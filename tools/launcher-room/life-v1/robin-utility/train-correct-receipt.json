@@ -1,0 +1,23 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-6dac48c5-e668-4028-a3c9-8b6db619671c.png",
+  "source": {
+    "path": "tools/launcher-room/life-v1/robin-utility/train-correct-source.png",
+    "sha256": "f6cf7ab8bc7201dd6b05d7a5bfa15d153dc7ed979c84ede661d4aa15d0ca19b4"
+  },
+  "prompt": {
+    "path": "tools/launcher-room/life-v1/robin-utility/train-correct-prompt.txt",
+    "sha256": "72df4b9c0ced5d2c74839946ebae8338b831c9862fb0fe407cb84ee6f6e6b3b1"
+  },
+  "references": [
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/train-reference.png",
+      "sha256": "eb643542ba410f4b17a4aea86bc66a9012c50d2635e72e42b55a32081a495b8e",
+      "role": "approved whole-character identity and style"
+    }
+  ],
+  "review": "Whole-figure replacement reviewed. Legs stay on same side for rest; no near-side collar for Chopper east; compact 3-head proportion for corrected train.",
+  "runtimeAccepted": false,
+  "processing": "Keep original RGBA; separate alpha copy removes alpha<16 and isolated <32px opaque specks, retaining 2px AA edge. Crop whole figures and uniform scale only."
+}

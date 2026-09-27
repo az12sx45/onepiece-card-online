@@ -1,0 +1,212 @@
+{
+  "clips": [
+    {
+      "id": "work",
+      "key": "brook",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/brook-work/source.png",
+      "scale": 0.324675,
+      "regions": [
+        [
+          106,
+          7,
+          281,
+          312
+        ],
+        [
+          395,
+          4,
+          582,
+          312
+        ],
+        [
+          706,
+          6,
+          880,
+          312
+        ],
+        [
+          1022,
+          7,
+          1195,
+          311
+        ]
+      ],
+      "roots": [
+        [
+          182,
+          312
+        ],
+        [
+          471,
+          312
+        ],
+        [
+          784,
+          312
+        ],
+        [
+          1098,
+          311
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/brook/work-east.webp"
+    },
+    {
+      "id": "work",
+      "key": "brook",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/brook-work/source.png",
+      "scale": 0.318471,
+      "regions": [
+        [
+          67,
+          315,
+          234,
+          628
+        ],
+        [
+          347,
+          315,
+          536,
+          628
+        ],
+        [
+          681,
+          315,
+          853,
+          628
+        ],
+        [
+          995,
+          314,
+          1162,
+          628
+        ]
+      ],
+      "roots": [
+        [
+          158,
+          628
+        ],
+        [
+          458,
+          628
+        ],
+        [
+          778,
+          628
+        ],
+        [
+          1090,
+          628
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/brook/work-west.webp"
+    },
+    {
+      "id": "work",
+      "key": "brook",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/brook-work/source.png",
+      "scale": 0.323625,
+      "regions": [
+        [
+          92,
+          628,
+          243,
+          937
+        ],
+        [
+          402,
+          629,
+          550,
+          937
+        ],
+        [
+          710,
+          629,
+          859,
+          937
+        ],
+        [
+          1030,
+          631,
+          1171,
+          937
+        ]
+      ],
+      "roots": [
+        [
+          170,
+          937
+        ],
+        [
+          476,
+          937
+        ],
+        [
+          787,
+          937
+        ],
+        [
+          1106,
+          937
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/brook/work-north.webp"
+    },
+    {
+      "id": "work",
+      "key": "brook",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/brook-work/source.png",
+      "scale": 0.321543,
+      "regions": [
+        [
+          103,
+          939,
+          245,
+          1246
+        ],
+        [
+          403,
+          938,
+          557,
+          1247
+        ],
+        [
+          716,
+          939,
+          871,
+          1247
+        ],
+        [
+          1034,
+          937,
+          1175,
+          1248
+        ]
+      ],
+      "roots": [
+        [
+          177,
+          1246
+        ],
+        [
+          476,
+          1247
+        ],
+        [
+          789,
+          1247
+        ],
+        [
+          1108,
+          1248
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/brook/work-south.webp"
+    }
+  ]
+}

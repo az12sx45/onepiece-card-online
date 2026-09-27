@@ -4,6 +4,7 @@ const crypto = require('node:crypto');
 const fs = require('node:fs');
 const fsp = require('node:fs/promises');
 const path = require('node:path');
+const lifeActions = require('./launcher-life-actions');
 const { Readable } = require('node:stream');
 const {
   app,
@@ -322,9 +323,10 @@ function resolveLauncherResource(requestUrl) {
       /^images\/walls\/[1-8]\.webp$/,
       /^images\/flags\/(?:[1-9]|1[0-5])\.webp$/,
       /^images\/profile_decor\/(?:bg-(?:luffy|zoro|nami)|frame-(?:luffy|zoro)|sticker-(?:luffy|zoro|nami|chopper|ace|robin))\.webp$/,
-      /^images\/launcher_room\/(?:scenes\/(?:sunny-deck|sunny-kitchen|sunny-library)|furniture\/(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|bookshelf|medicine-cabinet|piano|tool-bench)|chibi\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)|emotions\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)-(?:happy|surprised|focused|annoyed)|frames\/(?:straw-hat|ship-wheel))\.webp$/,
+      /^images\/launcher_room\/(?:scenes\/(?:sunny-deck|sunny-kitchen|sunny-library)|furniture\/(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|galley-stove|bookshelf|medicine-cabinet|piano|tool-bench)|chibi\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)|emotions\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)-(?:happy|surprised|focused|annoyed)|frames\/(?:straw-hat|ship-wheel))\.webp$/,
       /^images\/launcher_room\/scenes\/(?:crew-cabin|sunny-deck|sunny-kitchen|sunny-library)-v2\.webp$/,
-      /^images\/launcher_room\/furniture_views\/(?:bookshelf|helm|kitchen-table|map-table|medicine-cabinet|piano|swords-rack|tangerine-tree|tool-bench|treasure-chest)\/[0-3]\.webp$/,
+      /^images\/launcher_room\/furniture_views\/(?:bookshelf|helm|kitchen-table|galley-stove|map-table|medicine-cabinet|piano|swords-rack|tangerine-tree|tool-bench|treasure-chest)\/[0-3]\.webp$/,
+      /^images\/launcher_room\/life_v1\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:work|read|cook|craft|medicine|helm|music|eat|rest|sleep|train)-(?:east|west|north|south)\.webp$/,
       /^images\/launcher_room\/action_frames\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:idle|walk1|walk2|talk_happy|talk_annoyed|surprised|focused_use|sit|wave)\.webp$/,
       /^images\/launcher_room\/(?:motion|acting)_v3\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:east|west|north|south)\.webp$/,
       /^images\/launcher_room\/portrait_v3\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\.webp$/,
@@ -627,6 +629,14 @@ function registerLauncherIpc() {
   ipcMain.handle('launcher:room-set', guarded(async (_event, room) => {
     if (!authenticated) return { ok: false, error: 'not authenticated' };
     return authService.saveLauncherRoom(room);
+  }));
+  ipcMain.handle('launcher:life-get', guarded(async () => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    return authService.getLauncherLife();
+  }));
+  ipcMain.handle('launcher:life-command', guarded(async (_event, command) => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    return authService.commandLauncherLife(command);
   }));
   for (const [channel, method] of [
     ['launcher:character-get', 'getLauncherCharacter'],
@@ -1297,6 +1307,9 @@ async function runVisualOrSmokeCapture() {
               .map(direction => `images/launcher_room/${kind}_v3/${name}/${direction}.webp`))),
           ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']
             .map(name => `images/launcher_room/portrait_v3/${name}.webp`),
+          ...lifeActions.assets().map(asset => `images/launcher_room/life_v1/${asset}`),
+          ...[0,1,2,3].map(rotation => `images/launcher_room/furniture_views/galley-stove/${rotation}.webp`),
+          'images/launcher_room/furniture/galley-stove.webp',
           ...Array.from({ length: 12 }, (_, index) => `images/board/avatars/${index + 51}.webp`),
           ...Array.from({ length: 20 }, (_, index) => `audio/bgm/track${String(index + 1).padStart(2, '0')}.mp3`)
         ];

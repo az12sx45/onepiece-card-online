@@ -1,0 +1,26 @@
+{
+  "generator": "gpt-image",
+  "sourceSha256": "07c85908ba7cd468694ced47788d609bb44e019696ee91d2bcfbabeb71e17b5d",
+  "promptSha256": "4249d3ab52b57154ef3d4dffcfd2695e2492cdc893b890cb1e656c13a3a61a56",
+  "sourceReviewed": true,
+  "runtimeAccepted": false,
+  "wholeFigureOnly": true,
+  "assets": [
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-east.webp",
+      "assetSha256": "46db7267f6c077ddd764c7a66ef6fc898d55ea44ccd13cae20b57f90879cc17a"
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-west.webp",
+      "assetSha256": "a8c5527fd03078a757cf0ea53d20f2c18f2011cb2d025a92125073821363888c"
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-north.webp",
+      "assetSha256": "b3d0d61bf6a7b07087153a00b22e7f4a6cafb0d4658a83480e93c2434af13deb"
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-south.webp",
+      "assetSha256": "47199ccab021ec2e05fb7146e688f6b201b076d18275f15faa54d1fc68080fab"
+    }
+  ]
+}

@@ -1,0 +1,378 @@
+{
+  "status": "PASS_WITH_NOTES",
+  "scope": "actual-renderer-and-whole-figure-art",
+  "blockingIssues": [],
+  "reviewedAt": "2026-09-27",
+  "generator": "OpenAI built-in image_gen",
+  "canonicalCharactersOnly": true,
+  "reviewedAtlases": 128,
+  "reviewedFrames": 512,
+  "furnitureDockRotations": 32,
+  "method": "Primary and independent model visual inspection of GPT source, 128px whole-body atlas frames and actual Chromium room rendering. Fixture IPC, no real player purchases.",
+  "limitations": [
+    "Automated Chromium and model visual inspection are not human fan/playtest acceptance.",
+    "PGlite fixture serializes transactions; real PostgreSQL multi-session contention was not executed.",
+    "Sanji work/utility head silhouette remains about 15-18 percent wider than accepted idle; train standing height 89px versus idle98px. Independently reviewed as recognizable and nonblocking.",
+    "Small frame-to-frame hand/tool pose variation remains; these are complete drawn figures, not 3D skeletal models."
+  ],
+  "runtimeHashNormalization": "CRLF to LF only; all other bytes remain significant",
+  "runtime": {
+    "desktop/launcher-room.js": "de77bbbcfb37a81fc8503cdb07700247d726216a20b63149285088a6fc581e6a",
+    "desktop/launcher-room.css": "31f5647f368c6505979fad0ed230339ec56db91738ef62d13fe3f81e760c15f3",
+    "desktop/launcher-profile-shop.js": "9ceddcd5480eee810fb39859c2268f8a8464fd92458ed526b4a68f3f3bfc1cd8",
+    "desktop/launcher-life-room.js": "81a105dec4a48221bb459a804df6c8bfaee603a9088dd1962da257016b4973c1",
+    "desktop/launcher-life.js": "ca928053b49f4ba1cb8df0802f1b57e00368cff3e55a87ba909640f931966f9a",
+    "desktop/launcher-life-data.js": "a150b9f6aef8a82c4821b15a3a49b41eef4bccc11336795b2f6b25951b752410",
+    "desktop/launcher-life-actions.js": "d96db069e8d7025d3e48a9a86a00177e306b5be75dabdc0c85a6aff47a349f92",
+    "desktop/launcher-room-dialogue.js": "bc3d200914044b1ee97323302487d1a4e60b114586ba98551bed6384442d0b0a",
+    "desktop/launcher.html": "d7f130fa8344e9ed340fa80db6e0ebd3a3e8220b8d4c794cfaefeab4bd1cae0f",
+    "desktop/auth-service.js": "e06cc7121d12776f61d05966517d332d190d228d21d9bcd880113173b3172c9d",
+    "desktop/preload.js": "03668ed7e677b29e4212fb294d318937164b30be5b5621d7206e45fc1bbf2886",
+    "desktop/main.js": "d9425cd9dbe7074cadcbc5c0b96377aa8c2a12f71960b821a91443b78ea9650c",
+    "server/launcher-life.js": "a84e2d06aa70c6ee4dba4eee7bf819d4d86fb233d0bf1b4416c7196e7d5143b0",
+    "server/launcher-life-store.js": "ca2fe36da1055fc804df2bebf6ed1dec44c8c0aee666c890c6e7d816fdfd22f6",
+    "server/launcher-profile-shop.js": "f365f2e2e3b28d82c735b33637149931dd5eb4760a91e5b6eb5095295e55452d",
+    "server/index.js": "3bc51cd3c6338a0a9d798623633796f430b6598c9de24c34e2eea1cbdb27bd64",
+    "server/desktop-distribution.js": "e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85"
+  },
+  "evidence": [
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/backend-review-qa.json",
+      "sha256": "ea85b4f0f4288b225d91c52a1f189f22a5abbff098043a537000e44f93e739f7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/backend-review.md",
+      "sha256": "11090d247377d33be01bcce2c1195118e7889035f3ecafeda4581990c920de24"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/activation.json",
+      "sha256": "d86263269bfda3a791e189ccd61d9a625192ae3efdddad4bc641853b9d45d999"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/desktop-life.png",
+      "sha256": "2f0f683342b4e8f70e13bf564bb267a9f3d6126393e2b256ac15a8f24b190385"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/narrow-life.png",
+      "sha256": "f841d181ba48cd3c9a0d83303d2fb439397d0b8fa487547dbf3b1feda5ff139e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/report.json",
+      "sha256": "e35255590287a517f2f599045135edc6f6e9ccb3d0eac9065328fddceeecc1db"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/sanji-work-0.png",
+      "sha256": "7740d25cedfc7c8e3c3485409674f9201b24a23fd154165209905f8f93b93791"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/sanji-work-1.png",
+      "sha256": "d84929e147aa0d815f4c6ee7ced1c7ad8ec5913e0297d6add0705efb5e209811"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/sanji-work-2.png",
+      "sha256": "4e0f40347e24f7fe3498850f046d65bc2ea962905302635bc616f1d766741497"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/sanji-work-3.png",
+      "sha256": "7740d25cedfc7c8e3c3485409674f9201b24a23fd154165209905f8f93b93791"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/all-contact-review-final.png",
+      "sha256": "82439b622382fac45ff1f53448ff987a1ae5a71a81e0d52aa2413efcd9f60b9d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/brook-piano-r0-f1.png",
+      "sha256": "f3c32ed9330dc5e5dced364b584b90a26d314020f1b747975dd3ff00363973cc"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/brook-piano-r1-f1.png",
+      "sha256": "84b97da7511a3fb678810790c6bbef2d36752d5f5a8ae5ba75af254076ffb930"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/brook-piano-r2-f1.png",
+      "sha256": "cb44d4574176efb5491aa484ae3cee289d39631ff6ec25345fa7cb4f38ba0f2d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/brook-piano-r3-f1.png",
+      "sha256": "6dc636efff80c79fe659e42cd4c5ee3e07ddeb08630b9875dc653726120d7898"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/chopper-medicine-cabinet-r0-f1.png",
+      "sha256": "0a6e76e963e90ecd8270c2f0d5bca1a2b0653b0ace059ccd8736c60c1924f758"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/chopper-medicine-cabinet-r1-f1.png",
+      "sha256": "7b8a814ebe9b6e46ddaacb5e313d91e631756a2fec7d66de8436a7a674dfc138"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/chopper-medicine-cabinet-r2-f1.png",
+      "sha256": "ca7a75d4c03d7807947324be5275cba13dceb5ef02b8ffe914e5192816901014"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/chopper-medicine-cabinet-r3-f1.png",
+      "sha256": "c7bc73f669fbdc169de8cc71f1ab9fbef73f7cb6232a6833b337498b1985084c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/franky-tool-bench-r0-f1.png",
+      "sha256": "26494a7f86243a881baff2a49078cfc8418664fddda58c4719cbd808ff86a8ae"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/franky-tool-bench-r1-f1.png",
+      "sha256": "cbe8da001478a677294634f2b65289a2bd8bb9eccc78d36297e782e2b0c510cb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/franky-tool-bench-r2-f1.png",
+      "sha256": "7728126a16be324e28f03bba1e087813056f99115e3f38f6c944bb0b9b577acb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/franky-tool-bench-r3-f1.png",
+      "sha256": "ef8fa9cd8cb794f4ea84ff56cf9b8603b121595d6f5ce7dbba361e39bf2b2fe1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/jinbe-helm-r0-f1.png",
+      "sha256": "c080327058e78b60c831c2d3e6cc8598510691400067f0f03af6f19fa95535bb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/jinbe-helm-r1-f1.png",
+      "sha256": "d6d7df9741ce489df45e63757767e2ec9512511c556d270791b51ca7cd815479"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/jinbe-helm-r2-f1.png",
+      "sha256": "3b2df8d6d3f2161abed52367e98a0b5476f2559658b11a77251412d305033807"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/jinbe-helm-r3-f1.png",
+      "sha256": "ea39bc22a2728ce744c015b521ea0bfe165c574aa4a3ee1472fab956ababf531"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/nami-map-table-r0-f1.png",
+      "sha256": "8bcaee46e17ced2f7d38490d619f3206ce64fc2b2bd7ed75aba73a0ab8b12b88"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/nami-map-table-r1-f1.png",
+      "sha256": "87e326df3546627431f26628d708f760a0dd3f3143d5bcfc78eceff232508b6c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/nami-map-table-r2-f1.png",
+      "sha256": "6b53201c15f52a86a75615b30c9ada8c8d9f9466ed5e9db76f6cd2db23eb3e29"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/nami-map-table-r3-f1.png",
+      "sha256": "62be9e89007d6c2fe11e4c2d31423711ff38290e30549837b8751f62ec3dc0c4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-brook.json",
+      "sha256": "fca86faf83e0d73565b81b8b1ed98f51886ba87d06527d97f6553ad689ca0ec1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-chopper-r2.json",
+      "sha256": "fb39ebf8d70e827424e7effbe7526d84bd6c0e2d4390a504087d37d70bf47407"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-chopper.json",
+      "sha256": "c1365d440a8c2c11b90d841ffc6307100b3da6eeb4d4743d4e17575e384040db"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-franky.json",
+      "sha256": "947e47fe80940e948df4f6fc96df3fcb7b4d4feeb507368da10133562d6963ce"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-jinbe.json",
+      "sha256": "7cde14a33cf0b17647007f173766a90d33e2fbf3c71c593444bfcbe3c49925ba"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-nami.json",
+      "sha256": "68d59e89dda355242f74d758d14966d8376dc88737c0e3444fd1aa2f607841ce"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-robin.json",
+      "sha256": "07461a57b79ec12f835355e25b4e0df4caca7c5d7d628efa8a5f84897fe6377a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-sanji.json",
+      "sha256": "113bae9148c22090dde86b7a3e3309493883fa520b4519bc82fe60d813fe90ac"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-usopp.json",
+      "sha256": "a3b497190e035b712e7f796c366c21cfad150ecb0f075d5e51775ed74513b681"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/robin-bookshelf-r0-f1.png",
+      "sha256": "91c2724b6801444c721a109d0b486ce5a659129527b25165644a55029b866f60"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/robin-bookshelf-r1-f1.png",
+      "sha256": "f5b732e9719001f7180792a8fa54a56715e74407051dde768023c4e6cf7a441e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/robin-bookshelf-r2-f1.png",
+      "sha256": "1d0b5f47569f2e324faa9a5855467229bfef254d0a7e72319ad514f332ab376e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/robin-bookshelf-r3-f1.png",
+      "sha256": "fbde5a35c0e5c450e169aa9e559f04c2b82886e28163fd960cb7031b669fb16b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/sanji-galley-stove-r0-f1.png",
+      "sha256": "6d6a1d136093c4ff4e850b6a94d34f63da52c8f385ea9bc26a6c9b50da3475b0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/sanji-galley-stove-r1-f1.png",
+      "sha256": "976ef0d11d6e28d4140f9827f15d6fe464565fc58ed9937f12923ebf168e4115"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/sanji-galley-stove-r2-f1.png",
+      "sha256": "61f70f35eff0756eb06890a0dbf0f039c7723a51dc30e524ed87a2220ac5f215"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/sanji-galley-stove-r3-f1.png",
+      "sha256": "3d7447ad6995a7ca17c3fe265a53484f2df9f050bad03cc3e680ad000c3f37e6"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/usopp-tool-bench-r0-f1.png",
+      "sha256": "70cadccfa5daa0b9fbbbdaa89a21bbff9a6ab5620de35b755acf44eda9006199"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/usopp-tool-bench-r1-f1.png",
+      "sha256": "408845ce93c3303494209059c412f8349e41cf94903113dd37074f708e8ed0ed"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/usopp-tool-bench-r2-f1.png",
+      "sha256": "c297c783bc628fef4bc40d400a21daed9be8318d5cda397e91cf51b4599af4f8"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/usopp-tool-bench-r3-f1.png",
+      "sha256": "30dd08c84caeac859b82cd0a5724a09a548c278c2c539f3ea43d126e07613775"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery/package-qa.txt",
+      "sha256": "81a48cdfdbf6953468db2b686831b7952465b600a472e9e361bc317c28ca7fbc"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery/packaged-artifact.json",
+      "sha256": "0a286147b46bc425cdb704896b0345bed1f504bea769ae84e4043bac8e5910f6"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery/packaged-smoke.json",
+      "sha256": "6f92a4c69b985548d62d239e4360aff813fc6fb4a6efe1da5404d4e707b2deab"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery/public-installer-verification.json",
+      "sha256": "5284a7a2c80219efa295c34f3daec3635245a4700b594c6142119bae82de0f66"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/final-editorial-changes.json",
+      "sha256": "411eeee35443a3a794ab2a431f719d52438cea1c1fb8dfedca3c27781392edb4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/final-life-content-qa-result.json",
+      "sha256": "70da6349b090322412613911f9b11510744df69299d7ac8a8614c01852594cb3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/final-room-dialogue-qa-result.json",
+      "sha256": "0618eb9a39b5dddb3cda003be5846a19a3c8537358d0e8b9128389aacf54ecb2"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/independent-final-art-content.json",
+      "sha256": "a72155b85e1b31f1073ba1e1fc17b1ce3e13b091bb07fb1be8e863fb467ae030"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/independent-final-art-content.md",
+      "sha256": "516f51af1fa74dba158d9ed99a633fc1842343b3d4f4b400f60590caca02f1b0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/independent-final-assets.sha256.txt",
+      "sha256": "93f02b2a6f7201dafb8e135ab0503ef2c8009dbe64126bc8a8fd9367990eb1c5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/chain-1-trajectory.json",
+      "sha256": "71c77eb9ef8dfe14274fa890931feeaf335406275be2eceee3a413c7dff5f4af"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/chain-3-trajectory.json",
+      "sha256": "dbb817ffb78de46fe51732d2bff9b9ba374952fb5ea2c415766bc2f81b9a59ab"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/luffy-call.png",
+      "sha256": "fe9fc8676e2c63f6fb4d4d800c288bafb02b2e0bd88ae2a8b10c8ea2181fe9ab"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/luffy-gift-eat-with-line.png",
+      "sha256": "9906bd875cd125991b3614dd4baa6cfa11b0439c1cdbc2cab6fe62be9c1ee537"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/luffy-train.png",
+      "sha256": "68a3c4912f32d2d45c2ec662243dd8d35f637888eff303fe100e518dfb08a75f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/report.json",
+      "sha256": "9cf6c70c153dc3f32e5f83ff432432100dbb40872637f574c3be163e53c14217"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/zoro-call.png",
+      "sha256": "d49d1cbb5644a5ca08f63277b5cda623546d9353a58999e4a2f097809a503489"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/zoro-gift-eat-with-line.png",
+      "sha256": "0a55180f5f1282048f0892e05548f1fcef72aa8a6fb1bd74e36522c62cf07cb4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/zoro-train.png",
+      "sha256": "ed2e7a5757dcdee6d29e65acb3554952c384b00ae0e0056e94642c58c8040a81"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/arrival-trajectory.json",
+      "sha256": "df7904fd0b01817082e0aed6d88193924fb9d8bbe834391bbbe00a59bbb7611b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/cadence-report.json",
+      "sha256": "336c0ce151b683f9ec02e5298cb1f943d1fc9d6bd285c9f2d91049bb5178bc8f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/chain-1-trajectory.json",
+      "sha256": "24e89454735a117a08daeb1ef05d41f4f29f05ab292b9962d5c7d1bf8089bf34"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/chain-3-trajectory.json",
+      "sha256": "90a3bae172a433d913094501602bd09ed6ba5d8f4b907b04c4d7904492a75392"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/controller-report.json",
+      "sha256": "14c4a79d75ef7af57055555a15baf5660ddb70589599ed96941ae6da313193aa"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/gift-eat-with-line.png",
+      "sha256": "ecacd92dd122be897a502ee6d8847f177c742b86efe1f00a021320c91bd36a59"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/piano-event-exclusive.png",
+      "sha256": "a56548a7f8324cc714c678ea22c39b6f9dc797d88e84b3be3ad355f53b332af9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/report.json",
+      "sha256": "c734580dd985edf47bd9fdec00b9a314044e74566e162678261c05e5d53f9110"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/legacy-room-final/report.json",
+      "sha256": "9f9502dc435133b98ae5e341fd9f0f8738b2b633f1ba27d45e71e820f2d0e877"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/prepublication/electron-bounded/desktop-distribution-electron-report.json",
+      "sha256": "e0a6ecf3c534b7309a27217ccf01b6e7c14dad1586bae04e699b7c7a96dc1758"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/prepublication/npm-start-http.json",
+      "sha256": "8b21b71c10fabfaf1cba671bb1c59e31257c8438ae426191fe69373aaec2f0b9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/prepublication/transport-gate/desktop-distribution-gate-report.json",
+      "sha256": "6f28ff4b485f6cdc85432404a9adbd6fae5b926dec5f89a42280c1de633ef3f9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/profile-shop-final/report.json",
+      "sha256": "42af3d60f9d01155d816cdf87c6356c4ffc62a3c6df833d976658509cc41eb47"
+    }
+  ],
+  "humanAcceptance": false,
+  "publicDeployment": false
+}

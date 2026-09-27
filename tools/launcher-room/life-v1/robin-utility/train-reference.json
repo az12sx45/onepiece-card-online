@@ -1,0 +1,17 @@
+{
+  "operation": "whole-figure reference crop only, no anatomy edits",
+  "source": {
+    "path": "tools/launcher-room/life-v1/robin-work/source.png",
+    "sha256": "0ce9de11ab8972e8e1b682bc78e9137b6c4dec9fb61be5b079e0ac9998991938"
+  },
+  "region": [
+    0,
+    938,
+    314,
+    1254
+  ],
+  "output": {
+    "path": "tools/launcher-room/life-v1/robin-utility/train-reference.png",
+    "sha256": "eb643542ba410f4b17a4aea86bc66a9012c50d2635e72e42b55a32081a495b8e"
+  }
+}

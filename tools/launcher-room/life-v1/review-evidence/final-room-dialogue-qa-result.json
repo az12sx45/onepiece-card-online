@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "characters": 10,
+  "pairs": 45,
+  "scenes": 151,
+  "turns": 604,
+  "soloLines": 200,
+  "claimLines": 20,
+  "furnitureLines": 76,
+  "responsiveBeats": 400,
+  "maximumSceneSimilarity": 0.1,
+  "checks": 23799,
+  "note": "Data/API regression checks only. Pairwise string comparisons inflate the check count. They do not measure character likeness, joke quality, physical gestures, emotional timing, or fan acceptance."
+}

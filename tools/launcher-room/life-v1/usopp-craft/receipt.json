@@ -1,0 +1,19 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "approved-reference whole-body redraw",
+  "generatedOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030\\exec-8b6e609c-ef4c-434d-95ad-0cd65bd6f1e4.png",
+  "originalSha256": "10f2bea60ec26dfa598a8076e7a3556ca2d047b2fa926515404c08c3611d1ef1",
+  "promptSha256": "b20864a63255b670b517815381f1a84730e28c9f672bac5ef9fec11f8007c51f",
+  "references": [
+    {
+      "path": "tools/launcher-room/life-v1/usopp-read/source.png",
+      "sha256": "e9fca8aa8814a68453e174515d602c6181e2228f1e4396ecc517eaafc5662909"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/usopp-actions-05/image.png",
+      "sha256": "54930c43c6a1d1cc8422204e9b98252678dcb66036f93a3b9271234e7527bcfd"
+    }
+  ],
+  "priorGeneration": "rejected-proportion-v1/receipt.json",
+  "reason": "Prior head was too small and body too tall compared with approved model; redraw from approved/read references."
+}

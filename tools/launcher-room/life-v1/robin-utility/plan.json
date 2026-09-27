@@ -1,0 +1,224 @@
+{
+  "clips": [
+    {
+      "id": "eat",
+      "key": "robin",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/robin-utility/source-alpha.png",
+      "scale": 0.2558746736292428,
+      "regions": [
+        [
+          0,
+          0,
+          314,
+          414
+        ],
+        [
+          314,
+          0,
+          627,
+          414
+        ],
+        [
+          627,
+          0,
+          940,
+          414
+        ],
+        [
+          940,
+          0,
+          1254,
+          414
+        ]
+      ],
+      "roots": [
+        [
+          171.0,
+          414
+        ],
+        [
+          474.5,
+          414
+        ],
+        [
+          776.5,
+          414
+        ],
+        [
+          1081.0,
+          414
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/robin/eat-south.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/robin-utility/source.png"
+    },
+    {
+      "id": "rest",
+      "key": "robin",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/robin-utility/rest-fix-source-alpha.png",
+      "scale": 0.145,
+      "regions": [
+        [
+          0,
+          0,
+          443,
+          887
+        ],
+        [
+          443,
+          0,
+          886,
+          887
+        ],
+        [
+          886,
+          0,
+          1280,
+          887
+        ],
+        [
+          1280,
+          0,
+          1774,
+          887
+        ]
+      ],
+      "roots": [
+        [
+          274.38,
+          887
+        ],
+        [
+          696.38,
+          887
+        ],
+        [
+          1112.38,
+          887
+        ],
+        [
+          1536.38,
+          887
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/robin/rest-south.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/robin-utility/rest-fix-source.png"
+    },
+    {
+      "id": "sleep",
+      "key": "robin",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/robin-utility/source-alpha.png",
+      "scale": 0.2558746736292428,
+      "regions": [
+        [
+          0,
+          737,
+          314,
+          908
+        ],
+        [
+          314,
+          737,
+          627,
+          908
+        ],
+        [
+          627,
+          737,
+          940,
+          908
+        ],
+        [
+          940,
+          737,
+          1254,
+          908
+        ]
+      ],
+      "roots": [
+        [
+          168.0,
+          908
+        ],
+        [
+          483.5,
+          908
+        ],
+        [
+          790.0,
+          908
+        ],
+        [
+          1105.0,
+          908
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/robin/sleep-south.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/robin-utility/source.png"
+    },
+    {
+      "id": "train",
+      "key": "robin",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/robin-utility/train-correct-source-alpha.png",
+      "scale": 0.12420785804816223,
+      "regions": [
+        [
+          0,
+          0,
+          444,
+          887
+        ],
+        [
+          444,
+          0,
+          887,
+          887
+        ],
+        [
+          887,
+          0,
+          1330,
+          887
+        ],
+        [
+          1330,
+          0,
+          1774,
+          887
+        ]
+      ],
+      "roots": [
+        [
+          221.5,
+          887
+        ],
+        [
+          666.0,
+          887
+        ],
+        [
+          1109.0,
+          887
+        ],
+        [
+          1551.5,
+          887
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/robin/train-south.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/robin-utility/train-correct-source.png"
+    }
+  ]
+}

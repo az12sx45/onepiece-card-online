@@ -1,0 +1,183 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:/Users/王曜瑋/.codex/generated_images/01a0e0d1-a4bf-73f3-af41-6763cfefe2b5/exec-a0f0e707-4eec-4af4-81cc-f1e2d695c3d3.png",
+  "reference": "tools/launcher-room/fullbody-v3/sources/luffy/image.png",
+  "prompt": "tools/launcher-room/life-v1/luffy-utility/prompt.txt",
+  "sourceSha256": "f1acfe37f09541ab18c55bcbf01fe42d7327f3722febefebe3ad8f542be372d6",
+  "sourcePixels": [
+    1254,
+    1254
+  ],
+  "trueAlpha": true,
+  "sourceReview": "Sixteen intact complete figures. Canonical early outfit preserved. Luffy retains the straw hat, red vest, blue shorts, yellow sash and left-under-eye stitch; no chest X scar. Distinct eating, cross-legged rest, grounded side sleep and controlled low training. No invisible chair, high walking step or detached anatomy.",
+  "packing": "One uniform scale per four-frame loop, whole-figure crop and root alignment only. Main figure bounds estimated at alpha32 with 2px source padding to exclude remote faint generated pixels; source alpha never modified. No limb splitting, mirroring or warping.",
+  "runtimeAccepted": false,
+  "actualSizeReview": "Static 128px contact review passed: early outfit and no chest scar; intact full bodies; bowl/spoon motion, grounded cross-legged rest, side-curled sleep and compact arm training remain readable. No clipped props, detached heads or high-knee walking substitution. Room playback remains unverified.",
+  "sourceAccepted": true,
+  "contactAccepted": true,
+  "contactSheet": "tools/launcher-room/life-v1/luffy-utility/contact-128.png",
+  "contactSha256": "8871ddb1ecc0ecd5dc68a63dc24de2e7c27ea6a5b2a26dfd218875463ccffa2a",
+  "numericQa": {
+    "passed": true,
+    "checks": [
+      {
+        "asset": "public/images/launcher_room/life_v1/luffy/eat-south.webp",
+        "sha256": "14cffe58867051cc46f9b6bd49f95e14297e88e43f4ab53609ce61df3a8d28e5",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            36,
+            12,
+            95,
+            112
+          ],
+          [
+            33,
+            11,
+            94,
+            112
+          ],
+          [
+            34,
+            11,
+            94,
+            112
+          ],
+          [
+            34,
+            11,
+            94,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/luffy/rest-south.webp",
+        "sha256": "e17268eb77aaf98d936cb541616943b90ed878830991f04f7d5853e92e702a95",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            34,
+            25,
+            94,
+            112
+          ],
+          [
+            34,
+            25,
+            94,
+            112
+          ],
+          [
+            35,
+            25,
+            94,
+            112
+          ],
+          [
+            34,
+            25,
+            93,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/luffy/sleep-south.webp",
+        "sha256": "3e689b26723392477eb907ed5e74269065527944d487d2e4ddfdcb511c27bc4d",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            18,
+            58,
+            110,
+            112
+          ],
+          [
+            18,
+            58,
+            110,
+            112
+          ],
+          [
+            16,
+            58,
+            111,
+            112
+          ],
+          [
+            17,
+            58,
+            111,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/luffy/train-south.webp",
+        "sha256": "096644ee07a31e434da2856efea8ef2bcbc7834dfcf11fe626f23cb37b0a74bb",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            32,
+            12,
+            95,
+            112
+          ],
+          [
+            32,
+            13,
+            96,
+            112
+          ],
+          [
+            33,
+            13,
+            95,
+            112
+          ],
+          [
+            32,
+            12,
+            94,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      }
+    ],
+    "scope": "Atlas dimensions, alpha bounds, source hash, and four distinct rendered frames. Does not prove runtime animation acceptance."
+  }
+}

@@ -1,0 +1,212 @@
+{
+  "clips": [
+    {
+      "id": "brook-eat-south",
+      "key": "brook",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/brook-utility/source.png",
+      "asset": "public/images/launcher_room/life_v1/brook/eat-south.webp",
+      "regions": [
+        [
+          0,
+          0,
+          328,
+          353
+        ],
+        [
+          328,
+          0,
+          656,
+          353
+        ],
+        [
+          656,
+          0,
+          984,
+          353
+        ],
+        [
+          984,
+          0,
+          1312,
+          353
+        ]
+      ],
+      "roots": [
+        [
+          164.0,
+          345
+        ],
+        [
+          491.0,
+          344
+        ],
+        [
+          817.5,
+          343
+        ],
+        [
+          1148.0,
+          344
+        ]
+      ],
+      "scale": 0.29
+    },
+    {
+      "id": "brook-rest-south",
+      "key": "brook",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/brook-utility/source.png",
+      "asset": "public/images/launcher_room/life_v1/brook/rest-south.webp",
+      "regions": [
+        [
+          0,
+          353,
+          328,
+          662
+        ],
+        [
+          328,
+          353,
+          656,
+          662
+        ],
+        [
+          656,
+          353,
+          984,
+          662
+        ],
+        [
+          984,
+          353,
+          1312,
+          662
+        ]
+      ],
+      "roots": [
+        [
+          165.5,
+          642
+        ],
+        [
+          489.5,
+          642
+        ],
+        [
+          825.5,
+          642
+        ],
+        [
+          1148.5,
+          642
+        ]
+      ],
+      "scale": 0.29
+    },
+    {
+      "id": "brook-sleep-south",
+      "key": "brook",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/brook-utility/source.png",
+      "asset": "public/images/launcher_room/life_v1/brook/sleep-south.webp",
+      "regions": [
+        [
+          0,
+          662,
+          328,
+          830
+        ],
+        [
+          328,
+          662,
+          656,
+          830
+        ],
+        [
+          656,
+          662,
+          984,
+          830
+        ],
+        [
+          984,
+          662,
+          1312,
+          830
+        ]
+      ],
+      "roots": [
+        [
+          163.0,
+          824
+        ],
+        [
+          491.5,
+          824
+        ],
+        [
+          837.5,
+          824
+        ],
+        [
+          1164.5,
+          824
+        ]
+      ],
+      "scale": 0.29
+    },
+    {
+      "id": "brook-train-south",
+      "key": "brook",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/brook-utility/source.png",
+      "asset": "public/images/launcher_room/life_v1/brook/train-south.webp",
+      "regions": [
+        [
+          0,
+          830,
+          328,
+          1199
+        ],
+        [
+          328,
+          830,
+          656,
+          1199
+        ],
+        [
+          656,
+          830,
+          984,
+          1199
+        ],
+        [
+          984,
+          830,
+          1312,
+          1199
+        ]
+      ],
+      "roots": [
+        [
+          165.0,
+          1181
+        ],
+        [
+          492.5,
+          1181
+        ],
+        [
+          819.5,
+          1181
+        ],
+        [
+          1149.5,
+          1181
+        ]
+      ],
+      "scale": 0.29
+    }
+  ]
+}

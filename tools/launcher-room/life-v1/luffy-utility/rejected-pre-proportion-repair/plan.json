@@ -1,0 +1,140 @@
+{
+  "clips": [
+    {
+      "id": "eat",
+      "key": "luffy",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/luffy-utility/source.png",
+      "scale": 0.28,
+      "regions": [
+        [
+          73,
+          27,
+          291,
+          385
+        ],
+        [
+          371,
+          26,
+          589,
+          386
+        ],
+        [
+          672,
+          26,
+          888,
+          385
+        ],
+        [
+          983,
+          27,
+          1197,
+          386
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/eat-south.webp"
+    },
+    {
+      "id": "rest",
+      "key": "luffy",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/luffy-utility/source.png",
+      "scale": 0.28,
+      "regions": [
+        [
+          71,
+          410,
+          285,
+          720
+        ],
+        [
+          373,
+          410,
+          587,
+          720
+        ],
+        [
+          678,
+          411,
+          888,
+          720
+        ],
+        [
+          974,
+          411,
+          1186,
+          721
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/rest-south.webp"
+    },
+    {
+      "id": "sleep",
+      "key": "luffy",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/luffy-utility/source.png",
+      "scale": 0.34,
+      "regions": [
+        [
+          40,
+          753,
+          312,
+          912
+        ],
+        [
+          347,
+          753,
+          619,
+          912
+        ],
+        [
+          650,
+          753,
+          930,
+          912
+        ],
+        [
+          964,
+          753,
+          1240,
+          911
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/sleep-south.webp"
+    },
+    {
+      "id": "train",
+      "key": "luffy",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/luffy-utility/source.png",
+      "scale": 0.32,
+      "regions": [
+        [
+          71,
+          928,
+          269,
+          1239
+        ],
+        [
+          378,
+          929,
+          578,
+          1239
+        ],
+        [
+          674,
+          929,
+          870,
+          1239
+        ],
+        [
+          981,
+          928,
+          1183,
+          1240
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/train-south.webp"
+    }
+  ]
+}

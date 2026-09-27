@@ -61,6 +61,7 @@
   let shopTab = 'avatar';
   let pendingPurchase = null;
   let shopBusy = false;
+  let shopMutation = 0;
   let comments = null;
   let commentRequest = 0;
   let commentNextBeforeId = 0;
@@ -604,15 +605,26 @@
   async function buy() {
     const item = pendingPurchase;
     if (!item || shopBusy) return;
+    const owner = accountId;
+    const mutation = ++shopMutation;
     shopBusy = true; $('shopConfirmBuy').disabled = true; $('shopConfirmHint').textContent = '正在確認購買…';
     try {
       const result = await api.buyLauncherItem(item.id);
+      if (owner !== accountId || mutation !== shopMutation || !accountId || preview) return;
       if (!result?.ok || !result.shop) { $('shopConfirmHint').textContent = result?.error === 'timeout' ? '結果尚未確認。請關閉後重新整理商店，避免重複購買。' : errorText(result?.error); return; }
+      shopRequest++;
       shop = result.shop; $('shopConfirmDialog').close(); renderShop();
       status('shopStatus', `已收藏「${String(item.name || item.id).slice(0, 80)}」。`);
-      if (profile?.isSelf) loadProfile();
-    } catch { $('shopConfirmHint').textContent = errorText('offline'); }
-    finally { shopBusy = false; $('shopConfirmBuy').disabled = false; renderShop(); }
+      if (profile?.isSelf && result.profile?.userId === owner) {
+        profileRequest++; profile = result.profile; renderProfile();
+      }
+      window.LauncherRoom?.onPurchase?.(result, item.id);
+    } catch { if (owner === accountId && mutation === shopMutation) $('shopConfirmHint').textContent = errorText('offline'); }
+    finally {
+      if (owner === accountId && mutation === shopMutation) {
+        shopBusy = false; $('shopConfirmBuy').disabled = false; renderShop();
+      }
+    }
   }
   async function equip(item) {
     if (shopBusy || !owned(item) || item.type === 'guestbook' || ROOM_TYPES.includes(item.type)) return;
@@ -620,14 +632,16 @@
   }
   async function equipById(itemId, label) {
     if (shopBusy || !shop || shop.preview) return;
+    const owner=accountId,mutation=++shopMutation;
     shopBusy = true; renderShop(); status('shopStatus', '正在套用裝扮…');
     try {
       const result = await api.equipLauncherItem(itemId);
+      if(owner!==accountId||mutation!==shopMutation||!accountId||preview)return;
       if (!result?.ok || !result.shop) { status('shopStatus', errorText(result?.error), true); return; }
       shop = result.shop; status('shopStatus', `已套用「${label}」。`);
       if (profile?.isSelf) loadProfile();
-    } catch { status('shopStatus', errorText('offline'), true); }
-    finally { shopBusy = false; renderShop(); }
+    } catch { if(owner===accountId&&mutation===shopMutation)status('shopStatus', errorText('offline'), true); }
+    finally { if(owner===accountId&&mutation===shopMutation){shopBusy = false; renderShop();} }
   }
 
   $('profileRefresh').onclick = loadProfile;
@@ -658,6 +672,7 @@
       const isPreview = snapshot?.previewMode === true;
       if (id === accountId && isPreview === preview) return;
       stopBgm(); bgmSource = '';
+      shopMutation++; shopBusy = false;
       cardMutation++; cardBusy = false; decorBusy = false; $('profileCardEditor').hidden = true; $('profileCardSave').disabled = false; $('profileCardCancel').disabled = false;
       accountId = id; preview = isPreview; viewUserId = 0; profile = null; shop = null; roomEditorRequested = false;
       profileRequest++; shopRequest++; commentRequest++; comments = null; commentHasMore = false; commentNextBeforeId = 0; pendingPurchase = null; pendingCommentDelete = null;

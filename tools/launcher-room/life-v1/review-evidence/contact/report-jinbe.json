@@ -1,0 +1,610 @@
+{
+  "ok": true,
+  "scope": "Real renderer and art, isolated fixture server; numeric pass is not human visual approval.",
+  "results": [
+    {
+      "id": "jinbe-helm-r0",
+      "key": "jinbe",
+      "furniture": "helm",
+      "clip": "helm",
+      "rotation": 0,
+      "frames": [
+        "2",
+        "2",
+        "0",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-jinbe"
+          ],
+          "characters": {
+            "jinbe": {
+              "key": "jinbe",
+              "itemId": "room-character-jinbe",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99805149999997,
+                "hunger": 25.003247500000008,
+                "mood": 75.00216499999999,
+                "social": 74.99902574999999,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790481816057,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790481789784,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-jinbe",
+              "stationId": "room-furniture-helm",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:03:10.054Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:03:22.510Z",
+              "readyAt": "2026-09-27T04:04:22.510Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "jinbe",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-helm",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "jinbe",
+              "cell": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-helm",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790481969244,
+          "nextForegroundAt": 1790481801244,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "jinbe",
+            "cell": {
+              "col": 7,
+              "row": 4
+            },
+            "x": 469.26,
+            "y": 380.93640625,
+            "mode": "life-act",
+            "phase": 0.7318863474227617,
+            "direction": "north",
+            "dock": {
+              "x": 469.26,
+              "y": 380.93640625,
+              "z": 402,
+              "side": "north"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-jinbe",
+            "stationId": "room-furniture-helm",
+            "roomRevision": 1
+          },
+          "at": 1790481790054
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790481802510
+        }
+      ]
+    },
+    {
+      "id": "jinbe-helm-r1",
+      "key": "jinbe",
+      "furniture": "helm",
+      "clip": "helm",
+      "rotation": 1,
+      "frames": [
+        "1",
+        "2",
+        "0",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 5,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-jinbe"
+          ],
+          "characters": {
+            "jinbe": {
+              "key": "jinbe",
+              "itemId": "room-character-jinbe",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99804999999998,
+                "hunger": 25.00325000000001,
+                "mood": 75.00216666666665,
+                "social": 74.99902499999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790481818795,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790481813237,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-jinbe",
+              "stationId": "room-furniture-helm",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:03:33.360Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:03:49.684Z",
+              "readyAt": "2026-09-27T04:04:49.684Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "jinbe",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-helm",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "jinbe",
+              "cell": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-helm",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790481993014,
+          "nextForegroundAt": 1790481825014,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "jinbe",
+            "cell": {
+              "col": 6,
+              "row": 2
+            },
+            "x": 458.52,
+            "y": 378.25140625,
+            "mode": "life-act",
+            "phase": 0.773172431609023,
+            "direction": "east",
+            "dock": {
+              "x": 458.52,
+              "y": 378.25140625,
+              "z": 402,
+              "side": "east"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-jinbe",
+            "stationId": "room-furniture-helm",
+            "roomRevision": 1
+          },
+          "at": 1790481813035
+        },
+        {
+          "type": "work.cancel",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790481813094
+        },
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-jinbe",
+            "stationId": "room-furniture-helm",
+            "roomRevision": 1
+          },
+          "at": 1790481813360
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790481829684
+        }
+      ]
+    },
+    {
+      "id": "jinbe-helm-r2",
+      "key": "jinbe",
+      "furniture": "helm",
+      "clip": "helm",
+      "rotation": 2,
+      "frames": [
+        "1",
+        "3",
+        "3",
+        "2"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-jinbe"
+          ],
+          "characters": {
+            "jinbe": {
+              "key": "jinbe",
+              "itemId": "room-character-jinbe",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99805149999997,
+                "hunger": 25.003247500000008,
+                "mood": 75.00216499999999,
+                "social": 74.99902574999999,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790481842958,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790481836329,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-jinbe",
+              "stationId": "room-furniture-helm",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:03:56.454Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:04:21.207Z",
+              "readyAt": "2026-09-27T04:05:21.207Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "jinbe",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-helm",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "jinbe",
+              "cell": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-helm",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482016109,
+          "nextForegroundAt": 1790481848109,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "jinbe",
+            "cell": {
+              "col": 7,
+              "row": 1
+            },
+            "x": 480,
+            "y": 372.88140625,
+            "mode": "life-act",
+            "phase": 0.14428258767214688,
+            "direction": "south",
+            "dock": {
+              "x": 480,
+              "y": 372.88140625,
+              "z": 400,
+              "side": "south"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-jinbe",
+            "stationId": "room-furniture-helm",
+            "roomRevision": 1
+          },
+          "at": 1790481836454
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790481861207
+        }
+      ]
+    },
+    {
+      "id": "jinbe-helm-r3",
+      "key": "jinbe",
+      "furniture": "helm",
+      "clip": "helm",
+      "rotation": 3,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 5,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-jinbe"
+          ],
+          "characters": {
+            "jinbe": {
+              "key": "jinbe",
+              "itemId": "room-character-jinbe",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99807549999998,
+                "hunger": 25.003207500000006,
+                "mood": 75.00213833333332,
+                "social": 74.99903774999999,
+                "workMotivation": 69.96792500000001
+              },
+              "memories": [],
+              "nextAt": 1790481873201,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790481868218,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-jinbe",
+              "stationId": "room-furniture-helm",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:04:28.343Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:04:53.079Z",
+              "readyAt": "2026-09-27T04:05:53.079Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "jinbe",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-helm",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "jinbe",
+              "cell": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-helm",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482048008,
+          "nextForegroundAt": 1790481880008,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "jinbe",
+            "cell": {
+              "col": 9,
+              "row": 2
+            },
+            "x": 501.48,
+            "y": 378.25140625,
+            "mode": "life-act",
+            "phase": 0.012570205987266757,
+            "direction": "west",
+            "dock": {
+              "x": 501.48,
+              "y": 378.25140625,
+              "z": 402,
+              "side": "west"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-jinbe",
+            "stationId": "room-furniture-helm",
+            "roomRevision": 1
+          },
+          "at": 1790481868023
+        },
+        {
+          "type": "work.cancel",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790481868074
+        },
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-jinbe",
+            "stationId": "room-furniture-helm",
+            "roomRevision": 1
+          },
+          "at": 1790481868343
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790481893079
+        }
+      ]
+    }
+  ]
+}

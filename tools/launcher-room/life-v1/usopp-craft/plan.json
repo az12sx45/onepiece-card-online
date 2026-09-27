@@ -1,0 +1,216 @@
+{
+  "clips": [
+    {
+      "id": "craft",
+      "key": "usopp",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "scale": 0.33110368,
+      "scaleReason": "Matches approved99px standing model and reference head/body ratio. One isotropic scale per loop; utility uses same physical scale for all four poses, seated/lying never enlarged.",
+      "regions": [
+        [
+          86,
+          6,
+          276,
+          311
+        ],
+        [
+          399,
+          6,
+          585,
+          311
+        ],
+        [
+          706,
+          6,
+          894,
+          311
+        ],
+        [
+          1014,
+          6,
+          1207,
+          311
+        ]
+      ],
+      "roots": [
+        [
+          165.0,
+          308
+        ],
+        [
+          475.5,
+          308
+        ],
+        [
+          786.0,
+          308
+        ],
+        [
+          1095.5,
+          308
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-east.webp"
+    },
+    {
+      "id": "craft",
+      "key": "usopp",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "scale": 0.32459016,
+      "scaleReason": "Matches approved99px standing model and reference head/body ratio. One isotropic scale per loop; utility uses same physical scale for all four poses, seated/lying never enlarged.",
+      "regions": [
+        [
+          55,
+          312,
+          243,
+          623
+        ],
+        [
+          370,
+          313,
+          560,
+          623
+        ],
+        [
+          680,
+          313,
+          869,
+          623
+        ],
+        [
+          996,
+          314,
+          1182,
+          623
+        ]
+      ],
+      "roots": [
+        [
+          164.5,
+          620
+        ],
+        [
+          476.5,
+          620
+        ],
+        [
+          786.0,
+          620
+        ],
+        [
+          1100.0,
+          620
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-west.webp"
+    },
+    {
+      "id": "craft",
+      "key": "usopp",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "scale": 0.33445946,
+      "scaleReason": "Matches approved99px standing model and reference head/body ratio. One isotropic scale per loop; utility uses same physical scale for all four poses, seated/lying never enlarged.",
+      "regions": [
+        [
+          87,
+          625,
+          257,
+          927
+        ],
+        [
+          396,
+          625,
+          568,
+          927
+        ],
+        [
+          705,
+          626,
+          879,
+          928
+        ],
+        [
+          1016,
+          626,
+          1188,
+          927
+        ]
+      ],
+      "roots": [
+        [
+          167.0,
+          924
+        ],
+        [
+          478.5,
+          924
+        ],
+        [
+          785.5,
+          925
+        ],
+        [
+          1097.5,
+          924
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-north.webp"
+    },
+    {
+      "id": "craft",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "scale": 0.32565789,
+      "scaleReason": "Matches approved99px standing model and reference head/body ratio. One isotropic scale per loop; utility uses same physical scale for all four poses, seated/lying never enlarged.",
+      "regions": [
+        [
+          87,
+          932,
+          262,
+          1242
+        ],
+        [
+          397,
+          932,
+          573,
+          1242
+        ],
+        [
+          703,
+          932,
+          881,
+          1242
+        ],
+        [
+          1015,
+          932,
+          1194,
+          1242
+        ]
+      ],
+      "roots": [
+        [
+          170.5,
+          1239
+        ],
+        [
+          481.0,
+          1239
+        ],
+        [
+          788.0,
+          1239
+        ],
+        [
+          1099.5,
+          1239
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-south.webp"
+    }
+  ]
+}

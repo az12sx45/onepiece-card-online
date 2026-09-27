@@ -1,0 +1,544 @@
+{
+  "schema": "launcher-life-art-review/1",
+  "reviewType": "Codex actual source +128px approved-versus-new atlas visual inspection and deterministic alpha/shape checks; no in-room runtime acceptance claimed",
+  "generator": "image_gen.imagegen",
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "runtimeAccepted": false,
+  "review": "Replaced small-head long-body draft with GPT whole-body redrawing using accepted read and original identity references. Head/torso direction consistent; checked all four frames at128px against approved idle/walk/read. Correct left wristband and satchel. Standing99px; seated/lying stay same physical sheet scale.",
+  "noMirroring": true,
+  "noBodyPartAssembly": true,
+  "originalRetained": true,
+  "priorReviewSuperseded": "rejected-proportion-v1/review.json",
+  "comparisonEvidence": "C:\\Codex_Candidates\\launcher-life-audit\\proportion-repair\\usopp-approved-comparison.png",
+  "clips": [
+    {
+      "id": "eat",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/usopp/eat-south.webp",
+      "sha256": "32e3f15f36f6d0977cc2a69d9af1adef49fc613f560432196fde4fdfb5ba717a",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "sourceSha256": "6ac7e0d370e33b4d4beb5b20d519e0dcca06d7c0b358e4753652a4518d31bcd1",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          40,
+          14,
+          88,
+          111
+        ],
+        [
+          40,
+          14,
+          87,
+          111
+        ],
+        [
+          40,
+          14,
+          89,
+          111
+        ],
+        [
+          40,
+          14,
+          88,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3766,
+        3831,
+        3883,
+        3790
+      ],
+      "singleIsotropicScale": 0.29117647,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/usopp/eat-south.webp",
+        "sha256": "32e3f15f36f6d0977cc2a69d9af1adef49fc613f560432196fde4fdfb5ba717a",
+        "scale": 0.29117647,
+        "approved": {
+          "alphaBounds": [
+            40,
+            13,
+            89,
+            112
+          ],
+          "height": 99,
+          "width": 49,
+          "topThirdSilhouetteWidth": 40
+        },
+        "read": {
+          "alphaBounds": [
+            39,
+            13,
+            90,
+            111
+          ],
+          "height": 98,
+          "width": 51,
+          "topThirdSilhouetteWidth": 39
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              40,
+              14,
+              88,
+              111
+            ],
+            "height": 97,
+            "width": 48,
+            "topThirdSilhouetteWidth": 43
+          },
+          {
+            "alphaBounds": [
+              40,
+              14,
+              87,
+              111
+            ],
+            "height": 97,
+            "width": 47,
+            "topThirdSilhouetteWidth": 41
+          },
+          {
+            "alphaBounds": [
+              40,
+              14,
+              89,
+              111
+            ],
+            "height": 97,
+            "width": 49,
+            "topThirdSilhouetteWidth": 43
+          },
+          {
+            "alphaBounds": [
+              40,
+              14,
+              88,
+              111
+            ],
+            "height": 97,
+            "width": 48,
+            "topThirdSilhouetteWidth": 44
+          }
+        ],
+        "distinctNeighborPixels": [
+          3766,
+          3831,
+          3883,
+          3790
+        ]
+      }
+    },
+    {
+      "id": "rest",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/usopp/rest-south.webp",
+      "sha256": "fcbaf073f36a7413247763981dc942654bd127918519129d5e070ba4fccafd09",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "sourceSha256": "6ac7e0d370e33b4d4beb5b20d519e0dcca06d7c0b358e4753652a4518d31bcd1",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          37,
+          32,
+          93,
+          111
+        ],
+        [
+          37,
+          31,
+          92,
+          111
+        ],
+        [
+          37,
+          32,
+          93,
+          111
+        ],
+        [
+          37,
+          31,
+          92,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3581,
+        3583,
+        3584,
+        3606
+      ],
+      "singleIsotropicScale": 0.29117647,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/usopp/rest-south.webp",
+        "sha256": "fcbaf073f36a7413247763981dc942654bd127918519129d5e070ba4fccafd09",
+        "scale": 0.29117647,
+        "approved": {
+          "alphaBounds": [
+            40,
+            13,
+            89,
+            112
+          ],
+          "height": 99,
+          "width": 49,
+          "topThirdSilhouetteWidth": 40
+        },
+        "read": {
+          "alphaBounds": [
+            39,
+            13,
+            90,
+            111
+          ],
+          "height": 98,
+          "width": 51,
+          "topThirdSilhouetteWidth": 39
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              37,
+              32,
+              93,
+              111
+            ],
+            "height": 79,
+            "width": 56,
+            "topThirdSilhouetteWidth": 46
+          },
+          {
+            "alphaBounds": [
+              37,
+              31,
+              92,
+              111
+            ],
+            "height": 80,
+            "width": 55,
+            "topThirdSilhouetteWidth": 46
+          },
+          {
+            "alphaBounds": [
+              37,
+              32,
+              93,
+              111
+            ],
+            "height": 79,
+            "width": 56,
+            "topThirdSilhouetteWidth": 47
+          },
+          {
+            "alphaBounds": [
+              37,
+              31,
+              92,
+              111
+            ],
+            "height": 80,
+            "width": 55,
+            "topThirdSilhouetteWidth": 46
+          }
+        ],
+        "distinctNeighborPixels": [
+          3581,
+          3583,
+          3584,
+          3606
+        ]
+      }
+    },
+    {
+      "id": "sleep",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/usopp/sleep-south.webp",
+      "sha256": "9095a0c474ad91fa888fa2423665ea2ba19d46fa11537400ab2daac8ef2330a0",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "sourceSha256": "6ac7e0d370e33b4d4beb5b20d519e0dcca06d7c0b358e4753652a4518d31bcd1",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          23,
+          69,
+          102,
+          111
+        ],
+        [
+          23,
+          69,
+          102,
+          111
+        ],
+        [
+          24,
+          69,
+          103,
+          111
+        ],
+        [
+          24,
+          69,
+          103,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2565,
+        2662,
+        2525,
+        2695
+      ],
+      "singleIsotropicScale": 0.29117647,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/usopp/sleep-south.webp",
+        "sha256": "9095a0c474ad91fa888fa2423665ea2ba19d46fa11537400ab2daac8ef2330a0",
+        "scale": 0.29117647,
+        "approved": {
+          "alphaBounds": [
+            40,
+            13,
+            89,
+            112
+          ],
+          "height": 99,
+          "width": 49,
+          "topThirdSilhouetteWidth": 40
+        },
+        "read": {
+          "alphaBounds": [
+            39,
+            13,
+            90,
+            111
+          ],
+          "height": 98,
+          "width": 51,
+          "topThirdSilhouetteWidth": 39
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              23,
+              69,
+              102,
+              111
+            ],
+            "height": 42,
+            "width": 79,
+            "topThirdSilhouetteWidth": 60
+          },
+          {
+            "alphaBounds": [
+              23,
+              69,
+              102,
+              111
+            ],
+            "height": 42,
+            "width": 79,
+            "topThirdSilhouetteWidth": 60
+          },
+          {
+            "alphaBounds": [
+              24,
+              69,
+              103,
+              111
+            ],
+            "height": 42,
+            "width": 79,
+            "topThirdSilhouetteWidth": 59
+          },
+          {
+            "alphaBounds": [
+              24,
+              69,
+              103,
+              111
+            ],
+            "height": 42,
+            "width": 79,
+            "topThirdSilhouetteWidth": 59
+          }
+        ],
+        "distinctNeighborPixels": [
+          2565,
+          2662,
+          2525,
+          2695
+        ]
+      }
+    },
+    {
+      "id": "train",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/usopp/train-south.webp",
+      "sha256": "9dc16fe10c4872dabe3bd0b6723f9734079d245bdd40d23adf5e2fba9a83f968",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "sourceSha256": "6ac7e0d370e33b4d4beb5b20d519e0dcca06d7c0b358e4753652a4518d31bcd1",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          40,
+          12,
+          90,
+          111
+        ],
+        [
+          40,
+          12,
+          89,
+          111
+        ],
+        [
+          40,
+          12,
+          90,
+          111
+        ],
+        [
+          40,
+          12,
+          88,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3888,
+        3923,
+        4050,
+        4031
+      ],
+      "singleIsotropicScale": 0.29117647,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/usopp/train-south.webp",
+        "sha256": "9dc16fe10c4872dabe3bd0b6723f9734079d245bdd40d23adf5e2fba9a83f968",
+        "scale": 0.29117647,
+        "approved": {
+          "alphaBounds": [
+            40,
+            13,
+            89,
+            112
+          ],
+          "height": 99,
+          "width": 49,
+          "topThirdSilhouetteWidth": 40
+        },
+        "read": {
+          "alphaBounds": [
+            39,
+            13,
+            90,
+            111
+          ],
+          "height": 98,
+          "width": 51,
+          "topThirdSilhouetteWidth": 39
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              40,
+              12,
+              90,
+              111
+            ],
+            "height": 99,
+            "width": 50,
+            "topThirdSilhouetteWidth": 45
+          },
+          {
+            "alphaBounds": [
+              40,
+              12,
+              89,
+              111
+            ],
+            "height": 99,
+            "width": 49,
+            "topThirdSilhouetteWidth": 45
+          },
+          {
+            "alphaBounds": [
+              40,
+              12,
+              90,
+              111
+            ],
+            "height": 99,
+            "width": 50,
+            "topThirdSilhouetteWidth": 46
+          },
+          {
+            "alphaBounds": [
+              40,
+              12,
+              88,
+              111
+            ],
+            "height": 99,
+            "width": 48,
+            "topThirdSilhouetteWidth": 45
+          }
+        ],
+        "distinctNeighborPixels": [
+          3888,
+          3923,
+          4050,
+          4031
+        ]
+      }
+    }
+  ]
+}

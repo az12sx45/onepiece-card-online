@@ -1,0 +1,186 @@
+{
+  "calls": [
+    {
+      "requestId": "50d3d5dc-1b34-477b-86f7-23899ebdc3c0",
+      "expectedRevision": 1,
+      "type": "work.reserve",
+      "payload": {
+        "itemId": "room-character-sanji",
+        "stationId": "room-furniture-kitchen-table",
+        "roomRevision": 1
+      },
+      "at": 1790482147892,
+      "walkers": [
+        {
+          "key": "sanji",
+          "cell": {
+            "col": 7,
+            "row": 4
+          },
+          "x": 454.9375,
+          "y": 422,
+          "mode": "life-act",
+          "phase": 0,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": []
+        }
+      ]
+    },
+    {
+      "requestId": "36178d4d-9973-4dc1-a27f-c6848dcb7f24",
+      "expectedRevision": 2,
+      "type": "work.activate",
+      "payload": {
+        "jobId": "fixture-job-1"
+      },
+      "at": 1790482156923,
+      "walkers": [
+        {
+          "key": "sanji",
+          "cell": {
+            "col": 8,
+            "row": 3
+          },
+          "x": 502.9375,
+          "y": 361.4579296875,
+          "mode": "life-act",
+          "phase": 0.19668481402292723,
+          "direction": "north",
+          "dock": {
+            "x": 502.9375,
+            "y": 361.4579296875,
+            "z": 371,
+            "side": "north"
+          },
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": []
+        }
+      ]
+    }
+  ],
+  "state": {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 3,
+      "disposed": false,
+      "paused": false,
+      "directive": "free",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-sanji"
+      ],
+      "characters": {
+        "sanji": {
+          "key": "sanji",
+          "itemId": "room-character-sanji",
+          "state": "Work",
+          "needs": {
+            "energy": 85,
+            "hunger": 20,
+            "mood": 70,
+            "social": 70,
+            "workMotivation": 70
+          },
+          "memories": [],
+          "nextAt": 1790482151464,
+          "taps": [
+            1790482147522
+          ],
+          "taskToken": "life-2",
+          "lastWorkAt": 1790482147875,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [
+        {
+          "jobId": "fixture-job-1",
+          "itemId": "room-character-sanji",
+          "stationId": "room-furniture-kitchen-table",
+          "status": "active",
+          "durationMs": 18000,
+          "roomRevision": 1,
+          "reservedAt": "2026-09-27T04:09:07.892Z",
+          "reward": 10,
+          "activatedAt": "2026-09-27T04:09:16.923Z",
+          "readyAt": "2026-09-27T04:09:34.923Z"
+        }
+      ],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "sanji",
+          "token": "life-2",
+          "state": "Work",
+          "phase": "performing",
+          "goal": {
+            "col": 8,
+            "row": 3
+          },
+          "stationId": "room-furniture-kitchen-table",
+          "jobId": "fixture-job-1",
+          "clip": "work",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [
+        {
+          "key": "sanji",
+          "cell": {
+            "col": 8,
+            "row": 3
+          },
+          "stationId": "room-furniture-kitchen-table",
+          "slotId": "single",
+          "token": "life-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790482556914,
+      "nextForegroundAt": 1790482158667,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "sanji",
+        "cell": {
+          "col": 8,
+          "row": 3
+        },
+        "x": 502.9375,
+        "y": 361.4579296875,
+        "mode": "life-act",
+        "phase": 0.19668481402292723,
+        "direction": "north",
+        "dock": {
+          "x": 502.9375,
+          "y": 361.4579296875,
+          "z": 371,
+          "side": "north"
+        },
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ]
+  },
+  "source": "life_v1"
+}

@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "port": 31931,
+  "databaseConfigured": false,
+  "scope": "npm start and real isolated HTTP only; DATABASE_URL absent, not database acceptance",
+  "checks": [
+    {
+      "route": "/board_start.html",
+      "userAgent": "Electron/44.1.1",
+      "status": 200,
+      "bytes": 81199,
+      "html": true,
+      "pass": true
+    },
+    {
+      "route": "/download",
+      "userAgent": "node",
+      "status": 200,
+      "bytes": 10549,
+      "html": true,
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "generator": "image_gen.imagegen",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030\\exec-92122212-01f3-4d60-a9cf-9e78ef4d5bda.png",
+  "sourceSha256": "0bf5875c37014e03462ba445166ccd2b80e1815abfc3d61f774e73ecc384861c",
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/usopp-actions-05/ancestry/07-source-01.png",
+      "sha256": "d2860d7d10d8e9f5cfaec609c678bfdc1204545eddab9e079b8d2837924c28d5"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/usopp-actions-05/image.png",
+      "sha256": "54930c43c6a1d1cc8422204e9b98252678dcb66036f93a3b9271234e7527bcfd"
+    }
+  ],
+  "sourceReview": "Early Usopp face/outfit and left wristband/bag correct. Four coherent direction rows, back head has no face. Supported tray and changing cloth stroke are visible; no arm/face mirroring.",
+  "runtimeAccepted": false,
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "promptSha256": "a5c95843389774843c671eb1c283fdcd2d8f8db43ba572c0ebfe175e9ba6d736"
+}

@@ -1,0 +1,23 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-71a74745-86e9-4ce3-bb00-8f6dfb374492.png",
+  "source": {
+    "path": "tools/launcher-room/life-v1/robin-utility/source.png",
+    "sha256": "0c0c1bf2b2df331a762ac0a2467f34a91b3a3da807947cdcaedcfce328f87727"
+  },
+  "prompt": {
+    "path": "tools/launcher-room/life-v1/robin-utility/prompt.txt",
+    "sha256": "66119a113c893bb937b175dcd4ef72f909d4f24b354767b9190a7a5c22765b40"
+  },
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/robin-actions-source-01/image.png",
+      "sha256": "43a44dd91c8e89c711250eef20c9c763204fed4b8e6ab1b7662818c1b1506db9",
+      "role": "approved whole-character identity and style"
+    }
+  ],
+  "review": "Reviewed complete connected body, head/body same facing, correct outfit, four chronological poses per row. Runtime test pending. Original rest row rejected: knees switch sides; original train row rejected: shortened body. Use complete-figure replacement strips.",
+  "runtimeAccepted": false,
+  "processing": "Keep original RGBA; separate alpha copy removes alpha<16 and isolated <32px opaque specks, retaining 2px AA edge. Crop whole figures and uniform scale only."
+}

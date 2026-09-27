@@ -4,7 +4,7 @@
   const $ = id => document.getElementById(id);
   const WIDTH = 960;
   const HEIGHT = 540;
-  const ROOM_MAX_CHARACTERS = 8;
+  const ROOM_MAX_CHARACTERS = 10;
   const DEFAULT_SCENE = 'room-scene-default';
   const SCENE_FALLBACK = 'opui://launcher/images/launcher_room/scenes/crew-cabin-v2.webp';
   const TYPES = {
@@ -20,7 +20,7 @@
   const FLOOR = Object.freeze({ columns: 16, rows: 8, top: 267, bottom: 515, backLeft: 164, backRight: 796, frontLeft: 28, frontRight: 932 });
   const FURNITURE_FOOTPRINTS = {
     helm: [2, 2], 'map-table': [3, 2], 'treasure-chest': [2, 1], 'tangerine-tree': [2, 2],
-    'swords-rack': [2, 1], 'kitchen-table': [3, 2], bookshelf: [2, 1],
+    'swords-rack': [2, 1], 'kitchen-table': [3, 2], 'galley-stove': [3, 2], bookshelf: [2, 1],
     'medicine-cabinet': [2, 1], piano: [3, 2], 'tool-bench': [2, 2]
   };
   // Complete 384px drawings, measured at the front row against the accepted crew art.
@@ -28,7 +28,7 @@
   const FURNITURE_VISUALS = Object.freeze({
     helm: 78, 'map-table': 72, 'treasure-chest': 56,
     'tangerine-tree': 104, 'swords-rack': 84,
-    'kitchen-table': 80.25, bookshelf: 90,
+    'kitchen-table': 80.25, 'galley-stove': 80.25, bookshelf: 90,
     'medicine-cabinet': 86, piano: 80.25, 'tool-bench': 76
   });
   const FURNITURE_CANVAS = 384;
@@ -120,6 +120,7 @@
   function copyRoom(source) {
     const room = source && typeof source === 'object' ? source : {};
     return {
+      capacityVersion: 2,
       revision: Math.max(0, Math.trunc(clamp(room.revision, 0, Number.MAX_SAFE_INTEGER, 0))),
       sceneId: typeof room.sceneId === 'string' ? room.sceneId : DEFAULT_SCENE,
       placements: (Array.isArray(room.placements) ? room.placements : []).slice(0, 24).map(item => ({
@@ -162,6 +163,40 @@
   let companionRequest = 0;
   const companionStats = new Map();
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let renderedRevision = -1;
+  const lifeRoom = window.OnePieceLifeRoom?.create({
+    walkers: () => walkers, profile: () => profile, accountId: () => accountId, isOwner,
+    room: activeRoom, layout: () => layoutRoom(activeRoom()), furnitureKey: keyForFurniture,
+    spotsAround, cellBlocked, walkBlocked: () => walkBlocked, blockedFor, routeBetween, routeTo,
+    face: faceWalker, setPose, startDock: startFurnitureDock, moveDock: moveFurnitureDock,
+    speak: showSpeech, hideSpeech, wander: chooseDestination, canAnimate,
+    editing: () => editing, reducedMotion: () => motion.matches,
+    companionId: () => companionId, companionStatus, renderedRevision: () => renderedRevision,
+    placeWalker(walker, cell) {
+      const anchor = anchorForCell(cell, { width: 1, height: 1 });
+      walker.cell = { ...cell }; walker.x = anchor.x; walker.y = anchor.y;
+      walker.segmentCell = null; walker.route = []; walker.targetCell = null;
+      walker.node.style.left = `${walker.x / WIDTH * 100}%`; walker.node.style.top = `${walker.y / HEIGHT * 100}%`;
+      walker.node.dataset.gridCol = String(cell.col); walker.node.dataset.gridRow = String(cell.row);
+    },
+    restoreWalker(walker, saved) {
+      walker.cell = { ...saved.cell }; walker.x = saved.x; walker.y = saved.y;
+      walker.segmentCell = saved.segmentCell; walker.route = saved.segmentCell ? [saved.segmentCell] : [];
+      if (saved.direction) walker.motion.direction = saved.direction;
+      walker.node.style.left = `${walker.x / WIDTH * 100}%`; walker.node.style.top = `${walker.y / HEIGHT * 100}%`;
+      walker.node.style.zIndex = String(10 + Math.round(walker.y));
+      walker.node.dataset.gridCol = String(walker.cell.col); walker.node.dataset.gridRow = String(walker.cell.row);
+    },
+    acceptProfile(next) {
+      if (!next || next.userId !== profile?.userId) return;
+      const changedRoom = JSON.stringify(profile.room) !== JSON.stringify(next.room);
+      profile = next;
+      if (changedRoom && !editing) {
+        const epoch = viewEpoch;
+        queueMicrotask(() => { if (epoch === viewEpoch && !editing) render(); });
+      }
+    }
+  });
 
   function status(message = '', error = false) {
     const target = $('roomStatus');
@@ -227,6 +262,7 @@
     $('roomCompanionActions').hidden = !isOwner();
     $('roomCompanionTalk').disabled = !canAct || (record && (Number(record.talksRemainingToday) <= 0 || Date.parse(record.nextTalkAt) > Date.now()));
     $('roomCompanionTalk').title = record && Date.parse(record.nextTalkAt) > Date.now() ? `下次可聊天：${remainingTime(record.nextTalkAt)}` : '';
+    lifeRoom?.renderPanel();
   }
   function closeCompanion() {
     if (companionTick) clearInterval(companionTick);
@@ -250,15 +286,16 @@
     if (companionId !== itemId) closeCompanion();
     else if (companionTick) clearInterval(companionTick);
     companionId = itemId;
-    if (interaction) finishInteraction(performance.now());
+    if (interaction && !lifeRoom?.active()) finishInteraction(performance.now());
     nextInteractionAt = performance.now() + 5000;
     const walker = walkers.find(entry => entry.item?.id === itemId);
     if (walker) walker.node.classList.add('is-companion-selected');
-    if (walker) {
+    if (walker && !lifeRoom?.active()) {
       walker.route = []; walker.mode = 'focused'; walker.pause = 0;
       walker.node.classList.remove('is-walking'); walker.node.classList.add('is-companion-selected');
       setPose(walker, 'wave'); walker.manualUntil = performance.now() + 1250;
     }
+    lifeRoom?.tapped(keyForCharacter(resolvedItem(itemId, 'character')));
     renderCompanionPanel();
     $('roomCompanionPanel').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     companionTick = setInterval(renderCompanionPanel, 1000);
@@ -296,11 +333,12 @@
       nextInteractionAt = performance.now() + 5000;
       const walker = walkers.find(entry => entry.item?.id === itemId);
       const key = walker?.key || keyForCharacter(resolvedItem(itemId, 'character'));
+      if (lifeRoom?.active()) lifeRoom.cancel(key);
       const beat = dialogue?.interactionBeat?.(key, 'bond', companionLineIndex);
       const lines = beat ? [beat.line, beat.mood] : dialogue?.interaction?.(key, 'bond', companionLineIndex) ||
         ['下次再來聊天吧！', 'happy'];
       companionLineIndex++;
-      if (walker && walker.mode === 'focused') {
+      if (walker && (walker.mode === 'focused' || lifeRoom?.active())) {
         showSpeech(walker, lines[0], lines[1], '親密度 +2');
         if (beat?.pose) setPose(walker, beat.pose);
         walker.manualUntil = performance.now() + 3500;
@@ -326,6 +364,7 @@
     return list.find(item => item.itemId === selected.itemId) || null;
   }
   function stopAnimation() {
+    lifeRoom?.suspend();
     if (animationId) cancelAnimationFrame(animationId);
     animationId = 0;
     lastFrame = 0;
@@ -409,6 +448,10 @@
   }
   function blockedFor(walker, exempt = []) {
     const blocked = new Set(walkBlocked);
+    for (const lease of lifeRoom?.reservations() || []) {
+      if (lease.key !== walker.key && !exempt.some(other => other.key === lease.key) && lease.cell)
+        blocked.add(cellId(lease.cell.col, lease.cell.row));
+    }
     for (const other of walkers) {
       if (other === walker || exempt.includes(other)) continue;
       blocked.add(cellId(other.cell.col, other.cell.row));
@@ -519,7 +562,7 @@
     // The keyboard and table work surface must be approached from their front,
     // opposite the piano back or the table bench. Saved furniture
     // cells stay unchanged; the actor routes to a free floor cell by the keys.
-    if (['piano', 'kitchen-table'].includes(keyForFurniture(target.item))) {
+    if (['piano', 'kitchen-table', 'galley-stove', 'helm', 'map-table', 'tool-bench', 'medicine-cabinet', 'bookshelf'].includes(keyForFurniture(target.item))) {
       const middleCol = target.cell.col + Math.floor((target.span.width - 1) / 2);
       const middleRow = target.cell.row + Math.floor((target.span.height - 1) / 2);
       return [[{ col: middleCol, row: target.cell.row + target.span.height }],
@@ -538,12 +581,18 @@
   }
   function furnitureDock(walker, target) {
     const key = keyForFurniture(target?.item);
-    if (!['piano', 'kitchen-table'].includes(key)) return null;
+    if (!['piano', 'kitchen-table', 'galley-stove', 'helm', 'map-table', 'tool-bench', 'medicine-cabinet', 'bookshelf'].includes(key)) return null;
     const depth = locomotion.projectedScale(target.anchor.y, FLOOR);
     const side = ['north', 'east', 'south', 'west'][rotationFor(target.entry)];
     // Coordinates follow the actual tabletop / keyboard in the four GPT views.
     // The approach cell and persisted footprint stay reserved and unchanged.
-    const offsets = { north: [0, 4], south: [0, -27], east: [key === 'piano' ? -24 : -30, -8], west: [key === 'piano' ? 24 : 30, -8] };
+    const offsets = key === 'helm'
+      ? {north:[-12,-9],south:[0,-18],east:[-24,-12],west:[24,-12]}
+      : ['medicine-cabinet','bookshelf'].includes(key)
+        ? {north:[-18,6],south:[-38,-5],east:[-26,-2],west:[26,-2]}
+        : ['map-table','tool-bench'].includes(key)
+          ? {north:[0,6],south:[0,-7],east:[-26,-5],west:[26,-5]}
+          : { north: [0, 4], south: [0, key === 'galley-stove' ? -6 : -27], east: [key === 'piano' ? -24 : -30, -8], west: [key === 'piano' ? 24 : 30, -8] };
     const [dx, dy] = offsets[side];
     // Both drawings retain their former 75 * depth visible scale. Their old
     // 94% translation / 95% origin placed the ground below the grid anchor;
@@ -737,8 +786,10 @@
     if (!canAnimate()) return;
     const delta = Math.min(50, lastFrame ? now - lastFrame : 16);
     lastFrame = now;
-    startInteraction(now);
+    lifeRoom?.tick(now);
+    if (!lifeRoom?.active()) startInteraction(now);
     for (const walker of walkers) {
+      if (lifeRoom?.animate(walker, now, delta)) continue;
       if (walker.pose !== 'walk') showAction(walker, walker.pose || 'idle', now);
       if (walker.returnDockBeforeRoute) {
         if (moveFurnitureDock(walker, walker.dockOrigin, now, delta)) {
@@ -763,7 +814,7 @@
       }
       if (!walker.route.length) {
         walker.node.classList.remove('is-walking');
-        if (walker.mode === 'wander') chooseDestination(walker);
+        if (walker.mode === 'wander' && !lifeRoom?.isBusy(walker.key)) chooseDestination(walker);
         continue;
       }
       const nextCell = walker.route[0];
@@ -842,9 +893,10 @@
       });
     }
     for (const walker of walkers) {
-      if (walker.item?.id === companionId) { walker.mode = 'focused'; walker.node.classList.add('is-companion-selected'); setPose(walker, 'idle'); }
+      if (walker.item?.id === companionId && !lifeRoom?.active()) { walker.mode = 'focused'; walker.node.classList.add('is-companion-selected'); setPose(walker, 'idle'); }
       else chooseDestination(walker);
     }
+    lifeRoom?.resume();
     if (walkers.length) { nextInteractionAt = performance.now() + 1800; animationId = requestAnimationFrame(frame); }
   }
   function positionNode(node, placed) {
@@ -905,6 +957,7 @@
   function renderStage() {
     stopAnimation();
     const room = activeRoom();
+    renderedRevision = room.revision;
     const layout = layoutRoom(room);
     const scene = resolvedItem(room.sceneId, 'scene');
     const image = $('roomScene');
@@ -1170,14 +1223,17 @@
     const nextAccount = Number(context.accountId) || 0;
     const nextPreview = context.preview === true;
     const changedOwner = nextAccount !== accountId || nextPreview !== preview || (profile?.userId || 0) !== (nextProfile?.userId || 0);
+    const sameRoom = !changedOwner && JSON.stringify(profile?.room) === JSON.stringify(nextProfile?.room);
     if (changedOwner) viewEpoch++;
-    if (changedOwner) { closeCompanion(); companionStats.clear(); }
+    if (changedOwner) { closeCompanion(); companionStats.clear(); pairHistory.clear(); }
     profile = nextProfile || null; accountId = nextAccount; preview = nextPreview;
     if (changedOwner || !isOwner()) {
       editing = false; dirty = false; selected = null; shop = null; drag = null;
       draft = copyRoom(profile?.room); status('');
     } else if (!editing) draft = copyRoom(profile?.room);
-    render();
+    lifeRoom?.setContext();
+    if (sameRoom && !editing && $('roomCharacters').children.length) { renderEditor(); renderCompanionPanel(); }
+    else render();
   }
   function onVisible(panel) { visible = panel === 'profile'; if (!visible) closeCompanion(); refreshAnimation(); }
 
@@ -1232,16 +1288,23 @@
   });
   document.addEventListener('visibilitychange', refreshAnimation);
   motion.addEventListener?.('change', refreshAnimation);
-  window.LauncherRoom = { setProfile, onVisible, openEditor };
+  window.LauncherRoom = { setProfile, onVisible, openEditor, onPurchase: (result, itemId) => lifeRoom?.onPurchase(result, itemId) };
   // Enabled only by the local QA harness, never by the packaged launcher.
   if (window.__LAUNCHER_ROOM_QA__ === true) window.__launcherRoomTest = {
     snapshot: () => ({ interaction: interaction && { type: interaction.type, phase: interaction.phase,
       sceneId: interaction.scene?.id, sceneCursor: interaction.scene?.cursor, pair: interaction.scene?.pair,
       turnIndex: interaction.turnIndex, turns: interaction.scene?.turns.length },
+    life: lifeRoom?.snapshot(),
     walkers: walkers.map(walker => ({ key: walker.key, cell: { ...walker.cell }, x: walker.x, y: walker.y,
       mode: walker.mode, phase: walker.motion?.phase, direction: walker.motion?.direction,
       dock: walker.dockTarget ? { ...walker.dockTarget } : null,
       ready: Object.keys(walker.motionArt?.atlases || {}), route: walker.route.map(cell => ({ ...cell })) })) }),
+    lifeWorld: () => lifeRoom?.world(),
+    lifeAssign: (key,stationId) => lifeRoom?.controller()?.assignWork(key,stationId),
+    lifeInteract: (key,action) => lifeRoom?.controller()?.interact(key,action),
+    lifeEvent: id => lifeRoom?.controller()?.scheduleEvent(id),
+    lifePool: () => lifeRoom?.controller()?.getEventPool(),
+    lifeCancel: key => lifeRoom?.controller()?.cancel(key),
     route: (key, goal) => {
       if (interaction) finishInteraction(performance.now());
       nextInteractionAt = Infinity;

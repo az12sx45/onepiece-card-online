@@ -1,0 +1,186 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:/Users/王曜瑋/.codex/generated_images/01a0e0d1-a4bf-73f3-af41-6763cfefe2b5/exec-0842dd5f-b113-447f-b797-a01113e6982e.png",
+  "references": [
+    "tools/launcher-room/fullbody-v3/sources/usopp-actions-01/image.png",
+    "tools/launcher-room/fullbody-v3/sources/usopp-actions-05/image.png"
+  ],
+  "prompt": "tools/launcher-room/life-v1/usopp-read/prompt.txt",
+  "sourceSha256": "e9fca8aa8814a68453e174515d602c6181e2228f1e4396ecc517eaafc5662909",
+  "sourcePixels": [
+    1254,
+    1254
+  ],
+  "trueAlpha": true,
+  "packing": "Whole-body crop and root translation only, one uniform scale per four-frame loop. Main bounds measured at alpha32 and padded within row/cell bounds; original alpha is retained. No limb assembly, mirror, rotation or warp. Feet root is derived from ground pixels.",
+  "sourceAccepted": true,
+  "contactAccepted": true,
+  "runtimeAccepted": false,
+  "sourceReview": "Sixteen coherent complete full-body drawings reviewed. Long nose, early checked bandana/goggles, curly hair, brown overalls, pale blue sash, left-wrist stripe and left-hip satchel retained without mirroring. Four-direction reading includes distinct attached page shapes and supported book. True alpha; no baked furniture or opaque reference backdrop.",
+  "actualSizeReview": "Final 128px contact sheet reviewed: approximately100px figures, intact hair/feet/book and no neighboring fragments or detached body parts. Four successive frames show flat spread, lifting page, curved page across spine, and smoothing/recovery. Feet remain rooted, head and torso face same direction. No per-frame scale changes or body-part assembly. Static source/contact acceptance only; runtime playback pending.",
+  "contactSheet": "tools/launcher-room/life-v1/usopp-read/contact-128.png",
+  "contactSha256": "58234343a2266199d8b1a9c5670801655bfe5521825528a3f914dacab0aa738c",
+  "numericQa": {
+    "passed": true,
+    "checks": [
+      {
+        "asset": "public/images/launcher_room/life_v1/usopp/read-east.webp",
+        "sha256": "4dca19a9bf331ea066985a5bb334475014dcc4368a695d6aee31936f4407a4d3",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            38,
+            12,
+            105,
+            112
+          ],
+          [
+            38,
+            12,
+            104,
+            112
+          ],
+          [
+            38,
+            12,
+            104,
+            112
+          ],
+          [
+            38,
+            12,
+            104,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/usopp/read-west.webp",
+        "sha256": "dd698e8344c68a014252ce5a159b0c6f3c0f0880418c07e72fb84bb46eadd771",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            28,
+            12,
+            91,
+            112
+          ],
+          [
+            28,
+            12,
+            91,
+            112
+          ],
+          [
+            28,
+            12,
+            92,
+            112
+          ],
+          [
+            27,
+            12,
+            91,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/usopp/read-north.webp",
+        "sha256": "85e8251a9dfd8bcda94c031af2d4df32becb46c397775a819e09398e327fa19e",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            38,
+            12,
+            93,
+            112
+          ],
+          [
+            36,
+            12,
+            96,
+            112
+          ],
+          [
+            35,
+            12,
+            95,
+            112
+          ],
+          [
+            36,
+            12,
+            95,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/usopp/read-south.webp",
+        "sha256": "de6630b29bbacd5d142a8524273c093143fa3f6af1652e5b70928be217606b3f",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            38,
+            12,
+            91,
+            112
+          ],
+          [
+            38,
+            12,
+            92,
+            112
+          ],
+          [
+            38,
+            12,
+            93,
+            112
+          ],
+          [
+            38,
+            12,
+            92,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      }
+    ],
+    "scope": "Atlas dimensions, alpha bounds and four distinct frames; not runtime acceptance."
+  }
+}

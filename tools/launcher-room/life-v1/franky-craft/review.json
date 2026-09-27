@@ -1,0 +1,544 @@
+{
+  "schema": "launcher-life-art-review/1",
+  "reviewType": "Codex actual source +128px approved-versus-new atlas visual inspection and deterministic alpha/shape checks; no in-room runtime acceptance claimed",
+  "generator": "image_gen.imagegen",
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "runtimeAccepted": false,
+  "review": "Existing connected full-body source retained. Entire four-frame loops uniformly reduced by0.83 to match unchanged approved83px display model. Compared128px head/shoulder and feet with approved idle/walk. Feet grounded; lower sitting/sleeping height is preserved. Read clip belongs to another task and was not changed.",
+  "noMirroring": true,
+  "noBodyPartAssembly": true,
+  "originalRetained": true,
+  "priorReviewSuperseded": "rejected-display-scale-v1/review.json",
+  "comparisonEvidence": "C:\\Codex_Candidates\\launcher-life-audit\\proportion-repair\\franky-approved-comparison.png",
+  "clips": [
+    {
+      "id": "craft",
+      "direction": "east",
+      "asset": "public/images/launcher_room/life_v1/franky/craft-east.webp",
+      "sha256": "4e6ddd7ed07663b1d870444f1b320d6ad3638296f874492d5ef07305407c543d",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          43,
+          29,
+          97,
+          111
+        ],
+        [
+          42,
+          28,
+          97,
+          111
+        ],
+        [
+          43,
+          28,
+          99,
+          111
+        ],
+        [
+          43,
+          29,
+          97,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2827,
+        2934,
+        2944,
+        2678
+      ],
+      "singleIsotropicScale": 0.27574751,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/franky/craft-east.webp",
+        "sha256": "4e6ddd7ed07663b1d870444f1b320d6ad3638296f874492d5ef07305407c543d",
+        "scale": 0.27574751,
+        "approved": {
+          "alphaBounds": [
+            31,
+            29,
+            93,
+            112
+          ],
+          "height": 83,
+          "width": 62,
+          "topThirdSilhouetteWidth": 59
+        },
+        "read": {
+          "alphaBounds": [
+            28,
+            13,
+            111,
+            111
+          ],
+          "height": 98,
+          "width": 83,
+          "topThirdSilhouetteWidth": 83
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              43,
+              29,
+              97,
+              111
+            ],
+            "height": 82,
+            "width": 54,
+            "topThirdSilhouetteWidth": 45
+          },
+          {
+            "alphaBounds": [
+              42,
+              28,
+              97,
+              111
+            ],
+            "height": 83,
+            "width": 55,
+            "topThirdSilhouetteWidth": 37
+          },
+          {
+            "alphaBounds": [
+              43,
+              28,
+              99,
+              111
+            ],
+            "height": 83,
+            "width": 56,
+            "topThirdSilhouetteWidth": 40
+          },
+          {
+            "alphaBounds": [
+              43,
+              29,
+              97,
+              111
+            ],
+            "height": 82,
+            "width": 54,
+            "topThirdSilhouetteWidth": 44
+          }
+        ],
+        "distinctNeighborPixels": [
+          2827,
+          2934,
+          2944,
+          2678
+        ]
+      }
+    },
+    {
+      "id": "craft",
+      "direction": "west",
+      "asset": "public/images/launcher_room/life_v1/franky/craft-west.webp",
+      "sha256": "7672a6f66571616461c7fb419713c9be88a0d47abc8b8f540f0770d0f90f0c6b",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          31,
+          29,
+          86,
+          111
+        ],
+        [
+          31,
+          29,
+          86,
+          111
+        ],
+        [
+          30,
+          29,
+          85,
+          111
+        ],
+        [
+          31,
+          28,
+          84,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2856,
+        2977,
+        2851,
+        2870
+      ],
+      "singleIsotropicScale": 0.27574751,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/franky/craft-west.webp",
+        "sha256": "7672a6f66571616461c7fb419713c9be88a0d47abc8b8f540f0770d0f90f0c6b",
+        "scale": 0.27574751,
+        "approved": {
+          "alphaBounds": [
+            32,
+            29,
+            95,
+            112
+          ],
+          "height": 83,
+          "width": 63,
+          "topThirdSilhouetteWidth": 61
+        },
+        "read": {
+          "alphaBounds": [
+            22,
+            13,
+            99,
+            111
+          ],
+          "height": 98,
+          "width": 77,
+          "topThirdSilhouetteWidth": 77
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              31,
+              29,
+              86,
+              111
+            ],
+            "height": 82,
+            "width": 55,
+            "topThirdSilhouetteWidth": 47
+          },
+          {
+            "alphaBounds": [
+              31,
+              29,
+              86,
+              111
+            ],
+            "height": 82,
+            "width": 55,
+            "topThirdSilhouetteWidth": 47
+          },
+          {
+            "alphaBounds": [
+              30,
+              29,
+              85,
+              111
+            ],
+            "height": 82,
+            "width": 55,
+            "topThirdSilhouetteWidth": 45
+          },
+          {
+            "alphaBounds": [
+              31,
+              28,
+              84,
+              111
+            ],
+            "height": 83,
+            "width": 53,
+            "topThirdSilhouetteWidth": 45
+          }
+        ],
+        "distinctNeighborPixels": [
+          2856,
+          2977,
+          2851,
+          2870
+        ]
+      }
+    },
+    {
+      "id": "craft",
+      "direction": "north",
+      "asset": "public/images/launcher_room/life_v1/franky/craft-north.webp",
+      "sha256": "7ca91a740ed7b8e2ab03ef191ba3b7ef4d566ca9848ea1db79ec83185c38f9da",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          24,
+          29,
+          104,
+          112
+        ],
+        [
+          25,
+          29,
+          104,
+          111
+        ],
+        [
+          25,
+          29,
+          104,
+          111
+        ],
+        [
+          25,
+          29,
+          104,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        4286,
+        4129,
+        4184,
+        4329
+      ],
+      "singleIsotropicScale": 0.30181818,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/franky/craft-north.webp",
+        "sha256": "7ca91a740ed7b8e2ab03ef191ba3b7ef4d566ca9848ea1db79ec83185c38f9da",
+        "scale": 0.30181818,
+        "approved": {
+          "alphaBounds": [
+            30,
+            29,
+            98,
+            112
+          ],
+          "height": 83,
+          "width": 68,
+          "topThirdSilhouetteWidth": 67
+        },
+        "read": {
+          "alphaBounds": [
+            20,
+            13,
+            109,
+            111
+          ],
+          "height": 98,
+          "width": 89,
+          "topThirdSilhouetteWidth": 89
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              24,
+              29,
+              104,
+              112
+            ],
+            "height": 83,
+            "width": 80,
+            "topThirdSilhouetteWidth": 80
+          },
+          {
+            "alphaBounds": [
+              25,
+              29,
+              104,
+              111
+            ],
+            "height": 82,
+            "width": 79,
+            "topThirdSilhouetteWidth": 79
+          },
+          {
+            "alphaBounds": [
+              25,
+              29,
+              104,
+              111
+            ],
+            "height": 82,
+            "width": 79,
+            "topThirdSilhouetteWidth": 79
+          },
+          {
+            "alphaBounds": [
+              25,
+              29,
+              104,
+              112
+            ],
+            "height": 83,
+            "width": 79,
+            "topThirdSilhouetteWidth": 79
+          }
+        ],
+        "distinctNeighborPixels": [
+          4286,
+          4129,
+          4184,
+          4329
+        ]
+      }
+    },
+    {
+      "id": "craft",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/franky/craft-south.webp",
+      "sha256": "3166e0431b44eca3bd165f1a5926617489f6007ca9ed0750b43461d467c25f5f",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          27,
+          28,
+          102,
+          111
+        ],
+        [
+          26,
+          28,
+          101,
+          111
+        ],
+        [
+          26,
+          28,
+          102,
+          111
+        ],
+        [
+          25,
+          28,
+          101,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        4297,
+        4190,
+        4152,
+        4269
+      ],
+      "singleIsotropicScale": 0.29642857,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/franky/craft-south.webp",
+        "sha256": "3166e0431b44eca3bd165f1a5926617489f6007ca9ed0750b43461d467c25f5f",
+        "scale": 0.29642857,
+        "approved": {
+          "alphaBounds": [
+            27,
+            29,
+            99,
+            112
+          ],
+          "height": 83,
+          "width": 72,
+          "topThirdSilhouetteWidth": 70
+        },
+        "read": {
+          "alphaBounds": [
+            17,
+            13,
+            110,
+            111
+          ],
+          "height": 98,
+          "width": 93,
+          "topThirdSilhouetteWidth": 93
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              27,
+              28,
+              102,
+              111
+            ],
+            "height": 83,
+            "width": 75,
+            "topThirdSilhouetteWidth": 75
+          },
+          {
+            "alphaBounds": [
+              26,
+              28,
+              101,
+              111
+            ],
+            "height": 83,
+            "width": 75,
+            "topThirdSilhouetteWidth": 75
+          },
+          {
+            "alphaBounds": [
+              26,
+              28,
+              102,
+              111
+            ],
+            "height": 83,
+            "width": 76,
+            "topThirdSilhouetteWidth": 76
+          },
+          {
+            "alphaBounds": [
+              25,
+              28,
+              101,
+              111
+            ],
+            "height": 83,
+            "width": 76,
+            "topThirdSilhouetteWidth": 76
+          }
+        ],
+        "distinctNeighborPixels": [
+          4297,
+          4190,
+          4152,
+          4269
+        ]
+      }
+    }
+  ]
+}

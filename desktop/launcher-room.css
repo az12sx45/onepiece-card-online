@@ -109,3 +109,18 @@
 @media (max-width: 760px) { .room-heading { align-items: start; } .room-editor-items { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); } }
 @media (max-width: 560px) { .room-heading { flex-direction: row; } .room-heading > div { min-width: 0; } .room-heading > .ghost-button { min-width: 82px; padding: 6px; } .room-editor { padding: 11px; } .room-editor-actions { align-items: stretch; flex-direction: column; } .room-selection { align-items: start; flex-direction: column; } .room-companion-panel { grid-template-columns: 70px minmax(0, 1fr); gap: 10px; padding: 11px 36px 11px 10px; } .room-companion-portrait { width: 70px; height: 70px; } }
 @media (prefers-reduced-motion: reduce) { .room-character-shell.is-conversing .room-chibi, .room-character-shell.is-using-furniture .room-chibi { animation: none; } }
+.room-life-toolbar { display:flex; justify-content:space-between; align-items:center; gap:10px 20px; flex-wrap:wrap; margin:0 0 10px; padding:10px 13px; border:1px solid #86bfb647; border-radius:9px; background:#082531; color:#bcd2cb; font-size:11px; }
+.room-life-toolbar[hidden], .room-life-actions[hidden], .room-life-details[hidden], .room-life-work-choices[hidden] { display:none; }
+.room-life-clock { display:inline-block; margin-right:10px; color:#f4d59b; font-weight:700; }
+.room-life-controls { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.room-life-controls select { min-height:32px; max-width:150px; padding:5px 8px; border:1px solid #d5ba7959; border-radius:6px; background:#09212c; color:#f0ddbb; font:inherit; }
+.room-life-controls button { min-height:32px; padding:5px 10px; font-size:11px; }
+.room-life-actions, .room-life-work-choices { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.room-life-actions button, .room-life-work-choices button, .room-life-details button { min-height:32px; padding:6px 10px; font-size:11px; }
+.room-life-actions button:disabled, .room-life-controls button:disabled { opacity:.5; cursor:default; }
+.room-life-details { display:flex; align-items:center; flex-wrap:wrap; gap:7px; margin-top:10px; padding:10px; border:1px solid #83cfc633; border-radius:7px; background:#06202a; color:#c6dbd3; font-size:11px; }
+.room-life-details p { flex-basis:100%; margin:0 0 3px; color:#edce96; }
+.room-life-details span { padding:3px 6px; border-radius:4px; background:#163a43; }
+.room-life-details small { flex-basis:100%; color:#9ebbb6; }
+.room-life-work-choices { padding:8px; border:1px solid #d5ba7959; border-radius:7px; background:#071e28; }
+@media(max-width:560px) { .room-life-toolbar { align-items:flex-start; padding:9px; } .room-life-controls { width:100%; } .room-life-controls select { flex:1; max-width:none; } .room-life-actions button { flex:1 1 auto; } }

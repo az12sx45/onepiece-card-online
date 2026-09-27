@@ -1,0 +1,593 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "work",
+      "key": "brook",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/brook-work/source.png",
+      "scale": 0.324675,
+      "regions": [
+        [
+          106,
+          7,
+          281,
+          312
+        ],
+        [
+          395,
+          4,
+          582,
+          312
+        ],
+        [
+          706,
+          6,
+          880,
+          312
+        ],
+        [
+          1022,
+          7,
+          1195,
+          311
+        ]
+      ],
+      "roots": [
+        [
+          182,
+          312
+        ],
+        [
+          471,
+          312
+        ],
+        [
+          784,
+          312
+        ],
+        [
+          1098,
+          311
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/brook/work-east.webp",
+      "sourceSha256": "c2a21a4e048b3e68e20d504d27a70f55dcbda800d940d6bdcbe141f37e0a4b78",
+      "assetSha256": "798feb75e9daa70f2145c6d5e7b07e00a0fa36e807fd6a0a1fbf44e741166b29",
+      "frames": [
+        {
+          "sourceRegion": [
+            106,
+            7,
+            281,
+            312
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            175,
+            305
+          ],
+          "outputBounds": [
+            39,
+            13,
+            57,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            395,
+            4,
+            582,
+            312
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            187,
+            308
+          ],
+          "outputBounds": [
+            39,
+            12,
+            61,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            706,
+            6,
+            880,
+            312
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            174,
+            306
+          ],
+          "outputBounds": [
+            39,
+            13,
+            56,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            1022,
+            7,
+            1195,
+            311
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            173,
+            304
+          ],
+          "outputBounds": [
+            39,
+            13,
+            56,
+            99
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "brook",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/brook-work/source.png",
+      "scale": 0.318471,
+      "regions": [
+        [
+          67,
+          315,
+          234,
+          628
+        ],
+        [
+          347,
+          315,
+          536,
+          628
+        ],
+        [
+          681,
+          315,
+          853,
+          628
+        ],
+        [
+          995,
+          314,
+          1162,
+          628
+        ]
+      ],
+      "roots": [
+        [
+          158,
+          628
+        ],
+        [
+          458,
+          628
+        ],
+        [
+          778,
+          628
+        ],
+        [
+          1090,
+          628
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/brook/work-west.webp",
+      "sourceSha256": "c2a21a4e048b3e68e20d504d27a70f55dcbda800d940d6bdcbe141f37e0a4b78",
+      "assetSha256": "31b4c99b6adf2a64dd8e4852f54c4e8e01d2c7dc8cb1136f01596203b22d2d21",
+      "frames": [
+        {
+          "sourceRegion": [
+            67,
+            315,
+            234,
+            628
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            167,
+            313
+          ],
+          "outputBounds": [
+            35,
+            12,
+            53,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            347,
+            315,
+            536,
+            628
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            189,
+            313
+          ],
+          "outputBounds": [
+            29,
+            12,
+            60,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            681,
+            315,
+            853,
+            628
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            172,
+            313
+          ],
+          "outputBounds": [
+            33,
+            12,
+            55,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            995,
+            314,
+            1162,
+            628
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            167,
+            314
+          ],
+          "outputBounds": [
+            34,
+            12,
+            53,
+            100
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "brook",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/brook-work/source.png",
+      "scale": 0.323625,
+      "regions": [
+        [
+          92,
+          628,
+          243,
+          937
+        ],
+        [
+          402,
+          629,
+          550,
+          937
+        ],
+        [
+          710,
+          629,
+          859,
+          937
+        ],
+        [
+          1030,
+          631,
+          1171,
+          937
+        ]
+      ],
+      "roots": [
+        [
+          170,
+          937
+        ],
+        [
+          476,
+          937
+        ],
+        [
+          787,
+          937
+        ],
+        [
+          1106,
+          937
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/brook/work-north.webp",
+      "sourceSha256": "c2a21a4e048b3e68e20d504d27a70f55dcbda800d940d6bdcbe141f37e0a4b78",
+      "assetSha256": "6897976b2f0ebcd74552681537fceefda38ca2636b6c2137a6f516c98cc31b1d",
+      "frames": [
+        {
+          "sourceRegion": [
+            92,
+            628,
+            243,
+            937
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            151,
+            309
+          ],
+          "outputBounds": [
+            39,
+            12,
+            49,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            402,
+            629,
+            550,
+            937
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            148,
+            308
+          ],
+          "outputBounds": [
+            40,
+            12,
+            48,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            710,
+            629,
+            859,
+            937
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            149,
+            308
+          ],
+          "outputBounds": [
+            39,
+            12,
+            48,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            1030,
+            631,
+            1171,
+            937
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            141,
+            306
+          ],
+          "outputBounds": [
+            39,
+            13,
+            46,
+            99
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "brook",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/brook-work/source.png",
+      "scale": 0.321543,
+      "regions": [
+        [
+          103,
+          939,
+          245,
+          1246
+        ],
+        [
+          403,
+          938,
+          557,
+          1247
+        ],
+        [
+          716,
+          939,
+          871,
+          1247
+        ],
+        [
+          1034,
+          937,
+          1175,
+          1248
+        ]
+      ],
+      "roots": [
+        [
+          177,
+          1246
+        ],
+        [
+          476,
+          1247
+        ],
+        [
+          789,
+          1247
+        ],
+        [
+          1108,
+          1248
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/brook/work-south.webp",
+      "sourceSha256": "c2a21a4e048b3e68e20d504d27a70f55dcbda800d940d6bdcbe141f37e0a4b78",
+      "assetSha256": "b310f5c30f151e910f97f49fde3a248dcb8e1ef4aa273fb8ff1c27882ed29e53",
+      "frames": [
+        {
+          "sourceRegion": [
+            103,
+            939,
+            245,
+            1246
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            142,
+            307
+          ],
+          "outputBounds": [
+            40,
+            13,
+            46,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            403,
+            938,
+            557,
+            1247
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            154,
+            309
+          ],
+          "outputBounds": [
+            41,
+            13,
+            50,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            716,
+            939,
+            871,
+            1247
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            155,
+            308
+          ],
+          "outputBounds": [
+            41,
+            13,
+            50,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            1034,
+            937,
+            1175,
+            1248
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            141,
+            311
+          ],
+          "outputBounds": [
+            40,
+            12,
+            45,
+            100
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

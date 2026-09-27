@@ -1,0 +1,216 @@
+{
+  "clips": [
+    {
+      "id": "eat",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "scale": 0.29117647,
+      "scaleReason": "Matches approved99px standing model and reference head/body ratio. One isotropic scale per loop; utility uses same physical scale for all four poses, seated/lying never enlarged.",
+      "regions": [
+        [
+          67,
+          12,
+          240,
+          352
+        ],
+        [
+          393,
+          11,
+          563,
+          352
+        ],
+        [
+          695,
+          12,
+          870,
+          352
+        ],
+        [
+          1021,
+          12,
+          1194,
+          352
+        ]
+      ],
+      "roots": [
+        [
+          152.0,
+          349
+        ],
+        [
+          477.5,
+          349
+        ],
+        [
+          780.5,
+          349
+        ],
+        [
+          1105.5,
+          349
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/eat-south.webp"
+    },
+    {
+      "id": "rest",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "scale": 0.29117647,
+      "scaleReason": "Matches approved99px standing model and reference head/body ratio. One isotropic scale per loop; utility uses same physical scale for all four poses, seated/lying never enlarged.",
+      "regions": [
+        [
+          59,
+          389,
+          258,
+          668
+        ],
+        [
+          380,
+          389,
+          577,
+          669
+        ],
+        [
+          686,
+          389,
+          885,
+          668
+        ],
+        [
+          1007,
+          389,
+          1204,
+          669
+        ]
+      ],
+      "roots": [
+        [
+          155.5,
+          665
+        ],
+        [
+          475.0,
+          666
+        ],
+        [
+          782.5,
+          665
+        ],
+        [
+          1102.5,
+          666
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/rest-south.webp"
+    },
+    {
+      "id": "sleep",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "scale": 0.29117647,
+      "scaleReason": "Matches approved99px standing model and reference head/body ratio. One isotropic scale per loop; utility uses same physical scale for all four poses, seated/lying never enlarged.",
+      "regions": [
+        [
+          27,
+          710,
+          306,
+          862
+        ],
+        [
+          340,
+          711,
+          619,
+          862
+        ],
+        [
+          655,
+          711,
+          933,
+          862
+        ],
+        [
+          968,
+          711,
+          1246,
+          862
+        ]
+      ],
+      "roots": [
+        [
+          170.0,
+          859
+        ],
+        [
+          483.0,
+          859
+        ],
+        [
+          797.5,
+          859
+        ],
+        [
+          1110.5,
+          859
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/sleep-south.webp"
+    },
+    {
+      "id": "train",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "scale": 0.29117647,
+      "scaleReason": "Matches approved99px standing model and reference head/body ratio. One isotropic scale per loop; utility uses same physical scale for all four poses, seated/lying never enlarged.",
+      "regions": [
+        [
+          65,
+          884,
+          243,
+          1230
+        ],
+        [
+          388,
+          884,
+          562,
+          1230
+        ],
+        [
+          693,
+          884,
+          870,
+          1230
+        ],
+        [
+          1015,
+          884,
+          1188,
+          1230
+        ]
+      ],
+      "roots": [
+        [
+          152.0,
+          1227
+        ],
+        [
+          475.0,
+          1227
+        ],
+        [
+          779.0,
+          1227
+        ],
+        [
+          1100.5,
+          1227
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/train-south.webp"
+    }
+  ]
+}

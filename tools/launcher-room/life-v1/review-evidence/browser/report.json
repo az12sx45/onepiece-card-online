@@ -1,0 +1,27 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "name": "real Life module initializes with only purchased actor",
+      "pass": true
+    },
+    {
+      "name": "real BFS arrival and decoded whole-body work loop precede activation",
+      "pass": true
+    },
+    {
+      "name": "visible loop changes real drawn frame over time",
+      "pass": true
+    },
+    {
+      "name": "fixture receipt reaches existing marketplace wallet",
+      "pass": true
+    },
+    {
+      "name": "390px page has no horizontal overflow",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "scope": "Real Chromium renderer and GPT art; fixture server, no real purchase, database or deployment acceptance."
+}

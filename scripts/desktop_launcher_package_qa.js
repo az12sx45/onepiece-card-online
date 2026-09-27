@@ -14,6 +14,7 @@ const MAX_LAUNCHER_ASSET_BYTES = 128 * 1024 * 1024;
 // 1.1.16 retains the 80 reviewed 1.1.15 atlases and 10 portraits. Keep the existing media
 // budget intact and account for this separately hash-verified resource set.
 const MAX_ROOM_MOTION_ASSET_BYTES = 20 * 1024 * 1024;
+const MAX_ROOM_LIFE_ASSET_BYTES = 12 * 1024 * 1024;
 // Immutable historical program manifests are retained for existing installs.
 const MAX_CATALOG_BYTES = 32 * 1024 * 1024;
 const MAX_ASAR_BYTES = 32 * 1024 * 1024;
@@ -51,6 +52,10 @@ const APP_FILES = [
   'launcher-social.css',
   'launcher-profile-shop.js',
   'launcher-profile-shop.css',
+  'launcher-life-data.js',
+  'launcher-life-actions.js',
+  'launcher-life.js',
+  'launcher-life-room.js',
   'launcher-room.js',
   'launcher-room-dialogue.js',
   'launcher-room-motion-data.js',
@@ -71,6 +76,8 @@ const ROOM_DEPTH_CHARACTERS = ['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopp
 const ROOM_MOTION_ASSETS = ROOM_DEPTH_CHARACTERS.flatMap(key =>
   ['motion', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south'].map(direction => `${kind}_v3/${key}/${direction}.webp`)));
 const ROOM_PORTRAIT_ASSETS = ROOM_DEPTH_CHARACTERS.map(key => `portrait_v3/${key}.webp`);
+const ROOM_LIFE_ASSETS = require('../desktop/launcher-life-actions').assets().map(asset => `life_v1/${asset}`);
+const ROOM_LIFE_FURNITURE = ['furniture/galley-stove.webp', ...[0,1,2,3].map(rotation => `furniture_views/galley-stove/${rotation}.webp`)];
 const ROOM_DEPTH_ACTION_OVERRIDES = new Set([
   ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'brook'].map(key => `${key}/walk2`),
   'franky/talk_annoyed', 'jinbe/sit'
@@ -209,7 +216,9 @@ const EXTRA_RESOURCES = [
       'frames/straw-hat.webp', 'frames/ship-wheel.webp',
       ...ROOM_DEPTH_ASSETS,
       ...ROOM_MOTION_ASSETS,
-      ...ROOM_PORTRAIT_ASSETS
+      ...ROOM_PORTRAIT_ASSETS,
+      ...ROOM_LIFE_FURNITURE,
+      ...ROOM_LIFE_ASSETS
     ]
   },
   {
@@ -510,7 +519,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.16', 'Desktop launcher version must be 1.1.16 for corrected room and furniture scale.');
+  assert(packageJson.version === '1.2.0', 'Desktop launcher version must be 1.2.0 for the complete character life release.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -632,9 +641,12 @@ function validateSourcePackage() {
   const scaleReview = readJson(path.join(ROOT, scaleReviewPath), 'room scale visual review');
   assert(scaleReview.status === 'PASS_WITH_NOTES' && scaleReview.blockingIssues.length === 0, 'Room scale visual review has unresolved issues.');
   assert(scaleReview.runtimeHashNormalization === 'CRLF to LF only; all other bytes remain significant', 'Unexpected room review hash normalization.');
+  const lifeStatus = require('../tools/launcher-room/life-v1/validate_release').validate(ROOT);
   for (const [file, digest] of Object.entries(scaleReview.runtime)) {
     const reviewedBytes = fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n');
-    assert(crypto.createHash('sha256').update(reviewedBytes).digest('hex') === digest, `Room runtime differs from reviewed source: ${file}`);
+    // The 1.1.16 evidence remains immutable. A changed renderer needs the newer,
+    // independently hash-bound 1.2.0 room review rather than rewriting history.
+    assert(crypto.createHash('sha256').update(reviewedBytes).digest('hex') === (lifeStatus.review.runtime[file] || digest), `Room runtime differs from reviewed source: ${file}`);
   }
   const roomMotion = { items: [...roomBody.items, ...roomGait.items], portraits: roomBody.portraits };
   assert(roomBody.version === '1.1.15' && roomGait.version === '1.1.15' &&
@@ -673,7 +685,7 @@ function validateSourcePackage() {
     'Room art manifests must cover original, expansion, and 1.1.11 assets.');
   assertExactJson(sorted(roomDepth.items.map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(ROOM_DEPTH_ASSETS), 'Room depth/action art asset set');
-  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
+  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items, ...lifeStatus.manifest.items].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(roomResource.filter), 'Room art manifest output set');
   const zoroOverlay = validateZoroArtOverlay(roomManifest, roomDepth, roomWalk);
   const roomSourceRoot = path.join(ROOT, 'tools', 'launcher-room', 'source-png');
@@ -841,6 +853,12 @@ function validateAsar(asarPath) {
   const expectedEntries = sorted(['assets', ...APP_FILES]);
   assertExactJson(applicationEntries, expectedEntries, 'app.asar application file set');
   assert(entries.includes('node_modules/socket.io-client/package.json'), 'app.asar is missing socket.io-client.');
+  for (const entry of APP_FILES.filter(name => name !== 'package.json')) {
+    assert(asar.extractFile(asarPath, entry).equals(fs.readFileSync(path.join(DESKTOP_ROOT, entry))),
+      `Packaged application source differs: ${entry}`);
+  }
+  const packedPackage = JSON.parse(asar.extractFile(asarPath, 'package.json').toString('utf8'));
+  assert(packedPackage.version === '1.2.0' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
   for (const entry of entries) {
     const lower = entry.toLowerCase();
     assert(!lower.startsWith('public/'), `app.asar contains the public game tree: ${entry}`);
@@ -883,10 +901,14 @@ function validateWinUnpacked(winUnpackedPath, source) {
     .map(asset => path.join(launcherAssetRoot, 'images', 'launcher_room', ...asset.split('/')));
   assert(roomMotionFiles.length === 90 && new Set(roomMotionFiles).size === 90, 'Room media budget must cover exactly eighty atlases and ten portraits.');
   const roomMotionBytes = sumFileBytes(roomMotionFiles);
-  const launcherBaseBytes = launcherBytes - roomMotionBytes;
+  const lifeFiles = [...ROOM_LIFE_ASSETS, ...ROOM_LIFE_FURNITURE].map(asset => path.join(launcherAssetRoot, 'images', 'launcher_room', ...asset.split('/')));
+  assert(lifeFiles.length === 133 && new Set(lifeFiles).size === 133, 'Life media must contain 128 loops and five stove assets.');
+  const lifeBytes = sumFileBytes(lifeFiles);
+  assert(lifeBytes <= MAX_ROOM_LIFE_ASSET_BYTES, 'Reviewed life media exceeds its separate 12 MiB budget.');
+  const launcherBaseBytes = launcherBytes - roomMotionBytes - lifeBytes;
   assert(roomMotionBytes <= MAX_ROOM_MOTION_ASSET_BYTES, `Room motion and portraits exceed ${MAX_ROOM_MOTION_ASSET_BYTES} bytes.`);
   assert(launcherBaseBytes <= MAX_LAUNCHER_ASSET_BYTES, `Existing launcher media exceeds ${MAX_LAUNCHER_ASSET_BYTES} bytes.`);
-  assert(launcherBytes <= MAX_LAUNCHER_ASSET_BYTES + MAX_ROOM_MOTION_ASSET_BYTES, 'Combined launcher media budget exceeded.');
+  assert(launcherBytes <= MAX_LAUNCHER_ASSET_BYTES + MAX_ROOM_MOTION_ASSET_BYTES + MAX_ROOM_LIFE_ASSET_BYTES, 'Combined launcher media budget exceeded.');
   for (const [packagedName, sourcePath] of expectedAssets) {
     const packagedPath = path.join(launcherAssetRoot, ...packagedName.split('/'));
     assert(sha256File(packagedPath) === sha256File(sourcePath), `Packaged launcher resource differs from source: ${packagedName}`);

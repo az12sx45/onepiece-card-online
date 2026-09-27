@@ -24,3 +24,9 @@
 /tools/launcher-room/walk-v3/** -text
 /docs/LAUNCHER_ROOM_SCALE_ART_20260927.json -text
 /tools/launcher-room/scene-v2/** -text
+
+# Life art sources, review evidence and hashes are retained byte-for-byte.
+/docs/LAUNCHER_LIFE_ART_20260927.json -text
+/tools/launcher-room/life-v1/** -text
+# Exact submitted generation prompts preserve their original trailing spaces.
+/tools/launcher-room/life-v1/**/prompt*.txt whitespace=-blank-at-eol

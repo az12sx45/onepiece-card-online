@@ -1,0 +1,521 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "eat",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-utility/source.png",
+      "scale": 0.303,
+      "regions": [
+        [
+          82,
+          83,
+          284,
+          412
+        ],
+        [
+          380,
+          83,
+          584,
+          412
+        ],
+        [
+          678,
+          83,
+          882,
+          412
+        ],
+        [
+          978,
+          83,
+          1182,
+          412
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/eat-south.webp",
+      "sourceSha256": "cc4645c1cec01e684b2f2fc7f454956786582304df92ad3e1049fab1a8a3c167",
+      "assetSha256": "331e545c177ee625604115580ce0772a1fbc3f32e4cf05c8552a013cd63bc62a",
+      "frames": [
+        {
+          "sourceRegion": [
+            82,
+            83,
+            284,
+            412
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            187,
+            329
+          ],
+          "outputBounds": [
+            33,
+            12,
+            57,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            380,
+            83,
+            584,
+            412
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            204,
+            329
+          ],
+          "outputBounds": [
+            33,
+            12,
+            62,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            678,
+            83,
+            882,
+            412
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            204,
+            329
+          ],
+          "outputBounds": [
+            33,
+            12,
+            62,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            978,
+            83,
+            1182,
+            412
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            180,
+            329
+          ],
+          "outputBounds": [
+            33,
+            12,
+            55,
+            100
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "rest",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-utility/source.png",
+      "scale": 0.303,
+      "regions": [
+        [
+          87,
+          451,
+          317,
+          731
+        ],
+        [
+          387,
+          451,
+          613,
+          731
+        ],
+        [
+          686,
+          448,
+          912,
+          731
+        ],
+        [
+          984,
+          449,
+          1208,
+          731
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/rest-south.webp",
+      "sourceSha256": "cc4645c1cec01e684b2f2fc7f454956786582304df92ad3e1049fab1a8a3c167",
+      "assetSha256": "2653ae1085e6d98d8bf8dc8d37abff915b36ceaa5389d553b52d9ac4cc8b0d5a",
+      "frames": [
+        {
+          "sourceRegion": [
+            87,
+            451,
+            317,
+            731
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            217,
+            280
+          ],
+          "outputBounds": [
+            29,
+            27,
+            66,
+            85
+          ]
+        },
+        {
+          "sourceRegion": [
+            387,
+            451,
+            613,
+            731
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            200,
+            280
+          ],
+          "outputBounds": [
+            30,
+            27,
+            61,
+            85
+          ]
+        },
+        {
+          "sourceRegion": [
+            686,
+            448,
+            912,
+            731
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            201,
+            283
+          ],
+          "outputBounds": [
+            30,
+            26,
+            61,
+            86
+          ]
+        },
+        {
+          "sourceRegion": [
+            984,
+            449,
+            1208,
+            731
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            208,
+            282
+          ],
+          "outputBounds": [
+            30,
+            27,
+            63,
+            85
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "sleep",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-utility/source.png",
+      "scale": 0.303,
+      "regions": [
+        [
+          36,
+          769,
+          308,
+          911
+        ],
+        [
+          336,
+          769,
+          608,
+          930
+        ],
+        [
+          644,
+          770,
+          916,
+          911
+        ],
+        [
+          942,
+          770,
+          1212,
+          911
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/sleep-south.webp",
+      "sourceSha256": "cc4645c1cec01e684b2f2fc7f454956786582304df92ad3e1049fab1a8a3c167",
+      "assetSha256": "dd766552d6d03e61add697fdbdc41ea427947ff47ce76eb66f06c0fa94ec24ba",
+      "frames": [
+        {
+          "sourceRegion": [
+            36,
+            769,
+            308,
+            911
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            272,
+            142
+          ],
+          "outputBounds": [
+            23,
+            69,
+            82,
+            43
+          ]
+        },
+        {
+          "sourceRegion": [
+            336,
+            769,
+            608,
+            930
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            272,
+            161
+          ],
+          "outputBounds": [
+            23,
+            63,
+            82,
+            49
+          ]
+        },
+        {
+          "sourceRegion": [
+            644,
+            770,
+            916,
+            911
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            272,
+            141
+          ],
+          "outputBounds": [
+            23,
+            69,
+            82,
+            43
+          ]
+        },
+        {
+          "sourceRegion": [
+            942,
+            770,
+            1212,
+            911
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            270,
+            141
+          ],
+          "outputBounds": [
+            23,
+            69,
+            82,
+            43
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "train",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-utility/source.png",
+      "scale": 0.303,
+      "regions": [
+        [
+          83,
+          926,
+          269,
+          1239
+        ],
+        [
+          384,
+          926,
+          568,
+          1239
+        ],
+        [
+          700,
+          951,
+          860,
+          1239
+        ],
+        [
+          988,
+          926,
+          1172,
+          1239
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/train-south.webp",
+      "sourceSha256": "cc4645c1cec01e684b2f2fc7f454956786582304df92ad3e1049fab1a8a3c167",
+      "assetSha256": "0b9cc3c24d8ae9eff142832d011196fa13a4eca350baa532c18071bd904fb800",
+      "frames": [
+        {
+          "sourceRegion": [
+            83,
+            926,
+            269,
+            1239
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            186,
+            313
+          ],
+          "outputBounds": [
+            36,
+            17,
+            56,
+            95
+          ]
+        },
+        {
+          "sourceRegion": [
+            384,
+            926,
+            568,
+            1239
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            168,
+            313
+          ],
+          "outputBounds": [
+            36,
+            17,
+            51,
+            95
+          ]
+        },
+        {
+          "sourceRegion": [
+            700,
+            951,
+            860,
+            1239
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            160,
+            288
+          ],
+          "outputBounds": [
+            40,
+            25,
+            48,
+            87
+          ]
+        },
+        {
+          "sourceRegion": [
+            988,
+            926,
+            1172,
+            1239
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            184,
+            313
+          ],
+          "outputBounds": [
+            36,
+            17,
+            56,
+            95
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

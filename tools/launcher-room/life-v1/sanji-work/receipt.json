@@ -1,0 +1,8 @@
+{
+  "generator": "image_gen.imagegen",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-5c008f75-27eb-4e46-a9e6-ddcc1970457b.png",
+  "references": ["sanji-actions-east-01", "sanji-actions-west-02", "sanji-actions-north-01", "sanji-actions-south-01"],
+  "referenceBase": "tools/launcher-room/fullbody-v3/sources",
+  "sourceReview": "Sixteen whole figures, four directions. Left-eye fringe and back-facing head remain coherent. Four cloth strokes alter hands over supported tray. This clip is supply cleaning and sorting, not cooking or playing piano. Runtime size/loop review pending.",
+  "runtimeAccepted": false
+}

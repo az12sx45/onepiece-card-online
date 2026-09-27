@@ -1,0 +1,27 @@
+{
+  "generator": "image_gen.imagegen",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030\\exec-81c1f005-648a-4646-b3ed-3a1f9006fc25.png",
+  "sourceSha256": "d5e0aacab936ae6662b9ca9c5a25322b5fdccbfec5f96052f30be8a0d5f5da74",
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/usopp-actions-05/ancestry/07-source-01.png",
+      "sha256": "d2860d7d10d8e9f5cfaec609c678bfdc1204545eddab9e079b8d2837924c28d5"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/usopp-actions-05/image.png",
+      "sha256": "54930c43c6a1d1cc8422204e9b98252678dcb66036f93a3b9271234e7527bcfd"
+    }
+  ],
+  "sourceReview": "Early checked bandana/goggles/long nose/thick lips, left wristband and left-hip bag retained. Warmup row re-drawn with front-facing whole bodies and heads. Sleep/train source bounding boxes overlapped4px; whole-body alpha isolation and unchanged-pixel repacking prevents cross-frame contamination.",
+  "runtimeAccepted": false,
+  "priorGeneration": {
+    "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030\\exec-1d69beb1-5aa6-419f-a83b-947594a740e5.png",
+    "preservedCopy": "source-before-repair.png",
+    "reason": "Usopp warmup frames2/3 head rotated away from forward torso",
+    "repair": "Targeted GPT image edit; no local anatomical compositing."
+  },
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "promptSha256": "f7813004f5c510f3b6b42d8b710d83281081193e0e427f40a5eb56a4c1a95e22",
+  "repairPromptSha256": "765b7d7ebe8ec39ff35b6b6cf37ad70cbca042a95c8b996f5394a453d322cc7e"
+}

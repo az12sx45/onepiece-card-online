@@ -1,0 +1,224 @@
+{
+  "clips": [
+    {
+      "id": "work",
+      "key": "chopper",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/chopper-work/east-fix-source-alpha.png",
+      "scale": 0.23671497584541062,
+      "regions": [
+        [
+          0,
+          0,
+          444,
+          444
+        ],
+        [
+          444,
+          0,
+          887,
+          444
+        ],
+        [
+          887,
+          0,
+          1330,
+          444
+        ],
+        [
+          1330,
+          0,
+          1774,
+          444
+        ]
+      ],
+      "roots": [
+        [
+          236.5,
+          444
+        ],
+        [
+          633.0,
+          444
+        ],
+        [
+          1094.5,
+          444
+        ],
+        [
+          1535.5,
+          444
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/work-east.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-work/east-fix-source.png"
+    },
+    {
+      "id": "work",
+      "key": "chopper",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/chopper-work/source-alpha.png",
+      "scale": 0.3181818181818182,
+      "regions": [
+        [
+          0,
+          323,
+          314,
+          631
+        ],
+        [
+          314,
+          323,
+          627,
+          631
+        ],
+        [
+          627,
+          323,
+          940,
+          631
+        ],
+        [
+          940,
+          323,
+          1254,
+          631
+        ]
+      ],
+      "roots": [
+        [
+          157.5,
+          631
+        ],
+        [
+          485.0,
+          631
+        ],
+        [
+          787.5,
+          631
+        ],
+        [
+          1112.5,
+          631
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/work-west.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-work/source.png"
+    },
+    {
+      "id": "work",
+      "key": "chopper",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/chopper-work/source-alpha.png",
+      "scale": 0.33220338983050846,
+      "regions": [
+        [
+          0,
+          631,
+          314,
+          926
+        ],
+        [
+          314,
+          631,
+          627,
+          926
+        ],
+        [
+          627,
+          631,
+          940,
+          926
+        ],
+        [
+          940,
+          631,
+          1254,
+          926
+        ]
+      ],
+      "roots": [
+        [
+          161.0,
+          926
+        ],
+        [
+          472.0,
+          926
+        ],
+        [
+          788.5,
+          926
+        ],
+        [
+          1100.0,
+          926
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/work-north.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-work/source.png"
+    },
+    {
+      "id": "work",
+      "key": "chopper",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/chopper-work/source-alpha.png",
+      "scale": 0.31715210355987056,
+      "regions": [
+        [
+          0,
+          926,
+          314,
+          1254
+        ],
+        [
+          314,
+          926,
+          627,
+          1254
+        ],
+        [
+          627,
+          926,
+          940,
+          1254
+        ],
+        [
+          940,
+          926,
+          1254,
+          1254
+        ]
+      ],
+      "roots": [
+        [
+          157.5,
+          1254
+        ],
+        [
+          470.0,
+          1254
+        ],
+        [
+          786.0,
+          1254
+        ],
+        [
+          1097.5,
+          1254
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/work-south.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-work/source.png"
+    }
+  ]
+}

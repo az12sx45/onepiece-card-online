@@ -1,0 +1,212 @@
+{
+  "clips": [
+    {
+      "id": "work",
+      "key": "sanji",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/sanji-work/source.png",
+      "scale": 0.319,
+      "roots": [
+        [
+          185.5,
+          310
+        ],
+        [
+          465.5,
+          310
+        ],
+        [
+          746.5,
+          310
+        ],
+        [
+          1010.0,
+          310
+        ]
+      ],
+      "regions": [
+        [
+          0,
+          0,
+          340,
+          315
+        ],
+        [
+          340,
+          0,
+          620,
+          315
+        ],
+        [
+          620,
+          0,
+          900,
+          315
+        ],
+        [
+          900,
+          0,
+          1222,
+          315
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/sanji/work-east.webp"
+    },
+    {
+      "id": "work",
+      "key": "sanji",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/sanji-work/source.png",
+      "scale": 0.319,
+      "roots": [
+        [
+          209.5,
+          624
+        ],
+        [
+          494.5,
+          624
+        ],
+        [
+          763.0,
+          624
+        ],
+        [
+          1029.5,
+          624
+        ]
+      ],
+      "regions": [
+        [
+          0,
+          315,
+          340,
+          630
+        ],
+        [
+          340,
+          315,
+          620,
+          630
+        ],
+        [
+          620,
+          315,
+          900,
+          630
+        ],
+        [
+          900,
+          315,
+          1222,
+          630
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/sanji/work-west.webp"
+    },
+    {
+      "id": "work",
+      "key": "sanji",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/sanji-work/source.png",
+      "scale": 0.319,
+      "roots": [
+        [
+          200.0,
+          944
+        ],
+        [
+          484.5,
+          944
+        ],
+        [
+          757.0,
+          944
+        ],
+        [
+          1023.0,
+          944
+        ]
+      ],
+      "regions": [
+        [
+          0,
+          630,
+          340,
+          951
+        ],
+        [
+          340,
+          630,
+          620,
+          951
+        ],
+        [
+          620,
+          630,
+          900,
+          951
+        ],
+        [
+          900,
+          630,
+          1222,
+          951
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/sanji/work-north.webp"
+    },
+    {
+      "id": "work",
+      "key": "sanji",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/sanji-work/source.png",
+      "scale": 0.319,
+      "roots": [
+        [
+          200.5,
+          1262
+        ],
+        [
+          480.5,
+          1261
+        ],
+        [
+          757.5,
+          1262
+        ],
+        [
+          1023.0,
+          1262
+        ]
+      ],
+      "regions": [
+        [
+          0,
+          951,
+          340,
+          1287
+        ],
+        [
+          340,
+          951,
+          620,
+          1287
+        ],
+        [
+          620,
+          951,
+          900,
+          1287
+        ],
+        [
+          900,
+          951,
+          1222,
+          1287
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/sanji/work-south.webp"
+    }
+  ]
+}

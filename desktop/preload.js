@@ -26,6 +26,8 @@ contextBridge.exposeInMainWorld('onePieceDesktop', Object.freeze({
   deleteLauncherComment: (messageId) => ipcRenderer.invoke('launcher:comment-delete', messageId),
   saveLauncherDecorationPlacement: (slot, placement) => ipcRenderer.invoke('launcher:decoration-placement-set', slot, placement),
   saveLauncherRoom: (room) => ipcRenderer.invoke('launcher:room-set', room),
+  getLauncherLife: () => ipcRenderer.invoke('launcher:life-get'),
+  commandLauncherLife: (command) => ipcRenderer.invoke('launcher:life-command', command),
   getLauncherCharacter: (itemId) => ipcRenderer.invoke('launcher:character-get', itemId),
   interactLauncherCharacter: (itemId, action) => ipcRenderer.invoke('launcher:character-interact', itemId, action),
   startLauncherCharacterWork: (itemId) => ipcRenderer.invoke('launcher:character-work-start', itemId),

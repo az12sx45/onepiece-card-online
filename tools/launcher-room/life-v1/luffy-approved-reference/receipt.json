@@ -1,0 +1,27 @@
+{
+  "method": "First complete 128px frame of each approved acting_v3 direction, whole-figure crop then uniform x4 nearest-neighbor enlargement. No anatomy edits.",
+  "directionOrder": [
+    "south",
+    "east",
+    "west",
+    "north"
+  ],
+  "references": [
+    {
+      "path": "public/images/launcher_room/acting_v3/luffy/south.webp",
+      "sha256": "f9cd6ab0b5e905e6838f5657dd7231cffb574b00554e589238b9487539a91c95"
+    },
+    {
+      "path": "public/images/launcher_room/acting_v3/luffy/east.webp",
+      "sha256": "a7d4dbc7dd23a8dbc19d6050f869fadc0972a92fd08e2f71dd76b582506fa6d5"
+    },
+    {
+      "path": "public/images/launcher_room/acting_v3/luffy/west.webp",
+      "sha256": "8cbb4f4d6fee46756b598760c71f1680d99dd73abe7cac99c3e049ea51ed66ff"
+    },
+    {
+      "path": "public/images/launcher_room/acting_v3/luffy/north.webp",
+      "sha256": "a27e84977cc92dde008e78feb278d873eac5438fdbb221343263eb11b76f5e33"
+    }
+  ]
+}

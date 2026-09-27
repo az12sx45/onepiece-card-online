@@ -1,0 +1,23 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-fa127535-50c0-4794-8274-af7e62981ebe.png",
+  "source": {
+    "path": "tools/launcher-room/life-v1/chopper-work/east-fix-source.png",
+    "sha256": "1b2daf09997a3a9ecd67ac1122c06ff632b31d1fe701819ccb8d6bd19b6b201a"
+  },
+  "prompt": {
+    "path": "tools/launcher-room/life-v1/chopper-work/east-fix-prompt.txt",
+    "sha256": "1690d60050bf91113a963e0a1323370139dc5c5a6e0da5b7790f692813891c7a"
+  },
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/chopper-actions-02/image.png",
+      "sha256": "109d3fc7c4010b78869e9bec15d3e34d62cf357252084976d90d23ecc6538b93",
+      "role": "approved whole-character identity and style"
+    }
+  ],
+  "review": "Whole-figure replacement reviewed. Legs stay on same side for rest; no near-side collar for Chopper east; compact 3-head proportion for corrected train.",
+  "runtimeAccepted": false,
+  "processing": "Keep original RGBA; separate alpha copy removes alpha<16 and isolated <32px opaque specks, retaining 2px AA edge. Crop whole figures and uniform scale only."
+}

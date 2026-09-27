@@ -1,0 +1,578 @@
+{
+  "ok": true,
+  "scope": "Real renderer and art, isolated fixture server; numeric pass is not human visual approval.",
+  "results": [
+    {
+      "id": "robin-bookshelf-r0",
+      "key": "robin",
+      "furniture": "bookshelf",
+      "clip": "read",
+      "rotation": 0,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-robin"
+          ],
+          "characters": {
+            "robin": {
+              "key": "robin",
+              "itemId": "room-character-robin",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99805149999997,
+                "hunger": 25.002922749999996,
+                "mood": 75.00216499999999,
+                "social": 74.999188125,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790482072544,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790482068993,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-robin",
+              "stationId": "room-furniture-bookshelf",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:07:49.276Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:07:58.217Z",
+              "readyAt": "2026-09-27T04:08:58.217Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "robin",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-bookshelf",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "robin",
+              "cell": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-bookshelf",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482248457,
+          "nextForegroundAt": 1790482080457,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "robin",
+            "cell": {
+              "col": 7,
+              "row": 4
+            },
+            "x": 463.89,
+            "y": 394.36140625,
+            "mode": "life-act",
+            "phase": 0.8131375684509679,
+            "direction": "north",
+            "dock": {
+              "x": 463.89,
+              "y": 394.36140625,
+              "z": 402,
+              "side": "north"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-robin",
+            "stationId": "room-furniture-bookshelf",
+            "roomRevision": 1
+          },
+          "at": 1790482069276
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790482078217
+        }
+      ]
+    },
+    {
+      "id": "robin-bookshelf-r1",
+      "key": "robin",
+      "furniture": "bookshelf",
+      "clip": "read",
+      "rotation": 1,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-robin"
+          ],
+          "characters": {
+            "robin": {
+              "key": "robin",
+              "itemId": "room-character-robin",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99805149999997,
+                "hunger": 25.002922749999996,
+                "mood": 75.00216499999999,
+                "social": 74.999188125,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790482087158,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790482083645,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-robin",
+              "stationId": "room-furniture-bookshelf",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:08:03.771Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:08:19.210Z",
+              "readyAt": "2026-09-27T04:09:19.210Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "robin",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-bookshelf",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "robin",
+              "cell": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-bookshelf",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482263422,
+          "nextForegroundAt": 1790482095422,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "robin",
+            "cell": {
+              "col": 6,
+              "row": 2
+            },
+            "x": 432.73,
+            "y": 387.20140625,
+            "mode": "life-act",
+            "phase": 0.07248845086168887,
+            "direction": "east",
+            "dock": {
+              "x": 432.73,
+              "y": 387.20140625,
+              "z": 402,
+              "side": "east"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-robin",
+            "stationId": "room-furniture-bookshelf",
+            "roomRevision": 1
+          },
+          "at": 1790482083771
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790482099210
+        }
+      ]
+    },
+    {
+      "id": "robin-bookshelf-r2",
+      "key": "robin",
+      "furniture": "bookshelf",
+      "clip": "read",
+      "rotation": 2,
+      "frames": [
+        "1",
+        "2",
+        "2",
+        "3"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-robin"
+          ],
+          "characters": {
+            "robin": {
+              "key": "robin",
+              "itemId": "room-character-robin",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99805149999999,
+                "hunger": 25.00292275,
+                "mood": 75.002165,
+                "social": 74.999188125,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790482123168,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790482104388,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-robin",
+              "stationId": "room-furniture-bookshelf",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:08:24.478Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:08:40.619Z",
+              "readyAt": "2026-09-27T04:09:40.619Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "robin",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 2
+              },
+              "stationId": "room-furniture-bookshelf",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "robin",
+              "cell": {
+                "col": 7,
+                "row": 2
+              },
+              "stationId": "room-furniture-bookshelf",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482696066,
+          "nextForegroundAt": 1790482116167,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "robin",
+            "cell": {
+              "col": 7,
+              "row": 2
+            },
+            "x": 445.99,
+            "y": 384.51025806943665,
+            "mode": "life-act",
+            "phase": 0.7493087547638173,
+            "direction": "south",
+            "dock": {
+              "x": 445.99,
+              "y": 384.51640625,
+              "z": 400,
+              "side": "south"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-robin",
+            "stationId": "room-furniture-bookshelf",
+            "roomRevision": 1
+          },
+          "at": 1790482104478
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790482120619
+        }
+      ]
+    },
+    {
+      "id": "robin-bookshelf-r3",
+      "key": "robin",
+      "furniture": "bookshelf",
+      "clip": "read",
+      "rotation": 3,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-robin"
+          ],
+          "characters": {
+            "robin": {
+              "key": "robin",
+              "itemId": "room-character-robin",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99805149999997,
+                "hunger": 25.002922749999996,
+                "mood": 75.00216499999999,
+                "social": 74.999188125,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790482148724,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790482125648,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-robin",
+              "stationId": "room-furniture-bookshelf",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:08:45.787Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:09:04.428Z",
+              "readyAt": "2026-09-27T04:10:04.428Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "robin",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 8,
+                "row": 2
+              },
+              "stationId": "room-furniture-bookshelf",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "robin",
+              "cell": {
+                "col": 8,
+                "row": 2
+              },
+              "stationId": "room-furniture-bookshelf",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482717316,
+          "nextForegroundAt": 1790482137433,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "robin",
+            "cell": {
+              "col": 8,
+              "row": 2
+            },
+            "x": 479.27,
+            "y": 387.20140625,
+            "mode": "life-act",
+            "phase": 0.5308609175617668,
+            "direction": "west",
+            "dock": {
+              "x": 479.27,
+              "y": 387.20140625,
+              "z": 402,
+              "side": "west"
+            },
+            "ready": [
+              "west",
+              "east",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-robin",
+            "stationId": "room-furniture-bookshelf",
+            "roomRevision": 1
+          },
+          "at": 1790482125787
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790482144428
+        }
+      ]
+    }
+  ]
+}

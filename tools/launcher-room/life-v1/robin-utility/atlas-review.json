@@ -1,0 +1,430 @@
+{
+  "key": "robin",
+  "status": "SOURCE_AND_128PX_CONTACT_REVIEW_PASSED_RUNTIME_PENDING",
+  "clips": [
+    {
+      "id": "eat",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/robin/eat-south.webp",
+      "sha256": "32cfe403a0c703bdb2932f1ba7f4b1e6c084bba06c2d196b7ae700da29d2961f",
+      "frameBounds": [
+        [
+          44,
+          14,
+          85,
+          112
+        ],
+        [
+          43,
+          14,
+          84,
+          112
+        ],
+        [
+          44,
+          14,
+          85,
+          112
+        ],
+        [
+          44,
+          14,
+          85,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.2558746736292428,
+      "visualAcceptance": true
+    },
+    {
+      "id": "rest",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/robin/rest-south.webp",
+      "sha256": "b512587349fcb25e0f70dca136aa8d002c8b96ef47cdf373424a28c9fb58a8bc",
+      "frameBounds": [
+        [
+          32,
+          32,
+          83,
+          112
+        ],
+        [
+          32,
+          32,
+          83,
+          112
+        ],
+        [
+          32,
+          32,
+          84,
+          112
+        ],
+        [
+          32,
+          32,
+          84,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.145,
+      "visualAcceptance": true
+    },
+    {
+      "id": "sleep",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/robin/sleep-south.webp",
+      "sha256": "5c654ec050ff1b85f5040cca8815b37a24facfd1e036bec3a5b5451c4ed8bde8",
+      "frameBounds": [
+        [
+          29,
+          75,
+          100,
+          112
+        ],
+        [
+          29,
+          76,
+          98,
+          112
+        ],
+        [
+          28,
+          75,
+          100,
+          112
+        ],
+        [
+          29,
+          76,
+          99,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.2558746736292428,
+      "visualAcceptance": true
+    },
+    {
+      "id": "train",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/robin/train-south.webp",
+      "sha256": "73bbe648b063531418104a565bb0e1f8c57aacf9063acc48a4d204746a2c03ca",
+      "frameBounds": [
+        [
+          43,
+          14,
+          86,
+          112
+        ],
+        [
+          43,
+          14,
+          86,
+          112
+        ],
+        [
+          43,
+          14,
+          86,
+          112
+        ],
+        [
+          43,
+          14,
+          86,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.12420785804816223,
+      "visualAcceptance": true
+    },
+    {
+      "id": "work",
+      "direction": "east",
+      "asset": "public/images/launcher_room/life_v1/robin/work-east.webp",
+      "sha256": "5f7ae2e43491d29193dbe58f8f60ff2ca101736fff3d4a1f3084c5f35027fcf9",
+      "frameBounds": [
+        [
+          39,
+          14,
+          97,
+          112
+        ],
+        [
+          41,
+          14,
+          97,
+          112
+        ],
+        [
+          39,
+          14,
+          96,
+          112
+        ],
+        [
+          39,
+          14,
+          95,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.3223684210526316,
+      "visualAcceptance": true
+    },
+    {
+      "id": "work",
+      "direction": "west",
+      "asset": "public/images/launcher_room/life_v1/robin/work-west.webp",
+      "sha256": "0f46cc329fa35abd2f9b6501792e30ef5813183db9f6e2cbb1b220d496267c06",
+      "frameBounds": [
+        [
+          34,
+          14,
+          92,
+          111
+        ],
+        [
+          33,
+          14,
+          92,
+          112
+        ],
+        [
+          33,
+          16,
+          89,
+          112
+        ],
+        [
+          34,
+          14,
+          89,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.31511254019292606,
+      "visualAcceptance": true
+    },
+    {
+      "id": "work",
+      "direction": "north",
+      "asset": "public/images/launcher_room/life_v1/robin/work-north.webp",
+      "sha256": "10ba909c092932461b55a5d81ec9e029df83445dd82e47b017a7d08a4cdd2b2a",
+      "frameBounds": [
+        [
+          40,
+          16,
+          91,
+          112
+        ],
+        [
+          39,
+          16,
+          94,
+          112
+        ],
+        [
+          40,
+          14,
+          92,
+          112
+        ],
+        [
+          40,
+          14,
+          90,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.32131147540983607,
+      "visualAcceptance": true
+    },
+    {
+      "id": "work",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/robin/work-south.webp",
+      "sha256": "14d66645d68977959021d78140a5d6ceb571fde31b49a8ada47ba8f2d51fb3c7",
+      "frameBounds": [
+        [
+          43,
+          14,
+          86,
+          112
+        ],
+        [
+          42,
+          14,
+          86,
+          112
+        ],
+        [
+          42,
+          14,
+          86,
+          112
+        ],
+        [
+          42,
+          14,
+          85,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.32450331125827814,
+      "visualAcceptance": true
+    },
+    {
+      "id": "read",
+      "direction": "east",
+      "asset": "public/images/launcher_room/life_v1/robin/read-east.webp",
+      "sha256": "f9eec81ebd3cdae58d0c4983f78350c4a05e21770ec1aac32d5e58549b521905",
+      "frameBounds": [
+        [
+          40,
+          14,
+          94,
+          112
+        ],
+        [
+          40,
+          15,
+          94,
+          112
+        ],
+        [
+          40,
+          15,
+          94,
+          112
+        ],
+        [
+          40,
+          15,
+          92,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.3111111111111111,
+      "visualAcceptance": true
+    },
+    {
+      "id": "read",
+      "direction": "west",
+      "asset": "public/images/launcher_room/life_v1/robin/read-west.webp",
+      "sha256": "9b7affc8b3b2edbea4e0d4ade139e5ba818a522ef9fd9d4063420303e7924774",
+      "frameBounds": [
+        [
+          37,
+          14,
+          92,
+          112
+        ],
+        [
+          36,
+          14,
+          91,
+          112
+        ],
+        [
+          37,
+          14,
+          91,
+          112
+        ],
+        [
+          37,
+          14,
+          91,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.31715210355987056,
+      "visualAcceptance": true
+    },
+    {
+      "id": "read",
+      "direction": "north",
+      "asset": "public/images/launcher_room/life_v1/robin/read-north.webp",
+      "sha256": "70733f5033a93b9cfb385e3626c47a8a8fdf9ab3e13b32ba4e16982168ba08af",
+      "frameBounds": [
+        [
+          40,
+          14,
+          88,
+          111
+        ],
+        [
+          40,
+          14,
+          92,
+          111
+        ],
+        [
+          41,
+          15,
+          95,
+          112
+        ],
+        [
+          41,
+          14,
+          88,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.31715210355987056,
+      "visualAcceptance": true
+    },
+    {
+      "id": "read",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/robin/read-south.webp",
+      "sha256": "c254c8e11feea520f787f3bc8bc9e64fb45dd9a3205f3a2246ac268c49dbb762",
+      "frameBounds": [
+        [
+          40,
+          14,
+          87,
+          112
+        ],
+        [
+          40,
+          14,
+          87,
+          112
+        ],
+        [
+          40,
+          14,
+          87,
+          112
+        ],
+        [
+          40,
+          14,
+          87,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.3223684210526316,
+      "visualAcceptance": true
+    }
+  ],
+  "runtimeAccepted": false,
+  "sourceVisualReview": true,
+  "contact128VisualReview": true,
+  "scope": "Complete-figure source and actual128px contact inspection; browser room playback must be checked by integration owner"
+}

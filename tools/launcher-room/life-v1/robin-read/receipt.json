@@ -1,0 +1,23 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-05ebbe61-7977-4232-9bf0-419f7ae05ee4.png",
+  "source": {
+    "path": "tools/launcher-room/life-v1/robin-read/source.png",
+    "sha256": "91cba2ae248f229baf65a6ff6930596cfc59d3b482a6998125a9c04df26f3b07"
+  },
+  "prompt": {
+    "path": "tools/launcher-room/life-v1/robin-read/prompt.txt",
+    "sha256": "c2c2f9ed8fbcfaf3a662edf9785eb4bdf61d51559fc216d763ffa1767db037ed"
+  },
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/robin-actions-source-01/image.png",
+      "sha256": "43a44dd91c8e89c711250eef20c9c763204fed4b8e6ab1b7662818c1b1506db9",
+      "role": "approved whole-character identity and style"
+    }
+  ],
+  "review": "Reviewed complete connected body, head/body same facing, correct outfit, four chronological poses per row. Runtime test pending.",
+  "runtimeAccepted": false,
+  "processing": "Keep original RGBA; separate alpha copy removes alpha<16 and isolated <32px opaque specks, retaining 2px AA edge. Crop whole figures and uniform scale only."
+}

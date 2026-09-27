@@ -1,0 +1,212 @@
+{
+  "clips": [
+    {
+      "id": "read",
+      "key": "jinbe",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/jinbe-read/source.png",
+      "scale": 0.333333,
+      "regions": [
+        [
+          28,
+          10,
+          302,
+          310
+        ],
+        [
+          341,
+          10,
+          619,
+          310
+        ],
+        [
+          654,
+          10,
+          933,
+          310
+        ],
+        [
+          967,
+          10,
+          1241,
+          309
+        ]
+      ],
+      "roots": [
+        [
+          164,
+          310
+        ],
+        [
+          478,
+          310
+        ],
+        [
+          790,
+          310
+        ],
+        [
+          1104,
+          309
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/jinbe/read-east.webp"
+    },
+    {
+      "id": "read",
+      "key": "jinbe",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/jinbe-read/source.png",
+      "scale": 0.334448,
+      "regions": [
+        [
+          21,
+          320,
+          285,
+          619
+        ],
+        [
+          333,
+          320,
+          598,
+          619
+        ],
+        [
+          646,
+          320,
+          911,
+          619
+        ],
+        [
+          961,
+          320,
+          1225,
+          619
+        ]
+      ],
+      "roots": [
+        [
+          148,
+          619
+        ],
+        [
+          462,
+          619
+        ],
+        [
+          774,
+          619
+        ],
+        [
+          1088,
+          619
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/jinbe/read-west.webp"
+    },
+    {
+      "id": "read",
+      "key": "jinbe",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/jinbe-read/source.png",
+      "scale": 0.35461,
+      "regions": [
+        [
+          33,
+          633,
+          282,
+          914
+        ],
+        [
+          345,
+          632,
+          595,
+          914
+        ],
+        [
+          660,
+          633,
+          909,
+          914
+        ],
+        [
+          973,
+          633,
+          1222,
+          914
+        ]
+      ],
+      "roots": [
+        [
+          158,
+          914
+        ],
+        [
+          471,
+          914
+        ],
+        [
+          784,
+          914
+        ],
+        [
+          1098,
+          914
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/jinbe/read-north.webp"
+    },
+    {
+      "id": "read",
+      "key": "jinbe",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/jinbe-read/source.png",
+      "scale": 0.316456,
+      "regions": [
+        [
+          17,
+          922,
+          297,
+          1238
+        ],
+        [
+          330,
+          922,
+          611,
+          1238
+        ],
+        [
+          644,
+          922,
+          924,
+          1238
+        ],
+        [
+          956,
+          922,
+          1237,
+          1237
+        ]
+      ],
+      "roots": [
+        [
+          156,
+          1238
+        ],
+        [
+          469,
+          1238
+        ],
+        [
+          783,
+          1238
+        ],
+        [
+          1096,
+          1237
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/jinbe/read-south.webp"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-75ccd6fa-278e-4754-8662-1bab3c54e177.png",
+  "source": {
+    "path": "tools/launcher-room/life-v1/robin-utility/rest-fix-source.png",
+    "sha256": "1f8fdf0f2647a3558bc9e0334634b742fcffb9fb376d69eddc40a0d9fb51db05"
+  },
+  "prompt": {
+    "path": "tools/launcher-room/life-v1/robin-utility/rest-fix-prompt.txt",
+    "sha256": "26d81ef465f69f444872c84d24403318e91c36a186862adbbdb20ea5b3eb5107"
+  },
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/robin-actions-source-01/image.png",
+      "sha256": "43a44dd91c8e89c711250eef20c9c763204fed4b8e6ab1b7662818c1b1506db9",
+      "role": "approved whole-character identity and style"
+    }
+  ],
+  "review": "Whole-figure replacement reviewed. Legs stay on same side for rest; no near-side collar for Chopper east; compact 3-head proportion for corrected train.",
+  "runtimeAccepted": false,
+  "processing": "Keep original RGBA; separate alpha copy removes alpha<16 and isolated <32px opaque specks, retaining 2px AA edge. Crop whole figures and uniform scale only."
+}

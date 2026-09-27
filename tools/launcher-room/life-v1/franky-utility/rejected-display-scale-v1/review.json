@@ -1,0 +1,226 @@
+{
+  "schema": "launcher-life-art-review/1",
+  "reviewType": "Codex source and composited atlas visual inspection plus deterministic alpha/shape checks; no in-room playback acceptance claimed",
+  "generator": "image_gen.imagegen",
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "runtimeAccepted": false,
+  "review": "Accepted BF-37 body retained, red briefs never missing, large blue mechanical arms stay attached. Eating/relaxing/side sleeping/low shoulder-joint warmup. One utility physical scale avoids giant floor poses; eating standing height around91px versus tallest train100px is flagged for root runtime check.",
+  "noMirroring": true,
+  "noBodyPartAssembly": true,
+  "originalRetained": true,
+  "clips": [
+    {
+      "id": "eat",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/franky/eat-south.webp",
+      "sha256": "52c607eb66381d259ff3d6258b5454ec13c0b64ee532e5554747c1a7acb9501d",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          22,
+          19,
+          108,
+          112
+        ],
+        [
+          20,
+          21,
+          106,
+          112
+        ],
+        [
+          20,
+          21,
+          104,
+          112
+        ],
+        [
+          22,
+          21,
+          106,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        5161,
+        4906,
+        4953,
+        5089
+      ],
+      "singleIsotropicScale": 0.2994012,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "rest",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/franky/rest-south.webp",
+      "sha256": "bbf76878cad09dec5e7db4c4d75d69ba207bb34748264fdfeb8abddafe2c81af",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          21,
+          39,
+          108,
+          112
+        ],
+        [
+          22,
+          38,
+          106,
+          112
+        ],
+        [
+          23,
+          39,
+          106,
+          112
+        ],
+        [
+          22,
+          38,
+          107,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        5058,
+        4946,
+        5076,
+        5178
+      ],
+      "singleIsotropicScale": 0.2994012,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "sleep",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/franky/sleep-south.webp",
+      "sha256": "68534575550b453d5f4f93c94789678635877771c50a038b4d14baa4324bb28f",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          19,
+          66,
+          109,
+          112
+        ],
+        [
+          20,
+          65,
+          108,
+          112
+        ],
+        [
+          20,
+          66,
+          107,
+          112
+        ],
+        [
+          20,
+          66,
+          107,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2971,
+        2870,
+        2822,
+        2933
+      ],
+      "singleIsotropicScale": 0.2994012,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "train",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/franky/train-south.webp",
+      "sha256": "a774141d2454863e1bfc0684270bcff61e368dcfb3aaad18f7e9f73a479d8d12",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          21,
+          11,
+          108,
+          112
+        ],
+        [
+          20,
+          11,
+          108,
+          112
+        ],
+        [
+          23,
+          18,
+          106,
+          112
+        ],
+        [
+          21,
+          11,
+          107,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        6052,
+        6516,
+        6387,
+        5999
+      ],
+      "singleIsotropicScale": 0.2994012,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    }
+  ]
+}

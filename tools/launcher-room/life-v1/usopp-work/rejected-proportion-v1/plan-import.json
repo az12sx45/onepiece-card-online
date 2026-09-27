@@ -1,0 +1,597 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "work",
+      "key": "usopp",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "scale": 0.32786885,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          144,
+          5,
+          301,
+          314
+        ],
+        [
+          417,
+          5,
+          574,
+          314
+        ],
+        [
+          716,
+          5,
+          873,
+          313
+        ],
+        [
+          1007,
+          5,
+          1163,
+          314
+        ]
+      ],
+      "roots": [
+        [
+          179.5,
+          312
+        ],
+        [
+          452.5,
+          312
+        ],
+        [
+          750.5,
+          311
+        ],
+        [
+          1041.5,
+          312
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/work-east.webp",
+      "sourceSha256": "0bf5875c37014e03462ba445166ccd2b80e1815abfc3d61f774e73ecc384861c",
+      "assetSha256": "bf1e9ff96f3d78ceee91e892aedef8c526b878e49b5f235e9d4d80993d3d5297",
+      "frames": [
+        {
+          "sourceRegion": [
+            144,
+            5,
+            301,
+            314
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            157,
+            309
+          ],
+          "outputBounds": [
+            52,
+            11,
+            51,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            417,
+            5,
+            574,
+            314
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            157,
+            309
+          ],
+          "outputBounds": [
+            52,
+            11,
+            51,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            716,
+            5,
+            873,
+            313
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            157,
+            308
+          ],
+          "outputBounds": [
+            53,
+            11,
+            51,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            1007,
+            5,
+            1163,
+            314
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            156,
+            309
+          ],
+          "outputBounds": [
+            53,
+            11,
+            51,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "usopp",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "scale": 0.32467532,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          111,
+          316,
+          261,
+          628
+        ],
+        [
+          383,
+          316,
+          534,
+          628
+        ],
+        [
+          680,
+          316,
+          833,
+          628
+        ],
+        [
+          972,
+          316,
+          1124,
+          628
+        ]
+      ],
+      "roots": [
+        [
+          203.0,
+          626
+        ],
+        [
+          476.5,
+          626
+        ],
+        [
+          775.0,
+          626
+        ],
+        [
+          1066.5,
+          626
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/work-west.webp",
+      "sourceSha256": "0bf5875c37014e03462ba445166ccd2b80e1815abfc3d61f774e73ecc384861c",
+      "assetSha256": "21f428be7ac8cce4b13b5a658e4e0b68fda890b3d4ac8724cced6a4ed59b0276",
+      "frames": [
+        {
+          "sourceRegion": [
+            111,
+            316,
+            261,
+            628
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            150,
+            312
+          ],
+          "outputBounds": [
+            34,
+            11,
+            49,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            383,
+            316,
+            534,
+            628
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            151,
+            312
+          ],
+          "outputBounds": [
+            34,
+            11,
+            49,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            680,
+            316,
+            833,
+            628
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            153,
+            312
+          ],
+          "outputBounds": [
+            33,
+            11,
+            50,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            972,
+            316,
+            1124,
+            628
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            152,
+            312
+          ],
+          "outputBounds": [
+            33,
+            11,
+            49,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "usopp",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "scale": 0.32786885,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          127,
+          630,
+          264,
+          939
+        ],
+        [
+          411,
+          631,
+          551,
+          939
+        ],
+        [
+          705,
+          631,
+          841,
+          938
+        ],
+        [
+          991,
+          630,
+          1127,
+          938
+        ]
+      ],
+      "roots": [
+        [
+          194.5,
+          937
+        ],
+        [
+          479.0,
+          937
+        ],
+        [
+          772.5,
+          936
+        ],
+        [
+          1058.5,
+          936
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/work-north.webp",
+      "sourceSha256": "0bf5875c37014e03462ba445166ccd2b80e1815abfc3d61f774e73ecc384861c",
+      "assetSha256": "729040534016df4cbd4e3e150b5c1871310656f6b09105581a21e3f2e142af52",
+      "frames": [
+        {
+          "sourceRegion": [
+            127,
+            630,
+            264,
+            939
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            137,
+            309
+          ],
+          "outputBounds": [
+            42,
+            11,
+            45,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            411,
+            631,
+            551,
+            939
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            140,
+            308
+          ],
+          "outputBounds": [
+            42,
+            11,
+            46,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            705,
+            631,
+            841,
+            938
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            136,
+            307
+          ],
+          "outputBounds": [
+            42,
+            11,
+            45,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            991,
+            630,
+            1127,
+            938
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            136,
+            308
+          ],
+          "outputBounds": [
+            42,
+            11,
+            45,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "scale": 0.330033,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          122,
+          942,
+          266,
+          1249
+        ],
+        [
+          407,
+          942,
+          551,
+          1249
+        ],
+        [
+          701,
+          942,
+          844,
+          1249
+        ],
+        [
+          986,
+          942,
+          1128,
+          1249
+        ]
+      ],
+      "roots": [
+        [
+          194.0,
+          1247
+        ],
+        [
+          479.0,
+          1247
+        ],
+        [
+          772.5,
+          1247
+        ],
+        [
+          1057.0,
+          1247
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/work-south.webp",
+      "sourceSha256": "0bf5875c37014e03462ba445166ccd2b80e1815abfc3d61f774e73ecc384861c",
+      "assetSha256": "b4f1ac49c85765c13290db06b0ca4929fb099d911bb456186ea32c903b44245f",
+      "frames": [
+        {
+          "sourceRegion": [
+            122,
+            942,
+            266,
+            1249
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            144,
+            307
+          ],
+          "outputBounds": [
+            40,
+            11,
+            48,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            407,
+            942,
+            551,
+            1249
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            144,
+            307
+          ],
+          "outputBounds": [
+            40,
+            11,
+            48,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            701,
+            942,
+            844,
+            1249
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            143,
+            307
+          ],
+          "outputBounds": [
+            40,
+            11,
+            47,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            986,
+            942,
+            1128,
+            1249
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            142,
+            307
+          ],
+          "outputBounds": [
+            41,
+            11,
+            47,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "clips": [
+    {
+      "id": "work",
+      "key": "nami",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "scale": 0.33898305,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          116,
+          8,
+          240,
+          307
+        ],
+        [
+          422,
+          8,
+          548,
+          307
+        ],
+        [
+          738,
+          8,
+          864,
+          307
+        ],
+        [
+          1051,
+          8,
+          1176,
+          307
+        ]
+      ],
+      "roots": [
+        [
+          152.5,
+          305
+        ],
+        [
+          459.0,
+          305
+        ],
+        [
+          776.0,
+          305
+        ],
+        [
+          1087.0,
+          305
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/work-east.webp"
+    },
+    {
+      "id": "work",
+      "key": "nami",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "scale": 0.33670034,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          75,
+          317,
+          196,
+          617
+        ],
+        [
+          386,
+          317,
+          503,
+          617
+        ],
+        [
+          703,
+          316,
+          820,
+          617
+        ],
+        [
+          1014,
+          317,
+          1132,
+          618
+        ]
+      ],
+      "roots": [
+        [
+          157.5,
+          615
+        ],
+        [
+          467.5,
+          615
+        ],
+        [
+          784.0,
+          615
+        ],
+        [
+          1095.0,
+          616
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/work-west.webp"
+    },
+    {
+      "id": "work",
+      "key": "nami",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "scale": 0.33670034,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          107,
+          628,
+          206,
+          929
+        ],
+        [
+          417,
+          628,
+          517,
+          929
+        ],
+        [
+          732,
+          628,
+          834,
+          929
+        ],
+        [
+          1040,
+          629,
+          1143,
+          929
+        ]
+      ],
+      "roots": [
+        [
+          156.5,
+          927
+        ],
+        [
+          466.0,
+          927
+        ],
+        [
+          780.5,
+          927
+        ],
+        [
+          1088.0,
+          927
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/work-north.webp"
+    },
+    {
+      "id": "work",
+      "key": "nami",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "scale": 0.33112583,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          100,
+          935,
+          212,
+          1241
+        ],
+        [
+          412,
+          936,
+          525,
+          1241
+        ],
+        [
+          727,
+          936,
+          839,
+          1241
+        ],
+        [
+          1037,
+          935,
+          1149,
+          1241
+        ]
+      ],
+      "roots": [
+        [
+          156.0,
+          1239
+        ],
+        [
+          468.5,
+          1239
+        ],
+        [
+          783.0,
+          1239
+        ],
+        [
+          1093.0,
+          1239
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/work-south.webp"
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "clips": [
+    {
+      "id": "read",
+      "key": "nami",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/nami-read/source.png",
+      "scale": 0.311526,
+      "regions": [
+        [
+          174,
+          6,
+          343,
+          326
+        ],
+        [
+          440,
+          5,
+          610,
+          326
+        ],
+        [
+          714,
+          5,
+          886,
+          326
+        ],
+        [
+          988,
+          5,
+          1158,
+          326
+        ]
+      ],
+      "roots": [
+        [
+          216,
+          326
+        ],
+        [
+          470,
+          326
+        ],
+        [
+          746,
+          326
+        ],
+        [
+          1019,
+          326
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/read-east.webp"
+    },
+    {
+      "id": "read",
+      "key": "nami",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/nami-read/source.png",
+      "scale": 0.311526,
+      "regions": [
+        [
+          96,
+          326,
+          263,
+          647
+        ],
+        [
+          366,
+          326,
+          533,
+          647
+        ],
+        [
+          642,
+          326,
+          808,
+          647
+        ],
+        [
+          920,
+          326,
+          1082,
+          647
+        ]
+      ],
+      "roots": [
+        [
+          214,
+          647
+        ],
+        [
+          489,
+          647
+        ],
+        [
+          764,
+          647
+        ],
+        [
+          1038,
+          647
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/read-west.webp"
+    },
+    {
+      "id": "read",
+      "key": "nami",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/nami-read/source.png",
+      "scale": 0.326797,
+      "regions": [
+        [
+          143,
+          648,
+          282,
+          954
+        ],
+        [
+          417,
+          648,
+          568,
+          954
+        ],
+        [
+          689,
+          648,
+          841,
+          954
+        ],
+        [
+          966,
+          648,
+          1116,
+          954
+        ]
+      ],
+      "roots": [
+        [
+          216,
+          954
+        ],
+        [
+          490,
+          954
+        ],
+        [
+          764,
+          954
+        ],
+        [
+          1038,
+          954
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/read-north.webp"
+    },
+    {
+      "id": "read",
+      "key": "nami",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/nami-read/source.png",
+      "scale": 0.333333,
+      "regions": [
+        [
+          139,
+          954,
+          295,
+          1254
+        ],
+        [
+          416,
+          954,
+          569,
+          1254
+        ],
+        [
+          690,
+          954,
+          848,
+          1254
+        ],
+        [
+          964,
+          954,
+          1121,
+          1254
+        ]
+      ],
+      "roots": [
+        [
+          216,
+          1254
+        ],
+        [
+          488,
+          1254
+        ],
+        [
+          764,
+          1254
+        ],
+        [
+          1038,
+          1254
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/read-south.webp"
+    }
+  ]
+}

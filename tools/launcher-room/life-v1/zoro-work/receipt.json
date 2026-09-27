@@ -1,0 +1,33 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:\\Users\\\u738b\u66dc\u744b\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-48aba576-f86f-44fa-8c21-c159b4b0984c.png",
+  "source": {
+    "path": "tools\\launcher-room\\life-v1\\zoro-work\\proportion-repair\\source.png",
+    "sha256": "b530c66fdabd8f5d50ab6a7128439fcc88eeb654f4df7f127f57fa1cd069214b"
+  },
+  "prompt": {
+    "path": "tools\\launcher-room\\life-v1\\zoro-work\\proportion-repair\\prompt.txt",
+    "sha256": "4b4284399c9479917e321ad6e8edac8552e080e03ff0feca7d677b17895359ac"
+  },
+  "references": [
+    {
+      "path": "tools\\launcher-room\\fullbody-v3\\sources\\zoro-actions-south-01\\image.png",
+      "sha256": "d937777b4e01e4c6328680070f35d7ff7ae733822135c68e72c3c3e4832cf6aa",
+      "role": "approved old identity only"
+    },
+    {
+      "path": "tools\\launcher-room\\life-v1\\zoro-approved-reference\\idle-four-directions.png",
+      "sha256": "9da6f0f28e887f90fa96bf23f649f385e9855b10600bf064fbf98f1ee22ed066",
+      "role": "approved old identity only"
+    }
+  ],
+  "runtimeAccepted": false,
+  "processing": "Whole-figure crop; genuine alpha cleanup<16 plus isolated<32px opaque specks; uniform scaling only. No anatomy assembly.",
+  "visualAccepted": true,
+  "rejectedPredecessor": {
+    "source": "source.png",
+    "reason": "Overlarge head and shortened legs versus approved acting_v3; Luffy additionally introduced incorrect yellow waist sash."
+  },
+  "activePlan": "plan.json"
+}

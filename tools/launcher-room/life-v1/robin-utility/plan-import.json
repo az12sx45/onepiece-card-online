@@ -1,0 +1,605 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "eat",
+      "key": "robin",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/robin-utility/source-alpha.png",
+      "scale": 0.2558746736292428,
+      "regions": [
+        [
+          0,
+          0,
+          314,
+          414
+        ],
+        [
+          314,
+          0,
+          627,
+          414
+        ],
+        [
+          627,
+          0,
+          940,
+          414
+        ],
+        [
+          940,
+          0,
+          1254,
+          414
+        ]
+      ],
+      "roots": [
+        [
+          171.0,
+          414
+        ],
+        [
+          474.5,
+          414
+        ],
+        [
+          776.5,
+          414
+        ],
+        [
+          1081.0,
+          414
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/robin/eat-south.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/robin-utility/source.png",
+      "sourceSha256": "d746605bba7292e59f60eb145337615f55527ac4d42c4d5c585eb74dfb3d2449",
+      "assetSha256": "32cfe403a0c703bdb2932f1ba7f4b1e6c084bba06c2d196b7ae700da29d2961f",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            0,
+            314,
+            414
+          ],
+          "alphaBounds": [
+            92,
+            24,
+            253,
+            407
+          ],
+          "outputBounds": [
+            44,
+            14,
+            41,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            314,
+            0,
+            627,
+            414
+          ],
+          "alphaBounds": [
+            79,
+            24,
+            241,
+            406
+          ],
+          "outputBounds": [
+            43,
+            14,
+            41,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            627,
+            0,
+            940,
+            414
+          ],
+          "alphaBounds": [
+            70,
+            24,
+            232,
+            407
+          ],
+          "outputBounds": [
+            44,
+            14,
+            41,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            940,
+            0,
+            1254,
+            414
+          ],
+          "alphaBounds": [
+            64,
+            25,
+            224,
+            407
+          ],
+          "outputBounds": [
+            44,
+            14,
+            41,
+            98
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "rest",
+      "key": "robin",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/robin-utility/rest-fix-source-alpha.png",
+      "scale": 0.145,
+      "regions": [
+        [
+          0,
+          0,
+          443,
+          887
+        ],
+        [
+          443,
+          0,
+          886,
+          887
+        ],
+        [
+          886,
+          0,
+          1280,
+          887
+        ],
+        [
+          1280,
+          0,
+          1774,
+          887
+        ]
+      ],
+      "roots": [
+        [
+          274.38,
+          887
+        ],
+        [
+          696.38,
+          887
+        ],
+        [
+          1112.38,
+          887
+        ],
+        [
+          1536.38,
+          887
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/robin/rest-south.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/robin-utility/rest-fix-source.png",
+      "sourceSha256": "f98a701a48d761d8afea78e627dbf33877070df3d9a4680591badd922e39e319",
+      "assetSha256": "b512587349fcb25e0f70dca136aa8d002c8b96ef47cdf373424a28c9fb58a8bc",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            0,
+            443,
+            887
+          ],
+          "alphaBounds": [
+            56,
+            187,
+            410,
+            738
+          ],
+          "outputBounds": [
+            32,
+            32,
+            51,
+            80
+          ]
+        },
+        {
+          "sourceRegion": [
+            443,
+            0,
+            886,
+            887
+          ],
+          "alphaBounds": [
+            35,
+            186,
+            389,
+            738
+          ],
+          "outputBounds": [
+            32,
+            32,
+            51,
+            80
+          ]
+        },
+        {
+          "sourceRegion": [
+            886,
+            0,
+            1280,
+            887
+          ],
+          "alphaBounds": [
+            6,
+            187,
+            364,
+            738
+          ],
+          "outputBounds": [
+            32,
+            32,
+            52,
+            80
+          ]
+        },
+        {
+          "sourceRegion": [
+            1280,
+            0,
+            1774,
+            887
+          ],
+          "alphaBounds": [
+            35,
+            187,
+            395,
+            738
+          ],
+          "outputBounds": [
+            32,
+            32,
+            52,
+            80
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "sleep",
+      "key": "robin",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/robin-utility/source-alpha.png",
+      "scale": 0.2558746736292428,
+      "regions": [
+        [
+          0,
+          737,
+          314,
+          908
+        ],
+        [
+          314,
+          737,
+          627,
+          908
+        ],
+        [
+          627,
+          737,
+          940,
+          908
+        ],
+        [
+          940,
+          737,
+          1254,
+          908
+        ]
+      ],
+      "roots": [
+        [
+          168.0,
+          908
+        ],
+        [
+          483.5,
+          908
+        ],
+        [
+          790.0,
+          908
+        ],
+        [
+          1105.0,
+          908
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/robin/sleep-south.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/robin-utility/source.png",
+      "sourceSha256": "d746605bba7292e59f60eb145337615f55527ac4d42c4d5c585eb74dfb3d2449",
+      "assetSha256": "5c654ec050ff1b85f5040cca8815b37a24facfd1e036bec3a5b5451c4ed8bde8",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            737,
+            314,
+            908
+          ],
+          "alphaBounds": [
+            30,
+            11,
+            306,
+            154
+          ],
+          "outputBounds": [
+            29,
+            75,
+            71,
+            37
+          ]
+        },
+        {
+          "sourceRegion": [
+            314,
+            737,
+            627,
+            908
+          ],
+          "alphaBounds": [
+            34,
+            12,
+            305,
+            154
+          ],
+          "outputBounds": [
+            29,
+            76,
+            69,
+            36
+          ]
+        },
+        {
+          "sourceRegion": [
+            627,
+            737,
+            940,
+            908
+          ],
+          "alphaBounds": [
+            22,
+            13,
+            304,
+            157
+          ],
+          "outputBounds": [
+            28,
+            75,
+            72,
+            37
+          ]
+        },
+        {
+          "sourceRegion": [
+            940,
+            737,
+            1254,
+            908
+          ],
+          "alphaBounds": [
+            29,
+            15,
+            301,
+            156
+          ],
+          "outputBounds": [
+            29,
+            76,
+            70,
+            36
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "train",
+      "key": "robin",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/robin-utility/train-correct-source-alpha.png",
+      "scale": 0.12420785804816223,
+      "regions": [
+        [
+          0,
+          0,
+          444,
+          887
+        ],
+        [
+          444,
+          0,
+          887,
+          887
+        ],
+        [
+          887,
+          0,
+          1330,
+          887
+        ],
+        [
+          1330,
+          0,
+          1774,
+          887
+        ]
+      ],
+      "roots": [
+        [
+          221.5,
+          887
+        ],
+        [
+          666.0,
+          887
+        ],
+        [
+          1109.0,
+          887
+        ],
+        [
+          1551.5,
+          887
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/robin/train-south.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/robin-utility/train-correct-source.png",
+      "sourceSha256": "0594d7ac197b3b615ddf89478bb5820b747436214ebd284efb3a8a391af11464",
+      "assetSha256": "73bbe648b063531418104a565bb0e1f8c57aacf9063acc48a4d204746a2c03ca",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            0,
+            444,
+            887
+          ],
+          "alphaBounds": [
+            52,
+            47,
+            398,
+            835
+          ],
+          "outputBounds": [
+            43,
+            14,
+            43,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            444,
+            0,
+            887,
+            887
+          ],
+          "alphaBounds": [
+            50,
+            46,
+            397,
+            835
+          ],
+          "outputBounds": [
+            43,
+            14,
+            43,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            887,
+            0,
+            1330,
+            887
+          ],
+          "alphaBounds": [
+            50,
+            46,
+            398,
+            835
+          ],
+          "outputBounds": [
+            43,
+            14,
+            43,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            1330,
+            0,
+            1774,
+            887
+          ],
+          "alphaBounds": [
+            50,
+            46,
+            397,
+            834
+          ],
+          "outputBounds": [
+            43,
+            14,
+            43,
+            98
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

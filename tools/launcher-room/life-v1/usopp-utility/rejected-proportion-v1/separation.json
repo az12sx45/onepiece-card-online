@@ -1,0 +1,359 @@
+{
+  "method": "Whole-body connected alpha isolation and unchanged-pixel gutter repacking. Original source preserved; no body part assembly or pose editing.",
+  "sourceSha256": "d5e0aacab936ae6662b9ca9c5a25322b5fdccbfec5f96052f30be8a0d5f5da74",
+  "derivativeSha256": "f12fdff2c2dcbcbee79d36f0a9167bde980b7d62648fc91da4157d25c5e6f788",
+  "mappings": [
+    {
+      "originalRegion": [
+        102,
+        5,
+        286,
+        402
+      ],
+      "wholeBodyOpaqueComponent": [
+        104,
+        7,
+        284,
+        400
+      ],
+      "destination": [
+        164,
+        23,
+        348,
+        420
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        393,
+        5,
+        571,
+        403
+      ],
+      "wholeBodyOpaqueComponent": [
+        395,
+        7,
+        569,
+        401
+      ],
+      "destination": [
+        679,
+        22,
+        857,
+        420
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        696,
+        5,
+        876,
+        402
+      ],
+      "wholeBodyOpaqueComponent": [
+        698,
+        7,
+        874,
+        400
+      ],
+      "destination": [
+        1190,
+        23,
+        1370,
+        420
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        999,
+        5,
+        1181,
+        402
+      ],
+      "wholeBodyOpaqueComponent": [
+        1001,
+        7,
+        1179,
+        400
+      ],
+      "destination": [
+        1701,
+        23,
+        1883,
+        420
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        61,
+        404,
+        295,
+        689
+      ],
+      "wholeBodyOpaqueComponent": [
+        63,
+        406,
+        293,
+        687
+      ],
+      "destination": [
+        139,
+        647,
+        373,
+        932
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        370,
+        405,
+        602,
+        689
+      ],
+      "wholeBodyOpaqueComponent": [
+        372,
+        407,
+        600,
+        687
+      ],
+      "destination": [
+        652,
+        648,
+        884,
+        932
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        674,
+        404,
+        909,
+        689
+      ],
+      "wholeBodyOpaqueComponent": [
+        676,
+        406,
+        907,
+        687
+      ],
+      "destination": [
+        1162,
+        647,
+        1397,
+        932
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        992,
+        405,
+        1226,
+        690
+      ],
+      "wholeBodyOpaqueComponent": [
+        994,
+        407,
+        1224,
+        688
+      ],
+      "destination": [
+        1675,
+        647,
+        1909,
+        932
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        28,
+        703,
+        318,
+        846
+      ],
+      "wholeBodyOpaqueComponent": [
+        30,
+        705,
+        316,
+        844
+      ],
+      "destination": [
+        111,
+        1301,
+        401,
+        1444
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        333,
+        703,
+        625,
+        847
+      ],
+      "wholeBodyOpaqueComponent": [
+        335,
+        705,
+        623,
+        845
+      ],
+      "destination": [
+        622,
+        1300,
+        914,
+        1444
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        646,
+        703,
+        939,
+        847
+      ],
+      "wholeBodyOpaqueComponent": [
+        648,
+        705,
+        937,
+        845
+      ],
+      "destination": [
+        1133,
+        1300,
+        1426,
+        1444
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        963,
+        704,
+        1252,
+        847
+      ],
+      "wholeBodyOpaqueComponent": [
+        965,
+        706,
+        1250,
+        845
+      ],
+      "destination": [
+        1647,
+        1301,
+        1936,
+        1444
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        78,
+        839,
+        267,
+        1245
+      ],
+      "wholeBodyOpaqueComponent": [
+        80,
+        841,
+        265,
+        1243
+      ],
+      "destination": [
+        161,
+        1550,
+        350,
+        1956
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        380,
+        840,
+        569,
+        1246
+      ],
+      "wholeBodyOpaqueComponent": [
+        382,
+        842,
+        567,
+        1244
+      ],
+      "destination": [
+        673,
+        1550,
+        862,
+        1956
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        679,
+        840,
+        875,
+        1246
+      ],
+      "wholeBodyOpaqueComponent": [
+        681,
+        842,
+        873,
+        1244
+      ],
+      "destination": [
+        1182,
+        1550,
+        1378,
+        1956
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    },
+    {
+      "originalRegion": [
+        992,
+        840,
+        1180,
+        1245
+      ],
+      "wholeBodyOpaqueComponent": [
+        994,
+        842,
+        1178,
+        1243
+      ],
+      "destination": [
+        1698,
+        1551,
+        1886,
+        1956
+      ],
+      "scale": 1,
+      "anatomyEdited": false
+    }
+  ]
+}

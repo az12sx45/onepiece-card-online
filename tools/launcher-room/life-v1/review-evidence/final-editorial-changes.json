@@ -1,0 +1,1164 @@
+{
+  "scope": "151 legacy scenes retain id/pair/order/tag/API; targeted wording-only corrections",
+  "sceneCount": 39,
+  "changedTurnCount": 121,
+  "dialogueSha256": "5c4fbdf5166f810b8bdebbc21df32b8a954d7e1cc146a7f0c0507082dcc9a35f",
+  "changes": [
+    {
+      "id": "luffy-zoro-3",
+      "reason": "Unowned navigator cannot be summoned",
+      "before": [
+        "前面那個黑黑的是島嗎？",
+        "不知道。你不是想去看？",
+        "嗯！那就去！",
+        "先喊航海士。別又自己跳下去。"
+      ],
+      "after": [
+        "前面那個黑黑的是島嗎？",
+        "不知道。你不是想去看？",
+        "嗯！那就去！",
+        "先看清楚再說。別又自己跳下去。"
+      ],
+      "changedTurns": [
+        3
+      ]
+    },
+    {
+      "id": "luffy-nami-1",
+      "reason": "Remove absent handheld meat and dripping oil",
+      "before": [
+        "娜美，這張紙能借我嗎？",
+        "不能。你手上那塊肉想包去哪裡？",
+        "啊，被發現了！",
+        "油滴下來了！盤子就在你旁邊！"
+      ],
+      "after": [
+        "娜美，海圖能折成船嗎？",
+        "你敢折，我就讓你自己記住每一條海岸線。",
+        "那還是妳畫，我坐真的船好了！",
+        "很好，這次總算想清楚了。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "luffy-usopp-2",
+      "reason": "No present Franky implied or call to retrieve his item",
+      "before": [
+        "騙人布，你真的釣過一座島？",
+        "千真萬確！只是魚線太細，我讓牠走了。",
+        "佛朗基有很粗的！我去拿！",
+        "不用！那座島今天休息！"
+      ],
+      "after": [
+        "騙人布，你真的釣過一座島？",
+        "千真萬確！只是魚線太細，我讓牠走了。",
+        "那就換粗一點的，再釣一次！",
+        "不用！那座島今天休息！"
+      ],
+      "changedTurns": [
+        2
+      ]
+    },
+    {
+      "id": "luffy-sanji-1",
+      "reason": "Dining table does not imply an active stove",
+      "before": [
+        "香吉士！好了吧！已經有味道了！",
+        "你烤到一半也有味道。給我等著。",
+        "我要最大的那份！",
+        "早就是你的了，別再把頭伸過來！"
+      ],
+      "after": [
+        "香吉士！下次開飯，我要最大的那份！",
+        "你哪次不是？先把上次只記得吃忘了說的補上。",
+        "好吃！超好吃！",
+        "這還差不多。下次也不准剩。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "luffy-sanji-3",
+      "reason": "No unseen crowd being summoned or cooking pans claimed",
+      "before": [
+        "你怎麼不吃？都快沒有了！",
+        "還有鍋子要收。你們先吃。",
+        "那我去叫大家等你！喂——！",
+        "喊什麼喊！我盛一碗就過去！"
+      ],
+      "after": [
+        "下次開飯，你也要一起吃！",
+        "知道了。廚師總得先把收尾做好。",
+        "那我等你！……一下下也算等吧！",
+        "連這個都要討價還價。別偷吃我的就行。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "luffy-sanji-4",
+      "reason": "Two present actors only; no summon of unowned Usopp",
+      "before": [
+        "香吉士，你剛剛也在笑吧！",
+        "誰叫騙人布講一半，自己先怕了。",
+        "哈哈！我再去叫他講一次！",
+        "先讓他喘口氣。你也別笑到岔氣。"
+      ],
+      "after": [
+        "香吉士，你剛剛也在笑吧！",
+        "誰叫你說要安靜，自己先笑出來。",
+        "哈哈！可是你也笑了啊！",
+        "行了行了。別笑到岔氣。"
+      ],
+      "changedTurns": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "luffy-chopper-2",
+      "reason": "Medicine clip checks bottles; no unseen bandaging",
+      "before": [
+        "好了沒？我完全不痛耶！",
+        "你一直動，我就一直包不好！",
+        "喔。那這隻手也給你。",
+        "只要受傷那隻！另一隻不要碰藥箱！"
+      ],
+      "after": [
+        "不痛了，就算好了吧？",
+        "不行！恢復得怎麼樣，要確認過才知道！",
+        "喔，那下次也交給你！",
+        "當然！你也不准自己亂下結論！"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "luffy-chopper-3",
+      "reason": "Bird is a recollection, not an unseen present visitor",
+      "before": [
+        "剛才那隻鳥罵你什麼？",
+        "牠沒有罵我，牠說有人搶牠的餅乾。",
+        "是牠的啊？我還以為掉在那裡。",
+        "果然是你！牠還在窗外等你道歉！"
+      ],
+      "after": [
+        "剛才那隻鳥罵你什麼？",
+        "牠沒有罵我，牠說有人搶牠的餅乾。",
+        "是牠的啊？我還以為掉在那裡。",
+        "果然是你！下次看清楚，別連鳥的份也吃掉！"
+      ],
+      "changedTurns": [
+        3
+      ]
+    },
+    {
+      "id": "luffy-robin-3",
+      "reason": "No offscreen Usopp arriving to announce result",
+      "before": [
+        "羅賓！猜猜我跟騙人布誰贏了！",
+        "騙人布。他剛剛跑來宣布過了。",
+        "下一次就換我！你看著！",
+        "好。我先把這一頁看完，再看你翻盤。"
+      ],
+      "after": [
+        "羅賓，下次跟我猜拳！我想好要出什麼了！",
+        "已經寫在你臉上了呢。",
+        "真的嗎！那我換一個！",
+        "好。這次記得連表情一起換。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "luffy-franky-1",
+      "reason": "No nearby unseen Nami listening implied",
+      "before": [
+        "佛朗基！這個也會變形嗎！",
+        "現在還不會。你覺得往哪裡展開好？",
+        "全部！上面再加個大炮！",
+        "懂行啊，船長！……先別讓娜美聽見。"
+      ],
+      "after": [
+        "佛朗基！這個也會變形嗎！",
+        "現在還不會。你覺得往哪裡展開好？",
+        "全部！上面再加個大炮！",
+        "懂行啊，船長！……不過得先想好裝在哪裡！"
+      ],
+      "changedTurns": [
+        3
+      ]
+    },
+    {
+      "id": "luffy-franky-2",
+      "reason": "No summon of unowned Chopper or phantom transformation performance",
+      "before": [
+        "剛才那個再做一次！我沒看清楚！",
+        "喂，剛才就叫你看好了！",
+        "我去叫喬巴！你先不要做！",
+        "那就全員到齊再來一次！好戲得有人看啊！"
+      ],
+      "after": [
+        "你剛才說的那個變形，再講一次！",
+        "喂，剛才不是聽得最起勁嗎！",
+        "想像不出來嘛！一定超厲害的！",
+        "哈哈！那就從最帥的地方再講一遍！"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "luffy-brook-3",
+      "reason": "No piano performance in a furniture-free scene",
+      "before": [
+        "你怎麼一個人在這裡彈？去那邊啊！",
+        "怕吵到正在忙的各位。",
+        "沒事！我想聽，大家也想聽！",
+        "……好。今天這一曲，就從這裡開始吧。"
+      ],
+      "after": [
+        "下次唱歌，我也要一起！",
+        "好啊。船長喜歡熱鬧一些的吧？",
+        "嗯！我會的那段要唱兩次！",
+        "那就先約好了。副歌可別又提早進來喔。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "luffy-jinbe-3",
+      "reason": "Explicit recollection; no currently available third actor",
+      "before": [
+        "你剛剛怎麼沒笑？騙人布那個超好笑！",
+        "老夫以為他真被怪魚追了三天。",
+        "真的嗎？那就更厲害了！",
+        "……看來得再請他講一遍才行。"
+      ],
+      "after": [
+        "騙人布以前說被怪魚追三天，你信嗎？",
+        "頭一次聽，老夫還認真想了是哪種魚。",
+        "哈哈！我也是！",
+        "原來如此。下回聽故事，得多留意他的表情。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "zoro-nami-1",
+      "reason": "No actor lies on table without matching action",
+      "before": [
+        "這裡空著，我躺一下。",
+        "那是我要攤海圖的地方。起來。",
+        "海圖有那麼大？",
+        "對，剛好比你的懶腰還大。旁邊去！"
+      ],
+      "after": [
+        "這裡空著，借我歇一下。",
+        "那是放海圖的地方。休息去旁邊。",
+        "海圖有那麼大？",
+        "對，剛好比你的懶腰還大。旁邊去！"
+      ],
+      "changedTurns": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "zoro-nami-3",
+      "reason": "Works at every hour; no phantom active map drawing at helm",
+      "before": [
+        "天都亮了，還沒畫完？",
+        "差一段。你別睡，幫我留意一下外面。",
+        "嗯。妳畫。",
+        "有你這句就夠了。"
+      ],
+      "after": [
+        "還在想航線？",
+        "嗯。你有空的話，幫我留意一下外面。",
+        "知道了。妳慢慢想。",
+        "有你這句就夠了。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "zoro-usopp-1",
+      "reason": "No unowned target/sling/shot implied on empty floor",
+      "before": [
+        "射吧。不是說百發百中？",
+        "你先從靶子後面走開啊！",
+        "怎麼，沒把握？",
+        "有把握也不能拿你練膽子！"
+      ],
+      "after": [
+        "你說百發百中，什麼情況都行？",
+        "當然！……前提是別有人自己跑到靶子後面！",
+        "怎麼，沒把握？",
+        "有把握也不能拿夥伴練膽子！"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "id": "zoro-sanji-3",
+      "reason": "Sword rack does not imply knives cutting food",
+      "before": [
+        "你的菜刀鈍了？切那麼久。",
+        "這叫切薄片。不是把東西劈成兩半。",
+        "切完留一盤。",
+        "最後一盤！先給幫忙端菜的人！"
+      ],
+      "after": [
+        "切薄片，有那麼多講究？",
+        "當然。不是什麼東西都劈成兩半就好。",
+        "行，下次留一盤。",
+        "想吃就記得幫忙。嘴巴說說可不算！"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "zoro-chopper-1",
+      "reason": "Future care reminder instead of unperformed present bandage",
+      "before": [
+        "不用包。這點小傷。",
+        "你說小傷，我看到的又不是小傷！坐下！",
+        "……麻煩。",
+        "嫌麻煩就別偷偷拆！我會回來看！"
+      ],
+      "after": [
+        "你又要提醒什麼？",
+        "下次受了傷，不准再用小傷兩個字帶過！",
+        "……記住了。",
+        "還有，不准自己拆繃帶！這句也記住！"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "zoro-chopper-3",
+      "reason": "No jumping or fetching shelf action without matching frames",
+      "before": [
+        "別跳了。要哪本？",
+        "藍色那本！旁邊薄薄的那本也要！",
+        "看到了。我拿，你先到旁邊等。",
+        "謝謝！……索隆，你也要看嗎？裡面有刀傷的！"
+      ],
+      "after": [
+        "又在找書？",
+        "想看藍色那本！可是還有上一本文字沒記完。",
+        "一本一本來。書又不會跑。",
+        "我知道！……只是想學的太多了嘛。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "zoro-franky-3",
+      "reason": "Empty floor does not provide a trapped plank to pull",
+      "before": [
+        "那塊木頭卡住了。要我切？",
+        "不准！整塊留著還有用。",
+        "那我拔。你壓著這邊。",
+        "這就對啦。力氣大的傢伙，也能做細活嘛！"
+      ],
+      "after": [
+        "木頭卡住的時候，不能直接切？",
+        "得先看有什麼用。整塊留著，可能更合適。",
+        "知道了。要幫忙就說。",
+        "嘿！有你這句，省下不少力氣！"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "zoro-brook-2",
+      "reason": "Conversation schedules practice rather than claiming sword demonstration",
+      "before": [
+        "出手挺快。",
+        "過獎。其實祕訣是放鬆肩膀——",
+        "直接做一遍。我看。",
+        "喲呵呵，您比我的劍還不愛繞路呢。"
+      ],
+      "after": [
+        "出手挺快。",
+        "過獎。其實祕訣是放鬆肩膀——",
+        "下次一起練。我想看看你的步子。",
+        "樂意之至。您還真是一句就約好了呢。"
+      ],
+      "changedTurns": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "nami-robin-2",
+      "reason": "No implied present Luffy group or invisible tea/snack",
+      "before": [
+        "今天真安靜。魯夫他們去哪了？",
+        "大概在準備下一次讓妳頭痛的驚喜。",
+        "那我要把這杯茶喝完再找人。",
+        "我也這麼想。點心替妳留了。"
+      ],
+      "after": [
+        "今天真安靜。難得不用急著安排下一件事。",
+        "那就先把這一會兒留給自己吧。",
+        "嗯，晚一點再想也來得及。",
+        "我也這麼想。多待一會兒吧。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "nami-franky-1",
+      "reason": "Curtain mechanism is a proposal, not nonexistent current furniture",
+      "before": [
+        "我要的是會遮光的窗簾。",
+        "這個按鈕一下去，整片唰地展開，多帥！",
+        "還要把人彈出去嗎？",
+        "那是另一個設計……好啦，先做普通的！"
+      ],
+      "after": [
+        "我要的是會遮光的窗簾。",
+        "那就做個按鈕，一按整片展開，多帥！",
+        "還要把人彈出去嗎？",
+        "那是另一個設計……好啦，先做普通的！"
+      ],
+      "changedTurns": [
+        1
+      ]
+    },
+    {
+      "id": "nami-brook-2",
+      "reason": "No forced rain when background/weather does not show it",
+      "before": [
+        "要下雨了，樂譜收進來！",
+        "多謝提醒！我正想寫一首雨天的曲子。",
+        "可以寫，別拿真的雨來泡。",
+        "放心，這次只有音符會滴滴答答。"
+      ],
+      "after": [
+        "下雨的時候，樂譜可得先收好。",
+        "記住了。我倒想寫一首雨天的曲子。",
+        "可以寫，別拿真的雨來泡。",
+        "放心，這次只有音符會滴滴答答。"
+      ],
+      "changedTurns": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "nami-jinbe-3",
+      "reason": "Explicit past recollection without currently missing Luffy",
+      "before": [
+        "你又讓魯夫說去看看就跑了？",
+        "他說就在旁邊，老夫以為——",
+        "他說旁邊，通常就是看不到的地方！",
+        "原來如此。這條也得記進航海須知啊。"
+      ],
+      "after": [
+        "以前魯夫說只去旁邊看看，你還真信了？",
+        "那時他講得很肯定，老夫以為——",
+        "他說旁邊，通常就是看不到的地方！",
+        "原來如此。這條也得記進航海須知啊。"
+      ],
+      "changedTurns": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "usopp-jinbe-2",
+      "reason": "No unrendered fog/flag or replying ship",
+      "before": [
+        "霧這麼濃，誰看得見我啊。",
+        "船頭看得見。把那面旗放高些。",
+        "這樣？……喂，對面真的回了！",
+        "嗯，這雙眼就交給你了。"
+      ],
+      "after": [
+        "要是霧大到連人都看不到，還能傳訊號嗎？",
+        "能。先確認兩邊看得見什麼，不能只顧自己喊。",
+        "懂了！連這個也得挑準地方！",
+        "嗯。觀察的本事，到那時就派得上用場。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "sanji-chopper-1",
+      "reason": "No watching unowned Luffy eating or unseen plates",
+      "before": [
+        "喬巴，別只盯著別人的盤子。你的快涼了。",
+        "我在看魯夫有沒有把菜藏起來！",
+        "我看著。你先吃，醫生也不能空著肚子。",
+        "那你也坐下！你剛才只嚐了湯！"
+      ],
+      "after": [
+        "喬巴，別只管別人，自己的正餐也要記得。",
+        "我知道！醫生也得有精神才能幫忙！",
+        "知道就好。忙過頭時，我可會提醒你。",
+        "那你也一樣！不能只嚐味道就算吃過！"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "sanji-chopper-3",
+      "reason": "Health discussion rather than unperformed live examination",
+      "before": [
+        "熱鍋碰一下而已，別大驚小怪。",
+        "給我檢查。你自己不是最重視這雙手嗎！",
+        "……知道了，醫生。這隻。",
+        "另一隻也來！不准漏報！"
+      ],
+      "after": [
+        "在廚房忙的時候，總會有點小碰傷。",
+        "所以才不能隨便帶過！你不是最重視這雙手嗎！",
+        "……知道了。有事會找你，醫生。",
+        "說好了！不准只報一半！"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "sanji-robin-3",
+      "reason": "Explicit previous meal; no handoff to absent Nami",
+      "before": [
+        "這份專為妳做的，名字還沒想好。",
+        "像一隻從沙裡伸出來的手呢。",
+        "手、手嗎？我本來想做花……",
+        "我很喜歡。花也留一朵給娜美吧。"
+      ],
+      "after": [
+        "還記得上次那道點心嗎？名字我還沒想好。",
+        "像一隻從沙裡伸出來的手呢。",
+        "手、手嗎？那明明是照花做的……",
+        "我很喜歡。下次也留著那個形狀吧。"
+      ],
+      "changedTurns": [
+        0,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "sanji-franky-1",
+      "reason": "No current pouring/bottle action that is not shown",
+      "before": [
+        "停。這鍋湯不准加可樂。",
+        "還沒倒呢！我只是放旁邊！",
+        "上次你也是這麼說。",
+        "好啦，這回我就乖乖喝你做的！"
+      ],
+      "after": [
+        "先說好，下次也不准往湯裡加可樂。",
+        "上次只是放在旁邊，又沒倒！",
+        "上次你也是這麼說。",
+        "好啦！我就喝我的可樂，好好吃你做的！"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "id": "sanji-franky-4",
+      "reason": "No forced early morning across all schedules",
+      "before": [
+        "喂，你一大早喊那麼大聲幹什麼？",
+        "精神夠足才叫 SUPER 啊！",
+        "沒睡醒的人也被你喊醒了。",
+        "哈！那下一聲留到大家都醒了再來！"
+      ],
+      "after": [
+        "喂，你怎麼一開口就那麼大聲？",
+        "精神夠足才叫 SUPER 啊！",
+        "休息的人也會被你喊醒。",
+        "哈！那下一聲留到大家都醒了再來！"
+      ],
+      "changedTurns": [
+        0,
+        2
+      ]
+    },
+    {
+      "id": "sanji-brook-3",
+      "reason": "No offscreen Luffy currently singing in kitchen",
+      "before": [
+        "剛才那首不錯。下次再彈。",
+        "您在廚房也聽得見嗎？",
+        "聽得見，魯夫一直跟著亂唱。",
+        "喲呵呵，那我下次先教他開頭。"
+      ],
+      "after": [
+        "剛才那首不錯。下次再彈。",
+        "原來您也記得那首？",
+        "那個拍子聽過就記得了。做事時還會想起來。",
+        "喲呵呵，那下次就替您留著這首。"
+      ],
+      "changedTurns": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "chopper-franky-1",
+      "reason": "No unowned Luffy summon or unseen transforming machine",
+      "before": [
+        "會變形嗎？這次會變形嗎？",
+        "嘿，先別急！介紹完才是重頭戲！",
+        "我去叫魯夫！不准趁我不在變！",
+        "放心！少了你們兩個，誰替我叫好啊！"
+      ],
+      "after": [
+        "你說的那個構造，也能用來變形嗎？",
+        "嘿，有些地方還得想一想！你倒是問到重點了！",
+        "真的做好了，一定要第一個告訴我！",
+        "當然！你這麼期待，本大爺更有幹勁啦！"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "chopper-franky-2",
+      "reason": "No unperformed joint examination",
+      "before": [
+        "這邊轉起來會痛嗎？",
+        "不會，這裡是軸。卡了就上點油！",
+        "可是旁邊還是你的身體啊，我也要看。",
+        "行！機械歸我，身體就拜託醫生了。"
+      ],
+      "after": [
+        "機械的地方不會痛，就不用管了嗎？",
+        "也得管！軸卡了，就要檢查、上油。",
+        "旁邊還是你的身體，有異樣也要告诉我！",
+        "行！機械歸我，身體就拜託醫生了。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "chopper-brook-1",
+      "reason": "No thermometer or physical temperature measurement without art",
+      "before": [
+        "奇怪……怎麼量都一樣冷。",
+        "可能因為我連皮膚也沒有呢。",
+        "不要笑！我想知道怎樣才算你不舒服！",
+        "您這麼認真，我也得好好記下自己的狀況。"
+      ],
+      "after": [
+        "你沒有皮膚，平常怎麼知道自己不舒服？",
+        "這個嘛……骨頭的事，我也得仔細想想。",
+        "有跟平常不一樣的地方，就要告訴我喔！",
+        "好。您這麼認真，我也會好好留意的。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "chopper-brook-2",
+      "reason": "No Chopper instrument/hand-clap action missing from art",
+      "before": [
+        "我有跟上嗎？剛才好像慢了一下。",
+        "有。請再試一次，這次我跟您的速度。",
+        "一、二、三……啊！對上了！",
+        "就是這樣。那這一小段，請陪我合奏一次。"
+      ],
+      "after": [
+        "我練拍子的時候，常常不小心越數越快。",
+        "先選自己跟得上的速度，就不容易急。",
+        "那下次你聽聽看，我有沒有數穩！",
+        "樂意。等您穩了，我們再試更長的一段。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "chopper-jinbe-1",
+      "reason": "No unperformed palm examination",
+      "before": [
+        "手放鬆，再攤開一點。",
+        "這樣麼？老夫一使力，怕你不好看。",
+        "對，這樣就好。不用怕壓到我！",
+        "那就交給你了，醫生。"
+      ],
+      "after": [
+        "不舒服的時候，要把哪裡不對說清楚喔。",
+        "知道。老夫有時怕小事也來打擾你。",
+        "身體的事才不是打擾！我是醫生啊！",
+        "那就交給你了，醫生。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "robin-brook-3",
+      "reason": "Storytelling does not require a nonexistent piano",
+      "before": [
+        "怎麼停了？我有在聽。",
+        "以為您看得入神，便想歇一小段。",
+        "兩件事可以一起。繼續吧。",
+        "那就接著剛才的地方，不重新開場了。"
+      ],
+      "after": [
+        "剛才說到那首歌的來歷，怎麼不說下去了？",
+        "以為您在想事情，便想等一等。",
+        "我有在聽。請繼續吧。",
+        "那就接著剛才的地方，不重新開場了。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "brook-jinbe-3",
+      "reason": "Helm alone cannot enable piano playing",
+      "before": [
+        "要聽一段嗎？我彈輕些。",
+        "好。只是老夫不太會跟著唱。",
+        "有人聽就足夠了，拍子也不用趕。",
+        "那你慢慢彈，這一段海面交給老夫。"
+      ],
+      "after": [
+        "下回休息時，想聽什麼樣的曲子呢？",
+        "安靜些的就好。不過老夫不太會跟著唱。",
+        "有人聽就足夠了，拍子也不用趕。",
+        "那就約好了。老夫會慢慢聽的。"
+      ],
+      "changedTurns": [
+        0,
+        1,
+        3
+      ]
+    }
+  ],
+  "additionalSoloBondChanges": [
+    {
+      "before": "這張可以借你看。手先擦乾淨。",
+      "after": "想知道航線就問我。先把重點聽清楚喔。"
+    },
+    {
+      "before": "剛才尖叫那聲不准告訴喬巴，說好了！",
+      "after": "剛才尖叫那聲就當沒聽見，說好了！"
+    },
+    {
+      "before": "手放下。燙的交給我端。",
+      "after": "忙的時候也得顧好自己，別逞強。"
+    },
+    {
+      "before": "切得不錯。這盤明天也交給你。",
+      "after": "做事挺仔細。下次也來幫忙吧。"
+    },
+    {
+      "before": "你記得帶水給我啊！我剛才看得太專心了。",
+      "after": "你還記得提醒我休息啊！謝謝！"
+    },
+    {
+      "before": "這一頁先別翻，我想看看你猜的答案。",
+      "after": "先別急著說，我想猜猜你會怎麼回答。"
+    },
+    {
+      "before": "最後這顆給你鎖。你的點子，得自己完成！",
+      "after": "你的點子可別只放在心裡，說出來一起想！"
+    },
+    {
+      "before": "來，茶還熱。坐下再說。",
+      "after": "不用急著走。坐一會兒，再慢慢說。"
+    }
+  ],
+  "typographyCorrection": {
+    "before": "旁邊還是你的身體，有異樣也要告诉我！",
+    "after": "旁邊還是你的身體，有異樣也要告訴我！"
+  },
+  "legacyIdentityVerified": true,
+  "unchangedSceneIds": [
+    "luffy-zoro-1",
+    "luffy-zoro-2",
+    "luffy-nami-2",
+    "luffy-nami-3",
+    "luffy-nami-4",
+    "luffy-usopp-1",
+    "luffy-usopp-3",
+    "luffy-sanji-2",
+    "luffy-chopper-1",
+    "luffy-robin-1",
+    "luffy-robin-2",
+    "luffy-robin-4",
+    "luffy-franky-3",
+    "luffy-brook-1",
+    "luffy-brook-2",
+    "luffy-jinbe-1",
+    "luffy-jinbe-2",
+    "zoro-nami-2",
+    "zoro-usopp-2",
+    "zoro-usopp-3",
+    "zoro-sanji-1",
+    "zoro-sanji-2",
+    "zoro-chopper-2",
+    "zoro-chopper-4",
+    "zoro-robin-1",
+    "zoro-robin-2",
+    "zoro-robin-3",
+    "zoro-franky-1",
+    "zoro-franky-2",
+    "zoro-brook-1",
+    "zoro-brook-3",
+    "zoro-jinbe-1",
+    "zoro-jinbe-2",
+    "zoro-jinbe-3",
+    "nami-usopp-1",
+    "nami-usopp-2",
+    "nami-usopp-3",
+    "nami-usopp-4",
+    "nami-sanji-1",
+    "nami-sanji-2",
+    "nami-sanji-3",
+    "nami-sanji-4",
+    "nami-chopper-1",
+    "nami-chopper-2",
+    "nami-chopper-3",
+    "nami-robin-1",
+    "nami-robin-3",
+    "nami-robin-4",
+    "nami-franky-2",
+    "nami-franky-3",
+    "nami-brook-1",
+    "nami-brook-3",
+    "nami-jinbe-1",
+    "nami-jinbe-2",
+    "usopp-sanji-1",
+    "usopp-sanji-2",
+    "usopp-sanji-3",
+    "usopp-sanji-4",
+    "usopp-chopper-1",
+    "usopp-chopper-2",
+    "usopp-chopper-3",
+    "usopp-robin-1",
+    "usopp-robin-2",
+    "usopp-robin-3",
+    "usopp-franky-1",
+    "usopp-franky-2",
+    "usopp-franky-3",
+    "usopp-brook-1",
+    "usopp-brook-2",
+    "usopp-brook-3",
+    "usopp-jinbe-1",
+    "usopp-jinbe-3",
+    "sanji-chopper-2",
+    "sanji-chopper-4",
+    "sanji-robin-1",
+    "sanji-robin-2",
+    "sanji-robin-4",
+    "sanji-franky-2",
+    "sanji-franky-3",
+    "sanji-brook-1",
+    "sanji-brook-2",
+    "sanji-jinbe-1",
+    "sanji-jinbe-2",
+    "sanji-jinbe-3",
+    "sanji-jinbe-4",
+    "chopper-robin-1",
+    "chopper-robin-2",
+    "chopper-robin-3",
+    "chopper-franky-3",
+    "chopper-franky-4",
+    "chopper-brook-3",
+    "chopper-jinbe-2",
+    "chopper-jinbe-3",
+    "robin-franky-1",
+    "robin-franky-2",
+    "robin-franky-3",
+    "robin-brook-1",
+    "robin-brook-2",
+    "robin-jinbe-1",
+    "robin-jinbe-2",
+    "robin-jinbe-3",
+    "franky-brook-1",
+    "franky-brook-2",
+    "franky-brook-3",
+    "franky-brook-4",
+    "franky-jinbe-1",
+    "franky-jinbe-2",
+    "franky-jinbe-3",
+    "franky-jinbe-4",
+    "brook-jinbe-1",
+    "brook-jinbe-2",
+    "brook-jinbe-4"
+  ],
+  "allStableSceneIds": [
+    "luffy-zoro-1",
+    "luffy-zoro-2",
+    "luffy-zoro-3",
+    "luffy-nami-1",
+    "luffy-nami-2",
+    "luffy-nami-3",
+    "luffy-nami-4",
+    "luffy-usopp-1",
+    "luffy-usopp-2",
+    "luffy-usopp-3",
+    "luffy-sanji-1",
+    "luffy-sanji-2",
+    "luffy-sanji-3",
+    "luffy-sanji-4",
+    "luffy-chopper-1",
+    "luffy-chopper-2",
+    "luffy-chopper-3",
+    "luffy-robin-1",
+    "luffy-robin-2",
+    "luffy-robin-3",
+    "luffy-robin-4",
+    "luffy-franky-1",
+    "luffy-franky-2",
+    "luffy-franky-3",
+    "luffy-brook-1",
+    "luffy-brook-2",
+    "luffy-brook-3",
+    "luffy-jinbe-1",
+    "luffy-jinbe-2",
+    "luffy-jinbe-3",
+    "zoro-nami-1",
+    "zoro-nami-2",
+    "zoro-nami-3",
+    "zoro-usopp-1",
+    "zoro-usopp-2",
+    "zoro-usopp-3",
+    "zoro-sanji-1",
+    "zoro-sanji-2",
+    "zoro-sanji-3",
+    "zoro-chopper-1",
+    "zoro-chopper-2",
+    "zoro-chopper-3",
+    "zoro-chopper-4",
+    "zoro-robin-1",
+    "zoro-robin-2",
+    "zoro-robin-3",
+    "zoro-franky-1",
+    "zoro-franky-2",
+    "zoro-franky-3",
+    "zoro-brook-1",
+    "zoro-brook-2",
+    "zoro-brook-3",
+    "zoro-jinbe-1",
+    "zoro-jinbe-2",
+    "zoro-jinbe-3",
+    "nami-usopp-1",
+    "nami-usopp-2",
+    "nami-usopp-3",
+    "nami-usopp-4",
+    "nami-sanji-1",
+    "nami-sanji-2",
+    "nami-sanji-3",
+    "nami-sanji-4",
+    "nami-chopper-1",
+    "nami-chopper-2",
+    "nami-chopper-3",
+    "nami-robin-1",
+    "nami-robin-2",
+    "nami-robin-3",
+    "nami-robin-4",
+    "nami-franky-1",
+    "nami-franky-2",
+    "nami-franky-3",
+    "nami-brook-1",
+    "nami-brook-2",
+    "nami-brook-3",
+    "nami-jinbe-1",
+    "nami-jinbe-2",
+    "nami-jinbe-3",
+    "usopp-sanji-1",
+    "usopp-sanji-2",
+    "usopp-sanji-3",
+    "usopp-sanji-4",
+    "usopp-chopper-1",
+    "usopp-chopper-2",
+    "usopp-chopper-3",
+    "usopp-robin-1",
+    "usopp-robin-2",
+    "usopp-robin-3",
+    "usopp-franky-1",
+    "usopp-franky-2",
+    "usopp-franky-3",
+    "usopp-brook-1",
+    "usopp-brook-2",
+    "usopp-brook-3",
+    "usopp-jinbe-1",
+    "usopp-jinbe-2",
+    "usopp-jinbe-3",
+    "sanji-chopper-1",
+    "sanji-chopper-2",
+    "sanji-chopper-3",
+    "sanji-chopper-4",
+    "sanji-robin-1",
+    "sanji-robin-2",
+    "sanji-robin-3",
+    "sanji-robin-4",
+    "sanji-franky-1",
+    "sanji-franky-2",
+    "sanji-franky-3",
+    "sanji-franky-4",
+    "sanji-brook-1",
+    "sanji-brook-2",
+    "sanji-brook-3",
+    "sanji-jinbe-1",
+    "sanji-jinbe-2",
+    "sanji-jinbe-3",
+    "sanji-jinbe-4",
+    "chopper-robin-1",
+    "chopper-robin-2",
+    "chopper-robin-3",
+    "chopper-franky-1",
+    "chopper-franky-2",
+    "chopper-franky-3",
+    "chopper-franky-4",
+    "chopper-brook-1",
+    "chopper-brook-2",
+    "chopper-brook-3",
+    "chopper-jinbe-1",
+    "chopper-jinbe-2",
+    "chopper-jinbe-3",
+    "robin-franky-1",
+    "robin-franky-2",
+    "robin-franky-3",
+    "robin-brook-1",
+    "robin-brook-2",
+    "robin-brook-3",
+    "robin-jinbe-1",
+    "robin-jinbe-2",
+    "robin-jinbe-3",
+    "franky-brook-1",
+    "franky-brook-2",
+    "franky-brook-3",
+    "franky-brook-4",
+    "franky-jinbe-1",
+    "franky-jinbe-2",
+    "franky-jinbe-3",
+    "franky-jinbe-4",
+    "brook-jinbe-1",
+    "brook-jinbe-2",
+    "brook-jinbe-3",
+    "brook-jinbe-4"
+  ],
+  "changedTopics": [
+    {
+      "id": "luffy-nami-1",
+      "before": "海圖不能拿來包",
+      "after": "海圖不是摺紙"
+    },
+    {
+      "id": "luffy-sanji-1",
+      "before": "聞到就算開飯",
+      "after": "最大的那份"
+    },
+    {
+      "id": "luffy-chopper-2",
+      "before": "醫生的手先別鬆",
+      "after": "醫生說了才算"
+    },
+    {
+      "id": "luffy-robin-3",
+      "before": "熱鬧的書籤",
+      "after": "猜拳寫在臉上"
+    },
+    {
+      "id": "chopper-jinbe-1",
+      "before": "大手也要伸直",
+      "after": "身體的事不是打擾"
+    }
+  ]
+}

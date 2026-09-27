@@ -1,0 +1,212 @@
+{
+  "clips": [
+    {
+      "id": "music",
+      "key": "brook",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/brook-music/source.png",
+      "scale": 0.321543,
+      "regions": [
+        [
+          86,
+          0,
+          285,
+          311
+        ],
+        [
+          397,
+          0,
+          597,
+          311
+        ],
+        [
+          706,
+          1,
+          904,
+          311
+        ],
+        [
+          1022,
+          0,
+          1213,
+          311
+        ]
+      ],
+      "roots": [
+        [
+          148,
+          311
+        ],
+        [
+          459,
+          311
+        ],
+        [
+          768,
+          311
+        ],
+        [
+          1083,
+          311
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/brook/music-east.webp"
+    },
+    {
+      "id": "music",
+      "key": "brook",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/brook-music/source.png",
+      "scale": 0.321543,
+      "regions": [
+        [
+          62,
+          316,
+          260,
+          626
+        ],
+        [
+          376,
+          316,
+          574,
+          627
+        ],
+        [
+          690,
+          316,
+          890,
+          627
+        ],
+        [
+          1002,
+          316,
+          1201,
+          626
+        ]
+      ],
+      "roots": [
+        [
+          191,
+          626
+        ],
+        [
+          504,
+          627
+        ],
+        [
+          817,
+          627
+        ],
+        [
+          1130,
+          626
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/brook/music-west.webp"
+    },
+    {
+      "id": "music",
+      "key": "brook",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/brook-music/source.png",
+      "scale": 0.341297,
+      "regions": [
+        [
+          95,
+          629,
+          249,
+          922
+        ],
+        [
+          407,
+          629,
+          558,
+          922
+        ],
+        [
+          721,
+          629,
+          871,
+          922
+        ],
+        [
+          1033,
+          629,
+          1184,
+          922
+        ]
+      ],
+      "roots": [
+        [
+          170,
+          922
+        ],
+        [
+          482,
+          922
+        ],
+        [
+          796,
+          922
+        ],
+        [
+          1110,
+          922
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/brook/music-north.webp"
+    },
+    {
+      "id": "music",
+      "key": "brook",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/brook-music/source.png",
+      "scale": 0.320513,
+      "regions": [
+        [
+          91,
+          925,
+          246,
+          1237
+        ],
+        [
+          404,
+          925,
+          560,
+          1237
+        ],
+        [
+          718,
+          925,
+          872,
+          1237
+        ],
+        [
+          1033,
+          925,
+          1188,
+          1237
+        ]
+      ],
+      "roots": [
+        [
+          169,
+          1237
+        ],
+        [
+          482,
+          1237
+        ],
+        [
+          796,
+          1237
+        ],
+        [
+          1110,
+          1237
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/brook/music-south.webp"
+    }
+  ]
+}

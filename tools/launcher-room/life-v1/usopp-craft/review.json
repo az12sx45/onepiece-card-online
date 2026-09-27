@@ -1,0 +1,544 @@
+{
+  "schema": "launcher-life-art-review/1",
+  "reviewType": "Codex actual source +128px approved-versus-new atlas visual inspection and deterministic alpha/shape checks; no in-room runtime acceptance claimed",
+  "generator": "image_gen.imagegen",
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "runtimeAccepted": false,
+  "review": "Replaced small-head long-body draft with GPT whole-body redrawing using accepted read and original identity references. Head/torso direction consistent; checked all four frames at128px against approved idle/walk/read. Correct left wristband and satchel. Standing99px; seated/lying stay same physical sheet scale.",
+  "noMirroring": true,
+  "noBodyPartAssembly": true,
+  "originalRetained": true,
+  "priorReviewSuperseded": "rejected-proportion-v1/review.json",
+  "comparisonEvidence": "C:\\Codex_Candidates\\launcher-life-audit\\proportion-repair\\usopp-approved-comparison.png",
+  "clips": [
+    {
+      "id": "craft",
+      "direction": "east",
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-east.webp",
+      "sha256": "e905293a1a66da136c452d8051b121ab62d5aab53ecad06ace71175da5fc5797",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "sourceSha256": "10f2bea60ec26dfa598a8076e7a3556ca2d047b2fa926515404c08c3611d1ef1",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          39,
+          12,
+          100,
+          111
+        ],
+        [
+          40,
+          12,
+          100,
+          111
+        ],
+        [
+          39,
+          12,
+          99,
+          111
+        ],
+        [
+          38,
+          12,
+          100,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        4212,
+        4089,
+        4099,
+        4173
+      ],
+      "singleIsotropicScale": 0.33110368,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/usopp/craft-east.webp",
+        "sha256": "e905293a1a66da136c452d8051b121ab62d5aab53ecad06ace71175da5fc5797",
+        "scale": 0.33110368,
+        "approved": {
+          "alphaBounds": [
+            44,
+            13,
+            88,
+            112
+          ],
+          "height": 99,
+          "width": 44,
+          "topThirdSilhouetteWidth": 44
+        },
+        "read": {
+          "alphaBounds": [
+            39,
+            13,
+            104,
+            111
+          ],
+          "height": 98,
+          "width": 65,
+          "topThirdSilhouetteWidth": 45
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              39,
+              12,
+              100,
+              111
+            ],
+            "height": 99,
+            "width": 61,
+            "topThirdSilhouetteWidth": 49
+          },
+          {
+            "alphaBounds": [
+              40,
+              12,
+              100,
+              111
+            ],
+            "height": 99,
+            "width": 60,
+            "topThirdSilhouetteWidth": 47
+          },
+          {
+            "alphaBounds": [
+              39,
+              12,
+              99,
+              111
+            ],
+            "height": 99,
+            "width": 60,
+            "topThirdSilhouetteWidth": 48
+          },
+          {
+            "alphaBounds": [
+              38,
+              12,
+              100,
+              111
+            ],
+            "height": 99,
+            "width": 62,
+            "topThirdSilhouetteWidth": 48
+          }
+        ],
+        "distinctNeighborPixels": [
+          4212,
+          4089,
+          4099,
+          4173
+        ]
+      }
+    },
+    {
+      "id": "craft",
+      "direction": "west",
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-west.webp",
+      "sha256": "1793e08fb671dc5c682e9066e8cde1a39358d58fab35561f2b9c2e07c042639c",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "sourceSha256": "10f2bea60ec26dfa598a8076e7a3556ca2d047b2fa926515404c08c3611d1ef1",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          29,
+          12,
+          88,
+          111
+        ],
+        [
+          30,
+          12,
+          90,
+          111
+        ],
+        [
+          31,
+          12,
+          90,
+          111
+        ],
+        [
+          31,
+          13,
+          89,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        4254,
+        4018,
+        4118,
+        4158
+      ],
+      "singleIsotropicScale": 0.32459016,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/usopp/craft-west.webp",
+        "sha256": "1793e08fb671dc5c682e9066e8cde1a39358d58fab35561f2b9c2e07c042639c",
+        "scale": 0.32459016,
+        "approved": {
+          "alphaBounds": [
+            40,
+            13,
+            85,
+            112
+          ],
+          "height": 99,
+          "width": 45,
+          "topThirdSilhouetteWidth": 45
+        },
+        "read": {
+          "alphaBounds": [
+            29,
+            13,
+            90,
+            111
+          ],
+          "height": 98,
+          "width": 61,
+          "topThirdSilhouetteWidth": 46
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              29,
+              12,
+              88,
+              111
+            ],
+            "height": 99,
+            "width": 59,
+            "topThirdSilhouetteWidth": 47
+          },
+          {
+            "alphaBounds": [
+              30,
+              12,
+              90,
+              111
+            ],
+            "height": 99,
+            "width": 60,
+            "topThirdSilhouetteWidth": 47
+          },
+          {
+            "alphaBounds": [
+              31,
+              12,
+              90,
+              111
+            ],
+            "height": 99,
+            "width": 59,
+            "topThirdSilhouetteWidth": 47
+          },
+          {
+            "alphaBounds": [
+              31,
+              13,
+              89,
+              111
+            ],
+            "height": 98,
+            "width": 58,
+            "topThirdSilhouetteWidth": 46
+          }
+        ],
+        "distinctNeighborPixels": [
+          4254,
+          4018,
+          4118,
+          4158
+        ]
+      }
+    },
+    {
+      "id": "craft",
+      "direction": "north",
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-north.webp",
+      "sha256": "1f7696f147a48ca07081cd5b18570308b57dd10c00bf82c8442f9e1bb1880c31",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "sourceSha256": "10f2bea60ec26dfa598a8076e7a3556ca2d047b2fa926515404c08c3611d1ef1",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          38,
+          12,
+          93,
+          111
+        ],
+        [
+          37,
+          12,
+          93,
+          111
+        ],
+        [
+          38,
+          12,
+          94,
+          111
+        ],
+        [
+          38,
+          12,
+          94,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        4282,
+        4301,
+        4301,
+        4247
+      ],
+      "singleIsotropicScale": 0.33445946,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/usopp/craft-north.webp",
+        "sha256": "1f7696f147a48ca07081cd5b18570308b57dd10c00bf82c8442f9e1bb1880c31",
+        "scale": 0.33445946,
+        "approved": {
+          "alphaBounds": [
+            40,
+            13,
+            87,
+            112
+          ],
+          "height": 99,
+          "width": 47,
+          "topThirdSilhouetteWidth": 40
+        },
+        "read": {
+          "alphaBounds": [
+            39,
+            13,
+            92,
+            111
+          ],
+          "height": 98,
+          "width": 53,
+          "topThirdSilhouetteWidth": 50
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              38,
+              12,
+              93,
+              111
+            ],
+            "height": 99,
+            "width": 55,
+            "topThirdSilhouetteWidth": 44
+          },
+          {
+            "alphaBounds": [
+              37,
+              12,
+              93,
+              111
+            ],
+            "height": 99,
+            "width": 56,
+            "topThirdSilhouetteWidth": 47
+          },
+          {
+            "alphaBounds": [
+              38,
+              12,
+              94,
+              111
+            ],
+            "height": 99,
+            "width": 56,
+            "topThirdSilhouetteWidth": 47
+          },
+          {
+            "alphaBounds": [
+              38,
+              12,
+              94,
+              111
+            ],
+            "height": 99,
+            "width": 56,
+            "topThirdSilhouetteWidth": 45
+          }
+        ],
+        "distinctNeighborPixels": [
+          4282,
+          4301,
+          4301,
+          4247
+        ]
+      }
+    },
+    {
+      "id": "craft",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-south.webp",
+      "sha256": "a7347f07157605674be8c53baae07d3f8b5e5ae2ceead450f71435d42347d0e8",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "sourceSha256": "10f2bea60ec26dfa598a8076e7a3556ca2d047b2fa926515404c08c3611d1ef1",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          38,
+          12,
+          93,
+          111
+        ],
+        [
+          38,
+          12,
+          93,
+          111
+        ],
+        [
+          37,
+          12,
+          93,
+          111
+        ],
+        [
+          37,
+          12,
+          93,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        4065,
+        4224,
+        4213,
+        4227
+      ],
+      "singleIsotropicScale": 0.32565789,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/usopp/craft-south.webp",
+        "sha256": "a7347f07157605674be8c53baae07d3f8b5e5ae2ceead450f71435d42347d0e8",
+        "scale": 0.32565789,
+        "approved": {
+          "alphaBounds": [
+            40,
+            13,
+            89,
+            112
+          ],
+          "height": 99,
+          "width": 49,
+          "topThirdSilhouetteWidth": 40
+        },
+        "read": {
+          "alphaBounds": [
+            39,
+            13,
+            90,
+            111
+          ],
+          "height": 98,
+          "width": 51,
+          "topThirdSilhouetteWidth": 39
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              38,
+              12,
+              93,
+              111
+            ],
+            "height": 99,
+            "width": 55,
+            "topThirdSilhouetteWidth": 41
+          },
+          {
+            "alphaBounds": [
+              38,
+              12,
+              93,
+              111
+            ],
+            "height": 99,
+            "width": 55,
+            "topThirdSilhouetteWidth": 42
+          },
+          {
+            "alphaBounds": [
+              37,
+              12,
+              93,
+              111
+            ],
+            "height": 99,
+            "width": 56,
+            "topThirdSilhouetteWidth": 42
+          },
+          {
+            "alphaBounds": [
+              37,
+              12,
+              93,
+              111
+            ],
+            "height": 99,
+            "width": 56,
+            "topThirdSilhouetteWidth": 42
+          }
+        ],
+        "distinctNeighborPixels": [
+          4065,
+          4224,
+          4213,
+          4227
+        ]
+      }
+    }
+  ]
+}

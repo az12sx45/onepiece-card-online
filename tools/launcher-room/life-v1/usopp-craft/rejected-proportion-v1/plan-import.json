@@ -1,0 +1,597 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "craft",
+      "key": "usopp",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "scale": 0.32679739,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          154,
+          4,
+          289,
+          313
+        ],
+        [
+          416,
+          5,
+          557,
+          313
+        ],
+        [
+          696,
+          4,
+          837,
+          313
+        ],
+        [
+          974,
+          3,
+          1112,
+          313
+        ]
+      ],
+      "roots": [
+        [
+          189.5,
+          311
+        ],
+        [
+          450.0,
+          311
+        ],
+        [
+          731.0,
+          311
+        ],
+        [
+          1012.0,
+          311
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-east.webp",
+      "sourceSha256": "c10e97dd6d36c195216c3246cc3cb5855347d3b819a1308e2d6c4247fbf9b2dd",
+      "assetSha256": "89cce63e52ebd3a6903591ff3291395144ff6f99141eb9a3179663c3c3028f5b",
+      "frames": [
+        {
+          "sourceRegion": [
+            154,
+            4,
+            289,
+            313
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            135,
+            309
+          ],
+          "outputBounds": [
+            52,
+            11,
+            44,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            416,
+            5,
+            557,
+            313
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            141,
+            308
+          ],
+          "outputBounds": [
+            53,
+            11,
+            46,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            696,
+            4,
+            837,
+            313
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            141,
+            309
+          ],
+          "outputBounds": [
+            53,
+            11,
+            46,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            974,
+            3,
+            1112,
+            313
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            138,
+            310
+          ],
+          "outputBounds": [
+            52,
+            11,
+            45,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "craft",
+      "key": "usopp",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "scale": 0.3236246,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          126,
+          316,
+          262,
+          629
+        ],
+        [
+          397,
+          316,
+          541,
+          629
+        ],
+        [
+          676,
+          316,
+          822,
+          629
+        ],
+        [
+          964,
+          316,
+          1100,
+          629
+        ]
+      ],
+      "roots": [
+        [
+          224.0,
+          627
+        ],
+        [
+          501.0,
+          627
+        ],
+        [
+          781.5,
+          627
+        ],
+        [
+          1062.5,
+          627
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-west.webp",
+      "sourceSha256": "c10e97dd6d36c195216c3246cc3cb5855347d3b819a1308e2d6c4247fbf9b2dd",
+      "assetSha256": "161257293b917cfccdd58d6e60187da9622ca7e4db3f798a1f335e9c065cd72b",
+      "frames": [
+        {
+          "sourceRegion": [
+            126,
+            316,
+            262,
+            629
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            136,
+            313
+          ],
+          "outputBounds": [
+            32,
+            11,
+            44,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            397,
+            316,
+            541,
+            629
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            144,
+            313
+          ],
+          "outputBounds": [
+            30,
+            11,
+            47,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            676,
+            316,
+            822,
+            629
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            146,
+            313
+          ],
+          "outputBounds": [
+            30,
+            11,
+            47,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            964,
+            316,
+            1100,
+            629
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            136,
+            313
+          ],
+          "outputBounds": [
+            32,
+            11,
+            44,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "craft",
+      "key": "usopp",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "scale": 0.33112583,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          130,
+          632,
+          269,
+          938
+        ],
+        [
+          411,
+          632,
+          551,
+          938
+        ],
+        [
+          690,
+          632,
+          831,
+          938
+        ],
+        [
+          982,
+          632,
+          1122,
+          938
+        ]
+      ],
+      "roots": [
+        [
+          199.5,
+          936
+        ],
+        [
+          480.5,
+          936
+        ],
+        [
+          760.5,
+          936
+        ],
+        [
+          1052.0,
+          936
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-north.webp",
+      "sourceSha256": "c10e97dd6d36c195216c3246cc3cb5855347d3b819a1308e2d6c4247fbf9b2dd",
+      "assetSha256": "8a09f5e4b75d464d82ee13051978899e36ab48bcc53c51d0329bed0d00c74111",
+      "frames": [
+        {
+          "sourceRegion": [
+            130,
+            632,
+            269,
+            938
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            139,
+            306
+          ],
+          "outputBounds": [
+            41,
+            11,
+            46,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            411,
+            632,
+            551,
+            938
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            140,
+            306
+          ],
+          "outputBounds": [
+            41,
+            11,
+            46,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            690,
+            632,
+            831,
+            938
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            141,
+            306
+          ],
+          "outputBounds": [
+            41,
+            11,
+            47,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            982,
+            632,
+            1122,
+            938
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            140,
+            306
+          ],
+          "outputBounds": [
+            41,
+            11,
+            46,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "craft",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "scale": 0.32894737,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          125,
+          942,
+          273,
+          1250
+        ],
+        [
+          405,
+          942,
+          556,
+          1250
+        ],
+        [
+          685,
+          942,
+          836,
+          1249
+        ],
+        [
+          975,
+          942,
+          1128,
+          1249
+        ]
+      ],
+      "roots": [
+        [
+          199.0,
+          1248
+        ],
+        [
+          480.5,
+          1248
+        ],
+        [
+          760.5,
+          1247
+        ],
+        [
+          1051.5,
+          1247
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-south.webp",
+      "sourceSha256": "c10e97dd6d36c195216c3246cc3cb5855347d3b819a1308e2d6c4247fbf9b2dd",
+      "assetSha256": "c5f3766d8a750c20cbe6f0078fa991620e9cc87d763d8f5b5152f44e58dc00c0",
+      "frames": [
+        {
+          "sourceRegion": [
+            125,
+            942,
+            273,
+            1250
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            148,
+            308
+          ],
+          "outputBounds": [
+            40,
+            11,
+            49,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            405,
+            942,
+            556,
+            1250
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            151,
+            308
+          ],
+          "outputBounds": [
+            39,
+            11,
+            50,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            685,
+            942,
+            836,
+            1249
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            151,
+            307
+          ],
+          "outputBounds": [
+            39,
+            11,
+            50,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            975,
+            942,
+            1128,
+            1249
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            153,
+            307
+          ],
+          "outputBounds": [
+            39,
+            11,
+            50,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

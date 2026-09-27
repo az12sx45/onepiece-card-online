@@ -2,6 +2,8 @@
 
 // Renderer integration check. The real HTML/CSS/JS runs with a deterministic
 // Electron bridge stub, so no account, DB, or public server is changed.
+// Intentionally loads the legacy room fallback without CharacterLifeController;
+// life-enabled jobs/events are covered by launcher_life_integration_qa.js.
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const fs = require('node:fs');
@@ -282,6 +284,8 @@ async function main() {
       window.OnePieceRoomDialogue?.hasPair?.('luffy', 'jinbe')));
     await page.addScriptTag({ content: read('launcher-room.js') });
     await page.addScriptTag({ content: read('launcher-profile-shop.js') });
+    check('legacy fallback fixture explicitly excludes the life adapter and controller', await page.evaluate(() =>
+      !window.OnePieceLife && !window.OnePieceLifeRoom && typeof window.onePieceDesktop.getLauncherLife === 'undefined'));
     assert.ok(await page.evaluate(() => !!window.LauncherProfileShop), `Profile renderer did not initialize: ${errors.join(' | ')}`);
     await page.evaluate(() => window.LauncherProfileShop.setAccount({ authenticated: true, profile: { userId: 42 } }));
     await page.evaluate(() => window.LauncherProfileShop.openProfile(0));
@@ -407,11 +411,13 @@ async function main() {
       occupiedDragResult.after === occupiedDragResult.before && occupiedDragResult.status.includes('佔用'));
     await page.locator('#roomSelection .room-remove').click();
     await page.getByRole('tab', { name: '夥伴' }).click();
-    for (let index = 0; index < 8; index++) await page.locator('#roomEditorItems .room-palette-item').nth(index).click();
-    check('eight canonical chibis can share room', await page.locator('#roomObjects .room-object-shell').count() === 1 && await page.locator('#roomCharacters .room-character-shell').count() === 8);
-    check('edit grid marks nine non-overlapping placed footprints', await page.locator('#roomStage .room-grid-footprint').count() === 9 && await page.evaluate(() => {
+    for (let index = 0; index < 10; index++) await page.locator('#roomEditorItems .room-palette-item').nth(index).click();
+    check('all ten canonical chibis can share room', await page.locator('#roomObjects .room-object-shell').count() === 1 && await page.locator('#roomCharacters .room-character-shell').count() === 10);
+    check('edit grid marks eleven non-overlapping placed footprints', await page.locator('#roomStage .room-grid-footprint').count() === 11 && await page.evaluate(() => {
       const nodes = [...document.querySelectorAll('#roomObjects .room-object-shell, #roomCharacters .room-character-shell')];
-      return nodes.every(node => Number(node.style.zIndex) === 10 + Math.round(Number.parseFloat(node.style.top) / 100 * 540));
+      const cells=new Set();let overlap=false;
+      for(const node of nodes){const [w,h]=node.dataset.footprint.split('x').map(Number);for(let row=Number(node.dataset.gridRow);row<Number(node.dataset.gridRow)+h;row++)for(let col=Number(node.dataset.gridCol);col<Number(node.dataset.gridCol)+w;col++){const cell=col+':'+row;if(cells.has(cell))overlap=true;cells.add(cell);}}
+      return !overlap && nodes.every(node => Number(node.style.zIndex) === 10 + Math.round(Number.parseFloat(node.style.top) / 100 * 540));
     }));
     check('character and furniture really occlude by shared depth instead of layer order', await page.evaluate(() => {
       const furniture = document.querySelector('#roomObjects .room-object-shell');
@@ -427,20 +433,31 @@ async function main() {
       furniture.style.cssText = formerFurniture; actor.style.cssText = formerActor;
       return frontFurniture && frontActor;
     }));
-    await page.locator('#profileRoom').screenshot({ path: path.join(output, 'edit-room-eight-1280.png') });
-    await page.locator('#roomEditorItems .room-palette-item').nth(8).click();
-    check('ninth chibi is rejected', await page.locator('#roomCharacters .room-character-shell').count() === 8 && (await page.locator('#roomStatus').textContent()).includes('8 位'));
+    await page.locator('#profileRoom').screenshot({ path: path.join(output, 'edit-room-ten-1280.png') });
+    await page.locator('#roomEditorItems .room-palette-item').first().click();
+    check('selecting an already placed canonical character never duplicates it at ten-character capacity', await page.evaluate(() => {
+      const ids=[...document.querySelectorAll('#roomCharacters .room-character-shell')].map(node=>node.dataset.roomKey);
+      return ids.length===10 && new Set(ids).size===10;
+    }));
     await page.locator('#roomSave').click();
     check('server payload contains editable room', await page.evaluate(() => {
       const saved = window.__roomQa.saved;
       return saved?.revision === 0 && saved?.sceneId === 'room-scene-sunny-deck' &&
         saved?.placements?.[0]?.itemId === 'room-furniture-helm' && saved?.placements?.[0]?.x > 0 &&
         saved?.placements?.[0]?.rotation === 1 && saved?.placements?.[0]?.flip === false &&
-        saved?.characters?.length === 8 && saved.characters[0]?.itemId === 'room-character-luffy';
+        saved?.characters?.length === 10 && saved.characters[0]?.itemId === 'room-character-luffy';
     }));
     await page.evaluate(() => { Math.random = () => .9; });
     await page.locator('#roomCancel').click();
-    // Separate the locomotion/conversation fixture from the crowded eight-slot editor check.
+    // Eleven saved entries (using an existing canonical item) exercise the real
+    // hydration limit without inventing an eleventh purchasable character.
+    await page.evaluate(async () => {
+      const qa=window.__roomQa;qa.mine.room.characters.push(structuredClone(qa.mine.room.characters[0]));
+      qa.mine.roomItems.characters.push(structuredClone(qa.mine.roomItems.characters[0]));
+      await window.LauncherProfileShop.openProfile(0);
+    });
+    check('oversized saved room hydrates at most ten character entries', await page.locator('#roomCharacters .room-character-shell').count()===10);
+    // Separate locomotion/conversation from the crowded ten-slot editor check.
     await page.evaluate(async () => {
       const qa = window.__roomQa;
       qa.mine.room.placements = []; qa.mine.roomItems.placements = [];
@@ -595,7 +612,7 @@ async function main() {
       (await page.locator('#roomCompanionName').textContent()).includes('魯夫') &&
       (await page.locator('#roomCompanionRole').textContent()) === '船長' &&
       await page.locator('#roomCompanionProgress').getAttribute('value') === '0');
-    check('owner can chat while retired work controls are absent',
+    check('legacy fallback owner can chat without retired work controls',
       await page.locator('#roomCompanionTalk').isEnabled() &&
       await page.locator('#roomCompanionWork, #roomCompanionWorkStart, #roomCompanionWorkClaim, .room-work-badge').count() === 0);
     await page.locator('#roomCompanionTalk').click();
@@ -638,10 +655,10 @@ async function main() {
         window.__roomQa.calls.filter(call => call === 'character-get:room-character-luffy').length > stored.getCount &&
         document.getElementById('roomCompanionAffinity').textContent === `${stored.affinity} / 100` &&
         !document.getElementById('roomCompanionTalk').disabled, stored);
-      check(`persisted ${state} job exposes details and chat without work text or controls`,
+      check(`legacy persisted ${state} job exposes details and chat without retired work controls`,
         await page.locator('#roomCompanionPanel').isVisible() &&
         await page.locator('#roomCompanionWork, #roomCompanionWorkStart, #roomCompanionWorkClaim, .room-work-badge').count() === 0 &&
-        !/工作中|正在工作|安排工作|領取金幣|剩餘/.test(await page.locator('#roomCompanionPanel').innerText()) &&
+        await page.locator('#roomLifeActions').count() === 0 &&
         await page.evaluate(() => window.__launcherRoomTest.snapshot().walkers[0].mode === 'focused'));
       await page.locator('#roomCompanionTalk').click();
       await page.waitForFunction(affinity => document.getElementById('roomCompanionAffinity').textContent === `${affinity + 2} / 100`, stored.affinity);
@@ -659,7 +676,9 @@ async function main() {
     await page.waitForFunction(() => document.getElementById('shopItemCount').textContent.includes('3 件'));
     check('scene shop shows all three products', await page.locator('#shopGrid .shop-item').count() === 3);
     await page.getByRole('tab', { name: '房間家具' }).click();
-    check('furniture shop shows ten products', await page.locator('#shopGrid .shop-item').count() === 10);
+    const expectedFurnitureIds=CATALOG.filter(item=>item.type==='room_furniture').map(item=>item.id).sort();
+    check('furniture shop displays exactly the current catalog including the galley stove',
+      expectedFurnitureIds.includes('room-furniture-galley-stove') && JSON.stringify(await page.locator('#shopGrid .shop-item').evaluateAll(nodes=>nodes.map(node=>node.dataset.itemId).sort()))===JSON.stringify(expectedFurnitureIds));
     await page.getByRole('tab', { name: 'Q版夥伴' }).click();
     check('canonical chibi shop shows ten products', await page.locator('#shopGrid .shop-item').count() === 10);
     await page.locator('#shopPanel').screenshot({ path: path.join(output, 'chibi-shop-1280.png') });
@@ -880,7 +899,7 @@ async function main() {
       'showcase-view-room-390-right.png', 'showcase-edit-room-390.png'
     ].map(name => path.join(output, name));
     assert(showcaseScreenshots.every(file => fs.existsSync(file) && fs.statSync(file).size > 10000), 'Missing showcase screenshots.');
-    fs.writeFileSync(path.join(output, 'report.json'), JSON.stringify({ ok: true, syntheticMotion, syntheticScenes, directionalConversation,
+    fs.writeFileSync(path.join(output, 'report.json'), JSON.stringify({ ok: true, scope:'Actual Chromium, real room/editor/profile assets and deterministic mocked Electron bridge. Legacy fallback fixture intentionally excludes CharacterLifeController and its adapter; life-enabled jobs are covered separately. No real purchase, DB, device or deployment acceptance.', syntheticMotion, syntheticScenes, directionalConversation,
       visualAcceptance: false, results, errors, showcase, showcaseScreenshots, loadingRegression }, null, 2) + '\n');
     console.log(JSON.stringify({ ok: true, checks: results.length, output, syntheticMotion, syntheticScenes, visualAcceptance: false }));
   } catch (error) {

@@ -1,0 +1,183 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:/Users/王曜瑋/.codex/generated_images/01a0e0d1-a4bf-73f3-af41-6763cfefe2b5/exec-3ff6af77-904c-4848-b404-b3d2396c2d5c.png",
+  "reference": "tools/launcher-room/fullbody-v3/sources/zoro/image.png",
+  "prompt": "tools/launcher-room/life-v1/zoro-work/prompt.txt",
+  "sourceSha256": "74b5ae8cf0307a2e68755887aa881df8a6804d1166d80a4ff8f53b5fa6170e2d",
+  "sourcePixels": [
+    1254,
+    1254
+  ],
+  "trueAlpha": true,
+  "sourceReview": "Sixteen intact complete figures. Canonical early outfit preserved. Zoro has two healthy eyes with no eye scar; sheathed swords, left-ear earrings and left-arm bandana checked. Four-direction tray-and-cloth supply work, face and torso share direction, true back view.",
+  "packing": "One uniform scale per four-frame loop, whole-figure crop and root alignment only. Main figure bounds estimated at alpha32 with 2px source padding to exclude remote faint generated pixels; source alpha never modified. No limb splitting, mirroring or warping.",
+  "runtimeAccepted": false,
+  "actualSizeReview": "Static 128px contact review passed: early outfit and two healthy eyes, true four-direction full bodies, matching head/torso direction, held tray and cloth motion, stable boots and approximately 100px standing scale. Room playback remains unverified.",
+  "sourceAccepted": true,
+  "contactAccepted": true,
+  "contactSheet": "tools/launcher-room/life-v1/zoro-work/contact-128.png",
+  "contactSha256": "85ef2a1186d4da440ca1103582ce21c35d18b1fe6dbf397cb3b7e4c12c9d6b66",
+  "numericQa": {
+    "passed": true,
+    "checks": [
+      {
+        "asset": "public/images/launcher_room/life_v1/zoro/work-east.webp",
+        "sha256": "6613d59a2fdf3fc8b036c68e7a93919d80783e1b3fe9e3d4c92f866b4bfc41f2",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            30,
+            12,
+            96,
+            112
+          ],
+          [
+            30,
+            12,
+            100,
+            112
+          ],
+          [
+            28,
+            12,
+            104,
+            112
+          ],
+          [
+            30,
+            12,
+            96,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/zoro/work-west.webp",
+        "sha256": "ca7971ba91c892bed03b3c0381855c58b23a3f46471198572ba2f96dcf1741c4",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            34,
+            12,
+            99,
+            112
+          ],
+          [
+            33,
+            12,
+            100,
+            112
+          ],
+          [
+            30,
+            12,
+            100,
+            112
+          ],
+          [
+            33,
+            12,
+            99,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/zoro/work-north.webp",
+        "sha256": "227e907b3e8f7aa2b0b59282d86daf98341d3cb64368b5e26000a55955494372",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            37,
+            12,
+            99,
+            112
+          ],
+          [
+            39,
+            12,
+            99,
+            112
+          ],
+          [
+            36,
+            12,
+            98,
+            112
+          ],
+          [
+            36,
+            12,
+            97,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/zoro/work-south.webp",
+        "sha256": "c6b757393bf67eb5adccde380013db9f2493c86c9e66838ae98c45650a3e8bb6",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            34,
+            12,
+            89,
+            112
+          ],
+          [
+            36,
+            12,
+            92,
+            112
+          ],
+          [
+            34,
+            12,
+            94,
+            112
+          ],
+          [
+            36,
+            12,
+            91,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      }
+    ],
+    "scope": "Atlas dimensions, alpha bounds, source hash, and four distinct rendered frames. Does not prove runtime animation acceptance."
+  }
+}

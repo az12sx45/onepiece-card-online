@@ -1,0 +1,605 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "medicine",
+      "key": "chopper",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/chopper-medicine/source-alpha.png",
+      "scale": 0.3161290322580645,
+      "regions": [
+        [
+          0,
+          0,
+          314,
+          326
+        ],
+        [
+          314,
+          0,
+          627,
+          326
+        ],
+        [
+          627,
+          0,
+          940,
+          326
+        ],
+        [
+          940,
+          0,
+          1254,
+          326
+        ]
+      ],
+      "roots": [
+        [
+          153.5,
+          326
+        ],
+        [
+          465.0,
+          326
+        ],
+        [
+          776.0,
+          326
+        ],
+        [
+          1100.0,
+          326
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-east.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-medicine/source.png",
+      "sourceSha256": "c93223ebf6216e2ccdf295a0fd23eff10fb0ffcb316821b37da56ab73ba93cd7",
+      "assetSha256": "2a8ceb580c17e78d3305365f0f30bdc23e29dce1497441ca4a7a283dafc8a9f3",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            0,
+            314,
+            326
+          ],
+          "alphaBounds": [
+            56,
+            10,
+            262,
+            320
+          ],
+          "outputBounds": [
+            33,
+            14,
+            65,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            314,
+            0,
+            627,
+            326
+          ],
+          "alphaBounds": [
+            43,
+            10,
+            253,
+            320
+          ],
+          "outputBounds": [
+            30,
+            14,
+            66,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            627,
+            0,
+            940,
+            326
+          ],
+          "alphaBounds": [
+            48,
+            10,
+            257,
+            320
+          ],
+          "outputBounds": [
+            32,
+            14,
+            66,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            940,
+            0,
+            1254,
+            326
+          ],
+          "alphaBounds": [
+            54,
+            11,
+            263,
+            321
+          ],
+          "outputBounds": [
+            30,
+            14,
+            66,
+            98
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "medicine",
+      "key": "chopper",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/chopper-medicine/source-alpha.png",
+      "scale": 0.32450331125827814,
+      "regions": [
+        [
+          0,
+          326,
+          314,
+          641
+        ],
+        [
+          314,
+          326,
+          627,
+          641
+        ],
+        [
+          627,
+          326,
+          940,
+          641
+        ],
+        [
+          940,
+          326,
+          1254,
+          641
+        ]
+      ],
+      "roots": [
+        [
+          158.5,
+          641
+        ],
+        [
+          472.5,
+          641
+        ],
+        [
+          787.0,
+          641
+        ],
+        [
+          1101.0,
+          641
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-west.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-medicine/source.png",
+      "sourceSha256": "c93223ebf6216e2ccdf295a0fd23eff10fb0ffcb316821b37da56ab73ba93cd7",
+      "assetSha256": "81eb6854a72efd9396498b08199a5bb3a481fba95c54d1d184eb45c420ae2324",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            326,
+            314,
+            641
+          ],
+          "alphaBounds": [
+            59,
+            6,
+            272,
+            308
+          ],
+          "outputBounds": [
+            32,
+            14,
+            69,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            314,
+            326,
+            627,
+            641
+          ],
+          "alphaBounds": [
+            59,
+            6,
+            273,
+            308
+          ],
+          "outputBounds": [
+            32,
+            14,
+            69,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            627,
+            326,
+            940,
+            641
+          ],
+          "alphaBounds": [
+            61,
+            6,
+            275,
+            308
+          ],
+          "outputBounds": [
+            32,
+            14,
+            69,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            940,
+            326,
+            1254,
+            641
+          ],
+          "alphaBounds": [
+            61,
+            6,
+            274,
+            308
+          ],
+          "outputBounds": [
+            32,
+            14,
+            69,
+            98
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "medicine",
+      "key": "chopper",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/chopper-medicine/source-alpha.png",
+      "scale": 0.35766423357664234,
+      "regions": [
+        [
+          0,
+          641,
+          314,
+          930
+        ],
+        [
+          314,
+          641,
+          627,
+          930
+        ],
+        [
+          627,
+          641,
+          940,
+          930
+        ],
+        [
+          940,
+          641,
+          1254,
+          930
+        ]
+      ],
+      "roots": [
+        [
+          168.5,
+          930
+        ],
+        [
+          477.0,
+          930
+        ],
+        [
+          781.0,
+          930
+        ],
+        [
+          1089.0,
+          930
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-north.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-medicine/source.png",
+      "sourceSha256": "c93223ebf6216e2ccdf295a0fd23eff10fb0ffcb316821b37da56ab73ba93cd7",
+      "assetSha256": "f3fbe8d99359768925cfbb8aa401eb136e65d1084f310e1df3abe31436e24022",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            641,
+            314,
+            930
+          ],
+          "alphaBounds": [
+            55,
+            7,
+            285,
+            280
+          ],
+          "outputBounds": [
+            23,
+            14,
+            82,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            314,
+            641,
+            627,
+            930
+          ],
+          "alphaBounds": [
+            50,
+            6,
+            277,
+            280
+          ],
+          "outputBounds": [
+            24,
+            14,
+            81,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            627,
+            641,
+            940,
+            930
+          ],
+          "alphaBounds": [
+            41,
+            6,
+            271,
+            280
+          ],
+          "outputBounds": [
+            24,
+            14,
+            82,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            940,
+            641,
+            1254,
+            930
+          ],
+          "alphaBounds": [
+            35,
+            6,
+            262,
+            280
+          ],
+          "outputBounds": [
+            23,
+            14,
+            81,
+            98
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "medicine",
+      "key": "chopper",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/chopper-medicine/source-alpha.png",
+      "scale": 0.32558139534883723,
+      "regions": [
+        [
+          0,
+          930,
+          314,
+          1254
+        ],
+        [
+          314,
+          930,
+          627,
+          1254
+        ],
+        [
+          627,
+          930,
+          940,
+          1254
+        ],
+        [
+          940,
+          930,
+          1254,
+          1254
+        ]
+      ],
+      "roots": [
+        [
+          164.0,
+          1254
+        ],
+        [
+          476.0,
+          1254
+        ],
+        [
+          782.5,
+          1254
+        ],
+        [
+          1090.5,
+          1254
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-south.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-medicine/source.png",
+      "sourceSha256": "c93223ebf6216e2ccdf295a0fd23eff10fb0ffcb316821b37da56ab73ba93cd7",
+      "assetSha256": "0b841d4f1f2ff8996077ca93df39aefe92bdc04b57b4669d28ed935ae7576e28",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            930,
+            314,
+            1254
+          ],
+          "alphaBounds": [
+            41,
+            3,
+            289,
+            304
+          ],
+          "outputBounds": [
+            24,
+            14,
+            81,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            314,
+            930,
+            627,
+            1254
+          ],
+          "alphaBounds": [
+            41,
+            4,
+            288,
+            303
+          ],
+          "outputBounds": [
+            25,
+            15,
+            80,
+            97
+          ]
+        },
+        {
+          "sourceRegion": [
+            627,
+            930,
+            940,
+            1254
+          ],
+          "alphaBounds": [
+            34,
+            3,
+            282,
+            304
+          ],
+          "outputBounds": [
+            24,
+            14,
+            81,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            940,
+            930,
+            1254,
+            1254
+          ],
+          "alphaBounds": [
+            25,
+            2,
+            275,
+            303
+          ],
+          "outputBounds": [
+            23,
+            14,
+            81,
+            98
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

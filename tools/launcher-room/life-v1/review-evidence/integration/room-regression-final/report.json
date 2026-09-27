@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "generatedAt": "2026-09-27T04:10:43.487Z",
+  "checks": 9,
+  "results": [
+    {
+      "name": "arrival-once",
+      "pass": true,
+      "entrySamples": 7,
+      "acknowledgements": 1,
+      "freshControllerDidNotReplay": true
+    },
+    {
+      "name": "same-owner-refresh-position",
+      "pass": true,
+      "position": {
+        "x": 217.38177820186894,
+        "y": 422
+      }
+    },
+    {
+      "name": "late-autoassign-ui",
+      "pass": true
+    },
+    {
+      "name": "station-editor-release",
+      "pass": true
+    },
+    {
+      "name": "pending-reserve-editor",
+      "pass": true
+    },
+    {
+      "name": "manual-arrival-lines",
+      "pass": true
+    },
+    {
+      "name": "authored-chain-1",
+      "pass": true,
+      "participants": [
+        "luffy"
+      ]
+    },
+    {
+      "name": "authored-chain-3",
+      "pass": true,
+      "participants": [
+        "luffy",
+        "sanji",
+        "nami"
+      ]
+    },
+    {
+      "name": "piano-event-work-contention",
+      "pass": true,
+      "approachSamples": 19
+    }
+  ],
+  "filter": "arrival-once|same-owner-refresh-position|station-editor-release|pending-reserve-editor|piano-event-work-contention|late-autoassign-ui|authored-chain|manual-arrival-lines",
+  "testScriptSha256": "25430d48916f55233122417cde9f08d4b8ec275f9aaf8f645568aa1a4b5f216d",
+  "startedSources": {
+    "launcher-room-dialogue.js": "56f898e2c7289072b78728eb2740bc379bf0702f86500d74c0e7f1d04e12c5ab",
+    "launcher-room-motion-data.js": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+    "launcher-room-motion.js": "5acdafeefc61dc5415f1e89a359ba71061edff4bfe2924bbe14d3265df6f10f7",
+    "launcher-life-data.js": "51aa5267b4cb26339ee446b411d8ea3c524979dace164f0a23ce7ca82fc1c625",
+    "launcher-life-actions.js": "d96db069e8d7025d3e48a9a86a00177e306b5be75dabdc0c85a6aff47a349f92",
+    "launcher-life.js": "ca928053b49f4ba1cb8df0802f1b57e00368cff3e55a87ba909640f931966f9a",
+    "launcher-life-room.js": "81a105dec4a48221bb459a804df6c8bfaee603a9088dd1962da257016b4973c1",
+    "launcher-room.js": "27617a335c0269a937869d3c91e8f41ebfc99a31e00802131db0c451c1c37bc7"
+  },
+  "completedSources": {
+    "launcher-room-dialogue.js": "5c4fbdf5166f810b8bdebbc21df32b8a954d7e1cc146a7f0c0507082dcc9a35f",
+    "launcher-room-motion-data.js": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+    "launcher-room-motion.js": "5acdafeefc61dc5415f1e89a359ba71061edff4bfe2924bbe14d3265df6f10f7",
+    "launcher-life-data.js": "51aa5267b4cb26339ee446b411d8ea3c524979dace164f0a23ce7ca82fc1c625",
+    "launcher-life-actions.js": "d96db069e8d7025d3e48a9a86a00177e306b5be75dabdc0c85a6aff47a349f92",
+    "launcher-life.js": "ca928053b49f4ba1cb8df0802f1b57e00368cff3e55a87ba909640f931966f9a",
+    "launcher-life-room.js": "81a105dec4a48221bb459a804df6c8bfaee603a9088dd1962da257016b4973c1",
+    "launcher-room.js": "27617a335c0269a937869d3c91e8f41ebfc99a31e00802131db0c451c1c37bc7"
+  },
+  "sourceChangedDuringRun": true,
+  "scope": "Actual headless Chromium, existing BFS/room/controller/GPT assets, deterministic Playwright animation clock and isolated IPC fixtures. Random autonomous selection disabled only in fixture. No real purchase, database, physical-device, remote-network or public deployment acceptance."
+}

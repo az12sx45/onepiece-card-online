@@ -1,0 +1,23 @@
+{
+  "generator": "image_gen.imagegen",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030\\exec-6731f0d8-1b43-455f-b5dc-119e1dda2525.png",
+  "sourceSha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d",
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/nami-actions-source-01/ancestry/01-turnaround-02.png",
+      "sha256": "0f66d19da68b1a081951c17229180e6fa1c9d705a618d78b3e9a8bedfd40c9df"
+    }
+  ],
+  "sourceReview": "West skirt asymmetry corrected by targeted GPT redraw. East/west true side, north shows only back of head, south frontal. Left supports tray, right wipes. Four distinct arm phases; feet remain planted.",
+  "runtimeAccepted": false,
+  "priorGeneration": {
+    "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030\\exec-ee60d595-23dd-46c9-91c5-15f41a2431f5.png",
+    "preservedCopy": "source-before-repair.png",
+    "reason": "Nami west skirt side decoration incorrect",
+    "repair": "Targeted GPT image edit; no local anatomical compositing."
+  },
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "promptSha256": "c67ba7cd44c89e89670b529e90ae4bbfd3660ea00fd47f06befbd34920409ad1",
+  "repairPromptSha256": "dff5d90d2205af89edea8cdb314dca5970b45309519be70a2a8cd3951f5e8735"
+}

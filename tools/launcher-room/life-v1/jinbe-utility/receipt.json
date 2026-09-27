@@ -1,0 +1,34 @@
+{
+  "generator": "gpt-image",
+  "sourceSha256": "f5d0f79e4e23a03946bf275379856fca828cbafe19729c7c98eaf6462c8e92b4",
+  "promptSha256": "d4ac98fb1b1c8639d1510b3ae22dfe95b7141eac1dd9bffb01accc329e58d2d2",
+  "sourceReviewed": true,
+  "runtimeAccepted": false,
+  "wholeFigureOnly": true,
+  "assets": [
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/eat-south.webp",
+      "assetSha256": "ad4bf08ddf882cf0db1c909c6b10df85b9abd01285d9ac32196d138293f52b07"
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/rest-south.webp",
+      "assetSha256": "cf3b387a1522bdd3135fe6070910f04d42a0fe9cca6a92a643bb8f65b543eca5"
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/sleep-south.webp",
+      "assetSha256": "4bb7bc561547d9eaf86a3832ea4d6caea09327b1cf7cec34a0f5a0df8a67026e"
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/train-south.webp",
+      "assetSha256": "63278414fc5dfcee0be85069fc5e448f504a5412dc1f2de9c47255ed76972ca6"
+    }
+  ],
+  "scaleCorrection": "eat complete figures uniformly scaled 1.15 to 94-96px matching approved head/shoulder dimensions; other loops retain physical scale.",
+  "alphaProcessing": {
+    "input": "source.png",
+    "output": "source-alpha-clean.png",
+    "operation": "alpha <= 8 set to 0, preserving RGB and every body pixel; removes near-transparent background haze only",
+    "inputSha256": "f5d0f79e4e23a03946bf275379856fca828cbafe19729c7c98eaf6462c8e92b4",
+    "outputSha256": "6f5f9d3915618a91f2e3cedbe055b0e6cc367588c4845bc567f08fe20e6ad6eb"
+  }
+}

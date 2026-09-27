@@ -1,0 +1,191 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:/Users/王曜瑋/.codex/generated_images/01a0e0d1-a4bf-73f3-af41-6763cfefe2b5/exec-95a95ad3-21e9-44e8-a7cd-9e8b44142e2a.png",
+  "references": [
+    "tools/launcher-room/fullbody-v3/sources/franky-actions-source-01/image.png",
+    "tools/launcher-room/fullbody-v3/sources/franky-actions-side-repair-02/image.png",
+    "tools/launcher-room/fullbody-v3/sources/franky-actions-north-repair-02/image.png"
+  ],
+  "prompt": "tools/launcher-room/life-v1/franky-read/prompt.txt",
+  "sourceSha256": "17071e1ac1c5aaf29ba79817bb3b4d29f874e27eb4c0357ca22bc5bc7c23cefb",
+  "sourcePixels": [
+    1254,
+    1254
+  ],
+  "trueAlpha": true,
+  "packing": "Whole-body crop and root translation only, one uniform scale per four-frame loop. Main bounds measured at alpha32 and padded within row/cell bounds; original alpha is retained. No limb assembly, mirror, rotation or warp. Feet root is derived from ground pixels.",
+  "sourceAccepted": true,
+  "contactAccepted": true,
+  "runtimeAccepted": false,
+  "sourceReview": "Sixteen coherent complete full-body drawings reviewed. Approved BF-37 giant red shoulder pods, cyan star forearms, red articulated hands, open red palm shirt, red briefs and mechanical knees retained. Hands and forearm blocks remain large and connected while turning a broad manual; no early small-armed redesign. True alpha; no baked furniture or opaque reference backdrop.",
+  "actualSizeReview": "Uniform whole-figure scale corrected from 100px to 83px to match approved Franky idle/walk; head and limbs never resized separately. Four successive page-turn frames remain intact, roots64,112.",
+  "contactSheet": "tools/launcher-room/life-v1/franky-read/contact-128.png",
+  "contactSha256": "3ed009c6a84b15362a1e7e9db86adc89948be7a882c9bc134190ab9b2ef4f672",
+  "numericQa": {
+    "passed": true,
+    "checks": [
+      {
+        "asset": "public/images/launcher_room/life_v1/franky/read-east.webp",
+        "sha256": "f29937ce772b35001db5435b6d548cf51c205aaf287b279fcc2046244f5d47ac",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            33,
+            29,
+            103,
+            112
+          ],
+          [
+            23,
+            29,
+            109,
+            112
+          ],
+          [
+            34,
+            29,
+            108,
+            112
+          ],
+          [
+            34,
+            29,
+            104,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/franky/read-west.webp",
+        "sha256": "6898116dcca5f64e103eafb2c9fde95ef01390082d3b9875467e64f7c2fa5ee5",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            28,
+            29,
+            93,
+            112
+          ],
+          [
+            25,
+            29,
+            95,
+            112
+          ],
+          [
+            24,
+            29,
+            94,
+            112
+          ],
+          [
+            28,
+            29,
+            95,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/franky/read-north.webp",
+        "sha256": "9d23881c4fdc043e6a50ba3776f9991005bff3636e58ca4053f7b0a110efb4a7",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            27,
+            29,
+            103,
+            112
+          ],
+          [
+            26,
+            29,
+            102,
+            112
+          ],
+          [
+            27,
+            29,
+            102,
+            112
+          ],
+          [
+            26,
+            29,
+            102,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/franky/read-south.webp",
+        "sha256": "307deeede7b786b0ccfddc52e25a8ffc90282f509b1b27d64c519339b67ed52d",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            24,
+            29,
+            103,
+            112
+          ],
+          [
+            24,
+            29,
+            102,
+            112
+          ],
+          [
+            24,
+            29,
+            102,
+            112
+          ],
+          [
+            24,
+            29,
+            102,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      }
+    ],
+    "scope": "Atlas dimensions, alpha bounds and four distinct frames; not runtime acceptance."
+  },
+  "scaleCorrection": {
+    "factor": 0.83,
+    "reference": "public/images/launcher_room/acting_v3/franky/south.webp"
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "clips": [
+    {
+      "id": "eat",
+      "key": "sanji",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/sanji-utility/source.png",
+      "scale": 0.265,
+      "regions": [
+        [
+          0,
+          0,
+          313,
+          400
+        ],
+        [
+          313,
+          0,
+          627,
+          400
+        ],
+        [
+          627,
+          0,
+          940,
+          400
+        ],
+        [
+          940,
+          0,
+          1254,
+          400
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/sanji/eat-south.webp"
+    },
+    {
+      "id": "rest",
+      "key": "sanji",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/sanji-utility/source.png",
+      "scale": 0.265,
+      "regions": [
+        [
+          0,
+          400,
+          313,
+          715
+        ],
+        [
+          313,
+          400,
+          627,
+          715
+        ],
+        [
+          627,
+          400,
+          940,
+          715
+        ],
+        [
+          940,
+          400,
+          1254,
+          715
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/sanji/rest-south.webp"
+    },
+    {
+      "id": "sleep",
+      "key": "sanji",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/sanji-utility/source.png",
+      "scale": 0.265,
+      "regions": [
+        [
+          0,
+          715,
+          313,
+          888
+        ],
+        [
+          313,
+          715,
+          627,
+          888
+        ],
+        [
+          627,
+          715,
+          940,
+          888
+        ],
+        [
+          940,
+          715,
+          1254,
+          888
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/sanji/sleep-south.webp"
+    },
+    {
+      "id": "train",
+      "key": "sanji",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/sanji-utility/source.png",
+      "scale": 0.265,
+      "regions": [
+        [
+          0,
+          888,
+          313,
+          1254
+        ],
+        [
+          313,
+          888,
+          627,
+          1254
+        ],
+        [
+          627,
+          888,
+          940,
+          1254
+        ],
+        [
+          940,
+          888,
+          1254,
+          1254
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/sanji/train-south.webp"
+    }
+  ]
+}

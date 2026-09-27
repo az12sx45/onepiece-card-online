@@ -1,0 +1,183 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:/Users/王曜瑋/.codex/generated_images/01a0e0d1-a4bf-73f3-af41-6763cfefe2b5/exec-8ae0f23f-9776-4a96-a528-c5eb19e601af.png",
+  "reference": "tools/launcher-room/fullbody-v3/sources/brook-v15-actions-01/image.png",
+  "prompt": "tools/launcher-room/life-v1/brook-work/prompt.txt",
+  "sourceSha256": "c2a21a4e048b3e68e20d504d27a70f55dcbda800d940d6bdcbe141f37e0a4b78",
+  "sourcePixels": [
+    1254,
+    1254
+  ],
+  "trueAlpha": true,
+  "packing": "Whole-body crop and root translation only, one uniform scale per four-frame loop. Main bounds measured at alpha32 and padded within row/cell bounds; original alpha is retained. No limb assembly, mirror, rotation or warp. Feet root is derived from ground pixels.",
+  "sourceAccepted": true,
+  "contactAccepted": true,
+  "runtimeAccepted": false,
+  "sourceReview": "Sixteen intact full bodies preserve Brook afro/top hat/ivory hollow skull/blue cravat/gold cuffs/black formal outfit. Four actual directions; north shows no face. Held tray and boxes stay supported; cloth/forearms alternate through a supply-cleaning loop. No baked furniture or opaque background.",
+  "actualSizeReview": "Actual 128px contact sheet reviewed: coherent approximately100px tall full bodies, stable shoes/ground root, readable tray and cloth, visible four-frame arm movement, no clipping or detached anatomy. Actual room playback remains pending.",
+  "contactSheet": "tools/launcher-room/life-v1/brook-work/contact-128.png",
+  "contactSha256": "b1d650101ceca3b999c262d11a36c3ebf2bf451913cdd98747634a1697ee031a",
+  "numericQa": {
+    "passed": true,
+    "checks": [
+      {
+        "asset": "public/images/launcher_room/life_v1/brook/work-east.webp",
+        "sha256": "798feb75e9daa70f2145c6d5e7b07e00a0fa36e807fd6a0a1fbf44e741166b29",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            39,
+            13,
+            96,
+            112
+          ],
+          [
+            39,
+            12,
+            100,
+            112
+          ],
+          [
+            39,
+            13,
+            95,
+            112
+          ],
+          [
+            39,
+            13,
+            95,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/brook/work-west.webp",
+        "sha256": "31b4c99b6adf2a64dd8e4852f54c4e8e01d2c7dc8cb1136f01596203b22d2d21",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            35,
+            12,
+            88,
+            112
+          ],
+          [
+            29,
+            12,
+            89,
+            112
+          ],
+          [
+            33,
+            12,
+            88,
+            112
+          ],
+          [
+            34,
+            12,
+            87,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/brook/work-north.webp",
+        "sha256": "6897976b2f0ebcd74552681537fceefda38ca2636b6c2137a6f516c98cc31b1d",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            39,
+            12,
+            88,
+            112
+          ],
+          [
+            40,
+            12,
+            88,
+            112
+          ],
+          [
+            39,
+            12,
+            87,
+            112
+          ],
+          [
+            39,
+            13,
+            85,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/brook/work-south.webp",
+        "sha256": "b310f5c30f151e910f97f49fde3a248dcb8e1ef4aa273fb8ff1c27882ed29e53",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            40,
+            13,
+            86,
+            112
+          ],
+          [
+            41,
+            13,
+            91,
+            112
+          ],
+          [
+            41,
+            13,
+            91,
+            112
+          ],
+          [
+            40,
+            12,
+            85,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      }
+    ],
+    "scope": "Atlas dimensions, alpha bounds and four distinct frames; not runtime acceptance."
+  }
+}

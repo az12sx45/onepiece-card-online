@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "scope": "content schema, canon guardrails, all 1024 owned/present subsets, optional branches, shared UMD parity; not art or live gameplay acceptance",
+  "assertions": 384242,
+  "counts": {
+    "characters": 10,
+    "stations": 9,
+    "pairs": 45,
+    "events": 183,
+    "authoredEvents": 32,
+    "legacyEvents": 151,
+    "bins": {
+      "solo": 10,
+      "pair": 12,
+      "triple": 6,
+      "chain": 4
+    }
+  },
+  "dataSha256": "51aa5267b4cb26339ee446b411d8ea3c524979dace164f0a23ce7ca82fc1c625"
+}

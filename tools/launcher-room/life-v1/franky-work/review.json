@@ -1,0 +1,544 @@
+{
+  "schema": "launcher-life-art-review/1",
+  "reviewType": "Codex actual source +128px approved-versus-new atlas visual inspection and deterministic alpha/shape checks; no in-room runtime acceptance claimed",
+  "generator": "image_gen.imagegen",
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "runtimeAccepted": false,
+  "review": "Existing connected full-body source retained. Entire four-frame loops uniformly reduced by0.83 to match unchanged approved83px display model. Compared128px head/shoulder and feet with approved idle/walk. Feet grounded; lower sitting/sleeping height is preserved. Read clip belongs to another task and was not changed.",
+  "noMirroring": true,
+  "noBodyPartAssembly": true,
+  "originalRetained": true,
+  "priorReviewSuperseded": "rejected-display-scale-v1/review.json",
+  "comparisonEvidence": "C:\\Codex_Candidates\\launcher-life-audit\\proportion-repair\\franky-approved-comparison.png",
+  "clips": [
+    {
+      "id": "work",
+      "direction": "east",
+      "asset": "public/images/launcher_room/life_v1/franky/work-east.webp",
+      "sha256": "8137894582a70f1174f31acba77b374fc03365027af5447cbd4273ee36151b25",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          41,
+          28,
+          105,
+          111
+        ],
+        [
+          40,
+          28,
+          106,
+          111
+        ],
+        [
+          41,
+          29,
+          105,
+          111
+        ],
+        [
+          38,
+          29,
+          97,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2963,
+        2954,
+        3074,
+        3026
+      ],
+      "singleIsotropicScale": 0.27483444,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/franky/work-east.webp",
+        "sha256": "8137894582a70f1174f31acba77b374fc03365027af5447cbd4273ee36151b25",
+        "scale": 0.27483444,
+        "approved": {
+          "alphaBounds": [
+            31,
+            29,
+            93,
+            112
+          ],
+          "height": 83,
+          "width": 62,
+          "topThirdSilhouetteWidth": 59
+        },
+        "read": {
+          "alphaBounds": [
+            28,
+            13,
+            111,
+            111
+          ],
+          "height": 98,
+          "width": 83,
+          "topThirdSilhouetteWidth": 83
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              41,
+              28,
+              105,
+              111
+            ],
+            "height": 83,
+            "width": 64,
+            "topThirdSilhouetteWidth": 41
+          },
+          {
+            "alphaBounds": [
+              40,
+              28,
+              106,
+              111
+            ],
+            "height": 83,
+            "width": 66,
+            "topThirdSilhouetteWidth": 54
+          },
+          {
+            "alphaBounds": [
+              41,
+              29,
+              105,
+              111
+            ],
+            "height": 82,
+            "width": 64,
+            "topThirdSilhouetteWidth": 52
+          },
+          {
+            "alphaBounds": [
+              38,
+              29,
+              97,
+              112
+            ],
+            "height": 83,
+            "width": 59,
+            "topThirdSilhouetteWidth": 48
+          }
+        ],
+        "distinctNeighborPixels": [
+          2963,
+          2954,
+          3074,
+          3026
+        ]
+      }
+    },
+    {
+      "id": "work",
+      "direction": "west",
+      "asset": "public/images/launcher_room/life_v1/franky/work-west.webp",
+      "sha256": "0eec042469f5be7fbd7a5e185b05ed81e9ab1e8e08f95bc1fdb888b6075e9741",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          29,
+          28,
+          84,
+          111
+        ],
+        [
+          29,
+          29,
+          89,
+          112
+        ],
+        [
+          31,
+          29,
+          89,
+          112
+        ],
+        [
+          32,
+          28,
+          89,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2864,
+        2820,
+        2868,
+        2849
+      ],
+      "singleIsotropicScale": 0.27124183,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/franky/work-west.webp",
+        "sha256": "0eec042469f5be7fbd7a5e185b05ed81e9ab1e8e08f95bc1fdb888b6075e9741",
+        "scale": 0.27124183,
+        "approved": {
+          "alphaBounds": [
+            32,
+            29,
+            95,
+            112
+          ],
+          "height": 83,
+          "width": 63,
+          "topThirdSilhouetteWidth": 61
+        },
+        "read": {
+          "alphaBounds": [
+            22,
+            13,
+            99,
+            111
+          ],
+          "height": 98,
+          "width": 77,
+          "topThirdSilhouetteWidth": 77
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              29,
+              28,
+              84,
+              111
+            ],
+            "height": 83,
+            "width": 55,
+            "topThirdSilhouetteWidth": 46
+          },
+          {
+            "alphaBounds": [
+              29,
+              29,
+              89,
+              112
+            ],
+            "height": 83,
+            "width": 60,
+            "topThirdSilhouetteWidth": 50
+          },
+          {
+            "alphaBounds": [
+              31,
+              29,
+              89,
+              112
+            ],
+            "height": 83,
+            "width": 58,
+            "topThirdSilhouetteWidth": 50
+          },
+          {
+            "alphaBounds": [
+              32,
+              28,
+              89,
+              112
+            ],
+            "height": 84,
+            "width": 57,
+            "topThirdSilhouetteWidth": 42
+          }
+        ],
+        "distinctNeighborPixels": [
+          2864,
+          2820,
+          2868,
+          2849
+        ]
+      }
+    },
+    {
+      "id": "work",
+      "direction": "north",
+      "asset": "public/images/launcher_room/life_v1/franky/work-north.webp",
+      "sha256": "b253d51a22c028c5f7ce4673a587149a002b4707ffdc5e3c1ef545c6abb858ba",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          25,
+          29,
+          104,
+          111
+        ],
+        [
+          25,
+          28,
+          104,
+          111
+        ],
+        [
+          26,
+          29,
+          104,
+          111
+        ],
+        [
+          25,
+          29,
+          104,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        4061,
+        4049,
+        4082,
+        4120
+      ],
+      "singleIsotropicScale": 0.29328622,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/franky/work-north.webp",
+        "sha256": "b253d51a22c028c5f7ce4673a587149a002b4707ffdc5e3c1ef545c6abb858ba",
+        "scale": 0.29328622,
+        "approved": {
+          "alphaBounds": [
+            30,
+            29,
+            98,
+            112
+          ],
+          "height": 83,
+          "width": 68,
+          "topThirdSilhouetteWidth": 67
+        },
+        "read": {
+          "alphaBounds": [
+            20,
+            13,
+            109,
+            111
+          ],
+          "height": 98,
+          "width": 89,
+          "topThirdSilhouetteWidth": 89
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              25,
+              29,
+              104,
+              111
+            ],
+            "height": 82,
+            "width": 79,
+            "topThirdSilhouetteWidth": 79
+          },
+          {
+            "alphaBounds": [
+              25,
+              28,
+              104,
+              111
+            ],
+            "height": 83,
+            "width": 79,
+            "topThirdSilhouetteWidth": 79
+          },
+          {
+            "alphaBounds": [
+              26,
+              29,
+              104,
+              111
+            ],
+            "height": 82,
+            "width": 78,
+            "topThirdSilhouetteWidth": 78
+          },
+          {
+            "alphaBounds": [
+              25,
+              29,
+              104,
+              111
+            ],
+            "height": 82,
+            "width": 79,
+            "topThirdSilhouetteWidth": 79
+          }
+        ],
+        "distinctNeighborPixels": [
+          4061,
+          4049,
+          4082,
+          4120
+        ]
+      }
+    },
+    {
+      "id": "work",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/franky/work-south.webp",
+      "sha256": "d281234ad761a11614fc30075dd11569e803ac15e5be3de5c7bc2cdec6077753",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          27,
+          28,
+          99,
+          111
+        ],
+        [
+          27,
+          29,
+          99,
+          112
+        ],
+        [
+          27,
+          29,
+          100,
+          111
+        ],
+        [
+          27,
+          29,
+          98,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3547,
+        3569,
+        3830,
+        3786
+      ],
+      "singleIsotropicScale": 0.26688103,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/franky/work-south.webp",
+        "sha256": "d281234ad761a11614fc30075dd11569e803ac15e5be3de5c7bc2cdec6077753",
+        "scale": 0.26688103,
+        "approved": {
+          "alphaBounds": [
+            27,
+            29,
+            99,
+            112
+          ],
+          "height": 83,
+          "width": 72,
+          "topThirdSilhouetteWidth": 70
+        },
+        "read": {
+          "alphaBounds": [
+            17,
+            13,
+            110,
+            111
+          ],
+          "height": 98,
+          "width": 93,
+          "topThirdSilhouetteWidth": 93
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              27,
+              28,
+              99,
+              111
+            ],
+            "height": 83,
+            "width": 72,
+            "topThirdSilhouetteWidth": 72
+          },
+          {
+            "alphaBounds": [
+              27,
+              29,
+              99,
+              112
+            ],
+            "height": 83,
+            "width": 72,
+            "topThirdSilhouetteWidth": 72
+          },
+          {
+            "alphaBounds": [
+              27,
+              29,
+              100,
+              111
+            ],
+            "height": 82,
+            "width": 73,
+            "topThirdSilhouetteWidth": 73
+          },
+          {
+            "alphaBounds": [
+              27,
+              29,
+              98,
+              111
+            ],
+            "height": 82,
+            "width": 71,
+            "topThirdSilhouetteWidth": 71
+          }
+        ],
+        "distinctNeighborPixels": [
+          3547,
+          3569,
+          3830,
+          3786
+        ]
+      }
+    }
+  ]
+}

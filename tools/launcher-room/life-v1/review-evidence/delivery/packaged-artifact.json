@@ -1,0 +1,11 @@
+{
+  "sha256": "453cb33058897c5661ec2f5b8ab5e565866e9a0ed134a61a9d280f10cbcbba6b",
+  "path": "C:\\Codex_Candidates\\launcher-character-life-1.2.0\\desktop\\dist\\ONE-PIECE-Tabletop-Launcher-1.2.0-x64.exe",
+  "bytes": 244419451,
+  "version": "1.2.0",
+  "packageQA": {
+    "ok": true,
+    "output": "DESKTOP_LAUNCHER_PACKAGE_QA=PASS iconSizes=16,20,24,32,40,48,64,96,128,256 sidebar=164x314x24 header=150x57x24 cursors=40x40x8-rgba,40x40x8-rgba,40x40x8-rgba runtimeDeps=1 games=card,board,chess roomMotionAssets=80 roomPortraits=10 roomArtReviewed=true zoroArt=verified asarEntries=252 launcherFiles=569 launcherBytes=131953080 launcherBaseBytes=124017472 roomMotionBytes=3356872 catalogFiles=29 installerBytes=244419451 installerSha256=453cb33058897c5661ec2f5b8ab5e565866e9a0ed134a61a9d280f10cbcbba6b"
+  },
+  "builtAt": "2026-09-27T04:19:37.1803279Z"
+}

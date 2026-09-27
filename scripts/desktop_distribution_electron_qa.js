@@ -6,7 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
 const Module = require('node:module');
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const ROOT = path.resolve(__dirname, '..');
 const DEP_ROOT = process.env.OP_QA_DEP_ROOT || 'D:/Codex_Release_Worktrees/battle-chess-launcher-v1';
 const OUT = path.resolve(process.env.OP_DISTRIBUTION_QA_OUT || 'D:/Codex_QA/desktop-distribution-20260922/electron');
@@ -27,11 +27,13 @@ const { createDesktopDistribution } = require('../server/desktop-distribution');
 const checks = [], errors = [], handshakes = [], windows = [], services = [], clients = [];
 const report = { startedAt: new Date().toISOString(), realServer: REAL, electron: process.versions.electron,
   scope: 'True Electron default-UA HTTP/socket; actual AuthService against controlled local fixture; no real accounts or rooms',
-  mediaProbe: process.env.OP_DISTRIBUTION_QA_MEDIA === '1', checks, errors, handshakes };
+  mediaProbe: process.env.OP_DISTRIBUTION_QA_MEDIA === '1', bridgeOnly: process.env.OP_DISTRIBUTION_QA_BRIDGE_ONLY === '1', checks, errors, handshakes };
 let fixtureServer, fixtureIo;
 const check = (name, pass, detail) => checks.push({ name, pass: !!pass, ...(detail === undefined ? {} : { detail }) });
 const gameEvents = ['BOARD_ROOM_LIST', 'CHESS_ROOM_LIST', 'ROOM_LIST_GET'];
 const fixtureHandled = Object.create(null);
+const lifePackets = [];
+report.lifeTransport = { scope: 'Real preload IPC -> fixture main handlers -> actual AuthService -> actual Socket.IO gate -> controlled echo endpoints; no database business-validation claim', packets: lifePackets };
 function safeHeaders(headers) {
   return { userAgent: headers['user-agent'] || '', origin: headers.origin || '',
     fetchHeaders: Object.keys(headers).filter(key => key.startsWith('sec-fetch-')) };
@@ -60,6 +62,12 @@ async function makeFixture() {
     for (const event of ['AUTH_LOGIN', 'AUTH_REGISTER']) socket.on(event, (_payload, done) => done({ ok: true, secret: 'local-fixture-only', username: 'qa_fixture' }));
     for (const event of ['PROFILE_GET', 'PROFILE_PUBLIC_GET', 'PROFILE_UPDATE']) socket.on(event, (_payload, done) => done({ ok: true, profile }));
     for (const event of ['SOCIAL_AUTH', 'PRESENCE_SET', 'FRIENDS_GET', 'DM_HISTORY']) socket.on(event, (_payload, done) => done?.({ ok: true, friends: [], messages: [] }));
+    for (const event of ['LAUNCHER_LIFE_GET','LAUNCHER_LIFE_COMMAND','LAUNCHER_ROOM_SET','LAUNCHER_SHOP_BUY']) socket.on(event, (payload, done) => {
+      const { secret, ...received } = payload || {};
+      lifePackets.push({ event, type: received.type, keys: Object.keys(received).sort() });
+      done?.({ ok: secret === 'local-fixture-only', fixture: true, received,
+        life: { schemaVersion: 1, revision: 7, ownedCharacterIds: [], activeCharacterIds: [], jobs: [] } });
+    });
     for (const event of [...gameEvents, 'BOARD_GAME_STATE', 'CHESS_MOVE', 'ACTION']) socket.on(event, (_payload, done) => {
       fixtureHandled[event] = (fixtureHandled[event] || 0) + 1;
       done?.({ ok: true, rooms: [], fixture: true });
@@ -121,6 +129,7 @@ async function authProbe(origin) {
       { ok: result.ok, userId: result.account?.userId, error: result.error });
     const presence = await auth.setPresence('desktop-board');
     check('actual AuthService ' + mode + ' presence', presence.ok);
+    await lifeBridgeProbe(origin, auth, mode);
     for (const event of [...gameEvents, 'BOARD_GAME_STATE', 'CHESS_MOVE', 'ACTION']) {
       const result = await auth.emitAck(event, { secret: 'local-fixture-only' }, 4000);
       check('Node ' + mode + ' rejects ' + event, result.error === 'desktop_required', result.error);
@@ -141,6 +150,54 @@ async function authProbe(origin) {
     socket.disconnect();
   }
   check('Node game requests never reach handlers', Object.keys(fixtureHandled).length === 0, { ...fixtureHandled });
+}
+async function lifeBridgeProbe(origin, auth, mode) {
+  const keys = ['luffy','zoro','nami','usopp','sanji','chopper','robin','franky','brook','jinbe'];
+  const room = { revision: 3, capacityVersion: 2, sceneId: 'room-scene-default',
+    characters: keys.map((key, i) => ({ itemId: 'room-character-' + key, x: 140 + 65 * i, y: 430 })),
+    placements: [{ itemId: 'room-furniture-galley-stove', x: 480, y: 390, rotation: 0, flip: false, scale: 1 }] };
+  const getter = await auth.getLauncherLife();
+  check(mode + ': Life GET crosses guarded socket', getter.ok && getter.life?.revision === 7 && Object.keys(getter.received).length === 0);
+  const commands = [
+    ['work.reserve', { itemId: 'room-character-sanji', stationId: 'room-furniture-galley-stove', roomRevision: 3 }],
+    ['work.activate', { jobId: 'fixture-job' }], ['work.complete', { jobId: 'fixture-job' }], ['work.cancel', { jobId: 'fixture-job' }],
+    ['directive.set', { directiveId: 'free_day' }], ['character.interact', { itemId: 'room-character-luffy', action: 'call' }],
+    ['event.record', { eventId: 'fixture-transport-event', participants: ['room-character-luffy'] }],
+    ['activity.record', { itemId: 'room-character-luffy', activity: 'Sleep' }], ['arrival.ack', { arrivalId: 'fixture-arrival' }], ['checkpoint', { exit: true }]
+  ];
+  for (const [type, payload] of commands) {
+    const command = { requestId: 'transport-' + mode + '-' + type.replace('.', '-'), expectedRevision: 7, type, payload };
+    const result = await auth.commandLauncherLife({ ...command, secret: 'forged-fixture-secret', userId: 999 });
+    check(mode + ': command preserves exact transport ' + type, result.ok && JSON.stringify(result.received) === JSON.stringify(command));
+  }
+  for (let rotation = 0; rotation < 4; rotation++) {
+    const value = { ...room, placements: [{ ...room.placements[0], rotation, flip: rotation === 2 }] };
+    const result = await auth.saveLauncherRoom(value);
+    check(mode + ': ten crew + stove rotation ' + rotation, result.ok && result.received.capacityVersion === 2 && result.received.characters.length === 10 && result.received.placements[0].rotation === rotation);
+  }
+  const beforeReject = lifePackets.length;
+  check(mode + ': eleven crew rejected before transport', (await auth.saveLauncherRoom({ ...room, characters: [...room.characters, room.characters[0]] })).error === 'invalid_room');
+  check(mode + ': ten crew requires capacity version2', (await auth.saveLauncherRoom({ ...room, capacityVersion: undefined })).error === 'invalid_room');
+  check(mode + ': forged command type rejected before transport', (await auth.commandLauncherLife({ requestId: 'invalid-command-fixture', expectedRevision: 7, type: 'wallet.set', payload: {} })).error === 'invalid_command');
+  check(mode + ': invalid data emitted no socket request', beforeReject === lifePackets.length);
+  const buy = await auth.buyLauncherItem('room-furniture-galley-stove');
+  check(mode + ': stove purchase ID accepted', buy.ok && buy.received.itemId === 'room-furniture-galley-stove');
+  const handlers = { 'launcher:life-get': () => auth.getLauncherLife(), 'launcher:life-command': (_e,c) => auth.commandLauncherLife(c),
+    'launcher:room-set': (_e,r) => auth.saveLauncherRoom(r), 'launcher:buy-item': (_e,id) => auth.buyLauncherItem(id) };
+  for (const [channel, handler] of Object.entries(handlers)) ipcMain.handle(channel, handler);
+  const win = new BrowserWindow({ show: false, webPreferences: { preload: path.join(ROOT, 'desktop/preload.js'), sandbox: true, contextIsolation: true, nodeIntegration: false } });
+  windows.push(win);
+  try {
+    await win.loadURL(origin + '/download');
+    const result = await win.webContents.executeJavaScript(`(async()=>{
+      const api=window.onePieceDesktop;
+      return {get:await api.getLauncherLife(),command:await api.commandLauncherLife({requestId:'preload-transport-${mode}',expectedRevision:7,type:'checkpoint',payload:{exit:true}}),room:await api.saveLauncherRoom(${JSON.stringify(room)}),buy:await api.buyLauncherItem('room-furniture-galley-stove')};
+    })()`);
+    check(mode + ': actual sandboxed preload Life GET', result.get.ok && result.get.life.revision === 7);
+    check(mode + ': actual sandboxed preload Life command', result.command.ok && result.command.received.type === 'checkpoint');
+    check(mode + ': actual sandboxed preload ten-character room', result.room.ok && result.room.received.characters.length === 10 && result.room.received.capacityVersion === 2);
+    check(mode + ': actual sandboxed preload stove purchase', result.buy.ok && result.buy.received.itemId === 'room-furniture-galley-stove');
+  } finally { win.destroy(); for (const channel of Object.keys(handlers)) ipcMain.removeHandler(channel); }
 }
 async function httpProbe(origin) {
   for (const entry of ['/start.html', '/board_start.html?desktop=1', '/chess/index.html?desktop=1', '/js/board_game.js?desktop=1']) {
@@ -205,9 +262,9 @@ app.on('window-all-closed', () => {});
 app.whenReady().then(async () => {
   const fixture = await makeFixture();
   await authProbe(fixture);
-  await rendererProbe(fixture, 'controlled fixture');
+  if (!report.bridgeOnly) await rendererProbe(fixture, 'controlled fixture');
   await httpProbe(REAL);
-  await rendererProbe(REAL, 'real isolated server');
+  if (!report.bridgeOnly) await rendererProbe(REAL, 'real isolated server');
   if (report.mediaProbe) await mediaProbe(REAL);
   await finish();
 }).catch(finish);

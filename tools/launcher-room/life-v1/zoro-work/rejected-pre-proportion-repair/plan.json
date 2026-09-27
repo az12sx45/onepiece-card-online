@@ -1,0 +1,140 @@
+{
+  "clips": [
+    {
+      "id": "work",
+      "key": "zoro",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/zoro-work/source.png",
+      "scale": 0.334448,
+      "regions": [
+        [
+          74,
+          20,
+          276,
+          318
+        ],
+        [
+          382,
+          19,
+          594,
+          318
+        ],
+        [
+          677,
+          19,
+          917,
+          318
+        ],
+        [
+          1009,
+          20,
+          1211,
+          318
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/work-east.webp"
+    },
+    {
+      "id": "work",
+      "key": "zoro",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/zoro-work/source.png",
+      "scale": 0.332226,
+      "regions": [
+        [
+          59,
+          327,
+          273,
+          628
+        ],
+        [
+          371,
+          327,
+          585,
+          628
+        ],
+        [
+          680,
+          327,
+          900,
+          628
+        ],
+        [
+          998,
+          327,
+          1210,
+          628
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/work-west.webp"
+    },
+    {
+      "id": "work",
+      "key": "zoro",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/zoro-work/source.png",
+      "scale": 0.338983,
+      "regions": [
+        [
+          50,
+          636,
+          258,
+          931
+        ],
+        [
+          374,
+          637,
+          576,
+          931
+        ],
+        [
+          681,
+          636,
+          883,
+          931
+        ],
+        [
+          993,
+          637,
+          1193,
+          931
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/work-north.webp"
+    },
+    {
+      "id": "work",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-work/source.png",
+      "scale": 0.322581,
+      "regions": [
+        [
+          72,
+          933,
+          256,
+          1243
+        ],
+        [
+          388,
+          933,
+          564,
+          1243
+        ],
+        [
+          695,
+          933,
+          881,
+          1243
+        ],
+        [
+          1016,
+          933,
+          1192,
+          1243
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/work-south.webp"
+    }
+  ]
+}

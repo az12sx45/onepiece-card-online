@@ -1,0 +1,226 @@
+{
+  "schema": "launcher-life-art-review/1",
+  "reviewType": "Codex source and composited atlas visual inspection plus deterministic alpha/shape checks; no in-room playback acceptance claimed",
+  "generator": "image_gen.imagegen",
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "runtimeAccepted": false,
+  "review": "Early checked bandana/goggles/long nose/thick lips, left wristband and left-hip bag retained. Warmup row re-drawn with front-facing whole bodies and heads. Sleep/train source bounding boxes overlapped4px; whole-body alpha isolation and unchanged-pixel repacking prevents cross-frame contamination.",
+  "noMirroring": true,
+  "noBodyPartAssembly": true,
+  "originalRetained": true,
+  "clips": [
+    {
+      "id": "eat",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/usopp/eat-south.webp",
+      "sha256": "a76b252676ca5e8e93374966c2c3cac1a798bb6f919d517fff55be1fa25befde",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source-separated.png",
+      "sourceSha256": "f12fdff2c2dcbcbee79d36f0a9167bde980b7d62648fc91da4157d25c5e6f788",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          40,
+          13,
+          86,
+          112
+        ],
+        [
+          41,
+          13,
+          85,
+          112
+        ],
+        [
+          41,
+          13,
+          86,
+          112
+        ],
+        [
+          41,
+          13,
+          86,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3156,
+        3095,
+        2905,
+        2993
+      ],
+      "singleIsotropicScale": 0.24875622,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "rest",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/usopp/rest-south.webp",
+      "sha256": "84b9bbc2e32ae1fbcc9e03a468d1f663b6a99f85095ddb4f135cadde02c933c2",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source-separated.png",
+      "sourceSha256": "f12fdff2c2dcbcbee79d36f0a9167bde980b7d62648fc91da4157d25c5e6f788",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          35,
+          41,
+          93,
+          112
+        ],
+        [
+          35,
+          41,
+          93,
+          112
+        ],
+        [
+          35,
+          41,
+          93,
+          112
+        ],
+        [
+          35,
+          41,
+          93,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2621,
+        2699,
+        2708,
+        2596
+      ],
+      "singleIsotropicScale": 0.24875622,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "sleep",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/usopp/sleep-south.webp",
+      "sha256": "59eecceac94f3fe58e0c539b6b164acfe15cff36d5a9e1084685109965f3d5a4",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source-separated.png",
+      "sourceSha256": "f12fdff2c2dcbcbee79d36f0a9167bde980b7d62648fc91da4157d25c5e6f788",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          28,
+          76,
+          100,
+          112
+        ],
+        [
+          28,
+          76,
+          101,
+          112
+        ],
+        [
+          28,
+          76,
+          101,
+          112
+        ],
+        [
+          28,
+          76,
+          100,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        1893,
+        1873,
+        1914,
+        1860
+      ],
+      "singleIsotropicScale": 0.24875622,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "train",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/usopp/train-south.webp",
+      "sha256": "495fe52469c9dd265047aa4240517795c12ad16f5f39c205146299e2fd0d10af",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source-separated.png",
+      "sourceSha256": "f12fdff2c2dcbcbee79d36f0a9167bde980b7d62648fc91da4157d25c5e6f788",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          40,
+          11,
+          87,
+          112
+        ],
+        [
+          40,
+          11,
+          87,
+          112
+        ],
+        [
+          40,
+          11,
+          89,
+          112
+        ],
+        [
+          41,
+          11,
+          88,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3025,
+        3196,
+        3163,
+        3273
+      ],
+      "singleIsotropicScale": 0.24875622,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    }
+  ]
+}

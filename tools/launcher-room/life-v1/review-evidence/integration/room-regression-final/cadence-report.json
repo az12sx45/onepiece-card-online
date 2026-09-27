@@ -1,0 +1,32 @@
+{
+  "ok": true,
+  "checks": 6,
+  "results": [
+    {
+      "name": "shared/default policy has 12-second initial foreground and 6–10-minute rare window",
+      "pass": true
+    },
+    {
+      "name": "authored completion imposes 3-minute foreground and fresh 6–10-minute rare delay",
+      "pass": true
+    },
+    {
+      "name": "same pair cannot bypass 12-minute cooldown with another event id; longer scene cooldown survives",
+      "pass": true
+    },
+    {
+      "name": "longer per-scene pair cooldown is retained across different event ids",
+      "pass": true
+    },
+    {
+      "name": "optional participant on pair cooldown is omitted and authored solo branch finishes",
+      "pass": true
+    },
+    {
+      "name": "legacy fallback obeys shared foreground/pair limits without starving independent rare clock",
+      "pass": true
+    }
+  ],
+  "controllerSha256": "ca928053b49f4ba1cb8df0802f1b57e00368cff3e55a87ba909640f931966f9a",
+  "scope": "Virtual clock with fake navigation and authority. Shared-policy and eligibility regression only; no real-time, browser, DB or deployment acceptance."
+}

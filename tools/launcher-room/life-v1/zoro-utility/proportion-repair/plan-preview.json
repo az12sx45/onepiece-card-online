@@ -1,0 +1,212 @@
+{
+  "clips": [
+    {
+      "id": "eat",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/source-alpha.png",
+      "scale": 0.2719546742209632,
+      "regions": [
+        [
+          0,
+          0,
+          325,
+          395
+        ],
+        [
+          325,
+          0,
+          625,
+          395
+        ],
+        [
+          625,
+          0,
+          925,
+          395
+        ],
+        [
+          925,
+          0,
+          1254,
+          395
+        ]
+      ],
+      "roots": [
+        [
+          194.0,
+          376
+        ],
+        [
+          487.0,
+          377
+        ],
+        [
+          779.5,
+          376
+        ],
+        [
+          1071.0,
+          376
+        ]
+      ],
+      "asset": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/eat-south.webp"
+    },
+    {
+      "id": "rest",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/source-alpha.png",
+      "scale": 0.2719546742209632,
+      "regions": [
+        [
+          0,
+          395,
+          325,
+          710
+        ],
+        [
+          325,
+          395,
+          625,
+          710
+        ],
+        [
+          625,
+          395,
+          925,
+          710
+        ],
+        [
+          925,
+          395,
+          1254,
+          710
+        ]
+      ],
+      "roots": [
+        [
+          184.0,
+          677
+        ],
+        [
+          478.0,
+          678
+        ],
+        [
+          770.5,
+          677
+        ],
+        [
+          1061.0,
+          677
+        ]
+      ],
+      "asset": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/rest-south.webp"
+    },
+    {
+      "id": "sleep",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/source-alpha.png",
+      "scale": 0.2719546742209632,
+      "regions": [
+        [
+          0,
+          710,
+          325,
+          864
+        ],
+        [
+          325,
+          710,
+          625,
+          864
+        ],
+        [
+          625,
+          710,
+          925,
+          864
+        ],
+        [
+          925,
+          710,
+          1254,
+          864
+        ]
+      ],
+      "roots": [
+        [
+          184.5,
+          849
+        ],
+        [
+          483.5,
+          850
+        ],
+        [
+          779.0,
+          851
+        ],
+        [
+          1075.0,
+          850
+        ]
+      ],
+      "asset": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/sleep-south.webp"
+    },
+    {
+      "id": "train",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/source-alpha.png",
+      "scale": 0.2719546742209632,
+      "regions": [
+        [
+          0,
+          864,
+          325,
+          1254
+        ],
+        [
+          325,
+          864,
+          625,
+          1254
+        ],
+        [
+          625,
+          864,
+          925,
+          1254
+        ],
+        [
+          925,
+          864,
+          1254,
+          1254
+        ]
+      ],
+      "roots": [
+        [
+          190.5,
+          1224
+        ],
+        [
+          483.5,
+          1224
+        ],
+        [
+          794.5,
+          1224
+        ],
+        [
+          1074.0,
+          1224
+        ]
+      ],
+      "asset": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/train-south.webp"
+    }
+  ]
+}

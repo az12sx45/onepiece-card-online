@@ -1,0 +1,605 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "work",
+      "key": "chopper",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/chopper-work/east-fix-source-alpha.png",
+      "scale": 0.23671497584541062,
+      "regions": [
+        [
+          0,
+          0,
+          444,
+          444
+        ],
+        [
+          444,
+          0,
+          887,
+          444
+        ],
+        [
+          887,
+          0,
+          1330,
+          444
+        ],
+        [
+          1330,
+          0,
+          1774,
+          444
+        ]
+      ],
+      "roots": [
+        [
+          236.5,
+          444
+        ],
+        [
+          633.0,
+          444
+        ],
+        [
+          1094.5,
+          444
+        ],
+        [
+          1535.5,
+          444
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/work-east.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-work/east-fix-source.png",
+      "sourceSha256": "95cbfb99746b1811de4da2848d31dee6daa799a7c6c8d75d094c32d6f5409399",
+      "assetSha256": "fa15c0385f2ef377caa11751f9cb3510084ab1bd22863d083162d38b5e3b4207",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            104,
+            31,
+            411,
+            444
+          ],
+          "outputBounds": [
+            33,
+            14,
+            73,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            444,
+            0,
+            887,
+            444
+          ],
+          "alphaBounds": [
+            57,
+            30,
+            368,
+            444
+          ],
+          "outputBounds": [
+            33,
+            14,
+            74,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            887,
+            0,
+            1330,
+            444
+          ],
+          "alphaBounds": [
+            77,
+            30,
+            379,
+            444
+          ],
+          "outputBounds": [
+            33,
+            14,
+            71,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            1330,
+            0,
+            1774,
+            444
+          ],
+          "alphaBounds": [
+            75,
+            30,
+            375,
+            444
+          ],
+          "outputBounds": [
+            33,
+            14,
+            71,
+            98
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "chopper",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/chopper-work/source-alpha.png",
+      "scale": 0.3181818181818182,
+      "regions": [
+        [
+          0,
+          323,
+          314,
+          631
+        ],
+        [
+          314,
+          323,
+          627,
+          631
+        ],
+        [
+          627,
+          323,
+          940,
+          631
+        ],
+        [
+          940,
+          323,
+          1254,
+          631
+        ]
+      ],
+      "roots": [
+        [
+          157.5,
+          631
+        ],
+        [
+          485.0,
+          631
+        ],
+        [
+          787.5,
+          631
+        ],
+        [
+          1112.5,
+          631
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/work-west.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-work/source.png",
+      "sourceSha256": "bd996d2a051c0cae1aeccfbca47cee510d240d1c6d6996552dc68a291e2d3da1",
+      "assetSha256": "ce2dd18df7ba814d6ccb363ded045166174bc1d344832c85d62d6e9795162e0a",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            323,
+            314,
+            631
+          ],
+          "alphaBounds": [
+            36,
+            0,
+            262,
+            301
+          ],
+          "outputBounds": [
+            25,
+            16,
+            72,
+            96
+          ]
+        },
+        {
+          "sourceRegion": [
+            314,
+            323,
+            627,
+            631
+          ],
+          "alphaBounds": [
+            32,
+            0,
+            262,
+            308
+          ],
+          "outputBounds": [
+            20,
+            14,
+            73,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            627,
+            323,
+            940,
+            631
+          ],
+          "alphaBounds": [
+            44,
+            0,
+            263,
+            308
+          ],
+          "outputBounds": [
+            27,
+            14,
+            70,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            940,
+            323,
+            1254,
+            631
+          ],
+          "alphaBounds": [
+            41,
+            0,
+            265,
+            308
+          ],
+          "outputBounds": [
+            22,
+            14,
+            71,
+            98
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "chopper",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/chopper-work/source-alpha.png",
+      "scale": 0.33220338983050846,
+      "regions": [
+        [
+          0,
+          631,
+          314,
+          926
+        ],
+        [
+          314,
+          631,
+          627,
+          926
+        ],
+        [
+          627,
+          631,
+          940,
+          926
+        ],
+        [
+          940,
+          631,
+          1254,
+          926
+        ]
+      ],
+      "roots": [
+        [
+          161.0,
+          926
+        ],
+        [
+          472.0,
+          926
+        ],
+        [
+          788.5,
+          926
+        ],
+        [
+          1100.0,
+          926
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/work-north.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-work/source.png",
+      "sourceSha256": "bd996d2a051c0cae1aeccfbca47cee510d240d1c6d6996552dc68a291e2d3da1",
+      "assetSha256": "79581219d89c9369b03507a6454e2e4616c0dbd30aa042d6b1e56cc0b7369bcb",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            631,
+            314,
+            926
+          ],
+          "alphaBounds": [
+            48,
+            0,
+            270,
+            283
+          ],
+          "outputBounds": [
+            26,
+            18,
+            74,
+            94
+          ]
+        },
+        {
+          "sourceRegion": [
+            314,
+            631,
+            627,
+            926
+          ],
+          "alphaBounds": [
+            49,
+            0,
+            271,
+            295
+          ],
+          "outputBounds": [
+            28,
+            14,
+            74,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            627,
+            631,
+            940,
+            926
+          ],
+          "alphaBounds": [
+            48,
+            0,
+            270,
+            295
+          ],
+          "outputBounds": [
+            26,
+            14,
+            74,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            940,
+            631,
+            1254,
+            926
+          ],
+          "alphaBounds": [
+            47,
+            0,
+            271,
+            295
+          ],
+          "outputBounds": [
+            26,
+            14,
+            74,
+            98
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "chopper",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/chopper-work/source-alpha.png",
+      "scale": 0.31715210355987056,
+      "regions": [
+        [
+          0,
+          926,
+          314,
+          1254
+        ],
+        [
+          314,
+          926,
+          627,
+          1254
+        ],
+        [
+          627,
+          926,
+          940,
+          1254
+        ],
+        [
+          940,
+          926,
+          1254,
+          1254
+        ]
+      ],
+      "roots": [
+        [
+          157.5,
+          1254
+        ],
+        [
+          470.0,
+          1254
+        ],
+        [
+          786.0,
+          1254
+        ],
+        [
+          1097.5,
+          1254
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/work-south.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-work/source.png",
+      "sourceSha256": "bd996d2a051c0cae1aeccfbca47cee510d240d1c6d6996552dc68a291e2d3da1",
+      "assetSha256": "14dc19fa6b5a592dd93b4575dab650103d32592e255e3565ca6d3c431664facb",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            926,
+            314,
+            1254
+          ],
+          "alphaBounds": [
+            40,
+            2,
+            276,
+            309
+          ],
+          "outputBounds": [
+            27,
+            15,
+            75,
+            97
+          ]
+        },
+        {
+          "sourceRegion": [
+            314,
+            926,
+            627,
+            1254
+          ],
+          "alphaBounds": [
+            39,
+            0,
+            275,
+            308
+          ],
+          "outputBounds": [
+            27,
+            14,
+            75,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            627,
+            926,
+            940,
+            1254
+          ],
+          "alphaBounds": [
+            43,
+            0,
+            276,
+            308
+          ],
+          "outputBounds": [
+            27,
+            14,
+            74,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            940,
+            926,
+            1254,
+            1254
+          ],
+          "alphaBounds": [
+            41,
+            0,
+            276,
+            309
+          ],
+          "outputBounds": [
+            27,
+            14,
+            75,
+            98
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

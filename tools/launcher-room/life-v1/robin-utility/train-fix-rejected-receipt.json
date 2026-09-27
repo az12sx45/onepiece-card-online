@@ -1,0 +1,23 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-1c284a8d-41d9-410e-be0e-fad29552269f.png",
+  "source": {
+    "path": "tools/launcher-room/life-v1/robin-utility/train-fix-rejected-source.png",
+    "sha256": "e0c91a2de65c4248c582d15196a968a1c9ffa69ac29654b2a4c253678c0c877d"
+  },
+  "prompt": {
+    "path": "tools/launcher-room/life-v1/robin-utility/train-fix-prompt.txt",
+    "sha256": "26627af44d2a7e2445aa6eab35802f8d36d1c2d9092e7fe9ef9b3df1488fa3f9"
+  },
+  "references": [
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/train-reference.png",
+      "sha256": "eb643542ba410f4b17a4aea86bc66a9012c50d2635e72e42b55a32081a495b8e",
+      "role": "approved whole-character identity and style"
+    }
+  ],
+  "review": "Rejected: realistic tall adult proportion; never selected.",
+  "runtimeAccepted": false,
+  "processing": "Keep original RGBA; separate alpha copy removes alpha<16 and isolated <32px opaque specks, retaining 2px AA edge. Crop whole figures and uniform scale only."
+}

@@ -1,0 +1,212 @@
+{
+  "clips": [
+    {
+      "id": "work",
+      "key": "luffy",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source-alpha.png",
+      "scale": 0.33676975945017185,
+      "regions": [
+        [
+          0,
+          0,
+          375,
+          332
+        ],
+        [
+          375,
+          0,
+          625,
+          332
+        ],
+        [
+          625,
+          0,
+          875,
+          332
+        ],
+        [
+          875,
+          0,
+          1254,
+          332
+        ]
+      ],
+      "roots": [
+        [
+          252.5,
+          325
+        ],
+        [
+          504.0,
+          325
+        ],
+        [
+          754.0,
+          325
+        ],
+        [
+          1001.5,
+          325
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/work-south.webp"
+    },
+    {
+      "id": "work",
+      "key": "luffy",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source-alpha.png",
+      "scale": 0.3333333333333333,
+      "regions": [
+        [
+          0,
+          332,
+          375,
+          633
+        ],
+        [
+          375,
+          332,
+          625,
+          633
+        ],
+        [
+          625,
+          332,
+          875,
+          633
+        ],
+        [
+          875,
+          332,
+          1254,
+          633
+        ]
+      ],
+      "roots": [
+        [
+          256.5,
+          632
+        ],
+        [
+          510.5,
+          632
+        ],
+        [
+          765.0,
+          632
+        ],
+        [
+          1008.0,
+          632
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/work-east.webp"
+    },
+    {
+      "id": "work",
+      "key": "luffy",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source-alpha.png",
+      "scale": 0.3288590604026846,
+      "regions": [
+        [
+          0,
+          633,
+          375,
+          941
+        ],
+        [
+          375,
+          633,
+          625,
+          941
+        ],
+        [
+          625,
+          633,
+          875,
+          941
+        ],
+        [
+          875,
+          633,
+          1254,
+          941
+        ]
+      ],
+      "roots": [
+        [
+          248.5,
+          931
+        ],
+        [
+          492.0,
+          932
+        ],
+        [
+          744.5,
+          941
+        ],
+        [
+          1001.0,
+          932
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/work-west.webp"
+    },
+    {
+      "id": "work",
+      "key": "luffy",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source-alpha.png",
+      "scale": 0.35507246376811596,
+      "regions": [
+        [
+          0,
+          941,
+          375,
+          1254
+        ],
+        [
+          375,
+          941,
+          625,
+          1254
+        ],
+        [
+          625,
+          941,
+          875,
+          1254
+        ],
+        [
+          875,
+          941,
+          1254,
+          1254
+        ]
+      ],
+      "roots": [
+        [
+          251.0,
+          1216
+        ],
+        [
+          501.5,
+          1217
+        ],
+        [
+          753.0,
+          1216
+        ],
+        [
+          1004.0,
+          1217
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/work-north.webp"
+    }
+  ]
+}

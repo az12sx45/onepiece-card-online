@@ -1,0 +1,16 @@
+{
+  "generator": "image_gen.imagegen",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030\\exec-4875bf09-f69f-48cf-8e72-b3a51db6df90.png",
+  "sourceSha256": "463090f2adf5dcbbff90327983c598b4ac258c213ce78a8116dfd553897d606d",
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/nami-actions-source-01/ancestry/01-turnaround-02.png",
+      "sha256": "0f66d19da68b1a081951c17229180e6fa1c9d705a618d78b3e9a8bedfd40c9df"
+    }
+  ],
+  "sourceReview": "Nami early shirt/skirt/boots retained; skirt circles on anatomical right. Spoon reaches mouth, rest is floor-sitting, sleep closed eyes connected body, low shoulder warmup. No separately pasted parts.",
+  "runtimeAccepted": false,
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "promptSha256": "62dd953adb5f2adc494374c1abe067619b2503dd2ba8e1d04be0c9bf57907dbc"
+}

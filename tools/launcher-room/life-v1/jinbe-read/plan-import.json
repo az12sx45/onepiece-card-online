@@ -1,0 +1,593 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "read",
+      "key": "jinbe",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/jinbe-read/source.png",
+      "scale": 0.333333,
+      "regions": [
+        [
+          28,
+          10,
+          302,
+          310
+        ],
+        [
+          341,
+          10,
+          619,
+          310
+        ],
+        [
+          654,
+          10,
+          933,
+          310
+        ],
+        [
+          967,
+          10,
+          1241,
+          309
+        ]
+      ],
+      "roots": [
+        [
+          164,
+          310
+        ],
+        [
+          478,
+          310
+        ],
+        [
+          790,
+          310
+        ],
+        [
+          1104,
+          309
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/jinbe/read-east.webp",
+      "sourceSha256": "4a6778092cbc8a0dc8d246da6926a869783a6e43de7c05918e38455db18ca57f",
+      "assetSha256": "2b38f865de1a66152f7b15aee7bbfc98f2a30a7a9ddc24bc8dc0dcdf66a8bb4e",
+      "frames": [
+        {
+          "sourceRegion": [
+            28,
+            10,
+            302,
+            310
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            274,
+            300
+          ],
+          "outputBounds": [
+            19,
+            12,
+            91,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            341,
+            10,
+            619,
+            310
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            278,
+            300
+          ],
+          "outputBounds": [
+            18,
+            12,
+            93,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            654,
+            10,
+            933,
+            310
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            279,
+            300
+          ],
+          "outputBounds": [
+            19,
+            12,
+            93,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            967,
+            10,
+            1241,
+            309
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            274,
+            299
+          ],
+          "outputBounds": [
+            18,
+            12,
+            91,
+            100
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "read",
+      "key": "jinbe",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/jinbe-read/source.png",
+      "scale": 0.334448,
+      "regions": [
+        [
+          21,
+          320,
+          285,
+          619
+        ],
+        [
+          333,
+          320,
+          598,
+          619
+        ],
+        [
+          646,
+          320,
+          911,
+          619
+        ],
+        [
+          961,
+          320,
+          1225,
+          619
+        ]
+      ],
+      "roots": [
+        [
+          148,
+          619
+        ],
+        [
+          462,
+          619
+        ],
+        [
+          774,
+          619
+        ],
+        [
+          1088,
+          619
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/jinbe/read-west.webp",
+      "sourceSha256": "4a6778092cbc8a0dc8d246da6926a869783a6e43de7c05918e38455db18ca57f",
+      "assetSha256": "a05209d0f94976ecbbc1097ffc1549605be538ab333c6ddd2e3353846acc6aae",
+      "frames": [
+        {
+          "sourceRegion": [
+            21,
+            320,
+            285,
+            619
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            264,
+            299
+          ],
+          "outputBounds": [
+            22,
+            12,
+            88,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            333,
+            320,
+            598,
+            619
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            265,
+            299
+          ],
+          "outputBounds": [
+            21,
+            12,
+            89,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            646,
+            320,
+            911,
+            619
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            265,
+            299
+          ],
+          "outputBounds": [
+            21,
+            12,
+            89,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            961,
+            320,
+            1225,
+            619
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            264,
+            299
+          ],
+          "outputBounds": [
+            22,
+            12,
+            88,
+            100
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "read",
+      "key": "jinbe",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/jinbe-read/source.png",
+      "scale": 0.35461,
+      "regions": [
+        [
+          33,
+          633,
+          282,
+          914
+        ],
+        [
+          345,
+          632,
+          595,
+          914
+        ],
+        [
+          660,
+          633,
+          909,
+          914
+        ],
+        [
+          973,
+          633,
+          1222,
+          914
+        ]
+      ],
+      "roots": [
+        [
+          158,
+          914
+        ],
+        [
+          471,
+          914
+        ],
+        [
+          784,
+          914
+        ],
+        [
+          1098,
+          914
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/jinbe/read-north.webp",
+      "sourceSha256": "4a6778092cbc8a0dc8d246da6926a869783a6e43de7c05918e38455db18ca57f",
+      "assetSha256": "028debd3ed430de5fbb9132df1ec99874d4526c7acada24d4783584b72431ad5",
+      "frames": [
+        {
+          "sourceRegion": [
+            33,
+            633,
+            282,
+            914
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            249,
+            281
+          ],
+          "outputBounds": [
+            20,
+            12,
+            88,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            345,
+            632,
+            595,
+            914
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            250,
+            282
+          ],
+          "outputBounds": [
+            19,
+            12,
+            89,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            660,
+            633,
+            909,
+            914
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            249,
+            281
+          ],
+          "outputBounds": [
+            20,
+            12,
+            88,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            973,
+            633,
+            1222,
+            914
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            249,
+            281
+          ],
+          "outputBounds": [
+            20,
+            12,
+            88,
+            100
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "read",
+      "key": "jinbe",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/jinbe-read/source.png",
+      "scale": 0.316456,
+      "regions": [
+        [
+          17,
+          922,
+          297,
+          1238
+        ],
+        [
+          330,
+          922,
+          611,
+          1238
+        ],
+        [
+          644,
+          922,
+          924,
+          1238
+        ],
+        [
+          956,
+          922,
+          1237,
+          1237
+        ]
+      ],
+      "roots": [
+        [
+          156,
+          1238
+        ],
+        [
+          469,
+          1238
+        ],
+        [
+          783,
+          1238
+        ],
+        [
+          1096,
+          1237
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/jinbe/read-south.webp",
+      "sourceSha256": "4a6778092cbc8a0dc8d246da6926a869783a6e43de7c05918e38455db18ca57f",
+      "assetSha256": "9928916973ff63cd13290a80ac6f995f072cea82c1352f8f044172f481082d9f",
+      "frames": [
+        {
+          "sourceRegion": [
+            17,
+            922,
+            297,
+            1238
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            280,
+            316
+          ],
+          "outputBounds": [
+            20,
+            12,
+            89,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            330,
+            922,
+            611,
+            1238
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            281,
+            316
+          ],
+          "outputBounds": [
+            20,
+            12,
+            89,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            644,
+            922,
+            924,
+            1238
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            280,
+            316
+          ],
+          "outputBounds": [
+            20,
+            12,
+            89,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            956,
+            922,
+            1237,
+            1237
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            281,
+            315
+          ],
+          "outputBounds": [
+            20,
+            12,
+            89,
+            100
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

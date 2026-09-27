@@ -1,0 +1,85 @@
+{
+  "generator": "gpt-image",
+  "sourceSha256": "b5316bab6ad6a95609ee2c9dc72b37133fc822f1fea7e25bacb46cc48a0f7b18",
+  "promptSha256": "2eb841373bf3c6ef42099271d0fd8537ae10661217b0934aa897f596ffff33c1",
+  "sourceReviewed": true,
+  "runtimeAccepted": false,
+  "groundRoot": [
+    192,
+    372
+  ],
+  "assets": [
+    {
+      "asset": "public/images/launcher_room/furniture_views/galley-stove/0.webp",
+      "assetSha256": "524b624b53199ceda3ed6eb81ee58162cec407bc1ff2aeed1ce8738250d8a2dc",
+      "sourceRegion": [
+        0,
+        0,
+        768,
+        533
+      ],
+      "sourceBounds": [
+        0,
+        4,
+        768,
+        533
+      ],
+      "scale": 0.495
+    },
+    {
+      "asset": "public/images/launcher_room/furniture_views/galley-stove/1.webp",
+      "assetSha256": "6888c12846aed2cab97a1c3df210796692ccb2d8861572fee4dfeeb75882747e",
+      "sourceRegion": [
+        768,
+        0,
+        1536,
+        533
+      ],
+      "sourceBounds": [
+        0,
+        17,
+        762,
+        533
+      ],
+      "scale": 0.495
+    },
+    {
+      "asset": "public/images/launcher_room/furniture_views/galley-stove/2.webp",
+      "assetSha256": "8a8b3d54191fe70d7ed7246b2c987d385fb2cb231109c674073defa55f915a43",
+      "sourceRegion": [
+        0,
+        533,
+        768,
+        1024
+      ],
+      "sourceBounds": [
+        64,
+        0,
+        768,
+        471
+      ],
+      "scale": 0.495
+    },
+    {
+      "asset": "public/images/launcher_room/furniture_views/galley-stove/3.webp",
+      "assetSha256": "d9d631c06c83db1f350ec0c1820359547ef95af621dd170d66f7a4ce6c3eb706",
+      "sourceRegion": [
+        768,
+        533,
+        1536,
+        1024
+      ],
+      "sourceBounds": [
+        0,
+        0,
+        756,
+        475
+      ],
+      "scale": 0.495
+    },
+    {
+      "asset": "public/images/launcher_room/furniture/galley-stove.webp",
+      "assetSha256": "524b624b53199ceda3ed6eb81ee58162cec407bc1ff2aeed1ce8738250d8a2dc"
+    }
+  ]
+}

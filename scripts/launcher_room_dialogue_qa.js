@@ -157,7 +157,9 @@ check(characterLines.get('franky').filter(line => /SUPER/u.test(line)).length < 
 const named = id => Object.values(dialogue.SCENES).flat().find(value => value.id === id);
 check(/讓開/u.test(named('zoro-sanji-2').turns[0].line) && /喬巴/u.test(named('zoro-sanji-2').turns[3].line), 'Zoro/Sanji exchange retains the argument and practical care for a third crewmate');
 check(/扣子/u.test(named('usopp-franky-1').turns[0].line) && /聽你的/u.test(named('usopp-franky-1').turns[3].line), 'Franky leaves the mechanism decision with its inventor');
-check(/檢查/u.test(named('sanji-chopper-3').turns[1].line) && /醫生/u.test(named('sanji-chopper-3').turns[2].line), 'Chopper receives professional trust');
+check(/雙手/u.test(named('sanji-chopper-3').turns[1].line) && /有事會找你，醫生/u.test(named('sanji-chopper-3').turns[2].line) && /不准只報一半/u.test(named('sanji-chopper-3').turns[3].line), 'Chopper receives professional trust through an explicit future consultation');
+check(named('sanji-chopper-3').turns.every(turn => !/給我檢查|這隻|另一隻也來/u.test(turn.line)), 'Doctor trust does not claim an unperformed examination');
+check(named('luffy-chopper-2').turns.every(turn => !/一直包不好|受傷那隻/u.test(turn.line)) && /交給你/u.test(named('luffy-chopper-2').turns[2].line), 'Luffy trusts his doctor without an unperformed bandage action');
 check(/訊號/u.test(named('nami-jinbe-1').turns[0].line) && /往右/u.test(named('nami-jinbe-1').turns[2].line) && /時機/u.test(named('nami-jinbe-1').turns[3].line), 'Navigator plan is acknowledged by the helmsman without claiming an unseen turn');
 for (const scenes of Object.values(dialogue.SCENES)) {
   const [a, b] = scenes[0].pair;

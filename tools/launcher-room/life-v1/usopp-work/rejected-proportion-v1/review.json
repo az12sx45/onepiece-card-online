@@ -1,0 +1,226 @@
+{
+  "schema": "launcher-life-art-review/1",
+  "reviewType": "Codex source and composited atlas visual inspection plus deterministic alpha/shape checks; no in-room playback acceptance claimed",
+  "generator": "image_gen.imagegen",
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "runtimeAccepted": false,
+  "review": "Early Usopp face/outfit and left wristband/bag correct. Four coherent direction rows, back head has no face. Supported tray and changing cloth stroke are visible; no arm/face mirroring.",
+  "noMirroring": true,
+  "noBodyPartAssembly": true,
+  "originalRetained": true,
+  "clips": [
+    {
+      "id": "work",
+      "direction": "east",
+      "asset": "public/images/launcher_room/life_v1/usopp/work-east.webp",
+      "sha256": "bf1e9ff96f3d78ceee91e892aedef8c526b878e49b5f235e9d4d80993d3d5297",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "sourceSha256": "0bf5875c37014e03462ba445166ccd2b80e1815abfc3d61f774e73ecc384861c",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          52,
+          11,
+          103,
+          112
+        ],
+        [
+          52,
+          11,
+          103,
+          112
+        ],
+        [
+          53,
+          11,
+          104,
+          112
+        ],
+        [
+          53,
+          11,
+          104,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2783,
+        3018,
+        2751,
+        2982
+      ],
+      "singleIsotropicScale": 0.32786885,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "work",
+      "direction": "west",
+      "asset": "public/images/launcher_room/life_v1/usopp/work-west.webp",
+      "sha256": "21f428be7ac8cce4b13b5a658e4e0b68fda890b3d4ac8724cced6a4ed59b0276",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "sourceSha256": "0bf5875c37014e03462ba445166ccd2b80e1815abfc3d61f774e73ecc384861c",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          34,
+          11,
+          83,
+          112
+        ],
+        [
+          34,
+          11,
+          83,
+          112
+        ],
+        [
+          33,
+          11,
+          83,
+          112
+        ],
+        [
+          33,
+          11,
+          82,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2856,
+        2877,
+        2938,
+        2894
+      ],
+      "singleIsotropicScale": 0.32467532,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "work",
+      "direction": "north",
+      "asset": "public/images/launcher_room/life_v1/usopp/work-north.webp",
+      "sha256": "729040534016df4cbd4e3e150b5c1871310656f6b09105581a21e3f2e142af52",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "sourceSha256": "0bf5875c37014e03462ba445166ccd2b80e1815abfc3d61f774e73ecc384861c",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          42,
+          11,
+          87,
+          112
+        ],
+        [
+          42,
+          11,
+          88,
+          112
+        ],
+        [
+          42,
+          11,
+          87,
+          112
+        ],
+        [
+          42,
+          11,
+          87,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3089,
+        3157,
+        3299,
+        3257
+      ],
+      "singleIsotropicScale": 0.32786885,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "work",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/usopp/work-south.webp",
+      "sha256": "b4f1ac49c85765c13290db06b0ca4929fb099d911bb456186ea32c903b44245f",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "sourceSha256": "0bf5875c37014e03462ba445166ccd2b80e1815abfc3d61f774e73ecc384861c",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          40,
+          11,
+          88,
+          112
+        ],
+        [
+          40,
+          11,
+          88,
+          112
+        ],
+        [
+          40,
+          11,
+          87,
+          112
+        ],
+        [
+          41,
+          11,
+          88,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3179,
+        3126,
+        3312,
+        3261
+      ],
+      "singleIsotropicScale": 0.330033,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    }
+  ]
+}

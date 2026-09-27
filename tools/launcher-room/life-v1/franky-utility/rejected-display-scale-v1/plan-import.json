@@ -1,0 +1,597 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "eat",
+      "key": "franky",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "scale": 0.2994012,
+      "scaleReason": "One common standing physical scale for utility sheet; floor poses are not enlarged.",
+      "regions": [
+        [
+          25,
+          13,
+          311,
+          322
+        ],
+        [
+          332,
+          18,
+          618,
+          322
+        ],
+        [
+          641,
+          17,
+          922,
+          322
+        ],
+        [
+          953,
+          17,
+          1233,
+          322
+        ]
+      ],
+      "roots": [
+        [
+          165.5,
+          320
+        ],
+        [
+          478.5,
+          320
+        ],
+        [
+          789.0,
+          320
+        ],
+        [
+          1092.0,
+          320
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/eat-south.webp",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "assetSha256": "52c607eb66381d259ff3d6258b5454ec13c0b64ee532e5554747c1a7acb9501d",
+      "frames": [
+        {
+          "sourceRegion": [
+            25,
+            13,
+            311,
+            322
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            286,
+            309
+          ],
+          "outputBounds": [
+            22,
+            19,
+            86,
+            93
+          ]
+        },
+        {
+          "sourceRegion": [
+            332,
+            18,
+            618,
+            322
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            286,
+            304
+          ],
+          "outputBounds": [
+            20,
+            21,
+            86,
+            91
+          ]
+        },
+        {
+          "sourceRegion": [
+            641,
+            17,
+            922,
+            322
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            281,
+            305
+          ],
+          "outputBounds": [
+            20,
+            21,
+            84,
+            91
+          ]
+        },
+        {
+          "sourceRegion": [
+            953,
+            17,
+            1233,
+            322
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            280,
+            305
+          ],
+          "outputBounds": [
+            22,
+            21,
+            84,
+            91
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "rest",
+      "key": "franky",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "scale": 0.2994012,
+      "scaleReason": "One common standing physical scale for utility sheet; floor poses are not enlarged.",
+      "regions": [
+        [
+          23,
+          354,
+          312,
+          599
+        ],
+        [
+          337,
+          352,
+          619,
+          599
+        ],
+        [
+          644,
+          354,
+          921,
+          598
+        ],
+        [
+          950,
+          352,
+          1233,
+          599
+        ]
+      ],
+      "roots": [
+        [
+          167.5,
+          597
+        ],
+        [
+          478.0,
+          597
+        ],
+        [
+          782.5,
+          596
+        ],
+        [
+          1091.5,
+          597
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/rest-south.webp",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "assetSha256": "bbf76878cad09dec5e7db4c4d75d69ba207bb34748264fdfeb8abddafe2c81af",
+      "frames": [
+        {
+          "sourceRegion": [
+            23,
+            354,
+            312,
+            599
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            289,
+            245
+          ],
+          "outputBounds": [
+            21,
+            39,
+            87,
+            73
+          ]
+        },
+        {
+          "sourceRegion": [
+            337,
+            352,
+            619,
+            599
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            282,
+            247
+          ],
+          "outputBounds": [
+            22,
+            38,
+            84,
+            74
+          ]
+        },
+        {
+          "sourceRegion": [
+            644,
+            354,
+            921,
+            598
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            277,
+            244
+          ],
+          "outputBounds": [
+            23,
+            39,
+            83,
+            73
+          ]
+        },
+        {
+          "sourceRegion": [
+            950,
+            352,
+            1233,
+            599
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            283,
+            247
+          ],
+          "outputBounds": [
+            22,
+            38,
+            85,
+            74
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "sleep",
+      "key": "franky",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "scale": 0.2994012,
+      "scaleReason": "One common standing physical scale for utility sheet; floor poses are not enlarged.",
+      "regions": [
+        [
+          18,
+          661,
+          320,
+          816
+        ],
+        [
+          330,
+          661,
+          623,
+          818
+        ],
+        [
+          639,
+          663,
+          930,
+          818
+        ],
+        [
+          947,
+          665,
+          1239,
+          817
+        ]
+      ],
+      "roots": [
+        [
+          169.0,
+          814
+        ],
+        [
+          476.5,
+          816
+        ],
+        [
+          784.5,
+          816
+        ],
+        [
+          1093.0,
+          815
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/sleep-south.webp",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "assetSha256": "68534575550b453d5f4f93c94789678635877771c50a038b4d14baa4324bb28f",
+      "frames": [
+        {
+          "sourceRegion": [
+            18,
+            661,
+            320,
+            816
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            302,
+            155
+          ],
+          "outputBounds": [
+            19,
+            66,
+            90,
+            46
+          ]
+        },
+        {
+          "sourceRegion": [
+            330,
+            661,
+            623,
+            818
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            293,
+            157
+          ],
+          "outputBounds": [
+            20,
+            65,
+            88,
+            47
+          ]
+        },
+        {
+          "sourceRegion": [
+            639,
+            663,
+            930,
+            818
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            291,
+            155
+          ],
+          "outputBounds": [
+            20,
+            66,
+            87,
+            46
+          ]
+        },
+        {
+          "sourceRegion": [
+            947,
+            665,
+            1239,
+            817
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            292,
+            152
+          ],
+          "outputBounds": [
+            20,
+            66,
+            87,
+            46
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "train",
+      "key": "franky",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "scale": 0.2994012,
+      "scaleReason": "One common standing physical scale for utility sheet; floor poses are not enlarged.",
+      "regions": [
+        [
+          23,
+          858,
+          313,
+          1194
+        ],
+        [
+          330,
+          857,
+          623,
+          1194
+        ],
+        [
+          647,
+          880,
+          923,
+          1194
+        ],
+        [
+          944,
+          856,
+          1232,
+          1194
+        ]
+      ],
+      "roots": [
+        [
+          166.0,
+          1192
+        ],
+        [
+          475.5,
+          1192
+        ],
+        [
+          783.0,
+          1192
+        ],
+        [
+          1088.0,
+          1192
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/train-south.webp",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "assetSha256": "a774141d2454863e1bfc0684270bcff61e368dcfb3aaad18f7e9f73a479d8d12",
+      "frames": [
+        {
+          "sourceRegion": [
+            23,
+            858,
+            313,
+            1194
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            290,
+            336
+          ],
+          "outputBounds": [
+            21,
+            11,
+            87,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            330,
+            857,
+            623,
+            1194
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            293,
+            337
+          ],
+          "outputBounds": [
+            20,
+            11,
+            88,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            647,
+            880,
+            923,
+            1194
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            276,
+            314
+          ],
+          "outputBounds": [
+            23,
+            18,
+            83,
+            94
+          ]
+        },
+        {
+          "sourceRegion": [
+            944,
+            856,
+            1232,
+            1194
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            288,
+            338
+          ],
+          "outputBounds": [
+            21,
+            11,
+            86,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

@@ -1,0 +1,4022 @@
+[
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.96950799999978,
+            "hunger": 20.06652799999994,
+            "mood": 70.02945333333369,
+            "social": 69.9932916666671,
+            "workMotivation": 70.0282743999998
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 0,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-approach",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481617250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.96836399999977,
+            "hunger": 20.06902399999994,
+            "mood": 70.03569333333371,
+            "social": 70.02449166666712,
+            "workMotivation": 70.02933519999979
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 0,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-approach",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481617750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.96760133333309,
+            "hunger": 20.070687999999937,
+            "mood": 70.03985333333372,
+            "social": 70.04529166666713,
+            "workMotivation": 70.03004239999979
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 0,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-approach",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481618250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.96683866666642,
+            "hunger": 20.072351999999935,
+            "mood": 70.04401333333374,
+            "social": 70.06609166666713,
+            "workMotivation": 70.03074959999978
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 0,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-approach",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481618750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.96569466666641,
+            "hunger": 20.074847999999932,
+            "mood": 70.05025333333376,
+            "social": 70.09729166666715,
+            "workMotivation": 70.03181039999977
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 0,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-approach",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481619250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.96493199999973,
+            "hunger": 20.07651199999993,
+            "mood": 70.05441333333377,
+            "social": 70.11809166666715,
+            "workMotivation": 70.03251759999976
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 0,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-approach",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481619750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.96378799999972,
+            "hunger": 20.079007999999927,
+            "mood": 70.06065333333379,
+            "social": 70.14929166666717,
+            "workMotivation": 70.03357839999975
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 1,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481620250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "eat",
+        "source": "life_v1",
+        "frame": "0",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.96302533333305,
+            "hunger": 20.080671999999925,
+            "mood": 70.0648133333338,
+            "social": 70.17009166666718,
+            "workMotivation": 70.03428559999975
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 1,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481620750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "eat",
+        "source": "life_v1",
+        "frame": "1",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.96226266666638,
+            "hunger": 20.082335999999923,
+            "mood": 70.06897333333382,
+            "social": 70.19089166666718,
+            "workMotivation": 70.03499279999974
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 1,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481621250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "eat",
+        "source": "life_v1",
+        "frame": "2",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.96111866666637,
+            "hunger": 20.08483199999992,
+            "mood": 70.07521333333383,
+            "social": 70.2220916666672,
+            "workMotivation": 70.03605359999973
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 1,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481621750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "eat",
+        "source": "life_v1",
+        "frame": "3",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.96035599999969,
+            "hunger": 20.08649599999992,
+            "mood": 70.07937333333385,
+            "social": 70.2428916666672,
+            "workMotivation": 70.03676079999973
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 1,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481622250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "eat",
+        "source": "life_v1",
+        "frame": "0",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.95921199999968,
+            "hunger": 20.088991999999916,
+            "mood": 70.08561333333387,
+            "social": 70.27409166666722,
+            "workMotivation": 70.03782159999972
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 1,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481622750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "eat",
+        "source": "life_v1",
+        "frame": "1",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.95844933333301,
+            "hunger": 20.090655999999914,
+            "mood": 70.08977333333388,
+            "social": 70.29489166666723,
+            "workMotivation": 70.03852879999971
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 1,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481623250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "eat",
+        "source": "life_v1",
+        "frame": "2",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.95768666666633,
+            "hunger": 20.092319999999912,
+            "mood": 70.0939333333339,
+            "social": 70.31569166666723,
+            "workMotivation": 70.0392359999997
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 1,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481623750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "eat",
+        "source": "life_v1",
+        "frame": "3",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.95654266666632,
+            "hunger": 20.09481599999991,
+            "mood": 70.10017333333391,
+            "social": 70.34689166666725,
+            "workMotivation": 70.0402967999997
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 1,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481624250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "eat",
+        "source": "life_v1",
+        "frame": "0",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.95577999999965,
+            "hunger": 20.096479999999907,
+            "mood": 70.10433333333393,
+            "social": 70.36769166666726,
+            "workMotivation": 70.04100399999969
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 2,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481624750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "eat",
+        "source": "life_v1",
+        "frame": "1",
+        "speech": "肚子餓了！先吃一口！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.95463599999964,
+            "hunger": 20.098975999999904,
+            "mood": 70.11057333333395,
+            "social": 70.39889166666727,
+            "workMotivation": 70.04206479999968
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 2,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481625250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "嗯……慢一點吃，也很好吃耶。"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.95387333333296,
+            "hunger": 20.100639999999903,
+            "mood": 70.11473333333396,
+            "social": 70.41969166666728,
+            "workMotivation": 70.04277199999967
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 2,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481625750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "嗯……慢一點吃，也很好吃耶。"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.95311066666629,
+            "hunger": 20.1023039999999,
+            "mood": 70.11889333333397,
+            "social": 70.44049166666728,
+            "workMotivation": 70.04347919999967
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 2,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481626250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "嗯……慢一點吃，也很好吃耶。"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.95196666666628,
+            "hunger": 20.104799999999898,
+            "mood": 70.12513333333399,
+            "social": 70.4716916666673,
+            "workMotivation": 70.04453999999966
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 2,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481626750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "嗯……慢一點吃，也很好吃耶。"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.9512039999996,
+            "hunger": 20.106463999999896,
+            "mood": 70.129293333334,
+            "social": 70.4924916666673,
+            "workMotivation": 70.04524719999965
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 2,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481627250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "嗯……慢一點吃，也很好吃耶。"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.9500599999996,
+            "hunger": 20.108959999999893,
+            "mood": 70.13553333333402,
+            "social": 70.52369166666732,
+            "workMotivation": 70.04630799999964
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 3,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481627750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "work",
+        "source": "life_v1",
+        "frame": "0",
+        "speech": "嗯……慢一點吃，也很好吃耶。"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.94929733333292,
+            "hunger": 20.11062399999989,
+            "mood": 70.13969333333404,
+            "social": 70.54449166666733,
+            "workMotivation": 70.04701519999963
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 3,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481628250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "work",
+        "source": "life_v1",
+        "frame": "1",
+        "speech": "嗯……慢一點吃，也很好吃耶。"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.94853466666625,
+            "hunger": 20.11228799999989,
+            "mood": 70.14385333333405,
+            "social": 70.56529166666733,
+            "workMotivation": 70.04772239999963
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 3,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481628750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "work",
+        "source": "life_v1",
+        "frame": "3",
+        "speech": "嗯……慢一點吃，也很好吃耶。"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.94739066666624,
+            "hunger": 20.114783999999887,
+            "mood": 70.15009333333407,
+            "social": 70.59649166666735,
+            "workMotivation": 70.04878319999962
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 3,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481629250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "work",
+        "source": "life_v1",
+        "frame": "1",
+        "speech": "嗯……慢一點吃，也很好吃耶。"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.94662799999956,
+            "hunger": 20.116447999999885,
+            "mood": 70.15425333333408,
+            "social": 70.61729166666736,
+            "workMotivation": 70.04949039999961
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 3,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481629750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "work",
+        "source": "life_v1",
+        "frame": "2",
+        "speech": "嗯……慢一點吃，也很好吃耶。"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.94548399999955,
+            "hunger": 20.118943999999882,
+            "mood": 70.1604933333341,
+            "social": 70.64849166666737,
+            "workMotivation": 70.0505511999996
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 3,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481630250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "work",
+        "source": "life_v1",
+        "frame": "0",
+        "speech": "嗯……慢一點吃，也很好吃耶。"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.94472133333288,
+            "hunger": 20.12060799999988,
+            "mood": 70.16465333333412,
+            "social": 70.66929166666738,
+            "workMotivation": 70.0512583999996
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 3,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481630750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "work",
+        "source": "life_v1",
+        "frame": "2",
+        "speech": "嗯……慢一點吃，也很好吃耶。"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.94357733333287,
+            "hunger": 20.123103999999877,
+            "mood": 70.17089333333413,
+            "social": 70.70049166666739,
+            "workMotivation": 70.05231919999959
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 3,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481631250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "work",
+        "source": "life_v1",
+        "frame": "3",
+        "speech": "嗯……慢一點吃，也很好吃耶。"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.9428146666662,
+            "hunger": 20.124767999999875,
+            "mood": 70.17505333333415,
+            "social": 70.7212916666674,
+            "workMotivation": 70.05302639999958
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 4,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481631750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "好！收好了！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.94205199999952,
+            "hunger": 20.126431999999873,
+            "mood": 70.17921333333416,
+            "social": 70.7420916666674,
+            "workMotivation": 70.05373359999957
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 4,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481632250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "好！收好了！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.94090799999951,
+            "hunger": 20.12892799999987,
+            "mood": 70.18545333333418,
+            "social": 70.77329166666742,
+            "workMotivation": 70.05479439999957
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 4,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481632750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "好！收好了！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.94014533333284,
+            "hunger": 20.13059199999987,
+            "mood": 70.1896133333342,
+            "social": 70.79409166666743,
+            "workMotivation": 70.05550159999956
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 4,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481633250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "好！收好了！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.93900133333283,
+            "hunger": 20.133087999999866,
+            "mood": 70.19585333333421,
+            "social": 70.82529166666744,
+            "workMotivation": 70.05656239999955
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 4,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481633750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "好！收好了！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 1,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "EventParticipant",
+          "needs": {
+            "energy": 84.93823866666615,
+            "hunger": 20.134751999999864,
+            "mood": 70.20001333333423,
+            "social": 70.84609166666745,
+            "workMotivation": 70.05726959999954
+          },
+          "memories": [],
+          "nextAt": 1790481619896,
+          "taps": [],
+          "taskToken": "event-2",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "event-2",
+          "state": "EventParticipant",
+          "phase": "approach",
+          "goal": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "",
+          "resultError": ""
+        }
+      ],
+      "foreground": {
+        "id": "life-chain-luffy-break",
+        "keys": [
+          "luffy"
+        ],
+        "phase": "steps",
+        "index": 4,
+        "steps": 5
+      },
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 1,
+            "row": 5
+          },
+          "stationId": "",
+          "slotId": "0",
+          "token": "event-2"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960472,
+      "nextForegroundAt": 1790481612472,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "life-act",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481634250,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "talk_happy",
+        "source": "acting_v3",
+        "frame": "1",
+        "speech": "好！收好了！"
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "Idle",
+          "needs": {
+            "energy": 85,
+            "hunger": 20,
+            "mood": 70,
+            "social": 70,
+            "workMotivation": 70
+          },
+          "memories": [],
+          "nextAt": 1790481637576,
+          "taps": [],
+          "taskToken": null,
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [],
+      "foreground": null,
+      "reservations": [],
+      "recentEvents": [
+        {
+          "id": "life-chain-luffy-break",
+          "timestamp": 1790481634576
+        }
+      ],
+      "nextRareAt": 1790481994576,
+      "nextForegroundAt": 1790481814576,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 5
+        },
+        "x": 140.375,
+        "y": 453,
+        "mode": "wander",
+        "phase": 0.782716779340187,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 5
+          },
+          {
+            "col": 3,
+            "row": 5
+          },
+          {
+            "col": 3,
+            "row": 6
+          },
+          {
+            "col": 3,
+            "row": 7
+          }
+        ]
+      }
+    ],
+    "now": 1790481634750,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "idle",
+        "source": "acting_v3",
+        "frame": "0",
+        "speech": ""
+      }
+    ]
+  }
+]

@@ -1,0 +1,793 @@
+{
+  "ok": true,
+  "startedAt": "2026-09-27T04:20:45.665Z",
+  "fixtureRoot": "C:\\Codex_Candidates\\launcher-life-qa-1.2.0\\prepublication\\transport-gate\\fixtures-rOOuB5",
+  "checks": [
+    {
+      "name": "deduplicates identical shared media across three games",
+      "pass": true
+    },
+    {
+      "name": "browser download entry /",
+      "pass": true
+    },
+    {
+      "name": "browser download entry /download",
+      "pass": true
+    },
+    {
+      "name": "browser download entry /desktop-download.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load start.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load game.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load profile.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load shop.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load result.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load tutorial.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load board_start.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load board_game.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load board_battle.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load board_fixed_viewport.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load board_audio_preview.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load board_move_fx_preview.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load board_sea_event_preview.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load board_impel_down.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load board_marineford.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load board_water_seven.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load board_spar_selection_demo.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load board_york_clue_puzzle_formal_demo.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load game_launcher_preview.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load chess/index.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load chess/battle-game.html",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load chess/battle-chess.js",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load chess/assets/vendor/stockfish-18.0.0/stockfish-18-lite-single.js",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load js/board_game.js",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load css/board_audio_ui.css",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load data/game.json",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load engine.wasm",
+      "pass": true
+    },
+    {
+      "name": "URL variation cannot grant access /board_game.html?desktop=1",
+      "pass": true
+    },
+    {
+      "name": "URL variation cannot grant access /js/board_game.js?desktop=1",
+      "pass": true
+    },
+    {
+      "name": "URL variation cannot grant access /%62oard_game.html",
+      "pass": true
+    },
+    {
+      "name": "URL variation cannot grant access /js/%62oard_game.js",
+      "pass": true
+    },
+    {
+      "name": "URL variation cannot grant access //board_game.html",
+      "pass": true
+    },
+    {
+      "name": "URL variation cannot grant access /chess%2findex.html",
+      "pass": true
+    },
+    {
+      "name": "invalid path fails closed /%ZZ",
+      "pass": true
+    },
+    {
+      "name": "invalid path fails closed /js/%00bad.js",
+      "pass": true
+    },
+    {
+      "name": "invalid path fails closed /js/%5cboard_game.js",
+      "pass": true
+    },
+    {
+      "name": "HEAD does not leak program /board_game.html",
+      "pass": true
+    },
+    {
+      "name": "HEAD does not leak program /js/board_game.js",
+      "pass": true
+    },
+    {
+      "name": "Range does not bypass browser program gate",
+      "pass": true
+    },
+    {
+      "name": "non-read static requests rejected",
+      "pass": true
+    },
+    {
+      "name": "Electron receives unchanged board_game.html",
+      "pass": true
+    },
+    {
+      "name": "Electron receives unchanged start.html",
+      "pass": true
+    },
+    {
+      "name": "Electron receives unchanged chess/index.html",
+      "pass": true
+    },
+    {
+      "name": "Electron receives unchanged js/board_game.js",
+      "pass": true
+    },
+    {
+      "name": "Electron receives unchanged chess/battle-chess.js",
+      "pass": true
+    },
+    {
+      "name": "Node HTTP is not a game renderer",
+      "pass": true
+    },
+    {
+      "name": "Electron small prefetch JSON remains available",
+      "pass": true
+    },
+    {
+      "name": "browser cannot load desktop small prefetch JSON",
+      "pass": true
+    },
+    {
+      "name": "GET media redirects with zero Render body image",
+      "pass": true
+    },
+    {
+      "name": "HEAD media redirects with zero Render body image",
+      "pass": true
+    },
+    {
+      "name": "GET media redirects with zero Render body audio",
+      "pass": true
+    },
+    {
+      "name": "HEAD media redirects with zero Render body audio",
+      "pass": true
+    },
+    {
+      "name": "GET media redirects with zero Render body video",
+      "pass": true
+    },
+    {
+      "name": "HEAD media redirects with zero Render body video",
+      "pass": true
+    },
+    {
+      "name": "GET media redirects with zero Render body font",
+      "pass": true
+    },
+    {
+      "name": "HEAD media redirects with zero Render body font",
+      "pass": true
+    },
+    {
+      "name": "GET media redirects with zero Render body image",
+      "pass": true
+    },
+    {
+      "name": "HEAD media redirects with zero Render body image",
+      "pass": true
+    },
+    {
+      "name": "unknown media never falls through (web) /images/unknown.webp",
+      "pass": true
+    },
+    {
+      "name": "unknown media never falls through (web) /misc/unknown.mp3",
+      "pass": true
+    },
+    {
+      "name": "unknown media never falls through (web) /audio/missing.mp3",
+      "pass": true
+    },
+    {
+      "name": "unknown media never falls through (desktop) /images/unknown.webp",
+      "pass": true
+    },
+    {
+      "name": "unknown media never falls through (desktop) /misc/unknown.mp3",
+      "pass": true
+    },
+    {
+      "name": "unknown media never falls through (desktop) /audio/missing.mp3",
+      "pass": true
+    },
+    {
+      "name": "public metadata/API retained /desktop/catalog-v1.json",
+      "pass": true
+    },
+    {
+      "name": "public metadata/API retained /desktop/catalog-v2.json",
+      "pass": true
+    },
+    {
+      "name": "public metadata/API retained /desktop/catalog-v3.json",
+      "pass": true
+    },
+    {
+      "name": "public metadata/API retained /desktop/launcher-release-v1.json",
+      "pass": true
+    },
+    {
+      "name": "public metadata/API retained /desktop/manifests/board-assets-0123456789abcdef.json",
+      "pass": true
+    },
+    {
+      "name": "public metadata/API retained /desktop/manifests/board-package-2222222222222222.json",
+      "pass": true
+    },
+    {
+      "name": "public metadata/API retained /health",
+      "pass": true
+    },
+    {
+      "name": "public metadata/API retained /api/board-runtime",
+      "pass": true
+    },
+    {
+      "name": "public metadata/API retained /api/desktop-runtime-package/board",
+      "pass": true
+    },
+    {
+      "name": "API method remains available POST",
+      "pass": true
+    },
+    {
+      "name": "API method remains available PUT",
+      "pass": true
+    },
+    {
+      "name": "API method remains available DELETE",
+      "pass": true
+    },
+    {
+      "name": "API method remains available OPTIONS",
+      "pass": true
+    },
+    {
+      "name": "Socket.IO client bundle is not exposed",
+      "pass": true
+    },
+    {
+      "name": "websocket browser-origin/fetch handshake rejected {\"Origin\":\"http://127.0.0.1:2949\"}",
+      "pass": true
+    },
+    {
+      "name": "websocket browser-origin/fetch handshake rejected {\"Sec-Fetch-Site\":\"same-origin\"}",
+      "pass": true
+    },
+    {
+      "name": "websocket browser-origin/fetch handshake rejected {\"User-Agent\":\"node\",\"Origin\":\"http://127.0.0.1:2949\"}",
+      "pass": true
+    },
+    {
+      "name": "websocket browser-origin/fetch handshake rejected {\"User-Agent\":\"node\",\"Sec-Fetch-Site\":\"same-origin\"}",
+      "pass": true
+    },
+    {
+      "name": "websocket browser-origin/fetch handshake rejected {\"User-Agent\":\"node-XMLHttpRequest\",\"Origin\":\"http://127.0.0.1:2949\"}",
+      "pass": true
+    },
+    {
+      "name": "websocket browser-origin/fetch handshake rejected {\"User-Agent\":\"node-XMLHttpRequest\",\"Sec-Fetch-Site\":\"same-origin\"}",
+      "pass": true
+    },
+    {
+      "name": "websocket browser-origin/fetch handshake rejected {\"User-Agent\":\"proxy-synthesized-agent/1.0\",\"Origin\":\"http://127.0.0.1:2949\"}",
+      "pass": true
+    },
+    {
+      "name": "websocket browser-origin/fetch handshake rejected {\"User-Agent\":\"proxy-synthesized-agent/1.0\",\"Sec-Fetch-Site\":\"same-origin\"}",
+      "pass": true
+    },
+    {
+      "name": "websocket browser-origin/fetch handshake rejected {\"User-Agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140.0.0.0 Safari/537.36\",\"Origin\":\"http://127.0.0.1:2949\"}",
+      "pass": true
+    },
+    {
+      "name": "websocket browser-origin/fetch handshake rejected {\"User-Agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140.0.0.0 Safari/537.36\",\"Sec-Fetch-Site\":\"same-origin\"}",
+      "pass": true
+    },
+    {
+      "name": "websocket Electron game socket remains usable",
+      "pass": true
+    },
+    {
+      "name": "websocket launcher/proxy social allowed but game events blocked {}",
+      "pass": true
+    },
+    {
+      "name": "websocket launcher/proxy social allowed but game events blocked {\"User-Agent\":\"node\"}",
+      "pass": true
+    },
+    {
+      "name": "websocket launcher/proxy social allowed but game events blocked {\"User-Agent\":\"node-XMLHttpRequest\"}",
+      "pass": true
+    },
+    {
+      "name": "websocket launcher/proxy social allowed but game events blocked {\"User-Agent\":\"proxy-synthesized-agent/1.0\"}",
+      "pass": true
+    },
+    {
+      "name": "websocket launcher/proxy social allowed but game events blocked {\"User-Agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140.0.0.0 Safari/537.36\"}",
+      "pass": true
+    },
+    {
+      "name": "polling browser-origin/fetch handshake rejected {\"Origin\":\"http://127.0.0.1:2949\"}",
+      "pass": true
+    },
+    {
+      "name": "polling browser-origin/fetch handshake rejected {\"Sec-Fetch-Site\":\"same-origin\"}",
+      "pass": true
+    },
+    {
+      "name": "polling browser-origin/fetch handshake rejected {\"User-Agent\":\"node\",\"Origin\":\"http://127.0.0.1:2949\"}",
+      "pass": true
+    },
+    {
+      "name": "polling browser-origin/fetch handshake rejected {\"User-Agent\":\"node\",\"Sec-Fetch-Site\":\"same-origin\"}",
+      "pass": true
+    },
+    {
+      "name": "polling browser-origin/fetch handshake rejected {\"User-Agent\":\"node-XMLHttpRequest\",\"Origin\":\"http://127.0.0.1:2949\"}",
+      "pass": true
+    },
+    {
+      "name": "polling browser-origin/fetch handshake rejected {\"User-Agent\":\"node-XMLHttpRequest\",\"Sec-Fetch-Site\":\"same-origin\"}",
+      "pass": true
+    },
+    {
+      "name": "polling browser-origin/fetch handshake rejected {\"User-Agent\":\"proxy-synthesized-agent/1.0\",\"Origin\":\"http://127.0.0.1:2949\"}",
+      "pass": true
+    },
+    {
+      "name": "polling browser-origin/fetch handshake rejected {\"User-Agent\":\"proxy-synthesized-agent/1.0\",\"Sec-Fetch-Site\":\"same-origin\"}",
+      "pass": true
+    },
+    {
+      "name": "polling browser-origin/fetch handshake rejected {\"User-Agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140.0.0.0 Safari/537.36\",\"Origin\":\"http://127.0.0.1:2949\"}",
+      "pass": true
+    },
+    {
+      "name": "polling browser-origin/fetch handshake rejected {\"User-Agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140.0.0.0 Safari/537.36\",\"Sec-Fetch-Site\":\"same-origin\"}",
+      "pass": true
+    },
+    {
+      "name": "polling Electron game socket remains usable",
+      "pass": true
+    },
+    {
+      "name": "polling launcher/proxy social allowed but game events blocked {}",
+      "pass": true
+    },
+    {
+      "name": "polling launcher/proxy social allowed but game events blocked {\"User-Agent\":\"node\"}",
+      "pass": true
+    },
+    {
+      "name": "polling launcher/proxy social allowed but game events blocked {\"User-Agent\":\"node-XMLHttpRequest\"}",
+      "pass": true
+    },
+    {
+      "name": "polling launcher/proxy social allowed but game events blocked {\"User-Agent\":\"proxy-synthesized-agent/1.0\"}",
+      "pass": true
+    },
+    {
+      "name": "polling launcher/proxy social allowed but game events blocked {\"User-Agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140.0.0.0 Safari/537.36\"}",
+      "pass": true
+    },
+    {
+      "name": "browser receives retiring worker while Electron retains original worker response",
+      "pass": true
+    },
+    {
+      "name": "retired worker unregisters and redirects same-origin game clients without touching storage",
+      "pass": true
+    },
+    {
+      "name": "invalid catalog schema blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid unapproved asset origin blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid missing game blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid manifest traversal blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid manifest game identity blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid manifest release identity blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid manifest asset shape blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid absolute asset path blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid asset traversal blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid backslash asset blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid empty asset segment blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid query in asset blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid hash in asset blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid control in asset blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid invalid asset SHA blocks startup",
+      "pass": true
+    },
+    {
+      "name": "invalid conflicting shared asset blocks startup",
+      "pass": true
+    },
+    {
+      "name": "manifest bytes must match catalog SHA",
+      "pass": true
+    },
+    {
+      "name": "missing catalog fails closed",
+      "pass": true
+    },
+    {
+      "name": "explicit disabled gate supports isolated development without metadata",
+      "pass": true
+    }
+  ],
+  "socketDelivered": [
+    "BOARD_GAME_STATE",
+    "AUTH_REGISTER",
+    "AUTH_LOGIN",
+    "PROFILE_GET",
+    "PROFILE_UPDATE",
+    "PROFILE_PUBLIC_GET",
+    "LAUNCHER_PROFILE_GET",
+    "LAUNCHER_SHOP_GET",
+    "LAUNCHER_SHOP_BUY",
+    "LAUNCHER_SHOP_EQUIP",
+    "LAUNCHER_LIFE_GET",
+    "LAUNCHER_LIFE_COMMAND",
+    "LAUNCHER_DECORATION_PLACEMENT_SET",
+    "LAUNCHER_COMMENTS_GET",
+    "LAUNCHER_COMMENT_POST",
+    "LAUNCHER_COMMENT_DELETE",
+    "SOCIAL_AUTH",
+    "PRESENCE_SET",
+    "FRIENDS_GET",
+    "FRIEND_ADD_BY_NAME",
+    "FRIEND_REQUEST_ACCEPT",
+    "FRIEND_REQUEST_DECLINE",
+    "FRIEND_REMOVE",
+    "DM_HISTORY",
+    "DM_SEND",
+    "AUTH_REGISTER",
+    "AUTH_LOGIN",
+    "PROFILE_GET",
+    "PROFILE_UPDATE",
+    "PROFILE_PUBLIC_GET",
+    "LAUNCHER_PROFILE_GET",
+    "LAUNCHER_SHOP_GET",
+    "LAUNCHER_SHOP_BUY",
+    "LAUNCHER_SHOP_EQUIP",
+    "LAUNCHER_LIFE_GET",
+    "LAUNCHER_LIFE_COMMAND",
+    "LAUNCHER_DECORATION_PLACEMENT_SET",
+    "LAUNCHER_COMMENTS_GET",
+    "LAUNCHER_COMMENT_POST",
+    "LAUNCHER_COMMENT_DELETE",
+    "SOCIAL_AUTH",
+    "PRESENCE_SET",
+    "FRIENDS_GET",
+    "FRIEND_ADD_BY_NAME",
+    "FRIEND_REQUEST_ACCEPT",
+    "FRIEND_REQUEST_DECLINE",
+    "FRIEND_REMOVE",
+    "DM_HISTORY",
+    "DM_SEND",
+    "AUTH_REGISTER",
+    "AUTH_LOGIN",
+    "PROFILE_GET",
+    "PROFILE_UPDATE",
+    "PROFILE_PUBLIC_GET",
+    "LAUNCHER_PROFILE_GET",
+    "LAUNCHER_SHOP_GET",
+    "LAUNCHER_SHOP_BUY",
+    "LAUNCHER_SHOP_EQUIP",
+    "LAUNCHER_LIFE_GET",
+    "LAUNCHER_LIFE_COMMAND",
+    "LAUNCHER_DECORATION_PLACEMENT_SET",
+    "LAUNCHER_COMMENTS_GET",
+    "LAUNCHER_COMMENT_POST",
+    "LAUNCHER_COMMENT_DELETE",
+    "SOCIAL_AUTH",
+    "PRESENCE_SET",
+    "FRIENDS_GET",
+    "FRIEND_ADD_BY_NAME",
+    "FRIEND_REQUEST_ACCEPT",
+    "FRIEND_REQUEST_DECLINE",
+    "FRIEND_REMOVE",
+    "DM_HISTORY",
+    "DM_SEND",
+    "AUTH_REGISTER",
+    "AUTH_LOGIN",
+    "PROFILE_GET",
+    "PROFILE_UPDATE",
+    "PROFILE_PUBLIC_GET",
+    "LAUNCHER_PROFILE_GET",
+    "LAUNCHER_SHOP_GET",
+    "LAUNCHER_SHOP_BUY",
+    "LAUNCHER_SHOP_EQUIP",
+    "LAUNCHER_LIFE_GET",
+    "LAUNCHER_LIFE_COMMAND",
+    "LAUNCHER_DECORATION_PLACEMENT_SET",
+    "LAUNCHER_COMMENTS_GET",
+    "LAUNCHER_COMMENT_POST",
+    "LAUNCHER_COMMENT_DELETE",
+    "SOCIAL_AUTH",
+    "PRESENCE_SET",
+    "FRIENDS_GET",
+    "FRIEND_ADD_BY_NAME",
+    "FRIEND_REQUEST_ACCEPT",
+    "FRIEND_REQUEST_DECLINE",
+    "FRIEND_REMOVE",
+    "DM_HISTORY",
+    "DM_SEND",
+    "AUTH_REGISTER",
+    "AUTH_LOGIN",
+    "PROFILE_GET",
+    "PROFILE_UPDATE",
+    "PROFILE_PUBLIC_GET",
+    "LAUNCHER_PROFILE_GET",
+    "LAUNCHER_SHOP_GET",
+    "LAUNCHER_SHOP_BUY",
+    "LAUNCHER_SHOP_EQUIP",
+    "LAUNCHER_LIFE_GET",
+    "LAUNCHER_LIFE_COMMAND",
+    "LAUNCHER_DECORATION_PLACEMENT_SET",
+    "LAUNCHER_COMMENTS_GET",
+    "LAUNCHER_COMMENT_POST",
+    "LAUNCHER_COMMENT_DELETE",
+    "SOCIAL_AUTH",
+    "PRESENCE_SET",
+    "FRIENDS_GET",
+    "FRIEND_ADD_BY_NAME",
+    "FRIEND_REQUEST_ACCEPT",
+    "FRIEND_REQUEST_DECLINE",
+    "FRIEND_REMOVE",
+    "DM_HISTORY",
+    "DM_SEND",
+    "BOARD_GAME_STATE",
+    "AUTH_REGISTER",
+    "AUTH_LOGIN",
+    "PROFILE_GET",
+    "PROFILE_UPDATE",
+    "PROFILE_PUBLIC_GET",
+    "LAUNCHER_PROFILE_GET",
+    "LAUNCHER_SHOP_GET",
+    "LAUNCHER_SHOP_BUY",
+    "LAUNCHER_SHOP_EQUIP",
+    "LAUNCHER_LIFE_GET",
+    "LAUNCHER_LIFE_COMMAND",
+    "LAUNCHER_DECORATION_PLACEMENT_SET",
+    "LAUNCHER_COMMENTS_GET",
+    "LAUNCHER_COMMENT_POST",
+    "LAUNCHER_COMMENT_DELETE",
+    "SOCIAL_AUTH",
+    "PRESENCE_SET",
+    "FRIENDS_GET",
+    "FRIEND_ADD_BY_NAME",
+    "FRIEND_REQUEST_ACCEPT",
+    "FRIEND_REQUEST_DECLINE",
+    "FRIEND_REMOVE",
+    "DM_HISTORY",
+    "DM_SEND",
+    "AUTH_REGISTER",
+    "AUTH_LOGIN",
+    "PROFILE_GET",
+    "PROFILE_UPDATE",
+    "PROFILE_PUBLIC_GET",
+    "LAUNCHER_PROFILE_GET",
+    "LAUNCHER_SHOP_GET",
+    "LAUNCHER_SHOP_BUY",
+    "LAUNCHER_SHOP_EQUIP",
+    "LAUNCHER_LIFE_GET",
+    "LAUNCHER_LIFE_COMMAND",
+    "LAUNCHER_DECORATION_PLACEMENT_SET",
+    "LAUNCHER_COMMENTS_GET",
+    "LAUNCHER_COMMENT_POST",
+    "LAUNCHER_COMMENT_DELETE",
+    "SOCIAL_AUTH",
+    "PRESENCE_SET",
+    "FRIENDS_GET",
+    "FRIEND_ADD_BY_NAME",
+    "FRIEND_REQUEST_ACCEPT",
+    "FRIEND_REQUEST_DECLINE",
+    "FRIEND_REMOVE",
+    "DM_HISTORY",
+    "DM_SEND",
+    "AUTH_REGISTER",
+    "AUTH_LOGIN",
+    "PROFILE_GET",
+    "PROFILE_UPDATE",
+    "PROFILE_PUBLIC_GET",
+    "LAUNCHER_PROFILE_GET",
+    "LAUNCHER_SHOP_GET",
+    "LAUNCHER_SHOP_BUY",
+    "LAUNCHER_SHOP_EQUIP",
+    "LAUNCHER_LIFE_GET",
+    "LAUNCHER_LIFE_COMMAND",
+    "LAUNCHER_DECORATION_PLACEMENT_SET",
+    "LAUNCHER_COMMENTS_GET",
+    "LAUNCHER_COMMENT_POST",
+    "LAUNCHER_COMMENT_DELETE",
+    "SOCIAL_AUTH",
+    "PRESENCE_SET",
+    "FRIENDS_GET",
+    "FRIEND_ADD_BY_NAME",
+    "FRIEND_REQUEST_ACCEPT",
+    "FRIEND_REQUEST_DECLINE",
+    "FRIEND_REMOVE",
+    "DM_HISTORY",
+    "DM_SEND",
+    "AUTH_REGISTER",
+    "AUTH_LOGIN",
+    "PROFILE_GET",
+    "PROFILE_UPDATE",
+    "PROFILE_PUBLIC_GET",
+    "LAUNCHER_PROFILE_GET",
+    "LAUNCHER_SHOP_GET",
+    "LAUNCHER_SHOP_BUY",
+    "LAUNCHER_SHOP_EQUIP",
+    "LAUNCHER_LIFE_GET",
+    "LAUNCHER_LIFE_COMMAND",
+    "LAUNCHER_DECORATION_PLACEMENT_SET",
+    "LAUNCHER_COMMENTS_GET",
+    "LAUNCHER_COMMENT_POST",
+    "LAUNCHER_COMMENT_DELETE",
+    "SOCIAL_AUTH",
+    "PRESENCE_SET",
+    "FRIENDS_GET",
+    "FRIEND_ADD_BY_NAME",
+    "FRIEND_REQUEST_ACCEPT",
+    "FRIEND_REQUEST_DECLINE",
+    "FRIEND_REMOVE",
+    "DM_HISTORY",
+    "DM_SEND",
+    "AUTH_REGISTER",
+    "AUTH_LOGIN",
+    "PROFILE_GET",
+    "PROFILE_UPDATE",
+    "PROFILE_PUBLIC_GET",
+    "LAUNCHER_PROFILE_GET",
+    "LAUNCHER_SHOP_GET",
+    "LAUNCHER_SHOP_BUY",
+    "LAUNCHER_SHOP_EQUIP",
+    "LAUNCHER_LIFE_GET",
+    "LAUNCHER_LIFE_COMMAND",
+    "LAUNCHER_DECORATION_PLACEMENT_SET",
+    "LAUNCHER_COMMENTS_GET",
+    "LAUNCHER_COMMENT_POST",
+    "LAUNCHER_COMMENT_DELETE",
+    "SOCIAL_AUTH",
+    "PRESENCE_SET",
+    "FRIENDS_GET",
+    "FRIEND_ADD_BY_NAME",
+    "FRIEND_REQUEST_ACCEPT",
+    "FRIEND_REQUEST_DECLINE",
+    "FRIEND_REMOVE",
+    "DM_HISTORY",
+    "DM_SEND"
+  ],
+  "errors": [],
+  "finishedAt": "2026-09-27T04:20:48.627Z"
+}

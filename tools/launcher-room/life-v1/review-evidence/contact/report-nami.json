@@ -1,0 +1,578 @@
+{
+  "ok": true,
+  "scope": "Real renderer and art, isolated fixture server; numeric pass is not human visual approval.",
+  "results": [
+    {
+      "id": "nami-map-table-r0",
+      "key": "nami",
+      "furniture": "map-table",
+      "clip": "read",
+      "rotation": 0,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-nami"
+          ],
+          "characters": {
+            "nami": {
+              "key": "nami",
+              "itemId": "room-character-nami",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99794166666666,
+                "hunger": 25.00325000000001,
+                "mood": 75.00216666666665,
+                "social": 74.99907916666669,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790482075163,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790482061060,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-nami",
+              "stationId": "room-furniture-map-table",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:07:41.084Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:07:49.686Z",
+              "readyAt": "2026-09-27T04:08:49.686Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "nami",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-map-table",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "nami",
+              "cell": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-map-table",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482240267,
+          "nextForegroundAt": 1790482072267,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "nami",
+            "cell": {
+              "col": 7,
+              "row": 4
+            },
+            "x": 456,
+            "y": 394.36140625,
+            "mode": "life-act",
+            "phase": 0.6152952606031357,
+            "direction": "north",
+            "dock": {
+              "x": 456,
+              "y": 394.36140625,
+              "z": 402,
+              "side": "north"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-nami",
+            "stationId": "room-furniture-map-table",
+            "roomRevision": 1
+          },
+          "at": 1790482061084
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790482069686
+        }
+      ]
+    },
+    {
+      "id": "nami-map-table-r1",
+      "key": "nami",
+      "furniture": "map-table",
+      "clip": "read",
+      "rotation": 1,
+      "frames": [
+        "1",
+        "2",
+        "2",
+        "3"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-nami"
+          ],
+          "characters": {
+            "nami": {
+              "key": "nami",
+              "itemId": "room-character-nami",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99794324999999,
+                "hunger": 25.003247500000008,
+                "mood": 75.00216499999999,
+                "social": 74.99907987500002,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790482081883,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790482075115,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-nami",
+              "stationId": "room-furniture-map-table",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:07:55.239Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:08:10.846Z",
+              "readyAt": "2026-09-27T04:09:10.846Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "nami",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-map-table",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "nami",
+              "cell": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-map-table",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482254906,
+          "nextForegroundAt": 1790482086906,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "nami",
+            "cell": {
+              "col": 6,
+              "row": 2
+            },
+            "x": 456.73,
+            "y": 384.47512719386185,
+            "mode": "life-act",
+            "phase": 0.6129591077921763,
+            "direction": "east",
+            "dock": {
+              "x": 456.73,
+              "y": 384.51640625,
+              "z": 402,
+              "side": "east"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-nami",
+            "stationId": "room-furniture-map-table",
+            "roomRevision": 1
+          },
+          "at": 1790482075239
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790482090846
+        }
+      ]
+    },
+    {
+      "id": "nami-map-table-r2",
+      "key": "nami",
+      "furniture": "map-table",
+      "clip": "read",
+      "rotation": 2,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-nami"
+          ],
+          "characters": {
+            "nami": {
+              "key": "nami",
+              "itemId": "room-character-nami",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99794324999999,
+                "hunger": 25.003247500000008,
+                "mood": 75.00216499999999,
+                "social": 74.99907987500002,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790482118648,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790482098107,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-nami",
+              "stationId": "room-furniture-map-table",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:08:18.215Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:08:44.018Z",
+              "readyAt": "2026-09-27T04:09:44.018Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "nami",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-map-table",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "nami",
+              "cell": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-map-table",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482556500,
+          "nextForegroundAt": 1790482109896,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "nami",
+            "cell": {
+              "col": 7,
+              "row": 1
+            },
+            "x": 456,
+            "y": 382.72640625,
+            "mode": "life-act",
+            "phase": 0.2569165061256666,
+            "direction": "south",
+            "dock": {
+              "x": 456,
+              "y": 382.72640625,
+              "z": 400,
+              "side": "south"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-nami",
+            "stationId": "room-furniture-map-table",
+            "roomRevision": 1
+          },
+          "at": 1790482098215
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790482124018
+        }
+      ]
+    },
+    {
+      "id": "nami-map-table-r3",
+      "key": "nami",
+      "furniture": "map-table",
+      "clip": "read",
+      "rotation": 3,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-nami"
+          ],
+          "characters": {
+            "nami": {
+              "key": "nami",
+              "itemId": "room-character-nami",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99796858333333,
+                "hunger": 25.003207500000006,
+                "mood": 75.00213833333333,
+                "social": 74.99909120833335,
+                "workMotivation": 69.967925
+              },
+              "memories": [],
+              "nextAt": 1790482132632,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790482129296,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-nami",
+              "stationId": "room-furniture-map-table",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:08:49.442Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:09:08.777Z",
+              "readyAt": "2026-09-27T04:10:08.777Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "nami",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-map-table",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "nami",
+              "cell": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-map-table",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482630810,
+          "nextForegroundAt": 1790482141088,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "nami",
+            "cell": {
+              "col": 9,
+              "row": 2
+            },
+            "x": 503.27,
+            "y": 384.47683958844215,
+            "mode": "life-act",
+            "phase": 0.7169482927187346,
+            "direction": "west",
+            "dock": {
+              "x": 503.27,
+              "y": 384.51640625,
+              "z": 402,
+              "side": "west"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-nami",
+            "stationId": "room-furniture-map-table",
+            "roomRevision": 1
+          },
+          "at": 1790482129442
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790482148777
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,597 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "eat",
+      "key": "franky",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "scale": 0.248503,
+      "scaleReason": "Entire loop uniformly multiplied by0.83 to match approved83px model under unchanged shared displayScale; no anatomy warp, no seated/lying enlargement.",
+      "regions": [
+        [
+          25,
+          13,
+          311,
+          322
+        ],
+        [
+          332,
+          18,
+          618,
+          322
+        ],
+        [
+          641,
+          17,
+          922,
+          322
+        ],
+        [
+          953,
+          17,
+          1233,
+          322
+        ]
+      ],
+      "roots": [
+        [
+          165.5,
+          320
+        ],
+        [
+          478.5,
+          320
+        ],
+        [
+          789.0,
+          320
+        ],
+        [
+          1092.0,
+          320
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/eat-south.webp",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "assetSha256": "ccbb9931092174c2e6133c8a467a519259a8f71f721fd8252ec247b5e322d9c9",
+      "frames": [
+        {
+          "sourceRegion": [
+            25,
+            13,
+            311,
+            322
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            286,
+            309
+          ],
+          "outputBounds": [
+            29,
+            35,
+            71,
+            77
+          ]
+        },
+        {
+          "sourceRegion": [
+            332,
+            18,
+            618,
+            322
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            286,
+            304
+          ],
+          "outputBounds": [
+            28,
+            36,
+            71,
+            76
+          ]
+        },
+        {
+          "sourceRegion": [
+            641,
+            17,
+            922,
+            322
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            281,
+            305
+          ],
+          "outputBounds": [
+            27,
+            36,
+            70,
+            76
+          ]
+        },
+        {
+          "sourceRegion": [
+            953,
+            17,
+            1233,
+            322
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            280,
+            305
+          ],
+          "outputBounds": [
+            29,
+            36,
+            70,
+            76
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "rest",
+      "key": "franky",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "scale": 0.248503,
+      "scaleReason": "Entire loop uniformly multiplied by0.83 to match approved83px model under unchanged shared displayScale; no anatomy warp, no seated/lying enlargement.",
+      "regions": [
+        [
+          23,
+          354,
+          312,
+          599
+        ],
+        [
+          337,
+          352,
+          619,
+          599
+        ],
+        [
+          644,
+          354,
+          921,
+          598
+        ],
+        [
+          950,
+          352,
+          1233,
+          599
+        ]
+      ],
+      "roots": [
+        [
+          167.5,
+          597
+        ],
+        [
+          478.0,
+          597
+        ],
+        [
+          782.5,
+          596
+        ],
+        [
+          1091.5,
+          597
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/rest-south.webp",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "assetSha256": "531063ca186eb06d70196d6ed07f90340890aa3c69f6fddbd7048fb8e775b722",
+      "frames": [
+        {
+          "sourceRegion": [
+            23,
+            354,
+            312,
+            599
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            289,
+            245
+          ],
+          "outputBounds": [
+            28,
+            51,
+            72,
+            61
+          ]
+        },
+        {
+          "sourceRegion": [
+            337,
+            352,
+            619,
+            599
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            282,
+            247
+          ],
+          "outputBounds": [
+            29,
+            51,
+            70,
+            61
+          ]
+        },
+        {
+          "sourceRegion": [
+            644,
+            354,
+            921,
+            598
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            277,
+            244
+          ],
+          "outputBounds": [
+            30,
+            51,
+            69,
+            61
+          ]
+        },
+        {
+          "sourceRegion": [
+            950,
+            352,
+            1233,
+            599
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            283,
+            247
+          ],
+          "outputBounds": [
+            29,
+            51,
+            70,
+            61
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "sleep",
+      "key": "franky",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "scale": 0.248503,
+      "scaleReason": "Entire loop uniformly multiplied by0.83 to match approved83px model under unchanged shared displayScale; no anatomy warp, no seated/lying enlargement.",
+      "regions": [
+        [
+          18,
+          661,
+          320,
+          816
+        ],
+        [
+          330,
+          661,
+          623,
+          818
+        ],
+        [
+          639,
+          663,
+          930,
+          818
+        ],
+        [
+          947,
+          665,
+          1239,
+          817
+        ]
+      ],
+      "roots": [
+        [
+          169.0,
+          814
+        ],
+        [
+          476.5,
+          816
+        ],
+        [
+          784.5,
+          816
+        ],
+        [
+          1093.0,
+          815
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/sleep-south.webp",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "assetSha256": "b3cc4bb9b9acb54417867c8fd7bce5226576a75b5ac5c54ff7dbe3b8254599a7",
+      "frames": [
+        {
+          "sourceRegion": [
+            18,
+            661,
+            320,
+            816
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            302,
+            155
+          ],
+          "outputBounds": [
+            26,
+            73,
+            75,
+            39
+          ]
+        },
+        {
+          "sourceRegion": [
+            330,
+            661,
+            623,
+            818
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            293,
+            157
+          ],
+          "outputBounds": [
+            28,
+            73,
+            73,
+            39
+          ]
+        },
+        {
+          "sourceRegion": [
+            639,
+            663,
+            930,
+            818
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            291,
+            155
+          ],
+          "outputBounds": [
+            28,
+            73,
+            72,
+            39
+          ]
+        },
+        {
+          "sourceRegion": [
+            947,
+            665,
+            1239,
+            817
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            292,
+            152
+          ],
+          "outputBounds": [
+            28,
+            74,
+            73,
+            38
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "train",
+      "key": "franky",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "scale": 0.248503,
+      "scaleReason": "Entire loop uniformly multiplied by0.83 to match approved83px model under unchanged shared displayScale; no anatomy warp, no seated/lying enlargement.",
+      "regions": [
+        [
+          23,
+          858,
+          313,
+          1194
+        ],
+        [
+          330,
+          857,
+          623,
+          1194
+        ],
+        [
+          647,
+          880,
+          923,
+          1194
+        ],
+        [
+          944,
+          856,
+          1232,
+          1194
+        ]
+      ],
+      "roots": [
+        [
+          166.0,
+          1192
+        ],
+        [
+          475.5,
+          1192
+        ],
+        [
+          783.0,
+          1192
+        ],
+        [
+          1088.0,
+          1192
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/train-south.webp",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "assetSha256": "4dd3a5f6053a40c2e7722a9b7fef7dd197d8688b33e4d096946a2f6beabad2e4",
+      "frames": [
+        {
+          "sourceRegion": [
+            23,
+            858,
+            313,
+            1194
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            290,
+            336
+          ],
+          "outputBounds": [
+            28,
+            29,
+            72,
+            83
+          ]
+        },
+        {
+          "sourceRegion": [
+            330,
+            857,
+            623,
+            1194
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            293,
+            337
+          ],
+          "outputBounds": [
+            28,
+            28,
+            73,
+            84
+          ]
+        },
+        {
+          "sourceRegion": [
+            647,
+            880,
+            923,
+            1194
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            276,
+            314
+          ],
+          "outputBounds": [
+            30,
+            34,
+            69,
+            78
+          ]
+        },
+        {
+          "sourceRegion": [
+            944,
+            856,
+            1232,
+            1194
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            288,
+            338
+          ],
+          "outputBounds": [
+            28,
+            28,
+            72,
+            84
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

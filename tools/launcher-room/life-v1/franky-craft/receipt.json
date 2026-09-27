@@ -1,0 +1,16 @@
+{
+  "generator": "image_gen.imagegen",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030\\exec-3e702625-17e2-490f-9cfb-17d1c4acf589.png",
+  "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/franky-actions-source-01/ancestry/00-turnaround-01.png",
+      "sha256": "7b5d5dbce22dbdd5d954fd729779de50b63bb06cbc6bcaa311a7468dd9470702"
+    }
+  ],
+  "sourceReview": "BF-37 cyborg intact, red briefs and mechanical knees retained. Right mechanical hand turns small screwdriver on panel supported in left; plausible arm connections and stable feet in4 directions; no head/limb assembly.",
+  "runtimeAccepted": false,
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "promptSha256": "c99ffc3672f0b51ae21ee337c0f2d4fe27d8fd41eab0670b9c3f53ff82cca224"
+}

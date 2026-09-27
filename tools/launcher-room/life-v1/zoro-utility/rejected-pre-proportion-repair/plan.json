@@ -1,0 +1,140 @@
+{
+  "clips": [
+    {
+      "id": "eat",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-utility/source.png",
+      "scale": 0.303,
+      "regions": [
+        [
+          82,
+          83,
+          284,
+          412
+        ],
+        [
+          380,
+          83,
+          584,
+          412
+        ],
+        [
+          678,
+          83,
+          882,
+          412
+        ],
+        [
+          978,
+          83,
+          1182,
+          412
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/eat-south.webp"
+    },
+    {
+      "id": "rest",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-utility/source.png",
+      "scale": 0.303,
+      "regions": [
+        [
+          87,
+          451,
+          317,
+          731
+        ],
+        [
+          387,
+          451,
+          613,
+          731
+        ],
+        [
+          686,
+          448,
+          912,
+          731
+        ],
+        [
+          984,
+          449,
+          1208,
+          731
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/rest-south.webp"
+    },
+    {
+      "id": "sleep",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-utility/source.png",
+      "scale": 0.303,
+      "regions": [
+        [
+          36,
+          769,
+          308,
+          911
+        ],
+        [
+          336,
+          769,
+          608,
+          930
+        ],
+        [
+          644,
+          770,
+          916,
+          911
+        ],
+        [
+          942,
+          770,
+          1212,
+          911
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/sleep-south.webp"
+    },
+    {
+      "id": "train",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-utility/source.png",
+      "scale": 0.303,
+      "regions": [
+        [
+          83,
+          926,
+          269,
+          1239
+        ],
+        [
+          384,
+          926,
+          568,
+          1239
+        ],
+        [
+          700,
+          951,
+          860,
+          1239
+        ],
+        [
+          988,
+          926,
+          1172,
+          1239
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/train-south.webp"
+    }
+  ]
+}

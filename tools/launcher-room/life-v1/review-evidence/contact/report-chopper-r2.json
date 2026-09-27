@@ -1,0 +1,149 @@
+{
+  "ok": true,
+  "scope": "Real renderer and art, isolated fixture server; numeric pass is not human visual approval.",
+  "results": [
+    {
+      "id": "chopper-medicine-cabinet-r2",
+      "key": "chopper",
+      "furniture": "medicine-cabinet",
+      "clip": "medicine",
+      "rotation": 2,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-chopper"
+          ],
+          "characters": {
+            "chopper": {
+              "key": "chopper",
+              "itemId": "room-character-chopper",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99783333333335,
+                "hunger": 25.003412500000003,
+                "mood": 75.00216666666665,
+                "social": 74.99869999999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790482258594,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790482230410,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-chopper",
+              "stationId": "room-furniture-medicine-cabinet",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:10:30.451Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:10:56.555Z",
+              "readyAt": "2026-09-27T04:11:56.555Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "chopper",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 2
+              },
+              "stationId": "room-furniture-medicine-cabinet",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "chopper",
+              "cell": {
+                "col": 7,
+                "row": 2
+              },
+              "stationId": "room-furniture-medicine-cabinet",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482590562,
+          "nextForegroundAt": 1790482241703,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "chopper",
+            "cell": {
+              "col": 7,
+              "row": 2
+            },
+            "x": 445.99,
+            "y": 384.5150581034552,
+            "mode": "life-act",
+            "phase": 0.8447059754996318,
+            "direction": "south",
+            "dock": {
+              "x": 445.99,
+              "y": 384.51640625,
+              "z": 400,
+              "side": "south"
+            },
+            "ready": [
+              "west",
+              "east",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-chopper",
+            "stationId": "room-furniture-medicine-cabinet",
+            "roomRevision": 1
+          },
+          "at": 1790482230451
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790482256555
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,593 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "work",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source-alpha.png",
+      "scale": 0.31683168316831684,
+      "regions": [
+        [
+          0,
+          0,
+          305,
+          320
+        ],
+        [
+          305,
+          0,
+          630,
+          320
+        ],
+        [
+          630,
+          0,
+          946,
+          320
+        ],
+        [
+          946,
+          0,
+          1254,
+          320
+        ]
+      ],
+      "roots": [
+        [
+          135.0,
+          312
+        ],
+        [
+          467.5,
+          312
+        ],
+        [
+          785.5,
+          312
+        ],
+        [
+          1106.5,
+          312
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/work-south.webp",
+      "sourceSha256": "77196af917e63f1b9a25f563b397bfa22718820757e8d66c185a16f0e19c110e",
+      "assetSha256": "a66610714ad02a9a9e06a2a340f2650b68efd9a4a70c873f327fa88ea479436f",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            0,
+            305,
+            320
+          ],
+          "alphaBounds": [
+            65,
+            10,
+            205,
+            312
+          ],
+          "outputBounds": [
+            42,
+            16,
+            44,
+            96
+          ]
+        },
+        {
+          "sourceRegion": [
+            305,
+            0,
+            630,
+            320
+          ],
+          "alphaBounds": [
+            91,
+            10,
+            234,
+            312
+          ],
+          "outputBounds": [
+            41,
+            16,
+            45,
+            96
+          ]
+        },
+        {
+          "sourceRegion": [
+            630,
+            0,
+            946,
+            320
+          ],
+          "alphaBounds": [
+            85,
+            10,
+            226,
+            312
+          ],
+          "outputBounds": [
+            42,
+            16,
+            45,
+            96
+          ]
+        },
+        {
+          "sourceRegion": [
+            946,
+            0,
+            1254,
+            320
+          ],
+          "alphaBounds": [
+            90,
+            9,
+            231,
+            312
+          ],
+          "outputBounds": [
+            42,
+            16,
+            45,
+            96
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "zoro",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source-alpha.png",
+      "scale": 0.3210702341137124,
+      "regions": [
+        [
+          0,
+          320,
+          305,
+          630
+        ],
+        [
+          305,
+          320,
+          630,
+          630
+        ],
+        [
+          630,
+          320,
+          946,
+          630
+        ],
+        [
+          946,
+          320,
+          1254,
+          630
+        ]
+      ],
+      "roots": [
+        [
+          139.0,
+          624
+        ],
+        [
+          465.5,
+          624
+        ],
+        [
+          790.5,
+          624
+        ],
+        [
+          1104.5,
+          623
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/work-east.webp",
+      "sourceSha256": "77196af917e63f1b9a25f563b397bfa22718820757e8d66c185a16f0e19c110e",
+      "assetSha256": "558e20dfaa7cfdf87301c92750fee4343137f91410adf6b08cc8b946ffc18dc4",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            320,
+            305,
+            630
+          ],
+          "alphaBounds": [
+            68,
+            5,
+            210,
+            304
+          ],
+          "outputBounds": [
+            41,
+            16,
+            46,
+            96
+          ]
+        },
+        {
+          "sourceRegion": [
+            305,
+            320,
+            630,
+            630
+          ],
+          "alphaBounds": [
+            90,
+            5,
+            231,
+            304
+          ],
+          "outputBounds": [
+            41,
+            16,
+            45,
+            96
+          ]
+        },
+        {
+          "sourceRegion": [
+            630,
+            320,
+            946,
+            630
+          ],
+          "alphaBounds": [
+            83,
+            5,
+            238,
+            304
+          ],
+          "outputBounds": [
+            39,
+            16,
+            50,
+            96
+          ]
+        },
+        {
+          "sourceRegion": [
+            946,
+            320,
+            1254,
+            630
+          ],
+          "alphaBounds": [
+            89,
+            5,
+            228,
+            303
+          ],
+          "outputBounds": [
+            42,
+            16,
+            45,
+            96
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "zoro",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source-alpha.png",
+      "scale": 0.31475409836065577,
+      "regions": [
+        [
+          0,
+          630,
+          305,
+          941
+        ],
+        [
+          305,
+          630,
+          630,
+          941
+        ],
+        [
+          630,
+          630,
+          946,
+          941
+        ],
+        [
+          946,
+          630,
+          1254,
+          941
+        ]
+      ],
+      "roots": [
+        [
+          141.0,
+          938
+        ],
+        [
+          465.5,
+          938
+        ],
+        [
+          783.0,
+          937
+        ],
+        [
+          1107.0,
+          938
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/work-west.webp",
+      "sourceSha256": "77196af917e63f1b9a25f563b397bfa22718820757e8d66c185a16f0e19c110e",
+      "assetSha256": "0ce806926c2abbad176fc551dba61bdb76ac23bf25897f2c65ecf1b53bd2f214",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            630,
+            305,
+            941
+          ],
+          "alphaBounds": [
+            70,
+            4,
+            212,
+            308
+          ],
+          "outputBounds": [
+            42,
+            16,
+            45,
+            96
+          ]
+        },
+        {
+          "sourceRegion": [
+            305,
+            630,
+            630,
+            941
+          ],
+          "alphaBounds": [
+            87,
+            3,
+            234,
+            308
+          ],
+          "outputBounds": [
+            41,
+            16,
+            46,
+            96
+          ]
+        },
+        {
+          "sourceRegion": [
+            630,
+            630,
+            946,
+            941
+          ],
+          "alphaBounds": [
+            76,
+            4,
+            230,
+            307
+          ],
+          "outputBounds": [
+            40,
+            17,
+            48,
+            95
+          ]
+        },
+        {
+          "sourceRegion": [
+            946,
+            630,
+            1254,
+            941
+          ],
+          "alphaBounds": [
+            89,
+            4,
+            233,
+            308
+          ],
+          "outputBounds": [
+            41,
+            16,
+            45,
+            96
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "zoro",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source-alpha.png",
+      "scale": 0.3287671232876712,
+      "regions": [
+        [
+          0,
+          941,
+          305,
+          1254
+        ],
+        [
+          305,
+          941,
+          630,
+          1254
+        ],
+        [
+          630,
+          941,
+          946,
+          1254
+        ],
+        [
+          946,
+          941,
+          1254,
+          1254
+        ]
+      ],
+      "roots": [
+        [
+          142.5,
+          1235
+        ],
+        [
+          471.0,
+          1235
+        ],
+        [
+          793.0,
+          1235
+        ],
+        [
+          1114.5,
+          1236
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/zoro/work-north.webp",
+      "sourceSha256": "77196af917e63f1b9a25f563b397bfa22718820757e8d66c185a16f0e19c110e",
+      "assetSha256": "165055dbe83de465523365d2a0034b86dea6c973c0e0c11497c9b0b1d28c600b",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            941,
+            305,
+            1254
+          ],
+          "alphaBounds": [
+            72,
+            3,
+            213,
+            294
+          ],
+          "outputBounds": [
+            41,
+            16,
+            46,
+            96
+          ]
+        },
+        {
+          "sourceRegion": [
+            305,
+            941,
+            630,
+            1254
+          ],
+          "alphaBounds": [
+            97,
+            3,
+            235,
+            294
+          ],
+          "outputBounds": [
+            41,
+            16,
+            45,
+            96
+          ]
+        },
+        {
+          "sourceRegion": [
+            630,
+            941,
+            946,
+            1254
+          ],
+          "alphaBounds": [
+            94,
+            3,
+            232,
+            294
+          ],
+          "outputBounds": [
+            41,
+            16,
+            45,
+            96
+          ]
+        },
+        {
+          "sourceRegion": [
+            946,
+            941,
+            1254,
+            1254
+          ],
+          "alphaBounds": [
+            101,
+            3,
+            236,
+            295
+          ],
+          "outputBounds": [
+            42,
+            16,
+            44,
+            96
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

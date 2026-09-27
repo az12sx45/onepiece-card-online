@@ -1,0 +1,544 @@
+{
+  "schema": "launcher-life-art-review/1",
+  "reviewType": "Codex actual source +128px approved-versus-new atlas visual inspection and deterministic alpha/shape checks; no in-room runtime acceptance claimed",
+  "generator": "image_gen.imagegen",
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "runtimeAccepted": false,
+  "review": "Existing connected full-body source retained. Entire four-frame loops uniformly reduced by0.83 to match unchanged approved83px display model. Compared128px head/shoulder and feet with approved idle/walk. Feet grounded; lower sitting/sleeping height is preserved. Read clip belongs to another task and was not changed.",
+  "noMirroring": true,
+  "noBodyPartAssembly": true,
+  "originalRetained": true,
+  "priorReviewSuperseded": "rejected-display-scale-v1/review.json",
+  "comparisonEvidence": "C:\\Codex_Candidates\\launcher-life-audit\\proportion-repair\\franky-approved-comparison.png",
+  "clips": [
+    {
+      "id": "eat",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/franky/eat-south.webp",
+      "sha256": "ccbb9931092174c2e6133c8a467a519259a8f71f721fd8252ec247b5e322d9c9",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          30,
+          36,
+          100,
+          112
+        ],
+        [
+          28,
+          36,
+          98,
+          112
+        ],
+        [
+          27,
+          36,
+          97,
+          112
+        ],
+        [
+          29,
+          36,
+          98,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3598,
+        3583,
+        3561,
+        3599
+      ],
+      "singleIsotropicScale": 0.248503,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/franky/eat-south.webp",
+        "sha256": "ccbb9931092174c2e6133c8a467a519259a8f71f721fd8252ec247b5e322d9c9",
+        "scale": 0.248503,
+        "approved": {
+          "alphaBounds": [
+            27,
+            29,
+            99,
+            112
+          ],
+          "height": 83,
+          "width": 72,
+          "topThirdSilhouetteWidth": 70
+        },
+        "read": {
+          "alphaBounds": [
+            17,
+            13,
+            110,
+            111
+          ],
+          "height": 98,
+          "width": 93,
+          "topThirdSilhouetteWidth": 93
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              30,
+              36,
+              100,
+              112
+            ],
+            "height": 76,
+            "width": 70,
+            "topThirdSilhouetteWidth": 70
+          },
+          {
+            "alphaBounds": [
+              28,
+              36,
+              98,
+              112
+            ],
+            "height": 76,
+            "width": 70,
+            "topThirdSilhouetteWidth": 68
+          },
+          {
+            "alphaBounds": [
+              27,
+              36,
+              97,
+              112
+            ],
+            "height": 76,
+            "width": 70,
+            "topThirdSilhouetteWidth": 70
+          },
+          {
+            "alphaBounds": [
+              29,
+              36,
+              98,
+              112
+            ],
+            "height": 76,
+            "width": 69,
+            "topThirdSilhouetteWidth": 69
+          }
+        ],
+        "distinctNeighborPixels": [
+          3598,
+          3583,
+          3561,
+          3599
+        ]
+      }
+    },
+    {
+      "id": "rest",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/franky/rest-south.webp",
+      "sha256": "531063ca186eb06d70196d6ed07f90340890aa3c69f6fddbd7048fb8e775b722",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          29,
+          51,
+          100,
+          111
+        ],
+        [
+          29,
+          52,
+          98,
+          111
+        ],
+        [
+          31,
+          52,
+          99,
+          112
+        ],
+        [
+          29,
+          51,
+          99,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3526,
+        3461,
+        3482,
+        3564
+      ],
+      "singleIsotropicScale": 0.248503,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/franky/rest-south.webp",
+        "sha256": "531063ca186eb06d70196d6ed07f90340890aa3c69f6fddbd7048fb8e775b722",
+        "scale": 0.248503,
+        "approved": {
+          "alphaBounds": [
+            27,
+            29,
+            99,
+            112
+          ],
+          "height": 83,
+          "width": 72,
+          "topThirdSilhouetteWidth": 70
+        },
+        "read": {
+          "alphaBounds": [
+            17,
+            13,
+            110,
+            111
+          ],
+          "height": 98,
+          "width": 93,
+          "topThirdSilhouetteWidth": 93
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              29,
+              51,
+              100,
+              111
+            ],
+            "height": 60,
+            "width": 71,
+            "topThirdSilhouetteWidth": 70
+          },
+          {
+            "alphaBounds": [
+              29,
+              52,
+              98,
+              111
+            ],
+            "height": 59,
+            "width": 69,
+            "topThirdSilhouetteWidth": 68
+          },
+          {
+            "alphaBounds": [
+              31,
+              52,
+              99,
+              112
+            ],
+            "height": 60,
+            "width": 68,
+            "topThirdSilhouetteWidth": 68
+          },
+          {
+            "alphaBounds": [
+              29,
+              51,
+              99,
+              112
+            ],
+            "height": 61,
+            "width": 70,
+            "topThirdSilhouetteWidth": 69
+          }
+        ],
+        "distinctNeighborPixels": [
+          3526,
+          3461,
+          3482,
+          3564
+        ]
+      }
+    },
+    {
+      "id": "sleep",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/franky/sleep-south.webp",
+      "sha256": "b3cc4bb9b9acb54417867c8fd7bce5226576a75b5ac5c54ff7dbe3b8254599a7",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          26,
+          74,
+          100,
+          111
+        ],
+        [
+          28,
+          74,
+          101,
+          112
+        ],
+        [
+          28,
+          74,
+          99,
+          111
+        ],
+        [
+          28,
+          74,
+          101,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2096,
+        2002,
+        2018,
+        2097
+      ],
+      "singleIsotropicScale": 0.248503,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/franky/sleep-south.webp",
+        "sha256": "b3cc4bb9b9acb54417867c8fd7bce5226576a75b5ac5c54ff7dbe3b8254599a7",
+        "scale": 0.248503,
+        "approved": {
+          "alphaBounds": [
+            27,
+            29,
+            99,
+            112
+          ],
+          "height": 83,
+          "width": 72,
+          "topThirdSilhouetteWidth": 70
+        },
+        "read": {
+          "alphaBounds": [
+            17,
+            13,
+            110,
+            111
+          ],
+          "height": 98,
+          "width": 93,
+          "topThirdSilhouetteWidth": 93
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              26,
+              74,
+              100,
+              111
+            ],
+            "height": 37,
+            "width": 74,
+            "topThirdSilhouetteWidth": 39
+          },
+          {
+            "alphaBounds": [
+              28,
+              74,
+              101,
+              112
+            ],
+            "height": 38,
+            "width": 73,
+            "topThirdSilhouetteWidth": 38
+          },
+          {
+            "alphaBounds": [
+              28,
+              74,
+              99,
+              111
+            ],
+            "height": 37,
+            "width": 71,
+            "topThirdSilhouetteWidth": 36
+          },
+          {
+            "alphaBounds": [
+              28,
+              74,
+              101,
+              112
+            ],
+            "height": 38,
+            "width": 73,
+            "topThirdSilhouetteWidth": 42
+          }
+        ],
+        "distinctNeighborPixels": [
+          2096,
+          2002,
+          2018,
+          2097
+        ]
+      }
+    },
+    {
+      "id": "train",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/franky/train-south.webp",
+      "sha256": "4dd3a5f6053a40c2e7722a9b7fef7dd197d8688b33e4d096946a2f6beabad2e4",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          29,
+          29,
+          100,
+          112
+        ],
+        [
+          29,
+          29,
+          101,
+          111
+        ],
+        [
+          31,
+          34,
+          98,
+          111
+        ],
+        [
+          29,
+          29,
+          100,
+          111
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        4348,
+        4533,
+        4501,
+        4269
+      ],
+      "singleIsotropicScale": 0.248503,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false,
+      "approvedComparison": {
+        "asset": "public/images/launcher_room/life_v1/franky/train-south.webp",
+        "sha256": "4dd3a5f6053a40c2e7722a9b7fef7dd197d8688b33e4d096946a2f6beabad2e4",
+        "scale": 0.248503,
+        "approved": {
+          "alphaBounds": [
+            27,
+            29,
+            99,
+            112
+          ],
+          "height": 83,
+          "width": 72,
+          "topThirdSilhouetteWidth": 70
+        },
+        "read": {
+          "alphaBounds": [
+            17,
+            13,
+            110,
+            111
+          ],
+          "height": 98,
+          "width": 93,
+          "topThirdSilhouetteWidth": 93
+        },
+        "frames": [
+          {
+            "alphaBounds": [
+              29,
+              29,
+              100,
+              112
+            ],
+            "height": 83,
+            "width": 71,
+            "topThirdSilhouetteWidth": 68
+          },
+          {
+            "alphaBounds": [
+              29,
+              29,
+              101,
+              111
+            ],
+            "height": 82,
+            "width": 72,
+            "topThirdSilhouetteWidth": 67
+          },
+          {
+            "alphaBounds": [
+              31,
+              34,
+              98,
+              111
+            ],
+            "height": 77,
+            "width": 67,
+            "topThirdSilhouetteWidth": 67
+          },
+          {
+            "alphaBounds": [
+              29,
+              29,
+              100,
+              111
+            ],
+            "height": 82,
+            "width": 71,
+            "topThirdSilhouetteWidth": 68
+          }
+        ],
+        "distinctNeighborPixels": [
+          4348,
+          4533,
+          4501,
+          4269
+        ]
+      }
+    }
+  ]
+}

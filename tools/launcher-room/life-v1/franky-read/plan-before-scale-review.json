@@ -1,0 +1,212 @@
+{
+  "clips": [
+    {
+      "id": "read",
+      "key": "franky",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/franky-read/source.png",
+      "scale": 0.330033,
+      "regions": [
+        [
+          58,
+          8,
+          314,
+          310
+        ],
+        [
+          314,
+          7,
+          627,
+          310
+        ],
+        [
+          667,
+          8,
+          938,
+          310
+        ],
+        [
+          978,
+          7,
+          1233,
+          310
+        ]
+      ],
+      "roots": [
+        [
+          170,
+          310
+        ],
+        [
+          464,
+          310
+        ],
+        [
+          776,
+          310
+        ],
+        [
+          1088,
+          310
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/read-east.webp"
+    },
+    {
+      "id": "read",
+      "key": "franky",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/franky-read/source.png",
+      "scale": 0.324675,
+      "regions": [
+        [
+          37,
+          319,
+          279,
+          627
+        ],
+        [
+          333,
+          319,
+          591,
+          626
+        ],
+        [
+          642,
+          319,
+          903,
+          627
+        ],
+        [
+          969,
+          319,
+          1219,
+          626
+        ]
+      ],
+      "roots": [
+        [
+          170,
+          627
+        ],
+        [
+          478,
+          626
+        ],
+        [
+          791,
+          627
+        ],
+        [
+          1104,
+          626
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/read-west.webp"
+    },
+    {
+      "id": "read",
+      "key": "franky",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/franky-read/source.png",
+      "scale": 0.333333,
+      "regions": [
+        [
+          25,
+          635,
+          299,
+          934
+        ],
+        [
+          334,
+          634,
+          607,
+          934
+        ],
+        [
+          649,
+          634,
+          920,
+          934
+        ],
+        [
+          958,
+          635,
+          1231,
+          934
+        ]
+      ],
+      "roots": [
+        [
+          160,
+          934
+        ],
+        [
+          470,
+          934
+        ],
+        [
+          784,
+          934
+        ],
+        [
+          1094,
+          934
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/read-north.webp"
+    },
+    {
+      "id": "read",
+      "key": "franky",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/franky-read/source.png",
+      "scale": 0.33557,
+      "regions": [
+        [
+          19,
+          942,
+          303,
+          1239
+        ],
+        [
+          329,
+          942,
+          610,
+          1239
+        ],
+        [
+          641,
+          942,
+          922,
+          1240
+        ],
+        [
+          954,
+          943,
+          1234,
+          1240
+        ]
+      ],
+      "roots": [
+        [
+          162,
+          1239
+        ],
+        [
+          472,
+          1239
+        ],
+        [
+          785,
+          1240
+        ],
+        [
+          1096,
+          1240
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/read-south.webp"
+    }
+  ]
+}

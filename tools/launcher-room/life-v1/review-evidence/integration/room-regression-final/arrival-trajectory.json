@@ -1,0 +1,1555 @@
+[
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "Idle",
+          "needs": {
+            "energy": 85,
+            "hunger": 20,
+            "mood": 70,
+            "social": 70,
+            "workMotivation": 70
+          },
+          "memories": [],
+          "nextAt": 1790481604000,
+          "taps": [],
+          "taskToken": null,
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [
+        {
+          "arrivalId": "arrival-luffy",
+          "itemId": "room-character-luffy",
+          "createdAt": "2026-09-27T04:00:04.000Z"
+        }
+      ],
+      "tasks": [],
+      "foreground": null,
+      "reservations": [],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 254.4375,
+        "y": 422,
+        "mode": "wander",
+        "phase": 0,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481604000,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": true,
+        "pose": "idle",
+        "source": "acting_v3",
+        "frame": "0",
+        "speech": ""
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "SpecialAction",
+          "needs": {
+            "energy": 84.999208,
+            "hunger": 20.001727999999996,
+            "mood": 70.00072000000002,
+            "social": 69.99955000000001,
+            "workMotivation": 70.0007344
+          },
+          "memories": [],
+          "nextAt": 1790481604000,
+          "taps": [],
+          "taskToken": "arrival-1",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [
+        {
+          "arrivalId": "arrival-luffy",
+          "itemId": "room-character-luffy",
+          "createdAt": "2026-09-27T04:00:04.000Z"
+        }
+      ],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "arrival-1",
+          "state": "SpecialAction",
+          "phase": "approach",
+          "goal": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "wave",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "slotId": "arrival",
+          "token": "arrival-1"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 0,
+          "row": 6
+        },
+        "x": 89.6499428822431,
+        "y": 484,
+        "mode": "life-approach",
+        "phase": 0.3034480533333334,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 1,
+            "row": 6
+          },
+          {
+            "col": 2,
+            "row": 6
+          },
+          {
+            "col": 3,
+            "row": 6
+          }
+        ]
+      }
+    ],
+    "now": 1790481604500,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "walk",
+        "source": "motion_v3",
+        "frame": "0",
+        "speech": ""
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "SpecialAction",
+          "needs": {
+            "energy": 84.99844533333332,
+            "hunger": 20.003391999999995,
+            "mood": 70.00141333333336,
+            "social": 69.9991166666667,
+            "workMotivation": 70.00144159999999
+          },
+          "memories": [],
+          "nextAt": 1790481604000,
+          "taps": [],
+          "taskToken": "arrival-1",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [
+        {
+          "arrivalId": "arrival-luffy",
+          "itemId": "room-character-luffy",
+          "createdAt": "2026-09-27T04:00:04.000Z"
+        }
+      ],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "arrival-1",
+          "state": "SpecialAction",
+          "phase": "approach",
+          "goal": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "wave",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "slotId": "arrival",
+          "token": "arrival-1"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 0,
+          "row": 6
+        },
+        "x": 114.2561123981311,
+        "y": 484,
+        "mode": "life-approach",
+        "phase": 0.7310339466666669,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 1,
+            "row": 6
+          },
+          {
+            "col": 2,
+            "row": 6
+          },
+          {
+            "col": 3,
+            "row": 6
+          }
+        ]
+      }
+    ],
+    "now": 1790481605000,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "walk",
+        "source": "motion_v3",
+        "frame": "0",
+        "speech": ""
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "SpecialAction",
+          "needs": {
+            "energy": 84.99730133333331,
+            "hunger": 20.00588799999999,
+            "mood": 70.00245333333338,
+            "social": 69.99846666666672,
+            "workMotivation": 70.00250239999998
+          },
+          "memories": [],
+          "nextAt": 1790481604000,
+          "taps": [],
+          "taskToken": "arrival-1",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [
+        {
+          "arrivalId": "arrival-luffy",
+          "itemId": "room-character-luffy",
+          "createdAt": "2026-09-27T04:00:04.000Z"
+        }
+      ],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "arrival-1",
+          "state": "SpecialAction",
+          "phase": "approach",
+          "goal": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "wave",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "slotId": "arrival",
+          "token": "arrival-1"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 6
+        },
+        "x": 138.46871105607465,
+        "y": 484,
+        "mode": "life-approach",
+        "phase": 0.1517806874543187,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 6
+          },
+          {
+            "col": 3,
+            "row": 6
+          }
+        ]
+      }
+    ],
+    "now": 1790481605500,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "walk",
+        "source": "motion_v3",
+        "frame": "0",
+        "speech": ""
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "SpecialAction",
+          "needs": {
+            "energy": 84.99653866666664,
+            "hunger": 20.00755199999999,
+            "mood": 70.00314666666672,
+            "social": 69.9980333333334,
+            "workMotivation": 70.00320959999998
+          },
+          "memories": [],
+          "nextAt": 1790481604000,
+          "taps": [],
+          "taskToken": "arrival-1",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [
+        {
+          "arrivalId": "arrival-luffy",
+          "itemId": "room-character-luffy",
+          "createdAt": "2026-09-27T04:00:04.000Z"
+        }
+      ],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "arrival-1",
+          "state": "SpecialAction",
+          "phase": "approach",
+          "goal": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "wave",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "slotId": "arrival",
+          "token": "arrival-1"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 1,
+          "row": 6
+        },
+        "x": 163.86862797570052,
+        "y": 484,
+        "mode": "life-approach",
+        "phase": 0.5931596741209855,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 6
+          },
+          {
+            "col": 3,
+            "row": 6
+          }
+        ]
+      }
+    ],
+    "now": 1790481606000,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "walk",
+        "source": "motion_v3",
+        "frame": "0",
+        "speech": ""
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "SpecialAction",
+          "needs": {
+            "energy": 84.99577599999996,
+            "hunger": 20.009215999999988,
+            "mood": 70.00384000000007,
+            "social": 69.99760000000008,
+            "workMotivation": 70.00391679999997
+          },
+          "memories": [],
+          "nextAt": 1790481604000,
+          "taps": [],
+          "taskToken": "arrival-1",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [
+        {
+          "arrivalId": "arrival-luffy",
+          "itemId": "room-character-luffy",
+          "createdAt": "2026-09-27T04:00:04.000Z"
+        }
+      ],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "arrival-1",
+          "state": "SpecialAction",
+          "phase": "approach",
+          "goal": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "wave",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "slotId": "arrival",
+          "token": "arrival-1"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 2,
+          "row": 6
+        },
+        "x": 188.08122663364477,
+        "y": 484,
+        "mode": "life-approach",
+        "phase": 0.013906414908653512,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 3,
+            "row": 6
+          }
+        ]
+      }
+    ],
+    "now": 1790481606500,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "walk",
+        "source": "motion_v3",
+        "frame": "0",
+        "speech": ""
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "SpecialAction",
+          "needs": {
+            "energy": 84.99463199999995,
+            "hunger": 20.011711999999985,
+            "mood": 70.00488000000009,
+            "social": 69.9969500000001,
+            "workMotivation": 70.00497759999996
+          },
+          "memories": [],
+          "nextAt": 1790481604000,
+          "taps": [],
+          "taskToken": "arrival-1",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [
+        {
+          "arrivalId": "arrival-luffy",
+          "itemId": "room-character-luffy",
+          "createdAt": "2026-09-27T04:00:04.000Z"
+        }
+      ],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "arrival-1",
+          "state": "SpecialAction",
+          "phase": "approach",
+          "goal": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "wave",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "slotId": "arrival",
+          "token": "arrival-1"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 2,
+          "row": 6
+        },
+        "x": 212.68739614953233,
+        "y": 484,
+        "mode": "life-approach",
+        "phase": 0.441492308241987,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 3,
+            "row": 6
+          }
+        ]
+      }
+    ],
+    "now": 1790481607000,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "walk",
+        "source": "motion_v3",
+        "frame": "0",
+        "speech": ""
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "SpecialAction",
+          "needs": {
+            "energy": 84.99386933333328,
+            "hunger": 20.013375999999983,
+            "mood": 70.00557333333343,
+            "social": 69.99651666666678,
+            "workMotivation": 70.00568479999995
+          },
+          "memories": [],
+          "nextAt": 1790481604000,
+          "taps": [],
+          "taskToken": "arrival-1",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [
+        {
+          "arrivalId": "arrival-luffy",
+          "itemId": "room-character-luffy",
+          "createdAt": "2026-09-27T04:00:04.000Z"
+        }
+      ],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "arrival-1",
+          "state": "SpecialAction",
+          "phase": "approach",
+          "goal": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "wave",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "slotId": "arrival",
+          "token": "arrival-1"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 3,
+          "row": 6
+        },
+        "x": 235.3125,
+        "y": 484,
+        "mode": "life-approach",
+        "phase": 0.834652862362989,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481607500,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "idle",
+        "source": "acting_v3",
+        "frame": "0",
+        "speech": ""
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "SpecialAction",
+          "needs": {
+            "energy": 84.99272533333327,
+            "hunger": 20.01587199999998,
+            "mood": 70.00661333333345,
+            "social": 69.9958666666668,
+            "workMotivation": 70.00674559999995
+          },
+          "memories": [],
+          "nextAt": 1790481604000,
+          "taps": [],
+          "taskToken": "arrival-1",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [
+        {
+          "arrivalId": "arrival-luffy",
+          "itemId": "room-character-luffy",
+          "createdAt": "2026-09-27T04:00:04.000Z"
+        }
+      ],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "arrival-1",
+          "state": "SpecialAction",
+          "phase": "performing",
+          "goal": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "wave",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "slotId": "arrival",
+          "token": "arrival-1"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 3,
+          "row": 6
+        },
+        "x": 235.3125,
+        "y": 484,
+        "mode": "life-act",
+        "phase": 0.834652862362989,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481608000,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "wave",
+        "source": "acting_v3",
+        "frame": "6",
+        "speech": ""
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "SpecialAction",
+          "needs": {
+            "energy": 84.9919626666666,
+            "hunger": 20.01753599999998,
+            "mood": 70.00730666666679,
+            "social": 69.99543333333348,
+            "workMotivation": 70.00745279999994
+          },
+          "memories": [],
+          "nextAt": 1790481604000,
+          "taps": [],
+          "taskToken": "arrival-1",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [
+        {
+          "arrivalId": "arrival-luffy",
+          "itemId": "room-character-luffy",
+          "createdAt": "2026-09-27T04:00:04.000Z"
+        }
+      ],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "arrival-1",
+          "state": "SpecialAction",
+          "phase": "performing",
+          "goal": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "wave",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "slotId": "arrival",
+          "token": "arrival-1"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 3,
+          "row": 6
+        },
+        "x": 235.3125,
+        "y": 484,
+        "mode": "life-act",
+        "phase": 0.834652862362989,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481608500,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "wave",
+        "source": "acting_v3",
+        "frame": "6",
+        "speech": ""
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "SpecialAction",
+          "needs": {
+            "energy": 84.99119999999992,
+            "hunger": 20.019199999999977,
+            "mood": 70.00800000000014,
+            "social": 69.99500000000016,
+            "workMotivation": 70.00815999999993
+          },
+          "memories": [],
+          "nextAt": 1790481604000,
+          "taps": [],
+          "taskToken": "arrival-1",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [
+        {
+          "arrivalId": "arrival-luffy",
+          "itemId": "room-character-luffy",
+          "createdAt": "2026-09-27T04:00:04.000Z"
+        }
+      ],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "arrival-1",
+          "state": "SpecialAction",
+          "phase": "performing",
+          "goal": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "wave",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "slotId": "arrival",
+          "token": "arrival-1"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 3,
+          "row": 6
+        },
+        "x": 235.3125,
+        "y": 484,
+        "mode": "life-act",
+        "phase": 0.834652862362989,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481609000,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "wave",
+        "source": "acting_v3",
+        "frame": "6",
+        "speech": ""
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "SpecialAction",
+          "needs": {
+            "energy": 84.99005599999991,
+            "hunger": 20.021695999999974,
+            "mood": 70.00904000000016,
+            "social": 69.99435000000018,
+            "workMotivation": 70.00922079999992
+          },
+          "memories": [],
+          "nextAt": 1790481604000,
+          "taps": [],
+          "taskToken": "arrival-1",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [
+        {
+          "arrivalId": "arrival-luffy",
+          "itemId": "room-character-luffy",
+          "createdAt": "2026-09-27T04:00:04.000Z"
+        }
+      ],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "arrival-1",
+          "state": "SpecialAction",
+          "phase": "performing",
+          "goal": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "wave",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "slotId": "arrival",
+          "token": "arrival-1"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 3,
+          "row": 6
+        },
+        "x": 235.3125,
+        "y": 484,
+        "mode": "life-act",
+        "phase": 0.834652862362989,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481609500,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "wave",
+        "source": "acting_v3",
+        "frame": "6",
+        "speech": ""
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 2,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "SpecialAction",
+          "needs": {
+            "energy": 84.98929333333324,
+            "hunger": 20.023359999999972,
+            "mood": 70.0097333333335,
+            "social": 69.99391666666686,
+            "workMotivation": 70.00992799999992
+          },
+          "memories": [],
+          "nextAt": 1790481604000,
+          "taps": [],
+          "taskToken": "arrival-1",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [
+        {
+          "arrivalId": "arrival-luffy",
+          "itemId": "room-character-luffy",
+          "createdAt": "2026-09-27T04:00:04.000Z"
+        }
+      ],
+      "tasks": [
+        {
+          "key": "luffy",
+          "token": "arrival-1",
+          "state": "SpecialAction",
+          "phase": "performing",
+          "goal": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "wave",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 3,
+            "row": 6
+          },
+          "stationId": "",
+          "slotId": "arrival",
+          "token": "arrival-1"
+        }
+      ],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 3,
+          "row": 6
+        },
+        "x": 235.3125,
+        "y": 484,
+        "mode": "life-act",
+        "phase": 0.834652862362989,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    ],
+    "now": 1790481610000,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "wave",
+        "source": "acting_v3",
+        "frame": "6",
+        "speech": ""
+      }
+    ]
+  },
+  {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 3,
+      "disposed": false,
+      "paused": false,
+      "directive": "free_day",
+      "writable": true,
+      "ownedCharacterIds": [
+        "room-character-luffy"
+      ],
+      "characters": {
+        "luffy": {
+          "key": "luffy",
+          "itemId": "room-character-luffy",
+          "state": "Idle",
+          "needs": {
+            "energy": 84.99961866666666,
+            "hunger": 20.000832,
+            "mood": 70.00034666666667,
+            "social": 69.99978333333334,
+            "workMotivation": 70.0003536
+          },
+          "memories": [],
+          "nextAt": 1790481613256,
+          "taps": [],
+          "taskToken": null,
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [],
+      "foreground": null,
+      "reservations": [],
+      "recentEvents": [],
+      "nextRareAt": 1790481960349,
+      "nextForegroundAt": 1790481612349,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "luffy",
+        "cell": {
+          "col": 3,
+          "row": 6
+        },
+        "x": 235.3125,
+        "y": 484,
+        "mode": "wander",
+        "phase": 0.834652862362989,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 4,
+            "row": 6
+          },
+          {
+            "col": 5,
+            "row": 6
+          },
+          {
+            "col": 6,
+            "row": 6
+          },
+          {
+            "col": 6,
+            "row": 7
+          }
+        ]
+      }
+    ],
+    "now": 1790481610500,
+    "editing": false,
+    "nodes": [
+      {
+        "key": "luffy",
+        "hidden": false,
+        "pose": "idle",
+        "source": "acting_v3",
+        "frame": "0",
+        "speech": ""
+      }
+    ]
+  }
+]

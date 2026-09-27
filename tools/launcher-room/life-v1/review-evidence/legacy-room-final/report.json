@@ -1,0 +1,448 @@
+{
+  "ok": true,
+  "scope": "Actual Chromium, real room/editor/profile assets and deterministic mocked Electron bridge. Legacy fallback fixture intentionally excludes CharacterLifeController and its adapter; life-enabled jobs are covered separately. No real purchase, DB, device or deployment acceptance.",
+  "syntheticMotion": false,
+  "syntheticScenes": false,
+  "directionalConversation": true,
+  "visualAcceptance": false,
+  "results": [
+    {
+      "name": "browser receives v3 metadata and distinct four-beat and eight-pose atlas contracts",
+      "pass": true
+    },
+    {
+      "name": "canonical relationship dialogue loads before room renderer",
+      "pass": true
+    },
+    {
+      "name": "legacy fallback fixture explicitly excludes the life adapter and controller",
+      "pass": true
+    },
+    {
+      "name": "owner edit button visible",
+      "pass": true
+    },
+    {
+      "name": "room editor has no shop jump button",
+      "pass": true
+    },
+    {
+      "name": "floor grid only appears while editing",
+      "pass": true
+    },
+    {
+      "name": "free room scene shown",
+      "pass": true
+    },
+    {
+      "name": "selected furniture exposes on-canvas turn controls without a size slider",
+      "pass": true
+    },
+    {
+      "name": "furniture cycles four cardinal directions",
+      "pass": true
+    },
+    {
+      "name": "four furniture views use four distinct art files",
+      "pass": true
+    },
+    {
+      "name": "four furniture views decode into visible pixels",
+      "pass": true
+    },
+    {
+      "name": "on-canvas left turn reverses one bearing",
+      "pass": true
+    },
+    {
+      "name": "R shortcut rotates selected furniture",
+      "pass": true
+    },
+    {
+      "name": "on-canvas right turn restores selected bearing",
+      "pass": true
+    },
+    {
+      "name": "furniture uses a fixed character-calibrated base size",
+      "pass": true
+    },
+    {
+      "name": "furniture has projected grid footprint",
+      "pass": true
+    },
+    {
+      "name": "pointer drag moved furniture",
+      "pass": true
+    },
+    {
+      "name": "dragged furniture snaps to its projected floor cell",
+      "pass": true
+    },
+    {
+      "name": "arrow key moves one projected floor tile",
+      "pass": true
+    },
+    {
+      "name": "two furniture items have separate projected floor footprints",
+      "pass": true
+    },
+    {
+      "name": "projected depth order follows ground contact point",
+      "pass": true
+    },
+    {
+      "name": "dragging second furniture onto occupied tiles is rejected",
+      "pass": true
+    },
+    {
+      "name": "all ten canonical chibis can share room",
+      "pass": true
+    },
+    {
+      "name": "edit grid marks eleven non-overlapping placed footprints",
+      "pass": true
+    },
+    {
+      "name": "character and furniture really occlude by shared depth instead of layer order",
+      "pass": true
+    },
+    {
+      "name": "selecting an already placed canonical character never duplicates it at ten-character capacity",
+      "pass": true
+    },
+    {
+      "name": "server payload contains editable room",
+      "pass": true
+    },
+    {
+      "name": "oversized saved room hydrates at most ten character entries",
+      "pass": true
+    },
+    {
+      "name": "floor grid hidden outside editing",
+      "pass": true
+    },
+    {
+      "name": "dialogue bubble does not contain emotion portrait",
+      "pass": true
+    },
+    {
+      "name": "decoded directional canvas displays all four whole-body walk beats",
+      "pass": true
+    },
+    {
+      "name": "whole body uses independent directional art without mirror transforms",
+      "pass": true
+    },
+    {
+      "name": "character pixel size and gait use the same depth factor",
+      "pass": true
+    },
+    {
+      "name": "canonical chibi walks when room is visible",
+      "pass": true
+    },
+    {
+      "name": "spoken emotion changes the full-body character pose",
+      "pass": true
+    },
+    {
+      "name": "speaker keeps its complete directional body during authored expression",
+      "pass": true
+    },
+    {
+      "name": "authored whole-body pose retains its assigned expression without swapping body parts",
+      "pass": true
+    },
+    {
+      "name": "one active speech bubble stays inside stage",
+      "pass": true
+    },
+    {
+      "name": "partner replies sequentially",
+      "pass": true
+    },
+    {
+      "name": "listener performs its authored body reaction during the reply",
+      "pass": true
+    },
+    {
+      "name": "a full conversation plays at least four turns without truncating replies",
+      "pass": true
+    },
+    {
+      "name": "each displayed turn retains its authored speaker and line",
+      "pass": true
+    },
+    {
+      "name": "manual character selection interrupts scene and clears listener reactions",
+      "pass": true
+    },
+    {
+      "name": "an interrupted pair remains on cooldown instead of repeating immediately",
+      "pass": true
+    },
+    {
+      "name": "chibi pauses and bubble clears when document is hidden",
+      "pass": true
+    },
+    {
+      "name": "clicking a placed character opens details and affection",
+      "pass": true
+    },
+    {
+      "name": "legacy fallback owner can chat without retired work controls",
+      "pass": true
+    },
+    {
+      "name": "chat raises affection and enforces returned cooldown in UI",
+      "pass": true
+    },
+    {
+      "name": "persisted working job does not force an animation or prevent normal walking",
+      "pass": true
+    },
+    {
+      "name": "legacy persisted working job exposes details and chat without retired work controls",
+      "pass": true
+    },
+    {
+      "name": "chat during persisted working job raises affinity and preserves existing job and wallet",
+      "pass": true
+    },
+    {
+      "name": "persisted ready job does not force an animation or prevent normal walking",
+      "pass": true
+    },
+    {
+      "name": "legacy persisted ready job exposes details and chat without retired work controls",
+      "pass": true
+    },
+    {
+      "name": "chat during persisted ready job raises affinity and preserves existing job and wallet",
+      "pass": true
+    },
+    {
+      "name": "scene shop shows all three products",
+      "pass": true
+    },
+    {
+      "name": "furniture shop displays exactly the current catalog including the galley stove",
+      "pass": true
+    },
+    {
+      "name": "canonical chibi shop shows ten products",
+      "pass": true
+    },
+    {
+      "name": "friend room readonly",
+      "pass": true
+    },
+    {
+      "name": "friend canonical chibi visible",
+      "pass": true
+    },
+    {
+      "name": "legacy flip migrates to rear-facing furniture",
+      "pass": true
+    },
+    {
+      "name": "old saved furniture scale cannot stretch character-calibrated display size",
+      "pass": true
+    },
+    {
+      "name": "friend with stored ready job sees details and affinity but no work or interaction controls",
+      "pass": true
+    },
+    {
+      "name": "off-floor saved character receives valid walk bounds",
+      "pass": true
+    },
+    {
+      "name": "single chibi visits furniture and acts",
+      "pass": true
+    },
+    {
+      "name": "furniture actor uses in-world body pose at an adjacent tile",
+      "pass": true
+    },
+    {
+      "name": "Zoro cannot receive a generic navigation activity from a map table",
+      "pass": true
+    },
+    {
+      "name": "reduced motion stops walking and speech and restores idle body art",
+      "pass": true
+    },
+    {
+      "name": "narrow viewport scrolls room internally",
+      "pass": true
+    },
+    {
+      "name": "narrow owner editor remains usable",
+      "pass": true
+    },
+    {
+      "name": "narrow left and right speech bubbles stay inside room",
+      "pass": true
+    },
+    {
+      "name": "late save response cannot replace visited friend",
+      "pass": true
+    },
+    {
+      "name": "showcase places six distinct furniture and six canonical crew without floor collision",
+      "pass": true
+    },
+    {
+      "name": "showcase four bearings use decoded final view art with no fallback",
+      "pass": true
+    },
+    {
+      "name": "showcase depth follows projected ground contact",
+      "pass": true
+    },
+    {
+      "name": "showcase six characters have all four decoded directional atlases",
+      "pass": true
+    },
+    {
+      "name": "showcase mobile viewport pans to both room edges without page overflow",
+      "pass": true
+    },
+    {
+      "name": "renderer has no uncaught errors",
+      "pass": true
+    },
+    {
+      "name": "interrupted loading with reduced motion retains the new portrait and existing room/work/wallet",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "showcase": {
+    "collision": false,
+    "gridCount": 12,
+    "furniture": [
+      {
+        "id": "f:room-furniture-helm",
+        "col": 3,
+        "row": 3,
+        "footprint": "2x2",
+        "rotation": 0,
+        "src": "opui://launcher/images/launcher_room/furniture_views/helm/0.webp",
+        "decoded": true,
+        "fallback": "false",
+        "depth": 432,
+        "y": 421.99974
+      },
+      {
+        "id": "f:room-furniture-map-table",
+        "col": 10,
+        "row": 1,
+        "footprint": "2x3",
+        "rotation": 1,
+        "src": "opui://launcher/images/launcher_room/furniture_views/map-table/1.webp",
+        "decoded": true,
+        "fallback": "false",
+        "depth": 401,
+        "y": 390.99996
+      },
+      {
+        "id": "f:room-furniture-treasure-chest",
+        "col": 2,
+        "row": 6,
+        "footprint": "2x1",
+        "rotation": 2,
+        "src": "opui://launcher/images/launcher_room/furniture_views/treasure-chest/2.webp",
+        "decoded": true,
+        "fallback": "false",
+        "depth": 494,
+        "y": 483.99984
+      },
+      {
+        "id": "f:room-furniture-tangerine-tree",
+        "col": 14,
+        "row": 2,
+        "footprint": "2x2",
+        "rotation": 3,
+        "src": "opui://launcher/images/launcher_room/furniture_views/tangerine-tree/3.webp",
+        "decoded": true,
+        "fallback": "false",
+        "depth": 401,
+        "y": 390.99996
+      },
+      {
+        "id": "f:room-furniture-bookshelf",
+        "col": 1,
+        "row": 1,
+        "footprint": "1x2",
+        "rotation": 1,
+        "src": "opui://launcher/images/launcher_room/furniture_views/bookshelf/1.webp",
+        "decoded": true,
+        "fallback": "false",
+        "depth": 370,
+        "y": 360.00018
+      },
+      {
+        "id": "f:room-furniture-piano",
+        "col": 10,
+        "row": 6,
+        "footprint": "3x2",
+        "rotation": 2,
+        "src": "opui://launcher/images/launcher_room/furniture_views/piano/2.webp",
+        "decoded": true,
+        "fallback": "false",
+        "depth": 525,
+        "y": 515.00016
+      }
+    ],
+    "crew": [
+      "c:room-character-luffy",
+      "c:room-character-zoro",
+      "c:room-character-nami",
+      "c:room-character-chopper",
+      "c:room-character-sanji",
+      "c:room-character-robin"
+    ]
+  },
+  "showcaseScreenshots": [
+    "C:\\Codex_Candidates\\launcher-life-qa-1.2.0\\legacy-room-final\\showcase-edit-stage-1280.png",
+    "C:\\Codex_Candidates\\launcher-life-qa-1.2.0\\legacy-room-final\\showcase-edit-room-1280.png",
+    "C:\\Codex_Candidates\\launcher-life-qa-1.2.0\\legacy-room-final\\showcase-view-stage-1280.png",
+    "C:\\Codex_Candidates\\launcher-life-qa-1.2.0\\legacy-room-final\\showcase-view-room-1280.png",
+    "C:\\Codex_Candidates\\launcher-life-qa-1.2.0\\legacy-room-final\\showcase-view-room-390-left.png",
+    "C:\\Codex_Candidates\\launcher-life-qa-1.2.0\\legacy-room-final\\showcase-view-room-390-right.png",
+    "C:\\Codex_Candidates\\launcher-life-qa-1.2.0\\legacy-room-final\\showcase-edit-room-390.png"
+  ],
+  "loadingRegression": {
+    "scenario": "leave profile during initial decode, enable reduced motion, then return after decode",
+    "reduced": true,
+    "walkers": 0,
+    "source": "opui://launcher/images/launcher_room/portrait_v3/luffy.webp",
+    "visibility": "visible",
+    "canvasHidden": true,
+    "portraitDecoded": true,
+    "portraitHasLayout": true,
+    "actionSource": "loading",
+    "decodedWalk": [
+      "east",
+      "west",
+      "north",
+      "south"
+    ],
+    "decodedActions": [
+      "east",
+      "west",
+      "north",
+      "south"
+    ],
+    "roomWorkAndWalletUnchanged": true,
+    "apiCalls": [],
+    "ok": true,
+    "syntheticMotion": false,
+    "visualAcceptance": false,
+    "errors": [],
+    "roomSourceSha256": "27617a335c0269a937869d3c91e8f41ebfc99a31e00802131db0c451c1c37bc7"
+  }
+}

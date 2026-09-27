@@ -120,7 +120,7 @@ const sorted = values => [...values].sort((a, b) => String(a).localeCompare(Stri
     assert.equal((await changeLauncherItem(pool, 'protected', 'room-furniture-helm', 'buy')).ok, true);
     assert.equal((await changeLauncherItem(pool, 'protected', 'room-character-luffy', 'buy')).ok, true);
     const roomSaved = await setLauncherRoom(pool, 'protected', {
-      revision: 0, sceneId: 'room-scene-sunny-deck',
+      revision: (await profile('protected')).stats.launcherRoomV1.revision, sceneId: 'room-scene-sunny-deck',
       placements: [{ itemId: 'room-furniture-helm', x: 300, y: 210, scale: 1, flip: false }],
       characters: [{ itemId: 'room-character-luffy', x: 480, y: 420 }]
     });

@@ -1,0 +1,593 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "work",
+      "key": "luffy",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source-alpha.png",
+      "scale": 0.33676975945017185,
+      "regions": [
+        [
+          0,
+          0,
+          375,
+          332
+        ],
+        [
+          375,
+          0,
+          625,
+          332
+        ],
+        [
+          625,
+          0,
+          875,
+          332
+        ],
+        [
+          875,
+          0,
+          1254,
+          332
+        ]
+      ],
+      "roots": [
+        [
+          252.5,
+          325
+        ],
+        [
+          504.0,
+          325
+        ],
+        [
+          754.0,
+          325
+        ],
+        [
+          1001.5,
+          325
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/work-south.webp",
+      "sourceSha256": "baf7e4aabbbde1fe638e1e1633d51ade2a75d2d7e185cd1ea49fc5fc9a62cccc",
+      "assetSha256": "3571514b9bdeccd1986cfe327ab98e6c01fe141001cebf4f3808a46e80b48699",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            0,
+            375,
+            332
+          ],
+          "alphaBounds": [
+            184,
+            34,
+            321,
+            325
+          ],
+          "outputBounds": [
+            41,
+            14,
+            46,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            375,
+            0,
+            625,
+            332
+          ],
+          "alphaBounds": [
+            60,
+            34,
+            198,
+            325
+          ],
+          "outputBounds": [
+            41,
+            14,
+            46,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            625,
+            0,
+            875,
+            332
+          ],
+          "alphaBounds": [
+            58,
+            34,
+            200,
+            325
+          ],
+          "outputBounds": [
+            40,
+            14,
+            48,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            875,
+            0,
+            1254,
+            332
+          ],
+          "alphaBounds": [
+            58,
+            34,
+            195,
+            325
+          ],
+          "outputBounds": [
+            41,
+            14,
+            46,
+            98
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "luffy",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source-alpha.png",
+      "scale": 0.3333333333333333,
+      "regions": [
+        [
+          0,
+          332,
+          375,
+          633
+        ],
+        [
+          375,
+          332,
+          625,
+          633
+        ],
+        [
+          625,
+          332,
+          875,
+          633
+        ],
+        [
+          875,
+          332,
+          1254,
+          633
+        ]
+      ],
+      "roots": [
+        [
+          256.5,
+          632
+        ],
+        [
+          510.5,
+          632
+        ],
+        [
+          765.0,
+          632
+        ],
+        [
+          1008.0,
+          632
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/work-east.webp",
+      "sourceSha256": "baf7e4aabbbde1fe638e1e1633d51ade2a75d2d7e185cd1ea49fc5fc9a62cccc",
+      "assetSha256": "5cf4d4a16c98244dd203c084d90daf90986b74b116381141cbc2dc89123252d7",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            332,
+            375,
+            633
+          ],
+          "alphaBounds": [
+            187,
+            6,
+            326,
+            300
+          ],
+          "outputBounds": [
+            41,
+            14,
+            46,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            375,
+            332,
+            625,
+            633
+          ],
+          "alphaBounds": [
+            63,
+            8,
+            208,
+            300
+          ],
+          "outputBounds": [
+            40,
+            15,
+            48,
+            97
+          ]
+        },
+        {
+          "sourceRegion": [
+            625,
+            332,
+            875,
+            633
+          ],
+          "alphaBounds": [
+            57,
+            7,
+            223,
+            300
+          ],
+          "outputBounds": [
+            36,
+            14,
+            55,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            875,
+            332,
+            1254,
+            633
+          ],
+          "alphaBounds": [
+            62,
+            9,
+            204,
+            300
+          ],
+          "outputBounds": [
+            40,
+            15,
+            47,
+            97
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "luffy",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source-alpha.png",
+      "scale": 0.3288590604026846,
+      "regions": [
+        [
+          0,
+          633,
+          375,
+          941
+        ],
+        [
+          375,
+          633,
+          625,
+          941
+        ],
+        [
+          625,
+          633,
+          875,
+          941
+        ],
+        [
+          875,
+          633,
+          1254,
+          941
+        ]
+      ],
+      "roots": [
+        [
+          248.5,
+          931
+        ],
+        [
+          492.0,
+          932
+        ],
+        [
+          744.5,
+          941
+        ],
+        [
+          1001.0,
+          932
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/work-west.webp",
+      "sourceSha256": "baf7e4aabbbde1fe638e1e1633d51ade2a75d2d7e185cd1ea49fc5fc9a62cccc",
+      "assetSha256": "07259c95915d390e4cd12a96fd11231d5457bfacdcd118b28cb5a7952d34b11b",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            633,
+            375,
+            941
+          ],
+          "alphaBounds": [
+            180,
+            9,
+            317,
+            298
+          ],
+          "outputBounds": [
+            41,
+            17,
+            45,
+            95
+          ]
+        },
+        {
+          "sourceRegion": [
+            375,
+            633,
+            625,
+            941
+          ],
+          "alphaBounds": [
+            45,
+            11,
+            189,
+            299
+          ],
+          "outputBounds": [
+            40,
+            17,
+            47,
+            95
+          ]
+        },
+        {
+          "sourceRegion": [
+            625,
+            633,
+            875,
+            941
+          ],
+          "alphaBounds": [
+            46,
+            10,
+            193,
+            308
+          ],
+          "outputBounds": [
+            40,
+            14,
+            48,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            875,
+            633,
+            1254,
+            941
+          ],
+          "alphaBounds": [
+            56,
+            10,
+            196,
+            299
+          ],
+          "outputBounds": [
+            41,
+            17,
+            46,
+            95
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "luffy",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source-alpha.png",
+      "scale": 0.35507246376811596,
+      "regions": [
+        [
+          0,
+          941,
+          375,
+          1254
+        ],
+        [
+          375,
+          941,
+          625,
+          1254
+        ],
+        [
+          625,
+          941,
+          875,
+          1254
+        ],
+        [
+          875,
+          941,
+          1254,
+          1254
+        ]
+      ],
+      "roots": [
+        [
+          251.0,
+          1216
+        ],
+        [
+          501.5,
+          1217
+        ],
+        [
+          753.0,
+          1216
+        ],
+        [
+          1004.0,
+          1217
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/work-north.webp",
+      "sourceSha256": "baf7e4aabbbde1fe638e1e1633d51ade2a75d2d7e185cd1ea49fc5fc9a62cccc",
+      "assetSha256": "990ca55ef40a28d5cbdd39768ae0f2e1251b4847c0c78cd660cb930977d2f8fa",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            941,
+            375,
+            1254
+          ],
+          "alphaBounds": [
+            185,
+            0,
+            317,
+            275
+          ],
+          "outputBounds": [
+            41,
+            14,
+            47,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            375,
+            941,
+            625,
+            1254
+          ],
+          "alphaBounds": [
+            61,
+            0,
+            192,
+            276
+          ],
+          "outputBounds": [
+            41,
+            14,
+            47,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            625,
+            941,
+            875,
+            1254
+          ],
+          "alphaBounds": [
+            62,
+            0,
+            194,
+            275
+          ],
+          "outputBounds": [
+            41,
+            14,
+            47,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            875,
+            941,
+            1254,
+            1254
+          ],
+          "alphaBounds": [
+            63,
+            0,
+            195,
+            276
+          ],
+          "outputBounds": [
+            41,
+            14,
+            47,
+            98
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

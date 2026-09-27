@@ -1,0 +1,20 @@
+{
+  "generator": "image_gen.imagegen",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030\\exec-872ad05e-d07d-4f0b-9c8f-fffbbd092d34.png",
+  "sourceSha256": "c10e97dd6d36c195216c3246cc3cb5855347d3b819a1308e2d6c4247fbf9b2dd",
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/usopp-actions-05/ancestry/07-source-01.png",
+      "sha256": "d2860d7d10d8e9f5cfaec609c678bfdc1204545eddab9e079b8d2837924c28d5"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/usopp-actions-05/image.png",
+      "sha256": "54930c43c6a1d1cc8422204e9b98252678dcb66036f93a3b9271234e7527bcfd"
+    }
+  ],
+  "sourceReview": "Early Usopp holds small repair panel with left hand and turns screwdriver with right through four stages. Long nose, left wristband, left-hip satchel preserved; back has no face. No furniture baked in.",
+  "runtimeAccepted": false,
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "promptSha256": "40e3ffb886352e1bcc3e74fa24336219a4a3670a6453421d5791baf6064109b5"
+}

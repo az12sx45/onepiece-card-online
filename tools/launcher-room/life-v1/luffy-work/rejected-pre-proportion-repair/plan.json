@@ -1,0 +1,140 @@
+{
+  "clips": [
+    {
+      "id": "work",
+      "key": "luffy",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/luffy-work/source.png",
+      "scale": 0.350877,
+      "regions": [
+        [
+          52,
+          22,
+          268,
+          306
+        ],
+        [
+          354,
+          22,
+          578,
+          306
+        ],
+        [
+          653,
+          21,
+          895,
+          306
+        ],
+        [
+          979,
+          21,
+          1201,
+          306
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/work-east.webp"
+    },
+    {
+      "id": "work",
+      "key": "luffy",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/luffy-work/source.png",
+      "scale": 0.347222,
+      "regions": [
+        [
+          61,
+          326,
+          275,
+          614
+        ],
+        [
+          369,
+          326,
+          581,
+          614
+        ],
+        [
+          678,
+          326,
+          890,
+          614
+        ],
+        [
+          992,
+          326,
+          1200,
+          614
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/work-west.webp"
+    },
+    {
+      "id": "work",
+      "key": "luffy",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/luffy-work/source.png",
+      "scale": 0.367647,
+      "regions": [
+        [
+          90,
+          632,
+          242,
+          904
+        ],
+        [
+          395,
+          632,
+          549,
+          904
+        ],
+        [
+          697,
+          632,
+          867,
+          904
+        ],
+        [
+          1019,
+          632,
+          1169,
+          903
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/work-north.webp"
+    },
+    {
+      "id": "work",
+      "key": "luffy",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/luffy-work/source.png",
+      "scale": 0.328947,
+      "regions": [
+        [
+          73,
+          914,
+          251,
+          1218
+        ],
+        [
+          383,
+          915,
+          557,
+          1218
+        ],
+        [
+          692,
+          915,
+          868,
+          1218
+        ],
+        [
+          1006,
+          915,
+          1180,
+          1218
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/luffy/work-south.webp"
+    }
+  ]
+}

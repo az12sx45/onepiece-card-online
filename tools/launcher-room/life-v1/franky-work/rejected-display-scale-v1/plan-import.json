@@ -1,0 +1,597 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "work",
+      "key": "franky",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "scale": 0.33112583,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          58,
+          7,
+          295,
+          313
+        ],
+        [
+          363,
+          7,
+          605,
+          313
+        ],
+        [
+          684,
+          7,
+          919,
+          313
+        ],
+        [
+          990,
+          6,
+          1213,
+          312
+        ]
+      ],
+      "roots": [
+        [
+          141.5,
+          311
+        ],
+        [
+          455.0,
+          311
+        ],
+        [
+          769.5,
+          311
+        ],
+        [
+          1090.0,
+          310
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/work-east.webp",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "assetSha256": "2ba55f784661dcb6461343e165e5aa9dd9d3e2def72fbbec2b1d7e2523f58a28",
+      "frames": [
+        {
+          "sourceRegion": [
+            58,
+            7,
+            295,
+            313
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            237,
+            306
+          ],
+          "outputBounds": [
+            36,
+            11,
+            78,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            363,
+            7,
+            605,
+            313
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            242,
+            306
+          ],
+          "outputBounds": [
+            34,
+            11,
+            80,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            684,
+            7,
+            919,
+            313
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            235,
+            306
+          ],
+          "outputBounds": [
+            36,
+            11,
+            78,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            990,
+            6,
+            1213,
+            312
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            223,
+            306
+          ],
+          "outputBounds": [
+            31,
+            11,
+            74,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "franky",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "scale": 0.32679739,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          42,
+          318,
+          252,
+          627
+        ],
+        [
+          352,
+          317,
+          574,
+          626
+        ],
+        [
+          668,
+          317,
+          890,
+          626
+        ],
+        [
+          991,
+          316,
+          1204,
+          626
+        ]
+      ],
+      "roots": [
+        [
+          173.5,
+          625
+        ],
+        [
+          482.5,
+          624
+        ],
+        [
+          795.0,
+          624
+        ],
+        [
+          1112.5,
+          624
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/work-west.webp",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "assetSha256": "b3cf939e5da56bec1b924a7ec16dd530d822c6e5c9f2f1b021d8474058965e08",
+      "frames": [
+        {
+          "sourceRegion": [
+            42,
+            318,
+            252,
+            627
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            210,
+            309
+          ],
+          "outputBounds": [
+            21,
+            11,
+            69,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            352,
+            317,
+            574,
+            626
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            222,
+            309
+          ],
+          "outputBounds": [
+            21,
+            11,
+            73,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            668,
+            317,
+            890,
+            626
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            222,
+            309
+          ],
+          "outputBounds": [
+            22,
+            11,
+            73,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            991,
+            316,
+            1204,
+            626
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            213,
+            310
+          ],
+          "outputBounds": [
+            24,
+            11,
+            70,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "franky",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "scale": 0.35335689,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          24,
+          631,
+          296,
+          918
+        ],
+        [
+          336,
+          631,
+          608,
+          918
+        ],
+        [
+          650,
+          631,
+          922,
+          918
+        ],
+        [
+          961,
+          631,
+          1233,
+          918
+        ]
+      ],
+      "roots": [
+        [
+          157.0,
+          916
+        ],
+        [
+          469.0,
+          916
+        ],
+        [
+          784.0,
+          916
+        ],
+        [
+          1097.5,
+          916
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/work-north.webp",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "assetSha256": "cd022e98580969efa28ec8bbbf6983772f81309b3a46701e835ed7ed1e98ccde",
+      "frames": [
+        {
+          "sourceRegion": [
+            24,
+            631,
+            296,
+            918
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            272,
+            287
+          ],
+          "outputBounds": [
+            17,
+            11,
+            96,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            336,
+            631,
+            608,
+            918
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            272,
+            287
+          ],
+          "outputBounds": [
+            17,
+            11,
+            96,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            650,
+            631,
+            922,
+            918
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            272,
+            287
+          ],
+          "outputBounds": [
+            17,
+            11,
+            96,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            961,
+            631,
+            1233,
+            918
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            272,
+            287
+          ],
+          "outputBounds": [
+            16,
+            11,
+            96,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "franky",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "scale": 0.32154341,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          22,
+          919,
+          295,
+          1234
+        ],
+        [
+          335,
+          919,
+          608,
+          1234
+        ],
+        [
+          648,
+          919,
+          921,
+          1234
+        ],
+        [
+          960,
+          919,
+          1235,
+          1234
+        ]
+      ],
+      "roots": [
+        [
+          162.5,
+          1232
+        ],
+        [
+          475.0,
+          1232
+        ],
+        [
+          788.5,
+          1232
+        ],
+        [
+          1102.0,
+          1232
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/work-south.webp",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "assetSha256": "33b3a741f1966252230eec28171f2c9d5a56727def0016ce623ac3d275ef4bf5",
+      "frames": [
+        {
+          "sourceRegion": [
+            22,
+            919,
+            295,
+            1234
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            273,
+            315
+          ],
+          "outputBounds": [
+            19,
+            11,
+            88,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            335,
+            919,
+            608,
+            1234
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            273,
+            315
+          ],
+          "outputBounds": [
+            19,
+            11,
+            88,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            648,
+            919,
+            921,
+            1234
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            273,
+            315
+          ],
+          "outputBounds": [
+            19,
+            11,
+            88,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            960,
+            919,
+            1235,
+            1234
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            275,
+            315
+          ],
+          "outputBounds": [
+            18,
+            11,
+            88,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

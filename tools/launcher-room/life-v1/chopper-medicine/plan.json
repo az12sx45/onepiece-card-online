@@ -1,0 +1,224 @@
+{
+  "clips": [
+    {
+      "id": "medicine",
+      "key": "chopper",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/chopper-medicine/source-alpha.png",
+      "scale": 0.3161290322580645,
+      "regions": [
+        [
+          0,
+          0,
+          314,
+          326
+        ],
+        [
+          314,
+          0,
+          627,
+          326
+        ],
+        [
+          627,
+          0,
+          940,
+          326
+        ],
+        [
+          940,
+          0,
+          1254,
+          326
+        ]
+      ],
+      "roots": [
+        [
+          153.5,
+          326
+        ],
+        [
+          465.0,
+          326
+        ],
+        [
+          776.0,
+          326
+        ],
+        [
+          1100.0,
+          326
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-east.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-medicine/source.png"
+    },
+    {
+      "id": "medicine",
+      "key": "chopper",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/chopper-medicine/source-alpha.png",
+      "scale": 0.32450331125827814,
+      "regions": [
+        [
+          0,
+          326,
+          314,
+          641
+        ],
+        [
+          314,
+          326,
+          627,
+          641
+        ],
+        [
+          627,
+          326,
+          940,
+          641
+        ],
+        [
+          940,
+          326,
+          1254,
+          641
+        ]
+      ],
+      "roots": [
+        [
+          158.5,
+          641
+        ],
+        [
+          472.5,
+          641
+        ],
+        [
+          787.0,
+          641
+        ],
+        [
+          1101.0,
+          641
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-west.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-medicine/source.png"
+    },
+    {
+      "id": "medicine",
+      "key": "chopper",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/chopper-medicine/source-alpha.png",
+      "scale": 0.35766423357664234,
+      "regions": [
+        [
+          0,
+          641,
+          314,
+          930
+        ],
+        [
+          314,
+          641,
+          627,
+          930
+        ],
+        [
+          627,
+          641,
+          940,
+          930
+        ],
+        [
+          940,
+          641,
+          1254,
+          930
+        ]
+      ],
+      "roots": [
+        [
+          168.5,
+          930
+        ],
+        [
+          477.0,
+          930
+        ],
+        [
+          781.0,
+          930
+        ],
+        [
+          1089.0,
+          930
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-north.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-medicine/source.png"
+    },
+    {
+      "id": "medicine",
+      "key": "chopper",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/chopper-medicine/source-alpha.png",
+      "scale": 0.32558139534883723,
+      "regions": [
+        [
+          0,
+          930,
+          314,
+          1254
+        ],
+        [
+          314,
+          930,
+          627,
+          1254
+        ],
+        [
+          627,
+          930,
+          940,
+          1254
+        ],
+        [
+          940,
+          930,
+          1254,
+          1254
+        ]
+      ],
+      "roots": [
+        [
+          164.0,
+          1254
+        ],
+        [
+          476.0,
+          1254
+        ],
+        [
+          782.5,
+          1254
+        ],
+        [
+          1090.5,
+          1254
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-south.webp",
+      "normalization": "One uniform scale for all four complete figures. Standing height matched accepted idle (98px); rest/sleep use same head/anatomical size, naturally lower.",
+      "alphaCleanup": "Alpha<16 and detached opaque islands smaller than32px removed; all larger figures/props and2px AA edge retained. No RGB redraw or anatomy transform.",
+      "originalSource": "tools/launcher-room/life-v1/chopper-medicine/source.png"
+    }
+  ]
+}

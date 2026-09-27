@@ -1,0 +1,185 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:/Users/王曜瑋/.codex/generated_images/01a0e0d1-a4bf-73f3-af41-6763cfefe2b5/exec-0fd76ee1-695c-4ed3-8b40-1d609177ff6b.png",
+  "references": [
+    "tools/launcher-room/fullbody-v3/sources/jinbe-v15-actions-01/image.png"
+  ],
+  "prompt": "tools/launcher-room/life-v1/jinbe-read/prompt.txt",
+  "sourceSha256": "4a6778092cbc8a0dc8d246da6926a869783a6e43de7c05918e38455db18ca57f",
+  "sourcePixels": [
+    1254,
+    1254
+  ],
+  "trueAlpha": true,
+  "packing": "Whole-body crop and root translation only, one uniform scale per four-frame loop. Main bounds measured at alpha32 and padded within row/cell bounds; original alpha is retained. No limb assembly, mirror, rotation or warp. Feet root is derived from ground pixels.",
+  "sourceAccepted": true,
+  "contactAccepted": true,
+  "runtimeAccepted": false,
+  "sourceReview": "Sixteen coherent complete full-body drawings reviewed. Broad blue fishman silhouette, mint leaf-pattern kimono, orange obi, black cape/topknot, tusks/goatee and existing face asymmetry preserved. Four-direction book support and actual raised/turning/settling page are visible. True alpha; no baked furniture or opaque reference backdrop.",
+  "actualSizeReview": "Final 128px contact sheet reviewed: approximately100px figures, intact hair/feet/book and no neighboring fragments or detached body parts. Four successive frames show flat spread, lifting page, curved page across spine, and smoothing/recovery. Feet remain rooted, head and torso face same direction. No per-frame scale changes or body-part assembly. Static source/contact acceptance only; runtime playback pending.",
+  "contactSheet": "tools/launcher-room/life-v1/jinbe-read/contact-128.png",
+  "contactSha256": "b311154413e132446e4056529188796e78a1703aa6d551594e128fa6193680d3",
+  "numericQa": {
+    "passed": true,
+    "checks": [
+      {
+        "asset": "public/images/launcher_room/life_v1/jinbe/read-east.webp",
+        "sha256": "2b38f865de1a66152f7b15aee7bbfc98f2a30a7a9ddc24bc8dc0dcdf66a8bb4e",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            19,
+            12,
+            110,
+            112
+          ],
+          [
+            18,
+            12,
+            111,
+            112
+          ],
+          [
+            19,
+            12,
+            112,
+            112
+          ],
+          [
+            18,
+            12,
+            109,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/jinbe/read-west.webp",
+        "sha256": "a05209d0f94976ecbbc1097ffc1549605be538ab333c6ddd2e3353846acc6aae",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            22,
+            12,
+            110,
+            112
+          ],
+          [
+            21,
+            12,
+            110,
+            112
+          ],
+          [
+            21,
+            12,
+            110,
+            112
+          ],
+          [
+            22,
+            12,
+            110,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/jinbe/read-north.webp",
+        "sha256": "028debd3ed430de5fbb9132df1ec99874d4526c7acada24d4783584b72431ad5",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            20,
+            12,
+            108,
+            112
+          ],
+          [
+            19,
+            12,
+            108,
+            112
+          ],
+          [
+            20,
+            12,
+            108,
+            112
+          ],
+          [
+            20,
+            12,
+            108,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/jinbe/read-south.webp",
+        "sha256": "9928916973ff63cd13290a80ac6f995f072cea82c1352f8f044172f481082d9f",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            20,
+            12,
+            109,
+            112
+          ],
+          [
+            20,
+            12,
+            109,
+            112
+          ],
+          [
+            20,
+            12,
+            109,
+            112
+          ],
+          [
+            20,
+            12,
+            109,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      }
+    ],
+    "scope": "Atlas dimensions, alpha bounds and four distinct frames; not runtime acceptance."
+  }
+}

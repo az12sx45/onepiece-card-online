@@ -1,0 +1,597 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "eat",
+      "key": "nami",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/nami-utility/source.png",
+      "scale": 0.26315789,
+      "scaleReason": "One common standing physical scale for utility sheet; floor poses are not enlarged.",
+      "regions": [
+        [
+          100,
+          2,
+          235,
+          383
+        ],
+        [
+          408,
+          2,
+          548,
+          383
+        ],
+        [
+          718,
+          2,
+          860,
+          383
+        ],
+        [
+          1037,
+          1,
+          1173,
+          383
+        ]
+      ],
+      "roots": [
+        [
+          168.5,
+          381
+        ],
+        [
+          481.5,
+          381
+        ],
+        [
+          793.5,
+          381
+        ],
+        [
+          1106.5,
+          381
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/eat-south.webp",
+      "sourceSha256": "463090f2adf5dcbbff90327983c598b4ac258c213ce78a8116dfd553897d606d",
+      "assetSha256": "93fdf8d36c45db22dd76726be05497c627c213533a858b8689281b7667753a96",
+      "frames": [
+        {
+          "sourceRegion": [
+            100,
+            2,
+            235,
+            383
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            135,
+            381
+          ],
+          "outputBounds": [
+            46,
+            12,
+            36,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            408,
+            2,
+            548,
+            383
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            140,
+            381
+          ],
+          "outputBounds": [
+            45,
+            12,
+            37,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            718,
+            2,
+            860,
+            383
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            142,
+            381
+          ],
+          "outputBounds": [
+            44,
+            12,
+            37,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            1037,
+            1,
+            1173,
+            383
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            136,
+            382
+          ],
+          "outputBounds": [
+            46,
+            11,
+            36,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "rest",
+      "key": "nami",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/nami-utility/source.png",
+      "scale": 0.26315789,
+      "scaleReason": "One common standing physical scale for utility sheet; floor poses are not enlarged.",
+      "regions": [
+        [
+          54,
+          394,
+          222,
+          669
+        ],
+        [
+          362,
+          398,
+          531,
+          669
+        ],
+        [
+          677,
+          410,
+          847,
+          669
+        ],
+        [
+          988,
+          395,
+          1160,
+          669
+        ]
+      ],
+      "roots": [
+        [
+          138.0,
+          667
+        ],
+        [
+          446.5,
+          667
+        ],
+        [
+          762.0,
+          667
+        ],
+        [
+          1074.0,
+          667
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/rest-south.webp",
+      "sourceSha256": "463090f2adf5dcbbff90327983c598b4ac258c213ce78a8116dfd553897d606d",
+      "assetSha256": "ceeb6a4778939f82367be6fb3079c98fe5d056e6e3486578cba11ff78e335db2",
+      "frames": [
+        {
+          "sourceRegion": [
+            54,
+            394,
+            222,
+            669
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            168,
+            275
+          ],
+          "outputBounds": [
+            42,
+            40,
+            44,
+            72
+          ]
+        },
+        {
+          "sourceRegion": [
+            362,
+            398,
+            531,
+            669
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            169,
+            271
+          ],
+          "outputBounds": [
+            42,
+            41,
+            44,
+            71
+          ]
+        },
+        {
+          "sourceRegion": [
+            677,
+            410,
+            847,
+            669
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            170,
+            259
+          ],
+          "outputBounds": [
+            42,
+            44,
+            45,
+            68
+          ]
+        },
+        {
+          "sourceRegion": [
+            988,
+            395,
+            1160,
+            669
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            172,
+            274
+          ],
+          "outputBounds": [
+            41,
+            40,
+            45,
+            72
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "sleep",
+      "key": "nami",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/nami-utility/source.png",
+      "scale": 0.26315789,
+      "scaleReason": "One common standing physical scale for utility sheet; floor poses are not enlarged.",
+      "regions": [
+        [
+          9,
+          718,
+          312,
+          827
+        ],
+        [
+          322,
+          717,
+          624,
+          827
+        ],
+        [
+          635,
+          716,
+          937,
+          827
+        ],
+        [
+          948,
+          716,
+          1251,
+          827
+        ]
+      ],
+      "roots": [
+        [
+          160.5,
+          825
+        ],
+        [
+          473.0,
+          825
+        ],
+        [
+          786.0,
+          825
+        ],
+        [
+          1099.5,
+          825
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/sleep-south.webp",
+      "sourceSha256": "463090f2adf5dcbbff90327983c598b4ac258c213ce78a8116dfd553897d606d",
+      "assetSha256": "bdd284571134979f22f89dd4a5c410abcce9815cf47d25c3b5b6b6f02a4a34cf",
+      "frames": [
+        {
+          "sourceRegion": [
+            9,
+            718,
+            312,
+            827
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            303,
+            109
+          ],
+          "outputBounds": [
+            24,
+            83,
+            80,
+            29
+          ]
+        },
+        {
+          "sourceRegion": [
+            322,
+            717,
+            624,
+            827
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            302,
+            110
+          ],
+          "outputBounds": [
+            24,
+            83,
+            79,
+            29
+          ]
+        },
+        {
+          "sourceRegion": [
+            635,
+            716,
+            937,
+            827
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            302,
+            111
+          ],
+          "outputBounds": [
+            24,
+            83,
+            79,
+            29
+          ]
+        },
+        {
+          "sourceRegion": [
+            948,
+            716,
+            1251,
+            827
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            303,
+            111
+          ],
+          "outputBounds": [
+            24,
+            83,
+            80,
+            29
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "train",
+      "key": "nami",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/nami-utility/source.png",
+      "scale": 0.26315789,
+      "scaleReason": "One common standing physical scale for utility sheet; floor poses are not enlarged.",
+      "regions": [
+        [
+          78,
+          845,
+          241,
+          1227
+        ],
+        [
+          388,
+          844,
+          554,
+          1227
+        ],
+        [
+          688,
+          845,
+          870,
+          1227
+        ],
+        [
+          1018,
+          843,
+          1181,
+          1227
+        ]
+      ],
+      "roots": [
+        [
+          159.5,
+          1225
+        ],
+        [
+          472.5,
+          1225
+        ],
+        [
+          787.0,
+          1225
+        ],
+        [
+          1099.5,
+          1225
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/train-south.webp",
+      "sourceSha256": "463090f2adf5dcbbff90327983c598b4ac258c213ce78a8116dfd553897d606d",
+      "assetSha256": "1e64dc727c12a29da121cdcb3d4040e68dfd14fc44c353d46a041ee021f3d9ab",
+      "frames": [
+        {
+          "sourceRegion": [
+            78,
+            845,
+            241,
+            1227
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            163,
+            382
+          ],
+          "outputBounds": [
+            43,
+            11,
+            43,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            388,
+            844,
+            554,
+            1227
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            166,
+            383
+          ],
+          "outputBounds": [
+            42,
+            11,
+            44,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            688,
+            845,
+            870,
+            1227
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            182,
+            382
+          ],
+          "outputBounds": [
+            38,
+            11,
+            48,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            1018,
+            843,
+            1181,
+            1227
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            163,
+            384
+          ],
+          "outputBounds": [
+            43,
+            11,
+            43,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

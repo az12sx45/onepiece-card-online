@@ -1,0 +1,216 @@
+{
+  "clips": [
+    {
+      "id": "work",
+      "key": "usopp",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "scale": 0.32786885,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          144,
+          5,
+          301,
+          314
+        ],
+        [
+          417,
+          5,
+          574,
+          314
+        ],
+        [
+          716,
+          5,
+          873,
+          313
+        ],
+        [
+          1007,
+          5,
+          1163,
+          314
+        ]
+      ],
+      "roots": [
+        [
+          179.5,
+          312
+        ],
+        [
+          452.5,
+          312
+        ],
+        [
+          750.5,
+          311
+        ],
+        [
+          1041.5,
+          312
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/work-east.webp"
+    },
+    {
+      "id": "work",
+      "key": "usopp",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "scale": 0.32467532,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          111,
+          316,
+          261,
+          628
+        ],
+        [
+          383,
+          316,
+          534,
+          628
+        ],
+        [
+          680,
+          316,
+          833,
+          628
+        ],
+        [
+          972,
+          316,
+          1124,
+          628
+        ]
+      ],
+      "roots": [
+        [
+          203.0,
+          626
+        ],
+        [
+          476.5,
+          626
+        ],
+        [
+          775.0,
+          626
+        ],
+        [
+          1066.5,
+          626
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/work-west.webp"
+    },
+    {
+      "id": "work",
+      "key": "usopp",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "scale": 0.32786885,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          127,
+          630,
+          264,
+          939
+        ],
+        [
+          411,
+          631,
+          551,
+          939
+        ],
+        [
+          705,
+          631,
+          841,
+          938
+        ],
+        [
+          991,
+          630,
+          1127,
+          938
+        ]
+      ],
+      "roots": [
+        [
+          194.5,
+          937
+        ],
+        [
+          479.0,
+          937
+        ],
+        [
+          772.5,
+          936
+        ],
+        [
+          1058.5,
+          936
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/work-north.webp"
+    },
+    {
+      "id": "work",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "scale": 0.330033,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          122,
+          942,
+          266,
+          1249
+        ],
+        [
+          407,
+          942,
+          551,
+          1249
+        ],
+        [
+          701,
+          942,
+          844,
+          1249
+        ],
+        [
+          986,
+          942,
+          1128,
+          1249
+        ]
+      ],
+      "roots": [
+        [
+          194.0,
+          1247
+        ],
+        [
+          479.0,
+          1247
+        ],
+        [
+          772.5,
+          1247
+        ],
+        [
+          1057.0,
+          1247
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/work-south.webp"
+    }
+  ]
+}

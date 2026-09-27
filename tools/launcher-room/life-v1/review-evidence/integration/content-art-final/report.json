@@ -1,0 +1,79 @@
+{
+  "ok": true,
+  "generatedAt": "2026-09-27T04:13:36.312Z",
+  "checks": 4,
+  "results": [
+    {
+      "name": "manual-arrival-lines",
+      "pass": true,
+      "actor": "luffy",
+      "uiPointerClicks": true,
+      "trainFrames": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "atlasSha256": {
+        "eat": "1dd22d419a5be4be9fe076cb44905421ed5743d6121857e10268bf3f131d1a60",
+        "train": "f502e66444d9000373b33bbc17aaf8b5067ad260505fe09666d9f794f92b4f4f"
+      }
+    },
+    {
+      "name": "manual-arrival-lines-zoro",
+      "pass": true,
+      "actor": "zoro",
+      "uiPointerClicks": true,
+      "trainFrames": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "atlasSha256": {
+        "eat": "d023a0f6868ad4c3e46caa6533b93ce43b02bd8f07b0841f7b31dfe80f9c3583",
+        "train": "571b72d97c6428832ca97bbabc75914671feb67eef1e2401d3a6a99931d11f14"
+      }
+    },
+    {
+      "name": "authored-chain-1",
+      "pass": true,
+      "participants": [
+        "luffy"
+      ]
+    },
+    {
+      "name": "authored-chain-3",
+      "pass": true,
+      "participants": [
+        "luffy",
+        "sanji",
+        "nami"
+      ]
+    }
+  ],
+  "filter": "authored-chain|manual-arrival-lines",
+  "testScriptSha256": "1a559ed346e22f55972c1cb485632916179a1691eb0b03d585eefea6fc83677d",
+  "startedSources": {
+    "launcher-room-dialogue.js": "5c4fbdf5166f810b8bdebbc21df32b8a954d7e1cc146a7f0c0507082dcc9a35f",
+    "launcher-room-motion-data.js": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+    "launcher-room-motion.js": "5acdafeefc61dc5415f1e89a359ba71061edff4bfe2924bbe14d3265df6f10f7",
+    "launcher-life-data.js": "51aa5267b4cb26339ee446b411d8ea3c524979dace164f0a23ce7ca82fc1c625",
+    "launcher-life-actions.js": "d96db069e8d7025d3e48a9a86a00177e306b5be75dabdc0c85a6aff47a349f92",
+    "launcher-life.js": "ca928053b49f4ba1cb8df0802f1b57e00368cff3e55a87ba909640f931966f9a",
+    "launcher-life-room.js": "81a105dec4a48221bb459a804df6c8bfaee603a9088dd1962da257016b4973c1",
+    "launcher-room.js": "27617a335c0269a937869d3c91e8f41ebfc99a31e00802131db0c451c1c37bc7"
+  },
+  "completedSources": {
+    "launcher-room-dialogue.js": "5c4fbdf5166f810b8bdebbc21df32b8a954d7e1cc146a7f0c0507082dcc9a35f",
+    "launcher-room-motion-data.js": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+    "launcher-room-motion.js": "5acdafeefc61dc5415f1e89a359ba71061edff4bfe2924bbe14d3265df6f10f7",
+    "launcher-life-data.js": "51aa5267b4cb26339ee446b411d8ea3c524979dace164f0a23ce7ca82fc1c625",
+    "launcher-life-actions.js": "d96db069e8d7025d3e48a9a86a00177e306b5be75dabdc0c85a6aff47a349f92",
+    "launcher-life.js": "ca928053b49f4ba1cb8df0802f1b57e00368cff3e55a87ba909640f931966f9a",
+    "launcher-life-room.js": "81a105dec4a48221bb459a804df6c8bfaee603a9088dd1962da257016b4973c1",
+    "launcher-room.js": "27617a335c0269a937869d3c91e8f41ebfc99a31e00802131db0c451c1c37bc7"
+  },
+  "sourceChangedDuringRun": false,
+  "scope": "Actual headless Chromium, existing BFS/room/controller/GPT assets, deterministic Playwright animation clock and isolated IPC fixtures. Random autonomous selection disabled only in fixture. No real purchase, database, physical-device, remote-network or public deployment acceptance."
+}

@@ -1,0 +1,23 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-ed2c7a48-ff56-4caa-a4d0-0077e6a03013.png",
+  "source": {
+    "path": "tools/launcher-room/life-v1/chopper-work/source.png",
+    "sha256": "ecb97782c42e5580198ba7f687fc4eb617c3421f5703ae44d8fc28916a779868"
+  },
+  "prompt": {
+    "path": "tools/launcher-room/life-v1/chopper-work/prompt.txt",
+    "sha256": "2c0659e34f5aada2484d61c0fb3c2bcd0b2560eabc05f2181a8ba38dd18478b6"
+  },
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/chopper-actions-01/image.png",
+      "sha256": "2ed9f7b9bc2d92f2b6f0b60b908b72fe8a23acecdcafcb767869d17023db9aea",
+      "role": "approved whole-character identity and style"
+    }
+  ],
+  "review": "Reviewed complete connected body, head/body same facing, correct outfit, four chronological poses per row. Runtime test pending. Original EAST row rejected: collar on anatomical right antler; replaced by corrected complete EAST figures.",
+  "runtimeAccepted": false,
+  "processing": "Keep original RGBA; separate alpha copy removes alpha<16 and isolated <32px opaque specks, retaining 2px AA edge. Crop whole figures and uniform scale only."
+}

@@ -1,0 +1,226 @@
+{
+  "schema": "launcher-life-art-review/1",
+  "reviewType": "Codex source and composited atlas visual inspection plus deterministic alpha/shape checks; no in-room playback acceptance claimed",
+  "generator": "image_gen.imagegen",
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "runtimeAccepted": false,
+  "review": "Accepted BF-37 red shoulder pods, cyan star arms, red hands, Hawaiian shirt and red briefs. Tray support and cloth stroke visible in4 directions; back hands naturally occluded, elbow changes retained.",
+  "noMirroring": true,
+  "noBodyPartAssembly": true,
+  "originalRetained": true,
+  "clips": [
+    {
+      "id": "work",
+      "direction": "east",
+      "asset": "public/images/launcher_room/life_v1/franky/work-east.webp",
+      "sha256": "2ba55f784661dcb6461343e165e5aa9dd9d3e2def72fbbec2b1d7e2523f58a28",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          36,
+          11,
+          114,
+          112
+        ],
+        [
+          34,
+          11,
+          114,
+          112
+        ],
+        [
+          36,
+          11,
+          114,
+          112
+        ],
+        [
+          31,
+          11,
+          105,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        4246,
+        4162,
+        4385,
+        4317
+      ],
+      "singleIsotropicScale": 0.33112583,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "work",
+      "direction": "west",
+      "asset": "public/images/launcher_room/life_v1/franky/work-west.webp",
+      "sha256": "b3cf939e5da56bec1b924a7ec16dd530d822c6e5c9f2f1b021d8474058965e08",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          21,
+          11,
+          90,
+          112
+        ],
+        [
+          21,
+          11,
+          94,
+          112
+        ],
+        [
+          22,
+          11,
+          95,
+          112
+        ],
+        [
+          24,
+          11,
+          94,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        4087,
+        4040,
+        4105,
+        4072
+      ],
+      "singleIsotropicScale": 0.32679739,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "work",
+      "direction": "north",
+      "asset": "public/images/launcher_room/life_v1/franky/work-north.webp",
+      "sha256": "cd022e98580969efa28ec8bbbf6983772f81309b3a46701e835ed7ed1e98ccde",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          17,
+          11,
+          113,
+          112
+        ],
+        [
+          17,
+          11,
+          113,
+          112
+        ],
+        [
+          17,
+          11,
+          113,
+          112
+        ],
+        [
+          16,
+          11,
+          112,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        5821,
+        5786,
+        5747,
+        5874
+      ],
+      "singleIsotropicScale": 0.35335689,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "work",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/franky/work-south.webp",
+      "sha256": "33b3a741f1966252230eec28171f2c9d5a56727def0016ce623ac3d275ef4bf5",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          19,
+          11,
+          107,
+          112
+        ],
+        [
+          19,
+          11,
+          107,
+          112
+        ],
+        [
+          19,
+          11,
+          107,
+          112
+        ],
+        [
+          18,
+          11,
+          106,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        5098,
+        5120,
+        5434,
+        5387
+      ],
+      "singleIsotropicScale": 0.32154341,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    }
+  ]
+}

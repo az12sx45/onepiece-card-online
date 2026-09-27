@@ -1,0 +1,597 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "eat",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source-separated.png",
+      "scale": 0.24875622,
+      "scaleReason": "One common standing physical scale for utility sheet; floor poses are not enlarged.",
+      "regions": [
+        [
+          164,
+          23,
+          348,
+          420
+        ],
+        [
+          679,
+          22,
+          857,
+          420
+        ],
+        [
+          1190,
+          23,
+          1370,
+          420
+        ],
+        [
+          1701,
+          23,
+          1883,
+          420
+        ]
+      ],
+      "roots": [
+        [
+          259.0,
+          418
+        ],
+        [
+          769.5,
+          418
+        ],
+        [
+          1282.5,
+          418
+        ],
+        [
+          1795.0,
+          418
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/eat-south.webp",
+      "sourceSha256": "f12fdff2c2dcbcbee79d36f0a9167bde980b7d62648fc91da4157d25c5e6f788",
+      "assetSha256": "a76b252676ca5e8e93374966c2c3cac1a798bb6f919d517fff55be1fa25befde",
+      "frames": [
+        {
+          "sourceRegion": [
+            164,
+            23,
+            348,
+            420
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            184,
+            397
+          ],
+          "outputBounds": [
+            40,
+            13,
+            46,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            679,
+            22,
+            857,
+            420
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            178,
+            398
+          ],
+          "outputBounds": [
+            41,
+            13,
+            44,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            1190,
+            23,
+            1370,
+            420
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            180,
+            397
+          ],
+          "outputBounds": [
+            41,
+            13,
+            45,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            1701,
+            23,
+            1883,
+            420
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            182,
+            397
+          ],
+          "outputBounds": [
+            41,
+            13,
+            45,
+            99
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "rest",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source-separated.png",
+      "scale": 0.24875622,
+      "scaleReason": "One common standing physical scale for utility sheet; floor poses are not enlarged.",
+      "regions": [
+        [
+          139,
+          647,
+          373,
+          932
+        ],
+        [
+          652,
+          648,
+          884,
+          932
+        ],
+        [
+          1162,
+          647,
+          1397,
+          932
+        ],
+        [
+          1675,
+          647,
+          1909,
+          932
+        ]
+      ],
+      "roots": [
+        [
+          256.0,
+          930
+        ],
+        [
+          768.0,
+          930
+        ],
+        [
+          1279.5,
+          930
+        ],
+        [
+          1792.0,
+          930
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/rest-south.webp",
+      "sourceSha256": "f12fdff2c2dcbcbee79d36f0a9167bde980b7d62648fc91da4157d25c5e6f788",
+      "assetSha256": "84b9bbc2e32ae1fbcc9e03a468d1f663b6a99f85095ddb4f135cadde02c933c2",
+      "frames": [
+        {
+          "sourceRegion": [
+            139,
+            647,
+            373,
+            932
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            234,
+            285
+          ],
+          "outputBounds": [
+            35,
+            41,
+            58,
+            71
+          ]
+        },
+        {
+          "sourceRegion": [
+            652,
+            648,
+            884,
+            932
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            232,
+            284
+          ],
+          "outputBounds": [
+            35,
+            41,
+            58,
+            71
+          ]
+        },
+        {
+          "sourceRegion": [
+            1162,
+            647,
+            1397,
+            932
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            235,
+            285
+          ],
+          "outputBounds": [
+            35,
+            41,
+            58,
+            71
+          ]
+        },
+        {
+          "sourceRegion": [
+            1675,
+            647,
+            1909,
+            932
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            234,
+            285
+          ],
+          "outputBounds": [
+            35,
+            41,
+            58,
+            71
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "sleep",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source-separated.png",
+      "scale": 0.24875622,
+      "scaleReason": "One common standing physical scale for utility sheet; floor poses are not enlarged.",
+      "regions": [
+        [
+          111,
+          1301,
+          401,
+          1444
+        ],
+        [
+          622,
+          1300,
+          914,
+          1444
+        ],
+        [
+          1133,
+          1300,
+          1426,
+          1444
+        ],
+        [
+          1647,
+          1301,
+          1936,
+          1444
+        ]
+      ],
+      "roots": [
+        [
+          256.0,
+          1442
+        ],
+        [
+          768.0,
+          1442
+        ],
+        [
+          1279.5,
+          1442
+        ],
+        [
+          1791.5,
+          1442
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/sleep-south.webp",
+      "sourceSha256": "f12fdff2c2dcbcbee79d36f0a9167bde980b7d62648fc91da4157d25c5e6f788",
+      "assetSha256": "59eecceac94f3fe58e0c539b6b164acfe15cff36d5a9e1084685109965f3d5a4",
+      "frames": [
+        {
+          "sourceRegion": [
+            111,
+            1301,
+            401,
+            1444
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            290,
+            143
+          ],
+          "outputBounds": [
+            28,
+            76,
+            72,
+            36
+          ]
+        },
+        {
+          "sourceRegion": [
+            622,
+            1300,
+            914,
+            1444
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            292,
+            144
+          ],
+          "outputBounds": [
+            28,
+            76,
+            73,
+            36
+          ]
+        },
+        {
+          "sourceRegion": [
+            1133,
+            1300,
+            1426,
+            1444
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            293,
+            144
+          ],
+          "outputBounds": [
+            28,
+            76,
+            73,
+            36
+          ]
+        },
+        {
+          "sourceRegion": [
+            1647,
+            1301,
+            1936,
+            1444
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            289,
+            143
+          ],
+          "outputBounds": [
+            28,
+            76,
+            72,
+            36
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "train",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source-separated.png",
+      "scale": 0.24875622,
+      "scaleReason": "One common standing physical scale for utility sheet; floor poses are not enlarged.",
+      "regions": [
+        [
+          161,
+          1550,
+          350,
+          1956
+        ],
+        [
+          673,
+          1550,
+          862,
+          1956
+        ],
+        [
+          1182,
+          1550,
+          1378,
+          1956
+        ],
+        [
+          1698,
+          1551,
+          1886,
+          1956
+        ]
+      ],
+      "roots": [
+        [
+          255.5,
+          1954
+        ],
+        [
+          767.5,
+          1954
+        ],
+        [
+          1279.5,
+          1954
+        ],
+        [
+          1791.5,
+          1954
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/train-south.webp",
+      "sourceSha256": "f12fdff2c2dcbcbee79d36f0a9167bde980b7d62648fc91da4157d25c5e6f788",
+      "assetSha256": "495fe52469c9dd265047aa4240517795c12ad16f5f39c205146299e2fd0d10af",
+      "frames": [
+        {
+          "sourceRegion": [
+            161,
+            1550,
+            350,
+            1956
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            189,
+            406
+          ],
+          "outputBounds": [
+            40,
+            11,
+            47,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            673,
+            1550,
+            862,
+            1956
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            189,
+            406
+          ],
+          "outputBounds": [
+            40,
+            11,
+            47,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            1182,
+            1550,
+            1378,
+            1956
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            196,
+            406
+          ],
+          "outputBounds": [
+            40,
+            11,
+            49,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            1698,
+            1551,
+            1886,
+            1956
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            188,
+            405
+          ],
+          "outputBounds": [
+            41,
+            11,
+            47,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "ok": true,
+  "checks": 25,
+  "scope": "Pure controller with virtual clock and fake renderer/server. No visual, database, or public deployment acceptance.",
+  "results": [
+    {
+      "name": "requirements exclude every event with an unowned required actor",
+      "pass": true
+    },
+    {
+      "name": "ownership loss releases task and blocks late reserve response",
+      "pass": true
+    },
+    {
+      "name": "work reserve precedes physical movement, activation follows arrival and real clip",
+      "pass": true
+    },
+    {
+      "name": "missing animation never activates or claims a work reward",
+      "pass": true
+    },
+    {
+      "name": "station slot is exclusive; every suitable character can reserve when released",
+      "pass": true
+    },
+    {
+      "name": "unreachable routes never reserve server work or teleport",
+      "pass": true
+    },
+    {
+      "name": "reserved offline job must physically arrive again before activate",
+      "pass": true
+    },
+    {
+      "name": "optional chain members absent are skipped without spawning or error",
+      "pass": true
+    },
+    {
+      "name": "multi-participant event waits for all real routes and releases all leases",
+      "pass": true
+    },
+    {
+      "name": "losing a chain participant cancels the event and frees the other participants",
+      "pass": true
+    },
+    {
+      "name": "arrival is acknowledged once only after walking and greeting",
+      "pass": true
+    },
+    {
+      "name": "rare events are not scheduled every twenty seconds",
+      "pass": true
+    },
+    {
+      "name": "memory is bounded, decays, and relationship dimensions remain separate",
+      "pass": true
+    },
+    {
+      "name": "clock jumps never create negative needs or claim unactivated work",
+      "pass": true
+    },
+    {
+      "name": "rebind preserves needs and jobs instead of reinitializing the controller",
+      "pass": true
+    },
+    {
+      "name": "read-only visitor controller never submits life commands",
+      "pass": true
+    },
+    {
+      "name": "dispose prevents asynchronous callbacks from restoring life state",
+      "pass": true
+    },
+    {
+      "name": "weighted decisions expose varied life states while unavailable furniture is not invented",
+      "pass": true
+    },
+    {
+      "name": "older server revisions cannot restore removed ownership or stale jobs",
+      "pass": true
+    },
+    {
+      "name": "duplicate IPC forwarding and later heartbeat do not replay an offline receipt",
+      "pass": true
+    },
+    {
+      "name": "station stages require available real clips and play distinct actions",
+      "pass": true
+    },
+    {
+      "name": "event action gate requires decoded art, not a semantic action name",
+      "pass": true
+    },
+    {
+      "name": "repeated taps use authored escalation without mutating economy",
+      "pass": true
+    },
+    {
+      "name": "furniture removed during editor suspension cancels its reservation safely",
+      "pass": true
+    },
+    {
+      "name": "real authored data integrates without admitting unowned cast or nonexistent furniture",
+      "pass": true
+    }
+  ]
+}

@@ -1,5 +1,15 @@
 # File Map
 
+## 2026-09-27 角色生活基地完整升級（1.2.0）
+
+先完成 LIFE_SYSTEM_AUDIT.md，再在 C:/Codex_Candidates/launcher-character-life-1.2.0 由 main fff29a25298d60401a4e61fd96358f1622e6478b 建立隔離候選。正式 authority 仍為 D:/Codex_Release_Worktrees/board-voyage-records-v1；發布與正式選擇性同步結果另見 docs/LAUNCHER_LIFE_SYSTEM.md。保護其他 Board/rank 改動、三款遊戲、既有存檔與已接受的 1.1.15 人物步態／1.1.16 小比例空間。
+
+新增 desktop/launcher-life-data.js、launcher-life.js、launcher-life-actions.js、launcher-life-room.js 與 server/launcher-life.js、launcher-life-store.js。持有且擺放的角色才參與 11 狀態、5 需求、45 對四維關係、9 工作區、6 方針、日夜作息、有限短期記憶與 183 事件。controller 採既有 BFS、獨占家具接點、整身逐幀演出、操作抵達後台詞、前景180秒／同組720秒冷卻、稀有6–10分鐘。房間10人與capacityVersion2保護舊客戶端，新購角色持久首次入場，好友只讀投影。呼喚／送禮／訓練／工作／狀態透過原角色面板；工作收據與現有錢包連接、離線最多8小時聚合，server只認合法持有、擺放、站位、時間與一次性ledger，共用舊工作每日限額。
+
+修改 desktop room/profile-shop/dialogue/HTML/CSS/main/preload/auth/package、server shop/index/distribution、對應QA與四主文件。新增128張完整人物四幀atlas（512格）、五張固定比例四向爐台圖片、GPT原稿/prompt/receipt/alpha處理/量測與獨立審稿；全列於 docs/LAUNCHER_LIFE_ART_20260927.json 及 tools/launcher-room/life-v1。魯夫／索隆／騙人布重畫、佛朗基全身比例校正、吉貝爾進食全身同比放大；保留失敗來源但不進runtime。未拼頭／肢體、未鏡像配件。39個舊場景121句與8句bond修正無持有第三人、未發生動作與時間斷言；151舊scene ID和112未改場完整保留。
+
+候選驗證：PGlite SQL 160、controller25、cadence6、內容384242、舊對話23799、Chromium整合16及最終回歸9／素材互動4通過。實際渲染32個家具四向接點、魯夫／索隆真按鈕Call/Gift/Train及四幀動畫、390寬度與帳號切換/購買入場/租約/晚到回覆已核對。完整128 atlas／512格與舊站姿並排，獨立審稿PASS_WITH_NOTES；香吉士局部頭部輪廓仍比舊站姿略寬的非阻擋差異明列。這些是自動化、隔離fixture與模型視覺檢查，非真人或真實帳號購買驗收；PostgreSQL多session競爭未實測。封裝、公開簽章／完整下載SHA與正式同步需各自證據，不由上述數字代替。LATTICE runtime/task API本階段不可呼叫，未虛稱持久登記。
+
 ## 2026-09-27 房間背景與家具比例（1.1.16 已部署）
 
 - desktop/launcher-room.js/css：room 專用背景選擇、家具繪圖邊長、地面 root 與互動 dock。

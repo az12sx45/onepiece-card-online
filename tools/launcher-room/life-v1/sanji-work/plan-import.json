@@ -1,0 +1,593 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "work",
+      "key": "sanji",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/sanji-work/source.png",
+      "scale": 0.319,
+      "roots": [
+        [
+          185.5,
+          310
+        ],
+        [
+          465.5,
+          310
+        ],
+        [
+          746.5,
+          310
+        ],
+        [
+          1010.0,
+          310
+        ]
+      ],
+      "regions": [
+        [
+          0,
+          0,
+          340,
+          315
+        ],
+        [
+          340,
+          0,
+          620,
+          315
+        ],
+        [
+          620,
+          0,
+          900,
+          315
+        ],
+        [
+          900,
+          0,
+          1222,
+          315
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/sanji/work-east.webp",
+      "sourceSha256": "8eb5302708f3adfafc9466ca8e11b15cd6ac69a13a819cbc0330182a5ddd82fa",
+      "assetSha256": "43597749f008aaa53448de0ab418073af7c6ff471a4dd68a6834fb8f0c809d61",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            0,
+            340,
+            315
+          ],
+          "alphaBounds": [
+            0,
+            5,
+            340,
+            315
+          ],
+          "outputBounds": [
+            5,
+            13,
+            108,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            340,
+            0,
+            620,
+            315
+          ],
+          "alphaBounds": [
+            0,
+            6,
+            280,
+            315
+          ],
+          "outputBounds": [
+            24,
+            13,
+            89,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            620,
+            0,
+            900,
+            315
+          ],
+          "alphaBounds": [
+            0,
+            9,
+            280,
+            315
+          ],
+          "outputBounds": [
+            24,
+            14,
+            89,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            900,
+            0,
+            1222,
+            315
+          ],
+          "alphaBounds": [
+            0,
+            10,
+            302,
+            315
+          ],
+          "outputBounds": [
+            29,
+            15,
+            96,
+            97
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "sanji",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/sanji-work/source.png",
+      "scale": 0.319,
+      "roots": [
+        [
+          209.5,
+          624
+        ],
+        [
+          494.5,
+          624
+        ],
+        [
+          763.0,
+          624
+        ],
+        [
+          1029.5,
+          624
+        ]
+      ],
+      "regions": [
+        [
+          0,
+          315,
+          340,
+          630
+        ],
+        [
+          340,
+          315,
+          620,
+          630
+        ],
+        [
+          620,
+          315,
+          900,
+          630
+        ],
+        [
+          900,
+          315,
+          1222,
+          630
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/sanji/work-west.webp",
+      "sourceSha256": "8eb5302708f3adfafc9466ca8e11b15cd6ac69a13a819cbc0330182a5ddd82fa",
+      "assetSha256": "aabc7926b0db411cd3ec3a750ab3d12df61edc6568d2f4a054f6064b73ffdc69",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            315,
+            340,
+            630
+          ],
+          "alphaBounds": [
+            43,
+            0,
+            340,
+            315
+          ],
+          "outputBounds": [
+            11,
+            12,
+            95,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            340,
+            315,
+            620,
+            630
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            280,
+            315
+          ],
+          "outputBounds": [
+            15,
+            12,
+            89,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            620,
+            315,
+            900,
+            630
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            280,
+            315
+          ],
+          "outputBounds": [
+            18,
+            12,
+            89,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            900,
+            315,
+            1222,
+            630
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            308,
+            315
+          ],
+          "outputBounds": [
+            23,
+            12,
+            98,
+            100
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "sanji",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/sanji-work/source.png",
+      "scale": 0.319,
+      "roots": [
+        [
+          200.0,
+          944
+        ],
+        [
+          484.5,
+          944
+        ],
+        [
+          757.0,
+          944
+        ],
+        [
+          1023.0,
+          944
+        ]
+      ],
+      "regions": [
+        [
+          0,
+          630,
+          340,
+          951
+        ],
+        [
+          340,
+          630,
+          620,
+          951
+        ],
+        [
+          620,
+          630,
+          900,
+          951
+        ],
+        [
+          900,
+          630,
+          1222,
+          951
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/sanji/work-north.webp",
+      "sourceSha256": "8eb5302708f3adfafc9466ca8e11b15cd6ac69a13a819cbc0330182a5ddd82fa",
+      "assetSha256": "984df26a582272c77f50a9baaf9708413ee02fbaf35a7b11ae0d14375cda5216",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            630,
+            340,
+            951
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            340,
+            321
+          ],
+          "outputBounds": [
+            0,
+            10,
+            108,
+            102
+          ]
+        },
+        {
+          "sourceRegion": [
+            340,
+            630,
+            620,
+            951
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            280,
+            321
+          ],
+          "outputBounds": [
+            18,
+            10,
+            89,
+            102
+          ]
+        },
+        {
+          "sourceRegion": [
+            620,
+            630,
+            900,
+            951
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            280,
+            321
+          ],
+          "outputBounds": [
+            20,
+            10,
+            89,
+            102
+          ]
+        },
+        {
+          "sourceRegion": [
+            900,
+            630,
+            1222,
+            951
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            310,
+            321
+          ],
+          "outputBounds": [
+            25,
+            10,
+            99,
+            102
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "sanji",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/sanji-work/source.png",
+      "scale": 0.319,
+      "roots": [
+        [
+          200.5,
+          1262
+        ],
+        [
+          480.5,
+          1261
+        ],
+        [
+          757.5,
+          1262
+        ],
+        [
+          1023.0,
+          1262
+        ]
+      ],
+      "regions": [
+        [
+          0,
+          951,
+          340,
+          1287
+        ],
+        [
+          340,
+          951,
+          620,
+          1287
+        ],
+        [
+          620,
+          951,
+          900,
+          1287
+        ],
+        [
+          900,
+          951,
+          1222,
+          1287
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/sanji/work-south.webp",
+      "sourceSha256": "8eb5302708f3adfafc9466ca8e11b15cd6ac69a13a819cbc0330182a5ddd82fa",
+      "assetSha256": "6ab875d083bc88a9fb6c715d639f1f7ab4d91054e4b869837c54143bdcb9656f",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            951,
+            340,
+            1287
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            340,
+            336
+          ],
+          "outputBounds": [
+            0,
+            5,
+            108,
+            107
+          ]
+        },
+        {
+          "sourceRegion": [
+            340,
+            951,
+            620,
+            1287
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            280,
+            316
+          ],
+          "outputBounds": [
+            19,
+            11,
+            89,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            620,
+            951,
+            900,
+            1287
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            280,
+            318
+          ],
+          "outputBounds": [
+            20,
+            11,
+            89,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            900,
+            951,
+            1222,
+            1287
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            321,
+            317
+          ],
+          "outputBounds": [
+            25,
+            11,
+            102,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "generator": "gpt-image",
+  "sourceSha256": "d1bd2f1b07999454085128b461bf74d24c89d3a2bbcd4ab7974dda2db3a78b9b",
+  "promptSha256": "ef692d62032d63dc4d50e782d29610bab9d7e215c9bb13d04a7fbdef673e6a36",
+  "sourceReviewed": true,
+  "runtimeAccepted": false,
+  "wholeFigureOnly": true,
+  "assets": [
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/helm-east.webp",
+      "assetSha256": "ff6453c595833d059ed3d682bbea115e5492eb36fc728ff28a7585b1f87e72e5"
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/helm-west.webp",
+      "assetSha256": "28d3482f3197443b8743eeb31a281331e21fcd445a733accc5f47b5eaa1c4f26"
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/helm-north.webp",
+      "assetSha256": "12ddcad97779f6625aa153e04ab09f09e63d3ea4849e9e90eaaeea79a9654c0f"
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/helm-south.webp",
+      "assetSha256": "03a5c6af41e87f9b98b9c6ba93290313d4539e57c70af04b3b84889c45fa101f"
+    }
+  ]
+}

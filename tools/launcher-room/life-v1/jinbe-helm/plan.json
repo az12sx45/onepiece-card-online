@@ -1,0 +1,212 @@
+{
+  "clips": [
+    {
+      "id": "jinbe-helm-east",
+      "key": "jinbe",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/jinbe-helm/source.png",
+      "asset": "public/images/launcher_room/life_v1/jinbe/helm-east.webp",
+      "regions": [
+        [
+          0,
+          0,
+          313,
+          311
+        ],
+        [
+          313,
+          0,
+          627,
+          311
+        ],
+        [
+          627,
+          0,
+          940,
+          311
+        ],
+        [
+          940,
+          0,
+          1254,
+          311
+        ]
+      ],
+      "roots": [
+        [
+          171.5,
+          304
+        ],
+        [
+          484.5,
+          304
+        ],
+        [
+          797.0,
+          304
+        ],
+        [
+          1110.5,
+          304
+        ]
+      ],
+      "scale": 0.315
+    },
+    {
+      "id": "jinbe-helm-west",
+      "key": "jinbe",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/jinbe-helm/source.png",
+      "asset": "public/images/launcher_room/life_v1/jinbe/helm-west.webp",
+      "regions": [
+        [
+          0,
+          311,
+          313,
+          623
+        ],
+        [
+          313,
+          311,
+          627,
+          623
+        ],
+        [
+          627,
+          311,
+          940,
+          623
+        ],
+        [
+          940,
+          311,
+          1254,
+          623
+        ]
+      ],
+      "roots": [
+        [
+          144.0,
+          615
+        ],
+        [
+          457.0,
+          615
+        ],
+        [
+          770.0,
+          615
+        ],
+        [
+          1084.0,
+          615
+        ]
+      ],
+      "scale": 0.315
+    },
+    {
+      "id": "jinbe-helm-north",
+      "key": "jinbe",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/jinbe-helm/source.png",
+      "asset": "public/images/launcher_room/life_v1/jinbe/helm-north.webp",
+      "regions": [
+        [
+          0,
+          623,
+          313,
+          911
+        ],
+        [
+          313,
+          623,
+          627,
+          911
+        ],
+        [
+          627,
+          623,
+          940,
+          911
+        ],
+        [
+          940,
+          623,
+          1254,
+          911
+        ]
+      ],
+      "roots": [
+        [
+          155.0,
+          907
+        ],
+        [
+          469.5,
+          907
+        ],
+        [
+          782.0,
+          907
+        ],
+        [
+          1096.5,
+          907
+        ]
+      ],
+      "scale": 0.315
+    },
+    {
+      "id": "jinbe-helm-south",
+      "key": "jinbe",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/jinbe-helm/source.png",
+      "asset": "public/images/launcher_room/life_v1/jinbe/helm-south.webp",
+      "regions": [
+        [
+          0,
+          911,
+          313,
+          1254
+        ],
+        [
+          313,
+          911,
+          627,
+          1254
+        ],
+        [
+          627,
+          911,
+          940,
+          1254
+        ],
+        [
+          940,
+          911,
+          1254,
+          1254
+        ]
+      ],
+      "roots": [
+        [
+          157.5,
+          1229
+        ],
+        [
+          470.0,
+          1229
+        ],
+        [
+          784.5,
+          1229
+        ],
+        [
+          1097.0,
+          1229
+        ]
+      ],
+      "scale": 0.315
+    }
+  ]
+}

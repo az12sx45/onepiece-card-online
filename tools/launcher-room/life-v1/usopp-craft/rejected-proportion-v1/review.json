@@ -1,0 +1,226 @@
+{
+  "schema": "launcher-life-art-review/1",
+  "reviewType": "Codex source and composited atlas visual inspection plus deterministic alpha/shape checks; no in-room playback acceptance claimed",
+  "generator": "image_gen.imagegen",
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "runtimeAccepted": false,
+  "review": "Early Usopp holds small repair panel with left hand and turns screwdriver with right through four stages. Long nose, left wristband, left-hip satchel preserved; back has no face. No furniture baked in.",
+  "noMirroring": true,
+  "noBodyPartAssembly": true,
+  "originalRetained": true,
+  "clips": [
+    {
+      "id": "craft",
+      "direction": "east",
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-east.webp",
+      "sha256": "89cce63e52ebd3a6903591ff3291395144ff6f99141eb9a3179663c3c3028f5b",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "sourceSha256": "c10e97dd6d36c195216c3246cc3cb5855347d3b819a1308e2d6c4247fbf9b2dd",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          52,
+          11,
+          96,
+          112
+        ],
+        [
+          53,
+          11,
+          99,
+          112
+        ],
+        [
+          53,
+          11,
+          99,
+          112
+        ],
+        [
+          52,
+          11,
+          97,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3021,
+        2976,
+        2973,
+        2953
+      ],
+      "singleIsotropicScale": 0.32679739,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "craft",
+      "direction": "west",
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-west.webp",
+      "sha256": "161257293b917cfccdd58d6e60187da9622ca7e4db3f798a1f335e9c065cd72b",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "sourceSha256": "c10e97dd6d36c195216c3246cc3cb5855347d3b819a1308e2d6c4247fbf9b2dd",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          32,
+          11,
+          76,
+          112
+        ],
+        [
+          30,
+          11,
+          77,
+          112
+        ],
+        [
+          30,
+          11,
+          77,
+          112
+        ],
+        [
+          32,
+          11,
+          76,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3124,
+        3097,
+        3194,
+        3032
+      ],
+      "singleIsotropicScale": 0.3236246,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "craft",
+      "direction": "north",
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-north.webp",
+      "sha256": "8a09f5e4b75d464d82ee13051978899e36ab48bcc53c51d0329bed0d00c74111",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "sourceSha256": "c10e97dd6d36c195216c3246cc3cb5855347d3b819a1308e2d6c4247fbf9b2dd",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          41,
+          11,
+          87,
+          112
+        ],
+        [
+          41,
+          11,
+          87,
+          112
+        ],
+        [
+          41,
+          11,
+          88,
+          112
+        ],
+        [
+          41,
+          11,
+          87,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3164,
+        3318,
+        3247,
+        3180
+      ],
+      "singleIsotropicScale": 0.33112583,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "craft",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-south.webp",
+      "sha256": "c5f3766d8a750c20cbe6f0078fa991620e9cc87d763d8f5b5152f44e58dc00c0",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "sourceSha256": "c10e97dd6d36c195216c3246cc3cb5855347d3b819a1308e2d6c4247fbf9b2dd",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          40,
+          11,
+          89,
+          112
+        ],
+        [
+          39,
+          11,
+          89,
+          112
+        ],
+        [
+          39,
+          11,
+          89,
+          112
+        ],
+        [
+          39,
+          11,
+          89,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        3157,
+        3155,
+        3140,
+        3095
+      ],
+      "singleIsotropicScale": 0.32894737,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    }
+  ]
+}

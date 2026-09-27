@@ -1,0 +1,16 @@
+{
+  "generator": "image_gen.imagegen",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030\\exec-25695574-dee0-4efd-8366-c9c3e71c2990.png",
+  "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/franky-actions-source-01/ancestry/00-turnaround-01.png",
+      "sha256": "7b5d5dbce22dbdd5d954fd729779de50b63bb06cbc6bcaa311a7468dd9470702"
+    }
+  ],
+  "sourceReview": "Accepted BF-37 red shoulder pods, cyan star arms, red hands, Hawaiian shirt and red briefs. Tray support and cloth stroke visible in4 directions; back hands naturally occluded, elbow changes retained.",
+  "runtimeAccepted": false,
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "promptSha256": "8f2aa1c801953f33e1f255dfd2f49a95a2b88b5d36418a36a541808f624fc251"
+}

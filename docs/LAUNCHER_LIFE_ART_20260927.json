@@ -1,0 +1,7028 @@
+{
+  "schema": "launcher-life-art/1",
+  "version": "1.2.0",
+  "generator": "OpenAI built-in image_gen",
+  "canonicalCharactersOnly": true,
+  "anatomyReassembled": false,
+  "mirrored": false,
+  "shape": {
+    "cell": 128,
+    "columns": 4,
+    "rows": 1,
+    "frames": 4,
+    "root": [
+      64,
+      112
+    ]
+  },
+  "review": "tools/launcher-room/life-v1/final-visual-review.json",
+  "items": [
+    {
+      "asset": "public/images/launcher_room/life_v1/luffy/work-east.webp",
+      "assetSha256": "5cf4d4a16c98244dd203c084d90daf90986b74b116381141cbc2dc89123252d7",
+      "assetBytes": 29492,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          41,
+          14,
+          87,
+          112
+        ],
+        [
+          40,
+          15,
+          88,
+          112
+        ],
+        [
+          36,
+          14,
+          91,
+          112
+        ],
+        [
+          40,
+          15,
+          87,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/luffy/work-west.webp",
+      "assetSha256": "07259c95915d390e4cd12a96fd11231d5457bfacdcd118b28cb5a7952d34b11b",
+      "assetBytes": 29152,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          41,
+          17,
+          86,
+          112
+        ],
+        [
+          40,
+          17,
+          87,
+          112
+        ],
+        [
+          40,
+          14,
+          88,
+          109
+        ],
+        [
+          41,
+          17,
+          87,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/luffy/work-north.webp",
+      "assetSha256": "990ca55ef40a28d5cbdd39768ae0f2e1251b4847c0c78cd660cb930977d2f8fa",
+      "assetBytes": 29806,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          41,
+          14,
+          88,
+          112
+        ],
+        [
+          41,
+          14,
+          88,
+          112
+        ],
+        [
+          41,
+          14,
+          88,
+          112
+        ],
+        [
+          41,
+          14,
+          88,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/luffy/work-south.webp",
+      "assetSha256": "3571514b9bdeccd1986cfe327ab98e6c01fe141001cebf4f3808a46e80b48699",
+      "assetBytes": 32272,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          41,
+          14,
+          87,
+          112
+        ],
+        [
+          41,
+          14,
+          87,
+          112
+        ],
+        [
+          40,
+          14,
+          88,
+          112
+        ],
+        [
+          41,
+          14,
+          87,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/luffy/eat-south.webp",
+      "assetSha256": "1dd22d419a5be4be9fe076cb44905421ed5743d6121857e10268bf3f131d1a60",
+      "assetBytes": 31240,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          43,
+          14,
+          84,
+          112
+        ],
+        [
+          43,
+          14,
+          85,
+          112
+        ],
+        [
+          43,
+          14,
+          85,
+          112
+        ],
+        [
+          43,
+          14,
+          84,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/luffy/rest-south.webp",
+      "assetSha256": "b7cb9a0cc4f630913d00f89d381adb6c0a9331ecf6db10dc389c83c16937a98e",
+      "assetBytes": 28904,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          40,
+          36,
+          88,
+          112
+        ],
+        [
+          40,
+          36,
+          87,
+          112
+        ],
+        [
+          40,
+          36,
+          87,
+          112
+        ],
+        [
+          41,
+          36,
+          88,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/luffy/sleep-south.webp",
+      "assetSha256": "0df726cb823218e322cec0b1fa031612c0a44f9cee0209d3c7426b6b520f5b60",
+      "assetBytes": 19130,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          27,
+          77,
+          101,
+          112
+        ],
+        [
+          27,
+          77,
+          100,
+          112
+        ],
+        [
+          28,
+          77,
+          100,
+          112
+        ],
+        [
+          28,
+          77,
+          101,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/luffy/train-south.webp",
+      "assetSha256": "f502e66444d9000373b33bbc17aaf8b5067ad260505fe09666d9f794f92b4f4f",
+      "assetBytes": 32090,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          39,
+          17,
+          90,
+          112
+        ],
+        [
+          38,
+          17,
+          90,
+          112
+        ],
+        [
+          38,
+          17,
+          91,
+          112
+        ],
+        [
+          39,
+          17,
+          89,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/zoro/work-east.webp",
+      "assetSha256": "558e20dfaa7cfdf87301c92750fee4343137f91410adf6b08cc8b946ffc18dc4",
+      "assetBytes": 26548,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          41,
+          16,
+          87,
+          112
+        ],
+        [
+          41,
+          16,
+          86,
+          112
+        ],
+        [
+          39,
+          16,
+          89,
+          112
+        ],
+        [
+          42,
+          16,
+          87,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/zoro/work-west.webp",
+      "assetSha256": "0ce806926c2abbad176fc551dba61bdb76ac23bf25897f2c65ecf1b53bd2f214",
+      "assetBytes": 25510,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          42,
+          16,
+          87,
+          112
+        ],
+        [
+          41,
+          16,
+          87,
+          112
+        ],
+        [
+          40,
+          17,
+          88,
+          112
+        ],
+        [
+          41,
+          16,
+          86,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/zoro/work-north.webp",
+      "assetSha256": "165055dbe83de465523365d2a0034b86dea6c973c0e0c11497c9b0b1d28c600b",
+      "assetBytes": 26640,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          41,
+          16,
+          87,
+          112
+        ],
+        [
+          41,
+          16,
+          86,
+          112
+        ],
+        [
+          41,
+          16,
+          86,
+          112
+        ],
+        [
+          42,
+          16,
+          86,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/zoro/work-south.webp",
+      "assetSha256": "a66610714ad02a9a9e06a2a340f2650b68efd9a4a70c873f327fa88ea479436f",
+      "assetBytes": 29036,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          42,
+          16,
+          86,
+          112
+        ],
+        [
+          41,
+          16,
+          86,
+          112
+        ],
+        [
+          42,
+          16,
+          87,
+          112
+        ],
+        [
+          42,
+          16,
+          87,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/zoro/eat-south.webp",
+      "assetSha256": "d023a0f6868ad4c3e46caa6533b93ce43b02bd8f07b0841f7b31dfe80f9c3583",
+      "assetBytes": 28824,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          42,
+          16,
+          86,
+          112
+        ],
+        [
+          42,
+          16,
+          87,
+          112
+        ],
+        [
+          42,
+          16,
+          87,
+          112
+        ],
+        [
+          42,
+          16,
+          86,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/zoro/rest-south.webp",
+      "assetSha256": "955e569ea59884aa2a2faa40bf5055037bd0ce05206a89f5ea372bebddaaf3bd",
+      "assetBytes": 25034,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          38,
+          38,
+          91,
+          112
+        ],
+        [
+          38,
+          39,
+          90,
+          112
+        ],
+        [
+          38,
+          40,
+          90,
+          112
+        ],
+        [
+          38,
+          38,
+          90,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/zoro/sleep-south.webp",
+      "assetSha256": "bfa9c63f08168be610bb0bf151d2252031a9cf9b6d7680e9b25326e40ceedf49",
+      "assetBytes": 17380,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          27,
+          79,
+          101,
+          112
+        ],
+        [
+          26,
+          79,
+          102,
+          112
+        ],
+        [
+          26,
+          79,
+          101,
+          112
+        ],
+        [
+          27,
+          79,
+          101,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/zoro/train-south.webp",
+      "assetSha256": "571b72d97c6428832ca97bbabc75914671feb67eef1e2401d3a6a99931d11f14",
+      "assetBytes": 27900,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          41,
+          18,
+          88,
+          112
+        ],
+        [
+          39,
+          18,
+          88,
+          112
+        ],
+        [
+          32,
+          20,
+          96,
+          112
+        ],
+        [
+          41,
+          17,
+          87,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/nami/work-east.webp",
+      "assetSha256": "cfd8ff26c0fb28ebc7d7df5a5790b3954fb4a9ec9c39be9e46985b9d297ab0f6",
+      "assetBytes": 25862,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          52,
+          11,
+          94,
+          112
+        ],
+        [
+          51,
+          11,
+          94,
+          112
+        ],
+        [
+          51,
+          11,
+          94,
+          112
+        ],
+        [
+          52,
+          11,
+          94,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/nami/work-west.webp",
+      "assetSha256": "dddf34293757f635e979e91bf71c7daa7fc0e0b6a5ae487fac8cb626296fef4f",
+      "assetBytes": 24674,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          36,
+          11,
+          77,
+          112
+        ],
+        [
+          37,
+          11,
+          76,
+          112
+        ],
+        [
+          37,
+          11,
+          76,
+          112
+        ],
+        [
+          37,
+          11,
+          77,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/nami/work-north.webp",
+      "assetSha256": "21064ef6561e5b350737f69fd9baab09cb94ad6d0829777b3dd9afe92ef888ed",
+      "assetBytes": 27854,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          47,
+          11,
+          80,
+          112
+        ],
+        [
+          48,
+          11,
+          82,
+          112
+        ],
+        [
+          48,
+          11,
+          82,
+          112
+        ],
+        [
+          48,
+          11,
+          83,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/nami/work-south.webp",
+      "assetSha256": "7bbb857bb721c0b1529e6036e94d21c9ded87db372f6e5edc3681e3744fac3f3",
+      "assetBytes": 29176,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          45,
+          11,
+          82,
+          112
+        ],
+        [
+          45,
+          11,
+          82,
+          112
+        ],
+        [
+          45,
+          11,
+          82,
+          112
+        ],
+        [
+          45,
+          11,
+          82,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/nami/read-east.webp",
+      "assetSha256": "fa917d27aed82496ba08d0b95d4755dba2c543d6f1ab401ce030e1d9d76d40aa",
+      "assetBytes": 29662,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          52,
+          12,
+          104,
+          112
+        ],
+        [
+          56,
+          12,
+          108,
+          112
+        ],
+        [
+          55,
+          12,
+          107,
+          112
+        ],
+        [
+          55,
+          12,
+          107,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/nami/read-west.webp",
+      "assetSha256": "7b980d132acee891c9a2fc90b0f2496a1e9d661d894564f5607941e450c9b326",
+      "assetBytes": 28462,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          27,
+          12,
+          78,
+          112
+        ],
+        [
+          27,
+          12,
+          77,
+          112
+        ],
+        [
+          27,
+          12,
+          77,
+          112
+        ],
+        [
+          27,
+          12,
+          76,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/nami/read-north.webp",
+      "assetSha256": "9901559142f4d2a7ee69be6ba51bc13fd4a6a4c562f2a7993c2d0c5cb10324aa",
+      "assetBytes": 31806,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          40,
+          12,
+          85,
+          112
+        ],
+        [
+          40,
+          12,
+          88,
+          112
+        ],
+        [
+          39,
+          12,
+          89,
+          112
+        ],
+        [
+          40,
+          12,
+          89,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/nami/read-south.webp",
+      "assetSha256": "9cbdf0a968ab2064be92252ef79059315d0f717d83895e8026a652796cb86dce",
+      "assetBytes": 32220,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          39,
+          12,
+          90,
+          111
+        ],
+        [
+          40,
+          12,
+          90,
+          112
+        ],
+        [
+          40,
+          12,
+          92,
+          111
+        ],
+        [
+          40,
+          12,
+          90,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/nami/eat-south.webp",
+      "assetSha256": "93fdf8d36c45db22dd76726be05497c627c213533a858b8689281b7667753a96",
+      "assetBytes": 28162,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          46,
+          12,
+          82,
+          112
+        ],
+        [
+          45,
+          12,
+          82,
+          112
+        ],
+        [
+          44,
+          12,
+          81,
+          112
+        ],
+        [
+          46,
+          11,
+          82,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/nami/rest-south.webp",
+      "assetSha256": "ceeb6a4778939f82367be6fb3079c98fe5d056e6e3486578cba11ff78e335db2",
+      "assetBytes": 22986,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          42,
+          40,
+          86,
+          112
+        ],
+        [
+          42,
+          41,
+          86,
+          112
+        ],
+        [
+          42,
+          44,
+          87,
+          112
+        ],
+        [
+          41,
+          40,
+          86,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/nami/sleep-south.webp",
+      "assetSha256": "bdd284571134979f22f89dd4a5c410abcce9815cf47d25c3b5b6b6f02a4a34cf",
+      "assetBytes": 17798,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          24,
+          83,
+          104,
+          112
+        ],
+        [
+          24,
+          83,
+          103,
+          112
+        ],
+        [
+          24,
+          83,
+          103,
+          112
+        ],
+        [
+          24,
+          83,
+          104,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/nami/train-south.webp",
+      "assetSha256": "1e64dc727c12a29da121cdcb3d4040e68dfd14fc44c353d46a041ee021f3d9ab",
+      "assetBytes": 30488,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          43,
+          11,
+          86,
+          112
+        ],
+        [
+          42,
+          11,
+          86,
+          112
+        ],
+        [
+          38,
+          11,
+          86,
+          112
+        ],
+        [
+          43,
+          11,
+          86,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/work-east.webp",
+      "assetSha256": "863b75202afd7dcf00a6216f73573da451bece78df493255b4beb326b202f2f0",
+      "assetBytes": 38552,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          37,
+          11,
+          99,
+          111
+        ],
+        [
+          36,
+          12,
+          100,
+          111
+        ],
+        [
+          36,
+          12,
+          100,
+          112
+        ],
+        [
+          36,
+          12,
+          99,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/work-west.webp",
+      "assetSha256": "926916f8e106f45fd3a92a7388d99df54db3fba35ea4b6efdfae74f1bea9e1cf",
+      "assetBytes": 37658,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          30,
+          11,
+          91,
+          112
+        ],
+        [
+          29,
+          11,
+          91,
+          111
+        ],
+        [
+          30,
+          11,
+          91,
+          112
+        ],
+        [
+          30,
+          11,
+          91,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/work-north.webp",
+      "assetSha256": "d1b2e17e3136197eb7eaa8513a14bbe5de24511abf534c95a64b3d3e2af35dde",
+      "assetBytes": 37868,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          34,
+          12,
+          95,
+          112
+        ],
+        [
+          33,
+          11,
+          95,
+          111
+        ],
+        [
+          33,
+          12,
+          95,
+          111
+        ],
+        [
+          32,
+          12,
+          94,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/work-south.webp",
+      "assetSha256": "5d93826cba1f30d8f72bcb121303f8dc15df7db213482a5ab32bdf36291ce33d",
+      "assetBytes": 38598,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          38,
+          12,
+          91,
+          112
+        ],
+        [
+          38,
+          11,
+          90,
+          111
+        ],
+        [
+          37,
+          11,
+          92,
+          111
+        ],
+        [
+          38,
+          12,
+          90,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/read-east.webp",
+      "assetSha256": "4dca19a9bf331ea066985a5bb334475014dcc4368a695d6aee31936f4407a4d3",
+      "assetBytes": 38200,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          39,
+          12,
+          104,
+          112
+        ],
+        [
+          39,
+          12,
+          103,
+          111
+        ],
+        [
+          38,
+          12,
+          103,
+          112
+        ],
+        [
+          38,
+          12,
+          103,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/read-west.webp",
+      "assetSha256": "dd698e8344c68a014252ce5a159b0c6f3c0f0880418c07e72fb84bb46eadd771",
+      "assetBytes": 37418,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          29,
+          12,
+          90,
+          112
+        ],
+        [
+          29,
+          13,
+          90,
+          112
+        ],
+        [
+          29,
+          13,
+          92,
+          112
+        ],
+        [
+          27,
+          12,
+          91,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/read-north.webp",
+      "assetSha256": "85e8251a9dfd8bcda94c031af2d4df32becb46c397775a819e09398e327fa19e",
+      "assetBytes": 36368,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          39,
+          13,
+          93,
+          112
+        ],
+        [
+          36,
+          12,
+          96,
+          111
+        ],
+        [
+          36,
+          12,
+          95,
+          111
+        ],
+        [
+          36,
+          12,
+          94,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/read-south.webp",
+      "assetSha256": "de6630b29bbacd5d142a8524273c093143fa3f6af1652e5b70928be217606b3f",
+      "assetBytes": 38008,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          38,
+          13,
+          91,
+          112
+        ],
+        [
+          38,
+          12,
+          91,
+          112
+        ],
+        [
+          38,
+          12,
+          92,
+          111
+        ],
+        [
+          38,
+          12,
+          92,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-east.webp",
+      "assetSha256": "e905293a1a66da136c452d8051b121ab62d5aab53ecad06ace71175da5fc5797",
+      "assetBytes": 38294,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          39,
+          12,
+          100,
+          112
+        ],
+        [
+          40,
+          12,
+          100,
+          112
+        ],
+        [
+          39,
+          12,
+          99,
+          111
+        ],
+        [
+          38,
+          12,
+          100,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-west.webp",
+      "assetSha256": "1793e08fb671dc5c682e9066e8cde1a39358d58fab35561f2b9c2e07c042639c",
+      "assetBytes": 38566,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          28,
+          12,
+          88,
+          111
+        ],
+        [
+          30,
+          12,
+          91,
+          112
+        ],
+        [
+          31,
+          12,
+          90,
+          112
+        ],
+        [
+          30,
+          12,
+          89,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-north.webp",
+      "assetSha256": "1f7696f147a48ca07081cd5b18570308b57dd10c00bf82c8442f9e1bb1880c31",
+      "assetBytes": 36106,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          38,
+          12,
+          93,
+          112
+        ],
+        [
+          37,
+          12,
+          93,
+          112
+        ],
+        [
+          38,
+          12,
+          94,
+          111
+        ],
+        [
+          38,
+          12,
+          94,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/craft-south.webp",
+      "assetSha256": "a7347f07157605674be8c53baae07d3f8b5e5ae2ceead450f71435d42347d0e8",
+      "assetBytes": 38804,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          38,
+          11,
+          93,
+          112
+        ],
+        [
+          38,
+          12,
+          93,
+          112
+        ],
+        [
+          37,
+          12,
+          93,
+          112
+        ],
+        [
+          37,
+          11,
+          94,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/eat-south.webp",
+      "assetSha256": "32e3f15f36f6d0977cc2a69d9af1adef49fc613f560432196fde4fdfb5ba717a",
+      "assetBytes": 35476,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          40,
+          13,
+          89,
+          112
+        ],
+        [
+          39,
+          14,
+          88,
+          112
+        ],
+        [
+          39,
+          13,
+          90,
+          112
+        ],
+        [
+          39,
+          13,
+          89,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/rest-south.webp",
+      "assetSha256": "fcbaf073f36a7413247763981dc942654bd127918519129d5e070ba4fccafd09",
+      "assetBytes": 33290,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          37,
+          31,
+          94,
+          112
+        ],
+        [
+          36,
+          30,
+          93,
+          112
+        ],
+        [
+          37,
+          31,
+          94,
+          112
+        ],
+        [
+          37,
+          30,
+          93,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/sleep-south.webp",
+      "assetSha256": "9095a0c474ad91fa888fa2423665ea2ba19d46fa11537400ab2daac8ef2330a0",
+      "assetBytes": 24942,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          22,
+          68,
+          103,
+          111
+        ],
+        [
+          22,
+          68,
+          103,
+          111
+        ],
+        [
+          24,
+          68,
+          104,
+          111
+        ],
+        [
+          23,
+          68,
+          104,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/usopp/train-south.webp",
+      "assetSha256": "9dc16fe10c4872dabe3bd0b6723f9734079d245bdd40d23adf5e2fba9a83f968",
+      "assetBytes": 36340,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          39,
+          11,
+          91,
+          112
+        ],
+        [
+          40,
+          12,
+          89,
+          112
+        ],
+        [
+          39,
+          11,
+          91,
+          112
+        ],
+        [
+          39,
+          11,
+          89,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/work-east.webp",
+      "assetSha256": "43597749f008aaa53448de0ab418073af7c6ff471a4dd68a6834fb8f0c809d61",
+      "assetBytes": 27022,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          48,
+          15,
+          101,
+          111
+        ],
+        [
+          47,
+          15,
+          102,
+          111
+        ],
+        [
+          49,
+          15,
+          105,
+          111
+        ],
+        [
+          47,
+          16,
+          97,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/work-west.webp",
+      "assetSha256": "aabc7926b0db411cd3ec3a750ab3d12df61edc6568d2f4a054f6064b73ffdc69",
+      "assetBytes": 26334,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          32,
+          14,
+          82,
+          111
+        ],
+        [
+          32,
+          14,
+          80,
+          111
+        ],
+        [
+          27,
+          14,
+          79,
+          111
+        ],
+        [
+          36,
+          14,
+          81,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/work-north.webp",
+      "assetSha256": "984df26a582272c77f50a9baaf9708413ee02fbaf35a7b11ae0d14375cda5216",
+      "assetBytes": 26186,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          43,
+          11,
+          85,
+          110
+        ],
+        [
+          43,
+          11,
+          86,
+          110
+        ],
+        [
+          42,
+          11,
+          90,
+          110
+        ],
+        [
+          44,
+          12,
+          87,
+          110
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/work-south.webp",
+      "assetSha256": "6ab875d083bc88a9fb6c715d639f1f7ab4d91054e4b869837c54143bdcb9656f",
+      "assetBytes": 29048,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          43,
+          7,
+          84,
+          105
+        ],
+        [
+          43,
+          13,
+          84,
+          111
+        ],
+        [
+          43,
+          13,
+          85,
+          110
+        ],
+        [
+          44,
+          13,
+          85,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-east.webp",
+      "assetSha256": "46db7267f6c077ddd764c7a66ef6fc898d55ea44ccd13cae20b57f90879cc17a",
+      "assetBytes": 29200,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          46,
+          15,
+          105,
+          112
+        ],
+        [
+          44,
+          16,
+          104,
+          112
+        ],
+        [
+          46,
+          16,
+          108,
+          112
+        ],
+        [
+          46,
+          15,
+          105,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-west.webp",
+      "assetSha256": "a8c5527fd03078a757cf0ea53d20f2c18f2011cb2d025a92125073821363888c",
+      "assetBytes": 28840,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          24,
+          13,
+          81,
+          111
+        ],
+        [
+          24,
+          13,
+          81,
+          112
+        ],
+        [
+          23,
+          13,
+          80,
+          111
+        ],
+        [
+          24,
+          13,
+          82,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-north.webp",
+      "assetSha256": "b3d0d61bf6a7b07087153a00b22e7f4a6cafb0d4658a83480e93c2434af13deb",
+      "assetBytes": 28390,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          42,
+          15,
+          95,
+          112
+        ],
+        [
+          42,
+          15,
+          97,
+          112
+        ],
+        [
+          43,
+          15,
+          98,
+          112
+        ],
+        [
+          42,
+          15,
+          97,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-south.webp",
+      "assetSha256": "47199ccab021ec2e05fb7146e688f6b201b076d18275f15faa54d1fc68080fab",
+      "assetBytes": 30740,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          42,
+          7,
+          85,
+          105
+        ],
+        [
+          41,
+          12,
+          85,
+          110
+        ],
+        [
+          42,
+          12,
+          86,
+          110
+        ],
+        [
+          41,
+          7,
+          85,
+          105
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/eat-south.webp",
+      "assetSha256": "ffa1cc80d0549df82d920fa6d210eed9a4210542ed207b8730cd6f14721f486e",
+      "assetBytes": 26860,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          48,
+          14,
+          90,
+          112
+        ],
+        [
+          45,
+          13,
+          88,
+          111
+        ],
+        [
+          41,
+          14,
+          85,
+          111
+        ],
+        [
+          39,
+          14,
+          82,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/rest-south.webp",
+      "assetSha256": "033f0f141a106af8da79346f59665b6e22f1c4fd65a1dff9914c3efc1168d139",
+      "assetBytes": 26162,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          45,
+          31,
+          96,
+          108
+        ],
+        [
+          43,
+          34,
+          93,
+          109
+        ],
+        [
+          38,
+          33,
+          87,
+          109
+        ],
+        [
+          35,
+          33,
+          85,
+          109
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/sleep-south.webp",
+      "assetSha256": "e49979ef51a1c8e94ac95e37d8cb9697a61615a06413f889c0a4600193be021c",
+      "assetBytes": 15946,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          35,
+          78,
+          105,
+          111
+        ],
+        [
+          30,
+          78,
+          102,
+          111
+        ],
+        [
+          29,
+          73,
+          99,
+          108
+        ],
+        [
+          27,
+          78,
+          97,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/sanji/train-south.webp",
+      "assetSha256": "24fedd301e9d856478f0800262e71425ead733dd9aafe32d982b8ec1dbfd7630",
+      "assetBytes": 26724,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          43,
+          21,
+          98,
+          112
+        ],
+        [
+          39,
+          21,
+          95,
+          112
+        ],
+        [
+          36,
+          21,
+          91,
+          112
+        ],
+        [
+          32,
+          21,
+          87,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/work-east.webp",
+      "assetSha256": "fa15c0385f2ef377caa11751f9cb3510084ab1bd22863d083162d38b5e3b4207",
+      "assetBytes": 40446,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          33,
+          14,
+          106,
+          112
+        ],
+        [
+          33,
+          14,
+          107,
+          112
+        ],
+        [
+          33,
+          14,
+          104,
+          112
+        ],
+        [
+          33,
+          14,
+          104,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/work-west.webp",
+      "assetSha256": "ce2dd18df7ba814d6ccb363ded045166174bc1d344832c85d62d6e9795162e0a",
+      "assetBytes": 38860,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          25,
+          16,
+          97,
+          112
+        ],
+        [
+          20,
+          14,
+          93,
+          110
+        ],
+        [
+          27,
+          14,
+          97,
+          112
+        ],
+        [
+          22,
+          14,
+          93,
+          110
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/work-north.webp",
+      "assetSha256": "79581219d89c9369b03507a6454e2e4616c0dbd30aa042d6b1e56cc0b7369bcb",
+      "assetBytes": 39220,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          26,
+          18,
+          100,
+          112
+        ],
+        [
+          28,
+          14,
+          102,
+          112
+        ],
+        [
+          26,
+          14,
+          100,
+          112
+        ],
+        [
+          26,
+          14,
+          100,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/work-south.webp",
+      "assetSha256": "14dc19fa6b5a592dd93b4575dab650103d32592e255e3565ca6d3c431664facb",
+      "assetBytes": 43732,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          27,
+          15,
+          102,
+          112
+        ],
+        [
+          27,
+          14,
+          102,
+          112
+        ],
+        [
+          27,
+          14,
+          101,
+          112
+        ],
+        [
+          27,
+          14,
+          102,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/read-east.webp",
+      "assetSha256": "e5aeacd7e08d694a88fd63333f43bad6d07749822eaa462613972ab06815e913",
+      "assetBytes": 40496,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          34,
+          14,
+          108,
+          112
+        ],
+        [
+          33,
+          14,
+          109,
+          112
+        ],
+        [
+          33,
+          14,
+          110,
+          112
+        ],
+        [
+          34,
+          14,
+          106,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/read-west.webp",
+      "assetSha256": "e2155555358a21a743210f4be1c4ab55bc04518ee547cc6670f4b15f072e7e3f",
+      "assetBytes": 40374,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          30,
+          14,
+          99,
+          112
+        ],
+        [
+          30,
+          14,
+          99,
+          112
+        ],
+        [
+          30,
+          14,
+          99,
+          112
+        ],
+        [
+          30,
+          14,
+          99,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/read-north.webp",
+      "assetSha256": "daed41aa23006e33f4b8909790a0b9e74b95dfdbd8390ca93eeb4ba2470ce8cf",
+      "assetBytes": 42268,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          25,
+          14,
+          103,
+          112
+        ],
+        [
+          26,
+          14,
+          104,
+          112
+        ],
+        [
+          26,
+          14,
+          104,
+          112
+        ],
+        [
+          26,
+          14,
+          104,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/read-south.webp",
+      "assetSha256": "a1af9a36be11880d7eabf02a17c6a202808109bc4e925a487a800e92fc43937d",
+      "assetBytes": 44980,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          25,
+          14,
+          104,
+          112
+        ],
+        [
+          24,
+          14,
+          103,
+          112
+        ],
+        [
+          25,
+          14,
+          104,
+          112
+        ],
+        [
+          24,
+          14,
+          103,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-east.webp",
+      "assetSha256": "2a8ceb580c17e78d3305365f0f30bdc23e29dce1497441ca4a7a283dafc8a9f3",
+      "assetBytes": 39556,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          33,
+          14,
+          98,
+          112
+        ],
+        [
+          30,
+          14,
+          96,
+          112
+        ],
+        [
+          32,
+          14,
+          98,
+          112
+        ],
+        [
+          30,
+          14,
+          96,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-west.webp",
+      "assetSha256": "81eb6854a72efd9396498b08199a5bb3a481fba95c54d1d184eb45c420ae2324",
+      "assetBytes": 40114,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          32,
+          14,
+          101,
+          112
+        ],
+        [
+          32,
+          14,
+          101,
+          112
+        ],
+        [
+          32,
+          14,
+          101,
+          112
+        ],
+        [
+          32,
+          14,
+          101,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-north.webp",
+      "assetSha256": "f3fbe8d99359768925cfbb8aa401eb136e65d1084f310e1df3abe31436e24022",
+      "assetBytes": 41128,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          23,
+          14,
+          105,
+          112
+        ],
+        [
+          24,
+          14,
+          105,
+          112
+        ],
+        [
+          24,
+          14,
+          106,
+          112
+        ],
+        [
+          23,
+          14,
+          104,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-south.webp",
+      "assetSha256": "0b841d4f1f2ff8996077ca93df39aefe92bdc04b57b4669d28ed935ae7576e28",
+      "assetBytes": 42984,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          24,
+          14,
+          105,
+          112
+        ],
+        [
+          25,
+          15,
+          105,
+          112
+        ],
+        [
+          24,
+          14,
+          105,
+          112
+        ],
+        [
+          23,
+          14,
+          104,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/eat-south.webp",
+      "assetSha256": "f4c19f95f5a74b8a1d4a369870ee86859de8129f1de524635feac4091063f528",
+      "assetBytes": 44698,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          23,
+          14,
+          105,
+          112
+        ],
+        [
+          23,
+          14,
+          105,
+          112
+        ],
+        [
+          23,
+          14,
+          105,
+          112
+        ],
+        [
+          23,
+          14,
+          105,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/rest-south.webp",
+      "assetSha256": "9ec4fbf0afe69e4b5dc3f8c4c9caeb7e451cf989810312291702561548018b13",
+      "assetBytes": 43118,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          23,
+          21,
+          106,
+          112
+        ],
+        [
+          23,
+          20,
+          106,
+          112
+        ],
+        [
+          22,
+          21,
+          105,
+          112
+        ],
+        [
+          23,
+          21,
+          106,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/sleep-south.webp",
+      "assetSha256": "d748fb856e1f1618b7b88bf4f23d9e8a9e311f2ecb8b4733f67c9d7c340dfd77",
+      "assetBytes": 38036,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          18,
+          41,
+          109,
+          112
+        ],
+        [
+          18,
+          41,
+          109,
+          112
+        ],
+        [
+          18,
+          41,
+          109,
+          112
+        ],
+        [
+          18,
+          41,
+          109,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/chopper/train-south.webp",
+      "assetSha256": "f5ab4a81d43e9b0a66cb74c416f7cb32fc88d139cc3e6ff118dc0362bf07b281",
+      "assetBytes": 43496,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          23,
+          14,
+          105,
+          112
+        ],
+        [
+          23,
+          15,
+          105,
+          112
+        ],
+        [
+          23,
+          20,
+          106,
+          112
+        ],
+        [
+          23,
+          14,
+          105,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/robin/work-east.webp",
+      "assetSha256": "5f7ae2e43491d29193dbe58f8f60ff2ca101736fff3d4a1f3084c5f35027fcf9",
+      "assetBytes": 24502,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          39,
+          14,
+          97,
+          112
+        ],
+        [
+          41,
+          14,
+          97,
+          112
+        ],
+        [
+          39,
+          14,
+          96,
+          112
+        ],
+        [
+          39,
+          14,
+          95,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/robin/work-west.webp",
+      "assetSha256": "0f46cc329fa35abd2f9b6501792e30ef5813183db9f6e2cbb1b220d496267c06",
+      "assetBytes": 24574,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          34,
+          14,
+          92,
+          111
+        ],
+        [
+          33,
+          14,
+          92,
+          112
+        ],
+        [
+          33,
+          16,
+          89,
+          112
+        ],
+        [
+          34,
+          14,
+          89,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/robin/work-north.webp",
+      "assetSha256": "10ba909c092932461b55a5d81ec9e029df83445dd82e47b017a7d08a4cdd2b2a",
+      "assetBytes": 21492,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          40,
+          16,
+          91,
+          112
+        ],
+        [
+          39,
+          16,
+          94,
+          112
+        ],
+        [
+          40,
+          14,
+          92,
+          110
+        ],
+        [
+          40,
+          14,
+          90,
+          110
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/robin/work-south.webp",
+      "assetSha256": "14d66645d68977959021d78140a5d6ceb571fde31b49a8ada47ba8f2d51fb3c7",
+      "assetBytes": 24858,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          43,
+          14,
+          86,
+          112
+        ],
+        [
+          42,
+          14,
+          86,
+          112
+        ],
+        [
+          42,
+          14,
+          86,
+          112
+        ],
+        [
+          42,
+          14,
+          85,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/robin/read-east.webp",
+      "assetSha256": "f9eec81ebd3cdae58d0c4983f78350c4a05e21770ec1aac32d5e58549b521905",
+      "assetBytes": 24342,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          40,
+          14,
+          94,
+          112
+        ],
+        [
+          40,
+          15,
+          94,
+          112
+        ],
+        [
+          40,
+          15,
+          94,
+          112
+        ],
+        [
+          40,
+          15,
+          92,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/robin/read-west.webp",
+      "assetSha256": "9b7affc8b3b2edbea4e0d4ade139e5ba818a522ef9fd9d4063420303e7924774",
+      "assetBytes": 25902,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          37,
+          14,
+          92,
+          112
+        ],
+        [
+          36,
+          14,
+          91,
+          112
+        ],
+        [
+          37,
+          14,
+          91,
+          112
+        ],
+        [
+          37,
+          14,
+          91,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/robin/read-north.webp",
+      "assetSha256": "70733f5033a93b9cfb385e3626c47a8a8fdf9ab3e13b32ba4e16982168ba08af",
+      "assetBytes": 23696,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          40,
+          14,
+          88,
+          111
+        ],
+        [
+          40,
+          14,
+          92,
+          111
+        ],
+        [
+          41,
+          15,
+          95,
+          112
+        ],
+        [
+          41,
+          14,
+          88,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/robin/read-south.webp",
+      "assetSha256": "c254c8e11feea520f787f3bc8bc9e64fb45dd9a3205f3a2246ac268c49dbb762",
+      "assetBytes": 26900,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          40,
+          14,
+          87,
+          112
+        ],
+        [
+          40,
+          14,
+          87,
+          112
+        ],
+        [
+          40,
+          14,
+          87,
+          112
+        ],
+        [
+          40,
+          14,
+          87,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/robin/eat-south.webp",
+      "assetSha256": "32cfe403a0c703bdb2932f1ba7f4b1e6c084bba06c2d196b7ae700da29d2961f",
+      "assetBytes": 23480,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          44,
+          14,
+          85,
+          112
+        ],
+        [
+          43,
+          14,
+          84,
+          112
+        ],
+        [
+          44,
+          14,
+          85,
+          112
+        ],
+        [
+          44,
+          14,
+          85,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/robin/rest-south.webp",
+      "assetSha256": "b512587349fcb25e0f70dca136aa8d002c8b96ef47cdf373424a28c9fb58a8bc",
+      "assetBytes": 22008,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          32,
+          32,
+          83,
+          112
+        ],
+        [
+          32,
+          32,
+          83,
+          112
+        ],
+        [
+          32,
+          32,
+          84,
+          112
+        ],
+        [
+          32,
+          32,
+          84,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/robin/sleep-south.webp",
+      "assetSha256": "5c654ec050ff1b85f5040cca8815b37a24facfd1e036bec3a5b5451c4ed8bde8",
+      "assetBytes": 15124,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          29,
+          75,
+          100,
+          112
+        ],
+        [
+          29,
+          76,
+          98,
+          112
+        ],
+        [
+          28,
+          75,
+          100,
+          112
+        ],
+        [
+          29,
+          76,
+          99,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/robin/train-south.webp",
+      "assetSha256": "73bbe648b063531418104a565bb0e1f8c57aacf9063acc48a4d204746a2c03ca",
+      "assetBytes": 24930,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          43,
+          14,
+          86,
+          112
+        ],
+        [
+          43,
+          14,
+          86,
+          112
+        ],
+        [
+          43,
+          14,
+          86,
+          112
+        ],
+        [
+          43,
+          14,
+          86,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/work-east.webp",
+      "assetSha256": "8137894582a70f1174f31acba77b374fc03365027af5447cbd4273ee36151b25",
+      "assetBytes": 30304,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          41,
+          28,
+          106,
+          112
+        ],
+        [
+          39,
+          28,
+          106,
+          112
+        ],
+        [
+          41,
+          28,
+          106,
+          112
+        ],
+        [
+          37,
+          28,
+          98,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/work-west.webp",
+      "assetSha256": "0eec042469f5be7fbd7a5e185b05ed81e9ab1e8e08f95bc1fdb888b6075e9741",
+      "assetBytes": 29042,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          28,
+          28,
+          85,
+          112
+        ],
+        [
+          29,
+          28,
+          89,
+          112
+        ],
+        [
+          30,
+          28,
+          90,
+          112
+        ],
+        [
+          31,
+          28,
+          89,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/work-north.webp",
+      "assetSha256": "b253d51a22c028c5f7ce4673a587149a002b4707ffdc5e3c1ef545c6abb858ba",
+      "assetBytes": 43154,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          25,
+          28,
+          105,
+          112
+        ],
+        [
+          25,
+          28,
+          105,
+          112
+        ],
+        [
+          25,
+          28,
+          105,
+          112
+        ],
+        [
+          24,
+          28,
+          104,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/work-south.webp",
+      "assetSha256": "d281234ad761a11614fc30075dd11569e803ac15e5be3de5c7bc2cdec6077753",
+      "assetBytes": 40016,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          27,
+          28,
+          100,
+          112
+        ],
+        [
+          27,
+          28,
+          100,
+          112
+        ],
+        [
+          27,
+          28,
+          100,
+          112
+        ],
+        [
+          26,
+          28,
+          99,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/read-east.webp",
+      "assetSha256": "f29937ce772b35001db5435b6d548cf51c205aaf287b279fcc2046244f5d47ac",
+      "assetBytes": 35736,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          33,
+          29,
+          103,
+          112
+        ],
+        [
+          33,
+          29,
+          109,
+          112
+        ],
+        [
+          34,
+          29,
+          108,
+          112
+        ],
+        [
+          34,
+          29,
+          104,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/read-west.webp",
+      "assetSha256": "6898116dcca5f64e103eafb2c9fde95ef01390082d3b9875467e64f7c2fa5ee5",
+      "assetBytes": 34710,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          29,
+          29,
+          93,
+          112
+        ],
+        [
+          25,
+          29,
+          95,
+          112
+        ],
+        [
+          25,
+          29,
+          94,
+          112
+        ],
+        [
+          29,
+          29,
+          95,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/read-north.webp",
+      "assetSha256": "9d23881c4fdc043e6a50ba3776f9991005bff3636e58ca4053f7b0a110efb4a7",
+      "assetBytes": 43196,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          27,
+          29,
+          103,
+          112
+        ],
+        [
+          26,
+          29,
+          102,
+          112
+        ],
+        [
+          27,
+          29,
+          102,
+          112
+        ],
+        [
+          26,
+          29,
+          102,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/read-south.webp",
+      "assetSha256": "307deeede7b786b0ccfddc52e25a8ffc90282f509b1b27d64c519339b67ed52d",
+      "assetBytes": 45552,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          24,
+          29,
+          103,
+          112
+        ],
+        [
+          24,
+          29,
+          102,
+          112
+        ],
+        [
+          24,
+          29,
+          102,
+          112
+        ],
+        [
+          24,
+          29,
+          102,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/craft-east.webp",
+      "assetSha256": "4e6ddd7ed07663b1d870444f1b320d6ad3638296f874492d5ef07305407c543d",
+      "assetBytes": 31426,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          42,
+          28,
+          98,
+          112
+        ],
+        [
+          42,
+          28,
+          98,
+          112
+        ],
+        [
+          43,
+          28,
+          100,
+          112
+        ],
+        [
+          42,
+          28,
+          98,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/craft-west.webp",
+      "assetSha256": "7672a6f66571616461c7fb419713c9be88a0d47abc8b8f540f0770d0f90f0c6b",
+      "assetBytes": 31738,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          30,
+          28,
+          86,
+          112
+        ],
+        [
+          30,
+          28,
+          87,
+          112
+        ],
+        [
+          29,
+          28,
+          85,
+          112
+        ],
+        [
+          30,
+          28,
+          85,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/craft-north.webp",
+      "assetSha256": "7ca91a740ed7b8e2ab03ef191ba3b7ef4d566ca9848ea1db79ec83185c38f9da",
+      "assetBytes": 44880,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          23,
+          28,
+          105,
+          112
+        ],
+        [
+          24,
+          28,
+          105,
+          112
+        ],
+        [
+          24,
+          28,
+          104,
+          112
+        ],
+        [
+          24,
+          28,
+          105,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/craft-south.webp",
+      "assetSha256": "3166e0431b44eca3bd165f1a5926617489f6007ca9ed0750b43461d467c25f5f",
+      "assetBytes": 44894,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          26,
+          28,
+          103,
+          112
+        ],
+        [
+          25,
+          28,
+          102,
+          112
+        ],
+        [
+          25,
+          28,
+          102,
+          112
+        ],
+        [
+          25,
+          28,
+          102,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/eat-south.webp",
+      "assetSha256": "ccbb9931092174c2e6133c8a467a519259a8f71f721fd8252ec247b5e322d9c9",
+      "assetBytes": 37898,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          29,
+          35,
+          100,
+          112
+        ],
+        [
+          28,
+          36,
+          99,
+          112
+        ],
+        [
+          27,
+          36,
+          97,
+          112
+        ],
+        [
+          29,
+          36,
+          99,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/rest-south.webp",
+      "assetSha256": "531063ca186eb06d70196d6ed07f90340890aa3c69f6fddbd7048fb8e775b722",
+      "assetBytes": 36516,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          28,
+          51,
+          100,
+          112
+        ],
+        [
+          29,
+          51,
+          99,
+          112
+        ],
+        [
+          30,
+          51,
+          99,
+          112
+        ],
+        [
+          29,
+          51,
+          99,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/sleep-south.webp",
+      "assetSha256": "b3cc4bb9b9acb54417867c8fd7bce5226576a75b5ac5c54ff7dbe3b8254599a7",
+      "assetBytes": 22222,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          26,
+          73,
+          101,
+          112
+        ],
+        [
+          28,
+          73,
+          101,
+          112
+        ],
+        [
+          28,
+          73,
+          100,
+          112
+        ],
+        [
+          28,
+          74,
+          101,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/franky/train-south.webp",
+      "assetSha256": "4dd3a5f6053a40c2e7722a9b7fef7dd197d8688b33e4d096946a2f6beabad2e4",
+      "assetBytes": 45308,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          28,
+          29,
+          100,
+          112
+        ],
+        [
+          28,
+          28,
+          101,
+          112
+        ],
+        [
+          30,
+          34,
+          99,
+          112
+        ],
+        [
+          28,
+          28,
+          100,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/work-east.webp",
+      "assetSha256": "798feb75e9daa70f2145c6d5e7b07e00a0fa36e807fd6a0a1fbf44e741166b29",
+      "assetBytes": 23710,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          39,
+          13,
+          95,
+          112
+        ],
+        [
+          39,
+          12,
+          99,
+          112
+        ],
+        [
+          39,
+          13,
+          94,
+          112
+        ],
+        [
+          40,
+          13,
+          95,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/work-west.webp",
+      "assetSha256": "31b4c99b6adf2a64dd8e4852f54c4e8e01d2c7dc8cb1136f01596203b22d2d21",
+      "assetBytes": 24048,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          35,
+          12,
+          88,
+          112
+        ],
+        [
+          30,
+          12,
+          89,
+          112
+        ],
+        [
+          33,
+          12,
+          88,
+          112
+        ],
+        [
+          34,
+          12,
+          86,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/work-north.webp",
+      "assetSha256": "6897976b2f0ebcd74552681537fceefda38ca2636b6c2137a6f516c98cc31b1d",
+      "assetBytes": 22288,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          39,
+          12,
+          88,
+          112
+        ],
+        [
+          41,
+          12,
+          88,
+          112
+        ],
+        [
+          40,
+          12,
+          86,
+          112
+        ],
+        [
+          39,
+          13,
+          85,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/work-south.webp",
+      "assetSha256": "b310f5c30f151e910f97f49fde3a248dcb8e1ef4aa273fb8ff1c27882ed29e53",
+      "assetBytes": 25476,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          41,
+          14,
+          86,
+          112
+        ],
+        [
+          42,
+          13,
+          90,
+          112
+        ],
+        [
+          41,
+          13,
+          90,
+          112
+        ],
+        [
+          40,
+          12,
+          85,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/music-east.webp",
+      "assetSha256": "5f1574b8b53029992340f447c4853714e9c9c8a35025319f5907c4e9e46d68c9",
+      "assetBytes": 29404,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          44,
+          12,
+          107,
+          111
+        ],
+        [
+          44,
+          12,
+          108,
+          112
+        ],
+        [
+          44,
+          12,
+          108,
+          112
+        ],
+        [
+          44,
+          12,
+          104,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/music-west.webp",
+      "assetSha256": "2990cb774d0cf3853199466fe335ad4e71fb42d305772742786dad81b2e6757c",
+      "assetBytes": 30108,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          23,
+          12,
+          87,
+          112
+        ],
+        [
+          23,
+          12,
+          87,
+          112
+        ],
+        [
+          23,
+          12,
+          87,
+          112
+        ],
+        [
+          24,
+          13,
+          87,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/music-north.webp",
+      "assetSha256": "850dd3afda14b6d5e4a55b727d2beec62bdeee05cc1b8bcf7f34690875e27b3a",
+      "assetBytes": 26510,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          38,
+          12,
+          90,
+          111
+        ],
+        [
+          39,
+          12,
+          89,
+          111
+        ],
+        [
+          38,
+          12,
+          89,
+          111
+        ],
+        [
+          38,
+          12,
+          89,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/music-south.webp",
+      "assetSha256": "8896951a47ec0730e67ffa7481c736f2ed4e4ecb8747850f800cfbfd15a0b3e7",
+      "assetBytes": 30122,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          40,
+          12,
+          89,
+          112
+        ],
+        [
+          40,
+          12,
+          89,
+          112
+        ],
+        [
+          40,
+          12,
+          88,
+          112
+        ],
+        [
+          39,
+          12,
+          89,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/eat-south.webp",
+      "assetSha256": "8039c0c27b3321c0385197d80c03cb56252eb7df87f72386ecb0fee85b206152",
+      "assetBytes": 28132,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          41,
+          12,
+          88,
+          110
+        ],
+        [
+          40,
+          12,
+          88,
+          110
+        ],
+        [
+          41,
+          12,
+          87,
+          110
+        ],
+        [
+          40,
+          12,
+          87,
+          110
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/rest-south.webp",
+      "assetSha256": "8685ce882cce8c4f58215c5218bfdd72f94fdebf3454d5a648b5d9ab5b3c3146",
+      "assetBytes": 27354,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          38,
+          25,
+          91,
+          107
+        ],
+        [
+          37,
+          30,
+          90,
+          110
+        ],
+        [
+          37,
+          28,
+          91,
+          108
+        ],
+        [
+          38,
+          25,
+          91,
+          107
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/sleep-south.webp",
+      "assetSha256": "8dcf8378cc950a14cb9117b9c465cd0f808e7d351e78e8d76d2b77bafbc3cd23",
+      "assetBytes": 19186,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          23,
+          70,
+          107,
+          111
+        ],
+        [
+          22,
+          69,
+          106,
+          111
+        ],
+        [
+          23,
+          70,
+          106,
+          111
+        ],
+        [
+          24,
+          70,
+          105,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/train-south.webp",
+      "assetSha256": "27a60bfeb9af917c7ed61a95e7f00b8543aa93e1a35f3cf7bd862ec525783323",
+      "assetBytes": 28390,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          40,
+          11,
+          88,
+          111
+        ],
+        [
+          39,
+          11,
+          89,
+          111
+        ],
+        [
+          40,
+          11,
+          87,
+          112
+        ],
+        [
+          41,
+          11,
+          87,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/work-east.webp",
+      "assetSha256": "e148a1ff3e4ac4f62c7fc8518ec194331888f9b9a0cca7c33c1effbaaa0e1d6e",
+      "assetBytes": 46498,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          19,
+          12,
+          107,
+          112
+        ],
+        [
+          19,
+          12,
+          107,
+          112
+        ],
+        [
+          17,
+          12,
+          105,
+          112
+        ],
+        [
+          18,
+          12,
+          103,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/work-west.webp",
+      "assetSha256": "e8c69e856b258d776c0fc967fc4b7822132ec66088ede4ea2090943ef2d6fe61",
+      "assetBytes": 45966,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          25,
+          13,
+          111,
+          112
+        ],
+        [
+          26,
+          13,
+          111,
+          112
+        ],
+        [
+          25,
+          13,
+          112,
+          112
+        ],
+        [
+          25,
+          13,
+          112,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/work-north.webp",
+      "assetSha256": "578973153b09fb0050446237b3256647092f88ab9f6e1499bdc4730c51687e36",
+      "assetBytes": 33212,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          24,
+          13,
+          106,
+          111
+        ],
+        [
+          22,
+          12,
+          105,
+          111
+        ],
+        [
+          23,
+          12,
+          106,
+          111
+        ],
+        [
+          24,
+          13,
+          105,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/work-south.webp",
+      "assetSha256": "5db633948850a927b9639ec281f47e9497050c3a1bb60de1c84960fd80b53cce",
+      "assetBytes": 51494,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          21,
+          12,
+          106,
+          112
+        ],
+        [
+          21,
+          12,
+          108,
+          112
+        ],
+        [
+          21,
+          13,
+          108,
+          112
+        ],
+        [
+          21,
+          13,
+          107,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/read-east.webp",
+      "assetSha256": "2b38f865de1a66152f7b15aee7bbfc98f2a30a7a9ddc24bc8dc0dcdf66a8bb4e",
+      "assetBytes": 47160,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          20,
+          12,
+          109,
+          111
+        ],
+        [
+          19,
+          12,
+          111,
+          111
+        ],
+        [
+          20,
+          12,
+          112,
+          111
+        ],
+        [
+          19,
+          12,
+          108,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/read-west.webp",
+      "assetSha256": "a05209d0f94976ecbbc1097ffc1549605be538ab333c6ddd2e3353846acc6aae",
+      "assetBytes": 46024,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          23,
+          12,
+          109,
+          112
+        ],
+        [
+          22,
+          12,
+          110,
+          112
+        ],
+        [
+          22,
+          12,
+          110,
+          112
+        ],
+        [
+          23,
+          12,
+          109,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/read-north.webp",
+      "assetSha256": "028debd3ed430de5fbb9132df1ec99874d4526c7acada24d4783584b72431ad5",
+      "assetBytes": 39130,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          20,
+          12,
+          108,
+          112
+        ],
+        [
+          20,
+          13,
+          108,
+          112
+        ],
+        [
+          20,
+          12,
+          107,
+          112
+        ],
+        [
+          21,
+          12,
+          108,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/read-south.webp",
+      "assetSha256": "9928916973ff63cd13290a80ac6f995f072cea82c1352f8f044172f481082d9f",
+      "assetBytes": 52652,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          20,
+          12,
+          109,
+          111
+        ],
+        [
+          20,
+          12,
+          109,
+          111
+        ],
+        [
+          20,
+          12,
+          109,
+          111
+        ],
+        [
+          21,
+          12,
+          109,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/helm-east.webp",
+      "assetSha256": "ff6453c595833d059ed3d682bbea115e5492eb36fc728ff28a7585b1f87e72e5",
+      "assetBytes": 43542,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          18,
+          17,
+          102,
+          111
+        ],
+        [
+          17,
+          18,
+          99,
+          111
+        ],
+        [
+          17,
+          16,
+          102,
+          110
+        ],
+        [
+          18,
+          18,
+          102,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/helm-west.webp",
+      "assetSha256": "28d3482f3197443b8743eeb31a281331e21fcd445a733accc5f47b5eaa1c4f26",
+      "assetBytes": 43536,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          29,
+          16,
+          113,
+          110
+        ],
+        [
+          31,
+          16,
+          113,
+          110
+        ],
+        [
+          29,
+          16,
+          113,
+          110
+        ],
+        [
+          29,
+          16,
+          113,
+          110
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/helm-north.webp",
+      "assetSha256": "12ddcad97779f6625aa153e04ab09f09e63d3ea4849e9e90eaaeea79a9654c0f",
+      "assetBytes": 30434,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          26,
+          23,
+          102,
+          111
+        ],
+        [
+          26,
+          23,
+          103,
+          111
+        ],
+        [
+          25,
+          23,
+          102,
+          111
+        ],
+        [
+          26,
+          23,
+          103,
+          111
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/helm-south.webp",
+      "assetSha256": "03a5c6af41e87f9b98b9c6ba93290313d4539e57c70af04b3b84889c45fa101f",
+      "assetBytes": 54316,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          17,
+          10,
+          110,
+          109
+        ],
+        [
+          18,
+          11,
+          111,
+          110
+        ],
+        [
+          16,
+          10,
+          110,
+          110
+        ],
+        [
+          18,
+          11,
+          111,
+          110
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/eat-south.webp",
+      "assetSha256": "ad4bf08ddf882cf0db1c909c6b10df85b9abd01285d9ac32196d138293f52b07",
+      "assetBytes": 56168,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          14,
+          15,
+          114,
+          112
+        ],
+        [
+          14,
+          15,
+          113,
+          112
+        ],
+        [
+          14,
+          15,
+          115,
+          112
+        ],
+        [
+          13,
+          15,
+          114,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/rest-south.webp",
+      "assetSha256": "cf3b387a1522bdd3135fe6070910f04d42a0fe9cca6a92a643bb8f65b543eca5",
+      "assetBytes": 42478,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          10,
+          36,
+          118,
+          112
+        ],
+        [
+          10,
+          36,
+          118,
+          112
+        ],
+        [
+          9,
+          37,
+          118,
+          112
+        ],
+        [
+          10,
+          36,
+          118,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/sleep-south.webp",
+      "assetSha256": "4bb7bc561547d9eaf86a3832ea4d6caea09327b1cf7cec34a0f5a0df8a67026e",
+      "assetBytes": 32974,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          11,
+          69,
+          118,
+          112
+        ],
+        [
+          12,
+          69,
+          116,
+          112
+        ],
+        [
+          12,
+          67,
+          116,
+          112
+        ],
+        [
+          12,
+          68,
+          116,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/jinbe/train-south.webp",
+      "assetSha256": "63278414fc5dfcee0be85069fc5e448f504a5412dc1f2de9c47255ed76972ca6",
+      "assetBytes": 51874,
+      "assetPixels": [
+        512,
+        128
+      ],
+      "distinctFrames": 4,
+      "alpha": true,
+      "clipped": false,
+      "frameBounds": [
+        [
+          19,
+          18,
+          111,
+          112
+        ],
+        [
+          18,
+          18,
+          111,
+          112
+        ],
+        [
+          18,
+          18,
+          109,
+          112
+        ],
+        [
+          17,
+          18,
+          110,
+          112
+        ]
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/furniture/galley-stove.webp",
+      "assetSha256": "524b624b53199ceda3ed6eb81ee58162cec407bc1ff2aeed1ce8738250d8a2dc",
+      "assetBytes": 67044,
+      "assetPixels": [
+        384,
+        384
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/furniture_views/galley-stove/0.webp",
+      "assetSha256": "524b624b53199ceda3ed6eb81ee58162cec407bc1ff2aeed1ce8738250d8a2dc",
+      "assetBytes": 67044,
+      "assetPixels": [
+        384,
+        384
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/furniture_views/galley-stove/1.webp",
+      "assetSha256": "6888c12846aed2cab97a1c3df210796692ccb2d8861572fee4dfeeb75882747e",
+      "assetBytes": 68592,
+      "assetPixels": [
+        384,
+        384
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/furniture_views/galley-stove/2.webp",
+      "assetSha256": "8a8b3d54191fe70d7ed7246b2c987d385fb2cb231109c674073defa55f915a43",
+      "assetBytes": 58410,
+      "assetPixels": [
+        384,
+        384
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/furniture_views/galley-stove/3.webp",
+      "assetSha256": "d9d631c06c83db1f350ec0c1820359547ef95af621dd170d66f7a4ce6c3eb706",
+      "assetBytes": 69506,
+      "assetPixels": [
+        384,
+        384
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "tools/launcher-room/life-v1/brook-music/contact-128.png",
+      "sha256": "10952161dd0f8e0a26748ec7befa6aa46660296a8b3502e01c1ecd918905ed06"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-music/plan-import.json",
+      "sha256": "5f3c9b0e96a882cc1e642a9429c3c2d6a86b4299e55ad02d8e17a8f86a3e2c38"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-music/plan.json",
+      "sha256": "95cf98fb9f8a6d288929e7d3852b64bfb4f0bcc650d2a91b8726ff83842daf4d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-music/prompt.txt",
+      "sha256": "8ce43d3eaaee18ccc4a18698b771532b6bc03fe728f4b4244b165d33b854de06"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-music/receipt.json",
+      "sha256": "0fd32aaa69e18dedca3b4507f0c369b38fefe7374a6d086619f1d56a1c386add"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-music/source.png",
+      "sha256": "bde08a27f852fbb814e08a299a80eeeb240a511f93ccac9c4618254fd73ee40a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-utility/contact-128.png",
+      "sha256": "a02b3c09ce37f1726dee2df24e04c089c28c34e59045c01675aa84f042d9fe5d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-utility/plan-import.json",
+      "sha256": "5eaa88ecc90e6ae5735782700662e2dbdd88344ab91f7f037ce590f4ec982eec"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-utility/plan.json",
+      "sha256": "257eeabf205859713358dc853c84a8daaf1550fe1995122f769335d311d1c781"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-utility/prompt.txt",
+      "sha256": "a4cc0647d6925e6220b157ba3c806b55a0d59fc1806688b4f9dcb7010fd598f0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-utility/receipt.json",
+      "sha256": "faafd3b8dfb7b57d51a7eca0165a718ede75817863243ce8b578d9b1e4317f30"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-utility/source.png",
+      "sha256": "434ca76284e79b0638a66225b366f3aec865670775326e89e3cd3ed39d67021c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-work/contact-128.png",
+      "sha256": "b1d650101ceca3b999c262d11a36c3ebf2bf451913cdd98747634a1697ee031a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-work/pack-three-sheets.py",
+      "sha256": "cd9ae1c09afded23b71cfa8bcbf30e0bc36f197a013bac62ded13e02a15b6b31"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-work/plan-import.json",
+      "sha256": "38863bde2448752eaa7138f568f0f4128360a983f5a5b75c27b07c13b1feaf59"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-work/plan.json",
+      "sha256": "b355e2dd59e2b90f3e3d17f6167f88b478d501a161c96fc1afe18218cd51c72b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-work/prompt.txt",
+      "sha256": "3ed826ffac2d4a984695d248c5376244532a05ecf786ca9f017ee203e035ea97"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-work/receipt.json",
+      "sha256": "07d31edc0bc36f94d1bc1e326d4cc3d852af2ec64842a86005beca1bf3f2db13"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/brook-work/source.png",
+      "sha256": "c2a21a4e048b3e68e20d504d27a70f55dcbda800d940d6bdcbe141f37e0a4b78"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/build_manifest.py",
+      "sha256": "c35309fc37c0d3befdb5560c5e5fd8dc10d94fe61ecbea114e78e1d163b0640c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-medicine/contact-128.png",
+      "sha256": "89a27ad167b836a961f084dfa14d407acb0014654b25f8e3b69fe0299a471a3f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-medicine/plan-import.json",
+      "sha256": "1e7aaa05089c5484f25ec9d8182ab8e005fc10a8f728b3d1fc3af6eb92b7dc21"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-medicine/plan.json",
+      "sha256": "cf4473992f626d9c58824f21c83d094934245c813303929690c9f4585f7edb4d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-medicine/prompt.txt",
+      "sha256": "ff8de8d3e61d7dbc32d907062d1220b0e97b6dd94bb2318b43fc168b2f986055"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-medicine/receipt.json",
+      "sha256": "0df6f17acc23fe30ac850099164672855f4c75255f64a93da7a5fe0fd91a7f19"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-medicine/source-alpha.png",
+      "sha256": "c93223ebf6216e2ccdf295a0fd23eff10fb0ffcb316821b37da56ab73ba93cd7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-medicine/source.png",
+      "sha256": "49aca685e075793b1f63582ede90e58c1de0ecdfaa10c2dcd5951f7f1ebab4c6"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-read/plan-import.json",
+      "sha256": "ba79c5dedf6e9d55334b5aa8a98ee1bc1ee3f9512deb031c8a9a028654f598a6"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-read/plan.json",
+      "sha256": "12cd684bed1e1b8c8064f6d26e3d9d547d351d74ff1bc668f1f7139877ac20b3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-read/prompt.txt",
+      "sha256": "fe9a487ef6b020ca42fd25bf0063379dacc5a16065fe3a9f38e5a50b64671f53"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-read/receipt.json",
+      "sha256": "096fbcebdf36d5fcb9b88652201c8b11b85f19205ee40886bc69564b88ae821a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-read/source-alpha.png",
+      "sha256": "e65f2ecc179baeeeb88f3d983951aba885d8257e42f0fa62cca9c7b618666548"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-read/source.png",
+      "sha256": "64280c5266aba59d6adb1f4bb23d5c241d282f33d14d7686dd7106ecaf307091"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-utility/atlas-review.json",
+      "sha256": "7fb25153acfb4fa7fb19f68aad3a817934dabbdc518fe8c2ae9613aaed0e0313"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-utility/contact-128.png",
+      "sha256": "496ab53202c778feec3d22575a7f2900611ad7256ebac022d9185f11510ff4fb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-utility/motion-review.gif",
+      "sha256": "3a58419ff8292e75050f8d109fd2a1b72134636d7dae407219a2e1afb7eb6011"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-utility/plan-import.json",
+      "sha256": "af098fb35b2a6d441eb19a7c3db3075abcaa60ab5de7df464690dba7df0439c3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-utility/plan.json",
+      "sha256": "b22ff53e349a971d52de7c6f1cbee359911fb35ce67533a7a8e2a2f52920748a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-utility/prompt.txt",
+      "sha256": "fa3e3d611d3ce6af70413187aba3384593e441c74c3120a35f276efc1b3da81a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-utility/receipt.json",
+      "sha256": "21317ebec5c1e50951ab02878bc3b1878bd25ea00f0521e60b8f14676722dc43"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-utility/source-alpha.png",
+      "sha256": "7db6c026deb0dc3aac5102f610bb03337e506a7a698e7295193ebc4916bb50fe"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-utility/source.png",
+      "sha256": "189f3efa0f8795d6156a88aa18e3b95ec0917b94e90fccde979f5a4db5832406"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-work/east-fix-prompt.txt",
+      "sha256": "1690d60050bf91113a963e0a1323370139dc5c5a6e0da5b7790f692813891c7a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-work/east-fix-receipt.json",
+      "sha256": "2c8b7975bb44923a3f6f79d5899841724b52cf8760c0695ec8d59f9c15bd319a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-work/east-fix-source-alpha.png",
+      "sha256": "95cbfb99746b1811de4da2848d31dee6daa799a7c6c8d75d094c32d6f5409399"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-work/east-fix-source.png",
+      "sha256": "1b2daf09997a3a9ecd67ac1122c06ff632b31d1fe701819ccb8d6bd19b6b201a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-work/plan-import.json",
+      "sha256": "cdc4b3d4b66cac26e940c60f9b494928f35d3f01809d41a75b0d3b82b94eda9d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-work/plan.json",
+      "sha256": "c75a6d8bc9b50119aa1696f2453270c66fd1333207e74dbb41205cdb07df41f7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-work/prompt.txt",
+      "sha256": "2c0659e34f5aada2484d61c0fb3c2bcd0b2560eabc05f2181a8ba38dd18478b6"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-work/receipt.json",
+      "sha256": "8a17a45d61ce10bcf32182a2ce31b75180bb3948d584a1a27d441a151b481eee"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-work/source-alpha.png",
+      "sha256": "bd996d2a051c0cae1aeccfbca47cee510d240d1c6d6996552dc68a291e2d3da1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/chopper-work/source.png",
+      "sha256": "ecb97782c42e5580198ba7f687fc4eb617c3421f5703ae44d8fc28916a779868"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/final-visual-review.json",
+      "sha256": "2328827b7075b3fea0447e2835630eb9ab3b602c8791e5080f8bdc4ddb5851b0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/alpha-regions.json",
+      "sha256": "a6a629cdbbf004802abf83e22ef2115bd6a496e5b354cd01edbc9a27041b5a0e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/atlas-contact.png",
+      "sha256": "ed58e869b1c162864dcf5f7585a94a3d9e251ecadf818cb7f3ea5b616331fe49"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/inspection-white.jpg",
+      "sha256": "d4407a4f6eb22ef294678c2e49fae2f0d4f2023abd3198c931a5cf8f704aeda0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/loop-preview.gif",
+      "sha256": "6888b2a20860b2984fd49da852d705c44de7d7b7084196b38e52baac0b83e8b7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/plan-import.json",
+      "sha256": "b59fa58d2b6e6b5d673f49a9ad734c6f9841117d9cd7a871b895390d39293086"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/plan.json",
+      "sha256": "46f865c554665d1066638342fc12f25118a48658b6adaaadef51c6640cffd03d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/prompt.txt",
+      "sha256": "c99ffc3672f0b51ae21ee337c0f2d4fe27d8fd41eab0670b9c3f53ff82cca224"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/receipt.json",
+      "sha256": "af8da5c4145f807ea93a5e884fd85401a6ec52f8b6377390d801472a8aaa0b1e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/references.json",
+      "sha256": "41a9aa66df983a63b368231a7a4ef46f6b6f313d1e3026b43b189ae1ed19549a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/rejected-display-scale-v1/craft-east.webp",
+      "sha256": "d74f4abaac34153d42fe2efc8fbd2c786160ce0c9e8e76feedb6a38b52628ddd"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/rejected-display-scale-v1/craft-north.webp",
+      "sha256": "1128516cbe5326f12771eef2520cf794b2bb0f394f24dbfc3414ce71da5028cf"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/rejected-display-scale-v1/craft-south.webp",
+      "sha256": "4878db4ce1963d2871152b3926b1308977f1f49cc20e7269ba8b7f68d84f7c56"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/rejected-display-scale-v1/craft-west.webp",
+      "sha256": "febfb0a62d5e026d5e2b066542b3bf2ec3337273ed28e5e0c05ec22f6af3eccb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/rejected-display-scale-v1/loop-preview.gif",
+      "sha256": "7c512c7f2f9b901407013745cdeb529f0f59d7e7cbc0bfd0cefd26c74268f67c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/rejected-display-scale-v1/plan-import.json",
+      "sha256": "4dc10e9fd2e2b5b7bbabe06b28407ceba0712513a09a358f2e66bcf1b86b1e57"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/rejected-display-scale-v1/plan.json",
+      "sha256": "0380e8830742d5c15148ab9ee674b842cc92a8bc4d45e5f80cfd6787b6d0a042"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/rejected-display-scale-v1/rejection.json",
+      "sha256": "19bdf107c6965dc2e160b030dc5a37be97585ea4c6d83056853de63b9dc087b5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/rejected-display-scale-v1/review.json",
+      "sha256": "6156d31a62dc8ee9d0c775dc75e78711aacbbeffb5f92881de8247e62fca13f1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/review.json",
+      "sha256": "6d9186d77b1b02c0c1115dcfd005c7f07d03b0a57be8dcc47a81c47b7eb11d57"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "sha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-read/contact-128.png",
+      "sha256": "3ed009c6a84b15362a1e7e9db86adc89948be7a882c9bc134190ab9b2ef4f672"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-read/plan-before-scale-review.json",
+      "sha256": "70e6c087be6bbbaedcbe041cbc9a74cd942bdf913b6729489f35a3f0b7ab6c66"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-read/plan-import.json",
+      "sha256": "ae9918186ab22ebe551024dc56e1d3363facdc06019d49b8bf5c019e34302533"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-read/plan.json",
+      "sha256": "2da05f2014ccd4370e9cbbb05b20ec2702d8115a9faa5234a834f508c528e37e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-read/prompt.txt",
+      "sha256": "386f37dc23f79dcbab2ce323586738f9a754d26512bfb8ed51af4f622fec630a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-read/receipt.json",
+      "sha256": "faf830ad8eab29ea784e12ca6f9c9aa6dd6a6608b922e444bafc343d45fb11d8"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-read/source.png",
+      "sha256": "17071e1ac1c5aaf29ba79817bb3b4d29f874e27eb4c0357ca22bc5bc7c23cefb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/alpha-regions.json",
+      "sha256": "82d3d70d1c2ca5bc2bb975b14695304cc8b313273d5ae172ad499b4122bf0d47"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/atlas-contact.png",
+      "sha256": "ed58e869b1c162864dcf5f7585a94a3d9e251ecadf818cb7f3ea5b616331fe49"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/inspection-white.jpg",
+      "sha256": "38f3d941f39615bdeed2851ca06bbefa74563ef47c4d0abb94138981f110ed06"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/loop-preview.gif",
+      "sha256": "d52057305be277c4725c5bf1fa4473bf7c9b92dbf6a0241c64bc5e2a71d46dfb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/plan-import.json",
+      "sha256": "30433a67fff1fab29b67cd13da53648c678925b6a64b2bf56a47d3cfa142d604"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/plan.json",
+      "sha256": "bb2f359e1242cd80a03cde35dccf56750956e59026284c0f991fb24602038d4d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/prompt.txt",
+      "sha256": "73a8a192a7fd8c48e88344e841f4e287fb2f353cf7032bf4aa993601076d5b76"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/receipt.json",
+      "sha256": "f67e56ba7f710a97f921672a7a20983201c12b26ad26ef5db75443108ff14ee0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/references.json",
+      "sha256": "41a9aa66df983a63b368231a7a4ef46f6b6f313d1e3026b43b189ae1ed19549a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/rejected-display-scale-v1/eat-south.webp",
+      "sha256": "52c607eb66381d259ff3d6258b5454ec13c0b64ee532e5554747c1a7acb9501d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/rejected-display-scale-v1/loop-preview.gif",
+      "sha256": "f88694d76c0d3b1dfdc5a57594c46d1ac4c09aaed5c11a9aa528c5207f9d3217"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/rejected-display-scale-v1/plan-import.json",
+      "sha256": "06e3cf668618b38b6a04f3608dad3c160ce31c95a0ef30a1960f1d6ab90d8a7f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/rejected-display-scale-v1/plan.json",
+      "sha256": "bc9eb906406945c634252daaca988fed73249b9dcf643a6b498485631b5951bd"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/rejected-display-scale-v1/rejection.json",
+      "sha256": "19bdf107c6965dc2e160b030dc5a37be97585ea4c6d83056853de63b9dc087b5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/rejected-display-scale-v1/rest-south.webp",
+      "sha256": "bbf76878cad09dec5e7db4c4d75d69ba207bb34748264fdfeb8abddafe2c81af"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/rejected-display-scale-v1/review.json",
+      "sha256": "59db2b01893b2c463a17ed60387843da4441b4178664239f539aa20d88b43374"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/rejected-display-scale-v1/sleep-south.webp",
+      "sha256": "68534575550b453d5f4f93c94789678635877771c50a038b4d14baa4324bb28f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/rejected-display-scale-v1/train-south.webp",
+      "sha256": "a774141d2454863e1bfc0684270bcff61e368dcfb3aaad18f7e9f73a479d8d12"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/review.json",
+      "sha256": "6c682b746a6a583a8c9e86900381d28e44263ea2bd5c6cd5fbcc6dd20aa582e8"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "sha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/alpha-regions.json",
+      "sha256": "08c209b9d5d447f16a7ea3badee7b65dd5b220c986325233d673d9898ff71005"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/atlas-contact.png",
+      "sha256": "ed58e869b1c162864dcf5f7585a94a3d9e251ecadf818cb7f3ea5b616331fe49"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/inspection-white.jpg",
+      "sha256": "603c5068b52ae98e75160f6ad7c3edac03a0a229fd0d988dc6be6b3d9cb1958d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/loop-preview.gif",
+      "sha256": "4659974271ea0c25a006873ee88b43c7151f4952453e85d4c46eeb2a768f7301"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/plan-import.json",
+      "sha256": "a7e2ecf53009188e4a6e5e5272fdb2de330dbf55414db808908e218a3db749a3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/plan.json",
+      "sha256": "c30d56be82a2fde24956f8e67742e81952b47bc98f5f5f80049f68c94f6272df"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/prompt.txt",
+      "sha256": "8f2aa1c801953f33e1f255dfd2f49a95a2b88b5d36418a36a541808f624fc251"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/receipt.json",
+      "sha256": "df32a376f90e60c4511516d05d64f754e2282b2574ba64872c38c34bb57a1d34"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/references.json",
+      "sha256": "41a9aa66df983a63b368231a7a4ef46f6b6f313d1e3026b43b189ae1ed19549a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/rejected-display-scale-v1/atlas-contact.png",
+      "sha256": "c12f8aa272f6a9254eb13c300a5ad51a549497d52efadf92ef29fae8b9108319"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/rejected-display-scale-v1/loop-preview.gif",
+      "sha256": "8f1288956024a1d7adec6a8324e25b6fa61e5068cc6cbd35db91e9ade37f18f0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/rejected-display-scale-v1/plan-import.json",
+      "sha256": "af3c986ef6c38ae4c50fe15f5ced331df78b7dcef2bff80adf38799e44996977"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/rejected-display-scale-v1/plan.json",
+      "sha256": "b7500d15747111789ec6641ce8c7b55c667ad522e6043461deb0f68a3d22f9e6"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/rejected-display-scale-v1/rejection.json",
+      "sha256": "19bdf107c6965dc2e160b030dc5a37be97585ea4c6d83056853de63b9dc087b5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/rejected-display-scale-v1/review.json",
+      "sha256": "bf8df283ec89e6b5d20e27831353aa903edd88479b191a497299efbb05cd35a9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/rejected-display-scale-v1/work-east.webp",
+      "sha256": "2ba55f784661dcb6461343e165e5aa9dd9d3e2def72fbbec2b1d7e2523f58a28"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/rejected-display-scale-v1/work-north.webp",
+      "sha256": "cd022e98580969efa28ec8bbbf6983772f81309b3a46701e835ed7ed1e98ccde"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/rejected-display-scale-v1/work-south.webp",
+      "sha256": "33b3a741f1966252230eec28171f2c9d5a56727def0016ce623ac3d275ef4bf5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/rejected-display-scale-v1/work-west.webp",
+      "sha256": "b3cf939e5da56bec1b924a7ec16dd530d822c6e5c9f2f1b021d8474058965e08"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/review.json",
+      "sha256": "5d92ba8a0d18d7538b2bbaffef5ed88d95693666d7540fa70af0b19d31e4947a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/franky-work/source.png",
+      "sha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/galley-stove/contact-384.png",
+      "sha256": "e95ecc774a10a3da40122a5ae906bee6e95b5cd0071b3f373bb729be80ee1386"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/galley-stove/prompt.txt",
+      "sha256": "2eb841373bf3c6ef42099271d0fd8537ae10661217b0934aa897f596ffff33c1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/galley-stove/receipt.json",
+      "sha256": "d20d587a519342b71be5b9747744dcbe0ab7615594e41797edc543878ce888e4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/galley-stove/source.png",
+      "sha256": "b5316bab6ad6a95609ee2c9dc72b37133fc822f1fea7e25bacb46cc48a0f7b18"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/import_clips.py",
+      "sha256": "ab11149358e011c53b64b2b3b7cfeea351500918d4e4470f9970a7ce2809c0ca"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/import_root_art.py",
+      "sha256": "c12d4bc3d9125c2571ec12b7c39645c1d52e5869497be0f82e6d2f56892a33f7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-helm/contact-128.png",
+      "sha256": "c7a3ed47571649429b9b81c539e30230214519e2a061a8742a1ac551e58e5585"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-helm/plan-import.json",
+      "sha256": "d8656f9903f95b9bfeccf36697a5c64c2e30370d2fbd258e8c88ae8ec6ee332a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-helm/plan.json",
+      "sha256": "0412e9c54d29e04fa82e05ade51bb7400d102af3cab24f4ea892d5b8512386e5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-helm/prompt.txt",
+      "sha256": "ef692d62032d63dc4d50e782d29610bab9d7e215c9bb13d04a7fbdef673e6a36"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-helm/receipt.json",
+      "sha256": "9705aca5a0e276fbfad49177ce76d55f9670f33d2140812d2c6aebe3a1c07432"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-helm/source.png",
+      "sha256": "d1bd2f1b07999454085128b461bf74d24c89d3a2bbcd4ab7974dda2db3a78b9b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-read/contact-128.png",
+      "sha256": "b311154413e132446e4056529188796e78a1703aa6d551594e128fa6193680d3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-read/plan-import.json",
+      "sha256": "a846df4c39a16c87068f0c551f5db937f5a17cd8b3c2797dc18f58d2057d776c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-read/plan.json",
+      "sha256": "56670d23d392da66ee5430c82e0e8a0cb86ac02fbe733088b9dbff80116e60c5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-read/prompt.txt",
+      "sha256": "4ef100fb2d9814f639df34b217754681add24e1b8685c5f22841d7d335b82371"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-read/receipt.json",
+      "sha256": "6fce571e40bd853e5ba840dd9e361fd0207f09979407f705e96eafc58f80524a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-read/source.png",
+      "sha256": "4a6778092cbc8a0dc8d246da6926a869783a6e43de7c05918e38455db18ca57f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-utility/contact-128.png",
+      "sha256": "3c1e4f9d556270bc11811ca2e589f1d808c308b6b0f6836d08f4cdd472dc0845"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-utility/plan-import.json",
+      "sha256": "6b0c920781fc49cacfbdb3ad01f5507735a0f728ebd8dda6969fd455ad562bbc"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-utility/plan.json",
+      "sha256": "d567d7325a43fad524b0551037d6a3afda34d825d131c5557d4c34be8080945b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-utility/prompt.txt",
+      "sha256": "d4ac98fb1b1c8639d1510b3ae22dfe95b7141eac1dd9bffb01accc329e58d2d2"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-utility/receipt.json",
+      "sha256": "4cc8dc459daee7518778f737bb0f19faacd53a73fc1e874c04759c654f42b500"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-utility/source-alpha-clean.png",
+      "sha256": "6f5f9d3915618a91f2e3cedbe055b0e6cc367588c4845bc567f08fe20e6ad6eb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-utility/source.png",
+      "sha256": "f5d0f79e4e23a03946bf275379856fca828cbafe19729c7c98eaf6462c8e92b4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-work/contact-128.png",
+      "sha256": "a37cb1cdf6f4b8a13a9552fffb592a5a9650e0b80e0987aa0c7f033b3ec1bfce"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-work/plan-import.json",
+      "sha256": "64dca84f6f265035369a48809727d610e7ead41f358487d47f887e9f2b3c2d4f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-work/plan.json",
+      "sha256": "0e921d75134315b12dc2124a87e7c79479090255fa763968eb585715b544bc2b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-work/prompt.txt",
+      "sha256": "a17e379dadf46e0a302d4b36920c17bff7912bcd3505fc1829db011b35d8a575"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-work/receipt.json",
+      "sha256": "e296a342ab79cce6f15454beb21b76ff68536c6ff65aaff1be9a48a51cbf11e0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/jinbe-work/source.png",
+      "sha256": "7e411cb20a432682dd38d7068d3685e50e152f47e859f9cd3a0c2e724805d82b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-approved-reference/idle-four-directions.png",
+      "sha256": "21124393089b0d18b0f7cde04daae363cd3fd508fc80ec9ff77b527b5546f0a5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-approved-reference/receipt.json",
+      "sha256": "6e3c4a9bc5136bab23b49092359ac06f592bcff1e7065ab39797fd6f99c86bcc"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/contact-128.png",
+      "sha256": "8871ddb1ecc0ecd5dc68a63dc24de2e7c27ea6a5b2a26dfd218875463ccffa2a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/pack-four-sheets.py",
+      "sha256": "22bb69652f0b734119f7d957a2ccd66e7b4b3e4ef6bef01e595efbf40aa365ec"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/plan-import.json",
+      "sha256": "a6d406ed07bfbeb041de557905a2cb418e5952f7be4f4d87a6ac32ab201cdfd0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/plan.json",
+      "sha256": "36f7f3e19cac10208d5eec428a188d83aa0c147b9f0d85b3a95dfbd9465c9d3b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/prompt.txt",
+      "sha256": "eee2a0f0ef9017689e1d9ab5dee418770101934d5b7588b04b09a4416907dab5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/contact-128.png",
+      "sha256": "edc60eb0c50db34c899fce52f3e4a4f6bf6f0a4a1796b3c925fc4083100a2ed4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/eat-south.webp",
+      "sha256": "1dd22d419a5be4be9fe076cb44905421ed5743d6121857e10268bf3f131d1a60"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/plan-preview-import.json",
+      "sha256": "b53d553a83d19758869881cd02aedb2d159c5994efdee8c157f276d00d4bdbae"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/plan-preview.json",
+      "sha256": "baef9283b8ee29f3b9d850c174cd5b96b88f7b7813df92a3fc730769e82be0be"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/prompt.txt",
+      "sha256": "a7f8734fd33254a1d32e91945c10396ca7a0e4892037284be6e14b4abbf4af9e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/receipt.json",
+      "sha256": "e3e0a3e4d76cc56d23a4ed2d89b26852a192e89b274e263f77dbdf6504634f54"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/rest-south.webp",
+      "sha256": "b7cb9a0cc4f630913d00f89d381adb6c0a9331ecf6db10dc389c83c16937a98e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/review.md",
+      "sha256": "1e69c10a26dc80099d1f0b8e20ff2207fbc0c7bd85369548c7cfe5be2523dc46"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/sleep-south.webp",
+      "sha256": "0df726cb823218e322cec0b1fa031612c0a44f9cee0209d3c7426b6b520f5b60"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/source-alpha.png",
+      "sha256": "6bc65045163a06b36a4e3f0cd1ba812b812fd95f809e219617ce6517387149a5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/source.png",
+      "sha256": "233bc435d930e625b9366751e3a76f9fcc0062d47320e0d7e450f1c6939cc6c7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/train-south.webp",
+      "sha256": "f502e66444d9000373b33bbc17aaf8b5067ad260505fe09666d9f794f92b4f4f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/receipt.json",
+      "sha256": "effb4e4250dc92312b6e77468da33a3e40c91a6945298f8f5e59f4e28bdb38b1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/rejected-pre-proportion-repair/eat-south.webp",
+      "sha256": "14cffe58867051cc46f9b6bd49f95e14297e88e43f4ab53609ce61df3a8d28e5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/rejected-pre-proportion-repair/plan-import.json",
+      "sha256": "69061c84a17227a533c1c63eed1854b5f7692f74179a7a4a3e557c40a6b03d5f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/rejected-pre-proportion-repair/plan.json",
+      "sha256": "afc79f113fb08bba09c9b329b3f004c373ffc9588db8ac7aacb2b7ff8ed32423"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/rejected-pre-proportion-repair/receipt.json",
+      "sha256": "11311e5a57df6645c242b28aac8ba40b12cf3711d6c17553c426d67b2e5e0805"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/rejected-pre-proportion-repair/rest-south.webp",
+      "sha256": "e17268eb77aaf98d936cb541616943b90ed878830991f04f7d5853e92e702a95"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/rejected-pre-proportion-repair/sleep-south.webp",
+      "sha256": "3e689b26723392477eb907ed5e74269065527944d487d2e4ddfdcb511c27bc4d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/rejected-pre-proportion-repair/train-south.webp",
+      "sha256": "096644ee07a31e434da2856efea8ef2bcbc7834dfcf11fe626f23cb37b0a74bb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-utility/source.png",
+      "sha256": "f1acfe37f09541ab18c55bcbf01fe42d7327f3722febefebe3ad8f542be372d6"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/contact-128.png",
+      "sha256": "e94698676869479dfe7332244cb9f56d45b3a3fccbf64489a0ecaeb6368912c7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/plan-import.json",
+      "sha256": "fb9f49c1d8a10e72a59e25dddd26b24b83b1ee02bc5f98c655f3327eec08a062"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/plan.json",
+      "sha256": "1c1b18377b662260f2483f63005cf792536c5adb6908492d78a1b739f305663b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/prompt.txt",
+      "sha256": "5d0ee566685796e8814d8f80ed84984c3b98fd9e113a030f18a220e22b603640"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/proportion-repair/contact-128.png",
+      "sha256": "16715aeeed5df9cf0b285f8a0bca1121ebc057930f4fd3b8ac7c9f4ddbefe81a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/proportion-repair/plan-preview-import.json",
+      "sha256": "638bae289b4f53dfb6ac13086e0d10d6c35be955b659ee8213070c67c5a1d0b9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/proportion-repair/plan-preview.json",
+      "sha256": "6a43da05f5c4325042bc16e967ef26607e324d49e01d9c14ed25681bfd9d4196"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/proportion-repair/prompt.txt",
+      "sha256": "bd8ee5fe38e0e3162c0159d0dbd22840f317d2f086ed8131cd91776808284f36"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/proportion-repair/receipt.json",
+      "sha256": "7f88e244f43d980600d08b3785bfcab974da36135123913ba46e0b37b87fbc62"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/proportion-repair/review.md",
+      "sha256": "1e69c10a26dc80099d1f0b8e20ff2207fbc0c7bd85369548c7cfe5be2523dc46"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source-alpha.png",
+      "sha256": "baf7e4aabbbde1fe638e1e1633d51ade2a75d2d7e185cd1ea49fc5fc9a62cccc"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source.png",
+      "sha256": "e5a2443280f17feecb0c17419323432a4c9a1cba7b8a8dcbb7eebae52073d4bf"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/proportion-repair/work-east.webp",
+      "sha256": "5cf4d4a16c98244dd203c084d90daf90986b74b116381141cbc2dc89123252d7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/proportion-repair/work-north.webp",
+      "sha256": "990ca55ef40a28d5cbdd39768ae0f2e1251b4847c0c78cd660cb930977d2f8fa"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/proportion-repair/work-south.webp",
+      "sha256": "3571514b9bdeccd1986cfe327ab98e6c01fe141001cebf4f3808a46e80b48699"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/proportion-repair/work-west.webp",
+      "sha256": "07259c95915d390e4cd12a96fd11231d5457bfacdcd118b28cb5a7952d34b11b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/receipt.json",
+      "sha256": "22dccff1d392a30d8dc3a44affa763263c2b8d7a0d4966b2d4c676ae11d13033"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/rejected-pre-proportion-repair/plan-import.json",
+      "sha256": "22b80374ddf2d2dd18719d29f59026d6ea79ff553a6bf015cfbc8ab5f4da33e5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/rejected-pre-proportion-repair/plan.json",
+      "sha256": "1690003dc194c57bdc0ac074ece09a96d81049196948d4815888ef1d59a742a5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/rejected-pre-proportion-repair/receipt.json",
+      "sha256": "109863f6811bbb9aff0205fa6d475cb10e73e693fcabfe78f9073d301bc21ff1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/rejected-pre-proportion-repair/work-east.webp",
+      "sha256": "2502e7ba4e9ddbba94e37e969e4510e21c87e1618ca4e06bfa5ad2f69529ed12"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/rejected-pre-proportion-repair/work-north.webp",
+      "sha256": "1d02d764101475a756f4aebcc8926282d809294bb614bea8e3580df8dd1a6990"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/rejected-pre-proportion-repair/work-south.webp",
+      "sha256": "af57bad3984a7be67b88d4b9ea1f33324613d127a0efdbdcca572eea275b0610"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/rejected-pre-proportion-repair/work-west.webp",
+      "sha256": "c8ff2d12f45614d439cbff44be67a64287678f093571f589f3794c21dcfaf3ea"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/luffy-work/source.png",
+      "sha256": "6e5c2840e2e75da1c324006f428225a91361c11bf4520480356be929b39326f1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-read/contact-128.png",
+      "sha256": "77554a48a16867e49ef13822f35c368f825fa50cdaa4d826d99929e275d02596"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-read/pack-read-sheets.py",
+      "sha256": "030677d897f28d95f2659a26ac20ff23606ec2c07935e4d2e9a668ef877f8c63"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-read/plan-import.json",
+      "sha256": "1b082817a6a6e16d0ea9a39ccb59bb41d49b76aa64bd28557158d369db320034"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-read/plan.json",
+      "sha256": "45fe61dfb1cca4bb3f23ba0ffc2311126c40e9b0fb7f7b9652f599839dd89197"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-read/prompt.txt",
+      "sha256": "046ee5af72cda74aedd889b9e8e9dc25fd2fd3c14d86fd63d56eb0db64666706"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-read/receipt.json",
+      "sha256": "bc24638797f52e973a2635fd5fbd7e27b4d4a0fd1c32405d8eeade421e24536a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-read/source.png",
+      "sha256": "de182273c8f0d2c3fc68852a1ddbea7bd83958a9100cdb5041c311bdaf7f7697"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-utility/alpha-regions.json",
+      "sha256": "ea25eccce896dc01cb62435ad8698edeffd57657a0b9f73a56e6d2ab079f1213"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-utility/inspection-white.jpg",
+      "sha256": "8aa0c2de22f4a580f07edd12297af30675da23416c69fe89d8731781309f8cb3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-utility/loop-preview.gif",
+      "sha256": "8d05c6381f1060abbd1392c900277fb4bc1a92e1870bc3efffef83419e6c51e2"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-utility/plan-import.json",
+      "sha256": "4484bfb09ece6ccc76b2ef19061490b90780e0d942bfa9b03dcf0f212bcaeb66"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-utility/plan.json",
+      "sha256": "51148fca27fd667a7bd20c83c031fe83ab40e0a7b57ecf872bb04ea29017aae2"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-utility/prompt.txt",
+      "sha256": "62dd953adb5f2adc494374c1abe067619b2503dd2ba8e1d04be0c9bf57907dbc"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-utility/receipt.json",
+      "sha256": "7c80dc72385c8c144e10c99df4a3324b3ce45ac122a2c093e1b9d55a432a30f5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-utility/references.json",
+      "sha256": "17ba38f26b634b40f92b3842d182a88efb281185672fd47a2441601779b5a319"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-utility/review.json",
+      "sha256": "f2cd68c006db0a9f063437f986895f4c187cb460056bb2e267a0b8f55e6541b7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-utility/source.png",
+      "sha256": "463090f2adf5dcbbff90327983c598b4ac258c213ce78a8116dfd553897d606d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-work/alpha-regions.json",
+      "sha256": "b0bebe0863c690b760e49290cdd064b278a1c160a3e1cc8c9e853c4bd4a24a08"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-work/atlas-contact.png",
+      "sha256": "c76e2c2d82fc493588f3d9c5f5c4fbebf3abbef81685d7bb824338e7076e0cc4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-work/inspection-white.jpg",
+      "sha256": "98fa24ce5b4b4c3f9ef080d6e5de75d4f68074b87fe96d10434f054e1ae01809"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-work/loop-preview.gif",
+      "sha256": "b5de0044f39a59c1a0737785500741501c65b94b12cb4058f59706e97ae997f4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-work/plan-import.json",
+      "sha256": "de5d167033654e6c77fb90e73d0615d6a4db02d20edbd484c01d9fc531410ced"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-work/plan.json",
+      "sha256": "f72d9dc76b639131ec91b38815fe5bdeb33a72b7fcf07771ba5a74cd8f09484b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-work/prompt.txt",
+      "sha256": "c67ba7cd44c89e89670b529e90ae4bbfd3660ea00fd47f06befbd34920409ad1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-work/receipt.json",
+      "sha256": "4884be8b1b5d3fe440d3c71331e66def3851491b7376871ba46521c5403bc9b9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-work/references.json",
+      "sha256": "17ba38f26b634b40f92b3842d182a88efb281185672fd47a2441601779b5a319"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-work/repair-prompt.txt",
+      "sha256": "dff5d90d2205af89edea8cdb314dca5970b45309519be70a2a8cd3951f5e8735"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-work/review.json",
+      "sha256": "0c1b92736944126cbb54134ef3699c27a1ec976e2935f25d2bba98cec393bdb0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-work/source-before-repair.png",
+      "sha256": "4bff2da2dadd2f8e867c220d68af68b5b76083a3de03b3487ece66f07165d997"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/nami-work/source.png",
+      "sha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/backend-review-qa.json",
+      "sha256": "ea85b4f0f4288b225d91c52a1f189f22a5abbff098043a537000e44f93e739f7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/backend-review.md",
+      "sha256": "11090d247377d33be01bcce2c1195118e7889035f3ecafeda4581990c920de24"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/activation.json",
+      "sha256": "d86263269bfda3a791e189ccd61d9a625192ae3efdddad4bc641853b9d45d999"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/desktop-life.png",
+      "sha256": "2f0f683342b4e8f70e13bf564bb267a9f3d6126393e2b256ac15a8f24b190385"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/narrow-life.png",
+      "sha256": "f841d181ba48cd3c9a0d83303d2fb439397d0b8fa487547dbf3b1feda5ff139e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/report.json",
+      "sha256": "e35255590287a517f2f599045135edc6f6e9ccb3d0eac9065328fddceeecc1db"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/sanji-work-0.png",
+      "sha256": "7740d25cedfc7c8e3c3485409674f9201b24a23fd154165209905f8f93b93791"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/sanji-work-1.png",
+      "sha256": "d84929e147aa0d815f4c6ee7ced1c7ad8ec5913e0297d6add0705efb5e209811"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/sanji-work-2.png",
+      "sha256": "4e0f40347e24f7fe3498850f046d65bc2ea962905302635bc616f1d766741497"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/browser/sanji-work-3.png",
+      "sha256": "7740d25cedfc7c8e3c3485409674f9201b24a23fd154165209905f8f93b93791"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/all-contact-review-final.png",
+      "sha256": "82439b622382fac45ff1f53448ff987a1ae5a71a81e0d52aa2413efcd9f60b9d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/brook-piano-r0-f1.png",
+      "sha256": "f3c32ed9330dc5e5dced364b584b90a26d314020f1b747975dd3ff00363973cc"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/brook-piano-r1-f1.png",
+      "sha256": "84b97da7511a3fb678810790c6bbef2d36752d5f5a8ae5ba75af254076ffb930"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/brook-piano-r2-f1.png",
+      "sha256": "cb44d4574176efb5491aa484ae3cee289d39631ff6ec25345fa7cb4f38ba0f2d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/brook-piano-r3-f1.png",
+      "sha256": "6dc636efff80c79fe659e42cd4c5ee3e07ddeb08630b9875dc653726120d7898"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/chopper-medicine-cabinet-r0-f1.png",
+      "sha256": "0a6e76e963e90ecd8270c2f0d5bca1a2b0653b0ace059ccd8736c60c1924f758"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/chopper-medicine-cabinet-r1-f1.png",
+      "sha256": "7b8a814ebe9b6e46ddaacb5e313d91e631756a2fec7d66de8436a7a674dfc138"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/chopper-medicine-cabinet-r2-f1.png",
+      "sha256": "ca7a75d4c03d7807947324be5275cba13dceb5ef02b8ffe914e5192816901014"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/chopper-medicine-cabinet-r3-f1.png",
+      "sha256": "c7bc73f669fbdc169de8cc71f1ab9fbef73f7cb6232a6833b337498b1985084c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/franky-tool-bench-r0-f1.png",
+      "sha256": "26494a7f86243a881baff2a49078cfc8418664fddda58c4719cbd808ff86a8ae"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/franky-tool-bench-r1-f1.png",
+      "sha256": "cbe8da001478a677294634f2b65289a2bd8bb9eccc78d36297e782e2b0c510cb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/franky-tool-bench-r2-f1.png",
+      "sha256": "7728126a16be324e28f03bba1e087813056f99115e3f38f6c944bb0b9b577acb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/franky-tool-bench-r3-f1.png",
+      "sha256": "ef8fa9cd8cb794f4ea84ff56cf9b8603b121595d6f5ce7dbba361e39bf2b2fe1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/jinbe-helm-r0-f1.png",
+      "sha256": "c080327058e78b60c831c2d3e6cc8598510691400067f0f03af6f19fa95535bb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/jinbe-helm-r1-f1.png",
+      "sha256": "d6d7df9741ce489df45e63757767e2ec9512511c556d270791b51ca7cd815479"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/jinbe-helm-r2-f1.png",
+      "sha256": "3b2df8d6d3f2161abed52367e98a0b5476f2559658b11a77251412d305033807"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/jinbe-helm-r3-f1.png",
+      "sha256": "ea39bc22a2728ce744c015b521ea0bfe165c574aa4a3ee1472fab956ababf531"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/nami-map-table-r0-f1.png",
+      "sha256": "8bcaee46e17ced2f7d38490d619f3206ce64fc2b2bd7ed75aba73a0ab8b12b88"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/nami-map-table-r1-f1.png",
+      "sha256": "87e326df3546627431f26628d708f760a0dd3f3143d5bcfc78eceff232508b6c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/nami-map-table-r2-f1.png",
+      "sha256": "6b53201c15f52a86a75615b30c9ada8c8d9f9466ed5e9db76f6cd2db23eb3e29"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/nami-map-table-r3-f1.png",
+      "sha256": "62be9e89007d6c2fe11e4c2d31423711ff38290e30549837b8751f62ec3dc0c4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-brook.json",
+      "sha256": "fca86faf83e0d73565b81b8b1ed98f51886ba87d06527d97f6553ad689ca0ec1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-chopper-r2.json",
+      "sha256": "fb39ebf8d70e827424e7effbe7526d84bd6c0e2d4390a504087d37d70bf47407"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-chopper.json",
+      "sha256": "c1365d440a8c2c11b90d841ffc6307100b3da6eeb4d4743d4e17575e384040db"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-franky.json",
+      "sha256": "947e47fe80940e948df4f6fc96df3fcb7b4d4feeb507368da10133562d6963ce"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-jinbe.json",
+      "sha256": "7cde14a33cf0b17647007f173766a90d33e2fbf3c71c593444bfcbe3c49925ba"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-nami.json",
+      "sha256": "68d59e89dda355242f74d758d14966d8376dc88737c0e3444fd1aa2f607841ce"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-robin.json",
+      "sha256": "07461a57b79ec12f835355e25b4e0df4caca7c5d7d628efa8a5f84897fe6377a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-sanji.json",
+      "sha256": "113bae9148c22090dde86b7a3e3309493883fa520b4519bc82fe60d813fe90ac"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/report-usopp.json",
+      "sha256": "a3b497190e035b712e7f796c366c21cfad150ecb0f075d5e51775ed74513b681"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/robin-bookshelf-r0-f1.png",
+      "sha256": "91c2724b6801444c721a109d0b486ce5a659129527b25165644a55029b866f60"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/robin-bookshelf-r1-f1.png",
+      "sha256": "f5b732e9719001f7180792a8fa54a56715e74407051dde768023c4e6cf7a441e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/robin-bookshelf-r2-f1.png",
+      "sha256": "1d0b5f47569f2e324faa9a5855467229bfef254d0a7e72319ad514f332ab376e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/robin-bookshelf-r3-f1.png",
+      "sha256": "fbde5a35c0e5c450e169aa9e559f04c2b82886e28163fd960cb7031b669fb16b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/sanji-galley-stove-r0-f1.png",
+      "sha256": "6d6a1d136093c4ff4e850b6a94d34f63da52c8f385ea9bc26a6c9b50da3475b0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/sanji-galley-stove-r1-f1.png",
+      "sha256": "976ef0d11d6e28d4140f9827f15d6fe464565fc58ed9937f12923ebf168e4115"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/sanji-galley-stove-r2-f1.png",
+      "sha256": "61f70f35eff0756eb06890a0dbf0f039c7723a51dc30e524ed87a2220ac5f215"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/sanji-galley-stove-r3-f1.png",
+      "sha256": "3d7447ad6995a7ca17c3fe265a53484f2df9f050bad03cc3e680ad000c3f37e6"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/usopp-tool-bench-r0-f1.png",
+      "sha256": "70cadccfa5daa0b9fbbbdaa89a21bbff9a6ab5620de35b755acf44eda9006199"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/usopp-tool-bench-r1-f1.png",
+      "sha256": "408845ce93c3303494209059c412f8349e41cf94903113dd37074f708e8ed0ed"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/usopp-tool-bench-r2-f1.png",
+      "sha256": "c297c783bc628fef4bc40d400a21daed9be8318d5cda397e91cf51b4599af4f8"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/contact/usopp-tool-bench-r3-f1.png",
+      "sha256": "30dd08c84caeac859b82cd0a5724a09a548c278c2c539f3ea43d126e07613775"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery/package-qa.txt",
+      "sha256": "81a48cdfdbf6953468db2b686831b7952465b600a472e9e361bc317c28ca7fbc"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery/packaged-artifact.json",
+      "sha256": "0a286147b46bc425cdb704896b0345bed1f504bea769ae84e4043bac8e5910f6"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery/packaged-smoke.json",
+      "sha256": "6f92a4c69b985548d62d239e4360aff813fc6fb4a6efe1da5404d4e707b2deab"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery/public-installer-verification.json",
+      "sha256": "5284a7a2c80219efa295c34f3daec3635245a4700b594c6142119bae82de0f66"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/final-editorial-changes.json",
+      "sha256": "411eeee35443a3a794ab2a431f719d52438cea1c1fb8dfedca3c27781392edb4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/final-life-content-qa-result.json",
+      "sha256": "70da6349b090322412613911f9b11510744df69299d7ac8a8614c01852594cb3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/final-room-dialogue-qa-result.json",
+      "sha256": "0618eb9a39b5dddb3cda003be5846a19a3c8537358d0e8b9128389aacf54ecb2"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/independent-final-art-content.json",
+      "sha256": "a72155b85e1b31f1073ba1e1fc17b1ce3e13b091bb07fb1be8e863fb467ae030"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/independent-final-art-content.md",
+      "sha256": "516f51af1fa74dba158d9ed99a633fc1842343b3d4f4b400f60590caca02f1b0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/independent-final-assets.sha256.txt",
+      "sha256": "93f02b2a6f7201dafb8e135ab0503ef2c8009dbe64126bc8a8fd9367990eb1c5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/chain-1-trajectory.json",
+      "sha256": "71c77eb9ef8dfe14274fa890931feeaf335406275be2eceee3a413c7dff5f4af"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/chain-3-trajectory.json",
+      "sha256": "dbb817ffb78de46fe51732d2bff9b9ba374952fb5ea2c415766bc2f81b9a59ab"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/luffy-call.png",
+      "sha256": "fe9fc8676e2c63f6fb4d4d800c288bafb02b2e0bd88ae2a8b10c8ea2181fe9ab"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/luffy-gift-eat-with-line.png",
+      "sha256": "9906bd875cd125991b3614dd4baa6cfa11b0439c1cdbc2cab6fe62be9c1ee537"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/luffy-train.png",
+      "sha256": "68a3c4912f32d2d45c2ec662243dd8d35f637888eff303fe100e518dfb08a75f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/report.json",
+      "sha256": "9cf6c70c153dc3f32e5f83ff432432100dbb40872637f574c3be163e53c14217"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/zoro-call.png",
+      "sha256": "d49d1cbb5644a5ca08f63277b5cda623546d9353a58999e4a2f097809a503489"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/zoro-gift-eat-with-line.png",
+      "sha256": "0a55180f5f1282048f0892e05548f1fcef72aa8a6fb1bd74e36522c62cf07cb4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/content-art-final/zoro-train.png",
+      "sha256": "ed2e7a5757dcdee6d29e65acb3554952c384b00ae0e0056e94642c58c8040a81"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/arrival-trajectory.json",
+      "sha256": "df7904fd0b01817082e0aed6d88193924fb9d8bbe834391bbbe00a59bbb7611b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/cadence-report.json",
+      "sha256": "336c0ce151b683f9ec02e5298cb1f943d1fc9d6bd285c9f2d91049bb5178bc8f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/chain-1-trajectory.json",
+      "sha256": "24e89454735a117a08daeb1ef05d41f4f29f05ab292b9962d5c7d1bf8089bf34"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/chain-3-trajectory.json",
+      "sha256": "90a3bae172a433d913094501602bd09ed6ba5d8f4b907b04c4d7904492a75392"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/controller-report.json",
+      "sha256": "14c4a79d75ef7af57055555a15baf5660ddb70589599ed96941ae6da313193aa"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/gift-eat-with-line.png",
+      "sha256": "ecacd92dd122be897a502ee6d8847f177c742b86efe1f00a021320c91bd36a59"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/piano-event-exclusive.png",
+      "sha256": "a56548a7f8324cc714c678ea22c39b6f9dc797d88e84b3be3ad355f53b332af9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/integration/room-regression-final/report.json",
+      "sha256": "c734580dd985edf47bd9fdec00b9a314044e74566e162678261c05e5d53f9110"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/legacy-room-final/report.json",
+      "sha256": "9f9502dc435133b98ae5e341fd9f0f8738b2b633f1ba27d45e71e820f2d0e877"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/prepublication/electron-bounded/desktop-distribution-electron-report.json",
+      "sha256": "e0a6ecf3c534b7309a27217ccf01b6e7c14dad1586bae04e699b7c7a96dc1758"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/prepublication/npm-start-http.json",
+      "sha256": "8b21b71c10fabfaf1cba671bb1c59e31257c8438ae426191fe69373aaec2f0b9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/prepublication/transport-gate/desktop-distribution-gate-report.json",
+      "sha256": "6f28ff4b485f6cdc85432404a9adbd6fae5b926dec5f89a42280c1de633ef3f9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/profile-shop-final/report.json",
+      "sha256": "42af3d60f9d01155d816cdf87c6356c4ffc62a3c6df833d976658509cc41eb47"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-read/plan-import.json",
+      "sha256": "4fb27bd6ca44da4f40313573f1960fd50c554b25b5967c8d1087c4e2381e6082"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-read/plan.json",
+      "sha256": "6791de720d27aaf529728586c1996ebba24176341c646792dee1931d49aa1d5c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-read/prompt.txt",
+      "sha256": "c2c2f9ed8fbcfaf3a662edf9785eb4bdf61d51559fc216d763ffa1767db037ed"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-read/receipt.json",
+      "sha256": "af761ac017207dcca90f8682fc9e7c1bf98b580f06ab7b875b721e696380fdc0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-read/source-alpha.png",
+      "sha256": "13dfa641644ea5f4ab3931297918d129a40407a6dbe74849c2d3e0ef5d8a2bec"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-read/source.png",
+      "sha256": "91cba2ae248f229baf65a6ff6930596cfc59d3b482a6998125a9c04df26f3b07"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/atlas-review.json",
+      "sha256": "c0638a3d70aab90f1b58c78c085b239c275216e738177d93bdf5ac3f7fe1af11"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/contact-128.png",
+      "sha256": "ca29a32b3d03ec197ccaf956032e8e6211883df421a918e6b156dc70f2123f61"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/motion-review.gif",
+      "sha256": "d2058465e06ef7e1f6970cbf3777286dcbd8322aa1afa69f5197fb138614a6f3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/pack_review.py",
+      "sha256": "11ea024ca87394002452a78d7ec6b084a5b3858c92f64b13cc9ab38e863cd1bf"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/plan-import.json",
+      "sha256": "8423e7e4b62a09b000e9ee0e5cccbfa31a6b5be216e56b03c7069525a425f312"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/plan.json",
+      "sha256": "0b9e4a86d347f5a799e5a2096ae6309e22a2fc093d737f5af02d9a2ee74f066c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/prompt.txt",
+      "sha256": "66119a113c893bb937b175dcd4ef72f909d4f24b354767b9190a7a5c22765b40"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/receipt.json",
+      "sha256": "f77704114bd8705030146b3d286e839b7c44281c1913c287116505e126c9577c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/rest-contact-128.png",
+      "sha256": "fea8afad179f70a06b7b0e858f368677295e969a928e720031a0832d698111b1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/rest-fix-prompt.txt",
+      "sha256": "26d81ef465f69f444872c84d24403318e91c36a186862adbbdb20ea5b3eb5107"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/rest-fix-receipt.json",
+      "sha256": "106e65e315f4d8d184e0f63e5325db60012bd2edf19f0ba5ebe4bd77d62c0aa4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/rest-fix-source-alpha.png",
+      "sha256": "f98a701a48d761d8afea78e627dbf33877070df3d9a4680591badd922e39e319"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/rest-fix-source.png",
+      "sha256": "1f8fdf0f2647a3558bc9e0334634b742fcffb9fb376d69eddc40a0d9fb51db05"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/review.md",
+      "sha256": "e93b15dd594965dca2e95b2799226c58c53f2e7061bf0982bc33daec3c09cbe7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/source-alpha.png",
+      "sha256": "d746605bba7292e59f60eb145337615f55527ac4d42c4d5c585eb74dfb3d2449"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/source.png",
+      "sha256": "0c0c1bf2b2df331a762ac0a2467f34a91b3a3da807947cdcaedcfce328f87727"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/train-correct-prompt.txt",
+      "sha256": "72df4b9c0ced5d2c74839946ebae8338b831c9862fb0fe407cb84ee6f6e6b3b1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/train-correct-receipt.json",
+      "sha256": "3131da84c26b90cce22f89318ecf70b5460a12eecb5ccd10d7b88afa0aaad8e0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/train-correct-source-alpha.png",
+      "sha256": "0594d7ac197b3b615ddf89478bb5820b747436214ebd284efb3a8a391af11464"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/train-correct-source.png",
+      "sha256": "f6cf7ab8bc7201dd6b05d7a5bfa15d153dc7ed979c84ede661d4aa15d0ca19b4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/train-fix-prompt.txt",
+      "sha256": "26627af44d2a7e2445aa6eab35802f8d36d1c2d9092e7fe9ef9b3df1488fa3f9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/train-fix-rejected-receipt.json",
+      "sha256": "249dc5b7720eba5bdba0301a8f9728f8303d6cdbe50c695af9e5764883f266bb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/train-fix-rejected-source.png",
+      "sha256": "e0c91a2de65c4248c582d15196a968a1c9ffa69ac29654b2a4c253678c0c877d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/train-reference.json",
+      "sha256": "11af79ff59422dbf5450f90375363c5d08eb551a1fed60631b064fa41e58268b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-utility/train-reference.png",
+      "sha256": "eb643542ba410f4b17a4aea86bc66a9012c50d2635e72e42b55a32081a495b8e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-work/plan-import.json",
+      "sha256": "bea711c7a0bc8f1514f5e2644c0bc0dd355bb679505597a6c8666ac068f3ba4b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-work/plan.json",
+      "sha256": "d98627200936d39524c9a4129c6a3e193436efeec6956cb011eb9f15f6257e5f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-work/prompt.txt",
+      "sha256": "e137064f93871f28deea77db39d1e43c96d8705ca64c1aaaa079b0ff7edea49f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-work/receipt.json",
+      "sha256": "43cb68241bebaaa65e48679967e0e69eda9e870e3222c8e7c07273d0e432b51e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-work/source-alpha.png",
+      "sha256": "acdddc510294af60103a0e8060c3ad1472ecfe7aeb604d84e9ba1eb76fe9f5da"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/robin-work/source.png",
+      "sha256": "0ce9de11ab8972e8e1b682bc78e9137b6c4dec9fb61be5b079e0ac9998991938"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-cook/contact-128.png",
+      "sha256": "e02f16b25a48300bc069b3aeae252a1e193b6719e53d04fec18501bc93c89301"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-cook/plan-import.json",
+      "sha256": "160246cb842c5f02bb04ab59ac465f8c7a018c67e9af022c27aa728d0bac8583"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-cook/plan.json",
+      "sha256": "afd65fa5c30dd3883d826ff90ec0d5bd42b15c216d081fbc0e3ceeb675f0661c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-cook/prompt.txt",
+      "sha256": "4249d3ab52b57154ef3d4dffcfd2695e2492cdc893b890cb1e656c13a3a61a56"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-cook/receipt.json",
+      "sha256": "aa5d73312413d406e0da055852058a72cc27d389515392718d80fb1925319a3f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-cook/source.png",
+      "sha256": "07c85908ba7cd468694ced47788d609bb44e019696ee91d2bcfbabeb71e17b5d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-utility/plan-import.json",
+      "sha256": "2811264c5ac9ce0244fabf0692e21fc5889f8298a5ecc5e0640a0dbcd4dcd146"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-utility/plan.json",
+      "sha256": "cff8979ed5edc0987b7e1b9118b89cdc1cf16efb24524bcc510146574df48c0f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-utility/prompt.txt",
+      "sha256": "be86a38493be78fb95aafee1caa49d54157d0f827a188055c69b707954d69ac8"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-utility/receipt.json",
+      "sha256": "507a6ab18c19b789abbcb6b787c3332e99bf50dcd370005baa0aa57b3b193cf4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-utility/source.png",
+      "sha256": "d03eba05b2c8b74185180161e8b190c67adf100704f8383b66a622808ecbaa28"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-work/plan-import.json",
+      "sha256": "3f90bbb60bb73a8a3997df1d9df414ab732c0668bb2be9e986d56ce95e74fe83"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-work/plan.json",
+      "sha256": "cf1f52874682d13cb1b129bd21869cf3946e6c9acea8a5bbc0cd733f8e826500"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-work/prompt.txt",
+      "sha256": "6b66d6f141975eec9e2bc2d2968efed343e669f2ffaffc71f00483eb8b6b3c1b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-work/receipt.json",
+      "sha256": "8ab3324840f979d2cd57ab00685ec69aedd9157e7eb88576efa4c27f50352938"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-work/rejected/revision-02-review.txt",
+      "sha256": "beebc5604d44afa236156059c0093172a272ad7a8bcc37fd6ac40c7c3f9d72af"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-work/rejected/revision-02.png",
+      "sha256": "c6093fe1bdffd4f95c49b629d2ecf27cbe788c3e59da869e68cc7b121c08be47"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-work/revision-02-prompt.txt",
+      "sha256": "903155e282aa59b13fd74ce6c7d829d4d5b0a4fe891c3fe0d88012c08c32a41f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/sanji-work/source.png",
+      "sha256": "8eb5302708f3adfafc9466ca8e11b15cd6ac69a13a819cbc0330182a5ddd82fa"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/alpha-regions.json",
+      "sha256": "d1b8d4008ec496b830c8d920967263a2e20680f61c72ade90af55ddf00bc2d59"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/atlas-contact.png",
+      "sha256": "a41b942d1e560531aa76be747096da4adebb9acdf98932db846e81225121cc5e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/inspection-white.jpg",
+      "sha256": "7224248ae63a8a40f9b076fd8e0edeced93e4f93d91788b51e5c20e4395752cd"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/loop-preview.gif",
+      "sha256": "579456535182febc638fb9262dcd1607906dbbe09b17d161f153ae849e599b90"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/plan-import.json",
+      "sha256": "aa613d1a2e8672b62a2adbcf2a8da72f4eeaa5eb48d5a5afec8f70a8b139886e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/plan.json",
+      "sha256": "73312df6d94d6ff51b6b8012de72bf05f2752ae13339c554dfa1490fd968c3f3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/prompt-v2.txt",
+      "sha256": "b20864a63255b670b517815381f1a84730e28c9f672bac5ef9fec11f8007c51f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/prompt.txt",
+      "sha256": "b20864a63255b670b517815381f1a84730e28c9f672bac5ef9fec11f8007c51f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/receipt.json",
+      "sha256": "728dcc6f3451884518831a7dad203407076fccb1a5394e35d5653338763785e8"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/references.json",
+      "sha256": "a7e8a89ee177c3375f7220cee50d67b299b61a2e18c82568d86b80dd9b4c7fa3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/alpha-regions.json",
+      "sha256": "ffa3b39896328f152d08aa9134b5448e00097f9b49bcf8578c5518fa7e905dcd"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/craft-east.webp",
+      "sha256": "89cce63e52ebd3a6903591ff3291395144ff6f99141eb9a3179663c3c3028f5b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/craft-north.webp",
+      "sha256": "8a09f5e4b75d464d82ee13051978899e36ab48bcc53c51d0329bed0d00c74111"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/craft-south.webp",
+      "sha256": "c5f3766d8a750c20cbe6f0078fa991620e9cc87d763d8f5b5152f44e58dc00c0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/craft-west.webp",
+      "sha256": "161257293b917cfccdd58d6e60187da9622ca7e4db3f798a1f335e9c065cd72b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/inspection-white.jpg",
+      "sha256": "fec727bc22240f616242f69d49eec1fb8170dfb5839a670739e91bce7c4e84f3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/loop-preview.gif",
+      "sha256": "64ab137b61d3f627a82d2baab966063d4a22cfb52a99e142355867403de86428"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/plan-import.json",
+      "sha256": "7d04c32e66c1c7211007dc5883a78888b0907b01747ca66e60362957ec284a23"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/plan.json",
+      "sha256": "e24399976b5b5cbf2c90fe57e2ce027c25b7787a8e4a550833870390a7d6aa7c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/prompt.txt",
+      "sha256": "40e3ffb886352e1bcc3e74fa24336219a4a3670a6453421d5791baf6064109b5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/receipt.json",
+      "sha256": "f78b1581e39ca8e9f748b5ca5632f2d2a597ea4b4ad13ad27d37ed27cc18aebe"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/references.json",
+      "sha256": "a2c3a1951e6fcfc8565102c27c5c0ec33bb2d97dcb1fb76047b9e57de4b518ec"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/rejection.json",
+      "sha256": "e74c8f2514555dbede5a2a2349bb2766b480e5de12bca277c2cf9abbc03657ad"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/review.json",
+      "sha256": "59807422cfd145dbc27e488c6e647fa391fa611f84e0db5c29d122e95d827138"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/rejected-proportion-v1/source.png",
+      "sha256": "c10e97dd6d36c195216c3246cc3cb5855347d3b819a1308e2d6c4247fbf9b2dd"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/review.json",
+      "sha256": "30f9ea7ef060ff939004cc1cb08286917958508962c9ad87a58fd35de43f38e2"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "sha256": "10f2bea60ec26dfa598a8076e7a3556ca2d047b2fa926515404c08c3611d1ef1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-read/contact-128.png",
+      "sha256": "58234343a2266199d8b1a9c5670801655bfe5521825528a3f914dacab0aa738c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-read/plan-import.json",
+      "sha256": "4a70b0f812ae8117e95947ccdb01eb511f421a0353c8a0504421e4a17fd5b3fb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-read/plan.json",
+      "sha256": "6b1943cef9a40a38535e23ae0d22f315a50d641f9583c15333a58361e6a99f41"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-read/prompt.txt",
+      "sha256": "4c04f347dc4f49ab5b3668bda349fa57e491b85aa7f6f9e6f0ecb5979396271a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-read/receipt.json",
+      "sha256": "f7a50b589eae7abcd66827220d463cf143e42b865de9f02237933a1f02b43dea"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-read/source.png",
+      "sha256": "e9fca8aa8814a68453e174515d602c6181e2228f1e4396ecc517eaafc5662909"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/alpha-regions.json",
+      "sha256": "b1f4abcc51ddac200aaccd2f9d64d73260b5fa1c6498272f9d4c61fb9e9201f7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/atlas-contact.png",
+      "sha256": "a41b942d1e560531aa76be747096da4adebb9acdf98932db846e81225121cc5e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/inspection-white.jpg",
+      "sha256": "89817ff371b1eb3745aa8693411c7d479103004fdb5b527b7f59c63cc89cecae"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/loop-preview.gif",
+      "sha256": "4aea7b16a842086c49a2972bc3317f8ff6746f9acce014e778be4c2279065e45"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/plan-import.json",
+      "sha256": "f38c3af893ea12c73f938bc46a723003d205bb0cf7b67c4a9023e0208a036cac"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/plan.json",
+      "sha256": "9857466893d5676689c3653c4a52051c1953430a5390774eab66cb5bed5ea55a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/prompt-v2.txt",
+      "sha256": "504d4d34072ff7301c4a3c611660df1b7ef1e3d77a346078423e6c7af6bcfe81"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/prompt.txt",
+      "sha256": "504d4d34072ff7301c4a3c611660df1b7ef1e3d77a346078423e6c7af6bcfe81"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/receipt.json",
+      "sha256": "8d8f1d8922713c0710ca697588d9a680fb81843395e120081899e75fafe9ff01"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/references.json",
+      "sha256": "a7e8a89ee177c3375f7220cee50d67b299b61a2e18c82568d86b80dd9b4c7fa3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/alpha-regions.json",
+      "sha256": "f6dd8e1389f81806f68e802945a33092f74549fffc04e56d6d068f44e5b22e60"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/eat-south.webp",
+      "sha256": "a76b252676ca5e8e93374966c2c3cac1a798bb6f919d517fff55be1fa25befde"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/inspection-white.jpg",
+      "sha256": "8b32e7ca098459e0fd1fc5bb4b336ecbc3f1242a69fb818167f64054c9f766b7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/loop-preview.gif",
+      "sha256": "7c794c343d491b2beaf84465936ce0f9d883af8867152b60a431bc828667c1df"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/plan-import.json",
+      "sha256": "a30d0a484defdf4a6f5b684935fc618fbff8199cce1fa6492eceb06ec3b93a26"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/plan.json",
+      "sha256": "bd79afb65365c5ac8db7ec4b191b8471d59ef14a1f9f637ddd9dccea2b26a3f7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/prompt.txt",
+      "sha256": "f7813004f5c510f3b6b42d8b710d83281081193e0e427f40a5eb56a4c1a95e22"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/receipt.json",
+      "sha256": "bdd9bf6dd05a7f2060bc0e7c776793ff274546c5e34480676441d31d462bab9b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/references.json",
+      "sha256": "a2c3a1951e6fcfc8565102c27c5c0ec33bb2d97dcb1fb76047b9e57de4b518ec"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/rejection.json",
+      "sha256": "e74c8f2514555dbede5a2a2349bb2766b480e5de12bca277c2cf9abbc03657ad"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/repair-prompt.txt",
+      "sha256": "765b7d7ebe8ec39ff35b6b6cf37ad70cbca042a95c8b996f5394a453d322cc7e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/rest-south.webp",
+      "sha256": "84b9bbc2e32ae1fbcc9e03a468d1f663b6a99f85095ddb4f135cadde02c933c2"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/review.json",
+      "sha256": "75642005b36a44445fe88fb273b7f58b8ac2e4939bcf46591344d6b5ec90c47c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/separation.json",
+      "sha256": "1ef53cbdda197ac8a9d5750b8fe1169a988db102239b6303a76be1b1beec3b9a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/sleep-south.webp",
+      "sha256": "59eecceac94f3fe58e0c539b6b164acfe15cff36d5a9e1084685109965f3d5a4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/source-before-repair.png",
+      "sha256": "9e5ffa8bdca0a3dac266a3c5c1c3bdfc17ba2c91362b2bf9d9bdcaebcfca11ed"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/source-separated.png",
+      "sha256": "f12fdff2c2dcbcbee79d36f0a9167bde980b7d62648fc91da4157d25c5e6f788"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/source.png",
+      "sha256": "d5e0aacab936ae6662b9ca9c5a25322b5fdccbfec5f96052f30be8a0d5f5da74"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/rejected-proportion-v1/train-south.webp",
+      "sha256": "495fe52469c9dd265047aa4240517795c12ad16f5f39c205146299e2fd0d10af"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/repair-prompt.txt",
+      "sha256": "765b7d7ebe8ec39ff35b6b6cf37ad70cbca042a95c8b996f5394a453d322cc7e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/review.json",
+      "sha256": "097c7ad1437a8acb5144b1d1b8744efecf068b1b72339a71b69f93248456dec7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/separation.json",
+      "sha256": "1ef53cbdda197ac8a9d5750b8fe1169a988db102239b6303a76be1b1beec3b9a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/source-before-repair.png",
+      "sha256": "9e5ffa8bdca0a3dac266a3c5c1c3bdfc17ba2c91362b2bf9d9bdcaebcfca11ed"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/source-separated.png",
+      "sha256": "f12fdff2c2dcbcbee79d36f0a9167bde980b7d62648fc91da4157d25c5e6f788"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "sha256": "6ac7e0d370e33b4d4beb5b20d519e0dcca06d7c0b358e4753652a4518d31bcd1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/alpha-regions.json",
+      "sha256": "6fdf2fa79c11eb448af480ae8d841a86f367255f8f34ae1d015c05ba571a0e75"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/atlas-contact.png",
+      "sha256": "a41b942d1e560531aa76be747096da4adebb9acdf98932db846e81225121cc5e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/inspection-white.jpg",
+      "sha256": "7469ba82ac0bd76039f8f322ce899b0ea480ac596a1594e7b8a1b10485f13fd1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/loop-preview.gif",
+      "sha256": "03a95a8efbccbd99e52391db004cde9a3c72e3172e7a999d684c09a5b6f558f7"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/plan-import.json",
+      "sha256": "72b424635619f84596791468fe28e8c6f30faab14341a18ca6a75d7a3a19668b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/plan.json",
+      "sha256": "76b956bcffb5987a8406f8a0d342e2cabb4e4b913594c14221fa71bc5797a8e0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/prompt-v2.txt",
+      "sha256": "088ada712244460e3b050c717b871dffc253098009dbc6d737b22698265da258"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/prompt.txt",
+      "sha256": "088ada712244460e3b050c717b871dffc253098009dbc6d737b22698265da258"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/receipt.json",
+      "sha256": "672f29f7d7818552b6f992e1a118f72985e71ff1e0c2562e5b08293803898124"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/references.json",
+      "sha256": "a7e8a89ee177c3375f7220cee50d67b299b61a2e18c82568d86b80dd9b4c7fa3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/alpha-regions.json",
+      "sha256": "7817cc7b88dbde079991124c60f6352da6c23f6ab2e191633f54663f2a3c081d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/atlas-contact.png",
+      "sha256": "1a0cc0e1774c59e9690adbef39b384e1f31d9d47bf0da2486a8a2a68ed072302"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/inspection-white.jpg",
+      "sha256": "ca71a2b85a869adb97370f4746b3363006ad2d652e01d136ed013f71a8c93cb9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/loop-preview.gif",
+      "sha256": "5ccfb7fd66df1a70d8ccf163cc15616b6de4b99c963c44dc84126427fec0e8f9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/plan-import.json",
+      "sha256": "8e1f7239136495a9e3e8fed45c5f09a1377f6c80adb5adb42289596c6c525966"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/plan.json",
+      "sha256": "3d705853f0dffd4e4f2044ba641252e6fb061b9da0ebddccdfcc5e08a7e690ee"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/prompt.txt",
+      "sha256": "a5c95843389774843c671eb1c283fdcd2d8f8db43ba572c0ebfe175e9ba6d736"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/receipt.json",
+      "sha256": "f4e9b33635f5d8ebaf924381f00fd6603bbf88c002360eed7d063e1eea5de934"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/references.json",
+      "sha256": "a2c3a1951e6fcfc8565102c27c5c0ec33bb2d97dcb1fb76047b9e57de4b518ec"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/rejection.json",
+      "sha256": "e74c8f2514555dbede5a2a2349bb2766b480e5de12bca277c2cf9abbc03657ad"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/review.json",
+      "sha256": "fb24e501e06796d86067de7d91c21eff96084e3888887fa7cb2356254ab1f4c3"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/source.png",
+      "sha256": "0bf5875c37014e03462ba445166ccd2b80e1815abfc3d61f774e73ecc384861c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/work-east.webp",
+      "sha256": "bf1e9ff96f3d78ceee91e892aedef8c526b878e49b5f235e9d4d80993d3d5297"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/work-north.webp",
+      "sha256": "729040534016df4cbd4e3e150b5c1871310656f6b09105581a21e3f2e142af52"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/work-south.webp",
+      "sha256": "b4f1ac49c85765c13290db06b0ca4929fb099d911bb456186ea32c903b44245f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/rejected-proportion-v1/work-west.webp",
+      "sha256": "21f428be7ac8cce4b13b5a658e4e0b68fda890b3d4ac8724cced6a4ed59b0276"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/review.json",
+      "sha256": "e8283c3d17d4e6aeb993f8e3a4386a45f30f5bbeb6cc673c88fee00ea85250d9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "sha256": "75a913fd0bad04d57791b8b401a5c034dcdb57221757b61bd455be4ed58e8ddf"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/validate_release.js",
+      "sha256": "63736226d6d4b94dfdaae78a6eab25c45bc0e3b5e18b7eb28f600dec76c9297f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-approved-reference/idle-four-directions.png",
+      "sha256": "9da6f0f28e887f90fa96bf23f649f385e9855b10600bf064fbf98f1ee22ed066"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-approved-reference/receipt.json",
+      "sha256": "d334ab9d5590f3546b65fa1b498cb5579d4c38dca17b2ce0e92432766e1add8f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/contact-128.png",
+      "sha256": "fa05b217e4d59be50ad0b214f30324c10fb93cfcab0bccc794e225d7e289c15a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/plan-import.json",
+      "sha256": "b3d473109fc35d714d2a987c99fb28b016fcf45f9ba2e72aee76af3d9b13915d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/plan.json",
+      "sha256": "36ea41b07780c85a662d3234591cffa3b9a6f9cd0440a7d24eb4303aa129dfff"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/prompt.txt",
+      "sha256": "9eff3829b50c1eb64429caf439b5075a099968d937e2277433cf89d8b2f7242b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/contact-128.png",
+      "sha256": "a52c4159816d399a0f4274f8781dc4e84d8de94c7cf99f377dcaeb373debf029"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/eat-south.webp",
+      "sha256": "d023a0f6868ad4c3e46caa6533b93ce43b02bd8f07b0841f7b31dfe80f9c3583"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/plan-preview-import.json",
+      "sha256": "7903ea2d9ea6b77049dacfdb36b7d1e314f2e34ee6a261a6aca4edb1ef79e7ea"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/plan-preview.json",
+      "sha256": "075c630e253e3e946d4f44aa5e42e6c8cdab1e4193962131fa057b965297f115"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/prompt.txt",
+      "sha256": "bc0417cc1c70dc71863780893134a8460b19b3d5681c441f4b9b8d632109a1c4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/receipt.json",
+      "sha256": "4c0b095ac8143b9799beb31bec33b2be246de3de17205d5358c2cdc61280f3fc"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/rest-south.webp",
+      "sha256": "955e569ea59884aa2a2faa40bf5055037bd0ce05206a89f5ea372bebddaaf3bd"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/review.md",
+      "sha256": "1e69c10a26dc80099d1f0b8e20ff2207fbc0c7bd85369548c7cfe5be2523dc46"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/sleep-south.webp",
+      "sha256": "bfa9c63f08168be610bb0bf151d2252031a9cf9b6d7680e9b25326e40ceedf49"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/source-alpha.png",
+      "sha256": "b26c9eed95198e2230d6f42cc3c8f85d717e6d3ac25b64f6748373d5cf895ffb"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/source.png",
+      "sha256": "e3428afba2cfb0c1e87c1751bc69b2194476fe73969e4f0c240d8df557bbf34e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/train-south.webp",
+      "sha256": "571b72d97c6428832ca97bbabc75914671feb67eef1e2401d3a6a99931d11f14"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/receipt.json",
+      "sha256": "4dcaa43e815b868fd437b62dc08ce7fe2b935451a36c453f5361caa43583b09c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/rejected-pre-proportion-repair/eat-south.webp",
+      "sha256": "331e545c177ee625604115580ce0772a1fbc3f32e4cf05c8552a013cd63bc62a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/rejected-pre-proportion-repair/plan-import.json",
+      "sha256": "20a9f6a2d0cea97bb4c0e1dd1a37bf14de23d711f3bc2787c68419a2e1e8d19c"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/rejected-pre-proportion-repair/plan.json",
+      "sha256": "ffb78ad8e96d0b20ffd1c46bfd4c49409c8f28009a5e206e792e6a594a6fca8d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/rejected-pre-proportion-repair/receipt.json",
+      "sha256": "3e1f9392f7ffa6a00cb497570df9279557fd72d9f4df058d9516185cf66b4c60"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/rejected-pre-proportion-repair/rest-south.webp",
+      "sha256": "2653ae1085e6d98d8bf8dc8d37abff915b36ceaa5389d553b52d9ac4cc8b0d5a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/rejected-pre-proportion-repair/sleep-south.webp",
+      "sha256": "dd766552d6d03e61add697fdbdc41ea427947ff47ce76eb66f06c0fa94ec24ba"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/rejected-pre-proportion-repair/train-south.webp",
+      "sha256": "0b9cc3c24d8ae9eff142832d011196fa13a4eca350baa532c18071bd904fb800"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-utility/source.png",
+      "sha256": "cc4645c1cec01e684b2f2fc7f454956786582304df92ad3e1049fab1a8a3c167"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/contact-128.png",
+      "sha256": "85ef2a1186d4da440ca1103582ce21c35d18b1fe6dbf397cb3b7e4c12c9d6b66"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/plan-import.json",
+      "sha256": "49b825edb3b5c856177d65815592486aa9543f8822700f30c09e24383ce72585"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/plan.json",
+      "sha256": "6117110da9b3cecb5dc4100d269d611925a816777cb4872750ff94295637e4bc"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/prompt.txt",
+      "sha256": "90af358cacdfcfeef5a4faba49864605d20cf3ce0f6fe4ae0e0c9d5307c177b6"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/proportion-repair/contact-128.png",
+      "sha256": "70e64cb916f401104bf3d85d5704e918bae6a8f8c68994642b850278e31c978b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/proportion-repair/plan-preview-import.json",
+      "sha256": "d676b89da334b122969d7468646e43b5d308a867e4a526186bad8c191a37d7d1"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/proportion-repair/plan-preview.json",
+      "sha256": "1c5e6bb2932d28ec19efc550394a728c5e67410e5c7b94667f3666fa9af11726"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/proportion-repair/prompt.txt",
+      "sha256": "4b4284399c9479917e321ad6e8edac8552e080e03ff0feca7d677b17895359ac"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/proportion-repair/receipt.json",
+      "sha256": "3b97268ed65e90a16877990e5337e22d808928276d247b54d59a01bc43577080"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/proportion-repair/review.md",
+      "sha256": "1e69c10a26dc80099d1f0b8e20ff2207fbc0c7bd85369548c7cfe5be2523dc46"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source-alpha.png",
+      "sha256": "77196af917e63f1b9a25f563b397bfa22718820757e8d66c185a16f0e19c110e"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source.png",
+      "sha256": "b530c66fdabd8f5d50ab6a7128439fcc88eeb654f4df7f127f57fa1cd069214b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/proportion-repair/work-east.webp",
+      "sha256": "558e20dfaa7cfdf87301c92750fee4343137f91410adf6b08cc8b946ffc18dc4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/proportion-repair/work-north.webp",
+      "sha256": "165055dbe83de465523365d2a0034b86dea6c973c0e0c11497c9b0b1d28c600b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/proportion-repair/work-south.webp",
+      "sha256": "a66610714ad02a9a9e06a2a340f2650b68efd9a4a70c873f327fa88ea479436f"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/proportion-repair/work-west.webp",
+      "sha256": "0ce806926c2abbad176fc551dba61bdb76ac23bf25897f2c65ecf1b53bd2f214"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/receipt.json",
+      "sha256": "523f9e4a2f5fd88430d28fe43a5c76398cdb572a5032cb6b78c846b56907c568"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/rejected-pre-proportion-repair/plan-import.json",
+      "sha256": "19481a90072ac35d4b415b414ed33371fbd579f8c2a98e347a551d53d466e4e5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/rejected-pre-proportion-repair/plan.json",
+      "sha256": "a796a10de6f889ab689bd3b3e7b0b097321d5a99e8e1ed3f6e66dc29a103c45b"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/rejected-pre-proportion-repair/receipt.json",
+      "sha256": "d93a9f526a53c00b9d4bb4048d581b8d065af8072cd52d2357e001a9adfa6a69"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/rejected-pre-proportion-repair/work-east.webp",
+      "sha256": "6613d59a2fdf3fc8b036c68e7a93919d80783e1b3fe9e3d4c92f866b4bfc41f2"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/rejected-pre-proportion-repair/work-north.webp",
+      "sha256": "227e907b3e8f7aa2b0b59282d86daf98341d3cb64368b5e26000a55955494372"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/rejected-pre-proportion-repair/work-south.webp",
+      "sha256": "c6b757393bf67eb5adccde380013db9f2493c86c9e66838ae98c45650a3e8bb6"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/rejected-pre-proportion-repair/work-west.webp",
+      "sha256": "ca7971ba91c892bed03b3c0381855c58b23a3f46471198572ba2f96dcf1741c4"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/zoro-work/source.png",
+      "sha256": "74b5ae8cf0307a2e68755887aa881df8a6804d1166d80a4ff8f53b5fa6170e2d"
+    }
+  ]
+}

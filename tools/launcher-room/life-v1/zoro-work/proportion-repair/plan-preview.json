@@ -1,0 +1,212 @@
+{
+  "clips": [
+    {
+      "id": "work",
+      "key": "zoro",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source-alpha.png",
+      "scale": 0.31683168316831684,
+      "regions": [
+        [
+          0,
+          0,
+          305,
+          320
+        ],
+        [
+          305,
+          0,
+          630,
+          320
+        ],
+        [
+          630,
+          0,
+          946,
+          320
+        ],
+        [
+          946,
+          0,
+          1254,
+          320
+        ]
+      ],
+      "roots": [
+        [
+          135.0,
+          312
+        ],
+        [
+          467.5,
+          312
+        ],
+        [
+          785.5,
+          312
+        ],
+        [
+          1106.5,
+          312
+        ]
+      ],
+      "asset": "tools/launcher-room/life-v1/zoro-work/proportion-repair/work-south.webp"
+    },
+    {
+      "id": "work",
+      "key": "zoro",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source-alpha.png",
+      "scale": 0.3210702341137124,
+      "regions": [
+        [
+          0,
+          320,
+          305,
+          630
+        ],
+        [
+          305,
+          320,
+          630,
+          630
+        ],
+        [
+          630,
+          320,
+          946,
+          630
+        ],
+        [
+          946,
+          320,
+          1254,
+          630
+        ]
+      ],
+      "roots": [
+        [
+          139.0,
+          624
+        ],
+        [
+          465.5,
+          624
+        ],
+        [
+          790.5,
+          624
+        ],
+        [
+          1104.5,
+          623
+        ]
+      ],
+      "asset": "tools/launcher-room/life-v1/zoro-work/proportion-repair/work-east.webp"
+    },
+    {
+      "id": "work",
+      "key": "zoro",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source-alpha.png",
+      "scale": 0.31475409836065577,
+      "regions": [
+        [
+          0,
+          630,
+          305,
+          941
+        ],
+        [
+          305,
+          630,
+          630,
+          941
+        ],
+        [
+          630,
+          630,
+          946,
+          941
+        ],
+        [
+          946,
+          630,
+          1254,
+          941
+        ]
+      ],
+      "roots": [
+        [
+          141.0,
+          938
+        ],
+        [
+          465.5,
+          938
+        ],
+        [
+          783.0,
+          937
+        ],
+        [
+          1107.0,
+          938
+        ]
+      ],
+      "asset": "tools/launcher-room/life-v1/zoro-work/proportion-repair/work-west.webp"
+    },
+    {
+      "id": "work",
+      "key": "zoro",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source-alpha.png",
+      "scale": 0.3287671232876712,
+      "regions": [
+        [
+          0,
+          941,
+          305,
+          1254
+        ],
+        [
+          305,
+          941,
+          630,
+          1254
+        ],
+        [
+          630,
+          941,
+          946,
+          1254
+        ],
+        [
+          946,
+          941,
+          1254,
+          1254
+        ]
+      ],
+      "roots": [
+        [
+          142.5,
+          1235
+        ],
+        [
+          471.0,
+          1235
+        ],
+        [
+          793.0,
+          1235
+        ],
+        [
+          1114.5,
+          1236
+        ]
+      ],
+      "asset": "tools/launcher-room/life-v1/zoro-work/proportion-repair/work-north.webp"
+    }
+  ]
+}

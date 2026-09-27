@@ -1,0 +1,183 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:/Users/王曜瑋/.codex/generated_images/01a0e0d1-a4bf-73f3-af41-6763cfefe2b5/exec-4ab0b88e-5e5f-4484-9d7a-6dcb91e18365.png",
+  "reference": "tools/launcher-room/fullbody-v3/sources/brook-v15-actions-01/image.png",
+  "prompt": "tools/launcher-room/life-v1/brook-music/prompt.txt",
+  "sourceSha256": "bde08a27f852fbb814e08a299a80eeeb240a511f93ccac9c4618254fd73ee40a",
+  "sourcePixels": [
+    1254,
+    1254
+  ],
+  "trueAlpha": true,
+  "packing": "Whole-body crop and root translation only, one uniform scale per four-frame loop. Main bounds measured at alpha32 and padded within row/cell bounds; original alpha is retained. No limb assembly, mirror, rotation or warp. Feet root is derived from ground pixels.",
+  "sourceAccepted": true,
+  "contactAccepted": true,
+  "runtimeAccepted": false,
+  "sourceReview": "Sixteen intact Brook figures preserve approved model identity. Same-direction head and torso; bone hands stay low at waist/upper thighs near reference focused_use contact plane, curved fingers alternate low key presses. Feet planted. True back view has no face; rear hands naturally partially occluded. No piano/keyboard/chair/notes baked into actor.",
+  "actualSizeReview": "Actual 128px contact sheet reviewed: skull/afro/top hat/blue cravat and gold cuffs clear, hands low and attached, four modest finger/wrist variations rather than body turns, complete shoes and coherent body. Static contact review passed; actual piano contact and runtime animation remain pending.",
+  "contactSheet": "tools/launcher-room/life-v1/brook-music/contact-128.png",
+  "contactSha256": "10952161dd0f8e0a26748ec7befa6aa46660296a8b3502e01c1ecd918905ed06",
+  "numericQa": {
+    "passed": true,
+    "checks": [
+      {
+        "asset": "public/images/launcher_room/life_v1/brook/music-east.webp",
+        "sha256": "5f1574b8b53029992340f447c4853714e9c9c8a35025319f5907c4e9e46d68c9",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            44,
+            12,
+            108,
+            112
+          ],
+          [
+            44,
+            12,
+            108,
+            112
+          ],
+          [
+            44,
+            12,
+            108,
+            112
+          ],
+          [
+            44,
+            12,
+            105,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/brook/music-west.webp",
+        "sha256": "2990cb774d0cf3853199466fe335ad4e71fb42d305772742786dad81b2e6757c",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            23,
+            12,
+            87,
+            112
+          ],
+          [
+            23,
+            12,
+            87,
+            112
+          ],
+          [
+            23,
+            12,
+            87,
+            112
+          ],
+          [
+            23,
+            12,
+            87,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/brook/music-north.webp",
+        "sha256": "850dd3afda14b6d5e4a55b727d2beec62bdeee05cc1b8bcf7f34690875e27b3a",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            38,
+            12,
+            91,
+            112
+          ],
+          [
+            38,
+            12,
+            90,
+            112
+          ],
+          [
+            38,
+            12,
+            89,
+            112
+          ],
+          [
+            38,
+            12,
+            90,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/brook/music-south.webp",
+        "sha256": "8896951a47ec0730e67ffa7481c736f2ed4e4ecb8747850f800cfbfd15a0b3e7",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            39,
+            12,
+            89,
+            112
+          ],
+          [
+            39,
+            12,
+            89,
+            112
+          ],
+          [
+            39,
+            12,
+            88,
+            112
+          ],
+          [
+            39,
+            12,
+            89,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      }
+    ],
+    "scope": "Atlas dimensions, alpha bounds and four distinct frames; not runtime acceptance."
+  }
+}

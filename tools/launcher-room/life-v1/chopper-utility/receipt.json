@@ -1,0 +1,23 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-524bbeb0-2dee-4f6f-b45c-fea5857ae2ec.png",
+  "source": {
+    "path": "tools/launcher-room/life-v1/chopper-utility/source.png",
+    "sha256": "189f3efa0f8795d6156a88aa18e3b95ec0917b94e90fccde979f5a4db5832406"
+  },
+  "prompt": {
+    "path": "tools/launcher-room/life-v1/chopper-utility/prompt.txt",
+    "sha256": "fa3e3d611d3ce6af70413187aba3384593e441c74c3120a35f276efc1b3da81a"
+  },
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/chopper-actions-01/image.png",
+      "sha256": "2ed9f7b9bc2d92f2b6f0b60b908b72fe8a23acecdcafcb767869d17023db9aea",
+      "role": "approved whole-character identity and style"
+    }
+  ],
+  "review": "Reviewed complete connected body, head/body same facing, correct outfit, four chronological poses per row. Runtime test pending.",
+  "runtimeAccepted": false,
+  "processing": "Keep original RGBA; separate alpha copy removes alpha<16 and isolated <32px opaque specks, retaining 2px AA edge. Crop whole figures and uniform scale only."
+}

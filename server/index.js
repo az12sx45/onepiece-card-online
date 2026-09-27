@@ -14,6 +14,7 @@ const { createDesktopDistribution } = require("./desktop-distribution");
 const { sanitizeProfileStats, PROFILE_STATS_SQL } = require("./board-art-collection");
 const { updateProfileSocial } = require("./profile-social-stats");
 const launcherProfileShop = require("./launcher-profile-shop");
+const launcherLife = require("./launcher-life-store");
 const launcherGuestbook = require("./launcher-guestbook");
 const { completedChessMatch, recordCompletedChessMatch, sanitizeChessStatsPatch } = require("./chess-match-records");
 const boardStateSender = createBoardStateSender();
@@ -5253,14 +5254,23 @@ socket.on('LAUNCHER_DECORATION_PLACEMENT_SET', async ({ secret, slot, placement 
   catch (error) { console.error('[LAUNCHER_DECORATION_PLACEMENT_SET] error:', error); cb?.({ ok: false, error: 'placement unavailable' }); }
 });
 
-socket.on('LAUNCHER_ROOM_SET', async ({ secret, revision, sceneId, placements, characters } = {}, cb) => {
+socket.on('LAUNCHER_ROOM_SET', async ({ secret, revision, sceneId, placements, characters, capacityVersion } = {}, cb) => {
   try {
     cb?.(await launcherProfileShop.setLauncherRoom(pool, String(secret || '').trim(),
-      { revision, sceneId, placements, characters }));
+      { revision, sceneId, placements, characters, capacityVersion }));
   } catch (error) {
     console.error('[LAUNCHER_ROOM_SET] error:', error);
     cb?.({ ok: false, error: 'room unavailable' });
   }
+});
+
+socket.on('LAUNCHER_LIFE_GET', async ({ secret } = {}, cb) => {
+  try { cb?.(await launcherLife.getLauncherLife(pool, String(secret || '').trim())); }
+  catch (error) { console.error('[LAUNCHER_LIFE_GET] error:', error); cb?.({ ok: false, error: 'life unavailable' }); }
+});
+socket.on('LAUNCHER_LIFE_COMMAND', async ({ secret, requestId, expectedRevision, type, payload } = {}, cb) => {
+  try { cb?.(await launcherLife.commandLauncherLife(pool, String(secret || '').trim(), { requestId, expectedRevision, type, payload })); }
+  catch (error) { console.error('[LAUNCHER_LIFE_COMMAND] error:', error); cb?.({ ok: false, error: 'life unavailable' }); }
 });
 
 for (const [eventName, handler] of [

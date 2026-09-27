@@ -1,0 +1,593 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "brook-eat-south",
+      "key": "brook",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/brook-utility/source.png",
+      "asset": "public/images/launcher_room/life_v1/brook/eat-south.webp",
+      "regions": [
+        [
+          0,
+          0,
+          328,
+          353
+        ],
+        [
+          328,
+          0,
+          656,
+          353
+        ],
+        [
+          656,
+          0,
+          984,
+          353
+        ],
+        [
+          984,
+          0,
+          1312,
+          353
+        ]
+      ],
+      "roots": [
+        [
+          164.0,
+          345
+        ],
+        [
+          491.0,
+          344
+        ],
+        [
+          817.5,
+          343
+        ],
+        [
+          1148.0,
+          344
+        ]
+      ],
+      "scale": 0.29,
+      "sourceSha256": "434ca76284e79b0638a66225b366f3aec865670775326e89e3cd3ed39d67021c",
+      "assetSha256": "8039c0c27b3321c0385197d80c03cb56252eb7df87f72386ecb0fee85b206152",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            0,
+            328,
+            353
+          ],
+          "alphaBounds": [
+            77,
+            0,
+            328,
+            353
+          ],
+          "outputBounds": [
+            39,
+            10,
+            73,
+            102
+          ]
+        },
+        {
+          "sourceRegion": [
+            328,
+            0,
+            656,
+            353
+          ],
+          "alphaBounds": [
+            3,
+            1,
+            328,
+            352
+          ],
+          "outputBounds": [
+            18,
+            10,
+            94,
+            102
+          ]
+        },
+        {
+          "sourceRegion": [
+            656,
+            0,
+            984,
+            353
+          ],
+          "alphaBounds": [
+            3,
+            0,
+            328,
+            350
+          ],
+          "outputBounds": [
+            18,
+            10,
+            94,
+            102
+          ]
+        },
+        {
+          "sourceRegion": [
+            984,
+            0,
+            1312,
+            353
+          ],
+          "alphaBounds": [
+            3,
+            0,
+            290,
+            353
+          ],
+          "outputBounds": [
+            17,
+            10,
+            83,
+            102
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "brook-rest-south",
+      "key": "brook",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/brook-utility/source.png",
+      "asset": "public/images/launcher_room/life_v1/brook/rest-south.webp",
+      "regions": [
+        [
+          0,
+          353,
+          328,
+          662
+        ],
+        [
+          328,
+          353,
+          656,
+          662
+        ],
+        [
+          656,
+          353,
+          984,
+          662
+        ],
+        [
+          984,
+          353,
+          1312,
+          662
+        ]
+      ],
+      "roots": [
+        [
+          165.5,
+          642
+        ],
+        [
+          489.5,
+          642
+        ],
+        [
+          825.5,
+          642
+        ],
+        [
+          1148.5,
+          642
+        ]
+      ],
+      "scale": 0.29,
+      "sourceSha256": "434ca76284e79b0638a66225b366f3aec865670775326e89e3cd3ed39d67021c",
+      "assetSha256": "8685ce882cce8c4f58215c5218bfdd72f94fdebf3454d5a648b5d9ab5b3c3146",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            353,
+            328,
+            662
+          ],
+          "alphaBounds": [
+            47,
+            0,
+            328,
+            309
+          ],
+          "outputBounds": [
+            30,
+            22,
+            81,
+            90
+          ]
+        },
+        {
+          "sourceRegion": [
+            328,
+            353,
+            656,
+            662
+          ],
+          "alphaBounds": [
+            17,
+            10,
+            328,
+            297
+          ],
+          "outputBounds": [
+            22,
+            29,
+            90,
+            83
+          ]
+        },
+        {
+          "sourceRegion": [
+            656,
+            353,
+            984,
+            662
+          ],
+          "alphaBounds": [
+            1,
+            4,
+            326,
+            303
+          ],
+          "outputBounds": [
+            15,
+            25,
+            94,
+            87
+          ]
+        },
+        {
+          "sourceRegion": [
+            984,
+            353,
+            1312,
+            662
+          ],
+          "alphaBounds": [
+            1,
+            0,
+            294,
+            309
+          ],
+          "outputBounds": [
+            17,
+            22,
+            85,
+            90
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "brook-sleep-south",
+      "key": "brook",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/brook-utility/source.png",
+      "asset": "public/images/launcher_room/life_v1/brook/sleep-south.webp",
+      "regions": [
+        [
+          0,
+          662,
+          328,
+          830
+        ],
+        [
+          328,
+          662,
+          656,
+          830
+        ],
+        [
+          656,
+          662,
+          984,
+          830
+        ],
+        [
+          984,
+          662,
+          1312,
+          830
+        ]
+      ],
+      "roots": [
+        [
+          163.0,
+          824
+        ],
+        [
+          491.5,
+          824
+        ],
+        [
+          837.5,
+          824
+        ],
+        [
+          1164.5,
+          824
+        ]
+      ],
+      "scale": 0.29,
+      "sourceSha256": "434ca76284e79b0638a66225b366f3aec865670775326e89e3cd3ed39d67021c",
+      "assetSha256": "8dcf8378cc950a14cb9117b9c465cd0f808e7d351e78e8d76d2b77bafbc3cd23",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            662,
+            328,
+            830
+          ],
+          "alphaBounds": [
+            17,
+            15,
+            309,
+            168
+          ],
+          "outputBounds": [
+            22,
+            68,
+            85,
+            44
+          ]
+        },
+        {
+          "sourceRegion": [
+            328,
+            662,
+            656,
+            830
+          ],
+          "alphaBounds": [
+            11,
+            17,
+            311,
+            168
+          ],
+          "outputBounds": [
+            20,
+            68,
+            87,
+            44
+          ]
+        },
+        {
+          "sourceRegion": [
+            656,
+            662,
+            984,
+            830
+          ],
+          "alphaBounds": [
+            33,
+            15,
+            325,
+            168
+          ],
+          "outputBounds": [
+            21,
+            68,
+            85,
+            44
+          ]
+        },
+        {
+          "sourceRegion": [
+            984,
+            662,
+            1312,
+            830
+          ],
+          "alphaBounds": [
+            35,
+            3,
+            328,
+            168
+          ],
+          "outputBounds": [
+            22,
+            64,
+            85,
+            48
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "brook-train-south",
+      "key": "brook",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/brook-utility/source.png",
+      "asset": "public/images/launcher_room/life_v1/brook/train-south.webp",
+      "regions": [
+        [
+          0,
+          830,
+          328,
+          1199
+        ],
+        [
+          328,
+          830,
+          656,
+          1199
+        ],
+        [
+          656,
+          830,
+          984,
+          1199
+        ],
+        [
+          984,
+          830,
+          1312,
+          1199
+        ]
+      ],
+      "roots": [
+        [
+          165.0,
+          1181
+        ],
+        [
+          492.5,
+          1181
+        ],
+        [
+          819.5,
+          1181
+        ],
+        [
+          1149.5,
+          1181
+        ]
+      ],
+      "scale": 0.29,
+      "sourceSha256": "434ca76284e79b0638a66225b366f3aec865670775326e89e3cd3ed39d67021c",
+      "assetSha256": "27a60bfeb9af917c7ed61a95e7f00b8543aa93e1a35f3cf7bd862ec525783323",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            830,
+            328,
+            1199
+          ],
+          "alphaBounds": [
+            75,
+            0,
+            322,
+            355
+          ],
+          "outputBounds": [
+            38,
+            9,
+            72,
+            103
+          ]
+        },
+        {
+          "sourceRegion": [
+            328,
+            830,
+            656,
+            1199
+          ],
+          "alphaBounds": [
+            49,
+            0,
+            328,
+            355
+          ],
+          "outputBounds": [
+            31,
+            9,
+            81,
+            103
+          ]
+        },
+        {
+          "sourceRegion": [
+            656,
+            830,
+            984,
+            1199
+          ],
+          "alphaBounds": [
+            1,
+            0,
+            316,
+            354
+          ],
+          "outputBounds": [
+            17,
+            9,
+            91,
+            103
+          ]
+        },
+        {
+          "sourceRegion": [
+            984,
+            830,
+            1312,
+            1199
+          ],
+          "alphaBounds": [
+            13,
+            0,
+            290,
+            354
+          ],
+          "outputBounds": [
+            20,
+            9,
+            80,
+            103
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

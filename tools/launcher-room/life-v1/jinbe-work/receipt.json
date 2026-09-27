@@ -1,0 +1,183 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:/Users/王曜瑋/.codex/generated_images/01a0e0d1-a4bf-73f3-af41-6763cfefe2b5/exec-82faa0e7-46eb-4a71-9f09-031629dad6de.png",
+  "reference": "tools/launcher-room/fullbody-v3/sources/jinbe-v15-actions-01/image.png",
+  "prompt": "tools/launcher-room/life-v1/jinbe-work/prompt.txt",
+  "sourceSha256": "7e411cb20a432682dd38d7068d3685e50e152f47e859f9cd3a0c2e724805d82b",
+  "sourcePixels": [
+    1254,
+    1254
+  ],
+  "trueAlpha": true,
+  "packing": "Whole-body crop and root translation only, one uniform scale per four-frame loop. Main bounds measured at alpha32 and padded within row/cell bounds; original alpha is retained. No limb assembly, mirror, rotation or warp. Feet root is derived from ground pixels.",
+  "sourceAccepted": true,
+  "contactAccepted": true,
+  "runtimeAccepted": false,
+  "sourceReview": "Sixteen intact full bodies preserve Jinbe blue broad fishman body, black topknot and cape, pale mint kimono with black leaf pattern, orange obi, tusks/goatee/geta, left facial scar asymmetry. Four real directions and supported tray/cloth action; no facing head on back and no baked furniture.",
+  "actualSizeReview": "Actual 128px contact sheet reviewed: stocky silhouette and kimono motif remain readable; whole-body proportions and stable geta retained, distinct supported tray wiping poses, no clipping or detached anatomy. Actual room playback remains pending.",
+  "contactSheet": "tools/launcher-room/life-v1/jinbe-work/contact-128.png",
+  "contactSha256": "a37cb1cdf6f4b8a13a9552fffb592a5a9650e0b80e0987aa0c7f033b3ec1bfce",
+  "numericQa": {
+    "passed": true,
+    "checks": [
+      {
+        "asset": "public/images/launcher_room/life_v1/jinbe/work-east.webp",
+        "sha256": "e148a1ff3e4ac4f62c7fc8518ec194331888f9b9a0cca7c33c1effbaaa0e1d6e",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            18,
+            12,
+            107,
+            112
+          ],
+          [
+            18,
+            12,
+            107,
+            112
+          ],
+          [
+            17,
+            12,
+            106,
+            112
+          ],
+          [
+            17,
+            12,
+            104,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/jinbe/work-west.webp",
+        "sha256": "e8c69e856b258d776c0fc967fc4b7822132ec66088ede4ea2090943ef2d6fe61",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            25,
+            12,
+            112,
+            112
+          ],
+          [
+            25,
+            12,
+            112,
+            112
+          ],
+          [
+            25,
+            12,
+            112,
+            112
+          ],
+          [
+            25,
+            12,
+            112,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/jinbe/work-north.webp",
+        "sha256": "578973153b09fb0050446237b3256647092f88ab9f6e1499bdc4730c51687e36",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            23,
+            12,
+            107,
+            112
+          ],
+          [
+            21,
+            12,
+            105,
+            112
+          ],
+          [
+            22,
+            12,
+            106,
+            112
+          ],
+          [
+            23,
+            12,
+            105,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/jinbe/work-south.webp",
+        "sha256": "5db633948850a927b9639ec281f47e9497050c3a1bb60de1c84960fd80b53cce",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            20,
+            12,
+            107,
+            112
+          ],
+          [
+            21,
+            12,
+            108,
+            112
+          ],
+          [
+            21,
+            12,
+            108,
+            112
+          ],
+          [
+            21,
+            12,
+            107,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      }
+    ],
+    "scope": "Atlas dimensions, alpha bounds and four distinct frames; not runtime acceptance."
+  }
+}

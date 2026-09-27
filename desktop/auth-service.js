@@ -332,7 +332,7 @@ class AuthService extends EventEmitter {
       'decor-side-zoro-chibi', 'decor-side-nami-chibi',
       'decor-footer-sanji-chibi', 'decor-footer-robin-chibi'
     ]) customItems.add(id);
-    const roomProduct = /^room-(?:scene-(?:sunny-deck|sunny-kitchen|sunny-library)|furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|bookshelf|medicine-cabinet|piano|tool-bench)|character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe))$/.test(itemId);
+    const roomProduct = /^room-(?:scene-(?:sunny-deck|sunny-kitchen|sunny-library)|furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|galley-stove|bookshelf|medicine-cabinet|piano|tool-bench)|character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe))$/.test(itemId);
     if (typeof itemId !== 'string' || !(/^(?:ava-(?:[1-9]|[1-5][0-9]|6[0-2])|(?:wall|flag)-(?:[1-9]|[1-4][0-9]|50)|bgm-op-(?:0[1-9]|1[0-9]|20))$/.test(itemId) || roomProduct || customItems.has(itemId))) {
       return { ok: false, error: 'invalid item' };
     }
@@ -397,9 +397,10 @@ class AuthService extends EventEmitter {
 
   async saveLauncherRoom(room) {
     if (!room || typeof room !== 'object' || Array.isArray(room)) return { ok: false, error: 'invalid_room' };
-    const { revision, sceneId, placements, characters } = room;
+    const { revision, sceneId, placements, characters, capacityVersion } = room;
     if (!Number.isSafeInteger(revision) || revision < 0 || typeof sceneId !== 'string' ||
-        !Array.isArray(placements) || placements.length > 24 || !Array.isArray(characters) || characters.length > 8) {
+        !Array.isArray(placements) || placements.length > 24 || !Array.isArray(characters) || characters.length > 10 ||
+        characters.length > 8 && capacityVersion !== 2) {
       return { ok: false, error: 'invalid_room' };
     }
     const sceneValid = sceneId === 'room-scene-default' || /^room-scene-(?:sunny-deck|sunny-kitchen|sunny-library)$/.test(sceneId);
@@ -407,7 +408,7 @@ class AuthService extends EventEmitter {
     const coordinates = entry => entry && Number.isFinite(entry.x) && Number.isFinite(entry.y) &&
       entry.x >= 0 && entry.x <= 960 && entry.y >= 0 && entry.y <= 540;
     if (!sceneValid || !unique(placements) || !unique(characters) ||
-        !placements.every(entry => coordinates(entry) && /^room-furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|bookshelf|medicine-cabinet|piano|tool-bench)$/.test(entry.itemId) &&
+        !placements.every(entry => coordinates(entry) && /^room-furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|galley-stove|bookshelf|medicine-cabinet|piano|tool-bench)$/.test(entry.itemId) &&
           Number.isFinite(entry.scale) && entry.scale >= .5 && entry.scale <= 1.5 &&
           (entry.rotation === undefined || Number.isInteger(entry.rotation) && entry.rotation >= 0 && entry.rotation <= 3) &&
           (entry.flip === undefined || typeof entry.flip === 'boolean') &&
@@ -416,7 +417,22 @@ class AuthService extends EventEmitter {
         !characters.every(entry => coordinates(entry) && /^room-character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)$/.test(entry.itemId))) {
       return { ok: false, error: 'invalid_room' };
     }
-    return this.launcherRequest('LAUNCHER_ROOM_SET', { revision, sceneId, placements, characters });
+    return this.launcherRequest('LAUNCHER_ROOM_SET', { revision, sceneId, placements, characters, capacityVersion });
+  }
+
+  async getLauncherLife() {
+    return this.launcherRequest('LAUNCHER_LIFE_GET');
+  }
+
+  async commandLauncherLife(command) {
+    if (!command || typeof command !== 'object' || Array.isArray(command) ||
+        typeof command.requestId !== 'string' || !/^[a-zA-Z0-9_-]{8,100}$/.test(command.requestId) ||
+        !Number.isSafeInteger(command.expectedRevision) || command.expectedRevision < 0 ||
+        !['work.reserve','work.activate','work.complete','work.cancel','directive.set','character.interact','event.record','activity.record','arrival.ack','checkpoint'].includes(command.type) ||
+        !command.payload || typeof command.payload !== 'object' || Array.isArray(command.payload) ||
+        JSON.stringify(command.payload).length > 2048) return { ok: false, error: 'invalid_command' };
+    const { requestId, expectedRevision, type, payload } = command;
+    return this.launcherRequest('LAUNCHER_LIFE_COMMAND', { requestId, expectedRevision, type, payload });
   }
 
   async launcherCharacterRequest(eventName, itemId, action) {

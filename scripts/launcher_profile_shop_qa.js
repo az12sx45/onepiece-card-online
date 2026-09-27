@@ -32,45 +32,35 @@ const rows = new Map([
   } }]
 ]);
 
+// PGlite executes the real SQL. This is a serial simulated fixture, not a
+// claim about concurrent production PostgreSQL clients.
+const { PGlite } = require(process.env.BOARD_QA_PGLITE || 'D:/Codex_QA/draw-result-art-20260922/deps/node_modules/@electric-sql/pglite');
+const db = new PGlite();
+async function syncRows() {
+  for (const row of rows.values()) await db.query(`INSERT INTO player_profiles(user_id,secret,name,avatar,stats)
+    VALUES($1,$2,$3,$4,$5::jsonb) ON CONFLICT(user_id) DO UPDATE SET secret=EXCLUDED.secret,name=EXCLUDED.name,avatar=EXCLUDED.avatar,stats=EXCLUDED.stats`,
+    [row.user_id,row.secret,row.name,row.avatar,JSON.stringify(row.stats)]);
+}
+async function refreshRows() {
+  for(const row of (await db.query('SELECT * FROM player_profiles')).rows) rows.set(row.user_id,row);
+}
 const pool = {
-  async query(sql, args) {
-    if (sql.includes('WHERE secret=$1')) {
-      return { rows: [...rows.values()].filter(row => row.secret === args[0]).map(clone) };
-    }
-    if (sql.includes('WHERE user_id=$1')) return { rows: [rows.get(args[0])].filter(Boolean).map(clone) };
-    throw new Error(`Unexpected query: ${sql}`);
-  },
+  async query(sql,args) { await syncRows();const result=await db.query(sql,args);await refreshRows();return result; },
   async connect() {
-    let working = null;
-    return {
-      async query(sql, args) {
-        if (sql === 'BEGIN') return { rows: [] };
-        if (sql.includes('FOR UPDATE')) {
-          assert.match(sql, /WHERE secret=\$1 FOR UPDATE/);
-          working = [...rows.values()].find(row => row.secret === args[0]);
-          return { rows: working ? [clone(working)] : [] };
-        }
-        if (sql.startsWith('UPDATE player_profiles')) {
-          assert.ok(working && working.user_id === args[args.length - 1]);
-          working = args.length === 3 ? { ...working, avatar: args[0], stats: JSON.parse(args[1]), updated_at: 'now' } :
-            { ...working, stats: JSON.parse(args[0]), updated_at: 'now' };
-          return { rows: [clone(working)] };
-        }
-        if (sql === 'COMMIT') { if (working) rows.set(working.user_id, working); return { rows: [] }; }
-        if (sql === 'ROLLBACK') { working = null; return { rows: [] }; }
-        throw new Error(`Unexpected transaction query: ${sql}`);
-      },
+    await syncRows();return {
+      async query(sql,args) { const result=await db.query(sql,args);if(sql==='COMMIT'||sql==='ROLLBACK')await refreshRows();return result; },
       release() {}
     };
   }
 };
 
 (async () => {
-  assert.equal(CATALOG.length, 124);
+  await db.exec(`CREATE TABLE player_profiles(user_id INTEGER PRIMARY KEY,secret TEXT UNIQUE,name TEXT,avatar TEXT,stats JSONB,updated_at TIMESTAMPTZ DEFAULT now())`);
+  assert.equal(CATALOG.length, 125);
   assert.equal(new Set(CATALOG.map(item => item.id)).size, CATALOG.length);
   assert.deepEqual(
     ['room_scene', 'room_furniture', 'room_character'].map(type => CATALOG.filter(item => item.type === type).length),
-    [3, 10, 10]
+    [3, 11, 10]
   );
   assert.equal(CATALOG.find(item => item.id === 'frame-sunny').asset, 'opui://launcher/images/launcher_room/frames/ship-wheel.webp');
   assert.equal(CATALOG.find(item => item.id === 'room-character-luffy').asset, 'opui://launcher/images/launcher_room/chibi/luffy.webp');
@@ -173,7 +163,7 @@ const pool = {
   assert.equal(friend.profile.name, '夥伴');
   assert.deepEqual(friend.profile.card, { displayName: '夥伴', tagline: '', avatarId: 0 });
   assert.equal(friend.profile.guestbookUnlocked, true);
-  assert.deepEqual(friend.profile.room, { revision: 0, sceneId: 'room-scene-default', placements: [], characters: [] });
+  assert.deepEqual(friend.profile.room, { revision: 0, sceneId: 'room-scene-default', capacityVersion: 2, placements: [], characters: [] });
   assert.deepEqual(friend.profile.roomItems, { scene: null, placements: [], characters: [] });
   assert.deepEqual(friend.profile.collection.launcher.itemIds, ['guestbook-1', 'background-luffy']);
   assert.deepEqual(friend.profile.collection.launcher.items, [
@@ -203,8 +193,10 @@ const pool = {
   assert.deepEqual((await getLauncherShop(pool, 'room-owner')).shop.owned.roomScenes, ['room-scene-sunny-deck']);
   assert.deepEqual((await getLauncherShop(pool, 'room-owner')).shop.owned.roomFurniture, ['room-furniture-helm', 'room-furniture-map-table']);
   assert.deepEqual((await getLauncherShop(pool, 'room-owner')).shop.owned.roomCharacters, ['room-character-luffy', 'room-character-nami']);
+  const purchasedRoomRevision = (await getLauncherProfile(pool, 'room-owner')).profile.room.revision;
+  assert.equal(purchasedRoomRevision, 2); // Each new purchase atomically adds one arrival.
   const roomSnapshot = {
-    revision: 0, sceneId: 'room-scene-sunny-deck',
+    revision: purchasedRoomRevision, sceneId: 'room-scene-sunny-deck',
     placements: [
       { itemId: 'room-furniture-helm', x: 391.123, y: 210.456, scale: 1.2, flip: false },
       { itemId: 'room-furniture-map-table', x: 700, y: 480, scale: 0.8, flip: true }
@@ -216,7 +208,7 @@ const pool = {
   };
   const roomSaved = await setLauncherRoom(pool, 'room-owner', roomSnapshot);
   assert.equal(roomSaved.ok, true);
-  assert.equal(roomSaved.profile.room.revision, 1);
+  assert.equal(roomSaved.profile.room.revision, purchasedRoomRevision + 1);
   assert.deepEqual(roomSaved.profile.room.placements[0],
     { itemId: 'room-furniture-helm', x: 391.12, y: 210.46, scale: 1.2, rotation: 0, flip: false });
   assert.equal(roomSaved.profile.room.placements[1].rotation, 2);
@@ -227,18 +219,18 @@ const pool = {
   assert.equal((await getLauncherShop(pool, 'room-owner')).shop.wallet.coins, roomPurchaseCoins);
   rows.get(1).stats.client.social.friends.push(7);
   const visitedRoom = (await getLauncherProfile(pool, 'mine', 7)).profile;
-  assert.equal(visitedRoom.room.revision, 1);
+  assert.equal(visitedRoom.room.revision, purchasedRoomRevision + 1);
   assert.equal(visitedRoom.roomItems.characters[0].item.name, 'Q版魯夫');
   assert.equal(visitedRoom.collection.launcher.items.find(item => item.id === 'room-character-luffy').name, 'Q版魯夫');
   assert.ok(!JSON.stringify(visitedRoom).includes('room-owner'));
   assert.equal((await getLauncherProfile(pool, 'stranger', 7)).error, 'not friends');
   rows.get(1).stats.client.social.friends.pop();
   assert.equal((await setLauncherRoom(pool, 'room-owner', roomSnapshot)).error, 'revision_conflict');
-  assert.equal(rows.get(7).stats.launcherRoomV1.revision, 1);
+  assert.equal(rows.get(7).stats.launcherRoomV1.revision, purchasedRoomRevision + 1);
   assert.equal((await setLauncherRoom(pool, 'mine', {
     revision: 0, sceneId: 'room-scene-default', placements: [roomSnapshot.placements[0]], characters: []
   })).error, 'not_owned');
-  const revisionOne = { ...roomSnapshot, revision: 1 };
+  const revisionOne = { ...roomSnapshot, revision: purchasedRoomRevision + 1 };
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, sceneId: 'room-scene-sunny-library' })).error, 'not_owned');
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, placements: [{ ...roomSnapshot.placements[0], x: 961 }] })).error, 'invalid_room');
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, placements: [{ ...roomSnapshot.placements[0], scale: 1.6 }] })).error, 'invalid_room');
@@ -249,17 +241,17 @@ const pool = {
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, characters: Array(4).fill(roomSnapshot.characters[0]) })).error, 'invalid_room');
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, characters: [{ itemId: 'room-character-robin', x: 10, y: 10 }] })).error, 'not_owned');
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, placements: [{ ...roomSnapshot.placements[0], itemId: 'room-furniture-not-real' }] })).error, 'invalid_room');
-  assert.equal(rows.get(7).stats.launcherRoomV1.revision, 1);
+  assert.equal(rows.get(7).stats.launcherRoomV1.revision, purchasedRoomRevision + 1);
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, placements: [{ itemId: 'room-furniture-helm', x: 300, y: 210, scale: 1, rotation: 3 }] })).ok, true);
   assert.equal(rows.get(7).stats.launcherRoomV1.placements[0].rotation, 3);
   assert.equal(rows.get(7).stats.launcherRoomV1.placements[0].flip, false);
   const eightCrew = ['luffy', 'nami', 'zoro', 'chopper', 'sanji', 'robin', 'usopp', 'franky'];
   for (const key of eightCrew.slice(2)) assert.equal((await changeLauncherItem(pool, 'room-owner', `room-character-${key}`, 'buy')).ok, true);
-  const crewSnapshot = { revision: 2, sceneId: 'room-scene-sunny-deck', placements: [],
+  const crewSnapshot = { revision: (await getLauncherProfile(pool, 'room-owner')).profile.room.revision, sceneId: 'room-scene-sunny-deck', placements: [],
     characters: eightCrew.map((key, index) => ({ itemId: `room-character-${key}`, x: 100 + index * 90, y: 390 })) };
   assert.equal((await setLauncherRoom(pool, 'room-owner', crewSnapshot)).profile.room.characters.length, 8);
-  assert.equal((await setLauncherRoom(pool, 'room-owner', { ...crewSnapshot, revision: 3,
-    characters: [...crewSnapshot.characters, { itemId: 'room-character-brook', x: 820, y: 390 }] })).error, 'invalid_room');
+  assert.equal((await setLauncherRoom(pool, 'room-owner', { ...crewSnapshot, revision: crewSnapshot.revision + 1,
+    characters: [...crewSnapshot.characters, { itemId: 'room-character-brook', x: 820, y: 390 }] })).error, 'upgrade_required');
 
   assert.equal((await getLauncherShop(pool, 'mine')).shop.wallet.coins, 12);
   assert.equal((await getLauncherShop(pool, 'zero')).shop.wallet.coins, 100);
@@ -326,4 +318,4 @@ const pool = {
   assert.equal((await getLauncherProfile(pool, 'legacy')).profile.guestbookUnlocked, false);
   assert.equal((await changeLauncherItem(pool, 'legacy', 'guestbook-1', 'buy')).error, 'insufficient_coins');
   console.log('launcher profile/shop: legacy visitor DTO, authorized friend DTO, ownership, balance, equip checks passed');
-})().catch(error => { console.error(error); process.exitCode = 1; });
+})().catch(error => { console.error(error); process.exitCode = 1; }).finally(() => db.close());

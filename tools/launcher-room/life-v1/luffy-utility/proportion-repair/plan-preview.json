@@ -1,0 +1,216 @@
+{
+  "clips": [
+    {
+      "id": "eat",
+      "key": "luffy",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/source-alpha.png",
+      "scale": 0.2737430167597765,
+      "regions": [
+        [
+          0,
+          0,
+          335,
+          389
+        ],
+        [
+          335,
+          0,
+          625,
+          389
+        ],
+        [
+          625,
+          0,
+          924,
+          389
+        ],
+        [
+          924,
+          0,
+          1254,
+          389
+        ]
+      ],
+      "roots": [
+        [
+          210.5,
+          371
+        ],
+        [
+          488.5,
+          371
+        ],
+        [
+          765.0,
+          371
+        ],
+        [
+          1045.5,
+          371
+        ]
+      ],
+      "asset": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/eat-south.webp"
+    },
+    {
+      "id": "rest",
+      "key": "luffy",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/source-alpha.png",
+      "scale": 0.2737430167597765,
+      "regions": [
+        [
+          0,
+          389,
+          335,
+          714
+        ],
+        [
+          335,
+          389,
+          625,
+          714
+        ],
+        [
+          625,
+          389,
+          924,
+          714
+        ],
+        [
+          924,
+          389,
+          1254,
+          714
+        ]
+      ],
+      "roots": [
+        [
+          206.0,
+          686
+        ],
+        [
+          490.5,
+          686
+        ],
+        [
+          765.0,
+          686
+        ],
+        [
+          1049.5,
+          686
+        ]
+      ],
+      "asset": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/rest-south.webp"
+    },
+    {
+      "id": "sleep",
+      "key": "luffy",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/source-alpha.png",
+      "scale": 0.2737430167597765,
+      "regions": [
+        [
+          0,
+          714,
+          335,
+          891
+        ],
+        [
+          335,
+          714,
+          625,
+          891
+        ],
+        [
+          625,
+          714,
+          924,
+          891
+        ],
+        [
+          924,
+          714,
+          1254,
+          891
+        ]
+      ],
+      "roots": [
+        [
+          186.5,
+          874
+        ],
+        [
+          484.5,
+          874
+        ],
+        [
+          789.5,
+          874
+        ],
+        [
+          1090.5,
+          874
+        ]
+      ],
+      "asset": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/sleep-south.webp"
+    },
+    {
+      "id": "train",
+      "key": "luffy",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/source-alpha.png",
+      "scale": 0.2901675977653631,
+      "regions": [
+        [
+          0,
+          891,
+          335,
+          1254
+        ],
+        [
+          335,
+          891,
+          625,
+          1254
+        ],
+        [
+          625,
+          891,
+          924,
+          1254
+        ],
+        [
+          924,
+          891,
+          1254,
+          1254
+        ]
+      ],
+      "roots": [
+        [
+          190.5,
+          1233
+        ],
+        [
+          482.0,
+          1233
+        ],
+        [
+          768.0,
+          1233
+        ],
+        [
+          1071.0,
+          1233
+        ]
+      ],
+      "asset": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/train-south.webp",
+      "uniformCalibration": {
+        "factor": 1.06,
+        "reason": "Whole-character increase:89px grounded stance becomes94px and hat silhouette39px becomes41px, closer to old idle42px. No anatomy changes."
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "identityReferences": [
+    "tools/launcher-room/fullbody-v3/sources/usopp-actions-05/ancestry/07-source-01.png",
+    "tools/launcher-room/fullbody-v3/sources/usopp-actions-05/image.png"
+  ],
+  "semantics": "Exact approved character identity, era-specific costume and asymmetry. Pose references not copied.",
+  "generator": "image_gen.imagegen"
+}

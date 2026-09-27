@@ -1,0 +1,27 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:\\Users\\\u738b\u66dc\u744b\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-1012ee49-9daf-4e0d-9ac9-7961ad1918d5.png",
+  "source": {
+    "path": "tools\\launcher-room\\life-v1\\zoro-utility\\proportion-repair\\source.png",
+    "sha256": "e3428afba2cfb0c1e87c1751bc69b2194476fe73969e4f0c240d8df557bbf34e"
+  },
+  "prompt": {
+    "path": "tools\\launcher-room\\life-v1\\zoro-utility\\proportion-repair\\prompt.txt",
+    "sha256": "bc0417cc1c70dc71863780893134a8460b19b3d5681c441f4b9b8d632109a1c4"
+  },
+  "references": [
+    {
+      "path": "tools\\launcher-room\\fullbody-v3\\sources\\zoro-actions-south-01\\image.png",
+      "sha256": "d937777b4e01e4c6328680070f35d7ff7ae733822135c68e72c3c3e4832cf6aa",
+      "role": "approved old identity only"
+    },
+    {
+      "path": "tools\\launcher-room\\life-v1\\zoro-approved-reference\\idle-four-directions.png",
+      "sha256": "9da6f0f28e887f90fa96bf23f649f385e9855b10600bf064fbf98f1ee22ed066",
+      "role": "approved old identity only"
+    }
+  ],
+  "runtimeAccepted": false,
+  "processing": "Whole-figure crop; genuine alpha cleanup<16 plus isolated<32px opaque specks; uniform scaling only. No anatomy assembly."
+}

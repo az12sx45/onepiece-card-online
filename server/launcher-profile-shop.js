@@ -98,6 +98,9 @@ const CATALOG = Object.freeze([
     id: `room-furniture-${key}`, type: 'room_furniture', key, name, rarity,
     asset: `opui://launcher/images/launcher_room/furniture/${key}.webp`
   })),
+  { id: 'room-furniture-galley-stove', type: 'room_furniture', key: 'galley-stove', name: '千陽號料理爐台',
+    rarity: 'epic', price: 80, stationType: 'kitchen', footprint: { cols: 3, rows: 2 },
+    asset: 'opui://launcher/images/launcher_room/furniture/galley-stove.webp' },
   ...[
     ['luffy', '魯夫', 'legend'], ['zoro', '索隆', 'epic'],
     ['nami', '娜美', 'epic'], ['chopper', '喬巴', 'epic'],
@@ -135,7 +138,7 @@ const LAUNCHER_ITEM_TYPES = Object.freeze(['layout', 'background', 'frame', 'dec
 const ROOM_ITEM_TYPES = Object.freeze(['room_scene', 'room_furniture', 'room_character']);
 const ROOM_DEFAULT_SCENE = 'room-scene-default';
 const ROOM_MAX_FURNITURE = 24;
-const ROOM_MAX_CHARACTERS = 8;
+const ROOM_MAX_CHARACTERS = 10;
 const ROOM_WIDTH = 960;
 const ROOM_HEIGHT = 540;
 const COMPANION_MAX_AFFINITY = 100;
@@ -252,7 +255,7 @@ function launcherRoom(stats) {
   const sceneId = saved.sceneId === ROOM_DEFAULT_SCENE ||
     (owned.has(saved.sceneId) && BY_ID.get(saved.sceneId)?.type === 'room_scene') ? saved.sceneId : ROOM_DEFAULT_SCENE;
   return {
-    revision, sceneId,
+    revision, sceneId, capacityVersion: 2,
     placements: normalizedRoomEntries(saved.placements, 'room_furniture', owned, ROOM_MAX_FURNITURE),
     characters: normalizedRoomEntries(saved.characters, 'room_character', owned, ROOM_MAX_CHARACTERS)
   };
@@ -371,7 +374,7 @@ const appearanceItems = appearance => ({
 function sanitizeLauncherStatsPatch(stats) {
   if (!stats || typeof stats !== 'object' || Array.isArray(stats)) return {};
   const { launcherOwnedV1: _owned, launcherAppearanceV1: _appearance, launcherWalletV1: _wallet,
-    launcherRoomV1: _room, launcherCardV1: _card, launcherCompanionsV1: _companions, ...safe } = stats;
+    launcherRoomV1: _room, launcherCardV1: _card, launcherCompanionsV1: _companions, launcherLifeV1: _life, ...safe } = stats;
   return safe;
 }
 const validCardText = (value, min, max) => typeof value === 'string' && value.trim().length >= min &&
@@ -526,7 +529,9 @@ async function getLauncherProfile(pool, secret, userId = 0, boardSummaryForUser 
   if (!Number.isSafeInteger(targetId) || targetId < 0) return { ok: false, error: 'bad userId' };
   if (!targetId || targetId === Number(me.user_id)) {
     const board = boardSummaryForUser ? await boardSummaryForUser(Number(me.user_id)).catch(() => null) : null;
-    return { ok: true, profile: toPublicProfile(me, true, board) };
+    const profile = toPublicProfile(me, true, board);
+    profile.life = await require('./launcher-life-store').publicProjection(pool, me);
+    return { ok: true, profile };
   }
   const friends = numberIds(object(object(object(me.stats).client).social).friends, 1, Number.MAX_SAFE_INTEGER);
   if (!friends.includes(targetId)) return { ok: false, error: 'not friends' };
@@ -535,7 +540,9 @@ async function getLauncherProfile(pool, secret, userId = 0, boardSummaryForUser 
   const reciprocal = numberIds(object(object(object(other.rows[0].stats).client).social).friends, 1, Number.MAX_SAFE_INTEGER);
   if (!reciprocal.includes(Number(me.user_id))) return { ok: false, error: 'not friends' };
   const board = boardSummaryForUser ? await boardSummaryForUser(targetId).catch(() => null) : null;
-  return { ok: true, profile: toPublicProfile(other.rows[0], false, board) };
+  const profile = toPublicProfile(other.rows[0], false, board);
+  profile.life = await require('./launcher-life-store').publicProjection(pool, other.rows[0]);
+  return { ok: true, profile };
 }
 
 async function getLauncherShop(pool, secret, preview = false) {
@@ -591,6 +598,8 @@ async function changeLauncherItem(pool, secret, itemId, action) {
     freeDecor ? { id, type: 'decoration', slot: freeDecor[1] } : null : null;
   const item = catalogItem || freeItem || (baseAllowed ? { type: baseType, key: baseKey } : null);
   if (!item) return { ok: false, error: 'invalid item' };
+  const lifePurchase = action === 'buy' && item.type === 'room_character';
+  if (lifePurchase) await require('./launcher-life-store').ensureLifeTables(pool);
   const db = await pool.connect();
   try {
     await db.query('BEGIN');
@@ -622,6 +631,18 @@ async function changeLauncherItem(pool, secret, itemId, action) {
       } else {
         stats.launcherOwnedV1 = { ...object(stats.launcherOwnedV1), items: [...launcherOwned, item.id] };
       }
+      if (lifePurchase) {
+        const room = launcherRoom(stats);
+        if (room.revision === Number.MAX_SAFE_INTEGER) {
+          await db.query('ROLLBACK'); return { ok: false, error: 'invalid_room' };
+        }
+        const spawn = require('./launcher-life').safeSpawn(room);
+        if (!spawn || room.characters.length >= ROOM_MAX_CHARACTERS) {
+          await db.query('ROLLBACK'); return { ok: false, error: 'room_full' };
+        }
+        stats.launcherRoomV1 = { ...room, revision: room.revision + 1,
+          characters: [...room.characters, { itemId: item.id, ...spawn }] };
+      }
     } else if (action === 'equip') {
       if (ROOM_ITEM_TYPES.includes(item.type)) { await db.query('ROLLBACK'); return { ok: false, error: 'invalid_action' }; }
       if (item.type === 'guestbook') { await db.query('ROLLBACK'); return { ok: false, error: 'invalid_action' }; }
@@ -650,8 +671,10 @@ async function changeLauncherItem(pool, secret, itemId, action) {
       'UPDATE player_profiles SET avatar=$1, stats=$2::jsonb, updated_at=now() WHERE user_id=$3 RETURNING user_id, name, avatar, stats, updated_at',
       [nextAvatar, JSON.stringify(stats), row.user_id]
     );
+    const life = lifePurchase ? await require('./launcher-life-store').registerPurchasedCharacter(db, updated.rows[0], item.id) : null;
     await db.query('COMMIT');
-    return { ok: true, shop: toShop(updated.rows[0]), profile: toPublicProfile(updated.rows[0], true) };
+    return { ok: true, shop: toShop(updated.rows[0]), profile: toPublicProfile(updated.rows[0], true),
+      ...(life ? { life, serverNow: new Date().toISOString() } : {}) };
   } catch (error) {
     await db.query('ROLLBACK').catch(() => {});
     throw error;
@@ -748,6 +771,9 @@ async function setLauncherRoom(pool, secret, snapshot) {
     if (!row) { await db.query('ROLLBACK'); return { ok: false, error: 'bad secret' }; }
     const stats = { ...object(row.stats) };
     const current = launcherRoom(stats);
+    if ((current.characters.length > 8 || snapshot.characters.length > 8) && snapshot.capacityVersion !== 2) {
+      await db.query('ROLLBACK'); return { ok: false, error: 'upgrade_required', profile: toPublicProfile(row, true) };
+    }
     if (snapshot.revision !== current.revision) {
       await db.query('ROLLBACK');
       return { ok: false, error: 'revision_conflict', profile: toPublicProfile(row, true), shop: toShop(row) };
@@ -760,6 +786,7 @@ async function setLauncherRoom(pool, secret, snapshot) {
     }
     stats.launcherRoomV1 = {
       revision: current.revision + 1,
+      capacityVersion: 2,
       sceneId: snapshot.sceneId,
       placements: normalizedRoomEntries(snapshot.placements, 'room_furniture', owned, ROOM_MAX_FURNITURE),
       characters: normalizedRoomEntries(snapshot.characters, 'room_character', owned, ROOM_MAX_CHARACTERS)
@@ -781,17 +808,20 @@ async function setLauncherRoom(pool, secret, snapshot) {
 // Only the account that owns and has placed a character can advance its
 // companion state. A row lock serializes work claims with shop purchases and
 // prevents two sockets from receiving the same reward.
-async function launcherCharacterAction(pool, secret, itemId, action, now = new Date()) {
+async function launcherCharacterAction(pool, secret, itemId, action, suppliedNow) {
+  let now = suppliedNow || new Date();
   if (!secret) return { ok: false, error: 'bad secret' };
   if (typeof itemId !== 'string' || BY_ID.get(itemId)?.type !== 'room_character') {
     return { ok: false, error: 'invalid_character' };
   }
   if (!['get', 'talk', 'start', 'claim'].includes(action)) return { ok: false, error: 'invalid_action' };
+  if (action === 'start' || action === 'claim') await require('./launcher-life-store').ensureLifeTables(pool);
   const db = await pool.connect();
   try {
     await db.query('BEGIN');
     const found = await db.query('SELECT user_id, name, avatar, stats, updated_at FROM player_profiles WHERE secret=$1 FOR UPDATE', [secret]);
     const row = found.rows[0];
+    if (!suppliedNow) now = new Date();
     if (!row) { await db.query('ROLLBACK'); return { ok: false, error: 'bad secret' }; }
     const stats = { ...object(row.stats) };
     if (!launcherOwnedItemIds(stats).includes(itemId)) {
@@ -827,6 +857,8 @@ async function launcherCharacterAction(pool, secret, itemId, action, now = new D
       changed = true;
     } else if (action === 'start') {
       if (character.activeWork) return fail('work_active');
+      const lifeError = await require('./launcher-life-store').legacyWorkGuard(db, row, state, itemId, action, now);
+      if (lifeError) return fail(lifeError);
       if (state.workStartsToday >= COMPANION_WORKS_PER_DAY ||
           state.claimsToday + activeCompanionJobs(state) >= COMPANION_WORKS_PER_DAY ||
           character.worksStartedToday >= COMPANION_WORKS_PER_CHARACTER_PER_DAY) return fail('work_daily_limit');
@@ -844,6 +876,7 @@ async function launcherCharacterAction(pool, secret, itemId, action, now = new D
         if (state.claimsToday >= COMPANION_WORKS_PER_DAY) return fail('work_daily_limit');
         if (wallet.coins > LAUNCHER_WALLET_CAP_COINS - COMPANION_WORK_REWARD) return fail('wallet_full');
         stats.launcherWalletV1 = { ...wallet, coins: wallet.coins + COMPANION_WORK_REWARD };
+        await require('./launcher-life-store').recordLegacyClaim(db, { ...row, stats }, itemId, character.activeWork.startedAt, now);
         state.claimsToday += 1;
         character.affinity = Math.min(COMPANION_MAX_AFFINITY, character.affinity + 1);
         character.activeWork = null;
@@ -881,4 +914,5 @@ const interactLauncherCharacter = (pool, secret, itemId, action, now) =>
 const startLauncherCharacterWork = (pool, secret, itemId, now) => launcherCharacterAction(pool, secret, itemId, 'start', now);
 const claimLauncherCharacterWork = (pool, secret, itemId, now) => launcherCharacterAction(pool, secret, itemId, 'claim', now);
 
-module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop, getLauncherProfile, getLauncherShop, changeLauncherItem, setLauncherDecorationPlacement, setLauncherCard, setLauncherRoom, getLauncherCharacter, interactLauncherCharacter, startLauncherCharacterWork, claimLauncherCharacterWork, sanitizeLauncherStatsPatch, guestbookUnlocked, launcherAvatarForRow };
+module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop, getLauncherProfile, getLauncherShop, changeLauncherItem, setLauncherDecorationPlacement, setLauncherCard, setLauncherRoom, getLauncherCharacter, interactLauncherCharacter, startLauncherCharacterWork, claimLauncherCharacterWork, sanitizeLauncherStatsPatch, guestbookUnlocked, launcherAvatarForRow,
+  launcherOwnedItemIds, launcherRoom, launcherCompanionState, prepareLauncherWallet, launcherWalletPublic };

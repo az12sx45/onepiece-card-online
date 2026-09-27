@@ -1,0 +1,593 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "sanji-cook-east",
+      "key": "sanji",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/sanji-cook/source.png",
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-east.webp",
+      "regions": [
+        [
+          0,
+          0,
+          305,
+          318
+        ],
+        [
+          305,
+          0,
+          610,
+          318
+        ],
+        [
+          610,
+          0,
+          916,
+          318
+        ],
+        [
+          916,
+          0,
+          1222,
+          318
+        ]
+      ],
+      "roots": [
+        [
+          160.0,
+          316
+        ],
+        [
+          458.0,
+          316
+        ],
+        [
+          741.5,
+          316
+        ],
+        [
+          1034.0,
+          316
+        ]
+      ],
+      "scale": 0.313,
+      "sourceSha256": "07c85908ba7cd468694ced47788d609bb44e019696ee91d2bcfbabeb71e17b5d",
+      "assetSha256": "46db7267f6c077ddd764c7a66ef6fc898d55ea44ccd13cae20b57f90879cc17a",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            0,
+            305,
+            318
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            305,
+            318
+          ],
+          "outputBounds": [
+            14,
+            12,
+            95,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            305,
+            0,
+            610,
+            318
+          ],
+          "alphaBounds": [
+            0,
+            1,
+            305,
+            318
+          ],
+          "outputBounds": [
+            16,
+            13,
+            95,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            610,
+            0,
+            916,
+            318
+          ],
+          "alphaBounds": [
+            0,
+            1,
+            306,
+            318
+          ],
+          "outputBounds": [
+            23,
+            13,
+            96,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            916,
+            0,
+            1222,
+            318
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            272,
+            318
+          ],
+          "outputBounds": [
+            27,
+            12,
+            85,
+            100
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "sanji-cook-west",
+      "key": "sanji",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/sanji-cook/source.png",
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-west.webp",
+      "regions": [
+        [
+          0,
+          318,
+          305,
+          637
+        ],
+        [
+          305,
+          318,
+          610,
+          637
+        ],
+        [
+          610,
+          318,
+          916,
+          637
+        ],
+        [
+          916,
+          318,
+          1222,
+          637
+        ]
+      ],
+      "roots": [
+        [
+          184.5,
+          634
+        ],
+        [
+          478.0,
+          634
+        ],
+        [
+          766.0,
+          634
+        ],
+        [
+          1059.5,
+          634
+        ]
+      ],
+      "scale": 0.313,
+      "sourceSha256": "07c85908ba7cd468694ced47788d609bb44e019696ee91d2bcfbabeb71e17b5d",
+      "assetSha256": "a8c5527fd03078a757cf0ea53d20f2c18f2011cb2d025a92125073821363888c",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            318,
+            305,
+            637
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            305,
+            319
+          ],
+          "outputBounds": [
+            6,
+            12,
+            95,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            305,
+            318,
+            610,
+            637
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            304,
+            319
+          ],
+          "outputBounds": [
+            10,
+            12,
+            95,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            610,
+            318,
+            916,
+            637
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            306,
+            319
+          ],
+          "outputBounds": [
+            15,
+            12,
+            96,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            916,
+            318,
+            1222,
+            637
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            286,
+            319
+          ],
+          "outputBounds": [
+            19,
+            12,
+            90,
+            100
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "sanji-cook-north",
+      "key": "sanji",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/sanji-cook/source.png",
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-north.webp",
+      "regions": [
+        [
+          0,
+          637,
+          305,
+          950
+        ],
+        [
+          305,
+          637,
+          610,
+          950
+        ],
+        [
+          610,
+          637,
+          916,
+          950
+        ],
+        [
+          916,
+          637,
+          1222,
+          950
+        ]
+      ],
+      "roots": [
+        [
+          172.0,
+          948
+        ],
+        [
+          465.5,
+          948
+        ],
+        [
+          753.5,
+          948
+        ],
+        [
+          1045.5,
+          948
+        ]
+      ],
+      "scale": 0.313,
+      "sourceSha256": "07c85908ba7cd468694ced47788d609bb44e019696ee91d2bcfbabeb71e17b5d",
+      "assetSha256": "b3d0d61bf6a7b07087153a00b22e7f4a6cafb0d4658a83480e93c2434af13deb",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            637,
+            305,
+            950
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            305,
+            313
+          ],
+          "outputBounds": [
+            10,
+            14,
+            95,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            305,
+            637,
+            610,
+            950
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            305,
+            313
+          ],
+          "outputBounds": [
+            14,
+            14,
+            95,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            610,
+            637,
+            916,
+            950
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            306,
+            313
+          ],
+          "outputBounds": [
+            19,
+            14,
+            96,
+            98
+          ]
+        },
+        {
+          "sourceRegion": [
+            916,
+            637,
+            1222,
+            950
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            290,
+            313
+          ],
+          "outputBounds": [
+            23,
+            14,
+            91,
+            98
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "sanji-cook-south",
+      "key": "sanji",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/sanji-cook/source.png",
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-south.webp",
+      "regions": [
+        [
+          0,
+          950,
+          305,
+          1287
+        ],
+        [
+          305,
+          950,
+          610,
+          1287
+        ],
+        [
+          610,
+          950,
+          916,
+          1287
+        ],
+        [
+          916,
+          950,
+          1222,
+          1287
+        ]
+      ],
+      "roots": [
+        [
+          173.0,
+          1264
+        ],
+        [
+          465.5,
+          1264
+        ],
+        [
+          755.0,
+          1264
+        ],
+        [
+          1049.0,
+          1264
+        ]
+      ],
+      "scale": 0.313,
+      "sourceSha256": "07c85908ba7cd468694ced47788d609bb44e019696ee91d2bcfbabeb71e17b5d",
+      "assetSha256": "47199ccab021ec2e05fb7146e688f6b201b076d18275f15faa54d1fc68080fab",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            950,
+            305,
+            1287
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            305,
+            337
+          ],
+          "outputBounds": [
+            10,
+            7,
+            95,
+            105
+          ]
+        },
+        {
+          "sourceRegion": [
+            305,
+            950,
+            610,
+            1287
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            305,
+            321
+          ],
+          "outputBounds": [
+            14,
+            12,
+            95,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            610,
+            950,
+            916,
+            1287
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            306,
+            321
+          ],
+          "outputBounds": [
+            19,
+            12,
+            96,
+            100
+          ]
+        },
+        {
+          "sourceRegion": [
+            916,
+            950,
+            1222,
+            1287
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            306,
+            337
+          ],
+          "outputBounds": [
+            22,
+            7,
+            96,
+            105
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

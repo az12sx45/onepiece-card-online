@@ -1,0 +1,216 @@
+{
+  "clips": [
+    {
+      "id": "craft",
+      "key": "franky",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "scale": 0.33222591,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          93,
+          13,
+          295,
+          318
+        ],
+        [
+          402,
+          14,
+          606,
+          318
+        ],
+        [
+          706,
+          14,
+          911,
+          318
+        ],
+        [
+          1007,
+          13,
+          1209,
+          318
+        ]
+      ],
+      "roots": [
+        [
+          173.0,
+          316
+        ],
+        [
+          481.0,
+          316
+        ],
+        [
+          783.5,
+          316
+        ],
+        [
+          1086.5,
+          316
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/craft-east.webp"
+    },
+    {
+      "id": "craft",
+      "key": "franky",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "scale": 0.33222591,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          47,
+          335,
+          250,
+          640
+        ],
+        [
+          355,
+          335,
+          560,
+          640
+        ],
+        [
+          664,
+          335,
+          868,
+          640
+        ],
+        [
+          980,
+          336,
+          1181,
+          640
+        ]
+      ],
+      "roots": [
+        [
+          170.5,
+          638
+        ],
+        [
+          477.5,
+          638
+        ],
+        [
+          789.5,
+          638
+        ],
+        [
+          1103.0,
+          638
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/craft-west.webp"
+    },
+    {
+      "id": "craft",
+      "key": "franky",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "scale": 0.36363636,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          32,
+          651,
+          303,
+          930
+        ],
+        [
+          346,
+          651,
+          613,
+          930
+        ],
+        [
+          651,
+          651,
+          916,
+          930
+        ],
+        [
+          957,
+          651,
+          1225,
+          930
+        ]
+      ],
+      "roots": [
+        [
+          166.5,
+          928
+        ],
+        [
+          479.0,
+          928
+        ],
+        [
+          784.0,
+          928
+        ],
+        [
+          1089.5,
+          928
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/craft-north.webp"
+    },
+    {
+      "id": "craft",
+      "key": "franky",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "scale": 0.35714286,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          37,
+          937,
+          296,
+          1221
+        ],
+        [
+          350,
+          937,
+          611,
+          1221
+        ],
+        [
+          655,
+          937,
+          915,
+          1221
+        ],
+        [
+          962,
+          937,
+          1222,
+          1221
+        ]
+      ],
+      "roots": [
+        [
+          165.0,
+          1219
+        ],
+        [
+          480.0,
+          1219
+        ],
+        [
+          786.5,
+          1219
+        ],
+        [
+          1092.0,
+          1219
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/craft-south.webp"
+    }
+  ]
+}

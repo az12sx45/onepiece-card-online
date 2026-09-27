@@ -1,0 +1,578 @@
+{
+  "ok": true,
+  "scope": "Real renderer and art, isolated fixture server; numeric pass is not human visual approval.",
+  "results": [
+    {
+      "id": "usopp-tool-bench-r0",
+      "key": "usopp",
+      "furniture": "tool-bench",
+      "clip": "craft",
+      "rotation": 0,
+      "frames": [
+        "2",
+        "2",
+        "0",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-usopp"
+          ],
+          "characters": {
+            "usopp": {
+              "key": "usopp",
+              "itemId": "room-character-usopp",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99783500000001,
+                "hunger": 25.003572249999998,
+                "mood": 75.00216499999999,
+                "social": 74.998701,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790482042712,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790482037819,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-usopp",
+              "stationId": "room-furniture-tool-bench",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:07:18.089Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:07:27.495Z",
+              "readyAt": "2026-09-27T04:08:27.495Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "usopp",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-tool-bench",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "usopp",
+              "cell": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-tool-bench",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482217316,
+          "nextForegroundAt": 1790482049316,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "usopp",
+            "cell": {
+              "col": 7,
+              "row": 4
+            },
+            "x": 480,
+            "y": 394.36140625,
+            "mode": "life-act",
+            "phase": 0.33929316712162355,
+            "direction": "north",
+            "dock": {
+              "x": 480,
+              "y": 394.36140625,
+              "z": 402,
+              "side": "north"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-usopp",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790482038089
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790482047495
+        }
+      ]
+    },
+    {
+      "id": "usopp-tool-bench-r1",
+      "key": "usopp",
+      "furniture": "tool-bench",
+      "clip": "craft",
+      "rotation": 1,
+      "frames": [
+        "2",
+        "2",
+        "0",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-usopp"
+          ],
+          "characters": {
+            "usopp": {
+              "key": "usopp",
+              "itemId": "room-character-usopp",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99786166666668,
+                "hunger": 25.00352825,
+                "mood": 75.00213833333332,
+                "social": 74.99871699999998,
+                "workMotivation": 69.96792500000001
+              },
+              "memories": [],
+              "nextAt": 1790482087092,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790482060236,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-usopp",
+              "stationId": "room-furniture-tool-bench",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:07:40.246Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:07:56.005Z",
+              "readyAt": "2026-09-27T04:08:56.005Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "usopp",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-tool-bench",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "usopp",
+              "cell": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-tool-bench",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482239810,
+          "nextForegroundAt": 1790482071810,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "usopp",
+            "cell": {
+              "col": 6,
+              "row": 2
+            },
+            "x": 456.71550988773305,
+            "y": 384.4759833911519,
+            "mode": "life-act",
+            "phase": 0.7644539055653826,
+            "direction": "east",
+            "dock": {
+              "x": 456.73,
+              "y": 384.51640625,
+              "z": 402,
+              "side": "east"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-usopp",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790482060246
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790482076005
+        }
+      ]
+    },
+    {
+      "id": "usopp-tool-bench-r2",
+      "key": "usopp",
+      "furniture": "tool-bench",
+      "clip": "craft",
+      "rotation": 2,
+      "frames": [
+        "2",
+        "2",
+        "0",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-usopp"
+          ],
+          "characters": {
+            "usopp": {
+              "key": "usopp",
+              "itemId": "room-character-usopp",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99786333333334,
+                "hunger": 25.0035255,
+                "mood": 75.00213666666666,
+                "social": 74.998718,
+                "workMotivation": 69.96795000000002
+              },
+              "memories": [],
+              "nextAt": 1790482092481,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790482086294,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-usopp",
+              "stationId": "room-furniture-tool-bench",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:08:06.418Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:08:30.290Z",
+              "readyAt": "2026-09-27T04:09:30.290Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "usopp",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-tool-bench",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "usopp",
+              "cell": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-tool-bench",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482266087,
+          "nextForegroundAt": 1790482098087,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "usopp",
+            "cell": {
+              "col": 7,
+              "row": 1
+            },
+            "x": 479.97511699960245,
+            "y": 382.72640625,
+            "mode": "life-act",
+            "phase": 0.8739793851799647,
+            "direction": "south",
+            "dock": {
+              "x": 480,
+              "y": 382.72640625,
+              "z": 400,
+              "side": "south"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-usopp",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790482086418
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790482110290
+        }
+      ]
+    },
+    {
+      "id": "usopp-tool-bench-r3",
+      "key": "usopp",
+      "furniture": "tool-bench",
+      "clip": "craft",
+      "rotation": 3,
+      "frames": [
+        "2",
+        "3",
+        "3",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-usopp"
+          ],
+          "characters": {
+            "usopp": {
+              "key": "usopp",
+              "itemId": "room-character-usopp",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99783500000001,
+                "hunger": 25.003572249999998,
+                "mood": 75.00216499999999,
+                "social": 74.998701,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790482125791,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790482120516,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-usopp",
+              "stationId": "room-furniture-tool-bench",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T04:08:40.631Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T04:09:00.645Z",
+              "readyAt": "2026-09-27T04:10:00.645Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "usopp",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-tool-bench",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "usopp",
+              "cell": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-tool-bench",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790482563544,
+          "nextForegroundAt": 1790482132295,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "usopp",
+            "cell": {
+              "col": 9,
+              "row": 2
+            },
+            "x": 503.28778208694996,
+            "y": 384.4768395884421,
+            "mode": "life-act",
+            "phase": 0.32091067460189326,
+            "direction": "west",
+            "dock": {
+              "x": 503.27,
+              "y": 384.51640625,
+              "z": 402,
+              "side": "west"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-usopp",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790482120631
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790482140645
+        }
+      ]
+    }
+  ]
+}

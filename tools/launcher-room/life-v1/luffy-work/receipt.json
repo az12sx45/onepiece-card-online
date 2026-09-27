@@ -1,0 +1,33 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:\\Users\\\u738b\u66dc\u744b\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-e8b5deb4-3425-4682-b788-dc1e91cf39c1.png",
+  "source": {
+    "path": "tools\\launcher-room\\life-v1\\luffy-work\\proportion-repair\\source.png",
+    "sha256": "e5a2443280f17feecb0c17419323432a4c9a1cba7b8a8dcbb7eebae52073d4bf"
+  },
+  "prompt": {
+    "path": "tools\\launcher-room\\life-v1\\luffy-work\\proportion-repair\\prompt.txt",
+    "sha256": "bd8ee5fe38e0e3162c0159d0dbd22840f317d2f086ed8131cd91776808284f36"
+  },
+  "references": [
+    {
+      "path": "tools\\launcher-room\\fullbody-v3\\sources\\luffy-v15-actions-01\\image.png",
+      "sha256": "244a3f2318f9834e663b494d5b14f0faeaa0a9b0974d7a9fea6464127a13e960",
+      "role": "approved old identity only"
+    },
+    {
+      "path": "tools\\launcher-room\\life-v1\\luffy-approved-reference\\idle-four-directions.png",
+      "sha256": "21124393089b0d18b0f7cde04daae363cd3fd508fc80ec9ff77b527b5546f0a5",
+      "role": "approved old identity only"
+    }
+  ],
+  "runtimeAccepted": false,
+  "processing": "Whole-figure crop; genuine alpha cleanup<16 plus isolated<32px opaque specks; uniform scaling only. No anatomy assembly.",
+  "visualAccepted": true,
+  "rejectedPredecessor": {
+    "source": "source.png",
+    "reason": "Overlarge head and shortened legs versus approved acting_v3; Luffy additionally introduced incorrect yellow waist sash."
+  },
+  "activePlan": "plan.json"
+}

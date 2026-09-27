@@ -1,0 +1,226 @@
+{
+  "schema": "launcher-life-art-review/1",
+  "reviewType": "Codex source and composited atlas visual inspection plus deterministic alpha/shape checks; no in-room playback acceptance claimed",
+  "generator": "image_gen.imagegen",
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "runtimeAccepted": false,
+  "review": "West skirt asymmetry corrected by targeted GPT redraw. East/west true side, north shows only back of head, south frontal. Left supports tray, right wipes. Four distinct arm phases; feet remain planted.",
+  "noMirroring": true,
+  "noBodyPartAssembly": true,
+  "originalRetained": true,
+  "clips": [
+    {
+      "id": "work",
+      "direction": "east",
+      "asset": "public/images/launcher_room/life_v1/nami/work-east.webp",
+      "sha256": "cfd8ff26c0fb28ebc7d7df5a5790b3954fb4a9ec9c39be9e46985b9d297ab0f6",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "sourceSha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          52,
+          11,
+          94,
+          112
+        ],
+        [
+          51,
+          11,
+          94,
+          112
+        ],
+        [
+          51,
+          11,
+          94,
+          112
+        ],
+        [
+          52,
+          11,
+          94,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2531,
+        2363,
+        2489,
+        2327
+      ],
+      "singleIsotropicScale": 0.33898305,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "work",
+      "direction": "west",
+      "asset": "public/images/launcher_room/life_v1/nami/work-west.webp",
+      "sha256": "dddf34293757f635e979e91bf71c7daa7fc0e0b6a5ae487fac8cb626296fef4f",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "sourceSha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          36,
+          11,
+          77,
+          112
+        ],
+        [
+          37,
+          11,
+          76,
+          112
+        ],
+        [
+          37,
+          11,
+          76,
+          112
+        ],
+        [
+          37,
+          11,
+          77,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2376,
+        2328,
+        2453,
+        2410
+      ],
+      "singleIsotropicScale": 0.33670034,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "work",
+      "direction": "north",
+      "asset": "public/images/launcher_room/life_v1/nami/work-north.webp",
+      "sha256": "21064ef6561e5b350737f69fd9baab09cb94ad6d0829777b3dd9afe92ef888ed",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "sourceSha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          47,
+          11,
+          80,
+          112
+        ],
+        [
+          48,
+          11,
+          82,
+          112
+        ],
+        [
+          48,
+          11,
+          82,
+          112
+        ],
+        [
+          48,
+          11,
+          83,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2877,
+        2736,
+        2700,
+        2881
+      ],
+      "singleIsotropicScale": 0.33670034,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "work",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/nami/work-south.webp",
+      "sha256": "7bbb857bb721c0b1529e6036e94d21c9ded87db372f6e5edc3681e3744fac3f3",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "sourceSha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          45,
+          11,
+          82,
+          112
+        ],
+        [
+          45,
+          11,
+          82,
+          112
+        ],
+        [
+          45,
+          11,
+          82,
+          112
+        ],
+        [
+          45,
+          11,
+          82,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        2763,
+        2746,
+        2747,
+        2753
+      ],
+      "singleIsotropicScale": 0.33112583,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    }
+  ]
+}

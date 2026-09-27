@@ -1,0 +1,597 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "work",
+      "key": "nami",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "scale": 0.33898305,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          116,
+          8,
+          240,
+          307
+        ],
+        [
+          422,
+          8,
+          548,
+          307
+        ],
+        [
+          738,
+          8,
+          864,
+          307
+        ],
+        [
+          1051,
+          8,
+          1176,
+          307
+        ]
+      ],
+      "roots": [
+        [
+          152.5,
+          305
+        ],
+        [
+          459.0,
+          305
+        ],
+        [
+          776.0,
+          305
+        ],
+        [
+          1087.0,
+          305
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/work-east.webp",
+      "sourceSha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d",
+      "assetSha256": "cfd8ff26c0fb28ebc7d7df5a5790b3954fb4a9ec9c39be9e46985b9d297ab0f6",
+      "frames": [
+        {
+          "sourceRegion": [
+            116,
+            8,
+            240,
+            307
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            124,
+            299
+          ],
+          "outputBounds": [
+            52,
+            11,
+            42,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            422,
+            8,
+            548,
+            307
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            126,
+            299
+          ],
+          "outputBounds": [
+            51,
+            11,
+            43,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            738,
+            8,
+            864,
+            307
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            126,
+            299
+          ],
+          "outputBounds": [
+            51,
+            11,
+            43,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            1051,
+            8,
+            1176,
+            307
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            125,
+            299
+          ],
+          "outputBounds": [
+            52,
+            11,
+            42,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "nami",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "scale": 0.33670034,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          75,
+          317,
+          196,
+          617
+        ],
+        [
+          386,
+          317,
+          503,
+          617
+        ],
+        [
+          703,
+          316,
+          820,
+          617
+        ],
+        [
+          1014,
+          317,
+          1132,
+          618
+        ]
+      ],
+      "roots": [
+        [
+          157.5,
+          615
+        ],
+        [
+          467.5,
+          615
+        ],
+        [
+          784.0,
+          615
+        ],
+        [
+          1095.0,
+          616
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/work-west.webp",
+      "sourceSha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d",
+      "assetSha256": "dddf34293757f635e979e91bf71c7daa7fc0e0b6a5ae487fac8cb626296fef4f",
+      "frames": [
+        {
+          "sourceRegion": [
+            75,
+            317,
+            196,
+            617
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            121,
+            300
+          ],
+          "outputBounds": [
+            36,
+            11,
+            41,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            386,
+            317,
+            503,
+            617
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            117,
+            300
+          ],
+          "outputBounds": [
+            37,
+            11,
+            39,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            703,
+            316,
+            820,
+            617
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            117,
+            301
+          ],
+          "outputBounds": [
+            37,
+            11,
+            39,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            1014,
+            317,
+            1132,
+            618
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            118,
+            301
+          ],
+          "outputBounds": [
+            37,
+            11,
+            40,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "nami",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "scale": 0.33670034,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          107,
+          628,
+          206,
+          929
+        ],
+        [
+          417,
+          628,
+          517,
+          929
+        ],
+        [
+          732,
+          628,
+          834,
+          929
+        ],
+        [
+          1040,
+          629,
+          1143,
+          929
+        ]
+      ],
+      "roots": [
+        [
+          156.5,
+          927
+        ],
+        [
+          466.0,
+          927
+        ],
+        [
+          780.5,
+          927
+        ],
+        [
+          1088.0,
+          927
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/work-north.webp",
+      "sourceSha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d",
+      "assetSha256": "21064ef6561e5b350737f69fd9baab09cb94ad6d0829777b3dd9afe92ef888ed",
+      "frames": [
+        {
+          "sourceRegion": [
+            107,
+            628,
+            206,
+            929
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            99,
+            301
+          ],
+          "outputBounds": [
+            47,
+            11,
+            33,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            417,
+            628,
+            517,
+            929
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            100,
+            301
+          ],
+          "outputBounds": [
+            48,
+            11,
+            34,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            732,
+            628,
+            834,
+            929
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            102,
+            301
+          ],
+          "outputBounds": [
+            48,
+            11,
+            34,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            1040,
+            629,
+            1143,
+            929
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            103,
+            300
+          ],
+          "outputBounds": [
+            48,
+            11,
+            35,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "work",
+      "key": "nami",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "scale": 0.33112583,
+      "scaleReason": "Four complete frames share one isotropic scale targeting standing100px; no body-part scaling.",
+      "regions": [
+        [
+          100,
+          935,
+          212,
+          1241
+        ],
+        [
+          412,
+          936,
+          525,
+          1241
+        ],
+        [
+          727,
+          936,
+          839,
+          1241
+        ],
+        [
+          1037,
+          935,
+          1149,
+          1241
+        ]
+      ],
+      "roots": [
+        [
+          156.0,
+          1239
+        ],
+        [
+          468.5,
+          1239
+        ],
+        [
+          783.0,
+          1239
+        ],
+        [
+          1093.0,
+          1239
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/nami/work-south.webp",
+      "sourceSha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d",
+      "assetSha256": "7bbb857bb721c0b1529e6036e94d21c9ded87db372f6e5edc3681e3744fac3f3",
+      "frames": [
+        {
+          "sourceRegion": [
+            100,
+            935,
+            212,
+            1241
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            112,
+            306
+          ],
+          "outputBounds": [
+            45,
+            11,
+            37,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            412,
+            936,
+            525,
+            1241
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            113,
+            305
+          ],
+          "outputBounds": [
+            45,
+            11,
+            37,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            727,
+            936,
+            839,
+            1241
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            112,
+            305
+          ],
+          "outputBounds": [
+            45,
+            11,
+            37,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            1037,
+            935,
+            1149,
+            1241
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            112,
+            306
+          ],
+          "outputBounds": [
+            45,
+            11,
+            37,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

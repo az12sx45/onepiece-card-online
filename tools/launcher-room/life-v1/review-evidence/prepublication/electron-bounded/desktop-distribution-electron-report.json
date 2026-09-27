@@ -1,0 +1,849 @@
+{
+  "startedAt": "2026-09-27T04:23:10.467Z",
+  "realServer": "http://127.0.0.1:31931",
+  "electron": "44.1.1",
+  "scope": "True Electron default-UA HTTP/socket; actual AuthService against controlled local fixture; no real accounts or rooms",
+  "mediaProbe": false,
+  "bridgeOnly": true,
+  "checks": [
+    {
+      "name": "manifest media index loads",
+      "pass": true,
+      "detail": 8390
+    },
+    {
+      "name": "actual AuthService login",
+      "pass": true,
+      "detail": {
+        "ok": true,
+        "userId": 17
+      }
+    },
+    {
+      "name": "actual AuthService login presence",
+      "pass": true
+    },
+    {
+      "name": "login: Life GET crosses guarded socket",
+      "pass": true
+    },
+    {
+      "name": "login: command preserves exact transport work.reserve",
+      "pass": true
+    },
+    {
+      "name": "login: command preserves exact transport work.activate",
+      "pass": true
+    },
+    {
+      "name": "login: command preserves exact transport work.complete",
+      "pass": true
+    },
+    {
+      "name": "login: command preserves exact transport work.cancel",
+      "pass": true
+    },
+    {
+      "name": "login: command preserves exact transport directive.set",
+      "pass": true
+    },
+    {
+      "name": "login: command preserves exact transport character.interact",
+      "pass": true
+    },
+    {
+      "name": "login: command preserves exact transport event.record",
+      "pass": true
+    },
+    {
+      "name": "login: command preserves exact transport activity.record",
+      "pass": true
+    },
+    {
+      "name": "login: command preserves exact transport arrival.ack",
+      "pass": true
+    },
+    {
+      "name": "login: command preserves exact transport checkpoint",
+      "pass": true
+    },
+    {
+      "name": "login: ten crew + stove rotation 0",
+      "pass": true
+    },
+    {
+      "name": "login: ten crew + stove rotation 1",
+      "pass": true
+    },
+    {
+      "name": "login: ten crew + stove rotation 2",
+      "pass": true
+    },
+    {
+      "name": "login: ten crew + stove rotation 3",
+      "pass": true
+    },
+    {
+      "name": "login: eleven crew rejected before transport",
+      "pass": true
+    },
+    {
+      "name": "login: ten crew requires capacity version2",
+      "pass": true
+    },
+    {
+      "name": "login: forged command type rejected before transport",
+      "pass": true
+    },
+    {
+      "name": "login: invalid data emitted no socket request",
+      "pass": true
+    },
+    {
+      "name": "login: stove purchase ID accepted",
+      "pass": true
+    },
+    {
+      "name": "login: actual sandboxed preload Life GET",
+      "pass": true
+    },
+    {
+      "name": "login: actual sandboxed preload Life command",
+      "pass": true
+    },
+    {
+      "name": "login: actual sandboxed preload ten-character room",
+      "pass": true
+    },
+    {
+      "name": "login: actual sandboxed preload stove purchase",
+      "pass": true
+    },
+    {
+      "name": "Node login rejects BOARD_ROOM_LIST",
+      "pass": true,
+      "detail": "desktop_required"
+    },
+    {
+      "name": "Node login rejects CHESS_ROOM_LIST",
+      "pass": true,
+      "detail": "desktop_required"
+    },
+    {
+      "name": "Node login rejects ROOM_LIST_GET",
+      "pass": true,
+      "detail": "desktop_required"
+    },
+    {
+      "name": "Node login rejects BOARD_GAME_STATE",
+      "pass": true,
+      "detail": "desktop_required"
+    },
+    {
+      "name": "Node login rejects CHESS_MOVE",
+      "pass": true,
+      "detail": "desktop_required"
+    },
+    {
+      "name": "Node login rejects ACTION",
+      "pass": true,
+      "detail": "desktop_required"
+    },
+    {
+      "name": "actual AuthService login in-memory restore",
+      "pass": true
+    },
+    {
+      "name": "actual AuthService login encrypted reload",
+      "pass": true,
+      "detail": {
+        "encryptionAvailable": true
+      }
+    },
+    {
+      "name": "actual AuthService register",
+      "pass": true,
+      "detail": {
+        "ok": true,
+        "userId": 17
+      }
+    },
+    {
+      "name": "actual AuthService register presence",
+      "pass": true
+    },
+    {
+      "name": "register: Life GET crosses guarded socket",
+      "pass": true
+    },
+    {
+      "name": "register: command preserves exact transport work.reserve",
+      "pass": true
+    },
+    {
+      "name": "register: command preserves exact transport work.activate",
+      "pass": true
+    },
+    {
+      "name": "register: command preserves exact transport work.complete",
+      "pass": true
+    },
+    {
+      "name": "register: command preserves exact transport work.cancel",
+      "pass": true
+    },
+    {
+      "name": "register: command preserves exact transport directive.set",
+      "pass": true
+    },
+    {
+      "name": "register: command preserves exact transport character.interact",
+      "pass": true
+    },
+    {
+      "name": "register: command preserves exact transport event.record",
+      "pass": true
+    },
+    {
+      "name": "register: command preserves exact transport activity.record",
+      "pass": true
+    },
+    {
+      "name": "register: command preserves exact transport arrival.ack",
+      "pass": true
+    },
+    {
+      "name": "register: command preserves exact transport checkpoint",
+      "pass": true
+    },
+    {
+      "name": "register: ten crew + stove rotation 0",
+      "pass": true
+    },
+    {
+      "name": "register: ten crew + stove rotation 1",
+      "pass": true
+    },
+    {
+      "name": "register: ten crew + stove rotation 2",
+      "pass": true
+    },
+    {
+      "name": "register: ten crew + stove rotation 3",
+      "pass": true
+    },
+    {
+      "name": "register: eleven crew rejected before transport",
+      "pass": true
+    },
+    {
+      "name": "register: ten crew requires capacity version2",
+      "pass": true
+    },
+    {
+      "name": "register: forged command type rejected before transport",
+      "pass": true
+    },
+    {
+      "name": "register: invalid data emitted no socket request",
+      "pass": true
+    },
+    {
+      "name": "register: stove purchase ID accepted",
+      "pass": true
+    },
+    {
+      "name": "register: actual sandboxed preload Life GET",
+      "pass": true
+    },
+    {
+      "name": "register: actual sandboxed preload Life command",
+      "pass": true
+    },
+    {
+      "name": "register: actual sandboxed preload ten-character room",
+      "pass": true
+    },
+    {
+      "name": "register: actual sandboxed preload stove purchase",
+      "pass": true
+    },
+    {
+      "name": "Node register rejects BOARD_ROOM_LIST",
+      "pass": true,
+      "detail": "desktop_required"
+    },
+    {
+      "name": "Node register rejects CHESS_ROOM_LIST",
+      "pass": true,
+      "detail": "desktop_required"
+    },
+    {
+      "name": "Node register rejects ROOM_LIST_GET",
+      "pass": true,
+      "detail": "desktop_required"
+    },
+    {
+      "name": "Node register rejects BOARD_GAME_STATE",
+      "pass": true,
+      "detail": "desktop_required"
+    },
+    {
+      "name": "Node register rejects CHESS_MOVE",
+      "pass": true,
+      "detail": "desktop_required"
+    },
+    {
+      "name": "Node register rejects ACTION",
+      "pass": true,
+      "detail": "desktop_required"
+    },
+    {
+      "name": "actual AuthService register in-memory restore",
+      "pass": true
+    },
+    {
+      "name": "actual AuthService register encrypted reload",
+      "pass": true,
+      "detail": {
+        "encryptionAvailable": true
+      }
+    },
+    {
+      "name": "Node websocket account request allowed",
+      "pass": true
+    },
+    {
+      "name": "Node websocket rejects BOARD_ROOM_LIST",
+      "pass": true
+    },
+    {
+      "name": "Node websocket rejects CHESS_ROOM_LIST",
+      "pass": true
+    },
+    {
+      "name": "Node websocket rejects ROOM_LIST_GET",
+      "pass": true
+    },
+    {
+      "name": "Node polling account request allowed",
+      "pass": true
+    },
+    {
+      "name": "Node polling rejects BOARD_ROOM_LIST",
+      "pass": true
+    },
+    {
+      "name": "Node polling rejects CHESS_ROOM_LIST",
+      "pass": true
+    },
+    {
+      "name": "Node polling rejects ROOM_LIST_GET",
+      "pass": true
+    },
+    {
+      "name": "Node game requests never reach handlers",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "ordinary HTTP denied /start.html",
+      "pass": true,
+      "detail": {
+        "status": 302,
+        "location": "/download"
+      }
+    },
+    {
+      "name": "ordinary HTTP denied /board_start.html?desktop=1",
+      "pass": true,
+      "detail": {
+        "status": 302,
+        "location": "/download"
+      }
+    },
+    {
+      "name": "ordinary HTTP denied /chess/index.html?desktop=1",
+      "pass": true,
+      "detail": {
+        "status": 302,
+        "location": "/download"
+      }
+    },
+    {
+      "name": "ordinary HTTP denied /js/board_game.js?desktop=1",
+      "pass": true,
+      "detail": {
+        "status": 403,
+        "location": null
+      }
+    },
+    {
+      "name": "encoded unknown media has no body /images/unknown%2Epng",
+      "pass": true,
+      "detail": {
+        "status": 404
+      }
+    },
+    {
+      "name": "encoded unknown media has no body /audio/%75nknown.ogg",
+      "pass": true,
+      "detail": {
+        "status": 404
+      }
+    },
+    {
+      "name": "encoded unknown media has no body /font%73/unknown.bin",
+      "pass": true,
+      "detail": {
+        "status": 404
+      }
+    },
+    {
+      "name": "encoded unknown media has no body /unknown%2Ewebp",
+      "pass": true,
+      "detail": {
+        "status": 404
+      }
+    },
+    {
+      "name": "encoded unknown media has no body /images/%5cunknown",
+      "pass": true,
+      "detail": {
+        "status": 400
+      }
+    },
+    {
+      "name": "encoded unknown media has no body /images/%00unknown",
+      "pass": true,
+      "detail": {
+        "status": 400
+      }
+    },
+    {
+      "name": "encoded unknown media has no body /images/%ZZ",
+      "pass": true,
+      "detail": {
+        "status": 400
+      }
+    },
+    {
+      "name": "ordinary HTTP retires previous service worker",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "handshakes": [
+    {
+      "fixture": true,
+      "transport": "websocket",
+      "userAgent": "",
+      "origin": "",
+      "fetchHeaders": []
+    },
+    {
+      "fixture": true,
+      "transport": "websocket",
+      "userAgent": "",
+      "origin": "",
+      "fetchHeaders": []
+    },
+    {
+      "fixture": true,
+      "transport": "websocket",
+      "userAgent": "",
+      "origin": "",
+      "fetchHeaders": []
+    },
+    {
+      "fixture": true,
+      "transport": "websocket",
+      "userAgent": "",
+      "origin": "",
+      "fetchHeaders": []
+    },
+    {
+      "fixture": true,
+      "transport": "websocket",
+      "userAgent": "",
+      "origin": "",
+      "fetchHeaders": []
+    },
+    {
+      "fixture": true,
+      "transport": "polling",
+      "userAgent": "node-XMLHttpRequest",
+      "origin": "",
+      "fetchHeaders": []
+    }
+  ],
+  "lifeTransport": {
+    "scope": "Real preload IPC -> fixture main handlers -> actual AuthService -> actual Socket.IO gate -> controlled echo endpoints; no database business-validation claim",
+    "packets": [
+      {
+        "event": "LAUNCHER_LIFE_GET",
+        "keys": []
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "work.reserve",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "work.activate",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "work.complete",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "work.cancel",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "directive.set",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "character.interact",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "event.record",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "activity.record",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "arrival.ack",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "checkpoint",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_ROOM_SET",
+        "keys": [
+          "capacityVersion",
+          "characters",
+          "placements",
+          "revision",
+          "sceneId"
+        ]
+      },
+      {
+        "event": "LAUNCHER_ROOM_SET",
+        "keys": [
+          "capacityVersion",
+          "characters",
+          "placements",
+          "revision",
+          "sceneId"
+        ]
+      },
+      {
+        "event": "LAUNCHER_ROOM_SET",
+        "keys": [
+          "capacityVersion",
+          "characters",
+          "placements",
+          "revision",
+          "sceneId"
+        ]
+      },
+      {
+        "event": "LAUNCHER_ROOM_SET",
+        "keys": [
+          "capacityVersion",
+          "characters",
+          "placements",
+          "revision",
+          "sceneId"
+        ]
+      },
+      {
+        "event": "LAUNCHER_SHOP_BUY",
+        "keys": [
+          "itemId"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_GET",
+        "keys": []
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "checkpoint",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_ROOM_SET",
+        "keys": [
+          "capacityVersion",
+          "characters",
+          "placements",
+          "revision",
+          "sceneId"
+        ]
+      },
+      {
+        "event": "LAUNCHER_SHOP_BUY",
+        "keys": [
+          "itemId"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_GET",
+        "keys": []
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "work.reserve",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "work.activate",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "work.complete",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "work.cancel",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "directive.set",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "character.interact",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "event.record",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "activity.record",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "arrival.ack",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "checkpoint",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_ROOM_SET",
+        "keys": [
+          "capacityVersion",
+          "characters",
+          "placements",
+          "revision",
+          "sceneId"
+        ]
+      },
+      {
+        "event": "LAUNCHER_ROOM_SET",
+        "keys": [
+          "capacityVersion",
+          "characters",
+          "placements",
+          "revision",
+          "sceneId"
+        ]
+      },
+      {
+        "event": "LAUNCHER_ROOM_SET",
+        "keys": [
+          "capacityVersion",
+          "characters",
+          "placements",
+          "revision",
+          "sceneId"
+        ]
+      },
+      {
+        "event": "LAUNCHER_ROOM_SET",
+        "keys": [
+          "capacityVersion",
+          "characters",
+          "placements",
+          "revision",
+          "sceneId"
+        ]
+      },
+      {
+        "event": "LAUNCHER_SHOP_BUY",
+        "keys": [
+          "itemId"
+        ]
+      },
+      {
+        "event": "LAUNCHER_LIFE_GET",
+        "keys": []
+      },
+      {
+        "event": "LAUNCHER_LIFE_COMMAND",
+        "type": "checkpoint",
+        "keys": [
+          "expectedRevision",
+          "payload",
+          "requestId",
+          "type"
+        ]
+      },
+      {
+        "event": "LAUNCHER_ROOM_SET",
+        "keys": [
+          "capacityVersion",
+          "characters",
+          "placements",
+          "revision",
+          "sceneId"
+        ]
+      },
+      {
+        "event": "LAUNCHER_SHOP_BUY",
+        "keys": [
+          "itemId"
+        ]
+      }
+    ]
+  },
+  "finishedAt": "2026-09-27T04:23:11.520Z",
+  "passed": 90,
+  "failed": 0,
+  "ok": true
+}

@@ -1,0 +1,226 @@
+{
+  "schema": "launcher-life-art-review/1",
+  "reviewType": "Codex source and composited atlas visual inspection plus deterministic alpha/shape checks; no in-room playback acceptance claimed",
+  "generator": "image_gen.imagegen",
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "runtimeAccepted": false,
+  "review": "BF-37 cyborg intact, red briefs and mechanical knees retained. Right mechanical hand turns small screwdriver on panel supported in left; plausible arm connections and stable feet in4 directions; no head/limb assembly.",
+  "noMirroring": true,
+  "noBodyPartAssembly": true,
+  "originalRetained": true,
+  "clips": [
+    {
+      "id": "craft",
+      "direction": "east",
+      "asset": "public/images/launcher_room/life_v1/franky/craft-east.webp",
+      "sha256": "d74f4abaac34153d42fe2efc8fbd2c786160ce0c9e8e76feedb6a38b52628ddd",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          37,
+          11,
+          104,
+          112
+        ],
+        [
+          38,
+          11,
+          106,
+          112
+        ],
+        [
+          38,
+          11,
+          106,
+          112
+        ],
+        [
+          38,
+          11,
+          105,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        4210,
+        4103,
+        4161,
+        4118
+      ],
+      "singleIsotropicScale": 0.33222591,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "craft",
+      "direction": "west",
+      "asset": "public/images/launcher_room/life_v1/franky/craft-west.webp",
+      "sha256": "febfb0a62d5e026d5e2b066542b3bf2ec3337273ed28e5e0c05ec22f6af3eccb",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          23,
+          11,
+          90,
+          112
+        ],
+        [
+          23,
+          11,
+          91,
+          112
+        ],
+        [
+          22,
+          11,
+          90,
+          112
+        ],
+        [
+          23,
+          11,
+          90,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        4009,
+        4166,
+        4166,
+        4075
+      ],
+      "singleIsotropicScale": 0.33222591,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "craft",
+      "direction": "north",
+      "asset": "public/images/launcher_room/life_v1/franky/craft-north.webp",
+      "sha256": "1128516cbe5326f12771eef2520cf794b2bb0f394f24dbfc3414ce71da5028cf",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          15,
+          11,
+          114,
+          112
+        ],
+        [
+          16,
+          11,
+          113,
+          112
+        ],
+        [
+          16,
+          11,
+          112,
+          112
+        ],
+        [
+          16,
+          11,
+          113,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        6116,
+        5891,
+        5934,
+        6151
+      ],
+      "singleIsotropicScale": 0.36363636,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    },
+    {
+      "id": "craft",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/franky/craft-south.webp",
+      "sha256": "4878db4ce1963d2871152b3926b1308977f1f49cc20e7269ba8b7f68d84f7c56",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "shape": [
+        512,
+        128
+      ],
+      "root": [
+        64,
+        112
+      ],
+      "frameAlphaBounds": [
+        [
+          18,
+          11,
+          111,
+          112
+        ],
+        [
+          18,
+          11,
+          111,
+          112
+        ],
+        [
+          17,
+          11,
+          110,
+          112
+        ],
+        [
+          18,
+          11,
+          111,
+          112
+        ]
+      ],
+      "adjacentDifferentPixels": [
+        5989,
+        6016,
+        6018,
+        5972
+      ],
+      "singleIsotropicScale": 0.35714286,
+      "fullBodyFrames": 4,
+      "sourceVisualAccepted": true,
+      "atlasVisualAccepted": true,
+      "runtimeAccepted": false
+    }
+  ]
+}

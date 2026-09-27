@@ -1,0 +1,185 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:/Users/王曜瑋/.codex/generated_images/01a0e0d1-a4bf-73f3-af41-6763cfefe2b5/exec-b9ae5a4a-5e4e-49c4-b876-4bc697a8d9d6.png",
+  "references": [
+    "tools/launcher-room/fullbody-v3/sources/nami-actions-source-01/image.png"
+  ],
+  "prompt": "tools/launcher-room/life-v1/nami-read/prompt.txt",
+  "sourceSha256": "de182273c8f0d2c3fc68852a1ddbea7bd83958a9100cdb5041c311bdaf7f7697",
+  "sourcePixels": [
+    1254,
+    1254
+  ],
+  "trueAlpha": true,
+  "packing": "Whole-body crop and root translation only, one uniform scale per four-frame loop. Main bounds measured at alpha32 and padded within row/cell bounds; original alpha is retained. No limb assembly, mirror, rotation or warp. Feet root is derived from ground pixels.",
+  "sourceAccepted": true,
+  "contactAccepted": true,
+  "runtimeAccepted": false,
+  "sourceReview": "Sixteen coherent complete full-body drawings reviewed. Short orange hair, blue-striped white shirt, orange skirt with three circles on anatomical right, brown boots and no invented forearm tattoo preserved. Unequal source column boundaries individually corrected after a contact sheet exposed stray neighboring book fragments; final crop contains each full book/figure only. True alpha; no baked furniture or opaque reference backdrop.",
+  "actualSizeReview": "Final 128px contact sheet reviewed: approximately100px figures, intact hair/feet/book and no neighboring fragments or detached body parts. Four successive frames show flat spread, lifting page, curved page across spine, and smoothing/recovery. Feet remain rooted, head and torso face same direction. No per-frame scale changes or body-part assembly. Static source/contact acceptance only; runtime playback pending.",
+  "contactSheet": "tools/launcher-room/life-v1/nami-read/contact-128.png",
+  "contactSha256": "77554a48a16867e49ef13822f35c368f825fa50cdaa4d826d99929e275d02596",
+  "numericQa": {
+    "passed": true,
+    "checks": [
+      {
+        "asset": "public/images/launcher_room/life_v1/nami/read-east.webp",
+        "sha256": "fa917d27aed82496ba08d0b95d4755dba2c543d6f1ab401ce030e1d9d76d40aa",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            51,
+            12,
+            104,
+            112
+          ],
+          [
+            55,
+            12,
+            108,
+            112
+          ],
+          [
+            54,
+            12,
+            108,
+            112
+          ],
+          [
+            54,
+            12,
+            107,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/nami/read-west.webp",
+        "sha256": "7b980d132acee891c9a2fc90b0f2496a1e9d661d894564f5607941e450c9b326",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            27,
+            12,
+            79,
+            112
+          ],
+          [
+            26,
+            12,
+            78,
+            112
+          ],
+          [
+            26,
+            12,
+            78,
+            112
+          ],
+          [
+            27,
+            12,
+            77,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/nami/read-north.webp",
+        "sha256": "9901559142f4d2a7ee69be6ba51bc13fd4a6a4c562f2a7993c2d0c5cb10324aa",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            40,
+            12,
+            85,
+            112
+          ],
+          [
+            40,
+            12,
+            89,
+            112
+          ],
+          [
+            39,
+            12,
+            89,
+            112
+          ],
+          [
+            40,
+            12,
+            89,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/nami/read-south.webp",
+        "sha256": "9cbdf0a968ab2064be92252ef79059315d0f717d83895e8026a652796cb86dce",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            38,
+            12,
+            90,
+            112
+          ],
+          [
+            40,
+            12,
+            91,
+            112
+          ],
+          [
+            39,
+            12,
+            92,
+            112
+          ],
+          [
+            39,
+            12,
+            91,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      }
+    ],
+    "scope": "Atlas dimensions, alpha bounds and four distinct frames; not runtime acceptance."
+  }
+}

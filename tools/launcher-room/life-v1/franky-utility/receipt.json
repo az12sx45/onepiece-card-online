@@ -1,0 +1,16 @@
+{
+  "generator": "image_gen.imagegen",
+  "generatedFile": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030\\exec-f3809c58-b5cb-456e-a115-906a89c9b0f8.png",
+  "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+  "references": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/sources/franky-actions-source-01/ancestry/00-turnaround-01.png",
+      "sha256": "7b5d5dbce22dbdd5d954fd729779de50b63bb06cbc6bcaa311a7468dd9470702"
+    }
+  ],
+  "sourceReview": "Accepted BF-37 body retained, red briefs never missing, large blue mechanical arms stay attached. Eating/relaxing/side sleeping/low shoulder-joint warmup. One utility physical scale avoids giant floor poses; eating standing height around91px versus tallest train100px is flagged for root runtime check.",
+  "runtimeAccepted": false,
+  "sourceVisualAccepted": true,
+  "atlasVisualAccepted": true,
+  "promptSha256": "73a8a192a7fd8c48e88344e841f4e287fb2f353cf7032bf4aa993601076d5b76"
+}

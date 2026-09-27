@@ -1,0 +1,597 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "craft",
+      "key": "franky",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "scale": 0.27574751,
+      "scaleReason": "Entire loop uniformly multiplied by0.83 to match approved83px model under unchanged shared displayScale; no anatomy warp, no seated/lying enlargement.",
+      "regions": [
+        [
+          93,
+          13,
+          295,
+          318
+        ],
+        [
+          402,
+          14,
+          606,
+          318
+        ],
+        [
+          706,
+          14,
+          911,
+          318
+        ],
+        [
+          1007,
+          13,
+          1209,
+          318
+        ]
+      ],
+      "roots": [
+        [
+          173.0,
+          316
+        ],
+        [
+          481.0,
+          316
+        ],
+        [
+          783.5,
+          316
+        ],
+        [
+          1086.5,
+          316
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/craft-east.webp",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "assetSha256": "4e6ddd7ed07663b1d870444f1b320d6ad3638296f874492d5ef07305407c543d",
+      "frames": [
+        {
+          "sourceRegion": [
+            93,
+            13,
+            295,
+            318
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            202,
+            305
+          ],
+          "outputBounds": [
+            42,
+            28,
+            56,
+            84
+          ]
+        },
+        {
+          "sourceRegion": [
+            402,
+            14,
+            606,
+            318
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            204,
+            304
+          ],
+          "outputBounds": [
+            42,
+            28,
+            56,
+            84
+          ]
+        },
+        {
+          "sourceRegion": [
+            706,
+            14,
+            911,
+            318
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            205,
+            304
+          ],
+          "outputBounds": [
+            43,
+            28,
+            57,
+            84
+          ]
+        },
+        {
+          "sourceRegion": [
+            1007,
+            13,
+            1209,
+            318
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            202,
+            305
+          ],
+          "outputBounds": [
+            42,
+            28,
+            56,
+            84
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "craft",
+      "key": "franky",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "scale": 0.27574751,
+      "scaleReason": "Entire loop uniformly multiplied by0.83 to match approved83px model under unchanged shared displayScale; no anatomy warp, no seated/lying enlargement.",
+      "regions": [
+        [
+          47,
+          335,
+          250,
+          640
+        ],
+        [
+          355,
+          335,
+          560,
+          640
+        ],
+        [
+          664,
+          335,
+          868,
+          640
+        ],
+        [
+          980,
+          336,
+          1181,
+          640
+        ]
+      ],
+      "roots": [
+        [
+          170.5,
+          638
+        ],
+        [
+          477.5,
+          638
+        ],
+        [
+          789.5,
+          638
+        ],
+        [
+          1103.0,
+          638
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/craft-west.webp",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "assetSha256": "7672a6f66571616461c7fb419713c9be88a0d47abc8b8f540f0770d0f90f0c6b",
+      "frames": [
+        {
+          "sourceRegion": [
+            47,
+            335,
+            250,
+            640
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            203,
+            305
+          ],
+          "outputBounds": [
+            30,
+            28,
+            56,
+            84
+          ]
+        },
+        {
+          "sourceRegion": [
+            355,
+            335,
+            560,
+            640
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            205,
+            305
+          ],
+          "outputBounds": [
+            30,
+            28,
+            57,
+            84
+          ]
+        },
+        {
+          "sourceRegion": [
+            664,
+            335,
+            868,
+            640
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            204,
+            305
+          ],
+          "outputBounds": [
+            29,
+            28,
+            56,
+            84
+          ]
+        },
+        {
+          "sourceRegion": [
+            980,
+            336,
+            1181,
+            640
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            201,
+            304
+          ],
+          "outputBounds": [
+            30,
+            28,
+            55,
+            84
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "craft",
+      "key": "franky",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "scale": 0.30181818,
+      "scaleReason": "Entire loop uniformly multiplied by0.83 to match approved83px model under unchanged shared displayScale; no anatomy warp, no seated/lying enlargement.",
+      "regions": [
+        [
+          32,
+          651,
+          303,
+          930
+        ],
+        [
+          346,
+          651,
+          613,
+          930
+        ],
+        [
+          651,
+          651,
+          916,
+          930
+        ],
+        [
+          957,
+          651,
+          1225,
+          930
+        ]
+      ],
+      "roots": [
+        [
+          166.5,
+          928
+        ],
+        [
+          479.0,
+          928
+        ],
+        [
+          784.0,
+          928
+        ],
+        [
+          1089.5,
+          928
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/craft-north.webp",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "assetSha256": "7ca91a740ed7b8e2ab03ef191ba3b7ef4d566ca9848ea1db79ec83185c38f9da",
+      "frames": [
+        {
+          "sourceRegion": [
+            32,
+            651,
+            303,
+            930
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            271,
+            279
+          ],
+          "outputBounds": [
+            23,
+            28,
+            82,
+            84
+          ]
+        },
+        {
+          "sourceRegion": [
+            346,
+            651,
+            613,
+            930
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            267,
+            279
+          ],
+          "outputBounds": [
+            24,
+            28,
+            81,
+            84
+          ]
+        },
+        {
+          "sourceRegion": [
+            651,
+            651,
+            916,
+            930
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            265,
+            279
+          ],
+          "outputBounds": [
+            24,
+            28,
+            80,
+            84
+          ]
+        },
+        {
+          "sourceRegion": [
+            957,
+            651,
+            1225,
+            930
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            268,
+            279
+          ],
+          "outputBounds": [
+            24,
+            28,
+            81,
+            84
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "craft",
+      "key": "franky",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "scale": 0.29642857,
+      "scaleReason": "Entire loop uniformly multiplied by0.83 to match approved83px model under unchanged shared displayScale; no anatomy warp, no seated/lying enlargement.",
+      "regions": [
+        [
+          37,
+          937,
+          296,
+          1221
+        ],
+        [
+          350,
+          937,
+          611,
+          1221
+        ],
+        [
+          655,
+          937,
+          915,
+          1221
+        ],
+        [
+          962,
+          937,
+          1222,
+          1221
+        ]
+      ],
+      "roots": [
+        [
+          165.0,
+          1219
+        ],
+        [
+          480.0,
+          1219
+        ],
+        [
+          786.5,
+          1219
+        ],
+        [
+          1092.0,
+          1219
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/craft-south.webp",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "assetSha256": "3166e0431b44eca3bd165f1a5926617489f6007ca9ed0750b43461d467c25f5f",
+      "frames": [
+        {
+          "sourceRegion": [
+            37,
+            937,
+            296,
+            1221
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            259,
+            284
+          ],
+          "outputBounds": [
+            26,
+            28,
+            77,
+            84
+          ]
+        },
+        {
+          "sourceRegion": [
+            350,
+            937,
+            611,
+            1221
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            261,
+            284
+          ],
+          "outputBounds": [
+            25,
+            28,
+            77,
+            84
+          ]
+        },
+        {
+          "sourceRegion": [
+            655,
+            937,
+            915,
+            1221
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            260,
+            284
+          ],
+          "outputBounds": [
+            25,
+            28,
+            77,
+            84
+          ]
+        },
+        {
+          "sourceRegion": [
+            962,
+            937,
+            1222,
+            1221
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            260,
+            284
+          ],
+          "outputBounds": [
+            25,
+            28,
+            77,
+            84
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

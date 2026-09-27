@@ -1,0 +1,593 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "jinbe-eat-south",
+      "key": "jinbe",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/jinbe-utility/source-alpha-clean.png",
+      "asset": "public/images/launcher_room/life_v1/jinbe/eat-south.webp",
+      "regions": [
+        [
+          0,
+          0,
+          384,
+          279
+        ],
+        [
+          384,
+          0,
+          768,
+          279
+        ],
+        [
+          768,
+          0,
+          1152,
+          279
+        ],
+        [
+          1152,
+          0,
+          1536,
+          279
+        ]
+      ],
+      "roots": [
+        [
+          207.0,
+          274
+        ],
+        [
+          570.5,
+          274
+        ],
+        [
+          959.5,
+          274
+        ],
+        [
+          1327.0,
+          274
+        ]
+      ],
+      "scale": 0.3565,
+      "sourceSha256": "6f5f9d3915618a91f2e3cedbe055b0e6cc367588c4845bc567f08fe20e6ad6eb",
+      "assetSha256": "ad4bf08ddf882cf0db1c909c6b10df85b9abd01285d9ac32196d138293f52b07",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            0,
+            384,
+            279
+          ],
+          "alphaBounds": [
+            67,
+            4,
+            348,
+            275
+          ],
+          "outputBounds": [
+            14,
+            15,
+            100,
+            97
+          ]
+        },
+        {
+          "sourceRegion": [
+            384,
+            0,
+            768,
+            279
+          ],
+          "alphaBounds": [
+            47,
+            4,
+            326,
+            275
+          ],
+          "outputBounds": [
+            14,
+            15,
+            99,
+            97
+          ]
+        },
+        {
+          "sourceRegion": [
+            768,
+            0,
+            1152,
+            279
+          ],
+          "alphaBounds": [
+            50,
+            4,
+            332,
+            275
+          ],
+          "outputBounds": [
+            14,
+            15,
+            101,
+            97
+          ]
+        },
+        {
+          "sourceRegion": [
+            1152,
+            0,
+            1536,
+            279
+          ],
+          "alphaBounds": [
+            33,
+            4,
+            317,
+            275
+          ],
+          "outputBounds": [
+            13,
+            15,
+            101,
+            97
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "jinbe-rest-south",
+      "key": "jinbe",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/jinbe-utility/source-alpha-clean.png",
+      "asset": "public/images/launcher_room/life_v1/jinbe/rest-south.webp",
+      "regions": [
+        [
+          0,
+          279,
+          384,
+          535
+        ],
+        [
+          384,
+          279,
+          768,
+          535
+        ],
+        [
+          768,
+          279,
+          1152,
+          535
+        ],
+        [
+          1152,
+          279,
+          1536,
+          535
+        ]
+      ],
+      "roots": [
+        [
+          205.0,
+          525
+        ],
+        [
+          573.5,
+          525
+        ],
+        [
+          957.0,
+          523
+        ],
+        [
+          1330.5,
+          525
+        ]
+      ],
+      "scale": 0.31,
+      "sourceSha256": "6f5f9d3915618a91f2e3cedbe055b0e6cc367588c4845bc567f08fe20e6ad6eb",
+      "assetSha256": "cf3b387a1522bdd3135fe6070910f04d42a0fe9cca6a92a643bb8f65b543eca5",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            279,
+            384,
+            535
+          ],
+          "alphaBounds": [
+            30,
+            3,
+            379,
+            248
+          ],
+          "outputBounds": [
+            10,
+            36,
+            108,
+            76
+          ]
+        },
+        {
+          "sourceRegion": [
+            384,
+            279,
+            768,
+            535
+          ],
+          "alphaBounds": [
+            16,
+            3,
+            363,
+            248
+          ],
+          "outputBounds": [
+            10,
+            36,
+            108,
+            76
+          ]
+        },
+        {
+          "sourceRegion": [
+            768,
+            279,
+            1152,
+            535
+          ],
+          "alphaBounds": [
+            13,
+            6,
+            366,
+            247
+          ],
+          "outputBounds": [
+            9,
+            37,
+            109,
+            75
+          ]
+        },
+        {
+          "sourceRegion": [
+            1152,
+            279,
+            1536,
+            535
+          ],
+          "alphaBounds": [
+            4,
+            2,
+            353,
+            248
+          ],
+          "outputBounds": [
+            10,
+            36,
+            108,
+            76
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "jinbe-sleep-south",
+      "key": "jinbe",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/jinbe-utility/source-alpha-clean.png",
+      "asset": "public/images/launcher_room/life_v1/jinbe/sleep-south.webp",
+      "regions": [
+        [
+          0,
+          535,
+          384,
+          694
+        ],
+        [
+          384,
+          535,
+          768,
+          694
+        ],
+        [
+          768,
+          535,
+          1152,
+          694
+        ],
+        [
+          1152,
+          535,
+          1536,
+          694
+        ]
+      ],
+      "roots": [
+        [
+          202.0,
+          689
+        ],
+        [
+          584.0,
+          689
+        ],
+        [
+          958.5,
+          689
+        ],
+        [
+          1332.0,
+          691
+        ]
+      ],
+      "scale": 0.31,
+      "sourceSha256": "6f5f9d3915618a91f2e3cedbe055b0e6cc367588c4845bc567f08fe20e6ad6eb",
+      "assetSha256": "4bb7bc561547d9eaf86a3832ea4d6caea09327b1cf7cec34a0f5a0df8a67026e",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            535,
+            384,
+            694
+          ],
+          "alphaBounds": [
+            30,
+            16,
+            375,
+            155
+          ],
+          "outputBounds": [
+            11,
+            69,
+            107,
+            43
+          ]
+        },
+        {
+          "sourceRegion": [
+            384,
+            535,
+            768,
+            694
+          ],
+          "alphaBounds": [
+            31,
+            16,
+            368,
+            154
+          ],
+          "outputBounds": [
+            12,
+            69,
+            104,
+            43
+          ]
+        },
+        {
+          "sourceRegion": [
+            768,
+            535,
+            1152,
+            694
+          ],
+          "alphaBounds": [
+            24,
+            10,
+            358,
+            155
+          ],
+          "outputBounds": [
+            12,
+            67,
+            104,
+            45
+          ]
+        },
+        {
+          "sourceRegion": [
+            1152,
+            535,
+            1536,
+            694
+          ],
+          "alphaBounds": [
+            13,
+            16,
+            347,
+            157
+          ],
+          "outputBounds": [
+            12,
+            68,
+            104,
+            44
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "jinbe-train-south",
+      "key": "jinbe",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/jinbe-utility/source-alpha-clean.png",
+      "asset": "public/images/launcher_room/life_v1/jinbe/train-south.webp",
+      "regions": [
+        [
+          0,
+          694,
+          384,
+          1024
+        ],
+        [
+          384,
+          694,
+          768,
+          1024
+        ],
+        [
+          768,
+          694,
+          1152,
+          1024
+        ],
+        [
+          1152,
+          694,
+          1536,
+          1024
+        ]
+      ],
+      "roots": [
+        [
+          199.5,
+          999
+        ],
+        [
+          567.5,
+          999
+        ],
+        [
+          959.0,
+          999
+        ],
+        [
+          1335.5,
+          999
+        ]
+      ],
+      "scale": 0.31,
+      "sourceSha256": "6f5f9d3915618a91f2e3cedbe055b0e6cc367588c4845bc567f08fe20e6ad6eb",
+      "assetSha256": "63278414fc5dfcee0be85069fc5e448f504a5412dc1f2de9c47255ed76972ca6",
+      "frames": [
+        {
+          "sourceRegion": [
+            0,
+            694,
+            384,
+            1024
+          ],
+          "alphaBounds": [
+            53,
+            2,
+            349,
+            306
+          ],
+          "outputBounds": [
+            19,
+            18,
+            92,
+            94
+          ]
+        },
+        {
+          "sourceRegion": [
+            384,
+            694,
+            768,
+            1024
+          ],
+          "alphaBounds": [
+            34,
+            2,
+            335,
+            306
+          ],
+          "outputBounds": [
+            18,
+            18,
+            93,
+            94
+          ]
+        },
+        {
+          "sourceRegion": [
+            768,
+            694,
+            1152,
+            1024
+          ],
+          "alphaBounds": [
+            42,
+            2,
+            334,
+            306
+          ],
+          "outputBounds": [
+            18,
+            18,
+            91,
+            94
+          ]
+        },
+        {
+          "sourceRegion": [
+            1152,
+            694,
+            1536,
+            1024
+          ],
+          "alphaBounds": [
+            33,
+            4,
+            333,
+            306
+          ],
+          "outputBounds": [
+            17,
+            18,
+            93,
+            94
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

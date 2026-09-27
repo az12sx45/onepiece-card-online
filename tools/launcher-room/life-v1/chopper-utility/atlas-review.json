@@ -1,0 +1,570 @@
+{
+  "key": "chopper",
+  "status": "SOURCE_AND_128PX_CONTACT_REVIEW_PASSED_RUNTIME_PENDING",
+  "clips": [
+    {
+      "id": "eat",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/chopper/eat-south.webp",
+      "sha256": "f4c19f95f5a74b8a1d4a369870ee86859de8129f1de524635feac4091063f528",
+      "frameBounds": [
+        [
+          23,
+          14,
+          105,
+          112
+        ],
+        [
+          23,
+          14,
+          105,
+          112
+        ],
+        [
+          23,
+          14,
+          105,
+          112
+        ],
+        [
+          23,
+          14,
+          105,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.3310810810810811,
+      "visualAcceptance": true
+    },
+    {
+      "id": "rest",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/chopper/rest-south.webp",
+      "sha256": "9ec4fbf0afe69e4b5dc3f8c4c9caeb7e451cf989810312291702561548018b13",
+      "frameBounds": [
+        [
+          23,
+          21,
+          106,
+          112
+        ],
+        [
+          23,
+          20,
+          106,
+          112
+        ],
+        [
+          22,
+          21,
+          105,
+          112
+        ],
+        [
+          23,
+          21,
+          106,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.3310810810810811,
+      "visualAcceptance": true
+    },
+    {
+      "id": "sleep",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/chopper/sleep-south.webp",
+      "sha256": "d748fb856e1f1618b7b88bf4f23d9e8a9e311f2ecb8b4733f67c9d7c340dfd77",
+      "frameBounds": [
+        [
+          18,
+          41,
+          109,
+          112
+        ],
+        [
+          18,
+          41,
+          109,
+          112
+        ],
+        [
+          18,
+          41,
+          109,
+          112
+        ],
+        [
+          18,
+          41,
+          109,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.3310810810810811,
+      "visualAcceptance": true
+    },
+    {
+      "id": "train",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/chopper/train-south.webp",
+      "sha256": "f5ab4a81d43e9b0a66cb74c416f7cb32fc88d139cc3e6ff118dc0362bf07b281",
+      "frameBounds": [
+        [
+          23,
+          14,
+          105,
+          112
+        ],
+        [
+          23,
+          15,
+          105,
+          112
+        ],
+        [
+          23,
+          20,
+          106,
+          112
+        ],
+        [
+          23,
+          14,
+          105,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.3310810810810811,
+      "visualAcceptance": true
+    },
+    {
+      "id": "work",
+      "direction": "east",
+      "asset": "public/images/launcher_room/life_v1/chopper/work-east.webp",
+      "sha256": "fa15c0385f2ef377caa11751f9cb3510084ab1bd22863d083162d38b5e3b4207",
+      "frameBounds": [
+        [
+          33,
+          14,
+          106,
+          112
+        ],
+        [
+          33,
+          14,
+          107,
+          112
+        ],
+        [
+          33,
+          14,
+          104,
+          112
+        ],
+        [
+          33,
+          14,
+          104,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.23671497584541062,
+      "visualAcceptance": true
+    },
+    {
+      "id": "work",
+      "direction": "west",
+      "asset": "public/images/launcher_room/life_v1/chopper/work-west.webp",
+      "sha256": "ce2dd18df7ba814d6ccb363ded045166174bc1d344832c85d62d6e9795162e0a",
+      "frameBounds": [
+        [
+          25,
+          16,
+          97,
+          112
+        ],
+        [
+          20,
+          14,
+          93,
+          110
+        ],
+        [
+          27,
+          14,
+          97,
+          112
+        ],
+        [
+          22,
+          14,
+          93,
+          110
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.3181818181818182,
+      "visualAcceptance": true
+    },
+    {
+      "id": "work",
+      "direction": "north",
+      "asset": "public/images/launcher_room/life_v1/chopper/work-north.webp",
+      "sha256": "79581219d89c9369b03507a6454e2e4616c0dbd30aa042d6b1e56cc0b7369bcb",
+      "frameBounds": [
+        [
+          26,
+          18,
+          100,
+          112
+        ],
+        [
+          28,
+          14,
+          102,
+          112
+        ],
+        [
+          26,
+          14,
+          100,
+          112
+        ],
+        [
+          26,
+          14,
+          100,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.33220338983050846,
+      "visualAcceptance": true
+    },
+    {
+      "id": "work",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/chopper/work-south.webp",
+      "sha256": "14dc19fa6b5a592dd93b4575dab650103d32592e255e3565ca6d3c431664facb",
+      "frameBounds": [
+        [
+          27,
+          15,
+          102,
+          112
+        ],
+        [
+          27,
+          14,
+          102,
+          112
+        ],
+        [
+          27,
+          14,
+          101,
+          112
+        ],
+        [
+          27,
+          14,
+          102,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.31715210355987056,
+      "visualAcceptance": true
+    },
+    {
+      "id": "read",
+      "direction": "east",
+      "asset": "public/images/launcher_room/life_v1/chopper/read-east.webp",
+      "sha256": "e5aeacd7e08d694a88fd63333f43bad6d07749822eaa462613972ab06815e913",
+      "frameBounds": [
+        [
+          34,
+          14,
+          108,
+          112
+        ],
+        [
+          33,
+          14,
+          109,
+          112
+        ],
+        [
+          33,
+          14,
+          110,
+          112
+        ],
+        [
+          34,
+          14,
+          106,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.22632794457274827,
+      "visualAcceptance": true
+    },
+    {
+      "id": "read",
+      "direction": "west",
+      "asset": "public/images/launcher_room/life_v1/chopper/read-west.webp",
+      "sha256": "e2155555358a21a743210f4be1c4ab55bc04518ee547cc6670f4b15f072e7e3f",
+      "frameBounds": [
+        [
+          30,
+          14,
+          99,
+          112
+        ],
+        [
+          30,
+          14,
+          99,
+          112
+        ],
+        [
+          30,
+          14,
+          99,
+          112
+        ],
+        [
+          30,
+          14,
+          99,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.3277591973244147,
+      "visualAcceptance": true
+    },
+    {
+      "id": "read",
+      "direction": "north",
+      "asset": "public/images/launcher_room/life_v1/chopper/read-north.webp",
+      "sha256": "daed41aa23006e33f4b8909790a0b9e74b95dfdbd8390ca93eeb4ba2470ce8cf",
+      "frameBounds": [
+        [
+          25,
+          14,
+          103,
+          112
+        ],
+        [
+          26,
+          14,
+          104,
+          112
+        ],
+        [
+          26,
+          14,
+          104,
+          112
+        ],
+        [
+          26,
+          14,
+          104,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.3356164383561644,
+      "visualAcceptance": true
+    },
+    {
+      "id": "read",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/chopper/read-south.webp",
+      "sha256": "a1af9a36be11880d7eabf02a17c6a202808109bc4e925a487a800e92fc43937d",
+      "frameBounds": [
+        [
+          25,
+          14,
+          104,
+          112
+        ],
+        [
+          24,
+          14,
+          103,
+          112
+        ],
+        [
+          25,
+          14,
+          104,
+          112
+        ],
+        [
+          24,
+          14,
+          103,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.3234323432343234,
+      "visualAcceptance": true
+    },
+    {
+      "id": "medicine",
+      "direction": "east",
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-east.webp",
+      "sha256": "2a8ceb580c17e78d3305365f0f30bdc23e29dce1497441ca4a7a283dafc8a9f3",
+      "frameBounds": [
+        [
+          33,
+          14,
+          98,
+          112
+        ],
+        [
+          30,
+          14,
+          96,
+          112
+        ],
+        [
+          32,
+          14,
+          98,
+          112
+        ],
+        [
+          30,
+          14,
+          96,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.3161290322580645,
+      "visualAcceptance": true
+    },
+    {
+      "id": "medicine",
+      "direction": "west",
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-west.webp",
+      "sha256": "81eb6854a72efd9396498b08199a5bb3a481fba95c54d1d184eb45c420ae2324",
+      "frameBounds": [
+        [
+          32,
+          14,
+          101,
+          112
+        ],
+        [
+          32,
+          14,
+          101,
+          112
+        ],
+        [
+          32,
+          14,
+          101,
+          112
+        ],
+        [
+          32,
+          14,
+          101,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.32450331125827814,
+      "visualAcceptance": true
+    },
+    {
+      "id": "medicine",
+      "direction": "north",
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-north.webp",
+      "sha256": "f3fbe8d99359768925cfbb8aa401eb136e65d1084f310e1df3abe31436e24022",
+      "frameBounds": [
+        [
+          23,
+          14,
+          105,
+          112
+        ],
+        [
+          24,
+          14,
+          105,
+          112
+        ],
+        [
+          24,
+          14,
+          106,
+          112
+        ],
+        [
+          23,
+          14,
+          104,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.35766423357664234,
+      "visualAcceptance": true
+    },
+    {
+      "id": "medicine",
+      "direction": "south",
+      "asset": "public/images/launcher_room/life_v1/chopper/medicine-south.webp",
+      "sha256": "0b841d4f1f2ff8996077ca93df39aefe92bdc04b57b4669d28ed935ae7576e28",
+      "frameBounds": [
+        [
+          24,
+          14,
+          105,
+          112
+        ],
+        [
+          25,
+          15,
+          105,
+          112
+        ],
+        [
+          24,
+          14,
+          105,
+          112
+        ],
+        [
+          23,
+          14,
+          104,
+          112
+        ]
+      ],
+      "distinctFrames": 4,
+      "scale": 0.32558139534883723,
+      "visualAcceptance": true
+    }
+  ],
+  "runtimeAccepted": false,
+  "sourceVisualReview": true,
+  "contact128VisualReview": true,
+  "scope": "Complete-figure source and actual128px contact inspection; browser room playback must be checked by integration owner"
+}

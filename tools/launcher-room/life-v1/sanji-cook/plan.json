@@ -1,0 +1,212 @@
+{
+  "clips": [
+    {
+      "id": "sanji-cook-east",
+      "key": "sanji",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/sanji-cook/source.png",
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-east.webp",
+      "regions": [
+        [
+          0,
+          0,
+          305,
+          318
+        ],
+        [
+          305,
+          0,
+          610,
+          318
+        ],
+        [
+          610,
+          0,
+          916,
+          318
+        ],
+        [
+          916,
+          0,
+          1222,
+          318
+        ]
+      ],
+      "roots": [
+        [
+          160.0,
+          316
+        ],
+        [
+          458.0,
+          316
+        ],
+        [
+          741.5,
+          316
+        ],
+        [
+          1034.0,
+          316
+        ]
+      ],
+      "scale": 0.313
+    },
+    {
+      "id": "sanji-cook-west",
+      "key": "sanji",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/sanji-cook/source.png",
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-west.webp",
+      "regions": [
+        [
+          0,
+          318,
+          305,
+          637
+        ],
+        [
+          305,
+          318,
+          610,
+          637
+        ],
+        [
+          610,
+          318,
+          916,
+          637
+        ],
+        [
+          916,
+          318,
+          1222,
+          637
+        ]
+      ],
+      "roots": [
+        [
+          184.5,
+          634
+        ],
+        [
+          478.0,
+          634
+        ],
+        [
+          766.0,
+          634
+        ],
+        [
+          1059.5,
+          634
+        ]
+      ],
+      "scale": 0.313
+    },
+    {
+      "id": "sanji-cook-north",
+      "key": "sanji",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/sanji-cook/source.png",
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-north.webp",
+      "regions": [
+        [
+          0,
+          637,
+          305,
+          950
+        ],
+        [
+          305,
+          637,
+          610,
+          950
+        ],
+        [
+          610,
+          637,
+          916,
+          950
+        ],
+        [
+          916,
+          637,
+          1222,
+          950
+        ]
+      ],
+      "roots": [
+        [
+          172.0,
+          948
+        ],
+        [
+          465.5,
+          948
+        ],
+        [
+          753.5,
+          948
+        ],
+        [
+          1045.5,
+          948
+        ]
+      ],
+      "scale": 0.313
+    },
+    {
+      "id": "sanji-cook-south",
+      "key": "sanji",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/sanji-cook/source.png",
+      "asset": "public/images/launcher_room/life_v1/sanji/cook-south.webp",
+      "regions": [
+        [
+          0,
+          950,
+          305,
+          1287
+        ],
+        [
+          305,
+          950,
+          610,
+          1287
+        ],
+        [
+          610,
+          950,
+          916,
+          1287
+        ],
+        [
+          916,
+          950,
+          1222,
+          1287
+        ]
+      ],
+      "roots": [
+        [
+          173.0,
+          1264
+        ],
+        [
+          465.5,
+          1264
+        ],
+        [
+          755.0,
+          1264
+        ],
+        [
+          1049.0,
+          1264
+        ]
+      ],
+      "scale": 0.313
+    }
+  ]
+}

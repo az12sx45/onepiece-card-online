@@ -1,0 +1,216 @@
+{
+  "clips": [
+    {
+      "id": "work",
+      "key": "franky",
+      "direction": "east",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "scale": 0.27483444,
+      "scaleReason": "Entire loop uniformly multiplied by0.83 to match approved83px model under unchanged shared displayScale; no anatomy warp, no seated/lying enlargement.",
+      "regions": [
+        [
+          58,
+          7,
+          295,
+          313
+        ],
+        [
+          363,
+          7,
+          605,
+          313
+        ],
+        [
+          684,
+          7,
+          919,
+          313
+        ],
+        [
+          990,
+          6,
+          1213,
+          312
+        ]
+      ],
+      "roots": [
+        [
+          141.5,
+          311
+        ],
+        [
+          455.0,
+          311
+        ],
+        [
+          769.5,
+          311
+        ],
+        [
+          1090.0,
+          310
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/work-east.webp"
+    },
+    {
+      "id": "work",
+      "key": "franky",
+      "direction": "west",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "scale": 0.27124183,
+      "scaleReason": "Entire loop uniformly multiplied by0.83 to match approved83px model under unchanged shared displayScale; no anatomy warp, no seated/lying enlargement.",
+      "regions": [
+        [
+          42,
+          318,
+          252,
+          627
+        ],
+        [
+          352,
+          317,
+          574,
+          626
+        ],
+        [
+          668,
+          317,
+          890,
+          626
+        ],
+        [
+          991,
+          316,
+          1204,
+          626
+        ]
+      ],
+      "roots": [
+        [
+          173.5,
+          625
+        ],
+        [
+          482.5,
+          624
+        ],
+        [
+          795.0,
+          624
+        ],
+        [
+          1112.5,
+          624
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/work-west.webp"
+    },
+    {
+      "id": "work",
+      "key": "franky",
+      "direction": "north",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "scale": 0.29328622,
+      "scaleReason": "Entire loop uniformly multiplied by0.83 to match approved83px model under unchanged shared displayScale; no anatomy warp, no seated/lying enlargement.",
+      "regions": [
+        [
+          24,
+          631,
+          296,
+          918
+        ],
+        [
+          336,
+          631,
+          608,
+          918
+        ],
+        [
+          650,
+          631,
+          922,
+          918
+        ],
+        [
+          961,
+          631,
+          1233,
+          918
+        ]
+      ],
+      "roots": [
+        [
+          157.0,
+          916
+        ],
+        [
+          469.0,
+          916
+        ],
+        [
+          784.0,
+          916
+        ],
+        [
+          1097.5,
+          916
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/work-north.webp"
+    },
+    {
+      "id": "work",
+      "key": "franky",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "scale": 0.26688103,
+      "scaleReason": "Entire loop uniformly multiplied by0.83 to match approved83px model under unchanged shared displayScale; no anatomy warp, no seated/lying enlargement.",
+      "regions": [
+        [
+          22,
+          919,
+          295,
+          1234
+        ],
+        [
+          335,
+          919,
+          608,
+          1234
+        ],
+        [
+          648,
+          919,
+          921,
+          1234
+        ],
+        [
+          960,
+          919,
+          1235,
+          1234
+        ]
+      ],
+      "roots": [
+        [
+          162.5,
+          1232
+        ],
+        [
+          475.0,
+          1232
+        ],
+        [
+          788.5,
+          1232
+        ],
+        [
+          1102.0,
+          1232
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/franky/work-south.webp"
+    }
+  ]
+}

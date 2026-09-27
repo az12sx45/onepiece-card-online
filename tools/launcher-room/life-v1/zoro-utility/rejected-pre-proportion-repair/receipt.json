@@ -1,0 +1,183 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "generatedFile": "C:/Users/王曜瑋/.codex/generated_images/01a0e0d1-a4bf-73f3-af41-6763cfefe2b5/exec-8cbb281e-6065-4443-9f42-89b706e1574b.png",
+  "reference": "tools/launcher-room/fullbody-v3/sources/zoro/image.png",
+  "prompt": "tools/launcher-room/life-v1/zoro-utility/prompt.txt",
+  "sourceSha256": "cc4645c1cec01e684b2f2fc7f454956786582304df92ad3e1049fab1a8a3c167",
+  "sourcePixels": [
+    1254,
+    1254
+  ],
+  "trueAlpha": true,
+  "sourceReview": "Sixteen intact complete figures. Canonical early outfit preserved. Zoro has two healthy eyes with no eye scar; sheathed swords, left-ear earrings and left-arm bandana checked. Distinct eating, cross-legged rest, grounded side sleep and controlled low training. No invisible chair, high walking step or detached anatomy.",
+  "packing": "One uniform scale per four-frame loop, whole-figure crop and root alignment only. Main figure bounds estimated at alpha32 with 2px source padding to exclude remote faint generated pixels; source alpha never modified. No limb splitting, mirroring or warping.",
+  "runtimeAccepted": false,
+  "actualSizeReview": "Static 128px contact review passed: early white shirt, green haramaki and two healthy eyes; intact full bodies; rice bowl motion, grounded rest, side sleep and two-hand wooden training sword are readable without clipped props or floating anatomy. Room playback remains unverified.",
+  "sourceAccepted": true,
+  "contactAccepted": true,
+  "contactSheet": "tools/launcher-room/life-v1/zoro-utility/contact-128.png",
+  "contactSha256": "fa05b217e4d59be50ad0b214f30324c10fb93cfcab0bccc794e225d7e289c15a",
+  "numericQa": {
+    "passed": true,
+    "checks": [
+      {
+        "asset": "public/images/launcher_room/life_v1/zoro/eat-south.webp",
+        "sha256": "331e545c177ee625604115580ce0772a1fbc3f32e4cf05c8552a013cd63bc62a",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            33,
+            12,
+            88,
+            112
+          ],
+          [
+            33,
+            12,
+            89,
+            112
+          ],
+          [
+            33,
+            12,
+            88,
+            112
+          ],
+          [
+            33,
+            12,
+            88,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/zoro/rest-south.webp",
+        "sha256": "2653ae1085e6d98d8bf8dc8d37abff915b36ceaa5389d553b52d9ac4cc8b0d5a",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            29,
+            27,
+            92,
+            112
+          ],
+          [
+            30,
+            27,
+            91,
+            112
+          ],
+          [
+            30,
+            26,
+            91,
+            112
+          ],
+          [
+            30,
+            27,
+            91,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/zoro/sleep-south.webp",
+        "sha256": "dd766552d6d03e61add697fdbdc41ea427947ff47ce76eb66f06c0fa94ec24ba",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            23,
+            69,
+            105,
+            112
+          ],
+          [
+            23,
+            63,
+            105,
+            112
+          ],
+          [
+            23,
+            69,
+            105,
+            112
+          ],
+          [
+            23,
+            69,
+            105,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      },
+      {
+        "asset": "public/images/launcher_room/life_v1/zoro/train-south.webp",
+        "sha256": "0b9cc3c24d8ae9eff142832d011196fa13a4eca350baa532c18071bd904fb800",
+        "size": [
+          512,
+          128
+        ],
+        "frameBounds": [
+          [
+            36,
+            17,
+            89,
+            112
+          ],
+          [
+            36,
+            17,
+            87,
+            112
+          ],
+          [
+            40,
+            25,
+            88,
+            112
+          ],
+          [
+            36,
+            17,
+            89,
+            112
+          ]
+        ],
+        "distinctFrames": 4,
+        "root": [
+          64,
+          112
+        ]
+      }
+    ],
+    "scope": "Atlas dimensions, alpha bounds, source hash, and four distinct rendered frames. Does not prove runtime animation acceptance."
+  }
+}

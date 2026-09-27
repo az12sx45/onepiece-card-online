@@ -1,0 +1,27 @@
+{
+  "method": "First complete 128px frame of each approved acting_v3 direction, whole-figure crop then uniform x4 nearest-neighbor enlargement. No anatomy edits.",
+  "directionOrder": [
+    "south",
+    "east",
+    "west",
+    "north"
+  ],
+  "references": [
+    {
+      "path": "public/images/launcher_room/acting_v3/zoro/south.webp",
+      "sha256": "7852fe692f9ba996b4fb8688c18c6fc8e41e422e1346dd482d45c6878b3fdff7"
+    },
+    {
+      "path": "public/images/launcher_room/acting_v3/zoro/east.webp",
+      "sha256": "03ebd5b9c85e94f793e63ceb27be323c90abe6b5ae1b018d669c1e138ae2b560"
+    },
+    {
+      "path": "public/images/launcher_room/acting_v3/zoro/west.webp",
+      "sha256": "de0207bfcc939f8dc2d14cc8e26a3727856a2e3479cf8d45dc4823b88fcf9bf9"
+    },
+    {
+      "path": "public/images/launcher_room/acting_v3/zoro/north.webp",
+      "sha256": "6e5f2766df14ff646158e30dc9c8e5da7fc0689607e44a87c8d6a86a04e8ab39"
+    }
+  ]
+}

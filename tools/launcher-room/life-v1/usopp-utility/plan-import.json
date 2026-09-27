@@ -1,0 +1,597 @@
+{
+  "schema": "launcher-life-art-import/1",
+  "clips": [
+    {
+      "id": "eat",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "scale": 0.29117647,
+      "scaleReason": "Matches approved99px standing model and reference head/body ratio. One isotropic scale per loop; utility uses same physical scale for all four poses, seated/lying never enlarged.",
+      "regions": [
+        [
+          67,
+          12,
+          240,
+          352
+        ],
+        [
+          393,
+          11,
+          563,
+          352
+        ],
+        [
+          695,
+          12,
+          870,
+          352
+        ],
+        [
+          1021,
+          12,
+          1194,
+          352
+        ]
+      ],
+      "roots": [
+        [
+          152.0,
+          349
+        ],
+        [
+          477.5,
+          349
+        ],
+        [
+          780.5,
+          349
+        ],
+        [
+          1105.5,
+          349
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/eat-south.webp",
+      "sourceSha256": "6ac7e0d370e33b4d4beb5b20d519e0dcca06d7c0b358e4753652a4518d31bcd1",
+      "assetSha256": "32e3f15f36f6d0977cc2a69d9af1adef49fc613f560432196fde4fdfb5ba717a",
+      "frames": [
+        {
+          "sourceRegion": [
+            67,
+            12,
+            240,
+            352
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            173,
+            340
+          ],
+          "outputBounds": [
+            39,
+            13,
+            50,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            393,
+            11,
+            563,
+            352
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            170,
+            341
+          ],
+          "outputBounds": [
+            39,
+            13,
+            49,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            695,
+            12,
+            870,
+            352
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            175,
+            340
+          ],
+          "outputBounds": [
+            39,
+            13,
+            51,
+            99
+          ]
+        },
+        {
+          "sourceRegion": [
+            1021,
+            12,
+            1194,
+            352
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            173,
+            340
+          ],
+          "outputBounds": [
+            39,
+            13,
+            50,
+            99
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "rest",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "scale": 0.29117647,
+      "scaleReason": "Matches approved99px standing model and reference head/body ratio. One isotropic scale per loop; utility uses same physical scale for all four poses, seated/lying never enlarged.",
+      "regions": [
+        [
+          59,
+          389,
+          258,
+          668
+        ],
+        [
+          380,
+          389,
+          577,
+          669
+        ],
+        [
+          686,
+          389,
+          885,
+          668
+        ],
+        [
+          1007,
+          389,
+          1204,
+          669
+        ]
+      ],
+      "roots": [
+        [
+          155.5,
+          665
+        ],
+        [
+          475.0,
+          666
+        ],
+        [
+          782.5,
+          665
+        ],
+        [
+          1102.5,
+          666
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/rest-south.webp",
+      "sourceSha256": "6ac7e0d370e33b4d4beb5b20d519e0dcca06d7c0b358e4753652a4518d31bcd1",
+      "assetSha256": "fcbaf073f36a7413247763981dc942654bd127918519129d5e070ba4fccafd09",
+      "frames": [
+        {
+          "sourceRegion": [
+            59,
+            389,
+            258,
+            668
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            199,
+            279
+          ],
+          "outputBounds": [
+            36,
+            31,
+            58,
+            81
+          ]
+        },
+        {
+          "sourceRegion": [
+            380,
+            389,
+            577,
+            669
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            197,
+            280
+          ],
+          "outputBounds": [
+            36,
+            30,
+            57,
+            82
+          ]
+        },
+        {
+          "sourceRegion": [
+            686,
+            389,
+            885,
+            668
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            199,
+            279
+          ],
+          "outputBounds": [
+            36,
+            31,
+            58,
+            81
+          ]
+        },
+        {
+          "sourceRegion": [
+            1007,
+            389,
+            1204,
+            669
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            197,
+            280
+          ],
+          "outputBounds": [
+            36,
+            30,
+            57,
+            82
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "sleep",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "scale": 0.29117647,
+      "scaleReason": "Matches approved99px standing model and reference head/body ratio. One isotropic scale per loop; utility uses same physical scale for all four poses, seated/lying never enlarged.",
+      "regions": [
+        [
+          27,
+          710,
+          306,
+          862
+        ],
+        [
+          340,
+          711,
+          619,
+          862
+        ],
+        [
+          655,
+          711,
+          933,
+          862
+        ],
+        [
+          968,
+          711,
+          1246,
+          862
+        ]
+      ],
+      "roots": [
+        [
+          170.0,
+          859
+        ],
+        [
+          483.0,
+          859
+        ],
+        [
+          797.5,
+          859
+        ],
+        [
+          1110.5,
+          859
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/sleep-south.webp",
+      "sourceSha256": "6ac7e0d370e33b4d4beb5b20d519e0dcca06d7c0b358e4753652a4518d31bcd1",
+      "assetSha256": "9095a0c474ad91fa888fa2423665ea2ba19d46fa11537400ab2daac8ef2330a0",
+      "frames": [
+        {
+          "sourceRegion": [
+            27,
+            710,
+            306,
+            862
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            279,
+            152
+          ],
+          "outputBounds": [
+            22,
+            68,
+            81,
+            44
+          ]
+        },
+        {
+          "sourceRegion": [
+            340,
+            711,
+            619,
+            862
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            279,
+            151
+          ],
+          "outputBounds": [
+            22,
+            68,
+            81,
+            44
+          ]
+        },
+        {
+          "sourceRegion": [
+            655,
+            711,
+            933,
+            862
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            278,
+            151
+          ],
+          "outputBounds": [
+            23,
+            68,
+            81,
+            44
+          ]
+        },
+        {
+          "sourceRegion": [
+            968,
+            711,
+            1246,
+            862
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            278,
+            151
+          ],
+          "outputBounds": [
+            23,
+            68,
+            81,
+            44
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    },
+    {
+      "id": "train",
+      "key": "usopp",
+      "direction": "south",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "scale": 0.29117647,
+      "scaleReason": "Matches approved99px standing model and reference head/body ratio. One isotropic scale per loop; utility uses same physical scale for all four poses, seated/lying never enlarged.",
+      "regions": [
+        [
+          65,
+          884,
+          243,
+          1230
+        ],
+        [
+          388,
+          884,
+          562,
+          1230
+        ],
+        [
+          693,
+          884,
+          870,
+          1230
+        ],
+        [
+          1015,
+          884,
+          1188,
+          1230
+        ]
+      ],
+      "roots": [
+        [
+          152.0,
+          1227
+        ],
+        [
+          475.0,
+          1227
+        ],
+        [
+          779.0,
+          1227
+        ],
+        [
+          1100.5,
+          1227
+        ]
+      ],
+      "asset": "public/images/launcher_room/life_v1/usopp/train-south.webp",
+      "sourceSha256": "6ac7e0d370e33b4d4beb5b20d519e0dcca06d7c0b358e4753652a4518d31bcd1",
+      "assetSha256": "9dc16fe10c4872dabe3bd0b6723f9734079d245bdd40d23adf5e2fba9a83f968",
+      "frames": [
+        {
+          "sourceRegion": [
+            65,
+            884,
+            243,
+            1230
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            178,
+            346
+          ],
+          "outputBounds": [
+            39,
+            11,
+            52,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            388,
+            884,
+            562,
+            1230
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            174,
+            346
+          ],
+          "outputBounds": [
+            39,
+            11,
+            51,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            693,
+            884,
+            870,
+            1230
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            177,
+            346
+          ],
+          "outputBounds": [
+            39,
+            11,
+            52,
+            101
+          ]
+        },
+        {
+          "sourceRegion": [
+            1015,
+            884,
+            1188,
+            1230
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            173,
+            346
+          ],
+          "outputBounds": [
+            39,
+            11,
+            50,
+            101
+          ]
+        }
+      ],
+      "shape": {
+        "cell": 128,
+        "columns": 4,
+        "rows": 1,
+        "root": [
+          64,
+          112
+        ]
+      },
+      "generator": "gpt-image",
+      "visualAcceptance": false
+    }
+  ]
+}

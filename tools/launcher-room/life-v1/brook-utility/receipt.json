@@ -1,0 +1,26 @@
+{
+  "generator": "gpt-image",
+  "sourceSha256": "434ca76284e79b0638a66225b366f3aec865670775326e89e3cd3ed39d67021c",
+  "promptSha256": "a4cc0647d6925e6220b157ba3c806b55a0d59fc1806688b4f9dcb7010fd598f0",
+  "sourceReviewed": true,
+  "runtimeAccepted": false,
+  "wholeFigureOnly": true,
+  "assets": [
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/eat-south.webp",
+      "assetSha256": "8039c0c27b3321c0385197d80c03cb56252eb7df87f72386ecb0fee85b206152"
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/rest-south.webp",
+      "assetSha256": "8685ce882cce8c4f58215c5218bfdd72f94fdebf3454d5a648b5d9ab5b3c3146"
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/sleep-south.webp",
+      "assetSha256": "8dcf8378cc950a14cb9117b9c465cd0f808e7d351e78e8d76d2b77bafbc3cd23"
+    },
+    {
+      "asset": "public/images/launcher_room/life_v1/brook/train-south.webp",
+      "assetSha256": "27a60bfeb9af917c7ed61a95e7f00b8543aa93e1a35f3cf7bd862ec525783323"
+    }
+  ]
+}
