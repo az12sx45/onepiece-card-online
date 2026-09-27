@@ -1,0 +1,136 @@
+{
+  "ok": true,
+  "scope": "Only validateReviewedRuntime exact formal merge compatibility; no other QA or art generation rerun",
+  "checks": 21,
+  "candidateNormalizedSha256": "e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85",
+  "formalNormalizedSha256": "c9330072bab54d00370735b6fcc01bbcef76e101183dc42b9222e0f4d5769255",
+  "validatorSha256": "c4fbadb447b1a14bf5c8d788d1889d8c47ecf4a2ec41f3f9bc003ef16e1351ce",
+  "cases": [
+    {
+      "name": "reviewed candidate bytes remain accepted",
+      "expected": "accept",
+      "pass": true,
+      "rejection": null
+    },
+    {
+      "name": "exact approved formal bytes accepted",
+      "expected": "accept",
+      "pass": true,
+      "rejection": null
+    },
+    {
+      "name": "formal CRLF/LF-only equivalent accepted",
+      "expected": "accept",
+      "pass": true,
+      "rejection": null
+    },
+    {
+      "name": "formal one-byte content change rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Changed reviewed life runtime: server/desktop-distribution.js"
+    },
+    {
+      "name": "arbitrary digest matching modified file rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Unapproved formal runtime digest\n+ actual - expected\n\n+ '9cc521a895f07227f964e49e80a8201144dcd30e4d40a782ba5b978ca83b784d'\n- 'c9330072bab54d00370735b6fcc01bbcef76e101183dc42b9222e0f4d5769255'\n"
+    },
+    {
+      "name": "missing reason rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Missing or changed formal-merge reason\n+ actual - expected\n\n+ undefined\n- 'Preserve formal Board media policy: the launcher merge adds only LAUNCHER_LIFE_GET and LAUNCHER_LIFE_COMMAND; the candidate-only three-line Board depth manifest exception is not copied into the formal authority.'\n"
+    },
+    {
+      "name": "different reason rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Missing or changed formal-merge reason\n+ actual - expected\n\n+ 'accept any hash'\n- 'Preserve formal Board media policy: the launcher merge adds only LAUNCHER_LIFE_GET and LAUNCHER_LIFE_COMMAND; the candidate-only three-line Board depth manifest exception is not copied into the formal authority.'\n"
+    },
+    {
+      "name": "other runtime file variants rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Runtime variants are restricted to the reviewed formal Board merge\n+ actual - expected\n\n+ 'desktop/launcher-life.js'\n- 'server/desktop-distribution.js'\n"
+    },
+    {
+      "name": "other runtime content drift rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Changed reviewed life runtime: desktop/launcher-life.js"
+    },
+    {
+      "name": "formal mismatch without variant rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Changed reviewed life runtime: server/desktop-distribution.js"
+    },
+    {
+      "name": "candidate without variant still accepted",
+      "expected": "accept",
+      "pass": true,
+      "rejection": null
+    },
+    {
+      "name": "more than one formal variant rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Exactly one reviewed formal variant is permitted"
+    },
+    {
+      "name": "missing patch evidence rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Formal variant needs patch and direct readback evidence"
+    },
+    {
+      "name": "corrupted patch evidence rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Changed formal merge patch evidence\n+ actual - expected\n\n+ '490e62ac4729ab1e470a85ed77075b100740e0be4c40d9d7ad3c968257f56f25'\n- '758e224a4e496ffcacc8ed1c4250a91286cb5576dd705195a9737a43943eafce'\n"
+    },
+    {
+      "name": "replacement patch with recomputed claimed hash rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Expected values to be strictly equal:\n+ actual - expected\n\n+ '3c4117c60e92f396e38b4b259f7c9ca969e04e5f5f51f78509724128fcfabf53'\n- '758e224a4e496ffcacc8ed1c4250a91286cb5576dd705195a9737a43943eafce'\n"
+    },
+    {
+      "name": "missing readback evidence rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Formal variant needs patch and direct readback evidence"
+    },
+    {
+      "name": "readback content drift rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Changed formal runtime readback evidence\n+ actual - expected\n\n+ '47e8ef1270c839245206ffd82a50328878a8321d0767a3aaefcfe93bd75dd8eb'\n- '4139001682628e684103a70c592988f62b0cf7fbb066fdd856aebaa9b3b544e9'\n"
+    },
+    {
+      "name": "forged normalized readback with matching evidence hash rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Expected values to be strictly equal:\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000000000000000000000000000'\n- 'c9330072bab54d00370735b6fcc01bbcef76e101183dc42b9222e0f4d5769255'\n"
+    },
+    {
+      "name": "wrong formal authority readback rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'C:/not-authority'\n- 'D:\\\\Codex_Release_Worktrees\\\\board-voyage-records-v1'\n"
+    },
+    {
+      "name": "wrong approved base rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "Formal variant base must match its reviewed runtime\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000000000000000000000000000'\n- 'e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85'\n"
+    },
+    {
+      "name": "path escape rejected",
+      "expected": "reject",
+      "pass": true,
+      "rejection": "The expression evaluated to a falsy value:\n\n  assert(p.startsWith(path.resolve(root)+path.sep))\n"
+    }
+  ]
+}

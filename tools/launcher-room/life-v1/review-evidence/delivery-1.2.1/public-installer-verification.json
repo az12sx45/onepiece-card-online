@@ -1,0 +1,265 @@
+{
+  "schema": "launcher-public-installer-verification/1",
+  "startedAt": "2026-09-27T04:35:35.934844+00:00",
+  "url": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.1/ONE-PIECE-Tabletop-Launcher-1.2.1-x64.exe",
+  "canonicalUrlOnly": true,
+  "cacheBusterUsed": false,
+  "expectedBytes": 244419418,
+  "expectedSha256": "39b0ec460157384c57e542292c3efa103e9b0f937c6a3352a6ce27ba05a9ca71",
+  "downloadPath": "C:\\Codex_Candidates\\launcher-character-life-1.2.0\\desktop\\dist\\public-installer-1.2.1-independent-20260927T043535Z.exe",
+  "installerExecuted": false,
+  "requests": [
+    {
+      "method": "HEAD",
+      "requestUrl": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.1/ONE-PIECE-Tabletop-Launcher-1.2.1-x64.exe",
+      "requestHeaders": {
+        "User-Agent": "Codex-Launcher-Public-Verification/1.2.1",
+        "Accept-Encoding": "identity"
+      },
+      "startedAt": "2026-09-27T04:35:35.934887+00:00",
+      "responseUrl": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.1/ONE-PIECE-Tabletop-Launcher-1.2.1-x64.exe",
+      "status": 200,
+      "responseHeaders": [
+        [
+          "Date",
+          "Sun, 27 Sep 2026 04:35:36 GMT"
+        ],
+        [
+          "Content-Type",
+          "application/vnd.microsoft.portable-executable"
+        ],
+        [
+          "Content-Length",
+          "244419418"
+        ],
+        [
+          "Connection",
+          "close"
+        ],
+        [
+          "Cache-Control",
+          "public, max-age=31536000, immutable"
+        ],
+        [
+          "ETag",
+          "\"35f246537fa55038136e80548deab226\""
+        ],
+        [
+          "Last-Modified",
+          "Sun, 27 Sep 2026 04:35:15 GMT"
+        ],
+        [
+          "Accept-Ranges",
+          "bytes"
+        ],
+        [
+          "Server",
+          "cloudflare"
+        ],
+        [
+          "cf-cache-status",
+          "MISS"
+        ],
+        [
+          "Speculation-Rules",
+          "\"/cdn-cgi/speculation\""
+        ],
+        [
+          "Report-To",
+          "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=%2FBlH%2BktVwDizh2lpcWf8JjkPdYGn%2Fkt2gU3%2BnruSWliElNqHJUXdHB6gq3QYvu%2FLVMmLFf5mDxCisA%2FB1IsT7dcxONkOD1Nna5UGExOravkfllzaK7OEQeL5bKy4aPRIlSniNM0J5fBNFiC0JJofTzhk6g%3D%3D\"}]}"
+        ],
+        [
+          "Nel",
+          "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+        ],
+        [
+          "CF-RAY",
+          "a417cd78c934cf50-SIN"
+        ]
+      ],
+      "headerReceivedAt": "2026-09-27T04:35:36.610642+00:00",
+      "headerSeconds": 0.675,
+      "completedAt": "2026-09-27T04:35:36.611313+00:00",
+      "elapsedSeconds": 0.676
+    },
+    {
+      "method": "GET",
+      "requestUrl": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.1/ONE-PIECE-Tabletop-Launcher-1.2.1-x64.exe",
+      "requestHeaders": {
+        "User-Agent": "Codex-Launcher-Public-Verification/1.2.1",
+        "Accept-Encoding": "identity",
+        "Range": "bytes=0-4095"
+      },
+      "startedAt": "2026-09-27T04:35:36.611696+00:00",
+      "responseUrl": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.1/ONE-PIECE-Tabletop-Launcher-1.2.1-x64.exe",
+      "status": 206,
+      "responseHeaders": [
+        [
+          "Date",
+          "Sun, 27 Sep 2026 04:35:36 GMT"
+        ],
+        [
+          "Content-Type",
+          "application/vnd.microsoft.portable-executable"
+        ],
+        [
+          "Content-Length",
+          "4096"
+        ],
+        [
+          "Connection",
+          "close"
+        ],
+        [
+          "Cache-Control",
+          "public, max-age=31536000, immutable"
+        ],
+        [
+          "ETag",
+          "\"35f246537fa55038136e80548deab226\""
+        ],
+        [
+          "Last-Modified",
+          "Sun, 27 Sep 2026 04:35:15 GMT"
+        ],
+        [
+          "Age",
+          "0"
+        ],
+        [
+          "Nel",
+          "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+        ],
+        [
+          "Server",
+          "cloudflare"
+        ],
+        [
+          "content-range",
+          "bytes 0-4095/244419418"
+        ],
+        [
+          "cf-cache-status",
+          "HIT"
+        ],
+        [
+          "Speculation-Rules",
+          "\"/cdn-cgi/speculation\""
+        ],
+        [
+          "Report-To",
+          "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=lg6XOVzA7EYyPPkxn5lQa4XDyM70HKh7Gc7vE432CkrsTCoy7MRuPjURZF%2BD8QjbjZQ5%2B6KEEW7bSFRBQYSi178s3EElr0lBhuYhwOxZHI%2BaEUTLaGCeMWThYFnNTIUZ3txDvnhGD%2BRLdOo44GnMRqfPNQ%3D%3D\"}]}"
+        ],
+        [
+          "CF-RAY",
+          "a417cd7c1d96ab53-SIN"
+        ]
+      ],
+      "headerReceivedAt": "2026-09-27T04:35:36.858430+00:00",
+      "headerSeconds": 0.246,
+      "bodyBytesRead": 4096,
+      "sampleSha256": "b0d511e149f77b18d9922e5f0349bd4e0eebbf1f1c5e103fa2e5e0d9498f35dc",
+      "completedAt": "2026-09-27T04:35:36.859130+00:00",
+      "elapsedSeconds": 0.247
+    },
+    {
+      "method": "GET",
+      "requestUrl": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.1/ONE-PIECE-Tabletop-Launcher-1.2.1-x64.exe",
+      "requestHeaders": {
+        "User-Agent": "Codex-Launcher-Public-Verification/1.2.1",
+        "Accept-Encoding": "identity"
+      },
+      "startedAt": "2026-09-27T04:35:36.859485+00:00",
+      "responseUrl": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.1/ONE-PIECE-Tabletop-Launcher-1.2.1-x64.exe",
+      "status": 200,
+      "responseHeaders": [
+        [
+          "Date",
+          "Sun, 27 Sep 2026 04:35:37 GMT"
+        ],
+        [
+          "Content-Type",
+          "application/vnd.microsoft.portable-executable"
+        ],
+        [
+          "Content-Length",
+          "244419418"
+        ],
+        [
+          "Connection",
+          "close"
+        ],
+        [
+          "Cache-Control",
+          "public, max-age=31536000, immutable"
+        ],
+        [
+          "ETag",
+          "\"35f246537fa55038136e80548deab226\""
+        ],
+        [
+          "Last-Modified",
+          "Sun, 27 Sep 2026 04:35:15 GMT"
+        ],
+        [
+          "Accept-Ranges",
+          "bytes"
+        ],
+        [
+          "Nel",
+          "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+        ],
+        [
+          "Server",
+          "cloudflare"
+        ],
+        [
+          "Age",
+          "0"
+        ],
+        [
+          "cf-cache-status",
+          "HIT"
+        ],
+        [
+          "Speculation-Rules",
+          "\"/cdn-cgi/speculation\""
+        ],
+        [
+          "Report-To",
+          "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=crdoVE%2BIcU9fhoNQcJuKJkvGvZXYkBLn9s9qwE%2F8E1ZbqIRwzapAdvfaSkrZnPAmki3ee5Yt6DsODfK62m6ggBYPabCQORLKS%2B409oy56JGIbdNLSgrUjoh0Dk4DE9NbYtgp3Ct8hm4Pr6EC4jJ%2F%2Bi6s4A%3D%3D\"}]}"
+        ],
+        [
+          "CF-RAY",
+          "a417cd7dba4ffce6-SIN"
+        ]
+      ],
+      "headerReceivedAt": "2026-09-27T04:35:37.107148+00:00",
+      "headerSeconds": 0.247,
+      "completedAt": "2026-09-27T04:35:43.707610+00:00",
+      "elapsedSeconds": 6.848,
+      "downloadedBytes": 244419418
+    }
+  ],
+  "checks": {
+    "headStatus200": true,
+    "headExactLength": true,
+    "headCanonicalResponse": true,
+    "rangeStatus206": true,
+    "rangeContentRangeExact": true,
+    "rangeBytes4096": true,
+    "rangeCanonicalResponse": true,
+    "fullGetStatus200": true,
+    "fullGetCanonicalResponse": true,
+    "fullGetHeaderExactLength": true,
+    "downloadExactBytes": true,
+    "downloadExactSha256": true,
+    "diskExactBytes": true,
+    "diskExactSha256": true
+  },
+  "ok": true,
+  "actualBytes": 244419418,
+  "actualSha256": "39b0ec460157384c57e542292c3efa103e9b0f937c6a3352a6ce27ba05a9ca71",
+  "diskSha256": "39b0ec460157384c57e542292c3efa103e9b0f937c6a3352a6ce27ba05a9ca71",
+  "completedAt": "2026-09-27T04:35:44.455973+00:00"
+}

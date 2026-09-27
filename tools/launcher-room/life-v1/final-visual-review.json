@@ -20,7 +20,7 @@
     "desktop/launcher-room.js": "de77bbbcfb37a81fc8503cdb07700247d726216a20b63149285088a6fc581e6a",
     "desktop/launcher-room.css": "31f5647f368c6505979fad0ed230339ec56db91738ef62d13fe3f81e760c15f3",
     "desktop/launcher-profile-shop.js": "9ceddcd5480eee810fb39859c2268f8a8464fd92458ed526b4a68f3f3bfc1cd8",
-    "desktop/launcher-life-room.js": "81a105dec4a48221bb459a804df6c8bfaee603a9088dd1962da257016b4973c1",
+    "desktop/launcher-life-room.js": "2203d1adc9421c3c7ddb47d7cd379c3025c3e3b3c45fffd6e6ad05522008504f",
     "desktop/launcher-life.js": "ca928053b49f4ba1cb8df0802f1b57e00368cff3e55a87ba909640f931966f9a",
     "desktop/launcher-life-data.js": "a150b9f6aef8a82c4821b15a3a49b41eef4bccc11336795b2f6b25951b752410",
     "desktop/launcher-life-actions.js": "d96db069e8d7025d3e48a9a86a00177e306b5be75dabdc0c85a6aff47a349f92",
@@ -261,6 +261,58 @@
       "sha256": "5284a7a2c80219efa295c34f3daec3635245a4700b594c6142119bae82de0f66"
     },
     {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery-1.2.1/package-qa.txt",
+      "sha256": "0f5350f54e351eb4558dd781050f2fe946e007f7909683172d4fd2d4bc1b268d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery-1.2.1/packaged-artifact.json",
+      "sha256": "18b3eb0dedcd3076d1443267182668dd5903ad91a7cb980c4572ffc267b05849"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery-1.2.1/packaged-smoke.json",
+      "sha256": "2c67e7bbe13453759124c15b76ab79b70ed477d9efa9da067540a07d29fd1394"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery-1.2.1/public-installer-verification.json",
+      "sha256": "79856e0b422dab78656a499ac298fdd70c41170451923494afe35b8a7eae3900"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-default.png",
+      "sha256": "7b3933d915367e308ba97249cd7d85bc62d70522bdac3e849d7917131cfc064a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-feast.png",
+      "sha256": "65fa1c6c57df3f3310e7c986cf8f3dc8aaf44cdf2ec7741c3ab10036f84bcc65"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-free_day.png",
+      "sha256": "7b3933d915367e308ba97249cd7d85bc62d70522bdac3e849d7917131cfc064a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-friend-readonly.png",
+      "sha256": "d66d1aed676aba457f945311141e954ce6d90fad8641c68d783ae4bdea18af29"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-maintenance.png",
+      "sha256": "35715b3093e2bd381ac85c47b33675a7031651ef600ec9de5b4c6c95c6b6f9a5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-research.png",
+      "sha256": "456b7879fe9a4961f5cbd6062ef3c27d8c607f6ed7b75687758046791b24b7ee"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-training_day.png",
+      "sha256": "25a6c63fda53f06a52d938d7c83603b531a6df9ab7c8ca5b972478ec7e9858f0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-work_day.png",
+      "sha256": "518b7b79696de08377850ee6cbfce045c8570f79382f5ec5523e8aa042ae02d2"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/report.json",
+      "sha256": "340642bc3d2c5cdabcc5faab937a6046bc7304b9081d8cd2821dfcf932cb861e"
+    },
+    {
       "path": "tools/launcher-room/life-v1/review-evidence/final-editorial-changes.json",
       "sha256": "411eeee35443a3a794ab2a431f719d52438cea1c1fb8dfedca3c27781392edb4"
     },
@@ -271,6 +323,18 @@
     {
       "path": "tools/launcher-room/life-v1/review-evidence/final-room-dialogue-qa-result.json",
       "sha256": "0618eb9a39b5dddb3cda003be5846a19a3c8537358d0e8b9128389aacf54ecb2"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution-readback.json",
+      "sha256": "4139001682628e684103a70c592988f62b0cf7fbb066fdd856aebaa9b3b544e9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution.js.patch",
+      "sha256": "758e224a4e496ffcacc8ed1c4250a91286cb5576dd705195a9737a43943eafce"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/variant-qa-results.json",
+      "sha256": "3e92c872b19c841e6f28ee2efa29fff53bf500ca86810cdb3d084cef793b2014"
     },
     {
       "path": "tools/launcher-room/life-v1/review-evidence/independent-final-art-content.json",
@@ -374,5 +438,30 @@
     }
   ],
   "humanAcceptance": false,
-  "publicDeployment": false
+  "publicDeployment": false,
+  "approvedRuntimeVariants": {
+    "server/desktop-distribution.js": [
+      {
+        "normalizedSha256": "c9330072bab54d00370735b6fcc01bbcef76e101183dc42b9222e0f4d5769255",
+        "reviewedBaseNormalizedSha256": "e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85",
+        "reason": "Preserve formal Board media policy: the launcher merge adds only LAUNCHER_LIFE_GET and LAUNCHER_LIFE_COMMAND; the candidate-only three-line Board depth manifest exception is not copied into the formal authority.",
+        "evidence": {
+          "patch": {
+            "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution.js.patch",
+            "sha256": "758e224a4e496ffcacc8ed1c4250a91286cb5576dd705195a9737a43943eafce"
+          },
+          "formalReadback": {
+            "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution-readback.json",
+            "sha256": "4139001682628e684103a70c592988f62b0cf7fbb066fdd856aebaa9b3b544e9"
+          }
+        }
+      }
+    ]
+  },
+  "runtimeCorrection": {
+    "release": "1.2.1",
+    "artGeneration": "1.2.0",
+    "change": "Capture selected daily directive before renderUi resets the select to the acknowledged snapshot. No art/controller/server rule changes.",
+    "verification": "19 real Chromium UI checks with isolated IPC fixture, all six directives plus friend read-only; evidence under review-evidence/directive-ui-1.2.1."
+  }
 }

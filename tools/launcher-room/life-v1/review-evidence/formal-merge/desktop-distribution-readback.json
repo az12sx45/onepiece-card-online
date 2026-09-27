@@ -1,0 +1,17 @@
+{
+  "schema": "launcher-life-formal-runtime-readback/1",
+  "observedAtUtc": "2026-09-27T04:33:46.076174+00:00",
+  "runtimePath": "server/desktop-distribution.js",
+  "normalization": "CRLF to LF only; all other bytes remain significant",
+  "reason": "Preserve formal Board media policy: the launcher merge adds only LAUNCHER_LIFE_GET and LAUNCHER_LIFE_COMMAND; the candidate-only three-line Board depth manifest exception is not copied into the formal authority.",
+  "authorityRoot": "D:\\Codex_Release_Worktrees\\board-voyage-records-v1",
+  "candidateRoot": "C:\\Codex_Candidates\\launcher-character-life-1.2.0",
+  "candidateNormalizedSha256": "e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85",
+  "formalRawSha256": "0b7fb7242db21e5c1faa0d1b26c0c35e47afeb11a152d4efb867c4739525bc57",
+  "formalNormalizedSha256": "c9330072bab54d00370735b6fcc01bbcef76e101183dc42b9222e0f4d5769255",
+  "candidateOnlyBlock": "    // The reviewed Board depth catalog is package metadata fetched at runtime,\n    // not media redirected through R2. Allow only this exact JSON for Electron.\n    if (pathname === '/images/board-depth/v1/manifest.json' && isDesktopRenderer(req.headers)) return next();\n",
+  "onlyDifferenceVerified": true,
+  "patchSource": "C:\\Codex_Candidates\\launcher-life-qa-1.2.0\\delivery\\draft-20260927T042555572607Z\\minimal-patches\\server\\desktop-distribution.js.patch",
+  "patchSha256": "758e224a4e496ffcacc8ed1c4250a91286cb5576dd705195a9737a43943eafce",
+  "method": "Read formal and candidate bytes directly; compare after CRLF-to-LF only. Removing exactly the recorded three-line candidate-only Board block yields formal bytes. Original minimal delivery patch is retained byte-for-byte."
+}

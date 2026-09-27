@@ -32,7 +32,7 @@ async function main(){
       const profile={userId:42,isSelf:true,name:'生活基地測試',collection:{launcher:{itemIds:[item.id,furniture.id]}},
         room:{revision:1,capacityVersion:2,sceneId:'room-scene-default',placements:[placed],characters:[character]},
         roomItems:{scene:null,placements:[{...placed,item:furniture}],characters:[{...character,item}]},companions:[{itemId:item.id,affinity:12,talksRemainingToday:6}]};
-      const life={schemaVersion:1,revision:1,ownedCharacterIds:[item.id],activeCharacterIds:[item.id],characters:{[item.id]:{itemId:item.id,key:'sanji',needs:{energy:85,hunger:20,mood:70,social:70,workMotivation:70},memories:[]}},pairs:{},jobs:[],pendingArrivals:[],directive:'free',recentEvents:[],offlineSummary:{elapsedMs:0,completedJobs:0,coins:0}};
+      const life={schemaVersion:1,revision:1,ownedCharacterIds:[item.id],activeCharacterIds:[item.id],characters:{[item.id]:{itemId:item.id,key:'sanji',needs:{energy:85,hunger:20,mood:70,social:70,workMotivation:70},memories:[]}},pairs:{},jobs:[],pendingArrivals:[],directive:'free_day',recentEvents:[],offlineSummary:{elapsedMs:0,completedJobs:0,coins:0}};
       window.__lifeFixture={profile,life,calls:[],wallet:{coins:100,cap:500},receipts:[]};
       function response(extra={}){return structuredClone({ok:true,serverNow:new Date().toISOString(),profile,room:profile.room,life,wallet:window.__lifeFixture.wallet,...extra});}
       window.onePieceDesktop={

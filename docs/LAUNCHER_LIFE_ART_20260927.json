@@ -5138,7 +5138,7 @@
     },
     {
       "path": "tools/launcher-room/life-v1/final-visual-review.json",
-      "sha256": "2328827b7075b3fea0447e2835630eb9ab3b602c8791e5080f8bdc4ddb5851b0"
+      "sha256": "6723157c4482874c89b1409023cbd976aff970b4b57b32686a7b4a4fca83cd9c"
     },
     {
       "path": "tools/launcher-room/life-v1/franky-craft/alpha-regions.json",
@@ -6093,6 +6093,58 @@
       "sha256": "5284a7a2c80219efa295c34f3daec3635245a4700b594c6142119bae82de0f66"
     },
     {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery-1.2.1/package-qa.txt",
+      "sha256": "0f5350f54e351eb4558dd781050f2fe946e007f7909683172d4fd2d4bc1b268d"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery-1.2.1/packaged-artifact.json",
+      "sha256": "18b3eb0dedcd3076d1443267182668dd5903ad91a7cb980c4572ffc267b05849"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery-1.2.1/packaged-smoke.json",
+      "sha256": "2c67e7bbe13453759124c15b76ab79b70ed477d9efa9da067540a07d29fd1394"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/delivery-1.2.1/public-installer-verification.json",
+      "sha256": "79856e0b422dab78656a499ac298fdd70c41170451923494afe35b8a7eae3900"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-default.png",
+      "sha256": "7b3933d915367e308ba97249cd7d85bc62d70522bdac3e849d7917131cfc064a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-feast.png",
+      "sha256": "65fa1c6c57df3f3310e7c986cf8f3dc8aaf44cdf2ec7741c3ab10036f84bcc65"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-free_day.png",
+      "sha256": "7b3933d915367e308ba97249cd7d85bc62d70522bdac3e849d7917131cfc064a"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-friend-readonly.png",
+      "sha256": "d66d1aed676aba457f945311141e954ce6d90fad8641c68d783ae4bdea18af29"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-maintenance.png",
+      "sha256": "35715b3093e2bd381ac85c47b33675a7031651ef600ec9de5b4c6c95c6b6f9a5"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-research.png",
+      "sha256": "456b7879fe9a4961f5cbd6062ef3c27d8c607f6ed7b75687758046791b24b7ee"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-training_day.png",
+      "sha256": "25a6c63fda53f06a52d938d7c83603b531a6df9ab7c8ca5b972478ec7e9858f0"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/narrow-directive-work_day.png",
+      "sha256": "518b7b79696de08377850ee6cbfce045c8570f79382f5ec5523e8aa042ae02d2"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/directive-ui-1.2.1/report.json",
+      "sha256": "340642bc3d2c5cdabcc5faab937a6046bc7304b9081d8cd2821dfcf932cb861e"
+    },
+    {
       "path": "tools/launcher-room/life-v1/review-evidence/final-editorial-changes.json",
       "sha256": "411eeee35443a3a794ab2a431f719d52438cea1c1fb8dfedca3c27781392edb4"
     },
@@ -6103,6 +6155,18 @@
     {
       "path": "tools/launcher-room/life-v1/review-evidence/final-room-dialogue-qa-result.json",
       "sha256": "0618eb9a39b5dddb3cda003be5846a19a3c8537358d0e8b9128389aacf54ecb2"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution-readback.json",
+      "sha256": "4139001682628e684103a70c592988f62b0cf7fbb066fdd856aebaa9b3b544e9"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution.js.patch",
+      "sha256": "758e224a4e496ffcacc8ed1c4250a91286cb5576dd705195a9737a43943eafce"
+    },
+    {
+      "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/variant-qa-results.json",
+      "sha256": "3e92c872b19c841e6f28ee2efa29fff53bf500ca86810cdb3d084cef793b2014"
     },
     {
       "path": "tools/launcher-room/life-v1/review-evidence/independent-final-art-content.json",
@@ -6814,7 +6878,7 @@
     },
     {
       "path": "tools/launcher-room/life-v1/validate_release.js",
-      "sha256": "63736226d6d4b94dfdaae78a6eab25c45bc0e3b5e18b7eb28f600dec76c9297f"
+      "sha256": "c4fbadb447b1a14bf5c8d788d1889d8c47ecf4a2ec41f3f9bc003ef16e1351ce"
     },
     {
       "path": "tools/launcher-room/life-v1/zoro-approved-reference/idle-four-directions.png",

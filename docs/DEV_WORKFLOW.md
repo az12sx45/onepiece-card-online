@@ -1,5 +1,11 @@
 # Dev Workflow
 
+## 2026-09-27 生活基地方針修正（1.2.1）
+
+1.2.0完成封裝後，補查窄版截圖發現QA的free錯誤fixture；實際六方針操作進一步抓到onchange先renderUi重設select再讀value，導致總是送出舊方針。desktop/launcher-life-room.js改為先捕獲selectedDirective再更新UI；伺服器外部IPC沿用directiveId，controller內部directive保持原合約。原1.2.0上傳檔不可覆寫，因此另發1.2.1；所有128組人物、512格動作與台詞／經濟規則維持1.2.0世代。
+
+新增scripts/launcher_life_directive_qa.js，原browser fixture校正free_day；六選項逐一真select、保存與刷新保留、friend禁用及合成change不送mutation，共19/19通過且來源hash不變。package/lock与封裝QA升1.2.1；life-v1獨立review更新該UI runtime hash與QA證據。正式D既有Board三行差異只對server/desktop-distribution.js記錄exact hash變體與原patch/readback，不接受其他檔或任意hash。其餘素材與原審稿來源保持，公開簽章、下載SHA、正式delta同步結果另見LAUNCHER_LIFE_SYSTEM.md與QA/delivery-1.2.1。
+
 ## 2026-09-27 角色生活基地完整升級（1.2.0）
 
 先完成 LIFE_SYSTEM_AUDIT.md，再在 C:/Codex_Candidates/launcher-character-life-1.2.0 由 main fff29a25298d60401a4e61fd96358f1622e6478b 建立隔離候選。正式 authority 仍為 D:/Codex_Release_Worktrees/board-voyage-records-v1；發布與正式選擇性同步結果另見 docs/LAUNCHER_LIFE_SYSTEM.md。保護其他 Board/rank 改動、三款遊戲、既有存檔與已接受的 1.1.15 人物步態／1.1.16 小比例空間。

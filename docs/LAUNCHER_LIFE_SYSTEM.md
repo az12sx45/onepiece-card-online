@@ -1,4 +1,4 @@
-# 角色生活基地 1.2.0
+# 角色生活基地 1.2.1
 
 ## Authority and compatibility
 
@@ -51,7 +51,7 @@ Local test tools distinguish PGlite SQL fixtures, virtual-clock controller tests
 
 LATTICE APIs were unavailable in this session. The formal project identity was read from its existing project configuration; this work does not claim a new persisted task, graph analysis or database acceptance in LATTICE.
 
-## Release artifact and evidence
+## Initial 1.2.0 artifact and evidence
 
 - Version: `1.2.0`, Windows x64 installer, `244419451` bytes.
 - Installer SHA-256: `453cb33058897c5661ec2f5b8ab5e565866e9a0ed134a61a9d280f10cbcbba6b`.
@@ -62,3 +62,11 @@ LATTICE APIs were unavailable in this session. The formal project identity was r
 - Actual Electron/preload to isolated IPC/AuthService/Socket.IO bridge:90 pass, including all ten Life command types, ten-character saving, four stove rotations and purchase. Socket.IO event gate:135 pass. `npm start` on isolated31931 served `/board_start.html` and `/download` with HTTP200, then stopped. No DATABASE_URL was set. The bridge-only run is not the separate full-game renderer test; that historical attempt stopped on missing sparse-checkout vendor files and is not counted as passed.
 - Release and formal synchronization records are retained under `C:/Codex_Candidates/launcher-life-qa-1.2.0/delivery`; runtime/contact/content evidence is additionally committed under `tools/launcher-room/life-v1/review-evidence`.
 - At this artifact-recording step, the signed manifest is prepared and the installer is public; canonical Render activation and formal source synchronization still require their separate readback reports. Later deployment evidence is recorded below when verified.
+
+## Daily directive correction in 1.2.1
+
+Final UI inspection found that changing the daily directive called `renderUi()` before reading the select value; rendering restored the acknowledged old value. The handler now captures the selected value first. The external IPC payload remains `directiveId`, while the internal controller uses `directive`. All six actual selector choices, acknowledgement, refresh persistence and friend read-only behavior passed19 checks. The earlier browser fixture's invalid `free` directive was also corrected to `free_day`.
+
+Because the 1.2.0 installer was already uploaded to an immutable URL, this correction is shipped as 1.2.1. The 128-atlas art generation remains1.2.0 with an updated review binding for the single corrected UI handler. Its separate formal runtime variant records only the already-present Board allowlist difference in `server/desktop-distribution.js`, with exact source/patch/readback hashes; no arbitrary variant is permitted. Actual artifact and deployment readback are recorded below after completion.
+
+1.2.1 artifact:244419418bytes, SHA-256 `39b0ec460157384c57e542292c3efa103e9b0f937c6a3352a6ce27ba05a9ca71`. Package/ASAR byte comparison and actual Electron468 media checks passed. Immutable public installer HEAD200/Range206/fullGET200 and independent disk SHA match. URL: https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.1/ONE-PIECE-Tabletop-Launcher-1.2.1-x64.exe . The source variant validator passed21 positive/negative isolated cases. Canonical1.2.0 was observed at2026-09-27T04:35:24.161129+00:00; the corrected1.2.1 canonical release is separately awaited and must not be inferred from the previous deployment.

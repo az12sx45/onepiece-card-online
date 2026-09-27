@@ -304,7 +304,7 @@
       renderPanel();
     }
     if($('roomLifeDirective'))$('roomLifeDirective').onchange=async event=>{
-      if(!controller)return;const currentEpoch=epoch;manualBusy=true;renderUi();try{const response=await controller.setDirective(event.target.value);if(currentEpoch===epoch&&!response?.ok)status(ERRORS[response?.error]||'方針未更新。',true);}finally{if(currentEpoch===epoch){manualBusy=false;renderUi();}}
+      if(!controller)return;const selectedDirective=event.target.value,currentEpoch=epoch;manualBusy=true;renderUi();try{const response=await controller.setDirective(selectedDirective);if(currentEpoch===epoch&&!response?.ok)status(ERRORS[response?.error]||'方針未更新。',true);}finally{if(currentEpoch===epoch){manualBusy=false;renderUi();}}
     };
     if($('roomLifeAutoAssign'))$('roomLifeAutoAssign').onclick=async()=>{
       if(!controller||manualBusy)return;const currentEpoch=epoch;manualBusy=true;renderUi();try{

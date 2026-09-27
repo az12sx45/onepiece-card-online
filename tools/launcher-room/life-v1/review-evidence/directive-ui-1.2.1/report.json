@@ -1,0 +1,339 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "name": "six labeled production directive options are present",
+      "pass": true,
+      "detail": [
+        {
+          "value": "free_day",
+          "label": "自由日"
+        },
+        {
+          "value": "training_day",
+          "label": "訓練日"
+        },
+        {
+          "value": "work_day",
+          "label": "工作日"
+        },
+        {
+          "value": "feast",
+          "label": "宴會日"
+        },
+        {
+          "value": "maintenance",
+          "label": "整備日"
+        },
+        {
+          "value": "research",
+          "label": "研究日"
+        }
+      ]
+    },
+    {
+      "name": "initial selection is labeled free_day 自由日",
+      "pass": true,
+      "detail": {
+        "value": "free_day",
+        "label": "自由日",
+        "options": [
+          {
+            "value": "free_day",
+            "label": "自由日"
+          },
+          {
+            "value": "training_day",
+            "label": "訓練日"
+          },
+          {
+            "value": "work_day",
+            "label": "工作日"
+          },
+          {
+            "value": "feast",
+            "label": "宴會日"
+          },
+          {
+            "value": "maintenance",
+            "label": "整備日"
+          },
+          {
+            "value": "research",
+            "label": "研究日"
+          }
+        ]
+      }
+    },
+    {
+      "name": "actual UI selection sends the external directiveId free_day",
+      "pass": true,
+      "detail": {
+        "value": "free_day",
+        "label": "自由日",
+        "life": "free_day",
+        "controller": "free_day",
+        "command": {
+          "requestId": "a0a00113-1fb5-449f-9a1f-322c84656e2e",
+          "expectedRevision": 1,
+          "type": "directive.set",
+          "payload": {
+            "directiveId": "free_day"
+          }
+        }
+      }
+    },
+    {
+      "name": "UI and controller retain server-accepted free_day",
+      "pass": true,
+      "detail": {
+        "value": "free_day",
+        "label": "自由日",
+        "life": "free_day",
+        "controller": "free_day",
+        "command": {
+          "requestId": "a0a00113-1fb5-449f-9a1f-322c84656e2e",
+          "expectedRevision": 1,
+          "type": "directive.set",
+          "payload": {
+            "directiveId": "free_day"
+          }
+        }
+      }
+    },
+    {
+      "name": "actual UI selection sends the external directiveId training_day",
+      "pass": true,
+      "detail": {
+        "value": "training_day",
+        "label": "訓練日",
+        "life": "training_day",
+        "controller": "training_day",
+        "command": {
+          "requestId": "a74ede36-26ee-4a41-baaf-91fae20492de",
+          "expectedRevision": 2,
+          "type": "directive.set",
+          "payload": {
+            "directiveId": "training_day"
+          }
+        }
+      }
+    },
+    {
+      "name": "UI and controller retain server-accepted training_day",
+      "pass": true,
+      "detail": {
+        "value": "training_day",
+        "label": "訓練日",
+        "life": "training_day",
+        "controller": "training_day",
+        "command": {
+          "requestId": "a74ede36-26ee-4a41-baaf-91fae20492de",
+          "expectedRevision": 2,
+          "type": "directive.set",
+          "payload": {
+            "directiveId": "training_day"
+          }
+        }
+      }
+    },
+    {
+      "name": "actual UI selection sends the external directiveId work_day",
+      "pass": true,
+      "detail": {
+        "value": "work_day",
+        "label": "工作日",
+        "life": "work_day",
+        "controller": "work_day",
+        "command": {
+          "requestId": "f4739c6d-47cd-4848-8297-13354c5cb7b7",
+          "expectedRevision": 3,
+          "type": "directive.set",
+          "payload": {
+            "directiveId": "work_day"
+          }
+        }
+      }
+    },
+    {
+      "name": "UI and controller retain server-accepted work_day",
+      "pass": true,
+      "detail": {
+        "value": "work_day",
+        "label": "工作日",
+        "life": "work_day",
+        "controller": "work_day",
+        "command": {
+          "requestId": "f4739c6d-47cd-4848-8297-13354c5cb7b7",
+          "expectedRevision": 3,
+          "type": "directive.set",
+          "payload": {
+            "directiveId": "work_day"
+          }
+        }
+      }
+    },
+    {
+      "name": "actual UI selection sends the external directiveId feast",
+      "pass": true,
+      "detail": {
+        "value": "feast",
+        "label": "宴會日",
+        "life": "feast",
+        "controller": "feast",
+        "command": {
+          "requestId": "fa87691f-01d2-4c93-9ce9-efd2e96e37cf",
+          "expectedRevision": 4,
+          "type": "directive.set",
+          "payload": {
+            "directiveId": "feast"
+          }
+        }
+      }
+    },
+    {
+      "name": "UI and controller retain server-accepted feast",
+      "pass": true,
+      "detail": {
+        "value": "feast",
+        "label": "宴會日",
+        "life": "feast",
+        "controller": "feast",
+        "command": {
+          "requestId": "fa87691f-01d2-4c93-9ce9-efd2e96e37cf",
+          "expectedRevision": 4,
+          "type": "directive.set",
+          "payload": {
+            "directiveId": "feast"
+          }
+        }
+      }
+    },
+    {
+      "name": "actual UI selection sends the external directiveId maintenance",
+      "pass": true,
+      "detail": {
+        "value": "maintenance",
+        "label": "整備日",
+        "life": "maintenance",
+        "controller": "maintenance",
+        "command": {
+          "requestId": "461bb09f-0eec-4409-9d92-1996869b9e4b",
+          "expectedRevision": 5,
+          "type": "directive.set",
+          "payload": {
+            "directiveId": "maintenance"
+          }
+        }
+      }
+    },
+    {
+      "name": "UI and controller retain server-accepted maintenance",
+      "pass": true,
+      "detail": {
+        "value": "maintenance",
+        "label": "整備日",
+        "life": "maintenance",
+        "controller": "maintenance",
+        "command": {
+          "requestId": "461bb09f-0eec-4409-9d92-1996869b9e4b",
+          "expectedRevision": 5,
+          "type": "directive.set",
+          "payload": {
+            "directiveId": "maintenance"
+          }
+        }
+      }
+    },
+    {
+      "name": "actual UI selection sends the external directiveId research",
+      "pass": true,
+      "detail": {
+        "value": "research",
+        "label": "研究日",
+        "life": "research",
+        "controller": "research",
+        "command": {
+          "requestId": "9c58fc37-25ac-4cd2-a2fc-b2324cdd1d78",
+          "expectedRevision": 6,
+          "type": "directive.set",
+          "payload": {
+            "directiveId": "research"
+          }
+        }
+      }
+    },
+    {
+      "name": "UI and controller retain server-accepted research",
+      "pass": true,
+      "detail": {
+        "value": "research",
+        "label": "研究日",
+        "life": "research",
+        "controller": "research",
+        "command": {
+          "requestId": "9c58fc37-25ac-4cd2-a2fc-b2324cdd1d78",
+          "expectedRevision": 6,
+          "type": "directive.set",
+          "payload": {
+            "directiveId": "research"
+          }
+        }
+      }
+    },
+    {
+      "name": "same-owner profile refresh preserves selected directive",
+      "pass": true,
+      "detail": {
+        "value": "research"
+      }
+    },
+    {
+      "name": "friend directive selection is visibly disabled",
+      "pass": true
+    },
+    {
+      "name": "friend synthetic change cannot send an IPC mutation or alter owned life",
+      "pass": true,
+      "detail": {
+        "calls": 6,
+        "value": "research",
+        "life": "research",
+        "disabled": true
+      }
+    },
+    {
+      "name": "narrow page fits viewport",
+      "pass": true
+    },
+    {
+      "name": "no uncaught JavaScript errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "startedSources": {
+    "launcher-room-dialogue.js": "5c4fbdf5166f810b8bdebbc21df32b8a954d7e1cc146a7f0c0507082dcc9a35f",
+    "launcher-room-motion-data.js": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+    "launcher-room-motion.js": "5acdafeefc61dc5415f1e89a359ba71061edff4bfe2924bbe14d3265df6f10f7",
+    "launcher-life-data.js": "51aa5267b4cb26339ee446b411d8ea3c524979dace164f0a23ce7ca82fc1c625",
+    "launcher-life-actions.js": "d96db069e8d7025d3e48a9a86a00177e306b5be75dabdc0c85a6aff47a349f92",
+    "launcher-life.js": "ca928053b49f4ba1cb8df0802f1b57e00368cff3e55a87ba909640f931966f9a",
+    "launcher-life-room.js": "2203d1adc9421c3c7ddb47d7cd379c3025c3e3b3c45fffd6e6ad05522008504f",
+    "launcher-room.js": "27617a335c0269a937869d3c91e8f41ebfc99a31e00802131db0c451c1c37bc7"
+  },
+  "scope": "Actual Chromium UI and production launcher files; isolated IPC fixture with free_day and external payload.directiveId, matching the adapter and server contract. No real account, database write or deployment acceptance.",
+  "completedSources": {
+    "launcher-room-dialogue.js": "5c4fbdf5166f810b8bdebbc21df32b8a954d7e1cc146a7f0c0507082dcc9a35f",
+    "launcher-room-motion-data.js": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+    "launcher-room-motion.js": "5acdafeefc61dc5415f1e89a359ba71061edff4bfe2924bbe14d3265df6f10f7",
+    "launcher-life-data.js": "51aa5267b4cb26339ee446b411d8ea3c524979dace164f0a23ce7ca82fc1c625",
+    "launcher-life-actions.js": "d96db069e8d7025d3e48a9a86a00177e306b5be75dabdc0c85a6aff47a349f92",
+    "launcher-life.js": "ca928053b49f4ba1cb8df0802f1b57e00368cff3e55a87ba909640f931966f9a",
+    "launcher-life-room.js": "2203d1adc9421c3c7ddb47d7cd379c3025c3e3b3c45fffd6e6ad05522008504f",
+    "launcher-room.js": "27617a335c0269a937869d3c91e8f41ebfc99a31e00802131db0c451c1c37bc7"
+  },
+  "sourceChangedDuringRun": false,
+  "generatedAt": "2026-09-27T04:32:04.532Z"
+}

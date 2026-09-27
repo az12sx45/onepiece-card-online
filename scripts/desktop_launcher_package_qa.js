@@ -519,7 +519,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.2.0', 'Desktop launcher version must be 1.2.0 for the complete character life release.');
+  assert(packageJson.version === '1.2.1', 'Desktop launcher version must be 1.2.1 for the verified daily-directive correction.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -858,7 +858,7 @@ function validateAsar(asarPath) {
       `Packaged application source differs: ${entry}`);
   }
   const packedPackage = JSON.parse(asar.extractFile(asarPath, 'package.json').toString('utf8'));
-  assert(packedPackage.version === '1.2.0' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
+  assert(packedPackage.version === '1.2.1' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
   for (const entry of entries) {
     const lower = entry.toLowerCase();
     assert(!lower.startsWith('public/'), `app.asar contains the public game tree: ${entry}`);
