@@ -1,0 +1,390 @@
+{
+  "schema": "launcher-minigames-client-qa/1",
+  "status": "PASS",
+  "createdAt": "2026-09-27T20:40:18.596Z",
+  "checks": [
+    {
+      "name": "intro-is-free-and-released-eleven-voices-only",
+      "status": "PASS"
+    },
+    {
+      "name": "double-start-consumes-one-shared-work-slot",
+      "status": "PASS"
+    },
+    {
+      "name": "work-mouse-toggle-keyboard-and-real-timeout",
+      "status": "PASS"
+    },
+    {
+      "name": "lost-ack-retry-recovers-next-round-without-double-credit",
+      "status": "PASS"
+    },
+    {
+      "name": "work-real-clock-wallet-full-preserves-and-spend-then-claim-once",
+      "status": "PASS"
+    },
+    {
+      "name": "training-whole-body-glows-before-input-and-keyboard-memory-play",
+      "status": "PASS"
+    },
+    {
+      "name": "training-free-practice-survives-reward-cooldown-and-cancels",
+      "status": "PASS"
+    },
+    {
+      "name": "work-failure-retry-same-session-with-no-additional-cost",
+      "status": "PASS"
+    },
+    {
+      "name": "narrow-390px-layout-all-controls-and-cancel-before-start",
+      "status": "PASS"
+    },
+    {
+      "name": "narrow-touch-sized-directions-and-explicit-cancel",
+      "status": "PASS"
+    },
+    {
+      "name": "dismiss-during-start-does-not-reopen-under-another-account",
+      "status": "PASS"
+    },
+    {
+      "name": "rendered-assets-and-plaintext-no-page-errors",
+      "status": "PASS"
+    }
+  ],
+  "counts": {
+    "passed": 12,
+    "failed": 0
+  },
+  "sourceSha256": {
+    "desktop/launcher-room-minigames.js": "7823c8ab90aad4f5824f122578b74e2de68ee873c384afab66b387d330d52cb4",
+    "desktop/launcher-room-minigames.css": "c916a394cd5cb8950076797e173343d744be484c5d153564468eec09ec63fe61",
+    "desktop/launcher-life-room.js": "1e4d676156eb662e1b2ef9ceaf56c541e2cefca8182ae2bb699b82d2497abc87",
+    "desktop/auth-service.js": "290ecd2c2e9b1c3ef80fdb944efde789fe306d3ec6492b96bf78556269a51217",
+    "desktop/launcher.html": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6",
+    "server/launcher-life-store.js": "e8eb1075bef91ec87ba3d577316a7318d649942d42fdbcde97dcd968c7a0869a",
+    "server/launcher-minigames.js": "9b55077cf1960ddcba67bb6dffcf0f374d4ad96d0c2c56883270e00b209a0bef",
+    "scripts/launcher_minigames_client_qa.js": "9726085b9142ed94cdf6e37fb3b6ca8410edcb970a256a5f98fddf8f5c15a36b"
+  },
+  "captures": [
+    {
+      "path": "minigames-work-intro-desktop.png",
+      "sha256": "103c9dd78056320495865d1a02f298e67992c83adcb7eb09eb63481ada34de4d",
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      }
+    },
+    {
+      "path": "minigames-work-active-desktop.png",
+      "sha256": "5ec9392436377c1dc64d6020d2680b6e7240da924637fcdb09ef42ecc63bf54a",
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      }
+    },
+    {
+      "path": "minigames-wallet-full-desktop.png",
+      "sha256": "89dfb8aeb412ed185d17215ba90fd222765e6134e3c9f50ed84c0d5eaa9d8d8c",
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      }
+    },
+    {
+      "path": "minigames-work-result-desktop.png",
+      "sha256": "15c64ef0f2829f0cedab61becaa4abce934b5fd12b3ebeb9936a3fe293f5854d",
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      }
+    },
+    {
+      "path": "minigames-training-showcase-desktop.png",
+      "sha256": "10e568ca4457847f6201295ab45e6099e61faf215fdbe912936cda12a68d28f8",
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      }
+    },
+    {
+      "path": "minigames-training-intro-narrow.png",
+      "sha256": "0e0b409818bab8d40db5d2e620fabfce966e060df8f1e95d82dbfa2565f27dc4",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "path": "minigames-training-active-narrow.png",
+      "sha256": "d9146017bd69f899ea7277683c7e74f7930744c95fbf7bc64586432408677ad5",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    }
+  ],
+  "commands": [
+    {
+      "user": "client-owner",
+      "type": "minigame.start",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:39:01.036Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 1,
+      "at": "2026-09-27T20:39:06.334Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 2,
+      "at": "2026-09-27T20:39:09.466Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": false,
+      "error": "minigame_round_conflict",
+      "roundIndex": 2,
+      "at": "2026-09-27T20:39:09.646Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 3,
+      "at": "2026-09-27T20:39:12.528Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 4,
+      "at": "2026-09-27T20:39:15.596Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 5,
+      "at": "2026-09-27T20:39:18.687Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 6,
+      "at": "2026-09-27T20:39:21.757Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 7,
+      "at": "2026-09-27T20:39:24.825Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 8,
+      "at": "2026-09-27T20:39:27.894Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.finish",
+      "ok": false,
+      "error": "wallet_full",
+      "roundIndex": 8,
+      "at": "2026-09-27T20:39:27.922Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.start",
+      "ok": false,
+      "error": "minigame_active",
+      "roundIndex": 8,
+      "at": "2026-09-27T20:39:29.669Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.finish",
+      "ok": true,
+      "roundIndex": 8,
+      "at": "2026-09-27T20:39:29.710Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.start",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:39:29.938Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 1,
+      "at": "2026-09-27T20:39:32.539Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 2,
+      "at": "2026-09-27T20:39:35.823Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 3,
+      "at": "2026-09-27T20:39:39.085Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 4,
+      "at": "2026-09-27T20:39:43.020Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.finish",
+      "ok": true,
+      "roundIndex": 4,
+      "at": "2026-09-27T20:39:50.010Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.start",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:39:50.136Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.cancel",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:39:50.270Z"
+    },
+    {
+      "user": "client-work-failure",
+      "type": "minigame.start",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:39:50.376Z"
+    },
+    {
+      "user": "client-work-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 1,
+      "at": "2026-09-27T20:39:53.448Z"
+    },
+    {
+      "user": "client-work-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 2,
+      "at": "2026-09-27T20:39:56.534Z"
+    },
+    {
+      "user": "client-work-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 3,
+      "at": "2026-09-27T20:39:59.615Z"
+    },
+    {
+      "user": "client-work-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 4,
+      "at": "2026-09-27T20:40:02.698Z"
+    },
+    {
+      "user": "client-work-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 5,
+      "at": "2026-09-27T20:40:05.763Z"
+    },
+    {
+      "user": "client-work-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 6,
+      "at": "2026-09-27T20:40:08.837Z"
+    },
+    {
+      "user": "client-work-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 7,
+      "at": "2026-09-27T20:40:11.913Z"
+    },
+    {
+      "user": "client-work-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 8,
+      "at": "2026-09-27T20:40:14.994Z"
+    },
+    {
+      "user": "client-work-failure",
+      "type": "minigame.finish",
+      "ok": true,
+      "roundIndex": 8,
+      "at": "2026-09-27T20:40:15.038Z"
+    },
+    {
+      "user": "client-work-failure",
+      "type": "minigame.retry",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:40:15.108Z"
+    },
+    {
+      "user": "client-work-failure",
+      "type": "minigame.cancel",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:40:15.246Z"
+    },
+    {
+      "user": "client-second",
+      "type": "minigame.start",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:40:15.554Z"
+    },
+    {
+      "user": "client-second",
+      "type": "minigame.cancel",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:40:18.131Z"
+    },
+    {
+      "user": "client-second",
+      "type": "minigame.start",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:40:18.248Z"
+    }
+  ],
+  "limitations": [
+    "Automated Chromium interaction, not human playtest.",
+    "Real service functions and isolated PGlite; no production account or PostgreSQL transport claim.",
+    "Real wall-clock rounds; fixture reads current challenge for deterministic inputs.",
+    "Module mounted in production HTML; root release checks room-wheel integration separately."
+  ]
+}

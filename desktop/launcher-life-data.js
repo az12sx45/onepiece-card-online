@@ -1470,18 +1470,22 @@
       forbiddenClaimsWithoutSpecialist:['炒菜','點火','烤箱','冰箱取物'],
       capabilityNote:'餐桌只做備品整理。cook 僅於真正持有且擺出的 galley-stove 及正確接觸點啟用。'
     }),
-    navigation:station('navigation','航海資料區',['map-table'],'整理航海資料',{specialistActions:{nami:'read'}}),
+    navigation:station('navigation','航海資料區',['map-table','log-pose-desk'],'整理航海資料',{specialistActions:{nami:'read'}}),
     training:station('training','訓練區',['swords-rack'],'檢查與收整練習用品',{freeFloor:true,actions:['work','train']}),
-    workshop:station('workshop','工作間',['tool-bench'],'分類與擦拭工具',{specialistActions:{usopp:'craft',franky:'craft'}}),
-    medical:station('medical','醫療用品區',['medicine-cabinet'],'清點密封醫療用品',{
-      specialistActions:{chopper:'medicine'},capabilityNote:'一般角色做密封用品清點；喬巴專長循環檢查密封小藥瓶與標記，不虛構病患或用藥。'
+    workshop:station('workshop','工作間',['tool-bench','repair-cart'],'分類與擦拭工具',{
+      specialistActions:{usopp:'craft',franky:'craft'},
+      specialistRequirements:{usopp:{furnitureKeys:['tool-bench']},franky:{furnitureKeys:['tool-bench']}},
+      capabilityNote:'工具推車旁使用完整手持用品整理動作；實際製作工件動作只在原工作台啟用。'
     }),
-    library:station('library','圖書區',['bookshelf'],'整理與核對書冊',{specialistActions:{robin:'read',chopper:'read'}}),
+    medical:station('medical','醫療用品區',['medicine-cabinet','medical-cart'],'清點密封醫療用品',{
+      specialistActions:{chopper:'medicine'},specialistRequirements:{chopper:{furnitureKeys:['medicine-cabinet']}},capabilityNote:'一般角色做密封用品清點；喬巴專長循環檢查密封小藥瓶與標記，不虛構病患或用藥。'
+    }),
+    library:station('library','圖書區',['bookshelf','library-cart'],'整理與核對書冊',{specialistActions:{robin:'read',chopper:'read'}}),
     helm:station('helm','舵輪區',['helm'],'清點操舵備用品',{
       specialistActions:{jinbe:'helm'},capabilityNote:'通用 work 是備用品整理；甚平 helm 必須獨立完整動作及輪緣接觸才能使用。'
     }),
-    deck:station('deck','甲板',['treasure-chest','tangerine-tree'],'整理隨身備用品',{freeFloor:true,
-      capabilityNote:'免費地面工作使用動作圖內的小工具包；不生出玩家未購買的家具。橘子樹旁不做採摘或澆水假動作。'
+    deck:station('deck','甲板',['treasure-chest','tangerine-tree','supply-rack','den-den-desk'],'整理隨身備用品',{freeFloor:true,
+      capabilityNote:'免費地面工作使用動作圖內的小工具包；不生出玩家未購買的家具。橘子樹旁不做採摘或澆水假動作；補給架與電話蟲桌旁只整理備用品，不虛構通話動作。'
     }),
     music:station('music','音樂區',['piano'],'整理樂譜與保養用品',{specialistActions:{brook:'music'},
       capabilityNote:'music 僅布魯克的真演奏循環；其餘角色做整理工作，不假裝都能演奏。'

@@ -81,8 +81,8 @@ const FIELDS={
  'work.reserve':['itemId','stationId','roomRevision','stationType','furnitureId'],
  'work.activate':['jobId'],'work.complete':['jobId'],'work.cancel':['jobId'],
  'directive.set':['directiveId'],'character.interact':['itemId','action'],
- 'minigame.start':['characterId','kind','practice'],
- 'minigame.answer':['sessionId','token','roundId','selections','directions'],
+ 'minigame.start':['characterId','kind','practice','jobId'],
+ 'minigame.answer':['sessionId','token','roundId','selections','directions','ingredients','rotations','path'],
  'minigame.finish':['sessionId','token'],'minigame.cancel':['sessionId','token'],
  'minigame.retry':['sessionId','token'],
  'event.record':['eventId','participants'],'activity.record':['itemId','activity'],'arrival.ack':['arrivalId'],'checkpoint':['exit']
@@ -96,7 +96,7 @@ function validCommand(command) {
 async function performMinigame(db,row,state,companions,command,room,now,sessions) {
   const p=command.payload;
   if(command.type==='minigame.start') {
-    if(!['work','training'].includes(p.kind)||p.practice!==undefined&&typeof p.practice!=='boolean'||p.kind==='work'&&p.practice)return{ok:false,error:'invalid_minigame'};
+    if(!['work','training'].includes(p.kind)||p.practice!==undefined&&typeof p.practice!=='boolean'||p.kind==='work'&&p.practice||p.jobId!==undefined&&(p.kind!=='work'||!M.WORK_JOBS.includes(p.jobId)))return{ok:false,error:'invalid_minigame'};
     const actor=state.characters[p.characterId];
     if(!actor)return{ok:false,error:'not_owned'};
     if(!state.activeCharacterIds.includes(p.characterId))return{ok:false,error:'not_placed'};
@@ -114,7 +114,7 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
       if(actor.needs.energy<20)return{ok:false,error:'needs_rest'};
       actor.needs.energy=L.clamp(actor.needs.energy-6);actor.lastInteractions.train=now.toISOString();
     }
-    const session=M.create(p.kind,p.characterId,room.revision,now,practice);
+    const session=M.create(p.kind,p.characterId,room.revision,now,practice,p.jobId||'supply');
     await M.save(db,row.user_id,session);
     return{ok:true,minigame:M.view(session)};
   }

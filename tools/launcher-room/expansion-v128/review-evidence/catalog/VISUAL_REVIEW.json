@@ -1,0 +1,53 @@
+{
+  "schema": "launcher-room-expansion-visual-review/1",
+  "status": "PASS",
+  "reviewer": "Codex image inspection",
+  "humanAcceptance": false,
+  "createdAt": "2026-09-27T20:42:35.210629+00:00",
+  "artManifest": {
+    "path": "tools/launcher-room/expansion-v128/art-manifest.json",
+    "sha256": "db953c6bf073274a159b7a1ddbd16d8ac685df9043541b26a5002c690fa99625"
+  },
+  "reviewedImages": [
+    {
+      "path": "tools/launcher-room/expansion-v128/furniture-contact-white.png",
+      "sha256": "71b9bf920e17333e293760ce2668e60dd6d88441b79a71f6c7e78d2b2a50f7f4"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-workshop-1366.png",
+      "sha256": "52145bfad1e6444f7e91b44b643bb62127f7e95f65b24e6773b358dcc3e1fc3f"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-aquarium-1366.png",
+      "sha256": "9462a2de9b8072484514f73d7bd9460b910ae56c648fc9c6dabb80d83d757108"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-workshop-390.png",
+      "sha256": "423e49cc9c189a7ed0f6218d06af2cf05a0b70fee8214e18419876169670c6c7"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-workshop-390-right.png",
+      "sha256": "017abc560a7e904a0fb2b57439b757cfb34a91e61df634d9719b93a354db5bab"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-aquarium-390.png",
+      "sha256": "3b2e463fd14b05d1c8f25ae7c13a7ca4560ed91c9e0e3ab98b529c2a0fc91285"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-aquarium-390-right.png",
+      "sha256": "d1684ec08099f23f20f88c004e2bdf2510740079fbef3d97ea65d10944e57f70"
+    }
+  ],
+  "observations": [
+    "All six complete furniture silhouettes retain four distinct front/right/back/left views with transparent margins; no cropped feet or panel stitching.",
+    "Repair-cart first draft was rejected for inconsistent side width and handle placement. Revision 2 removes handles, with matching front/back and matching narrow left/right silhouette widths. Original first draft and receipt are retained.",
+    "Both backgrounds keep an empty, navigable wooden floor; aquarium and workshop fittings remain above the floor seam.",
+    "Actual desktop scenes place furniture below adult Robin shoulder height at comparable depth. Drawings retain detail and do not dwarf the character.",
+    "At 390px the established room horizontal scroller exposes the left furniture and the right side with Robin in separate captures; both sides remain reachable and readable.",
+    "New furniture uses complete handheld sorting or reading animations from adjacent reachable floor cells; no fabricated specialized prop contact is claimed."
+  ],
+  "limitations": [
+    "Model inspection of generated contact sheet and automated browser screenshots, not human acceptance or physical-device testing.",
+    "These are painted 2.5D views rather than a physically rendered 3D model."
+  ]
+}

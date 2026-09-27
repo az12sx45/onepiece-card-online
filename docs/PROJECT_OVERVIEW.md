@@ -2276,3 +2276,9 @@ The character room has two short challenges opened from the companion wheel. Sea
 The server account owns session state, daily work allowances, wallet and affinity. Reconnection can recover an active session; results never trust client-supplied coin amounts. Robin's complete-body redraw addresses a head-to-body style mismatch, rather than claiming a CSS-only scaling defect.
 
 This describes the prepared 1.2.7 candidate. Public release status requires the verified canonical manifest, installer bytes/SHA and delivery report.
+
+## 2026-09-28 Launcher 1.2.8 room expansion and work variety
+
+生活基地擴充至 5 個可購買場景及 17 件家具。新場景為千陽號船匠工作間與千陽號水族館酒吧；六件新家具為補給架、航海記錄桌、工具推車、書籍推車、醫藥推車及電話蟲聯絡桌，均使用商城現有金幣購買，並支援好友參觀。
+
+夥伴輪盤「工作」可選海上補給、香吉士的出餐考驗、佛朗基的管路檢修、娜美的航線演練。11 位已開放角色能參與，新增 33 段各角色的工作提示。角色素材／預載開放旗標／三款桌遊規則保持原有設計。場景地板留空、家具以人物比例固定尺寸並可旋轉四向。

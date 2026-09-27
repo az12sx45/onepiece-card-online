@@ -1,0 +1,542 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "checks": 128,
+  "coverage": {
+    "cooking": {
+      "generatedRounds": 256,
+      "distinctLayouts": 4
+    },
+    "repair": {
+      "generatedRounds": 256,
+      "distinctLayouts": 256
+    },
+    "navigation": {
+      "generatedRounds": 256,
+      "distinctLayouts": 241
+    }
+  },
+  "results": [
+    {
+      "name": "cooking generated rounds are all independently solvable",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking contains layout variation",
+      "status": "PASS"
+    },
+    {
+      "name": "repair generated rounds are all independently solvable",
+      "status": "PASS"
+    },
+    {
+      "name": "repair contains layout variation",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation generated rounds are all independently solvable",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation contains layout variation",
+      "status": "PASS"
+    },
+    {
+      "name": "supply rejects premature answer",
+      "status": "PASS"
+    },
+    {
+      "name": "supply rejects cross-game answer injection",
+      "status": "PASS"
+    },
+    {
+      "name": "supply accepts legal timeout input",
+      "status": "PASS"
+    },
+    {
+      "name": "supply timeout is a miss",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking rejects premature answer",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking rejects cross-game answer injection",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking accepts legal timeout input",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking timeout is a miss",
+      "status": "PASS"
+    },
+    {
+      "name": "repair rejects premature answer",
+      "status": "PASS"
+    },
+    {
+      "name": "repair rejects cross-game answer injection",
+      "status": "PASS"
+    },
+    {
+      "name": "repair accepts legal timeout input",
+      "status": "PASS"
+    },
+    {
+      "name": "repair timeout is a miss",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation rejects premature answer",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation rejects cross-game answer injection",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation accepts legal timeout input",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation timeout is a miss",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation teleport is scored as wrong",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation teleport cannot pass",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation row-wrap is scored as wrong",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation row-wrap cannot pass",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation reef is scored as wrong",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation reef cannot pass",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation backtracking is scored as wrong",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation backtracking cannot pass",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation over-budget is scored as wrong",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation over-budget cannot pass",
+      "status": "PASS"
+    },
+    {
+      "name": "repair malformed rotation rejected []",
+      "status": "PASS"
+    },
+    {
+      "name": "repair malformed rotation rejected [4,4,4,4,4,4,4,4,4]",
+      "status": "PASS"
+    },
+    {
+      "name": "repair malformed rotation rejected [-1,-1,-1,-1,-1,-1,-1,-1,-1]",
+      "status": "PASS"
+    },
+    {
+      "name": "repair malformed rotation rejected [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5]",
+      "status": "PASS"
+    },
+    {
+      "name": "repair malformed rotation rejected [\"1\",\"1\",\"1\",\"1\",\"1\",\"1\",\"1\",\"1\",\"1\"]",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking rejects forged ingredient",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking requires the recipe sequence",
+      "status": "PASS"
+    },
+    {
+      "name": "training rejects work answerfield",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown work job rejected \"treasure\"",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown work job rejected \"\"",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown work job rejected null",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown work job rejected {}",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown work job rejected 1",
+      "status": "PASS"
+    },
+    {
+      "name": "rejected jobs consume no work allowance",
+      "status": "PASS"
+    },
+    {
+      "name": "training cannot carry a work jobId",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking public session preserves selected job",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking holds shared global allowance",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking opening never grants coins",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking gets enough time for eight rounds",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking reconnect preserves current puzzle",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking blocks parallel work variant",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking client reward injection rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking answer request is idempotent",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking old round cannot be replayed",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking awards shop coins once",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking awards fixed ten coins",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking awards existing affinity",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking keeps the existing ledger namespace",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking repeated completion returns same receipt",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking duplicate finish never adds coins",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking preserves Board save",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking preserves Card coins",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking can spend coins through current shop",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking failure does not pay",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking retry retains job identity",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking retry reserves no extra quota",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking retry can earn one reward",
+      "status": "PASS"
+    },
+    {
+      "name": "repair public session preserves selected job",
+      "status": "PASS"
+    },
+    {
+      "name": "repair holds shared global allowance",
+      "status": "PASS"
+    },
+    {
+      "name": "repair opening never grants coins",
+      "status": "PASS"
+    },
+    {
+      "name": "repair gets enough time for eight rounds",
+      "status": "PASS"
+    },
+    {
+      "name": "repair reconnect preserves current puzzle",
+      "status": "PASS"
+    },
+    {
+      "name": "repair blocks parallel work variant",
+      "status": "PASS"
+    },
+    {
+      "name": "repair client reward injection rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "repair answer request is idempotent",
+      "status": "PASS"
+    },
+    {
+      "name": "repair old round cannot be replayed",
+      "status": "PASS"
+    },
+    {
+      "name": "repair awards shop coins once",
+      "status": "PASS"
+    },
+    {
+      "name": "repair awards fixed ten coins",
+      "status": "PASS"
+    },
+    {
+      "name": "repair awards existing affinity",
+      "status": "PASS"
+    },
+    {
+      "name": "repair keeps the existing ledger namespace",
+      "status": "PASS"
+    },
+    {
+      "name": "repair repeated completion returns same receipt",
+      "status": "PASS"
+    },
+    {
+      "name": "repair duplicate finish never adds coins",
+      "status": "PASS"
+    },
+    {
+      "name": "repair preserves Board save",
+      "status": "PASS"
+    },
+    {
+      "name": "repair preserves Card coins",
+      "status": "PASS"
+    },
+    {
+      "name": "repair can spend coins through current shop",
+      "status": "PASS"
+    },
+    {
+      "name": "repair failure does not pay",
+      "status": "PASS"
+    },
+    {
+      "name": "repair retry retains job identity",
+      "status": "PASS"
+    },
+    {
+      "name": "repair retry reserves no extra quota",
+      "status": "PASS"
+    },
+    {
+      "name": "repair retry can earn one reward",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation public session preserves selected job",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation holds shared global allowance",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation opening never grants coins",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation gets enough time for eight rounds",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation reconnect preserves current puzzle",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation blocks parallel work variant",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation client reward injection rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation answer request is idempotent",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation old round cannot be replayed",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation awards shop coins once",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation awards fixed ten coins",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation awards existing affinity",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation keeps the existing ledger namespace",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation repeated completion returns same receipt",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation duplicate finish never adds coins",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation preserves Board save",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation preserves Card coins",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation can spend coins through current shop",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation failure does not pay",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation retry retains job identity",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation retry reserves no extra quota",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation retry can earn one reward",
+      "status": "PASS"
+    },
+    {
+      "name": "missing jobId stays supply",
+      "status": "PASS"
+    },
+    {
+      "name": "pre-update stored session is projected as supply",
+      "status": "PASS"
+    },
+    {
+      "name": "pre-update stored session completes without migration",
+      "status": "PASS"
+    },
+    {
+      "name": "switching work games cannot bypass global six starts",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy background API shares the global quota",
+      "status": "PASS"
+    },
+    {
+      "name": "switching work games cannot bypass actor two starts",
+      "status": "PASS"
+    },
+    {
+      "name": "new repair still active at 240 seconds",
+      "status": "PASS"
+    },
+    {
+      "name": "repair expires at 300 seconds",
+      "status": "PASS"
+    },
+    {
+      "name": "expired new game never pays",
+      "status": "PASS"
+    },
+    {
+      "name": "new cooking respects full wallet",
+      "status": "PASS"
+    },
+    {
+      "name": "wallet full consumes no quota",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation holds reward when wallet fills",
+      "status": "PASS"
+    },
+    {
+      "name": "ready reward survives game timeout",
+      "status": "PASS"
+    },
+    {
+      "name": "held navigation reward claims after shop spend",
+      "status": "PASS"
+    },
+    {
+      "name": "held navigation creates one ledger receipt",
+      "status": "PASS"
+    }
+  ],
+  "sourceHashes": {
+    "server/launcher-minigames.js": "9b55077cf1960ddcba67bb6dffcf0f374d4ad96d0c2c56883270e00b209a0bef",
+    "server/launcher-life-store.js": "e8eb1075bef91ec87ba3d577316a7318d649942d42fdbcde97dcd968c7a0869a",
+    "scripts/launcher_work_variants_server_qa.js": "c66e75a51541e6ce9c511b929a6e1281bb35ae4f21fa4020e1e91685896941b5"
+  },
+  "limitations": [
+    "PGlite isolated in-memory database with serialized transactions; not production PostgreSQL concurrency or human play testing."
+  ],
+  "createdAt": "2026-09-27T20:32:30.253Z"
+}

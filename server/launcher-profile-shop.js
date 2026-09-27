@@ -80,7 +80,9 @@ const CATALOG = Object.freeze([
   ...[
     ['sunny-deck', '千陽號甲板', 'rare'],
     ['sunny-kitchen', '千陽號廚房', 'epic'],
-    ['sunny-library', '千陽號圖書室', 'epic']
+    ['sunny-library', '千陽號圖書室', 'epic'],
+    ['sunny-workshop', '千陽號船匠工作間', 'epic'],
+    ['sunny-aquarium', '千陽號水族館酒吧', 'epic']
   ].map(([key, name, rarity]) => ({
     id: `room-scene-${key}`, type: 'room_scene', key, name, rarity,
     asset: `opui://launcher/images/launcher_room/scenes/${key}.webp`
@@ -98,6 +100,18 @@ const CATALOG = Object.freeze([
     ['tool-bench', '佛朗基的工作台', 'epic']
   ].map(([key, name, rarity]) => ({
     id: `room-furniture-${key}`, type: 'room_furniture', key, name, rarity,
+    asset: `opui://launcher/images/launcher_room/furniture/${key}.webp`
+  })),
+  ...[
+    ['supply-rack', '甲板補給架', 'rare', 'deck', 2, 1],
+    ['log-pose-desk', '航海記錄桌', 'rare', 'navigation', 2, 2],
+    ['repair-cart', '船匠工具推車', 'rare', 'workshop', 2, 1],
+    ['library-cart', '考古書籍推車', 'rare', 'library', 2, 1],
+    ['medical-cart', '船醫備品推車', 'rare', 'medical', 2, 1],
+    ['den-den-desk', '電話蟲聯絡桌', 'epic', 'deck', 2, 2]
+  ].map(([key, name, rarity, stationType, cols, rows]) => ({
+    id: `room-furniture-${key}`, type: 'room_furniture', key, name, rarity, stationType,
+    footprint: { cols, rows },
     asset: `opui://launcher/images/launcher_room/furniture/${key}.webp`
   })),
   { id: 'room-furniture-galley-stove', type: 'room_furniture', key: 'galley-stove', name: '千陽號料理爐台',

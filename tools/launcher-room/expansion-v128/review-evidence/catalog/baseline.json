@@ -1,0 +1,23 @@
+{
+  "schema": "launcher-expansion-catalog-baseline/1",
+  "sourceRoot": "D:\\Codex_Candidates\\launcher-minigames-deploy",
+  "commit": "6dc1fcf32c13225e108b32767251c20098eefed4",
+  "createdAt": "2026-09-27T20:30:54.061291+00:00",
+  "files": [
+    {
+      "path": "server/launcher-profile-shop.js",
+      "sha256": "011b2600dee65f52cd14af28577d89f304fa4beb973d8eb82253692a76b0408d",
+      "bytes": 58136
+    },
+    {
+      "path": "desktop/launcher-room.js",
+      "sha256": "f461e338bfc633e2ba0f078e1460d5336764fe4b299dce5a5aa70ecbd79a2dbd",
+      "bytes": 93172
+    },
+    {
+      "path": "desktop/launcher-life-data.js",
+      "sha256": "dab3c07b0610acb328e31300094bf0faa28c1b4c7e13acec14f32e1d83ecb908",
+      "bytes": 75836
+    }
+  ]
+}

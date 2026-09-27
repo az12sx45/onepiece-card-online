@@ -1,0 +1,125 @@
+{
+  "schema": "launcher-room-expansion-renderer-qa/1",
+  "status": "PASS",
+  "createdAt": "2026-09-27T20:41:51.685Z",
+  "sourceRoot": "D:\\Codex_Candidates\\launcher-minigames-deploy",
+  "sourceSha256": {
+    "desktop/launcher-reserved-crew.js": "e42d09aa38205cd105ee48fb30a5799632cd67b1dec2db881abf9e19c4fa30a6",
+    "desktop/launcher-room-dialogue.js": "3cb915a30dbff3c20845d9dbfb4e88cbc15761a1c79f9899895e05f69cadd05e",
+    "desktop/launcher-room-motion-data.js": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+    "desktop/launcher-room-motion.js": "eb0d40f266aa56c1e37fcc4dd6a959d39eb7d6cd955d5f4961ac0612bc175d41",
+    "desktop/launcher-life-data.js": "edbfb2d5e89a684684edd23fa73af0d4f2657b5ad5fdd0f3c48889100b43e770",
+    "desktop/launcher-life-actions.js": "9d15a266c00540ab937cb4a1010e521763403c7b23d2bede443e8be0b5fb8b64",
+    "desktop/launcher-life-room.js": "1e4d676156eb662e1b2ef9ceaf56c541e2cefca8182ae2bb699b82d2497abc87",
+    "desktop/launcher-room.js": "d9495b1c9730d690bbc2faf17df6e47fa53a7b91527ea874722b1669b802b993",
+    "desktop/launcher.html": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6",
+    "desktop/launcher.css": "4a6986900ea3d7bb8d94739de37075dd45103caa48abefe56d2583496b0fabf3",
+    "desktop/launcher-social.css": "56c5d6f985c30aa5336bdc98c44954e44f5d2372cf96d69a213f67c76425fe2b",
+    "desktop/launcher-profile-shop.css": "689d01d74bbb2c2b4eaaba42d5f3d763d081d2b29c930e10836ea5ee2901e6d2",
+    "desktop/launcher-room.css": "3dc6ac0750ee8afcba5c202516e81d180fec5472795a6679ae8887087f754c16",
+    "server/launcher-profile-shop.js": "502dff93ffa54503c556b75abce3c7e48bb6327d7e38d6476a87e1b4dd014427",
+    "scripts/launcher_room_expansion_browser_qa.js": "d45425c148468a3627771f684bf8bffe9bb3e93383875a554c692ccfc0e80176"
+  },
+  "assetSha256": {
+    "public/images/launcher_room/scenes/sunny-workshop.webp": "ce78713fb71d12df11c5c73dfda7001493e9dcb431462da5d28d40d5b5bd4adf",
+    "public/images/launcher_room/scenes/sunny-aquarium.webp": "d61bd91709f314c2b103abffca5f923c40c99eb9e2fb2952c781f447f108b716",
+    "public/images/launcher_room/furniture/supply-rack.webp": "4acd6e4505c9e2f58f83e88caa562ae661f1167e4c51240cf70b80b3a10bb3f6",
+    "public/images/launcher_room/furniture/log-pose-desk.webp": "e9850de48acf238fc6112594d80f459d7dc6fee8e6b88e92ab1fe9c5aa16ceca",
+    "public/images/launcher_room/furniture/repair-cart.webp": "e733ee0a06ee4e0ece6507873bc51c6f2480476e90c25ab211ba214e14b1fc93",
+    "public/images/launcher_room/furniture/library-cart.webp": "fb6380701cea91220a566f47374e43ababc49b1ec0c29a8f4b52b7a091be2dbe",
+    "public/images/launcher_room/furniture/medical-cart.webp": "196efe6a8387460fd1538af15f82234e688f0783de3a994d06c58ffa54813c01",
+    "public/images/launcher_room/furniture/den-den-desk.webp": "8f61bc2ba134bb93d129daa57464885356b0095c1de637475c8b32b576635636",
+    "public/images/launcher_room/furniture_views/supply-rack/0.webp": "4acd6e4505c9e2f58f83e88caa562ae661f1167e4c51240cf70b80b3a10bb3f6",
+    "public/images/launcher_room/furniture_views/supply-rack/1.webp": "abe8e36a113875accb483704fe594030827739ad519795b54d5bbce9fbf89069",
+    "public/images/launcher_room/furniture_views/supply-rack/2.webp": "d4e51c2a23ce3b22b659b60871aad98c06875e12ffe957a53038751337d6e4d4",
+    "public/images/launcher_room/furniture_views/supply-rack/3.webp": "a50b879c81acbed14f87450e1731d68230d9ae74fd88774a96bc065a1ffbdf9c",
+    "public/images/launcher_room/furniture_views/log-pose-desk/0.webp": "e9850de48acf238fc6112594d80f459d7dc6fee8e6b88e92ab1fe9c5aa16ceca",
+    "public/images/launcher_room/furniture_views/log-pose-desk/1.webp": "7328a853e721c973415748c09b59de4c39a03c462d5e2fea8c8ddb4307d37ecf",
+    "public/images/launcher_room/furniture_views/log-pose-desk/2.webp": "f9d663a859b7890e48b4f82730c322a4641612ee8ef1deccd558b474c40a20fc",
+    "public/images/launcher_room/furniture_views/log-pose-desk/3.webp": "66302a00bad2964482b7a5a71788f023c3e2b4a20bf289a408d8a9f775566d25",
+    "public/images/launcher_room/furniture_views/repair-cart/0.webp": "e733ee0a06ee4e0ece6507873bc51c6f2480476e90c25ab211ba214e14b1fc93",
+    "public/images/launcher_room/furniture_views/repair-cart/1.webp": "8edcc7547e5b18e77c4d6e52b0a886525d20cbf95eef41641501f7e6a49db636",
+    "public/images/launcher_room/furniture_views/repair-cart/2.webp": "bd51d466c3c2d25b91673e506846d04fe44dd4f0a8f8c6fa1b06ab239ada728a",
+    "public/images/launcher_room/furniture_views/repair-cart/3.webp": "54eda12ed1da1475c1162ce310131373f165be525703a2e991a27e6f2a13cbf9",
+    "public/images/launcher_room/furniture_views/library-cart/0.webp": "fb6380701cea91220a566f47374e43ababc49b1ec0c29a8f4b52b7a091be2dbe",
+    "public/images/launcher_room/furniture_views/library-cart/1.webp": "5cb05a8bd030ba8e2609a1041475423645d397ba8b40bae8468124e0443031a1",
+    "public/images/launcher_room/furniture_views/library-cart/2.webp": "1b24fe6d01339f5709558749003988e3eeed47dc710f74f4e1f70a1251ecb00f",
+    "public/images/launcher_room/furniture_views/library-cart/3.webp": "ad1f309f26ef158768ded8856dd30c56d6deeaaaaca7616b796ee26553d77731",
+    "public/images/launcher_room/furniture_views/medical-cart/0.webp": "196efe6a8387460fd1538af15f82234e688f0783de3a994d06c58ffa54813c01",
+    "public/images/launcher_room/furniture_views/medical-cart/1.webp": "6e8a44c31660d1c23e28aa67e6857fffd3aa887dd8c767e33fd52aac5ad4c4db",
+    "public/images/launcher_room/furniture_views/medical-cart/2.webp": "ba53f6cf62c4bc78865aaed981fdb2a26c2872800b63e12497b4b13e64386419",
+    "public/images/launcher_room/furniture_views/medical-cart/3.webp": "c8f3ae5dd37303908d810050fb729347754d6fe17360ee50445330e92426d2d3",
+    "public/images/launcher_room/furniture_views/den-den-desk/0.webp": "8f61bc2ba134bb93d129daa57464885356b0095c1de637475c8b32b576635636",
+    "public/images/launcher_room/furniture_views/den-den-desk/1.webp": "cc9fc975c4c7ac8cd0940901f2ca103e1a8220e9fcaed11a64df8c965461de13",
+    "public/images/launcher_room/furniture_views/den-den-desk/2.webp": "fc6ac48eb16dd702fb51e20174f1d2b9f994d6f84a315ae42d99bb974b38fdb8",
+    "public/images/launcher_room/furniture_views/den-den-desk/3.webp": "1fb7f306b1b5040ecdec199a474260c4ae574d3965eac7f7f5df5b60a2e60aa8"
+  },
+  "checks": [
+    {
+      "name": "six-items-four-turns-own-fixed-scale-and-rotated-footprint",
+      "status": "PASS"
+    },
+    {
+      "name": "all-24-front-approaches-avoid-footprints-and-blocked-fronts-are-unavailable",
+      "status": "PASS"
+    },
+    {
+      "name": "one-free-front-cell-remains-usable-and-wall-facing-front-is-unavailable",
+      "status": "PASS"
+    },
+    {
+      "name": "placing-at-same-point-and-editor-rotation-never-overlap-occupied-grid",
+      "status": "PASS"
+    },
+    {
+      "name": "owner-editor-saves-new-scene-furniture-and-visitor-cannot-edit",
+      "status": "PASS"
+    },
+    {
+      "name": "two-scenes-six-thumbnails-and-24-view-assets-decode-at-native-size",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop-and-narrow-room-layouts-use-new-art-with-robin-and-no-fallbacks",
+      "status": "PASS"
+    },
+    {
+      "name": "no-script-errors-or-unexpected-wallet-commands",
+      "status": "PASS"
+    }
+  ],
+  "captures": [
+    {
+      "file": "sunny-workshop-1366.png",
+      "sha256": "52145bfad1e6444f7e91b44b643bb62127f7e95f65b24e6773b358dcc3e1fc3f"
+    },
+    {
+      "file": "sunny-aquarium-1366.png",
+      "sha256": "9462a2de9b8072484514f73d7bd9460b910ae56c648fc9c6dabb80d83d757108"
+    },
+    {
+      "file": "sunny-workshop-390.png",
+      "sha256": "423e49cc9c189a7ed0f6218d06af2cf05a0b70fee8214e18419876169670c6c7"
+    },
+    {
+      "file": "sunny-workshop-390-right.png",
+      "sha256": "017abc560a7e904a0fb2b57439b757cfb34a91e61df634d9719b93a354db5bab"
+    },
+    {
+      "file": "sunny-aquarium-390.png",
+      "sha256": "3b2e463fd14b05d1c8f25ae7c13a7ca4560ed91c9e0e3ab98b529c2a0fc91285"
+    },
+    {
+      "file": "sunny-aquarium-390-right.png",
+      "sha256": "d1684ec08099f23f20f88c004e2bdf2510740079fbef3d97ea65d10944e57f70"
+    }
+  ],
+  "requireAssets": true,
+  "missing": [],
+  "errors": [],
+  "limitations": [
+    "Real room HTML/CSS/JS, editor, layout, pathfinder and station discovery in automated Chromium with local IPC fixture.",
+    "Lifecycle controller and jobs are covered separately; this test does not mutate production accounts.",
+    "Human play, physical device and visual approval are not implied by browser assertions."
+  ]
+}

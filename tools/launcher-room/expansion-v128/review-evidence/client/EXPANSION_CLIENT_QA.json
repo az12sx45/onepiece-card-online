@@ -1,0 +1,620 @@
+{
+  "schema": "launcher-expansion-client-qa/1",
+  "status": "PASS",
+  "createdAt": "2026-09-27T20:41:06.973Z",
+  "checks": [
+    {
+      "name": "four-work-cards-free-selection-shared-budget-and-supply-default",
+      "status": "PASS"
+    },
+    {
+      "name": "all-eleven-characters-have-distinct-new-job-briefs",
+      "status": "PASS"
+    },
+    {
+      "name": "cooking-eight-real-rounds-keyboard-mouse-undo-and-ten-shop-coins",
+      "status": "PASS"
+    },
+    {
+      "name": "repair-eight-real-rounds-keyboard-mouse-undo-and-ten-shop-coins",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation-eight-real-rounds-keyboard-mouse-undo-and-ten-shop-coins",
+      "status": "PASS"
+    },
+    {
+      "name": "three-jobs-share-one-wallet-and-daily-ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "390px-work-picker-and-puzzle-controls-remain-onscreen",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation-reef-stays-disabled-after-answer-and-keyboard-cancel-focus",
+      "status": "PASS"
+    },
+    {
+      "name": "timeout-partial-cooking-counts-miss-and-failed-game-retries-free",
+      "status": "PASS"
+    },
+    {
+      "name": "dismiss-during-new-job-start-never-reopens-for-different-account",
+      "status": "PASS"
+    },
+    {
+      "name": "new-puzzles-real-assets-no-missing-resources-or-console-errors",
+      "status": "PASS"
+    }
+  ],
+  "counts": {
+    "passed": 11,
+    "failed": 0
+  },
+  "sourceSha256": {
+    "desktop/launcher-room-minigames.js": "7823c8ab90aad4f5824f122578b74e2de68ee873c384afab66b387d330d52cb4",
+    "desktop/launcher-room-minigames.css": "c916a394cd5cb8950076797e173343d744be484c5d153564468eec09ec63fe61",
+    "desktop/launcher-life-room.js": "1e4d676156eb662e1b2ef9ceaf56c541e2cefca8182ae2bb699b82d2497abc87",
+    "desktop/auth-service.js": "290ecd2c2e9b1c3ef80fdb944efde789fe306d3ec6492b96bf78556269a51217",
+    "desktop/launcher.html": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6",
+    "server/launcher-life-store.js": "e8eb1075bef91ec87ba3d577316a7318d649942d42fdbcde97dcd968c7a0869a",
+    "server/launcher-minigames.js": "9b55077cf1960ddcba67bb6dffcf0f374d4ad96d0c2c56883270e00b209a0bef",
+    "scripts/launcher_room_expansion_client_qa.js": "44c435b8cae1c452919911c2a43d0672f46f17a2c3e473e69d3bb88cc025cc6a"
+  },
+  "assetSha256": {
+    "public/images/board/avatars/49.webp": "d9e102e5d14717d674bff36864bcd6b64b02bad8e4629f41ed2b27d3b989a5e6",
+    "public/images/board/avatars/8.webp": "d851a2b4ccf61a7db5c22c45780d9fcfd718b9bb4cb1f1e81831817b66edf167",
+    "public/images/desktop_launcher/desktop_launcher_cabin_bg_v1.png": "93097dc75c0b2997981e9b267256af5ccec23040fb0c1f716dfdd7570a87174a",
+    "public/images/desktop_launcher/launcher_box_center_light_01_v3.png": "b9c19798b9cc5ace537a5f6d0d002dc9ab3611127c7f03a83c8d9e38dedae34a",
+    "public/images/desktop_launcher/launcher_box_center_light_02_v3.png": "29f169ba30cddd80933f25d2222889777413e9abb64598cb7db6620b80171f87",
+    "public/images/desktop_launcher/launcher_box_center_light_03_v3.png": "ff148b5104f7d904db4f3d26843716ed319b5acf0a572fa32d3e4544490832a1",
+    "public/images/desktop_launcher/launcher_box_center_light_04_v3.png": "03171e42b0c35f7885a234cbc1f99af4fbef43f8fc9160a2cfceca86e3848f50",
+    "public/images/desktop_launcher/launcher_box_core_frame_01_v1.png": "d8e550dec54db0fefa2ba1e31bf26838315769f62a65b345c70daece6e026697",
+    "public/images/desktop_launcher/launcher_cursor_logpose_default_v1.png": "900e361f0aa062916da40e72ece9d8c8ef23c5bc9df7ffce3d7d6f21324652a7",
+    "public/images/desktop_launcher/launcher_cursor_logpose_pointer_v1.png": "f41522184c5b62a71a9b9ca14baacade1fb61eebf478a56b9a9b780d8c0b47f3",
+    "public/images/desktop_launcher/launcher_cursor_logpose_pressed_v1.png": "7d8f72884ef9b40fad290fc4a21dc8ba1d0756acda66c8d64d95a33a0f1459c1",
+    "public/images/game_launcher/launcher_board_cover_logo_perspective_v5.png": "039534cc27759914d33c95fd7b3a80899a93b8b135f2607cf88f3b09fe3e59c8",
+    "public/images/game_launcher/launcher_card_cover_perspective_v2.png": "7da8f83de28979221e4f9db8918ec893dca4bff53da10aa864107f548d832991",
+    "public/images/game_launcher/launcher_chess_cover_logo_perspective_v5.png": "8b406c9963f308c12e92f7f0bcbd1fb94ac1889a15bf92773f5387f2fc5a6d09",
+    "public/images/game_launcher/launcher_tabletop_series_logo_v1.png": "2ae34a49d112f92fbe44bf30c4489ae9a1d7a2d100bf5669121e0bc4b5e91355",
+    "public/images/launcher_room/minigames_v1/deck.webp": "ffcd35bf294edcdc8c50564a4d34b292bea87f920824731b5ed3547c7ea5dc62",
+    "public/images/launcher_room/motion_v4/brook/east.webp": "4711497531a98661ad158d2140534325966e808feb0102c448c9e25d0551a8c7",
+    "public/images/launcher_room/motion_v4/brook/north.webp": "80d8ae550a97b1e424cc7245b1ddc25656768b831fdb849c927bf92f864d3155",
+    "public/images/launcher_room/motion_v4/brook/south.webp": "3734a7885c42db8f13cb1e4dd26ea6d87d9400180b48607642dabf9a5bde2b0e",
+    "public/images/launcher_room/motion_v4/brook/west.webp": "ef19dcf996a3e424ce9b65491dd08da67f090d2c903e897fcc24847204dba24f",
+    "public/images/launcher_room/motion_v4/chopper/east.webp": "5c9824511aa0f0d156cbcbb63115cd2997b085d779ee25a80ce5978577673f4e",
+    "public/images/launcher_room/motion_v4/chopper/north.webp": "03029a18c3bdb2fac15fa88ce3600691d318a8f75b7a2822f7282f8b736fcd0b",
+    "public/images/launcher_room/motion_v4/chopper/south.webp": "ed9ce8574d1e71094369058bfd1b3efd82f515eaac6206f46a34a31282c0d0ff",
+    "public/images/launcher_room/motion_v4/chopper/west.webp": "a5ad87cdc8ee0df311a19ff634de440dba8c5967f35516b8fa0246d0b321c44b",
+    "public/images/launcher_room/motion_v4/franky/east.webp": "5005428388cf28e9bdf5ca77a0d5e412e8da86e1ae2399b10b295fed08498c18",
+    "public/images/launcher_room/motion_v4/franky/north.webp": "75bdd92bc267a4b52ee5d639af0246d18a0bbee64146ec5fac63b39b344a7437",
+    "public/images/launcher_room/motion_v4/franky/south.webp": "4d16ce840bb960c74e8ce12443395584ab8fa0771f87cba161fc75a5f96fbb2f",
+    "public/images/launcher_room/motion_v4/franky/west.webp": "74964966934213e618f6300c37c859d6351df21dd6080dc616770f4637bc85dc",
+    "public/images/launcher_room/motion_v4/jinbe/east.webp": "273b25a639c63da6d33622c85586db7d973ca706ddc0e5baaa634a9fc3b8d7c7",
+    "public/images/launcher_room/motion_v4/jinbe/north.webp": "0724c5577319e69efbdf87173c217fd421344379a31f4967590193acbdc87c17",
+    "public/images/launcher_room/motion_v4/jinbe/south.webp": "ba7c5bff71d6d58b2bc92f8fc508b539bc35578aac3c8e49a0d0d8a060dd1c31",
+    "public/images/launcher_room/motion_v4/jinbe/west.webp": "f29b4701fa6924809131c6fbd7855f82418d25f5e4cce33e38c465500d3e7d53",
+    "public/images/launcher_room/motion_v4/luffy/east.webp": "b38fdc1605dbf92fad73d37a948a94e50cbf879b0c8a744e28bbf1f5efe438cf",
+    "public/images/launcher_room/motion_v4/luffy/north.webp": "94d34df61be4900ff938e839d8b4e630a5bc759d96b8e7e2230ac6049eaa948f",
+    "public/images/launcher_room/motion_v4/luffy/south.webp": "d2f51107eac3ffe4532e2e0cfa47c2495c4496431be6c51f8bab1e2f19de46e7",
+    "public/images/launcher_room/motion_v4/luffy/west.webp": "fd84b3a2d03657be0de1f34fbb5cb9ad1c15e1effd0240873400862af1c755e5",
+    "public/images/launcher_room/motion_v4/nami/east.webp": "3caf57339186a388c854936e26dc32cfbbef475ac4827ee8f406ef50308ee997",
+    "public/images/launcher_room/motion_v4/nami/north.webp": "1a07e8d6f19bb8d7c681c42bfca536c086d0e481fadaeb7fed776b6efce2a4d1",
+    "public/images/launcher_room/motion_v4/nami/south.webp": "6ff45b290f0adb9be57b2d60b96a25f9c3a56801b63154559466fc34d65bc907",
+    "public/images/launcher_room/motion_v4/nami/west.webp": "0626b8ae304de8bd6f3e639957acbfd739dec60dcad73bd0d4767fee8ed86e6d",
+    "public/images/launcher_room/motion_v4/sanji/east.webp": "4ea6fe3893710b9805ce5e5bbef7d03e8c8acd9541d66c2f85288c78713af4b6",
+    "public/images/launcher_room/motion_v4/sanji/north.webp": "956e3f1032169e9e8b0c9df67fc4aaf3c9cb6f35ef8e2475cf9244b88469cbc2",
+    "public/images/launcher_room/motion_v4/sanji/south.webp": "d8c2a5c00b4e435b7172247c7d28e1fd2830f6aedbf8817c9c1a22e46d7c2b91",
+    "public/images/launcher_room/motion_v4/sanji/west.webp": "ed644f5bfb9fb7aa76e6f4945c2083ccaa7cbcb1186c2f847677104b522f4f91",
+    "public/images/launcher_room/motion_v4/usopp/east.webp": "60c7d1b3277d875a3f3ca5dbbff04715f85f62029c441c19774dcf59fa6cb241",
+    "public/images/launcher_room/motion_v4/usopp/north.webp": "10c74e3c3d1db6606154823a4566624329eb6ad76a0e23ac8278f6ec4d14fe1d",
+    "public/images/launcher_room/motion_v4/usopp/south.webp": "c3a0ab5d9ba7b8aca4753e896c8e6115af44fe4666368429d6f1baf8b05effeb",
+    "public/images/launcher_room/motion_v4/usopp/west.webp": "1a07cbf9899822a222904ec6aaeb5cbe32114a18db87e064de28ccd9b72984fb",
+    "public/images/launcher_room/motion_v4/zoro/east.webp": "43fd11ec9a1e50a672266a8623fae514149805231aae6c1133b61db5aa5f0c15",
+    "public/images/launcher_room/motion_v4/zoro/north.webp": "d737435df80534e7c8e8689d7e5eeba58232a3dd3d611438de9d8c59b21c658e",
+    "public/images/launcher_room/motion_v4/zoro/south.webp": "0fe7e3f8881a5f45e5a3bcb31a186873e612c99b0f484ba4cb381eafbc56b515",
+    "public/images/launcher_room/motion_v4/zoro/west.webp": "3914dd8728f0ca54ac11b4116ac0bbfa3d6c757c50146a4d613eea6a438388ff",
+    "public/images/launcher_room/portrait_v3/brook.webp": "6b1515f105acdfa4269c58eeba45d37e5fe2a5f712515318c9f9bc9bd4d1391e",
+    "public/images/launcher_room/portrait_v3/chopper.webp": "8a04c2a5cc57daab39005dd87bbaa5fa7438ce26c757826a40a4bd61a7cbcc0b",
+    "public/images/launcher_room/portrait_v3/franky.webp": "80a2eb9333867d0e98db043d50e26608fd752ee72486c1684ab8fe73d5bc5af0",
+    "public/images/launcher_room/portrait_v3/jinbe.webp": "f76e664ba3544304d2f457be111a0b3d1fcd3f17c0cfdb2a2d7a03ca7b18dc6d",
+    "public/images/launcher_room/portrait_v3/luffy.webp": "5e1e9f01d850395206a18fe9f0340b72f02884c8b737beda0b98ae21ed7fb6f1",
+    "public/images/launcher_room/portrait_v3/nami.webp": "a427dff86fe15bf8edde9078dd1716f2ff8ddaf83333d584db460c3ecb17b235",
+    "public/images/launcher_room/portrait_v3/sanji.webp": "c3cfc54f3cc07585f4e34f7914096c8ae540d99122ab89eb04018c314c02a80b",
+    "public/images/launcher_room/portrait_v3/usopp.webp": "b7066ef7c09f599dd2e4a9a09e3451aca652ffc807180badd4fe0a8a1ef2cf8c",
+    "public/images/launcher_room/portrait_v3/zoro.webp": "81c485a7b25da72be74095cfacee1794c28c88cbdb9a807bc39892ac19ba8a8f",
+    "public/images/launcher_room/reserved_v1/ace/portrait.webp": "f000212ce2b93ac9684be18a3d6c9c5f78ff94958a35031ed4ec556afdd055f8",
+    "public/images/launcher_room/reserved_v1/ace/walk/east.webp": "9c799350017ba7fd4226684a4c5c19b009f9bb88db9d722a7ec34a3a8dd3bddd",
+    "public/images/launcher_room/reserved_v1/ace/walk/north.webp": "7701ed6a9a6a64378785c907567a249a170d4c8c4e33dbe81a8c1334e5c8d51b",
+    "public/images/launcher_room/reserved_v1/ace/walk/south.webp": "8fac027e7f882316a97f7579cc8c16d01b6df51ed60662c6032467632ff7e163",
+    "public/images/launcher_room/reserved_v1/ace/walk/west.webp": "8c6d5849a7a80f7656b11d2f066ff81d6913a740442c1c420a83c0de5440ae7c",
+    "public/images/launcher_room/robin_v2/portrait.webp": "ddf9577b980c778f6d9190533181b0b8061757e5838105db299ab46148c0232c",
+    "public/images/launcher_room/robin_v2/walk/east.webp": "713da4baf28e90895a821f84a82546d13f51e6ec600afcdbadc2cc9834b141cf",
+    "public/images/launcher_room/robin_v2/walk/north.webp": "56cc1ff75f4b441c4223885b4320502b5931fbfeb6fba8e1196a8f008c1224f1",
+    "public/images/launcher_room/robin_v2/walk/south.webp": "32d1c6e9e3fe67c7498ebf50bd4a4c85057fe8350dff56f3a6fdb0b28a7cc1e1",
+    "public/images/launcher_room/robin_v2/walk/west.webp": "b9032bd2dfd36f67610f96dfefef3936438464247bec58d1120c6bcbdd30a101",
+    "public/images/launcher_room/scenes/crew-cabin-v2.webp": "e7fb18d9e378e8e99b6883e19c24385a1a300a99a17501d4fe8d881008f81652",
+    "public/images/launcher_room/scenes/sunny-kitchen-v2.webp": "c73421009114f9465868cffb81d5487c1ad171acab2261c366fd6544df28db96",
+    "public/images/launcher_room/scenes/sunny-workshop.webp": "ce78713fb71d12df11c5c73dfda7001493e9dcb431462da5d28d40d5b5bd4adf"
+  },
+  "captures": [
+    {
+      "path": "four-jobs-desktop.png",
+      "sha256": "09ca5538b719accf64ffbbf942a60dabb90f2da5d48ad863adc964491139ec68",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "cooking-active-desktop.png",
+      "sha256": "99d7b2c9411a37264d486afc1789b477d11a5be9379f11aab63587911c115d08",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "cooking-result-desktop.png",
+      "sha256": "3d21427ba2f1962f209a115d59814823936458553a0f2a9c87407873dc7d732b",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "repair-active-desktop.png",
+      "sha256": "7ba70bb294991d49ef4e5be2f8fcb1583d7f960b814f272db92de41d9c81ea81",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "repair-result-desktop.png",
+      "sha256": "a2f1ae0d47e1241309248981723d382252495638543b4f0d4bc72b8d8afe5b15",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "navigation-active-desktop.png",
+      "sha256": "c8049b27d1b3075561577fc1441b4605213b79df6873c61f9e5692ed7c217b15",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "navigation-result-desktop.png",
+      "sha256": "213dda2095e735a924364b04f0e6bb6777b1deb7d34952d4b2a9df0391412bcb",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "four-jobs-narrow.png",
+      "sha256": "9b5dd0839a01ea8f655d47108f1c2a9a2bedad5ffabf9e0f19714411040c833c",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "path": "cooking-active-narrow.png",
+      "sha256": "68973aefe5d2947e3fb8075ce47b5d568ac670f00a3f83037e6aac8eef0bb107",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "path": "repair-active-narrow.png",
+      "sha256": "9535b8292370d2a2a29b6ae450bda1dadc8d7ad4279168990e9edb4b92c80804",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "path": "navigation-active-narrow.png",
+      "sha256": "9f3017436a156805d8d369dd92f44430938205b5a2ddef9db922f42f60acb4d3",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    }
+  ],
+  "commands": [
+    {
+      "user": "client-owner",
+      "type": "minigame.start",
+      "jobId": "cooking",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:39:09.919Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 1,
+      "at": "2026-09-27T20:39:12.980Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": false,
+      "error": "minigame_round_conflict",
+      "roundIndex": 1,
+      "at": "2026-09-27T20:39:13.138Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 2,
+      "at": "2026-09-27T20:39:16.056Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 3,
+      "at": "2026-09-27T20:39:19.134Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 4,
+      "at": "2026-09-27T20:39:22.216Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 5,
+      "at": "2026-09-27T20:39:25.309Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 6,
+      "at": "2026-09-27T20:39:28.376Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 7,
+      "at": "2026-09-27T20:39:31.449Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 8,
+      "at": "2026-09-27T20:39:34.527Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.finish",
+      "ok": true,
+      "roundIndex": 8,
+      "at": "2026-09-27T20:39:34.587Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.start",
+      "jobId": "repair",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:39:34.902Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 1,
+      "at": "2026-09-27T20:39:37.974Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 2,
+      "at": "2026-09-27T20:39:41.056Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 3,
+      "at": "2026-09-27T20:39:44.137Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 4,
+      "at": "2026-09-27T20:39:47.210Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 5,
+      "at": "2026-09-27T20:39:50.296Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 6,
+      "at": "2026-09-27T20:39:53.362Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 7,
+      "at": "2026-09-27T20:39:56.456Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 8,
+      "at": "2026-09-27T20:39:59.549Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.finish",
+      "ok": true,
+      "roundIndex": 8,
+      "at": "2026-09-27T20:39:59.627Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.start",
+      "jobId": "navigation",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:39:59.971Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 1,
+      "at": "2026-09-27T20:40:03.045Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 2,
+      "at": "2026-09-27T20:40:06.124Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 3,
+      "at": "2026-09-27T20:40:09.212Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 4,
+      "at": "2026-09-27T20:40:12.281Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 5,
+      "at": "2026-09-27T20:40:15.372Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 6,
+      "at": "2026-09-27T20:40:18.441Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 7,
+      "at": "2026-09-27T20:40:21.508Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 8,
+      "at": "2026-09-27T20:40:24.580Z"
+    },
+    {
+      "user": "client-owner",
+      "type": "minigame.finish",
+      "ok": true,
+      "roundIndex": 8,
+      "at": "2026-09-27T20:40:24.635Z"
+    },
+    {
+      "user": "client-narrow",
+      "type": "minigame.start",
+      "jobId": "cooking",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:40:25.081Z"
+    },
+    {
+      "user": "client-narrow",
+      "type": "minigame.cancel",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:40:26.609Z"
+    },
+    {
+      "user": "client-narrow",
+      "type": "minigame.start",
+      "jobId": "repair",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:40:26.706Z"
+    },
+    {
+      "user": "client-narrow",
+      "type": "minigame.cancel",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:40:27.744Z"
+    },
+    {
+      "user": "client-narrow",
+      "type": "minigame.start",
+      "jobId": "navigation",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:40:27.842Z"
+    },
+    {
+      "user": "client-narrow",
+      "type": "minigame.cancel",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:40:29.154Z"
+    },
+    {
+      "user": "client-recovery",
+      "type": "minigame.start",
+      "jobId": "navigation",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:40:29.256Z"
+    },
+    {
+      "user": "client-recovery",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 1,
+      "at": "2026-09-27T20:40:32.334Z"
+    },
+    {
+      "user": "client-recovery",
+      "type": "minigame.cancel",
+      "ok": true,
+      "roundIndex": 1,
+      "at": "2026-09-27T20:40:33.311Z"
+    },
+    {
+      "user": "client-failure",
+      "type": "minigame.start",
+      "jobId": "cooking",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:40:33.421Z"
+    },
+    {
+      "user": "client-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 1,
+      "at": "2026-09-27T20:40:44.667Z"
+    },
+    {
+      "user": "client-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 2,
+      "at": "2026-09-27T20:40:47.750Z"
+    },
+    {
+      "user": "client-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 3,
+      "at": "2026-09-27T20:40:50.816Z"
+    },
+    {
+      "user": "client-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 4,
+      "at": "2026-09-27T20:40:53.895Z"
+    },
+    {
+      "user": "client-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 5,
+      "at": "2026-09-27T20:40:56.975Z"
+    },
+    {
+      "user": "client-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 6,
+      "at": "2026-09-27T20:41:00.058Z"
+    },
+    {
+      "user": "client-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 7,
+      "at": "2026-09-27T20:41:03.141Z"
+    },
+    {
+      "user": "client-failure",
+      "type": "minigame.answer",
+      "ok": true,
+      "roundIndex": 8,
+      "at": "2026-09-27T20:41:06.217Z"
+    },
+    {
+      "user": "client-failure",
+      "type": "minigame.finish",
+      "ok": true,
+      "roundIndex": 8,
+      "at": "2026-09-27T20:41:06.262Z"
+    },
+    {
+      "user": "client-failure",
+      "type": "minigame.retry",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:41:06.362Z"
+    },
+    {
+      "user": "client-failure",
+      "type": "minigame.cancel",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:41:06.524Z"
+    },
+    {
+      "user": "client-race",
+      "type": "minigame.start",
+      "jobId": "repair",
+      "ok": true,
+      "roundIndex": 0,
+      "at": "2026-09-27T20:41:06.631Z"
+    }
+  ],
+  "limitations": [
+    "Automated Chromium interaction, not human playtest or physical-device acceptance.",
+    "Real service functions and isolated PGlite, no production accounts or PostgreSQL concurrency claim.",
+    "Real clocks, independently solved repair/navigation and recipe-driven cooking inputs.",
+    "Production HTML/CSP modules; separate room-wheel fixture verifies actual entry."
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "name": "onepiece-tabletop-desktop",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "private": true,
   "description": "Windows launcher for ONE PIECE tabletop games with account login, verified game downloads and incremental updates.",
   "main": "main.js",
@@ -732,7 +732,39 @@
           "robin_v2/life/eat-south.webp",
           "robin_v2/life/rest-south.webp",
           "robin_v2/life/sleep-south.webp",
-          "robin_v2/life/train-south.webp"
+          "robin_v2/life/train-south.webp",
+          "scenes/sunny-workshop.webp",
+          "scenes/sunny-aquarium.webp",
+          "furniture/supply-rack.webp",
+          "furniture/log-pose-desk.webp",
+          "furniture/repair-cart.webp",
+          "furniture/library-cart.webp",
+          "furniture/medical-cart.webp",
+          "furniture/den-den-desk.webp",
+          "furniture_views/supply-rack/0.webp",
+          "furniture_views/supply-rack/1.webp",
+          "furniture_views/supply-rack/2.webp",
+          "furniture_views/supply-rack/3.webp",
+          "furniture_views/log-pose-desk/0.webp",
+          "furniture_views/log-pose-desk/1.webp",
+          "furniture_views/log-pose-desk/2.webp",
+          "furniture_views/log-pose-desk/3.webp",
+          "furniture_views/repair-cart/0.webp",
+          "furniture_views/repair-cart/1.webp",
+          "furniture_views/repair-cart/2.webp",
+          "furniture_views/repair-cart/3.webp",
+          "furniture_views/library-cart/0.webp",
+          "furniture_views/library-cart/1.webp",
+          "furniture_views/library-cart/2.webp",
+          "furniture_views/library-cart/3.webp",
+          "furniture_views/medical-cart/0.webp",
+          "furniture_views/medical-cart/1.webp",
+          "furniture_views/medical-cart/2.webp",
+          "furniture_views/medical-cart/3.webp",
+          "furniture_views/den-den-desk/0.webp",
+          "furniture_views/den-den-desk/1.webp",
+          "furniture_views/den-den-desk/2.webp",
+          "furniture_views/den-den-desk/3.webp"
         ]
       },
       {
@@ -830,7 +862,15 @@
       "installerSidebar": "assets/one_piece_tabletop_installer_sidebar_v1.bmp",
       "uninstallerSidebar": "assets/one_piece_tabletop_installer_sidebar_v1.bmp",
       "installerHeader": "assets/one_piece_tabletop_installer_header_v1.bmp"
-    }
+    },
+    "compression": "maximum",
+    "npmRebuild": false,
+    "electronLanguages": [
+      "zh-TW",
+      "zh-CN",
+      "en-US",
+      "ja"
+    ]
   },
   "dependencies": {
     "socket.io-client": "4.8.1"

@@ -58,3 +58,9 @@ LATTICE API 目前未列在可呼叫工具清單；前一階段官方 Status 曾
 Windows checkout 的 51 個未變更程式檔有 CRLF／Git LF byte 差異，導致本機 runtime HTTP verifier 拒絕（503），這不是新程式或媒體缺失。沒有為通過 gate 改動這些舊檔；候選精確 bytes 的正式 verifier 與隔離公告 API 另驗，最終仍以公開 runtime HTTP、manifest 與程式逐檔核對作為部署證据。
 
 候選精確 bytes 的原官方 verifier 與隔離 PGlite 公告 gate 共 35/35 通過；56 個程式逐一符合 manifest 與功能提交，四則舊公告、授權、舊版隱藏與已讀隔離皆驗證。這不是本機 HTTP 或公開部署 PASS，範圍見 `BOARD_TAVERN_CREW_ANNOUNCEMENT_QA_20260928.json`。官方 publisher dry-run 完整驗證 6051 個去重檔案（6377 logical files），無上傳、無跳過；上傳與公開切換另記。
+
+正式 publisher 已上傳 13 個新 SHA、沿用 6038 個既有物件。13 個變更 logical paths 的完整公開 GET、大小、SHA256、CORS、immutable cache 均通過；既有 `board_spectator_release_verify.js --r2` 亦 13/13 通過。
+
+推送前 main 前進至 `0aa99bac64f748b0322f248280546078f1523b06`（launcher 1.2.8）。保留自己的 metadata 提交 `e5ec2dd93` 後執行正常 merge，未 force push。新增 launcher 程式、素材、伺服器模組、文件及簽章發布檔全數保留；Board 程式／config／catalog 未被該提交改動，本次 13 份變更檔仍與已上傳候選逐 SHA 相符，不需換包或重傳。公告合併至 revision 5／六篇，保留遠端五篇原文；正式 D 樹已存在同一合併內容，經 deepEqual 核對，不覆蓋並行工作。合併後公告 gate 與最終公開 runtime 另驗。
+
+合併後公告 gate 40/40 通過：以 0aa99bac 為基準，五篇舊公告不變、唯一新增 Board 公告及 revision 5 正確；1.2.8 package／lock／簽章 release／download 依 Git index bytes 與遠端完全相同。56 個候選程式、原官方 verifier 與隔離 PGlite 再驗成功。獨立證據 `BOARD_TAVERN_CREW_MERGED_ANNOUNCEMENT_QA_20260928.json`，保留第一次 35 項報告不覆寫。

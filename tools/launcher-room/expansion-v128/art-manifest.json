@@ -1,0 +1,1033 @@
+{
+  "schema": "launcher-room-expansion-gpt-art/1",
+  "tool": "built-in image_gen",
+  "humanAcceptance": false,
+  "sources": [
+    {
+      "key": "sunny-workshop",
+      "kind": "scene",
+      "image": {
+        "path": "tools/launcher-room/expansion-v128/sources/sunny-workshop/original.png",
+        "sha256": "51d4d09b23e481b7dfea84d86c9472c1884e903664e1e30b2f3969571a76db26",
+        "bytes": 2086736
+      },
+      "prompt": {
+        "path": "tools/launcher-room/expansion-v128/sources/sunny-workshop/prompt.txt",
+        "sha256": "6aa82ee5a2b001e8b68dd8fb3d2ff8c441b55416a8fbba1f23f9de879faa742c",
+        "bytes": 1319
+      },
+      "receipt": {
+        "path": "tools/launcher-room/expansion-v128/sources/sunny-workshop/receipt.json",
+        "sha256": "de5fae418739f830275a2706aeea5ba9f742917addb2d3d41c2ca7acd7e4992d",
+        "bytes": 2174
+      }
+    },
+    {
+      "key": "sunny-aquarium",
+      "kind": "scene",
+      "image": {
+        "path": "tools/launcher-room/expansion-v128/sources/sunny-aquarium/original.png",
+        "sha256": "dcb1b319f696195a1ec1d50ec589420ae654a28d9d6eb50b74728aec7e838905",
+        "bytes": 2108695
+      },
+      "prompt": {
+        "path": "tools/launcher-room/expansion-v128/sources/sunny-aquarium/prompt.txt",
+        "sha256": "46f6a583878d77363a191ddd71beac08b0449cf5d65f2533a407d75a4e3723ff",
+        "bytes": 1312
+      },
+      "receipt": {
+        "path": "tools/launcher-room/expansion-v128/sources/sunny-aquarium/receipt.json",
+        "sha256": "78e8ff3de083715a29f80d304372a3a82d38f4a9cb42c03a8b61042cd52a033a",
+        "bytes": 2167
+      }
+    },
+    {
+      "key": "supply-rack",
+      "kind": "furniture",
+      "image": {
+        "path": "tools/launcher-room/expansion-v128/sources/supply-rack/original.png",
+        "sha256": "b06a9499aec245004ae2aa8eb5b3f6146e649c4445cd79dc790905a4757fe7fa",
+        "bytes": 1348591
+      },
+      "prompt": {
+        "path": "tools/launcher-room/expansion-v128/sources/supply-rack/prompt.txt",
+        "sha256": "22726a22b70c8f94ef5f25965efc12237814271686b4864ef88dbbbd76789617",
+        "bytes": 1433
+      },
+      "receipt": {
+        "path": "tools/launcher-room/expansion-v128/sources/supply-rack/receipt.json",
+        "sha256": "cb7d8ee45746332282f43808cdc853587620f45b76d74dd0198dbccc3d8f76c7",
+        "bytes": 2288
+      }
+    },
+    {
+      "key": "log-pose-desk",
+      "kind": "furniture",
+      "image": {
+        "path": "tools/launcher-room/expansion-v128/sources/log-pose-desk/original.png",
+        "sha256": "7dfc7da04befe9ee76ae61fbd55ee8d2bc01264d3ef5688711578ffcf0abb45a",
+        "bytes": 1091602
+      },
+      "prompt": {
+        "path": "tools/launcher-room/expansion-v128/sources/log-pose-desk/prompt.txt",
+        "sha256": "73d9b6530b48a43fe70a24d7fe6a10e5249f36f65f6fb70ddcd3df2863719e6d",
+        "bytes": 1492
+      },
+      "receipt": {
+        "path": "tools/launcher-room/expansion-v128/sources/log-pose-desk/receipt.json",
+        "sha256": "85c9313f507fce0994eddfebf83b044955a56bce032ce2fed89fb13e3124bde7",
+        "bytes": 2349
+      }
+    },
+    {
+      "key": "repair-cart",
+      "kind": "furniture",
+      "image": {
+        "path": "tools/launcher-room/expansion-v128/sources/repair-cart/attempt-2/original.png",
+        "sha256": "78451a8e4ee414ddcbc9e17604c2821863da88a9ba0422dfe6092ca1ca1c0ec3",
+        "bytes": 990452
+      },
+      "prompt": {
+        "path": "tools/launcher-room/expansion-v128/sources/repair-cart/attempt-2/prompt.txt",
+        "sha256": "4790bd0ba68f340aeefe60b343985de0c0d4d6b9629fdab58a030a244a4a769f",
+        "bytes": 1215
+      },
+      "receipt": {
+        "path": "tools/launcher-room/expansion-v128/sources/repair-cart/attempt-2/receipt.json",
+        "sha256": "779e8c0bd348576e0d4c22d271ec3d85cd7639faf5269d97219ba41115adfcd5",
+        "bytes": 2088
+      }
+    },
+    {
+      "key": "library-cart",
+      "kind": "furniture",
+      "image": {
+        "path": "tools/launcher-room/expansion-v128/sources/library-cart/original.png",
+        "sha256": "bba7926c148267cbfc5db433735dcec2c32b90f6f2262b7474a3174ca720e1b3",
+        "bytes": 1215422
+      },
+      "prompt": {
+        "path": "tools/launcher-room/expansion-v128/sources/library-cart/prompt.txt",
+        "sha256": "6b9f71f87fcbd43598f6c74e83f1f297f4028778ec2e55e61dad09ae78cd2a56",
+        "bytes": 1519
+      },
+      "receipt": {
+        "path": "tools/launcher-room/expansion-v128/sources/library-cart/receipt.json",
+        "sha256": "8ae25a89bdf7ab94d092958f4457229820be93ecd50edd138348c1ca96f1c1f4",
+        "bytes": 2375
+      }
+    },
+    {
+      "key": "medical-cart",
+      "kind": "furniture",
+      "image": {
+        "path": "tools/launcher-room/expansion-v128/sources/medical-cart/original.png",
+        "sha256": "9afeb684a87250b5f1139274a6308ef6416a75f7de55ee00cff1cef3168cf450",
+        "bytes": 970025
+      },
+      "prompt": {
+        "path": "tools/launcher-room/expansion-v128/sources/medical-cart/prompt.txt",
+        "sha256": "4d0dc5537f975cbc631af2ced1835bded2e3f35c6e8731606cf22d5ada2b8887",
+        "bytes": 1486
+      },
+      "receipt": {
+        "path": "tools/launcher-room/expansion-v128/sources/medical-cart/receipt.json",
+        "sha256": "d286d1a4af37e6518c4dfe6644ad7f0ec54e271ec7bf69887ed6fa3069fe9d71",
+        "bytes": 2342
+      }
+    },
+    {
+      "key": "den-den-desk",
+      "kind": "furniture",
+      "image": {
+        "path": "tools/launcher-room/expansion-v128/sources/den-den-desk/original.png",
+        "sha256": "6b8a232711de71ac8a689cc3e04b7d53d6c7f768ed8d683d05ead6a4e4f87ea4",
+        "bytes": 1050729
+      },
+      "prompt": {
+        "path": "tools/launcher-room/expansion-v128/sources/den-den-desk/prompt.txt",
+        "sha256": "23ea67cb9ca2b859d026a644f458c35331a26d0dff1b97163167dafa11c61d76",
+        "bytes": 1708
+      },
+      "receipt": {
+        "path": "tools/launcher-room/expansion-v128/sources/den-den-desk/receipt.json",
+        "sha256": "a8860a908a5bce4dd1c6596ce51a869dab4e81f3d7fe3fbf08819eb5550a80ec",
+        "bytes": 2564
+      }
+    }
+  ],
+  "assets": [
+    {
+      "path": "public/images/launcher_room/scenes/sunny-workshop.webp",
+      "sha256": "ce78713fb71d12df11c5c73dfda7001493e9dcb431462da5d28d40d5b5bd4adf",
+      "bytes": 215230,
+      "width": 1600,
+      "height": 900,
+      "alpha": false,
+      "source": "sunny-workshop"
+    },
+    {
+      "path": "public/images/launcher_room/scenes/sunny-aquarium.webp",
+      "sha256": "d61bd91709f314c2b103abffca5f923c40c99eb9e2fb2952c781f447f108b716",
+      "bytes": 225256,
+      "width": 1600,
+      "height": 900,
+      "alpha": false,
+      "source": "sunny-aquarium"
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/supply-rack/0.webp",
+      "sha256": "4acd6e4505c9e2f58f83e88caa562ae661f1167e4c51240cf70b80b3a10bb3f6",
+      "bytes": 124136,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "supply-rack",
+      "rotation": 0,
+      "uniformScale": 0.5990016638935108,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/supply-rack/1.webp",
+      "sha256": "abe8e36a113875accb483704fe594030827739ad519795b54d5bbce9fbf89069",
+      "bytes": 67090,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "supply-rack",
+      "rotation": 1,
+      "uniformScale": 0.5990016638935108,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/supply-rack/2.webp",
+      "sha256": "d4e51c2a23ce3b22b659b60871aad98c06875e12ffe957a53038751337d6e4d4",
+      "bytes": 106104,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "supply-rack",
+      "rotation": 2,
+      "uniformScale": 0.5990016638935108,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/supply-rack/3.webp",
+      "sha256": "a50b879c81acbed14f87450e1731d68230d9ae74fd88774a96bc065a1ffbdf9c",
+      "bytes": 65618,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "supply-rack",
+      "rotation": 3,
+      "uniformScale": 0.5990016638935108,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture/supply-rack.webp",
+      "sha256": "4acd6e4505c9e2f58f83e88caa562ae661f1167e4c51240cf70b80b3a10bb3f6",
+      "bytes": 124136,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "supply-rack",
+      "thumbnail": true
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/log-pose-desk/0.webp",
+      "sha256": "e9850de48acf238fc6112594d80f459d7dc6fee8e6b88e92ab1fe9c5aa16ceca",
+      "bytes": 107790,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "log-pose-desk",
+      "rotation": 0,
+      "uniformScale": 0.6703910614525139,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/log-pose-desk/1.webp",
+      "sha256": "7328a853e721c973415748c09b59de4c39a03c462d5e2fea8c8ddb4307d37ecf",
+      "bytes": 84612,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "log-pose-desk",
+      "rotation": 1,
+      "uniformScale": 0.6703910614525139,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/log-pose-desk/2.webp",
+      "sha256": "f9d663a859b7890e48b4f82730c322a4641612ee8ef1deccd558b474c40a20fc",
+      "bytes": 96206,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "log-pose-desk",
+      "rotation": 2,
+      "uniformScale": 0.6703910614525139,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/log-pose-desk/3.webp",
+      "sha256": "66302a00bad2964482b7a5a71788f023c3e2b4a20bf289a408d8a9f775566d25",
+      "bytes": 80470,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "log-pose-desk",
+      "rotation": 3,
+      "uniformScale": 0.6703910614525139,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture/log-pose-desk.webp",
+      "sha256": "e9850de48acf238fc6112594d80f459d7dc6fee8e6b88e92ab1fe9c5aa16ceca",
+      "bytes": 107790,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "log-pose-desk",
+      "thumbnail": true
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/repair-cart/0.webp",
+      "sha256": "e733ee0a06ee4e0ece6507873bc51c6f2480476e90c25ab211ba214e14b1fc93",
+      "bytes": 114488,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "repair-cart",
+      "rotation": 0,
+      "uniformScale": 0.7214428857715431,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/repair-cart/1.webp",
+      "sha256": "8edcc7547e5b18e77c4d6e52b0a886525d20cbf95eef41641501f7e6a49db636",
+      "bytes": 79594,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "repair-cart",
+      "rotation": 1,
+      "uniformScale": 0.7214428857715431,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/repair-cart/2.webp",
+      "sha256": "bd51d466c3c2d25b91673e506846d04fe44dd4f0a8f8c6fa1b06ab239ada728a",
+      "bytes": 111056,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "repair-cart",
+      "rotation": 2,
+      "uniformScale": 0.7214428857715431,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/repair-cart/3.webp",
+      "sha256": "54eda12ed1da1475c1162ce310131373f165be525703a2e991a27e6f2a13cbf9",
+      "bytes": 77862,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "repair-cart",
+      "rotation": 3,
+      "uniformScale": 0.7214428857715431,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture/repair-cart.webp",
+      "sha256": "e733ee0a06ee4e0ece6507873bc51c6f2480476e90c25ab211ba214e14b1fc93",
+      "bytes": 114488,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "repair-cart",
+      "thumbnail": true
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/library-cart/0.webp",
+      "sha256": "fb6380701cea91220a566f47374e43ababc49b1ec0c29a8f4b52b7a091be2dbe",
+      "bytes": 130040,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "library-cart",
+      "rotation": 0,
+      "uniformScale": 0.6792452830188679,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/library-cart/1.webp",
+      "sha256": "5cb05a8bd030ba8e2609a1041475423645d397ba8b40bae8468124e0443031a1",
+      "bytes": 99566,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "library-cart",
+      "rotation": 1,
+      "uniformScale": 0.6792452830188679,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/library-cart/2.webp",
+      "sha256": "1b24fe6d01339f5709558749003988e3eeed47dc710f74f4e1f70a1251ecb00f",
+      "bytes": 102020,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "library-cart",
+      "rotation": 2,
+      "uniformScale": 0.6792452830188679,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/library-cart/3.webp",
+      "sha256": "ad1f309f26ef158768ded8856dd30c56d6deeaaaaca7616b796ee26553d77731",
+      "bytes": 83134,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "library-cart",
+      "rotation": 3,
+      "uniformScale": 0.6792452830188679,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture/library-cart.webp",
+      "sha256": "fb6380701cea91220a566f47374e43ababc49b1ec0c29a8f4b52b7a091be2dbe",
+      "bytes": 130040,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "library-cart",
+      "thumbnail": true
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/medical-cart/0.webp",
+      "sha256": "196efe6a8387460fd1538af15f82234e688f0783de3a994d06c58ffa54813c01",
+      "bytes": 97046,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "medical-cart",
+      "rotation": 0,
+      "uniformScale": 0.6883365200764818,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/medical-cart/1.webp",
+      "sha256": "6e8a44c31660d1c23e28aa67e6857fffd3aa887dd8c767e33fd52aac5ad4c4db",
+      "bytes": 76414,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "medical-cart",
+      "rotation": 1,
+      "uniformScale": 0.6883365200764818,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/medical-cart/2.webp",
+      "sha256": "ba53f6cf62c4bc78865aaed981fdb2a26c2872800b63e12497b4b13e64386419",
+      "bytes": 90052,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "medical-cart",
+      "rotation": 2,
+      "uniformScale": 0.6883365200764818,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/medical-cart/3.webp",
+      "sha256": "c8f3ae5dd37303908d810050fb729347754d6fe17360ee50445330e92426d2d3",
+      "bytes": 73220,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "medical-cart",
+      "rotation": 3,
+      "uniformScale": 0.6883365200764818,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture/medical-cart.webp",
+      "sha256": "196efe6a8387460fd1538af15f82234e688f0783de3a994d06c58ffa54813c01",
+      "bytes": 97046,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "medical-cart",
+      "thumbnail": true
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/den-den-desk/0.webp",
+      "sha256": "8f61bc2ba134bb93d129daa57464885356b0095c1de637475c8b32b576635636",
+      "bytes": 100582,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "den-den-desk",
+      "rotation": 0,
+      "uniformScale": 0.6976744186046512,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/den-den-desk/1.webp",
+      "sha256": "cc9fc975c4c7ac8cd0940901f2ca103e1a8220e9fcaed11a64df8c965461de13",
+      "bytes": 92440,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "den-den-desk",
+      "rotation": 1,
+      "uniformScale": 0.6976744186046512,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/den-den-desk/2.webp",
+      "sha256": "fc6ac48eb16dd702fb51e20174f1d2b9f994d6f84a315ae42d99bb974b38fdb8",
+      "bytes": 93066,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "den-den-desk",
+      "rotation": 2,
+      "uniformScale": 0.6976744186046512,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture_views/den-den-desk/3.webp",
+      "sha256": "1fb7f306b1b5040ecdec199a474260c4ae574d3965eac7f7f5df5b60a2e60aa8",
+      "bytes": 88428,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "den-den-desk",
+      "rotation": 3,
+      "uniformScale": 0.6976744186046512,
+      "groundRoot": [
+        192,
+        372
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/furniture/den-den-desk.webp",
+      "sha256": "8f61bc2ba134bb93d129daa57464885356b0095c1de637475c8b32b576635636",
+      "bytes": 100582,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "source": "den-den-desk",
+      "thumbnail": true
+    }
+  ],
+  "extractions": [
+    {
+      "key": "supply-rack",
+      "method": "whole connected silhouettes; centroid assigns rotation",
+      "views": [
+        {
+          "rotation": 0,
+          "sourceBounds": [
+            63,
+            73,
+            664,
+            555
+          ],
+          "centroid": [
+            362.558,
+            310.784
+          ],
+          "componentArea": 230851,
+          "crossesVerticalMidpoint": true,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 1,
+          "sourceBounds": [
+            858,
+            71,
+            1155,
+            566
+          ],
+          "centroid": [
+            1005.248,
+            317.297
+          ],
+          "componentArea": 121455,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 2,
+          "sourceBounds": [
+            75,
+            690,
+            674,
+            1161
+          ],
+          "centroid": [
+            375.425,
+            913.908
+          ],
+          "componentArea": 246276,
+          "crossesVerticalMidpoint": true,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 3,
+          "sourceBounds": [
+            861,
+            677,
+            1155,
+            1161
+          ],
+          "centroid": [
+            1007.672,
+            917.145
+          ],
+          "componentArea": 119480,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        }
+      ]
+    },
+    {
+      "key": "log-pose-desk",
+      "method": "whole connected silhouettes; centroid assigns rotation",
+      "views": [
+        {
+          "rotation": 0,
+          "sourceBounds": [
+            89,
+            49,
+            604,
+            576
+          ],
+          "centroid": [
+            340.381,
+            279.64
+          ],
+          "componentArea": 152399,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 1,
+          "sourceBounds": [
+            790,
+            39,
+            1168,
+            576
+          ],
+          "centroid": [
+            981.178,
+            290.378
+          ],
+          "componentArea": 115704,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 2,
+          "sourceBounds": [
+            94,
+            669,
+            601,
+            1163
+          ],
+          "centroid": [
+            351.968,
+            876.206
+          ],
+          "componentArea": 139586,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 3,
+          "sourceBounds": [
+            780,
+            683,
+            1158,
+            1162
+          ],
+          "centroid": [
+            966.814,
+            886.602
+          ],
+          "componentArea": 110278,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        }
+      ]
+    },
+    {
+      "key": "repair-cart",
+      "method": "whole connected silhouettes; centroid assigns rotation",
+      "views": [
+        {
+          "rotation": 0,
+          "sourceBounds": [
+            138,
+            163,
+            634,
+            584
+          ],
+          "centroid": [
+            385.176,
+            349.819
+          ],
+          "componentArea": 172178,
+          "crossesVerticalMidpoint": true,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 1,
+          "sourceBounds": [
+            810,
+            160,
+            1121,
+            585
+          ],
+          "centroid": [
+            964.52,
+            359.317
+          ],
+          "componentArea": 108891,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 2,
+          "sourceBounds": [
+            135,
+            731,
+            634,
+            1145
+          ],
+          "centroid": [
+            384.754,
+            915.27
+          ],
+          "componentArea": 170387,
+          "crossesVerticalMidpoint": true,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 3,
+          "sourceBounds": [
+            808,
+            724,
+            1121,
+            1145
+          ],
+          "centroid": [
+            964.467,
+            921.261
+          ],
+          "componentArea": 107961,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        }
+      ]
+    },
+    {
+      "key": "library-cart",
+      "method": "whole connected silhouettes; centroid assigns rotation",
+      "views": [
+        {
+          "rotation": 0,
+          "sourceBounds": [
+            91,
+            54,
+            582,
+            578
+          ],
+          "centroid": [
+            356.135,
+            305.328
+          ],
+          "componentArea": 186000,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 1,
+          "sourceBounds": [
+            740,
+            79,
+            1106,
+            606
+          ],
+          "centroid": [
+            921.244,
+            326.526
+          ],
+          "componentArea": 134743,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 2,
+          "sourceBounds": [
+            140,
+            666,
+            610,
+            1157
+          ],
+          "centroid": [
+            356.318,
+            899.897
+          ],
+          "componentArea": 170726,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 3,
+          "sourceBounds": [
+            782,
+            676,
+            1112,
+            1206
+          ],
+          "centroid": [
+            947.505,
+            931.133
+          ],
+          "componentArea": 120689,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        }
+      ]
+    },
+    {
+      "key": "medical-cart",
+      "method": "whole connected silhouettes; centroid assigns rotation",
+      "views": [
+        {
+          "rotation": 0,
+          "sourceBounds": [
+            114,
+            43,
+            555,
+            566
+          ],
+          "centroid": [
+            333.585,
+            296.742
+          ],
+          "componentArea": 157022,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 1,
+          "sourceBounds": [
+            785,
+            52,
+            1099,
+            574
+          ],
+          "centroid": [
+            950.715,
+            307.771
+          ],
+          "componentArea": 124631,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 2,
+          "sourceBounds": [
+            116,
+            659,
+            552,
+            1176
+          ],
+          "centroid": [
+            334.269,
+            909.579
+          ],
+          "componentArea": 153898,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 3,
+          "sourceBounds": [
+            791,
+            670,
+            1094,
+            1189
+          ],
+          "centroid": [
+            935.919,
+            927.154
+          ],
+          "componentArea": 118688,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        }
+      ]
+    },
+    {
+      "key": "den-den-desk",
+      "method": "whole connected silhouettes; centroid assigns rotation",
+      "views": [
+        {
+          "rotation": 0,
+          "sourceBounds": [
+            144,
+            73,
+            549,
+            580
+          ],
+          "centroid": [
+            349.383,
+            326.503
+          ],
+          "componentArea": 130894,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 1,
+          "sourceBounds": [
+            743,
+            67,
+            1122,
+            583
+          ],
+          "centroid": [
+            938.253,
+            328.162
+          ],
+          "componentArea": 122019,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 2,
+          "sourceBounds": [
+            141,
+            690,
+            546,
+            1188
+          ],
+          "centroid": [
+            336.282,
+            937.383
+          ],
+          "componentArea": 125791,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        },
+        {
+          "rotation": 3,
+          "sourceBounds": [
+            751,
+            694,
+            1136,
+            1189
+          ],
+          "centroid": [
+            935.535,
+            942.027
+          ],
+          "componentArea": 118283,
+          "crossesVerticalMidpoint": false,
+          "crossesHorizontalMidpoint": false
+        }
+      ]
+    }
+  ],
+  "contactSheets": [
+    {
+      "path": "tools/launcher-room/expansion-v128/furniture-contact-white.png",
+      "sha256": "71b9bf920e17333e293760ce2668e60dd6d88441b79a71f6c7e78d2b2a50f7f4",
+      "bytes": 1286800
+    }
+  ],
+  "exporter": {
+    "path": "tools/launcher-room/expansion-v128/export_art.py",
+    "sha256": "2b7d9fd1687c12d1574c9f21e67a7cf40342be33c05a886dab13bc4c7b9e6b48",
+    "bytes": 6357
+  }
+}

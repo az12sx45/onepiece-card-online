@@ -1,0 +1,626 @@
+{
+  "schema": "launcher-room-expansion-release/1",
+  "releaseVersion": "1.2.8",
+  "baseline": "6dc1fcf32c13225e108b32767251c20098eefed4",
+  "recordedAt": "2026-09-27T21:17:36.591Z",
+  "status": "PASS_WITH_NOTES",
+  "humanAcceptance": false,
+  "blockingIssues": [],
+  "method": "Existing immutable 1.2.7 and earlier gates are rerun through byte-bound historical overlays. Current server economy, real Chromium minigames and room renderer, all 32 GPT assets and independent visual observations are bound to the exact tested source and pixels.",
+  "limitations": [
+    "Automated PGlite and Chromium checks are not human play or physical-device acceptance.",
+    "Source/art approval alone does not prove installer publication or canonical deployment."
+  ],
+  "runtimeHashNormalization": "CRLF to LF only; all other bytes remain significant",
+  "runtime": {
+    "desktop/launcher-room.js": "8bfbf9269c8c3d216b647ba0bead67fe09840066f7503c28052ad7753fdd231e",
+    "desktop/launcher-room.css": "32b67efc5bde4018a3ca66883f5afa0bed90eb47a09b27bcb0b54c912b3ec610",
+    "desktop/launcher-profile-shop.js": "2bc69f6e30c6a3d09542a57b6ff0e2a98a8a04dca1d3755356120b332e383e12",
+    "desktop/launcher-life-room.js": "b44c7bf33d38b0e161eeef4d2c97f42eb7b327b5ca5b19026cc4416195ab2372",
+    "desktop/launcher-life.js": "c9be09c38bd748a3b064de91879d12dea54515f776cb9d735dcd8b6dcbef55e7",
+    "desktop/launcher-life-data.js": "21e0c79dec584f1aeae82e64f785d10a19ceb7be929dae91160c9a4d48fdc86c",
+    "desktop/launcher-life-actions.js": "487443cbb8941e94d169e5891c837e7cb92c1b844828630b32e831e77197e3ce",
+    "desktop/launcher-room-dialogue.js": "484bc23b46fcfeeb3a90a14d1c049c0d2f2dd2789947a5a82ef6eda6b79a7737",
+    "desktop/launcher.html": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6",
+    "desktop/auth-service.js": "fa1d8d9ef12bcb37fd523829980614c30de51e2674a57ffc797682936d669671",
+    "desktop/preload.js": "f29e59436b55eff3f2ae02d74ff4f95304672b167524d9b9f6c9dd4867619fcd",
+    "desktop/main.js": "18ab07bc9954451d4be5c98479a869a0e02d8a032bb32e1f07981d93fe672b28",
+    "server/launcher-life.js": "0bcfa4bbab2a40970d108bdb1dcefcb64c1103f0456bcf6a1b1727108aa9f85e",
+    "server/launcher-life-store.js": "3180aaef496139fc8c8f2152724ae4e4f5eed627e89d9dc0f244c5f9f2080f88",
+    "server/launcher-profile-shop.js": "18c57c1ff2b2fc655a18c73e99732c6ed22143a0fbc689b8ec6ad66b183048e2",
+    "server/index.js": "11100a110e339caa90894fd802b199cf5037a519595b353798d4f8fdeb865738",
+    "server/desktop-distribution.js": "c8ff98a6c5da36920aa1a7d9ca5ba2ac1f69f3ebc31fdd6c14cf75095661a0db",
+    "desktop/launcher-profile-shop.css": "0f9b42f8c6cd5844876a7c877a16b8265a13631f38d3371083c5f2e6969b4ee9",
+    "desktop/launcher.css": "272c9f7e809d19291c4c9a037b762cdc436515aa87a681873e66f22f3fabdbea",
+    "desktop/launcher.js": "c76109cc906185acc73b676aec6a5a762a98527d4f37aa9d554b3e451f6d5728",
+    "desktop/launcher-room-motion.js": "b48b20b6f55f770f2bc2fafdf6665be0c7cf6544a45fd1d370179ebbabdd919d",
+    "desktop/launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+    "desktop/launcher-reserved-crew.js": "6e6209d4bcd5267704e40ec30bc86769aa739e8806e2b39f60d3337b065790dd",
+    "server/launcher-crew-release.js": "7738284a71871309f5e18346f785bf5db8c051d969fe028cc74f5b7402478693",
+    "config/launcher-crew-release-v1.json": "0526f5ff2913aa1000cc683de1fa8e4072def749e548c7a9b72f0e9b28305b64",
+    "desktop/launcher-announcements.js": "5547288ccadd8c6406f63dae764367b3a3bd29b2b5c6c3cc56c812419e4d56c1",
+    "desktop/launcher-announcements.css": "fe9a988f68fe9b5f7640a5091b84ebd99bf54a69d76b254a1b3d30a457586d4e",
+    "server/launcher-announcements.js": "a5534e6c0f618ed8f376375f45979a7078882d051b0774b751e92c30bba82afd",
+    "config/launcher-announcements-v1.json": "8ec56d716be19ecfcb27a19f25975350c1a01677c66e2f0fc165816e55c4e2fb",
+    "desktop/package.json": "b6dd0c523c73f430118f9eddd02b68a6329c2fef3a8ce122120862c456856d58",
+    "desktop/package-lock.json": "ef5515465d072b7b59b8ae2416101cd5362fdbcda48516c4adc80d9788c85355",
+    "desktop/launcher-updates-ui.js": "6c37f929c8350b915caf26766939c018b05889ed7a2aea6971231089d284c334",
+    "desktop/launcher-room-minigames.js": "948a3fa20ceffa370fbc40fd4e7e66c5374c4f28cd3505ccf59682188ebde7e8",
+    "desktop/launcher-room-minigames.css": "62778c2172083e2581313e1da3df2d380272915a234e6f5d3187d8c1fd33703d",
+    "server/launcher-minigames.js": "9b55077cf1960ddcba67bb6dffcf0f374d4ad96d0c2c56883270e00b209a0bef"
+  },
+  "approvedRuntimeVariants": {
+    "server/desktop-distribution.js": [
+      {
+        "path": "server/desktop-distribution.js",
+        "rawSha256": "747a591087e1561195b67af8cd83e44a5b8a384e599507542863f9a61f7f2119",
+        "normalizedSha256": "359d518bd3b1c573f40462ba357ef6319cf215413b5679c9bac78e02e91eda87",
+        "reviewedBaseNormalizedSha256": "c8ff98a6c5da36920aa1a7d9ca5ba2ac1f69f3ebc31fdd6c14cf75095661a0db",
+        "reason": "Exact one-line insertion of announcement GET/READ events into the byte-pinned formal Board distribution; all other formal bytes preserved.",
+        "before": {
+          "path": "tools/launcher-room/presentation-v126/review-evidence/formal-merge/desktop-distribution.before.js",
+          "sha256": "0b7fb7242db21e5c1faa0d1b26c0c35e47afeb11a152d4efb867c4739525bc57"
+        }
+      }
+    ]
+  },
+  "gateSources": {
+    "tools/launcher-room/expansion-v128/export_historical.js": "d87c1d2c935fbf821a9f689b447b92603e1dc387bc39f620339eb2096d53bee8",
+    "tools/launcher-room/expansion-v128/validate_historical.js": "3bcfcfc6c1ae3180ca091ed6d42a3dabc919da4c61530b89a34aa0ac8f27ac5d",
+    "tools/launcher-room/expansion-v128/validate_release.js": "f6a5a56cfb9e692b98514fe2253c63a2ffcf3a7dd3a4f407c458d50e1d228fc4",
+    "tools/launcher-room/expansion-v128/freeze_review.js": "300fad0ce123b79e3c48d8f14f798debda1be1f7cdebddb19c5e14eea40b1828",
+    "scripts/desktop_launcher_package_qa.js": "48d703367b2348ee5f076ffd3d45b6f29c78ced7db01dee6f54bb82ad60285be"
+  },
+  "historicalReview": {
+    "path": "docs/LAUNCHER_MINIGAMES_20260928.json",
+    "sha256": "5da1b92a51b94580a073965c128b4ff1958b66cb4ec9a9be19041c8480410430"
+  },
+  "historicalOverlay": {
+    "path": "tools/launcher-room/expansion-v128/historical-v127/manifest.json",
+    "sha256": "31c9d69b7592c099d2853eb56d1a43f49e82e7f6570fcfa83afbeb644642f366"
+  },
+  "gameBaseline": {
+    "path": "tools/launcher-room/expansion-v128/review-evidence/game-baseline.json",
+    "sha256": "f078c41fb6acf4227680f59952ede6c7bdc5f8dbed4b8ef3b72bcd68e6185262"
+  },
+  "art": {
+    "path": "tools/launcher-room/expansion-v128/art-manifest.json",
+    "sha256": "db953c6bf073274a159b7a1ddbd16d8ac685df9043541b26a5002c690fa99625"
+  },
+  "releaseScope": [
+    ".gitattributes",
+    "config/launcher-announcements-v1.json",
+    "desktop/launcher-life-data.js",
+    "desktop/launcher-room-minigames.css",
+    "desktop/launcher-room-minigames.js",
+    "desktop/launcher-room.js",
+    "desktop/main.js",
+    "desktop/package-lock.json",
+    "desktop/package.json",
+    "docs/DEV_WORKFLOW.md",
+    "docs/FILE_MAP.md",
+    "docs/GAME_RULES.md",
+    "docs/LAUNCHER_ROOM_EXPANSION_20260928.json",
+    "docs/PROJECT_OVERVIEW.md",
+    "public/desktop-download.html",
+    "public/desktop/launcher-release-v1.json",
+    "public/images/launcher_room/furniture/den-den-desk.webp",
+    "public/images/launcher_room/furniture/library-cart.webp",
+    "public/images/launcher_room/furniture/log-pose-desk.webp",
+    "public/images/launcher_room/furniture/medical-cart.webp",
+    "public/images/launcher_room/furniture/repair-cart.webp",
+    "public/images/launcher_room/furniture/supply-rack.webp",
+    "public/images/launcher_room/furniture_views/den-den-desk/0.webp",
+    "public/images/launcher_room/furniture_views/den-den-desk/1.webp",
+    "public/images/launcher_room/furniture_views/den-den-desk/2.webp",
+    "public/images/launcher_room/furniture_views/den-den-desk/3.webp",
+    "public/images/launcher_room/furniture_views/library-cart/0.webp",
+    "public/images/launcher_room/furniture_views/library-cart/1.webp",
+    "public/images/launcher_room/furniture_views/library-cart/2.webp",
+    "public/images/launcher_room/furniture_views/library-cart/3.webp",
+    "public/images/launcher_room/furniture_views/log-pose-desk/0.webp",
+    "public/images/launcher_room/furniture_views/log-pose-desk/1.webp",
+    "public/images/launcher_room/furniture_views/log-pose-desk/2.webp",
+    "public/images/launcher_room/furniture_views/log-pose-desk/3.webp",
+    "public/images/launcher_room/furniture_views/medical-cart/0.webp",
+    "public/images/launcher_room/furniture_views/medical-cart/1.webp",
+    "public/images/launcher_room/furniture_views/medical-cart/2.webp",
+    "public/images/launcher_room/furniture_views/medical-cart/3.webp",
+    "public/images/launcher_room/furniture_views/repair-cart/0.webp",
+    "public/images/launcher_room/furniture_views/repair-cart/1.webp",
+    "public/images/launcher_room/furniture_views/repair-cart/2.webp",
+    "public/images/launcher_room/furniture_views/repair-cart/3.webp",
+    "public/images/launcher_room/furniture_views/supply-rack/0.webp",
+    "public/images/launcher_room/furniture_views/supply-rack/1.webp",
+    "public/images/launcher_room/furniture_views/supply-rack/2.webp",
+    "public/images/launcher_room/furniture_views/supply-rack/3.webp",
+    "public/images/launcher_room/scenes/sunny-aquarium.webp",
+    "public/images/launcher_room/scenes/sunny-workshop.webp",
+    "scripts/desktop_launcher_package_qa.js",
+    "scripts/launcher_room_expansion_browser_qa.js",
+    "scripts/launcher_room_expansion_catalog_qa.js",
+    "scripts/launcher_room_expansion_client_qa.js",
+    "scripts/launcher_room_expansion_wheel_qa.js",
+    "scripts/launcher_work_variants_server_qa.js",
+    "server/launcher-life-store.js",
+    "server/launcher-minigames.js",
+    "server/launcher-profile-shop.js",
+    "tools/launcher-room/expansion-v128/art-manifest.json",
+    "tools/launcher-room/expansion-v128/export_art.py",
+    "tools/launcher-room/expansion-v128/export_historical.js",
+    "tools/launcher-room/expansion-v128/freeze_review.js",
+    "tools/launcher-room/expansion-v128/furniture-contact-white.png",
+    "tools/launcher-room/expansion-v128/furniture-generation.json",
+    "tools/launcher-room/expansion-v128/historical-v127/files/config/launcher-announcements-v1.json",
+    "tools/launcher-room/expansion-v128/historical-v127/files/config/launcher-crew-release-v1.json",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/auth-service.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-announcements.css",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-announcements.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-life-actions.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-life-data.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-life-room.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-life.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-profile-shop.css",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-profile-shop.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-reserved-crew.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room-dialogue.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room-minigames.css",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room-minigames.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room-motion-data.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room-motion.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room.css",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-updates-ui.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher.css",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher.html",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/main.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/package-lock.json",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/package.json",
+    "tools/launcher-room/expansion-v128/historical-v127/files/desktop/preload.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/public/desktop/catalog-v2.json",
+    "tools/launcher-room/expansion-v128/historical-v127/files/public/desktop/catalog-v3.json",
+    "tools/launcher-room/expansion-v128/historical-v127/files/scripts/launcher_ace_release_qa.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/scripts/launcher_minigames_client_qa.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/scripts/launcher_minigames_server_qa.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/scripts/launcher_robin_scale_qa.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/server/desktop-distribution.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/server/index.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/server/launcher-announcements.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/server/launcher-crew-release.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/server/launcher-life-store.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/server/launcher-life.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/server/launcher-minigames.js",
+    "tools/launcher-room/expansion-v128/historical-v127/files/server/launcher-profile-shop.js",
+    "tools/launcher-room/expansion-v128/historical-v127/manifest.json",
+    "tools/launcher-room/expansion-v128/negative_qa.js",
+    "tools/launcher-room/expansion-v128/repair-cart-revision2.json",
+    "tools/launcher-room/expansion-v128/review-evidence/catalog/CATALOG_QA.json",
+    "tools/launcher-room/expansion-v128/review-evidence/catalog/ROOM_ASSET_QA.json",
+    "tools/launcher-room/expansion-v128/review-evidence/catalog/VISUAL_REVIEW.json",
+    "tools/launcher-room/expansion-v128/review-evidence/catalog/baseline.json",
+    "tools/launcher-room/expansion-v128/review-evidence/catalog/baseline/desktop/launcher-life-data.js",
+    "tools/launcher-room/expansion-v128/review-evidence/catalog/baseline/desktop/launcher-room.js",
+    "tools/launcher-room/expansion-v128/review-evidence/catalog/baseline/server/launcher-profile-shop.js",
+    "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-aquarium-1366.png",
+    "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-aquarium-390-right.png",
+    "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-aquarium-390.png",
+    "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-workshop-1366.png",
+    "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-workshop-390-right.png",
+    "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-workshop-390.png",
+    "tools/launcher-room/expansion-v128/review-evidence/client/EXPANSION_CLIENT_QA.json",
+    "tools/launcher-room/expansion-v128/review-evidence/client/cooking-active-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/client/cooking-active-narrow.png",
+    "tools/launcher-room/expansion-v128/review-evidence/client/cooking-result-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/client/four-jobs-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/client/four-jobs-narrow.png",
+    "tools/launcher-room/expansion-v128/review-evidence/client/navigation-active-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/client/navigation-active-narrow.png",
+    "tools/launcher-room/expansion-v128/review-evidence/client/navigation-result-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/client/repair-active-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/client/repair-active-narrow.png",
+    "tools/launcher-room/expansion-v128/review-evidence/client/repair-result-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/existing-minigames.json",
+    "tools/launcher-room/expansion-v128/review-evidence/formal-announcements-before.json",
+    "tools/launcher-room/expansion-v128/review-evidence/formal-announcements-merge.json",
+    "tools/launcher-room/expansion-v128/review-evidence/formal-announcements-merged.json",
+    "tools/launcher-room/expansion-v128/review-evidence/game-baseline.json",
+    "tools/launcher-room/expansion-v128/review-evidence/independent-visual-review.json",
+    "tools/launcher-room/expansion-v128/review-evidence/legacy/MINIGAMES_CLIENT_QA.json",
+    "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-training-active-narrow.png",
+    "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-training-intro-narrow.png",
+    "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-training-showcase-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-wallet-full-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-work-active-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-work-intro-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-work-result-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/life-regression.json",
+    "tools/launcher-room/expansion-v128/review-evidence/server-qa.json",
+    "tools/launcher-room/expansion-v128/review-evidence/wheel/EXPANSION_WHEEL_QA.json",
+    "tools/launcher-room/expansion-v128/review-evidence/wheel/room-wheel-four-jobs-robin-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/wheel/room-wheel-robin-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/wheel/room-wheel-training-robin-desktop.png",
+    "tools/launcher-room/expansion-v128/review-evidence/wheel/room-wheel-training-robin-narrow.png",
+    "tools/launcher-room/expansion-v128/review-evidence/wheel/room-wheel-work-robin-narrow.png",
+    "tools/launcher-room/expansion-v128/scene-generation.json",
+    "tools/launcher-room/expansion-v128/sources/den-den-desk/original.png",
+    "tools/launcher-room/expansion-v128/sources/den-den-desk/prompt.txt",
+    "tools/launcher-room/expansion-v128/sources/den-den-desk/receipt.json",
+    "tools/launcher-room/expansion-v128/sources/library-cart/original.png",
+    "tools/launcher-room/expansion-v128/sources/library-cart/prompt.txt",
+    "tools/launcher-room/expansion-v128/sources/library-cart/receipt.json",
+    "tools/launcher-room/expansion-v128/sources/log-pose-desk/original.png",
+    "tools/launcher-room/expansion-v128/sources/log-pose-desk/prompt.txt",
+    "tools/launcher-room/expansion-v128/sources/log-pose-desk/receipt.json",
+    "tools/launcher-room/expansion-v128/sources/medical-cart/original.png",
+    "tools/launcher-room/expansion-v128/sources/medical-cart/prompt.txt",
+    "tools/launcher-room/expansion-v128/sources/medical-cart/receipt.json",
+    "tools/launcher-room/expansion-v128/sources/repair-cart/attempt-1-generation.json",
+    "tools/launcher-room/expansion-v128/sources/repair-cart/attempt-2/original.png",
+    "tools/launcher-room/expansion-v128/sources/repair-cart/attempt-2/prompt.txt",
+    "tools/launcher-room/expansion-v128/sources/repair-cart/attempt-2/receipt.json",
+    "tools/launcher-room/expansion-v128/sources/repair-cart/original.png",
+    "tools/launcher-room/expansion-v128/sources/repair-cart/prompt.txt",
+    "tools/launcher-room/expansion-v128/sources/repair-cart/receipt.json",
+    "tools/launcher-room/expansion-v128/sources/sunny-aquarium/original.png",
+    "tools/launcher-room/expansion-v128/sources/sunny-aquarium/prompt.txt",
+    "tools/launcher-room/expansion-v128/sources/sunny-aquarium/receipt.json",
+    "tools/launcher-room/expansion-v128/sources/sunny-workshop/original.png",
+    "tools/launcher-room/expansion-v128/sources/sunny-workshop/prompt.txt",
+    "tools/launcher-room/expansion-v128/sources/sunny-workshop/receipt.json",
+    "tools/launcher-room/expansion-v128/sources/supply-rack/original.png",
+    "tools/launcher-room/expansion-v128/sources/supply-rack/prompt.txt",
+    "tools/launcher-room/expansion-v128/sources/supply-rack/receipt.json",
+    "tools/launcher-room/expansion-v128/validate_historical.js",
+    "tools/launcher-room/expansion-v128/validate_release.js"
+  ],
+  "qaSourceNormalization": "CRLF to LF only; all other bytes remain significant",
+  "qaSourceProofs": {
+    "server/launcher-minigames.js": {
+      "sha256": "9b55077cf1960ddcba67bb6dffcf0f374d4ad96d0c2c56883270e00b209a0bef",
+      "normalizedSha256": "9b55077cf1960ddcba67bb6dffcf0f374d4ad96d0c2c56883270e00b209a0bef"
+    },
+    "server/launcher-life-store.js": {
+      "sha256": "e8eb1075bef91ec87ba3d577316a7318d649942d42fdbcde97dcd968c7a0869a",
+      "normalizedSha256": "3180aaef496139fc8c8f2152724ae4e4f5eed627e89d9dc0f244c5f9f2080f88"
+    },
+    "scripts/launcher_work_variants_server_qa.js": {
+      "sha256": "c66e75a51541e6ce9c511b929a6e1281bb35ae4f21fa4020e1e91685896941b5",
+      "normalizedSha256": "c66e75a51541e6ce9c511b929a6e1281bb35ae4f21fa4020e1e91685896941b5"
+    },
+    "desktop/launcher-room-minigames.js": {
+      "sha256": "7823c8ab90aad4f5824f122578b74e2de68ee873c384afab66b387d330d52cb4",
+      "normalizedSha256": "948a3fa20ceffa370fbc40fd4e7e66c5374c4f28cd3505ccf59682188ebde7e8"
+    },
+    "desktop/launcher-room-minigames.css": {
+      "sha256": "c916a394cd5cb8950076797e173343d744be484c5d153564468eec09ec63fe61",
+      "normalizedSha256": "62778c2172083e2581313e1da3df2d380272915a234e6f5d3187d8c1fd33703d"
+    },
+    "desktop/launcher-life-room.js": {
+      "sha256": "1e4d676156eb662e1b2ef9ceaf56c541e2cefca8182ae2bb699b82d2497abc87",
+      "normalizedSha256": "b44c7bf33d38b0e161eeef4d2c97f42eb7b327b5ca5b19026cc4416195ab2372"
+    },
+    "desktop/auth-service.js": {
+      "sha256": "290ecd2c2e9b1c3ef80fdb944efde789fe306d3ec6492b96bf78556269a51217",
+      "normalizedSha256": "fa1d8d9ef12bcb37fd523829980614c30de51e2674a57ffc797682936d669671"
+    },
+    "desktop/launcher.html": {
+      "sha256": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6",
+      "normalizedSha256": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6"
+    },
+    "scripts/launcher_room_expansion_client_qa.js": {
+      "sha256": "44c435b8cae1c452919911c2a43d0672f46f17a2c3e473e69d3bb88cc025cc6a",
+      "normalizedSha256": "165998a7dc87e3ddaf172771cb1630d6c759c5ef638d1861213f1a9e738bc390"
+    },
+    "server/launcher-profile-shop.js": {
+      "sha256": "502dff93ffa54503c556b75abce3c7e48bb6327d7e38d6476a87e1b4dd014427",
+      "normalizedSha256": "18c57c1ff2b2fc655a18c73e99732c6ed22143a0fbc689b8ec6ad66b183048e2"
+    },
+    "server/launcher-life.js": {
+      "sha256": "81e2a2833e5db2ba7b4245fdde87142946580ae28fc4f0d583bf47423335824e",
+      "normalizedSha256": "0bcfa4bbab2a40970d108bdb1dcefcb64c1103f0456bcf6a1b1727108aa9f85e"
+    },
+    "server/launcher-crew-release.js": {
+      "sha256": "fcc9051cc5e24065cc698cbf1f8f215cc93ccc41c81478231a564059a682fc31",
+      "normalizedSha256": "7738284a71871309f5e18346f785bf5db8c051d969fe028cc74f5b7402478693"
+    },
+    "desktop/launcher-room.js": {
+      "sha256": "d9495b1c9730d690bbc2faf17df6e47fa53a7b91527ea874722b1669b802b993",
+      "normalizedSha256": "8bfbf9269c8c3d216b647ba0bead67fe09840066f7503c28052ad7753fdd231e"
+    },
+    "desktop/launcher-life-data.js": {
+      "sha256": "edbfb2d5e89a684684edd23fa73af0d4f2657b5ad5fdd0f3c48889100b43e770",
+      "normalizedSha256": "21e0c79dec584f1aeae82e64f785d10a19ceb7be929dae91160c9a4d48fdc86c"
+    },
+    "desktop/launcher-reserved-crew.js": {
+      "sha256": "e42d09aa38205cd105ee48fb30a5799632cd67b1dec2db881abf9e19c4fa30a6",
+      "normalizedSha256": "6e6209d4bcd5267704e40ec30bc86769aa739e8806e2b39f60d3337b065790dd"
+    },
+    "desktop/launcher-room-dialogue.js": {
+      "sha256": "3cb915a30dbff3c20845d9dbfb4e88cbc15761a1c79f9899895e05f69cadd05e",
+      "normalizedSha256": "484bc23b46fcfeeb3a90a14d1c049c0d2f2dd2789947a5a82ef6eda6b79a7737"
+    },
+    "scripts/launcher_room_expansion_catalog_qa.js": {
+      "sha256": "e4e96e5b2e7eb98a306b28088e3fd0235089009566335d84c96d697a6c76d085",
+      "normalizedSha256": "e4e96e5b2e7eb98a306b28088e3fd0235089009566335d84c96d697a6c76d085"
+    },
+    "desktop/launcher-room-motion-data.js": {
+      "sha256": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+      "normalizedSha256": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d"
+    },
+    "desktop/launcher-room-motion.js": {
+      "sha256": "eb0d40f266aa56c1e37fcc4dd6a959d39eb7d6cd955d5f4961ac0612bc175d41",
+      "normalizedSha256": "b48b20b6f55f770f2bc2fafdf6665be0c7cf6544a45fd1d370179ebbabdd919d"
+    },
+    "desktop/launcher-life-actions.js": {
+      "sha256": "9d15a266c00540ab937cb4a1010e521763403c7b23d2bede443e8be0b5fb8b64",
+      "normalizedSha256": "487443cbb8941e94d169e5891c837e7cb92c1b844828630b32e831e77197e3ce"
+    },
+    "desktop/launcher.css": {
+      "sha256": "4a6986900ea3d7bb8d94739de37075dd45103caa48abefe56d2583496b0fabf3",
+      "normalizedSha256": "272c9f7e809d19291c4c9a037b762cdc436515aa87a681873e66f22f3fabdbea"
+    },
+    "desktop/launcher-social.css": {
+      "sha256": "56c5d6f985c30aa5336bdc98c44954e44f5d2372cf96d69a213f67c76425fe2b",
+      "normalizedSha256": "241c8a9b78683fb61d678c9b9a5cea1396c567a538d859eb918eff7bd3909ae5"
+    },
+    "desktop/launcher-profile-shop.css": {
+      "sha256": "689d01d74bbb2c2b4eaaba42d5f3d763d081d2b29c930e10836ea5ee2901e6d2",
+      "normalizedSha256": "0f9b42f8c6cd5844876a7c877a16b8265a13631f38d3371083c5f2e6969b4ee9"
+    },
+    "desktop/launcher-room.css": {
+      "sha256": "3dc6ac0750ee8afcba5c202516e81d180fec5472795a6679ae8887087f754c16",
+      "normalizedSha256": "32b67efc5bde4018a3ca66883f5afa0bed90eb47a09b27bcb0b54c912b3ec610"
+    },
+    "scripts/launcher_room_expansion_browser_qa.js": {
+      "sha256": "d45425c148468a3627771f684bf8bffe9bb3e93383875a554c692ccfc0e80176",
+      "normalizedSha256": "d45425c148468a3627771f684bf8bffe9bb3e93383875a554c692ccfc0e80176"
+    },
+    "desktop/launcher-profile-shop.js": {
+      "sha256": "b82f1a912da5f5cd9772a53f4c61e558ec77fb2c3ffc582b16a78c00294529bd",
+      "normalizedSha256": "2bc69f6e30c6a3d09542a57b6ff0e2a98a8a04dca1d3755356120b332e383e12"
+    },
+    "scripts/launcher_room_expansion_wheel_qa.js": {
+      "sha256": "4f9281f0e281b13c7897de108ed65ccbe03874d09f512daed84ad667f857912f",
+      "normalizedSha256": "26ce897987e75d218e86cb0a204beff8b5a6dd15ea75428f64ca798bdc1850d2"
+    },
+    "scripts/launcher_minigames_client_qa.js": {
+      "sha256": "9726085b9142ed94cdf6e37fb3b6ca8410edcb970a256a5f98fddf8f5c15a36b",
+      "normalizedSha256": "9726085b9142ed94cdf6e37fb3b6ca8410edcb970a256a5f98fddf8f5c15a36b"
+    },
+    "scripts/launcher_minigames_server_qa.js": {
+      "sha256": "2b3587c487c9b1a097f6cbe4bd43467aa5b032acf500b15851be5690031c54c5",
+      "normalizedSha256": "2b3587c487c9b1a097f6cbe4bd43467aa5b032acf500b15851be5690031c54c5"
+    }
+  },
+  "evidence": [
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/CATALOG_QA.json",
+      "sha256": "8f703fa24cb5cb9b4aaaf285d206bb41b397233390c4a43c55703bd24dc0bdd7"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/ROOM_ASSET_QA.json",
+      "sha256": "d6bc2e9d474912971ee68bae04d05785a6f29efb3f7db4b7e3e61898817fb4ff"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/VISUAL_REVIEW.json",
+      "sha256": "19286bfe1e94d615aa0db3279aac7120fec1e5f7f26152d558a7c7223a6223e1"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/baseline.json",
+      "sha256": "013ace3b92205076d8942b895b1e71b72fd87e46d980a65c1e19bfe2b8f08a78"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/baseline/desktop/launcher-life-data.js",
+      "sha256": "dab3c07b0610acb328e31300094bf0faa28c1b4c7e13acec14f32e1d83ecb908"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/baseline/desktop/launcher-room.js",
+      "sha256": "f461e338bfc633e2ba0f078e1460d5336764fe4b299dce5a5aa70ecbd79a2dbd"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/baseline/server/launcher-profile-shop.js",
+      "sha256": "011b2600dee65f52cd14af28577d89f304fa4beb973d8eb82253692a76b0408d"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-aquarium-1366.png",
+      "sha256": "9462a2de9b8072484514f73d7bd9460b910ae56c648fc9c6dabb80d83d757108"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-aquarium-390-right.png",
+      "sha256": "d1684ec08099f23f20f88c004e2bdf2510740079fbef3d97ea65d10944e57f70"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-aquarium-390.png",
+      "sha256": "3b2e463fd14b05d1c8f25ae7c13a7ca4560ed91c9e0e3ab98b529c2a0fc91285"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-workshop-1366.png",
+      "sha256": "52145bfad1e6444f7e91b44b643bb62127f7e95f65b24e6773b358dcc3e1fc3f"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-workshop-390-right.png",
+      "sha256": "017abc560a7e904a0fb2b57439b757cfb34a91e61df634d9719b93a354db5bab"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-workshop-390.png",
+      "sha256": "423e49cc9c189a7ed0f6218d06af2cf05a0b70fee8214e18419876169670c6c7"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/EXPANSION_CLIENT_QA.json",
+      "sha256": "840a1b8a5fba6a114528e01ac7179d56ac2281902a296a71f59688061ea97401"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/cooking-active-desktop.png",
+      "sha256": "99d7b2c9411a37264d486afc1789b477d11a5be9379f11aab63587911c115d08"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/cooking-active-narrow.png",
+      "sha256": "68973aefe5d2947e3fb8075ce47b5d568ac670f00a3f83037e6aac8eef0bb107"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/cooking-result-desktop.png",
+      "sha256": "3d21427ba2f1962f209a115d59814823936458553a0f2a9c87407873dc7d732b"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/four-jobs-desktop.png",
+      "sha256": "09ca5538b719accf64ffbbf942a60dabb90f2da5d48ad863adc964491139ec68"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/four-jobs-narrow.png",
+      "sha256": "9b5dd0839a01ea8f655d47108f1c2a9a2bedad5ffabf9e0f19714411040c833c"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/navigation-active-desktop.png",
+      "sha256": "c8049b27d1b3075561577fc1441b4605213b79df6873c61f9e5692ed7c217b15"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/navigation-active-narrow.png",
+      "sha256": "9f3017436a156805d8d369dd92f44430938205b5a2ddef9db922f42f60acb4d3"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/navigation-result-desktop.png",
+      "sha256": "213dda2095e735a924364b04f0e6bb6777b1deb7d34952d4b2a9df0391412bcb"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/repair-active-desktop.png",
+      "sha256": "7ba70bb294991d49ef4e5be2f8fcb1583d7f960b814f272db92de41d9c81ea81"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/repair-active-narrow.png",
+      "sha256": "9535b8292370d2a2a29b6ae450bda1dadc8d7ad4279168990e9edb4b92c80804"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/repair-result-desktop.png",
+      "sha256": "a2f1ae0d47e1241309248981723d382252495638543b4f0d4bc72b8d8afe5b15"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/existing-minigames.json",
+      "sha256": "a1f7130ab9fa4f70acceee024dbfd9238a498d461644b86cd290b089212a1626"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/formal-announcements-before.json",
+      "sha256": "1aa50a7390fde9337e7a4f7f3df6a04fcff46aa4cd2d0dd54424c355ba63be3a"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/formal-announcements-merge.json",
+      "sha256": "e1f71f6305952cce1819540a8ba76c0649780b0a57d68a62d541bcfcd9069c6a"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/formal-announcements-merged.json",
+      "sha256": "b054ee20a2c4a18b78fef35343ec18f7c6ed6ac8fb0b45593ffd5468a03ad8aa"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/game-baseline.json",
+      "sha256": "f078c41fb6acf4227680f59952ede6c7bdc5f8dbed4b8ef3b72bcd68e6185262"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/independent-visual-review.json",
+      "sha256": "45b4d6e3f6953b4faa3d4f8e3687e4cdc65927b65d47f1c6ee05071a1f653ae5"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/legacy/MINIGAMES_CLIENT_QA.json",
+      "sha256": "9c916df274fa4ef453d163fd1f17b0518131b62a10f047d44e567851ad7be741"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-training-active-narrow.png",
+      "sha256": "d9146017bd69f899ea7277683c7e74f7930744c95fbf7bc64586432408677ad5"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-training-intro-narrow.png",
+      "sha256": "0e0b409818bab8d40db5d2e620fabfce966e060df8f1e95d82dbfa2565f27dc4"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-training-showcase-desktop.png",
+      "sha256": "10e568ca4457847f6201295ab45e6099e61faf215fdbe912936cda12a68d28f8"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-wallet-full-desktop.png",
+      "sha256": "89dfb8aeb412ed185d17215ba90fd222765e6134e3c9f50ed84c0d5eaa9d8d8c"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-work-active-desktop.png",
+      "sha256": "5ec9392436377c1dc64d6020d2680b6e7240da924637fcdb09ef42ecc63bf54a"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-work-intro-desktop.png",
+      "sha256": "103c9dd78056320495865d1a02f298e67992c83adcb7eb09eb63481ada34de4d"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/legacy/minigames-work-result-desktop.png",
+      "sha256": "15c64ef0f2829f0cedab61becaa4abce934b5fd12b3ebeb9936a3fe293f5854d"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/life-regression.json",
+      "sha256": "47e96fbe0d83a0373145e072d07a4f86684c3c4cc9d599ce847e336cdbe5b927"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/server-qa.json",
+      "sha256": "742895636016ad2dd3fda85669e4e7a4328874450260581a9ffb259ac8715ada"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/wheel/EXPANSION_WHEEL_QA.json",
+      "sha256": "61cb11e0060368c607e113c5eda334942657d8a86414d8df58ae7b0ca3b2bdd9"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/wheel/room-wheel-four-jobs-robin-desktop.png",
+      "sha256": "ef09c59c0ca4c92932e80a9717157b5d1a44af47dbe09adc56dfaafe792f86d0"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/wheel/room-wheel-robin-desktop.png",
+      "sha256": "70825261beedfa5302f5ffc126af2974d009c20e55c3d5b11d003b866ec3dd12"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/wheel/room-wheel-training-robin-desktop.png",
+      "sha256": "dc36f2cd255bd3b990b10a358b8505401bd4e059407d8ba01283cfe76e0392e7"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/wheel/room-wheel-training-robin-narrow.png",
+      "sha256": "102a854209a9e3d77ba37e4c1120f3a6cfd0f58481455a704f880e51c5b3b3bd"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/wheel/room-wheel-work-robin-narrow.png",
+      "sha256": "5ef44934c8b96ca3b32fa9753eec13f7f8fb8453ee2e7fd2a684ae04a599fa03"
+    }
+  ],
+  "serverQA": {
+    "path": "tools/launcher-room/expansion-v128/review-evidence/server-qa.json",
+    "sha256": "742895636016ad2dd3fda85669e4e7a4328874450260581a9ffb259ac8715ada"
+  },
+  "clientQA": {
+    "path": "tools/launcher-room/expansion-v128/review-evidence/client/EXPANSION_CLIENT_QA.json",
+    "sha256": "840a1b8a5fba6a114528e01ac7179d56ac2281902a296a71f59688061ea97401"
+  },
+  "catalogQA": {
+    "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/CATALOG_QA.json",
+    "sha256": "8f703fa24cb5cb9b4aaaf285d206bb41b397233390c4a43c55703bd24dc0bdd7"
+  },
+  "roomQA": {
+    "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/ROOM_ASSET_QA.json",
+    "sha256": "d6bc2e9d474912971ee68bae04d05785a6f29efb3f7db4b7e3e61898817fb4ff"
+  },
+  "wheelQA": {
+    "path": "tools/launcher-room/expansion-v128/review-evidence/wheel/EXPANSION_WHEEL_QA.json",
+    "sha256": "61cb11e0060368c607e113c5eda334942657d8a86414d8df58ae7b0ca3b2bdd9"
+  },
+  "legacyClientQA": {
+    "path": "tools/launcher-room/expansion-v128/review-evidence/legacy/MINIGAMES_CLIENT_QA.json",
+    "sha256": "9c916df274fa4ef453d163fd1f17b0518131b62a10f047d44e567851ad7be741"
+  },
+  "legacyServerQA": {
+    "path": "tools/launcher-room/expansion-v128/review-evidence/existing-minigames.json",
+    "sha256": "a1f7130ab9fa4f70acceee024dbfd9238a498d461644b86cd290b089212a1626"
+  },
+  "lifeQA": {
+    "path": "tools/launcher-room/expansion-v128/review-evidence/life-regression.json",
+    "sha256": "47e96fbe0d83a0373145e072d07a4f86684c3c4cc9d599ce847e336cdbe5b927"
+  },
+  "visualReview": {
+    "path": "tools/launcher-room/expansion-v128/review-evidence/independent-visual-review.json",
+    "sha256": "45b4d6e3f6953b4faa3d4f8e3687e4cdc65927b65d47f1c6ee05071a1f653ae5"
+  },
+  "formalAnnouncementMerge": {
+    "path": "tools/launcher-room/expansion-v128/review-evidence/formal-announcements-merge.json",
+    "sha256": "e1f71f6305952cce1819540a8ba76c0649780b0a57d68a62d541bcfcd9069c6a"
+  }
+}

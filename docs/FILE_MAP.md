@@ -1212,3 +1212,14 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 - scripts/launcher_minigames_server_qa.js and launcher_minigames_client_qa.js: isolated SQL and real Chromium gameplay checks.
 - config/launcher-announcements-v1.json: append-only notices including this release.
 - desktop/package.json, package-lock.json, main.js and launcher.html: version, explicit packaging, resource allowlist and entrypoint integration.
+
+## 2026-09-28 Launcher 1.2.8 room expansion and work variety
+
+- `server/launcher-minigames.js`：四種工作 challenge 與答案驗證；舊 supply/session 相容。
+- `server/launcher-life-store.js`：沿用帳號鎖、工作配額、金幣帳本與領獎冪等。
+- `server/launcher-profile-shop.js`、`desktop/launcher-life-data.js`、`desktop/launcher-room.js`：新增商品、工作站、固定尺度、四向占格與可達操作面。
+- `desktop/launcher-room-minigames.js/.css`：工作選擇卡、食材順序、管路旋轉、海圖導航及鍵盤／窄版互動。
+- `public/images/launcher_room/scenes/{sunny-workshop,sunny-aquarium}.webp`：1600×900 留空地板場景。
+- `public/images/launcher_room/furniture/` 與 `furniture_views/`：六件商品縮圖與 24 張 384×384 四向透明家具。
+- `tools/launcher-room/expansion-v128/`：GPT 來源、重畫紀錄、匯出／素材 manifest、歷史快照、現行 gate 與實際 QA evidence。
+- `docs/LAUNCHER_ROOM_EXPANSION_20260928.json`：新版凍結來源與驗證綁定（完成後產生）。

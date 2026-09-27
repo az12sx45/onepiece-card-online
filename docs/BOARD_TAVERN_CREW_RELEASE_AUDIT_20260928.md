@@ -42,3 +42,17 @@ node D:\Codex_QA\board-tavern-crew-20260928\announcement-gate.js --root 'C:\User
 ```
 
 Publication scenarios use a controlled verifier for prior/unavailable/invalid proof, and the unmodified official verifier's actual result for the matching candidate. Publication/read witnesses exist only inside the in-memory synthetic fixture. No production database, real account, credentials, public announcement request or deployed-runtime acceptance was used or claimed.
+
+## Concurrent Launcher Merge Gate
+
+- PASS: 40 checks against merged worktree and remote baseline `0aa99bac64f748b0322f248280546078f1523b06`. The earlier 35-check report above is preserved unchanged as historical evidence.
+- Evidence: `docs/BOARD_TAVERN_CREW_MERGED_ANNOUNCEMENT_QA_20260928.json`, retained externally at `D:/Codex_QA/board-tavern-crew-20260928/merged-announcement-gate.json`. SHA-256: `91a2791b4e97fa94a4e56538af142681973c7858c56afe0cf8dc83fb7dc178bc`.
+- Final shipping announcement configuration is revision 5 / six notices: all five remote published notices remain unchanged, with precisely one additional Board notice for `package-1c453fcf83416d97`.
+- Current launcher remains 1.2.8. The merged Git index bytes for `desktop/package.json`, `desktop/package-lock.json`, `public/desktop/launcher-release-v1.json` and `public/desktop-download.html` exactly match remote baseline. Working contents match too; CRLF-only checkout differences in three files are explicitly bound in the report. The signed launcher release metadata bytes are unchanged.
+- The current 1.2.8 announcement is retained exactly. Historical v1.2.7 notices are protected by actual append-only validation, not incorrectly retested as current-version notices with the old v127 validator.
+- Board candidate source remains `c815941cdbb9307c4f3b6041ea2baadb365adc43` and its original builder baseline remains `6dc1fcf32c13225e108b32767251c20098eefed4`. The package/manifest identity is unchanged. All 56 candidate program blobs and the unmodified official runtime verifier passed again, followed by the same isolated PGlite publication/read and extracted handler gates.
+- Runtime scope remains exact immutable candidate verification, **not local HTTP**. Earlier HTTP 503 evidence remains retained. This merge gate does not claim public deployment or real-account acceptance.
+
+```powershell
+node D:\Codex_QA\board-tavern-crew-20260928\merged-announcement-gate.js --root 'C:\Users\王曜瑋\.codex\worktrees\tavern-recruit-animation\2026-04-20-1-2-start-html-game-html' --release package-1c453fcf83416d97 --report D:\Codex_QA\board-tavern-crew-20260928\merged-announcement-gate.json --candidate D:\Codex_QA\board-tavern-crew-20260928\candidate
+```

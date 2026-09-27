@@ -7441,3 +7441,23 @@ UI / RWD：
 - The first source smoke loaded all 641 assets and played BGM but captured the hidden settings version before its state had been requested. Preserved its report under delivery/attempts; smoke now calls the existing refreshLauncherUpdateState IPC before capture and retains the exact version assertion. This branch runs only in smoke mode.
 
 實際封裝驗證：小遊戲伺服器 96項、實際 Chromium 小遊戲互動 12項、羅賓實際渲染 9項、艾斯與既有經濟回歸 226項通過；保留歷史圖像與公告證據。新圖共25張（羅賓21張及GPT小遊戲4張）。Source與封裝Electron各641項素材、Range及BGM播放通過。1.2.7安裝檔 267973283 bytes，SHA-256 bc105b825711f967580a7fd714ff394c6ee524547cbbf65b14e290bf15d617e7，公開完整GET／Range／SHA及既有Ed25519簽章已核對。這是候選封裝與下載證據；正式來源同步、source commit和canonical切換由delivery最終證據確認，不代表真人或實體裝置驗收。
+
+## 2026-09-28 Launcher 1.2.8 room expansion and work variety
+
+本次接上 2 個生活基地場景、6 件四方向家具與 3 種工作。正式來源仍為 D:\Codex_Release_Worktrees\board-voyage-records-v1；候選分支由已公開 6dc1fcf32c13225e108b32767251c20098eefed4 延續，保留酒館更新及公告。LATTICE runtime/task 工具未提供可呼叫介面，沒有宣稱持久任務或圖譜寫入。
+
+程式範圍：server/launcher-profile-shop.js、launcher-minigames.js、launcher-life-store.js；desktop/launcher-room.js、launcher-life-data.js、launcher-room-minigames.js/.css、main.js、package.json/package-lock.json；config/launcher-announcements-v1.json。獨立 QA scripts、32 張 runtime 圖稿及 GPT 原稿／prompt／receipt 位於 tools/launcher-room/expansion-v128 與 public/images/launcher_room。旧版 gate、素材與證據保留，新版 gate 分開驗證歷史快照與現行來源。
+
+驗證：隔離 PGlite 新工作 128 項及 768 個隨機可解關卡、原小遊戲 96 項、生活 160 項、商城與好友參觀 10 項通過；實際 Chromium 新工作 11 項、原互動 12 項、角色輪盤 7 項通過。房間全方向／碰撞／可达性與正式圖稿以同目錄最終 ROOM_ASSET_QA 為準。修正取消對話框鍵盤焦點，避免 Enter／方向鍵穿透。工具推車初稿四向結構不一致，已保留初稿另用 GPT 重繪；未裁切或拆接人物。
+
+Source npm start、封裝 Electron、installer SHA／签章、公開版本切換為獨立交付步驟，以本次 artifacts/launcher-room-expansion-1.2.8/delivery 的實際報告為準。此段為實作／測試紀錄，不宣稱真人遊玩、實體裝置或玩家安裝驗收。
+
+封裝修正：npm collector 在候選依賴 junction 下遺漏 Socket.IO 子依賴，因此改由獨立建置暫存目錄使用 lock 對應的 10 個正式依賴路徑實體副本，並逐檔核對審查來源。Electron 封裝語系固定為 zh-TW、zh-CN、en-US、ja，以維持 256 MiB 安裝包上限；圖像與音樂來源沒有壓縮降質。失敗的初次安裝包和審查記錄保存在 delivery attempts 與獨立 QA 目錄。
+
+封裝素材預算修正：32 張本次新增圖像共 3,355,602 bytes，改以明確清單計入獨立 4 MiB 額度；舊素材仍受 128 MiB、合計素材仍受 160 MiB、安裝包仍受 256 MiB 原上限約束。這項分類修正只更動 QA 工具，不改已封裝程式或素材。
+
+封裝證據：1.2.8 安裝檔 263238297 bytes，SHA-256 d8d0a9c6b9ffd612e8b8a54aa0c0dd87738938db9b861f3a99c117ef3a438b29。Source 與封裝 Electron 各 673 項素材、Range 與 BGM 播放通過；公開安裝檔完整 GET、Range、SHA 與既有 Ed25519 簽章已核對。公告日期亦經實際服務 validator 驗證。正式來源同步、Git 發布與 canonical 生效另記 delivery 最終證據；本紀錄不是真人或實體裝置驗收。
+
+正式來源接回時保留同步工作的 Board 酒館草帽招募公告，以固定 SHA 的追加合併記錄驗證正式公告設定；本次候選發行公告只新增基地 1.2.8。正式 DEV_WORKFLOW 原文完整保留並追加本段。
+
+歷史驗證補記：正式樹採原 1.2.7 審查已固定 SHA 的正式遊戲目錄，候選採 41 檔歷史快照。只修正 expansion-v128/validate_historical.js 的驗證情境，原審查、舊 gate、遊戲目錄及已封裝執行程式不變；兩種情境均通過。
