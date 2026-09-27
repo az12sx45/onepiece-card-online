@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "createdDate": "2026-09-28",
+  "projectRoot": "D:/Codex_Release_Worktrees/board-voyage-records-v1",
+  "purpose": "Tavern recruitment invitation, rarity-colored doorway light, and character silhouette reveal.",
+  "generator": "Built-in image_gen.imagegen",
+  "generationMode": "Built-in tool only. No fallback API or paid external provider.",
+  "conversion": {
+    "engine": "sharp (bundled Codex workspace dependencies)",
+    "format": "webp",
+    "quality": 90,
+    "alphaQuality": 100,
+    "effort": 6,
+    "operations": "Format conversion only; dimensions and generated alpha preserved."
+  },
+  "originalsPreserved": true,
+  "outputDirectory": "public/images/board/tavern_recruit/cinematic_v1",
+  "assets": [
+    {
+      "file": "doorway.webp",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": false,
+      "bytes": 262226,
+      "sha256": "9920c0fad9a1fb02efb2b8bacdca16684e20afe880589b0de55bc8d33a75287d",
+      "generatedOriginal": "C:/Users/\u738b\u66dc\u744b/.codex/generated_images/01a0e411-4955-7d92-9c76-046e305bdad3/exec-b575a6b7-6889-445f-bffa-7a88e8c1e65c.png",
+      "prompt": "Use case: stylized-concept. Asset type: production 2D anime RPG tavern recruitment animation backdrop. Create a landscape 1536x1024 image, camera exactly front-facing towards a wooden pirate tavern wall. Hand-painted anime cel illustration with crisp outlines, detailed amber wooden planks, hanging lanterns, nautical ropes, a bar with bottles at far left and low tables/barrels at far right. Important composition: one large perfectly rectangular OPEN doorway exactly centered, clear dark empty interior, opening spans x35% to x65% and y14% to y86% of canvas; vertical parallel posts and horizontal lintel, no arched opening, no visible door leaves anywhere. The empty opening is a near-black charcoal color without objects, ready for animated colored light and character silhouettes composited later. The floor perspective directs attention toward the doorway. Rich restrained warm amber illumination at the sides, detailed but quiet. This should feel like a welcoming One Piece pirate tavern interior. No characters, no text, no logos, no border or UI, no glowing portal or bright fill inside the door. Ensure the entire rectangular aperture remains unobstructed and visible. The bar and any furniture must remain at the outer sides, not obstruct the opening. Purpose is a real compositing asset, not a concept sheet.",
+      "composition": {
+        "apertureApproxPixels": {
+          "left": 530,
+          "top": 92,
+          "right": 1007,
+          "bottom": 744
+        },
+        "apertureApproxPercent": {
+          "left": 34.5,
+          "top": 9,
+          "right": 65.6,
+          "bottom": 72.7
+        },
+        "note": "Front-facing rectangular open dark doorway. Art has no door leaves; animate separate door overlay."
+      }
+    },
+    {
+      "file": "doors.webp",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 327902,
+      "sha256": "830de692345b9453d5eb6e739b20241e0d34e8b647092a36c2a0e4b213f3142e",
+      "generatedOriginal": "C:/Users/\u738b\u66dc\u744b/.codex/generated_images/01a0e411-4955-7d92-9c76-046e305bdad3/exec-a7df658b-0d28-448c-9248-eac9ccd13ce8.png",
+      "prompt": "Use case: stylized-concept. Asset type: transparent production 2D game sprite for pirate tavern doors. Draw ONLY a closed pair of rectangular wooden double doors, directly front-on orthographic view, no perspective and no surrounding frame. Both leaves together form a tall rectangle, combined width to height about 2:3, no arch, with a straight flat horizontal top and bottom. Detailed deep amber brown aged vertical wood planks, black iron decorative hinge straps at outer edges, round metal ring handles near the center at waist height. A clear vertical seam exactly at center so a game can crop left and right halves and animate them separately. Warm anime cel illustration with crisp dark outlines and hand-painted wood texture, matching a cozy seafaring pirate tavern. Each leaf has two horizontal thick wood cross-beams and restrained iron nail details. Everything on the left half must stay left of the central seam; everything on right half stays right. Keep the full rectangular pair inside canvas with only a very small consistent transparent margin around it, fully visible. Actual transparent background with alpha outside the door silhouette, including no floor, wall, doorway frame, labels, text, characters, cast shadow outside the shape, glow or backdrop. The door itself must be solid opaque. This is one isolated sprite, not a concept sheet. Canvas portrait 1024x1536.",
+      "composition": {
+        "doorApproxPixels": {
+          "left": 58,
+          "top": 85,
+          "right": 965,
+          "bottom": 1432
+        },
+        "centerSeamX": 512,
+        "note": "Transparent margin around closed rectangular double-door sprite. Crop halves or position the full image according to its visible silhouette bounds."
+      }
+    },
+    {
+      "file": "luffy_invite.webp",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 209054,
+      "sha256": "c1e844068b20d7dc77ef4342804521c82aa7595097c43c17e6063d0a28f08175",
+      "generatedOriginal": "C:/Users/\u738b\u66dc\u744b/.codex/generated_images/01a0e411-4955-7d92-9c76-046e305bdad3/exec-40912f36-232a-4d47-8269-708228c113fd.png",
+      "prompt": "Use case: stylized-concept. Asset type: production transparent anime game character invitation sprite. Monkey D. Luffy from One Piece as a cheerful young adult pirate captain with his iconic straw hat with red ribbon, black messy hair, small stitched scar below his left eye, sleeveless open red vest exposing chest with an X-shaped scar. Waist-up portrait, full straw hat completely inside canvas, both arms and hands completely inside canvas with comfortable empty margin, body centered. Luffy smiles enthusiastically at the viewer and extends his right hand toward the viewer with palm open, naturally inviting a new friend to join his crew; his other hand rests casually on his hip. Distinctive anime character likeness, lively expressive eyes, relaxed welcoming invitation rather than action attack. Professional hand-drawn shonen anime cel painting, clean black line art, bright red vest, warm golden hat, vivid skin tones with natural cel shadows. Actual transparent background with alpha, no scene, no floor, no color backdrop, no glow, no speech balloon, no lettering, no border, no watermarks. One isolated complete waist-up character sprite, not a concept sheet. Portrait canvas 1024x1536, silhouette visible all the way around head and both hands.",
+      "composition": {
+        "note": "Waist-up Luffy with complete straw hat and both hands. Inviting hand reaches toward viewer. Transparent surrounding alpha."
+      }
+    }
+  ],
+  "verification": {
+    "imagesVisuallyInspected": true,
+    "dimensionsAndAlphaVerified": true,
+    "webpHashesVerified": true,
+    "note": "Generated preview may show hidden RGB backdrop; actual transparent sprite corner alpha is 0 and exterior sample points are transparent."
+  }
+}

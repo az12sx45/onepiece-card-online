@@ -1,0 +1,365 @@
+{
+  "rootUrl": "http://127.0.0.1:18928",
+  "errors": [],
+  "resources": [
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:18928/qa-tavern-missing-image.webp"
+    },
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:18928/qa-tavern-missing-image.webp"
+    },
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:18928/qa-tavern-missing-image.webp"
+    }
+  ],
+  "checks": [
+    "result remains present while animation blocks actions",
+    "B, K, and Home cannot escape the animation into game actions",
+    "CPU does not accept through the animation",
+    "repeated scans and synthetic clicks cannot duplicate or accept",
+    "recruit silhouette uses character transparency, not an opaque rectangle",
+    "Luffy leaves the stage before the silhouette appears",
+    "invitation, rarity light, silhouette, and reveal occur in order",
+    "automatic completion restores the same undecided result",
+    "animation completes within 12 seconds",
+    "S grade reaches the reveal",
+    "S skip restores actions",
+    "A grade reaches the reveal",
+    "A skip restores actions",
+    "B grade reaches the reveal",
+    "B skip restores actions",
+    "C grade reaches the reveal",
+    "C skip restores actions",
+    "D grade reaches the reveal",
+    "D skip restores actions",
+    "E grade reaches the reveal",
+    "E skip restores actions",
+    "all six grades have different light colors",
+    "Escape only skips and retains the result",
+    "Space activates focused skip without rolling or accepting",
+    "closing the source modal removes the overlay",
+    "hiding the source modal removes the overlay",
+    "overlay and skip fit 1440x900",
+    "art loads at 1440x900",
+    "overlay and skip fit 390x844",
+    "art loads at 390x844",
+    "overlay and skip fit 932x430",
+    "art loads at 932x430",
+    "missing character art does not trap spectator result",
+    "replacing spectator result cleans previous overlay and controls",
+    "spectator result receives the same animation and keeps close action",
+    "non-tavern shared result does not animate",
+    "reduced motion exposes the result promptly",
+    "accept: real draw charges exactly once",
+    "accept: animation leaves crew and candidate pool undecided",
+    "accept: deciding does not charge again",
+    "accept adds only the selected recruit and removes it from the pool",
+    "reject: real draw charges exactly once",
+    "reject: animation leaves crew and candidate pool undecided",
+    "reject: deciding does not charge again",
+    "reject preserves crew and returns no false acceptance",
+    "replace: real draw charges exactly once",
+    "replace: animation leaves crew and candidate pool undecided",
+    "replace: deciding does not charge again",
+    "full crew replacement keeps six and returns the replaced card to pool",
+    "no browser runtime errors"
+  ],
+  "colors": [
+    {
+      "grade": "S",
+      "color": "#ffe27a"
+    },
+    {
+      "grade": "A",
+      "color": "#dca4ff"
+    },
+    {
+      "grade": "B",
+      "color": "#9fc4ff"
+    },
+    {
+      "grade": "C",
+      "color": "#9fdaa9"
+    },
+    {
+      "grade": "D",
+      "color": "#cad2db"
+    },
+    {
+      "grade": "E",
+      "color": "#d7b786"
+    }
+  ],
+  "layouts": [
+    {
+      "stage": "invitation",
+      "grade": "A",
+      "color": "#dca4ff",
+      "width": 1440,
+      "height": 900,
+      "cover": true,
+      "skipVisible": true,
+      "skipTextFits": true,
+      "overflow": false,
+      "images": [
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doorway.webp",
+          "loaded": true
+        },
+        {
+          "source": "http://127.0.0.1:18928/images/board/battle/portraits/nami/normal.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doors.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doors.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/luffy_invite.webp",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "stage": "invitation",
+      "grade": "A",
+      "color": "#dca4ff",
+      "width": 390,
+      "height": 844,
+      "cover": true,
+      "skipVisible": true,
+      "skipTextFits": true,
+      "overflow": false,
+      "images": [
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doorway.webp",
+          "loaded": true
+        },
+        {
+          "source": "http://127.0.0.1:18928/images/board/battle/portraits/nami/normal.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doors.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doors.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/luffy_invite.webp",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "stage": "invitation",
+      "grade": "A",
+      "color": "#dca4ff",
+      "width": 932,
+      "height": 430,
+      "cover": true,
+      "skipVisible": true,
+      "skipTextFits": true,
+      "overflow": false,
+      "images": [
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doorway.webp",
+          "loaded": true
+        },
+        {
+          "source": "http://127.0.0.1:18928/images/board/battle/portraits/nami/normal.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doors.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doors.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/luffy_invite.webp",
+          "loaded": true
+        }
+      ]
+    }
+  ],
+  "outcomes": [
+    {
+      "outcome": "accept",
+      "before": {
+        "playerId": "1354044",
+        "coins": 20000,
+        "crewIds": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "poolIds": [
+          "nami"
+        ],
+        "candidateId": "nami",
+        "rollCost": 2500,
+        "currentPlayerIndex": 0
+      },
+      "rolled": {
+        "playerId": "1354044",
+        "coins": 17500,
+        "crewIds": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "poolIds": [
+          "nami"
+        ],
+        "candidateId": "nami",
+        "rollCost": 2500,
+        "currentPlayerIndex": 0
+      },
+      "after": {
+        "playerId": "1354044",
+        "coins": 17500,
+        "crewIds": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "poolIds": [],
+        "candidateId": "nami",
+        "rollCost": 2500,
+        "currentPlayerIndex": 0
+      }
+    },
+    {
+      "outcome": "reject",
+      "before": {
+        "playerId": "1354044",
+        "coins": 20000,
+        "crewIds": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "poolIds": [
+          "nami"
+        ],
+        "candidateId": "nami",
+        "rollCost": 2500,
+        "currentPlayerIndex": 0
+      },
+      "rolled": {
+        "playerId": "1354044",
+        "coins": 17500,
+        "crewIds": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "poolIds": [
+          "nami"
+        ],
+        "candidateId": "nami",
+        "rollCost": 2500,
+        "currentPlayerIndex": 0
+      },
+      "after": {
+        "playerId": "1354044",
+        "coins": 17500,
+        "crewIds": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "poolIds": [
+          "nami"
+        ],
+        "candidateId": "nami",
+        "rollCost": 2500,
+        "currentPlayerIndex": 0
+      }
+    },
+    {
+      "outcome": "replace",
+      "before": {
+        "playerId": "1354044",
+        "coins": 20000,
+        "crewIds": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "law",
+          "robin",
+          "hancock"
+        ],
+        "poolIds": [
+          "nami"
+        ],
+        "candidateId": "nami",
+        "rollCost": 2500,
+        "currentPlayerIndex": 0
+      },
+      "rolled": {
+        "playerId": "1354044",
+        "coins": 17500,
+        "crewIds": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "law",
+          "robin",
+          "hancock"
+        ],
+        "poolIds": [
+          "nami"
+        ],
+        "candidateId": "nami",
+        "rollCost": 2500,
+        "currentPlayerIndex": 0
+      },
+      "after": {
+        "playerId": "1354044",
+        "coins": 17500,
+        "crewIds": [
+          "nami",
+          "zoro",
+          "sanji",
+          "law",
+          "robin",
+          "hancock"
+        ],
+        "poolIds": [
+          "luffy"
+        ],
+        "candidateId": "nami",
+        "rollCost": 2500,
+        "currentPlayerIndex": 0
+      }
+    }
+  ],
+  "silhouetteArt": {
+    "source": "http://127.0.0.1:18928/images/board/battle/portraits/nami/normal.webp",
+    "mask": "images/board-depth/v1/images-board-battle-portraits-nami-normal-c7027f1b/mask.webp",
+    "computedMask": "url(\"http://127.0.0.1:18928/images/board-depth/v1/images-board-battle-portraits-nami-normal-c7027f1b/mask.webp\")",
+    "transparentFraction": 0.62646484375,
+    "captainOpacity": 0
+  },
+  "stages": [
+    "invitation",
+    "glow",
+    "silhouette",
+    "reveal"
+  ],
+  "automaticDurationMs": 7740
+}

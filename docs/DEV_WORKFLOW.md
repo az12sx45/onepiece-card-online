@@ -1,5 +1,11 @@
 # Dev Workflow
 
+## 2026-09-28 酒館招募演出
+
+酒館成功抽選後以獨立呈現層播放魯夫邀請、階級門光、真實角色剪影與揭曉；原結果及收下／放棄／滿員替換 handlers 保持原位。新增 `public/js/board_tavern_reveal.js`、`public/css/board_tavern_reveal.css`、三張 `public/images/board/tavern_recruit/cinematic_v1/*.webp`；`board_game.js` 僅傳遞酒館限定的 UI 標記，`board_game.html` 載入模組，config 新增兩個程式 allowlist。圖片／prompts／SHA 見 `BOARD_TAVERN_CINEMATIC_ART_20260928.json`。
+
+正式工作樹的其他修改保留；發布以線上 `92a11b3c5c1c8e21eea5ab84917dd5c8c5e8d441` 為底，在 managed `codex/tavern-recruit-animation` 只帶入本次差異。`scripts/build_board_tavern_reveal_release.js` 保留原有 6310 筆媒體；`scripts/board_tavern_reveal_qa.js` 驗證原遊戲招募 handler 與響應式呈現。實測結果、發布版本、風險與環境界線統一記於 `BOARD_TAVERN_REVEAL_20260928.md`。LATTICE API 本階段不存在，官方 Status 回報 `CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未聲稱持久任務登記。
+
 ## 2026-09-27 角色旁透明選單與整體比例（1.2.2）
 
 依使用者要求將房間角色操作移至角色旁的半透明圖示選單。desktop/launcher-room.js 維護 viewport 定位、跟隨角色、左右換邊、捲動裁切、Escape／點空白收合與鍵盤焦點；launcher.html、launcher-room.css、launcher-life-room.js 提供聊天／工作／呼喚／點心／訓練／詳情及原有親密度。詳情和工作清單在同一浮層展開；好友僅顯示可讀詳情，付費點心仍須兩次確認。

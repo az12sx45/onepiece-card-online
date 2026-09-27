@@ -1,0 +1,68 @@
+:root { --tavern-reveal-ready: 1; }
+.tavern-reveal-overlay {
+  position: fixed; inset: 0; z-index: 2147483000; isolation: isolate;
+  overflow: hidden; background: #100e12; color: #fff; font-family: inherit;
+  letter-spacing: 0; touch-action: manipulation;
+}
+.tavern-reveal-overlay *, .tavern-reveal-overlay *::before, .tavern-reveal-overlay *::after { box-sizing: border-box; }
+.tavern-reveal-scene { position: absolute; width: max(100vw, 150dvh); aspect-ratio: 3 / 2; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.tavern-reveal-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; filter: brightness(.68); }
+.tavern-reveal-scene::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, #080912e6, transparent 35%, transparent 75%, #08091280); }
+.tavern-reveal-portal { position: absolute; left: 34.5%; top: 9%; width: 31.1%; height: 63.7%; perspective: 1000px; }
+.tavern-reveal-light { position: absolute; inset: 0; background: var(--tavern-reveal-color); opacity: 0; box-shadow: 0 0 50px 12px var(--tavern-reveal-color); transition: opacity 1s ease; }
+.tavern-reveal-light::after { content: ""; position: absolute; inset: 40% -70% -25%; background: var(--tavern-reveal-color); clip-path: polygon(34% 0, 66% 0, 100% 100%, 0 100%); opacity: .2; filter: blur(6px); }
+.tavern-reveal-doors { position: absolute; inset: 0; display: flex; perspective: 1200px; }
+.tavern-reveal-door { position: relative; width: 50%; height: 100%; overflow: hidden; transition: transform 1.15s cubic-bezier(.22,.65,.2,1), opacity .65s ease; backface-visibility: hidden; }
+.tavern-reveal-door.left { transform-origin: left center; }
+.tavern-reveal-door.right { transform-origin: right center; }
+.tavern-reveal-door img { position: absolute; width: 226%; height: 114%; top: -6.3%; left: -12.8%; max-width: none; object-fit: fill; }
+.tavern-reveal-door.right img { left: -112.8%; }
+.tavern-reveal-character { position: absolute; width: 150%; max-width: 88vw; height: 105%; left: 50%; bottom: 0; object-fit: contain; filter: brightness(0); opacity: 0; transform: translateX(-50%) scale(.85); transition: opacity .75s ease, transform 1.4s ease, filter .9s ease; }
+.tavern-reveal-luffy { position: absolute; left: 6%; bottom: -4%; width: 47%; height: 94%; object-fit: contain; object-position: bottom; filter: drop-shadow(0 12px 22px #0009); transform: translateX(0); transition: opacity .55s ease, transform .8s ease; animation: tavern-captain-enter .7s ease both; z-index: 2; }
+.tavern-reveal-character { mask-mode: alpha; mask-size: contain; -webkit-mask-size: contain; mask-position: center; -webkit-mask-position: center; mask-repeat: no-repeat; -webkit-mask-repeat: no-repeat; }
+.tavern-reveal-invitation { position: absolute; left: 48%; right: 6%; top: 40%; z-index: 3; text-shadow: 0 3px 12px #000, 0 2px 3px #000; transition: opacity .35s ease, transform .6s ease; }
+.tavern-reveal-speaker { color: #ffe27a; font-size: 18px; font-weight: 800; }
+.tavern-reveal-invitation p { margin: 14px 0 0; font-size: 34px; line-height: 1.55; font-weight: 900; text-wrap: balance; overflow-wrap: anywhere; }
+.tavern-reveal-caption { position: absolute; left: 10%; right: 10%; bottom: max(6%, env(safe-area-inset-bottom)); text-align: center; z-index: 3; text-shadow: 0 3px 12px #000, 0 2px 3px #000; animation: tavern-caption-enter .55s ease both; }
+.tavern-reveal-caption[hidden] { display: none; }
+.tavern-reveal-rank { font-size: 22px; color: var(--tavern-reveal-color); font-weight: 900; }
+.tavern-reveal-name { margin: 7px 0; font-size: 36px; line-height: 1.3; font-weight: 900; overflow-wrap: anywhere; text-wrap: balance; }
+.tavern-reveal-caption p { margin: 0; font-size: 15px; line-height: 1.5; }
+.tavern-reveal-skip { position: absolute; right: max(24px, env(safe-area-inset-right)); top: max(22px, env(safe-area-inset-top)); z-index: 5; min-height: 44px; padding: 9px 14px; background: #111018b3; color: #fff; border: 1px solid #ffffff70; border-radius: 4px; font-family: inherit; font-size: 14px; font-weight: 600; line-height: 1.4; cursor: pointer; }
+.tavern-reveal-skip:hover { background: #302b35; }
+.tavern-reveal-skip:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+.tavern-reveal-overlay[data-stage="glow"] .tavern-reveal-light { opacity: .75; }
+.tavern-reveal-overlay:not([data-stage="invitation"]) .tavern-reveal-luffy { animation: none; opacity: 0; transform: translateX(-10%); }
+.tavern-reveal-overlay:not([data-stage="invitation"]) .tavern-reveal-invitation { opacity: 0; transform: translateY(10px); }
+.tavern-reveal-overlay[data-stage="silhouette"] .tavern-reveal-light, .tavern-reveal-overlay[data-stage="reveal"] .tavern-reveal-light { opacity: .9; }
+.tavern-reveal-overlay[data-stage="silhouette"] .tavern-reveal-door.left, .tavern-reveal-overlay[data-stage="reveal"] .tavern-reveal-door.left { transform: rotateY(-105deg); opacity: .35; }
+.tavern-reveal-overlay[data-stage="silhouette"] .tavern-reveal-door.right, .tavern-reveal-overlay[data-stage="reveal"] .tavern-reveal-door.right { transform: rotateY(105deg); opacity: .35; }
+.tavern-reveal-overlay[data-stage="silhouette"] .tavern-reveal-character { opacity: 1; transform: translateX(-50%) scale(.95); }
+.tavern-reveal-overlay[data-stage="reveal"] .tavern-reveal-character { opacity: 1; transform: translateX(-50%) scale(1.07); filter: brightness(1) drop-shadow(0 0 15px var(--tavern-reveal-color)); }
+.tavern-reveal-overlay[data-stage="reveal"] .tavern-reveal-light { opacity: .32; }
+@keyframes tavern-captain-enter { from { opacity: 0; transform: translateX(-5%); } to { opacity: 1; transform: translateX(0); } }
+@keyframes tavern-caption-enter { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-aspect-ratio: 3 / 4) {
+  .tavern-reveal-scene { width: 150dvh; }
+  .tavern-reveal-luffy { left: 34%; width: 32%; bottom: 8%; height: 75%; }
+  .tavern-reveal-invitation { left: 7%; right: 7%; top: auto; bottom: 10%; text-align: center; }
+  .tavern-reveal-invitation p { font-size: 27px; }
+  .tavern-reveal-caption { left: 5%; right: 5%; bottom: 7%; }
+  .tavern-reveal-name { font-size: 28px; }
+  .tavern-reveal-skip { right: 16px; top: max(16px, env(safe-area-inset-top)); }
+}
+@media (max-height: 500px) and (min-aspect-ratio: 3 / 4) {
+  .tavern-reveal-character { height: 64dvh; bottom: 10%; }
+  .tavern-reveal-luffy { height: 88dvh; bottom: 8%; }
+  .tavern-reveal-invitation { top: 35%; }
+  .tavern-reveal-invitation p { font-size: 26px; }
+  .tavern-reveal-speaker { font-size: 15px; }
+  .tavern-reveal-caption { bottom: 3%; }
+  .tavern-reveal-name { font-size: 26px; margin: 2px 0; }
+  .tavern-reveal-rank { font-size: 18px; }
+  .tavern-reveal-caption p { font-size: 13px; }
+  .tavern-reveal-skip { top: 12px; right: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tavern-reveal-overlay *, .tavern-reveal-overlay *::after { animation: none !important; transition: none !important; }
+}

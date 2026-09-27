@@ -1,5 +1,15 @@
 # File Map
 
+## 2026-09-28 酒館招募演出
+
+- `public/js/board_tavern_reveal.js`：監看明確標記的酒館結果、四階段演出、階級色、原結果按鈕與焦點恢復、跳過／取消／素材失敗處理。
+- `public/css/board_tavern_reveal.css`：點陣背景／門片／角色圖合成、門片轉動、剪影揭曉及桌機／手機版面。
+- `public/images/board/tavern_recruit/cinematic_v1/`：GPT 酒館門洞、透明雙門與魯夫邀請圖片。
+- `public/js/board_game.js`、`public/board_game.html`：原招募結果的最小 UI 標记及載入；原規則／結果 handlers 不變。
+- `scripts/board_tavern_reveal_qa.js`、`scripts/build_board_tavern_reveal_release.js`：瀏覽器驗證與保留既有媒體的限定發布建置。
+- `scripts/board_tavern_reveal_sync_qa.js`：兩個瀏覽器 context 的本機實際 Socket.IO 酒館抽選／觀看／收下／重整驗證；使用隔離測試初始狀態。
+- `docs/BOARD_TAVERN_CINEMATIC_ART_20260928.json`、`docs/BOARD_TAVERN_REVEAL_20260928.md`：素材來源、提示詞、驗證與發布證據。
+
 ## 2026-09-27 角色旁選單與比例（1.2.2）
 
 - desktop/launcher-room.js：1.50倍呈現比例、家具接點與靜態腳根；角色旁浮層定位、焦點、跟隨及收合。

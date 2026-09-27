@@ -1,0 +1,441 @@
+{
+  "ok": true,
+  "url": "http://127.0.0.1:18928",
+  "scope": "Two isolated Chromium contexts, real local Socket.IO rooms and production draw handlers; controlled initial state and one deterministic random sample. Not human, physical-device, or remote-network acceptance.",
+  "checks": [
+    "real host create, guest join, ready and start reach connected game",
+    "controlled host state reaches guest through normal snapshot",
+    "actual draw presents same character, tier, portrait and color to both devices",
+    "actual draw charges once and keeps crew undecided",
+    "spectator has no recruitment decision controls",
+    "spectator skip changes no authoritative recruitment state",
+    "spectator retains only its close action",
+    "accept propagates exactly one recruit and removes candidate from pool",
+    "normal acceptance state push makes host and guest identical",
+    "guest refresh restores accepted crew, pool, coins, turn and identity",
+    "tavern reveal travels on acknowledged existing spectator event",
+    "acceptance uses acknowledged normal game-state transport",
+    "no browser runtime errors"
+  ],
+  "errors": [],
+  "resources": [],
+  "roomCode": "B4714",
+  "fixture": {
+    "playerId": "378609603",
+    "islandId": "island-16",
+    "candidateId": "nami",
+    "candidateName": "娜美"
+  },
+  "before": {
+    "playerId": "378609603",
+    "coins": 20000,
+    "crewIds": [
+      "luffy",
+      "zoro",
+      "sanji"
+    ],
+    "poolIds": [
+      "bartolomeo",
+      "brook",
+      "carrot",
+      "cavendish",
+      "chopper",
+      "custom_mp3l6s8w",
+      "custom_mp3l85c1",
+      "dragon",
+      "franky",
+      "fujitora",
+      "garp",
+      "hancock",
+      "ivankov",
+      "jinbe",
+      "kid",
+      "killer",
+      "kinemon",
+      "koby",
+      "kuma",
+      "kuzan",
+      "law",
+      "mansherry",
+      "nami",
+      "perona",
+      "rayleigh",
+      "robin",
+      "sabo",
+      "smoker",
+      "tashigi",
+      "usopp",
+      "vivi",
+      "yamato"
+    ],
+    "phase": "main",
+    "currentPlayerIndex": 0
+  },
+  "guestBefore": {
+    "playerId": "378609603",
+    "coins": 20000,
+    "crewIds": [
+      "luffy",
+      "zoro",
+      "sanji"
+    ],
+    "poolIds": [
+      "bartolomeo",
+      "brook",
+      "carrot",
+      "cavendish",
+      "chopper",
+      "custom_mp3l6s8w",
+      "custom_mp3l85c1",
+      "dragon",
+      "franky",
+      "fujitora",
+      "garp",
+      "hancock",
+      "ivankov",
+      "jinbe",
+      "kid",
+      "killer",
+      "kinemon",
+      "koby",
+      "kuma",
+      "kuzan",
+      "law",
+      "mansherry",
+      "nami",
+      "perona",
+      "rayleigh",
+      "robin",
+      "sabo",
+      "smoker",
+      "tashigi",
+      "usopp",
+      "vivi",
+      "yamato"
+    ],
+    "phase": "main",
+    "currentPlayerIndex": 0
+  },
+  "rollMeta": {
+    "cost": 2500,
+    "grade": "E"
+  },
+  "presentation": {
+    "host": {
+      "grade": "E",
+      "name": "娜美",
+      "portrait": "/images/board/battle/portraits/nami/normal.webp",
+      "color": "#d7b786",
+      "stage": "glow"
+    },
+    "guest": {
+      "grade": "E",
+      "name": "娜美",
+      "portrait": "/images/board/battle/portraits/nami/normal.webp",
+      "color": "#d7b786",
+      "stage": "invitation"
+    }
+  },
+  "rolled": {
+    "playerId": "378609603",
+    "coins": 17500,
+    "crewIds": [
+      "luffy",
+      "zoro",
+      "sanji"
+    ],
+    "poolIds": [
+      "bartolomeo",
+      "brook",
+      "carrot",
+      "cavendish",
+      "chopper",
+      "custom_mp3l6s8w",
+      "custom_mp3l85c1",
+      "dragon",
+      "franky",
+      "fujitora",
+      "garp",
+      "hancock",
+      "ivankov",
+      "jinbe",
+      "kid",
+      "killer",
+      "kinemon",
+      "koby",
+      "kuma",
+      "kuzan",
+      "law",
+      "mansherry",
+      "nami",
+      "perona",
+      "rayleigh",
+      "robin",
+      "sabo",
+      "smoker",
+      "tashigi",
+      "usopp",
+      "vivi",
+      "yamato"
+    ],
+    "phase": "main",
+    "currentPlayerIndex": 0
+  },
+  "after": {
+    "host": {
+      "playerId": "378609603",
+      "coins": 17500,
+      "crewIds": [
+        "luffy",
+        "zoro",
+        "sanji",
+        "nami"
+      ],
+      "poolIds": [
+        "bartolomeo",
+        "brook",
+        "carrot",
+        "cavendish",
+        "chopper",
+        "custom_mp3l6s8w",
+        "custom_mp3l85c1",
+        "dragon",
+        "franky",
+        "fujitora",
+        "garp",
+        "hancock",
+        "ivankov",
+        "jinbe",
+        "kid",
+        "killer",
+        "kinemon",
+        "koby",
+        "kuma",
+        "kuzan",
+        "law",
+        "mansherry",
+        "perona",
+        "rayleigh",
+        "robin",
+        "sabo",
+        "smoker",
+        "tashigi",
+        "usopp",
+        "vivi",
+        "yamato"
+      ],
+      "phase": "main",
+      "currentPlayerIndex": 1
+    },
+    "guest": {
+      "playerId": "378609603",
+      "coins": 17500,
+      "crewIds": [
+        "luffy",
+        "zoro",
+        "sanji",
+        "nami"
+      ],
+      "poolIds": [
+        "bartolomeo",
+        "brook",
+        "carrot",
+        "cavendish",
+        "chopper",
+        "custom_mp3l6s8w",
+        "custom_mp3l85c1",
+        "dragon",
+        "franky",
+        "fujitora",
+        "garp",
+        "hancock",
+        "ivankov",
+        "jinbe",
+        "kid",
+        "killer",
+        "kinemon",
+        "koby",
+        "kuma",
+        "kuzan",
+        "law",
+        "mansherry",
+        "perona",
+        "rayleigh",
+        "robin",
+        "sabo",
+        "smoker",
+        "tashigi",
+        "usopp",
+        "vivi",
+        "yamato"
+      ],
+      "phase": "main",
+      "currentPlayerIndex": 1
+    }
+  },
+  "refresh": {
+    "state": {
+      "playerId": "378609603",
+      "coins": 17500,
+      "crewIds": [
+        "luffy",
+        "zoro",
+        "sanji",
+        "nami"
+      ],
+      "poolIds": [
+        "bartolomeo",
+        "brook",
+        "carrot",
+        "cavendish",
+        "chopper",
+        "custom_mp3l6s8w",
+        "custom_mp3l85c1",
+        "dragon",
+        "franky",
+        "fujitora",
+        "garp",
+        "hancock",
+        "ivankov",
+        "jinbe",
+        "kid",
+        "killer",
+        "kinemon",
+        "koby",
+        "kuma",
+        "kuzan",
+        "law",
+        "mansherry",
+        "perona",
+        "rayleigh",
+        "robin",
+        "sabo",
+        "smoker",
+        "tashigi",
+        "usopp",
+        "vivi",
+        "yamato"
+      ],
+      "phase": "main",
+      "currentPlayerIndex": 1
+    },
+    "localUserId": 528069674
+  },
+  "wire": [
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "reason": "join",
+      "ack": {
+        "ok": true,
+        "version": 1
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "reason": "qa-tavern-sync-fixture",
+      "ack": {
+        "ok": true,
+        "version": 2
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "spectator-modal",
+      "kind": "tavern",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "sequence": 1,
+        "stateVersion": 2
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "reason": "board-event-spectator-modal",
+      "ack": {
+        "ok": true,
+        "version": 3
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "recruit",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "sequence": 2,
+        "stateVersion": 3
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "reason": "board-event-recruit",
+      "ack": {
+        "ok": true,
+        "version": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "spectator-modal",
+      "kind": "tavern-result",
+      "detail": {
+        "kind": "tavern-result",
+        "tavernReveal": true,
+        "playerName": "招募主muk5gnwj",
+        "islandName": "雙子酒館港",
+        "title": "雙子酒館港 招募結果",
+        "subtitle": "招募主muk5gnwj 抽中 娜美。",
+        "recruit": {
+          "id": "nami",
+          "name": "娜美",
+          "tier": "T6",
+          "grade": "E",
+          "attribute": "技",
+          "roleType": "偵查型",
+          "level": 1,
+          "passive": "天候直覺",
+          "baseStats": {
+            "hp": 58,
+            "atk": 42,
+            "def": 40,
+            "satk": 50,
+            "sdef": 46,
+            "spd": 52
+          },
+          "image": "images/board/battle/portraits/nami/normal.webp",
+          "tag": "技 / 偵查型"
+        },
+        "chanceText": "6%"
+      },
+      "ack": {
+        "ok": true,
+        "sequence": 3,
+        "stateVersion": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "turn-banner",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "sequence": 4,
+        "stateVersion": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "reason": "board-event-turn-banner",
+      "ack": {
+        "ok": true,
+        "version": 5
+      }
+    }
+  ]
+}

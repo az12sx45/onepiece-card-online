@@ -28354,6 +28354,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function spectatorTavernResultModal(detail = {}) {
     const recruit = detail.recruit || {};
     openSpectatorModal(tavernRecruitResultPanelMarkup({
+      cinematic: detail.tavernReveal === true,
       title: `${detail.islandName || "酒館"} 招募結果`,
       subtitle: `${detail.playerName || "玩家"} 抽中了這位候選人，等待操作方決定是否收下。`,
       recruit,
@@ -43004,7 +43005,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       </div>
     `;
     return `
-      <section class="tavern-result-ui${options.fullCrew ? " is-full-crew" : ""}" aria-labelledby="tavernResultTitle">
+      <section class="tavern-result-ui${options.fullCrew ? " is-full-crew" : ""}" aria-labelledby="tavernResultTitle"${options.cinematic ? ` data-tavern-reveal="v1" data-grade="${escapeModalText(grade)}"` : ""}>
         <img class="tavern-result-panel-frame" src="${tavernUiAsset("tavern_recruit_result_panel_frame.webp")}" alt="" aria-hidden="true">
         <header class="tavern-result-heading"><h3 id="tavernResultTitle">${escapeModalText(options.title || "酒館招募結果")}</h3></header>
         <div class="tavern-result-subtitle">${escapeModalText(options.subtitle || "")}</div>
@@ -43600,6 +43601,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           symbol: "招",
         }, { immediate: true });
         openRecruitResultModal(latest, island, recruit, {
+          tavernReveal: true,
           cost: TAVERN_RECRUIT_ROLL_COST,
           chance,
           boostCount,
@@ -43623,6 +43625,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function openRecruitResultModal(player, island, recruit, rollMeta = {}) {
     emitSpectatorModalEvent("tavern-result", player, {
+      tavernReveal: rollMeta.tavernReveal === true,
       playerName: player?.name || "玩家",
       islandName: island?.name || "酒館",
       title: `${island?.name || "酒館"} 招募結果`,
@@ -43633,6 +43636,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const chanceText = formatRecruitChance(Number(rollMeta.chance || 0));
     if (player.crew.length < TEAM_LIMIT) {
       openModal(tavernRecruitResultPanelMarkup({
+        cinematic: rollMeta.tavernReveal === true,
         title: `${island.name} 招募結果`,
         subtitle: "抽中的角色可以選擇不加入；放棄時不會加入隊伍，也不會從候選池移除。",
         recruit,
@@ -43659,6 +43663,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     }
 
     openModal(tavernRecruitResultPanelMarkup({
+      cinematic: rollMeta.tavernReveal === true,
       title: `${island.name} 隊伍已滿`,
       subtitle: `隊伍上限 ${TEAM_LIMIT} 人。你可以放棄新夥伴，或捨棄 1 位舊角色後收下。`,
       recruit,
