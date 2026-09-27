@@ -33,6 +33,9 @@
   });
   const FURNITURE_CANVAS = 384;
   const FURNITURE_GROUND_ROOT = Object.freeze([192, 372]);
+  // One uniform art multiplier: rear-row adults now match the cabin door's
+  // roughly 89 stage-pixel opening. Grid cells and saved positions stay fixed.
+  const ROOM_ART_SCALE = 1.5;
   const dialogue = window.OnePieceRoomDialogue || null;
   const locomotion = window.OnePieceRoomMotion || null;
   const motionTable = window.OnePieceRoomMotionManifest || null;
@@ -263,6 +266,40 @@
     $('roomCompanionTalk').disabled = !canAct || (record && (Number(record.talksRemainingToday) <= 0 || Date.parse(record.nextTalkAt) > Date.now()));
     $('roomCompanionTalk').title = record && Date.parse(record.nextTalkAt) > Date.now() ? `下次可聊天：${remainingTime(record.nextTalkAt)}` : '';
     lifeRoom?.renderPanel();
+    positionCompanion();
+  }
+  // A viewport overlay follows the whole actor, including in a scrolled room.
+  // It never participates in the profile layout or interrupts autonomous tasks.
+  let companionPositionAt = 0;
+  function positionCompanion() {
+    const panel = $('roomCompanionPanel');
+    if (!companionId || panel.hidden) return;
+    const actor = [...$('roomCharacters').children].find(node => node.dataset.roomKey === `c:${companionId}`);
+    if (!actor || actor.hidden) { panel.style.visibility = 'hidden'; return; }
+    const anchor = actor.getBoundingClientRect(), stage = $('roomStage').getBoundingClientRect();
+    const clip = $('roomStage').parentElement.getBoundingClientRect();
+    const profileClip = $('roomStage').closest('.voyage-scroll').getBoundingClientRect();
+    const width = document.documentElement.clientWidth, height = window.innerHeight, margin = 8, gap = 9;
+    const left = Math.max(margin, clip.left), right = Math.min(width - margin, clip.right);
+    const top = Math.max(margin, stage.top, profileClip.top), bottom = Math.min(height - margin, stage.bottom, profileClip.bottom);
+    if (anchor.right <= left || anchor.left >= right || anchor.bottom <= top || anchor.top >= bottom) {
+      panel.style.visibility = 'hidden'; return;
+    }
+    panel.style.visibility = '';
+    panel.style.maxHeight = `${Math.max(100, height - margin * 2)}px`;
+    const box = panel.getBoundingClientRect();
+    let x = anchor.right + gap, side = 'right';
+    if (x + box.width > width - margin) { x = anchor.left - box.width - gap; side = 'left'; }
+    let y = anchor.top + Math.min(22, anchor.height * .18);
+    if (x < margin) {
+      x = anchor.left + (anchor.width - box.width) / 2;
+      y = anchor.top - box.height - gap;
+      side = 'above';
+      if (y < margin && anchor.bottom + gap + box.height <= height - margin) { y = anchor.bottom + gap; side = 'below'; }
+    }
+    panel.dataset.side = side;
+    panel.style.left = `${Math.round(Math.max(margin, Math.min(width - box.width - margin, x)))}px`;
+    panel.style.top = `${Math.round(Math.max(margin, Math.min(height - box.height - margin, y)))}px`;
   }
   function closeCompanion() {
     if (companionTick) clearInterval(companionTick);
@@ -273,14 +310,18 @@
     companionBusy = false;
     companionStatus('');
     $('roomCompanionPanel').hidden = true;
+    $('roomCompanionPanel').classList.remove('show-details');
+    lifeRoom?.renderPanel();
+    for (const node of $('roomCharacters').children) {
+      node.classList.remove('is-companion-selected'); node.setAttribute('aria-expanded', 'false');
+    }
     for (const walker of walkers) {
-      walker.node.classList.remove('is-companion-selected');
       if (walker.item?.id === previous && walker.mode === 'focused') {
         hideSpeech(walker); walker.manualUntil = 0; setPose(walker, 'idle'); chooseDestination(walker);
       }
     }
   }
-  async function openCompanion(itemId) {
+  async function openCompanion(itemId, keyboard = false) {
     if (editing || !activeRoom().characters.some(entry => entry.itemId === itemId)) return;
     if (companionId === itemId && companionBusy) { renderCompanionPanel(); return; }
     if (companionId !== itemId) closeCompanion();
@@ -289,7 +330,8 @@
     if (interaction && !lifeRoom?.active()) finishInteraction(performance.now());
     nextInteractionAt = performance.now() + 5000;
     const walker = walkers.find(entry => entry.item?.id === itemId);
-    if (walker) walker.node.classList.add('is-companion-selected');
+    const actor = [...$('roomCharacters').children].find(node => node.dataset.roomKey === `c:${itemId}`);
+    if (actor) { actor.classList.add('is-companion-selected'); actor.setAttribute('aria-expanded', 'true'); }
     if (walker && !lifeRoom?.active()) {
       walker.route = []; walker.mode = 'focused'; walker.pause = 0;
       walker.node.classList.remove('is-walking'); walker.node.classList.add('is-companion-selected');
@@ -297,7 +339,7 @@
     }
     lifeRoom?.tapped(keyForCharacter(resolvedItem(itemId, 'character')));
     renderCompanionPanel();
-    $('roomCompanionPanel').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    if (keyboard) $('roomCompanionPanel').querySelector('.room-companion-actions button:not([hidden]):not(:disabled)')?.focus({ preventScroll: true });
     companionTick = setInterval(renderCompanionPanel, 1000);
     if (!isOwner() || typeof api.getLauncherCharacter !== 'function') return;
     const epoch = viewEpoch; const ownerId = accountId; const request = ++companionRequest;
@@ -598,7 +640,7 @@
     // 94% translation / 95% origin placed the ground below the grid anchor;
     // shift the actor by that same amount when aligning the drawing's ground.
     const priorGroundOffset = 75 * .01 + depth * (75 * FURNITURE_GROUND_ROOT[1] / FURNITURE_CANVAS - 75 * .95);
-    return { x: target.anchor.x + dx * depth, y: target.anchor.y + dy * depth - priorGroundOffset,
+    return { x: target.anchor.x + dx * depth * ROOM_ART_SCALE, y: target.anchor.y + (dy * depth - priorGroundOffset) * ROOM_ART_SCALE,
       z: Math.round(target.anchor.y) + (side === 'south' ? 9 : 11), side };
   }
   function startFurnitureDock(walker, target) {
@@ -622,12 +664,12 @@
     const facing = { col: walker.cell.col + (horizontal ? Math.sign(amount) : 0), row: walker.cell.row + (horizontal ? 0 : Math.sign(amount)) };
     if (!faceWalker(walker, facing, now)) { setPose(walker, 'idle'); return false; }
     const scale = locomotion.projectedScale(walker.y, FLOOR);
-    const gait = locomotion.speedAndStride(walker.key, walker.motion.direction, scale, motionTable);
+    const gait = scaledGait(walker.key, walker.motion.direction, scale);
     const travel = Math.min(Math.abs(amount), delta / 1000 * gait.speed);
     if (horizontal) walker.x += Math.sign(amount) * travel; else walker.y += Math.sign(amount) * travel;
     walker.node.style.left = `${walker.x / WIDTH * 100}%`; walker.node.style.top = `${walker.y / HEIGHT * 100}%`;
     walker.node.style.zIndex = String(Number.isFinite(target.z) ? target.z : 10 + Math.round(walker.y));
-    walker.node.style.setProperty('--room-character-scale', String(scale / 1.07 * locomotion.metadata(walker.key, motionTable).displayScale));
+    walker.node.style.setProperty('--room-character-scale', String(ROOM_ART_SCALE * scale / 1.07 * locomotion.metadata(walker.key, motionTable).displayScale));
     keepSpeechInsideStage(walker);
     walker.dockTravel = true; walker.node.classList.add('is-walking');
     locomotion.advance(walker.motion, travel, gait.stride, { ready: true }); showMotion(walker, true);
@@ -839,7 +881,7 @@
       const dx = target.x - walker.x;
       const dy = target.y - walker.y;
       const scale = locomotion.projectedScale(walker.y, FLOOR);
-      const gait = locomotion.speedAndStride(walker.key, direction, scale, motionTable);
+      const gait = scaledGait(walker.key, direction, scale);
       const step = locomotion.pathStep(dx, dy, direction, delta / 1000 * gait.speed);
       if (step.reached) {
         walker.x = target.x; walker.y = target.y; walker.cell = nextCell; walker.route.shift(); walker.segmentCell = null;
@@ -849,7 +891,7 @@
       walker.node.style.top = `${walker.y / HEIGHT * 100}%`;
       walker.node.style.zIndex = String(10 + Math.round(walker.y));
       walker.node.style.setProperty('--room-depth', String(locomotion.projectedScale(walker.y, FLOOR)));
-      walker.node.style.setProperty('--room-character-scale', String(locomotion.projectedScale(walker.y, FLOOR) / 1.07 * locomotion.metadata(walker.key, motionTable).displayScale));
+      walker.node.style.setProperty('--room-character-scale', String(ROOM_ART_SCALE * locomotion.projectedScale(walker.y, FLOOR) / 1.07 * locomotion.metadata(walker.key, motionTable).displayScale));
       keepSpeechInsideStage(walker);
       walker.node.classList.add('is-walking');
       locomotion.advance(walker.motion, step.travel, gait.stride, { ready: decoded });
@@ -860,6 +902,7 @@
       }
     }
     updateInteraction(now, delta);
+    if (now - companionPositionAt >= 32) { positionCompanion(); companionPositionAt = now; }
     animationId = requestAnimationFrame(frame);
   }
   function refreshAnimation() {
@@ -899,19 +942,33 @@
     lifeRoom?.resume();
     if (walkers.length) { nextInteractionAt = performance.now() + 1800; animationId = requestAnimationFrame(frame); }
   }
+  function scaledGait(key, direction, depth) {
+    const gait = locomotion.speedAndStride(key, direction, depth, motionTable);
+    // Keep the same cadence and planted stride when the complete figure grows.
+    return { speed: gait.speed * ROOM_ART_SCALE, stride: gait.stride * ROOM_ART_SCALE };
+  }
   function positionNode(node, placed) {
     const { entry, kind, span, anchor, cell } = placed;
     const bodyScale = kind === 'character' ? locomotion?.metadata?.(keyForCharacter(placed.item), motionTable)?.displayScale || 1 : 1;
-    if (kind === 'character') node.style.setProperty('--room-character-body-scale', String(bodyScale));
+    if (kind === 'character') node.style.setProperty('--room-character-body-scale', String(ROOM_ART_SCALE * bodyScale));
+    if (kind === 'character') {
+      // The intact static portrait shares the atlas ground root. Its image box
+      // is 96×135 stage pixels, while its contained square is 96×96; compensate
+      // the transparent pixels below the feet just as the walk canvas does.
+      const rootY = locomotion?.metadata?.(keyForCharacter(placed.item), motionTable)?.root?.[1] || 112;
+      const cellSize = locomotion?.SHAPE?.cell || 128;
+      const portrait = node.querySelector('.room-chibi');
+      if (portrait) portrait.style.transform = `translateY(${WIDTH * .1 / (HEIGHT * .25) * (1 - rootY / cellSize) * 100}%)`;
+    }
     node.style.left = `${anchor.x / WIDTH * 100}%`;
     node.style.top = `${anchor.y / HEIGHT * 100}%`;
     node.style.zIndex = String(10 + Math.round(anchor.y));
     node.style.setProperty('--room-depth', String(round(.72 + .35 * (anchor.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top))));
-    if (kind === 'character') node.style.setProperty('--room-character-scale', String((.72 + .35 * (anchor.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top)) / 1.07 * bodyScale));
+    if (kind === 'character') node.style.setProperty('--room-character-scale', String(ROOM_ART_SCALE * (.72 + .35 * (anchor.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top)) / 1.07 * bodyScale));
     node.dataset.gridCol = String(cell.col); node.dataset.gridRow = String(cell.row);
     node.dataset.footprint = `${span.width}x${span.height}`;
     if (kind === 'furniture') {
-      const size = FURNITURE_VISUALS[keyForFurniture(placed.item)] || 80;
+      const size = ROOM_ART_SCALE * (FURNITURE_VISUALS[keyForFurniture(placed.item)] || 80);
       const depth = locomotion?.projectedScale?.(anchor.y, FLOOR) || .72 + .35 * (anchor.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top);
       node.style.setProperty('--room-size', String(depth / 1.07));
       node.style.setProperty('--room-width', `${size / WIDTH * 100}%`);
@@ -1023,11 +1080,14 @@
       node.dataset.roomKey = `c:${entry.itemId}`;
       node.tabIndex = 0;
       node.setAttribute('role', 'button');
+      node.setAttribute('aria-haspopup', 'dialog');
+      node.setAttribute('aria-controls', 'roomCompanionPanel');
+      node.setAttribute('aria-expanded', String(!editing && companionId === entry.itemId));
       node.setAttribute('aria-label', `查看${item.name || '夥伴'}的詳情與互動`);
       node.onclick = () => { if (!editing) openCompanion(entry.itemId); };
       node.onkeydown = event => {
         if (editing || (event.key !== 'Enter' && event.key !== ' ')) return;
-        event.preventDefault(); openCompanion(entry.itemId);
+        event.preventDefault(); openCompanion(entry.itemId, true);
       };
       node.classList.toggle('is-selected', !!selected && selected.kind === 'character' && selected.itemId === entry.itemId);
       node.classList.toggle('is-companion-selected', !editing && companionId === entry.itemId);
@@ -1242,6 +1302,20 @@
   $('roomSave').onclick = save;
   $('roomCompanionClose').onclick = closeCompanion;
   $('roomCompanionTalk').onclick = performCompanionTalk;
+  document.body.append($('roomCompanionPanel'));
+  new ResizeObserver(positionCompanion).observe($('roomCompanionPanel'));
+  window.addEventListener('resize', positionCompanion);
+  document.addEventListener('scroll', positionCompanion, true);
+  document.addEventListener('pointerdown', event => {
+    if (!companionId || $('roomCompanionPanel').contains(event.target)) return;
+    if (event.target.closest('#roomCharacters [data-room-key]')) return;
+    closeCompanion();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !companionId) return;
+    const actor = [...$('roomCharacters').children].find(node => node.dataset.roomKey === `c:${companionId}`);
+    closeCompanion(); actor?.focus({ preventScroll: true }); event.preventDefault();
+  });
   $('roomStage').addEventListener('pointerdown', event => {
     if (!editing || saving || event.button > 0) return;
     if (event.target.closest('.room-canvas-controls')) return;

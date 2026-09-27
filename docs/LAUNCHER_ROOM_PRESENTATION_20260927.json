@@ -1,0 +1,404 @@
+{
+  "schema": "launcher-room-presentation/1",
+  "releaseVersion": "1.2.2",
+  "artGeneration": "1.2.0",
+  "historicalBaseline": "b9210988b1b6fd6054ce8dfe65b6ddbd9b0f75ea",
+  "status": "PASS_WITH_NOTES",
+  "blockingIssues": [],
+  "method": "Independent model visual inspection using view_image: ten final popup PNGs, four real Chromium room scenes, one ten-character editor and eight four-direction contact strips (32 contacts). Final popup source hashes verified stable and current; isolated IPC fixtures, no live purchases.",
+  "humanAcceptance": false,
+  "limitations": [
+    "Model visual inspection and automated Chromium are not physical-device or human fan/playtest acceptance.",
+    "The fixed room-name badge can overlap a front-left actor foot; the popup may temporarily overlap nearby actors or the BGM area.",
+    "Cabinet backs partially occlude Chopper and Robin in the corresponding rear rotation; visible side body and feet remain coherent.",
+    "Deck/library far-floor art begins about 26 screenshot pixels before the shared grid; inherited background geometry is unchanged.",
+    "The 320x500 detail panel uses most of the viewport while open, but text and close control remain visible.",
+    "The original 128 atlases and 512 action frames are unchanged; finite four-frame loops are not 3D skeletal animation.",
+    "The main 32-contact run overlapped UI/static-root changes and did not capture per-case source hashes; dock geometry was unchanged, and a final frozen Brook/piano run binds ten runtime sources. No claim is made that all 32 were rerun after the final UI change."
+  ],
+  "runtimeHashNormalization": "CRLF to LF only; all other bytes remain significant",
+  "runtime": {
+    "desktop/launcher-room.js": "29059d4677f5e64d0035037e8f10dca5a9229f31c94a6d4812fec9bdedb6c88a",
+    "desktop/launcher-room.css": "4dfc727e8747c309c7399d2446fef5c6c49f17c9be66ce6504bee63320abce14",
+    "desktop/launcher-profile-shop.js": "9ceddcd5480eee810fb39859c2268f8a8464fd92458ed526b4a68f3f3bfc1cd8",
+    "desktop/launcher-life-room.js": "1a0451b15fbf573523a51b547c0420275ea654de2fc3389398c7f05f2e13f79d",
+    "desktop/launcher-life.js": "ca928053b49f4ba1cb8df0802f1b57e00368cff3e55a87ba909640f931966f9a",
+    "desktop/launcher-life-data.js": "a150b9f6aef8a82c4821b15a3a49b41eef4bccc11336795b2f6b25951b752410",
+    "desktop/launcher-life-actions.js": "d96db069e8d7025d3e48a9a86a00177e306b5be75dabdc0c85a6aff47a349f92",
+    "desktop/launcher-room-dialogue.js": "bc3d200914044b1ee97323302487d1a4e60b114586ba98551bed6384442d0b0a",
+    "desktop/launcher.html": "bb81d9374e5405289eb3a4a65b590b76204ab800517e3d301d15ce5415afc9df",
+    "desktop/auth-service.js": "e06cc7121d12776f61d05966517d332d190d228d21d9bcd880113173b3172c9d",
+    "desktop/preload.js": "03668ed7e677b29e4212fb294d318937164b30be5b5621d7206e45fc1bbf2886",
+    "desktop/main.js": "d9425cd9dbe7074cadcbc5c0b96377aa8c2a12f71960b821a91443b78ea9650c",
+    "server/launcher-life.js": "a84e2d06aa70c6ee4dba4eee7bf819d4d86fb233d0bf1b4416c7196e7d5143b0",
+    "server/launcher-life-store.js": "ca2fe36da1055fc804df2bebf6ed1dec44c8c0aee666c890c6e7d816fdfd22f6",
+    "server/launcher-profile-shop.js": "f365f2e2e3b28d82c735b33637149931dd5eb4760a91e5b6eb5095295e55452d",
+    "server/index.js": "3bc51cd3c6338a0a9d798623633796f430b6598c9de24c34e2eea1cbdb27bd64",
+    "server/desktop-distribution.js": "e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85",
+    "desktop/launcher-profile-shop.css": "7e064396e85d2750113f40dba898dc57dd83ad3aa7f77ec718e62458864045db",
+    "desktop/launcher.css": "272c9f7e809d19291c4c9a037b762cdc436515aa87a681873e66f22f3fabdbea",
+    "desktop/launcher.js": "345be37a9d953a1dea307414df27e9051938444e563b69cfc62aed5718b41172",
+    "desktop/launcher-room-motion.js": "a215bc7b866d4ba870bc951e63701fbea354c33e67922a6316a19cfe03301b59",
+    "desktop/launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d"
+  },
+  "approvedRuntimeVariants": {
+    "server/desktop-distribution.js": [
+      {
+        "normalizedSha256": "c9330072bab54d00370735b6fcc01bbcef76e101183dc42b9222e0f4d5769255",
+        "reviewedBaseNormalizedSha256": "e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85",
+        "reason": "Preserve formal Board media policy: the launcher merge adds only LAUNCHER_LIFE_GET and LAUNCHER_LIFE_COMMAND; the candidate-only three-line Board depth manifest exception is not copied into the formal authority.",
+        "evidence": {
+          "patch": {
+            "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution.js.patch",
+            "sha256": "758e224a4e496ffcacc8ed1c4250a91286cb5576dd705195a9737a43943eafce"
+          },
+          "formalReadback": {
+            "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution-readback.json",
+            "sha256": "4139001682628e684103a70c592988f62b0cf7fbb066fdd856aebaa9b3b544e9"
+          }
+        }
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/popup/owner-desktop.png",
+      "sha256": "fee8ed490bd92da902acac1a1088a7f8eaeb66d33e84250f805481bf669ab1f0",
+      "kind": "screenshot",
+      "pixels": [
+        1366,
+        900
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/popup/owner-mobile.png",
+      "sha256": "79cbf44ea9fa626de76cabbe79b165cf69de0ac40f65f132fff7b4b7f8c3f862",
+      "kind": "screenshot",
+      "pixels": [
+        390,
+        900
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/popup/details-desktop.png",
+      "sha256": "eade40d91a872640096c039f67a792214c8a8acac008719ae7b3ac81f44404cd",
+      "kind": "screenshot",
+      "pixels": [
+        1366,
+        900
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/popup/work-desktop.png",
+      "sha256": "5af704dc305fbdb2349ccf99bae8ce719bcd2eb878c3568f1704844cf35a4a89",
+      "kind": "screenshot",
+      "pixels": [
+        1366,
+        900
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/popup/visitor-desktop.png",
+      "sha256": "ce1e0762703d417e280f99f4152f57636a9167508b06c8e8ae23bdfbc651f58a",
+      "kind": "screenshot",
+      "pixels": [
+        1366,
+        900
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/popup/editor-desktop.png",
+      "sha256": "25fc090dfbe61ed9ae65b56daebf94a5ea125b393ba6056c7330aa49a3b0c72d",
+      "kind": "screenshot",
+      "pixels": [
+        1366,
+        900
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/popup/owner-320.png",
+      "sha256": "3cf5b600d0c67659d3133d91aa3f2592c852761bb7df6b5f273d2ffa8a3d9397",
+      "kind": "screenshot",
+      "pixels": [
+        320,
+        900
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/popup/reduced-motion-mobile.png",
+      "sha256": "85a4574e6f225a88905164b5fdac8a97f125e912fd79fb9316e093aa30e5486e",
+      "kind": "screenshot",
+      "pixels": [
+        320,
+        900
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/popup/owner-right-edge.png",
+      "sha256": "505efa672dbd7db285c9e685dfb94de229b1c9d8be1a3d29dc6cfef35cdf04fb",
+      "kind": "screenshot",
+      "pixels": [
+        1366,
+        900
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/popup/short-viewport.png",
+      "sha256": "2006fe70cbd4829a706104d34aff5c9820cc9d56b9115b97a2aafa2d1d8598ae",
+      "kind": "screenshot",
+      "pixels": [
+        320,
+        500
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/scenes/crew-cabin-desktop.png",
+      "sha256": "fe4d46596ffacbfb2eca897091a0c28d704c52ee3faee8a06e018f9424547f1f",
+      "kind": "screenshot",
+      "pixels": [
+        1138,
+        640
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/scenes/sunny-deck-desktop.png",
+      "sha256": "95da3f889dbd7d60982f71f952ae6b66614107ed6d39f83c97c77e431787ad85",
+      "kind": "screenshot",
+      "pixels": [
+        1138,
+        640
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/scenes/sunny-kitchen-desktop.png",
+      "sha256": "80e891b10ffe57cbda2865ed97adc7dc049a16c813b775d66487934f41979b51",
+      "kind": "screenshot",
+      "pixels": [
+        1138,
+        640
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/scenes/sunny-library-desktop.png",
+      "sha256": "0d569347183a607875af1af79974d8ee7dabd88a0dfff63da391a53278396882",
+      "kind": "screenshot",
+      "pixels": [
+        1138,
+        640
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/scenes/editor-ten-actors.png",
+      "sha256": "28bb28db87be00556eeefa807d84c9036604e21621c54596972aaa764b0db5af",
+      "kind": "screenshot",
+      "pixels": [
+        1138,
+        640
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/contacts/sanji.png",
+      "sha256": "64749945569e16efc9e8a30f7dcc7b7273f6f3990dffbf5117df21d6f24ebed9",
+      "kind": "screenshot",
+      "pixels": [
+        1120,
+        216
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/contacts/brook.png",
+      "sha256": "20200f48299688d6c6513cca2e24dadf4160633a0c6abb3950e455441b670db3",
+      "kind": "screenshot",
+      "pixels": [
+        1120,
+        216
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/contacts/jinbe.png",
+      "sha256": "0081e79bd18189527eeec79339d77d419115bd3390004645bd32ef6b91f8ca57",
+      "kind": "screenshot",
+      "pixels": [
+        1120,
+        216
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/contacts/usopp.png",
+      "sha256": "6118671f21a4172e65797e3396cf3a702af9c57bfd286535f4a3e7ee66267473",
+      "kind": "screenshot",
+      "pixels": [
+        1120,
+        216
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/contacts/franky.png",
+      "sha256": "7779ab3132e0e7b0b9088ab61904018e426649a80f0a10fe24857109862786b1",
+      "kind": "screenshot",
+      "pixels": [
+        1120,
+        216
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/contacts/chopper.png",
+      "sha256": "1ca7c42327a8588deba5d238cfbb4e8222c639fcf4616d93e67aa94c93e69080",
+      "kind": "screenshot",
+      "pixels": [
+        1120,
+        216
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/contacts/nami.png",
+      "sha256": "8df5cffaca2d74b0852caeeffeee8e66e92248a7847a8fb025e66d2fc53f778f",
+      "kind": "screenshot",
+      "pixels": [
+        1120,
+        216
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/contacts/robin.png",
+      "sha256": "0fb6b4f7c0991a28bef96caea6c729ba4a34515f0a506fb332c425d99d3f7783",
+      "kind": "screenshot",
+      "pixels": [
+        1120,
+        216
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/popup/report.json",
+      "sha256": "b75a13c6891c7d7648cd3c01b79c1b5a81cb70abf7002476b590ab7b54a71f15",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/contact/report-all.json",
+      "sha256": "90959a00faf105f3ca5f41511eea6b81e206cb23bb635b260765521bce6fabb8",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/scale-layout-report.json",
+      "sha256": "d91b79e784903356531165f0c19cba2c9566cd5d868fc705adc3f3c5f8ce68e7",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/presentation-gate-results.json",
+      "sha256": "528f406b2941ca857aaf010a9d92d05b18efc5a1fa43f89abe2998d0ed73ef12",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/independent-final-review.md",
+      "sha256": "bd5c44fe1bfffb5c009b8d18b13e5c8ceb724201e598ebecb6130f6f8571fea3",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/frozen-contact-final/runtime-binding-report.json",
+      "sha256": "817f8225cc4d4d48e8229f34975e7ca5ffd64f2a40be856fccf09ccbc5e8db79",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/frozen-contact-final/report-brook-r0.json",
+      "sha256": "ab693017619272ff638e9c1eb5c005fdd95f21d93c6461148207ef597066a280",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/legacy-browser/report.json",
+      "kind": "report",
+      "sha256": "314b1a58805b3277695a68193cc82c63f23b47f9722db18d67cea9a18f7d11de"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v122/review-evidence/geometry-handoff-report.json",
+      "kind": "report",
+      "sha256": "85e6b457959ac633aced4d559e14c36a0c6be2342b5770f47299c4fac4d57b88"
+    }
+  ],
+  "checks": [
+    {
+      "id": "desktop-owner-popover",
+      "status": "PASS",
+      "notes": "Six compact icon/text actions and affinity are readable; details/work choices fit; the right-edge view flips the panel to the left. A nearby actor may be temporarily occluded.",
+      "evidence": [
+        "tools/launcher-room/presentation-v122/review-evidence/popup/owner-desktop.png",
+        "tools/launcher-room/presentation-v122/review-evidence/popup/details-desktop.png",
+        "tools/launcher-room/presentation-v122/review-evidence/popup/work-desktop.png",
+        "tools/launcher-room/presentation-v122/review-evidence/popup/owner-right-edge.png"
+      ]
+    },
+    {
+      "id": "mobile-owner-popover",
+      "status": "PASS",
+      "notes": "390px owner view keeps the panel and all six controls inside the horizontal viewport; affinity is readable. Extra 320px and short-viewport evidence was inspected separately.",
+      "evidence": [
+        "tools/launcher-room/presentation-v122/review-evidence/popup/owner-mobile.png"
+      ]
+    },
+    {
+      "id": "desktop-friend-readonly-popover",
+      "status": "PASS",
+      "notes": "Visitor shows details and needs without owner work, gift, train or call controls. Separate final fixture report records zero writes.",
+      "evidence": [
+        "tools/launcher-room/presentation-v122/review-evidence/popup/visitor-desktop.png"
+      ]
+    },
+    {
+      "id": "desktop-furniture-edit",
+      "status": "PASS",
+      "notes": "Entering the editor dismisses the character popup; grid/rotation labels and enlarged actor/furniture roots align with their footprints. Front-left badge overlap remains noted.",
+      "evidence": [
+        "tools/launcher-room/presentation-v122/review-evidence/popup/editor-desktop.png",
+        "tools/launcher-room/presentation-v122/review-evidence/scenes/editor-ten-actors.png"
+      ]
+    },
+    {
+      "id": "desktop-scale-crew-cabin",
+      "status": "PASS",
+      "notes": "All ten figures retain their approved proportions and depth scale; door is slightly taller than the rear adult. Map table, piano and helm are appropriately sized; front-left badge may overlap feet.",
+      "evidence": [
+        "tools/launcher-room/presentation-v122/review-evidence/scenes/crew-cabin-desktop.png"
+      ]
+    },
+    {
+      "id": "desktop-scale-sunny-deck",
+      "status": "PASS",
+      "notes": "Deck architecture remains behind the crew; ten figures and four movable items maintain consistent depth scale. The inherited early far-floor edge does not place rear actors inside the wall.",
+      "evidence": [
+        "tools/launcher-room/presentation-v122/review-evidence/scenes/sunny-deck-desktop.png"
+      ]
+    },
+    {
+      "id": "desktop-scale-sunny-kitchen",
+      "status": "PASS",
+      "notes": "Rear kitchen counter reads at waist/chest height and refrigerator around adult height; movable furniture and all ten character figures share the enlarged floor scale.",
+      "evidence": [
+        "tools/launcher-room/presentation-v122/review-evidence/scenes/sunny-kitchen-desktop.png"
+      ]
+    },
+    {
+      "id": "desktop-scale-sunny-library",
+      "status": "PASS",
+      "notes": "Rear bookshelves sit below door height and do not dominate the figures. Four movable furnishings and ten actors remain grounded with coherent near/far scale.",
+      "evidence": [
+        "tools/launcher-room/presentation-v122/review-evidence/scenes/sunny-library-desktop.png"
+      ]
+    }
+  ],
+  "reviewedAt": "2026-09-27T05:50:35.135Z",
+  "captureSourceProof": {
+    "popupReport": "tools/launcher-room/presentation-v122/review-evidence/popup/report.json",
+    "sourceStable": true,
+    "capturedRawSources": {
+      "desktop/launcher-room.js": "9ba2bb0e3ca3737d1472a9304899fe06cc23aabcd1245ed435fae1334bd84aa6",
+      "desktop/launcher-life-room.js": "1a0451b15fbf573523a51b547c0420275ea654de2fc3389398c7f05f2e13f79d",
+      "desktop/launcher-room.css": "3e62838323ff97b990da07fdd66cfdddb52ada179188f35eb3ba516897010cc4",
+      "desktop/launcher.html": "14e4ca74167866e2afbac0aaa1f1238b79ae3bb9969bf2ac89aa544b12f32265",
+      "scripts/launcher_life_integration_qa.js": "beb31ebf1e7e3e0d08534f122ed44aeb9fd80faeaf4668bce67e09f8c3928f07",
+      "scripts/launcher_room_popover_qa.js": "bd42bb404682fb021596e88246c383999b0c24788af165088348eede47e61654"
+    },
+    "verifiedAgainstCurrentFilesAt": "2026-09-27T05:50:35.135Z",
+    "contactViews": 32,
+    "frozenContactReport": "tools/launcher-room/presentation-v122/review-evidence/frozen-contact-final/runtime-binding-report.json",
+    "frozenContactSourceStable": true
+  }
+}

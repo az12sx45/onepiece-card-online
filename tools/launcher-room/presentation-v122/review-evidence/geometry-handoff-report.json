@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "scope": "Candidate actual Chromium room geometry, real art and isolated IPC. Not physical-device testing, real-account purchases, DB authority or public deployment acceptance.",
+  "scale": {
+    "multiplier": 1.5,
+    "doorSourceApprox": {
+      "width": 1600,
+      "height": 900,
+      "top": 292,
+      "bottom": 441
+    },
+    "doorStageHeight": 89.4,
+    "luffyNeutralAlphaHeight": 98,
+    "frontVisibleHeightBefore": 73.5,
+    "frontVisibleHeightAfter": 110.25,
+    "rearFirstRowVisibleHeightBefore": 52.46320093457943,
+    "rearFirstRowVisibleHeightAfter": 78.69480140186914
+  },
+  "layoutChecks": 12,
+  "contactCases": 32,
+  "contactDefinition": "Eight actor/furniture combinations times four directions; seven distinct furniture products because Usopp and Franky both use the workbench.",
+  "allCapturedActorsArrived": true,
+  "artSourceHashesUnchanged": true,
+  "measuredArtSourceCount": 21,
+  "runtimeBinding": "C:\\Codex_Candidates\\launcher-room-popover-qa-1.2.2\\frozen-contact-final\\runtime-binding-report.json",
+  "roomSourceSha256": "9BA2BB0E3CA3737D1472A9304899FE06CC23AABCD1245ED435FAE1334BD84AA6",
+  "sourceDriftDisclosure": "The main 32-case run overlapped root companion UI changes and a static-portrait ground-root adjustment. Contact/dock geometry remained unchanged. Per-case source hashes were not captured in that legacy script. The additional final-runtime Brook/piano probe captured equal before/after hashes for all ten runtime files.",
+  "frameSamplingDisclosure": "Four real-time samples per contact; screenshots do not pause rendering and may advance beyond the requested frame, so the filenames are sample indices, not exact held-frame verification.",
+  "visualReview": "Independent reference agent viewed four background scenes, editor layout and all 32 contact screenshot directions; PASS_WITH_NOTES.",
+  "notes": [
+    "The fixed room-name badge overlays part of Zoro feet when placed at the extreme front-left test cell.",
+    "Chopper and Robin remain partially occluded behind rear-facing cabinets; visible head/book/hands/feet distinguish them.",
+    "Sunny-deck art opens its far floor about 26 stage pixels before the shared floor grid; inherited background geometry, not changed in this task."
+  ],
+  "reports": [
+    "C:\\Codex_Candidates\\launcher-room-popover-qa-1.2.2\\scale-layout-report.json",
+    "C:\\Codex_Candidates\\launcher-room-popover-qa-1.2.2\\contact\\report-all.json",
+    "C:\\Codex_Candidates\\launcher-room-popover-qa-1.2.2\\contact-review-index.json"
+  ],
+  "sceneScreenshots": [
+    "C:\\Codex_Candidates\\launcher-room-popover-qa-1.2.2\\scale-scene-crew-cabin-desktop.png",
+    "C:\\Codex_Candidates\\launcher-room-popover-qa-1.2.2\\scale-scene-sunny-deck-desktop.png",
+    "C:\\Codex_Candidates\\launcher-room-popover-qa-1.2.2\\scale-scene-sunny-kitchen-desktop.png",
+    "C:\\Codex_Candidates\\launcher-room-popover-qa-1.2.2\\scale-scene-sunny-library-desktop.png"
+  ],
+  "productionChanges": [
+    "ROOM_ART_SCALE 1.5 applied to whole character/static portraits and furniture canvases.",
+    "Furniture docking offsets and root correction scaled uniformly.",
+    "Movement speed and planted stride both scaled equally, keeping cadence.",
+    "Static full-figure portrait transparent foot margin corrected to match existing canvas root/shadow.",
+    "Saved coordinate schema, IDs and all furniture/character grid footprints preserved."
+  ]
+}

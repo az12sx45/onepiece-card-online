@@ -1,5 +1,15 @@
 # Dev Workflow
 
+## 2026-09-27 角色旁透明選單與整體比例（1.2.2）
+
+依使用者要求將房間角色操作移至角色旁的半透明圖示選單。desktop/launcher-room.js 維護 viewport 定位、跟隨角色、左右換邊、捲動裁切、Escape／點空白收合與鍵盤焦點；launcher.html、launcher-room.css、launcher-life-room.js 提供聊天／工作／呼喚／點心／訓練／詳情及原有親密度。詳情和工作清單在同一浮層展開；好友僅顯示可讀詳情，付費點心仍須兩次確認。
+
+同檔繪圖常數 ROOM_ART_SCALE=1.50 對人物、可移動家具、接點、步幅與速度等比例調整；16×8佔格、saved coords、商品ID、舊人物/場景bitmap與後端金幣規則不變。補齊 static portrait root 的12.5% Y補正，編輯與減少動態模式腳跟落在影子上。
+
+新增 scripts/launcher_room_popover_qa.js，沿用 integration QA 匯出的真Chromium fixture。新 tools/launcher-room/presentation-v122 與 docs/LAUNCHER_ROOM_PRESENTATION_20260927.json 使用分離的1.2.2審查；舊life-v1原始證据不改，先以固定b921 Git blobs核驗舊runtime，再逐SHA核對當前素材與新runtime/畫面。package/lock、package QA升1.2.2。
+
+本地驗證：新popup實際操作4情境（桌機/390/320與320×500、左右換邊、離屏隱藏、鍵盤、點心確認、好友、編輯）全通過且前後來源hash相同；尺度/靜態/編輯12項、8組角色/工作站×4方向32接點通過，並以凍結runtime單站讀回補足主32-run與UI修改並行的證據限制；legacy browser78項、獨立8場景視覺審查、新gate21拒收/接受fixture及safe-sync28fixture通過。npm start以獨立loopback31932（DB禁用）確認health與下載頁200，測試程序已停止。Windows封裝QA確認252 ASAR項與569素材逐byte一致，真Electron啟動/素材smoke PASS。這些是自動化與模型審圖，不等同真人或真帳號購買。公開部署與正式D同步結果待本次交付完成後寫入。LATTICE runtime/task API 本階段未出現在可呼叫工具中，不宣稱持久任務或Graphify成功。正式來源仍為 D:/Codex_Release_Worktrees/board-voyage-records-v1；候選沿用 C:/Codex_Candidates/launcher-character-life-1.2.0，分支codex/launcher-room-popover-1.2.2。只選擇性同步本次delta，保護全部其他正式檔。
+
 ## 2026-09-27 生活基地方針修正（1.2.1）
 
 已完成1.2.1部署：main `2c3bc409e9ee264df7ac46f789da6c770933c0c7`，公開canonical清單於 `2026-09-27T04:45:20.341208+00:00` 回傳1.2.1，與提交逐byte一致且Ed25519驗簽通過。安裝檔244419418bytes、SHA256 `39b0ec460157384c57e542292c3efa103e9b0f937c6a3352a6ce27ba05a9ca71`，公開完整下載重算一致。正式D先同步1.2.0共700檔，再安全套用1.2.1共31檔；後者保護10897個既有檔案，所有原素材與不相關遊戲變更保留。證據：`C:/Codex_Candidates/launcher-life-qa-1.2.0/delivery-1.2.1/DELIVERY.json`。驗證含真Electron468素材、19方針UI檢查及公開發行／下載頁／Socket檢查；無真帳號購買或PostgreSQL多session驗收。

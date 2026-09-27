@@ -212,4 +212,5 @@ async function main(){
     fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));console.log(JSON.stringify({ok:report.ok,checks:results.length,out}));if(!report.ok)process.exitCode=1;
   }finally{await browser.close();}
 }
-main().catch(error=>{console.error(error);process.exitCode=1;});
+if(require.main===module)main().catch(error=>{console.error(error);process.exitCode=1;});
+else module.exports={create,advance,snap,sourceHashes,chromium,setBrowser:value=>{browser=value;}};

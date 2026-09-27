@@ -1,0 +1,136 @@
+{
+  "status": "PASS",
+  "scope": "validator fixture tests only; no visual or deployment acceptance",
+  "baseline": "b9210988b1b6fd6054ce8dfe65b6ddbd9b0f75ea",
+  "historicalRuntimeFiles": 17,
+  "assetsVerifiedFromCurrentTree": 133,
+  "cases": 21,
+  "results": [
+    {
+      "name": "complete fixture structure accepted (not visual approval)",
+      "pass": true,
+      "expected": "accept fixture structure",
+      "observedError": null
+    },
+    {
+      "name": "DRAFT rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "1.2.2 visual review is not complete\n+ actual - expected\n\n+ 'DRAFT'\n- 'PASS_WITH_NOTES'\n"
+    },
+    {
+      "name": "blocking issue rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'Unreviewed popup'\n+ ]\n- []\n"
+    },
+    {
+      "name": "old release rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Expected values to be strictly equal:\n\n'1.2.1' !== '1.2.2'\n"
+    },
+    {
+      "name": "changed historical baseline rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Expected values to be strictly equal:\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000'\n- 'b9210988b1b6fd6054ce8dfe65b6ddbd9b0f75ea'\n"
+    },
+    {
+      "name": "new art generation claim rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Expected values to be strictly equal:\n\n'1.2.2' !== '1.2.0'\n"
+    },
+    {
+      "name": "changed current runtime digest rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Changed reviewed life runtime: desktop/launcher-room.js"
+    },
+    {
+      "name": "missing current runtime coverage rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "1.2.2 runtime coverage must be exact and complete\n+ actual - expected\n\n  [\n    'desktop/auth-service.js',\n    'desktop/launcher-life-actions.js',\n    'desktop/launcher-life-data.js',\n    'desktop/launcher-life-room.js',\n    'desktop/launcher-life.js',\n-   'desktop/launcher-profile-shop.css',\n    'desktop/launcher-profile-shop.js',\n    'desktop/launcher-room-dialogue.js',\n    'desktop/launcher-room-motion-data.js',\n    'desktop/launcher-room-motion.js',\n    'desktop/launcher-room.css',\n"
+    },
+    {
+      "name": "unreviewed extra runtime coverage rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "1.2.2 runtime coverage must be exact and complete\n+ actual - expected\n... Skipped lines\n\n  [\n    'desktop/auth-service.js',\n    'desktop/launcher-life-actions.js',\n    'desktop/launcher-life-data.js',\n    'desktop/launcher-life-room.js',\n...\n    'desktop/main.js',\n+   'desktop/not-reviewed.js',\n    'desktop/preload.js',\n    'server/desktop-distribution.js',\n    'server/index.js',\n    'server/launcher-life-store.js',\n    'server/launcher-life.js',\n"
+    },
+    {
+      "name": "arbitrary formal variant rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Only the immutable formal Board variant may be inherited\n+ actual - expected\n... Skipped lines\n\n  {\n    'server/desktop-distribution.js': [\n      {\n        evidence: {\n          formalReadback: {\n...\n        },\n+       normalizedSha256: '0000000000000000000000000000000000000000000000000000000000000000',\n-       normalizedSha256: 'c9330072bab54d00370735b6fcc01bbcef76e101183dc42b9222e0f4d5769255',\n        reason: 'Preserve formal Board media policy: the launcher merge adds only LAUNCHER_LIFE_GET and LAUNCHER_LIFE_COMMAND; the candidate-only three-line Board depth manifest exception is not copied into the formal authority.',\n        reviewedBaseNormalizedSha256: 'e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85'\n      }\n    ]\n  }\n"
+    },
+    {
+      "name": "missing exact formal merge evidence rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Only the immutable formal Board variant may be inherited\n+ actual - expected\n\n  {\n    'server/desktop-distribution.js': [\n      {\n-       evidence: {\n-         formalReadback: {\n-           path: 'tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution-readback.json',\n-           sha256: '4139001682628e684103a70c592988f62b0cf7fbb066fdd856aebaa9b3b544e9'\n-         },\n-         patch: {\n-           path: 'tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution.js.patch',\n-           sha256: '758e224a4e496ffcacc8ed1c4250a91286cb5576dd705195a9737a43943eafce'\n-         }\n-       },\n        normalizedSha256: 'c9330072bab54d00370735b6fcc01bbcef76e101183dc42b9222e0f4d5769255',\n        reason: 'Preserve formal Board media policy: the launcher merge adds only LAUNCHER_LIFE_GET and LAUNCHER_LIFE_COMMAND; the candidate-only three-line Board depth manifest exception is not copied into the formal authority.',\n        reviewedBaseNormalizedSha256: 'e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85'\n      }\n    ]\n"
+    },
+    {
+      "name": "changed screenshot hash rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Changed presentation evidence: tools/launcher-room/presentation-v122/review-evidence/desktop-VALIDATOR-FIXTURE.png\n+ actual - expected\n\n+ '2f0f683342b4e8f70e13bf564bb267a9f3d6126393e2b256ac15a8f24b190385'\n- '0000000000000000000000000000000000000000000000000000000000000000'\n"
+    },
+    {
+      "name": "changed screenshot size rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Screenshot dimensions differ\n+ actual - expected\n\n  [\n+   1367,\n-   1366,\n    1050\n  ]\n"
+    },
+    {
+      "name": "old evidence directory rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "1.2.2 evidence must be self-contained in its own directory"
+    },
+    {
+      "name": "evidence directory traversal rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "1.2.2 evidence must be self-contained in its own directory"
+    },
+    {
+      "name": "missing scenario rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Visual scenario coverage differs\n+ actual - expected\n\n  [\n    'desktop-friend-readonly-popover',\n    'desktop-furniture-edit',\n    'desktop-owner-popover',\n    'desktop-scale-crew-cabin',\n    'desktop-scale-sunny-deck',\n    'desktop-scale-sunny-kitchen',\n-   'desktop-scale-sunny-library',\n    'mobile-owner-popover'\n  ]\n"
+    },
+    {
+      "name": "pending scenario rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Unreviewed or failed scenario: desktop-owner-popover\n\n'PENDING' !== 'PASS'\n"
+    },
+    {
+      "name": "missing visual findings rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Specific visual findings required: desktop-owner-popover"
+    },
+    {
+      "name": "wrong mobile viewport rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Screenshot viewport does not match mobile-owner-popover"
+    },
+    {
+      "name": "no screenshot binding rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "Scenario needs a reviewed screenshot: desktop-owner-popover"
+    },
+    {
+      "name": "human-playtest claim rejected",
+      "pass": true,
+      "expected": "reject",
+      "observedError": "This gate records model visual review, not human acceptance\n\ntrue !== false\n"
+    }
+  ]
+}

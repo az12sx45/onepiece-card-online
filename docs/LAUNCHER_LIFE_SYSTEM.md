@@ -1,4 +1,12 @@
-# 角色生活基地 1.2.1
+# 角色生活基地 1.2.2
+
+## 1.2.2 presentation update
+
+The owner interaction card is now a compact, 72%-opacity dark overlay beside the actor, with six icon controls and an affinity meter. Work choices and needs/description expand inside the same panel. It follows the actor at a bounded rendering cadence, flips at viewport edges, hides with an offscreen anchor, closes on navigation/edit/account changes, outside press or Escape, and supports keyboard activation/focus return. Friends see read-only details; gift confirmation and all existing command guards remain.
+
+ROOM_ART_SCALE=1.50 enlarges whole characters and movable furniture together, with matching docks, gait speed/stride and static portrait ground-root compensation. Grid footprints, saved coordinates, accepted bitmap assets and economy are preserved. The separate presentation-v122 validator proves the immutable 1.2.1 runtime from exact Git blobs, then validates current assets and reviewed 1.2.2 runtime/screenshots. Existing art evidence is never rewritten to accept new runtime bytes.
+
+Local verification passed: popup UI 4 scenarios with stable source hashes; 12 scale/editor checks; 32 directional contacts plus a final frozen-source contact; 78 legacy Chromium checks using real assets; 8 independently reviewed visual cases. The 1.2.2 installer has 244421393 bytes and SHA256 b61967c6af6a43e730ac65e85e3b75627076491a50d357fb0a2b2fa70212c052. Package QA verified 252 ASAR entries and 569 assets; actual Electron startup/media smoke passed. Public signed-manifest/full artifact checks and formal delta synchronization remain pending at this commit. Local fixture checks do not claim real account, physical device or human fan acceptance.
 
 ## Authority and compatibility
 

@@ -251,23 +251,29 @@
       if($('roomLifeActions'))return;
       const actions=$('roomCompanionActions');if(!actions)return;
       const wrap=document.createElement('div');wrap.id='roomLifeActions';wrap.className='room-life-actions';
-      for(const [id,label] of [['Work','指派工作'],['Call','叫他過來'],['Gift','送點心 · 5 金幣'],['Train','一起訓練'],['Status','生活狀態']]) {
+      for(const [id,label] of [['Work','工作'],['Call','呼喚'],['Gift','點心 · 5'],['Train','訓練'],['Status','詳情']]) {
         const button=document.createElement('button');button.id='roomLife'+id;button.className='ghost-button';button.type='button';button.textContent=label;wrap.append(button);
       }
-      actions.after(wrap);
+      actions.append(wrap);
+      $('roomLifeGift').title='送點心：使用 5 枚商城金幣，再點一次確認';
+      $('roomLifeGift').setAttribute('aria-label','送點心，5 枚商城金幣');
+      $('roomLifeWork').setAttribute('aria-expanded','false');
+      $('roomLifeStatus').setAttribute('aria-expanded','false');
       const panel=document.createElement('div');panel.id='roomLifeDetails';panel.className='room-life-details';panel.hidden=true;wrap.after(panel);
       const work=document.createElement('div');work.id='roomLifeWorkChoices';work.className='room-life-work-choices';work.hidden=true;panel.after(work);
       $('roomLifeWork').onclick=showWorkChoices;
       $('roomLifeCall').onclick=()=>runManual('call');$('roomLifeTrain').onclick=()=>runManual('train');
-      $('roomLifeGift').onclick=()=>{const node=$('roomLifeGift');if(node.dataset.confirm!=='true'){node.dataset.confirm='true';node.textContent='確認送點心 · 5 金幣';setTimeout(()=>{delete node.dataset.confirm;node.textContent='送點心 · 5 金幣';},5000);return;}delete node.dataset.confirm;node.textContent='送點心 · 5 金幣';runManual('gift');};
-      $('roomLifeStatus').onclick=()=>{panel.hidden=!panel.hidden;renderPanel();};
+      $('roomLifeGift').onclick=()=>{const node=$('roomLifeGift');if(node.dataset.confirm!=='true'){node.dataset.confirm='true';node.textContent='確認 · 5';setTimeout(()=>{delete node.dataset.confirm;node.textContent='點心 · 5';},5000);return;}delete node.dataset.confirm;node.textContent='點心 · 5';runManual('gift');};
+      $('roomLifeStatus').onclick=()=>{panel.hidden=!panel.hidden;$('roomCompanionPanel').classList.toggle('show-details',!panel.hidden);$('roomLifeStatus').setAttribute('aria-expanded',String(!panel.hidden));renderPanel();};
     }
     function renderPanel() {
       panelNodes();const wrap=$('roomLifeActions');if(!wrap)return;
       const key=keyOf(env.companionId());const actor=snapshot?.characters?.[key];
-      if(key!==panelKey){panelKey=key;const gift=$('roomLifeGift');delete gift.dataset.confirm;gift.textContent='送點心 · 5 金幣';$('roomLifeWorkChoices').hidden=true;}
+      if(key!==panelKey){panelKey=key;const gift=$('roomLifeGift');delete gift.dataset.confirm;gift.textContent='點心 · 5';$('roomLifeWorkChoices').hidden=true;$('roomLifeDetails').hidden=true;$('roomLifeWork').setAttribute('aria-expanded','false');$('roomLifeStatus').setAttribute('aria-expanded','false');$('roomCompanionPanel').classList.remove('show-details');}
       wrap.hidden=!active();
-      for(const button of wrap.querySelectorAll('button'))button.disabled=manualBusy||!actor||(button.id!=='roomLifeStatus'&&!owner());
+      $('roomCompanionActions').hidden=false;
+      $('roomCompanionTalk').hidden=!owner();
+      for(const button of wrap.querySelectorAll('button')){button.hidden=button.id!=='roomLifeStatus'&&!owner();button.disabled=manualBusy||!actor||(button.id!=='roomLifeStatus'&&!owner());}
       const details=$('roomLifeDetails');if(!actor){details.textContent='';return;}
       const needs=actor.needs||{};
       const values=[['精神',needs.energy],['飢餓',needs.hunger],['心情',needs.mood],['社交滿足',needs.social],['工作意願',needs.workMotivation]];
@@ -275,12 +281,12 @@
       const heading=document.createElement('p');heading.textContent=STATE_NAMES[actor.state]||'自由活動';details.append(heading);
       for(const [label,value] of values){const span=document.createElement('span');span.textContent=`${label} ${Math.round(Number(value)||0)}`;details.append(span);}
       const task=snapshot.tasks.find(t=>t.key===key);
-      if(task?.jobId){const cancel=document.createElement('button');cancel.type='button';cancel.className='ghost-button';cancel.textContent='結束這次分工';cancel.onclick=()=>controller.cancel(key);details.append(cancel);}
+      if(task?.jobId&&owner()){const cancel=document.createElement('button');cancel.type='button';cancel.className='ghost-button';cancel.textContent='結束這次分工';cancel.onclick=()=>controller.cancel(key);details.append(cancel);}
       const memories=(actor.memories||[]).filter(m=>m.currentStrength>.15).slice(-2);
       if(memories.length){const p=document.createElement('small');p.textContent='還記得最近和夥伴一起度過的片刻。';details.append(p);}
     }
     function showWorkChoices() {
-      const node=$('roomLifeWorkChoices');node.hidden=!node.hidden;if(node.hidden)return;node.replaceChildren();
+      const node=$('roomLifeWorkChoices');node.hidden=!node.hidden;$('roomLifeWork').setAttribute('aria-expanded',String(!node.hidden));if(node.hidden)return;node.replaceChildren();
       const key=keyOf(env.companionId());
       for(const station of stations()) {
         const button=document.createElement('button');button.type='button';button.className='ghost-button';
@@ -296,7 +302,7 @@
         const result=action==='work'?await controller.assignWork(key,stationId):await controller.interact(key,action);
         if(currentEpoch!==epoch)return;
         status(result?.ok?(action==='work'?'收到分工，夥伴會走到工作位置。':action==='gift'?'點心已送達，已使用 5 枚商城金幣。':'夥伴回應了你的邀請。'):(ERRORS[result?.error]||'現在無法完成，請稍後再試。'),!result?.ok);
-        if(result?.ok)$('roomLifeWorkChoices').hidden=true;
+        if(result?.ok){$('roomLifeWorkChoices').hidden=true;$('roomLifeWork').setAttribute('aria-expanded','false');}
       }finally{if(currentEpoch===epoch){manualBusy=false;renderUi();}}
     }
     function tapped(key) {

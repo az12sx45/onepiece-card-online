@@ -334,7 +334,9 @@ async function main() {
       const image = node.querySelector('.room-object').getBoundingClientRect();
       const layer = document.getElementById('roomObjects').getBoundingClientRect();
       const anchorY = layer.top + groundY / 540 * layer.height;
-      return Math.abs(width - 78 / 960 * 100) < .01 &&
+      // 1.2.2 deliberately enlarges whole furniture and crew art by 1.50;
+      // depth projection, square aspect and the ground root remain unchanged.
+      return Math.abs(width - 78 * 1.50 / 960 * 100) < .01 &&
         Math.abs(depth - (.72 + .35 * (groundY - 267) / (515 - 267)) / 1.07) < .01 &&
         Math.abs(image.width - image.height) < .03 &&
         Math.abs(image.top + image.height * 372 / 384 - anchorY) < .15;
@@ -493,7 +495,7 @@ async function main() {
         const scale = Number(node.style.getPropertyValue('--room-character-scale'));
         const key = node.dataset.roomKey.replace('c:room-character-', '');
         const body = window.OnePieceRoomMotion.metadata(key, window.OnePieceRoomMotionManifest).displayScale;
-        return Math.abs(scale - depth / 1.07 * body) < .0001;
+        return Math.abs(scale - 1.50 * depth / 1.07 * body) < .0001;
       })));
     await page.waitForTimeout(2200);
     const chibiMoved = await page.locator('#roomCharacters .room-character-shell').first().evaluate(node => `${node.style.left}|${node.style.top}`);
@@ -698,7 +700,7 @@ async function main() {
       const groundY = Number.parseFloat(node.style.top) / 100 * 540;
       const depth = Number.parseFloat(node.style.getPropertyValue('--room-size'));
       return Math.abs(depth - (.72 + .35 * (groundY - 267) / (515 - 267)) / 1.07) < .01 &&
-        Math.abs(Number.parseFloat(node.style.getPropertyValue('--room-width')) - 78 / 960 * 100) < .01;
+        Math.abs(Number.parseFloat(node.style.getPropertyValue('--room-width')) - 78 * 1.50 / 960 * 100) < .01;
     }));
     const friendRequestsBefore = await page.evaluate(() => window.__roomQa.calls.length);
     await page.locator('#roomCharacters [data-room-key="c:room-character-luffy"]').click({ force: true });

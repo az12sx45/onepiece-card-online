@@ -1,0 +1,4726 @@
+{
+  "ok": true,
+  "scope": "Real renderer and art, isolated fixture server; numeric pass is not human visual approval.",
+  "results": [
+    {
+      "id": "sanji-galley-stove-r0",
+      "key": "sanji",
+      "furniture": "galley-stove",
+      "clip": "cook",
+      "rotation": 0,
+      "frames": [
+        "3",
+        "3",
+        "0",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-sanji"
+          ],
+          "characters": {
+            "sanji": {
+              "key": "sanji",
+              "itemId": "room-character-sanji",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99772500000003,
+                "hunger": 25.00325000000001,
+                "mood": 75.00216666666665,
+                "social": 74.99886249999997,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487470878,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487467543,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-sanji",
+              "stationId": "room-furniture-galley-stove",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:37:47.826Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:37:54.025Z",
+              "readyAt": "2026-09-27T05:38:54.025Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "sanji",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-galley-stove",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "sanji",
+              "cell": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-galley-stove",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488028003,
+          "nextForegroundAt": 1790487478784,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "sanji",
+            "cell": {
+              "col": 7,
+              "row": 4
+            },
+            "x": 456,
+            "y": 393.370603691004,
+            "mode": "life-act",
+            "phase": 0.5459282229010832,
+            "direction": "north",
+            "dock": {
+              "x": 456,
+              "y": 393.357109375,
+              "z": 402,
+              "side": "north"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-sanji",
+            "stationId": "room-furniture-galley-stove",
+            "roomRevision": 1
+          },
+          "at": 1790487467826
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487474025
+        }
+      ]
+    },
+    {
+      "id": "sanji-galley-stove-r1",
+      "key": "sanji",
+      "furniture": "galley-stove",
+      "clip": "cook",
+      "rotation": 1,
+      "frames": [
+        "2",
+        "3",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-sanji"
+          ],
+          "characters": {
+            "sanji": {
+              "key": "sanji",
+              "itemId": "room-character-sanji",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99772675000003,
+                "hunger": 25.003247500000008,
+                "mood": 75.00216499999999,
+                "social": 74.99886337499997,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790487508767,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790487483836,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-sanji",
+              "stationId": "room-furniture-galley-stove",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:38:03.932Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:38:13.768Z",
+              "readyAt": "2026-09-27T05:39:13.768Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "sanji",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-galley-stove",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "sanji",
+              "cell": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-galley-stove",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790487868965,
+          "nextForegroundAt": 1790487495623,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "sanji",
+            "cell": {
+              "col": 6,
+              "row": 2
+            },
+            "x": 439.725,
+            "y": 377.247109375,
+            "mode": "life-act",
+            "phase": 0.7048200112996658,
+            "direction": "east",
+            "dock": {
+              "x": 439.725,
+              "y": 377.247109375,
+              "z": 402,
+              "side": "east"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-sanji",
+            "stationId": "room-furniture-galley-stove",
+            "roomRevision": 1
+          },
+          "at": 1790487483932
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487493768
+        }
+      ]
+    },
+    {
+      "id": "sanji-galley-stove-r2",
+      "key": "sanji",
+      "furniture": "galley-stove",
+      "clip": "cook",
+      "rotation": 2,
+      "frames": [
+        "2",
+        "2",
+        "0",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 5,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-sanji"
+          ],
+          "characters": {
+            "sanji": {
+              "key": "sanji",
+              "itemId": "room-character-sanji",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99772500000003,
+                "hunger": 25.00325000000001,
+                "mood": 75.00216666666665,
+                "social": 74.99886249999997,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487505410,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487500030,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-sanji",
+              "stationId": "room-furniture-galley-stove",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:38:20.156Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:38:37.326Z",
+              "readyAt": "2026-09-27T05:39:37.326Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "sanji",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-galley-stove",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "sanji",
+              "cell": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-galley-stove",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790487921993,
+          "nextForegroundAt": 1790487511821,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "sanji",
+            "cell": {
+              "col": 7,
+              "row": 1
+            },
+            "x": 456,
+            "y": 379.9065301733323,
+            "mode": "life-act",
+            "phase": 0.19372047035341636,
+            "direction": "south",
+            "dock": {
+              "x": 456,
+              "y": 379.932109375,
+              "z": 400,
+              "side": "south"
+            },
+            "ready": [
+              "west",
+              "east",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-sanji",
+            "stationId": "room-furniture-galley-stove",
+            "roomRevision": 1
+          },
+          "at": 1790487499833
+        },
+        {
+          "type": "work.cancel",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487499887
+        },
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-sanji",
+            "stationId": "room-furniture-galley-stove",
+            "roomRevision": 1
+          },
+          "at": 1790487500156
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487517326
+        }
+      ]
+    },
+    {
+      "id": "sanji-galley-stove-r3",
+      "key": "sanji",
+      "furniture": "galley-stove",
+      "clip": "cook",
+      "rotation": 3,
+      "frames": [
+        "2",
+        "2",
+        "0",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-sanji"
+          ],
+          "characters": {
+            "sanji": {
+              "key": "sanji",
+              "itemId": "room-character-sanji",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99772500000003,
+                "hunger": 25.00325000000001,
+                "mood": 75.00216666666665,
+                "social": 74.99886249999997,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487529856,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487523289,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-sanji",
+              "stationId": "room-furniture-galley-stove",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:38:43.396Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:38:55.820Z",
+              "readyAt": "2026-09-27T05:39:55.820Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "sanji",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-galley-stove",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "sanji",
+              "cell": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-galley-stove",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488016876,
+          "nextForegroundAt": 1790487535073,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "sanji",
+            "cell": {
+              "col": 9,
+              "row": 2
+            },
+            "x": 520.275,
+            "y": 377.247109375,
+            "mode": "life-act",
+            "phase": 0.9809523491454607,
+            "direction": "west",
+            "dock": {
+              "x": 520.275,
+              "y": 377.247109375,
+              "z": 402,
+              "side": "west"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-sanji",
+            "stationId": "room-furniture-galley-stove",
+            "roomRevision": 1
+          },
+          "at": 1790487523396
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487535820
+        }
+      ]
+    },
+    {
+      "id": "brook-piano-r0",
+      "key": "brook",
+      "furniture": "piano",
+      "clip": "music",
+      "rotation": 0,
+      "frames": [
+        "2",
+        "3",
+        "0",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-brook"
+          ],
+          "characters": {
+            "brook": {
+              "key": "brook",
+              "itemId": "room-character-brook",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99804999999998,
+                "hunger": 25.002924999999998,
+                "mood": 75.00216666666665,
+                "social": 74.99869999999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487547176,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487541766,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-brook",
+              "stationId": "room-furniture-piano",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:39:01.864Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:39:08.016Z",
+              "readyAt": "2026-09-27T05:40:08.016Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "brook",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-piano",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "brook",
+              "cell": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-piano",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488131137,
+          "nextForegroundAt": 1790487553550,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "brook",
+            "cell": {
+              "col": 7,
+              "row": 4
+            },
+            "x": 456,
+            "y": 393.357109375,
+            "mode": "life-act",
+            "phase": 0.3095659349947594,
+            "direction": "north",
+            "dock": {
+              "x": 456,
+              "y": 393.357109375,
+              "z": 402,
+              "side": "north"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-brook",
+            "stationId": "room-furniture-piano",
+            "roomRevision": 1
+          },
+          "at": 1790487541864
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487548016
+        }
+      ]
+    },
+    {
+      "id": "brook-piano-r1",
+      "key": "brook",
+      "furniture": "piano",
+      "clip": "music",
+      "rotation": 1,
+      "frames": [
+        "2",
+        "3",
+        "0",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-brook"
+          ],
+          "characters": {
+            "brook": {
+              "key": "brook",
+              "itemId": "room-character-brook",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99805149999997,
+                "hunger": 25.002922749999996,
+                "mood": 75.00216499999999,
+                "social": 74.998701,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790487587090,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790487557794,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-brook",
+              "stationId": "room-furniture-piano",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:39:17.897Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:39:27.743Z",
+              "readyAt": "2026-09-27T05:40:27.743Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "brook",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-piano",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "brook",
+              "cell": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-piano",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488090410,
+          "nextForegroundAt": 1790487569577,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "brook",
+            "cell": {
+              "col": 6,
+              "row": 2
+            },
+            "x": 447.78,
+            "y": 377.2449308850011,
+            "mode": "life-act",
+            "phase": 0.2663398552398547,
+            "direction": "east",
+            "dock": {
+              "x": 447.78,
+              "y": 377.247109375,
+              "z": 402,
+              "side": "east"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-brook",
+            "stationId": "room-furniture-piano",
+            "roomRevision": 1
+          },
+          "at": 1790487557897
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487567743
+        }
+      ]
+    },
+    {
+      "id": "brook-piano-r2",
+      "key": "brook",
+      "furniture": "piano",
+      "clip": "music",
+      "rotation": 2,
+      "frames": [
+        "2",
+        "3",
+        "0",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-brook"
+          ],
+          "characters": {
+            "brook": {
+              "key": "brook",
+              "itemId": "room-character-brook",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99804999999998,
+                "hunger": 25.002924999999998,
+                "mood": 75.00216666666665,
+                "social": 74.99869999999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487599645,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790487577387,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-brook",
+              "stationId": "room-furniture-piano",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:39:37.499Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:39:53.167Z",
+              "readyAt": "2026-09-27T05:40:53.167Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "brook",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-piano",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "brook",
+              "cell": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-piano",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790487947935,
+          "nextForegroundAt": 1790487589192,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "brook",
+            "cell": {
+              "col": 7,
+              "row": 1
+            },
+            "x": 456,
+            "y": 351.739609375,
+            "mode": "life-act",
+            "phase": 0.664016784088474,
+            "direction": "south",
+            "dock": {
+              "x": 456,
+              "y": 351.739609375,
+              "z": 400,
+              "side": "south"
+            },
+            "ready": [
+              "west",
+              "east",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-brook",
+            "stationId": "room-furniture-piano",
+            "roomRevision": 1
+          },
+          "at": 1790487577499
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487593167
+        }
+      ]
+    },
+    {
+      "id": "brook-piano-r3",
+      "key": "brook",
+      "furniture": "piano",
+      "clip": "music",
+      "rotation": 3,
+      "frames": [
+        "2",
+        "3",
+        "0",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-brook"
+          ],
+          "characters": {
+            "brook": {
+              "key": "brook",
+              "itemId": "room-character-brook",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99804999999998,
+                "hunger": 25.002924999999998,
+                "mood": 75.00216666666665,
+                "social": 74.99869999999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487606320,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487602962,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-brook",
+              "stationId": "room-furniture-piano",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:40:03.067Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:40:16.376Z",
+              "readyAt": "2026-09-27T05:41:16.376Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "brook",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-piano",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "brook",
+              "cell": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-piano",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488057991,
+          "nextForegroundAt": 1790487614757,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "brook",
+            "cell": {
+              "col": 9,
+              "row": 2
+            },
+            "x": 512.22,
+            "y": 377.2436351509381,
+            "mode": "life-act",
+            "phase": 0.8527738483111621,
+            "direction": "west",
+            "dock": {
+              "x": 512.22,
+              "y": 377.247109375,
+              "z": 402,
+              "side": "west"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-brook",
+            "stationId": "room-furniture-piano",
+            "roomRevision": 1
+          },
+          "at": 1790487603067
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487616376
+        }
+      ]
+    },
+    {
+      "id": "jinbe-helm-r0",
+      "key": "jinbe",
+      "furniture": "helm",
+      "clip": "helm",
+      "rotation": 0,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-jinbe"
+          ],
+          "characters": {
+            "jinbe": {
+              "key": "jinbe",
+              "itemId": "room-character-jinbe",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99804999999998,
+                "hunger": 25.00325000000001,
+                "mood": 75.00216666666665,
+                "social": 74.99902499999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487629652,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487626287,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-jinbe",
+              "stationId": "room-furniture-helm",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:40:26.401Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:40:35.153Z",
+              "readyAt": "2026-09-27T05:41:35.153Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "jinbe",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-helm",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "jinbe",
+              "cell": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-helm",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488094011,
+          "nextForegroundAt": 1790487638067,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "jinbe",
+            "cell": {
+              "col": 7,
+              "row": 4
+            },
+            "x": 463.89,
+            "y": 375.9439127707279,
+            "mode": "life-act",
+            "phase": 0.9685850228128975,
+            "direction": "north",
+            "dock": {
+              "x": 463.89,
+              "y": 375.904609375,
+              "z": 402,
+              "side": "north"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-jinbe",
+            "stationId": "room-furniture-helm",
+            "roomRevision": 1
+          },
+          "at": 1790487626401
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487635153
+        }
+      ]
+    },
+    {
+      "id": "jinbe-helm-r1",
+      "key": "jinbe",
+      "furniture": "helm",
+      "clip": "helm",
+      "rotation": 1,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-jinbe"
+          ],
+          "characters": {
+            "jinbe": {
+              "key": "jinbe",
+              "itemId": "room-character-jinbe",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99804999999998,
+                "hunger": 25.00325000000001,
+                "mood": 75.00216666666665,
+                "social": 74.99902499999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487642823,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487639933,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-jinbe",
+              "stationId": "room-furniture-helm",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:40:40.033Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:40:50.332Z",
+              "readyAt": "2026-09-27T05:41:50.332Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "jinbe",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-helm",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "jinbe",
+              "cell": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-helm",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488002385,
+          "nextForegroundAt": 1790487651713,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "jinbe",
+            "cell": {
+              "col": 6,
+              "row": 2
+            },
+            "x": 447.78,
+            "y": 371.85831936942583,
+            "mode": "life-act",
+            "phase": 0.13745092148002142,
+            "direction": "east",
+            "dock": {
+              "x": 447.78,
+              "y": 371.877109375,
+              "z": 402,
+              "side": "east"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-jinbe",
+            "stationId": "room-furniture-helm",
+            "roomRevision": 1
+          },
+          "at": 1790487640033
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487650332
+        }
+      ]
+    },
+    {
+      "id": "jinbe-helm-r2",
+      "key": "jinbe",
+      "furniture": "helm",
+      "clip": "helm",
+      "rotation": 2,
+      "frames": [
+        "1",
+        "2",
+        "0",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-jinbe"
+          ],
+          "characters": {
+            "jinbe": {
+              "key": "jinbe",
+              "itemId": "room-character-jinbe",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99804999999998,
+                "hunger": 25.00325000000001,
+                "mood": 75.00216666666665,
+                "social": 74.99902499999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487660895,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487655144,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-jinbe",
+              "stationId": "room-furniture-helm",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:40:55.251Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:41:11.324Z",
+              "readyAt": "2026-09-27T05:42:11.324Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "jinbe",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-helm",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "jinbe",
+              "cell": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-helm",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488239679,
+          "nextForegroundAt": 1790487666920,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "jinbe",
+            "cell": {
+              "col": 7,
+              "row": 1
+            },
+            "x": 480,
+            "y": 363.822109375,
+            "mode": "life-act",
+            "phase": 0.5484710290712995,
+            "direction": "south",
+            "dock": {
+              "x": 480,
+              "y": 363.822109375,
+              "z": 400,
+              "side": "south"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-jinbe",
+            "stationId": "room-furniture-helm",
+            "roomRevision": 1
+          },
+          "at": 1790487655251
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487671324
+        }
+      ]
+    },
+    {
+      "id": "jinbe-helm-r3",
+      "key": "jinbe",
+      "furniture": "helm",
+      "clip": "helm",
+      "rotation": 3,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 5,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-jinbe"
+          ],
+          "characters": {
+            "jinbe": {
+              "key": "jinbe",
+              "itemId": "room-character-jinbe",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99804999999998,
+                "hunger": 25.00325000000001,
+                "mood": 75.00216666666665,
+                "social": 74.99902499999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487681580,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487677620,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-jinbe",
+              "stationId": "room-furniture-helm",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:41:17.742Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:41:33.635Z",
+              "readyAt": "2026-09-27T05:42:33.635Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "jinbe",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-helm",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "jinbe",
+              "cell": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-helm",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488118965,
+          "nextForegroundAt": 1790487689400,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "jinbe",
+            "cell": {
+              "col": 9,
+              "row": 2
+            },
+            "x": 512.22,
+            "y": 371.85957998600895,
+            "mode": "life-act",
+            "phase": 0.2971252347462277,
+            "direction": "west",
+            "dock": {
+              "x": 512.22,
+              "y": 371.877109375,
+              "z": 402,
+              "side": "west"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-jinbe",
+            "stationId": "room-furniture-helm",
+            "roomRevision": 1
+          },
+          "at": 1790487677421
+        },
+        {
+          "type": "work.cancel",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487677475
+        },
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-jinbe",
+            "stationId": "room-furniture-helm",
+            "roomRevision": 1
+          },
+          "at": 1790487677742
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487693635
+        }
+      ]
+    },
+    {
+      "id": "usopp-tool-bench-r0",
+      "key": "usopp",
+      "furniture": "tool-bench",
+      "clip": "craft",
+      "rotation": 0,
+      "frames": [
+        "1",
+        "3",
+        "3",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-usopp"
+          ],
+          "characters": {
+            "usopp": {
+              "key": "usopp",
+              "itemId": "room-character-usopp",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99786166666668,
+                "hunger": 25.00352825,
+                "mood": 75.00213833333332,
+                "social": 74.99871699999998,
+                "workMotivation": 69.96792500000001
+              },
+              "memories": [],
+              "nextAt": 1790487701267,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487698413,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-usopp",
+              "stationId": "room-furniture-tool-bench",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:41:38.515Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:41:44.913Z",
+              "readyAt": "2026-09-27T05:42:44.913Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "usopp",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-tool-bench",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "usopp",
+              "cell": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-tool-bench",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488249740,
+          "nextForegroundAt": 1790487710194,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "usopp",
+            "cell": {
+              "col": 7,
+              "row": 4
+            },
+            "x": 480,
+            "y": 396.042109375,
+            "mode": "life-act",
+            "phase": 0.7817760853139383,
+            "direction": "north",
+            "dock": {
+              "x": 480,
+              "y": 396.042109375,
+              "z": 402,
+              "side": "north"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-usopp",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790487698515
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487704913
+        }
+      ]
+    },
+    {
+      "id": "usopp-tool-bench-r1",
+      "key": "usopp",
+      "furniture": "tool-bench",
+      "clip": "craft",
+      "rotation": 1,
+      "frames": [
+        "1",
+        "3",
+        "3",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 5,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-usopp"
+          ],
+          "characters": {
+            "usopp": {
+              "key": "usopp",
+              "itemId": "room-character-usopp",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99783500000001,
+                "hunger": 25.003572249999998,
+                "mood": 75.00216499999999,
+                "social": 74.998701,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790487715129,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487710576,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-usopp",
+              "stationId": "room-furniture-tool-bench",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:41:50.698Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:42:00.958Z",
+              "readyAt": "2026-09-27T05:43:00.958Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "usopp",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-tool-bench",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "usopp",
+              "cell": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-tool-bench",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488187850,
+          "nextForegroundAt": 1790487722356,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "usopp",
+            "cell": {
+              "col": 6,
+              "row": 2
+            },
+            "x": 445.095,
+            "y": 381.274609375,
+            "mode": "life-act",
+            "phase": 0.0910901585610376,
+            "direction": "east",
+            "dock": {
+              "x": 445.095,
+              "y": 381.274609375,
+              "z": 402,
+              "side": "east"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-usopp",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790487710375
+        },
+        {
+          "type": "work.cancel",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487710431
+        },
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-usopp",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790487710698
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487720958
+        }
+      ]
+    },
+    {
+      "id": "usopp-tool-bench-r2",
+      "key": "usopp",
+      "furniture": "tool-bench",
+      "clip": "craft",
+      "rotation": 2,
+      "frames": [
+        "1",
+        "3",
+        "3",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 5,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-usopp"
+          ],
+          "characters": {
+            "usopp": {
+              "key": "usopp",
+              "itemId": "room-character-usopp",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99783333333335,
+                "hunger": 25.003574999999998,
+                "mood": 75.00216666666665,
+                "social": 74.99869999999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487732202,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487726687,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-usopp",
+              "stationId": "room-furniture-tool-bench",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:42:06.806Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:42:22.501Z",
+              "readyAt": "2026-09-27T05:43:22.501Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "usopp",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-tool-bench",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "usopp",
+              "cell": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-tool-bench",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488179983,
+          "nextForegroundAt": 1790487738464,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "usopp",
+            "cell": {
+              "col": 7,
+              "row": 1
+            },
+            "x": 479.9766783914137,
+            "y": 378.589609375,
+            "mode": "life-act",
+            "phase": 0.969730978487574,
+            "direction": "south",
+            "dock": {
+              "x": 480,
+              "y": 378.589609375,
+              "z": 400,
+              "side": "south"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-usopp",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790487726485
+        },
+        {
+          "type": "work.cancel",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487726542
+        },
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-usopp",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790487726806
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487742501
+        }
+      ]
+    },
+    {
+      "id": "usopp-tool-bench-r3",
+      "key": "usopp",
+      "furniture": "tool-bench",
+      "clip": "craft",
+      "rotation": 3,
+      "frames": [
+        "2",
+        "2",
+        "0",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-usopp"
+          ],
+          "characters": {
+            "usopp": {
+              "key": "usopp",
+              "itemId": "room-character-usopp",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99783333333335,
+                "hunger": 25.003574999999998,
+                "mood": 75.00216666666665,
+                "social": 74.99869999999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487763475,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790487748163,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-usopp",
+              "stationId": "room-furniture-tool-bench",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:42:28.267Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:42:41.561Z",
+              "readyAt": "2026-09-27T05:43:41.561Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "usopp",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-tool-bench",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "usopp",
+              "cell": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-tool-bench",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488198855,
+          "nextForegroundAt": 1790487759939,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "usopp",
+            "cell": {
+              "col": 9,
+              "row": 2
+            },
+            "x": 514.905,
+            "y": 381.274609375,
+            "mode": "life-act",
+            "phase": 0.4620613291207953,
+            "direction": "west",
+            "dock": {
+              "x": 514.905,
+              "y": 381.274609375,
+              "z": 402,
+              "side": "west"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-usopp",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790487748267
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487761561
+        }
+      ]
+    },
+    {
+      "id": "franky-tool-bench-r0",
+      "key": "franky",
+      "furniture": "tool-bench",
+      "clip": "craft",
+      "rotation": 0,
+      "frames": [
+        "1",
+        "3",
+        "3",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 5,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-franky"
+          ],
+          "characters": {
+            "franky": {
+              "key": "franky",
+              "itemId": "room-character-franky",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99772675000003,
+                "hunger": 25.003734624999993,
+                "mood": 75.00216499999999,
+                "social": 74.9989175,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790487776284,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487771722,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-franky",
+              "stationId": "room-furniture-tool-bench",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:42:51.842Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:42:57.139Z",
+              "readyAt": "2026-09-27T05:43:57.139Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "franky",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-tool-bench",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "franky",
+              "cell": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-tool-bench",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488234480,
+          "nextForegroundAt": 1790487783508,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "franky",
+            "cell": {
+              "col": 7,
+              "row": 4
+            },
+            "x": 480,
+            "y": 396.042109375,
+            "mode": "life-act",
+            "phase": 0.8023137736353565,
+            "direction": "north",
+            "dock": {
+              "x": 480,
+              "y": 396.042109375,
+              "z": 402,
+              "side": "north"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-franky",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790487771524
+        },
+        {
+          "type": "work.cancel",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487771580
+        },
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-franky",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790487771842
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487777139
+        }
+      ]
+    },
+    {
+      "id": "franky-tool-bench-r1",
+      "key": "franky",
+      "furniture": "tool-bench",
+      "clip": "craft",
+      "rotation": 1,
+      "frames": [
+        "1",
+        "3",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-franky"
+          ],
+          "characters": {
+            "franky": {
+              "key": "franky",
+              "itemId": "room-character-franky",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99772675000003,
+                "hunger": 25.003734624999993,
+                "mood": 75.00216499999999,
+                "social": 74.9989175,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790487788216,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487783101,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-franky",
+              "stationId": "room-furniture-tool-bench",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:43:03.221Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:43:11.767Z",
+              "readyAt": "2026-09-27T05:44:11.767Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "franky",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-tool-bench",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "franky",
+              "cell": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-tool-bench",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488154967,
+          "nextForegroundAt": 1790487794883,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "franky",
+            "cell": {
+              "col": 6,
+              "row": 2
+            },
+            "x": 445.095,
+            "y": 381.2744638487594,
+            "mode": "life-act",
+            "phase": 0.2191640698074604,
+            "direction": "east",
+            "dock": {
+              "x": 445.095,
+              "y": 381.274609375,
+              "z": 402,
+              "side": "east"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-franky",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790487783221
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487791767
+        }
+      ]
+    },
+    {
+      "id": "franky-tool-bench-r2",
+      "key": "franky",
+      "furniture": "tool-bench",
+      "clip": "craft",
+      "rotation": 2,
+      "frames": [
+        "1",
+        "3",
+        "3",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-franky"
+          ],
+          "characters": {
+            "franky": {
+              "key": "franky",
+              "itemId": "room-character-franky",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99772675000003,
+                "hunger": 25.003734624999993,
+                "mood": 75.00216499999999,
+                "social": 74.9989175,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790487821730,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790487797430,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-franky",
+              "stationId": "room-furniture-tool-bench",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:43:17.563Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:43:30.794Z",
+              "readyAt": "2026-09-27T05:44:30.794Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "franky",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-tool-bench",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "franky",
+              "cell": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-tool-bench",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488388832,
+          "nextForegroundAt": 1790487809230,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "franky",
+            "cell": {
+              "col": 7,
+              "row": 1
+            },
+            "x": 480,
+            "y": 378.5820546494564,
+            "mode": "life-act",
+            "phase": 0.008346042646413032,
+            "direction": "south",
+            "dock": {
+              "x": 480,
+              "y": 378.589609375,
+              "z": 400,
+              "side": "south"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-franky",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790487797563
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487810794
+        }
+      ]
+    },
+    {
+      "id": "franky-tool-bench-r3",
+      "key": "franky",
+      "furniture": "tool-bench",
+      "clip": "craft",
+      "rotation": 3,
+      "frames": [
+        "2",
+        "2",
+        "0",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 5,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-franky"
+          ],
+          "characters": {
+            "franky": {
+              "key": "franky",
+              "itemId": "room-character-franky",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99772500000003,
+                "hunger": 25.003737499999993,
+                "mood": 75.00216666666665,
+                "social": 74.99891666666667,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487823008,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487816457,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-franky",
+              "stationId": "room-furniture-tool-bench",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:43:36.611Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:43:47.922Z",
+              "readyAt": "2026-09-27T05:44:47.922Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "franky",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-tool-bench",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "franky",
+              "cell": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-tool-bench",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488255795,
+          "nextForegroundAt": 1790487828251,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "franky",
+            "cell": {
+              "col": 9,
+              "row": 2
+            },
+            "x": 514.905,
+            "y": 381.2728989573543,
+            "mode": "life-act",
+            "phase": 0.37451240762188925,
+            "direction": "west",
+            "dock": {
+              "x": 514.905,
+              "y": 381.274609375,
+              "z": 402,
+              "side": "west"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-franky",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790487816277
+        },
+        {
+          "type": "work.cancel",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487816346
+        },
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-franky",
+            "stationId": "room-furniture-tool-bench",
+            "roomRevision": 1
+          },
+          "at": 1790487816611
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487827922
+        }
+      ]
+    },
+    {
+      "id": "chopper-medicine-cabinet-r0",
+      "key": "chopper",
+      "furniture": "medicine-cabinet",
+      "clip": "medicine",
+      "rotation": 0,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 5,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-chopper"
+          ],
+          "characters": {
+            "chopper": {
+              "key": "chopper",
+              "itemId": "room-character-chopper",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99783500000001,
+                "hunger": 25.003409875000003,
+                "mood": 75.00216499999999,
+                "social": 74.998701,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790487844720,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487838399,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-chopper",
+              "stationId": "room-furniture-medicine-cabinet",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:43:58.544Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:44:07.915Z",
+              "readyAt": "2026-09-27T05:45:07.915Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "chopper",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-medicine-cabinet",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "chopper",
+              "cell": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-medicine-cabinet",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488270472,
+          "nextForegroundAt": 1790487850188,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "chopper",
+            "cell": {
+              "col": 7,
+              "row": 4
+            },
+            "x": 455.835,
+            "y": 396.042109375,
+            "mode": "life-act",
+            "phase": 0.9070831520934274,
+            "direction": "north",
+            "dock": {
+              "x": 455.835,
+              "y": 396.042109375,
+              "z": 402,
+              "side": "north"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-chopper",
+            "stationId": "room-furniture-medicine-cabinet",
+            "roomRevision": 1
+          },
+          "at": 1790487838206
+        },
+        {
+          "type": "work.cancel",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487838288
+        },
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-chopper",
+            "stationId": "room-furniture-medicine-cabinet",
+            "roomRevision": 1
+          },
+          "at": 1790487838544
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487847915
+        }
+      ]
+    },
+    {
+      "id": "chopper-medicine-cabinet-r1",
+      "key": "chopper",
+      "furniture": "medicine-cabinet",
+      "clip": "medicine",
+      "rotation": 1,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-chopper"
+          ],
+          "characters": {
+            "chopper": {
+              "key": "chopper",
+              "itemId": "room-character-chopper",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99783333333335,
+                "hunger": 25.003412500000003,
+                "mood": 75.00216666666665,
+                "social": 74.99869999999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487867727,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790487852628,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-chopper",
+              "stationId": "room-furniture-medicine-cabinet",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:44:12.752Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:44:28.441Z",
+              "readyAt": "2026-09-27T05:45:28.441Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "chopper",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-medicine-cabinet",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "chopper",
+              "cell": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-medicine-cabinet",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488269079,
+          "nextForegroundAt": 1790487864411,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "chopper",
+            "cell": {
+              "col": 6,
+              "row": 2
+            },
+            "x": 421.095,
+            "y": 385.302109375,
+            "mode": "life-act",
+            "phase": 0.3622267713705894,
+            "direction": "east",
+            "dock": {
+              "x": 421.095,
+              "y": 385.302109375,
+              "z": 402,
+              "side": "east"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-chopper",
+            "stationId": "room-furniture-medicine-cabinet",
+            "roomRevision": 1
+          },
+          "at": 1790487852752
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487868441
+        }
+      ]
+    },
+    {
+      "id": "chopper-medicine-cabinet-r2",
+      "key": "chopper",
+      "furniture": "medicine-cabinet",
+      "clip": "medicine",
+      "rotation": 2,
+      "frames": [
+        "1",
+        "3",
+        "3",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 5,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-chopper"
+          ],
+          "characters": {
+            "chopper": {
+              "key": "chopper",
+              "itemId": "room-character-chopper",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99783333333335,
+                "hunger": 25.003412500000003,
+                "mood": 75.00216666666665,
+                "social": 74.99869999999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487879009,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487873321,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-chopper",
+              "stationId": "room-furniture-medicine-cabinet",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:44:33.427Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:44:51.284Z",
+              "readyAt": "2026-09-27T05:45:51.284Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "chopper",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 2
+              },
+              "stationId": "room-furniture-medicine-cabinet",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "chopper",
+              "cell": {
+                "col": 7,
+                "row": 2
+              },
+              "stationId": "room-furniture-medicine-cabinet",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488235928,
+          "nextForegroundAt": 1790487885098,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "chopper",
+            "cell": {
+              "col": 7,
+              "row": 2
+            },
+            "x": 429.00464422404934,
+            "y": 381.274609375,
+            "mode": "life-act",
+            "phase": 0.5721737105734382,
+            "direction": "south",
+            "dock": {
+              "x": 428.985,
+              "y": 381.274609375,
+              "z": 400,
+              "side": "south"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-chopper",
+            "stationId": "room-furniture-medicine-cabinet",
+            "roomRevision": 1
+          },
+          "at": 1790487873116
+        },
+        {
+          "type": "work.cancel",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487873158
+        },
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-chopper",
+            "stationId": "room-furniture-medicine-cabinet",
+            "roomRevision": 1
+          },
+          "at": 1790487873427
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487891284
+        }
+      ]
+    },
+    {
+      "id": "chopper-medicine-cabinet-r3",
+      "key": "chopper",
+      "furniture": "medicine-cabinet",
+      "clip": "medicine",
+      "rotation": 3,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-chopper"
+          ],
+          "characters": {
+            "chopper": {
+              "key": "chopper",
+              "itemId": "room-character-chopper",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99783333333335,
+                "hunger": 25.003412500000003,
+                "mood": 75.00216666666665,
+                "social": 74.99869999999999,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790487903267,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487897812,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-chopper",
+              "stationId": "room-furniture-medicine-cabinet",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:44:57.927Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:45:17.924Z",
+              "readyAt": "2026-09-27T05:46:17.925Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "chopper",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 8,
+                "row": 2
+              },
+              "stationId": "room-furniture-medicine-cabinet",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "chopper",
+              "cell": {
+                "col": 8,
+                "row": 2
+              },
+              "stationId": "room-furniture-medicine-cabinet",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488355327,
+          "nextForegroundAt": 1790487909593,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "chopper",
+            "cell": {
+              "col": 8,
+              "row": 2
+            },
+            "x": 490.91520417020774,
+            "y": 385.302109375,
+            "mode": "life-act",
+            "phase": 0.21357803519405233,
+            "direction": "west",
+            "dock": {
+              "x": 490.905,
+              "y": 385.302109375,
+              "z": 402,
+              "side": "west"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-chopper",
+            "stationId": "room-furniture-medicine-cabinet",
+            "roomRevision": 1
+          },
+          "at": 1790487897927
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487917924
+        }
+      ]
+    },
+    {
+      "id": "nami-map-table-r0",
+      "key": "nami",
+      "furniture": "map-table",
+      "clip": "read",
+      "rotation": 0,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-nami"
+          ],
+          "characters": {
+            "nami": {
+              "key": "nami",
+              "itemId": "room-character-nami",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99794324999999,
+                "hunger": 25.003247500000008,
+                "mood": 75.00216499999999,
+                "social": 74.99907987500002,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790487944747,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790487922687,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-nami",
+              "stationId": "room-furniture-map-table",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:45:22.802Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:45:28.523Z",
+              "readyAt": "2026-09-27T05:46:28.523Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "nami",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-map-table",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "nami",
+              "cell": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-map-table",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488414581,
+          "nextForegroundAt": 1790487934473,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "nami",
+            "cell": {
+              "col": 7,
+              "row": 4
+            },
+            "x": 455.97328658717294,
+            "y": 396.042109375,
+            "mode": "life-act",
+            "phase": 0.29874173703329615,
+            "direction": "north",
+            "dock": {
+              "x": 456,
+              "y": 396.042109375,
+              "z": 402,
+              "side": "north"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-nami",
+            "stationId": "room-furniture-map-table",
+            "roomRevision": 1
+          },
+          "at": 1790487922802
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487928523
+        }
+      ]
+    },
+    {
+      "id": "nami-map-table-r1",
+      "key": "nami",
+      "furniture": "map-table",
+      "clip": "read",
+      "rotation": 1,
+      "frames": [
+        "1",
+        "1",
+        "2",
+        "3"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-nami"
+          ],
+          "characters": {
+            "nami": {
+              "key": "nami",
+              "itemId": "room-character-nami",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99794324999999,
+                "hunger": 25.003247500000008,
+                "mood": 75.00216499999999,
+                "social": 74.99907987500002,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790487941358,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790487936116,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-nami",
+              "stationId": "room-furniture-map-table",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:45:36.242Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:45:46.499Z",
+              "readyAt": "2026-09-27T05:46:46.499Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "nami",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-map-table",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "nami",
+              "cell": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-map-table",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488300974,
+          "nextForegroundAt": 1790487947902,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "nami",
+            "cell": {
+              "col": 6,
+              "row": 2
+            },
+            "x": 445.095,
+            "y": 381.274609375,
+            "mode": "life-act",
+            "phase": 0.015750214956446906,
+            "direction": "east",
+            "dock": {
+              "x": 445.095,
+              "y": 381.274609375,
+              "z": 402,
+              "side": "east"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-nami",
+            "stationId": "room-furniture-map-table",
+            "roomRevision": 1
+          },
+          "at": 1790487936242
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487946499
+        }
+      ]
+    },
+    {
+      "id": "nami-map-table-r2",
+      "key": "nami",
+      "furniture": "map-table",
+      "clip": "read",
+      "rotation": 2,
+      "frames": [
+        "0",
+        "2",
+        "2",
+        "3"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-nami"
+          ],
+          "characters": {
+            "nami": {
+              "key": "nami",
+              "itemId": "room-character-nami",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99796858333333,
+                "hunger": 25.003207500000006,
+                "mood": 75.00213833333332,
+                "social": 74.99909120833335,
+                "workMotivation": 69.96792500000001
+              },
+              "memories": [],
+              "nextAt": 1790487969651,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790487951361,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-nami",
+              "stationId": "room-furniture-map-table",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:45:51.488Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:46:08.657Z",
+              "readyAt": "2026-09-27T05:47:08.657Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "nami",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-map-table",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "nami",
+              "cell": {
+                "col": 7,
+                "row": 1
+              },
+              "stationId": "room-furniture-map-table",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488347740,
+          "nextForegroundAt": 1790487963163,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "nami",
+            "cell": {
+              "col": 7,
+              "row": 1
+            },
+            "x": 456,
+            "y": 378.589609375,
+            "mode": "life-act",
+            "phase": 0.8916603146842242,
+            "direction": "south",
+            "dock": {
+              "x": 456,
+              "y": 378.589609375,
+              "z": 400,
+              "side": "south"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-nami",
+            "stationId": "room-furniture-map-table",
+            "roomRevision": 1
+          },
+          "at": 1790487951488
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487968657
+        }
+      ]
+    },
+    {
+      "id": "nami-map-table-r3",
+      "key": "nami",
+      "furniture": "map-table",
+      "clip": "read",
+      "rotation": 3,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "3"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-nami"
+          ],
+          "characters": {
+            "nami": {
+              "key": "nami",
+              "itemId": "room-character-nami",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99794324999999,
+                "hunger": 25.003247500000008,
+                "mood": 75.00216499999999,
+                "social": 74.99907987500002,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790487988285,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790487973570,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-nami",
+              "stationId": "room-furniture-map-table",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:46:13.669Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:46:26.552Z",
+              "readyAt": "2026-09-27T05:47:26.552Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "nami",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-map-table",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "nami",
+              "cell": {
+                "col": 9,
+                "row": 2
+              },
+              "stationId": "room-furniture-map-table",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488524514,
+          "nextForegroundAt": 1790487985356,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "nami",
+            "cell": {
+              "col": 9,
+              "row": 2
+            },
+            "x": 514.905,
+            "y": 381.274609375,
+            "mode": "life-act",
+            "phase": 0.08496142052979169,
+            "direction": "west",
+            "dock": {
+              "x": 514.905,
+              "y": 381.274609375,
+              "z": 402,
+              "side": "west"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-nami",
+            "stationId": "room-furniture-map-table",
+            "roomRevision": 1
+          },
+          "at": 1790487973669
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487986552
+        }
+      ]
+    },
+    {
+      "id": "robin-bookshelf-r0",
+      "key": "robin",
+      "furniture": "bookshelf",
+      "clip": "read",
+      "rotation": 0,
+      "frames": [
+        "1",
+        "2",
+        "2",
+        "3"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-robin"
+          ],
+          "characters": {
+            "robin": {
+              "key": "robin",
+              "itemId": "room-character-robin",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99805149999997,
+                "hunger": 25.002922749999996,
+                "mood": 75.00216499999999,
+                "social": 74.999188125,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790488013165,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790487991614,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-robin",
+              "stationId": "room-furniture-bookshelf",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:46:31.726Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:46:37.683Z",
+              "readyAt": "2026-09-27T05:47:37.683Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "robin",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-bookshelf",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "robin",
+              "cell": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-bookshelf",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488462246,
+          "nextForegroundAt": 1790488003399,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "robin",
+            "cell": {
+              "col": 7,
+              "row": 4
+            },
+            "x": 455.8000394193576,
+            "y": 396.0898265241775,
+            "mode": "life-act",
+            "phase": 0.30144317304299706,
+            "direction": "north",
+            "dock": {
+              "x": 455.835,
+              "y": 396.042109375,
+              "z": 402,
+              "side": "north"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-robin",
+            "stationId": "room-furniture-bookshelf",
+            "roomRevision": 1
+          },
+          "at": 1790487991726
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790487997683
+        }
+      ]
+    },
+    {
+      "id": "robin-bookshelf-r1",
+      "key": "robin",
+      "furniture": "bookshelf",
+      "clip": "read",
+      "rotation": 1,
+      "frames": [
+        "1",
+        "1",
+        "2",
+        "3"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 5,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-robin"
+          ],
+          "characters": {
+            "robin": {
+              "key": "robin",
+              "itemId": "room-character-robin",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99804999999998,
+                "hunger": 25.002924999999998,
+                "mood": 75.00216666666665,
+                "social": 74.9991875,
+                "workMotivation": 69.9675
+              },
+              "memories": [],
+              "nextAt": 1790488006543,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790488002544,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-robin",
+              "stationId": "room-furniture-bookshelf",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:46:42.674Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:46:52.693Z",
+              "readyAt": "2026-09-27T05:47:52.693Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "robin",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-bookshelf",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "robin",
+              "cell": {
+                "col": 6,
+                "row": 2
+              },
+              "stationId": "room-furniture-bookshelf",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488575990,
+          "nextForegroundAt": 1790488014342,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "robin",
+            "cell": {
+              "col": 6,
+              "row": 2
+            },
+            "x": 421.095,
+            "y": 385.29114555784446,
+            "mode": "life-act",
+            "phase": 0.7181826084279755,
+            "direction": "east",
+            "dock": {
+              "x": 421.095,
+              "y": 385.302109375,
+              "z": 402,
+              "side": "east"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-robin",
+            "stationId": "room-furniture-bookshelf",
+            "roomRevision": 1
+          },
+          "at": 1790488002355
+        },
+        {
+          "type": "work.cancel",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790488002416
+        },
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-robin",
+            "stationId": "room-furniture-bookshelf",
+            "roomRevision": 1
+          },
+          "at": 1790488002674
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790488012693
+        }
+      ]
+    },
+    {
+      "id": "robin-bookshelf-r2",
+      "key": "robin",
+      "furniture": "bookshelf",
+      "clip": "read",
+      "rotation": 2,
+      "frames": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-robin"
+          ],
+          "characters": {
+            "robin": {
+              "key": "robin",
+              "itemId": "room-character-robin",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99807549999998,
+                "hunger": 25.00288675,
+                "mood": 75.00213833333332,
+                "social": 74.999198125,
+                "workMotivation": 69.96792500000001
+              },
+              "memories": [],
+              "nextAt": 1790488021210,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790488017622,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-robin",
+              "stationId": "room-furniture-bookshelf",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:46:57.733Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:47:09.070Z",
+              "readyAt": "2026-09-27T05:48:09.070Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "robin",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 2
+              },
+              "stationId": "room-furniture-bookshelf",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "robin",
+              "cell": {
+                "col": 7,
+                "row": 2
+              },
+              "stationId": "room-furniture-bookshelf",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488612755,
+          "nextForegroundAt": 1790488029409,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "robin",
+            "cell": {
+              "col": 7,
+              "row": 2
+            },
+            "x": 428.985,
+            "y": 381.2515212966932,
+            "mode": "life-act",
+            "phase": 0.5871604528464904,
+            "direction": "south",
+            "dock": {
+              "x": 428.985,
+              "y": 381.274609375,
+              "z": 400,
+              "side": "south"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-robin",
+            "stationId": "room-furniture-bookshelf",
+            "roomRevision": 1
+          },
+          "at": 1790488017733
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790488029070
+        }
+      ]
+    },
+    {
+      "id": "robin-bookshelf-r3",
+      "key": "robin",
+      "furniture": "bookshelf",
+      "clip": "read",
+      "rotation": 3,
+      "frames": [
+        "1",
+        "2",
+        "2",
+        "3"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-robin"
+          ],
+          "characters": {
+            "robin": {
+              "key": "robin",
+              "itemId": "room-character-robin",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99807549999998,
+                "hunger": 25.00288675,
+                "mood": 75.00213833333333,
+                "social": 74.999198125,
+                "workMotivation": 69.96792500000001
+              },
+              "memories": [],
+              "nextAt": 1790488040587,
+              "taps": [],
+              "taskToken": "life-2",
+              "lastWorkAt": 1790488034533,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-robin",
+              "stationId": "room-furniture-bookshelf",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:47:14.628Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:47:27.065Z",
+              "readyAt": "2026-09-27T05:48:27.065Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "robin",
+              "token": "life-2",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 8,
+                "row": 2
+              },
+              "stationId": "room-furniture-bookshelf",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "robin",
+              "cell": {
+                "col": 8,
+                "row": 2
+              },
+              "stationId": "room-furniture-bookshelf",
+              "slotId": "single",
+              "token": "life-2"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488526800,
+          "nextForegroundAt": 1790488046310,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "robin",
+            "cell": {
+              "col": 8,
+              "row": 2
+            },
+            "x": 490.905,
+            "y": 385.2911455500203,
+            "mode": "life-act",
+            "phase": 0.3570976141136071,
+            "direction": "west",
+            "dock": {
+              "x": 490.905,
+              "y": 385.302109375,
+              "z": 402,
+              "side": "west"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-robin",
+            "stationId": "room-furniture-bookshelf",
+            "roomRevision": 1
+          },
+          "at": 1790488034628
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790488047065
+        }
+      ]
+    }
+  ]
+}

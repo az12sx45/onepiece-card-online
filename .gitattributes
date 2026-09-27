@@ -30,3 +30,5 @@
 /tools/launcher-room/life-v1/** -text
 # Exact submitted generation prompts preserve their original trailing spaces.
 /tools/launcher-room/life-v1/**/prompt*.txt whitespace=-blank-at-eol
+tools/launcher-room/presentation-v122/** -text
+docs/LAUNCHER_ROOM_PRESENTATION_20260927.json -text

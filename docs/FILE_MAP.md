@@ -1,5 +1,14 @@
 # File Map
 
+## 2026-09-27 角色旁選單與比例（1.2.2）
+
+- desktop/launcher-room.js：1.50倍呈現比例、家具接點與靜態腳根；角色旁浮層定位、焦點、跟隨及收合。
+- desktop/launcher-room.css、launcher.html、launcher-life-room.js：透明圖示操作、詳情/工作子面板及好友唯讀呈現。
+- scripts/launcher_room_popover_qa.js：實际Chromium選單操作、跟隨/邊界/窄版、付費確認、好友與編輯模式；scripts/launcher_life_integration_qa.js僅新增可重用fixture匯出，直接執行原測試的行為保留。
+- tools/launcher-room/presentation-v122/：固定b921歷史life證據核驗、新版runtime SHA與獨立視覺審查gate/測試/截圖。
+- docs/LAUNCHER_ROOM_PRESENTATION_20260927.json：1.2.2新呈現審查。既有life-v1素材證據原封保留。
+- desktop/package.json、desktop/package-lock.json、scripts/desktop_launcher_package_qa.js及public/desktop/launcher-release-v1.json：1.2.2封裝與簽章發行鏈。
+
 ## 2026-09-27 生活基地方針修正（1.2.1）
 
 1.2.0完成封裝後，補查窄版截圖發現QA的free錯誤fixture；實際六方針操作進一步抓到onchange先renderUi重設select再讀value，導致總是送出舊方針。desktop/launcher-life-room.js改為先捕獲selectedDirective再更新UI；伺服器外部IPC沿用directiveId，controller內部directive保持原合約。原1.2.0上傳檔不可覆寫，因此另發1.2.1；所有128組人物、512格動作與台詞／經濟規則維持1.2.0世代。

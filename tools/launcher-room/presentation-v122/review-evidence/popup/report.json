@@ -1,0 +1,117 @@
+{
+  "ok": true,
+  "generatedAt": "2026-09-27T05:47:28.419Z",
+  "checks": 4,
+  "results": [
+    {
+      "name": "owner-anchored-actions",
+      "pass": true,
+      "layout": {
+        "actor": {
+          "x": 342.14605712890625,
+          "y": 469.5652770996094,
+          "width": 159.8328857421875,
+          "height": 224.48159790039062,
+          "right": 501.97894287109375,
+          "bottom": 694.046875
+        },
+        "panel": {
+          "x": 510,
+          "y": 492,
+          "width": 182,
+          "height": 207,
+          "right": 692,
+          "bottom": 699
+        },
+        "width": 1366,
+        "height": 900,
+        "side": "right",
+        "position": "fixed",
+        "background": "rgba(6, 30, 39, 0.72)",
+        "visibility": "visible"
+      },
+      "giftCommands": 1,
+      "keyboardAndDismiss": true
+    },
+    {
+      "name": "follow-edge-mobile",
+      "pass": true,
+      "first": {
+        "actor": {
+          "x": 300.98980712890625,
+          "y": 469.5652770996094,
+          "width": 159.8328857421875,
+          "height": 224.48159790039062,
+          "right": 460.82269287109375,
+          "bottom": 694.046875
+        },
+        "panel": {
+          "x": 471,
+          "y": 492,
+          "width": 182,
+          "height": 207,
+          "right": 653,
+          "bottom": 699
+        },
+        "width": 1366,
+        "height": 900,
+        "side": "right",
+        "position": "fixed",
+        "background": "rgba(6, 30, 39, 0.72)",
+        "visibility": "visible"
+      },
+      "moved": {
+        "actor": {
+          "x": 241.88043212890625,
+          "y": 469.5652770996094,
+          "width": 159.8328857421875,
+          "height": 224.48159790039062,
+          "right": 401.71331787109375,
+          "bottom": 694.046875
+        },
+        "panel": {
+          "x": 411,
+          "y": 492,
+          "width": 182,
+          "height": 207,
+          "right": 593,
+          "bottom": 699
+        },
+        "width": 1366,
+        "height": 900,
+        "side": "right",
+        "position": "fixed",
+        "background": "rgba(6, 30, 39, 0.72)",
+        "visibility": "visible"
+      },
+      "accountSwitchClosed": true
+    },
+    {
+      "name": "visitor-readonly",
+      "pass": true,
+      "writes": 0
+    },
+    {
+      "name": "editor-dismiss-and-scale",
+      "pass": true,
+      "staticWidth": 159.8328857421875
+    }
+  ],
+  "startedSources": {
+    "desktop/launcher-room.js": "9ba2bb0e3ca3737d1472a9304899fe06cc23aabcd1245ed435fae1334bd84aa6",
+    "desktop/launcher-life-room.js": "1a0451b15fbf573523a51b547c0420275ea654de2fc3389398c7f05f2e13f79d",
+    "desktop/launcher-room.css": "3e62838323ff97b990da07fdd66cfdddb52ada179188f35eb3ba516897010cc4",
+    "desktop/launcher.html": "14e4ca74167866e2afbac0aaa1f1238b79ae3bb9969bf2ac89aa544b12f32265",
+    "scripts/launcher_life_integration_qa.js": "beb31ebf1e7e3e0d08534f122ed44aeb9fd80faeaf4668bce67e09f8c3928f07",
+    "scripts/launcher_room_popover_qa.js": "bd42bb404682fb021596e88246c383999b0c24788af165088348eede47e61654"
+  },
+  "completedSources": {
+    "desktop/launcher-room.js": "9ba2bb0e3ca3737d1472a9304899fe06cc23aabcd1245ed435fae1334bd84aa6",
+    "desktop/launcher-life-room.js": "1a0451b15fbf573523a51b547c0420275ea654de2fc3389398c7f05f2e13f79d",
+    "desktop/launcher-room.css": "3e62838323ff97b990da07fdd66cfdddb52ada179188f35eb3ba516897010cc4",
+    "desktop/launcher.html": "14e4ca74167866e2afbac0aaa1f1238b79ae3bb9969bf2ac89aa544b12f32265",
+    "scripts/launcher_life_integration_qa.js": "beb31ebf1e7e3e0d08534f122ed44aeb9fd80faeaf4668bce67e09f8c3928f07",
+    "scripts/launcher_room_popover_qa.js": "bd42bb404682fb021596e88246c383999b0c24788af165088348eede47e61654"
+  },
+  "scope": "Real Chromium UI/production artwork. Isolated IPC fixtures and deterministic clock; no real account purchases or human/device acceptance."
+}

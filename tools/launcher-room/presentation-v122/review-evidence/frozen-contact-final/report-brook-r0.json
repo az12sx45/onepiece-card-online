@@ -1,0 +1,149 @@
+{
+  "ok": true,
+  "scope": "Real renderer and art, isolated fixture server; numeric pass is not human visual approval.",
+  "results": [
+    {
+      "id": "brook-piano-r0",
+      "key": "brook",
+      "furniture": "piano",
+      "clip": "music",
+      "rotation": 0,
+      "frames": [
+        "3",
+        "3",
+        "0",
+        "1"
+      ],
+      "directions": null,
+      "pass": true,
+      "state": {
+        "interaction": null,
+        "life": {
+          "schemaVersion": 1,
+          "revision": 3,
+          "disposed": false,
+          "paused": false,
+          "directive": "free_day",
+          "writable": true,
+          "ownedCharacterIds": [
+            "room-character-brook"
+          ],
+          "characters": {
+            "brook": {
+              "key": "brook",
+              "itemId": "room-character-brook",
+              "state": "Work",
+              "needs": {
+                "energy": 79.99805149999997,
+                "hunger": 25.002922749999996,
+                "mood": 75.00216499999999,
+                "social": 74.998701,
+                "workMotivation": 69.96752500000001
+              },
+              "memories": [],
+              "nextAt": 1790488122598,
+              "taps": [],
+              "taskToken": "life-1",
+              "lastWorkAt": 1790488101704,
+              "missingClip": ""
+            }
+          },
+          "pairs": {},
+          "jobs": [
+            {
+              "jobId": "contact-job",
+              "itemId": "room-character-brook",
+              "stationId": "room-furniture-piano",
+              "status": "active",
+              "durationMs": 60000,
+              "roomRevision": 1,
+              "reservedAt": "2026-09-27T05:48:21.978Z",
+              "reward": 10,
+              "activatedAt": "2026-09-27T05:48:28.360Z",
+              "readyAt": "2026-09-27T05:49:28.360Z"
+            }
+          ],
+          "pendingArrivals": [],
+          "tasks": [
+            {
+              "key": "brook",
+              "token": "life-1",
+              "state": "Work",
+              "phase": "performing",
+              "goal": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-piano",
+              "jobId": "contact-job",
+              "clip": "work",
+              "resultError": ""
+            }
+          ],
+          "foreground": null,
+          "reservations": [
+            {
+              "key": "brook",
+              "cell": {
+                "col": 7,
+                "row": 4
+              },
+              "stationId": "room-furniture-piano",
+              "slotId": "single",
+              "token": "life-1"
+            }
+          ],
+          "recentEvents": [],
+          "nextRareAt": 1790488667157,
+          "nextForegroundAt": 1790488113190,
+          "offlineSummary": null
+        },
+        "walkers": [
+          {
+            "key": "brook",
+            "cell": {
+              "col": 7,
+              "row": 4
+            },
+            "x": 456,
+            "y": 393.357109375,
+            "mode": "life-act",
+            "phase": 0.30956593683410916,
+            "direction": "north",
+            "dock": {
+              "x": 456,
+              "y": 393.357109375,
+              "z": 402,
+              "side": "north"
+            },
+            "ready": [
+              "east",
+              "west",
+              "north",
+              "south"
+            ],
+            "route": []
+          }
+        ]
+      },
+      "calls": [
+        {
+          "type": "work.reserve",
+          "payload": {
+            "itemId": "room-character-brook",
+            "stationId": "room-furniture-piano",
+            "roomRevision": 1
+          },
+          "at": 1790488101978
+        },
+        {
+          "type": "work.activate",
+          "payload": {
+            "jobId": "contact-job"
+          },
+          "at": 1790488108360
+        }
+      ]
+    }
+  ]
+}

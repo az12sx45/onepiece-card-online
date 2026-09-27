@@ -1,0 +1,739 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "name": "ten static characters keep canonical 1x1 footprints and valid depth",
+      "pass": true
+    },
+    {
+      "name": "static characters uniformly use 1.50x body scale at each floor depth",
+      "pass": true
+    },
+    {
+      "name": "all static portrait ground roots align to the same shadow anchor",
+      "pass": true,
+      "detail": [
+        {
+          "key": "luffy",
+          "footDelta": -0.03039980175776691,
+          "shadowDelta": -0.008717062499954409
+        },
+        {
+          "key": "zoro",
+          "footDelta": -0.03755131249999977,
+          "shadowDelta": -0.007277874999999767
+        },
+        {
+          "key": "sanji",
+          "footDelta": -0.03755131249999977,
+          "shadowDelta": -0.007277874999999767
+        },
+        {
+          "key": "chopper",
+          "footDelta": -0.02539308251971306,
+          "shadowDelta": -0.005365921875181812
+        },
+        {
+          "key": "franky",
+          "footDelta": -0.04217012109393181,
+          "shadowDelta": -0.005365921875181812
+        },
+        {
+          "key": "brook",
+          "footDelta": -0.04587459082040368,
+          "shadowDelta": -0.013815875000091182
+        },
+        {
+          "key": "jinbe",
+          "footDelta": -0.04695033544930993,
+          "shadowDelta": -0.013815875000091182
+        },
+        {
+          "key": "nami",
+          "footDelta": -0.03483708447265599,
+          "shadowDelta": -0.010629015624999738
+        },
+        {
+          "key": "robin",
+          "footDelta": -0.03550084179687474,
+          "shadowDelta": -0.010629015624999738
+        },
+        {
+          "key": "usopp",
+          "footDelta": -0.03039980175776691,
+          "shadowDelta": -0.008717062499954409
+        }
+      ]
+    },
+    {
+      "name": "visible character alpha stays within stage at both front corners and rear row",
+      "pass": true
+    },
+    {
+      "name": "movable furniture keeps a uniform 1.50x canvas scale",
+      "pass": true
+    },
+    {
+      "name": "furniture foot roots and shared depth sorting remain aligned",
+      "pass": true
+    },
+    {
+      "name": "enlarged edge furniture alpha stays within the stage",
+      "pass": true
+    },
+    {
+      "name": "reduced-motion view creates no walkers or save mutation",
+      "pass": true
+    },
+    {
+      "name": "editor keeps world scales, cell footprints and feet within 0.001px of static view",
+      "pass": true
+    },
+    {
+      "name": "editor retains all fourteen original non-overlapping grid footprints",
+      "pass": true
+    },
+    {
+      "name": "cancel preserves original serialized room coordinates and IDs",
+      "pass": true
+    },
+    {
+      "name": "no uncaught JavaScript errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "scope": "Actual Chromium editor and reduced-motion DOM geometry, real immutable artwork, isolated IPC profile. Approximate door measurement is visual source measurement; no real account/save/deployment acceptance.",
+  "reduced": {
+    "characters": [
+      {
+        "key": "luffy",
+        "cell": [
+          8,
+          0
+        ],
+        "footprint": "1x1",
+        "scale": 1.0706775700934579,
+        "bodyScale": 1.5,
+        "depth": 0.76,
+        "footDelta": -0.03039980175776691,
+        "shadowDelta": -0.008717062499954409,
+        "bbox": {
+          "left": 483.94245393356823,
+          "right": 518.069355635049,
+          "top": 218.87024384919815,
+          "bottom": 297.5628642432008
+        },
+        "z": 308,
+        "y": 298.00008,
+        "metaScale": 1
+      },
+      {
+        "key": "zoro",
+        "cell": [
+          0,
+          7
+        ],
+        "footprint": "1x1",
+        "scale": 1.4999999999999998,
+        "bodyScale": 1.5,
+        "depth": 1.07,
+        "footDelta": -0.03755131249999977,
+        "shadowDelta": -0.007277874999999767,
+        "bbox": {
+          "left": 28.114511862445234,
+          "right": 80.98805488964206,
+          "top": 406.26022980904355,
+          "bottom": 514.2572538645945
+        },
+        "z": 525,
+        "y": 515.00016,
+        "metaScale": 1
+      },
+      {
+        "key": "sanji",
+        "cell": [
+          15,
+          7
+        ],
+        "footprint": "1x1",
+        "scale": 1.4999999999999998,
+        "bodyScale": 1.5,
+        "depth": 1.07,
+        "footDelta": -0.03755131249999977,
+        "shadowDelta": -0.007277874999999767,
+        "bbox": {
+          "left": 882.3736256923204,
+          "right": 926.8099012151773,
+          "top": 404.57277630817555,
+          "bottom": 514.2572538645945
+        },
+        "z": 525,
+        "y": 515.00016,
+        "metaScale": 1
+      },
+      {
+        "key": "chopper",
+        "cell": [
+          3,
+          5
+        ],
+        "footprint": "1x1",
+        "scale": 0.9916822429906541,
+        "bodyScale": 1.08,
+        "depth": 0.98,
+        "footDelta": -0.02539308251971306,
+        "shadowDelta": -0.005365921875181812,
+        "bbox": {
+          "left": 216.61177374168182,
+          "right": 273.1360976313859,
+          "top": 379.4664281110502,
+          "bottom": 452.353056284616
+        },
+        "z": 463,
+        "y": 453.0000600000001,
+        "metaScale": 0.72
+      },
+      {
+        "key": "franky",
+        "cell": [
+          13,
+          5
+        ],
+        "footprint": "1x1",
+        "scale": 1.8180841121495326,
+        "bodyScale": 1.98,
+        "depth": 0.98,
+        "footDelta": -0.04217012109393181,
+        "shadowDelta": -0.005365921875181812,
+        "bbox": {
+          "left": 716.9199717646937,
+          "right": 815.0938216861618,
+          "top": 339.1662221263536,
+          "bottom": 452.3388546747127
+        },
+        "z": 463,
+        "y": 453.0000600000001,
+        "metaScale": 1.32
+      },
+      {
+        "key": "brook",
+        "cell": [
+          6,
+          6
+        ],
+        "footprint": "1x1",
+        "scale": 1.5825350467289718,
+        "bodyScale": 1.6500000000000001,
+        "depth": 1.03,
+        "footDelta": -0.04587459082040368,
+        "shadowDelta": -0.013815875000091182,
+        "bbox": {
+          "left": 369.94782409895015,
+          "right": 426.91751441473093,
+          "top": 367.5730104991165,
+          "bottom": 483.8861282271689
+        },
+        "z": 494,
+        "y": 483.99984,
+        "metaScale": 1.1
+      },
+      {
+        "key": "jinbe",
+        "cell": [
+          9,
+          6
+        ],
+        "footprint": "1x1",
+        "scale": 1.640081775700934,
+        "bodyScale": 1.71,
+        "depth": 1.03,
+        "footDelta": -0.04695033544930993,
+        "shadowDelta": -0.013815875000091182,
+        "bbox": {
+          "left": 510.5079858626493,
+          "right": 610.140219303146,
+          "top": 362.7490811577767,
+          "bottom": 483.2917833450442
+        },
+        "z": 494,
+        "y": 483.99984,
+        "metaScale": 1.14
+      },
+      {
+        "key": "nami",
+        "cell": [
+          3,
+          2
+        ],
+        "footprint": "1x1",
+        "scale": 1.1933411214953271,
+        "bodyScale": 1.5,
+        "depth": 0.85,
+        "footDelta": -0.03483708447265599,
+        "shadowDelta": -0.010629015624999738,
+        "bbox": {
+          "left": 256.5573984155421,
+          "right": 291.0141725075819,
+          "top": 270.4229735823577,
+          "bottom": 359.4735975345127
+        },
+        "z": 370,
+        "y": 360.00018,
+        "metaScale": 1
+      },
+      {
+        "key": "robin",
+        "cell": [
+          12,
+          2
+        ],
+        "footprint": "1x1",
+        "scale": 1.2291413551401869,
+        "bodyScale": 1.545,
+        "depth": 0.85,
+        "footDelta": -0.03550084179687474,
+        "shadowDelta": -0.010629015624999738,
+        "bbox": {
+          "left": 667.9881181801272,
+          "right": 704.8613486298256,
+          "top": 268.6727056876188,
+          "bottom": 359.93395105062206
+        },
+        "z": 370,
+        "y": 360.00018,
+        "metaScale": 1.03
+      },
+      {
+        "key": "usopp",
+        "cell": [
+          10,
+          0
+        ],
+        "footprint": "1x1",
+        "scale": 1.0706775700934579,
+        "bodyScale": 1.5,
+        "depth": 0.76,
+        "footDelta": -0.03039980175776691,
+        "shadowDelta": -0.008717062499954409,
+        "bbox": {
+          "left": 564.3790892596046,
+          "right": 604.5283853789938,
+          "top": 218.06725792681036,
+          "bottom": 297.5628642432008
+        },
+        "z": 308,
+        "y": 298.00008,
+        "metaScale": 1
+      }
+    ],
+    "furniture": [
+      {
+        "key": "helm",
+        "cell": [
+          0,
+          0
+        ],
+        "footprint": "2x2",
+        "width": 117,
+        "size": 0.7546728971962616,
+        "footDelta": -0.0015801625976337164,
+        "z": 339,
+        "y": 328.99986,
+        "bbox": {
+          "left": 138.795139678226,
+          "right": 208.4594454106648,
+          "top": 245.7748111618583,
+          "bottom": 327.8544896849425
+        }
+      },
+      {
+        "key": "map-table",
+        "cell": [
+          6,
+          2
+        ],
+        "footprint": "3x2",
+        "width": 108,
+        "size": 0.836448598130841,
+        "footDelta": -0.0035035598143622337,
+        "z": 401,
+        "y": 390.99996,
+        "bbox": {
+          "left": 415.29797090489035,
+          "right": 496.69012531731346,
+          "top": 310.71160382610356,
+          "bottom": 390.4570961550384
+        }
+      },
+      {
+        "key": "tangerine-tree",
+        "cell": [
+          14,
+          0
+        ],
+        "footprint": "2x2",
+        "width": 156,
+        "size": 0.7546728971962616,
+        "footDelta": -0.0015362935790790289,
+        "z": 339,
+        "y": 328.99986,
+        "bbox": {
+          "left": 739.3391980901773,
+          "right": 832.5368099292008,
+          "top": 218.79186940072952,
+          "bottom": 328.23770106030935
+        }
+      },
+      {
+        "key": "piano",
+        "cell": [
+          0,
+          4
+        ],
+        "footprint": "3x2",
+        "width": 120.375,
+        "size": 0.9182242990654205,
+        "footDelta": -0.005369736572447437,
+        "z": 463,
+        "y": 453.0000600000001,
+        "bbox": {
+          "left": 90.0002542921282,
+          "right": 190.74373182013102,
+          "top": 372.3509008561007,
+          "bottom": 451.5064903423886
+        }
+      }
+    ],
+    "walkers": 0,
+    "sourceUnchanged": true
+  },
+  "editor": {
+    "characters": [
+      {
+        "key": "luffy",
+        "cell": [
+          8,
+          0
+        ],
+        "footprint": "1x1",
+        "scale": 1.0706775700934579,
+        "bodyScale": 1.5,
+        "depth": 0.76,
+        "footDelta": -0.03039980175776691,
+        "shadowDelta": -0.008717062499954409,
+        "bbox": {
+          "left": 483.94245393356823,
+          "right": 518.069355635049,
+          "top": 218.87024384919815,
+          "bottom": 297.5628642432008
+        },
+        "z": 308,
+        "y": 298.00008,
+        "metaScale": 1
+      },
+      {
+        "key": "zoro",
+        "cell": [
+          0,
+          7
+        ],
+        "footprint": "1x1",
+        "scale": 1.4999999999999998,
+        "bodyScale": 1.5,
+        "depth": 1.07,
+        "footDelta": -0.03761234765624977,
+        "shadowDelta": -0.007277874999999767,
+        "bbox": {
+          "left": 28.114511862445234,
+          "right": 80.98805488964206,
+          "top": 406.2601781433413,
+          "bottom": 514.2572021988923
+        },
+        "z": 525,
+        "y": 515.00016,
+        "metaScale": 1
+      },
+      {
+        "key": "sanji",
+        "cell": [
+          15,
+          7
+        ],
+        "footprint": "1x1",
+        "scale": 1.4999999999999998,
+        "bodyScale": 1.5,
+        "depth": 1.07,
+        "footDelta": -0.03761234765624977,
+        "shadowDelta": -0.007277874999999767,
+        "bbox": {
+          "left": 882.3736256923204,
+          "right": 926.8099012151773,
+          "top": 404.5727246424733,
+          "bottom": 514.2572021988923
+        },
+        "z": 525,
+        "y": 515.00016,
+        "metaScale": 1
+      },
+      {
+        "key": "chopper",
+        "cell": [
+          3,
+          5
+        ],
+        "footprint": "1x1",
+        "scale": 0.9916822429906541,
+        "bodyScale": 1.08,
+        "depth": 0.98,
+        "footDelta": -0.025454117675849375,
+        "shadowDelta": -0.005365921875068125,
+        "bbox": {
+          "left": 216.61177374168182,
+          "right": 273.1360976313859,
+          "top": 379.46637644534803,
+          "bottom": 452.35300461891376
+        },
+        "z": 463,
+        "y": 453.0000600000001,
+        "metaScale": 0.72
+      },
+      {
+        "key": "franky",
+        "cell": [
+          13,
+          5
+        ],
+        "footprint": "1x1",
+        "scale": 1.8180841121495326,
+        "bodyScale": 1.98,
+        "depth": 0.98,
+        "footDelta": -0.042170121093818125,
+        "shadowDelta": -0.005365921875068125,
+        "bbox": {
+          "left": 716.9199717646937,
+          "right": 815.0938216861618,
+          "top": 339.1662221263536,
+          "bottom": 452.3388546747127
+        },
+        "z": 463,
+        "y": 453.0000600000001,
+        "metaScale": 1.32
+      },
+      {
+        "key": "brook",
+        "cell": [
+          6,
+          6
+        ],
+        "footprint": "1x1",
+        "scale": 1.5825350467289718,
+        "bodyScale": 1.6500000000000001,
+        "depth": 1.03,
+        "footDelta": -0.045813555664039995,
+        "shadowDelta": -0.013815874999977495,
+        "bbox": {
+          "left": 369.94782409895015,
+          "right": 426.91751441473093,
+          "top": 367.57306216481874,
+          "bottom": 483.88617989287116
+        },
+        "z": 494,
+        "y": 483.99984,
+        "metaScale": 1.1
+      },
+      {
+        "key": "jinbe",
+        "cell": [
+          9,
+          6
+        ],
+        "footprint": "1x1",
+        "scale": 1.640081775700934,
+        "bodyScale": 1.71,
+        "depth": 1.03,
+        "footDelta": -0.046950335449196245,
+        "shadowDelta": -0.013815874999977495,
+        "bbox": {
+          "left": 510.5079858626493,
+          "right": 610.140219303146,
+          "top": 362.7490811577767,
+          "bottom": 483.2917833450442
+        },
+        "z": 494,
+        "y": 483.99984,
+        "metaScale": 1.14
+      },
+      {
+        "key": "nami",
+        "cell": [
+          3,
+          2
+        ],
+        "footprint": "1x1",
+        "scale": 1.1933411214953271,
+        "bodyScale": 1.5,
+        "depth": 0.85,
+        "footDelta": -0.03477604931640599,
+        "shadowDelta": -0.010629015624999738,
+        "bbox": {
+          "left": 256.5573984155421,
+          "right": 291.0141725075819,
+          "top": 270.42302524805996,
+          "bottom": 359.47364920021494
+        },
+        "z": 370,
+        "y": 360.00018,
+        "metaScale": 1
+      },
+      {
+        "key": "robin",
+        "cell": [
+          12,
+          2
+        ],
+        "footprint": "1x1",
+        "scale": 1.2291413551401869,
+        "bodyScale": 1.545,
+        "depth": 0.85,
+        "footDelta": -0.03550084179687474,
+        "shadowDelta": -0.010629015624999738,
+        "bbox": {
+          "left": 667.9881181801272,
+          "right": 704.8613486298256,
+          "top": 268.6727056876188,
+          "bottom": 359.93395105062206
+        },
+        "z": 370,
+        "y": 360.00018,
+        "metaScale": 1.03
+      },
+      {
+        "key": "usopp",
+        "cell": [
+          10,
+          0
+        ],
+        "footprint": "1x1",
+        "scale": 1.0706775700934579,
+        "bodyScale": 1.5,
+        "depth": 0.76,
+        "footDelta": -0.03039980175776691,
+        "shadowDelta": -0.008717062499954409,
+        "bbox": {
+          "left": 564.3790892596046,
+          "right": 604.5283853789938,
+          "top": 218.06725792681036,
+          "bottom": 297.5628642432008
+        },
+        "z": 308,
+        "y": 298.00008,
+        "metaScale": 1
+      }
+    ],
+    "furniture": [
+      {
+        "key": "helm",
+        "cell": [
+          0,
+          0
+        ],
+        "footprint": "2x2",
+        "width": 117,
+        "size": 0.7546728971962616,
+        "footDelta": -0.0015801625976337164,
+        "z": 339,
+        "y": 328.99986,
+        "bbox": {
+          "left": 138.795139678226,
+          "right": 208.4594454106648,
+          "top": 245.7748111618583,
+          "bottom": 327.8544896849425
+        }
+      },
+      {
+        "key": "map-table",
+        "cell": [
+          6,
+          2
+        ],
+        "footprint": "3x2",
+        "width": 108,
+        "size": 0.836448598130841,
+        "footDelta": -0.0035035598144759206,
+        "z": 401,
+        "y": 390.99996,
+        "bbox": {
+          "left": 415.29797090489035,
+          "right": 496.69012531731346,
+          "top": 310.71160382610356,
+          "bottom": 390.4570961550384
+        }
+      },
+      {
+        "key": "tangerine-tree",
+        "cell": [
+          14,
+          0
+        ],
+        "footprint": "2x2",
+        "width": 156,
+        "size": 0.7546728971962616,
+        "footDelta": -0.0015362935790790289,
+        "z": 339,
+        "y": 328.99986,
+        "bbox": {
+          "left": 739.3391980901773,
+          "right": 832.5368099292008,
+          "top": 218.79186940072952,
+          "bottom": 328.23770106030935
+        }
+      },
+      {
+        "key": "piano",
+        "cell": [
+          0,
+          4
+        ],
+        "footprint": "3x2",
+        "width": 120.375,
+        "size": 0.9182242990654205,
+        "footDelta": -0.00536973657233375,
+        "z": 463,
+        "y": 453.0000600000001,
+        "bbox": {
+          "left": 90.0002542921282,
+          "right": 190.74373182013102,
+          "top": 372.3509008561007,
+          "bottom": 451.5064903423886
+        }
+      }
+    ],
+    "walkers": 0,
+    "sourceUnchanged": true
+  },
+  "measurement": {
+    "multiplier": 1.5,
+    "doorSourceApprox": {
+      "width": 1600,
+      "height": 900,
+      "top": 292,
+      "bottom": 441
+    },
+    "doorStageHeight": 89.4,
+    "luffyNeutralAlphaHeight": 98,
+    "frontVisibleHeightBefore": 73.5,
+    "frontVisibleHeightAfter": 110.25,
+    "rearFirstRowVisibleHeightBefore": 52.46320093457943,
+    "rearFirstRowVisibleHeightAfter": 78.69480140186914
+  },
+  "sceneScreenshots": [
+    "C:\\Codex_Candidates\\launcher-room-popover-qa-1.2.2\\scale-scene-crew-cabin-desktop.png",
+    "C:\\Codex_Candidates\\launcher-room-popover-qa-1.2.2\\scale-scene-sunny-deck-desktop.png",
+    "C:\\Codex_Candidates\\launcher-room-popover-qa-1.2.2\\scale-scene-sunny-kitchen-desktop.png",
+    "C:\\Codex_Candidates\\launcher-room-popover-qa-1.2.2\\scale-scene-sunny-library-desktop.png"
+  ],
+  "roomSourceSha256": "2437af83c0546bba90e5c3d6f81d1b8535fdba4121bfbd679b0491e51d25fd27",
+  "generatedAt": "2026-09-27T05:43:59.139Z"
+}

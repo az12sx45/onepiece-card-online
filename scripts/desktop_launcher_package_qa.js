@@ -519,7 +519,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.2.1', 'Desktop launcher version must be 1.2.1 for the verified daily-directive correction.');
+  assert(packageJson.version === '1.2.2', 'Desktop launcher version must be 1.2.2 for the reviewed room presentation release.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -641,12 +641,13 @@ function validateSourcePackage() {
   const scaleReview = readJson(path.join(ROOT, scaleReviewPath), 'room scale visual review');
   assert(scaleReview.status === 'PASS_WITH_NOTES' && scaleReview.blockingIssues.length === 0, 'Room scale visual review has unresolved issues.');
   assert(scaleReview.runtimeHashNormalization === 'CRLF to LF only; all other bytes remain significant', 'Unexpected room review hash normalization.');
-  const lifeStatus = require('../tools/launcher-room/life-v1/validate_release').validate(ROOT);
+  const presentationStatus = require('../tools/launcher-room/presentation-v122/validate_release').validate(ROOT);
+  const lifeStatus = presentationStatus.life;
   for (const [file, digest] of Object.entries(scaleReview.runtime)) {
     const reviewedBytes = fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n');
-    // The 1.1.16 evidence remains immutable. A changed renderer needs the newer,
-    // independently hash-bound 1.2.0 room review rather than rewriting history.
-    assert(crypto.createHash('sha256').update(reviewedBytes).digest('hex') === (lifeStatus.review.runtime[file] || digest), `Room runtime differs from reviewed source: ${file}`);
+    // All historical art reviews remain immutable. The presentation gate has
+    // validated their original runtime and binds this release's current UI.
+    assert(crypto.createHash('sha256').update(reviewedBytes).digest('hex') === (presentationStatus.review.runtime[file] || digest), `Room runtime differs from reviewed source: ${file}`);
   }
   const roomMotion = { items: [...roomBody.items, ...roomGait.items], portraits: roomBody.portraits };
   assert(roomBody.version === '1.1.15' && roomGait.version === '1.1.15' &&
@@ -785,7 +786,7 @@ function validateSourcePackage() {
   }
 
   return { packageJson, iconSizes, sidebar, header, cursorDefault, cursorPointer, cursorPressed,
-    catalog, catalogV3, roomMotionStatus, zoroOverlayStatus: zoroOverlay.status };
+    catalog, catalogV3, roomMotionStatus, presentationStatus, zoroOverlayStatus: zoroOverlay.status };
 }
 
 function collectExpectedLauncherAssets() {
@@ -858,7 +859,7 @@ function validateAsar(asarPath) {
       `Packaged application source differs: ${entry}`);
   }
   const packedPackage = JSON.parse(asar.extractFile(asarPath, 'package.json').toString('utf8'));
-  assert(packedPackage.version === '1.2.1' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
+  assert(packedPackage.version === '1.2.2' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
   for (const entry of entries) {
     const lower = entry.toLowerCase();
     assert(!lower.startsWith('public/'), `app.asar contains the public game tree: ${entry}`);
@@ -981,6 +982,8 @@ function main() {
       'Release package requires all eighty complete-body atlases and explicit visual review evidence for every direction.');
     assert(source.zoroOverlayStatus === 'verified',
       'Release package requires a verified Zoro art overlay; candidate art cannot be shipped.');
+    assert(source.presentationStatus.complete && source.presentationStatus.review.releaseVersion === '1.2.2',
+      'Release package requires historical art provenance plus the exact current 1.2.2 visual review.');
   }
   const parts = [
     'DESKTOP_LAUNCHER_PACKAGE_QA=PASS',
@@ -993,6 +996,9 @@ function main() {
     `roomMotionAssets=${source.roomMotionStatus.assets}`,
     `roomPortraits=${source.roomMotionStatus.portraits}`,
     `roomArtReviewed=${source.roomMotionStatus.allSelectedArtReviewed}`,
+    `presentationVersion=${source.presentationStatus.review.releaseVersion}`,
+    `presentationScenarios=${source.presentationStatus.scenarios}`,
+    `lifeHistoricalRuntime=${source.presentationStatus.historicalBaseline}`,
     `zoroArt=${source.zoroOverlayStatus}`
   ];
   if (options.winUnpacked) {
