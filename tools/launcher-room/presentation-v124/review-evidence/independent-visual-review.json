@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-27T11:14:45.469502+00:00",
+  "reviewer": "Codex independent visual subagent radial_icons_b",
+  "releaseVersion": "1.2.4",
+  "modelReview": true,
+  "humanAcceptance": false,
+  "overall": "PASS",
+  "mustFix": [],
+  "method": "Opened and visually inspected all ten current v124 screenshots through view_image. Copied the actual interaction report and selected-frame image without modification, copied the HD comparison without modification, and freshly rendered the icon contact from current production CSS. SHA256 values bind review to each inspected image.",
+  "limitations": [
+    "Static model inspection is not human or physical-device acceptance.",
+    "No claim of walking animation timing acceptance from static comparison; automated motion reports provide separate technical evidence.",
+    "Temporary greeting bubble overlap at 320px is recorded as a nonblocking visual observation."
+  ],
+  "images": [
+    {
+      "id": "desktop-owner-radial",
+      "file": "radial-desktop.png",
+      "sha256": "e56efdb4f75575bc6d42f5d066a19df3392b2cfaf1f1969a0480e58892fce437",
+      "pixels": [
+        1366,
+        1050
+      ],
+      "result": "PASS",
+      "notes": [
+        "Five separate translucent circles form the right-side arc; all line glyphs remain upright and visible.",
+        "Selected Luffy is front-facing with an intact whole-body greeting pose. Nearby Zoro overlaps the inner name area, but the action circles remain clear."
+      ]
+    },
+    {
+      "id": "mobile-owner-radial",
+      "file": "radial-mobile.png",
+      "sha256": "14be6b478a9d4cd1283eb10e1e62afbc573ac56f2d0cbfe1d3107530f7143872",
+      "pixels": [
+        390,
+        844
+      ],
+      "result": "PASS",
+      "notes": [
+        "All five circles remain inside the 390px viewport; selected character faces forward.",
+        "The lower circle extends over the music-card area; close circle overlaps empty right side of the greeting bubble, with no control clipped."
+      ]
+    },
+    {
+      "id": "narrow-owner-radial",
+      "file": "radial-narrow.png",
+      "sha256": "2dd89ef6fcba9cf8439ef7b1dfec13a5b7df687f2b00c6bdfc194d15b3e5c8d9",
+      "pixels": [
+        320,
+        568
+      ],
+      "result": "PASS",
+      "notes": [
+        "At 320px the arc mirrors left and all five action controls remain visible and uncropped.",
+        "Nonblocking observation: the temporary greeting bubble overlaps the upper details circle and its opening glyph is partly obscured; the action caption and controls remain legible."
+      ]
+    },
+    {
+      "id": "short-owner-radial",
+      "file": "radial-short.png",
+      "sha256": "a7bc79f0cd93763476a0e1135ac68951053dbdb631c070f076a01160c4189cc8",
+      "pixels": [
+        900,
+        300
+      ],
+      "result": "PASS",
+      "notes": [
+        "All five circles and close control remain visible in the short viewport, with top circles overlaying the header and lower circle near the bottom edge.",
+        "Selected Luffy is a complete front-facing figure with feet on the visible floor; no body part or action glyph is clipped."
+      ]
+    },
+    {
+      "id": "desktop-friend-readonly-radial",
+      "file": "radial-friend.png",
+      "sha256": "f7deced2c93be2fc47d6861f9b3003234614e208ccc3bdb635d6e2705b816b03",
+      "pixels": [
+        1366,
+        1050
+      ],
+      "result": "PASS",
+      "notes": [
+        "Friend view displays only the information action beside the front-facing character.",
+        "Description, needs chips and return button fit in the separate translucent details sheet; no owner work/gift/training action appears."
+      ]
+    },
+    {
+      "id": "desktop-work-sheet",
+      "file": "radial-work.png",
+      "sha256": "7cd983c9778552cb5ea410683f24219b08b64deefbb1ea47bfed10b749365558",
+      "pixels": [
+        1366,
+        1050
+      ],
+      "result": "PASS",
+      "notes": [
+        "Selected character remains front-facing while the work briefcase glyph is highlighted.",
+        "Three work destinations and return control are legible in the separate sheet; no button or text overflow."
+      ]
+    },
+    {
+      "id": "desktop-details-sheet",
+      "file": "radial-details.png",
+      "sha256": "28e93bc95d2ee0ff53281ac6eec2796670adc25d8a66bb81d8b42e077528821a",
+      "pixels": [
+        1366,
+        1050
+      ],
+      "result": "PASS",
+      "notes": [
+        "Selected information glyph and translucent details sheet are visually distinct.",
+        "The complete front-facing character, description and status chips remain readable; no sheet or circle clipping."
+      ]
+    },
+    {
+      "id": "inline-icons-contact-sheet",
+      "file": "icons-contact.png",
+      "sha256": "341c3710d22fc56597647fc7baddba7d0a632900d2bbc0faa17d756b7fa0af5e",
+      "pixels": [
+        960,
+        360
+      ],
+      "result": "PASS",
+      "notes": [
+        "Freshly rendered from current production CSS: six original line icons have consistent thin strokes and round-button padding on both dark teal and wood colors.",
+        "Warm ivory/gold glyphs and muted sea-teal transparency fit the launcher palette; selected state has a clear brighter rim."
+      ]
+    },
+    {
+      "id": "desktop-selected-front-facing",
+      "file": "selected-front-facing.png",
+      "sha256": "e326c34d7fb1ea25feec6ecb36a7830bf96dc6bb997a98ca9768241d01c754e7",
+      "pixels": [
+        1366,
+        1050
+      ],
+      "result": "PASS",
+      "notes": [
+        "Whole Luffy figure faces the viewer in a settled standing pose with coherent head, torso, limbs and both feet; no detached component or walking step is visible.",
+        "Right-side semicircle and inner information text remain readable. Stationary duration is established separately by INTERACTION_QA.json, not by this single image."
+      ]
+    },
+    {
+      "id": "hd-walk-contact-sheet",
+      "file": "hd-walk-contact.png",
+      "sha256": "48571a922f9b5419e61080f32a78b3f806f008ef01af62904426d910eeebfbe7",
+      "pixels": [
+        2320,
+        5566
+      ],
+      "result": "PASS",
+      "notes": [
+        "Inspected all ten crew rows and four before/after columns. Larger-source idle and walk samples have substantially cleaner outlines and recognizable facial and costume details than the blocky 128px samples.",
+        "Whole-body proportions, costumes, head-to-body continuity and walking-pose silhouettes remain consistent between before/after pairs; no detached heads or missing extremities observed. This static contact sheet does not establish subjective animation timing quality."
+      ]
+    }
+  ]
+}

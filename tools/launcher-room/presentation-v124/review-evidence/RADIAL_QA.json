@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "kind": "release-source-actual-chromium-isolated-ipc",
+  "iconMode": "inline-svg-restored-user-request",
+  "productionDeployed": false,
+  "recordedAt": "2026-09-27T11:09:47.937Z",
+  "checks": [
+    {
+      "name": "five separate translucent circles; no rectangular backplate",
+      "status": "PASS"
+    },
+    {
+      "name": "mouse wheel traverses every action and wraps without page scroll or command",
+      "status": "PASS"
+    },
+    {
+      "name": "line-mode wheel and keyboard activate details; sheet scroll leaves arc unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "direct icon selection opens work choices without assigning work",
+      "status": "PASS"
+    },
+    {
+      "name": "gift requires two clicks; close resets confirmation; exactly one five-coin charge",
+      "status": "PASS"
+    },
+    {
+      "name": "drag rotates without accidental action; release outside clears drag",
+      "status": "PASS"
+    },
+    {
+      "name": "navigation/account/edit mode close wheel and reset state",
+      "status": "PASS"
+    },
+    {
+      "name": "work button assigns the selected station through the existing command path",
+      "status": "PASS"
+    },
+    {
+      "name": "friend room exposes details only and no mutating commands",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile viewport keeps circles and details within screen",
+      "status": "PASS"
+    },
+    {
+      "name": "narrow viewport keeps circles and details within screen",
+      "status": "PASS"
+    },
+    {
+      "name": "short viewport keeps circles and details within screen",
+      "status": "PASS"
+    },
+    {
+      "name": "right-edge character mirrors semicircle and reduced motion switches instantly",
+      "status": "PASS"
+    }
+  ],
+  "sourceSha256": {
+    "launcher-room.js": "240feace16bbfc08d2866b8ba5ba25f2044b060abce46ae46a5532b16de56662",
+    "launcher-room.css": "3dc6ac0750ee8afcba5c202516e81d180fec5472795a6679ae8887087f754c16",
+    "launcher-life-room.js": "a2f76a53ee05884242e39789bfe13bb9bda969efb15a01c1885d34f97d205b93",
+    "launcher.html": "e50a38faa46531cf6f25e7d855f304006fcb2f2a62bb4c48535f946d0ed3ac7b"
+  },
+  "sourceNormalizedSha256": {
+    "launcher-room.js": "d9de9680b484989e48ff5c72591a49cee98be5dbfd5dd07a79835176eeb8edd3",
+    "launcher-room.css": "32b67efc5bde4018a3ca66883f5afa0bed90eb47a09b27bcb0b54c912b3ec610",
+    "launcher-life-room.js": "af6208f636984ab12d3fbdc760e336807526e9d0627fc3c469e568197bac2818",
+    "launcher.html": "19a8df25fa797a3c84cea5f0e42b4f8d7e9907cc7938057e8ad5408ffffa461b"
+  },
+  "sourceHashNormalization": "CRLF to LF only; all other bytes remain significant",
+  "limitations": [
+    "IPC uses isolated fixtures; no real purchases or production data",
+    "Synthetic touch cancellation; no physical touch-device acceptance",
+    "Browser report alone does not certify installer or public deployment"
+  ]
+}

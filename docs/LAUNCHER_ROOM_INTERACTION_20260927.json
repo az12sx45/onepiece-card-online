@@ -1,0 +1,316 @@
+{
+  "schema": "launcher-room-interaction/1",
+  "releaseVersion": "1.2.4",
+  "artGeneration": "1.2.0",
+  "historicalBaseline": "b9210988b1b6fd6054ce8dfe65b6ddbd9b0f75ea",
+  "presentationBaseline": "caf02b4f2e768ebc4c0eefb9f393fff1b08ee8c9",
+  "radialBaseline": "45167a912b0763b134972bade17e99919cba6c6c",
+  "status": "PASS_WITH_NOTES",
+  "blockingIssues": [],
+  "method": "Opened and visually inspected all ten current v124 screenshots through view_image. Copied the actual interaction report and selected-frame image without modification, copied the HD comparison without modification, and freshly rendered the icon contact from current production CSS. SHA256 values bind review to each inspected image. Frozen review also binds the existing 13-case radial QA, five-case interaction regression and 160-case DPR1/2 HD readback report to the same current runtime content.",
+  "humanAcceptance": false,
+  "limitations": [
+    "Automated Chromium and model inspection do not establish physical-device or human fan/playtest acceptance.",
+    "Static model inspection is not human or physical-device acceptance.",
+    "No claim of walking animation timing acceptance from static comparison; automated motion reports provide separate technical evidence.",
+    "Temporary greeting bubble overlap at 320px is recorded as a nonblocking visual observation.",
+    "Real headless Chrome DPR1/2 isolated readback fixture with web security disabled for routed opui assets; this does not verify packaged protocol security. Same authored legacy versus HD frames at244 CSSpx (covers current1366px viewport,1216.6pxroom,near-frontFranky at1.5x and1.32body scale), native backing, decoded images and every frame alpha. No new artwork or human acceptance.",
+    "IPC uses isolated fixtures; no real purchases or production data",
+    "Synthetic touch cancellation; no physical touch-device acceptance",
+    "Browser report alone does not certify installer or public deployment",
+    "IPC and ownership use isolated fixtures; no production account, purchase or database touched",
+    "Playwright animation clock is deterministic; no human or physical-device acceptance",
+    "This report alone does not prove packaged installer or public deployment"
+  ],
+  "runtimeHashNormalization": "CRLF to LF only; all other bytes remain significant",
+  "runtime": {
+    "desktop/launcher-room.js": "d9de9680b484989e48ff5c72591a49cee98be5dbfd5dd07a79835176eeb8edd3",
+    "desktop/launcher-room.css": "32b67efc5bde4018a3ca66883f5afa0bed90eb47a09b27bcb0b54c912b3ec610",
+    "desktop/launcher-profile-shop.js": "9ceddcd5480eee810fb39859c2268f8a8464fd92458ed526b4a68f3f3bfc1cd8",
+    "desktop/launcher-life-room.js": "af6208f636984ab12d3fbdc760e336807526e9d0627fc3c469e568197bac2818",
+    "desktop/launcher-life.js": "f465cfaa4d1ab3397b40e915e38e4be534748973d0c9f5a63978798f919415b1",
+    "desktop/launcher-life-data.js": "a150b9f6aef8a82c4821b15a3a49b41eef4bccc11336795b2f6b25951b752410",
+    "desktop/launcher-life-actions.js": "d96db069e8d7025d3e48a9a86a00177e306b5be75dabdc0c85a6aff47a349f92",
+    "desktop/launcher-room-dialogue.js": "bc3d200914044b1ee97323302487d1a4e60b114586ba98551bed6384442d0b0a",
+    "desktop/launcher.html": "19a8df25fa797a3c84cea5f0e42b4f8d7e9907cc7938057e8ad5408ffffa461b",
+    "desktop/auth-service.js": "e06cc7121d12776f61d05966517d332d190d228d21d9bcd880113173b3172c9d",
+    "desktop/preload.js": "03668ed7e677b29e4212fb294d318937164b30be5b5621d7206e45fc1bbf2886",
+    "desktop/main.js": "c0cab6c642587a1bd9b7b628098a1637818b5e134995cfc557bceceed96cb6d7",
+    "server/launcher-life.js": "a84e2d06aa70c6ee4dba4eee7bf819d4d86fb233d0bf1b4416c7196e7d5143b0",
+    "server/launcher-life-store.js": "ca2fe36da1055fc804df2bebf6ed1dec44c8c0aee666c890c6e7d816fdfd22f6",
+    "server/launcher-profile-shop.js": "f365f2e2e3b28d82c735b33637149931dd5eb4760a91e5b6eb5095295e55452d",
+    "server/index.js": "3bc51cd3c6338a0a9d798623633796f430b6598c9de24c34e2eea1cbdb27bd64",
+    "server/desktop-distribution.js": "e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85",
+    "desktop/launcher-profile-shop.css": "7e064396e85d2750113f40dba898dc57dd83ad3aa7f77ec718e62458864045db",
+    "desktop/launcher.css": "272c9f7e809d19291c4c9a037b762cdc436515aa87a681873e66f22f3fabdbea",
+    "desktop/launcher.js": "345be37a9d953a1dea307414df27e9051938444e563b69cfc62aed5718b41172",
+    "desktop/launcher-room-motion.js": "cbf21401f6965e093f328073b9139fca5f0ddf4ba6fcf6d5b1b8c3c1e6c44205",
+    "desktop/launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d"
+  },
+  "approvedRuntimeVariants": {
+    "server/desktop-distribution.js": [
+      {
+        "normalizedSha256": "c9330072bab54d00370735b6fcc01bbcef76e101183dc42b9222e0f4d5769255",
+        "reviewedBaseNormalizedSha256": "e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85",
+        "reason": "Preserve formal Board media policy: the launcher merge adds only LAUNCHER_LIFE_GET and LAUNCHER_LIFE_COMMAND; the candidate-only three-line Board depth manifest exception is not copied into the formal authority.",
+        "evidence": {
+          "patch": {
+            "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution.js.patch",
+            "sha256": "758e224a4e496ffcacc8ed1c4250a91286cb5576dd705195a9737a43943eafce"
+          },
+          "formalReadback": {
+            "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution-readback.json",
+            "sha256": "4139001682628e684103a70c592988f62b0cf7fbb066fdd856aebaa9b3b544e9"
+          }
+        }
+      }
+    ]
+  },
+  "iconMode": "inline-svg-restored-user-request",
+  "hdArt": {
+    "path": "tools/launcher-room/hd-v4/manifest.json",
+    "sha256": "00fa5ca2b2ba149bc2cc1c05fff292e1512219eb59f1dae8171bd95ac05b7849"
+  },
+  "hdQuality": {
+    "path": "tools/launcher-room/hd-v4/review-evidence/QUALITY_QA.json",
+    "sha256": "f4c29ec56b16894435a546b119f9aac92e28a8b43d791ec8e383680032e06dab"
+  },
+  "evidence": [
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/INTERACTION_QA.json",
+      "kind": "report",
+      "sha256": "eececc45a6242a3aa720a71acc70f27bec4708a203a78864fab2d94ca717a9e6"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/RADIAL_QA.json",
+      "kind": "report",
+      "sha256": "addaac991cde86c21d0b24172feafee3ef566303ccb8e38e640b3970c8beae5f"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/hd-walk-contact.png",
+      "kind": "screenshot",
+      "sha256": "48571a922f9b5419e61080f32a78b3f806f008ef01af62904426d910eeebfbe7",
+      "pixels": [
+        2320,
+        5566
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/icons-contact.png",
+      "kind": "screenshot",
+      "sha256": "341c3710d22fc56597647fc7baddba7d0a632900d2bbc0faa17d756b7fa0af5e",
+      "pixels": [
+        960,
+        360
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/independent-visual-review.json",
+      "kind": "report",
+      "sha256": "1bfaa59ff29c7ed1bd92d07c7704c75923fec3270f8d9e5e7be247caa53e3df9"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/radial-desktop.png",
+      "kind": "screenshot",
+      "sha256": "e56efdb4f75575bc6d42f5d066a19df3392b2cfaf1f1969a0480e58892fce437",
+      "pixels": [
+        1366,
+        1050
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/radial-details.png",
+      "kind": "screenshot",
+      "sha256": "28e93bc95d2ee0ff53281ac6eec2796670adc25d8a66bb81d8b42e077528821a",
+      "pixels": [
+        1366,
+        1050
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/radial-edge.png",
+      "kind": "screenshot",
+      "sha256": "7bbb94c478cd818ec55004e2e6208dc9bdb88152ebbad5105c75d172f525685a",
+      "pixels": [
+        1366,
+        1050
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/radial-friend.png",
+      "kind": "screenshot",
+      "sha256": "f7deced2c93be2fc47d6861f9b3003234614e208ccc3bdb635d6e2705b816b03",
+      "pixels": [
+        1366,
+        1050
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/radial-mobile-details.png",
+      "kind": "screenshot",
+      "sha256": "99731a0935af890668b9f91459cb245660e98d1003814dbf60fd54c22aaee137",
+      "pixels": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/radial-mobile.png",
+      "kind": "screenshot",
+      "sha256": "14be6b478a9d4cd1283eb10e1e62afbc573ac56f2d0cbfe1d3107530f7143872",
+      "pixels": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/radial-narrow-details.png",
+      "kind": "screenshot",
+      "sha256": "7958557beb0766ea71034f7839a990bcc44b60ad8567fab87bf16138c50822bb",
+      "pixels": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/radial-narrow.png",
+      "kind": "screenshot",
+      "sha256": "2dd89ef6fcba9cf8439ef7b1dfec13a5b7df687f2b00c6bdfc194d15b3e5c8d9",
+      "pixels": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/radial-short-details.png",
+      "kind": "screenshot",
+      "sha256": "4f49f7fffad6af9d00e966743e0d67dc406921466da6bc7bf64e9f4299aba470",
+      "pixels": [
+        900,
+        300
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/radial-short.png",
+      "kind": "screenshot",
+      "sha256": "a7bc79f0cd93763476a0e1135ac68951053dbdb631c070f076a01160c4189cc8",
+      "pixels": [
+        900,
+        300
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/radial-turned.png",
+      "kind": "screenshot",
+      "sha256": "59f6846026c1d4a2de68c6b23713301609dbc31f27ef65a39453ae025536fe3a",
+      "pixels": [
+        1366,
+        1050
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/radial-work.png",
+      "kind": "screenshot",
+      "sha256": "7cd983c9778552cb5ea410683f24219b08b64deefbb1ea47bfed10b749365558",
+      "pixels": [
+        1366,
+        1050
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v124/review-evidence/selected-front-facing.png",
+      "kind": "screenshot",
+      "sha256": "e326c34d7fb1ea25feec6ecb36a7830bf96dc6bb997a98ca9768241d01c754e7",
+      "pixels": [
+        1366,
+        1050
+      ]
+    }
+  ],
+  "qaReport": "tools/launcher-room/presentation-v124/review-evidence/RADIAL_QA.json",
+  "interactionReport": "tools/launcher-room/presentation-v124/review-evidence/INTERACTION_QA.json",
+  "checks": [
+    {
+      "id": "desktop-owner-radial",
+      "status": "PASS",
+      "notes": "Five separate translucent circles form the right-side arc; all line glyphs remain upright and visible. Selected Luffy is front-facing with an intact whole-body greeting pose. Nearby Zoro overlaps the inner name area, but the action circles remain clear.",
+      "evidence": [
+        "tools/launcher-room/presentation-v124/review-evidence/radial-desktop.png"
+      ]
+    },
+    {
+      "id": "mobile-owner-radial",
+      "status": "PASS",
+      "notes": "All five circles remain inside the 390px viewport; selected character faces forward. The lower circle extends over the music-card area; close circle overlaps empty right side of the greeting bubble, with no control clipped.",
+      "evidence": [
+        "tools/launcher-room/presentation-v124/review-evidence/radial-mobile.png"
+      ]
+    },
+    {
+      "id": "narrow-owner-radial",
+      "status": "PASS",
+      "notes": "At 320px the arc mirrors left and all five action controls remain visible and uncropped. Nonblocking observation: the temporary greeting bubble overlaps the upper details circle and its opening glyph is partly obscured; the action caption and controls remain legible.",
+      "evidence": [
+        "tools/launcher-room/presentation-v124/review-evidence/radial-narrow.png"
+      ]
+    },
+    {
+      "id": "short-owner-radial",
+      "status": "PASS",
+      "notes": "All five circles and close control remain visible in the short viewport, with top circles overlaying the header and lower circle near the bottom edge. Selected Luffy is a complete front-facing figure with feet on the visible floor; no body part or action glyph is clipped.",
+      "evidence": [
+        "tools/launcher-room/presentation-v124/review-evidence/radial-short.png"
+      ]
+    },
+    {
+      "id": "desktop-friend-readonly-radial",
+      "status": "PASS",
+      "notes": "Friend view displays only the information action beside the front-facing character. Description, needs chips and return button fit in the separate translucent details sheet; no owner work/gift/training action appears.",
+      "evidence": [
+        "tools/launcher-room/presentation-v124/review-evidence/radial-friend.png"
+      ]
+    },
+    {
+      "id": "desktop-work-sheet",
+      "status": "PASS",
+      "notes": "Selected character remains front-facing while the work briefcase glyph is highlighted. Three work destinations and return control are legible in the separate sheet; no button or text overflow.",
+      "evidence": [
+        "tools/launcher-room/presentation-v124/review-evidence/radial-work.png"
+      ]
+    },
+    {
+      "id": "desktop-details-sheet",
+      "status": "PASS",
+      "notes": "Selected information glyph and translucent details sheet are visually distinct. The complete front-facing character, description and status chips remain readable; no sheet or circle clipping.",
+      "evidence": [
+        "tools/launcher-room/presentation-v124/review-evidence/radial-details.png"
+      ]
+    },
+    {
+      "id": "inline-icons-contact-sheet",
+      "status": "PASS",
+      "notes": "Freshly rendered from current production CSS: six original line icons have consistent thin strokes and round-button padding on both dark teal and wood colors. Warm ivory/gold glyphs and muted sea-teal transparency fit the launcher palette; selected state has a clear brighter rim.",
+      "evidence": [
+        "tools/launcher-room/presentation-v124/review-evidence/icons-contact.png"
+      ]
+    },
+    {
+      "id": "desktop-selected-front-facing",
+      "status": "PASS",
+      "notes": "Whole Luffy figure faces the viewer in a settled standing pose with coherent head, torso, limbs and both feet; no detached component or walking step is visible. Right-side semicircle and inner information text remain readable. Stationary duration is established separately by INTERACTION_QA.json, not by this single image.",
+      "evidence": [
+        "tools/launcher-room/presentation-v124/review-evidence/selected-front-facing.png"
+      ]
+    },
+    {
+      "id": "hd-walk-contact-sheet",
+      "status": "PASS",
+      "notes": "Inspected all ten crew rows and four before/after columns. Larger-source idle and walk samples have substantially cleaner outlines and recognizable facial and costume details than the blocky 128px samples. Whole-body proportions, costumes, head-to-body continuity and walking-pose silhouettes remain consistent between before/after pairs; no detached heads or missing extremities observed. This static contact sheet does not establish subjective animation timing quality.",
+      "evidence": [
+        "tools/launcher-room/presentation-v124/review-evidence/hd-walk-contact.png"
+      ]
+    }
+  ],
+  "recordedAt": "2026-09-27T11:18:22.693Z",
+  "independentVisualReview": "tools/launcher-room/presentation-v124/review-evidence/independent-visual-review.json"
+}

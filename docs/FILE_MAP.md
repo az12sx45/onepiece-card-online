@@ -1140,3 +1140,8 @@
 ## 2026-09-27 Launcher 1.2.3 radial icons
 
 desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、簡單inline SVG、海洋藍綠和淡金色；launcher-life-room.js：既有動作與二級內容面板。scripts/launcher_radial_fixture.js／launcher_radial_qa.js：13項Chromium隔離測試；desktop_launcher_package_qa.js：來源及封裝檢查。tools/launcher-room/presentation-v123/validate_historical_presentation.js、validate_release.js、validate_review_draft.js、validate_gate_qa.js：歷史保護及新審查閘門；render_inline_contact.js：從實際CSS產生六圖示預覽；review-evidence：最終截圖、報告。docs/LAUNCHER_ROOM_RADIAL_20260927.json：模型審查及SHA。此版沒有新增生圖PNG、opui允許項或extraResources。
+
+
+## 2026-09-27 Launcher 1.2.4 interaction fixes
+
+高清同稿 atlas：public/images/launcher_room/motion_v4、acting_v4；來源、480格原稿一致性及160組DPR品質檢查：tools/launcher-room/hd-v4。角色停留／滑鼠輪盤回歸：scripts/launcher_interaction_qa.js；新版13項輪盤回歸：scripts/launcher_radial_v124_qa.js。不可改寫的前版審查由 presentation-v124/validate_historical_radial.js 讀取精確 Git 版本；本版審查 docs/LAUNCHER_ROOM_INTERACTION_20260927.json。

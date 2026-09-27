@@ -34,3 +34,8 @@ tools/launcher-room/presentation-v122/** -text
 docs/LAUNCHER_ROOM_PRESENTATION_20260927.json -text
 tools/launcher-room/presentation-v123/** -text
 docs/LAUNCHER_ROOM_RADIAL_20260927.json -text
+tools/launcher-room/presentation-v124/** -text
+docs/LAUNCHER_ROOM_INTERACTION_20260927.json -text
+tools/launcher-room/hd-v4/** -text
+scripts/launcher_interaction_qa.js -text
+scripts/launcher_radial_v124_qa.js -text

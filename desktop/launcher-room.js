@@ -173,7 +173,14 @@
     spotsAround, cellBlocked, walkBlocked: () => walkBlocked, blockedFor, routeBetween, routeTo,
     face: faceWalker, setPose, startDock: startFurnitureDock, moveDock: moveFurnitureDock,
     speak: showSpeech, hideSpeech, wander: chooseDestination, canAnimate,
-    editing: () => editing, reducedMotion: () => motion.matches,
+    editing: () => editing, reducedMotion: () => motion.matches, roomStatus: status,
+    focus: holdCompanionAttention, deferAttentionMovement,
+    finishManual(itemId) {
+      if (companionId !== itemId) return;
+      const walker = walkers.find(entry => entry.item?.id === itemId);
+      if (walker) releaseCompanionAttention(walker, false);
+      closeCompanion();
+    },
     companionId: () => companionId, companionStatus, renderedRevision: () => renderedRevision,
     placeWalker(walker, cell) {
       const anchor = anchorForCell(cell, { width: 1, height: 1 });
@@ -359,6 +366,46 @@
     }
   }
   function refreshCompanion() { renderCompanionWheel(); positionCompanion(); }
+  function movementState(walker) {
+    return { mode: walker.mode, route: [...walker.route], segmentCell: walker.segmentCell,
+      targetCell: walker.targetCell, pause: walker.pause, lifeClip: walker.lifeClip && { ...walker.lifeClip },
+      lifeToken: walker.lifeToken, direction: walker.motion?.direction, pose: walker.pose,
+      returnDockBeforeRoute: walker.returnDockBeforeRoute, dockTravel: walker.dockTravel };
+  }
+  function holdCompanionAttention(walker) {
+    if (!walker || walker.attention) return;
+    walker.attention = { ...movementState(walker), started: performance.now() };
+    walker.route = []; walker.segmentCell = null; walker.lifeClip = null; walker.mode = 'focused'; walker.pause = 0;
+    walker.node.classList.remove('is-walking', 'is-turning');
+    if (walker.motion) { walker.motion.direction = 'south'; walker.motion.pendingDirection = ''; walker.motion.turnUntil = 0; }
+    // The loading fallback is the intact front-facing portrait, never the last side/back frame.
+    if (!walker.actionArt?.atlases?.south && !walker.motionArt?.atlases?.south) {
+      walker.node.querySelector('.room-walk-sprite').hidden = true;
+      walker.node.classList.remove('has-directional-sprite');
+    }
+    walker.node.dataset.direction = 'south';
+    hideSpeech(walker); setPose(walker, 'wave'); walker.manualUntil = performance.now() + 1800;
+  }
+  function deferAttentionMovement(walker) {
+    if (!walker.attention) return;
+    Object.assign(walker.attention, movementState(walker));
+    walker.route = []; walker.segmentCell = null; walker.lifeClip = null; walker.mode = 'focused';
+  }
+  function releaseCompanionAttention(walker, restore = true) {
+    const saved = walker.attention;
+    if (!saved) return;
+    walker.attention = null; walker.manualUntil = 0; hideSpeech(walker);
+    if (!restore) return;
+    if (saved.lifeToken && (saved.lifeToken !== walker.lifeToken || !lifeRoom?.isBusy(walker.key))) {
+      setPose(walker, 'idle'); chooseDestination(walker); return;
+    }
+    const held = performance.now() - saved.started;
+    for (const name of ['mode', 'route', 'segmentCell', 'targetCell', 'pause', 'lifeClip', 'returnDockBeforeRoute', 'dockTravel']) walker[name] = saved[name];
+    if (walker.lifeClip) walker.lifeClip.started += held;
+    if (walker.motion) { walker.motion.direction = saved.direction || 'south'; walker.motion.pendingDirection = ''; walker.motion.turnUntil = 0; }
+    setPose(walker, saved.pose === 'walk' || saved.pose === 'life' ? 'idle' : saved.pose || 'idle');
+    if (walker.mode === 'focused') chooseDestination(walker);
+  }
   function closeCompanion() {
     if (companionTick) clearInterval(companionTick);
     companionTick = 0;
@@ -376,9 +423,7 @@
       node.classList.remove('is-companion-selected'); node.setAttribute('aria-expanded', 'false');
     }
     for (const walker of walkers) {
-      if (walker.item?.id === previous && walker.mode === 'focused') {
-        hideSpeech(walker); walker.manualUntil = 0; setPose(walker, 'idle'); chooseDestination(walker);
-      }
+      if (walker.item?.id === previous) releaseCompanionAttention(walker);
     }
   }
   async function openCompanion(itemId, keyboard = false) {
@@ -387,17 +432,13 @@
     if (companionId !== itemId) closeCompanion();
     else if (companionTick) clearInterval(companionTick);
     companionId = itemId;
-    if (interaction && !lifeRoom?.active()) finishInteraction(performance.now());
+    if (interaction) finishInteraction(performance.now());
     nextInteractionAt = performance.now() + 5000;
     const walker = walkers.find(entry => entry.item?.id === itemId);
     const actor = [...$('roomCharacters').children].find(node => node.dataset.roomKey === `c:${itemId}`);
     if (actor) { actor.classList.add('is-companion-selected'); actor.setAttribute('aria-expanded', 'true'); }
-    if (walker && !lifeRoom?.active()) {
-      walker.route = []; walker.mode = 'focused'; walker.pause = 0;
-      walker.node.classList.remove('is-walking'); walker.node.classList.add('is-companion-selected');
-      setPose(walker, 'wave'); walker.manualUntil = performance.now() + 1250;
-    }
     lifeRoom?.tapped(keyForCharacter(resolvedItem(itemId, 'character')));
+    if (walker) { holdCompanionAttention(walker); walker.node.classList.add('is-companion-selected'); }
     renderCompanionPanel();
     if (keyboard) $('roomCompanionWheel').focus({ preventScroll: true });
     companionTick = setInterval(renderCompanionPanel, 1000);
@@ -508,7 +549,7 @@
     const root = locomotion.metadata(walker.key, motionTable).root;
     canvas.style.setProperty('--room-root-offset', `${(locomotion.SHAPE.cell - root[1]) / locomotion.SHAPE.cell * 100}%`);
     canvas.hidden = false; walker.node.classList.add('has-directional-sprite');
-    walker.node.dataset.directionalAction = 'true'; walker.node.dataset.actionSource = 'acting_v3';
+    walker.node.dataset.directionalAction = 'true'; walker.node.dataset.actionSource = 'acting_v4';
     walker.node.dataset.direction = walker.motion.direction;
     walker.node.dataset.actionFrame = String(frame);
     return true;
@@ -531,7 +572,7 @@
     walker.node.dataset.motionFrame = String(frame);
     walker.node.dataset.motionPhase = String(state.phase);
     walker.node.dataset.motionReady = 'true';
-    walker.node.dataset.actionSource = 'motion_v3';
+    walker.node.dataset.actionSource = 'motion_v4';
     delete walker.node.dataset.directionalAction;
     if (walking) { walker.pose = 'walk'; walker.node.dataset.pose = 'walk'; }
     return true;
@@ -596,6 +637,7 @@
     return true;
   }
   function chooseDestination(walker) {
+    if (walker.attention) return;
     if (walker.dockOrigin) { walker.mode = 'undock'; walker.route = []; walker.pause = 0; return; }
     walker.mode = 'wander'; walker.route = []; walker.targetCell = null;
     const origin = walker.segmentCell || walker.cell;
@@ -891,6 +933,13 @@
     lifeRoom?.tick(now);
     if (!lifeRoom?.active()) startInteraction(now);
     for (const walker of walkers) {
+      if (walker.attention) {
+        walker.mode = 'focused'; walker.node.classList.remove('is-walking', 'is-turning');
+        if (walker.motion) { walker.motion.direction = 'south'; walker.motion.pendingDirection = ''; walker.motion.turnUntil = 0; }
+        if (walker.manualUntil && now >= walker.manualUntil) { hideSpeech(walker); setPose(walker, 'idle'); walker.manualUntil = 0; }
+        showAction(walker, walker.pose === 'walk' || walker.pose === 'life' ? 'idle' : walker.pose || 'idle', now);
+        continue;
+      }
       if (lifeRoom?.animate(walker, now, delta)) continue;
       if (walker.pose !== 'walk') showAction(walker, walker.pose || 'idle', now);
       if (walker.returnDockBeforeRoute) {
@@ -996,10 +1045,10 @@
       });
     }
     for (const walker of walkers) {
-      if (walker.item?.id === companionId && !lifeRoom?.active()) { walker.mode = 'focused'; walker.node.classList.add('is-companion-selected'); setPose(walker, 'idle'); }
-      else chooseDestination(walker);
+      chooseDestination(walker);
     }
     lifeRoom?.resume();
+    for (const walker of walkers) if (walker.item?.id === companionId) { holdCompanionAttention(walker); walker.node.classList.add('is-companion-selected'); }
     if (walkers.length) { nextInteractionAt = performance.now() + 1800; animationId = requestAnimationFrame(frame); }
   }
   function scaledGait(key, direction, depth) {
@@ -1366,8 +1415,12 @@
     if (!companionId || event.ctrlKey) return;
     event.preventDefault();
     const delta = (event.deltaY || event.deltaX) * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? 272 : 1);
+    if (!Number.isFinite(delta)) return;
+    if (wheelDelta && Math.sign(delta) !== Math.sign(wheelDelta)) wheelDelta = 0;
     wheelDelta += delta;
-    if (Math.abs(wheelDelta) >= 48) { const steps = Math.sign(wheelDelta) * Math.min(3, Math.floor(Math.abs(wheelDelta) / 48)); wheelDelta = 0; rotateCompanionWheel(steps); }
+    // A Windows mouse notch commonly sends100/120px. One notch must advance
+    // one option; stepping2 across six options makes half of them unreachable.
+    if (Math.abs(wheelDelta) >= 48) { const step = Math.sign(wheelDelta); wheelDelta = 0; rotateCompanionWheel(step); }
   }, { passive: false });
   $('roomCompanionWheel').addEventListener('keydown', event => {
     if (['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key)) {
@@ -1473,7 +1526,7 @@
       turnIndex: interaction.turnIndex, turns: interaction.scene?.turns.length },
     life: lifeRoom?.snapshot(),
     walkers: walkers.map(walker => ({ key: walker.key, cell: { ...walker.cell }, x: walker.x, y: walker.y,
-      mode: walker.mode, phase: walker.motion?.phase, direction: walker.motion?.direction,
+      mode: walker.mode, attention: !!walker.attention, phase: walker.motion?.phase, direction: walker.motion?.direction,
       dock: walker.dockTarget ? { ...walker.dockTarget } : null,
       ready: Object.keys(walker.motionArt?.atlases || {}), route: walker.route.map(cell => ({ ...cell })) })) }),
     lifeWorld: () => lifeRoom?.world(),

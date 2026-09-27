@@ -1,0 +1,41 @@
+{
+  "schema": "one-piece-room-hd-visual-review/1",
+  "modelReview": true,
+  "humanAcceptance": false,
+  "images": [
+    {
+      "path": "tools/launcher-room/hd-v4/review-evidence/quality-paired-dpr1.png",
+      "sha256": "286e6d5eb9216bd3260f1e1fbcb0d3d6a08c853d2b706402835ddf6f7f95cf5f",
+      "dpr": 1,
+      "cssCanvas": 244,
+      "physicalCanvas": 244,
+      "status": "PASS",
+      "notes": [
+        "Viewed all ten crew in paired legacy and HD south idle / east walk at244 CSSpx.",
+        "HD exports visibly retain face, hair, clothing and silhouette edges lost in128px frames.",
+        "Poses, head attachment, costumes, proportions and planted root remain unchanged."
+      ],
+      "limitations": [
+        "Other direction/pose alpha and source fidelity are automated checks; this sheet shows south idle and east contactA.",
+        "DPR2 at244 CSSpx requires488physicalpixels;384pxwalk still resamples1.27x,256pxacting1.91x. No invented source detail."
+      ]
+    },
+    {
+      "path": "tools/launcher-room/hd-v4/review-evidence/quality-paired-dpr2.png",
+      "sha256": "48571a922f9b5419e61080f32a78b3f806f008ef01af62904426d910eeebfbe7",
+      "dpr": 2,
+      "cssCanvas": 244,
+      "physicalCanvas": 488,
+      "status": "PASS",
+      "notes": [
+        "Viewed all ten crew in paired legacy and HD south idle / east walk at244 CSSpx.",
+        "HD exports visibly retain face, hair, clothing and silhouette edges lost in128px frames.",
+        "Poses, head attachment, costumes, proportions and planted root remain unchanged."
+      ],
+      "limitations": [
+        "Other direction/pose alpha and source fidelity are automated checks; this sheet shows south idle and east contactA.",
+        "DPR2 at244 CSSpx requires488physicalpixels;384pxwalk still resamples1.27x,256pxacting1.91x. No invented source detail."
+      ]
+    }
+  ]
+}

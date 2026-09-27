@@ -16,7 +16,7 @@
   function create(env) {
     const api=root.onePieceDesktop;
     let controller=null,snapshot=null,serverLife=null,scope='',epoch=0,requestSerial=0,pending=Promise.resolve();
-    let savedPositions=new Map(),savedRevision=-1,fetching=null,nextSync=0,lastTick=0,lastUi=0,manualBusy=false,panelKey='';
+    let savedPositions=new Map(),savedRevision=-1,fetching=null,nextSync=0,lastTick=0,lastUi=0,manualBusy=false,manualKey='',panelKey='';
     const taps=new Map();
     function walker(key){return env.walkers().find(w=>w.key===keyOf(key));}
     function owner(){return env.isOwner();}
@@ -51,7 +51,7 @@
       }
       return result;
     }
-    function world(){return{ownedItemIds:ownedIds(),roomRevision:env.room().revision,stations:stations(),actors:env.walkers().map(w=>({key:w.key,itemId:w.item.id,cell:{...w.cell},moving:!!w.segmentCell||!!w.route.length||!!w.dockTravel,available:w.mode!=='focused'}))};}
+    function world(){return{ownedItemIds:ownedIds(),roomRevision:env.room().revision,stations:stations(),actors:env.walkers().map(w=>({key:w.key,itemId:w.item.id,cell:{...w.cell},moving:!w.attention&&(!!w.segmentCell||!!w.route.length||!!w.dockTravel),available:manualKey===w.key||!w.attention&&w.mode!=='focused'}))};}
     function face(key,cell) {const w=walker(key);return !!w&&env.face(w,cell,performance.now());}
     function setClip(key,clip,meta={}) {
       const w=walker(key);if(!w)return false;
@@ -81,6 +81,7 @@
     }
     const adapter={
       getWorld:world,
+      attending:key=>!!walker(key)?.attention,
       hold(key,token){const w=walker(key);if(!w)return false;w.lifeClip=null;w.lifeToken=token;w.mode='life-act';w.route=[];w.pause=0;env.hideSpeech(w);env.setPose(w,'idle');return true;},
       callTarget(key){
         const w=walker(key);if(!w)return null;
@@ -90,7 +91,7 @@
       },
       plan(key,cell){const w=walker(key);return !!w&&!!env.routeBetween(w.segmentCell||w.cell,cell,env.blockedFor(w));},
       reserve(entries){return entries.every(entry=>adapter.plan(entry.key,entry.cell));},
-      move(key,cell,token){const w=walker(key);if(!w)return false;env.hideSpeech(w);w.lifeClip=null;w.lifeToken=token;w.pause=0;w.mode='life-approach';return env.routeTo(w,cell);},
+      move(key,cell,token){const w=walker(key);if(!w)return false;env.hideSpeech(w);w.lifeClip=null;w.lifeToken=token;w.pause=0;w.mode='life-approach';const result=env.routeTo(w,cell);if(w.attention&&manualKey!==key)env.deferAttentionMovement(w);return result;},
       arrived(key){const w=walker(key);return !!w&&!w.route.length&&!w.segmentCell&&!w.returnDockBeforeRoute&&!w.dockTravel;},
       face,
       dock(key,station){
@@ -182,7 +183,7 @@
       if(next!==scope) {
         controller?.dispose();controller=null;snapshot=null;serverLife=null;scope=next;epoch++;
         savedPositions.clear();savedRevision=-1;pending=Promise.resolve();fetching=null;taps.clear();
-        nextSync=0;lastTick=0;manualBusy=false;panelKey='';
+        nextSync=0;lastTick=0;manualBusy=false;manualKey='';panelKey='';
       }
       ensureController();if(owner())void refresh();renderUi();
     }
@@ -308,16 +309,22 @@
     }
     async function runManual(action,stationId) {
       const key=keyOf(env.companionId());if(!controller||manualBusy||!key)return;
-      manualBusy=true;renderUi();const currentEpoch=epoch;
+      manualBusy=true;manualKey=key;renderUi();const currentEpoch=epoch;
       try {
         const result=action==='work'?await controller.assignWork(key,stationId):await controller.interact(key,action);
         if(currentEpoch!==epoch)return;
-        status(result?.ok?(action==='work'?'收到分工，夥伴會走到工作位置。':action==='gift'?'點心已送達，已使用 5 枚商城金幣。':'夥伴回應了你的邀請。'):(ERRORS[result?.error]||'現在無法完成，請稍後再試。'),!result?.ok);
-        if(result?.ok){$('roomLifeWorkChoices').hidden=true;$('roomLifeWork').setAttribute('aria-expanded','false');}
-      }finally{if(currentEpoch===epoch){manualBusy=false;renderUi();}}
+        const message=result?.ok?(action==='work'?'收到分工，夥伴會走到工作位置。':action==='gift'?'點心已送達，已使用 5 枚商城金幣。':'夥伴回應了你的邀請。'):(ERRORS[result?.error]||'現在無法完成，請稍後再試。');
+        if(result?.ok){$('roomLifeWorkChoices').hidden=true;$('roomLifeWork').setAttribute('aria-expanded','false');env.finishManual(itemOf(key));env.roomStatus(message);}
+        else status(message,true);
+      }finally{if(currentEpoch===epoch){manualBusy=false;manualKey='';renderUi();}}
     }
     function tapped(key) {
-      controller?.react(keyOf(key));
+      key=keyOf(key);
+      // Interrupt a local conversation, while retaining paid work and its reservation.
+      if(snapshot?.foreground?.keys?.includes(key))controller?.cancel(key,'player_attention');
+      const w=walker(key);if(w)env.focus(w);
+      const reaction=controller?.react(key);
+      if(w&&reaction?.ok){env.speak(w,reaction.line,reaction.mood);env.setPose(w,reaction.pose||'wave');w.manualUntil=performance.now()+2800;}
       renderPanel();
     }
     if($('roomLifeDirective'))$('roomLifeDirective').onchange=async event=>{

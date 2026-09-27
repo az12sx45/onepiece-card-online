@@ -9,7 +9,8 @@ const DESKTOP_ROOT = path.join(ROOT, 'desktop');
 const PUBLIC_ROOT = path.join(ROOT, 'public');
 const PACKAGE_PATH = path.join(DESKTOP_ROOT, 'package.json');
 const PACKAGE_LOCK_PATH = path.join(DESKTOP_ROOT, 'package-lock.json');
-const RADIAL_PRESENTATION = require('../tools/launcher-room/presentation-v123/validate_release');
+const RADIAL_PRESENTATION = require('../tools/launcher-room/presentation-v124/validate_release');
+const ROOM_HD_REVIEW = require('../tools/launcher-room/presentation-v124/validate_hd');
 
 const MAX_LAUNCHER_ASSET_BYTES = 128 * 1024 * 1024;
 // 1.1.16 retains the 80 reviewed 1.1.15 atlases and 10 portraits. Keep the existing media
@@ -77,6 +78,7 @@ const ROOM_DEPTH_CHARACTERS = ['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopp
 const ROOM_MOTION_ASSETS = ROOM_DEPTH_CHARACTERS.flatMap(key =>
   ['motion', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south'].map(direction => `${kind}_v3/${key}/${direction}.webp`)));
 const ROOM_PORTRAIT_ASSETS = ROOM_DEPTH_CHARACTERS.map(key => `portrait_v3/${key}.webp`);
+const ROOM_HD_ASSETS = ROOM_HD_REVIEW.ASSETS.map(asset => asset.replace(/^public\/images\/launcher_room\//, ''));
 const ROOM_LIFE_ASSETS = require('../desktop/launcher-life-actions').assets().map(asset => `life_v1/${asset}`);
 const ROOM_LIFE_FURNITURE = ['furniture/galley-stove.webp', ...[0,1,2,3].map(rotation => `furniture_views/galley-stove/${rotation}.webp`)];
 const ROOM_DEPTH_ACTION_OVERRIDES = new Set([
@@ -218,6 +220,7 @@ const EXTRA_RESOURCES = [
       ...ROOM_DEPTH_ASSETS,
       ...ROOM_MOTION_ASSETS,
       ...ROOM_PORTRAIT_ASSETS,
+      ...ROOM_HD_ASSETS,
       ...ROOM_LIFE_FURNITURE,
       ...ROOM_LIFE_ASSETS
     ]
@@ -520,7 +523,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.2.3', 'Desktop launcher version must be 1.2.3 for the reviewed radial presentation release.');
+  assert(packageJson.version === '1.2.4', 'Desktop launcher version must be 1.2.4 for the reviewed interaction and HD release.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -542,6 +545,13 @@ function validateSourcePackage() {
   for (const key of ['crew-cabin', 'sunny-deck', 'sunny-kitchen', 'sunny-library']) {
     const relative = `images/launcher_room/scenes/${key}-v2.webp`;
     assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, 'public', relative), `Room scene is blocked by the packaged protocol: ${key}`);
+  }
+  for (const asset of ROOM_HD_REVIEW.ASSETS) {
+    const relative = asset.replace(/^public\//, '');
+    assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, asset), `HD room atlas is blocked by the packaged protocol: ${relative}`);
+  }
+  for (const relative of ['motion_v4/unknown/east.webp', 'acting_v4/luffy/unknown.webp', 'motion_v5/luffy/east.webp']) {
+    assert(resolveScene(`opui://launcher/images/launcher_room/${relative}`) === null, `Unreviewed HD room atlas was admitted: ${relative}`);
   }
   for (const url of ['opui://launcher/images/launcher_room/scenes/unknown-v2.webp',
     'opui://launcher/images/launcher_room/scenes/crew-cabin-v3.webp',
@@ -687,7 +697,7 @@ function validateSourcePackage() {
     'Room art manifests must cover original, expansion, and 1.1.11 assets.');
   assertExactJson(sorted(roomDepth.items.map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(ROOM_DEPTH_ASSETS), 'Room depth/action art asset set');
-  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items, ...lifeStatus.manifest.items].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
+  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items, ...lifeStatus.manifest.items, ...presentationStatus.hd.manifest.items].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(roomResource.filter), 'Room art manifest output set');
   const zoroOverlay = validateZoroArtOverlay(roomManifest, roomDepth, roomWalk);
   const roomSourceRoot = path.join(ROOT, 'tools', 'launcher-room', 'source-png');
@@ -860,7 +870,7 @@ function validateAsar(asarPath) {
       `Packaged application source differs: ${entry}`);
   }
   const packedPackage = JSON.parse(asar.extractFile(asarPath, 'package.json').toString('utf8'));
-  assert(packedPackage.version === '1.2.3' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
+  assert(packedPackage.version === '1.2.4' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
   for (const entry of entries) {
     const lower = entry.toLowerCase();
     assert(!lower.startsWith('public/'), `app.asar contains the public game tree: ${entry}`);
@@ -899,9 +909,9 @@ function validateWinUnpacked(winUnpackedPath, source) {
   const actualAssetNames = sorted(actualAssetFiles.map((filePath) => relativePosix(launcherAssetRoot, filePath)));
   assertExactJson(actualAssetNames, sorted(expectedAssets.keys()), 'win-unpacked launcher asset set');
   const launcherBytes = sumFileBytes(actualAssetFiles);
-  const roomMotionFiles = [...ROOM_MOTION_ASSETS, ...ROOM_PORTRAIT_ASSETS]
+  const roomMotionFiles = [...ROOM_MOTION_ASSETS, ...ROOM_PORTRAIT_ASSETS, ...ROOM_HD_ASSETS]
     .map(asset => path.join(launcherAssetRoot, 'images', 'launcher_room', ...asset.split('/')));
-  assert(roomMotionFiles.length === 90 && new Set(roomMotionFiles).size === 90, 'Room media budget must cover exactly eighty atlases and ten portraits.');
+  assert(roomMotionFiles.length === 170 && new Set(roomMotionFiles).size === 170, 'Room media budget must cover eighty legacy atlases, eighty HD atlases and ten portraits.');
   const roomMotionBytes = sumFileBytes(roomMotionFiles);
   const lifeFiles = [...ROOM_LIFE_ASSETS, ...ROOM_LIFE_FURNITURE].map(asset => path.join(launcherAssetRoot, 'images', 'launcher_room', ...asset.split('/')));
   assert(lifeFiles.length === 133 && new Set(lifeFiles).size === 133, 'Life media must contain 128 loops and five stove assets.');
@@ -983,8 +993,8 @@ function main() {
       'Release package requires all eighty complete-body atlases and explicit visual review evidence for every direction.');
     assert(source.zoroOverlayStatus === 'verified',
       'Release package requires a verified Zoro art overlay; candidate art cannot be shipped.');
-    assert(source.presentationStatus.complete && source.presentationStatus.review.releaseVersion === '1.2.3',
-      'Release package requires historical art provenance plus the exact current 1.2.3 radial and icon review.');
+    assert(source.presentationStatus.complete && source.presentationStatus.review.releaseVersion === '1.2.4',
+      'Release package requires historical art provenance plus the exact current 1.2.4 interaction and HD review.');
   }
   const parts = [
     'DESKTOP_LAUNCHER_PACKAGE_QA=PASS',
@@ -1002,6 +1012,8 @@ function main() {
     `radialIcons=${source.presentationStatus.icons.count}`,
     `radialIconMode=${source.presentationStatus.icons.mode}`,
     `radialFunctionalChecks=${source.presentationStatus.functionalChecks}`,
+    `interactionChecks=${source.presentationStatus.interactionChecks}`,
+    `roomHdAssets=${source.presentationStatus.hd.assets}`,
     `lifeHistoricalRuntime=${source.presentationStatus.historicalBaseline}`,
     `zoroArt=${source.zoroOverlayStatus}`
   ];

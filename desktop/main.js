@@ -328,7 +328,7 @@ function resolveLauncherResource(requestUrl) {
       /^images\/launcher_room\/furniture_views\/(?:bookshelf|helm|kitchen-table|galley-stove|map-table|medicine-cabinet|piano|swords-rack|tangerine-tree|tool-bench|treasure-chest)\/[0-3]\.webp$/,
       /^images\/launcher_room\/life_v1\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:work|read|cook|craft|medicine|helm|music|eat|rest|sleep|train)-(?:east|west|north|south)\.webp$/,
       /^images\/launcher_room\/action_frames\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:idle|walk1|walk2|talk_happy|talk_annoyed|surprised|focused_use|sit|wave)\.webp$/,
-      /^images\/launcher_room\/(?:motion|acting)_v3\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:east|west|north|south)\.webp$/,
+      /^images\/launcher_room\/(?:motion|acting)_v[34]\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:east|west|north|south)\.webp$/,
       /^images\/launcher_room\/portrait_v3\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\.webp$/,
       /^audio\/profile_bgm\/(?:harbor|night-watch|voyage)\.ogg$/,
       /^audio\/bgm\/track(?:0[1-9]|1[0-9]|20)\.mp3$/,
@@ -1307,6 +1307,9 @@ async function runVisualOrSmokeCapture() {
               .map(direction => `images/launcher_room/${kind}_v3/${name}/${direction}.webp`))),
           ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']
             .map(name => `images/launcher_room/portrait_v3/${name}.webp`),
+          ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']
+            .flatMap(name => ['motion', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south']
+              .map(direction => `images/launcher_room/${kind}_v4/${name}/${direction}.webp`))),
           ...lifeActions.assets().map(asset => `images/launcher_room/life_v1/${asset}`),
           ...[0,1,2,3].map(rotation => `images/launcher_room/furniture_views/galley-stove/${rotation}.webp`),
           'images/launcher_room/furniture/galley-stove.webp',

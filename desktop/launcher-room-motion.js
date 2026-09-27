@@ -10,6 +10,8 @@
   const WALK_SHAPE = Object.freeze({ columns: 4, rows: 1, frames: 4, cell: 128, width: 512, height: 128, rootX: 64, rootY: 112 });
   const ACTION_SHAPE = Object.freeze({ columns: 8, rows: 1, frames: 8, cell: 128, width: 1024, height: 128, rootX: 64, rootY: 112, beatsPerAction: 1 });
   const SHAPE = WALK_SHAPE;
+  // Geometry remains in 128px units. These are source pixel densities only.
+  const ATLAS_RESOLUTION = Object.freeze({ motion_v4: 3, acting_v4: 2 });
   const TURN_MS = 140;
   const ACTION_POSES = Object.freeze(['idle', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave', 'listen']);
   const STRIDES = Object.freeze({ luffy: 24, zoro: 24, nami: 24, usopp: 24, sanji: 24, chopper: 20, robin: 24, franky: 24, brook: 24, jinbe: 24 });
@@ -82,9 +84,9 @@
     const ratio = axis > 1e-8 ? travel / axis : 1;
     return { dx: dx * ratio, dy: dy * ratio, travel, reached: ratio >= 1 };
   }
-  function atlasUrl(key, direction, kind = 'motion_v3') {
+  function atlasUrl(key, direction, kind = 'motion_v4') {
     if (!Object.hasOwn(STRIDES, key) || !DIRECTIONS.includes(direction)) return '';
-    if (!['motion_v3', 'acting_v3'].includes(kind)) return '';
+    if (!Object.hasOwn(ATLAS_RESOLUTION, kind)) return '';
     return `opui://launcher/images/launcher_room/${kind}/${key}/${direction}.webp`;
   }
   function walkShape() { return WALK_SHAPE; }
@@ -100,21 +102,22 @@
         const image = new ImageType();
         image.src = source;
         await image.decode();
-        const shape = kind === 'acting_v3' ? ACTION_SHAPE : walkShape(direction);
-        if (image.naturalWidth !== shape.width || image.naturalHeight !== shape.height) throw new Error(`Directional atlas must be ${shape.width} × ${shape.height}`);
+        const shape = kind === 'acting_v4' ? ACTION_SHAPE : walkShape(direction);
+        const resolution = ATLAS_RESOLUTION[kind];
+        const width = shape.width * resolution, height = shape.height * resolution;
+        if (image.naturalWidth !== width || image.naturalHeight !== height) throw new Error(`Directional atlas must be ${width} × ${height}`);
         if (typeof globalThis.createImageBitmap === 'function') {
-          // Validate the published atlas before retaining its decoded bitmap.
-          const resolution = Math.min(1, 128 / shape.cell);
-          const bitmap = await globalThis.createImageBitmap(image, { resizeWidth: shape.width * resolution, resizeHeight: shape.height * resolution, resizeQuality: 'high' });
+          // Retain authored HD pixels; a decode must never shrink back to 128px.
+          const bitmap = await globalThis.createImageBitmap(image);
           atlasResolution.set(bitmap, resolution); record.atlases[direction] = bitmap;
           image.src = '';
-        } else record.atlases[direction] = image;
+        } else { atlasResolution.set(image, resolution); record.atlases[direction] = image; }
       } catch (error) { record.errors[direction] = String(error?.message || error); }
     }))).then(() => { record.complete = true; return record; });
     return record;
   }
-  function preload(key, ImageType = globalThis.Image) { return loadAtlases(key, ImageType, 'motion_v3'); }
-  function preloadActions(key, ImageType = globalThis.Image) { return loadAtlases(key, ImageType, 'acting_v3'); }
+  function preload(key, ImageType = globalThis.Image) { return loadAtlases(key, ImageType, 'motion_v4'); }
+  function preloadActions(key, ImageType = globalThis.Image) { return loadAtlases(key, ImageType, 'acting_v4'); }
   function draw(canvas, atlas, frame, shape = WALK_SHAPE) {
     if (!canvas || !atlas) return false;
     const context = canvas.getContext('2d');
@@ -125,9 +128,13 @@
     if (canvas.width !== renderCell) canvas.width = renderCell;
     if (canvas.height !== renderCell) canvas.height = renderCell;
     context.clearRect(0, 0, renderCell, renderCell);
+    // Retain native source detail at the 1.5x display scale and on DPR 2 screens.
+    // No repeated layout read or canvas reallocation is needed while walking.
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = 'high';
     context.drawImage(atlas, index % shape.columns * shape.cell * resolution, Math.floor(index / shape.columns) * shape.cell * resolution,
       renderCell, renderCell, 0, 0, renderCell, renderCell);
     return true;
   }
-  return Object.freeze({ DIRECTIONS, SHAPE, WALK_SHAPE, ACTION_SHAPE, TURN_MS, ACTION_POSES, metadata, directionForDelta, createState, face, advance, projectedScale, speedAndStride, pathStep, walkShape, actionFrame, atlasUrl, preload, preloadActions, draw });
+  return Object.freeze({ DIRECTIONS, SHAPE, WALK_SHAPE, ACTION_SHAPE, ATLAS_RESOLUTION, TURN_MS, ACTION_POSES, metadata, directionForDelta, createState, face, advance, projectedScale, speedAndStride, pathStep, walkShape, actionFrame, atlasUrl, preload, preloadActions, draw });
 }));

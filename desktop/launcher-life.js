@@ -363,9 +363,15 @@
         emit();
       });
     }
-    function taskTick(task,now) {
+    function taskTick(task,now,elapsed=0) {
       if(task.event)return;
       if(!owned.has(task.key)){cancel(task.key,'ownership_changed');return;}
+      if(safeCall('attending',task.key)===true) {
+        // A character menu holds only local presentation. Server jobs, wallet
+        // authority and reservations remain intact until the viewer closes it.
+        for(const field of ['deadline','phaseAt','retryAt'])if(Number.isFinite(task[field]))task[field]+=elapsed;
+        return;
+      }
       if(now>task.deadline&&['approach','docking','turning','await-art'].includes(task.phase)){cancel(task.key,'blocked_timeout');return;}
       if(task.phase==='reserving'||task.pending){holdTask(task);return;}
       if(task.phase==='arrival-ack'){if(now>=task.retryAt)completeArrival(task);return;}
@@ -670,7 +676,7 @@
       tickNeeds(elapsed,now);
       for(const [key,task] of [...tasks])if(!activeMap().has(key)&&!task.arrival)cancel(key,'actor_detached');
       startArrivals(now);restoreJobs();
-      for(const task of [...tasks.values()])taskTick(task,now);
+      for(const task of [...tasks.values()])taskTick(task,now,elapsed);
       eventTick(now);
       if(now>=nextDecision){nextDecision=now+1000;chooseEvent(now);for(const key of owned)autonomous(key,now);}
       if(writable&&now-lastCheckpoint>=60000){lastCheckpoint=now;void invoke('checkpoint',{});}

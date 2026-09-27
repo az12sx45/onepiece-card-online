@@ -1,0 +1,2019 @@
+{
+  "status": "PASS",
+  "kind": "release-source-actual-chromium-isolated-ipc",
+  "productionDeployed": false,
+  "recordedAt": "2026-09-27T11:11:00.067Z",
+  "checks": [
+    {
+      "name": "wheel-physical-notch-all-actions",
+      "status": "PASS",
+      "samples": [
+        {
+          "target": "icon",
+          "delta": 100,
+          "sequence": [
+            "roomCompanionTalk",
+            "roomLifeWork",
+            "roomLifeCall",
+            "roomLifeGift",
+            "roomLifeTrain",
+            "roomLifeStatus",
+            "roomCompanionTalk"
+          ],
+          "hits": [
+            "roomCompanionTalk",
+            "roomLifeWork",
+            "roomLifeCall",
+            "roomLifeGift",
+            "roomLifeTrain",
+            "roomLifeStatus"
+          ],
+          "reachable": [
+            "roomCompanionTalk",
+            "roomLifeWork",
+            "roomLifeCall",
+            "roomLifeGift",
+            "roomLifeTrain",
+            "roomLifeStatus"
+          ]
+        },
+        {
+          "target": "icon",
+          "delta": 120,
+          "sequence": [
+            "roomCompanionTalk",
+            "roomLifeWork",
+            "roomLifeCall",
+            "roomLifeGift",
+            "roomLifeTrain",
+            "roomLifeStatus",
+            "roomCompanionTalk"
+          ],
+          "hits": [
+            "roomCompanionTalk",
+            "roomLifeWork",
+            "roomLifeCall",
+            "roomLifeGift",
+            "roomLifeTrain",
+            "roomLifeStatus"
+          ],
+          "reachable": [
+            "roomCompanionTalk",
+            "roomLifeWork",
+            "roomLifeCall",
+            "roomLifeGift",
+            "roomLifeTrain",
+            "roomLifeStatus"
+          ]
+        },
+        {
+          "target": "icon",
+          "delta": -100,
+          "sequence": [
+            "roomCompanionTalk",
+            "roomLifeStatus",
+            "roomLifeTrain",
+            "roomLifeGift",
+            "roomLifeCall",
+            "roomLifeWork",
+            "roomCompanionTalk"
+          ],
+          "hits": [
+            "roomCompanionTalk",
+            "roomLifeStatus",
+            "roomLifeTrain",
+            "roomLifeGift",
+            "roomLifeCall",
+            "roomLifeWork"
+          ],
+          "reachable": [
+            "roomCompanionTalk",
+            "roomLifeStatus",
+            "roomLifeTrain",
+            "roomLifeGift",
+            "roomLifeCall",
+            "roomLifeWork"
+          ]
+        },
+        {
+          "target": "icon",
+          "delta": -120,
+          "sequence": [
+            "roomCompanionTalk",
+            "roomLifeStatus",
+            "roomLifeTrain",
+            "roomLifeGift",
+            "roomLifeCall",
+            "roomLifeWork",
+            "roomCompanionTalk"
+          ],
+          "hits": [
+            "roomCompanionTalk",
+            "roomLifeStatus",
+            "roomLifeTrain",
+            "roomLifeGift",
+            "roomLifeCall",
+            "roomLifeWork"
+          ],
+          "reachable": [
+            "roomCompanionTalk",
+            "roomLifeStatus",
+            "roomLifeTrain",
+            "roomLifeGift",
+            "roomLifeCall",
+            "roomLifeWork"
+          ]
+        },
+        {
+          "target": "blank",
+          "delta": 100,
+          "sequence": [
+            "roomCompanionTalk",
+            "roomLifeWork",
+            "roomLifeCall",
+            "roomLifeGift",
+            "roomLifeTrain",
+            "roomLifeStatus",
+            "roomCompanionTalk"
+          ],
+          "hits": [
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel"
+          ],
+          "reachable": [
+            "roomCompanionTalk",
+            "roomLifeWork",
+            "roomLifeCall",
+            "roomLifeGift",
+            "roomLifeTrain",
+            "roomLifeStatus"
+          ]
+        },
+        {
+          "target": "blank",
+          "delta": 120,
+          "sequence": [
+            "roomCompanionTalk",
+            "roomLifeWork",
+            "roomLifeCall",
+            "roomLifeGift",
+            "roomLifeTrain",
+            "roomLifeStatus",
+            "roomCompanionTalk"
+          ],
+          "hits": [
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel"
+          ],
+          "reachable": [
+            "roomCompanionTalk",
+            "roomLifeWork",
+            "roomLifeCall",
+            "roomLifeGift",
+            "roomLifeTrain",
+            "roomLifeStatus"
+          ]
+        },
+        {
+          "target": "blank",
+          "delta": -100,
+          "sequence": [
+            "roomCompanionTalk",
+            "roomLifeStatus",
+            "roomLifeTrain",
+            "roomLifeGift",
+            "roomLifeCall",
+            "roomLifeWork",
+            "roomCompanionTalk"
+          ],
+          "hits": [
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel"
+          ],
+          "reachable": [
+            "roomCompanionTalk",
+            "roomLifeStatus",
+            "roomLifeTrain",
+            "roomLifeGift",
+            "roomLifeCall",
+            "roomLifeWork"
+          ]
+        },
+        {
+          "target": "blank",
+          "delta": -120,
+          "sequence": [
+            "roomCompanionTalk",
+            "roomLifeStatus",
+            "roomLifeTrain",
+            "roomLifeGift",
+            "roomLifeCall",
+            "roomLifeWork",
+            "roomCompanionTalk"
+          ],
+          "hits": [
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel",
+            "roomCompanionWheel"
+          ],
+          "reachable": [
+            "roomCompanionTalk",
+            "roomLifeStatus",
+            "roomLifeTrain",
+            "roomLifeGift",
+            "roomLifeCall",
+            "roomLifeWork"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "wheel-rapid-and-pending-resync",
+      "status": "PASS",
+      "rapidSequence": [
+        "roomCompanionTalk",
+        "roomLifeWork",
+        "roomLifeCall",
+        "roomLifeGift",
+        "roomLifeTrain",
+        "roomLifeStatus",
+        "roomCompanionTalk"
+      ],
+      "pendingSequence": [
+        "roomCompanionTalk",
+        "roomLifeWork",
+        "roomLifeCall",
+        "roomLifeGift",
+        "roomLifeTrain",
+        "roomLifeStatus",
+        "roomCompanionTalk"
+      ],
+      "smallDeltaEvents": 6,
+      "smallDeltaSize": 8
+    },
+    {
+      "name": "selected-character-front-and-still",
+      "status": "PASS",
+      "walkingBefore": {
+        "key": "luffy",
+        "cell": {
+          "col": 4,
+          "row": 4
+        },
+        "x": 315.45356516822426,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.7727437754697466,
+        "direction": "east",
+        "dock": null,
+        "ready": [
+          "west",
+          "east",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 6,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 12,
+            "row": 5
+          }
+        ]
+      },
+      "focusedAfter": {
+        "key": "luffy",
+        "cell": {
+          "col": 4,
+          "row": 4
+        },
+        "x": 315.45356516822426,
+        "y": 422,
+        "mode": "focused",
+        "attention": true,
+        "phase": 0.7727437754697466,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "west",
+          "east",
+          "north",
+          "south"
+        ],
+        "route": []
+      },
+      "samples": [
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "talk_happy",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "talk_happy",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "talk_happy",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "talk_happy",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 315.45356516822426,
+          "y": 422,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        }
+      ],
+      "detailsPreservesFocus": true
+    },
+    {
+      "name": "explicit-call-and-work-still-operate",
+      "status": "PASS",
+      "callSamples": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 4,
+            "row": 4
+          },
+          "x": 308.9189260672897,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.6899852154697464,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            },
+            {
+              "col": 7,
+              "row": 4
+            },
+            {
+              "col": 7,
+              "row": 5
+            },
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 4,
+            "row": 4
+          },
+          "x": 342.6812280887849,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.11757110880307994,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            },
+            {
+              "col": 7,
+              "row": 4
+            },
+            {
+              "col": 7,
+              "row": 5
+            },
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 5,
+            "row": 4
+          },
+          "x": 375.3805238196261,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.5316944576061597,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 6,
+              "row": 4
+            },
+            {
+              "col": 7,
+              "row": 4
+            },
+            {
+              "col": 7,
+              "row": 5
+            },
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 6,
+            "row": 4
+          },
+          "x": 409.1689260672897,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.959610899742573,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 4
+            },
+            {
+              "col": 7,
+              "row": 5
+            },
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 6,
+            "row": 4
+          },
+          "x": 442.9312280887849,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.3871967930759063,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 4
+            },
+            {
+              "col": 7,
+              "row": 5
+            },
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 4
+          },
+          "x": 454.8627335398065,
+          "y": 424.18142142682177,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.6771820352123196,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 5
+            },
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 4
+          },
+          "x": 454.62939571434686,
+          "y": 430.9893956284675,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.10476710187898658,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 5
+            },
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 4
+          },
+          "x": 454.3860337837793,
+          "y": 438.0898378379704,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.5461452352123203,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 5
+            },
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 4
+          },
+          "x": 454.14783292425744,
+          "y": 445.039698209898,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.9737303018789876,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 5
+            },
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 4
+          },
+          "x": 453.90720206791116,
+          "y": 452.06045731271007,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.4013153685456544,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 5
+            },
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 5
+          },
+          "x": 453.6710134934764,
+          "y": 458.95160630798136,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.8168279493148779,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 5
+          },
+          "x": 453.41755762489026,
+          "y": 466.34655400319764,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.2582060826482113,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 5
+          },
+          "x": 453.16947689341686,
+          "y": 473.5846741685412,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.6857911493148786,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 5
+          },
+          "x": 452.9188653759885,
+          "y": 480.89663373586586,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.11337621598154574,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 6
+            },
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 6
+          },
+          "x": 452.6733904312715,
+          "y": 488.0587262405477,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.528031591143391,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 6
+          },
+          "x": 452.4094273296251,
+          "y": 495.76023791211406,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.969409724476725,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 6
+          },
+          "x": 452.1510621960666,
+          "y": 503.29842063241307,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.39699479114339176,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 6
+          },
+          "x": 451.89006136062403,
+          "y": 510.91350383120295,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.824579857810059,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 7
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 7
+          },
+          "x": 451.75,
+          "y": 515,
+          "mode": "life-act",
+          "attention": false,
+          "phase": 0.052258168270981724,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": []
+        }
+      ],
+      "callArrived": true,
+      "workSamples": [
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 4,
+            "row": 4
+          },
+          "x": 308.9189260672897,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.6899852154697464,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            },
+            {
+              "col": 7,
+              "row": 4
+            },
+            {
+              "col": 8,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 3
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 4,
+            "row": 4
+          },
+          "x": 342.6812280887849,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.11757110880307994,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            },
+            {
+              "col": 7,
+              "row": 4
+            },
+            {
+              "col": 8,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 3
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 5,
+            "row": 4
+          },
+          "x": 375.3805238196261,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.5316944576061597,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 6,
+              "row": 4
+            },
+            {
+              "col": 7,
+              "row": 4
+            },
+            {
+              "col": 8,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 3
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 6,
+            "row": 4
+          },
+          "x": 409.1689260672897,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.959610899742573,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 4
+            },
+            {
+              "col": 8,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 3
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 6,
+            "row": 4
+          },
+          "x": 442.9312280887849,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.3871967930759063,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 7,
+              "row": 4
+            },
+            {
+              "col": 8,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 3
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 7,
+            "row": 4
+          },
+          "x": 475.6305238196261,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.8013201418789861,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 8,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 3
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 8,
+            "row": 4
+          },
+          "x": 508.3298195504673,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.21544349068206592,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 9,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 3
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 8,
+            "row": 4
+          },
+          "x": 543.1812280887849,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.6568224773487328,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 9,
+              "row": 4
+            },
+            {
+              "col": 9,
+              "row": 3
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 9,
+            "row": 4
+          },
+          "x": 554.9638606995584,
+          "y": 419.8249981760959,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.9468077194851461,
+          "direction": "north",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 9,
+              "row": 3
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 9,
+            "row": 4
+          },
+          "x": 554.2752154232874,
+          "y": 413.12758529314596,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.374392786151813,
+          "direction": "north",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 9,
+              "row": 3
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 9,
+            "row": 4
+          },
+          "x": 553.5935266577292,
+          "y": 406.49782788693017,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.8019778528184802,
+          "direction": "north",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 9,
+              "row": 3
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 9,
+            "row": 4
+          },
+          "x": 552.8970701713038,
+          "y": 399.7244471562072,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.24335598615181364,
+          "direction": "north",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 9,
+              "row": 3
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 9,
+            "row": 4
+          },
+          "x": 552.229303061116,
+          "y": 393.2300846728127,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.6709410528184809,
+          "direction": "north",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 9,
+              "row": 3
+            }
+          ]
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 9,
+            "row": 3
+          },
+          "x": 548.8125,
+          "y": 391,
+          "mode": "life-dock",
+          "attention": false,
+          "phase": 0.8611177867922504,
+          "direction": "west",
+          "dock": {
+            "x": 548.8125,
+            "y": 364.74064453125,
+            "z": 371,
+            "side": "north"
+          },
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": []
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 9,
+            "row": 3
+          },
+          "x": 548.8125,
+          "y": 385.21088854410834,
+          "mode": "life-dock",
+          "attention": false,
+          "phase": 0.24732365345891708,
+          "direction": "north",
+          "dock": {
+            "x": 548.8125,
+            "y": 364.74064453125,
+            "z": 371,
+            "side": "north"
+          },
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": []
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 9,
+            "row": 3
+          },
+          "x": 548.8125,
+          "y": 378.6594431186617,
+          "mode": "life-dock",
+          "attention": false,
+          "phase": 0.688701786792251,
+          "direction": "north",
+          "dock": {
+            "x": 548.8125,
+            "y": 364.74064453125,
+            "z": 371,
+            "side": "north"
+          },
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": []
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 9,
+            "row": 3
+          },
+          "x": 548.8125,
+          "y": 372.3778736816985,
+          "mode": "life-dock",
+          "attention": false,
+          "phase": 0.11628685345891818,
+          "direction": "north",
+          "dock": {
+            "x": 548.8125,
+            "y": 364.74064453125,
+            "z": 371,
+            "side": "north"
+          },
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": []
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 9,
+            "row": 3
+          },
+          "x": 548.8125,
+          "y": 366.15975898200816,
+          "mode": "life-dock",
+          "attention": false,
+          "phase": 0.5438719201255852,
+          "direction": "north",
+          "dock": {
+            "x": 548.8125,
+            "y": 364.74064453125,
+            "z": 371,
+            "side": "north"
+          },
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": []
+        },
+        {
+          "key": "luffy",
+          "cell": {
+            "col": 9,
+            "row": 3
+          },
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "mode": "life-act",
+          "attention": false,
+          "phase": 0.640423386792252,
+          "direction": "north",
+          "dock": {
+            "x": 548.8125,
+            "y": 364.74064453125,
+            "z": 371,
+            "side": "north"
+          },
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": []
+        }
+      ],
+      "workActivated": true
+    },
+    {
+      "name": "menu-close-restores-autonomy",
+      "status": "PASS",
+      "preservedJobId": "mock-1",
+      "held": {
+        "key": "luffy",
+        "cell": {
+          "col": 9,
+          "row": 3
+        },
+        "x": 548.8125,
+        "y": 364.76438459450145,
+        "mode": "focused",
+        "attention": true,
+        "phase": 0.640423386792252,
+        "direction": "south",
+        "dock": {
+          "x": 548.8125,
+          "y": 364.74064453125,
+          "z": 371,
+          "side": "north"
+        },
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      },
+      "samples": [
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        },
+        {
+          "x": 548.8125,
+          "y": 364.76438459450145,
+          "direction": "south",
+          "mode": "focused",
+          "pose": "idle",
+          "walking": false,
+          "canvasHidden": false
+        }
+      ],
+      "resumedWorker": {
+        "key": "luffy",
+        "cell": {
+          "col": 9,
+          "row": 3
+        },
+        "x": 548.8125,
+        "y": 364.76438459450145,
+        "mode": "life-act",
+        "attention": false,
+        "phase": 0.640423386792252,
+        "direction": "north",
+        "dock": {
+          "x": 548.8125,
+          "y": 364.74064453125,
+          "z": 371,
+          "side": "north"
+        },
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      },
+      "ordinaryRoute": {
+        "stopped": {
+          "key": "luffy",
+          "cell": {
+            "col": 2,
+            "row": 4
+          },
+          "x": 204.3125,
+          "y": 422,
+          "mode": "focused",
+          "attention": true,
+          "phase": 0.6348128421364131,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": []
+        },
+        "moving": {
+          "key": "luffy",
+          "cell": {
+            "col": 3,
+            "row": 4
+          },
+          "x": 295.8235476392522,
+          "y": 422,
+          "mode": "life-approach",
+          "attention": false,
+          "phase": 0.7937632309394932,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 4,
+              "row": 4
+            },
+            {
+              "col": 3,
+              "row": 4
+            },
+            {
+              "col": 2,
+              "row": 4
+            },
+            {
+              "col": 1,
+              "row": 4
+            },
+            {
+              "col": 1,
+              "row": 5
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "sourceSha256": {
+    "launcher-room.js": "240feace16bbfc08d2866b8ba5ba25f2044b060abce46ae46a5532b16de56662",
+    "launcher-room.css": "3dc6ac0750ee8afcba5c202516e81d180fec5472795a6679ae8887087f754c16",
+    "launcher-life-room.js": "a2f76a53ee05884242e39789bfe13bb9bda969efb15a01c1885d34f97d205b93",
+    "launcher-life.js": "f465cfaa4d1ab3397b40e915e38e4be534748973d0c9f5a63978798f919415b1",
+    "launcher-room-motion.js": "99565a7796ee0ad11f16987aa45e31d8a55e78888b079bb0fd0b5407d994f3ed",
+    "main.js": "733886a9ed8c7d39487326491ca5abeebb80f545d6a58411c601900b71465ff3",
+    "launcher.html": "e50a38faa46531cf6f25e7d855f304006fcb2f2a62bb4c48535f946d0ed3ac7b"
+  },
+  "sourceNormalizedSha256": {
+    "launcher-room.js": "d9de9680b484989e48ff5c72591a49cee98be5dbfd5dd07a79835176eeb8edd3",
+    "launcher-room.css": "32b67efc5bde4018a3ca66883f5afa0bed90eb47a09b27bcb0b54c912b3ec610",
+    "launcher-life-room.js": "af6208f636984ab12d3fbdc760e336807526e9d0627fc3c469e568197bac2818",
+    "launcher-life.js": "f465cfaa4d1ab3397b40e915e38e4be534748973d0c9f5a63978798f919415b1",
+    "launcher-room-motion.js": "cbf21401f6965e093f328073b9139fca5f0ddf4ba6fcf6d5b1b8c3c1e6c44205",
+    "main.js": "c0cab6c642587a1bd9b7b628098a1637818b5e134995cfc557bceceed96cb6d7",
+    "launcher.html": "19a8df25fa797a3c84cea5f0e42b4f8d7e9907cc7938057e8ad5408ffffa461b"
+  },
+  "sourceHashNormalization": "CRLF to LF only; all other bytes remain significant",
+  "testScriptSha256": "c3574e0e01e53604e323b069b8bff05db543548dd2886fe00d2bb14671a30320",
+  "sourceStable": true,
+  "limitations": [
+    "IPC and ownership use isolated fixtures; no production account, purchase or database touched",
+    "Playwright animation clock is deterministic; no human or physical-device acceptance",
+    "This report alone does not prove packaged installer or public deployment"
+  ]
+}

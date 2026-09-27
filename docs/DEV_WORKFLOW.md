@@ -7370,3 +7370,10 @@ UI / RWD：
 角色互動改為貼近角色的半圓輪盤，滾輪／拖曳／方向鍵切換，五個圓鈕顯示六項既有操作。依使用者最後要求，恢復生圖前的簡單 inline SVG 線條圖示，只調整海洋藍綠半透明底、淡金色符號／選取框。試作生圖全部留在本機候選歷程，未納入正式資源或封裝。修改 desktop/launcher-room.js、launcher-room.css、launcher-life-room.js、launcher.html、desktop/package.json 與 package-lock.json；新增 scripts/launcher_radial_qa.js、launcher_radial_fixture.js、presentation-v123 四支驗證工具及來源 CSS 圖示預覽工具。desktop_launcher_package_qa.js 綁定22runtime、6inlineSVG、13真Chromium隔離IPC操作檢查與8模型視覺審查。修正拖曳外部放開殘留及glyph visibility不同步；未改人物／家具比例、存檔、對話／經濟規則或Board同步。保留1.2.1／1.2.2原始審查。公開發布須通過安裝包、實際Electron、Ed25519簽章及公開installer SHA驗證；本原始碼紀錄本身不等於公開部署。LATTICE API本階段不可呼叫，沒有宣稱新持久任務或Graphify紀錄。
 
 發布附帶更新 public/desktop/launcher-release-v1.json 的既有金鑰 Ed25519 簽章，以及 public/desktop-download.html 的靜態備援下載連結／大小。1.2.3 安裝檔 244423496 bytes，SHA-256 3e340393e1b6fa37b5f807b7db0c088734b3bb18e3f9bf715998dbc81547b43d；封裝資源門檻、npm start／封裝 Electron 啟動、公開完整 GET／Range／SHA 已通過。正式 manifest 生效另以 canonical URL 比對提交後的完全相同位元組確認。
+
+
+## 2026-09-27 Launcher 1.2.4 interaction fixes
+
+修正一般滑鼠 delta100/120 一次跳兩格，六個輪盤項目只能轉到三個的錯誤；每個大滾輪事件改為一格，小幅觸控板事件累積後切換。選角後完整角色朝南面向觀看者、保持當前位置，關閉後續行；選定付費工作保留工作與預約，只暫停本機呈現及其逾時；明確成功的工作／呼喚／訓練／點心指令才關閉輪盤並執行，失敗則留在選角狀態。將相同原始 GPT 完整角色畫稿重新輸出為384px走路、256px表情圖格，80個 v4 atlas；既有 v3 原圖保留，未重新生成角色。修改 desktop/launcher-room.js、launcher-life-room.js、launcher-life.js、launcher-room-motion.js、main.js、package.json、package-lock.json。新增 hd-v4 素材來源／品質驗證、launcher_interaction_qa.js、launcher_radial_v124_qa.js 與 presentation-v124 審查門檻。驗證結果將以原始碼綁定的真 Chrome 隔離 IPC 回歸、高清1x/2x畫面、既有controller回歸、封裝Electron與公開SHA／manifest檢查記錄；不宣稱真人或實機驗收。LATTICE工具本階段不可呼叫，未宣稱新增持久任務或圖譜記錄。
+
+實際驗證：13項輪盤回歸、5組選角／滾輪／工作保留回歸、25項生活控制器、160組高清檢查（960圖格／16000次穩定繪製）、24項審查防護，以及10張模型目視皆通過。npm start與封裝Electron均成功，548項個人頁素材及BGM播放通過；1.2.4安裝檔 257785927 bytes，SHA-256 17137123eeef33f86d4d718b8600d34a8ab2726adba7d36bb0809da98a14be7f，公開完整GET／Range／SHA及既有Ed25519金鑰簽章已核對。正式canonical manifest切換與提交位元組比對仍以發布證據另行確認。320px窄畫面短暫招呼氣泡重疊列為非阻斷觀察，沒有宣稱真人或實體裝置驗收。
