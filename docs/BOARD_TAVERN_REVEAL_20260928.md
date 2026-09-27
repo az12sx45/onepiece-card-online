@@ -12,7 +12,7 @@
 
 ## 驗證與發布
 
-最終本機套件為 `package-b5eaebdecfaee7d6`，manifest SHA256 `0502fba41c3e97236d1ec832d7e1b36e58e3e323ba877f8211dc424c6bac4b82`，共 6368 檔／1532671578 bytes。`config/launcher-announcements-v1.json` revision 2 以新 ID `board-tavern-reveal-20260928-b5eaebdecfaee7d6` 新增 `scope=board`、相同 releaseId 的繁中公告；保留兩篇既有公告原文，CTA 只指向航海錄。公開 runtime 尚未符合時，既有服務不會向玩家顯示此新公告；實際公開上線證據須於部署後另記。
+最終已發布套件為 `package-b5eaebdecfaee7d6`，manifest SHA256 `0502fba41c3e97236d1ec832d7e1b36e58e3e323ba877f8211dc424c6bac4b82`，共 6368 檔／1532671578 bytes。`config/launcher-announcements-v1.json` revision 2 以新 ID `board-tavern-reveal-20260928-b5eaebdecfaee7d6` 新增 `scope=board`、相同 releaseId 的繁中公告；保留兩篇既有公告原文，CTA 只指向航海錄。公告依既有 runtime gate 顯示，未用正式玩家帳號寫入已讀狀態；公開部署證據見下方「正式發布結果」。
 
 公告本機 gate 14/14 通過：執行既有 runtime schema、append-only 與 package 對應檢查，並以實際公告服務 API／隔離記憶體 PGlite 驗證授權、舊版本隱藏、未驗 manifest 隱藏、正確版本顯示、發行見證與逐帳號已讀。此處 runtime verifier 使用受控舊／新版本回傳值，沒有向正式資料庫寫入；報告 `D:/Codex_QA/board-tavern-reveal-20260928/announcement-gate.json` 保存本次設定／服務／gate／catalog SHA。
 
@@ -31,5 +31,15 @@
 橫向最後补驗 `BOARD_QA_LANDSCAPE_ONLY=1` 6/6 通過，0 錯誤。932x430 角色透明輪廓 top 59.88 / bottom 325.28，字幕 top 333.81，間距 8.54px；邀請角色頭部完整、剪影與揭曉無裁頭。證據位於 landscape-final/result.json 與三張截圖。
 
 初版候選 package-acd57a19b6352ba6 已在外部 candidate 目錄建置，未 promote、未 R2 上傳、未推送。使用者確認「服裝跟傷疤是不同時期」，修正為逐位元複製遊戲既有 `images/board/story/speakers/luffy_smile.webp` 作邀請立繪，長袖紅上衣、胸前 X 傷疤與黃色腰帶保持既有同套造型，原始素材及被否決生圖稿保留。修正版 SHA256 e4c681eb835f5421d046c895fa2bad0c8919de658c6355a826e01f60e4618d6e。修正版圖片補驗 7/7 通過、0 錯誤：三種 viewport 的既有魯夫圖載入、跳過與原結果未決狀態；截圖目視確認頭部、邀請台詞與角色分開。證據 corrected-luffy/result.json；同步保存 BOARD_TAVERN_REVEAL_LUFFY_QA_20260928.json。原候選不得發布，修正後另建候選再驗 R2 與公開 runtime。
+
+## 正式發布結果
+
+正式提交 `1b7227679353fdff6f6c37bf8687152bb7c2f15b` 已推送 main。2026-09-28 03:03:03（Asia/Taipei，UTC 2026-09-27T19:03:03.872Z）公開 `/api/desktop-runtime-package/board` 實際回傳上述新 package 與 manifest SHA；03:03:18 最終公開驗證 59/59 通過，包含三款 runtime identity、55 份 Board 程式及舊存檔端點停用；health、catalog 與三款 manifest 亦逐位元組核對。Card／Chess package 維持原值。推送後約九分鐘仍回傳舊包的等待階段沒有被當成部署完成。
+
+官方 publisher dry-run 驗證 6042 個去重檔案（6368 logical files），正式發布上傳 6 個新 SHA、沿用 6036 個已存在物件。依 7 個變更路徑逐一完整 GET，HTTP 200、大小、SHA256、CORS 與 immutable cache 全部通過；其中魯夫沿用舊包既有 SHA，故另外納入 7 路徑核對，不能只靠既有 `--r2` 的 6 新 SHA 檢查。兩個被淘汰本機候選未上傳或發布。既有 6310 筆媒體記錄保持不變。
+
+修正版手機邀請台詞移至 `bottom: max(3%, env(safe-area-inset-bottom))`，避免與既有魯夫立繪的拳頭重疊。桌機／直向／橫向最後截图使用同一正確人物 SHA；原有圖與被否決原稿均保留。本機預覽：`http://localhost:18928/board_start.html`。玩家由啟動器下載航海錄更新後重開遊戲；未改使用者本機已安裝 receipt。
+
+完整發布證據保存在 `BOARD_TAVERN_REVEAL_RELEASE_QA_20260928.json` 與 `D:/Codex_QA/board-tavern-reveal-20260928/`；它區分本機功能測試、公開檔案核對及真正的 runtime 切換。收尾只補文件，以 `[skip render]` 提交，沿用 [Render 官方文件](https://render.com/docs/deploys#skipping-an-auto-deploy) 的文件更新流程，不再觸發重啟。
 
 LATTICE runtime/task API 不在本階段工具清單，官方 Status 回傳 BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED。未登記新 task、未修改資料庫、未宣稱圖譜成功。舊正式工作樹的未提交修改完整保留。

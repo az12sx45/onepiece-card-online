@@ -2,6 +2,8 @@
 
 ## 2026-09-28 酒館招募演出
 
+正式提交 `1b7227679353fdff6f6c37bf8687152bb7c2f15b` 已發布；台灣時間 03:03:03 公開 runtime 切換為 `package-b5eaebdecfaee7d6`，03:03:18 線上 59 項檢查通過。R2 6 新 SHA 上傳／6036 沿用，7 個變更路徑包含修正版魯夫皆完整 GET／SHA／CORS 通過；其他兩款遊戲版本不變。完整證據為 `BOARD_TAVERN_REVEAL_RELEASE_QA_20260928.json`，測試界線與素材更正見 `BOARD_TAVERN_REVEAL_20260928.md`；收尾文件以 `[skip render]` 提交。
+
 酒館成功抽選後以獨立呈現層播放魯夫邀請、階級門光、真實角色剪影與揭曉；原結果及收下／放棄／滿員替換 handlers 保持原位。新增 `public/js/board_tavern_reveal.js`、`public/css/board_tavern_reveal.css`、三張 `public/images/board/tavern_recruit/cinematic_v1/*.webp`；`board_game.js` 僅傳遞酒館限定的 UI 標記，`board_game.html` 載入模組，config 新增兩個程式 allowlist。圖片／prompts／SHA 見 `BOARD_TAVERN_CINEMATIC_ART_20260928.json`。
 
 `config/launcher-announcements-v1.json` revision 2 新增獨立 Board 更新公告 `board-tavern-reveal-20260928-b5eaebdecfaee7d6`，綁定最終 `package-b5eaebdecfaee7d6`；原啟動器與艾斯公告保持不變。公告說明邀請、階級門光、剪影、揭曉與跳過，以及抽選結果／費用不變；只有既有 runtime verifier 確認相同套件後才可顯示。公告設定寫入不代表公開版本已切換。

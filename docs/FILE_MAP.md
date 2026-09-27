@@ -2,6 +2,8 @@
 
 ## 2026-09-28 酒館招募演出
 
+- `config/launcher-announcements-v1.json`：與本次 Board package 綁定的新公告，保留既有公告。
+- `docs/BOARD_TAVERN_REVEAL_RELEASE_QA_20260928.json`、`docs/BOARD_TAVERN_REVEAL_ANNOUNCEMENT_QA_20260928.json`：公開 CAS／runtime／程式雜湊與隔離公告 gate 驗證證據。
 - `public/js/board_tavern_reveal.js`：監看明確標記的酒館結果、四階段演出、階級色、原結果按鈕與焦點恢復、跳過／取消／素材失敗處理。
 - `public/css/board_tavern_reveal.css`：點陣背景／門片／角色圖合成、門片轉動、剪影揭曉及桌機／手機版面。
 - `public/images/board/tavern_recruit/cinematic_v1/`：新 GPT 酒館門洞、透明雙門與沿用既有造型的魯夫邀請立繪。
