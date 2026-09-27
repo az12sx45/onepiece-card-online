@@ -8,6 +8,7 @@
 - `scripts/board_tavern_invitation_qa.js`：正式招募 handler 的隔離瀏覽器分歧驗證。
 - `scripts/build_board_tavern_crew_release.js`：自 6dc1/b5ea 基準保留全部 6313 媒體的 strict 新版候選建置。
 - `docs/BOARD_TAVERN_CREW_20260928.md`：設計、角色準則、測試與部署結果。
+- `docs/BOARD_TAVERN_CREW_RELEASE_QA_20260928.json`：正式 runtime 切換、60 項線上核對、13 項資源完整驗證與 launcher 1.2.8 保留證據。
 
 ## 2026-09-28 酒館招募演出
 

@@ -1,5 +1,11 @@
 # 草帽十人酒館邀請與分歧演出
 
+## 正式上線
+
+已部署發布提交 `5ce0b822f39a98950c6f9c696cd8ad9778bf33b2`。台灣時間 2026-09-28 05:40:54 首次觀察到公開 runtime 切換為 `package-1c453fcf83416d97`，05:43:06 正式站 verifier 60/60 通過：三款遊戲 identity、56 個 Board 程式及舊入口限制均正確，catalog／manifest 與正式 HTTP 逐檔 SHA 一致。6377 檔清單 SHA256 為 `f83c26dfb1d9e2bc74b864ebfd6afb67b939e73ed6ac6790462af098134f141e`。
+
+13 個變更資源的公開完整 GET／SHA／大小／CORS／immutable cache 驗證通過；launcher 1.2.8 canonical 發布 JSON 與下載頁皆 HTTP 200，與同一提交的 Git bytes 完全相同。本次未重新下載或安裝未變更的啟動器安裝檔。發布完整證據為 `BOARD_TAVERN_CREW_RELEASE_QA_20260928.json`；下列候選與本機階段記錄保留為歷史，不取代這次公開驗證。
+
 ## 範圍與來源
 
 正式工作樹為 `D:/Codex_Release_Worktrees/board-voyage-records-v1`。發布整合沿用 managed `tavern-recruit-animation`，先 fast-forward 至 `6dc1fcf32c13225e108b32767251c20098eefed4`，保留既有 rank 圖未提交修改與已發布 launcher 1.2.7。既有 Board 基準為 `package-b5eaebdecfaee7d6`。不覆寫兩棵工作樹原本不同的主程式內容，只同步本次明確區塊。
@@ -33,7 +39,7 @@ CPU 初始演出後回到原本按鈕策略，不等人類 overlay 選項；滿�
 - [布魯克](https://one-piece.com/character/brook/index.html)：禮貌、音樂與笑聲，不使用內褲梗。
 - [甚平](https://one-piece.com/character/Jinbe/index.html)：穩重仁義，尊重各自航向，不硬套大笑。
 
-## 驗證狀態
+## 本機階段紀錄
 
 本次尚在本機驗證，沒有把候選當作已部署。`scripts/board_tavern_invitation_qa.js` 最新完整回歸 163 項通過、0 瀏覽器執行錯誤：正式招募 handler、十人各兩種分歧、只扣一次 2500、加入／拒絕／六人替換、重複點擊、初始與反應取消、CPU 三種策略、reduced-motion、缺素材／缺 helper fallback、旁觀只讀與三種畫面尺寸。刻意缺圖測試的 HTTP 404 不當成正常素材載入證據。該輪 CSS 為底缘淡出前版本，後續獨立視覺測試使用最新 CSS。
 
@@ -49,7 +55,7 @@ root 已逐張查看十張三階段 contact sheet，包含重畫後的布魯克�
 
 LATTICE API 目前未列在可呼叫工具清單；前一階段官方 Status 曾回報 `CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，本次未聲稱新 task、圖譜或資料庫記錄成功。既有接入 project/task 只作續接線索，未冒充本次完成紀錄。
 
-## 發布候選
+## 候選與發布過程紀錄
 
 功能提交 `c815941cdbb9307c4f3b6041ea2baadb365adc43` 已經 scoped builder 建置、重算與 promote。本次套件 `package-1c453fcf83416d97`，manifest SHA256 `f83c26dfb1d9e2bc74b864ebfd6afb67b939e73ed6ac6790462af098134f141e`，6377 檔／1534234666 bytes。保留 6313 筆舊媒體，只變更四個既有程式、新增一個程式與八張圖；Card／Chess、舊 manifests 及 launcher 1.2.7 發布記錄不變。
 

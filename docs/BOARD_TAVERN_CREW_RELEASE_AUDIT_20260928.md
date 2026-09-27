@@ -1,5 +1,9 @@
 # Tavern Crew Release Audit - 2026-09-28
 
+## Public Deployment
+
+Release commit `5ce0b822f39a98950c6f9c696cd8ad9778bf33b2` reached the public Board runtime at 2026-09-27T21:40:54.511Z. The actual public HTTP verifier passed 60/60 checks at 21:43:06.068Z; all 13 changed blob paths passed full GET, size, SHA, CORS and immutable-cache checks. Public launcher 1.2.8 release metadata and download HTML match the same commit byte-for-byte. Complete evidence is `BOARD_TAVERN_CREW_RELEASE_QA_20260928.json`. The gates below retain their original local/candidate scope and do not claim real-account, physical-device or human play acceptance.
+
 ## Executed Guards
 
 - Evidence: `D:/Codex_QA/board-tavern-crew-20260928/release-guards-qa.json`.

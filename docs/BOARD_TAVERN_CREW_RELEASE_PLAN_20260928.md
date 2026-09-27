@@ -1,5 +1,7 @@
 # Board Tavern Crew Release Plan - 2026-09-28
 
+Historical pre-release planning snapshot. The pending/in-progress statements below describe the audit time, not current delivery status. The completed release is `package-1c453fcf83416d97`, deployed from `5ce0b822f39a98950c6f9c696cd8ad9778bf33b2`; see `BOARD_TAVERN_CREW_RELEASE_QA_20260928.json` for actual public verification and `BOARD_TAVERN_CREW_20260928.md` for the final scope.
+
 ## Audited Baseline
 
 - Formal authority remains `D:\Codex_Release_Worktrees\board-voyage-records-v1`; do not overwrite its unrelated local work from another checkout.
@@ -35,7 +37,7 @@
 8. Complete catalog/publisher dry-run, authorized immutable CAS upload, release commit/push and public runtime polling through the existing official pipeline. This planning work performs none of these actions.
 9. Public verification must compare exact runtime package/manifest identity and GET/hash/CORS for every changed logical path, including reused hashes. Use an Electron user agent for desktop-gated program paths. Tested local Chromium is not real Electron, physical-device or remote-network acceptance.
 
-## Current Builder Validation
+## Historical Pre-Release Builder Validation
 
 Executed `node --check scripts/build_board_tavern_crew_release.js`: PASS.
 
