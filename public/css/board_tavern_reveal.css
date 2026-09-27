@@ -45,7 +45,7 @@
 @media (max-aspect-ratio: 3 / 4) {
   .tavern-reveal-scene { width: 150dvh; }
   .tavern-reveal-luffy { left: 34%; width: 32%; bottom: 8%; height: 75%; }
-  .tavern-reveal-invitation { left: 7%; right: 7%; top: auto; bottom: 10%; text-align: center; }
+  .tavern-reveal-invitation { left: 7%; right: 7%; top: auto; bottom: max(3%, env(safe-area-inset-bottom)); text-align: center; }
   .tavern-reveal-invitation p { font-size: 27px; }
   .tavern-reveal-caption { left: 5%; right: 5%; bottom: 7%; }
   .tavern-reveal-name { font-size: 28px; }
