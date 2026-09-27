@@ -7363,3 +7363,10 @@ UI / RWD：
 - 最終本機六項互動／備援及 36 原圖雜湊通過（interactions-verified/report.json），包含桌機／窄螢幕移動時布局不变、移開回復／停止繪圖、校準、context loss/restore、觸控、reduced-motion、無 WebGL／深度資料失敗備援與升級按鈕。最初 npm start 缺相依及桌面入口攔截的失敗留存，使用子程序 NODE_PATH 指向現有依賴、OP_DESKTOP_ONLY=0 後完成實際 npm start；沒有改全域設定、node_modules 或資料庫。
 - 2026-09-24 21:07（Asia/Taipei）正式 runtime 已切換 `package-c84296185eafd825`，manifest SHA `7e682e1fe5874c22f90a2a2ab0ccadae84bd970d454f55698b74841bb325270c`；source e02c50310d0b377cb6bc214e8cc482fa5ff9b65c，package commit 0b469f47932c686a1db5ad39eeb2b2309a24ebc6。四個更新 blob 完整 GET／SHA／CORS、57 項正式 runtime／程式檔、144 項下載檢查與六艘船正式頁無覆寫 smoke 全部通過。
 - 證據 delivery.json、runtime-deployment.json、r2-public-verification.json、public-release/live-verify.json、distribution-release.json、public-smoke.json 均位於上述 QA 目錄。僅宣稱瀏覽器自動驗證，未聲稱實體手機或真人驗收；未改玩家存檔。LATTICE 本階段仍無 callable API，未假稱持久寫入。
+
+
+## 2026-09-27 Launcher 1.2.3 radial icons
+
+角色互動改為貼近角色的半圓輪盤，滾輪／拖曳／方向鍵切換，五個圓鈕顯示六項既有操作。依使用者最後要求，恢復生圖前的簡單 inline SVG 線條圖示，只調整海洋藍綠半透明底、淡金色符號／選取框。試作生圖全部留在本機候選歷程，未納入正式資源或封裝。修改 desktop/launcher-room.js、launcher-room.css、launcher-life-room.js、launcher.html、desktop/package.json 與 package-lock.json；新增 scripts/launcher_radial_qa.js、launcher_radial_fixture.js、presentation-v123 四支驗證工具及來源 CSS 圖示預覽工具。desktop_launcher_package_qa.js 綁定22runtime、6inlineSVG、13真Chromium隔離IPC操作檢查與8模型視覺審查。修正拖曳外部放開殘留及glyph visibility不同步；未改人物／家具比例、存檔、對話／經濟規則或Board同步。保留1.2.1／1.2.2原始審查。公開發布須通過安裝包、實際Electron、Ed25519簽章及公開installer SHA驗證；本原始碼紀錄本身不等於公開部署。LATTICE API本階段不可呼叫，沒有宣稱新持久任務或Graphify紀錄。
+
+發布附帶更新 public/desktop/launcher-release-v1.json 的既有金鑰 Ed25519 簽章，以及 public/desktop-download.html 的靜態備援下載連結／大小。1.2.3 安裝檔 244423496 bytes，SHA-256 3e340393e1b6fa37b5f807b7db0c088734b3bb18e3f9bf715998dbc81547b43d；封裝資源門檻、npm start／封裝 Electron 啟動、公開完整 GET／Range／SHA 已通過。正式 manifest 生效另以 canonical URL 比對提交後的完全相同位元組確認。

@@ -1,0 +1,257 @@
+{
+  "schema": "launcher-room-radial/1",
+  "releaseVersion": "1.2.3",
+  "artGeneration": "1.2.0",
+  "historicalBaseline": "b9210988b1b6fd6054ce8dfe65b6ddbd9b0f75ea",
+  "presentationBaseline": "caf02b4f2e768ebc4c0eefb9f393fff1b08ee8c9",
+  "status": "PASS_WITH_NOTES",
+  "blockingIssues": [],
+  "method": "Actual Chromium exercised thirteen interaction and viewport scenarios against the final source. The primary model inspected the actual desktop and inline-icon contact sheet. An independent model opened all eight final required PNGs and recorded concrete findings and screenshot hashes. User explicitly requested restoration of the original simple pre-generation symbols with maritime recoloring.",
+  "humanAcceptance": false,
+  "limitations": [
+    "Automated Chromium and model inspection do not establish physical-device or human fan/playtest acceptance.",
+    "Viewport overlays can cover adjacent characters or page chrome in narrow/short views; tested controls remain visible and operable.",
+    "IPC uses isolated wallet/profile fixtures; no real purchases, physical-device or human acceptance are claimed."
+  ],
+  "runtimeHashNormalization": "CRLF to LF only; all other bytes remain significant",
+  "runtime": {
+    "desktop/launcher-room.js": "4483c26e7c5a3d0f3861b14e9aa2f370ea6899c6c72d19151df3a7efcf39fc74",
+    "desktop/launcher-room.css": "32b67efc5bde4018a3ca66883f5afa0bed90eb47a09b27bcb0b54c912b3ec610",
+    "desktop/launcher-profile-shop.js": "9ceddcd5480eee810fb39859c2268f8a8464fd92458ed526b4a68f3f3bfc1cd8",
+    "desktop/launcher-life-room.js": "f5368af07ace54539306a0f9a72d9c225db0be3d7f6154b43ee2a9f256c040d7",
+    "desktop/launcher-life.js": "ca928053b49f4ba1cb8df0802f1b57e00368cff3e55a87ba909640f931966f9a",
+    "desktop/launcher-life-data.js": "a150b9f6aef8a82c4821b15a3a49b41eef4bccc11336795b2f6b25951b752410",
+    "desktop/launcher-life-actions.js": "d96db069e8d7025d3e48a9a86a00177e306b5be75dabdc0c85a6aff47a349f92",
+    "desktop/launcher-room-dialogue.js": "bc3d200914044b1ee97323302487d1a4e60b114586ba98551bed6384442d0b0a",
+    "desktop/launcher.html": "19a8df25fa797a3c84cea5f0e42b4f8d7e9907cc7938057e8ad5408ffffa461b",
+    "desktop/auth-service.js": "e06cc7121d12776f61d05966517d332d190d228d21d9bcd880113173b3172c9d",
+    "desktop/preload.js": "03668ed7e677b29e4212fb294d318937164b30be5b5621d7206e45fc1bbf2886",
+    "desktop/main.js": "d9425cd9dbe7074cadcbc5c0b96377aa8c2a12f71960b821a91443b78ea9650c",
+    "server/launcher-life.js": "a84e2d06aa70c6ee4dba4eee7bf819d4d86fb233d0bf1b4416c7196e7d5143b0",
+    "server/launcher-life-store.js": "ca2fe36da1055fc804df2bebf6ed1dec44c8c0aee666c890c6e7d816fdfd22f6",
+    "server/launcher-profile-shop.js": "f365f2e2e3b28d82c735b33637149931dd5eb4760a91e5b6eb5095295e55452d",
+    "server/index.js": "3bc51cd3c6338a0a9d798623633796f430b6598c9de24c34e2eea1cbdb27bd64",
+    "server/desktop-distribution.js": "e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85",
+    "desktop/launcher-profile-shop.css": "7e064396e85d2750113f40dba898dc57dd83ad3aa7f77ec718e62458864045db",
+    "desktop/launcher.css": "272c9f7e809d19291c4c9a037b762cdc436515aa87a681873e66f22f3fabdbea",
+    "desktop/launcher.js": "345be37a9d953a1dea307414df27e9051938444e563b69cfc62aed5718b41172",
+    "desktop/launcher-room-motion.js": "a215bc7b866d4ba870bc951e63701fbea354c33e67922a6316a19cfe03301b59",
+    "desktop/launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d"
+  },
+  "approvedRuntimeVariants": {
+    "server/desktop-distribution.js": [
+      {
+        "normalizedSha256": "c9330072bab54d00370735b6fcc01bbcef76e101183dc42b9222e0f4d5769255",
+        "reviewedBaseNormalizedSha256": "e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85",
+        "reason": "Preserve formal Board media policy: the launcher merge adds only LAUNCHER_LIFE_GET and LAUNCHER_LIFE_COMMAND; the candidate-only three-line Board depth manifest exception is not copied into the formal authority.",
+        "evidence": {
+          "patch": {
+            "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution.js.patch",
+            "sha256": "758e224a4e496ffcacc8ed1c4250a91286cb5576dd705195a9737a43943eafce"
+          },
+          "formalReadback": {
+            "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution-readback.json",
+            "sha256": "4139001682628e684103a70c592988f62b0cf7fbb066fdd856aebaa9b3b544e9"
+          }
+        }
+      }
+    ]
+  },
+  "iconMode": "inline-svg-restored-user-request",
+  "evidence": [
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/icons-contact.png",
+      "kind": "screenshot",
+      "sha256": "341c3710d22fc56597647fc7baddba7d0a632900d2bbc0faa17d756b7fa0af5e",
+      "pixels": [
+        960,
+        360
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/independent-visual-review.json",
+      "kind": "report",
+      "sha256": "208a87d27bf65d2d577502aefe3e0e94e0a957e9c03fdf7a9c58f2755223745f"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/radial-desktop.png",
+      "kind": "screenshot",
+      "sha256": "880ec566e945e62d7992668374bbc841ac7b16e42ccce45e8d0a65d7bf779c85",
+      "pixels": [
+        1366,
+        1050
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/radial-details.png",
+      "kind": "screenshot",
+      "sha256": "5a634c49b2b00fdde8d857a6de76eff9c63d853e342432ad5d0d0ec277705bd6",
+      "pixels": [
+        1366,
+        1050
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/radial-edge.png",
+      "kind": "screenshot",
+      "sha256": "ccff9d6a9d0918d8ca10c80b1871f90515036ea62e9e1b4b9c4a80146e705804",
+      "pixels": [
+        1366,
+        1050
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/radial-friend.png",
+      "kind": "screenshot",
+      "sha256": "996d4e28b6a9bfedd8c13669c203d0de3cb435a4ba13bb20d45c666f74cce8de",
+      "pixels": [
+        1366,
+        1050
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/radial-mobile-details.png",
+      "kind": "screenshot",
+      "sha256": "65d768a4ec3525fa828bcd9d129c65bc71dfa8ae0d1b91cf8232f50edfc39e20",
+      "pixels": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/radial-mobile.png",
+      "kind": "screenshot",
+      "sha256": "b6b203f373c4d2a64f4bdee26166f65f020c899765b957b5158cf90a7023e5b1",
+      "pixels": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/radial-narrow-details.png",
+      "kind": "screenshot",
+      "sha256": "3b69915626253e225744e6a2a349815f5904738883c095981aea828f3806cef0",
+      "pixels": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/radial-narrow.png",
+      "kind": "screenshot",
+      "sha256": "00d30765cd1684e632fe687c59034f77763fc251ce422d270242ac394b4c0f3f",
+      "pixels": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/radial-short-details.png",
+      "kind": "screenshot",
+      "sha256": "1b23240a3a1c97668c6d4ef532b37d3dc90c8cafadadb866b4fee19d8a71a3a0",
+      "pixels": [
+        900,
+        300
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/radial-short.png",
+      "kind": "screenshot",
+      "sha256": "760b1898964a1ea6314ee16b40b100ebeb78f153bd92ebe979bd131fdef3294a",
+      "pixels": [
+        900,
+        300
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/radial-turned.png",
+      "kind": "screenshot",
+      "sha256": "34694a4105fdb5d85379715e4e4792db71bdafa42eb4a96b8db2c9e420ccc3f7",
+      "pixels": [
+        1366,
+        1050
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/radial-work.png",
+      "kind": "screenshot",
+      "sha256": "b63765a745ffae67f41b23ce1f6fb6463084056b4126eb99bd66638632ef0cba",
+      "pixels": [
+        1366,
+        1050
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v123/review-evidence/RADIAL_QA.json",
+      "kind": "report",
+      "sha256": "d1cf57373321b52a2f26b55208cda614994d5945100ba8db16d93a0433770793"
+    }
+  ],
+  "qaReport": "tools/launcher-room/presentation-v123/review-evidence/RADIAL_QA.json",
+  "checks": [
+    {
+      "id": "desktop-owner-radial",
+      "status": "PASS",
+      "notes": "Five separate circular controls form a right-side semicircle around the selected character. The current icons are simple original line pictograms with warm ivory/gold strokes over translucent muted sea-teal buttons; no generated raster illustrations are visible. Selected chat button has a clear rim and contrast; no clipped control. Nearby actor partially overlaps inner caption area, but the caption remains legible.",
+      "evidence": [
+        "tools/launcher-room/presentation-v123/review-evidence/radial-desktop.png"
+      ]
+    },
+    {
+      "id": "mobile-owner-radial",
+      "status": "PASS",
+      "notes": "All five line pictograms and the close control are visible inside the viewport. The arc extends below the room over the music card, while each circular button and selected icon remain discernible. No rectangular action-list backplate; original transparent circular treatment preserved.",
+      "evidence": [
+        "tools/launcher-room/presentation-v123/review-evidence/radial-mobile.png"
+      ]
+    },
+    {
+      "id": "narrow-owner-radial",
+      "status": "PASS",
+      "notes": "Arc mirrors left at the narrow viewport boundary and every circular control remains visible. Warm line glyphs remain legible against the sea-teal button tint over both water and wood. Lower call control overlaps underlying content without visible clipping.",
+      "evidence": [
+        "tools/launcher-room/presentation-v123/review-evidence/radial-narrow.png"
+      ]
+    },
+    {
+      "id": "short-owner-radial",
+      "status": "PASS",
+      "notes": "The short viewport keeps all five controls and the close button visible. Top controls overlay the header and the lowest control approaches the viewport edge; no pictogram is cut off in this screenshot. The selected chat action retains a clear border and the selected character remains visible.",
+      "evidence": [
+        "tools/launcher-room/presentation-v123/review-evidence/radial-short.png"
+      ]
+    },
+    {
+      "id": "desktop-friend-readonly-radial",
+      "status": "PASS",
+      "notes": "Only the details action is visible, with no owner-only work/gift/training circles shown. The details sheet and return control fit inside the viewport; description and status chips are readable. Details uses the original simple information glyph.",
+      "evidence": [
+        "tools/launcher-room/presentation-v123/review-evidence/radial-friend.png"
+      ]
+    },
+    {
+      "id": "desktop-work-sheet",
+      "status": "PASS",
+      "notes": "The original briefcase line glyph is visibly selected in the semicircle. The separate translucent work sheet displays three legible choices and a visible return control. All circular controls and sheet edges fit without visible clipping.",
+      "evidence": [
+        "tools/launcher-room/presentation-v123/review-evidence/radial-work.png"
+      ]
+    },
+    {
+      "id": "desktop-details-sheet",
+      "status": "PASS",
+      "notes": "The selected information glyph and details sheet are visually distinct and readable. Description, state chips and return control fit without overflow. Original line icons match the rest of the launcher UI and retain the muted sea-teal/warm-gold palette.",
+      "evidence": [
+        "tools/launcher-room/presentation-v123/review-evidence/radial-details.png"
+      ]
+    },
+    {
+      "id": "inline-icons-contact-sheet",
+      "status": "PASS",
+      "notes": "All six original line icons are visible on dark sea-teal and warm wood backgrounds: chat bubble, briefcase, call arrow, gift, training weight and information. Line weight, round-button dimensions, generous padding and warm ivory/gold tint are consistent. Selected state is differentiated by brighter teal fill and warm-gold border; no GPT bitmap artwork is visible.",
+      "evidence": [
+        "tools/launcher-room/presentation-v123/review-evidence/icons-contact.png"
+      ]
+    }
+  ]
+}

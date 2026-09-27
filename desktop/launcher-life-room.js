@@ -259,12 +259,21 @@
       $('roomLifeGift').setAttribute('aria-label','送點心，5 枚商城金幣');
       $('roomLifeWork').setAttribute('aria-expanded','false');
       $('roomLifeStatus').setAttribute('aria-expanded','false');
-      const panel=document.createElement('div');panel.id='roomLifeDetails';panel.className='room-life-details';panel.hidden=true;wrap.after(panel);
-      const work=document.createElement('div');work.id='roomLifeWorkChoices';work.className='room-life-work-choices';work.hidden=true;panel.after(work);
+      const panel=document.createElement('div');panel.id='roomLifeDetails';panel.className='room-life-details';panel.hidden=true;$('roomCompanionSheet').append(panel);
+      const work=document.createElement('div');work.id='roomLifeWorkChoices';work.className='room-life-work-choices';work.hidden=true;$('roomCompanionSheet').append(work);
       $('roomLifeWork').onclick=showWorkChoices;
       $('roomLifeCall').onclick=()=>runManual('call');$('roomLifeTrain').onclick=()=>runManual('train');
-      $('roomLifeGift').onclick=()=>{const node=$('roomLifeGift');if(node.dataset.confirm!=='true'){node.dataset.confirm='true';node.textContent='確認 · 5';setTimeout(()=>{delete node.dataset.confirm;node.textContent='點心 · 5';},5000);return;}delete node.dataset.confirm;node.textContent='點心 · 5';runManual('gift');};
-      $('roomLifeStatus').onclick=()=>{panel.hidden=!panel.hidden;$('roomCompanionPanel').classList.toggle('show-details',!panel.hidden);$('roomLifeStatus').setAttribute('aria-expanded',String(!panel.hidden));renderPanel();};
+      $('roomLifeGift').onclick=()=>{const node=$('roomLifeGift');if(node.dataset.confirm!=='true'){node.dataset.confirm='true';node.textContent='確認 · 5';setTimeout(()=>{delete node.dataset.confirm;node.textContent='點心 · 5';window.LauncherRoom?.refreshCompanion?.();},5000);window.LauncherRoom?.refreshCompanion?.();return;}delete node.dataset.confirm;node.textContent='點心 · 5';runManual('gift');};
+      $('roomCompanionSheetClose').onclick=()=>{panel.hidden=true;work.hidden=true;syncPanelShell();$('roomCompanionWheel').focus({preventScroll:true});};
+      $('roomLifeStatus').onclick=()=>{work.hidden=true;panel.hidden=!panel.hidden;$('roomCompanionPanel').classList.toggle('show-details',!panel.hidden);$('roomLifeStatus').setAttribute('aria-expanded',String(!panel.hidden));renderPanel();};
+    }
+    function syncPanelShell() {
+      const details=$('roomLifeDetails'),work=$('roomLifeWorkChoices');
+      $('roomCompanionSheet').hidden=details.hidden&&work.hidden;
+      $('roomCompanionPanel').classList.toggle('show-details',!details.hidden);
+      $('roomLifeStatus').setAttribute('aria-expanded',String(!details.hidden));
+      $('roomLifeWork').setAttribute('aria-expanded',String(!work.hidden));
+      window.LauncherRoom?.refreshCompanion?.();
     }
     function renderPanel() {
       panelNodes();const wrap=$('roomLifeActions');if(!wrap)return;
@@ -274,7 +283,7 @@
       $('roomCompanionActions').hidden=false;
       $('roomCompanionTalk').hidden=!owner();
       for(const button of wrap.querySelectorAll('button')){button.hidden=button.id!=='roomLifeStatus'&&!owner();button.disabled=manualBusy||!actor||(button.id!=='roomLifeStatus'&&!owner());}
-      const details=$('roomLifeDetails');if(!actor){details.textContent='';return;}
+      const details=$('roomLifeDetails');if(!actor){details.textContent='';syncPanelShell();return;}
       const needs=actor.needs||{};
       const values=[['精神',needs.energy],['飢餓',needs.hunger],['心情',needs.mood],['社交滿足',needs.social],['工作意願',needs.workMotivation]];
       details.replaceChildren();
@@ -284,9 +293,10 @@
       if(task?.jobId&&owner()){const cancel=document.createElement('button');cancel.type='button';cancel.className='ghost-button';cancel.textContent='結束這次分工';cancel.onclick=()=>controller.cancel(key);details.append(cancel);}
       const memories=(actor.memories||[]).filter(m=>m.currentStrength>.15).slice(-2);
       if(memories.length){const p=document.createElement('small');p.textContent='還記得最近和夥伴一起度過的片刻。';details.append(p);}
+      syncPanelShell();
     }
     function showWorkChoices() {
-      const node=$('roomLifeWorkChoices');node.hidden=!node.hidden;$('roomLifeWork').setAttribute('aria-expanded',String(!node.hidden));if(node.hidden)return;node.replaceChildren();
+      const node=$('roomLifeWorkChoices');$('roomLifeDetails').hidden=true;node.hidden=!node.hidden;$('roomLifeWork').setAttribute('aria-expanded',String(!node.hidden));if(node.hidden){syncPanelShell();return;}node.replaceChildren();
       const key=keyOf(env.companionId());
       for(const station of stations()) {
         const button=document.createElement('button');button.type='button';button.className='ghost-button';
@@ -294,6 +304,7 @@
         button.textContent=`${def?.name||def?.label||station.type} · ${Math.round(efficiency*100)}%`;
         button.onclick=()=>runManual('work',station.id);node.append(button);
       }
+      syncPanelShell();
     }
     async function runManual(action,stationId) {
       const key=keyOf(env.companionId());if(!controller||manualBusy||!key)return;

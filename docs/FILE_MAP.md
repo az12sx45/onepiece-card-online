@@ -1135,3 +1135,8 @@
 2026-09-24：public/js/board_water_seven_depth.js 為水之七島獨立呈現模組，board_water_seven_depth_data.json 為 36 視角數字深度資料；scripts/build_water_seven_ship_depth.py 負責離線推論、water_seven_ship_depth_qa.js 比對布局、water_seven_ship_function_qa.js 比對正式改造功能，build_water_seven_ship_release.js 建立限定發布候選。詳 BOARD_WATER_SEVEN_DEPTH_20260924.md。
 
 2026-09-24：scripts/build_water_seven_ship_cors_release.js 固定 9a74f0467 基線，限定四程式更新，處理正式 CDN texture 快取的 CORS 讀取；原資料與素材不變。
+
+
+## 2026-09-27 Launcher 1.2.3 radial icons
+
+desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、簡單inline SVG、海洋藍綠和淡金色；launcher-life-room.js：既有動作與二級內容面板。scripts/launcher_radial_fixture.js／launcher_radial_qa.js：13項Chromium隔離測試；desktop_launcher_package_qa.js：來源及封裝檢查。tools/launcher-room/presentation-v123/validate_historical_presentation.js、validate_release.js、validate_review_draft.js、validate_gate_qa.js：歷史保護及新審查閘門；render_inline_contact.js：從實際CSS產生六圖示預覽；review-evidence：最終截圖、報告。docs/LAUNCHER_ROOM_RADIAL_20260927.json：模型審查及SHA。此版沒有新增生圖PNG、opui允許項或extraResources。

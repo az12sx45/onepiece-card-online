@@ -9,6 +9,7 @@ const DESKTOP_ROOT = path.join(ROOT, 'desktop');
 const PUBLIC_ROOT = path.join(ROOT, 'public');
 const PACKAGE_PATH = path.join(DESKTOP_ROOT, 'package.json');
 const PACKAGE_LOCK_PATH = path.join(DESKTOP_ROOT, 'package-lock.json');
+const RADIAL_PRESENTATION = require('../tools/launcher-room/presentation-v123/validate_release');
 
 const MAX_LAUNCHER_ASSET_BYTES = 128 * 1024 * 1024;
 // 1.1.16 retains the 80 reviewed 1.1.15 atlases and 10 portraits. Keep the existing media
@@ -519,7 +520,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.2.2', 'Desktop launcher version must be 1.2.2 for the reviewed room presentation release.');
+  assert(packageJson.version === '1.2.3', 'Desktop launcher version must be 1.2.3 for the reviewed radial presentation release.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -641,7 +642,7 @@ function validateSourcePackage() {
   const scaleReview = readJson(path.join(ROOT, scaleReviewPath), 'room scale visual review');
   assert(scaleReview.status === 'PASS_WITH_NOTES' && scaleReview.blockingIssues.length === 0, 'Room scale visual review has unresolved issues.');
   assert(scaleReview.runtimeHashNormalization === 'CRLF to LF only; all other bytes remain significant', 'Unexpected room review hash normalization.');
-  const presentationStatus = require('../tools/launcher-room/presentation-v122/validate_release').validate(ROOT);
+  const presentationStatus = RADIAL_PRESENTATION.validate(ROOT);
   const lifeStatus = presentationStatus.life;
   for (const [file, digest] of Object.entries(scaleReview.runtime)) {
     const reviewedBytes = fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n');
@@ -859,7 +860,7 @@ function validateAsar(asarPath) {
       `Packaged application source differs: ${entry}`);
   }
   const packedPackage = JSON.parse(asar.extractFile(asarPath, 'package.json').toString('utf8'));
-  assert(packedPackage.version === '1.2.2' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
+  assert(packedPackage.version === '1.2.3' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
   for (const entry of entries) {
     const lower = entry.toLowerCase();
     assert(!lower.startsWith('public/'), `app.asar contains the public game tree: ${entry}`);
@@ -982,8 +983,8 @@ function main() {
       'Release package requires all eighty complete-body atlases and explicit visual review evidence for every direction.');
     assert(source.zoroOverlayStatus === 'verified',
       'Release package requires a verified Zoro art overlay; candidate art cannot be shipped.');
-    assert(source.presentationStatus.complete && source.presentationStatus.review.releaseVersion === '1.2.2',
-      'Release package requires historical art provenance plus the exact current 1.2.2 visual review.');
+    assert(source.presentationStatus.complete && source.presentationStatus.review.releaseVersion === '1.2.3',
+      'Release package requires historical art provenance plus the exact current 1.2.3 radial and icon review.');
   }
   const parts = [
     'DESKTOP_LAUNCHER_PACKAGE_QA=PASS',
@@ -998,6 +999,9 @@ function main() {
     `roomArtReviewed=${source.roomMotionStatus.allSelectedArtReviewed}`,
     `presentationVersion=${source.presentationStatus.review.releaseVersion}`,
     `presentationScenarios=${source.presentationStatus.scenarios}`,
+    `radialIcons=${source.presentationStatus.icons.count}`,
+    `radialIconMode=${source.presentationStatus.icons.mode}`,
+    `radialFunctionalChecks=${source.presentationStatus.functionalChecks}`,
     `lifeHistoricalRuntime=${source.presentationStatus.historicalBaseline}`,
     `zoroArt=${source.zoroOverlayStatus}`
   ];

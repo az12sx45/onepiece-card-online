@@ -266,46 +266,106 @@
     $('roomCompanionTalk').disabled = !canAct || (record && (Number(record.talksRemainingToday) <= 0 || Date.parse(record.nextTalkAt) > Date.now()));
     $('roomCompanionTalk').title = record && Date.parse(record.nextTalkAt) > Date.now() ? `下次可聊天：${remainingTime(record.nextTalkAt)}` : '';
     lifeRoom?.renderPanel();
-    positionCompanion();
+    refreshCompanion();
   }
-  // A viewport overlay follows the whole actor, including in a scrolled room.
-  // It never participates in the profile layout or interrupts autonomous tasks.
+  // Same interaction model as the lineage extractor: upright icons travel
+  // along an arc and settle on one action. Scrolling never performs an action.
   let companionPositionAt = 0;
+  let wheelPhase = 0, wheelTarget = 0, wheelFrame = 0, wheelAt = 0, wheelKey = '', wheelDelta = 0, wheelDrag = null, wheelSuppressClick = false;
+  const WHEEL_IDS = ['roomCompanionTalk', 'roomLifeWork', 'roomLifeCall', 'roomLifeGift', 'roomLifeTrain', 'roomLifeStatus'];
+  function wheelButtons() {
+    return WHEEL_IDS.map($).filter(button => button && !button.hidden && (button.id === 'roomCompanionTalk' || !$('roomLifeActions')?.hidden));
+  }
+  function resetCompanionWheel() {
+    cancelAnimationFrame(wheelFrame); wheelFrame = 0; wheelAt = 0; wheelKey = ''; wheelDelta = 0; wheelDrag = null; wheelSuppressClick = false;
+    wheelPhase = 0; wheelTarget = 0;
+  }
+  function renderCompanionWheel() {
+    if (!companionId) return;
+    const buttons = wheelButtons(), count = buttons.length;
+    const key = `${companionId}:${buttons.map(button => button.id).join(',')}`;
+    if (key !== wheelKey) { resetCompanionWheel(); wheelKey = key; }
+    if (!count) return;
+    const selected = ((Math.round(wheelTarget) % count) + count) % count;
+    const mirrored = $('roomCompanionPanel').dataset.side === 'left';
+    const phase = ((wheelPhase % count) + count) % count;
+    for (const [index, button] of buttons.entries()) {
+      const offset = ((index - phase + count * 1.5) % count) - count / 2;
+      const angle = offset * 40 * Math.PI / 180;
+      const onArc = Math.abs(offset) <= 2.22;
+      const x = 28 + 108 * Math.cos(angle), y = 136 + 108 * Math.sin(angle);
+      const scale = 1 - Math.min(1, Math.abs(offset) / 2.5) * .16;
+      button.style.left = `${mirrored ? 188 - x : x}px`; button.style.top = `${y}px`;
+      button.style.transform = `translate(-50%, -50%) scale(${scale})`;
+      button.style.opacity = onArc ? String(1 - Math.abs(offset) * .13) : '0';
+      // Opacity also hides the back slot. Avoid toggling visibility here: Chromium
+      // can retain an inherited hidden state on the masked icon when it re-enters.
+      button.style.pointerEvents = onArc ? 'auto' : 'none';
+      button.tabIndex = onArc ? 0 : -1;
+      button.setAttribute('aria-hidden', String(!onArc));
+      button.classList.toggle('is-wheel-current', index === selected);
+      button.title = button.id === 'roomLifeGift' ? (button.dataset.confirm === 'true' ? '確認送點心：5 枚商城金幣' : '送點心：5 枚商城金幣') : button.textContent;
+    }
+    const current = buttons[selected];
+    $('roomWheelLabel').textContent = current.id === 'roomLifeGift' ? (current.dataset.confirm === 'true' ? '確認送點心' : '點心 · 5金幣') : current.textContent;
+    $('roomCompanionWheel').dataset.selectedAction = current.id;
+    $('roomCompanionWheel').setAttribute('aria-label', `夥伴互動輪盤，目前${current.textContent}，滾輪或上下方向鍵切換，Enter執行`);
+  }
+  function animateCompanionWheel(now) {
+    wheelFrame = 0;
+    if (!companionId || $('roomCompanionPanel').hidden) return;
+    const dt = Math.min(40, Math.max(1, now - (wheelAt || now - 16))); wheelAt = now;
+    wheelPhase += (wheelTarget - wheelPhase) * (1 - Math.exp(-dt / 65));
+    if (motion.matches || Math.abs(wheelTarget - wheelPhase) < .003) { wheelPhase = wheelTarget; wheelAt = 0; }
+    renderCompanionWheel();
+    if (wheelPhase !== wheelTarget) wheelFrame = requestAnimationFrame(animateCompanionWheel);
+  }
+  function rotateCompanionWheel(steps) {
+    if (!companionId || wheelButtons().length < 2) return;
+    wheelTarget += steps;
+    if (motion.matches) { wheelPhase = wheelTarget; renderCompanionWheel(); return; }
+    if (!wheelFrame) wheelFrame = requestAnimationFrame(animateCompanionWheel);
+  }
   function positionCompanion() {
     const panel = $('roomCompanionPanel');
     if (!companionId || panel.hidden) return;
     const actor = [...$('roomCharacters').children].find(node => node.dataset.roomKey === `c:${companionId}`);
     if (!actor || actor.hidden) { panel.style.visibility = 'hidden'; return; }
     const anchor = actor.getBoundingClientRect(), stage = $('roomStage').getBoundingClientRect();
-    const clip = $('roomStage').parentElement.getBoundingClientRect();
-    const profileClip = $('roomStage').closest('.voyage-scroll').getBoundingClientRect();
-    const width = document.documentElement.clientWidth, height = window.innerHeight, margin = 8, gap = 9;
+    const clip = $('roomStage').parentElement.getBoundingClientRect(), profileClip = $('roomStage').closest('.voyage-scroll').getBoundingClientRect();
+    const width = document.documentElement.clientWidth, height = window.innerHeight, margin = 8;
     const left = Math.max(margin, clip.left), right = Math.min(width - margin, clip.right);
     const top = Math.max(margin, stage.top, profileClip.top), bottom = Math.min(height - margin, stage.bottom, profileClip.bottom);
-    if (anchor.right <= left || anchor.left >= right || anchor.bottom <= top || anchor.top >= bottom) {
-      panel.style.visibility = 'hidden'; return;
-    }
+    if (anchor.right <= left || anchor.left >= right || anchor.bottom <= top || anchor.top >= bottom) { panel.style.visibility = 'hidden'; return; }
     panel.style.visibility = '';
-    panel.style.maxHeight = `${Math.max(100, height - margin * 2)}px`;
-    const box = panel.getBoundingClientRect();
-    let x = anchor.right + gap, side = 'right';
-    if (x + box.width > width - margin) { x = anchor.left - box.width - gap; side = 'left'; }
-    let y = anchor.top + Math.min(22, anchor.height * .18);
-    if (x < margin) {
-      x = anchor.left + (anchor.width - box.width) / 2;
-      y = anchor.top - box.height - gap;
-      side = 'above';
-      if (y < margin && anchor.bottom + gap + box.height <= height - margin) { y = anchor.bottom + gap; side = 'below'; }
+    const scale = Math.min(1, (height - 24) / 272), menuWidth = 188 * scale, menuHeight = 272 * scale;
+    panel.style.setProperty('--room-wheel-scale', String(scale));
+    panel.style.width = `${menuWidth}px`; panel.style.height = `${menuHeight}px`;
+    let x = anchor.right - anchor.width * .13, side = 'right';
+    if (x + menuWidth > width - margin) { x = anchor.left + anchor.width * .13 - menuWidth; side = 'left'; }
+    x = Math.max(margin, Math.min(width - menuWidth - margin, x));
+    const y = Math.max(margin, Math.min(height - menuHeight - margin, anchor.bottom - anchor.height * .3 - menuHeight / 2));
+    if (panel.dataset.side !== side) { panel.dataset.side = side; renderCompanionWheel(); }
+    panel.style.left = `${Math.round(x)}px`; panel.style.top = `${Math.round(y)}px`;
+    const sheet = $('roomCompanionSheet');
+    if (!sheet.hidden) {
+      sheet.style.maxHeight = `${height - margin * 2}px`;
+      const sheetWidth = Math.min(224, width - margin * 2);
+      sheet.style.width = `${sheetWidth}px`;
+      let sheetX = side === 'right' ? x + menuWidth + 6 : x - sheetWidth - 6;
+      sheetX = Math.max(margin, Math.min(width - sheetWidth - margin, sheetX));
+      sheet.style.left = `${Math.round(sheetX)}px`;
+      sheet.style.top = `${Math.round(Math.max(margin, Math.min(height - sheet.offsetHeight - margin, y + 28)))}px`;
     }
-    panel.dataset.side = side;
-    panel.style.left = `${Math.round(Math.max(margin, Math.min(width - box.width - margin, x)))}px`;
-    panel.style.top = `${Math.round(Math.max(margin, Math.min(height - box.height - margin, y)))}px`;
   }
+  function refreshCompanion() { renderCompanionWheel(); positionCompanion(); }
   function closeCompanion() {
     if (companionTick) clearInterval(companionTick);
     companionTick = 0;
     const previous = companionId;
     companionId = '';
+    resetCompanionWheel();
+    $('roomCompanionSheet').hidden = true;
     companionRequest++;
     companionBusy = false;
     companionStatus('');
@@ -339,7 +399,7 @@
     }
     lifeRoom?.tapped(keyForCharacter(resolvedItem(itemId, 'character')));
     renderCompanionPanel();
-    if (keyboard) $('roomCompanionPanel').querySelector('.room-companion-actions button:not([hidden]):not(:disabled)')?.focus({ preventScroll: true });
+    if (keyboard) $('roomCompanionWheel').focus({ preventScroll: true });
     companionTick = setInterval(renderCompanionPanel, 1000);
     if (!isOwner() || typeof api.getLauncherCharacter !== 'function') return;
     const epoch = viewEpoch; const ownerId = accountId; const request = ++companionRequest;
@@ -1302,6 +1362,49 @@
   $('roomSave').onclick = save;
   $('roomCompanionClose').onclick = closeCompanion;
   $('roomCompanionTalk').onclick = performCompanionTalk;
+  $('roomCompanionWheel').addEventListener('wheel', event => {
+    if (!companionId || event.ctrlKey) return;
+    event.preventDefault();
+    const delta = (event.deltaY || event.deltaX) * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? 272 : 1);
+    wheelDelta += delta;
+    if (Math.abs(wheelDelta) >= 48) { const steps = Math.sign(wheelDelta) * Math.min(3, Math.floor(Math.abs(wheelDelta) / 48)); wheelDelta = 0; rotateCompanionWheel(steps); }
+  }, { passive: false });
+  $('roomCompanionWheel').addEventListener('keydown', event => {
+    if (['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key)) {
+      event.preventDefault(); rotateCompanionWheel(['ArrowDown', 'ArrowRight'].includes(event.key) ? 1 : -1); $('roomCompanionWheel').focus({ preventScroll: true });
+    } else if ((event.key === 'Enter' || event.key === ' ') && event.target === $('roomCompanionWheel')) {
+      event.preventDefault(); const buttons = wheelButtons(); buttons[((Math.round(wheelTarget) % buttons.length) + buttons.length) % buttons.length]?.click();
+    }
+  });
+  $('roomCompanionWheel').addEventListener('pointerdown', event => {
+    if (event.button > 0 || event.target.closest('#roomCompanionClose')) return;
+    wheelSuppressClick = false; wheelDrag = { id: event.pointerId, start: event.clientY, last: event.clientY, moved: false };
+  });
+  $('roomCompanionWheel').addEventListener('pointermove', event => {
+    if (!wheelDrag || event.pointerId !== wheelDrag.id) return;
+    if (event.pointerType === 'mouse' && event.buttons === 0) { wheelDrag = null; wheelSuppressClick = false; return; }
+    if (!wheelDrag.moved && Math.abs(event.clientY - wheelDrag.start) < 9) return;
+    wheelDrag.moved = true; wheelSuppressClick = true;
+    $('roomCompanionWheel').setPointerCapture(event.pointerId);
+    const delta = event.clientY - wheelDrag.last;
+    if (Math.abs(delta) >= 32) { rotateCompanionWheel(-Math.sign(delta)); wheelDrag.last = event.clientY; }
+    event.preventDefault();
+  });
+  const stopWheelDrag = event => {
+    if (wheelDrag?.id !== event.pointerId) return;
+    wheelDrag = null;
+    if (event.type === 'pointercancel') wheelSuppressClick = false;
+    else setTimeout(() => { wheelSuppressClick = false; }, 0);
+  };
+  document.addEventListener('pointerup', stopWheelDrag, true);
+  document.addEventListener('pointercancel', stopWheelDrag, true);
+  $('roomCompanionWheel').addEventListener('click', event => {
+    if (wheelSuppressClick) { event.preventDefault(); event.stopImmediatePropagation(); wheelSuppressClick = false; return; }
+    const buttons = wheelButtons(), index = buttons.indexOf(event.target.closest('button'));
+    if (index < 0) return;
+    cancelAnimationFrame(wheelFrame); wheelFrame = 0; wheelAt = 0;
+    wheelPhase = wheelTarget = index; renderCompanionWheel();
+  }, true);
   document.body.append($('roomCompanionPanel'));
   new ResizeObserver(positionCompanion).observe($('roomCompanionPanel'));
   window.addEventListener('resize', positionCompanion);
@@ -1362,7 +1465,7 @@
   });
   document.addEventListener('visibilitychange', refreshAnimation);
   motion.addEventListener?.('change', refreshAnimation);
-  window.LauncherRoom = { setProfile, onVisible, openEditor, onPurchase: (result, itemId) => lifeRoom?.onPurchase(result, itemId) };
+  window.LauncherRoom = { setProfile, onVisible, openEditor, refreshCompanion, onPurchase: (result, itemId) => lifeRoom?.onPurchase(result, itemId) };
   // Enabled only by the local QA harness, never by the packaged launcher.
   if (window.__LAUNCHER_ROOM_QA__ === true) window.__launcherRoomTest = {
     snapshot: () => ({ interaction: interaction && { type: interaction.type, phase: interaction.phase,

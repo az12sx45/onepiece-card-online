@@ -32,3 +32,5 @@
 /tools/launcher-room/life-v1/**/prompt*.txt whitespace=-blank-at-eol
 tools/launcher-room/presentation-v122/** -text
 docs/LAUNCHER_ROOM_PRESENTATION_20260927.json -text
+tools/launcher-room/presentation-v123/** -text
+docs/LAUNCHER_ROOM_RADIAL_20260927.json -text

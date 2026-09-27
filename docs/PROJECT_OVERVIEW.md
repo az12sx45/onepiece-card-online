@@ -2233,3 +2233,8 @@ Board 遊戲正式流程的圖片路徑集中在 `public/images/board/**`，避�
 已補上普通戰鬥與 Tot Musica 的無可用招式待機退路，敵方仍正常行動；修復 3D 角色圖清空時 MutationObserver 自我觸發造成的整頁凍結，以及旁觀戰鬥關閉／地圖動畫的順序競態。整框傾斜、圖像尺寸與版面保留；沿用現有 gameState、存檔 key、角色 id 與 Socket.IO 事件。正式發布證據以 DEV_WORKFLOW 最新確認為準。
 
 2026-09-24：水之七島六艘船的 36 視角加入本機模型推論的深度表面、光影與限幅視差；保留原版功能及校準，無 GPU 時使用原圖。詳 BOARD_WATER_SEVEN_DEPTH_20260924.md。
+
+
+## 2026-09-27 Launcher 1.2.3 radial icons
+
+啟動器1.2.3角色互動採半透明半圓輪盤，使用生圖前的聊天、工作、呼喚、點心、訓練與詳情六個簡單線條符號。色調為海洋藍綠與淡金；圖示保持正向，右側碰邊時鏡射以保留操作。工作／詳情內容在點擊後展開。依使用者最後指定不採用此次GPT試作圖，無新增PNG資源。來源與審查綁定在 docs/LAUNCHER_ROOM_RADIAL_20260927.json，公開版本以簽名launcher-release-v1.json為準。

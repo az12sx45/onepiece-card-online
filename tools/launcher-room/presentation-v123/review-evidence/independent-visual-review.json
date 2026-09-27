@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-27T10:19:08.395336+00:00",
+  "reviewer": "Codex independent visual subagent radial_icons_b",
+  "modelReview": true,
+  "humanAcceptance": false,
+  "versionReviewed": "Final user-requested original SVG line icons with revised sea-teal and warm-gold palette",
+  "method": "Opened and visually inspected all eight current final PNG screenshots using view_image; reviewed these current files again after the SVG restoration. SHA256 values bind this review to the inspected images. Prior raster-icon visual review is not reused.",
+  "scope": "Static model visual review only. Does not assert runtime behavior, wheel interactions, accessibility compliance, deployment status, physical-device testing or human acceptance.",
+  "overall": "PASS",
+  "mustFix": [],
+  "images": [
+    {
+      "file": "radial-desktop.png",
+      "sha256": "880ec566e945e62d7992668374bbc841ac7b16e42ccce45e8d0a65d7bf779c85",
+      "pixels": [
+        1366,
+        1050
+      ],
+      "result": "PASS",
+      "notes": [
+        "Five separate circular controls form a right-side semicircle around the selected character.",
+        "The current icons are simple original line pictograms with warm ivory/gold strokes over translucent muted sea-teal buttons; no generated raster illustrations are visible.",
+        "Selected chat button has a clear rim and contrast; no clipped control. Nearby actor partially overlaps inner caption area, but the caption remains legible."
+      ]
+    },
+    {
+      "file": "radial-mobile.png",
+      "sha256": "b6b203f373c4d2a64f4bdee26166f65f020c899765b957b5158cf90a7023e5b1",
+      "pixels": [
+        390,
+        844
+      ],
+      "result": "PASS",
+      "notes": [
+        "All five line pictograms and the close control are visible inside the viewport.",
+        "The arc extends below the room over the music card, while each circular button and selected icon remain discernible.",
+        "No rectangular action-list backplate; original transparent circular treatment preserved."
+      ]
+    },
+    {
+      "file": "radial-narrow.png",
+      "sha256": "00d30765cd1684e632fe687c59034f77763fc251ce422d270242ac394b4c0f3f",
+      "pixels": [
+        320,
+        568
+      ],
+      "result": "PASS",
+      "notes": [
+        "Arc mirrors left at the narrow viewport boundary and every circular control remains visible.",
+        "Warm line glyphs remain legible against the sea-teal button tint over both water and wood.",
+        "Lower call control overlaps underlying content without visible clipping."
+      ]
+    },
+    {
+      "file": "radial-short.png",
+      "sha256": "760b1898964a1ea6314ee16b40b100ebeb78f153bd92ebe979bd131fdef3294a",
+      "pixels": [
+        900,
+        300
+      ],
+      "result": "PASS",
+      "notes": [
+        "The short viewport keeps all five controls and the close button visible.",
+        "Top controls overlay the header and the lowest control approaches the viewport edge; no pictogram is cut off in this screenshot.",
+        "The selected chat action retains a clear border and the selected character remains visible."
+      ]
+    },
+    {
+      "file": "radial-friend.png",
+      "sha256": "996d4e28b6a9bfedd8c13669c203d0de3cb435a4ba13bb20d45c666f74cce8de",
+      "pixels": [
+        1366,
+        1050
+      ],
+      "result": "PASS",
+      "notes": [
+        "Only the details action is visible, with no owner-only work/gift/training circles shown.",
+        "The details sheet and return control fit inside the viewport; description and status chips are readable.",
+        "Details uses the original simple information glyph."
+      ]
+    },
+    {
+      "file": "radial-work.png",
+      "sha256": "b63765a745ffae67f41b23ce1f6fb6463084056b4126eb99bd66638632ef0cba",
+      "pixels": [
+        1366,
+        1050
+      ],
+      "result": "PASS",
+      "notes": [
+        "The original briefcase line glyph is visibly selected in the semicircle.",
+        "The separate translucent work sheet displays three legible choices and a visible return control.",
+        "All circular controls and sheet edges fit without visible clipping."
+      ]
+    },
+    {
+      "file": "radial-details.png",
+      "sha256": "5a634c49b2b00fdde8d857a6de76eff9c63d853e342432ad5d0d0ec277705bd6",
+      "pixels": [
+        1366,
+        1050
+      ],
+      "result": "PASS",
+      "notes": [
+        "The selected information glyph and details sheet are visually distinct and readable.",
+        "Description, state chips and return control fit without overflow.",
+        "Original line icons match the rest of the launcher UI and retain the muted sea-teal/warm-gold palette."
+      ]
+    },
+    {
+      "file": "icons-contact.png",
+      "sha256": "341c3710d22fc56597647fc7baddba7d0a632900d2bbc0faa17d756b7fa0af5e",
+      "pixels": [
+        960,
+        360
+      ],
+      "result": "PASS",
+      "notes": [
+        "All six original line icons are visible on dark sea-teal and warm wood backgrounds: chat bubble, briefcase, call arrow, gift, training weight and information.",
+        "Line weight, round-button dimensions, generous padding and warm ivory/gold tint are consistent.",
+        "Selected state is differentiated by brighter teal fill and warm-gold border; no GPT bitmap artwork is visible."
+      ]
+    }
+  ]
+}
