@@ -9,7 +9,7 @@ const DESKTOP_ROOT = path.join(ROOT, 'desktop');
 const PUBLIC_ROOT = path.join(ROOT, 'public');
 const PACKAGE_PATH = path.join(DESKTOP_ROOT, 'package.json');
 const PACKAGE_LOCK_PATH = path.join(DESKTOP_ROOT, 'package-lock.json');
-const RADIAL_PRESENTATION = require('../tools/launcher-room/presentation-v127/validate_release');
+const RADIAL_PRESENTATION = require('../tools/launcher-room/expansion-v128/validate_release');
 const ROOM_HD_REVIEW = require('../tools/launcher-room/presentation-v124/validate_hd');
 const ROOM_RESERVED_REVIEW = require('../tools/launcher-room/presentation-v125/validate_reserved');
 
@@ -18,6 +18,9 @@ const MAX_LAUNCHER_ASSET_BYTES = 128 * 1024 * 1024;
 // budget intact and account for this separately hash-verified resource set.
 const MAX_ROOM_MOTION_ASSET_BYTES = 20 * 1024 * 1024;
 const MAX_ROOM_LIFE_ASSET_BYTES = 12 * 1024 * 1024;
+// The 32 new, individually reviewed expansion assets have a 4 MiB allowance.
+// Existing media keeps its 128 MiB limit and the combined 160 MiB cap stays fixed.
+const MAX_ROOM_EXPANSION_ASSET_BYTES = 4 * 1024 * 1024;
 // Immutable historical program manifests are retained for existing installs.
 const MAX_CATALOG_BYTES = 32 * 1024 * 1024;
 const MAX_ASAR_BYTES = 32 * 1024 * 1024;
@@ -87,6 +90,8 @@ const ROOM_PORTRAIT_ASSETS = ROOM_DEPTH_CHARACTERS.map(key => `portrait_v3/${key
 const ROOM_HD_ASSETS = ROOM_HD_REVIEW.ASSETS.map(asset => asset.replace(/^public\/images\/launcher_room\//, ''));
 const ROOM_RESERVED_ASSETS = ROOM_RESERVED_REVIEW.ASSETS.map(asset => asset.replace(/^public\/images\/launcher_room\//, ''));
 const ROOM_NEW_V127_ASSETS = [...RADIAL_PRESENTATION.MINIGAME_ASSETS, ...RADIAL_PRESENTATION.ROBIN_ASSETS]
+  .map(asset => asset.replace(/^public\/images\/launcher_room\//, ''));
+const ROOM_NEW_V128_ASSETS = RADIAL_PRESENTATION.EXPANSION_ASSETS
   .map(asset => asset.replace(/^public\/images\/launcher_room\//, ''));
 const ROOM_LIFE_ASSETS = require('../desktop/launcher-life-actions').assets().map(asset => `life_v1/${asset}`);
 const ROOM_LIFE_FURNITURE = ['furniture/galley-stove.webp', ...[0,1,2,3].map(rotation => `furniture_views/galley-stove/${rotation}.webp`)];
@@ -233,7 +238,8 @@ const EXTRA_RESOURCES = [
       ...ROOM_LIFE_FURNITURE,
       ...ROOM_LIFE_ASSETS,
       ...ROOM_RESERVED_ASSETS,
-      ...ROOM_NEW_V127_ASSETS
+      ...ROOM_NEW_V127_ASSETS,
+      ...ROOM_NEW_V128_ASSETS
     ]
   },
   {
@@ -534,7 +540,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.2.7', 'Desktop launcher version must be 1.2.7 for the reviewed minigames and Robin release.');
+  assert(packageJson.version === '1.2.8', 'Desktop launcher version must be 1.2.8 for the reviewed room and work expansion.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -565,12 +571,15 @@ function validateSourcePackage() {
     const relative = asset.replace(/^public\//, '');
     assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, asset), `Reserved atlas blocked by packaged protocol: ${relative}`);
   }
-  for (const asset of [...RADIAL_PRESENTATION.ROBIN_ASSETS, ...RADIAL_PRESENTATION.MINIGAME_ASSETS]) {
+  for (const asset of [...RADIAL_PRESENTATION.ROBIN_ASSETS, ...RADIAL_PRESENTATION.MINIGAME_ASSETS, ...RADIAL_PRESENTATION.EXPANSION_ASSETS]) {
     const relative = asset.replace(/^public\//, '');
     assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, asset), `New reviewed room art blocked by packaged protocol: ${relative}`);
   }
   for (const relative of ['robin_v2/walk/diagonal.webp','robin_v2/life/sleep-east.webp','minigames_v1/unknown.webp']) {
     assert(resolveScene(`opui://launcher/images/launcher_room/${relative}`) === null, `Unreviewed 1.2.7 resource admitted: ${relative}`);
+  }
+  for (const relative of ['scenes/sunny-unknown.webp','furniture/supply-rack-extra.webp','furniture_views/repair-cart/4.webp','furniture_views/log-pose-desk/unknown.webp']) {
+    assert(resolveScene(`opui://launcher/images/launcher_room/${relative}`) === null, `Unreviewed 1.2.8 resource admitted: ${relative}`);
   }
   for (const relative of ['reserved_v1/unknown/portrait.webp', 'reserved_v1/ace/walk/diagonal.webp', 'reserved_v1/law/life/cook-south.webp', 'reserved_v1/hancock/life/sleep-east.webp']) {
     assert(resolveScene(`opui://launcher/images/launcher_room/${relative}`) === null, `Unknown reserved path admitted: ${relative}`);
@@ -895,7 +904,7 @@ function validateAsar(asarPath) {
       `Packaged application source differs: ${entry}`);
   }
   const packedPackage = JSON.parse(asar.extractFile(asarPath, 'package.json').toString('utf8'));
-  assert(packedPackage.version === '1.2.7' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
+  assert(packedPackage.version === '1.2.8' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
   for (const entry of entries) {
     const lower = entry.toLowerCase();
     assert(!lower.startsWith('public/'), `app.asar contains the public game tree: ${entry}`);
@@ -903,6 +912,21 @@ function validateAsar(asarPath) {
     assert(!/\.(mp3|mp4|webm|wav|ogg|webp|png|jpe?g)$/i.test(entry), `app.asar contains unexpected media: ${entry}`);
   }
   return entries.length;
+}
+
+function validateLauncherMediaBudgets(launcherBytes, roomMotionBytes, lifeBytes, expansionMedia) {
+  assert(expansionMedia.length === 32 && new Set(expansionMedia.map(item => item.asset)).size === 32, 'Expansion media budget requires exactly 32 unique assets.');
+  assertExactJson(sorted(expansionMedia.map(item => item.asset)), sorted(ROOM_NEW_V128_ASSETS), 'Expansion media budget asset set');
+  assert(expansionMedia.every(item => Number.isSafeInteger(item.bytes) && item.bytes > 0), 'Expansion media sizes must come from actual packaged files.');
+  const expansionBytes = expansionMedia.reduce((sum, item) => sum + item.bytes, 0);
+  assert(expansionBytes <= MAX_ROOM_EXPANSION_ASSET_BYTES, 'Reviewed expansion media exceeds its separate 4 MiB budget.');
+  const launcherBaseBytes = launcherBytes - roomMotionBytes - lifeBytes - expansionBytes;
+  assert(launcherBaseBytes >= 0, 'Launcher media classifications cannot exceed the actual total.');
+  assert(roomMotionBytes <= MAX_ROOM_MOTION_ASSET_BYTES, `Room motion and portraits exceed ${MAX_ROOM_MOTION_ASSET_BYTES} bytes.`);
+  assert(lifeBytes <= MAX_ROOM_LIFE_ASSET_BYTES, 'Reviewed life media exceeds its separate 12 MiB budget.');
+  assert(launcherBaseBytes <= MAX_LAUNCHER_ASSET_BYTES, `Existing launcher media exceeds ${MAX_LAUNCHER_ASSET_BYTES} bytes.`);
+  assert(launcherBytes <= MAX_LAUNCHER_ASSET_BYTES + MAX_ROOM_MOTION_ASSET_BYTES + MAX_ROOM_LIFE_ASSET_BYTES, 'Combined launcher media budget exceeded.');
+  return { launcherBaseBytes, expansionBytes };
 }
 
 function validateWinUnpacked(winUnpackedPath, source) {
@@ -941,11 +965,8 @@ function validateWinUnpacked(winUnpackedPath, source) {
   const lifeFiles = [...ROOM_LIFE_ASSETS, ...ROOM_LIFE_FURNITURE].map(asset => path.join(launcherAssetRoot, 'images', 'launcher_room', ...asset.split('/')));
   assert(lifeFiles.length === 133 && new Set(lifeFiles).size === 133, 'Life media must contain 128 loops and five stove assets.');
   const lifeBytes = sumFileBytes(lifeFiles);
-  assert(lifeBytes <= MAX_ROOM_LIFE_ASSET_BYTES, 'Reviewed life media exceeds its separate 12 MiB budget.');
-  const launcherBaseBytes = launcherBytes - roomMotionBytes - lifeBytes;
-  assert(roomMotionBytes <= MAX_ROOM_MOTION_ASSET_BYTES, `Room motion and portraits exceed ${MAX_ROOM_MOTION_ASSET_BYTES} bytes.`);
-  assert(launcherBaseBytes <= MAX_LAUNCHER_ASSET_BYTES, `Existing launcher media exceeds ${MAX_LAUNCHER_ASSET_BYTES} bytes.`);
-  assert(launcherBytes <= MAX_LAUNCHER_ASSET_BYTES + MAX_ROOM_MOTION_ASSET_BYTES + MAX_ROOM_LIFE_ASSET_BYTES, 'Combined launcher media budget exceeded.');
+  const expansionMedia = ROOM_NEW_V128_ASSETS.map(asset => ({ asset, bytes: fs.statSync(path.join(launcherAssetRoot, 'images', 'launcher_room', ...asset.split('/'))).size }));
+  const { launcherBaseBytes, expansionBytes } = validateLauncherMediaBudgets(launcherBytes, roomMotionBytes, lifeBytes, expansionMedia);
   for (const [packagedName, sourcePath] of expectedAssets) {
     const packagedPath = path.join(launcherAssetRoot, ...packagedName.split('/'));
     assert(sha256File(packagedPath) === sha256File(sourcePath), `Packaged launcher resource differs from source: ${packagedName}`);
@@ -977,7 +998,7 @@ function validateWinUnpacked(winUnpackedPath, source) {
   assert(fs.statSync(packagedIcon, { throwIfNoEntry: false })?.isFile(), 'Packaged resources/launcher-icon.ico is missing.');
   assert(sha256File(packagedIcon) === sha256File(ICON_PATH), 'Packaged launcher icon differs from the approved ICO.');
 
-  return { asarEntries, launcherFiles: actualAssetFiles.length, launcherBytes, launcherBaseBytes, roomMotionBytes, catalogFiles: catalogFiles.length, catalogBytes };
+  return { asarEntries, launcherFiles: actualAssetFiles.length, launcherBytes, launcherBaseBytes, expansionBytes, roomMotionBytes, catalogFiles: catalogFiles.length, catalogBytes };
 }
 
 function validatePortableExecutable(filePath, label) {
@@ -1018,8 +1039,8 @@ function main() {
       'Release package requires all eighty complete-body atlases and explicit visual review evidence for every direction.');
     assert(source.zoroOverlayStatus === 'verified',
       'Release package requires a verified Zoro art overlay; candidate art cannot be shipped.');
-    assert(source.presentationStatus.complete && source.presentationStatus.review.releaseVersion === '1.2.7',
-      'Release package requires preserved historical proof plus current minigame and Robin review.');
+    assert(source.presentationStatus.complete && source.presentationStatus.review.releaseVersion === '1.2.8',
+      'Release package requires preserved historical proof plus current room and work expansion review.');
   }
   const parts = [
     'DESKTOP_LAUNCHER_PACKAGE_QA=PASS',
@@ -1050,6 +1071,8 @@ function main() {
     `minigameBrowserChecks=${source.presentationStatus.functionalChecks}`,
     `robinBrowserChecks=${source.presentationStatus.robinChecks}`,
     `newRoomAssets=${source.presentationStatus.newAssets}`,
+    `expansionCatalogChecks=${source.presentationStatus.catalogChecks}`,
+    `expansionRoomChecks=${source.presentationStatus.roomChecks}`,
     `reservedArtBrowserChecks=${source.presentationStatus.artBrowser.checks}`,
     `reservedArtCaptures=${source.presentationStatus.artBrowser.captures}`,
     `lifeHistoricalRuntime=${source.presentationStatus.historicalBaseline}`,
@@ -1057,7 +1080,7 @@ function main() {
   ];
   if (options.winUnpacked) {
     const packaged = validateWinUnpacked(options.winUnpacked, source);
-    parts.push(`asarEntries=${packaged.asarEntries}`, `launcherFiles=${packaged.launcherFiles}`, `launcherBytes=${packaged.launcherBytes}`, `launcherBaseBytes=${packaged.launcherBaseBytes}`, `roomMotionBytes=${packaged.roomMotionBytes}`, `catalogFiles=${packaged.catalogFiles}`);
+    parts.push(`asarEntries=${packaged.asarEntries}`, `launcherFiles=${packaged.launcherFiles}`, `launcherBytes=${packaged.launcherBytes}`, `launcherBaseBytes=${packaged.launcherBaseBytes}`, `expansionBytes=${packaged.expansionBytes}`, `roomMotionBytes=${packaged.roomMotionBytes}`, `catalogFiles=${packaged.catalogFiles}`);
   }
   if (options.installer) {
     const installer = validateInstaller(options.installer, source.packageJson);

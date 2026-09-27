@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "rosterRevision": 2,
+  "characters": {
+    "ace": true,
+    "sabo": false,
+    "law": false,
+    "hancock": false
+  }
+}

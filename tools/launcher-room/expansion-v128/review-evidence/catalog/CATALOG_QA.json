@@ -1,0 +1,169 @@
+{
+  "schema": "launcher-room-expansion-catalog-qa/1",
+  "status": "PASS",
+  "createdAt": "2026-09-27T20:39:46.009Z",
+  "sourceRoot": "D:\\Codex_Candidates\\launcher-minigames-deploy",
+  "sourceSha256": {
+    "server/launcher-profile-shop.js": "502dff93ffa54503c556b75abce3c7e48bb6327d7e38d6476a87e1b4dd014427",
+    "server/launcher-life.js": "81e2a2833e5db2ba7b4245fdde87142946580ae28fc4f0d583bf47423335824e",
+    "server/launcher-life-store.js": "e8eb1075bef91ec87ba3d577316a7318d649942d42fdbcde97dcd968c7a0869a",
+    "server/launcher-minigames.js": "9b55077cf1960ddcba67bb6dffcf0f374d4ad96d0c2c56883270e00b209a0bef",
+    "server/launcher-crew-release.js": "fcc9051cc5e24065cc698cbf1f8f215cc93ccc41c81478231a564059a682fc31",
+    "desktop/launcher-room.js": "d9495b1c9730d690bbc2faf17df6e47fa53a7b91527ea874722b1669b802b993",
+    "desktop/launcher-life-data.js": "edbfb2d5e89a684684edd23fa73af0d4f2657b5ad5fdd0f3c48889100b43e770",
+    "desktop/launcher-reserved-crew.js": "e42d09aa38205cd105ee48fb30a5799632cd67b1dec2db881abf9e19c4fa30a6",
+    "desktop/launcher-room-dialogue.js": "3cb915a30dbff3c20845d9dbfb4e88cbc15761a1c79f9899895e05f69cadd05e",
+    "scripts/launcher_room_expansion_catalog_qa.js": "e4e96e5b2e7eb98a306b28088e3fd0235089009566335d84c96d697a6c76d085"
+  },
+  "checks": [
+    {
+      "name": "exact-eight-products-added-old-catalog-unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "unowned-new-scene-and-furniture-rejected-without-wallet-change",
+      "status": "PASS"
+    },
+    {
+      "name": "all-eight-purchases-charge-existing-shop-wallet-and-preserve-game-data",
+      "status": "PASS"
+    },
+    {
+      "name": "repeat-purchase-invalid-equip-and-forged-id-do-not-charge",
+      "status": "PASS"
+    },
+    {
+      "name": "two-scenes-six-pieces-all-four-rotations-save-and-reload",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy-saved-room-normalization-remains-compatible",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid-rotation-duplicate-piece-and-stale-revision-rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "friend-visit-resolves-new-assets-and-stranger-remains-blocked",
+      "status": "PASS"
+    },
+    {
+      "name": "all-six-workstations-resolve-only-while-placed-and-rotation-fingerprints-change",
+      "status": "PASS"
+    },
+    {
+      "name": "target-source-stable-through-test",
+      "status": "PASS"
+    }
+  ],
+  "products": [
+    {
+      "id": "room-scene-sunny-workshop",
+      "type": "room_scene",
+      "key": "sunny-workshop",
+      "name": "千陽號船匠工作間",
+      "rarity": "epic",
+      "asset": "opui://launcher/images/launcher_room/scenes/sunny-workshop.webp",
+      "price": 18
+    },
+    {
+      "id": "room-scene-sunny-aquarium",
+      "type": "room_scene",
+      "key": "sunny-aquarium",
+      "name": "千陽號水族館酒吧",
+      "rarity": "epic",
+      "asset": "opui://launcher/images/launcher_room/scenes/sunny-aquarium.webp",
+      "price": 18
+    },
+    {
+      "id": "room-furniture-supply-rack",
+      "type": "room_furniture",
+      "key": "supply-rack",
+      "name": "甲板補給架",
+      "rarity": "rare",
+      "stationType": "deck",
+      "footprint": {
+        "cols": 2,
+        "rows": 1
+      },
+      "asset": "opui://launcher/images/launcher_room/furniture/supply-rack.webp",
+      "price": 10
+    },
+    {
+      "id": "room-furniture-log-pose-desk",
+      "type": "room_furniture",
+      "key": "log-pose-desk",
+      "name": "航海記錄桌",
+      "rarity": "rare",
+      "stationType": "navigation",
+      "footprint": {
+        "cols": 2,
+        "rows": 2
+      },
+      "asset": "opui://launcher/images/launcher_room/furniture/log-pose-desk.webp",
+      "price": 10
+    },
+    {
+      "id": "room-furniture-repair-cart",
+      "type": "room_furniture",
+      "key": "repair-cart",
+      "name": "船匠工具推車",
+      "rarity": "rare",
+      "stationType": "workshop",
+      "footprint": {
+        "cols": 2,
+        "rows": 1
+      },
+      "asset": "opui://launcher/images/launcher_room/furniture/repair-cart.webp",
+      "price": 10
+    },
+    {
+      "id": "room-furniture-library-cart",
+      "type": "room_furniture",
+      "key": "library-cart",
+      "name": "考古書籍推車",
+      "rarity": "rare",
+      "stationType": "library",
+      "footprint": {
+        "cols": 2,
+        "rows": 1
+      },
+      "asset": "opui://launcher/images/launcher_room/furniture/library-cart.webp",
+      "price": 10
+    },
+    {
+      "id": "room-furniture-medical-cart",
+      "type": "room_furniture",
+      "key": "medical-cart",
+      "name": "船醫備品推車",
+      "rarity": "rare",
+      "stationType": "medical",
+      "footprint": {
+        "cols": 2,
+        "rows": 1
+      },
+      "asset": "opui://launcher/images/launcher_room/furniture/medical-cart.webp",
+      "price": 10
+    },
+    {
+      "id": "room-furniture-den-den-desk",
+      "type": "room_furniture",
+      "key": "den-den-desk",
+      "name": "電話蟲聯絡桌",
+      "rarity": "epic",
+      "stationType": "deck",
+      "footprint": {
+        "cols": 2,
+        "rows": 2
+      },
+      "asset": "opui://launcher/images/launcher_room/furniture/den-den-desk.webp",
+      "price": 18
+    }
+  ],
+  "limitations": [
+    "Actual service SQL runs in isolated PGlite; no production wallet or account was changed.",
+    "Serial test, not concurrent PostgreSQL acceptance.",
+    "Catalog and persistence proof does not prove visual asset quality."
+  ]
+}

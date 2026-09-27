@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' opui:; img-src 'self' opui: data:; media-src 'self' opui:; style-src 'self'; script-src 'self'; connect-src 'none'; font-src 'self' opui:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>ONE PIECE TABLETOP SERIES</title>
+  <link rel="stylesheet" href="launcher.css">
+  <link rel="stylesheet" href="launcher-social.css">
+  <link rel="stylesheet" href="launcher-profile-shop.css">
+  <link rel="stylesheet" href="launcher-room.css">
+  <link rel="stylesheet" href="launcher-room-minigames.css">
+  <link rel="stylesheet" href="launcher-announcements.css">
+  <script src="launcher.js" defer></script>
+  <script src="launcher-social.js" defer></script>
+  <script src="launcher-updates-ui.js" defer></script>
+  <script src="launcher-announcements.js" defer></script>
+  <script src="launcher-account-ui.js" defer></script>
+  <script src="launcher-reserved-crew.js" defer></script>
+  <script src="launcher-room-dialogue.js" defer></script>
+  <script src="launcher-room-motion-data.js" defer></script>
+  <script src="launcher-room-motion.js" defer></script>
+  <script src="launcher-life-data.js" defer></script>
+  <script src="launcher-life-actions.js" defer></script>
+  <script src="launcher-life.js" defer></script>
+  <script src="launcher-room-minigames.js" defer></script>
+  <script src="launcher-life-room.js" defer></script>
+  <script src="launcher-room.js" defer></script>
+  <script src="launcher-profile-shop.js" defer></script>
+</head>
+<body data-stage="boot">
+  <div class="app-backdrop" aria-hidden="true"></div>
+  <div class="app-vignette" aria-hidden="true"></div>
+
+  <header class="window-titlebar" id="windowTitlebar">
+    <div class="window-brand" aria-label="ONE PIECE TABLETOP SERIES">
+      <span class="window-brand-mark" aria-hidden="true"></span>
+      <span>TABLETOP SERIES</span>
+    </div>
+  </header>
+
+  <section class="boot-screen screen is-active" id="bootScreen" aria-live="polite">
+    <img class="boot-logo" src="opui://launcher/images/game_launcher/launcher_tabletop_series_logo_v1.png" alt="ONE PIECE TABLETOP SERIES">
+    <span class="log-pose-loader" aria-hidden="true"></span>
+    <p id="bootMessage">正在連接偉大航道…</p>
+  </section>
+
+  <section class="auth-screen screen" id="authScreen" hidden>
+    <div class="auth-card">
+      <img class="auth-logo" src="opui://launcher/images/game_launcher/launcher_tabletop_series_logo_v1.png" alt="ONE PIECE TABLETOP SERIES">
+      <p class="eyebrow">CAPTAIN ACCOUNT</p>
+      <h1 id="authTitle">航海者登入</h1>
+      <p class="auth-copy">登入後管理桌遊、下載素材並接收更新。</p>
+      <div class="auth-tabs" role="tablist" aria-label="帳號操作">
+        <button class="auth-tab is-active" id="loginTab" type="button" role="tab" aria-selected="true">登入</button>
+        <button class="auth-tab" id="registerTab" type="button" role="tab" aria-selected="false">建立帳號</button>
+      </div>
+      <form id="authForm" autocomplete="on">
+        <label class="field"><span>帳號</span><input id="usernameInput" type="text" autocomplete="username" minlength="3" maxlength="24" required></label>
+        <label class="field"><span>密碼</span><input id="passwordInput" type="password" autocomplete="current-password" minlength="6" maxlength="72" required></label>
+        <p class="form-message" id="authMessage" role="status" aria-live="polite"></p>
+        <button class="gold-button auth-submit" id="authSubmit" type="submit">登入</button>
+      </form>
+      <button class="preview-skip" id="previewSkip" type="button" hidden>進入設計預覽</button>
+      <p class="security-note">密碼只用於本次驗證，不會儲存在電腦中。</p>
+    </div>
+  </section>
+
+  <main class="launcher-app screen" id="launcherApp" hidden>
+    <header class="topbar">
+      <img class="series-logo" src="opui://launcher/images/game_launcher/launcher_tabletop_series_logo_v1.png" alt="ONE PIECE TABLETOP SERIES">
+      <nav class="topnav" aria-label="啟動器導覽">
+        <button class="nav-button is-active" type="button" data-panel="library">遊戲庫</button>
+        <button class="nav-button" id="downloadsButton" type="button" data-panel="downloads">下載管理<span class="nav-dot" id="downloadDot" hidden></span></button>
+        <button class="nav-button" id="socialButton" type="button" data-panel="social">好友與聊天<span class="social-badge" id="socialBadge" hidden></span></button>
+        <button class="nav-button" id="profileButton" type="button" data-panel="profile">個人頁</button>
+        <button class="nav-button" id="shopButton" type="button" data-panel="shop">商店</button>
+        <button class="nav-button" id="announcementsButton" type="button" data-panel="announcements">公告中心<span class="announcement-badge" id="announcementBadge" hidden></span></button>
+      </nav>
+      <div class="account-area">
+        <button class="storage-button" id="storageButton" type="button" title="下載位置"><span class="storage-icon" aria-hidden="true"></span><span id="storageSummary">讀取空間…</span></button>
+        <button class="account-chip" id="accountButton" type="button" aria-haspopup="menu" aria-expanded="false">
+          <img id="accountAvatar" src="opui://launcher/images/board/avatars/8.webp" alt="">
+          <span><strong id="accountName">航海者</strong><small id="accountTitle">TABLETOP MEMBER</small></span><i aria-hidden="true"></i>
+        </button>
+        <div class="account-menu" id="accountMenu" role="menu" hidden>
+          <button id="accountProfileButton" type="button" role="menuitem">查看個人頁</button>
+          <button id="settingsButton" type="button" role="menuitem"><span class="settings-menu-icon" aria-hidden="true"></span>啟動器設定</button>
+          <button id="logoutButton" type="button" role="menuitem">登出帳號</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="library-panel app-panel is-active" id="libraryPanel">
+      <aside class="game-rail" aria-label="桌遊選擇"><p class="rail-title">MY GAMES</p><div id="gameRail"></div></aside>
+      <section class="game-feature" id="gameFeature" data-media-state="ambient" aria-live="polite">
+        <video class="feature-video" id="featureVideo" muted playsinline loop preload="metadata"></video>
+        <div class="feature-art" id="featureArt" aria-hidden="true"></div><div class="feature-shade" aria-hidden="true"></div>
+        <div class="feature-content">
+          <div class="feature-cover-wrap">
+            <span class="game-box-art feature-box-art">
+              <span class="feature-box-tray" aria-hidden="true">
+                <img class="feature-box-tray-image" src="opui://launcher/images/desktop_launcher/launcher_box_core_frame_01_v1.png" alt="" aria-hidden="true" draggable="false">
+              </span>
+              <span class="feature-box-reveal" aria-hidden="true">
+                <img class="feature-box-reveal-frame feature-box-reveal-frame--01" src="opui://launcher/images/desktop_launcher/launcher_box_center_light_01_v3.png" alt="" draggable="false">
+                <img class="feature-box-reveal-frame feature-box-reveal-frame--02" src="opui://launcher/images/desktop_launcher/launcher_box_center_light_02_v3.png" alt="" draggable="false">
+                <img class="feature-box-reveal-frame feature-box-reveal-frame--03" src="opui://launcher/images/desktop_launcher/launcher_box_center_light_04_v3.png" alt="" draggable="false">
+                <img class="feature-box-reveal-frame feature-box-reveal-frame--04" src="opui://launcher/images/desktop_launcher/launcher_box_center_light_03_v3.png" alt="" draggable="false">
+              </span>
+              <svg class="feature-box-inner-core-svg" viewBox="0 0 1086 1448" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <defs>
+                  <radialGradient id="featureBoxInnerCoreGradient">
+                    <stop offset="0" stop-color="#fffef0" stop-opacity="1"></stop>
+                    <stop offset="0.16" stop-color="#ffe986" stop-opacity="0.92"></stop>
+                    <stop offset="0.45" stop-color="#efaa2c" stop-opacity="0.42"></stop>
+                    <stop offset="1" stop-color="#d66b0a" stop-opacity="0"></stop>
+                  </radialGradient>
+                </defs>
+                <ellipse id="featureInnerCore" rx="305" ry="405" fill="url(#featureBoxInnerCoreGradient)"></ellipse>
+              </svg>
+              <img class="game-box-frame game-box-fixed-shell" id="featureFrame" src="" alt="" aria-hidden="true">
+              <svg class="feature-box-free-edge-svg" viewBox="0 0 1086 1448" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <defs>
+                  <filter id="featureBoxEdgeBlur" x="-25%" y="-25%" width="150%" height="150%">
+                    <feGaussianBlur stdDeviation="18"></feGaussianBlur>
+                  </filter>
+                </defs>
+                <path class="feature-box-free-edge-spill" id="featureEdgeSpill" fill="none" filter="url(#featureBoxEdgeBlur)"></path>
+                <path class="feature-box-free-edge-glow" id="featureEdgeGlow" fill="none"></path>
+                <path class="feature-box-free-edge-core" id="featureEdgeCore" fill="none"></path>
+              </svg>
+              <span class="feature-box-lid">
+                <span class="feature-box-lid-front">
+                  <img class="game-box-cover" id="featureCover" src="" alt="">
+                  <span class="cover-glint" aria-hidden="true"></span>
+                </span>
+                <span class="feature-box-lid-back" aria-hidden="true"></span>
+              </span>
+            </span>
+            <span class="feature-box-shadow" aria-hidden="true"></span>
+          </div>
+          <div class="feature-copy">
+            <div class="feature-kicker-row"><span class="status-pill" id="featureStatus">檢查中</span><span class="feature-version" id="featureVersion"></span></div>
+            <h2 id="featureTitle"></h2><p class="feature-tagline" id="featureTagline"></p><div class="feature-tags" id="featureTags"></div><p class="feature-description" id="featureDescription"></p>
+            <div class="install-progress" id="installProgress" hidden>
+              <div class="progress-head"><span id="progressLabel">正在準備下載…</span><strong id="progressPercent">0%</strong></div>
+              <div class="progress-track"><span id="progressBar"></span></div><p id="progressDetail"></p>
+            </div>
+            <div class="feature-actions"><button class="ghost-button" id="detailsButton" type="button">遊戲簡介</button><button class="gold-button primary-action" id="primaryAction" type="button">檢查中…</button><button class="ghost-button" id="existingLaunchAction" type="button" hidden>啟動現有版本</button><button class="cancel-button" id="cancelAction" type="button" hidden>暫停下載</button></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="downloads-panel app-panel" id="downloadsPanel" hidden>
+      <div class="downloads-header">
+        <div class="panel-heading"><div><p class="eyebrow">DOWNLOAD MANAGER</p><h2>遊戲安裝管理</h2><p>下載、更新或個別移除遊戲；帳號與雲端進度不受影響。</p></div></div>
+        <div class="downloads-storage"><span>目前位置</span><strong id="downloadsCachePath">讀取中…</strong></div>
+        <button class="ghost-button" id="changeLocationButton" type="button">變更下載位置</button>
+      </div>
+      <div class="download-list-scroll"><div class="download-list" id="downloadList"></div></div>
+    </section>
+    <section class="social-panel app-panel" id="socialPanel" hidden aria-label="好友與聊天">
+      <aside class="social-sidebar">
+        <div class="social-sidebar-heading"><div><p class="eyebrow">CREW &amp; MESSAGES</p><h2>我的好友</h2></div><button class="social-icon-button" id="socialAddOpen" type="button" aria-label="新增好友" title="新增好友">＋</button></div>
+        <p class="social-connection" id="socialConnection" role="status">正在連線…</p>
+        <label class="social-search"><span aria-hidden="true">⌕</span><input id="socialSearch" type="search" placeholder="搜尋好友" maxlength="80" aria-label="搜尋好友"></label>
+        <div class="social-tabs" role="tablist" aria-label="好友清單"><button type="button" id="socialFriendsTab" role="tab" aria-selected="true">好友 <span id="socialFriendCount">0</span></button><button type="button" id="socialRequestsTab" role="tab" aria-selected="false">邀請 <span id="socialRequestCount">0</span></button></div>
+        <div class="social-friends-list" id="socialFriendsList"></div>
+        <button class="social-refresh" id="socialRefresh" type="button">重新整理</button>
+      </aside>
+      <section class="social-conversation" aria-label="私人訊息">
+        <div class="social-welcome" id="socialWelcome"><span class="social-welcome-mark" aria-hidden="true">✧</span><p class="eyebrow">BETTER TOGETHER</p><h2>下一場，和好友一起。</h2><p>選擇左側好友，聊聊近況、約一場對戰。<br>三款遊戲共用同一份好友與聊天紀錄。</p><button class="ghost-button" id="socialWelcomeAdd" type="button">新增好友</button></div>
+        <div class="social-chat" id="socialChat" hidden>
+          <header class="social-chat-header"><button class="social-back" id="socialBack" type="button" aria-label="返回好友清單">‹</button><img id="socialPeerAvatar" alt=""><div><h2 id="socialPeerName"></h2><p id="socialPeerActivity"></p></div><button class="ghost-button social-visit" id="socialVisitProfile" type="button">參觀個人頁</button><button class="social-remove" id="socialRemove" type="button">移除好友</button></header>
+          <div class="social-chat-notice" id="socialChatNotice" role="status" hidden></div>
+          <div class="social-messages" id="socialMessages" role="log" aria-label="聊天紀錄" aria-live="polite"></div>
+          <form class="social-composer" id="socialComposer"><label class="sr-social" for="socialMessageInput">輸入訊息</label><textarea id="socialMessageInput" rows="2" maxlength="400" placeholder="輸入訊息，Enter 送出…"></textarea><div><small id="socialMessageCount">0 / 400</small><button class="gold-button" id="socialSend" type="submit">送出 <span aria-hidden="true">↗</span></button></div></form>
+        </div>
+      </section>
+    </section>
+    <section class="voyage-panel app-panel" id="profilePanel" hidden aria-label="個人頁">
+      <div class="voyage-scroll">
+        <header class="voyage-heading"><div><p class="eyebrow">CAPTAIN'S LOG</p><h2 id="profilePageTitle">個人頁</h2><p id="profilePageHint">三款遊戲的航行紀錄與珍藏。</p></div><div class="voyage-heading-actions"><button class="ghost-button" id="profileBackToFriends" type="button" hidden>返回好友聊天</button><button class="ghost-button" id="profileRefresh" type="button">重新整理</button></div></header>
+        <p class="voyage-status" id="profileStatus" role="status" aria-live="polite"></p>
+        <section class="captain-hero" id="profileHero" aria-label="玩家名片"><div class="captain-hero-art" id="profileHeroArt" aria-hidden="true"></div><div class="captain-hero-stickers" id="profileHeroStickers" aria-hidden="true"></div><div class="captain-hero-body"><span class="captain-hero-avatar"><img id="profileHeroAvatar" alt="玩家頭像"><span class="captain-hero-frame" id="profileHeroFrame" aria-hidden="true" hidden></span></span><div class="captain-hero-copy"><p class="eyebrow" id="profileHeroKind">MY VOYAGE</p><h3 id="profileHeroName">航海者</h3><p id="profileHeroTitle">偉大航道航海者</p><small id="profileHeroId"></small></div><img class="captain-hero-flag" id="profileHeroFlag" alt="" hidden><button class="ghost-button captain-card-edit-button" id="profileCardEdit" type="button" hidden>編輯名片</button></div>
+          <form class="captain-card-editor" id="profileCardEditor" hidden><label for="profileCardName">顯示名稱<input id="profileCardName" type="text" maxlength="32" autocomplete="off" required></label><label for="profileCardTagline">個人簡介<input id="profileCardTagline" type="text" maxlength="120" autocomplete="off" placeholder="寫下你的航海宣言"></label><label for="profileCardAvatar">名片頭像<select id="profileCardAvatar"></select></label><div class="captain-card-editor-actions"><button class="ghost-button" id="profileCardCancel" type="button">取消</button><button class="gold-button" id="profileCardSave" type="submit">儲存名片</button></div><div class="captain-card-decor" id="profileCardDecorControls" hidden></div><p class="voyage-status" id="profileCardStatus" role="status" aria-live="polite"></p></form>
+        </section>
+        <section class="voyage-room" id="profileRoom" aria-label="自由擺設房間">
+          <div class="voyage-section-heading room-heading"><div><p class="eyebrow">MY LITTLE WORLD</p><h3>航海夥伴房間</h3><p>把千陽號的回憶帶進房間，讓夥伴在你的收藏之間活動。</p></div><button class="ghost-button" id="roomEditToggle" type="button" hidden>佈置房間</button></div>
+          <p class="voyage-status" id="roomStatus" role="status" aria-live="polite"></p>
+          <div class="room-life-toolbar" id="roomLifeToolbar" hidden>
+            <div><span class="room-life-clock" id="roomLifeClock"></span><span id="roomLifeSummary">夥伴正在享受船上的日常。</span></div>
+            <div class="room-life-controls"><label for="roomLifeDirective">今日方針</label><select id="roomLifeDirective" aria-label="今日基地方針"></select><button class="ghost-button" id="roomLifeAutoAssign" type="button">自動分工</button></div>
+          </div>
+          <div class="room-stage-scroll"><div class="room-stage" id="roomStage" tabindex="0" aria-label="房間擺設預覽"><img class="room-scene" id="roomScene" alt=""><div class="room-objects" id="roomObjects"></div><div class="room-character-layer" id="roomCharacters"></div><div class="room-stage-caption" id="roomCaption">你的航海房間</div></div></div>
+          <section class="room-companion-panel" id="roomCompanionPanel" role="dialog" aria-labelledby="roomCompanionName" hidden>
+            <div class="room-companion-wheel" id="roomCompanionWheel" tabindex="0" role="group" aria-label="夥伴互動輪盤，滾輪或上下方向鍵切換，Enter執行">
+              <div class="room-wheel-track" aria-hidden="true"></div>
+              <button class="room-companion-close" id="roomCompanionClose" type="button" aria-label="關閉夥伴互動">×</button>
+              <div class="room-companion-actions" id="roomCompanionActions"><button class="gold-button" id="roomCompanionTalk" type="button">聊天</button></div>
+              <div class="room-wheel-caption" aria-live="polite"><strong id="roomWheelLabel">聊天</strong><h4 id="roomCompanionName"></h4><div class="room-companion-affinity"><span>親密度 <strong id="roomCompanionAffinity">0 / 100</strong></span><progress id="roomCompanionProgress" max="100" value="0"></progress></div></div>
+              <span class="room-wheel-hint" aria-hidden="true">滾輪切換</span>
+            </div>
+            <div class="room-companion-sheet" id="roomCompanionSheet" hidden><button class="room-sheet-close" id="roomCompanionSheetClose" type="button" aria-label="返回互動輪盤">‹ 返回</button><img class="room-companion-portrait" id="roomCompanionPortrait" alt=""><p class="room-companion-role" id="roomCompanionRole"></p><p class="room-companion-detail" id="roomCompanionDetail"></p></div>
+            <p class="voyage-status" id="roomCompanionStatus" role="status" aria-live="polite"></p>
+          </section>
+          <div class="room-editor" id="roomEditor" hidden><div class="room-editor-top"><strong>自由佈置</strong><span>在房間圖面拖曳家具；點選家具後直接用兩側箭頭轉四個方向。大小依角色比例固定。</span></div><div class="room-editor-tabs" id="roomEditorTabs" role="tablist" aria-label="房間物件分類"></div><div class="room-editor-items" id="roomEditorItems"></div><div class="room-selection" id="roomSelection" hidden></div><div class="room-editor-actions"><div><button class="ghost-button" id="roomCancel" type="button">取消</button><button class="gold-button" id="roomSave" type="button">儲存房間</button></div></div></div>
+          <div class="captain-cabin-music"><div class="captain-music-copy"><strong id="profileBgmName">尚未設定個人頁音樂</strong><small id="profileBgmHint" role="status">套用個人頁音樂後，進入時會自動播放。</small></div><div class="captain-music-controls"><button class="ghost-button" id="profileBgmToggle" type="button" disabled>播放音樂</button><button class="ghost-button" id="profileBgmMute" type="button" aria-pressed="false">靜音</button><label class="captain-music-volume" for="profileBgmVolume"><span>音量</span><input id="profileBgmVolume" type="range" min="0" max="100" step="1" value="35"><output id="profileBgmVolumeValue" for="profileBgmVolume">35%</output></label></div></div><audio id="profileBgmAudio" preload="none" loop></audio>
+        </section>
+        <div class="voyage-section-heading"><div><p class="eyebrow">THREE SEAS, ONE CAPTAIN</p><h3>遊戲紀錄</h3></div><span>只顯示已由遊戲或伺服器保存的資料</span></div>
+        <div class="voyage-game-stats" id="profileGameStats"></div>
+        <div class="voyage-section-heading"><div><p class="eyebrow">TREASURE LOCKER</p><h3>我的蒐藏</h3></div><span id="profileCollectionCount"></span></div>
+        <div class="voyage-collection-tabs" id="profileCollectionTabs" role="tablist" aria-label="蒐藏分類"></div>
+        <div class="voyage-collection-grid" id="profileCollectionGrid"></div>
+        <section class="captain-guestbook" aria-label="好友留言板"><div class="voyage-section-heading"><div><p class="eyebrow">THE LOGBOOK</p><h3>好友留言板</h3></div><span id="profileGuestbookCount"></span></div><p class="voyage-status" id="profileGuestbookStatus" role="status" aria-live="polite"></p><div id="profileGuestbookLocked" class="captain-guestbook-locked" hidden><strong>留言板尚未開放</strong><p>頁主可在商店解鎖，讓好友留下航行中的話。</p></div><div class="captain-guestbook-list" id="profileGuestbookList"></div><button class="ghost-button captain-guestbook-more" id="profileGuestbookMore" type="button" hidden>載入較早留言</button><form id="profileGuestbookForm" class="captain-guestbook-form" hidden><label for="profileGuestbookInput">留下訊息</label><textarea id="profileGuestbookInput" maxlength="240" rows="3" placeholder="和船長打聲招呼…"></textarea><div><small id="profileGuestbookLength">0 / 240</small><button class="gold-button" id="profileGuestbookPost" type="submit">發表留言</button></div></form></section>
+      </div>
+    </section>
+    <section class="voyage-panel app-panel" id="shopPanel" hidden aria-label="商店">
+      <div class="voyage-scroll">
+        <header class="voyage-heading"><div><p class="eyebrow">PIRATE'S MARKET</p><h2>航海者商店</h2><p>用展示室金幣收藏頭像、音樂、房間場景、家具與 Q 版夥伴。展示室金幣與遊戲金幣分開計算。</p></div><div class="shop-wallet"><span>展示室金幣</span><strong id="shopWallet">—</strong><small id="shopWalletMeta">每日補給</small></div></header>
+        <p class="voyage-status" id="shopStatus" role="status" aria-live="polite"></p>
+        <div class="shop-feature"><div><p class="eyebrow">MAKE IT YOURS</p><h3>打造你的航海房間</h3><p>選購航海王角色頭像、千陽號房間場景、家具與會走動的 Q 版夥伴，再搭配背景、相框、貼紙、音樂及好友留言板。商品與展示室金幣以雲端帳號為準。</p></div><img src="opui://launcher/images/board/avatars/49.webp" alt="尼卡頭像展示"></div>
+        <div class="voyage-section-heading"><div><p class="eyebrow">COLLECTIBLES</p><h3>挑選裝扮</h3></div><span id="shopItemCount"></span></div>
+        <div class="voyage-collection-tabs" id="shopCategoryTabs" role="tablist" aria-label="商品分類"></div>
+        <div class="shop-reset-actions" id="shopResetActions"></div>
+        <div class="shop-grid" id="shopGrid"></div>
+      </div>
+    </section>
+    <section class="announcements-panel app-panel" id="announcementsPanel" hidden aria-label="公告中心">
+      <header class="announcement-header">
+        <div class="announcement-heading">
+          <svg class="announcement-emblem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h9l6-3v14l-6-3H4zM7 15l2 5h4l-2-5M22 8v6M3 9H1v4h2"/></svg>
+          <div><p class="eyebrow">THE VOYAGE BULLETIN</p><h2>公告中心</h2><p>版本更新、夥伴登場與三款遊戲的最新消息。</p></div>
+        </div>
+        <div class="announcement-header-actions"><span id="announcementUnread">登入後同步</span><button id="announcementMarkAll" type="button">全部設為已讀</button><button id="announcementRefresh" type="button">重新整理</button></div>
+      </header>
+      <div class="announcement-toolbar">
+        <nav class="announcement-scopes" id="announcementScopes" aria-label="公告範圍"></nav>
+        <div class="announcement-filter-row">
+          <label for="announcementCategory">類型<select id="announcementCategory"></select></label>
+          <label for="announcementPeriod">日期<select id="announcementPeriod"><option value="0">全部時間</option><option value="7">最近 7 天</option><option value="30">最近 30 天</option><option value="90">最近 90 天</option></select></label>
+          <p class="announcement-status" id="announcementStatus" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="announcement-columns">
+        <div class="announcement-index"><div class="announcement-index-heading"><strong>最新公告</strong><span id="announcementResultCount">0 則</span></div><div class="announcement-list" id="announcementList" tabindex="-1" aria-label="公告列表"></div></div>
+        <div class="announcement-detail" id="announcementDetail">
+          <div class="announcement-empty" id="announcementDetailEmpty"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 8h34v45H15zM23 18h18M23 25h18M23 32h12M8 56c8-8 16 8 24 0s16 8 24 0"/><circle cx="43" cy="44" r="9"/><path d="m39 44 3 3 5-6"/></svg><h3>航海中的每一步，都記在這裡</h3><p>選擇一則公告，查看完整更新內容。閱讀全文後才會標示為已讀。</p></div>
+          <article class="announcement-article" id="announcementArticle" hidden><button class="announcement-back" id="announcementBack" type="button">‹ 返回公告列表</button><div class="announcement-article-meta"><span id="announcementDetailScope"></span><span id="announcementDetailCategory"></span><span id="announcementReadState"></span></div><h3 id="announcementDetailTitle" tabindex="-1"></h3><time id="announcementDetailDate"></time><p class="announcement-detail-summary" id="announcementDetailSummary"></p><div class="announcement-body" id="announcementBody"></div><button class="gold-button announcement-action" id="announcementAction" type="button" hidden></button></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="social-dialog shop-confirm" id="shopConfirmDialog"><button class="dialog-close" id="shopConfirmClose" type="button" aria-label="關閉">×</button><p class="eyebrow">CONFIRM PURCHASE</p><h2 id="shopConfirmName">確認購買</h2><p id="shopConfirmCopy"></p><div class="shop-confirm-preview"><img id="shopConfirmImage" alt=""><strong id="shopConfirmPrice"></strong></div><p class="social-form-hint" id="shopConfirmHint" role="status"></p><div class="social-dialog-actions"><button class="ghost-button" id="shopConfirmCancel" type="button">取消</button><button class="gold-button" id="shopConfirmBuy" type="button">確認購買</button></div></dialog>
+  <dialog class="social-dialog" id="profileCommentDeleteDialog"><p class="eyebrow">MANAGE LOGBOOK</p><h2>刪除這則留言？</h2><p>刪除後，這則留言將從個人頁移除。</p><p class="social-form-hint" id="profileCommentDeleteHint" role="status"></p><div class="social-dialog-actions"><button class="ghost-button" id="profileCommentDeleteCancel" type="button">取消</button><button class="danger-button" id="profileCommentDeleteConfirm" type="button">刪除留言</button></div></dialog>
+
+  <dialog class="social-dialog" id="socialAddDialog"><button class="dialog-close" id="socialAddClose" type="button" aria-label="關閉">×</button><p class="eyebrow">ADD A FRIEND</p><h2>邀請好友加入</h2><p>輸入對方顯示的玩家名稱，對方接受後就能聊天。</p><form id="socialAddForm"><label class="field"><span>玩家名稱</span><input id="socialAddName" maxlength="80" required autocomplete="off" placeholder="輸入玩家名稱"></label><p class="social-form-hint" id="socialAddHint" role="status"></p><button class="gold-button" id="socialAddSubmit" type="submit">送出好友邀請</button></form></dialog>
+  <dialog class="social-dialog" id="socialRemoveDialog"><p class="eyebrow">MANAGE FRIENDSHIP</p><h2>移除好友？</h2><p id="socialRemoveCopy"></p><div class="social-dialog-actions"><button class="ghost-button" id="socialRemoveCancel" type="button">取消</button><button class="danger-button" id="socialRemoveConfirm" type="button">移除好友</button></div></dialog>
+  <dialog class="social-dialog update-prompt" id="updatePrompt"><span class="update-prompt-mark" aria-hidden="true">↥</span><p class="eyebrow">UPDATE AVAILABLE</p><h2 id="updatePromptTitle">有新的更新</h2><p id="updatePromptCopy"></p><div class="social-dialog-actions"><button class="ghost-button" id="updatePromptLater" type="button">稍後再說</button><button class="ghost-button" id="updatePromptNotes" type="button">更新內容</button><button class="gold-button" id="updatePromptGo" type="button">前往更新</button></div></dialog>
+  <dialog class="social-dialog" id="playerNameDialog" aria-labelledby="playerNameTitle"><p class="eyebrow">WELCOME ABOARD</p><h2 id="playerNameTitle">大家該怎麼稱呼你？</h2><p>設定一個玩家名稱，讓好友在三款遊戲中都能認出你。</p><form id="playerNameForm"><label class="field"><span>玩家名稱</span><input id="playerNameInput" maxlength="16" required autocomplete="off" placeholder="替自己取個名字"></label><p class="social-form-hint" id="playerNameHint" role="status">最多 16 字，不能與其他玩家重複。</p><button class="gold-button" id="playerNameSave" type="submit">儲存並進入啟動器</button></form><button class="social-refresh" id="playerNameLogout" type="button">登出，稍後再設定</button></dialog>
+
+  <dialog class="detail-dialog" id="detailDialog">
+    <button class="dialog-close" id="detailClose" type="button" aria-label="關閉">×</button>
+    <div class="dialog-visual"><span class="game-box-art detail-box-art"><img class="game-box-cover" id="detailCover" src="" alt=""><img class="game-box-frame" id="detailFrame" src="" alt="" aria-hidden="true"></span></div>
+    <div class="dialog-copy"><p class="eyebrow" id="detailEyebrow"></p><h2 id="detailTitle"></h2><p id="detailDescription"></p><ul id="detailFeatures"></ul><div class="dialog-meta" id="detailMeta"></div></div>
+  </dialog>
+
+  <dialog class="location-dialog" id="locationDialog">
+    <button class="dialog-close" id="locationClose" type="button" aria-label="關閉">×</button><p class="eyebrow">GAME STORAGE</p><h2>遊戲下載位置</h2>
+    <p>圖片、音樂與影片會安裝到這裡；帳號與雲端存檔仍留在伺服器。</p><div class="path-box" id="cachePath">讀取中…</div>
+    <div class="location-actions"><button class="ghost-button" id="pickLocationButton" type="button">選擇資料夾</button><button class="gold-button" id="locationDone" type="button">完成</button></div>
+  </dialog>
+
+  <dialog class="settings-dialog" id="settingsDialog">
+    <button class="dialog-close" id="settingsClose" type="button" aria-label="關閉">×</button>
+    <p class="eyebrow">LAUNCHER SETTINGS</p>
+    <h2>啟動器設定</h2>
+    <fieldset class="settings-group settings-display-group">
+      <legend>遊戲顯示模式</legend>
+      <p class="settings-group-note">套用在下一次開啟的遊戲視窗。</p>
+      <div class="display-mode-options" role="radiogroup" aria-label="遊戲顯示模式">
+        <label class="display-mode-option" for="gameDisplayBorderless">
+          <input id="gameDisplayBorderless" name="gameDisplayMode" type="radio" value="borderless" checked>
+          <span class="display-mode-mark" aria-hidden="true"><i></i></span>
+          <span class="display-mode-copy">
+            <strong>無邊框視窗</strong>
+            <small>保留縮放與切換視窗，使用深色遊戲視窗邊框。</small>
+          </span>
+        </label>
+        <label class="display-mode-option" for="gameDisplayFullscreen">
+          <input id="gameDisplayFullscreen" name="gameDisplayMode" type="radio" value="fullscreen">
+          <span class="display-mode-mark" aria-hidden="true"><i></i></span>
+          <span class="display-mode-copy">
+            <strong>全螢幕</strong>
+            <small>開啟遊戲時自動填滿目前使用的顯示器；遊戲中可按 F11 暫時切換。</small>
+          </span>
+        </label>
+      </div>
+    </fieldset>
+    <label class="settings-option" for="minimizeToTrayToggle">
+      <input id="minimizeToTrayToggle" type="checkbox">
+      <span class="settings-toggle" aria-hidden="true"><i></i></span>
+      <span class="settings-option-copy">
+        <strong>啟動遊戲後縮到系統匣</strong>
+        <small>遊戲開啟後隱藏啟動器；可從 Windows 右下角圖示重新顯示，關閉最後一款遊戲後會自動回來。</small>
+      </span>
+    </label>
+    <section class="launcher-update-card" id="launcherUpdateCard" data-status="idle" aria-labelledby="launcherUpdateTitle">
+      <div class="launcher-update-heading">
+        <span class="launcher-update-mark" aria-hidden="true"><i></i></span>
+        <span>
+          <strong id="launcherUpdateTitle">啟動器更新</strong>
+          <small id="launcherCurrentVersion">目前版本 —</small>
+        </span>
+      </div>
+      <p class="launcher-update-status" id="launcherUpdateStatus" role="status" aria-live="polite">尚未檢查更新。</p>
+      <div class="launcher-update-progress" id="launcherUpdateProgress" role="progressbar" aria-label="啟動器更新下載進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden>
+        <span><i id="launcherUpdateProgressBar"></i></span>
+        <small id="launcherUpdateProgressDetail">0%</small>
+      </div>
+      <button class="ghost-button launcher-update-action" id="launcherUpdateAction" type="button">檢查更新</button>
+    </section>
+    <div class="settings-actions"><button class="ghost-button" id="settingsCancel" type="button">取消</button><button class="gold-button" id="settingsSave" type="button">儲存設定</button></div>
+  </dialog>
+
+  <dialog class="uninstall-dialog" id="uninstallDialog">
+    <button class="dialog-close" id="uninstallClose" type="button" aria-label="關閉">×</button>
+    <div class="uninstall-mark" aria-hidden="true"><span></span></div>
+    <p class="eyebrow">REMOVE LOCAL GAME</p>
+    <h2 id="uninstallTitle">解除安裝遊戲？</h2>
+    <p id="uninstallDescription"></p>
+    <div class="uninstall-preserved"><strong>會保留</strong><span>帳號、雲端進度，以及其他遊戲仍在使用的共用素材</span></div>
+    <div class="uninstall-actions"><button class="ghost-button" id="uninstallCancel" type="button">取消</button><button class="danger-button" id="uninstallConfirm" type="button">解除安裝</button></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

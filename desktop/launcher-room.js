@@ -22,7 +22,9 @@
   const FURNITURE_FOOTPRINTS = {
     helm: [2, 2], 'map-table': [3, 2], 'treasure-chest': [2, 1], 'tangerine-tree': [2, 2],
     'swords-rack': [2, 1], 'kitchen-table': [3, 2], 'galley-stove': [3, 2], bookshelf: [2, 1],
-    'medicine-cabinet': [2, 1], piano: [3, 2], 'tool-bench': [2, 2]
+    'medicine-cabinet': [2, 1], piano: [3, 2], 'tool-bench': [2, 2],
+    'supply-rack': [2, 1], 'log-pose-desk': [2, 2], 'repair-cart': [2, 1],
+    'library-cart': [2, 1], 'medical-cart': [2, 1], 'den-den-desk': [2, 2]
   };
   // Complete 384px drawings, measured at the front row against the accepted crew art.
   // All four views keep one item scale; saved footprints and placement coordinates stay fixed.
@@ -30,7 +32,9 @@
     helm: 78, 'map-table': 72, 'treasure-chest': 56,
     'tangerine-tree': 104, 'swords-rack': 84,
     'kitchen-table': 80.25, 'galley-stove': 80.25, bookshelf: 90,
-    'medicine-cabinet': 86, piano: 80.25, 'tool-bench': 76
+    'medicine-cabinet': 86, piano: 80.25, 'tool-bench': 76,
+    'supply-rack': 82, 'log-pose-desk': 72, 'repair-cart': 70,
+    'library-cart': 72, 'medical-cart': 70, 'den-den-desk': 72
   });
   const FURNITURE_CANVAS = 384;
   const FURNITURE_GROUND_ROOT = Object.freeze([192, 372]);
@@ -711,6 +715,18 @@
     return { ...scene, pair, cursor: history.cursor };
   }
   function spotsAround(target) {
+    // New service furniture has a usable front edge in every view. Keep the
+    // complete handheld work/read animation on adjacent floor cells; these
+    // pieces do not inherit another drawing's hand-contact dock offsets.
+    if (['supply-rack', 'log-pose-desk', 'repair-cart', 'library-cart', 'medical-cart', 'den-den-desk'].includes(keyForFurniture(target.item))) {
+      const rotation = rotationFor(target.entry);
+      const count = rotation % 2 === 0 ? target.span.width : target.span.height;
+      return Array.from({ length: count }, (_, index) => rotation === 0
+        ? { col: target.cell.col + index, row: target.cell.row + target.span.height }
+        : rotation === 1 ? { col: target.cell.col - 1, row: target.cell.row + index }
+          : rotation === 2 ? { col: target.cell.col + index, row: target.cell.row - 1 }
+            : { col: target.cell.col + target.span.width, row: target.cell.row + index });
+    }
     // The keyboard and table work surface must be approached from their front,
     // opposite the piano back or the table bench. Saved furniture
     // cells stay unchanged; the actor routes to a free floor cell by the keys.

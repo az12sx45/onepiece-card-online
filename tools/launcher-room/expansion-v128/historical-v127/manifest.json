@@ -1,0 +1,300 @@
+{
+  "schema": "launcher-v127-portable-history/1",
+  "sourceCommit": "f0ece52f27d05b817b85b42185d13dab26ab057b",
+  "sourceReview": {
+    "path": "docs/LAUNCHER_MINIGAMES_20260928.json",
+    "sha256": "5da1b92a51b94580a073965c128b4ff1958b66cb4ec9a9be19041c8480410430"
+  },
+  "createdAt": "2026-09-27T20:39:22.663Z",
+  "method": "Original 1.2.7 source gate passed in the unchanged frozen build; copied exact runtime, QA source and catalog bytes. Future validation re-executes the unchanged original gate with this overlay and retained original evidence. No dependency on the local-only build commit at validation time.",
+  "originalGatePassed": true,
+  "files": [
+    {
+      "path": "config/launcher-announcements-v1.json",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/config/launcher-announcements-v1.json",
+      "sha256": "5d69c07f81f8194587373a53c574291e52bc70da7c081adc55a1aec9ba7144fa",
+      "normalizedSha256": "240f3baca80aaa8dce09b49ff523ba47b9a094042aa87ec68a1569f55b7abf47",
+      "bytes": 4021
+    },
+    {
+      "path": "config/launcher-crew-release-v1.json",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/config/launcher-crew-release-v1.json",
+      "sha256": "14105517f17a3057e636053e4da0e41d314a65aa74621228df2fb4e02eb60896",
+      "normalizedSha256": "0526f5ff2913aa1000cc683de1fa8e4072def749e548c7a9b72f0e9b28305b64",
+      "bytes": 156
+    },
+    {
+      "path": "desktop/auth-service.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/auth-service.js",
+      "sha256": "290ecd2c2e9b1c3ef80fdb944efde789fe306d3ec6492b96bf78556269a51217",
+      "normalizedSha256": "fa1d8d9ef12bcb37fd523829980614c30de51e2674a57ffc797682936d669671",
+      "bytes": 25641
+    },
+    {
+      "path": "desktop/launcher-announcements.css",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-announcements.css",
+      "sha256": "fe9a988f68fe9b5f7640a5091b84ebd99bf54a69d76b254a1b3d30a457586d4e",
+      "normalizedSha256": "fe9a988f68fe9b5f7640a5091b84ebd99bf54a69d76b254a1b3d30a457586d4e",
+      "bytes": 10132
+    },
+    {
+      "path": "desktop/launcher-announcements.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-announcements.js",
+      "sha256": "5547288ccadd8c6406f63dae764367b3a3bd29b2b5c6c3cc56c812419e4d56c1",
+      "normalizedSha256": "5547288ccadd8c6406f63dae764367b3a3bd29b2b5c6c3cc56c812419e4d56c1",
+      "bytes": 14296
+    },
+    {
+      "path": "desktop/launcher-life-actions.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-life-actions.js",
+      "sha256": "9d15a266c00540ab937cb4a1010e521763403c7b23d2bede443e8be0b5fb8b64",
+      "normalizedSha256": "487443cbb8941e94d169e5891c837e7cb92c1b844828630b32e831e77197e3ce",
+      "bytes": 4444
+    },
+    {
+      "path": "desktop/launcher-life-data.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-life-data.js",
+      "sha256": "dab3c07b0610acb328e31300094bf0faa28c1b4c7e13acec14f32e1d83ecb908",
+      "normalizedSha256": "6457a5fb9f2623357a4a22ddb846d8e5bc81a1f1b5eda0ae17e184dc433bf66c",
+      "bytes": 75836
+    },
+    {
+      "path": "desktop/launcher-life-room.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-life-room.js",
+      "sha256": "1e4d676156eb662e1b2ef9ceaf56c541e2cefca8182ae2bb699b82d2497abc87",
+      "normalizedSha256": "b44c7bf33d38b0e161eeef4d2c97f42eb7b327b5ca5b19026cc4416195ab2372",
+      "bytes": 27924
+    },
+    {
+      "path": "desktop/launcher-life.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-life.js",
+      "sha256": "c5c9d72c35e9c88f3337e579adacfa9ff30bb7b99870a5dead9db58efbaec47d",
+      "normalizedSha256": "c9be09c38bd748a3b064de91879d12dea54515f776cb9d735dcd8b6dcbef55e7",
+      "bytes": 53032
+    },
+    {
+      "path": "desktop/launcher-profile-shop.css",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-profile-shop.css",
+      "sha256": "689d01d74bbb2c2b4eaaba42d5f3d763d081d2b29c930e10836ea5ee2901e6d2",
+      "normalizedSha256": "0f9b42f8c6cd5844876a7c877a16b8265a13631f38d3371083c5f2e6969b4ee9",
+      "bytes": 25440
+    },
+    {
+      "path": "desktop/launcher-profile-shop.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-profile-shop.js",
+      "sha256": "b82f1a912da5f5cd9772a53f4c61e558ec77fb2c3ffc582b16a78c00294529bd",
+      "normalizedSha256": "2bc69f6e30c6a3d09542a57b6ff0e2a98a8a04dca1d3755356120b332e383e12",
+      "bytes": 52052
+    },
+    {
+      "path": "desktop/launcher-reserved-crew.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-reserved-crew.js",
+      "sha256": "e42d09aa38205cd105ee48fb30a5799632cd67b1dec2db881abf9e19c4fa30a6",
+      "normalizedSha256": "6e6209d4bcd5267704e40ec30bc86769aa739e8806e2b39f60d3337b065790dd",
+      "bytes": 31408
+    },
+    {
+      "path": "desktop/launcher-room-dialogue.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room-dialogue.js",
+      "sha256": "3cb915a30dbff3c20845d9dbfb4e88cbc15761a1c79f9899895e05f69cadd05e",
+      "normalizedSha256": "484bc23b46fcfeeb3a90a14d1c049c0d2f2dd2789947a5a82ef6eda6b79a7737",
+      "bytes": 83188
+    },
+    {
+      "path": "desktop/launcher-room-minigames.css",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room-minigames.css",
+      "sha256": "69cc519447ece1ff956da6de58e2327172358bea1b7186bd2590182b88d41d63",
+      "normalizedSha256": "fc21095c7799164e08dd4134e02a67f543740073e1385f7eb5a4e096b694b155",
+      "bytes": 8180
+    },
+    {
+      "path": "desktop/launcher-room-minigames.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room-minigames.js",
+      "sha256": "75e435fce4a4af8c825be63f0cfa2a07a4ff013585268695880350f835679fdf",
+      "normalizedSha256": "75e435fce4a4af8c825be63f0cfa2a07a4ff013585268695880350f835679fdf",
+      "bytes": 31505
+    },
+    {
+      "path": "desktop/launcher-room-motion-data.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room-motion-data.js",
+      "sha256": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+      "normalizedSha256": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+      "bytes": 4606
+    },
+    {
+      "path": "desktop/launcher-room-motion.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room-motion.js",
+      "sha256": "eb0d40f266aa56c1e37fcc4dd6a959d39eb7d6cd955d5f4961ac0612bc175d41",
+      "normalizedSha256": "b48b20b6f55f770f2bc2fafdf6665be0c7cf6544a45fd1d370179ebbabdd919d",
+      "bytes": 9469
+    },
+    {
+      "path": "desktop/launcher-room.css",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room.css",
+      "sha256": "3dc6ac0750ee8afcba5c202516e81d180fec5472795a6679ae8887087f754c16",
+      "normalizedSha256": "32b67efc5bde4018a3ca66883f5afa0bed90eb47a09b27bcb0b54c912b3ec610",
+      "bytes": 21525
+    },
+    {
+      "path": "desktop/launcher-room.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-room.js",
+      "sha256": "f461e338bfc633e2ba0f078e1460d5336764fe4b299dce5a5aa70ecbd79a2dbd",
+      "normalizedSha256": "635a14d921fd0d95efcef7257ae80bce4423171da2d24fb9f5fd1738df9bc476",
+      "bytes": 93172
+    },
+    {
+      "path": "desktop/launcher-updates-ui.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher-updates-ui.js",
+      "sha256": "e643febd111782a16e9cd9fa8ecb705914a07a548ba4ab0c330d9c04b530ba43",
+      "normalizedSha256": "6c37f929c8350b915caf26766939c018b05889ed7a2aea6971231089d284c334",
+      "bytes": 2602
+    },
+    {
+      "path": "desktop/launcher.css",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher.css",
+      "sha256": "4a6986900ea3d7bb8d94739de37075dd45103caa48abefe56d2583496b0fabf3",
+      "normalizedSha256": "272c9f7e809d19291c4c9a037b762cdc436515aa87a681873e66f22f3fabdbea",
+      "bytes": 49992
+    },
+    {
+      "path": "desktop/launcher.html",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher.html",
+      "sha256": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6",
+      "normalizedSha256": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6",
+      "bytes": 36607
+    },
+    {
+      "path": "desktop/launcher.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/launcher.js",
+      "sha256": "88bab99c9c191217a25b79e74d8d44b883189891ca67dabcd5cc5f2049f30ca6",
+      "normalizedSha256": "c76109cc906185acc73b676aec6a5a762a98527d4f37aa9d554b3e451f6d5728",
+      "bytes": 46008
+    },
+    {
+      "path": "desktop/main.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/main.js",
+      "sha256": "975620924d7bc9793856960cf937c39538d8d138a94796f1e151f8a0af3d86df",
+      "normalizedSha256": "6e46c1645e63fe13aafc6f23bd1b2c97ce903de624c4288d60e9a355a244b7b8",
+      "bytes": 92114
+    },
+    {
+      "path": "desktop/package-lock.json",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/package-lock.json",
+      "sha256": "fb91d2c77bcb329895952ce5d6e87b0f657c7976dcf84955434f3be3a442a040",
+      "normalizedSha256": "fb91d2c77bcb329895952ce5d6e87b0f657c7976dcf84955434f3be3a442a040",
+      "bytes": 131222
+    },
+    {
+      "path": "desktop/package.json",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/package.json",
+      "sha256": "3087d33570e5bb66caac7e7d8e31d1a29e2d7428363eb888a0a686d5720d4ea9",
+      "normalizedSha256": "6063d3dcff0168a9d0f989e8aaf53d927299fd949d240b8021a45866fafb9a35",
+      "bytes": 33753
+    },
+    {
+      "path": "desktop/preload.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/desktop/preload.js",
+      "sha256": "69033604ef56c554c44cdbf8f0a0a82d6a0bde48f906077529b039b988f18212",
+      "normalizedSha256": "f29e59436b55eff3f2ae02d74ff4f95304672b167524d9b9f6c9dd4867619fcd",
+      "bytes": 3952
+    },
+    {
+      "path": "public/desktop/catalog-v2.json",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/public/desktop/catalog-v2.json",
+      "sha256": "34f6641e13d34303bd4fad66374bbe6d8a89abcb309f0113c5aa355bf91ee345",
+      "normalizedSha256": "34f6641e13d34303bd4fad66374bbe6d8a89abcb309f0113c5aa355bf91ee345",
+      "bytes": 1286
+    },
+    {
+      "path": "public/desktop/catalog-v3.json",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/public/desktop/catalog-v3.json",
+      "sha256": "88564ed63d3defb01264f3432d4bed0e1ef99775199d184727daa6cdf72af5e8",
+      "normalizedSha256": "88564ed63d3defb01264f3432d4bed0e1ef99775199d184727daa6cdf72af5e8",
+      "bytes": 1403
+    },
+    {
+      "path": "scripts/launcher_ace_release_qa.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/scripts/launcher_ace_release_qa.js",
+      "sha256": "90ed8c6419842e8d88cbbb57d5cab54aa445e8d04b98d456e1803aa7a524d8f8",
+      "normalizedSha256": "90ed8c6419842e8d88cbbb57d5cab54aa445e8d04b98d456e1803aa7a524d8f8",
+      "bytes": 22272
+    },
+    {
+      "path": "scripts/launcher_minigames_client_qa.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/scripts/launcher_minigames_client_qa.js",
+      "sha256": "9726085b9142ed94cdf6e37fb3b6ca8410edcb970a256a5f98fddf8f5c15a36b",
+      "normalizedSha256": "9726085b9142ed94cdf6e37fb3b6ca8410edcb970a256a5f98fddf8f5c15a36b",
+      "bytes": 16917
+    },
+    {
+      "path": "scripts/launcher_minigames_server_qa.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/scripts/launcher_minigames_server_qa.js",
+      "sha256": "2b3587c487c9b1a097f6cbe4bd43467aa5b032acf500b15851be5690031c54c5",
+      "normalizedSha256": "2b3587c487c9b1a097f6cbe4bd43467aa5b032acf500b15851be5690031c54c5",
+      "bytes": 19538
+    },
+    {
+      "path": "scripts/launcher_robin_scale_qa.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/scripts/launcher_robin_scale_qa.js",
+      "sha256": "fefeabe7546cc4b17a63e09afd064969dd8a4a6370c375d0fa8f61ec9c92dbbe",
+      "normalizedSha256": "fefeabe7546cc4b17a63e09afd064969dd8a4a6370c375d0fa8f61ec9c92dbbe",
+      "bytes": 12032
+    },
+    {
+      "path": "server/desktop-distribution.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/server/desktop-distribution.js",
+      "sha256": "f0acaee8f6a301096651c7e848eef648c7400880967fb1bb96259d057d93ec5b",
+      "normalizedSha256": "c8ff98a6c5da36920aa1a7d9ca5ba2ac1f69f3ebc31fdd6c14cf75095661a0db",
+      "bytes": 8012
+    },
+    {
+      "path": "server/index.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/server/index.js",
+      "sha256": "d6256ff963508f91df0fbbd628563bea705f7d77fc7758d5647e249f82ed5b03",
+      "normalizedSha256": "11100a110e339caa90894fd802b199cf5037a519595b353798d4f8fdeb865738",
+      "bytes": 274508
+    },
+    {
+      "path": "server/launcher-announcements.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/server/launcher-announcements.js",
+      "sha256": "a5534e6c0f618ed8f376375f45979a7078882d051b0774b751e92c30bba82afd",
+      "normalizedSha256": "a5534e6c0f618ed8f376375f45979a7078882d051b0774b751e92c30bba82afd",
+      "bytes": 10741
+    },
+    {
+      "path": "server/launcher-crew-release.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/server/launcher-crew-release.js",
+      "sha256": "fcc9051cc5e24065cc698cbf1f8f215cc93ccc41c81478231a564059a682fc31",
+      "normalizedSha256": "7738284a71871309f5e18346f785bf5db8c051d969fe028cc74f5b7402478693",
+      "bytes": 5477
+    },
+    {
+      "path": "server/launcher-life-store.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/server/launcher-life-store.js",
+      "sha256": "e05b7095cc672ae0fc85ad6dbd16182afb3377250e8eb196e00f2cebf2edd834",
+      "normalizedSha256": "7e0b99d21aa536ebfbe9a790a081cd4706cbb67c17598facaff207506e7220d6",
+      "bytes": 29185
+    },
+    {
+      "path": "server/launcher-life.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/server/launcher-life.js",
+      "sha256": "81e2a2833e5db2ba7b4245fdde87142946580ae28fc4f0d583bf47423335824e",
+      "normalizedSha256": "0bcfa4bbab2a40970d108bdb1dcefcb64c1103f0456bcf6a1b1727108aa9f85e",
+      "bytes": 8551
+    },
+    {
+      "path": "server/launcher-minigames.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/server/launcher-minigames.js",
+      "sha256": "10da3ff7b9647d40d72119e3c129689231238096fd677301df877e72edbdf8ac",
+      "normalizedSha256": "10da3ff7b9647d40d72119e3c129689231238096fd677301df877e72edbdf8ac",
+      "bytes": 6687
+    },
+    {
+      "path": "server/launcher-profile-shop.js",
+      "snapshot": "tools/launcher-room/expansion-v128/historical-v127/files/server/launcher-profile-shop.js",
+      "sha256": "011b2600dee65f52cd14af28577d89f304fa4beb973d8eb82253692a76b0408d",
+      "normalizedSha256": "ba17dee5b39f1dcb1f993854512533bf249d40b5e01bd5d4b04337199ac1dd4b",
+      "bytes": 58136
+    }
+  ]
+}

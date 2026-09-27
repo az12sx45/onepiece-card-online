@@ -1435,3 +1435,9 @@ Board 多人模式不是 server authoritative。實際規則在前端執行，se
 - Training free practice has no energy charge, cooldown or reward. No XP or combat-stat system is added.
 - Sessions belong to the owner and a placed character, and are bound to room revision. Visitors cannot command another player's character. Successful work waiting for wallet space remains ready until claim/cancel or invalidated room context.
 - These launcher activities do not change tabletop damage, turns, saves or multiplayer synchronization.
+
+## 2026-09-28 Launcher 1.2.8 room expansion and work variety
+
+四種工作共用既有每日 6 次、每位角色 2 次上限；每場 8 回合、6 回合成功即過關，完成獎勵 10 枚商城金幣與 1 點親密度。原補給玩法保留，新增依順序選食材、3×3 管路旋轉連線、4×4 海圖避礁限步路線。伺服器產生題目並判分；重試最多三次、同場只領獎一次、錢包滿額可保留待領，不新增貨幣或 XP。工作題目較長者使用較長 session 有效期，旧 session 缺少 jobId 時仍當成 supply。
+
+2 場景及 6 家具都經現有商城購買／所有權檢查，存檔 ID 與房間資料格式維持。家具占格隨奇數旋轉交換寬深，視覺使用固定人物尺度；工作操作面被家具或牆擋住時，不提供穿越或重疊的工作位置。24 家具／10 角色的房間上限不變。

@@ -1,0 +1,10 @@
+{
+  "key": "repair-cart",
+  "kind": "furniture",
+  "revision": 2,
+  "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-04555c17-f8ce-4505-a788-00d502ac8f99.png",
+  "prompt": "Use case: precise-object-edit. Rebuild this FOUR-VIEW game furniture sheet fixing geometric consistency. Keep exactly this navy wood-top compact Franky tool trolley, red star on FRONT panel, tools in tray and four caster wheels, warm painted One Piece room style. IMPORTANT CHANGE: REMOVE ALL handles and ANY external grip bars in ALL FOUR views. No handle anywhere. The physical cart has a rectangular footprint: front/back long sides width 1.65 times its short side. Precisely FRONT top-left, RIGHT SIDE top-right, BACK bottom-left, LEFT SIDE bottom-right. Fixed orthographic slightly elevated camera angle, no yaw 3/4 slants. Front and back must have exactly matching width/height; left and right must have exactly matching width/height and depth. Same drawerless lower shelf on all views, correct simple construction. Only front has red star; rear plain navy panel. Use one coherent object design through all rotations. Tools physically rotate with the cart. Exactly2x2 separated full objects on genuine transparent alpha background, no label/text/shadow/floor. Leave100px clear gutters, no overlap acrossquadrants, no clipping. Camera/projected object size identical for all four views. 2048x2048 square atlas.",
+  "tool": "image_gen.imagegen",
+  "transparentBackground": true,
+  "output_hint": "Generated images are saved to C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e as C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-04555c17-f8ce-4505-a788-00d502ac8f99.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+}

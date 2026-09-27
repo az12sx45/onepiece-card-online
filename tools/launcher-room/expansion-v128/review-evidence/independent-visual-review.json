@@ -1,0 +1,59 @@
+{
+  "status": "PASS_WITH_NOTES",
+  "humanAcceptance": false,
+  "blockingIssues": [],
+  "recordedAt": "2026-09-27T20:45:54.932257+00:00",
+  "method": "Root model independently inspected the actual Chromium screenshots and the final four-direction white-background furniture contact sheet with view_image. This is model visual inspection, not human play or physical-device acceptance.",
+  "images": [
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/four-jobs-desktop.png",
+      "sha256": "09ca5538b719accf64ffbbf942a60dabb90f2da5d48ad863adc964491139ec68",
+      "subject": "jobs"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/cooking-active-narrow.png",
+      "sha256": "68973aefe5d2947e3fb8075ce47b5d568ac670f00a3f83037e6aac8eef0bb107",
+      "subject": "jobs"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/repair-active-desktop.png",
+      "sha256": "7ba70bb294991d49ef4e5be2f8fcb1583d7f960b814f272db92de41d9c81ea81",
+      "subject": "jobs"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/client/navigation-active-narrow.png",
+      "sha256": "9f3017436a156805d8d369dd92f44430938205b5a2ddef9db922f42f60acb4d3",
+      "subject": "jobs"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-workshop-1366.png",
+      "sha256": "52145bfad1e6444f7e91b44b643bb62127f7e95f65b24e6773b358dcc3e1fc3f",
+      "subject": "rooms"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-aquarium-1366.png",
+      "sha256": "9462a2de9b8072484514f73d7bd9460b910ae56c648fc9c6dabb80d83d757108",
+      "subject": "rooms"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-workshop-390-right.png",
+      "sha256": "017abc560a7e904a0fb2b57439b757cfb34a91e61df634d9719b93a354db5bab",
+      "subject": "rooms"
+    },
+    {
+      "path": "tools/launcher-room/expansion-v128/review-evidence/catalog/sunny-aquarium-390-right.png",
+      "sha256": "d1684ec08099f23f20f88c004e2bdf2510740079fbef3d97ea65d10944e57f70",
+      "subject": "rooms"
+    }
+  ],
+  "notes": [
+    "Desktop and 390px job controls and labels are readable; the three new mechanics are visually distinct.",
+    "Movable furniture has coherent waist-level scale relative to Robin; the large aquarium is part of the background wall.",
+    "The established narrow-room horizontal pan remains available and the right-side captures show the character without new page overflow.",
+    "All four furniture views retain complete silhouettes. The rejected repair-cart draft is preserved as provenance; selected revision 2 has consistent structure."
+  ],
+  "contactSheet": {
+    "path": "tools/launcher-room/expansion-v128/furniture-contact-white.png",
+    "sha256": "71b9bf920e17333e293760ce2668e60dd6d88441b79a71f6c7e78d2b2a50f7f4"
+  }
+}

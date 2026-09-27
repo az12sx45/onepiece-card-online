@@ -11,11 +11,77 @@ const SUPPLIES = Object.freeze({
   books:[['logbook','航海日誌'],['chart','海圖'],['history','歷史文獻']]
 });
 const DIRECTIONS = ['left','up','right'];
+const WORK_JOBS = Object.freeze(['supply','cooking','repair','navigation']);
+const INGREDIENTS = Object.freeze({meat:'肉塊',fish:'鮮魚',onion:'洋蔥',potato:'馬鈴薯',rice:'白飯',salt:'海鹽',lemon:'檸檬',orange:'橘子',apple:'蘋果',cream:'鮮奶油'});
+const RECIPES = Object.freeze([
+  {label:'港口燉肉',steps:['onion','meat','potato','salt']},
+  {label:'香煎鮮魚',steps:['fish','salt','lemon']},
+  {label:'船員特製肉飯',steps:['rice','meat','onion']},
+  {label:'橘香水果杯',steps:['orange','apple','cream']}
+]);
+const SIDES = ['north','east','south','west'];
+const PIPE_PATHS = [[3,4,5],[3,0,1,2,5],[3,6,7,8,5],[3,4,1,2,5],[3,0,1,4,7,8,5],[3,6,7,4,1,2,5]];
 const pick = list => list[crypto.randomInt(list.length)];
 const iso = ms => new Date(ms).toISOString();
-function challenge(kind, roundIndex, now) {
+function shuffled(list) {
+  const result=[...list];for(let i=result.length-1;i>0;i--){const j=crypto.randomInt(i+1);[result[i],result[j]]=[result[j],result[i]];}return result;
+}
+function jobFor(session) {return session.kind==='work'?(session.jobId||'supply'):null;}
+function durationFor(session) {return session.kind==='work'&&jobFor(session)!=='supply'?300000:180000;}
+function ports(tile,rotation) {return(tile.type==='straight'?[0,2]:[0,1]).map(side=>(side+rotation)%4);}
+function neighbor(index,side,size) {
+  const x=index%size,y=Math.floor(index/size),nx=x+[0,1,0,-1][side],ny=y+[-1,0,1,0][side];
+  return nx<0||ny<0||nx>=size||ny>=size?-1:ny*size+nx;
+}
+function sideBetween(from,to,size) {return to===from-size?0:to===from+1?1:to===from+size?2:3;}
+function repairConnected(round,rotations) {
+  let index=round.entry.index,entrySide=SIDES.indexOf(round.entry.side);const visited=new Set();
+  while(!visited.has(index)) {
+    visited.add(index);const openings=ports(round.tiles[index],rotations[index]);
+    if(!openings.includes(entrySide))return false;
+    const exitSide=openings.find(side=>side!==entrySide);
+    if(index===round.exit.index&&exitSide===SIDES.indexOf(round.exit.side))return true;
+    const next=neighbor(index,exitSide,round.size);if(next<0)return false;
+    index=next;entrySide=(exitSide+2)%4;
+  }
+  return false;
+}
+function workChallenge(jobId,id,roundIndex,issuedAt) {
+  if(jobId==='cooking') {
+    const dish=pick(RECIPES),recipe=[...dish.steps],extra=shuffled(Object.keys(INGREDIENTS).filter(key=>!recipe.includes(key))).slice(0,6-recipe.length);
+    return{id,recipe,recipeLabel:dish.label,ingredients:shuffled([...recipe,...extra]).map(key=>({id:key,label:INGREDIENTS[key]})),showcaseMs:1200,answerWindowMs:10000,notBefore:iso(issuedAt+3000)};
+  }
+  if(jobId==='repair') {
+    const route=pick(roundIndex<2?PIPE_PATHS.slice(0,4):PIPE_PATHS.slice(1));
+    const tiles=Array.from({length:9},(_,i)=>({id:id+'-'+i,type:pick(['straight','elbow']),rotation:crypto.randomInt(4)}));
+    for(let i=0;i<route.length;i++) {
+      const before=i===0?3:sideBetween(route[i],route[i-1],3),after=i===route.length-1?1:sideBetween(route[i],route[i+1],3);
+      tiles[route[i]].type=(before+2)%4===after?'straight':'elbow';
+    }
+    const round={id,size:3,tiles,entry:{index:3,side:'west'},exit:{index:5,side:'east'},showcaseMs:700,answerWindowMs:18000,notBefore:iso(issuedAt+3000)};
+    // A solved layout is never handed to the player, including by coincidence.
+    while(repairConnected(round,tiles.map(tile=>tile.rotation)))tiles[3].rotation=(tiles[3].rotation+1)%4;
+    return round;
+  }
+  if(jobId==='navigation') {
+    const size=4,corners=[[12,3],[0,15],[3,12],[15,0]],[start,goal]=pick(corners),route=[start];
+    let current=start;
+    // Carve a shortest route first. Reefs only occupy other cells, so every
+    // random chart is reachable within the declared move allowance.
+    while(current!==goal) {
+      const choices=[],x=current%size,y=Math.floor(current/size),gx=goal%size,gy=Math.floor(goal/size);
+      if(x!==gx)choices.push(current+Math.sign(gx-x));if(y!==gy)choices.push(current+size*Math.sign(gy-y));
+      current=pick(choices);route.push(current);
+    }
+    const blocked=shuffled(Array.from({length:16},(_,i)=>i).filter(i=>!route.includes(i))).slice(0,roundIndex<2?4:6).sort((a,b)=>a-b);
+    return{id,size,start,goal,blocked,maxSteps:roundIndex<3?10:8,showcaseMs:900,answerWindowMs:16000,notBefore:iso(issuedAt+3000)};
+  }
+  return null;
+}
+function challenge(kind, roundIndex, now, jobId='supply') {
   const id=crypto.randomUUID(), issuedAt=now.getTime();
   if(kind==='work') {
+    const variant=workChallenge(jobId,id,roundIndex,issuedAt);if(variant)return variant;
     const category=pick(Object.keys(CATEGORIES)), targets=1+crypto.randomInt(2);
     const categories=[...Array(targets).fill(category),...Array(3-targets).fill(null).map(()=>pick(Object.keys(CATEGORIES).filter(key=>key!==category)))];
     for(let i=categories.length-1;i>0;i--){const j=crypto.randomInt(i+1);[categories[i],categories[j]]=[categories[j],categories[i]];}
@@ -40,6 +106,7 @@ async function save(db,userId,session) {
 function view(session) {
   if(!session)return null;
   const {roomRevision,...result}=session;
+  if(session.kind==='work')result.jobId=jobFor(session);
   return JSON.parse(JSON.stringify(result));
 }
 function contextValid(session,state,room) {
@@ -56,16 +123,18 @@ async function active(db,userId,now,state,room) {
   }
   return result;
 }
-function create(kind,characterId,roomRevision,now,practice=false) {
-  return{id:crypto.randomUUID(),token:crypto.randomBytes(24).toString('hex'),kind,characterId,practice,
+function create(kind,characterId,roomRevision,now,practice=false,jobId='supply') {
+  const session={id:crypto.randomUUID(),token:crypto.randomBytes(24).toString('hex'),kind,characterId,practice,
+    ...(kind==='work'?{jobId}:{}),
     state:'playing',roomRevision,attempt:1,maxAttempts:3,roundIndex:0,totalRounds:kind==='work'?8:4,
-    startedAt:now.toISOString(),expiresAt:iso(now.getTime()+180000),finishNotBefore:iso(now.getTime()+(kind==='work'?24000:20000)),
-    challenge:challenge(kind,0,now),score:0,combo:0,correctRounds:0,feedback:null,result:null};
+    startedAt:now.toISOString(),finishNotBefore:iso(now.getTime()+(kind==='work'?24000:20000)),
+    challenge:challenge(kind,0,now,jobId),score:0,combo:0,correctRounds:0,feedback:null,result:null};
+  session.expiresAt=iso(now.getTime()+durationFor(session));return session;
 }
 function retry(session,now) {
   session.attempt++;session.state='playing';session.roundIndex=0;session.score=0;session.combo=0;session.correctRounds=0;session.feedback=null;session.result=null;
-  session.startedAt=now.toISOString();session.expiresAt=iso(now.getTime()+180000);session.finishNotBefore=iso(now.getTime()+(session.kind==='work'?24000:20000));
-  session.challenge=challenge(session.kind,0,now);
+  session.startedAt=now.toISOString();session.expiresAt=iso(now.getTime()+durationFor(session));session.finishNotBefore=iso(now.getTime()+(session.kind==='work'?24000:20000));
+  session.challenge=challenge(session.kind,0,now,jobFor(session));
 }
 function validId(value){return typeof value==='string'&&/^[a-f0-9-]{36}$/.test(value);}
 function validToken(value){return typeof value==='string'&&/^[a-f0-9]{48}$/.test(value);}
@@ -83,12 +152,26 @@ function answer(session,payload,now) {
   if(now.getTime()<Date.parse(round.notBefore))return{error:'minigame_too_early'};
   let correct=false;
   if(session.kind==='work') {
-    if(payload.directions!==undefined||!Array.isArray(payload.selections)||payload.selections.length>3||
+    const jobId=jobFor(session),field={supply:'selections',cooking:'ingredients',repair:'rotations',navigation:'path'}[jobId];
+    if(!field||['selections','directions','ingredients','rotations','path'].some(key=>key!==field&&payload[key]!==undefined))return{error:'invalid_minigame_answer'};
+    if(jobId==='cooking') {
+      if(!Array.isArray(payload.ingredients)||payload.ingredients.length>round.recipe.length||payload.ingredients.some(id=>!round.ingredients.some(item=>item.id===id)))return{error:'invalid_minigame_answer'};
+      correct=payload.ingredients.length===round.recipe.length&&payload.ingredients.every((id,i)=>id===round.recipe[i]);
+    } else if(jobId==='repair') {
+      if(!Array.isArray(payload.rotations)||payload.rotations.length!==9||payload.rotations.some(value=>!Number.isInteger(value)||value<0||value>3))return{error:'invalid_minigame_answer'};
+      correct=repairConnected(round,payload.rotations);
+    } else if(jobId==='navigation') {
+      const route=payload.path;
+      if(!Array.isArray(route)||route.length>16||route.some(value=>!Number.isInteger(value)||value<0||value>=16))return{error:'invalid_minigame_answer'};
+      correct=route.length>=2&&route.length-1<=round.maxSteps&&route[0]===round.start&&route.at(-1)===round.goal&&new Set(route).size===route.length&&route.every((cell,i)=>!round.blocked.includes(cell)&&(i===0||Math.abs(cell%4-route[i-1]%4)+Math.abs(Math.floor(cell/4)-Math.floor(route[i-1]/4))===1));
+    } else {
+    if(!Array.isArray(payload.selections)||payload.selections.length>3||
       new Set(payload.selections).size!==payload.selections.length||payload.selections.some(id=>!round.crates.some(crate=>crate.id===id)))return{error:'invalid_minigame_answer'};
     const expected=round.crates.filter(crate=>crate.category===round.order.category).map(crate=>crate.id);
     correct=expected.length===payload.selections.length&&expected.every(id=>payload.selections.includes(id));
+    }
   } else {
-    if(payload.selections!==undefined||!Array.isArray(payload.directions)||payload.directions.length>5||
+    if(['selections','ingredients','rotations','path'].some(key=>payload[key]!==undefined)||!Array.isArray(payload.directions)||payload.directions.length>5||
       payload.directions.some(value=>!DIRECTIONS.includes(value)))return{error:'invalid_minigame_answer'};
     correct=payload.directions.length===round.directions.length&&payload.directions.every((value,i)=>value===round.directions[i]);
   }
@@ -96,7 +179,7 @@ function answer(session,payload,now) {
   if(correct){session.correctRounds++;session.score+=100+Math.min(4,session.combo-1)*25;}
   session.feedback={roundIndex:session.roundIndex,correct,combo:session.combo,correctRounds:session.correctRounds,score:session.score};
   session.roundIndex++;
-  session.challenge=session.roundIndex<session.totalRounds?challenge(session.kind,session.roundIndex,now):null;
+  session.challenge=session.roundIndex<session.totalRounds?challenge(session.kind,session.roundIndex,now,jobFor(session)):null;
   return{};
 }
-module.exports={ACTIVE,CATEGORIES,ensure,save,view,active,create,retry,load,answer,contextValid};
+module.exports={ACTIVE,CATEGORIES,WORK_JOBS,ensure,save,view,active,create,retry,load,answer,contextValid};

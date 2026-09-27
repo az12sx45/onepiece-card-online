@@ -61,3 +61,7 @@ scripts/launcher_minigames_server_qa.js -text
 scripts/launcher_minigames_client_qa.js -text
 scripts/launcher_robin_scale_qa.js -text
 scripts/launcher_minigames_room_wheel_qa.js -text
+
+tools/launcher-room/expansion-v128/** -text
+
+docs/LAUNCHER_ROOM_EXPANSION_20260928.json -text

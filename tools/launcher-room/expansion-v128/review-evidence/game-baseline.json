@@ -1,0 +1,22 @@
+{
+  "schema": "launcher-v128-game-baseline/1",
+  "authorityRoot": "D:\\Codex_Release_Worktrees\\board-voyage-records-v1",
+  "capturedAt": "2026-09-27T20:39:11.393762+00:00",
+  "files": [
+    {
+      "path": "public/desktop/catalog-v2.json",
+      "sha256": "34f6641e13d34303bd4fad66374bbe6d8a89abcb309f0113c5aa355bf91ee345",
+      "normalizedSha256": "34f6641e13d34303bd4fad66374bbe6d8a89abcb309f0113c5aa355bf91ee345"
+    },
+    {
+      "path": "public/desktop/catalog-v3.json",
+      "sha256": "c9535f50638259e38fc897a5f6859a9135de6697871f2278876612212954d94e",
+      "normalizedSha256": "c9535f50638259e38fc897a5f6859a9135de6697871f2278876612212954d94e"
+    },
+    {
+      "path": "config/desktop-program-packages-v1.json",
+      "sha256": "099dfff3f7ca20c4945944581d45aef2c71443e5d4a08dc7dee96e103c2ae52e",
+      "normalizedSha256": "099dfff3f7ca20c4945944581d45aef2c71443e5d4a08dc7dee96e103c2ae52e"
+    }
+  ]
+}
