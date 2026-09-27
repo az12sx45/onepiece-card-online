@@ -1,6 +1,6 @@
 # File Map
 
-## 2026-09-27 房間背景與家具比例（1.1.16 候選）
+## 2026-09-27 房間背景與家具比例（1.1.16 已部署）
 
 - desktop/launcher-room.js/css：room 專用背景選擇、家具繪圖邊長、地面 root 與互動 dock。
 - public/images/launcher_room/scenes/*-v2.webp：按 FLOOR 與角色尺標重畫的四個 room 背景；舊共享素材保留。

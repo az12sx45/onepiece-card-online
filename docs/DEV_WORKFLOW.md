@@ -1,6 +1,6 @@
 # Dev Workflow
 
-## 2026-09-27 房間背景與家具比例修正（1.1.16 候選）
+## 2026-09-27 房間背景與家具比例修正（1.1.16 已部署）
 
 使用者接受 1.1.15 人物後回報背景／家具偏大。本輪正式 authority 仍為 D:\Codex_Release_Worktrees\board-voyage-records-v1；D 槽完整候選 checkout 因空間不足失敗且 Git 自動撤回，改用 C:\Codex_Candidates\launcher-room-scale-1.1.16 的隔離 sparse 工作樹，由 main df2b0aebc6b8c12bfd43efb2019e4b599bbcc46f 開始。正式與候選四個房間程式按 CRLF-only 比對相同。保留已接受的十人人物原畫、步態、尺寸、台詞與動作；不變更商品 ID、既有 room 座標、16×8 邏輯格／佔格與玩家資料。
 
@@ -10,7 +10,9 @@
 
 已驗證：10 家具×4方向×3深度共120例 root／方形尺寸；餐桌香吉士、鋼琴布魯克各四向 approach→focused_use→離開共8例；真素材房間76項、個人頁／商城97項；四景各桌機view/edit與390左右畫面16張逐張視覺核對，無缺圖、頁面橫向溢出或儲存座標變動。人物與背景皆為實際素材，資料是隔離fixture，非真人／實體手機或真購買驗收。三景前緣有8–12stage px木板接縫差異，下方仍為連續平地；布魯克沿用已接受的通用focused_use，不宣稱逐鍵彈奏。
 
-npm start 在隔離18786端口、無DATABASE_URL啟動，下載頁HTTP200。首輪封裝發現 sparse 缺 public/css，補回既有目錄重建；實際Electron另抓出四背景opui白名單404，已精確加入四路徑，package QA改為執行真resolveLauncherResource檢查。失敗歷史保留。最終Windows包與ASAR／134個房間素材逐byte一致，真Electron 335/335素材測試通過、零缺圖。安裝檔 239,804,254 bytes、SHA256 `33e925f3f9ee3cc88e8f7126162b384f107683f0e5c3ecefe6ae92b1882a6e7b`；R2公開HEAD200、Range206、完整GET200，獨立下載檔再算SHA一致。更新清單已用既有Ed25519簽署；本次推送後另核對Render canonical清單。正式D同步另做限制範圍與原檔備份驗證。LATTICE runtime/task API 本階段未出現在可呼叫工具清單，未宣稱持久寫入或新圖譜成功。
+npm start 在隔離18786端口、無DATABASE_URL啟動，下載頁HTTP200。首輪封裝發現 sparse 缺 public/css，補回既有目錄重建；實際Electron另抓出四背景opui白名單404，已精確加入四路徑，package QA改為執行真resolveLauncherResource檢查。失敗歷史保留。最終Windows包與ASAR／134個房間素材逐byte一致，真Electron 335/335素材測試通過、零缺圖。安裝檔 239,804,254 bytes、SHA256 `33e925f3f9ee3cc88e8f7126162b384f107683f0e5c3ecefe6ae92b1882a6e7b`；R2公開HEAD200、Range206、完整GET200，獨立下載檔再算SHA一致。發布提交 `15693c8af132a1576821e6cce297469c1e014541` 已推送main，2026-09-27T01:44:39.328418+00:00 Render canonical清單回傳1.1.16，676bytes、SHA256 `0e196b1307f19851e5ab856409f7c7fc8b46873f4d95d275c4d1ebb3f41dea08`，與提交及本機逐byte一致，Ed25519驗簽通過。公開發行144項、Socket10項、下載頁Chromium38項全通過；桌機1366／390／320寬度，未登入真帳號或改玩家資料。
+
+正式D同步工具限本版69個必要檔案，四主文件僅加入本節，舊角色與共享背景以SHA保留；實際apply、原檔備份、未相關修改SHA保護與讀回結果存於 D:\Codex_QA\launcher-room-scale-1.1.16\formal-sync。C隔離候選不是正式authority。LATTICE runtime/task API 本階段未出現在可呼叫工具清單，未宣稱持久寫入或新圖譜成功。
 
 ## 2026-09-27 航海王角色辨識與關係表演重審（1.1.15 已部署）
 
