@@ -1,0 +1,117 @@
+{
+  "rootUrl": "http://127.0.0.1:18928",
+  "errors": [],
+  "resources": [],
+  "checks": [
+    "corrected Luffy art and controls load 1440x900",
+    "corrected Luffy skip preserves result 1440x900",
+    "corrected Luffy art and controls load 390x844",
+    "corrected Luffy skip preserves result 390x844",
+    "corrected Luffy art and controls load 932x430",
+    "corrected Luffy skip preserves result 932x430",
+    "corrected Luffy has no browser runtime errors"
+  ],
+  "colors": [],
+  "layouts": [
+    {
+      "stage": "invitation",
+      "grade": "A",
+      "color": "#dca4ff",
+      "width": 1440,
+      "height": 900,
+      "cover": true,
+      "skipVisible": true,
+      "skipTextFits": true,
+      "overflow": false,
+      "images": [
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doorway.webp",
+          "loaded": true
+        },
+        {
+          "source": "http://127.0.0.1:18928/images/board/battle/portraits/nami/normal.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doors.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doors.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/luffy_invite.webp",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "stage": "invitation",
+      "grade": "A",
+      "color": "#dca4ff",
+      "width": 390,
+      "height": 844,
+      "cover": true,
+      "skipVisible": true,
+      "skipTextFits": true,
+      "overflow": false,
+      "images": [
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doorway.webp",
+          "loaded": true
+        },
+        {
+          "source": "http://127.0.0.1:18928/images/board/battle/portraits/nami/normal.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doors.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doors.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/luffy_invite.webp",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "stage": "invitation",
+      "grade": "A",
+      "color": "#dca4ff",
+      "width": 932,
+      "height": 430,
+      "cover": true,
+      "skipVisible": true,
+      "skipTextFits": true,
+      "overflow": false,
+      "images": [
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doorway.webp",
+          "loaded": true
+        },
+        {
+          "source": "http://127.0.0.1:18928/images/board/battle/portraits/nami/normal.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doors.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/doors.webp",
+          "loaded": true
+        },
+        {
+          "source": "images/board/tavern_recruit/cinematic_v1/luffy_invite.webp",
+          "loaded": true
+        }
+      ]
+    }
+  ],
+  "outcomes": []
+}

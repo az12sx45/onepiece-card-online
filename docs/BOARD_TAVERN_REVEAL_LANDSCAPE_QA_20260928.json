@@ -1,0 +1,52 @@
+{
+  "rootUrl": "http://127.0.0.1:18928",
+  "errors": [],
+  "resources": [],
+  "checks": [
+    "landscape invitation keeps Luffy's entire head visible",
+    "landscape silhouette keeps the complete head visible",
+    "landscape reveal keeps complete character art visible",
+    "landscape reveal leaves caption separate from character",
+    "landscape animation returns usable result controls",
+    "landscape has no browser runtime errors"
+  ],
+  "colors": [],
+  "layouts": [],
+  "outcomes": [],
+  "landscapeInvitation": {
+    "stage": "invitation",
+    "painted": {
+      "left": 150.76245117187503,
+      "right": 401.05208333333337,
+      "top": 97.5703125,
+      "bottom": 475.9609375
+    },
+    "captionTop": 0,
+    "opacity": 1,
+    "fullArtVisible": false
+  },
+  "landscapeSilhouette": {
+    "stage": "silhouette",
+    "painted": {
+      "left": 393.7787342071533,
+      "right": 531.5572956800461,
+      "top": 73.87742042541504,
+      "bottom": 308.0505065917969
+    },
+    "captionTop": 0,
+    "opacity": 1,
+    "fullArtVisible": true
+  },
+  "landscapeReveal": {
+    "stage": "reveal",
+    "painted": {
+      "left": 384.08846855163574,
+      "right": 540.238129734993,
+      "top": 59.88040733337402,
+      "bottom": 325.2776336669922
+    },
+    "captionTop": 333.8125,
+    "opacity": 1,
+    "fullArtVisible": true
+  }
+}

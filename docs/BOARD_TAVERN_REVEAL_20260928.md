@@ -4,7 +4,7 @@
 
 正式來源：D:/Codex_Release_Worktrees/board-voyage-records-v1。發布整合基準為線上 main 92a11b3c5c1c8e21eea5ab84917dd5c8c5e8d441，於 managed tavern-recruit-animation 工作樹驗證。
 
-只有酒館實際抽選傳入 tavernReveal UI 標記。原结果先建立，再由只讀呈現模組播放約 6.9 秒：魯夫台詞「你願不願意加入我們？」、階級光、開門剪影、角色揭曉。剪影直接使用原結果的角色圖，不另抽選、不改人物 id。三張 GPT 原畫的來源及完整 prompts 見 BOARD_TAVERN_CINEMATIC_ART_20260928.json。
+只有酒館實際抽選傳入 tavernReveal UI 標記。原结果先建立，再由只讀呈現模組播放約 6.9 秒：魯夫台詞「你願不願意加入我們？」、階級光、開門剪影、角色揭曉。剪影直接使用原結果的角色圖，不另抽選、不改人物 id。兩張新 GPT 酒館／木門原畫與沿用的既有魯夫立繪來源、提示詞及被否決初稿記錄見 BOARD_TAVERN_CINEMATIC_ART_20260928.json。
 
 沿用配色：S #ffe27a、A #dca4ff、B #9fc4ff、C #9fdaa9、D #cad2db、E #d7b786。演出暫停原決策輸入，按鈕原 disabled 狀態於結束／跳過／關閉還原。Escape 可跳過；reduced-motion 直接顯示原結果；3 秒素材逾時或載入失敗會恢复操作。既有 BoardAudio draw/reward 音效遵守原音量／靜音設定。沒有新增合成魯夫語音。
 
@@ -24,6 +24,8 @@
 
 證據：D:/Codex_QA/board-tavern-reveal-20260928/result.json、sync/result.json 與同目錄截圖；選取的原始 JSON 另保存為本文件旁的 BOARD_TAVERN_REVEAL_BROWSER_QA_20260928.json、BOARD_TAVERN_REVEAL_SYNC_QA_20260928.json。本次為自動化、隔離本機驗證，非真人、實體手機或跨網路多人驗收。
 
-發布進行中，尚待 R2 bytes/SHA/CORS 及公開 runtime identity 驗證。
+橫向最後补驗 `BOARD_QA_LANDSCAPE_ONLY=1` 6/6 通過，0 錯誤。932x430 角色透明輪廓 top 59.88 / bottom 325.28，字幕 top 333.81，間距 8.54px；邀請角色頭部完整、剪影與揭曉無裁頭。證據位於 landscape-final/result.json 與三張截圖。
+
+初版候選 package-acd57a19b6352ba6 已在外部 candidate 目錄建置，未 promote、未 R2 上傳、未推送。使用者確認「服裝跟傷疤是不同時期」，修正為逐位元複製遊戲既有 `images/board/story/speakers/luffy_smile.webp` 作邀請立繪，長袖紅上衣、胸前 X 傷疤與黃色腰帶保持既有同套造型，原始素材及被否決生圖稿保留。修正版 SHA256 e4c681eb835f5421d046c895fa2bad0c8919de658c6355a826e01f60e4618d6e。修正版圖片補驗 7/7 通過、0 錯誤：三種 viewport 的既有魯夫圖載入、跳過與原結果未決狀態；截圖目視確認頭部、邀請台詞與角色分開。證據 corrected-luffy/result.json；同步保存 BOARD_TAVERN_REVEAL_LUFFY_QA_20260928.json。原候選不得發布，修正後另建候選再驗 R2 與公開 runtime。
 
 LATTICE runtime/task API 不在本階段工具清單，官方 Status 回傳 BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED。未登記新 task、未修改資料庫、未宣稱圖譜成功。舊正式工作樹的未提交修改完整保留。

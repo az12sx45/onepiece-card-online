@@ -168,6 +168,29 @@ async function main() {
       });
     }
 
+    if (process.env.BOARD_QA_LUFFY_ONLY === "1") {
+      for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }, { width: 932, height: 430 }]) {
+        await page.setViewportSize(viewport);
+        await prepare();
+        await result({ grade: "A" });
+        await page.waitForFunction(() => {
+          const image = document.querySelector(".tavern-reveal-luffy");
+          return image?.complete && image.naturalWidth > 0 && Number(getComputedStyle(image).opacity) > 0.98;
+        });
+        const layout = await frame();
+        report.layouts.push(layout);
+        check(`corrected Luffy art and controls load ${viewport.width}x${viewport.height}`, layout.images.every((image) => image.loaded) && layout.cover && layout.skipVisible && layout.skipTextFits && !layout.overflow);
+        const screenshot = path.join(OUTPUT_DIR, `corrected-luffy-${viewport.width}x${viewport.height}.png`);
+        await page.screenshot({ path: screenshot, timeout: 5000 });
+        console.log(`SCREENSHOT ${screenshot}`);
+        const beforeSkip = await snapshot();
+        await skip();
+        check(`corrected Luffy skip preserves result ${viewport.width}x${viewport.height}`, await page.locator("#acceptRecruitBtn").isEnabled() && JSON.stringify(await snapshot()) === JSON.stringify(beforeSkip));
+      }
+      check("corrected Luffy has no browser runtime errors", report.errors.length === 0);
+      return;
+    }
+
     if (process.env.BOARD_QA_LANDSCAPE_ONLY === "1") {
       await page.setViewportSize({ width: 932, height: 430 });
       await prepare();

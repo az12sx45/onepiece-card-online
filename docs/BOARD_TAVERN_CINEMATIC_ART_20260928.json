@@ -3,7 +3,7 @@
   "createdDate": "2026-09-28",
   "projectRoot": "D:/Codex_Release_Worktrees/board-voyage-records-v1",
   "purpose": "Tavern recruitment invitation, rarity-colored doorway light, and character silhouette reveal.",
-  "generator": "Built-in image_gen.imagegen",
+  "generator": "Built-in image_gen.imagegen for doorway and doors; existing game artwork reused for Luffy after user correction.",
   "generationMode": "Built-in tool only. No fallback API or paid external provider.",
   "conversion": {
     "engine": "sharp (bundled Codex workspace dependencies)",
@@ -66,12 +66,16 @@
       "width": 1024,
       "height": 1536,
       "hasAlpha": true,
-      "bytes": 209054,
-      "sha256": "c1e844068b20d7dc77ef4342804521c82aa7595097c43c17e6063d0a28f08175",
+      "bytes": 183234,
+      "sha256": "e4c681eb835f5421d046c895fa2bad0c8919de658c6355a826e01f60e4618d6e",
+      "runtimeSource": "public/images/board/story/speakers/luffy_smile.webp",
+      "runtimeOperation": "Exact byte copy of the existing accepted game sprite. Original game asset is unchanged.",
+      "correction": "User rejected the new Luffy image. Replace mixed sleeveless outfit with the existing red long-sleeve shirt Luffy; retain the rejected generation and prompt below only as provenance, never runtime content.",
+      "rejectedGenerationSha256": "c1e844068b20d7dc77ef4342804521c82aa7595097c43c17e6063d0a28f08175",
       "generatedOriginal": "C:/Users/\u738b\u66dc\u744b/.codex/generated_images/01a0e411-4955-7d92-9c76-046e305bdad3/exec-40912f36-232a-4d47-8269-708228c113fd.png",
       "prompt": "Use case: stylized-concept. Asset type: production transparent anime game character invitation sprite. Monkey D. Luffy from One Piece as a cheerful young adult pirate captain with his iconic straw hat with red ribbon, black messy hair, small stitched scar below his left eye, sleeveless open red vest exposing chest with an X-shaped scar. Waist-up portrait, full straw hat completely inside canvas, both arms and hands completely inside canvas with comfortable empty margin, body centered. Luffy smiles enthusiastically at the viewer and extends his right hand toward the viewer with palm open, naturally inviting a new friend to join his crew; his other hand rests casually on his hip. Distinctive anime character likeness, lively expressive eyes, relaxed welcoming invitation rather than action attack. Professional hand-drawn shonen anime cel painting, clean black line art, bright red vest, warm golden hat, vivid skin tones with natural cel shadows. Actual transparent background with alpha, no scene, no floor, no color backdrop, no glow, no speech balloon, no lettering, no border, no watermarks. One isolated complete waist-up character sprite, not a concept sheet. Portrait canvas 1024x1536, silhouette visible all the way around head and both hands.",
       "composition": {
-        "note": "Waist-up Luffy with complete straw hat and both hands. Inviting hand reaches toward viewer. Transparent surrounding alpha."
+        "note": "Existing transparent game Luffy, tipping straw hat, red long-sleeve open shirt, chest scar and yellow sash. GeneratedOriginal and prompt above describe the rejected draft, not the runtime sprite."
       }
     }
   ],
