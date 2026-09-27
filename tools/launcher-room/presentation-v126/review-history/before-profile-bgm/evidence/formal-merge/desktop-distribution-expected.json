@@ -1,0 +1,19 @@
+{
+  "path": "server/desktop-distribution.js",
+  "rawSha256": "747a591087e1561195b67af8cd83e44a5b8a384e599507542863f9a61f7f2119",
+  "normalizedSha256": "359d518bd3b1c573f40462ba357ef6319cf215413b5679c9bac78e02e91eda87",
+  "reviewedBaseNormalizedSha256": "c8ff98a6c5da36920aa1a7d9ca5ba2ac1f69f3ebc31fdd6c14cf75095661a0db",
+  "reason": "Exact one-line insertion of announcement GET/READ events into the byte-pinned formal Board distribution; all other formal bytes preserved.",
+  "before": {
+    "path": "tools/launcher-room/presentation-v126/review-evidence/formal-merge/desktop-distribution.before.js",
+    "sha256": "0b7fb7242db21e5c1faa0d1b26c0c35e47afeb11a152d4efb867c4739525bc57"
+  },
+  "schema": "launcher-formal-board-preservation/1",
+  "version": "1.2.6",
+  "formalWrites": 0,
+  "expectedOnly": true,
+  "patch": {
+    "path": "tools/launcher-room/presentation-v126/review-evidence/formal-merge/desktop-distribution.js.patch",
+    "sha256": "88c38f19d3e500a2d92e9a342fa90e3a3e5380ef755b4ae56bf9db15e2b5dbb0"
+  }
+}

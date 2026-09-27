@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "revision": 1,
+  "announcements": [
+    {
+      "id": "launcher-1.2.6-announcements",
+      "status": "published",
+      "publishedAt": "2026-09-27T13:20:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.6",
+      "title": "更新公告中心上線｜啟動器 1.2.6",
+      "summary": "在啟動器查看更新內容、新夥伴登場與三款遊戲的後續更新公告。",
+      "body": [
+        "新增更新公告中心，分別查看啟動器、商城、偉大航道爭霸戰、新世界航海錄與霸海戰棋的消息。",
+        "公告提供版本、發布日期、更新內容與未讀提示；已讀紀錄跟隨登入帳號保存。",
+        "套用個人頁 BGM 後，自己進入個人頁或好友前來參觀時，會自動播放該頁設定的音樂；聽者可調整音量、靜音或暫停，離開個人頁時停止。",
+        "若裝置限制自動播放，點一次播放即可開始聆聽。",
+        "本次同步上架 Q版艾斯，可從艾斯登場公告前往商城查看。",
+        "三款遊戲的公告會隨實際遊戲更新發布；本次沒有調整三款遊戲的規則或存檔。"
+      ],
+      "requiredRelease": { "kind": "launcher", "version": "1.2.6" }
+    },
+    {
+      "id": "crew-ace-1.2.6",
+      "status": "published",
+      "publishedAt": "2026-09-27T13:20:00.000Z",
+      "scope": "shop",
+      "category": "character",
+      "version": "1.2.6",
+      "title": "Q版艾斯登場",
+      "summary": "白鬍子海賊團第二隊隊長來到角色生活基地，商城售價 18 金幣。",
+      "body": [
+        "Q版艾斯正式上架，可使用啟動器商城金幣購買，售價 18 金幣。",
+        "購買後艾斯會加入生活基地，具備四個方向的走路動畫、表情動作、日常活動與符合人物關係的互動台詞。",
+        "可點選艾斯聊天、查看詳情與親密度，也能安排工作並依現有規則領取商城金幣。",
+        "房間最多可同時擺放 10 位角色。若房間已滿，請先在布置模式收回一位角色，再購買艾斯。"
+      ],
+      "requiredRelease": { "kind": "launcher", "version": "1.2.6" },
+      "requiresCharacterId": "room-character-ace",
+      "cta": { "kind": "shop", "itemId": "room-character-ace" }
+    }
+  ]
+}

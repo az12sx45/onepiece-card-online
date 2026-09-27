@@ -314,6 +314,15 @@ class AuthService extends EventEmitter {
     return this.launcherRequest('LAUNCHER_SHOP_GET');
   }
 
+  async getLauncherAnnouncements() {
+    return this.launcherRequest('LAUNCHER_ANNOUNCEMENTS_GET');
+  }
+
+  async markLauncherAnnouncementsRead(announcementIds) {
+    if (!Array.isArray(announcementIds) || !announcementIds.length || announcementIds.length > 100 || announcementIds.some(id => typeof id !== 'string' || !/^[a-z0-9][a-z0-9._-]{0,95}$/.test(id))) return { ok: false, error: 'invalid announcements' };
+    return this.launcherRequest('LAUNCHER_ANNOUNCEMENT_READ', { announcementIds: [...new Set(announcementIds)] });
+  }
+
   async changeLauncherShopItem(action, itemId) {
     const customItems = new Set([
       'layout-default', 'layout-grand-line', 'layout-bounty-board', 'layout-captain-quarters',

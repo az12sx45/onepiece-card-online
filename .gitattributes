@@ -46,3 +46,11 @@ scripts/launcher_reserved_crew_server_qa.js -text
 scripts/launcher_reserved_crew_client_qa.js -text
 scripts/launcher_reserved_crew_browser_qa.js -text
 scripts/launcher_reserved_crew_art_browser_qa.js -text
+tools/launcher-room/presentation-v126/** -text
+docs/LAUNCHER_ANNOUNCEMENTS_20260927.json -text
+scripts/launcher_announcements_server_qa.js -text
+scripts/launcher_announcements_client_qa.js -text
+scripts/launcher_ace_release_qa.js -text
+scripts/launcher_announcements_production_visual_qa.js -text
+scripts/launcher_profile_bgm_server_qa.js -text
+scripts/launcher_profile_bgm_client_qa.js -text

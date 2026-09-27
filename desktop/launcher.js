@@ -180,6 +180,7 @@ function setStage(stage) {
   if (stage === 'auth') closeLauncherOverlays();
   window.LauncherSocial?.setAccount(stage === 'app' ? snapshot : null);
   window.LauncherUpdates?.setAccount(stage === 'app' ? snapshot : null);
+  window.LauncherAnnouncements?.setAccount(stage === 'app' ? snapshot : null);
   window.LauncherAccount?.setAccount(stage === 'app' ? snapshot : null);
   window.LauncherProfileShop?.setAccount(stage === 'app' ? snapshot : null);
   document.body.dataset.stage = stage;
@@ -660,6 +661,7 @@ function renderAll() {
   renderDownloads();
   window.LauncherSocial?.setAccount(snapshot);
   window.LauncherUpdates?.setAccount(snapshot);
+  window.LauncherAnnouncements?.setAccount(snapshot);
   window.LauncherAccount?.setAccount(snapshot);
   window.LauncherProfileShop?.setAccount(snapshot);
 }
@@ -838,16 +840,18 @@ function openDetails() {
 }
 
 function switchPanel(panelName) {
-  for (const [name, panel] of [['library', libraryPanel], ['downloads', downloadsPanel], ['social', $('#socialPanel')], ['profile', $('#profilePanel')], ['shop', $('#shopPanel')]]) {
+  for (const [name, panel] of [['library', libraryPanel], ['downloads', downloadsPanel], ['social', $('#socialPanel')], ['profile', $('#profilePanel')], ['shop', $('#shopPanel')], ['announcements', $('#announcementsPanel')]]) {
     panel.hidden = name !== panelName;
     panel.classList.toggle('is-active', name === panelName);
   }
   document.querySelectorAll('.nav-button[data-panel]').forEach((button) => button.classList.toggle('is-active', button.dataset.panel === panelName));
   window.LauncherSocial?.onVisible();
   window.LauncherProfileShop?.onVisible(panelName);
+  window.LauncherAnnouncements?.onVisible(panelName);
   syncFeatureMedia();
 }
 window.launcherSwitchPanel = switchPanel;
+window.launcherOpenGame = gameId => { if (byId[gameId]) { selectGame(gameId); switchPanel('library'); } };
 
 async function chooseCacheLocation() {
   if (!api) return;

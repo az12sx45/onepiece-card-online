@@ -1,0 +1,136 @@
+{
+  "schema": "one-piece-launcher-announcements-client-qa/1",
+  "ok": true,
+  "generatedAt": "2026-09-27T13:47:20.105Z",
+  "checks": 18,
+  "results": [
+    {
+      "name": "preload-exposes-only-two-fixed-announcement-channels",
+      "status": "PASS"
+    },
+    {
+      "name": "auth-bridge-authentication-preview-shape-and-session-epoch",
+      "status": "PASS"
+    },
+    {
+      "name": "actual-main-ipc-rejects-game-sender-and-unauthenticated-user",
+      "status": "PASS"
+    },
+    {
+      "name": "startup-fetch-and-opening-center-do-not-mark-read",
+      "status": "PASS"
+    },
+    {
+      "name": "scope-category-date-filters-preserve-global-unread",
+      "status": "PASS"
+    },
+    {
+      "name": "full-detail-open-marks-only-selected-after-server-ack",
+      "status": "PASS"
+    },
+    {
+      "name": "shop-cta-focuses-live-ace-product-without-purchasing",
+      "status": "PASS"
+    },
+    {
+      "name": "game-cta-selects-correct-game-without-launch-or-download",
+      "status": "PASS"
+    },
+    {
+      "name": "notice-text-is-not-html-and-unknown-cta-stays-hidden",
+      "status": "PASS"
+    },
+    {
+      "name": "offline-open-stays-unread-until-reconnect-and-ack",
+      "status": "PASS"
+    },
+    {
+      "name": "account-switch-discards-stale-read-and-isolates-cached-state",
+      "status": "PASS"
+    },
+    {
+      "name": "account-switch-discards-stale-get-result",
+      "status": "PASS"
+    },
+    {
+      "name": "stale-get-cannot-undo-concurrent-confirmed-read",
+      "status": "PASS"
+    },
+    {
+      "name": "explicit-mark-all-uses-only-current-visible-account-notices",
+      "status": "PASS"
+    },
+    {
+      "name": "offline-cache-restores-same-account-only-and-logout-clears-ui",
+      "status": "PASS"
+    },
+    {
+      "name": "update-prompt-opens-matching-game-announcements",
+      "status": "PASS"
+    },
+    {
+      "name": "narrow-viewport-detail-back-keyboard-and-overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "no-production-browser-errors-or-unrequested-purchase",
+      "status": "PASS"
+    }
+  ],
+  "sourceRoot": "D:\\Codex_Candidates\\launcher-announcements-1.2.6",
+  "sourceSha256": {
+    "main.js": "510507819f7abe354447d673d14b8d11ada07778f7a57b3eef81400ef80c882a",
+    "preload.js": "69033604ef56c554c44cdbf8f0a0a82d6a0bde48f906077529b039b988f18212",
+    "auth-service.js": "54993359eeb4f054b6c148cee47a11680c365505c6a75d58b3d76019db87da5f",
+    "launcher.html": "644acc9876803f57e81f1dd54f5c04421bff07684e0e8b35ab3b968a142cc09f",
+    "launcher.js": "88bab99c9c191217a25b79e74d8d44b883189891ca67dabcd5cc5f2049f30ca6",
+    "launcher-updates-ui.js": "e643febd111782a16e9cd9fa8ecb705914a07a548ba4ab0c330d9c04b530ba43",
+    "launcher-profile-shop.js": "b82f1a912da5f5cd9772a53f4c61e558ec77fb2c3ffc582b16a78c00294529bd",
+    "launcher-announcements.js": "5547288ccadd8c6406f63dae764367b3a3bd29b2b5c6c3cc56c812419e4d56c1",
+    "launcher-announcements.css": "fe9a988f68fe9b5f7640a5091b84ebd99bf54a69d76b254a1b3d30a457586d4e"
+  },
+  "sourceNormalizedSha256": {
+    "main.js": "50d7bb36cbb9d924e8e8fab67690652d7d7c9d663d9fe690c1364fd5f02a7cce",
+    "preload.js": "f29e59436b55eff3f2ae02d74ff4f95304672b167524d9b9f6c9dd4867619fcd",
+    "auth-service.js": "9f9449dfe8553c76930a6e90763f4c29e24102871fee0d0916987fc9d2cbd986",
+    "launcher.html": "248af4e7cfff1ca4fac37e05bdddc2cc49ca9c87e3d4621d286996f027510ee5",
+    "launcher.js": "c76109cc906185acc73b676aec6a5a762a98527d4f37aa9d554b3e451f6d5728",
+    "launcher-updates-ui.js": "6c37f929c8350b915caf26766939c018b05889ed7a2aea6971231089d284c334",
+    "launcher-profile-shop.js": "2bc69f6e30c6a3d09542a57b6ff0e2a98a8a04dca1d3755356120b332e383e12",
+    "launcher-announcements.js": "5547288ccadd8c6406f63dae764367b3a3bd29b2b5c6c3cc56c812419e4d56c1",
+    "launcher-announcements.css": "fe9a988f68fe9b5f7640a5091b84ebd99bf54a69d76b254a1b3d30a457586d4e"
+  },
+  "testScriptSha256": "ed40892088174707a2620f977fb7a39565ffe56b3b30c8d35adff7039947fd02",
+  "captures": [
+    {
+      "path": "announcements-desktop-list.png",
+      "sha256": "9975cda16c2ec2748cbb6b094a074e050762c01d9cbf97c866dba83d74d8ec2d",
+      "viewport": {
+        "width": 1280,
+        "height": 820
+      },
+      "kind": "actual Chromium production launcher with isolated fixture IPC"
+    },
+    {
+      "path": "announcements-desktop-ace.png",
+      "sha256": "544719c4c79c1fb9e84c0dea8b330af4eb5a451838e2631e6d4bc71cb0f76627",
+      "viewport": {
+        "width": 1280,
+        "height": 820
+      },
+      "kind": "actual Chromium production launcher with isolated fixture IPC"
+    },
+    {
+      "path": "announcements-narrow-ace.png",
+      "sha256": "f49cd24063b7e7d92264273e3f412ea9fa0710462c5eb9be24d79d678d6f1b53",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "kind": "actual Chromium production launcher with isolated fixture IPC"
+    }
+  ],
+  "errors": [],
+  "humanAcceptance": false,
+  "scope": "Actual Chromium with production launcher HTML/CSP/CSS/JavaScript, desktop 1280x820 and narrow 390x844. Isolated IPC fixture includes two current production notices plus four clearly synthetic notices only for filter/race/plain-text tests. Main IPC and auth bridge executed with isolated services. Not real DB/account/purchase, physical-device, public deployment, or human acceptance."
+}

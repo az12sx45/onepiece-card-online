@@ -1,0 +1,103 @@
+{
+  "schema": "one-piece-launcher-announcements-production-visual-qa/1",
+  "ok": true,
+  "generatedAt": "2026-09-27T13:34:26.745Z",
+  "checks": 3,
+  "results": [
+    {
+      "name": "actual-config-only-two-notices-center-open-keeps-both-unread",
+      "status": "PASS"
+    },
+    {
+      "name": "natural-detail-scroll-exposes-entire-cta-inside-visible-panel",
+      "status": "PASS",
+      "geometry": {
+        "action": {
+          "top": 722.25,
+          "bottom": 761.25,
+          "left": 459.140625,
+          "right": 580.75
+        },
+        "detail": {
+          "top": 327,
+          "bottom": 791,
+          "left": 420.75,
+          "right": 1249
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 820
+        },
+        "scrollTop": 58
+      }
+    },
+    {
+      "name": "non-force-cta-click-opens-ace-product-without-purchase",
+      "status": "PASS"
+    }
+  ],
+  "sourceRoot": "D:\\Codex_Candidates\\launcher-announcements-1.2.6",
+  "sourceSha256": {
+    "main.js": "510507819f7abe354447d673d14b8d11ada07778f7a57b3eef81400ef80c882a",
+    "preload.js": "69033604ef56c554c44cdbf8f0a0a82d6a0bde48f906077529b039b988f18212",
+    "auth-service.js": "54993359eeb4f054b6c148cee47a11680c365505c6a75d58b3d76019db87da5f",
+    "launcher.html": "df0f8e22751ff7d234531032c635cc8a2b9de91594d234feb86e9214ea2c11e8",
+    "launcher.js": "88bab99c9c191217a25b79e74d8d44b883189891ca67dabcd5cc5f2049f30ca6",
+    "launcher-updates-ui.js": "e643febd111782a16e9cd9fa8ecb705914a07a548ba4ab0c330d9c04b530ba43",
+    "launcher-profile-shop.js": "24f73abce9c7c7b1b82d942758e77b023e6886343643fdd8af125ca6de0e98fc",
+    "launcher-announcements.js": "5547288ccadd8c6406f63dae764367b3a3bd29b2b5c6c3cc56c812419e4d56c1",
+    "launcher-announcements.css": "fe9a988f68fe9b5f7640a5091b84ebd99bf54a69d76b254a1b3d30a457586d4e"
+  },
+  "sourceNormalizedSha256": {
+    "main.js": "50d7bb36cbb9d924e8e8fab67690652d7d7c9d663d9fe690c1364fd5f02a7cce",
+    "preload.js": "f29e59436b55eff3f2ae02d74ff4f95304672b167524d9b9f6c9dd4867619fcd",
+    "auth-service.js": "9f9449dfe8553c76930a6e90763f4c29e24102871fee0d0916987fc9d2cbd986",
+    "launcher.html": "28bfa9234bd51530122998c0e0004f9013609c5db70163736323c7fe1f53c280",
+    "launcher.js": "c76109cc906185acc73b676aec6a5a762a98527d4f37aa9d554b3e451f6d5728",
+    "launcher-updates-ui.js": "6c37f929c8350b915caf26766939c018b05889ed7a2aea6971231089d284c334",
+    "launcher-profile-shop.js": "f12eaf5c5e281d4cefa668dbf41d1dd7a50b3071efd56f140aee0868446234fa",
+    "launcher-announcements.js": "5547288ccadd8c6406f63dae764367b3a3bd29b2b5c6c3cc56c812419e4d56c1",
+    "launcher-announcements.css": "fe9a988f68fe9b5f7640a5091b84ebd99bf54a69d76b254a1b3d30a457586d4e"
+  },
+  "testScriptSha256": "c8f9adff80e2d8a37dd78234c69c9791854f420c048a35dd87812d609dea30bf",
+  "fixtureScriptSha256": "ed40892088174707a2620f977fb7a39565ffe56b3b30c8d35adff7039947fd02",
+  "config": {
+    "path": "config/launcher-announcements-v1.json",
+    "sha256": "bbd5e5c9f0bdd778082aa587e29a4c0c2e335406cd1323cc53ef422b5a09a71e",
+    "noticeIds": [
+      "crew-ace-1.2.6",
+      "launcher-1.2.6-announcements"
+    ]
+  },
+  "captures": [
+    {
+      "path": "announcements-production-two-notices.png",
+      "sha256": "0858f7799cd0f261010ed128eceb76097eb2fd40fa62bbb41ac788401c4ac238",
+      "viewport": {
+        "width": 1280,
+        "height": 820
+      },
+      "noticeIds": [
+        "crew-ace-1.2.6",
+        "launcher-1.2.6-announcements"
+      ],
+      "syntheticAnnouncements": false
+    },
+    {
+      "path": "announcements-production-ace-cta.png",
+      "sha256": "6bfb1cf968b403c38ba28bf5e7ffe11e811c8b171c8cf47811b2258e5afd4e60",
+      "viewport": {
+        "width": 1280,
+        "height": 820
+      },
+      "noticeIds": [
+        "crew-ace-1.2.6",
+        "launcher-1.2.6-announcements"
+      ],
+      "syntheticAnnouncements": false
+    }
+  ],
+  "errors": [],
+  "humanAcceptance": false,
+  "scope": "Actual Chromium with unchanged production launcher HTML/CSP/CSS/JS. Only the two notices from actual announcement config; no synthetic announcements. Isolated IPC/backend fixture, not public server or real account/purchase. Natural element scrolling and ordinary click without force."
+}

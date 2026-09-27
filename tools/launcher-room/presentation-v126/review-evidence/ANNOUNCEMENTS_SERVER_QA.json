@@ -1,0 +1,359 @@
+{
+  "status": "PASS",
+  "kind": "isolated-in-memory-PGlite-announcement-service-QA",
+  "checkCount": 81,
+  "checks": [
+    {
+      "name": "shipping roster opens only Ace",
+      "status": "PASS"
+    },
+    {
+      "name": "shipping contains only two truthful current notices",
+      "status": "PASS"
+    },
+    {
+      "name": "unauthorized GET ",
+      "status": "PASS"
+    },
+    {
+      "name": "unauthorized GET null",
+      "status": "PASS"
+    },
+    {
+      "name": "unauthorized GET [object Ob",
+      "status": "PASS"
+    },
+    {
+      "name": "unauthorized GET missing",
+      "status": "PASS"
+    },
+    {
+      "name": "unauthorized GET xxxxxxxxxx",
+      "status": "PASS"
+    },
+    {
+      "name": "unauthenticated requests do not create tables",
+      "status": "PASS"
+    },
+    {
+      "name": "required launcher release hidden before deployment",
+      "status": "PASS"
+    },
+    {
+      "name": "future release creates no publication witness",
+      "status": "PASS"
+    },
+    {
+      "name": "hidden read refused",
+      "status": "PASS"
+    },
+    {
+      "name": "hidden read has no rows",
+      "status": "PASS"
+    },
+    {
+      "name": "published current launcher and Ace visible",
+      "status": "PASS"
+    },
+    {
+      "name": "first visit has two unread",
+      "status": "PASS"
+    },
+    {
+      "name": "private fields never leak",
+      "status": "PASS"
+    },
+    {
+      "name": "publication witness tied to current verified version",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy client hides Ace and its count",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy cannot mark Ace read",
+      "status": "PASS"
+    },
+    {
+      "name": "scope filter does not reduce global unread count",
+      "status": "PASS"
+    },
+    {
+      "name": "empty game filter has no fake update",
+      "status": "PASS"
+    },
+    {
+      "name": "category filter works",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid query rejected {\"scope\":\"bogus\"}",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid query rejected {\"category\":\"bogus\"}",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid query rejected {\"userId\":2}",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid query rejected {\"scope\":[]}",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid query rejected null",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid query rejected []",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid read rejected {}",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid read rejected {\"announcementIds\":[]}",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid read rejected {\"announcementIds\":[\"crew-ace-1.2.6\",\"crew-ace-1.2.6\"]}",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid read rejected {\"announcementId\":\"crew-ace-1.2.6\",\"announcementIds\":[\"crew-",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid read rejected {\"announcementId\":\"x'; DROP TABLE player_profiles;--\"}",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid read rejected {\"announcementId\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid read rejected {\"announcementIds\":[\"test-0\",\"test-1\",\"test-2\",\"test-3\",\"tes",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid read rejected {\"announcementId\":\"crew-ace-1.2.6\",\"userId\":2}",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid read rejected null",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid read rejected []",
+      "status": "PASS"
+    },
+    {
+      "name": "bad-secret read denied",
+      "status": "PASS"
+    },
+    {
+      "name": "mixed visible and unknown batch rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "mixed batch creates no partial read",
+      "status": "PASS"
+    },
+    {
+      "name": "single read persisted",
+      "status": "PASS"
+    },
+    {
+      "name": "read idempotent including original timestamp",
+      "status": "PASS"
+    },
+    {
+      "name": "account B remains unread",
+      "status": "PASS"
+    },
+    {
+      "name": "explicit snapshot batch read",
+      "status": "PASS"
+    },
+    {
+      "name": "new service instance retains account reads",
+      "status": "PASS"
+    },
+    {
+      "name": "published history survives later release verifier outage",
+      "status": "PASS"
+    },
+    {
+      "name": "all three verified game categories publish",
+      "status": "PASS"
+    },
+    {
+      "name": "hidden notes omitted before global counts",
+      "status": "PASS"
+    },
+    {
+      "name": "game notes expose real release identifier",
+      "status": "PASS"
+    },
+    {
+      "name": "hidden statuses never enter publication ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "next package keeps game history and adds newly verified note",
+      "status": "PASS"
+    },
+    {
+      "name": "edited historical content cannot inherit stale witness",
+      "status": "PASS"
+    },
+    {
+      "name": "withdrawn notice remains hidden despite historic witness",
+      "status": "PASS"
+    },
+    {
+      "name": "character release gate rechecked even after publication",
+      "status": "PASS"
+    },
+    {
+      "name": "HTML title",
+      "status": "PASS"
+    },
+    {
+      "name": "duplicate ids",
+      "status": "PASS"
+    },
+    {
+      "name": "too many entries",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid date",
+      "status": "PASS"
+    },
+    {
+      "name": "external CTA",
+      "status": "PASS"
+    },
+    {
+      "name": "CTA extra URL",
+      "status": "PASS"
+    },
+    {
+      "name": "character CTA mismatch",
+      "status": "PASS"
+    },
+    {
+      "name": "character CTA missing gate",
+      "status": "PASS"
+    },
+    {
+      "name": "wrong game release binding",
+      "status": "PASS"
+    },
+    {
+      "name": "game note missing package",
+      "status": "PASS"
+    },
+    {
+      "name": "empty body",
+      "status": "PASS"
+    },
+    {
+      "name": "oversized body",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid character metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "GET socket body preserves authentication/capability",
+      "status": "PASS"
+    },
+    {
+      "name": "GET socket body old capability projection",
+      "status": "PASS"
+    },
+    {
+      "name": "READ socket body works",
+      "status": "PASS"
+    },
+    {
+      "name": "socket rejects forged userId",
+      "status": "PASS"
+    },
+    {
+      "name": "malformed socket payload safe",
+      "status": "PASS"
+    },
+    {
+      "name": "distribution allows exact GET and READ events",
+      "status": "PASS"
+    },
+    {
+      "name": "production adapter reads only canonical manifest path",
+      "status": "PASS"
+    },
+    {
+      "name": "actual signed launcher manifest accepted",
+      "status": "PASS"
+    },
+    {
+      "name": "production adapter reads only canonical manifest path",
+      "status": "PASS"
+    },
+    {
+      "name": "tampered launcher manifest refused by production adapter",
+      "status": "PASS"
+    },
+    {
+      "name": "game adapter invokes existing real runtime verifier",
+      "status": "PASS"
+    },
+    {
+      "name": "game adapter carries verified release and SHA",
+      "status": "PASS"
+    },
+    {
+      "name": "profile stats, wallets and game saves unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "QA source stable",
+      "status": "PASS"
+    }
+  ],
+  "sourceStable": true,
+  "sourceSha256": {
+    "config/launcher-announcements-v1.json": "089b904000b533d8f04b1fedc593bb82da748775ce76821e08baff08b5594b50",
+    "config/launcher-crew-release-v1.json": "14105517f17a3057e636053e4da0e41d314a65aa74621228df2fb4e02eb60896",
+    "server/launcher-announcements.js": "a5534e6c0f618ed8f376375f45979a7078882d051b0774b751e92c30bba82afd",
+    "server/launcher-crew-release.js": "fcc9051cc5e24065cc698cbf1f8f215cc93ccc41c81478231a564059a682fc31",
+    "server/launcher-profile-shop.js": "011b2600dee65f52cd14af28577d89f304fa4beb973d8eb82253692a76b0408d",
+    "server/index.js": "d6256ff963508f91df0fbbd628563bea705f7d77fc7758d5647e249f82ed5b03",
+    "server/desktop-distribution.js": "f0acaee8f6a301096651c7e848eef648c7400880967fb1bb96259d057d93ec5b",
+    "desktop/launcher-update-service.js": "b0d6dbb5684ec559bab5b33283466b9a943777480741d6e68ccfe814df2c2f66",
+    "scripts/launcher_announcements_server_qa.js": "53f350832f00e0f8716fbe4baf55f207fba5e95bafbfb3b4a115157aadd55253"
+  },
+  "sourceHashNormalization": "CRLF-to-LF-only",
+  "sourceNormalizedSha256": {
+    "config/launcher-announcements-v1.json": "089b904000b533d8f04b1fedc593bb82da748775ce76821e08baff08b5594b50",
+    "config/launcher-crew-release-v1.json": "0526f5ff2913aa1000cc683de1fa8e4072def749e548c7a9b72f0e9b28305b64",
+    "server/launcher-announcements.js": "a5534e6c0f618ed8f376375f45979a7078882d051b0774b751e92c30bba82afd",
+    "server/launcher-crew-release.js": "7738284a71871309f5e18346f785bf5db8c051d969fe028cc74f5b7402478693",
+    "server/launcher-profile-shop.js": "ba17dee5b39f1dcb1f993854512533bf249d40b5e01bd5d4b04337199ac1dd4b",
+    "server/index.js": "11100a110e339caa90894fd802b199cf5037a519595b353798d4f8fdeb865738",
+    "server/desktop-distribution.js": "c8ff98a6c5da36920aa1a7d9ca5ba2ac1f69f3ebc31fdd6c14cf75095661a0db",
+    "desktop/launcher-update-service.js": "51e7fe33b03dfb920bdf66b91033c6ba0d9fb3bea3be08e4430ec7a9ceceaf25",
+    "scripts/launcher_announcements_server_qa.js": "53f350832f00e0f8716fbe4baf55f207fba5e95bafbfb3b4a115157aadd55253"
+  },
+  "limitations": [
+    "In-memory SQL and isolated Socket.IO handler bodies; no physical-device, public-account, or concurrent PostgreSQL acceptance.",
+    "Release verifier is injected for publication-boundary scenarios; production adapter uses signed launcher manifest and existing program-hash verifier."
+  ]
+}

@@ -1157,3 +1157,24 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 - scripts/launcher_reserved_crew_server_qa.js、launcher_reserved_crew_client_qa.js、launcher_reserved_crew_browser_qa.js：伺服器隔離驗證、客戶端契約與真Chromium隱藏／逐角開放驗證。
 - scripts/launcher_reserved_crew_art_browser_qa.js：四角實圖在DPR1／2的逐格原生裁切、四向實際路徑、選角朝南停留及生活動作；測試fixture的開放設定不寫入正式角色開關。
 - tools/launcher-room/presentation-v125、docs/LAUNCHER_RESERVED_CREW_20260927.json：保留歷史發版證據，綁定本版程式、真圖與模型目視；desktop_launcher_package_qa.js納入本版門檻。
+
+
+## 2026-09-27 Launcher 1.2.6 announcements and Ace
+
+- desktop/launcher-announcements.js、launcher-announcements.css：公告列表、分類、正文、未讀、帳號快取與受限 CTA。
+- desktop/launcher-updates-ui.js：更新提示前往本次更新說明。
+- config/launcher-announcements-v1.json：具 ID、日期、scope、版本、正文、發布條件的人工更新公告。
+- server/launcher-announcements.js：設定驗證、發布紀錄、帳號已讀記錄與 release gate；server/index.js 與 desktop bridge 串接兩個 launcher event。
+- config/launcher-crew-release-v1.json：rosterRevision 2；只將 ace 改 true，其餘預載角色 false。
+- scripts/launcher_announcements_server_qa.js、launcher_ace_release_qa.js、launcher_announcements_client_qa.js：当前服務／艾斯／實際瀏覽器 QA。
+- tools/launcher-room/presentation-v126：當前發布門檻、原 1.2.5 committed runtime 隔離驗證、拒絕案例與新增小量證據。review-evidence/formal-merge 固定原 formal Board 檔案 SHA，只容許加入兩個公告 event。
+- docs/LAUNCHER_ANNOUNCEMENTS_20260927.json：最終當前版本來源与證據凍結（通過實際 QA 後建立）。
+
+- scripts/launcher_announcements_production_visual_qa.js：載入本次實際兩篇公告的瀏覽器捕捉，驗證自然捲動及前往艾斯商品。
+
+- scripts/launcher_profile_bgm_server_qa.js 與對應 client BGM QA：驗證已儲存歌曲對本人／訪客的投影、權限、金幣不變，以及真實瀏覽器的自動播放生命週期。
+- tools/launcher-room/presentation-v126/review-history/before-profile-bgm：已被新增需求取代的第一輪原始 review／來源／圖像證據；ARCHIVE.json 保留原SHA與映射，不能冒充最終驗收。
+
+- scripts/launcher_profile_bgm_client_qa.js、review-evidence/PROFILE_BGM_CLIENT_QA.json：真實瀏覽器原生音訊的本人／訪客自播、聽者控制及生命週期；可注入的拒絕播放／延遲案例須與真實音訊分開標明。
+
+- scripts/desktop_launcher_package_qa.js → presentation-v126/validate_release.js：目前公告內容門檻的實際入口；三款獨立遊戲 publisher 沒有新增自動公告掛接。

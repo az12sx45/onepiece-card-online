@@ -7387,3 +7387,22 @@ UI / RWD：
 驗證分開保存：211項伺服器隔離PGlite／Socket handler測試、9項客戶端契約與9項實際Chromium隔離IPC檢查已通過；既有controller25項與cadence6項通過。匯入器8項synthetic檢查只證明工具行為，不代表實際人物素材驗收。真圖像素、逐格目視、封裝Electron、公開完整安裝包SHA與canonical manifest證據需在發布時另行完成。LATTICE本階段無可呼叫API，未宣稱新增持久任務或圖譜成功。正式D樹以本次只讀基線與限定路徑同步，保留Board distribution及其他未提交工作。
 
 實際封裝驗證：伺服器隔離PGlite 211項、client contract 9項、實際Chromium接線 9項與4位角色完整contact模型目視通過；68份新WebP及324圖格有實際像素QA。實圖Chromium DPR1/2共20項檢查，含兩種DPR各324格實際native crop、四方向走路、選角正面站定及184張房間捕捉；腳本路徑測試抑制自主life tick，不宣稱自主事件驗收。Source及封裝Electron的616項素材、Range與BGM播放皆通過。四位預載角色的server旗標仍全部false，未上架亦未加入可用名單。1.2.5安裝檔 266435298 bytes，SHA-256 87e4ca105b1309f4cb039f54629e4babc18359943dfb0b393e209b1cf709f021，公開完整GET／Range／SHA及既有Ed25519簽章已核對。正式canonical manifest切換、source commit及完整formal保存驗證以delivery證據另行確認；沒有宣稱真人或實體裝置驗收。
+
+
+## 2026-09-27 Launcher 1.2.6 announcements and Ace
+
+範圍：啟動器新增帳號制更新公告中心，支援 launcher、shop、card、board、chess 分類與未讀／已讀；公告必須綁定真實發布版本／遊戲包 ID。本次只開放 Q版艾斯，商城售價 18 金幣；薩波、羅、漢考克維持預載未開放。1.2.5 素材及全部歷史驗證不修改。
+
+檔案：desktop/launcher-announcements.js/.css、launcher.html、launcher.js、launcher-updates-ui.js、main.js、preload.js、auth-service.js、launcher-profile-shop.js；server/launcher-announcements.js、index.js、desktop-distribution.js；config/launcher-announcements-v1.json、launcher-crew-release-v1.json；desktop/package.json/package-lock.json；scripts/launcher_announcements_server_qa.js、launcher_announcements_client_qa.js、launcher_ace_release_qa.js、desktop_launcher_package_qa.js；tools/launcher-room/presentation-v126 與 docs/LAUNCHER_ANNOUNCEMENTS_20260927.json。
+
+每次更新流程：新增不可重用 ID 的公告，寫清楚改了什麼及對應 launcher version 或 card／board／chess 的 releaseId；遊戲發布不得省略同 scope、相同 package ID 的更新說明。公告需由伺服器核對正式簽章版本／完整遊戲包驗證及角色上架狀態後才顯示。進入列表不自動標已讀，閱讀後才經帳號驗證保存。歷史已發布內容由發布紀錄保留；修正文案應新增公告，不修改已發布正文。此流程不會自動憑空產生遊戲更新內容。
+
+驗證：新增當前版本 release gate、拒絕錯誤角色旗標／缺漏更新說明／錯誤遊戲版本／外部 CTA／未綁定來源等檢查。歷史 1.2.5 gate 已用原 committed runtime 重跑通過，68 素材與 184 捕捉保留原位及原 SHA。本版 service、Ace、實際 Chromium、source／封裝 Electron、installer／public endpoint 驗證須以最終新報告為準；文件寫入時尚不宣稱部署完成。LATTICE 工具在此階段不可呼叫，沒有宣稱任務或圖譜持久化成功。
+
+本版發布前追加需求：自己或訪客進入設定有 BGM 的個人頁時自動播放所選歌曲；離開個人頁停止，快速換頁不讓舊歌曲覆蓋新頁。提供聽者本機靜音／音量設定，瀏覽器若拒絕自動播放則顯示可操作的播放提示。第一輪 review、13 份 evidence 與 32 份原 runtime 已逐項 SHA 保存於 presentation-v126/review-history/before-profile-bgm；第一輪 source smoke 另保留 delivery/attempts 原件，不能代替新增 BGM 後的驗證。第二輪須重跑受文案／個人頁來源影響的公告 QA，另驗 BGM owner／visitor／停止／拒絕播放與競態；source npm start 使用全新的 profile-bgm-r2 隔離資料夾。
+
+本版 1.2.6 尚未公開，因此同一輪的兩篇公告可補入使用者追加的 BGM 內容；原 config 及正文仍在 before-profile-bgm archive 以 SHA 留存。正式發布後不可再用相同 ID 改成另一次更新，後續勘誤／版本更新必須新增 ID。
+
+實際強制範圍：公告完整性檢查目前由 presentation-v126/validate_release.js 接入 desktop_launcher_package_qa.js，以及本次啟動器 build／sync／finalize 流程。此 gate 能比較 card／board／chess 的 catalog releaseId 並拒絕缺少對應說明；三款遊戲各自的獨立 publisher 尚未掛接本 gate，也不會自動撰寫公告。後續遊戲發布須依上述文件流程補新 ID 公告並安排對應檢查，不可宣稱所有遊戲 publisher 已自動強制。
+
+實際封裝驗證：公告伺服器 81項、艾斯完整release protection 226項、實際Chromium公告互動 18項通過；個人頁BGM伺服器 32項與實際瀏覽器 15項驗證本人／好友進頁自播、聽者音量／靜音及離頁停止。歷史1.2.5的68素材、324圖格與184捕捉依原committed runtime及現有素材SHA保留驗證。Source與封裝Electron各616項素材及BGM播放通過。只有艾斯上架，售價18金幣；其餘三位預載角色維持false。1.2.6安裝檔 266524950 bytes，SHA-256 6c76360bf0d35430a1d21436c29c6d375305d1585f8760edabc006d5a943cd06，公開完整GET／Range／SHA及既有Ed25519簽章已核對。正式canonical manifest切換、source commit及formal保存驗證以delivery證據另行確認；沒有宣稱真人或實體裝置驗收。

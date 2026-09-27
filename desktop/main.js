@@ -599,6 +599,14 @@ function registerLauncherIpc() {
     if (!authenticated && !authService.previewMode) return { ok: false, error: 'not authenticated' };
     return authService.getLauncherShop(authService.previewMode && options?.preview === true ? { preview: true } : {});
   }));
+  ipcMain.handle('launcher:announcements-get', guarded(async () => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    return authService.getLauncherAnnouncements();
+  }));
+  ipcMain.handle('launcher:announcements-read', guarded(async (_event, announcementIds) => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    return authService.markLauncherAnnouncementsRead(announcementIds);
+  }));
   ipcMain.handle('launcher:buy-item', guarded(async (_event, itemId) => {
     if (!authenticated) return { ok: false, error: 'not authenticated' };
     const result = await authService.buyLauncherItem(itemId);

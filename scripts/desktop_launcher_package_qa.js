@@ -9,7 +9,7 @@ const DESKTOP_ROOT = path.join(ROOT, 'desktop');
 const PUBLIC_ROOT = path.join(ROOT, 'public');
 const PACKAGE_PATH = path.join(DESKTOP_ROOT, 'package.json');
 const PACKAGE_LOCK_PATH = path.join(DESKTOP_ROOT, 'package-lock.json');
-const RADIAL_PRESENTATION = require('../tools/launcher-room/presentation-v125/validate_release');
+const RADIAL_PRESENTATION = require('../tools/launcher-room/presentation-v126/validate_release');
 const ROOM_HD_REVIEW = require('../tools/launcher-room/presentation-v124/validate_hd');
 const ROOM_RESERVED_REVIEW = require('../tools/launcher-room/presentation-v125/validate_reserved');
 
@@ -65,6 +65,8 @@ const APP_FILES = [
   'launcher-room-motion-data.js',
   'launcher-room-motion.js',
   'launcher-room.css',
+  'launcher-announcements.js',
+  'launcher-announcements.css',
   'launcher-updates-ui.js',
   'launcher-account-ui.js',
   'asset-store.js',
@@ -527,7 +529,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.2.5', 'Desktop launcher version must be 1.2.5 for the reviewed reserved crew preload release.');
+  assert(packageJson.version === '1.2.6', 'Desktop launcher version must be 1.2.6 for the reviewed reserved crew preload release.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -881,7 +883,7 @@ function validateAsar(asarPath) {
       `Packaged application source differs: ${entry}`);
   }
   const packedPackage = JSON.parse(asar.extractFile(asarPath, 'package.json').toString('utf8'));
-  assert(packedPackage.version === '1.2.5' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
+  assert(packedPackage.version === '1.2.6' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
   for (const entry of entries) {
     const lower = entry.toLowerCase();
     assert(!lower.startsWith('public/'), `app.asar contains the public game tree: ${entry}`);
@@ -1004,8 +1006,8 @@ function main() {
       'Release package requires all eighty complete-body atlases and explicit visual review evidence for every direction.');
     assert(source.zoroOverlayStatus === 'verified',
       'Release package requires a verified Zoro art overlay; candidate art cannot be shipped.');
-    assert(source.presentationStatus.complete && source.presentationStatus.review.releaseVersion === '1.2.5',
-      'Release package requires historical art provenance plus the exact current 1.2.5 reserved crew review.');
+    assert(source.presentationStatus.complete && source.presentationStatus.review.releaseVersion === '1.2.6',
+      'Release package requires historical art provenance plus the exact current 1.2.6 announcements and Ace review.');
   }
   const parts = [
     'DESKTOP_LAUNCHER_PACKAGE_QA=PASS',
@@ -1027,6 +1029,11 @@ function main() {
     `roomHdAssets=${source.presentationStatus.hd.assets}`,
     `reservedAssets=${source.presentationStatus.reserved.assets}`,
     `serverReleaseChecks=${source.presentationStatus.serverChecks}`,
+    `aceReleaseChecks=${source.presentationStatus.aceChecks}`,
+    `actualAnnouncementVisualChecks=${source.presentationStatus.productionVisualChecks}`,
+    `activeCharacters=${source.presentationStatus.activeCharacters}`,
+    `profileBgmServerChecks=${source.presentationStatus.bgmServerChecks}`,
+    `profileBgmClientChecks=${source.presentationStatus.bgmClientChecks}`,
     `reservedArtBrowserChecks=${source.presentationStatus.artBrowser.checks}`,
     `reservedArtCaptures=${source.presentationStatus.artBrowser.captures}`,
     `lifeHistoricalRuntime=${source.presentationStatus.historicalBaseline}`,

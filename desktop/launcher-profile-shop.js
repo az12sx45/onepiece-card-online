@@ -61,6 +61,7 @@
   let shopRequest = 0;
   let collectionTab = 'avatars';
   let shopTab = 'avatar';
+  let announcementShopItem = '';
   let pendingPurchase = null;
   let shopBusy = false;
   let shopMutation = 0;
@@ -75,6 +76,17 @@
   let cardMutation = 0;
   let bgmSource = '';
   let bgmPlayRequest = 0;
+  let bgmPlayPending = false;
+  let bgmPausedByUser = false;
+  let bgmAutoplayBlocked = false;
+  let bgmState = 'idle';
+  let profileVisible = false;
+  const BGM_LISTENER_KEY = 'onepiece.launcher.profileMusic.v1';
+  let bgmListener = { volume: .35, muted: false };
+  try {
+    const saved = JSON.parse(localStorage.getItem(BGM_LISTENER_KEY) || 'null');
+    if (saved && Number.isFinite(saved.volume) && typeof saved.muted === 'boolean') bgmListener = { volume: clamp(saved.volume, 0, 1, .35), muted: saved.muted };
+  } catch { /* Listener preferences never change the page owner's saved song. */ }
   let roomEditorRequested = false;
 
   function status(target, message, error = false) {
@@ -233,11 +245,54 @@
     $('profileCollectionCount').textContent = '戰棋收藏';
     emptyCollection('霸海戰棋目前尚無獨立收藏系統；你在商店取得的頭像仍可用於共用帳號。');
   }
-  function stopBgm() {
+  function stopBgm(resetTime = true) {
     bgmPlayRequest++;
+    bgmPlayPending = false; bgmState = 'idle';
     const audio = $('profileBgmAudio');
-    audio.pause(); audio.currentTime = 0;
-    $('profileBgmToggle').textContent = '播放音樂';
+    audio.pause();
+    try { if (resetTime) audio.currentTime = 0; } catch { /* The source may still be loading. */ }
+    renderMusicControls();
+  }
+  function clearBgm() {
+    stopBgm(); bgmSource = ''; bgmAutoplayBlocked = false; bgmPausedByUser = false;
+    const audio = $('profileBgmAudio'); audio.removeAttribute('src'); audio.load();
+    renderMusicControls();
+  }
+  function musicVisible() {
+    return accountId > 0 && !preview && profile && document.body.dataset.stage === 'app' && !$('profilePanel').hidden && !document.hidden;
+  }
+  function renderMusicControls() {
+    const audio = $('profileBgmAudio'), quiet = bgmListener.muted || bgmListener.volume === 0;
+    audio.volume = bgmListener.volume; audio.muted = bgmListener.muted;
+    $('profileBgmToggle').disabled = !bgmSource;
+    $('profileBgmToggle').textContent = bgmPlayPending ? '取消播放' : !audio.paused ? '暫停音樂' : '播放音樂';
+    $('profileBgmMute').textContent = quiet ? '取消靜音' : '靜音';
+    $('profileBgmMute').setAttribute('aria-pressed', String(quiet));
+    $('profileBgmVolume').value = String(Math.round(bgmListener.volume * 100));
+    $('profileBgmVolumeValue').textContent = `${Math.round(bgmListener.volume * 100)}%`;
+    $('profileBgmHint').textContent = !bgmSource ? '套用個人頁音樂後，進入時會自動播放。' : bgmAutoplayBlocked ? '系統限制了自動播放，按「播放音樂」即可開始。' : bgmState === 'error' ? '音樂暫時無法播放，可按播放重試。' : bgmPausedByUser ? '音樂已暫停；下次進入個人頁時會自動播放。' : quiet ? '目前已靜音；音量設定只影響你聽到的聲音。' : bgmPlayPending ? '正在載入個人頁音樂…' : '進入時自動播放；離開個人頁時停止。';
+  }
+  function saveMusicListener() {
+    try { localStorage.setItem(BGM_LISTENER_KEY, JSON.stringify(bgmListener)); } catch { /* Playback also works without persistent browser storage. */ }
+    renderMusicControls();
+  }
+  async function playBgm(automatic = false) {
+    const audio = $('profileBgmAudio');
+    if (!bgmSource || !musicVisible() || bgmPlayPending || (automatic && (bgmPausedByUser || bgmAutoplayBlocked)) || !audio.paused) return;
+    const requestId = ++bgmPlayRequest, source = bgmSource;
+    bgmPlayPending = true; bgmState = 'loading'; renderMusicControls();
+    try {
+      await audio.play();
+      // A superseded play promise must never pause a newer owner's song.
+      if (requestId !== bgmPlayRequest || source !== bgmSource) return;
+      if (!musicVisible()) { stopBgm(); return; }
+      bgmPlayPending = false; bgmAutoplayBlocked = false; bgmState = 'playing'; renderMusicControls();
+    } catch (error) {
+      if (requestId !== bgmPlayRequest || source !== bgmSource) return;
+      bgmPlayPending = false;
+      bgmAutoplayBlocked = error?.name === 'NotAllowedError';
+      bgmState = bgmAutoplayBlocked ? 'blocked' : 'error'; renderMusicControls();
+    }
   }
   function slotPlacement(placement, slot) {
     const defaults = { header: { x: 50, y: 12 }, side: { x: 12, y: 54 }, footer: { x: 50, y: 86 } }[slot];
@@ -249,12 +304,14 @@
     const items = profile?.appearanceItems || {};
     const nextBgm = items.bgm?.id === appearance.bgmId ? safeAudioAsset(items.bgm?.asset) : '';
     if (nextBgm !== bgmSource) {
-      stopBgm(); bgmSource = nextBgm;
+      stopBgm(); bgmSource = nextBgm; bgmAutoplayBlocked = false;
       if (nextBgm) $('profileBgmAudio').src = nextBgm;
       else $('profileBgmAudio').removeAttribute('src');
+      $('profileBgmAudio').load();
     }
     $('profileBgmName').textContent = nextBgm ? String(items.bgm?.name || '個人頁音樂').slice(0, 60) : '尚未設定個人頁音樂';
-    $('profileBgmToggle').disabled = !nextBgm;
+    renderMusicControls();
+    if (nextBgm && bgmState !== 'error') playBgm(true);
   }
   function renderGuestbook() {
     const enabled = profile?.guestbookUnlocked === true || profile?.guestbook?.enabled === true;
@@ -472,17 +529,8 @@
   async function toggleBgm() {
     const audio = $('profileBgmAudio');
     if (!bgmSource) return;
-    if (!audio.paused) { stopBgm(); return; }
-    const requestId = ++bgmPlayRequest;
-    const source = bgmSource;
-    try {
-      audio.currentTime = 0;
-      await audio.play();
-      if (requestId !== bgmPlayRequest || source !== bgmSource || $('profilePanel').hidden || document.hidden) { stopBgm(); return; }
-      $('profileBgmToggle').textContent = '停止音樂';
-    } catch {
-      if (requestId === bgmPlayRequest && !$('profilePanel').hidden) status('profileStatus', '音樂無法播放，請確認音效裝置或稍後再試。', true);
-    }
+    if (bgmPlayPending || !audio.paused) { bgmPausedByUser = true; stopBgm(false); return; }
+    bgmPausedByUser = false; bgmAutoplayBlocked = false; await playBgm();
   }
   function safeCatalog() {
     return (Array.isArray(shop?.catalog) ? shop.catalog : []).filter(item =>
@@ -586,7 +634,16 @@
       const result = await api.getLauncherShop(preview ? { preview: true } : undefined);
       if (requestId !== shopRequest) return;
       if (!result?.ok || !result.shop) { shop = null; renderShop(); status('shopStatus', errorText(result?.error), true); return; }
-      shop = result.shop; renderShopTabs(); renderShop(); status('shopStatus', preview ? '設計預覽可查看商品；登入後才能使用金幣購買。' : '');
+      shop = result.shop;
+      const announcedItem = announcementShopItem ? safeCatalog().find(item => item.id === announcementShopItem) : null;
+      if (announcedItem && SHOP_TABS.some(([id]) => id === announcedItem.type)) shopTab = announcedItem.type;
+      renderShopTabs(); renderShop(); status('shopStatus', preview ? '設計預覽可查看商品；登入後才能使用金幣購買。' : '');
+      if (announcementShopItem) {
+        const article = [...$('shopGrid').querySelectorAll('[data-item-id]')].find(node => node.dataset.itemId === announcementShopItem);
+        if (article) { article.tabIndex = -1; article.classList.add('is-announcement-target'); article.scrollIntoView({ block: 'center' }); article.focus({ preventScroll: true }); status('shopStatus', `公告商品：${String(announcedItem.name || announcedItem.id).slice(0, 80)}`); }
+        else status('shopStatus', '這件公告商品目前尚未開放，或需要更新啟動器後查看。');
+        announcementShopItem = '';
+      }
     } catch { if (requestId === shopRequest) { shop = null; renderShop(); status('shopStatus', errorText('offline'), true); } }
   }
   function confirmPurchase(item) {
@@ -656,6 +713,13 @@
     $('profileHeroAvatar').src = imageFor('avatar', id) || imageFor('avatar', 8);
   };
   $('profileBgmToggle').onclick = toggleBgm;
+  $('profileBgmMute').onclick = () => {
+    if (bgmListener.muted || bgmListener.volume === 0) { bgmListener.muted = false; if (bgmListener.volume === 0) bgmListener.volume = .35; }
+    else bgmListener.muted = true;
+    saveMusicListener();
+    if (!bgmPausedByUser && bgmAutoplayBlocked) { bgmAutoplayBlocked = false; playBgm(); }
+  };
+  $('profileBgmVolume').oninput = () => { bgmListener.volume = clamp(Number($('profileBgmVolume').value) / 100, 0, 1, .35); saveMusicListener(); };
   $('profileBgmAudio').onended = stopBgm;
   $('profileGuestbookForm').onsubmit = postComment;
   $('profileGuestbookInput').oninput = () => { $('profileGuestbookLength').textContent = `${$('profileGuestbookInput').value.length} / 240`; };
@@ -673,10 +737,11 @@
       const id = snapshot?.authenticated && !snapshot.profile?.needsDisplayName ? number(snapshot.profile?.userId) : 0;
       const isPreview = snapshot?.previewMode === true;
       if (id === accountId && isPreview === preview) return;
-      stopBgm(); bgmSource = '';
+      clearBgm(); profileVisible = false;
       shopMutation++; shopBusy = false;
       cardMutation++; cardBusy = false; decorBusy = false; $('profileCardEditor').hidden = true; $('profileCardSave').disabled = false; $('profileCardCancel').disabled = false;
       accountId = id; preview = isPreview; viewUserId = 0; profile = null; shop = null; roomEditorRequested = false;
+      announcementShopItem = '';
       profileRequest++; shopRequest++; commentRequest++; comments = null; commentHasMore = false; commentNextBeforeId = 0; pendingPurchase = null; pendingCommentDelete = null;
       if ($('shopConfirmDialog').open) $('shopConfirmDialog').close();
       if ($('profileCommentDeleteDialog').open) $('profileCommentDeleteDialog').close();
@@ -684,7 +749,7 @@
     },
     openProfile(userId = 0) {
       const id = number(userId);
-      stopBgm(); bgmSource = '';
+      clearBgm();
       cardMutation++; cardBusy = false; decorBusy = false; $('profileCardEditor').hidden = true; $('profileCardSave').disabled = false; $('profileCardCancel').disabled = false;
       viewUserId = id && id !== accountId ? id : 0;
       profile = null; comments = null; profileRequest++; commentRequest++; commentHasMore = false; commentNextBeforeId = 0;
@@ -692,9 +757,11 @@
       else loadProfile();
     },
     onVisible(panel) {
-      if (panel !== 'profile') stopBgm();
+      if (panel !== 'profile') { profileVisible = false; stopBgm(); }
+      else if (!profileVisible) { profileVisible = true; bgmPausedByUser = false; bgmAutoplayBlocked = false; }
       window.LauncherRoom?.onVisible(panel);
       if (panel === 'profile' && !profile) loadProfile();
+      else if (panel === 'profile') playBgm(true);
       if (panel === 'shop') loadShop();
     },
     openShopCategory(category) {
@@ -702,6 +769,12 @@
       shopTab = category;
       window.launcherSwitchPanel?.('shop');
       renderShopTabs(); renderShop();
+    },
+    openShop(itemId) {
+      if (typeof itemId !== 'string' || !/^[a-z0-9-]{1,100}$/.test(itemId)) return;
+      announcementShopItem = itemId;
+      if (itemId.startsWith('room-character-')) shopTab = 'room_character';
+      window.launcherSwitchPanel?.('shop');
     },
     onRoomSaved(nextProfile, nextShop) {
       if (!nextProfile?.isSelf || !profile?.isSelf || nextProfile.userId !== profile.userId) return;
@@ -718,6 +791,6 @@
       }
     }
   };
-  document.addEventListener('visibilitychange', () => { if (document.hidden) stopBgm(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stopBgm(); else playBgm(true); });
   renderProfile(); renderShopTabs(); renderShop();
 })();

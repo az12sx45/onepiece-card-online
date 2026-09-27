@@ -1,0 +1,152 @@
+{
+  "schema": "launcher-announcements-release/1",
+  "releaseVersion": "1.2.6",
+  "reservedBaseline": "435cb91f44cb7674fbcfd5b9674a9d07cf469c05",
+  "recordedAt": "2026-09-27T13:36:57.579Z",
+  "status": "PASS_WITH_NOTES",
+  "blockingIssues": [],
+  "humanAcceptance": false,
+  "method": "Binds current announcement service, complete Ace release protection tests, and actual Chromium UI checks to exact tested source. Re-executes the original 1.2.5 art review against its committed runtime and the preserved current asset/evidence bytes; no historical image copies or replacement reviews are created.",
+  "limitations": [
+    "Automated isolated service/browser/Electron checks are not human gameplay or physical-device acceptance.",
+    "The four-character art review and 184 captures remain historical 1.2.5 evidence; 1.2.6 adds the announcement UI and releases only Ace.",
+    "Source approval alone does not prove installer publication, canonical deployment, or that players downloaded the update."
+  ],
+  "runtimeHashNormalization": "CRLF to LF only; all other bytes remain significant",
+  "runtime": {
+    "desktop/launcher-room.js": "69713f87c63b13a2d6d595a209a4cd8e1df42c54875a557f69328a9bdeb84ca6",
+    "desktop/launcher-room.css": "32b67efc5bde4018a3ca66883f5afa0bed90eb47a09b27bcb0b54c912b3ec610",
+    "desktop/launcher-profile-shop.js": "f12eaf5c5e281d4cefa668dbf41d1dd7a50b3071efd56f140aee0868446234fa",
+    "desktop/launcher-life-room.js": "300a1dd132a43f6301705752c49779e298d02ee564e83fe9e858e76d61d3b02c",
+    "desktop/launcher-life.js": "c9be09c38bd748a3b064de91879d12dea54515f776cb9d735dcd8b6dcbef55e7",
+    "desktop/launcher-life-data.js": "6457a5fb9f2623357a4a22ddb846d8e5bc81a1f1b5eda0ae17e184dc433bf66c",
+    "desktop/launcher-life-actions.js": "ebde9375cdefb0332f613b20c438b06475562c1691f8c8b59bd61369ced35968",
+    "desktop/launcher-room-dialogue.js": "484bc23b46fcfeeb3a90a14d1c049c0d2f2dd2789947a5a82ef6eda6b79a7737",
+    "desktop/launcher.html": "28bfa9234bd51530122998c0e0004f9013609c5db70163736323c7fe1f53c280",
+    "desktop/auth-service.js": "9f9449dfe8553c76930a6e90763f4c29e24102871fee0d0916987fc9d2cbd986",
+    "desktop/preload.js": "f29e59436b55eff3f2ae02d74ff4f95304672b167524d9b9f6c9dd4867619fcd",
+    "desktop/main.js": "50d7bb36cbb9d924e8e8fab67690652d7d7c9d663d9fe690c1364fd5f02a7cce",
+    "server/launcher-life.js": "0bcfa4bbab2a40970d108bdb1dcefcb64c1103f0456bcf6a1b1727108aa9f85e",
+    "server/launcher-life-store.js": "678a6347aeb06b835371bc10772c6d416acf47806edcdaf969d26450cdee6592",
+    "server/launcher-profile-shop.js": "ba17dee5b39f1dcb1f993854512533bf249d40b5e01bd5d4b04337199ac1dd4b",
+    "server/index.js": "11100a110e339caa90894fd802b199cf5037a519595b353798d4f8fdeb865738",
+    "server/desktop-distribution.js": "c8ff98a6c5da36920aa1a7d9ca5ba2ac1f69f3ebc31fdd6c14cf75095661a0db",
+    "desktop/launcher-profile-shop.css": "7e064396e85d2750113f40dba898dc57dd83ad3aa7f77ec718e62458864045db",
+    "desktop/launcher.css": "272c9f7e809d19291c4c9a037b762cdc436515aa87a681873e66f22f3fabdbea",
+    "desktop/launcher.js": "c76109cc906185acc73b676aec6a5a762a98527d4f37aa9d554b3e451f6d5728",
+    "desktop/launcher-room-motion.js": "7215e47ea574e69548e80f2bd440bbf66fb092f40fafe86e3de3249889b19e01",
+    "desktop/launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+    "desktop/launcher-reserved-crew.js": "6e6209d4bcd5267704e40ec30bc86769aa739e8806e2b39f60d3337b065790dd",
+    "server/launcher-crew-release.js": "7738284a71871309f5e18346f785bf5db8c051d969fe028cc74f5b7402478693",
+    "config/launcher-crew-release-v1.json": "0526f5ff2913aa1000cc683de1fa8e4072def749e548c7a9b72f0e9b28305b64",
+    "desktop/launcher-announcements.js": "5547288ccadd8c6406f63dae764367b3a3bd29b2b5c6c3cc56c812419e4d56c1",
+    "desktop/launcher-announcements.css": "fe9a988f68fe9b5f7640a5091b84ebd99bf54a69d76b254a1b3d30a457586d4e",
+    "server/launcher-announcements.js": "a5534e6c0f618ed8f376375f45979a7078882d051b0774b751e92c30bba82afd",
+    "config/launcher-announcements-v1.json": "bbd5e5c9f0bdd778082aa587e29a4c0c2e335406cd1323cc53ef422b5a09a71e",
+    "desktop/package.json": "6879f764119b8362a061228a0924e1956c2185c3a4305455439cd76e896de142",
+    "desktop/package-lock.json": "884bad106874c3bd52487c6fe80684c19d9516a418b151f90ba4b7f1e5f96e47",
+    "desktop/launcher-updates-ui.js": "6c37f929c8350b915caf26766939c018b05889ed7a2aea6971231089d284c334"
+  },
+  "approvedRuntimeVariants": {
+    "server/desktop-distribution.js": [
+      {
+        "path": "server/desktop-distribution.js",
+        "rawSha256": "747a591087e1561195b67af8cd83e44a5b8a384e599507542863f9a61f7f2119",
+        "normalizedSha256": "359d518bd3b1c573f40462ba357ef6319cf215413b5679c9bac78e02e91eda87",
+        "reviewedBaseNormalizedSha256": "c8ff98a6c5da36920aa1a7d9ca5ba2ac1f69f3ebc31fdd6c14cf75095661a0db",
+        "reason": "Exact one-line insertion of announcement GET/READ events into the byte-pinned formal Board distribution; all other formal bytes preserved.",
+        "before": {
+          "path": "tools/launcher-room/presentation-v126/review-evidence/formal-merge/desktop-distribution.before.js",
+          "sha256": "0b7fb7242db21e5c1faa0d1b26c0c35e47afeb11a152d4efb867c4739525bc57"
+        }
+      }
+    ]
+  },
+  "historicalReview": {
+    "path": "docs/LAUNCHER_RESERVED_CREW_20260927.json",
+    "sha256": "0ad64a5a552c7fe4923e939127e9df980250eff0866cc181e078f4a44396a102"
+  },
+  "evidence": [
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/ACE_RELEASE_QA.json",
+      "sha256": "c37275e77af44303f8bc071c5f5041961e7509fa985fe2d377dece736f950d1e",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/ANNOUNCEMENTS_CLIENT_QA.json",
+      "sha256": "3c4f27f21f77520c2e1dc4b34e9b6b61ca6ba353eb5c1bf81edffc2cda475e1e",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/ANNOUNCEMENTS_PRODUCTION_VISUAL_QA.json",
+      "sha256": "94d30641ee3d6c87a4801446629562fee9fd9658e236e59eac5146bca11fe511",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/ANNOUNCEMENTS_SERVER_QA.json",
+      "sha256": "d8b6220c67da1e3db131837fa6551212508f28de7433bb53a0c23d8523927273",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/announcements-desktop-ace.png",
+      "sha256": "5621a5214e13ca993f610bc736f591139571530cc6de1d409cc3583007a3b235",
+      "kind": "screenshot"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/announcements-desktop-list.png",
+      "sha256": "2595fdb71bc7b6511bc055466ce730f6e5e65960eea751e5541cf4d7136d0e50",
+      "kind": "screenshot"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/announcements-narrow-ace.png",
+      "sha256": "bb11e2dfb005dbd653235da3ff276b625b24fe8904119df05076d9922d41911b",
+      "kind": "screenshot"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/announcements-production-ace-cta.png",
+      "sha256": "6bfb1cf968b403c38ba28bf5e7ffe11e811c8b171c8cf47811b2258e5afd4e60",
+      "kind": "screenshot"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/announcements-production-two-notices.png",
+      "sha256": "0858f7799cd0f261010ed128eceb76097eb2fd40fa62bbb41ac788401c4ac238",
+      "kind": "screenshot"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/formal-merge/desktop-distribution-expected.json",
+      "sha256": "f3584c97ad56b25318e926861c8ff99782c897342bd08253e3bac97d6d2c3dce",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/formal-merge/desktop-distribution.before.js",
+      "sha256": "0b7fb7242db21e5c1faa0d1b26c0c35e47afeb11a152d4efb867c4739525bc57",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/formal-merge/desktop-distribution.js.patch",
+      "sha256": "88c38f19d3e500a2d92e9a342fa90e3a3e5380ef755b4ae56bf9db15e2b5dbb0",
+      "kind": "report"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/independent-visual-review.json",
+      "sha256": "218508098c495f5e4cc148e7e90b2970912a142b523868b308b5a29c6d05f3df",
+      "kind": "report"
+    }
+  ],
+  "serverQA": {
+    "path": "tools/launcher-room/presentation-v126/review-evidence/ANNOUNCEMENTS_SERVER_QA.json",
+    "sha256": "d8b6220c67da1e3db131837fa6551212508f28de7433bb53a0c23d8523927273"
+  },
+  "aceQA": {
+    "path": "tools/launcher-room/presentation-v126/review-evidence/ACE_RELEASE_QA.json",
+    "sha256": "c37275e77af44303f8bc071c5f5041961e7509fa985fe2d377dece736f950d1e"
+  },
+  "clientQA": {
+    "path": "tools/launcher-room/presentation-v126/review-evidence/ANNOUNCEMENTS_CLIENT_QA.json",
+    "sha256": "3c4f27f21f77520c2e1dc4b34e9b6b61ca6ba353eb5c1bf81edffc2cda475e1e"
+  },
+  "productionVisualQA": {
+    "path": "tools/launcher-room/presentation-v126/review-evidence/ANNOUNCEMENTS_PRODUCTION_VISUAL_QA.json",
+    "sha256": "94d30641ee3d6c87a4801446629562fee9fd9658e236e59eac5146bca11fe511"
+  }
+}

@@ -1,0 +1,332 @@
+{
+  "schema": "one-piece-launcher-profile-bgm-client-qa/1",
+  "ok": true,
+  "generatedAt": "2026-09-27T13:49:01.448Z",
+  "checks": 15,
+  "results": [
+    {
+      "name": "self-entry-autoplays-real-unmuted-looping-ogg",
+      "status": "PASS"
+    },
+    {
+      "name": "same-profile-refresh-and-room-render-do-not-restart-song",
+      "status": "PASS"
+    },
+    {
+      "name": "manual-pause-survives-refresh-and-room-render-until-next-entry",
+      "status": "PASS"
+    },
+    {
+      "name": "friend-entry-replaces-owner-song-with-single-audio-element",
+      "status": "PASS"
+    },
+    {
+      "name": "late-profile-response-cannot-play-over-new-friend",
+      "status": "PASS"
+    },
+    {
+      "name": "late-play-promise-cannot-stop-new-friend-song",
+      "status": "PASS"
+    },
+    {
+      "name": "leaving-during-load-stays-silent-and-cached-return-autoplays",
+      "status": "PASS"
+    },
+    {
+      "name": "shop-equip-persists-selected-song-for-next-own-entry-without-hidden-play",
+      "status": "PASS"
+    },
+    {
+      "name": "listener-mute-volume-persist-across-friend-visits-and-reload",
+      "status": "PASS"
+    },
+    {
+      "name": "controlled-visibility-stop-return-and-manual-pause-intent",
+      "status": "PASS"
+    },
+    {
+      "name": "injected-autoplay-denial-is-explained-and-one-real-click-recovers",
+      "status": "PASS"
+    },
+    {
+      "name": "no-song-and-invalid-or-mismatched-assets-remain-silent",
+      "status": "PASS"
+    },
+    {
+      "name": "existing-op-track01-mp3-autoplays-native-unmuted-in-same-profile-player",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop-and-390px-music-controls-fit-and-remain-operable",
+      "status": "PASS"
+    },
+    {
+      "name": "logout-stops-clears-source-and-no-real-purchase-or-browser-error",
+      "status": "PASS"
+    }
+  ],
+  "sourceRoot": "D:\\Codex_Candidates\\launcher-announcements-1.2.6",
+  "sourceSha256": {
+    "launcher-profile-shop.js": "b82f1a912da5f5cd9772a53f4c61e558ec77fb2c3ffc582b16a78c00294529bd",
+    "launcher-profile-shop.css": "689d01d74bbb2c2b4eaaba42d5f3d763d081d2b29c930e10836ea5ee2901e6d2",
+    "launcher.html": "644acc9876803f57e81f1dd54f5c04421bff07684e0e8b35ab3b968a142cc09f",
+    "launcher.js": "88bab99c9c191217a25b79e74d8d44b883189891ca67dabcd5cc5f2049f30ca6",
+    "main.js": "510507819f7abe354447d673d14b8d11ada07778f7a57b3eef81400ef80c882a",
+    "auth-service.js": "54993359eeb4f054b6c148cee47a11680c365505c6a75d58b3d76019db87da5f"
+  },
+  "sourceNormalizedSha256": {
+    "launcher-profile-shop.js": "2bc69f6e30c6a3d09542a57b6ff0e2a98a8a04dca1d3755356120b332e383e12",
+    "launcher-profile-shop.css": "0f9b42f8c6cd5844876a7c877a16b8265a13631f38d3371083c5f2e6969b4ee9",
+    "launcher.html": "248af4e7cfff1ca4fac37e05bdddc2cc49ca9c87e3d4621d286996f027510ee5",
+    "launcher.js": "c76109cc906185acc73b676aec6a5a762a98527d4f37aa9d554b3e451f6d5728",
+    "main.js": "50d7bb36cbb9d924e8e8fab67690652d7d7c9d663d9fe690c1364fd5f02a7cce",
+    "auth-service.js": "9f9449dfe8553c76930a6e90763f4c29e24102871fee0d0916987fc9d2cbd986"
+  },
+  "testScriptSha256": "bf6c81c282318d69d099def7ec1aec6976c4ee22d805845a787cbd77d2e7594e",
+  "fixtureScriptSha256": "ed40892088174707a2620f977fb7a39565ffe56b3b30c8d35adff7039947fd02",
+  "realAudioAssets": [
+    {
+      "path": "public/audio/profile_bgm/harbor.ogg",
+      "bytes": 490094,
+      "sha256": "1c63d24b20701d5b662228151edb175b82c1c6d8779c77bfe8ccd0731cedf8f6"
+    },
+    {
+      "path": "public/audio/profile_bgm/night-watch.ogg",
+      "bytes": 438160,
+      "sha256": "17d65304f38ddd79c11f7e2db99be30ae684a2f44279874ecab5e8d06e169534"
+    },
+    {
+      "path": "public/audio/profile_bgm/voyage.ogg",
+      "bytes": 415369,
+      "sha256": "c545faea002effb70a3d675ce682d0e119043f934fc44ee537fc82bc4a6066f6"
+    },
+    {
+      "path": "public/audio/bgm/track01.mp3",
+      "bytes": 3929145,
+      "sha256": "50f89aa9c47d5dd00107ea0329ad02a773ab923d873dc1845f3df3fd573b7b06"
+    }
+  ],
+  "audioObservations": [
+    {
+      "src": "opui://launcher/audio/profile_bgm/harbor.ogg",
+      "currentTime": 0.128546,
+      "duration": 40.855063,
+      "paused": false,
+      "muted": false,
+      "volume": 0.35,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/harbor.ogg",
+      "currentTime": 0.191741,
+      "duration": 40.855063,
+      "paused": false,
+      "muted": false,
+      "volume": 0.35,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/harbor.ogg",
+      "currentTime": 0.129607,
+      "duration": 40.855063,
+      "paused": false,
+      "muted": false,
+      "volume": 0.35,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/night-watch.ogg",
+      "currentTime": 0.142138,
+      "duration": 46.833281,
+      "paused": false,
+      "muted": false,
+      "volume": 0.35,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/voyage.ogg",
+      "currentTime": 0.138602,
+      "duration": 33.107438,
+      "paused": false,
+      "muted": false,
+      "volume": 0.35,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/voyage.ogg",
+      "currentTime": 0.141859,
+      "duration": 33.107438,
+      "paused": false,
+      "muted": false,
+      "volume": 0.35,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/voyage.ogg",
+      "currentTime": 0.1424,
+      "duration": 33.107438,
+      "paused": false,
+      "muted": false,
+      "volume": 0.35,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/voyage.ogg",
+      "currentTime": 0.255865,
+      "duration": 33.107438,
+      "paused": false,
+      "muted": false,
+      "volume": 0.35,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/harbor.ogg",
+      "currentTime": 0.139733,
+      "duration": 40.855063,
+      "paused": false,
+      "muted": false,
+      "volume": 0.35,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/night-watch.ogg",
+      "currentTime": 0.13769,
+      "duration": 46.833281,
+      "paused": false,
+      "muted": false,
+      "volume": 0.35,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/voyage.ogg",
+      "currentTime": 0.124307,
+      "duration": 33.107438,
+      "paused": false,
+      "muted": true,
+      "volume": 0.62,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/harbor.ogg",
+      "currentTime": 0.130658,
+      "duration": 40.855063,
+      "paused": false,
+      "muted": true,
+      "volume": 0.62,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/harbor.ogg",
+      "currentTime": 0.24152,
+      "duration": 40.855063,
+      "paused": false,
+      "muted": false,
+      "volume": 0.62,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/harbor.ogg",
+      "currentTime": 0.126519,
+      "duration": 40.855063,
+      "paused": false,
+      "muted": false,
+      "volume": 0.62,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/night-watch.ogg",
+      "currentTime": 0.133551,
+      "duration": 46.833281,
+      "paused": false,
+      "muted": false,
+      "volume": 0.62,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/harbor.ogg",
+      "currentTime": 0.138231,
+      "duration": 40.855063,
+      "paused": false,
+      "muted": false,
+      "volume": 0.62,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/bgm/track01.mp3",
+      "currentTime": 0.123218,
+      "duration": 240.69805,
+      "paused": false,
+      "muted": false,
+      "volume": 0.62,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    },
+    {
+      "src": "opui://launcher/audio/profile_bgm/harbor.ogg",
+      "currentTime": 0.133482,
+      "duration": 40.855063,
+      "paused": false,
+      "muted": false,
+      "volume": 0.62,
+      "readyState": 4,
+      "loop": true,
+      "error": null
+    }
+  ],
+  "captures": [
+    {
+      "path": "profile-bgm-desktop.png",
+      "sha256": "9f9a104ecef2a71b9fdf4ba1ff831503ce3820ab639c4a3adbc9bebf70b4fe81",
+      "viewport": {
+        "width": 1280,
+        "height": 820
+      },
+      "kind": "Actual Chromium profile music controls; isolated empty-room/profile IPC fixture"
+    },
+    {
+      "path": "profile-bgm-narrow.png",
+      "sha256": "77e165be056d4ba2113f47ab494b8f5ae5166c65a0a010c7cf8cb8cbdd0ef0a7",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "kind": "Actual Chromium profile music controls; isolated empty-room/profile IPC fixture"
+    }
+  ],
+  "errors": [],
+  "humanAcceptance": false,
+  "scope": "Actual headless Chromium with production launcher HTML/CSP/CSS/JS, local real Ogg plus existing OP track01 MP3 decoding and unmuted currentTime progression. Isolated profile/shop IPC fixture; no real purchase or database. Policy denial, delayed play/profile promises and document visibility are explicitly controlled fault-injection cases. No autoplay-policy browser override. No physical speaker/listening or real-device acceptance claim."
+}

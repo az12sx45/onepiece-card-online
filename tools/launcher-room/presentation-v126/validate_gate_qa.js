@@ -1,0 +1,24 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const gate=require('./validate_release'),historical=require('../presentation-v122/validate_historical_life');
+const root=path.resolve(__dirname,'../../..'),clone=value=>JSON.parse(JSON.stringify(value));
+const review=JSON.parse(fs.readFileSync(path.join(root,gate.REVIEW_PATH))),config=JSON.parse(fs.readFileSync(path.join(root,'config/launcher-crew-release-v1.json'))),notes=JSON.parse(fs.readFileSync(path.join(root,'config/launcher-announcements-v1.json')));
+const checks=[];
+function refuses(name,run){assert.throws(run);checks.push({name,status:'PASS'});}
+for(const key of ['sabo','law','hancock'])refuses('reject-unreleased-'+key,()=>{const c=clone(config);c.characters[key]=true;gate.validateConfig(c);});
+refuses('reject-ace-not-open',()=>{const c=clone(config);c.characters.ace=false;gate.validateConfig(c);});
+refuses('reject-stale-roster',()=>{const c=clone(config);c.rosterRevision=1;gate.validateConfig(c);});
+refuses('reject-missing-launcher-notes',()=>{const c=clone(notes);c.announcements=c.announcements.filter(e=>e.scope!=='launcher');gate.validateAnnouncements(root,c);});
+refuses('reject-missing-ace-listing-note',()=>{const c=clone(notes);c.announcements=c.announcements.filter(e=>e.requiresCharacterId!=='room-character-ace');gate.validateAnnouncements(root,c);});
+refuses('reject-missing-profile-bgm-notes',()=>{const c=clone(notes);c.announcements[0].body=c.announcements[0].body.filter(line=>!line.includes('BGM'));gate.validateAnnouncements(root,c);});
+refuses('reject-empty-update-description',()=>{const c=clone(notes);c.announcements[0].body=['更新'];gate.validateAnnouncements(root,c);});
+refuses('reject-game-without-exact-release',()=>{const c=clone(notes);c.announcements.push({...clone(c.announcements[0]),id:'invalid-game-note',scope:'board'});gate.validateAnnouncements(root,c);});
+refuses('reject-external-ace-cta',()=>{const c=clone(notes);c.announcements.find(e=>e.requiresCharacterId).cta={kind:'url',url:'https://example.com'};gate.validateAnnouncements(root,c);});
+refuses('reject-source-drift',()=>gate.validateSources(root,{sourceSha256:{'desktop/main.js':'0'.repeat(64),'desktop/launcher.js':'0'.repeat(64),'desktop/preload.js':'0'.repeat(64)}}));
+refuses('reject-missing-source-binding',()=>gate.validateSources(root,{}));
+refuses('reject-published-id-rewrite',()=>{const c=clone(notes);c.announcements[0].summary+=' overwritten';gate.validateAppendOnly(notes,c);});
+refuses('reject-published-id-removal',()=>{const c=clone(notes);c.announcements.shift();gate.validateAppendOnly(notes,c);});
+const next=clone(notes);next.announcements.push({...clone(notes.announcements[0]),id:'new-correction-id'});gate.validateAppendOnly(notes,next);checks.push({name:'allow-new-id-correction-preserving-history',status:'PASS'});
+const result={status:'PASS',kind:'real-review-gate-negative-tests',releaseVersion:'1.2.6',recordedAt:new Date().toISOString(),checks,checkCount:checks.length,reviewSha256:historical.sha256(fs.readFileSync(path.join(root,gate.REVIEW_PATH))),testScriptSha256:historical.sha256(fs.readFileSync(__filename)),productionDeployed:false,humanAcceptance:false};
+if(process.argv[2])fs.writeFileSync(process.argv[2],JSON.stringify(result,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify(result));

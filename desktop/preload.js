@@ -19,6 +19,8 @@ contextBridge.exposeInMainWorld('onePieceDesktop', Object.freeze({
   getLauncherProfile: (userId = 0) => ipcRenderer.invoke('launcher:get-profile', userId),
   saveLauncherCard: (card) => ipcRenderer.invoke('launcher:card-set', card),
   getLauncherShop: (options) => ipcRenderer.invoke('launcher:get-shop', options),
+  getLauncherAnnouncements: () => ipcRenderer.invoke('launcher:announcements-get'),
+  markLauncherAnnouncementsRead: (announcementIds) => ipcRenderer.invoke('launcher:announcements-read', announcementIds),
   buyLauncherItem: (itemId) => ipcRenderer.invoke('launcher:buy-item', itemId),
   equipLauncherItem: (itemId) => ipcRenderer.invoke('launcher:equip-item', itemId),
   getLauncherComments: (userId = 0, beforeId = 0) => ipcRenderer.invoke('launcher:comments-get', userId, beforeId),

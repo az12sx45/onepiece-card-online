@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "humanAcceptance": false,
+  "reviewedAt": "2026-09-27T13:48:19.231665+00:00",
+  "method": "Independent root model visual inspection of five fresh real Chromium captures and source review of profile music request tokens, listener preferences and visibility handling.",
+  "limitations": [
+    "Local IPC/account fixtures; no real production purchase or human physical-speaker listening test.",
+    "Narrow announcement capture includes QA-only notices, absent from the shipping configuration.",
+    "Character artwork and movement were not changed or reaccepted in this review."
+  ],
+  "images": [
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/profile-bgm-desktop.png",
+      "sha256": "9f9a104ecef2a71b9fdf4ba1ff831503ce3820ab639c4a3adbc9bebf70b4fe81",
+      "source": "profile IPC fixture",
+      "notes": "Music name, playback, mute and volume controls are readable in a single desktop row. Empty room is a QA fixture."
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/profile-bgm-narrow.png",
+      "sha256": "77e165be056d4ba2113f47ab494b8f5ae5166c65a0a010c7cf8cb8cbdd0ef0a7",
+      "source": "profile IPC fixture",
+      "notes": "At 390px controls wrap cleanly below the song title, without horizontal overflow."
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/announcements-production-two-notices.png",
+      "sha256": "e9a0e9aa746cb1a40b537ceffedfa1c646afd41aaf3dbe7d4b73868914d6a63d",
+      "source": "actual config",
+      "notes": "Only two shipping notices listed; the selected update notice visibly explains owner and visitor autoplay, listening controls, leaving-page stop and policy fallback."
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/announcements-production-ace-cta.png",
+      "sha256": "51a947f935593554bb99b492b7855d7c2e664ae417091c858ace7c867e8f1f08",
+      "source": "actual config",
+      "notes": "Ace notice clearly states 18 coins, activities and capacity; shop CTA is fully visible after natural scrolling."
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/announcements-narrow-ace.png",
+      "sha256": "f49cd24063b7e7d92264273e3f412ea9fa0710462c5eb9be24d79d678d6f1b53",
+      "source": "fixture UI",
+      "notes": "Readable 390px single-column detail and return-to-list control. Six notices include four QA-only filtering fixtures."
+    }
+  ]
+}

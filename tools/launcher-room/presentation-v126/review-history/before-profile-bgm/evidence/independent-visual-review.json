@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "humanAcceptance": false,
+  "reviewedAt": "2026-09-27T13:35:27.345238+00:00",
+  "method": "Independent root model visual inspection of four real Chromium captures from the local production HTML/JS UI; actual-config captures show the two shipping notices.",
+  "limitations": [
+    "Browser captures use isolated local IPC/account fixtures, not a production account purchase or a human/physical-device test.",
+    "The first two captures include QA-only filtering notices; those fixture notices are not in the shipping server configuration.",
+    "Character artwork and motion were unchanged in this release; this review covers the announcement UI."
+  ],
+  "images": [
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/announcements-desktop-ace.png",
+      "sha256": "5621a5214e13ca993f610bc736f591139571530cc6de1d409cc3583007a3b235",
+      "source": "fixture UI",
+      "notes": "Teal/gold styling, hierarchy, readable two-column detail; extra game notes are QA fixtures only."
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/announcements-narrow-ace.png",
+      "sha256": "bb11e2dfb005dbd653235da3ff276b625b24fe8904119df05076d9922d41911b",
+      "source": "fixture UI",
+      "notes": "Readable single-column 390px detail, returning to list and scrollable navigation visible."
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/announcements-production-two-notices.png",
+      "sha256": "0858f7799cd0f261010ed128eceb76097eb2fd40fa62bbb41ac788401c4ac238",
+      "source": "actual config",
+      "notes": "Only the two release notices are listed; unread count is two; unselected detail does not mark read."
+    },
+    {
+      "path": "tools/launcher-room/presentation-v126/review-evidence/announcements-production-ace-cta.png",
+      "sha256": "6bfb1cf968b403c38ba28bf5e7ffe11e811c8b171c8cf47811b2258e5afd4e60",
+      "source": "actual config",
+      "notes": "Ace notice has clear price and actions. After natural detail scrolling, gold shop CTA is fully visible; unread count is one."
+    }
+  ]
+}

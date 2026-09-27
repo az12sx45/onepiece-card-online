@@ -9,9 +9,11 @@
   <link rel="stylesheet" href="launcher-social.css">
   <link rel="stylesheet" href="launcher-profile-shop.css">
   <link rel="stylesheet" href="launcher-room.css">
+  <link rel="stylesheet" href="launcher-announcements.css">
   <script src="launcher.js" defer></script>
   <script src="launcher-social.js" defer></script>
   <script src="launcher-updates-ui.js" defer></script>
+  <script src="launcher-announcements.js" defer></script>
   <script src="launcher-account-ui.js" defer></script>
   <script src="launcher-reserved-crew.js" defer></script>
   <script src="launcher-room-dialogue.js" defer></script>
@@ -71,6 +73,7 @@
         <button class="nav-button" id="socialButton" type="button" data-panel="social">好友與聊天<span class="social-badge" id="socialBadge" hidden></span></button>
         <button class="nav-button" id="profileButton" type="button" data-panel="profile">個人頁</button>
         <button class="nav-button" id="shopButton" type="button" data-panel="shop">商店</button>
+        <button class="nav-button" id="announcementsButton" type="button" data-panel="announcements">公告中心<span class="announcement-badge" id="announcementBadge" hidden></span></button>
       </nav>
       <div class="account-area">
         <button class="storage-button" id="storageButton" type="button" title="下載位置"><span class="storage-icon" aria-hidden="true"></span><span id="storageSummary">讀取空間…</span></button>
@@ -202,7 +205,7 @@
             <p class="voyage-status" id="roomCompanionStatus" role="status" aria-live="polite"></p>
           </section>
           <div class="room-editor" id="roomEditor" hidden><div class="room-editor-top"><strong>自由佈置</strong><span>在房間圖面拖曳家具；點選家具後直接用兩側箭頭轉四個方向。大小依角色比例固定。</span></div><div class="room-editor-tabs" id="roomEditorTabs" role="tablist" aria-label="房間物件分類"></div><div class="room-editor-items" id="roomEditorItems"></div><div class="room-selection" id="roomSelection" hidden></div><div class="room-editor-actions"><div><button class="ghost-button" id="roomCancel" type="button">取消</button><button class="gold-button" id="roomSave" type="button">儲存房間</button></div></div></div>
-          <div class="captain-cabin-music"><div><strong id="profileBgmName">尚未設定個人頁音樂</strong><small>音樂由參觀者自行選擇播放</small></div><button class="ghost-button" id="profileBgmToggle" type="button" disabled>播放音樂</button></div><audio id="profileBgmAudio" preload="none" loop></audio>
+          <div class="captain-cabin-music"><div class="captain-music-copy"><strong id="profileBgmName">尚未設定個人頁音樂</strong><small id="profileBgmHint" role="status">套用個人頁音樂後，進入時會自動播放。</small></div><div class="captain-music-controls"><button class="ghost-button" id="profileBgmToggle" type="button" disabled>播放音樂</button><button class="ghost-button" id="profileBgmMute" type="button" aria-pressed="false">靜音</button><label class="captain-music-volume" for="profileBgmVolume"><span>音量</span><input id="profileBgmVolume" type="range" min="0" max="100" step="1" value="35"><output id="profileBgmVolumeValue" for="profileBgmVolume">35%</output></label></div></div><audio id="profileBgmAudio" preload="none" loop></audio>
         </section>
         <div class="voyage-section-heading"><div><p class="eyebrow">THREE SEAS, ONE CAPTAIN</p><h3>遊戲紀錄</h3></div><span>只顯示已由遊戲或伺服器保存的資料</span></div>
         <div class="voyage-game-stats" id="profileGameStats"></div>
@@ -223,6 +226,30 @@
         <div class="shop-grid" id="shopGrid"></div>
       </div>
     </section>
+    <section class="announcements-panel app-panel" id="announcementsPanel" hidden aria-label="公告中心">
+      <header class="announcement-header">
+        <div class="announcement-heading">
+          <svg class="announcement-emblem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h9l6-3v14l-6-3H4zM7 15l2 5h4l-2-5M22 8v6M3 9H1v4h2"/></svg>
+          <div><p class="eyebrow">THE VOYAGE BULLETIN</p><h2>公告中心</h2><p>版本更新、夥伴登場與三款遊戲的最新消息。</p></div>
+        </div>
+        <div class="announcement-header-actions"><span id="announcementUnread">登入後同步</span><button id="announcementMarkAll" type="button">全部設為已讀</button><button id="announcementRefresh" type="button">重新整理</button></div>
+      </header>
+      <div class="announcement-toolbar">
+        <nav class="announcement-scopes" id="announcementScopes" aria-label="公告範圍"></nav>
+        <div class="announcement-filter-row">
+          <label for="announcementCategory">類型<select id="announcementCategory"></select></label>
+          <label for="announcementPeriod">日期<select id="announcementPeriod"><option value="0">全部時間</option><option value="7">最近 7 天</option><option value="30">最近 30 天</option><option value="90">最近 90 天</option></select></label>
+          <p class="announcement-status" id="announcementStatus" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="announcement-columns">
+        <div class="announcement-index"><div class="announcement-index-heading"><strong>最新公告</strong><span id="announcementResultCount">0 則</span></div><div class="announcement-list" id="announcementList" tabindex="-1" aria-label="公告列表"></div></div>
+        <div class="announcement-detail" id="announcementDetail">
+          <div class="announcement-empty" id="announcementDetailEmpty"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 8h34v45H15zM23 18h18M23 25h18M23 32h12M8 56c8-8 16 8 24 0s16 8 24 0"/><circle cx="43" cy="44" r="9"/><path d="m39 44 3 3 5-6"/></svg><h3>航海中的每一步，都記在這裡</h3><p>選擇一則公告，查看完整更新內容。閱讀全文後才會標示為已讀。</p></div>
+          <article class="announcement-article" id="announcementArticle" hidden><button class="announcement-back" id="announcementBack" type="button">‹ 返回公告列表</button><div class="announcement-article-meta"><span id="announcementDetailScope"></span><span id="announcementDetailCategory"></span><span id="announcementReadState"></span></div><h3 id="announcementDetailTitle" tabindex="-1"></h3><time id="announcementDetailDate"></time><p class="announcement-detail-summary" id="announcementDetailSummary"></p><div class="announcement-body" id="announcementBody"></div><button class="gold-button announcement-action" id="announcementAction" type="button" hidden></button></article>
+        </div>
+      </div>
+    </section>
   </main>
 
   <dialog class="social-dialog shop-confirm" id="shopConfirmDialog"><button class="dialog-close" id="shopConfirmClose" type="button" aria-label="關閉">×</button><p class="eyebrow">CONFIRM PURCHASE</p><h2 id="shopConfirmName">確認購買</h2><p id="shopConfirmCopy"></p><div class="shop-confirm-preview"><img id="shopConfirmImage" alt=""><strong id="shopConfirmPrice"></strong></div><p class="social-form-hint" id="shopConfirmHint" role="status"></p><div class="social-dialog-actions"><button class="ghost-button" id="shopConfirmCancel" type="button">取消</button><button class="gold-button" id="shopConfirmBuy" type="button">確認購買</button></div></dialog>
@@ -230,7 +257,7 @@
 
   <dialog class="social-dialog" id="socialAddDialog"><button class="dialog-close" id="socialAddClose" type="button" aria-label="關閉">×</button><p class="eyebrow">ADD A FRIEND</p><h2>邀請好友加入</h2><p>輸入對方顯示的玩家名稱，對方接受後就能聊天。</p><form id="socialAddForm"><label class="field"><span>玩家名稱</span><input id="socialAddName" maxlength="80" required autocomplete="off" placeholder="輸入玩家名稱"></label><p class="social-form-hint" id="socialAddHint" role="status"></p><button class="gold-button" id="socialAddSubmit" type="submit">送出好友邀請</button></form></dialog>
   <dialog class="social-dialog" id="socialRemoveDialog"><p class="eyebrow">MANAGE FRIENDSHIP</p><h2>移除好友？</h2><p id="socialRemoveCopy"></p><div class="social-dialog-actions"><button class="ghost-button" id="socialRemoveCancel" type="button">取消</button><button class="danger-button" id="socialRemoveConfirm" type="button">移除好友</button></div></dialog>
-  <dialog class="social-dialog update-prompt" id="updatePrompt"><span class="update-prompt-mark" aria-hidden="true">↥</span><p class="eyebrow">UPDATE AVAILABLE</p><h2 id="updatePromptTitle">有新的更新</h2><p id="updatePromptCopy"></p><div class="social-dialog-actions"><button class="ghost-button" id="updatePromptLater" type="button">稍後再說</button><button class="gold-button" id="updatePromptGo" type="button">前往更新</button></div></dialog>
+  <dialog class="social-dialog update-prompt" id="updatePrompt"><span class="update-prompt-mark" aria-hidden="true">↥</span><p class="eyebrow">UPDATE AVAILABLE</p><h2 id="updatePromptTitle">有新的更新</h2><p id="updatePromptCopy"></p><div class="social-dialog-actions"><button class="ghost-button" id="updatePromptLater" type="button">稍後再說</button><button class="ghost-button" id="updatePromptNotes" type="button">更新內容</button><button class="gold-button" id="updatePromptGo" type="button">前往更新</button></div></dialog>
   <dialog class="social-dialog" id="playerNameDialog" aria-labelledby="playerNameTitle"><p class="eyebrow">WELCOME ABOARD</p><h2 id="playerNameTitle">大家該怎麼稱呼你？</h2><p>設定一個玩家名稱，讓好友在三款遊戲中都能認出你。</p><form id="playerNameForm"><label class="field"><span>玩家名稱</span><input id="playerNameInput" maxlength="16" required autocomplete="off" placeholder="替自己取個名字"></label><p class="social-form-hint" id="playerNameHint" role="status">最多 16 字，不能與其他玩家重複。</p><button class="gold-button" id="playerNameSave" type="submit">儲存並進入啟動器</button></form><button class="social-refresh" id="playerNameLogout" type="button">登出，稍後再設定</button></dialog>
 
   <dialog class="detail-dialog" id="detailDialog">

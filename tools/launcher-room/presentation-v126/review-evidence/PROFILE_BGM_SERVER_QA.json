@@ -1,0 +1,159 @@
+{
+  "status": "PASS",
+  "kind": "isolated-in-memory-PGlite-profile-BGM-QA",
+  "checkCount": 32,
+  "checks": [
+    {
+      "name": "real OP track present in shop",
+      "status": "PASS"
+    },
+    {
+      "name": "unowned track equip denied",
+      "status": "PASS"
+    },
+    {
+      "name": "denied equip preserves every profile and wallet",
+      "status": "PASS"
+    },
+    {
+      "name": "actual purchased OP track owned",
+      "status": "PASS"
+    },
+    {
+      "name": "music purchase pays existing ten-coin price",
+      "status": "PASS"
+    },
+    {
+      "name": "purchase does not silently equip",
+      "status": "PASS"
+    },
+    {
+      "name": "owned track equip succeeds",
+      "status": "PASS"
+    },
+    {
+      "name": "equipped item returned for immediate playback",
+      "status": "PASS"
+    },
+    {
+      "name": "equip persists to authoritative saved appearance",
+      "status": "PASS"
+    },
+    {
+      "name": "equip does not charge again",
+      "status": "PASS"
+    },
+    {
+      "name": "self profile entry returns saved music",
+      "status": "PASS"
+    },
+    {
+      "name": "mutual friend visit returns owner music",
+      "status": "PASS"
+    },
+    {
+      "name": "friend visit does not equip music for visitor",
+      "status": "PASS"
+    },
+    {
+      "name": "self and guest reads do not mutate any profile",
+      "status": "PASS"
+    },
+    {
+      "name": "profile payload does not expose account secret",
+      "status": "PASS"
+    },
+    {
+      "name": "non-friend cannot visit profile",
+      "status": "PASS"
+    },
+    {
+      "name": "bad secret cannot read profile",
+      "status": "PASS"
+    },
+    {
+      "name": "one-way friend cannot read owner music",
+      "status": "PASS"
+    },
+    {
+      "name": "actual profile socket handler delivers visitor BGM",
+      "status": "PASS"
+    },
+    {
+      "name": "disable music succeeds and retains ownership",
+      "status": "PASS"
+    },
+    {
+      "name": "disabled music persisted",
+      "status": "PASS"
+    },
+    {
+      "name": "self disabled profile has no playable track",
+      "status": "PASS"
+    },
+    {
+      "name": "guest disabled profile has no playable track",
+      "status": "PASS"
+    },
+    {
+      "name": "disabling does not deduct coins",
+      "status": "PASS"
+    },
+    {
+      "name": "nonowner may choose bgm-none",
+      "status": "PASS"
+    },
+    {
+      "name": "unowned saved BGM normalizes to none",
+      "status": "PASS"
+    },
+    {
+      "name": "normalizing public projection never rewrites original profile",
+      "status": "PASS"
+    },
+    {
+      "name": "original game currency remains untouched",
+      "status": "PASS"
+    },
+    {
+      "name": "room revisions remain untouched",
+      "status": "PASS"
+    },
+    {
+      "name": "same two release announcements retained",
+      "status": "PASS"
+    },
+    {
+      "name": "release notice describes self and friend BGM autoplay",
+      "status": "PASS"
+    },
+    {
+      "name": "tested sources stay unchanged",
+      "status": "PASS"
+    }
+  ],
+  "sourceStable": true,
+  "sourceSha256": {
+    "server/launcher-profile-shop.js": "011b2600dee65f52cd14af28577d89f304fa4beb973d8eb82253692a76b0408d",
+    "server/launcher-life-store.js": "7e97781e70eaecc4c093b8a1a042f0f179f4e5daa6bd319ac663194d13f5f52a",
+    "server/launcher-crew-release.js": "fcc9051cc5e24065cc698cbf1f8f215cc93ccc41c81478231a564059a682fc31",
+    "server/index.js": "d6256ff963508f91df0fbbd628563bea705f7d77fc7758d5647e249f82ed5b03",
+    "config/launcher-crew-release-v1.json": "14105517f17a3057e636053e4da0e41d314a65aa74621228df2fb4e02eb60896",
+    "config/launcher-announcements-v1.json": "089b904000b533d8f04b1fedc593bb82da748775ce76821e08baff08b5594b50",
+    "scripts/launcher_profile_bgm_server_qa.js": "0b5077a059511591594e171222f874ebf3a5841f1d19e1f6d2cef578943ee094"
+  },
+  "sourceNormalizedSha256": {
+    "server/launcher-profile-shop.js": "ba17dee5b39f1dcb1f993854512533bf249d40b5e01bd5d4b04337199ac1dd4b",
+    "server/launcher-life-store.js": "678a6347aeb06b835371bc10772c6d416acf47806edcdaf969d26450cdee6592",
+    "server/launcher-crew-release.js": "7738284a71871309f5e18346f785bf5db8c051d969fe028cc74f5b7402478693",
+    "server/index.js": "11100a110e339caa90894fd802b199cf5037a519595b353798d4f8fdeb865738",
+    "config/launcher-crew-release-v1.json": "0526f5ff2913aa1000cc683de1fa8e4072def749e548c7a9b72f0e9b28305b64",
+    "config/launcher-announcements-v1.json": "089b904000b533d8f04b1fedc593bb82da748775ce76821e08baff08b5594b50",
+    "scripts/launcher_profile_bgm_server_qa.js": "0b5077a059511591594e171222f874ebf3a5841f1d19e1f6d2cef578943ee094"
+  },
+  "sourceHashNormalization": "CRLF-to-LF-only",
+  "limitations": [
+    "No production accounts or saves were touched. PGlite runs one isolated SQL session.",
+    "This verifies server ownership, persistence and profile/socket projection, not audible playback or physical devices."
+  ]
+}
