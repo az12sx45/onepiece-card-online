@@ -130,6 +130,9 @@
 .shop-item-bottom button { min-width: 69px; min-height: 33px; padding: 6px 10px; border: 1px solid #e7bd6975; border-radius: 7px; background: #e7bd691d; color: #ffe5b1; cursor: pointer; font-size: 11px; }
 .shop-item-bottom button:hover:not(:disabled) { background: #e7bd693d; }
 .shop-item-bottom button:disabled { opacity: .55; cursor: default; }
+.shop-preview-button { display: block; width: 100%; min-height: 32px; margin-top: 9px; padding: 5px 10px; border: 1px solid #6fbeb484; border-radius: 7px; background: #2b6b642e; color: #bfeee0; cursor: pointer; font: inherit; font-size: 11px; text-align: center; }
+.shop-preview-button:hover, .shop-preview-button[aria-pressed='true'] { background: #3387774d; color: #e1fff2; }
+.shop-preview-button:focus-visible { outline: 2px solid #e7bd69; outline-offset: 2px; }
 .shop-confirm-preview { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin: 22px 0 5px; padding: 12px; border: 1px solid #e7bd6940; border-radius: 11px; background: #081d27; }
 .shop-confirm-preview img { width: 76px; height: 76px; object-fit: contain; border-radius: 7px; }
 #shopConfirmDialog[data-type='frame'] .shop-confirm-preview img { border: 2px solid #dfbc75; border-radius: 50%; object-fit: cover; clip-path: circle(50% at 50% 50%); }
@@ -150,6 +153,15 @@
 .captain-music-volume { display: flex; align-items: center; gap: 7px; color: #a7bfc1; font-size: 10px; }
 .captain-music-volume input { width: 80px; max-width: 24vw; accent-color: #7fceb8; cursor: pointer; }
 .captain-music-volume output { min-width: 29px; color: #d8ca9f; font-variant-numeric: tabular-nums; }
+.captain-music-picker { margin-top: 8px; padding: 13px; border: 1px solid #7ccebb55; border-radius: 11px; background: #09232d; }
+.captain-music-picker p { margin: 0 0 10px; color: #b7c9c6; font-size: 12px; }
+.captain-music-picker-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 7px; max-height: 210px; overflow: auto; }
+.captain-music-picker-list label { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 9px; border: 1px solid #a0c6bf2a; border-radius: 8px; color: #f4e0b6; cursor: pointer; }
+.captain-music-picker-list input { flex: none; accent-color: #7fceb8; }
+.captain-music-picker-list span { overflow-wrap: anywhere; }
+.captain-music-picker-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.captain-music-picker > small { display: block; margin-top: 8px; color: #a7bfc1; }
+.captain-music-picker > small.is-error { color: #f2a09a; }
 @media (max-width: 760px) { .captain-cabin-music { flex-wrap: wrap; } .captain-music-controls { justify-content: flex-start; max-width: 100%; } }
 .captain-guestbook { margin-top: 31px; }
 .captain-guestbook .voyage-section-heading { margin-bottom: 10px; }

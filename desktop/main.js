@@ -644,6 +644,10 @@ function registerLauncherIpc() {
     if (result.ok) await broadcastState();
     return result;
   }));
+  ipcMain.handle('launcher:bgm-playlist-set', guarded(async (_event, bgmIds) => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    return authService.saveLauncherBgmPlaylist(bgmIds);
+  }));
   ipcMain.handle('launcher:comments-get', guarded(async (_event, userId = 0, beforeId = 0) => {
     if (!authenticated) return { ok: false, error: 'not authenticated' };
     return authService.getLauncherComments(userId, beforeId);

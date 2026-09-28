@@ -546,7 +546,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.2.10', 'Desktop launcher version must be 1.2.10 for the reviewed shop and room fixes.');
+  assert(packageJson.version === '1.2.11', 'Desktop launcher version must be 1.2.11 for the reviewed scene and music release.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   const announcementConfig = readJson(path.join(ROOT, 'config/launcher-announcements-v1.json'), 'launcher announcements');
   require('../server/launcher-announcements').validateConfig(announcementConfig);
@@ -558,10 +558,16 @@ function validateSourcePackage() {
   'Launcher 1.2.9 announcement must be gated to this release.');
   const roomFixAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.10-shop-and-room-visuals');
   assert(roomFixAnnouncement?.status === 'published' && roomFixAnnouncement.scope === 'launcher' &&
-    roomFixAnnouncement.version === packageJson.version &&
+    roomFixAnnouncement.version === '1.2.10' &&
     roomFixAnnouncement.requiredRelease?.kind === 'launcher' &&
-    roomFixAnnouncement.requiredRelease?.version === packageJson.version,
-  'Launcher 1.2.10 announcement must be gated to this release.');
+    roomFixAnnouncement.requiredRelease?.version === '1.2.10',
+  'Historical launcher 1.2.10 announcement changed.');
+  const sceneMusicAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.11-room-scenes-and-music');
+  assert(sceneMusicAnnouncement?.status === 'published' && sceneMusicAnnouncement.scope === 'launcher' &&
+    sceneMusicAnnouncement.version === packageJson.version &&
+    sceneMusicAnnouncement.requiredRelease?.kind === 'launcher' &&
+    sceneMusicAnnouncement.requiredRelease?.version === packageJson.version,
+  'Launcher 1.2.11 scene and music announcement must be gated to this release.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
   assert(packageJson.build?.appId === 'com.onepiece.tabletop.desktop', 'Desktop appId changed unexpectedly.');
@@ -770,7 +776,7 @@ function validateSourcePackage() {
   assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items, ...packagedLifeHistory, ...presentationStatus.hd.manifest.items, ...presentationStatus.reserved.manifest.items, ...presentationStatus.newArt.manifest.items].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(roomResource.filter.filter(asset => !asset.startsWith('life_hd_v2/'))), 'Historical room art manifest output set');
   const lifeHd = readJson(path.join(ROOT, 'tools/launcher-room/life-hd-v2/manifest.json'), 'life HD source manifest');
-  assert(lifeHd.schema === 'launcher-life-hd-art/1' && lifeHd.release === packageJson.version &&
+  assert(lifeHd.schema === 'launcher-life-hd-art/1' && lifeHd.release === '1.2.10' &&
     lifeHd.count === 116 && lifeHd.newAtlasCellPixels === 256 && lifeHd.sourceAtlasCellPixels === 128 &&
     Array.isArray(lifeHd.assets) && lifeHd.assets.length === 116, 'Life HD manifest identity is invalid.');
   assertExactJson(sorted(lifeHd.assets.map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
@@ -960,7 +966,7 @@ function validateAsar(asarPath) {
       `Packaged application source differs: ${entry}`);
   }
   const packedPackage = JSON.parse(asar.extractFile(asarPath, 'package.json').toString('utf8'));
-  assert(packedPackage.version === '1.2.10' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
+  assert(packedPackage.version === '1.2.11' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
   for (const entry of entries) {
     const lower = entry.toLowerCase();
     assert(!lower.startsWith('public/'), `app.asar contains the public game tree: ${entry}`);

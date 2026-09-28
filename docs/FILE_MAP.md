@@ -1259,3 +1259,22 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 - `config/launcher-announcements-v1.json`, `scripts/launcher_1210_announcement_qa.js`: version-gated release notice and isolated publication/read test.
 - `scripts/launcher_shop_purchase_gate_qa.js`, `launcher_life_hd_browser_qa.js`, `launcher_character_proportion_qa.js`, `launcher_character_scale_audit.py`: account-isolated shop transaction, Chromium action clarity, pose-scale and image-geometry checks.
 - `tools/launcher-room/scale-v1210/review-evidence/`: actual desktop/narrow Chromium screenshots and complete released-character proportion report.
+
+
+## 2026-09-28 Launcher 1.2.11 independent room scenes
+
+- `server/launcher-profile-shop.js`: `launcherRoomsV2` normalization, legacy `launcherRoomV1` active mirror, owned scene/item checks, one item per scene map, global room revision and friend projection.
+- `server/launcher-crew-release.js`: checks reserved characters in inactive scenes and filters projected crew for older clients.
+- `server/launcher-life.js`, `server/launcher-life-store.js`: ongoing work remains valid across display switches only while character and furniture station stay in the same deployed scene.
+- `server/index.js`, `desktop/auth-service.js`: carry and validate the optional `scenes` map through the existing `LAUNCHER_ROOM_SET` event; legacy flat payloads remain accepted.
+- `desktop/launcher-room.js`, `launcher-room.css`, `launcher.html`: owner scene switcher, separate scene editing, item transfer, active scene caption and visitor view.
+- `scripts/launcher_multiscene_qa.js`, `launcher_multiscene_browser_qa.js`: isolated SQL and real Chromium scene persistence/visibility checks. Existing purchase and life server QA cover legacy room writes and work rewards.
+
+## 2026-09-28 Launcher 1.2.11 shop, music and proportion files
+
+- `desktop/launcher-profile-shop.js/.css`, `launcher.html`: music preview, owned-song selection, next-track and owner/visitor playback controls.
+- `server/launcher-profile-shop.js`, `server/index.js`, `server/desktop-distribution.js`, `desktop/auth-service.js`, `main.js`, `preload.js`: validated playlist ownership/persistence, Socket and Electron bridge, plus scene purchase/use allowlist.
+- `desktop/launcher-room.css`: Ace and Sanji whole-sprite aspect correction shared by still, walking and action poses.
+- `desktop/package.json`, `package-lock.json`, `config/launcher-announcements-v1.json`: 1.2.11 version and release-gated notice. `scripts/desktop_launcher_package_qa.js` preserves 1.2.10 HD source provenance and verifies the new package version.
+- `scripts/launcher_shop_purchase_gate_qa.js`, `launcher_shop_music_preview_qa.js`, `launcher_bgm_playlist_qa.js`, `desktop_distribution_gate_qa.js`: focused catalog, audio, playlist and desktop routing checks.
+- `.gitattributes`: keeps the frozen 1.2.8 acceptance receipt LF byte-for-byte for its existing source SHA gate on Windows checkouts.

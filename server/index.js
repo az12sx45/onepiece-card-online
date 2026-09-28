@@ -5268,10 +5268,15 @@ socket.on('LAUNCHER_DECORATION_PLACEMENT_SET', async ({ secret, slot, placement,
   catch (error) { console.error('[LAUNCHER_DECORATION_PLACEMENT_SET] error:', error); cb?.({ ok: false, error: 'placement unavailable' }); }
 });
 
-socket.on('LAUNCHER_ROOM_SET', async ({ secret, revision, sceneId, placements, characters, capacityVersion, crewContentRevision } = {}, cb) => {
+socket.on('LAUNCHER_BGM_PLAYLIST_SET', async ({ secret, bgmIds, crewContentRevision } = {}, cb) => {
+  try { cb?.(await launcherProfileShop.setLauncherBgmPlaylist(pool, String(secret || '').trim(), bgmIds, { crewContentRevision })); }
+  catch (error) { console.error('[LAUNCHER_BGM_PLAYLIST_SET] error:', error); cb?.({ ok: false, error: 'playlist unavailable' }); }
+});
+
+socket.on('LAUNCHER_ROOM_SET', async ({ secret, revision, sceneId, placements, characters, scenes, capacityVersion, crewContentRevision } = {}, cb) => {
   try {
     cb?.(await launcherProfileShop.setLauncherRoom(pool, String(secret || '').trim(),
-      { revision, sceneId, placements, characters, capacityVersion }, { crewContentRevision }));
+      { revision, sceneId, placements, characters, ...(scenes === undefined ? {} : { scenes }), capacityVersion }, { crewContentRevision }));
   } catch (error) {
     console.error('[LAUNCHER_ROOM_SET] error:', error);
     cb?.({ ok: false, error: 'room unavailable' });

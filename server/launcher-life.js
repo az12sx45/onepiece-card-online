@@ -61,6 +61,12 @@ function stationFor(room, stationId) {
 function stationFingerprint(station) { return canonical({stationId:station.stationId,x:station.x,y:station.y,rotation:station.rotation}); }
 function validJobContext(job,state,room) {
   const station=stationFor(room,job.stationId);
+  if (station && station.furnitureId && room.scenes) {
+    const sceneOf = (list, itemId) => Object.entries(room.scenes)
+      .find(([, scene]) => scene[list].some(entry => entry.itemId === itemId))?.[0];
+    if (!sceneOf('characters', job.itemId) ||
+        sceneOf('characters', job.itemId) !== sceneOf('placements', station.furnitureId)) return false;
+  }
   return state.activeCharacterIds.includes(job.itemId) && station && (!job.stationFingerprint || job.stationFingerprint===stationFingerprint(station));
 }
 function aggregate(state, now) {

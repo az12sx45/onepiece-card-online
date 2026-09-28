@@ -26,6 +26,7 @@ const check=(name,actual,expected)=>{assert.deepEqual(actual,expected,name);resu
 const today=new Date().toISOString().slice(0,10),base=Date.parse(today+'T03:00:00.000Z');
 const now=s=>new Date(base+s*1000),id=k=>'room-character-'+k;
 const keys=['luffy','zoro','nami','usopp','sanji','chopper','robin','franky','brook','jinbe'];
+const legacyRoom=room=>{const {scenes:_scenes,...flat}=room;return flat;};
 function stats(owned=['luffy','zoro','nami'],coins=100) {return {
  client:{totals:{coins:73}},launcherWalletV1:{coins,lastGrantDay:today},
  launcherOwnedV1:{items:owned.map(id)},launcherRoomV1:{revision:1,sceneId:'room-scene-default',capacityVersion:2,placements:[],characters:owned.map((key,i)=>({itemId:id(key),x:160+i*70,y:440}))},
@@ -155,16 +156,16 @@ async function start(secret,key,time=0,stationId='deck') {
   const stoveBuy=await S.changeLauncherItem(pool,'buyer',stove,'buy');
   check('new stove is paid item',stoveBuy.shop.wallet.coins,stoveBefore-80);
   check('stove is never granted without purchase',(await S.getLauncherShop(pool,'empty')).shop.owned.roomFurniture.includes(stove),false);
-  const stoveRoom={...stoveBuy.profile.room,placements:[{itemId:stove,x:480,y:400,rotation:0,scale:1,flip:false}]};
+  const stoveRoom={...legacyRoom(stoveBuy.profile.room),placements:[{itemId:stove,x:480,y:400,rotation:0,scale:1,flip:false}]};
   check('owned stove may be placed',(await S.setLauncherRoom(pool,'buyer',stoveRoom)).ok,true);
   check('canonical new stove station type',L.stationFor(S.launcherRoom((await row('buyer')).stats),stove).type,'kitchen');
   await add('ten',stats(keys));const ten=await get('ten');check('ten owned actors retained',ten.room.characters.length,10);
-  check('legacy eight client cannot erase ninth tenth',(await S.setLauncherRoom(pool,'ten',{...ten.room,capacityVersion:undefined,characters:ten.room.characters.slice(0,8)})).error,'upgrade_required');
+  check('legacy eight client cannot erase ninth tenth',(await S.setLauncherRoom(pool,'ten',{...legacyRoom(ten.room),capacityVersion:undefined,characters:ten.room.characters.slice(0,8)})).error,'upgrade_required');
   check('v2 ten save works',(await S.setLauncherRoom(pool,'ten',ten.room)).ok,true);
   // Move an owned station after activation: the job is invalidated and cannot pay.
   const furniture='room-furniture-map-table',movedStats=stats(['nami']);movedStats.launcherOwnedV1.items.push(furniture);movedStats.launcherRoomV1.placements=[{itemId:furniture,x:500,y:430,scale:1,rotation:0,flip:false}];
   await add('moved',movedStats);const moveWork=await start('moved','nami',0,furniture),moveSnap=await get('moved',10);
-  await S.setLauncherRoom(pool,'moved',{...moveSnap.room,placements:[{...moveSnap.room.placements[0],x:700}]});
+  await S.setLauncherRoom(pool,'moved',{...legacyRoom(moveSnap.room),placements:[{...moveSnap.room.placements[0],x:700}]});
   const cancelled=await get('moved',moveWork.ready+1);check('moved furniture cancels invalid work',cancelled.life.jobs.length,0);check('invalid station never pays',cancelled.wallet.coins,100);
   // Six daily work starts and two per actor are shared by both APIs.
   await add('limits',stats(keys));
@@ -185,7 +186,7 @@ async function start(secret,key,time=0,stationId='deck') {
   await add('stale-context',movedStats);
   await start('stale-context','nami',0,furniture);
   const oldRoom=S.launcherRoom((await row('stale-context')).stats);
-  await S.setLauncherRoom(pool,'stale-context',{...oldRoom,placements:[{...oldRoom.placements[0],x:700}]});
+  await S.setLauncherRoom(pool,'stale-context',{...legacyRoom(oldRoom),placements:[{...oldRoom.placements[0],x:700}]});
   check('old start ignores relocated new station',(await S.startLauncherCharacterWork(pool,'stale-context',id('nami'),now(20))).ok,true);
   // Same revision / same request ID must commit one effect in either delivery.
   await add('duplicate-gift',stats(['nami']));const dupSnap=await get('duplicate-gift');
@@ -239,9 +240,14 @@ async function start(secret,key,time=0,stationId='deck') {
   check('ninth tenth keep first eight positions',tenth.profile.room.characters.slice(0,8),positions);
   check('ninth tenth arrivals exactly two',tenth.life.pendingArrivals.length,2);
   const overflowStats=stats(['luffy'],500);overflowStats.launcherRoomV1.revision=Number.MAX_SAFE_INTEGER;await add('revision-overflow',overflowStats);
-  check('purchase rejects room revision overflow',(await S.changeLauncherItem(pool,'revision-overflow',id('zoro'),'buy')).error,'invalid_room');
-  check('rejected overflow purchase keeps wallet',(await row('revision-overflow')).stats.launcherWalletV1.coins,500);
-  check('rejected overflow purchase keeps ownership',(await row('revision-overflow')).stats.launcherOwnedV1.items,[id('luffy')]);
+  const overflowBuy=await S.changeLauncherItem(pool,'revision-overflow',id('zoro'),'buy');
+  check('room revision overflow defers placement without blocking purchase',
+    [overflowBuy.ok,overflowBuy.roomPlacementDeferred,overflowBuy.profile.room.revision],
+    [true,true,Number.MAX_SAFE_INTEGER]);
+  check('deferred purchase debits once',(await row('revision-overflow')).stats.launcherWalletV1.coins,
+    500-S.CATALOG.find(x=>x.id===id('zoro')).price);
+  check('deferred purchase keeps new ownership',(await row('revision-overflow')).stats.launcherOwnedV1.items,
+    [id('luffy'),id('zoro')]);
   await add('offline-batch',stats(keys,100));const batch=[];
   for(const key of keys.slice(0,6))batch.push(await start('offline-batch',key,0));
   const allReady=Math.max(...batch.map(w=>w.ready));const batchResult=await get('offline-batch',allReady+1);

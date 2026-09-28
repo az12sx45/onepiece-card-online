@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 8,
+  "revision": 9,
   "announcements": [
     {
       "id": "board-tavern-crew-20260928-1c453fcf83416d97",
@@ -201,6 +201,27 @@
       "cta": {
         "kind": "game",
         "gameId": "board"
+      }
+    },
+    {
+      "id": "launcher-1.2.11-room-scenes-and-music",
+      "status": "published",
+      "publishedAt": "2026-09-28T13:29:19.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.11",
+      "title": "生活基地多場景與音樂清單｜1.2.11",
+      "summary": "可以切換場景，分別佈置家具與安排夥伴；修正場景購買後無法使用，並加入商店音樂試聽與個人頁播放清單。",
+      "body": [
+        "已購場景現在可以切換；每個場景各自保存家具和夥伴配置，好友參觀會看到目前選用的場景。",
+        "修正部分場景與家具購買後無法套用的問題，已購收藏與金幣餘額保留。",
+        "商店音樂可以先試聽；購買多首後，可選擇個人頁要播放的歌曲，自己和好友進入頁面都會依清單播放。",
+        "調整艾斯與香吉士的生活基地顯示比例，維持角色動作和腳底位置。",
+        "三款桌遊的規則、多人同步與存檔沒有變更。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.11"
       }
     }
   ]

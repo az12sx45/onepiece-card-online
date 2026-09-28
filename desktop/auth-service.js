@@ -373,6 +373,14 @@ class AuthService extends EventEmitter {
   async buyLauncherItem(itemId) { return this.changeLauncherShopItem('buy', itemId); }
   async equipLauncherItem(itemId) { return this.changeLauncherShopItem('equip', itemId); }
 
+  async saveLauncherBgmPlaylist(bgmIds) {
+    if (!Array.isArray(bgmIds) || bgmIds.length > 23 || new Set(bgmIds).size !== bgmIds.length ||
+        bgmIds.some(id => typeof id !== 'string' || !/^(?:bgm-(?:harbor|night-watch|voyage)|bgm-op-(?:0[1-9]|1[0-9]|20))$/.test(id))) {
+      return { ok: false, error: 'invalid_bgm_playlist' };
+    }
+    return this.launcherRequest('LAUNCHER_BGM_PLAYLIST_SET', { bgmIds });
+  }
+
   async getLauncherComments(userId = 0, beforeId = 0) {
     const id = Number(userId);
     const before = Number(beforeId);
@@ -409,27 +417,55 @@ class AuthService extends EventEmitter {
 
   async saveLauncherRoom(room) {
     if (!room || typeof room !== 'object' || Array.isArray(room)) return { ok: false, error: 'invalid_room' };
-    const { revision, sceneId, placements, characters, capacityVersion } = room;
+    const { revision, sceneId, placements, characters, capacityVersion, scenes } = room;
     if (!Number.isSafeInteger(revision) || revision < 0 || typeof sceneId !== 'string' ||
         !Array.isArray(placements) || placements.length > 24 || !Array.isArray(characters) || characters.length > 10 ||
         characters.length > 8 && capacityVersion !== 2) {
       return { ok: false, error: 'invalid_room' };
     }
-    const sceneValid = sceneId === 'room-scene-default' || /^room-scene-(?:sunny-deck|sunny-kitchen|sunny-library)$/.test(sceneId);
+    const sceneValid = sceneId === 'room-scene-default' ||
+      /^room-scene-(?:sunny-deck|sunny-kitchen|sunny-library|sunny-workshop|sunny-aquarium)$/.test(sceneId);
     const unique = values => new Set(values.map(value => value.itemId)).size === values.length;
     const coordinates = entry => entry && Number.isFinite(entry.x) && Number.isFinite(entry.y) &&
       entry.x >= 0 && entry.x <= 960 && entry.y >= 0 && entry.y <= 540;
-    if (!sceneValid || !unique(placements) || !unique(characters) ||
-        !placements.every(entry => coordinates(entry) && /^room-furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|galley-stove|bookshelf|medicine-cabinet|piano|tool-bench)$/.test(entry.itemId) &&
+    const validScene = id => id === 'room-scene-default' ||
+      /^room-scene-(?:sunny-deck|sunny-kitchen|sunny-library|sunny-workshop|sunny-aquarium)$/.test(id);
+    const validFurniture = entry => coordinates(entry) && /^room-furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|galley-stove|bookshelf|medicine-cabinet|piano|tool-bench|supply-rack|log-pose-desk|repair-cart|library-cart|medical-cart|den-den-desk)$/.test(entry.itemId) &&
           Number.isFinite(entry.scale) && entry.scale >= .5 && entry.scale <= 1.5 &&
           (entry.rotation === undefined || Number.isInteger(entry.rotation) && entry.rotation >= 0 && entry.rotation <= 3) &&
           (entry.flip === undefined || typeof entry.flip === 'boolean') &&
           (entry.rotation !== undefined || typeof entry.flip === 'boolean') &&
-          (entry.rotation === undefined || entry.flip === undefined || entry.flip === (entry.rotation === 2))) ||
-        !characters.every(entry => coordinates(entry) && /^room-character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe|ace|sabo|law|hancock)$/.test(entry.itemId))) {
+          (entry.rotation === undefined || entry.flip === undefined || entry.flip === (entry.rotation === 2));
+    const validCharacter = entry => coordinates(entry) && /^room-character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe|ace|sabo|law|hancock)$/.test(entry.itemId);
+    const layouts = scenes === undefined ? { [sceneId]: { placements, characters } } : scenes;
+    if (!sceneValid || !unique(placements) || !unique(characters) ||
+        !layouts || typeof layouts !== 'object' || Array.isArray(layouts) ||
+        Object.keys(layouts).length > 6 || !Object.prototype.hasOwnProperty.call(layouts, sceneId)) {
       return { ok: false, error: 'invalid_room' };
     }
-    return this.launcherRequest('LAUNCHER_ROOM_SET', { revision, sceneId, placements, characters, capacityVersion });
+    const allFurniture = [], allCharacters = [];
+    for (const [id, layout] of Object.entries(layouts)) {
+      if (!validScene(id) || !layout || !Array.isArray(layout.placements) || !Array.isArray(layout.characters) ||
+          layout.placements.length > 24 || layout.characters.length > 10 ||
+          layout.characters.length > 8 && capacityVersion !== 2 ||
+          !layout.placements.every(validFurniture) || !layout.characters.every(validCharacter)) return { ok: false, error: 'invalid_room' };
+      allFurniture.push(...layout.placements); allCharacters.push(...layout.characters);
+    }
+    if (!unique(allFurniture) || !unique(allCharacters) || scenes !== undefined && capacityVersion !== 2)
+      return { ok: false, error: 'invalid_room' };
+    if (scenes !== undefined) {
+      const active = layouts[sceneId];
+      const sameEntries = (flat, nested, furniture) => flat.length === nested.length && flat.every((entry, index) => {
+        const saved = nested[index];
+        return entry.itemId === saved.itemId && entry.x === saved.x && entry.y === saved.y &&
+          (!furniture || entry.scale === saved.scale && (entry.rotation ?? (entry.flip ? 2 : 0)) ===
+            (saved.rotation ?? (saved.flip ? 2 : 0)));
+      });
+      if (!sameEntries(placements, active.placements, true) || !sameEntries(characters, active.characters, false))
+        return { ok: false, error: 'invalid_room' };
+    }
+    return this.launcherRequest('LAUNCHER_ROOM_SET', { revision, sceneId, placements, characters, capacityVersion,
+      ...(scenes === undefined ? {} : { scenes }) });
   }
 
   async getLauncherLife() {

@@ -2,6 +2,14 @@
 .room-heading { margin-bottom: 11px; }
 .room-heading > div > p:last-child { margin: 6px 0 0; color: #99b9bd; font-size: 12px; line-height: 1.55; }
 .room-heading > .ghost-button { flex: none; min-height: 36px; padding: 7px 14px; font-size: 11px; }
+.room-scene-switcher { display: flex; align-items: center; gap: 7px; min-height: 39px; margin: 3px 0 10px; overflow-x: auto; scrollbar-color: #b99b60 #0b2630; }
+.room-scene-switcher[hidden] { display: none; }
+.room-scene-label, .room-scene-current { flex: none; color: #a7c9c5; font-size: 11px; }
+.room-scene-current { padding: 6px 10px; border: 1px solid #4d807e66; border-radius: 999px; background: #092e37a8; }
+.room-scene-choice { flex: none; min-height: 31px; padding: 5px 11px; border: 1px solid #5f979079; border-radius: 999px; background: #10333dc4; color: #d5e8df; cursor: pointer; font: inherit; font-size: 11px; }
+.room-scene-choice:hover, .room-scene-choice:focus-visible { border-color: #e1c884; color: #fff2c6; outline: none; }
+.room-scene-choice.is-active { border-color: #f4d38d; background: #785d33bb; color: #fff0c0; }
+.room-scene-choice:disabled { cursor: progress; opacity: .6; }
 .room-stage-scroll { max-width: 100%; overflow-x: auto; border-radius: 17px; scrollbar-color: #b99b60 #0b2630; }
 .room-stage { position: relative; width: 100%; min-width: 480px; aspect-ratio: 16 / 9; overflow: hidden; isolation: isolate; border: 1px solid #e7bd6980; border-radius: 17px; outline: none; background: #122b33; box-shadow: inset 0 0 0 3px #07141d80, 0 18px 34px #0005; }
 .room-stage:focus-visible { outline: 2px solid #71d5c9; outline-offset: -4px; }
@@ -37,6 +45,12 @@
 .room-chibi { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 10px 8px #03171bb0); }
 .room-walk-sprite { position: absolute; left: 0; bottom: 0; display: block; width: 100%; height: auto; aspect-ratio: 1; transform-origin: 50% calc(100% - var(--room-root-offset, 12.5%)); transform: translateY(var(--room-root-offset, 12.5%)) scale(var(--room-pose-scale, 1)); pointer-events: none; }
 .room-walk-sprite[hidden] { display: none; }
+/* Keep Ace and Sanji's existing complete drawings but correct their broad
+   silhouettes uniformly across portrait, walk, acting and life poses. */
+.room-character-shell[data-room-key="c:room-character-ace"] { --room-figure-aspect: .89; }
+.room-character-shell[data-room-key="c:room-character-sanji"] { --room-figure-aspect: .92; }
+.room-character-shell[data-room-key="c:room-character-ace"] :is(.room-chibi, .room-walk-sprite),
+.room-character-shell[data-room-key="c:room-character-sanji"] :is(.room-chibi, .room-walk-sprite) { scale: var(--room-figure-aspect) 1; }
 /* Correct only measured upright pose shrinkage; keep the common foot root fixed. */
 .room-character-shell[data-room-key="c:room-character-franky"][data-action-source="life_v1"][data-pose="eat"] { --room-pose-scale: 1.09; }
 .room-character-shell[data-room-key="c:room-character-jinbe"][data-action-source="life_v1"][data-pose="helm"][data-direction="north"] { --room-pose-scale: 1.115; }

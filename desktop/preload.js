@@ -23,6 +23,7 @@ contextBridge.exposeInMainWorld('onePieceDesktop', Object.freeze({
   markLauncherAnnouncementsRead: (announcementIds) => ipcRenderer.invoke('launcher:announcements-read', announcementIds),
   buyLauncherItem: (itemId) => ipcRenderer.invoke('launcher:buy-item', itemId),
   equipLauncherItem: (itemId) => ipcRenderer.invoke('launcher:equip-item', itemId),
+  saveLauncherBgmPlaylist: (bgmIds) => ipcRenderer.invoke('launcher:bgm-playlist-set', bgmIds),
   getLauncherComments: (userId = 0, beforeId = 0) => ipcRenderer.invoke('launcher:comments-get', userId, beforeId),
   postLauncherComment: (userId, body) => ipcRenderer.invoke('launcher:comment-post', userId, body),
   deleteLauncherComment: (messageId) => ipcRenderer.invoke('launcher:comment-delete', messageId),

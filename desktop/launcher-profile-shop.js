@@ -67,6 +67,14 @@
   let pendingPurchase = null;
   let shopBusy = false;
   let shopMutation = 0;
+  const shopPreviewAudio = el('audio');
+  shopPreviewAudio.dataset.role = 'shop-preview';
+  shopPreviewAudio.preload = 'none';
+  shopPreviewAudio.volume = .4;
+  $('shopPanel').append(shopPreviewAudio);
+  let shopPreviewId = '';
+  let shopPreviewRequest = 0;
+  let shopPreviewPending = false;
   let comments = null;
   let commentRequest = 0;
   let commentNextBeforeId = 0;
@@ -77,11 +85,15 @@
   let decorBusy = false;
   let cardMutation = 0;
   let bgmSource = '';
+  let bgmPlaylist = [];
+  let bgmIndex = 0;
   let bgmPlayRequest = 0;
   let bgmPlayPending = false;
   let bgmPausedByUser = false;
   let bgmAutoplayBlocked = false;
   let bgmState = 'idle';
+  let bgmSaveRequest = 0;
+  let bgmPickerBusy = false;
   let profileVisible = false;
   const BGM_LISTENER_KEY = 'onepiece.launcher.profileMusic.v1';
   let bgmListener = { volume: .35, muted: false };
@@ -256,8 +268,11 @@
     renderMusicControls();
   }
   function clearBgm() {
-    stopBgm(); bgmSource = ''; bgmAutoplayBlocked = false; bgmPausedByUser = false;
+    stopBgm(); bgmSource = ''; bgmPlaylist = []; bgmIndex = 0; bgmAutoplayBlocked = false; bgmPausedByUser = false;
+    bgmSaveRequest++; bgmPickerBusy = false; $('profileBgmPicker').hidden = true;
+    $('profileBgmSave').disabled = false; $('profileBgmCancel').disabled = false;
     const audio = $('profileBgmAudio'); audio.removeAttribute('src'); audio.load();
+    $('profileBgmName').textContent = '尚未設定個人頁音樂';
     renderMusicControls();
   }
   function musicVisible() {
@@ -267,12 +282,13 @@
     const audio = $('profileBgmAudio'), quiet = bgmListener.muted || bgmListener.volume === 0;
     audio.volume = bgmListener.volume; audio.muted = bgmListener.muted;
     $('profileBgmToggle').disabled = !bgmSource;
+    $('profileBgmNext').disabled = bgmPlaylist.length < 2;
     $('profileBgmToggle').textContent = bgmPlayPending ? '取消播放' : !audio.paused ? '暫停音樂' : '播放音樂';
     $('profileBgmMute').textContent = quiet ? '取消靜音' : '靜音';
     $('profileBgmMute').setAttribute('aria-pressed', String(quiet));
     $('profileBgmVolume').value = String(Math.round(bgmListener.volume * 100));
     $('profileBgmVolumeValue').textContent = `${Math.round(bgmListener.volume * 100)}%`;
-    $('profileBgmHint').textContent = !bgmSource ? '套用個人頁音樂後，進入時會自動播放。' : bgmAutoplayBlocked ? '系統限制了自動播放，按「播放音樂」即可開始。' : bgmState === 'error' ? '音樂暫時無法播放，可按播放重試。' : bgmPausedByUser ? '音樂已暫停；下次進入個人頁時會自動播放。' : quiet ? '目前已靜音；音量設定只影響你聽到的聲音。' : bgmPlayPending ? '正在載入個人頁音樂…' : '進入時自動播放；離開個人頁時停止。';
+    $('profileBgmHint').textContent = !bgmSource ? '選擇已購歌曲後，進入時會自動播放。' : bgmAutoplayBlocked ? '系統限制了自動播放，按「播放音樂」即可開始。' : bgmState === 'error' ? '音樂暫時無法播放，可按播放重試或下一首。' : bgmPausedByUser ? '音樂已暫停；下次進入個人頁時會自動播放。' : quiet ? '目前已靜音；音量設定只影響你聽到的聲音。' : bgmPlayPending ? '正在載入個人頁音樂…' : bgmPlaylist.length > 1 ? `依序輪播 ${bgmPlaylist.length} 首；離開個人頁時停止。` : '進入時自動播放；離開個人頁時停止。';
   }
   function saveMusicListener() {
     try { localStorage.setItem(BGM_LISTENER_KEY, JSON.stringify(bgmListener)); } catch { /* Playback also works without persistent browser storage. */ }
@@ -301,19 +317,44 @@
     const value = placement?.[slot] || {};
     return { x: clamp(value.x, 5, 95, defaults.x), y: clamp(value.y, 5, 95, defaults.y), scale: clamp(value.scale, .5, 1.5, 1) };
   }
+  function setBgmTrack(index) {
+    const audio = $('profileBgmAudio');
+    bgmIndex = index;
+    bgmSource = bgmPlaylist[index]?.src || '';
+    audio.loop = bgmPlaylist.length === 1;
+    if (bgmSource) audio.src = bgmSource;
+    else audio.removeAttribute('src');
+    audio.load();
+    const track = bgmPlaylist[index];
+    $('profileBgmName').textContent = track
+      ? `${track.name}${bgmPlaylist.length > 1 ? `（${index + 1} / ${bgmPlaylist.length}）` : ''}`
+      : '尚未設定個人頁音樂';
+    renderMusicControls();
+  }
+  function nextBgm(automatic = false) {
+    if (bgmPlaylist.length < 2 || !musicVisible()) return;
+    stopBgm();
+    setBgmTrack((bgmIndex + 1) % bgmPlaylist.length);
+    if (!automatic) { bgmPausedByUser = false; bgmAutoplayBlocked = false; }
+    playBgm(automatic);
+  }
   function renderMusic() {
     const appearance = profile?.appearance || {};
     const items = profile?.appearanceItems || {};
-    const nextBgm = items.bgm?.id === appearance.bgmId ? safeAudioAsset(items.bgm?.asset) : '';
-    if (nextBgm !== bgmSource) {
-      stopBgm(); bgmSource = nextBgm; bgmAutoplayBlocked = false;
-      if (nextBgm) $('profileBgmAudio').src = nextBgm;
-      else $('profileBgmAudio').removeAttribute('src');
-      $('profileBgmAudio').load();
+    const ids = Array.isArray(appearance.bgmIds) ? appearance.bgmIds : [appearance.bgmId];
+    const available = Array.isArray(items.bgms) ? items.bgms : [items.bgm];
+    const nextPlaylist = [...new Set(ids)].map(id => available.find(item => item?.id === id))
+      .filter(item => item && safeAudioAsset(item.asset))
+      .map(item => ({ id: item.id, name: String(item.name || '個人頁音樂').slice(0, 60), src: safeAudioAsset(item.asset) }));
+    if (nextPlaylist.length !== bgmPlaylist.length || nextPlaylist.some((item, index) => item.id !== bgmPlaylist[index].id || item.src !== bgmPlaylist[index].src)) {
+      stopBgm(); bgmPlaylist = nextPlaylist; bgmAutoplayBlocked = false;
+      setBgmTrack(0);
     }
-    $('profileBgmName').textContent = nextBgm ? String(items.bgm?.name || '個人頁音樂').slice(0, 60) : '尚未設定個人頁音樂';
+    $('profileBgmChoose').hidden = !profile?.isSelf || !accountId || preview;
+    $('profileBgmChoose').disabled = !Array.isArray(profile?.collection?.launcher?.bgms) || !profile.collection.launcher.bgms.length;
+    if ($('profileBgmChoose').hidden) $('profileBgmPicker').hidden = true;
     renderMusicControls();
-    if (nextBgm && bgmState !== 'error') playBgm(true);
+    if (bgmSource && bgmState !== 'error') playBgm(true);
   }
   function renderGuestbook() {
     const enabled = profile?.guestbookUnlocked === true || profile?.guestbook?.enabled === true;
@@ -534,6 +575,46 @@
     if (bgmPlayPending || !audio.paused) { bgmPausedByUser = true; stopBgm(false); return; }
     bgmPausedByUser = false; bgmAutoplayBlocked = false; await playBgm();
   }
+  function openBgmPicker() {
+    if (!profile?.isSelf || !accountId || preview || bgmPickerBusy) return;
+    const picker = $('profileBgmPicker');
+    if (!picker.hidden) { picker.hidden = true; return; }
+    const list = $('profileBgmPickerList'); list.replaceChildren();
+    const selected = new Set(Array.isArray(profile.appearance?.bgmIds) ? profile.appearance.bgmIds : [profile.appearance?.bgmId]);
+    const ownedSongs = Array.isArray(profile.collection?.launcher?.bgms) ? profile.collection.launcher.bgms : [];
+    for (const song of ownedSongs) {
+      if (!song || !safeAudioAsset(song.asset)) continue;
+      const label = el('label'); const check = el('input');
+      check.type = 'checkbox'; check.value = song.id; check.checked = selected.has(song.id);
+      label.append(check, el('span', '', String(song.name || song.id).slice(0, 60)));
+      list.append(label);
+    }
+    status('profileBgmPickerStatus', list.childElementCount ? '未勾選任何歌曲會關閉個人頁音樂。' : '尚未購買可播放的音樂。');
+    picker.hidden = false;
+  }
+  async function saveBgmPicker() {
+    if (bgmPickerBusy || !profile?.isSelf || !accountId || preview || $('profileBgmPicker').hidden) return;
+    const checked = [...$('profileBgmPickerList').querySelectorAll('input:checked')].map(input => input.value);
+    const prior = Array.isArray(profile.appearance?.bgmIds) ? profile.appearance.bgmIds : [profile.appearance?.bgmId];
+    const bgmIds = [...new Set([...prior.filter(id => checked.includes(id)), ...checked])];
+    const owner = accountId, request = ++bgmSaveRequest;
+    profileRequest++;
+    bgmPickerBusy = true; $('profileBgmSave').disabled = true; $('profileBgmCancel').disabled = true;
+    status('profileBgmPickerStatus', '正在儲存播放清單…');
+    try {
+      const result = await api.saveLauncherBgmPlaylist(bgmIds);
+      if (request !== bgmSaveRequest || owner !== accountId || !profile?.isSelf || viewUserId) return;
+      if (!result?.ok || !result.profile) { status('profileBgmPickerStatus', errorText(result?.error), true); return; }
+      profile = result.profile;
+      if (result.shop) shop = result.shop;
+      $('profileBgmPicker').hidden = true;
+      renderProfile();
+      status('profileStatus', bgmIds.length ? `已儲存 ${bgmIds.length} 首個人頁音樂。` : '已停用個人頁音樂。');
+    } catch { if (request === bgmSaveRequest && owner === accountId) status('profileBgmPickerStatus', errorText('offline'), true); }
+    finally {
+      if (request === bgmSaveRequest) { bgmPickerBusy = false; $('profileBgmSave').disabled = false; $('profileBgmCancel').disabled = false; }
+    }
+  }
   function safeCatalog() {
     return (Array.isArray(shop?.catalog) ? shop.catalog : []).filter(item =>
       item && TYPE_LABEL[item.type] && typeof item.id === 'string' && /^[a-z0-9-]{3,64}$/.test(item.id) &&
@@ -565,7 +646,10 @@
     if (item.type === 'background') return shop?.equipped?.backgroundId === item.id;
     if (item.type === 'frame') return shop?.equipped?.frameId === item.id;
     if (item.type === 'layout') return shop?.equipped?.layoutId === item.id;
-    if (item.type === 'bgm') return shop?.equipped?.bgmId === item.id;
+    if (item.type === 'bgm') {
+      const selected = shop?.equipped?.bgmIds;
+      return Array.isArray(selected) ? selected.includes(item.id) : shop?.equipped?.bgmId === item.id;
+    }
     if (item.type === 'decoration') return shop?.equipped?.decorations?.[item.slot] === item.id;
     const field = item.type === 'avatar' ? 'avatar' : item.type === 'wall' ? 'wall' : 'flag';
     return Number(shop?.equipped?.[field]) === Number(item.key);
@@ -588,10 +672,54 @@
     for (const [id, label] of SHOP_TABS) {
       const button = el('button', '', label); button.type = 'button'; button.setAttribute('role', 'tab');
       button.setAttribute('aria-selected', String(id === shopTab));
-      button.onclick = () => { shopTab = id; renderShopTabs(); renderShop(); };
+      button.onclick = () => { if (id !== shopTab) stopShopPreview(); shopTab = id; renderShopTabs(); renderShop(); };
       tabs.append(button);
     }
   }
+  function updateShopPreviewButtons() {
+    for (const button of $('shopGrid').querySelectorAll('.shop-preview-button')) {
+      const active = button.dataset.previewId === shopPreviewId;
+      button.textContent = active ? shopPreviewPending ? '載入中…按此取消' : '停止試聽' : '♫ 試聽 30 秒';
+      button.setAttribute('aria-pressed', String(active));
+    }
+  }
+  function stopShopPreview() {
+    shopPreviewRequest++;
+    shopPreviewId = '';
+    shopPreviewPending = false;
+    shopPreviewAudio.pause();
+    shopPreviewAudio.removeAttribute('src');
+    shopPreviewAudio.load();
+    updateShopPreviewButtons();
+  }
+  async function toggleShopPreview(item) {
+    const source = safeAudioAsset(item?.asset);
+    if (!source || $('shopPanel').hidden || document.hidden) return;
+    if (shopPreviewId === item.id) { stopShopPreview(); return; }
+    stopShopPreview();
+    const request = ++shopPreviewRequest;
+    shopPreviewId = item.id;
+    shopPreviewPending = true;
+    shopPreviewAudio.src = source;
+    updateShopPreviewButtons();
+    try {
+      await shopPreviewAudio.play();
+      if (request !== shopPreviewRequest) return;
+      shopPreviewPending = false;
+      updateShopPreviewButtons();
+    } catch {
+      if (request !== shopPreviewRequest) return;
+      stopShopPreview();
+      status('shopStatus', '這首音樂目前無法試聽，請稍後再試。', true);
+    }
+  }
+  shopPreviewAudio.ontimeupdate = () => { if (shopPreviewId && shopPreviewAudio.currentTime >= 30) stopShopPreview(); };
+  shopPreviewAudio.onended = stopShopPreview;
+  shopPreviewAudio.onerror = () => {
+    if (!shopPreviewId) return;
+    stopShopPreview();
+    status('shopStatus', '這首音樂目前無法試聽，請稍後再試。', true);
+  };
   function renderShop() {
     const wallet = number(shop?.wallet?.coins);
     $('shopWallet').textContent = shop && !shop.preview ? fmt(wallet) : '—';
@@ -612,10 +740,18 @@
       else visual.append(el('span', 'shop-symbol', item.type === 'bgm' ? '♫' : '✒'));
       const body = el('div', 'shop-item-body');
       body.append(el('small', '', `${RARITY[item.rarity] || '普通'} · ${TYPE_LABEL[item.type]}${item.slot ? ` · ${SLOTS.find(([slot]) => slot === item.slot)?.[1] || ''}` : ''}`), el('strong', '', String(item.name || item.id).slice(0, 80)));
+      if (item.type === 'bgm') {
+        const previewButton = el('button', 'shop-preview-button', '♫ 試聽 30 秒');
+        previewButton.type = 'button';
+        previewButton.dataset.previewId = item.id;
+        previewButton.setAttribute('aria-label', `試聽「${String(item.name || item.id).slice(0, 80)}」30 秒`);
+        previewButton.onclick = () => toggleShopPreview(item);
+        body.append(previewButton);
+      }
       const bottom = el('div', 'shop-item-bottom');
       const isOwned = owned(item), isEquipped = equipped(item);
       bottom.append(el('span', '', isOwned ? item.type === 'guestbook' ? '已解鎖' : '已收藏' : `${fmt(item.price)} 金幣`));
-      const button = el('button', '', shop?.preview ? '登入後購買' : isEquipped ? item.type === 'guestbook' ? '已開放' : '使用中' : isOwned ? ROOM_TYPES.includes(item.type) ? '佈置' : '套用' : wallet < number(item.price) ? '金幣不足' : '購買');
+      const button = el('button', '', shop?.preview ? '登入後購買' : isEquipped ? item.type === 'guestbook' ? '已開放' : item.type === 'bgm' ? '清單中' : '使用中' : isOwned ? ROOM_TYPES.includes(item.type) ? '佈置' : item.type === 'bgm' ? '單曲套用' : '套用' : wallet < number(item.price) ? '金幣不足' : '購買');
       button.type = 'button'; button.disabled = shopBusy || shop?.preview || isEquipped || (!isOwned && wallet < number(item.price));
       button.onclick = () => {
         if (isOwned && ROOM_TYPES.includes(item.type)) { roomEditorRequested = true; window.LauncherProfileShop?.openProfile(0); }
@@ -624,9 +760,11 @@
       };
       bottom.append(button); body.append(bottom); article.append(visual, body); grid.append(article);
     }
+    updateShopPreviewButtons();
   }
   async function loadShop() {
     const requestId = ++shopRequest;
+    stopShopPreview();
     if (!accountId && !preview) {
       shop = null; renderShopTabs(); renderShop();
       status('shopStatus', '請先登入帳號。'); return;
@@ -718,6 +856,10 @@
     $('profileHeroAvatar').src = imageFor('avatar', id) || imageFor('avatar', 8);
   };
   $('profileBgmToggle').onclick = toggleBgm;
+  $('profileBgmNext').onclick = () => nextBgm(false);
+  $('profileBgmChoose').onclick = openBgmPicker;
+  $('profileBgmCancel').onclick = () => { if (!bgmPickerBusy) $('profileBgmPicker').hidden = true; };
+  $('profileBgmSave').onclick = saveBgmPicker;
   $('profileBgmMute').onclick = () => {
     if (bgmListener.muted || bgmListener.volume === 0) { bgmListener.muted = false; if (bgmListener.volume === 0) bgmListener.volume = .35; }
     else bgmListener.muted = true;
@@ -725,7 +867,7 @@
     if (!bgmPausedByUser && bgmAutoplayBlocked) { bgmAutoplayBlocked = false; playBgm(); }
   };
   $('profileBgmVolume').oninput = () => { bgmListener.volume = clamp(Number($('profileBgmVolume').value) / 100, 0, 1, .35); saveMusicListener(); };
-  $('profileBgmAudio').onended = stopBgm;
+  $('profileBgmAudio').onended = () => { if (bgmPlaylist.length > 1) nextBgm(true); else stopBgm(); };
   $('profileGuestbookForm').onsubmit = postComment;
   $('profileGuestbookInput').oninput = () => { $('profileGuestbookLength').textContent = `${$('profileGuestbookInput').value.length} / 240`; };
   $('profileGuestbookMore').onclick = () => loadComments(true);
@@ -742,6 +884,7 @@
       const id = snapshot?.authenticated && !snapshot.profile?.needsDisplayName ? number(snapshot.profile?.userId) : 0;
       const isPreview = snapshot?.previewMode === true;
       if (id === accountId && isPreview === preview) return;
+      stopShopPreview();
       clearBgm(); profileVisible = false;
       shopMutation++; shopBusy = false;
       cardMutation++; cardBusy = false; decorBusy = false; $('profileCardEditor').hidden = true; $('profileCardSave').disabled = false; $('profileCardCancel').disabled = false;
@@ -762,6 +905,7 @@
       else loadProfile();
     },
     onVisible(panel) {
+      if (panel !== 'shop') stopShopPreview();
       if (panel !== 'profile') { profileVisible = false; stopBgm(); }
       else if (!profileVisible) { profileVisible = true; bgmPausedByUser = false; bgmAutoplayBlocked = false; }
       window.LauncherRoom?.onVisible(panel);
@@ -771,12 +915,14 @@
     },
     openShopCategory(category) {
       if (!SHOP_TABS.some(([id]) => id === category)) return;
+      if (category !== shopTab) stopShopPreview();
       shopTab = category;
       window.launcherSwitchPanel?.('shop');
       renderShopTabs(); renderShop();
     },
     openShop(itemId) {
       if (typeof itemId !== 'string' || !/^[a-z0-9-]{1,100}$/.test(itemId)) return;
+      stopShopPreview();
       announcementShopItem = itemId;
       if (itemId.startsWith('room-character-')) shopTab = 'room_character';
       window.launcherSwitchPanel?.('shop');
@@ -796,6 +942,6 @@
       }
     }
   };
-  document.addEventListener('visibilitychange', () => { if (document.hidden) stopBgm(); else playBgm(true); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { stopBgm(); stopShopPreview(); } else playBgm(true); });
   renderProfile(); renderShopTabs(); renderShop();
 })();

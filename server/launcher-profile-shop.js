@@ -268,17 +268,58 @@ function normalizedRoomEntries(entries, type, owned, limit) {
   }
   return result;
 }
-function launcherRoom(stats) {
+function launcherRooms(stats) {
   const owned = new Set(launcherOwnedItemIds(stats));
-  const saved = object(object(stats).launcherRoomV1);
-  const revision = Number.isSafeInteger(saved.revision) && saved.revision >= 0 ? saved.revision : 0;
-  const sceneId = saved.sceneId === ROOM_DEFAULT_SCENE ||
-    (owned.has(saved.sceneId) && BY_ID.get(saved.sceneId)?.type === 'room_scene') ? saved.sceneId : ROOM_DEFAULT_SCENE;
+  const allowedScene = id => id === ROOM_DEFAULT_SCENE ||
+    (owned.has(id) && BY_ID.get(id)?.type === 'room_scene');
+  const legacy = object(object(stats).launcherRoomV1);
+  const saved = object(object(stats).launcherRoomsV2);
+  const legacyRevision = Number.isSafeInteger(legacy.revision) && legacy.revision >= 0 ? legacy.revision : 0;
+  const savedRevision = Number.isSafeInteger(saved.revision) && saved.revision >= 0 ? saved.revision : -1;
+  const validV2 = savedRevision >= 0 && object(saved.scenes) === saved.scenes &&
+    !Array.isArray(saved.scenes) && allowedScene(saved.activeSceneId) &&
+    Object.prototype.hasOwnProperty.call(saved.scenes, saved.activeSceneId) &&
+    object(saved.scenes[saved.activeSceneId]) === saved.scenes[saved.activeSceneId];
+  const scenes = { [ROOM_DEFAULT_SCENE]: { placements: [], characters: [] } };
+  if (validV2) {
+    for (const [id, value] of Object.entries(saved.scenes)) {
+      if (!allowedScene(id)) continue;
+      scenes[id] = {
+        placements: normalizedRoomEntries(value?.placements, 'room_furniture', owned, ROOM_MAX_FURNITURE),
+        characters: normalizedRoomEntries(value?.characters, 'room_character', owned, ROOM_MAX_CHARACTERS)
+      };
+    }
+  }
+  let sceneId = allowedScene(saved.activeSceneId) ? saved.activeSceneId : ROOM_DEFAULT_SCENE;
+  let revision = validV2 ? savedRevision : -1;
+  // A legacy snapshot is authoritative on first upgrade, or after a server
+  // rollback wrote a newer V1 mirror. Other scene layouts remain intact.
+  if (legacyRevision > revision || revision < 0) {
+    sceneId = allowedScene(legacy.sceneId) ? legacy.sceneId : ROOM_DEFAULT_SCENE;
+    scenes[sceneId] = {
+      placements: normalizedRoomEntries(legacy.placements, 'room_furniture', owned, ROOM_MAX_FURNITURE),
+      characters: normalizedRoomEntries(legacy.characters, 'room_character', owned, ROOM_MAX_CHARACTERS)
+    };
+    revision = legacyRevision;
+  }
+  if (!scenes[sceneId]) scenes[sceneId] = { placements: [], characters: [] };
+  return { revision, sceneId, scenes };
+}
+function launcherRoom(stats, includeScenes = false) {
+  const rooms = launcherRooms(stats);
   return {
-    revision, sceneId, capacityVersion: 2,
-    placements: normalizedRoomEntries(saved.placements, 'room_furniture', owned, ROOM_MAX_FURNITURE),
-    characters: normalizedRoomEntries(saved.characters, 'room_character', owned, ROOM_MAX_CHARACTERS)
+    revision: rooms.revision, sceneId: rooms.sceneId, capacityVersion: 2,
+    placements: rooms.scenes[rooms.sceneId].placements,
+    characters: rooms.scenes[rooms.sceneId].characters,
+    ...(includeScenes ? { scenes: rooms.scenes } : {})
   };
+}
+function storeLauncherRooms(stats, rooms) {
+  const active = rooms.scenes[rooms.sceneId];
+  stats.launcherRoomsV2 = { revision: rooms.revision, activeSceneId: rooms.sceneId, scenes: rooms.scenes };
+  // Keep the active room readable by old clients and release-gate checks.
+  stats.launcherRoomV1 = { revision: rooms.revision, capacityVersion: 2, sceneId: rooms.sceneId,
+    placements: active.placements, characters: active.characters };
 }
 function launcherRoomItems(room) {
   return {
@@ -371,7 +412,12 @@ function launcherAppearance(stats) {
   const layoutId = saved.layoutId !== 'layout-default' && owned.has(saved.layoutId) && BY_ID.get(saved.layoutId)?.type === 'layout' ? saved.layoutId : 'layout-default';
   const backgroundId = saved.backgroundId !== 'background-default' && owned.has(saved.backgroundId) && BY_ID.get(saved.backgroundId)?.type === 'background' ? saved.backgroundId : 'background-default';
   const frameId = saved.frameId !== 'frame-none' && owned.has(saved.frameId) && BY_ID.get(saved.frameId)?.type === 'frame' ? saved.frameId : 'frame-none';
-  const bgmId = saved.bgmId !== 'bgm-none' && owned.has(saved.bgmId) && BY_ID.get(saved.bgmId)?.type === 'bgm' ? saved.bgmId : 'bgm-none';
+  // Keep the old single-song field readable for clients and existing saves.
+  // An explicit empty list means the owner chose silence; an absent list means
+  // a pre-playlist save and falls back to its old equipped song.
+  const savedBgmIds = Array.isArray(saved.bgmIds) ? saved.bgmIds : [saved.bgmId];
+  const bgmIds = [...new Set(savedBgmIds.filter(id => typeof id === 'string' && owned.has(id) && BY_ID.get(id)?.type === 'bgm'))].slice(0, 23);
+  const bgmId = bgmIds[0] || 'bgm-none';
   const savedDecorations = object(saved.decorations);
   const savedPlacement = object(saved.decorationPlacement);
   const decorations = {};
@@ -381,7 +427,7 @@ function launcherAppearance(stats) {
     decorations[slot] = owned.has(id) && BY_ID.get(id)?.type === 'decoration' && BY_ID.get(id)?.slot === slot ? id : null;
     decorationPlacement[slot] = validPlacement(savedPlacement[slot]) ? normalizedPlacement(savedPlacement[slot]) : { ...DEFAULT_DECORATION_PLACEMENT[slot] };
   }
-  return { avatarId: launcherAvatarId, layoutId, backgroundId, frameId, bgmId, decorations, decorationPlacement };
+  return { avatarId: launcherAvatarId, layoutId, backgroundId, frameId, bgmId, bgmIds, decorations, decorationPlacement };
 }
 const launcherAvatarForRow = (row, appearance = launcherAppearance(object(row?.stats))) =>
   appearance.avatarId || boundedId(row?.avatar, 50, 8);
@@ -390,12 +436,14 @@ const appearanceItems = appearance => ({
   background: BY_ID.get(appearance.backgroundId) || null,
   frame: BY_ID.get(appearance.frameId) || null,
   bgm: BY_ID.get(appearance.bgmId) || null,
+  bgms: appearance.bgmIds.map(id => BY_ID.get(id)).filter(Boolean),
   decorations: Object.fromEntries(DECORATION_SLOTS.map(slot => [slot, BY_ID.get(appearance.decorations[slot]) || null]))
 });
 function sanitizeLauncherStatsPatch(stats) {
   if (!stats || typeof stats !== 'object' || Array.isArray(stats)) return {};
   const { launcherOwnedV1: _owned, launcherAppearanceV1: _appearance, launcherWalletV1: _wallet,
-    launcherRoomV1: _room, launcherCardV1: _card, launcherCompanionsV1: _companions, launcherLifeV1: _life, ...safe } = stats;
+    launcherRoomV1: _room, launcherRoomsV2: _rooms, launcherCardV1: _card,
+    launcherCompanionsV1: _companions, launcherLifeV1: _life, ...safe } = stats;
   return safe;
 }
 const validCardText = (value, min, max) => typeof value === 'string' && value.trim().length >= min &&
@@ -435,7 +483,7 @@ function toPublicProfile(row, isSelf = false, boardSummary = null) {
     return { id, title: entry.title, group: adventureArtGroups[entry.group], variant: entry.variant + 1, variantLabel: `插畫 ${entry.variant + 1}/3` };
   });
   const customAppearance = launcherAppearance(stats);
-  const room = launcherRoom(stats);
+  const room = launcherRoom(stats, isSelf);
   const avatar = launcherAvatarForRow(row, customAppearance);
   const launcherItemIds = launcherOwnedItemIds(stats);
   const launcherAvatarIds = launcherItemIds
@@ -456,7 +504,9 @@ function toPublicProfile(row, isSelf = false, boardSummary = null) {
       card: cardItems,
       board: { artworks: artIds.length, artworkTotal: adventureArt.length, artworkIds: artIds, artworkEntries },
       chess: { items: 0 },
-      launcher: { ownedItems: launcherItemIds.length, itemIds: launcherItemIds, items: launcherItems, avatarIds: launcherAvatarIds }
+      launcher: { ownedItems: launcherItemIds.length, itemIds: launcherItemIds, items: launcherItems, avatarIds: launcherAvatarIds,
+        bgms: launcherItemIds.map(id => BY_ID.get(id)).filter(item => item?.type === 'bgm')
+          .map(item => ({ id: item.id, name: item.name, asset: item.asset })) }
     },
     appearance: { wallId: boundedId(object(stats.wall).id, 8), flagId: boundedId(object(stats.wall).flagId, 15), ...customAppearance },
     appearanceItems: appearanceItems(customAppearance),
@@ -660,14 +710,17 @@ async function changeLauncherItem(pool, secret, itemId, action, capability) {
         stats.launcherOwnedV1 = { ...object(stats.launcherOwnedV1), items: [...launcherOwned, item.id] };
       }
       if (lifePurchase) {
-        const room = launcherRoom(stats);
+        const rooms = launcherRooms(stats);
+        const room = rooms.scenes[rooms.sceneId];
         // Ownership and room occupancy are separate: a full room must not block
         // buying a released character. The owner can swap the new character in.
-        const spawn = room.characters.length < ROOM_MAX_CHARACTERS && room.revision < Number.MAX_SAFE_INTEGER
+        const spawn = room.characters.length < ROOM_MAX_CHARACTERS && rooms.revision < Number.MAX_SAFE_INTEGER
           ? require('./launcher-life').safeSpawn(room) : null;
         if (spawn) {
-          stats.launcherRoomV1 = { ...room, revision: room.revision + 1,
+          rooms.scenes[rooms.sceneId] = { ...room,
             characters: [...room.characters, { itemId: item.id, ...spawn }] };
+          rooms.revision++;
+          storeLauncherRooms(stats, rooms);
         } else roomPlacementDeferred = true;
       }
     } else if (action === 'equip') {
@@ -686,7 +739,7 @@ async function changeLauncherItem(pool, secret, itemId, action, capability) {
         if (item.type === 'layout') appearance.layoutId = item.id;
         else if (item.type === 'background') appearance.backgroundId = item.id;
         else if (item.type === 'frame') appearance.frameId = item.id;
-        else if (item.type === 'bgm') appearance.bgmId = item.id;
+        else if (item.type === 'bgm') { appearance.bgmId = item.id; appearance.bgmIds = item.id === 'bgm-none' ? [] : [item.id]; }
         else if (item.type === 'decoration') appearance.decorations[item.slot] = freeItem ? null : item.id;
         stats.launcherAppearanceV1 = appearance;
       }
@@ -702,6 +755,41 @@ async function changeLauncherItem(pool, secret, itemId, action, capability) {
     await db.query('COMMIT');
     return { ok: true, shop: toShop(updated.rows[0]), profile: toPublicProfile(updated.rows[0], true),
       ...(life ? { life, serverNow: new Date().toISOString(), roomPlacementDeferred } : {}) };
+  } catch (error) {
+    await db.query('ROLLBACK').catch(() => {});
+    throw error;
+  } finally {
+    db.release();
+  }
+}
+
+async function setLauncherBgmPlaylist(pool, secret, bgmIds, capability) {
+  if (!secret) return { ok: false, error: 'bad secret' };
+  if (!Array.isArray(bgmIds) || bgmIds.length > 23 || new Set(bgmIds).size !== bgmIds.length ||
+      bgmIds.some(id => typeof id !== 'string' || BY_ID.get(id)?.type !== 'bgm')) {
+    return { ok: false, error: 'invalid_bgm_playlist' };
+  }
+  const db = await pool.connect();
+  try {
+    await db.query('BEGIN');
+    const found = await db.query('SELECT user_id, name, avatar, stats, updated_at FROM player_profiles WHERE secret=$1 FOR UPDATE', [secret]);
+    const row = found.rows[0];
+    if (!row) { await db.query('ROLLBACK'); return { ok: false, error: 'bad secret' }; }
+    const canonicalError = await crewRelease.canonicalError(db, row, capability);
+    if (canonicalError) { await db.query('ROLLBACK'); return crewRelease.failure(canonicalError, capability); }
+    const stats = { ...object(row.stats) };
+    const owned = new Set(launcherOwnedItemIds(stats));
+    if (bgmIds.some(id => !owned.has(id))) { await db.query('ROLLBACK'); return { ok: false, error: 'not_owned' }; }
+    const appearance = launcherAppearance(stats);
+    appearance.bgmIds = [...bgmIds];
+    appearance.bgmId = bgmIds[0] || 'bgm-none';
+    stats.launcherAppearanceV1 = appearance;
+    const updated = await db.query(
+      'UPDATE player_profiles SET stats=$1::jsonb, updated_at=now() WHERE user_id=$2 RETURNING user_id, name, avatar, stats, updated_at',
+      [JSON.stringify(stats), row.user_id]
+    );
+    await db.query('COMMIT');
+    return { ok: true, shop: toShop(updated.rows[0]), profile: toPublicProfile(updated.rows[0], true) };
   } catch (error) {
     await db.query('ROLLBACK').catch(() => {});
     throw error;
@@ -783,18 +871,43 @@ async function setLauncherRoom(pool, secret, snapshot, capability) {
     typeof snapshot.sceneId !== 'string' || !Array.isArray(snapshot.placements) ||
     !Array.isArray(snapshot.characters) || snapshot.placements.length > ROOM_MAX_FURNITURE ||
     snapshot.characters.length > ROOM_MAX_CHARACTERS) return { ok: false, error: 'invalid_room' };
-  const scene = snapshot.sceneId === ROOM_DEFAULT_SCENE ? null : BY_ID.get(snapshot.sceneId);
-  if (snapshot.sceneId !== ROOM_DEFAULT_SCENE && scene?.type !== 'room_scene') return { ok: false, error: 'invalid_room' };
-  const seen = new Set();
-  for (const placement of snapshot.placements) {
-    if (BY_ID.get(placement?.itemId)?.type !== 'room_furniture' || !validFurniturePlacement(placement) ||
-      seen.has(placement.itemId)) return { ok: false, error: 'invalid_room' };
-    seen.add(placement.itemId);
+  const validSceneId = id => id === ROOM_DEFAULT_SCENE || BY_ID.get(id)?.type === 'room_scene';
+  if (!validSceneId(snapshot.sceneId)) return { ok: false, error: 'invalid_room' };
+  const hasScenes = Object.prototype.hasOwnProperty.call(snapshot, 'scenes');
+  if (hasScenes && (snapshot.capacityVersion !== 2 || object(snapshot.scenes) !== snapshot.scenes ||
+      Object.keys(snapshot.scenes).length > CATALOG.filter(item => item.type === 'room_scene').length + 1 ||
+      !Object.prototype.hasOwnProperty.call(snapshot.scenes, snapshot.sceneId))) {
+    return { ok: false, error: 'invalid_room' };
   }
-  for (const character of snapshot.characters) {
-    if (BY_ID.get(character?.itemId)?.type !== 'room_character' || !validCharacterPlacement(character) ||
-      seen.has(character.itemId)) return { ok: false, error: 'invalid_room' };
-    seen.add(character.itemId);
+  const suppliedScenes = hasScenes ? snapshot.scenes : { [snapshot.sceneId]: snapshot };
+  const seen = new Set();
+  const submitted = {};
+  for (const [id, value] of Object.entries(suppliedScenes)) {
+    if (!validSceneId(id) || object(value) !== value || !Array.isArray(value.placements) ||
+        !Array.isArray(value.characters) || value.placements.length > ROOM_MAX_FURNITURE ||
+        value.characters.length > ROOM_MAX_CHARACTERS ||
+        (value.characters.length > 8 && snapshot.capacityVersion !== 2)) return { ok: false, error: 'invalid_room' };
+    for (const placement of value.placements) {
+      if (BY_ID.get(placement?.itemId)?.type !== 'room_furniture' || !validFurniturePlacement(placement) ||
+          seen.has(placement.itemId)) return { ok: false, error: 'invalid_room' };
+      seen.add(placement.itemId);
+    }
+    for (const character of value.characters) {
+      if (BY_ID.get(character?.itemId)?.type !== 'room_character' || !validCharacterPlacement(character) ||
+          seen.has(character.itemId)) return { ok: false, error: 'invalid_room' };
+      seen.add(character.itemId);
+    }
+    submitted[id] = { placements: value.placements, characters: value.characters };
+  }
+  if (hasScenes) {
+    const active = submitted[snapshot.sceneId];
+    const sameEntries = (flat, nested, furniture) => flat.length === nested.length && flat.every((entry, index) => {
+      const saved = nested[index];
+      return entry?.itemId === saved?.itemId && entry.x === saved.x && entry.y === saved.y &&
+        (!furniture || entry.scale === saved.scale && furnitureRotation(entry) === furnitureRotation(saved));
+    });
+    if (!sameEntries(snapshot.placements, active.placements, true) ||
+        !sameEntries(snapshot.characters, active.characters, false)) return { ok: false, error: 'invalid_room' };
   }
   const db = await pool.connect();
   try {
@@ -805,8 +918,8 @@ async function setLauncherRoom(pool, secret, snapshot, capability) {
     const canonicalError = await crewRelease.canonicalError(db, row, capability);
     if (canonicalError) { await db.query('ROLLBACK'); return crewRelease.failure(canonicalError, capability); }
     const stats = { ...object(row.stats) };
-    const current = launcherRoom(stats);
-    if ((current.characters.length > 8 || snapshot.characters.length > 8) && snapshot.capacityVersion !== 2) {
+    const current = launcherRooms(stats);
+    if ((current.scenes[current.sceneId].characters.length > 8 || snapshot.characters.length > 8) && snapshot.capacityVersion !== 2) {
       await db.query('ROLLBACK'); return { ok: false, error: 'upgrade_required', profile: toPublicProfile(row, true) };
     }
     if (snapshot.revision !== current.revision) {
@@ -815,17 +928,30 @@ async function setLauncherRoom(pool, secret, snapshot, capability) {
     }
     if (current.revision === Number.MAX_SAFE_INTEGER) { await db.query('ROLLBACK'); return { ok: false, error: 'invalid_room' }; }
     const owned = new Set(launcherOwnedItemIds(stats));
-    if ((scene && !owned.has(scene.id)) || [...snapshot.placements, ...snapshot.characters].some(entry => !owned.has(entry.itemId))) {
+    if (Object.entries(submitted).some(([id, room]) =>
+      id !== ROOM_DEFAULT_SCENE && !owned.has(id) ||
+      [...room.placements, ...room.characters].some(entry => !owned.has(entry.itemId)))) {
       await db.query('ROLLBACK');
       return { ok: false, error: 'not_owned' };
     }
-    stats.launcherRoomV1 = {
-      revision: current.revision + 1,
-      capacityVersion: 2,
-      sceneId: snapshot.sceneId,
-      placements: normalizedRoomEntries(snapshot.placements, 'room_furniture', owned, ROOM_MAX_FURNITURE),
-      characters: normalizedRoomEntries(snapshot.characters, 'room_character', owned, ROOM_MAX_CHARACTERS)
+    const scenes = hasScenes ? submitted : { ...current.scenes, ...submitted };
+    // Legacy clients send one room. If they move an item after switching its
+    // backdrop, transfer that single owned copy out of the other scenes.
+    if (!hasScenes) {
+      for (const [id, room] of Object.entries(scenes)) {
+        if (id === snapshot.sceneId) continue;
+        scenes[id] = {
+          placements: room.placements.filter(entry => !seen.has(entry.itemId)),
+          characters: room.characters.filter(entry => !seen.has(entry.itemId))
+        };
+      }
+    }
+    const normalized = {};
+    for (const [id, room] of Object.entries(scenes)) normalized[id] = {
+      placements: normalizedRoomEntries(room.placements, 'room_furniture', owned, ROOM_MAX_FURNITURE),
+      characters: normalizedRoomEntries(room.characters, 'room_character', owned, ROOM_MAX_CHARACTERS)
     };
+    storeLauncherRooms(stats, { revision: current.revision + 1, sceneId: snapshot.sceneId, scenes: normalized });
     const updated = await db.query(
       'UPDATE player_profiles SET stats=$1::jsonb, updated_at=now() WHERE user_id=$2 RETURNING user_id, name, avatar, stats, updated_at',
       [JSON.stringify(stats), row.user_id]
@@ -959,6 +1085,7 @@ const withRoster = (fn, capabilityIndex) => async (...args) =>
 module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop,
   getLauncherProfile: withRoster(getLauncherProfile, 4), getLauncherShop: withRoster(getLauncherShop, 3),
   changeLauncherItem: withRoster(changeLauncherItem, 4),
+  setLauncherBgmPlaylist: withRoster(setLauncherBgmPlaylist, 3),
   setLauncherDecorationPlacement: withRoster(setLauncherDecorationPlacement, 4),
   setLauncherCard: withRoster(setLauncherCard, 3), setLauncherRoom: withRoster(setLauncherRoom, 3),
   getLauncherCharacter: withRoster(getLauncherCharacter, 4), interactLauncherCharacter: withRoster(interactLauncherCharacter, 5),

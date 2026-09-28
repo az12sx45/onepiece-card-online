@@ -37,7 +37,7 @@ function accessError(capability, ...values) {
   return null;
 }
 function statsContent(stats) {
-  return [stats?.launcherOwnedV1, stats?.launcherRoomV1, stats?.launcherCompanionsV1];
+  return [stats?.launcherOwnedV1, stats?.launcherRoomV1, stats?.launcherRoomsV2, stats?.launcherCompanionsV1];
 }
 async function canonicalError(db, row, capability, request) {
   // Call with the profile row locked, before ANY normalization, grants or saves.
@@ -60,7 +60,11 @@ function projectResponse(result, capability) {
     return Object.fromEntries(Object.entries(value).filter(([key]) => allowedId(key) && visible(key)).map(([key, item]) => [key, visit(item)]));
   }
   const response = projected;
-  const roomView = room => { if (room?.characters) room.characters = room.characters.filter(entry => allowedId(entry.itemId)); };
+  const roomView = room => {
+    if (room?.characters) room.characters = room.characters.filter(entry => allowedId(entry.itemId));
+    if (room?.scenes) for (const scene of Object.values(room.scenes))
+      if (scene?.characters) scene.characters = scene.characters.filter(entry => allowedId(entry.itemId));
+  };
   roomView(response.room);
   if (response.life) response.life = visit(response.life);
   if (response.shop) {

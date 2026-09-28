@@ -14,6 +14,14 @@ function applyActivityNeeds(actor,activity) {
   }
 }
 const shop = () => require('./launcher-profile-shop');
+function deployedRoom(stats) {
+  const room = shop().launcherRoom(stats, true);
+  const scenes = Object.values(room.scenes);
+  return { ...room, placements: scenes.flatMap(scene => scene.placements),
+    characters: scenes.flatMap(scene => scene.characters) };
+}
+const jobState = (state, room) => ({ ...state,
+  activeCharacterIds: room.characters.map(entry => entry.itemId) });
 async function ensureLifeTables(pool) {
   if (!initializers.has(pool)) initializers.set(pool, (async () => {
     await pool.query(`CREATE TABLE IF NOT EXISTS launcher_life_state (
@@ -46,7 +54,7 @@ function reconcileLegacy(state,companions,room,now) {
     const jobId=L.legacyJobId(itemId,work.startedAt);live.add(jobId);
     if(!state.jobs.some(j=>j.jobId===jobId))state.jobs.push({jobId,itemId,stationId:'deck',status:Date.parse(work.readyAt)<=now.getTime()?'ready':'active',reservedAt:work.startedAt,activatedAt:work.startedAt,readyAt:work.readyAt,durationMs:300000,reward:10,roomRevision:room.revision,legacy:true});
   }
-  state.jobs=state.jobs.filter(j=>j.legacy?live.has(j.jobId):L.validJobContext(j,state,room));
+  state.jobs=state.jobs.filter(j=>j.legacy?live.has(j.jobId):L.validJobContext(j,jobState(state,room),room));
 }
 function snapshot(row,state,now,extra={}) {
   const S=shop();return {ok:true,serverNow:now.toISOString(),life:L.publicLife(state),room:S.launcherRoom(row.stats),wallet:S.launcherWalletPublic(row.stats),profile:S.toPublicProfile(row,true),...extra};
@@ -60,7 +68,7 @@ async function writeLedger(db,row,operationId,jobId,amount,receipt) {
 async function settleJob(db,row,state,companions,job,room,now) {
   const operationId='life-work:'+job.jobId,existing=await ledger(db,row.user_id,operationId);
   if(existing){state.jobs=state.jobs.filter(j=>j.jobId!==job.jobId);return {receipt:existing,duplicate:true};}
-  if(!L.validJobContext(job,state,room))return {error:'work_context_changed'};
+  if(!L.validJobContext(job,jobState(state,room),room))return {error:'work_context_changed'};
   if(job.status==='reserved'||!job.activatedAt||Date.parse(job.readyAt)>now.getTime())return {error:'work_not_ready'};
   if(companions.claimsToday>=6)return {error:'work_daily_limit'};
   const wallet=row.stats.launcherWalletV1;if(wallet.coins>490)return {error:'wallet_full'};
@@ -160,7 +168,7 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
   await M.save(db,row.user_id,session);
   return{ok:true,minigame:M.view(session),...(session.receipt?{receipt:session.receipt}:{})};
 }
-async function perform(db,row,state,companions,command,room,now,sessions=[]) {
+async function perform(db,row,state,companions,command,room,now,sessions=[],jobsRoom=room) {
   const p=command.payload,content=L.content(),actor=state.characters[p.itemId];
   if(command.type.startsWith('minigame.'))return performMinigame(db,row,state,companions,command,room,now,sessions);
   if(command.type.startsWith('work.')&&command.type!=='work.reserve') {
@@ -168,12 +176,12 @@ async function perform(db,row,state,companions,command,room,now,sessions=[]) {
     const existing=command.type==='work.complete'?await ledger(db,row.user_id,'life-work:'+p.jobId):null;
     if(existing)return {ok:true,receipt:existing,duplicate:true};
     const job=state.jobs.find(j=>j.jobId===p.jobId);if(!job)return {ok:false,error:'no_active_work'};
-    if(!L.validJobContext(job,state,room))return {ok:false,error:'work_context_changed'};
+    if(!L.validJobContext(job,jobState(state,jobsRoom),jobsRoom))return {ok:false,error:'work_context_changed'};
     if(command.type==='work.cancel') {
       if(job.legacy)companions.characters[job.itemId].activeWork=null;
       state.jobs=state.jobs.filter(j=>j!==job);return {ok:true,cancelled:true};
     }
-    if(command.type==='work.complete') {const result=await settleJob(db,row,state,companions,job,room,now);return {ok:!result.error,...result};}
+    if(command.type==='work.complete') {const result=await settleJob(db,row,state,companions,job,jobsRoom,now);return {ok:!result.error,...result};}
     if(job.status!=='reserved')return {ok:true,job};
     if(Date.parse(job.activateAfter)>now.getTime())return {ok:false,error:'arrival_too_early'};
     const old=companions.characters[job.itemId];
@@ -294,13 +302,14 @@ async function run(pool,secret,command,suppliedNow,capability) {
     const releaseError=await crewRelease.canonicalError(db,row,capability,[command,event,jobReceipt,replay.rows[0]?.result]);
     if(releaseError){await db.query('ROLLBACK');return crewRelease.failure(releaseError,capability);}
     row.stats=L.clone(L.object(row.stats));
-    const S=shop(),room=S.launcherRoom(row.stats),state=await loadState(db,row,now),companions=S.launcherCompanionState(row.stats,now);
+    const S=shop(),room=S.launcherRoom(row.stats),jobsRoom=deployedRoom(row.stats),
+      state=await loadState(db,row,now),companions=S.launcherCompanionState(row.stats,now);
     row.stats.launcherWalletV1=S.prepareLauncherWallet(row.stats,now).wallet;
-    reconcileLegacy(state,companions,room,now);
+    reconcileLegacy(state,companions,jobsRoom,now);
     const sessions=await M.active(db,row.user_id,now,state,room);
     const beforeRevision=state.revision,aggregation=L.aggregate(state,now);
     if(aggregation.offline)for(const job of [...state.jobs])if(job.status==='ready'){
-      const settled=await settleJob(db,row,state,companions,job,room,now);
+      const settled=await settleJob(db,row,state,companions,job,jobsRoom,now);
       if(settled.receipt&&!settled.duplicate){state.offlineSummary.completedJobs++;state.offlineSummary.coins+=10;}
     }
     let extra={};
@@ -311,7 +320,7 @@ async function run(pool,secret,command,suppliedNow,capability) {
         if(prior.rows[0])extra=prior.rows[0].payload_hash===hash?{...prior.rows[0].result,duplicate:true}:{ok:false,error:'request_id_conflict'};
         else if(command.expectedRevision!==beforeRevision)extra={ok:false,error:'revision_conflict'};
         else {
-          extra=await perform(db,row,state,companions,command,room,now,sessions);
+          extra=await perform(db,row,state,companions,command,room,now,sessions,jobsRoom);
           // Transient failures are retryable; successful effects are immutable.
           if(extra.ok)await db.query('INSERT INTO launcher_life_operations(user_id,request_id,payload_hash,result) VALUES($1,$2,$3,$4::jsonb)',[row.user_id,command.requestId,hash,JSON.stringify(extra)]);
         }
@@ -333,10 +342,10 @@ async function registerPurchasedCharacter(db,row,itemId,now=new Date()) {
 }
 async function legacyWorkGuard(db,row,companions,itemId,action,now=new Date()) {
   const found=await db.query('SELECT state FROM launcher_life_state WHERE user_id=$1 FOR UPDATE',[row.user_id]);
-  const S=shop(),room=S.launcherRoom(row.stats);
+  const S=shop(),room=S.launcherRoom(row.stats),jobsRoom=deployedRoom(row.stats);
   const state=L.normalizeState(found.rows[0]?.state,S.launcherOwnedItemIds(row.stats),room.characters.map(c=>c.itemId),now);
   const jobs=state.jobs.filter(j=>!j.legacy&&['reserved','active','ready'].includes(j.status)&&
-    (j.status!=='reserved'||Date.parse(j.expiresAt)>now.getTime())&&L.validJobContext(j,state,room));
+    (j.status!=='reserved'||Date.parse(j.expiresAt)>now.getTime())&&L.validJobContext(j,jobState(state,jobsRoom),jobsRoom));
   const sessions=await M.active(db,row.user_id,now,state,room);
   if(action==='start'&&sessions.some(session=>session.characterId===itemId))return 'minigame_active';
   if(action==='start'&&jobs.some(j=>j.itemId===itemId))return 'work_active';
