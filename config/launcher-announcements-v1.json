@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 7,
+  "revision": 8,
   "announcements": [
     {
       "id": "board-tavern-crew-20260928-1c453fcf83416d97",
@@ -177,6 +177,30 @@
       "requiredRelease": {
         "kind": "launcher",
         "version": "1.2.10"
+      }
+    },
+    {
+      "id": "board-tavern-vfx-20260928-3155f473aa76c19f",
+      "status": "published",
+      "publishedAt": "2026-09-28T11:23:28.000Z",
+      "scope": "board",
+      "category": "update",
+      "version": "package-3155f473aa76c19f",
+      "title": "酒館雙門招募演出升級｜新世界航海錄",
+      "summary": "魯夫固定邀請、雙門門縫先透光，再揭曉新夥伴；加入與婉拒都有草帽夥伴的專屬回應。",
+      "body": [
+        "魯夫會說「你真有趣，要不要加入我們？」；玩家做出選擇後，其他九位草帽夥伴會隨機由一位說出對應的歡迎或婉拒反應。",
+        "酒館木門先露出一道光，再逐漸開啟。S 級是白光核心與短暫虹彩、A 金、B 紫、C 藍、D 綠、E 銀白；光從門後透出，門框本身不發光。",
+        "招募節奏加長，開門後先看見抽中角色的剪影，接著揭曉角色，再由玩家決定加入或不加入。",
+        "原本的招募費、抽選機率、隊伍替換與多人同步規則維持不變。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-3155f473aa76c19f"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
       }
     }
   ]
