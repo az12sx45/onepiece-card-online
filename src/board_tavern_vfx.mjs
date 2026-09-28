@@ -259,7 +259,7 @@ function create(options = {}) {
       gate.addChild(sprite);
       return sprite;
     });
-    gate.addChild(portalFill, aura, innerLeft, innerRight);
+    gate.addChild(portalFill, aura, innerLeft, innerRight, ...prism);
 
     const halo = additiveSprite(textures.halo);
     const seam = additiveSprite(textures.seam);
@@ -313,10 +313,10 @@ function create(options = {}) {
     layers.whiteFlash.height = portalHeight * 1.22;
     layers.prism.forEach((sprite, index) => {
       const side = index < 3 ? -1 : 1;
-      sprite.position.set(center + side * portalWidth * (0.14 + (index % 3) * 0.09), geometry.portalTop + portalHeight * (0.26 + (index % 3) * 0.23));
-      sprite.width = portalWidth * (0.29 + (index % 3) * 0.05);
-      sprite.height = portalHeight * 0.82;
-      sprite.rotation = side * (0.08 + (index % 3) * 0.08);
+      sprite.position.set(center, geometry.portalTop + portalHeight * (0.27 + (index % 3) * 0.22));
+      sprite.width = portalWidth * 0.15;
+      sprite.height = portalHeight * 0.56;
+      sprite.rotation = side * (0.04 + (index % 3) * 0.07);
     });
     render();
   }
@@ -392,7 +392,11 @@ function create(options = {}) {
     layers.seam.width = Math.max(4, portalWidth * (0.012 + aperture * 0.23));
     layers.seam.alpha = clamp(state.power * 1.08 * gain, 0, 1);
     layers.whiteFlash.alpha = clamp(state.flash * 0.34 * gain, 0, 0.42);
-    layers.prism.forEach((sprite, index) => { sprite.alpha = clamp(rainbow * state.ambient * (index % 3 === 1 ? 0.33 : 0.27) * gain, 0, 0.36); });
+    layers.prism.forEach((sprite, index) => {
+      const side = index < 3 ? -1 : 1;
+      sprite.position.x = center + side * gapWidth * (0.15 + (index % 3) * 0.13);
+      sprite.alpha = clamp(rainbow * state.ambient * 0.68 * gain, 0, 0.66);
+    });
     layers.shafts.forEach((sprite, index) => {
       const side = index % 2 ? 1 : -1;
       const offset = Math.ceil(index / 2);

@@ -30,4 +30,10 @@
 
 演出採既有 DOM 雙門、立繪、文字與選擇介面，另以本機打包的 PixiJS 8 WebGL canvas 製作門縫三層光、透視地板投光、彩色稀有度、粒子與短暫衝擊；GSAP 管理特效時間，WebGL 不可用時保留原 DOM 光效。依官方版本相容性選用 PixiJS 8.21.0、pixi-filters 6.1.5、GSAP 3.15.0；`@pixi/particle-emitter` 的目前 peer range 不含 PixiJS 8，因此使用 PixiJS 原生 ParticleContainer 與可重用粒子池，未強行降級。主要新程式為 `src/board_tavern_vfx.mjs`、`scripts/build_board_tavern_vfx.js` 與離線 `public/js/board_tavern_vfx.bundle.js`；開發用測試場景只留在 `scripts/`，不放玩家封包。保留先前 v1/v2 素材、程式和發布證據。沒有新增 `gameState` 持久欄位、localStorage key 或 Socket.IO event 名稱；保留原招募扣款、候選卡抽選、隊伍替換和 `BOARD_GAME_STATE` 同步權威。酒館目前只有單抽，沒有十連入口，本次不憑空新增十連或修改概率。
 
-此文件先記劇本與設計。素材、桌機／手機／多人同步 QA、正式候選及線上發布結果須在實際執行後補入，不以本機啟動或文件定稿冒充部署完成。
+## 本機驗證與待辦
+
+`D:\Codex_QA\board-tavern-captain-20260928\v4-full-regression\result.json` 記錄本機 Chromium 216/216 通過：六階級門縫先亮後開、18 張反應圖載入、九人各自加入／拒絕台詞與動作、跳過不自動決定、選後只結算一次、失權取消、減少動態效果及桌機／手機／橫屏版面。`v4-socket-regression\result.json` 記錄兩個真實本機 Socket.IO 房間、各兩個獨立瀏覽器 context 的建立／加入／開始／招募／觀看／重整 31/31 通過。這些是控制測試狀態的本機自動驗證，不是人手試玩、實體手機、遠端網路或公開站驗收。
+
+`D:\Codex_QA\board-tavern-vfx-20260928\result.json` 在最新 bundle 上通過 WebGL／真雙門合成 59/59；實際 S 門縫取樣白光 7,164 像素，並有粉 546、青 1,329、藍 367、紫 406 像素，A 金光 11,840、E 金光 0，顯示虹彩從門內漏出且階級可區分。`D:\Codex_QA\board-tavern-captain-20260928\v4-stage-final-prisms\result.json` 在同一輪通過階段／響應式 78/78：門板先微開、光落在門縫和地板而非外側門框，再進剪影、真容與選擇；S 級棱光收在開啟中的門縫，不是固定彩虹燈帶。兩份結果皆為本機 Chromium 截圖及像素檢查，不能推出實體裝置穩定 60 FPS。離線 bundle 的相依套件授權文字與最終候選仍須另行核對。
+
+目前尚無本次 v4 正式候選、公開 runtime 切換或線上資源 SHA 驗收結果；不得把本機測試或前一版 `package-1c453fcf83416d97` 說成本次部署完成。正式 D 工作樹只允許定點同步，保留其中與本需求無關的未提交內容。

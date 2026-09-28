@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>酒館招募 VFX 測試台</title>
+  <link rel="stylesheet" href="/css/board_tavern_reveal.css">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: #10151b; font-family: system-ui, sans-serif; letter-spacing: 0; }
+    .sandbox-controls { position: fixed; top: 0; right: 0; bottom: 0; z-index: 2147483001; width: 280px; padding: 18px; overflow-y: auto; color: #f3f5f4; background: #171c20f5; border-left: 1px solid #527369; box-shadow: -5px 0 24px #0008; }
+    .sandbox-controls h1 { margin: 0 0 6px; font-size: 19px; line-height: 1.3; }
+    .sandbox-controls h2 { margin: 24px 0 10px; font-size: 13px; line-height: 1.4; color: #c9d7d1; }
+    .sandbox-controls label { display: block; margin: 18px 0 7px; font-size: 13px; color: #d3ded9; }
+    .sandbox-controls button, .sandbox-controls select, .sandbox-controls input { font: inherit; }
+    .sandbox-controls button { border: 1px solid #8fa49c; background: #293139; color: #f3f5f4; min-height: 42px; border-radius: 4px; cursor: pointer; }
+    .sandbox-controls button:hover { background: #35433f; }
+    .sandbox-controls button:focus-visible, .sandbox-controls select:focus-visible, .sandbox-controls input:focus-visible { outline: 3px solid #84dec2; outline-offset: 2px; }
+    .sandbox-grades { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+    .sandbox-grades button { min-width: 0; min-height: 39px; border-bottom: 4px solid var(--grade-color); font-weight: 750; }
+    .sandbox-grades button[aria-pressed="true"] { outline: 2px solid #fff; outline-offset: 1px; }
+    .sandbox-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
+    .sandbox-actions button:first-child { background: #27564b; border-color: #84dec2; }
+    .sandbox-controls select { width: 100%; min-height: 40px; border: 1px solid #819790; border-radius: 4px; color: #f3f5f4; background: #293139; padding: 6px 9px; }
+    .sandbox-controls input[type="range"] { display: block; width: 100%; min-height: 28px; margin: 5px 0; accent-color: #85d6b4; }
+    .sandbox-controls output { color: #f4d992; font-variant-numeric: tabular-nums; }
+    .sandbox-readout { display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; margin: 0; font-size: 13px; line-height: 1.3; }
+    .sandbox-readout dt { color: #b7c9c1; }
+    .sandbox-readout dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+    #vfxFallback { margin: 12px 0 0; color: #f5c67d; font-size: 13px; line-height: 1.5; }
+    #sandboxStage { --tavern-reveal-color: #f6dd8e; --tavern-reveal-light: #f6dd8e; --tavern-host-color: #f4d27d; }
+    #sandboxStage .tavern-reveal-host-frame { z-index: 2; }
+    #sandboxStage .tavern-reveal-caption { max-width: calc(100% - 300px); }
+    @media (max-width: 700px) {
+      .sandbox-controls { top: auto; left: 0; width: 100%; bottom: 0; height: auto; max-height: 45dvh; padding: 10px 14px; border-left: 0; border-top: 1px solid #527369; box-shadow: 0 -4px 22px #0009; }
+      .sandbox-controls h1 { font-size: 15px; }
+      .sandbox-controls h2 { margin: 10px 0 6px; }
+      .sandbox-controls label { margin: 9px 0 5px; }
+      .sandbox-controls .sandbox-readout { grid-template-columns: repeat(3, auto 1fr); }
+      #sandboxStage .tavern-reveal-caption { max-width: 100%; }
+    }
+  </style>
+  <script defer src="/js/board_cards.js"></script>
+  <script defer src="/js/board_tavern_vfx.bundle.js"></script>
+  <script defer>
+    (() => {
+      document.addEventListener("DOMContentLoaded", () => {
+      const COLORS = { E: "#d3dbe0", D: "#a0dcae", C: "#8acfff", B: "#bd9bff", A: "#f5cc65", S: "#f6dd8e" };
+      const TIMING = [["crack", 2500], ["glow", 4300], ["silhouette", 6400], ["reveal", 8300], ["choice", 10800]];
+      const stage = document.getElementById("sandboxStage");
+      const layer = document.getElementById("sandboxVfxLayer");
+      const caption = document.getElementById("sandboxCaption");
+      const candidate = document.getElementById("sandboxCandidate");
+      const grades = [...document.querySelectorAll("[data-sandbox-grade]")];
+      const quality = document.getElementById("sandboxQuality");
+      const intensity = document.getElementById("sandboxIntensity");
+      const intensityValue = document.getElementById("sandboxIntensityValue");
+      const speed = document.getElementById("sandboxSpeed");
+      const fallback = document.getElementById("vfxFallback");
+      const readout = {
+        fps: document.getElementById("sandboxFps"),
+        particles: document.getElementById("sandboxParticles"),
+        phase: document.getElementById("sandboxPhase"),
+      };
+      let controller = null;
+      let timers = [];
+      let selectedGrade = "S";
+      let frames = 0;
+      let lastFpsAt = performance.now();
+
+      function clear() {
+        timers.forEach(clearTimeout);
+        timers = [];
+        controller?.dispose();
+        controller = null;
+        stage.removeAttribute("data-vfx-ready");
+        layer.removeAttribute("data-vfx-ready");
+      }
+      function setStage(value) {
+        stage.dataset.stage = value;
+        controller?.stage(value);
+        caption.hidden = !["reveal", "choice"].includes(value);
+        readout.phase.textContent = value;
+      }
+      function updateGrade() {
+        grades.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.sandboxGrade === selectedGrade)));
+        stage.dataset.grade = selectedGrade;
+        stage.style.setProperty("--tavern-reveal-color", COLORS[selectedGrade]);
+        stage.style.setProperty("--tavern-reveal-light", COLORS[selectedGrade]);
+        document.getElementById("sandboxRank").textContent = selectedGrade + " 級";
+      }
+      function replay() {
+        clear();
+        updateGrade();
+        const card = window.BoardCards?.cards?.find(entry => entry.id === "nami");
+        const portrait = card?.battlePortraits?.normal || card?.battlePortraits?.idle;
+        if (portrait) candidate.src = "/" + portrait.replace(/^\/+/, "");
+        const rate = Number(speed.value);
+        controller = window.BoardTavernVfx?.create({
+          container: layer, grade: selectedGrade, quality: quality.value,
+          intensity: Number(intensity.value),
+        }) || null;
+        controller?.setTimeScale(rate);
+        setStage("invitation");
+        TIMING.forEach(([phase, delay]) => timers.push(setTimeout(() => setStage(phase), delay / rate)));
+        fallback.textContent = controller ? "" : "WebGL 不可用；目前顯示 CSS 後備光效。";
+      }
+      function skip() {
+        clear();
+        setStage("choice");
+        fallback.textContent = "";
+      }
+      function tick(now) {
+        frames++;
+        if (now - lastFpsAt >= 500) {
+          readout.fps.textContent = String(Math.round(frames * 1000 / (now - lastFpsAt)));
+          frames = 0;
+          lastFpsAt = now;
+        }
+        const stats = controller?.stats();
+        readout.particles.textContent = String(stats?.particleCount || 0);
+        if (layer.dataset.vfxReady === "1") stage.dataset.vfxReady = "1";
+        else stage.removeAttribute("data-vfx-ready");
+        if (controller && (stats?.failed || stats?.disposed && !stats.ready)) fallback.textContent = "WebGL 不可用；目前顯示 CSS 後備光效。";
+        requestAnimationFrame(tick);
+      }
+      grades.forEach(button => button.addEventListener("click", () => {
+        selectedGrade = button.dataset.sandboxGrade;
+        replay();
+      }));
+      document.getElementById("sandboxReplay").addEventListener("click", replay);
+      document.getElementById("sandboxSkip").addEventListener("click", skip);
+      quality.addEventListener("change", replay);
+      speed.addEventListener("change", replay);
+      intensity.addEventListener("input", () => { intensityValue.textContent = Number(intensity.value).toFixed(1); });
+      intensity.addEventListener("change", replay);
+      window.addEventListener("pagehide", clear, { once: true });
+      updateGrade();
+      replay();
+      requestAnimationFrame(tick);
+      }, { once: true });
+    })();
+  </script>
+</head>
+<body>
+  <section id="sandboxStage" class="tavern-reveal-overlay" data-stage="invitation" data-grade="S" data-host="luffy" data-motion="eager" data-ready="1" aria-label="酒館招募 VFX 預覽">
+    <div class="tavern-reveal-scene">
+      <img class="tavern-reveal-backdrop" src="/images/board/tavern_recruit/cinematic_v1/doorway.webp" alt="">
+      <div id="sandboxVfxLayer" class="tavern-reveal-vfx-layer"></div>
+      <div class="tavern-reveal-portal">
+        <div class="tavern-reveal-light"></div>
+        <img id="sandboxCandidate" class="tavern-reveal-character" alt="娜美">
+        <div class="tavern-reveal-doors">
+          <div class="tavern-reveal-door left"><img src="/images/board/tavern_recruit/cinematic_v1/doors.webp" alt=""></div>
+          <div class="tavern-reveal-door right"><img src="/images/board/tavern_recruit/cinematic_v1/doors.webp" alt=""></div>
+        </div>
+      </div>
+    </div>
+    <div class="tavern-reveal-host-frame"><img class="tavern-reveal-host" src="/images/board/story/speakers/luffy_reunion_laugh.webp" alt="魯夫"></div>
+    <div class="tavern-reveal-invitation"><span class="tavern-reveal-speaker">魯夫</span><span class="tavern-reveal-role">草帽一行人船長</span><p>你真有趣，要不要加入我們？</p></div>
+    <div id="sandboxCaption" class="tavern-reveal-caption" hidden><span id="sandboxRank" class="tavern-reveal-rank">S 級</span><h2 class="tavern-reveal-name">娜美</h2></div>
+  </section>
+  <aside class="sandbox-controls" aria-label="VFX 測試控制台">
+    <h1>酒館招募 VFX 測試台</h1>
+    <h2>階級</h2>
+    <div class="sandbox-grades" role="group" aria-label="階級">
+      <button type="button" data-sandbox-grade="E" style="--grade-color:#d3dbe0" aria-pressed="false">E</button>
+      <button type="button" data-sandbox-grade="D" style="--grade-color:#a0dcae" aria-pressed="false">D</button>
+      <button type="button" data-sandbox-grade="C" style="--grade-color:#8acfff" aria-pressed="false">C</button>
+      <button type="button" data-sandbox-grade="B" style="--grade-color:#bd9bff" aria-pressed="false">B</button>
+      <button type="button" data-sandbox-grade="A" style="--grade-color:#f5cc65" aria-pressed="false">A</button>
+      <button type="button" data-sandbox-grade="S" style="--grade-color:#f6dd8e" aria-pressed="true">S</button>
+    </div>
+    <div class="sandbox-actions"><button id="sandboxReplay" type="button">重播</button><button id="sandboxSkip" type="button">跳過</button></div>
+    <label for="sandboxQuality">畫質</label>
+    <select id="sandboxQuality"><option value="low">低</option><option value="medium">中</option><option value="high" selected>高</option></select>
+    <label for="sandboxIntensity">強度 <output id="sandboxIntensityValue" for="sandboxIntensity">1.0</output></label>
+    <input id="sandboxIntensity" type="range" min="0.5" max="1.5" step="0.1" value="1">
+    <label for="sandboxSpeed">速度</label>
+    <select id="sandboxSpeed"><option value="0.5">0.5x 慢動作</option><option value="1" selected>1x 正常</option></select>
+    <h2>即時狀態</h2>
+    <dl class="sandbox-readout"><dt>FPS</dt><dd id="sandboxFps">0</dd><dt>粒子</dt><dd id="sandboxParticles">0</dd><dt>階段</dt><dd id="sandboxPhase">invitation</dd></dl>
+    <p id="vfxFallback" role="status"></p>
+  </aside>
+</body>
+</html>

@@ -6,6 +6,8 @@
 
 玩家新增的 VFX 規格進一步要求白光核心、先白藍紫金後假金升彩、金粒內縮與短爆發。實作擴充 `src/board_tavern_vfx.mjs`、本機 bundle/build、`package.json`/lock、Board 程式 allowlist、既有揭曉 JS/CSS/HTML 與 strict release/QA；九人反應、2,500 貝里及 Board 同步權威不變。PixiJS 8.21.0、pixi-filters 6.1.5、GSAP 3.15.0、esbuild 0.28.2 使用固定版本；粒子採原生池，不安裝與 PixiJS 8 peer 不相容的 emitter。此段是開發紀錄，尚不代表新特效已部署。
 
+本機 gate：`D:\Codex_QA\board-tavern-captain-20260928\v4-full-regression\result.json` 216/216、`v4-socket-regression\result.json` 31/31；`D:\Codex_QA\board-tavern-vfx-20260928\result.json` 59/59、`v4-stage-final-prisms\result.json` 78/78，後兩者涵蓋最新 S 虹彩門縫與 S–E 門光的真雙門截圖／像素及桌機、手機版面。這些只算本機自動 QA，實體裝置穩定 60 FPS、人手試玩、遠端網路與公開部署均未驗；正式 D 樹的並行修改須保留，尚未進行本次 v4 最終同步與部署。具體範圍和測試界線見 `BOARD_TAVERN_CAPTAIN_20260928.md`。
+
 ## 2026-09-28 草帽十人招募分歧演出
 
 最終已部署：發布提交 `5ce0b822f39a98950c6f9c696cd8ad9778bf33b2`，台灣時間 05:40:54 公開 runtime 切換 `package-1c453fcf83416d97`，05:43:06 正式站 60/60 通過；13 個變更資源完整公開 GET／SHA／CORS 及 R2 13/13 通過。保留 main 並行 launcher 1.2.8，公開發布 JSON／下載頁與提交 bytes 一致；合併公告 revision 5／六篇，隔離 gate 40/40 通過。新增 `BOARD_TAVERN_CREW_RELEASE_QA_20260928.json` 保存完整上線證據，主報告同步更新；以下本機候選敘述保留為執行歷史。收尾只提交文件並使用 `[skip render]`。

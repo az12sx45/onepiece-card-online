@@ -9,6 +9,7 @@
 - `public/images/board/tavern_recruit/crew_v3/`：依台詞製作的九人加入／拒絕透明反應圖，不覆蓋舊素材。
 - `scripts/build_board_tavern_captain_release.js`、`scripts/board_tavern_captain_release_builder_qa.js`：從目前正式 Board 套件建立受限候選、隔離邊界驗證。
 - `scripts/board_tavern_vfx_qa.js`、`scripts/board_tavern_vfx_sandbox_server.js`、`scripts/board_tavern_vfx_sandbox.html`：瀏覽器 VFX 回歸及只在本機的開發調整介面，不在玩家封包。
+- `scripts/board_tavern_captain_qa.js`、`scripts/board_tavern_captain_announcement_qa.js`：招募互動與公告隔離驗證；腳本本身不屬玩家封包。
 - `docs/BOARD_TAVERN_CAPTAIN_20260928.md`：劇本、畫圖指示、流程與後續實測／發布紀錄。
 
 ## 2026-09-28 草帽十人酒館演出
