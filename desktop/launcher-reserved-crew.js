@@ -17,7 +17,7 @@
   function assetUrl(key,relative){
     if(!RESERVED_KEYS.includes(key))return '';
     if(!/^(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/.test(relative))return '';
-    return `opui://launcher/images/launcher_room/reserved_v1/${key}/${relative}`;
+    return `opui://launcher/images/launcher_room/${key==='ace'?'reserved_v2':'reserved_v1'}/${key}/${relative}`;
   }
   const profiles={
     ace:{name:'艾斯',role:'白鬍子海賊團第二隊隊長',detail:'豪爽而有禮，珍惜家人與夥伴。關心魯夫時像個可靠的哥哥，也會坦率地向照顧弟弟的人道謝。',voice:'親切、爽朗、少說大道理；不把每句話都變成火焰笑話。',favorite:['kitchen-table','treasure-chest'],closeTo:['luffy','sabo','jinbe']},

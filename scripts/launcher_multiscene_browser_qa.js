@@ -112,7 +112,7 @@ async function main() {
     LauncherRoom.setProfile(profile, { accountId: 42 });
   });
   assert.equal(await page.locator('#roomEditToggle').isHidden(), true);
-  assert.equal(await page.locator('#roomSceneSwitcher button').count(), 0);
+  assert.equal(await page.locator('#roomSceneSwitcher button:visible').count(), 0);
   assert.match(await page.locator('#roomSceneSwitcher').innerText(), /千陽號甲板/);
   assert.deepEqual(errors, []);
   console.log(JSON.stringify({ status: 'PASS', checks: 8, saves: saved.scenes ? 2 : 0 }));

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 9,
+  "revision": 10,
   "announcements": [
     {
       "id": "board-tavern-crew-20260928-1c453fcf83416d97",
@@ -222,6 +222,26 @@
       "requiredRelease": {
         "kind": "launcher",
         "version": "1.2.11"
+      }
+    },
+    {
+      "id": "launcher-1.2.12-room-weather-and-arrangement",
+      "status": "published",
+      "publishedAt": "2026-09-28T14:58:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.12",
+      "title": "生活基地四季與佈置改善｜1.2.12",
+      "summary": "六個場景依時間、季節與天氣變換；可從海面兩側切換場景並直接佈置，艾斯角色比例重新調整。",
+      "body": [
+        "生活基地場景依本機時段呈現清晨、白天、黃昏與夜晚，隨季節與每日天氣改變海面和室內窗景；可看見雨、雪與雷雨。",
+        "海面兩側新增半透明場景切換箭頭，切換時會立即顯示場景並同步保存。已購場景可直接進入佈置，家具與夥伴仍各自保存於原場景。",
+        "艾斯的角色圖重新調整頭身與肢體比例，站立、行走、互動及工作使用一致的角色畫面。",
+        "房間移除「今日方針」選單；自動分工與原本的工作、商城金幣及好友參觀功能繼續使用。三款桌遊規則與存檔不變。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.12"
       }
     }
   ]

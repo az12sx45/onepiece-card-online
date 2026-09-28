@@ -17,6 +17,7 @@ const HISTORICAL_V128_STATUS_SHA256 = '34cb7074700ea4171bffa7ba6c4e5e0ec1798ad67
 const HISTORICAL_V128_REVIEW_SHA256 = '52296787a94ee50223fc75e725642055761aacde820aef3d915064aac9bbdd0e';
 const ROOM_HD_REVIEW = require('../tools/launcher-room/presentation-v124/validate_hd');
 const ROOM_RESERVED_REVIEW = require('../tools/launcher-room/presentation-v125/validate_reserved');
+const ACE_V2_MANIFEST = require('../tools/launcher-room/ace-lean-v1212/manifest.json');
 
 const MAX_LAUNCHER_ASSET_BYTES = 128 * 1024 * 1024;
 // 1.1.16 retains the 80 reviewed 1.1.15 atlases and 10 portraits. Keep the existing media
@@ -72,6 +73,8 @@ const APP_FILES = [
   'launcher-room-minigames.css',
   'launcher-life-room.js',
   'launcher-room.js',
+  'launcher-room-ambience.js',
+  'launcher-room-ambience.css',
   'launcher-room-dialogue.js',
   'launcher-room-motion-data.js',
   'launcher-room-motion.js',
@@ -95,6 +98,8 @@ const ROOM_MOTION_ASSETS = ROOM_DEPTH_CHARACTERS.flatMap(key =>
 const ROOM_PORTRAIT_ASSETS = ROOM_DEPTH_CHARACTERS.map(key => `portrait_v3/${key}.webp`);
 const ROOM_HD_ASSETS = ROOM_HD_REVIEW.ASSETS.map(asset => asset.replace(/^public\/images\/launcher_room\//, ''));
 const ROOM_RESERVED_ASSETS = ROOM_RESERVED_REVIEW.ASSETS.map(asset => asset.replace(/^public\/images\/launcher_room\//, ''));
+const ACE_V2_ASSETS = ROOM_RESERVED_ASSETS.filter(asset => asset.startsWith('reserved_v1/ace/'))
+  .map(asset => asset.replace(/^reserved_v1\//, 'reserved_v2/'));
 const ROOM_NEW_V127_ASSETS = [...RADIAL_PRESENTATION.MINIGAME_ASSETS, ...RADIAL_PRESENTATION.ROBIN_ASSETS]
   .map(asset => asset.replace(/^public\/images\/launcher_room\//, ''));
 const ROOM_NEW_V128_ASSETS = RADIAL_PRESENTATION.EXPANSION_ASSETS
@@ -244,6 +249,7 @@ const EXTRA_RESOURCES = [
       ...ROOM_LIFE_FURNITURE,
       ...ROOM_LIFE_HD_ASSETS,
       ...ROOM_RESERVED_ASSETS,
+      ...ACE_V2_ASSETS,
       ...ROOM_NEW_V127_ASSETS,
       ...ROOM_NEW_V128_ASSETS
     ]
@@ -546,7 +552,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.2.11', 'Desktop launcher version must be 1.2.11 for the reviewed scene and music release.');
+  assert(packageJson.version === '1.2.12', 'Desktop launcher version must be 1.2.12 for the reviewed room weather release.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   const announcementConfig = readJson(path.join(ROOT, 'config/launcher-announcements-v1.json'), 'launcher announcements');
   require('../server/launcher-announcements').validateConfig(announcementConfig);
@@ -564,10 +570,16 @@ function validateSourcePackage() {
   'Historical launcher 1.2.10 announcement changed.');
   const sceneMusicAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.11-room-scenes-and-music');
   assert(sceneMusicAnnouncement?.status === 'published' && sceneMusicAnnouncement.scope === 'launcher' &&
-    sceneMusicAnnouncement.version === packageJson.version &&
+    sceneMusicAnnouncement.version === '1.2.11' &&
     sceneMusicAnnouncement.requiredRelease?.kind === 'launcher' &&
-    sceneMusicAnnouncement.requiredRelease?.version === packageJson.version,
-  'Launcher 1.2.11 scene and music announcement must be gated to this release.');
+    sceneMusicAnnouncement.requiredRelease?.version === '1.2.11',
+  'Historical launcher 1.2.11 scene and music announcement changed.');
+  const roomWeatherAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.12-room-weather-and-arrangement');
+  assert(roomWeatherAnnouncement?.status === 'published' && roomWeatherAnnouncement.scope === 'launcher' &&
+    roomWeatherAnnouncement.version === packageJson.version &&
+    roomWeatherAnnouncement.requiredRelease?.kind === 'launcher' &&
+    roomWeatherAnnouncement.requiredRelease?.version === packageJson.version,
+  'Launcher 1.2.12 room weather announcement must be gated to this release.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
   assert(packageJson.build?.appId === 'com.onepiece.tabletop.desktop', 'Desktop appId changed unexpectedly.');
@@ -597,6 +609,10 @@ function validateSourcePackage() {
     const relative = asset.replace(/^public\//, '');
     assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, asset), `Reserved atlas blocked by packaged protocol: ${relative}`);
   }
+  for (const item of ACE_V2_MANIFEST.items) {
+    const relative = item.path.replace(/^public\//, '');
+    assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, item.path), `Ace v2 atlas blocked by packaged protocol: ${relative}`);
+  }
   for (const asset of [...RADIAL_PRESENTATION.ROBIN_ASSETS, ...RADIAL_PRESENTATION.MINIGAME_ASSETS, ...RADIAL_PRESENTATION.EXPANSION_ASSETS]) {
     const relative = asset.replace(/^public\//, '');
     assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, asset), `New reviewed room art blocked by packaged protocol: ${relative}`);
@@ -607,7 +623,7 @@ function validateSourcePackage() {
   for (const relative of ['scenes/sunny-unknown.webp','furniture/supply-rack-extra.webp','furniture_views/repair-cart/4.webp','furniture_views/log-pose-desk/unknown.webp']) {
     assert(resolveScene(`opui://launcher/images/launcher_room/${relative}`) === null, `Unreviewed 1.2.8 resource admitted: ${relative}`);
   }
-  for (const relative of ['reserved_v1/unknown/portrait.webp', 'reserved_v1/ace/walk/diagonal.webp', 'reserved_v1/law/life/cook-south.webp', 'reserved_v1/hancock/life/sleep-east.webp']) {
+  for (const relative of ['reserved_v1/unknown/portrait.webp', 'reserved_v1/ace/walk/diagonal.webp', 'reserved_v1/law/life/cook-south.webp', 'reserved_v1/hancock/life/sleep-east.webp', 'reserved_v2/sabo/portrait.webp', 'reserved_v2/ace/walk/diagonal.webp']) {
     assert(resolveScene(`opui://launcher/images/launcher_room/${relative}`) === null, `Unknown reserved path admitted: ${relative}`);
   }
   for (const relative of ['motion_v4/unknown/east.webp', 'acting_v4/luffy/unknown.webp', 'motion_v5/luffy/east.webp']) {
@@ -773,8 +789,30 @@ function validateSourcePackage() {
   const packagedLifeHistory = lifeStatus.manifest.items.filter(item =>
     ROOM_LIFE_FURNITURE.includes(item.asset.replace(/^public\/images\/launcher_room\//, '')));
   assert(packagedLifeHistory.length === ROOM_LIFE_FURNITURE.length, 'Historical stove resources are incomplete.');
-  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items, ...packagedLifeHistory, ...presentationStatus.hd.manifest.items, ...presentationStatus.reserved.manifest.items, ...presentationStatus.newArt.manifest.items].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
+  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items, ...packagedLifeHistory, ...presentationStatus.hd.manifest.items, ...presentationStatus.reserved.manifest.items, ...presentationStatus.newArt.manifest.items, ...ACE_V2_MANIFEST.items.map(item => ({asset: item.path}))].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(roomResource.filter.filter(asset => !asset.startsWith('life_hd_v2/'))), 'Historical room art manifest output set');
+  assert(ACE_V2_MANIFEST.schema === 'launcher-ace-lean-art/1' && ACE_V2_MANIFEST.visualAccepted === true &&
+    ACE_V2_MANIFEST.humanAcceptance === false && ACE_V2_MANIFEST.atlasCount === 17 &&
+    ACE_V2_MANIFEST.frameCount === 81 && ACE_V2_MANIFEST.totalRuntimeBytes <= 4 * 1024 * 1024,
+    'Ace v2 art manifest identity/size is invalid.');
+  assertExactJson(sorted(ACE_V2_MANIFEST.items.map(item => item.path.replace(/^public\/images\/launcher_room\//, ''))),
+    sorted(ACE_V2_ASSETS), 'Ace v2 reviewed asset set');
+  for (const item of ACE_V2_MANIFEST.items) {
+    assert(item.frames.length === (item.path.includes('/acting/') ? 8 : item.path.includes('/walk/') || item.path.includes('/life/') ? 4 : 1),
+      `Ace v2 frame count mismatch: ${item.path}`);
+    const asset = path.join(ROOT, ...item.path.split('/'));
+    assert(fs.statSync(asset).size === item.bytes && sha256File(asset) === item.sha256,
+      `Ace v2 art digest differs: ${item.path}`);
+  }
+  for (const item of ACE_V2_MANIFEST.sourceSheets) {
+    const original = path.join(ROOT, ...item.path.split('/'));
+    assert(fs.statSync(original).size === item.bytes && sha256File(original) === item.sha256,
+      `Ace v2 GPT source digest differs: ${item.path}`);
+  }
+  const aceContact = path.join(ROOT, ...ACE_V2_MANIFEST.contact.path.split('/'));
+  assert(fs.statSync(aceContact).size === ACE_V2_MANIFEST.contact.bytes &&
+    sha256File(aceContact) === ACE_V2_MANIFEST.contact.sha256,
+    'Ace v2 81-frame contact digest differs.');
   const lifeHd = readJson(path.join(ROOT, 'tools/launcher-room/life-hd-v2/manifest.json'), 'life HD source manifest');
   assert(lifeHd.schema === 'launcher-life-hd-art/1' && lifeHd.release === '1.2.10' &&
     lifeHd.count === 116 && lifeHd.newAtlasCellPixels === 256 && lifeHd.sourceAtlasCellPixels === 128 &&
@@ -966,7 +1004,7 @@ function validateAsar(asarPath) {
       `Packaged application source differs: ${entry}`);
   }
   const packedPackage = JSON.parse(asar.extractFile(asarPath, 'package.json').toString('utf8'));
-  assert(packedPackage.version === '1.2.11' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
+  assert(packedPackage.version === '1.2.12' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
   for (const entry of entries) {
     const lower = entry.toLowerCase();
     assert(!lower.startsWith('public/'), `app.asar contains the public game tree: ${entry}`);

@@ -337,6 +337,7 @@ function resolveLauncherResource(requestUrl) {
       /^images\/launcher_room\/(?:motion|acting)_v[34]\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:east|west|north|south)\.webp$/,
       /^images\/launcher_room\/portrait_v3\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\.webp$/,
       /^images\/launcher_room\/reserved_v1\/(?:ace|sabo|law|hancock)\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
+      /^images\/launcher_room\/reserved_v2\/ace\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
       /^images\/launcher_room\/robin_v2\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:(?:work|read)-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
       /^images\/launcher_room\/minigames_v1\/(?:deck|cargo-food|cargo-tools|cargo-books)\.webp$/,
       /^images\/launcher_room\/scenes\/(?:sunny-workshop|sunny-aquarium)\.webp$/,
@@ -1359,6 +1360,10 @@ async function runVisualOrSmokeCapture() {
             ...['east', 'west', 'north', 'south'].map(direction => `life/work-${direction}.webp`),
             ...['eat', 'rest', 'sleep', 'train'].map(action => `life/${action}-south.webp`)
           ].map(asset => `images/launcher_room/reserved_v1/${key}/${asset}`)),
+          ...['portrait.webp', ...['walk', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south'].map(direction => `${kind}/${direction}.webp`)),
+            ...['east', 'west', 'north', 'south'].map(direction => `life/work-${direction}.webp`),
+            ...['eat', 'rest', 'sleep', 'train'].map(action => `life/${action}-south.webp`)]
+            .map(asset => `images/launcher_room/reserved_v2/ace/${asset}`),
           ...["portrait.webp", "walk/east.webp", "walk/west.webp", "walk/north.webp", "walk/south.webp", "acting/east.webp", "acting/west.webp", "acting/north.webp", "acting/south.webp", "life/work-east.webp", "life/work-west.webp", "life/work-north.webp", "life/work-south.webp", "life/read-east.webp", "life/read-west.webp", "life/read-north.webp", "life/read-south.webp", "life/eat-south.webp", "life/rest-south.webp", "life/sleep-south.webp", "life/train-south.webp"].map(asset => `images/launcher_room/robin_v2/${asset}`),
           ...['deck','cargo-food','cargo-tools','cargo-books'].map(name => `images/launcher_room/minigames_v1/${name}.webp`),
           ...lifeActions.hdAssets().map(asset => `images/launcher_room/life_hd_v2/${asset}`),

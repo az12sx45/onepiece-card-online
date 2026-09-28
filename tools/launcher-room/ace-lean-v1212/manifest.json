@@ -1,0 +1,1809 @@
+{
+  "schema": "launcher-ace-lean-art/1",
+  "build": "1.2.12-candidate",
+  "identity": "Portgas D. Ace",
+  "legacyArtOverwritten": false,
+  "visualAccepted": true,
+  "humanAcceptance": false,
+  "sourceSheets": [
+    {
+      "path": "tools/launcher-room/ace-lean-v1212/sources/master.png",
+      "bytes": 851483,
+      "sha256": "c511f339df1b2e3342d46d35fd2156d5ee86f8ea8a2245360b21667eb1899c6a",
+      "standingHeight": 588
+    },
+    {
+      "path": "tools/launcher-room/ace-lean-v1212/sources/walk-side.png",
+      "bytes": 1221464,
+      "sha256": "3f9b074dd10f414e2c7ae80cd9f1620d4f2460fe65260e3bb77e190eff3c6d32",
+      "standingHeight": 596
+    },
+    {
+      "path": "tools/launcher-room/ace-lean-v1212/sources/walk-front.png",
+      "bytes": 1378911,
+      "sha256": "2f014f5b8cfa2e0f08066811d4dc5ec06858c49fbcc6684fa6345e07d299881d",
+      "standingHeight": 586
+    },
+    {
+      "path": "tools/launcher-room/ace-lean-v1212/sources/acting-side-inset.png",
+      "bytes": 1191633,
+      "sha256": "1dec0a398676bf2be1089dd7c32f16a69c93dd2043d40eb83196ace6f6e1edaf",
+      "standingHeight": 297
+    },
+    {
+      "path": "tools/launcher-room/ace-lean-v1212/sources/acting-front.png",
+      "bytes": 1516127,
+      "sha256": "2407c40f0ebbeb5bdaf90b84ef8acdf17b463e35e8a1a85493eed62e9dc9efe8",
+      "standingHeight": 320
+    },
+    {
+      "path": "tools/launcher-room/ace-lean-v1212/sources/work.png",
+      "bytes": 1334686,
+      "sha256": "c24e2f98fc0d89a425e710e80b250d5a41f7bb325ce0989b46761d6bc350bbb5",
+      "standingHeight": 309
+    },
+    {
+      "path": "tools/launcher-room/ace-lean-v1212/sources/utility.png",
+      "bytes": 1680392,
+      "sha256": "fe04b1c08cf55a33a028e60ac97555fa6b3ad877770df11b9b0cad68ae005d65",
+      "standingHeight": 356
+    }
+  ],
+  "items": [
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/portrait.webp",
+      "bytes": 24754,
+      "sha256": "778805e1cedaeb9969862263e9aa4c7c9a05d9501be2ed68c934ae77e16838de",
+      "dimensions": [
+        256,
+        256
+      ],
+      "cell": 256,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "idle",
+          "source": "ace-master",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "bounds": [
+            85,
+            24,
+            171,
+            224
+          ],
+          "removedDistantAlphaPixels": 288339,
+          "rgbaSha256": "81227a2f6c4a9d4979d177434fe99909ac5d91562c26c2146aa6be1c087f4ce6",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/walk/east.webp",
+      "bytes": 128858,
+      "sha256": "1d598a77e405fccd6207b44f95dc6f5b753149ca4b31d9af7b98223995e5b941",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "cell": 384,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "step-a",
+          "source": "ace-walk-side",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "bounds": [
+            126,
+            37,
+            271,
+            336
+          ],
+          "removedDistantAlphaPixels": 458647,
+          "rgbaSha256": "3b47a5e28ad10c9411712d8f235a85758f81c4946c5f3cca6c16dc8bc20d6d02",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "neutral",
+          "source": "ace-walk-side",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "bounds": [
+            128,
+            36,
+            257,
+            336
+          ],
+          "removedDistantAlphaPixels": 470819,
+          "rgbaSha256": "c82a36206c84d3f00afb59714e93058ea21a0e29850d2b77b97cedf303d8f340",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "step-c",
+          "source": "ace-walk-side",
+          "sourceCell": [
+            2,
+            0
+          ],
+          "bounds": [
+            128,
+            37,
+            266,
+            336
+          ],
+          "removedDistantAlphaPixels": 461879,
+          "rgbaSha256": "c01c28982c072bc65e3d8a2276156c6e60e1c84e15ba3466a425fc24e3bfccda",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "neutral",
+          "source": "ace-walk-side",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "bounds": [
+            128,
+            36,
+            257,
+            336
+          ],
+          "removedDistantAlphaPixels": 470819,
+          "rgbaSha256": "c82a36206c84d3f00afb59714e93058ea21a0e29850d2b77b97cedf303d8f340",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/acting/east.webp",
+      "bytes": 198700,
+      "sha256": "dbc7f93c65eec8803e969c8a8250982fa01306ac2296e3e97ac40ee0f008e046",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "cell": 256,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "idle",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "bounds": [
+            80,
+            24,
+            178,
+            224
+          ],
+          "removedDistantAlphaPixels": 446894,
+          "rgbaSha256": "65a5f0b491daab233c6c7370f37a2941c9a7a15cb7292496b60eb5a3adaf300f",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "talk_happy",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "bounds": [
+            81,
+            24,
+            200,
+            224
+          ],
+          "removedDistantAlphaPixels": 445375,
+          "rgbaSha256": "0a8874cc1b0e598f7587ed047086185cfdb63561c88b4b7891c123b03a71bd96",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "talk_annoyed",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            2,
+            0
+          ],
+          "bounds": [
+            80,
+            24,
+            177,
+            224
+          ],
+          "removedDistantAlphaPixels": 446827,
+          "rgbaSha256": "3b343ab360de63270c487b2658e085c15f862ec3164286c5d5ce99d369d864ed",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "surprised",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            3,
+            0
+          ],
+          "bounds": [
+            80,
+            24,
+            186,
+            224
+          ],
+          "removedDistantAlphaPixels": 445419,
+          "rgbaSha256": "49ab91852bc0a9fc22b93df86c01ad16d64544118af126e9bf8c06f0f13c4c29",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 4,
+          "pose": "focused_use",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "bounds": [
+            52,
+            59,
+            180,
+            224
+          ],
+          "removedDistantAlphaPixels": 444413,
+          "rgbaSha256": "0a279060b86967472ad16031f40c199d7342dfd2a3b8eaf86b37b511ee183912",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 5,
+          "pose": "sit",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "bounds": [
+            68,
+            78,
+            188,
+            224
+          ],
+          "removedDistantAlphaPixels": 449248,
+          "rgbaSha256": "85f85ff18910928eccb17a2d0d73fb580031f1ca3518880ba5fd74bb5a29986e",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 6,
+          "pose": "wave",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            2,
+            1
+          ],
+          "bounds": [
+            73,
+            38,
+            179,
+            224
+          ],
+          "removedDistantAlphaPixels": 446749,
+          "rgbaSha256": "1b77501cc6015df378e4762f6007bc81e5b24439c82b14e489c22fdf34423bd5",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 7,
+          "pose": "listen",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            3,
+            1
+          ],
+          "bounds": [
+            81,
+            38,
+            176,
+            224
+          ],
+          "removedDistantAlphaPixels": 448291,
+          "rgbaSha256": "0b39195c22769a73c47e46e47ada65e348d3554623574461408704389ec2bd23",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/life/work-east.webp",
+      "bytes": 98358,
+      "sha256": "064cf4ee573a9cc584c2fc22738456356a6ff53a6b3bbbdffe00e846aa5737b6",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "cell": 256,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "bounds": [
+            76,
+            24,
+            183,
+            224
+          ],
+          "removedDistantAlphaPixels": 516026,
+          "rgbaSha256": "eef586d11036fe827850b48fb283f385e854184e9dff72d8c2803e600ce437f7",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "bounds": [
+            76,
+            23,
+            187,
+            224
+          ],
+          "removedDistantAlphaPixels": 515550,
+          "rgbaSha256": "b8c9762c4ae3f3531873be1097947ea5c2e1645c9d6202227ad7498944ccb23e",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            2,
+            0
+          ],
+          "bounds": [
+            77,
+            24,
+            184,
+            224
+          ],
+          "removedDistantAlphaPixels": 515784,
+          "rgbaSha256": "a194a8394689625a6724dde344dee19ba4cf13addca57f2c7432b9d3a98d8cfe",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            3,
+            0
+          ],
+          "bounds": [
+            77,
+            23,
+            182,
+            224
+          ],
+          "removedDistantAlphaPixels": 515962,
+          "rgbaSha256": "ec26957a79b877bdb92fdd03fa437a773ea47b5319e8c0faf5bf1c8c72230047",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/walk/west.webp",
+      "bytes": 128928,
+      "sha256": "23de59e077cfed0e12bc537df7a7e8d43a4eba1a4539804b9c4082a8b4564c55",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "cell": 384,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "step-a",
+          "source": "ace-walk-side",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "bounds": [
+            114,
+            43,
+            256,
+            336
+          ],
+          "removedDistantAlphaPixels": 460969,
+          "rgbaSha256": "285532cc250c83fb2ebb828e06c4963dc72b4296d99cd6dd1fdd894d4061e654",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "neutral",
+          "source": "ace-walk-side",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "bounds": [
+            128,
+            41,
+            256,
+            336
+          ],
+          "removedDistantAlphaPixels": 471798,
+          "rgbaSha256": "a90b0a5ec021e96c49d63a4b1086761cb1d31bf785e67e07b5674c9e99e1e5ec",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "step-c",
+          "source": "ace-walk-side",
+          "sourceCell": [
+            2,
+            1
+          ],
+          "bounds": [
+            122,
+            43,
+            261,
+            336
+          ],
+          "removedDistantAlphaPixels": 464357,
+          "rgbaSha256": "69bd6364d48f998a660b1245e5542db76af8118bb8d9fef8e93394ee6c5d1339",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "neutral",
+          "source": "ace-walk-side",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "bounds": [
+            128,
+            41,
+            256,
+            336
+          ],
+          "removedDistantAlphaPixels": 471798,
+          "rgbaSha256": "a90b0a5ec021e96c49d63a4b1086761cb1d31bf785e67e07b5674c9e99e1e5ec",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/acting/west.webp",
+      "bytes": 203068,
+      "sha256": "76a188ddbff9d8a26b166f37f57c34a8f30450a57b29b7d4a7b2e37ca9393a18",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "cell": 256,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "idle",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            0,
+            2
+          ],
+          "bounds": [
+            79,
+            26,
+            176,
+            224
+          ],
+          "removedDistantAlphaPixels": 447893,
+          "rgbaSha256": "15bdd7631bc58cc690e7b6466c3bd869c021d88f3fe9eb040551e39a00d4a615",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "talk_happy",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            1,
+            2
+          ],
+          "bounds": [
+            58,
+            27,
+            177,
+            224
+          ],
+          "removedDistantAlphaPixels": 445325,
+          "rgbaSha256": "823080a52f203b502ba1299e43f9bed42feae85ae6a58b4e9ff2e6ed7c1ceead",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "talk_annoyed",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            2,
+            2
+          ],
+          "bounds": [
+            79,
+            29,
+            176,
+            224
+          ],
+          "removedDistantAlphaPixels": 446601,
+          "rgbaSha256": "b04487dfc084faa97c73bc488fad0b298ab8db93c29c72f00e408a113ff747ff",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "surprised",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            3,
+            2
+          ],
+          "bounds": [
+            71,
+            30,
+            176,
+            224
+          ],
+          "removedDistantAlphaPixels": 446017,
+          "rgbaSha256": "0bedfd6273eb1e52ea7915e81107c3f48b613b2361731418c881b28398ebcfc9",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 4,
+          "pose": "focused_use",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            0,
+            3
+          ],
+          "bounds": [
+            77,
+            55,
+            208,
+            224
+          ],
+          "removedDistantAlphaPixels": 443710,
+          "rgbaSha256": "826b419cd7f52f0de871db50398a40b9369165976e52edfc23865e731be47aa5",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 5,
+          "pose": "sit",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            1,
+            3
+          ],
+          "bounds": [
+            68,
+            77,
+            188,
+            224
+          ],
+          "removedDistantAlphaPixels": 448857,
+          "rgbaSha256": "001817c24677890f8bfa8f885e696741d57998dfa27f87f0d5fd4e1f81c8eb0c",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 6,
+          "pose": "wave",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            2,
+            3
+          ],
+          "bounds": [
+            76,
+            36,
+            182,
+            224
+          ],
+          "removedDistantAlphaPixels": 445977,
+          "rgbaSha256": "a3f0e19463d35016bbbad6fa82a9e5eb9d25d26fecd09ad77e7ad36eaa544dc5",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 7,
+          "pose": "listen",
+          "source": "ace-acting-side",
+          "sourceCell": [
+            3,
+            3
+          ],
+          "bounds": [
+            80,
+            36,
+            176,
+            224
+          ],
+          "removedDistantAlphaPixels": 447361,
+          "rgbaSha256": "9f79fbcd1753a349c8c116b73afc1a279efea22d3539b93d4f704aad1c94433d",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/life/work-west.webp",
+      "bytes": 106526,
+      "sha256": "6901a7780f6d02c3391c58a6935d27ddf898dfed785db2176f24f5258bbaae3d",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "cell": 256,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "bounds": [
+            73,
+            23,
+            182,
+            224
+          ],
+          "removedDistantAlphaPixels": 515060,
+          "rgbaSha256": "9e572c247a68aab9544c5aae54201bdc627f4daf582c3685e1fe276e957bcee9",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "bounds": [
+            73,
+            23,
+            182,
+            224
+          ],
+          "removedDistantAlphaPixels": 514261,
+          "rgbaSha256": "3e4ba1ff2d808c93040dc89eaa5edba9c9b7023f86a7a8e974f990e33c5730bd",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            2,
+            1
+          ],
+          "bounds": [
+            73,
+            23,
+            183,
+            224
+          ],
+          "removedDistantAlphaPixels": 514326,
+          "rgbaSha256": "cd740a549bdb842d7f470b8558d9087badcb640943ff702b6117e2eff4805f65",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            3,
+            1
+          ],
+          "bounds": [
+            74,
+            22,
+            181,
+            224
+          ],
+          "removedDistantAlphaPixels": 514518,
+          "rgbaSha256": "5da4b6fec3bb7a77be4402d3e49dc7f2acef0781ddc8efaa6145d96b4562ba20",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/walk/north.webp",
+      "bytes": 147578,
+      "sha256": "4a994d7e4fc8b863d39a0920e0ffb23a745762076d668d4d870248e09ca6b05a",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "cell": 384,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "step-a",
+          "source": "ace-walk-front",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "bounds": [
+            122,
+            34,
+            257,
+            336
+          ],
+          "removedDistantAlphaPixels": 567767,
+          "rgbaSha256": "beecb65726a5f4ccab5da22b8ef25b2eb2f2d7bf9f4cad9b45062f78557be49d",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "neutral",
+          "source": "ace-walk-front",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "bounds": [
+            122,
+            36,
+            260,
+            336
+          ],
+          "removedDistantAlphaPixels": 566553,
+          "rgbaSha256": "8f5b379ee67ae632aa622df26aa30cc9819e149224efc6aadc2656fb09987137",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "step-c",
+          "source": "ace-walk-front",
+          "sourceCell": [
+            2,
+            0
+          ],
+          "bounds": [
+            125,
+            36,
+            263,
+            336
+          ],
+          "removedDistantAlphaPixels": 566268,
+          "rgbaSha256": "d4bca42832f64c229af9e1b93ddf4672c203db0eacba0ea4fd5bddb0545e38b2",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "neutral",
+          "source": "ace-walk-front",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "bounds": [
+            122,
+            36,
+            260,
+            336
+          ],
+          "removedDistantAlphaPixels": 566553,
+          "rgbaSha256": "8f5b379ee67ae632aa622df26aa30cc9819e149224efc6aadc2656fb09987137",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/acting/north.webp",
+      "bytes": 223570,
+      "sha256": "2baf127ff7f421d87182bec4ec96870223474cfc457aea39656ff177b5f2d94f",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "cell": 256,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "idle",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "bounds": [
+            74,
+            24,
+            177,
+            224
+          ],
+          "removedDistantAlphaPixels": 585048,
+          "rgbaSha256": "1ea41f14fc8a37d2b2d8e4c65e150fd55e403730493217a9a3d026ba9de45988",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "talk_happy",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "bounds": [
+            74,
+            25,
+            206,
+            224
+          ],
+          "removedDistantAlphaPixels": 585161,
+          "rgbaSha256": "f7c9a2f1dd2546ae6bbab73b1899c498c485ceb95abd45eba3b8fc52ade2a5ac",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "talk_annoyed",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            2,
+            0
+          ],
+          "bounds": [
+            74,
+            24,
+            182,
+            224
+          ],
+          "removedDistantAlphaPixels": 585231,
+          "rgbaSha256": "61d749f34b7f1b69e94f643dd1c9d89ea27c73335dcb96b5cd1df971767a3162",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "surprised",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            3,
+            0
+          ],
+          "bounds": [
+            61,
+            25,
+            196,
+            224
+          ],
+          "removedDistantAlphaPixels": 584704,
+          "rgbaSha256": "2acc814dc66d19aa5edfa1b47c3de45217c3b401329209a48bc833b6c3a904e6",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 4,
+          "pose": "focused_use",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "bounds": [
+            55,
+            46,
+            188,
+            224
+          ],
+          "removedDistantAlphaPixels": 589712,
+          "rgbaSha256": "a73668cf2eb26d6fc664ca6643de0fe52cd337c2993740f1e7515e6f90288f5c",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 5,
+          "pose": "sit",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "bounds": [
+            67,
+            87,
+            189,
+            224
+          ],
+          "removedDistantAlphaPixels": 592763,
+          "rgbaSha256": "5e6df292b4b5359a5a70f3a1f20738ed85188b2815aeecf9e48733e461c90737",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 6,
+          "pose": "wave",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            2,
+            1
+          ],
+          "bounds": [
+            68,
+            35,
+            194,
+            224
+          ],
+          "removedDistantAlphaPixels": 586102,
+          "rgbaSha256": "e0dab7a6de3ee20547b1c912eb1508de6a31804599e25614f77566c4bab7d564",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 7,
+          "pose": "listen",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            3,
+            1
+          ],
+          "bounds": [
+            75,
+            35,
+            177,
+            224
+          ],
+          "removedDistantAlphaPixels": 587338,
+          "rgbaSha256": "7690ddca32a64e4e7e302135efec10412edfcf10a22f3ce26ff71f8ecca3ac00",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/life/work-north.webp",
+      "bytes": 107308,
+      "sha256": "5437b7ecdbb5efc0e09f3b736291eb32d5d2e7c8e13636a64da7c039b1a01171",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "cell": 256,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            0,
+            2
+          ],
+          "bounds": [
+            80,
+            30,
+            180,
+            224
+          ],
+          "removedDistantAlphaPixels": 512846,
+          "rgbaSha256": "bc729c5ea788a93d6183664634c6f3fb791d256ffc9d6e1f31d290db355bc597",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            1,
+            2
+          ],
+          "bounds": [
+            78,
+            30,
+            179,
+            224
+          ],
+          "removedDistantAlphaPixels": 512408,
+          "rgbaSha256": "41eab6c9d7da2c90022c031a8bf7f410ee811a487f04e9de66b8dce6289432c5",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            2,
+            2
+          ],
+          "bounds": [
+            78,
+            30,
+            185,
+            224
+          ],
+          "removedDistantAlphaPixels": 511623,
+          "rgbaSha256": "a9c8dfa7ee0b271259d364188d5f6cde7a0cea74afe8cc655fe5d4bc25cce1f6",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            3,
+            2
+          ],
+          "bounds": [
+            78,
+            30,
+            179,
+            224
+          ],
+          "removedDistantAlphaPixels": 512028,
+          "rgbaSha256": "88d09980c0bec0bf127e25f438199e9a90a37564d67198ba8e78dbd3f0018b75",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/walk/south.webp",
+      "bytes": 160874,
+      "sha256": "8b37572f03f72eaea02d4e653f073ecbb70cd3515e90d32efa745d858acb7cc7",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "cell": 384,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "step-a",
+          "source": "ace-walk-front",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "bounds": [
+            127,
+            39,
+            263,
+            336
+          ],
+          "removedDistantAlphaPixels": 567787,
+          "rgbaSha256": "f22c79d97f8527770744b436a676d087b042f10afe15fcf4a2be141745f60478",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "neutral",
+          "source": "ace-walk-front",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "bounds": [
+            124,
+            42,
+            265,
+            336
+          ],
+          "removedDistantAlphaPixels": 565862,
+          "rgbaSha256": "e4df6a0b37d3bc807a5146c935d084cb6946896441b5cb24685ce7193006fa38",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "step-c",
+          "source": "ace-walk-front",
+          "sourceCell": [
+            2,
+            1
+          ],
+          "bounds": [
+            124,
+            38,
+            263,
+            336
+          ],
+          "removedDistantAlphaPixels": 566635,
+          "rgbaSha256": "f8e35ee2deb7acf314053bb347ccd46bf2cc25fa1faaa3929756a503f825ad98",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "neutral",
+          "source": "ace-walk-front",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "bounds": [
+            124,
+            42,
+            265,
+            336
+          ],
+          "removedDistantAlphaPixels": 565862,
+          "rgbaSha256": "e4df6a0b37d3bc807a5146c935d084cb6946896441b5cb24685ce7193006fa38",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/acting/south.webp",
+      "bytes": 233096,
+      "sha256": "a706888ec9f95feb2bfffd1d8475df85d073e3a43dc3450a8b794360fecc82f8",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "cell": 256,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "idle",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            0,
+            2
+          ],
+          "bounds": [
+            76,
+            27,
+            180,
+            224
+          ],
+          "removedDistantAlphaPixels": 585386,
+          "rgbaSha256": "bce043f23ca3b1d905bfbc03711a451fd15b5b0e19141f0a8465ad4b4bef7260",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "talk_happy",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            1,
+            2
+          ],
+          "bounds": [
+            45,
+            27,
+            181,
+            224
+          ],
+          "removedDistantAlphaPixels": 585606,
+          "rgbaSha256": "b518d6d3a5beb8b98970f90edcf85aa1dea546311f3c6b0003cd37db646b0997",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "talk_annoyed",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            2,
+            2
+          ],
+          "bounds": [
+            76,
+            27,
+            183,
+            224
+          ],
+          "removedDistantAlphaPixels": 585376,
+          "rgbaSha256": "337c14070c0e59eaba0ed74b941c5bedae65c63e0dc4599aee1e89aed9f6af45",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "surprised",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            3,
+            2
+          ],
+          "bounds": [
+            63,
+            27,
+            191,
+            224
+          ],
+          "removedDistantAlphaPixels": 585665,
+          "rgbaSha256": "99abf4dce41af31789648c0086e0a7ed0c29749b6c648e00988da0f30a205312",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 4,
+          "pose": "focused_use",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            0,
+            3
+          ],
+          "bounds": [
+            72,
+            55,
+            185,
+            224
+          ],
+          "removedDistantAlphaPixels": 590070,
+          "rgbaSha256": "fd07734f8698989226b9c8f3bb9e63fb3b0caa642e7d1522e5f6078989b6ee6c",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 5,
+          "pose": "sit",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            1,
+            3
+          ],
+          "bounds": [
+            65,
+            84,
+            191,
+            224
+          ],
+          "removedDistantAlphaPixels": 593273,
+          "rgbaSha256": "b8af74d6259401826d9dff86100611034abd1a1bc7d163fdceeb95bc4a06b94a",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 6,
+          "pose": "wave",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            2,
+            3
+          ],
+          "bounds": [
+            69,
+            43,
+            183,
+            224
+          ],
+          "removedDistantAlphaPixels": 588212,
+          "rgbaSha256": "85e0786194eaf38d5f79c334d72256ab351f2d5a0558c73fbbc553a76198ec9d",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 7,
+          "pose": "listen",
+          "source": "ace-acting-front",
+          "sourceCell": [
+            3,
+            3
+          ],
+          "bounds": [
+            79,
+            44,
+            178,
+            224
+          ],
+          "removedDistantAlphaPixels": 589389,
+          "rgbaSha256": "e82d7b2ef6304d8ec2bd2b57091cb5af3297744b8d9d2635527bebf7efbbb23a",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/life/work-south.webp",
+      "bytes": 118720,
+      "sha256": "fc092ee9d73f755917fbbe1e242fa3baaf60696cc11ac15f498095749d8df3c3",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "cell": 256,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            0,
+            3
+          ],
+          "bounds": [
+            78,
+            24,
+            180,
+            224
+          ],
+          "removedDistantAlphaPixels": 511641,
+          "rgbaSha256": "63801bf265d21ef05a95448dd6197ff403ea48017ad6a72968e8e44a822382f5",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            1,
+            3
+          ],
+          "bounds": [
+            79,
+            24,
+            180,
+            224
+          ],
+          "removedDistantAlphaPixels": 511187,
+          "rgbaSha256": "8694ef7a4c535dfba94a5f3c94ec3f7037cef954920be0add29602eba31f0073",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            2,
+            3
+          ],
+          "bounds": [
+            77,
+            24,
+            180,
+            224
+          ],
+          "removedDistantAlphaPixels": 511387,
+          "rgbaSha256": "8aee5bbb15a903dabddba74317ec1f5b5392fb5512eac14aca225663c3bf4e39",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "work",
+          "source": "ace-work",
+          "sourceCell": [
+            3,
+            3
+          ],
+          "bounds": [
+            78,
+            24,
+            179,
+            224
+          ],
+          "removedDistantAlphaPixels": 511731,
+          "rgbaSha256": "80b9d2f7230eed91b81c861700314cb247d88c67dc5a812aabe34cfb93dbe881",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/life/eat-south.webp",
+      "bytes": 121750,
+      "sha256": "e5fa828836e6e8ef93768a7435d62a2e4224c310c3d788677582ab1f75cce141",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "cell": 256,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "eat",
+          "source": "ace-utility",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "bounds": [
+            74,
+            4,
+            182,
+            224
+          ],
+          "removedDistantAlphaPixels": 652308,
+          "rgbaSha256": "23f47ea963d861f1653727e2d3b9d8928748751d719b745792796dd01d599e5e",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "eat",
+          "source": "ace-utility",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "bounds": [
+            75,
+            4,
+            182,
+            224
+          ],
+          "removedDistantAlphaPixels": 652216,
+          "rgbaSha256": "bc449d6fffbbf8edbce11394b79bf0b0d95785ac6f18755638e58e80b6a7e7aa",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "eat",
+          "source": "ace-utility",
+          "sourceCell": [
+            2,
+            0
+          ],
+          "bounds": [
+            75,
+            4,
+            182,
+            224
+          ],
+          "removedDistantAlphaPixels": 652944,
+          "rgbaSha256": "2860a6818bc089c49938d3249af51fb44747bf27de0b26dad3810ee1b5f83c6b",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "eat",
+          "source": "ace-utility",
+          "sourceCell": [
+            3,
+            0
+          ],
+          "bounds": [
+            75,
+            4,
+            182,
+            224
+          ],
+          "removedDistantAlphaPixels": 651786,
+          "rgbaSha256": "238200c46c11752ba0a87dc843347ac041c8cf717d4b060e5e56965bfe4a1d6f",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/life/rest-south.webp",
+      "bytes": 116754,
+      "sha256": "1ecd4ceb15e5c1742d2d8d15a41447e0ae37545a4242e2f40a8456876431ce9c",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "cell": 256,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "rest",
+          "source": "ace-utility",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "bounds": [
+            67,
+            52,
+            189,
+            224
+          ],
+          "removedDistantAlphaPixels": 654098,
+          "rgbaSha256": "35ea8c9cc496bc4382e12ad77d96c30f96d93c59df5bdc4928304bfdf2b4b0b9",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "rest",
+          "source": "ace-utility",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "bounds": [
+            67,
+            52,
+            189,
+            224
+          ],
+          "removedDistantAlphaPixels": 653784,
+          "rgbaSha256": "47e09b67d20866c83fdc082aa7b83eed4c649defbc6159bdf91f69e9b1329f62",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "rest",
+          "source": "ace-utility",
+          "sourceCell": [
+            2,
+            1
+          ],
+          "bounds": [
+            68,
+            52,
+            189,
+            224
+          ],
+          "removedDistantAlphaPixels": 654026,
+          "rgbaSha256": "6e25c049f17babe832d997c6e6666da6bbf1b757d21d9eec5e008d769d8ffa29",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "rest",
+          "source": "ace-utility",
+          "sourceCell": [
+            3,
+            1
+          ],
+          "bounds": [
+            68,
+            52,
+            188,
+            224
+          ],
+          "removedDistantAlphaPixels": 654390,
+          "rgbaSha256": "9f1b4804a6a1703037b97d1cb64e734603618bb21d38dd92321e5e1014f926ea",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/life/sleep-south.webp",
+      "bytes": 84026,
+      "sha256": "5b8285505ab6a77a601ce878f263751fd7aea2a7d80f0f2d54ba085a62ce91d7",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "cell": 256,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "sleep",
+          "source": "ace-utility",
+          "sourceCell": [
+            0,
+            2
+          ],
+          "bounds": [
+            45,
+            126,
+            210,
+            224
+          ],
+          "removedDistantAlphaPixels": 665993,
+          "rgbaSha256": "e3a2dda38e9774cbc36d8e383272ed9382b40972944bc9962e2871f7acdd01e3",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "sleep",
+          "source": "ace-utility",
+          "sourceCell": [
+            1,
+            2
+          ],
+          "bounds": [
+            45,
+            127,
+            211,
+            224
+          ],
+          "removedDistantAlphaPixels": 665886,
+          "rgbaSha256": "7a491c4fd94632627ba7c8b692965a5bab71c7b2fc5b583132de8103f8b65e71",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "sleep",
+          "source": "ace-utility",
+          "sourceCell": [
+            2,
+            2
+          ],
+          "bounds": [
+            46,
+            129,
+            210,
+            224
+          ],
+          "removedDistantAlphaPixels": 666442,
+          "rgbaSha256": "fb777fe6fe8fc6ff492296fbc5ecfd1a33c1ea4616383e1a6beb5ff377681e26",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "sleep",
+          "source": "ace-utility",
+          "sourceCell": [
+            3,
+            2
+          ],
+          "bounds": [
+            46,
+            129,
+            210,
+            224
+          ],
+          "removedDistantAlphaPixels": 666544,
+          "rgbaSha256": "75c601b2eb5925509bed0bfb9c516537f909808f303717717b4c1a744aae2daf",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "path": "public/images/launcher_room/reserved_v2/ace/life/train-south.webp",
+      "bytes": 106018,
+      "sha256": "e038cf76258715f992faf3b9e2cafecb98ef34d9256a21705a7ef0b3f4ca3d51",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "cell": 256,
+      "frames": [
+        {
+          "index": 0,
+          "pose": "train",
+          "source": "ace-utility",
+          "sourceCell": [
+            0,
+            3
+          ],
+          "bounds": [
+            79,
+            24,
+            179,
+            224
+          ],
+          "removedDistantAlphaPixels": 655863,
+          "rgbaSha256": "b8fcacb968d59f51ff15aab1cfd064e4b51fdfd4c86b6ecd0d504a67b79856cf",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "pose": "train",
+          "source": "ace-utility",
+          "sourceCell": [
+            1,
+            3
+          ],
+          "bounds": [
+            79,
+            25,
+            177,
+            224
+          ],
+          "removedDistantAlphaPixels": 659991,
+          "rgbaSha256": "9cf24d2df4a34df085ca287f2c684448fa81d01cc4b1680566724a4f98e32b53",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "pose": "train",
+          "source": "ace-utility",
+          "sourceCell": [
+            2,
+            3
+          ],
+          "bounds": [
+            75,
+            25,
+            178,
+            224
+          ],
+          "removedDistantAlphaPixels": 660105,
+          "rgbaSha256": "cf466e5e51132f7f7ef66c62b129c76a8c615137309ae2ef76049a86a24a32f2",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "pose": "train",
+          "source": "ace-utility",
+          "sourceCell": [
+            3,
+            3
+          ],
+          "bounds": [
+            79,
+            26,
+            177,
+            224
+          ],
+          "removedDistantAlphaPixels": 659596,
+          "rgbaSha256": "6b3e6d08ac0df7b6bf8c2ffcd6daabbffea0ac744bfb25343bd57e3b54d2f257",
+          "wholeFigureOnly": true,
+          "mirrored": false
+        }
+      ]
+    }
+  ],
+  "atlasCount": 17,
+  "frameCount": 81,
+  "totalRuntimeBytes": 2308886,
+  "contact": {
+    "path": "tools/launcher-room/ace-lean-v1212/contact.png",
+    "bytes": 1164169,
+    "sha256": "8a9ca0321ad24d1b68e422d2106c008b44689d3bd92c6afea0ccdb93c4fb7f85"
+  },
+  "processing": "Whole connected source figure per cell; common standing calibration; no body part splicing or mirroring; existing importer plus restrained alpha/warm-edge cleanup.",
+  "removedWarmAndTransparentEdgePixels": 177301,
+  "removedIsolatedPixels": 13,
+  "visualReview": "Independent AI visual review of 81 frames on pale background; canonical badge/tattoo check; no human play acceptance claimed."
+}

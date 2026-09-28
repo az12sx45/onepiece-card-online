@@ -13,7 +13,7 @@
     character: { type: 'room_character', owned: 'roomCharacters', label: '夥伴' }
   };
   const reserved = window.OnePieceReservedCrew;
-  const ASSET = /^opui:\/\/launcher\/images\/launcher_room\/(?:(scenes|furniture|chibi)\/[a-z0-9-]+|reserved_v1\/(ace|sabo|law|hancock)\/portrait)\.webp$/i;
+  const ASSET = /^opui:\/\/launcher\/images\/launcher_room\/(?:(scenes|furniture|chibi)\/[a-z0-9-]+|reserved_v1\/(ace|sabo|law|hancock)\/portrait|reserved_v2\/ace\/portrait)\.webp$/i;
   const CHARACTER_KEYS = new Set(reserved?.SUPPORTED_KEYS || ['luffy', 'zoro', 'nami', 'chopper', 'sanji', 'robin', 'usopp', 'franky', 'brook', 'jinbe']);
   const MOODS = new Set(['happy', 'surprised', 'focused', 'annoyed']);
   const POSES = new Set(['idle', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave', 'listen']);
@@ -54,8 +54,9 @@
   const catalogAssetFor = item => typeof item?.asset === 'string' && ASSET.test(item.asset) ? item.asset : '';
   const assetFor = item => {
     const source = catalogAssetFor(item);
-    if (source && item?.type === TYPES.scene.type && ['sunny-deck', 'sunny-kitchen', 'sunny-library'].includes(item.key)) {
-      return `opui://launcher/images/launcher_room/scenes/${item.key}-v2.webp`;
+    const sceneKey = item?.key || String(item?.id || '').replace(/^room-scene-/, '');
+    if (source && item?.type === TYPES.scene.type && ['sunny-deck', 'sunny-kitchen', 'sunny-library'].includes(sceneKey)) {
+      return `opui://launcher/images/launcher_room/scenes/${sceneKey}-v2.webp`;
     }
     const key = item?.type === TYPES.character.type ? keyForCharacter(item) : '';
     return source && key ? portraitFor(key) : source;
@@ -167,9 +168,11 @@
   let loading = false;
   let saving = false;
   let switching = false;
+  let displaySceneId = '';
+  let sceneSwitchTimer = 0;
   let dirty = false;
   let draft = blankRoom();
-  let tab = 'scene';
+  let tab = 'furniture';
   let selected = null;
   let drag = null;
   let walkers = [];
@@ -237,9 +240,23 @@
     target.classList.toggle('is-error', error);
   }
   function isOwner() { return !!profile?.isSelf && accountId > 0 && !preview; }
-  function activeRoom() { return editing ? draft : copyRoom(profile?.room); }
+  function activeRoom() {
+    if (editing) return draft;
+    const room = copyRoom(profile?.room);
+    if (isOwner() && displaySceneId) {
+      if (!room.scenes[displaySceneId]) room.scenes[displaySceneId] = blankScene();
+      room.sceneId = displaySceneId;
+      room.placements = room.scenes[displaySceneId].placements;
+      room.characters = room.scenes[displaySceneId].characters;
+    }
+    return room;
+  }
   function catalog() { return Array.isArray(shop?.catalog) ? shop.catalog : []; }
   function fromShop(itemId) { return catalog().find(item => item.id === itemId) || null; }
+  function ownedProfileItems() {
+    const items = profile?.collection?.launcher?.items;
+    return Array.isArray(items) ? items : [];
+  }
   function releasedCharacterKeys() { return new Set(reserved?.releasedKeys(profile) || CHARACTER_KEYS); }
   function resolvedItem(itemId, kind) {
     const type = TYPES[kind].type;
@@ -247,7 +264,7 @@
       const owned=profile?.life?.ownedCharacterIds || profile?.collection?.launcher?.itemIds || (isOwner()?shop?.owned?.roomCharacters:[]) || [];
       if(!owned.includes(itemId))return null;
     }
-    const bought = fromShop(itemId);
+    const bought = fromShop(itemId) || ownedProfileItems().find(item => item.id === itemId);
     if (isValidProduct(bought, type)) return bought;
     const resolved = profile?.roomItems || {};
     const list = kind === 'scene' ? [resolved.scene] : kind === 'furniture' ? resolved.placements : resolved.characters;
@@ -261,12 +278,14 @@
   }
   function roomItems(kind) {
     const owned = ownedIds(kind);
-    return catalog().filter(item => isValidProduct(item, TYPES[kind].type) && owned.has(item.id));
+    const byId = new Map();
+    for (const item of ownedProfileItems()) if (isValidProduct(item, TYPES[kind].type)) byId.set(item.id, item);
+    for (const item of catalog()) if (isValidProduct(item, TYPES[kind].type) && owned.has(item.id)) byId.set(item.id, item);
+    return [...byId.values()];
   }
   function sceneProducts() {
-    const items = isOwner() && shop ? roomItems('scene') :
-      (Array.isArray(profile?.collection?.launcher?.items) ? profile.collection.launcher.items : [])
-        .filter(item => item?.type === TYPES.scene.type && isValidProduct(item, TYPES.scene.type));
+    const items = isOwner() ? roomItems('scene') : ownedProfileItems()
+      .filter(item => item?.type === TYPES.scene.type && isValidProduct(item, TYPES.scene.type));
     return items.filter((item, index) => items.findIndex(other => other.id === item.id) === index);
   }
   function sceneName(id) {
@@ -277,31 +296,32 @@
     return Object.entries(draft.scenes || {}).find(([, scene]) =>
       [...scene.placements, ...scene.characters].some(entry => entry.itemId === itemId))?.[0] || '';
   }
+  function sceneChoiceIds() {
+    return [DEFAULT_SCENE, ...sceneProducts().map(item => item.id).filter(id => id !== DEFAULT_SCENE)];
+  }
   function renderSceneSwitcher() {
     const strip = $('roomSceneSwitcher');
-    strip.replaceChildren();
     strip.hidden = !profile;
     if (!profile) return;
     const room = activeRoom();
-    if (!isOwner()) {
-      strip.append(el('span', 'room-scene-current', `目前展示：${sceneName(room.sceneId)}`));
-      return;
-    }
-    strip.append(el('span', 'room-scene-label', editing ? '正在佈置' : '展示場景'));
-    for (const item of [{ id: DEFAULT_SCENE, name: '原始船艙' }, ...sceneProducts()]) {
-      const button = el('button', 'room-scene-choice', item.name);
-      button.type = 'button';
-      button.dataset.sceneId = item.id;
-      button.classList.toggle('is-active', room.sceneId === item.id);
-      button.setAttribute('aria-pressed', String(room.sceneId === item.id));
-      button.disabled = saving || switching || loading;
-      button.title = editing ? `編輯${item.name}的擺設` : `展示${item.name}給好友`;
-      button.onclick = () => switchScene(item.id);
-      strip.append(button);
+    const choices = sceneChoiceIds();
+    const index = Math.max(0, choices.indexOf(room.sceneId));
+    const suffix = isOwner() && choices.length > 1 ? `${index + 1} / ${choices.length} · ` : '';
+    $('roomSceneCurrent').textContent = `${suffix}${sceneName(room.sceneId)}`;
+    for (const [buttonId, offset] of [['roomScenePrev', -1], ['roomSceneNext', 1]]) {
+      const button = $(buttonId);
+      button.hidden = !isOwner() || choices.length < 2;
+      if (button.hidden) continue;
+      const target = choices[(index + offset + choices.length) % choices.length];
+      button.dataset.sceneId = target;
+      button.setAttribute('aria-label', `${offset < 0 ? '上一個' : '下一個'}場景：${sceneName(target)}`);
+      button.title = editing ? `佈置${sceneName(target)}` : `展示${sceneName(target)}`;
+      button.disabled = saving;
+      button.onclick = () => switchScene(target);
     }
   }
-  async function switchScene(id) {
-    if (!isOwner() || saving || switching || loading ||
+  function switchScene(id) {
+    if (!isOwner() || saving ||
         id !== DEFAULT_SCENE && !sceneProducts().some(item => item.id === id)) return;
     if (editing) {
       if (draft.sceneId === id) return;
@@ -314,31 +334,61 @@
       status(`正在佈置「${sceneName(id)}」；儲存後好友會看到這個場景。`);
       return;
     }
-    if (profile?.room?.sceneId === id) return;
+    if (activeRoom().sceneId === id) return;
+    displaySceneId = id;
+    clearTimeout(sceneSwitchTimer);
+    renderStage(); renderSceneSwitcher();
+    status(`正在展示「${sceneName(id)}」並同步到好友頁面…`);
+    sceneSwitchTimer = setTimeout(saveViewScene, 180);
+  }
+  async function saveViewScene() {
+    sceneSwitchTimer = 0;
+    if (switching || editing || saving || !isOwner() || !displaySceneId) return;
+    const id = displaySceneId;
+    if (profile?.room?.sceneId === id) {
+      displaySceneId = '';
+      renderSceneSwitcher();
+      return;
+    }
     const epoch = viewEpoch, owner = accountId, userId = profile.userId;
     const payload = copyRoom(profile.room);
     if (!payload.scenes[id]) payload.scenes[id] = blankScene();
     payload.sceneId = id;
     payload.placements = payload.scenes[id].placements;
     payload.characters = payload.scenes[id].characters;
-    switching = true; renderSceneSwitcher(); status(`正在切換到「${sceneName(id)}」…`);
+    switching = true; renderEditor();
+    let failed = false;
     try {
       const result = await api.saveLauncherRoom(payload);
       if (epoch !== viewEpoch || owner !== accountId || userId !== profile?.userId || !isOwner()) return;
       if (!result?.ok || !result.profile) {
+        failed = true;
         if (result?.error === 'revision_conflict' && result.profile) {
           profile = result.profile; draft = copyRoom(profile.room);
           window.LauncherProfileShop?.onRoomSaved?.(result.profile, result.shop);
-          render();
         }
+        displaySceneId = '';
+        render();
         status(result?.error === 'revision_conflict' ? '房間已在其他裝置修改，請重新選擇場景。' : '場景切換失敗，請稍後再試。', true);
         return;
       }
-      profile = result.profile; shop = result.shop || shop; draft = copyRoom(profile.room);
+      profile = result.profile; shop = result.shop || shop;
+      if (editing) draft.revision = profile.room.revision;
+      else draft = copyRoom(profile.room);
+      if (displaySceneId === id) displaySceneId = '';
       window.LauncherProfileShop?.onRoomSaved?.(result.profile, result.shop);
-      render(); status(`已展示「${sceneName(id)}」，好友參觀時會看到這個場景。`);
-    } catch { if (epoch === viewEpoch) status('場景切換失敗，請檢查連線後再試。', true); }
-    finally { switching = false; renderSceneSwitcher(); }
+      if (!editing) {
+        render();
+        if (!displaySceneId) status(`已展示「${sceneName(id)}」，好友參觀時會看到這個場景。`);
+      }
+    } catch {
+      failed = true;
+      if (epoch === viewEpoch) { displaySceneId = ''; render(); status('場景切換失敗，請檢查連線後再試。', true); }
+    } finally {
+      switching = false; renderEditor(); renderSceneSwitcher();
+      if (!failed && displaySceneId && !editing && epoch === viewEpoch)
+        sceneSwitchTimer = setTimeout(saveViewScene, 0);
+    }
   }
   function companionRecord(itemId) {
     return companionStats.get(itemId) || (Array.isArray(profile?.companions)
@@ -1245,10 +1295,13 @@
     const layout = layoutRoom(room);
     const scene = resolvedItem(room.sceneId, 'scene');
     const image = $('roomScene');
-    image.src = assetFor(scene) || SCENE_FALLBACK;
+    const sceneAsset = assetFor(scene) || SCENE_FALLBACK;
+    if (image.getAttribute('src') !== sceneAsset) image.src = sceneAsset;
     image.alt = scene?.name || '航海夥伴房間';
     image.onerror = () => { image.onerror = null; image.src = SCENE_FALLBACK; };
     const stage = $('roomStage');
+    window.OnePieceRoomAmbience?.setScene({ stage, sceneId: room.sceneId,
+      sceneKey: scene?.key || String(room.sceneId).replace(/^room-scene-/, '') });
     stage.classList.toggle('is-editing', editing);
     stage.setAttribute('aria-label', `${profile?.name || '航海者'}的航海夥伴房間${editing ? '，可拖曳，用方向鍵微調，按 R 旋轉家具' : ''}`);
     if (!stage.querySelector('.room-floor-grid')) {
@@ -1464,28 +1517,38 @@
   function renderEditor() {
     $('roomEditor').hidden = !editing;
     $('roomEditToggle').hidden = !isOwner();
-    $('roomEditToggle').textContent = editing ? '取消佈置' : loading ? '讀取商品…' : '佈置房間';
-    $('roomEditToggle').disabled = loading || saving || switching;
-    $('roomSave').disabled = saving || !dirty;
+    $('roomEditToggle').textContent = editing ? '取消佈置' : '佈置房間';
+    $('roomEditToggle').disabled = saving;
+    $('roomSave').disabled = saving || switching || !dirty;
     $('roomCancel').disabled = saving;
     if (editing) { renderEditorTabs(); renderEditorItems(); renderSelection(); }
   }
   function render() { renderStage(); renderSceneSwitcher(); renderEditor(); renderCompanionPanel(); }
   async function openEditor() {
-    if (!isOwner() || editing || loading) return;
+    if (!isOwner() || editing || saving) return;
     const openEpoch = viewEpoch;
     const openAccountId = accountId;
     const openUserId = profile.userId;
-    loading = true; renderEditor(); renderSceneSwitcher(); status('正在讀取你已購買的房間商品…');
+    const displayedRoom = activeRoom();
+    clearTimeout(sceneSwitchTimer); sceneSwitchTimer = 0;
+    displaySceneId = '';
+    closeCompanion();
+    draft = displayedRoom; editing = true; dirty = draft.sceneId !== profile.room.sceneId;
+    selected = null; tab = 'furniture';
+    status('選擇家具或夥伴，在圖面拖曳與轉向；用場景兩側箭頭佈置其他場景，最後儲存。');
+    render();
+    if (loading) return;
+    loading = true;
     try {
       const result = await api.getLauncherShop();
       if (openEpoch !== viewEpoch || openAccountId !== accountId || openUserId !== profile?.userId || !isOwner()) return;
-      if (!result?.ok || !result.shop) { status(COMPANION_ERRORS[result?.error] || '商品無法讀取，請稍後再試。', true); return; }
-      closeCompanion();
-      shop = result.shop; draft = copyRoom(profile?.room); editing = true; dirty = false; selected = null;
-      status('選擇場景、家具或夥伴；在圖面拖曳與轉向，最後儲存。'); render();
-    } catch { if (openEpoch === viewEpoch) status('目前無法連線，請稍後再試。', true); }
-    finally { loading = false; renderEditor(); renderSceneSwitcher(); }
+      if (result?.ok && result.shop) { shop = result.shop; if (editing) renderEditor(); }
+      else if (!ownedProfileItems().length && editing)
+        status(COMPANION_ERRORS[result?.error] || '商品目前無法讀取，請稍後再試。', true);
+    } catch {
+      if (openEpoch === viewEpoch && editing && !ownedProfileItems().length)
+        status('商品目前無法讀取，請檢查連線後再試。', true);
+    } finally { loading = false; }
   }
   function closeEditor() {
     if (saving) return;
@@ -1493,7 +1556,7 @@
     draft = copyRoom(profile?.room); status(''); render();
   }
   async function save() {
-    if (!isOwner() || !editing || !dirty || saving) return;
+    if (!isOwner() || !editing || !dirty || saving || switching) return;
     const saveEpoch = viewEpoch;
     const saveAccountId = accountId;
     const saveUserId = profile.userId;
@@ -1523,7 +1586,10 @@
     const nextPreview = context.preview === true;
     const changedOwner = nextAccount !== accountId || nextPreview !== preview || (profile?.userId || 0) !== (nextProfile?.userId || 0);
     const sameRoom = !changedOwner && JSON.stringify(profile?.room) === JSON.stringify(nextProfile?.room) && JSON.stringify(profile?.releasedCharacterIds) === JSON.stringify(nextProfile?.releasedCharacterIds);
-    if (changedOwner) viewEpoch++;
+    if (changedOwner) {
+      viewEpoch++;
+      clearTimeout(sceneSwitchTimer); sceneSwitchTimer = 0; displaySceneId = '';
+    }
     if (changedOwner) { closeCompanion(); companionStats.clear(); pairHistory.clear(); }
     profile = nextProfile || null; accountId = nextAccount; preview = nextPreview;
     if (changedOwner || !isOwner()) {

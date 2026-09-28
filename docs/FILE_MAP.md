@@ -1278,3 +1278,14 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 - `desktop/package.json`, `package-lock.json`, `config/launcher-announcements-v1.json`: 1.2.11 version and release-gated notice. `scripts/desktop_launcher_package_qa.js` preserves 1.2.10 HD source provenance and verifies the new package version.
 - `scripts/launcher_shop_purchase_gate_qa.js`, `launcher_shop_music_preview_qa.js`, `launcher_bgm_playlist_qa.js`, `desktop_distribution_gate_qa.js`: focused catalog, audio, playlist and desktop routing checks.
 - `.gitattributes`: keeps the frozen 1.2.8 acceptance receipt LF byte-for-byte for its existing source SHA gate on Windows checkouts.
+
+## 2026-09-28 Launcher 1.2.12 房間時令與切換檔案
+
+- `desktop/launcher-room-ambience.js/.css`：六場景本機時段、季節、每日場景天氣，室內海面／舷窗遮罩、雨雪、雷光與低動態處理。
+- `desktop/launcher.html`、`desktop/launcher-room.js/.css`：房間演出接線、海面左右半透明箭頭、立即預覽與循序儲存、已購場景佈置及 390px 入口。
+- `desktop/launcher-life-room.js`：「今日方針」選單接線移除；自動分工入口保留。
+- `desktop/package.json`、`desktop/package-lock.json`、`scripts/desktop_launcher_package_qa.js`：1.2.12 版號、演出檔案封裝與來源檢查。
+- `config/launcher-announcements-v1.json`、`scripts/launcher_1212_announcement_qa.js`：受啟動器版本門檻保護的 1.2.12 更新公告與 PGlite gate。
+- `tools/launcher-room/ambience-v1212/qa.js`、`scripts/launcher_scene_navigation_qa.js`：六景桌機／窄版天候畫面和隔離 PGlite＋Chromium 佈置、切換、重載、訪客驗證；報告在 `D:/Codex_QA/launcher-room-ambience-1.2.12/` 及 `D:/Codex_QA/launcher-scene-ambience-ui-1.2.12/scene-navigation/`。
+- `tools/launcher-room/ace-lean-v1212/`、`public/images/launcher_room/reserved_v2/ace/`：艾斯原稿、重製程式、逐格 manifest、17 張新版全身 WebP；`desktop/launcher-reserved-crew.js`、`desktop/main.js` 對應角色動作索引與 `opui://` 素材白名單。
+- `public/desktop/launcher-release-v1.json`、`public/desktop-download.html`：1.2.12 已簽署安裝檔清單與下載頁；封裝、R2 完整下載、正式來源同步及公開端讀回證據分別在 `D:/Codex_QA/launcher-room-weather-1.2.12-release-r2/` 與 `D:/Codex_QA/launcher-room-weather-1.2.12-release/`。

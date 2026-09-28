@@ -248,11 +248,7 @@
       $('roomLifeClock').textContent=schedule>=5&&schedule<11?'清晨':schedule>=11&&schedule<17?'日間':schedule>=17&&schedule<22?'傍晚':'夜間';
       const jobs=snapshot?.jobs||[];
       const summary=snapshot?.offlineSummary;
-      $('roomLifeSummary').textContent=summary?.completedJobs?`離開期間完成 ${summary.completedJobs} 件工作${summary.coins?` · 商城金幣 +${summary.coins}`:''}`:jobs.length?`${jobs.length} 位夥伴正在分工，其餘自由活動。`:ownedIds().length?'夥伴會依照心情、作息和今日方針自由活動。':'收藏第一位夥伴後，船上的日常就會開始。';
-      const select=$('roomLifeDirective');
-      if(!select.options.length)for(const [id,def] of Object.entries(data?.directives||{})){const option=document.createElement('option');option.value=id;option.textContent=def.name||def.label||id;select.append(option);}
-      if(snapshot?.directive)select.value=snapshot.directive;
-      select.disabled=!owner()||!active()||manualBusy||env.editing();
+      $('roomLifeSummary').textContent=summary?.completedJobs?`離開期間完成 ${summary.completedJobs} 件工作${summary.coins?` · 商城金幣 +${summary.coins}`:''}`:jobs.length?`${jobs.length} 位夥伴正在分工，其餘自由活動。`:ownedIds().length?'夥伴會依照心情與作息自由活動。':'收藏第一位夥伴後，船上的日常就會開始。';
       $('roomLifeAutoAssign').hidden=!owner();$('roomLifeAutoAssign').disabled=!active()||manualBusy||env.editing()||!ownedIds().length;
       renderPanel();
     }
@@ -342,9 +338,6 @@
       if(w&&reaction?.ok){env.speak(w,reaction.line,reaction.mood);env.setPose(w,reaction.pose||'wave');w.manualUntil=performance.now()+2800;}
       renderPanel();
     }
-    if($('roomLifeDirective'))$('roomLifeDirective').onchange=async event=>{
-      if(!controller)return;const selectedDirective=event.target.value,currentEpoch=epoch;manualBusy=true;renderUi();try{const response=await controller.setDirective(selectedDirective);if(currentEpoch===epoch&&!response?.ok)status(ERRORS[response?.error]||'方針未更新。',true);}finally{if(currentEpoch===epoch){manualBusy=false;renderUi();}}
-    };
     if($('roomLifeAutoAssign'))$('roomLifeAutoAssign').onclick=async()=>{
       if(!controller||manualBusy)return;const currentEpoch=epoch;manualBusy=true;renderUi();try{
         const result=await controller.autoAssign(),assigned=result.filter(value=>value.ok).length;
