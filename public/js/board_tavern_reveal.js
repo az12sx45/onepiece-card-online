@@ -2,7 +2,7 @@
   "use strict";
   if (window.BoardTavernReveal) return;
 
-  const COLORS = { S: "#ffe27a", A: "#dca4ff", B: "#9fc4ff", C: "#9fdaa9", D: "#cad2db", E: "#d7b786" };
+  const COLORS = { S: "#f6dd8e", A: "#f5cc65", B: "#bd9bff", C: "#8acfff", D: "#a0dcae", E: "#d3dbe0" };
   const ART = "images/board/tavern_recruit/cinematic_v1/";
   const seen = new WeakSet();
   const validators = new WeakMap();
@@ -71,9 +71,10 @@
     const valid = callbacks.valid || validators.get(result);
     const current = () => result?.isConnected && (!modal || modal.classList.contains("open")) && (!valid || valid());
     if (!current()) { callbacks.cancel?.(); return; }
-    const host = window.BoardTavernCrew?.get(result.dataset.tavernHost);
+    const hostId = reaction ? (callbacks.hostId || result.dataset.tavernHost) : "luffy";
+    const host = window.BoardTavernCrew?.get(hostId);
     if (!host || window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-        getComputedStyle(document.documentElement).getPropertyValue("--tavern-reveal-ready").trim() !== "2") {
+        getComputedStyle(document.documentElement).getPropertyValue("--tavern-reveal-ready").trim() !== "4") {
       complete();
       return;
     }
@@ -87,6 +88,7 @@
     const overlay = element("section", "tavern-reveal-overlay");
     Object.assign(overlay.dataset, { stage: reaction ? outcome : "invitation", grade, host: host.id, motion: performance.motion, spectator: spectator ? "1" : "0" });
     overlay.style.setProperty("--tavern-reveal-color", COLORS[grade]);
+    overlay.style.setProperty("--tavern-reveal-light", grade === "S" ? "#fff9e9" : COLORS[grade]);
     overlay.style.setProperty("--tavern-host-color", host.accent);
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
@@ -94,6 +96,8 @@
     const scene = element("div", "tavern-reveal-scene");
     const scenery = picture("tavern-reveal-backdrop", `${ART}doorway.webp`);
     scene.append(scenery);
+    const vfxLayer = reaction ? null : element("div", "tavern-reveal-vfx-layer");
+    if (vfxLayer) scene.append(vfxLayer);
     const images = [scenery];
     let portrait;
     if (!reaction) {
@@ -145,6 +149,7 @@
     const timers = [];
     let finished = false;
     let started = false;
+    let vfx = null;
     result.inert = true;
     buttons.forEach(({ node }) => { node.disabled = true; });
     const previousOverflow = document.body.style.overflow;
@@ -156,6 +161,7 @@
       finished = true;
       const mayComplete = reason !== "cancel" && current();
       timers.forEach(clearTimeout);
+      vfx?.dispose();
       document.removeEventListener("keydown", onKey, true);
       document.removeEventListener("click", guardClick, true);
       document.removeEventListener("focusin", guardFocus, true);
@@ -194,6 +200,7 @@
     const later = (delay, action) => timers.push(setTimeout(() => { if (!finished) action(); }, delay));
     function stage(value) {
       overlay.dataset.stage = value;
+      vfx?.stage(value);
       if (value === "glow") {
         try { window.BoardAudio?.playCue("draw"); } catch (_) {}
       }
@@ -230,15 +237,20 @@
       started = true;
       overlay.dataset.ready = "1";
       if (reaction) {
-        later(2600, () => finish());
+        later(3200, () => finish());
       } else {
-        [host.accept, host.decline].forEach(entry => { const image = new Image(); image.src = entry.image; image.decode().catch(() => {}); });
-        later(2300, () => stage("glow"));
-        later(3600, () => stage("silhouette"));
-        later(5000, () => stage("reveal"));
-        later(6700, () => {
-          if (spectator || result.dataset.tavernAuto === "1") finish();
-          else stage("choice");
+        later(2500, () => stage("crack"));
+        later(4300, () => stage("glow"));
+        later(6400, async () => {
+          if (!await portraitReady) { finish(); return; }
+          if (finished) return;
+          if (!current()) { finish("cancel", false); return; }
+          stage("silhouette");
+          later(1900, () => stage("reveal"));
+          later(4400, () => {
+            if (spectator || result.dataset.tavernAuto === "1") finish();
+            else stage("choice");
+          });
         });
       }
     }
@@ -248,17 +260,24 @@
     document.addEventListener("focusin", guardFocus, true);
     skip.addEventListener("click", () => finish("skip"));
     document.body.append(overlay);
+    if (vfxLayer && window.BoardTavernVfx?.create) {
+      try { vfx = window.BoardTavernVfx.create({ container: vfxLayer, grade }); } catch (_) {}
+    }
     active = { overlay, result, modal, current, finish };
     skip.focus({ preventScroll: true });
     const guard = () => { if (!current()) finish("cancel", false); else later(100, guard); };
     later(100, guard);
-    Promise.all([...images.map(img => img.decode()), ...(portrait ? [preparePortrait(portrait)] : [])]).then(begin, () => finish());
-    later(3000, () => { if (!started) finish(); });
+    const portraitReady = portrait ? Promise.race([
+      preparePortrait(portrait),
+      new Promise((_, reject) => later(60000, () => reject(new Error("Portrait preparation timed out")))),
+    ]).then(() => true, () => false) : Promise.resolve(true);
+    Promise.all(images.filter(img => img !== portrait).map(img => img.decode())).then(begin, () => finish());
+    later(60000, () => { if (!started) finish(); });
   }
   function scan() {
     if (document.querySelector(".tavern-nautical-modal")) loadMasks();
     if (active && !active.current()) active.finish("cancel", false);
-    document.querySelectorAll('.tavern-result-ui[data-tavern-reveal="v2"]').forEach(result => {
+    document.querySelectorAll('.tavern-result-ui[data-tavern-reveal="v4"]').forEach(result => {
       const backdrop = result.closest(".board-modal-backdrop");
       if (seen.has(result) || (backdrop && !backdrop.classList.contains("open"))) return;
       seen.add(result);
@@ -272,7 +291,7 @@
     scan();
   }
   window.BoardTavernReveal = Object.freeze({
-    version: "2", scan,
+    version: "4", scan,
     watch: (result, valid) => { if (result && typeof valid === "function") validators.set(result, valid); },
     respond: (result, outcome, callbacks) => present(result, outcome, callbacks),
   });

@@ -1,4 +1,4 @@
-:root { --tavern-reveal-ready: 2; }
+:root { --tavern-reveal-ready: 4; }
 .tavern-reveal-overlay {
   position: fixed; inset: 0; z-index: 2147483000; isolation: isolate;
   overflow: hidden; background: #100e12; color: #fff; font-family: inherit;
@@ -7,16 +7,28 @@
 .tavern-reveal-overlay *, .tavern-reveal-overlay *::before, .tavern-reveal-overlay *::after { box-sizing: border-box; }
 .tavern-reveal-scene { position: absolute; width: max(100vw, 150dvh); aspect-ratio: 3 / 2; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 .tavern-reveal-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; filter: brightness(.68); }
+.tavern-reveal-vfx-layer { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.tavern-reveal-vfx-layer canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; pointer-events: none; }
 .tavern-reveal-scene::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, #080912e6, transparent 35%, transparent 75%, #08091280); }
-.tavern-reveal-portal { position: absolute; left: 34.5%; top: 9%; width: 31.1%; height: 63.7%; perspective: 1000px; }
-.tavern-reveal-light { position: absolute; inset: 0; background: var(--tavern-reveal-color); opacity: 0; box-shadow: 0 0 50px 12px var(--tavern-reveal-color); transition: opacity 1s ease; }
-.tavern-reveal-light::after { content: ""; position: absolute; inset: 40% -70% -25%; background: var(--tavern-reveal-color); clip-path: polygon(34% 0, 66% 0, 100% 100%, 0 100%); opacity: .2; filter: blur(6px); }
+.tavern-reveal-portal { position: absolute; left: 34.5%; top: 9%; width: 31.1%; height: 63.7%; z-index: 2; perspective: 1000px; }
+.tavern-reveal-light { position: absolute; inset: 0; background: var(--tavern-reveal-light); opacity: 0; transition: opacity 1.2s ease, box-shadow 1.2s ease; }
+.tavern-reveal-light::before { content: ""; position: absolute; left: 44%; right: 44%; top: 3%; bottom: 3%; background: var(--tavern-reveal-light); mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent); opacity: 0; filter: blur(22px); mix-blend-mode: screen; transition: opacity 1s ease; }
+.tavern-reveal-light::after { content: ""; position: absolute; inset: 88% -58% -58%; background: var(--tavern-reveal-light); clip-path: polygon(49% 0, 51% 0, 100% 100%, 0 100%); mask-image: linear-gradient(to bottom, #000 0%, #000a 48%, transparent 100%); opacity: 0; filter: blur(13px); mix-blend-mode: screen; transition: opacity 1s ease; }
+.tavern-reveal-overlay:is([data-stage="glow"], [data-stage="silhouette"], [data-stage="reveal"]) .tavern-reveal-light::after { opacity: .28; }
+.tavern-reveal-overlay[data-grade="S"]:is([data-stage="crack"], [data-stage="glow"]) .tavern-reveal-doors::after { box-shadow: -13px 0 26px 9px #ff77b8, 13px 0 26px 9px #84d6ff, 0 0 42px 12px #f7e887; }
+.tavern-reveal-overlay[data-vfx-ready="1"] .tavern-reveal-light,
+.tavern-reveal-overlay[data-vfx-ready="1"] .tavern-reveal-doors::after { opacity: 0 !important; }
+.tavern-reveal-overlay[data-vfx-ready="1"] .tavern-reveal-door::after { opacity: .18 !important; }
 .tavern-reveal-doors { position: absolute; inset: 0; display: flex; perspective: 1200px; }
-.tavern-reveal-door { position: relative; width: 50%; height: 100%; overflow: hidden; transition: transform 1.15s cubic-bezier(.22,.65,.2,1), opacity .65s ease; backface-visibility: hidden; }
+.tavern-reveal-doors::after { content: ""; position: absolute; left: 50%; top: 1%; bottom: 1%; width: 0; transform: translateX(-50%); pointer-events: none; opacity: 0; background: var(--tavern-reveal-light); filter: blur(3px); box-shadow: 0 0 22px 8px var(--tavern-reveal-color), 0 0 55px 16px var(--tavern-reveal-color); transition: width .9s ease, opacity .45s ease; }
+.tavern-reveal-door { position: relative; width: 50%; height: 100%; overflow: hidden; transition: transform .95s cubic-bezier(.22,.65,.2,1), opacity .8s ease; backface-visibility: hidden; }
 .tavern-reveal-door.left { transform-origin: left center; }
 .tavern-reveal-door.right { transform-origin: right center; }
 .tavern-reveal-door img { position: absolute; width: 226%; height: 114%; top: -6.3%; left: -12.8%; max-width: none; object-fit: fill; }
 .tavern-reveal-door.right img { left: -112.8%; }
+.tavern-reveal-door::after { content: ""; position: absolute; top: 0; bottom: 0; width: 15%; background: var(--tavern-reveal-light); mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent); filter: blur(9px); mix-blend-mode: screen; opacity: 0; pointer-events: none; transition: opacity .7s ease; }
+.tavern-reveal-door.left::after { right: -4%; }
+.tavern-reveal-door.right::after { left: -4%; }
 .tavern-reveal-character { position: absolute; width: 150%; max-width: 88vw; height: 105%; left: 50%; bottom: 0; object-fit: contain; filter: brightness(0); opacity: 0; transform: translateX(-50%) scale(.85); transition: opacity .75s ease, transform 1.4s ease, filter .9s ease; }
 .tavern-reveal-host-frame { position: absolute; left: 5%; bottom: 5%; width: 46%; height: 86%; z-index: 2; opacity: 0; transition: opacity .4s ease, transform .6s ease; }
 .tavern-reveal-host { width: 100%; height: 100%; object-fit: contain; object-position: bottom; filter: drop-shadow(0 12px 22px #0009); transform-origin: 50% 85%; }
@@ -49,10 +61,23 @@
 .tavern-reveal-skip { position: absolute; right: max(24px, env(safe-area-inset-right)); top: max(22px, env(safe-area-inset-top)); z-index: 5; min-height: 44px; padding: 9px 14px; background: #111018b3; color: #fff; border: 1px solid #ffffff70; border-radius: 4px; font-family: inherit; font-size: 14px; font-weight: 600; line-height: 1.4; cursor: pointer; }
 .tavern-reveal-skip:hover { background: #302b35; }
 .tavern-reveal-skip:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
-.tavern-reveal-overlay[data-stage="glow"] .tavern-reveal-light { opacity: .75; }
+.tavern-reveal-overlay[data-stage="crack"] .tavern-reveal-light { opacity: .94; }
+.tavern-reveal-overlay[data-stage="crack"] .tavern-reveal-light::before { opacity: .48; }
+.tavern-reveal-overlay[data-stage="crack"] .tavern-reveal-light::after { opacity: .55; }
+.tavern-reveal-overlay[data-stage="crack"] .tavern-reveal-doors::after { width: 3.5%; opacity: 1; }
+.tavern-reveal-overlay[data-stage="crack"] .tavern-reveal-door::after { opacity: .72; }
+.tavern-reveal-overlay[data-stage="crack"] .tavern-reveal-door.left { transform: rotateY(-19deg); }
+.tavern-reveal-overlay[data-stage="crack"] .tavern-reveal-door.right { transform: rotateY(19deg); }
+.tavern-reveal-overlay[data-stage="glow"] .tavern-reveal-light { opacity: .85; }
+.tavern-reveal-overlay[data-stage="glow"] .tavern-reveal-light::before { opacity: .55; }
+.tavern-reveal-overlay[data-stage="glow"] .tavern-reveal-doors::after { width: 6%; opacity: .8; }
+.tavern-reveal-overlay[data-stage="glow"] .tavern-reveal-door::after { opacity: .75; }
+.tavern-reveal-overlay[data-stage="glow"] .tavern-reveal-door.left { transform: rotateY(-40deg); }
+.tavern-reveal-overlay[data-stage="glow"] .tavern-reveal-door.right { transform: rotateY(40deg); }
 .tavern-reveal-overlay:not(:is([data-stage="invitation"], [data-stage="accept"], [data-stage="decline"])) .tavern-reveal-host-frame { opacity: 0; transform: translateX(-6%); pointer-events: none; }
 .tavern-reveal-overlay:not(:is([data-stage="invitation"], [data-stage="accept"], [data-stage="decline"])) .tavern-reveal-invitation { opacity: 0; transform: translateY(10px); pointer-events: none; }
 .tavern-reveal-overlay[data-stage="silhouette"] .tavern-reveal-light, .tavern-reveal-overlay[data-stage="reveal"] .tavern-reveal-light { opacity: .9; }
+.tavern-reveal-overlay:is([data-stage="silhouette"], [data-stage="reveal"]) .tavern-reveal-doors::after { opacity: 0; }
 .tavern-reveal-overlay[data-stage="silhouette"] .tavern-reveal-door.left, .tavern-reveal-overlay[data-stage="reveal"] .tavern-reveal-door.left { transform: rotateY(-105deg); opacity: .35; }
 .tavern-reveal-overlay[data-stage="silhouette"] .tavern-reveal-door.right, .tavern-reveal-overlay[data-stage="reveal"] .tavern-reveal-door.right { transform: rotateY(105deg); opacity: .35; }
 .tavern-reveal-overlay[data-stage="silhouette"] .tavern-reveal-character { opacity: 1; transform: translateX(-50%) scale(.95); }
@@ -61,6 +86,7 @@
 .tavern-reveal-overlay[data-stage="choice"] .tavern-reveal-character { height: 88%; bottom: 17%; opacity: 1; transform: translateX(-50%); filter: brightness(1) drop-shadow(0 0 15px var(--tavern-reveal-color)); }
 .tavern-reveal-overlay[data-stage="choice"] .tavern-reveal-door { opacity: 0; }
 .tavern-reveal-overlay[data-stage="choice"] .tavern-reveal-light { opacity: .25; }
+.tavern-reveal-overlay[data-grade="S"] .tavern-reveal-rank { color: #fff7d2; text-shadow: -2px 0 7px #ff7ab7, 2px 0 7px #83d4ff, 0 1px 2px #120d17; }
 .tavern-reveal-overlay[data-stage="choice"] .tavern-reveal-caption { bottom: max(4%, env(safe-area-inset-bottom)); }
 .tavern-reveal-overlay[data-host="chopper"] .tavern-reveal-host-frame { height: 66%; bottom: 8%; }
 .tavern-reveal-overlay:is([data-motion="eager"], [data-motion="welcome"], [data-motion="bright"]) { --host-motion: tavern-host-welcome; }

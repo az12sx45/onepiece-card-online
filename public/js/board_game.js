@@ -43008,7 +43008,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       </div>
     `;
     return `
-      <section class="tavern-result-ui${options.fullCrew ? " is-full-crew" : ""}" aria-labelledby="tavernResultTitle"${options.cinematic ? ` data-tavern-reveal="v2" data-grade="${escapeModalText(grade)}" data-tavern-host="${escapeModalText(options.tavernHost || "luffy")}" data-tavern-outcome="${escapeModalText(options.tavernOutcome || "invite")}" data-tavern-spectator="${options.spectator ? "1" : "0"}" data-tavern-auto="${options.tavernAuto ? "1" : "0"}"` : ""}>
+      <section class="tavern-result-ui${options.fullCrew ? " is-full-crew" : ""}" aria-labelledby="tavernResultTitle"${options.cinematic ? ` data-tavern-reveal="v4" data-grade="${escapeModalText(grade)}" data-tavern-host="${escapeModalText(options.tavernHost || "luffy")}" data-tavern-outcome="${escapeModalText(options.tavernOutcome || "invite")}" data-tavern-spectator="${options.spectator ? "1" : "0"}" data-tavern-auto="${options.tavernAuto ? "1" : "0"}"` : ""}>
         <img class="tavern-result-panel-frame" src="${tavernUiAsset("tavern_recruit_result_panel_frame.webp")}" alt="" aria-hidden="true">
         <header class="tavern-result-heading"><h3 id="tavernResultTitle">${escapeModalText(options.title || "酒館招募結果")}</h3></header>
         <div class="tavern-result-subtitle">${escapeModalText(options.subtitle || "")}</div>
@@ -43628,7 +43628,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function openRecruitResultModal(player, island, recruit, rollMeta = {}) {
     const cinematic = rollMeta.tavernReveal === true;
-    const tavernHost = cinematic ? (window.BoardTavernCrew?.choose() || "luffy") : "";
+    const tavernHost = cinematic ? "luffy" : "";
     const presentation = { cinematic, tavernHost, tavernAuto: isCpuPlayer(player) || devObserver.running };
     const gameAtOpen = state.gameState;
     const roundAtOpen = gameAtOpen.round;
@@ -43660,16 +43660,17 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       if (!cinematic) { action(); return; }
       if (decisionPending || decisionComplete || !decisionIsCurrent()) return;
       decisionPending = true;
+      const reactionHost = window.BoardTavernCrew?.chooseResponder?.(recruit.id) || (recruit.id === "zoro" ? "nami" : "zoro");
       const complete = () => {
         if (decisionComplete || !decisionIsCurrent()) { decisionPending = false; return; }
         decisionComplete = true;
         action();
       };
-      emitSpectatorModalEvent("tavern-result", player, { ...spectatorDetail, tavernOutcome: outcome }, { clearDelay: 6000 });
+      emitSpectatorModalEvent("tavern-result", player, { ...spectatorDetail, tavernHost: reactionHost, tavernOutcome: outcome }, { clearDelay: 10000 });
       if (!window.BoardTavernReveal?.respond) { complete(); return; }
       try {
         window.BoardTavernReveal.respond(resultNode, outcome, {
-          complete, valid: decisionIsCurrent, cancel: () => { decisionPending = false; },
+          hostId: reactionHost, complete, valid: decisionIsCurrent, cancel: () => { decisionPending = false; },
         });
       } catch (_) { complete(); }
     }

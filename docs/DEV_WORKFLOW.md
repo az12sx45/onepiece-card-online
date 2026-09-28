@@ -1,5 +1,11 @@
 # Dev Workflow
 
+## 2026-09-28 酒館魯夫邀請、夥伴回應與 WebGL 抽卡特效（開發中）
+
+依玩家修正，魯夫固定說「你真有趣，要不要加入我們？」；確定加入／拒絕後才從其餘九人抽一位說對應歡迎／吐槽，滿隊於實際替換選定後才抽。先定稿 18 句短台詞與每句表情姿勢，製作 crew_v3 真透明圖；門新增微開漏光階段，S 白光核心與虹彩折射、A 金、B 紫、C 藍、D 綠、E 銀白，邀請至選擇的演出約 10.8 秒。新範圍為六個 Board 程式、crew_v3 新圖、Pixi 來源／依賴與獨立 builder/QA；正式 D 樹既有並行工作保持。最初以 main `4ca49f945`（launcher 1.2.9）為整合基底，`npm start` 18931／health 200；此為早期進度，不代表本次新特效的驗收或部署。劇本與測試界線見 `BOARD_TAVERN_CAPTAIN_20260928.md`。
+
+玩家新增的 VFX 規格進一步要求白光核心、先白藍紫金後假金升彩、金粒內縮與短爆發。實作擴充 `src/board_tavern_vfx.mjs`、本機 bundle/build、`package.json`/lock、Board 程式 allowlist、既有揭曉 JS/CSS/HTML 與 strict release/QA；九人反應、2,500 貝里及 Board 同步權威不變。PixiJS 8.21.0、pixi-filters 6.1.5、GSAP 3.15.0、esbuild 0.28.2 使用固定版本；粒子採原生池，不安裝與 PixiJS 8 peer 不相容的 emitter。此段是開發紀錄，尚不代表新特效已部署。
+
 ## 2026-09-28 草帽十人招募分歧演出
 
 最終已部署：發布提交 `5ce0b822f39a98950c6f9c696cd8ad9778bf33b2`，台灣時間 05:40:54 公開 runtime 切換 `package-1c453fcf83416d97`，05:43:06 正式站 60/60 通過；13 個變更資源完整公開 GET／SHA／CORS 及 R2 13/13 通過。保留 main 並行 launcher 1.2.8，公開發布 JSON／下載頁與提交 bytes 一致；合併公告 revision 5／六篇，隔離 gate 40/40 通過。新增 `BOARD_TAVERN_CREW_RELEASE_QA_20260928.json` 保存完整上線證據，主報告同步更新；以下本機候選敘述保留為執行歷史。收尾只提交文件並使用 `[skip render]`。

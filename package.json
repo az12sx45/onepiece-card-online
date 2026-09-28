@@ -8,17 +8,22 @@
     "dev": "nodemon server/index.js",
     "build:card-css": "tailwindcss -i ./styles/card-tailwind.input.css -o ./public/css/card-tailwind-v1.min.css --content ./public/game.html --minify",
     "build:card-entry-css": "tailwindcss -i ./styles/card-tailwind.input.css -o ./public/css/card-entry-tailwind-v1.min.css --content ./public/start.html,./public/tutorial.html --minify",
+    "build:tavern-vfx": "node scripts/build_board_tavern_vfx.js",
     "qa:card-performance": "node scripts/card_runtime_performance_qa.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "chess.js": "1.4.0",
     "express": "^4.19.2",
+    "gsap": "3.15.0",
     "pg": "^8.17.2",
+    "pixi-filters": "6.1.5",
+    "pixi.js": "8.21.0",
     "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "@babel/standalone": "7.24.7",
+    "esbuild": "0.28.2",
     "jsdom": "^29.0.2",
     "nodemon": "^3.1.0",
     "react": "18.3.1",

@@ -1,5 +1,16 @@
 # File Map
 
+## 2026-09-28 酒館固定魯夫邀請與抽卡特效（開發中）
+
+- `public/js/board_tavern_crew.js`：魯夫固定邀請、九位夥伴各兩句台詞／圖及獨立 response RNG。
+- `src/board_tavern_vfx.mjs`、`scripts/build_board_tavern_vfx.js`、`public/js/board_tavern_vfx.bundle.js`：PixiJS WebGL 特效來源、固定版本離線打包及玩家程式，負責門光、粒子、投影和短暫濾鏡。
+- `public/js/board_tavern_reveal.js`、`public/css/board_tavern_reveal.css`：v4 畫面接線、雙門、剪影、WebGL 失敗時的備援光、放慢揭曉與選後夥伴反應。
+- `public/js/board_game.js`、`public/board_game.html`：邀請及真決策接線、旁觀同一回應者、v4 資源載入。
+- `public/images/board/tavern_recruit/crew_v3/`：依台詞製作的九人加入／拒絕透明反應圖，不覆蓋舊素材。
+- `scripts/build_board_tavern_captain_release.js`、`scripts/board_tavern_captain_release_builder_qa.js`：從目前正式 Board 套件建立受限候選、隔離邊界驗證。
+- `scripts/board_tavern_vfx_qa.js`、`scripts/board_tavern_vfx_sandbox_server.js`、`scripts/board_tavern_vfx_sandbox.html`：瀏覽器 VFX 回歸及只在本機的開發調整介面，不在玩家封包。
+- `docs/BOARD_TAVERN_CAPTAIN_20260928.md`：劇本、畫圖指示、流程與後續實測／發布紀錄。
+
 ## 2026-09-28 草帽十人酒館演出
 
 - `public/js/board_tavern_crew.js`：十人角色資料、三階段台詞／圖／動作、獨立呈現 RNG。
