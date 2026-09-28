@@ -36,4 +36,10 @@
 
 `D:\Codex_QA\board-tavern-vfx-20260928\result.json` 在最新 bundle 上通過 WebGL／真雙門合成 59/59；實際 S 門縫取樣白光 7,164 像素，並有粉 546、青 1,329、藍 367、紫 406 像素，A 金光 11,840、E 金光 0，顯示虹彩從門內漏出且階級可區分。`D:\Codex_QA\board-tavern-captain-20260928\v4-stage-final-prisms\result.json` 在同一輪通過階段／響應式 78/78：門板先微開、光落在門縫和地板而非外側門框，再進剪影、真容與選擇；S 級棱光收在開啟中的門縫，不是固定彩虹燈帶。兩份結果皆為本機 Chromium 截圖及像素檢查，不能推出實體裝置穩定 60 FPS。離線 bundle 已補足隨包相依套件授權文字並重建；正式候選經隔離 builder gate 17/17。
 
-本機已從正式前版建立並提升受限候選 `package-3155f473aa76c19f`（6 個變更程式、18 張新圖、Board 共 6,396 檔），manifest SHA-256 `5d704e4b4e95cf11ca677480e9edabc9f4a8c3367345fd10f5b78f6782fd6c38`；公告 revision 8 只追加第九則，隔離 PGlite gate 20/20。R2 不可變發布上傳 24 個新物件、略過 6,046 個既有物件；`D:\Codex_QA\board-tavern-captain-20260928\r2-final\r2-verify.json` 對新資源 24/24 公開 GET／SHA 回讀通過。正式 D 樹已定點同步 v4 與本地發布資料，保留其他未提交修改；D 樹未安裝 `express`，故無獨立 HTTP 驗收。公開 runtime 切換尚未核對，不得把本機提升或前一版 `package-1c453fcf83416d97` 當成本次公開部署完成。
+本機已從正式前版建立並提升受限候選 `package-3155f473aa76c19f`（6 個變更程式、18 張新圖、Board 共 6,396 檔），manifest SHA-256 `5d704e4b4e95cf11ca677480e9edabc9f4a8c3367345fd10f5b78f6782fd6c38`；公告 revision 8 只追加第九則，隔離 PGlite gate 20/20。R2 不可變發布上傳 24 個新物件、略過 6,046 個既有物件；`D:\Codex_QA\board-tavern-captain-20260928\r2-final\r2-verify.json` 對新資源 24/24 公開 GET／SHA 回讀通過。正式 D 樹已定點同步 v4 與發布資料，保留其他未提交修改；D 樹未安裝 `express`，故無獨立 HTTP 驗收。此段是公開 runtime 切換前的進度，最終結果見下節。
+
+## 公開部署驗證
+
+2026-09-28 11:58 UTC，正式 [Render 站](https://onepiece-card-online.onrender.com) 的 Board runtime 回報 `package-3155f473aa76c19f`，公開 manifest SHA-256 為 `5d704e4b4e95cf11ca677480e9edabc9f4a8c3367345fd10f5b78f6782fd6c38`。`D:\Codex_QA\board-tavern-captain-20260928\public-final\result.json` 109/109 通過：Electron UA 下 57 個 Board 程式逐檔 GET／SHA、24 個變更 CAS 資源 GET／SHA／CORS、18 張角色圖別名，以及 catalog／manifest／runtime 身分；一般瀏覽器直接開遊戲頁仍按桌面版規則 302 到下載頁。Card／Chess 的公開 releaseId 仍是 `package-ca251af687e50daf`／`package-d37cd9a585600687`。本次確有公開端點與資源完整性驗證，不以本機候選冒充部署。
+
+上述仍是自動化與 HTTP 驗收，不等於人手試玩、實體手機或玩家端穩定 60 FPS，也不等於遠端多人玩家實測；公告隔離 gate 不證明個別玩家已看到通知。

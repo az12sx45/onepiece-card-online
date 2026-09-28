@@ -1,12 +1,14 @@
 # Dev Workflow
 
-## 2026-09-28 酒館魯夫邀請、夥伴回應與 WebGL 抽卡特效（開發中）
+## 2026-09-28 酒館魯夫邀請、夥伴回應與 WebGL 抽卡特效（已部署）
 
 依玩家修正，魯夫固定說「你真有趣，要不要加入我們？」；確定加入／拒絕後才從其餘九人抽一位說對應歡迎／吐槽，滿隊於實際替換選定後才抽。先定稿 18 句短台詞與每句表情姿勢，製作 crew_v3 真透明圖；門新增微開漏光階段，S 白光核心與虹彩折射、A 金、B 紫、C 藍、D 綠、E 銀白，邀請至選擇的演出約 10.8 秒。新範圍為六個 Board 程式、crew_v3 新圖、Pixi 來源／依賴與獨立 builder/QA；正式 D 樹既有並行工作保持。最初以 main `4ca49f945`（launcher 1.2.9）為整合基底，`npm start` 18931／health 200；此為早期進度，不代表本次新特效的驗收或部署。劇本與測試界線見 `BOARD_TAVERN_CAPTAIN_20260928.md`。
 
-玩家新增的 VFX 規格進一步要求白光核心、先白藍紫金後假金升彩、金粒內縮與短爆發。實作擴充 `src/board_tavern_vfx.mjs`、本機 bundle/build、`package.json`/lock、Board 程式 allowlist、既有揭曉 JS/CSS/HTML 與 strict release/QA；九人反應、2,500 貝里及 Board 同步權威不變。PixiJS 8.21.0、pixi-filters 6.1.5、GSAP 3.15.0、esbuild 0.28.2 使用固定版本；粒子採原生池，不安裝與 PixiJS 8 peer 不相容的 emitter。此段是開發紀錄，尚不代表新特效已部署。
+玩家新增的 VFX 規格進一步要求白光核心、先白藍紫金後假金升彩、金粒內縮與短爆發。實作擴充 `src/board_tavern_vfx.mjs`、本機 bundle/build、`package.json`/lock、Board 程式 allowlist、既有揭曉 JS/CSS/HTML 與 strict release/QA；九人反應、2,500 貝里及 Board 同步權威不變。PixiJS 8.21.0、pixi-filters 6.1.5、GSAP 3.15.0、esbuild 0.28.2 使用固定版本；粒子採原生池，不安裝與 PixiJS 8 peer 不相容的 emitter。此段保留開發階段紀錄，最終部署證據見下方。
 
-本機 gate：`D:\Codex_QA\board-tavern-captain-20260928\v4-full-regression\result.json` 216/216、`v4-socket-regression\result.json` 31/31；`D:\Codex_QA\board-tavern-vfx-20260928\result.json` 59/59、`v4-stage-final-prisms\result.json` 78/78，後兩者涵蓋最新 S 虹彩門縫與 S–E 門光的真雙門截圖／像素及桌機、手機版面。嚴格候選 `package-3155f473aa76c19f` 已在本機提升，公告隔離 gate 20/20；R2 不可變發布 `uploaded=24`、`skipped=6046`，`D:\Codex_QA\board-tavern-captain-20260928\r2-final\r2-verify.json` 回讀新資源 24/24 SHA 通過。正式 D 樹僅定點同步本次檔案並保留並行修改，D 樹 `npm start` 因既有依賴 `express` 未安裝而無法獨立驗證 HTTP。公開 runtime 尚未驗證切換；本機自動 QA 不等於實體裝置穩定 60 FPS、人手試玩或遠端多人實玩。具體範圍和測試界線見 `BOARD_TAVERN_CAPTAIN_20260928.md`。
+本機 gate：`D:\Codex_QA\board-tavern-captain-20260928\v4-full-regression\result.json` 216/216、`v4-socket-regression\result.json` 31/31；`D:\Codex_QA\board-tavern-vfx-20260928\result.json` 59/59、`v4-stage-final-prisms\result.json` 78/78，後兩者涵蓋最新 S 虹彩門縫與 S–E 門光的真雙門截圖／像素及桌機、手機版面。嚴格候選 `package-3155f473aa76c19f` 已在本機提升，公告隔離 gate 20/20；R2 不可變發布 `uploaded=24`、`skipped=6046`，`D:\Codex_QA\board-tavern-captain-20260928\r2-final\r2-verify.json` 回讀新資源 24/24 SHA 通過。正式 D 樹僅定點同步本次檔案並保留並行修改，D 樹 `npm start` 因既有依賴 `express` 未安裝而無法獨立驗證 HTTP。這是公開核驗前的本機紀錄；最終部署結果見下一段。
+
+公開交付：2026-09-28 11:58 UTC，Render runtime 已切至 `package-3155f473aa76c19f`，manifest SHA-256 `5d704e4b4e95cf11ca677480e9edabc9f4a8c3367345fd10f5b78f6782fd6c38`。新增 `scripts/board_tavern_captain_public_qa.js`；`D:\Codex_QA\board-tavern-captain-20260928\public-final\result.json` 109/109 通過，包括 57 個 Board 程式 Electron UA GET／SHA、24 個變更 CAS 資源 GET／SHA／CORS、18 張新圖別名、公開 catalog／runtime／manifest，及一般瀏覽器 302 下載頁；Card／Chess releaseId 不變。這是自動化公開完整性證據，不是人手試玩、實體手機 60 FPS 或遠端多人玩家驗收。細節見 `BOARD_TAVERN_CAPTAIN_20260928.md`。
 
 ## 2026-09-28 草帽十人招募分歧演出
 
