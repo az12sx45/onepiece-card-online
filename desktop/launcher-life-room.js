@@ -109,8 +109,13 @@
       },
       undock(key){const w=walker(key);if(!w)return false;if(!w.dockOrigin)return true;w.lifeClip=null;w.mode='life-undock';return false;},
       clip:setClip,
+      supportsClip:(key,clip)=>root.OnePieceLifeActions?.supported(key,clip)===true,
+      clipFailed(key,clip,direction){
+        const definition=root.OnePieceLifeActions?.describe(clip,direction||walker(key)?.motion?.direction||'south');
+        return !!definition&&root.OnePieceLifeActions.preload(key,clip,definition.direction)?.failed===true;
+      },
       hasClip(key,clip,direction){
-        const definition=root.OnePieceLifeActions?.describe(clip,direction||'south');
+        const definition=root.OnePieceLifeActions?.describe(clip,direction||walker(key)?.motion?.direction||'south');
         if(!definition)return ['idle','wave','listen','talk_happy','talk_annoyed','surprised'].includes(clip);
         return root.OnePieceLifeActions.preload(key,clip,definition.direction)?.ready===true;
       },
@@ -211,13 +216,6 @@
       ensureController();
       if(controller&&env.canAnimate()){controller.rebind(adapter);controller.resume();}
       hideAwaitingArrivals();
-      for(const w of env.walkers()) {
-        for(const action of Object.keys(root.OnePieceLifeActions?.CLIPS||{})) {
-          if(!root.OnePieceLifeActions.supported(w.key,action))continue;
-          const definition=root.OnePieceLifeActions.CLIPS[action];
-          for(const direction of definition.direction?[definition.direction]:['east','west','north','south'])root.OnePieceLifeActions.preload(w.key,action,direction);
-        }
-      }
       renderUi();
     }
     function tick(now) {

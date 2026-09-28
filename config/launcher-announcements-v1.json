@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 5,
+  "revision": 6,
   "announcements": [
     {
       "id": "board-tavern-crew-20260928-1c453fcf83416d97",
@@ -137,6 +137,26 @@
       "requiredRelease": {
         "kind": "launcher",
         "version": "1.2.8"
+      }
+    },
+    {
+      "id": "launcher-1.2.9-loading-optimization",
+      "status": "published",
+      "publishedAt": "2026-09-28T03:18:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.9",
+      "title": "啟動器載入速度改善｜1.2.9",
+      "summary": "首頁素材縮小，開啟生活基地時不再一次載入所有角色動作；帳號驗證時可先看到啟動器畫面。",
+      "body": [
+        "20 張較大的首頁圖片改用無損 WebP 封裝，保留原 PNG；畫面內容與尺寸不變，安裝包中的這批素材縮小約 11.2 MiB。",
+        "生活基地改為需要時才載入角色動作與方向圖，不再在進房時一次解碼全部動作，減少首次進房等待。",
+        "啟動器會先顯示本機狀態並在背景核對帳號及遊戲快取；驗證完成前仍會限制登入操作與啟動遊戲，避免顯示過期資訊。",
+        "本次不調整三款桌遊規則、角色上架、商城價格、金幣或存檔。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.9"
       }
     }
   ]

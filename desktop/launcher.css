@@ -45,7 +45,7 @@ button { color: inherit; }
 }
 
 .app-backdrop {
-  background: #081522 url("opui://launcher/images/desktop_launcher/desktop_launcher_cabin_bg_v1.png") center / cover no-repeat;
+  background: #081522 url("opui://launcher/images/desktop_launcher/desktop_launcher_cabin_bg_v1.webp") center / cover no-repeat;
   transform: scale(1.015);
 }
 

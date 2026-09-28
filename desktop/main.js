@@ -131,14 +131,20 @@ let authService = null;
 let socialService = null;
 let updateCheckAt = 0;
 async function checkRemoteUpdates() {
-  if (!assetStore || !launcherUpdateService || Date.now() - updateCheckAt < 60000) return;
+  if (!assetReady || !assetStore || !launcherUpdateService || Date.now() - updateCheckAt < 60000) return;
   updateCheckAt = Date.now();
   await Promise.allSettled([assetStore.refreshRemoteCatalog(), launcherUpdateService.checkForUpdates()]);
 }
 let assetStore = null;
 let launcherUpdateService = null;
 let authenticated = false;
+let restoringSession = false;
+let assetReady = false;
+let assetStartupError = '';
+let assetReadyPromise = null;
+let servicesReadyPromise = null;
 let readyPromise = null;
+let stateRevision = 0;
 let smokeFinished = false;
 const gameWindows = new Map();
 const gameLaunchPromises = new Map();
@@ -531,10 +537,23 @@ async function chooseDefaultCacheRoot() {
 }
 
 async function composeState(assetSnapshot) {
-  const assets = assetSnapshot || await assetStore.getState();
+  const assets = assetReady
+    ? (assetSnapshot || await assetStore.getState())
+    : {
+      cacheRoot: assetStore?.cacheRoot || authService?.state.cacheRoot || '',
+      freeBytes: null,
+      catalogSource: 'bundled',
+      games: Object.fromEntries([...ALLOWED_GAME_IDS].map((gameId) => [gameId, {
+        status: assetStartupError ? 'startup-error' : 'checking',
+        message: assetStartupError || '正在檢查本機遊戲檔案…',
+        hasInstalled: false
+      }]))
+    };
   const previewMode = authService?.previewMode === true || SMOKE_MODE;
   return {
+    stateRevision: ++stateRevision,
     authenticated,
+    restoringSession,
     previewMode,
     profile: authenticated || previewMode ? (authService.accountSummary() || { name: '羅盤測試員', avatar: 8, title: 'LAUNCHER PREVIEW' }) : null,
     preferences: authService?.getPreferences() || {
@@ -572,17 +591,18 @@ function publicError(error, fallback = '操作失敗，請稍後再試。') {
 }
 
 function registerLauncherIpc() {
-  const guarded = (handler) => async (event, ...args) => {
+  const guarded = (handler, { localOnly = false, requiresAssets = false } = {}) => async (event, ...args) => {
     if (!isLauncherSender(event)) return { ok: false, error: '拒絕未授權的啟動器要求。' };
     try {
-      await readyPromise;
+      await (localOnly ? servicesReadyPromise : readyPromise);
+      if (requiresAssets) await assetReadyPromise;
       return await handler(event, ...args);
     } catch (error) {
       return { ok: false, error: publicError(error) };
     }
   };
 
-  ipcMain.handle('launcher:get-state', guarded(async () => composeState()));
+  ipcMain.handle('launcher:get-state', guarded(async () => composeState(), { localOnly: true }));
   ipcMain.handle('launcher:set-display-name', guarded(async (_event, name) => {
     if (!authenticated) return { ok: false, error: 'not authenticated' };
     const result = await authService.setDisplayName(name);
@@ -731,16 +751,16 @@ function registerLauncherIpc() {
     const state = launcherUpdateService.getState();
     await launcherUpdateService.installReadyUpdate();
     return { ok: true, state: { ...state, status: 'applying', error: '' } };
-  }));
+  }, { requiresAssets: true }));
   ipcMain.handle('launcher:install-game', guarded(async (_event, gameId) => {
     if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
     if (!ALLOWED_GAME_IDS.has(gameId)) return { ok: false, error: '此遊戲尚未開放下載。' };
     return assetStore.installGame(gameId);
-  }));
+  }, { requiresAssets: true }));
   ipcMain.handle('launcher:cancel-install', guarded(async (_event, gameId) => {
     if (!ALLOWED_GAME_IDS.has(gameId)) return { ok: false, error: '遊戲代號不正確。' };
     return assetStore.cancelInstall(gameId);
-  }));
+  }, { requiresAssets: true }));
   ipcMain.handle('launcher:uninstall-game', guarded(async (_event, gameId) => {
     if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
     if (!ALLOWED_GAME_IDS.has(gameId)) return { ok: false, error: '遊戲代號不正確。' };
@@ -754,8 +774,8 @@ function registerLauncherIpc() {
     const result = await assetStore.uninstallGame(gameId);
     runtimeAssetCache.clearGame(gameId);
     return { ...result, state: await composeState() };
-  }));
-  ipcMain.handle('launcher:launch-game', guarded(async (_event, gameId) => launchGame(gameId)));
+  }, { requiresAssets: true }));
+  ipcMain.handle('launcher:launch-game', guarded(async (_event, gameId) => launchGame(gameId), { requiresAssets: true }));
   ipcMain.handle('launcher:choose-cache-location', guarded(async () => {
     if (assetStore.activeInstall || assetStore.activeRemoval) {
       return { ok: false, error: '請先等待目前的下載或移除工作完成。' };
@@ -778,7 +798,7 @@ function registerLauncherIpc() {
     await assetStore.setCacheRoot(result.filePaths[0]);
     await authService.setCacheRoot(assetStore.cacheRoot);
     return { ok: true, state: await composeState() };
-  }));
+  }, { requiresAssets: true }));
 
   ipcMain.on('game:get-bootstrap', (event) => {
     if (!event.senderFrame || event.senderFrame !== event.sender.mainFrame) {
@@ -809,7 +829,7 @@ async function authenticate(mode, credentials) {
   if (!result?.ok) return { ok: false, error: String(result?.error || 'unknown').slice(0, 100) };
   authenticated = true;
   socialService.start().catch(() => {});
-  assetStore.refreshRemoteCatalog().catch(() => {});
+  assetReadyPromise.then(() => assetStore.refreshRemoteCatalog()).catch(() => {});
   const state = await composeState();
   await broadcastState();
   return { ok: true, state };
@@ -1066,7 +1086,10 @@ function createMainWindow() {
 
 async function runVisualOrSmokeCapture() {
   if (!mainWindow || mainWindow.isDestroyed()) return;
-  try { await readyPromise; } catch (error) {
+  try {
+    await readyPromise;
+    if (SMOKE_MODE || SCREENSHOT_PATH) await assetReadyPromise;
+  } catch (error) {
     finishSmoke({ stage: 'services', error: error.message }, 1);
     return;
   }
@@ -1552,6 +1575,7 @@ async function initializeServices() {
     if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('launcher:social-state', state);
   });
   await authService.load();
+  restoringSession = Boolean(authService.secretMemory && authService.state.account && !authService.previewMode);
   const updateSession = session.fromPartition('onepiece-launcher-updates-v1');
   hardenSession(updateSession);
   launcherUpdateService = new LauncherUpdateService({
@@ -1573,10 +1597,6 @@ async function initializeServices() {
     fetchImpl: (url, options) => session.fromPartition('onepiece-downloads-v1').fetch(url, options)
   });
   hardenSession(session.fromPartition('onepiece-downloads-v1'));
-  await assetStore.init();
-  const restored = await authService.restore();
-  authenticated = restored?.ok === true && authService.previewMode !== true;
-  if (authenticated) socialService.start().catch(() => {});
   assetStore.on('state', (state) => broadcastState(state).catch(() => {}));
   assetStore.on('progress', broadcastProgress);
   authService.on('kicked', async () => {
@@ -1588,10 +1608,28 @@ async function initializeServices() {
     mainWindow?.webContents.send('launcher:session-kicked', {});
     await broadcastState();
   });
-  checkRemoteUpdates().catch(() => {});
+  assetReadyPromise = assetStore.init().then(() => {
+    assetReady = true;
+    broadcastState().catch(() => {});
+    readyPromise.then(() => checkRemoteUpdates().catch(() => {})).catch(() => {});
+  }, (error) => {
+    assetStartupError = publicError(error, '遊戲檔案檢查失敗，請重新開啟啟動器。');
+    broadcastState().catch(() => {});
+    throw error;
+  });
+  // A damaged cache should remain visible in the launcher without an unhandled rejection.
+  assetReadyPromise.catch(() => {});
   const updateTimer = setInterval(() => checkRemoteUpdates().catch(() => {}), 5 * 60 * 1000);
   updateTimer.unref();
   app.on('browser-window-focus', () => checkRemoteUpdates().catch(() => {}));
+}
+
+async function restoreSession() {
+  const restored = await authService.restore();
+  authenticated = restored?.ok === true && authService.previewMode !== true;
+  restoringSession = false;
+  if (authenticated) socialService.start().catch(() => {});
+  await broadcastState();
 }
 
 const gotLock = app.requestSingleInstanceLock();
@@ -1609,7 +1647,8 @@ if (!gotLock) {
     app.setAppUserModelId('com.onepiece.tabletop.desktop');
     await installLauncherProtocol();
     registerLauncherIpc();
-    readyPromise = initializeServices();
+    servicesReadyPromise = initializeServices();
+    readyPromise = servicesReadyPromise.then(restoreSession);
     createMainWindow();
     if (SMOKE_MODE) setTimeout(() => finishSmoke({ stage: 'timeout', error: 'Launcher smoke timed out.' }, 1), 60_000).unref();
   }).catch((error) => {

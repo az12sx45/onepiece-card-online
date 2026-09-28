@@ -17,6 +17,26 @@
     sleep:{frameMs:1000,direction:'south'}, train:{frameMs:420,direction:'south'}
   });
   const cache = new Map();
+  const loadQueue = [];
+  let activeLoads = 0;
+  function drainLoads() {
+    while(activeLoads<2&&loadQueue.length) {
+      const {record,resolve}=loadQueue.shift();
+      activeLoads++;
+      let finished=false;
+      const done=()=>{if(finished)return;finished=true;activeLoads--;resolve(record);drainLoads();};
+      try {
+        const img=new Image();record.image=img;
+        img.onload=async()=>{
+          try {await img.decode();record.ready=img.naturalWidth===record.cell*4&&img.naturalHeight===record.cell;record.failed=!record.ready;}
+          catch {record.failed=true;}
+          done();
+        };
+        img.onerror=()=>{record.failed=true;done();};
+        img.src=record.source;
+      } catch {record.failed=true;done();}
+    }
+  }
   const SPECIALISTS={read:['nami','usopp','chopper','robin','franky','jinbe'],cook:['sanji'],music:['brook'],craft:['usopp','franky'],medicine:['chopper'],helm:['jinbe']};
   function supported(key,action){return KEYS.has(key)&&!!CLIPS[action]&&(!SPECIALISTS[action]||SPECIALISTS[action].includes(key));}
   // Existing consumers resolve these paths beneath life_v1; reserved content has its own manifest/root.
@@ -37,15 +57,8 @@
     if(cache.has(source))return cache.get(source);
     const cell=key==='robin'||reserved?.RESERVED_KEYS.includes(key)?256:128;
     const record={source,cell,ready:false,failed:false,image:null}; cache.set(source,record);
-    const img=new Image();record.image=img;
-    record.promise=new Promise(resolve=>{
-      img.onload=async()=>{
-        try {await img.decode();record.ready=img.naturalWidth===cell*4&&img.naturalHeight===cell;record.failed=!record.ready;} catch {record.failed=true;}
-        resolve(record);
-      };
-      img.onerror=()=>{record.failed=true;resolve(record);};
-      img.src=source;
-    });
+    record.promise=new Promise(resolve=>loadQueue.push({record,resolve}));
+    drainLoads();
     return record;
   }
   function frame(action,elapsedMs) {

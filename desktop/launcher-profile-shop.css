@@ -19,7 +19,7 @@
 .voyage-status.is-error { color: #f2a49a; }
 
 .captain-hero { position: relative; min-height: 182px; overflow: hidden; border: 1px solid rgba(231, 189, 105, .33); border-radius: 18px; background: #132f3b; }
-.captain-hero-art { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(4, 20, 30, .94) 0%, rgba(4, 20, 30, .78) 50%, rgba(8, 23, 29, .3) 100%), url('opui://launcher/images/game_launcher/launcher_gallery_background_v2.png') center 43% / cover; filter: saturate(.8); }
+.captain-hero-art { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(4, 20, 30, .94) 0%, rgba(4, 20, 30, .78) 50%, rgba(8, 23, 29, .3) 100%), url('opui://launcher/images/game_launcher/launcher_gallery_background_v2.webp') center 43% / cover; filter: saturate(.8); }
 .captain-hero::after { content: ''; position: absolute; z-index: 0; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 30% 100%, rgba(80, 218, 201, .12), transparent 65%), linear-gradient(0deg, rgba(0, 8, 14, .45), transparent 70%); }
 .captain-hero[data-layout='layout-bounty-board'] { border-color: #bd9169; }
 .captain-hero[data-layout='layout-captain-quarters'] { border-color: #7ac8c0; }

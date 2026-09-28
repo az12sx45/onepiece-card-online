@@ -3,9 +3,9 @@
   const api = window.onePieceDesktop;
   const $ = id => document.getElementById(id);
   const GAME_META = [
-    { id: 'card', title: '偉大航道爭霸戰', english: 'GRAND LINE RIVALRY', cover: 'launcher_card_cover_perspective_v2.png' },
-    { id: 'board', title: '新世界航海錄', english: 'NEW WORLD VOYAGE', cover: 'launcher_board_cover_logo_perspective_v5.png' },
-    { id: 'chess', title: '霸海戰棋', english: 'PIRATE WAR CHESS', cover: 'launcher_chess_cover_logo_perspective_v5.png' }
+    { id: 'card', title: '偉大航道爭霸戰', english: 'GRAND LINE RIVALRY', cover: 'launcher_card_cover_perspective_v2.webp' },
+    { id: 'board', title: '新世界航海錄', english: 'NEW WORLD VOYAGE', cover: 'launcher_board_cover_logo_perspective_v5.webp' },
+    { id: 'chess', title: '霸海戰棋', english: 'PIRATE WAR CHESS', cover: 'launcher_chess_cover_logo_perspective_v5.webp' }
   ];
   const COLLECTION_TABS = [
     ['avatars', '頭像'], ['walls', '牆面'], ['flags', '旗幟'], ['launcher', '展示室'], ['titles', '榮譽'], ['board', '航海圖鑑'], ['chess', '戰棋']

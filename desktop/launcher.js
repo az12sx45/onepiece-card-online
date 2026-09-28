@@ -12,10 +12,10 @@ const GAMES = [
     detailDescription: '這不是傳統牌組構築遊戲。每回合先抽一張，再從手中的兩張牌決定要打出誰、留下誰：打出的角色立刻改變牌局，保留的牌則成為交換、猜牌與決鬥時的底牌。觀察棄牌情報與本局場地，抓準時機淘汰對手，才能把寶箱金幣帶回船上。',
     tags: ['雙牌抉擇', '線上房間', '玩家與 CPU'],
     features: ['抽一張、打一張的雙牌抉擇', '場地強化、猜牌與尾數決鬥', '線上房間、CPU 與好友對戰'],
-    cover: 'opui://launcher/images/game_launcher/launcher_card_cover_perspective_v2.png',
-    frame: 'opui://launcher/images/game_launcher/launcher_card_box_frame_cutout_v1.png',
-    lidFront: 'opui://launcher/images/game_launcher/launcher_card_lid_front_panel_v1.png',
-    fixedShell: 'opui://launcher/images/game_launcher/launcher_card_box_shell_fixed_v1.png',
+    cover: 'opui://launcher/images/game_launcher/launcher_card_cover_perspective_v2.webp',
+    frame: 'opui://launcher/images/game_launcher/launcher_card_box_frame_cutout_v1.webp',
+    lidFront: 'opui://launcher/images/game_launcher/launcher_card_lid_front_panel_v1.webp',
+    fixedShell: 'opui://launcher/images/game_launcher/launcher_card_box_shell_fixed_v1.webp',
     lidClip: 'polygon(4.604% 9.185%, 86.096% 11.188%, 85.635% 93.923%, 4.604% 89.434%)',
     trayClip: 'polygon(6.814% 10.704%, 81.676% 11.878%, 81.676% 91.298%, 6.814% 87.362%)',
     lidOrigin: '4.604% 49.309%',
@@ -38,10 +38,10 @@ const GAMES = [
     detailDescription: '每次擲骰都不只是前進：你要選擇航路、處理島嶼與海上事件、招募夥伴、配置裝備，再決定如何面對戰鬥與任務。可以獨自帶著 CPU 航海，也能與其他玩家同步共鬥；完成一周目後，二周目會開啟角色捕捉、培育、切磋，以及十三座 Boss 島的長期挑戰。',
     tags: ['分支航線', '1–4 人', '共鬥與培養'],
     features: ['分支航線、島嶼與海上事件', '招募、裝備、任務與多人共鬥', '二周目捕捉、培育、切磋與十三 Boss'],
-    cover: 'opui://launcher/images/game_launcher/launcher_board_cover_logo_perspective_v5.png',
-    frame: 'opui://launcher/images/game_launcher/launcher_board_box_frame_cutout_v1.png',
-    lidFront: 'opui://launcher/images/game_launcher/launcher_board_lid_front_panel_v1.png',
-    fixedShell: 'opui://launcher/images/game_launcher/launcher_board_box_shell_fixed_v1.png',
+    cover: 'opui://launcher/images/game_launcher/launcher_board_cover_logo_perspective_v5.webp',
+    frame: 'opui://launcher/images/game_launcher/launcher_board_box_frame_cutout_v1.webp',
+    lidFront: 'opui://launcher/images/game_launcher/launcher_board_lid_front_panel_v1.webp',
+    fixedShell: 'opui://launcher/images/game_launcher/launcher_board_box_shell_fixed_v1.webp',
     lidClip: 'polygon(3.959% 7.528%, 86.464% 9.807%, 85.820% 93.232%, 3.959% 89.019%)',
     trayClip: 'polygon(6.446% 9.185%, 81.215% 10.635%, 81.215% 90.677%, 6.446% 86.671%)',
     lidOrigin: '3.959% 48.273%',
@@ -64,10 +64,10 @@ const GAMES = [
     detailDescription: '以西洋棋規則作為戰術骨架，再把角色個性帶進每一次移動與吃子。不同陣營與角色擁有專屬棋子造型、移動表現和攻擊演出；可以隨時挑戰 CPU 熟悉戰術，也可登入後與其他玩家進行線上對弈。',
     tags: ['角色棋子', '專屬演出', '線上與 CPU'],
     features: ['角色化棋子與陣營配置', '移動、吃子的專屬演出', '線上玩家對弈與單人 CPU 挑戰'],
-    cover: 'opui://launcher/images/game_launcher/launcher_chess_cover_logo_perspective_v5.png',
-    frame: 'opui://launcher/images/game_launcher/launcher_chess_box_frame_cutout_v1.png',
-    lidFront: 'opui://launcher/images/game_launcher/launcher_chess_lid_front_panel_v1.png',
-    fixedShell: 'opui://launcher/images/game_launcher/launcher_chess_box_shell_fixed_v1.png',
+    cover: 'opui://launcher/images/game_launcher/launcher_chess_cover_logo_perspective_v5.webp',
+    frame: 'opui://launcher/images/game_launcher/launcher_chess_box_frame_cutout_v1.webp',
+    lidFront: 'opui://launcher/images/game_launcher/launcher_chess_lid_front_panel_v1.webp',
+    fixedShell: 'opui://launcher/images/game_launcher/launcher_chess_box_shell_fixed_v1.webp',
     lidClip: 'polygon(4.328% 7.597%, 86.372% 9.807%, 85.820% 96.685%, 4.328% 92.334%)',
     trayClip: 'polygon(6.998% 9.254%, 81.952% 10.566%, 81.952% 93.715%, 6.906% 89.641%)',
     lidOrigin: '4.328% 49.965%',
@@ -94,6 +94,8 @@ let snapshot = {
   games: Object.fromEntries(GAMES.map((game) => [game.id, { status: 'checking' }]))
 };
 let authMode = 'login';
+let authSubmitting = false;
+let latestAppliedStateRevision = -1;
 let toastTimer = 0;
 let activePreviewUrl = '';
 let uninstallGameId = '';
@@ -410,6 +412,7 @@ function statusCopy(gameState = {}) {
     case 'unavailable': return { label: '製作中', tone: 'locked', action: '尚未開放' };
     case 'desktop-required': return { label: '桌面版限定', tone: 'locked', action: '需安裝啟動器' };
     case 'checking': return { label: '檢查版本', tone: 'locked', action: '檢查中…' };
+    case 'startup-error': return { label: '檢查失敗', tone: 'error', action: '請重新開啟' };
     default: return { label: '尚未安裝', tone: 'update', action: '下載安裝' };
   }
 }
@@ -554,7 +557,7 @@ function renderFeature() {
   featureStatus.dataset.tone = copy.tone;
   featureVersion.textContent = game.english;
   primaryAction.textContent = launching && state.status === 'installed' ? '正在啟動…' : copy.action;
-  primaryAction.disabled = launchBlocked || ['unavailable', 'desktop-required', 'checking', 'preparing', 'downloading', 'verifying', 'removing'].includes(state.status);
+  primaryAction.disabled = launchBlocked || ['unavailable', 'desktop-required', 'checking', 'startup-error', 'preparing', 'downloading', 'verifying', 'removing'].includes(state.status);
   existingLaunchAction.hidden = !state.hasInstalled || ['installed', 'preparing', 'downloading', 'verifying', 'removing'].includes(state.status);
   existingLaunchAction.disabled = launchBlocked;
   renderProgress(state);
@@ -610,7 +613,7 @@ function renderDownloads() {
     const downloadActive = ['preparing', 'downloading', 'verifying'].includes(state.status);
     const launching = launchingGameIds.has(game.id);
     const busy = downloadActive || state.status === 'removing' || launchingGameIds.size > 0;
-    if (state.status !== 'unavailable' && state.status !== 'checking') {
+    if (!['unavailable', 'checking', 'startup-error'].includes(state.status)) {
       const primary = document.createElement('button');
       primary.type = 'button';
       primary.className = 'gold-button download-primary';
@@ -667,9 +670,30 @@ function renderAll() {
 }
 
 function showApp(nextSnapshot) {
+  if (Number.isSafeInteger(nextSnapshot?.stateRevision)) {
+    latestAppliedStateRevision = Math.max(latestAppliedStateRevision, nextSnapshot.stateRevision);
+  }
   snapshot = { ...snapshot, ...nextSnapshot, games: { ...snapshot.games, ...(nextSnapshot?.games || {}) } };
   renderAll();
   setStage('app');
+}
+
+function applyLauncherState(nextState) {
+  const revision = nextState?.stateRevision;
+  if (Number.isSafeInteger(revision)) {
+    if (revision <= latestAppliedStateRevision) return;
+    latestAppliedStateRevision = revision;
+  }
+  if (nextState?.authenticated || nextState?.previewMode) {
+    showApp(nextState);
+    return;
+  }
+  const wasRestoring = snapshot.restoringSession === true;
+  snapshot = { ...snapshot, ...nextState, games: { ...snapshot.games, ...(nextState?.games || {}) } };
+  authSubmit.disabled = authSubmitting || snapshot.restoringSession === true;
+  if (snapshot.restoringSession) authMessage.textContent = '正在確認上次的登入…';
+  else if (wasRestoring) authMessage.textContent = '';
+  setStage('auth');
 }
 
 function setAuthMode(mode) {
@@ -682,7 +706,7 @@ function setAuthMode(mode) {
   authTitle.textContent = registering ? '建立航海者帳號' : '航海者登入';
   authSubmit.textContent = registering ? '建立帳號' : '登入';
   passwordInput.autocomplete = registering ? 'new-password' : 'current-password';
-  authMessage.textContent = '';
+  authMessage.textContent = snapshot.restoringSession ? '正在確認上次的登入…' : '';
 }
 
 function translateAuthError(code) {
@@ -702,9 +726,10 @@ function translateAuthError(code) {
 
 async function submitAuth(event) {
   event.preventDefault();
-  if (!api) return;
+  if (!api || snapshot.restoringSession || authSubmitting) return;
   const username = usernameInput.value.trim();
   const password = passwordInput.value;
+  authSubmitting = true;
   authSubmit.disabled = true;
   authMessage.textContent = authMode === 'register' ? '正在建立帳號…' : '正在登入…';
   try {
@@ -716,12 +741,13 @@ async function submitAuth(event) {
       authMessage.textContent = translateAuthError(result?.error);
       return;
     }
-    showApp(result.state);
+    applyLauncherState(result.state);
   } catch (_) {
     passwordInput.value = '';
     authMessage.textContent = '登入元件暫時沒有回應。';
   } finally {
-    authSubmit.disabled = false;
+    authSubmitting = false;
+    authSubmit.disabled = snapshot.restoringSession === true;
   }
 }
 
@@ -930,8 +956,7 @@ async function initialize() {
       return;
     }
     if (state?.previewMode) previewSkip.hidden = false;
-    if (state?.authenticated || state?.previewMode) showApp(state);
-    else setStage('auth');
+    applyLauncherState(state);
   } catch (_) {
     $('#bootMessage').textContent = '啟動器初始化失敗，請重新開啟。';
   }
@@ -996,15 +1021,7 @@ document.addEventListener('click', (event) => {
   if (!event.target.closest('.account-area')) closeAccountMenu();
 });
 
-api?.onState((nextState) => {
-  if (nextState?.authenticated === false && !nextState?.previewMode) {
-    snapshot = { ...snapshot, ...nextState };
-    setStage('auth');
-    return;
-  }
-  snapshot = { ...snapshot, ...nextState, games: { ...snapshot.games, ...(nextState?.games || {}) } };
-  renderAll();
-});
+api?.onState(applyLauncherState);
 
 api?.onProgress((progress) => {
   if (!progress?.gameId || !byId[progress.gameId]) return;

@@ -1,0 +1,1113 @@
+{
+  "schema": "launcher-historical-v128-status/1",
+  "sourceCommit": "0aa99bac64f748b0322f248280546078f1523b06",
+  "reviewSha256": "52296787a94ee50223fc75e725642055761aacde820aef3d915064aac9bbdd0e",
+  "validated": true,
+  "humanAcceptance": false,
+  "status": {
+    "complete": true,
+    "life": {
+      "manifest": {
+        "items": [
+          {
+            "asset": "public/images/launcher_room/life_v1/luffy/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/luffy/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/luffy/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/luffy/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/luffy/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/luffy/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/luffy/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/luffy/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/zoro/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/zoro/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/zoro/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/zoro/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/zoro/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/zoro/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/zoro/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/zoro/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/nami/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/nami/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/nami/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/nami/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/nami/read-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/nami/read-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/nami/read-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/nami/read-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/nami/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/nami/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/nami/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/nami/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/read-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/read-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/read-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/read-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/craft-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/craft-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/craft-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/craft-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/usopp/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/sanji/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/sanji/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/sanji/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/sanji/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/sanji/cook-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/sanji/cook-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/sanji/cook-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/sanji/cook-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/sanji/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/sanji/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/sanji/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/sanji/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/read-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/read-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/read-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/read-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/medicine-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/medicine-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/medicine-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/medicine-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/chopper/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/robin/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/robin/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/robin/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/robin/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/robin/read-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/robin/read-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/robin/read-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/robin/read-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/robin/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/robin/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/robin/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/robin/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/read-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/read-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/read-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/read-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/craft-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/craft-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/craft-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/craft-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/franky/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/brook/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/brook/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/brook/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/brook/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/brook/music-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/brook/music-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/brook/music-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/brook/music-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/brook/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/brook/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/brook/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/brook/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/read-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/read-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/read-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/read-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/helm-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/helm-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/helm-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/helm-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/life_v1/jinbe/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture/galley-stove.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/galley-stove/0.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/galley-stove/1.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/galley-stove/2.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/galley-stove/3.webp"
+          }
+        ]
+      }
+    },
+    "hd": {
+      "manifest": {
+        "items": [
+          {
+            "asset": "public/images/launcher_room/motion_v4/brook/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/brook/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/brook/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/brook/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/chopper/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/chopper/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/chopper/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/chopper/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/franky/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/franky/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/franky/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/franky/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/jinbe/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/jinbe/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/jinbe/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/jinbe/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/luffy/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/luffy/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/luffy/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/luffy/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/nami/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/nami/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/nami/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/nami/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/robin/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/robin/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/robin/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/robin/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/sanji/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/sanji/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/sanji/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/sanji/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/usopp/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/usopp/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/usopp/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/usopp/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/zoro/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/zoro/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/zoro/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/motion_v4/zoro/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/brook/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/brook/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/brook/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/brook/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/chopper/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/chopper/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/chopper/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/chopper/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/franky/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/franky/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/franky/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/franky/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/jinbe/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/jinbe/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/jinbe/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/jinbe/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/luffy/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/luffy/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/luffy/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/luffy/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/nami/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/nami/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/nami/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/nami/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/robin/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/robin/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/robin/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/robin/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/sanji/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/sanji/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/sanji/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/sanji/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/usopp/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/usopp/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/usopp/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/usopp/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/zoro/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/zoro/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/zoro/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/acting_v4/zoro/west.webp"
+          }
+        ]
+      },
+      "assets": 80
+    },
+    "reserved": {
+      "manifest": {
+        "items": [
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/portrait.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/walk/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/acting/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/life/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/walk/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/acting/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/life/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/walk/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/acting/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/life/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/walk/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/acting/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/life/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/life/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/life/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/life/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/ace/life/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/portrait.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/walk/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/acting/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/life/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/walk/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/acting/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/life/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/walk/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/acting/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/life/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/walk/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/acting/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/life/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/life/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/life/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/life/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/sabo/life/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/portrait.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/walk/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/acting/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/life/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/walk/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/acting/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/life/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/walk/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/acting/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/life/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/walk/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/acting/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/life/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/life/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/life/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/life/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/law/life/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/portrait.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/walk/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/acting/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/life/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/walk/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/acting/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/life/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/walk/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/acting/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/life/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/walk/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/acting/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/life/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/life/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/life/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/life/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/reserved_v1/hancock/life/train-south.webp"
+          }
+        ]
+      },
+      "assets": 68
+    },
+    "newArt": {
+      "manifest": {
+        "items": [
+          {
+            "asset": "public/images/launcher_room/minigames_v1/deck.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/minigames_v1/cargo-food.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/minigames_v1/cargo-tools.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/minigames_v1/cargo-books.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/walk/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/acting/east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/life/work-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/life/read-east.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/walk/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/acting/west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/life/work-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/life/read-west.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/walk/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/acting/north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/life/work-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/life/read-north.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/walk/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/acting/south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/life/work-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/life/read-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/portrait.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/life/eat-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/life/rest-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/life/sleep-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/robin_v2/life/train-south.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/scenes/sunny-workshop.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/scenes/sunny-aquarium.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/supply-rack/0.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/supply-rack/1.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/supply-rack/2.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/supply-rack/3.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture/supply-rack.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/log-pose-desk/0.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/log-pose-desk/1.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/log-pose-desk/2.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/log-pose-desk/3.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture/log-pose-desk.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/repair-cart/0.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/repair-cart/1.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/repair-cart/2.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/repair-cart/3.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture/repair-cart.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/library-cart/0.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/library-cart/1.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/library-cart/2.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/library-cart/3.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture/library-cart.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/medical-cart/0.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/medical-cart/1.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/medical-cart/2.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/medical-cart/3.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture/medical-cart.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/den-den-desk/0.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/den-den-desk/1.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/den-den-desk/2.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture_views/den-den-desk/3.webp"
+          },
+          {
+            "asset": "public/images/launcher_room/furniture/den-den-desk.webp"
+          }
+        ]
+      }
+    },
+    "review": {
+      "releaseVersion": "1.2.8",
+      "runtime": {
+        "desktop/launcher-room.js": "8bfbf9269c8c3d216b647ba0bead67fe09840066f7503c28052ad7753fdd231e",
+        "desktop/launcher-room.css": "32b67efc5bde4018a3ca66883f5afa0bed90eb47a09b27bcb0b54c912b3ec610",
+        "desktop/launcher-profile-shop.js": "2bc69f6e30c6a3d09542a57b6ff0e2a98a8a04dca1d3755356120b332e383e12",
+        "desktop/launcher-life-room.js": "b44c7bf33d38b0e161eeef4d2c97f42eb7b327b5ca5b19026cc4416195ab2372",
+        "desktop/launcher-life.js": "c9be09c38bd748a3b064de91879d12dea54515f776cb9d735dcd8b6dcbef55e7",
+        "desktop/launcher-life-data.js": "21e0c79dec584f1aeae82e64f785d10a19ceb7be929dae91160c9a4d48fdc86c",
+        "desktop/launcher-life-actions.js": "487443cbb8941e94d169e5891c837e7cb92c1b844828630b32e831e77197e3ce",
+        "desktop/launcher-room-dialogue.js": "484bc23b46fcfeeb3a90a14d1c049c0d2f2dd2789947a5a82ef6eda6b79a7737",
+        "desktop/launcher.html": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6",
+        "desktop/auth-service.js": "fa1d8d9ef12bcb37fd523829980614c30de51e2674a57ffc797682936d669671",
+        "desktop/preload.js": "f29e59436b55eff3f2ae02d74ff4f95304672b167524d9b9f6c9dd4867619fcd",
+        "desktop/main.js": "18ab07bc9954451d4be5c98479a869a0e02d8a032bb32e1f07981d93fe672b28",
+        "server/launcher-life.js": "0bcfa4bbab2a40970d108bdb1dcefcb64c1103f0456bcf6a1b1727108aa9f85e",
+        "server/launcher-life-store.js": "3180aaef496139fc8c8f2152724ae4e4f5eed627e89d9dc0f244c5f9f2080f88",
+        "server/launcher-profile-shop.js": "18c57c1ff2b2fc655a18c73e99732c6ed22143a0fbc689b8ec6ad66b183048e2",
+        "server/index.js": "11100a110e339caa90894fd802b199cf5037a519595b353798d4f8fdeb865738",
+        "server/desktop-distribution.js": "c8ff98a6c5da36920aa1a7d9ca5ba2ac1f69f3ebc31fdd6c14cf75095661a0db",
+        "desktop/launcher-profile-shop.css": "0f9b42f8c6cd5844876a7c877a16b8265a13631f38d3371083c5f2e6969b4ee9",
+        "desktop/launcher.css": "272c9f7e809d19291c4c9a037b762cdc436515aa87a681873e66f22f3fabdbea",
+        "desktop/launcher.js": "c76109cc906185acc73b676aec6a5a762a98527d4f37aa9d554b3e451f6d5728",
+        "desktop/launcher-room-motion.js": "b48b20b6f55f770f2bc2fafdf6665be0c7cf6544a45fd1d370179ebbabdd919d",
+        "desktop/launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+        "desktop/launcher-reserved-crew.js": "6e6209d4bcd5267704e40ec30bc86769aa739e8806e2b39f60d3337b065790dd",
+        "server/launcher-crew-release.js": "7738284a71871309f5e18346f785bf5db8c051d969fe028cc74f5b7402478693",
+        "config/launcher-crew-release-v1.json": "0526f5ff2913aa1000cc683de1fa8e4072def749e548c7a9b72f0e9b28305b64",
+        "desktop/launcher-announcements.js": "5547288ccadd8c6406f63dae764367b3a3bd29b2b5c6c3cc56c812419e4d56c1",
+        "desktop/launcher-announcements.css": "fe9a988f68fe9b5f7640a5091b84ebd99bf54a69d76b254a1b3d30a457586d4e",
+        "server/launcher-announcements.js": "a5534e6c0f618ed8f376375f45979a7078882d051b0774b751e92c30bba82afd",
+        "config/launcher-announcements-v1.json": "8ec56d716be19ecfcb27a19f25975350c1a01677c66e2f0fc165816e55c4e2fb",
+        "desktop/package.json": "b6dd0c523c73f430118f9eddd02b68a6329c2fef3a8ce122120862c456856d58",
+        "desktop/package-lock.json": "ef5515465d072b7b59b8ae2416101cd5362fdbcda48516c4adc80d9788c85355",
+        "desktop/launcher-updates-ui.js": "6c37f929c8350b915caf26766939c018b05889ed7a2aea6971231089d284c334",
+        "desktop/launcher-room-minigames.js": "948a3fa20ceffa370fbc40fd4e7e66c5374c4f28cd3505ccf59682188ebde7e8",
+        "desktop/launcher-room-minigames.css": "62778c2172083e2581313e1da3df2d380272915a234e6f5d3187d8c1fd33703d",
+        "server/launcher-minigames.js": "9b55077cf1960ddcba67bb6dffcf0f374d4ad96d0c2c56883270e00b209a0bef"
+      }
+    },
+    "scenarios": 4,
+    "icons": {
+      "mode": "inline-svg-restored-user-request",
+      "count": 6,
+      "externalAssets": 0
+    },
+    "functionalChecks": 11,
+    "interactionChecks": 7,
+    "robinChecks": 9,
+    "serverChecks": 128,
+    "aceChecks": 226,
+    "productionVisualChecks": 3,
+    "activeCharacters": 11,
+    "bgmServerChecks": 32,
+    "bgmClientChecks": 15,
+    "newAssets": 32,
+    "catalogChecks": 10,
+    "roomChecks": 8,
+    "artBrowser": {
+      "checks": 20,
+      "captures": 184
+    },
+    "historicalBaseline": "b9210988b1b6fd6054ce8dfe65b6ddbd9b0f75ea"
+  }
+}

@@ -242,8 +242,10 @@ class AuthService extends EventEmitter {
   async restore() {
     if (this.previewMode) return { ok: true, previewMode: true, account: sanitizeAccount({}, 'preview') };
     if (!this.secretMemory || !this.state.account) return { ok: false, error: 'not authenticated' };
+    const secret = this.secretMemory;
     try {
-      const profileResult = await this.emitAck('PROFILE_GET', { secret: this.secretMemory });
+      const profileResult = await this.emitAck('PROFILE_GET', { secret });
+      if (secret !== this.secretMemory || !this.state.account) return { ok: false, error: 'session changed' };
       if (!profileResult?.ok || !profileResult.profile) {
         const missingProfile = profileResult?.ok === true && !profileResult.profile;
         if (missingProfile || isExplicitSecretRejection(profileResult)) {
@@ -254,8 +256,9 @@ class AuthService extends EventEmitter {
       }
       const account = sanitizeAccount(profileResult.profile, this.state.account.username);
       this.state.account = { ...account, secretCipher: this.state.account.secretCipher };
-      await this.setPresence('desktop-launcher');
+      // The socket connect/reconnect handler sends presence; it must not hold up the verified profile.
       await this.save();
+      if (secret !== this.secretMemory) return { ok: false, error: 'session changed' };
       return { ok: true, account };
     } catch (error) {
       return { ok: false, error: error.message || 'offline', recoverable: true };

@@ -1,6 +1,7 @@
 'use strict';
 
 const crypto = require('node:crypto');
+const childProcess = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -10,6 +11,10 @@ const PUBLIC_ROOT = path.join(ROOT, 'public');
 const PACKAGE_PATH = path.join(DESKTOP_ROOT, 'package.json');
 const PACKAGE_LOCK_PATH = path.join(DESKTOP_ROOT, 'package-lock.json');
 const RADIAL_PRESENTATION = require('../tools/launcher-room/expansion-v128/validate_release');
+const HISTORICAL_V128_COMMIT = '0aa99bac64f748b0322f248280546078f1523b06';
+const HISTORICAL_V128_STATUS = 'tools/launcher-room/loading-v129/historical-status.json';
+const HISTORICAL_V128_STATUS_SHA256 = '34cb7074700ea4171bffa7ba6c4e5e0ec1798ad67b1c7a726b672d4fe873ff8e';
+const HISTORICAL_V128_REVIEW_SHA256 = '52296787a94ee50223fc75e725642055761aacde820aef3d915064aac9bbdd0e';
 const ROOM_HD_REVIEW = require('../tools/launcher-room/presentation-v124/validate_hd');
 const ROOM_RESERVED_REVIEW = require('../tools/launcher-room/presentation-v125/validate_reserved');
 
@@ -121,32 +126,32 @@ const EXTRA_RESOURCES = [
     from: '../public/images/game_launcher',
     to: 'launcher-assets/images/game_launcher',
     filter: [
-      'launcher_tabletop_series_logo_v1.png',
-      'launcher_gallery_background_v2.png',
-      'launcher_card_cover_perspective_v2.png',
-      'launcher_card_box_frame_cutout_v1.png',
-      'launcher_card_lid_front_panel_v1.png',
-      'launcher_card_box_shell_fixed_v1.png',
-      'launcher_board_cover_logo_perspective_v5.png',
-      'launcher_board_box_frame_cutout_v1.png',
-      'launcher_board_lid_front_panel_v1.png',
-      'launcher_board_box_shell_fixed_v1.png',
-      'launcher_chess_cover_logo_perspective_v5.png',
-      'launcher_chess_box_frame_cutout_v1.png',
-      'launcher_chess_lid_front_panel_v1.png',
-      'launcher_chess_box_shell_fixed_v1.png'
+      'launcher_tabletop_series_logo_v1.webp',
+      'launcher_gallery_background_v2.webp',
+      'launcher_card_cover_perspective_v2.webp',
+      'launcher_card_box_frame_cutout_v1.webp',
+      'launcher_card_lid_front_panel_v1.webp',
+      'launcher_card_box_shell_fixed_v1.webp',
+      'launcher_board_cover_logo_perspective_v5.webp',
+      'launcher_board_box_frame_cutout_v1.webp',
+      'launcher_board_lid_front_panel_v1.webp',
+      'launcher_board_box_shell_fixed_v1.webp',
+      'launcher_chess_cover_logo_perspective_v5.webp',
+      'launcher_chess_box_frame_cutout_v1.webp',
+      'launcher_chess_lid_front_panel_v1.webp',
+      'launcher_chess_box_shell_fixed_v1.webp'
     ]
   },
   {
     from: '../public/images/desktop_launcher',
     to: 'launcher-assets/images/desktop_launcher',
     filter: [
-      'desktop_launcher_cabin_bg_v1.png',
-      'launcher_box_core_frame_01_v1.png',
-      'launcher_box_center_light_01_v3.png',
-      'launcher_box_center_light_02_v3.png',
-      'launcher_box_center_light_03_v3.png',
-      'launcher_box_center_light_04_v3.png',
+      'desktop_launcher_cabin_bg_v1.webp',
+      'launcher_box_core_frame_01_v1.webp',
+      'launcher_box_center_light_01_v3.webp',
+      'launcher_box_center_light_02_v3.webp',
+      'launcher_box_center_light_03_v3.webp',
+      'launcher_box_center_light_04_v3.webp',
       'launcher_cursor_logpose_default_v1.png',
       'launcher_cursor_logpose_pointer_v1.png',
       'launcher_cursor_logpose_pressed_v1.png'
@@ -540,8 +545,16 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.2.8', 'Desktop launcher version must be 1.2.8 for the reviewed room and work expansion.');
+  assert(packageJson.version === '1.2.9', 'Desktop launcher version must be 1.2.9 for the reviewed loading optimization.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
+  const announcementConfig = readJson(path.join(ROOT, 'config/launcher-announcements-v1.json'), 'launcher announcements');
+  require('../server/launcher-announcements').validateConfig(announcementConfig);
+  const loadingAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.9-loading-optimization');
+  assert(loadingAnnouncement?.status === 'published' && loadingAnnouncement.scope === 'launcher' &&
+    loadingAnnouncement.version === packageJson.version &&
+    loadingAnnouncement.requiredRelease?.kind === 'launcher' &&
+    loadingAnnouncement.requiredRelease?.version === packageJson.version,
+  'Launcher 1.2.9 announcement must be gated to this release.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
   assert(packageJson.build?.appId === 'com.onepiece.tabletop.desktop', 'Desktop appId changed unexpectedly.');
@@ -686,10 +699,23 @@ function validateSourcePackage() {
   const scaleReview = readJson(path.join(ROOT, scaleReviewPath), 'room scale visual review');
   assert(scaleReview.status === 'PASS_WITH_NOTES' && scaleReview.blockingIssues.length === 0, 'Room scale visual review has unresolved issues.');
   assert(scaleReview.runtimeHashNormalization === 'CRLF to LF only; all other bytes remain significant', 'Unexpected room review hash normalization.');
-  const presentationStatus = RADIAL_PRESENTATION.validate(ROOT);
+  // The complete 1.2.8 gate was rerun against its immutable release commit.
+  // Current 1.2.9 sources are checked below; they must not be passed to the
+  // historical gate as though they were the original reviewed release.
+  assert(sha256File(path.join(ROOT, HISTORICAL_V128_STATUS)) === HISTORICAL_V128_STATUS_SHA256,
+    'Historical 1.2.8 acceptance receipt changed.');
+  const historicalV128 = readJson(path.join(ROOT, HISTORICAL_V128_STATUS), 'historical 1.2.8 acceptance');
+  assert(historicalV128.schema === 'launcher-historical-v128-status/1' &&
+    historicalV128.sourceCommit === HISTORICAL_V128_COMMIT && historicalV128.validated === true &&
+    historicalV128.humanAcceptance === false && historicalV128.reviewSha256 === HISTORICAL_V128_REVIEW_SHA256,
+  'Historical 1.2.8 acceptance is invalid.');
+  assert(sha256File(path.join(ROOT, RADIAL_PRESENTATION.REVIEW_PATH)) === HISTORICAL_V128_REVIEW_SHA256,
+    'Historical 1.2.8 release review changed.');
+  const presentationStatus = historicalV128.status;
   const lifeStatus = presentationStatus.life;
   for (const [file, digest] of Object.entries(scaleReview.runtime)) {
-    const reviewedBytes = fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n');
+    const reviewedBytes = childProcess.execFileSync('git', ['cat-file', 'blob', `${HISTORICAL_V128_COMMIT}:${file}`],
+      { cwd: ROOT, windowsHide: true, maxBuffer: 16 * 1024 * 1024 }).toString('utf8').replace(/\r\n/g, '\n');
     // All historical art reviews remain immutable. The presentation gate has
     // validated their original runtime and binds this release's current UI.
     assert(crypto.createHash('sha256').update(reviewedBytes).digest('hex') === (presentationStatus.review.runtime[file] || digest), `Room runtime differs from reviewed source: ${file}`);
@@ -904,7 +930,7 @@ function validateAsar(asarPath) {
       `Packaged application source differs: ${entry}`);
   }
   const packedPackage = JSON.parse(asar.extractFile(asarPath, 'package.json').toString('utf8'));
-  assert(packedPackage.version === '1.2.8' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
+  assert(packedPackage.version === '1.2.9' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
   for (const entry of entries) {
     const lower = entry.toLowerCase();
     assert(!lower.startsWith('public/'), `app.asar contains the public game tree: ${entry}`);

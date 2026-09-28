@@ -291,8 +291,11 @@
       const firstClip=clipFor(state,station,key);
       const stationDef=stationDefinition(station||{}),specialist=stationDef.specialistActions?.[key];
       const requirement=stationDef.specialistRequirements?.[key];
-      const specialistReady=specialist&&(!list(requirement?.furnitureKeys).length||requirement.furnitureKeys.includes(station?.furnitureKey))&&safeCall('hasClip',key,specialist)===true;
-      const stages=state==='Work'?list(stationDef.stages).map(stage=>({...clone(stage),clip:stage.id==='operate'&&specialistReady?specialist:stage.clip,durationMs:duration(stage.durationMs,5000)})):[];
+      const specialistSupported=specialist&&(!list(requirement?.furnitureKeys).length||requirement.furnitureKeys.includes(station?.furnitureKey))&&safeCall('supportsClip',key,specialist)===true;
+      const stages=state==='Work'?list(stationDef.stages).map(stage=>{
+        const useSpecialist=stage.id==='operate'&&specialistSupported;
+        return {...clone(stage),...(useSpecialist?{fallbackClip:stage.clip}:{}),clip:useSpecialist?specialist:stage.clip,durationMs:duration(stage.durationMs,5000)};
+      }):[];
       const task={key,token,state,phase:'approach',station,slot:selected,goal:selected.cell,started:lastNow,deadline:lastNow+180000,clip:firstClip,durationMs:12000+Math.floor(rng()*16000),direction:['Eat','Rest','Sleep','Train'].includes(state)?'south':null,stages,...extra};
       tasks.set(key,task);actor.state=state;actor.taskToken=token;
       if(task.phase==='reserving')holdTask(task);
@@ -399,8 +402,9 @@
         changePhase(task,'await-art',now);
       }
       if(task.phase==='await-art') {
+        for(const stage of task.stages||[])if(stage.fallbackClip&&stage.clip!==stage.fallbackClip&&safeCall('clipFailed',task.key,stage.clip,task.direction)===true)stage.clip=stage.fallbackClip;
         const clips=task.stages?.length?task.stages.map(stage=>stage.clip):[task.clip];
-        const complete=typeof adapter.hasClip!=='function'||clips.every(clip=>safeCall('hasClip',task.key,clip)!==false);
+        const complete=typeof adapter.hasClip!=='function'||clips.map(clip=>safeCall('hasClip',task.key,clip)).every(ready=>ready!==false);
         const ready=complete&&safeCall('clip',task.key,task.clip,{token:task.token,state:task.state,direction:task.direction,stationId:task.station?.id,stageId:task.stages?.[0]?.id,elapsedMs:0,durationMs:task.durationMs})===true;
         record(task.key).missingClip=ready?'':task.clip;
         if(!ready)return;

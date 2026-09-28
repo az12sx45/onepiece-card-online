@@ -1224,3 +1224,15 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 - `public/images/launcher_room/furniture/` 與 `furniture_views/`：六件商品縮圖與 24 張 384×384 四向透明家具。
 - `tools/launcher-room/expansion-v128/`：GPT 來源、重畫紀錄、匯出／素材 manifest、歷史快照、現行 gate 與實際 QA evidence。
 - `docs/LAUNCHER_ROOM_EXPANSION_20260928.json`：新版凍結來源與驗證綁定（完成後產生）。
+
+
+## 2026-09-28 Launcher 1.2.9 loading optimization
+
+- `desktop/main.js`, `desktop/auth-service.js`, `desktop/launcher.js`: safe first paint, account/cache verification and ordered launcher state updates.
+- `desktop/launcher-life.js`, `desktop/launcher-life-room.js`, `desktop/launcher-life-actions.js`: lazy room action atlas loading and specialized action fallback.
+- `desktop/launcher.html`, `.css`, `launcher-profile-shop.js/.css`, `desktop/package.json`: WebP launcher art references and explicit packaged resource list.
+- `public/images/game_launcher/*.webp`, `public/images/desktop_launcher/*.webp`: 20 lossless variants; source PNGs retained. `docs/LAUNCHER_LOADING_ART_20260928.json`: hash/dimension/pixel review.
+- `scripts/desktop_launcher_startup_qa.js`, `launcher_life_lazy_loading_qa.js`, `launcher_life_lazy_browser_qa.js`, `launcher_loading_webp_qa.js`: focused performance and visual checks.
+- `tools/launcher-room/loading-v129/historical-status.json`: SHA-pinned result of the original 1.2.8 release gate. `scripts/desktop_launcher_package_qa.js`: current package gate and historical status verification.
+- `config/launcher-announcements-v1.json`: 1.2.9 gated update notice.
+- `scripts/launcher_129_announcement_qa.js`: isolated check that 1.2.9 notice stays hidden on 1.2.8, appears after verified release, and records reads.
