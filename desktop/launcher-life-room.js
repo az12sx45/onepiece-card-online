@@ -82,7 +82,7 @@
       w.mode='life-act';w.lifeClip={clip,direction:description.direction,started:performance.now()-(meta.elapsedMs||0),token:meta.token};
       w.pose='life';w.node.dataset.pose=clip;w.node.dataset.lifeState=meta.state||'';
       canvas.style.setProperty('--room-root-offset','12.5%');canvas.hidden=false;
-      w.node.classList.add('has-directional-sprite');w.node.dataset.actionSource='life_v1';w.node.dataset.actionFrame=String(painted.frame);
+      w.node.classList.add('has-directional-sprite');w.node.dataset.actionSource='life_v1';w.node.dataset.actionFrame=String(painted.frame);w.node.dataset.direction=description.direction;
       return true;
     }
     const adapter={

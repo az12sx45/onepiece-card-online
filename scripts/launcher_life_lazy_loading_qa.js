@@ -49,8 +49,8 @@ async function main() {
     const started = [];
     class ControlledImage {
       set src(value) { this.source = value; started.push(this); }
-      get naturalWidth() { return this.source.includes('/train-') ? 1 : 512; }
-      get naturalHeight() { return 128; }
+      get naturalWidth() { return this.source.includes('/train-') ? 1 : 1024; }
+      get naturalHeight() { return 256; }
       decode() { return new Promise((resolve, reject) => { this.finish = resolve; this.reject = reject; }); }
     }
     const root = {
@@ -78,7 +78,7 @@ async function main() {
     const calls = [];
     const canvas = { width: 0, height: 0, getContext: () => ({ clearRect() {}, drawImage: (...args) => calls.push(args) }) };
     assert.equal(actions.draw(canvas, 'sanji', 'cook', 'south', 300).frame, 1);
-    assert.equal(calls[0][1], 128);
+    assert.equal(calls[0][1], 256);
   });
 
   await check('first assignment keeps specialist clip and waits for decoded art', async () => {

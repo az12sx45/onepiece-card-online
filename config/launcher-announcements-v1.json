@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 6,
+  "revision": 7,
   "announcements": [
     {
       "id": "board-tavern-crew-20260928-1c453fcf83416d97",
@@ -157,6 +157,26 @@
       "requiredRelease": {
         "kind": "launcher",
         "version": "1.2.9"
+      }
+    },
+    {
+      "id": "launcher-1.2.10-shop-and-room-visuals",
+      "status": "published",
+      "publishedAt": "2026-09-28T06:49:27.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.10",
+      "title": "生活基地購買與角色畫面修正｜1.2.10",
+      "summary": "修正新場景與家具購買失敗；滿房時仍可收藏新夥伴，並改善工作動作的清晰度與角色比例。",
+      "body": [
+        "千陽號船匠工作間、水族館酒吧與六件新增家具現在可以從啟動器商城正常購買。",
+        "房間已放滿 10 位夥伴時，仍可購買第 11 位並存入收藏；之後到佈置模式替換房內角色即可。",
+        "草帽團的工作與日常動作改用原始高解析素材重新輸出；調整部分動作切換時的人物比例。",
+        "既有商品價格、金幣餘額、已購收藏與三款桌遊的規則和存檔均保留。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.10"
       }
     }
   ]

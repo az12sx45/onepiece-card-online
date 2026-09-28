@@ -39,7 +39,7 @@ function normalizeState(raw, ownedIds, activeIds, now) {
     characters: Object.fromEntries(owned.map(id => [id,character(id,object(saved.characters)[id],now)])),
     pairs: {}, directive: typeof saved.directive==='string' && Object.hasOwn(content().directives||{},saved.directive) ? saved.directive : 'free_day',
     jobs: (Array.isArray(saved.jobs) ? saved.jobs : []).filter(j => j && set.has(j.itemId) && typeof j.jobId === 'string').slice(0,10),
-    pendingArrivals: (Array.isArray(saved.pendingArrivals) ? saved.pendingArrivals : []).filter(a => a && set.has(a.itemId) && typeof a.arrivalId === 'string').slice(0,10),
+    pendingArrivals: (Array.isArray(saved.pendingArrivals) ? saved.pendingArrivals : []).filter(a => a && set.has(a.itemId) && typeof a.arrivalId === 'string').slice(0, CREW.length),
     arrivedCharacterIds: (Array.isArray(saved.arrivedCharacterIds) ? saved.arrivedCharacterIds : owned).filter(id => set.has(id)),
     recentEvents: (Array.isArray(saved.recentEvents) ? saved.recentEvents : []).filter(e => e && typeof e.eventId === 'string' && iso(e.at)).slice(-32),
     lastSimulatedAt: iso(saved.lastSimulatedAt) || now.toISOString(), lastSeenAt: iso(saved.lastSeenAt) || now.toISOString(),

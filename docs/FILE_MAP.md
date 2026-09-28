@@ -1247,3 +1247,13 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 - `tools/launcher-room/loading-v129/historical-status.json`: SHA-pinned result of the original 1.2.8 release gate. `scripts/desktop_launcher_package_qa.js`: current package gate and historical status verification.
 - `config/launcher-announcements-v1.json`: 1.2.9 gated update notice.
 - `scripts/launcher_129_announcement_qa.js`: isolated check that 1.2.9 notice stays hidden on 1.2.8, appears after verified release, and records reads.
+
+## 2026-09-28 Launcher 1.2.10 shop and room visual repair
+
+- `desktop/auth-service.js`, `server/launcher-profile-shop.js`, `server/launcher-life.js`, `desktop/launcher-profile-shop.js`: updated room-product purchase allowlist, collection after room capacity, arrival retention and player-facing purchase messages.
+- `desktop/launcher-life-actions.js`, `desktop/launcher-life-room.js`, `desktop/launcher-room.css`: HD action routing and three measured pose-height corrections.
+- `public/images/launcher_room/life_hd_v2/`: 116 current 256px life atlases. `tools/launcher-room/life-hd-v2/build_hd.py` and `manifest.json`: reproducible original-PNG crop export with SHA and geometry records; historical `life_v1` remains in source.
+- `desktop/main.js`, `desktop/package.json`, `desktop/package-lock.json`, `scripts/desktop_launcher_package_qa.js`: 1.2.10 resource allowlist, explicit installer assets, version and source/package validation.
+- `config/launcher-announcements-v1.json`, `scripts/launcher_1210_announcement_qa.js`: version-gated release notice and isolated publication/read test.
+- `scripts/launcher_shop_purchase_gate_qa.js`, `launcher_life_hd_browser_qa.js`, `launcher_character_proportion_qa.js`, `launcher_character_scale_audit.py`: account-isolated shop transaction, Chromium action clarity, pose-scale and image-geometry checks.
+- `tools/launcher-room/scale-v1210/review-evidence/`: actual desktop/narrow Chromium screenshots and complete released-character proportion report.

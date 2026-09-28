@@ -39,8 +39,10 @@
   }
   const SPECIALISTS={read:['nami','usopp','chopper','robin','franky','jinbe'],cook:['sanji'],music:['brook'],craft:['usopp','franky'],medicine:['chopper'],helm:['jinbe']};
   function supported(key,action){return KEYS.has(key)&&!!CLIPS[action]&&(!SPECIALISTS[action]||SPECIALISTS[action].includes(key));}
-  // Existing consumers resolve these paths beneath life_v1; reserved content has its own manifest/root.
+  // Keep the approved 128px atlas list for its historical release validator.
+  // Current room content is repacked from the same original drawings at 256px.
   function assets(){return [...KEYS].filter(key=>!reserved?.RESERVED_KEYS.includes(key)).flatMap(key=>Object.keys(CLIPS).filter(action=>supported(key,action)).flatMap(action=>(CLIPS[action].direction?[CLIPS[action].direction]:[...DIRECTIONS]).map(direction=>`${key}/${action}-${direction}.webp`)));}
+  function hdAssets(){return assets().filter(asset=>!asset.startsWith('robin/'));}
   function describe(action, direction='south') {
     const clip = CLIPS[action];
     return clip ? {...clip,action,direction:clip.direction || (DIRECTIONS.has(direction)?direction:'south')} : null;
@@ -49,13 +51,13 @@
     const clip=describe(action,direction);
     if(key==='robin'&&supported(key,action)&&clip)return `opui://launcher/images/launcher_room/robin_v2/life/${action}-${clip.direction}.webp`;
     if(supported(key,action)&&clip&&reserved?.RESERVED_KEYS.includes(key))return reserved.assetUrl(key,`life/${action}-${clip.direction}.webp`);
-    return supported(key,action)&&clip ? `opui://launcher/images/launcher_room/life_v1/${key}/${action}-${clip.direction}.webp` : '';
+    return supported(key,action)&&clip ? `opui://launcher/images/launcher_room/life_hd_v2/${key}/${action}-${clip.direction}.webp` : '';
   }
   function preload(key,action,direction) {
     const source=url(key,action,direction);
     if(!source || typeof Image==='undefined')return null;
     if(cache.has(source))return cache.get(source);
-    const cell=key==='robin'||reserved?.RESERVED_KEYS.includes(key)?256:128;
+    const cell=256;
     const record={source,cell,ready:false,failed:false,image:null}; cache.set(source,record);
     record.promise=new Promise(resolve=>loadQueue.push({record,resolve}));
     drainLoads();
@@ -71,10 +73,10 @@
     const context=canvas.getContext('2d');if(!context)return false;
     const cell=record.cell;
     if(canvas.width!==cell||canvas.height!==cell){canvas.width=cell;canvas.height=cell;}
-    context.clearRect(0,0,cell,cell);context.imageSmoothingEnabled=true;
+    context.clearRect(0,0,cell,cell);context.imageSmoothingEnabled=true;context.imageSmoothingQuality='high';
     const index=reducedMotion?0:frame(action,elapsedMs);
     context.drawImage(record.image,index*cell,0,cell,cell,0,0,cell,cell);
     return {frame:index,source:record.source,direction:describe(action,direction).direction};
   }
-  return Object.freeze({SHAPE,CLIPS,supported,assets,describe,url,preload,frame,draw});
+  return Object.freeze({SHAPE,CLIPS,supported,assets,hdAssets,describe,url,preload,frame,draw});
 });
