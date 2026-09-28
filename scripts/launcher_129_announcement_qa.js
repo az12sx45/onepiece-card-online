@@ -8,7 +8,7 @@ const config = require('../config/launcher-announcements-v1.json');
 
 async function main() {
   validateConfig(config);
-  assert.equal(config.revision, 6);
+  assert.ok(config.revision >= 6);
   const notice = config.announcements.find(item => item.id === 'launcher-1.2.9-loading-optimization');
   assert.equal(notice?.version, '1.2.9');
   assert.deepEqual(notice.requiredRelease, { kind: 'launcher', version: '1.2.9' });

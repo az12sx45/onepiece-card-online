@@ -35,8 +35,12 @@
 .room-character-shell:focus-visible { outline: 2px solid #ffe3a6; border-radius: 9px; }
 .room-character-shell::before { position: absolute; left: 25%; right: 25%; bottom: 0; height: 7%; content: ''; border-radius: 50%; background: radial-gradient(ellipse, #061922a8, #06192200 72%); transform: scaleY(.55); }
 .room-chibi { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 10px 8px #03171bb0); }
-.room-walk-sprite { position: absolute; left: 0; bottom: 0; display: block; width: 100%; height: auto; aspect-ratio: 1; transform: translateY(var(--room-root-offset, 12.5%)); pointer-events: none; }
+.room-walk-sprite { position: absolute; left: 0; bottom: 0; display: block; width: 100%; height: auto; aspect-ratio: 1; transform-origin: 50% calc(100% - var(--room-root-offset, 12.5%)); transform: translateY(var(--room-root-offset, 12.5%)) scale(var(--room-pose-scale, 1)); pointer-events: none; }
 .room-walk-sprite[hidden] { display: none; }
+/* Correct only measured upright pose shrinkage; keep the common foot root fixed. */
+.room-character-shell[data-room-key="c:room-character-franky"][data-action-source="life_v1"][data-pose="eat"] { --room-pose-scale: 1.09; }
+.room-character-shell[data-room-key="c:room-character-jinbe"][data-action-source="life_v1"][data-pose="helm"][data-direction="north"] { --room-pose-scale: 1.115; }
+.room-character-shell[data-room-key="c:room-character-sanji"][data-action-source="life_v1"][data-pose="train"] { --room-pose-scale: 1.075; }
 .room-character-shell.has-directional-sprite .room-chibi { visibility: hidden; }
 .room-character-shell.has-directional-sprite .room-speech { bottom: 66%; }
 .room-character-shell.is-companion-selected .room-walk-sprite, .room-character-shell:hover .room-walk-sprite { filter: drop-shadow(0 0 10px #ffd67ac9); }

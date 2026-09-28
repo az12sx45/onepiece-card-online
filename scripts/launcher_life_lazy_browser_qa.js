@@ -17,7 +17,7 @@ source = source.replace(scriptAnchor, `  for(const file of files){
       window.__lifeImageStarts=[];
       const descriptor=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src');
       Object.defineProperty(HTMLImageElement.prototype,'src',{...descriptor,set(value){
-        if(String(value).includes('/launcher_room/life_v1/'))window.__lifeImageStarts.push(String(value));
+        if(String(value).includes('/launcher_room/life_hd_v2/'))window.__lifeImageStarts.push(String(value));
         return descriptor.set.call(this,value);
       }});
     });

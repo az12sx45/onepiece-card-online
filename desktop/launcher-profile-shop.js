@@ -46,6 +46,8 @@
     'not friends': '目前無法參觀這位玩家的個人頁。', 'not found': '找不到這位玩家。',
     'insufficient_coins': '金幣不足。', 'insufficient coins': '金幣不足。',
     'already_owned': '已經收藏這件商品。', 'not_owned': '尚未收藏這件商品。',
+    'room_full': '房間最多同時放 10 位夥伴。請先在佈置模式收回一位，再放入新夥伴。',
+    'invalid item': '這件商品目前無法購買，請更新啟動器後再試。',
     'guestbook_locked': '留言板尚未解鎖。', 'not_friends': '目前只有好友可以留言。',
     'invalid placement': '佈置位置不正確，請重新調整。', 'rate_limited': '留言太頻繁，請稍後再試。',
     'invalid card': '名片內容不正確，請檢查名稱、簡介與頭像。', 'invalid_card': '名片內容不正確，請檢查名稱、簡介與頭像。',
@@ -673,7 +675,10 @@
       if (!result?.ok || !result.shop) { $('shopConfirmHint').textContent = result?.error === 'timeout' ? '結果尚未確認。請關閉後重新整理商店，避免重複購買。' : errorText(result?.error); return; }
       shopRequest++;
       shop = result.shop; $('shopConfirmDialog').close(); renderShop();
-      status('shopStatus', `已收藏「${String(item.name || item.id).slice(0, 80)}」。`);
+      const purchasedName = String(item.name || item.id).slice(0, 80);
+      status('shopStatus', result.roomPlacementDeferred
+        ? `已收藏「${purchasedName}」。房間最多同時放 10 位夥伴；請到佈置模式替換角色。`
+        : `已收藏「${purchasedName}」。`);
       if (profile?.isSelf && result.profile?.userId === owner) {
         profileRequest++; profile = result.profile; renderProfile();
       }

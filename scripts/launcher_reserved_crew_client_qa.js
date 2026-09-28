@@ -65,16 +65,17 @@ function fixture({released,owned=['ace'],placed=owned}={}){
   await check('68-exact-asset-paths-and-no-nonexistent-specialist-clips',()=>{
     const urls=[];for(const key of R.RESERVED_KEYS){urls.push(R.assetUrl(key,'portrait.webp'));for(const direction of M.DIRECTIONS){urls.push(M.atlasUrl(key,direction));urls.push(M.atlasUrl(key,direction,'acting_v4'));urls.push(A.url(key,'work',direction));}for(const clip of ['eat','rest','sleep','train'])urls.push(A.url(key,clip,'south'));for(const clip of ['medicine','cook','read','music','craft','helm']){assert.equal(A.supported(key,clip),false);assert.equal(A.url(key,clip,'south'),'');}}
     assert.equal(urls.length,68);assert.equal(new Set(urls).size,68);assert(urls.every(u=>u.includes('/reserved_v1/')&&u.endsWith('.webp')));assert.equal(R.assetUrl('ace','../portrait.webp'),'');assert.equal(R.assetUrl('luffy','portrait.webp'),'');
-    assert.equal(M.atlasUrl('luffy','east'),'opui://launcher/images/launcher_room/motion_v4/luffy/east.webp');assert.equal(A.url('chopper','medicine','south'),'opui://launcher/images/launcher_room/life_v1/chopper/medicine-south.webp');
+    assert.equal(M.atlasUrl('luffy','east'),'opui://launcher/images/launcher_room/motion_v4/luffy/east.webp');assert.equal(A.url('chopper','medicine','south'),'opui://launcher/images/launcher_room/life_hd_v2/chopper/medicine-south.webp');
   });
   await check('browser-umd-global-order-and-hd-decoder-geometry',async()=>{
     const ctx={};ctx.globalThis=ctx;ctx.window=ctx;vm.createContext(ctx);for(const file of ['launcher-reserved-crew.js','launcher-room-dialogue.js','launcher-room-motion.js','launcher-life-data.js','launcher-life-actions.js','launcher-life.js'])vm.runInContext(read(file),ctx,{filename:file});assert.equal(ctx.OnePieceLifeData.characterKeys.length,14);assert.equal(ctx.OnePieceRoomDialogue.profile('ace').name,'艾斯');
-    class Image {set src(value){this._src=value;this.naturalWidth=value.includes('/acting/')?2048:value.includes('/walk/')?1536:value.includes('/reserved_v1/')?1024:512;this.naturalHeight=value.includes('/walk/')?384:value.includes('/reserved_v1/')?256:128;if(this.onload)queueMicrotask(()=>this.onload());}get src(){return this._src;}async decode(){}}
+    class Image {set src(value){this._src=value;this.naturalWidth=value.includes('/acting/')?2048:value.includes('/walk/')?1536:value.includes('/reserved_v1/')||value.includes('/life_hd_v2/')?1024:512;this.naturalHeight=value.includes('/walk/')?384:value.includes('/reserved_v1/')||value.includes('/life_hd_v2/')?256:128;if(this.onload)queueMicrotask(()=>this.onload());}get src(){return this._src;}async decode(){}}
     ctx.Image=Image;global.Image=Image;try{
       const motion=await ctx.OnePieceRoomMotion.preload('ace',Image).promise;const acting=await ctx.OnePieceRoomMotion.preloadActions('ace',Image).promise;assert.equal(Object.keys(motion.errors).length,0);assert.equal(Object.keys(acting.errors).length,0);
       const record=ctx.OnePieceLifeActions.preload('ace','work','south');await record.promise;assert(record.ready);assert.equal(record.cell,256);
       const drawCalls=[],canvas={width:0,height:0,getContext:()=>({clearRect(){},drawImage(...args){drawCalls.push(args);}})};ctx.OnePieceLifeActions.draw(canvas,'ace','work','south',900);assert.equal(canvas.width,256);assert.equal(drawCalls[0][1],768);assert.equal(drawCalls[0][3],256);
-      const legacy=ctx.OnePieceLifeActions.preload('luffy','work','south');await legacy.promise;assert(legacy.ready);assert.equal(legacy.cell,128);
+      const updated=ctx.OnePieceLifeActions.preload('luffy','work','south');await updated.promise;assert(updated.ready);assert.equal(updated.cell,256);assert(updated.source.includes('/life_hd_v2/'));
+      assert(fs.existsSync(path.join(root,'public/images/launcher_room/life_v1/luffy/work-south.webp')),'historical 128px atlas remains available');
     }finally{delete global.Image;}
     const html=read('launcher.html');assert(html.indexOf('launcher-reserved-crew.js')<html.indexOf('launcher-room-dialogue.js'));
   });

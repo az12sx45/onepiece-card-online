@@ -344,7 +344,7 @@ class AuthService extends EventEmitter {
       'decor-side-zoro-chibi', 'decor-side-nami-chibi',
       'decor-footer-sanji-chibi', 'decor-footer-robin-chibi'
     ]) customItems.add(id);
-    const roomProduct = /^room-(?:scene-(?:sunny-deck|sunny-kitchen|sunny-library)|furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|galley-stove|bookshelf|medicine-cabinet|piano|tool-bench)|character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe|ace|sabo|law|hancock))$/.test(itemId);
+    const roomProduct = /^room-(?:scene-(?:sunny-deck|sunny-kitchen|sunny-library|sunny-workshop|sunny-aquarium)|furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|galley-stove|bookshelf|medicine-cabinet|piano|tool-bench|supply-rack|log-pose-desk|repair-cart|library-cart|medical-cart|den-den-desk)|character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe|ace|sabo|law|hancock))$/.test(itemId);
     if (typeof itemId !== 'string' || !(/^(?:ava-(?:[1-9]|[1-5][0-9]|6[0-2])|(?:wall|flag)-(?:[1-9]|[1-4][0-9]|50)|bgm-op-(?:0[1-9]|1[0-9]|20))$/.test(itemId) || roomProduct || customItems.has(itemId))) {
       return { ok: false, error: 'invalid item' };
     }

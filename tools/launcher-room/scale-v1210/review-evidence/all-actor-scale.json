@@ -1,0 +1,1338 @@
+{
+  "schema": "launcher-character-scale-audit/1",
+  "activeCharacters": [
+    "luffy",
+    "zoro",
+    "nami",
+    "usopp",
+    "sanji",
+    "chopper",
+    "robin",
+    "franky",
+    "brook",
+    "jinbe",
+    "ace"
+  ],
+  "method": "Pillow RGBA alpha >24; walk standing frame 1; action median of four complete frames; same actor and direction; rest/sleep omitted.",
+  "characters": [
+    {
+      "key": "luffy",
+      "displayScale": 1,
+      "standingHeightByDirection": {
+        "east": 0.7656,
+        "west": 0.7656,
+        "north": 0.7656,
+        "south": 0.7708
+      },
+      "uprightActions": [
+        {
+          "action": "eat",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/luffy/eat-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7708,
+          "actionHeightFraction": 0.7617,
+          "heightRatio": 0.9882,
+          "widthRatio": 0.9785
+        },
+        {
+          "action": "train",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/luffy/train-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7708,
+          "actionHeightFraction": 0.7383,
+          "heightRatio": 0.9578,
+          "widthRatio": 1.2012
+        },
+        {
+          "action": "work",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/luffy/work-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7617,
+          "heightRatio": 0.9949,
+          "widthRatio": 1.2203
+        },
+        {
+          "action": "work",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/luffy/work-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7637,
+          "heightRatio": 0.9974,
+          "widthRatio": 1.1653
+        },
+        {
+          "action": "work",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/luffy/work-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7708,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 0.9932,
+          "widthRatio": 1.084
+        },
+        {
+          "action": "work",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/luffy/work-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7422,
+          "heightRatio": 0.9694,
+          "widthRatio": 1.2091
+        }
+      ],
+      "southVisibleHeightRelativeToLuffy": 1.0
+    },
+    {
+      "key": "zoro",
+      "displayScale": 1,
+      "standingHeightByDirection": {
+        "east": 0.75,
+        "west": 0.75,
+        "north": 0.7474,
+        "south": 0.7526
+      },
+      "uprightActions": [
+        {
+          "action": "eat",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/zoro/eat-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7526,
+          "actionHeightFraction": 0.748,
+          "heightRatio": 0.9939,
+          "widthRatio": 1.1543
+        },
+        {
+          "action": "train",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/zoro/train-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7526,
+          "actionHeightFraction": 0.7363,
+          "heightRatio": 0.9784,
+          "widthRatio": 1.2457
+        },
+        {
+          "action": "work",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/zoro/work-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.75,
+          "actionHeightFraction": 0.75,
+          "heightRatio": 1.0,
+          "widthRatio": 1.2297
+        },
+        {
+          "action": "work",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/zoro/work-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7474,
+          "actionHeightFraction": 0.7461,
+          "heightRatio": 0.9983,
+          "widthRatio": 1.0833
+        },
+        {
+          "action": "work",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/zoro/work-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7526,
+          "actionHeightFraction": 0.7461,
+          "heightRatio": 0.9913,
+          "widthRatio": 1.1609
+        },
+        {
+          "action": "work",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/zoro/work-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.75,
+          "actionHeightFraction": 0.7461,
+          "heightRatio": 0.9948,
+          "widthRatio": 1.4526
+        }
+      ],
+      "southVisibleHeightRelativeToLuffy": 0.9764
+    },
+    {
+      "key": "nami",
+      "displayScale": 1,
+      "standingHeightByDirection": {
+        "east": 0.7734,
+        "west": 0.7734,
+        "north": 0.776,
+        "south": 0.776
+      },
+      "uprightActions": [
+        {
+          "action": "eat",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/nami/eat-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7812,
+          "heightRatio": 1.0067,
+          "widthRatio": 0.9662
+        },
+        {
+          "action": "read",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/nami/read-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7734,
+          "actionHeightFraction": 0.7734,
+          "heightRatio": 1.0,
+          "widthRatio": 1.8571
+        },
+        {
+          "action": "read",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/nami/read-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7773,
+          "heightRatio": 1.0017,
+          "widthRatio": 1.3041
+        },
+        {
+          "action": "read",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/nami/read-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7734,
+          "heightRatio": 0.9966,
+          "widthRatio": 1.3851
+        },
+        {
+          "action": "read",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/nami/read-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7734,
+          "actionHeightFraction": 0.7734,
+          "heightRatio": 1.0,
+          "widthRatio": 1.8704
+        },
+        {
+          "action": "train",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/nami/train-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7852,
+          "heightRatio": 1.0117,
+          "widthRatio": 1.1554
+        },
+        {
+          "action": "work",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/nami/work-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7734,
+          "actionHeightFraction": 0.7852,
+          "heightRatio": 1.0152,
+          "widthRatio": 1.4911
+        },
+        {
+          "action": "work",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/nami/work-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7852,
+          "heightRatio": 1.0117,
+          "widthRatio": 0.8986
+        },
+        {
+          "action": "work",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/nami/work-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7852,
+          "heightRatio": 1.0117,
+          "widthRatio": 0.973
+        },
+        {
+          "action": "work",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/nami/work-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7734,
+          "actionHeightFraction": 0.7852,
+          "heightRatio": 1.0152,
+          "widthRatio": 1.4444
+        }
+      ],
+      "southVisibleHeightRelativeToLuffy": 1.0067
+    },
+    {
+      "key": "usopp",
+      "displayScale": 1,
+      "standingHeightByDirection": {
+        "east": 0.7734,
+        "west": 0.7786,
+        "north": 0.776,
+        "south": 0.776
+      },
+      "uprightActions": [
+        {
+          "action": "craft",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/craft-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7734,
+          "actionHeightFraction": 0.7754,
+          "heightRatio": 1.0025,
+          "widthRatio": 1.435
+        },
+        {
+          "action": "craft",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/craft-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7754,
+          "heightRatio": 0.9992,
+          "widthRatio": 1.212
+        },
+        {
+          "action": "craft",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/craft-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7812,
+          "heightRatio": 1.0067,
+          "widthRatio": 1.1558
+        },
+        {
+          "action": "craft",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/craft-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7786,
+          "actionHeightFraction": 0.7754,
+          "heightRatio": 0.9958,
+          "widthRatio": 1.4004
+        },
+        {
+          "action": "eat",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/eat-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 0.9866,
+          "widthRatio": 1.0171
+        },
+        {
+          "action": "read",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/read-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7734,
+          "actionHeightFraction": 0.7695,
+          "heightRatio": 0.9949,
+          "widthRatio": 1.5354
+        },
+        {
+          "action": "read",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/read-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7734,
+          "heightRatio": 0.9966,
+          "widthRatio": 1.2717
+        },
+        {
+          "action": "read",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/read-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7695,
+          "heightRatio": 0.9916,
+          "widthRatio": 1.0942
+        },
+        {
+          "action": "read",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/read-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7786,
+          "actionHeightFraction": 0.7695,
+          "heightRatio": 0.9883,
+          "widthRatio": 1.459
+        },
+        {
+          "action": "train",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/train-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7773,
+          "heightRatio": 1.0017,
+          "widthRatio": 1.0274
+        },
+        {
+          "action": "work",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/work-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7734,
+          "actionHeightFraction": 0.7734,
+          "heightRatio": 1.0,
+          "widthRatio": 1.4882
+        },
+        {
+          "action": "work",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/work-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7773,
+          "heightRatio": 1.0017,
+          "widthRatio": 1.3315
+        },
+        {
+          "action": "work",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/work-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.7773,
+          "heightRatio": 1.0017,
+          "widthRatio": 1.0788
+        },
+        {
+          "action": "work",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/usopp/work-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7786,
+          "actionHeightFraction": 0.7812,
+          "heightRatio": 1.0033,
+          "widthRatio": 1.4414
+        }
+      ],
+      "southVisibleHeightRelativeToLuffy": 1.0067
+    },
+    {
+      "key": "sanji",
+      "displayScale": 1,
+      "standingHeightByDirection": {
+        "east": 0.7656,
+        "west": 0.7656,
+        "north": 0.7656,
+        "south": 0.7656
+      },
+      "uprightActions": [
+        {
+          "action": "cook",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/sanji/cook-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.75,
+          "heightRatio": 0.9796,
+          "widthRatio": 1.7621
+        },
+        {
+          "action": "cook",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/sanji/cook-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7578,
+          "heightRatio": 0.9898,
+          "widthRatio": 1.4095
+        },
+        {
+          "action": "cook",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/sanji/cook-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 1.0,
+          "widthRatio": 1.1092
+        },
+        {
+          "action": "cook",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/sanji/cook-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7695,
+          "heightRatio": 1.0051,
+          "widthRatio": 1.7812
+        },
+        {
+          "action": "eat",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/sanji/eat-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7598,
+          "heightRatio": 0.9923,
+          "widthRatio": 1.0714
+        },
+        {
+          "action": "train",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/sanji/train-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.707,
+          "heightRatio": 0.9235,
+          "widthRatio": 1.3739
+        },
+        {
+          "action": "work",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/sanji/work-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7441,
+          "heightRatio": 0.9719,
+          "widthRatio": 1.5655
+        },
+        {
+          "action": "work",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/sanji/work-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7734,
+          "heightRatio": 1.0102,
+          "widthRatio": 1.1056
+        },
+        {
+          "action": "work",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/sanji/work-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7617,
+          "heightRatio": 0.9949,
+          "widthRatio": 1.0336
+        },
+        {
+          "action": "work",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/sanji/work-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7578,
+          "heightRatio": 0.9898,
+          "widthRatio": 1.5312
+        }
+      ],
+      "southVisibleHeightRelativeToLuffy": 0.9933
+    },
+    {
+      "key": "chopper",
+      "displayScale": 0.72,
+      "standingHeightByDirection": {
+        "east": 0.7682,
+        "west": 0.7682,
+        "north": 0.7682,
+        "south": 0.7734
+      },
+      "uprightActions": [
+        {
+          "action": "eat",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/eat-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7734,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 0.9899,
+          "widthRatio": 1.1233
+        },
+        {
+          "action": "medicine",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/medicine-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 0.9966,
+          "widthRatio": 1.1186
+        },
+        {
+          "action": "medicine",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/medicine-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 0.9966,
+          "widthRatio": 1.09
+        },
+        {
+          "action": "medicine",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/medicine-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7734,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 0.9899,
+          "widthRatio": 1.1027
+        },
+        {
+          "action": "medicine",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/medicine-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 0.9966,
+          "widthRatio": 1.1671
+        },
+        {
+          "action": "read",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/read-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 0.9966,
+          "widthRatio": 1.2712
+        },
+        {
+          "action": "read",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/read-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7637,
+          "heightRatio": 0.9941,
+          "widthRatio": 1.0367
+        },
+        {
+          "action": "read",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/read-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7734,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 0.9899,
+          "widthRatio": 1.0822
+        },
+        {
+          "action": "read",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/read-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 0.9966,
+          "widthRatio": 1.1629
+        },
+        {
+          "action": "train",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/train-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7734,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 0.9899,
+          "widthRatio": 1.1301
+        },
+        {
+          "action": "work",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/work-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 0.9966,
+          "widthRatio": 1.2203
+        },
+        {
+          "action": "work",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/work-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 0.9966,
+          "widthRatio": 0.98
+        },
+        {
+          "action": "work",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/work-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7734,
+          "actionHeightFraction": 0.7617,
+          "heightRatio": 0.9848,
+          "widthRatio": 1.024
+        },
+        {
+          "action": "work",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/chopper/work-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.748,
+          "heightRatio": 0.9737,
+          "widthRatio": 1.2093
+        }
+      ],
+      "southVisibleHeightRelativeToLuffy": 0.7224
+    },
+    {
+      "key": "robin",
+      "displayScale": 1.03,
+      "standingHeightByDirection": {
+        "east": 0.7656,
+        "west": 0.7656,
+        "north": 0.7656,
+        "south": 0.7656
+      },
+      "uprightActions": [
+        {
+          "action": "eat",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/robin_v2/life/eat-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 1.0,
+          "widthRatio": 0.9736
+        },
+        {
+          "action": "read",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/robin_v2/life/read-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 1.0,
+          "widthRatio": 1.58
+        },
+        {
+          "action": "read",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/robin_v2/life/read-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 1.0,
+          "widthRatio": 1.1016
+        },
+        {
+          "action": "read",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/robin_v2/life/read-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7715,
+          "heightRatio": 1.0077,
+          "widthRatio": 0.9087
+        },
+        {
+          "action": "read",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/robin_v2/life/read-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7637,
+          "heightRatio": 0.9974,
+          "widthRatio": 1.5296
+        },
+        {
+          "action": "train",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/robin_v2/life/train-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7676,
+          "heightRatio": 1.0026,
+          "widthRatio": 1.4567
+        },
+        {
+          "action": "work",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/robin_v2/life/work-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 1.0,
+          "widthRatio": 1.93
+        },
+        {
+          "action": "work",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/robin_v2/life/work-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 1.0,
+          "widthRatio": 1.2031
+        },
+        {
+          "action": "work",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/robin_v2/life/work-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7695,
+          "heightRatio": 1.0051,
+          "widthRatio": 1.0385
+        },
+        {
+          "action": "work",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/robin_v2/life/work-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7656,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 1.0,
+          "widthRatio": 1.8257
+        }
+      ],
+      "southVisibleHeightRelativeToLuffy": 1.0231
+    },
+    {
+      "key": "franky",
+      "displayScale": 1.32,
+      "standingHeightByDirection": {
+        "east": 0.651,
+        "west": 0.6484,
+        "north": 0.651,
+        "south": 0.6484
+      },
+      "uprightActions": [
+        {
+          "action": "craft",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/craft-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.651,
+          "actionHeightFraction": 0.6523,
+          "heightRatio": 1.002,
+          "widthRatio": 1.1562
+        },
+        {
+          "action": "craft",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/craft-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.651,
+          "actionHeightFraction": 0.6504,
+          "heightRatio": 0.999,
+          "widthRatio": 1.0875
+        },
+        {
+          "action": "craft",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/craft-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.6484,
+          "actionHeightFraction": 0.6523,
+          "heightRatio": 1.006,
+          "widthRatio": 1.1475
+        },
+        {
+          "action": "craft",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/craft-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.6484,
+          "actionHeightFraction": 0.6484,
+          "heightRatio": 1.0,
+          "widthRatio": 1.1351
+        },
+        {
+          "action": "eat",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/eat-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.6484,
+          "actionHeightFraction": 0.5938,
+          "heightRatio": 0.9157,
+          "widthRatio": 1.0537
+        },
+        {
+          "action": "read",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/read-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.651,
+          "actionHeightFraction": 0.6387,
+          "heightRatio": 0.981,
+          "widthRatio": 1.4844
+        },
+        {
+          "action": "read",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/read-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.651,
+          "actionHeightFraction": 0.6387,
+          "heightRatio": 0.981,
+          "widthRatio": 1.0159
+        },
+        {
+          "action": "read",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/read-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.6484,
+          "actionHeightFraction": 0.6367,
+          "heightRatio": 0.9819,
+          "widthRatio": 1.1625
+        },
+        {
+          "action": "read",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/read-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.6484,
+          "actionHeightFraction": 0.6387,
+          "heightRatio": 0.9849,
+          "widthRatio": 1.3682
+        },
+        {
+          "action": "train",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/train-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.6484,
+          "actionHeightFraction": 0.6465,
+          "heightRatio": 0.997,
+          "widthRatio": 1.0687
+        },
+        {
+          "action": "work",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/work-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.651,
+          "actionHeightFraction": 0.6523,
+          "heightRatio": 1.002,
+          "widthRatio": 1.3385
+        },
+        {
+          "action": "work",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/work-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.651,
+          "actionHeightFraction": 0.6484,
+          "heightRatio": 0.996,
+          "widthRatio": 1.0841
+        },
+        {
+          "action": "work",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/work-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.6484,
+          "actionHeightFraction": 0.6504,
+          "heightRatio": 1.003,
+          "widthRatio": 1.0912
+        },
+        {
+          "action": "work",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/franky/work-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.6484,
+          "actionHeightFraction": 0.6523,
+          "heightRatio": 1.006,
+          "widthRatio": 1.1807
+        }
+      ],
+      "southVisibleHeightRelativeToLuffy": 1.1104
+    },
+    {
+      "key": "brook",
+      "displayScale": 1.1,
+      "standingHeightByDirection": {
+        "east": 0.763,
+        "west": 0.7604,
+        "north": 0.7604,
+        "south": 0.7578
+      },
+      "uprightActions": [
+        {
+          "action": "eat",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/brook/eat-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7578,
+          "actionHeightFraction": 0.7656,
+          "heightRatio": 1.0103,
+          "widthRatio": 1.0545
+        },
+        {
+          "action": "music",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/brook/music-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.763,
+          "actionHeightFraction": 0.7734,
+          "heightRatio": 1.0137,
+          "widthRatio": 1.5305
+        },
+        {
+          "action": "music",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/brook/music-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7604,
+          "actionHeightFraction": 0.7715,
+          "heightRatio": 1.0146,
+          "widthRatio": 1.0978
+        },
+        {
+          "action": "music",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/brook/music-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7578,
+          "actionHeightFraction": 0.7734,
+          "heightRatio": 1.0206,
+          "widthRatio": 1.094
+        },
+        {
+          "action": "music",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/brook/music-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7604,
+          "actionHeightFraction": 0.7715,
+          "heightRatio": 1.0146,
+          "widthRatio": 1.543
+        },
+        {
+          "action": "train",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/brook/train-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7578,
+          "actionHeightFraction": 0.7812,
+          "heightRatio": 1.0309,
+          "widthRatio": 1.0545
+        },
+        {
+          "action": "work",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/brook/work-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.763,
+          "actionHeightFraction": 0.7676,
+          "heightRatio": 1.006,
+          "widthRatio": 1.3598
+        },
+        {
+          "action": "work",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/brook/work-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7604,
+          "actionHeightFraction": 0.7715,
+          "heightRatio": 1.0146,
+          "widthRatio": 1.0217
+        },
+        {
+          "action": "work",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/brook/work-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7578,
+          "actionHeightFraction": 0.7676,
+          "heightRatio": 1.0129,
+          "widthRatio": 1.0489
+        },
+        {
+          "action": "work",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/brook/work-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7604,
+          "actionHeightFraction": 0.7695,
+          "heightRatio": 1.012,
+          "widthRatio": 1.3033
+        }
+      ],
+      "southVisibleHeightRelativeToLuffy": 1.0814
+    },
+    {
+      "key": "jinbe",
+      "displayScale": 1.14,
+      "standingHeightByDirection": {
+        "east": 0.7708,
+        "west": 0.7682,
+        "north": 0.7682,
+        "south": 0.7682
+      },
+      "uprightActions": [
+        {
+          "action": "eat",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/eat-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7539,
+          "heightRatio": 0.9814,
+          "widthRatio": 1.1349
+        },
+        {
+          "action": "helm",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/helm-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7708,
+          "actionHeightFraction": 0.7285,
+          "heightRatio": 0.9451,
+          "widthRatio": 1.1776
+        },
+        {
+          "action": "helm",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/helm-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.6836,
+          "heightRatio": 0.8898,
+          "widthRatio": 0.8194
+        },
+        {
+          "action": "helm",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/helm-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7734,
+          "heightRatio": 1.0068,
+          "widthRatio": 1.0613
+        },
+        {
+          "action": "helm",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/helm-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7305,
+          "heightRatio": 0.9508,
+          "widthRatio": 1.1267
+        },
+        {
+          "action": "read",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/read-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7708,
+          "actionHeightFraction": 0.7695,
+          "heightRatio": 0.9983,
+          "widthRatio": 1.2757
+        },
+        {
+          "action": "read",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/read-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7695,
+          "heightRatio": 1.0017,
+          "widthRatio": 0.9315
+        },
+        {
+          "action": "read",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/read-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7734,
+          "heightRatio": 1.0068,
+          "widthRatio": 0.9934
+        },
+        {
+          "action": "read",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/read-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7734,
+          "heightRatio": 1.0068,
+          "widthRatio": 1.1771
+        },
+        {
+          "action": "train",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/train-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7344,
+          "heightRatio": 0.9559,
+          "widthRatio": 1.0472
+        },
+        {
+          "action": "work",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/work-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7708,
+          "actionHeightFraction": 0.7734,
+          "heightRatio": 1.0034,
+          "widthRatio": 1.2336
+        },
+        {
+          "action": "work",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/work-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7695,
+          "heightRatio": 1.0017,
+          "widthRatio": 0.8861
+        },
+        {
+          "action": "work",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/work-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7734,
+          "heightRatio": 1.0068,
+          "widthRatio": 0.9736
+        },
+        {
+          "action": "work",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/life_hd_v2/jinbe/work-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7682,
+          "actionHeightFraction": 0.7695,
+          "heightRatio": 1.0017,
+          "widthRatio": 1.157
+        }
+      ],
+      "southVisibleHeightRelativeToLuffy": 1.1362
+    },
+    {
+      "key": "ace",
+      "displayScale": 1,
+      "standingHeightByDirection": {
+        "east": 0.7839,
+        "west": 0.776,
+        "north": 0.7812,
+        "south": 0.7839
+      },
+      "uprightActions": [
+        {
+          "action": "eat",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/reserved_v1/ace/life/eat-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7839,
+          "actionHeightFraction": 0.8066,
+          "heightRatio": 1.0291,
+          "widthRatio": 1.0617
+        },
+        {
+          "action": "train",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/reserved_v1/ace/life/train-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7839,
+          "actionHeightFraction": 0.7715,
+          "heightRatio": 0.9842,
+          "widthRatio": 1.0422
+        },
+        {
+          "action": "work",
+          "direction": "east",
+          "atlas": "public/images/launcher_room/reserved_v1/ace/life/work-east.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7839,
+          "actionHeightFraction": 0.7832,
+          "heightRatio": 0.9992,
+          "widthRatio": 1.1455
+        },
+        {
+          "action": "work",
+          "direction": "north",
+          "atlas": "public/images/launcher_room/reserved_v1/ace/life/work-north.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7812,
+          "actionHeightFraction": 0.7695,
+          "heightRatio": 0.985,
+          "widthRatio": 1.0788
+        },
+        {
+          "action": "work",
+          "direction": "south",
+          "atlas": "public/images/launcher_room/reserved_v1/ace/life/work-south.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.7839,
+          "actionHeightFraction": 0.7812,
+          "heightRatio": 0.9967,
+          "widthRatio": 1.0325
+        },
+        {
+          "action": "work",
+          "direction": "west",
+          "atlas": "public/images/launcher_room/reserved_v1/ace/life/work-west.webp",
+          "atlasCell": 256,
+          "standingHeightFraction": 0.776,
+          "actionHeightFraction": 0.8008,
+          "heightRatio": 1.0319,
+          "widthRatio": 1.1793
+        }
+      ],
+      "southVisibleHeightRelativeToLuffy": 1.017
+    }
+  ],
+  "outliersOverSevenPercent": [
+    {
+      "key": "jinbe",
+      "action": "helm",
+      "direction": "north",
+      "atlas": "public/images/launcher_room/life_hd_v2/jinbe/helm-north.webp",
+      "atlasCell": 256,
+      "standingHeightFraction": 0.7682,
+      "actionHeightFraction": 0.6836,
+      "heightRatio": 0.8898,
+      "widthRatio": 0.8194
+    },
+    {
+      "key": "franky",
+      "action": "eat",
+      "direction": "south",
+      "atlas": "public/images/launcher_room/life_hd_v2/franky/eat-south.webp",
+      "atlasCell": 256,
+      "standingHeightFraction": 0.6484,
+      "actionHeightFraction": 0.5938,
+      "heightRatio": 0.9157,
+      "widthRatio": 1.0537
+    },
+    {
+      "key": "sanji",
+      "action": "train",
+      "direction": "south",
+      "atlas": "public/images/launcher_room/life_hd_v2/sanji/train-south.webp",
+      "atlasCell": 256,
+      "standingHeightFraction": 0.7656,
+      "actionHeightFraction": 0.707,
+      "heightRatio": 0.9235,
+      "widthRatio": 1.3739
+    }
+  ],
+  "humanAcceptance": false
+}

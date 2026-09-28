@@ -647,6 +647,7 @@ async function changeLauncherItem(pool, secret, itemId, action, capability) {
     const alreadyOwned = !catalogItem || (legacyType ? owned[ownershipKey].includes(item.key) :
       ((item.type === 'guestbook' && guestbookUnlocked(stats)) || launcherOwned.includes(item.id)));
     let nextAvatar = row.avatar;
+    let roomPlacementDeferred = false;
     if (action === 'buy') {
       if (alreadyOwned) { await db.query('ROLLBACK'); return { ok: false, error: 'already_owned' }; }
       if (wallet.coins < item.price) { await db.query('ROLLBACK'); return { ok: false, error: 'insufficient_coins' }; }
@@ -660,15 +661,14 @@ async function changeLauncherItem(pool, secret, itemId, action, capability) {
       }
       if (lifePurchase) {
         const room = launcherRoom(stats);
-        if (room.revision === Number.MAX_SAFE_INTEGER) {
-          await db.query('ROLLBACK'); return { ok: false, error: 'invalid_room' };
-        }
-        const spawn = require('./launcher-life').safeSpawn(room);
-        if (!spawn || room.characters.length >= ROOM_MAX_CHARACTERS) {
-          await db.query('ROLLBACK'); return { ok: false, error: 'room_full' };
-        }
-        stats.launcherRoomV1 = { ...room, revision: room.revision + 1,
-          characters: [...room.characters, { itemId: item.id, ...spawn }] };
+        // Ownership and room occupancy are separate: a full room must not block
+        // buying a released character. The owner can swap the new character in.
+        const spawn = room.characters.length < ROOM_MAX_CHARACTERS && room.revision < Number.MAX_SAFE_INTEGER
+          ? require('./launcher-life').safeSpawn(room) : null;
+        if (spawn) {
+          stats.launcherRoomV1 = { ...room, revision: room.revision + 1,
+            characters: [...room.characters, { itemId: item.id, ...spawn }] };
+        } else roomPlacementDeferred = true;
       }
     } else if (action === 'equip') {
       if (ROOM_ITEM_TYPES.includes(item.type)) { await db.query('ROLLBACK'); return { ok: false, error: 'invalid_action' }; }
@@ -701,7 +701,7 @@ async function changeLauncherItem(pool, secret, itemId, action, capability) {
     const life = lifePurchase ? await require('./launcher-life-store').registerPurchasedCharacter(db, updated.rows[0], item.id) : null;
     await db.query('COMMIT');
     return { ok: true, shop: toShop(updated.rows[0]), profile: toPublicProfile(updated.rows[0], true),
-      ...(life ? { life, serverNow: new Date().toISOString() } : {}) };
+      ...(life ? { life, serverNow: new Date().toISOString(), roomPlacementDeferred } : {}) };
   } catch (error) {
     await db.query('ROLLBACK').catch(() => {});
     throw error;

@@ -186,7 +186,7 @@ async function main(){
       await page.locator('#roomStage').screenshot({path:path.join(out,key+'-gift-eat-with-line.png')});await page.evaluate(key=>window.__launcherRoomTest.lifeCancel(key),key);await advance(page,2000);await page.locator('#roomLifeTrain').click();await until(page,s=>s.nodes[0]?.pose==='train'&&s.nodes[0]?.speech);
       await page.locator('#roomStage').screenshot({path:path.join(out,key+'-train.png')});
       const frames=[];for(let i=0;i<4;i++){frames.push((await snap(page)).nodes[0].frame);await page.clock.runFor(420);}assert(new Set(frames).size>=3,'train shows successive authored frames');
-      return{actor:key,uiPointerClicks:true,trainFrames:frames,atlasSha256:Object.fromEntries(['eat','train'].map(action=>[action,crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'public/images/launcher_room/life_v1',key,action+'-south.webp'))).digest('hex')]))};
+      return{actor:key,uiPointerClicks:true,trainFrames:frames,atlasSha256:Object.fromEntries(['eat','train'].map(action=>[action,crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'public/images/launcher_room/life_hd_v2',key,action+'-south.webp'))).digest('hex')]))};
     });
     for(const cast of [['luffy'],['luffy','sanji','nami']])await scenario('authored-chain-'+cast.length,{owned:cast},async page=>{
       await advance(page,13000);await page.evaluate(()=>{for(const actor of window.__launcherRoomTest.snapshot().walkers)window.__launcherRoomTest.lifeCancel(actor.key);});assert(await page.evaluate(()=>window.__launcherRoomTest.lifeEvent('life-chain-luffy-break')));

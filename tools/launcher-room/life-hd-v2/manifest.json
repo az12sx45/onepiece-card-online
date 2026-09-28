@@ -1,0 +1,5823 @@
+{
+  "schema": "launcher-life-hd-art/1",
+  "release": "1.2.10",
+  "method": "reviewed-original-png-crops-at-2x-output-no-upsample",
+  "sourceAtlasCellPixels": 128,
+  "newAtlasCellPixels": 256,
+  "count": 116,
+  "byAction": {
+    "cook": 4,
+    "craft": 8,
+    "eat": 9,
+    "helm": 4,
+    "medicine": 4,
+    "music": 4,
+    "read": 20,
+    "rest": 9,
+    "sleep": 9,
+    "train": 9,
+    "work": 36
+  },
+  "assets": [
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/brook/eat-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/brook/eat-south.webp",
+      "source": "tools/launcher-room/life-v1/brook-utility/source.png",
+      "sourceSha256": "434ca76284e79b0638a66225b366f3aec865670775326e89e3cd3ed39d67021c",
+      "sourcePixels": [
+        1312,
+        1199
+      ],
+      "plan": "tools/launcher-room/life-v1/brook-utility/plan.json",
+      "planSha256": "257eeabf205859713358dc853c84a8daaf1550fe1995122f769335d311d1c781",
+      "scaleFromSource": 0.58,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          78,
+          19,
+          146,
+          205
+        ],
+        [
+          35,
+          20,
+          188,
+          204
+        ],
+        [
+          36,
+          21,
+          188,
+          203
+        ],
+        [
+          35,
+          19,
+          166,
+          205
+        ]
+      ],
+      "assetBytes": 91040,
+      "assetSha256": "b7407c46099b1493f76a86a3c6a64d9344ed455adce5e6fa6a1949d2d5db4491"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/brook/music-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/brook/music-east.webp",
+      "source": "tools/launcher-room/life-v1/brook-music/source.png",
+      "sourceSha256": "bde08a27f852fbb814e08a299a80eeeb240a511f93ccac9c4618254fd73ee40a",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/brook-music/plan.json",
+      "planSha256": "95cf98fb9f8a6d288929e7d3852b64bfb4f0bcc650d2a91b8726ff83842daf4d",
+      "scaleFromSource": 0.643086,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          88,
+          24,
+          128,
+          200
+        ],
+        [
+          88,
+          24,
+          129,
+          200
+        ],
+        [
+          88,
+          25,
+          127,
+          199
+        ],
+        [
+          89,
+          24,
+          123,
+          200
+        ]
+      ],
+      "assetBytes": 98838,
+      "assetSha256": "3ba6ee9e5f5ba5c3d069c0e55f460ca06ed5cf96709b01856f43c354df107e26"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/brook/music-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/brook/music-north.webp",
+      "source": "tools/launcher-room/life-v1/brook-music/source.png",
+      "sourceSha256": "bde08a27f852fbb814e08a299a80eeeb240a511f93ccac9c4618254fd73ee40a",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/brook-music/plan.json",
+      "planSha256": "95cf98fb9f8a6d288929e7d3852b64bfb4f0bcc650d2a91b8726ff83842daf4d",
+      "scaleFromSource": 0.682594,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          77,
+          24,
+          105,
+          200
+        ],
+        [
+          77,
+          24,
+          103,
+          200
+        ],
+        [
+          77,
+          24,
+          102,
+          200
+        ],
+        [
+          75,
+          24,
+          103,
+          200
+        ]
+      ],
+      "assetBytes": 90764,
+      "assetSha256": "0036cad983bb27d6fcf88e6f038936deb2390b282bd635be7aa2d81139d1b38b"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/brook/music-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/brook/music-south.webp",
+      "source": "tools/launcher-room/life-v1/brook-music/source.png",
+      "sourceSha256": "bde08a27f852fbb814e08a299a80eeeb240a511f93ccac9c4618254fd73ee40a",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/brook-music/plan.json",
+      "planSha256": "95cf98fb9f8a6d288929e7d3852b64bfb4f0bcc650d2a91b8726ff83842daf4d",
+      "scaleFromSource": 0.641026,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          78,
+          24,
+          99,
+          200
+        ],
+        [
+          78,
+          24,
+          100,
+          200
+        ],
+        [
+          78,
+          24,
+          99,
+          200
+        ],
+        [
+          79,
+          24,
+          99,
+          200
+        ]
+      ],
+      "assetBytes": 101914,
+      "assetSha256": "e602869a22b03a183d4656ec966337d0279b92ab0c478006a6520e4349201ab8"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/brook/music-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/brook/music-west.webp",
+      "source": "tools/launcher-room/life-v1/brook-music/source.png",
+      "sourceSha256": "bde08a27f852fbb814e08a299a80eeeb240a511f93ccac9c4618254fd73ee40a",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/brook-music/plan.json",
+      "planSha256": "95cf98fb9f8a6d288929e7d3852b64bfb4f0bcc650d2a91b8726ff83842daf4d",
+      "scaleFromSource": 0.643086,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          45,
+          25,
+          127,
+          199
+        ],
+        [
+          46,
+          24,
+          127,
+          200
+        ],
+        [
+          46,
+          24,
+          129,
+          200
+        ],
+        [
+          46,
+          25,
+          128,
+          199
+        ]
+      ],
+      "assetBytes": 102554,
+      "assetSha256": "a090702e9e465e03bf72af117b838326b34d01ce119b3016ede3ad98f0400cbf"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/brook/rest-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/brook/rest-south.webp",
+      "source": "tools/launcher-room/life-v1/brook-utility/source.png",
+      "sourceSha256": "434ca76284e79b0638a66225b366f3aec865670775326e89e3cd3ed39d67021c",
+      "sourcePixels": [
+        1312,
+        1199
+      ],
+      "plan": "tools/launcher-room/life-v1/brook-utility/plan.json",
+      "planSha256": "257eeabf205859713358dc853c84a8daaf1550fe1995122f769335d311d1c781",
+      "scaleFromSource": 0.58,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          59,
+          45,
+          163,
+          179
+        ],
+        [
+          44,
+          58,
+          180,
+          166
+        ],
+        [
+          30,
+          51,
+          188,
+          173
+        ],
+        [
+          33,
+          45,
+          170,
+          179
+        ]
+      ],
+      "assetBytes": 92110,
+      "assetSha256": "80bb2ec39c746ffd8f9d097b701801cf62983acc42ed26f7164add36103d9976"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/brook/sleep-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/brook/sleep-south.webp",
+      "source": "tools/launcher-room/life-v1/brook-utility/source.png",
+      "sourceSha256": "434ca76284e79b0638a66225b366f3aec865670775326e89e3cd3ed39d67021c",
+      "sourcePixels": [
+        1312,
+        1199
+      ],
+      "plan": "tools/launcher-room/life-v1/brook-utility/plan.json",
+      "planSha256": "257eeabf205859713358dc853c84a8daaf1550fe1995122f769335d311d1c781",
+      "scaleFromSource": 0.58,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          43,
+          135,
+          169,
+          89
+        ],
+        [
+          40,
+          136,
+          174,
+          88
+        ],
+        [
+          42,
+          135,
+          169,
+          89
+        ],
+        [
+          44,
+          128,
+          170,
+          96
+        ]
+      ],
+      "assetBytes": 65106,
+      "assetSha256": "5e4b2f3ba6fff4677a496f11c3eba5f9fa0d207170c55f65415a973bd015481c"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/brook/train-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/brook/train-south.webp",
+      "source": "tools/launcher-room/life-v1/brook-utility/source.png",
+      "sourceSha256": "434ca76284e79b0638a66225b366f3aec865670775326e89e3cd3ed39d67021c",
+      "sourcePixels": [
+        1312,
+        1199
+      ],
+      "plan": "tools/launcher-room/life-v1/brook-utility/plan.json",
+      "planSha256": "257eeabf205859713358dc853c84a8daaf1550fe1995122f769335d311d1c781",
+      "scaleFromSource": 0.58,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          76,
+          18,
+          143,
+          206
+        ],
+        [
+          61,
+          18,
+          162,
+          206
+        ],
+        [
+          34,
+          19,
+          183,
+          205
+        ],
+        [
+          40,
+          19,
+          161,
+          205
+        ]
+      ],
+      "assetBytes": 95914,
+      "assetSha256": "2734c19ac393219dfb841b1e3287c26d5f87f9e5e59d8356c80177bb0d478581"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/brook/work-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/brook/work-east.webp",
+      "source": "tools/launcher-room/life-v1/brook-work/source.png",
+      "sourceSha256": "c2a21a4e048b3e68e20d504d27a70f55dcbda800d940d6bdcbe141f37e0a4b78",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/brook-work/plan.json",
+      "planSha256": "b355e2dd59e2b90f3e3d17f6167f88b478d501a161c96fc1afe18218cd51c72b",
+      "scaleFromSource": 0.64935,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          79,
+          26,
+          114,
+          198
+        ],
+        [
+          79,
+          24,
+          121,
+          200
+        ],
+        [
+          77,
+          25,
+          113,
+          199
+        ],
+        [
+          79,
+          27,
+          112,
+          197
+        ]
+      ],
+      "assetBytes": 78438,
+      "assetSha256": "cf8691b09108dabea742176b285fe62ffbdf81443744af731eb5403562eba432"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/brook/work-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/brook/work-north.webp",
+      "source": "tools/launcher-room/life-v1/brook-work/source.png",
+      "sourceSha256": "c2a21a4e048b3e68e20d504d27a70f55dcbda800d940d6bdcbe141f37e0a4b78",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/brook-work/plan.json",
+      "planSha256": "b355e2dd59e2b90f3e3d17f6167f88b478d501a161c96fc1afe18218cd51c72b",
+      "scaleFromSource": 0.64725,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          78,
+          24,
+          98,
+          200
+        ],
+        [
+          80,
+          25,
+          96,
+          199
+        ],
+        [
+          78,
+          25,
+          96,
+          199
+        ],
+        [
+          79,
+          26,
+          91,
+          198
+        ]
+      ],
+      "assetBytes": 73744,
+      "assetSha256": "ec07a183c76118001b92798c46d2778adb24baf72c42590f1526f26686330426"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/brook/work-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/brook/work-south.webp",
+      "source": "tools/launcher-room/life-v1/brook-work/source.png",
+      "sourceSha256": "c2a21a4e048b3e68e20d504d27a70f55dcbda800d940d6bdcbe141f37e0a4b78",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/brook-work/plan.json",
+      "planSha256": "b355e2dd59e2b90f3e3d17f6167f88b478d501a161c96fc1afe18218cd51c72b",
+      "scaleFromSource": 0.643086,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          80,
+          27,
+          91,
+          197
+        ],
+        [
+          81,
+          25,
+          99,
+          199
+        ],
+        [
+          81,
+          26,
+          100,
+          198
+        ],
+        [
+          80,
+          24,
+          91,
+          200
+        ]
+      ],
+      "assetBytes": 87208,
+      "assetSha256": "b76af7726c16105f7f7657d53a77eacaaadf919516c58d062f3c88e10943623e"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/brook/work-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/brook/work-west.webp",
+      "source": "tools/launcher-room/life-v1/brook-work/source.png",
+      "sourceSha256": "c2a21a4e048b3e68e20d504d27a70f55dcbda800d940d6bdcbe141f37e0a4b78",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/brook-work/plan.json",
+      "planSha256": "b355e2dd59e2b90f3e3d17f6167f88b478d501a161c96fc1afe18218cd51c72b",
+      "scaleFromSource": 0.636942,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          70,
+          25,
+          106,
+          199
+        ],
+        [
+          57,
+          25,
+          120,
+          199
+        ],
+        [
+          66,
+          25,
+          110,
+          199
+        ],
+        [
+          67,
+          24,
+          106,
+          200
+        ]
+      ],
+      "assetBytes": 80220,
+      "assetSha256": "fcf557595e1b996c08db2e9324e0418319c83945df502cf0075cdb39e0858ab2"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/eat-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/eat-south.webp",
+      "source": "tools/launcher-room/life-v1/chopper-utility/source-alpha.png",
+      "sourceSha256": "7db6c026deb0dc3aac5102f610bb03337e506a7a698e7295193ebc4916bb50fe",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-utility/plan.json",
+      "planSha256": "b22ff53e349a971d52de7c6f1cbee359911fb35ce67533a7a8e2a2f52920748a",
+      "scaleFromSource": 0.6621621621621622,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          47,
+          29,
+          164,
+          195
+        ],
+        [
+          47,
+          28,
+          164,
+          196
+        ],
+        [
+          47,
+          28,
+          164,
+          196
+        ],
+        [
+          47,
+          28,
+          164,
+          196
+        ]
+      ],
+      "assetBytes": 140044,
+      "assetSha256": "a5f4e1493241675cb1037eb105f1a8e364e14c04a4d3038619a6e5b345d771c1"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/medicine-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/medicine-east.webp",
+      "source": "tools/launcher-room/life-v1/chopper-medicine/source-alpha.png",
+      "sourceSha256": "c93223ebf6216e2ccdf295a0fd23eff10fb0ffcb316821b37da56ab73ba93cd7",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-medicine/plan.json",
+      "planSha256": "cf4473992f626d9c58824f21c83d094934245c813303929690c9f4585f7edb4d",
+      "scaleFromSource": 0.632258064516129,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          66,
+          28,
+          130,
+          196
+        ],
+        [
+          60,
+          28,
+          133,
+          196
+        ],
+        [
+          64,
+          28,
+          132,
+          196
+        ],
+        [
+          61,
+          28,
+          132,
+          196
+        ]
+      ],
+      "assetBytes": 123362,
+      "assetSha256": "346c48fc8d03b6ed96fe1b9633300a9df22e0202864b801f014dbe42ae2ff2fd"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/medicine-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/medicine-north.webp",
+      "source": "tools/launcher-room/life-v1/chopper-medicine/source-alpha.png",
+      "sourceSha256": "c93223ebf6216e2ccdf295a0fd23eff10fb0ffcb316821b37da56ab73ba93cd7",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-medicine/plan.json",
+      "planSha256": "cf4473992f626d9c58824f21c83d094934245c813303929690c9f4585f7edb4d",
+      "scaleFromSource": 0.7153284671532847,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          47,
+          29,
+          165,
+          195
+        ],
+        [
+          47,
+          28,
+          162,
+          196
+        ],
+        [
+          47,
+          28,
+          165,
+          196
+        ],
+        [
+          46,
+          28,
+          162,
+          196
+        ]
+      ],
+      "assetBytes": 131622,
+      "assetSha256": "1d6484b88a134b4993c9feb7f6522857164f3408e9d34ade1e42803b03af5463"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/medicine-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/medicine-south.webp",
+      "source": "tools/launcher-room/life-v1/chopper-medicine/source-alpha.png",
+      "sourceSha256": "c93223ebf6216e2ccdf295a0fd23eff10fb0ffcb316821b37da56ab73ba93cd7",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-medicine/plan.json",
+      "planSha256": "cf4473992f626d9c58824f21c83d094934245c813303929690c9f4585f7edb4d",
+      "scaleFromSource": 0.6511627906976745,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          48,
+          28,
+          161,
+          196
+        ],
+        [
+          49,
+          29,
+          161,
+          195
+        ],
+        [
+          49,
+          28,
+          161,
+          196
+        ],
+        [
+          46,
+          28,
+          163,
+          196
+        ]
+      ],
+      "assetBytes": 135280,
+      "assetSha256": "aa61899a3af57de47b5141013f0ae6b487ce5e6f32c40b5b0ff0eff220bc104c"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/medicine-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/medicine-west.webp",
+      "source": "tools/launcher-room/life-v1/chopper-medicine/source-alpha.png",
+      "sourceSha256": "c93223ebf6216e2ccdf295a0fd23eff10fb0ffcb316821b37da56ab73ba93cd7",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-medicine/plan.json",
+      "planSha256": "cf4473992f626d9c58824f21c83d094934245c813303929690c9f4585f7edb4d",
+      "scaleFromSource": 0.6490066225165563,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          63,
+          28,
+          138,
+          196
+        ],
+        [
+          63,
+          28,
+          139,
+          196
+        ],
+        [
+          64,
+          28,
+          139,
+          196
+        ],
+        [
+          63,
+          28,
+          138,
+          196
+        ]
+      ],
+      "assetBytes": 125060,
+      "assetSha256": "41c0336105b2e5057e6185ca88fb52fb786ceb44862ca4994e4da7a8f3600d0f"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/read-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/read-east.webp",
+      "source": "tools/launcher-room/life-v1/chopper-work/east-fix-source-alpha.png",
+      "sourceSha256": "95cbfb99746b1811de4da2848d31dee6daa799a7c6c8d75d094c32d6f5409399",
+      "sourcePixels": [
+        1774,
+        887
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-read/plan.json",
+      "planSha256": "12cd684bed1e1b8c8064f6d26e3d9d547d351d74ff1bc668f1f7139877ac20b3",
+      "scaleFromSource": 0.45265588914549654,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          67,
+          28,
+          148,
+          196
+        ],
+        [
+          66,
+          28,
+          152,
+          196
+        ],
+        [
+          67,
+          28,
+          155,
+          196
+        ],
+        [
+          68,
+          28,
+          144,
+          196
+        ]
+      ],
+      "assetBytes": 121766,
+      "assetSha256": "1e824b13c57bbf9e25a980c8149300278af8d13ff7b70b90b1619208be2a3dce"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/read-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/read-north.webp",
+      "source": "tools/launcher-room/life-v1/chopper-read/source-alpha.png",
+      "sourceSha256": "e65f2ecc179baeeeb88f3d983951aba885d8257e42f0fa62cca9c7b618666548",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-read/plan.json",
+      "planSha256": "12cd684bed1e1b8c8064f6d26e3d9d547d351d74ff1bc668f1f7139877ac20b3",
+      "scaleFromSource": 0.6712328767123288,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          50,
+          29,
+          156,
+          195
+        ],
+        [
+          52,
+          29,
+          156,
+          195
+        ],
+        [
+          51,
+          28,
+          155,
+          196
+        ],
+        [
+          51,
+          28,
+          155,
+          196
+        ]
+      ],
+      "assetBytes": 132514,
+      "assetSha256": "66e819e8614a1ed2f3974c4a71872ec2165ead954ca5143dd68444ff587df709"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/read-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/read-south.webp",
+      "source": "tools/launcher-room/life-v1/chopper-read/source-alpha.png",
+      "sourceSha256": "e65f2ecc179baeeeb88f3d983951aba885d8257e42f0fa62cca9c7b618666548",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-read/plan.json",
+      "planSha256": "12cd684bed1e1b8c8064f6d26e3d9d547d351d74ff1bc668f1f7139877ac20b3",
+      "scaleFromSource": 0.6468646864686468,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          50,
+          28,
+          158,
+          196
+        ],
+        [
+          48,
+          28,
+          158,
+          196
+        ],
+        [
+          49,
+          28,
+          158,
+          196
+        ],
+        [
+          49,
+          28,
+          158,
+          196
+        ]
+      ],
+      "assetBytes": 142170,
+      "assetSha256": "b3c7fc8f1b7dd4c6ad816faae3abba5dfe4cc7c38972688a01494afe2fcbe957"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/read-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/read-west.webp",
+      "source": "tools/launcher-room/life-v1/chopper-read/source-alpha.png",
+      "sourceSha256": "e65f2ecc179baeeeb88f3d983951aba885d8257e42f0fa62cca9c7b618666548",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-read/plan.json",
+      "planSha256": "12cd684bed1e1b8c8064f6d26e3d9d547d351d74ff1bc668f1f7139877ac20b3",
+      "scaleFromSource": 0.6555183946488294,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          60,
+          28,
+          138,
+          196
+        ],
+        [
+          60,
+          28,
+          138,
+          196
+        ],
+        [
+          61,
+          29,
+          138,
+          195
+        ],
+        [
+          60,
+          28,
+          138,
+          196
+        ]
+      ],
+      "assetBytes": 126260,
+      "assetSha256": "6589d133abd292205d76c90801e303904ed8a2b7c418f042245b29fff4d50c47"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/rest-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/rest-south.webp",
+      "source": "tools/launcher-room/life-v1/chopper-utility/source-alpha.png",
+      "sourceSha256": "7db6c026deb0dc3aac5102f610bb03337e506a7a698e7295193ebc4916bb50fe",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-utility/plan.json",
+      "planSha256": "b22ff53e349a971d52de7c6f1cbee359911fb35ce67533a7a8e2a2f52920748a",
+      "scaleFromSource": 0.6621621621621622,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          45,
+          41,
+          166,
+          183
+        ],
+        [
+          45,
+          41,
+          166,
+          183
+        ],
+        [
+          45,
+          41,
+          166,
+          183
+        ],
+        [
+          45,
+          41,
+          166,
+          183
+        ]
+      ],
+      "assetBytes": 135730,
+      "assetSha256": "b9acde1f893496ac9b2487d35798f36757d56fd900c4a1813f8162b8b8c6a15b"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/sleep-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/sleep-south.webp",
+      "source": "tools/launcher-room/life-v1/chopper-utility/source-alpha.png",
+      "sourceSha256": "7db6c026deb0dc3aac5102f610bb03337e506a7a698e7295193ebc4916bb50fe",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-utility/plan.json",
+      "planSha256": "b22ff53e349a971d52de7c6f1cbee359911fb35ce67533a7a8e2a2f52920748a",
+      "scaleFromSource": 0.6621621621621622,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          37,
+          82,
+          183,
+          142
+        ],
+        [
+          37,
+          82,
+          183,
+          142
+        ],
+        [
+          37,
+          82,
+          182,
+          142
+        ],
+        [
+          37,
+          82,
+          183,
+          142
+        ]
+      ],
+      "assetBytes": 120778,
+      "assetSha256": "9a62c5516595601e9a39156267c622849177870e46fafa7ae33166040a7a2b1f"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/train-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/train-south.webp",
+      "source": "tools/launcher-room/life-v1/chopper-utility/source-alpha.png",
+      "sourceSha256": "7db6c026deb0dc3aac5102f610bb03337e506a7a698e7295193ebc4916bb50fe",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-utility/plan.json",
+      "planSha256": "b22ff53e349a971d52de7c6f1cbee359911fb35ce67533a7a8e2a2f52920748a",
+      "scaleFromSource": 0.6621621621621622,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          46,
+          27,
+          165,
+          197
+        ],
+        [
+          46,
+          29,
+          165,
+          195
+        ],
+        [
+          45,
+          40,
+          166,
+          184
+        ],
+        [
+          46,
+          27,
+          165,
+          197
+        ]
+      ],
+      "assetBytes": 136190,
+      "assetSha256": "97e46da76d93a5e2f3301fe870b92e000efb1958cac06ec7f30daf829296076a"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/work-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/work-east.webp",
+      "source": "tools/launcher-room/life-v1/chopper-work/east-fix-source-alpha.png",
+      "sourceSha256": "95cbfb99746b1811de4da2848d31dee6daa799a7c6c8d75d094c32d6f5409399",
+      "sourcePixels": [
+        1774,
+        887
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-work/plan.json",
+      "planSha256": "c75a6d8bc9b50119aa1696f2453270c66fd1333207e74dbb41205cdb07df41f7",
+      "scaleFromSource": 0.47342995169082125,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          65,
+          28,
+          145,
+          196
+        ],
+        [
+          66,
+          28,
+          147,
+          196
+        ],
+        [
+          66,
+          28,
+          143,
+          196
+        ],
+        [
+          66,
+          28,
+          142,
+          196
+        ]
+      ],
+      "assetBytes": 122366,
+      "assetSha256": "c6efb4a3e9c930954d64a068dade85aa1b2f3953a58789e39ff6a2086c2fe278"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/work-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/work-north.webp",
+      "source": "tools/launcher-room/life-v1/chopper-work/source-alpha.png",
+      "sourceSha256": "bd996d2a051c0cae1aeccfbca47cee510d240d1c6d6996552dc68a291e2d3da1",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-work/plan.json",
+      "planSha256": "c75a6d8bc9b50119aa1696f2453270c66fd1333207e74dbb41205cdb07df41f7",
+      "scaleFromSource": 0.6644067796610169,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          53,
+          36,
+          147,
+          188
+        ],
+        [
+          56,
+          28,
+          147,
+          196
+        ],
+        [
+          53,
+          28,
+          147,
+          196
+        ],
+        [
+          53,
+          28,
+          149,
+          196
+        ]
+      ],
+      "assetBytes": 122134,
+      "assetSha256": "71e7facad4659b58469316205a22c3118cdeb1cd7e953285bf3db6c57481838a"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/work-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/work-south.webp",
+      "source": "tools/launcher-room/life-v1/chopper-work/source-alpha.png",
+      "sourceSha256": "bd996d2a051c0cae1aeccfbca47cee510d240d1c6d6996552dc68a291e2d3da1",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-work/plan.json",
+      "planSha256": "c75a6d8bc9b50119aa1696f2453270c66fd1333207e74dbb41205cdb07df41f7",
+      "scaleFromSource": 0.6343042071197411,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          53,
+          29,
+          150,
+          195
+        ],
+        [
+          54,
+          29,
+          150,
+          195
+        ],
+        [
+          54,
+          29,
+          148,
+          195
+        ],
+        [
+          54,
+          28,
+          149,
+          196
+        ]
+      ],
+      "assetBytes": 136636,
+      "assetSha256": "2ccc438db8d04f4a04dd0d55047ed68a23e3b996355612e1f4b1453e6bf94496"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/chopper/work-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/chopper/work-west.webp",
+      "source": "tools/launcher-room/life-v1/chopper-work/source-alpha.png",
+      "sourceSha256": "bd996d2a051c0cae1aeccfbca47cee510d240d1c6d6996552dc68a291e2d3da1",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/chopper-work/plan.json",
+      "planSha256": "c75a6d8bc9b50119aa1696f2453270c66fd1333207e74dbb41205cdb07df41f7",
+      "scaleFromSource": 0.6363636363636364,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          51,
+          32,
+          144,
+          192
+        ],
+        [
+          40,
+          28,
+          146,
+          196
+        ],
+        [
+          54,
+          28,
+          139,
+          196
+        ],
+        [
+          44,
+          28,
+          143,
+          196
+        ]
+      ],
+      "assetBytes": 119256,
+      "assetSha256": "f2766b872641b1e35af60c5082e13ae341bd256f7494e748cf485bba2d5ce721"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/craft-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/craft-east.webp",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-craft/plan.json",
+      "planSha256": "46f865c554665d1066638342fc12f25118a48658b6adaaadef51c6640cffd03d",
+      "scaleFromSource": 0.55149502,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          84,
+          56,
+          111,
+          168
+        ],
+        [
+          84,
+          56,
+          113,
+          168
+        ],
+        [
+          85,
+          56,
+          113,
+          168
+        ],
+        [
+          84,
+          56,
+          111,
+          168
+        ]
+      ],
+      "assetBytes": 101932,
+      "assetSha256": "b1c849300a0f5b2c267ec52c6f9abab68e56fef8a1e6093dc3a118a5dbc8724e"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/craft-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/craft-north.webp",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-craft/plan.json",
+      "planSha256": "46f865c554665d1066638342fc12f25118a48658b6adaaadef51c6640cffd03d",
+      "scaleFromSource": 0.60363636,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          47,
+          56,
+          164,
+          168
+        ],
+        [
+          48,
+          56,
+          161,
+          168
+        ],
+        [
+          48,
+          56,
+          160,
+          168
+        ],
+        [
+          48,
+          56,
+          162,
+          168
+        ]
+      ],
+      "assetBytes": 146578,
+      "assetSha256": "9a54321fb0b913be694d6ed961e44afca0e8eb10ea018fa07e227b3d98bdec2b"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/craft-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/craft-south.webp",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-craft/plan.json",
+      "planSha256": "46f865c554665d1066638342fc12f25118a48658b6adaaadef51c6640cffd03d",
+      "scaleFromSource": 0.59285714,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          52,
+          56,
+          154,
+          168
+        ],
+        [
+          51,
+          56,
+          155,
+          168
+        ],
+        [
+          50,
+          56,
+          154,
+          168
+        ],
+        [
+          51,
+          56,
+          154,
+          168
+        ]
+      ],
+      "assetBytes": 148038,
+      "assetSha256": "46ffcf4c60e4414cae3f1617bd01b91ed33d373884dea125fb438fc3eee847e9"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/craft-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/craft-west.webp",
+      "source": "tools/launcher-room/life-v1/franky-craft/source.png",
+      "sourceSha256": "56f1951f4ead7124695694e6bb65d134ab88423ba616a3205ba67496e5c088d7",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-craft/plan.json",
+      "planSha256": "46f865c554665d1066638342fc12f25118a48658b6adaaadef51c6640cffd03d",
+      "scaleFromSource": 0.55149502,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          60,
+          56,
+          112,
+          168
+        ],
+        [
+          60,
+          56,
+          113,
+          168
+        ],
+        [
+          59,
+          56,
+          113,
+          168
+        ],
+        [
+          60,
+          56,
+          111,
+          168
+        ]
+      ],
+      "assetBytes": 103132,
+      "assetSha256": "9ef3103fd94129b7bec8b552263387584ab581e1dcf9751e1b9fab8bbdbdf255"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/eat-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/eat-south.webp",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-utility/plan.json",
+      "planSha256": "bb2f359e1242cd80a03cde35dccf56750956e59026284c0f991fb24602038d4d",
+      "scaleFromSource": 0.497006,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          58,
+          70,
+          142,
+          154
+        ],
+        [
+          55,
+          73,
+          142,
+          151
+        ],
+        [
+          54,
+          72,
+          140,
+          152
+        ],
+        [
+          59,
+          72,
+          139,
+          152
+        ]
+      ],
+      "assetBytes": 121816,
+      "assetSha256": "f3091767cfb1fd4135f40e2f5dd08a5ac1ac9e4029c93c1abab2e44ef4ee7796"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/read-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/read-east.webp",
+      "source": "tools/launcher-room/life-v1/franky-read/source.png",
+      "sourceSha256": "17071e1ac1c5aaf29ba79817bb3b4d29f874e27eb4c0357ca22bc5bc7c23cefb",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-read/plan.json",
+      "planSha256": "2da05f2014ccd4370e9cbbb05b20ec2702d8115a9faa5234a834f508c528e37e",
+      "scaleFromSource": 0.54785478,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          67,
+          59,
+          140,
+          165
+        ],
+        [
+          46,
+          58,
+          171,
+          166
+        ],
+        [
+          68,
+          59,
+          148,
+          165
+        ],
+        [
+          68,
+          58,
+          140,
+          166
+        ]
+      ],
+      "assetBytes": 114658,
+      "assetSha256": "b87f687b382be9a1db5b5426cd775905fd3e75cd4619e681f9ef56bc910fa731"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/read-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/read-north.webp",
+      "source": "tools/launcher-room/life-v1/franky-read/source.png",
+      "sourceSha256": "17071e1ac1c5aaf29ba79817bb3b4d29f874e27eb4c0357ca22bc5bc7c23cefb",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-read/plan.json",
+      "planSha256": "2da05f2014ccd4370e9cbbb05b20ec2702d8115a9faa5234a834f508c528e37e",
+      "scaleFromSource": 0.55333278,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          53,
+          59,
+          152,
+          165
+        ],
+        [
+          53,
+          58,
+          151,
+          166
+        ],
+        [
+          53,
+          58,
+          150,
+          166
+        ],
+        [
+          53,
+          59,
+          151,
+          165
+        ]
+      ],
+      "assetBytes": 139328,
+      "assetSha256": "9b9f036a1eece8865ec1feaafa858d24e021d5cf231b8d7cfbca726f4d64f1b4"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/read-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/read-south.webp",
+      "source": "tools/launcher-room/life-v1/franky-read/source.png",
+      "sourceSha256": "17071e1ac1c5aaf29ba79817bb3b4d29f874e27eb4c0357ca22bc5bc7c23cefb",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-read/plan.json",
+      "planSha256": "2da05f2014ccd4370e9cbbb05b20ec2702d8115a9faa5234a834f508c528e37e",
+      "scaleFromSource": 0.5570461999999999,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          48,
+          59,
+          158,
+          165
+        ],
+        [
+          48,
+          59,
+          157,
+          165
+        ],
+        [
+          48,
+          58,
+          157,
+          166
+        ],
+        [
+          49,
+          59,
+          156,
+          165
+        ]
+      ],
+      "assetBytes": 149008,
+      "assetSha256": "1b30e80b7c45fc0b721341cc9a49fe1a4a3b4ae8ae36427bec55cfa0538a5599"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/read-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/read-west.webp",
+      "source": "tools/launcher-room/life-v1/franky-read/source.png",
+      "sourceSha256": "17071e1ac1c5aaf29ba79817bb3b4d29f874e27eb4c0357ca22bc5bc7c23cefb",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-read/plan.json",
+      "planSha256": "2da05f2014ccd4370e9cbbb05b20ec2702d8115a9faa5234a834f508c528e37e",
+      "scaleFromSource": 0.5389605,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          56,
+          58,
+          130,
+          166
+        ],
+        [
+          50,
+          59,
+          139,
+          165
+        ],
+        [
+          48,
+          58,
+          141,
+          166
+        ],
+        [
+          55,
+          59,
+          135,
+          165
+        ]
+      ],
+      "assetBytes": 111322,
+      "assetSha256": "94bed2ec72635d9ca9557f1c730eedcd594be2568110848a99e240751b907a9f"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/rest-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/rest-south.webp",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-utility/plan.json",
+      "planSha256": "bb2f359e1242cd80a03cde35dccf56750956e59026284c0f991fb24602038d4d",
+      "scaleFromSource": 0.497006,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          56,
+          102,
+          144,
+          122
+        ],
+        [
+          58,
+          101,
+          140,
+          123
+        ],
+        [
+          59,
+          103,
+          138,
+          121
+        ],
+        [
+          58,
+          101,
+          141,
+          123
+        ]
+      ],
+      "assetBytes": 121950,
+      "assetSha256": "49c5bb1c44718d029fcca40bae68696a1a56a44456a1f38c547045624c0e613b"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/sleep-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/sleep-south.webp",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-utility/plan.json",
+      "planSha256": "bb2f359e1242cd80a03cde35dccf56750956e59026284c0f991fb24602038d4d",
+      "scaleFromSource": 0.497006,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          53,
+          147,
+          150,
+          77
+        ],
+        [
+          55,
+          146,
+          146,
+          78
+        ],
+        [
+          56,
+          147,
+          145,
+          77
+        ],
+        [
+          55,
+          148,
+          145,
+          76
+        ]
+      ],
+      "assetBytes": 73126,
+      "assetSha256": "be4f11e6eb14f644d3912ae5aa39aee0011b2c7b2565cb85f65d3f4e827a7992"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/train-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/train-south.webp",
+      "source": "tools/launcher-room/life-v1/franky-utility/source.png",
+      "sourceSha256": "712d030daec7ed2a608bf95585b6beaf57fddfdc1e4688da419f9b2dd2b7ad50",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-utility/plan.json",
+      "planSha256": "bb2f359e1242cd80a03cde35dccf56750956e59026284c0f991fb24602038d4d",
+      "scaleFromSource": 0.497006,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          57,
+          57,
+          144,
+          167
+        ],
+        [
+          56,
+          57,
+          146,
+          167
+        ],
+        [
+          60,
+          68,
+          137,
+          156
+        ],
+        [
+          56,
+          56,
+          143,
+          168
+        ]
+      ],
+      "assetBytes": 144208,
+      "assetSha256": "40ca87e12e617ec6b6d7c9677b4d18cdc96e070353a08b4e05a371a5c4e74b8e"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/work-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/work-east.webp",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-work/plan.json",
+      "planSha256": "c30d56be82a2fde24956f8e67742e81952b47bc98f5f5f80049f68c94f6272df",
+      "scaleFromSource": 0.54966888,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          82,
+          56,
+          130,
+          168
+        ],
+        [
+          77,
+          56,
+          133,
+          168
+        ],
+        [
+          81,
+          56,
+          129,
+          168
+        ],
+        [
+          73,
+          56,
+          123,
+          168
+        ]
+      ],
+      "assetBytes": 98252,
+      "assetSha256": "3776b97e59070f91cae4c96b23c4c765fb0b4c8e179336eddcae83d02c3e86c0"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/work-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/work-north.webp",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-work/plan.json",
+      "planSha256": "c30d56be82a2fde24956f8e67742e81952b47bc98f5f5f80049f68c94f6272df",
+      "scaleFromSource": 0.58657244,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          50,
+          56,
+          160,
+          168
+        ],
+        [
+          50,
+          56,
+          160,
+          168
+        ],
+        [
+          49,
+          56,
+          160,
+          168
+        ],
+        [
+          48,
+          56,
+          160,
+          168
+        ]
+      ],
+      "assetBytes": 142118,
+      "assetSha256": "6647cffc1b0487350dbc21b8330adc31740922350993bfba0ae8e8edf179dc26"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/work-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/work-south.webp",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-work/plan.json",
+      "planSha256": "c30d56be82a2fde24956f8e67742e81952b47bc98f5f5f80049f68c94f6272df",
+      "scaleFromSource": 0.53376206,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          53,
+          56,
+          146,
+          168
+        ],
+        [
+          53,
+          56,
+          146,
+          168
+        ],
+        [
+          53,
+          56,
+          146,
+          168
+        ],
+        [
+          52,
+          56,
+          147,
+          168
+        ]
+      ],
+      "assetBytes": 129648,
+      "assetSha256": "2691a6522e35ef8394aeae9d3e1c8de973941476f85cdc7c4be479a6d80b831b"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/franky/work-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/franky/work-west.webp",
+      "source": "tools/launcher-room/life-v1/franky-work/source.png",
+      "sourceSha256": "d53d895a9911294982496d9e4b31ed98bf58514244012809f1a571afea44fd7f",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/franky-work/plan.json",
+      "planSha256": "c30d56be82a2fde24956f8e67742e81952b47bc98f5f5f80049f68c94f6272df",
+      "scaleFromSource": 0.54248366,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          57,
+          56,
+          114,
+          168
+        ],
+        [
+          57,
+          56,
+          120,
+          168
+        ],
+        [
+          59,
+          56,
+          120,
+          168
+        ],
+        [
+          62,
+          56,
+          116,
+          168
+        ]
+      ],
+      "assetBytes": 94172,
+      "assetSha256": "83d3d32d448c5ad93bee2ceb1714b6af7b26227d1172a48b8b7991faeaba1414"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/eat-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/eat-south.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-utility/source-alpha-clean.png",
+      "sourceSha256": "6f5f9d3915618a91f2e3cedbe055b0e6cc367588c4845bc567f08fe20e6ad6eb",
+      "sourcePixels": [
+        1536,
+        1024
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-utility/plan.json",
+      "planSha256": "d567d7325a43fad524b0551037d6a3afda34d825d131c5557d4c34be8080945b",
+      "scaleFromSource": 0.713,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          28,
+          31,
+          200,
+          193
+        ],
+        [
+          29,
+          31,
+          199,
+          193
+        ],
+        [
+          27,
+          31,
+          201,
+          193
+        ],
+        [
+          27,
+          31,
+          202,
+          193
+        ]
+      ],
+      "assetBytes": 187692,
+      "assetSha256": "887724229f3e5cea39964600f3c1ffc94455fdc63ad33a14a0cd3156e02a13a6"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/helm-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/helm-east.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-helm/source.png",
+      "sourceSha256": "d1bd2f1b07999454085128b461bf74d24c89d3a2bbcd4ab7974dda2db3a78b9b",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-helm/plan.json",
+      "planSha256": "0412e9c54d29e04fa82e05ade51bb7400d102af3cab24f4ea892d5b8512386e5",
+      "scaleFromSource": 0.63,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          32,
+          30,
+          180,
+          194
+        ],
+        [
+          22,
+          30,
+          192,
+          194
+        ],
+        [
+          24,
+          29,
+          190,
+          195
+        ],
+        [
+          33,
+          30,
+          174,
+          194
+        ]
+      ],
+      "assetBytes": 144272,
+      "assetSha256": "f3ae2f51b8aa290432ecd114a48932e957fcb0df1bf5a1045d69f7ef61977bab"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/helm-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/helm-north.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-helm/source.png",
+      "sourceSha256": "d1bd2f1b07999454085128b461bf74d24c89d3a2bbcd4ab7974dda2db3a78b9b",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-helm/plan.json",
+      "planSha256": "0412e9c54d29e04fa82e05ade51bb7400d102af3cab24f4ea892d5b8512386e5",
+      "scaleFromSource": 0.63,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          51,
+          43,
+          170,
+          181
+        ],
+        [
+          50,
+          43,
+          168,
+          181
+        ],
+        [
+          35,
+          43,
+          171,
+          181
+        ],
+        [
+          31,
+          43,
+          176,
+          181
+        ]
+      ],
+      "assetBytes": 100794,
+      "assetSha256": "d383de83b4b3777a5f4e294463e4884c7861f0bec25eb032364e1993385ed75f"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/helm-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/helm-south.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-helm/source.png",
+      "sourceSha256": "d1bd2f1b07999454085128b461bf74d24c89d3a2bbcd4ab7974dda2db3a78b9b",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-helm/plan.json",
+      "planSha256": "0412e9c54d29e04fa82e05ade51bb7400d102af3cab24f4ea892d5b8512386e5",
+      "scaleFromSource": 0.63,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          29,
+          18,
+          195,
+          206
+        ],
+        [
+          34,
+          19,
+          193,
+          205
+        ],
+        [
+          29,
+          19,
+          194,
+          205
+        ],
+        [
+          34,
+          19,
+          193,
+          205
+        ]
+      ],
+      "assetBytes": 185008,
+      "assetSha256": "493df78d57fd4ae5fdc800266c5e2b6930a365969bbe9036de3efc318876038e"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/helm-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/helm-west.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-helm/source.png",
+      "sourceSha256": "d1bd2f1b07999454085128b461bf74d24c89d3a2bbcd4ab7974dda2db3a78b9b",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-helm/plan.json",
+      "planSha256": "0412e9c54d29e04fa82e05ade51bb7400d102af3cab24f4ea892d5b8512386e5",
+      "scaleFromSource": 0.63,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          37,
+          30,
+          192,
+          194
+        ],
+        [
+          61,
+          28,
+          172,
+          196
+        ],
+        [
+          44,
+          27,
+          185,
+          197
+        ],
+        [
+          54,
+          30,
+          173,
+          194
+        ]
+      ],
+      "assetBytes": 145234,
+      "assetSha256": "2ea880956d7e177562432b26467a72d8c58a30c264ea3cba6d78992250e40a9b"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/read-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/read-east.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-read/source.png",
+      "sourceSha256": "4a6778092cbc8a0dc8d246da6926a869783a6e43de7c05918e38455db18ca57f",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-read/plan.json",
+      "planSha256": "56670d23d392da66ee5430c82e0e8a0cb86ac02fbe733088b9dbff80116e60c5",
+      "scaleFromSource": 0.666666,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          37,
+          24,
+          183,
+          200
+        ],
+        [
+          37,
+          24,
+          185,
+          200
+        ],
+        [
+          37,
+          24,
+          186,
+          200
+        ],
+        [
+          37,
+          25,
+          183,
+          199
+        ]
+      ],
+      "assetBytes": 159052,
+      "assetSha256": "752691a190612cedfeabd6cd03e3c024be5e87e6ef920b89027439f80f592ebe"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/read-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/read-north.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-read/source.png",
+      "sourceSha256": "4a6778092cbc8a0dc8d246da6926a869783a6e43de7c05918e38455db18ca57f",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-read/plan.json",
+      "planSha256": "56670d23d392da66ee5430c82e0e8a0cb86ac02fbe733088b9dbff80116e60c5",
+      "scaleFromSource": 0.70922,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          39,
+          25,
+          177,
+          199
+        ],
+        [
+          39,
+          24,
+          177,
+          200
+        ],
+        [
+          40,
+          25,
+          177,
+          199
+        ],
+        [
+          39,
+          25,
+          177,
+          199
+        ]
+      ],
+      "assetBytes": 129678,
+      "assetSha256": "0a212ae48678b167f4a36bdab9ea30a441ec1ffaa84e577dfd321684e5703286"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/read-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/read-south.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-read/source.png",
+      "sourceSha256": "4a6778092cbc8a0dc8d246da6926a869783a6e43de7c05918e38455db18ca57f",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-read/plan.json",
+      "planSha256": "56670d23d392da66ee5430c82e0e8a0cb86ac02fbe733088b9dbff80116e60c5",
+      "scaleFromSource": 0.632912,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          40,
+          24,
+          177,
+          200
+        ],
+        [
+          40,
+          24,
+          178,
+          200
+        ],
+        [
+          40,
+          24,
+          177,
+          200
+        ],
+        [
+          39,
+          25,
+          178,
+          199
+        ]
+      ],
+      "assetBytes": 177368,
+      "assetSha256": "6a71ad82d1378908ca559e3852fc48311be5e1768d5df4b2a37166639a7a4177"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/read-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/read-west.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-read/source.png",
+      "sourceSha256": "4a6778092cbc8a0dc8d246da6926a869783a6e43de7c05918e38455db18ca57f",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-read/plan.json",
+      "planSha256": "56670d23d392da66ee5430c82e0e8a0cb86ac02fbe733088b9dbff80116e60c5",
+      "scaleFromSource": 0.668896,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          43,
+          24,
+          177,
+          200
+        ],
+        [
+          42,
+          24,
+          177,
+          200
+        ],
+        [
+          42,
+          24,
+          177,
+          200
+        ],
+        [
+          43,
+          24,
+          177,
+          200
+        ]
+      ],
+      "assetBytes": 154678,
+      "assetSha256": "24ecf38e564b84756a456c26a9cb616edb48d94c6011d18b41091ddd1379e1e7"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/rest-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/rest-south.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-utility/source-alpha-clean.png",
+      "sourceSha256": "6f5f9d3915618a91f2e3cedbe055b0e6cc367588c4845bc567f08fe20e6ad6eb",
+      "sourcePixels": [
+        1536,
+        1024
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-utility/plan.json",
+      "planSha256": "d567d7325a43fad524b0551037d6a3afda34d825d131c5557d4c34be8080945b",
+      "scaleFromSource": 0.62,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          20,
+          72,
+          216,
+          152
+        ],
+        [
+          20,
+          72,
+          215,
+          152
+        ],
+        [
+          19,
+          75,
+          219,
+          149
+        ],
+        [
+          20,
+          71,
+          216,
+          153
+        ]
+      ],
+      "assetBytes": 142710,
+      "assetSha256": "97103abe02510042807c81ef56e3afe3d4c28eea43c277638dd1d31c86901368"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/sleep-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/sleep-south.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-utility/source-alpha-clean.png",
+      "sourceSha256": "6f5f9d3915618a91f2e3cedbe055b0e6cc367588c4845bc567f08fe20e6ad6eb",
+      "sourcePixels": [
+        1536,
+        1024
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-utility/plan.json",
+      "planSha256": "d567d7325a43fad524b0551037d6a3afda34d825d131c5557d4c34be8080945b",
+      "scaleFromSource": 0.62,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          21,
+          138,
+          214,
+          86
+        ],
+        [
+          23,
+          138,
+          209,
+          86
+        ],
+        [
+          25,
+          134,
+          207,
+          90
+        ],
+        [
+          24,
+          137,
+          207,
+          87
+        ]
+      ],
+      "assetBytes": 110748,
+      "assetSha256": "ec527fa5991d63e51d68d48b85a4fff7f97d975b6718961f21bd7ff84706d72b"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/train-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/train-south.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-utility/source-alpha-clean.png",
+      "sourceSha256": "6f5f9d3915618a91f2e3cedbe055b0e6cc367588c4845bc567f08fe20e6ad6eb",
+      "sourcePixels": [
+        1536,
+        1024
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-utility/plan.json",
+      "planSha256": "d567d7325a43fad524b0551037d6a3afda34d825d131c5557d4c34be8080945b",
+      "scaleFromSource": 0.62,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          37,
+          36,
+          184,
+          188
+        ],
+        [
+          35,
+          36,
+          187,
+          188
+        ],
+        [
+          36,
+          36,
+          181,
+          188
+        ],
+        [
+          35,
+          37,
+          186,
+          187
+        ]
+      ],
+      "assetBytes": 170384,
+      "assetSha256": "5a9212de7aa722db7d88dd386fe5efe440dac592e7ec51adede2bac5c59ce064"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/work-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/work-east.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-work/source.png",
+      "sourceSha256": "7e411cb20a432682dd38d7068d3685e50e152f47e859f9cd3a0c2e724805d82b",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-work/plan.json",
+      "planSha256": "0e921d75134315b12dc2124a87e7c79479090255fa763968eb585715b544bc2b",
+      "scaleFromSource": 0.666666,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          36,
+          24,
+          178,
+          200
+        ],
+        [
+          35,
+          24,
+          178,
+          200
+        ],
+        [
+          35,
+          24,
+          179,
+          200
+        ],
+        [
+          35,
+          24,
+          174,
+          200
+        ]
+      ],
+      "assetBytes": 154520,
+      "assetSha256": "c6ab6a9010d2274e89eb797517634d53f82fee77a14d50e68b9eb3db2ddac098"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/work-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/work-north.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-work/source.png",
+      "sourceSha256": "7e411cb20a432682dd38d7068d3685e50e152f47e859f9cd3a0c2e724805d82b",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-work/plan.json",
+      "planSha256": "0e921d75134315b12dc2124a87e7c79479090255fa763968eb585715b544bc2b",
+      "scaleFromSource": 0.716846,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          46,
+          24,
+          168,
+          200
+        ],
+        [
+          43,
+          24,
+          168,
+          200
+        ],
+        [
+          43,
+          24,
+          168,
+          200
+        ],
+        [
+          46,
+          25,
+          165,
+          199
+        ]
+      ],
+      "assetBytes": 110364,
+      "assetSha256": "3b9aae402f841f68edab449e31cd10f5125202dbb186ad0ea43ca1e9f6d0412e"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/work-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/work-south.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-work/source.png",
+      "sourceSha256": "7e411cb20a432682dd38d7068d3685e50e152f47e859f9cd3a0c2e724805d82b",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-work/plan.json",
+      "planSha256": "0e921d75134315b12dc2124a87e7c79479090255fa763968eb585715b544bc2b",
+      "scaleFromSource": 0.62893,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          41,
+          24,
+          175,
+          200
+        ],
+        [
+          41,
+          25,
+          174,
+          199
+        ],
+        [
+          42,
+          24,
+          174,
+          200
+        ],
+        [
+          41,
+          24,
+          173,
+          200
+        ]
+      ],
+      "assetBytes": 173742,
+      "assetSha256": "e1edc90254fad3485c3d596fc10b49ebe4e07c6626726e37a0e5f91f736bca1f"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/jinbe/work-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/jinbe/work-west.webp",
+      "source": "tools/launcher-room/life-v1/jinbe-work/source.png",
+      "sourceSha256": "7e411cb20a432682dd38d7068d3685e50e152f47e859f9cd3a0c2e724805d82b",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/jinbe-work/plan.json",
+      "planSha256": "0e921d75134315b12dc2124a87e7c79479090255fa763968eb585715b544bc2b",
+      "scaleFromSource": 0.675676,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          50,
+          25,
+          174,
+          199
+        ],
+        [
+          50,
+          25,
+          174,
+          199
+        ],
+        [
+          51,
+          25,
+          174,
+          199
+        ],
+        [
+          50,
+          24,
+          174,
+          200
+        ]
+      ],
+      "assetBytes": 152850,
+      "assetSha256": "47a1128edc2436a4eb8386a14b422ca91702f975fb59384af0a4807f5d101174"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/luffy/eat-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/luffy/eat-south.webp",
+      "source": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/source-alpha.png",
+      "sourceSha256": "6bc65045163a06b36a4e3f0cd1ba812b812fd95f809e219617ce6517387149a5",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/luffy-utility/plan.json",
+      "planSha256": "36f7f3e19cac10208d5eec428a188d83aa0c147b9f0d85b3a95dfbd9465c9d3b",
+      "scaleFromSource": 0.547486033519553,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          87,
+          29,
+          83,
+          195
+        ],
+        [
+          86,
+          28,
+          84,
+          196
+        ],
+        [
+          86,
+          29,
+          84,
+          195
+        ],
+        [
+          87,
+          29,
+          83,
+          195
+        ]
+      ],
+      "assetBytes": 94348,
+      "assetSha256": "8da56543fb0d0e1799e71d6f884a29f537aa7c286da853daeeb3f0c0480cca43"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/luffy/rest-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/luffy/rest-south.webp",
+      "source": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/source-alpha.png",
+      "sourceSha256": "6bc65045163a06b36a4e3f0cd1ba812b812fd95f809e219617ce6517387149a5",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/luffy-utility/plan.json",
+      "planSha256": "36f7f3e19cac10208d5eec428a188d83aa0c147b9f0d85b3a95dfbd9465c9d3b",
+      "scaleFromSource": 0.547486033519553,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          80,
+          72,
+          95,
+          152
+        ],
+        [
+          81,
+          72,
+          95,
+          152
+        ],
+        [
+          81,
+          72,
+          94,
+          152
+        ],
+        [
+          81,
+          71,
+          94,
+          153
+        ]
+      ],
+      "assetBytes": 90238,
+      "assetSha256": "441a98a611d916bfb332e9f2082f3a91d67a6a7e66b44e1e11e06c00467dacee"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/luffy/sleep-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/luffy/sleep-south.webp",
+      "source": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/source-alpha.png",
+      "sourceSha256": "6bc65045163a06b36a4e3f0cd1ba812b812fd95f809e219617ce6517387149a5",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/luffy-utility/plan.json",
+      "planSha256": "36f7f3e19cac10208d5eec428a188d83aa0c147b9f0d85b3a95dfbd9465c9d3b",
+      "scaleFromSource": 0.547486033519553,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          54,
+          154,
+          148,
+          70
+        ],
+        [
+          55,
+          154,
+          146,
+          70
+        ],
+        [
+          56,
+          154,
+          144,
+          70
+        ],
+        [
+          55,
+          154,
+          145,
+          70
+        ]
+      ],
+      "assetBytes": 61308,
+      "assetSha256": "cb246be6203b51fe6c039ff2d974d3460331b4f13a71350b0679716dc3ee238d"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/luffy/train-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/luffy/train-south.webp",
+      "source": "tools/launcher-room/life-v1/luffy-utility/proportion-repair/source-alpha.png",
+      "sourceSha256": "6bc65045163a06b36a4e3f0cd1ba812b812fd95f809e219617ce6517387149a5",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/luffy-utility/plan.json",
+      "planSha256": "36f7f3e19cac10208d5eec428a188d83aa0c147b9f0d85b3a95dfbd9465c9d3b",
+      "scaleFromSource": 0.5803351955307262,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          77,
+          35,
+          102,
+          189
+        ],
+        [
+          76,
+          35,
+          103,
+          189
+        ],
+        [
+          75,
+          34,
+          106,
+          190
+        ],
+        [
+          78,
+          35,
+          100,
+          189
+        ]
+      ],
+      "assetBytes": 96976,
+      "assetSha256": "d38b41a2746218ce36cf25073da8f1a6ec0b28316a0c7f756510dd4d796f7db5"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/luffy/work-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/luffy/work-east.webp",
+      "source": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source-alpha.png",
+      "sourceSha256": "baf7e4aabbbde1fe638e1e1633d51ade2a75d2d7e185cd1ea49fc5fc9a62cccc",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/luffy-work/plan.json",
+      "planSha256": "1c1b18377b662260f2483f63005cf792536c5adb6908492d78a1b739f305663b",
+      "scaleFromSource": 0.6666666666666666,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          82,
+          28,
+          93,
+          196
+        ],
+        [
+          80,
+          29,
+          97,
+          195
+        ],
+        [
+          73,
+          29,
+          111,
+          195
+        ],
+        [
+          81,
+          30,
+          95,
+          194
+        ]
+      ],
+      "assetBytes": 92070,
+      "assetSha256": "6693dc1b24e6e83bab28a481bd348fdebb56d10a6deb9b183e2b9542e9f3cebc"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/luffy/work-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/luffy/work-north.webp",
+      "source": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source-alpha.png",
+      "sourceSha256": "baf7e4aabbbde1fe638e1e1633d51ade2a75d2d7e185cd1ea49fc5fc9a62cccc",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/luffy-work/plan.json",
+      "planSha256": "1c1b18377b662260f2483f63005cf792536c5adb6908492d78a1b739f305663b",
+      "scaleFromSource": 0.7101449275362319,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          81,
+          29,
+          94,
+          195
+        ],
+        [
+          81,
+          28,
+          93,
+          196
+        ],
+        [
+          81,
+          29,
+          94,
+          195
+        ],
+        [
+          81,
+          28,
+          94,
+          196
+        ]
+      ],
+      "assetBytes": 90654,
+      "assetSha256": "952e9cf19aef7f78dfe47af5f9656526e3b4d8896f9900af039f1d797b60f46c"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/luffy/work-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/luffy/work-south.webp",
+      "source": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source-alpha.png",
+      "sourceSha256": "baf7e4aabbbde1fe638e1e1633d51ade2a75d2d7e185cd1ea49fc5fc9a62cccc",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/luffy-work/plan.json",
+      "planSha256": "1c1b18377b662260f2483f63005cf792536c5adb6908492d78a1b739f305663b",
+      "scaleFromSource": 0.6735395189003437,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          82,
+          28,
+          92,
+          196
+        ],
+        [
+          82,
+          28,
+          93,
+          196
+        ],
+        [
+          80,
+          28,
+          96,
+          196
+        ],
+        [
+          82,
+          28,
+          92,
+          196
+        ]
+      ],
+      "assetBytes": 101536,
+      "assetSha256": "276f8001f977078c3b617fe4b017500ad22f3cafb2d87f7ca7fd05b0e82ebb6b"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/luffy/work-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/luffy/work-west.webp",
+      "source": "tools/launcher-room/life-v1/luffy-work/proportion-repair/source-alpha.png",
+      "sourceSha256": "baf7e4aabbbde1fe638e1e1633d51ade2a75d2d7e185cd1ea49fc5fc9a62cccc",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/luffy-work/plan.json",
+      "planSha256": "1c1b18377b662260f2483f63005cf792536c5adb6908492d78a1b739f305663b",
+      "scaleFromSource": 0.6577181208053692,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          83,
+          34,
+          90,
+          190
+        ],
+        [
+          81,
+          35,
+          95,
+          189
+        ],
+        [
+          80,
+          28,
+          97,
+          196
+        ],
+        [
+          82,
+          34,
+          92,
+          190
+        ]
+      ],
+      "assetBytes": 90770,
+      "assetSha256": "1bfa880266fc9d3b3e3080999e69464d82388e8660e2b3eb877cee5c51d3fceb"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/nami/eat-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/nami/eat-south.webp",
+      "source": "tools/launcher-room/life-v1/nami-utility/source.png",
+      "sourceSha256": "463090f2adf5dcbbff90327983c598b4ac258c213ce78a8116dfd553897d606d",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/nami-utility/plan.json",
+      "planSha256": "51148fca27fd667a7bd20c83c031fe83ab40e0a7b57ecf872bb04ea29017aae2",
+      "scaleFromSource": 0.52631578,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          92,
+          23,
+          71,
+          201
+        ],
+        [
+          89,
+          23,
+          74,
+          201
+        ],
+        [
+          88,
+          23,
+          75,
+          201
+        ],
+        [
+          91,
+          23,
+          72,
+          201
+        ]
+      ],
+      "assetBytes": 88334,
+      "assetSha256": "9d307d86f7d7d1e1e6ecaedaa68cde55cb44bd5824bd79e6cf924a931bdf943e"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/nami/read-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/nami/read-east.webp",
+      "source": "tools/launcher-room/life-v1/nami-read/source.png",
+      "sourceSha256": "de182273c8f0d2c3fc68852a1ddbea7bd83958a9100cdb5041c311bdaf7f7697",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/nami-read/plan.json",
+      "planSha256": "45fe61dfb1cca4bb3f23ba0ffc2311126c40e9b0fb7f7b9652f599839dd89197",
+      "scaleFromSource": 0.623052,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          102,
+          25,
+          105,
+          199
+        ],
+        [
+          109,
+          24,
+          106,
+          200
+        ],
+        [
+          108,
+          24,
+          107,
+          200
+        ],
+        [
+          109,
+          24,
+          106,
+          200
+        ]
+      ],
+      "assetBytes": 96548,
+      "assetSha256": "7c6cbc329f05b0ee8e76c9c278f0d7e87524c69a482e703574d8a0eb8f2b2326"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/nami/read-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/nami/read-north.webp",
+      "source": "tools/launcher-room/life-v1/nami-read/source.png",
+      "sourceSha256": "de182273c8f0d2c3fc68852a1ddbea7bd83958a9100cdb5041c311bdaf7f7697",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/nami-read/plan.json",
+      "planSha256": "45fe61dfb1cca4bb3f23ba0ffc2311126c40e9b0fb7f7b9652f599839dd89197",
+      "scaleFromSource": 0.653594,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          80,
+          24,
+          91,
+          200
+        ],
+        [
+          80,
+          24,
+          99,
+          200
+        ],
+        [
+          79,
+          24,
+          99,
+          200
+        ],
+        [
+          81,
+          24,
+          98,
+          200
+        ]
+      ],
+      "assetBytes": 102092,
+      "assetSha256": "65618a4199a4be1b27a7b2dde85c443a3cb20d339d545766386494181b8a90c5"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/nami/read-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/nami/read-south.webp",
+      "source": "tools/launcher-room/life-v1/nami-read/source.png",
+      "sourceSha256": "de182273c8f0d2c3fc68852a1ddbea7bd83958a9100cdb5041c311bdaf7f7697",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/nami-read/plan.json",
+      "planSha256": "45fe61dfb1cca4bb3f23ba0ffc2311126c40e9b0fb7f7b9652f599839dd89197",
+      "scaleFromSource": 0.666666,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          77,
+          24,
+          104,
+          200
+        ],
+        [
+          80,
+          24,
+          102,
+          200
+        ],
+        [
+          79,
+          24,
+          105,
+          200
+        ],
+        [
+          79,
+          24,
+          105,
+          200
+        ]
+      ],
+      "assetBytes": 105388,
+      "assetSha256": "684ea89df95bfce6e8d81388464a0ca61d074b55aab2c6a1caed1c329daa2458"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/nami/read-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/nami/read-west.webp",
+      "source": "tools/launcher-room/life-v1/nami-read/source.png",
+      "sourceSha256": "de182273c8f0d2c3fc68852a1ddbea7bd83958a9100cdb5041c311bdaf7f7697",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/nami-read/plan.json",
+      "planSha256": "45fe61dfb1cca4bb3f23ba0ffc2311126c40e9b0fb7f7b9652f599839dd89197",
+      "scaleFromSource": 0.623052,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          54,
+          24,
+          104,
+          200
+        ],
+        [
+          51,
+          24,
+          104,
+          200
+        ],
+        [
+          52,
+          24,
+          103,
+          200
+        ],
+        [
+          54,
+          24,
+          101,
+          200
+        ]
+      ],
+      "assetBytes": 91846,
+      "assetSha256": "40b3d7b2ed72a9f578ce6aed45eb2d120616dd3a303911a1e04466f3b2a0b672"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/nami/rest-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/nami/rest-south.webp",
+      "source": "tools/launcher-room/life-v1/nami-utility/source.png",
+      "sourceSha256": "463090f2adf5dcbbff90327983c598b4ac258c213ce78a8116dfd553897d606d",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/nami-utility/plan.json",
+      "planSha256": "51148fca27fd667a7bd20c83c031fe83ab40e0a7b57ecf872bb04ea29017aae2",
+      "scaleFromSource": 0.52631578,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          84,
+          79,
+          88,
+          145
+        ],
+        [
+          84,
+          81,
+          89,
+          143
+        ],
+        [
+          83,
+          88,
+          89,
+          136
+        ],
+        [
+          83,
+          80,
+          91,
+          144
+        ]
+      ],
+      "assetBytes": 76380,
+      "assetSha256": "a45d9ba0144e2f7aed46e0275044825724100686de9a71fcbda5214ad6a42a3f"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/nami/sleep-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/nami/sleep-south.webp",
+      "source": "tools/launcher-room/life-v1/nami-utility/source.png",
+      "sourceSha256": "463090f2adf5dcbbff90327983c598b4ac258c213ce78a8116dfd553897d606d",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/nami-utility/plan.json",
+      "planSha256": "51148fca27fd667a7bd20c83c031fe83ab40e0a7b57ecf872bb04ea29017aae2",
+      "scaleFromSource": 0.52631578,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          48,
+          167,
+          159,
+          57
+        ],
+        [
+          49,
+          166,
+          159,
+          58
+        ],
+        [
+          49,
+          166,
+          159,
+          58
+        ],
+        [
+          48,
+          166,
+          159,
+          58
+        ]
+      ],
+      "assetBytes": 58408,
+      "assetSha256": "3eaaae382e9dbd78706ab175a99ca97db0b45e9cab6c6fcbb15d124a0bdea8ed"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/nami/train-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/nami/train-south.webp",
+      "source": "tools/launcher-room/life-v1/nami-utility/source.png",
+      "sourceSha256": "463090f2adf5dcbbff90327983c598b4ac258c213ce78a8116dfd553897d606d",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/nami-utility/plan.json",
+      "planSha256": "51148fca27fd667a7bd20c83c031fe83ab40e0a7b57ecf872bb04ea29017aae2",
+      "scaleFromSource": 0.52631578,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          85,
+          23,
+          86,
+          201
+        ],
+        [
+          84,
+          22,
+          87,
+          202
+        ],
+        [
+          76,
+          23,
+          96,
+          201
+        ],
+        [
+          85,
+          22,
+          86,
+          202
+        ]
+      ],
+      "assetBytes": 95174,
+      "assetSha256": "b65711145c2765db2cd70804b75ca1283c5ef85008b80aae70dcc46bddc9e30e"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/nami/work-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/nami/work-east.webp",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "sourceSha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/nami-work/plan.json",
+      "planSha256": "f72d9dc76b639131ec91b38815fe5bdeb33a72b7fcf07771ba5a74cd8f09484b",
+      "scaleFromSource": 0.6779661,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          103,
+          21,
+          84,
+          203
+        ],
+        [
+          103,
+          21,
+          85,
+          203
+        ],
+        [
+          102,
+          21,
+          85,
+          203
+        ],
+        [
+          104,
+          21,
+          85,
+          203
+        ]
+      ],
+      "assetBytes": 84964,
+      "assetSha256": "c296b063c21c49bdade2bbbadceb862c4dfbbfb385f1d6604947c17e12ffe970"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/nami/work-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/nami/work-north.webp",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "sourceSha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/nami-work/plan.json",
+      "planSha256": "f72d9dc76b639131ec91b38815fe5bdeb33a72b7fcf07771ba5a74cd8f09484b",
+      "scaleFromSource": 0.67340068,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          95,
+          21,
+          67,
+          203
+        ],
+        [
+          95,
+          21,
+          67,
+          203
+        ],
+        [
+          95,
+          21,
+          69,
+          203
+        ],
+        [
+          96,
+          22,
+          69,
+          202
+        ]
+      ],
+      "assetBytes": 91296,
+      "assetSha256": "d0e5306687b3b00fa93267cee16e93110b3d37f67300afaf6e33cbec6b1d9077"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/nami/work-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/nami/work-south.webp",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "sourceSha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/nami-work/plan.json",
+      "planSha256": "f72d9dc76b639131ec91b38815fe5bdeb33a72b7fcf07771ba5a74cd8f09484b",
+      "scaleFromSource": 0.66225166,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          91,
+          21,
+          74,
+          203
+        ],
+        [
+          91,
+          22,
+          75,
+          202
+        ],
+        [
+          91,
+          22,
+          74,
+          202
+        ],
+        [
+          91,
+          21,
+          74,
+          203
+        ]
+      ],
+      "assetBytes": 95650,
+      "assetSha256": "37fed57236b271f01d28de01d07c5b72048bce6e3deebe9d3515a9bbb4521185"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/nami/work-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/nami/work-west.webp",
+      "source": "tools/launcher-room/life-v1/nami-work/source.png",
+      "sourceSha256": "02374cde2ca89ba0cd76f20d28cbd9bc876eca91145f5579ef05f2d02cdeb85d",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/nami-work/plan.json",
+      "planSha256": "f72d9dc76b639131ec91b38815fe5bdeb33a72b7fcf07771ba5a74cd8f09484b",
+      "scaleFromSource": 0.67340068,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          72,
+          22,
+          81,
+          202
+        ],
+        [
+          73,
+          22,
+          79,
+          202
+        ],
+        [
+          73,
+          21,
+          79,
+          203
+        ],
+        [
+          73,
+          21,
+          79,
+          203
+        ]
+      ],
+      "assetBytes": 80802,
+      "assetSha256": "7435bfd082a4fa2f5b3b60c327bc557dbea4cb307c2ca1510a028b6903e954f1"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/sanji/cook-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/sanji/cook-east.webp",
+      "source": "tools/launcher-room/life-v1/sanji-cook/source.png",
+      "sourceSha256": "07c85908ba7cd468694ced47788d609bb44e019696ee91d2bcfbabeb71e17b5d",
+      "sourcePixels": [
+        1222,
+        1287
+      ],
+      "plan": "tools/launcher-room/life-v1/sanji-cook/plan.json",
+      "planSha256": "afd65fa5c30dd3883d826ff90ec0d5bd42b15c216d081fbc0e3ceeb675f0661c",
+      "scaleFromSource": 0.626,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          28,
+          25,
+          191,
+          199
+        ],
+        [
+          32,
+          26,
+          191,
+          198
+        ],
+        [
+          46,
+          26,
+          192,
+          198
+        ],
+        [
+          54,
+          25,
+          170,
+          199
+        ]
+      ],
+      "assetBytes": 98674,
+      "assetSha256": "1c1e8781ff8d4f581ede179d13f1be9633e8fe01991a90f221d95cf3ec33a696"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/sanji/cook-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/sanji/cook-north.webp",
+      "source": "tools/launcher-room/life-v1/sanji-cook/source.png",
+      "sourceSha256": "07c85908ba7cd468694ced47788d609bb44e019696ee91d2bcfbabeb71e17b5d",
+      "sourcePixels": [
+        1222,
+        1287
+      ],
+      "plan": "tools/launcher-room/life-v1/sanji-cook/plan.json",
+      "planSha256": "afd65fa5c30dd3883d826ff90ec0d5bd42b15c216d081fbc0e3ceeb675f0661c",
+      "scaleFromSource": 0.626,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          20,
+          28,
+          191,
+          196
+        ],
+        [
+          28,
+          28,
+          191,
+          196
+        ],
+        [
+          38,
+          28,
+          192,
+          196
+        ],
+        [
+          47,
+          28,
+          182,
+          196
+        ]
+      ],
+      "assetBytes": 95350,
+      "assetSha256": "0d6dd78c86baed00b4e94cfc95ef0f18e449d329467eb06de74a8b0960ddb624"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/sanji/cook-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/sanji/cook-south.webp",
+      "source": "tools/launcher-room/life-v1/sanji-cook/source.png",
+      "sourceSha256": "07c85908ba7cd468694ced47788d609bb44e019696ee91d2bcfbabeb71e17b5d",
+      "sourcePixels": [
+        1222,
+        1287
+      ],
+      "plan": "tools/launcher-room/life-v1/sanji-cook/plan.json",
+      "planSha256": "afd65fa5c30dd3883d826ff90ec0d5bd42b15c216d081fbc0e3ceeb675f0661c",
+      "scaleFromSource": 0.626,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          20,
+          13,
+          191,
+          211
+        ],
+        [
+          28,
+          23,
+          191,
+          201
+        ],
+        [
+          37,
+          23,
+          192,
+          201
+        ],
+        [
+          45,
+          13,
+          192,
+          211
+        ]
+      ],
+      "assetBytes": 104450,
+      "assetSha256": "ea10991cdf7dd8014c78768a35b67cc894fcf0c0ff78009d6da090fa05f144d2"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/sanji/cook-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/sanji/cook-west.webp",
+      "source": "tools/launcher-room/life-v1/sanji-cook/source.png",
+      "sourceSha256": "07c85908ba7cd468694ced47788d609bb44e019696ee91d2bcfbabeb71e17b5d",
+      "sourcePixels": [
+        1222,
+        1287
+      ],
+      "plan": "tools/launcher-room/life-v1/sanji-cook/plan.json",
+      "planSha256": "afd65fa5c30dd3883d826ff90ec0d5bd42b15c216d081fbc0e3ceeb675f0661c",
+      "scaleFromSource": 0.626,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          13,
+          24,
+          191,
+          200
+        ],
+        [
+          20,
+          24,
+          190,
+          200
+        ],
+        [
+          30,
+          24,
+          192,
+          200
+        ],
+        [
+          38,
+          24,
+          179,
+          200
+        ]
+      ],
+      "assetBytes": 97892,
+      "assetSha256": "f0ad247cd0105507a08f486a1a41565c818ed4bd9c457c188319f7553ce4ba9b"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/sanji/eat-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/sanji/eat-south.webp",
+      "source": "tools/launcher-room/life-v1/sanji-utility/source.png",
+      "sourceSha256": "d03eba05b2c8b74185180161e8b190c67adf100704f8383b66a622808ecbaa28",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/sanji-utility/plan.json",
+      "planSha256": "cff8979ed5edc0987b7e1b9118b89cdc1cf16efb24524bcc510146574df48c0f",
+      "scaleFromSource": 0.53,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          95,
+          26,
+          113,
+          198
+        ],
+        [
+          85,
+          27,
+          123,
+          197
+        ],
+        [
+          66,
+          25,
+          144,
+          199
+        ],
+        [
+          48,
+          26,
+          119,
+          198
+        ]
+      ],
+      "assetBytes": 88178,
+      "assetSha256": "688818704b1077440fb07903273a7922501ea0830d21d85b4476c531926f1d58"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/sanji/rest-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/sanji/rest-south.webp",
+      "source": "tools/launcher-room/life-v1/sanji-utility/source.png",
+      "sourceSha256": "d03eba05b2c8b74185180161e8b190c67adf100704f8383b66a622808ecbaa28",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/sanji-utility/plan.json",
+      "planSha256": "cff8979ed5edc0987b7e1b9118b89cdc1cf16efb24524bcc510146574df48c0f",
+      "scaleFromSource": 0.53,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          60,
+          60,
+          145,
+          164
+        ],
+        [
+          45,
+          66,
+          160,
+          158
+        ],
+        [
+          51,
+          63,
+          126,
+          161
+        ],
+        [
+          47,
+          64,
+          142,
+          160
+        ]
+      ],
+      "assetBytes": 86220,
+      "assetSha256": "d0d4bdc8f4769a2dd9b70b1ef8f1ed0ff18f707dda7480224ccbbfb5bd6c59c8"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/sanji/sleep-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/sanji/sleep-south.webp",
+      "source": "tools/launcher-room/life-v1/sanji-utility/source.png",
+      "sourceSha256": "d03eba05b2c8b74185180161e8b190c67adf100704f8383b66a622808ecbaa28",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/sanji-utility/plan.json",
+      "planSha256": "cff8979ed5edc0987b7e1b9118b89cdc1cf16efb24524bcc510146574df48c0f",
+      "scaleFromSource": 0.53,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          58,
+          147,
+          153,
+          77
+        ],
+        [
+          45,
+          151,
+          160,
+          73
+        ],
+        [
+          46,
+          141,
+          155,
+          83
+        ],
+        [
+          48,
+          155,
+          149,
+          69
+        ]
+      ],
+      "assetBytes": 52632,
+      "assetSha256": "e6ea361f7fd8449475fa9b8e43159d22dac0d083e6caaa0bd2b9d91c9d23d112"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/sanji/train-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/sanji/train-south.webp",
+      "source": "tools/launcher-room/life-v1/sanji-utility/source.png",
+      "sourceSha256": "d03eba05b2c8b74185180161e8b190c67adf100704f8383b66a622808ecbaa28",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/sanji-utility/plan.json",
+      "planSha256": "cff8979ed5edc0987b7e1b9118b89cdc1cf16efb24524bcc510146574df48c0f",
+      "scaleFromSource": 0.53,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          45,
+          39,
+          163,
+          185
+        ],
+        [
+          45,
+          38,
+          164,
+          186
+        ],
+        [
+          63,
+          37,
+          148,
+          187
+        ],
+        [
+          52,
+          39,
+          136,
+          185
+        ]
+      ],
+      "assetBytes": 87162,
+      "assetSha256": "335e539f5e1e6d311136c7d2ba8abd845261dbfb5a52103ebd877c4c16188667"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/sanji/work-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/sanji/work-east.webp",
+      "source": "tools/launcher-room/life-v1/sanji-work/source.png",
+      "sourceSha256": "8eb5302708f3adfafc9466ca8e11b15cd6ac69a13a819cbc0330182a5ddd82fa",
+      "sourcePixels": [
+        1222,
+        1287
+      ],
+      "plan": "tools/launcher-room/life-v1/sanji-work/plan.json",
+      "planSha256": "cf1f52874682d13cb1b129bd21869cf3946e6c9acea8a5bbc0cd733f8e826500",
+      "scaleFromSource": 0.638,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          10,
+          26,
+          217,
+          198
+        ],
+        [
+          48,
+          27,
+          179,
+          197
+        ],
+        [
+          47,
+          29,
+          179,
+          195
+        ],
+        [
+          58,
+          29,
+          193,
+          195
+        ]
+      ],
+      "assetBytes": 91536,
+      "assetSha256": "475fea53c7aae08e281df39f8bcddbfe9ecdec98d6e63bf458ab0234eb8d8093"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/sanji/work-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/sanji/work-north.webp",
+      "source": "tools/launcher-room/life-v1/sanji-work/source.png",
+      "sourceSha256": "8eb5302708f3adfafc9466ca8e11b15cd6ac69a13a819cbc0330182a5ddd82fa",
+      "sourcePixels": [
+        1222,
+        1287
+      ],
+      "plan": "tools/launcher-room/life-v1/sanji-work/plan.json",
+      "planSha256": "cf1f52874682d13cb1b129bd21869cf3946e6c9acea8a5bbc0cd733f8e826500",
+      "scaleFromSource": 0.638,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          0,
+          19,
+          217,
+          205
+        ],
+        [
+          36,
+          19,
+          179,
+          205
+        ],
+        [
+          41,
+          19,
+          179,
+          205
+        ],
+        [
+          50,
+          19,
+          198,
+          205
+        ]
+      ],
+      "assetBytes": 87034,
+      "assetSha256": "2f6243ebf0dcbb2e405bf4205e8148e68ab0e0dec356e7bdb724d22d5f1a3c80"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/sanji/work-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/sanji/work-south.webp",
+      "source": "tools/launcher-room/life-v1/sanji-work/source.png",
+      "sourceSha256": "8eb5302708f3adfafc9466ca8e11b15cd6ac69a13a819cbc0330182a5ddd82fa",
+      "sourcePixels": [
+        1222,
+        1287
+      ],
+      "plan": "tools/launcher-room/life-v1/sanji-work/plan.json",
+      "planSha256": "cf1f52874682d13cb1b129bd21869cf3946e6c9acea8a5bbc0cd733f8e826500",
+      "scaleFromSource": 0.638,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          0,
+          10,
+          217,
+          214
+        ],
+        [
+          38,
+          22,
+          179,
+          202
+        ],
+        [
+          40,
+          21,
+          179,
+          203
+        ],
+        [
+          50,
+          22,
+          205,
+          202
+        ]
+      ],
+      "assetBytes": 98236,
+      "assetSha256": "43f9e165b703b448fce5a3ad0c3d0ffd26d918596d6e6eb5a651e9fd765dbed6"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/sanji/work-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/sanji/work-west.webp",
+      "source": "tools/launcher-room/life-v1/sanji-work/source.png",
+      "sourceSha256": "8eb5302708f3adfafc9466ca8e11b15cd6ac69a13a819cbc0330182a5ddd82fa",
+      "sourcePixels": [
+        1222,
+        1287
+      ],
+      "plan": "tools/launcher-room/life-v1/sanji-work/plan.json",
+      "planSha256": "cf1f52874682d13cb1b129bd21869cf3946e6c9acea8a5bbc0cd733f8e826500",
+      "scaleFromSource": 0.638,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          22,
+          23,
+          189,
+          201
+        ],
+        [
+          29,
+          23,
+          179,
+          201
+        ],
+        [
+          37,
+          23,
+          179,
+          201
+        ],
+        [
+          45,
+          23,
+          197,
+          201
+        ]
+      ],
+      "assetBytes": 89002,
+      "assetSha256": "c506d2fd0d90d51b01f5a873fb8732ecefa5e9b341679f06910458656e93009e"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/craft-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/craft-east.webp",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "sourceSha256": "10f2bea60ec26dfa598a8076e7a3556ca2d047b2fa926515404c08c3611d1ef1",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-craft/plan.json",
+      "planSha256": "73312df6d94d6ff51b6b8012de72bf05f2752ae13339c554dfa1490fd968c3f3",
+      "scaleFromSource": 0.66220736,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          76,
+          22,
+          126,
+          202
+        ],
+        [
+          77,
+          22,
+          123,
+          202
+        ],
+        [
+          75,
+          22,
+          124,
+          202
+        ],
+        [
+          74,
+          22,
+          128,
+          202
+        ]
+      ],
+      "assetBytes": 130034,
+      "assetSha256": "962e72429fc8f07ae8f959dfd3526cdd11d29880b3ff91c2020cbb700b9795f6"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/craft-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/craft-north.webp",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "sourceSha256": "10f2bea60ec26dfa598a8076e7a3556ca2d047b2fa926515404c08c3611d1ef1",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-craft/plan.json",
+      "planSha256": "73312df6d94d6ff51b6b8012de72bf05f2752ae13339c554dfa1490fd968c3f3",
+      "scaleFromSource": 0.66891892,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          74,
+          22,
+          114,
+          202
+        ],
+        [
+          73,
+          22,
+          115,
+          202
+        ],
+        [
+          74,
+          22,
+          116,
+          202
+        ],
+        [
+          73,
+          23,
+          115,
+          201
+        ]
+      ],
+      "assetBytes": 122504,
+      "assetSha256": "554139ac0f49862545ad32311e36e7c593ea7da96e7fd6e82cae00ac22640a7c"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/craft-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/craft-south.webp",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "sourceSha256": "10f2bea60ec26dfa598a8076e7a3556ca2d047b2fa926515404c08c3611d1ef1",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-craft/plan.json",
+      "planSha256": "73312df6d94d6ff51b6b8012de72bf05f2752ae13339c554dfa1490fd968c3f3",
+      "scaleFromSource": 0.65131578,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          74,
+          22,
+          114,
+          202
+        ],
+        [
+          73,
+          22,
+          115,
+          202
+        ],
+        [
+          73,
+          22,
+          116,
+          202
+        ],
+        [
+          73,
+          22,
+          117,
+          202
+        ]
+      ],
+      "assetBytes": 131466,
+      "assetSha256": "4b9a8162acfbe8642c6dd0edff036159851a5d3adfa762896c2bb73d25b67edd"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/craft-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/craft-west.webp",
+      "source": "tools/launcher-room/life-v1/usopp-craft/source.png",
+      "sourceSha256": "10f2bea60ec26dfa598a8076e7a3556ca2d047b2fa926515404c08c3611d1ef1",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-craft/plan.json",
+      "planSha256": "73312df6d94d6ff51b6b8012de72bf05f2752ae13339c554dfa1490fd968c3f3",
+      "scaleFromSource": 0.64918032,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          57,
+          22,
+          122,
+          202
+        ],
+        [
+          59,
+          23,
+          123,
+          201
+        ],
+        [
+          59,
+          23,
+          123,
+          201
+        ],
+        [
+          60,
+          23,
+          121,
+          201
+        ]
+      ],
+      "assetBytes": 131366,
+      "assetSha256": "c599942469d60c6688b09357875c926e535228a5a4e141378ae66d6a225fcd52"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/eat-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/eat-south.webp",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "sourceSha256": "6ac7e0d370e33b4d4beb5b20d519e0dcca06d7c0b358e4753652a4518d31bcd1",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-utility/plan.json",
+      "planSha256": "9857466893d5676689c3653c4a52051c1953430a5390774eab66cb5bed5ea55a",
+      "scaleFromSource": 0.58235294,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          79,
+          26,
+          101,
+          198
+        ],
+        [
+          79,
+          25,
+          99,
+          199
+        ],
+        [
+          78,
+          26,
+          102,
+          198
+        ],
+        [
+          79,
+          26,
+          101,
+          198
+        ]
+      ],
+      "assetBytes": 119110,
+      "assetSha256": "69a4617cced12e0653e0f0609ca287d552e09f5941834d729aca713d285ccbef"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/read-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/read-east.webp",
+      "source": "tools/launcher-room/life-v1/usopp-read/source.png",
+      "sourceSha256": "e9fca8aa8814a68453e174515d602c6181e2228f1e4396ecc517eaafc5662909",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-read/plan.json",
+      "planSha256": "6b1943cef9a40a38535e23ae0d22f315a50d641f9583c15333a58361e6a99f41",
+      "scaleFromSource": 0.662252,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          76,
+          25,
+          134,
+          199
+        ],
+        [
+          75,
+          24,
+          132,
+          200
+        ],
+        [
+          75,
+          25,
+          131,
+          199
+        ],
+        [
+          75,
+          25,
+          132,
+          199
+        ]
+      ],
+      "assetBytes": 127950,
+      "assetSha256": "52fd27bde37d35d4e688f21c1515e5cc80fc397e714c680602808482f47d6dad"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/read-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/read-north.webp",
+      "source": "tools/launcher-room/life-v1/usopp-read/source.png",
+      "sourceSha256": "e9fca8aa8814a68453e174515d602c6181e2228f1e4396ecc517eaafc5662909",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-read/plan.json",
+      "planSha256": "6b1943cef9a40a38535e23ae0d22f315a50d641f9583c15333a58361e6a99f41",
+      "scaleFromSource": 0.666666,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          75,
+          24,
+          110,
+          200
+        ],
+        [
+          71,
+          24,
+          121,
+          200
+        ],
+        [
+          70,
+          24,
+          120,
+          200
+        ],
+        [
+          71,
+          25,
+          118,
+          199
+        ]
+      ],
+      "assetBytes": 122104,
+      "assetSha256": "b1a47985d83be3c4d7dc5e8a23dda85621f4958f83eb15d26d9420deff12d4b1"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/read-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/read-south.webp",
+      "source": "tools/launcher-room/life-v1/usopp-read/source.png",
+      "sourceSha256": "e9fca8aa8814a68453e174515d602c6181e2228f1e4396ecc517eaafc5662909",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-read/plan.json",
+      "planSha256": "6b1943cef9a40a38535e23ae0d22f315a50d641f9583c15333a58361e6a99f41",
+      "scaleFromSource": 0.651466,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          77,
+          24,
+          106,
+          200
+        ],
+        [
+          76,
+          25,
+          108,
+          199
+        ],
+        [
+          76,
+          25,
+          110,
+          199
+        ],
+        [
+          76,
+          25,
+          109,
+          199
+        ]
+      ],
+      "assetBytes": 128836,
+      "assetSha256": "0598c38c4bd8d4e9016695dbdb6a2d9846ccef091ecb3a43ec8bc40d7d863498"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/read-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/read-west.webp",
+      "source": "tools/launcher-room/life-v1/usopp-read/source.png",
+      "sourceSha256": "e9fca8aa8814a68453e174515d602c6181e2228f1e4396ecc517eaafc5662909",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-read/plan.json",
+      "planSha256": "6b1943cef9a40a38535e23ae0d22f315a50d641f9583c15333a58361e6a99f41",
+      "scaleFromSource": 0.645162,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          56,
+          24,
+          126,
+          200
+        ],
+        [
+          55,
+          25,
+          126,
+          199
+        ],
+        [
+          55,
+          25,
+          127,
+          199
+        ],
+        [
+          53,
+          25,
+          127,
+          199
+        ]
+      ],
+      "assetBytes": 124812,
+      "assetSha256": "4866a47b9bdd5ba4356a45385297bf63e02348d986b5a207db5f85947d975ff1"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/rest-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/rest-south.webp",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "sourceSha256": "6ac7e0d370e33b4d4beb5b20d519e0dcca06d7c0b358e4753652a4518d31bcd1",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-utility/plan.json",
+      "planSha256": "9857466893d5676689c3653c4a52051c1953430a5390774eab66cb5bed5ea55a",
+      "scaleFromSource": 0.58235294,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          72,
+          62,
+          116,
+          162
+        ],
+        [
+          73,
+          61,
+          115,
+          163
+        ],
+        [
+          72,
+          62,
+          116,
+          162
+        ],
+        [
+          72,
+          61,
+          115,
+          163
+        ]
+      ],
+      "assetBytes": 111960,
+      "assetSha256": "404d913a8c084fc8edf615b92b69a25afbd53bd8e90635b4f3b45033e920b22f"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/sleep-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/sleep-south.webp",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "sourceSha256": "6ac7e0d370e33b4d4beb5b20d519e0dcca06d7c0b358e4753652a4518d31bcd1",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-utility/plan.json",
+      "planSha256": "9857466893d5676689c3653c4a52051c1953430a5390774eab66cb5bed5ea55a",
+      "scaleFromSource": 0.58235294,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          45,
+          135,
+          162,
+          89
+        ],
+        [
+          45,
+          136,
+          162,
+          88
+        ],
+        [
+          45,
+          136,
+          162,
+          88
+        ],
+        [
+          45,
+          136,
+          162,
+          88
+        ]
+      ],
+      "assetBytes": 83130,
+      "assetSha256": "e266293015cd25c7067445eba9b8f9ce3646840e359f891162d74479c4296394"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/train-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/train-south.webp",
+      "source": "tools/launcher-room/life-v1/usopp-utility/source.png",
+      "sourceSha256": "6ac7e0d370e33b4d4beb5b20d519e0dcca06d7c0b358e4753652a4518d31bcd1",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-utility/plan.json",
+      "planSha256": "9857466893d5676689c3653c4a52051c1953430a5390774eab66cb5bed5ea55a",
+      "scaleFromSource": 0.58235294,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          77,
+          23,
+          104,
+          201
+        ],
+        [
+          77,
+          23,
+          101,
+          201
+        ],
+        [
+          78,
+          23,
+          103,
+          201
+        ],
+        [
+          78,
+          23,
+          101,
+          201
+        ]
+      ],
+      "assetBytes": 120064,
+      "assetSha256": "1af2fb886237f4a4d625886a44a49ff0d5e07dfc078ceb09928eab3508c2e0f7"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/work-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/work-east.webp",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "sourceSha256": "75a913fd0bad04d57791b8b401a5c034dcdb57221757b61bd455be4ed58e8ddf",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-work/plan.json",
+      "planSha256": "76b956bcffb5987a8406f8a0d342e2cabb4e4b913594c14221fa71bc5797a8e0",
+      "scaleFromSource": 0.66666666,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          71,
+          23,
+          129,
+          201
+        ],
+        [
+          71,
+          22,
+          129,
+          202
+        ],
+        [
+          70,
+          23,
+          129,
+          201
+        ],
+        [
+          72,
+          23,
+          129,
+          201
+        ]
+      ],
+      "assetBytes": 129956,
+      "assetSha256": "b414ca3eb2fbc61da57825fe30380901e9a0f5ef358eb2240b13dee79f6da285"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/work-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/work-north.webp",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "sourceSha256": "75a913fd0bad04d57791b8b401a5c034dcdb57221757b61bd455be4ed58e8ddf",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-work/plan.json",
+      "planSha256": "76b956bcffb5987a8406f8a0d342e2cabb4e4b913594c14221fa71bc5797a8e0",
+      "scaleFromSource": 0.67576792,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          66,
+          23,
+          126,
+          201
+        ],
+        [
+          66,
+          22,
+          126,
+          202
+        ],
+        [
+          64,
+          22,
+          128,
+          202
+        ],
+        [
+          65,
+          22,
+          125,
+          202
+        ]
+      ],
+      "assetBytes": 127360,
+      "assetSha256": "349bf73419dde4bc334f272ecbad3f6f72bededd9f01a04d0110678bf3cab539"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/work-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/work-south.webp",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "sourceSha256": "75a913fd0bad04d57791b8b401a5c034dcdb57221757b61bd455be4ed58e8ddf",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-work/plan.json",
+      "planSha256": "76b956bcffb5987a8406f8a0d342e2cabb4e4b913594c14221fa71bc5797a8e0",
+      "scaleFromSource": 0.65346534,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          74,
+          22,
+          108,
+          202
+        ],
+        [
+          74,
+          22,
+          108,
+          202
+        ],
+        [
+          74,
+          22,
+          109,
+          202
+        ],
+        [
+          74,
+          22,
+          108,
+          202
+        ]
+      ],
+      "assetBytes": 130756,
+      "assetSha256": "66aa53be0505628dbe7b95ae22fba9b6586d46371e7135a4ebb5c8f1fc22e885"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/usopp/work-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/usopp/work-west.webp",
+      "source": "tools/launcher-room/life-v1/usopp-work/source.png",
+      "sourceSha256": "75a913fd0bad04d57791b8b401a5c034dcdb57221757b61bd455be4ed58e8ddf",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/usopp-work/plan.json",
+      "planSha256": "76b956bcffb5987a8406f8a0d342e2cabb4e4b913594c14221fa71bc5797a8e0",
+      "scaleFromSource": 0.64705882,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          57,
+          22,
+          127,
+          202
+        ],
+        [
+          58,
+          22,
+          126,
+          202
+        ],
+        [
+          58,
+          22,
+          126,
+          202
+        ],
+        [
+          58,
+          22,
+          126,
+          202
+        ]
+      ],
+      "assetBytes": 127374,
+      "assetSha256": "36f45abd65c2fb2fd1866efb1f6de8a1f3abbca55e5096c52c220cd762a0a245"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/zoro/eat-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/zoro/eat-south.webp",
+      "source": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/source-alpha.png",
+      "sourceSha256": "b26c9eed95198e2230d6f42cc3c8f85d717e6d3ac25b64f6748373d5cf895ffb",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/zoro-utility/plan.json",
+      "planSha256": "36ea41b07780c85a662d3234591cffa3b9a6f9cd0440a7d24eb4303aa129dfff",
+      "scaleFromSource": 0.5439093484419264,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          84,
+          33,
+          88,
+          191
+        ],
+        [
+          83,
+          32,
+          89,
+          192
+        ],
+        [
+          83,
+          32,
+          90,
+          192
+        ],
+        [
+          84,
+          33,
+          88,
+          191
+        ]
+      ],
+      "assetBytes": 90300,
+      "assetSha256": "3f5bd9d8f073627e1ee074eea04d615fe55402fd3cad74d2895ce6c629307d3e"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/zoro/rest-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/zoro/rest-south.webp",
+      "source": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/source-alpha.png",
+      "sourceSha256": "b26c9eed95198e2230d6f42cc3c8f85d717e6d3ac25b64f6748373d5cf895ffb",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/zoro-utility/plan.json",
+      "planSha256": "36ea41b07780c85a662d3234591cffa3b9a6f9cd0440a7d24eb4303aa129dfff",
+      "scaleFromSource": 0.5439093484419264,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          75,
+          76,
+          106,
+          148
+        ],
+        [
+          76,
+          78,
+          104,
+          146
+        ],
+        [
+          76,
+          80,
+          105,
+          144
+        ],
+        [
+          76,
+          76,
+          104,
+          148
+        ]
+      ],
+      "assetBytes": 80606,
+      "assetSha256": "e3d97090cbd067112400c10602a7c00140774b59064ca421c062c3040c25d027"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/zoro/sleep-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/zoro/sleep-south.webp",
+      "source": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/source-alpha.png",
+      "sourceSha256": "b26c9eed95198e2230d6f42cc3c8f85d717e6d3ac25b64f6748373d5cf895ffb",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/zoro-utility/plan.json",
+      "planSha256": "36ea41b07780c85a662d3234591cffa3b9a6f9cd0440a7d24eb4303aa129dfff",
+      "scaleFromSource": 0.5439093484419264,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          54,
+          159,
+          147,
+          65
+        ],
+        [
+          52,
+          159,
+          152,
+          65
+        ],
+        [
+          53,
+          158,
+          150,
+          66
+        ],
+        [
+          54,
+          158,
+          148,
+          66
+        ]
+      ],
+      "assetBytes": 55592,
+      "assetSha256": "1fc2f296aeb1f27088434d474cd93b7c5ff1999830a92fa1c85ba43fbf0d0955"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/zoro/train-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/zoro/train-south.webp",
+      "source": "tools/launcher-room/life-v1/zoro-utility/proportion-repair/source-alpha.png",
+      "sourceSha256": "b26c9eed95198e2230d6f42cc3c8f85d717e6d3ac25b64f6748373d5cf895ffb",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/zoro-utility/plan.json",
+      "planSha256": "36ea41b07780c85a662d3234591cffa3b9a6f9cd0440a7d24eb4303aa129dfff",
+      "scaleFromSource": 0.5439093484419264,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          81,
+          35,
+          93,
+          189
+        ],
+        [
+          79,
+          36,
+          98,
+          188
+        ],
+        [
+          64,
+          41,
+          128,
+          183
+        ],
+        [
+          82,
+          35,
+          92,
+          189
+        ]
+      ],
+      "assetBytes": 87454,
+      "assetSha256": "e0d09c5c3280be914210b5200d717c915b2b20e52dfbcee214a6a52cca62e62a"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/zoro/work-east.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/zoro/work-east.webp",
+      "source": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source-alpha.png",
+      "sourceSha256": "77196af917e63f1b9a25f563b397bfa22718820757e8d66c185a16f0e19c110e",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/zoro-work/plan.json",
+      "planSha256": "6117110da9b3cecb5dc4100d269d611925a816777cb4872750ff94295637e4bc",
+      "scaleFromSource": 0.6421404682274248,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          82,
+          32,
+          91,
+          192
+        ],
+        [
+          83,
+          32,
+          91,
+          192
+        ],
+        [
+          78,
+          32,
+          100,
+          192
+        ],
+        [
+          83,
+          33,
+          89,
+          191
+        ]
+      ],
+      "assetBytes": 83208,
+      "assetSha256": "e365685d5695291da99d5b442c30e1105591bea46a4f692a9452ba63d1382544"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/zoro/work-north.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/zoro/work-north.webp",
+      "source": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source-alpha.png",
+      "sourceSha256": "77196af917e63f1b9a25f563b397bfa22718820757e8d66c185a16f0e19c110e",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/zoro-work/plan.json",
+      "planSha256": "6117110da9b3cecb5dc4100d269d611925a816777cb4872750ff94295637e4bc",
+      "scaleFromSource": 0.6575342465753424,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          82,
+          33,
+          93,
+          191
+        ],
+        [
+          83,
+          33,
+          91,
+          191
+        ],
+        [
+          83,
+          33,
+          91,
+          191
+        ],
+        [
+          84,
+          32,
+          89,
+          192
+        ]
+      ],
+      "assetBytes": 84204,
+      "assetSha256": "47d720441ad6e05f3fbc1b6eff28a2bc9550474549168acb26eb92ee288ebb89"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/zoro/work-south.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/zoro/work-south.webp",
+      "source": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source-alpha.png",
+      "sourceSha256": "77196af917e63f1b9a25f563b397bfa22718820757e8d66c185a16f0e19c110e",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/zoro-work/plan.json",
+      "planSha256": "6117110da9b3cecb5dc4100d269d611925a816777cb4872750ff94295637e4bc",
+      "scaleFromSource": 0.6336633663366337,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          84,
+          33,
+          89,
+          191
+        ],
+        [
+          83,
+          33,
+          91,
+          191
+        ],
+        [
+          83,
+          33,
+          89,
+          191
+        ],
+        [
+          83,
+          32,
+          89,
+          192
+        ]
+      ],
+      "assetBytes": 92600,
+      "assetSha256": "107cabca456c3214eb9c164b1bad9ad9e39ef8bd505c7696b37bd09bde548942"
+    },
+    {
+      "asset": "public/images/launcher_room/life_hd_v2/zoro/work-west.webp",
+      "legacyAtlas": "public/images/launcher_room/life_v1/zoro/work-west.webp",
+      "source": "tools/launcher-room/life-v1/zoro-work/proportion-repair/source-alpha.png",
+      "sourceSha256": "77196af917e63f1b9a25f563b397bfa22718820757e8d66c185a16f0e19c110e",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "plan": "tools/launcher-room/life-v1/zoro-work/plan.json",
+      "planSha256": "6117110da9b3cecb5dc4100d269d611925a816777cb4872750ff94295637e4bc",
+      "scaleFromSource": 0.6295081967213115,
+      "assetPixels": [
+        1024,
+        256
+      ],
+      "cellPixels": 256,
+      "groundRoot": [
+        128,
+        224
+      ],
+      "frameBounds": [
+        [
+          83,
+          33,
+          89,
+          191
+        ],
+        [
+          82,
+          32,
+          93,
+          192
+        ],
+        [
+          80,
+          33,
+          97,
+          191
+        ],
+        [
+          83,
+          33,
+          91,
+          191
+        ]
+      ],
+      "assetBytes": 80046,
+      "assetSha256": "da76acb21872a1dce2d24b1e3c0cc7fda92bf93e99e656be2ca2e85f6301b893"
+    }
+  ]
+}
