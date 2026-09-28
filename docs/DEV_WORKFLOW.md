@@ -6,7 +6,7 @@
 
 玩家新增的 VFX 規格進一步要求白光核心、先白藍紫金後假金升彩、金粒內縮與短爆發。實作擴充 `src/board_tavern_vfx.mjs`、本機 bundle/build、`package.json`/lock、Board 程式 allowlist、既有揭曉 JS/CSS/HTML 與 strict release/QA；九人反應、2,500 貝里及 Board 同步權威不變。PixiJS 8.21.0、pixi-filters 6.1.5、GSAP 3.15.0、esbuild 0.28.2 使用固定版本；粒子採原生池，不安裝與 PixiJS 8 peer 不相容的 emitter。此段是開發紀錄，尚不代表新特效已部署。
 
-本機 gate：`D:\Codex_QA\board-tavern-captain-20260928\v4-full-regression\result.json` 216/216、`v4-socket-regression\result.json` 31/31；`D:\Codex_QA\board-tavern-vfx-20260928\result.json` 59/59、`v4-stage-final-prisms\result.json` 78/78，後兩者涵蓋最新 S 虹彩門縫與 S–E 門光的真雙門截圖／像素及桌機、手機版面。這些只算本機自動 QA，實體裝置穩定 60 FPS、人手試玩、遠端網路與公開部署均未驗；正式 D 樹的並行修改須保留，尚未進行本次 v4 最終同步與部署。具體範圍和測試界線見 `BOARD_TAVERN_CAPTAIN_20260928.md`。
+本機 gate：`D:\Codex_QA\board-tavern-captain-20260928\v4-full-regression\result.json` 216/216、`v4-socket-regression\result.json` 31/31；`D:\Codex_QA\board-tavern-vfx-20260928\result.json` 59/59、`v4-stage-final-prisms\result.json` 78/78，後兩者涵蓋最新 S 虹彩門縫與 S–E 門光的真雙門截圖／像素及桌機、手機版面。嚴格候選 `package-3155f473aa76c19f` 已在本機提升，公告隔離 gate 20/20；R2 不可變發布 `uploaded=24`、`skipped=6046`，`D:\Codex_QA\board-tavern-captain-20260928\r2-final\r2-verify.json` 回讀新資源 24/24 SHA 通過。正式 D 樹僅定點同步本次檔案並保留並行修改，D 樹 `npm start` 因既有依賴 `express` 未安裝而無法獨立驗證 HTTP。公開 runtime 尚未驗證切換；本機自動 QA 不等於實體裝置穩定 60 FPS、人手試玩或遠端多人實玩。具體範圍和測試界線見 `BOARD_TAVERN_CAPTAIN_20260928.md`。
 
 ## 2026-09-28 草帽十人招募分歧演出
 

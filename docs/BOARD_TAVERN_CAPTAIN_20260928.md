@@ -34,6 +34,6 @@
 
 `D:\Codex_QA\board-tavern-captain-20260928\v4-full-regression\result.json` 記錄本機 Chromium 216/216 通過：六階級門縫先亮後開、18 張反應圖載入、九人各自加入／拒絕台詞與動作、跳過不自動決定、選後只結算一次、失權取消、減少動態效果及桌機／手機／橫屏版面。`v4-socket-regression\result.json` 記錄兩個真實本機 Socket.IO 房間、各兩個獨立瀏覽器 context 的建立／加入／開始／招募／觀看／重整 31/31 通過。這些是控制測試狀態的本機自動驗證，不是人手試玩、實體手機、遠端網路或公開站驗收。
 
-`D:\Codex_QA\board-tavern-vfx-20260928\result.json` 在最新 bundle 上通過 WebGL／真雙門合成 59/59；實際 S 門縫取樣白光 7,164 像素，並有粉 546、青 1,329、藍 367、紫 406 像素，A 金光 11,840、E 金光 0，顯示虹彩從門內漏出且階級可區分。`D:\Codex_QA\board-tavern-captain-20260928\v4-stage-final-prisms\result.json` 在同一輪通過階段／響應式 78/78：門板先微開、光落在門縫和地板而非外側門框，再進剪影、真容與選擇；S 級棱光收在開啟中的門縫，不是固定彩虹燈帶。兩份結果皆為本機 Chromium 截圖及像素檢查，不能推出實體裝置穩定 60 FPS。離線 bundle 的相依套件授權文字與最終候選仍須另行核對。
+`D:\Codex_QA\board-tavern-vfx-20260928\result.json` 在最新 bundle 上通過 WebGL／真雙門合成 59/59；實際 S 門縫取樣白光 7,164 像素，並有粉 546、青 1,329、藍 367、紫 406 像素，A 金光 11,840、E 金光 0，顯示虹彩從門內漏出且階級可區分。`D:\Codex_QA\board-tavern-captain-20260928\v4-stage-final-prisms\result.json` 在同一輪通過階段／響應式 78/78：門板先微開、光落在門縫和地板而非外側門框，再進剪影、真容與選擇；S 級棱光收在開啟中的門縫，不是固定彩虹燈帶。兩份結果皆為本機 Chromium 截圖及像素檢查，不能推出實體裝置穩定 60 FPS。離線 bundle 已補足隨包相依套件授權文字並重建；正式候選經隔離 builder gate 17/17。
 
-目前尚無本次 v4 正式候選、公開 runtime 切換或線上資源 SHA 驗收結果；不得把本機測試或前一版 `package-1c453fcf83416d97` 說成本次部署完成。正式 D 工作樹只允許定點同步，保留其中與本需求無關的未提交內容。
+本機已從正式前版建立並提升受限候選 `package-3155f473aa76c19f`（6 個變更程式、18 張新圖、Board 共 6,396 檔），manifest SHA-256 `5d704e4b4e95cf11ca677480e9edabc9f4a8c3367345fd10f5b78f6782fd6c38`；公告 revision 8 只追加第九則，隔離 PGlite gate 20/20。R2 不可變發布上傳 24 個新物件、略過 6,046 個既有物件；`D:\Codex_QA\board-tavern-captain-20260928\r2-final\r2-verify.json` 對新資源 24/24 公開 GET／SHA 回讀通過。正式 D 樹已定點同步 v4 與本地發布資料，保留其他未提交修改；D 樹未安裝 `express`，故無獨立 HTTP 驗收。公開 runtime 切換尚未核對，不得把本機提升或前一版 `package-1c453fcf83416d97` 當成本次公開部署完成。
