@@ -13,7 +13,7 @@
     return `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
   }
   const STATE_NAMES={Idle:'稍作停留',Wander:'四處走走',Work:'正在工作',Eat:'享用餐點',Rest:'休息片刻',Sleep:'安心睡著',Train:'自主訓練',Socialize:'和夥伴聊天',UseFurniture:'使用家具',SpecialAction:'與你互動',EventParticipant:'船上的小插曲'};
-  const ERRORS={client_update_required:'請更新啟動器後再使用這位夥伴；原有配置與工作會保留。',character_not_released:'這位夥伴尚未開放。',offline:'暫時無法連線，工作紀錄會在連線後更新。',unavailable:'正在讀取基地資料。',readonly:'參觀時無法指派主人的夥伴。',no_station:'目前沒有可到達且空閒的工作位置。',not_owned:'尚未收藏這位夥伴。',busy:'夥伴正在忙，稍候再來。',work_daily_limit:'今天的有酬工作已完成，夥伴仍會自由活動。',wallet_full:'商城金幣已滿，工作成果會保留。',insufficient_coins:'商城金幣不足。',cooldown:'剛剛才互動過，讓夥伴忙一下吧。',revision_conflict:'基地資料已更新，請再試一次。',work_active:'這位夥伴已有工作。',station_busy:'這個工作位置正在使用中。',not_placed:'請先把這位夥伴放進房間。'};
+  const ERRORS={client_update_required:'請更新啟動器後再使用這位夥伴；原有配置與工作會保留。',character_not_released:'這位夥伴尚未開放。',offline:'暫時無法連線，工作紀錄會在連線後更新。',unavailable:'正在讀取基地資料。',readonly:'參觀時無法指派主人的夥伴。',no_station:'目前沒有可到達且空閒的工作位置。',no_route:'這個位置目前走不到，換個地板格子試試。',invalid_target:'請點房間內的地板或已擺出的家具。',not_owned:'尚未收藏這位夥伴。',busy:'夥伴正在忙，稍候再來。',work_daily_limit:'今天的有酬工作已完成，夥伴仍會自由活動。',wallet_full:'商城金幣已滿，工作成果會保留。',insufficient_coins:'商城金幣不足。',cooldown:'剛剛才互動過，讓夥伴忙一下吧。',revision_conflict:'基地資料已更新，請再試一次。',work_active:'這位夥伴已有工作。',station_busy:'這個工作位置正在使用中。',not_placed:'請先把這位夥伴放進房間。'};
   function create(env) {
     const api=root.onePieceDesktop;
     let controller=null,snapshot=null,serverLife=null,serverRoster=null,scope='',epoch=0,requestSerial=0,pending=Promise.resolve();
@@ -58,13 +58,21 @@
       return result;
     }
     function world(){const owned=new Set(ownedIds());return{...roster(),ownedItemIds:[...owned],roomRevision:env.room().revision,stations:stations(),actors:env.walkers().filter(w=>owned.has(w.item.id)).map(w=>({key:w.key,itemId:w.item.id,cell:{...w.cell},moving:!w.attention&&(!!w.segmentCell||!!w.route.length||!!w.dockTravel),available:manualKey===w.key||!w.attention&&w.mode!=='focused'}))};}
+    function contextAt(now) {
+      const sceneKey=String(env.room().sceneId||'room-scene-crew-cabin').replace(/^room-scene-/,'');
+      return root.OnePieceRoomAmbience?.compute?.(new Date(now),sceneKey)||{};
+    }
     function face(key,cell) {const w=walker(key);return !!w&&env.face(w,cell,performance.now());}
     function setClip(key,clip,meta={}) {
       const w=walker(key);if(!w)return false;
+      if(w.lifeReaction&&performance.now()<w.lifeReaction.until)return true;
+      w.lifeReaction=null;
       const definition=root.OnePieceLifeActions?.CLIPS?.[clip];
       if(definition?.directional&&meta.stationId) {
         const station=stations().find(value=>value.id===meta.stationId);
-        const target=station?.slots.find(slot=>slot.cell.col===w.cell.col&&slot.cell.row===w.cell.row)?.facing||station?.slots[0]?.facing;
+        const placed=env.layout().placements.get('f:'+meta.stationId);
+        const target=station?.slots.find(slot=>slot.cell.col===w.cell.col&&slot.cell.row===w.cell.row)?.facing||station?.slots[0]?.facing||
+          (placed&&{col:placed.cell.col+(placed.span.width-1)/2,row:placed.cell.row+(placed.span.height-1)/2});
         if(target&&!face(key,target))return false;
       }
       const description=root.OnePieceLifeActions?.describe(clip,meta.direction||w.motion.direction);
@@ -87,8 +95,12 @@
     }
     const adapter={
       getWorld:world,
+      getContext:contextAt,
+      favoriteFurniture:key=>root.OnePieceRoomDialogue?.profile?.(key)?.favorite||[],
+      activityBeat:(key,furnitureKey,index,context)=>root.OnePieceRoomDialogue?.activity?.(key,furnitureKey,index,context),
+      directiveBeat:(key,furnitureKey,kind,index,context)=>root.OnePieceRoomDialogue?.directiveBeat?.(key,furnitureKey,kind,index,context),
       attending:key=>!!walker(key)?.attention,
-      hold(key,token){const w=walker(key);if(!w)return false;w.lifeClip=null;w.lifeToken=token;w.mode='life-act';w.route=[];w.pause=0;env.hideSpeech(w);env.setPose(w,'idle');return true;},
+      hold(key,token){const w=walker(key);if(!w)return false;w.lifeClip=null;w.lifeReaction=null;w.lifeToken=token;w.mode='life-act';w.route=[];w.pause=0;env.hideSpeech(w);env.setPose(w,'idle');return true;},
       callTarget(key){
         const w=walker(key);if(!w)return null;
         const blocked=env.blockedFor(w),candidates=[];
@@ -97,7 +109,7 @@
       },
       plan(key,cell){const w=walker(key);return !!w&&!!env.routeBetween(w.segmentCell||w.cell,cell,env.blockedFor(w));},
       reserve(entries){return entries.every(entry=>adapter.plan(entry.key,entry.cell));},
-      move(key,cell,token){const w=walker(key);if(!w)return false;env.hideSpeech(w);w.lifeClip=null;w.lifeToken=token;w.pause=0;w.mode='life-approach';const result=env.routeTo(w,cell);if(w.attention&&manualKey!==key)env.deferAttentionMovement(w);return result;},
+      move(key,cell,token){const w=walker(key);if(!w)return false;env.hideSpeech(w);w.lifeClip=null;w.lifeReaction=null;w.lifeToken=token;w.pause=0;w.mode='life-approach';const result=env.routeTo(w,cell);if(w.attention&&manualKey!==key)env.deferAttentionMovement(w);return result;},
       arrived(key){const w=walker(key);return !!w&&!w.route.length&&!w.segmentCell&&!w.returnDockBeforeRoute&&!w.dockTravel;},
       face,
       dock(key,station){
@@ -119,9 +131,21 @@
         if(!definition)return ['idle','wave','listen','talk_happy','talk_annoyed','surprised'].includes(clip);
         return root.OnePieceLifeActions.preload(key,clip,definition.direction)?.ready===true;
       },
-      speak(key,line,mood,meta={}){const w=walker(key);if(!w)return;w.lifeClip=null;env.speak(w,line,mood);if(meta.pose)env.setPose(w,meta.pose);},
+      speak(key,line,mood,meta={}){
+        const w=walker(key);if(!w)return;
+        const activeClip=meta.activity&&w.lifeClip?{...w.lifeClip}:null;
+        w.lifeClip=null;env.speak(w,line,mood);
+        if(meta.reactionPose&&meta.reactionMs){
+          w.lifeReaction={pose:meta.reactionPose,until:performance.now()+meta.reactionMs,faceCamera:true};
+          env.face(w,{col:w.cell.col,row:w.cell.row+1});
+          env.setPose(w,meta.reactionPose);
+        } else {
+          if(meta.pose)env.setPose(w,meta.pose);
+          if(activeClip)setClip(key,activeClip.clip,{direction:activeClip.direction,elapsedMs:Math.max(0,performance.now()-activeClip.started),token:meta.token,state:meta.state,stationId:meta.stationId});
+        }
+      },
       clearSpeech(key){const w=walker(key);if(w)env.hideSpeech(w);},
-      release(key,token){const w=walker(key);if(!w||w.lifeToken&&w.lifeToken!==token)return;w.lifeClip=null;w.lifeToken=null;w.lifeDockReady=null;w.lifeDockStation=null;delete w.node.dataset.lifeState;env.hideSpeech(w);env.setPose(w,'idle');env.wander(w);},
+      release(key,token){const w=walker(key);if(!w||w.lifeToken&&w.lifeToken!==token)return;w.lifeClip=null;w.lifeReaction=null;w.lifeToken=null;w.lifeDockReady=null;w.lifeDockStation=null;delete w.node.dataset.lifeState;env.hideSpeech(w);env.setPose(w,'idle');env.wander(w);},
       wander(key){const w=walker(key);if(w){w.lifeClip=null;env.wander(w);}},
       socialScene(a,b,context){return root.OnePieceRoomDialogue?.scene?.(a,b,Math.floor(Math.random()*10000),context);},
       entry(key){
@@ -187,7 +211,7 @@
     }
     function ensureController() {
       if(controller||!root.OnePieceLife||!profile()||owner()&&!serverLife)return;
-      controller=root.OnePieceLife.create({data,adapter,command,writable:owner(),onChange:value=>{snapshot=value;renderUi();}});
+      controller=root.OnePieceLife.create({data,adapter,command,writable:owner(),casualConversation:{foregroundGapMs:75000,pairCooldownMs:90000},onChange:value=>{snapshot=value;renderUi();}});
       controller.sync({...roster(),life:serverLife||profile().life||{ownedCharacterIds:ownedIds(),characters:{},directive:'free'}});
       if(!env.canAnimate())controller.pause();
     }
@@ -234,6 +258,13 @@
         }
         return true;
       }
+      if(w.lifeReaction) {
+        if(now<w.lifeReaction.until){
+          if(w.lifeReaction.faceCamera)env.face(w,{col:w.cell.col,row:w.cell.row+1});
+          env.setPose(w,w.lifeReaction.pose);return true;
+        }
+        w.lifeReaction=null;
+      }
       if(w.lifeClip) {
         const value=root.OnePieceLifeActions.draw(w.node.querySelector('.room-walk-sprite'),w.key,w.lifeClip.clip,w.lifeClip.direction,now-w.lifeClip.started,env.reducedMotion());
         if(value){w.node.dataset.actionFrame=String(value.frame);w.node.dataset.actionSource='life_v1';}
@@ -256,7 +287,7 @@
       if($('roomLifeActions'))return;
       const actions=$('roomCompanionActions');if(!actions)return;
       const wrap=document.createElement('div');wrap.id='roomLifeActions';wrap.className='room-life-actions';
-      for(const [id,label] of [['Work','工作'],['Call','呼喚'],['Gift','點心 · 5'],['Train','訓練'],['Status','詳情']]) {
+      for(const [id,label] of [['Work','工作'],['Call','指派移動'],['Gift','點心 · 5'],['Train','訓練'],['Status','詳情']]) {
         const button=document.createElement('button');button.id='roomLife'+id;button.className='ghost-button';button.type='button';button.textContent=label;wrap.append(button);
       }
       actions.append(wrap);
@@ -267,7 +298,7 @@
       const panel=document.createElement('div');panel.id='roomLifeDetails';panel.className='room-life-details';panel.hidden=true;$('roomCompanionSheet').append(panel);
       const work=document.createElement('div');work.id='roomLifeWorkChoices';work.className='room-life-work-choices';work.hidden=true;$('roomCompanionSheet').append(work);
       $('roomLifeWork').onclick=()=>openMinigame('work');
-      $('roomLifeCall').onclick=()=>runManual('call');$('roomLifeTrain').onclick=()=>openMinigame('training');
+      $('roomLifeCall').onclick=()=>root.LauncherRoom?.beginAssignment?.(env.companionId());$('roomLifeTrain').onclick=()=>openMinigame('training');
       $('roomLifeGift').onclick=()=>{const node=$('roomLifeGift');if(node.dataset.confirm!=='true'){node.dataset.confirm='true';node.textContent='確認 · 5';setTimeout(()=>{delete node.dataset.confirm;node.textContent='點心 · 5';window.LauncherRoom?.refreshCompanion?.();},5000);window.LauncherRoom?.refreshCompanion?.();return;}delete node.dataset.confirm;node.textContent='點心 · 5';runManual('gift');};
       $('roomCompanionSheetClose').onclick=()=>{panel.hidden=true;work.hidden=true;syncPanelShell();$('roomCompanionWheel').focus({preventScroll:true});};
       $('roomLifeStatus').onclick=()=>{work.hidden=true;panel.hidden=!panel.hidden;$('roomCompanionPanel').classList.toggle('show-details',!panel.hidden);$('roomLifeStatus').setAttribute('aria-expanded',String(!panel.hidden));renderPanel();};
@@ -329,6 +360,38 @@
         else status(message,true);
       }finally{if(currentEpoch===epoch){manualBusy=false;manualKey='';renderUi();}}
     }
+    function assignDestination(key,target) {
+      key=keyOf(key);
+      if(!owner())return{ok:false,error:'readonly'};
+      if(!controller||!active()||!env.canAnimate()||env.editing())return{ok:false,error:'unavailable'};
+      if(minigames?.active()||manualBusy)return{ok:false,error:'busy'};
+      const w=walker(key);
+      if(!w||!ownedIds().includes(itemOf(key)))return{ok:false,error:'not_owned'};
+      const blocked=env.blockedFor(w),from=w.segmentCell||w.cell;
+      let request;
+      if(target?.kind==='floor') {
+        const cell=target.cell;
+        if(!Number.isInteger(cell?.col)||!Number.isInteger(cell?.row))return{ok:false,error:'invalid_target'};
+        if(env.cellBlocked(cell,blocked)||!env.routeBetween(from,cell,blocked))return{ok:false,error:'no_route'};
+        request={kind:'floor',cell:{col:cell.col,row:cell.row}};
+      } else if(target?.kind==='furniture') {
+        const itemId=String(target.itemId||'');
+        const placed=env.layout().placements.get('f:'+itemId);
+        if(!placed||placed.kind!=='furniture')return{ok:false,error:'invalid_target'};
+        const slots=env.spotsAround(placed).filter(cell=>!env.cellBlocked(cell,blocked))
+          .map((cell,index)=>({id:String(index),cell,route:env.routeBetween(from,cell,blocked)}))
+          .filter(slot=>!!slot.route).sort((a,b)=>a.route.length-b.route.length)
+          .map(({id,cell})=>({id,cell,facing:{col:placed.cell.col+(placed.span.width-1)/2,row:placed.cell.row+(placed.span.height-1)/2}}));
+        if(!slots.length)return{ok:false,error:'no_route'};
+        const furnitureKey=env.furnitureKey(placed.item);
+        const type=Object.entries(data?.stations||{}).find(([,def])=>def.furnitureKeys?.includes(furnitureKey))?.[0]||'inspect';
+        request={kind:'furniture',station:{id:itemId,type,furnitureKey,cell:placed.cell,slots,target:placed}};
+      } else return{ok:false,error:'invalid_target'};
+      if(w.attention&&env.companionId()===itemOf(key))env.finishManual(itemOf(key));
+      const result=controller.assignDestination(key,request);
+      if(result.ok)env.roomStatus(target.kind==='floor'?'夥伴正走向指定位置。':'夥伴正走向家具。');
+      return result;
+    }
     function tapped(key) {
       key=keyOf(key);
       // Interrupt a local conversation, while retaining paid work and its reservation.
@@ -353,7 +416,7 @@
       onClose(){if(!suspending&&env.canAnimate())controller?.resume();renderUi();},
       onResult(){void refresh();}
     });
-    return {setContext,suspend,resume,tick,animate,active,renderPanel,tapped,refresh,
+    return {setContext,suspend,resume,tick,animate,active,renderPanel,tapped,refresh,assignDestination,
       isBusy:key=>!!controller?.isBusy(key)||!!minigames?.active(),reservations:()=>controller?.reservations()||[],
       cancel:key=>controller?.cancel(key),onPurchase(result){if(!owner())return;accept(result);void refresh();},
       snapshot:()=>snapshot,controller:()=>controller,world};

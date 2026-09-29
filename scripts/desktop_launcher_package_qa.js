@@ -189,6 +189,11 @@ const EXTRA_RESOURCES = [
     ]
   },
   {
+    from: '../public/images/launcher_announcements',
+    to: 'launcher-assets/images/launcher_announcements',
+    filter: ['launcher-life-1.2.13.webp']
+  },
+  {
     from: '../public/images/launcher_room',
     to: 'launcher-assets/images/launcher_room',
     filter: [
@@ -552,7 +557,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.2.12', 'Desktop launcher version must be 1.2.12 for the reviewed room weather release.');
+  assert(packageJson.version === '1.2.13', 'Desktop launcher version must be 1.2.13 for the reviewed character life release.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   const announcementConfig = readJson(path.join(ROOT, 'config/launcher-announcements-v1.json'), 'launcher announcements');
   require('../server/launcher-announcements').validateConfig(announcementConfig);
@@ -576,10 +581,16 @@ function validateSourcePackage() {
   'Historical launcher 1.2.11 scene and music announcement changed.');
   const roomWeatherAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.12-room-weather-and-arrangement');
   assert(roomWeatherAnnouncement?.status === 'published' && roomWeatherAnnouncement.scope === 'launcher' &&
-    roomWeatherAnnouncement.version === packageJson.version &&
+    roomWeatherAnnouncement.version === '1.2.12' &&
     roomWeatherAnnouncement.requiredRelease?.kind === 'launcher' &&
-    roomWeatherAnnouncement.requiredRelease?.version === packageJson.version,
-  'Launcher 1.2.12 room weather announcement must be gated to this release.');
+    roomWeatherAnnouncement.requiredRelease?.version === '1.2.12',
+  'Historical launcher 1.2.12 room weather announcement changed.');
+  const crewLifeAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.13-character-life-and-dialogue');
+  assert(crewLifeAnnouncement?.status === 'published' && crewLifeAnnouncement.scope === 'launcher' &&
+    crewLifeAnnouncement.version === packageJson.version &&
+    crewLifeAnnouncement.requiredRelease?.kind === 'launcher' &&
+    crewLifeAnnouncement.requiredRelease?.version === packageJson.version,
+  'Launcher 1.2.13 character life announcement must be gated to this release.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
   assert(packageJson.build?.appId === 'com.onepiece.tabletop.desktop', 'Desktop appId changed unexpectedly.');
@@ -962,6 +973,7 @@ function collectExpectedLauncherAssets() {
   }
   for (const [resourceTo, publicPath] of [
     ['launcher-assets/images/profile_decor', path.join(PUBLIC_ROOT, 'images', 'profile_decor')],
+    ['launcher-assets/images/launcher_announcements', path.join(PUBLIC_ROOT, 'images', 'launcher_announcements')],
     ['launcher-assets/images/launcher_room', path.join(PUBLIC_ROOT, 'images', 'launcher_room')],
     ['launcher-assets/audio/profile_bgm', path.join(PUBLIC_ROOT, 'audio', 'profile_bgm')],
     ['launcher-assets/audio/bgm', path.join(PUBLIC_ROOT, 'audio', 'bgm')]
@@ -992,7 +1004,7 @@ function loadAsarApi() {
   fail('Cannot inspect app.asar because @electron/asar is unavailable; run npm install in desktop first.');
 }
 
-function validateAsar(asarPath) {
+function validateAsar(asarPath, packageJson) {
   const asar = loadAsarApi();
   const entries = asar.listPackage(asarPath).map((entry) => entry.replace(/^[/\\]+/, '').replaceAll('\\', '/'));
   const applicationEntries = sorted(entries.filter((entry) => entry && entry !== 'node_modules' && !entry.startsWith('node_modules/')));
@@ -1004,7 +1016,7 @@ function validateAsar(asarPath) {
       `Packaged application source differs: ${entry}`);
   }
   const packedPackage = JSON.parse(asar.extractFile(asarPath, 'package.json').toString('utf8'));
-  assert(packedPackage.version === '1.2.12' && packedPackage.main === 'main.js', 'Packed application metadata differs.');
+  assert(packedPackage.version === packageJson.version && packedPackage.main === 'main.js', 'Packed application metadata differs.');
   for (const entry of entries) {
     const lower = entry.toLowerCase();
     assert(!lower.startsWith('public/'), `app.asar contains the public game tree: ${entry}`);
@@ -1045,7 +1057,7 @@ function validateWinUnpacked(winUnpackedPath, source) {
   assert(fs.statSync(asarPath, { throwIfNoEntry: false })?.isFile(), 'win-unpacked resources/app.asar is missing.');
   const asarBytes = fs.statSync(asarPath).size;
   assert(asarBytes <= MAX_ASAR_BYTES, `app.asar is too large for the small launcher (${asarBytes} bytes).`);
-  const asarEntries = validateAsar(asarPath);
+  const asarEntries = validateAsar(asarPath, source.packageJson);
 
   const cursorPolicyRoot = path.join(resourcesRoot, 'cursor-policy');
   const cursorPolicyFiles = ['css/board-cursor-nami-v3.css', 'css/card-cursor-buggy-v3.css', 'js/game_cursor_feedback_v1.js'];

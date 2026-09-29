@@ -1,0 +1,23 @@
+{
+  "schema": "launcher-announcement-art/1",
+  "release": "1.2.13",
+  "generator": "OpenAI built-in image_gen",
+  "subject": "ONE PIECE Thousand Sunny life base with Monkey D. Luffy, Nami, Sanji and Tony Tony Chopper",
+  "review": "Second generation, with human head-to-body proportions reduced and coherent full-body silhouettes. No original characters or text in the artwork.",
+  "source": {
+    "path": "tools/launcher-room/announcement-v1213/source.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 2439632,
+    "sha256": "23455b84b297ab9ebed441696db399da7104d536ca41af8f0c4cc60395962a1b"
+  },
+  "delivery": {
+    "path": "public/images/launcher_announcements/launcher-life-1.2.13.webp",
+    "width": 1672,
+    "height": 941,
+    "bytes": 318044,
+    "sha256": "32b02d73487d840d762b30745db73b13e2ac1816ae5d6eabd048fae9aa1ab94c",
+    "webpQuality": 88,
+    "webpMethod": 6
+  }
+}

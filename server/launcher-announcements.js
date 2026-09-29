@@ -9,6 +9,7 @@ const GAMES = new Set(['card', 'board', 'chess']);
 const ID = /^[a-z0-9][a-z0-9._-]{0,95}$/;
 const VERSION = /^(0|[1-9]\d{0,5})\.(0|[1-9]\d{0,5})\.(0|[1-9]\d{0,5})$/;
 const RELEASE = /^package-[a-f0-9]{16}$/;
+const ANNOUNCEMENT_IMAGE = /^images\/launcher_announcements\/[a-z0-9][a-z0-9._-]*\.webp$/;
 const readyByPool = new WeakMap();
 const object = value => value && typeof value === 'object' && !Array.isArray(value);
 const keys = (value, allowed) => object(value) && Object.keys(value).every(key => allowed.includes(key));
@@ -20,7 +21,7 @@ function validateConfig(raw) {
       !Number.isSafeInteger(raw.revision) || raw.revision < 1 || !Array.isArray(raw.announcements) || raw.announcements.length > 100) invalid();
   const seen = new Set();
   for (const item of raw.announcements) {
-    if (!keys(item, ['id', 'status', 'publishedAt', 'title', 'summary', 'scope', 'category', 'version', 'body', 'requiredRelease', 'requiresCharacterId', 'cta']) ||
+    if (!keys(item, ['id', 'status', 'publishedAt', 'title', 'summary', 'scope', 'category', 'version', 'body', 'requiredRelease', 'requiresCharacterId', 'cta', 'image']) ||
         typeof item.id !== 'string' || !ID.test(item.id) || seen.has(item.id) || !['draft', 'published'].includes(item.status) ||
         typeof item.publishedAt !== 'string' || !/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/.test(item.publishedAt) ||
         !Number.isFinite(Date.parse(item.publishedAt)) || new Date(item.publishedAt).toISOString() !== item.publishedAt ||
@@ -34,6 +35,8 @@ function validateConfig(raw) {
     } else if (!keys(release, ['kind', 'version']) || release.kind !== 'launcher' || !VERSION.test(release.version)) invalid();
     if (item.requiresCharacterId !== undefined && !/^room-character-[a-z]+$/.test(item.requiresCharacterId)) invalid();
     if (item.category === 'character' && !item.requiresCharacterId) invalid();
+    if (item.image !== undefined && (!keys(item.image, ['asset', 'alt']) ||
+        typeof item.image.asset !== 'string' || !ANNOUNCEMENT_IMAGE.test(item.image.asset) || !text(item.image.alt, 160))) invalid();
     if (item.cta !== undefined) {
       if (item.cta?.kind === 'shop') {
         if (!keys(item.cta, ['kind', 'itemId']) || typeof item.cta.itemId !== 'string' || !ID.test(item.cta.itemId) ||
@@ -115,6 +118,7 @@ function createLauncherAnnouncements({ config = require('../config/launcher-anno
   const project = (item, readIds) => ({ id: item.id, publishedAt: item.publishedAt, title: item.title,
     summary: item.summary, scope: item.scope, category: item.category, version: item.version,
     body: item.body.slice(), ...(item.requiredRelease.releaseId ? { releaseId: item.requiredRelease.releaseId } : {}),
+    ...(item.image ? { image: { ...item.image } } : {}),
     ...(item.cta ? { cta: { ...item.cta } } : {}), read: readIds.includes(item.id) });
   async function get(pool, secret, query = {}, capability) {
     if (!keys(query, ['scope', 'category']) || (query.scope !== undefined && query.scope !== 'all' && !SCOPES.includes(query.scope)) ||

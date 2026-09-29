@@ -115,6 +115,263 @@
   Object.assign(PROFILES, reserved?.profiles || {});
   Object.assign(SOLO, reserved?.solo || {});
   for (const key of KEYS) if (CLAIM[key]) SOLO[key].claim = CLAIM[key];
+  // Short original lines for visible room conditions. A context is optional:
+  // old callers still get the exact same solo pools and cursor behavior.
+  const CONTEXT_TEXT = {
+    luffy: {
+      daypart: { dawn: ['天亮了！我先去看看今天的海！', 'admire'], day: ['今天要做什麼？我也找件好玩的事！', 'offer'], dusk: ['傍晚了！下一座島會在哪裡？', 'admire'], night: ['睡前再玩一會兒！……好吧，就一會兒。', 'laugh'] },
+      season: { spring: ['這個時節風聞起來不一樣耶！', 'admire'], summer: ['熱？到海邊吹風就好了！', 'laugh'], autumn: ['那片雲跑得好快！我們也加速吧！', 'offer'], winter: ['冬天的海也有趣，我要多看一會兒！', 'admire'] },
+      weather: { rain: ['下雨也能玩！先別把大家的東西弄濕。', 'think'], snow: ['雪落在手上就不見了！再接一片！', 'admire'], storm: ['雷好大！娜美會叫我別出去……等一等吧！', 'nod'] },
+      activity: { Work: ['這些我搬得動！你指放哪就好。', 'work'], Train: ['來啊！這次我們一起練！', 'offer'], Eat: ['開飯了嗎？我先把大家叫齊！', 'offer'], Rest: ['等大家都回來，再叫醒我。', 'rest'] }
+    },
+    zoro: {
+      daypart: { dawn: ['天剛亮，正好練第一輪。', 'work'], day: ['我這邊還沒練完。你先忙。', 'nod'], dusk: ['光快沒了，再練幾下就收。', 'think'], night: ['值夜的地方留給我。你去睡。', 'offer'] },
+      season: { spring: ['風變了，站穩再出刀。', 'explain'], summer: ['熱就熱，握刀的手別滑。', 'think'], autumn: ['秋風來得急，腳步別跟著亂。', 'think'], winter: ['手指僵了？先活動開。', 'explain'] },
+      weather: { rain: ['要出門練，先看地上滑不滑。', 'explain'], snow: ['外面雪大，刀架這邊得保持乾燥。', 'work'], storm: ['雷聲吵不到我。通道別站人。', 'nod'] },
+      activity: { Work: ['重的給我。這邊路先清出來。', 'work'], Train: ['別只數次數，重心每下都要穩。', 'explain'], Eat: ['我的那份先放著，練完會吃。', 'nod'], Rest: ['叫我之前，先看是不是輪到我。', 'rest'] }
+    },
+    nami: {
+      daypart: { dawn: ['清晨先記下風向，免得漏了變化。', 'work'], day: ['這段海岸還沒補上，我再畫一筆。', 'work'], dusk: ['傍晚要換班了，把航向再對一次。', 'think'], night: ['燈別照到海圖上，我還差一筆。', 'explain'] },
+      season: { spring: ['這裡的季節不能光看日曆，還得看海。', 'explain'], summer: ['熱流靠近了，別只顧著看天色。', 'think'], autumn: ['這時節風涼得快，夜裡還得再看。', 'think'], winter: ['海圖得收在乾燥處，潮氣一重就皺。', 'work'] },
+      weather: { rain: ['雨線斜了，風向也跟著轉。', 'think'], snow: ['雪遮住遠處的岸線，速度放慢。', 'explain'], storm: ['雷雨過來了！照我說的先關窗！', 'protest'] },
+      activity: { Work: ['潮位和風向都記好了，才好畫這段。', 'work'], Train: ['看雲也要練，不能只靠直覺。', 'explain'], Eat: ['等我把這條線畫完，就來吃。', 'nod'], Rest: ['帳本合上了。現在誰都別借去亂畫。', 'rest'] }
+    },
+    usopp: {
+      daypart: { dawn: ['清晨先試射一輪！本大爺有把握。', 'offer'], day: ['細小的刻痕得湊近看，別催我。', 'think'], dusk: ['快收工了？等等，還差最後一顆螺絲！', 'protest'], night: ['夜裡試機關？不、不如明早再測！', 'think'] },
+      season: { spring: ['這陣風適合試箭尾，別突然關窗！', 'explain'], summer: ['手汗會滑，我把握把再纏一層。', 'work'], autumn: ['這時節溫差大，卡榫得留一點餘地。', 'think'], winter: ['天冷零件會縮，得重試那個扣。', 'work'] },
+      weather: { rain: ['下雨先把火藥收好！我可不是怕雷！', 'protest'], snow: ['外頭下雪，靶子今天先別搬上甲板！', 'think'], storm: ['雷、雷聲是我校準時的背景音！', 'protest'] },
+      activity: { Work: ['先試空機關，再裝正式零件！', 'explain'], Train: ['靶子再遠一點，本大爺照樣看得到！', 'offer'], Eat: ['英雄先吃飽，才有力氣繼續試機關。', 'tease'], Rest: ['我是在整理思路，眼睛閉著比較清楚！', 'rest'] }
+    },
+    sanji: {
+      daypart: { dawn: ['爐火剛好，早餐很快就能端出來。', 'work'], day: ['午餐少一份？先數人，別只數盤子。', 'explain'], dusk: ['晚餐要熱的，回來的人先洗手。', 'offer'], night: ['夜裡餓了就說，別翻我的備料。', 'offer'] },
+      season: { spring: ['這時節想做清爽些的。先看有什麼食材。', 'think'], summer: ['天熱，冷的和熱的都備一份。', 'work'], autumn: ['風涼了，慢慢熬的湯正合適。', 'work'], winter: ['鍋裡有熱湯。誰從外面回來先喝一碗。', 'offer'] },
+      weather: { rain: ['雨天回來先擦乾，熱茶我來準備。', 'offer'], snow: ['外頭飄雪，熱鍋先別讓人伸手亂碰。', 'explain'], storm: ['打雷也得吃飯。先把窗扣好。', 'work'] },
+      activity: { Work: ['火候我顧著。你幫忙把菜瀝乾。', 'work'], Train: ['腳步還能再快一點，別擋我手邊。', 'think'], Eat: ['這盤先給還沒坐下的，別搶。', 'explain'], Rest: ['廚房收乾淨了，我才坐得住。', 'rest'] }
+    },
+    chopper: {
+      daypart: { dawn: ['早上先把藥箱清單對一遍！', 'work'], day: ['這頁的字我再核對一次！', 'admire'], dusk: ['傍晚了，還沒回來的人我去看看！', 'offer'], night: ['值夜的人有事就叫我，別忍著。', 'reassure'] },
+      season: { spring: ['新長的葉子要認仔細，不能亂採！', 'explain'], summer: ['熱天水要喝夠！我也會記得喝！', 'offer'], autumn: ['風一涼，繃帶和藥瓶都得防潮。', 'work'], winter: ['冷得手發僵就先暖一暖，別硬撐！', 'explain'] },
+      weather: { rain: ['淋濕了先換乾的，不准拖到明天！', 'protest'], snow: ['雪好漂亮！……啊，藥箱不能放窗邊！', 'startled'], storm: ['雷聲大也聽得見我喊你休息吧！', 'protest'] },
+      activity: { Work: ['標籤朝外，這樣誰來都找得到！', 'work'], Train: ['先活動關節，受傷了就不能繼續！', 'explain'], Eat: ['吃完再把藥放回去，不能混在桌上。', 'nod'], Rest: ['我也休息一下。醫生要有精神才行！', 'rest'] }
+    },
+    robin: {
+      daypart: { dawn: ['清晨很安靜，適合把昨晚的筆記補完。', 'work'], day: ['頁邊這行註記，有點意思呢。', 'think'], dusk: ['先夾好書籤。這個故事明天再讀。', 'rest'], night: ['夜裡翻書，連換頁都聽得清呢。', 'tease'] },
+      season: { spring: ['這個時節再讀植物圖鑑，倒很合適。', 'think'], summer: ['這麼熱，紙頁最好離窗遠一些。', 'explain'], autumn: ['舊紙的顏色，倒有點像這時節的葉子。', 'think'], winter: ['冷天讀舊航海誌，很容易忘了時間。', 'talk'] },
+      weather: { rain: ['雨聲正好，不必替書找配樂了。', 'smile'], snow: ['雪落得很輕。比翻頁還安靜呢。', 'talk'], storm: ['這段雷聲，倒像有人在替故事翻頁。', 'tease'] },
+      activity: { Work: ['這個地名寫了兩次，先核對年代。', 'work'], Train: ['記憶也要練習；先從這段短的開始。', 'think'], Eat: ['先收起書吧。湯灑在這頁就難讀了。', 'nod'], Rest: ['這一頁不急。你也坐一會兒吧。', 'offer'] }
+    },
+    franky: {
+      daypart: { dawn: ['一早就有好點子！先畫下來！', 'admire'], day: ['每道接縫都得看過。開工！', 'offer'], dusk: ['收工前再試一次，手感要對！', 'work'], night: ['晚上不敲了。草圖照樣能畫得帥！', 'think'] },
+      season: { spring: ['潮氣變了，木板的縫得再看。', 'think'], summer: ['熱得正好來口可樂！但螺絲別曬燙。', 'laugh'], autumn: ['乾燥時上油剛好，轉起來更順。', 'work'], winter: ['冷天金屬會縮，別硬把零件塞回去。', 'explain'] },
+      weather: { rain: ['下雨就該查接縫，別等真的滲進來！', 'work'], snow: ['雪天先別把新木板搬出去，濕了量不準。', 'think'], storm: ['雷再大，固定好的東西也不該亂響！', 'protest'] },
+      activity: { Work: ['這個零件能拆能修，才算做好！', 'work'], Train: ['力氣大也得控制住，船板可不能重做！', 'explain'], Eat: ['先把工具洗乾淨，再來吃這一桌！', 'offer'], Rest: ['完成的東西擺在眼前，休息也痛快！', 'laugh'] }
+    },
+    brook: {
+      daypart: { dawn: ['清晨的海聲，是最好的前奏。', 'talk'], day: ['您醒著？那我換一首明亮的。', 'offer'], dusk: ['傍晚這首，慢一點收尾。', 'work'], night: ['值夜的各位，這首就輕輕地來。', 'offer'] },
+      season: { spring: ['這個時節的風聲，真適合寫成歌。', 'admire'], summer: ['熱得想吹海風……啊，我沒有肺呢。', 'tease'], autumn: ['風聲低了半個音，我也跟著換調。', 'think'], winter: ['冷天的海聲更遠，正好聽得見旋律。', 'talk'] },
+      weather: { rain: ['雨點搶拍了呢，容我跟著調整。', 'tease'], snow: ['雪花慢慢落，我的節拍也放慢些。', 'work'], storm: ['雷鼓太熱烈！這一段我先留白。', 'startled'] },
+      activity: { Work: ['再校一音，讓最後排也聽得清。', 'work'], Train: ['先穩住節奏，再讓手指追上。', 'explain'], Eat: ['您先用餐，我在旁邊奏一小段。', 'offer'], Rest: ['曲子停了，海聲還在替我們唱。', 'rest'] }
+    },
+    jinbe: {
+      daypart: { dawn: ['天剛亮，先確認水流往哪裡走。', 'think'], day: ['這一段航行，先看清水流再決定方向。', 'nod'], dusk: ['傍晚交班，該把下一段說明白。', 'explain'], night: ['夜裡看不遠，更要聽船怎麼走。', 'think'] },
+      season: { spring: ['風向轉暖，水流卻未必跟著變。', 'explain'], summer: ['夏天掌舵也要換手歇息。', 'offer'], autumn: ['這陣涼風過後，也得再看海面變化。', 'think'], winter: ['冷水走得慢，轉舵不必急。', 'explain'] },
+      weather: { rain: ['雨天掌舵，握穩便好，不用較勁。', 'nod'], snow: ['雪遮了遠處，先把方向重新對清楚。', 'explain'], storm: ['雷雨近了。老夫守舵，你們顧好裡頭。', 'reassure'] },
+      activity: { Work: ['舵的回力有變，我再試一回。', 'work'], Train: ['步子穩，力量才能送到該去的地方。', 'explain'], Eat: ['輪到我吃了？好，這回不推辭。', 'smile'], Rest: ['老夫也坐一會兒，順便聽聽海聲。', 'rest'] }
+    },
+    ace: {
+      daypart: { dawn: ['醒得早？走，幫我看看海上有什麼。', 'offer'], day: ['這邊收得差不多了。魯夫要是在，肯定先衝過來。', 'smile'], dusk: ['傍晚了。魯夫準又想往外跑。', 'smile'], night: ['晚上安靜些，帽子也能放下來歇歇。', 'rest'] },
+      season: { spring: ['風一暖，就想起小時候往外跑的日子。', 'smile'], summer: ['這點熱還好。你先去陰涼處歇歇。', 'offer'], autumn: ['風涼了，披件衣服再出去。', 'reassure'], winter: ['這時候的海真冷。魯夫肯定還想出去看。', 'admire'] },
+      weather: { rain: ['淋濕的東西先收進來，我幫你搬。', 'offer'], snow: ['外頭還飄雪，慢點走，地板會濕。', 'offer'], storm: ['雷聲大，先把窗關好。其他的慢慢處理。', 'reassure'] },
+      activity: { Work: ['這些我處理。你去做擅長的事吧。', 'work'], Train: ['別急著使力，先跟上我的步子。', 'offer'], Eat: ['還有誰沒吃？等人齊再動筷。', 'think'], Rest: ['抱歉，剛剛又睡著了。現在醒了。', 'smile'] }
+    },
+    sabo: {
+      daypart: { dawn: ['天剛亮，先把要做的事列清楚。', 'work'], day: ['這一趟安排好了，剩下交給大家。', 'nod'], dusk: ['趁今天還沒結束，把沒說完的事說完吧。', 'offer'], night: ['夜裡就別催他們，明早再一起商量。', 'reassure'] },
+      season: { spring: ['暖風來了，窗邊坐一會兒也不錯。', 'smile'], summer: ['熱得很。先把水分給還在忙的人。', 'offer'], autumn: ['風變涼，紙張得壓住。', 'work'], winter: ['手冷就先停一停，不急著寫。', 'reassure'] },
+      weather: { rain: ['雨聲蓋過說話了，等小一些再討論。', 'think'], snow: ['雪景難得，有機會也帶魯夫來看。', 'smile'], storm: ['雷雨來得快，先確認人都在裡面。', 'explain'] },
+      activity: { Work: ['順序排好，大家接手才不會亂。', 'work'], Train: ['重心穩住，再往下一步。', 'explain'], Eat: ['你們先坐，我把最後那人叫過來。', 'offer'], Rest: ['難得坐下來，先喝口茶吧。', 'smile'] }
+    },
+    law: {
+      daypart: { dawn: ['天亮了。先把昨天的記錄核對。', 'work'], day: ['這些標記得再核對一次。', 'think'], dusk: ['收尾做完再走，別留一半給下一個。', 'explain'], night: ['今晚別再加事。明早清醒了再看。', 'nod'] },
+      season: { spring: ['換季時藥品放哪裡，先重新標清。', 'work'], summer: ['天熱，密封和保存狀態多查一次。', 'explain'], autumn: ['潮氣一變，紙上的字先護好。', 'think'], winter: ['手冷會影響判斷。先把它暖回來。', 'explain'] },
+      weather: { rain: ['雨水別帶進收納架，草帽當家的也一樣。', 'explain'], snow: ['雪還在下，外面的路線先緩一緩。', 'think'], storm: ['雷雨時別搬那排瓶子，先固定架子。', 'protest'] },
+      activity: { Work: ['先看標籤，再動那個箱子。', 'work'], Train: ['這一輪到此。再多也沒有好處。', 'explain'], Eat: ['我的那份別放麵包。其他都可以。', 'nod'], Rest: ['難得沒人打斷。讓我看完這頁。', 'rest'] }
+    },
+    hancock: {
+      daypart: { dawn: ['清晨清靜，妾身便在此稍坐。', 'rest'], day: ['那一側也整理妥當，別留到夜裡。', 'work'], dusk: ['傍晚了，讓外頭的人都先回來。', 'explain'], night: ['夜裡喧嘩無益。各自早些歇息。', 'nod'] },
+      season: { spring: ['春天的風也會變快，先看一眼窗外。', 'think'], summer: ['熱便移到陰涼處，何必硬撐。', 'explain'], autumn: ['風涼了，座位往裡挪一些。', 'work'], winter: ['天冷也能看海，別為此凍著自己。', 'reassure'] },
+      weather: { rain: ['外頭下雨，先把沾水的物品收好。', 'work'], snow: ['雪落在海上……倒也值得多看一眼。', 'admire'], storm: ['雷聲再大，妾身也會把事情安排妥當。', 'nod'] },
+      activity: { Work: ['分好位置，往後才不必到處找。', 'work'], Train: ['腳步穩住。妾身不會放慢要求。', 'explain'], Eat: ['其餘人也有座位？那便開飯吧。', 'nod'], Rest: ['妾身在此歇息，不必大驚小怪。', 'rest'] }
+    }
+  };
+  const CONTEXT_SOLO = Object.fromEntries(Object.entries(CONTEXT_TEXT).map(([key, groups]) => [key,
+    Object.fromEntries(Object.entries(groups).map(([group, values]) => [group,
+      Object.fromEntries(Object.entries(values).map(([name, entry]) => [name, [Array.isArray(entry) ? b(...entry) : b(entry)]]))]))]));
+  // A directive is an acknowledgement of an actual room assignment. These
+  // lines never claim a task was completed and never grant a new ability.
+  const DIRECTIVE_TEXT = {
+    luffy: {
+      moveFloor: [['那裡空著？好，我過去看看！', 'offer'], ['我站那邊！有事再叫我！', 'offer']],
+      moveFavorite: [['喔，這個我喜歡！帶我過去！', 'admire'], ['就放在那邊？好，這次我記住了！', 'laugh']],
+      moveOther: [['這個怎麼玩？先讓我去看看！', 'admire'], ['我不知道怎麼用耶，到了再問你！', 'think']],
+      useFavorite: [['好！輪到我試了！', 'offer'], ['再來一次！剛才那個很好玩！', 'laugh']],
+      useOther: [['你先說怎麼用，我會聽啦！', 'think'], ['這個不是我會的。找懂的人一起看！', 'offer']],
+      train: [['來！這次換我先動！', 'offer'], ['練完再去找大家玩！', 'laugh']],
+      work: [['要幫忙？交給我！先說從哪裡搬！', 'offer'], ['好，我做這一份！做完再找你！', 'nod']],
+      rest: [['那我在這裡歇一下，開飯記得叫！', 'rest'], ['你在就放心了。我眯一下！', 'rest']]
+    },
+    zoro: {
+      moveFloor: [['那邊夠空。行，我過去。', 'nod'], ['別擋通道，我站旁邊。', 'explain']],
+      moveFavorite: [['刀架那邊？正好。', 'nod'], ['讓出一點位置，我去把刀收好。', 'offer']],
+      moveOther: [['要我站這？行，先別叫我亂碰。', 'think'], ['這東西不是我常用的。你先說用途。', 'explain']],
+      useFavorite: [['我先檢查擺的位置。', 'think'], ['好。用完我會放回去。', 'nod']],
+      useOther: [['這不是練刀的東西，別指望我熟。', 'think'], ['讓懂的人來，我先別碰壞它。', 'nod']],
+      train: [['再一輪。這次別放鬆腳步。', 'offer'], ['我先熱身，然後開始。', 'nod']],
+      work: [['重的給我。其他的你安排。', 'offer'], ['知道了，這份我來處理。', 'nod']],
+      rest: [['練完再叫我。', 'rest'], ['我在這裡歇一會兒，沒走遠。', 'rest']]
+    },
+    nami: {
+      moveFloor: [['那邊不擋路。好，我過去。', 'nod'], ['讓我先把手上的圖收好。', 'think']],
+      moveFavorite: [['放那邊剛好有光，我去看看。', 'think'], ['我的東西先別動，讓我過去看。', 'nod']],
+      moveOther: [['先說要我看什麼，別叫我猜用途。', 'explain'], ['這不是我的東西，讓我先看清楚。', 'think']],
+      useFavorite: [['先看清楚，再照我的順序來。', 'think'], ['別碰亂了，我會一樣樣核對。', 'explain']],
+      useOther: [['這不是我熟的，先問清楚再用。', 'think'], ['東西壞了還要修，別催我亂試。', 'protest']],
+      train: [['讀風也得練。先從這一段開始。', 'explain'], ['好，這回你也跟著看雲。', 'offer']],
+      work: [['清單拿來，我先排順序。', 'work'], ['交給我可以，別中途又改條件。', 'explain']],
+      rest: [['航線對完就休息，真的。', 'rest'], ['好吧，先坐一下。海圖別碰。', 'rest']]
+    },
+    usopp: {
+      moveFloor: [['本大爺站那裡，大家就看得到啦！', 'offer'], ['先讓我看好退路……我是說位置！', 'think']],
+      moveFavorite: [['這件我熟！正等著我上場！', 'admire'], ['到那邊就能把細節看清楚。', 'think']],
+      moveOther: [['這個我還沒研究過。先看看結構！', 'think'], ['別急著按，我得先找安全的地方站。', 'explain']],
+      useFavorite: [['先看結構，別急著用力。', 'explain'], ['讓我試試。這回可有把握！', 'admire']],
+      useOther: [['不是說我不會！我是先確認怎麼拆。', 'protest'], ['這個跟我的機關不一樣，讓我觀察。', 'think']],
+      train: [['靶子固定好了？那就看本大爺的！', 'offer'], ['先練準，再練快！這次我有把握。', 'nod']],
+      work: [['交給我！先把規格說清楚。', 'offer'], ['我會先試好，不拿正式的亂裝。', 'explain']],
+      rest: [['英雄也得歇口氣！我等會兒再來。', 'rest'], ['只是閉眼想設計，沒睡著！', 'protest']]
+    },
+    sanji: {
+      moveFloor: [['那邊留著走路，別讓人絆著。', 'explain'], ['我過去，端熱的時候你讓一點。', 'nod']],
+      moveFavorite: [['這邊是我用得上的地方，我過去。', 'nod'], ['東西先別動，讓我來看。', 'explain']],
+      moveOther: [['這不是廚具。先說你要我幫哪一手。', 'think'], ['碰之前得看清楚，別把別人的心血弄壞。', 'explain']],
+      useFavorite: [['先把手洗乾淨，再看該怎麼處理。', 'offer'], ['熟了沒，得先看清楚；別急著動。', 'nod']],
+      useOther: [['我不熟這套，你說清楚再動。', 'think'], ['胡亂碰壞可不帥，讓行家先示範。', 'tease']],
+      train: [['腳步跟上，別只顧出力。', 'explain'], ['練完先喝水，別空著肚子逞強。', 'offer']],
+      work: [['好，這邊我來。先把手洗乾淨。', 'nod'], ['做完這份，再把還沒吃的人叫來。', 'offer']],
+      rest: [['爐火關好，我就來坐。', 'rest'], ['讓我喝完這杯，待會兒再忙。', 'rest']]
+    },
+    chopper: {
+      moveFloor: [['這裡看得到大家！我站這邊。', 'offer'], ['我先把藥箱帶上，再過去！', 'nod']],
+      moveFavorite: [['我先去看看有沒有東西放錯！', 'admire'], ['那邊留給我一點位置，謝謝！', 'offer']],
+      moveOther: [['這不是我的工具耶！先告訴我怎麼用。', 'think'], ['我可以幫忙看，但不能亂碰喔！', 'explain']],
+      useFavorite: [['先看清楚標記，再拿需要的！', 'think'], ['我會放回原位，不能讓別人找不到！', 'offer']],
+      useOther: [['我不是說不幫忙！只是這個得先學。', 'protest'], ['先請會的人教我，安全比較重要！', 'explain']],
+      train: [['先活動開！我也一起練！', 'offer'], ['累了就停，醫生說了算！', 'explain']],
+      work: [['交給我！我會仔細核對。', 'nod'], ['等一下，先把乾淨和用過的分開！', 'explain']],
+      rest: [['我也歇一下，等會兒才有精神！', 'rest'], ['只睡一小會兒！有事就叫我！', 'offer']]
+    },
+    robin: {
+      moveFloor: [['這裡安靜。那我過去。', 'nod'], ['讓我夾好書籤，馬上就來。', 'smile']],
+      moveFavorite: [['那邊的資料我去看看。', 'think'], ['有新記號嗎？我過去確認。', 'offer']],
+      moveOther: [['這件物品有意思。先看看來歷。', 'think'], ['我不熟它的用法，先別急著試。', 'reassure']],
+      useFavorite: [['先找原來的記號，免得漏讀。', 'think'], ['這一份值得多看一會兒。', 'smile']],
+      useOther: [['這個機關我還沒摸透呢。', 'think'], ['讓熟悉的人試，我在旁邊記下來。', 'offer']],
+      train: [['先記住順序，再慢慢加快。', 'explain'], ['這回換個角度試試，會有新發現。', 'think']],
+      work: [['我先把資料分好，再逐一核對。', 'work'], ['交給我吧。看完會放回原位。', 'nod']],
+      rest: [['書籤放好了，能坐一會兒。', 'rest'], ['不說話也很好。一起歇歇吧。', 'offer']]
+    },
+    franky: {
+      moveFloor: [['這裡夠寬！我過去擺個帥姿勢！', 'laugh'], ['通道先留著，我站這邊！', 'offer']],
+      moveFavorite: [['這個位置合我用！哈哈，正好開工！', 'admire'], ['那邊能摸到手感，走！', 'offer']],
+      moveOther: [['造得挺有趣！先說它拿來做什麼。', 'think'], ['別急！不熟的東西也得先量清楚。', 'explain']],
+      useFavorite: [['先試手感，順了才算完成！', 'work'], ['這個我熟！讓它穩穩地動起來！', 'admire']],
+      useOther: [['這不是我的專長，先看說明再動！', 'think'], ['硬拆不是本事，找會用的人一起看！', 'explain']],
+      train: [['力氣要收得住，這才 SUPER！', 'laugh'], ['來！這回別讓地板跟著晃！', 'offer']],
+      work: [['圖拿來！咱們從結構開始！', 'offer'], ['好，做完我還要親手試過！', 'nod']],
+      rest: [['工具歸位，我就喝口可樂！', 'rest'], ['先欣賞成品，等會兒再改下一版！', 'laugh']]
+    },
+    brook: {
+      moveFloor: [['多謝。這裡站著正好能聽見海。', 'bow'], ['請稍等，我把譜頁收好便來。', 'nod']],
+      moveFavorite: [['那邊還有位置？我過去。', 'offer'], ['也許能找到合適的曲子，先看看。', 'think']],
+      moveOther: [['這件不是樂器呢，請容我先看看。', 'think'], ['我若不懂，還請您教我，可別笑我。', 'tease']],
+      useFavorite: [['先看清楚，再從合適的地方開始。', 'think'], ['譜頁找到了。你想先聽哪一首？', 'offer']],
+      useOther: [['這個我還不擅長，先聽您說明。', 'bow'], ['若手法不對，請立即叫停我。', 'reassure']],
+      train: [['節拍慢些，腳步便跟得上。', 'explain'], ['再來一遍，尾音要收得漂亮。', 'offer']],
+      work: [['明白。先調準音，再讓大家聽。', 'nod'], ['交給我吧，這段我會練熟。', 'offer']],
+      rest: [['容我安靜地坐一會兒。', 'rest'], ['海聲接手了，我也歇一曲。', 'tease']]
+    },
+    jinbe: {
+      moveFloor: [['這邊視野開闊，老夫過去。', 'nod'], ['好，讓通道空著，老夫站旁邊。', 'explain']],
+      moveFavorite: [['那邊能看得清楚，老夫去確認。', 'nod'], ['先看航海士的記號，再動手。', 'think']],
+      moveOther: [['這物件老夫少用，先問清楚。', 'think'], ['老夫可以幫忙，但不會亂動人家的東西。', 'nod']],
+      useFavorite: [['先看方向，再動手，不必急。', 'explain'], ['位置對了，老夫再確認一遍。', 'work']],
+      useOther: [['這不是老夫拿手的，請懂的人指點。', 'offer'], ['先看你如何做，老夫再試。', 'nod']],
+      train: [['腳站穩，力量才送得出去。', 'explain'], ['好，老夫陪你再練一回。', 'offer']],
+      work: [['這份交給老夫。先把位置交代清楚。', 'nod'], ['待老夫確認妥當，再讓下一位接手。', 'work']],
+      rest: [['舵有人顧了，老夫也歇一會兒。', 'rest'], ['這裡風平，坐一坐正好。', 'rest']]
+    },
+    ace: {
+      moveFloor: [['這邊空著？好，我過去。', 'nod'], ['等我把帽子拿上，馬上到。', 'smile']],
+      moveFavorite: [['那邊有東西要我幫忙？我去看看。', 'think'], ['如果沉，我來搬。', 'offer']],
+      moveOther: [['我不熟這個，先讓我看一眼。', 'think'], ['你教我怎麼放，別把東西弄壞。', 'offer']],
+      useFavorite: [['先看看有沒有人的東西還沒拿。', 'nod'], ['好，這個搬起來不費事。', 'offer']],
+      useOther: [['這不是我拿手的，讓我先問清楚。', 'think'], ['別急。我能幫忙，手法得聽你的。', 'reassure']],
+      train: [['來，別一下衝太快。', 'offer'], ['再一輪！累了就跟我說。', 'laugh']],
+      work: [['好，交給我。要放哪裡？', 'nod'], ['我先把這份做好，完了再叫你。', 'offer']],
+      rest: [['我在這兒歇一下。……別擔心，我醒著。', 'smile'], ['哈哈，才坐下就想睡了。等會兒再聊。', 'laugh']]
+    },
+    sabo: {
+      moveFloor: [['這個位置方便大家走動，我過去。', 'nod'], ['稍等，我先把手上的事收好。', 'reassure']],
+      moveFavorite: [['那邊有記號？我去核對一下。', 'think'], ['找個安靜位置，我把內容看完。', 'smile']],
+      moveOther: [['我不熟它，先問用法。', 'think'], ['別急著交給我，先讓我看看結構。', 'explain']],
+      useFavorite: [['先把前後內容對起來。', 'work'], ['找到那一段了，讓我讀完。', 'think']],
+      useOther: [['這不是我的專長，我跟著你學。', 'offer'], ['若有安全步驟，請先告訴我。', 'explain']],
+      train: [['先穩住重心，再往下一步。', 'explain'], ['好，這回我們一起練。', 'offer']],
+      work: [['把順序交代清楚，後面就好接手。', 'work'], ['這份我來，其他人先歇口氣。', 'nod']],
+      rest: [['坐一下吧，話可以慢慢說。', 'offer'], ['這杯茶喝完，我再回去忙。', 'rest']]
+    },
+    law: {
+      moveFloor: [['這裡不擋人。就這裡。', 'nod'], ['等我把記錄收起來。', 'think']],
+      moveFavorite: [['那份資料在哪？我去核對。', 'think'], ['先等我把目前這頁收好。', 'nod']],
+      moveOther: [['這不是醫療用品。先說用途。', 'explain'], ['你要我去看可以，別要我憑猜的操作。', 'think']],
+      useFavorite: [['先確認標記，再取需要的。', 'work'], ['我還差一頁。看完就歸位。', 'nod']],
+      useOther: [['不是我熟的東西。先停一下。', 'protest'], ['讓知道用法的人先示範。', 'explain']],
+      train: [['先穩住，無效的動作別重複。', 'explain'], ['這輪到此。休息後再看狀態。', 'nod']],
+      work: [['先把步驟列出來。我照著做。', 'work'], ['這份歸我。別臨時改順序。', 'nod']],
+      rest: [['終於能安靜看書了。', 'rest'], ['有急事再叫，其他明天說。', 'rest']]
+    },
+    hancock: {
+      moveFloor: [['此處尚可，妾身便站這裡。', 'nod'], ['先把通道讓開，妾身再過去。', 'explain']],
+      moveFavorite: [['那邊留好位置，妾身這就去。', 'nod'], ['先讓妾身看清楚。', 'think']],
+      moveOther: [['這物件與妾身無關，先說用意。', 'think'], ['妾身可以看看，莫要催著亂碰。', 'protest']],
+      useFavorite: [['先將物件收妥，才方便使用。', 'work'], ['看過便放回原處，妾身記得。', 'nod']],
+      useOther: [['妾身尚不熟此物，先讓人說明。', 'think'], ['不必逞強。讓熟悉的人先來。', 'explain']],
+      train: [['既要練，便站穩些。', 'explain'], ['下一輪，妾身不會放低要求。', 'nod']],
+      work: [['妾身既答應，自會親手處理。', 'nod'], ['把需要的東西列清楚，妾身來做。', 'work']],
+      rest: [['妾身在此歇息片刻。', 'rest'], ['有急事再說，其餘稍後。', 'nod']]
+    }
+  };
+  const DIRECTIVES = Object.fromEntries(Object.entries(DIRECTIVE_TEXT).map(([key, groups]) => [key,
+    Object.fromEntries(Object.entries(groups).map(([group, entries]) => [group,
+      entries.map(entry => b(...entry))]))]));
+  const DIRECTIVE_FURNITURE_TEXT = {
+    luffy: { 'kitchen-table': { move: ['香吉士開飯了嗎？我去看看！', 'admire'], use: ['先把大家叫來，我會留位子的！', 'offer'] }, helm: { move: ['去舵那邊？我想看看前面的海！', 'admire'], use: ['甚平說先看水流。我先不亂轉！', 'nod'] } },
+    zoro: { 'swords-rack': { move: ['刀架在那邊。我自己收。', 'nod'], use: ['擺好才拿得順手。先對位置。', 'think'] } },
+    nami: { 'map-table': { move: ['那張海圖桌讓我過去。', 'nod'], use: ['潮位補上，再把這段航線接起來。', 'work'] }, 'tangerine-tree': { move: ['橘子樹在那邊？我看看光夠不夠。', 'think'], use: ['土還濕，今天先別多澆。', 'explain'] } },
+    usopp: { 'tool-bench': { move: ['工具台！終於輪到本大爺啦！', 'admire'], use: ['先把卡榫磨順，再試空的。', 'work'] }, 'treasure-chest': { move: ['那個箱子有機關？我去聽聽！', 'think'], use: ['蓋子先墊住，免得夾到手。', 'explain'] } },
+    sanji: { 'kitchen-table': { move: ['餐桌那邊？好，先把盤子排好。', 'nod'], use: ['菜要趁熱。先確認人都坐下。', 'offer'] }, 'tangerine-tree': { move: ['橘子樹那邊，我先問娜美小姐。', 'offer'], use: ['果皮一點就夠，別傷了樹。', 'think'] } },
+    chopper: { 'medicine-cabinet': { move: ['藥櫃！我去檢查標籤！', 'offer'], use: ['用途和日期都得再對一次！', 'work'] }, bookshelf: { move: ['書架旁邊留給我！那頁還沒看完！', 'admire'], use: ['找到啦！這段我還要再讀一遍！', 'admire'] } },
+    robin: { bookshelf: { move: ['書架那邊安靜，我去看看。', 'smile'], use: ['頁邊的小字，也得一起讀。', 'think'] }, 'map-table': { move: ['海圖上有個舊地名，我去核對。', 'think'], use: ['這條路的舊記載還留著呢。', 'think'] } },
+    franky: { 'tool-bench': { move: ['工具台空著？那就開工！', 'offer'], use: ['這顆螺絲得留餘量，轉起來才順！', 'work'] }, helm: { move: ['舵那邊！讓我看看新調的手感！', 'admire'], use: ['得讓掌舵的人試轉，船要聽他的手。', 'offer'] } },
+    brook: { piano: { move: ['琴旁的位子留給我？多謝。', 'bow'], use: ['先試一個音，請您再跟進來。', 'offer'] }, bookshelf: { move: ['書架上那份樂譜，我去看看。', 'think'], use: ['這段旋律有兩種寫法，真有趣。', 'admire'] } },
+    jinbe: { helm: { move: ['老夫去舵旁，順便看看水流。', 'nod'], use: ['方向穩了，便不必一直較力。', 'explain'] }, 'map-table': { move: ['海圖在那邊？老夫去看航海士的記號。', 'offer'], use: ['圖上的線，到了海裡還得留餘地。', 'think'] } },
+    ace: { 'kitchen-table': { move: ['餐桌在那邊？先替後來的人留位子。', 'offer'], use: ['我等大家坐好。這盤先別動。', 'nod'] }, 'treasure-chest': { move: ['那箱子交給我搬？我去看看。', 'offer'], use: ['蓋子先扶好，別夾到手。', 'explain'] } },
+    sabo: { 'map-table': { move: ['那張海圖，我去核對記號。', 'think'], use: ['前後路線對上了，再看下一段。', 'work'] }, bookshelf: { move: ['書架旁有空位，我去找那份資料。', 'offer'], use: ['先看目錄，免得漏掉前面的記錄。', 'think'] } },
+    law: { 'medicine-cabinet': { move: ['藥櫃那排，我去檢查密封。', 'think'], use: ['標記和日期對上，才能取用。', 'work'] }, bookshelf: { move: ['書架那本還沒看完。我過去。', 'nod'], use: ['別翻走這頁。我還要核對。', 'explain'] } },
+    hancock: { 'kitchen-table': { move: ['餐桌那邊留好位置，妾身過去。', 'nod'], use: ['座位要夠，別讓後來的人站著。', 'explain'] }, bookshelf: { move: ['那卷書在此？妾身去看看。', 'think'], use: ['翻過便放回原位，妾身記得。', 'nod'] } }
+  };
+  const DIRECTIVE_FURNITURE = Object.fromEntries(Object.entries(DIRECTIVE_FURNITURE_TEXT).map(([key, furniture]) => [key,
+    Object.fromEntries(Object.entries(furniture).map(([name, kinds]) => [name,
+      Object.fromEntries(Object.entries(kinds).map(([kind, entry]) => [kind, [b(...entry)]]))]))]));
   const SCENES = {};
   const RELATIONSHIPS = {};
   // Text is authored for the named pair; there is no name-substitution dialogue fallback.
@@ -380,6 +637,129 @@
 
   Object.assign(SCENES, reserved?.scenes || {});
   for (const [key, scenes] of Object.entries(reserved?.scenes || {})) RELATIONSHIPS[key] = scenes[0].relationship;
+  // These vignettes are available only when the room really has the named
+  // condition. They do not alter any existing scene IDs or legacy pair lists.
+  const CONTEXT_SCENES = {};
+  const addContext = (a, c, when, topic, turns) => {
+    const forward = `${a}:${c}`, reverse = `${c}:${a}`;
+    const pairKey = Object.prototype.hasOwnProperty.call(SCENES, forward) ? forward : reverse;
+    // Some standalone room previews load this script without the optional
+    // reserved crew module. Their unavailable pair scenes stay unavailable.
+    if (!Object.prototype.hasOwnProperty.call(SCENES, pairKey)) {
+      if (reserved) throw new Error(`Unknown relationship: ${forward}`);
+      return;
+    }
+    const list = CONTEXT_SCENES[pairKey] ||= [];
+    list.push({
+      id: `context-${a}-${c}-${list.length + 1}`, pair: [a, c], topic, tags: [], when,
+      relationship: RELATIONSHIPS[pairKey], cooldownMs: 90000,
+      turns: turns.map(([line, action, reaction], n) => ({
+        speaker: n % 2 ? c : a, ...b(line, action), pose: conversationPose(action),
+        listener: { key: n % 2 ? a : c, action: reaction, mood: PERFORMANCE[reaction][0], pose: conversationPose(reaction) },
+        durationMs: Math.max(2300, Math.min(5000, 950 + Array.from(line).length * 105))
+      }))
+    });
+  };
+  addContext('luffy', 'nami', { weather: 'storm' }, '雷雨先聽航海士', [
+    t('娜美！外面閃得好亮！', 'admire', 'startled'), t('亮歸亮，現在誰都不准跑出去！', 'protest', 'think'),
+    t('我又沒說要跳下去。……現在沒有。', 'think', 'protest'), t('把那個「現在」收回去，幫我關窗。', 'explain', 'nod')
+  ]);
+  addContext('luffy', 'zoro', { weather: 'snow' }, '窗外飄雪', [
+    t('索隆！你看，外面的雪落得好亂！', 'admire', 'think'), t('風轉了。你剛才不是要找娜美？', 'think', 'startled'),
+    t('我先看完雪，再去找她！', 'offer', 'talk'), t('別跑，鞋底濕了會滑。', 'explain', 'nod')
+  ]);
+  addContext('luffy', 'sanji', { daypart: 'dusk' }, '晚飯何時開', [
+    t('都這個時候了！是不是要開飯了？', 'offer', 'think'), t('還沒。我得先把大家的份都備好。', 'explain', 'protest'),
+    t('那我去找！你要我叫誰？', 'offer', 'nod'), t('先叫喬巴，別把他那份吃了。', 'explain', 'laugh')
+  ]);
+  addContext('luffy', 'chopper', { weather: 'snow' }, '雪花和醫生', [
+    t('喬巴！你看雪黏在帽子上！', 'admire', 'startled'), t('看到了！但你先把濕衣服換掉！', 'protest', 'think'),
+    t('雪剛落下來耶，再等一下！', 'offer', 'protest'), t('不行，等下感冒了還是我要看！', 'protest', 'laugh')
+  ]);
+  addContext('luffy', 'brook', { daypart: 'night' }, '讓值夜的人聽見', [
+    t('布魯克！小聲一點的歌也會好聽嗎？', 'think', 'admire'), t('會的。今晚唱給還醒著的人。', 'offer', 'talk'),
+    t('那我不睡了！我也要聽！', 'offer', 'startled'), t('聽完這首便休息，如何？', 'tease', 'laugh')
+  ]);
+  addContext('zoro', 'sanji', { weather: 'rain' }, '濕掉的地板', [
+    t('這邊地板濕了。你的盤子別從這裡過。', 'explain', 'startled'), t('用不著你說。我還拿著熱湯呢。', 'protest', 'think'),
+    t('我去把門關好，免得又打進來。', 'nod', 'think'), t('……抹布在右邊。順手擦一下，綠藻頭。', 'tease', 'protest')
+  ]);
+  addContext('zoro', 'chopper', { season: 'winter' }, '天冷也要看傷', [
+    t('這點冷，不用叫我停。', 'protest', 'think'), t('我不是叫你停，是叫你先把手暖開！', 'explain', 'think'),
+    t('暖好了再練。這總行吧。', 'nod', 'admire'), t('行！還有，擦傷記得告訴我。', 'offer', 'nod')
+  ]);
+  addContext('nami', 'jinbe', { weather: 'storm' }, '雷雨中的交接', [
+    t('甚平，下一道浪會從右邊推過來！', 'explain', 'nod'), t('看到了。老夫先順著放一點。', 'work', 'think'),
+    t('對，就是這個角度。等雷過了再修正。', 'nod', 'nod'), t('妳盯著雲，老夫顧著舵。', 'reassure', 'nod')
+  ]);
+  addContext('nami', 'robin', { daypart: 'dusk' }, '畫完前的光', [
+    t('再給我一點光，這段海岸就畫完了。', 'work', 'think'), t('我替妳把燈移近些？', 'offer', 'nod'),
+    t('不用，現在的顏色剛好。妳坐著吧。', 'talk', 'smile'), t('那我把書翻慢一些，陪妳到收筆。', 'smile', 'talk')
+  ]);
+  addContext('nami', 'usopp', { weather: 'rain' }, '窗邊的工具', [
+    t('你那些零件再不收，雨就吹進來了。', 'explain', 'startled'), t('馬上！等我先拿那個最小的！', 'work', 'think'),
+    t('我幫你關窗，東西你自己點清。', 'offer', 'nod'), t('好！少一顆我都找得出來！', 'nod', 'smile')
+  ]);
+  addContext('usopp', 'franky', { weather: 'rain' }, '潮濕的木頭', [
+    t('下雨了，這塊木頭是不是先別裝？', 'think', 'nod'), t('沒錯！濕著量，明天準會鬆。', 'explain', 'admire'),
+    t('哼，本大爺早就看出這點！', 'tease', 'laugh'), t('那就一起搬去乾的地方！', 'offer', 'nod')
+  ]);
+  addContext('usopp', 'chopper', { daypart: 'night' }, '夜裡別嚇人', [
+    t('我在試夜間警報，響了可別害怕！', 'offer', 'startled'), t('你自己剛才先跳起來了！', 'protest', 'think'),
+    t('那是在測反應速度！很快吧？', 'tease', 'laugh'), t('很快。也別把大家全叫醒喔。', 'explain', 'nod')
+  ]);
+  addContext('sanji', 'chopper', { season: 'summer' }, '熱天的餐', [
+    t('天熱，我做點清爽的，醫生有意見嗎？', 'offer', 'think'), t('有！只吃冷的可不行，還得吃夠。', 'explain', 'nod'),
+    t('知道，份量我看著。你也算一份。', 'nod', 'admire'), t('當然！我可是醫生，也是船員啊！', 'laugh', 'smile')
+  ]);
+  addContext('sanji', 'robin', { season: 'winter' }, '冬天的茶', [
+    t('羅賓小姐，茶換熱的。冷了我再續。', 'offer', 'smile'), t('謝謝。這頁還有一小段就讀完。', 'talk', 'nod'),
+    t('慢慢來，我把壺留在旁邊。', 'reassure', 'smile'), t('你也記得坐下喝一杯。', 'offer', 'think')
+  ]);
+  addContext('robin', 'franky', { season: 'autumn' }, '木紋留下來', [
+    t('這塊木頭的紋路像一片秋葉。', 'think', 'admire'), t('要磨平的地方我標好了，這邊留著。', 'explain', 'think'),
+    t('留下來，大家摸得到它原來的樣子。', 'smile', 'admire'), t('沒錯！好看也不妨礙它結實。', 'laugh', 'smile')
+  ]);
+  addContext('franky', 'brook', { season: 'summer', daypart: 'day' }, '午後別敲太響', [
+    t('這塊板子再敲一下就好了！', 'work', 'startled'), t('午後有人睡著呢，能否先聽我練曲？', 'offer', 'think'),
+    t('行！我先畫下一步的圖！', 'nod', 'smile'), t('等人醒了，我替您的開工配一段。', 'offer', 'laugh')
+  ]);
+  addContext('brook', 'jinbe', { daypart: 'night' }, '安靜的值夜曲', [
+    t('今夜的曲子，您想要有浪聲那樣的拍子嗎？', 'offer', 'think'), t('好啊。夜裡看不遠，慢一點也聽得見。', 'nod', 'smile'),
+    t('那我把最後一音留給真正的海。', 'smile', 'admire'), t('老夫便聽到那裡。多謝。', 'nod', 'smile')
+  ]);
+  addContext('ace', 'luffy', { weather: 'snow' }, '兄弟看雪', [
+    t('魯夫，先別跑，鞋底會濕。', 'explain', 'think'), t('艾斯，外面雪飄得像一群小船！', 'admire', 'think'),
+    t('看到了。先把鞋擦乾，再慢慢看。', 'reassure', 'protest'), t('好啦！那你也一起來看！', 'offer', 'smile')
+  ]);
+  addContext('ace', 'sabo', { daypart: 'dusk' }, '傍晚的茶', [
+    t('傍晚了。你小時候也愛坐到這個時候。', 'smile', 'think'), t('你那時候坐不住，老想去搶最後一份飯。', 'tease', 'laugh'),
+    t('現在也差不多。你那杯茶先喝吧。', 'laugh', 'smile'), t('好。今天的事，待會兒慢慢聊。', 'smile', 'nod')
+  ]);
+  addContext('ace', 'jinbe', { weather: 'rain' }, '先把人叫進來', [
+    t('雨越來越大，我去看看誰還在外頭。', 'offer', 'think'), t('老夫也去。你顧左邊，我看右邊。', 'nod', 'nod'),
+    t('行。找到人就從這裡回來。', 'nod', 'nod'), t('好，別讓大家淋著等。', 'reassure', 'nod')
+  ]);
+  addContext('sabo', 'luffy', { daypart: 'day' }, '先替大家留路', [
+    t('魯夫，那些箱子要搬去哪裡？', 'think', 'admire'), t('那邊！大家要走的地方先空出來！', 'offer', 'smile'),
+    t('嗯，這回你想得挺周到。', 'smile', 'laugh'), t('嘿嘿，是娜美剛才說的！', 'laugh', 'smile')
+  ]);
+  addContext('law', 'luffy', { weather: 'storm' }, '計畫先講完', [
+    t('草帽當家的，雷雨過去前別出門。', 'explain', 'think'), t('我知道啦！所以先說去哪座島！', 'offer', 'think'),
+    t('地點還沒確認，讓我把圖看完。', 'protest', 'nod'), t('那我在這裡等！……會等的。', 'nod', 'think')
+  ]);
+  addContext('law', 'chopper', { season: 'winter' }, '藥品怕潮', [
+    t('冷天這排用品，密封還完好嗎？', 'think', 'nod'), t('剛檢查過！我把日期也寫在外面了！', 'explain', 'nod'),
+    t('做得對。誰接手都看得懂。', 'nod', 'admire'), t('你別這樣誇，我會得意的啦！', 'laugh', 'tease')
+  ]);
+  addContext('hancock', 'luffy', { weather: 'snow' }, '一起看雪', [
+    t('魯夫，窗邊能看到雪。', 'offer', 'admire'), t('真的耶！叫大家都來看！', 'admire', 'startled'),
+    t('當、當然。妾身本也要讓大家來。', 'think', 'smile'), t('好！妳來叫這邊，我去叫那邊！', 'offer', 'smile')
+  ]);
+  addContext('hancock', 'nami', { weather: 'rain' }, '雨天的座位', [
+    t('窗邊濺水，這排座位先挪開。', 'explain', 'nod'), t('正好。我去把海圖收起來。', 'work', 'think'),
+    t('妾身來移椅子，妳只管護好圖。', 'offer', 'nod'), t('謝了。窗邊那張也一起挪喔。', 'offer', 'smile')
+  ]);
   const ACTION_LABELS = Object.freeze({ talk: '交談', explain: '說明', nod: '點頭', laugh: '開懷', smile: '微笑', tease: '打趣', protest: '抗議', reassure: '安慰', admire: '驚喜', think: '思考', bow: '致意', listen: '聆聽', startled: '吃驚', offer: '招呼', work: '專心', rest: '休息' });
   const FURNITURE_VERBS = Object.freeze({ helm: '查看航向', 'map-table': '核對海圖', 'treasure-chest': '查看箱子', 'tangerine-tree': '照顧橘子樹', 'swords-rack': '整理刀架', 'kitchen-table': '整理餐桌', bookshelf: '翻閱書籍', 'medicine-cabinet': '清點藥品', piano: '練習樂曲', 'tool-bench': '修整零件' });
   const hasKey = key => Object.prototype.hasOwnProperty.call(PROFILES, key);
@@ -390,10 +770,33 @@
   const deepFreeze = value => { if (value && typeof value === 'object' && !Object.isFrozen(value)) { Object.values(value).forEach(deepFreeze); Object.freeze(value); } return value; };
   const profile = key => hasKey(key) ? PROFILES[key] : null;
   const hasPair = (first, second) => !!pairKeyFor(first, second);
+  const contextOf = input => {
+    if (!input || typeof input !== 'object') return null;
+    const daypart = { morning: 'dawn', afternoon: 'day', evening: 'dusk' }[input.daypart] || input.daypart;
+    const weather = input.weather === 'thunder' ? 'storm' : input.weather;
+    const state = String(input.activity || input.state || '');
+    const activity = state === 'UseFurniture' ? 'Work' : state;
+    return {
+      daypart: ['dawn', 'day', 'dusk', 'night'].includes(daypart) ? daypart : null,
+      season: ['spring', 'summer', 'autumn', 'winter'].includes(input.season) ? input.season : null,
+      weather: ['clear', 'cloudy', 'rain', 'snow', 'storm'].includes(weather) ? weather : null,
+      activity: ['Work', 'Train', 'Eat', 'Rest'].includes(activity) ? activity : null
+    };
+  };
+  const contextLines = (key, context, groups = ['activity', 'weather', 'daypart', 'season']) => {
+    const normalized = contextOf(context);
+    if (!normalized) return [];
+    return groups.flatMap(group => CONTEXT_SOLO[key]?.[group]?.[normalized[group]] || []);
+  };
+  const matchesContext = (when, context) => {
+    const normalized = contextOf(context);
+    return normalized && Object.entries(when).every(([group, value]) => normalized[group] === value);
+  };
   const scene = (first, second, index = 0, context = {}) => {
     const key = pairKeyFor(first, second);
     if (!key) return null;
-    const all = SCENES[key];
+    const contextual = (CONTEXT_SCENES[key] || []).filter(value => matchesContext(value.when, context));
+    const all = [...contextual, ...SCENES[key]];
     // Presence of an explicit availability list opts into strict physical context.
     // The legacy API without this list keeps its complete authored scene pool.
     const available = Array.isArray(context?.availableFurnitureKeys) ? new Set(context.availableFurnitureKeys) : null;
@@ -401,12 +804,15 @@
     if (!eligible.length) return null;
     const tagged = context && context.furnitureKey ? eligible.filter(value => value.tags.includes(context.furnitureKey)) : [];
     const excluded = new Set(Array.isArray(context?.recentSceneIds) ? context.recentSceneIds : []);
+    const freshContextual = contextual.filter(value => !excluded.has(value.id));
     const preferred = tagged.length ? tagged : eligible;
-    const fresh = preferred.filter(value => !excluded.has(value.id));
+    const fresh = freshContextual.length ? freshContextual : preferred.filter(value => !excluded.has(value.id));
     // If contextual choices were all recently used, broaden before repeating one.
     const broadFresh = eligible.filter(value => !excluded.has(value.id));
     const selected = at(fresh.length ? fresh : broadFresh.length ? broadFresh : eligible, index);
-    return { ...selected, pair: [...selected.pair], tags: [...selected.tags], turns: selected.turns.map(value => ({ ...value, listener: { ...value.listener } })) };
+    return { ...selected, pair: [...selected.pair], tags: [...selected.tags],
+      ...(selected.when ? { when: { ...selected.when } } : {}),
+      turns: selected.turns.map(value => ({ ...value, listener: { ...value.listener } })) };
   };
   // Legacy consumers receive the first line spoken by each requested character.
   // New consumers must play scene().turns in authored order, even for a reversed encounter.
@@ -414,18 +820,43 @@
     const value = scene(first, second, index);
     return value ? [first, second].map(key => tuple(value.turns.find(beat => beat.speaker === key))) : null;
   };
-  const interactionBeat = (key, kind = 'chat', index = 0) => {
+  const interactionBeat = (key, kind = 'chat', index = 0, context = null) => {
     if (!hasKey(key)) return null;
     const resolved = ['chat', 'work', 'bond', 'rest', 'claim'].includes(kind) ? kind : 'chat';
-    return { speaker: key, ...copyBeat(at(SOLO[key][resolved], index)) };
+    const contextual = resolved === 'claim' ? [] : contextLines(key, context,
+      resolved === 'work' ? ['activity'] : ['activity', 'weather', 'daypart', 'season']);
+    const values = contextual.length ? [...contextual, ...SOLO[key][resolved]] : SOLO[key][resolved];
+    return { speaker: key, ...copyBeat(at(values, index)) };
   };
-  const greeting = (key, index = 0) => { const value = interactionBeat(key, 'chat', index); return value ? tuple(value) : null; };
-  const interaction = (key, kind = 'chat', index = 0) => { const value = interactionBeat(key, kind, index); return value ? tuple(value) : null; };
-  const activity = (key, furnitureKey, index = 0) => {
+  const greeting = (key, index = 0, context = null) => { const value = interactionBeat(key, 'chat', index, context); return value ? tuple(value) : null; };
+  const interaction = (key, kind = 'chat', index = 0, context = null) => { const value = interactionBeat(key, kind, index, context); return value ? tuple(value) : null; };
+  const activity = (key, furnitureKey, index = 0, context = null) => {
     const values = hasKey(key) && Object.prototype.hasOwnProperty.call(SOLO[key].furniture, furnitureKey) && SOLO[key].furniture[furnitureKey];
-    if (!values) return null;
-    const value = at(values, index);
-    return { speaker: key, ...copyBeat(value), verb: FURNITURE_VERBS[furnitureKey] || '使用家具', furnitureKey };
+    if (!values && !contextOf(context)?.activity) return null;
+    const contextual = contextLines(key, context, values ? ['weather', 'daypart', 'season'] : ['activity', 'weather', 'daypart', 'season']);
+    const pool = [...contextual, ...(values || [])];
+    if (!pool.length) return null;
+    const value = copyBeat(at(pool, index));
+    if (!values) value.pose = conversationPose(value.action);
+    return { speaker: key, ...value, verb: values ? (FURNITURE_VERBS[furnitureKey] || '使用家具') : '自主活動', furnitureKey };
+  };
+  const directiveBeat = (key, furnitureKey = '', kind = 'move', index = 0, context = null) => {
+    if (!hasKey(key) || !['move', 'use', 'train', 'work', 'rest'].includes(kind)) return null;
+    const item = typeof furnitureKey === 'string' ? furnitureKey : '';
+    if (kind === 'use' && !item) return null;
+    const favorite = item && PROFILES[key].favorite.includes(item);
+    const familiar = context?.specialist === false ? false : context?.specialist === true || favorite;
+    const group = kind === 'move' ? (!item ? 'moveFloor' : familiar ? 'moveFavorite' : 'moveOther') :
+      kind === 'use' ? (familiar ? 'useFavorite' : 'useOther') : kind;
+    const specific = familiar && item ? (DIRECTIVE_FURNITURE[key]?.[item]?.[kind] || []) : [];
+    const values = [...specific, ...DIRECTIVES[key][group]];
+    const value = copyBeat(at(values, index));
+    // The room controller performs movement and work with complete-body clips;
+    // a spoken acknowledgement must not mime a tool or sit on an empty floor.
+    value.pose = conversationPose(value.action);
+    const verb = kind === 'move' ? (item ? '前往家具' : '前往空地') : kind === 'use' ?
+      (FURNITURE_VERBS[item] || '查看家具') : { train: '準備訓練', work: '接受工作', rest: '休息' }[kind];
+    return { speaker: key, ...value, verb, furnitureKey: item };
   };
   const CHARACTER_LINES = Object.fromEntries(KEYS.map(key => [key, {
     chat: SOLO[key].chat.map(value => value.line),
@@ -434,8 +865,8 @@
   }]));
   const CHAT_MOODS = Object.fromEntries(KEYS.map(key => [key, SOLO[key].chat.map(value => value.mood)]));
   const PAIR_LINES = Object.fromEntries(Object.entries(SCENES).map(([key, values]) => [key, values.map(value => value.turns.slice(0, 2).map(tuple))]));
-  [PROFILES, SOLO, SCENES, RELATIONSHIPS, CHARACTER_LINES, CHAT_MOODS, PAIR_LINES].forEach(deepFreeze);
-  const api = Object.freeze({ KEYS, MOODS, POSES, ACTIONS, ACTION_LABELS, PROFILES, SOLO, SCENES, RELATIONSHIPS, CHARACTER_LINES, CHAT_MOODS, PAIR_LINES, profile, hasPair, scene, pair, greeting, interaction, interactionBeat, activity });
+  [PROFILES, SOLO, SCENES, CONTEXT_SOLO, CONTEXT_SCENES, DIRECTIVES, DIRECTIVE_FURNITURE, RELATIONSHIPS, CHARACTER_LINES, CHAT_MOODS, PAIR_LINES].forEach(deepFreeze);
+  const api = Object.freeze({ KEYS, MOODS, POSES, ACTIONS, ACTION_LABELS, PROFILES, SOLO, CONTEXT_SOLO, SCENES, CONTEXT_SCENES, DIRECTIVES, DIRECTIVE_FURNITURE, RELATIONSHIPS, CHARACTER_LINES, CHAT_MOODS, PAIR_LINES, profile, hasPair, scene, pair, greeting, interaction, interactionBeat, activity, directiveBeat });
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (root) root.OnePieceRoomDialogue = api;
 })(typeof window !== 'undefined' ? window : globalThis);

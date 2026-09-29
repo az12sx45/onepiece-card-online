@@ -31,6 +31,10 @@
     const policy=data.policies || {};
     const foregroundGapMs=clamp(policy.foregroundGapMs,1000,86400000,180000);
     const pairCooldownMs=clamp(policy.pairCooldownMs,1000,86400000,720000);
+    // Casual room conversation has its own presentation cadence. Authored rare
+    // events keep the original foreground and pair cooldowns.
+    const casualGapMs=clamp(options.casualConversation?.foregroundGapMs,1000,foregroundGapMs,foregroundGapMs);
+    const casualPairCooldownMs=clamp(options.casualConversation?.pairCooldownMs,1000,pairCooldownMs,pairCooldownMs);
     const rareMinimum=Math.max(foregroundGapMs,clamp(policy.rareEventIntervalMs?.[0],1000,86400000,360000));
     const rareMaximum=Math.max(rareMinimum,clamp(policy.rareEventIntervalMs?.[1],1000,86400000,600000));
     const rareDelay=()=>rareMinimum+Math.floor(clamp(rng(),0,.999999,0)*(rareMaximum-rareMinimum));
@@ -39,11 +43,13 @@
     let released = new Set(reserved?.releasedKeys() || canonical);
     let rosterRevision = 0;
     const records = new Map(), tasks = new Map(), leases = new Map(), owned = new Set(), stationCooldowns = new Map();
+    const stationUseAt = new Map(), activityCursor = new Map(), lastActivityLineAt = new Map();
     const arrivals = new Map(), acknowledged = new Set(), jobs = new Map(), pairCooldown = new Map(), eventCooldown = new Map(), lineCooldown = new Map();
     const recentEvents = [], recentLines = [];
     let pairs = {}, directive = data.defaultDirective || 'free_day', revision = 0, serial = 0, epoch = 0, disposed = false, paused = false;
     let writable = options.writable !== false, lastTick = stamp(clock()), lastNow = lastTick, nextDecision = lastTick;
     let nextForegroundAt = lastTick + 12000, nextRareAt = lastTick + rareDelay(), foreground = null, lastCheckpoint = lastTick;
+    let nextActivityLineAt = lastTick;
     let serverOffset = 0, offlineSummary = null, syncedRevision = -1;
     const seenOffline = [];
     const nowOf = value => {
@@ -217,6 +223,17 @@
       const found=Array.isArray(table)?table.find(s=>s.id===id):table[id];
       return {id,weights:found?.weights || found?.stateWeights || {}};
     }
+    function contextAt(now) {
+      const date=new Date(now),month=date.getMonth()+1,hour=date.getHours();
+      const provided=safeCall('getContext',now)||{};
+      const daypart=hour<5||hour>=20?'night':hour<7?'dawn':hour<17?'day':'dusk';
+      const season=month<=2||month===12?'winter':month<=5?'spring':month<=8?'summer':'autumn';
+      return {
+        daypart:['dawn','day','dusk','night'].includes(provided.daypart)?provided.daypart:daypart,
+        season:['spring','summer','autumn','winter'].includes(provided.season)?provided.season:season,
+        weather:['clear','cloudy','rain','snow','storm'].includes(provided.weather)?provided.weather:'clear'
+      };
+    }
     function weightsFor(key,now) {
       const actor=record(key),def=definition(key);
       const weights={...BASE_WEIGHTS,...(def.weights || def.stateWeights || {})};
@@ -232,6 +249,15 @@
       weights.Socialize*=.3+(100-n.social)/25+n.mood/120;
       weights.Work*=.2+n.workMotivation/60;
       weights.Train*=.3+n.energy/70;
+      const outside=contextAt(now);
+      if(['rain','snow','storm'].includes(outside.weather)) {
+        weights.Wander*=outside.weather==='storm'?.42:.68;
+        weights.UseFurniture*=1.28;
+        weights.Socialize*=1.12;
+      }
+      if(outside.season==='winter')weights.Rest*=1.18;
+      if(outside.daypart==='dawn')weights.Train*=1.12;
+      if(outside.daypart==='night')weights.Sleep*=1.2;
       if(now-actor.lastWorkAt<180000)weights.Work=0;
       return weights;
     }
@@ -259,19 +285,43 @@
     function clipFor(state,station,key) {
       const def=station?stationDefinition(station):{};
       if(state==='Work'&&list(def.stages).length)return def.stages[0].clip || 'work';
+      if(state==='UseFurniture'&&station) {
+        const specialist=def.specialistActions?.[key];
+        const requirement=def.specialistRequirements?.[key];
+        if(specialist&&(!list(requirement?.furnitureKeys).length||requirement.furnitureKeys.includes(station.furnitureKey))&&safeCall('supportsClip',key,specialist)===true)return specialist;
+      }
       if(state!=='Work'&&state!=='UseFurniture')return definition(key).clips?.[state] || DEFAULT_CLIPS[state] || 'idle';
       const value=def.clips || def.actions;
       if(Array.isArray(value)&&value.length) return typeof value[0]==='string'?value[0]:value[0].clip || DEFAULT_CLIPS[state];
       const actor=definition(key);
       return actor.clips?.[state] || DEFAULT_CLIPS[state] || 'idle';
     }
-    function candidatesFor(state) {
-      const preferred={Eat:['kitchen-table','tangerine-tree'],Rest:[],Sleep:[],Train:['swords-rack'],UseFurniture:[],Work:[]}[state] || [];
+    function favoritesFor(key) {
+      const value=safeCall('favoriteFurniture',key);
+      return list(value?.length?value:definition(key).favoriteFurniture).map(String);
+    }
+    function stationScore(key,station,state,now) {
+      const favorites=favoritesFor(key),skill=efficiency(key,station);
+      const stationDef=stationDefinition(station),specialist=stationDef.specialistActions?.[key];
+      const requirement=stationDef.specialistRequirements?.[key];
+      const hasSpecialist=!!specialist&&(!list(requirement?.furnitureKeys).length||requirement.furnitureKeys.includes(station.furnitureKey))&&safeCall('supportsClip',key,specialist)===true;
+      const lastUsed=stationUseAt.get(key+':'+station.id)||0;
+      const repeated=now-lastUsed<120000?2:0;
+      const weather=contextAt(now).weather;
+      const exposed=['deck','training'].includes(station.type)&&!station.furnitureKey;
+      const shelter=['rain','snow','storm'].includes(weather)&&exposed?(weather==='storm'?5:2):0;
+      return skill*(state==='Work'?9:3)+(favorites.includes(station.furnitureKey)?(state==='Work'?2:7):0)+(hasSpecialist?4:0)-repeated-shelter;
+    }
+    function candidatesFor(key,state,now) {
+      if(!['Eat','Train','UseFurniture','Rest','Sleep'].includes(state))return [];
+      const favorites=favoritesFor(key);
       return world().stations.filter(station=>{
         const def=stationDefinition(station);
-        if(preferred.length)return preferred.includes(station.furnitureKey);
-        return state!=='Rest'&&state!=='Sleep' || list(def.actions).some(a=>['rest','sleep'].includes(a));
-      });
+        if(state==='Eat')return station.furnitureKey==='kitchen-table';
+        if(state==='Train')return station.furnitureKey==='swords-rack'&&favorites.includes('swords-rack');
+        if(state==='UseFurniture')return !!station.furnitureKey&&(!favorites.length||favorites.includes(station.furnitureKey)||efficiency(key,station)>=1.2||!!def.specialistActions?.[key]&&(!list(def.specialistRequirements?.[key]?.furnitureKeys).length||def.specialistRequirements[key].furnitureKeys.includes(station.furnitureKey)));
+        return state!=='Rest'&&state!=='Sleep'||list(def.actions).some(a=>['rest','sleep'].includes(a));
+      }).sort((a,b)=>stationScore(key,b,state,now)-stationScore(key,a,state,now));
     }
     function nearbyCells(key) {
       const actor=activeMap().get(key); if(!actor?.cell)return[];
@@ -310,7 +360,7 @@
       if(existing&&!existing.job&&!existing.arrival)cancel(key,'manual_assignment');
       if(disposed||paused||!writable||!available(key))return{ok:false,error:'unavailable'};
       const availableStations=world().stations.filter(s=>!stationId||s.id===stationId);
-      availableStations.sort((a,b)=>efficiency(key,b)-efficiency(key,a));
+      availableStations.sort((a,b)=>stationScore(key,b,'Work',lastNow)-stationScore(key,a,'Work',lastNow));
       let task;
       for(const station of availableStations) if((task=startTask(key,'Work',station,{phase:'reserving'})))break;
       if(!task)return{ok:false,error:'no_station'};
@@ -326,6 +376,35 @@
       task.job=clone(job);jobs.set(job.jobId,clone(job));task.phase='approach';
       if(!paused&&(!reacquireTask(task)||safeCall('move',key,task.goal,task.token)!==true)){cancel(key,'route_failed');return{ok:false,error:'blocked_route'};}
       emit();return{...response,taskToken:task.token};
+    }
+    function assignDestination(key,target) {
+      key=keyOf(key);
+      if(disposed||paused||!writable)return{ok:false,error:'unavailable'};
+      if(!owned.has(key)||!activeMap().has(key))return{ok:false,error:'not_owned'};
+      const existing=tasks.get(key);
+      if(existing?.job||[...jobs.values()].some(job=>keyOf(job.itemId)===key&&['reserved','active','ready'].includes(job.status)))return{ok:false,error:'work_active'};
+      if(existing?.arrival)return{ok:false,error:'busy'};
+      if(!target||!['floor','furniture'].includes(target.kind))return{ok:false,error:'invalid_target'};
+      if(target.kind==='floor'&&(!Number.isInteger(target.cell?.col)||!Number.isInteger(target.cell?.row)))return{ok:false,error:'invalid_target'};
+      if(target.kind==='furniture'&&(!target.station?.id||!list(target.station.slots).length))return{ok:false,error:'no_route'};
+      if(target.kind==='floor'&&safeCall('plan',key,target.cell,'preview')!==true)return{ok:false,error:'no_route'};
+      if(target.kind==='furniture'&&!target.station.slots.some(slot=>safeCall('plan',key,slot.cell,'preview')===true))return{ok:false,error:'no_route'};
+      if(foreground?.keys.includes(key))finishEvent(false,'player_direction');
+      else if(existing)cancel(key,'player_direction');
+      if(!available(key))return{ok:false,error:'busy'};
+      const station=target.kind==='furniture'?target.station:null;
+      const favorites=favoritesFor(key);
+      const training=station?.furnitureKey==='swords-rack'&&favorites.includes('swords-rack');
+      const state=target.kind==='floor'?'SpecialAction':training?'Train':'UseFurniture';
+      const task=startTask(key,state,station,{
+        ...(target.kind==='floor'?{targetCell:{...target.cell}}:{}),
+        clip:target.kind==='floor'?'idle':clipFor(state,station,key),
+        durationMs:target.kind==='floor'?3500:training?12000:10000,
+        direction:target.kind==='floor'||training?'south':null,
+        directiveKind:target.kind==='floor'?'move':training?'train':'use'
+      });
+      if(!task)return{ok:false,error:'no_route'};
+      emit();return{ok:true,state,taskToken:task.token};
     }
     function efficiency(key,station) {
       const def=definition(key);
@@ -351,6 +430,7 @@
         if(writable)void invoke('activity.record',{itemId:itemOf(task.key),activity:task.state},task.key);
       }
       if(task.station&&safeCall('undock',task.key,task.token)!==true){changePhase(task,'undocking',now);return;}
+      if(task.station)stationUseAt.set(task.key+':'+task.station.id,now);
       memory(task.key,task.state.toLowerCase(),[task.key],now,.25);releaseTask(task);
     }
     function completeWork(task) {
@@ -447,6 +527,27 @@
         const drawn=safeCall('clip',task.key,clip,{token:task.token,state:resting?'Rest':task.state,direction:task.direction,stationId:task.station?.id,stageId:stage?.id,elapsedMs:stageElapsed,durationMs:stage?.durationMs || task.durationMs})===true;
         record(task.key).missingClip=drawn?'':clip;
         if(!drawn)return;
+        if(!foreground&&!task.activitySpoken&&!task.arrivalBeat&&(task.directiveKind||['UseFurniture','Eat','Train','Rest','Work'].includes(task.state))) {
+          task.activitySpoken=true;
+          if(task.directiveKind||now>=nextActivityLineAt&&now-(lastActivityLineAt.get(task.key)||0)>=35000) {
+            const index=activityCursor.get(task.key)||0;
+            const context={...contextAt(now),activity:task.state,stationType:task.station?.type||'',furnitureKey:task.station?.furnitureKey||'',
+              specialist:!!task.station&&(favoritesFor(task.key).includes(task.station.furnitureKey)||clipFor('UseFurniture',task.station,task.key)!=='work')};
+            const beat=task.directiveKind
+              ?safeCall('directiveBeat',task.key,task.station?.furnitureKey||'',task.directiveKind,index,context)
+              :safeCall('activityBeat',task.key,task.station?.furnitureKey||'',index,context);
+            if(beat?.line&&(!beat.speaker||beat.speaker===task.key)) {
+              activityCursor.set(task.key,index+1);
+              lastActivityLineAt.set(task.key,now);nextActivityLineAt=now+7000;
+              const reactionPose=task.directiveKind==='use'&&!context.specialist
+                ?beat.mood==='annoyed'?'talk_annoyed':'surprised':'';
+              safeCall('speak',task.key,String(beat.line).slice(0,160),beat.mood||'focused',{
+                token:task.token,activity:true,clip,state:task.state,direction:task.direction,stationId:task.station?.id,
+                reactionPose,reactionMs:reactionPose?1500:0
+              });
+            }
+          }
+        }
         if(task.job) {
           const readyAt=stamp(task.job.readyAt);
           if(task.job.status==='ready'||(readyAt>0&&now+serverOffset>=readyAt)) {
@@ -544,10 +645,10 @@
       foreground=null;
       const now=lastNow,id=event.event.id;
       eventCooldown.set(id,now+Math.max(rareMinimum,Number(event.event.cooldownMs)||0));
-      for(const a of event.keys) for(const b of event.keys) if(a<b)pairCooldown.set(pairKey(a,b),now+Math.max(pairCooldownMs,Number(event.event.pairCooldownMs)||0));
-      nextForegroundAt=now+foregroundGapMs;
-      // Casual legacy dialogue observes the same foreground/pair limits. It
-      // must not keep postponing the independent rare-event clock forever.
+      for(const a of event.keys) for(const b of event.keys) if(a<b)pairCooldown.set(pairKey(a,b),now+Math.max(event.event.legacy?casualPairCooldownMs:pairCooldownMs,Number(event.event.pairCooldownMs)||0));
+      nextForegroundAt=now+(event.event.legacy?casualGapMs:foregroundGapMs);
+      // Casual dialogue uses shorter presentation limits and does not postpone
+      // the independent rare-event clock.
       if(!event.event.legacy)nextRareAt=now+rareDelay();
       if(completed) {
         recentEvents.push({id,timestamp:now});recentEvents.splice(0,Math.max(0,recentEvents.length-32));
@@ -625,7 +726,15 @@
         const a=keys[i],b=keys[j],pair=pairKey(a,b);
         if(now<(pairCooldown.get(pair)||0))continue;
         const relationship=pairs[pair]||normalizePair();
-        const scene=safeCall('socialScene',a,b,{recentSceneIds:recentEvents.slice(-6).map(e=>e.id),availableFurnitureKeys:world().stations.map(s=>s.furnitureKey),relationship:clone(relationship),schedule:scheduleAt(now).id,needs:{[a]:clone(record(a).needs),[b]:clone(record(b).needs)},memories:[...record(a).memories,...record(b).memories].slice(-8).map(clone)});
+        const availableFurnitureKeys=world().stations.map(s=>s.furnitureKey).filter(Boolean);
+        const favoriteFurniture=[...favoritesFor(a),...favoritesFor(b)].find(key=>availableFurnitureKeys.includes(key))||'';
+        const scene=safeCall('socialScene',a,b,{
+          ...contextAt(now),activity:'Socialize',furnitureKey:favoriteFurniture,
+          recentSceneIds:recentEvents.slice(-6).map(e=>e.id),availableFurnitureKeys,
+          relationship:clone(relationship),schedule:scheduleAt(now).id,
+          needs:{[a]:clone(record(a).needs),[b]:clone(record(b).needs)},
+          memories:[...record(a).memories,...record(b).memories].slice(-8).map(clone)
+        });
         if(!scene?.id||!list(scene.turns).length)continue;
         const legacy={...scene,id:scene.id,requiredCharacters:[a,b],steps:scene.turns.map(turn=>({...turn,kind:'speak'})),legacy:true};
         if(now<(eventCooldown.get(scene.id)||0))continue;
@@ -672,8 +781,12 @@
       const actor=record(key);actor.nextAt=now+12000+Math.floor(rng()*18000);
       if(state==='Work'){void assignWork(key);return;}
       if(state==='Wander'){actor.state='Wander';safeCall('wander',key);return;}
-      if(state==='Socialize'){actor.state='Socialize';chooseEvent(now);return;}
-      const stations=candidatesFor(state);
+      if(state==='Socialize'){
+        chooseEvent(now);
+        if(!foreground?.keys.includes(key)){actor.state='Wander';safeCall('wander',key);}
+        return;
+      }
+      const stations=candidatesFor(key,state,now);
       for(const station of stations)if(startTask(key,state,station))return;
       // Ground activities remain honest: never invent a missing chair, food or workbench.
       if(['Eat','UseFurniture'].includes(state)){actor.state='Wander';safeCall('wander',key);return;}
@@ -794,7 +907,7 @@
     released=new Set(reserved?.releasedKeys(initial)||canonical);
     rosterRevision=Number.isSafeInteger(initial.rosterRevision)?initial.rosterRevision:0;
     if(initial.ownedItemIds)rebuildOwned(initial.ownedItemIds);
-    return Object.freeze({sync,rebind,tick,pause,resume,dispose,snapshot,assignWork,autoAssign,interact,react,setDirective,queueArrival,cancel,getEventPool,
+    return Object.freeze({sync,rebind,tick,pause,resume,dispose,snapshot,assignWork,assignDestination,autoAssign,interact,react,setDirective,queueArrival,cancel,getEventPool,
       isBusy:key=>tasks.has(keyOf(key)),stateFor:key=>records.has(keyOf(key))?clone(records.get(keyOf(key))):null,reservations:()=>[...leases.values()].map(clone),
       // Explicit scheduling entry is also useful for deterministic integration tests.
       scheduleEvent:id=>{const event=eventDefinitions().find(v=>v.id===id);return !!event&&lastNow>=(eventCooldown.get(id)||0)&&beginEvent(event,lastNow);}});

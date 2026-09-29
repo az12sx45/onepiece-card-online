@@ -23,22 +23,35 @@ try{
  await run('owner-anchored-actions',{owned:['luffy','zoro'],furniture:[{key:'map-table',col:8,row:1}]},async page=>{
   const scroll=await page.evaluate(()=>document.querySelector('.voyage-scroll').scrollTop);await open(page);
   assert.equal(await page.evaluate(()=>document.querySelector('.voyage-scroll').scrollTop),scroll,'opening must not scroll the profile');
-  const b=await bounds(page);onScreen(b);assert(b.panel.x>=b.actor.right||b.panel.right<=b.actor.x,'desktop menu sits beside the actor');assert(/0\.72/.test(b.background));
+  const b=await bounds(page);onScreen(b);
+  const current=await page.locator('#roomCompanionActions button.is-wheel-current').boundingBox();
+  assert(current&&current.x+current.width/2>=b.actor.right-4||current&&current.x+current.width/2<=b.actor.x+4,
+    'the visible current action sits beside the actor; the transparent panel may overlap');
+  const actionBackground=await page.locator('#roomCompanionActions button.is-wheel-current').evaluate(node=>getComputedStyle(node).backgroundColor);
+  const alpha=Number(actionBackground.match(/rgba\([^,]+,[^,]+,[^,]+,\s*([\d.]+)\)/)?.[1]);
+  assert(alpha>0&&alpha<1,'the action circle uses a translucent fill');
   for(const id of ['roomCompanionTalk','roomLifeWork','roomLifeCall','roomLifeGift','roomLifeTrain','roomLifeStatus']){assert(await page.locator('#'+id).isVisible());assert(await page.locator('#'+id).evaluate(el=>getComputedStyle(el,'::before').maskImage!=='none'));}
   await shot(page,'owner-desktop');
   await page.locator('#roomLifeStatus').click();assert(await page.locator('#roomCompanionDetail').isVisible());assert(await page.locator('#roomLifeDetails').isVisible());await shot(page,'details-desktop');
-  await page.locator('#roomLifeStatus').click();await page.locator('#roomLifeWork').click();assert(await page.locator('#roomLifeWorkChoices').isVisible());onScreen(await bounds(page));await shot(page,'work-desktop');
-  await page.locator('#roomLifeWork').click();
+  await page.locator('#roomLifeStatus').click();onScreen(await bounds(page));
+  // Work opens a separate minigame in the full launcher; this wheel-only
+  // fixture omits that module and verifies the action circle above instead.
   await page.locator('#roomLifeGift').click();assert.equal(await page.evaluate(()=>window.__integration.calls.filter(c=>c.type==='character.interact').length),0,'gift first click is confirmation only');
   await page.locator('#roomLifeGift').click();await advance(page,100);assert.equal(await page.evaluate(()=>window.__integration.calls.filter(c=>c.type==='character.interact'&&c.payload.action==='gift').length),1);assert.equal(await page.evaluate(()=>window.__integration.db[42].wallet.coins),95);
-  await page.keyboard.press('Escape');assert(await page.locator('#roomCompanionPanel').isHidden());assert(await actor(page).evaluate(el=>document.activeElement===el));
+  await page.waitForFunction(()=>document.getElementById('roomCompanionPanel').hidden);
+  await open(page);await page.keyboard.press('Escape');assert(await page.locator('#roomCompanionPanel').isHidden());assert(await actor(page).evaluate(el=>document.activeElement===el));
   await actor(page).press('Enter');await advance(page,50);assert(await page.locator('#roomCompanionPanel').isVisible());await page.locator('#roomLifeClock').click();assert(await page.locator('#roomCompanionPanel').isHidden());
   await open(page);await page.evaluate(()=>window.LauncherRoom.onVisible('library'));assert(await page.locator('#roomCompanionPanel').isHidden());
   return{layout:b,giftCommands:1,keyboardAndDismiss:true};
  });
  await run('follow-edge-mobile',{owned:['luffy']},async page=>{
   await open(page);const first=await bounds(page);
-  await page.evaluate(()=>{window.__launcherRoomTest.lifeCancel('luffy');window.__launcherRoomTest.route('luffy',{col:14,row:5});});await advance(page,7000);
+  // Opening the wheel intentionally holds the selected actor facing the player.
+  // Close it before asking the existing BFS navigation helper to move them.
+  await page.keyboard.press('Escape');
+  const route=await page.evaluate(()=>{window.__launcherRoomTest.lifeCancel('luffy');return window.__launcherRoomTest.route('luffy',{col:14,row:5});});
+  assert.equal(route,true,'the east-side floor goal is reachable by BFS');
+  await advance(page,7000);await open(page);
   const moved=await bounds(page);onScreen(moved);assert(Math.abs(moved.actor.x-first.actor.x)>50);assert(Math.abs(moved.panel.x-first.panel.x)>40);
   await page.evaluate(()=>{const f=window.__integration;f.db[42].profile.room.characters[0].x=875;f.db[42].profile.room.characters[0].y=495;f.use(43);f.use(42);});await advance(page,50);await open(page);
   const edge=await bounds(page);onScreen(edge);assert.equal(edge.side,'left','right edge flips the menu to the left');await shot(page,'owner-right-edge');

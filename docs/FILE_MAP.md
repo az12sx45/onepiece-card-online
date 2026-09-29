@@ -1289,3 +1289,11 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 - `tools/launcher-room/ambience-v1212/qa.js`、`scripts/launcher_scene_navigation_qa.js`：六景桌機／窄版天候畫面和隔離 PGlite＋Chromium 佈置、切換、重載、訪客驗證；報告在 `D:/Codex_QA/launcher-room-ambience-1.2.12/` 及 `D:/Codex_QA/launcher-scene-ambience-ui-1.2.12/scene-navigation/`。
 - `tools/launcher-room/ace-lean-v1212/`、`public/images/launcher_room/reserved_v2/ace/`：艾斯原稿、重製程式、逐格 manifest、17 張新版全身 WebP；`desktop/launcher-reserved-crew.js`、`desktop/main.js` 對應角色動作索引與 `opui://` 素材白名單。
 - `public/desktop/launcher-release-v1.json`、`public/desktop-download.html`：1.2.12 已簽署安裝檔清單與下載頁；封裝、R2 完整下載、正式來源同步及公開端讀回證據分別在 `D:/Codex_QA/launcher-room-weather-1.2.12-release-r2/` 與 `D:/Codex_QA/launcher-room-weather-1.2.12-release/`。
+
+## 2026-09-29 Launcher 1.2.13 角色日常與對話檔案
+
+- `desktop/launcher-life.js`、`desktop/launcher-life-room.js`：角色日程、偏好活動與房間家具選擇；指派目的地與到達後反應。
+- `desktop/launcher-room-dialogue.js`、`desktop/launcher-room.js`、`desktop/launcher-room.css`、`desktop/launcher.html`：角色與人物關係對白、時段／季節／天氣情境、輪盤的指派移動操作和房間互動。
+- `config/launcher-announcements-v1.json`、`server/launcher-announcements.js`、`desktop/launcher-announcements.js`、`desktop/launcher-announcements.css`：圖文公告的版本門檻、路徑驗證、清單縮圖與詳情主圖。
+- `public/images/launcher_announcements/launcher-life-1.2.13.webp`、`tools/launcher-room/announcement-v1213/`：重畫的更新主圖、原稿及 SHA manifest；`desktop/main.js`、`desktop/package.json`、`desktop/package-lock.json` 封裝本機媒體與 1.2.13 版號。
+- `scripts/desktop_launcher_package_qa.js`、`scripts/launcher_1213_announcement_qa.js`、`scripts/launcher_announcements_client_qa.js`、`scripts/launcher_life_routine_qa.js`、`scripts/launcher_room_assignment_browser_qa.js`：封裝、公告、角色日常與實際 Chromium 指派操作的定向 QA。

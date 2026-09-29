@@ -19,9 +19,19 @@
 .room-stage { position: relative; width: 100%; min-width: 480px; aspect-ratio: 16 / 9; overflow: hidden; isolation: isolate; border: 1px solid #e7bd6980; border-radius: 17px; outline: none; background: #122b33; box-shadow: inset 0 0 0 3px #07141d80, 0 18px 34px #0005; }
 .room-stage:focus-visible { outline: 2px solid #71d5c9; outline-offset: -4px; }
 .room-stage.is-editing { cursor: crosshair; }
+.room-stage.is-assigning { cursor: crosshair; border-color: #8ce3d0; box-shadow: inset 0 0 0 3px #61cbb438, 0 18px 34px #0005; }
+.room-assignment-hint { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 9px; padding: 7px 10px; border: 1px solid #8cdac28c; border-radius: 9px; background: #0b3b43dc; color: #f2ead0; font-size: 12px; line-height: 1.5; }
+.room-assignment-hint[hidden] { display: none; }
+.room-assignment-hint > button { flex: none; min-height: 30px; padding: 4px 9px; border-color: #e6c98893; }
+.room-assignment-target { position: absolute; z-index: 920; width: 22px; height: 22px; transform: translate(-50%, -50%) rotate(45deg); border: 2px solid #f2dea2; border-radius: 50% 50% 50% 2px; background: #2369689c; box-shadow: 0 0 0 4px #0b464a4d, 0 0 12px #f8e6ad; pointer-events: none; }
+.room-assignment-target[hidden] { display: none; }
+.room-stage.is-assigning .room-object-shell { cursor: pointer; }
+.room-stage.is-assigning .room-object-shell:hover .room-object, .room-stage.is-assigning .room-object-shell:focus-visible .room-object { filter: drop-shadow(0 0 9px #aceed6) drop-shadow(0 3px 4px #03171b75); }
+.room-stage.is-assigning .room-object-shell:focus-visible { outline: 2px solid #f3daa2; border-radius: 7px; }
 .room-scene { position: absolute; z-index: 0; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; user-select: none; }
 .room-floor-plane { display: none; position: absolute; z-index: 1; inset: 0; clip-path: polygon(17.1% 49.4%, 82.9% 49.4%, 97.1% 95.4%, 2.9% 95.4%); background: #50beac28; pointer-events: none; }
 .room-stage.is-editing .room-floor-plane { display: block; }
+.room-stage.is-assigning .room-floor-plane { display: block; background: #73d8c512; }
 .room-floor-grid { display: none; position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
 .room-stage.is-editing .room-floor-grid { display: block; }
 .room-grid-lines { fill: none; stroke: #fff1c2b0; stroke-width: 1.25; vector-effect: non-scaling-stroke; filter: drop-shadow(0 1px 1px #09232bcc); }
@@ -58,9 +68,11 @@
 .room-character-shell[data-room-key="c:room-character-franky"][data-action-source="life_v1"][data-pose="eat"] { --room-pose-scale: 1.09; }
 .room-character-shell[data-room-key="c:room-character-jinbe"][data-action-source="life_v1"][data-pose="helm"][data-direction="north"] { --room-pose-scale: 1.115; }
 .room-character-shell[data-room-key="c:room-character-sanji"][data-action-source="life_v1"][data-pose="train"] { --room-pose-scale: 1.075; }
+.room-character-shell[data-room-key="c:room-character-ace"][data-action-source="life_v1"][data-pose="eat"] { --room-pose-scale: .895; }
 .room-character-shell.has-directional-sprite .room-chibi { visibility: hidden; }
 .room-character-shell.has-directional-sprite .room-speech { bottom: 66%; }
 .room-character-shell.is-companion-selected .room-walk-sprite, .room-character-shell:hover .room-walk-sprite { filter: drop-shadow(0 0 10px #ffd67ac9); }
+.room-character-shell.is-assignment-source :is(.room-chibi, .room-walk-sprite) { filter: drop-shadow(0 0 10px #8debd3) drop-shadow(0 0 5px #f5dfaa); }
 .room-character-shell.is-interacting .room-chibi { filter: drop-shadow(0 0 12px #f5d397b8) drop-shadow(0 10px 8px #03171bb0); }
 .room-speech { position: absolute; z-index: 30; left: 50%; bottom: 98%; display: grid; gap: 2px; width: 170px; min-height: 43px; padding: 8px 10px; transform: translateX(-50%); border: 1px solid #f4d28e; border-radius: 10px; background: #082430f2; box-shadow: 0 7px 18px #001219b8; color: #fff0cc; font-size: 11px; font-weight: 600; line-height: 1.4; pointer-events: none; }
 .room-speech[hidden] { display: none; }
@@ -163,10 +175,11 @@
 .room-life-details small { flex-basis:100%; color:#9ebbb6; }
 .room-life-work-choices { padding:8px; border:1px solid #d5ba7959; border-radius:7px; background:#071e2888; }
 @media(max-width:560px) { .room-life-toolbar { align-items:flex-start; padding:9px; } .room-life-controls { width:100%; } .room-life-actions button { flex:1 1 auto; } }
+@media(max-width:560px) { .room-assignment-hint { align-items: flex-start; font-size: 11px; } .room-assignment-hint > button { min-width: 75px; } }
 
 #roomCompanionTalk { --room-action-icon:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M5%204h14a2%202%200%200%201%202%202v9a2%202%200%200%201-2%202H9l-5%204v-4H3V6a2%202%200%200%201%202-2Z%22%2F%3E%3Cpath%20d%3D%22M7%209h10M7%2013h6%22%2F%3E%3C%2Fsvg%3E"); }
 #roomLifeWork { --room-action-icon:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%223%22%20y%3D%227%22%20width%3D%2218%22%20height%3D%2213%22%20rx%3D%222%22%2F%3E%3Cpath%20d%3D%22M8%207V4h8v3M3%2012l9%203%209-3M12%2012v5%22%2F%3E%3C%2Fsvg%3E"); }
-#roomLifeCall { --room-action-icon:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M4%2012h12m-5-5%205%205-5%205M18%204h3v16h-3%22%2F%3E%3C%2Fsvg%3E"); }
+#roomLifeCall { --room-action-icon:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M4%2019c3-5%206%202%209-4%22%20stroke-dasharray%3D%222%202%22%2F%3E%3Cpath%20d%3D%22M13%2010a4%204%200%201%201%208%200c0%203-4%207-4%207s-4-4-4-7Z%22%2F%3E%3Ccircle%20cx%3D%2217%22%20cy%3D%2210%22%20r%3D%221.4%22%2F%3E%3C%2Fsvg%3E"); }
 #roomLifeGift { --room-action-icon:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M4%2011v10h16V11M3%207h18v4H3zM12%207v14%22%2F%3E%3Cpath%20d%3D%22M12%207C4%208%204%201%208%203c2%201%204%204%204%204Zm0%200c8%201%208-6%204-4-2%201-4%204-4%204Z%22%2F%3E%3C%2Fsvg%3E"); }
 #roomLifeTrain { --room-action-icon:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%206v12M3%209v6M18%206v12M21%209v6M6%2012h12%22%2F%3E%3C%2Fsvg%3E"); }
 #roomLifeStatus { --room-action-icon:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22%2F%3E%3Cpath%20d%3D%22M12%2011v6M12%207v1%22%2F%3E%3C%2Fsvg%3E"); }
