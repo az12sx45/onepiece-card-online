@@ -42,6 +42,12 @@
   // roughly 89 stage-pixel opening. Grid cells and saved positions stay fixed.
   const ROOM_ART_SCALE = 1.5;
   const dialogue = window.OnePieceRoomDialogue || null;
+  function dialogueContext(extra = {}) {
+    const sceneId = activeRoom()?.sceneId || '';
+    const sceneKey = String(sceneId).replace(/^room-scene-/, '');
+    const ambience = window.OnePieceRoomAmbience?.compute?.(new Date(), sceneKey) || {};
+    return { ...ambience, ...extra };
+  }
   const locomotion = window.OnePieceRoomMotion || null;
   const motionTable = window.OnePieceRoomMotionManifest || null;
   const el = (tag, className = '', content) => {
@@ -190,6 +196,8 @@
   let companionTick = 0;
   let companionLineIndex = 0;
   let companionRequest = 0;
+  let assignment = null;
+  let assignmentBusy = false;
   const companionStats = new Map();
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let renderedRevision = -1;
@@ -323,6 +331,7 @@
   function switchScene(id) {
     if (!isOwner() || saving ||
         id !== DEFAULT_SCENE && !sceneProducts().some(item => item.id === id)) return;
+    if (assignment) cancelAssignment();
     if (editing) {
       if (draft.sceneId === id) return;
       draft.scenes[draft.sceneId] = { placements: draft.placements, characters: draft.characters };
@@ -582,6 +591,7 @@
     }
   }
   async function openCompanion(itemId, keyboard = false) {
+    if (assignment) cancelAssignment();
     if (editing || !activeRoom().characters.some(entry => entry.itemId === itemId)) return;
     if (companionId === itemId && companionBusy) { renderCompanionPanel(); return; }
     if (companionId !== itemId) closeCompanion();
@@ -633,7 +643,7 @@
       const walker = walkers.find(entry => entry.item?.id === itemId);
       const key = walker?.key || keyForCharacter(resolvedItem(itemId, 'character'));
       if (lifeRoom?.active()) lifeRoom.cancel(key);
-      const beat = dialogue?.interactionBeat?.(key, 'bond', companionLineIndex);
+      const beat = dialogue?.interactionBeat?.(key, 'bond', companionLineIndex, dialogueContext());
       const lines = beat ? [beat.line, beat.mood] : dialogue?.interaction?.(key, 'bond', companionLineIndex) ||
         ['下次再來聊天吧！', 'happy'];
       companionLineIndex++;
@@ -656,6 +666,89 @@
   function point(event) {
     const rect = $('roomStage').getBoundingClientRect();
     return { x: (event.clientX - rect.left) / rect.width * WIDTH, y: (event.clientY - rect.top) / rect.height * HEIGHT };
+  }
+  function floorCellAt(position) {
+    const depth = (position.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top);
+    if (depth < 0 || depth > 1) return null;
+    const left = FLOOR.backLeft + (FLOOR.frontLeft - FLOOR.backLeft) * depth;
+    const right = FLOOR.backRight + (FLOOR.frontRight - FLOOR.backRight) * depth;
+    if (position.x < left || position.x > right) return null;
+    return { col: Math.min(FLOOR.columns - 1, Math.floor((position.x - left) / (right - left) * FLOOR.columns)),
+      row: Math.min(FLOOR.rows - 1, Math.floor(depth * FLOOR.rows)) };
+  }
+  function positionAssignmentMarker() {
+    const marker = $('roomStage').querySelector('.room-assignment-target');
+    if (!marker) return;
+    marker.hidden = !assignment;
+    if (assignment) {
+      const point = gridPoint(assignment.cell.col + .5, assignment.cell.row + .5);
+      marker.style.left = `${point.x / WIDTH * 100}%`;
+      marker.style.top = `${point.y / HEIGHT * 100}%`;
+    }
+  }
+  function syncAssignmentUi() {
+    const stage = $('roomStage'), hint = $('roomAssignmentHint');
+    const active = !!assignment && isOwner() && !editing;
+    hint.hidden = !active;
+    stage.classList.toggle('is-assigning', active);
+    stage.setAttribute('aria-label', active
+      ? `指派${assignment.name}：點地板指定步行位置，點家具指定互動；方向鍵選地板格，Enter 確認，Escape 取消`
+      : `${profile?.name || '航海者'}的航海夥伴房間${editing ? '，可拖曳，用方向鍵微調，按 R 旋轉家具' : ''}`);
+    if (active) $('roomAssignmentText').textContent = `指派 ${assignment.name}：點地板讓他走過去；點家具讓他試著使用。`;
+    positionAssignmentMarker();
+    for (const node of $('roomObjects').children) {
+      if (active) {
+        node.tabIndex = 0; node.setAttribute('role', 'button');
+        node.setAttribute('aria-label', `指派${assignment.name}使用${resolvedItem(node.dataset.roomKey.slice(2), 'furniture')?.name || '家具'}`);
+      } else {
+        node.removeAttribute('tabindex'); node.removeAttribute('role'); node.removeAttribute('aria-label');
+      }
+    }
+    for (const node of $('roomCharacters').children) node.classList.toggle('is-assignment-source', active && node.dataset.roomKey === `c:${assignment.itemId}`);
+  }
+  function cancelAssignment(message = '') {
+    assignment = null; assignmentBusy = false; syncAssignmentUi();
+    if (message) status(message);
+  }
+  function beginAssignment(itemId = companionId) {
+    const item = resolvedItem(itemId, 'character');
+    if (!isOwner() || editing || !lifeRoom?.active() || !item ||
+        !activeRoom().characters.some(entry => entry.itemId === itemId)) return false;
+    const walker = walkers.find(entry => entry.item?.id === itemId);
+    const cell = walker?.cell || { col: 8, row: 6 };
+    closeCompanion();
+    assignment = { itemId, key: keyForCharacter(item), name: item.name || '夥伴',
+      sceneId: activeRoom().sceneId, epoch: viewEpoch, cell: { ...cell } };
+    syncAssignmentUi(); $('roomStage').focus({ preventScroll: true });
+    status(`點地板或家具，指派 ${assignment.name} 前往。`);
+    return true;
+  }
+  const ASSIGN_ERRORS = {
+    readonly: '參觀好友房間時不能指派夥伴。', not_owned: '尚未收藏這位夥伴。',
+    not_placed: '這位夥伴已不在目前場景。', work_active: '夥伴正在完成工作，請先結束分工。',
+    busy: '夥伴正在忙，稍後再指派。', unavailable: '基地資料還在載入，稍後再試。',
+    invalid_target: '請點房間內的地板，或已擺出的家具。',
+    no_route: '走不到那裡；請點另一塊地板或家具。', no_station: '目前無法走到這件家具旁，請調整擺設。',
+    station_busy: '這件家具旁有人，請稍後再試。'
+  };
+  async function submitAssignment(target) {
+    if (!assignment || assignmentBusy || editing || !isOwner()) return;
+    const current = assignment;
+    if (current.epoch !== viewEpoch || current.sceneId !== activeRoom().sceneId) { cancelAssignment(); return; }
+    if (target.kind === 'floor' && !target.cell) {
+      status('請點選地板範圍，或直接點一件家具。', true); return;
+    }
+    assignmentBusy = true;
+    try {
+      const result = await lifeRoom?.assignDestination?.(current.key, target) || { ok: false, error: 'unavailable' };
+      if (assignment !== current || current.epoch !== viewEpoch || current.sceneId !== activeRoom().sceneId) return;
+      if (!result.ok) { status(ASSIGN_ERRORS[result.error] || '無法指派到這裡，請換個位置再試。', true); return; }
+      cancelAssignment();
+      const furniture = target.kind === 'furniture' ? resolvedItem(target.itemId, 'furniture') : null;
+      status(furniture ? `${current.name} 正前往${furniture.name || '家具'}。` : `${current.name} 正前往指定位置。`);
+    } catch {
+      if (assignment === current) status('指派暫時失敗，請再選一個位置。', true);
+    } finally { if (assignment === current) assignmentBusy = false; }
   }
   function itemBySelection() {
     if (!selected) return null;
@@ -849,11 +942,11 @@
     const furnitureKeys = [...layoutRoom(activeRoom()).placements.values()].filter(placed => placed.kind === 'furniture' &&
       Math.min(Math.hypot(placed.anchor.x - first.x, placed.anchor.y - first.y), Math.hypot(placed.anchor.x - second.x, placed.anchor.y - second.y)) <= 170
     ).map(placed => keyForFurniture(placed.item));
-    const scene = dialogue?.scene?.(first.key, second.key, history.cursor, {
+    const scene = dialogue?.scene?.(first.key, second.key, history.cursor, dialogueContext({
       furnitureKey: furnitureKeys.find(key => dialogue?.profile?.(first.key)?.favorite?.includes(key)) || furnitureKeys[0] || '',
       availableFurnitureKeys: furnitureKeys,
       recentSceneIds: history.recentIds || []
-    });
+    }));
     if (!scene || !Array.isArray(scene.turns) || scene.turns.length < 4 ||
         !scene.turns.every(turn => [first.key, second.key].includes(turn.speaker) && typeof turn.line === 'string')) return null;
     return { ...scene, pair, cursor: history.cursor };
@@ -958,7 +1051,8 @@
       .filter(value => value.item);
     const first = stationary[interactionIndex % stationary.length];
     const activityTargets = furnishings.map(target => ({ ...target,
-      beat: dialogue?.activity?.(first.key, keyForFurniture(target.item), dialogueIndex) }))
+      beat: dialogue?.activity?.(first.key, keyForFurniture(target.item), dialogueIndex,
+        dialogueContext({ activity: 'UseFurniture' })) }))
       .filter(target => target.beat?.speaker === first.key && typeof target.beat?.line === 'string');
     const chat = available.length > 1 && (!activityTargets.length || interactionIndex % 2 === 0);
     if (chat) {
@@ -1311,6 +1405,10 @@
       floor.setAttribute('preserveAspectRatio', 'none'); floor.setAttribute('aria-hidden', 'true');
       image.after(plane, floor);
     }
+    if (!stage.querySelector('.room-assignment-target')) {
+      const marker = el('span', 'room-assignment-target'); marker.hidden = true;
+      marker.setAttribute('aria-hidden', 'true'); stage.append(marker);
+    }
     drawFloorGrid(layout);
     $('roomCaption').textContent = profile ? `${profile.name || '航海者'} · ${sceneName(room.sceneId)}` : '登入後展示你的航海房間';
     const furniture = $('roomObjects'); furniture.replaceChildren();
@@ -1339,6 +1437,11 @@
       controls.append(remove);
       node.append(sprite, direction, controls);
       node.dataset.roomKey = `f:${entry.itemId}`;
+      node.onkeydown = event => {
+        if (!assignment || (event.key !== 'Enter' && event.key !== ' ')) return;
+        event.preventDefault(); event.stopPropagation();
+        void submitAssignment({ kind: 'furniture', itemId: entry.itemId });
+      };
       node.classList.toggle('is-selected', !!selected && selected.kind === 'furniture' && selected.itemId === entry.itemId);
       positionNode(node, placed); furniture.append(node);
     }
@@ -1373,7 +1476,7 @@
       node.classList.toggle('is-companion-selected', !editing && companionId === entry.itemId);
       positionNode(node, placed); characters.append(node);
     }
-    refreshAnimation();
+    refreshAnimation(); syncAssignmentUi();
   }
   function setSelected(kind, itemId) {
     selected = kind && itemId ? { kind, itemId } : null;
@@ -1526,6 +1629,7 @@
   function render() { renderStage(); renderSceneSwitcher(); renderEditor(); renderCompanionPanel(); }
   async function openEditor() {
     if (!isOwner() || editing || saving) return;
+    if (assignment) cancelAssignment();
     const openEpoch = viewEpoch;
     const openAccountId = accountId;
     const openUserId = profile.userId;
@@ -1592,6 +1696,8 @@
     }
     if (changedOwner) { closeCompanion(); companionStats.clear(); pairHistory.clear(); }
     profile = nextProfile || null; accountId = nextAccount; preview = nextPreview;
+    if (assignment && (changedOwner || !isOwner() || assignment.sceneId !== activeRoom().sceneId ||
+        !activeRoom().characters.some(entry => entry.itemId === assignment.itemId))) cancelAssignment();
     if (changedOwner || !isOwner()) {
       editing = false; dirty = false; selected = null; shop = null; drag = null;
       draft = copyRoom(profile?.room); status('');
@@ -1600,13 +1706,14 @@
     if (sameRoom && !editing && $('roomCharacters').children.length) { renderEditor(); renderCompanionPanel(); }
     else render();
   }
-  function onVisible(panel) { visible = panel === 'profile'; if (!visible) closeCompanion(); refreshAnimation(); }
+  function onVisible(panel) { visible = panel === 'profile'; if (!visible) { closeCompanion(); cancelAssignment(); } refreshAnimation(); }
 
   $('roomEditToggle').onclick = () => editing ? closeEditor() : openEditor();
   $('roomCancel').onclick = closeEditor;
   $('roomSave').onclick = save;
   $('roomCompanionClose').onclick = closeCompanion;
   $('roomCompanionTalk').onclick = performCompanionTalk;
+  $('roomAssignmentCancel').onclick = () => cancelAssignment('已取消指派。');
   $('roomCompanionWheel').addEventListener('wheel', event => {
     if (!companionId || event.ctrlKey) return;
     event.preventDefault();
@@ -1664,6 +1771,9 @@
     closeCompanion();
   });
   document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && assignment) {
+      cancelAssignment('已取消指派。'); $('roomStage').focus({ preventScroll: true }); event.preventDefault(); return;
+    }
     if (event.key !== 'Escape' || !companionId) return;
     const actor = [...$('roomCharacters').children].find(node => node.dataset.roomKey === `c:${companionId}`);
     closeCompanion(); actor?.focus({ preventScroll: true }); event.preventDefault();
@@ -1683,7 +1793,23 @@
     $('roomStage').setPointerCapture(event.pointerId);
     $('roomStage').focus(); event.preventDefault();
   });
+  $('roomStage').addEventListener('click', event => {
+    if (!assignment || editing || assignmentBusy) return;
+    const object = event.target.closest('.room-object-shell[data-room-key]');
+    if (object && $('roomStage').contains(object)) {
+      void submitAssignment({ kind: 'furniture', itemId: object.dataset.roomKey.slice(2) }); return;
+    }
+    if (event.target.closest('.room-character-shell')) return;
+    const cell = floorCellAt(point(event));
+    if (!cell) { status('請點選地板範圍，或直接點一件家具。', true); return; }
+    assignment.cell = cell; positionAssignmentMarker();
+    void submitAssignment({ kind: 'floor', cell });
+  });
   $('roomStage').addEventListener('pointermove', event => {
+    if (assignment && !editing && event.pointerType === 'mouse' && !event.target.closest('[data-room-key]')) {
+      const cell = floorCellAt(point(event));
+      if (cell) { assignment.cell = cell; positionAssignmentMarker(); }
+    }
     if (!drag || event.pointerId !== drag.pointerId || !editing) return;
     const position = point(event);
     moveSelection(position.x - drag.dx, position.y - drag.dy);
@@ -1693,6 +1819,17 @@
   $('roomStage').addEventListener('pointerup', endDrag);
   $('roomStage').addEventListener('pointercancel', endDrag);
   $('roomStage').addEventListener('keydown', event => {
+    if (assignment && event.target === $('roomStage')) {
+      const delta = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[event.key];
+      if (delta) {
+        assignment.cell = { col: Math.max(0, Math.min(FLOOR.columns - 1, assignment.cell.col + delta[0])),
+          row: Math.max(0, Math.min(FLOOR.rows - 1, assignment.cell.row + delta[1])) };
+        positionAssignmentMarker(); event.preventDefault(); return;
+      }
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault(); void submitAssignment({ kind: 'floor', cell: { ...assignment.cell } }); return;
+      }
+    }
     if (!editing || !selected) return;
     const entry = itemBySelection(); if (!entry) return;
     const key = `${selected.kind === 'furniture' ? 'f' : 'c'}:${entry.itemId}`;
@@ -1714,13 +1851,15 @@
   });
   document.addEventListener('visibilitychange', refreshAnimation);
   motion.addEventListener?.('change', refreshAnimation);
-  window.LauncherRoom = { setProfile, onVisible, openEditor, refreshCompanion, onPurchase: (result, itemId) => lifeRoom?.onPurchase(result, itemId) };
+  window.LauncherRoom = { setProfile, onVisible, openEditor, refreshCompanion, beginAssignment,
+    onPurchase: (result, itemId) => lifeRoom?.onPurchase(result, itemId) };
   // Enabled only by the local QA harness, never by the packaged launcher.
   if (window.__LAUNCHER_ROOM_QA__ === true) window.__launcherRoomTest = {
     snapshot: () => ({ interaction: interaction && { type: interaction.type, phase: interaction.phase,
       sceneId: interaction.scene?.id, sceneCursor: interaction.scene?.cursor, pair: interaction.scene?.pair,
       turnIndex: interaction.turnIndex, turns: interaction.scene?.turns.length },
     life: lifeRoom?.snapshot(),
+    assignment: assignment && { itemId: assignment.itemId, key: assignment.key, sceneId: assignment.sceneId, cell: { ...assignment.cell } },
     walkers: walkers.map(walker => ({ key: walker.key, cell: { ...walker.cell }, x: walker.x, y: walker.y,
       mode: walker.mode, attention: !!walker.attention, phase: walker.motion?.phase, direction: walker.motion?.direction,
       dock: walker.dockTarget ? { ...walker.dockTarget } : null,

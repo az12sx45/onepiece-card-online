@@ -83,7 +83,9 @@ async function capture(name, viewport) {
 }
 async function bodyTests() {
   const config = JSON.parse(fs.readFileSync(path.join(root, 'config/launcher-announcements-v1.json')));
-  const base = config.announcements.map(({ id, publishedAt, title, summary, scope, category, version, body, cta }) => ({ id, publishedAt, title, summary, scope, category, version, body, ...(cta ? { cta } : {}) }));
+  const projected = ({ id, publishedAt, title, summary, scope, category, version, body, cta, image }) =>
+    ({ id, publishedAt, title, summary, scope, category, version, body, ...(cta ? { cta } : {}), ...(image ? { image } : {}) });
+  const base = config.announcements.filter(item => ['launcher-1.2.6-announcements', 'crew-ace-1.2.6'].includes(item.id)).map(projected);
   const synthetic = ['card', 'board', 'chess'].map((scope, i) => ({ id: `qa-only-${scope}`, publishedAt: new Date(Date.now() - (i === 2 ? 120 : i + 1) * 86400000).toISOString(), title: `${scope} 篩選測試公告`, summary: '僅存在於隔離測試中的公告。', scope, category: 'update', version: 'QA', body: ['隔離測試內容，未寫入正式公告目錄。'], cta: { kind: 'game', gameId: scope } }));
   synthetic.push({ id: 'qa-only-plain-text', publishedAt: new Date(Date.now() - 5 * 86400000).toISOString(), title: '<img src=x onerror="window.__unsafe=true">', summary: '<script>不執行</script>', scope: 'launcher', category: 'maintenance', version: 'QA', body: ['<svg onload="window.__unsafe=true">', '純文字公告\n第二行'], cta: { kind: 'url', url: 'https://invalid.example' } });
   const shopModule = require(path.join(root, 'server/launcher-profile-shop')); const catalog = shopModule.CATALOG;
@@ -180,6 +182,21 @@ async function bodyTests() {
     assert(dimensions.page <= dimensions.viewport && dimensions.panel <= dimensions.viewport && dimensions.article <= dimensions.viewport, JSON.stringify(dimensions));
     await capture('announcements-narrow-ace', { width: 390, height: 844 });
     await page.locator('#announcementBack').click(); assert(await page.locator('.announcement-index').isVisible()); assert(await page.locator('#announcementArticle').isHidden());
+  });
+  await check('new-release-art-renders-from-local-allowlisted-asset', async () => {
+    const notice = projected(config.announcements.find(item => item.id === 'launcher-1.2.13-character-life-and-dialogue'));
+    assert.equal(notice.image.asset, 'images/launcher_announcements/launcher-life-1.2.13.webp');
+    await page.evaluate(item => { __noticeQA.notices.push(item); }, notice);
+    await page.locator('#announcementRefresh').click();
+    await page.locator(`[data-announcement-id="${notice.id}"]`).click();
+    await page.waitForFunction(() => document.querySelector('.announcement-hero-image')?.naturalWidth === 1672);
+    assert.equal(await page.locator('.announcement-hero-image').getAttribute('alt'), notice.image.alt);
+    assert(await page.locator('.announcement-hero').isVisible());
+    const dimensions = await page.evaluate(() => ({ viewport: innerWidth, page: document.documentElement.scrollWidth }));
+    assert(dimensions.page <= dimensions.viewport, JSON.stringify(dimensions));
+    await capture('announcements-narrow-life-1213', { width: 390, height: 844 });
+    await page.setViewportSize({ width: 1280, height: 820 });
+    await capture('announcements-desktop-life-1213', { width: 1280, height: 820 });
   });
   await check('no-production-browser-errors-or-unrequested-purchase', async () => { assert.deepEqual(errors, []); assert.equal(await page.evaluate(() => __noticeQA.calls.filter(x => ['buy', 'launch'].includes(x.kind)).length), 0); });
 }

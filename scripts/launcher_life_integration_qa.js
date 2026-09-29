@@ -174,15 +174,26 @@ async function main(){
       assert(!await page.evaluate(()=>window.__integration.calls.some(c=>c.type==='work.activate')));await page.evaluate(()=>window.__integration.resolve());assert((await page.evaluate(()=>window.__reserve)).ok);await advance(page,500);state=await snap(page);assert(state.life.reservations.length===1);assert(state.walkers[0].route.length>0);return{};
     });
     for(const key of ['luffy','zoro'])await scenario(key==='luffy'?'manual-arrival-lines':'manual-arrival-lines-zoro',{owned:[key]},async page=>{
-      // Actual actor + panel button pointer clicks; only the account authority is a fixture.
-      await page.locator(`[data-room-key="c:room-character-${key}"]`).click({force:true});
-      assert(await page.locator('#roomCompanionPanel').isVisible());
-      await page.locator('#roomLifeCall').click();let state=await snap(page);assert.equal(state.nodes[0].speech,'');assert(state.life.tasks[0].goal.row>=6);
+      // Legacy call animation remains covered through its controller API;
+      // the visible wheel's call slot now starts click-to-move assignment.
+      assert((await page.evaluate(key=>window.__launcherRoomTest.lifeInteract(key,'call'),key)).ok);
+      let state=await snap(page);assert.equal(state.nodes[0].speech,'');assert(state.life.tasks[0].goal.row>=6);
       const trail=await until(page,s=>s.nodes[0]?.speech&&s.life.tasks[0]?.phase==='performing');state=trail.at(-1);assert.equal(state.walkers[0].route.length,0);assert(state.nodes[0].speech.length>0);
       await page.locator('#roomStage').screenshot({path:path.join(out,key+'-call.png')});
-      await page.evaluate(key=>window.__launcherRoomTest.lifeCancel(key),key);await advance(page,2000);await page.locator('#roomLifeGift').click();assert.equal(await page.evaluate(()=>window.__integration.db[42].wallet.coins),100);await page.locator('#roomLifeGift').click();
+      await page.evaluate(key=>window.__launcherRoomTest.lifeCancel(key),key);await advance(page,2000);
+      // A successful call closes the wheel. Select the actor again before gifting.
+      await page.locator(`[data-room-key="c:room-character-${key}"]`).click({force:true});
+      await page.locator('#roomCompanionWheel').focus();
+      for(let turn=0;turn<3;turn++)await page.locator('#roomCompanionWheel').press('ArrowDown');
+      await page.clock.runFor(500);
+      assert.equal(await page.locator('#roomCompanionWheel').getAttribute('data-selected-action'),'roomLifeGift');
+      await page.locator('#roomLifeGift').click();assert.equal(await page.evaluate(()=>window.__integration.db[42].wallet.coins),100);await page.locator('#roomLifeGift').click();
       await until(page,s=>s.nodes[0]?.pose==='eat'&&s.nodes[0]?.speech);state=await snap(page);assert.equal(state.nodes[0].source,'life_v1');assert.equal(await page.evaluate(()=>window.__integration.db[42].wallet.coins),95);
-      await page.locator('#roomStage').screenshot({path:path.join(out,key+'-gift-eat-with-line.png')});await page.evaluate(key=>window.__launcherRoomTest.lifeCancel(key),key);await advance(page,2000);await page.locator('#roomLifeTrain').click();await until(page,s=>s.nodes[0]?.pose==='train'&&s.nodes[0]?.speech);
+      await page.locator('#roomStage').screenshot({path:path.join(out,key+'-gift-eat-with-line.png')});await page.evaluate(key=>window.__launcherRoomTest.lifeCancel(key),key);await advance(page,2000);
+      // The visible Train button now opens the training minigame. This probe
+      // covers the original manual life animation through the controller API.
+      assert((await page.evaluate(key=>window.__launcherRoomTest.lifeInteract(key,'train'),key)).ok);
+      await until(page,s=>s.nodes[0]?.pose==='train'&&s.nodes[0]?.speech);
       await page.locator('#roomStage').screenshot({path:path.join(out,key+'-train.png')});
       const frames=[];for(let i=0;i<4;i++){frames.push((await snap(page)).nodes[0].frame);await page.clock.runFor(420);}assert(new Set(frames).size>=3,'train shows successive authored frames');
       return{actor:key,uiPointerClicks:true,trainFrames:frames,atlasSha256:Object.fromEntries(['eat','train'].map(action=>[action,crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'public/images/launcher_room/life_hd_v2',key,action+'-south.webp'))).digest('hex')]))};

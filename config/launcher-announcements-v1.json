@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 10,
+  "revision": 12,
   "announcements": [
     {
       "id": "board-tavern-crew-20260928-1c453fcf83416d97",
@@ -242,6 +242,32 @@
       "requiredRelease": {
         "kind": "launcher",
         "version": "1.2.12"
+      }
+    },
+    {
+      "id": "launcher-1.2.13-character-life-and-dialogue",
+      "status": "published",
+      "publishedAt": "2026-09-29T05:45:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.13",
+      "title": "夥伴的日常與指派互動｜1.2.13",
+      "summary": "點夥伴指派目的地或家具；他們會依喜好活動，並用符合時段、天氣與人物關係的口吻聊天。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-life-1.2.13.webp",
+        "alt": "千陽號生活基地裡，魯夫、娜美、香吉士與喬巴一起活動的更新主圖"
+      },
+      "body": [
+        "夥伴在生活基地會更常選擇適合自己的家具與日常活動；工作、用餐、訓練和交談的行動依現有房間配置進行。",
+        "新增清晨、白天、黃昏與夜晚，以及四季和晴雨等情境對白；不同夥伴的說話方式、擅長活動與彼此關係也會影響互動內容。",
+        "點選夥伴的指派移動，再點地板或已擺放家具，就能請他前往指定位置；走到家具後會嘗試互動，不擅長的夥伴也會有自己的反應。",
+        "逐張檢查現行與預備夥伴的頭身比例，修正艾斯吃飯時的尺寸跳變；更新公告也加入重新繪製的千陽號夥伴主圖。",
+        "點選角色的互動、詳情、親密度與已有的工作小遊戲繼續使用。自由活動不額外發放商城金幣；有酬工作仍由原有的伺服器工作與領獎流程結算。",
+        "三款桌遊的規則、多人同步與存檔沒有調整。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.13"
       }
     }
   ]

@@ -1,6 +1,6 @@
 {
   "name": "onepiece-tabletop-desktop",
-  "version": "1.2.12",
+  "version": "1.2.13",
   "private": true,
   "description": "Windows launcher for ONE PIECE tabletop games with account login, verified game downloads and incremental updates.",
   "main": "main.js",
@@ -135,6 +135,11 @@
           "sticker-ace.webp",
           "sticker-robin.webp"
         ]
+      },
+      {
+        "from": "../public/images/launcher_announcements",
+        "to": "launcher-assets/images/launcher_announcements",
+        "filter": ["launcher-life-1.2.13.webp"]
       },
       {
         "from": "../public/images/launcher_room",

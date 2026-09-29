@@ -5,6 +5,7 @@
   const SCOPES = { all: '全部', launcher: '啟動器', shop: '商城', card: '偉大航道爭霸戰', board: '新世界航海錄', chess: '霸海戰棋' };
   const CATEGORIES = { all: '所有類型', update: '版本更新', character: '夥伴登場', item: '商品上架', event: '活動', maintenance: '維護通知' };
   const ID = /^[a-z0-9][a-z0-9._-]{0,95}$/;
+  const IMAGE = /^images\/launcher_announcements\/[a-z0-9][a-z0-9._-]*\.webp$/;
   const CACHE_PREFIX = 'onepiece.launcher.announcements.v1.';
   const date = new Intl.DateTimeFormat('zh-TW', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' });
   const time = new Intl.DateTimeFormat('zh-TW', { timeZone: 'Asia/Taipei', hour: '2-digit', minute: '2-digit', hour12: false });
@@ -21,6 +22,10 @@
     if (!item.body.length) return null;
     if (value.cta?.kind === 'shop' && typeof value.cta.itemId === 'string' && /^[a-z0-9-]{1,100}$/.test(value.cta.itemId)) item.cta = { kind: 'shop', itemId: value.cta.itemId };
     if (value.cta?.kind === 'game' && ['card', 'board', 'chess'].includes(value.cta.gameId)) item.cta = { kind: 'game', gameId: value.cta.gameId };
+    if (value.image && typeof value.image.asset === 'string' && IMAGE.test(value.image.asset) &&
+        typeof value.image.alt === 'string' && value.image.alt.trim() && value.image.alt.length <= 160) {
+      item.image = { asset: value.image.asset, alt: value.image.alt };
+    }
     return item;
   }
   function normalize(source) {
@@ -76,6 +81,14 @@
       const meta = el('span', 'announcement-row-meta');
       meta.append(el('span', 'announcement-scope', SCOPES[item.scope]), el('time', '', date.format(Date.parse(item.publishedAt))));
       const title = el('strong', 'announcement-row-title', item.title);
+      if (item.image) {
+        const thumbnail = el('img', 'announcement-row-image');
+        thumbnail.src = `opui://launcher/${item.image.asset}`;
+        thumbnail.alt = '';
+        thumbnail.loading = 'lazy';
+        thumbnail.onerror = () => { thumbnail.hidden = true; };
+        button.append(thumbnail);
+      }
       button.append(meta, title, el('span', 'announcement-row-summary', item.summary), el('span', 'announcement-row-footer', `${CATEGORIES[item.category]}${item.version ? ` · ${item.version}` : ''}${item.read ? '' : ' · 未讀'}`));
       button.onclick = () => openDetail(item.id);
       list.append(button);
@@ -91,6 +104,20 @@
     $('announcementDetailCategory').textContent = CATEGORIES[item.category];
     $('announcementDetailTitle').textContent = item.title;
     $('announcementDetailDate').textContent = `${date.format(Date.parse(item.publishedAt))} ${time.format(Date.parse(item.publishedAt))}（台灣時間）${item.version ? ` · ${item.version}` : ''}`;
+    let hero = article.querySelector('.announcement-hero');
+    if (!hero) {
+      hero = el('figure', 'announcement-hero');
+      hero.append(el('img', 'announcement-hero-image'));
+      article.insertBefore(hero, $('announcementDetailSummary'));
+    }
+    hero.hidden = !item.image;
+    if (item.image) {
+      const picture = hero.firstElementChild;
+      const src = `opui://launcher/${item.image.asset}`;
+      picture.alt = item.image.alt;
+      if (picture.src !== src) picture.src = src;
+      picture.onerror = () => { hero.hidden = true; };
+    }
     $('announcementDetailSummary').textContent = item.summary;
     $('announcementReadState').textContent = item.read ? '已讀' : pending.has(item.id) ? '已開啟 · 等待同步已讀' : '未讀';
     $('announcementBody').replaceChildren(...item.body.map(text => el('p', '', text)));
