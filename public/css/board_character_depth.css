@@ -294,7 +294,8 @@
   opacity: 1;
 }
 
-.combat-card.board-frame-inset-host:is(.portrait-attack, .portrait-hit, .portrait-switch-in,
+/* Hit recoil tilts the whole card, so its inset lip remains visible during impact. */
+.combat-card.board-frame-inset-host:is(.portrait-attack, .portrait-switch-in,
   .portrait-ko, .yonko-phase-transform, .nika-awakening-standby,
   .nika-awakening-heartbeat, .black-turn-donor, .black-turn-receiver)
   > :is(.board-frame-inset-edge, .board-frame-inset-rail) {

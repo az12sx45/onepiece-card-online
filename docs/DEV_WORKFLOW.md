@@ -1,5 +1,11 @@
 # Dev Workflow
 
+## 2026-09-29 戰鬥受擊方向與 3D 後仰
+
+本次只改 Board 客戶端受擊呈現：`public/board_battle.html` 依攻擊來源讓一般戰鬥我方往左、敵方往右後仰；Tot Musica 的上方 Boss 遭下方角色攻擊往上退，雙世界角色遭 Boss 攻擊往下退，沿用其特殊鏡頭命中節奏。`public/board_game.html` 的地圖戰鬥在左右排列時同向處理，手機上下排列時改為沿垂直方向退；`public/css/board_character_depth.css` 讓整張卡受擊傾斜時保留原有內框光澤。減少動態模式只有短暫亮度反饋，不做 3D 晃動。沒有修改攻擊判定、HP、擲骰、回合、存檔、`BOARD_GAME_STATE` 或 Socket.IO 合約。
+
+驗證腳本：`scripts/board_battle_hit_depth_qa.js` 檢查桌機／橫向手機／直向提示、左右及上下方向、3D 角度、版面和減少動態；`scripts/board_hit_depth_release_builder_qa.js` 檢查限定三個玩家程式的封包建置邊界；`scripts/board_hit_depth_public_qa.js` 在部署後比對正式 runtime、manifest、程式與 CAS 位元組。發布結果與本次 QA 數據以下段補記；不要把本機瀏覽器測試當成人手試玩或實體裝置驗收。
+
 ## 2026-09-28 酒館魯夫邀請、夥伴回應與 WebGL 抽卡特效（已部署）
 
 依玩家修正，魯夫固定說「你真有趣，要不要加入我們？」；確定加入／拒絕後才從其餘九人抽一位說對應歡迎／吐槽，滿隊於實際替換選定後才抽。先定稿 18 句短台詞與每句表情姿勢，製作 crew_v3 真透明圖；門新增微開漏光階段，S 白光核心與虹彩折射、A 金、B 紫、C 藍、D 綠、E 銀白，邀請至選擇的演出約 10.8 秒。新範圍為六個 Board 程式、crew_v3 新圖、Pixi 來源／依賴與獨立 builder/QA；正式 D 樹既有並行工作保持。最初以 main `4ca49f945`（launcher 1.2.9）為整合基底，`npm start` 18931／health 200；此為早期進度，不代表本次新特效的驗收或部署。劇本與測試界線見 `BOARD_TAVERN_CAPTAIN_20260928.md`。

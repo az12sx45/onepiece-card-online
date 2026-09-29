@@ -2452,7 +2452,44 @@
     }
 
     .combat-card.portrait-hit {
+      --battle-hit-push: -12px;
+      --battle-hit-push-y: -3px;
+      --battle-hit-rebound: 13px;
+      --battle-hit-rebound-y: 1px;
+      --battle-hit-yaw: -11deg;
+      --battle-hit-pitch: 4deg;
+      --battle-hit-counter-yaw: 4deg;
+      --battle-hit-counter-pitch: -2deg;
       animation: cardHitShake 700ms ease;
+    }
+
+    .combat-card.enemy.portrait-hit {
+      --battle-hit-push: 12px;
+      --battle-hit-rebound: -13px;
+      --battle-hit-yaw: 11deg;
+      --battle-hit-counter-yaw: -4deg;
+    }
+
+    .combat-card.tot-musica-dual-actor-card.portrait-hit {
+      --battle-hit-push: 0px;
+      --battle-hit-push-y: 12px;
+      --battle-hit-rebound: 0px;
+      --battle-hit-rebound-y: -8px;
+      --battle-hit-yaw: 0deg;
+      --battle-hit-pitch: 10deg;
+      --battle-hit-counter-yaw: 0deg;
+      --battle-hit-counter-pitch: -4deg;
+    }
+
+    .combat-card.tot-musica-dual-boss.portrait-hit {
+      --battle-hit-push: 0px;
+      --battle-hit-push-y: -12px;
+      --battle-hit-rebound: 0px;
+      --battle-hit-rebound-y: 8px;
+      --battle-hit-yaw: 0deg;
+      --battle-hit-pitch: -10deg;
+      --battle-hit-counter-yaw: 0deg;
+      --battle-hit-counter-pitch: 4deg;
     }
 
     .combat-card.player.has-coop-allies.portrait-hit {
@@ -7296,10 +7333,10 @@
       100% { opacity: 0; transform: translate(-50%, -50%) scale(1.8); }
     }
     @keyframes totMusicaTargetHitDown {
-      0%,100% { transform: translateY(0) scale(1); filter: none; }
-      22% { transform: translate(-7px, 24px) rotate(-1deg) scale(1.04); filter: brightness(2); }
-      45% { transform: translate(10px, 12px) rotate(1deg) scale(1.02); }
-      65% { transform: translate(-8px, 5px) rotate(-.6deg) scale(1.01); }
+      0%,100% { transform: perspective(900px) translate3d(0, 0, 0) rotateX(0deg) rotateZ(0deg) scale(1); filter: none; }
+      22% { transform: perspective(900px) translate3d(-7px, 24px, -16px) rotateX(10deg) rotateZ(-1deg) scale(1.04); filter: brightness(2); }
+      45% { transform: perspective(900px) translate3d(10px, 12px, 4px) rotateX(-4deg) rotateZ(1deg) scale(1.02); }
+      65% { transform: perspective(900px) translate3d(-8px, 5px, -5px) rotateX(4deg) rotateZ(-.6deg) scale(1.01); }
     }
 
     @media (max-width: 1100px), (max-height: 620px) {
@@ -9722,11 +9759,19 @@
     }
 
     @keyframes cardHitShake {
-      0%, 100% { transform: translate(0, 0); filter: none; }
-      12%, 84% { transform: translate(-7px, 0); filter: brightness(1.25) saturate(1.18); }
-      24%, 72% { transform: translate(8px, 0); }
-      36%, 60% { transform: translate(-12px, 0); }
-      48% { transform: translate(13px, 0); }
+      0%, 100% { transform: perspective(900px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg); filter: none; }
+      12% { transform: perspective(900px) translate3d(var(--battle-hit-push), var(--battle-hit-push-y), -16px) rotateX(var(--battle-hit-pitch)) rotateY(var(--battle-hit-yaw)); filter: brightness(1.25) saturate(1.18); }
+      24% { transform: perspective(900px) translate3d(var(--battle-hit-rebound), var(--battle-hit-rebound-y), 6px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw)); }
+      36% { transform: perspective(900px) translate3d(calc(var(--battle-hit-push) * .8), calc(var(--battle-hit-push-y) * .8), -9px) rotateX(calc(var(--battle-hit-pitch) * .65)) rotateY(calc(var(--battle-hit-yaw) * .65)); }
+      48% { transform: perspective(900px) translate3d(var(--battle-hit-rebound), var(--battle-hit-rebound-y), 3px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw)); }
+      60% { transform: perspective(900px) translate3d(calc(var(--battle-hit-push) * .5), calc(var(--battle-hit-push-y) * .5), -3px) rotateX(calc(var(--battle-hit-pitch) * .35)) rotateY(calc(var(--battle-hit-yaw) * .35)); }
+      72% { transform: perspective(900px) translate3d(calc(var(--battle-hit-rebound) * .6), calc(var(--battle-hit-rebound-y) * .6), 0) rotateX(calc(var(--battle-hit-counter-pitch) * .5)) rotateY(calc(var(--battle-hit-counter-yaw) * .5)); }
+      84% { transform: perspective(900px) translate3d(calc(var(--battle-hit-push) * .2), calc(var(--battle-hit-push-y) * .2), 0) rotateX(calc(var(--battle-hit-pitch) * .15)) rotateY(calc(var(--battle-hit-yaw) * .15)); filter: brightness(1.25) saturate(1.18); }
+    }
+
+    @keyframes cardHitReduced {
+      0%, 100% { filter: none; }
+      50% { filter: brightness(1.2) saturate(1.1); }
     }
 
     @keyframes cardKnockoutFade {
@@ -10883,6 +10928,18 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+      .combat-card.portrait-hit:not(.portrait-ko) {
+        animation: cardHitReduced 160ms ease-out !important;
+      }
+      .combat-card.player.has-coop-allies.portrait-hit:not(.portrait-ko) {
+        animation: none !important;
+      }
+      .combat-card.player.has-coop-allies.portrait-hit:not(.portrait-ko) .card-inner {
+        animation: cardHitReduced 160ms ease-out !important;
+      }
+      .combat-card.portrait-hit .battle-portrait {
+        animation: none !important;
+      }
       .zephyr-explosion-story-image { transition-duration: 120ms; }
       .zephyr-explosion-story.flash-on .zephyr-explosion-story-flash { animation-duration: 120ms; }
       .combat-card.enemy.king-flame-on .king-flame-state-aura::before,
@@ -10897,7 +10954,7 @@
   <link rel="stylesheet" href="css/board_lineage_extraction.css?v=20260814-lucci-rokuogan-audio-v48">
   <link rel="stylesheet" href="css/board_audio_ui.css?v=20260921-board-audio-v1">
   <link rel="stylesheet" href="css/board_adventure_art.css?v=20260922-adventure-art-v1">
-  <link rel="stylesheet" href="css/board_character_depth.css?v=20260924-whole-card-v1">
+  <link rel="stylesheet" href="css/board_character_depth.css?v=20260929-battle-hit-depth-v1">
   <script defer src="js/board_character_depth.js?v=20260924-depth-lifecycle-v2"></script>
 </head>
 <body>

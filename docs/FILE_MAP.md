@@ -1,5 +1,14 @@
 # File Map
 
+## 2026-09-29 戰鬥受擊方向
+
+- `public/board_battle.html`：一般戰鬥及 Tot Musica 的左右／上下 3D 受擊、回彈與減少動態呈現。
+- `public/board_game.html`：地圖戰鬥角色卡在左右／手機上下排列的方向化受擊。
+- `public/css/board_character_depth.css`：受擊時保留既有整卡內框的可見度。
+- `scripts/board_battle_hit_depth_qa.js`：桌機／手機方向、動畫與版面唯讀瀏覽器驗證。
+- `scripts/build_board_hit_depth_release.js`、`scripts/board_hit_depth_release_builder_qa.js`：Board 三程式限定封包建置與隔離測試。
+- `scripts/board_hit_depth_public_qa.js`、`scripts/board_hit_depth_public_qa_fixture.js`：公開 runtime／程式／CAS 唯讀驗證與假回應測試。
+
 ## 2026-09-28 酒館固定魯夫邀請與抽卡特效（已部署）
 
 - `public/js/board_tavern_crew.js`：魯夫固定邀請、九位夥伴各兩句台詞／圖及獨立 response RNG。
