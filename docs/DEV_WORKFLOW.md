@@ -4,7 +4,9 @@
 
 本次只改 Board 客戶端受擊呈現：`public/board_battle.html` 依攻擊來源讓一般戰鬥我方往左、敵方往右後仰；Tot Musica 的上方 Boss 遭下方角色攻擊往上退，雙世界角色遭 Boss 攻擊往下退，沿用其特殊鏡頭命中節奏。`public/board_game.html` 的地圖戰鬥在左右排列時同向處理，手機上下排列時改為沿垂直方向退；`public/css/board_character_depth.css` 讓整張卡受擊傾斜時保留原有內框光澤。減少動態模式只有短暫亮度反饋，不做 3D 晃動。沒有修改攻擊判定、HP、擲骰、回合、存檔、`BOARD_GAME_STATE` 或 Socket.IO 合約。
 
-驗證腳本：`scripts/board_battle_hit_depth_qa.js` 檢查桌機／橫向手機／直向提示、左右及上下方向、3D 角度、版面和減少動態；`scripts/board_hit_depth_release_builder_qa.js` 檢查限定三個玩家程式的封包建置邊界；`scripts/board_hit_depth_public_qa.js` 在部署後比對正式 runtime、manifest、程式與 CAS 位元組。發布結果與本次 QA 數據以下段補記；不要把本機瀏覽器測試當成人手試玩或實體裝置驗收。
+驗證腳本：`scripts/board_battle_hit_depth_qa.js` 檢查桌機／橫向手機／直向提示、左右及上下方向、3D 角度、版面和減少動態；`scripts/board_hit_depth_release_builder_qa.js` 檢查限定三個玩家程式的封包建置邊界；`scripts/board_hit_depth_public_qa.js` 在部署後比對正式 runtime、manifest、程式與 CAS 位元組。本機真瀏覽器 148/148、戰鬥出招時序 38/38、接觸前後命中檢查，以及嚴格封包建置測試 10/10 通過；`npm start` 可提供三個變更頁面／樣式 HTTP 200，測試環境未提供 `DATABASE_URL`，因此沒有宣稱多人連線驗收。
+
+公開交付：隔離候選僅替換三個 Board 玩家程式，沿用 6,339 筆未變更資源。R2 預演 6,070/6,070 回讀、實際上傳 3 筆並跳過 6,067 筆，三筆新程式 GET／SHA／CORS 通過。2026-09-29 07:47 UTC 正式 runtime 已切至 `package-a457977a2d6db004`，manifest SHA-256 `bd3b8a6edda7d61d9dbc4fa58e831c52c6d03ecb5cbe941bccac585d018879b1`；公開驗證 15/15、Board 程式完整盤點 57/57 GET／SHA 通過，Card／Chess 版本未變。發布時合併並行 launcher 1.2.13 更新，沒有覆蓋正式 D 樹的既有修改；D 樹僅定點同步兩個受擊頁面。上述均為自動化驗證，不等同人手試玩、實體手機或遠端多人驗收。
 
 ## 2026-09-28 酒館魯夫邀請、夥伴回應與 WebGL 抽卡特效（已部署）
 

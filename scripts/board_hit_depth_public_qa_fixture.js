@@ -14,6 +14,7 @@ const {
 const { createVerifier, parseArguments, ORIGIN, ELECTRON_UA } = require('./board_hit_depth_public_qa');
 
 const ROOT = path.resolve(__dirname, '..');
+const BASELINE_SOURCE = 'e7f73ca92166990da1fc0cd9341b57add3eafe0e';
 const folder = fs.mkdtempSync(path.join(os.tmpdir(), 'board-hit-depth-public-qa-'));
 const candidateDir = path.join(folder, 'candidate');
 const bytesOf = value => Buffer.from(canonicalJson(value));
@@ -21,7 +22,7 @@ const at = (ref, filename) => execFileSync('git', ['cat-file', 'blob', `${ref}:$
   cwd: ROOT, windowsHide: true, maxBuffer: 128 * 1024 * 1024,
   stdio: ['ignore', 'pipe', 'pipe'],
 });
-const sourceHead = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, windowsHide: true }).toString('utf8').trim();
+const sourceHead = BASELINE_SOURCE;
 const write = (relative, bytes) => {
   const filename = path.join(candidateDir, relative);
   fs.mkdirSync(path.dirname(filename), { recursive: true });

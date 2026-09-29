@@ -10,6 +10,7 @@ const builder = require('./build_board_hit_depth_release');
 const { sha256Bytes } = require('./desktop_program_package_common');
 
 const ROOT = path.resolve(__dirname, '..');
+const BASELINE_SOURCE = 'e7f73ca92166990da1fc0cd9341b57add3eafe0e';
 const runRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'board-hit-depth-builder-'));
 const fixture = path.join(runRoot, 'source');
 const candidateDir = path.join(runRoot, 'candidate');
@@ -18,7 +19,7 @@ const git = (root, args) => execFileSync('git', args, {
   cwd: root, windowsHide: true, maxBuffer: 128 * 1024 * 1024,
   stdio: ['ignore', 'pipe', 'pipe'],
 });
-const sourceBytes = filename => git(ROOT, ['cat-file', 'blob', `HEAD:${filename}`]);
+const sourceBytes = filename => git(ROOT, ['cat-file', 'blob', `${BASELINE_SOURCE}:${filename}`]);
 const write = (filename, bytes) => {
   const target = path.join(fixture, filename);
   fs.mkdirSync(path.dirname(target), { recursive: true });
