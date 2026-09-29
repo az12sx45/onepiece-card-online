@@ -16,9 +16,9 @@ const CONFIG = 'config/desktop-program-packages-v1.json';
 const CATALOG = 'public/desktop/catalog-v3.json';
 const LEGACY_CATALOG = 'public/desktop/catalog-v2.json';
 const LAUNCHER = 'public/desktop/launcher-release-v1.json';
-const BASELINE_RELEASE = 'package-3155f473aa76c19f';
-const BASELINE_MANIFEST_SHA = '5d704e4b4e95cf11ca677480e9edabc9f4a8c3367345fd10f5b78f6782fd6c38';
-const BASELINE_CATALOG_SHA = '1c315e567b9010288c5d1c4ed907aad83068784de049f578fd98c0fcee6bb7c1';
+const BASELINE_RELEASE = 'package-a457977a2d6db004';
+const BASELINE_MANIFEST_SHA = 'bd3b8a6edda7d61d9dbc4fa58e831c52c6d03ecb5cbe941bccac585d018879b1';
+const BASELINE_CATALOG_SHA = 'c702232e5575b33d1825befa8f0661a2b1ee5e671b46f26a9c1c37a55e5f43c8';
 const GENERATOR = 'board-hit-depth-release-v1';
 const CHANGED_PROGRAMS = Object.freeze([
   'board_battle.html', 'board_game.html', 'css/board_character_depth.css',
@@ -133,7 +133,7 @@ function createBuilder(root = ROOT) {
     const baselineEol = eolCounts(committed);
     const localEol = eolCounts(local);
     if (filename === 'public/board_game.html') {
-      assert.deepEqual(baselineEol, { crlf: 27486, bareLf: 135 }, 'Board main page mixed-EOL baseline changed.');
+      assert.deepEqual(baselineEol, { crlf: 27521, bareLf: 135 }, 'Board main page mixed-EOL baseline changed.');
       assert.equal(localEol.bareLf, baselineEol.bareLf, 'Board main page bare-LF lines changed.');
       assert.ok(localEol.crlf > 0, 'Board main page lost its committed CRLF lines.');
       const rawBlobId = cleanHash(filename, local, false);

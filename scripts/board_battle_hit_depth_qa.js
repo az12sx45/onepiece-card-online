@@ -31,6 +31,19 @@ const OUTPUT = process.env.BOARD_QA_OUTPUT || (BASELINE_REF
 const CHROME = process.env.BOARD_QA_CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const report = { origin, baselineRef: BASELINE_REF || null, startedAt: new Date().toISOString(), readOnly: true,
   checks: [], cases: [], pageErrors: [], blockedWrites: [] };
+const ORIGINAL_HIT_MOTION = {
+  cardHitShake: { duration: 700, points: [
+    [0, 0, 0], [.12, -7, 0], [.24, 8, 0], [.36, -12, 0], [.48, 13, 0],
+    [.60, -12, 0], [.72, 8, 0], [.84, -7, 0],
+  ] },
+  battleBoxHit: { duration: 460, points: [
+    [0, 0, 0], [.10, -3, 0], [.20, 4, 0], [.30, -6, 0], [.40, 6, 0],
+    [.50, -6, 0], [.60, 6, 0], [.70, -6, 0], [.80, 4, 0], [.90, -3, 0],
+  ] },
+  totMusicaTargetHitDown: { duration: 720, points: [
+    [0, 0, 0], [.22, -7, 24], [.45, 10, 12], [.65, -8, 5], [1, 0, 0],
+  ] },
+};
 
 const MIME = {
   '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8',
@@ -143,14 +156,17 @@ const measure = ({ selector }) => {
       ? Math.max(Math.abs(matrix.m13), Math.abs(matrix.m23), Math.abs(matrix.m31), Math.abs(matrix.m32))
       : 0;
     const parts = style.rotate.trim().split(/\s+/);
-    const angle = Math.abs(parseFloat(parts.at(-1)) || 0);
-    const axisTilt = parts.length >= 4 && Math.hypot(Number(parts[0]) || 0, Number(parts[1]) || 0) > 0.1
-      ? Math.sin(angle * Math.PI / 180) : 0;
+    const angle = (parseFloat(parts.at(-1)) || 0) * Math.PI / 180;
+    const axis = parts.length >= 4 ? [Number(parts[0]) || 0, Number(parts[1]) || 0]
+      : parts[0] === 'x' ? [1, 0] : parts[0] === 'y' ? [0, 1] : [0, 0];
+    const axisPitch = axis[0] * Math.sin(angle);
+    const axisYaw = -axis[1] * Math.sin(angle);
+    const axisTilt = Math.max(Math.abs(axisPitch), Math.abs(axisYaw));
     return { element: element.tagName.toLowerCase() + (element.className ? '.' + String(element.className).trim().replace(/\s+/g, '.') : ''),
       visible, animation: style.animationName, transform, rotate: style.rotate,
       tilt: visible ? Math.max(matrixTilt, axisTilt) : 0,
-      yaw: visible ? (matrix?.m13 || 0) : 0,
-      pitch: visible ? (matrix?.m23 || 0) : 0,
+      yaw: visible ? (matrix?.m13 || 0) + axisYaw : 0,
+      pitch: visible ? (matrix?.m23 || 0) + axisPitch : 0,
       x: visible ? (matrix?.m41 || 0) : 0,
       y: visible ? (matrix?.m42 || 0) : 0 };
   });
@@ -160,6 +176,38 @@ const measure = ({ selector }) => {
     box: box(root), portraitBox: box(root.querySelector('.battle-portrait, .battle-character-img')),
     maxTilt: Math.max(0, ...samples.map(item => item.tilt)), samples };
 };
+
+async function checkOriginalHitMotion(page, selector, animationName, label) {
+  const expected = ORIGINAL_HIT_MOTION[animationName];
+  const actual = await page.evaluate(({ selector, animationName, points }) => {
+    const target = document.querySelector(selector);
+    const animation = target?.getAnimations({ subtree: true }).find(item => item.animationName === animationName);
+    if (!animation?.effect?.target) return null;
+    const duration = Number(animation.effect.getComputedTiming().duration);
+    const animatedStyle = getComputedStyle(animation.effect.target);
+    const names = animatedStyle.animationName.split(/\s*,\s*/);
+    const easing = animatedStyle.animationTimingFunction.split(/\s*,\s*/)[names.indexOf(animationName)];
+    const originalTime = animation.currentTime;
+    animation.pause();
+    const samples = points.map(([at]) => {
+      animation.currentTime = duration * at;
+      const style = getComputedStyle(animation.effect.target);
+      const matrix = style.transform === 'none' ? null : new DOMMatrixReadOnly(style.transform);
+      return { at, x: matrix?.m41 || 0, y: matrix?.m42 || 0 };
+    });
+    animation.currentTime = originalTime;
+    return { duration, easing, samples };
+  }, { selector, animationName, points: expected.points });
+  check(`${label} original hit duration and easing`,
+    actual && Math.abs(actual.duration - expected.duration) < 1 && actual.easing === 'ease',
+    { expected: { duration: expected.duration, easing: 'ease' }, actual });
+  check(`${label} original hit displacement at every keyframe`,
+    actual && actual.samples.length === expected.points.length && actual.samples.every((sample, index) => {
+      const [at, x, y] = expected.points[index];
+      return sample.at === at && Math.abs(sample.x - x) < .5 && Math.abs(sample.y - y) < .5;
+    }), { expected: expected.points, actual: actual?.samples });
+  return actual;
+}
 
 async function makeContext(browser, spec) {
   const context = await browser.newContext({ viewport: spec.viewport, reducedMotion: spec.reduced ? 'reduce' : 'no-preference',
@@ -288,14 +336,16 @@ async function runTotCase(browser, spec) {
 
     await page.evaluate(() => document.getElementById('totMusicaDualFx').classList.add('wave-impact'));
     const boss = await seekTotImpact(page, selectors.boss, spec.reduced, 0.12);
+    if (!spec.reduced) await checkOriginalHitMotion(page, selectors.boss, 'cardHitShake', `${spec.name}/boss`);
     const bossScreenshot = path.join(OUTPUT, `${spec.name}-boss-up.png`);
     await page.screenshot({ path: bossScreenshot });
     report.cases.push({ name: `${spec.name}/boss-up`, before: initial.boss, impact: boss, screenshot: bossScreenshot });
     check(`${spec.name} boss hit pose active`, boss?.samples[0]?.animation !== 'none', boss?.samples[0]?.animation);
     if (spec.reduced) check(`${spec.name} boss reduced motion stays flat`, boss.maxTilt < 0.01, boss.samples[0]);
-    else check(`${spec.name} boss recoils up with 3D pitch`,
-      boss.samples[0].y < -3 && Math.abs(boss.samples[0].pitch) > 0.02,
-      { y: boss.samples[0].y, pitch: boss.samples[0].pitch });
+    else {
+      check(`${spec.name} boss tilts away from actors below`,
+        boss.samples[0].pitch < -0.02, { pitch: boss.samples[0].pitch });
+    }
 
     await page.evaluate(() => {
       const fx = document.getElementById('totMusicaDualFx');
@@ -305,7 +355,8 @@ async function runTotCase(browser, spec) {
       document.getElementById('totMusicaBossFrame').classList.remove('portrait-hit');
     });
     for (const side of ['real', 'song']) {
-      const impact = await seekTotImpact(page, selectors[side], spec.reduced);
+      const impact = await seekTotImpact(page, selectors[side], spec.reduced, .22);
+      if (!spec.reduced) await checkOriginalHitMotion(page, selectors[side], 'totMusicaTargetHitDown', `${spec.name}/${side}`);
       const screenshot = path.join(OUTPUT, `${spec.name}-${side}-down.png`);
       await page.screenshot({ path: screenshot });
       report.cases.push({ name: `${spec.name}/${side}-down`, before: initial[side], impact, screenshot });
@@ -313,9 +364,10 @@ async function runTotCase(browser, spec) {
         impact?.samples[0]?.animation === (spec.reduced ? 'cardHitReduced' : 'totMusicaTargetHitDown'),
         impact?.samples[0]?.animation);
       if (spec.reduced) check(`${spec.name}/${side} reduced motion stays flat`, impact.maxTilt < 0.01, impact.samples[0]);
-      else check(`${spec.name}/${side} recoils down with 3D pitch`,
-        impact.samples[0].y > 3 && Math.abs(impact.samples[0].pitch) > 0.02,
-        { y: impact.samples[0].y, pitch: impact.samples[0].pitch });
+      else {
+        check(`${spec.name}/${side} tilts away from boss above`,
+          impact.samples[0].pitch > 0.02, { pitch: impact.samples[0].pitch });
+      }
     }
     const stateAfter = await page.evaluate(() =>
       JSON.stringify(window.__BOARD_BATTLE_DEBUG__?.latestView?.() || null));
@@ -379,7 +431,7 @@ async function runCase(browser, spec) {
         frames.push({ at, ...(await page.evaluate(measure, { selector })) });
         elapsed = at;
       }
-      await page.evaluate(({ selector, hitClass, reduced }) => {
+      await page.evaluate(({ selector, hitClass, reduced, pageKind }) => {
         const target = document.querySelector(selector);
         target.classList.remove(hitClass);
         void target.offsetWidth;
@@ -388,15 +440,18 @@ async function runCase(browser, spec) {
           /cardHitShake|cardHitReduced|battleBoxHit|battleBoxHitReduced/.test(animation.animationName));
         for (const animation of relevant) {
           animation.pause();
-          animation.currentTime = reduced ? 80 : 84;
+          const duration = Number(animation.effect?.getComputedTiming().duration) || 700;
+          animation.currentTime = reduced ? 80 : duration * (pageKind === 'map' ? .10 : .12);
         }
-      }, { selector, hitClass, reduced: spec.reduced });
+      }, { selector, hitClass, reduced: spec.reduced, pageKind: spec.page });
       const impact = await page.evaluate(measure, { selector });
       const peak = Math.max(impact.maxTilt, ...frames.map(frame => frame.maxTilt));
       const yaw = impact.samples.map(item => item.yaw)
         .reduce((best, value) => Math.abs(value) > Math.abs(best) ? value : best, 0);
       yawBySide[side] = yaw;
       const animations = impact.samples.map(item => item.animation);
+      if (!spec.reduced) await checkOriginalHitMotion(page, selector,
+        spec.page === 'iframe' ? 'cardHitShake' : 'battleBoxHit', `${spec.name}/${side}`);
       const screenshot = path.join(OUTPUT, `${spec.name}-${side}.png`);
       await page.screenshot({ path: screenshot });
       await page.evaluate(({ selector, hitClass }) => document.querySelector(selector)?.classList.remove(hitClass),
@@ -437,9 +492,13 @@ async function runCase(browser, spec) {
       check(`${spec.name} card centers remain side-by-side`,
         Math.abs(separation.x) > Math.abs(separation.y), separation);
     }
-    if (!BASELINE_REF && !spec.reduced && !spec.mapPortrait) check(`${spec.name} opposite hit yaw`,
-      yawBySide.player * yawBySide.enemy < 0 &&
-        Math.abs(yawBySide.player) > 0.015 && Math.abs(yawBySide.enemy) > 0.015, yawBySide);
+    if (!BASELINE_REF && !spec.reduced && !spec.mapPortrait) {
+      const enemyDirection = Math.sign((enemy?.before.center.x || 0) - (player?.before.center.x || 0));
+      check(`${spec.name} signed hit yaw follows attack side`,
+        enemyDirection !== 0 && enemyDirection * yawBySide.player > 0.015 &&
+          enemyDirection * yawBySide.enemy < -0.015,
+        { enemyDirection, yawBySide });
+    }
     if (spec.mapPortrait) {
       check(`${spec.name} fighters stack vertically`,
         Boolean(player && enemy && Math.abs(player.before.center.y - enemy.before.center.y) >
@@ -448,11 +507,9 @@ async function runCase(browser, spec) {
       if (!spec.reduced && player && enemy) {
         for (const [side, target, source] of [['player', player, enemy], ['enemy', enemy, player]]) {
           const expected = Math.sign(target.before.center.y - source.before.center.y);
-          const actual = target.impact.samples[0]?.y || 0;
           const pitch = target.impact.samples[0]?.pitch || 0;
-          check(`${spec.name}/${side} pushed away along vertical attack`,
-            expected * actual > 3 && Math.abs(pitch) > 0.02,
-            { expected, actual, pitch });
+          check(`${spec.name}/${side} tilts away from vertical attack`,
+            expected * pitch > 0.02, { expected, pitch });
         }
       }
     }

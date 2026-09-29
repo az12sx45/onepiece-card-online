@@ -14,7 +14,7 @@ const {
 const { createVerifier, parseArguments, ORIGIN, ELECTRON_UA } = require('./board_hit_depth_public_qa');
 
 const ROOT = path.resolve(__dirname, '..');
-const BASELINE_SOURCE = 'e7f73ca92166990da1fc0cd9341b57add3eafe0e';
+const BASELINE_SOURCE = 'cc85b439f88d4b8a127a95f021398956083f28ef';
 const folder = fs.mkdtempSync(path.join(os.tmpdir(), 'board-hit-depth-public-qa-'));
 const candidateDir = path.join(folder, 'candidate');
 const bytesOf = value => Buffer.from(canonicalJson(value));

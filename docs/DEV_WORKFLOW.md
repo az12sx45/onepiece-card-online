@@ -1,6 +1,12 @@
 # Dev Workflow
 
-## 2026-09-29 戰鬥受擊方向與 3D 後仰
+## 2026-09-29 戰鬥受擊手感回調（公開待核驗）
+
+玩家指出初版手感退步，原因是改掉原本的位移及地圖戰鬥時長。本次將 `public/board_battle.html` 的一般受擊 700ms、X 位移 0/-7/+8/-12/+13/-12/+8/-7/0，以及 Tot Musica 特殊演出的 X/Y 位移、縮放和 720ms 時長逐影格還原；`public/board_game.html` 地圖戰鬥恢復 460ms 和原 X 抖動，手機不再新增 Y 位移。只在原變形上疊 900px 透視和約 14 度、依攻擊方位相反的 X/Y 軸傾斜；`public/css/board_character_depth.css` 恢復原本受擊時內框亮度。角色圖本身的抖動、真命中時點、傷害、存檔和同步均未改。
+
+`scripts/board_battle_hit_depth_qa.js` 加入舊版每個關鍵影格中心位移、原時長及 easing 的唯讀核對。隔離瀏覽器 188/188、舊版比對 31/31、封包隔離測試 10/10 與假公開回應測試通過；`npm start` 在無 `DATABASE_URL` 的本機環境提供三個變更頁面／樣式 HTTP 200，不能據此宣稱多人連線驗收。修正候選 `package-4f719965bdc78c48` 僅更換兩個 Board 頁面與一份還原的樣式；正式公開 runtime 尚待讀回，不把候選當作已部署。
+
+## 2026-09-29 戰鬥受擊方向與 3D 後仰（初版歷史，已修正）
 
 本次只改 Board 客戶端受擊呈現：`public/board_battle.html` 依攻擊來源讓一般戰鬥我方往左、敵方往右後仰；Tot Musica 的上方 Boss 遭下方角色攻擊往上退，雙世界角色遭 Boss 攻擊往下退，沿用其特殊鏡頭命中節奏。`public/board_game.html` 的地圖戰鬥在左右排列時同向處理，手機上下排列時改為沿垂直方向退；`public/css/board_character_depth.css` 讓整張卡受擊傾斜時保留原有內框光澤。減少動態模式只有短暫亮度反饋，不做 3D 晃動。沒有修改攻擊判定、HP、擲骰、回合、存檔、`BOARD_GAME_STATE` 或 Socket.IO 合約。
 
