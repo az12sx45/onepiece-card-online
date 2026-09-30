@@ -1,5 +1,21 @@
 # File Map
 
+## 2026-09-30 Launcher 1.2.14 魯夫圖集與更新公告
+
+- `public/images/launcher_room/{motion_v5,acting_v5,life_hd_v3,portrait_v4}/luffy/`：17 張新版魯夫完整人物 WebP，舊版路徑保留作回退；`tools/launcher-room/luffy-v1214/manifest.json` 保存精確路徑、尺寸來源及 SHA。
+- `desktop/launcher-room-motion.js`、`launcher-life-actions.js`、`launcher-room.js`、`launcher-profile-shop.js`、`launcher-room-minigames.js`：單一發行開關、新圖選擇、解碼失敗回退與角色／商店肖像接線。
+- `desktop/main.js`、`desktop/package.json`、`desktop/package-lock.json`：17 張新圖與公告圖的協定白名單、封裝資源及 1.2.14 版本。
+- `public/images/launcher_announcements/launcher-proportions-1.2.14.webp`、`config/launcher-announcements-v1.json`：GPT 繪製的本次更新主圖與依發布版本顯示的公告。
+- `scripts/launcher_luffy_art_switch_qa.js`、`scripts/desktop_launcher_package_qa.js`：新版與舊版路徑、失敗回退、實體素材 SHA 與安裝檔資源檢查。發行證據見 `docs/LAUNCHER_LUFFY_ART_1.2.14_PREP.md`。
+
+## 2026-09-29 Launcher 魯夫素材版本接線候選
+
+- `desktop/launcher-room-motion.js`、`launcher-life-actions.js`：共用預設關閉的發行開關；關閉時只讀舊圖，未來啟用後魯夫新版走路／互動／生活 atlas 優先載入及逐張回退。
+- `desktop/launcher-room.js`、`launcher-profile-shop.js`、`launcher-room-minigames.js`：同一開關控制魯夫新版縮圖及舊圖回退；關閉時與其他角色一樣只讀既有圖。
+- `desktop/main.js`：只加入 17 個魯夫新素材的 `opui://` 精確白名單。
+- `scripts/launcher_luffy_art_switch_qa.js`、`scripts/desktop_launcher_package_qa.js`：合成解碼回退與封裝協定路徑檢查；後者未把缺失的新圖列入已封裝素材。
+- `docs/LAUNCHER_LUFFY_ART_1.2.14_PREP.md`：17 張待製圖清單、尺寸及封裝／發行閘門；新圖與封裝清單尚未提交。
+
 ## 2026-09-28 酒館固定魯夫邀請與抽卡特效（已部署）
 
 - `public/js/board_tavern_crew.js`：魯夫固定邀請、九位夥伴各兩句台詞／圖及獨立 response RNG。

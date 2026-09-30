@@ -1,5 +1,17 @@
 # Dev Workflow
 
+## 2026-09-30 Launcher 1.2.14 魯夫頭身比例、動作圖與附圖公告
+
+範圍：對生活基地 14 位已發布角色以相同 128px 顯示尺寸檢查頭身；確認最明顯的魯夫頭／上身寬度異常後，用 GPT 原畫重新製作魯夫四向走路、四向互動、八個生活動作與圓形肖像共 17 張 WebP。素材只加入 `motion_v5`、`acting_v5`、`life_hd_v3`、`portrait_v4` 新路徑，未覆寫舊圖；透明邊緣、尺寸、腳跟與縮圖逐張檢查。`tools/launcher-room/luffy-v1214/manifest.json` 綁定 17 筆 SHA-256；`desktop/launcher-room-motion.js` 的 `LUFFY_ART_ENABLED=true` 控制房間、工作、商店與小遊戲，載入／解碼失敗時回退同方向舊圖。`config/launcher-announcements-v1.json` revision 13 附新增更新主圖，並由 1.2.14 發布版本決定是否顯示。角色 ID、商品、存檔與三款遊戲規則不變。
+
+驗證：隔離圖集結構 17/17、81 幀，魯夫 128px 接觸圖與公告主圖由 Codex 目視審核；`node scripts/launcher_luffy_art_switch_qa.js`、`node scripts/desktop_launcher_package_qa.js` 通過。`D:\Codex_QA\launcher-proportion-1.2.14-release` 的來源與封裝後真 Electron 測試各驗證 697 個素材路徑的 GET／Range、版本與 BGM；安裝檔 QA 驗證 ASAR、10 個實體 runtime 依賴與 SHA-256。這些是模型審圖與自動化驗證，沒有真人試玩；新側向圖仍未做出比 1.2.13 更自然的交替跨步，不記為步態改善。發行、正式 D 樹同步和公開驗證另見 `docs/LAUNCHER_LUFFY_ART_1.2.14_PREP.md`。
+
+## 2026-09-29 Launcher 1.2.14 魯夫新圖接線準備（未發布）
+
+範圍：`desktop/launcher-room-motion.js` 的單一 `LUFFY_ART_ENABLED=false` 供 `launcher-life-actions.js`、`launcher-room.js`、`launcher-profile-shop.js`、`launcher-room-minigames.js` 共用；目前魯夫直接走舊 `motion_v4`／`acting_v4`／`life_hd_v2`／`portrait_v3`，不請求缺失的新圖。未來同一開關通過素材、封裝與版本閘門後，才優先接入 `motion_v5`／`acting_v5`／`life_hd_v3`／`portrait_v4`，失敗逐張回退。`desktop/main.js` 與 `scripts/desktop_launcher_package_qa.js` 加入精確協定白名單核對；專項 QA 測試關閉狀態無新圖請求，並在隔離 VM 測試未來回退。`docs/LAUNCHER_LUFFY_ART_1.2.14_PREP.md` 記錄 17 張素材及封裝閘門。其餘角色、Board 程式與既有存檔／ID 不動。
+
+目前尚無任何 17 張新圖；既有四類新版本目錄皆不存在。此輪不改 `desktop/package.json`／lock、`extraResources`、公告、公開版本 manifest，也不製作安裝檔或推送。測試：`node scripts/launcher_luffy_art_switch_qa.js` PASS，關閉狀態九筆合成 Image 請求及房間／商店／小遊戲三個實際來源肖像 resolver 都只用舊路徑，未來候選分支只在隔離 VM 測試；修改 JS 的 `node --check` PASS，`node scripts/desktop_launcher_package_qa.js` PASS，`git diff --check` PASS。把開關僅在 Node require cache 中模擬改為 true 而仍保留 1.2.13，封裝 QA 如預期 FAIL，錯誤為 `Luffy art gate and desktop launcher version must advance together.`。`npm start` 在 `PORT=18946` 啟動，首頁 HTTP 200，停止測試程序。當前測試沒有 `DATABASE_URL`，因此登入／資料庫流程未驗證。舊 `launcher_reserved_crew_client_qa.js` 另外執行至第 8 項時因其歷史 `reserved_v1` 全路徑假設與現有 Ace `reserved_v2` 不符而失敗，未列為本次通過證據。美術、真瀏覽器、安裝檔與公開驗收尚未完成。
+
 ## 2026-09-28 酒館魯夫邀請、夥伴回應與 WebGL 抽卡特效（已部署）
 
 依玩家修正，魯夫固定說「你真有趣，要不要加入我們？」；確定加入／拒絕後才從其餘九人抽一位說對應歡迎／吐槽，滿隊於實際替換選定後才抽。先定稿 18 句短台詞與每句表情姿勢，製作 crew_v3 真透明圖；門新增微開漏光階段，S 白光核心與虹彩折射、A 金、B 紫、C 藍、D 綠、E 銀白，邀請至選擇的演出約 10.8 秒。新範圍為六個 Board 程式、crew_v3 新圖、Pixi 來源／依賴與獨立 builder/QA；正式 D 樹既有並行工作保持。最初以 main `4ca49f945`（launcher 1.2.9）為整合基底，`npm start` 18931／health 200；此為早期進度，不代表本次新特效的驗收或部署。劇本與測試界線見 `BOARD_TAVERN_CAPTAIN_20260928.md`。

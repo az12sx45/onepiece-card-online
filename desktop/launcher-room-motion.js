@@ -13,6 +13,8 @@
   const SHAPE = WALK_SHAPE;
   // Geometry remains in 128px units. These are source pixel densities only.
   const ATLAS_RESOLUTION = Object.freeze({ motion_v4: 3, acting_v4: 2 });
+  // Release gate: enable only after all 17 Luffy atlases, package QA and a version bump pass.
+  const LUFFY_ART_ENABLED = true;
   const TURN_MS = 140;
   const ACTION_POSES = Object.freeze(['idle', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave', 'listen']);
   const STRIDES = Object.freeze({ luffy: 24, zoro: 24, nami: 24, usopp: 24, sanji: 24, chopper: 20, robin: 24, franky: 24, brook: 24, jinbe: 24, ...Object.fromEntries((reserved?.RESERVED_KEYS || []).map(key => [key, 24])) });
@@ -90,31 +92,42 @@
     if (!Object.hasOwn(ATLAS_RESOLUTION, kind)) return '';
     if (key === 'robin') return `opui://launcher/images/launcher_room/robin_v2/${kind === 'acting_v4' ? 'acting' : 'walk'}/${direction}.webp`;
     if (reserved?.RESERVED_KEYS.includes(key)) return reserved.assetUrl(key, `${kind === 'acting_v4' ? 'acting' : 'walk'}/${direction}.webp`);
-    return `opui://launcher/images/launcher_room/${kind}/${key}/${direction}.webp`;
+    const artKind = LUFFY_ART_ENABLED && key === 'luffy' ? (kind === 'acting_v4' ? 'acting_v5' : 'motion_v5') : kind;
+    return `opui://launcher/images/launcher_room/${artKind}/${key}/${direction}.webp`;
   }
   function walkShape() { return WALK_SHAPE; }
   function loadAtlases(key, ImageType, kind) {
     const cacheKey = `${kind}:${key}`;
     if (cache.has(cacheKey)) return cache.get(cacheKey);
-    const record = { atlases: {}, errors: {}, complete: false, promise: null };
+    const record = { atlases: {}, sources: {}, errors: {}, complete: false, promise: null };
     cache.set(cacheKey, record);
     record.promise = Promise.all(DIRECTIONS.map(direction => decodeLimited(async () => {
       try {
         const source = atlasUrl(key, direction, kind);
         if (!source || typeof ImageType !== 'function') throw new Error('Unknown character or image loader');
-        const image = new ImageType();
-        image.src = source;
-        await image.decode();
         const shape = kind === 'acting_v4' ? ACTION_SHAPE : walkShape(direction);
         const resolution = ATLAS_RESOLUTION[kind];
         const width = shape.width * resolution, height = shape.height * resolution;
-        if (image.naturalWidth !== width || image.naturalHeight !== height) throw new Error(`Directional atlas must be ${width} × ${height}`);
-        if (typeof globalThis.createImageBitmap === 'function') {
-          // Retain authored HD pixels; a decode must never shrink back to 128px.
-          const bitmap = await globalThis.createImageBitmap(image);
-          atlasResolution.set(bitmap, resolution); record.atlases[direction] = bitmap;
-          image.src = '';
-        } else { atlasResolution.set(image, resolution); record.atlases[direction] = image; }
+        const candidates = LUFFY_ART_ENABLED && key === 'luffy'
+          ? [source, `opui://launcher/images/launcher_room/${kind}/${key}/${direction}.webp`]
+          : [source];
+        let loadedSource, lastError;
+        for (const candidate of candidates) {
+          try {
+            const image = new ImageType();
+            image.src = candidate;
+            await image.decode();
+            if (image.naturalWidth !== width || image.naturalHeight !== height) throw new Error(`Directional atlas must be ${width} × ${height}`);
+            const atlas = typeof globalThis.createImageBitmap === 'function' ? await globalThis.createImageBitmap(image) : image;
+            atlasResolution.set(atlas, resolution);
+            record.atlases[direction] = atlas;
+            if (atlas !== image) image.src = '';
+            loadedSource = candidate;
+            break;
+          } catch (error) { lastError = error; }
+        }
+        if (!loadedSource) throw lastError || new Error('Directional atlas did not load');
+        record.sources[direction] = loadedSource;
       } catch (error) { record.errors[direction] = String(error?.message || error); }
     }))).then(() => { record.complete = true; return record; });
     return record;
@@ -139,5 +152,5 @@
       renderCell, renderCell, 0, 0, renderCell, renderCell);
     return true;
   }
-  return Object.freeze({ DIRECTIONS, SHAPE, WALK_SHAPE, ACTION_SHAPE, ATLAS_RESOLUTION, TURN_MS, ACTION_POSES, metadata, directionForDelta, createState, face, advance, projectedScale, speedAndStride, pathStep, walkShape, actionFrame, atlasUrl, preload, preloadActions, draw });
+  return Object.freeze({ DIRECTIONS, SHAPE, WALK_SHAPE, ACTION_SHAPE, ATLAS_RESOLUTION, LUFFY_ART_ENABLED, TURN_MS, ACTION_POSES, metadata, directionForDelta, createState, face, advance, projectedScale, speedAndStride, pathStep, walkShape, actionFrame, atlasUrl, preload, preloadActions, draw });
 }));

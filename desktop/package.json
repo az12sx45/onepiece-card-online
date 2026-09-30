@@ -1,6 +1,6 @@
 {
   "name": "onepiece-tabletop-desktop",
-  "version": "1.2.13",
+  "version": "1.2.14",
   "private": true,
   "description": "Windows launcher for ONE PIECE tabletop games with account login, verified game downloads and incremental updates.",
   "main": "main.js",
@@ -139,7 +139,7 @@
       {
         "from": "../public/images/launcher_announcements",
         "to": "launcher-assets/images/launcher_announcements",
-        "filter": ["launcher-life-1.2.13.webp"]
+        "filter": ["launcher-life-1.2.13.webp", "launcher-proportions-1.2.14.webp"]
       },
       {
         "from": "../public/images/launcher_room",
@@ -776,7 +776,24 @@
           "furniture_views/den-den-desk/0.webp",
           "furniture_views/den-den-desk/1.webp",
           "furniture_views/den-den-desk/2.webp",
-          "furniture_views/den-den-desk/3.webp"
+          "furniture_views/den-den-desk/3.webp",
+          "motion_v5/luffy/east.webp",
+          "motion_v5/luffy/west.webp",
+          "motion_v5/luffy/north.webp",
+          "motion_v5/luffy/south.webp",
+          "acting_v5/luffy/east.webp",
+          "acting_v5/luffy/west.webp",
+          "acting_v5/luffy/north.webp",
+          "acting_v5/luffy/south.webp",
+          "life_hd_v3/luffy/work-east.webp",
+          "life_hd_v3/luffy/work-west.webp",
+          "life_hd_v3/luffy/work-north.webp",
+          "life_hd_v3/luffy/work-south.webp",
+          "life_hd_v3/luffy/eat-south.webp",
+          "life_hd_v3/luffy/rest-south.webp",
+          "life_hd_v3/luffy/sleep-south.webp",
+          "life_hd_v3/luffy/train-south.webp",
+          "portrait_v4/luffy.webp"
         ]
       },
       {

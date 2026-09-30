@@ -105,6 +105,13 @@ const ROOM_NEW_V127_ASSETS = [...RADIAL_PRESENTATION.MINIGAME_ASSETS, ...RADIAL_
 const ROOM_NEW_V128_ASSETS = RADIAL_PRESENTATION.EXPANSION_ASSETS
   .map(asset => asset.replace(/^public\/images\/launcher_room\//, ''));
 const ROOM_LIFE_HD_ASSETS = require('../desktop/launcher-life-actions').hdAssets().map(asset => `life_hd_v2/${asset}`);
+const LUFFY_NEW_ASSETS = [
+  ...['motion_v5', 'acting_v5'].flatMap(kind => ['east', 'west', 'north', 'south'].map(direction => `${kind}/luffy/${direction}.webp`)),
+  ...['east', 'west', 'north', 'south'].map(direction => `life_hd_v3/luffy/work-${direction}.webp`),
+  ...['eat', 'rest', 'sleep', 'train'].map(action => `life_hd_v3/luffy/${action}-south.webp`),
+  'portrait_v4/luffy.webp'
+];
+const LUFFY_NEW_ASSET_SET = new Set(LUFFY_NEW_ASSETS);
 const ROOM_LIFE_FURNITURE = ['furniture/galley-stove.webp', ...[0,1,2,3].map(rotation => `furniture_views/galley-stove/${rotation}.webp`)];
 const ROOM_DEPTH_ACTION_OVERRIDES = new Set([
   ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'brook'].map(key => `${key}/walk2`),
@@ -191,7 +198,7 @@ const EXTRA_RESOURCES = [
   {
     from: '../public/images/launcher_announcements',
     to: 'launcher-assets/images/launcher_announcements',
-    filter: ['launcher-life-1.2.13.webp']
+    filter: ['launcher-life-1.2.13.webp', 'launcher-proportions-1.2.14.webp']
   },
   {
     from: '../public/images/launcher_room',
@@ -256,7 +263,8 @@ const EXTRA_RESOURCES = [
       ...ROOM_RESERVED_ASSETS,
       ...ACE_V2_ASSETS,
       ...ROOM_NEW_V127_ASSETS,
-      ...ROOM_NEW_V128_ASSETS
+      ...ROOM_NEW_V128_ASSETS,
+      ...LUFFY_NEW_ASSETS
     ]
   },
   {
@@ -557,7 +565,9 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.2.13', 'Desktop launcher version must be 1.2.13 for the reviewed character life release.');
+  const luffyArtEnabled = require('../desktop/launcher-room-motion.js').LUFFY_ART_ENABLED === true;
+  assert(packageJson.version === (luffyArtEnabled ? '1.2.14' : '1.2.13'),
+    'Luffy art gate and desktop launcher version must advance together.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   const announcementConfig = readJson(path.join(ROOT, 'config/launcher-announcements-v1.json'), 'launcher announcements');
   require('../server/launcher-announcements').validateConfig(announcementConfig);
@@ -587,10 +597,17 @@ function validateSourcePackage() {
   'Historical launcher 1.2.12 room weather announcement changed.');
   const crewLifeAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.13-character-life-and-dialogue');
   assert(crewLifeAnnouncement?.status === 'published' && crewLifeAnnouncement.scope === 'launcher' &&
-    crewLifeAnnouncement.version === packageJson.version &&
+    crewLifeAnnouncement.version === '1.2.13' &&
     crewLifeAnnouncement.requiredRelease?.kind === 'launcher' &&
-    crewLifeAnnouncement.requiredRelease?.version === packageJson.version,
-  'Launcher 1.2.13 character life announcement must be gated to this release.');
+    crewLifeAnnouncement.requiredRelease?.version === '1.2.13',
+  'Historical launcher 1.2.13 character life announcement changed.');
+  const proportionAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.14-luffy-proportions');
+  assert(proportionAnnouncement?.status === 'published' && proportionAnnouncement.scope === 'launcher' &&
+    proportionAnnouncement.version === packageJson.version &&
+    proportionAnnouncement.requiredRelease?.kind === 'launcher' &&
+    proportionAnnouncement.requiredRelease?.version === packageJson.version &&
+    proportionAnnouncement.image?.asset === 'images/launcher_announcements/launcher-proportions-1.2.14.webp',
+  'Launcher 1.2.14 proportion announcement must be illustrated and gated to this release.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
   assert(packageJson.build?.appId === 'com.onepiece.tabletop.desktop', 'Desktop appId changed unexpectedly.');
@@ -637,7 +654,11 @@ function validateSourcePackage() {
   for (const relative of ['reserved_v1/unknown/portrait.webp', 'reserved_v1/ace/walk/diagonal.webp', 'reserved_v1/law/life/cook-south.webp', 'reserved_v1/hancock/life/sleep-east.webp', 'reserved_v2/sabo/portrait.webp', 'reserved_v2/ace/walk/diagonal.webp']) {
     assert(resolveScene(`opui://launcher/images/launcher_room/${relative}`) === null, `Unknown reserved path admitted: ${relative}`);
   }
-  for (const relative of ['motion_v4/unknown/east.webp', 'acting_v4/luffy/unknown.webp', 'motion_v5/luffy/east.webp']) {
+  for (const relative of LUFFY_NEW_ASSETS) {
+    const pathPart = `images/launcher_room/${relative}`;
+    assert(resolveScene(`opui://launcher/${pathPart}`) === path.resolve(ROOT, 'public', pathPart), `Luffy candidate path is blocked by the packaged protocol: ${relative}`);
+  }
+  for (const relative of ['motion_v4/unknown/east.webp', 'acting_v4/luffy/unknown.webp', 'motion_v5/zoro/east.webp', 'life_hd_v3/zoro/work-east.webp', 'portrait_v4/zoro.webp']) {
     assert(resolveScene(`opui://launcher/images/launcher_room/${relative}`) === null, `Unreviewed HD room atlas was admitted: ${relative}`);
   }
   for (const url of ['opui://launcher/images/launcher_room/scenes/unknown-v2.webp',
@@ -706,6 +727,27 @@ function validateSourcePackage() {
   }
   const roomManifest = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_ART_20260925.json'), 'launcher room art manifest');
   const roomResource = EXTRA_RESOURCES.find(resource => resource.to === 'launcher-assets/images/launcher_room');
+  if (luffyArtEnabled) {
+    const manifest = readJson(path.join(ROOT, 'tools/launcher-room/luffy-v1214/manifest.json'), 'Luffy 1.2.14 art manifest');
+    assert(manifest.schema === 'launcher-luffy-art/1' && manifest.visualAccepted === true &&
+      Array.isArray(manifest.items) && manifest.items.length === 17,
+    'Luffy art gate requires 17 reviewed atlas entries.');
+    assertExactJson(sorted(manifest.items.map(item => item.path.replace(/^public\/images\/launcher_room\//, ''))),
+      sorted(LUFFY_NEW_ASSETS), 'Luffy reviewed art asset set');
+    assertExactJson(sorted(roomResource.filter.filter(asset => LUFFY_NEW_ASSET_SET.has(asset))),
+      sorted(LUFFY_NEW_ASSETS), 'Luffy packaged art asset set');
+    for (const item of manifest.items) {
+      assert(/^public\/images\/launcher_room\/(?:motion_v5\/luffy\/(?:east|west|north|south)|acting_v5\/luffy\/(?:east|west|north|south)|life_hd_v3\/luffy\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south)|portrait_v4\/luffy)\.webp$/.test(item.path),
+        `Unsafe Luffy art path: ${item.path}`);
+      const asset = path.join(ROOT, ...item.path.split('/'));
+      assert(Number.isSafeInteger(item.bytes) && item.bytes > 0 && /^[a-f0-9]{64}$/.test(item.sha256) &&
+        fs.statSync(asset).size === item.bytes && sha256File(asset) === item.sha256,
+      `Luffy art digest differs: ${item.path}`);
+    }
+  } else {
+    assert(roomResource.filter.every(asset => !LUFFY_NEW_ASSET_SET.has(asset)),
+      'Disabled Luffy art must not enter the 1.2.13 package.');
+  }
   assert(roomManifest.version === '1.1.9' && roomManifest.canonicalCharactersOnly === true,
     'Room art manifest is not the approved canonical-character release.');
   const roomExpansion = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_EXPANSION_ART_20260925.json'), 'launcher room expansion art manifest');
@@ -801,7 +843,7 @@ function validateSourcePackage() {
     ROOM_LIFE_FURNITURE.includes(item.asset.replace(/^public\/images\/launcher_room\//, '')));
   assert(packagedLifeHistory.length === ROOM_LIFE_FURNITURE.length, 'Historical stove resources are incomplete.');
   assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items, ...packagedLifeHistory, ...presentationStatus.hd.manifest.items, ...presentationStatus.reserved.manifest.items, ...presentationStatus.newArt.manifest.items, ...ACE_V2_MANIFEST.items.map(item => ({asset: item.path}))].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
-    sorted(roomResource.filter.filter(asset => !asset.startsWith('life_hd_v2/'))), 'Historical room art manifest output set');
+    sorted(roomResource.filter.filter(asset => !asset.startsWith('life_hd_v2/') && !LUFFY_NEW_ASSET_SET.has(asset))), 'Historical room art manifest output set');
   assert(ACE_V2_MANIFEST.schema === 'launcher-ace-lean-art/1' && ACE_V2_MANIFEST.visualAccepted === true &&
     ACE_V2_MANIFEST.humanAcceptance === false && ACE_V2_MANIFEST.atlasCount === 17 &&
     ACE_V2_MANIFEST.frameCount === 81 && ACE_V2_MANIFEST.totalRuntimeBytes <= 4 * 1024 * 1024,

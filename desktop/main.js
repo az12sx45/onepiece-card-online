@@ -329,14 +329,17 @@ function resolveLauncherResource(requestUrl) {
       /^images\/walls\/[1-8]\.webp$/,
       /^images\/flags\/(?:[1-9]|1[0-5])\.webp$/,
       /^images\/profile_decor\/(?:bg-(?:luffy|zoro|nami)|frame-(?:luffy|zoro)|sticker-(?:luffy|zoro|nami|chopper|ace|robin))\.webp$/,
-      /^images\/launcher_announcements\/launcher-life-1\.2\.13\.webp$/,
+      /^images\/launcher_announcements\/(?:launcher-life-1\.2\.13|launcher-proportions-1\.2\.14)\.webp$/,
       /^images\/launcher_room\/(?:scenes\/(?:sunny-deck|sunny-kitchen|sunny-library)|furniture\/(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|galley-stove|bookshelf|medicine-cabinet|piano|tool-bench)|chibi\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)|emotions\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)-(?:happy|surprised|focused|annoyed)|frames\/(?:straw-hat|ship-wheel))\.webp$/,
       /^images\/launcher_room\/scenes\/(?:crew-cabin|sunny-deck|sunny-kitchen|sunny-library)-v2\.webp$/,
       /^images\/launcher_room\/furniture_views\/(?:bookshelf|helm|kitchen-table|galley-stove|map-table|medicine-cabinet|piano|swords-rack|tangerine-tree|tool-bench|treasure-chest)\/[0-3]\.webp$/,
       /^images\/launcher_room\/life_hd_v2\/(?:luffy|zoro|nami|usopp|sanji|chopper|franky|brook|jinbe)\/(?:work|read|cook|craft|medicine|helm|music|eat|rest|sleep|train)-(?:east|west|north|south)\.webp$/,
+      /^images\/launcher_room\/life_hd_v3\/luffy\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south)\.webp$/,
       /^images\/launcher_room\/action_frames\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:idle|walk1|walk2|talk_happy|talk_annoyed|surprised|focused_use|sit|wave)\.webp$/,
       /^images\/launcher_room\/(?:motion|acting)_v[34]\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:east|west|north|south)\.webp$/,
+      /^images\/launcher_room\/(?:motion|acting)_v5\/luffy\/(?:east|west|north|south)\.webp$/,
       /^images\/launcher_room\/portrait_v3\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\.webp$/,
+      /^images\/launcher_room\/portrait_v4\/luffy\.webp$/,
       /^images\/launcher_room\/reserved_v1\/(?:ace|sabo|law|hancock)\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
       /^images\/launcher_room\/reserved_v2\/ace\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
       /^images\/launcher_room\/robin_v2\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:(?:work|read)-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
@@ -1333,6 +1336,7 @@ async function runVisualOrSmokeCapture() {
           'images/profile_decor/sticker-nami.webp', 'images/profile_decor/sticker-chopper.webp',
           'images/profile_decor/sticker-ace.webp', 'images/profile_decor/sticker-robin.webp',
           'images/launcher_announcements/launcher-life-1.2.13.webp',
+          'images/launcher_announcements/launcher-proportions-1.2.14.webp',
           'audio/profile_bgm/harbor.ogg', 'audio/profile_bgm/night-watch.ogg', 'audio/profile_bgm/voyage.ogg',
           ...['sunny-deck', 'sunny-kitchen', 'sunny-library'].map(name => `images/launcher_room/scenes/${name}.webp`),
           ...['crew-cabin', 'sunny-deck', 'sunny-kitchen', 'sunny-library'].map(name => `images/launcher_room/scenes/${name}-v2.webp`),
@@ -1357,6 +1361,11 @@ async function runVisualOrSmokeCapture() {
           ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']
             .flatMap(name => ['motion', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south']
               .map(direction => `images/launcher_room/${kind}_v4/${name}/${direction}.webp`))),
+          ...['motion_v5', 'acting_v5'].flatMap(kind => ['east', 'west', 'north', 'south']
+            .map(direction => `images/launcher_room/${kind}/luffy/${direction}.webp`)),
+          ...['east', 'west', 'north', 'south'].map(direction => `images/launcher_room/life_hd_v3/luffy/work-${direction}.webp`),
+          ...['eat', 'rest', 'sleep', 'train'].map(action => `images/launcher_room/life_hd_v3/luffy/${action}-south.webp`),
+          'images/launcher_room/portrait_v4/luffy.webp',
           ...['ace', 'sabo', 'law', 'hancock'].flatMap(key => [
             'portrait.webp', ...['walk', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south'].map(direction => `${kind}/${direction}.webp`)),
             ...['east', 'west', 'north', 'south'].map(direction => `life/work-${direction}.webp`),

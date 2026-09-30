@@ -1,0 +1,99 @@
+{
+  "schema": "launcher-luffy-art/1",
+  "version": "1.2.14",
+  "visualAccepted": true,
+  "humanAcceptance": false,
+  "visualReviewer": "Codex visual QA",
+  "scope": "Luffy head/body proportion; side gait unchanged",
+  "review": "D:\\Codex_QA\\launcher-proportion-1.2.14\\LUFFY_PROVISIONAL_VISUAL_REVIEW_20260930.md",
+  "reviewSha256": "758b9672c9d8ca6283a28d69f13657f0639eb734f84ae3dbc274b9e4a682040e",
+  "stageReportSha256": "d58aea6ffdb863a8c5fa4d1624e74f6fea6b42feee0f8f9767de93feb8e41575",
+  "frameCount": 81,
+  "items": [
+    {
+      "path": "public/images/launcher_room/acting_v5/luffy/east.webp",
+      "bytes": 166712,
+      "sha256": "d4a6ad277ab05ceff4768d17cf6d9858e7e3c37a4dfe73e963156d0ddb3bb1a4"
+    },
+    {
+      "path": "public/images/launcher_room/motion_v5/luffy/east.webp",
+      "bytes": 142670,
+      "sha256": "532dd728fc5170bcbd8769216a63816e068b12e6dccc25ff7a5e613b3f25d08b"
+    },
+    {
+      "path": "public/images/launcher_room/acting_v5/luffy/west.webp",
+      "bytes": 160552,
+      "sha256": "ef295ac6979f73a12c383bae5da4945e7016b532e877c34bf1f66c0e761417fc"
+    },
+    {
+      "path": "public/images/launcher_room/motion_v5/luffy/west.webp",
+      "bytes": 146198,
+      "sha256": "b97c1f0554a88f47d33d43b1396045b0ed84407b718ff6ffde65944061939f6f"
+    },
+    {
+      "path": "public/images/launcher_room/acting_v5/luffy/north.webp",
+      "bytes": 151124,
+      "sha256": "0b4ad43e97de112ac70582ac104e4c42732a1825ec599447c3c3a2c2ed21c82c"
+    },
+    {
+      "path": "public/images/launcher_room/motion_v5/luffy/north.webp",
+      "bytes": 137100,
+      "sha256": "87bf431920cf776151cd8d94c486597e74d77c794a618339dba3c7a36697f492"
+    },
+    {
+      "path": "public/images/launcher_room/acting_v5/luffy/south.webp",
+      "bytes": 179322,
+      "sha256": "bbcf35d8fd5041966d71965d26d5a5d9b19587151a73cf00da60b53f3c277f41"
+    },
+    {
+      "path": "public/images/launcher_room/motion_v5/luffy/south.webp",
+      "bytes": 148630,
+      "sha256": "0f6f3b2ec1c45518fb243b700f641df139904676e1ba9b4010d9f3f4ed2fd1fc"
+    },
+    {
+      "path": "public/images/launcher_room/life_hd_v3/luffy/work-east.webp",
+      "bytes": 81970,
+      "sha256": "16461d79f6ab095c2e3a9bc16634ad56aab069f3c9db982e01a4cc165e965c41"
+    },
+    {
+      "path": "public/images/launcher_room/life_hd_v3/luffy/work-west.webp",
+      "bytes": 81926,
+      "sha256": "781a2ee0da19747e7154489a84b59092cc0af2d3bc2c26e0380695bf13169b11"
+    },
+    {
+      "path": "public/images/launcher_room/life_hd_v3/luffy/work-north.webp",
+      "bytes": 72418,
+      "sha256": "f44d198ae96819b6d4b1c00e28403ea6ebba8d78fecce73ee0d9b0dd5aac1f26"
+    },
+    {
+      "path": "public/images/launcher_room/life_hd_v3/luffy/work-south.webp",
+      "bytes": 87346,
+      "sha256": "1c386f517835bee4ad9c94f10dad875600adfead0040f348e704b2c993397672"
+    },
+    {
+      "path": "public/images/launcher_room/life_hd_v3/luffy/eat-south.webp",
+      "bytes": 82524,
+      "sha256": "e543627922b02fa2baa652a7d8333bc82021becec32e98cdb8c9073d7fd34992"
+    },
+    {
+      "path": "public/images/launcher_room/life_hd_v3/luffy/rest-south.webp",
+      "bytes": 80534,
+      "sha256": "267a58eef11c79d7e7757831301ac2a4cbc195ffa691b5f90d711e2b7fa5fbbe"
+    },
+    {
+      "path": "public/images/launcher_room/life_hd_v3/luffy/sleep-south.webp",
+      "bytes": 59750,
+      "sha256": "2c3265be31c35970a9cf0b1979526f22937cfc728a1b761b944ec947f9db831d"
+    },
+    {
+      "path": "public/images/launcher_room/life_hd_v3/luffy/train-south.webp",
+      "bytes": 82050,
+      "sha256": "af68218592787997b3d9f7f313a09f4a8e43906af364e4e8ea925e6bb49d2f79"
+    },
+    {
+      "path": "public/images/launcher_room/portrait_v4/luffy.webp",
+      "bytes": 20358,
+      "sha256": "d3bb26a898f377b68c5a5e8c4dc6a01dd42722aec594c011b7a8f673bb622539"
+    }
+  ]
+}

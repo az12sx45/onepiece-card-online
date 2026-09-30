@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 12,
+  "revision": 13,
   "announcements": [
     {
       "id": "board-tavern-crew-20260928-1c453fcf83416d97",
@@ -268,6 +268,29 @@
       "requiredRelease": {
         "kind": "launcher",
         "version": "1.2.13"
+      }
+    },
+    {
+      "id": "launcher-1.2.14-luffy-proportions",
+      "status": "published",
+      "publishedAt": "2026-09-30T00:40:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.14",
+      "title": "夥伴頭身比例調整｜啟動器 1.2.14",
+      "summary": "檢視生活基地 14 位夥伴的同尺寸畫面，重新繪製魯夫的完整動作圖，讓帽子、頭部與身體更協調。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-proportions-1.2.14.webp",
+        "alt": "千陽號甲板上，魯夫扶著草帽向前走的更新主圖"
+      },
+      "body": [
+        "魯夫的四向走路、互動表情、工作、吃飯、休息、睡覺、訓練及肖像換成同一套頭身比例的完整人物圖，帽與頭部相對上身更協調。",
+        "新圖在生活基地原本的顯示尺寸逐格檢查，並清理透明邊緣；切換動作時維持原本的腳根與人物高度。",
+        "其餘夥伴保留各自的原作造型與已發行動作。三款桌遊規則、角色金幣與存檔內容沒有改動。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.14"
       }
     }
   ]

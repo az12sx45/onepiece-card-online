@@ -27,7 +27,7 @@
   const validIds = (source, max) => [...new Set((Array.isArray(source) ? source : []).map(Number).filter(id => Number.isInteger(id) && id >= 1 && id <= max))].sort((a, b) => a - b);
   const imageFor = (type, key) => {
     if (type === 'room_scene' && ['sunny-deck', 'sunny-kitchen', 'sunny-library'].includes(key)) return `opui://launcher/images/launcher_room/scenes/${key}-v2.webp`;
-    if (type === 'room_character' && ['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe'].includes(key)) return `opui://launcher/images/launcher_room/portrait_v3/${key}.webp`;
+    if (type === 'room_character' && ['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe'].includes(key)) return `opui://launcher/images/launcher_room/${window.OnePieceRoomMotion?.LUFFY_ART_ENABLED === true && key === 'luffy' ? 'portrait_v4' : 'portrait_v3'}/${key}.webp`;
     const id = Number(key);
     if (type === 'avatar' && Number.isInteger(id) && id >= 1 && id <= MAX_AVATAR_ID) return `opui://launcher/images/board/avatars/${id}.webp`;
     if (type === 'wall' && Number.isInteger(id) && id >= 1 && id <= 8) return `opui://launcher/images/walls/${id}.webp`;
@@ -38,6 +38,14 @@
   const safeAudioAsset = asset => typeof asset === 'string' &&
     /^opui:\/\/launcher\/audio\/(?:profile_bgm\/[a-z0-9-]+\.ogg|bgm\/track(?:0[1-9]|1[0-9]|20)\.mp3)$/i.test(asset) ? asset : '';
   const itemImage = item => imageFor(item?.type, item?.key) || safeImageAsset(item?.asset);
+  function portraitFallback(image, item) {
+    image.onerror = null;
+    if (window.OnePieceRoomMotion?.LUFFY_ART_ENABLED !== true || item?.type !== 'room_character' || item?.key !== 'luffy') return;
+    image.onerror = () => {
+      image.onerror = null;
+      image.src = 'opui://launcher/images/launcher_room/portrait_v3/luffy.webp';
+    };
+  }
   const clamp = (value, min, max, fallback) => Number.isFinite(Number(value)) ? Math.max(min, Math.min(max, Number(value))) : fallback;
   const errorText = code => ({
     'client_update_required': '請先更新啟動器，再操作含新夥伴的個人頁。',
@@ -735,7 +743,7 @@
       const article = el('article', 'shop-item'); article.dataset.rarity = item.rarity || 'common'; article.dataset.type = item.type; article.dataset.itemId = item.id;
       const visual = el('div', 'shop-item-image');
       const source = itemImage(item);
-      if (source) { const image = el('img'); image.src = source; image.alt = ''; if (item.type === 'avatar') avatarFallback(image); visual.append(image); }
+      if (source) { const image = el('img'); portraitFallback(image, item); image.src = source; image.alt = ''; if (item.type === 'avatar') avatarFallback(image); visual.append(image); }
       else if (item.type === 'layout') { const miniature = el('div', 'shop-layout-preview'); miniature.dataset.layout = item.id; miniature.append(el('i'), el('span', '', 'CAPTAIN')); visual.append(miniature); }
       else visual.append(el('span', 'shop-symbol', item.type === 'bgm' ? '♫' : '✒'));
       const body = el('div', 'shop-item-body');
@@ -794,7 +802,7 @@
     const source = itemImage(item);
     $('shopConfirmDialog').dataset.type = item.type;
     $('shopConfirmImage').hidden = !source;
-    if (source) $('shopConfirmImage').src = source;
+    if (source) { portraitFallback($('shopConfirmImage'), item); $('shopConfirmImage').src = source; }
     else $('shopConfirmImage').removeAttribute('src');
     $('shopConfirmPrice').textContent = `${fmt(item.price)} 金幣`;
     $('shopConfirmHint').textContent = '購買後會儲存在雲端帳號。';

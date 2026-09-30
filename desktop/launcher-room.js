@@ -67,7 +67,17 @@
     const key = item?.type === TYPES.character.type ? keyForCharacter(item) : '';
     return source && key ? portraitFor(key) : source;
   };
-  const portraitFor = key => key === 'robin' ? 'opui://launcher/images/launcher_room/robin_v2/portrait.webp' : reserved?.assetUrl(key,'portrait.webp') || `opui://launcher/images/launcher_room/portrait_v3/${key}.webp`;
+  const portraitFor = key => key === 'robin' ? 'opui://launcher/images/launcher_room/robin_v2/portrait.webp' : reserved?.assetUrl(key,'portrait.webp') || `opui://launcher/images/launcher_room/${locomotion?.LUFFY_ART_ENABLED === true && key === 'luffy' ? 'portrait_v4' : 'portrait_v3'}/${key}.webp`;
+  function portraitFallback(image, key, finalFallback = '') {
+    image.onerror = () => {
+      if (locomotion?.LUFFY_ART_ENABLED === true && key === 'luffy' && image.getAttribute('src') === portraitFor(key)) {
+        image.src = 'opui://launcher/images/launcher_room/portrait_v3/luffy.webp';
+        return;
+      }
+      image.onerror = null;
+      if (finalFallback) image.src = finalFallback;
+    };
+  }
   const isValidProduct = (item, type) => item?.type === type && typeof item.id === 'string' && /^[a-z0-9-]{3,64}$/.test(item.id) && !!assetFor(item) && (type !== TYPES.character.type || releasedCharacterKeys().has(keyForCharacter(item)));
   const round = value => Math.round(value * 100) / 100;
   const rotationFor = item => Number.isInteger(item?.rotation) && item.rotation >= 0 && item.rotation <= 3
@@ -425,7 +435,7 @@
     const affinity = Math.max(0, Math.min(100, Number(record?.affinity) || 0));
     const canAct = isOwner() && !!record && !companionBusy;
     const portrait = $('roomCompanionPortrait');
-    portrait.onerror = () => { portrait.onerror = null; portrait.src = catalogAssetFor(item); };
+    portraitFallback(portrait, key, catalogAssetFor(item));
     portrait.src = key ? portraitFor(key) : assetFor(item);
     $('roomCompanionPortrait').alt = item.name || details.name || '航海夥伴';
     $('roomCompanionName').textContent = item.name || details.name || '航海夥伴';
@@ -786,8 +796,8 @@
     walker.pose = next; walker.node.dataset.pose = next;
     if (!walker.node.classList.contains('has-directional-sprite')) {
       walker.node.dataset.actionSource = 'loading';
-      // portrait_v3 is also an intact new drawing. Keep it visible when loading
-      // is interrupted or reduced motion prevents creation of another walker.
+      // Keep the complete portrait visible when loading is interrupted or
+      // reduced motion prevents creation of another walker.
     }
   }
   function showAction(walker, pose, now = performance.now()) {
@@ -798,7 +808,8 @@
     const root = locomotion.metadata(walker.key, motionTable).root;
     canvas.style.setProperty('--room-root-offset', `${(locomotion.SHAPE.cell - root[1]) / locomotion.SHAPE.cell * 100}%`);
     canvas.hidden = false; walker.node.classList.add('has-directional-sprite');
-    walker.node.dataset.directionalAction = 'true'; walker.node.dataset.actionSource = 'acting_v4';
+    walker.node.dataset.directionalAction = 'true';
+    walker.node.dataset.actionSource = walker.actionArt?.sources?.[walker.motion.direction]?.includes('/acting_v5/') ? 'acting_v5' : 'acting_v4';
     walker.node.dataset.direction = walker.motion.direction;
     walker.node.dataset.actionFrame = String(frame);
     return true;
@@ -821,7 +832,7 @@
     walker.node.dataset.motionFrame = String(frame);
     walker.node.dataset.motionPhase = String(state.phase);
     walker.node.dataset.motionReady = 'true';
-    walker.node.dataset.actionSource = 'motion_v4';
+    walker.node.dataset.actionSource = walker.motionArt?.sources?.[state.direction]?.includes('/motion_v5/') ? 'motion_v5' : 'motion_v4';
     delete walker.node.dataset.directionalAction;
     if (walking) { walker.pose = 'walk'; walker.node.dataset.pose = 'walk'; }
     return true;
@@ -1453,6 +1464,7 @@
       if (!placed) continue;
       const node = el('div', 'room-character-shell');
       const sprite = el('img', 'room-chibi');
+      portraitFallback(sprite, keyForCharacter(item));
       sprite.src = source; sprite.alt = item.name || '航海夥伴'; sprite.draggable = false;
       const walkSprite = el('canvas', 'room-walk-sprite');
       walkSprite.width = 256; walkSprite.height = 256; walkSprite.hidden = true; walkSprite.setAttribute('aria-hidden', 'true');
@@ -1607,7 +1619,8 @@
       const inRoom = tab === 'scene' ? draft.sceneId === item.id :
         (tab === 'furniture' ? draft.placements : draft.characters).some(value => value.itemId === item.id);
       button.classList.toggle('is-active', inRoom);
-      const image = el('img'); image.src = assetFor(item); image.alt = ''; image.loading = 'lazy';
+      const image = el('img'); portraitFallback(image, tab === 'character' ? keyForCharacter(item) : '');
+      image.src = assetFor(item); image.alt = ''; image.loading = 'lazy';
       const elsewhere = tab === 'scene' ? '' : deployedScene(item.id);
       button.append(image, el('strong', '', item.name || item.id),
         el('small', '', inRoom ? tab === 'scene' ? '目前場景' : '這個場景內' :
