@@ -2451,11 +2451,23 @@
       animation: enemyCardAttackShake 900ms ease;
     }
 
+    @property --battle-hit-active-yaw {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+    @property --battle-hit-active-pitch {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
     .combat-card.portrait-hit {
       --battle-hit-yaw: -14deg;
       --battle-hit-pitch: 3deg;
       --battle-hit-counter-yaw: 5deg;
       --battle-hit-counter-pitch: -1deg;
+      translate: calc(100% * 100% * sin(var(--battle-hit-active-yaw)) / 3600px) 0;
       animation: cardHitShake 700ms ease;
     }
 
@@ -2478,11 +2490,22 @@
       --battle-hit-counter-pitch: 5deg;
     }
 
+    .combat-card.tot-musica-dual-actor-card.portrait-hit,
+    .combat-card.tot-musica-dual-boss.portrait-hit {
+      translate: 0 calc(-100% * 100% * sin(var(--battle-hit-active-pitch)) / 3600px);
+    }
+
+    .tot-musica-dual-fx.enemy-impact .tot-musica-dual-actor-card.portrait-hit {
+      translate: calc(-100% * 100% * abs(sin(var(--battle-hit-active-pitch))) / 5000px)
+        calc(-100% * 100% * sin(var(--battle-hit-active-pitch)) / 3600px);
+    }
+
     .combat-card.player.has-coop-allies.portrait-hit {
       animation: none;
     }
 
     .combat-card.player.has-coop-allies.portrait-hit .card-inner {
+      translate: calc(100% * 100% * sin(var(--battle-hit-active-yaw)) / 3600px) 0;
       animation: cardHitShake 700ms ease;
     }
 
@@ -7319,10 +7342,10 @@
       100% { opacity: 0; transform: translate(-50%, -50%) scale(1.8); }
     }
     @keyframes totMusicaTargetHitDown {
-      0%,100% { transform: translateY(0) perspective(900px) rotateX(0deg) scale(1); filter: none; }
-      22% { transform: translate(-7px, 24px) perspective(900px) rotateX(14deg) rotate(-1deg) scale(1.04); filter: brightness(2); }
-      45% { transform: translate(10px, 12px) perspective(900px) rotateX(-5deg) rotate(1deg) scale(1.02); }
-      65% { transform: translate(-8px, 5px) perspective(900px) rotateX(5deg) rotate(-.6deg) scale(1.01); }
+      0%,100% { --battle-hit-active-pitch: 0deg; transform: translateY(0) perspective(900px) rotateX(0deg) scale(1); filter: none; }
+      22% { --battle-hit-active-pitch: 14deg; transform: translate(-7px, 24px) perspective(900px) rotateX(14deg) rotate(-1deg) scale(1.04); filter: brightness(2); }
+      45% { --battle-hit-active-pitch: -5deg; transform: translate(10px, 12px) perspective(900px) rotateX(-5deg) rotate(1deg) scale(1.02); }
+      65% { --battle-hit-active-pitch: 5deg; transform: translate(-8px, 5px) perspective(900px) rotateX(5deg) rotate(-.6deg) scale(1.01); }
     }
 
     @media (max-width: 1100px), (max-height: 620px) {
@@ -9745,11 +9768,11 @@
     }
 
     @keyframes cardHitShake {
-      0%, 100% { transform: translate(0, 0) perspective(900px) rotateX(0deg) rotateY(0deg); filter: none; }
-      12%, 84% { transform: translate(-7px, 0) perspective(900px) rotateX(var(--battle-hit-pitch)) rotateY(var(--battle-hit-yaw)); filter: brightness(1.25) saturate(1.18); }
-      24%, 72% { transform: translate(8px, 0) perspective(900px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw)); }
-      36%, 60% { transform: translate(-12px, 0) perspective(900px) rotateX(var(--battle-hit-pitch)) rotateY(var(--battle-hit-yaw)); }
-      48% { transform: translate(13px, 0) perspective(900px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw)); }
+      0%, 100% { --battle-hit-active-yaw: 0deg; --battle-hit-active-pitch: 0deg; transform: translate(0, 0) perspective(900px) rotateX(0deg) rotateY(0deg); filter: none; }
+      12%, 84% { --battle-hit-active-yaw: var(--battle-hit-yaw); --battle-hit-active-pitch: var(--battle-hit-pitch); transform: translate(-7px, 0) perspective(900px) rotateX(var(--battle-hit-pitch)) rotateY(var(--battle-hit-yaw)); filter: brightness(1.25) saturate(1.18); }
+      24%, 72% { --battle-hit-active-yaw: var(--battle-hit-counter-yaw); --battle-hit-active-pitch: var(--battle-hit-counter-pitch); transform: translate(8px, 0) perspective(900px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw)); }
+      36%, 60% { --battle-hit-active-yaw: var(--battle-hit-yaw); --battle-hit-active-pitch: var(--battle-hit-pitch); transform: translate(-12px, 0) perspective(900px) rotateX(var(--battle-hit-pitch)) rotateY(var(--battle-hit-yaw)); }
+      48% { --battle-hit-active-yaw: var(--battle-hit-counter-yaw); --battle-hit-active-pitch: var(--battle-hit-counter-pitch); transform: translate(13px, 0) perspective(900px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw)); }
     }
 
     @keyframes cardHitReduced {

@@ -14,7 +14,7 @@ const {
 const { createVerifier, parseArguments, ORIGIN, ELECTRON_UA } = require('./board_hit_depth_public_qa');
 
 const ROOT = path.resolve(__dirname, '..');
-const BASELINE_SOURCE = 'cc85b439f88d4b8a127a95f021398956083f28ef';
+const BASELINE_SOURCE = 'ddbd4ab13de7404ecd3d3c948a1bd991d9cdc3f5';
 const folder = fs.mkdtempSync(path.join(os.tmpdir(), 'board-hit-depth-public-qa-'));
 const candidateDir = path.join(folder, 'candidate');
 const bytesOf = value => Buffer.from(canonicalJson(value));
@@ -41,7 +41,6 @@ function fixture() {
   const payloads = new Map([
     ['board_battle.html', Buffer.from('<!doctype html><title>Fixture battle</title>\n')],
     ['board_game.html', Buffer.from('<!doctype html><title>Fixture board</title>\n')],
-    ['css/board_character_depth.css', Buffer.from('.fixture-hit { transform: rotateY(8deg); }\n')],
   ]);
   const programs = config.games.board.programFiles.map(name => {
     if (!payloads.has(name)) return oldByPath.get(name);
@@ -50,7 +49,7 @@ function fixture() {
     return { ...previous, size: bytes.length, sha256: sha256Bytes(bytes) };
   });
   const retained = old.assets.filter(asset => !config.games.board.programFiles.includes(asset.path));
-  const createdAt = '2026-09-29T00:00:00.000Z';
+  const createdAt = '2026-10-01T00:00:00.000Z';
   const manifest = buildManifest('board', old.entryPath, createdAt, retained, programs);
   const manifestBytes = bytesOf(manifest);
   const board = {
@@ -140,9 +139,9 @@ async function main() {
   const healthy = fakeFetch(data);
   const report = await createVerifier({ root: ROOT, origin: ORIGIN, fetchImpl: healthy.fetchImpl }).verify(candidateDir);
   assert.equal(report.ok, true);
-  assert.equal(report.checks.length, 15);
-  assert.equal(healthy.requests.length, 15);
-  checks.push('all-15-public-routes-verified-with-fake-responses');
+  assert.equal(report.checks.length, 13);
+  assert.equal(healthy.requests.length, 13);
+  checks.push('all-13-public-routes-verified-with-fake-responses');
 
   const badCatalog = fakeFetch(data, {
     url: `${ORIGIN}/desktop/catalog-v3.json`, bytes: Buffer.from('{}'),
@@ -157,9 +156,9 @@ async function main() {
     /card runtime releaseId/);
   checks.push('card-runtime-drift-rejected');
 
-  const css = data.manifest.assets.find(asset => asset.path === 'css/board_character_depth.css');
-  const cssCas = `${data.catalog.assetBlobBaseUrl}/${css.sha256.slice(0, 2)}/${css.sha256}`;
-  const badCors = fakeFetch(data, { url: cssCas, headers: { 'access-control-allow-origin': 'https://wrong.invalid' } });
+  const battle = data.manifest.assets.find(asset => asset.path === 'board_battle.html');
+  const battleCas = `${data.catalog.assetBlobBaseUrl}/${battle.sha256.slice(0, 2)}/${battle.sha256}`;
+  const badCors = fakeFetch(data, { url: battleCas, headers: { 'access-control-allow-origin': 'https://wrong.invalid' } });
   await assert.rejects(createVerifier({ root: ROOT, origin: ORIGIN, fetchImpl: badCors.fetchImpl }).verify(candidateDir),
     /CAS CORS origin/);
   checks.push('cas-cors-regression-rejected');

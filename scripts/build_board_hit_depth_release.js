@@ -1,6 +1,6 @@
 'use strict';
 
-// A candidate contains only the three reviewed hit-depth program payloads.
+// A candidate contains only the two reviewed hit-depth program payloads.
 // Untouched Board assets retain their exact records from the live baseline.
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -16,12 +16,12 @@ const CONFIG = 'config/desktop-program-packages-v1.json';
 const CATALOG = 'public/desktop/catalog-v3.json';
 const LEGACY_CATALOG = 'public/desktop/catalog-v2.json';
 const LAUNCHER = 'public/desktop/launcher-release-v1.json';
-const BASELINE_RELEASE = 'package-a457977a2d6db004';
-const BASELINE_MANIFEST_SHA = 'bd3b8a6edda7d61d9dbc4fa58e831c52c6d03ecb5cbe941bccac585d018879b1';
-const BASELINE_CATALOG_SHA = 'c702232e5575b33d1825befa8f0661a2b1ee5e671b46f26a9c1c37a55e5f43c8';
+const BASELINE_RELEASE = 'package-4f719965bdc78c48';
+const BASELINE_MANIFEST_SHA = 'f28563970af3553be7dbe5a00b48a77297d93f30b1bc06de3668f6e6fae86093';
+const BASELINE_CATALOG_SHA = '2c589137e1205bc74def0b320f2c6cc0fc8d17f2ee4debc0153d86ff32381f4a';
 const GENERATOR = 'board-hit-depth-release-v1';
 const CHANGED_PROGRAMS = Object.freeze([
-  'board_battle.html', 'board_game.html', 'css/board_character_depth.css',
+  'board_battle.html', 'board_game.html',
 ]);
 const jsonBytes = value => Buffer.from(canonicalJson(value));
 
@@ -133,7 +133,7 @@ function createBuilder(root = ROOT) {
     const baselineEol = eolCounts(committed);
     const localEol = eolCounts(local);
     if (filename === 'public/board_game.html') {
-      assert.deepEqual(baselineEol, { crlf: 27521, bareLf: 135 }, 'Board main page mixed-EOL baseline changed.');
+      assert.deepEqual(baselineEol, { crlf: 27509, bareLf: 135 }, 'Board main page mixed-EOL baseline changed.');
       assert.equal(localEol.bareLf, baselineEol.bareLf, 'Board main page bare-LF lines changed.');
       assert.ok(localEol.crlf > 0, 'Board main page lost its committed CRLF lines.');
       const rawBlobId = cleanHash(filename, local, false);
@@ -217,7 +217,7 @@ function createBuilder(root = ROOT) {
       if (!CHANGED_PROGRAMS.includes(old.path)) assert.deepEqual(nextByPath.get(old.path), old, `Untouched asset record changed: ${old.path}`);
     }
     assert.deepEqual(manifest.assets.filter(asset => canonicalJson(asset) !== canonicalJson(oldByPath.get(asset.path))).map(asset => asset.path),
-      CHANGED_PROGRAMS, 'Only the three reviewed program records may change.');
+      CHANGED_PROGRAMS, 'Only the two reviewed program records may change.');
     assert.equal(manifest.totalFiles, previous.totalFiles, 'Board inventory count changed.');
     const manifestPath = `desktop/manifests/board-${manifest.releaseId}.json`;
     const manifestBytes = jsonBytes(manifest);

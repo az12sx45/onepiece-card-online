@@ -10,7 +10,7 @@ const builder = require('./build_board_hit_depth_release');
 const { sha256Bytes } = require('./desktop_program_package_common');
 
 const ROOT = path.resolve(__dirname, '..');
-const BASELINE_SOURCE = 'cc85b439f88d4b8a127a95f021398956083f28ef';
+const BASELINE_SOURCE = 'ddbd4ab13de7404ecd3d3c948a1bd991d9cdc3f5';
 const runRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'board-hit-depth-builder-'));
 const fixture = path.join(runRoot, 'source');
 const candidateDir = path.join(runRoot, 'candidate');
@@ -75,10 +75,10 @@ function main() {
   });
   const result = api.main(['--output', candidateDir]);
   const manifest = JSON.parse(result.files.get(result.manifestPath));
-  check('candidate-is-only-three-program-payloads', () => {
+  check('candidate-is-only-two-program-payloads', () => {
     assert.deepEqual([...result.files.keys()].filter(name => name.startsWith('program-bytes/')),
       builder.CHANGED_PROGRAMS.map(name => `program-bytes/${name}`));
-    assert.equal(result.inputs.changedPrograms.length, 3);
+    assert.equal(result.inputs.changedPrograms.length, 2);
     assert.equal(manifest.totalFiles, oldManifest.totalFiles);
     assert.ok(fs.readFileSync(path.join(fixture, 'public/desktop/catalog-v3.json')).equals(oldCatalogBytes));
   });
@@ -91,8 +91,8 @@ function main() {
     assert.equal(payload.length, committed.length + Buffer.byteLength('\r\n/* reviewed hit-depth fixture */\r\n'));
     const count = bytes => ({ crlf: (bytes.toString('latin1').match(/\r\n/g) || []).length,
       bareLf: (bytes.toString('latin1').match(/(?<!\r)\n/g) || []).length });
-    assert.deepEqual(count(committed), { crlf: 27521, bareLf: 135 });
-    assert.deepEqual(count(payload), { crlf: 27523, bareLf: 135 });
+    assert.deepEqual(count(committed), { crlf: 27509, bareLf: 135 });
+    assert.deepEqual(count(payload), { crlf: 27511, bareLf: 135 });
     assert.equal(result.inputs.changedPrograms.find(asset => asset.path === name).sha256, sha256Bytes(local));
   });
   check('every-untouched-asset-record-retained', () => {

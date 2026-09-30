@@ -24,13 +24,23 @@ const { chromium } = loadPlaywright();
 const PUBLIC = path.resolve(__dirname, '..', 'public');
 const ROOT = path.resolve(__dirname, '..');
 const BASELINE_REF = process.env.BOARD_QA_BASELINE_REF || '';
+const BASELINE_REPORT = process.env.BOARD_QA_BASELINE_REPORT
+  ? JSON.parse(fs.readFileSync(process.env.BOARD_QA_BASELINE_REPORT, 'utf8')) : null;
 let origin = process.env.BOARD_QA_URL || '';
 const OUTPUT = process.env.BOARD_QA_OUTPUT || (BASELINE_REF
   ? 'D:/Codex_QA/board-battle-hit-depth-20260929/baseline'
   : 'D:/Codex_QA/board-battle-hit-depth-20260929');
 const CHROME = process.env.BOARD_QA_CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
-const report = { origin, baselineRef: BASELINE_REF || null, startedAt: new Date().toISOString(), readOnly: true,
+const report = { origin, baselineRef: BASELINE_REF || null,
+  comparedWith: BASELINE_REPORT ? { path: process.env.BOARD_QA_BASELINE_REPORT, ref: BASELINE_REPORT.baselineRef } : null,
+  motionTolerance: { cardMinPx: 2, portraitMinPx: 2.5, relative: 0.1, clipPx: 2,
+    note: 'Portrait raw bbox may shift sub-pixel amounts under 3D projection; card center and painted clipping keep the 2px gate.' },
+  startedAt: new Date().toISOString(), readOnly: true,
   checks: [], cases: [], pageErrors: [], blockedWrites: [] };
+const HIT_ANIMATIONS = new Set(['cardHitShake', 'portraitHit', 'battleBoxHit', 'battleHitShake',
+  'totMusicaTargetHitDown']);
+const HIT_TIMES_MS = [0, 46, 70, 84, 92, 138, 140, 158, 168, 184, 210, 230, 252, 276,
+  280, 322, 324, 336, 350, 368, 414, 420, 460, 468, 490, 504, 560, 588, 630, 700, 720];
 const ORIGINAL_HIT_MOTION = {
   cardHitShake: { duration: 700, points: [
     [0, 0, 0], [.12, -7, 0], [.24, 8, 0], [.36, -12, 0], [.48, 13, 0],
@@ -134,8 +144,15 @@ const measure = ({ selector }) => {
   const box = element => {
     if (!element) return null;
     const rect = element.getBoundingClientRect();
+    const visible = { left: Math.max(clip.left, rect.left), top: Math.max(clip.top, rect.top),
+      right: Math.min(clip.right, rect.right), bottom: Math.min(clip.bottom, rect.bottom) };
+    visible.width = Math.max(0, visible.right - visible.left);
+    visible.height = Math.max(0, visible.bottom - visible.top);
+    visible.center = visible.width && visible.height
+      ? { x: (visible.left + visible.right) / 2, y: (visible.top + visible.bottom) / 2 } : null;
     return { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
       width: rect.width, height: rect.height,
+      visible,
       clipped: { left: Math.max(0, clip.left - rect.left), top: Math.max(0, clip.top - rect.top),
         right: Math.max(0, rect.right - clip.right), bottom: Math.max(0, rect.bottom - clip.bottom) } };
   };
@@ -163,7 +180,7 @@ const measure = ({ selector }) => {
     const axisYaw = -axis[1] * Math.sin(angle);
     const axisTilt = Math.max(Math.abs(axisPitch), Math.abs(axisYaw));
     return { element: element.tagName.toLowerCase() + (element.className ? '.' + String(element.className).trim().replace(/\s+/g, '.') : ''),
-      visible, animation: style.animationName, transform, rotate: style.rotate,
+      visible, animation: style.animationName, transform, translate: style.translate, rotate: style.rotate,
       tilt: visible ? Math.max(matrixTilt, axisTilt) : 0,
       yaw: visible ? (matrix?.m13 || 0) + axisYaw : 0,
       pitch: visible ? (matrix?.m23 || 0) + axisPitch : 0,
@@ -209,6 +226,173 @@ async function checkOriginalHitMotion(page, selector, animationName, label) {
   return actual;
 }
 
+function motionBox(box, neutral) {
+  if (!box) return null;
+  const center = { x: (box.left + box.right) / 2, y: (box.top + box.bottom) / 2 };
+  const visibleCenter = box.visible.center;
+  const baseCenter = neutral && { x: (neutral.left + neutral.right) / 2,
+    y: (neutral.top + neutral.bottom) / 2 };
+  return { center, visibleCenter, bounds: { left: box.left, top: box.top,
+    right: box.right, bottom: box.bottom, width: box.width, height: box.height }, clipped: box.clipped,
+    delta: baseCenter ? { x: center.x - baseCenter.x, y: center.y - baseCenter.y } : { x: 0, y: 0 },
+    visibleDelta: neutral?.visible.center && visibleCenter
+      ? { x: visibleCenter.x - neutral.visible.center.x, y: visibleCenter.y - neutral.visible.center.y }
+      : null };
+}
+
+async function captureHitTrace(page, selector, hitClass) {
+  const captured = await page.evaluate(({ selector, hitClass, names, times }) => {
+    const target = document.querySelector(selector);
+    target.classList.remove(hitClass);
+    void target.offsetWidth;
+    target.classList.add(hitClass);
+    const hitAnimations = target.getAnimations({ subtree: true })
+      .filter(animation => names.includes(animation.animationName));
+    for (const animation of hitAnimations) {
+      animation.pause();
+      animation.currentTime = 0;
+    }
+    const clipRect = document.querySelector('.battle-viewport')?.getBoundingClientRect();
+    const clip = { left: Math.max(0, clipRect?.left || 0), top: Math.max(0, clipRect?.top || 0),
+      right: Math.min(innerWidth, clipRect?.right ?? innerWidth),
+      bottom: Math.min(innerHeight, clipRect?.bottom ?? innerHeight) };
+    const boxFromRect = rect => {
+      if (!rect) return null;
+      const visible = { left: Math.max(clip.left, rect.left), top: Math.max(clip.top, rect.top),
+        right: Math.min(clip.right, rect.right), bottom: Math.min(clip.bottom, rect.bottom) };
+      visible.width = Math.max(0, visible.right - visible.left);
+      visible.height = Math.max(0, visible.bottom - visible.top);
+      visible.center = visible.width && visible.height
+        ? { x: (visible.left + visible.right) / 2, y: (visible.top + visible.bottom) / 2 } : null;
+      return { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
+        width: rect.width ?? rect.right - rect.left, height: rect.height ?? rect.bottom - rect.top, visible,
+        clipped: { left: Math.max(0, clip.left - rect.left), top: Math.max(0, clip.top - rect.top),
+          right: Math.max(0, rect.right - clip.right), bottom: Math.max(0, rect.bottom - clip.bottom) } };
+    };
+    const box = element => boxFromRect(element?.getBoundingClientRect());
+    const paintedPortrait = portrait => {
+      if (!portrait) return null;
+      const raw = portrait.getBoundingClientRect();
+      const wrap = portrait.closest('.portrait-wrap');
+      if (!wrap) return boxFromRect(raw);
+      const style = getComputedStyle(wrap);
+      if (!['hidden', 'clip'].includes(style.overflowX) || !['hidden', 'clip'].includes(style.overflowY)) {
+        return boxFromRect(raw);
+      }
+      const mask = wrap.getBoundingClientRect();
+      const painted = { left: Math.max(raw.left, mask.left), top: Math.max(raw.top, mask.top),
+        right: Math.min(raw.right, mask.right), bottom: Math.min(raw.bottom, mask.bottom) };
+      if (painted.right <= painted.left || painted.bottom <= painted.top) return null;
+      return boxFromRect(painted);
+    };
+    const frames = [];
+    for (const atMs of times) {
+      for (const animation of hitAnimations) {
+        const duration = Number(animation.effect.getComputedTiming().duration);
+        animation.currentTime = Math.min(atMs, duration);
+      }
+      const style = getComputedStyle(target);
+      const portrait = target.querySelector('.battle-portrait, .battle-character-img');
+      frames.push({ atMs, offsetWidth: target.offsetWidth,
+        rootStyle: { animation: style.animationName, transform: style.transform,
+          translate: style.translate, rotate: style.rotate },
+        card: box(target), portrait: box(portrait), portraitPainted: paintedPortrait(portrait) });
+    }
+    return { animations: hitAnimations.map(animation => ({ name: animation.animationName,
+      duration: animation.effect.getComputedTiming().duration })),
+    calcSupport: CSS.supports('translate', 'calc(100% * 100% * sin(-14deg) / 3600px) 0'), frames };
+  }, { selector, hitClass, names: [...HIT_ANIMATIONS], times: HIT_TIMES_MS });
+  const neutral = captured.frames[0];
+  const samples = captured.frames.map(frame => ({ atMs: frame.atMs, offsetWidth: frame.offsetWidth,
+    rootStyle: frame.rootStyle, card: motionBox(frame.card, neutral.card),
+    portrait: motionBox(frame.portrait, neutral.portrait),
+    portraitPainted: motionBox(frame.portraitPainted, neutral.portraitPainted) }));
+  const peaks = {};
+  for (const part of ['card', 'portrait']) {
+    peaks[part] = {};
+    for (const axis of ['x', 'y']) {
+      const values = samples.map(sample => (part === 'card'
+        ? sample[part]?.visibleDelta?.[axis] : sample[part]?.delta?.[axis])).filter(Number.isFinite);
+      peaks[part][axis] = values.length ? { min: Math.min(...values), max: Math.max(...values) } : null;
+    }
+  }
+  return { animations: captured.animations, calcSupport: captured.calcSupport, samples, peaks };
+}
+
+async function holdFixtureHitClass(page, selector, hitClass, hold) {
+  await page.evaluate(({ selector, hitClass, hold }) => {
+    const target = document.querySelector(selector);
+    target.__boardQaHitObserver?.disconnect();
+    if (!hold) {
+      delete target.__boardQaHitObserver;
+      target.classList.remove(hitClass);
+      return;
+    }
+    target.__boardQaHitObserver = new MutationObserver(() => {
+      if (!target.classList.contains(hitClass)) target.classList.add(hitClass);
+    });
+    target.__boardQaHitObserver.observe(target, { attributes: true, attributeFilter: ['class'] });
+  }, { selector, hitClass, hold });
+}
+
+function compareHitTrace(name, trace) {
+  if (!BASELINE_REPORT) return;
+  const baseline = BASELINE_REPORT.cases.find(entry => entry.name === name)?.motionTrace;
+  check(`${name} baseline visual trace available`, Boolean(baseline),
+    { baselineRef: BASELINE_REPORT.baselineRef, name });
+  if (!baseline) return;
+  const matchingTimes = baseline.samples.length === trace.samples.length && baseline.samples.every((frame, index) =>
+    frame.atMs === trace.samples[index].atMs);
+  check(`${name} same exact hit frame times`, matchingTimes,
+    { expected: baseline.samples.map(frame => frame.atMs), actual: trace.samples.map(frame => frame.atMs) });
+  if (!matchingTimes) return;
+  for (const part of ['card', 'portrait']) {
+    if (part === 'portrait' && !baseline.samples[0].portrait && !trace.samples[0].portrait) continue;
+    const peakLoss = [];
+    const displacement = [];
+    const clipping = [];
+    for (const axis of ['x', 'y']) {
+      const oldPeak = baseline.peaks?.[part]?.[axis], newPeak = trace.peaks?.[part]?.[axis];
+      if (!oldPeak || !newPeak) continue;
+      if (oldPeak.min < -3 && newPeak.min > oldPeak.min + Math.max(part === 'portrait' ? 2.5 : 2, -oldPeak.min * .1)) {
+        peakLoss.push({ axis, direction: 'negative', baseline: oldPeak.min, candidate: newPeak.min });
+      }
+      if (oldPeak.max > 3 && newPeak.max < oldPeak.max - Math.max(part === 'portrait' ? 2.5 : 2, oldPeak.max * .1)) {
+        peakLoss.push({ axis, direction: 'positive', baseline: oldPeak.max, candidate: newPeak.max });
+      }
+    }
+    for (let index = 0; index < baseline.samples.length; index += 1) {
+      const oldFrame = baseline.samples[index], newFrame = trace.samples[index];
+      const oldBox = oldFrame[part], newBox = newFrame[part];
+      if (!oldBox || !newBox) continue;
+      const oldDelta = part === 'card' ? oldBox.visibleDelta : oldBox.delta;
+      const newDelta = part === 'card' ? newBox.visibleDelta : newBox.delta;
+      if (oldDelta && newDelta) for (const axis of ['x', 'y']) {
+        const amount = oldDelta[axis];
+        if (Math.abs(amount) < 3) continue;
+        const tolerance = Math.max(part === 'portrait' ? 2.5 : 2, Math.abs(amount) * .1);
+        if (Math.sign(newDelta[axis]) !== Math.sign(amount) ||
+          Math.abs(newDelta[axis]) + tolerance < Math.abs(amount)) {
+          displacement.push({ atMs: oldFrame.atMs, axis, baseline: amount,
+            candidate: newDelta[axis], tolerance });
+        }
+      }
+      for (const edge of ['left', 'top', 'right', 'bottom']) {
+        const oldClip = part === 'portrait' ? oldFrame.portraitPainted || oldBox : oldBox;
+        const newClip = part === 'portrait' ? newFrame.portraitPainted || newBox : newBox;
+        if (newClip.clipped[edge] > oldClip.clipped[edge] + 2) {
+          clipping.push({ atMs: oldFrame.atMs, edge, baseline: oldClip.clipped[edge],
+            candidate: newClip.clipped[edge], rawBaseline: oldBox.clipped[edge],
+            rawCandidate: newBox.clipped[edge] });
+        }
+      }
+    }
+    check(`${name} ${part} signed peak displacement matches original`, peakLoss.length === 0, peakLoss);
+    check(`${name} ${part} visible displacement matches original`, displacement.length === 0, displacement);
+    check(`${name} ${part} viewport clipping matches original`, clipping.length === 0, clipping);
+  }
+}
+
 async function makeContext(browser, spec) {
   const context = await browser.newContext({ viewport: spec.viewport, reducedMotion: spec.reduced ? 'reduce' : 'no-preference',
     hasTouch: spec.mobile, isMobile: spec.mobile, deviceScaleFactor: 1 });
@@ -246,27 +430,35 @@ async function prepareIframe(page) {
 
 async function prepareMap(page) {
   await page.evaluate(() => {
+    // renderBattle emits stats-only fighters; its old portrait selectors have no live image nodes.
     const fixture = document.createElement('section');
     fixture.id = 'battleHitDepthQaFixture';
     fixture.className = 'battle-grid';
     fixture.style.cssText = 'position:fixed;inset:12% 5%;z-index:99999;padding:12px;background:#061322;';
     fixture.innerHTML = `
       <div class="battle-box battle-fighter player" id="battleHitDepthQaPlayer">
-        <div class="name">我方角色</div>
-        <div class="battle-portrait-stage">
-          <img class="battle-character-img" src="images/board/battle/portraits/evolutions/sanji_evolution_2/normal.webp" alt="">
-        </div>
+        <div class="name">我方角色 ・ 山治</div>
+        <div class="meta">S級 ・ 戰鬥員 ・ Lv.50 ・ 生命值 320/400 ・ 攻擊 180 ・ 防禦 120 ・ 特攻 140 ・ 特防 130 ・ 速度 160</div>
+        <div class="battle-hp"><span style="width:80%"></span></div>
+        <div class="meta">狀態：正常</div>
+        <div class="meta">被動：連擊</div>
+        <div class="meta">攜帶物：無</div>
+        <div class="meta">船長：目前上場</div>
       </div>
       <div class="battle-box battle-fighter enemy" id="battleHitDepthQaEnemy">
         <div class="name">敵方角色</div>
-        <div class="battle-portrait-stage">
-          <img class="battle-character-img" src="images/board/battle/enemies/postgame_saga/normal.webp" alt="">
-        </div>
+        <div class="meta">級別 S級 ・ Lv.50 ・ 推薦戰力 4000+ ・ 速度 140</div>
+        <div class="battle-hp"><span style="width:65%"></span></div>
+        <div class="meta">生命值 260/400 ・ 攻擊 170 ・ 防禦 125 ・ 特攻 155 ・ 特防 120</div>
+        <div class="meta">狀態：正常</div>
       </div>`;
     document.body.appendChild(fixture);
   });
-  await page.waitForFunction(() => [...document.querySelectorAll('#battleHitDepthQaFixture img')]
-    .every(image => image.complete && image.naturalWidth > 0), null, { timeout: 15000 });
+  check('map fixture mirrors live stats-only fighters', await page.evaluate(() => {
+    const fixture = document.getElementById('battleHitDepthQaFixture');
+    return fixture?.querySelectorAll('.battle-box.battle-fighter').length === 2 &&
+      fixture.querySelectorAll('.battle-portrait-stage, .battle-character-img, img').length === 0;
+  }));
 }
 
 async function prepareTotMusica(page) {
@@ -339,10 +531,13 @@ async function runTotCase(browser, spec) {
     if (!spec.reduced) await checkOriginalHitMotion(page, selectors.boss, 'cardHitShake', `${spec.name}/boss`);
     const bossScreenshot = path.join(OUTPUT, `${spec.name}-boss-up.png`);
     await page.screenshot({ path: bossScreenshot });
-    report.cases.push({ name: `${spec.name}/boss-up`, before: initial.boss, impact: boss, screenshot: bossScreenshot });
+    const bossTrace = spec.reduced ? null : await captureHitTrace(page, selectors.boss, 'portrait-hit');
+    if (bossTrace) compareHitTrace(`${spec.name}/boss-up`, bossTrace);
+    report.cases.push({ name: `${spec.name}/boss-up`, before: initial.boss, impact: boss,
+      motionTrace: bossTrace, screenshot: bossScreenshot });
     check(`${spec.name} boss hit pose active`, boss?.samples[0]?.animation !== 'none', boss?.samples[0]?.animation);
     if (spec.reduced) check(`${spec.name} boss reduced motion stays flat`, boss.maxTilt < 0.01, boss.samples[0]);
-    else {
+    else if (!BASELINE_REF) {
       check(`${spec.name} boss tilts away from actors below`,
         boss.samples[0].pitch < -0.02, { pitch: boss.samples[0].pitch });
     }
@@ -359,12 +554,15 @@ async function runTotCase(browser, spec) {
       if (!spec.reduced) await checkOriginalHitMotion(page, selectors[side], 'totMusicaTargetHitDown', `${spec.name}/${side}`);
       const screenshot = path.join(OUTPUT, `${spec.name}-${side}-down.png`);
       await page.screenshot({ path: screenshot });
-      report.cases.push({ name: `${spec.name}/${side}-down`, before: initial[side], impact, screenshot });
+      const motionTrace = spec.reduced ? null : await captureHitTrace(page, selectors[side], 'portrait-hit');
+      if (motionTrace) compareHitTrace(`${spec.name}/${side}-down`, motionTrace);
+      report.cases.push({ name: `${spec.name}/${side}-down`, before: initial[side], impact,
+        motionTrace, screenshot });
       check(`${spec.name}/${side} hit pose active`,
         impact?.samples[0]?.animation === (spec.reduced ? 'cardHitReduced' : 'totMusicaTargetHitDown'),
         impact?.samples[0]?.animation);
       if (spec.reduced) check(`${spec.name}/${side} reduced motion stays flat`, impact.maxTilt < 0.01, impact.samples[0]);
-      else {
+      else if (!BASELINE_REF) {
         check(`${spec.name}/${side} tilts away from boss above`,
           impact.samples[0].pitch > 0.02, { pitch: impact.samples[0].pitch });
       }
@@ -417,6 +615,7 @@ async function runCase(browser, spec) {
       const before = await page.evaluate(measure, { selector });
       check(`${spec.name}/${side} target exists`, Boolean(before?.offsetWidth && before?.offsetHeight), before);
       if (!before) continue;
+      if (spec.page === 'iframe') await holdFixtureHitClass(page, selector, hitClass, true);
       await page.evaluate(({ selector, hitClass }) => {
         const target = document.querySelector(selector);
         target.classList.remove(hitClass);
@@ -454,14 +653,17 @@ async function runCase(browser, spec) {
         spec.page === 'iframe' ? 'cardHitShake' : 'battleBoxHit', `${spec.name}/${side}`);
       const screenshot = path.join(OUTPUT, `${spec.name}-${side}.png`);
       await page.screenshot({ path: screenshot });
-      await page.evaluate(({ selector, hitClass }) => document.querySelector(selector)?.classList.remove(hitClass),
+      const motionTrace = spec.reduced ? null : await captureHitTrace(page, selector, hitClass);
+      if (motionTrace) compareHitTrace(`${spec.name}/${side}`, motionTrace);
+      if (spec.page === 'iframe') await holdFixtureHitClass(page, selector, hitClass, false);
+      else await page.evaluate(({ selector, hitClass }) => document.querySelector(selector)?.classList.remove(hitClass),
         { selector, hitClass });
       await page.waitForTimeout(260);
       const after = await page.evaluate(measure, { selector });
       const clipping = { before: before.box.clipped,
         frames: frames.map(frame => ({ at: frame.at, card: frame.box.clipped, portrait: frame.portraitBox?.clipped })),
         impact: { card: impact.box.clipped, portrait: impact.portraitBox?.clipped } };
-      const details = { before, frames, impact, after, peak, yaw, clipping, screenshot };
+      const details = { before, frames, impact, after, peak, yaw, clipping, motionTrace, screenshot };
       report.cases.push({ name: `${spec.name}/${side}`, ...details });
       directionBySide[side] = { before, impact };
       check(`${spec.name}/${side} hit animation active`, animations.some(name =>
@@ -475,7 +677,7 @@ async function runCase(browser, spec) {
       { before: [before.offsetWidth, before.offsetHeight], frames: frames.map(frame => [frame.offsetWidth, frame.offsetHeight]),
         impact: [impact.offsetWidth, impact.offsetHeight] });
       check(`${spec.name}/${side} no lingering 3D tilt`, after.maxTilt < 0.01, { after: after.maxTilt });
-      if (spec.page === 'iframe' && !spec.iframePortrait && !BASELINE_REF) {
+      if (spec.page === 'iframe' && !spec.iframePortrait && !BASELINE_REF && !BASELINE_REPORT) {
         const hitBoxes = [...frames, impact];
         const newCardClip = hitBoxes.some(frame => Object.keys(before.box.clipped).some(edge =>
           frame.box.clipped[edge] > before.box.clipped[edge] + 2));
@@ -504,7 +706,7 @@ async function runCase(browser, spec) {
         Boolean(player && enemy && Math.abs(player.before.center.y - enemy.before.center.y) >
           Math.abs(player.before.center.x - enemy.before.center.x)),
         { player: player?.before.center, enemy: enemy?.before.center });
-      if (!spec.reduced && player && enemy) {
+      if (!BASELINE_REF && !spec.reduced && player && enemy) {
         for (const [side, target, source] of [['player', player, enemy], ['enemy', enemy, player]]) {
           const expected = Math.sign(target.before.center.y - source.before.center.y);
           const pitch = target.impact.samples[0]?.pitch || 0;
@@ -532,6 +734,9 @@ async function main() {
   const local = origin ? null : await startStaticServer();
   if (local) origin = local.url;
   report.origin = origin;
+  if (BASELINE_REPORT) check('comparison baseline is a passing pre-depth run',
+    BASELINE_REPORT.ok === true && Boolean(BASELINE_REPORT.baselineRef),
+    { ok: BASELINE_REPORT.ok, ref: BASELINE_REPORT.baselineRef });
   let browser;
   try {
     browser = await chromium.launch({ headless: true, executablePath: CHROME });
@@ -540,22 +745,18 @@ async function main() {
     const portrait = { viewport: { width: 390, height: 844 }, mobile: true, reduced: false, mapPortrait: true };
     const iframePortrait = { viewport: { width: 390, height: 844 }, mobile: true, reduced: false, iframePortrait: true };
     const reduced = { viewport: { width: 1440, height: 900 }, mobile: false, reduced: true };
-    if (BASELINE_REF) {
-      await runCase(browser, { page: 'iframe', name: 'iframe-mobile-baseline', ...mobile });
-      await runCase(browser, { page: 'iframe', name: 'iframe-portrait-baseline', ...iframePortrait });
-    } else for (const page of ['iframe', 'map']) {
-      for (const [variant, settings] of Object.entries({ desktop, mobile, reduced })) {
+    for (const page of ['iframe', 'map']) {
+      for (const [variant, settings] of Object.entries(BASELINE_REF ? { desktop, mobile }
+        : { desktop, mobile, reduced })) {
         await runCase(browser, { page, name: `${page}-${variant}`, ...settings });
       }
     }
-    if (!BASELINE_REF) {
-      await runCase(browser, { page: 'iframe', name: 'iframe-portrait-390x844', ...iframePortrait });
-      await runCase(browser, { page: 'map', name: 'map-portrait-390x844', ...portrait });
-      await runCase(browser, { page: 'iframe', name: 'iframe-coop-desktop', ...desktop, coop: true });
-      await runTotCase(browser, { name: 'tot-musica-desktop', ...desktop });
-      await runTotCase(browser, { name: 'tot-musica-mobile', ...mobile });
-      await runTotCase(browser, { name: 'tot-musica-reduced', ...reduced });
-    }
+    await runCase(browser, { page: 'iframe', name: 'iframe-portrait-390x844', ...iframePortrait });
+    await runCase(browser, { page: 'map', name: 'map-portrait-390x844', ...portrait });
+    await runCase(browser, { page: 'iframe', name: 'iframe-coop-desktop', ...desktop, coop: true });
+    await runTotCase(browser, { name: 'tot-musica-desktop', ...desktop });
+    await runTotCase(browser, { name: 'tot-musica-mobile', ...mobile });
+    if (!BASELINE_REF) await runTotCase(browser, { name: 'tot-musica-reduced', ...reduced });
     check('no browser exceptions', report.pageErrors.length === 0, report.pageErrors);
   } finally {
     await browser?.close();

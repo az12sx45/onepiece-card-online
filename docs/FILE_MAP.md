@@ -1,5 +1,11 @@
 # File Map
 
+## 2026-10-01 戰鬥受擊可見位移補償
+
+- `public/board_battle.html`、`public/board_game.html`：固定 CSS individual `translate` 補償式，以註冊的角度屬性在 keyframe 內動畫，避開 Chrome 的平方百分比 keyframe 計算問題；Tot Musica 特例補 X/Y，原平移與時長不變。
+- `scripts/board_battle_hit_depth_qa.js`：同時間點 bounding box 比對舊版與候選的卡片／肖像可見位移及裁切；地圖用與 live `renderBattle` 相同的 stats-only 框隔離 fixture，不測不存在的 live 肖像圖。
+- `scripts/build_board_hit_depth_release.js`、`scripts/board_hit_depth_release_builder_qa.js`、`scripts/board_hit_depth_public_qa_fixture.js`：鎖定現行 Board 封包基線及兩個 HTML 變更白名單，驗證隔離候選／假公開回應；尚未正式發布。
+
 ## 2026-09-30 Launcher 1.2.14 魯夫圖集與更新公告
 
 - `public/images/launcher_room/{motion_v5,acting_v5,life_hd_v3,portrait_v4}/luffy/`：17 張新版魯夫完整人物 WebP，舊版路徑保留作回退；`tools/launcher-room/luffy-v1214/manifest.json` 保存精確路徑、尺寸來源及 SHA。

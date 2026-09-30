@@ -1,5 +1,11 @@
 # Dev Workflow
 
+## 2026-10-01 戰鬥受擊可見位移補償（本地候選，未部署）
+
+玩家實玩指出先前公開版受擊卡片看起來沒有舊版移得那麼多。逐幀檢查發現原本的平移數值雖已還原，新增的 3D 透視旋轉仍會把卡片的可見中心往反方向帶。這次在 `public/board_battle.html`、`public/board_game.html` 的受擊元素上固定 CSS individual `translate` 補償式，只在 keyframe 內動畫已註冊的角度自訂屬性；避免 Chrome 在 keyframe 內誤算平方百分比。一般受擊依元素寬度及 yaw 補 X；Tot Musica 上下站位依 pitch 補 Y，特殊雙角色演出再補 X。原 `transform` 平移路徑、700ms／460ms 時長、Tot Musica 720ms 特殊動作、命中時點及戰鬥規則均不改。手機上下排列只補償可見中心，沒有新增受擊路徑。
+
+`scripts/board_battle_hit_depth_qa.js` 新增同時間點的逐幀 bounding box、可見中心、肖像位移及裁切與舊版比對，避免只檢查 CSS 平移值。地圖實際 `renderBattle` 輸出的是 stats-only 角色框，QA 已改用同結構、不含圖片的隔離 fixture，不把舊的非 live 圖像 fixture 當作正式畫面。最終本機候選 `D:\Codex_QA\board-battle-hit-depth-20261001\candidate-held-hit\result.json` 為 327/327 PASS、0 page errors、0 blocked writes；舊版基準最終重跑確認中。`scripts/build_board_hit_depth_release.js` 及兩支隔離 fixture 改以現行 `package-4f719965bdc78c48` 為基線，封包白名單限兩個 HTML；builder fixture 10/10、假公開回應 fixture 6/6 及腳本語法檢查通過。目前沒有建立正式候選、提升 catalog、提交或部署；自動化瀏覽器檢查不等於真人／實體手機驗收。
+
 ## 2026-09-30 Launcher 1.2.14 魯夫頭身比例、動作圖與附圖公告
 
 範圍：對生活基地 14 位已發布角色以相同 128px 顯示尺寸檢查頭身；確認最明顯的魯夫頭／上身寬度異常後，用 GPT 原畫重新製作魯夫四向走路、四向互動、八個生活動作與圓形肖像共 17 張 WebP。素材只加入 `motion_v5`、`acting_v5`、`life_hd_v3`、`portrait_v4` 新路徑，未覆寫舊圖；透明邊緣、尺寸、腳跟與縮圖逐張檢查。`tools/launcher-room/luffy-v1214/manifest.json` 綁定 17 筆 SHA-256；`desktop/launcher-room-motion.js` 的 `LUFFY_ART_ENABLED=true` 控制房間、工作、商店與小遊戲，載入／解碼失敗時回退同方向舊圖。`config/launcher-announcements-v1.json` revision 13 附新增更新主圖，並由 1.2.14 發布版本決定是否顯示。角色 ID、商品、存檔與三款遊戲規則不變。

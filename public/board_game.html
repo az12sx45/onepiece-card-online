@@ -20447,11 +20447,18 @@
     .battle-box.battle-fighter.enemy.attack{
       animation:battleBoxEnemyAttack .58s ease;
     }
+    @property --battle-hit-active-yaw{
+      syntax:"<angle>";inherits:false;initial-value:0deg;
+    }
+    @property --battle-hit-active-pitch{
+      syntax:"<angle>";inherits:false;initial-value:0deg;
+    }
     .battle-box.battle-fighter.hit{
       --battle-hit-yaw:-14deg;
       --battle-hit-pitch:3deg;
       --battle-hit-counter-yaw:5deg;
       --battle-hit-counter-pitch:-1deg;
+      translate:calc(100% * 100% * sin(var(--battle-hit-active-yaw)) / 3600px) 0;
       animation:battleBoxHit .46s ease;
       filter:brightness(1.18) saturate(1.15);
     }
@@ -20462,10 +20469,11 @@
     @keyframes battleBoxPlayerAttack{0%,100%{transform:translateX(0)}42%{transform:translateX(18px) scale(1.02)}}
     @keyframes battleBoxEnemyAttack{0%,100%{transform:translateX(0)}42%{transform:translateX(-18px) scale(1.02)}}
     @keyframes battleBoxHit{
-      10%,90%{transform:translateX(-3px) perspective(900px) rotateX(var(--battle-hit-pitch)) rotateY(var(--battle-hit-yaw))}
-      20%,80%{transform:translateX(4px) perspective(900px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw))}
-      30%,50%,70%{transform:translateX(-6px) perspective(900px) rotateX(var(--battle-hit-pitch)) rotateY(var(--battle-hit-yaw))}
-      40%,60%{transform:translateX(6px) perspective(900px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw))}
+      0%,100%{--battle-hit-active-yaw:0deg;--battle-hit-active-pitch:0deg}
+      10%,90%{--battle-hit-active-yaw:var(--battle-hit-yaw);--battle-hit-active-pitch:var(--battle-hit-pitch);transform:translateX(-3px) perspective(900px) rotateX(var(--battle-hit-pitch)) rotateY(var(--battle-hit-yaw))}
+      20%,80%{--battle-hit-active-yaw:var(--battle-hit-counter-yaw);--battle-hit-active-pitch:var(--battle-hit-counter-pitch);transform:translateX(4px) perspective(900px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw))}
+      30%,50%,70%{--battle-hit-active-yaw:var(--battle-hit-yaw);--battle-hit-active-pitch:var(--battle-hit-pitch);transform:translateX(-6px) perspective(900px) rotateX(var(--battle-hit-pitch)) rotateY(var(--battle-hit-yaw))}
+      40%,60%{--battle-hit-active-yaw:var(--battle-hit-counter-yaw);--battle-hit-active-pitch:var(--battle-hit-counter-pitch);transform:translateX(6px) perspective(900px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw))}
     }
     @keyframes battleBoxHitReduced{0%,100%{filter:brightness(1)}50%{filter:brightness(1.2)}}
     @media (prefers-reduced-motion: reduce){
@@ -20592,6 +20600,9 @@
       .current-grid,
       .companion-grid,
       .battle-grid{grid-template-columns:1fr}
+      .battle-box.battle-fighter.hit{
+        translate:0 calc(-100% * 100% * sin(var(--battle-hit-active-pitch)) / 3600px);
+      }
       .battle-box.battle-fighter.player.hit{
         --battle-hit-yaw:0deg;--battle-hit-pitch:-14deg;
         --battle-hit-counter-yaw:0deg;--battle-hit-counter-pitch:5deg;
