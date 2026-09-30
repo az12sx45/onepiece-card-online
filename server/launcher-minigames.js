@@ -11,7 +11,15 @@ const SUPPLIES = Object.freeze({
   books:[['logbook','航海日誌'],['chart','海圖'],['history','歷史文獻']]
 });
 const DIRECTIONS = ['left','up','right'];
-const WORK_JOBS = Object.freeze(['supply','cooking','repair','navigation']);
+const WORK_JOBS = Object.freeze(['supply','cooking','repair','navigation','fishing']);
+// Existing catches in One Piece: Unlimited World Red. Keep this list stable for saves.
+const FISH_SPECIES = Object.freeze([
+  Object.freeze({id:'balloon-catfish',label:'氣球鯰魚',sourceName:'フウセンナマズ',weight:5}),
+  Object.freeze({id:'glistening-saury',label:'閃亮秋刀魚',sourceName:'ギラギラサンマ',weight:4}),
+  Object.freeze({id:'smile-jellyfish',label:'微笑水母',sourceName:'スマイルクラゲ',weight:4}),
+  Object.freeze({id:'panda-shark',label:'熊貓鯊',sourceName:'パンサメ',weight:2})
+]);
+const FISH_COUNTER = Object.freeze({left:'right',right:'left',deep:'slack'});
 const INGREDIENTS = Object.freeze({meat:'肉塊',fish:'鮮魚',onion:'洋蔥',potato:'馬鈴薯',rice:'白飯',salt:'海鹽',lemon:'檸檬',orange:'橘子',apple:'蘋果',cream:'鮮奶油'});
 const RECIPES = Object.freeze([
   {label:'港口燉肉',steps:['onion','meat','potato','salt']},
@@ -47,6 +55,10 @@ function repairConnected(round,rotations) {
   return false;
 }
 function workChallenge(jobId,id,roundIndex,issuedAt) {
+  if(jobId==='fishing') {
+    const pulls=Array.from({length:roundIndex<2?3:4},()=>pick(['left','right','deep']));
+    return{id,pulls,showcaseMs:950,answerWindowMs:12500,notBefore:iso(issuedAt+3000)};
+  }
   if(jobId==='cooking') {
     const dish=pick(RECIPES),recipe=[...dish.steps],extra=shuffled(Object.keys(INGREDIENTS).filter(key=>!recipe.includes(key))).slice(0,6-recipe.length);
     return{id,recipe,recipeLabel:dish.label,ingredients:shuffled([...recipe,...extra]).map(key=>({id:key,label:INGREDIENTS[key]})),showcaseMs:1200,answerWindowMs:10000,notBefore:iso(issuedAt+3000)};
@@ -107,6 +119,8 @@ function view(session) {
   if(!session)return null;
   const {roomRevision,...result}=session;
   if(session.kind==='work')result.jobId=jobFor(session);
+  // The catch is drawn by the server and revealed only after settlement.
+  delete result.catchSpeciesId;
   return JSON.parse(JSON.stringify(result));
 }
 function contextValid(session,state,room) {
@@ -126,7 +140,8 @@ async function active(db,userId,now,state,room) {
 function create(kind,characterId,roomRevision,now,practice=false,jobId='supply') {
   const session={id:crypto.randomUUID(),token:crypto.randomBytes(24).toString('hex'),kind,characterId,practice,
     ...(kind==='work'?{jobId}:{}),
-    state:'playing',roomRevision,attempt:1,maxAttempts:3,roundIndex:0,totalRounds:kind==='work'?8:4,
+    ...(kind==='work'&&jobId==='fishing'?{catchSpeciesId:pick(FISH_SPECIES.flatMap(species=>Array(species.weight).fill(species.id)))}:{}),
+    state:'playing',roomRevision,attempt:1,maxAttempts:3,roundIndex:0,totalRounds:kind==='work'?(jobId==='fishing'?5:8):4,
     startedAt:now.toISOString(),finishNotBefore:iso(now.getTime()+(kind==='work'?24000:20000)),
     challenge:challenge(kind,0,now,jobId),score:0,combo:0,correctRounds:0,feedback:null,result:null};
   session.expiresAt=iso(now.getTime()+durationFor(session));return session;
@@ -152,9 +167,12 @@ function answer(session,payload,now) {
   if(now.getTime()<Date.parse(round.notBefore))return{error:'minigame_too_early'};
   let correct=false;
   if(session.kind==='work') {
-    const jobId=jobFor(session),field={supply:'selections',cooking:'ingredients',repair:'rotations',navigation:'path'}[jobId];
-    if(!field||['selections','directions','ingredients','rotations','path'].some(key=>key!==field&&payload[key]!==undefined))return{error:'invalid_minigame_answer'};
-    if(jobId==='cooking') {
+    const jobId=jobFor(session),field={supply:'selections',cooking:'ingredients',repair:'rotations',navigation:'path',fishing:'counterMoves'}[jobId];
+    if(!field||['selections','directions','ingredients','rotations','path','counterMoves'].some(key=>key!==field&&payload[key]!==undefined))return{error:'invalid_minigame_answer'};
+    if(jobId==='fishing') {
+      if(!Array.isArray(payload.counterMoves)||payload.counterMoves.length>round.pulls.length||payload.counterMoves.some(move=>!['left','right','slack'].includes(move)))return{error:'invalid_minigame_answer'};
+      correct=payload.counterMoves.length===round.pulls.length&&payload.counterMoves.every((move,index)=>move===FISH_COUNTER[round.pulls[index]]);
+    } else if(jobId==='cooking') {
       if(!Array.isArray(payload.ingredients)||payload.ingredients.length>round.recipe.length||payload.ingredients.some(id=>!round.ingredients.some(item=>item.id===id)))return{error:'invalid_minigame_answer'};
       correct=payload.ingredients.length===round.recipe.length&&payload.ingredients.every((id,i)=>id===round.recipe[i]);
     } else if(jobId==='repair') {
@@ -175,6 +193,10 @@ function answer(session,payload,now) {
       payload.directions.some(value=>!DIRECTIONS.includes(value)))return{error:'invalid_minigame_answer'};
     correct=payload.directions.length===round.directions.length&&payload.directions.every((value,i)=>value===round.directions[i]);
   }
+  // The round timer is authoritative on the server, with a short allowance
+  // for network latency. A late answer advances as a miss, never as a catch.
+  const latestAnswerMs = Date.parse(round.notBefore) + Number(round.answerWindowMs) + 3000;
+  if(!Number.isFinite(latestAnswerMs)||now.getTime()>latestAnswerMs)correct=false;
   session.combo=correct?session.combo+1:0;
   if(correct){session.correctRounds++;session.score+=100+Math.min(4,session.combo-1)*25;}
   session.feedback={roundIndex:session.roundIndex,correct,combo:session.combo,correctRounds:session.correctRounds,score:session.score};
@@ -182,4 +204,4 @@ function answer(session,payload,now) {
   session.challenge=session.roundIndex<session.totalRounds?challenge(session.kind,session.roundIndex,now,jobFor(session)):null;
   return{};
 }
-module.exports={ACTIVE,CATEGORIES,WORK_JOBS,ensure,save,view,active,create,retry,load,answer,contextValid};
+module.exports={ACTIVE,CATEGORIES,WORK_JOBS,FISH_SPECIES,ensure,save,view,active,create,retry,load,answer,contextValid};

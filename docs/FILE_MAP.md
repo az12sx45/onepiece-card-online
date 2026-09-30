@@ -1330,3 +1330,14 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 - `config/launcher-announcements-v1.json`、`server/launcher-announcements.js`、`desktop/launcher-announcements.js`、`desktop/launcher-announcements.css`：圖文公告的版本門檻、路徑驗證、清單縮圖與詳情主圖。
 - `public/images/launcher_announcements/launcher-life-1.2.13.webp`、`tools/launcher-room/announcement-v1213/`：重畫的更新主圖、原稿及 SHA manifest；`desktop/main.js`、`desktop/package.json`、`desktop/package-lock.json` 封裝本機媒體與 1.2.13 版號。
 - `scripts/desktop_launcher_package_qa.js`、`scripts/launcher_1213_announcement_qa.js`、`scripts/launcher_announcements_client_qa.js`、`scripts/launcher_life_routine_qa.js`、`scripts/launcher_room_assignment_browser_qa.js`：封裝、公告、角色日常與實際 Chromium 指派操作的定向 QA。
+
+## 2026-10-01 Launcher 1.2.15 海釣與生活海景檔案
+
+- `server/launcher-minigames.js`、`server/launcher-life.js`、`server/launcher-life-store.js`：海釣題目／答案與每輪伺服器截止判定、四種魚收藏、展示權限與上限、原工作錢包帳本。
+- `server/launcher-profile-shop.js`、`desktop/launcher-life-data.js`、`desktop/launcher-room-dialogue.js`：四件家具商品、工作站、夥伴活動及對話。`config/launcher-crew-release-v1.json`：薩波／羅開放、漢考克維持關閉。
+- `desktop/launcher-room-minigames.js/.css`：海釣魚影提示與原四種工作新畫面；`desktop/launcher-room-aquarium.js/.css`、`desktop/launcher-room.js`：背景窗優先、同場單一魚缸游魚，避免重複；`desktop/launcher-room-ambience.js/.css`、`desktop/launcher.html`：透明船體後方的動態海天、全船同日天候與夜間暴風暗度。
+- `public/images/launcher_room/scenes/*-cutout-v3.webp`、`sea/ocean-*.webp`：六個透明船體與時段／雷雨海面；`fish_v1/`、`furniture/`、`furniture_views/`、`minigames_v1/`：四種魚、四件家具四向圖與工作場景。圖像清單及 SHA 在 `tools/launcher-room/release-v1215/manifest.json`。
+- `public/images/launcher_room/reserved_v3_previews/`、`tools/launcher-room/reserved-v3/`：十名未上架角色的鎖定預覽、來源及製作進度；`public/images/launcher_room/reserved_v3/vivi/`：薇薇 17 張／81 格鎖定候選動作圖，僅供封裝預載，不接商城或出場。
+- `config/launcher-announcements-v1.json`、`public/images/launcher_announcements/launcher-life-fishing-1.2.15.webp`、`scripts/launcher_1215_announcement_qa.js`：版本門檻圖文公告及本機隔離驗證。
+- `desktop/auth-service.js`、`desktop/main.js`、`desktop/package.json`、`desktop/package-lock.json`、`scripts/desktop_launcher_package_qa.js`：資源允許清單與 1.2.15 封裝門檻；`scripts/launcher_fishing_server_qa.js`、`launcher_fishing_client_qa.js`、`launcher_furniture_weather_browser_qa.js`、`launcher_work_art_client_qa.js`、`launcher_1215_crew_release_qa.js`：定向 PGlite／Chromium 驗證。
+- `public/desktop/launcher-release-v1.json`、`public/desktop-download.html`：已簽署的 1.2.15 版本／安裝檔 SHA-256 清單與下載頁回退連結；公開讀回證據另存 `D:/Codex_QA/launcher-life-fishing-weather-1.2.15-release-r4/publish/`。

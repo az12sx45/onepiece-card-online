@@ -1,0 +1,1898 @@
+{
+  "schema": "one-piece-room-reserved-pixel-qa/1",
+  "ok": true,
+  "assetCount": 17,
+  "frameCount": 81,
+  "items": [
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/portrait.webp",
+      "sha256": "403592d2278271d9db996a2238db68aed3de3ba4e76e3c4c66347229cb2841fd",
+      "dimensions": [
+        256,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "b5a1843904b8ce8ace43d2f6b3f172182f3ce445f0bd21b6cfc29d4a6a5150f1",
+          "bounds": [
+            65,
+            23,
+            190,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            66,
+            24,
+            189,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/walk/east.webp",
+      "sha256": "2af437121d8220f9d32a4ee5bb36e289957582e3805bdcfbc5f2de215847eaed",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "c8be7e881d15e0d169b581c3b670058bb2c1fdefaf25554566e9b8561b338e33",
+          "bounds": [
+            72,
+            31,
+            281,
+            336
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            73,
+            33,
+            280,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "38b81646ba05db35734a9ab0de91183fe7a759f3fc7b53a014563093362e84c8",
+          "bounds": [
+            97,
+            35,
+            273,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            98,
+            36,
+            272,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "bc1402229c1900ab4c2628774fe85a08c5c1183e1444f3bd8c669827fda7615e",
+          "bounds": [
+            81,
+            34,
+            286,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            35,
+            286,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "38b81646ba05db35734a9ab0de91183fe7a759f3fc7b53a014563093362e84c8",
+          "bounds": [
+            97,
+            35,
+            273,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            98,
+            36,
+            272,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/acting/east.webp",
+      "sha256": "4c31b538362f50edece9d8d87716d4dfe4facd6e86c7d5626f4fabed6ee5156c",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "ae894d66b3df06ac681b625196164eadfdd66b4f1672b903496904515f0c00aa",
+          "bounds": [
+            73,
+            22,
+            174,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            24,
+            173,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "891ebe594aca02bd2a414e36f12bc1c85f94fd8d2326083e3ddc5fcdbbb6d326",
+          "bounds": [
+            67,
+            22,
+            208,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            68,
+            23,
+            207,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "022b06b6cff1ec51b3126d9c34dd20e680d9ad04a444280a32f8f0d59da9e26d",
+          "bounds": [
+            54,
+            25,
+            207,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            56,
+            26,
+            206,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "8cb979a4a91e58a5b068b14987bf3b5a35e2efaf3d219008aae5b28375d9752e",
+          "bounds": [
+            72,
+            19,
+            203,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            73,
+            21,
+            202,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "5797319f525770b10f27a6cc631392f1fffcea5a9df5d5dca1e3e182c265388e",
+          "bounds": [
+            72,
+            24,
+            184,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            73,
+            25,
+            184,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "2021a728e93080ee81901a211c38ba27757c862faecb1fe83d25ad339d0319c4",
+          "bounds": [
+            61,
+            34,
+            196,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            61,
+            36,
+            195,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "e7ba2f190bc84e8726e51ef6da12edd649179f27de823e1861350236aa54d184",
+          "bounds": [
+            67,
+            15,
+            195,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            67,
+            16,
+            194,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "c166086981ef0ac34707922cc8bb3214bb828d4c298a3b20285703630390f8fa",
+          "bounds": [
+            72,
+            22,
+            189,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            73,
+            23,
+            188,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/work-east.webp",
+      "sha256": "6aa3a2b9bcf89202b810aaa74060eb8d6788298adc37a792554c5dc6f70cfc85",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "613e555c3e38ae7f59fabfb31c4336ba8fa3f720fb49ab0af446d95ff91ce00f",
+          "bounds": [
+            65,
+            23,
+            211,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            66,
+            24,
+            209,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "3bad02a44aa05feae2ca57ae927ca35d1528d937af39aec4ee4816ba525af481",
+          "bounds": [
+            65,
+            23,
+            216,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            66,
+            24,
+            215,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "79bdc5ac1afd336505e6c70e1eff12082694d0f322c542f89af00ab203a5f732",
+          "bounds": [
+            67,
+            23,
+            200,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            68,
+            24,
+            199,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "a603960f5e9b5087b70ff65201b7693737dda01add98167801ab33e17b525ff0",
+          "bounds": [
+            62,
+            22,
+            221,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            63,
+            23,
+            220,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/walk/west.webp",
+      "sha256": "c87b3de0ed69463636ee496645d1cee91e7b8aa975f7f748ec0d4368451d6afc",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "cfbf7fe562fa45cf085c1576826dc5baa7e163cad97c86bbecc3b4a539bff64a",
+          "bounds": [
+            93,
+            36,
+            307,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            94,
+            37,
+            305,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "5e0b52b3518c6bd5bdf6d8c95d1eeaa78e519e0c5c73e74dbb3fc3c86215b60e",
+          "bounds": [
+            104,
+            35,
+            292,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            105,
+            36,
+            290,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "3c0a36cc6261dadfab4a49d7caf0fac440488a6fb2b6c0c5a59975e75879bd84",
+          "bounds": [
+            98,
+            35,
+            310,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            99,
+            36,
+            308,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "5e0b52b3518c6bd5bdf6d8c95d1eeaa78e519e0c5c73e74dbb3fc3c86215b60e",
+          "bounds": [
+            104,
+            35,
+            292,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            105,
+            36,
+            290,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/acting/west.webp",
+      "sha256": "c8f568f07c4da34613af51e308f31bc11fd5f3282a157148cf3c39548cfc91b2",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "8c2503dac14b7cd1fac9ca5bb18a77472a3ac33c943ef448ea514367d0435638",
+          "bounds": [
+            81,
+            23,
+            191,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            24,
+            190,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "fc8d66f2425a4167f1cc9e09d36672f1f955bd138a743ab4daf758f1ef70bd99",
+          "bounds": [
+            44,
+            22,
+            194,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            45,
+            24,
+            192,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "c1b498638623b544fac000d60d1415922f52412c07af0374bb863ef6e66b0a3a",
+          "bounds": [
+            48,
+            29,
+            205,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            50,
+            30,
+            204,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "ddc2e1fdfe1dacdd307f701fd6ca4d9f5516fc18e562bc79eff3c062d6bff398",
+          "bounds": [
+            48,
+            18,
+            184,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            49,
+            20,
+            182,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "fa5e3e43c63259f1e2ebc5e18a002f6b48c1d8ebfc7c7fdfd45cb10079d10922",
+          "bounds": [
+            73,
+            27,
+            188,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            73,
+            28,
+            187,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "526ed3d3180bc92468951f1c516e998a361c0126777a9885a6cf3282b2c2d1f8",
+          "bounds": [
+            57,
+            35,
+            200,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            58,
+            37,
+            198,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "48839ccbd1ccc6ee0d9f3969fd1129c8f04096b72fc163185bed4b1431bf151f",
+          "bounds": [
+            64,
+            13,
+            195,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            66,
+            14,
+            194,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "18dfd984e9e14177ae36b2654aad6d87fe0eb9dcd0bed1cb5d416132456724a7",
+          "bounds": [
+            64,
+            20,
+            187,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            65,
+            21,
+            186,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/work-west.webp",
+      "sha256": "48b74730220c75c66c920a8f4db999fbf550a27651389bc6ef79634c9487eb32",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "5d1bd911a6243e894fc780405e05cb286003065281d894487e3ea928c67cefeb",
+          "bounds": [
+            51,
+            25,
+            193,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            52,
+            26,
+            192,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "4bde3a563dbcf3e28f0d3d8c570dca580cb449a742d0c4e012913b789b330197",
+          "bounds": [
+            58,
+            17,
+            193,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            59,
+            18,
+            191,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "3bad218a89146511aa893c135c7906b6747d29bfa61004b4c14f64fd2869f31c",
+          "bounds": [
+            58,
+            23,
+            192,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            60,
+            25,
+            191,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "00560374710bf11db75e7c14a6b0a486dfbd746aff4af231f9b2c80d9ff17051",
+          "bounds": [
+            44,
+            21,
+            198,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            45,
+            22,
+            197,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/walk/north.webp",
+      "sha256": "48ff5edf9b4f5dc72c82049153ea69a100079fb769ec5a94a71c89604011f5e9",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "e01afb2714fb192c4cc2c2a886958ecc51250b24b6f3e0477cf4d3524285ac11",
+          "bounds": [
+            82,
+            35,
+            271,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            83,
+            36,
+            270,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "e82cc821e6df1f52e15a3787a74b85066ca835975a4b0dba89931ae1d539fcef",
+          "bounds": [
+            107,
+            35,
+            277,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            108,
+            36,
+            276,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "9701b3d96035bdeaff912a8a039507e4d7c86ae5e2fbd3b510f26147cb5eeadf",
+          "bounds": [
+            109,
+            34,
+            297,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            109,
+            34,
+            296,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "e82cc821e6df1f52e15a3787a74b85066ca835975a4b0dba89931ae1d539fcef",
+          "bounds": [
+            107,
+            35,
+            277,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            108,
+            36,
+            276,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/acting/north.webp",
+      "sha256": "74fe78e46329f09d62b6af17afd7cd91c98e14c846b4486237f1d6998314b377",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "e0446bf18bd0e65b4f6bf98ef818f58f945054a4c229a9e75c7418415d021dd3",
+          "bounds": [
+            71,
+            22,
+            185,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            72,
+            24,
+            184,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "d2bcabf5371730ca11a6a4ca37e3673f902e64014d95d91d42452c0c32bf4c83",
+          "bounds": [
+            69,
+            22,
+            210,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            70,
+            24,
+            209,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "1253a486f29f31df1e94e10c2f3608b3d177eb0bd5c84a6c864fe5c423e3f516",
+          "bounds": [
+            66,
+            22,
+            213,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            67,
+            24,
+            211,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "58993b91be020e16ac27499e9332762f86fca7779ce88f31cd09441872e0b3df",
+          "bounds": [
+            71,
+            24,
+            213,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            72,
+            25,
+            212,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "5260eab24f20d02f50da79101cc71d17aebc6002dd38f525a9f732927c9f6bdd",
+          "bounds": [
+            60,
+            33,
+            177,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            61,
+            34,
+            176,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "d3d02282cf940d2ac840fea5b30356a18fb56f0352c9ab240ee427bd21d76eb0",
+          "bounds": [
+            47,
+            64,
+            209,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            48,
+            66,
+            207,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "88ccfddbabc36dff9223a078715e151b6b17bfa95765037434d305753f269fa7",
+          "bounds": [
+            65,
+            14,
+            201,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            66,
+            15,
+            200,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "0adad9108f06339b9ddbce29930dd83eaf6f6d8ab77997c1400d056dc2280bf5",
+          "bounds": [
+            72,
+            36,
+            187,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            73,
+            37,
+            187,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/work-north.webp",
+      "sha256": "a31314ed0b57c7f3d2360f24c89e6dcd2eb2623416acbea52e1a34952bed0689",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "6c6954860c557817297b6f7134426155d1e6834ca802d663df478861528f1fb8",
+          "bounds": [
+            66,
+            22,
+            194,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            67,
+            23,
+            193,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "01f42f58d4f517767ee733ef0870fd3ca1373c0f6c17ce398af48e5f4a18e9f8",
+          "bounds": [
+            67,
+            27,
+            198,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            68,
+            28,
+            198,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "df89d649932f6107620392f0b9d330c8f872464e5a9bf9d04ff461695399471c",
+          "bounds": [
+            62,
+            27,
+            195,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            63,
+            28,
+            194,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "df88c71fa11c9dfdf2d44996356565fd164b856641ac7b8f91d995f2decb8f4a",
+          "bounds": [
+            63,
+            27,
+            208,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            63,
+            28,
+            206,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/walk/south.webp",
+      "sha256": "53553ac2160257253a42e70ccf0ab19169ca43e13fd6061cb50209c897f773aa",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "2c671ac4c25dbf0918eeb46aa16e3fefca3061728b61216cefdbc7676f33f874",
+          "bounds": [
+            93,
+            31,
+            289,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            94,
+            32,
+            288,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "ad2baac0b0526f658d09e033e4a1030140e659a921fc73833137c503dbb4907c",
+          "bounds": [
+            95,
+            28,
+            293,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            96,
+            29,
+            292,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "28d87377ae25fc366515e18b27e73f6d81d32f955c06352da30acc5ad713b178",
+          "bounds": [
+            93,
+            30,
+            310,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            95,
+            31,
+            309,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "ad2baac0b0526f658d09e033e4a1030140e659a921fc73833137c503dbb4907c",
+          "bounds": [
+            95,
+            28,
+            293,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            96,
+            29,
+            292,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/acting/south.webp",
+      "sha256": "17f22e300d8fb98219c28cb97d1f8f60859f43616910bf2c920faa070867010e",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "8da5fecdcdbc7ec3dfd6f3155fb94ba901a81ecf39748d5b17de0c4a945d34ea",
+          "bounds": [
+            60,
+            23,
+            195,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            61,
+            25,
+            194,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "cebe35dacb7e35ea06ee88a56736b5cc83fbd138da1a1544109afd027b5a6b1c",
+          "bounds": [
+            67,
+            25,
+            221,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            68,
+            26,
+            220,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "3f5968544645fbed1cea870b5cc27f813e42856602b333290a434b6db859442e",
+          "bounds": [
+            42,
+            23,
+            200,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            43,
+            25,
+            199,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "fd1a7a8becd0a89c4b25d37e8924ccde32d09ad0c8ee21ce73f5ef65011993d0",
+          "bounds": [
+            59,
+            25,
+            196,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            60,
+            27,
+            195,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "7659dfe2d98cff156fc8bba95046be1c53056509c8b53d5b543b22ae7a398c57",
+          "bounds": [
+            71,
+            36,
+            194,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            72,
+            37,
+            193,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "67eb178db3f74de1a3d8078b2c58c8ddbbe0f30cd4eca2bb276609478cbf3bf6",
+          "bounds": [
+            47,
+            62,
+            209,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            48,
+            63,
+            207,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "b6ef31183fcefb7effc953405e061c975b02faa0f0600a92fbabc98621ecfdae",
+          "bounds": [
+            65,
+            22,
+            200,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            66,
+            23,
+            200,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "be98803ae1da3f07d271eb8cf70bdb9704f52bd578f2a06fd450eee13d70c41c",
+          "bounds": [
+            56,
+            32,
+            196,
+            226
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            57,
+            33,
+            195,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/work-south.webp",
+      "sha256": "e4be3101adc9c33838cd98621f524ad61a775b3b80f9cf217a1f1b0dfb737c44",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "9b464d63898447da2a55b65ce3a57b68fa1abdb12bca59f8cf2617a815bf7e3e",
+          "bounds": [
+            61,
+            16,
+            199,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            63,
+            18,
+            198,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "5c5907377dce5ab41ef1784044a48631fc5722e86ef7df5e115b8519e5e604cf",
+          "bounds": [
+            61,
+            14,
+            201,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            61,
+            16,
+            200,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "51177e440a5e76e73ee7f35379e7586b3c0ebbb30b84984bd917333abff3ffad",
+          "bounds": [
+            54,
+            13,
+            202,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            55,
+            13,
+            201,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "1fad5b8e12975ba2682915488f55d5199cf88dbfe8a0986cb72161c23000169e",
+          "bounds": [
+            57,
+            12,
+            217,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            58,
+            13,
+            216,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/eat-south.webp",
+      "sha256": "ef02db285e3ed8d3e8967f97156ebab6c83111c8c38fe74fd2732ef658f7066a",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "9e89af4e3b176d8b60dab5a6bd0a858f322d091ed6372834273d8eed54eeadaf",
+          "bounds": [
+            53,
+            23,
+            189,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            54,
+            24,
+            188,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "bed1aa321cf35d8867a6395ed008a2a5dec26dcf69f477f363f2c0e72f44fafa",
+          "bounds": [
+            64,
+            29,
+            188,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            65,
+            30,
+            188,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "a90432d283481eb235e182f9f45d588e977fc64091fdb72d26db05e41aeaf2cb",
+          "bounds": [
+            56,
+            27,
+            198,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            57,
+            28,
+            197,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "dbed324130803e35b2f83cf982e753d1ef3492aedb76bf0f324c8f5028959858",
+          "bounds": [
+            64,
+            21,
+            191,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            65,
+            22,
+            190,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/rest-south.webp",
+      "sha256": "dab406fa3e1c8d1e94d9d566b6f908afe5fa85a432ee0a3dbfe9792b30c7aa49",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "714b409da567552d186ecf818628dccac797fa8d165135405e5695e6ee4dfc1e",
+          "bounds": [
+            49,
+            63,
+            206,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            51,
+            64,
+            205,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "32c1d987db9ca0feb5a84ffb89014910297c21fd6636bfa2012b8d238c1693d2",
+          "bounds": [
+            46,
+            72,
+            209,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            48,
+            73,
+            208,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "d956ae1486f91f7569d8245c74e16ea699b49b2b4013aaebbf7139d98c9196ba",
+          "bounds": [
+            49,
+            45,
+            207,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            50,
+            45,
+            206,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "f77bea4a80eb7b99a5f71b5f51a7ab52453102e0e42337a219210a449c3412d5",
+          "bounds": [
+            65,
+            26,
+            191,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            66,
+            27,
+            191,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/sleep-south.webp",
+      "sha256": "5ea974fb2757d454186d683c5eba99e3092e532f29132a2af97ff08f73bbebd6",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "c2643e26a3bbf4ebe6e4bb19585d370e9ee6ded673443685e6041224b6f6a472",
+          "bounds": [
+            58,
+            45,
+            198,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            59,
+            46,
+            197,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "2c9ddfbe7a01bd9000098f7b3f42cf678fbbd12f921c93b050130a389a646786",
+          "bounds": [
+            42,
+            118,
+            214,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            43,
+            119,
+            212,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "cba9fd4f07aa5d36b54b15bb77a69d9a3ec126a7db4f986f521a939092253cef",
+          "bounds": [
+            29,
+            127,
+            227,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            30,
+            128,
+            226,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "98aeb4bea0464aec11419275ca695f19ee5a1b9ae6403772fe42c0bd0226cb2d",
+          "bounds": [
+            49,
+            67,
+            208,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            50,
+            68,
+            206,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/train-south.webp",
+      "sha256": "4e8cf2c17a29cc9cd0f5412369508f5a663a7582b4ffb27f6c7cfc9475b80969",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "8036c1de6f61321e41256e3d1a9cf070dc2bd24ef20d5446a0094950d9950d5c",
+          "bounds": [
+            37,
+            80,
+            215,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            39,
+            81,
+            214,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "0de8bfc5cf30968513d5502d0dbc8049e434bfa70e0c8c73752be54916ab1678",
+          "bounds": [
+            40,
+            63,
+            220,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            41,
+            64,
+            220,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "85ac360db932c909107cc9a9f8c9dd016b012fbf42a4a685d58e9dffdb33d6a6",
+          "bounds": [
+            38,
+            59,
+            208,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            39,
+            60,
+            207,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "9895d2500d7bf3e2b6df12d378019a82036f4483c7e56c4f2bfae5b7ea97da2d",
+          "bounds": [
+            50,
+            56,
+            205,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            51,
+            57,
+            204,
+            224
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "Actual lossless WebP decode, per-cell RGBA hashes, alpha and bounds only; not art or animation acceptance",
+  "humanAcceptance": false
+}

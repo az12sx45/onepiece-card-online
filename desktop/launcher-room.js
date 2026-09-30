@@ -6,7 +6,7 @@
   const HEIGHT = 540;
   const ROOM_MAX_CHARACTERS = 10;
   const DEFAULT_SCENE = 'room-scene-default';
-  const SCENE_FALLBACK = 'opui://launcher/images/launcher_room/scenes/crew-cabin-v2.webp';
+  const SCENE_FALLBACK = 'opui://launcher/images/launcher_room/scenes/crew-cabin-cutout-v3.webp';
   const TYPES = {
     scene: { type: 'room_scene', owned: 'roomScenes', label: '場景' },
     furniture: { type: 'room_furniture', owned: 'roomFurniture', label: '家具' },
@@ -24,7 +24,9 @@
     'swords-rack': [2, 1], 'kitchen-table': [3, 2], 'galley-stove': [3, 2], bookshelf: [2, 1],
     'medicine-cabinet': [2, 1], piano: [3, 2], 'tool-bench': [2, 2],
     'supply-rack': [2, 1], 'log-pose-desk': [2, 2], 'repair-cart': [2, 1],
-    'library-cart': [2, 1], 'medical-cart': [2, 1], 'den-den-desk': [2, 2]
+    'library-cart': [2, 1], 'medical-cart': [2, 1], 'den-den-desk': [2, 2],
+    'aquarium-tank': [3, 2], 'fishing-gear-rack': [2, 2],
+    'galley-icebox': [2, 1], 'crew-tea-table': [3, 1]
   };
   // Complete 384px drawings, measured at the front row against the accepted crew art.
   // All four views keep one item scale; saved footprints and placement coordinates stay fixed.
@@ -34,7 +36,9 @@
     'kitchen-table': 80.25, 'galley-stove': 80.25, bookshelf: 90,
     'medicine-cabinet': 86, piano: 80.25, 'tool-bench': 76,
     'supply-rack': 82, 'log-pose-desk': 72, 'repair-cart': 70,
-    'library-cart': 72, 'medical-cart': 70, 'den-den-desk': 72
+    'library-cart': 72, 'medical-cart': 70, 'den-den-desk': 72,
+    'aquarium-tank': 84, 'fishing-gear-rack': 78,
+    'galley-icebox': 80, 'crew-tea-table': 86
   });
   const FURNITURE_CANVAS = 384;
   const FURNITURE_GROUND_ROOT = Object.freeze([192, 372]);
@@ -46,7 +50,8 @@
     const sceneId = activeRoom()?.sceneId || '';
     const sceneKey = String(sceneId).replace(/^room-scene-/, '');
     const ambience = window.OnePieceRoomAmbience?.compute?.(new Date(), sceneKey) || {};
-    return { ...ambience, ...extra };
+    const fish = lifeRoom?.fishCollection?.() || profile?.life?.fishCollection || [];
+    return { ...ambience, aquariumFishCount: fish.filter(entry => entry.inAquarium).length, ...extra };
   }
   const locomotion = window.OnePieceRoomMotion || null;
   const motionTable = window.OnePieceRoomMotionManifest || null;
@@ -61,8 +66,9 @@
   const assetFor = item => {
     const source = catalogAssetFor(item);
     const sceneKey = item?.key || String(item?.id || '').replace(/^room-scene-/, '');
-    if (source && item?.type === TYPES.scene.type && ['sunny-deck', 'sunny-kitchen', 'sunny-library'].includes(sceneKey)) {
-      return `opui://launcher/images/launcher_room/scenes/${sceneKey}-v2.webp`;
+    if (source && item?.type === TYPES.scene.type &&
+        ['sunny-deck', 'sunny-kitchen', 'sunny-library', 'sunny-workshop', 'sunny-aquarium'].includes(sceneKey)) {
+      return `opui://launcher/images/launcher_room/scenes/${sceneKey}-cutout-v3.webp`;
     }
     const key = item?.type === TYPES.character.type ? keyForCharacter(item) : '';
     return source && key ? portraitFor(key) : source;
@@ -219,6 +225,7 @@
     speak: showSpeech, hideSpeech, wander: chooseDestination, canAnimate,
     editing: () => editing, reducedMotion: () => motion.matches, roomStatus: status,
     focus: holdCompanionAttention, deferAttentionMovement,
+    onFishChanged() { renderAquarium(); },
     finishManual(itemId) {
       if (companionId !== itemId) return;
       const walker = walkers.find(entry => entry.item?.id === itemId);
@@ -1447,6 +1454,14 @@
       remove.onclick = event => { event.stopPropagation(); setSelected('furniture', entry.itemId); removeSelection(); };
       controls.append(remove);
       node.append(sprite, direction, controls);
+      if (keyForFurniture(item) === 'aquarium-tank') {
+        node.classList.add('room-aquarium-furniture');
+        node.dataset.aquariumTank = 'true';
+        const waterWindow = el('div', 'room-aquarium-window');
+        waterWindow.dataset.aquariumTank = 'furniture';
+        waterWindow.setAttribute('aria-hidden', 'true');
+        node.append(waterWindow);
+      }
       node.dataset.roomKey = `f:${entry.itemId}`;
       node.onkeydown = event => {
         if (!assignment || (event.key !== 'Enter' && event.key !== ' ')) return;
@@ -1488,7 +1503,14 @@
       node.classList.toggle('is-companion-selected', !editing && companionId === entry.itemId);
       positionNode(node, placed); characters.append(node);
     }
+    renderAquarium();
     refreshAnimation(); syncAssignmentUi();
+  }
+  function renderAquarium() {
+    window.OnePieceRoomAquarium?.render?.({
+      stage: $('roomStage'), profile, room: activeRoom(), editing,
+      fishCollection: lifeRoom?.fishCollection?.() || profile?.life?.fishCollection || []
+    });
   }
   function setSelected(kind, itemId) {
     selected = kind && itemId ? { kind, itemId } : null;
