@@ -31,3 +31,9 @@
 4. 素材、封裝與瀏覽器 QA 均通過後，才建立版本化安裝檔與完整 SHA／簽章證據。公告須綁定實際已發布的 release ID 且保留歷史公告。正式上傳、公開 manifest 切換及下載驗證各自記錄，不以本機程式測試代替。
 
 目前可執行 `node scripts/launcher_luffy_art_switch_qa.js` 驗證正式來源關閉時只請求舊圖，並在隔離 VM 中模擬開啟後的候選成功與失敗回退；測試使用合成 Image，不能作為 17 張美術或安裝檔驗收。
+
+## 2026-09-30 公開部署讀回
+
+發行提交 `25f822e3ca87de53425e0e1ae57fc932bb7de91f` 已推至 `main`。1.2.14 安裝檔以不可變版本路徑上傳 R2；公開網址完整下載得到 265,807,827 bytes，SHA-256 `11e700d97042cef4a1328f4cf0dbbb9cc350be8d23f4f71a342e8cf9e38d62b5`，與封裝收據完全一致。公開更新清單於 2026-09-30 01:10 UTC 切換到 1.2.14；676 bytes、SHA-256 `48d762cb02fd4f26aebc67dfb237f6b91c7eab09a994da8fdecc415a708b1ea2`，與 Git 提交及 Ed25519 簽署候選逐 byte 相同，啟動器驗簽通過。公開下載頁 HTTP 200、版本文字、安裝檔連結及頁面來源核對通過。
+
+正式 `D:\Codex_Release_Worktrees\board-voyage-records-v1` 僅同步 33 個指定檔案並加入三段文件；原有其他修改保留，正式樹的啟動器 package QA 再次通過。更新公告在隔離 PGlite 測試中於 1.2.13 隱藏、1.2.14 顯示，附圖 SHA、公告發布紀錄及已讀保存通過。完整來源、封裝、R2 與公開讀回證據在 `D:\Codex_QA\launcher-proportion-1.2.14-release`。上述是自動化與 Codex 目視驗證；未作真人遊玩、真帳號公告閱讀或實體手機驗收。側向走路跨步仍需改善。
