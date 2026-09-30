@@ -2,7 +2,7 @@
 
 ## 2026-10-01 受擊視覺補償
 
-固定 CSS individual `translate` 依已註冊的動畫角度屬性抵消 3D 透視造成的卡片可見中心偏移，Tot Musica 特例補 X/Y。原受擊位移路徑、動畫時長、命中時點與減少動態設定不變；這些視覺屬性不參與碰撞或傷害判定，也不修改 HP、回合、存檔、`BOARD_GAME_STATE` 或 Socket.IO。此為本地候選，未部署。
+固定 CSS individual `translate` 依已註冊的動畫角度屬性抵消 3D 透視造成的卡片可見中心偏移，Tot Musica 特例補 X/Y。原受擊位移路徑、動畫時長、命中時點與減少動態設定不變；這些視覺屬性不參與碰撞或傷害判定，也不修改 HP、回合、存檔、`BOARD_GAME_STATE` 或 Socket.IO。公開 Board `package-e98ef3f16bf6e6e4` 已驗證。
 
 ## 2026-09-29 戰鬥受擊呈現
 

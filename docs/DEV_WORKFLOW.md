@@ -1,10 +1,12 @@
 # Dev Workflow
 
-## 2026-10-01 戰鬥受擊可見位移補償（本地候選，未部署）
+## 2026-10-01 戰鬥受擊可見位移補償（已部署）
 
 玩家實玩指出先前公開版受擊卡片看起來沒有舊版移得那麼多。逐幀檢查發現原本的平移數值雖已還原，新增的 3D 透視旋轉仍會把卡片的可見中心往反方向帶。這次在 `public/board_battle.html`、`public/board_game.html` 的受擊元素上固定 CSS individual `translate` 補償式，只在 keyframe 內動畫已註冊的角度自訂屬性；避免 Chrome 在 keyframe 內誤算平方百分比。一般受擊依元素寬度及 yaw 補 X；Tot Musica 上下站位依 pitch 補 Y，特殊雙角色演出再補 X。原 `transform` 平移路徑、700ms／460ms 時長、Tot Musica 720ms 特殊動作、命中時點及戰鬥規則均不改。手機上下排列只補償可見中心，沒有新增受擊路徑。
 
-`scripts/board_battle_hit_depth_qa.js` 新增同時間點的逐幀 bounding box、可見中心、肖像位移及裁切與舊版比對，避免只檢查 CSS 平移值。地圖實際 `renderBattle` 輸出的是 stats-only 角色框，QA 已改用同結構、不含圖片的隔離 fixture，不把舊的非 live 圖像 fixture 當作正式畫面。最終本機候選 `D:\Codex_QA\board-battle-hit-depth-20261001\candidate-held-hit\result.json` 為 327/327 PASS、0 page errors、0 blocked writes；舊版基準最終重跑確認中。`scripts/build_board_hit_depth_release.js` 及兩支隔離 fixture 改以現行 `package-4f719965bdc78c48` 為基線，封包白名單限兩個 HTML；builder fixture 10/10、假公開回應 fixture 6/6 及腳本語法檢查通過。目前沒有建立正式候選、提升 catalog、提交或部署；自動化瀏覽器檢查不等於真人／實體手機驗收。
+`scripts/board_battle_hit_depth_qa.js` 新增同時間點的逐幀 bounding box、可見中心、肖像位移及裁切與舊版比對，避免只檢查 CSS 平移值。地圖實際 `renderBattle` 輸出的是 stats-only 角色框，QA 已改用同結構、不含圖片的隔離 fixture，不把舊的非 live 圖像 fixture 當作正式畫面。最終舊版／候選配對為 124/124、327/327 PASS，0 page errors、0 blocked writes；報告在 `D:\Codex_QA\board-battle-hit-depth-20261001\baseline-final-held-hit\result.json` 與 `candidate-final-paired\result.json`。`scripts/build_board_hit_depth_release.js` 及兩支隔離 fixture 以原 `package-4f719965bdc78c48` 為基線，封包白名單限兩個 HTML；builder fixture 10/10、假公開回應 fixture 6/6 通過。
+
+發布提交 `52db7a058` 已推送 `main`；R2 預演 6070/6070，實際上傳兩個新 blob、沿用 6068 個。2026-10-01 01:57（Asia/Taipei）公開 Board runtime 切換為 `package-e98ef3f16bf6e6e4`，manifest SHA-256 `438d5e65fc477bcdd30e5c07fa71a5ef8faf15758b0cb9814e5201221b8b3d64`。`board_hit_depth_public_qa.js` 的正式站專項 13/13、`board_spectator_release_verify.js` 的三款 runtime／Board 57 個程式與舊端點 61/61、R2 新資源 2/2 均通過；Card／Chess 套件不變。全量驗證工具首次未帶桌面版 User-Agent 而取得下載導向頁，已修正工具並重跑通過；失敗報告保留。公開證據在 `D:\Codex_QA\board-hit-visible-travel-20261001\public-qa.json` 與 `spectator\`。這些是自動化與模型審圖，非真人遊玩或實體手機驗收；後續僅提交文件／QA 修正並使用 `[skip render]`。
 
 ## 2026-09-30 Launcher 1.2.14 魯夫頭身比例、動作圖與附圖公告
 

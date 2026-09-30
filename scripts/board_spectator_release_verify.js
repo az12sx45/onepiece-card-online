@@ -16,8 +16,10 @@ const catalog = JSON.parse(fs.readFileSync(path.join(ROOT, "public/desktop/catal
 const config = JSON.parse(fs.readFileSync(path.join(ROOT, "config/desktop-program-packages-v1.json")));
 const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "public", catalog.games.board.manifestPath)));
 const report = { mode, startedAt:new Date().toISOString(), expectedPackage:catalog.games.board, responses:[], checks:[], transferredBodyBytes:0 };
-async function get(url, expectedStatus = 200){
-  const response = await fetch(url, { signal:AbortSignal.timeout(45000), headers:{ "Cache-Control":"no-cache" } });
+async function get(url, expectedStatus = 200, electron = false){
+  const headers = { "Cache-Control":"no-cache" };
+  if(electron) headers["User-Agent"] = "OnePieceDesktop Electron/31.0.0";
+  const response = await fetch(url, { signal:AbortSignal.timeout(45000), headers });
   const bytes = Buffer.from(await response.arrayBuffer());
   const item = { url, status:response.status, size:bytes.length, sha256:digest(bytes), cacheControl:response.headers.get("cache-control"), contentType:response.headers.get("content-type") };
   report.responses.push(item); report.transferredBodyBytes += bytes.length;
@@ -59,7 +61,7 @@ async function main(){
     async function worker(){
       while(queue.length){
         const relative = queue.shift();
-        const { item } = await get(`${ORIGIN}/${relative}`);
+        const { item } = await get(`${ORIGIN}/${relative}`, 200, true);
         assert.equal(item.size, assets.get(relative).size, relative);
         assert.equal(item.sha256, assets.get(relative).sha256, relative);
         if(assets.get(relative).kind === "document") assert.match(item.contentType, /^text\/html/);

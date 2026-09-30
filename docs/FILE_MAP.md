@@ -4,7 +4,8 @@
 
 - `public/board_battle.html`、`public/board_game.html`：固定 CSS individual `translate` 補償式，以註冊的角度屬性在 keyframe 內動畫，避開 Chrome 的平方百分比 keyframe 計算問題；Tot Musica 特例補 X/Y，原平移與時長不變。
 - `scripts/board_battle_hit_depth_qa.js`：同時間點 bounding box 比對舊版與候選的卡片／肖像可見位移及裁切；地圖用與 live `renderBattle` 相同的 stats-only 框隔離 fixture，不測不存在的 live 肖像圖。
-- `scripts/build_board_hit_depth_release.js`、`scripts/board_hit_depth_release_builder_qa.js`、`scripts/board_hit_depth_public_qa_fixture.js`：鎖定現行 Board 封包基線及兩個 HTML 變更白名單，驗證隔離候選／假公開回應；尚未正式發布。
+- `scripts/build_board_hit_depth_release.js`、`scripts/board_hit_depth_release_builder_qa.js`、`scripts/board_hit_depth_public_qa_fixture.js`：鎖定原 Board 封包基線及兩個 HTML 變更白名單，驗證隔離候選／假公開回應；正式封包已發布。
+- `scripts/board_spectator_release_verify.js`：公開程式檔 GET 使用桌面版 User-Agent，核對 57 份 Board 程式、metadata、三款 runtime 和變更 blob；不把匿名下載導向頁當成遊戲程式。
 
 ## 2026-09-30 Launcher 1.2.14 魯夫圖集與更新公告
 

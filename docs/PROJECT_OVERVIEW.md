@@ -2,7 +2,7 @@
 
 ## 2026-10-01 戰鬥受擊可見位移回歸
 
-先前公開版的 3D 透視旋轉抵消了部分肉眼可見的卡片位移。Board 本地候選在保留原受擊平移、時長和傾斜方向的前提下，以固定 CSS individual `translate` 和 keyframe 內動畫的已註冊角度屬性補償投影中心；Tot Musica 特例補 X/Y。逐幀可見位移與裁切候選檢查 327/327 通過；地圖檢查使用與 live `renderBattle` 相同的 stats-only 框結構。尚未部署；傷害、回合與同步規則不變。
+先前公開版的 3D 透視旋轉抵消了部分肉眼可見的卡片位移。Board 保留原受擊平移、時長和傾斜方向，以固定 CSS individual `translate` 和 keyframe 內動畫的已註冊角度屬性補償投影中心；Tot Musica 特例補 X/Y。逐幀可見位移與裁切檢查 327/327 通過；地圖檢查使用與 live `renderBattle` 相同的 stats-only 框結構。正式 Board `package-e98ef3f16bf6e6e4` 已公開，13 項專項及 61 項完整性檢查通過；傷害、回合與同步規則不變。
 
 ## 2026-09-30 Launcher 1.2.14 魯夫圖集與附圖公告
 
