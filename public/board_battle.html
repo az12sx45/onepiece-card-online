@@ -2452,7 +2452,30 @@
     }
 
     .combat-card.portrait-hit {
+      --battle-hit-yaw: -14deg;
+      --battle-hit-pitch: 3deg;
+      --battle-hit-counter-yaw: 5deg;
+      --battle-hit-counter-pitch: -1deg;
       animation: cardHitShake 700ms ease;
+    }
+
+    .combat-card.enemy.portrait-hit {
+      --battle-hit-yaw: 14deg;
+      --battle-hit-counter-yaw: -5deg;
+    }
+
+    .combat-card.tot-musica-dual-actor-card.portrait-hit {
+      --battle-hit-yaw: 0deg;
+      --battle-hit-pitch: 14deg;
+      --battle-hit-counter-yaw: 0deg;
+      --battle-hit-counter-pitch: -5deg;
+    }
+
+    .combat-card.tot-musica-dual-boss.portrait-hit {
+      --battle-hit-yaw: 0deg;
+      --battle-hit-pitch: -14deg;
+      --battle-hit-counter-yaw: 0deg;
+      --battle-hit-counter-pitch: 5deg;
     }
 
     .combat-card.player.has-coop-allies.portrait-hit {
@@ -7296,10 +7319,10 @@
       100% { opacity: 0; transform: translate(-50%, -50%) scale(1.8); }
     }
     @keyframes totMusicaTargetHitDown {
-      0%,100% { transform: translateY(0) scale(1); filter: none; }
-      22% { transform: translate(-7px, 24px) rotate(-1deg) scale(1.04); filter: brightness(2); }
-      45% { transform: translate(10px, 12px) rotate(1deg) scale(1.02); }
-      65% { transform: translate(-8px, 5px) rotate(-.6deg) scale(1.01); }
+      0%,100% { transform: translateY(0) perspective(900px) rotateX(0deg) scale(1); filter: none; }
+      22% { transform: translate(-7px, 24px) perspective(900px) rotateX(14deg) rotate(-1deg) scale(1.04); filter: brightness(2); }
+      45% { transform: translate(10px, 12px) perspective(900px) rotateX(-5deg) rotate(1deg) scale(1.02); }
+      65% { transform: translate(-8px, 5px) perspective(900px) rotateX(5deg) rotate(-.6deg) scale(1.01); }
     }
 
     @media (max-width: 1100px), (max-height: 620px) {
@@ -9722,11 +9745,16 @@
     }
 
     @keyframes cardHitShake {
-      0%, 100% { transform: translate(0, 0); filter: none; }
-      12%, 84% { transform: translate(-7px, 0); filter: brightness(1.25) saturate(1.18); }
-      24%, 72% { transform: translate(8px, 0); }
-      36%, 60% { transform: translate(-12px, 0); }
-      48% { transform: translate(13px, 0); }
+      0%, 100% { transform: translate(0, 0) perspective(900px) rotateX(0deg) rotateY(0deg); filter: none; }
+      12%, 84% { transform: translate(-7px, 0) perspective(900px) rotateX(var(--battle-hit-pitch)) rotateY(var(--battle-hit-yaw)); filter: brightness(1.25) saturate(1.18); }
+      24%, 72% { transform: translate(8px, 0) perspective(900px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw)); }
+      36%, 60% { transform: translate(-12px, 0) perspective(900px) rotateX(var(--battle-hit-pitch)) rotateY(var(--battle-hit-yaw)); }
+      48% { transform: translate(13px, 0) perspective(900px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw)); }
+    }
+
+    @keyframes cardHitReduced {
+      0%, 100% { filter: none; }
+      50% { filter: brightness(1.2) saturate(1.1); }
     }
 
     @keyframes cardKnockoutFade {
@@ -10883,6 +10911,18 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+      .combat-card.portrait-hit:not(.portrait-ko) {
+        animation: cardHitReduced 160ms ease-out !important;
+      }
+      .combat-card.player.has-coop-allies.portrait-hit:not(.portrait-ko) {
+        animation: none !important;
+      }
+      .combat-card.player.has-coop-allies.portrait-hit:not(.portrait-ko) .card-inner {
+        animation: cardHitReduced 160ms ease-out !important;
+      }
+      .combat-card.portrait-hit .battle-portrait {
+        animation: none !important;
+      }
       .zephyr-explosion-story-image { transition-duration: 120ms; }
       .zephyr-explosion-story.flash-on .zephyr-explosion-story-flash { animation-duration: 120ms; }
       .combat-card.enemy.king-flame-on .king-flame-state-aura::before,
@@ -10897,7 +10937,7 @@
   <link rel="stylesheet" href="css/board_lineage_extraction.css?v=20260814-lucci-rokuogan-audio-v48">
   <link rel="stylesheet" href="css/board_audio_ui.css?v=20260921-board-audio-v1">
   <link rel="stylesheet" href="css/board_adventure_art.css?v=20260922-adventure-art-v1">
-  <link rel="stylesheet" href="css/board_character_depth.css?v=20260924-whole-card-v1">
+  <link rel="stylesheet" href="css/board_character_depth.css?v=20260929-battle-hit-depth-v1">
   <script defer src="js/board_character_depth.js?v=20260924-depth-lifecycle-v2"></script>
 </head>
 <body>

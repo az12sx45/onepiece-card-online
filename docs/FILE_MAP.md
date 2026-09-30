@@ -16,6 +16,16 @@
 - `scripts/launcher_luffy_art_switch_qa.js`、`scripts/desktop_launcher_package_qa.js`：合成解碼回退與封裝協定路徑檢查；後者未把缺失的新圖列入已封裝素材。
 - `docs/LAUNCHER_LUFFY_ART_1.2.14_PREP.md`：17 張待製圖清單、尺寸及封裝／發行閘門；新圖與封裝清單尚未提交。
 
+## 2026-09-29 戰鬥受擊方向
+
+- `public/board_battle.html`：保留一般戰鬥及 Tot Musica 原受擊位移／時長，只依攻擊方位增加 3D 傾斜與減少動態呈現。
+- `public/board_game.html`：地圖戰鬥維持原 460ms 水平抖動，桌機左右／手機上下僅切換傾斜軸。
+- `public/css/board_character_depth.css`：恢復受擊時原有內框亮度處理。
+- `scripts/board_battle_hit_depth_qa.js`：桌機／手機方向、原位移關鍵影格、動畫時長與版面唯讀瀏覽器驗證。
+- `scripts/build_board_hit_depth_release.js`、`scripts/board_hit_depth_release_builder_qa.js`：Board 三程式限定封包建置與隔離測試。
+- `scripts/board_hit_depth_public_qa.js`、`scripts/board_hit_depth_public_qa_fixture.js`：公開 runtime／程式／CAS 唯讀驗證與假回應測試。
+
+
 ## 2026-09-28 酒館固定魯夫邀請與抽卡特效（已部署）
 
 - `public/js/board_tavern_crew.js`：魯夫固定邀請、九位夥伴各兩句台詞／圖及獨立 response RNG。
