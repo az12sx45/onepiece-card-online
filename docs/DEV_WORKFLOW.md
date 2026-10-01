@@ -1,10 +1,10 @@
 # Dev Workflow
 
-## 2026-10-01 戰鬥整卡等距擊退（發布驗證中）
+## 2026-10-01 戰鬥整卡等距擊退（已部署）
 
 玩家指出攻擊方整張卡前衝約 192px，受擊方卻只晃約 13px。本次在 `public/board_battle.html` 加入依敵我方向向外的獨立擊退動畫，受擊可見峰值約 184–200px；原攻擊前衝、受擊微晃 keyframe、700ms／連擊 420ms 時長、3D 傾斜和命中時點保留。玩家明確選擇可短暫出框的完整等距擊退；桌面峰值時卡片仍有至少約七成可見。合作戰移動活動角色的內層卡片，Tot Musica 的獨立縱向鏡頭不套用一般水平擊退，減少動態仍無位移。`public/board_game.html` 備用戰鬥的可見擊退校準至攻擊的約 18px，真正堆疊的窄視窗則讓攻防都沿上下方向移動約 18px。未改傷害、HP、回合、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 
-`scripts/board_battle_hit_depth_qa.js` 加入攻擊／受擊配對的逐幀畫面中心、方向、可見比例和回位檢查，保留原始 transform keyframe／時長／easing、Tot Musica、減少動態、版面與狀態檢查。舊版基準 140/140、候選 432/432 通過，0 browser errors／blocked writes；桌面雙向、合作戰與 700×768 堆疊視窗截圖在 `D:\Codex_QA\board-battle-hit-depth-20261001\paired-knockback-final-v2\`。戰鬥時序 68/68、真 DOM 順序 38/38、接觸前後受擊／HP 檢查通過。發布建置器鎖定上一版 `package-e98ef3f16bf6e6e4` 並只准兩個 HTML，隔離建置 10/10、假公開回應 6/6；候選 `package-660f4c4369f9177b`／manifest SHA-256 `0de8e2d5835f49e13d0063f997681c28a9a6d8af6541480bfb28f50d91143650` 已建立並提升本地 catalog，公開上傳和 runtime 讀回尚待完成。正式 D 樹只定點同步兩個頁面且保留原檔備份；`npm start` 在隔離 8862 埠啟動，兩頁桌面請求 HTTP 200，但無 `DATABASE_URL`，不代表帳號／多人驗收。本次自動化與模型審圖不等於真人試玩或實體裝置驗收。
+`scripts/board_battle_hit_depth_qa.js` 加入攻擊／受擊配對的逐幀畫面中心、方向、可見比例和回位檢查，保留原始 transform keyframe／時長／easing、Tot Musica、減少動態、版面與狀態檢查。舊版基準 140/140、候選 432/432 通過，0 browser errors／blocked writes；桌面雙向、合作戰與 700×768 堆疊視窗截圖在 `D:\Codex_QA\board-battle-hit-depth-20261001\paired-knockback-final-v2\`。戰鬥時序 68/68、真 DOM 順序 38/38、接觸前後受擊／HP 檢查通過。發布建置器鎖定上一版 `package-e98ef3f16bf6e6e4` 並只准兩個 HTML，隔離建置 10/10、假公開回應 6/6。發布提交 `7ed7fda67` 已推送 `main`，並保留同時發布的啟動器 1.2.16；R2 新資產 2/2 讀回通過。2026-10-01 22:25（Asia/Taipei）公開 Board runtime 切換為 `package-660f4c4369f9177b`，manifest SHA-256 `0de8e2d5835f49e13d0063f997681c28a9a6d8af6541480bfb28f50d91143650`；公開專項 13/13、三款 runtime 與 Board 57 個程式等全量 61/61 通過，Card／Chess 套件不變。證據在 `D:\Codex_QA\board-hit-knockback-20261001\public-qa.json` 與 `spectator\`。正式 D 樹只定點同步兩個頁面且保留原檔備份；`npm start` 在隔離 8862 埠啟動，兩頁桌面請求 HTTP 200，但無 `DATABASE_URL`，不代表帳號／多人驗收。本次自動化與模型審圖不等於真人試玩或實體裝置驗收。
 
 ## 2026-10-01 啟動器 1.2.16 海釣重做與小遊戲不限次數
 
