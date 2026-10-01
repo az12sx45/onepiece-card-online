@@ -84,6 +84,97 @@ async function play(secret,job){
   check(`${job}: server awards 10 coins`,response.wallet.coins,110);
   return{response,time};
 }
+const seconds=stamp=>(Date.parse(stamp)-base)/1000;
+async function startFishingV2(secret,t=0){
+  const response=await command(secret,'minigame.start',{kind:'work',characterId:actor,jobId:'fishing',fishingVersion:2},t);
+  assert.equal(response.ok,true,JSON.stringify(response));
+  check(`${secret}: v2 opts in without changing saved v1 sessions`,response.minigame.fishingVersion,2);
+  check(`${secret}: v2 has three casts`,response.minigame.totalRounds,3);
+  check(`${secret}: catch stays server private`,Object.hasOwn(response.minigame,'catchSpeciesId'),false);
+  return response.minigame;
+}
+async function fishAction(secret,game,move,t){
+  const response=await command(secret,'minigame.answer',{...ref(game),roundId:game.challenge.id,counterMoves:[move]},t);
+  assert.equal(response.ok,true,JSON.stringify({move,t,response}));
+  return response.minigame;
+}
+async function landFishingRound(secret,game,t,assertSlack=false){
+  const index=game.roundIndex;
+  game=await fishAction(secret,game,'cast',t);
+  check(`${secret} round ${index+1}: cast shows a future bite`,seconds(game.challenge.biteAt)>t,true);
+  check(`${secret} round ${index+1}: cast enters bobber wait`,game.challenge.stage,'wait');
+  t=seconds(game.challenge.biteAt)+0.05;
+  game=await fishAction(secret,game,'hook',t);
+  check(`${secret} round ${index+1}: timely hook starts fight`,game.challenge.stage,'fight');
+  check(`${secret} round ${index+1}: private pull pattern stays hidden`,Object.hasOwn(game.challenge,'fightPattern'),false);
+  if(assertSlack){
+    const early=await command(secret,'minigame.answer',{...ref(game),roundId:game.challenge.id,counterMoves:['reel']},t+0.1);
+    check('fishing v2: server rejects action spam inside cooldown',early.error,'fishing_action_cooldown');
+    t+=0.31;game=await fishAction(secret,game,'reel',t);
+    check('fishing v2: reel shortens line distance',game.challenge.distance<100,true);
+    const tension=game.challenge.tension,distance=game.challenge.distance;
+    t+=0.31;game=await fishAction(secret,game,'slack',t);
+    check('fishing v2: slack lowers tension',game.challenge.tension<tension,true);
+    check('fishing v2: slack gives fish distance',game.challenge.distance>distance,true);
+  }
+  for(let step=0;step<40&&game.roundIndex===index;step++){
+    const round=game.challenge;
+    const move=round.tension>55||round.pull==='surge'&&round.tension>34?'slack':'reel';
+    t+=0.31;game=await fishAction(secret,game,move,t);
+  }
+  check(`${secret} round ${index+1}: fish landed without inspecting private pattern`,game.feedback.reason,'landed');
+  check(`${secret} round ${index+1}: completed one catch`,game.roundIndex,index+1);
+  return{game,t};
+}
+async function fishingV2Checks(){
+  await createUser('v2-missed');
+  let game=await startFishingV2('v2-missed');
+  game=await fishAction('v2-missed',game,'cast',0.1);
+  const first=game.challenge;
+  game=await fishAction('v2-missed',game,'hook',0.2);
+  check('fishing v2: premature hook fails the cast',game.feedback.reason,'early_hook');
+  check('fishing v2: premature hook does not score',game.score,0);
+  check('fishing v2: premature hook advances exactly one round',game.roundIndex,1);
+  game=await fishAction('v2-missed',game,'cast',1);
+  const tooSoon=await command('v2-missed','minigame.answer',{...ref(game),roundId:game.challenge.id,counterMoves:['timeout']},1.1);
+  check('fishing v2: timeout cannot skip a waiting float',tooSoon.error,'invalid_fishing_action');
+  game=await fishAction('v2-missed',game,'timeout',seconds(game.challenge.hookUntil)+0.02);
+  check('fishing v2: missed bite advances as failure',game.feedback.reason,'missed_bite');
+  check('fishing v2: two missed bites still have zero score',game.score,0);
+  check('fishing v2: original missed hook window was after bite',seconds(first.hookUntil)>seconds(first.biteAt),true);
+
+  await createUser('v2-snap');
+  game=await startFishingV2('v2-snap');
+  game=await fishAction('v2-snap',game,'cast',0.1);
+  let t=seconds(game.challenge.biteAt)+0.05;
+  game=await fishAction('v2-snap',game,'hook',t);
+  // A controlled server-private current makes this branch deterministic while
+  // keeping the entire fight pattern out of the public challenge response.
+  const stored=(await db.query('SELECT session FROM launcher_minigame_sessions WHERE session_id=$1',[game.id])).rows[0].session;
+  stored.challenge.fightPattern=Array(24).fill('surge');stored.challenge.pull='surge';
+  await db.query('UPDATE launcher_minigame_sessions SET session=$1::jsonb WHERE session_id=$2',[JSON.stringify(stored),game.id]);
+  for(let move=0;move<4;move++){t+=0.31;game=await fishAction('v2-snap',game,'reel',t);}
+  check('fishing v2: excess tension snaps line',game.feedback.reason,'line_snapped');
+  check('fishing v2: line snap awards no round',game.correctRounds,0);
+
+  await createUser('v2-catch');
+  game=await startFishingV2('v2-catch');t=0.1;
+  ({game,t}=await landFishingRound('v2-catch',game,t,true));
+  ({game,t}=await landFishingRound('v2-catch',game,t+0.1));
+  check('fishing v2: two landed rounds pass threshold',game.correctRounds,2);
+  game=await fishAction('v2-catch',game,'cast',t+0.1);
+  game=await fishAction('v2-catch',game,'hook',t+0.2);
+  check('fishing v2: last missed cast still completes three rounds',game.roundIndex,3);
+  check('fishing v2: final feedback records miss',game.feedback.reason,'early_hook');
+  t=Math.max(t+0.3,seconds(game.finishNotBefore)+0.05);
+  const finished=await command('v2-catch','minigame.finish',ref(game),t);
+  assert.equal(finished.ok,true,JSON.stringify(finished));
+  check('fishing v2: two out of three is a pass',finished.minigame.result.passed,true);
+  check('fishing v2: final score reports two landed fish',finished.minigame.result.correctRounds,2);
+  check('fishing v2: pass adds one canonical collection fish',species.some(entry=>entry.id===finished.minigame.result.catch?.speciesId),true);
+  check('fishing v2: pass awards wallet coins once',finished.wallet.coins,110);
+  check('fishing v2: duplicate finish does not duplicate catch',(await command('v2-catch','minigame.finish',ref(game),t+1)).life.fishCollection.length,1);
+}
 async function main(){
   await db.exec('CREATE TABLE player_profiles(user_id SERIAL PRIMARY KEY,secret TEXT UNIQUE NOT NULL,name TEXT,avatar TEXT,stats JSONB,updated_at TIMESTAMPTZ DEFAULT now())');
   for(const job of ['supply','cooking','repair','navigation','fishing']){
@@ -112,7 +203,10 @@ async function main(){
     const stateRow=(await db.query('SELECT state FROM launcher_life_state WHERE user_id=$1',[ownerRow.user_id])).rows[0];
     stateRow.state.fishCollection=Array.from({length:64},(_,index)=>({id:index===0?fish.id:crypto.randomUUID(),speciesId:species[index%species.length].id,caughtAt:at(time+1).toISOString(),inAquarium:index<6}));
     await db.query('UPDATE launcher_life_state SET state=$1::jsonb WHERE user_id=$2',[JSON.stringify(stateRow.state),ownerRow.user_id]);
-    check('fishing: collection cap blocks new paid session',(await command(job,'minigame.start',{kind:'work',characterId:actor,jobId:'fishing'},time+2)).error,'fish_collection_full');
+    const fullCollectionStart=await command(job,'minigame.start',{kind:'work',characterId:actor,jobId:'fishing'},time+2);
+    check('fishing: full collection does not block another session',fullCollectionStart.ok,true);
+    check('fishing: full collection keeps original version by default',fullCollectionStart.minigame.fishingVersion,1);
+    check('fishing: full collection session can be cancelled',(await command(job,'minigame.cancel',ref(fullCollectionStart.minigame),time+2)).cancelled,true);
     check('fishing: seventh tank fish rejected',(await command(job,'fish.place',{fishId:stateRow.state.fishCollection[6].id,inAquarium:true},time+2)).error,'fish_aquarium_full');
     check('fishing: release removes selected catch',(await command(job,'fish.release',{fishId:stateRow.state.fishCollection[7].id},time+2)).life.fishCollection.length,63);
     check('fishing: invalid release cannot duplicate',(await command(job,'fish.release',{fishId:stateRow.state.fishCollection[7].id},time+2)).error,'fish_not_owned');
@@ -130,6 +224,7 @@ async function main(){
   assert.equal(lateAnswer.ok,true,JSON.stringify(lateAnswer));
   check('fishing: server rejects correct answer after round deadline',lateAnswer.minigame.feedback.correct,false);
   check('fishing: late answer does not increase score',lateAnswer.minigame.score,0);
+  await fishingV2Checks();
   const files=['server/launcher-life.js','server/launcher-life-store.js','server/launcher-minigames.js','scripts/launcher_fishing_server_qa.js'];
   const report={schemaVersion:1,status:'PASS',checks:checks.length,results:checks,sourceHashes:Object.fromEntries(files.map(file=>[file,crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname,'..',file))).digest('hex')])),limitations:['In-memory PGlite service test with serialized transactions. Does not prove production PostgreSQL timing or human play.'],createdAt:new Date().toISOString()};
   if(process.argv[2]){fs.mkdirSync(path.dirname(path.resolve(process.argv[2])),{recursive:true});fs.writeFileSync(process.argv[2],JSON.stringify(report,null,2)+'\n');}

@@ -414,7 +414,6 @@
     };
     window.addEventListener('pagehide',()=>{if(owner()&&active())void command('checkpoint',{exit:true});});
     const minigames=root.OnePieceRoomMinigames?.create({command,
-      workBudget(id){const work=profile()?.companions?.find(value=>value.itemId===id)?.work;if(!work)return null;return{remainingStartsToday:Math.max(0,work.remainingStartsToday-(snapshot?.jobs||[]).filter(job=>job.status==='reserved').length),characterStartsRemainingToday:work.characterStartsRemainingToday};},
       fishCollection(){return serverLife?.fishCollection||profile()?.life?.fishCollection||[];},
       onOpen(id){controller?.pause();const w=walker(id);if(w)env.focus(w);renderUi();},
       onClose(){if(!suspending&&env.canAnimate())controller?.resume();renderUi();},

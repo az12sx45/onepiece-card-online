@@ -141,9 +141,11 @@ async function start(secret,key,time=0,stationId='deck') {
   const afterOld=await get('legacy-first',301);check('old claim then life preserves one payout',afterOld.wallet.coins,110);check('old claim removes imported job',afterOld.life.jobs.length,0);
   check('ledger unique per legacy reward',Number((await db.query('SELECT count(*) AS n FROM launcher_wallet_ledger WHERE user_id=$1',[(await row('legacy-first')).user_id])).rows[0].n),1);
   await add('cap',stats(['luffy'],495));const full=await start('cap','luffy',0);const capSnap=await get('cap',full.ready+1);
-  check('wallet cap holds ready reward',capSnap.wallet.coins,495);check('wallet cap retains job',capSnap.life.jobs[0].status,'ready');
+   check('wallet cap grants only five available coins',capSnap.wallet.coins,500);
+   check('capped work completes instead of holding job',capSnap.life.jobs.length,0);
+   check('capped work reports actual offline coins',capSnap.life.offlineSummary.coins,5);
   await S.changeLauncherItem(pool,'cap','bgm-op-01','buy');const afterSpend=await cmd('cap','work.complete',{jobId:full.active.job.jobId},full.ready+2);
-  check('earned reward claim after spending',afterSpend.wallet.coins,495);
+   check('spending cannot reaward completed work',afterSpend.wallet.coins,490);
   await add('buyer',stats(['luffy'],500));const beforeBuy=await get('buyer');
   const bought=await S.changeLauncherItem(pool,'buyer',id('zoro'),'buy');
   check('new purchase auto adds owned actor',bought.profile.room.characters.map(c=>c.itemId),[id('luffy'),id('zoro')]);
@@ -167,12 +169,12 @@ async function start(secret,key,time=0,stationId='deck') {
   await add('moved',movedStats);const moveWork=await start('moved','nami',0,furniture),moveSnap=await get('moved',10);
   await S.setLauncherRoom(pool,'moved',{...legacyRoom(moveSnap.room),placements:[{...moveSnap.room.placements[0],x:700}]});
   const cancelled=await get('moved',moveWork.ready+1);check('moved furniture cancels invalid work',cancelled.life.jobs.length,0);check('invalid station never pays',cancelled.wallet.coins,100);
-  // Six daily work starts and two per actor are shared by both APIs.
+   // Work sessions remain available after six starts and two starts per actor.
   await add('limits',stats(keys));
   for(let n=0;n<6;n++) {const key=keys[Math.floor(n/2)],work=await start('limits',key,n*700),settled=await get('limits',work.ready+2);check('daily reward '+n,settled.wallet.coins,110+n*10);}
-  check('daily six reserve limit',(await cmd('limits','work.reserve',{itemId:id('franky'),stationId:'deck',roomRevision:1},5000)).error,'work_daily_limit');
+   check('seventh work reserve succeeds',(await cmd('limits','work.reserve',{itemId:id('franky'),stationId:'deck',roomRevision:1},5000)).ok,true);
   await add('perchar',stats());const one=await start('perchar','luffy',0);await get('perchar',one.ready+1);const two=await start('perchar','luffy',700);await get('perchar',two.ready+1);
-  check('two per character limit',(await cmd('perchar','work.reserve',{itemId:id('luffy'),stationId:'deck',roomRevision:1},1400)).error,'work_daily_limit');
+   check('third same-character work reserve succeeds',(await cmd('perchar','work.reserve',{itemId:id('luffy'),stationId:'deck',roomRevision:1},1400)).ok,true);
   const beforeProtect=await row('buyer');
   const safe=S.sanitizeLauncherStatsPatch({launcherWalletV1:{coins:999999},launcherOwnedV1:{items:keys.map(id)},launcherLifeV1:{revision:90000},launcherCompanionsV1:{claimsToday:0},client:{totals:{coins:17}}});
   await db.query('UPDATE player_profiles SET stats='+PROFILE_STATS_SQL.replaceAll('$4','$1')+' WHERE user_id=$2',[JSON.stringify(safe),beforeProtect.user_id]);
@@ -200,8 +202,8 @@ async function start(secret,key,time=0,stationId='deck') {
   const directives=await Promise.all(['training_day','work_day'].map((directiveId,i)=>B.commandLauncherLife(pool,'duplicate-gift',{type:'directive.set',payload:{directiveId},requestId:'competing-directive-'+i,expectedRevision:raceSnap.life.revision},now(61))));
   check('different requests same revision one wins',directives.map(r=>r.ok),[true,false]);
   check('second competing request gets conflict',directives[1].error,'revision_conflict');
-  // Purchase and payout share the same profile transaction. At 495 coins,
-  // payout-first must remain pending; purchase-first may pay immediately.
+   // Purchase and payout share the same profile transaction. At 495 coins,
+   // payout grants only the space available at the moment the row lock is held.
   for(const purchaseFirst of [true,false]){
    const secret='wallet-order-'+purchaseFirst;await add(secret,stats(['luffy'],495));
    const work=await start(secret,'luffy'),snapshot=await get(secret,work.ready-1);
@@ -209,10 +211,10 @@ async function start(secret,key,time=0,stationId='deck') {
    const purchase=()=>S.changeLauncherItem(pool,secret,'bgm-op-01','buy');
    const ordered=await queuedPair(...(purchaseFirst?[purchase,complete]:[complete,purchase]));
    check('wallet order purchase success '+purchaseFirst,ordered[purchaseFirst?0:1].ok,true);
-   check('wallet order completion result '+purchaseFirst,ordered[purchaseFirst?1:0].ok,purchaseFirst);
-   if(!purchaseFirst)check('wallet order cap is retryable',ordered[0].error,'wallet_full');
+    check('wallet order completion result '+purchaseFirst,ordered[purchaseFirst?1:0].ok,true);
    const final=await cmd(secret,'work.complete',{jobId:work.active.job.jobId},work.ready+1);
-   check('wallet order converges no lost balance '+purchaseFirst,final.wallet.coins,495);
+    check('wallet order respects cap and serial order '+purchaseFirst,final.wallet.coins,purchaseFirst?495:490);
+    check('wallet order receipt has actual payout '+purchaseFirst,final.receipt.amount,purchaseFirst?10:5);
    check('wallet order preserves purchase '+purchaseFirst,(await row(secret)).stats.launcherOwnedV1.items.includes('bgm-op-01'),true);
    check('wallet order one reward ledger '+purchaseFirst,Number((await db.query('SELECT count(*) n FROM launcher_wallet_ledger WHERE user_id=$1',[(await row(secret)).user_id])).rows[0].n),1);
   }
@@ -272,13 +274,13 @@ async function start(secret,key,time=0,stationId='deck') {
   const beforeVisit=await row('friend-target'),beforeVisitState=(await db.query('SELECT state FROM launcher_life_state WHERE user_id=$1',[friend.user_id])).rows[0].state;
   const visit=await S.getLauncherProfile(pool,'visitor',friend.user_id);
   check('reciprocal friend gets public life',visit.ok,true);
-  check('friend life exact public fields',Object.keys(visit.profile.life).sort(),['activeCharacterIds','characters','directive','ownedCharacterIds','revision','schemaVersion'].sort());
+   check('friend life exact public fields',Object.keys(visit.profile.life).sort(),['activeCharacterIds','characters','directive','fishCollection','ownedCharacterIds','revision','schemaVersion'].sort());
   check('friend character projection excludes private fields',Object.keys(visit.profile.life.characters[id('luffy')]).sort(),['itemId','key','needs']);
   check('friend visit does not aggregate profile',(await row('friend-target')).stats,beforeVisit.stats);
   check('friend visit does not advance life state',(await db.query('SELECT state FROM launcher_life_state WHERE user_id=$1',[friend.user_id])).rows[0].state,beforeVisitState);
   const Module=require('node:module'),originalLoad=Module._load;let bridge;
   try {
-    Module._load=function(request,parent,isMain){if(request==='electron')return {app:{isPackaged:true},safeStorage:{}};return originalLoad.call(this,request,parent,isMain);};
+     Module._load=function(request,parent,isMain){if(request==='electron')return {app:{isPackaged:true},safeStorage:{}};if(request==='socket.io-client')return{io:()=>{throw new Error('Network transport is not used by this bridge QA');}};return originalLoad.call(this,request,parent,isMain);};
     const {AuthService}=require('../desktop/auth-service');bridge=new AuthService({origin:'https://example.invalid',userDataPath:'C:/Codex_Candidates/launcher-life-audit/unused-bridge'});
   }finally{Module._load=originalLoad;}
   bridge.secretMemory='fixture-secret';bridge.state.account={userId:1};let emitted;

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 14,
+  "revision": 15,
   "announcements": [
     {
       "id": "board-tavern-crew-20260928-1c453fcf83416d97",
@@ -315,6 +315,30 @@
       "requiredRelease": {
         "kind": "launcher",
         "version": "1.2.15"
+      }
+    },
+    {
+      "id": "launcher-1.2.16-fishing-play-and-unlimited-challenges",
+      "status": "published",
+      "publishedAt": "2026-10-01T13:39:22.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.16",
+      "title": "看浮標、抽竿、捲線｜啟動器 1.2.16",
+      "summary": "千陽號海釣換成放大的四階段操作，工作與訓練小遊戲可不限次數挑戰，金幣仍以 500 枚為上限。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-play-1.2.16.webp",
+        "alt": "船舷上的魚竿彎向海面，紅白浮標沉入水花，海中可見魚影的更新主圖"
+      },
+      "body": [
+        "海釣改為拋竿、觀察浮標、浮標沉下時抽竿、交替捲線與放線四個步驟。海面、浮標與操作區放大，新繪魚竿、浮標和水花會跟著魚況動起來。",
+        "魚輕啄時先等，真正沉入才抽竿；上鉤後看距離與張力，張力過高就放線。三個釣點完成兩次即可得到一尾漁獲，仍可放進水族箱展示。",
+        "工作與訓練小遊戲不再設每日次數或訓練冷卻。已持有 500 枚金幣也能遊玩；完成時只發到錢包上限，成績、親密度與漁獲另外結算。",
+        "收藏滿 64 尾時仍能海釣，但新魚無法加入收藏；想留下新魚，先到收藏放生一尾。三款桌遊的規則與既有存檔沒有變更。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.16"
       }
     }
   ]

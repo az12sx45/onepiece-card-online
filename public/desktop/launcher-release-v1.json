@@ -3,17 +3,17 @@
   "channel": "stable",
   "platform": "win32",
   "arch": "x64",
-  "version": "1.2.15",
-  "publishedAt": "2026-09-30T18:48:58.944Z",
+  "version": "1.2.16",
+  "publishedAt": "2026-10-01T14:02:20.321Z",
   "artifact": {
-    "fileName": "ONE-PIECE-Tabletop-Launcher-1.2.15-x64.exe",
-    "bytes": 266048185,
-    "sha256": "cea6c99b6051b8f6f8df86bf81041cf2a341a8a4dbccd402eefaede42c9869fd",
-    "url": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.15/ONE-PIECE-Tabletop-Launcher-1.2.15-x64.exe"
+    "fileName": "ONE-PIECE-Tabletop-Launcher-1.2.16-x64.exe",
+    "bytes": 267046567,
+    "sha256": "824b9050ffb812f8145a32087b7bb3760ea92931c5cf26d8ec7115b5dae0d815",
+    "url": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.16/ONE-PIECE-Tabletop-Launcher-1.2.16-x64.exe"
   },
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "oFZG6eoy4AwNfJuiaMzd7BC4gCc7+NZYEPfDvNEUT4LhSBLTSeHCgwGPki4M5QCmvUrkcoO/FnvBnnSb9zq0CA=="
+    "value": "wDlS8AL/vOiDJEB3c7EJcAoLLY01D4rOQ+0olA0MxdU0O3OLA3ahMSRBykVUtYj2V2CE8kGDdRxCAN0fR+MZDA=="
   }
 }

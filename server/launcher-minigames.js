@@ -20,6 +20,7 @@ const FISH_SPECIES = Object.freeze([
   Object.freeze({id:'panda-shark',label:'熊貓鯊',sourceName:'パンサメ',weight:2})
 ]);
 const FISH_COUNTER = Object.freeze({left:'right',right:'left',deep:'slack'});
+const FISHING_V2_ROUNDS = 3;
 const INGREDIENTS = Object.freeze({meat:'肉塊',fish:'鮮魚',onion:'洋蔥',potato:'馬鈴薯',rice:'白飯',salt:'海鹽',lemon:'檸檬',orange:'橘子',apple:'蘋果',cream:'鮮奶油'});
 const RECIPES = Object.freeze([
   {label:'港口燉肉',steps:['onion','meat','potato','salt']},
@@ -36,6 +37,13 @@ function shuffled(list) {
 }
 function jobFor(session) {return session.kind==='work'?(session.jobId||'supply'):null;}
 function durationFor(session) {return session.kind==='work'&&jobFor(session)!=='supply'?300000:180000;}
+function fishingChallenge(id,roundIndex,issuedAt) {
+  // The fight pattern stays on the server; only the current pull is shown.
+  const pattern=Array.from({length:24},(_,index)=>index<2?'steady':pick(['steady','steady','surge']));
+  return {id,fishingVersion:2,stage:'cast',castAt:null,biteAt:null,hookUntil:null,fightUntil:null,
+    distance:100,tension:12,pullIndex:0,pull:'steady',fightPattern:pattern,
+    showcaseMs:0,answerWindowMs:90000,notBefore:iso(issuedAt)};
+}
 function ports(tile,rotation) {return(tile.type==='straight'?[0,2]:[0,1]).map(side=>(side+rotation)%4);}
 function neighbor(index,side,size) {
   const x=index%size,y=Math.floor(index/size),nx=x+[0,1,0,-1][side],ny=y+[-1,0,1,0][side];
@@ -54,8 +62,9 @@ function repairConnected(round,rotations) {
   }
   return false;
 }
-function workChallenge(jobId,id,roundIndex,issuedAt) {
+function workChallenge(jobId,id,roundIndex,issuedAt,fishingVersion=1) {
   if(jobId==='fishing') {
+    if(fishingVersion===2)return fishingChallenge(id,roundIndex,issuedAt);
     const pulls=Array.from({length:roundIndex<2?3:4},()=>pick(['left','right','deep']));
     return{id,pulls,showcaseMs:950,answerWindowMs:12500,notBefore:iso(issuedAt+3000)};
   }
@@ -90,10 +99,10 @@ function workChallenge(jobId,id,roundIndex,issuedAt) {
   }
   return null;
 }
-function challenge(kind, roundIndex, now, jobId='supply') {
+function challenge(kind, roundIndex, now, jobId='supply',fishingVersion=1) {
   const id=crypto.randomUUID(), issuedAt=now.getTime();
   if(kind==='work') {
-    const variant=workChallenge(jobId,id,roundIndex,issuedAt);if(variant)return variant;
+    const variant=workChallenge(jobId,id,roundIndex,issuedAt,fishingVersion);if(variant)return variant;
     const category=pick(Object.keys(CATEGORIES)), targets=1+crypto.randomInt(2);
     const categories=[...Array(targets).fill(category),...Array(3-targets).fill(null).map(()=>pick(Object.keys(CATEGORIES).filter(key=>key!==category)))];
     for(let i=categories.length-1;i>0;i--){const j=crypto.randomInt(i+1);[categories[i],categories[j]]=[categories[j],categories[i]];}
@@ -121,6 +130,7 @@ function view(session) {
   if(session.kind==='work')result.jobId=jobFor(session);
   // The catch is drawn by the server and revealed only after settlement.
   delete result.catchSpeciesId;
+  if(result.challenge?.fishingVersion===2){result.challenge={...result.challenge};delete result.challenge.fightPattern;}
   return JSON.parse(JSON.stringify(result));
 }
 function contextValid(session,state,room) {
@@ -137,19 +147,20 @@ async function active(db,userId,now,state,room) {
   }
   return result;
 }
-function create(kind,characterId,roomRevision,now,practice=false,jobId='supply') {
+function create(kind,characterId,roomRevision,now,practice=false,jobId='supply',fishingVersion=1) {
   const session={id:crypto.randomUUID(),token:crypto.randomBytes(24).toString('hex'),kind,characterId,practice,
     ...(kind==='work'?{jobId}:{}),
+    ...(kind==='work'&&jobId==='fishing'?{fishingVersion}:{}),
     ...(kind==='work'&&jobId==='fishing'?{catchSpeciesId:pick(FISH_SPECIES.flatMap(species=>Array(species.weight).fill(species.id)))}:{}),
-    state:'playing',roomRevision,attempt:1,maxAttempts:3,roundIndex:0,totalRounds:kind==='work'?(jobId==='fishing'?5:8):4,
+    state:'playing',roomRevision,attempt:1,maxAttempts:3,roundIndex:0,totalRounds:kind==='work'?(jobId==='fishing'&&fishingVersion===2?FISHING_V2_ROUNDS:jobId==='fishing'?5:8):4,
     startedAt:now.toISOString(),finishNotBefore:iso(now.getTime()+(kind==='work'?24000:20000)),
-    challenge:challenge(kind,0,now,jobId),score:0,combo:0,correctRounds:0,feedback:null,result:null};
+    challenge:challenge(kind,0,now,jobId,fishingVersion),score:0,combo:0,correctRounds:0,feedback:null,result:null};
   session.expiresAt=iso(now.getTime()+durationFor(session));return session;
 }
 function retry(session,now) {
   session.attempt++;session.state='playing';session.roundIndex=0;session.score=0;session.combo=0;session.correctRounds=0;session.feedback=null;session.result=null;
   session.startedAt=now.toISOString();session.expiresAt=iso(now.getTime()+durationFor(session));session.finishNotBefore=iso(now.getTime()+(session.kind==='work'?24000:20000));
-  session.challenge=challenge(session.kind,0,now,jobFor(session));
+  session.challenge=challenge(session.kind,0,now,jobFor(session),session.fishingVersion||1);
 }
 function validId(value){return typeof value==='string'&&/^[a-f0-9-]{36}$/.test(value);}
 function validToken(value){return typeof value==='string'&&/^[a-f0-9]{48}$/.test(value);}
@@ -160,11 +171,56 @@ async function load(db,userId,payload) {
   const session=row.session;
   return crypto.timingSafeEqual(Buffer.from(session.token),Buffer.from(payload.token))?session:null;
 }
+function advanceRound(session,correct,now,reason='') {
+  session.combo=correct?session.combo+1:0;
+  if(correct){session.correctRounds++;session.score+=100+Math.min(4,session.combo-1)*25;}
+  session.feedback={roundIndex:session.roundIndex,correct,combo:session.combo,correctRounds:session.correctRounds,score:session.score,...reason?{reason}:{}};
+  session.roundIndex++;
+  session.challenge=session.roundIndex<session.totalRounds?challenge(session.kind,session.roundIndex,now,jobFor(session),session.fishingVersion||1):null;
+  return{};
+}
+function answerFishingV2(session,payload,now) {
+  const round=session.challenge,action=payload.counterMoves;
+  if(!Array.isArray(action)||action.length!==1||!['cast','hook','reel','slack','timeout'].includes(action[0])||
+    ['selections','directions','ingredients','rotations','path'].some(key=>payload[key]!==undefined))return{error:'invalid_minigame_answer'};
+  const move=action[0],at=now.getTime();
+  if(round.stage==='cast') {
+    if(move!=='cast')return{error:'invalid_fishing_action'};
+    round.stage='wait';round.castAt=iso(at);round.biteAt=iso(at+3600+crypto.randomInt(1600));round.hookUntil=iso(Date.parse(round.biteAt)+3200);
+    return{};
+  }
+  if(round.stage==='wait') {
+    if(move==='timeout')return at>Date.parse(round.hookUntil)?advanceRound(session,false,now,'missed_bite'):{error:'invalid_fishing_action'};
+    if(move!=='hook')return{error:'invalid_fishing_action'};
+    if(at<Date.parse(round.biteAt))return advanceRound(session,false,now,'early_hook');
+    if(at>Date.parse(round.hookUntil))return advanceRound(session,false,now,'missed_bite');
+    round.stage='fight';round.hookedAt=iso(at);round.fightUntil=iso(at+50000);round.lastActionAt=iso(at);round.pull=round.fightPattern[0];
+    return{};
+  }
+  if(round.stage!=='fight')return{error:'invalid_fishing_action'};
+  if(at>Date.parse(round.fightUntil))return advanceRound(session,false,now,'escaped');
+  if(move==='timeout')return{error:'invalid_fishing_action'};
+  if(!['reel','slack'].includes(move))return{error:'invalid_fishing_action'};
+  if(at-Date.parse(round.lastActionAt)<240)return{error:'fishing_action_cooldown'};
+  round.lastActionAt=iso(at);
+  if(move==='reel'){
+    round.distance=Math.max(0,round.distance-(round.pull==='surge'?13:18));
+    round.tension=Math.min(100,round.tension+(round.pull==='surge'?29:15));
+  }else{
+    round.distance=Math.min(100,round.distance+2);
+    round.tension=Math.max(0,round.tension-32);
+  }
+  if(round.tension>=100)return advanceRound(session,false,now,'line_snapped');
+  if(round.distance<=0)return advanceRound(session,true,now,'landed');
+  round.pullIndex++;round.pull=round.fightPattern[round.pullIndex%round.fightPattern.length];
+  return{};
+}
 function answer(session,payload,now) {
   if(session.state!=='playing'||!session.challenge)return{error:'minigame_round_complete'};
   const round=session.challenge;
   if(payload.roundId!==round.id)return{error:'minigame_round_conflict'};
   if(now.getTime()<Date.parse(round.notBefore))return{error:'minigame_too_early'};
+  if(session.kind==='work'&&jobFor(session)==='fishing'&&round.fishingVersion===2)return answerFishingV2(session,payload,now);
   let correct=false;
   if(session.kind==='work') {
     const jobId=jobFor(session),field={supply:'selections',cooking:'ingredients',repair:'rotations',navigation:'path',fishing:'counterMoves'}[jobId];
@@ -197,11 +253,6 @@ function answer(session,payload,now) {
   // for network latency. A late answer advances as a miss, never as a catch.
   const latestAnswerMs = Date.parse(round.notBefore) + Number(round.answerWindowMs) + 3000;
   if(!Number.isFinite(latestAnswerMs)||now.getTime()>latestAnswerMs)correct=false;
-  session.combo=correct?session.combo+1:0;
-  if(correct){session.correctRounds++;session.score+=100+Math.min(4,session.combo-1)*25;}
-  session.feedback={roundIndex:session.roundIndex,correct,combo:session.combo,correctRounds:session.correctRounds,score:session.score};
-  session.roundIndex++;
-  session.challenge=session.roundIndex<session.totalRounds?challenge(session.kind,session.roundIndex,now,jobFor(session)):null;
-  return{};
+  return advanceRound(session,correct,now);
 }
 module.exports={ACTIVE,CATEGORIES,WORK_JOBS,FISH_SPECIES,ensure,save,view,active,create,retry,load,answer,contextValid};
