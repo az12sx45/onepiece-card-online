@@ -4,7 +4,11 @@
 
 封裝第一輪（r1）發現舊版資源 filter 仍帶 `board-package-e98ef3f16bf6e6e4.json`，而正式 `catalog-v3.json` 已指向 `board-package-660f4c4369f9177b.json`；因此該安裝檔被封裝 QA 擋下，未發布。已同步修正 `desktop/package.json` 與 `scripts/desktop_launcher_package_qa.js`，新增來源端精確核對 catalog 與 filter 引用的檢查；來源 QA 重跑 PASS，以獨立 r2 重新封裝並保留 r1 失敗證據。
 
-r2 安裝檔 268,294,874 bytes、SHA-256 `6d764ca0261883d1042f1a869f1acb81b70d5645fe087de6b444d308c2c79ce1`，封裝 QA 驗證 798 個素材、8 個 catalog、10 個 runtime 依賴及 4 語系；真 Electron smoke 核對 697/697 本機素材、BGM 與無破圖。已使用目前啟動器信任的 Ed25519 金鑰簽署版本清單，R2 上傳後的公開 HEAD、Range、完整 GET 大小與 SHA-256 全部一致；證據在 `D:\Codex_QA\launcher-fishing-adventure-1.2.17-release-r2\`。Render 清單與下載頁待正式提交後讀回。
+r2 安裝檔 268,294,874 bytes、SHA-256 `6d764ca0261883d1042f1a869f1acb81b70d5645fe087de6b444d308c2c79ce1`，封裝 QA 驗證 798 個素材、8 個 catalog、10 個 runtime 依賴及 4 語系；真 Electron smoke 核對 697/697 本機素材、BGM 與無破圖。已使用目前啟動器信任的 Ed25519 金鑰簽署版本清單，R2 上傳後的公開 HEAD、Range、完整 GET 大小與 SHA-256 全部一致；證據在 `D:\Codex_QA\launcher-fishing-adventure-1.2.17-release-r2\`。
+
+正式提交 `b3d408040989a7c4e0e0120f3b96869470389cd5` 推送至 `main`；2026-10-02 03:06（Asia/Taipei）Render 公開更新清單切至 1.2.17，原始位元組與提交、簽署候選完全一致，SHA-256 `d9e3bf7a2508d65988288a1b9bb99a91fdaa21f97409a73a5dd8326b5bf288fb`，目前啟動器 Ed25519 驗簽通過。公開下載頁版本文字、1.2.17 靜態回退連結與來源一致；三款遊戲 runtime、catalog-v3 讀回也一致。證據見 `D:\Codex_QA\launcher-fishing-adventure-1.2.17-release-r2\publish\public-release-manifest-verification.json`、`public-download-verification.json`、`public-runtime-verification.json` 與 `public-assets-verification.json`。這些是自動化與模型審圖，非真人試玩或實體手機驗收。
+
+本次九張未採用生圖候選共 15,406,275 bytes 位於 `C:\Users\王曜瑋\.codex\generated_images\01a0f8ac-167d-7ed2-a7e4-946f4e99f887`；精確刪除請求被自動審查以 `blocked by policy` 拒絕，實際刪除為零，原檔保留。未採用候選未打入安裝檔。
 
 範圍：玩家指出 1.2.16 海釣三個釣點只給一尾、操作單調。以 Marvelous《川のぬし釣り5》官方對魚餌、釣點、搏魚與圖鑑的介紹作玩法參考，未取用其素材。正式來源從 `origin/main` 提交 `d1e9c9a48` 建立 `D:\Codex_Release_Worktrees\launcher-fishing-adventure-1.2.17`；保留工作樹原有 `public/images/ranks/r5.PNG`、`r6.PNG` 修改，發布時不納入。LATTICE 工具在本階段未提供，官方 Runtime Status 回 `CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，因此沒有假設任務已提交或圖譜已刷新。
 
