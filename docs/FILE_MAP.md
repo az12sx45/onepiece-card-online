@@ -7,6 +7,16 @@
 - `scripts/board_battle_hit_depth_qa.js`：逐幀比對攻擊前衝與受擊後退的整卡畫面中心、可見比例、方向與回位，並保留舊 transform／時序回歸。
 - `scripts/build_board_hit_depth_release.js`、`scripts/board_hit_depth_release_builder_qa.js`、`scripts/board_hit_depth_public_qa_fixture.js`：更新上一版封包基線，只允許兩個戰鬥 HTML 進入候選；`public/desktop/catalog-v3.json` 與新 Board manifest 為本次候選 metadata，正式站尚待驗證。
 
+## 2026-10-01 啟動器 1.2.16 海釣與不限次數小遊戲
+
+- `server/launcher-minigames.js`、`server/launcher-life-store.js`、`server/launcher-profile-shop.js`：伺服器判定拋竿、咬鉤、抽竿、捲線、放線與三釣點結算；移除工作／訓練小遊戲的每日次數及訓練冷卻，工作獎勵依錢包餘額發到 500 枚上限。
+- `desktop/launcher-room-minigames.js`、`desktop/launcher-room-minigames.css`、`desktop/launcher-life-room.js`：放大的海釣互動、浮標動畫、魚線距離／張力、按住捲線、鍵盤操作及不再顯示次數預算。
+- `public/images/launcher_room/fishing_v2/`：GPT 生成並檢查透明背景的釣竿、浮標、水花 WebP；`public/images/launcher_announcements/launcher-fishing-play-1.2.16.webp` 為本次公告主圖。
+- `config/launcher-announcements-v1.json`、`desktop/main.js`、`desktop/package.json`、`desktop/package-lock.json`：1.2.16 公告、`opui://` 素材白名單與桌面封裝清單。
+- `scripts/launcher_fishing_server_qa.js`、`scripts/launcher_fishing_client_qa.js`、`scripts/launcher_minigames_server_qa.js`、`scripts/launcher_work_variants_server_qa.js`、`scripts/launcher_life_server_qa.js`、`scripts/launcher_character_economy_qa.js`、`scripts/desktop_launcher_package_qa.js`：階段判定、金幣上限、無每日次數、桌機／窄版及封裝資源的回歸驗證。
+- `public/desktop/launcher-release-v1.json`、`public/desktop-download.html`：指向 1.2.16 的 Ed25519 簽署安裝清單與靜態下載備援；公開版讀回以獨立 QA 紀錄為準。
+
+
 ## 2026-10-01 戰鬥受擊可見位移補償
 
 - `public/board_battle.html`、`public/board_game.html`：固定 CSS individual `translate` 補償式，以註冊的角度屬性在 keyframe 內動畫，避開 Chrome 的平方百分比 keyframe 計算問題；Tot Musica 特例補 X/Y，原平移與時長不變。

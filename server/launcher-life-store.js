@@ -70,17 +70,16 @@ async function settleJob(db,row,state,companions,job,room,now) {
   if(existing){state.jobs=state.jobs.filter(j=>j.jobId!==job.jobId);return {receipt:existing,duplicate:true};}
   if(!L.validJobContext(job,jobState(state,room),room))return {error:'work_context_changed'};
   if(job.status==='reserved'||!job.activatedAt||Date.parse(job.readyAt)>now.getTime())return {error:'work_not_ready'};
-  if(companions.claimsToday>=6)return {error:'work_daily_limit'};
-  const wallet=row.stats.launcherWalletV1;if(wallet.coins>490)return {error:'wallet_full'};
+  const wallet=row.stats.launcherWalletV1,amount=shop().launcherWorkPayout(wallet);
   if(job.legacy) {
     const old=companions.characters[job.itemId]?.activeWork;
     if(!old||L.legacyJobId(job.itemId,old.startedAt)!==job.jobId)return {error:'work_already_settled'};
   }
-  wallet.coins+=10;companions.claimsToday++;
+  wallet.coins+=amount;companions.claimsToday++;
   const actor=companions.characters[job.itemId];actor.affinity=Math.min(100,actor.affinity+1);actor.lastClaimAt=now.toISOString();
   if(job.legacy)actor.activeWork=null;
-  const receipt={operationId,jobId:job.jobId,itemId:job.itemId,amount:10,claimedAt:now.toISOString()};
-  await writeLedger(db,row,operationId,job.jobId,10,receipt);
+  const receipt={operationId,jobId:job.jobId,itemId:job.itemId,amount,claimedAt:now.toISOString()};
+  await writeLedger(db,row,operationId,job.jobId,amount,receipt);
   state.jobs=state.jobs.filter(j=>j.jobId!==job.jobId);
   L.addMemory(state,job.itemId,'work.completed',[job.itemId],now,2);
   return {receipt};
@@ -89,7 +88,7 @@ const FIELDS={
  'work.reserve':['itemId','stationId','roomRevision','stationType','furnitureId'],
  'work.activate':['jobId'],'work.complete':['jobId'],'work.cancel':['jobId'],
  'directive.set':['directiveId'],'character.interact':['itemId','action'],
- 'minigame.start':['characterId','kind','practice','jobId'],
+ 'minigame.start':['characterId','kind','practice','jobId','fishingVersion'],
  'minigame.answer':['sessionId','token','roundId','selections','directions','ingredients','rotations','path','counterMoves'],
  'minigame.finish':['sessionId','token'],'minigame.cancel':['sessionId','token'],
  'minigame.retry':['sessionId','token'],
@@ -106,7 +105,7 @@ function validCommand(command) {
 async function performMinigame(db,row,state,companions,command,room,now,sessions) {
   const p=command.payload;
   if(command.type==='minigame.start') {
-    if(!['work','training'].includes(p.kind)||p.practice!==undefined&&typeof p.practice!=='boolean'||p.kind==='work'&&p.practice||p.jobId!==undefined&&(p.kind!=='work'||!M.WORK_JOBS.includes(p.jobId)))return{ok:false,error:'invalid_minigame'};
+    if(!['work','training'].includes(p.kind)||p.practice!==undefined&&typeof p.practice!=='boolean'||p.kind==='work'&&p.practice||p.jobId!==undefined&&(p.kind!=='work'||!M.WORK_JOBS.includes(p.jobId))||p.fishingVersion!==undefined&&(p.fishingVersion!==2||p.kind!=='work'||p.jobId!=='fishing'))return{ok:false,error:'invalid_minigame'};
     const actor=state.characters[p.characterId];
     if(!actor)return{ok:false,error:'not_owned'};
     if(!state.activeCharacterIds.includes(p.characterId))return{ok:false,error:'not_placed'};
@@ -114,18 +113,9 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
     if(state.jobs.some(job=>job.itemId===p.characterId))return{ok:false,error:'work_active'};
     const old=companions.characters[p.characterId],practice=p.practice===true;
     if(p.kind==='work') {
-      if(p.jobId==='fishing'&&state.fishCollection.length>=L.MAX_FISH)return{ok:false,error:'fish_collection_full'};
-      const reserved=state.jobs.filter(job=>job.status==='reserved').length;
-      if(companions.workStartsToday+reserved>=6||companions.claimsToday+state.jobs.length>=6||old.worksStartedToday>=2)return{ok:false,error:'work_daily_limit'};
-      if(row.stats.launcherWalletV1.coins>490)return{ok:false,error:'wallet_full'};
-      if(actor.needs.energy<15||actor.needs.hunger>90)return{ok:false,error:'needs_rest'};
       companions.workStartsToday++;old.worksStartedToday++;
-    } else if(!practice) {
-      if(Date.parse(actor.lastInteractions.train||0)+600000>now.getTime())return{ok:false,error:'interaction_cooldown'};
-      if(actor.needs.energy<20)return{ok:false,error:'needs_rest'};
-      actor.needs.energy=L.clamp(actor.needs.energy-6);actor.lastInteractions.train=now.toISOString();
     }
-    const session=M.create(p.kind,p.characterId,room.revision,now,practice,p.jobId||'supply');
+    const session=M.create(p.kind,p.characterId,room.revision,now,practice,p.jobId||'supply',p.fishingVersion===2?2:1);
     await M.save(db,row.user_id,session);
     return{ok:true,minigame:M.view(session)};
   }
@@ -149,22 +139,22 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
   }
   if(session.roundIndex!==session.totalRounds)return{ok:false,error:'minigame_incomplete',minigame:M.view(session)};
   if(now.getTime()<Date.parse(session.finishNotBefore))return{ok:false,error:'minigame_too_early',minigame:M.view(session)};
-  const passed=session.correctRounds>=(session.kind==='work'?(session.jobId==='fishing'?4:6):3),actor=state.characters[session.characterId],old=companions.characters[session.characterId];
+  const passingRounds=session.kind==='training'?3:session.jobId==='fishing'?(session.fishingVersion===2?2:4):6;
+  const passed=session.correctRounds>=passingRounds,actor=state.characters[session.characterId],old=companions.characters[session.characterId];
   const canRetry=!passed&&session.attempt<session.maxAttempts;
-  const result={passed,practice:session.practice,canRetry,attempt:session.attempt,attemptsRemaining:canRetry?session.maxAttempts-session.attempt:0,coins:0,affinity:0,workMotivation:0,energyCost:session.kind==='training'&&!session.practice?6:0,correctRounds:session.correctRounds,totalRounds:session.totalRounds};
+  const result={passed,practice:session.practice,canRetry,attempt:session.attempt,attemptsRemaining:canRetry?session.maxAttempts-session.attempt:0,coins:0,affinity:0,workMotivation:0,energyCost:0,correctRounds:session.correctRounds,totalRounds:session.totalRounds};
   if(passed&&session.kind==='work') {
-    if(companions.claimsToday>=6)return{ok:false,error:'work_daily_limit',minigame:M.view(session)};
-    if(row.stats.launcherWalletV1.coins>490){session.state='ready';await M.save(db,row.user_id,session);return{ok:false,error:'wallet_full',minigame:M.view(session)};}
     const jobId='minigame-'+session.id,operationId='life-work:'+jobId,prior=await ledger(db,row.user_id,operationId);
     if(prior)return{ok:false,error:'minigame_receipt_conflict'};
-    row.stats.launcherWalletV1.coins+=10;companions.claimsToday++;old.affinity=Math.min(100,old.affinity+1);old.lastClaimAt=now.toISOString();
-    session.receipt={operationId,jobId,itemId:session.characterId,amount:10,claimedAt:now.toISOString()};
-    await writeLedger(db,row,operationId,jobId,10,session.receipt);
-    result.coins=10;result.affinity=1;
+    const amount=shop().launcherWorkPayout(row.stats.launcherWalletV1);
+    row.stats.launcherWalletV1.coins+=amount;companions.claimsToday++;old.affinity=Math.min(100,old.affinity+1);old.lastClaimAt=now.toISOString();
+    session.receipt={operationId,jobId,itemId:session.characterId,amount,claimedAt:now.toISOString()};
+    await writeLedger(db,row,operationId,jobId,amount,session.receipt);
+    result.coins=amount;result.affinity=1;
     if(session.jobId==='fishing'&&state.fishCollection.length<L.MAX_FISH) {
       const species=M.FISH_SPECIES.find(entry=>entry.id===session.catchSpeciesId);
       if(species){const caught={id:crypto.randomUUID(),speciesId:species.id,caughtAt:now.toISOString(),inAquarium:false};state.fishCollection.push(caught);result.catch={...caught,label:species.label};}
-    }
+    } else if(session.jobId==='fishing')result.catchCollectionFull=true;
     L.addMemory(state,session.characterId,'work.completed',[session.characterId],now,2);
   } else if(passed&&session.kind==='training'&&!session.practice) {
     actor.needs.workMotivation=L.clamp(actor.needs.workMotivation+5);old.affinity=Math.min(100,old.affinity+1);
@@ -209,7 +199,6 @@ async function perform(db,row,state,companions,command,room,now,sessions=[],jobs
     if(job.status!=='reserved')return {ok:true,job};
     if(Date.parse(job.activateAfter)>now.getTime())return {ok:false,error:'arrival_too_early'};
     const old=companions.characters[job.itemId];
-    if(companions.workStartsToday>=6||old.worksStartedToday>=2)return {ok:false,error:'work_daily_limit'};
     old.worksStartedToday++;companions.workStartsToday++;
     job.status='active';job.activatedAt=now.toISOString();job.readyAt=new Date(now.getTime()+job.durationMs).toISOString();delete job.expiresAt;
     return {ok:true,job};
@@ -222,8 +211,6 @@ async function perform(db,row,state,companions,command,room,now,sessions=[],jobs
     const station=L.stationFor(room,p.stationId);if(!station)return {ok:false,error:'invalid_station'};
     if(state.jobs.some(j=>j.itemId===p.itemId))return {ok:false,error:'work_active'};
     if(state.jobs.filter(j=>j.stationId===p.stationId).length>=station.capacity)return {ok:false,error:'station_busy'};
-    const old=companions.characters[p.itemId],reserved=state.jobs.filter(j=>j.status==='reserved').length;
-    if(companions.workStartsToday+reserved>=6||companions.claimsToday+state.jobs.length+sessions.filter(session=>session.kind==='work').length>=6||old.worksStartedToday>=2)return {ok:false,error:'work_daily_limit'};
     if(actor.needs.energy<15||actor.needs.hunger>90)return {ok:false,error:'needs_rest'};
     const efficiency=L.clamp(content.characters?.[actor.key]?.workEfficiency?.[station.type]??1,.35,1.5);
     const durationMs=Math.round(300000/efficiency),placement=room.characters.find(c=>c.itemId===p.itemId);
@@ -334,7 +321,7 @@ async function run(pool,secret,command,suppliedNow,capability) {
     const beforeRevision=state.revision,aggregation=L.aggregate(state,now);
     if(aggregation.offline)for(const job of [...state.jobs])if(job.status==='ready'){
       const settled=await settleJob(db,row,state,companions,job,jobsRoom,now);
-      if(settled.receipt&&!settled.duplicate){state.offlineSummary.completedJobs++;state.offlineSummary.coins+=10;}
+      if(settled.receipt&&!settled.duplicate){state.offlineSummary.completedJobs++;state.offlineSummary.coins+=settled.receipt.amount;}
     }
     let extra={};
     if(command!==undefined) {
@@ -373,13 +360,12 @@ async function legacyWorkGuard(db,row,companions,itemId,action,now=new Date()) {
   const sessions=await M.active(db,row.user_id,now,state,room);
   if(action==='start'&&sessions.some(session=>session.characterId===itemId))return 'minigame_active';
   if(action==='start'&&jobs.some(j=>j.itemId===itemId))return 'work_active';
-  if(action==='start'&&(companions.claimsToday+Object.values(companions.characters).filter(c=>c.activeWork).length+jobs.length+sessions.filter(session=>session.kind==='work').length>=6||companions.workStartsToday+jobs.filter(j=>j.status==='reserved').length>=6))return 'work_daily_limit';
   return null;
 }
-async function recordLegacyClaim(db,row,itemId,startedAt,now) {
+async function recordLegacyClaim(db,row,itemId,startedAt,now,amount) {
   const jobId=L.legacyJobId(itemId,startedAt),operationId='life-work:'+jobId;
-  const receipt={operationId,jobId,itemId,amount:10,claimedAt:now.toISOString()};
-  await writeLedger(db,row,operationId,jobId,10,receipt);
+  const receipt={operationId,jobId,itemId,amount,claimedAt:now.toISOString()};
+  await writeLedger(db,row,operationId,jobId,amount,receipt);
   const found=await db.query('SELECT state FROM launcher_life_state WHERE user_id=$1 FOR UPDATE',[row.user_id]);
   if(found.rows[0]){const state=found.rows[0].state;state.jobs=(state.jobs||[]).filter(j=>j.jobId!==jobId);state.revision++;await saveState(db,row.user_id,state);}
 }

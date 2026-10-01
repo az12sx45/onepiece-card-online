@@ -53,7 +53,8 @@ const row = async secret => (await db.query('SELECT user_id, stats FROM player_p
     assert.equal(initial.character.affinity, 0);
     assert.equal(initial.character.work.reward, 10);
     assert.equal(initial.character.work.state, 'idle');
-    assert.equal(initial.character.work.remainingClaimsToday, 6);
+    assert.equal(initial.character.work.unlimited, true);
+    assert.equal(initial.character.work.remainingClaimsToday, null);
     assert.equal(initial.wallet.coins, 100);
 
     const talked = await interactLauncherCharacter(pool, 'owner', ids[0], 'talk', at(0));
@@ -87,9 +88,9 @@ const row = async secret => (await db.query('SELECT user_id, stats FROM player_p
         assert.equal(replay.wallet.coins, claimed.wallet.coins);
         minute += 6;
       }
-      assert.equal((await startLauncherCharacterWork(pool, 'owner', itemId, at(minute))).error, 'work_daily_limit');
+      assert.equal((await getLauncherCharacter(pool, 'owner', itemId, at(minute))).character.work.unlimited, true);
     }
-    assert.equal((await getLauncherCharacter(pool, 'owner', ids[0], at(minute))).character.work.remainingClaimsToday, 0);
+    assert.equal((await getLauncherCharacter(pool, 'owner', ids[0], at(minute))).character.work.remainingClaimsToday, null);
     assert.equal((await getLauncherShop(pool, 'owner')).shop.wallet.coins, 160);
     assert.equal((await changeLauncherItem(pool, 'owner', 'bgm-op-01', 'buy')).shop.wallet.coins, 150);
     assert.equal((await row('owner')).stats.client.totals.coins, 37);
@@ -116,13 +117,24 @@ const row = async secret => (await db.query('SELECT user_id, stats FROM player_p
     const richStats = statsFor(495, [ids[0]], [ids[0]]);
     await add('rich', richStats);
     assert.equal((await startLauncherCharacterWork(pool, 'rich', ids[0], at(65))).ok, true);
-    assert.equal((await claimLauncherCharacterWork(pool, 'rich', ids[0], at(70))).error, 'wallet_full');
-    assert.equal((await row('rich')).stats.launcherWalletV1.coins, 495);
-    assert.equal((await changeLauncherItem(pool, 'rich', 'ava-31', 'buy')).shop.wallet.coins, 490);
     assert.equal((await claimLauncherCharacterWork(pool, 'rich', ids[0], at(70))).wallet.coins, 500);
+    assert.equal((await row('rich')).stats.launcherWalletV1.coins, 500);
+    assert.equal((await changeLauncherItem(pool, 'rich', 'ava-31', 'buy')).shop.wallet.coins, 495);
+    assert.equal((await claimLauncherCharacterWork(pool, 'rich', ids[0], at(70))).wallet.coins, 495);
     const richReplay = await claimLauncherCharacterWork(pool, 'rich', ids[0], at(70));
     assert.equal(richReplay.claimed, false);
-    assert.equal(richReplay.wallet.coins, 500);
+    assert.equal(richReplay.wallet.coins, 495);
+    const richLedger = await db.query('SELECT amount FROM launcher_wallet_ledger WHERE user_id=$1', [(await row('rich')).user_id]);
+    assert.equal(richLedger.rows[0].amount, 5);
+
+    const unlimitedStats = statsFor(100, [ids[0]], [ids[0]]);
+    await add('unlimited', unlimitedStats);
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const startAt = 65 + attempt * 6;
+      assert.equal((await startLauncherCharacterWork(pool, 'unlimited', ids[0], at(startAt))).ok, true);
+      assert.equal((await claimLauncherCharacterWork(pool, 'unlimited', ids[0], at(startAt + 5))).ok, true);
+    }
+    assert.equal((await getLauncherCharacter(pool, 'unlimited', ids[0], at(83))).wallet.coins, 130);
 
     const unplacedStats = statsFor(100, [ids[0]], []);
     await add('unplaced', unplacedStats);
@@ -140,16 +152,15 @@ const row = async secret => (await db.query('SELECT user_id, stats FROM player_p
     await add('reserved', reservedStats);
     const yesterday = new Date(Date.parse(`${today}T00:00:00.000Z`) - 86400000);
     yesterday.setUTCHours(23, 50, 0, 0);
-    for (const itemId of reservedIds.slice(0, 6)) {
+    for (const itemId of reservedIds) {
       assert.equal((await startLauncherCharacterWork(pool, 'reserved', itemId, yesterday)).ok, true);
     }
-    assert.equal((await startLauncherCharacterWork(pool, 'reserved', reservedIds[6], yesterday)).error, 'work_daily_limit');
     const nextDay = new Date(`${today}T00:00:00.000Z`);
-    assert.equal((await getLauncherCharacter(pool, 'reserved', reservedIds[6], nextDay)).character.work.remainingStartsToday, 0);
-    assert.equal((await startLauncherCharacterWork(pool, 'reserved', reservedIds[6], nextDay)).error, 'work_daily_limit');
+    assert.equal((await getLauncherCharacter(pool, 'reserved', reservedIds[6], nextDay)).character.work.unlimited, true);
+    assert.equal((await startLauncherCharacterWork(pool, 'reserved', reservedIds[6], nextDay)).error, 'work_active');
     assert.equal((await row('reserved')).stats.launcherWalletV1.coins, 120);
     assert.equal((await claimLauncherCharacterWork(pool, 'reserved', reservedIds[0], nextDay)).ok, true);
-    assert.equal((await startLauncherCharacterWork(pool, 'reserved', reservedIds[6], nextDay)).error, 'work_daily_limit');
+    assert.equal((await startLauncherCharacterWork(pool, 'reserved', reservedIds[0], nextDay)).ok, true);
 
     // The desktop bridge accepts the eight canonical companions and both
     // four-way rotations and older flip-only furniture snapshots.
@@ -158,6 +169,7 @@ const row = async secret => (await db.query('SELECT user_id, stats FROM player_p
     try {
       Module._load = function (request, parent, isMain) {
         if (request === 'electron') return { app: { isPackaged: false }, safeStorage: {} };
+        if (request === 'socket.io-client') return { io: () => { throw new Error('Network transport is not used by this bridge QA'); } };
         return originalLoad.call(this, request, parent, isMain);
       };
       const { AuthService } = require('../desktop/auth-service');
@@ -204,7 +216,7 @@ const row = async secret => (await db.query('SELECT user_id, stats FROM player_p
       placements: [], characters: [...eightCharacters, { itemId: 'room-character-franky', x: 900, y: 405 }] })).error, 'invalid_room');
     bridge.close();
 
-    console.log(JSON.stringify({ ok: true, characters: ids.length, workReward: 10, workMinutes: 5, dailyClaimCap: 6, spendable: true, crossDayReservation: true }));
+    console.log(JSON.stringify({ ok: true, characters: ids.length, workReward: 10, workMinutes: 5, workUnlimited: true, walletCap: 500, spendable: true, crossDayReservation: true }));
   } finally {
     await db.close();
   }

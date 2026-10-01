@@ -174,8 +174,6 @@ const COMPANION_TALK_COOLDOWN_MS = 10 * 60 * 1000;
 const COMPANION_TALKS_PER_DAY = 6;
 const COMPANION_WORK_DURATION_MS = 5 * 60 * 1000;
 const COMPANION_WORK_REWARD = 10;
-const COMPANION_WORKS_PER_DAY = 6;
-const COMPANION_WORKS_PER_CHARACTER_PER_DAY = 2;
 const COMPANION_DETAILS = Object.freeze({
   luffy: ['船長', '喜歡冒險與熱鬧的夥伴，總會先奔向有趣的地方。'],
   zoro: ['劍士', '常在船上練刀，認定的目標會一路堅持。'],
@@ -202,6 +200,8 @@ const count = value => {
   const n = Number(value);
   return Number.isSafeInteger(n) && n >= 0 ? n : 0;
 };
+const launcherWorkPayout = wallet => Math.min(COMPANION_WORK_REWARD,
+  Math.max(0, LAUNCHER_WALLET_CAP_COINS - count(wallet?.coins)));
 const finiteNumber = value => {
   const n = Number(value);
   return Number.isFinite(n) ? n : 0;
@@ -362,20 +362,19 @@ function launcherCompanionState(stats, now = new Date()) {
       talksToday: dailyCount(value.talkDay, value.talksToday, today, COMPANION_TALKS_PER_DAY),
       lastTalkAt: validIsoTime(value.lastTalkAt) ? value.lastTalkAt : null,
       workStartsDay: today,
-      worksStartedToday: dailyCount(value.workStartsDay, value.worksStartedToday, today, COMPANION_WORKS_PER_CHARACTER_PER_DAY),
+      worksStartedToday: dailyCount(value.workStartsDay, value.worksStartedToday, today, Number.MAX_SAFE_INTEGER),
       lastClaimAt: validIsoTime(value.lastClaimAt) ? value.lastClaimAt : null,
       activeWork
     };
   }
   return {
     workStartsDay: today,
-    workStartsToday: dailyCount(saved.workStartsDay, saved.workStartsToday, today, COMPANION_WORKS_PER_DAY),
+    workStartsToday: dailyCount(saved.workStartsDay, saved.workStartsToday, today, Number.MAX_SAFE_INTEGER),
     claimsDay: today,
-    claimsToday: dailyCount(saved.claimsDay, saved.claimsToday, today, COMPANION_WORKS_PER_DAY),
+    claimsToday: dailyCount(saved.claimsDay, saved.claimsToday, today, Number.MAX_SAFE_INTEGER),
     characters
   };
 }
-const activeCompanionJobs = state => Object.values(state.characters).filter(value => value.activeWork).length;
 function launcherCompanionPublic(stats, itemId, now = new Date()) {
   const key = String(itemId || '').replace(/^room-character-/, '');
   if (!COMPANION_DETAILS[key] || itemId !== `room-character-${key}`) return null;
@@ -394,12 +393,8 @@ function launcherCompanionPublic(stats, itemId, now = new Date()) {
     work: {
       state: !active ? 'idle' : Date.parse(active.readyAt) <= now.getTime() ? 'ready' : 'working',
       readyAt: active?.readyAt || null, lastClaimAt: value.lastClaimAt, reward: COMPANION_WORK_REWARD,
-      remainingClaimsToday: COMPANION_WORKS_PER_DAY - state.claimsToday,
-      remainingStartsToday: Math.max(0, Math.min(
-        COMPANION_WORKS_PER_DAY - state.workStartsToday,
-        COMPANION_WORKS_PER_DAY - state.claimsToday - activeCompanionJobs(state)
-      )),
-      characterStartsRemainingToday: COMPANION_WORKS_PER_CHARACTER_PER_DAY - value.worksStartedToday
+      unlimited: true, remainingClaimsToday: null, remainingStartsToday: null,
+      characterStartsRemainingToday: null
     }
   };
 }
@@ -1034,9 +1029,6 @@ async function launcherCharacterAction(pool, secret, itemId, action, suppliedNow
       if (character.activeWork) return fail('work_active');
       const lifeError = await require('./launcher-life-store').legacyWorkGuard(db, row, state, itemId, action, now);
       if (lifeError) return fail(lifeError);
-      if (state.workStartsToday >= COMPANION_WORKS_PER_DAY ||
-          state.claimsToday + activeCompanionJobs(state) >= COMPANION_WORKS_PER_DAY ||
-          character.worksStartedToday >= COMPANION_WORKS_PER_CHARACTER_PER_DAY) return fail('work_daily_limit');
       character.activeWork = {
         startedAt: now.toISOString(),
         readyAt: new Date(now.getTime() + COMPANION_WORK_DURATION_MS).toISOString()
@@ -1048,10 +1040,9 @@ async function launcherCharacterAction(pool, secret, itemId, action, suppliedNow
       if (!character.activeWork && !character.lastClaimAt) return fail('no_active_work');
       if (character.activeWork) {
         if (Date.parse(character.activeWork.readyAt) > now.getTime()) return fail('work_not_ready');
-        if (state.claimsToday >= COMPANION_WORKS_PER_DAY) return fail('work_daily_limit');
-        if (wallet.coins > LAUNCHER_WALLET_CAP_COINS - COMPANION_WORK_REWARD) return fail('wallet_full');
-        stats.launcherWalletV1 = { ...wallet, coins: wallet.coins + COMPANION_WORK_REWARD };
-        await require('./launcher-life-store').recordLegacyClaim(db, { ...row, stats }, itemId, character.activeWork.startedAt, now);
+        const payout = launcherWorkPayout(wallet);
+        stats.launcherWalletV1 = { ...wallet, coins: wallet.coins + payout };
+        await require('./launcher-life-store').recordLegacyClaim(db, { ...row, stats }, itemId, character.activeWork.startedAt, now, payout);
         state.claimsToday += 1;
         character.affinity = Math.min(COMPANION_MAX_AFFINITY, character.affinity + 1);
         character.activeWork = null;
@@ -1101,4 +1092,5 @@ module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop,
   getLauncherCharacter: withRoster(getLauncherCharacter, 4), interactLauncherCharacter: withRoster(interactLauncherCharacter, 5),
   startLauncherCharacterWork: withRoster(startLauncherCharacterWork, 4), claimLauncherCharacterWork: withRoster(claimLauncherCharacterWork, 4),
   sanitizeLauncherStatsPatch, guestbookUnlocked, launcherAvatarForRow,
-  launcherOwnedItemIds, launcherRoom, launcherCompanionState, prepareLauncherWallet, launcherWalletPublic };
+  launcherOwnedItemIds, launcherRoom, launcherCompanionState, prepareLauncherWallet, launcherWalletPublic,
+  launcherWorkPayout };

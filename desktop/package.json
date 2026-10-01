@@ -1,6 +1,6 @@
 {
   "name": "onepiece-tabletop-desktop",
-  "version": "1.2.15",
+  "version": "1.2.16",
   "private": true,
   "description": "Windows launcher for ONE PIECE tabletop games with account login, verified game downloads and incremental updates.",
   "main": "main.js",
@@ -141,7 +141,7 @@
       {
         "from": "../public/images/launcher_announcements",
         "to": "launcher-assets/images/launcher_announcements",
-        "filter": ["launcher-life-1.2.13.webp", "launcher-proportions-1.2.14.webp", "launcher-life-fishing-1.2.15.webp"]
+        "filter": ["launcher-life-1.2.13.webp", "launcher-proportions-1.2.14.webp", "launcher-life-fishing-1.2.15.webp", "launcher-fishing-play-1.2.16.webp"]
       },
       {
         "from": "../public/images/launcher_room",
@@ -724,6 +724,9 @@
           "sea/ocean-night.webp",
           "sea/ocean-storm.webp",
           "minigames_v1/fishing-sea.webp",
+          "fishing_v2/rod.webp",
+          "fishing_v2/bobber.webp",
+          "fishing_v2/splash.webp",
           "minigames_v1/repair-workbench-v2.webp",
           "minigames_v1/navigation-chart-v2.webp",
           "minigames_v1/cooking-galley-v2.webp",

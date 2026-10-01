@@ -6,6 +6,17 @@
 
 `scripts/board_battle_hit_depth_qa.js` 加入攻擊／受擊配對的逐幀畫面中心、方向、可見比例和回位檢查，保留原始 transform keyframe／時長／easing、Tot Musica、減少動態、版面與狀態檢查。舊版基準 140/140、候選 432/432 通過，0 browser errors／blocked writes；桌面雙向、合作戰與 700×768 堆疊視窗截圖在 `D:\Codex_QA\board-battle-hit-depth-20261001\paired-knockback-final-v2\`。戰鬥時序 68/68、真 DOM 順序 38/38、接觸前後受擊／HP 檢查通過。發布建置器鎖定上一版 `package-e98ef3f16bf6e6e4` 並只准兩個 HTML，隔離建置 10/10、假公開回應 6/6；候選 `package-660f4c4369f9177b`／manifest SHA-256 `0de8e2d5835f49e13d0063f997681c28a9a6d8af6541480bfb28f50d91143650` 已建立並提升本地 catalog，公開上傳和 runtime 讀回尚待完成。正式 D 樹只定點同步兩個頁面且保留原檔備份；`npm start` 在隔離 8862 埠啟動，兩頁桌面請求 HTTP 200，但無 `DATABASE_URL`，不代表帳號／多人驗收。本次自動化與模型審圖不等於真人試玩或實體裝置驗收。
 
+## 2026-10-01 啟動器 1.2.16 海釣重做與小遊戲不限次數
+
+範圍：玩家要求工作、訓練小遊戲不限每日次數，金幣仍最多持有 500 枚；海釣畫面放大，改成拋竿、觀察浮標、下沉時抽竿、按住捲線／適時放線。正式來源沿用 `origin/main` 的 1.2.15 提交 `f8397e3cc`，在隔離的 `D:\Codex_Release_Worktrees\launcher-fishing-rework-1.2.16` 工作；原工作樹的 `public/images/ranks/r5.PNG`、`r6.PNG` 既有修改不納入本次發行。
+
+程式：`server/launcher-minigames.js` 保留舊客戶端海釣 v1，對宣告 v2 的新客戶端由伺服器管理三釣點、咬鉤時窗、魚距、張力與斷線；`server/launcher-life-store.js`、`server/launcher-profile-shop.js` 移除小遊戲開始時的每日次數／金幣已滿阻擋，採每次工作結算最多補足到 500 枚的 ledger，訓練不再有冷卻。`desktop/launcher-room-minigames.js`、`.css`、`desktop/launcher-life-room.js` 更新操作與提示；伺服器時間回應校正浮標窗口。角色、魚種、持久欄位及三款桌遊規則不變。
+
+素材與發布：GPT 生成透明釣竿、浮標、水花，轉為 `public/images/launcher_room/fishing_v2/*.webp`；公告主圖在 `public/images/launcher_announcements/launcher-fishing-play-1.2.16.webp`。`desktop/main.js`、`desktop/package.json`／lock 登記新圖；`config/launcher-announcements-v1.json` 增加綁定 1.2.16 的更新公告。`scripts/desktop_launcher_package_qa.js` 檢查四張圖的來源 SHA、封裝後位元組、精確資源白名單及公告閘門。
+
+驗證：`scripts/launcher_fishing_server_qa.js` 79/79、`scripts/launcher_minigames_server_qa.js` 104/104、`scripts/launcher_work_variants_server_qa.js` 129/129、`scripts/launcher_life_server_qa.js` 162/162 及角色經濟 QA 已通過；最終 Chromium 桌機／390px 53/53，含三輪結算、漁獲入缸、時鐘快 60 秒、抽竿後長按空白鍵與魚線 SVG 真正繪製，無頁面錯誤。來源 `scripts/desktop_launcher_package_qa.js`、`node --check`、`git diff --check` 通過；`npm start` 首頁 HTTP 200，無資料庫功能測試。正式安裝檔 267,046,567 bytes，SHA-256 `824b9050ffb812f8145a32087b7bb3760ea92931c5cf26d8ec7115b5dae0d815`，封裝 QA 驗證 ASAR／10 個正式套件／4 語系；實際 Electron 啟動 685/685 本機素材、BGM 播放與無破圖通過。R2 以不可覆寫的 1.2.16 路徑上傳，公開 HEAD、Range 與完整 GET 的大小／SHA 一致；已產出目前啟動器信任的 Ed25519 簽署清單，`public/desktop/launcher-release-v1.json` 與下載頁靜態回退連結同步更新。公開 Render 清單與下載頁仍須在 Git 發布後核對；證據在 `D:\Codex_QA\launcher-fishing-rework-1.2.16-release-r1\` 與 `D:\Codex_QA\launcher-fishing-rework-1.2.16\fishing-client\`。上述為自動化與模型審圖，非真人試玩或實體手機驗收。
+
+
 ## 2026-10-01 戰鬥受擊可見位移補償（已部署）
 
 玩家實玩指出先前公開版受擊卡片看起來沒有舊版移得那麼多。逐幀檢查發現原本的平移數值雖已還原，新增的 3D 透視旋轉仍會把卡片的可見中心往反方向帶。這次在 `public/board_battle.html`、`public/board_game.html` 的受擊元素上固定 CSS individual `translate` 補償式，只在 keyframe 內動畫已註冊的角度自訂屬性；避免 Chrome 在 keyframe 內誤算平方百分比。一般受擊依元素寬度及 yaw 補 X；Tot Musica 上下站位依 pitch 補 Y，特殊雙角色演出再補 X。原 `transform` 平移路徑、700ms／460ms 時長、Tot Musica 720ms 特殊動作、命中時點及戰鬥規則均不改。手機上下排列只補償可見中心，沒有新增受擊路徑。

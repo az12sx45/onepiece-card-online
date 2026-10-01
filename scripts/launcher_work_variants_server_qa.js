@@ -89,11 +89,11 @@ async function main(){
   const train=M.create('training',id('luffy'),1,now(0));check('training rejects work answerfield',M.answer(train,{roundId:train.challenge.id,directions:train.challenge.directions,ingredients:[]},new Date(train.challenge.notBefore)).error,'invalid_minigame_answer');
   await db.exec('CREATE TABLE player_profiles(user_id SERIAL PRIMARY KEY,secret TEXT UNIQUE NOT NULL,name TEXT,avatar TEXT,stats JSONB,updated_at TIMESTAMPTZ DEFAULT now())');
   await add('invalid');for(const jobId of ['treasure','',null,{},1])check('unknown work job rejected '+JSON.stringify(jobId),(await start('invalid',jobId)).error,'invalid_minigame');
-  check('rejected jobs consume no work allowance',(await row('invalid')).stats.launcherCompanionsV1.workStartsToday,0);
+   check('rejected jobs create no work start',(await row('invalid')).stats.launcherCompanionsV1.workStartsToday,0);
   check('training cannot carry a work jobId',(await cmd('invalid','minigame.start',{kind:'training',characterId:id('luffy'),jobId:'cooking'})).error,'invalid_minigame');
   for(const jobId of ['cooking','repair','navigation']){
     await add(jobId);const first=await start(jobId,jobId),session=first.minigame;
-    check(jobId+' public session preserves selected job',session.jobId,jobId);check(jobId+' holds shared global allowance',(await row(jobId)).stats.launcherCompanionsV1.workStartsToday,1);
+     check(jobId+' public session preserves selected job',session.jobId,jobId);check(jobId+' records one work start',(await row(jobId)).stats.launcherCompanionsV1.workStartsToday,1);
     check(jobId+' opening never grants coins',first.wallet.coins,100);check(jobId+' gets enough time for eight rounds',Date.parse(session.expiresAt)-Date.parse(session.startedAt),300000);
     check(jobId+' reconnect preserves current puzzle',(await get(jobId,1)).activeMinigame.challenge,session.challenge);
     check(jobId+' blocks parallel work variant',(await start(jobId,'supply','zoro',1)).error,'minigame_active');
@@ -110,7 +110,7 @@ async function main(){
     check(jobId+' can spend coins through current shop',(await S.changeLauncherItem(pool,jobId,'bgm-op-01','buy',cap)).ok,true);
     await add(jobId+'-retry');const retryStart=await start(jobId+'-retry',jobId),failure=await play(jobId+'-retry',retryStart,0,8);
     check(jobId+' failure does not pay',failure.response.wallet.coins,100);const retry=await cmd(jobId+'-retry','minigame.retry',ref(retryStart.minigame),failure.t+1);
-    check(jobId+' retry retains job identity',retry.minigame.jobId,jobId);check(jobId+' retry reserves no extra quota',(await row(jobId+'-retry')).stats.launcherCompanionsV1.workStartsToday,1);
+     check(jobId+' retry retains job identity',retry.minigame.jobId,jobId);check(jobId+' retry creates no extra start',(await row(jobId+'-retry')).stats.launcherCompanionsV1.workStartsToday,1);
     check(jobId+' retry can earn one reward',(await play(jobId+'-retry',retry,failure.t+1)).response.wallet.coins,110);
   }
   await add('legacy');const legacy=await start('legacy');check('missing jobId stays supply',legacy.minigame.jobId,'supply');
@@ -118,18 +118,23 @@ async function main(){
   await db.query('UPDATE launcher_minigame_sessions SET session=$1::jsonb WHERE session_id=$2',[JSON.stringify(stored),stored.id]);
   check('pre-update stored session is projected as supply',(await get('legacy')).activeMinigame.jobId,'supply');
   check('pre-update stored session completes without migration',(await play('legacy',{minigame:(await get('legacy')).activeMinigame})).response.wallet.coins,110);
-  await add('quota');for(const [index,jobId] of ['cooking','repair','navigation','supply','repair','cooking'].entries()){
-    const r=await start('quota',jobId,['luffy','zoro','nami'][Math.floor(index/2)]);assert.equal(r.ok,true);await cmd('quota','minigame.cancel',ref(r.minigame));
-  }
-  check('switching work games cannot bypass global six starts',(await start('quota','navigation','sanji')).error,'work_daily_limit');
-  check('legacy background API shares the global quota',(await S.startLauncherCharacterWork(pool,'quota',id('sanji'),now(0),cap)).error,'work_daily_limit');
-  await add('actor-quota');for(const jobId of ['cooking','repair']){const r=await start('actor-quota',jobId);await cmd('actor-quota','minigame.cancel',ref(r.minigame));}
-  check('switching work games cannot bypass actor two starts',(await start('actor-quota','navigation')).error,'work_daily_limit');
+   await add('quota');for(const [index,jobId] of ['cooking','repair','navigation','supply','repair','cooking'].entries()){
+     const r=await start('quota',jobId,['luffy','zoro','nami'][Math.floor(index/2)]);assert.equal(r.ok,true);await cmd('quota','minigame.cancel',ref(r.minigame));
+   }
+   const seventh=await start('quota','navigation','sanji');check('seventh different work game can start',seventh.ok,true);
+   await cmd('quota','minigame.cancel',ref(seventh.minigame));
+   check('legacy work can start after seven games',(await S.startLauncherCharacterWork(pool,'quota',id('sanji'),now(0),cap)).ok,true);
+   await add('actor-quota');for(const jobId of ['cooking','repair']){const r=await start('actor-quota',jobId);await cmd('actor-quota','minigame.cancel',ref(r.minigame));}
+   check('third game for same actor can start',(await start('actor-quota','navigation')).ok,true);
   await add('expiry');const expires=await start('expiry','repair');check('new repair still active at 240 seconds',(await get('expiry',240)).activeMinigame.id,expires.minigame.id);check('repair expires at 300 seconds',(await get('expiry',301)).activeMinigame,null);check('expired new game never pays',(await get('expiry',301)).wallet.coins,100);
-  await add('full',495);check('new cooking respects full wallet',(await start('full','cooking')).error,'wallet_full');check('wallet full consumes no quota',(await row('full')).stats.launcherCompanionsV1.workStartsToday,0);
+   await add('full',495);const full=await start('full','cooking');check('cooking can start near full wallet',full.ok,true);
+   const capped=await play('full',full);check('cooking pays only available five coins',capped.response.minigame.result.coins,5);check('cooking reaches wallet cap',capped.response.wallet.coins,500);
   await add('ready',480);const readyStart=await start('ready','navigation'),fill=(await row('ready')).stats;fill.launcherWalletV1.coins=495;await db.query('UPDATE player_profiles SET stats=$1::jsonb WHERE secret=$2',[JSON.stringify(fill),'ready']);
-  const ready=await play('ready',readyStart);check('navigation holds reward when wallet fills',ready.response.error,'wallet_full');check('ready reward survives game timeout',(await get('ready',310)).activeMinigame.state,'ready');
-  await S.changeLauncherItem(pool,'ready','bgm-op-01','buy',cap);check('held navigation reward claims after shop spend',(await cmd('ready','minigame.finish',ref(readyStart.minigame),311)).wallet.coins,495);check('held navigation creates one ledger receipt',Number((await db.query('SELECT count(*) AS n FROM launcher_wallet_ledger WHERE user_id=$1',[(await row('ready')).user_id])).rows[0].n),1);
+   const ready=await play('ready',readyStart);check('navigation pays available space when wallet fills',ready.response.minigame.result.coins,5);
+   check('completed navigation frees active session',(await get('ready',310)).activeMinigame,null);
+   await S.changeLauncherItem(pool,'ready','bgm-op-01','buy',cap);
+   check('finished navigation cannot claim twice after spending',(await cmd('ready','minigame.finish',ref(readyStart.minigame),311)).wallet.coins,490);
+   check('navigation creates one ledger receipt',Number((await db.query('SELECT count(*) AS n FROM launcher_wallet_ledger WHERE user_id=$1',[(await row('ready')).user_id])).rows[0].n),1);
   const sources=['server/launcher-minigames.js','server/launcher-life-store.js','scripts/launcher_work_variants_server_qa.js'],report={schemaVersion:1,status:'PASS',checks:checks.length,coverage,results:checks,sourceHashes:Object.fromEntries(sources.map(file=>[file,crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname,'..',file))).digest('hex')])),limitations:['PGlite isolated in-memory database with serialized transactions; not production PostgreSQL concurrency or human play testing.'],createdAt:new Date().toISOString()};
   const output=process.argv[2];if(output){fs.mkdirSync(path.dirname(path.resolve(output)),{recursive:true});fs.writeFileSync(output,JSON.stringify(report,null,2)+'\n');}console.log(JSON.stringify({status:'PASS',checks:checks.length,coverage,output:output||null}));
 }
