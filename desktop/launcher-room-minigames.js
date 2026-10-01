@@ -2,7 +2,12 @@
 (function(root) {
   'use strict';
   const ASSET='opui://launcher/images/launcher_room/';
-  const FISH_LABELS=Object.freeze({'balloon-catfish':'氣球鯰魚','glistening-saury':'閃亮秋刀魚','smile-jellyfish':'微笑水母','panda-shark':'熊貓鯊'});
+  const FISH_LABELS=Object.freeze({'balloon-catfish':'氣球鯰魚','glistening-saury':'閃亮秋刀魚','smile-jellyfish':'微笑水母','panda-shark':'熊貓鯊','butterflyfish':'蝶魚','adventure-fish':'冒險魚','cola-sunfish':'可樂翻車魚','reef-shark':'鯊魚','elephant-tuna':'象鼻鮪魚'});
+  const FISH_BAITS=Object.freeze({worm:{label:'蟲餌',note:'適合近岸的小型魚'},shrimp:{label:'蝦餌',note:'吸引礁區魚群'},lure:{label:'亮片擬餌',note:'遠處的大魚也會追逐'}});
+  const FISH_SPOTS=Object.freeze({shore:{label:'近岸水流',note:'船邊的淺水與緩流',x:57,y:45},reef:{label:'珊瑚礁邊',note:'礁石間的魚影較活躍',x:68,y:46},deep:{label:'外海深水',note:'深處可能遇到有力的大魚',x:80,y:47}});
+  const FISH_CAST_ZONES=Object.freeze({near:{label:'近處水面',key:'↓',x:46,y:55},mid:{label:'中距水面',key:'●',x:66,y:45},far:{label:'遠處水面',key:'↑',x:81,y:34}});
+  const fishArt=id=>`${ASSET}${Object.hasOwn({'balloon-catfish':1,'glistening-saury':1,'smile-jellyfish':1,'panda-shark':1},id)?'fish_v1':'fish_v3'}/${id}.webp`;
+  const useFishSilhouette=art=>{art.onerror=null;art.src=fishArt('balloon-catfish');art.classList.add('fish-art-fallback');};
   const keyOf=value=>String(value||'').replace(/^room-character-/,'');
   const clamp=(value,min,max)=>Math.max(min,Math.min(max,Number(value)||0));
   const DIRS=['left','up','right'];
@@ -15,6 +20,11 @@
     navigation:{title:'娜美的航線演練',guide:'航海助手',short:'避礁規劃',round:'航線',description:'避開暗礁，用有限的步數畫出抵達港口的航線。',rules:['共 8 張海圖。從起點逐格點選上下左右相鄰海域，避開暗礁，抵達港口。','可以使用方向鍵移動；點前一格或按 Backspace 退回，Enter 確認出航。','每張海圖限時 16 秒，不能重走格子或超過步數上限。完成 6 張即可過關。']},
     fishing:{title:'千陽號海釣',guide:'浮標與魚線',short:'拋竿 · 抽竿 · 捲線',round:'釣點',description:'拋出釣竿，盯著大浮標；真正沉入水面才抽竿，再交替捲線與放線。',rules:['共有 3 個釣點，成功釣起 2 次就能收藏一尾作品中出現的魚。可以一直再玩，商城金幣最多持有 500 枚。','點「拋竿」後等魚靠近。浮標輕晃只是試餌；浮標猛地沉下、水花濺起時，按「抽竿」或空白鍵。太早抽竿會驚走魚。','上鉤後按住「捲線」縮短魚的距離；張力變黃、變紅時，鬆開捲線並點「放線」降低張力。張力滿格會斷線。']}
   });
+  const FISHING_RULES=Object.freeze([
+    '先挑魚餌和海域，進入海面後點選近處、中距或遠處落點，再拋竿。海域、魚餌及投距都會改變可能遇到的作品魚種；釣魚不限次數，也不算工作或發金幣。',
+    '拋竿後留意大浮標。輕啄只是試餌；浮標明顯沉入水面時抽竿，太早或太晚都可能讓魚逃走。',
+    '上鉤後捲線拉近魚；魚線張力升高就放線。魚往左衝時向右牽制、往右衝時向左牽制，猛潛時先放線。收藏未滿時，每次釣起一尾就立即保存。'
+  ]);
   const JOB_LINES={
     cooking:{luffy:'香吉士說得照食譜來……我會忍住不偷吃啦！',zoro:'切好的食材放哪？你報順序，我來備料。',nami:'先照食譜備好，別讓魯夫把晚餐吃光了。',usopp:'這可是大廚騙人布的……咳，香吉士寫的食譜！',sanji:'照順序備料，火候我來顧。可別糟蹋食物。',chopper:'蔬菜也要吃喔！我來幫忙把食材排好。',robin:'呵呵，晚餐的線索都寫在食譜上了。',franky:'備料也得 SUPER 俐落！別把我的可樂倒進鍋裡啊。',brook:'讓我幫忙備料，晚餐後再為大家演奏吧。',jinbe:'照著食譜慢慢來，廚房也講究彼此配合。',ace:'我也來幫忙。放心，還沒開飯我不會先睡著。',sabo:'先把食材備妥，魯夫才不會趁我們不注意偷吃。',law:'食材按順序來。處理魚的刀具別和其他食材混放。'},
     repair:{luffy:'這根要轉過來？好！修好了就能繼續冒險！',zoro:'這次只看管線的方向是吧。指出入口，我來接。',nami:'漏水可不是小事，照佛朗基的圖把它接好。',usopp:'小修小補我也很在行！先把兩邊的開口對準。',sanji:'廚房用水可不能停。這邊接穩了再試。',chopper:'原來管線也會不舒服啊……我們把它修好！',robin:'順著入口往前看，斷開的地方就找到了。',franky:'SUPER！把管口接穩，桑尼號就能順暢運轉！',brook:'把每一段接起來，就像樂句彼此呼應呢。',jinbe:'水路通暢，船上才安穩。先看清楚流向吧。',ace:'這種活交給雙手就好，可不能把管子燒壞了。',sabo:'佛朗基應該有留下接管圖。先看清楚，再動手。',law:'先找漏點，再對準管口。別把這裡弄成第二間手術室。'},
@@ -62,7 +72,7 @@
   function create(options) {
     let layer=null,card=null,body=null,feedback=null,progress=null,closeButton=null,live=null;
     let game=null,kind='',jobId='supply',characterId='',phase='closed',generation=0,frame=0,requesting=false,queued=null,roundStart=0,choice=[],directions=[],ingredients=[],rotations=[],course=[],counterMoves=[],previousFocus=null,lastRound='',lastResult='',lastFeedback=-1;
-    let held=false,windowFocused=true,practice=false,actorFrame=0,actorStep=null,actorLane=1,reelTimer=0,lastFishingTimeout=0,lastKeyboardReel=0,serverClockOffset=0;
+    let held=false,windowFocused=true,practice=false,actorFrame=0,actorStep=null,actorLane=1,reelTimer=0,lastFishingTimeout=0,lastKeyboardReel=0,serverClockOffset=0,selectedBait='worm',selectedSpot='shore',selectedCastZone='mid';
     const reactionCounts={good:0,miss:0};
     const now=()=>performance.now();
     const fishingNow=()=>Date.now()+serverClockOffset;
@@ -70,7 +80,7 @@
     const voice=()=>VOICES[keyOf(characterId)]||VOICES.luffy;
     const job=()=>JOBS[jobId]||JOBS.supply;
     const introLine=()=>kind==='training'?voice().training:JOB_LINES[jobId]?.[keyOf(characterId)]||voice().work;
-    function updateTitle(){document.getElementById('roomMinigameTitle').textContent=kind==='work'?job().title:'甲板特訓';if(layer)layer.dataset.job=kind==='work'?jobId:'training';}
+    function updateTitle(){document.getElementById('roomMinigameTitle').textContent=kind==='fishing'?'千陽號海釣':kind==='work'?job().title:'甲板特訓';if(layer){layer.dataset.job=kind==='fishing'?'fishing':kind==='work'?jobId:'training';layer.querySelector('.room-minigame-head .room-minigame-eyebrow').textContent=kind==='fishing'?'FISHING ADVENTURE':'CREW CHALLENGE';}}
     const reaction=type=>{const lines=voice()[type];return Array.isArray(lines)?lines[reactionCounts[type]++%lines.length]:lines;};
     const active=()=>phase!=='closed';
     function say(text) {if(feedback)feedback.textContent=text;if(live)live.textContent=text;}
@@ -93,8 +103,8 @@
     function portraitUrl(){const key=keyOf(characterId);return key==='robin'?`${ASSET}robin_v2/portrait.webp`:root.OnePieceReservedCrew?.assetUrl(key,'portrait.webp')||`${ASSET}${root.OnePieceRoomMotion?.LUFFY_ART_ENABLED===true&&key==='luffy'?'portrait_v4':'portrait_v3'}/${key}.webp`;}
     function open(input) {
       if(active()||!VOICES[keyOf(input.characterId)])return false;
-      ensure();generation++;game=null;queued=null;requesting=false;lastRound='';lastResult='';lastFeedback=-1;practice=false;serverClockOffset=0;lastKeyboardReel=0;reactionCounts.good=0;reactionCounts.miss=0;kind=input.kind;characterId=input.characterId;phase='intro';previousFocus=document.activeElement;root.OnePieceRoomMotion?.preload(keyOf(characterId));
-      jobId=JOBS[input.jobId]?input.jobId:'supply';held=true;options.onOpen?.(characterId);layer.hidden=false;updateTitle();document.getElementById('roomMinigameName').textContent=voice().name;
+      ensure();generation++;game=null;queued=null;requesting=false;lastRound='';lastResult='';lastFeedback=-1;practice=false;serverClockOffset=0;lastKeyboardReel=0;selectedBait='worm';selectedSpot='shore';selectedCastZone='mid';reactionCounts.good=0;reactionCounts.miss=0;kind=input.kind;characterId=input.characterId;phase='intro';previousFocus=document.activeElement;root.OnePieceRoomMotion?.preload(keyOf(characterId));
+      jobId=kind==='fishing'?'fishing':JOBS[input.jobId]?input.jobId:'supply';held=true;options.onOpen?.(characterId);layer.hidden=false;updateTitle();document.getElementById('roomMinigameName').textContent=voice().name;
       const portrait=document.getElementById('roomMinigamePortrait');portrait.onerror=root.OnePieceRoomMotion?.LUFFY_ART_ENABLED===true&&keyOf(characterId)==='luffy'?()=>{portrait.onerror=null;portrait.src=`${ASSET}portrait_v3/luffy.webp`;}:null;portrait.src=portraitUrl();
       progress.replaceChildren();say(introLine());renderIntro();return true;
     }
@@ -103,22 +113,39 @@
       phase='intro';body.replaceChildren();const intro=node('div','room-minigame-intro');
       if(kind==='work'){
         const choices=node('div','room-minigame-jobs');choices.setAttribute('role','group');choices.setAttribute('aria-label','選擇工作');
-        for(const [id,definition] of Object.entries(JOBS)){const option=button('',()=>{if(requesting)return;jobId=id;updateTitle();say(introLine());renderIntro();body.querySelector(`[data-job="${id}"]`)?.focus({preventScroll:true});},'room-minigame-job');option.dataset.job=id;option.setAttribute('aria-pressed',String(id===jobId));option.append(node('span','room-minigame-job-guide',definition.guide),node('strong','',definition.title),node('span','',definition.short));choices.append(option);}
-        intro.append(choices,node('p','room-minigame-shared-budget','工作小遊戲不限遊玩次數。過關可獲商城金幣，持有上限 500 枚；海釣另可收藏漁獲。'));
+        for(const [id,definition] of Object.entries(JOBS)){if(id==='fishing')continue;const option=button('',()=>{if(requesting)return;jobId=id;updateTitle();say(introLine());renderIntro();body.querySelector(`[data-job="${id}"]`)?.focus({preventScroll:true});},'room-minigame-job');option.dataset.job=id;option.setAttribute('aria-pressed',String(id===jobId));option.append(node('span','room-minigame-job-guide',definition.guide),node('strong','',definition.title),node('span','',definition.short));choices.append(option);}
+        intro.append(choices,node('p','room-minigame-shared-budget','工作小遊戲不限遊玩次數。過關可獲商城金幣，持有上限 500 枚。'));
+      } else if(kind==='fishing') {
+        const setup=node('div','room-fishing-v3-setup');
+        const baits=node('fieldset','room-fishing-v3-baits');baits.append(node('legend','','先選魚餌'));
+        for(const [id,definition] of Object.entries(FISH_BAITS)){
+          const choice=button('',()=>{selectedBait=id;renderIntro();body.querySelector(`[data-bait="${id}"]`)?.focus({preventScroll:true});},'room-fishing-v3-bait');choice.dataset.bait=id;choice.setAttribute('aria-pressed',String(selectedBait===id));choice.setAttribute('aria-label',`${definition.label}，${definition.note}`);
+          const art=node('img');art.src=`${ASSET}fishing_v3/bait-${id}.webp`;art.alt='';art.draggable=false;art.onerror=()=>{art.hidden=true;};
+          choice.append(art,node('strong','',definition.label),node('small','',definition.note));baits.append(choice);
+        }
+        const spots=node('fieldset','room-fishing-v3-spots');spots.append(node('legend','','再選要拋到哪裡'));
+        for(const [id,definition] of Object.entries(FISH_SPOTS)){
+          const choice=button('',()=>{selectedSpot=id;renderIntro();body.querySelector(`[data-spot="${id}"]`)?.focus({preventScroll:true});},'room-fishing-v3-spot');choice.dataset.spot=id;choice.setAttribute('aria-pressed',String(selectedSpot===id));choice.setAttribute('aria-label',`${definition.label}，${definition.note}`);choice.style.backgroundImage=`linear-gradient(0deg,#062837dd,#06283718 70%),url("${ASSET}fishing_v3/sea-${id}.webp")`;
+          choice.append(node('strong','',definition.label),node('small','',definition.note));spots.append(choice);
+        }
+        setup.append(baits,spots);intro.append(setup);
       }
-      intro.append(node('h3','',kind==='work'?job().description:'看過安全路線，再用腳步記住它。'));
-      const rules=node('ol');for(const text of kind==='work'?job().rules:['共 4 段航道。先看依序亮起的安全位置，再照順序走。','使用 ←／↑／→ 或畫面上的三個方向鍵；↑ 代表中央航道。','路線由 3 步增至 5 步。完整通過 3 段即可過關，沒有戰鬥能力限制。'])rules.append(node('li','',text));intro.append(rules);
-      const warning=node('p','room-minigame-cost',practice?'自由練習不領取獎勵；正式訓練也可以不限次數遊玩。':kind==='work'?'工作可以不限次數挑戰。過關最多取得 10 枚金幣，已接近 500 枚上限時只補足差額；中途離開不給獎勵。':'訓練可以不限次數挑戰，過關可提升工作意願與親密度；中途離開不給獎勵。');intro.append(warning);
-      if(kind==='work'&&jobId==='fishing')intro.append(fishCollectionView());
-      if(message)intro.append(node('p','room-minigame-error',message));intro.append(button('準備好了 · 開始挑戰',()=>void start()));if(kind==='training'&&!practice)intro.append(button('先自由練習 · 不領獎',()=>{practice=true;renderIntro();},'room-minigame-secondary'));body.append(intro);body.querySelector('.room-minigame-primary')?.focus({preventScroll:true});
+      intro.append(node('h3','',kind==='fishing'?'選好位置，一竿一竿把漁獲帶上船。':kind==='work'?job().description:'看過安全路線，再用腳步記住它。'));
+      const rules=node('ol');for(const text of kind==='fishing'?FISHING_RULES:kind==='work'?job().rules:['共 4 段航道。先看依序亮起的安全位置，再照順序走。','使用 ←／↑／→ 或畫面上的三個方向鍵；↑ 代表中央航道。','路線由 3 步增至 5 步。完整通過 3 段即可過關，沒有戰鬥能力限制。'])rules.append(node('li','',text));intro.append(rules);
+      const collectionFull=(options.fishCollection?.()||[]).length>=64;
+      const warning=node('p','room-minigame-cost',kind==='fishing'?collectionFull?'收藏已滿 64 尾。仍可無限釣魚，但成功釣起的新魚不能保存；若想留魚，請自行選擇放生一尾。釣魚不算工作，也不發商城金幣。':'每次成功釣起一尾就立即收藏；釣魚不限次數，不消耗工作次數，也不發放商城金幣。漁獲收藏最多 64 尾。':practice?'自由練習不領取獎勵；正式訓練也可以不限次數遊玩。':kind==='work'?'工作可以不限次數挑戰。過關最多取得 10 枚金幣，已接近 500 枚上限時只補足差額；中途離開不給獎勵。':'訓練可以不限次數挑戰，過關可提升工作意願與親密度；中途離開不給獎勵。');intro.append(warning);
+      if(message)intro.append(node('p','room-minigame-error',message));
+      const startButton=button(kind==='fishing'?'帶上魚餌 · 前往釣點':'準備好了 · 開始挑戰',()=>void start());intro.append(startButton);
+      if(kind==='fishing'||kind==='work'&&jobId==='fishing')intro.append(fishCollectionView());
+      if(kind==='training'&&!practice)intro.append(button('先自由練習 · 不領獎',()=>{practice=true;renderIntro();},'room-minigame-secondary'));body.append(intro);startButton.focus({preventScroll:true});
     }
     function fishCollectionView(){
       const collection=node('section','room-fishing-collection');collection.append(node('h4','','我的漁獲收藏'));
-      const fish=(options.fishCollection?.()||[]).filter(entry=>entry&&FISH_LABELS[entry.speciesId]);
-      collection.append(node('p','',fish.length?`已收藏 ${fish.length} / 64 尾；魚缸展示 ${fish.filter(entry=>entry.inAquarium).length} / 6 尾。${fish.length>=64?'收藏已滿；仍可玩海釣，要保存新魚請先放生一尾。':''}`:'尚未釣到魚。過關後會加入收藏。'));
+      const fish=(options.fishCollection?.()||[]).filter(entry=>entry&&typeof entry.speciesId==='string');
+      collection.append(node('p','',fish.length?`已收藏 ${fish.length} / 64 尾；魚缸展示 ${fish.filter(entry=>entry.inAquarium).length} / 6 尾。${fish.length>=64?'收藏已滿；仍可釣魚，若要保存新魚請先放生一尾。':''}`:'尚未釣到魚。每次成功釣起一尾就會加入收藏。'));
       const list=node('div','room-fishing-collection-list');for(const entry of [...fish].reverse()){
-        const card=node('div','room-fishing-collection-item');const art=node('img');art.src=`${ASSET}fish_v1/${entry.speciesId}.webp`;art.alt='';art.draggable=false;
-        const name=node('strong','',FISH_LABELS[entry.speciesId]);const action=button(entry.inAquarium?'收回收藏':'放進水族箱',async()=>{
+        const card=node('div','room-fishing-collection-item');const art=node('img');art.src=fishArt(entry.speciesId);art.alt='';art.draggable=false;art.onerror=()=>useFishSilhouette(art);
+        const name=node('strong','',FISH_LABELS[entry.speciesId]||entry.label||'未知漁獲');const action=button(entry.inAquarium?'收回收藏':'放進水族箱',async()=>{
           const response=await request('fish.place',{fishId:entry.id,inAquarium:!entry.inAquarium});
           if(response?.ok){renderIntro();body.querySelector(`[data-fish-id="${entry.id}"]`)?.focus({preventScroll:true});say(entry.inAquarium?'已收回收藏。':'已放進水族箱。');options.onResult?.(game);}
           else if(response)say(ERRORS[response.error]||'目前無法變更魚缸展示，請稍後再試。');
@@ -126,7 +153,7 @@
         const release=button('放生',async()=>{
           if(release.dataset.confirmed!=='true'){release.dataset.confirmed='true';release.textContent='確定永久放生';release.classList.add('confirm-release');return;}
           const response=await request('fish.release',{fishId:entry.id});
-          if(response?.ok){renderIntro();say(`${FISH_LABELS[entry.speciesId]}已放回海中。`);options.onResult?.(game);}
+          if(response?.ok){renderIntro();say(`${FISH_LABELS[entry.speciesId]||entry.label||'漁獲'}已放回海中。`);options.onResult?.(game);}
           else if(response)say('放生未完成，請稍後再試。');
         },'room-fishing-collection-action room-fishing-release');
         card.append(art,name,action,release);list.append(card);
@@ -139,21 +166,22 @@
       finally{if(current===generation){requesting=false;setDisabled(false);updateFishingV2();}}
     }
     function setDisabled(value){if(!layer)return;layer.dataset.pending=String(value);for(const b of body.querySelectorAll('button'))b.disabled=(value&&b.dataset.fishAction!=='reel')||b.dataset.permanentDisabled==='true';}
-    async function start(){if(phase!=='intro')return;const response=await request('minigame.start',{characterId,kind,...kind==='work'?{jobId}:{},...kind==='work'&&jobId==='fishing'?{fishingVersion:2}:{},...practice?{practice:true}:{}});if(!response)return;if(response.minigame&&['playing','ready','failed'].includes(response.minigame.state)){game=response.minigame;if(game.characterId!==characterId||game.kind!==kind){renderRecovery();return;}accept(response);return;}renderIntro(ERRORS[response.error]||response.message||'暫時無法開始，請稍候再試。');}
+    async function start(){if(phase!=='intro')return;const response=await request('minigame.start',{characterId,kind,...kind==='fishing'?{baitId:selectedBait,spotId:selectedSpot}:kind==='work'?{jobId}:{},...kind==='work'&&jobId==='fishing'?{fishingVersion:2}:{},...practice?{practice:true}:{}});if(!response)return;if(response.minigame&&['playing','ready','failed'].includes(response.minigame.state)){game=response.minigame;if(game.characterId!==characterId||game.kind!==kind){renderRecovery();return;}accept(response);return;}renderIntro(kind==='fishing'&&response.error==='work_active'?'夥伴正在分工。完成原有分工後即可自由釣魚；釣魚不消耗工作次數。':ERRORS[response.error]||response.message||'暫時無法開始，請稍候再試。');}
     function renderRecovery(){phase='recovery';body.replaceChildren(node('h3','','上一次挑戰尚未結束'),node('p','','結束舊挑戰後，即可重新選擇夥伴。未完成的獎勵不會發放。'),button('結束舊挑戰',()=>void cancel(false)));say('不會自動領取獎勵。');}
     function accept(response) {
       if(!response?.minigame){showRetry(response);return;}
       syncServerClock(response);
-      const previousFishingStage=game?.challenge?.id&&game.challenge.id===response.minigame.challenge?.id&&game.challenge.fishingVersion===2?game.challenge.stage:null;
+      const previousFishingStage=game?.challenge?.id&&game.challenge.id===response.minigame.challenge?.id&&[2,3].includes(game.challenge.fishingVersion)?game.challenge.stage:null;
       game=response.minigame;
       if(kind==='work'){jobId=JOBS[game.jobId]?game.jobId:'supply';updateTitle();}
+      if(kind==='fishing'){selectedBait=Object.hasOwn(FISH_BAITS,game.baitId)?game.baitId:selectedBait;selectedSpot=Object.hasOwn(FISH_SPOTS,game.spotId)?game.spotId:selectedSpot;}
       if(game.feedback&&game.feedback.roundIndex!==lastFeedback){lastFeedback=game.feedback.roundIndex;say(reaction(game.feedback.correct?'good':'miss'));}
-      progress.textContent=`${kind==='work'?job().round:'航道'} ${Math.min(game.roundIndex+1,game.totalRounds)} / ${game.totalRounds}　｜　完成 ${game.correctRounds||0}　｜　連擊 ${game.combo||0}`;
+      progress.textContent=kind==='fishing'?`${FISH_SPOTS[selectedSpot].label} · ${FISH_BAITS[selectedBait].label}　｜　一竿一尾，釣起就收藏`: `${kind==='work'?job().round:'航道'} ${Math.min(game.roundIndex+1,game.totalRounds)} / ${game.totalRounds}　｜　完成 ${game.correctRounds||0}　｜　連擊 ${game.combo||0}`;
       if(['completed','failed'].includes(game.state)){renderResult();return;}
       if(!['playing','ready'].includes(game.state)){renderEnded();return;}
       if(game.state==='ready'||!game.challenge){void finish();return;}
       if(lastRound===game.challenge.id){
-        if(jobId==='fishing'&&game.challenge.fishingVersion===2){
+        if(jobId==='fishing'&&[2,3].includes(game.challenge.fishingVersion)){
           updateFishingV2();
           if(previousFishingStage!==game.challenge.stage){
             const target=game.challenge.stage==='fight'?body.querySelector('[data-fish-action=reel]'):layer;
@@ -162,13 +190,13 @@
         }
         return;
       }
-      stopReeling();lastRound=game.challenge.id;choice=[];directions=[];ingredients=[];rotations=game.challenge.tiles?.map(tile=>tile.rotation)||[];course=Number.isInteger(game.challenge.start)?[game.challenge.start]:[];counterMoves=[];queued=null;roundStart=now();phase=jobId==='fishing'&&game.challenge.fishingVersion===2?'answer':'showcase';renderRound();cancelAnimationFrame(frame);frame=requestAnimationFrame(tick);
+      stopReeling();lastRound=game.challenge.id;choice=[];directions=[];ingredients=[];rotations=game.challenge.tiles?.map(tile=>tile.rotation)||[];course=Number.isInteger(game.challenge.start)?[game.challenge.start]:[];counterMoves=[];queued=null;roundStart=now();phase=jobId==='fishing'&&[2,3].includes(game.challenge.fishingVersion)?'answer':'showcase';renderRound();cancelAnimationFrame(frame);frame=requestAnimationFrame(tick);
     }
     function renderRound() {
       body.replaceChildren();const challenge=game.challenge;
-      const stage=node('div',`room-minigame-stage ${kind} ${kind==='work'?'job-'+jobId:''} ${jobId==='fishing'&&challenge.fishingVersion===2?'fishing-v2':''}`);stage.dataset.round=String(game.roundIndex);body.append(stage);
+      const stage=node('div',`room-minigame-stage ${kind} ${kind==='work'?'job-'+jobId:''} ${jobId==='fishing'&&[2,3].includes(challenge.fishingVersion)?'fishing-v2':''} ${kind==='fishing'?'fishing-v3':''}`);stage.dataset.round=String(game.roundIndex);body.append(stage);
       const heading=node('div','room-minigame-order');heading.append(node('span','room-minigame-round-number',`0${game.roundIndex+1}`));
-      heading.append(node('strong','',kind!=='work'?'記住安全航道':jobId==='supply'?`這一批需要：${challenge.order?.label||{food:'食材',tools:'工具',books:'書籍'}[challenge.order?.category]||'補給'}`:jobId==='cooking'?challenge.recipeLabel||'依序備好食材':jobId==='repair'?'入口 → 接通管線 → 出口':jobId==='fishing'&&challenge.fishingVersion===2?'拋竿 → 浮標下沉 → 抽竿 → 控制張力':'魚影正在拉扯魚線'));stage.append(heading);
+      heading.append(node('strong','',kind==='fishing'?`${FISH_SPOTS[selectedSpot].label} · ${FISH_BAITS[selectedBait].label} · 拋竿釣魚`:kind!=='work'?'記住安全航道':jobId==='supply'?`這一批需要：${challenge.order?.label||{food:'食材',tools:'工具',books:'書籍'}[challenge.order?.category]||'補給'}`:jobId==='cooking'?challenge.recipeLabel||'依序備好食材':jobId==='repair'?'入口 → 接通管線 → 出口':jobId==='fishing'&&challenge.fishingVersion===2?'拋竿 → 浮標下沉 → 抽竿 → 控制張力':'魚影正在拉扯魚線'));stage.append(heading);
       const timer=node('div','room-minigame-timer');timer.setAttribute('role','progressbar');timer.setAttribute('aria-label','這一輪剩餘時間');timer.setAttribute('aria-valuemin','0');timer.setAttribute('aria-valuemax','100');timer.append(node('span'));stage.append(timer);
       const hint=node('p','room-minigame-hint');hint.id='roomMinigameHint';stage.append(hint);
       if(kind==='work'&&jobId==='supply') {
@@ -181,13 +209,15 @@
         else if(jobId==='repair')renderRepair(stage,challenge);
         else if(jobId==='fishing')challenge.fishingVersion===2?renderFishingV2(stage,challenge):renderFishing(stage,challenge);
         else renderNavigation(stage,challenge);
+      }else if(kind==='fishing'){
+        renderFishingV2(stage,challenge);
       }else {
         const lanes=node('div','room-minigame-lanes');for(const dir of DIRS){const lane=node('div','room-minigame-lane');lane.dataset.direction=dir;lane.append(node('span','room-minigame-lane-arrow',ARROWS[dir]),node('span','room-minigame-lane-name',DIR_NAMES[dir]));lanes.append(lane);}const token=node('canvas','room-minigame-runner');token.setAttribute('role','img');token.setAttribute('aria-label',voice().name+'完整人物');token.dataset.lane='up';lanes.append(token);stage.append(lanes);actorLane=1;actorStep=null;cancelAnimationFrame(actorFrame);actorFrame=requestAnimationFrame(paintActor);
         const steps=node('div','room-minigame-steps');for(let i=0;i<challenge.directions.length;i++){const dot=node('span','',String(i+1));dot.setAttribute('aria-label',`第 ${i+1} 步`);steps.append(dot);}stage.append(steps);
         const controls=node('div','room-minigame-directions');for(const dir of DIRS){const b=button(ARROWS[dir],()=>inputDirection(dir),'room-minigame-direction');b.dataset.direction=dir;b.setAttribute('aria-label',DIR_NAMES[dir]);controls.append(b);}stage.append(controls);
       }
       if(game.feedback){const result=node('div',`room-minigame-round-result ${game.feedback.correct?'correct':'miss'}`,game.feedback.correct?'上一輪完整通過！':'上一輪有遺漏或失誤，穩住再來。');stage.append(result);}
-      if(!(jobId==='fishing'&&challenge.fishingVersion===2))stage.querySelectorAll('button').forEach(b=>{b.disabled=true;});
+      if(!(jobId==='fishing'&&[2,3].includes(challenge.fishingVersion)))stage.querySelectorAll('button').forEach(b=>{b.disabled=true;});
       layer.focus({preventScroll:true});
     }
     function renderCooking(stage,challenge){
@@ -227,9 +257,9 @@
     function updateCourse(){body.querySelectorAll('.room-minigame-sea-cell').forEach((b,index)=>{const order=course.indexOf(index),current=index===course[course.length-1];b.classList.toggle('on-course',order>=0);b.classList.toggle('current',current);b.setAttribute('aria-pressed',String(order>=0));b.querySelector('.room-minigame-cell-order').textContent=order<0?'':order===0?'起':String(order);});const budget=body.querySelector('.room-minigame-course-budget');if(budget)budget.textContent=`已走 ${course.length-1} / ${game.challenge.maxSteps} 步　·　${course.at(-1)===game.challenge.goal?'已抵達港口，可以確認出航。':'沿著相鄰海面，前往港口。'}`;}
     function stopReeling(){if(reelTimer){clearInterval(reelTimer);reelTimer=0;}}
     async function sendFishingAction(action){
-      if(phase!=='answer'||requesting||jobId!=='fishing'||game?.challenge?.fishingVersion!==2)return;
+      if(phase!=='answer'||requesting||jobId!=='fishing'||![2,3].includes(game?.challenge?.fishingVersion))return;
       const currentRound=game.challenge.id;
-      const response=await request('minigame.answer',{sessionId:game.id,token:game.token,roundId:currentRound,counterMoves:[action]});
+      const response=await request('minigame.answer',{sessionId:game.id,token:game.token,roundId:currentRound,counterMoves:[action],...(action==='cast'&&game.challenge.fishingVersion===3?{castZone:selectedCastZone}:{})});
       if(!response)return;
       if(response.ok){accept(response);return;}
       if(response.error==='fishing_action_cooldown')return;
@@ -237,44 +267,74 @@
       if(response.minigame&&['expired','cancelled','invalidated'].includes(response.minigame.state)){accept(response);return;}
       say(ERRORS[response.error]||'海釣操作暫時沒有送達；請看浮標後再試一次。');
     }
+    function positionFishingV3(sea,id){
+      if(sea.dataset.castZone===id)return;
+      const zone=FISH_CAST_ZONES[id]||FISH_CAST_ZONES.mid;
+      sea.style.setProperty('--cast-x',`${zone.x}%`);sea.style.setProperty('--cast-y',`${zone.y}%`);sea.dataset.castZone=id;
+      const line=sea.querySelector('.room-fishing-v2-line .v3-line');
+      if(line)line.setAttribute('d',`M 520 210 Q ${Math.round((520+zone.x*10)/2)} 160 ${zone.x*10} ${Math.round(zone.y*5.6)}`);
+      sea.querySelectorAll('.room-fishing-v3-zone').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.castZone===id)));
+    }
+    function selectFishingCastZone(id){
+      if(kind!=='fishing'||phase!=='answer'||game?.challenge?.stage!=='cast'||!Object.hasOwn(FISH_CAST_ZONES,id))return;
+      selectedCastZone=id;const sea=body.querySelector('.room-fishing-v3-sea');if(sea)positionFishingV3(sea,id);updateFishingV2();
+    }
     function renderFishingV2(stage,challenge){
-      const sea=node('div','room-fishing-sea room-fishing-v2-sea');sea.setAttribute('role','img');sea.setAttribute('aria-label','放大的海面、釣竿、魚線、浮標及魚影');
+      const isV3=challenge.fishingVersion===3,spot=FISH_SPOTS[selectedSpot]||FISH_SPOTS.shore;
+      const sea=node('div',`room-fishing-sea room-fishing-v2-sea${isV3?' room-fishing-v3-sea':''}`);sea.setAttribute('role',isV3?'group':'img');sea.setAttribute('aria-label',isV3?`${spot.label}海釣畫面，觀察浮標與魚影並操作下緣按鈕`:'放大的海面、釣竿、魚線、浮標及魚影');
+      if(isV3){sea.dataset.spot=selectedSpot;sea.style.backgroundImage=`linear-gradient(0deg,#04283866,transparent 45%),url("${ASSET}fishing_v3/sea-${selectedSpot}.webp")`;}
       const rod=node('img','room-fishing-v2-rod');rod.src=`${ASSET}fishing_v2/rod.webp`;rod.alt='';rod.draggable=false;
       const line=document.createElementNS('http://www.w3.org/2000/svg','svg');line.setAttribute('class','room-fishing-v2-line');line.setAttribute('viewBox','0 0 1000 560');line.setAttribute('preserveAspectRatio','none');
       for(const [name,shape] of [['desktop-wait','M 520 210 Q 585 195 650 275'],['desktop-fight','M 520 210 Q 590 190 650 275'],['mobile-wait','M 520 220 Q 590 205 650 196'],['mobile-fight','M 520 220 Q 590 200 650 196']]){const curve=document.createElementNS('http://www.w3.org/2000/svg','path');curve.setAttribute('class',name);curve.setAttribute('d',shape);line.append(curve);}
+      if(isV3){const curve=document.createElementNS('http://www.w3.org/2000/svg','path');curve.setAttribute('class','v3-line');line.append(curve);}
       const shadow=node('img','room-fishing-v2-shadow');shadow.src=`${ASSET}fish_v1/balloon-catfish.webp`;shadow.alt='';shadow.draggable=false;
       const splash=node('img','room-fishing-v2-splash');splash.src=`${ASSET}fishing_v2/splash.webp`;splash.alt='';splash.draggable=false;
       const float=node('img','room-fishing-v2-bobber');float.src=`${ASSET}fishing_v2/bobber.webp`;float.alt='';float.draggable=false;
-      const seaCaption=node('span','room-fishing-v2-sea-caption');seaCaption.textContent='千陽號船舷 · 海釣';
-      sea.append(node('div','room-fishing-wake'),shadow,line,rod,splash,float,seaCaption);stage.append(sea);
+      const seaCaption=node('span','room-fishing-v2-sea-caption');seaCaption.textContent=isV3?`千陽號 · ${spot.label} · ${FISH_BAITS[selectedBait].label}`:'千陽號船舷 · 海釣';
+      sea.append(node('div','room-fishing-wake'),shadow,line,rod,splash,float,seaCaption);
+      if(isV3){
+        const zones=node('div','room-fishing-v3-zones');zones.setAttribute('role','group');zones.setAttribute('aria-label','選擇拋竿落點，近處、中距或遠處');
+        for(const [id,definition] of Object.entries(FISH_CAST_ZONES)){
+          const choice=button(`${definition.key} ${definition.label}`,()=>selectFishingCastZone(id),'room-fishing-v3-zone');choice.dataset.castZone=id;choice.style.setProperty('--zone-x',`${definition.x}%`);choice.style.setProperty('--zone-y',`${definition.y}%`);choice.setAttribute('aria-pressed',String(selectedCastZone===id));choice.setAttribute('aria-label',`${definition.label}，按下後再點拋竿`);zones.append(choice);
+        }
+        sea.append(zones);
+        const target=node('div','room-fishing-v3-target');target.setAttribute('aria-hidden','true');sea.append(target);sea.append(node('div','room-fishing-v3-fish-cue'));
+        positionFishingV3(sea,challenge.castZone||selectedCastZone);
+      }
+      stage.append(sea);
       const steps=node('div','room-fishing-v2-steps');for(const label of ['1 拋竿','2 看浮標','3 抽竿','4 捲線'])steps.append(node('span','',label));stage.append(steps);
-      const panel=node('div','room-fishing-v2-panel');const signal=node('strong','room-fishing-v2-signal');signal.setAttribute('aria-live','polite');const sub=node('span','room-fishing-v2-sub');panel.append(signal,sub);stage.append(panel);
-      const meters=node('div','room-fishing-v2-meters');for(const [type,label] of [['distance','魚離船舷'],['tension','魚線張力']]){const meter=node('div',`room-fishing-v2-meter ${type}`);const title=node('div','room-fishing-v2-meter-title');title.append(node('strong','',label),node('span','',type==='distance'?'100 %':'12 %'));const track=node('div','room-fishing-v2-track');track.setAttribute('role','progressbar');track.setAttribute('aria-label',label);track.setAttribute('aria-valuemin','0');track.setAttribute('aria-valuemax','100');track.append(node('span'));meter.append(title,track);meters.append(meter);}stage.append(meters);
+      const panel=node('div','room-fishing-v2-panel');const signal=node('strong','room-fishing-v2-signal');signal.setAttribute('aria-live','polite');const sub=node('span','room-fishing-v2-sub');panel.append(signal,sub);(isV3?sea:stage).append(panel);
+      const meters=node('div','room-fishing-v2-meters');for(const [type,label] of [['distance','魚離船舷'],['tension','魚線張力']]){const meter=node('div',`room-fishing-v2-meter ${type}`);const title=node('div','room-fishing-v2-meter-title');title.append(node('strong','',label),node('span','',type==='distance'?'100 %':'12 %'));const track=node('div','room-fishing-v2-track');track.setAttribute('role','progressbar');track.setAttribute('aria-label',label);track.setAttribute('aria-valuemin','0');track.setAttribute('aria-valuemax','100');track.append(node('span'));meter.append(title,track);meters.append(meter);}(isV3?sea:stage).append(meters);
       const actions=node('div','room-fishing-v2-actions');
-      const cast=button('拋竿 · Enter',()=>void sendFishingAction('cast'),'room-fishing-v2-action primary');cast.dataset.fishAction='cast';
+      const cast=button(isV3?'瞄準後拋竿 · Enter':'拋竿 · Enter',()=>void sendFishingAction('cast'),'room-fishing-v2-action primary');cast.dataset.fishAction='cast';
       const hook=button('浮標沉了！抽竿 · Enter',()=>void sendFishingAction('hook'),'room-fishing-v2-action hook');hook.dataset.fishAction='hook';
       const reel=node('button','room-fishing-v2-action reel','按住捲線 · 空白鍵');reel.type='button';reel.dataset.fishAction='reel';
       reel.addEventListener('pointerdown',event=>{if(reel.disabled||event.button!==0)return;event.preventDefault();void sendFishingAction('reel');stopReeling();reelTimer=setInterval(()=>void sendFishingAction('reel'),560);});
       const slack=button('放線 · ↓',()=>void sendFishingAction('slack'),'room-fishing-v2-action slack');slack.dataset.fishAction='slack';
-      actions.append(cast,hook,reel,slack);stage.append(actions);
+      actions.append(cast,hook,reel,slack);
+      if(isV3){for(const [action,label] of [['steerLeft','← 向左牽制'],['steerRight','向右牽制 →']]){const steer=button(label,()=>void sendFishingAction(action),'room-fishing-v2-action steer');steer.dataset.fishAction=action;actions.append(steer);}}
+      (isV3?sea:stage).append(actions);
       updateFishingV2();
     }
     function updateFishingV2(){
-      const challenge=game?.challenge;if(jobId!=='fishing'||challenge?.fishingVersion!==2)return;
+      const challenge=game?.challenge;if(jobId!=='fishing'||![2,3].includes(challenge?.fishingVersion))return;
       const sea=body.querySelector('.room-fishing-v2-sea');if(!sea)return;
+      if(challenge.fishingVersion===3){if(Object.hasOwn(FISH_CAST_ZONES,challenge.castZone))selectedCastZone=challenge.castZone;positionFishingV3(sea,selectedCastZone);}
       const at=fishingNow(),biting=challenge.stage==='wait'&&at>=Date.parse(challenge.biteAt),nibbling=challenge.stage==='wait'&&!biting&&at>=Date.parse(challenge.biteAt)-1250;
-      sea.dataset.stage=challenge.stage;sea.dataset.biting=String(biting);sea.dataset.nibbling=String(nibbling);sea.dataset.pull=challenge.pull||'steady';
+      sea.dataset.stage=challenge.stage;sea.dataset.biting=String(biting);sea.dataset.nibbling=String(nibbling);sea.dataset.pull=challenge.pull||'steady';sea.dataset.pullDirection=challenge.pullDirection||'steady';
       const activeStep=challenge.stage==='cast'?0:challenge.stage==='wait'?biting?2:1:3;
       body.querySelectorAll('.room-fishing-v2-steps span').forEach((item,index)=>{item.classList.toggle('active',index===activeStep);item.classList.toggle('done',index<activeStep);});
-      const text=challenge.stage==='cast'?'先拋竿，浮標會落在海面上。':challenge.stage==='wait'?(biting?'浮標沉下去了！現在抽竿！':nibbling?'魚在試餌，只是輕晃；等浮標整個沉下。':'盯著浮標；魚影靠近時先別抽竿。'):challenge.pull==='surge'?'魚正在猛衝！張力高就放線。':'魚已上鉤！按住捲線，留意張力。';
+      const direction=challenge.fishingVersion===3?challenge.pullDirection||'steady':'steady';
+      const text=challenge.stage==='cast'?(challenge.fishingVersion===3?`點海面選${FISH_CAST_ZONES[selectedCastZone].label}，再拋出${FISH_BAITS[selectedBait].label}。`:'先拋竿，浮標會落在海面上。'):challenge.stage==='wait'?(biting?'浮標沉下去了！現在抽竿！':nibbling?'魚在試餌，只是輕晃；等浮標整個沉下。':'盯著浮標；魚影靠近時先別抽竿。'):direction==='left'?'魚往左衝！向右牽制或先放線。':direction==='right'?'魚往右衝！向左牽制或先放線。':direction==='deep'?'魚猛往深處鑽！先放線減張力。':challenge.pull==='surge'?'魚正在猛衝！張力高就放線。':'魚已上鉤！按住捲線，留意張力。';
       const signal=body.querySelector('.room-fishing-v2-signal');if(signal&&signal.textContent!==text)signal.textContent=text;
       const hint=body.querySelector('#roomMinigameHint');if(hint&&hint.textContent!==text)hint.textContent=text;
-      const sub=body.querySelector('.room-fishing-v2-sub');if(sub)sub.textContent=challenge.stage==='wait'?biting?`抽竿窗口還有 ${Math.max(0,((Date.parse(challenge.hookUntil)-at)/1000)).toFixed(1)} 秒`:'浮標會先輕啄再猛沉；只在沉下時抽竿。':challenge.stage==='fight'?'張力過高會斷線；放線可讓魚冷靜。':'點按拋竿，從船舷把浮標送出去。';
-      const actions=body.querySelectorAll('[data-fish-action]');for(const action of actions){const type=action.dataset.fishAction;action.hidden=!(type==='cast'&&challenge.stage==='cast'||type==='hook'&&challenge.stage==='wait'||['reel','slack'].includes(type)&&challenge.stage==='fight');if(type==='hook')action.disabled=!biting||requesting;}
+      const sub=body.querySelector('.room-fishing-v2-sub');if(sub)sub.textContent=challenge.stage==='wait'?biting?`抽竿窗口還有 ${Math.max(0,((Date.parse(challenge.hookUntil)-at)/1000)).toFixed(1)} 秒`:'浮標會先輕啄再猛沉；只在沉下時抽竿。':challenge.stage==='fight'?'張力過高會斷線；放線可讓魚冷靜。':challenge.fishingVersion===3?'按 ↑／↓ 或點海面圈選落點。':'點按拋竿，從船舷把浮標送出去。';
+      const fishCue=sea.querySelector('.room-fishing-v3-fish-cue');if(fishCue){const cue=challenge.stage==='fight'?direction==='left'?'← 魚往左 · 向右牽制':direction==='right'?'魚往右 → · 向左牽制':direction==='deep'?'↓ 魚往深處 · 放線':'魚勢平穩 · 趁現在捲線':'';if(fishCue.textContent!==cue)fishCue.textContent=cue;}
+      const actions=body.querySelectorAll('[data-fish-action]');for(const action of actions){const type=action.dataset.fishAction;action.hidden=!(type==='cast'&&challenge.stage==='cast'||type==='hook'&&challenge.stage==='wait'||['reel','slack','steerLeft','steerRight'].includes(type)&&challenge.stage==='fight'&&(challenge.fishingVersion===3||!type.startsWith('steer')));if(type==='hook')action.disabled=!biting||requesting;}
       for(const [type,value] of [['distance',challenge.distance],['tension',challenge.tension]]){const meter=body.querySelector(`.room-fishing-v2-meter.${type}`);if(!meter)continue;const amount=clamp(value,0,100);meter.querySelector('.room-fishing-v2-track span').style.width=`${amount}%`;meter.querySelector('.room-fishing-v2-track').setAttribute('aria-valuenow',String(Math.round(amount)));meter.querySelector('.room-fishing-v2-meter-title span').textContent=`${Math.round(amount)} %`;if(type==='tension')meter.dataset.risk=amount>=78?'danger':amount>=55?'warning':'safe';}
     }
     function tickFishingV2(){
-      updateFishingV2();const challenge=game?.challenge;if(!challenge||challenge.fishingVersion!==2)return;
+      updateFishingV2();const challenge=game?.challenge;if(!challenge||![2,3].includes(challenge.fishingVersion))return;
       if(challenge.stage==='wait'&&fishingNow()>Date.parse(challenge.hookUntil)+150&&!requesting&&now()-lastFishingTimeout>1300){lastFishingTimeout=now();void sendFishingAction('timeout');}
       if(challenge.stage==='fight'&&fishingNow()>Date.parse(challenge.fightUntil)+150&&!requesting&&now()-lastFishingTimeout>1300){lastFishingTimeout=now();void sendFishingAction('timeout');}
     }
@@ -306,7 +366,7 @@
     function paintActor(time){const canvas=body?.querySelector('.room-minigame-runner');if(!active()||!canvas)return;const elapsed=actorStep?time-actorStep.started:0,ratio=actorStep?clamp(elapsed/actorStep.duration,0,1):1,moving=actorStep&&ratio<1,position=actorStep?actorStep.from+(actorStep.to-actorStep.from)*ratio:actorLane;canvas.style.left=`calc(${21.3+position*28.7}% - 72px)`;const motion=root.OnePieceRoomMotion,atlas=motion?.preload(keyOf(characterId))?.atlases[moving?actorStep.direction:'south'];if(atlas){const frameIndex=moving?Math.floor(elapsed/70)%4:motion.metadata(keyOf(characterId),root.OnePieceRoomMotionManifest).standingFrame;motion.draw(canvas,atlas,frameIndex);canvas.dataset.wholeBody='true';}actorFrame=requestAnimationFrame(paintActor);}
     function tick() {
       if(!active()||!game?.challenge||!['showcase','answer','waiting'].includes(phase))return;
-      if(jobId==='fishing'&&game.challenge.fishingVersion===2){tickFishingV2();frame=requestAnimationFrame(tick);return;}
+      if(jobId==='fishing'&&[2,3].includes(game.challenge.fishingVersion)){tickFishingV2();frame=requestAnimationFrame(tick);return;}
       const challenge=game.challenge,elapsed=now()-roundStart,showcase=Number(challenge.showcaseMs)||700,windowMs=Number(challenge.answerWindowMs)||4500;
       if(phase==='showcase') {
         document.getElementById('roomMinigameHint').textContent=kind!=='work'?'看清路線，亮過之後才輪到你。':({supply:'補給靠港中，先看訂單…',cooking:'先看食譜順序，準備開始備料。',repair:'先找入口、出口，再觀察管口方向。',navigation:'先看港口和暗礁，準備規劃航線。',fishing:'浮標正在晃動。等魚上鉤再選擇收線方向。'}[jobId]);
@@ -335,30 +395,47 @@
       if(messages[response?.error]){say(messages[response.error]);body.replaceChildren(node('p','',messages[response.error]),button('返回房間',()=>closeLocal()));return;}
       const old=body.querySelector('.room-minigame-retry');old?.remove();const strip=node('div','room-minigame-retry');strip.append(node('p','',text),button(queued?'重新送出這一輪':'重新結算',()=>void (queued?sendAnswer():finish())));body.append(strip);
     }
-    async function finish(){phase='waiting';cancelAnimationFrame(frame);body.replaceChildren(node('h3','','挑戰完成，正在結算…'));say('成果確認後才會發放獎勵。');const current=generation,wait=Math.max(0,Date.parse(game.finishNotBefore)-fishingNow()+60);if(wait>0)await new Promise(resolve=>setTimeout(resolve,Math.min(wait,30000)));if(current!==generation||!active())return;const response=await request('minigame.finish',{sessionId:game.id,token:game.token});if(!response)return;if(response.ok)accept(response);else showRetry(response);}
+    async function finish(){phase='waiting';cancelAnimationFrame(frame);body.replaceChildren(node('h3','',kind==='fishing'?'魚正被帶上甲板…':'挑戰完成，正在結算…'));say(kind==='fishing'?'正在確認這次漁獲。':'成果確認後才會發放獎勵。');const current=generation,wait=Math.max(0,Date.parse(game.finishNotBefore)-fishingNow()+60);if(wait>0)await new Promise(resolve=>setTimeout(resolve,Math.min(wait,30000)));if(current!==generation||!active())return;const response=await request('minigame.finish',{sessionId:game.id,token:game.token});if(!response)return;if(response.ok)accept(response);else showRetry(response);}
+    function renderFishingV3Result(result){
+      const caught=result.catch&&typeof result.catch.speciesId==='string'?result.catch:null;
+      const box=node('div',`room-fishing-v3-result ${caught?'caught':'miss'}`);
+      box.append(node('span','room-minigame-eyebrow',caught?'NEW CATCH':'THE FISH GOT AWAY'),node('h3','',caught?'釣起來了！':result.catchCollectionFull?'釣到了，收藏已滿':'這一竿讓魚逃走了'));
+      box.append(node('p','room-fishing-v3-result-spot',`${FISH_SPOTS[selectedSpot].label} · ${FISH_BAITS[selectedBait].label}`));
+      if(caught){
+        const art=node('img','room-fishing-v3-catch-art');art.src=fishArt(caught.speciesId);art.alt=caught.label||FISH_LABELS[caught.speciesId]||'釣到的魚';art.draggable=false;art.onerror=()=>useFishSilhouette(art);
+        box.append(art,node('strong','room-fishing-v3-catch-name',caught.label||FISH_LABELS[caught.speciesId]||'新漁獲'),node('p','','這尾魚已加入漁獲收藏。每次釣起一尾就會立刻保存。'));
+        const place=button('放進水族箱',async()=>{const response=await request('fish.place',{fishId:caught.id,inAquarium:true});if(response?.ok){place.textContent='已放進水族箱';place.dataset.permanentDisabled='true';place.disabled=true;say('魚已放進水族箱。');options.onResult?.(game);}else if(response)say(ERRORS[response.error]||'目前無法放進水族箱，漁獲仍保存在收藏。');},'room-minigame-secondary');box.append(place);
+      }else box.append(node('p','',result.catchCollectionFull?'先到漁獲收藏放生一尾，就能保存新魚。':'換個餌或釣點，再試著觀察浮標下沉的時機。'));
+      const row=node('div','room-minigame-result-actions');row.append(button('同處再釣一竿',()=>{game=null;lastResult='';lastRound='';lastFeedback=-1;renderIntro();void start();},'room-minigame-primary'),button('換魚餌與釣點',()=>{game=null;lastResult='';lastRound='';lastFeedback=-1;renderIntro();},'room-minigame-secondary'),button('返回房間',()=>void askClose(),'room-minigame-secondary'));box.append(row);body.append(box);
+      say(caught?`${caught.label||FISH_LABELS[caught.speciesId]||'魚'}已加入收藏。`:result.catchCollectionFull?'漁獲收藏已滿，請先放生一尾。':reaction('miss'));options.onResult?.(game);row.firstChild.focus({preventScroll:true});
+    }
     function renderResult() {
-      const resultKey=`${game.id}:${game.attempt||1}`;if(lastResult===resultKey)return;lastResult=resultKey;phase='result';cancelAnimationFrame(frame);const result=game.result||{};body.replaceChildren();const box=node('div',`room-minigame-result ${result.passed?'passed':''}`);box.append(node('span','room-minigame-eyebrow',result.passed?'CHALLENGE CLEAR':'KEEP PRACTICING'),node('h3','',result.passed?'配合成功！':'差一點，再調整步調。'),node('p','',`完整通過 ${result.correctRounds||0} / ${result.totalRounds||game.totalRounds} 輪`));
+      const resultKey=`${game.id}:${game.attempt||1}`;if(lastResult===resultKey)return;lastResult=resultKey;phase='result';cancelAnimationFrame(frame);const result=game.result||{};body.replaceChildren();if(kind==='fishing'){renderFishingV3Result(result);return;}const box=node('div',`room-minigame-result ${result.passed?'passed':''}`);box.append(node('span','room-minigame-eyebrow',result.passed?'CHALLENGE CLEAR':'KEEP PRACTICING'),node('h3','',result.passed?'配合成功！':'差一點，再調整步調。'),node('p','',`完整通過 ${result.correctRounds||0} / ${result.totalRounds||game.totalRounds} 輪`));
       const rewards=node('div','room-minigame-rewards');rewards.append(node('strong','',game.practice?'自由練習 · 不領獎勵':result.coins?`商城金幣 +${result.coins}`:kind==='work'&&result.passed?'金幣已達 500 枚上限':kind==='work'?'本次沒有金幣獎勵':'工作意願 +'+(result.workMotivation||0)));if(result.affinity)rewards.append(node('span','',`親密度 +${result.affinity}`));box.append(rewards,node('p','room-minigame-cost',result.catchCollectionFull?'漁獲收藏已滿 64 尾；本次仍照常計算成績與金幣。要留下新魚，請先在收藏中放生一尾。':result.canRetry?`這一場還能重試 ${result.attemptsRemaining} 次；新的一場也不限次數。`:kind==='work'?'工作小遊戲可不限次數再玩；持有金幣上限 500 枚。':'訓練可不限次數再玩。'));
       if(result.catch&&Object.hasOwn(FISH_LABELS,result.catch.speciesId)){
-        const catchCard=node('div','room-fishing-catch');const fish=node('img');fish.src=`${ASSET}fish_v1/${result.catch.speciesId}.webp`;fish.alt=result.catch.label||'釣到的魚';fish.draggable=false;
+        const catchCard=node('div','room-fishing-catch');const fish=node('img');fish.src=fishArt(result.catch.speciesId);fish.alt=result.catch.label||'釣到的魚';fish.draggable=false;
         const copy=node('div');copy.append(node('span','room-minigame-eyebrow','NEW CATCH'),node('strong','',result.catch.label||'新漁獲'),node('small','','已加入漁獲收藏。香吉士料理菜單將於後續更新開放。'));
         const place=button('放進水族箱',async()=>{const response=await request('fish.place',{fishId:result.catch.id,inAquarium:true});if(response?.ok){place.textContent='已放進水族箱';place.dataset.permanentDisabled='true';place.disabled=true;say('魚已放進千陽號水族館酒吧的魚缸。');options.onResult?.(game);}else if(response){say(ERRORS[response.error]||'現在無法把魚放進水族箱，漁獲已保存在收藏。');}},'room-minigame-secondary');
         copy.append(place);catchCard.append(fish,copy);box.append(catchCard);
       }
       const row=node('div','room-minigame-result-actions');row.append(button('返回房間',()=>void askClose()));if(result.canRetry)row.append(button('這場再試一次',()=>void retryAttempt(),'room-minigame-secondary'));else row.append(button(kind==='training'?'再練一場':'再玩一場',()=>{game=null;practice=false;lastResult='';lastRound='';lastFeedback=-1;renderIntro();},'room-minigame-secondary'));box.append(row);body.append(box);say(result.passed?voice().win:reaction('miss'));options.onResult?.(game);row.firstChild.focus({preventScroll:true});
     }
-    function renderEnded(){phase='ended';cancelAnimationFrame(frame);body.replaceChildren(node('h3','','這場挑戰已結束'),node('p','','没有發放未完成的獎勵。下次開始前可再確認消耗與規則。'),button('返回房間',()=>closeLocal()));say(game.state==='expired'?'挑戰逾時，夥伴先回房間了。':'下回再一起挑戰吧。');}
+    function renderEnded(){phase='ended';cancelAnimationFrame(frame);body.replaceChildren(node('h3','',kind==='fishing'?'這次釣魚已結束':'這場挑戰已結束'),node('p','',kind==='fishing'?'這次沒有保存漁獲；隨時可以再來釣一竿。':'沒有發放未完成的獎勵。下次開始前可再確認消耗與規則。'),button('返回房間',()=>closeLocal()));say(game.state==='expired'?'挑戰逾時，夥伴先回房間了。':'下回再一起挑戰吧。');}
     async function cancel(close=true){if(requesting)return;const response=await request('minigame.cancel',{sessionId:game.id,token:game.token});if(!response)return;if(response.ok){if(close)closeLocal();else{game=null;lastRound='';renderIntro();}}else{say(ERRORS[response.error]||'暫時無法確認取消，重新連線後再試。');}}
     async function retryAttempt(){const response=await request('minigame.retry',{sessionId:game.id,token:game.token});if(!response)return;if(response.ok||response.minigame?.id===game.id&&response.minigame.attempt>game.attempt){lastFeedback=-1;lastRound='';queued=null;accept(response);}else say(ERRORS[response.error]||'現在無法重新開始，請稍後再試。');}
-    async function askClose(){if(requesting)return;if(!game||!['playing','ready','failed'].includes(game.state)){closeLocal();return;}if(body.querySelector('.room-minigame-confirm'))return;stopReeling();const confirm=node('div','room-minigame-confirm');confirm.append(node('h3','','結束這場挑戰？'),node('p','',game.practice?'結束自由練習後不會領取獎勵。':'未完成的獎勵不會發放；關閉確認視窗時，本輪仍會繼續。'),button('結束並回房間',()=>void cancel(true)),button('繼續挑戰',()=>{confirm.remove();layer.focus({preventScroll:true});},'room-minigame-secondary'));body.append(confirm);confirm.querySelector('button').focus({preventScroll:true});}
+    async function askClose(){if(requesting)return;if(!game||!['playing','ready','failed'].includes(game.state)){closeLocal();return;}if(body.querySelector('.room-minigame-confirm'))return;stopReeling();const confirm=node('div','room-minigame-confirm');confirm.append(node('h3','',kind==='fishing'?'結束這次釣魚？':'結束這場挑戰？'),node('p','',kind==='fishing'?'尚未釣起的魚不會加入收藏；關閉確認視窗時仍可繼續。':game.practice?'結束自由練習後不會領取獎勵。':'未完成的獎勵不會發放；關閉確認視窗時，本輪仍會繼續。'),button('結束並回房間',()=>void cancel(true)),button('繼續挑戰',()=>{confirm.remove();layer.focus({preventScroll:true});},'room-minigame-secondary'));body.append(confirm);confirm.querySelector('button').focus({preventScroll:true});}
     function closeLocal(){generation++;stopReeling();cancelAnimationFrame(frame);cancelAnimationFrame(actorFrame);phase='closed';game=null;queued=null;requesting=false;if(layer)layer.hidden=true;safeResume();if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true});}
     function dismiss(){if(!active())return;const old=game;if(old&&['playing','ready','failed'].includes(old.state)&&!requesting)void options.command('minigame.cancel',{sessionId:old.id,token:old.token});closeLocal();}
     function keyDown(event){
       const confirmation=body?.querySelector('.room-minigame-confirm'),focusRoot=confirmation||layer;
       if(event.key==='Tab'){const available=[...focusRoot.querySelectorAll('button:not(:disabled)')].filter(n=>!n.hidden&&n.getClientRects().length);if(!available.length){event.preventDefault();return;}const first=available[0],last=available[available.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}return;}
       if(event.key==='Escape'){event.preventDefault();event.stopPropagation();void askClose();return;}if(confirmation)return;
-      if(kind==='work'&&phase==='answer'&&jobId==='fishing'&&game?.challenge?.fishingVersion===2){
-        const stage=game.challenge.stage,action=event.key==='ArrowDown'&&stage==='fight'?'slack':(event.key==='Enter'||event.key===' ')?stage==='cast'?'cast':stage==='wait'&&fishingNow()>=Date.parse(game.challenge.biteAt)?'hook':stage==='fight'?'reel':null:null;
+      if(phase==='answer'&&jobId==='fishing'&&[2,3].includes(game?.challenge?.fishingVersion)){
+        const stage=game.challenge.stage,steer=game.challenge.fishingVersion===3;
+        if(steer&&stage==='cast'&&['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(event.key)){
+          event.preventDefault();if(event.repeat)return;const zones=Object.keys(FISH_CAST_ZONES),current=zones.indexOf(selectedCastZone),step=['ArrowUp','ArrowRight'].includes(event.key)?1:-1;selectFishingCastZone(zones[Math.max(0,Math.min(zones.length-1,current+step))]);return;
+        }
+        const action=event.key==='ArrowDown'&&stage==='fight'?'slack':steer&&stage==='fight'&&event.key==='ArrowLeft'?'steerLeft':steer&&stage==='fight'&&event.key==='ArrowRight'?'steerRight':(event.key==='Enter'||event.key===' ')?stage==='cast'?'cast':stage==='wait'&&fishingNow()>=Date.parse(game.challenge.biteAt)?'hook':stage==='fight'?'reel':null:null;
         if(action){event.preventDefault();if(action==='reel'){if(now()-lastKeyboardReel<520)return;lastKeyboardReel=now();}else if(event.repeat)return;void sendFishingAction(action);}return;
       }
       if(event.repeat)return;

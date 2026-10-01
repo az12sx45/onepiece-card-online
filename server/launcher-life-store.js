@@ -88,8 +88,8 @@ const FIELDS={
  'work.reserve':['itemId','stationId','roomRevision','stationType','furnitureId'],
  'work.activate':['jobId'],'work.complete':['jobId'],'work.cancel':['jobId'],
  'directive.set':['directiveId'],'character.interact':['itemId','action'],
- 'minigame.start':['characterId','kind','practice','jobId','fishingVersion'],
- 'minigame.answer':['sessionId','token','roundId','selections','directions','ingredients','rotations','path','counterMoves'],
+  'minigame.start':['characterId','kind','practice','jobId','fishingVersion','baitId','spotId'],
+  'minigame.answer':['sessionId','token','roundId','selections','directions','ingredients','rotations','path','counterMoves','castZone'],
  'minigame.finish':['sessionId','token'],'minigame.cancel':['sessionId','token'],
  'minigame.retry':['sessionId','token'],
  'fish.place':['fishId','inAquarium'],
@@ -102,10 +102,23 @@ function validCommand(command) {
   if(!command.payload||typeof command.payload!=='object'||Array.isArray(command.payload))return false;
   return Object.keys(command.payload).every(k=>FIELDS[command.type].includes(k))&&JSON.stringify(command.payload).length<=2048;
 }
+function addFishCatch(state,session,result,now) {
+  const species=M.FISH_SPECIES.find(entry=>entry.id===session.catchSpeciesId);
+  if(!species)return;
+  if(state.fishCollection.length>=L.MAX_FISH){result.catchCollectionFull=true;return;}
+  const caught={id:crypto.randomUUID(),speciesId:species.id,caughtAt:now.toISOString(),inAquarium:false};
+  state.fishCollection.push(caught);
+  result.catch={...caught,label:species.label};
+}
 async function performMinigame(db,row,state,companions,command,room,now,sessions) {
   const p=command.payload;
   if(command.type==='minigame.start') {
-    if(!['work','training'].includes(p.kind)||p.practice!==undefined&&typeof p.practice!=='boolean'||p.kind==='work'&&p.practice||p.jobId!==undefined&&(p.kind!=='work'||!M.WORK_JOBS.includes(p.jobId))||p.fishingVersion!==undefined&&(p.fishingVersion!==2||p.kind!=='work'||p.jobId!=='fishing'))return{ok:false,error:'invalid_minigame'};
+    if(!['work','training','fishing'].includes(p.kind)||p.practice!==undefined&&typeof p.practice!=='boolean'||
+      p.kind==='work'&&p.practice||p.kind==='fishing'&&p.practice!==undefined||
+      p.jobId!==undefined&&(p.kind!=='work'||!M.WORK_JOBS.includes(p.jobId))||
+      p.fishingVersion!==undefined&&(p.fishingVersion!==2||p.kind!=='work'||p.jobId!=='fishing')||
+      (p.kind==='fishing'?!M.FISHING_BAITS.includes(p.baitId)||!M.FISHING_SPOTS.includes(p.spotId):
+        p.baitId!==undefined||p.spotId!==undefined))return{ok:false,error:'invalid_minigame'};
     const actor=state.characters[p.characterId];
     if(!actor)return{ok:false,error:'not_owned'};
     if(!state.activeCharacterIds.includes(p.characterId))return{ok:false,error:'not_placed'};
@@ -115,7 +128,7 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
     if(p.kind==='work') {
       companions.workStartsToday++;old.worksStartedToday++;
     }
-    const session=M.create(p.kind,p.characterId,room.revision,now,practice,p.jobId||'supply',p.fishingVersion===2?2:1);
+    const session=M.create(p.kind,p.characterId,room.revision,now,practice,p.jobId||'supply',p.fishingVersion===2?2:1,p.baitId,p.spotId);
     await M.save(db,row.user_id,session);
     return{ok:true,minigame:M.view(session)};
   }
@@ -139,11 +152,13 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
   }
   if(session.roundIndex!==session.totalRounds)return{ok:false,error:'minigame_incomplete',minigame:M.view(session)};
   if(now.getTime()<Date.parse(session.finishNotBefore))return{ok:false,error:'minigame_too_early',minigame:M.view(session)};
-  const passingRounds=session.kind==='training'?3:session.jobId==='fishing'?(session.fishingVersion===2?2:4):6;
+  const passingRounds=session.kind==='fishing'?1:session.kind==='training'?3:session.jobId==='fishing'?(session.fishingVersion===2?2:4):6;
   const passed=session.correctRounds>=passingRounds,actor=state.characters[session.characterId],old=companions.characters[session.characterId];
   const canRetry=!passed&&session.attempt<session.maxAttempts;
   const result={passed,practice:session.practice,canRetry,attempt:session.attempt,attemptsRemaining:canRetry?session.maxAttempts-session.attempt:0,coins:0,affinity:0,workMotivation:0,energyCost:0,correctRounds:session.correctRounds,totalRounds:session.totalRounds};
-  if(passed&&session.kind==='work') {
+  if(passed&&session.kind==='fishing') {
+    addFishCatch(state,session,result,now);
+  } else if(passed&&session.kind==='work') {
     const jobId='minigame-'+session.id,operationId='life-work:'+jobId,prior=await ledger(db,row.user_id,operationId);
     if(prior)return{ok:false,error:'minigame_receipt_conflict'};
     const amount=shop().launcherWorkPayout(row.stats.launcherWalletV1);
@@ -151,10 +166,7 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
     session.receipt={operationId,jobId,itemId:session.characterId,amount,claimedAt:now.toISOString()};
     await writeLedger(db,row,operationId,jobId,amount,session.receipt);
     result.coins=amount;result.affinity=1;
-    if(session.jobId==='fishing'&&state.fishCollection.length<L.MAX_FISH) {
-      const species=M.FISH_SPECIES.find(entry=>entry.id===session.catchSpeciesId);
-      if(species){const caught={id:crypto.randomUUID(),speciesId:species.id,caughtAt:now.toISOString(),inAquarium:false};state.fishCollection.push(caught);result.catch={...caught,label:species.label};}
-    } else if(session.jobId==='fishing')result.catchCollectionFull=true;
+    if(session.jobId==='fishing')addFishCatch(state,session,result,now);
     L.addMemory(state,session.characterId,'work.completed',[session.characterId],now,2);
   } else if(passed&&session.kind==='training'&&!session.practice) {
     actor.needs.workMotivation=L.clamp(actor.needs.workMotivation+5);old.affinity=Math.min(100,old.affinity+1);

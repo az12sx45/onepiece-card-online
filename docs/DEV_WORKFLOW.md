@@ -1,5 +1,17 @@
 # Dev Workflow
 
+## 2026-10-02 啟動器 1.2.17 自由選餌、落點與一竿一魚
+
+封裝第一輪（r1）發現舊版資源 filter 仍帶 `board-package-e98ef3f16bf6e6e4.json`，而正式 `catalog-v3.json` 已指向 `board-package-660f4c4369f9177b.json`；因此該安裝檔被封裝 QA 擋下，未發布。已同步修正 `desktop/package.json` 與 `scripts/desktop_launcher_package_qa.js`，新增來源端精確核對 catalog 與 filter 引用的檢查；來源 QA 重跑 PASS，以獨立 r2 重新封裝並保留 r1 失敗證據。
+
+r2 安裝檔 268,294,874 bytes、SHA-256 `6d764ca0261883d1042f1a869f1acb81b70d5645fe087de6b444d308c2c79ce1`，封裝 QA 驗證 798 個素材、8 個 catalog、10 個 runtime 依賴及 4 語系；真 Electron smoke 核對 697/697 本機素材、BGM 與無破圖。已使用目前啟動器信任的 Ed25519 金鑰簽署版本清單，R2 上傳後的公開 HEAD、Range、完整 GET 大小與 SHA-256 全部一致；證據在 `D:\Codex_QA\launcher-fishing-adventure-1.2.17-release-r2\`。Render 清單與下載頁待正式提交後讀回。
+
+範圍：玩家指出 1.2.16 海釣三個釣點只給一尾、操作單調。以 Marvelous《川のぬし釣り5》官方對魚餌、釣點、搏魚與圖鑑的介紹作玩法參考，未取用其素材。正式來源從 `origin/main` 提交 `d1e9c9a48` 建立 `D:\Codex_Release_Worktrees\launcher-fishing-adventure-1.2.17`；保留工作樹原有 `public/images/ranks/r5.PNG`、`r6.PNG` 修改，發布時不納入。LATTICE 工具在本階段未提供，官方 Runtime Status 回 `CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，因此沒有假設任務已提交或圖譜已刷新。
+
+程式：`server/launcher-minigames.js`、`launcher-life-store.js` 將釣魚獨立成 `kind:fishing`；三種餌、三海域、三個可瞄準投距共同決定伺服器魚池，在 cast 當下抽魚、結算前隱藏魚種。每次成功上岸且收藏未滿 64 尾即保存一尾，不合併三竿，不消耗工作次數或發工作金幣；滿收藏不刪舊魚且明確提示。舊 v1/v2 釣魚資料仍可讀。新增五種參照《ONE PIECE》遊戲漁獲清單的魚名；餌偏好／機率是本專案設計，不冒稱原作數值。`desktop/launcher-life-room.js`、`launcher-room.js/.css`、`launcher-room-minigames.js/.css` 與 `launcher-room-aquarium.js` 接角色半圓輪盤獨立入口、點擊／方向鍵落點、抽竿與魚向牽制、單尾結算、新魚入缸；`public/images/launcher_room/fishing_v3/`、`fish_v3/`、`public/images/launcher_announcements/launcher-fishing-adventure-1.2.17.webp` 為逐張檢查的 GPT WebP。封裝與公告同步改 `desktop/main.js`、`desktop/package.json`／lock、`config/launcher-announcements-v1.json`。
+
+驗證：`scripts/launcher_fishing_server_qa.js` 360/360、舊小遊戲伺服器 104/104、封裝來源 `scripts/desktop_launcher_package_qa.js` PASS；`scripts/launcher_fishing_v3_client_qa.js` 用真 PGlite＋Chromium 驗證桌機／390×844 手機、三個投距連續 3/3 漁獲、0 金幣及新魚入缸 52/52，舊 v2 用戶端 53/53；`scripts/launcher_minigames_room_wheel_qa.js` 驗證角色半圓輪盤入口與窄版滾動 9/9。`npm start` 以隔離 8863 埠啟動、下載頁 HTTP 200（無 `DATABASE_URL`，不代表正式帳號功能驗收）。`node --check` 與 `git diff --check` 通過。來源與畫面候選證據在 `D:\Codex_QA\launcher-fishing-adventure-1.2.17\`；真人試玩與實體手機仍待使用者驗收。
+
 ## 2026-10-01 戰鬥整卡等距擊退（已部署）
 
 玩家指出攻擊方整張卡前衝約 192px，受擊方卻只晃約 13px。本次在 `public/board_battle.html` 加入依敵我方向向外的獨立擊退動畫，受擊可見峰值約 184–200px；原攻擊前衝、受擊微晃 keyframe、700ms／連擊 420ms 時長、3D 傾斜和命中時點保留。玩家明確選擇可短暫出框的完整等距擊退；桌面峰值時卡片仍有至少約七成可見。合作戰移動活動角色的內層卡片，Tot Musica 的獨立縱向鏡頭不套用一般水平擊退，減少動態仍無位移。`public/board_game.html` 備用戰鬥的可見擊退校準至攻擊的約 18px，真正堆疊的窄視窗則讓攻防都沿上下方向移動約 18px。未改傷害、HP、回合、存檔、`BOARD_GAME_STATE` 或 Socket.IO。

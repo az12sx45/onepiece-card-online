@@ -290,7 +290,7 @@
       if($('roomLifeActions'))return;
       const actions=$('roomCompanionActions');if(!actions)return;
       const wrap=document.createElement('div');wrap.id='roomLifeActions';wrap.className='room-life-actions';
-      for(const [id,label] of [['Work','工作'],['Call','指派移動'],['Gift','點心 · 5'],['Train','訓練'],['Status','詳情']]) {
+      for(const [id,label] of [['Work','工作'],['Fish','釣魚'],['Call','指派移動'],['Gift','點心 · 5'],['Train','訓練'],['Status','詳情']]) {
         const button=document.createElement('button');button.id='roomLife'+id;button.className='ghost-button';button.type='button';button.textContent=label;wrap.append(button);
       }
       actions.append(wrap);
@@ -301,7 +301,7 @@
       const panel=document.createElement('div');panel.id='roomLifeDetails';panel.className='room-life-details';panel.hidden=true;$('roomCompanionSheet').append(panel);
       const work=document.createElement('div');work.id='roomLifeWorkChoices';work.className='room-life-work-choices';work.hidden=true;$('roomCompanionSheet').append(work);
       $('roomLifeWork').onclick=()=>openMinigame('work');
-      $('roomLifeCall').onclick=()=>root.LauncherRoom?.beginAssignment?.(env.companionId());$('roomLifeTrain').onclick=()=>openMinigame('training');
+      $('roomLifeCall').onclick=()=>root.LauncherRoom?.beginAssignment?.(env.companionId());$('roomLifeFish').onclick=()=>openMinigame('fishing');$('roomLifeTrain').onclick=()=>openMinigame('training');
       $('roomLifeGift').onclick=()=>{const node=$('roomLifeGift');if(node.dataset.confirm!=='true'){node.dataset.confirm='true';node.textContent='確認 · 5';setTimeout(()=>{delete node.dataset.confirm;node.textContent='點心 · 5';window.LauncherRoom?.refreshCompanion?.();},5000);window.LauncherRoom?.refreshCompanion?.();return;}delete node.dataset.confirm;node.textContent='點心 · 5';runManual('gift');};
       $('roomCompanionSheetClose').onclick=()=>{panel.hidden=true;work.hidden=true;syncPanelShell();$('roomCompanionWheel').focus({preventScroll:true});};
       $('roomLifeStatus').onclick=()=>{work.hidden=true;panel.hidden=!panel.hidden;$('roomCompanionPanel').classList.toggle('show-details',!panel.hidden);$('roomLifeStatus').setAttribute('aria-expanded',String(!panel.hidden));renderPanel();};
@@ -349,7 +349,7 @@
       const key=keyOf(env.companionId());
       if(!owner()||!controller||manualBusy||env.editing()||!ownedIds().includes(itemOf(key)))return;
       if(!minigames){status('請更新啟動器後再開始夥伴挑戰。',true);return;}
-      if((snapshot?.jobs||[]).some(job=>keyOf(job.characterId||job.itemId||job.key)===key)){status('夥伴正在工作，先完成原有分工，再一起挑戰。',true);return;}
+      if((snapshot?.jobs||[]).some(job=>keyOf(job.characterId||job.itemId||job.key)===key)){status(kind==='fishing'?'這位夥伴正在分工，完成後就能自由釣魚；釣魚不消耗工作次數。':'夥伴正在工作，先完成原有分工，再一起挑戰。',true);return;}
       minigames.open({kind,characterId:itemOf(key)});
     }
     async function runManual(action,stationId) {

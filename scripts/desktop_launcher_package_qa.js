@@ -145,6 +145,25 @@ const FISHING_V1216_ANNOUNCEMENT = Object.freeze({
   asset: 'launcher-fishing-play-1.2.16.webp', bytes: 367478,
   sha256: '333d6282f1f5da6c0121882133c8725555dd255b632ca5b9ccc579da46616b74'
 });
+// These exact source bytes are the visually reviewed 1.2.17 GPT outputs.
+const FISHING_V1217_ART = Object.freeze([
+  Object.freeze({ asset: 'fishing_v3/sea-shore.webp', bytes: 218286, sha256: 'a3bb837bd6c7dcf732aa5208e5b7209e4d21d9c650940f126a0a79d9e1859080' }),
+  Object.freeze({ asset: 'fishing_v3/sea-reef.webp', bytes: 255664, sha256: '2e530761b642fb71cfa96df3ced6bcdfa1fd822e7267baa4a012e4d19a276e1c' }),
+  Object.freeze({ asset: 'fishing_v3/sea-deep.webp', bytes: 214528, sha256: 'f5b7e2bd9e8067002452e92a16841b22cd7011a5ad0f03812511ab093232e634' }),
+  Object.freeze({ asset: 'fishing_v3/bait-worm.webp', bytes: 18454, sha256: '8b86f26b7c7cd3ba38f485cdb27e811bf8503c2fba6f679177777c70ec99764b' }),
+  Object.freeze({ asset: 'fishing_v3/bait-shrimp.webp', bytes: 24264, sha256: 'a0f34fe3e3527ada9c70bed2a813620efff8708d474464911b121be404cc132e' }),
+  Object.freeze({ asset: 'fishing_v3/bait-lure.webp', bytes: 22322, sha256: '3e63576a8c2bf11ad0855bce670b13e5f2ba8b35f12e601c85f56586607905f3' }),
+  Object.freeze({ asset: 'fish_v3/butterflyfish.webp', bytes: 37812, sha256: '14f46e850e6b3c9c601dbc8aebfd0f68b4495a8e746437f8a1cebcf5cf6884ba' }),
+  Object.freeze({ asset: 'fish_v3/adventure-fish.webp', bytes: 46436, sha256: 'd2d383e4fbe8345b56d6136a3ca30f144d96b58b7d402563245007aa5d665072' }),
+  Object.freeze({ asset: 'fish_v3/cola-sunfish.webp', bytes: 70838, sha256: '15c8a6c8ec368a8d8db9f593a0ea07c26219eb288dac545d96509cadcbc6d1b8' }),
+  Object.freeze({ asset: 'fish_v3/reef-shark.webp', bytes: 21018, sha256: '33ee5627bcc295f214f0d5bbd111200f0b655c6f6fd6984afd1d1d9d963bc306' }),
+  Object.freeze({ asset: 'fish_v3/elephant-tuna.webp', bytes: 43296, sha256: '5a9eb2735446e1c94eaf61442a2280fbe198a3582e870986f02c5a88c487775d' })
+]);
+const FISHING_V1217_ART_SET = new Set(FISHING_V1217_ART.map(item => item.asset));
+const FISHING_V1217_ANNOUNCEMENT = Object.freeze({
+  asset: 'launcher-fishing-adventure-1.2.17.webp', bytes: 270252,
+  sha256: '2670af33259509acac13029191bf0e339fd4246efc8592266dd53c23ccd09f6b'
+});
 const ROOM_LOCKED_V1215_PREVIEW_KEYS = ['vivi', 'shanks', 'mihawk', 'perona', 'marco', 'buggy', 'carrot', 'yamato', 'bonclay', 'koala'];
 const ROOM_LOCKED_V1215_VIVI_ASSETS = [
   'reserved_v3/vivi/portrait.webp',
@@ -239,7 +258,7 @@ const EXTRA_RESOURCES = [
   {
     from: '../public/images/launcher_announcements',
     to: 'launcher-assets/images/launcher_announcements',
-    filter: ['launcher-life-1.2.13.webp', 'launcher-proportions-1.2.14.webp', 'launcher-life-fishing-1.2.15.webp', FISHING_V1216_ANNOUNCEMENT.asset]
+    filter: ['launcher-life-1.2.13.webp', 'launcher-proportions-1.2.14.webp', 'launcher-life-fishing-1.2.15.webp', FISHING_V1216_ANNOUNCEMENT.asset, FISHING_V1217_ANNOUNCEMENT.asset]
   },
   {
     from: '../public/images/launcher_room',
@@ -305,7 +324,11 @@ const EXTRA_RESOURCES = [
       ...ROOM_NEW_V128_ASSETS,
       ...LUFFY_NEW_ASSETS,
       ...ROOM_NEW_V1215_ASSETS.flatMap(asset => asset === 'minigames_v1/fishing-sea.webp'
-        ? [asset, ...FISHING_V1216_ART.map(item => item.asset)] : [asset]),
+        ? [asset, ...FISHING_V1216_ART.map(item => item.asset),
+          ...FISHING_V1217_ART.filter(item => item.asset.startsWith('fishing_v3/')).map(item => item.asset)]
+        : asset === 'fish_v1/smile-jellyfish.webp'
+          ? [asset, ...FISHING_V1217_ART.filter(item => item.asset.startsWith('fish_v3/')).map(item => item.asset)]
+          : [asset]),
       ...ROOM_LOCKED_V1215_VIVI_ASSETS
     ]
   },
@@ -334,7 +357,7 @@ const EXTRA_RESOURCES = [
       'manifests/board-assets-eb95373ee6ab1aa3.json',
       'manifests/chess-assets-4a14ed8c714c0b60.json',
       'manifests/card-package-ca251af687e50daf.json',
-      'manifests/board-package-e98ef3f16bf6e6e4.json',
+      'manifests/board-package-660f4c4369f9177b.json',
       'manifests/chess-package-d37cd9a585600687.json'
     ]
   },
@@ -610,8 +633,8 @@ function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
   const luffyArtEnabled = require('../desktop/launcher-room-motion.js').LUFFY_ART_ENABLED === true;
-  assert(luffyArtEnabled && packageJson.version === '1.2.16',
-    'Luffy art gate must remain enabled in launcher 1.2.16.');
+  assert(luffyArtEnabled && packageJson.version === '1.2.17',
+    'Luffy art gate must remain enabled in launcher 1.2.17.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   const announcementConfig = readJson(path.join(ROOT, 'config/launcher-announcements-v1.json'), 'launcher announcements');
   require('../server/launcher-announcements').validateConfig(announcementConfig);
@@ -661,11 +684,18 @@ function validateSourcePackage() {
   'Historical launcher 1.2.15 fishing announcement must remain illustrated and release gated.');
   const fishingPlayAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.16-fishing-play-and-unlimited-challenges');
   assert(fishingPlayAnnouncement?.status === 'published' && fishingPlayAnnouncement.scope === 'launcher' &&
-    fishingPlayAnnouncement.version === packageJson.version &&
+    fishingPlayAnnouncement.version === '1.2.16' &&
     fishingPlayAnnouncement.requiredRelease?.kind === 'launcher' &&
-    fishingPlayAnnouncement.requiredRelease?.version === packageJson.version &&
+    fishingPlayAnnouncement.requiredRelease?.version === '1.2.16' &&
     fishingPlayAnnouncement.image?.asset === `images/launcher_announcements/${FISHING_V1216_ANNOUNCEMENT.asset}`,
-  'Launcher 1.2.16 fishing and unlimited challenges announcement must be illustrated and release gated.');
+  'Historical Launcher 1.2.16 fishing and unlimited challenges announcement must remain illustrated and release gated.');
+  const fishingAdventureAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.17-fishing-adventure');
+  assert(fishingAdventureAnnouncement?.status === 'published' && fishingAdventureAnnouncement.scope === 'launcher' &&
+    fishingAdventureAnnouncement.version === packageJson.version &&
+    fishingAdventureAnnouncement.requiredRelease?.kind === 'launcher' &&
+    fishingAdventureAnnouncement.requiredRelease?.version === packageJson.version &&
+    fishingAdventureAnnouncement.image?.asset === `images/launcher_announcements/${FISHING_V1217_ANNOUNCEMENT.asset}`,
+  'Launcher 1.2.17 fishing adventure announcement must be illustrated and release gated.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
   assert(packageJson.build?.appId === 'com.onepiece.tabletop.desktop', 'Desktop appId changed unexpectedly.');
@@ -732,6 +762,29 @@ function validateSourcePackage() {
   }
   assert(resolveScene('opui://launcher/images/launcher_room/fishing_v2/unknown.webp') === null,
     'Unknown Launcher 1.2.16 fishing art was admitted by packaged protocol.');
+  for (const directory of ['fishing_v3', 'fish_v3']) {
+    const sourceDirectory = path.join(PUBLIC_ROOT, 'images/launcher_room', directory);
+    assert(fs.statSync(sourceDirectory, { throwIfNoEntry: false })?.isDirectory(),
+      `Launcher 1.2.17 reviewed art directory is missing: ${directory}`);
+    assertExactJson(sorted(fs.readdirSync(sourceDirectory)),
+      sorted(FISHING_V1217_ART.filter(item => item.asset.startsWith(`${directory}/`)).map(item => path.basename(item.asset))),
+      `Launcher 1.2.17 ${directory} source asset set`);
+  }
+  for (const item of FISHING_V1217_ART) {
+    const pathPart = `images/launcher_room/${item.asset}`;
+    const source = path.join(PUBLIC_ROOT, pathPart);
+    assert(Number.isSafeInteger(item.bytes) && item.bytes > 0 && /^[a-f0-9]{64}$/.test(item.sha256),
+      `Launcher 1.2.17 art is not locked to reviewed bytes and SHA: ${item.asset}`);
+    assert(fs.statSync(source).size === item.bytes && sha256File(source) === item.sha256,
+      `Launcher 1.2.17 fishing art differs from reviewed GPT output: ${item.asset}`);
+    assert(resolveScene(`opui://launcher/${pathPart}`) === source,
+      `Launcher 1.2.17 fishing art is blocked by packaged protocol: ${item.asset}`);
+  }
+  for (const relative of ['fishing_v3/unknown.webp', 'fishing_v3/sea-cove.webp',
+    'fish_v3/unknown.webp', 'fish_v3/balloon-catfish.webp']) {
+    assert(resolveScene(`opui://launcher/images/launcher_room/${relative}`) === null,
+      `Unknown Launcher 1.2.17 fishing art was admitted by packaged protocol: ${relative}`);
+  }
   const v1215Art = readJson(path.join(ROOT, 'tools/launcher-room/release-v1215/manifest.json'), 'Launcher 1.2.15 art manifest');
   assert(v1215Art.schema === 'launcher-life-fishing-art/1' && v1215Art.release === '1.2.15' &&
     v1215Art.itemCount === ROOM_NEW_V1215_ASSETS.length && Array.isArray(v1215Art.items),
@@ -794,6 +847,17 @@ function validateSourcePackage() {
   'Launcher 1.2.16 illustrated announcement differs from reviewed art.');
   assert(resolveScene(`opui://launcher/images/launcher_announcements/${FISHING_V1216_ANNOUNCEMENT.asset}`) === fishingPlayArtPath,
     'Launcher 1.2.16 announcement art is blocked by packaged protocol.');
+  const fishingAdventureArtPath = path.join(PUBLIC_ROOT, 'images/launcher_announcements', FISHING_V1217_ANNOUNCEMENT.asset);
+  assert(Number.isSafeInteger(FISHING_V1217_ANNOUNCEMENT.bytes) && FISHING_V1217_ANNOUNCEMENT.bytes > 0 &&
+    /^[a-f0-9]{64}$/.test(FISHING_V1217_ANNOUNCEMENT.sha256),
+  'Launcher 1.2.17 illustrated announcement is not locked to reviewed bytes and SHA.');
+  assert(fs.statSync(fishingAdventureArtPath).size === FISHING_V1217_ANNOUNCEMENT.bytes &&
+    sha256File(fishingAdventureArtPath) === FISHING_V1217_ANNOUNCEMENT.sha256,
+  'Launcher 1.2.17 illustrated announcement differs from reviewed art.');
+  assert(resolveScene(`opui://launcher/images/launcher_announcements/${FISHING_V1217_ANNOUNCEMENT.asset}`) === fishingAdventureArtPath,
+    'Launcher 1.2.17 announcement art is blocked by packaged protocol.');
+  assert(resolveScene('opui://launcher/images/launcher_announcements/launcher-fishing-adventure-unknown.webp') === null,
+    'Unknown Launcher 1.2.17 announcement was admitted by packaged protocol.');
   for (const relative of ['motion_v4/unknown/east.webp', 'acting_v4/luffy/unknown.webp', 'motion_v5/zoro/east.webp', 'life_hd_v3/zoro/work-east.webp', 'portrait_v4/zoro.webp']) {
     assert(resolveScene(`opui://launcher/images/launcher_room/${relative}`) === null, `Unreviewed HD room atlas was admitted: ${relative}`);
   }
@@ -981,7 +1045,7 @@ function validateSourcePackage() {
   // v3 movement atlases remain in source for historical review, but the live
   // renderer uses v4/v5 and omits v3 from the update installer.
   assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items, ...packagedLifeHistory, ...presentationStatus.hd.manifest.items, ...presentationStatus.reserved.manifest.items, ...presentationStatus.newArt.manifest.items, ...ACE_V2_MANIFEST.items.map(item => ({asset: item.path}))].map(item => item.asset.replace(/^public\/images\/launcher_room\//, '')).filter(asset => !ROOM_MOTION_ASSETS.includes(asset) && !['scenes/sunny-deck.webp', 'scenes/sunny-kitchen.webp', 'scenes/sunny-library.webp', 'scenes/crew-cabin-v2.webp'].includes(asset))),
-    sorted(roomResource.filter.filter(asset => !asset.startsWith('life_hd_v2/') && !LUFFY_NEW_ASSET_SET.has(asset) && !ROOM_NEW_V1215_SET.has(asset) && !FISHING_V1216_ART_SET.has(asset) && !ROOM_LOCKED_V1215_VIVI_SET.has(asset))), 'Historical room art manifest output set');
+    sorted(roomResource.filter.filter(asset => !asset.startsWith('life_hd_v2/') && !LUFFY_NEW_ASSET_SET.has(asset) && !ROOM_NEW_V1215_SET.has(asset) && !FISHING_V1216_ART_SET.has(asset) && !FISHING_V1217_ART_SET.has(asset) && !ROOM_LOCKED_V1215_VIVI_SET.has(asset))), 'Historical room art manifest output set');
   assert(ACE_V2_MANIFEST.schema === 'launcher-ace-lean-art/1' && ACE_V2_MANIFEST.visualAccepted === true &&
     ACE_V2_MANIFEST.humanAcceptance === false && ACE_V2_MANIFEST.atlasCount === 17 &&
     ACE_V2_MANIFEST.frameCount === 81 && ACE_V2_MANIFEST.totalRuntimeBytes <= 4 * 1024 * 1024,
@@ -1115,6 +1179,16 @@ function validateSourcePackage() {
     const retainedPath = path.join(manifestDirectory, fileName);
     assert(sha256File(retainedPath) === expectedSha256, `Retained rollout manifest changed: ${fileName}`);
   }
+
+  const catalogResource = packageJson.build.extraResources.find((item) => item.to === 'catalog');
+  const expectedBundledCatalog = sorted([
+    'catalog-v2.json',
+    'catalog-v3.json',
+    ...referencedManifests.map((name) => `manifests/${name}`),
+    ...referencedProgramManifests.map((name) => `manifests/${name}`)
+  ]);
+  assertExactJson(sorted(catalogResource?.filter || []), expectedBundledCatalog,
+    'Catalog package filter must match both published catalogs');
 
   const forbiddenText = JSON.stringify({ files: packageJson.build.files, extraResources: packageJson.build.extraResources }).toLowerCase();
   for (const forbidden of ['../public/images/**', '../public/audio/**', '../public/videos/**', '../public/fonts']) {
@@ -1281,6 +1355,15 @@ function validateWinUnpacked(winUnpackedPath, source) {
   assert(fs.statSync(packagedFishingAnnouncement).size === FISHING_V1216_ANNOUNCEMENT.bytes &&
     sha256File(packagedFishingAnnouncement) === FISHING_V1216_ANNOUNCEMENT.sha256,
   'Packaged Launcher 1.2.16 announcement differs from reviewed art.');
+  for (const item of FISHING_V1217_ART) {
+    const packagedPath = path.join(launcherAssetRoot, 'images', 'launcher_room', ...item.asset.split('/'));
+    assert(fs.statSync(packagedPath).size === item.bytes && sha256File(packagedPath) === item.sha256,
+      `Packaged Launcher 1.2.17 fishing art differs from reviewed output: ${item.asset}`);
+  }
+  const packagedFishingAdventureAnnouncement = path.join(launcherAssetRoot, 'images', 'launcher_announcements', FISHING_V1217_ANNOUNCEMENT.asset);
+  assert(fs.statSync(packagedFishingAdventureAnnouncement).size === FISHING_V1217_ANNOUNCEMENT.bytes &&
+    sha256File(packagedFishingAdventureAnnouncement) === FISHING_V1217_ANNOUNCEMENT.sha256,
+  'Packaged Launcher 1.2.17 announcement differs from reviewed art.');
 
   const catalogRoot = path.join(resourcesRoot, 'catalog');
   const catalogFiles = listFilesRecursive(catalogRoot);

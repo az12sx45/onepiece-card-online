@@ -1,6 +1,6 @@
 {
   "name": "onepiece-tabletop-desktop",
-  "version": "1.2.16",
+  "version": "1.2.17",
   "private": true,
   "description": "Windows launcher for ONE PIECE tabletop games with account login, verified game downloads and incremental updates.",
   "main": "main.js",
@@ -141,7 +141,7 @@
       {
         "from": "../public/images/launcher_announcements",
         "to": "launcher-assets/images/launcher_announcements",
-        "filter": ["launcher-life-1.2.13.webp", "launcher-proportions-1.2.14.webp", "launcher-life-fishing-1.2.15.webp", "launcher-fishing-play-1.2.16.webp"]
+        "filter": ["launcher-life-1.2.13.webp", "launcher-proportions-1.2.14.webp", "launcher-life-fishing-1.2.15.webp", "launcher-fishing-play-1.2.16.webp", "launcher-fishing-adventure-1.2.17.webp"]
       },
       {
         "from": "../public/images/launcher_room",
@@ -727,6 +727,12 @@
           "fishing_v2/rod.webp",
           "fishing_v2/bobber.webp",
           "fishing_v2/splash.webp",
+          "fishing_v3/sea-shore.webp",
+          "fishing_v3/sea-reef.webp",
+          "fishing_v3/sea-deep.webp",
+          "fishing_v3/bait-worm.webp",
+          "fishing_v3/bait-shrimp.webp",
+          "fishing_v3/bait-lure.webp",
           "minigames_v1/repair-workbench-v2.webp",
           "minigames_v1/navigation-chart-v2.webp",
           "minigames_v1/cooking-galley-v2.webp",
@@ -735,6 +741,11 @@
           "fish_v1/glistening-saury.webp",
           "fish_v1/panda-shark.webp",
           "fish_v1/smile-jellyfish.webp",
+          "fish_v3/butterflyfish.webp",
+          "fish_v3/adventure-fish.webp",
+          "fish_v3/cola-sunfish.webp",
+          "fish_v3/reef-shark.webp",
+          "fish_v3/elephant-tuna.webp",
           "furniture/aquarium-tank.webp",
           "furniture/crew-tea-table.webp",
           "furniture/fishing-gear-rack.webp",
@@ -837,7 +848,7 @@
           "manifests/board-assets-eb95373ee6ab1aa3.json",
           "manifests/chess-assets-4a14ed8c714c0b60.json",
           "manifests/card-package-ca251af687e50daf.json",
-          "manifests/board-package-e98ef3f16bf6e6e4.json",
+          "manifests/board-package-660f4c4369f9177b.json",
           "manifests/chess-package-d37cd9a585600687.json"
         ]
       },

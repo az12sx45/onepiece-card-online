@@ -460,7 +460,7 @@
   // along an arc and settle on one action. Scrolling never performs an action.
   let companionPositionAt = 0;
   let wheelPhase = 0, wheelTarget = 0, wheelFrame = 0, wheelAt = 0, wheelKey = '', wheelDelta = 0, wheelDrag = null, wheelSuppressClick = false;
-  const WHEEL_IDS = ['roomCompanionTalk', 'roomLifeWork', 'roomLifeCall', 'roomLifeGift', 'roomLifeTrain', 'roomLifeStatus'];
+  const WHEEL_IDS = ['roomCompanionTalk', 'roomLifeWork', 'roomLifeFish', 'roomLifeCall', 'roomLifeGift', 'roomLifeTrain', 'roomLifeStatus'];
   function wheelButtons() {
     return WHEEL_IDS.map($).filter(button => button && !button.hidden && (button.id === 'roomCompanionTalk' || !$('roomLifeActions')?.hidden));
   }

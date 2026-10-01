@@ -5,9 +5,15 @@
     'balloon-catfish': '氣球鯰魚',
     'panda-shark': '熊貓鯊',
     'glistening-saury': '閃亮秋刀魚',
-    'smile-jellyfish': '微笑水母'
+    'smile-jellyfish': '微笑水母',
+    butterflyfish: '蝶魚',
+    'adventure-fish': '冒險魚',
+    'cola-sunfish': '可樂翻車魚',
+    'reef-shark': '鯊魚',
+    'elephant-tuna': '象鼻鮪魚'
   });
-  const ASSET_ROOT = 'opui://launcher/images/launcher_room/fish_v1/';
+  const LEGACY_FISH = new Set(['balloon-catfish', 'panda-shark', 'glistening-saury', 'smile-jellyfish']);
+  const fishArt = speciesId => `opui://launcher/images/launcher_room/${LEGACY_FISH.has(speciesId) ? 'fish_v1' : 'fish_v3'}/${speciesId}.webp`;
 
   function displayedFish(profile, collectionOverride) {
     const collection = Array.isArray(collectionOverride) ? collectionOverride : profile?.life?.fishCollection;
@@ -35,7 +41,7 @@
     lane.style.setProperty('--fish-bob', `${1.4 + (seed(fish.id + 'bob') % 12) / 10}s`);
     lane.style.setProperty('--fish-size', `${compact ? 15 + seed(fish.id + 'size') % 5 : 9 + seed(fish.id + 'size') % 4}%`);
     const sprite = document.createElement('img');
-    sprite.src = `${ASSET_ROOT}${fish.speciesId}.webp`;
+    sprite.src = fishArt(fish.speciesId);
     sprite.alt = '';
     sprite.decoding = 'async';
     sprite.draggable = false;

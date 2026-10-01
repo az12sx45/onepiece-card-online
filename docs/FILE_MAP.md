@@ -1,5 +1,13 @@
 # File Map
 
+## 2026-10-02 啟動器 1.2.17 獨立海釣
+
+- `server/launcher-minigames.js`、`server/launcher-life-store.js`：獨立 `fishing` 場次、九組餌／釣點魚池、抽竿及魚向牽制、每次成功收藏一尾與滿 64 尾回應，保留舊版場次。
+- `desktop/launcher-room-minigames.js/.css`、`desktop/launcher-life-room.js`、`desktop/launcher-room.js/.css`、`desktop/launcher-room-aquarium.js`：角色半圓輪盤的釣魚入口、選餌選釣點與投距、桌機與窄版的浮標／搏魚操作、魚種圖／結果畫面及新魚入缸。
+- `public/images/launcher_room/fishing_v3/`、`fish_v3/`：GPT 製作的三個海域、三款透明餌、五種透明魚 WebP；`public/images/launcher_announcements/launcher-fishing-adventure-1.2.17.webp` 為附圖公告。
+- `config/launcher-announcements-v1.json`、`desktop/main.js`、`desktop/package.json`／`package-lock.json`：1.2.17 公告、精確素材白名單及安裝封裝。
+- `scripts/launcher_fishing_server_qa.js`、`scripts/launcher_fishing_v3_client_qa.js`、`scripts/launcher_fishing_client_qa.js`、`scripts/launcher_minigames_room_wheel_qa.js`、`scripts/desktop_launcher_package_qa.js`：伺服器場次／存檔、桌機與手機實際操作及舊版回歸、角色半圓輪盤入口、來源與封裝檔雜湊檢查。
+
 ## 2026-10-01 戰鬥整卡擊退
 
 - `public/board_battle.html`：一般戰鬥依敵我方向疊加 192px 受擊擊退；合作戰活動內卡共用；Tot Musica 與減少動態維持原演出。
