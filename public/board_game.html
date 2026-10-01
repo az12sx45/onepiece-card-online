@@ -20453,18 +20453,26 @@
     @property --battle-hit-active-pitch{
       syntax:"<angle>";inherits:false;initial-value:0deg;
     }
+    @property --battle-hit-knockback-x{
+      syntax:"<length>";inherits:false;initial-value:0px;
+    }
+    @property --battle-hit-knockback-y{
+      syntax:"<length>";inherits:false;initial-value:0px;
+    }
     .battle-box.battle-fighter.hit{
       --battle-hit-yaw:-14deg;
       --battle-hit-pitch:3deg;
       --battle-hit-counter-yaw:5deg;
       --battle-hit-counter-pitch:-1deg;
-      translate:calc(100% * 100% * sin(var(--battle-hit-active-yaw)) / 3600px) 0;
-      animation:battleBoxHit .46s ease;
+      --battle-hit-knockback-distance:-13px;
+      translate:calc(100% * 100% * sin(var(--battle-hit-active-yaw)) / 3600px + var(--battle-hit-knockback-x)) 0;
+      animation:battleBoxHit .46s ease,battleHitKnockback .46s ease;
       filter:brightness(1.18) saturate(1.15);
     }
     .battle-box.battle-fighter.enemy.hit{
       --battle-hit-yaw:14deg;
       --battle-hit-counter-yaw:-5deg;
+      --battle-hit-knockback-distance:14px;
     }
     @keyframes battleBoxPlayerAttack{0%,100%{transform:translateX(0)}42%{transform:translateX(18px) scale(1.02)}}
     @keyframes battleBoxEnemyAttack{0%,100%{transform:translateX(0)}42%{transform:translateX(-18px) scale(1.02)}}
@@ -20475,6 +20483,26 @@
       30%,50%,70%{--battle-hit-active-yaw:var(--battle-hit-yaw);--battle-hit-active-pitch:var(--battle-hit-pitch);transform:translateX(-6px) perspective(900px) rotateX(var(--battle-hit-pitch)) rotateY(var(--battle-hit-yaw))}
       40%,60%{--battle-hit-active-yaw:var(--battle-hit-counter-yaw);--battle-hit-active-pitch:var(--battle-hit-counter-pitch);transform:translateX(6px) perspective(900px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw))}
     }
+    @keyframes battleHitKnockback{
+      0%,100%{--battle-hit-knockback-x:0px}
+      10%{--battle-hit-knockback-x:calc(var(--battle-hit-knockback-distance) * .45)}
+      25%{--battle-hit-knockback-x:var(--battle-hit-knockback-distance)}
+      40%{--battle-hit-knockback-x:calc(var(--battle-hit-knockback-distance) * .85)}
+      55%{--battle-hit-knockback-x:calc(var(--battle-hit-knockback-distance) * .55)}
+      70%{--battle-hit-knockback-x:calc(var(--battle-hit-knockback-distance) * .2)}
+      85%{--battle-hit-knockback-x:0px}
+    }
+    @keyframes battleHitKnockbackVertical{
+      0%,100%{--battle-hit-knockback-y:0px}
+      10%{--battle-hit-knockback-y:calc(var(--battle-hit-knockback-y-distance) * .45)}
+      25%{--battle-hit-knockback-y:var(--battle-hit-knockback-y-distance)}
+      40%{--battle-hit-knockback-y:calc(var(--battle-hit-knockback-y-distance) * .85)}
+      55%{--battle-hit-knockback-y:calc(var(--battle-hit-knockback-y-distance) * .55)}
+      70%{--battle-hit-knockback-y:calc(var(--battle-hit-knockback-y-distance) * .2)}
+      85%{--battle-hit-knockback-y:0px}
+    }
+    @keyframes battleBoxPlayerAttackStacked{0%,100%{transform:translateY(0)}42%{transform:translateY(18px) scale(1.02)}}
+    @keyframes battleBoxEnemyAttackStacked{0%,100%{transform:translateY(0)}42%{transform:translateY(-18px) scale(1.02)}}
     @keyframes battleBoxHitReduced{0%,100%{filter:brightness(1)}50%{filter:brightness(1.2)}}
     @media (prefers-reduced-motion: reduce){
       .battle-box.battle-fighter.hit{animation:battleBoxHitReduced .16s ease-out !important}
@@ -20600,8 +20628,12 @@
       .current-grid,
       .companion-grid,
       .battle-grid{grid-template-columns:1fr}
+      .battle-box.battle-fighter.attack{animation:battleBoxPlayerAttackStacked .58s ease}
+      .battle-box.battle-fighter.enemy.attack{animation:battleBoxEnemyAttackStacked .58s ease}
       .battle-box.battle-fighter.hit{
-        translate:0 calc(-100% * 100% * sin(var(--battle-hit-active-pitch)) / 3600px);
+        --battle-hit-knockback-y-distance:-18px;
+        translate:0 calc(-100% * 100% * sin(var(--battle-hit-active-pitch)) / 3600px + var(--battle-hit-knockback-y));
+        animation:battleBoxHit .46s ease,battleHitKnockbackVertical .46s ease;
       }
       .battle-box.battle-fighter.player.hit{
         --battle-hit-yaw:0deg;--battle-hit-pitch:-14deg;
@@ -20610,6 +20642,7 @@
       .battle-box.battle-fighter.enemy.hit{
         --battle-hit-yaw:0deg;--battle-hit-pitch:14deg;
         --battle-hit-counter-yaw:0deg;--battle-hit-counter-pitch:-5deg;
+        --battle-hit-knockback-y-distance:18px;
       }
       .board-modal.trade-modal{
         width:96vw;

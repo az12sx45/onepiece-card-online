@@ -1,5 +1,12 @@
 # File Map
 
+## 2026-10-01 戰鬥整卡擊退
+
+- `public/board_battle.html`：一般戰鬥依敵我方向疊加 192px 受擊擊退；合作戰活動內卡共用；Tot Musica 與減少動態維持原演出。
+- `public/board_game.html`：地圖備用戰鬥的 18px 可見擊退，堆疊視窗的攻防垂直方向一致。
+- `scripts/board_battle_hit_depth_qa.js`：逐幀比對攻擊前衝與受擊後退的整卡畫面中心、可見比例、方向與回位，並保留舊 transform／時序回歸。
+- `scripts/build_board_hit_depth_release.js`、`scripts/board_hit_depth_release_builder_qa.js`、`scripts/board_hit_depth_public_qa_fixture.js`：更新上一版封包基線，只允許兩個戰鬥 HTML 進入候選；`public/desktop/catalog-v3.json` 與新 Board manifest 為本次候選 metadata，正式站尚待驗證。
+
 ## 2026-10-01 戰鬥受擊可見位移補償
 
 - `public/board_battle.html`、`public/board_game.html`：固定 CSS individual `translate` 補償式，以註冊的角度屬性在 keyframe 內動畫，避開 Chrome 的平方百分比 keyframe 計算問題；Tot Musica 特例補 X/Y，原平移與時長不變。

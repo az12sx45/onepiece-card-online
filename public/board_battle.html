@@ -2461,19 +2461,26 @@
       inherits: false;
       initial-value: 0deg;
     }
+    @property --battle-hit-knockback-x {
+      syntax: "<length>";
+      inherits: false;
+      initial-value: 0px;
+    }
 
     .combat-card.portrait-hit {
       --battle-hit-yaw: -14deg;
       --battle-hit-pitch: 3deg;
       --battle-hit-counter-yaw: 5deg;
       --battle-hit-counter-pitch: -1deg;
-      translate: calc(100% * 100% * sin(var(--battle-hit-active-yaw)) / 3600px) 0;
-      animation: cardHitShake 700ms ease;
+      --battle-hit-knockback-distance: -192px;
+      translate: calc(100% * 100% * sin(var(--battle-hit-active-yaw)) / 3600px + var(--battle-hit-knockback-x)) 0;
+      animation: cardHitShake 700ms ease, battleHitKnockback 700ms ease;
     }
 
     .combat-card.enemy.portrait-hit {
       --battle-hit-yaw: 14deg;
       --battle-hit-counter-yaw: -5deg;
+      --battle-hit-knockback-distance: 192px;
     }
 
     .combat-card.tot-musica-dual-actor-card.portrait-hit {
@@ -2492,6 +2499,7 @@
 
     .combat-card.tot-musica-dual-actor-card.portrait-hit,
     .combat-card.tot-musica-dual-boss.portrait-hit {
+      --battle-hit-knockback-distance: 0px;
       translate: 0 calc(-100% * 100% * sin(var(--battle-hit-active-pitch)) / 3600px);
     }
 
@@ -2505,8 +2513,9 @@
     }
 
     .combat-card.player.has-coop-allies.portrait-hit .card-inner {
-      translate: calc(100% * 100% * sin(var(--battle-hit-active-yaw)) / 3600px) 0;
-      animation: cardHitShake 700ms ease;
+      --battle-hit-knockback-distance: -192px;
+      translate: calc(100% * 100% * sin(var(--battle-hit-active-yaw)) / 3600px + var(--battle-hit-knockback-x)) 0;
+      animation: cardHitShake 700ms ease, battleHitKnockback 700ms ease;
     }
 
     .battle-stage.combo-sequence .combat-card.portrait-attack,
@@ -9773,6 +9782,16 @@
       24%, 72% { --battle-hit-active-yaw: var(--battle-hit-counter-yaw); --battle-hit-active-pitch: var(--battle-hit-counter-pitch); transform: translate(8px, 0) perspective(900px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw)); }
       36%, 60% { --battle-hit-active-yaw: var(--battle-hit-yaw); --battle-hit-active-pitch: var(--battle-hit-pitch); transform: translate(-12px, 0) perspective(900px) rotateX(var(--battle-hit-pitch)) rotateY(var(--battle-hit-yaw)); }
       48% { --battle-hit-active-yaw: var(--battle-hit-counter-yaw); --battle-hit-active-pitch: var(--battle-hit-counter-pitch); transform: translate(13px, 0) perspective(900px) rotateX(var(--battle-hit-counter-pitch)) rotateY(var(--battle-hit-counter-yaw)); }
+    }
+
+    @keyframes battleHitKnockback {
+      0%, 100% { --battle-hit-knockback-x: 0px; }
+      10% { --battle-hit-knockback-x: calc(var(--battle-hit-knockback-distance) * .45); }
+      25% { --battle-hit-knockback-x: var(--battle-hit-knockback-distance); }
+      40% { --battle-hit-knockback-x: calc(var(--battle-hit-knockback-distance) * .85); }
+      55% { --battle-hit-knockback-x: calc(var(--battle-hit-knockback-distance) * .55); }
+      70% { --battle-hit-knockback-x: calc(var(--battle-hit-knockback-distance) * .2); }
+      85% { --battle-hit-knockback-x: 0px; }
     }
 
     @keyframes cardHitReduced {

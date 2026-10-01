@@ -38,7 +38,7 @@ const report = { origin, baselineRef: BASELINE_REF || null,
   startedAt: new Date().toISOString(), readOnly: true,
   checks: [], cases: [], pageErrors: [], blockedWrites: [] };
 const HIT_ANIMATIONS = new Set(['cardHitShake', 'portraitHit', 'battleBoxHit', 'battleHitShake',
-  'totMusicaTargetHitDown']);
+  'totMusicaTargetHitDown', 'battleHitKnockback', 'battleHitKnockbackVertical']);
 const HIT_TIMES_MS = [0, 46, 70, 84, 92, 138, 140, 158, 168, 184, 210, 230, 252, 276,
   280, 322, 324, 336, 350, 368, 414, 420, 460, 468, 490, 504, 560, 588, 630, 700, 720];
 const ORIGINAL_HIT_MOTION = {
@@ -346,12 +346,20 @@ function compareHitTrace(name, trace) {
   check(`${name} same exact hit frame times`, matchingTimes,
     { expected: baseline.samples.map(frame => frame.atMs), actual: trace.samples.map(frame => frame.atMs) });
   if (!matchingTimes) return;
+  const intentionalRecoil = /^(?:iframe-|map-(?:desktop|mobile|portrait|narrow-desktop))/.test(name) &&
+    /\/(?:player|enemy)$/.test(name);
+  const recoilAxis = name.startsWith('map-narrow-desktop/') || name.startsWith('map-portrait-')
+    ? 'y' : 'x';
+  const outwardEdge = name.endsWith('/player')
+    ? (recoilAxis === 'y' ? 'top' : 'left')
+    : (recoilAxis === 'y' ? 'bottom' : 'right');
   for (const part of ['card', 'portrait']) {
     if (part === 'portrait' && !baseline.samples[0].portrait && !trace.samples[0].portrait) continue;
     const peakLoss = [];
     const displacement = [];
     const clipping = [];
     for (const axis of ['x', 'y']) {
+      if (intentionalRecoil && axis === recoilAxis) continue;
       const oldPeak = baseline.peaks?.[part]?.[axis], newPeak = trace.peaks?.[part]?.[axis];
       if (!oldPeak || !newPeak) continue;
       if (oldPeak.min < -3 && newPeak.min > oldPeak.min + Math.max(part === 'portrait' ? 2.5 : 2, -oldPeak.min * .1)) {
@@ -368,6 +376,7 @@ function compareHitTrace(name, trace) {
       const oldDelta = part === 'card' ? oldBox.visibleDelta : oldBox.delta;
       const newDelta = part === 'card' ? newBox.visibleDelta : newBox.delta;
       if (oldDelta && newDelta) for (const axis of ['x', 'y']) {
+        if (intentionalRecoil && axis === recoilAxis) continue;
         const amount = oldDelta[axis];
         if (Math.abs(amount) < 3) continue;
         const tolerance = Math.max(part === 'portrait' ? 2.5 : 2, Math.abs(amount) * .1);
@@ -378,6 +387,7 @@ function compareHitTrace(name, trace) {
         }
       }
       for (const edge of ['left', 'top', 'right', 'bottom']) {
+        if (intentionalRecoil && edge === outwardEdge) continue;
         const oldClip = part === 'portrait' ? oldFrame.portraitPainted || oldBox : oldBox;
         const newClip = part === 'portrait' ? newFrame.portraitPainted || newBox : newBox;
         if (newClip.clipped[edge] > oldClip.clipped[edge] + 2) {
@@ -391,6 +401,186 @@ function compareHitTrace(name, trace) {
     check(`${name} ${part} visible displacement matches original`, displacement.length === 0, displacement);
     check(`${name} ${part} viewport clipping matches original`, clipping.length === 0, clipping);
   }
+}
+
+async function capturePairedTravel(page, spec) {
+  return page.evaluate(({ pageKind, coop, reduced }) => {
+    const iframe = pageKind === 'iframe';
+    const roots = {
+      player: document.querySelector(iframe ? '#playerCard' : '#battleHitDepthQaPlayer'),
+      enemy: document.querySelector(iframe ? '#enemyCard' : '#battleHitDepthQaEnemy'),
+    };
+    if (!roots.player || !roots.enemy) return null;
+    if (iframe && coop) roots.player.classList.add('has-coop-allies');
+    const mover = side => iframe && coop && side === 'player'
+      ? roots.player.querySelector('.card-inner') : roots[side];
+    const attackClass = iframe ? 'portrait-attack' : 'attack';
+    const hitClass = iframe ? 'portrait-hit' : 'hit';
+    const hitFractions = iframe ? [0, .12, .24, .36, .48, .60, .72, .84, 1]
+      : [0, .10, .20, .30, .40, .50, .60, .70, .80, .90, 1];
+    const viewport = document.querySelector('.battle-viewport')?.getBoundingClientRect();
+    const clip = { left: Math.max(0, viewport?.left || 0), top: Math.max(0, viewport?.top || 0),
+      right: Math.min(innerWidth, viewport?.right ?? innerWidth),
+      bottom: Math.min(innerHeight, viewport?.bottom ?? innerHeight) };
+    const clear = () => {
+      for (const root of Object.values(roots)) root.classList.remove(attackClass, hitClass);
+      void roots.player.offsetWidth;
+      void roots.enemy.offsetWidth;
+    };
+    const center = (element, root) => {
+      const rect = element.getBoundingClientRect();
+      const rootRect = root.getBoundingClientRect();
+      const rootStyle = getComputedStyle(root);
+      const rootClips = root !== element && ['hidden', 'clip'].includes(rootStyle.overflowX);
+      const left = Math.max(clip.left, rect.left, rootClips ? rootRect.left : -Infinity);
+      const right = Math.min(clip.right, rect.right, rootClips ? rootRect.right : Infinity);
+      const top = Math.max(clip.top, rect.top, rootClips ? rootRect.top : -Infinity);
+      const bottom = Math.min(clip.bottom, rect.bottom, rootClips ? rootRect.bottom : Infinity);
+      const visible = right > left && bottom > top
+        ? { x: (left + right) / 2, y: (top + bottom) / 2,
+          width: right - left, height: bottom - top } : null;
+      return { x: (rect.left + rect.right) / 2, y: (rect.top + rect.bottom) / 2,
+        width: rect.width, height: rect.height, visible };
+    };
+    const sampleAction = (side, className, names, fractions) => {
+      clear();
+      const root = roots[side];
+      const target = mover(side);
+      if (!target) return { error: `missing ${side} moving element` };
+      root.classList.add(className);
+      const animations = root.getAnimations({ subtree: true }).filter(item =>
+        item.effect?.target === target &&
+        (names.includes(item.animationName) ||
+          ['battleHitKnockback', 'battleHitKnockbackVertical'].includes(item.animationName)));
+      const animation = animations.find(item => names.includes(item.animationName));
+      if (!animation) {
+        const available = root.getAnimations({ subtree: true }).map(item => ({
+          name: item.animationName, target: item.effect?.target?.className || null }));
+        const computed = getComputedStyle(target).animationName;
+        clear();
+        return { error: `missing ${side} ${className} animation`, computed, available };
+      }
+      for (const item of animations) item.pause();
+      const duration = Number(animation.effect.getComputedTiming().duration);
+      const samples = fractions.map(at => {
+        for (const item of animations) {
+          item.currentTime = Number(item.effect.getComputedTiming().duration) * at;
+        }
+        return { at, ...center(target, root) };
+      });
+      const name = animation.animationName;
+      clear();
+      return { name, duration, samples };
+    };
+    const pairs = [];
+    for (const attackSide of ['player', 'enemy']) {
+      clear();
+      const defendSide = attackSide === 'player' ? 'enemy' : 'player';
+      const attacker = mover(attackSide), defender = mover(defendSide);
+      const attackBase = center(attacker, roots[attackSide]);
+      const defendBase = center(defender, roots[defendSide]);
+      const axis = Math.abs(defendBase.y - attackBase.y) > Math.abs(defendBase.x - attackBase.x)
+        ? 'y' : 'x';
+      const direction = Math.sign(defendBase[axis] - attackBase[axis]);
+      const hit = sampleAction(defendSide, hitClass,
+        reduced ? [iframe ? 'cardHitReduced' : 'battleBoxHitReduced']
+          : [iframe ? 'cardHitShake' : 'battleBoxHit'],
+        reduced ? [0, .5, 1] : hitFractions);
+      const attack = reduced ? null : sampleAction(attackSide, attackClass,
+        iframe ? [attackSide === 'enemy' ? 'enemyCardAttackShake' : 'cardAttackShake']
+          : [axis === 'y'
+            ? (attackSide === 'enemy' ? 'battleBoxEnemyAttackStacked' : 'battleBoxPlayerAttackStacked')
+            : (attackSide === 'enemy' ? 'battleBoxEnemyAttack' : 'battleBoxPlayerAttack')],
+        iframe ? [0, .38, 1] : [0, .42, 1]);
+      pairs.push({ attackSide, defendSide, axis, direction,
+        attackBase, defendBase, attack, hit });
+    }
+    clear();
+    return pairs;
+  }, { pageKind: spec.page, coop: Boolean(spec.coop), reduced: Boolean(spec.reduced) });
+}
+
+async function checkPairedTravel(page, spec) {
+  const pairs = await capturePairedTravel(page, spec);
+  check(`${spec.name} paired travel traces available`, Boolean(pairs?.length === 2), pairs);
+  if (!pairs?.length) return;
+  for (const pair of pairs) {
+    const label = `${spec.name}/${pair.attackSide}-attacks`;
+    check(`${label} moving element animation available`,
+      Boolean(pair.hit?.samples?.length && (spec.reduced || pair.attack?.samples?.length)),
+      { attack: pair.attack?.error ? pair.attack : pair.attack?.name,
+        hit: pair.hit?.error ? pair.hit : pair.hit?.name });
+    if (!pair.hit?.samples?.length || (!spec.reduced && !pair.attack?.samples?.length)) continue;
+    const hitSamples = pair.hit.samples.map(sample => ({ at: sample.at,
+      raw: (sample[pair.axis] - pair.defendBase[pair.axis]) * pair.direction,
+      visible: sample.visible && pair.defendBase.visible
+        ? (sample.visible[pair.axis] - pair.defendBase.visible[pair.axis]) * pair.direction : null,
+      visibleFraction: sample.visible
+        ? sample.visible[pair.axis === 'x' ? 'width' : 'height'] /
+          sample[pair.axis === 'x' ? 'width' : 'height'] : 0 }));
+    const peak = hitSamples.reduce((best, sample) => sample.raw > best.raw ? sample : best);
+    const data = { ...pair, hitSamples, peak };
+    report.cases.push({ name: label, pairedTravel: data });
+    if (spec.reduced) {
+      check(`${label} reduced-motion card has no recoil`,
+        hitSamples.every(sample => Math.abs(sample.raw) < 2), hitSamples);
+      continue;
+    }
+    const forward = (pair.attack.samples[1][pair.axis] - pair.attackBase[pair.axis]) * pair.direction;
+    const floor = spec.page === 'iframe' ? 100 : 12;
+    check(`${label} attacker moves toward defender`, pair.direction !== 0 && forward > floor,
+      { direction: pair.direction, forward, attack: pair.attack });
+    check(`${label} whole-card knockback matches attacker travel`,
+      forward > floor && peak.raw >= forward * .9 && peak.raw <= forward * 1.1,
+      { attackerForwardPx: forward, defenderOutwardPx: peak.raw,
+        ratio: forward > 0 ? peak.raw / forward : null, at: peak.at, axis: pair.axis });
+    check(`${label} knockback remains visibly on screen`,
+      peak.visible !== null && peak.visible > Math.min(45, forward * .45) &&
+        peak.visibleFraction >= .3,
+      { attackerForwardPx: forward, defenderVisiblePx: peak.visible,
+        visibleFraction: peak.visibleFraction });
+    check(`${label} action returns to neutral`,
+      Math.abs((pair.attack.samples.at(-1)[pair.axis] - pair.attackBase[pair.axis]) * pair.direction) < 2 &&
+        Math.abs(hitSamples.at(-1).raw) < 2,
+      { attackEnd: pair.attack.samples.at(-1), hitEnd: hitSamples.at(-1) });
+  }
+}
+
+async function captureRecoilPeakScreenshot(page, spec, side) {
+  const pose = await page.evaluate(({ side, coop }) => {
+    const player = document.getElementById('playerCard');
+    const enemy = document.getElementById('enemyCard');
+    player.classList.remove('portrait-attack', 'portrait-hit');
+    enemy.classList.remove('portrait-attack', 'portrait-hit');
+    if (coop) player.classList.add('has-coop-allies');
+    const root = side === 'player' ? player : enemy;
+    const target = coop && side === 'player' ? root.querySelector('.card-inner') : root;
+    root.classList.add('portrait-hit');
+    const animations = root.getAnimations({ subtree: true }).filter(item =>
+      item.effect?.target === target &&
+      ['cardHitShake', 'battleHitKnockback'].includes(item.animationName));
+    if (!animations.some(item => item.animationName === 'cardHitShake')) return null;
+    for (const animation of animations) {
+      animation.pause();
+      animation.currentTime = Number(animation.effect.getComputedTiming().duration) * .25;
+    }
+    const rect = target.getBoundingClientRect();
+    return { at: .25, animations: animations.map(item => item.animationName),
+      center: { x: (rect.left + rect.right) / 2, y: (rect.top + rect.bottom) / 2 },
+      translate: getComputedStyle(target).translate };
+  }, { side, coop: Boolean(spec.coop) });
+  check(`${spec.name}/${side} recoil screenshot pose available`, Boolean(pose), pose);
+  if (!pose) return;
+  const screenshot = path.join(OUTPUT, `${spec.name}-${side}-recoil-25pct.png`);
+  try {
+    await page.screenshot({ path: screenshot });
+  } finally {
+    await page.evaluate(() => {
+      document.getElementById('playerCard').classList.remove('portrait-hit');
+      document.getElementById('enemyCard').classList.remove('portrait-hit');
+    });
+  }
+  report.cases.push({ name: `${spec.name}/${side}-recoil-frame`, pose, screenshot });
 }
 
 async function makeContext(browser, spec) {
@@ -586,6 +776,28 @@ async function runCase(browser, spec) {
     await page.goto(`${origin}/${pageName}?${query}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     if (spec.page === 'iframe') await prepareIframe(page);
     else await prepareMap(page);
+    if (spec.name === 'map-narrow-desktop') {
+      const layout = await page.evaluate(() => {
+        const rules = [];
+        const walk = (list, media = []) => {
+          for (const rule of list) {
+            if (rule.selectorText?.includes('.battle-grid') && rule.style?.gridTemplateColumns) {
+              rules.push({ selector: rule.selectorText, columns: rule.style.gridTemplateColumns, media });
+            }
+            if (rule.cssRules) walk(rule.cssRules, rule.conditionText
+              ? [...media, rule.conditionText] : media);
+          }
+        };
+        for (const sheet of document.styleSheets) {
+          try { walk(sheet.cssRules); } catch (_) { /* Cross-origin CSS is not needed here. */ }
+        }
+        return { innerWidth, media720: matchMedia('(max-width:720px)').matches,
+          columns: getComputedStyle(document.getElementById('battleHitDepthQaFixture')).gridTemplateColumns,
+          display: getComputedStyle(document.getElementById('battleHitDepthQaFixture')).display, rules };
+      });
+      check(`${spec.name} narrow desktop layout active`,
+        layout.innerWidth === 700 && layout.media720, layout);
+    }
     if (spec.iframePortrait) {
       const orientation = await page.evaluate(() => {
         const notice = document.getElementById('battleOrientationNotice');
@@ -679,11 +891,12 @@ async function runCase(browser, spec) {
       check(`${spec.name}/${side} no lingering 3D tilt`, after.maxTilt < 0.01, { after: after.maxTilt });
       if (spec.page === 'iframe' && !spec.iframePortrait && !BASELINE_REF && !BASELINE_REPORT) {
         const hitBoxes = [...frames, impact];
+        const allowedEdge = side === 'player' ? 'left' : 'right';
         const newCardClip = hitBoxes.some(frame => Object.keys(before.box.clipped).some(edge =>
-          frame.box.clipped[edge] > before.box.clipped[edge] + 2));
+          edge !== allowedEdge && frame.box.clipped[edge] > before.box.clipped[edge] + 2));
         const newPortraitClip = hitBoxes.some(frame => frame.portraitBox && before.portraitBox &&
           Object.keys(before.portraitBox.clipped).some(edge =>
-            frame.portraitBox.clipped[edge] > before.portraitBox.clipped[edge] + 2));
+            edge !== allowedEdge && frame.portraitBox.clipped[edge] > before.portraitBox.clipped[edge] + 2));
         check(`${spec.name}/${side} no new viewport clipping`, !newCardClip && !newPortraitClip, clipping);
       }
     }
@@ -714,6 +927,14 @@ async function runCase(browser, spec) {
             expected * pitch > 0.02, { expected, pitch });
         }
       }
+    }
+    if (!BASELINE_REF && ['iframe-desktop', 'iframe-coop-desktop', 'map-desktop',
+      'map-narrow-desktop',
+      'iframe-reduced', 'iframe-coop-reduced', 'map-reduced'].includes(spec.name)) {
+      await checkPairedTravel(page, spec);
+    }
+    if (!BASELINE_REF && ['iframe-desktop', 'iframe-coop-desktop'].includes(spec.name)) {
+      for (const side of ['player', 'enemy']) await captureRecoilPeakScreenshot(page, spec, side);
     }
     const stateAfter = await page.evaluate(() => {
       if (window.__BOARD_GAME_DEBUG__) {
@@ -754,6 +975,10 @@ async function main() {
     await runCase(browser, { page: 'iframe', name: 'iframe-portrait-390x844', ...iframePortrait });
     await runCase(browser, { page: 'map', name: 'map-portrait-390x844', ...portrait });
     await runCase(browser, { page: 'iframe', name: 'iframe-coop-desktop', ...desktop, coop: true });
+    if (!BASELINE_REF) await runCase(browser,
+      { page: 'iframe', name: 'iframe-coop-reduced', ...reduced, coop: true });
+    await runCase(browser, { page: 'map', name: 'map-narrow-desktop',
+      viewport: { width: 700, height: 768 }, mobile: false, reduced: false, mapPortrait: true });
     await runTotCase(browser, { name: 'tot-musica-desktop', ...desktop });
     await runTotCase(browser, { name: 'tot-musica-mobile', ...mobile });
     if (!BASELINE_REF) await runTotCase(browser, { name: 'tot-musica-reduced', ...reduced });
