@@ -1,0 +1,407 @@
+{
+  "schema": "one-piece-launcher-future-crew/1",
+  "status": "art-in-progress",
+  "notReleaseAuthority": true,
+  "characterCount": 10,
+  "requiredSourceSheets": [
+    "master",
+    "walk-side",
+    "walk-front",
+    "acting-side",
+    "acting-front",
+    "work",
+    "utility"
+  ],
+  "requiredRuntimeWebpFilesPerCharacter": 17,
+  "characters": {
+    "vivi": {
+      "name": "薇薇",
+      "role": "阿拉巴斯坦王國公主",
+      "officialCharacterPage": "https://one-piece.com/character/Nefeltari_Vivi/index.html",
+      "costumeSpec": "阿拉巴斯坦王室白金長裙、粉色短披肩、淡藍長髮",
+      "locked": true,
+      "runtimeEligible": false,
+      "availableForPurchase": false,
+      "sourceSheets": {
+        "master": {
+          "path": "tools/launcher-room/reserved-v3/sources/vivi/master-01/source.png",
+          "sha256": "859a378b4aa97cfaafbeaf0bf94088535684e18b5d1980c4c9510ec0274294e3",
+          "bytes": 1169577,
+          "review": "model-selected; human art acceptance pending",
+          "layout": {
+            "rowCuts": [
+              0,
+              623,
+              1254
+            ],
+            "columnCuts": [
+              0,
+              620,
+              1254
+            ]
+          }
+        },
+        "walk-side": {
+          "path": "tools/launcher-room/reserved-v3/sources/vivi/walk-side-01/source.png",
+          "sha256": "8595eda65ee792f62083f8c8e5d749ccda1110d550bb9b9866f687c9d93809ba",
+          "bytes": 2142544,
+          "review": "model-selected; human art acceptance pending",
+          "layout": {
+            "rowCuts": [
+              0,
+              510,
+              1024
+            ],
+            "columnCuts": [
+              0,
+              547,
+              993,
+              1536
+            ]
+          }
+        },
+        "walk-front": {
+          "path": "tools/launcher-room/reserved-v3/sources/vivi/walk-front-01/source.png",
+          "sha256": "687189f2cfe660bdc3254ba3a6dce0a5b50e60870cd468b5ab8785d3faadc03f",
+          "bytes": 2148363,
+          "review": "model-selected; human art acceptance pending",
+          "layout": {
+            "rowCuts": [
+              0,
+              505,
+              1024
+            ],
+            "columnCuts": [
+              0,
+              534,
+              1000,
+              1536
+            ]
+          }
+        },
+        "acting-side": {
+          "path": "tools/launcher-room/reserved-v3/sources/vivi/acting-side-02/source.png",
+          "sha256": "4d2a3abbbad83c3f30373e22039c1414575719b311f28ac76ed5fe3030e1d253",
+          "bytes": 1355921,
+          "layout": {
+            "rowCuts": [
+              0,
+              343,
+              638,
+              921,
+              1254
+            ],
+            "columnCuts": [
+              0,
+              318,
+              622,
+              929,
+              1254
+            ]
+          },
+          "review": "model-selected; human art acceptance pending"
+        },
+        "acting-front": {
+          "path": "tools/launcher-room/reserved-v3/sources/vivi/acting-front-02/source.png",
+          "sha256": "ce94a1c37d86e004604f7ad0adc9b4fb06cee532b5472334e0b8cc1799da6389",
+          "bytes": 1307596,
+          "layout": {
+            "rowCuts": [
+              0,
+              352,
+              662,
+              948,
+              1254
+            ],
+            "columnCuts": [
+              0,
+              330,
+              654,
+              962,
+              1254
+            ]
+          },
+          "review": "model-selected; human art acceptance pending"
+        },
+        "work": {
+          "path": "tools/launcher-room/reserved-v3/sources/vivi/work-02/source.png",
+          "sha256": "774270ab38a30603f7e755b721bd746f80f4cb4142bf637080cb1cdb8200ebd9",
+          "bytes": 1807200,
+          "layout": {
+            "rowCuts": [
+              0,
+              313,
+              624,
+              924,
+              1254
+            ],
+            "columnCuts": [
+              0,
+              350,
+              658,
+              947,
+              1254
+            ]
+          },
+          "review": "model-selected; human art acceptance pending"
+        },
+        "utility": {
+          "path": "tools/launcher-room/reserved-v3/sources/vivi/utility-02/source.png",
+          "sha256": "8a5aeac34466f78623c518546b45edd7c933780f778e1bedd5f683a1478c100b",
+          "bytes": 1725546,
+          "layout": {
+            "rowCuts": [
+              0,
+              376,
+              694,
+              976,
+              1254
+            ],
+            "columnCuts": [
+              0,
+              333,
+              640,
+              967,
+              1254
+            ]
+          },
+          "review": "model-selected; human art acceptance pending",
+          "standingReferenceCell": [
+            0,
+            0
+          ]
+        }
+      },
+      "contactReview": {
+        "status": "model-reviewed",
+        "path": "tools/launcher-room/reserved-v3/contacts/vivi.png",
+        "sha256": "979cc097c4f8967e04d59a6edfd4c94fd68b32d2010ae8f5d7c5e841e955d0dd",
+        "frameCount": 81,
+        "notes": "81 complete connected figures reviewed on contact sheet; four low-step walk directions and distinct expressions/actions; not human or in-game play acceptance"
+      },
+      "runtimeManifest": {
+        "path": "tools/launcher-room/reserved-v3/manifests/vivi.json",
+        "sha256": "e846efa23c5c8727ca519e6e878422e93e7602b4a1d6d4e4bad16da3580dfb70",
+        "assetCount": 17,
+        "frameCount": 81,
+        "releaseStatus": "locked-art-candidate"
+      }
+    },
+    "shanks": {
+      "name": "香克斯",
+      "role": "紅髮海賊團大頭",
+      "officialCharacterPage": "https://one-piece.com/character/Shanks/index.html",
+      "costumeSpec": "紅髮、左眼三道傷疤、失去左臂、黑披風與白襯衫",
+      "locked": true,
+      "runtimeEligible": false,
+      "availableForPurchase": false,
+      "sourceSheets": {
+        "master": {
+          "path": "tools/launcher-room/reserved-v3/sources/shanks/master-01/source.png",
+          "sha256": "96e8256c5eb63d2e56a0cc338e4894a10804ea3f2d1d897679c2c974e2ca4da6",
+          "bytes": 1100054,
+          "review": "model-selected; human art acceptance pending"
+        },
+        "walk-side": null,
+        "walk-front": null,
+        "acting-side": null,
+        "acting-front": null,
+        "work": null,
+        "utility": null
+      },
+      "contactReview": null
+    },
+    "mihawk": {
+      "name": "密佛格",
+      "role": "世界第一劍豪",
+      "officialCharacterPage": "https://one-piece.com/character/Dracule_Mihawk/index.html",
+      "costumeSpec": "寬簷黑帽、鷹眼、黑紅長外套與十字項鍊",
+      "locked": true,
+      "runtimeEligible": false,
+      "availableForPurchase": false,
+      "sourceSheets": {
+        "master": {
+          "path": "tools/launcher-room/reserved-v3/sources/mihawk/master-01/source.png",
+          "sha256": "fede9b726e9ffe7eafcf15c8b1990ab18c2e39ea7802e6e6b166e65ae9f851ed",
+          "bytes": 1105443,
+          "review": "model-selected; human art acceptance pending"
+        },
+        "walk-side": null,
+        "walk-front": null,
+        "acting-side": null,
+        "acting-front": null,
+        "work": null,
+        "utility": null
+      },
+      "contactReview": null
+    },
+    "perona": {
+      "name": "培羅娜",
+      "role": "恐怖三桅帆船四怪人",
+      "officialCharacterPage": "https://one-piece.com/character/Perona/index.html",
+      "costumeSpec": "粉色雙馬尾、小皇冠、紅粉哥德裙與條紋襪",
+      "locked": true,
+      "runtimeEligible": false,
+      "availableForPurchase": false,
+      "sourceSheets": {
+        "master": {
+          "path": "tools/launcher-room/reserved-v3/sources/perona/master-01/source.png",
+          "sha256": "4fe0fafbec41de42fe31f2621d8af1f7aaecfd174e767fe6f22b96233fb07a43",
+          "bytes": 1198308,
+          "review": "model-selected; human art acceptance pending"
+        },
+        "walk-side": null,
+        "walk-front": null,
+        "acting-side": null,
+        "acting-front": null,
+        "work": null,
+        "utility": null
+      },
+      "contactReview": null
+    },
+    "marco": {
+      "name": "馬可",
+      "role": "白鬍子海賊團第一隊隊長兼船醫",
+      "officialCharacterPage": "https://one-piece.com/character/marco/index.html",
+      "costumeSpec": "短金髮、紫色短袖衫、白鬍子胸前紋章",
+      "locked": true,
+      "runtimeEligible": false,
+      "availableForPurchase": false,
+      "sourceSheets": {
+        "master": {
+          "path": "tools/launcher-room/reserved-v3/sources/marco/master-01/source.png",
+          "sha256": "f6e15c12b517470d9b89e0c0b1092ba27edcbe6e7af5e13b5e10e91e79a5c3a0",
+          "bytes": 829506,
+          "review": "model-selected; human art acceptance pending"
+        },
+        "walk-side": null,
+        "walk-front": null,
+        "acting-side": null,
+        "acting-front": null,
+        "work": null,
+        "utility": null
+      },
+      "contactReview": null
+    },
+    "buggy": {
+      "name": "巴其",
+      "role": "巴其海賊團船長",
+      "officialCharacterPage": "https://one-piece.com/character/Buggy/index.html",
+      "costumeSpec": "紅鼻、藍髮、橘色船長帽與披風",
+      "locked": true,
+      "runtimeEligible": false,
+      "availableForPurchase": false,
+      "sourceSheets": {
+        "master": {
+          "path": "tools/launcher-room/reserved-v3/sources/buggy/master-01/source.png",
+          "sha256": "feb84a8d9ab26d43d7d1fe788530cefbee571370442c5576ed9764254e45a80a",
+          "bytes": 1443786,
+          "review": "model-selected; human art acceptance pending"
+        },
+        "walk-side": null,
+        "walk-front": null,
+        "acting-side": null,
+        "acting-front": null,
+        "work": null,
+        "utility": null
+      },
+      "contactReview": null
+    },
+    "carrot": {
+      "name": "凱洛特",
+      "role": "毛茸茸公國兔子毛皮族",
+      "officialCharacterPage": "https://one-piece.com/character/carrot/index.html",
+      "costumeSpec": "白色兔耳、金髮、橘色上衣與綠色短披風",
+      "locked": true,
+      "runtimeEligible": false,
+      "availableForPurchase": false,
+      "sourceSheets": {
+        "master": {
+          "path": "tools/launcher-room/reserved-v3/sources/carrot/master-01/source.png",
+          "sha256": "614874f1424ab610d519ae170d2b4dad5a89f33fd1d006d20d3c1c9eabd2d0fe",
+          "bytes": 758500,
+          "review": "model-selected; human art acceptance pending"
+        },
+        "walk-side": null,
+        "walk-front": null,
+        "acting-side": null,
+        "acting-front": null,
+        "work": null,
+        "utility": null
+      },
+      "contactReview": null
+    },
+    "yamato": {
+      "name": "大和",
+      "role": "和之國鬼島",
+      "officialCharacterPage": "https://one-piece.com/character/YAMATO/",
+      "costumeSpec": "白青長髮、赤角、白紅和服與紫色繩結",
+      "locked": true,
+      "runtimeEligible": false,
+      "availableForPurchase": false,
+      "sourceSheets": {
+        "master": {
+          "path": "tools/launcher-room/reserved-v3/sources/yamato/master-01/source.png",
+          "sha256": "05c7dc77c78655d2e75d7170b94e38e0b2accdbbba673f3a2219027b9c0efa05",
+          "bytes": 1149433,
+          "review": "model-selected; human art acceptance pending"
+        },
+        "walk-side": null,
+        "walk-front": null,
+        "acting-side": null,
+        "acting-front": null,
+        "work": null,
+        "utility": null
+      },
+      "contactReview": null
+    },
+    "bonclay": {
+      "name": "馮・克雷",
+      "role": "原巴洛克華克斯 Mr.2",
+      "officialCharacterPage": "https://one-piece.com/character/Bon_Clay_Mr2/index.html",
+      "costumeSpec": "黑短髮、濃妝、天鵝肩飾與芭蕾服",
+      "locked": true,
+      "runtimeEligible": false,
+      "availableForPurchase": false,
+      "sourceSheets": {
+        "master": {
+          "path": "tools/launcher-room/reserved-v3/sources/bonclay/master-01/source.png",
+          "sha256": "30e1320732380ab4f13aaa98513cfaf0f50619b25f013752196b62f3544dd09f",
+          "bytes": 1184987,
+          "review": "model-selected; human art acceptance pending"
+        },
+        "walk-side": null,
+        "walk-front": null,
+        "acting-side": null,
+        "acting-front": null,
+        "work": null,
+        "utility": null
+      },
+      "contactReview": null
+    },
+    "koala": {
+      "name": "可亞拉",
+      "role": "革命軍成員",
+      "officialCharacterPage": "https://one-piece.com/character/Koala/index.html",
+      "costumeSpec": "橘色短髮、酒紅帽護目鏡與粉色荷葉領上衣",
+      "locked": true,
+      "runtimeEligible": false,
+      "availableForPurchase": false,
+      "sourceSheets": {
+        "master": {
+          "path": "tools/launcher-room/reserved-v3/sources/koala/master-01/source.png",
+          "sha256": "626a3aa8052c04a3370fc53f837104f4acdc2f017eadac0df0fce4ef2564826d",
+          "bytes": 859506,
+          "review": "model-selected; human art acceptance pending"
+        },
+        "walk-side": null,
+        "walk-front": null,
+        "acting-side": null,
+        "acting-front": null,
+        "work": null,
+        "utility": null
+      },
+      "contactReview": null
+    }
+  }
+}

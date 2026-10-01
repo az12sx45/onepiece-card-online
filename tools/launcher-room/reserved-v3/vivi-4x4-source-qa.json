@@ -1,0 +1,85 @@
+{
+  "schema": "one-piece-room-4x4-source-qa/1",
+  "vivi": {
+    "acting-side": {
+      "source": "tools/launcher-room/reserved-v3/sources/vivi/acting-side-02/source.png",
+      "sha256": "4d2a3abbbad83c3f30373e22039c1414575719b311f28ac76ed5fe3030e1d253",
+      "rowCuts": [
+        0,
+        343,
+        638,
+        921,
+        1254
+      ],
+      "columnCuts": [
+        0,
+        318,
+        622,
+        929,
+        1254
+      ],
+      "cellCount": 16,
+      "safeWholeFigureCuts": true
+    },
+    "acting-front": {
+      "source": "tools/launcher-room/reserved-v3/sources/vivi/acting-front-02/source.png",
+      "sha256": "ce94a1c37d86e004604f7ad0adc9b4fb06cee532b5472334e0b8cc1799da6389",
+      "rowCuts": [
+        0,
+        352,
+        662,
+        948,
+        1254
+      ],
+      "columnCuts": [
+        0,
+        330,
+        654,
+        962,
+        1254
+      ],
+      "cellCount": 16,
+      "safeWholeFigureCuts": true
+    },
+    "work": {
+      "source": "tools/launcher-room/reserved-v3/sources/vivi/work-02/source.png",
+      "sha256": "774270ab38a30603f7e755b721bd746f80f4cb4142bf637080cb1cdb8200ebd9",
+      "rowCuts": [
+        0,
+        313,
+        624,
+        924,
+        1254
+      ],
+      "columnCuts": [
+        0,
+        350,
+        658,
+        947,
+        1254
+      ],
+      "cellCount": 16,
+      "safeWholeFigureCuts": true
+    },
+    "utility": {
+      "source": "tools/launcher-room/reserved-v3/sources/vivi/utility-02/source.png",
+      "sha256": "8a5aeac34466f78623c518546b45edd7c933780f778e1bedd5f683a1478c100b",
+      "rowCuts": [
+        0,
+        376,
+        694,
+        976,
+        1254
+      ],
+      "columnCuts": [
+        0,
+        333,
+        640,
+        967,
+        1254
+      ],
+      "cellCount": 16,
+      "safeWholeFigureCuts": true
+    }
+  }
+}

@@ -1,0 +1,4239 @@
+{
+  "schema": "one-piece-room-future-crew-character-art/1",
+  "character": "vivi",
+  "releasePolicy": "locked-art-candidate",
+  "runtimeEligible": false,
+  "availableForPurchase": false,
+  "artStatus": "awaiting-model-contact-review",
+  "humanAcceptance": false,
+  "sourceSheets": {
+    "master": {
+      "key": "vivi",
+      "sheet": "master",
+      "image": {
+        "path": "tools/launcher-room/reserved-v3/sources/vivi/master-01/source.png",
+        "sha256": "859a378b4aa97cfaafbeaf0bf94088535684e18b5d1980c4c9510ec0274294e3",
+        "bytes": 1169577
+      },
+      "layout": {
+        "rowCuts": [
+          0,
+          623,
+          1254
+        ],
+        "columnCuts": [
+          0,
+          620,
+          1254
+        ]
+      },
+      "standingReferenceCell": null,
+      "generator": "gpt-image"
+    },
+    "walk-side": {
+      "key": "vivi",
+      "sheet": "walk-side",
+      "image": {
+        "path": "tools/launcher-room/reserved-v3/sources/vivi/walk-side-01/source.png",
+        "sha256": "8595eda65ee792f62083f8c8e5d749ccda1110d550bb9b9866f687c9d93809ba",
+        "bytes": 2142544
+      },
+      "layout": {
+        "rowCuts": [
+          0,
+          510,
+          1024
+        ],
+        "columnCuts": [
+          0,
+          547,
+          993,
+          1536
+        ]
+      },
+      "standingReferenceCell": null,
+      "generator": "gpt-image"
+    },
+    "walk-front": {
+      "key": "vivi",
+      "sheet": "walk-front",
+      "image": {
+        "path": "tools/launcher-room/reserved-v3/sources/vivi/walk-front-01/source.png",
+        "sha256": "687189f2cfe660bdc3254ba3a6dce0a5b50e60870cd468b5ab8785d3faadc03f",
+        "bytes": 2148363
+      },
+      "layout": {
+        "rowCuts": [
+          0,
+          505,
+          1024
+        ],
+        "columnCuts": [
+          0,
+          534,
+          1000,
+          1536
+        ]
+      },
+      "standingReferenceCell": null,
+      "generator": "gpt-image"
+    },
+    "acting-side": {
+      "key": "vivi",
+      "sheet": "acting-side",
+      "image": {
+        "path": "tools/launcher-room/reserved-v3/sources/vivi/acting-side-02/source.png",
+        "sha256": "4d2a3abbbad83c3f30373e22039c1414575719b311f28ac76ed5fe3030e1d253",
+        "bytes": 1355921
+      },
+      "layout": {
+        "rowCuts": [
+          0,
+          343,
+          638,
+          921,
+          1254
+        ],
+        "columnCuts": [
+          0,
+          318,
+          622,
+          929,
+          1254
+        ]
+      },
+      "standingReferenceCell": null,
+      "generator": "gpt-image"
+    },
+    "acting-front": {
+      "key": "vivi",
+      "sheet": "acting-front",
+      "image": {
+        "path": "tools/launcher-room/reserved-v3/sources/vivi/acting-front-02/source.png",
+        "sha256": "ce94a1c37d86e004604f7ad0adc9b4fb06cee532b5472334e0b8cc1799da6389",
+        "bytes": 1307596
+      },
+      "layout": {
+        "rowCuts": [
+          0,
+          352,
+          662,
+          948,
+          1254
+        ],
+        "columnCuts": [
+          0,
+          330,
+          654,
+          962,
+          1254
+        ]
+      },
+      "standingReferenceCell": null,
+      "generator": "gpt-image"
+    },
+    "work": {
+      "key": "vivi",
+      "sheet": "work",
+      "image": {
+        "path": "tools/launcher-room/reserved-v3/sources/vivi/work-02/source.png",
+        "sha256": "774270ab38a30603f7e755b721bd746f80f4cb4142bf637080cb1cdb8200ebd9",
+        "bytes": 1807200
+      },
+      "layout": {
+        "rowCuts": [
+          0,
+          313,
+          624,
+          924,
+          1254
+        ],
+        "columnCuts": [
+          0,
+          350,
+          658,
+          947,
+          1254
+        ]
+      },
+      "standingReferenceCell": null,
+      "generator": "gpt-image"
+    },
+    "utility": {
+      "key": "vivi",
+      "sheet": "utility",
+      "image": {
+        "path": "tools/launcher-room/reserved-v3/sources/vivi/utility-02/source.png",
+        "sha256": "8a5aeac34466f78623c518546b45edd7c933780f778e1bedd5f683a1478c100b",
+        "bytes": 1725546
+      },
+      "layout": {
+        "rowCuts": [
+          0,
+          376,
+          694,
+          976,
+          1254
+        ],
+        "columnCuts": [
+          0,
+          333,
+          640,
+          967,
+          1254
+        ]
+      },
+      "standingReferenceCell": [
+        0,
+        0
+      ],
+      "generator": "gpt-image"
+    }
+  },
+  "sourceCalibration": {
+    "vivi-master": {
+      "frame": {
+        "key": "vivi",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "vivi-master",
+        "region": [
+          620,
+          623,
+          634,
+          631
+        ],
+        "sourceCell": [
+          1,
+          1
+        ]
+      },
+      "opaqueBounds": [
+        694,
+        636,
+        367,
+        593
+      ],
+      "sourceAnchor": [
+        878.8699987418219,
+        1229
+      ],
+      "standingHeight": 593
+    },
+    "vivi-walk-side": {
+      "frame": {
+        "key": "vivi",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "vivi-walk-side",
+        "region": [
+          547,
+          0,
+          446,
+          510
+        ],
+        "sourceCell": [
+          1,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        621,
+        45,
+        260,
+        447
+      ],
+      "sourceAnchor": [
+        761.6352309846011,
+        492
+      ],
+      "standingHeight": 447
+    },
+    "vivi-walk-front": {
+      "frame": {
+        "key": "vivi",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "vivi-walk-front",
+        "region": [
+          534,
+          0,
+          466,
+          505
+        ],
+        "sourceCell": [
+          1,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        634,
+        17,
+        267,
+        477
+      ],
+      "sourceAnchor": [
+        766.644385026738,
+        494
+      ],
+      "standingHeight": 477
+    },
+    "vivi-acting-side": {
+      "frame": {
+        "key": "vivi",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "vivi-acting-side",
+        "region": [
+          0,
+          0,
+          318,
+          343
+        ],
+        "sourceCell": [
+          0,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        119,
+        73,
+        124,
+        250
+      ],
+      "sourceAnchor": [
+        186.66005001562988,
+        323
+      ],
+      "standingHeight": 250
+    },
+    "vivi-acting-front": {
+      "frame": {
+        "key": "vivi",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "vivi-acting-front",
+        "region": [
+          0,
+          0,
+          330,
+          352
+        ],
+        "sourceCell": [
+          0,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        120,
+        78,
+        139,
+        247
+      ],
+      "sourceAnchor": [
+        189.42096555873064,
+        325
+      ],
+      "standingHeight": 247
+    },
+    "vivi-work": {
+      "frame": {
+        "key": "vivi",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "vivi-work",
+        "region": [
+          0,
+          0,
+          350,
+          313
+        ],
+        "sourceCell": [
+          0,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        102,
+        17,
+        208,
+        289
+      ],
+      "sourceAnchor": [
+        192.53536961496368,
+        306
+      ],
+      "standingHeight": 289
+    },
+    "vivi-utility": {
+      "frame": {
+        "key": "vivi",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "vivi-utility",
+        "region": [
+          0,
+          0,
+          333,
+          376
+        ],
+        "sourceCell": [
+          0,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        85,
+        63,
+        195,
+        290
+      ],
+      "sourceAnchor": [
+        191.973941970061,
+        353
+      ],
+      "standingHeight": 290
+    }
+  },
+  "items": [
+    {
+      "key": "vivi",
+      "kind": "portrait",
+      "direction": "south",
+      "cell": 256,
+      "columns": 1,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/portrait.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "idle",
+          "source": "vivi-master",
+          "region": [
+            620,
+            623,
+            634,
+            631
+          ],
+          "sourceCell": [
+            1,
+            1
+          ],
+          "index": 0,
+          "bounds": [
+            65,
+            23,
+            190,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            66,
+            24,
+            189,
+            224
+          ],
+          "rgbaSha256": "b5a1843904b8ce8ace43d2f6b3f172182f3ce445f0bd21b6cfc29d4a6a5150f1",
+          "wholeImageTransform": [
+            2.965,
+            0,
+            -192.65000125817812,
+            0,
+            2.965,
+            -69.15999999999997
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.0,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-master"
+      ],
+      "sha256": "403592d2278271d9db996a2238db68aed3de3ba4e76e3c4c66347229cb2841fd",
+      "bytes": 35998
+    },
+    {
+      "key": "vivi",
+      "kind": "walk",
+      "direction": "east",
+      "cell": 384,
+      "columns": 4,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/walk/east.webp",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "step-a",
+          "source": "vivi-walk-side",
+          "region": [
+            0,
+            0,
+            547,
+            510
+          ],
+          "sourceCell": [
+            0,
+            0
+          ],
+          "index": 0,
+          "bounds": [
+            72,
+            31,
+            281,
+            336
+          ],
+          "opaqueBoundsAtOutput": [
+            73,
+            33,
+            280,
+            336
+          ],
+          "rgbaSha256": "c8be7e881d15e0d169b581c3b670058bb2c1fdefaf25554566e9b8561b338e33",
+          "wholeImageTransform": [
+            1.49,
+            0,
+            -106.06811933468276,
+            0,
+            1.49,
+            -46.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.3266219239373602,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "neutral",
+          "source": "vivi-walk-side",
+          "region": [
+            547,
+            0,
+            446,
+            510
+          ],
+          "sourceCell": [
+            1,
+            0
+          ],
+          "index": 1,
+          "bounds": [
+            97,
+            35,
+            273,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            98,
+            36,
+            272,
+            336
+          ],
+          "rgbaSha256": "38b81646ba05db35734a9ab0de91183fe7a759f3fc7b53a014563093362e84c8",
+          "wholeImageTransform": [
+            1.49,
+            0,
+            -143.4447690153989,
+            0,
+            1.49,
+            -51.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.3266219239373602,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "step-c",
+          "source": "vivi-walk-side",
+          "region": [
+            993,
+            0,
+            543,
+            510
+          ],
+          "sourceCell": [
+            2,
+            0
+          ],
+          "index": 2,
+          "bounds": [
+            81,
+            34,
+            286,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            82,
+            35,
+            286,
+            336
+          ],
+          "rgbaSha256": "bc1402229c1900ab4c2628774fe85a08c5c1183e1444f3bd8c669827fda7615e",
+          "wholeImageTransform": [
+            1.49,
+            0,
+            -120.12068187053666,
+            0,
+            1.49,
+            -50.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.3266219239373602,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "neutral",
+          "source": "vivi-walk-side",
+          "region": [
+            547,
+            0,
+            446,
+            510
+          ],
+          "sourceCell": [
+            1,
+            0
+          ],
+          "index": 3,
+          "bounds": [
+            97,
+            35,
+            273,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            98,
+            36,
+            272,
+            336
+          ],
+          "rgbaSha256": "38b81646ba05db35734a9ab0de91183fe7a759f3fc7b53a014563093362e84c8",
+          "wholeImageTransform": [
+            1.49,
+            0,
+            -143.4447690153989,
+            0,
+            1.49,
+            -51.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.3266219239373602,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-walk-side"
+      ],
+      "sha256": "2af437121d8220f9d32a4ee5bb36e289957582e3805bdcfbc5f2de215847eaed",
+      "bytes": 241822
+    },
+    {
+      "key": "vivi",
+      "kind": "acting",
+      "direction": "east",
+      "cell": 256,
+      "columns": 8,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/acting/east.webp",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "idle",
+          "source": "vivi-acting-side",
+          "region": [
+            0,
+            0,
+            318,
+            343
+          ],
+          "sourceCell": [
+            0,
+            0
+          ],
+          "index": 0,
+          "bounds": [
+            73,
+            22,
+            174,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            74,
+            24,
+            173,
+            224
+          ],
+          "rgbaSha256": "ae894d66b3df06ac681b625196164eadfdd66b4f1672b903496904515f0c00aa",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -91.33994998437012,
+            0,
+            1.25,
+            -28.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "talk_happy",
+          "source": "vivi-acting-side",
+          "region": [
+            318,
+            0,
+            304,
+            343
+          ],
+          "sourceCell": [
+            1,
+            0
+          ],
+          "index": 1,
+          "bounds": [
+            67,
+            22,
+            208,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            68,
+            23,
+            207,
+            224
+          ],
+          "rgbaSha256": "891ebe594aca02bd2a414e36f12bc1c85f94fd8d2326083e3ddc5fcdbbb6d326",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -82.06701479547434,
+            0,
+            1.25,
+            -27.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "talk_annoyed",
+          "source": "vivi-acting-side",
+          "region": [
+            622,
+            0,
+            307,
+            343
+          ],
+          "sourceCell": [
+            2,
+            0
+          ],
+          "index": 2,
+          "bounds": [
+            54,
+            25,
+            207,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            56,
+            26,
+            206,
+            224
+          ],
+          "rgbaSha256": "022b06b6cff1ec51b3126d9c34dd20e680d9ad04a444280a32f8f0d59da9e26d",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -68.10324005891016,
+            0,
+            1.25,
+            -31.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "surprised",
+          "source": "vivi-acting-side",
+          "region": [
+            929,
+            0,
+            325,
+            343
+          ],
+          "sourceCell": [
+            3,
+            0
+          ],
+          "index": 3,
+          "bounds": [
+            72,
+            19,
+            203,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            73,
+            21,
+            202,
+            224
+          ],
+          "rgbaSha256": "8cb979a4a91e58a5b068b14987bf3b5a35e2efaf3d219008aae5b28375d9752e",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -90.04465709728856,
+            0,
+            1.25,
+            -24.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "focused_use",
+          "source": "vivi-acting-side",
+          "region": [
+            0,
+            343,
+            318,
+            295
+          ],
+          "sourceCell": [
+            0,
+            1
+          ],
+          "index": 4,
+          "bounds": [
+            72,
+            24,
+            184,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            73,
+            25,
+            184,
+            224
+          ],
+          "rgbaSha256": "5797319f525770b10f27a6cc631392f1fffcea5a9df5d5dca1e3e182c265388e",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -90.44361907591741,
+            0,
+            1.25,
+            -30.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "sit",
+          "source": "vivi-acting-side",
+          "region": [
+            318,
+            343,
+            304,
+            295
+          ],
+          "sourceCell": [
+            1,
+            1
+          ],
+          "index": 5,
+          "bounds": [
+            61,
+            34,
+            196,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            61,
+            36,
+            195,
+            224
+          ],
+          "rgbaSha256": "2021a728e93080ee81901a211c38ba27757c862faecb1fe83d25ad339d0319c4",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -74.5,
+            0,
+            1.25,
+            -43.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "wave",
+          "source": "vivi-acting-side",
+          "region": [
+            622,
+            343,
+            307,
+            295
+          ],
+          "sourceCell": [
+            2,
+            1
+          ],
+          "index": 6,
+          "bounds": [
+            67,
+            15,
+            195,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            67,
+            16,
+            194,
+            224
+          ],
+          "rgbaSha256": "e7ba2f190bc84e8726e51ef6da12edd649179f27de823e1861350236aa54d184",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -83.21416288885416,
+            0,
+            1.25,
+            -19.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "listen",
+          "source": "vivi-acting-side",
+          "region": [
+            929,
+            343,
+            325,
+            295
+          ],
+          "sourceCell": [
+            3,
+            1
+          ],
+          "index": 7,
+          "bounds": [
+            72,
+            22,
+            189,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            73,
+            23,
+            188,
+            224
+          ],
+          "rgbaSha256": "c166086981ef0ac34707922cc8bb3214bb828d4c298a3b20285703630390f8fa",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -90.01541749351236,
+            0,
+            1.25,
+            -28.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-acting-side"
+      ],
+      "sha256": "4c31b538362f50edece9d8d87716d4dfe4facd6e86c7d5626f4fabed6ee5156c",
+      "bytes": 301600
+    },
+    {
+      "key": "vivi",
+      "kind": "life",
+      "action": "work",
+      "direction": "east",
+      "cell": 256,
+      "columns": 4,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/work-east.webp",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            0,
+            0,
+            350,
+            313
+          ],
+          "sourceCell": [
+            0,
+            0
+          ],
+          "index": 0,
+          "bounds": [
+            65,
+            23,
+            211,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            66,
+            24,
+            209,
+            224
+          ],
+          "rgbaSha256": "613e555c3e38ae7f59fabfb31c4336ba8fa3f720fb49ab0af446d95ff91ce00f",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -92.4246303850363,
+            0,
+            1.4449999999999998,
+            -32.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            350,
+            0,
+            308,
+            313
+          ],
+          "sourceCell": [
+            1,
+            0
+          ],
+          "index": 1,
+          "bounds": [
+            65,
+            23,
+            216,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            66,
+            24,
+            215,
+            224
+          ],
+          "rgbaSha256": "3bad02a44aa05feae2ca57ae927ca35d1528d937af39aec4ee4816ba525af481",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -93.0522818791946,
+            0,
+            1.4449999999999998,
+            -32.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            658,
+            0,
+            289,
+            313
+          ],
+          "sourceCell": [
+            2,
+            0
+          ],
+          "index": 2,
+          "bounds": [
+            67,
+            23,
+            200,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            68,
+            24,
+            199,
+            224
+          ],
+          "rgbaSha256": "79bdc5ac1afd336505e6c70e1eff12082694d0f322c542f89af00ab203a5f732",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -96.66702802967842,
+            0,
+            1.4449999999999998,
+            -33.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "east",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            947,
+            0,
+            307,
+            313
+          ],
+          "sourceCell": [
+            3,
+            0
+          ],
+          "index": 3,
+          "bounds": [
+            62,
+            22,
+            221,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            63,
+            23,
+            220,
+            224
+          ],
+          "rgbaSha256": "a603960f5e9b5087b70ff65201b7693737dda01add98167801ab33e17b525ff0",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -89.644507320934,
+            0,
+            1.4449999999999998,
+            -31.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-work"
+      ],
+      "sha256": "6aa3a2b9bcf89202b810aaa74060eb8d6788298adc37a792554c5dc6f70cfc85",
+      "bytes": 162772
+    },
+    {
+      "key": "vivi",
+      "kind": "walk",
+      "direction": "west",
+      "cell": 384,
+      "columns": 4,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/walk/west.webp",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "step-a",
+          "source": "vivi-walk-side",
+          "region": [
+            0,
+            510,
+            547,
+            514
+          ],
+          "sourceCell": [
+            0,
+            1
+          ],
+          "index": 0,
+          "bounds": [
+            93,
+            36,
+            307,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            94,
+            37,
+            305,
+            336
+          ],
+          "rgbaSha256": "cfbf7fe562fa45cf085c1576826dc5baa7e163cad97c86bbecc3b4a539bff64a",
+          "wholeImageTransform": [
+            1.49,
+            0,
+            -137.3121908290875,
+            0,
+            1.49,
+            -53.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.3266219239373602,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "neutral",
+          "source": "vivi-walk-side",
+          "region": [
+            547,
+            510,
+            446,
+            514
+          ],
+          "sourceCell": [
+            1,
+            1
+          ],
+          "index": 1,
+          "bounds": [
+            104,
+            35,
+            292,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            105,
+            36,
+            290,
+            336
+          ],
+          "rgbaSha256": "5e0b52b3518c6bd5bdf6d8c95d1eeaa78e519e0c5c73e74dbb3fc3c86215b60e",
+          "wholeImageTransform": [
+            1.49,
+            0,
+            -155.57242597592784,
+            0,
+            1.49,
+            -51.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.3266219239373602,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "step-c",
+          "source": "vivi-walk-side",
+          "region": [
+            993,
+            510,
+            543,
+            514
+          ],
+          "sourceCell": [
+            2,
+            1
+          ],
+          "index": 2,
+          "bounds": [
+            98,
+            35,
+            310,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            99,
+            36,
+            308,
+            336
+          ],
+          "rgbaSha256": "3c0a36cc6261dadfab4a49d7caf0fac440488a6fb2b6c0c5a59975e75879bd84",
+          "wholeImageTransform": [
+            1.49,
+            0,
+            -145.51878362573103,
+            0,
+            1.49,
+            -51.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.3266219239373602,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "neutral",
+          "source": "vivi-walk-side",
+          "region": [
+            547,
+            510,
+            446,
+            514
+          ],
+          "sourceCell": [
+            1,
+            1
+          ],
+          "index": 3,
+          "bounds": [
+            104,
+            35,
+            292,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            105,
+            36,
+            290,
+            336
+          ],
+          "rgbaSha256": "5e0b52b3518c6bd5bdf6d8c95d1eeaa78e519e0c5c73e74dbb3fc3c86215b60e",
+          "wholeImageTransform": [
+            1.49,
+            0,
+            -155.57242597592784,
+            0,
+            1.49,
+            -51.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.3266219239373602,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-walk-side"
+      ],
+      "sha256": "c87b3de0ed69463636ee496645d1cee91e7b8aa975f7f748ec0d4368451d6afc",
+      "bytes": 241326
+    },
+    {
+      "key": "vivi",
+      "kind": "acting",
+      "direction": "west",
+      "cell": 256,
+      "columns": 8,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/acting/west.webp",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "idle",
+          "source": "vivi-acting-side",
+          "region": [
+            0,
+            638,
+            318,
+            283
+          ],
+          "sourceCell": [
+            0,
+            2
+          ],
+          "index": 0,
+          "bounds": [
+            81,
+            23,
+            191,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            82,
+            24,
+            190,
+            224
+          ],
+          "rgbaSha256": "8c2503dac14b7cd1fac9ca5bb18a77472a3ac33c943ef448ea514367d0435638",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -101.52340488968395,
+            0,
+            1.25,
+            -29.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "talk_happy",
+          "source": "vivi-acting-side",
+          "region": [
+            318,
+            638,
+            304,
+            283
+          ],
+          "sourceCell": [
+            1,
+            2
+          ],
+          "index": 1,
+          "bounds": [
+            44,
+            22,
+            194,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            45,
+            24,
+            192,
+            224
+          ],
+          "rgbaSha256": "fc8d66f2425a4167f1cc9e09d36672f1f955bd138a743ab4daf758f1ef70bd99",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -54.89900525006908,
+            0,
+            1.25,
+            -28.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "talk_annoyed",
+          "source": "vivi-acting-side",
+          "region": [
+            622,
+            638,
+            307,
+            283
+          ],
+          "sourceCell": [
+            2,
+            2
+          ],
+          "index": 2,
+          "bounds": [
+            48,
+            29,
+            205,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            50,
+            30,
+            204,
+            224
+          ],
+          "rgbaSha256": "c1b498638623b544fac000d60d1415922f52412c07af0374bb863ef6e66b0a3a",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -60.2209139332773,
+            0,
+            1.25,
+            -36.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "surprised",
+          "source": "vivi-acting-side",
+          "region": [
+            929,
+            638,
+            325,
+            283
+          ],
+          "sourceCell": [
+            3,
+            2
+          ],
+          "index": 3,
+          "bounds": [
+            48,
+            18,
+            184,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            49,
+            20,
+            182,
+            224
+          ],
+          "rgbaSha256": "ddc2e1fdfe1dacdd307f701fd6ca4d9f5516fc18e562bc79eff3c062d6bff398",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -59.755227710070585,
+            0,
+            1.25,
+            -23.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "focused_use",
+          "source": "vivi-acting-side",
+          "region": [
+            0,
+            921,
+            318,
+            333
+          ],
+          "sourceCell": [
+            0,
+            3
+          ],
+          "index": 4,
+          "bounds": [
+            73,
+            27,
+            188,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            73,
+            28,
+            187,
+            224
+          ],
+          "rgbaSha256": "fa5e3e43c63259f1e2ebc5e18a002f6b48c1d8ebfc7c7fdfd45cb10079d10922",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -90.85262257696695,
+            0,
+            1.25,
+            -34.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "sit",
+          "source": "vivi-acting-side",
+          "region": [
+            318,
+            921,
+            304,
+            333
+          ],
+          "sourceCell": [
+            1,
+            3
+          ],
+          "index": 5,
+          "bounds": [
+            57,
+            35,
+            200,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            58,
+            37,
+            198,
+            224
+          ],
+          "rgbaSha256": "526ed3d3180bc92468951f1c516e998a361c0126777a9885a6cf3282b2c2d1f8",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -71.5,
+            0,
+            1.25,
+            -44.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "wave",
+          "source": "vivi-acting-side",
+          "region": [
+            622,
+            921,
+            307,
+            333
+          ],
+          "sourceCell": [
+            2,
+            3
+          ],
+          "index": 6,
+          "bounds": [
+            64,
+            13,
+            195,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            66,
+            14,
+            194,
+            224
+          ],
+          "rgbaSha256": "48839ccbd1ccc6ee0d9f3969fd1129c8f04096b72fc163185bed4b1431bf151f",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -80.04618069539538,
+            0,
+            1.25,
+            -16.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "listen",
+          "source": "vivi-acting-side",
+          "region": [
+            929,
+            921,
+            325,
+            333
+          ],
+          "sourceCell": [
+            3,
+            3
+          ],
+          "index": 7,
+          "bounds": [
+            64,
+            20,
+            187,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            65,
+            21,
+            186,
+            224
+          ],
+          "rgbaSha256": "18dfd984e9e14177ae36b2654aad6d87fe0eb9dcd0bed1cb5d416132456724a7",
+          "wholeImageTransform": [
+            1.25,
+            0,
+            -80.22899553249749,
+            0,
+            1.25,
+            -25.0
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.372,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-acting-side"
+      ],
+      "sha256": "c8f568f07c4da34613af51e308f31bc11fd5f3282a157148cf3c39548cfc91b2",
+      "bytes": 314156
+    },
+    {
+      "key": "vivi",
+      "kind": "life",
+      "action": "work",
+      "direction": "west",
+      "cell": 256,
+      "columns": 4,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/work-west.webp",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            0,
+            313,
+            350,
+            311
+          ],
+          "sourceCell": [
+            0,
+            1
+          ],
+          "index": 0,
+          "bounds": [
+            51,
+            25,
+            193,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            52,
+            26,
+            192,
+            224
+          ],
+          "rgbaSha256": "5d1bd911a6243e894fc780405e05cb286003065281d894487e3ea928c67cefeb",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -73.28567554844176,
+            0,
+            1.4449999999999998,
+            -35.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            350,
+            313,
+            308,
+            311
+          ],
+          "sourceCell": [
+            1,
+            1
+          ],
+          "index": 1,
+          "bounds": [
+            58,
+            17,
+            193,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            59,
+            18,
+            191,
+            224
+          ],
+          "rgbaSha256": "4bde3a563dbcf3e28f0d3d8c570dca580cb449a742d0c4e012913b789b330197",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -83.47276454398781,
+            0,
+            1.4449999999999998,
+            -24.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            658,
+            313,
+            289,
+            311
+          ],
+          "sourceCell": [
+            2,
+            1
+          ],
+          "index": 2,
+          "bounds": [
+            58,
+            23,
+            192,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            60,
+            25,
+            191,
+            224
+          ],
+          "rgbaSha256": "3bad218a89146511aa893c135c7906b6747d29bfa61004b4c14f64fd2869f31c",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -84.41855324433408,
+            0,
+            1.4449999999999998,
+            -33.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "west",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            947,
+            313,
+            307,
+            311
+          ],
+          "sourceCell": [
+            3,
+            1
+          ],
+          "index": 3,
+          "bounds": [
+            44,
+            21,
+            198,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            45,
+            22,
+            197,
+            224
+          ],
+          "rgbaSha256": "00560374710bf11db75e7c14a6b0a486dfbd746aff4af231f9b2c80d9ff17051",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -64.1663724057293,
+            0,
+            1.4449999999999998,
+            -30.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-work"
+      ],
+      "sha256": "48b74730220c75c66c920a8f4db999fbf550a27651389bc6ef79634c9487eb32",
+      "bytes": 161274
+    },
+    {
+      "key": "vivi",
+      "kind": "walk",
+      "direction": "north",
+      "cell": 384,
+      "columns": 4,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/walk/north.webp",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "step-a",
+          "source": "vivi-walk-front",
+          "region": [
+            0,
+            0,
+            534,
+            505
+          ],
+          "sourceCell": [
+            0,
+            0
+          ],
+          "index": 0,
+          "bounds": [
+            82,
+            35,
+            271,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            83,
+            36,
+            270,
+            336
+          ],
+          "rgbaSha256": "e01afb2714fb192c4cc2c2a886958ecc51250b24b6f3e0477cf4d3524285ac11",
+          "wholeImageTransform": [
+            1.5899999999999999,
+            0,
+            -130.32843094788257,
+            0,
+            1.5899999999999999,
+            -55.239999999999895
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.2431865828092243,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "neutral",
+          "source": "vivi-walk-front",
+          "region": [
+            534,
+            0,
+            466,
+            505
+          ],
+          "sourceCell": [
+            1,
+            0
+          ],
+          "index": 1,
+          "bounds": [
+            107,
+            35,
+            277,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            108,
+            36,
+            276,
+            336
+          ],
+          "rgbaSha256": "e82cc821e6df1f52e15a3787a74b85066ca835975a4b0dba89931ae1d539fcef",
+          "wholeImageTransform": [
+            1.5899999999999999,
+            0,
+            -170.63561497326202,
+            0,
+            1.5899999999999999,
+            -55.239999999999895
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.2431865828092243,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "step-c",
+          "source": "vivi-walk-front",
+          "region": [
+            1000,
+            0,
+            536,
+            505
+          ],
+          "sourceCell": [
+            2,
+            0
+          ],
+          "index": 2,
+          "bounds": [
+            109,
+            34,
+            297,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            109,
+            34,
+            296,
+            336
+          ],
+          "rgbaSha256": "9701b3d96035bdeaff912a8a039507e4d7c86ae5e2fbd3b510f26147cb5eeadf",
+          "wholeImageTransform": [
+            1.5899999999999999,
+            0,
+            -171.20050837124222,
+            0,
+            1.5899999999999999,
+            -52.239999999999895
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.2431865828092243,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "neutral",
+          "source": "vivi-walk-front",
+          "region": [
+            534,
+            0,
+            466,
+            505
+          ],
+          "sourceCell": [
+            1,
+            0
+          ],
+          "index": 3,
+          "bounds": [
+            107,
+            35,
+            277,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            108,
+            36,
+            276,
+            336
+          ],
+          "rgbaSha256": "e82cc821e6df1f52e15a3787a74b85066ca835975a4b0dba89931ae1d539fcef",
+          "wholeImageTransform": [
+            1.5899999999999999,
+            0,
+            -170.63561497326202,
+            0,
+            1.5899999999999999,
+            -55.239999999999895
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.2431865828092243,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-walk-front"
+      ],
+      "sha256": "48ff5edf9b4f5dc72c82049153ea69a100079fb769ec5a94a71c89604011f5e9",
+      "bytes": 203634
+    },
+    {
+      "key": "vivi",
+      "kind": "acting",
+      "direction": "north",
+      "cell": 256,
+      "columns": 8,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/acting/north.webp",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "idle",
+          "source": "vivi-acting-front",
+          "region": [
+            0,
+            0,
+            330,
+            352
+          ],
+          "sourceCell": [
+            0,
+            0
+          ],
+          "index": 0,
+          "bounds": [
+            71,
+            22,
+            185,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            72,
+            24,
+            184,
+            224
+          ],
+          "rgbaSha256": "e0446bf18bd0e65b4f6bf98ef818f58f945054a4c229a9e75c7418415d021dd3",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -86.65903444126934,
+            0,
+            1.2349999999999999,
+            -27.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "talk_happy",
+          "source": "vivi-acting-front",
+          "region": [
+            330,
+            0,
+            324,
+            352
+          ],
+          "sourceCell": [
+            1,
+            0
+          ],
+          "index": 1,
+          "bounds": [
+            69,
+            22,
+            210,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            70,
+            24,
+            209,
+            224
+          ],
+          "rgbaSha256": "d2bcabf5371730ca11a6a4ca37e3673f902e64014d95d91d42452c0c32bf4c83",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -84.75841601392511,
+            0,
+            1.2349999999999999,
+            -27.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "talk_annoyed",
+          "source": "vivi-acting-front",
+          "region": [
+            654,
+            0,
+            308,
+            352
+          ],
+          "sourceCell": [
+            2,
+            0
+          ],
+          "index": 2,
+          "bounds": [
+            66,
+            22,
+            213,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            67,
+            24,
+            211,
+            224
+          ],
+          "rgbaSha256": "1253a486f29f31df1e94e10c2f3608b3d177eb0bd5c84a6c864fe5c423e3f516",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -81.56842134990114,
+            0,
+            1.2349999999999999,
+            -27.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "surprised",
+          "source": "vivi-acting-front",
+          "region": [
+            962,
+            0,
+            292,
+            352
+          ],
+          "sourceCell": [
+            3,
+            0
+          ],
+          "index": 3,
+          "bounds": [
+            71,
+            24,
+            213,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            72,
+            25,
+            212,
+            224
+          ],
+          "rgbaSha256": "58993b91be020e16ac27499e9332762f86fca7779ce88f31cd09441872e0b3df",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -87.18913533324286,
+            0,
+            1.2349999999999999,
+            -29.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "focused_use",
+          "source": "vivi-acting-front",
+          "region": [
+            0,
+            352,
+            330,
+            310
+          ],
+          "sourceCell": [
+            0,
+            1
+          ],
+          "index": 4,
+          "bounds": [
+            60,
+            33,
+            177,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            61,
+            34,
+            176,
+            224
+          ],
+          "rgbaSha256": "5260eab24f20d02f50da79101cc71d17aebc6002dd38f525a9f732927c9f6bdd",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -73.33394636015322,
+            0,
+            1.2349999999999999,
+            -40.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "sit",
+          "source": "vivi-acting-front",
+          "region": [
+            330,
+            352,
+            324,
+            310
+          ],
+          "sourceCell": [
+            1,
+            1
+          ],
+          "index": 5,
+          "bounds": [
+            47,
+            64,
+            209,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            48,
+            66,
+            207,
+            224
+          ],
+          "rgbaSha256": "d3d02282cf940d2ac840fea5b30356a18fb56f0352c9ab240ee427bd21d76eb0",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -58.079999999999984,
+            0,
+            1.2349999999999999,
+            -79.63999999999999
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "wave",
+          "source": "vivi-acting-front",
+          "region": [
+            654,
+            352,
+            308,
+            310
+          ],
+          "sourceCell": [
+            2,
+            1
+          ],
+          "index": 6,
+          "bounds": [
+            65,
+            14,
+            201,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            66,
+            15,
+            200,
+            224
+          ],
+          "rgbaSha256": "88ccfddbabc36dff9223a078715e151b6b17bfa95765037434d305753f269fa7",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -79.8235769102435,
+            0,
+            1.2349999999999999,
+            -17.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "listen",
+          "source": "vivi-acting-front",
+          "region": [
+            962,
+            352,
+            292,
+            310
+          ],
+          "sourceCell": [
+            3,
+            1
+          ],
+          "index": 7,
+          "bounds": [
+            72,
+            36,
+            187,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            73,
+            37,
+            187,
+            224
+          ],
+          "rgbaSha256": "0adad9108f06339b9ddbce29930dd83eaf6f6d8ab77997c1400d056dc2280bf5",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -88.11932846261453,
+            0,
+            1.2349999999999999,
+            -44.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-acting-front"
+      ],
+      "sha256": "74fe78e46329f09d62b6af17afd7cd91c98e14c846b4486237f1d6998314b377",
+      "bytes": 285822
+    },
+    {
+      "key": "vivi",
+      "kind": "life",
+      "action": "work",
+      "direction": "north",
+      "cell": 256,
+      "columns": 4,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/work-north.webp",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            0,
+            624,
+            350,
+            300
+          ],
+          "sourceCell": [
+            0,
+            2
+          ],
+          "index": 0,
+          "bounds": [
+            66,
+            22,
+            194,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            67,
+            23,
+            193,
+            224
+          ],
+          "rgbaSha256": "6c6954860c557817297b6f7134426155d1e6834ca802d663df478861528f1fb8",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -94.47896263245954,
+            0,
+            1.4449999999999998,
+            -31.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            350,
+            624,
+            308,
+            300
+          ],
+          "sourceCell": [
+            1,
+            2
+          ],
+          "index": 1,
+          "bounds": [
+            67,
+            27,
+            198,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            68,
+            28,
+            198,
+            224
+          ],
+          "rgbaSha256": "01f42f58d4f517767ee733ef0870fd3ca1373c0f6c17ce398af48e5f4a18e9f8",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -96.22551949466344,
+            0,
+            1.4449999999999998,
+            -38.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            658,
+            624,
+            289,
+            300
+          ],
+          "sourceCell": [
+            2,
+            2
+          ],
+          "index": 2,
+          "bounds": [
+            62,
+            27,
+            195,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            63,
+            28,
+            194,
+            224
+          ],
+          "rgbaSha256": "df89d649932f6107620392f0b9d330c8f872464e5a9bf9d04ff461695399471c",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -87.93420543528322,
+            0,
+            1.4449999999999998,
+            -38.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "north",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            947,
+            624,
+            307,
+            300
+          ],
+          "sourceCell": [
+            3,
+            2
+          ],
+          "index": 3,
+          "bounds": [
+            63,
+            27,
+            208,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            63,
+            28,
+            206,
+            224
+          ],
+          "rgbaSha256": "df88c71fa11c9dfdf2d44996356565fd164b856641ac7b8f91d995f2decb8f4a",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -89.92660697355944,
+            0,
+            1.4449999999999998,
+            -38.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-work"
+      ],
+      "sha256": "a31314ed0b57c7f3d2360f24c89e6dcd2eb2623416acbea52e1a34952bed0689",
+      "bytes": 143432
+    },
+    {
+      "key": "vivi",
+      "kind": "walk",
+      "direction": "south",
+      "cell": 384,
+      "columns": 4,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/walk/south.webp",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "step-a",
+          "source": "vivi-walk-front",
+          "region": [
+            0,
+            505,
+            534,
+            519
+          ],
+          "sourceCell": [
+            0,
+            1
+          ],
+          "index": 0,
+          "bounds": [
+            93,
+            31,
+            289,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            94,
+            32,
+            288,
+            336
+          ],
+          "rgbaSha256": "2c671ac4c25dbf0918eeb46aa16e3fefca3061728b61216cefdbc7676f33f874",
+          "wholeImageTransform": [
+            1.5899999999999999,
+            0,
+            -147.45919292242206,
+            0,
+            1.5899999999999999,
+            -49.239999999999895
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.2431865828092243,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "neutral",
+          "source": "vivi-walk-front",
+          "region": [
+            534,
+            505,
+            466,
+            519
+          ],
+          "sourceCell": [
+            1,
+            1
+          ],
+          "index": 1,
+          "bounds": [
+            95,
+            28,
+            293,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            96,
+            29,
+            292,
+            336
+          ],
+          "rgbaSha256": "ad2baac0b0526f658d09e033e4a1030140e659a921fc73833137c503dbb4907c",
+          "wholeImageTransform": [
+            1.5899999999999999,
+            0,
+            -149.95165030349938,
+            0,
+            1.5899999999999999,
+            -45.239999999999895
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.2431865828092243,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "step-c",
+          "source": "vivi-walk-front",
+          "region": [
+            1000,
+            505,
+            536,
+            519
+          ],
+          "sourceCell": [
+            2,
+            1
+          ],
+          "index": 2,
+          "bounds": [
+            93,
+            30,
+            310,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            95,
+            31,
+            309,
+            336
+          ],
+          "rgbaSha256": "28d87377ae25fc366515e18b27e73f6d81d32f955c06352da30acc5ad713b178",
+          "wholeImageTransform": [
+            1.5899999999999999,
+            0,
+            -148.59111286628217,
+            0,
+            1.5899999999999999,
+            -47.239999999999895
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.2431865828092243,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "neutral",
+          "source": "vivi-walk-front",
+          "region": [
+            534,
+            505,
+            466,
+            519
+          ],
+          "sourceCell": [
+            1,
+            1
+          ],
+          "index": 3,
+          "bounds": [
+            95,
+            28,
+            293,
+            337
+          ],
+          "opaqueBoundsAtOutput": [
+            96,
+            29,
+            292,
+            336
+          ],
+          "rgbaSha256": "ad2baac0b0526f658d09e033e4a1030140e659a921fc73833137c503dbb4907c",
+          "wholeImageTransform": [
+            1.5899999999999999,
+            0,
+            -149.95165030349938,
+            0,
+            1.5899999999999999,
+            -45.239999999999895
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 1.2431865828092243,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-walk-front"
+      ],
+      "sha256": "53553ac2160257253a42e70ccf0ab19169ca43e13fd6061cb50209c897f773aa",
+      "bytes": 250750
+    },
+    {
+      "key": "vivi",
+      "kind": "acting",
+      "direction": "south",
+      "cell": 256,
+      "columns": 8,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/acting/south.webp",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "idle",
+          "source": "vivi-acting-front",
+          "region": [
+            0,
+            662,
+            330,
+            286
+          ],
+          "sourceCell": [
+            0,
+            2
+          ],
+          "index": 0,
+          "bounds": [
+            60,
+            23,
+            195,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            61,
+            25,
+            194,
+            224
+          ],
+          "rgbaSha256": "8da5fecdcdbc7ec3dfd6f3155fb94ba901a81ecf39748d5b17de0c4a945d34ea",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -73.99738007881504,
+            0,
+            1.2349999999999999,
+            -28.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "talk_happy",
+          "source": "vivi-acting-front",
+          "region": [
+            330,
+            662,
+            324,
+            286
+          ],
+          "sourceCell": [
+            1,
+            2
+          ],
+          "index": 1,
+          "bounds": [
+            67,
+            25,
+            221,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            68,
+            26,
+            220,
+            224
+          ],
+          "rgbaSha256": "cebe35dacb7e35ea06ee88a56736b5cc83fbd138da1a1544109afd027b5a6b1c",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -82.5497187141217,
+            0,
+            1.2349999999999999,
+            -30.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "talk_annoyed",
+          "source": "vivi-acting-front",
+          "region": [
+            654,
+            662,
+            308,
+            286
+          ],
+          "sourceCell": [
+            2,
+            2
+          ],
+          "index": 2,
+          "bounds": [
+            42,
+            23,
+            200,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            43,
+            25,
+            199,
+            224
+          ],
+          "rgbaSha256": "3f5968544645fbed1cea870b5cc27f813e42856602b333290a434b6db859442e",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -51.44477078681206,
+            0,
+            1.2349999999999999,
+            -28.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "surprised",
+          "source": "vivi-acting-front",
+          "region": [
+            962,
+            662,
+            292,
+            286
+          ],
+          "sourceCell": [
+            3,
+            2
+          ],
+          "index": 3,
+          "bounds": [
+            59,
+            25,
+            196,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            60,
+            27,
+            195,
+            224
+          ],
+          "rgbaSha256": "fd1a7a8becd0a89c4b25d37e8924ccde32d09ad0c8ee21ce73f5ef65011993d0",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -72.57075520833342,
+            0,
+            1.2349999999999999,
+            -30.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "focused_use",
+          "source": "vivi-acting-front",
+          "region": [
+            0,
+            948,
+            330,
+            306
+          ],
+          "sourceCell": [
+            0,
+            3
+          ],
+          "index": 4,
+          "bounds": [
+            71,
+            36,
+            194,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            72,
+            37,
+            193,
+            224
+          ],
+          "rgbaSha256": "7659dfe2d98cff156fc8bba95046be1c53056509c8b53d5b543b22ae7a398c57",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -86.59223652567547,
+            0,
+            1.2349999999999999,
+            -44.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "sit",
+          "source": "vivi-acting-front",
+          "region": [
+            330,
+            948,
+            324,
+            306
+          ],
+          "sourceCell": [
+            1,
+            3
+          ],
+          "index": 5,
+          "bounds": [
+            47,
+            62,
+            209,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            48,
+            63,
+            207,
+            224
+          ],
+          "rgbaSha256": "67eb178db3f74de1a3d8078b2c58c8ddbbe0f30cd4eca2bb276609478cbf3bf6",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -57.579999999999984,
+            0,
+            1.2349999999999999,
+            -76.63999999999999
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "wave",
+          "source": "vivi-acting-front",
+          "region": [
+            654,
+            948,
+            308,
+            306
+          ],
+          "sourceCell": [
+            2,
+            3
+          ],
+          "index": 6,
+          "bounds": [
+            65,
+            22,
+            200,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            66,
+            23,
+            200,
+            224
+          ],
+          "rgbaSha256": "b6ef31183fcefb7effc953405e061c975b02faa0f0600a92fbabc98621ecfdae",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -80.31934469898778,
+            0,
+            1.2349999999999999,
+            -26.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "listen",
+          "source": "vivi-acting-front",
+          "region": [
+            962,
+            948,
+            292,
+            306
+          ],
+          "sourceCell": [
+            3,
+            3
+          ],
+          "index": 7,
+          "bounds": [
+            56,
+            32,
+            196,
+            226
+          ],
+          "opaqueBoundsAtOutput": [
+            57,
+            33,
+            195,
+            224
+          ],
+          "rgbaSha256": "be98803ae1da3f07d271eb8cf70bdb9704f52bd578f2a06fd450eee13d70c41c",
+          "wholeImageTransform": [
+            1.2349999999999999,
+            0,
+            -68.91837970540092,
+            0,
+            1.2349999999999999,
+            -39.639999999999986
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.4008097165991904,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-acting-front"
+      ],
+      "sha256": "17f22e300d8fb98219c28cb97d1f8f60859f43616910bf2c920faa070867010e",
+      "bytes": 332686
+    },
+    {
+      "key": "vivi",
+      "kind": "life",
+      "action": "work",
+      "direction": "south",
+      "cell": 256,
+      "columns": 4,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/work-south.webp",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            0,
+            924,
+            350,
+            330
+          ],
+          "sourceCell": [
+            0,
+            3
+          ],
+          "index": 0,
+          "bounds": [
+            61,
+            16,
+            199,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            63,
+            18,
+            198,
+            224
+          ],
+          "rgbaSha256": "9b464d63898447da2a55b65ce3a57b68fa1abdb12bca59f8cf2617a815bf7e3e",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -88.68576566451247,
+            0,
+            1.4449999999999998,
+            -23.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            350,
+            924,
+            308,
+            330
+          ],
+          "sourceCell": [
+            1,
+            3
+          ],
+          "index": 1,
+          "bounds": [
+            61,
+            14,
+            201,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            61,
+            16,
+            200,
+            224
+          ],
+          "rgbaSha256": "5c5907377dce5ab41ef1784044a48631fc5722e86ef7df5e115b8519e5e604cf",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -86.34186179536857,
+            0,
+            1.4449999999999998,
+            -20.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            658,
+            924,
+            289,
+            330
+          ],
+          "sourceCell": [
+            2,
+            3
+          ],
+          "index": 2,
+          "bounds": [
+            54,
+            13,
+            202,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            55,
+            13,
+            201,
+            224
+          ],
+          "rgbaSha256": "51177e440a5e76e73ee7f35379e7586b3c0ebbb30b84984bd917333abff3ffad",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -78.05231051569098,
+            0,
+            1.4449999999999998,
+            -16.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "work",
+          "source": "vivi-work",
+          "region": [
+            947,
+            924,
+            307,
+            330
+          ],
+          "sourceCell": [
+            3,
+            3
+          ],
+          "index": 3,
+          "bounds": [
+            57,
+            12,
+            217,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            58,
+            13,
+            216,
+            224
+          ],
+          "rgbaSha256": "1fad5b8e12975ba2682915488f55d5199cf88dbfe8a0986cb72161c23000169e",
+          "wholeImageTransform": [
+            1.4449999999999998,
+            0,
+            -82.32099284355462,
+            0,
+            1.4449999999999998,
+            -16.67999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0519031141868513,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-work"
+      ],
+      "sha256": "e4be3101adc9c33838cd98621f524ad61a775b3b80f9cf217a1f1b0dfb737c44",
+      "bytes": 183746
+    },
+    {
+      "key": "vivi",
+      "kind": "life",
+      "action": "eat",
+      "direction": "south",
+      "cell": 256,
+      "columns": 4,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/eat-south.webp",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "eat",
+          "source": "vivi-utility",
+          "region": [
+            0,
+            0,
+            333,
+            376
+          ],
+          "sourceCell": [
+            0,
+            0
+          ],
+          "index": 0,
+          "bounds": [
+            53,
+            23,
+            189,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            54,
+            24,
+            188,
+            224
+          ],
+          "rgbaSha256": "9e89af4e3b176d8b60dab5a6bd0a858f322d091ed6372834273d8eed54eeadaf",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -76.626058029939,
+            0,
+            1.45,
+            -32.799999999999955
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "eat",
+          "source": "vivi-utility",
+          "region": [
+            333,
+            0,
+            307,
+            376
+          ],
+          "sourceCell": [
+            1,
+            0
+          ],
+          "index": 1,
+          "bounds": [
+            64,
+            29,
+            188,
+            224
+          ],
+          "opaqueBoundsAtOutput": [
+            65,
+            30,
+            188,
+            224
+          ],
+          "rgbaSha256": "bed1aa321cf35d8867a6395ed008a2a5dec26dcf69f477f363f2c0e72f44fafa",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -92.09845470349623,
+            0,
+            1.45,
+            -41.799999999999955
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "eat",
+          "source": "vivi-utility",
+          "region": [
+            640,
+            0,
+            327,
+            376
+          ],
+          "sourceCell": [
+            2,
+            0
+          ],
+          "index": 2,
+          "bounds": [
+            56,
+            27,
+            198,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            57,
+            28,
+            197,
+            224
+          ],
+          "rgbaSha256": "a90432d283481eb235e182f9f45d588e977fc64091fdb72d26db05e41aeaf2cb",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -80.59345501474931,
+            0,
+            1.45,
+            -38.799999999999955
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "eat",
+          "source": "vivi-utility",
+          "region": [
+            967,
+            0,
+            287,
+            376
+          ],
+          "sourceCell": [
+            3,
+            0
+          ],
+          "index": 3,
+          "bounds": [
+            64,
+            21,
+            191,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            65,
+            22,
+            190,
+            224
+          ],
+          "rgbaSha256": "dbed324130803e35b2f83cf982e753d1ef3492aedb76bf0f324c8f5028959858",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -92.46967854039971,
+            0,
+            1.45,
+            -29.799999999999955
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-utility"
+      ],
+      "sha256": "ef02db285e3ed8d3e8967f97156ebab6c83111c8c38fe74fd2732ef658f7066a",
+      "bytes": 169048
+    },
+    {
+      "key": "vivi",
+      "kind": "life",
+      "action": "rest",
+      "direction": "south",
+      "cell": 256,
+      "columns": 4,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/rest-south.webp",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "rest",
+          "source": "vivi-utility",
+          "region": [
+            0,
+            376,
+            333,
+            318
+          ],
+          "sourceCell": [
+            0,
+            1
+          ],
+          "index": 0,
+          "bounds": [
+            49,
+            63,
+            206,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            51,
+            64,
+            205,
+            224
+          ],
+          "rgbaSha256": "714b409da567552d186ecf818628dccac797fa8d165135405e5695e6ee4dfc1e",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -71.1,
+            0,
+            1.45,
+            -91.79999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "rest",
+          "source": "vivi-utility",
+          "region": [
+            333,
+            376,
+            307,
+            318
+          ],
+          "sourceCell": [
+            1,
+            1
+          ],
+          "index": 1,
+          "bounds": [
+            46,
+            72,
+            209,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            48,
+            73,
+            208,
+            224
+          ],
+          "rgbaSha256": "32c1d987db9ca0feb5a84ffb89014910297c21fd6636bfa2012b8d238c1693d2",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -67.1,
+            0,
+            1.45,
+            -103.79999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "rest",
+          "source": "vivi-utility",
+          "region": [
+            640,
+            376,
+            327,
+            318
+          ],
+          "sourceCell": [
+            2,
+            1
+          ],
+          "index": 2,
+          "bounds": [
+            49,
+            45,
+            207,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            50,
+            45,
+            206,
+            224
+          ],
+          "rgbaSha256": "d956ae1486f91f7569d8245c74e16ea699b49b2b4013aaebbf7139d98c9196ba",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -69.6,
+            0,
+            1.45,
+            -64.79999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "rest",
+          "source": "vivi-utility",
+          "region": [
+            967,
+            376,
+            287,
+            318
+          ],
+          "sourceCell": [
+            3,
+            1
+          ],
+          "index": 3,
+          "bounds": [
+            65,
+            26,
+            191,
+            224
+          ],
+          "opaqueBoundsAtOutput": [
+            66,
+            27,
+            191,
+            224
+          ],
+          "rgbaSha256": "f77bea4a80eb7b99a5f71b5f51a7ab52453102e0e42337a219210a449c3412d5",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -94.1,
+            0,
+            1.45,
+            -37.799999999999955
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-utility"
+      ],
+      "sha256": "dab406fa3e1c8d1e94d9d566b6f908afe5fa85a432ee0a3dbfe9792b30c7aa49",
+      "bytes": 153332
+    },
+    {
+      "key": "vivi",
+      "kind": "life",
+      "action": "sleep",
+      "direction": "south",
+      "cell": 256,
+      "columns": 4,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/sleep-south.webp",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "sleep",
+          "source": "vivi-utility",
+          "region": [
+            0,
+            694,
+            333,
+            282
+          ],
+          "sourceCell": [
+            0,
+            2
+          ],
+          "index": 0,
+          "bounds": [
+            58,
+            45,
+            198,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            59,
+            46,
+            197,
+            224
+          ],
+          "rgbaSha256": "c2643e26a3bbf4ebe6e4bb19585d370e9ee6ded673443685e6041224b6f6a472",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -83.6,
+            0,
+            1.45,
+            -63.799999999999955
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "sleep",
+          "source": "vivi-utility",
+          "region": [
+            333,
+            694,
+            307,
+            282
+          ],
+          "sourceCell": [
+            1,
+            2
+          ],
+          "index": 1,
+          "bounds": [
+            42,
+            118,
+            214,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            43,
+            119,
+            212,
+            224
+          ],
+          "rgbaSha256": "2c9ddfbe7a01bd9000098f7b3f42cf678fbbd12f921c93b050130a389a646786",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -61.099999999999994,
+            0,
+            1.45,
+            -170.79999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "sleep",
+          "source": "vivi-utility",
+          "region": [
+            640,
+            694,
+            327,
+            282
+          ],
+          "sourceCell": [
+            2,
+            2
+          ],
+          "index": 2,
+          "bounds": [
+            29,
+            127,
+            227,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            30,
+            128,
+            226,
+            224
+          ],
+          "rgbaSha256": "cba9fd4f07aa5d36b54b15bb77a69d9a3ec126a7db4f986f521a939092253cef",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -41.599999999999994,
+            0,
+            1.45,
+            -183.79999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "sleep",
+          "source": "vivi-utility",
+          "region": [
+            967,
+            694,
+            287,
+            282
+          ],
+          "sourceCell": [
+            3,
+            2
+          ],
+          "index": 3,
+          "bounds": [
+            49,
+            67,
+            208,
+            224
+          ],
+          "opaqueBoundsAtOutput": [
+            50,
+            68,
+            206,
+            224
+          ],
+          "rgbaSha256": "98aeb4bea0464aec11419275ca695f19ee5a1b9ae6403772fe42c0bd0226cb2d",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -70.1,
+            0,
+            1.45,
+            -97.79999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-utility"
+      ],
+      "sha256": "5ea974fb2757d454186d683c5eba99e3092e532f29132a2af97ff08f73bbebd6",
+      "bytes": 135252
+    },
+    {
+      "key": "vivi",
+      "kind": "life",
+      "action": "train",
+      "direction": "south",
+      "cell": 256,
+      "columns": 4,
+      "asset": "public/images/launcher_room/reserved_v3/vivi/life/train-south.webp",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "frames": [
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "train",
+          "source": "vivi-utility",
+          "region": [
+            0,
+            976,
+            333,
+            278
+          ],
+          "sourceCell": [
+            0,
+            3
+          ],
+          "index": 0,
+          "bounds": [
+            37,
+            80,
+            215,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            39,
+            81,
+            214,
+            224
+          ],
+          "rgbaSha256": "8036c1de6f61321e41256e3d1a9cf070dc2bd24ef20d5446a0094950d9950d5c",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -53.99666533546326,
+            0,
+            1.45,
+            -115.79999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "train",
+          "source": "vivi-utility",
+          "region": [
+            333,
+            976,
+            307,
+            278
+          ],
+          "sourceCell": [
+            1,
+            3
+          ],
+          "index": 1,
+          "bounds": [
+            40,
+            63,
+            220,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            41,
+            64,
+            220,
+            224
+          ],
+          "rgbaSha256": "0de8bfc5cf30968513d5502d0dbc8049e434bfa70e0c8c73752be54916ab1678",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -57.79995481247178,
+            0,
+            1.45,
+            -91.79999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "train",
+          "source": "vivi-utility",
+          "region": [
+            640,
+            976,
+            327,
+            278
+          ],
+          "sourceCell": [
+            2,
+            3
+          ],
+          "index": 2,
+          "bounds": [
+            38,
+            59,
+            208,
+            225
+          ],
+          "opaqueBoundsAtOutput": [
+            39,
+            60,
+            207,
+            224
+          ],
+          "rgbaSha256": "85ac360db932c909107cc9a9f8c9dd016b012fbf42a4a685d58e9dffdb33d6a6",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -54.38431372549016,
+            0,
+            1.45,
+            -85.79999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        },
+        {
+          "key": "vivi",
+          "direction": "south",
+          "pose": "train",
+          "source": "vivi-utility",
+          "region": [
+            967,
+            976,
+            287,
+            278
+          ],
+          "sourceCell": [
+            3,
+            3
+          ],
+          "index": 3,
+          "bounds": [
+            50,
+            56,
+            205,
+            224
+          ],
+          "opaqueBoundsAtOutput": [
+            51,
+            57,
+            204,
+            224
+          ],
+          "rgbaSha256": "9895d2500d7bf3e2b6df12d378019a82036f4483c7e56c4f2bfae5b7ea97da2d",
+          "wholeImageTransform": [
+            1.45,
+            0,
+            -72.736473722451,
+            0,
+            1.45,
+            -80.79999999999995
+          ],
+          "uniformCharacterScale": 0.16863406408094436,
+          "sourceUnitScale": 2.0448275862068965,
+          "anatomyReassembled": false,
+          "mirrored": false,
+          "clipped": false
+        }
+      ],
+      "sourceIds": [
+        "vivi-utility"
+      ],
+      "sha256": "4e8cf2c17a29cc9cd0f5412369508f5a663a7582b4ffb27f6c7cfc9475b80969",
+      "bytes": 157022
+    }
+  ],
+  "pixelQa": {
+    "path": "tools/launcher-room/reserved-v3/pixel-qa/vivi.json",
+    "sha256": "e41dd067939ee18d3f2018e00546f41ce2c90c0743934feba657c0cee410c521"
+  },
+  "contactSheet": {
+    "key": "vivi",
+    "path": "tools/launcher-room/reserved-v3/contacts/vivi.png",
+    "sha256": "979cc097c4f8967e04d59a6edfd4c94fd68b32d2010ae8f5d7c5e841e955d0dd",
+    "bytes": 1641296,
+    "dimensions": [
+      1536,
+      2112
+    ],
+    "frameCount": 81
+  },
+  "assetCount": 17,
+  "frameCount": 81,
+  "processingRules": {
+    "wholeFigureOnly": true,
+    "anatomyReassembled": false,
+    "mirrored": false,
+    "sourceRegion": "one complete whole figure from each reviewed transparent cell",
+    "calibration": "one master standing height and one standing reference per source sheet",
+    "transforms": "uniform whole-image scale and translation only"
+  }
+}

@@ -1,48 +1,37 @@
-/* Sea and porthole masks follow the existing painted scenes. Weather never
-   covers furniture, crew, floor controls or the aquarium's indoor fish tank. */
+/* Sea and weather are animated behind real transparent ship cutouts. */
 .room-stage {
-  --room-sea-time: #3ec6de0d;
-  --room-sea-season: #16c5ba17;
-  --room-sea-weather: #0000;
   --room-scene-time: brightness(1);
   --room-scene-weather: brightness(1);
 }
 .room-stage .room-scene {
+  z-index: 1;
   filter: var(--room-scene-time) var(--room-scene-weather);
   transition: filter .8s ease;
 }
-.room-stage[data-room-season='spring'] { --room-sea-season: #70db9a22; }
-.room-stage[data-room-season='summer'] { --room-sea-season: #13c8e819; }
-.room-stage[data-room-season='autumn'] { --room-sea-season: #c9976930; }
-.room-stage[data-room-season='winter'] { --room-sea-season: #bce2ff42; }
 .room-stage[data-room-daypart='dawn'] {
-  --room-scene-time: brightness(.86) sepia(.12) saturate(1.03);
-  --room-sea-time: #e79e624d;
+  --room-scene-time: brightness(.95) sepia(.04) saturate(1.02);
 }
 .room-stage[data-room-daypart='dusk'] {
-  --room-scene-time: brightness(.76) sepia(.17) saturate(.92);
-  --room-sea-time: #bd674071;
+  --room-scene-time: brightness(.87) sepia(.07) saturate(.96);
 }
 .room-stage[data-room-daypart='night'] {
-  --room-scene-time: brightness(.47) saturate(.8);
-  --room-sea-time: #0b2757b5;
+  --room-scene-time: brightness(.68) saturate(.83);
 }
 .room-stage[data-room-weather='cloudy'] {
-  --room-scene-weather: brightness(.93) saturate(.92);
-  --room-sea-weather: #617e9a25;
+  --room-scene-weather: brightness(.96) saturate(.94);
 }
 .room-stage[data-room-weather='rain'] {
-  --room-scene-weather: brightness(.82) saturate(.83);
-  --room-sea-weather: #314c6a55;
+  --room-scene-weather: brightness(.91) saturate(.9);
 }
 .room-stage[data-room-weather='snow'] {
-  --room-scene-weather: brightness(.97) saturate(.76);
-  --room-sea-weather: #b3d7e94b;
+  --room-scene-weather: brightness(.99) saturate(.9);
 }
 .room-stage[data-room-weather='storm'] {
-  --room-scene-weather: brightness(.71) saturate(.68);
-  --room-sea-weather: #172b4e86;
+  --room-scene-weather: brightness(.82) saturate(.78);
 }
+.room-stage .room-floor-plane { z-index: 3; }
+.room-stage .room-floor-grid { z-index: 4; }
+.room-ambience-sea,
 .room-ambience,
 .room-ambience-light,
 .room-ambience-canvas,
@@ -53,22 +42,17 @@
   pointer-events: none;
   user-select: none;
 }
-.room-ambience { z-index: 1; overflow: hidden; }
+.room-ambience-sea { z-index: 0; overflow: hidden; }
+.room-ambience { z-index: 2; overflow: hidden; }
 .room-ambience-light { z-index: 0; transition: background .8s ease; }
 .room-stage[data-room-daypart='dawn'] .room-ambience-light {
-  background: linear-gradient(135deg, #ffe5a52b, transparent 43%, #2a56802a 100%);
+  background: radial-gradient(ellipse 39% 43% at 46% 18%, #ffe5a51c, transparent);
 }
 .room-stage[data-room-daypart='dusk'] .room-ambience-light {
-  background: linear-gradient(90deg, #ec8b432b, transparent 53%, #17396238),
-    linear-gradient(180deg, #3c294028, transparent 58%);
+  background: radial-gradient(ellipse 46% 38% at 34% 25%, #ec9c5727, transparent);
 }
 .room-stage[data-room-daypart='night'] .room-ambience-light {
-  background: linear-gradient(180deg, #071d4073, #14274736 55%, #07142143),
-    radial-gradient(ellipse 46% 34% at 50% 68%, #f5ba7540, transparent 100%);
-}
-.room-stage[data-room-weather='rain'] .room-ambience-light,
-.room-stage[data-room-weather='storm'] .room-ambience-light {
-  background-image: linear-gradient(180deg, #102c4459, transparent 53%);
+  background: radial-gradient(ellipse 38% 34% at 50% 63%, #f5ba7526, transparent 100%);
 }
 .room-ambience-canvas { z-index: 1; width: 100%; height: 100%; }
 .room-ambience-lamps { z-index: 2; opacity: .08; transition: opacity .8s ease; }
@@ -91,6 +75,28 @@
   background: radial-gradient(ellipse 15% 24% at 19% 18%, #ffcf8eaa, transparent),
     radial-gradient(ellipse 15% 24% at 82% 18%, #ffcf8eaa, transparent),
     radial-gradient(ellipse 51% 26% at 50% 20%, #4abace42, transparent);
+}
+.room-aquarium-scene-window {
+  position: absolute;
+  z-index: 3;
+  left: 25.9%; top: 7.2%; width: 48.1%; height: 18.3%;
+  overflow: hidden;
+  border-radius: 18% / 32%;
+  pointer-events: none;
+  display: none;
+}
+.room-stage[data-room-scene='sunny-aquarium'] .room-aquarium-scene-window { display: block; }
+.room-aquarium-scene-window::before {
+  position: absolute;
+  inset: -30%;
+  content: '';
+  background: repeating-linear-gradient(105deg, #d6ffff00 0 12px, #d6ffff2d 15px 18px, #d6ffff00 23px 39px);
+  opacity: .3;
+  transform: translateX(-12%) skewX(-7deg);
+  animation: room-tank-caustic 8s ease-in-out infinite alternate;
+}
+@keyframes room-tank-caustic {
+  to { transform: translateX(12%) skewX(8deg); opacity: .48; }
 }
 .room-ambience-lightning { z-index: 3; opacity: 0; }
 .room-stage[data-room-weather='storm'] .room-ambience-lightning {
@@ -142,6 +148,7 @@
 @media (prefers-reduced-motion: reduce) {
   .room-ambience-lightning { animation: none !important; }
   .room-ambience-lightning { display: none; }
+  .room-aquarium-scene-window::before { animation: none; }
   .room-stage .room-scene,
   .room-ambience-light,
   .room-ambience-lamps { transition: none; }

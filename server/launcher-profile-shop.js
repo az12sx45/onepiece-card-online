@@ -118,6 +118,16 @@ const CATALOG = Object.freeze([
     rarity: 'epic', price: 80, stationType: 'kitchen', footprint: { cols: 3, rows: 2 },
     asset: 'opui://launcher/images/launcher_room/furniture/galley-stove.webp' },
   ...[
+    ['aquarium-tank', '千陽號移動水族箱', 'epic', 28, 'aquarium', 3, 2],
+    ['fishing-gear-rack', '草帽一行人的釣具架', 'rare', 12, 'deck', 2, 2],
+    ['galley-icebox', '香吉士的食材冰箱', 'rare', 14, 'kitchen', 2, 1],
+    ['crew-tea-table', '千陽號夥伴茶桌', 'common', 6, 'social', 3, 1]
+  ].map(([key, name, rarity, price, stationType, cols, rows]) => ({
+    id: `room-furniture-${key}`, type: 'room_furniture', key, name, rarity, price,
+    stationType, footprint: { cols, rows },
+    asset: `opui://launcher/images/launcher_room/furniture/${key}.webp`
+  })),
+  ...[
     ['luffy', '魯夫', 'legend'], ['zoro', '索隆', 'epic'],
     ['nami', '娜美', 'epic'], ['chopper', '喬巴', 'epic'],
     ['sanji', '香吉士', 'epic'], ['robin', '羅賓', 'epic'],

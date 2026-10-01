@@ -1,0 +1,170 @@
+{
+  "schema": "one-piece-room-walk-source-selection/1",
+  "character": "vivi",
+  "accepted": {
+    "walk-side": {
+      "path": "tools/launcher-room/reserved-v3/sources/vivi/walk-side-01/source.png",
+      "sha256": "8595eda65ee792f62083f8c8e5d749ccda1110d550bb9b9866f687c9d93809ba",
+      "alphaGridQa": {
+        "size": [
+          1536,
+          1024
+        ],
+        "alphaExtrema": [
+          0,
+          254
+        ],
+        "cells": [
+          {
+            "row": 0,
+            "col": 0,
+            "opaqueBounds": [
+              140,
+              44,
+              448,
+              495
+            ],
+            "opaquePixels": 90789
+          },
+          {
+            "row": 0,
+            "col": 1,
+            "opaqueBounds": [
+              109,
+              45,
+              368,
+              491
+            ],
+            "opaquePixels": 77795
+          },
+          {
+            "row": 0,
+            "col": 2,
+            "opaqueBounds": [
+              47,
+              46,
+              350,
+              493
+            ],
+            "opaquePixels": 86685
+          },
+          {
+            "row": 1,
+            "col": 0,
+            "opaqueBounds": [
+              159,
+              14,
+              474,
+              458
+            ],
+            "opaquePixels": 86599
+          },
+          {
+            "row": 1,
+            "col": 1,
+            "opaqueBounds": [
+              128,
+              13,
+              403,
+              459
+            ],
+            "opaquePixels": 80727
+          },
+          {
+            "row": 1,
+            "col": 2,
+            "opaqueBounds": [
+              73,
+              13,
+              384,
+              459
+            ],
+            "opaquePixels": 87495
+          }
+        ]
+      }
+    },
+    "walk-front": {
+      "path": "tools/launcher-room/reserved-v3/sources/vivi/walk-front-01/source.png",
+      "sha256": "687189f2cfe660bdc3254ba3a6dce0a5b50e60870cd468b5ab8785d3faadc03f",
+      "alphaGridQa": {
+        "size": [
+          1536,
+          1024
+        ],
+        "alphaExtrema": [
+          0,
+          254
+        ],
+        "cells": [
+          {
+            "row": 0,
+            "col": 0,
+            "opaqueBounds": [
+              152,
+              20,
+              448,
+              496
+            ],
+            "opaquePixels": 85240
+          },
+          {
+            "row": 0,
+            "col": 1,
+            "opaqueBounds": [
+              122,
+              17,
+              388,
+              493
+            ],
+            "opaquePixels": 82739
+          },
+          {
+            "row": 0,
+            "col": 2,
+            "opaqueBounds": [
+              57,
+              17,
+              354,
+              496
+            ],
+            "opaquePixels": 84137
+          },
+          {
+            "row": 1,
+            "col": 0,
+            "opaqueBounds": [
+              150,
+              6,
+              457,
+              488
+            ],
+            "opaquePixels": 89372
+          },
+          {
+            "row": 1,
+            "col": 1,
+            "opaqueBounds": [
+              99,
+              2,
+              411,
+              488
+            ],
+            "opaquePixels": 93688
+          },
+          {
+            "row": 1,
+            "col": 2,
+            "opaqueBounds": [
+              52,
+              4,
+              392,
+              488
+            ],
+            "opaquePixels": 96779
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "generator": "gpt-image",
+  "sourceSha256": "4d2a3abbbad83c3f30373e22039c1414575719b311f28ac76ed5fe3030e1d253",
+  "sourceImage": "exec-5bd21304-ab34-4726-bc0e-c22d2284412e.png",
+  "sourceGrid": [
+    4,
+    4
+  ],
+  "sourceCuts": {
+    "rowCuts": [
+      0,
+      343,
+      638,
+      921,
+      1254
+    ],
+    "columnCuts": [
+      0,
+      318,
+      622,
+      929,
+      1254
+    ]
+  },
+  "status": "model-selected; human art acceptance pending",
+  "wholeFigureOnly": true,
+  "mirrored": false,
+  "alphaGridQa": {
+    "safeWholeFigureCuts": true,
+    "cellCount": 16
+  }
+}

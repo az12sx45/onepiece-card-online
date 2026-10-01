@@ -1,0 +1,92 @@
+{
+  "generator": "gpt-image",
+  "status": "model-selected; human art acceptance pending",
+  "sourceSha256": "8595eda65ee792f62083f8c8e5d749ccda1110d550bb9b9866f687c9d93809ba",
+  "sourceImage": "exec-d2d51c21-a10b-4c34-8561-a3ff16f4960c.png",
+  "sourceGrid": [
+    3,
+    2
+  ],
+  "wholeFigureOnly": true,
+  "alphaGridQa": {
+    "size": [
+      1536,
+      1024
+    ],
+    "alphaExtrema": [
+      0,
+      254
+    ],
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "opaqueBounds": [
+          140,
+          44,
+          448,
+          495
+        ],
+        "opaquePixels": 90789
+      },
+      {
+        "row": 0,
+        "col": 1,
+        "opaqueBounds": [
+          109,
+          45,
+          368,
+          491
+        ],
+        "opaquePixels": 77795
+      },
+      {
+        "row": 0,
+        "col": 2,
+        "opaqueBounds": [
+          47,
+          46,
+          350,
+          493
+        ],
+        "opaquePixels": 86685
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "opaqueBounds": [
+          159,
+          14,
+          474,
+          458
+        ],
+        "opaquePixels": 86599
+      },
+      {
+        "row": 1,
+        "col": 1,
+        "opaqueBounds": [
+          128,
+          13,
+          403,
+          459
+        ],
+        "opaquePixels": 80727
+      },
+      {
+        "row": 1,
+        "col": 2,
+        "opaqueBounds": [
+          73,
+          13,
+          384,
+          459
+        ],
+        "opaquePixels": 87495
+      }
+    ]
+  },
+  "removedBackground": false,
+  "rescaled": false,
+  "mirrored": false
+}

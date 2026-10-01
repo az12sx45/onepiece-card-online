@@ -430,7 +430,7 @@ class AuthService extends EventEmitter {
       entry.x >= 0 && entry.x <= 960 && entry.y >= 0 && entry.y <= 540;
     const validScene = id => id === 'room-scene-default' ||
       /^room-scene-(?:sunny-deck|sunny-kitchen|sunny-library|sunny-workshop|sunny-aquarium)$/.test(id);
-    const validFurniture = entry => coordinates(entry) && /^room-furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|galley-stove|bookshelf|medicine-cabinet|piano|tool-bench|supply-rack|log-pose-desk|repair-cart|library-cart|medical-cart|den-den-desk)$/.test(entry.itemId) &&
+    const validFurniture = entry => coordinates(entry) && /^room-furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|galley-stove|bookshelf|medicine-cabinet|piano|tool-bench|supply-rack|log-pose-desk|repair-cart|library-cart|medical-cart|den-den-desk|aquarium-tank|fishing-gear-rack|galley-icebox|crew-tea-table)$/.test(entry.itemId) &&
           Number.isFinite(entry.scale) && entry.scale >= .5 && entry.scale <= 1.5 &&
           (entry.rotation === undefined || Number.isInteger(entry.rotation) && entry.rotation >= 0 && entry.rotation <= 3) &&
           (entry.flip === undefined || typeof entry.flip === 'boolean') &&
@@ -476,7 +476,7 @@ class AuthService extends EventEmitter {
     if (!command || typeof command !== 'object' || Array.isArray(command) ||
         typeof command.requestId !== 'string' || !/^[a-zA-Z0-9_-]{8,100}$/.test(command.requestId) ||
         !Number.isSafeInteger(command.expectedRevision) || command.expectedRevision < 0 ||
-        !['work.reserve','work.activate','work.complete','work.cancel','directive.set','character.interact','event.record','activity.record','arrival.ack','checkpoint','minigame.start','minigame.answer','minigame.finish','minigame.cancel','minigame.retry'].includes(command.type) ||
+        !['work.reserve','work.activate','work.complete','work.cancel','directive.set','character.interact','event.record','activity.record','arrival.ack','checkpoint','minigame.start','minigame.answer','minigame.finish','minigame.cancel','minigame.retry','fish.place','fish.release'].includes(command.type) ||
         !command.payload || typeof command.payload !== 'object' || Array.isArray(command.payload) ||
         JSON.stringify(command.payload).length > 2048) return { ok: false, error: 'invalid_command' };
     const { requestId, expectedRevision, type, payload } = command;

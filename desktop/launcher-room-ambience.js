@@ -1,38 +1,17 @@
 (() => {
   'use strict';
 
-  // The original room paintings are 1600 x 900. The ship polygon below and
-  // these portholes keep rain and snow in the visible sea, off the room floor
-  // and the aquarium's indoor fish tank.
-  const porthole = (cx, cy, diameter = 2.7) => ({
-    left: cx - diameter / 2, top: cy - diameter * 16 / 9 / 2,
-    width: diameter, height: diameter * 16 / 9
-  });
-  const PORTHOLES = Object.freeze({
-    'crew-cabin': [porthole(33.65, 35.35), porthole(50.2, 37.6, 2.45), porthole(66.35, 35.35)],
-    'sunny-deck': [porthole(33.7, 34.5), porthole(50.1, 38.1, 2.5), porthole(66.4, 34.5)],
-    'sunny-kitchen': [porthole(33.7, 35.45), porthole(50.1, 40.1, 2.4), porthole(66.4, 35.45)],
-    'sunny-library': [porthole(33.8, 32.2), porthole(50.1, 36.2, 2.4), porthole(66.4, 32.2)],
-    'sunny-workshop': [porthole(36.6, 35.3), porthole(50.15, 39.15, 2.5)],
-    'sunny-aquarium': [porthole(50.1, 35.4, 2.5)]
-  });
-  const SCENES = new Set(Object.keys(PORTHOLES));
-  // Polygon of the solid ship, in coordinates of the 1600 x 900 scene art.
-  // The canvas clips one continuous outside-sea mask around it. This avoids
-  // rectangular joins where independently tinted panels would meet.
-  const SHIP = Object.freeze({
-    'crew-cabin': [[262, 215], [1338, 215], [1367, 354], [1584, 743], [1600, 900], [0, 900], [16, 743], [233, 354]],
-    'sunny-deck': [[263, 192], [1337, 192], [1370, 316], [1588, 738], [1600, 900], [0, 900], [12, 738], [230, 316]],
-    'sunny-kitchen': [[274, 222], [1327, 222], [1373, 343], [1588, 746], [1600, 900], [0, 900], [12, 746], [227, 343]],
-    'sunny-library': [[240, 202], [1360, 202], [1384, 330], [1585, 742], [1600, 900], [0, 900], [15, 742], [216, 330]],
-    'sunny-workshop': [[260, 177], [1344, 177], [1372, 326], [1587, 740], [1600, 900], [0, 900], [13, 740], [228, 326]],
-    'sunny-aquarium': [[204, 0], [1396, 0], [1381, 313], [1588, 743], [1600, 900], [0, 900], [12, 743], [219, 313]]
-  });
+  // The six 1600 x 900 ship paintings have real transparent sea/porthole cutouts.
+  // Moving water and weather are drawn beneath the ship, never across furniture,
+  // crew or the aquarium's own indoor water.
+  const SCENES = new Set(['crew-cabin', 'sunny-deck', 'sunny-kitchen',
+    'sunny-library', 'sunny-workshop', 'sunny-aquarium']);
   const SEASON_NAMES = Object.freeze({ spring: '春', summer: '夏', autumn: '秋', winter: '冬' });
   const DAYPART_NAMES = Object.freeze({ dawn: '清晨', day: '白天', dusk: '黃昏', night: '夜晚' });
   const WEATHER_NAMES = Object.freeze({ clear: '晴朗', cloudy: '多雲', rain: '下雨', snow: '飄雪', storm: '雷雨' });
   let stage = null;
   let root = null;
+  let seaLayer = null;
   let badge = null;
   let canvas = null;
   let context = null;
@@ -45,6 +24,7 @@
   let currentState = null;
   let sceneKey = 'crew-cabin';
   let qaOverride = null;
+  const oceanArt = new Map();
 
   function seasonAt(date) {
     const month = date.getMonth() + 1;
@@ -60,8 +40,9 @@
     for (const letter of stamp) hash = Math.imul(hash ^ letter.charCodeAt(0), 16777619);
     return hash >>> 0;
   }
-  function weatherAt(date, key, season) {
-    const roll = hashDay(date, key) % 100;
+  function weatherAt(date, season) {
+    // Every room looks out onto the same Thousand Sunny weather on a given day.
+    const roll = hashDay(date, 'thousand-sunny') % 100;
     if (season === 'winter') return roll < 24 ? 'snow' : roll < 46 ? 'rain' : roll < 54 ? 'storm' : roll < 74 ? 'cloudy' : 'clear';
     if (season === 'spring') return roll < 30 ? 'rain' : roll < 37 ? 'storm' : roll < 63 ? 'cloudy' : 'clear';
     if (season === 'summer') return roll < 20 ? 'rain' : roll < 34 ? 'storm' : roll < 51 ? 'cloudy' : 'clear';
@@ -71,7 +52,7 @@
     const safe = date instanceof Date && !Number.isNaN(date.getTime()) ? date : new Date();
     const scene = SCENES.has(key) ? key : 'crew-cabin';
     const season = seasonAt(safe);
-    return Object.freeze({ scene, season, daypart: daypartAt(safe), weather: weatherAt(safe, scene, season) });
+    return Object.freeze({ scene, season, daypart: daypartAt(safe), weather: weatherAt(safe, season) });
   }
   function element(className) {
     const node = document.createElement('div');
@@ -79,20 +60,94 @@
     node.setAttribute('aria-hidden', 'true');
     return node;
   }
-  function makeSeaPath(width, height) {
-    const path = new Path2D();
-    path.rect(0, 0, width, height);
-    const points = SHIP[sceneKey];
-    path.moveTo(points[0][0] / 1600 * width, points[0][1] / 900 * height);
-    for (const [x, y] of points.slice(1)) path.lineTo(x / 1600 * width, y / 900 * height);
-    path.closePath();
-    for (const hole of PORTHOLES[sceneKey]) {
-      const x = (hole.left + hole.width / 2) / 100 * width;
-      const y = (hole.top + hole.height / 2) / 100 * height;
-      path.moveTo(x + hole.width / 200 * width, y);
-      path.ellipse(x, y, hole.width / 200 * width, hole.height / 200 * height, 0, 0, Math.PI * 2);
+  function seaColors(state) {
+    let base = {
+      dawn: ['#d68768', '#437c94', '#155779', '#ffd8a3'],
+      day: ['#4ac5e1', '#159fc3', '#086d9c', '#defcff'],
+      dusk: ['#b85e68', '#425f91', '#162c63', '#ffd199'],
+      night: ['#142e5c', '#0d386b', '#091e46', '#c2dfff']
+    }[state.daypart];
+    if (state.daypart !== 'day') return base;
+    if (state.weather === 'storm') return ['#3b5570', '#1d4e6c', '#0c2b4c', '#c1d9e9'];
+    if (state.weather === 'rain') return ['#67889b', '#3a7290', '#1b4d72', '#d2e5ef'];
+    if (state.weather === 'snow') return ['#b9d6e7', '#78acc8', '#3e719c', '#fff9e9'];
+    if (state.weather === 'cloudy') return ['#91b7c9', '#4d95af', '#21658f', '#e4f4f6'];
+    if (state.daypart === 'day') {
+      base = {
+        spring: ['#72d7dd', '#24acb5', '#127b89', '#f2ffff'],
+        summer: base,
+        autumn: ['#78c5d3', '#268cae', '#145b87', '#ffe4b1'],
+        winter: ['#a7d4e7', '#5a9fbd', '#28688f', '#f2faff']
+      }[state.season];
     }
-    return path;
+    return base;
+  }
+  function oceanTexture(state) {
+    const key = state.weather === 'storm' || state.weather === 'rain' ? 'storm' : state.daypart;
+    if (!oceanArt.has(key)) {
+      const image = new Image();
+      const qaRoot = window.__ONE_PIECE_ROOM_QA__ === true &&
+        typeof window.__ROOM_OCEAN_QA_ROOT__ === 'string' ? window.__ROOM_OCEAN_QA_ROOT__ : null;
+      image.src = (qaRoot || 'opui://launcher/images/launcher_room/sea/') + 'ocean-' + key + '.webp';
+      image.onload = () => { if (currentState) drawFrame(); };
+      oceanArt.set(key, image);
+    }
+    const image = oceanArt.get(key);
+    return image.complete && image.naturalWidth ? image : null;
+  }
+  function drawSea(ctx, width, height, state, time) {
+    const [upper, middle, lower, sparkle] = seaColors(state);
+    const water = ctx.createLinearGradient(0, 0, 0, height);
+    water.addColorStop(0, upper);
+    water.addColorStop(.42, middle);
+    water.addColorStop(1, lower);
+    ctx.fillStyle = water;
+    ctx.fillRect(0, 0, width, height);
+    const seconds = time / 1000;
+    const texture = oceanTexture(state);
+    if (texture) {
+      const marginX = width * .035, marginY = height * .035;
+      const wind = state.weather === 'storm' ? 1.4 : .65;
+      const driftX = Math.sin(seconds * .18 * wind) * marginX * .55;
+      const driftY = Math.cos(seconds * .12 * wind) * marginY * .48;
+      ctx.save();
+      const weatherFilter = state.weather === 'snow' ? 'saturate(.7) brightness(.87)' :
+        state.weather === 'cloudy' ? 'saturate(.82) brightness(.9)' :
+        state.season === 'winter' ? 'saturate(.82)' : '';
+      const timeFilter = state.daypart === 'night' ? 'brightness(.48) saturate(.78)' :
+        state.daypart === 'dusk' ? 'brightness(.74) sepia(.1)' :
+        state.daypart === 'dawn' ? 'brightness(.81) sepia(.08)' : '';
+      ctx.filter = [weatherFilter, timeFilter].filter(Boolean).join(' ');
+      ctx.drawImage(texture, -marginX + driftX, -marginY + driftY,
+        width + marginX * 2, height + marginY * 2);
+      // A second softly shifted sample moves the small glints at another rate.
+      ctx.globalAlpha = state.daypart === 'night' ? .035 : .045;
+      ctx.globalCompositeOperation = 'screen';
+      ctx.drawImage(texture, -marginX - driftX * .47, -marginY + driftY * .3,
+        width + marginX * 2, height + marginY * 2);
+      ctx.restore();
+      return;
+    }
+    // Palette remains useful during the first frame before local texture loads.
+    ctx.strokeStyle = sparkle;
+    ctx.globalAlpha = .15;
+    for (let row = 0; row < 12; row++) {
+      const y = height * (.06 + row * .082);
+      ctx.beginPath();
+      for (let x = 0; x <= width; x += 12) {
+        const yy = y + Math.sin(x * .022 + seconds * .38 + row) * 2.8;
+        if (!x) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    if (state.daypart === 'dusk' || state.daypart === 'dawn' || state.daypart === 'night') {
+      const glow = ctx.createRadialGradient(width * .51, height * .08, 2, width * .51, height * .08, width * .5);
+      glow.addColorStop(0, state.daypart === 'night' ? '#e0eaff33' : '#ffd9ab77');
+      glow.addColorStop(1, '#ffffff00');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, width, height);
+    }
   }
   function refreshParticles(date, weather) {
     const key = `${hashDay(date, sceneKey)}:${weather}`;
@@ -131,20 +186,6 @@
       ctx.stroke();
     }
   }
-  function tintAndWeather(ctx, width, height, date, state, time) {
-    const season = { spring: '#55b99617', summer: '#21b7e00e', autumn: '#b8865d22', winter: '#b8deff38' };
-    const daypart = { dawn: '#e5a26755', day: '#00000000', dusk: '#ad6b676d', night: '#081f4caa' };
-    const weather = { clear: '#00000000', cloudy: '#526e8c25', rain: '#344b7254', snow: '#b6d6e943', storm: '#172b4e87' };
-    for (const tint of [season[state.season], daypart[state.daypart], weather[state.weather]]) {
-      ctx.fillStyle = tint; ctx.fillRect(0, 0, width, height);
-    }
-    if (state.weather === 'clear' && state.daypart === 'night') {
-      const reflected = ctx.createLinearGradient(width * .42, 0, width * .65, height * .35);
-      reflected.addColorStop(0, '#d9efff00'); reflected.addColorStop(.5, '#d9efff30'); reflected.addColorStop(1, '#d9efff00');
-      ctx.fillStyle = reflected; ctx.fillRect(0, 0, width, height * .38);
-    }
-    drawWeather(ctx, width, height, date, state.weather, time);
-  }
   function drawFrame(time = performance.now()) {
     if (!canvas || !stage || !currentState) return;
     const bounds = stage.getBoundingClientRect();
@@ -157,36 +198,43 @@
     }
     context.setTransform(dpr, 0, 0, dpr, 0, 0);
     context.clearRect(0, 0, width, height);
-    context.save();
-    context.clip(makeSeaPath(width, height), 'evenodd');
-    tintAndWeather(context, width, height, qaOverride?.date || new Date(), currentState, time);
-    context.restore();
+    drawSea(context, width, height, currentState, time);
+    drawWeather(context, width, height, qaOverride?.date || new Date(), currentState.weather, time);
     canvas.dataset.drawn = 'true';
+    canvas.dataset.oceanReady = oceanTexture(currentState) ? 'true' : 'false';
   }
   function animate(time) {
     animationId = 0;
     if (!inView || document.hidden || window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-        !currentState || !['rain', 'snow', 'storm'].includes(currentState.weather)) return;
-    if (time - lastFrame >= 32) { drawFrame(time); lastFrame = time; }
+        !currentState) return;
+    if (time - lastFrame >= 42) { drawFrame(time); lastFrame = time; }
     animationId = window.requestAnimationFrame(animate);
   }
   function manageAnimation() {
     if (animationId) { window.cancelAnimationFrame(animationId); animationId = 0; }
     if (inView && !document.hidden && !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
-        currentState && ['rain', 'snow', 'storm'].includes(currentState.weather)) {
+        currentState) {
       animationId = window.requestAnimationFrame(animate);
     }
   }
   function ensureLayer() {
     if (!stage) return;
     if (root?.parentNode !== stage) {
+      seaLayer?.remove();
+      badge?.remove();
       root = element('room-ambience');
+      seaLayer = element('room-ambience-sea');
       canvas = document.createElement('canvas');
       canvas.className = 'room-ambience-canvas';
       canvas.setAttribute('aria-hidden', 'true');
-      context = canvas.getContext('2d', { alpha: true });
-      root.append(element('room-ambience-light'), canvas, element('room-ambience-lamps'), element('room-ambience-lightning'));
-      stage.querySelector('#roomScene')?.after(root);
+      context = canvas.getContext('2d', { alpha: false });
+      seaLayer.append(canvas, element('room-ambience-lightning'));
+      const scene = stage.querySelector('#roomScene');
+      scene?.before(seaLayer);
+      scene?.after(root);
+      const aquariumWindow = element('room-aquarium-scene-window');
+      aquariumWindow.dataset.aquariumTank = 'scene';
+      root.append(element('room-ambience-light'), element('room-ambience-lamps'), aquariumWindow);
       badge = document.createElement('span');
       badge.className = 'room-ambience-badge';
       badge.title = '航路天氣演出依本機日期與時間變化';

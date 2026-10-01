@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 13,
+  "revision": 14,
   "announcements": [
     {
       "id": "board-tavern-crew-20260928-1c453fcf83416d97",
@@ -291,6 +291,30 @@
       "requiredRelease": {
         "kind": "launcher",
         "version": "1.2.14"
+      }
+    },
+    {
+      "id": "launcher-1.2.15-fishing-and-living-seas",
+      "status": "published",
+      "publishedAt": "2026-09-30T17:35:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.15",
+      "title": "千陽號海釣與會游動的水族箱｜啟動器 1.2.15",
+      "summary": "新增有動畫的海釣工作、魚類收藏與水族箱展示；場景改用透明船體與分層海天動畫，並開放薩波和羅。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-life-fishing-1.2.15.webp",
+        "alt": "薩波與羅站在千陽號甲板兩側，中央水族箱展示氣球鯰魚、秋刀魚與水母的更新主圖"
+      },
+      "body": [
+        "工作新增千陽號海釣：觀察魚影與魚線方向，選擇反向收竿或在魚下潛時鬆線；魚線、浮標和海面會隨操作動起來，完成工作可依原有每日上限取得商城金幣。",
+        "漁獲收藏可釣到氣球鯰魚、閃亮秋刀魚、微笑水母與熊貓鯊；取得水族館酒吧場景或水族箱家具後，可挑選魚放入展示並看到牠們游動。漁獲不會自動出售或消耗。",
+        "六個生活場景重新整理成透明船體、海面與天空分層，清晨、白天、黃昏、夜晚及雨雪雷雨會讓窗外或甲板背景動態變化。新增水族箱、茶桌、釣具架與廚房冰櫃家具，維持四方向旋轉佈置。",
+        "生活基地開放薩波與羅，沿用已檢查的完整動作圖、工作與互動。三款桌遊規則、多人同步與既有存檔沒有調整。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.15"
       }
     }
   ]

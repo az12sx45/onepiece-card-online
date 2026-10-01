@@ -28,8 +28,10 @@ const MAX_ROOM_LIFE_HD_ASSET_BYTES = 16 * 1024 * 1024;
 // The 32 new, individually reviewed expansion assets have a 4 MiB allowance.
 // Existing media keeps its 128 MiB limit and the combined 160 MiB cap stays fixed.
 const MAX_ROOM_EXPANSION_ASSET_BYTES = 4 * 1024 * 1024;
-// Immutable historical program manifests are retained for existing installs.
-const MAX_CATALOG_BYTES = 32 * 1024 * 1024;
+const MAX_LOCKED_CREW_CANDIDATE_BYTES = 4 * 1024 * 1024;
+// The installer needs the current game manifests; historical manifests remain
+// in the source and in existing installs' caches.
+const MAX_CATALOG_BYTES = 5 * 1024 * 1024;
 const MAX_ASAR_BYTES = 32 * 1024 * 1024;
 const MAX_INSTALLER_BYTES = 256 * 1024 * 1024;
 const RETAINED_ROLLOUT_MANIFESTS = Object.freeze({
@@ -75,6 +77,8 @@ const APP_FILES = [
   'launcher-room.js',
   'launcher-room-ambience.js',
   'launcher-room-ambience.css',
+  'launcher-room-aquarium.js',
+  'launcher-room-aquarium.css',
   'launcher-room-dialogue.js',
   'launcher-room-motion-data.js',
   'launcher-room-motion.js',
@@ -112,6 +116,33 @@ const LUFFY_NEW_ASSETS = [
   'portrait_v4/luffy.webp'
 ];
 const LUFFY_NEW_ASSET_SET = new Set(LUFFY_NEW_ASSETS);
+const ROOM_NEW_V1215_ASSETS = [
+  ...['crew-cabin', 'sunny-deck', 'sunny-kitchen', 'sunny-library', 'sunny-workshop', 'sunny-aquarium']
+    .map(key => `scenes/${key}-cutout-v3.webp`),
+  ...['dawn', 'day', 'dusk', 'night', 'storm'].map(key => `sea/ocean-${key}.webp`),
+  'minigames_v1/fishing-sea.webp',
+  'minigames_v1/repair-workbench-v2.webp',
+  'minigames_v1/navigation-chart-v2.webp',
+  'minigames_v1/cooking-galley-v2.webp',
+  'minigames_v1/supply-deck-v2.webp',
+  ...['balloon-catfish', 'glistening-saury', 'panda-shark', 'smile-jellyfish']
+    .map(key => `fish_v1/${key}.webp`),
+  ...['aquarium-tank', 'crew-tea-table', 'fishing-gear-rack', 'galley-icebox']
+    .map(key => `furniture/${key}.webp`),
+  ...['aquarium-tank', 'crew-tea-table', 'fishing-gear-rack', 'galley-icebox']
+    .flatMap(key => [0, 1, 2, 3].map(rotation => `furniture_views/${key}/${rotation}.webp`)),
+  ...['vivi', 'shanks', 'mihawk', 'perona', 'marco', 'buggy', 'carrot', 'yamato', 'bonclay', 'koala']
+    .map(key => `reserved_v3_previews/${key}.webp`)
+];
+const ROOM_NEW_V1215_SET = new Set(ROOM_NEW_V1215_ASSETS);
+const ROOM_LOCKED_V1215_PREVIEW_KEYS = ['vivi', 'shanks', 'mihawk', 'perona', 'marco', 'buggy', 'carrot', 'yamato', 'bonclay', 'koala'];
+const ROOM_LOCKED_V1215_VIVI_ASSETS = [
+  'reserved_v3/vivi/portrait.webp',
+  ...['walk', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south'].map(direction => `reserved_v3/vivi/${kind}/${direction}.webp`)),
+  ...['east', 'west', 'north', 'south'].map(direction => `reserved_v3/vivi/life/work-${direction}.webp`),
+  ...['eat', 'rest', 'sleep', 'train'].map(action => `reserved_v3/vivi/life/${action}-south.webp`)
+];
+const ROOM_LOCKED_V1215_VIVI_SET = new Set(ROOM_LOCKED_V1215_VIVI_ASSETS);
 const ROOM_LIFE_FURNITURE = ['furniture/galley-stove.webp', ...[0,1,2,3].map(rotation => `furniture_views/galley-stove/${rotation}.webp`)];
 const ROOM_DEPTH_ACTION_OVERRIDES = new Set([
   ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'brook'].map(key => `${key}/walk2`),
@@ -198,14 +229,13 @@ const EXTRA_RESOURCES = [
   {
     from: '../public/images/launcher_announcements',
     to: 'launcher-assets/images/launcher_announcements',
-    filter: ['launcher-life-1.2.13.webp', 'launcher-proportions-1.2.14.webp']
+    filter: ['launcher-life-1.2.13.webp', 'launcher-proportions-1.2.14.webp', 'launcher-life-fishing-1.2.15.webp']
   },
   {
     from: '../public/images/launcher_room',
     to: 'launcher-assets/images/launcher_room',
     filter: [
-      'scenes/sunny-deck.webp', 'scenes/sunny-kitchen.webp', 'scenes/sunny-library.webp',
-      'scenes/crew-cabin-v2.webp', 'scenes/sunny-deck-v2.webp', 'scenes/sunny-kitchen-v2.webp', 'scenes/sunny-library-v2.webp',
+      'scenes/sunny-deck-v2.webp', 'scenes/sunny-kitchen-v2.webp', 'scenes/sunny-library-v2.webp',
       'furniture/helm.webp', 'furniture/map-table.webp', 'furniture/treasure-chest.webp',
       'furniture/tangerine-tree.webp', 'furniture/swords-rack.webp', 'furniture/kitchen-table.webp',
       'furniture/bookshelf.webp', 'furniture/medicine-cabinet.webp', 'furniture/piano.webp',
@@ -255,7 +285,6 @@ const EXTRA_RESOURCES = [
       'emotions/jinbe-annoyed.webp',
       'frames/straw-hat.webp', 'frames/ship-wheel.webp',
       ...ROOM_DEPTH_ASSETS,
-      ...ROOM_MOTION_ASSETS,
       ...ROOM_PORTRAIT_ASSETS,
       ...ROOM_HD_ASSETS,
       ...ROOM_LIFE_FURNITURE,
@@ -264,7 +293,9 @@ const EXTRA_RESOURCES = [
       ...ACE_V2_ASSETS,
       ...ROOM_NEW_V127_ASSETS,
       ...ROOM_NEW_V128_ASSETS,
-      ...LUFFY_NEW_ASSETS
+      ...LUFFY_NEW_ASSETS,
+      ...ROOM_NEW_V1215_ASSETS,
+      ...ROOM_LOCKED_V1215_VIVI_ASSETS
     ]
   },
   {
@@ -291,7 +322,9 @@ const EXTRA_RESOURCES = [
       'manifests/card-assets-440918e609684317.json',
       'manifests/board-assets-eb95373ee6ab1aa3.json',
       'manifests/chess-assets-4a14ed8c714c0b60.json',
-      'manifests/*-package-*.json'
+      'manifests/card-package-ca251af687e50daf.json',
+      'manifests/board-package-e98ef3f16bf6e6e4.json',
+      'manifests/chess-package-d37cd9a585600687.json'
     ]
   },
   {
@@ -566,8 +599,8 @@ function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
   const luffyArtEnabled = require('../desktop/launcher-room-motion.js').LUFFY_ART_ENABLED === true;
-  assert(packageJson.version === (luffyArtEnabled ? '1.2.14' : '1.2.13'),
-    'Luffy art gate and desktop launcher version must advance together.');
+  assert(luffyArtEnabled && packageJson.version === '1.2.15',
+    'Luffy art gate must remain enabled in launcher 1.2.15.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   const announcementConfig = readJson(path.join(ROOT, 'config/launcher-announcements-v1.json'), 'launcher announcements');
   require('../server/launcher-announcements').validateConfig(announcementConfig);
@@ -603,11 +636,18 @@ function validateSourcePackage() {
   'Historical launcher 1.2.13 character life announcement changed.');
   const proportionAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.14-luffy-proportions');
   assert(proportionAnnouncement?.status === 'published' && proportionAnnouncement.scope === 'launcher' &&
-    proportionAnnouncement.version === packageJson.version &&
+    proportionAnnouncement.version === '1.2.14' &&
     proportionAnnouncement.requiredRelease?.kind === 'launcher' &&
-    proportionAnnouncement.requiredRelease?.version === packageJson.version &&
+    proportionAnnouncement.requiredRelease?.version === '1.2.14' &&
     proportionAnnouncement.image?.asset === 'images/launcher_announcements/launcher-proportions-1.2.14.webp',
   'Launcher 1.2.14 proportion announcement must be illustrated and gated to this release.');
+  const fishingAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.15-fishing-and-living-seas');
+  assert(fishingAnnouncement?.status === 'published' && fishingAnnouncement.scope === 'launcher' &&
+    fishingAnnouncement.version === packageJson.version &&
+    fishingAnnouncement.requiredRelease?.kind === 'launcher' &&
+    fishingAnnouncement.requiredRelease?.version === packageJson.version &&
+    fishingAnnouncement.image?.asset === 'images/launcher_announcements/launcher-life-fishing-1.2.15.webp',
+  'Launcher 1.2.15 fishing announcement must be illustrated and release gated.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
   assert(packageJson.build?.appId === 'com.onepiece.tabletop.desktop', 'Desktop appId changed unexpectedly.');
@@ -658,6 +698,66 @@ function validateSourcePackage() {
     const pathPart = `images/launcher_room/${relative}`;
     assert(resolveScene(`opui://launcher/${pathPart}`) === path.resolve(ROOT, 'public', pathPart), `Luffy candidate path is blocked by the packaged protocol: ${relative}`);
   }
+  for (const relative of ROOM_NEW_V1215_ASSETS) {
+    const pathPart = `images/launcher_room/${relative}`;
+    assert(resolveScene(`opui://launcher/${pathPart}`) === path.resolve(ROOT, 'public', pathPart), `1.2.15 room art is blocked by packaged protocol: ${relative}`);
+  }
+  const v1215Art = readJson(path.join(ROOT, 'tools/launcher-room/release-v1215/manifest.json'), 'Launcher 1.2.15 art manifest');
+  assert(v1215Art.schema === 'launcher-life-fishing-art/1' && v1215Art.release === packageJson.version &&
+    v1215Art.itemCount === ROOM_NEW_V1215_ASSETS.length && Array.isArray(v1215Art.items),
+  'Launcher 1.2.15 art manifest identity or count differs.');
+  assertExactJson(sorted(v1215Art.items.map(item => item.path)),
+    sorted(ROOM_NEW_V1215_ASSETS.map(asset => `public/images/launcher_room/${asset}`)),
+    'Launcher 1.2.15 reviewed art asset set');
+  for (const item of [...v1215Art.items, v1215Art.announcement]) {
+    assert(/^public\/images\/(?:launcher_room|launcher_announcements)\/[a-z0-9._/-]+\.webp$/.test(item.path) &&
+      Number.isSafeInteger(item.bytes) && item.bytes > 0 && /^[a-f0-9]{64}$/.test(item.sha256) &&
+      Array.isArray(item.dimensions) && item.dimensions.length === 2 && item.dimensions.every(value => Number.isInteger(value) && value > 0),
+    `Invalid Launcher 1.2.15 art manifest entry: ${item.path}`);
+    const file = path.join(ROOT, ...item.path.split('/'));
+    assert(fs.statSync(file).size === item.bytes && sha256File(file) === item.sha256,
+      `Launcher 1.2.15 art bytes or digest differ: ${item.path}`);
+  }
+  assert(v1215Art.announcement.path === 'public/images/launcher_announcements/launcher-life-fishing-1.2.15.webp',
+    'Launcher 1.2.15 announcement image differs from reviewed asset.');
+  const previewRosterPath = path.join(ROOT, 'tools/launcher-room/reserved-v3/roster.json');
+  const previewRoster = readJson(previewRosterPath, '1.2.15 locked preview roster');
+  const previewManifest = readJson(path.join(ROOT, 'tools/launcher-room/reserved-v3/preview-manifest.json'), '1.2.15 locked preview manifest');
+  assert(previewRoster.schema === 'one-piece-launcher-future-crew/1' && previewRoster.notReleaseAuthority === true &&
+    previewRoster.characterCount === 10 && previewManifest.schema === 'one-piece-locked-crew-previews/1' &&
+    previewManifest.characterCount === 10 && previewManifest.rosterSha256 === sha256File(previewRosterPath),
+  'Ten locked preview roster identity or source hash differs.');
+  assertExactJson(sorted(Object.keys(previewRoster.characters)), sorted(ROOM_LOCKED_V1215_PREVIEW_KEYS), 'Ten locked roster keys');
+  assertExactJson(sorted(Object.keys(previewManifest.previews)), sorted(ROOM_LOCKED_V1215_PREVIEW_KEYS), 'Ten locked preview keys');
+  for (const key of ROOM_LOCKED_V1215_PREVIEW_KEYS) {
+    const character = previewRoster.characters[key];
+    const item = previewManifest.previews[key];
+    const relative = `public/images/launcher_room/reserved_v3_previews/${key}.webp`;
+    assert(character.locked === true && character.runtimeEligible === false && character.availableForPurchase === false &&
+      item.path === relative && item.releaseStatus === 'locked-art-preview-only' && item.runtimeAnimationComplete === false,
+    `Locked candidate was marked playable or has an invalid preview path: ${key}`);
+    assert(fs.statSync(path.join(ROOT, ...relative.split('/'))).size === item.bytes &&
+      sha256File(path.join(ROOT, ...relative.split('/'))) === item.sha256,
+    `Locked candidate preview bytes or digest differ: ${key}`);
+  }
+  const viviCandidate = readJson(path.join(ROOT, 'tools/launcher-room/reserved-v3/manifests/vivi.json'), '1.2.15 Vivi locked art candidate');
+  assert(viviCandidate.character === 'vivi' && viviCandidate.runtimeEligible === false &&
+    viviCandidate.availableForPurchase === false && viviCandidate.releasePolicy === 'locked-art-candidate',
+  'Vivi candidate must remain locked.');
+  assertExactJson(sorted(viviCandidate.items.map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
+    sorted(ROOM_LOCKED_V1215_VIVI_ASSETS), 'Vivi candidate atlas set');
+  for (const item of viviCandidate.items) {
+    const source = path.join(ROOT, ...item.asset.split('/'));
+    assert(fs.statSync(source).size === item.bytes && sha256File(source) === item.sha256,
+      `Vivi candidate atlas differs from reviewed source: ${item.asset}`);
+    assert(resolveScene(`opui://launcher/${item.asset.replace(/^public\//, '')}`) === source,
+      `Vivi locked candidate is blocked by packaged protocol: ${item.asset}`);
+  }
+  assert(resolveScene('opui://launcher/images/launcher_room/reserved_v3_previews/unknown.webp') === null,
+    'Unknown locked candidate preview was admitted by packaged protocol.');
+  assert(resolveScene('opui://launcher/images/launcher_announcements/launcher-life-fishing-1.2.15.webp') ===
+    path.resolve(ROOT, 'public/images/launcher_announcements/launcher-life-fishing-1.2.15.webp'),
+  '1.2.15 announcement art is blocked by packaged protocol.');
   for (const relative of ['motion_v4/unknown/east.webp', 'acting_v4/luffy/unknown.webp', 'motion_v5/zoro/east.webp', 'life_hd_v3/zoro/work-east.webp', 'portrait_v4/zoro.webp']) {
     assert(resolveScene(`opui://launcher/images/launcher_room/${relative}`) === null, `Unreviewed HD room atlas was admitted: ${relative}`);
   }
@@ -842,8 +942,10 @@ function validateSourcePackage() {
   const packagedLifeHistory = lifeStatus.manifest.items.filter(item =>
     ROOM_LIFE_FURNITURE.includes(item.asset.replace(/^public\/images\/launcher_room\//, '')));
   assert(packagedLifeHistory.length === ROOM_LIFE_FURNITURE.length, 'Historical stove resources are incomplete.');
-  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items, ...packagedLifeHistory, ...presentationStatus.hd.manifest.items, ...presentationStatus.reserved.manifest.items, ...presentationStatus.newArt.manifest.items, ...ACE_V2_MANIFEST.items.map(item => ({asset: item.path}))].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
-    sorted(roomResource.filter.filter(asset => !asset.startsWith('life_hd_v2/') && !LUFFY_NEW_ASSET_SET.has(asset))), 'Historical room art manifest output set');
+  // v3 movement atlases remain in source for historical review, but the live
+  // renderer uses v4/v5 and omits v3 from the update installer.
+  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items, ...packagedLifeHistory, ...presentationStatus.hd.manifest.items, ...presentationStatus.reserved.manifest.items, ...presentationStatus.newArt.manifest.items, ...ACE_V2_MANIFEST.items.map(item => ({asset: item.path}))].map(item => item.asset.replace(/^public\/images\/launcher_room\//, '')).filter(asset => !ROOM_MOTION_ASSETS.includes(asset) && !['scenes/sunny-deck.webp', 'scenes/sunny-kitchen.webp', 'scenes/sunny-library.webp', 'scenes/crew-cabin-v2.webp'].includes(asset))),
+    sorted(roomResource.filter.filter(asset => !asset.startsWith('life_hd_v2/') && !LUFFY_NEW_ASSET_SET.has(asset) && !ROOM_NEW_V1215_SET.has(asset) && !ROOM_LOCKED_V1215_VIVI_SET.has(asset))), 'Historical room art manifest output set');
   assert(ACE_V2_MANIFEST.schema === 'launcher-ace-lean-art/1' && ACE_V2_MANIFEST.visualAccepted === true &&
     ACE_V2_MANIFEST.humanAcceptance === false && ACE_V2_MANIFEST.atlasCount === 17 &&
     ACE_V2_MANIFEST.frameCount === 81 && ACE_V2_MANIFEST.totalRuntimeBytes <= 4 * 1024 * 1024,
@@ -1068,19 +1170,21 @@ function validateAsar(asarPath, packageJson) {
   return entries.length;
 }
 
-function validateLauncherMediaBudgets(launcherBytes, roomMotionBytes, lifeBytes, lifeHdBytes, expansionMedia) {
+function validateLauncherMediaBudgets(launcherBytes, roomMotionBytes, lifeBytes, lifeHdBytes, expansionMedia, lockedCrewBytes) {
   assert(expansionMedia.length === 32 && new Set(expansionMedia.map(item => item.asset)).size === 32, 'Expansion media budget requires exactly 32 unique assets.');
   assertExactJson(sorted(expansionMedia.map(item => item.asset)), sorted(ROOM_NEW_V128_ASSETS), 'Expansion media budget asset set');
   assert(expansionMedia.every(item => Number.isSafeInteger(item.bytes) && item.bytes > 0), 'Expansion media sizes must come from actual packaged files.');
   const expansionBytes = expansionMedia.reduce((sum, item) => sum + item.bytes, 0);
   assert(expansionBytes <= MAX_ROOM_EXPANSION_ASSET_BYTES, 'Reviewed expansion media exceeds its separate 4 MiB budget.');
-  const launcherBaseBytes = launcherBytes - roomMotionBytes - lifeBytes - lifeHdBytes - expansionBytes;
+  assert(Number.isSafeInteger(lockedCrewBytes) && lockedCrewBytes > 0 && lockedCrewBytes <= MAX_LOCKED_CREW_CANDIDATE_BYTES,
+    'Locked Vivi candidate exceeds its separate 4 MiB budget.');
+  const launcherBaseBytes = launcherBytes - roomMotionBytes - lifeBytes - lifeHdBytes - expansionBytes - lockedCrewBytes;
   assert(launcherBaseBytes >= 0, 'Launcher media classifications cannot exceed the actual total.');
   assert(roomMotionBytes <= MAX_ROOM_MOTION_ASSET_BYTES, `Room motion and portraits exceed ${MAX_ROOM_MOTION_ASSET_BYTES} bytes.`);
   assert(lifeBytes <= MAX_ROOM_LIFE_FURNITURE_BYTES, 'Room life furniture exceeds its separate 1 MiB budget.');
   assert(lifeHdBytes <= MAX_ROOM_LIFE_HD_ASSET_BYTES, 'Reviewed HD life media exceeds its separate 16 MiB budget.');
   assert(launcherBaseBytes <= MAX_LAUNCHER_ASSET_BYTES, `Existing launcher media exceeds ${MAX_LAUNCHER_ASSET_BYTES} bytes.`);
-  assert(launcherBytes <= MAX_LAUNCHER_ASSET_BYTES + MAX_ROOM_MOTION_ASSET_BYTES + MAX_ROOM_LIFE_FURNITURE_BYTES + MAX_ROOM_LIFE_HD_ASSET_BYTES,
+  assert(launcherBytes <= MAX_LAUNCHER_ASSET_BYTES + MAX_ROOM_MOTION_ASSET_BYTES + MAX_ROOM_LIFE_FURNITURE_BYTES + MAX_ROOM_LIFE_HD_ASSET_BYTES + MAX_LOCKED_CREW_CANDIDATE_BYTES,
     'Combined launcher media budget exceeded.');
   return { launcherBaseBytes, expansionBytes };
 }
@@ -1114,9 +1218,9 @@ function validateWinUnpacked(winUnpackedPath, source) {
   const actualAssetNames = sorted(actualAssetFiles.map((filePath) => relativePosix(launcherAssetRoot, filePath)));
   assertExactJson(actualAssetNames, sorted(expectedAssets.keys()), 'win-unpacked launcher asset set');
   const launcherBytes = sumFileBytes(actualAssetFiles);
-  const roomMotionFiles = [...ROOM_MOTION_ASSETS, ...ROOM_PORTRAIT_ASSETS, ...ROOM_HD_ASSETS]
+  const roomMotionFiles = [...ROOM_PORTRAIT_ASSETS, ...ROOM_HD_ASSETS]
     .map(asset => path.join(launcherAssetRoot, 'images', 'launcher_room', ...asset.split('/')));
-  assert(roomMotionFiles.length === 170 && new Set(roomMotionFiles).size === 170, 'Room media budget must cover eighty legacy atlases, eighty HD atlases and ten portraits.');
+  assert(roomMotionFiles.length === 90 && new Set(roomMotionFiles).size === 90, 'Room media budget must cover eighty HD atlases and ten portraits.');
   const roomMotionBytes = sumFileBytes(roomMotionFiles);
   const lifeFiles = ROOM_LIFE_FURNITURE.map(asset => path.join(launcherAssetRoot, 'images', 'launcher_room', ...asset.split('/')));
   assert(lifeFiles.length === 5 && new Set(lifeFiles).size === 5, 'Room life furniture must contain five stove assets.');
@@ -1125,7 +1229,9 @@ function validateWinUnpacked(winUnpackedPath, source) {
   assert(lifeHdFiles.length === 116 && new Set(lifeHdFiles).size === 116, 'HD life media must contain 116 reviewed loops.');
   const lifeHdBytes = sumFileBytes(lifeHdFiles);
   const expansionMedia = ROOM_NEW_V128_ASSETS.map(asset => ({ asset, bytes: fs.statSync(path.join(launcherAssetRoot, 'images', 'launcher_room', ...asset.split('/'))).size }));
-  const { launcherBaseBytes, expansionBytes } = validateLauncherMediaBudgets(launcherBytes, roomMotionBytes, lifeBytes, lifeHdBytes, expansionMedia);
+  const lockedCrewBytes = sumFileBytes(ROOM_LOCKED_V1215_VIVI_ASSETS.map(asset =>
+    path.join(launcherAssetRoot, 'images', 'launcher_room', ...asset.split('/'))));
+  const { launcherBaseBytes, expansionBytes } = validateLauncherMediaBudgets(launcherBytes, roomMotionBytes, lifeBytes, lifeHdBytes, expansionMedia, lockedCrewBytes);
   for (const [packagedName, sourcePath] of expectedAssets) {
     const packagedPath = path.join(launcherAssetRoot, ...packagedName.split('/'));
     assert(sha256File(packagedPath) === sha256File(sourcePath), `Packaged launcher resource differs from source: ${packagedName}`);
@@ -1138,9 +1244,7 @@ function validateWinUnpacked(winUnpackedPath, source) {
     'catalog-v2.json',
     'catalog-v3.json',
     ...['card', 'board', 'chess'].map((gameId) => source.catalog.games[gameId].manifestPath.replace(/^desktop\//, '')),
-    ...listFilesRecursive(path.join(sourceCatalogRoot, 'manifests'))
-      .map((filePath) => relativePosix(sourceCatalogRoot, filePath))
-      .filter((relativeName) => /^manifests\/(?:card|board|chess)-package-[a-f0-9]{16}\.json$/.test(relativeName))
+    ...['card', 'board', 'chess'].map((gameId) => source.catalogV3.games[gameId].manifestPath.replace(/^desktop\//, ''))
   ]);
   const actualCatalogNames = sorted(catalogFiles.map((filePath) => relativePosix(catalogRoot, filePath)));
   assertExactJson(actualCatalogNames, expectedCatalogNames, 'win-unpacked catalog file set');

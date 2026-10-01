@@ -329,24 +329,31 @@ function resolveLauncherResource(requestUrl) {
       /^images\/walls\/[1-8]\.webp$/,
       /^images\/flags\/(?:[1-9]|1[0-5])\.webp$/,
       /^images\/profile_decor\/(?:bg-(?:luffy|zoro|nami)|frame-(?:luffy|zoro)|sticker-(?:luffy|zoro|nami|chopper|ace|robin))\.webp$/,
-      /^images\/launcher_announcements\/(?:launcher-life-1\.2\.13|launcher-proportions-1\.2\.14)\.webp$/,
+      /^images\/launcher_announcements\/(?:launcher-life-1\.2\.13|launcher-proportions-1\.2\.14|launcher-life-fishing-1\.2\.15)\.webp$/,
       /^images\/launcher_room\/(?:scenes\/(?:sunny-deck|sunny-kitchen|sunny-library)|furniture\/(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|galley-stove|bookshelf|medicine-cabinet|piano|tool-bench)|chibi\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)|emotions\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)-(?:happy|surprised|focused|annoyed)|frames\/(?:straw-hat|ship-wheel))\.webp$/,
       /^images\/launcher_room\/scenes\/(?:crew-cabin|sunny-deck|sunny-kitchen|sunny-library)-v2\.webp$/,
+      /^images\/launcher_room\/scenes\/(?:crew-cabin|sunny-deck|sunny-kitchen|sunny-library|sunny-workshop|sunny-aquarium)-cutout-v3\.webp$/,
+      /^images\/launcher_room\/sea\/ocean-(?:dawn|day|dusk|night|storm)\.webp$/,
       /^images\/launcher_room\/furniture_views\/(?:bookshelf|helm|kitchen-table|galley-stove|map-table|medicine-cabinet|piano|swords-rack|tangerine-tree|tool-bench|treasure-chest)\/[0-3]\.webp$/,
       /^images\/launcher_room\/life_hd_v2\/(?:luffy|zoro|nami|usopp|sanji|chopper|franky|brook|jinbe)\/(?:work|read|cook|craft|medicine|helm|music|eat|rest|sleep|train)-(?:east|west|north|south)\.webp$/,
       /^images\/launcher_room\/life_hd_v3\/luffy\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south)\.webp$/,
       /^images\/launcher_room\/action_frames\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:idle|walk1|walk2|talk_happy|talk_annoyed|surprised|focused_use|sit|wave)\.webp$/,
-      /^images\/launcher_room\/(?:motion|acting)_v[34]\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:east|west|north|south)\.webp$/,
+      /^images\/launcher_room\/(?:motion|acting)_v4\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:east|west|north|south)\.webp$/,
       /^images\/launcher_room\/(?:motion|acting)_v5\/luffy\/(?:east|west|north|south)\.webp$/,
       /^images\/launcher_room\/portrait_v3\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\.webp$/,
       /^images\/launcher_room\/portrait_v4\/luffy\.webp$/,
       /^images\/launcher_room\/reserved_v1\/(?:ace|sabo|law|hancock)\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
       /^images\/launcher_room\/reserved_v2\/ace\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
       /^images\/launcher_room\/robin_v2\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:(?:work|read)-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
-      /^images\/launcher_room\/minigames_v1\/(?:deck|cargo-food|cargo-tools|cargo-books)\.webp$/,
+      /^images\/launcher_room\/minigames_v1\/(?:deck|cargo-food|cargo-tools|cargo-books|fishing-sea|repair-workbench-v2|navigation-chart-v2|cooking-galley-v2|supply-deck-v2)\.webp$/,
+      /^images\/launcher_room\/fish_v1\/(?:balloon-catfish|glistening-saury|panda-shark|smile-jellyfish)\.webp$/,
+      /^images\/launcher_room\/reserved_v3_previews\/(?:vivi|shanks|mihawk|perona|marco|buggy|carrot|yamato|bonclay|koala)\.webp$/,
+      /^images\/launcher_room\/reserved_v3\/vivi\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
       /^images\/launcher_room\/scenes\/(?:sunny-workshop|sunny-aquarium)\.webp$/,
       /^images\/launcher_room\/furniture\/(?:supply-rack|log-pose-desk|repair-cart|library-cart|medical-cart|den-den-desk)\.webp$/,
       /^images\/launcher_room\/furniture_views\/(?:supply-rack|log-pose-desk|repair-cart|library-cart|medical-cart|den-den-desk)\/[0-3]\.webp$/,
+      /^images\/launcher_room\/furniture\/(?:aquarium-tank|crew-tea-table|fishing-gear-rack|galley-icebox)\.webp$/,
+      /^images\/launcher_room\/furniture_views\/(?:aquarium-tank|crew-tea-table|fishing-gear-rack|galley-icebox)\/[0-3]\.webp$/,
       /^audio\/profile_bgm\/(?:harbor|night-watch|voyage)\.ogg$/,
       /^audio\/bgm\/track(?:0[1-9]|1[0-9]|20)\.mp3$/,
       /^videos\/game_launcher\/[A-Za-z0-9._-]+$/
@@ -1337,9 +1344,9 @@ async function runVisualOrSmokeCapture() {
           'images/profile_decor/sticker-ace.webp', 'images/profile_decor/sticker-robin.webp',
           'images/launcher_announcements/launcher-life-1.2.13.webp',
           'images/launcher_announcements/launcher-proportions-1.2.14.webp',
+          'images/launcher_announcements/launcher-life-fishing-1.2.15.webp',
           'audio/profile_bgm/harbor.ogg', 'audio/profile_bgm/night-watch.ogg', 'audio/profile_bgm/voyage.ogg',
-          ...['sunny-deck', 'sunny-kitchen', 'sunny-library'].map(name => `images/launcher_room/scenes/${name}.webp`),
-          ...['crew-cabin', 'sunny-deck', 'sunny-kitchen', 'sunny-library'].map(name => `images/launcher_room/scenes/${name}-v2.webp`),
+          ...['sunny-deck', 'sunny-kitchen', 'sunny-library'].map(name => `images/launcher_room/scenes/${name}-v2.webp`),
           ...['helm', 'map-table', 'treasure-chest', 'tangerine-tree', 'swords-rack', 'kitchen-table',
             'bookshelf', 'medicine-cabinet', 'piano', 'tool-bench'].map(name => `images/launcher_room/furniture/${name}.webp`),
           ...['luffy', 'zoro', 'nami', 'chopper', 'sanji', 'robin', 'usopp', 'franky', 'brook', 'jinbe']
@@ -1353,9 +1360,6 @@ async function runVisualOrSmokeCapture() {
           ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']
             .flatMap(name => ['idle', 'walk1', 'walk2', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave']
               .map(pose => `images/launcher_room/action_frames/${name}/${pose}.webp`)),
-          ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']
-            .flatMap(name => ['motion', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south']
-              .map(direction => `images/launcher_room/${kind}_v3/${name}/${direction}.webp`))),
           ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']
             .map(name => `images/launcher_room/portrait_v3/${name}.webp`),
           ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']
@@ -1377,6 +1381,26 @@ async function runVisualOrSmokeCapture() {
             .map(asset => `images/launcher_room/reserved_v2/ace/${asset}`),
           ...["portrait.webp", "walk/east.webp", "walk/west.webp", "walk/north.webp", "walk/south.webp", "acting/east.webp", "acting/west.webp", "acting/north.webp", "acting/south.webp", "life/work-east.webp", "life/work-west.webp", "life/work-north.webp", "life/work-south.webp", "life/read-east.webp", "life/read-west.webp", "life/read-north.webp", "life/read-south.webp", "life/eat-south.webp", "life/rest-south.webp", "life/sleep-south.webp", "life/train-south.webp"].map(asset => `images/launcher_room/robin_v2/${asset}`),
           ...['deck','cargo-food','cargo-tools','cargo-books'].map(name => `images/launcher_room/minigames_v1/${name}.webp`),
+          'images/launcher_room/minigames_v1/fishing-sea.webp',
+          'images/launcher_room/minigames_v1/repair-workbench-v2.webp',
+          'images/launcher_room/minigames_v1/navigation-chart-v2.webp',
+          'images/launcher_room/minigames_v1/cooking-galley-v2.webp',
+          'images/launcher_room/minigames_v1/supply-deck-v2.webp',
+          ...['balloon-catfish','glistening-saury','panda-shark','smile-jellyfish']
+            .map(name => `images/launcher_room/fish_v1/${name}.webp`),
+          ...['vivi','shanks','mihawk','perona','marco','buggy','carrot','yamato','bonclay','koala']
+            .map(name => `images/launcher_room/reserved_v3_previews/${name}.webp`),
+          ...['portrait.webp', ...['walk', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south'].map(direction => `${kind}/${direction}.webp`)),
+            ...['east', 'west', 'north', 'south'].map(direction => `life/work-${direction}.webp`),
+            ...['eat', 'rest', 'sleep', 'train'].map(action => `life/${action}-south.webp`)]
+            .map(asset => `images/launcher_room/reserved_v3/vivi/${asset}`),
+          ...['crew-cabin','sunny-deck','sunny-kitchen','sunny-library','sunny-workshop','sunny-aquarium']
+            .map(name => `images/launcher_room/scenes/${name}-cutout-v3.webp`),
+          ...['dawn','day','dusk','night','storm']
+            .map(name => `images/launcher_room/sea/ocean-${name}.webp`),
+          ...['aquarium-tank','crew-tea-table','fishing-gear-rack','galley-icebox']
+            .flatMap(name => [`images/launcher_room/furniture/${name}.webp`,
+              ...[0,1,2,3].map(rotation => `images/launcher_room/furniture_views/${name}/${rotation}.webp`)]),
           ...lifeActions.hdAssets().map(asset => `images/launcher_room/life_hd_v2/${asset}`),
           ...[0,1,2,3].map(rotation => `images/launcher_room/furniture_views/galley-stove/${rotation}.webp`),
           'images/launcher_room/furniture/galley-stove.webp',

@@ -1,0 +1,197 @@
+{
+  "schema": "one-piece-locked-crew-previews/1",
+  "rosterSha256": "5b6019e0ee38d90f5325e056c59213eae149775923f1d97f9befa75b2f76e730",
+  "characterCount": 10,
+  "previews": {
+    "vivi": {
+      "path": "public/images/launcher_room/reserved_v3_previews/vivi.webp",
+      "sha256": "1a56a06c2a453f6ebf8bde6032dbf19d7f36f7b96f782253e2de4116cd65eb7a",
+      "bytes": 16552,
+      "dimensions": [
+        256,
+        256
+      ],
+      "sourcePath": "tools/launcher-room/reserved-v3/sources/vivi/master-01/source.png",
+      "sourceSha256": "859a378b4aa97cfaafbeaf0bf94088535684e18b5d1980c4c9510ec0274294e3",
+      "frontCellBoundingBox": [
+        67,
+        8,
+        434,
+        602
+      ],
+      "releaseStatus": "locked-art-preview-only",
+      "runtimeAnimationComplete": false
+    },
+    "shanks": {
+      "path": "public/images/launcher_room/reserved_v3_previews/shanks.webp",
+      "sha256": "750199629ae29cc59b769b21e3e85ebd05599bebbb586be3f60a3dc541cb0815",
+      "bytes": 13532,
+      "dimensions": [
+        256,
+        256
+      ],
+      "sourcePath": "tools/launcher-room/reserved-v3/sources/shanks/master-01/source.png",
+      "sourceSha256": "96e8256c5eb63d2e56a0cc338e4894a10804ea3f2d1d897679c2c974e2ca4da6",
+      "frontCellBoundingBox": [
+        35,
+        0,
+        471,
+        601
+      ],
+      "releaseStatus": "locked-art-preview-only",
+      "runtimeAnimationComplete": false
+    },
+    "mihawk": {
+      "path": "public/images/launcher_room/reserved_v3_previews/mihawk.webp",
+      "sha256": "a428a2277b1ac1b6f3056424daf208a8cd839770a75ca2fe1177cf8d806274da",
+      "bytes": 14654,
+      "dimensions": [
+        256,
+        256
+      ],
+      "sourcePath": "tools/launcher-room/reserved-v3/sources/mihawk/master-01/source.png",
+      "sourceSha256": "fede9b726e9ffe7eafcf15c8b1990ab18c2e39ea7802e6e6b166e65ae9f851ed",
+      "frontCellBoundingBox": [
+        51,
+        16,
+        430,
+        596
+      ],
+      "releaseStatus": "locked-art-preview-only",
+      "runtimeAnimationComplete": false
+    },
+    "perona": {
+      "path": "public/images/launcher_room/reserved_v3_previews/perona.webp",
+      "sha256": "ecdc4e3ffce402c4ab15068406c2c606bf43336581a04fa3f7189850d3910630",
+      "bytes": 18808,
+      "dimensions": [
+        256,
+        256
+      ],
+      "sourcePath": "tools/launcher-room/reserved-v3/sources/perona/master-01/source.png",
+      "sourceSha256": "4fe0fafbec41de42fe31f2621d8af1f7aaecfd174e767fe6f22b96233fb07a43",
+      "frontCellBoundingBox": [
+        67,
+        0,
+        411,
+        602
+      ],
+      "releaseStatus": "locked-art-preview-only",
+      "runtimeAnimationComplete": false
+    },
+    "marco": {
+      "path": "public/images/launcher_room/reserved_v3_previews/marco.webp",
+      "sha256": "bac3da5ee40dcb2e916a0217e7bdb2bc98addd0a23324cd6ed8b8f08d06dc92e",
+      "bytes": 13718,
+      "dimensions": [
+        256,
+        256
+      ],
+      "sourcePath": "tools/launcher-room/reserved-v3/sources/marco/master-01/source.png",
+      "sourceSha256": "f6e15c12b517470d9b89e0c0b1092ba27edcbe6e7af5e13b5e10e91e79a5c3a0",
+      "frontCellBoundingBox": [
+        89,
+        0,
+        340,
+        587
+      ],
+      "releaseStatus": "locked-art-preview-only",
+      "runtimeAnimationComplete": false
+    },
+    "buggy": {
+      "path": "public/images/launcher_room/reserved_v3_previews/buggy.webp",
+      "sha256": "4a51eb1ac7a4fce4122c05d4d878972c70a2e69c1078fec9b8ff9f43be64bad8",
+      "bytes": 20100,
+      "dimensions": [
+        256,
+        256
+      ],
+      "sourcePath": "tools/launcher-room/reserved-v3/sources/buggy/master-01/source.png",
+      "sourceSha256": "feb84a8d9ab26d43d7d1fe788530cefbee571370442c5576ed9764254e45a80a",
+      "frontCellBoundingBox": [
+        8,
+        1,
+        467,
+        604
+      ],
+      "releaseStatus": "locked-art-preview-only",
+      "runtimeAnimationComplete": false
+    },
+    "carrot": {
+      "path": "public/images/launcher_room/reserved_v3_previews/carrot.webp",
+      "sha256": "af2cff49a4f9dbdfde68ec20ed51a90431611070366d2e5a60197538db8606e5",
+      "bytes": 14220,
+      "dimensions": [
+        256,
+        256
+      ],
+      "sourcePath": "tools/launcher-room/reserved-v3/sources/carrot/master-01/source.png",
+      "sourceSha256": "614874f1424ab610d519ae170d2b4dad5a89f33fd1d006d20d3c1c9eabd2d0fe",
+      "frontCellBoundingBox": [
+        69,
+        7,
+        377,
+        604
+      ],
+      "releaseStatus": "locked-art-preview-only",
+      "runtimeAnimationComplete": false
+    },
+    "yamato": {
+      "path": "public/images/launcher_room/reserved_v3_previews/yamato.webp",
+      "sha256": "17199e73c194f6dce28d23917d6c0f796284a769a28c5a977de9e55258a3e2ea",
+      "bytes": 16038,
+      "dimensions": [
+        256,
+        256
+      ],
+      "sourcePath": "tools/launcher-room/reserved-v3/sources/yamato/master-01/source.png",
+      "sourceSha256": "05c7dc77c78655d2e75d7170b94e38e0b2accdbbba673f3a2219027b9c0efa05",
+      "frontCellBoundingBox": [
+        99,
+        3,
+        406,
+        610
+      ],
+      "releaseStatus": "locked-art-preview-only",
+      "runtimeAnimationComplete": false
+    },
+    "bonclay": {
+      "path": "public/images/launcher_room/reserved_v3_previews/bonclay.webp",
+      "sha256": "f9edaaf614d1a57f4fbb6d0d4057e10502c6304158c91dee76dbeaf6b1c16f66",
+      "bytes": 21010,
+      "dimensions": [
+        256,
+        256
+      ],
+      "sourcePath": "tools/launcher-room/reserved-v3/sources/bonclay/master-01/source.png",
+      "sourceSha256": "30e1320732380ab4f13aaa98513cfaf0f50619b25f013752196b62f3544dd09f",
+      "frontCellBoundingBox": [
+        62,
+        11,
+        436,
+        595
+      ],
+      "releaseStatus": "locked-art-preview-only",
+      "runtimeAnimationComplete": false
+    },
+    "koala": {
+      "path": "public/images/launcher_room/reserved_v3_previews/koala.webp",
+      "sha256": "4d9e696d3970eaca6b188b20da9e9069ee910f37761f2542a440b281a8e8e9e7",
+      "bytes": 13238,
+      "dimensions": [
+        256,
+        256
+      ],
+      "sourcePath": "tools/launcher-room/reserved-v3/sources/koala/master-01/source.png",
+      "sourceSha256": "626a3aa8052c04a3370fc53f837104f4acdc2f017eadac0df0fce4ef2564826d",
+      "frontCellBoundingBox": [
+        108,
+        3,
+        338,
+        606
+      ],
+      "releaseStatus": "locked-art-preview-only",
+      "runtimeAnimationComplete": false
+    }
+  }
+}

@@ -114,6 +114,105 @@
   };
   Object.assign(PROFILES, reserved?.profiles || {});
   Object.assign(SOLO, reserved?.solo || {});
+  // New furniture keeps each speaker's established voice. These are spoken
+  // while facing the real prop; work and specialist clips remain controller-owned.
+  const NEW_FURNITURE_TEXT = {
+    luffy: {
+      'aquarium-tank': [['牠轉彎好快！再游一次給我看！','admire'],['喂，這尾是不是剛才釣上來的？','offer']],
+      'fishing-gear-rack': [['釣竿都在這！騙人布，哪支最好玩？','offer'],['這條線纏住啦！先別拉，會更亂！','think']],
+      'galley-icebox': [['香吉士！裡面有今天的晚餐嗎？','offer'],['我只看一眼！……好啦，先關起來。','tease']],
+      'crew-tea-table': [['大家都坐過來！我有件好玩的事要說！','offer'],['等一下！我要聽完騙人布那個故事！','admire']]
+    },
+    zoro: {
+      'aquarium-tank': [['游得挺穩。比那個吵的安靜多了。','think'],['別敲玻璃。嚇到牠了。','explain']],
+      'fishing-gear-rack': [['魚線繞在一起了。先分開再收。','work'],['釣竿別擋通道。有人會踩斷。','explain']],
+      'galley-icebox': [['我不懂食材。讓那廚子自己整理。','protest'],['門沒關緊。裡面的東西會壞吧。','think']],
+      'crew-tea-table': [['我坐一下。別以為要我講故事。','rest'],['那廚子又說什麼了？……算了。','think']]
+    },
+    nami: {
+      'aquarium-tank': [['水位剛好。窗邊的光別照太久。','think'],['顏色變了？先看水溫，再猜天氣。','explain']],
+      'fishing-gear-rack': [['釣線按長度收，下一次才不會打結。','work'],['風向變了，今天別在船尾甩竿。','explain']],
+      'galley-icebox': [['門開太久要耗冷氣。先想好再拿。','explain'],['香吉士做過清單了，缺的別重買。','work']],
+      'crew-tea-table': [['先坐好，我把剛才的航線說完。','explain'],['這壺茶誰泡的？謝啦，正好能歇一下。','smile']]
+    },
+    usopp: {
+      'aquarium-tank': [['看見沒？牠一看到本大爺就游過來了！','admire'],['水管那邊好像鬆了……我再看清楚。','think']],
+      'fishing-gear-rack': [['線輪先試空轉，卡住就不能下海！','work'],['這支竿的握把是我改的，順手吧！','admire']],
+      'galley-icebox': [['這不是寶箱吧？打開前先問香吉士！','think'],['太冷了！我只是幫忙檢查門有沒有關好！','protest']],
+      'crew-tea-table': [['聽好了！勇敢海上戰士的釣魚故事要開始啦！','offer'],['別打斷！最厲害的那段還沒說呢！','protest']]
+    },
+    sanji: {
+      'aquarium-tank': [['這些是大家養的，先讓牠們好好游。','nod'],['水質要顧，別拿吃剩的東西亂餵。','explain']],
+      'fishing-gear-rack': [['釣到的先記下來。我再決定怎麼料理。','think'],['魚鉤收好，別帶到廚房來。','explain']],
+      'galley-icebox': [['生的和熟的分層，這個可不能省。','work'],['先看日期。今晚該用的放前面。','work']],
+      'crew-tea-table': [['娜美小姐、羅賓小姐，茶點馬上來。','offer'],['魯夫，別把其他人的份也端走！','protest']]
+    },
+    chopper: {
+      'aquarium-tank': [['牠游得有點慢……是不是水太冷？','think'],['別敲玻璃！會把牠嚇壞的！','protest']],
+      'fishing-gear-rack': [['魚鉤要包好！扎到手會很痛！','explain'],['我能幫忙捲線！慢慢來就不會亂。','work']],
+      'galley-icebox': [['藥不能跟食材擺一起！我會分開放。','explain'],['門關好了！溫度要保持穩定。','nod']],
+      'crew-tea-table': [['騙人布的故事還沒講完！我想聽！','admire'],['給我一小杯就好。謝謝你！','smile']]
+    },
+    robin: {
+      'aquarium-tank': [['牠們各有自己的路線呢。再看一會兒。','think'],['那尾總是躲在後面。也許只是喜歡安靜。','smile']],
+      'fishing-gear-rack': [['舊結和新結不同。這段倒有意思。','think'],['把線解開再收，不必剪斷它。','work']],
+      'galley-icebox': [['標籤寫得很清楚。香吉士很細心呢。','smile'],['這份先別動，好像是留給誰的。','think']],
+      'crew-tea-table': [['坐吧。我正好有個有趣的故事。','offer'],['你說的那座島，我在書裡見過另一個名字。','think']]
+    },
+    franky: {
+      'aquarium-tank': [['這個水流循環做得順！聽，機關聲很穩。','admire'],['玻璃邊緣都收好了，喬巴靠近也安全。','nod']],
+      'fishing-gear-rack': [['支架角度再調一點，竿子就不會滑！','work'],['哈！拆裝起來一點都不卡，夠 SUPER！','laugh']],
+      'galley-icebox': [['門軸有點緊。我調好，食材交給香吉士。','work'],['密封條別亂扯，冷氣會跑光的！','explain']],
+      'crew-tea-table': [['這張桌子夠穩！大家放心坐！','admire'],['可樂呢？沒有可樂也行，先聽你說！','offer']]
+    },
+    brook: {
+      'aquarium-tank': [['這尾游動的節奏，像一段輕快的旋律。','think'],['請別敲玻璃，牠們也在聽海的聲音。','explain']],
+      'fishing-gear-rack': [['線纏在一起了？讓我慢慢理開。','work'],['釣魚要靜候，這點和等一個好音符很像。','smile']],
+      'galley-icebox': [['好冷！雖然我連皮膚也沒有，喲呵呵！','laugh'],['香吉士先生，這份我先放回原位。','nod']],
+      'crew-tea-table': [['容我奏一段，再聽各位說今天的故事。','offer'],['能和大家一起坐著，真是件好事。','smile']]
+    },
+    jinbe: {
+      'aquarium-tank': [['這尾的呼吸平穩。水流也合適。','think'],['魚在水裡才自在，別急著追著牠看。','explain']],
+      'fishing-gear-rack': [['先把鉤和線分開收。海上顛簸得很。','work'],['看水色再下竿，莫只盯著浮標。','explain']],
+      'galley-icebox': [['這些先交給廚師。老夫不亂動。','nod'],['門關妥了，船一晃也不會打開。','work']],
+      'crew-tea-table': [['坐吧，老夫也想聽聽你們今天的事。','offer'],['這壺茶正好。慢慢說，不必急。','rest']]
+    },
+    ace: {
+      'aquarium-tank': [['這尾挺精神的。魯夫看見一定要追著看。','smile']],
+      'fishing-gear-rack': [['這些先收好，免得魯夫踩到鉤。','work']],
+      'galley-icebox': [['別急，我不拿你的份。先關好門。','nod']],
+      'crew-tea-table': [['等魯夫來吧。那小子肯定有話要說。','offer']]
+    },
+    sabo: {
+      'aquarium-tank': [['水流和牠們游的方向不太一樣。我記下來。','think']],
+      'fishing-gear-rack': [['繩結鬆了，我先替大家補緊。','work']],
+      'galley-icebox': [['這份有名字，別拿錯。','explain']],
+      'crew-tea-table': [['魯夫又在講冒險了？我坐下聽完。','smile']]
+    },
+    law: {
+      'aquarium-tank': [['水質要穩定。別一時興起就換掉。','explain']],
+      'fishing-gear-rack': [['鉤尖包好。受傷就得停工。','explain']],
+      'galley-icebox': [['這些食材的保存順序有問題。先分開。','think']],
+      'crew-tea-table': [['我坐一下。草帽當家的，你小聲一點。','protest']]
+    },
+    hancock: {
+      'aquarium-tank': [['游得倒很自在。別驚擾牠們。','nod']],
+      'fishing-gear-rack': [['釣線亂成這樣？先讓懂的人整理。','think']],
+      'galley-icebox': [['妾身不亂碰食材。廚師自有安排。','nod']],
+      'crew-tea-table': [['草帽小子若來，這邊的位置替他留著。','offer']]
+    }
+  };
+  for (const [key, furniture] of Object.entries(NEW_FURNITURE_TEXT)) {
+    if (!SOLO[key]) continue;
+    if (Object.isFrozen(SOLO[key])) SOLO[key] = { ...SOLO[key], furniture: { ...SOLO[key].furniture } };
+    SOLO[key].furniture ||= {};
+    for (const [name, entries] of Object.entries(furniture)) SOLO[key].furniture[name] = entries.map(entry => b(...entry));
+  }
+  for (const [key, names] of Object.entries({
+    luffy:['aquarium-tank','crew-tea-table'],nami:['crew-tea-table'],usopp:['fishing-gear-rack'],
+    sanji:['galley-icebox','crew-tea-table'],chopper:['aquarium-tank'],robin:['aquarium-tank','crew-tea-table'],
+    franky:['fishing-gear-rack','aquarium-tank'],brook:['crew-tea-table'],jinbe:['fishing-gear-rack']
+  })) if (PROFILES[key]) PROFILES[key].favorite.push(...names);
   for (const key of KEYS) if (CLAIM[key]) SOLO[key].claim = CLAIM[key];
   // Short original lines for visible room conditions. A context is optional:
   // old callers still get the exact same solo pools and cursor behavior.
@@ -761,7 +860,16 @@
     t('妾身來移椅子，妳只管護好圖。', 'offer', 'nod'), t('謝了。窗邊那張也一起挪喔。', 'offer', 'smile')
   ]);
   const ACTION_LABELS = Object.freeze({ talk: '交談', explain: '說明', nod: '點頭', laugh: '開懷', smile: '微笑', tease: '打趣', protest: '抗議', reassure: '安慰', admire: '驚喜', think: '思考', bow: '致意', listen: '聆聽', startled: '吃驚', offer: '招呼', work: '專心', rest: '休息' });
-  const FURNITURE_VERBS = Object.freeze({ helm: '查看航向', 'map-table': '核對海圖', 'treasure-chest': '查看箱子', 'tangerine-tree': '照顧橘子樹', 'swords-rack': '整理刀架', 'kitchen-table': '整理餐桌', bookshelf: '翻閱書籍', 'medicine-cabinet': '清點藥品', piano: '練習樂曲', 'tool-bench': '修整零件' });
+  const FURNITURE_VERBS = Object.freeze({ helm: '查看航向', 'map-table': '核對海圖', 'treasure-chest': '查看箱子', 'tangerine-tree': '照顧橘子樹', 'swords-rack': '整理刀架', 'kitchen-table': '整理餐桌', bookshelf: '翻閱書籍', 'medicine-cabinet': '清點藥品', piano: '練習樂曲', 'tool-bench': '修整零件', 'aquarium-tank': '觀看游魚', 'fishing-gear-rack': '整理釣具', 'galley-icebox': '清點食材', 'crew-tea-table': '與夥伴閒聊' });
+  const EMPTY_AQUARIUM_LINES = Object.freeze({
+    luffy:'空的耶！下次釣到魚，就請牠住這裡！',zoro:'先把水弄好。別急著放魚。',
+    nami:'水和位置都確認過，再讓魚住進來。',usopp:'等本大爺釣到一尾大的，再放進來！',
+    sanji:'水質先顧好。魚可不是隨便放就行。',chopper:'牠們還沒來！先把水檢查好。',
+    robin:'現在是空的。等牠們來，這裡會熱鬧些吧。',franky:'水循環已經開了！就等新住客啦！',
+    brook:'先留一片安靜的水，等待牠們到來。',jinbe:'水流穩了。接下來耐心等便是。',
+    ace:'還空著啊。等釣到了再讓魯夫來看。',sabo:'先把水備好，魚的事慢慢來。',
+    law:'水質沒確認之前，別急著放魚。',hancock:'先打理好這裡，再迎接牠們。'
+  });
   const hasKey = key => Object.prototype.hasOwnProperty.call(PROFILES, key);
   const pairKeyFor = (a, c) => !hasKey(a) || !hasKey(c) || a === c ? null : Object.prototype.hasOwnProperty.call(SCENES, `${a}:${c}`) ? `${a}:${c}` : `${c}:${a}`;
   const at = (values, index) => { const n = Number(index); return values[((Number.isFinite(n) ? Math.trunc(n) : 0) % values.length + values.length) % values.length]; };
@@ -831,6 +939,10 @@
   const greeting = (key, index = 0, context = null) => { const value = interactionBeat(key, 'chat', index, context); return value ? tuple(value) : null; };
   const interaction = (key, kind = 'chat', index = 0, context = null) => { const value = interactionBeat(key, kind, index, context); return value ? tuple(value) : null; };
   const activity = (key, furnitureKey, index = 0, context = null) => {
+    if (hasKey(key) && furnitureKey === 'aquarium-tank' && Number(context?.aquariumFishCount) === 0) {
+      return { speaker:key, ...b(EMPTY_AQUARIUM_LINES[key] || '先把水族箱準備好，再讓魚住進來。', 'think'),
+        verb:'準備水族箱', furnitureKey };
+    }
     const values = hasKey(key) && Object.prototype.hasOwnProperty.call(SOLO[key].furniture, furnitureKey) && SOLO[key].furniture[furnitureKey];
     if (!values && !contextOf(context)?.activity) return null;
     const contextual = contextLines(key, context, values ? ['weather', 'daypart', 'season'] : ['activity', 'weather', 'daypart', 'season']);

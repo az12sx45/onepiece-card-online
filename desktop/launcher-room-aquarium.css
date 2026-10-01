@@ -1,0 +1,43 @@
+.room-aquarium-scene-window,
+.room-aquarium-window {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+  isolation: isolate;
+}
+.room-aquarium-scene-window { z-index: 1; }
+.room-aquarium-window { z-index: 2; }
+.room-aquarium-window .room-aquarium-fish { --fish-swim-end: 70%; }
+.room-aquarium-fish {
+  position: absolute;
+  left: 3%;
+  top: var(--fish-lane, 40%);
+  display: block;
+  width: var(--fish-size, 11%);
+  aspect-ratio: 1;
+  transform-origin: 50% 50%;
+  animation: room-fish-swim var(--fish-duration, 14s) linear var(--fish-delay, 0s) infinite;
+  will-change: left, transform;
+  filter: drop-shadow(0 1px 2px #032d5480);
+}
+.room-aquarium-fish img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  animation: room-fish-bob var(--fish-bob, 2s) ease-in-out infinite alternate;
+}
+.room-aquarium-paused .room-aquarium-fish,
+.room-aquarium-paused .room-aquarium-fish img { animation-play-state: paused; }
+@keyframes room-fish-swim {
+  0% { left: 3%; transform: scaleX(1); }
+  48% { left: var(--fish-swim-end, 85%); transform: scaleX(1); }
+  50% { left: var(--fish-swim-end, 85%); transform: scaleX(-1); }
+  98% { left: 3%; transform: scaleX(-1); }
+  100% { left: 3%; transform: scaleX(1); }
+}
+@keyframes room-fish-bob { from { transform: translateY(-5%); } to { transform: translateY(7%); } }
+@media (prefers-reduced-motion: reduce) {
+  .room-aquarium-fish { animation: none; left: calc(7% + var(--fish-index, 0) * 13%); }
+  .room-aquarium-fish img { animation: none; }
+}

@@ -60,7 +60,8 @@
     function world(){const owned=new Set(ownedIds());return{...roster(),ownedItemIds:[...owned],roomRevision:env.room().revision,stations:stations(),actors:env.walkers().filter(w=>owned.has(w.item.id)).map(w=>({key:w.key,itemId:w.item.id,cell:{...w.cell},moving:!w.attention&&(!!w.segmentCell||!!w.route.length||!!w.dockTravel),available:manualKey===w.key||!w.attention&&w.mode!=='focused'}))};}
     function contextAt(now) {
       const sceneKey=String(env.room().sceneId||'room-scene-crew-cabin').replace(/^room-scene-/,'');
-      return root.OnePieceRoomAmbience?.compute?.(new Date(now),sceneKey)||{};
+      const fish=serverLife?.fishCollection||profile()?.life?.fishCollection||[];
+      return {...(root.OnePieceRoomAmbience?.compute?.(new Date(now),sceneKey)||{}),aquariumFishCount:fish.filter(entry=>entry.inAquarium).length};
     }
     function face(key,cell) {const w=walker(key);return !!w&&env.face(w,cell,performance.now());}
     function setClip(key,clip,meta={}) {
@@ -166,6 +167,7 @@
     function accept(result,requestEpoch=epoch) {
       if(requestEpoch!==epoch||!result?.life)return false;
       if(serverLife&&Number(result.life.revision)<Number(serverLife.revision))return false;
+      const previousFish=JSON.stringify(serverLife?.fishCollection||[]);
       serverLife=result.life;
       serverRoster={releasedCharacterIds:(reserved?.releasedKeys(result)||data.characterKeys).map(itemOf),rosterRevision:Number(result.rosterRevision)||0};
       if(result.wallet&&owner())root.LauncherProfileShop?.onCompanionWalletChanged(result.wallet);
@@ -173,6 +175,7 @@
       if(controller)controller.sync(result);
       minigames?.receive(result);
       hideAwaitingArrivals();
+      if(previousFish!==JSON.stringify(serverLife.fishCollection||[]))env.onFishChanged?.();
       return true;
     }
     function command(type,payload={}) {
@@ -412,6 +415,7 @@
     window.addEventListener('pagehide',()=>{if(owner()&&active())void command('checkpoint',{exit:true});});
     const minigames=root.OnePieceRoomMinigames?.create({command,
       workBudget(id){const work=profile()?.companions?.find(value=>value.itemId===id)?.work;if(!work)return null;return{remainingStartsToday:Math.max(0,work.remainingStartsToday-(snapshot?.jobs||[]).filter(job=>job.status==='reserved').length),characterStartsRemainingToday:work.characterStartsRemainingToday};},
+      fishCollection(){return serverLife?.fishCollection||profile()?.life?.fishCollection||[];},
       onOpen(id){controller?.pause();const w=walker(id);if(w)env.focus(w);renderUi();},
       onClose(){if(!suspending&&env.canAnimate())controller?.resume();renderUi();},
       onResult(){void refresh();}
@@ -419,7 +423,8 @@
     return {setContext,suspend,resume,tick,animate,active,renderPanel,tapped,refresh,assignDestination,
       isBusy:key=>!!controller?.isBusy(key)||!!minigames?.active(),reservations:()=>controller?.reservations()||[],
       cancel:key=>controller?.cancel(key),onPurchase(result){if(!owner())return;accept(result);void refresh();},
-      snapshot:()=>snapshot,controller:()=>controller,world};
+      snapshot:()=>snapshot,controller:()=>controller,world,
+      fishCollection:()=>serverLife?.fishCollection||profile()?.life?.fishCollection||[]};
   }
   root.OnePieceLifeRoom=Object.freeze({create});
 })(window);

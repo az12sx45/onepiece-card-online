@@ -1465,10 +1465,10 @@
     ...extra
   });
   data.stations = {
-    kitchen:station('kitchen','備餐區',['kitchen-table','galley-stove'],'整理餐具與備用品',{
+    kitchen:station('kitchen','備餐區',['kitchen-table','galley-stove','galley-icebox'],'整理餐具與備用品',{
       specialistActions:{sanji:'cook'},specialistRequirements:{sanji:{furnitureKeys:['galley-stove']}},
       forbiddenClaimsWithoutSpecialist:['炒菜','點火','烤箱','冰箱取物'],
-      capabilityNote:'餐桌只做備品整理。cook 僅於真正持有且擺出的 galley-stove 及正確接觸點啟用。'
+      capabilityNote:'餐桌與食材冰箱只做備品整理、清點密封食材；cook 僅於真正持有且擺出的 galley-stove 及正確接觸點啟用。'
     }),
     navigation:station('navigation','航海資料區',['map-table','log-pose-desk'],'整理航海資料',{specialistActions:{nami:'read'}}),
     training:station('training','訓練區',['swords-rack'],'檢查與收整練習用品',{freeFloor:true,actions:['work','train']}),
@@ -1484,8 +1484,14 @@
     helm:station('helm','舵輪區',['helm'],'清點操舵備用品',{
       specialistActions:{jinbe:'helm'},capabilityNote:'通用 work 是備用品整理；甚平 helm 必須獨立完整動作及輪緣接觸才能使用。'
     }),
-    deck:station('deck','甲板',['treasure-chest','tangerine-tree','supply-rack','den-den-desk'],'整理隨身備用品',{freeFloor:true,
-      capabilityNote:'免費地面工作使用動作圖內的小工具包；不生出玩家未購買的家具。橘子樹旁不做採摘或澆水假動作；補給架與電話蟲桌旁只整理備用品，不虛構通話動作。'
+    deck:station('deck','甲板',['treasure-chest','tangerine-tree','supply-rack','den-den-desk','fishing-gear-rack'],'整理隨身備用品',{freeFloor:true,
+      capabilityNote:'免費地面工作使用動作圖內的小工具包；不生出玩家未購買的家具。橘子樹旁不做採摘或澆水假動作；釣具架只清點釣具，不虛構拿起竿或釣到魚的動作。'
+    }),
+    social:station('social','夥伴茶桌',['crew-tea-table'],'整理杯具與茶點',{
+      capabilityNote:'沿用完整 work 動作收整杯具；角色交談透過既有雙人對話流程進行，茶桌不替代角色的互動動畫。'
+    }),
+    aquarium:station('aquarium','水族箱',['aquarium-tank'],'清點水族箱備品',{
+      capabilityNote:'通用 work 僅整理箱旁用品；觀賞游魚使用角色既有靠近、看向與說話動作，不假稱餵魚或撈魚。'
     }),
     music:station('music','音樂區',['piano'],'整理樂譜與保養用品',{specialistActions:{brook:'music'},
       capabilityNote:'music 僅布魯克的真演奏循環；其餘角色做整理工作，不假裝都能演奏。'
@@ -1625,6 +1631,28 @@
       act('sanji','rest'),say('sanji','那就恭敬不如從命。','talk_happy','happy'),
       say('robin','今天也辛苦了。','talk_happy','happy')
     ],{tone:'quiet_warmth'}),
+    event('pair-nami-robin-tea','茶桌旁的半刻鐘','pair',['nami','robin'],['crew-tea-table'],[
+      say('nami','這壺茶剛泡好。今天先別談下一段航線。'),
+      say('robin','好。那就只說說剛才看到的海。','talk_happy','happy'),
+      say('nami','妳看見那片雲了？我還以為只有我注意到。'),
+      say('robin','它的影子慢慢跟著船呢。','talk_happy','happy')
+    ],{tone:'quiet_warmth',location:{type:'station',stationType:'social'}}),
+    event('pair-luffy-usopp-fishing-rack','出發前先理線','pair',['luffy','usopp'],['fishing-gear-rack'],[
+      say('luffy','騙人布！今天用哪支釣竿？','talk_happy','happy'),
+      say('usopp','先別搶！線打結了，得從外圈慢慢解。'),act('usopp','work'),
+      say('luffy','喔，這邊鬆了！'),say('usopp','對！這次做得不錯嘛！','talk_happy','happy')
+    ],{tone:'playful_craft',location:{type:'station',stationType:'deck'}}),
+    event('pair-sanji-chopper-icebox','食材有自己的位置','pair',['sanji','chopper'],['galley-icebox'],[
+      say('sanji','生的放下層，做好的放上層。門也別開太久。'),
+      say('chopper','我知道！標籤也要朝外，才不會拿錯！'),act('chopper','work'),
+      say('sanji','這就對了。藥品還是放你自己的藥箱。'),
+      say('chopper','嗯！我會分清楚的！','talk_happy','happy')
+    ],{tone:'care',location:{type:'station',stationType:'kitchen'}}),
+    event('pair-franky-jinbe-aquarium','讓水流安穩','pair',['franky','jinbe'],['aquarium-tank'],[
+      say('franky','這道水流循環聽著順不順？'),say('jinbe','穩。只是轉角可以再緩些。'),
+      act('franky','work'),say('franky','這樣呢？水不會一直打在同一邊了！'),
+      say('jinbe','嗯，往後住進來的魚也能自在些。')
+    ],{tone:'craft_care',location:{type:'station',stationType:'aquarium'}}),
 
     event('triple-luffy-usopp-chopper','比誇口還有用的地方','triple',['luffy','usopp','chopper'],[],[
       say('usopp','仔細看，高手動手前，準備一點都不馬虎！'),act('usopp','work'),
