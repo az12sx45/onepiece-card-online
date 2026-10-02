@@ -463,6 +463,7 @@ dialog::backdrop { background: rgba(0,5,9,.72); backdrop-filter: blur(8px); }
 .settings-option-copy strong { color: #eef6f4; font-size: 15px; }
 .settings-option-copy small { margin-top: 6px; color: #93a8af; font-size: 12px; line-height: 1.65; }
 .launcher-update-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 9px 18px; margin: 14px 0 25px; padding: 17px 18px; border: 1px solid rgba(231,189,105,.2); border-radius: 13px; background: linear-gradient(135deg, rgba(73,51,21,.16), rgba(4,17,26,.82)); }
+.launcher-content-update-card { margin-top: -12px; border-color: rgba(70,179,165,.24); background: linear-gradient(135deg, rgba(13,75,74,.18), rgba(4,17,26,.82)); }
 .launcher-update-heading { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .launcher-update-heading > span:last-child, .launcher-update-heading strong, .launcher-update-heading small { display: block; min-width: 0; }
 .launcher-update-heading strong { color: #f4eee0; font-size: 14px; }

@@ -1,5 +1,19 @@
 # Dev Workflow
 
+## 2026-10-03 啟動器 1.2.23 海釣儀表與內容增量更新（R2 發行檔已驗證，Render 待讀回）
+
+範圍：`desktop/launcher-room-minigames.js/.css` 將搏魚儀表上移並縮短提示，移除魚與竿的方向文字卡片；保留剩餘魚距、線強度與拉力讀數。中央線輪加上穿過輪軸的深色金屬雙端手把及兩個金色圓鈕，收線順轉、放線反轉、停手停止，外框固定。六處釣點的水花按場景配色，熔岩潭新增獨立透明圖 `public/images/launcher_room/fishing_v5/splash-magma-v1.webp`。沿用既有 v5 伺服器魚況，未改魚池、收藏、釣竿升級及三款桌遊規則。
+
+更新方式：1.2.22 及更早的啟動器沒有內容增量執行碼，因此升至 1.2.23 仍是一次安裝更新。1.2.23 候選將 UI 程式與素材列入受 Ed25519 簽署的稀疏內容清單，按清單逐檔下載並驗 SHA-256，完成後切換內容版本；清單未列的檔案沿用安裝包。後續僅修改這類內容時，可重新開啟啟動器套用，不必再執行 NSIS。`desktop/main.js`、`preload.js`、Electron 與其他核心檔不走內容覆蓋；核心更新仍需安裝程序。更新器另支援從快取的舊 EXE 與 `.blockmap` 重建新 EXE，只下載缺少的區塊，最後仍依簽署發行清單驗完整 EXE SHA-256；快取或 Range 條件不符時回退完整下載。區塊重用只節省下載，不能視為免安裝。
+
+檔案：`desktop/launcher-content-overlay.js`、`launcher-storage-migration.js`、`launcher-blockmap-delta.js`、`launcher-update-service.js`、`main.js`、`preload.js` 與 `launcher.html` 為候選更新器及本機內容接線；`server/desktop-distribution.js` 精確放行公開 `/desktop/launcher-content-v1.json` 簽章清單。`tools/desktop-r2-publisher/launcher-content-manifest.js`、`publish-launcher-content.js`、`sign-launcher-content.ps1`、`publish-saved-content.ps1`、`publish-launcher-blockmap.js`、`publish-saved-launcher.ps1` 為候選簽署與上傳流程。`config/launcher-announcements-v1.json` revision 21 增加 1.2.23 版本門檻圖文公告，沿用既有 1.2.18 海釣主圖；公告在正式 1.2.23 發行門檻通過前不會對玩家顯示。`desktop/package.json` 與 `scripts/desktop_launcher_package_qa.js` 收錄新圖與封裝檢查。以上描述以候選接線為準，發布檔案、來源 SHA 與公開讀回須在發行後補上。
+
+驗證：釣魚桌機及 960×640 最小視窗的本機瀏覽器操作 184/184 通過，pageErrors=0、missingAssets=0，截圖位於 `D:\Codex_QA\launcher-wii-video-reference-1.2.23\browser-final-r6\`；中央手把收線順轉、放線反轉、外圈不轉及放手停止均經逐影格檢查。正式安裝檔 `D:\Codex_QA\launcher-content-1.2.23-build-r3\source\desktop\dist\ONE-PIECE-Tabletop-Launcher-1.2.23-x64.exe` 為 266,577,295 bytes，SHA-256 `209fc95214a07a5473588192db021dde226853cad9d1b5b2edd72373a2f0d604`；封裝 QA、ASAR 精確清單、三遊戲卡與 Electron packaged smoke 均通過。1.2.22→1.2.23 以兩份真實 EXE 重建，讀取新區塊 3,461,405 bytes、重用舊區塊 263,115,890 bytes，17 次 Range，最終完整 SHA 與簽署清單一致；這是本機差分模擬，舊版客戶端本身仍會完整下載橋接版。blockmap 279,239 bytes，SHA-256 `1eae80e03bacd57394cbae8bc0b76dec4a4ec1e0261106992b3ff6fbf3812f93`。EXE 與 blockmap 已用審核雜湊上傳 R2，公開完整 GET／SHA 均一致。
+
+內容修訂 r1 僅改善手把轉動時兩端金色圓鈕的辨識度，覆蓋 `launcher-room-minigames.css` 一檔；安裝包基準檔為 78,811 bytes／SHA-256 `a0974a7656ab2c78391e39c2b2e62c8d097ab136f30d387cd5c71c32a8c9dd15`，r1 為 79,061 bytes／SHA-256 `3c3a7865b5ce650ff3fcf4a08ae813eb69139f5a2ed4abda491829f2d59356c9`。r1 清單使用正式 Ed25519 金鑰簽署，blob 已上傳 R2 並公開 GET／SHA 比對；以正式金鑰信任表及公開 blob 執行客戶端 stage/load/readVerified，實際只下載 79,061 bytes、revision=1。覆蓋後瀏覽器 QA 184/184 通過。舊偏好搬移、本機媒體 no-store、簽署但壞掉的 HTML 整版回退已用隔離 Electron 驗證；壞版測試使用 QA 金鑰，正式 r1 簽章及 blob 則用正式金鑰與 R2。`public/desktop/launcher-release-v1.json` 與 `launcher-content-v1.json` 候選簽章位元組已與隔離候選逐一核對；Render 公開讀回、玩家真實升級與實體操作仍待上線後驗證。
+
+LATTICE 本機 `D:\LATTICE\LATTICE.ps1 -Action Status` 此階段回報 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`；目前沒有可呼叫的 LATTICE 任務工具，因此沒有虛構 task_ref、圖譜或持久驗收。
+
 ## 2026-10-02 啟動器 1.2.22 Wii ISO 考證、海釣操控與水族箱魚修正（已部署）
 
 使用者另提供 [Wii 釣魚實機影片](https://www.youtube.com/watch?v=K9Do_E05r1k) 作視覺參考。核對約 13:02、13:15、13:20 的連續畫面：左上是一體式圓形線輪、旁側短弧形拉力刻度與長分節導環軌道；魚距由約 45.2 降至 35.4 時，軌道上的垂掛指標向船端移動，紅色剩餘距離段縮短，線輪外圈隨耗損改色。新版 HUD 以自行繪製的 UI 元件重現這種資訊關係，不擷取影片或 ISO 的原圖放入安裝包；影片畫面只留在隔離 QA 目錄供核對。
@@ -60,9 +74,9 @@ r4 隔離建置已完成本機驗證：`D:\\Codex_QA\\launcher-fishing-wii-1.2.2
 
 封裝與部署：R1、R2、R3 均是較舊且已中止的建置來源，不得發布。唯一採用的 R4 已完成逐檔來源／staging SHA 比對、ASAR／10 個正式依賴、來源與封裝 Electron smoke；兩者均讀取 701 個素材且 BGM 播放 PASS。R4 安裝檔為 265,806,288 bytes，SHA-256 `0d5c868225898ab4070c0dd57044bc78fbdb30c87862284590629c76f081347f`，比舊更新器 256 MiB 上限少 2,629,168 bytes。安裝檔以 immutable R2 key 上傳，公開 HEAD、Range、完整 GET 的位元組數與 SHA 均比對通過；1.2.19 release manifest 已以現有 Ed25519 金鑰簽署並由啟動器驗簽通過。程式與清單發布 commit `8669415b3e4822b6e68a6ebdf26f64b055ca6b11` 推至 `origin/main`；2026-10-02T06:00:06Z 公開 Render canonical manifest 切到 1.2.19，位元組 SHA-256 `65800eb0e77c59a28a14185427ca0c8bf220dc5226ece015ad207c7cadb4f4fd` 與提交內容完全一致。公開下載頁 1.2.19 回退連結、catalog 與 Card／Board／Chess 三款 runtime identity 讀回均 PASS；公告內容與圖檔來源有提交及 R4 staging 證據，登入帳號的實際公告顯示未另做遠端驗收。封裝證據在 `D:\Codex_QA\launcher-fishing-controls-1.2.19-release-r4\`，上傳與公開驗證證據在 `D:\Codex_QA\launcher-fishing-controls-1.2.19-release-r2\publish\`。上述自動測試不代表真人或實體裝置手感驗收。
 
-## 2026-10-02 啟動器差分更新方案（文件，尚未實作）
+## 2026-10-02 啟動器差分更新原方案（1.2.18 時點歷史紀錄）
 
-玩家希望後續啟動器更新不再每次下載約 269 MB 的完整安裝檔。唯讀核對 `desktop/launcher-update-service.js`、1.2.18 簽署清單、NSIS 設定與本機 1.2.17／1.2.18 `.blockmap`；後者顯示新安裝檔有 266,207,343／268,390,665 bytes 可由舊檔重用，僅 2,183,322 bytes 為不同區塊。這是估計差分下載量，不是已部署功能或實際網路流量。已把過渡版、小於舊版 256 MiB 上限、簽章／完整 SHA 驗證、Range 重建、無快取回退、真 Windows 安裝驗收寫入 `docs/LAUNCHER_DELTA_UPDATE_PLAN.md`。本輪只改文件，未變更 1.2.18 程式或公開更新清單。
+玩家希望後續啟動器更新不再每次下載約 269 MB 的完整安裝檔。當時唯讀核對 `desktop/launcher-update-service.js`、1.2.18 簽署清單、NSIS 設定與本機 1.2.17／1.2.18 `.blockmap`；後者顯示新安裝檔有 266,207,343／268,390,665 bytes 可由舊檔重用，僅 2,183,322 bytes 為不同區塊。這是當時估計的差分下載量，不是 1.2.18 已部署功能或實際網路流量。已把過渡版、小於舊版 256 MiB 上限、簽章／完整 SHA 驗證、Range 重建、無快取回退、真 Windows 安裝驗收寫入 `docs/LAUNCHER_DELTA_UPDATE_PLAN.md`。該輪只改文件，未變更 1.2.18 程式或公開更新清單。
 
 ## 2026-10-02 啟動器 1.2.18 海釣重製、UA 漁獲與釣竿改裝（已部署）
 

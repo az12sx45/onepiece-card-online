@@ -138,6 +138,28 @@ desktop/launcher/releases/<version>/<filename>
 https://game-assets.rihdi.tw/desktop/launcher/releases/<version>/<filename>
 ```
 
+For launchers that support block reuse, publish electron-builder's matching
+`<filename>.blockmap` beside the EXE. The blockmap publisher first checks the
+reviewed EXE bytes/SHA, gzip format, block count, and block-size sum. Both
+objects remain immutable; a blockmap never replaces the signed full-installer
+SHA as the update trust root. Dry run and live publishing use the same exact
+paths and reviewed values:
+
+```powershell
+node tools/desktop-r2-publisher/publish-launcher-blockmap.js `
+  --installer "D:\review\ONE-PIECE-Tabletop-Launcher-1.2.23-x64.exe" `
+  --blockmap "D:\review\ONE-PIECE-Tabletop-Launcher-1.2.23-x64.exe.blockmap" `
+  --version 1.2.23 --json
+
+.\tools\desktop-r2-publisher\publish-saved-launcher.ps1 `
+  -FilePath "D:\review\ONE-PIECE-Tabletop-Launcher-1.2.23-x64.exe" `
+  -Version 1.2.23 -ExpectedSha256 "<reviewed EXE SHA-256>" `
+  -ExpectedBytes <reviewed EXE bytes> `
+  -BlockmapPath "D:\review\ONE-PIECE-Tabletop-Launcher-1.2.23-x64.exe.blockmap" `
+  -ExpectedBlockmapSha256 "<reviewed blockmap SHA-256>" `
+  -ExpectedBlockmapBytes <reviewed blockmap bytes> -Json
+```
+
 Live mode performs `HeadObject`, then a conditional `PutObject` with
 `IfNoneMatch: *`, followed by another `HeadObject`. It stores `sha256` and
 `version` object metadata plus `Cache-Control: public, max-age=31536000,
@@ -252,3 +274,64 @@ production key store:
 ```powershell
 node tools/desktop-r2-publisher/launcher-manifest-signature-qa.js
 ```
+
+## Sparse launcher content updates
+
+The content channel updates only the launcher renderer and approved
+`images/`, `audio/`, and `videos/` resources. New media paths may be added
+from `public/` as long as they pass the runtime path allowlist. It cannot replace Electron main,
+preload, native dependencies, game packages, or the installer. A content
+manifest is an **overlay**: list only paths that differ from the installed
+core package. Every revision must list **all** paths whose overlays remain
+active; omitted paths fall back to the installed package. The core version must
+match `desktop/package.json`, and the revision must increase within that core.
+
+Build an unsigned candidate with explicit packaged renderer paths or new public
+media paths. `--include` may be
+repeated; no file is selected implicitly. To carry forward an earlier overlay,
+give its signed manifest with `--carry-from`. This verifies its signature and
+retains its paths while allowing new `--include` paths. Review the complete
+result before signing, especially when a path should intentionally return to
+the bundled version.
+
+```powershell
+node tools/desktop-r2-publisher/launcher-content-manifest.js build `
+  --repo-root "D:\Codex_Release_Worktrees\launcher-fishing-visual-1.2.20" `
+  --core-version 1.2.23 --revision 1 `
+  --include launcher-room-minigames.css `
+  --output "D:\review\launcher-content-1.2.23-r1.unsigned.json"
+
+# Later revision: add --carry-from "D:\review\launcher-content-1.2.23-r1.signed.json"
+.\tools\desktop-r2-publisher\sign-launcher-content.ps1 `
+  -InputPath "D:\review\launcher-content-1.2.23-r1.unsigned.json" `
+  -OutputPath "D:\review\launcher-content-1.2.23-r1.signed.json"
+```
+
+The signer uses the existing Windows CurrentUser DPAPI Ed25519 key and writes
+only a new candidate file; it never writes the public manifest directly. The
+canonical signed payload contains `schema`, `channel`, `platform`, `arch`,
+`coreVersion`, `revision`, `publishedAt`, `baseUrl`, then sorted
+`files[{path,bytes,sha256}]`. The signature is separate. The runtime verifies
+the same payload and rejects a different core version or an older revision.
+
+Inspect every signed path against the current source files without network
+access, then publish only missing immutable SHA blobs. The dry run returns the
+exact signed manifest SHA-256 required by the live command. Existing blobs
+with matching immutable metadata are reused; conflicting objects abort.
+
+```powershell
+node tools/desktop-r2-publisher/publish-launcher-content.js `
+  --repo-root "D:\Codex_Release_Worktrees\launcher-fishing-visual-1.2.20" `
+  --manifest "D:\review\launcher-content-1.2.23-r1.signed.json" --json
+
+.\tools\desktop-r2-publisher\publish-saved-content.ps1 `
+  -ManifestPath "D:\review\launcher-content-1.2.23-r1.signed.json" `
+  -ExpectedManifestSha256 "<64-character SHA-256 from dry run>"
+```
+
+Blob keys are `desktop/launcher/content/blobs/sha256/<sha256>`. Check public
+HEAD, full GET, size, and SHA-256 for each newly uploaded blob before promoting
+the signed candidate to `public/desktop/launcher-content-v1.json`. That
+manifest is served by Render; R2 holds only immutable content bytes. This
+workflow does not invoke the Windows installer. Run the cross-module fixture
+check with `node scripts/desktop_r2_launcher_content_qa.js`.

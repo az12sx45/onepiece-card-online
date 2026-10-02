@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 20,
+  "revision": 21,
   "announcements": [
     {
       "id": "board-tavern-crew-20260928-1c453fcf83416d97",
@@ -464,6 +464,30 @@
       "requiredRelease": {
         "kind": "launcher",
         "version": "1.2.22"
+      }
+    },
+    {
+      "id": "launcher-1.2.23-fishing-hud-and-content-updates",
+      "status": "published",
+      "publishedAt": "2026-10-02T16:39:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23",
+      "title": "海釣儀表與啟動器更新改善｜1.2.23",
+      "summary": "釣竿表上移，中央雙端把手會隨收線與放線轉動；六處釣點的水花配合各自水色。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-rebuild-1.2.18.webp",
+        "alt": "騙人布在千陽號上持竿，魯夫在旁等待魚上鉤的海釣主圖"
+      },
+      "body": [
+        "釣竿表移到較高的位置，縮短畫面說明，移除魚與竿的方向文字卡片；保留剩餘魚距、線強度與拉力讀數。",
+        "中央線輪改成穿過輪軸的雙端手把：按住收線時順轉，主動放線時反轉，停手就停止。近岸、珊瑚礁、外海、淡水池、熔岩潭與虹色水域的水花改為各自配色，熔岩潭另用重繪水花。",
+        "從舊版升至 1.2.23 仍須經過一次啟動器安裝更新。此版本加入簽章內容更新能力；往後若只變更啟動器介面與素材，可下載變更的檔案，重新開啟啟動器後套用，不必每次重新安裝整個啟動器。",
+        "若更新涉及啟動器核心或 Electron，仍須執行安裝更新；可重用舊安裝檔區塊時優先下載差異區塊，無法重用時會退回完整下載。三款桌遊的內容更新維持原有逐檔方式。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
       }
     }
   ]

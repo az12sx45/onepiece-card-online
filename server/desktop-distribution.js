@@ -85,7 +85,7 @@ function createDesktopDistribution({ publicDir, enabled = process.env.OP_DESKTOP
     if (pathname === null) return res.status(400).set('Cache-Control', 'no-store').end();
     const read = req.method === 'GET' || req.method === 'HEAD';
     if (pathname === '/health' || pathname.startsWith('/api/')) return next();
-    if (/^\/desktop\/(?:catalog-v[123]|launcher-release-v1)\.json$/.test(pathname)
+    if (/^\/desktop\/(?:catalog-v[123]|launcher-release-v1|launcher-content-v1)\.json$/.test(pathname)
       || /^\/desktop\/manifests\/[a-z0-9._-]+\.json$/.test(pathname)) return next();
     if (!read) return res.status(405).set('Allow', 'GET, HEAD').set('Cache-Control', 'no-store').end();
     if (pathname === '/download' || pathname === '/desktop-download.html' || pathname === '/') {

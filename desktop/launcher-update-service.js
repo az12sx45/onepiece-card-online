@@ -6,6 +6,7 @@ const fsp = require('node:fs/promises');
 const path = require('node:path');
 const { EventEmitter } = require('node:events');
 const { spawn: nodeSpawn } = require('node:child_process');
+const { rebuildInstaller } = require('./launcher-blockmap-delta');
 
 const MANIFEST_SCHEMA = 1;
 const DEFAULT_MANIFEST_PATH = '/desktop/launcher-release-v1.json';
@@ -477,6 +478,7 @@ class LauncherUpdateService extends EventEmitter {
       downloadedBytes: 0,
       totalBytes: 0,
       progress: 0,
+      downloadMethod: '',
       errorCode: '',
       error: ''
     });
@@ -522,7 +524,7 @@ class LauncherUpdateService extends EventEmitter {
 
   async _checkForUpdates() {
     this._setState('checking', {
-      availableVersion: '', downloadedBytes: 0, totalBytes: 0, progress: 0, errorCode: '', error: ''
+      availableVersion: '', downloadedBytes: 0, totalBytes: 0, progress: 0, downloadMethod: '', errorCode: '', error: ''
     });
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), this.manifestTimeoutMs);
@@ -635,6 +637,7 @@ class LauncherUpdateService extends EventEmitter {
       downloadedBytes: 0,
       totalBytes: release.bytes,
       progress: 0,
+      downloadMethod: '',
       errorCode: '',
       error: ''
     });
@@ -645,6 +648,41 @@ class LauncherUpdateService extends EventEmitter {
     timer.unref?.();
     let handle = null;
     try {
+      try {
+        const delta = await rebuildInstaller({
+          artifactUrl: release.artifactUrl,
+          currentVersion: this.currentVersion,
+          downloadRoot: this.downloadRoot,
+          partPath: paths.partPath,
+          expectedSize: release.bytes,
+          fetchImpl: this.fetchImpl,
+          signal: controller.signal,
+          onProgress: (downloaded, total) => {
+            this._setState('downloading', { downloadMethod: 'delta' }, false);
+            this._emitProgress(downloaded, total);
+          }
+        });
+        if (delta) {
+          await verifyInstaller(paths.partPath, release, this.maxInstallerBytes);
+          await fsp.rename(paths.partPath, paths.finalPath);
+          await verifyInstaller(paths.finalPath, release, this.maxInstallerBytes);
+          this.ready = { release, installerPath: paths.finalPath };
+          return this._setState('ready', {
+            availableVersion: release.version,
+            downloadedBytes: delta.downloadedBytes,
+            totalBytes: delta.totalBytes,
+            progress: 100,
+            downloadMethod: 'delta',
+            errorCode: '', error: ''
+          });
+        }
+      } catch (deltaError) {
+        if (controller.signal.aborted || deltaError?.code === 'aborted') throw deltaError;
+        await fsp.rm(paths.partPath, { force: true }).catch(() => {});
+        await fsp.rm(paths.finalPath, { force: true }).catch(() => {});
+      }
+      this._setState('downloading', { downloadMethod: 'full' }, false);
+      this._emitProgress(0, release.bytes);
       const response = await this.fetchImpl(release.artifactUrl.href, {
         cache: 'no-store',
         redirect: 'error',
@@ -688,6 +726,7 @@ class LauncherUpdateService extends EventEmitter {
         downloadedBytes: release.bytes,
         totalBytes: release.bytes,
         progress: 100,
+        downloadMethod: 'full',
         errorCode: '',
         error: ''
       });

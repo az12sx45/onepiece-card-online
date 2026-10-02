@@ -1,5 +1,14 @@
 # File Map
 
+## 2026-10-03 啟動器 1.2.23 海釣儀表與內容增量候選
+
+- `desktop/launcher-room-minigames.js/.css`：搏魚釣竿表上移、移除魚／竿方向文字卡片；中央雙端手把和藍色內輪隨收線／放線正反轉，停手停止，金色外框固定。六釣點水花依水色變化。`public/images/launcher_room/fishing_v5/splash-magma-v1.webp`：獨立熔岩水花透明圖；`desktop/main.js`、`desktop/package.json`、`scripts/desktop_launcher_package_qa.js` 加入精確本機素材路徑與來源核對。
+- `desktop/launcher-content-overlay.js`、`launcher-storage-migration.js`、`main.js`、`preload.js`、`launcher.html`：簽章稀疏內容清單、下載驗證、內容槽切換、本機 UI 供應及原有本機設定搬移的候選接線。清單只覆蓋允許的介面／媒體；主程序、preload 與 Electron 仍由安裝檔更新。`scripts/desktop_launcher_content_overlay_qa.js`：內容套用、回退與安全界線檢查。
+- `desktop/launcher-blockmap-delta.js`、`launcher-update-service.js`：既有簽署 EXE 清單下的 blockmap／Range 差異區塊重建、完整 SHA-256 驗證及全量回退；`scripts/desktop_launcher_delta_qa.js`、`desktop_launcher_real_delta_qa.js`：模擬與真實舊／新 EXE 區塊重用檢查。區塊更新後仍執行 NSIS 安裝。
+- `tools/desktop-r2-publisher/launcher-content-manifest.js`、`publish-launcher-content.js`、`sign-launcher-content.ps1`、`publish-saved-content.ps1`、`publish-launcher-blockmap.js`、`publish-saved-launcher.ps1`：內容清單簽署、不可覆寫的內容 blob／blockmap 上傳及公開讀回工具；`scripts/desktop_r2_launcher_content_qa.js`、`desktop_r2_launcher_blockmap_qa.js`：發行工具檢查。
+- `server/desktop-distribution.js`：精確放行 `/desktop/launcher-content-v1.json` 公開簽章清單路由；其他路徑仍依既有桌面發行規則。`config/launcher-announcements-v1.json` revision 21：1.2.23 版本門檻公告，沿用 `public/images/launcher_announcements/launcher-fishing-rebuild-1.2.18.webp` 作附圖。
+- `public/desktop/launcher-release-v1.json`：1.2.23 正式簽署安裝檔清單；`public/desktop/launcher-content-v1.json`：1.2.23 修訂 1 的正式簽署單檔 CSS 覆蓋清單。EXE、blockmap、CSS blob 已上傳 R2 並公開逐位元組讀回；Render 清單與下載頁待 Git 發布後讀回。玩家實際從舊版更新仍須另驗。
+
 ## 2026-10-02 啟動器 1.2.22 海釣操控檔案
 
 - `desktop/launcher-room-minigames.js/.css`：一體式圓形線輪強度、短弧拉力與分節魚距軌道，由伺服器魚況更新；使用者提供的實機影片只作 UI 參考，畫面擷取留在隔離 QA 目錄，不是產品素材。
@@ -30,9 +39,9 @@
 - `desktop/main.js`、`desktop/package.json`／`package-lock.json`、`scripts/desktop_launcher_package_qa.js`：1.2.19 版號、封裝與舊艾斯 v1 素材去重。
 - `config/launcher-announcements-v1.json`、`scripts/launcher_1219_announcement_qa.js`：使用既有海釣主圖的版本門檻公告；`scripts/launcher_fishing_server_qa.js`、`scripts/launcher_fishing_controls_browser_qa.js`：伺服器與畫面定向 QA。
 
-## 2026-10-02 啟動器差分更新方案（尚未實作）
+## 2026-10-02 啟動器差分更新原方案（歷史紀錄）
 
-- `docs/LAUNCHER_DELTA_UPDATE_PLAN.md`：現行完整 NSIS 更新的限制、1.2.17→1.2.18 blockmap 重用量測、下一版過渡、差分重建與全量回退及正式驗收條件。1.2.18 更新程式未改。
+- `docs/LAUNCHER_DELTA_UPDATE_PLAN.md`：1.2.18 時點完整 NSIS 更新的限制、1.2.17→1.2.18 blockmap 重用量測、過渡、差分重建與全量回退的原方案；同文件頂端補有 1.2.23 候選內容增量與發布門檻。1.2.18 更新程式當時未改。
 
 ## 2026-10-02 啟動器 1.2.18 海釣重製、魚種與釣竿
 

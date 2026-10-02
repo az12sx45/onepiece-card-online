@@ -73,6 +73,7 @@ function fixture(change = null) {
   put(dir, 'desktop/catalog-v1.json', '{"legacy":1}');
   put(dir, 'desktop/catalog-v2.json', '{"legacy":2}');
   put(dir, 'desktop/launcher-release-v1.json', '{"version":"fixture"}');
+  put(dir, 'desktop/launcher-content-v1.json', '{"revision":1}');
   put(dir, 'desktop/manifests/board-assets-0123456789abcdef.json', '{"legacy":true}');
   put(dir, 'desktop-download.html', '<!doctype html><title>Download fixture</title><main>DESKTOP_DOWNLOAD_ONLY</main>');
   const programs = [
@@ -177,7 +178,7 @@ function emitAck(socket, event) {
     for (const ua of [BROWSER, ELECTRON]) for (const target of ['/images/unknown.webp', '/misc/unknown.mp3', '/audio/missing.mp3']) await check(`unknown media never falls through (${ua === BROWSER ? 'web' : 'desktop'}) ${target}`, async () => {
       const r = await request(port, target, { ua }); assert.equal(r.status, 404); assert.equal(r.bytes, 0);
     });
-    for (const target of ['/desktop/catalog-v1.json', '/desktop/catalog-v2.json', '/desktop/catalog-v3.json', '/desktop/launcher-release-v1.json', '/desktop/manifests/board-assets-0123456789abcdef.json', '/' + base.catalog.games.board.manifestPath, '/health', '/api/board-runtime', '/api/desktop-runtime-package/board']) await check(`public metadata/API retained ${target}`, async () => {
+    for (const target of ['/desktop/catalog-v1.json', '/desktop/catalog-v2.json', '/desktop/catalog-v3.json', '/desktop/launcher-release-v1.json', '/desktop/launcher-content-v1.json', '/desktop/manifests/board-assets-0123456789abcdef.json', '/' + base.catalog.games.board.manifestPath, '/health', '/api/board-runtime', '/api/desktop-runtime-package/board']) await check(`public metadata/API retained ${target}`, async () => {
       const r = await request(port, target); assert.equal(r.status, 200); assert.doesNotThrow(() => JSON.parse(r.body));
     });
     for (const method of ['POST', 'PUT', 'DELETE', 'OPTIONS']) await check(`API method remains available ${method}`, async () => {

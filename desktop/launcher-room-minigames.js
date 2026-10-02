@@ -487,7 +487,7 @@
     }
     function renderFishingV4(stage,challenge){
       const isV5=challenge.fishingVersion===5;
-      const sea=node('div','room-fishing-v4-sea');sea.setAttribute('role','group');sea.setAttribute('aria-label',isV5?'千陽號釣魚海面。按住拋竿蓄力、放開決定距離；浮標沉下時抽竿；上鉤後看魚的方向，把釣竿帶往同側，鬆開捲線回復魚線強度。':'千陽號釣魚海面。按住拋竿蓄力、放開決定距離；浮標沉下時抽竿；上鉤後拖動捲線控制左右方向，魚線過緊時按住放線。');
+      const sea=node('div','room-fishing-v4-sea');sea.dataset.spot=selectedSpot;sea.setAttribute('role','group');sea.setAttribute('aria-label',isV5?'千陽號釣魚海面。按住拋竿蓄力、放開決定距離；浮標沉下時抽竿；上鉤後看魚的方向，把釣竿帶往同側，鬆開捲線回復魚線強度。':'千陽號釣魚海面。按住拋竿蓄力、放開決定距離；浮標沉下時抽竿；上鉤後拖動捲線控制左右方向，魚線過緊時按住放線。');
       sea.style.backgroundImage='linear-gradient(0deg,#04283850,transparent 52%),url("'+spotArt(selectedSpot)+'")';
       const water=node('div','room-fishing-v4-water'),fish=node('div','room-fishing-v4-fish'),target=node('div','room-fishing-v4-target');
       // The actual catch stays hidden until landing; a neutral water shadow
@@ -498,7 +498,7 @@
         const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('class',className);line.append(path);
       }
       const rod=node('img','room-fishing-v4-rod');rod.src=ASSET+(isV5?'fishing_v5/rod-no-line-v1.webp':'fishing_v2/rod.webp');rod.alt='';rod.draggable=false;rod.addEventListener('load',()=>updateFishingV4());
-      const splash=node('img','room-fishing-v4-splash');splash.src=ASSET+'fishing_v2/splash.webp';splash.alt='';splash.draggable=false;
+      const splash=node('img','room-fishing-v4-splash');splash.src=ASSET+(selectedSpot==='magma'?'fishing_v5/splash-magma-v1.webp':'fishing_v2/splash.webp');splash.alt='';splash.draggable=false;
       const bobber=node('img','room-fishing-v4-bobber');bobber.src=ASSET+'fishing_v2/bobber.webp';bobber.alt='';bobber.draggable=false;
       const signal=node('strong','room-fishing-v4-signal');signal.setAttribute('aria-live','polite');
       const gauge=node('div','room-fishing-v4-gauge');gauge.setAttribute('role','meter');gauge.setAttribute('aria-label',isV5?'魚線強度':'釣線張力');gauge.setAttribute('aria-valuemin','0');gauge.setAttribute('aria-valuemax','100');
@@ -509,21 +509,19 @@
       gaugeSvg.querySelector('.room-fishing-v4-dial-arm').style.transform='rotate(-135deg)';
       gauge.append(node('span','room-fishing-v4-gauge-label',isV5?'魚線強度':'釣線張力'),gaugeSvg,node('strong','room-fishing-v4-gauge-value',isV5?'100 / 100':'0%'),node('small','room-fishing-v4-gauge-status',isV5?'強度充足':'安全'));
       const directionCue=node('div','room-fishing-v4-direction');directionCue.append(node('span','','魚的方向'),node('strong','','—'),node('small','',isV5?'釣竿要跟著魚移動':'拖動捲線牽制'));
-      if(isV5)directionCue.append(node('b','room-fishing-v5-aim','竿位：中央'));
       directionCue.append(node('em','','已收回 0%'));
       if(isV5){
         const hud=node('div','room-fishing-v5-hud');hud.setAttribute('role','group');hud.setAttribute('aria-label','釣竿表：魚線強度、魚的拉力、剩餘魚距與竿位');
         hud.append(node('span','room-fishing-v5-handle'));
         const strengthBox=node('div','room-fishing-v5-strength');
-        const dial=node('div','room-fishing-v5-dial');dial.setAttribute('role','meter');dial.setAttribute('aria-label','魚線強度');dial.setAttribute('aria-valuemin','0');dial.setAttribute('aria-valuemax','100');dial.append(node('span','room-fishing-v5-dial-spool'),node('span','room-fishing-v5-dial-hub'));
+        const dial=node('div','room-fishing-v5-dial');dial.setAttribute('role','meter');dial.setAttribute('aria-label','魚線強度');dial.setAttribute('aria-valuemin','0');dial.setAttribute('aria-valuemax','100');const spool=node('span','room-fishing-v5-dial-spool');spool.append(node('span','room-fishing-v5-dial-crank'));dial.append(spool,node('span','room-fishing-v5-dial-hub'));
         const strengthCopy=node('div','room-fishing-v5-strength-copy');strengthCopy.append(node('span','','魚線強度'),node('strong','room-fishing-v5-strength-value','100 / 100'));strengthBox.append(dial,strengthCopy);
-        const pullArc=node('div','room-fishing-v5-pull-arc');pullArc.setAttribute('role','meter');pullArc.setAttribute('aria-label','魚的拉力等級');pullArc.setAttribute('aria-valuemin','0');pullArc.setAttribute('aria-valuemax','3');pullArc.append(node('span','room-fishing-v5-pull-arc-band'),node('strong','room-fishing-v5-force-value','平穩'));
-        const bearing=node('div','room-fishing-v5-bearing');bearing.append(node('strong','','魚勢平穩'),node('small','','趁現在捲線'));
+        const pullArc=node('div','room-fishing-v5-pull-arc');pullArc.setAttribute('role','meter');pullArc.setAttribute('aria-label','魚的拉力等級');pullArc.setAttribute('aria-valuemin','0');pullArc.setAttribute('aria-valuemax','3');pullArc.append(node('span','room-fishing-v5-pull-arc-band'),node('span','room-fishing-v5-pull-needle'),node('strong','room-fishing-v5-force-value','平穩'));
         const position=node('div','room-fishing-v5-position');
         const catchLabel=node('div','room-fishing-v5-catch-label');catchLabel.append(node('span','','剩餘魚距'),node('strong','room-fishing-v5-distance','100%'));
         const catchTrack=node('div','room-fishing-v5-catch-track');catchTrack.setAttribute('role','meter');catchTrack.setAttribute('aria-label','剩餘魚距');catchTrack.setAttribute('aria-valuemin','0');catchTrack.setAttribute('aria-valuemax','100');const catchRail=node('span','room-fishing-v5-catch-rail');catchRail.append(node('span','room-fishing-v5-catch-fill'));for(let index=1;index<10;index++){const guide=node('span','room-fishing-v5-guide');guide.style.setProperty('--guide',String(index));catchRail.append(guide);}catchRail.append(node('span','room-fishing-v5-rail-marker'));catchTrack.append(node('span','room-fishing-v5-boat','船'),catchRail,node('span','room-fishing-v5-fish-end','魚'));
-        position.append(catchLabel,catchTrack,node('span','room-fishing-v5-aim','竿位：中央'));
-        hud.append(strengthBox,pullArc,position,bearing);fishingV5Hud=hud;
+        position.append(catchLabel,catchTrack);
+        hud.append(strengthBox,pullArc,position);fishingV5Hud=hud;
       }
       const castMeter=node('div','room-fishing-v4-cast-meter');castMeter.append(node('div','room-fishing-v4-cast-heading','拋竿力度'),node('strong','room-fishing-v4-cast-readout','52% · 中距離'));
       const castTrack=node('div','room-fishing-v4-cast-track');castTrack.setAttribute('role','progressbar');castTrack.setAttribute('aria-label','拋竿力度');castTrack.setAttribute('aria-valuemin','0');castTrack.setAttribute('aria-valuemax','100');castTrack.append(node('span'));
@@ -537,7 +535,11 @@
       const hook=button('抽竿！· 空白鍵',()=>void sendFishingV4Action('hook'),'room-fishing-v4-primary room-fishing-v4-hook');
       hook.hidden=challenge.stage!=='wait';hook.disabled=true;
       const fightControls=node('div','room-fishing-v4-fight-controls');fightControls.hidden=challenge.stage!=='fight';
-      const reel=node('button','room-fishing-v4-primary room-fishing-v4-reel');reel.type='button';reel.dataset.reeling='false';reel.setAttribute('aria-label',isV5?'按住捲線，左右拖動釣竿跟隨魚的方向；鬆開可回復魚線強度':'按住捲線，向左右拖動控制釣竿方向');reel.append(node('span','room-fishing-v4-reel-zones','← 左　　中　　右 →'),node('strong','',isV5?'按住捲線 · 左右帶竿':'按住捲線 · 拖動控竿'));
+      const reel=node('button','room-fishing-v4-primary room-fishing-v4-reel');reel.type='button';reel.dataset.reeling='false';reel.setAttribute('aria-label',isV5?'按住收線；在按鈕左側或右側拖動可把釣竿帶往同側，鬆開可回復魚線強度':'按住捲線，向左右拖動控制釣竿方向');
+      const reelZones=node('span','room-fishing-v4-reel-zones');
+      if(isV5)reelZones.append(node('span','room-fishing-v5-steer-left','◀'),node('span','room-fishing-v5-reel-key','空白'),node('span','room-fishing-v5-steer-right','▶'));
+      else reelZones.textContent='← 左　　中　　右 →';
+      reel.append(reelZones,node('strong','',isV5?'按住收線':'按住捲線 · 拖動控竿'));
       reel.addEventListener('pointerdown',event=>{if(event.button!==0||reel.disabled)return;event.preventDefault();event.stopPropagation();fishingV4ReelPointer=event.pointerId;reel.setPointerCapture(event.pointerId);const rect=reel.getBoundingClientRect(),ratio=(event.clientX-rect.left)/rect.width;setFishingV4Control(true,isV5?(ratio<.36?-1:ratio>.64?1:0):0,fishingV4Paying);});
       reel.addEventListener('pointermove',event=>{if(fishingV4ReelPointer!==event.pointerId)return;const rect=reel.getBoundingClientRect(),ratio=(event.clientX-rect.left)/rect.width;setFishingV4Control(true,ratio<.36?-1:ratio>.64?1:0,fishingV4Paying);});
       reel.addEventListener('pointerup',event=>{event.preventDefault();event.stopPropagation();if(fishingV4ReelPointer!==event.pointerId)return;fishingV4ReelPointer=null;setFishingV4Control(false,isV5?fishingV4Steer:0,fishingV4Paying);});
@@ -617,22 +619,23 @@
       sea.style.setProperty('--pull-intensity',pullIntensity.toFixed(3));
       sea.style.setProperty('--pull-period',`${Math.round(940-pullIntensity*530)}ms`);
       sea.style.setProperty('--pull-bend',`${((direction==='left'?-1:direction==='right'?1:0)*pullIntensity*9).toFixed(2)}deg`);
-      sea.style.setProperty('--pull-splash-opacity',(0.12+pullIntensity*0.58).toFixed(3));
+      sea.style.setProperty('--pull-splash-opacity',(0.36+pullIntensity*0.53).toFixed(3));
       if(fishingV5Hud){
         fishingV5Hud.dataset.risk=risk;fishingV5Hud.dataset.surge=String(surge);
+        fishingV5Hud.dataset.fishDirection=direction;fishingV5Hud.dataset.steer=String(fishingV4Steer);
+        fishingV5Hud.dataset.reeling=String(fishingV4Reeling);fishingV5Hud.dataset.paying=String(fishingV4Paying);
         const forceGrade=pullIntensity<.25?0:pullIntensity<.58?1:pullIntensity<.82?2:3;
         const forceNames=['平穩','輕拉','急拉','猛拉'];
         fishingV5Hud.dataset.force=['calm','light','hard','fierce'][forceGrade];
         fishingV5Hud.style.setProperty('--line-angle',`${(strengthRatio*300).toFixed(1)}deg`);
         fishingV5Hud.style.setProperty('--pull-fill',`${Math.round(pullIntensity*100)}%`);
+        fishingV5Hud.style.setProperty('--pull-needle-x',`${(21+54*Math.sin(Math.PI*pullIntensity)).toFixed(1)}%`);
+        fishingV5Hud.style.setProperty('--pull-needle-y',`${(88-76*pullIntensity).toFixed(1)}%`);
         const dial=fishingV5Hud.querySelector('.room-fishing-v5-dial');dial.setAttribute('aria-valuenow',String(Math.round(strengthRatio*100)));dial.setAttribute('aria-valuetext',`${Math.round(strength)} / ${Math.round(maxStrength)}`);
         const pullArc=fishingV5Hud.querySelector('.room-fishing-v5-pull-arc');pullArc.setAttribute('aria-valuenow',String(forceGrade));pullArc.setAttribute('aria-valuetext',forceNames[forceGrade]);
         fishingV5Hud.querySelector('.room-fishing-v5-force-value').textContent=forceNames[forceGrade];
         fishingV5Hud.querySelector('.room-fishing-v5-strength-value').textContent=`${Math.round(strength)} / ${Math.round(maxStrength)}`;
-        const bearing=fishingV5Hud.querySelector('.room-fishing-v5-bearing');
-        bearing.querySelector('strong').textContent=direction==='left'?'← 魚往左':direction==='right'?'魚往右 →':'魚勢平穩';
-        bearing.querySelector('small').textContent=risk==='danger'?'線弱 · 停捲放線':surge?'鬆捲線 · 順魚向帶竿':'趁空檔捲線';
-        fishingV5Hud.querySelector('.room-fishing-v5-aim').textContent=`竿位：${fishingV4Steer<0?'左側':fishingV4Steer>0?'右側':'中央'}`;
+        fishingV5Hud.querySelector('.room-fishing-v5-strength-copy>span').textContent=fishingV4Paying?'放線中':fishingV4Reeling?'收線中':'線強度';
         const remainingDistance=Math.round(distance);
         fishingV5Hud.querySelector('.room-fishing-v5-distance').textContent=`${remainingDistance}%`;
         fishingV5Hud.querySelector('.room-fishing-v5-position').style.setProperty('--marker-percent',`${(11+remainingDistance*.82).toFixed(2)}%`);

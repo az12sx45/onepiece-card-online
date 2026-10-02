@@ -184,7 +184,13 @@ async function lineGeometry(page){
     const ring={x:center.x+Math.sin(tilt)*radius,y:center.y-Math.cos(tilt)*radius};
     const splash=sea.querySelector('.room-fishing-v4-splash'),splashRect=splash.getBoundingClientRect();
     const splashCenter={x:(splashRect.left+splashRect.right)/2,y:(splashRect.top+splashRect.bottom)/2};
+    const rodRect=rod.getBoundingClientRect();
     return{paths:lines.map(line=>line.getAttribute('d')),
+      rod:{naturalWidth:rod.naturalWidth,naturalHeight:rod.naturalHeight,
+        offsetLeft:rod.offsetLeft,offsetTop:rod.offsetTop,offsetWidth:width,offsetHeight:height,
+        contentWidth:artWidth,contentHeight:artHeight,transform:style.transform,
+        transformOrigin:style.transformOrigin,
+        rect:{x:rodRect.x,y:rodRect.y,width:rodRect.width,height:rodRect.height}},
       tipGap:Math.hypot(tip.x-start.x,tip.y-start.y),ringGap:Math.hypot(end.x-ring.x,end.y-ring.y),
       splashGap:Math.hypot(end.x-splashCenter.x,end.y-splashCenter.y),
       start,end,ring,center,splashCenter,bobber:{rect:{x:bobRect.x,y:bobRect.y,width:bobRect.width,height:bobRect.height},
@@ -204,8 +210,7 @@ async function visual(page){
       sea.querySelector('.room-fishing-v4-gauge')?.getAttribute('aria-valuenow')),
     direction:sea.dataset.pullDirection,run:sea.dataset.runState,
     steer:sea.dataset.steer,reeling:sea.dataset.reeling,paying:sea.dataset.paying,
-    cue:document.querySelector('.room-fishing-v5-bearing strong')?.textContent||
-      sea.querySelector('.room-fishing-v4-direction strong')?.textContent,
+    directionPills:sea.querySelectorAll('.room-fishing-v5-bearing,.room-fishing-v5-aim').length,
     castPower:Number(sea.querySelector('.room-fishing-v4-cast-track').getAttribute('aria-valuenow')),
     pullIntensity:Number.parseFloat(sea.style.getPropertyValue('--pull-intensity')),
     pullBend:Number.parseFloat(sea.style.getPropertyValue('--pull-bend')),
@@ -215,6 +220,7 @@ async function visual(page){
     pullDial:Number(document.querySelector('.room-fishing-v5-dial')?.getAttribute('aria-valuenow')),
     pullArcGrade:Number(document.querySelector('.room-fishing-v5-pull-arc')?.getAttribute('aria-valuenow')),
     pullArcFill:Number.parseFloat(document.querySelector('.room-fishing-v5-hud')?.style.getPropertyValue('--pull-fill')),
+    pullNeedleY:Number.parseFloat(document.querySelector('.room-fishing-v5-hud')?.style.getPropertyValue('--pull-needle-y')),
     rodTransform:getComputedStyle(sea.querySelector('.room-fishing-v4-rod')).transform,
     rodAngle:(()=>{const matrix=new DOMMatrixReadOnly(getComputedStyle(sea.querySelector('.room-fishing-v4-rod')).transform);
       return Math.atan2(matrix.b,matrix.a)*180/Math.PI;})()
@@ -255,12 +261,15 @@ async function fightUiGeometry(page){
     const hud=card.querySelector('.room-fishing-v5-hud'),progress=card.querySelector('.room-minigame-progress');
     const sea=card.querySelector('.room-fishing-v4-sea'),controls=sea.querySelector('.room-fishing-v4-fight-controls');
     const cardBox=card.getBoundingClientRect(),progressBox=progress.getBoundingClientRect();
-    const hudBox=hud?.getBoundingClientRect(),controlBox=controls.getBoundingClientRect();
+    const hudBox=hud?.getBoundingClientRect(),controlBox=controls.getBoundingClientRect(),seaBox=sea.getBoundingClientRect();
     const fits=rect=>rect&&rect.width>0&&rect.height>0&&rect.left>=cardBox.left-1&&
       rect.right<=cardBox.right+1&&rect.top>=0&&rect.bottom<=innerHeight+1;
     return{hudVisible:fits(hudBox)&&[...hud.children].every(child=>
       getComputedStyle(child).display==='none'||fits(child.getBoundingClientRect())),
       controlsVisible:fits(controlBox)&&[...controls.querySelectorAll('button')].every(button=>fits(button.getBoundingClientRect())),
+      compactRightPad:controlBox.left>=seaBox.left+seaBox.width*.72&&controlBox.right<=seaBox.right&&
+        controlBox.top>=seaBox.top+seaBox.height*.2&&controlBox.bottom<=seaBox.top+seaBox.height*.72&&
+        controlBox.height<seaBox.height*.44,
       noHorizontalOverflow:card.scrollWidth<=card.clientWidth+1&&progress.scrollWidth<=progress.clientWidth+1,
       hudBox:hudBox&&{left:hudBox.left,right:hudBox.right,top:hudBox.top,bottom:hudBox.bottom},
       progressBox:{left:progressBox.left,right:progressBox.right,top:progressBox.top,bottom:progressBox.bottom},
@@ -283,6 +292,12 @@ async function fightMeterState(page){
       lineAngle:Number.parseFloat(hud.style.getPropertyValue('--line-angle')),
       arcGrade:Number(arc.getAttribute('aria-valuenow')),
       arcFill:Number.parseFloat(hud.style.getPropertyValue('--pull-fill')),
+      needleX:Number.parseFloat(hud.style.getPropertyValue('--pull-needle-x')),
+      needleY:Number.parseFloat(hud.style.getPropertyValue('--pull-needle-y')),
+      needleVisible:(()=>{const box=hud.querySelector('.room-fishing-v5-pull-needle').getBoundingClientRect();
+        return box.width>=10&&box.height>=6;})(),
+      staticOuterRing:getComputedStyle(dial,'::after').transform==='none'&&
+        getComputedStyle(dial,'::after').animationName==='none',
       arcVisible:arc.getBoundingClientRect().width>=50,
       strength:hud.querySelector('.room-fishing-v5-strength-value').textContent,
       progress:Number(progress.getAttribute('aria-valuenow')),
@@ -299,6 +314,8 @@ function meterMatchesServer(meter){
   return meter.dial===Math.round(ratio*100)&&
     Math.abs(meter.lineAngle-ratio*300)<1&&
     meter.arcGrade===grade&&Math.abs(meter.arcFill-server.pullIntensity*100)<1&&
+    Math.abs(meter.needleX-(21+54*Math.sin(Math.PI*server.pullIntensity)))<1&&
+    Math.abs(meter.needleY-(88-76*server.pullIntensity))<1&&
     meter.strength.includes(`${Math.round(server.strength)} / ${Math.round(server.maxStrength)}`)&&
     meter.progress===Math.round(server.distance)&&
     Math.abs(meter.fillRatio-meter.progress*.82/100)<.035&&
@@ -387,13 +404,15 @@ async function castAndHook(page,label){
   check(`${label}: fight hides bobber and shows water splash`,waterVisual.bobberHidden&&
     waterVisual.splashLoaded&&waterVisual.splashVisible&&waterVisual.splashInside);
   check(`${label}: compact fight UI has no old dial or side card`,await page.locator('.room-fishing-v4-gauge,.room-fishing-v4-direction').count()===0);
+  check(`${label}: fishing HUD has no fish or rod direction pills`,await page.locator('.room-fishing-v5-bearing,.room-fishing-v5-aim').count()===0);
   const geometry=await fightUiGeometry(page);
   fs.writeFileSync(path.join(out,`${label}-fight-geometry.json`),JSON.stringify(geometry,null,2));
   check(`${label}: strength and direction HUD fits viewport`,geometry.hudVisible&&geometry.noHorizontalOverflow);
   check(`${label}: fighting actions visible and reachable`,geometry.controlsVisible);
+  check(`${label}: control pad stays compact on the right`,geometry.compactRightPad);
   const meter=await fightMeterState(page);
   check(`${label}: line wheel, pull arc and distance ruler are visible`,
-    meter.dialVisible&&meter.arcVisible&&meter.progressVisible);
+    meter.dialVisible&&meter.arcVisible&&meter.progressVisible&&meter.needleVisible&&meter.staticOuterRing);
   check(`${label}: wheel, arc and ruler match server`,meterMatchesServer(meter));
   await snapshot(page,`${label}-fight`);
 }
@@ -401,7 +420,7 @@ async function fightInteraction(page,label){
   await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.runState==='surge',null,{timeout:8000});
   const initial=await visual(page),sign=initial.direction==='left'?-1:initial.direction==='right'?1:0;
   check(`${label}: fish surge gives lateral direction`,sign!==0);
-  check(`${label}: cue matches fish direction`,initial.cue.includes(sign<0?'左':'右'));
+  check(`${label}: fish direction is carried by water motion without direction pills`,initial.directionPills===0);
   const activeWater=await fightWaterVisual(page);
   check(`${label}: surge retains water splash without a bobber`,activeWater.bobberHidden&&activeWater.splashVisible);
   await snapshot(page,`${label}-surge-start`);
@@ -410,19 +429,52 @@ async function fightInteraction(page,label){
   }
   fs.writeFileSync(path.join(out,`${label}-fish-motion.json`),JSON.stringify(motion,null,2));
   const moved=motion.at(-1);
-  check(`${label}: visible fish moves toward announced side`,motion.some(sample=>
-    sample.run==='surge'&&sample.direction===initial.direction&&
-    (sample.fishX-initial.fishX)*sign>.12));
+  check(`${label}: visible fish moves laterally during the run`,motion.some((sample,index)=>
+    index>0&&sample.run==='surge'&&Math.abs(sample.fishX-motion[index-1].fishX)>.12));
   check(`${label}: water splash follows visible fish`,Math.abs(moved.floatX-moved.fishX)<.02);
   const reel=page.locator('.room-fishing-v4-reel');await reel.scrollIntoViewIfNeeded();
   const box=await reel.boundingBox();assert(box,`${label}: reel hit area`);
   const x=box.x+box.width*(sign<0?.18:.82),y=box.y+box.height*.5;
   const beforeControls=(await actionCalls(page,'control')).length;
-  await page.mouse.move(x,y);await page.mouse.down();await page.waitForTimeout(2300);
+  await page.mouse.move(x,y);await page.mouse.down();await page.waitForTimeout(600);
+  const reelBefore=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>({
+    transform:getComputedStyle(wheel).transform,animation:getComputedStyle(wheel).animationName,
+    angle:(()=>{const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
+      return Math.atan2(matrix.b,matrix.a)*180/Math.PI;})(),
+    art:getComputedStyle(wheel).backgroundImage,
+    outerAnimation:getComputedStyle(wheel.parentElement,'::after').animationName,
+    outerTransform:getComputedStyle(wheel.parentElement,'::after').transform,
+    crank:(()=>{const handle=wheel.querySelector('.room-fishing-v5-dial-crank');const box=handle?.getBoundingClientRect();
+      return{attached:handle?.parentElement===wheel,width:box?.width,height:box?.height,
+        topKnob:getComputedStyle(handle,'::before').backgroundImage,
+        bottomKnob:getComputedStyle(handle,'::after').backgroundImage,
+        hub:getComputedStyle(wheel.parentElement.querySelector('.room-fishing-v5-dial-hub')).display};})(),
+    label:document.querySelector('.room-fishing-v5-strength-copy>span')?.textContent}));
+  await page.waitForTimeout(140);
+  const reelAfter=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>{
+    const box=wheel.querySelector('.room-fishing-v5-dial-crank').getBoundingClientRect();
+    const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
+    return{transform:getComputedStyle(wheel).transform,angle:Math.atan2(matrix.b,matrix.a)*180/Math.PI,
+      crankWidth:box.width,crankHeight:box.height};
+  });
+  const reelDelta=(reelAfter.angle-reelBefore.angle+540)%360-180;
+  check(`${label}: inner reel rotates while brass rim stays fixed`,reelBefore.animation.includes('spool')&&
+    reelBefore.art.includes('hud-reel-v2.webp')&&reelBefore.transform!==reelAfter.transform&&
+    reelBefore.outerAnimation==='none'&&reelBefore.outerTransform==='none'&&reelBefore.label==='收線中');
+  check(`${label}: winding turns reel and crank clockwise`,reelDelta>15&&reelDelta<150);
+  check(`${label}: visible crank is attached to and travels with inner reel`,reelBefore.crank.attached&&
+    reelBefore.crank.width>=8&&reelBefore.crank.height>=40&&
+    reelBefore.crank.topKnob.includes('gradient')&&reelBefore.crank.bottomKnob.includes('gradient')&&
+    reelBefore.crank.hub==='block'&&Math.abs(reelBefore.crank.width-reelAfter.crankWidth)>3);
+  await page.waitForTimeout(1560);
   const held=await visual(page);
-  check(`${label}: pointer reel follows fish`,held.steer===String(sign)&&held.reeling==='true');
+  check(`${label}: pointer reel steers the visible rod toward the fish`,held.steer===String(sign)&&held.reeling==='true');
+  fs.writeFileSync(path.join(out,`${label}-reeling-line-diagnostics.json`),JSON.stringify(await lineGeometry(page),null,2));
+  await snapshot(page,`${label}-reeling`);
   await page.mouse.up();
-  await page.waitForTimeout(180);
+  await page.waitForFunction(()=>getComputedStyle(document.querySelector('.room-fishing-v5-dial-spool')).animationName==='none',null,{timeout:2000});
+  check(`${label}: inner reel stops after releasing winding`,await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>
+    getComputedStyle(wheel).animationName==='none'));
   const controls=(await actionCalls(page,'control')).slice(beforeControls);
   check(`${label}: held control refreshes server lease`,controls.filter(c=>c.payload.reeling&&c.payload.steer===sign).length>=2);
   check(`${label}: reel release reaches server`,controls.some(c=>c.payload.reeling===false));
@@ -434,7 +486,32 @@ async function fightInteraction(page,label){
   check(`${label}: surge water splash remains visible`,surgeWater.bobberHidden&&surgeWater.splashVisible);
   await snapshot(page,`${label}-surge`);
   const pay=page.locator('.room-fishing-v4-pay');await pay.scrollIntoViewIfNeeded();
-  await holdPointer(page,pay,450);
+  const payBox=await pay.boundingBox();assert(payBox,`${label}: pay hit area`);
+  await page.mouse.move(payBox.x+payBox.width*.5,payBox.y+payBox.height*.5);await page.mouse.down();
+  await page.waitForTimeout(220);
+  const payVisual=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>({
+    direction:getComputedStyle(wheel).animationDirection,animation:getComputedStyle(wheel).animationName,
+    angle:(()=>{const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
+      return Math.atan2(matrix.b,matrix.a)*180/Math.PI;})(),
+    attached:wheel.querySelector('.room-fishing-v5-dial-crank')?.parentElement===wheel,
+    label:document.querySelector('.room-fishing-v5-strength-copy>span')?.textContent}));
+  await page.waitForTimeout(140);
+  const payAngle=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>{
+    const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
+    return Math.atan2(matrix.b,matrix.a)*180/Math.PI;
+  });
+  const payDelta=(payAngle-payVisual.angle+540)%360-180;
+  check(`${label}: paying reverses reel and attached crank`,payVisual.direction==='reverse'&&
+    payVisual.animation.includes('spool')&&payVisual.attached&&payVisual.label==='放線中'&&
+    payDelta< -10&&payDelta> -150);
+  fs.writeFileSync(path.join(out,`${label}-reel-motion.json`),JSON.stringify({
+    winding:{before:reelBefore,after:reelAfter,delta:reelDelta},
+    paying:{before:payVisual,afterAngle:payAngle,delta:payDelta}},null,2));
+  await snapshot(page,`${label}-paying`);
+  await page.waitForTimeout(230);await page.mouse.up();
+  await page.waitForFunction(()=>getComputedStyle(document.querySelector('.room-fishing-v5-dial-spool')).animationName==='none',null,{timeout:2000});
+  check(`${label}: inner reel stops after releasing line`,await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>
+    getComputedStyle(wheel).animationName==='none'));
   const paid=(await actionCalls(page,'control')).slice(beforeControls);
   check(`${label}: pay and release reach server`,paid.some(c=>c.payload.paying===true)&&paid.at(-1)?.payload.paying===false);
   const before=(await visual(page)).strength;
@@ -569,14 +646,16 @@ async function runForceComparison(){
     Math.abs(first(heavy).pullIntensity-heavy.publicIntensityAtSample)<.02&&
     Math.abs(first(light).pullIntensity-light.publicIntensityAtSample)<.02);
   check('species: stronger fish visibly bends rod farther',
-    Math.abs(first(heavy).rodAngle)-Math.abs(first(light).rodAngle)>2);
+    Math.abs(first(heavy).rodAngle-first(light).rodAngle)>2&&
+    Math.abs(first(heavy).pullBend)-Math.abs(first(light).pullBend)>2);
   check('species: stronger fish has faster visible pull rhythm',
     first(light).pullPeriod-first(heavy).pullPeriod>75);
   check('species: stronger fish visibly enlarges water splash',
     first(heavy).splashOpacity-first(light).splashOpacity>.1);
   check('species: stronger fish visibly moves tension arc farther',
     first(heavy).pullArcGrade-first(light).pullArcGrade>=2&&
-    first(heavy).pullArcFill-first(light).pullArcFill>30);
+    first(heavy).pullArcFill-first(light).pullArcFill>30&&
+    first(light).pullNeedleY-first(heavy).pullNeedleY>20);
 }
 async function main(){
   fs.mkdirSync(out,{recursive:true});await serve();

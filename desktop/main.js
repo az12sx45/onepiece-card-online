@@ -38,6 +38,9 @@ const { SocialService } = require('./social-service');
 const { AssetStore, availableBytes, blobPath, safeAssetPath } = require('./asset-store');
 const { resetDesktopGameWebCache, shouldBlockServiceWorkerRequest } = require('./game-session-policy');
 const { LauncherUpdateService } = require('./launcher-update-service');
+const { LauncherContentOverlay, RENDERER_FILES } = require('./launcher-content-overlay');
+const { applySnapshotScript, legacySnapshotScript, sanitizeSnapshot } = require('./launcher-storage-migration');
+const { CONTENT_UI_URL, isTrustedLauncherUrl } = require('./launcher-sender-policy');
 const { RuntimeAssetCache } = require('./runtime-asset-cache');
 const { HttpsProgramRuntime } = require('./program-runtime');
 const { installGameCursorPolicy } = require('./game-cursor-policy');
@@ -133,10 +136,48 @@ let updateCheckAt = 0;
 async function checkRemoteUpdates() {
   if (!assetReady || !assetStore || !launcherUpdateService || Date.now() - updateCheckAt < 60000) return;
   updateCheckAt = Date.now();
-  await Promise.allSettled([assetStore.refreshRemoteCatalog(), launcherUpdateService.checkForUpdates()]);
+  const checks = [assetStore.refreshRemoteCatalog(), launcherUpdateService.checkForUpdates()];
+  if (launcherContentOverlay && !gameWindows.size && !gameLaunchPromises.size &&
+      !assetStore.activeInstall && !assetStore.activeRemoval &&
+      !['ready', 'applying', 'checking', 'downloading'].includes(launcherContentState.status)) {
+    checks.push(checkLauncherContentUpdate());
+  }
+  await Promise.allSettled(checks);
 }
 let assetStore = null;
 let launcherUpdateService = null;
+let launcherContentOverlay = null;
+let launcherContentState = { status: 'idle', revision: 0, downloadedBytes: 0, totalBytes: 0, error: '' };
+let launcherContentCheckPromise = null;
+
+function setLauncherContentState(patch) {
+  launcherContentState = { ...launcherContentState, ...patch };
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send('launcher:content-update-state', { ...launcherContentState });
+  }
+  return { ...launcherContentState };
+}
+
+async function checkLauncherContentUpdate() {
+  if (launcherContentCheckPromise) return launcherContentCheckPromise;
+  if (!launcherContentOverlay) return setLauncherContentState({ status: 'unavailable' });
+  launcherContentCheckPromise = (async () => {
+    setLauncherContentState({ status: 'checking', error: '' });
+    try {
+      const result = await launcherContentOverlay.stage((progress) => setLauncherContentState({ ...progress, error: '' }));
+      return setLauncherContentState({
+        status: result.staged ? 'ready' : 'current',
+        revision: result.revision,
+        downloadedBytes: result.downloadedBytes,
+        totalBytes: result.totalBytes || 0,
+        error: ''
+      });
+    } catch {
+      return setLauncherContentState({ status: 'error', error: '無法取得介面與素材的小型更新。' });
+    }
+  })().finally(() => { launcherContentCheckPromise = null; });
+  return launcherContentCheckPromise;
+}
 let authenticated = false;
 let restoringSession = false;
 let assetReady = false;
@@ -158,6 +199,7 @@ const hardenedSessions = new WeakSet();
 function mimeForPath(filePath) {
   const extension = path.extname(filePath).toLowerCase();
   return new Map([
+    ['.html', 'text/html; charset=utf-8'], ['.js', 'text/javascript; charset=utf-8'], ['.css', 'text/css; charset=utf-8'],
     ['.png', 'image/png'], ['.jpg', 'image/jpeg'], ['.jpeg', 'image/jpeg'], ['.jfif', 'image/jpeg'],
     ['.webp', 'image/webp'], ['.gif', 'image/gif'], ['.svg', 'image/svg+xml'], ['.avif', 'image/avif'],
     ['.mp3', 'audio/mpeg'], ['.wav', 'audio/wav'], ['.ogg', 'audio/ogg'], ['.m4a', 'audio/mp4'],
@@ -215,7 +257,7 @@ async function streamFileResponse(request, filePath, options = {}) {
   const etag = `"${options.sha256 || `${info.size.toString(16)}-${Math.floor(info.mtimeMs).toString(16)}`}"`;
   const headers = new Headers({
     'Accept-Ranges': 'bytes',
-    'Cache-Control': 'public, max-age=31536000, immutable',
+    'Cache-Control': options.cacheControl || 'public, max-age=31536000, immutable',
     'Content-Type': options.mime || mimeForPath(filePath),
     'Cross-Origin-Resource-Policy': 'cross-origin',
     'X-Content-Type-Options': 'nosniff',
@@ -350,6 +392,7 @@ function resolveLauncherResource(requestUrl) {
       /^images\/launcher_room\/fishing_v3\/(?:sea-(?:shore|reef|deep)|bait-(?:worm|shrimp|lure))\.webp$/,
       /^images\/launcher_room\/fishing_v4\/sea-(?:freshwater|magma|rainbow)\.webp$/,
       /^images\/launcher_room\/fishing_v5\/rod-no-line-v1\.webp$/,
+      /^images\/launcher_room\/fishing_v5\/splash-magma-v1\.webp$/,
       /^images\/launcher_room\/fishing_v5\/hud-(?:reel|rail|pull-arc|marker)-v2\.webp$/,
       /^images\/launcher_room\/fish_v1\/(?:balloon-catfish|glistening-saury|smile-jellyfish)\.webp$/,
       /^images\/launcher_room\/fish_v3\/(?:butterflyfish|cola-sunfish|reef-shark)\.webp$/,
@@ -379,9 +422,58 @@ function resolveLauncherResource(requestUrl) {
 
 async function installLauncherProtocol() {
   await protocol.handle(LAUNCHER_SCHEME, async (request) => {
+    let parsed;
+    try { parsed = new URL(request.url); } catch { return new Response('Not found', { status: 404 }); }
+    if (parsed.protocol !== `${LAUNCHER_SCHEME}:` || parsed.search || parsed.hash) return new Response('Not found', { status: 404 });
+    let relative;
+    try { relative = decodeURIComponent(parsed.pathname).replace(/^\/+/, ''); }
+    catch { return new Response('Not found', { status: 404 }); }
+    if (parsed.hostname === 'launcher-ui') {
+      if (!RENDERER_FILES.has(relative)) return new Response('Not found', { status: 404 });
+      const content = await verifiedOverlayResponse(request, relative);
+      return content || streamFileResponse(request, path.join(__dirname, relative), { cacheControl: 'no-store' });
+    }
+    if (parsed.hostname === 'launcher' && launcherContentOverlay?.activeFiles.has(relative)) {
+      const content = await verifiedOverlayResponse(request, relative);
+      if (content) return content;
+    }
     const filePath = resolveLauncherResource(request.url);
-    return filePath ? streamFileResponse(request, filePath) : new Response('Not found', { status: 404 });
+    return filePath ? streamFileResponse(request, filePath, { cacheControl: 'no-store' }) : new Response('Not found', { status: 404 });
   });
+}
+
+async function verifiedOverlayResponse(request, relative) {
+  if (!launcherContentOverlay?.activeFiles.has(relative)) return null;
+  let bytes;
+  try { bytes = await launcherContentOverlay.readVerified(relative); }
+  catch {
+    launcherContentOverlay.deactivate();
+    return null;
+  }
+  if (!bytes) return null; // Identical bundled bytes remain in their packaged location.
+  const method = String(request.method || 'GET').toUpperCase();
+  if (method !== 'GET' && method !== 'HEAD') return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET, HEAD' } });
+  const headers = new Headers({
+    'Content-Type': mimeForPath(relative),
+    'X-Content-Type-Options': 'nosniff',
+    'Cache-Control': 'no-store',
+    'Accept-Ranges': 'bytes'
+  });
+  if (method === 'HEAD') {
+    headers.set('Content-Length', String(bytes.length));
+    return new Response(null, { status: 200, headers });
+  }
+  const range = parseRange(request.headers.get('range'), bytes.length);
+  if (range?.invalid) {
+    headers.set('Content-Range', `bytes */${bytes.length}`);
+    return new Response(null, { status: 416, headers });
+  }
+  const start = range?.start ?? 0;
+  const end = range?.end ?? bytes.length - 1;
+  const body = bytes.subarray(start, end + 1);
+  headers.set('Content-Length', String(body.length));
+  if (range) headers.set('Content-Range', `bytes ${start}-${end}/${bytes.length}`);
+  return new Response(body, { status: range ? 206 : 200, headers });
 }
 
 function requestAssetPath(requestUrl) {
@@ -602,7 +694,7 @@ function broadcastLauncherUpdate() {
 function isLauncherSender(event) {
   if (!mainWindow || mainWindow.isDestroyed() || event.sender.id !== mainWindow.webContents.id) return false;
   const senderUrl = event.sender.getURL();
-  return senderUrl.startsWith('file:') && senderUrl.endsWith('/launcher.html');
+  return isTrustedLauncherUrl(senderUrl, __dirname);
 }
 
 function publicError(error, fallback = '操作失敗，請稍後再試。') {
@@ -775,6 +867,18 @@ function registerLauncherIpc() {
     const state = launcherUpdateService.getState();
     await launcherUpdateService.installReadyUpdate();
     return { ok: true, state: { ...state, status: 'applying', error: '' } };
+  }, { requiresAssets: true }));
+  ipcMain.handle('launcher:get-content-update-state', guarded(async () => ({ ok: true, state: { ...launcherContentState } })));
+  ipcMain.handle('launcher:check-content-update', guarded(async () => ({ ok: true, state: await checkLauncherContentUpdate() })));
+  ipcMain.handle('launcher:apply-content-update', guarded(async () => {
+    if (launcherContentState.status !== 'ready') return { ok: false, error: '目前沒有待套用的介面與素材更新。' };
+    if (gameLaunchPromises.size || gameWindows.size || assetStore.activeInstall || assetStore.activeRemoval) {
+      return { ok: false, error: '請先結束遊戲與下載，再重新開啟啟動器。' };
+    }
+    setLauncherContentState({ status: 'applying' });
+    app.relaunch();
+    app.quit();
+    return { ok: true, state: { ...launcherContentState } };
   }, { requiresAssets: true }));
   ipcMain.handle('launcher:install-game', guarded(async (_event, gameId) => {
     if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
@@ -1078,7 +1182,7 @@ function createMainWindow() {
     height: size.height,
     minWidth: 960,
     minHeight: 640,
-    show: !SMOKE_MODE && !SCREENSHOT_PATH,
+    show: false,
     autoHideMenuBar: true,
     titleBarStyle: 'hidden',
     titleBarOverlay: {
@@ -1104,8 +1208,104 @@ function createMainWindow() {
     if (targetUrl !== mainWindow.webContents.getURL()) event.preventDefault();
   });
   mainWindow.on('closed', () => { mainWindow = null; });
-  mainWindow.loadFile(path.join(__dirname, 'launcher.html')).catch((error) => finishSmoke({ stage: 'load', error: error.message }, 1));
-  mainWindow.webContents.once('did-finish-load', () => setTimeout(runVisualOrSmokeCapture, 1200));
+  loadLauncherPage(mainWindow).then(() => {
+    if (!SMOKE_MODE && !SCREENSHOT_PATH && mainWindow && !mainWindow.isDestroyed()) mainWindow.show();
+    setTimeout(runVisualOrSmokeCapture, 1200);
+  }).catch((error) => {
+    if (SMOKE_MODE) finishSmoke({ stage: 'load', error: error.message }, 1);
+    else {
+      dialog.showErrorBox('啟動器無法開啟', publicError(error, '請重新安裝啟動器後再試。'));
+      app.quit();
+    }
+  });
+}
+
+async function loadContentOrBundled(window, bundledHtml) {
+  try {
+    await window.loadURL(CONTENT_UI_URL);
+    if (launcherContentOverlay?.active && !(await window.webContents.executeJavaScript(`new Promise(resolve => {
+      const deadline = Date.now() + 15000;
+      const check = () => {
+        const stage = document.body?.dataset?.stage;
+        if (window.onePieceDesktop && (stage === 'auth' ||
+          (stage === 'app' && document.querySelectorAll('.game-rail-item').length === 3))) return resolve(true);
+        if (Date.now() >= deadline) return resolve(false);
+        setTimeout(check, 50);
+      };
+      check();
+    })`, true))) throw new Error('內容更新頁面未能正常啟動。');
+    return true;
+  } catch {
+    try { await launcherContentOverlay?.rejectActive(); }
+    catch { launcherContentOverlay?.deactivate(); }
+    setLauncherContentState({
+      revision: launcherContentOverlay?.active?.revision || 0,
+      status: 'error',
+      error: '內容更新未能啟動，已退回原版。'
+    });
+    await window.loadFile(bundledHtml);
+    return false;
+  }
+}
+
+async function loadLauncherPage(window) {
+  const bundledHtml = path.join(__dirname, 'launcher.html');
+  if (!launcherContentOverlay) {
+    await window.loadFile(bundledHtml);
+    return;
+  }
+  const marker = path.join(launcherContentOverlay.root, 'origin-migrated-v1.json');
+  let alreadyMigrated = false;
+  try {
+    const parsed = JSON.parse(await fsp.readFile(marker, 'utf8'));
+    alreadyMigrated = parsed?.schema === 1 && parsed?.done === true;
+  } catch { /* First run with this content-capable core. */ }
+  if (alreadyMigrated) {
+    await loadContentOrBundled(window, bundledHtml);
+    return;
+  }
+  try {
+    await window.loadFile(bundledHtml);
+    const snapshot = sanitizeSnapshot(await window.webContents.executeJavaScript(legacySnapshotScript, true));
+    if (!await loadContentOrBundled(window, bundledHtml)) return;
+    const applied = await window.webContents.executeJavaScript(applySnapshotScript(snapshot), true);
+    if (!applied?.ok || Object.keys(applied.actual || {}).length !== Object.keys(snapshot).length) {
+      throw new Error('Launcher preferences could not be copied to the content origin.');
+    }
+    const verified = sanitizeSnapshot(applied.actual);
+    for (const key of Object.keys(snapshot)) {
+      if (verified[key] !== applied.actual[key]) {
+        throw new Error('Launcher preferences could not be read back.');
+      }
+    }
+    if (Object.keys(snapshot).length && !await loadContentOrBundled(window, bundledHtml)) return;
+    await fsp.mkdir(launcherContentOverlay.root, { recursive: true });
+    const temp = `${marker}.${crypto.randomBytes(8).toString('hex')}.part`;
+    try {
+      await fsp.writeFile(temp, JSON.stringify({ schema: 1, done: true }), { flag: 'wx' });
+      await fsp.rename(temp, marker);
+    } finally { await fsp.rm(temp, { force: true }).catch(() => {}); }
+  } catch {
+    // Keep the original origin and preferences if migration was interrupted.
+    await window.loadFile(bundledHtml);
+  }
+}
+
+async function refreshLauncherMediaCache() {
+  const root = path.join(app.getPath('userData'), 'launcher-content-v1');
+  const marker = path.join(root, 'media-cache-version.json');
+  const wanted = { coreVersion: app.getVersion(), revision: launcherContentOverlay?.active?.revision || 0 };
+  try {
+    const previous = JSON.parse(await fsp.readFile(marker, 'utf8'));
+    if (previous?.coreVersion === wanted.coreVersion && previous?.revision === wanted.revision) return;
+  } catch { /* First start or a newly activated content revision. */ }
+  await session.defaultSession.clearCache();
+  await fsp.mkdir(root, { recursive: true });
+  const temp = `${marker}.${crypto.randomBytes(8).toString('hex')}.part`;
+  try {
+    await fsp.writeFile(temp, `${JSON.stringify(wanted)}\n`, { flag: 'wx' });
+    await fsp.rename(temp, marker);
+  } finally { await fsp.rm(temp, { force: true }).catch(() => {}); }
 }
 
 async function runVisualOrSmokeCapture() {
@@ -1395,6 +1595,7 @@ async function runVisualOrSmokeCapture() {
           'images/launcher_room/minigames_v1/fishing-sea.webp',
           ...['rod','bobber','splash'].map(name => `images/launcher_room/fishing_v2/${name}.webp`),
           'images/launcher_room/fishing_v5/rod-no-line-v1.webp',
+          'images/launcher_room/fishing_v5/splash-magma-v1.webp',
           ...['reel','rail','pull-arc','marker'].map(name => `images/launcher_room/fishing_v5/hud-${name}-v2.webp`),
           'images/launcher_room/fishing_v3/sea-shore.webp',
           'images/launcher_room/fishing_v3/sea-reef.webp',
@@ -1659,6 +1860,7 @@ async function initializeServices() {
   });
   launcherUpdateService.on('state', broadcastLauncherUpdate);
   launcherUpdateService.on('progress', broadcastLauncherUpdate);
+  checkLauncherContentUpdate().catch(() => {});
   const cacheRoot = authService.state.cacheRoot || await chooseDefaultCacheRoot();
   if (!authService.state.cacheRoot) await authService.setCacheRoot(cacheRoot);
   assetStore = new AssetStore({
@@ -1716,6 +1918,22 @@ if (!gotLock) {
   });
   app.whenReady().then(async () => {
     app.setAppUserModelId('com.onepiece.tabletop.desktop');
+    try {
+      const contentSession = session.fromPartition('onepiece-launcher-updates-v1');
+      hardenSession(contentSession);
+      launcherContentOverlay = new LauncherContentOverlay({
+        coreVersion: app.getVersion(),
+        userDataPath: app.getPath('userData'),
+        origin: REMOTE_ORIGIN,
+        bundledDesktopRoot: __dirname,
+        bundledAssetsRoot: launcherResourceRoot(),
+        fetchImpl: (url, options) => contentSession.fetch(url, options)
+      });
+      launcherContentState.revision = await launcherContentOverlay.load();
+    } catch {
+      launcherContentOverlay = null;
+    }
+    await refreshLauncherMediaCache().catch(() => {});
     await installLauncherProtocol();
     registerLauncherIpc();
     servicesReadyPromise = initializeServices();

@@ -23,6 +23,13 @@ param(
   })]
   [string]$ExpectedBytes,
 
+  [string]$BlockmapPath,
+
+  [ValidatePattern('^[A-Fa-f0-9]{64}$')]
+  [string]$ExpectedBlockmapSha256,
+
+  [string]$ExpectedBlockmapBytes,
+
   [switch]$Json
 )
 
@@ -31,7 +38,21 @@ $ErrorActionPreference = 'Stop'
 
 $credentialPath = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'ONEPIECE-Tabletop\publisher\r2-credentials.json'
 $publisherPath = Join-Path $PSScriptRoot 'publish-launcher-artifact.js'
+$blockmapPublisherPath = Join-Path $PSScriptRoot 'publish-launcher-blockmap.js'
 $resolvedFile = (Resolve-Path -LiteralPath $FilePath -ErrorAction Stop).Path
+$withBlockmap = [bool]$BlockmapPath -or [bool]$ExpectedBlockmapSha256 -or [bool]$ExpectedBlockmapBytes
+if ($withBlockmap -and (-not $BlockmapPath -or -not $ExpectedBlockmapSha256 -or -not $ExpectedBlockmapBytes)) {
+  throw 'BlockmapPath, ExpectedBlockmapSha256 and ExpectedBlockmapBytes must be supplied together.'
+}
+$resolvedBlockmap = if ($withBlockmap) { (Resolve-Path -LiteralPath $BlockmapPath -ErrorAction Stop).Path } else { $null }
+if ($withBlockmap) {
+  $parsedBlockmapBytes = 0L
+  if ($ExpectedBlockmapBytes -notmatch '^[1-9][0-9]*$' -or
+      -not [long]::TryParse($ExpectedBlockmapBytes, [ref]$parsedBlockmapBytes) -or
+      $parsedBlockmapBytes -gt 2097152L) {
+    throw 'ExpectedBlockmapBytes must be between 1 and 2097152.'
+  }
+}
 
 if (-not (Test-Path -LiteralPath $credentialPath -PathType Leaf)) {
   throw "Encrypted R2 credentials were not found at $credentialPath"
@@ -83,6 +104,24 @@ try {
   & node @arguments
   if ($LASTEXITCODE -ne 0) {
     throw "R2 launcher publisher exited with code $LASTEXITCODE."
+  }
+  if ($withBlockmap) {
+    $blockmapArguments = @(
+      $blockmapPublisherPath,
+      '--live',
+      '--installer', $resolvedFile,
+      '--blockmap', $resolvedBlockmap,
+      '--version', $Version,
+      '--installer-sha256', $ExpectedSha256.ToLowerInvariant(),
+      '--installer-bytes', $ExpectedBytes,
+      '--blockmap-sha256', $ExpectedBlockmapSha256.ToLowerInvariant(),
+      '--blockmap-bytes', $ExpectedBlockmapBytes
+    )
+    if ($Json) { $blockmapArguments += '--json' }
+    & node @blockmapArguments
+    if ($LASTEXITCODE -ne 0) {
+      throw "R2 launcher blockmap publisher exited with code $LASTEXITCODE."
+    }
   }
 } finally {
   foreach ($name in $previous.Keys) {

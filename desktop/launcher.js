@@ -113,6 +113,7 @@ let launcherUpdateState = {
   totalBytes: 0,
   error: ''
 };
+let launcherContentUpdateState = { status: 'idle', revision: 0, downloadedBytes: 0, totalBytes: 0, error: '' };
 
 const $ = (selector) => document.querySelector(selector);
 const bootScreen = $('#bootScreen');
@@ -174,6 +175,12 @@ const launcherUpdateProgress = $('#launcherUpdateProgress');
 const launcherUpdateProgressBar = $('#launcherUpdateProgressBar');
 const launcherUpdateProgressDetail = $('#launcherUpdateProgressDetail');
 const launcherUpdateAction = $('#launcherUpdateAction');
+const launcherContentUpdateCard = $('#launcherContentUpdateCard');
+const launcherContentUpdateStatus = $('#launcherContentUpdateStatus');
+const launcherContentUpdateProgress = $('#launcherContentUpdateProgress');
+const launcherContentUpdateProgressBar = $('#launcherContentUpdateProgressBar');
+const launcherContentUpdateProgressDetail = $('#launcherContentUpdateProgressDetail');
+const launcherContentUpdateAction = $('#launcherContentUpdateAction');
 const uninstallDialog = $('#uninstallDialog');
 const toast = $('#toast');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -298,16 +305,16 @@ function renderLauncherUpdate() {
       action = '再次檢查';
       break;
     case 'available':
-      message = `發現版本 ${availableVersion}，下載後即可安裝。`;
+      message = `核心版本 ${availableVersion} 可更新；下載後需安裝並重新啟動。`;
       action = '下載更新';
       break;
     case 'downloading':
-      message = `正在下載版本 ${availableVersion}…`;
+      message = state.downloadMethod === 'delta' ? `正在下載核心版本 ${availableVersion} 的變更區塊，完成後仍需安裝…` : `正在下載核心版本 ${availableVersion} 的安裝檔…`;
       action = `下載中 ${progress}%`;
       disabled = true;
       break;
     case 'ready':
-      message = `版本 ${availableVersion} 已下載並完成驗證。`;
+      message = `核心版本 ${availableVersion} 已下載並完成驗證，套用時會執行安裝程序。`;
       action = '安裝並重新啟動';
       break;
     case 'applying':
@@ -395,6 +402,66 @@ async function runLauncherUpdateAction() {
     readLauncherUpdateResult(result, fallbackError);
   } catch (_) {
     mergeLauncherUpdateState({ status: 'error', error: fallbackError });
+  }
+}
+
+function mergeLauncherContentUpdateState(nextState = {}) {
+  const source = nextState && typeof nextState === 'object' ? nextState : {};
+  launcherContentUpdateState = {
+    ...launcherContentUpdateState, ...source,
+    status: ['idle', 'checking', 'downloading', 'current', 'ready', 'applying', 'error', 'unavailable'].includes(source.status)
+      ? source.status : launcherContentUpdateState.status,
+    revision: Math.max(0, Number(source.revision ?? launcherContentUpdateState.revision) || 0),
+    downloadedBytes: Math.max(0, Number(source.downloadedBytes ?? launcherContentUpdateState.downloadedBytes) || 0),
+    totalBytes: Math.max(0, Number(source.totalBytes ?? launcherContentUpdateState.totalBytes) || 0)
+  };
+  renderLauncherContentUpdate();
+}
+
+function renderLauncherContentUpdate() {
+  if (!launcherContentUpdateCard) return;
+  const state = launcherContentUpdateState;
+  const percent = state.totalBytes > 0 ? Math.min(100, Math.round(state.downloadedBytes / state.totalBytes * 100)) : 100;
+  const text = {
+    idle: '尚未檢查介面與素材更新。',
+    checking: '正在確認介面與素材的小型更新…',
+    current: '介面與素材已是目前版本。',
+    ready: `第 ${state.revision} 版內容已下載；重開啟啟動器即可套用，不需重新安裝。`,
+    applying: '正在重新開啟啟動器…',
+    unavailable: '目前無法使用小型更新。',
+    error: state.error || '小型更新暫時無法完成。'
+  };
+  launcherContentUpdateCard.dataset.status = state.status;
+  launcherContentUpdateStatus.textContent = state.status === 'downloading'
+    ? `正在下載變更檔案：${formatBytes(state.downloadedBytes)} / ${formatBytes(state.totalBytes)}`
+    : text[state.status] || text.idle;
+  launcherContentUpdateAction.textContent = state.status === 'ready' ? '重新開啟套用' :
+    ['checking', 'downloading', 'applying'].includes(state.status) ? '處理中…' : '檢查小型更新';
+  launcherContentUpdateAction.disabled = ['checking', 'downloading', 'applying', 'unavailable'].includes(state.status);
+  launcherContentUpdateProgress.hidden = state.status !== 'downloading';
+  launcherContentUpdateProgress.setAttribute('aria-valuenow', String(percent));
+  launcherContentUpdateProgressBar.style.width = `${percent}%`;
+  launcherContentUpdateProgressDetail.textContent = `${percent}%`;
+}
+
+async function refreshLauncherContentUpdateState() {
+  if (typeof api?.getLauncherContentUpdateState !== 'function') return;
+  try {
+    const result = await api.getLauncherContentUpdateState();
+    mergeLauncherContentUpdateState(result?.state || {});
+  } catch {
+    mergeLauncherContentUpdateState({ status: 'error', error: '無法讀取小型更新狀態。' });
+  }
+}
+
+async function runLauncherContentUpdateAction() {
+  const method = launcherContentUpdateState.status === 'ready' ? 'applyLauncherContentUpdate' : 'checkLauncherContentUpdate';
+  if (typeof api?.[method] !== 'function') return;
+  const result = await api[method]().catch(() => ({ ok: false, error: '小型更新暫時無法完成。' }));
+  if (result?.ok === false) {
+    mergeLauncherContentUpdateState({ status: 'error', error: String(result.error || '小型更新暫時無法完成。') });
+  } else {
+    mergeLauncherContentUpdateState(result?.state || {});
   }
 }
 
@@ -912,8 +979,10 @@ function openSettingsDialog() {
   $('#settingsSave').disabled = false;
   $('#settingsSave').textContent = '儲存設定';
   renderLauncherUpdate();
+  renderLauncherContentUpdate();
   settingsDialog.showModal();
   refreshLauncherUpdateState();
+  refreshLauncherContentUpdateState();
 }
 
 async function saveSettings() {
@@ -1007,6 +1076,7 @@ $('#settingsClose').addEventListener('click', () => settingsDialog.close());
 $('#settingsCancel').addEventListener('click', () => settingsDialog.close());
 $('#settingsSave').addEventListener('click', saveSettings);
 launcherUpdateAction.addEventListener('click', runLauncherUpdateAction);
+launcherContentUpdateAction?.addEventListener('click', runLauncherContentUpdateAction);
 settingsDialog.addEventListener('click', (event) => { if (event.target === settingsDialog) settingsDialog.close(); });
 $('#logoutButton').addEventListener('click', async () => {
   await api.logout();
@@ -1033,6 +1103,9 @@ api?.onProgress((progress) => {
 
 api?.onLauncherUpdate?.((nextState) => {
   mergeLauncherUpdateState(nextState);
+});
+api?.onLauncherContentUpdate?.((nextState) => {
+  mergeLauncherContentUpdateState(nextState);
 });
 
 api?.onSessionKicked(() => {

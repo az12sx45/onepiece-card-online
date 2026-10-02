@@ -329,6 +329,12 @@
       </div>
       <button class="ghost-button launcher-update-action" id="launcherUpdateAction" type="button">檢查更新</button>
     </section>
+    <section class="launcher-update-card launcher-content-update-card" id="launcherContentUpdateCard" data-status="idle" aria-labelledby="launcherContentUpdateTitle">
+      <div class="launcher-update-heading"><span class="launcher-update-mark" aria-hidden="true"><i></i></span><span><strong id="launcherContentUpdateTitle">介面與素材小型更新</strong><small>更新檔案，不需重新安裝啟動器</small></span></div>
+      <p class="launcher-update-status" id="launcherContentUpdateStatus" role="status" aria-live="polite">正在確認介面與素材更新…</p>
+      <div class="launcher-update-progress" id="launcherContentUpdateProgress" role="progressbar" aria-label="介面與素材更新進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden><span><i id="launcherContentUpdateProgressBar"></i></span><small id="launcherContentUpdateProgressDetail">0%</small></div>
+      <button class="ghost-button launcher-update-action" id="launcherContentUpdateAction" type="button">檢查小型更新</button>
+    </section>
     <div class="settings-actions"><button class="ghost-button" id="settingsCancel" type="button">取消</button><button class="gold-button" id="settingsSave" type="button">儲存設定</button></div>
   </dialog>
 

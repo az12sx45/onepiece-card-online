@@ -10,7 +10,7 @@
     "launcher:live": "node publish-launcher-artifact.js --live",
     "test": "npm run test:assets && npm run test:launcher && npm run test:signature",
     "test:assets": "node ../../scripts/desktop_r2_publish_qa.js",
-    "test:launcher": "node ../../scripts/desktop_r2_launcher_publish_qa.js",
+    "test:launcher": "node ../../scripts/desktop_r2_launcher_publish_qa.js && node ../../scripts/desktop_r2_launcher_blockmap_qa.js",
     "test:signature": "node launcher-manifest-signature-qa.js"
   },
   "dependencies": {

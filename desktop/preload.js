@@ -43,6 +43,9 @@ contextBridge.exposeInMainWorld('onePieceDesktop', Object.freeze({
   checkLauncherUpdate: () => ipcRenderer.invoke('launcher:check-update'),
   downloadLauncherUpdate: () => ipcRenderer.invoke('launcher:download-update'),
   applyLauncherUpdate: () => ipcRenderer.invoke('launcher:apply-update'),
+  getLauncherContentUpdateState: () => ipcRenderer.invoke('launcher:get-content-update-state'),
+  checkLauncherContentUpdate: () => ipcRenderer.invoke('launcher:check-content-update'),
+  applyLauncherContentUpdate: () => ipcRenderer.invoke('launcher:apply-content-update'),
   installGame: (gameId) => ipcRenderer.invoke('launcher:install-game', gameId),
   cancelInstall: (gameId) => ipcRenderer.invoke('launcher:cancel-install', gameId),
   uninstallGame: (gameId) => ipcRenderer.invoke('launcher:uninstall-game', gameId),
@@ -51,5 +54,6 @@ contextBridge.exposeInMainWorld('onePieceDesktop', Object.freeze({
   onState: (callback) => subscribe('launcher:state', callback),
   onProgress: (callback) => subscribe('launcher:progress', callback),
   onLauncherUpdate: (callback) => subscribe('launcher:update-state', callback),
+  onLauncherContentUpdate: (callback) => subscribe('launcher:content-update-state', callback),
   onSessionKicked: (callback) => subscribe('launcher:session-kicked', callback)
 }));

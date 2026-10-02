@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "channel": "stable",
+  "platform": "win32",
+  "arch": "x64",
+  "coreVersion": "1.2.23",
+  "revision": 1,
+  "publishedAt": "2026-10-02T17:29:29.093Z",
+  "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
+  "files": [
+    {
+      "path": "launcher-room-minigames.css",
+      "bytes": 79061,
+      "sha256": "3c3a7865b5ce650ff3fcf4a08ae813eb69139f5a2ed4abda491829f2d59356c9"
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
+    "value": "vqvgtvelRzajbReqHPOvfO4+A2fW3C9EIW8FcyDCt0i8MbmVHrPG+4JA2cs27PLnqXA7fon/1n8DRZA+e+CuCA=="
+  }
+}
