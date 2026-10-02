@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 2,
-  "publishedAt": "2026-10-02T18:29:24.613Z",
+  "revision": 3,
+  "publishedAt": "2026-10-02T19:42:25.174Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -19,19 +19,89 @@
       "sha256": "a3e55da2b26fef25c9fde283f9c463c3f2a0cdbe60e21aea1e5a11723c99f886"
     },
     {
+      "path": "images/launcher_room/minigames_v2/ingredient-apple.webp",
+      "bytes": 36754,
+      "sha256": "00e0fdab9b518b5a25120b2db570260a6dbe70b70c79d309ee2e0e6d1b7cc01d"
+    },
+    {
+      "path": "images/launcher_room/minigames_v2/ingredient-cream.webp",
+      "bytes": 37380,
+      "sha256": "3396112bad46dfde4da0a3f878504dc315850d8d73af34e77ce0f757711a0565"
+    },
+    {
+      "path": "images/launcher_room/minigames_v2/ingredient-fish.webp",
+      "bytes": 34510,
+      "sha256": "c568f4d65b1142ba40a01a279b5f04e10464cfcc862665f796aa9a0becca2526"
+    },
+    {
+      "path": "images/launcher_room/minigames_v2/ingredient-lemon.webp",
+      "bytes": 33040,
+      "sha256": "be79553e70747286cb0e06e0da8a83a782d772de3c1f7d67ddf3742c59a7cee5"
+    },
+    {
+      "path": "images/launcher_room/minigames_v2/ingredient-meat.webp",
+      "bytes": 38938,
+      "sha256": "c81b0e71eacc33e75fdcac43319f5f4e6ff59cb2e42f00d3a9faef90c3a82b01"
+    },
+    {
+      "path": "images/launcher_room/minigames_v2/ingredient-onion.webp",
+      "bytes": 37398,
+      "sha256": "9ada06e9360212133f2fa74173cfc0e7a0fbb2a5bc185e432ed4af476fe267fa"
+    },
+    {
+      "path": "images/launcher_room/minigames_v2/ingredient-orange.webp",
+      "bytes": 192066,
+      "sha256": "ed2747f0372059f9da6b8d35723906e5f8341744eb2ce9bb7ab54c22ba8a8e43"
+    },
+    {
+      "path": "images/launcher_room/minigames_v2/ingredient-potato.webp",
+      "bytes": 33436,
+      "sha256": "1e54504d48d9f018fee832164f834e7c54ca3d2f0f73c67e85250ee27386b1d4"
+    },
+    {
+      "path": "images/launcher_room/minigames_v2/ingredient-rice.webp",
+      "bytes": 34886,
+      "sha256": "4a430c93214026544cc24ac9c65171a0f0e1061967c94dd8f856d5afcc1ff792"
+    },
+    {
+      "path": "images/launcher_room/minigames_v2/ingredient-salt.webp",
+      "bytes": 38512,
+      "sha256": "09b712fc667bdebc43aaca2de04e99f9e698938e3d00fb51e478b7187a9ee62d"
+    },
+    {
+      "path": "images/launcher_room/minigames_v2/nav-port.webp",
+      "bytes": 115506,
+      "sha256": "70562961077ab4924d622f42106bc407d68d8c4893f6830d00b107ec44adc286"
+    },
+    {
+      "path": "images/launcher_room/minigames_v2/nav-reef.webp",
+      "bytes": 207530,
+      "sha256": "cf3fc4bcdef0d3ea37db5655487be6c50da18b0bb6fdc3564723869dbd53ce11"
+    },
+    {
+      "path": "images/launcher_room/minigames_v2/nav-ship.webp",
+      "bytes": 88472,
+      "sha256": "84ef3d442b96cbf584245030e71ed6f9501a65c922d7964d48e23fa5a41f2a12"
+    },
+    {
+      "path": "images/launcher_room/minigames_v2/training-deck.webp",
+      "bytes": 208884,
+      "sha256": "dc0d2664b05c2045c1095f06c8e422724865b145267aa3a6d1dc45fba836f239"
+    },
+    {
       "path": "launcher-room-minigames.css",
-      "bytes": 79627,
-      "sha256": "bcf7c8355f0511cba60e071faee61edfe43d2449202d6417ad88cef46bedfb37"
+      "bytes": 96218,
+      "sha256": "4979cec0efcb4d32a5702d4fec63a6a1e0cd81da19a052087b48a958f85286f8"
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 137399,
-      "sha256": "ef8979e5ebd90701c0ae72007ef13d70b87d9ebb9be4e9d708f7cef4903376b1"
+      "bytes": 139081,
+      "sha256": "014b489118adc8ba18188ca65e89576be8b86dd39ba199ef85117e6db40a26da"
     }
   ],
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "PdTSYJntsNntHZvPXcYv+DEBq+zKwJgXJS5vC9NKBRC9W6GazfsgyivFswAs112Stv75LQ3lJTYUgvRSFkEmDA=="
+    "value": "c+YMMZrh8yvvCm1C2Z4YNw1Fo9f17bIAz9J6jg+doM6ZdZZmq3P4t3J2oU8YNPKIjLnFQb3nfBEUlK3gJQ3yDg=="
   }
 }

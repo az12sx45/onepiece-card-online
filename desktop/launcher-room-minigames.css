@@ -218,6 +218,137 @@
 }
 @media(prefers-reduced-motion:reduce){.room-fishing-v3-target,.room-fishing-v3-catch-art{animation:none!important}}
 
+/* Crew work and training: large illustrated desktop playfields. */
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-card{width:min(1160px,100%)}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-head{padding:13px 24px 5px}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-progress{padding:0 24px 6px;min-height:21px}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-body{padding:0 24px 14px;min-height:0}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-crew{padding:8px 24px}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-crew img{width:51px;height:51px}
+.room-minigame-intro-visual{display:grid;gap:11px}
+.room-minigame-intro-visual .room-minigame-jobs{grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin:0}
+.room-minigame-intro-visual .room-minigame-job{min-height:153px;justify-content:flex-end;padding:13px 15px;background-position:center;background-size:cover;box-shadow:inset 0 -60px 46px #05222bb8,0 4px 12px #0017217a;text-shadow:0 2px 4px #001b25}
+.room-minigame-intro-visual .room-minigame-job strong{font-size:19px;color:#fff0b9;line-height:1.1}
+.room-minigame-intro-visual .room-minigame-job>span{font-size:12px;color:#e4f0eb}
+.room-minigame-intro-visual .room-minigame-job .room-minigame-job-guide{font-size:10px;color:#c3f3df}
+.room-minigame-intro-visual .room-minigame-job[aria-pressed=true]{box-shadow:inset 0 -60px 46px #153d3db8,0 0 0 2px #f3d17a,0 5px 15px #0017218a}
+.room-minigame-intro-hero{display:flex;flex-direction:column;justify-content:flex-end;min-height:195px;padding:20px 24px;border:1px solid #a5c2ae9c;border-radius:15px;background-color:#14566a;background-position:center 52%;background-size:cover;box-shadow:inset 0 -30px 40px #06273270;text-shadow:0 2px 7px #001823}
+.room-minigame-intro-hero strong{font-size:31px;line-height:1.12;color:#fff0b9}
+.room-minigame-intro-hero>span:last-child{font-size:15px;color:#e5f2e9}
+.room-minigame-intro-visual .room-minigame-cost{margin:0;padding:0;background:none;color:#bcd6d0;font-size:12px;line-height:1.25}
+.room-minigame-intro-visual>[data-action=start]{width:100%;min-height:56px;margin:0;font-size:21px}
+.room-minigame-rules{padding:0 2px;color:#c5d7d2;font-size:12px}
+.room-minigame-rules summary{width:max-content;color:#e5d49f;cursor:pointer;font-weight:700}
+.room-minigame-rules ol{margin:7px 0 2px;padding:7px 12px 7px 29px;border:1px solid #6b999178;border-radius:10px;background:#092834e3;line-height:1.5}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-stage{min-height:560px;padding:16px 24px 18px;background-position:center;background-size:cover}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-stage.job-supply{background-image:linear-gradient(#0827327d,#062633a0),url('opui://launcher/images/launcher_room/minigames_v1/supply-deck-v2.webp')}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-stage.job-cooking{background-image:linear-gradient(#08273266,#062633b0),url('opui://launcher/images/launcher_room/minigames_v1/cooking-galley-v2.webp')}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-stage.job-repair{background-image:linear-gradient(#08273270,#062633b8),url('opui://launcher/images/launcher_room/minigames_v1/repair-workbench-v2.webp')}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-stage.job-navigation{background-image:linear-gradient(#08273268,#062633b0),url('opui://launcher/images/launcher_room/minigames_v1/navigation-chart-v2.webp')}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-stage.training{background-image:linear-gradient(#07303a52,#062633c7),url('opui://launcher/images/launcher_room/minigames_v2/training-deck.webp')}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-order{width:max-content;max-width:100%;padding:6px 14px;border:1px solid #d7c2869c;border-radius:12px;background:#082d3bdf;backdrop-filter:blur(5px)}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-order strong{font-size:22px;color:#fff0bd}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-timer{height:8px;margin:10px 0 5px;background:#061e2aa8}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-hint{min-height:23px;margin:0 0 13px;color:#fff1c4;font-size:17px;font-weight:750;text-shadow:0 2px 5px #001923}
+.room-minigame-stage.job-supply .room-minigame-belt{min-height:363px;align-items:center;gap:20px;padding:13px 12px 22px;background:linear-gradient(0deg,#08212bba,#08212b30 65%);border:1px solid #a9bd9b78}
+.room-minigame-stage.job-supply .room-minigame-cargo{height:314px;justify-content:flex-end;border:2px solid #bca8788f;border-radius:16px;background:linear-gradient(transparent 27%,#0c3643d9);box-shadow:0 8px 17px #00192382}
+.room-minigame-stage.job-supply .room-minigame-cargo img{width:min(85%,228px);height:228px;object-fit:contain;image-rendering:auto;filter:drop-shadow(0 13px 9px #001c28aa)}
+.room-minigame-stage.job-supply .room-minigame-cargo strong{font-size:20px;color:#fff0b7}
+.room-minigame-stage.job-supply .room-minigame-cargo-state{font-size:13px}
+.room-minigame-stage.job-supply .room-minigame-cargo[aria-pressed=true]{border-color:#ffe199;box-shadow:0 0 0 3px #ffda816b,0 8px 20px #00192393}
+.room-minigame-stage.job-supply .room-minigame-submit{min-height:59px;min-width:245px;margin-top:12px;font-size:20px}
+.room-minigame-stage.job-cooking .room-minigame-recipe{gap:8px;justify-content:center;margin:4px 0 10px}
+.room-minigame-stage.job-cooking .room-minigame-recipe li{position:relative;flex:1;max-width:190px;min-height:95px;justify-content:center;flex-direction:column;gap:0;padding:7px 9px;background:#082d3ce9;border:1px solid #d3bc81a6;box-shadow:0 5px 11px #001a2580}
+.room-minigame-stage.job-cooking .room-minigame-recipe li small{position:absolute;top:5px;left:6px}
+.room-minigame-stage.job-cooking .room-minigame-recipe .room-minigame-food-art{width:62px;height:57px;object-fit:contain}
+.room-minigame-stage.job-cooking .room-minigame-recipe li span{font-size:13px}
+.room-minigame-stage.job-cooking .room-minigame-prep{min-height:91px;gap:8px;margin:4px 0 11px}
+.room-minigame-stage.job-cooking .room-minigame-prep-slot{position:relative;flex:1;max-width:190px;min-height:85px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0;background:#0c2d35d9;border:2px dashed #9cb7a899;color:#d8ede0}
+.room-minigame-stage.job-cooking .room-minigame-prep-slot.filled{border-style:solid;box-shadow:inset 0 0 16px #7be3c02f,0 0 11px #75dabb55}
+.room-minigame-stage.job-cooking .room-minigame-prep-slot small{position:absolute;top:4px;left:8px;color:#ebd5a0}
+.room-minigame-stage.job-cooking .room-minigame-prep-slot strong{font-size:12px}
+.room-minigame-stage.job-cooking .room-minigame-prep-slot .room-minigame-food-art{width:55px;height:48px;object-fit:contain}
+.room-minigame-stage.job-cooking .room-minigame-ingredients{gap:10px;grid-template-columns:repeat(3,minmax(0,1fr));max-width:750px;margin:0 auto}
+.room-minigame-stage.job-cooking .room-minigame-ingredient{position:relative;min-height:105px;gap:0;background:#153c46e8;box-shadow:0 5px 10px #001a2588}
+.room-minigame-stage.job-cooking .room-minigame-ingredient:hover:not(:disabled){border-color:#f3d381;background:#245a5c}
+.room-minigame-stage.job-cooking .room-minigame-ingredient kbd{position:absolute;left:9px;top:5px}
+.room-minigame-stage.job-cooking .room-minigame-ingredient .room-minigame-food-art{width:73px;height:68px;object-fit:contain}
+.room-minigame-stage.job-cooking .room-minigame-ingredient strong{font-size:16px}
+.room-minigame-stage.job-cooking .room-minigame-puzzle-actions button{min-height:53px;font-size:17px}
+.room-minigame-stage.job-repair,.room-minigame-stage.job-navigation{min-height:650px!important}
+.room-minigame-stage.job-repair .room-minigame-pipe-board{width:min(456px,calc(100% - 52px));gap:7px;margin:6px auto 4px;padding:9px;border:9px ridge #92794c;border-radius:18px;background:#0b2936e9;box-shadow:0 10px 27px #001a2799}
+.room-minigame-stage.job-repair .room-minigame-pipe{border:3px solid #647c78;border-radius:8px;background:radial-gradient(circle at 45% 25%,#375b61,#0a2734 75%);box-shadow:inset 0 0 18px #001721a6}
+.room-minigame-stage.job-repair .room-minigame-pipe[data-flow=true]{border-color:#addcca;box-shadow:inset 0 0 16px #37c9d566,0 0 12px #6ce4e486}
+.room-minigame-stage.job-repair .room-minigame-pipe .room-pipe-hub{fill:#577e81;stroke:#e8bd70;stroke-width:5}
+.room-minigame-stage.job-repair .room-minigame-pipe .room-pipe-water{opacity:.58}
+.room-minigame-stage.job-repair .room-minigame-pipe[data-flow=true] .room-pipe-water{stroke:#a8f9ed;opacity:1;filter:drop-shadow(0 0 4px #5de8eb)}
+.room-minigame-stage.job-repair .room-minigame-pipe[data-flow=true] .room-pipe-hub{fill:#90d7d2}
+.room-minigame-stage.job-repair .room-minigame-pipe-board[data-connected=true]{box-shadow:0 0 0 3px #b6efdc,0 0 32px #7aeddcaa}
+.room-minigame-stage.job-repair .room-minigame-pipe[data-entry=west]::before,.room-minigame-stage.job-repair .room-minigame-pipe[data-exit=east]::after{top:calc(50% - 13px);height:26px;width:22px}
+.room-minigame-stage.job-repair .room-minigame-pipe[data-entry=west]::before{left:-22px}.room-minigame-stage.job-repair .room-minigame-pipe[data-exit=east]::after{right:-22px}
+.room-minigame-stage.job-repair .room-minigame-puzzle-note{margin:5px 0;font-size:14px;color:#fff0be}
+.room-minigame-stage.job-repair .room-minigame-puzzle-actions button{min-height:54px;font-size:17px}
+.room-minigame-stage.job-navigation .room-minigame-chart{width:min(450px,100%);gap:5px;margin:7px auto 4px;padding:10px;border:7px ridge #ba9e62;border-radius:12px;background:#0a3245e5;box-shadow:0 8px 23px #001721b3}
+.room-minigame-stage.job-navigation .room-minigame-sea-cell{overflow:hidden;border:2px solid #95c7bd89;border-radius:8px;background:linear-gradient(135deg,#337c83dc,#155269e8),radial-gradient(circle at 55% 50%,#8ce0d846,transparent 70%)}
+.room-minigame-stage.job-navigation .room-minigame-sea-cell[data-reef=true]{background:#1b4952e8}
+.room-minigame-stage.job-navigation .room-minigame-sea-cell[data-label=港口]{background:#4f6257e8}
+.room-minigame-stage.job-navigation .room-minigame-nav-art{width:82%;height:70%;object-fit:contain;filter:drop-shadow(0 4px 4px #001e2caa)}
+.room-minigame-stage.job-navigation .room-minigame-cell-label{position:absolute;bottom:1px;left:0;right:0;font-size:12px;color:#fff3c9;text-shadow:0 2px 3px #001923}
+.room-minigame-stage.job-navigation .room-minigame-cell-order{position:absolute;top:4px;left:6px;z-index:2;color:#ffedab;text-shadow:0 2px 3px #001923}
+.room-minigame-stage.job-navigation .room-minigame-sea-cell.current::after{content:'';position:absolute;z-index:3;inset:12% 10% 14%;width:auto;height:auto;border:0;background:url('opui://launcher/images/launcher_room/minigames_v2/nav-ship.webp') center/contain no-repeat;transform:none;filter:drop-shadow(0 5px 3px #001923);animation:room-boat-bob 1.5s ease-in-out infinite}
+.room-minigame-stage.job-navigation .room-minigame-course-budget{font-size:16px;font-weight:800;color:#fff0bd;margin:5px 0}
+.room-minigame-stage.job-navigation .room-minigame-puzzle-actions button{min-height:54px;font-size:17px}
+.room-minigame-stage.training .room-minigame-lanes{height:350px;gap:17px;padding:4px 6% 0}
+.room-minigame-stage.training .room-minigame-lane{position:relative;justify-content:flex-start;padding-top:10px;border:2px solid #d9c7869c;border-bottom:10px solid #bf9d65;border-radius:45% 45% 18px 18px;background:linear-gradient(#8fe3db2e,#14435071 60%,#183b3aa5),repeating-linear-gradient(0deg,transparent 0 43px,#d9dfad2d 45px 49px)}
+.room-minigame-stage.training .room-minigame-lane.lit{background:linear-gradient(#e4f5ac91,#67d5ba88 60%,#338a74ba),repeating-linear-gradient(0deg,transparent 0 43px,#f5e9a867 45px 49px);box-shadow:inset 0 0 40px #b2fbe0b0,0 0 18px #afeecab0}
+.room-minigame-stage.training .room-minigame-lane-arrow{font-size:43px;line-height:1;color:#fff1bd}
+.room-minigame-stage.training .room-minigame-lane-name{font-size:16px;font-weight:800;color:#fff4ce}
+.room-minigame-stage.training .room-minigame-runner{width:210px;height:210px;bottom:-9px;transform:translateX(-50%);filter:drop-shadow(0 11px 5px #001e2cbb);image-rendering:auto}
+.room-minigame-stage.training .room-minigame-steps{gap:13px;margin:12px 0}
+.room-minigame-stage.training .room-minigame-steps span{width:42px;height:42px;font-size:16px}
+.room-minigame-stage.training .room-minigame-directions{gap:18px}
+.room-minigame-stage.training .room-minigame-direction{width:94px;min-height:67px;font-size:36px;background:#1b4c55ef;border:2px solid #d2c18b}
+.room-minigame-stage.training .room-minigame-direction:hover:not(:disabled){background:#367a73}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-result{min-height:480px;display:flex;flex-direction:column;justify-content:center;align-items:center;border:1px solid #bdb07f8c;border-radius:15px;background:linear-gradient(#12394bc4,#0d2e3be9),url('opui://launcher/images/launcher_room/minigames_v1/deck.webp') center/cover}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-result h3{font-size:39px}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-rewards{min-width:300px;font-size:20px}
+.room-minigame-overlay:not([data-job=fishing]) .room-minigame-rewards strong{font-size:29px}
+@media(max-width:700px){
+ .room-minigame-overlay:not([data-job=fishing]){padding:5px}
+ .room-minigame-overlay:not([data-job=fishing]) .room-minigame-card{max-height:calc(100dvh - 10px);border-radius:12px}
+ .room-minigame-overlay:not([data-job=fishing]) .room-minigame-head{padding:10px 12px 3px}
+ .room-minigame-overlay:not([data-job=fishing]) .room-minigame-body{padding:0 8px 9px}
+ .room-minigame-intro-visual .room-minigame-jobs{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ .room-minigame-intro-visual .room-minigame-job{min-height:92px;padding:8px}
+ .room-minigame-intro-visual .room-minigame-job strong{font-size:14px}
+ .room-minigame-intro-hero{min-height:130px;padding:13px}.room-minigame-intro-hero strong{font-size:23px}
+ .room-minigame-overlay:not([data-job=fishing]) .room-minigame-stage{min-height:0;padding:9px}
+ .room-minigame-overlay:not([data-job=fishing]) .room-minigame-order strong{font-size:16px}
+ .room-minigame-overlay:not([data-job=fishing]) .room-minigame-hint{font-size:13px}
+ .room-minigame-stage.job-supply .room-minigame-belt{min-height:225px;gap:5px;padding:7px 4px}
+ .room-minigame-stage.job-supply .room-minigame-cargo{height:210px}
+ .room-minigame-stage.job-supply .room-minigame-cargo img{width:92%;height:145px}
+ .room-minigame-stage.job-supply .room-minigame-cargo strong{font-size:12px}
+ .room-minigame-stage.job-supply .room-minigame-cargo-state{font-size:10px}
+ .room-minigame-stage.job-cooking .room-minigame-recipe li{min-height:72px;padding:4px}
+ .room-minigame-stage.job-cooking .room-minigame-recipe .room-minigame-food-art{width:38px;height:37px}
+ .room-minigame-stage.job-cooking .room-minigame-recipe li span{font-size:10px}
+ .room-minigame-stage.job-cooking .room-minigame-prep-slot{min-height:68px}
+ .room-minigame-stage.job-cooking .room-minigame-prep-slot .room-minigame-food-art{width:37px;height:34px}
+ .room-minigame-stage.job-cooking .room-minigame-ingredient{min-height:78px}
+ .room-minigame-stage.job-cooking .room-minigame-ingredient .room-minigame-food-art{width:48px;height:46px}
+ .room-minigame-stage.job-cooking .room-minigame-ingredient strong{font-size:12px}
+ .room-minigame-stage.job-repair,.room-minigame-stage.job-navigation{min-height:0!important}
+ .room-minigame-stage.job-repair .room-minigame-pipe-board{width:min(330px,calc(100% - 30px));padding:5px;gap:3px;border-width:5px}
+ .room-minigame-stage.job-navigation .room-minigame-chart{width:min(340px,100%);padding:4px;gap:3px;border-width:4px}
+ .room-minigame-stage.training .room-minigame-lanes{height:235px;gap:5px;padding:4px 2% 0}
+ .room-minigame-stage.training .room-minigame-runner{width:135px;height:135px}
+ .room-minigame-stage.training .room-minigame-lane-arrow{font-size:27px}
+ .room-minigame-stage.training .room-minigame-lane-name{font-size:11px}
+ .room-minigame-stage.training .room-minigame-direction{width:70px;min-height:52px;font-size:28px}
+}
+@media(prefers-reduced-motion:reduce){.room-minigame-stage.training .room-minigame-lane,.room-minigame-stage.job-navigation .room-minigame-sea-cell.current::after{animation:none!important;transition:none!important}}
+
 /* Fishing v4: one ocean scene, one contextual action, direct rod gestures. */
 .room-fishing-v4-intro{display:grid;gap:11px}
 .room-fishing-v4-intro-scene{display:flex;flex-direction:column;justify-content:flex-end;min-height:156px;padding:19px 22px;border:1px solid #b9d4bc9c;border-radius:16px;background-color:#0d5269;background-position:center 52%;background-size:cover;text-shadow:0 2px 7px #001824}
