@@ -4,19 +4,34 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 1,
-  "publishedAt": "2026-10-02T17:29:29.093Z",
+  "revision": 2,
+  "publishedAt": "2026-10-02T18:29:24.613Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
+      "path": "images/launcher_room/fish_ua/golden-whale-v2.webp",
+      "bytes": 22008,
+      "sha256": "c23e90c575399656f4d2375528f9c607ffb61e079a66e2e0830d7b56d17f1d7c"
+    },
+    {
+      "path": "images/launcher_room/fish_ua/pumpkin-octopus.webp",
+      "bytes": 29862,
+      "sha256": "a3e55da2b26fef25c9fde283f9c463c3f2a0cdbe60e21aea1e5a11723c99f886"
+    },
+    {
       "path": "launcher-room-minigames.css",
-      "bytes": 79061,
-      "sha256": "3c3a7865b5ce650ff3fcf4a08ae813eb69139f5a2ed4abda491829f2d59356c9"
+      "bytes": 79627,
+      "sha256": "bcf7c8355f0511cba60e071faee61edfe43d2449202d6417ad88cef46bedfb37"
+    },
+    {
+      "path": "launcher-room-minigames.js",
+      "bytes": 137399,
+      "sha256": "ef8979e5ebd90701c0ae72007ef13d70b87d9ebb9be4e9d708f7cef4903376b1"
     }
   ],
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "vqvgtvelRzajbReqHPOvfO4+A2fW3C9EIW8FcyDCt0i8MbmVHrPG+4JA2cs27PLnqXA7fon/1n8DRZA+e+CuCA=="
+    "value": "PdTSYJntsNntHZvPXcYv+DEBq+zKwJgXJS5vC9NKBRC9W6GazfsgyivFswAs112Stv75LQ3lJTYUgvRSFkEmDA=="
   }
 }

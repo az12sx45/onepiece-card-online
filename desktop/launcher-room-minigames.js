@@ -74,7 +74,7 @@
     let fishingV4Reeling=false,fishingV4Paying=false,fishingV4Steer=0,fishingV4Pointer=null,fishingV4ReelPointer=null,fishingV4PayPointer=null,fishingV4QueuedCast=false,fishingV4QueuedControl=false,fishingV4QueuedHook=false,fishingV4LastSync=0;
     let fishingV4CastPower=52,fishingV4ChargeStarted=0,fishingV4ChargePointer=null,fishingV4ChargeKey=false,fishingV4CastClickSuppressed=false;
     let fishingV4VisualChallenge=null,fishingV4VisualTension=10,fishingV4VisualDistance=100,fishingV4VisualAt=0;
-    let fishingV5PositionAt=0,fishingV5Display=null,fishingV5Hud=null;
+    let fishingV5PositionAt=0,fishingV5Display=null,fishingV5Hud=null,fishingV5PressureAt=0,fishingV5Pressure=0;
     let fishingV4ClockAnchor=null,fishingV4ClockPerf=0,fishingV4ClockLast=0,lastClockSample=null;
     let fishingResultShownAt=0;
     const fishingResultHeldKeys=new Set();
@@ -511,17 +511,17 @@
       const directionCue=node('div','room-fishing-v4-direction');directionCue.append(node('span','','魚的方向'),node('strong','','—'),node('small','',isV5?'釣竿要跟著魚移動':'拖動捲線牽制'));
       directionCue.append(node('em','','已收回 0%'));
       if(isV5){
-        const hud=node('div','room-fishing-v5-hud');hud.setAttribute('role','group');hud.setAttribute('aria-label','釣竿表：魚線強度、魚的拉力、剩餘魚距與竿位');
+        const hud=node('div','room-fishing-v5-hud');hud.setAttribute('role','group');hud.setAttribute('aria-label','釣竿表：即時線壓力、魚線強度、魚的拉力與剩餘魚距');
         hud.append(node('span','room-fishing-v5-handle'));
         const strengthBox=node('div','room-fishing-v5-strength');
-        const dial=node('div','room-fishing-v5-dial');dial.setAttribute('role','meter');dial.setAttribute('aria-label','魚線強度');dial.setAttribute('aria-valuemin','0');dial.setAttribute('aria-valuemax','100');const spool=node('span','room-fishing-v5-dial-spool');spool.append(node('span','room-fishing-v5-dial-crank'));dial.append(spool,node('span','room-fishing-v5-dial-hub'));
-        const strengthCopy=node('div','room-fishing-v5-strength-copy');strengthCopy.append(node('span','','魚線強度'),node('strong','room-fishing-v5-strength-value','100 / 100'));strengthBox.append(dial,strengthCopy);
+        const dial=node('div','room-fishing-v5-dial');dial.setAttribute('role','meter');dial.setAttribute('aria-label','即時線壓力');dial.setAttribute('aria-valuemin','0');dial.setAttribute('aria-valuemax','100');const spool=node('span','room-fishing-v5-dial-spool');spool.append(node('span','room-fishing-v5-dial-crank'));dial.append(node('span','room-fishing-v5-pressure-ring'),spool,node('span','room-fishing-v5-dial-hub'));
+        const strengthCopy=node('div','room-fishing-v5-strength-copy');strengthCopy.append(node('span','','壓力'),node('strong','room-fishing-v5-pressure-value','0%'),node('small','room-fishing-v5-strength-value','線100'));strengthBox.append(dial,strengthCopy);
         const pullArc=node('div','room-fishing-v5-pull-arc');pullArc.setAttribute('role','meter');pullArc.setAttribute('aria-label','魚的拉力等級');pullArc.setAttribute('aria-valuemin','0');pullArc.setAttribute('aria-valuemax','3');pullArc.append(node('span','room-fishing-v5-pull-arc-band'),node('span','room-fishing-v5-pull-needle'),node('strong','room-fishing-v5-force-value','平穩'));
         const position=node('div','room-fishing-v5-position');
-        const catchLabel=node('div','room-fishing-v5-catch-label');catchLabel.append(node('span','','剩餘魚距'),node('strong','room-fishing-v5-distance','100%'));
+        const catchLabel=node('div','room-fishing-v5-catch-label');catchLabel.append(node('span','','剩餘魚距'),node('strong','room-fishing-v5-distance','0.0 m'));
         const catchTrack=node('div','room-fishing-v5-catch-track');catchTrack.setAttribute('role','meter');catchTrack.setAttribute('aria-label','剩餘魚距');catchTrack.setAttribute('aria-valuemin','0');catchTrack.setAttribute('aria-valuemax','100');const catchRail=node('span','room-fishing-v5-catch-rail');catchRail.append(node('span','room-fishing-v5-catch-fill'));for(let index=1;index<10;index++){const guide=node('span','room-fishing-v5-guide');guide.style.setProperty('--guide',String(index));catchRail.append(guide);}catchRail.append(node('span','room-fishing-v5-rail-marker'));catchTrack.append(node('span','room-fishing-v5-boat','船'),catchRail,node('span','room-fishing-v5-fish-end','魚'));
         position.append(catchLabel,catchTrack);
-        hud.append(strengthBox,pullArc,position);fishingV5Hud=hud;
+        hud.append(strengthBox,pullArc,position);fishingV5Hud=hud;fishingV5Pressure=0;fishingV5PressureAt=0;
       }
       const castMeter=node('div','room-fishing-v4-cast-meter');castMeter.append(node('div','room-fishing-v4-cast-heading','拋竿力度'),node('strong','room-fishing-v4-cast-readout','52% · 中距離'));
       const castTrack=node('div','room-fishing-v4-cast-track');castTrack.setAttribute('role','progressbar');castTrack.setAttribute('aria-label','拋竿力度');castTrack.setAttribute('aria-valuemin','0');castTrack.setAttribute('aria-valuemax','100');castTrack.append(node('span'));
@@ -627,19 +627,42 @@
         const forceGrade=pullIntensity<.25?0:pullIntensity<.58?1:pullIntensity<.82?2:3;
         const forceNames=['平穩','輕拉','急拉','猛拉'];
         fishingV5Hud.dataset.force=['calm','light','hard','fierce'][forceGrade];
-        fishingV5Hud.style.setProperty('--line-angle',`${(strengthRatio*300).toFixed(1)}deg`);
+        // This outer ring reports the pull happening now, not the slowly changing
+        // amount of line strength left. The reel and its crank rotate separately.
+        const fishSign=direction==='left'?-1:direction==='right'?1:0;
+        const aligned=surge&&fishSign!==0&&fishingV4Steer===fishSign;
+        const opposed=surge&&fishSign!==0&&fishingV4Steer===-fishSign;
+        const pressureTarget=clamp((surge?24+pullIntensity*44:6+pullIntensity*18)
+          +(fishingV4Reeling?18+pullIntensity*11:0)
+          +(aligned?-20:opposed?17:0)
+          -(fishingV4Paying?48:0)
+          +(1-strengthRatio)*8,0,100);
+        const pressureElapsed=fishingV5PressureAt?clamp((displayAt-fishingV5PressureAt)/1000,0,.1):0;
+        fishingV5Pressure=fishingV5PressureAt
+          ?fishingV5Pressure+(pressureTarget-fishingV5Pressure)*(1-Math.exp(-pressureElapsed*(fishingV4Paying?14:11)))
+          :pressureTarget;
+        fishingV5PressureAt=displayAt;
+        const pressure=Math.round(fishingV5Pressure);
+        fishingV5Hud.dataset.pressureRisk=pressure>=75?'danger':pressure>=45?'warning':'safe';
+        fishingV5Hud.style.setProperty('--pressure-angle',`${(fishingV5Pressure*3).toFixed(1)}deg`);
         fishingV5Hud.style.setProperty('--pull-fill',`${Math.round(pullIntensity*100)}%`);
         fishingV5Hud.style.setProperty('--pull-needle-x',`${(21+54*Math.sin(Math.PI*pullIntensity)).toFixed(1)}%`);
         fishingV5Hud.style.setProperty('--pull-needle-y',`${(88-76*pullIntensity).toFixed(1)}%`);
-        const dial=fishingV5Hud.querySelector('.room-fishing-v5-dial');dial.setAttribute('aria-valuenow',String(Math.round(strengthRatio*100)));dial.setAttribute('aria-valuetext',`${Math.round(strength)} / ${Math.round(maxStrength)}`);
+        const dial=fishingV5Hud.querySelector('.room-fishing-v5-dial');dial.setAttribute('aria-valuenow',String(pressure));dial.setAttribute('aria-valuetext',`即時線壓力 ${pressure}%；魚線強度 ${Math.round(strength)} / ${Math.round(maxStrength)}`);
         const pullArc=fishingV5Hud.querySelector('.room-fishing-v5-pull-arc');pullArc.setAttribute('aria-valuenow',String(forceGrade));pullArc.setAttribute('aria-valuetext',forceNames[forceGrade]);
         fishingV5Hud.querySelector('.room-fishing-v5-force-value').textContent=forceNames[forceGrade];
-        fishingV5Hud.querySelector('.room-fishing-v5-strength-value').textContent=`${Math.round(strength)} / ${Math.round(maxStrength)}`;
-        fishingV5Hud.querySelector('.room-fishing-v5-strength-copy>span').textContent=fishingV4Paying?'放線中':fishingV4Reeling?'收線中':'線強度';
+        fishingV5Hud.querySelector('.room-fishing-v5-pressure-value').textContent=`${pressure}%`;
+        const strengthValue=fishingV5Hud.querySelector('.room-fishing-v5-strength-value');strengthValue.textContent=`線${Math.round(strength)}`;strengthValue.title=`魚線強度 ${Math.round(strength)} / ${Math.round(maxStrength)}`;
         const remainingDistance=Math.round(distance);
-        fishingV5Hud.querySelector('.room-fishing-v5-distance').textContent=`${remainingDistance}%`;
+        const castY=Number.isFinite(challenge.castTarget?.y)?challenge.castTarget.y*100:(FISH_CAST_ZONES[challenge.castZone||selectedCastZone]||FISH_CAST_ZONES.mid).y;
+        const castFarness=clamp((FISH_CAST_ZONES.near.y-castY)/(FISH_CAST_ZONES.near.y-FISH_CAST_ZONES.far.y),0,1);
+        // The fight engine owns a relative 0–100 distance. Convert it using
+        // this cast's landing depth so the rod rail reads like a distance gauge.
+        const shownMeters=(distance/100*(18+36*castFarness)).toFixed(1);
+        const distanceLabel=fishingV5Hud.querySelector('.room-fishing-v5-distance');distanceLabel.textContent=`${shownMeters} m`;
+        distanceLabel.title='依本作拋竿落點換算的魚距';
         fishingV5Hud.querySelector('.room-fishing-v5-position').style.setProperty('--marker-percent',`${(11+remainingDistance*.82).toFixed(2)}%`);
-        const catchTrack=fishingV5Hud.querySelector('.room-fishing-v5-catch-track');catchTrack.setAttribute('aria-valuenow',String(remainingDistance));
+        const catchTrack=fishingV5Hud.querySelector('.room-fishing-v5-catch-track');catchTrack.setAttribute('aria-valuenow',String(remainingDistance));catchTrack.setAttribute('aria-valuetext',`本作換算魚距 ${shownMeters} 公尺`);
         catchTrack.querySelector('.room-fishing-v5-catch-fill').style.width=`${(remainingDistance*.82).toFixed(2)}%`;
         catchTrack.querySelector('.room-fishing-v5-rail-marker').style.left=`${(11+remainingDistance*.82).toFixed(2)}%`;
       }
@@ -650,12 +673,26 @@
       cast.hidden=challenge.stage!=='cast';hook.hidden=challenge.stage!=='wait';fightControls.hidden=challenge.stage!=='fight';hook.disabled=!biting;
       sea.querySelector('.room-fishing-v4-reel').dataset.reeling=String(fishingV4Reeling);
       sea.querySelector('.room-fishing-v4-pay').dataset.paying=String(fishingV4Paying);
-      const visualX=fish.x*100,visualY=36+(fish.y-.38)*64+closeness*12;
-      sea.style.setProperty('--fish-x',visualX.toFixed(2)+'%');sea.style.setProperty('--fish-y',visualY.toFixed(2)+'%');
-      sea.style.setProperty('--fish-scale',(.8+.65*closeness).toFixed(3));
-      const bobberScale=1+.2*closeness;sea.style.setProperty('--bobber-scale',bobberScale.toFixed(3));
       const castPoint=challenge.castTarget&&Number.isFinite(challenge.castTarget.x)&&Number.isFinite(challenge.castTarget.y)?{x:challenge.castTarget.x*100,y:challenge.castTarget.y*100}:FISH_CAST_ZONES[challenge.castZone||selectedCastZone]||FISH_CAST_ZONES.mid;
-      const floatX=challenge.stage==='fight'?visualX:castPoint.x,floatY=challenge.stage==='fight'?visualY-9:castPoint.y;
+      // During the wait, the cast landing point sets perspective. Once hooked,
+      // the remaining fish distance drives the water disturbance toward the
+      // boat. The fish's horizontal position remains the source of left/right
+      // movement, so the splash never becomes a disconnected direction icon.
+      const castFarness=clamp((FISH_CAST_ZONES.near.y-castPoint.y)/(FISH_CAST_ZONES.near.y-FISH_CAST_ZONES.far.y),0,1);
+      const apparentNearness=challenge.stage==='fight'?closeness:1-castFarness;
+      sea.style.setProperty('--bobber-scale',(.58+.90*apparentNearness).toFixed(3));
+      // Fight splashes need a stronger depth curve than cast ripples: at a
+      // distant 72% they are compact, but at 28% they are clearly larger even
+      // at opposite points of the splash animation. Cap the near end by the
+      // fish's 18–82% horizontal projection so no edge is clipped.
+      const splashScale=challenge.stage==='fight'?.20+1.48*closeness*closeness:.48+1.05*apparentNearness;
+      const splashWidth=clamp(sea.clientWidth*.2,120,210)*splashScale;
+      sea.style.setProperty('--splash-width',`${splashWidth.toFixed(1)}px`);
+      const visualX=50+(fish.x-.5)*76;
+      const floatX=challenge.stage==='fight'?visualX:castPoint.x;
+      const floatY=challenge.stage==='fight'?31+30*closeness+(fish.y-.57)*10:castPoint.y;
+      sea.style.setProperty('--fish-x',visualX.toFixed(2)+'%');sea.style.setProperty('--fish-y',(floatY+4).toFixed(2)+'%');
+      sea.style.setProperty('--fish-scale',(.8+.65*closeness).toFixed(3));
       sea.style.setProperty('--float-x',floatX.toFixed(2)+'%');sea.style.setProperty('--float-y',floatY.toFixed(2)+'%');
       const bobOffset=biting?0:nibbling?Math.sin(at/90)*3:Math.sin(at/270)*2.5+(challenge.stage==='fight'?Math.sin(at/(145-pullIntensity*70))*pullIntensity*5:0);
       sea.style.setProperty('--bob-offset',`${bobOffset.toFixed(1)}px`);

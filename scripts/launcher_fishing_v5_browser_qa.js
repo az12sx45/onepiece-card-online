@@ -75,6 +75,21 @@ async function serve(){
         session.challenge.distance=-1;session.challenge.strength=Math.max(50,session.challenge.strength);
         respond(res,{ok:true});return;
       }
+      if(rel==='qa-cast-target'&&req.method==='POST'){
+        const session=sessions.get(client),{zone}=await readJson(req);
+        if(session?.challenge?.stage!=='wait'||!['near','far'].includes(zone)){
+          respond(res,{ok:false});return;
+        }
+        // Visual fixture: keep the real cast round waiting while the same
+        // renderer is sampled at two server-authoritative landing points.
+        session.challenge.castTarget={...minigames.FISHING_CAST_ZONES[zone]};
+        session.challenge.castZone=zone;
+        const later=Date.now()+12000;
+        session.challenge.nibbleAt=new Date(later-1150).toISOString();
+        session.challenge.biteAt=new Date(later).toISOString();
+        session.challenge.hookUntil=new Date(later+3000).toISOString();
+        respond(res,{ok:true});return;
+      }
       if(rel==='qa-distance'&&req.method==='POST'){
         const session=sessions.get(client),{distance}=await readJson(req);
         if(!session||session.challenge?.stage!=='fight'||!Number.isFinite(distance)||distance<10||distance>90){
@@ -90,7 +105,7 @@ async function serve(){
         if(!session||session.challenge?.stage!=='fight'||!Number.isFinite(strength)||strength<10||strength>90){
           respond(res,{ok:false});return;
         }
-        session.challenge.strength=strength;
+        session.challenge.strength=strength;session.challenge.tension=100-strength;
         respond(res,{ok:true});return;
       }
       if(!rel){res.setHeader('Content-Type','text/html; charset=utf-8');res.end(html);return;}
@@ -206,7 +221,7 @@ async function visual(page){
     fishY:parseFloat(sea.style.getPropertyValue('--fish-y')),
     floatX:parseFloat(sea.style.getPropertyValue('--float-x')),
     floatY:parseFloat(sea.style.getPropertyValue('--float-y')),
-    strength:Number(document.querySelector('.room-fishing-v5-strength-value')?.textContent.match(/(\d+)\s*\//)?.[1]||
+    strength:Number(document.querySelector('.room-fishing-v5-strength-value')?.textContent.match(/線\s*(\d+)/)?.[1]||
       sea.querySelector('.room-fishing-v4-gauge')?.getAttribute('aria-valuenow')),
     direction:sea.dataset.pullDirection,run:sea.dataset.runState,
     steer:sea.dataset.steer,reeling:sea.dataset.reeling,paying:sea.dataset.paying,
@@ -248,6 +263,22 @@ async function fightWaterVisual(page){
         splashBox.top>=seaBox.top-1&&splashBox.bottom<=seaBox.bottom+1};
   });
 }
+async function waterPerspective(page){
+  return page.locator('.room-fishing-v4-sea').evaluate(sea=>{
+    const seaBox=sea.getBoundingClientRect();
+    const splash=sea.querySelector('.room-fishing-v4-splash').getBoundingClientRect();
+    const bobber=sea.querySelector('.room-fishing-v4-bobber').getBoundingClientRect();
+    return{floatX:parseFloat(sea.style.getPropertyValue('--float-x')),
+      floatY:parseFloat(sea.style.getPropertyValue('--float-y')),
+      splashWidth:splash.width,splashHeight:splash.height,
+      splashX:(splash.left+splash.right)/2-seaBox.left,
+      splashY:(splash.top+splash.bottom)/2-seaBox.top,
+      bobberWidth:bobber.width,bobberHeight:bobber.height,
+      bobberX:(bobber.left+bobber.right)/2-seaBox.left,
+      bobberY:(bobber.top+bobber.bottom)/2-seaBox.top,
+      seaWidth:seaBox.width,seaHeight:seaBox.height};
+  });
+}
 async function headerVisible(page){
   return page.locator('.room-minigame-card').evaluate(card=>{
     const eyebrow=card.querySelector('.room-minigame-head .room-minigame-eyebrow');
@@ -286,10 +317,13 @@ async function fightMeterState(page){
     const rail=hud.querySelector('.room-fishing-v5-catch-rail').getBoundingClientRect();
     const fill=hud.querySelector('.room-fishing-v5-catch-fill').getBoundingClientRect();
     const marker=hud.querySelector('.room-fishing-v5-rail-marker').getBoundingClientRect();
+    const pressureRing=hud.querySelector('.room-fishing-v5-pressure-ring');
+    const pressureBox=pressureRing.getBoundingClientRect();
     return{challenge:challenge&&{pullIntensity:challenge.pullIntensity,strength:challenge.strength,
-      maxStrength:challenge.maxStrength,distance:challenge.distance},
-      dial:Number(dial.getAttribute('aria-valuenow')),dialVisible:dialBox.width>=90&&dialBox.height>=90,
-      lineAngle:Number.parseFloat(hud.style.getPropertyValue('--line-angle')),
+      maxStrength:challenge.maxStrength,distance:challenge.distance,castTarget:challenge.castTarget},
+       dial:Number(dial.getAttribute('aria-valuenow')),dialVisible:dialBox.width>=90&&dialBox.height>=90,
+       pressureAngle:Number.parseFloat(hud.style.getPropertyValue('--pressure-angle')),
+       pressureRingVisible:pressureBox.width>=80&&getComputedStyle(pressureRing).display!=='none',
       arcGrade:Number(arc.getAttribute('aria-valuenow')),
       arcFill:Number.parseFloat(hud.style.getPropertyValue('--pull-fill')),
       needleX:Number.parseFloat(hud.style.getPropertyValue('--pull-needle-x')),
@@ -299,7 +333,9 @@ async function fightMeterState(page){
       staticOuterRing:getComputedStyle(dial,'::after').transform==='none'&&
         getComputedStyle(dial,'::after').animationName==='none',
       arcVisible:arc.getBoundingClientRect().width>=50,
-      strength:hud.querySelector('.room-fishing-v5-strength-value').textContent,
+       strength:hud.querySelector('.room-fishing-v5-strength-value').textContent,
+       pressure:hud.querySelector('.room-fishing-v5-pressure-value').textContent,
+      distanceLabel:hud.querySelector('.room-fishing-v5-distance').textContent,
       progress:Number(progress.getAttribute('aria-valuenow')),
       fillRatio:rail.width>0?fill.width/rail.width:NaN,
       markerRatio:rail.width>0?((marker.left+marker.right)/2-rail.left)/rail.width:NaN,
@@ -309,15 +345,16 @@ async function fightMeterState(page){
 }
 function meterMatchesServer(meter){
   const server=meter.challenge;if(!server)return false;
-  const ratio=server.strength/server.maxStrength;
   const grade=server.pullIntensity<.25?0:server.pullIntensity<.58?1:server.pullIntensity<.82?2:3;
-  return meter.dial===Math.round(ratio*100)&&
-    Math.abs(meter.lineAngle-ratio*300)<1&&
+  const castFarness=Math.max(0,Math.min(1,(.55-(server.castTarget?.y??.45))/.21));
+  const meters=(server.distance/100*(18+36*castFarness)).toFixed(1)+' m';
+  return meter.dial>=0&&meter.dial<=100&&meter.pressureRingVisible&&
+    Math.abs(meter.pressureAngle-meter.dial*3)<2&&meter.pressure===`${meter.dial}%`&&
     meter.arcGrade===grade&&Math.abs(meter.arcFill-server.pullIntensity*100)<1&&
     Math.abs(meter.needleX-(21+54*Math.sin(Math.PI*server.pullIntensity)))<1&&
     Math.abs(meter.needleY-(88-76*server.pullIntensity))<1&&
-    meter.strength.includes(`${Math.round(server.strength)} / ${Math.round(server.maxStrength)}`)&&
-    meter.progress===Math.round(server.distance)&&
+    meter.strength===`線${Math.round(server.strength)}`&&
+    meter.progress===Math.round(server.distance)&&meter.distanceLabel===meters&&
     Math.abs(meter.fillRatio-meter.progress*.82/100)<.035&&
     Math.abs(meter.markerRatio-(.11+meter.progress*.82/100))<.035;
 }
@@ -390,19 +427,25 @@ async function castAndHook(page,label){
   fs.writeFileSync(path.join(out,`${label}-wait-line-diagnostics.json`),JSON.stringify(waitLine,null,2));
   const waitBobber=await bobberVisible(page);
   check(`${label}: waiting bobber fully visible`,waitBobber.loaded&&waitBobber.inside&&waitBobber.opacity>.5&&waitBobber.overlap===0);
+  check(`${label}: waiting sea hides decorative fish silhouette`,await page.locator('.room-fishing-v4-fish').evaluate(fish=>
+    getComputedStyle(fish).display==='none'));
   await snapshot(page,`${label}-wait`);
   await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.biting==='true',null,{timeout:7500});
   check(`${label}: hook enabled on full sink`,await page.locator('.room-fishing-v4-hook').isEnabled());
   await page.locator('.room-fishing-v4-hook').click();
   await page.locator('.room-fishing-v4-sea[data-stage="fight"]').waitFor({timeout:5000});
   check(`${label}: genuine server hook accepted`,(await actionCalls(page,'hook')).length===1&&sessions.get(label)?.challenge.stage==='fight');
-  const fightLine=await lineGeometry(page);check(`${label}: fighting line joins rod and water splash`,
+  const fightLine=await lineGeometry(page);
+  fs.writeFileSync(path.join(out,`${label}-fight-line-diagnostics.json`),JSON.stringify(fightLine,null,2));
+  check(`${label}: fighting line joins rod and water splash`,
     fightLine&&fightLine.tipGap<3&&fightLine.splashGap<4);
   const fightHeader=await headerVisible(page);
   check(`${label}: header fully visible while fighting`,fightHeader.visible);
   const waterVisual=await fightWaterVisual(page);
   check(`${label}: fight hides bobber and shows water splash`,waterVisual.bobberHidden&&
     waterVisual.splashLoaded&&waterVisual.splashVisible&&waterVisual.splashInside);
+  check(`${label}: fighting sea hides decorative fish silhouette`,await page.locator('.room-fishing-v4-fish').evaluate(fish=>
+    getComputedStyle(fish).display==='none'));
   check(`${label}: compact fight UI has no old dial or side card`,await page.locator('.room-fishing-v4-gauge,.room-fishing-v4-direction').count()===0);
   check(`${label}: fishing HUD has no fish or rod direction pills`,await page.locator('.room-fishing-v5-bearing,.room-fishing-v5-aim').count()===0);
   const geometry=await fightUiGeometry(page);
@@ -432,6 +475,12 @@ async function fightInteraction(page,label){
   check(`${label}: visible fish moves laterally during the run`,motion.some((sample,index)=>
     index>0&&sample.run==='surge'&&Math.abs(sample.fishX-motion[index-1].fishX)>.12));
   check(`${label}: water splash follows visible fish`,Math.abs(moved.floatX-moved.fishX)<.02);
+  const directed=motion.filter(sample=>sample.run==='surge'&&sample.direction===initial.direction);
+  check(`${label}: splash travels toward the fish's left or right run`,
+    directed.length>1&&sign*(directed.at(-1).floatX-directed[0].floatX)>1.5);
+  const water=await waterPerspective(page);
+  check(`${label}: splash image stays centered on lateral water point`,
+    Math.abs(water.splashX-water.floatX*water.seaWidth/100)<5);
   const reel=page.locator('.room-fishing-v4-reel');await reel.scrollIntoViewIfNeeded();
   const box=await reel.boundingBox();assert(box,`${label}: reel hit area`);
   const x=box.x+box.width*(sign<0?.18:.82),y=box.y+box.height*.5;
@@ -450,6 +499,7 @@ async function fightInteraction(page,label){
         bottomKnob:getComputedStyle(handle,'::after').backgroundImage,
         hub:getComputedStyle(wheel.parentElement.querySelector('.room-fishing-v5-dial-hub')).display};})(),
     label:document.querySelector('.room-fishing-v5-strength-copy>span')?.textContent}));
+  const reelPressure=await fightMeterState(page);
   await page.waitForTimeout(140);
   const reelAfter=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>{
     const box=wheel.querySelector('.room-fishing-v5-dial-crank').getBoundingClientRect();
@@ -460,7 +510,7 @@ async function fightInteraction(page,label){
   const reelDelta=(reelAfter.angle-reelBefore.angle+540)%360-180;
   check(`${label}: inner reel rotates while brass rim stays fixed`,reelBefore.animation.includes('spool')&&
     reelBefore.art.includes('hud-reel-v2.webp')&&reelBefore.transform!==reelAfter.transform&&
-    reelBefore.outerAnimation==='none'&&reelBefore.outerTransform==='none'&&reelBefore.label==='收線中');
+     reelBefore.outerAnimation==='none'&&reelBefore.outerTransform==='none'&&reelBefore.label==='壓力');
   check(`${label}: winding turns reel and crank clockwise`,reelDelta>15&&reelDelta<150);
   check(`${label}: visible crank is attached to and travels with inner reel`,reelBefore.crank.attached&&
     reelBefore.crank.width>=8&&reelBefore.crank.height>=40&&
@@ -495,6 +545,7 @@ async function fightInteraction(page,label){
       return Math.atan2(matrix.b,matrix.a)*180/Math.PI;})(),
     attached:wheel.querySelector('.room-fishing-v5-dial-crank')?.parentElement===wheel,
     label:document.querySelector('.room-fishing-v5-strength-copy>span')?.textContent}));
+  const payPressure=await fightMeterState(page);
   await page.waitForTimeout(140);
   const payAngle=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>{
     const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
@@ -502,11 +553,14 @@ async function fightInteraction(page,label){
   });
   const payDelta=(payAngle-payVisual.angle+540)%360-180;
   check(`${label}: paying reverses reel and attached crank`,payVisual.direction==='reverse'&&
-    payVisual.animation.includes('spool')&&payVisual.attached&&payVisual.label==='放線中'&&
+     payVisual.animation.includes('spool')&&payVisual.attached&&payVisual.label==='壓力'&&
     payDelta< -10&&payDelta> -150);
+  check(`${label}: releasing line lowers the live outer pressure bar`,
+    reelPressure.dial-payPressure.dial>10&&
+    reelPressure.pressureRingVisible&&payPressure.pressureRingVisible);
   fs.writeFileSync(path.join(out,`${label}-reel-motion.json`),JSON.stringify({
-    winding:{before:reelBefore,after:reelAfter,delta:reelDelta},
-    paying:{before:payVisual,afterAngle:payAngle,delta:payDelta}},null,2));
+    winding:{before:reelBefore,after:reelAfter,delta:reelDelta,pressure:reelPressure},
+    paying:{before:payVisual,afterAngle:payAngle,delta:payDelta,pressure:payPressure}},null,2));
   await snapshot(page,`${label}-paying`);
   await page.waitForTimeout(230);await page.mouse.up();
   await page.waitForFunction(()=>getComputedStyle(document.querySelector('.room-fishing-v5-dial-spool')).animationName==='none',null,{timeout:2000});
@@ -533,7 +587,8 @@ async function verifyDistanceRuler(page,label){
       return Math.abs(value-target)<10;
     },target,{timeout:4000});
     await page.waitForTimeout(300);
-    return fightMeterState(page);
+    const meter=await fightMeterState(page);
+    return{...meter,water:await waterPerspective(page)};
   };
   const far=await setDistance(72),near=await setDistance(28);
   fs.writeFileSync(path.join(out,`${label}-distance-ruler.json`),JSON.stringify({far,near},null,2));
@@ -541,6 +596,25 @@ async function verifyDistanceRuler(page,label){
     far.progress-near.progress>=30&&far.markerCenter-near.markerCenter>50&&
     far.fillRatio-near.fillRatio>.3);
   check(`${label}: distance ruler remains bound to server`,meterMatchesServer(far)&&meterMatchesServer(near));
+  check(`${label}: nearer fish makes a larger water splash`,
+    near.water.splashWidth/far.water.splashWidth>1.8);
+  check(`${label}: nearer fish pulls splash toward foreground`,
+    near.water.splashY-far.water.splashY>near.water.seaHeight*.10);
+  const edgeSplash=await page.locator('.room-fishing-v4-sea').evaluate(sea=>{
+    const splash=sea.querySelector('.room-fishing-v4-splash');
+    const priorX=sea.style.getPropertyValue('--float-x'),priorWidth=sea.style.getPropertyValue('--splash-width');
+    const maxWidth=Math.max(120,Math.min(210,sea.clientWidth*.2))*1.68;
+    sea.style.setProperty('--splash-width',`${maxWidth}px`);
+    const samples=[18,82].map(x=>{
+      sea.style.setProperty('--float-x',`${x}%`);
+      const box=splash.getBoundingClientRect(),bounds=sea.getBoundingClientRect();
+      return{left:box.left-bounds.left,right:box.right-bounds.left,seaWidth:bounds.width};
+    });
+    sea.style.setProperty('--float-x',priorX);sea.style.setProperty('--splash-width',priorWidth);
+    return samples;
+  });
+  check(`${label}: largest near-shore splash fits left and right sea edges`,edgeSplash.every(sample=>
+    sample.left>=-1&&sample.right<=sample.seaWidth+1));
   await snapshot(page,`${label}-ruler-near`);
 }
 async function verifyLineWheel(page,label){
@@ -550,7 +624,7 @@ async function verifyLineWheel(page,label){
     }).then(result=>result.json()),{client:label,strength:target});
     check(`${label}: line-strength fixture accepted ${target}`,response.ok===true);
     await page.waitForFunction(target=>{
-      const value=Number(document.querySelector('.room-fishing-v5-dial')?.getAttribute('aria-valuenow'));
+      const value=Number(document.querySelector('.room-fishing-v5-strength-value')?.textContent.match(/線\s*(\d+)/)?.[1]);
       // The server restores line strength while the fixture waits for its next 1 s sync.
       return Math.abs(value-target)<15;
     },target,{timeout:4000});
@@ -558,9 +632,11 @@ async function verifyLineWheel(page,label){
   };
   const healthy=await setStrength(42),weak=await setStrength(20);
   fs.writeFileSync(path.join(out,`${label}-line-wheel.json`),JSON.stringify({healthy,weak},null,2));
-  check(`${label}: reel outer strength ring shrinks with server strength`,
-    healthy.dial-weak.dial>=15&&healthy.lineAngle-weak.lineAngle>40);
-  check(`${label}: reel ring remains bound to server`,meterMatchesServer(healthy)&&meterMatchesServer(weak));
+  check(`${label}: line strength changes without using the outer pressure arc as a strength meter`,
+    healthy.challenge.strength-weak.challenge.strength>15&&
+    weak.dial-healthy.dial<20&&
+    Math.abs(healthy.pressureAngle-healthy.dial*3)<2&&Math.abs(weak.pressureAngle-weak.dial*3)<2);
+  check(`${label}: pressure arc and line strength readouts remain valid`,meterMatchesServer(healthy)&&meterMatchesServer(weak));
   await snapshot(page,`${label}-wheel-weak`);
   await setStrength(80);
 }
@@ -591,6 +667,39 @@ async function runV5(label,width,height){
   try{await setup(page,label);await begin(page,label);await castAndHook(page,label);
     await fightInteraction(page,label);await verifyDistanceRuler(page,label);
     await verifyLineWheel(page,label);await settle(page,label);
+  }finally{await context.close();}
+}
+async function runCastDepth(label,width,height){
+  const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1});
+  const page=await context.newPage();
+  try{
+    await setup(page,label);
+    await page.getByRole('button',{name:'開始釣魚'}).click();
+    await page.locator('.room-fishing-v4-sea[data-stage="cast"]').waitFor();
+    await holdPointer(page,page.locator('.room-fishing-v4-cast'),180);
+    await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor();
+    const sample=async(zone,targetX)=>{
+      const result=await page.evaluate(({client,zone})=>fetch(`/qa-cast-target?client=${client}`,{
+        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({zone})
+      }).then(response=>response.json()),{client:label,zone});
+      check(`${label}: ${zone} landing fixture accepted`,result.ok===true);
+      await page.waitForFunction(target=>Math.abs(parseFloat(document.querySelector('.room-fishing-v4-sea')
+        ?.style.getPropertyValue('--float-x'))-target)<.15,targetX,{timeout:3500});
+      const visual=await waterPerspective(page);
+      await snapshot(page,`${label}-${zone}-depth`);
+      return visual;
+    };
+    const near=await sample('near',46),far=await sample('far',81);
+    fs.writeFileSync(path.join(out,`${label}-cast-depth.json`),JSON.stringify({near,far},null,2));
+    check(`${label}: near cast bobber visibly larger than far cast`,
+      near.bobberWidth/far.bobberWidth>1.7&&near.bobberHeight/far.bobberHeight>1.7);
+    check(`${label}: near cast splash visibly larger than far cast`,near.splashWidth/far.splashWidth>2);
+    check(`${label}: cast distance shifts bobber across sea perspective`,
+      near.bobberX<far.bobberX-near.seaWidth*.25&&
+      near.bobberY>far.bobberY+near.seaHeight*.06);
+    check(`${label}: cast bobbers remain inside sea`,[near,far].every(sample=>
+      sample.bobberX-sample.bobberWidth/2>=0&&sample.bobberX+sample.bobberWidth/2<=sample.seaWidth&&
+      sample.bobberY-sample.bobberHeight/2>=0&&sample.bobberY+sample.bobberHeight/2<=sample.seaHeight));
   }finally{await context.close();}
 }
 async function runLegacy(){
@@ -663,6 +772,10 @@ async function main(){
   try{
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='desktop')await runV5('desktop',1440,900);
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='minimum')await runV5('minimum',960,640);
+    if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='depth'){
+      await runCastDepth('depth-desktop',1440,900);
+      await runCastDepth('depth-minimum',960,640);
+    }
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='legacy')await runLegacy();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='force')await runForceComparison();
     check('no browser script errors',pageErrors.length===0);

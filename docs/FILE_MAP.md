@@ -1,5 +1,12 @@
 # File Map
 
+## 2026-10-03 啟動器 1.2.23 海釣內容修訂 2
+
+- `desktop/launcher-room-minigames.js/.css`：即時壓力外圈、分離的魚線強度、橫軌換算公尺、落點／魚距水花與浮標透視，以及左右跟魚移動的入水點。
+- `public/images/launcher_room/fish_ua/pumpkin-octopus.webp`、`golden-whale-v2.webp`：依 ISO 魚種外觀重新檢查後的兩張 256×256 透明 WebP；同一路徑供漁獲、圖鑑與水族箱使用。
+- `scripts/launcher_fishing_v5_browser_qa.js`：桌面／最小視窗的壓力環、收放線、橫軌、水花／浮標遠近與魚向畫面測試；`scripts/launcher_fishing_species_qa.js`、`launcher_fishing_ua_ui_qa.js`：既有 20 種 ISO 魚與全部 26 種畫面讀圖回歸。
+- `public/desktop/launcher-content-v1.json`：1.2.23 核心的簽章內容修訂，覆蓋上述 renderer 與魚圖，不需另一份完整安裝檔；公開狀態以部署與讀回驗證為準。
+
 ## 2026-10-03 啟動器 1.2.23 海釣儀表與內容增量（已部署）
 
 - `desktop/launcher-room-minigames.js/.css`：搏魚釣竿表上移、移除魚／竿方向文字卡片；中央雙端手把和藍色內輪隨收線／放線正反轉，停手停止，金色外框固定。六釣點水花依水色變化。`public/images/launcher_room/fishing_v5/splash-magma-v1.webp`：獨立熔岩水花透明圖；`desktop/main.js`、`desktop/package.json`、`scripts/desktop_launcher_package_qa.js` 加入精確本機素材路徑與來源核對。
