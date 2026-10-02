@@ -8,7 +8,7 @@
 - `server/launcher-fishing-v5.js`：新場次的魚向、魚影速度、魚距、魚線強度與釣竿升級伺服器計算；20 種魚依 ISO 五組行為原值調校，六種非本片魚另列參數，公開拉力強度供畫面繪製；`server/launcher-minigames.js`、`server/launcher-life-store.js`：v5 路由、場次驗證及 v4／v3 相容。
 - `desktop/launcher-room-minigames.js/.css`：力度條持續往返、圓形拉力盤／收線進度條；v5 等咬餌顯示浮標、搏魚隱藏浮標並讓動態線連到水花；舊 v4 畫面維持對應舊場次。`public/images/launcher_room/fishing_v5/rod-no-line-v1.webp` 是 GPT 重繪去掉預繪線的透明竿，v5 使用，v4 原圖保留；`desktop/main.js`、`desktop/package.json` 與 `scripts/desktop_launcher_package_qa.js` 只放行、封裝並逐位元組核對這張新增圖。
 - `desktop/package.json`、`desktop/package-lock.json`、`config/launcher-announcements-v1.json`：1.2.22 版號與圖文更新公告；`scripts/desktop_launcher_package_qa.js`：來源封裝與公告門檻核對。
-- `public/desktop/launcher-release-v1.json`、`public/desktop-download.html`：1.2.22 的 Ed25519 簽署安裝清單與靜態下載備援；R2 安裝檔的公開完整 GET／SHA 證據在 `D:\\Codex_QA\\launcher-fishing-wii-1.2.22-release-r4\\publish\\public-installer-verification-r3.json`，Render 讀回須另驗。
+- `public/desktop/launcher-release-v1.json`、`public/desktop-download.html`：已部署的 1.2.22 Ed25519 簽署安裝清單與靜態下載備援；R2 安裝檔的公開 HEAD／Range／完整 GET／SHA 證據在 `D:\\Codex_QA\\launcher-fishing-wii-1.2.22-release-r4\\publish\\public-installer-verification-r3.json`，Render canonical 清單、下載頁、三款 runtime 與 catalog 讀回證據同目錄的 `public-release-manifest-verification.json`、`public-download-verification.json`、`public-runtime-verification.json`、`public-assets-verification.json`。正式發行提交 `2381b23ec46adb818e128183aa12325c828cf92a` 已推送 `origin/main`。
 - `scripts/launcher_fishing_v5_server_qa.js`、`scripts/launcher_fishing_v5_life_qa.js`、`scripts/launcher_fishing_v5_browser_qa.js`：新版模型、實際場次入帳與 Windows 啟動器桌面尺寸的瀏覽器互動驗證。原 ISO 的唯讀表格、反組譯與限制記在 `D:\\Codex_QA\\wii-adventure-iso-analysis\\logic\\fish-species-parameter-evidence.md`，不屬公開遊戲資源。
 
 ## 2026-10-02 啟動器 1.2.21 海釣視覺與更新容量檔案
