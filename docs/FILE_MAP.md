@@ -1,10 +1,10 @@
 # File Map
 
-## 2026-10-03 啟動器五種工作／訓練大畫面候選（尚未部署）
+## 2026-10-03 啟動器五種工作／訓練大畫面（已部署）
 
 - `desktop/launcher-room-minigames.js/.css`：四種非釣魚工作的圖卡開場、五種玩法放大及精簡提示；食材圖載入、海圖圖示、管路連通視覺與放大的訓練角色／航道。既有伺服器請求與答案欄位不變。
 - `public/images/launcher_room/minigames_v2/`：14 張新圖，包含 `training-deck.webp`、`nav-ship.webp`、`nav-reef.webp`、`nav-port.webp` 與 `ingredient-{apple,cream,fish,lemon,meat,onion,orange,potato,rice,salt}.webp`；`minigames_v1` 的四張工作背景與三張補給箱圖繼續使用。
-- `scripts/launcher_minigames_large_visual_qa.js`：五種玩法的本機瀏覽器互動、圖片與尺寸檢查，90 項、12 張截圖。新圖與 renderer 尚未列入公開簽署內容修訂；本段不是部署證據。
+- `scripts/launcher_minigames_large_visual_qa.js`：五種玩法的本機瀏覽器互動、圖片與尺寸檢查，90 項、12 張截圖。新圖與 renderer 已列入公開簽署內容清單修訂 3，正式清單 SHA-256 `165fdc45e08d036b41a117000d0d4402127cc64611c5c1f0611437dd3bbedd36`；公開下載與啟動器啟用報告見 `D:/Codex_QA/launcher-minigames-content-1.2.23-r3/public-content-runtime-report.json`。
 
 ## 2026-10-03 啟動器 1.2.23 海釣內容修訂 2（已部署）
 
