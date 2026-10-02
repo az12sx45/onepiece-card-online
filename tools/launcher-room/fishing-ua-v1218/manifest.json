@@ -1,0 +1,259 @@
+{
+  "schema": "launcher-fishing-ua-art/1",
+  "release": "1.2.18",
+  "visualAccepted": true,
+  "humanAcceptance": false,
+  "referencePolicy": "ISO images were used only for local species QA; the public assets are GPT redraws.",
+  "items": [
+    {
+      "asset": "fishing_v4/sea-freshwater.webp",
+      "bytes": 99904,
+      "sha256": "9410c8f0b2ca3bed0e2dfc582a9b9b4e4e2fd5688d5331f273034a80262d6b92",
+      "width": 1024,
+      "height": 576,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "3e7ee0c0c8dd849bb4b64077466bafec099b269f5d124968b6a3b9401f7c6845",
+      "referenceAsset": "fishing_v3/sea-shore.webp"
+    },
+    {
+      "asset": "fishing_v4/sea-magma.webp",
+      "bytes": 62434,
+      "sha256": "7a85e0d1571da5cbbf7e43e579eb63b06a7e04b0eadb8b3722a2961fb04f384e",
+      "width": 1024,
+      "height": 576,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "32070dc565cdd306d341042468f952039203fb6c32ab4bedd1b789e48572f46e",
+      "referenceAsset": "fishing_v3/sea-shore.webp"
+    },
+    {
+      "asset": "fishing_v4/sea-rainbow.webp",
+      "bytes": 83946,
+      "sha256": "4f1662668643ad210736e959a1a4b767c7993ff464652f25915649fcdf0cc009",
+      "width": 1024,
+      "height": 576,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "d34adffe6dda81f213e1e5a2284adee2b4a07514ac9d2daaa547e64b89bacc33",
+      "referenceAsset": "fishing_v3/sea-shore.webp"
+    },
+    {
+      "asset": "fish_ua/adventure-fish.webp",
+      "bytes": 14112,
+      "sha256": "9ff258833dbf9b3c964aa59a0a38941b553abcc17b448627c4cbb6d4d4d5fc29",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "70e9d6c895935741ecc67f4e74705b26295c5ff3bd83c4f76ddd18c6ea1e6f3e",
+      "referenceAsset": "com_fish_afishA.png",
+      "referenceSha256": "00ee338bd08575efa5252d9e07ffab617b048495f9df608bb84d12f57e1295b1"
+    },
+    {
+      "asset": "fish_ua/aurora-sunfish.webp",
+      "bytes": 12130,
+      "sha256": "2ef4cca7abf30639785c3d004c4e50fe7779257e50aaa301bbb679ff0a93b74c",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "4aeee8bb25371c80fe132cf6aa3f5ac782981ad11caf23cfb065bf199975ede8",
+      "referenceAsset": "com_fish_manbouA.png",
+      "referenceSha256": "009d0653552aa7f9286ec263302cf0eb6db80b9d17058f80bebe4888f1dced7d"
+    },
+    {
+      "asset": "fish_ua/beat-alligator.webp",
+      "bytes": 20696,
+      "sha256": "95309ab5872e95899c4eb7a91a3160ded9fe49ae62d802d624baf49b85b89d1e",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "4f44c5664acf5c3664b03902037ce77353d498f2cd3dacd84946ab54c5714e3b",
+      "referenceAsset": "com_fish_wanisakanaA.png",
+      "referenceSha256": "1c5b399a8176da81f995f296b2706720ba626325289e02764435a44b2660171d"
+    },
+    {
+      "asset": "fish_ua/burning-dragon.webp",
+      "bytes": 22218,
+      "sha256": "1b9c2848db526d309aa96c1ad6d8d58b66b2cc1c9053de00cb0436420da95078",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "0e068ae7bfd7793d63cb94dda09471ba6ba398a6e835c23cbe578b039c7812f7",
+      "referenceAsset": "com_fish_dragonA.png",
+      "referenceSha256": "1bf4a4a81617e3b0dbb04e33d4cb25649b2755eda8603a5e1c759caf1a90fe96"
+    },
+    {
+      "asset": "fish_ua/claw-shrimp.webp",
+      "bytes": 19136,
+      "sha256": "74dde02e812dc9f6ecf31d3f47ebe01eb4eabc66e5bee48d5846f5c22b32d969",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "25cfab4078ab3d48fc2fe2b098b75bf4e088c428019c4a527007c2c20c05abe1",
+      "referenceAsset": "com_fish_hasamiA.png",
+      "referenceSha256": "0128f36fc04f81d804c2d9a819bc3ef1bfa2355906c78ec91f698f2bdfce6b52"
+    },
+    {
+      "asset": "fish_ua/cutie-piranha.webp",
+      "bytes": 13762,
+      "sha256": "0438783095fcefc0efe262e1e572adb633e49be4997ff7d1368aa2bec69abb8a",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "2e53fd09fd858f11dba0ca34a89af7218843ef567b300e44f38704092d8a871b",
+      "referenceAsset": "com_fish_piraniaA.png",
+      "referenceSha256": "f3e3d3aa242d2dd2ef9d0a859d9cbc2f7602b62398a4f0ee22d3c4b65b4b4b1b"
+    },
+    {
+      "asset": "fish_ua/demon-bonito.webp",
+      "bytes": 19608,
+      "sha256": "0c3061fb01055a2e9b50d677b1aac988c7a6ec57073c0a2fb9fe7c13ed736930",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "da46ab3fc8fe437b6f4599caefea099824ebcc9caa9ff5450d9ef47e2116c610",
+      "referenceAsset": "com_fish_onigatuoA.png",
+      "referenceSha256": "07d9b0a350b1c50a752a341f1fb97e27d107aa199257c2380da0639b1d705d55"
+    },
+    {
+      "asset": "fish_ua/electric-catfish.webp",
+      "bytes": 10774,
+      "sha256": "dd6be502034003e3741ef3c029d0c90a366b2328a4495898b14e2194ac29adac",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "8f7878e000784ab0cc751f77edb0635df4cb44f8383463189c5fcc6b39b09ed6",
+      "referenceAsset": "com_fish_ecatfishA.png",
+      "referenceSha256": "22031661b54b78b97e86a9d71328a1ab25309b8f52c3c44413bc554e5fb1cfaa"
+    },
+    {
+      "asset": "fish_ua/elephant-tuna.webp",
+      "bytes": 12244,
+      "sha256": "73149a389a2f991d93fada57f923a92b82d8ba177e902cca3773570d7f1be085",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "70e20cb61e0af2b05dd49775e47f865d4c6b4aac01b0b06e3c02e2332691cf24",
+      "referenceAsset": "com_fish_elephantA.png",
+      "referenceSha256": "7dcaf321164797207877e1ffa255bf9014a5b552fd1bcbab7f6da42451de87bb"
+    },
+    {
+      "asset": "fish_ua/golden-whale.webp",
+      "bytes": 12974,
+      "sha256": "369d8e3435019c381b3b96bd9a0c36f95536422d814d57e7c811b88076c44a8e",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "4b5511f04c9839c27ec6f49f59a5dd5e5c0d635011ce52d6efeb2c4fca300f3f",
+      "referenceAsset": "com_fish_whaleA.png",
+      "referenceSha256": "2ed6163e0e3cc0bd325b67f84c1595bbf26c659eda65a9128a2516b0bc988066"
+    },
+    {
+      "asset": "fish_ua/great-terigius.webp",
+      "bytes": 22224,
+      "sha256": "73355e8c846ca4fe19f35ce70441baa36948f00d1a822afb00a9ea1428f28a45",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "113dda3a3f45d0a486ebd38ebb613d6f0f9aaea931cd80df6a57f8399dffa533",
+      "referenceAsset": "com_fish_greatA.png",
+      "referenceSha256": "25ae5a011451442bf14650b23fa9bffa24097dd8ef752754dfa5dd729c576abd"
+    },
+    {
+      "asset": "fish_ua/guiding-anglerfish.webp",
+      "bytes": 12854,
+      "sha256": "2ef1c2b0dc06ad1d437deca20d057c06520867dc873caffd28592017f50dc0ab",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "ba7df2c92274ed41ad1232759fc63d3205ef04f1fbb97ac801494008780ee69b",
+      "referenceAsset": "com_fish_ankouA.png",
+      "referenceSha256": "bd46956d3753767ef7c53189fb6c1f50840d642442072c926f878fbd84b561a3"
+    },
+    {
+      "asset": "fish_ua/ice-fish.webp",
+      "bytes": 17792,
+      "sha256": "72bb0d120e4103facb01620772536f10dafba7a1383fbb6aa5e960e2af69bd58",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "c89cb0d7b1878afd01bb68e3750151f9d0abcef50f890a5f4f454383e6c4baab",
+      "referenceAsset": "com_fish_iceA.png",
+      "referenceSha256": "891065b328dfdfef819c0f83d1f26b7bb674dd5d8f88d7058ba4f3aa378cb775"
+    },
+    {
+      "asset": "fish_ua/lava-flounder.webp",
+      "bytes": 24672,
+      "sha256": "d66f560b041d22d0f812160f41dab27f46d19c704807bdfeaa031ceb1b8ce0a3",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "384385ccf6f59c72ff61ce7f16e43de75dd579d02a92749813e78657aaad581d",
+      "referenceAsset": "com_fish_hirameA.png",
+      "referenceSha256": "b0e049b0f30ca921dc7ac2ea371be6ddc46d4cbd3c90a4a546037cbbd7d5849b"
+    },
+    {
+      "asset": "fish_ua/lovely-angel.webp",
+      "bytes": 10718,
+      "sha256": "1fe951668d270a1c963fb7e3e05e4e2500dde85da03c6f56c2b0488d98371fb9",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "1ae507ad41377afc4d62438d0e30d6befd10541f82ec4adfd0895913b0655cfb",
+      "referenceAsset": "com_fish_angelA.png",
+      "referenceSha256": "0367e7316d678d041489d768ce480fc03f792cfd8335653d582da341dfaf0ba2"
+    },
+    {
+      "asset": "fish_ua/maple-salmon.webp",
+      "bytes": 14708,
+      "sha256": "6186fc20c9d9f2dd5e75a32a3a0c8a85e1cfe7cdf44b1c6c9aa3149dd8a1cc14",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "a7683f62cff1207c525d38e9d115e5a4f85762ab7fb1084b04ae37c2701c635d",
+      "referenceAsset": "com_fish_syakeA.png",
+      "referenceSha256": "676ea6c08150c5264b2e8919f197947496904201d5734e10ac35b3a06a363941"
+    },
+    {
+      "asset": "fish_ua/panda-shark.webp",
+      "bytes": 10028,
+      "sha256": "bd7d7df12a35b4908da0e87b832e9a0ca504f84f891a2c993913325f1241f62c",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "2ecd23562971a7145f86e192c525436cd0d7467c056f0cca0a7224472706c235",
+      "referenceAsset": "com_fish_pansameA.png",
+      "referenceSha256": "2431e979c5060e8a51d3999d038e476f1c26b5a0d21a5dfa6cc83f8396ef0297"
+    },
+    {
+      "asset": "fish_ua/pumpkin-octopus.webp",
+      "bytes": 21628,
+      "sha256": "e207322e0165e40bd1e9d1fb8d140343acedb855a758823e0abb2ab706bea175",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "d393c3d91bab5c67aa1041d44f64c5c97432d0c44492e3ac0faa98b235b5b237",
+      "referenceAsset": "com_fish_octopusA.png",
+      "referenceSha256": "e958a2776fe7ececf0c1ddd64096f6af9c56b49a16c5e0f55b998258aec8a582"
+    },
+    {
+      "asset": "fish_ua/striped-clam.webp",
+      "bytes": 9190,
+      "sha256": "c605624ffedfcf43f4cc1ba05380117876f844a1ffb7f7386b786ebcb5593309",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "a8f1908b76ca971c00a6761c2dea806eeacdd0e79be03a80a480cdb0f7d9879d",
+      "referenceAsset": "com_fish_asariA.png",
+      "referenceSha256": "67494cc4ae0632428d08e3fac6226db23c5f383c6d36d964fd4e959bf2e99963"
+    },
+    {
+      "asset": "fish_ua/treasure-pearl-clam.webp",
+      "bytes": 15084,
+      "sha256": "1e429ab646a1c0712a6828c146db385b2e58a29a606c6a70f50d8b889af7240e",
+      "width": 256,
+      "height": 256,
+      "sourceKind": "gpt-redraw",
+      "sourceSha256": "6f09681949707709b2b78ffcabe2198999ed881472550ad5fae3f1591ab02079",
+      "referenceAsset": "com_fish_kaiA.png",
+      "referenceSha256": "e0b85fc3233caeb82d5ac389abe5c02fb7b9d1987e205ec8223cd44f70316fe7"
+    }
+  ]
+}

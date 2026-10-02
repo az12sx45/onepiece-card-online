@@ -3,6 +3,7 @@
 // Sessions are private server records. Profile-row locking in life-store also
 // serializes them with the existing shop, background jobs and wallet ledger.
 const crypto = require('node:crypto');
+const fishingV4 = require('./launcher-fishing-v4');
 const ACTIVE = new Set(['playing', 'ready', 'failed']);
 const CATEGORIES = Object.freeze({food:'食材',tools:'工具',books:'書籍'});
 const SUPPLIES = Object.freeze({
@@ -12,7 +13,10 @@ const SUPPLIES = Object.freeze({
 });
 const DIRECTIONS = ['left','up','right'];
 const WORK_JOBS = Object.freeze(['supply','cooking','repair','navigation','fishing']);
-// Existing catches in One Piece: Unlimited World Red. Keep this list stable for saves.
+// Keep all existing IDs stable for saves. The added 17 species plus the three
+// already present below (Adventure Fish, Panther Shark, Elephant Tuna) match
+// the 20 fish records in the supplied Unlimited Adventure ISO. The other six
+// legacy catches remain available in this launcher's fishing pools.
 const FISH_SPECIES = Object.freeze([
   Object.freeze({id:'balloon-catfish',label:'氣球鯰魚',sourceName:'フウセンナマズ',weight:5}),
   Object.freeze({id:'glistening-saury',label:'閃亮秋刀魚',sourceName:'ギラギラサンマ',weight:4}),
@@ -22,38 +26,78 @@ const FISH_SPECIES = Object.freeze([
   Object.freeze({id:'adventure-fish',label:'冒險魚',sourceName:'アドベンチャーフィッシュ',weight:0}),
   Object.freeze({id:'cola-sunfish',label:'可樂翻車魚',sourceName:'コーラセマンボウ',weight:0}),
   Object.freeze({id:'reef-shark',label:'鯊魚',sourceName:'サメ',weight:0}),
-  Object.freeze({id:'elephant-tuna',label:'象鼻鮪魚',sourceName:'エレファントホンマグロ',weight:0})
+  Object.freeze({id:'elephant-tuna',label:'象鼻鮪魚',sourceName:'エレファントホンマグロ',weight:0}),
+  Object.freeze({id:'lovely-angel',label:'可愛天使魚',sourceName:'ラブリーエンゼル',weight:0}),
+  Object.freeze({id:'striped-clam',label:'條紋蛤蜊',sourceName:'シマアサリ',weight:0}),
+  Object.freeze({id:'cutie-piranha',label:'可愛食人魚',sourceName:'キューティピラニア',weight:0}),
+  Object.freeze({id:'claw-shrimp',label:'剪刀蝦',sourceName:'ハサミエビ',weight:0}),
+  Object.freeze({id:'pumpkin-octopus',label:'南瓜章魚',sourceName:'パンプキンオクトパス',weight:0}),
+  Object.freeze({id:'maple-salmon',label:'紅葉鮭魚',sourceName:'紅葉シャケ',weight:0}),
+  Object.freeze({id:'lava-flounder',label:'熔岩比目魚',sourceName:'溶岩ヒラメ',weight:0}),
+  Object.freeze({id:'treasure-pearl-clam',label:'寶藏珍珠貝',sourceName:'トレジャーパールガイ',weight:0}),
+  Object.freeze({id:'electric-catfish',label:'感電鯰魚',sourceName:'カンデンキナマズ',weight:0}),
+  Object.freeze({id:'demon-bonito',label:'鬼鰹魚',sourceName:'オニガツオ',weight:0}),
+  Object.freeze({id:'guiding-anglerfish',label:'引路鮟鱇魚',sourceName:'導きアンコウ',weight:0}),
+  Object.freeze({id:'ice-fish',label:'冰晶魚',sourceName:'アイスフィッシュ',weight:0}),
+  Object.freeze({id:'beat-alligator',label:'節奏鱷魚',sourceName:'ビートアリゲーター',weight:0}),
+  Object.freeze({id:'aurora-sunfish',label:'極光翻車魚',sourceName:'オーロラマンボウ',weight:0}),
+  Object.freeze({id:'burning-dragon',label:'燃燒龍',sourceName:'バーニングドラゴン',weight:0}),
+  Object.freeze({id:'great-terigius',label:'巨型泰利吉烏斯',sourceName:'グレートテリギウス',weight:0}),
+  Object.freeze({id:'golden-whale',label:'黃金鯨',sourceName:'ゴールデンホエール',weight:0})
 ]);
 const FISHING_BAITS = Object.freeze(['worm','shrimp','lure']);
-const FISHING_SPOTS = Object.freeze(['shore','reef','deep']);
+const FISHING_SPOTS = Object.freeze(['shore','reef','deep','freshwater','magma','rainbow']);
 const FISHING_CAST_ZONES = Object.freeze({
   near:Object.freeze({x:.46,y:.55}),
   mid:Object.freeze({x:.66,y:.45}),
   far:Object.freeze({x:.81,y:.34})
 });
-// The species occur in the ONE PIECE Unlimited Cruise / Unlimited World Red
-// fishing lists. Bait preferences and probabilities are new rules for this
-// launcher, not values attributed to those games. The freshwater catfish is
-// retained for existing saves but absent from this ocean fishing pool.
+// Habitats follow the game's fishing guide where known: freshwater, sea,
+// magma, and rainbow water. Bait preferences and probabilities are new rules
+// for this launcher; they are not claimed to be the original game's odds.
+// Each ordered triple supplies the near, middle and far cast pools through the
+// existing weighting rule. Magma deliberately has only its two source fish.
 const FISHING_V3_POOLS = Object.freeze({
   shore:Object.freeze({
-    worm:Object.freeze([['butterflyfish',5],['adventure-fish',4],['glistening-saury',2]]),
-    shrimp:Object.freeze([['butterflyfish',3],['adventure-fish',3],['panda-shark',1]]),
-    lure:Object.freeze([['glistening-saury',5],['adventure-fish',2],['panda-shark',2]])
+    worm:Object.freeze([['striped-clam',5],['lovely-angel',4],['adventure-fish',2]]),
+    shrimp:Object.freeze([['claw-shrimp',5],['pumpkin-octopus',4],['panda-shark',2]]),
+    lure:Object.freeze([['glistening-saury',5],['demon-bonito',4],['elephant-tuna',2]])
   }),
   reef:Object.freeze({
-    worm:Object.freeze([['adventure-fish',3],['smile-jellyfish',3],['cola-sunfish',1]]),
-    shrimp:Object.freeze([['smile-jellyfish',3],['cola-sunfish',4],['reef-shark',1]]),
-    lure:Object.freeze([['cola-sunfish',3],['panda-shark',2],['reef-shark',3]])
+    worm:Object.freeze([['butterflyfish',5],['adventure-fish',4],['treasure-pearl-clam',2]]),
+    shrimp:Object.freeze([['smile-jellyfish',5],['pumpkin-octopus',4],['panda-shark',2]]),
+    lure:Object.freeze([['cola-sunfish',5],['panda-shark',4],['reef-shark',2]])
   }),
   deep:Object.freeze({
-    worm:Object.freeze([['cola-sunfish',4],['reef-shark',2],['elephant-tuna',1]]),
-    shrimp:Object.freeze([['cola-sunfish',2],['reef-shark',4],['elephant-tuna',2]]),
-    lure:Object.freeze([['panda-shark',1],['reef-shark',3],['elephant-tuna',5]])
+    worm:Object.freeze([['smile-jellyfish',5],['cola-sunfish',4],['reef-shark',2]]),
+    shrimp:Object.freeze([['cola-sunfish',5],['elephant-tuna',4],['golden-whale',1]]),
+    lure:Object.freeze([['panda-shark',5],['reef-shark',4],['golden-whale',1]])
+  }),
+  freshwater:Object.freeze({
+    worm:Object.freeze([['cutie-piranha',5],['electric-catfish',4],['guiding-anglerfish',2]]),
+    shrimp:Object.freeze([['balloon-catfish',5],['maple-salmon',4],['beat-alligator',2]]),
+    lure:Object.freeze([['demon-bonito',5],['ice-fish',4],['great-terigius',1]])
+  }),
+  magma:Object.freeze({
+    worm:Object.freeze([['lava-flounder',8],['lava-flounder',3],['burning-dragon',1]]),
+    shrimp:Object.freeze([['lava-flounder',7],['lava-flounder',4],['burning-dragon',2]]),
+    lure:Object.freeze([['lava-flounder',6],['lava-flounder',5],['burning-dragon',3]])
+  }),
+  rainbow:Object.freeze({
+    worm:Object.freeze([['striped-clam',5],['lovely-angel',4],['adventure-fish',2]]),
+    shrimp:Object.freeze([['striped-clam',5],['treasure-pearl-clam',4],['aurora-sunfish',2]]),
+    lure:Object.freeze([['adventure-fish',5],['treasure-pearl-clam',4],['aurora-sunfish',2]])
   })
 });
-const FISHING_V3_DIFFICULTY = Object.freeze({'butterflyfish':0,'adventure-fish':1,'glistening-saury':1,
-  'smile-jellyfish':1,'cola-sunfish':2,'panda-shark':2,'reef-shark':3,'elephant-tuna':3});
+const FISHING_V3_DIFFICULTY = Object.freeze({
+  'balloon-catfish':0,'butterflyfish':0,'striped-clam':0,'lovely-angel':0,'claw-shrimp':0,
+  'cutie-piranha':1,'adventure-fish':1,'glistening-saury':1,'smile-jellyfish':1,
+  'pumpkin-octopus':1,'maple-salmon':1,'lava-flounder':1,
+  'cola-sunfish':2,'panda-shark':2,'treasure-pearl-clam':2,'electric-catfish':2,
+  'demon-bonito':2,'guiding-anglerfish':2,'ice-fish':2,
+  'reef-shark':3,'elephant-tuna':3,'beat-alligator':3,'aurora-sunfish':3,
+  'burning-dragon':3,'great-terigius':3,'golden-whale':3
+});
 const FISH_COUNTER = Object.freeze({left:'right',right:'left',deep:'slack'});
 const FISHING_V2_ROUNDS = 3;
 const INGREDIENTS = Object.freeze({meat:'肉塊',fish:'鮮魚',onion:'洋蔥',potato:'馬鈴薯',rice:'白飯',salt:'海鹽',lemon:'檸檬',orange:'橘子',apple:'蘋果',cream:'鮮奶油'});
@@ -169,9 +213,9 @@ function workChallenge(jobId,id,roundIndex,issuedAt,fishingVersion=1) {
   }
   return null;
 }
-function challenge(kind, roundIndex, now, jobId='supply',fishingVersion=1,speciesId=null) {
+function challenge(kind, roundIndex, now, jobId='supply',fishingVersion=1,speciesId=null,rodLevel=0) {
   const id=crypto.randomUUID(), issuedAt=now.getTime();
-  if(kind==='fishing')return fishingChallengeV3(id,issuedAt);
+  if(kind==='fishing')return fishingVersion===4?fishingV4.create(id,issuedAt,rodLevel):fishingChallengeV3(id,issuedAt);
   if(kind==='work') {
     const variant=workChallenge(jobId,id,roundIndex,issuedAt,fishingVersion);if(variant)return variant;
     const category=pick(Object.keys(CATEGORIES)), targets=1+crypto.randomInt(2);
@@ -218,22 +262,23 @@ async function active(db,userId,now,state,room) {
   }
   return result;
 }
-function create(kind,characterId,roomRevision,now,practice=false,jobId='supply',fishingVersion=1,baitId=null,spotId=null) {
+function create(kind,characterId,roomRevision,now,practice=false,jobId='supply',fishingVersion=1,baitId=null,spotId=null,rodLevel=0) {
   const catchSpeciesId=kind==='work'&&jobId==='fishing'?
     pick(FISH_SPECIES.filter(species=>species.weight>0).flatMap(species=>Array(species.weight).fill(species.id))):null;
   const session={id:crypto.randomUUID(),token:crypto.randomBytes(24).toString('hex'),kind,characterId,practice,
     ...(kind==='work'?{jobId}:{}),
     ...(catchSpeciesId?{catchSpeciesId}:{}),
-    ...(kind==='fishing'?{fishingVersion:3,baitId,spotId,castZone:null}:kind==='work'&&jobId==='fishing'?{fishingVersion}:{}),
+    ...(kind==='fishing'?{fishingVersion:fishingVersion===4?4:3,baitId,spotId,castZone:null,
+      ...(fishingVersion===4?{rodLevel:fishingV4.rodLevel(rodLevel)}:{})}:kind==='work'&&jobId==='fishing'?{fishingVersion}:{}),
     state:'playing',roomRevision,attempt:1,maxAttempts:kind==='fishing'?1:3,roundIndex:0,totalRounds:kind==='fishing'?1:kind==='work'?(jobId==='fishing'&&fishingVersion===2?FISHING_V2_ROUNDS:jobId==='fishing'?5:8):4,
     startedAt:now.toISOString(),finishNotBefore:iso(now.getTime()+(kind==='fishing'?0:kind==='work'?24000:20000)),
-    challenge:challenge(kind,0,now,jobId,fishingVersion,catchSpeciesId),score:0,combo:0,correctRounds:0,feedback:null,result:null};
+    challenge:challenge(kind,0,now,jobId,kind==='fishing'?fishingVersion===4?4:3:fishingVersion,catchSpeciesId,rodLevel),score:0,combo:0,correctRounds:0,feedback:null,result:null};
   session.expiresAt=iso(now.getTime()+durationFor(session));return session;
 }
 function retry(session,now) {
   session.attempt++;session.state='playing';session.roundIndex=0;session.score=0;session.combo=0;session.correctRounds=0;session.feedback=null;session.result=null;
   session.startedAt=now.toISOString();session.expiresAt=iso(now.getTime()+durationFor(session));session.finishNotBefore=iso(now.getTime()+(session.kind==='work'?24000:20000));
-  session.challenge=challenge(session.kind,0,now,jobFor(session),session.fishingVersion||1,session.catchSpeciesId);
+  session.challenge=challenge(session.kind,0,now,jobFor(session),session.fishingVersion||1,session.catchSpeciesId,session.rodLevel);
 }
 function validId(value){return typeof value==='string'&&/^[a-f0-9-]{36}$/.test(value);}
 function validToken(value){return typeof value==='string'&&/^[a-f0-9]{48}$/.test(value);}
@@ -249,7 +294,58 @@ function advanceRound(session,correct,now,reason='') {
   if(correct){session.correctRounds++;session.score+=100+Math.min(4,session.combo-1)*25;}
   session.feedback={roundIndex:session.roundIndex,correct,combo:session.combo,correctRounds:session.correctRounds,score:session.score,...reason?{reason}:{}};
   session.roundIndex++;
-  session.challenge=session.roundIndex<session.totalRounds?challenge(session.kind,session.roundIndex,now,jobFor(session),session.fishingVersion||1,session.catchSpeciesId):null;
+  session.challenge=session.roundIndex<session.totalRounds?challenge(session.kind,session.roundIndex,now,jobFor(session),session.fishingVersion||1,session.catchSpeciesId,session.rodLevel):null;
+  return{};
+}
+function answerFishingV4(session,payload,now) {
+  const round=session.challenge,actions=payload.counterMoves;
+  if(!Array.isArray(actions)||actions.length!==1||
+      !['cast','hook','control','sync','timeout'].includes(actions[0])||
+      ['selections','directions','ingredients','rotations','path'].some(key=>payload[key]!==undefined))
+    return{error:'invalid_minigame_answer'};
+  const move=actions[0],at=now.getTime();
+  if(move==='cast') {
+    if(typeof payload.castZone!=='string'||!Object.hasOwn(FISHING_CAST_ZONES,payload.castZone)||
+        payload.reeling!==undefined||payload.steer!==undefined)return{error:'invalid_fishing_cast_zone'};
+  }else if(move==='control') {
+    if(payload.castZone!==undefined||typeof payload.reeling!=='boolean'||
+        !Number.isInteger(payload.steer)||![-1,0,1].includes(payload.steer))
+      return{error:'invalid_fishing_control'};
+  }else if(payload.castZone!==undefined||payload.reeling!==undefined||payload.steer!==undefined)
+    return{error:'invalid_minigame_answer'};
+  if(round.stage==='cast') {
+    if(move==='sync'){fishingV4.observe(round,now);return{};}
+    if(move!=='cast')return{error:'invalid_fishing_action'};
+    session.castZone=payload.castZone;
+    session.catchSpeciesId=fishingSpeciesFor(session.spotId,session.baitId,payload.castZone);
+    fishingV4.cast(round,now,session.baitId,payload.castZone,FISHING_CAST_ZONES[payload.castZone]);
+    return{};
+  }
+  if(round.stage==='wait') {
+    if(at>Date.parse(round.hookUntil)){
+      if(move==='hook'||move==='sync'||move==='timeout')return advanceRound(session,false,now,'missed_bite');
+      return{error:'invalid_fishing_action'};
+    }
+    if(move==='sync'){fishingV4.observe(round,now);return{};}
+    if(move==='timeout')return{error:'invalid_fishing_action'};
+    if(move!=='hook')return{error:'invalid_fishing_action'};
+    if(at<Date.parse(round.biteAt))return{error:'fishing_not_bitten'};
+    fishingV4.hook(round,now,FISHING_V3_DIFFICULTY[session.catchSpeciesId]??1);
+    return{};
+  }
+  if(round.stage!=='fight')return{error:'invalid_fishing_action'};
+  const result=fishingV4.simulate(round,now,FISHING_V3_DIFFICULTY[session.catchSpeciesId]??1);
+  if(result)return advanceRound(session,result==='landed',now,result);
+  if(move==='timeout')return{error:'invalid_fishing_action'};
+  if(move==='sync')return{};
+  if(move!=='control')return{error:'invalid_fishing_action'};
+  // Repeated heartbeat is allowed once per control lease; changes are accepted
+  // immediately so releasing the button never waits on an action cooldown.
+  const same=round.control?.reeling===payload.reeling&&round.control?.steer===payload.steer;
+  if(same&&Number.isFinite(Date.parse(round.lastControlAt))&&
+      at-Date.parse(round.lastControlAt)<180)return{error:'fishing_action_cooldown'};
+  fishingV4.control(round,now,payload.reeling,payload.steer);
+  round.lastControlAt=iso(at);
   return{};
 }
 function answerFishingV2(session,payload,now) {
@@ -321,6 +417,7 @@ function answer(session,payload,now) {
   const round=session.challenge;
   if(payload.roundId!==round.id)return{error:'minigame_round_conflict'};
   if(now.getTime()<Date.parse(round.notBefore))return{error:'minigame_too_early'};
+  if(session.kind==='fishing'&&round.fishingVersion===4)return answerFishingV4(session,payload,now);
   if((session.kind==='fishing'||session.kind==='work'&&jobFor(session)==='fishing')&&round.fishingVersion>=2)return answerFishingV2(session,payload,now);
   let correct=false;
   if(session.kind==='work') {
@@ -356,4 +453,4 @@ function answer(session,payload,now) {
   if(!Number.isFinite(latestAnswerMs)||now.getTime()>latestAnswerMs)correct=false;
   return advanceRound(session,correct,now);
 }
-module.exports={ACTIVE,CATEGORIES,WORK_JOBS,FISH_SPECIES,FISHING_BAITS,FISHING_SPOTS,FISHING_CAST_ZONES,FISHING_V3_POOLS,fishingPoolFor,ensure,save,view,active,create,retry,load,answer,contextValid};
+module.exports={ACTIVE,CATEGORIES,WORK_JOBS,FISH_SPECIES,FISHING_BAITS,FISHING_SPOTS,FISHING_CAST_ZONES,FISHING_V3_POOLS,FISHING_V3_DIFFICULTY,fishingPoolFor,ensure,save,view,active,create,retry,load,answer,contextValid};

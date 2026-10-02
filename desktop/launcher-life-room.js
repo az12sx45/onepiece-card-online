@@ -413,7 +413,7 @@
       }finally{if(currentEpoch===epoch){manualBusy=false;renderUi();}}
     };
     window.addEventListener('pagehide',()=>{if(owner()&&active())void command('checkpoint',{exit:true});});
-    const minigames=root.OnePieceRoomMinigames?.create({command,
+    const minigames=root.OnePieceRoomMinigames?.create({command,refreshLife:refresh,
       fishCollection(){return serverLife?.fishCollection||profile()?.life?.fishCollection||[];},
       onOpen(id){controller?.pause();const w=walker(id);if(w)env.focus(w);renderUi();},
       onClose(){if(!suspending&&env.canAnimate())controller?.resume();renderUi();},

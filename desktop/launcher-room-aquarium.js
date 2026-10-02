@@ -10,10 +10,28 @@
     'adventure-fish': '冒險魚',
     'cola-sunfish': '可樂翻車魚',
     'reef-shark': '鯊魚',
-    'elephant-tuna': '象鼻鮪魚'
+    'elephant-tuna': '象鼻鮪魚',
+    'lovely-angel': '可愛天使魚',
+    'striped-clam': '條紋蛤蜊',
+    'cutie-piranha': '可愛食人魚',
+    'claw-shrimp': '剪刀蝦',
+    'pumpkin-octopus': '南瓜章魚',
+    'maple-salmon': '紅葉鮭魚',
+    'lava-flounder': '熔岩比目魚',
+    'treasure-pearl-clam': '寶藏珍珠貝',
+    'electric-catfish': '感電鯰魚',
+    'demon-bonito': '鬼鰹魚',
+    'guiding-anglerfish': '引路鮟鱇魚',
+    'ice-fish': '冰晶魚',
+    'beat-alligator': '節奏鱷魚',
+    'aurora-sunfish': '極光翻車魚',
+    'burning-dragon': '燃燒龍',
+    'great-terigius': '巨型泰利吉烏斯',
+    'golden-whale': '黃金鯨'
   });
   const LEGACY_FISH = new Set(['balloon-catfish', 'panda-shark', 'glistening-saury', 'smile-jellyfish']);
-  const fishArt = speciesId => `opui://launcher/images/launcher_room/${LEGACY_FISH.has(speciesId) ? 'fish_v1' : 'fish_v3'}/${speciesId}.webp`;
+  const UA_FISH = new Set(['adventure-fish', 'panda-shark', 'elephant-tuna', 'lovely-angel', 'striped-clam', 'cutie-piranha', 'claw-shrimp', 'pumpkin-octopus', 'maple-salmon', 'lava-flounder', 'treasure-pearl-clam', 'electric-catfish', 'demon-bonito', 'guiding-anglerfish', 'ice-fish', 'beat-alligator', 'aurora-sunfish', 'burning-dragon', 'great-terigius', 'golden-whale']);
+  const fishArt = speciesId => `opui://launcher/images/launcher_room/${UA_FISH.has(speciesId) ? 'fish_ua' : LEGACY_FISH.has(speciesId) ? 'fish_v1' : 'fish_v3'}/${speciesId}.webp`;
 
   function displayedFish(profile, collectionOverride) {
     const collection = Array.isArray(collectionOverride) ? collectionOverride : profile?.life?.fishCollection;
@@ -45,6 +63,7 @@
     sprite.alt = '';
     sprite.decoding = 'async';
     sprite.draggable = false;
+    sprite.onerror = () => lane.remove();
     lane.append(sprite);
     windowNode.append(lane);
   }

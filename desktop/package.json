@@ -1,6 +1,6 @@
 {
   "name": "onepiece-tabletop-desktop",
-  "version": "1.2.17",
+  "version": "1.2.18",
   "private": true,
   "description": "Windows launcher for ONE PIECE tabletop games with account login, verified game downloads and incremental updates.",
   "main": "main.js",
@@ -141,7 +141,7 @@
       {
         "from": "../public/images/launcher_announcements",
         "to": "launcher-assets/images/launcher_announcements",
-        "filter": ["launcher-life-1.2.13.webp", "launcher-proportions-1.2.14.webp", "launcher-life-fishing-1.2.15.webp", "launcher-fishing-play-1.2.16.webp", "launcher-fishing-adventure-1.2.17.webp"]
+        "filter": ["launcher-life-1.2.13.webp", "launcher-proportions-1.2.14.webp", "launcher-life-fishing-1.2.15.webp", "launcher-fishing-play-1.2.16.webp", "launcher-fishing-adventure-1.2.17.webp", "launcher-fishing-rebuild-1.2.18.webp"]
       },
       {
         "from": "../public/images/launcher_room",
@@ -730,6 +730,9 @@
           "fishing_v3/sea-shore.webp",
           "fishing_v3/sea-reef.webp",
           "fishing_v3/sea-deep.webp",
+          "fishing_v4/sea-freshwater.webp",
+          "fishing_v4/sea-magma.webp",
+          "fishing_v4/sea-rainbow.webp",
           "fishing_v3/bait-worm.webp",
           "fishing_v3/bait-shrimp.webp",
           "fishing_v3/bait-lure.webp",
@@ -739,13 +742,30 @@
           "minigames_v1/supply-deck-v2.webp",
           "fish_v1/balloon-catfish.webp",
           "fish_v1/glistening-saury.webp",
-          "fish_v1/panda-shark.webp",
           "fish_v1/smile-jellyfish.webp",
           "fish_v3/butterflyfish.webp",
-          "fish_v3/adventure-fish.webp",
           "fish_v3/cola-sunfish.webp",
           "fish_v3/reef-shark.webp",
-          "fish_v3/elephant-tuna.webp",
+          "fish_ua/adventure-fish.webp",
+          "fish_ua/aurora-sunfish.webp",
+          "fish_ua/beat-alligator.webp",
+          "fish_ua/burning-dragon.webp",
+          "fish_ua/claw-shrimp.webp",
+          "fish_ua/cutie-piranha.webp",
+          "fish_ua/demon-bonito.webp",
+          "fish_ua/electric-catfish.webp",
+          "fish_ua/elephant-tuna.webp",
+          "fish_ua/golden-whale.webp",
+          "fish_ua/great-terigius.webp",
+          "fish_ua/guiding-anglerfish.webp",
+          "fish_ua/ice-fish.webp",
+          "fish_ua/lava-flounder.webp",
+          "fish_ua/lovely-angel.webp",
+          "fish_ua/maple-salmon.webp",
+          "fish_ua/panda-shark.webp",
+          "fish_ua/pumpkin-octopus.webp",
+          "fish_ua/striped-clam.webp",
+          "fish_ua/treasure-pearl-clam.webp",
           "furniture/aquarium-tank.webp",
           "furniture/crew-tea-table.webp",
           "furniture/fishing-gear-rack.webp",
@@ -897,9 +917,7 @@
     "npmRebuild": false,
     "electronLanguages": [
       "zh-TW",
-      "zh-CN",
-      "en-US",
-      "ja"
+      "en-US"
     ]
   },
   "dependencies": {

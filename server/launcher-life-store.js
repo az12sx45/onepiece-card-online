@@ -57,7 +57,7 @@ function reconcileLegacy(state,companions,room,now) {
   state.jobs=state.jobs.filter(j=>j.legacy?live.has(j.jobId):L.validJobContext(j,jobState(state,room),room));
 }
 function snapshot(row,state,now,extra={}) {
-  const S=shop();return {ok:true,serverNow:now.toISOString(),life:L.publicLife(state),room:S.launcherRoom(row.stats),wallet:S.launcherWalletPublic(row.stats),profile:S.toPublicProfile(row,true),...extra};
+  const S=shop();return {ok:true,serverNow:now.toISOString(),life:L.publicLife(state),rod:L.rodStatus(state),room:S.launcherRoom(row.stats),wallet:S.launcherWalletPublic(row.stats),profile:S.toPublicProfile(row,true),...extra};
 }
 async function ledger(db,userId,operationId) {
   const result=await db.query('SELECT receipt FROM launcher_wallet_ledger WHERE user_id=$1 AND operation_id=$2',[userId,operationId]);return result.rows[0]?.receipt||null;
@@ -89,11 +89,12 @@ const FIELDS={
  'work.activate':['jobId'],'work.complete':['jobId'],'work.cancel':['jobId'],
  'directive.set':['directiveId'],'character.interact':['itemId','action'],
   'minigame.start':['characterId','kind','practice','jobId','fishingVersion','baitId','spotId'],
-  'minigame.answer':['sessionId','token','roundId','selections','directions','ingredients','rotations','path','counterMoves','castZone'],
+  'minigame.answer':['sessionId','token','roundId','selections','directions','ingredients','rotations','path','counterMoves','castZone','reeling','steer'],
  'minigame.finish':['sessionId','token'],'minigame.cancel':['sessionId','token'],
  'minigame.retry':['sessionId','token'],
  'fish.place':['fishId','inAquarium'],
  'fish.release':['fishId'],
+ 'rod.upgrade':[],
  'event.record':['eventId','participants'],'activity.record':['itemId','activity'],'arrival.ack':['arrivalId'],'checkpoint':['exit']
 };
 function validCommand(command) {
@@ -116,7 +117,8 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
     if(!['work','training','fishing'].includes(p.kind)||p.practice!==undefined&&typeof p.practice!=='boolean'||
       p.kind==='work'&&p.practice||p.kind==='fishing'&&p.practice!==undefined||
       p.jobId!==undefined&&(p.kind!=='work'||!M.WORK_JOBS.includes(p.jobId))||
-      p.fishingVersion!==undefined&&(p.fishingVersion!==2||p.kind!=='work'||p.jobId!=='fishing')||
+      p.fishingVersion!==undefined&&!(p.fishingVersion===4&&p.kind==='fishing'||
+        p.fishingVersion===2&&p.kind==='work'&&p.jobId==='fishing')||
       (p.kind==='fishing'?!M.FISHING_BAITS.includes(p.baitId)||!M.FISHING_SPOTS.includes(p.spotId):
         p.baitId!==undefined||p.spotId!==undefined))return{ok:false,error:'invalid_minigame'};
     const actor=state.characters[p.characterId];
@@ -128,7 +130,8 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
     if(p.kind==='work') {
       companions.workStartsToday++;old.worksStartedToday++;
     }
-    const session=M.create(p.kind,p.characterId,room.revision,now,practice,p.jobId||'supply',p.fishingVersion===2?2:1,p.baitId,p.spotId);
+    const session=M.create(p.kind,p.characterId,room.revision,now,practice,p.jobId||'supply',
+      p.fishingVersion===4?4:p.fishingVersion===2?2:1,p.baitId,p.spotId,state.fishingRodLevel);
     await M.save(db,row.user_id,session);
     return{ok:true,minigame:M.view(session)};
   }
@@ -196,6 +199,17 @@ async function perform(db,row,state,companions,command,room,now,sessions=[],jobs
     if(index<0)return{ok:false,error:'fish_not_owned'};
     const [fish]=state.fishCollection.splice(index,1);
     return{ok:true,releasedFish:{...fish}};
+  }
+  if(command.type==='rod.upgrade') {
+    const level=L.rodLevel(state.fishingRodLevel),cost=L.ROD_UPGRADE_COSTS[level];
+    if(cost===undefined)return{ok:false,error:'rod_max_level'};
+    if(row.stats.launcherWalletV1.coins<cost)return{ok:false,error:'insufficient_coins'};
+    row.stats.launcherWalletV1.coins-=cost;
+    state.fishingRodLevel=level+1;
+    const operationId='life-rod:'+command.requestId;
+    const receipt={operationId,level:state.fishingRodLevel,amount:-cost,claimedAt:now.toISOString()};
+    await writeLedger(db,row,operationId,null,-cost,receipt);
+    return{ok:true,receipt};
   }
   if(command.type.startsWith('work.')&&command.type!=='work.reserve') {
     if(typeof p.jobId!=='string'||p.jobId.length>100)return {ok:false,error:'invalid_job'};

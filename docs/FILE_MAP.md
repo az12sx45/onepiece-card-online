@@ -1,5 +1,15 @@
 # File Map
 
+## 2026-10-02 啟動器 1.2.18 海釣重製、魚種與釣竿
+
+- `server/launcher-fishing-v4.js`、`server/launcher-minigames.js`：時鐘驅動的魚影／張力／距離、六釣點×三種餌×三投距魚池、20 種 UA 漁獲與六種舊魚、拋竿／抽竿／控竿／同步動作。
+- `server/launcher-life.js`、`server/launcher-life-store.js`：帳號釣竿 Lv 0–3、佛朗基改裝扣款與 ledger、伺服器漁獲結算、64 尾收藏與六尾水族箱上限，以及 v1–v3 場次相容。
+- `desktop/launcher-life-room.js`、`desktop/launcher-room-minigames.js/.css`、`desktop/launcher-room-aquarium.js`：六處海面、輕啄／強咬、不冒充魚種的連續水影、長按收線、手機／鍵盤控竿、佛朗基釣竿工房及掉線後帳號刷新、26 種圖鑑和收藏／水族箱圖片。
+- `public/images/launcher_room/fish_ua/*.webp`（20 張）、`public/images/launcher_room/fishing_v4/*.webp`（三處新場景）：依使用者 ISO QA 參考逐隻 GPT 重繪的公開魚圖與新場景。ISO 解碼原圖只在 `D:/Codex_QA/launcher-fishing-iso-fish-audit/`，未納入玩家素材。
+- `public/images/launcher_announcements/launcher-fishing-rebuild-1.2.18.webp`、`config/launcher-announcements-v1.json`：GPT 繪製的 1.2.18 公告主圖與版本顯示閘門。
+- `desktop/main.js`、`desktop/package.json`、`desktop/package-lock.json`、`scripts/desktop_launcher_package_qa.js`、`scripts/launcher_1218_announcement_qa.js`：精確資源白名單、版本、安裝封裝及公告驗證。
+- `scripts/launcher_fishing_server_qa.js`、`scripts/launcher_fishing_species_qa.js`、`scripts/launcher_fishing_rod_qa.js`、`scripts/launcher_fishing_ua_ui_qa.js`：海釣、26 魚種、改裝交易與 UI 專項 QA；結果以實際執行紀錄為準。`tools/launcher-room/fishing-ua-v1218/manifest.json` 保存候選素材來源索引。
+
 ## 2026-10-02 啟動器 1.2.17 獨立海釣
 
 - `server/launcher-minigames.js`、`server/launcher-life-store.js`：獨立 `fishing` 場次、九組餌／釣點魚池、抽竿及魚向牽制、每次成功收藏一尾與滿 64 尾回應，保留舊版場次。

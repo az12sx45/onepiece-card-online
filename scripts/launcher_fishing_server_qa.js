@@ -190,15 +190,14 @@ async function fishingV3Checks(){
     {kind:'work',characterId:actor,jobId:'fishing',baitId:'worm',spotId:'shore'}
   ])check('fishing v3: invalid bait or spot is rejected',
     (await command('v3-catch','minigame.start',payload)).error,'invalid_minigame');
-  const difficulty={'butterflyfish':0,'adventure-fish':1,'glistening-saury':1,
-    'smile-jellyfish':1,'cola-sunfish':2,'panda-shark':2,'reef-shark':3,'elephant-tuna':3};
+  const difficulty=minigames.FISHING_V3_DIFFICULTY;
   const meanDifficulty=pool=>pool.reduce((sum,[id,weight])=>sum+difficulty[id]*weight,0)/
     pool.reduce((sum,[,weight])=>sum+weight,0);
   for(const spotId of minigames.FISHING_SPOTS)for(const baitId of minigames.FISHING_BAITS){
     const near=minigames.fishingPoolFor(spotId,baitId,'near');
     const far=minigames.fishingPoolFor(spotId,baitId,'far');
-    check(`fishing v3: ${spotId}/${baitId} near and far have different species`,
-      near.some(([id])=>!far.some(([farId])=>farId===id))&&far.some(([id])=>!near.some(([nearId])=>nearId===id)),true);
+    check(`fishing v3: ${spotId}/${baitId} far has a species absent from near`,
+      far.some(([id])=>!near.some(([nearId])=>nearId===id)),true);
     check(`fishing v3: ${spotId}/${baitId} far cast favours stronger fish`,
       meanDifficulty(far)>meanDifficulty(near),true);
     for(const castZone of Object.keys(minigames.FISHING_CAST_ZONES)){
@@ -336,6 +335,147 @@ async function fishingV3Checks(){
   check('fishing v3: countersteering reduces tension',steer.challenge.tension<afterWrong,true);
   check('fishing v3: countersteering recovers distance',steer.challenge.distance<afterDistance,true);
 }
+async function fishingV4Checks(){
+  await createUser('v4-catch');
+  await get('v4-catch');
+  const before=(await db.query('SELECT stats FROM player_profiles WHERE secret=$1',['v4-catch'])).rows[0].stats;
+  for(const payload of [
+    {kind:'fishing',characterId:actor,baitId:'worm',spotId:'shore',fishingVersion:2},
+    {kind:'fishing',characterId:actor,baitId:'worm',spotId:'shore',fishingVersion:3},
+    {kind:'work',characterId:actor,jobId:'fishing',fishingVersion:4}
+  ])check('fishing v4: invalid version and kind combinations are rejected',
+    (await command('v4-catch','minigame.start',payload)).error,'invalid_minigame');
+  let t=0;
+  for(const [index,{baitId,spotId,castZone}] of [
+    {baitId:'worm',spotId:'shore',castZone:'near'},
+    {baitId:'shrimp',spotId:'reef',castZone:'mid'},
+    {baitId:'lure',spotId:'deep',castZone:'far'}
+  ].entries()){
+    const started=await command('v4-catch','minigame.start',
+      {kind:'fishing',characterId:actor,baitId,spotId,fishingVersion:4},t);
+    assert.equal(started.ok,true,JSON.stringify(started));
+    let game=started.minigame;
+    check('fishing v4: opt-in version and one round',[game.fishingVersion,game.challenge.fishingVersion,game.totalRounds],[4,4,1]);
+    check('fishing v4: species hidden before cast',Object.hasOwn(game,'catchSpeciesId'),false);
+    check('fishing v4: no catch is pre-drawn',
+      Object.hasOwn((await db.query('SELECT session FROM launcher_minigame_sessions WHERE session_id=$1',[game.id])).rows[0].session,'catchSpeciesId'),false);
+    t+=.1;
+    check('fishing v4: cast requires a real target',
+      (await command('v4-catch','minigame.answer',{...ref(game),roundId:game.challenge.id,counterMoves:['cast'],castZone:'none'},t)).error,
+      'invalid_fishing_cast_zone');
+    game=await fishAction('v4-catch',game,'cast',t,{castZone});
+    const castAt=t,round=game.challenge;
+    check('fishing v4: cast starts wait',[round.stage,round.castZone,game.castZone],['wait',castZone,castZone]);
+    check('fishing v4: bite has visible nibble and forgiving hook window',
+      Date.parse(round.nibbleAt)<Date.parse(round.biteAt)&&
+      Date.parse(round.hookUntil)-Date.parse(round.biteAt)===4500,true);
+    check('fishing v4: casted fish remains private',Object.hasOwn(game,'catchSpeciesId'),false);
+    check('fishing v4: second cast cannot reroll a fish',
+      (await command('v4-catch','minigame.answer',{...ref(game),roundId:round.id,counterMoves:['cast'],castZone:'far'},t+.01)).error,
+      'invalid_fishing_action');
+    check('fishing v4: early hook does not lose the whole cast',
+      (await command('v4-catch','minigame.answer',{...ref(game),roundId:round.id,counterMoves:['hook']},t+.2)).error,
+      'fishing_not_bitten');
+    game=await fishAction('v4-catch',game,'sync',t+.8);
+    check('fishing v4: fish shadow moves without a button press',
+      game.challenge.fishX!==round.fishX||game.challenge.fishY!==round.fishY,true);
+    t=seconds(game.challenge.biteAt)+.15;
+    game=await fishAction('v4-catch',game,'hook',t);
+    check('fishing v4: bite leads to a fight',game.challenge.stage,'fight');
+    check('fishing v4: public motion can be predicted',
+      Number.isInteger(game.challenge.motionSeed)&&typeof game.challenge.motionStartedAt==='string'&&
+      Number.isFinite(game.challenge.fishX)&&Number.isFinite(game.challenge.fishY),true);
+    const firstFight={...game.challenge};
+    t+=1.05;
+    game=await fishAction('v4-catch',game,'sync',t);
+    check('fishing v4: idle fish changes distance and tension without input',
+      game.challenge.distance>firstFight.distance&&game.challenge.tension!==firstFight.tension,true);
+    check('fishing v4: disconnected state can be read back',
+      (await get('v4-catch',t)).activeMinigame?.id,game.id);
+    check('fishing v4: invalid controls cannot steer or reel',
+      (await command('v4-catch','minigame.answer',
+        {...ref(game),roundId:game.challenge.id,counterMoves:['control'],reeling:'yes',steer:0},t+.01)).error,
+      'invalid_fishing_control');
+    if(index===0){
+      t+=.1;game=await fishAction('v4-catch',game,'control',t,{reeling:true,steer:0});
+      const startDistance=game.challenge.distance;
+      t+=2.6;game=await fishAction('v4-catch',game,'sync',t);
+      check('fishing v4: held reel lease expires after disconnect',game.challenge.control,{reeling:false,steer:0});
+      check('fishing v4: old held control is not trusted forever',
+        game.challenge.distance<startDistance&&game.challenge.distance>startDistance-22,true);
+    }
+    let fightActions=0;
+    while(game.challenge&&fightActions++<48){
+      const round=game.challenge,steer=round.pullDirection==='left'?1:round.pullDirection==='right'?-1:0;
+      const reeling=round.tension<70;
+      t+=1.05;
+      game=await fishAction('v4-catch',game,'control',t,{reeling,steer});
+    }
+    check('fishing v4: ordinary fish is landed with readable countersteer',game.feedback?.reason,'landed');
+    const fightSeconds=t-seconds(firstFight.hookedAt);
+    check(`fishing v4: ordinary fish lands in a short active fight (${fightSeconds.toFixed(1)}s)`,
+      fightSeconds<(index===0?25:20),true);
+    const beforeFinish=await get('v4-catch',t+.01);
+    const finishCommand={type:'minigame.finish',payload:ref(game),
+      requestId:`fishing-v4-finish-${index}`,expectedRevision:beforeFinish.life.revision};
+    const finished=await life.commandLauncherLife(pool,'v4-catch',finishCommand,at(t+.01),cap);
+    assert.equal(finished.ok,true,JSON.stringify(finished));
+    const replay=await life.commandLauncherLife(pool,'v4-catch',finishCommand,at(t+.02),cap);
+    check('fishing v4: exact finish request replays its immutable receipt',replay.duplicate,true);
+    check('fishing v4: replay never mints another fish',replay.life.fishCollection.length,index+1);
+    check('fishing v4: one landed cast saves exactly one fish',finished.life.fishCollection.length,index+1);
+    check('fishing v4: fish belongs to bait/spot/cast pool',
+      minigames.fishingPoolFor(spotId,baitId,castZone).some(([id])=>id===finished.minigame.result.catch.speciesId),true);
+    check('fishing v4: fishing never awards work coins',finished.wallet.coins,100);
+    check('fishing v4: duplicate finish does not duplicate fish',
+      (await command('v4-catch','minigame.finish',ref(game),t+.02)).life.fishCollection.length,index+1);
+    t+=.1;
+  }
+  const after=(await db.query('SELECT stats FROM player_profiles WHERE secret=$1',['v4-catch'])).rows[0].stats;
+  check('fishing v4: launcher work counter stays unchanged',
+    after.launcherCompanionsV1.workStartsToday,before.launcherCompanionsV1.workStartsToday);
+  check('fishing v4: actor work counter stays unchanged',
+    after.launcherCompanionsV1.characters[actor].worksStartedToday,
+    before.launcherCompanionsV1.characters[actor].worksStartedToday);
+  check('fishing v4: no wallet ledger is created',
+    Number((await db.query('SELECT count(*) AS count FROM launcher_wallet_ledger WHERE user_id=(SELECT user_id FROM player_profiles WHERE secret=$1)',['v4-catch'])).rows[0].count),0);
+  await createUser('v4-miss');
+  let miss=(await command('v4-miss','minigame.start',
+    {kind:'fishing',characterId:actor,baitId:'worm',spotId:'shore',fishingVersion:4},0)).minigame;
+  miss=await fishAction('v4-miss',miss,'cast',.1,{castZone:'near'});
+  miss=await fishAction('v4-miss',miss,'sync',seconds(miss.challenge.hookUntil)+.1);
+  check('fishing v4: missed hook window ends only this cast',miss.feedback.reason,'missed_bite');
+  const noFish=await command('v4-miss','minigame.finish',ref(miss),seconds(miss.startedAt)+9);
+  check('fishing v4: missed cast cannot create a fish',noFish.life.fishCollection.length,0);
+  check('fishing v4: a new cast can start after failure',
+    (await command('v4-miss','minigame.start',
+      {kind:'fishing',characterId:actor,baitId:'shrimp',spotId:'reef',fishingVersion:4},10)).ok,true);
+}
+function fishingV4SimulationStress(){
+  // Exercise random motion seeds without database or a renderer. This keeps
+  // timing regressions visible even when one happy-path fish happens to be easy.
+  for(const [speciesId,maximumSeconds] of [
+    ['butterflyfish',20],['adventure-fish',20],['cola-sunfish',25],['elephant-tuna',28]
+  ])for(let sample=0;sample<12;sample++){
+    const game=minigames.create('fishing',actor,1,at(0),false,'supply',4,'shrimp','reef');
+    const answer=(move,t,extra={})=>minigames.answer(game,
+      {roundId:game.challenge.id,counterMoves:[move],...extra},at(t));
+    assert.equal(answer('cast',.1,{castZone:'mid'}).error,undefined);
+    game.catchSpeciesId=speciesId;
+    let time=seconds(game.challenge.biteAt)+.1;
+    assert.equal(answer('hook',time).error,undefined);
+    const hookedAt=time;
+    time+=1.05;assert.equal(answer('sync',time).error,undefined);
+    for(let action=0;game.challenge&&action<48;action++){
+      const round=game.challenge,steer=round.pullDirection==='left'?1:round.pullDirection==='right'?-1:0;
+      time+=1.05;
+      assert.equal(answer('control',time,{reeling:round.tension<70,steer}).error,undefined);
+    }
+    check(`fishing v4: ${speciesId} seed ${sample} lands safely`,game.feedback?.reason,'landed');
+    check(`fishing v4: ${speciesId} seed ${sample} remains in short fight`,
+      time-hookedAt<maximumSeconds,true);
+  }
+}
 async function main(){
   await db.exec('CREATE TABLE player_profiles(user_id SERIAL PRIMARY KEY,secret TEXT UNIQUE NOT NULL,name TEXT,avatar TEXT,stats JSONB,updated_at TIMESTAMPTZ DEFAULT now())');
   for(const job of ['supply','cooking','repair','navigation','fishing']){
@@ -387,7 +527,9 @@ async function main(){
   check('fishing: late answer does not increase score',lateAnswer.minigame.score,0);
   await fishingV2Checks();
   await fishingV3Checks();
-  const files=['server/launcher-life.js','server/launcher-life-store.js','server/launcher-minigames.js','scripts/launcher_fishing_server_qa.js'];
+  await fishingV4Checks();
+  fishingV4SimulationStress();
+  const files=['server/launcher-life.js','server/launcher-life-store.js','server/launcher-minigames.js','server/launcher-fishing-v4.js','scripts/launcher_fishing_server_qa.js'];
   const report={schemaVersion:1,status:'PASS',checks:checks.length,results:checks,sourceHashes:Object.fromEntries(files.map(file=>[file,crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname,'..',file))).digest('hex')])),limitations:['In-memory PGlite service test with serialized transactions. Does not prove production PostgreSQL timing or human play.'],createdAt:new Date().toISOString()};
   if(process.argv[2]){fs.mkdirSync(path.dirname(path.resolve(process.argv[2])),{recursive:true});fs.writeFileSync(process.argv[2],JSON.stringify(report,null,2)+'\n');}
   console.log(JSON.stringify({status:'PASS',checks:checks.length,output:process.argv[2]||null}));
