@@ -21,6 +21,7 @@ const species = [
   'demon-bonito', 'guiding-anglerfish', 'ice-fish', 'beat-alligator',
   'aurora-sunfish', 'burning-dragon', 'great-terigius', 'golden-whale'
 ];
+const fishArtFile = id => id === 'golden-whale' ? 'golden-whale-v2.webp' : id + '.webp';
 const spots = ['shore', 'reef', 'deep', 'freshwater', 'magma', 'rainbow'];
 const catalogue = Object.fromEntries(require(path.join(root, 'server/launcher-minigames')).FISH_SPECIES
   .map(fish => [fish.id, fish.label]));
@@ -152,7 +153,7 @@ async function main() {
     const card = fishCards.filter({has: page.locator('[data-fish-id="ua-' + index + '"]')});
     check(id + ' collection name', (await card.locator('strong').textContent()).trim(), catalogue[id]);
     const art = card.locator('img');
-    check(id + ' art path', (await art.getAttribute('src')).endsWith('/fish_ua/' + id + '.webp'), true);
+    check(id + ' art path', (await art.getAttribute('src')).endsWith('/fish_ua/' + fishArtFile(id)), true);
     await art.evaluate(img => img.decode());
     check(id + ' art decoded', await art.evaluate(img => img.naturalWidth > 0 && img.naturalHeight > 0), true);
   }
@@ -189,7 +190,7 @@ async function main() {
     const result = page.locator('.room-fishing-v3-result');
     await result.waitFor();
     const art = result.locator('img');
-    check(id + ' catch art path', (await art.getAttribute('src')).endsWith('/fish_ua/' + id + '.webp'), true);
+    check(id + ' catch art path', (await art.getAttribute('src')).endsWith('/fish_ua/' + fishArtFile(id)), true);
     await art.evaluate(img => img.decode());
     check(id + ' catch art decoded', await art.evaluate(img => img.naturalWidth > 0), true);
     check(id + ' catch named', (await result.locator('.room-fishing-v3-catch-name').textContent()).trim(), catalogue[id]);
@@ -208,7 +209,7 @@ async function main() {
       return {src: sprite?.src, name: OnePieceRoomAquarium.species[entry]};
     }, id);
     check(id + ' aquarium species', details.name, catalogue[id]);
-    check(id + ' aquarium art path', details.src.endsWith('/fish_ua/' + id + '.webp'), true);
+    check(id + ' aquarium art path', details.src.endsWith('/fish_ua/' + fishArtFile(id)), true);
     const art = page.locator('#aquarium-stage .room-aquarium-fish img');
     await art.evaluate(img => img.decode());
     check(id + ' aquarium art decoded', await art.evaluate(img => img.naturalWidth > 0), true);

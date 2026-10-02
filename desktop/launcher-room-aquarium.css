@@ -7,10 +7,11 @@
 }
 .room-aquarium-scene-window { z-index: 1; }
 .room-aquarium-window { z-index: 2; }
-.room-aquarium-window .room-aquarium-fish { --fish-swim-end: 70%; }
+.room-aquarium-window .room-aquarium-fish { --fish-swim-start: 8%; --fish-swim-end: 70%; }
+.room-aquarium-furniture:is([data-rotation='1'], [data-rotation='3']) .room-aquarium-fish { width: calc(var(--fish-size, 11%) * 1.7); --fish-swim-end: 55%; }
 .room-aquarium-fish {
   position: absolute;
-  left: 3%;
+  left: var(--fish-swim-start, 10%);
   top: var(--fish-lane, 40%);
   display: block;
   width: var(--fish-size, 11%);
@@ -27,17 +28,29 @@
   object-fit: contain;
   animation: room-fish-bob var(--fish-bob, 2s) ease-in-out infinite alternate;
 }
+.room-aquarium-fish[data-swim='perch'] { left: var(--fish-home, 32%); animation: room-fish-perch var(--fish-duration, 6s) ease-in-out var(--fish-delay, 0s) infinite; }
+.room-aquarium-fish[data-swim='drift'] { left: var(--fish-home, 32%); animation: room-fish-drift var(--fish-duration, 7s) ease-in-out var(--fish-delay, 0s) infinite alternate; }
+.room-aquarium-fish[data-swim='pulse'] { left: var(--fish-home, 32%); animation: room-fish-pulse var(--fish-duration, 8s) ease-in-out var(--fish-delay, 0s) infinite; }
+.room-aquarium-fish[data-swim='backstep'] { left: var(--fish-home, 32%); animation: room-fish-backstep var(--fish-duration, 7s) ease-in-out var(--fish-delay, 0s) infinite; }
+.room-aquarium-fish[data-swim='perch'] img { animation: none; }
+.room-aquarium-fish[data-swim='pulse'] img { animation: room-octopus-pulse 2.8s ease-in-out infinite alternate; }
+.room-aquarium-fish[data-swim='backstep'] img { animation: none; }
 .room-aquarium-paused .room-aquarium-fish,
 .room-aquarium-paused .room-aquarium-fish img { animation-play-state: paused; }
 @keyframes room-fish-swim {
-  0% { left: 3%; transform: scaleX(1); }
-  48% { left: var(--fish-swim-end, 85%); transform: scaleX(1); }
-  50% { left: var(--fish-swim-end, 85%); transform: scaleX(-1); }
-  98% { left: 3%; transform: scaleX(-1); }
-  100% { left: 3%; transform: scaleX(1); }
+  0% { left: var(--fish-swim-start, 10%); transform: scaleX(var(--fish-face-right, 1)); }
+  44% { left: var(--fish-swim-end, 75%); transform: scaleX(var(--fish-face-right, 1)); }
+  50% { left: var(--fish-swim-end, 75%); transform: scaleX(calc(var(--fish-face-right, 1) * -1)); }
+  94% { left: var(--fish-swim-start, 10%); transform: scaleX(calc(var(--fish-face-right, 1) * -1)); }
+  100% { left: var(--fish-swim-start, 10%); transform: scaleX(var(--fish-face-right, 1)); }
 }
 @keyframes room-fish-bob { from { transform: translateY(-5%); } to { transform: translateY(7%); } }
+@keyframes room-fish-perch { 0%, 36%, 100% { transform: translateY(0) scaleY(.94); } 55%, 80% { transform: translateY(-1%) scaleY(1.04); } }
+@keyframes room-fish-drift { from { transform: translate(-12%, -5%); } to { transform: translate(18%, 14%); } }
+@keyframes room-fish-pulse { 0%, 26%, 75%, 100% { transform: translate(0, 0); } 40%, 61% { transform: translate(22%, -13%); } }
+@keyframes room-octopus-pulse { from { transform: scale(.96, 1.04); } to { transform: scale(1.05, .92); } }
+@keyframes room-fish-backstep { 0%, 52%, 100% { transform: translateX(0); } 66%, 81% { transform: translateX(52%); } }
 @media (prefers-reduced-motion: reduce) {
-  .room-aquarium-fish { animation: none; left: calc(7% + var(--fish-index, 0) * 13%); }
+  .room-aquarium-fish { animation: none; left: var(--fish-home, 32%); }
   .room-aquarium-fish img { animation: none; }
 }

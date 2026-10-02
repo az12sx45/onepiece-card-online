@@ -1,5 +1,31 @@
 # Dev Workflow
 
+## 2026-10-02 啟動器 1.2.22 Wii ISO 考證與海釣操控重做（候選）
+
+使用者另提供 [Wii 釣魚實機影片](https://www.youtube.com/watch?v=K9Do_E05r1k) 作視覺參考。核對約 13:02、13:15、13:20 的連續畫面：左上是一體式圓形線輪、旁側短弧形拉力刻度與長分節導環軌道；魚距由約 45.2 降至 35.4 時，軌道上的垂掛指標向船端移動，紅色剩餘距離段縮短，線輪外圈隨耗損改色。新版 HUD 以自行繪製的 UI 元件重現這種資訊關係，不擷取影片或 ISO 的原圖放入安裝包；影片畫面只留在隔離 QA 目錄供核對。
+
+視覺複核時使用者否決 r2 的純 CSS 儀表，因此保留其安裝檔作測試證據但不發布。r3 改用 GPT 生成的四件透明原創素材：`hud-reel-v1.webp`、`hud-rail-v1.webp`、`hud-pull-arc-v1.webp`、`hud-marker-v1.webp`；技術性裁除透明邊與 WebP 編碼後合計 163,564 bytes，來源生成 PNG 留於本機生成紀錄。這些圖只負責線輪、導環、拉力弧與掛件外觀；魚線強度環、拉力等級、剩餘距離紅條及掛件位置仍隨伺服器場次更新。1440×900 與 960×640 的實際戰鬥畫面逐張核對，掛件／紅條在 70→35 距離時同向左移，線強 42→20 時線輪減少；上鉤後海面無浮標。新版以四件組合為釣竿表主體，不把參考影片影像打包。
+
+範圍：使用者提供 `D:\\abap.ind\\wii\\game\\One Piece Unlimited Adventure(J).iso` 並要求直接解析後改善釣魚操作。原片以唯讀方式核對為日版 `RIPJAF`；DolphinTool 取出釣竿、魚種、釣點表與 UI 檔，另從 `main.dol` 查到竿向與魚方向差超過 0.4 時魚線剩餘強度降低、暫停收線可回復、強度耗盡失敗及魚接近後獲魚的程式分支。進一步追到 `fish_prm.bin` 每魚 64-byte 記錄中的五組行為：模式、權重、拉力係數、持續時間底值與亂數範圍；20 種原版魚的原值、日文名、DOL 指令位址與可證明範圍記在 `D:\\Codex_QA\\wii-adventure-iso-analysis\\logic\\fish-species-parameter-evidence.md` 和相鄰 JSON／CSV。ISO 也有 15 個釣點與 49 個有效魚種槽；持續時間是原版內部 tick，拉力係數是無量綱消耗倍率，不能直接當成秒或現實力量。這是靜態分析，不宣稱親自玩過 Wii 版或逐幀還原；ISO 原件、存檔未修改，原版素材未打包。
+
+實作：`server/launcher-fishing-v5.js` 新增伺服器時鐘推進的魚向、魚線強度、魚距與 26 種魚的差異節奏；其中 20 種按已證實的原版五組權重與相對拉力參數調校，六種未見於本 ISO 的圖鑑魚使用本作參數。公開視圖不傳魚種與內部種子，拉力只給畫面所需的分級值，伺服器仍用各魚原值計算。`server/launcher-minigames.js` 與 `server/launcher-life-store.js` 只讓新釣魚場次選 v5，既有 v4／v3 場次繼續走各自規則。新版魚往左／右衝時要把竿帶往同側；收線可拉近魚但消耗強度，鬆開或放線可回復，魚線歸零斷線、魚距歸零上岸。細部節奏、魚池與力度條依 Windows 滑鼠／鍵盤調整，並非原版內部 tick 的直接換算。`desktop/launcher-room-minigames.js/.css` 將搏魚資訊收斂成原創圓形拉力盤與收線進度條；魚咬餌前可見浮標，開始搏魚後藏起浮標，魚線改落向水花。GPT 依已審釣竿圖重繪無預繪線透明竿 `public/images/launcher_room/fishing_v5/rod-no-line-v1.webp`，v4 保留舊圖；竿尖、水花與魚線依伺服器拉力變化。按住拋竿時力度條持續往返，鬆開按當下力度拋出；保留咬鉤抽竿、漁獲結果停留及 Windows 啟動器的滑鼠／鍵盤操作。`desktop/package.json`／`package-lock.json` 升為 1.2.22；`config/launcher-announcements-v1.json` revision 20 新增有圖且以 1.2.22 為門檻的公告；`scripts/desktop_launcher_package_qa.js` 核對版本、公告與新圖。
+
+驗證：`scripts/launcher_fishing_v5_server_qa.js` 覆蓋盲目長按、未操作、正確控竿、26 種魚行為差異與舊 v4 相容；`scripts/launcher_fishing_v5_life_qa.js` 用隔離 PGlite 驗證開始、拋竿、抽竿、上岸、入帳一次與不發金幣。最終測試數量、Windows 啟動器桌面尺寸的 Chromium 操作、正式封裝與公開讀回以完成後實測結果補記。原有 `public/images/ranks/r5.PNG`、`r6.PNG` 修改不納入此次發行。
+
+1.2.22 R2 來源與封裝煙測均實際啟動 Electron，702/702 本機素材可載入且 BGM 播放成功；ASAR 中的 10 個正式套件和 zh-TW／en-US 語系核對通過。隔離建置產生 `D:\\Codex_QA\\launcher-fishing-wii-1.2.22-build-r2\\dist\\ONE-PIECE-Tabletop-Launcher-1.2.22-x64.exe`，266,103,939 bytes、SHA-256 `3129847f414e8d3f67ecc852b78d9dc3e50e93150f4315b33c70ce607c7f108d`；低於舊更新器的 268,435,456 bytes 橋接上限。封裝報告在 `D:\\Codex_QA\\launcher-fishing-wii-1.2.22-release-r2\\packaged-artifact.json`。此段只證明本機封裝，不等於公開上線或真人手感驗收。
+
+取代 r2 的 r3 來源與封裝 Electron 煙測各 706/706 本機素材及 BGM PASS，ASAR 10 個正式套件和 zh-TW／en-US 語系 PASS。正式來源、實體 staging 與封裝的釣魚 JS／CSS、無預繪線釣竿及四張新 HUD WebP 位元組相同。r3 安裝檔 266,268,753 bytes、SHA-256 `e8b1ac8f15b9581cc5030202bd8d19d78ed0a3741dc0a003488909b4fc013ae2`，低於舊更新器橋接上限；證據位於 `D:\\Codex_QA\\launcher-fishing-wii-1.2.22-release-r3\\packaged-artifact.json`。使用者認為 r3 的亮金／藍色琺瑯拼接仍不像 Wii 參考畫風，故同樣不發布；此封裝只保留作歷史 QA 證據。
+
+後續 r4 候選重新對照使用者影片 13:02–13:20 的線輪、短拉力弧與分節橫軌，以及 ISO 中唯讀抽出的 `fishing.aar` UI 圖集；使用 GPT 重繪為較平面、深色描邊與低飽和黃銅／青藍色的四張透明 WebP：`public/images/launcher_room/fishing_v5/hud-reel-v2.webp`、`hud-rail-v2.webp`、`hud-pull-arc-v2.webp`、`hud-marker-v2.webp`。動態線強環、拉力弧與魚距掛件仍由伺服器讀數驅動；參考影片與 ISO 圖像僅在 `D:\\Codex_QA\\launcher-fishing-wii-1.2.22\\`、`D:\\Codex_QA\\launcher-fishing-iso-fish-audit\\reference-hud\\` 留作比對，沒有放進玩家安裝包。r3 的 v1 HUD 圖不納入 r4 資源白名單；無預繪線釣竿仍沿用已核對的 `rod-no-line-v1.webp`。
+
+同輪修正水族箱魚：`desktop/launcher-room-aquarium.js/.css` 依 26 種魚的原圖朝向、體型與棲息位置分配方向、尺寸、游速和水層；貝類留在缸底、蝦短距倒退、水母漂浮、章魚脈動，大型魚緩游，旋轉家具魚缸也調整可見游動範圍。`public/images/launcher_room/fish_ua/golden-whale-v2.webp` 是重新審視鯨魚輪廓後的透明重繪；收藏、結算與入缸畫面都指向新版圖，舊圖及魚種 ID 留在原位。`desktop/launcher-room-ambience.css`、`desktop/main.js`、`scripts/desktop_launcher_package_qa.js` 與 `scripts/launcher_fishing_ua_ui_qa.js` 跟進視窗遮罩、資源白名單和路徑核對；沒有改動漁獲帳本、上限或既有玩家資料。
+
+r4 本機玩法驗收：`scripts/launcher_fishing_v5_browser_qa.js` 在 Windows 桌面 1440×900、最小 960×640 及不同魚勢 fixture 164/164 PASS，截圖與報告位於 `D:\\Codex_QA\\launcher-fishing-wii-1.2.22\\browser-hud-redraw-final\\`；水族箱 26/26 魚種的載圖與動作檢查在 `D:\\Codex_QA\\launcher-aquarium-audit\\behavior\\report.json`，UA 收藏／上岸／入缸 UI 273/273 PASS，房間素材與家具 9/9 PASS。`scripts/desktop_launcher_package_qa.js` 的來源檢查 PASS。這些是本機自動化與截圖檢查，不能代替真人手感、正式帳號或公開部署驗收。
+
+r4 隔離建置已完成本機驗證：`D:\\Codex_QA\\launcher-fishing-wii-1.2.22-build-r4\\dist\\ONE-PIECE-Tabletop-Launcher-1.2.22-x64.exe` 為 266,280,421 bytes，SHA-256 `8c0a865691c6201e665753bd78f8a66fea1eb918b88a2759ec2c72d834f29686`，低於舊更新器 268,435,456 bytes 上限 2,155,035 bytes。更新公告改稿後重跑的來源 staging 與封裝版 Electron 各 707/707 本機素材、BGM 播放 PASS；10 個正式依賴和 zh-TW／en-US 語系 PASS。小遊戲 JS／CSS、水族箱 JS／CSS 與六張最終圖在正式來源、staging 和封裝內的大小／SHA 一致；證據在 `D:\\Codex_QA\\launcher-fishing-wii-1.2.22-release-r4\\r4-handoff.json`、`packaged-artifact.json`、`packaged-client-verification.json`。公告 JSON 是伺服器來源，需隨正式程式一併發布。
+
+發行準備：同一 r4 安裝檔已上傳至不可覆寫的 `desktop/launcher/releases/1.2.22/` R2 路徑；公開 HEAD 200、Range 206 及完整 GET 266,280,421 bytes／上述 SHA-256 均核對成功，證據在 `D:\\Codex_QA\\launcher-fishing-wii-1.2.22-release-r4\\publish\\public-installer-verification-r3.json`。`public/desktop/launcher-release-v1.json` 已複製現有 Ed25519 金鑰簽署且獲啟動器驗簽的 1.2.22 清單（676 bytes，SHA-256 `be27b81bcb79742b30bdd555d9d0fdf7c3cc1957407ee507cc7de276873fd436`）；`public/desktop-download.html` 的靜態回退網址與容量文字同步更新。`scripts/desktop_launcher_update_qa.js`、`scripts/launcher_announcements_server_qa.js`、來源封裝 QA 和 `git diff --check` 通過。正式 Render 清單與下載頁仍待推送後讀回。
+
 ## 2026-10-02 啟動器 1.2.21 海釣視覺、漁獲展示與更新容量（已部署）
 
 玩家在 1.2.20 候選已封裝並上傳後，追加取消更新檔固定大小限制的要求；1.2.20 安裝檔雖已經 R2 完整 GET／SHA 核對，但未進入公開簽署更新清單或下載頁。正式發行改為 1.2.21。海釣的 `desktop/launcher-room-minigames.js/.css` 改為竿尖到浮標金環的細魚線、原創五孔圓形張力表；上岸魚獲圖與名稱保持可見，直到玩家明確選擇下一竿、換餌或返回房間。釣魚伺服器規則、魚池、收藏、三款桌遊及存檔未變。

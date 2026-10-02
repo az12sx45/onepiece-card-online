@@ -79,9 +79,12 @@
 .room-aquarium-scene-window {
   position: absolute;
   z-index: 3;
-  left: 25.9%; top: 7.2%; width: 48.1%; height: 18.3%;
+  left: 25%; top: 3.7%; width: 50%; height: 25.6%;
   overflow: hidden;
   border-radius: 18% / 32%;
+  /* The real glass extends below the old fish overlay. Leave the cabin door
+     in front of the lower middle instead of letting fish cross its frame. */
+  clip-path: polygon(8% 0, 92% 0, 100% 12%, 100% 88%, 95% 100%, 59% 100%, 59% 86%, 41% 86%, 41% 100%, 5% 100%, 0 88%, 0 12%);
   pointer-events: none;
   display: none;
 }

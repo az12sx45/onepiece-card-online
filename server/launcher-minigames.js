@@ -4,6 +4,7 @@
 // serializes them with the existing shop, background jobs and wallet ledger.
 const crypto = require('node:crypto');
 const fishingV4 = require('./launcher-fishing-v4');
+const fishingV5 = require('./launcher-fishing-v5');
 const ACTIVE = new Set(['playing', 'ready', 'failed']);
 const CATEGORIES = Object.freeze({food:'食材',tools:'工具',books:'書籍'});
 const SUPPLIES = Object.freeze({
@@ -215,7 +216,8 @@ function workChallenge(jobId,id,roundIndex,issuedAt,fishingVersion=1) {
 }
 function challenge(kind, roundIndex, now, jobId='supply',fishingVersion=1,speciesId=null,rodLevel=0) {
   const id=crypto.randomUUID(), issuedAt=now.getTime();
-  if(kind==='fishing')return fishingVersion===4?fishingV4.create(id,issuedAt,rodLevel):fishingChallengeV3(id,issuedAt);
+  if(kind==='fishing')return fishingVersion===5?fishingV5.create(id,issuedAt,rodLevel):
+    fishingVersion===4?fishingV4.create(id,issuedAt,rodLevel):fishingChallengeV3(id,issuedAt);
   if(kind==='work') {
     const variant=workChallenge(jobId,id,roundIndex,issuedAt,fishingVersion);if(variant)return variant;
     const category=pick(Object.keys(CATEGORIES)), targets=1+crypto.randomInt(2);
@@ -245,7 +247,19 @@ function view(session) {
   if(session.kind==='work')result.jobId=jobFor(session);
   // The catch is drawn by the server and revealed only after settlement.
   delete result.catchSpeciesId;
-  if(result.challenge?.fishingVersion>=2){result.challenge={...result.challenge};delete result.challenge.fightPattern;}
+  if(result.challenge?.fishingVersion>=2){
+    result.challenge={...result.challenge};delete result.challenge.fightPattern;
+    if(result.challenge.fishingVersion===5){
+      // Species rhythm is server-private until the catch is settled.
+      delete result.challenge.behavior;delete result.challenge.reelHoldMs;
+      delete result.challenge.nextTurnAt;
+      delete result.challenge.turnsRemaining;delete result.challenge.phaseIndex;
+      delete result.challenge.phaseUntil;
+      delete result.challenge.motionSeed;
+      result.challenge.pullIntensity=fishingV5.displayIntensity(
+        result.challenge.pullIntensity,result.challenge.runState);
+    }
+  }
   return JSON.parse(JSON.stringify(result));
 }
 function contextValid(session,state,room) {
@@ -263,16 +277,17 @@ async function active(db,userId,now,state,room) {
   return result;
 }
 function create(kind,characterId,roomRevision,now,practice=false,jobId='supply',fishingVersion=1,baitId=null,spotId=null,rodLevel=0) {
+  const clockedFishingVersion=fishingVersion===5?5:fishingVersion===4?4:3;
   const catchSpeciesId=kind==='work'&&jobId==='fishing'?
     pick(FISH_SPECIES.filter(species=>species.weight>0).flatMap(species=>Array(species.weight).fill(species.id))):null;
   const session={id:crypto.randomUUID(),token:crypto.randomBytes(24).toString('hex'),kind,characterId,practice,
     ...(kind==='work'?{jobId}:{}),
     ...(catchSpeciesId?{catchSpeciesId}:{}),
-    ...(kind==='fishing'?{fishingVersion:fishingVersion===4?4:3,baitId,spotId,castZone:null,
-      ...(fishingVersion===4?{rodLevel:fishingV4.rodLevel(rodLevel)}:{})}:kind==='work'&&jobId==='fishing'?{fishingVersion}:{}),
+    ...(kind==='fishing'?{fishingVersion:clockedFishingVersion,baitId,spotId,castZone:null,
+      ...(clockedFishingVersion>=4?{rodLevel:fishingV4.rodLevel(rodLevel)}:{})}:kind==='work'&&jobId==='fishing'?{fishingVersion}:{}),
     state:'playing',roomRevision,attempt:1,maxAttempts:kind==='fishing'?1:3,roundIndex:0,totalRounds:kind==='fishing'?1:kind==='work'?(jobId==='fishing'&&fishingVersion===2?FISHING_V2_ROUNDS:jobId==='fishing'?5:8):4,
     startedAt:now.toISOString(),finishNotBefore:iso(now.getTime()+(kind==='fishing'?0:kind==='work'?24000:20000)),
-    challenge:challenge(kind,0,now,jobId,kind==='fishing'?fishingVersion===4?4:3:fishingVersion,catchSpeciesId,rodLevel),score:0,combo:0,correctRounds:0,feedback:null,result:null};
+    challenge:challenge(kind,0,now,jobId,kind==='fishing'?clockedFishingVersion:fishingVersion,catchSpeciesId,rodLevel),score:0,combo:0,correctRounds:0,feedback:null,result:null};
   session.expiresAt=iso(now.getTime()+durationFor(session));return session;
 }
 function retry(session,now) {
@@ -297,8 +312,9 @@ function advanceRound(session,correct,now,reason='') {
   session.challenge=session.roundIndex<session.totalRounds?challenge(session.kind,session.roundIndex,now,jobFor(session),session.fishingVersion||1,session.catchSpeciesId,session.rodLevel):null;
   return{};
 }
-function answerFishingV4(session,payload,now) {
+function answerClockedFishing(session,payload,now) {
   const round=session.challenge,actions=payload.counterMoves;
+  const engine=round.fishingVersion===5?fishingV5:fishingV4;
   if(!Array.isArray(actions)||actions.length!==1||
       !['cast','hook','control','sync','timeout'].includes(actions[0])||
       ['selections','directions','ingredients','rotations','path'].some(key=>payload[key]!==undefined))
@@ -308,7 +324,7 @@ function answerFishingV4(session,payload,now) {
     const hasPower=payload.castPower!==undefined;
     if(hasPower&&(!Number.isInteger(payload.castPower)||payload.castPower<0||payload.castPower>100)||
         payload.castZone!==undefined&&(!Object.hasOwn(FISHING_CAST_ZONES,payload.castZone)||
-          hasPower&&payload.castZone!==fishingV4.castZoneForPower(payload.castPower))||
+          hasPower&&payload.castZone!==engine.castZoneForPower(payload.castPower))||
         !hasPower&&typeof payload.castZone!=='string'||
         payload.reeling!==undefined||payload.steer!==undefined||payload.paying!==undefined)
       return{error:'invalid_fishing_cast_zone'};
@@ -322,14 +338,14 @@ function answerFishingV4(session,payload,now) {
       payload.reeling!==undefined||payload.steer!==undefined||payload.paying!==undefined)
     return{error:'invalid_minigame_answer'};
   if(round.stage==='cast') {
-    if(move==='sync'){fishingV4.observe(round,now);return{};}
+    if(move==='sync'){engine.observe(round,now);return{};}
     if(move!=='cast')return{error:'invalid_fishing_action'};
-    const zone=payload.castPower===undefined?payload.castZone:fishingV4.castZoneForPower(payload.castPower);
+    const zone=payload.castPower===undefined?payload.castZone:engine.castZoneForPower(payload.castPower);
     const target=payload.castPower===undefined?FISHING_CAST_ZONES[zone]:
-      fishingV4.castTargetForPower(payload.castPower,FISHING_CAST_ZONES);
+      engine.castTargetForPower(payload.castPower,FISHING_CAST_ZONES);
     session.castZone=zone;
     session.catchSpeciesId=fishingSpeciesFor(session.spotId,session.baitId,zone);
-    fishingV4.cast(round,now,session.baitId,zone,target);
+    engine.cast(round,now,session.baitId,zone,target);
     return{};
   }
   if(round.stage==='wait') {
@@ -337,15 +353,15 @@ function answerFishingV4(session,payload,now) {
       if(move==='hook'||move==='sync'||move==='timeout')return advanceRound(session,false,now,'missed_bite');
       return{error:'invalid_fishing_action'};
     }
-    if(move==='sync'){fishingV4.observe(round,now);return{};}
+    if(move==='sync'){engine.observe(round,now);return{};}
     if(move==='timeout')return{error:'invalid_fishing_action'};
     if(move!=='hook')return{error:'invalid_fishing_action'};
     if(at<Date.parse(round.biteAt))return{error:'fishing_not_bitten'};
-    fishingV4.hook(round,now,FISHING_V3_DIFFICULTY[session.catchSpeciesId]??1);
+    engine.hook(round,now,FISHING_V3_DIFFICULTY[session.catchSpeciesId]??1,session.catchSpeciesId);
     return{};
   }
   if(round.stage!=='fight')return{error:'invalid_fishing_action'};
-  const result=fishingV4.simulate(round,now,FISHING_V3_DIFFICULTY[session.catchSpeciesId]??1);
+  const result=engine.simulate(round,now,FISHING_V3_DIFFICULTY[session.catchSpeciesId]??1);
   if(result)return advanceRound(session,result==='landed',now,result);
   if(move==='timeout')return{error:'invalid_fishing_action'};
   if(move==='sync')return{};
@@ -356,7 +372,7 @@ function answerFishingV4(session,payload,now) {
     Boolean(round.control?.paying)===Boolean(payload.paying);
   if(same&&Number.isFinite(Date.parse(round.lastControlAt))&&
       at-Date.parse(round.lastControlAt)<180)return{error:'fishing_action_cooldown'};
-  fishingV4.control(round,now,payload.reeling,payload.steer,payload.paying===true);
+  engine.control(round,now,payload.reeling,payload.steer,payload.paying===true);
   round.lastControlAt=iso(at);
   return{};
 }
@@ -429,7 +445,7 @@ function answer(session,payload,now) {
   const round=session.challenge;
   if(payload.roundId!==round.id)return{error:'minigame_round_conflict'};
   if(now.getTime()<Date.parse(round.notBefore))return{error:'minigame_too_early'};
-  if(session.kind==='fishing'&&round.fishingVersion===4)return answerFishingV4(session,payload,now);
+  if(session.kind==='fishing'&&(round.fishingVersion===4||round.fishingVersion===5))return answerClockedFishing(session,payload,now);
   if((session.kind==='fishing'||session.kind==='work'&&jobFor(session)==='fishing')&&round.fishingVersion>=2)return answerFishingV2(session,payload,now);
   let correct=false;
   if(session.kind==='work') {

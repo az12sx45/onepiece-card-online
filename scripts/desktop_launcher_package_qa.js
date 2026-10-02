@@ -180,6 +180,21 @@ const FISHING_V1218_FISH = Object.freeze([
   'pumpkin-octopus', 'striped-clam', 'treasure-pearl-clam'
 ].map(name => `fish_ua/${name}.webp`));
 const FISHING_V1218_ART_SET = new Set([...FISHING_V1218_SCENES, ...FISHING_V1218_FISH]);
+const FISHING_GOLDEN_WHALE_V2 = Object.freeze({
+  asset: 'fish_ua/golden-whale-v2.webp', bytes: 45588,
+  sha256: 'a9a73c0bf70f309efc7dc2e1636769a456a5a151d2c17a9884ef87956dedc539'
+});
+const FISHING_V1222_ROD = Object.freeze({
+  asset: 'fishing_v5/rod-no-line-v1.webp', bytes: 292484,
+  sha256: '76c7e1462ff41b0e10e39d175182edbe02ca4dfa3d5c06fce0ed6555780b0f28'
+});
+const FISHING_V1222_HUD_ART = Object.freeze([
+  { asset: 'fishing_v5/hud-reel-v2.webp', bytes: 64396, sha256: '30a0ee6872ceccfa05e6841417fdebd09cbf1a5faec22b1c4450a7262b34bc93' },
+  { asset: 'fishing_v5/hud-rail-v2.webp', bytes: 46876, sha256: '0959edd738f3c0e55a6a31cf54d4b6a50d0468dbb72eb12483cfe75626478651' },
+  { asset: 'fishing_v5/hud-pull-arc-v2.webp', bytes: 11210, sha256: '3f90745e9a87fce43b3273e7c50a660ab1c080e957f0e5d6f372562532303686' },
+  { asset: 'fishing_v5/hud-marker-v2.webp', bytes: 6332, sha256: 'bbe5fbc88983c872cb6937e8ff23fea5084b786068a92caacc6533c6bd4ec3b0' }
+]);
+const FISHING_V1222_HUD_ART_BYTES = FISHING_V1222_HUD_ART.reduce((sum, item) => sum + item.bytes, 0);
 const FISHING_V1217_ANNOUNCEMENT = Object.freeze({
   asset: 'launcher-fishing-adventure-1.2.17.webp', bytes: 270252,
   sha256: '2670af33259509acac13029191bf0e339fd4246efc8592266dd53c23ccd09f6b'
@@ -349,12 +364,14 @@ const EXTRA_RESOURCES = [
       ...LUFFY_NEW_ASSETS,
       ...ROOM_NEW_V1215_ASSETS.filter(asset => !RETIRED_DUPLICATE_FISH.has(asset)).flatMap(asset => asset === 'minigames_v1/fishing-sea.webp'
         ? [asset, ...FISHING_V1216_ART.map(item => item.asset),
+          FISHING_V1222_ROD.asset,
+          ...FISHING_V1222_HUD_ART.map(item => item.asset),
           ...FISHING_V1217_ART.filter(item => item.asset.startsWith('fishing_v3/sea-')).map(item => item.asset),
           ...FISHING_V1218_SCENES,
           ...FISHING_V1217_ART.filter(item => item.asset.startsWith('fishing_v3/bait-')).map(item => item.asset)]
         : asset === 'fish_v1/smile-jellyfish.webp'
           ? [asset, ...FISHING_V1217_ART.filter(item => item.asset.startsWith('fish_v3/') && !RETIRED_DUPLICATE_FISH.has(item.asset)).map(item => item.asset),
-            ...FISHING_V1218_FISH]
+            ...FISHING_V1218_FISH, FISHING_GOLDEN_WHALE_V2.asset]
           : [asset]),
       ...ROOM_LOCKED_V1215_VIVI_ASSETS
     ]
@@ -660,8 +677,8 @@ function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
   const luffyArtEnabled = require('../desktop/launcher-room-motion.js').LUFFY_ART_ENABLED === true;
-  assert(luffyArtEnabled && packageJson.version === '1.2.21',
-    'Luffy art gate must remain enabled in launcher 1.2.21.');
+  assert(luffyArtEnabled && packageJson.version === '1.2.22',
+    'Luffy art gate must remain enabled in launcher 1.2.22.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   const announcementConfig = readJson(path.join(ROOT, 'config/launcher-announcements-v1.json'), 'launcher announcements');
   require('../server/launcher-announcements').validateConfig(announcementConfig);
@@ -743,15 +760,25 @@ function validateSourcePackage() {
   const fishingVisualAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.21-fishing-visual-catch-and-updates');
   assert(announcementConfig.revision >= 19 && fishingVisualAnnouncement?.status === 'published' &&
     fishingVisualAnnouncement.scope === 'launcher' &&
-    fishingVisualAnnouncement.version === packageJson.version &&
+    fishingVisualAnnouncement.version === '1.2.21' &&
     fishingVisualAnnouncement.requiredRelease?.kind === 'launcher' &&
-    fishingVisualAnnouncement.requiredRelease?.version === packageJson.version &&
+    fishingVisualAnnouncement.requiredRelease?.version === '1.2.21' &&
     fishingVisualAnnouncement.image?.asset === `images/launcher_announcements/${FISHING_V1218_ANNOUNCEMENT.asset}` &&
     /魚線/.test(fishingVisualAnnouncement.body.join('\n')) &&
     /張力/.test(fishingVisualAnnouncement.body.join('\n')) &&
     /上岸/.test(fishingVisualAnnouncement.body.join('\n')) &&
     /固定 256 MiB/.test(fishingVisualAnnouncement.body.join('\n')),
   'Launcher 1.2.21 fishing visual, catch, and updates announcement must match this release and use reviewed local art.');
+  const fishingControlAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.22-fishing-rod-and-line');
+  assert(announcementConfig.revision >= 20 && fishingControlAnnouncement?.status === 'published' &&
+    fishingControlAnnouncement.scope === 'launcher' &&
+    fishingControlAnnouncement.version === packageJson.version &&
+    fishingControlAnnouncement.requiredRelease?.kind === 'launcher' &&
+    fishingControlAnnouncement.requiredRelease?.version === packageJson.version &&
+    fishingControlAnnouncement.image?.asset === `images/launcher_announcements/${FISHING_V1218_ANNOUNCEMENT.asset}` &&
+    /魚往左衝就把竿朝左/.test(fishingControlAnnouncement.body.join('\n')) &&
+    /魚線強度耗盡/.test(fishingControlAnnouncement.body.join('\n')),
+  'Launcher 1.2.22 fishing rod and line announcement must match this release and use reviewed local art.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
   assert(packageJson.build?.appId === 'com.onepiece.tabletop.desktop', 'Desktop appId changed unexpectedly.');
@@ -820,6 +847,38 @@ function validateSourcePackage() {
   }
   assert(resolveScene('opui://launcher/images/launcher_room/fishing_v2/unknown.webp') === null,
     'Unknown Launcher 1.2.16 fishing art was admitted by packaged protocol.');
+  const v5ArtDirectory = path.join(PUBLIC_ROOT, 'images/launcher_room/fishing_v5');
+  assertExactJson(sorted(fs.readdirSync(v5ArtDirectory)), sorted([FISHING_V1222_ROD, ...FISHING_V1222_HUD_ART].map(item => path.basename(item.asset))),
+    'Launcher 1.2.22 reviewed v5 art source set');
+  for (const item of [FISHING_V1222_ROD, ...FISHING_V1222_HUD_ART]) {
+    const sourcePath = path.join(PUBLIC_ROOT, 'images/launcher_room', item.asset);
+    assert(fs.statSync(sourcePath).size === item.bytes && sha256File(sourcePath) === item.sha256,
+      `Launcher 1.2.22 reviewed v5 art differs from exact bytes: ${item.asset}`);
+    assert(resolveScene(`opui://launcher/images/launcher_room/${item.asset}`) === sourcePath,
+      `Launcher 1.2.22 reviewed v5 art is blocked by packaged protocol: ${item.asset}`);
+  }
+  assert(resolveScene('opui://launcher/images/launcher_room/fishing_v5/unknown.webp') === null,
+    'Unknown Launcher 1.2.22 fishing rod was admitted by packaged protocol.');
+  const fishingClient = fs.readFileSync(path.join(DESKTOP_ROOT, 'launcher-room-minigames.js'), 'utf8');
+  const aquariumClient = fs.readFileSync(path.join(DESKTOP_ROOT, 'launcher-room-aquarium.js'), 'utf8');
+  for (const [client, label] of [[fishingClient, 'catch and collection'], [aquariumClient, 'aquarium']]) {
+    assert(client.includes("speciesId === 'golden-whale' ? 'golden-whale-v2' : speciesId") ||
+      client.includes("id==='golden-whale'?'golden-whale-v2':id"),
+    `The corrected Golden Whale must be used by the ${label} view.`);
+  }
+  const goldenWhaleV2 = path.join(PUBLIC_ROOT, 'images/launcher_room', FISHING_GOLDEN_WHALE_V2.asset);
+  assert(fs.statSync(goldenWhaleV2).size === FISHING_GOLDEN_WHALE_V2.bytes &&
+    sha256File(goldenWhaleV2) === FISHING_GOLDEN_WHALE_V2.sha256,
+  'Corrected Golden Whale differs from reviewed 256px transparent art.');
+  assert(resolveScene(`opui://launcher/images/launcher_room/${FISHING_GOLDEN_WHALE_V2.asset}`) === goldenWhaleV2,
+    'Corrected Golden Whale is blocked by packaged protocol.');
+  assert(fishingClient.includes("isV5?'fishing_v5/rod-no-line-v1.webp':'fishing_v2/rod.webp'"),
+    'Line-free rod must be used only by v5; historical v4 must retain its original rod.');
+  const fishingStyles = fs.readFileSync(path.join(DESKTOP_ROOT, 'launcher-room-minigames.css'), 'utf8');
+  for (const item of FISHING_V1222_HUD_ART) {
+    assert(fishingStyles.includes(`opui://launcher/images/launcher_room/${item.asset}`),
+      `Reviewed generated fishing HUD art is not used by the v5 stylesheet: ${item.asset}`);
+  }
   for (const directory of ['fishing_v3', 'fish_v3']) {
     const sourceDirectory = path.join(PUBLIC_ROOT, 'images/launcher_room', directory);
     assert(fs.statSync(sourceDirectory, { throwIfNoEntry: false })?.isDirectory(),
@@ -856,7 +915,7 @@ function validateSourcePackage() {
   'Launcher 1.2.18 fishing art manifest identity or count differs.');
   assertExactJson(sorted(fishingV1218Art.items.map(item => item.asset)), sorted(FISHING_V1218_ART_SET),
     'Launcher 1.2.18 fishing art asset set');
-  for (const [directory, expected] of [['fishing_v4', FISHING_V1218_SCENES], ['fish_ua', FISHING_V1218_FISH]]) {
+  for (const [directory, expected] of [['fishing_v4', FISHING_V1218_SCENES], ['fish_ua', [...FISHING_V1218_FISH, FISHING_GOLDEN_WHALE_V2.asset]]]) {
     assertExactJson(sorted(fs.readdirSync(path.join(PUBLIC_ROOT, 'images/launcher_room', directory))),
       sorted(expected.map(asset => path.basename(asset))), `Launcher 1.2.18 ${directory} source asset set`);
   }
@@ -1144,7 +1203,7 @@ function validateSourcePackage() {
     PACKAGED_RESERVED_ASSETS.length === ROOM_RESERVED_ASSETS.length - 17,
   'Only the 17 reviewed obsolete Ace v1 assets may be excluded from packaging.');
   assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items, ...packagedLifeHistory, ...presentationStatus.hd.manifest.items, ...presentationStatus.reserved.manifest.items, ...presentationStatus.newArt.manifest.items, ...ACE_V2_MANIFEST.items.map(item => ({asset: item.path}))].map(item => item.asset.replace(/^public\/images\/launcher_room\//, '')).filter(asset => !ROOM_MOTION_ASSETS.includes(asset) && !asset.startsWith('reserved_v1/ace/') && !['scenes/sunny-deck.webp', 'scenes/sunny-kitchen.webp', 'scenes/sunny-library.webp', 'scenes/crew-cabin-v2.webp'].includes(asset))),
-    sorted(roomResource.filter.filter(asset => !asset.startsWith('life_hd_v2/') && !LUFFY_NEW_ASSET_SET.has(asset) && !ROOM_NEW_V1215_SET.has(asset) && !FISHING_V1216_ART_SET.has(asset) && !FISHING_V1217_ART_SET.has(asset) && !FISHING_V1218_ART_SET.has(asset) && !ROOM_LOCKED_V1215_VIVI_SET.has(asset))), 'Historical room art manifest output set');
+    sorted(roomResource.filter.filter(asset => !asset.startsWith('life_hd_v2/') && !LUFFY_NEW_ASSET_SET.has(asset) && !ROOM_NEW_V1215_SET.has(asset) && !FISHING_V1216_ART_SET.has(asset) && !FISHING_V1217_ART_SET.has(asset) && !FISHING_V1218_ART_SET.has(asset) && asset !== FISHING_GOLDEN_WHALE_V2.asset && asset !== FISHING_V1222_ROD.asset && !FISHING_V1222_HUD_ART.some(item => item.asset === asset) && !ROOM_LOCKED_V1215_VIVI_SET.has(asset))), 'Historical room art manifest output set');
   assert(ACE_V2_MANIFEST.schema === 'launcher-ace-lean-art/1' && ACE_V2_MANIFEST.visualAccepted === true &&
     ACE_V2_MANIFEST.humanAcceptance === false && ACE_V2_MANIFEST.atlasCount === 17 &&
     ACE_V2_MANIFEST.frameCount === 81 && ACE_V2_MANIFEST.totalRuntimeBytes <= 4 * 1024 * 1024,
@@ -1379,7 +1438,7 @@ function validateAsar(asarPath, packageJson) {
   return entries.length;
 }
 
-function validateLauncherMediaBudgets(launcherBytes, roomMotionBytes, lifeBytes, lifeHdBytes, expansionMedia, lockedCrewBytes, fishingV1218ArtBytes) {
+function validateLauncherMediaBudgets(launcherBytes, roomMotionBytes, lifeBytes, lifeHdBytes, expansionMedia, lockedCrewBytes, fishingV1218ArtBytes, fishingV1222RodBytes, fishingV1222HudBytes, goldenWhaleV2Bytes) {
   assert(expansionMedia.length === 32 && new Set(expansionMedia.map(item => item.asset)).size === 32, 'Expansion media budget requires exactly 32 unique assets.');
   assertExactJson(sorted(expansionMedia.map(item => item.asset)), sorted(ROOM_NEW_V128_ASSETS), 'Expansion media budget asset set');
   assert(expansionMedia.every(item => Number.isSafeInteger(item.bytes) && item.bytes > 0), 'Expansion media sizes must come from actual packaged files.');
@@ -1390,15 +1449,21 @@ function validateLauncherMediaBudgets(launcherBytes, roomMotionBytes, lifeBytes,
   assert(Number.isSafeInteger(fishingV1218ArtBytes) && fishingV1218ArtBytes > 0 &&
     fishingV1218ArtBytes <= MAX_FISHING_V1218_ADDED_ART_BYTES,
   'Reviewed 1.2.18 fishing art exceeds its separate 700 KiB budget.');
-  const launcherBaseBytes = launcherBytes - roomMotionBytes - lifeBytes - lifeHdBytes - expansionBytes - lockedCrewBytes - fishingV1218ArtBytes;
+  assert(fishingV1222RodBytes === FISHING_V1222_ROD.bytes,
+    'Launcher 1.2.22 line-free rod must use the reviewed byte budget.');
+  assert(fishingV1222HudBytes === FISHING_V1222_HUD_ART_BYTES && fishingV1222HudBytes <= 164 * 1024,
+    'Launcher 1.2.22 generated HUD must use reviewed bytes within its 164 KiB budget.');
+  assert(goldenWhaleV2Bytes === FISHING_GOLDEN_WHALE_V2.bytes,
+    'The corrected Golden Whale must use the reviewed byte budget.');
+  const launcherBaseBytes = launcherBytes - roomMotionBytes - lifeBytes - lifeHdBytes - expansionBytes - lockedCrewBytes - fishingV1218ArtBytes - fishingV1222RodBytes - fishingV1222HudBytes - goldenWhaleV2Bytes;
   assert(launcherBaseBytes >= 0, 'Launcher media classifications cannot exceed the actual total.');
   assert(roomMotionBytes <= MAX_ROOM_MOTION_ASSET_BYTES, `Room motion and portraits exceed ${MAX_ROOM_MOTION_ASSET_BYTES} bytes.`);
   assert(lifeBytes <= MAX_ROOM_LIFE_FURNITURE_BYTES, 'Room life furniture exceeds its separate 1 MiB budget.');
   assert(lifeHdBytes <= MAX_ROOM_LIFE_HD_ASSET_BYTES, 'Reviewed HD life media exceeds its separate 16 MiB budget.');
   assert(launcherBaseBytes <= MAX_LAUNCHER_ASSET_BYTES, `Existing launcher media exceeds ${MAX_LAUNCHER_ASSET_BYTES} bytes.`);
-  assert(launcherBytes <= MAX_LAUNCHER_ASSET_BYTES + MAX_ROOM_MOTION_ASSET_BYTES + MAX_ROOM_LIFE_FURNITURE_BYTES + MAX_ROOM_LIFE_HD_ASSET_BYTES + MAX_LOCKED_CREW_CANDIDATE_BYTES + fishingV1218ArtBytes,
+  assert(launcherBytes <= MAX_LAUNCHER_ASSET_BYTES + MAX_ROOM_MOTION_ASSET_BYTES + MAX_ROOM_LIFE_FURNITURE_BYTES + MAX_ROOM_LIFE_HD_ASSET_BYTES + MAX_LOCKED_CREW_CANDIDATE_BYTES + fishingV1218ArtBytes + fishingV1222RodBytes + fishingV1222HudBytes + goldenWhaleV2Bytes,
     'Combined launcher media budget exceeded.');
-  return { launcherBaseBytes, expansionBytes, fishingV1218ArtBytes };
+  return { launcherBaseBytes, expansionBytes, fishingV1218ArtBytes, fishingV1222RodBytes };
 }
 
 function validateWinUnpacked(winUnpackedPath, source) {
@@ -1446,8 +1511,12 @@ function validateWinUnpacked(winUnpackedPath, source) {
   const fishingV1218ArtBytes = [...FISHING_V1218_ART_SET].reduce((sum, asset) =>
     sum + fs.statSync(path.join(launcherAssetRoot, 'images', 'launcher_room', ...asset.split('/'))).size, 0) +
     fs.statSync(path.join(launcherAssetRoot, 'images', 'launcher_announcements', FISHING_V1218_ANNOUNCEMENT.asset)).size;
+  const fishingV1222RodBytes = fs.statSync(path.join(launcherAssetRoot, 'images', 'launcher_room', FISHING_V1222_ROD.asset)).size;
+  const fishingV1222HudBytes = FISHING_V1222_HUD_ART.reduce((sum, item) =>
+    sum + fs.statSync(path.join(launcherAssetRoot, 'images', 'launcher_room', item.asset)).size, 0);
+  const goldenWhaleV2Bytes = fs.statSync(path.join(launcherAssetRoot, 'images', 'launcher_room', FISHING_GOLDEN_WHALE_V2.asset)).size;
   const { launcherBaseBytes, expansionBytes } = validateLauncherMediaBudgets(launcherBytes, roomMotionBytes,
-    lifeBytes, lifeHdBytes, expansionMedia, lockedCrewBytes, fishingV1218ArtBytes);
+    lifeBytes, lifeHdBytes, expansionMedia, lockedCrewBytes, fishingV1218ArtBytes, fishingV1222RodBytes, fishingV1222HudBytes, goldenWhaleV2Bytes);
   for (const [packagedName, sourcePath] of expectedAssets) {
     const packagedPath = path.join(launcherAssetRoot, ...packagedName.split('/'));
     assert(sha256File(packagedPath) === sha256File(sourcePath), `Packaged launcher resource differs from source: ${packagedName}`);
@@ -1457,6 +1526,19 @@ function validateWinUnpacked(winUnpackedPath, source) {
     assert(fs.statSync(packagedPath).size === item.bytes && sha256File(packagedPath) === item.sha256,
       `Packaged Launcher 1.2.16 fishing art differs from reviewed output: ${item.asset}`);
   }
+  const packagedV5Rod = path.join(launcherAssetRoot, 'images', 'launcher_room', FISHING_V1222_ROD.asset);
+  assert(fs.statSync(packagedV5Rod).size === FISHING_V1222_ROD.bytes &&
+    sha256File(packagedV5Rod) === FISHING_V1222_ROD.sha256,
+  'Packaged Launcher 1.2.22 line-free rod differs from reviewed art.');
+  for (const item of FISHING_V1222_HUD_ART) {
+    const packaged = path.join(launcherAssetRoot, 'images', 'launcher_room', item.asset);
+    assert(fs.statSync(packaged).size === item.bytes && sha256File(packaged) === item.sha256,
+      `Packaged Launcher 1.2.22 generated HUD art differs from reviewed bytes: ${item.asset}`);
+  }
+  const packagedGoldenWhaleV2 = path.join(launcherAssetRoot, 'images', 'launcher_room', FISHING_GOLDEN_WHALE_V2.asset);
+  assert(fs.statSync(packagedGoldenWhaleV2).size === FISHING_GOLDEN_WHALE_V2.bytes &&
+    sha256File(packagedGoldenWhaleV2) === FISHING_GOLDEN_WHALE_V2.sha256,
+  'Packaged corrected Golden Whale differs from reviewed art.');
   const packagedFishingAnnouncement = path.join(launcherAssetRoot, 'images', 'launcher_announcements', FISHING_V1216_ANNOUNCEMENT.asset);
   assert(fs.statSync(packagedFishingAnnouncement).size === FISHING_V1216_ANNOUNCEMENT.bytes &&
     sha256File(packagedFishingAnnouncement) === FISHING_V1216_ANNOUNCEMENT.sha256,

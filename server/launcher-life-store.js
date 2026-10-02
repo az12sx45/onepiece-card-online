@@ -117,7 +117,7 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
     if(!['work','training','fishing'].includes(p.kind)||p.practice!==undefined&&typeof p.practice!=='boolean'||
       p.kind==='work'&&p.practice||p.kind==='fishing'&&p.practice!==undefined||
       p.jobId!==undefined&&(p.kind!=='work'||!M.WORK_JOBS.includes(p.jobId))||
-      p.fishingVersion!==undefined&&!(p.fishingVersion===4&&p.kind==='fishing'||
+      p.fishingVersion!==undefined&&!(p.kind==='fishing'&&[4,5].includes(p.fishingVersion)||
         p.fishingVersion===2&&p.kind==='work'&&p.jobId==='fishing')||
       (p.kind==='fishing'?!M.FISHING_BAITS.includes(p.baitId)||!M.FISHING_SPOTS.includes(p.spotId):
         p.baitId!==undefined||p.spotId!==undefined))return{ok:false,error:'invalid_minigame'};
@@ -131,7 +131,7 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
       companions.workStartsToday++;old.worksStartedToday++;
     }
     const session=M.create(p.kind,p.characterId,room.revision,now,practice,p.jobId||'supply',
-      p.fishingVersion===4?4:p.fishingVersion===2?2:1,p.baitId,p.spotId,state.fishingRodLevel);
+      p.kind==='fishing'&&[4,5].includes(p.fishingVersion)?p.fishingVersion:p.fishingVersion===2?2:1,p.baitId,p.spotId,state.fishingRodLevel);
     await M.save(db,row.user_id,session);
     return{ok:true,minigame:M.view(session)};
   }
