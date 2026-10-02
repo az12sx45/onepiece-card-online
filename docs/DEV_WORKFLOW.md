@@ -1,6 +1,6 @@
 # Dev Workflow
 
-## 2026-10-02 啟動器 1.2.21 海釣視覺、漁獲展示與更新容量（候選）
+## 2026-10-02 啟動器 1.2.21 海釣視覺、漁獲展示與更新容量（已部署）
 
 玩家在 1.2.20 候選已封裝並上傳後，追加取消更新檔固定大小限制的要求；1.2.20 安裝檔雖已經 R2 完整 GET／SHA 核對，但未進入公開簽署更新清單或下載頁。正式發行改為 1.2.21。海釣的 `desktop/launcher-room-minigames.js/.css` 改為竿尖到浮標金環的細魚線、原創五孔圓形張力表；上岸魚獲圖與名稱保持可見，直到玩家明確選擇下一竿、換餌或返回房間。釣魚伺服器規則、魚池、收藏、三款桌遊及存檔未變。
 
@@ -10,7 +10,9 @@
 
 定向驗證：`scripts/launcher_fishing_controls_browser_qa.js` 的 Chromium 桌機／390px 觸控 172/172 PASS，含雙層魚線同曲線、竿尖與浮標金環實際渲染幾何（最遠 2.8px）、五孔輪盤與張力弧線；`scripts/launcher_fishing_catch_reveal_browser_qa.js` 魚圖、焦點、長按及按鈕 42/42 PASS。截圖與報告在 `D:\Codex_QA\launcher-fishing-visual-1.2.20\controls\`、`catch\`。`scripts/desktop_launcher_update_qa.js`、`scripts/desktop_r2_launcher_publish_qa.js` 與簽章 QA 以小檔及 >256 MiB metadata 驗證新界線與超量拒絕，均 PASS。1.2.21 公告 QA、歷史 1.2.19 公告 QA、來源 package QA、`git diff --check` PASS。無 `DATABASE_URL` 的本機 `npm start` 可啟動靜態服務，`/desktop-download.html` HTTP 200；本機下載頁 Chromium 38/38 PASS，此環境的資料庫路由不作正式帳號驗收。真人及實體裝置手感未驗收。工作樹原有 `public/images/ranks/r5.PNG`、`r6.PNG` 修改不納入本版。
 
-1.2.21 R1 安裝檔為 265,807,620 bytes，SHA-256 `0c99f8afcbad3e37ed8c305ce0044083b1c045c60670768864a9990c6a5ead9a`；仍低於舊更新器的 268,435,456 bytes 橋接門檻。來源與封裝 ASAR 中的更新器、釣魚 JS／CSS 位元組一致；封裝依賴 10 個、正式 Electron 語系 2 個，實際封裝啟動載入 701 個本機素材且 BGM 播放 PASS。1.2.19 舊更新器對本版已簽署候選清單驗證為可更新。正式 R2 安裝檔已公開，HEAD、Range、完整 GET 位元組與 SHA-256 均一致；證據在 `D:\Codex_QA\launcher-fishing-visual-1.2.21-release-r1\publish\public-installer-verification.json`。Render 更新清單與下載頁讀回尚待正式提交後核對；封裝證據在同一 QA 目錄。
+1.2.21 R1 安裝檔為 265,807,620 bytes，SHA-256 `0c99f8afcbad3e37ed8c305ce0044083b1c045c60670768864a9990c6a5ead9a`；仍低於舊更新器的 268,435,456 bytes 橋接門檻。來源與封裝 ASAR 中的更新器、釣魚 JS／CSS 位元組一致；封裝依賴 10 個、正式 Electron 語系 2 個，實際封裝啟動載入 701 個本機素材且 BGM 播放 PASS。1.2.19 舊更新器對本版已簽署候選清單驗證為可更新。正式 R2 安裝檔已公開，HEAD、Range、完整 GET 位元組與 SHA-256 均一致；證據在 `D:\Codex_QA\launcher-fishing-visual-1.2.21-release-r1\publish\public-installer-verification.json`。
+
+發行提交 `ff69ca7d8094742687db1d10e373ad5ea7c15ce0` 已推送 `origin/main`；2026-10-02 07:14 UTC 正式 Render 清單切至 1.2.21，原始位元組與提交及已簽署候選一致，SHA-256 `d90b5062773a9f1e84547b81bd8b518110ff25f32355af870fcc611ebec3cfa9`，啟動器信任的 Ed25519 驗簽通過。公開下載頁的版本與 1.2.21 回退連結、三款遊戲 runtime identity、桌面 catalog 都與來源核對通過；讀回證據在同一 QA 目錄的 `publish/public-release-manifest-verification.json`、`public-download-verification.json`、`public-runtime-verification.json`、`public-assets-verification.json`。封裝證據亦在同一 QA 目錄；這些自動化檢查不等於真人操作或實體裝置驗收。
 
 ## 2026-10-02 啟動器 1.2.20（未公開候選）
 
