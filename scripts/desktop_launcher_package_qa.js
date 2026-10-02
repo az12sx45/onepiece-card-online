@@ -103,6 +103,9 @@ const ROOM_MOTION_ASSETS = ROOM_DEPTH_CHARACTERS.flatMap(key =>
 const ROOM_PORTRAIT_ASSETS = ROOM_DEPTH_CHARACTERS.map(key => `portrait_v3/${key}.webp`);
 const ROOM_HD_ASSETS = ROOM_HD_REVIEW.ASSETS.map(asset => asset.replace(/^public\/images\/launcher_room\//, ''));
 const ROOM_RESERVED_ASSETS = ROOM_RESERVED_REVIEW.ASSETS.map(asset => asset.replace(/^public\/images\/launcher_room\//, ''));
+// Ace now resolves to reserved_v2 everywhere in the active launcher. Preserve
+// reviewed v1 source files for provenance, but do not ship its 17 old frames.
+const PACKAGED_RESERVED_ASSETS = ROOM_RESERVED_ASSETS.filter(asset => !asset.startsWith('reserved_v1/ace/'));
 const ACE_V2_ASSETS = ROOM_RESERVED_ASSETS.filter(asset => asset.startsWith('reserved_v1/ace/'))
   .map(asset => asset.replace(/^reserved_v1\//, 'reserved_v2/'));
 const ROOM_NEW_V127_ASSETS = [...RADIAL_PRESENTATION.MINIGAME_ASSETS, ...RADIAL_PRESENTATION.ROBIN_ASSETS]
@@ -340,7 +343,7 @@ const EXTRA_RESOURCES = [
       ...ROOM_HD_ASSETS,
       ...ROOM_LIFE_FURNITURE,
       ...ROOM_LIFE_HD_ASSETS,
-      ...ROOM_RESERVED_ASSETS,
+      ...PACKAGED_RESERVED_ASSETS,
       ...ACE_V2_ASSETS,
       ...ROOM_NEW_V127_ASSETS,
       ...ROOM_NEW_V128_ASSETS,
@@ -658,8 +661,8 @@ function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
   const luffyArtEnabled = require('../desktop/launcher-room-motion.js').LUFFY_ART_ENABLED === true;
-  assert(luffyArtEnabled && packageJson.version === '1.2.18',
-    'Luffy art gate must remain enabled in launcher 1.2.18.');
+  assert(luffyArtEnabled && packageJson.version === '1.2.19',
+    'Luffy art gate must remain enabled in launcher 1.2.19.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   const announcementConfig = readJson(path.join(ROOT, 'config/launcher-announcements-v1.json'), 'launcher announcements');
   require('../server/launcher-announcements').validateConfig(announcementConfig);
@@ -723,11 +726,21 @@ function validateSourcePackage() {
   'Launcher 1.2.17 fishing adventure announcement must be illustrated and release gated.');
   const fishingRebuildAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.18-fishing-rebuild');
   assert(fishingRebuildAnnouncement?.status === 'published' && fishingRebuildAnnouncement.scope === 'launcher' &&
-    fishingRebuildAnnouncement.version === packageJson.version &&
+    fishingRebuildAnnouncement.version === '1.2.18' &&
     fishingRebuildAnnouncement.requiredRelease?.kind === 'launcher' &&
-    fishingRebuildAnnouncement.requiredRelease?.version === packageJson.version &&
+    fishingRebuildAnnouncement.requiredRelease?.version === '1.2.18' &&
     fishingRebuildAnnouncement.image?.asset === `images/launcher_announcements/${FISHING_V1218_ANNOUNCEMENT.asset}`,
   'Launcher 1.2.18 fishing rebuild announcement must be illustrated and release gated.');
+  const fishingControlsAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.19-fishing-controls');
+  assert(announcementConfig.revision >= 18 && fishingControlsAnnouncement?.status === 'published' &&
+    fishingControlsAnnouncement.scope === 'launcher' &&
+    fishingControlsAnnouncement.version === packageJson.version &&
+    fishingControlsAnnouncement.requiredRelease?.kind === 'launcher' &&
+    fishingControlsAnnouncement.requiredRelease?.version === packageJson.version &&
+    fishingControlsAnnouncement.image?.asset === `images/launcher_announcements/${FISHING_V1218_ANNOUNCEMENT.asset}` &&
+    /蓄力/.test(fishingControlsAnnouncement.body.join('\n')) &&
+    /放線/.test(fishingControlsAnnouncement.body.join('\n')),
+  'Launcher 1.2.19 controls announcement must match the release and use reviewed local art.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
   assert(packageJson.build?.appId === 'com.onepiece.tabletop.desktop', 'Desktop appId changed unexpectedly.');
@@ -753,10 +766,12 @@ function validateSourcePackage() {
     const relative = asset.replace(/^public\//, '');
     assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, asset), `HD room atlas is blocked by the packaged protocol: ${relative}`);
   }
-  for (const asset of ROOM_RESERVED_REVIEW.ASSETS) {
+  for (const asset of ROOM_RESERVED_REVIEW.ASSETS.filter(asset => !asset.includes('/reserved_v1/ace/'))) {
     const relative = asset.replace(/^public\//, '');
     assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, asset), `Reserved atlas blocked by packaged protocol: ${relative}`);
   }
+  assert(resolveScene('opui://launcher/images/launcher_room/reserved_v1/ace/portrait.webp') === null,
+    'Obsolete Ace v1 portrait must not be admitted by the packaged protocol.');
   for (const item of ACE_V2_MANIFEST.items) {
     const relative = item.path.replace(/^public\//, '');
     assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, item.path), `Ace v2 atlas blocked by packaged protocol: ${relative}`);
@@ -1114,7 +1129,10 @@ function validateSourcePackage() {
   assert(packagedLifeHistory.length === ROOM_LIFE_FURNITURE.length, 'Historical stove resources are incomplete.');
   // v3 movement atlases remain in source for historical review, but the live
   // renderer uses v4/v5 and omits v3 from the update installer.
-  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items, ...packagedLifeHistory, ...presentationStatus.hd.manifest.items, ...presentationStatus.reserved.manifest.items, ...presentationStatus.newArt.manifest.items, ...ACE_V2_MANIFEST.items.map(item => ({asset: item.path}))].map(item => item.asset.replace(/^public\/images\/launcher_room\//, '')).filter(asset => !ROOM_MOTION_ASSETS.includes(asset) && !['scenes/sunny-deck.webp', 'scenes/sunny-kitchen.webp', 'scenes/sunny-library.webp', 'scenes/crew-cabin-v2.webp'].includes(asset))),
+  assert(ROOM_RESERVED_ASSETS.filter(asset => asset.startsWith('reserved_v1/ace/')).length === 17 &&
+    PACKAGED_RESERVED_ASSETS.length === ROOM_RESERVED_ASSETS.length - 17,
+  'Only the 17 reviewed obsolete Ace v1 assets may be excluded from packaging.');
+  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items, ...packagedLifeHistory, ...presentationStatus.hd.manifest.items, ...presentationStatus.reserved.manifest.items, ...presentationStatus.newArt.manifest.items, ...ACE_V2_MANIFEST.items.map(item => ({asset: item.path}))].map(item => item.asset.replace(/^public\/images\/launcher_room\//, '')).filter(asset => !ROOM_MOTION_ASSETS.includes(asset) && !asset.startsWith('reserved_v1/ace/') && !['scenes/sunny-deck.webp', 'scenes/sunny-kitchen.webp', 'scenes/sunny-library.webp', 'scenes/crew-cabin-v2.webp'].includes(asset))),
     sorted(roomResource.filter.filter(asset => !asset.startsWith('life_hd_v2/') && !LUFFY_NEW_ASSET_SET.has(asset) && !ROOM_NEW_V1215_SET.has(asset) && !FISHING_V1216_ART_SET.has(asset) && !FISHING_V1217_ART_SET.has(asset) && !FISHING_V1218_ART_SET.has(asset) && !ROOM_LOCKED_V1215_VIVI_SET.has(asset))), 'Historical room art manifest output set');
   assert(ACE_V2_MANIFEST.schema === 'launcher-ace-lean-art/1' && ACE_V2_MANIFEST.visualAccepted === true &&
     ACE_V2_MANIFEST.humanAcceptance === false && ACE_V2_MANIFEST.atlasCount === 17 &&

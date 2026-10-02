@@ -1,5 +1,12 @@
 # File Map
 
+## 2026-10-02 啟動器 1.2.19 海釣操作檔案
+
+- `desktop/launcher-room-minigames.js/.css`：蓄力力度條、連續浮標預覽、半圓張力表、捲線拖動左右與主動放線的桌機／觸控／鍵盤操作。
+- `server/launcher-fishing-v4.js`、`server/launcher-minigames.js`、`server/launcher-life-store.js`：選填 `castPower`／`paying` 的驗證、投距和搏魚判定；保留舊 v4 與 v1–v3 相容。
+- `desktop/main.js`、`desktop/package.json`／`package-lock.json`、`scripts/desktop_launcher_package_qa.js`：1.2.19 版號、封裝與舊艾斯 v1 素材去重。
+- `config/launcher-announcements-v1.json`、`scripts/launcher_1219_announcement_qa.js`：使用既有海釣主圖的版本門檻公告；`scripts/launcher_fishing_server_qa.js`、`scripts/launcher_fishing_controls_browser_qa.js`：伺服器與畫面定向 QA。
+
 ## 2026-10-02 啟動器差分更新方案（尚未實作）
 
 - `docs/LAUNCHER_DELTA_UPDATE_PLAN.md`：現行完整 NSIS 更新的限制、1.2.17→1.2.18 blockmap 重用量測、下一版過渡、差分重建與全量回退及正式驗收條件。1.2.18 更新程式未改。

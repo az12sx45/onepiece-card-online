@@ -6,6 +6,7 @@ const crypto=require('node:crypto');
 const {PGlite}=require(process.env.BOARD_QA_PGLITE||'D:/Codex_QA/draw-result-art-20260922/deps/node_modules/@electric-sql/pglite');
 const life=require('../server/launcher-life-store');
 const minigames=require('../server/launcher-minigames');
+const fishingV4=require('../server/launcher-fishing-v4');
 const species=minigames.FISH_SPECIES;
 const db=new PGlite(),checks=[];
 let queue=Promise.resolve(),serial=0;
@@ -476,6 +477,106 @@ function fishingV4SimulationStress(){
       time-hookedAt<maximumSeconds,true);
   }
 }
+function fishingV4ControlChecks(){
+  const fresh=()=>minigames.create('fishing',actor,1,at(0),false,'supply',4,'worm','shore');
+  const answer=(game,move,t,extra={})=>minigames.answer(game,
+    {roundId:game.challenge.id,counterMoves:[move],...extra},at(t));
+  for(const [power,zone] of [[0,'near'],[34,'near'],[35,'mid'],[69,'mid'],[70,'far'],[100,'far']]){
+    const game=fresh();
+    check(`v4 power ${power}: cast accepted`,answer(game,'cast',.1,{castPower:power}).error,undefined);
+    check(`v4 power ${power}: derived zone`,[game.castZone,game.challenge.castZone],[zone,zone]);
+    check(`v4 power ${power}: continuous target`,game.challenge.castTarget,{
+      x:Math.round((.46+.0035*power)*10000)/10000,
+      y:Math.round((.55-.0021*power)*10000)/10000
+    });
+  }
+  const legacy=fresh();
+  check('v4 legacy castZone-only payload remains valid',answer(legacy,'cast',.1,{castZone:'mid'}).error,undefined);
+  check('v4 legacy castTarget remains the zone anchor',legacy.challenge.castTarget,minigames.FISHING_CAST_ZONES.mid);
+  const matching=fresh();
+  check('v4 power accepts a matching castZone',answer(matching,'cast',.1,{castPower:70,castZone:'far'}).error,undefined);
+  for(const extra of [{castPower:-1},{castPower:101},{castPower:35.5},{castPower:'35'},
+    {castPower:35,castZone:'near'},{castPower:50,castZone:'unknown'},{}]){
+    const game=fresh();
+    check(`v4 invalid cast ${JSON.stringify(extra)} rejected`,answer(game,'cast',.1,extra).error,'invalid_fishing_cast_zone');
+    check('v4 invalid cast leaves stage untouched',game.challenge.stage,'cast');
+  }
+  const older=minigames.create('fishing',actor,1,at(0),false,'supply',3,'worm','shore');
+  check('v3 cast cannot consume v4 castPower',answer(older,'cast',.1,{castZone:'mid',castPower:50}).error,'invalid_minigame_answer');
+  check('v3 cast cannot consume v4 paying control',answer(older,'cast',.1,{castZone:'mid',paying:false}).error,'invalid_minigame_answer');
+  const castDistance=power=>{
+    const round=fishingV4.create('cast-distance',at(0).getTime());
+    fishingV4.cast(round,at(.1),'worm',fishingV4.castZoneForPower(power),
+      fishingV4.castTargetForPower(power,minigames.FISHING_CAST_ZONES));
+    fishingV4.hook(round,at(1),1);
+    return round.distance;
+  };
+  check('v4 farther cast starts fight farther out',castDistance(0)<castDistance(50)&&castDistance(50)<castDistance(100),true);
+  const oldRound=fishingV4.create('old-v4-round',at(0).getTime());
+  fishingV4.hook(oldRound,at(1),1);
+  check('v4 old round without castTarget keeps its original start distance',oldRound.distance,77);
+
+  const controls=fresh();
+  check('v4 control test cast',answer(controls,'cast',.1,{castPower:50}).error,undefined);
+  const bite=seconds(controls.challenge.biteAt)+.1;
+  check('v4 control test hook',answer(controls,'hook',bite).error,undefined);
+  for(const extra of [{reeling:true,steer:0,paying:true},{reeling:false,steer:0,paying:'yes'},
+    {reeling:false,steer:0,castPower:50}])
+    check(`v4 invalid control ${JSON.stringify(extra)} rejected`,answer(controls,'control',bite+.1,extra).error,'invalid_fishing_control');
+  check('v4 legacy control without paying remains valid',
+    answer(controls,'control',bite+.2,{reeling:false,steer:0}).error,undefined);
+  check('v4 legacy control keeps old saved shape',controls.challenge.control,{reeling:false,steer:0});
+  check('v4 paying control accepted',
+    answer(controls,'control',bite+.4,{reeling:false,steer:0,paying:true}).error,undefined);
+  check('v4 paying state held in existing round control',controls.challenge.control,{reeling:false,steer:0,paying:true});
+
+  const baseRound=fishingV4.create('physics',at(0).getTime());
+  baseRound.motionSeed=1;baseRound.motionStartedAt=at(0).toISOString();
+  fishingV4.hook(baseRound,at(0),1);baseRound.distance=45;baseRound.tension=80;
+  const run=(reeling,steer,paying=false)=>{
+    const round=structuredClone(baseRound);
+    fishingV4.control(round,at(0),reeling,steer,paying);
+    fishingV4.simulate(round,at(1),1);
+    return round;
+  };
+  const idle=run(false,0),paying=run(false,0,true);
+  check('v4 paying relieves tension faster than idle',paying.tension<idle.tension,true);
+  check('v4 paying lets the fish farther out than idle',paying.distance>idle.distance,true);
+  const aligned=run(true,-1),straight=run(true,0),opposed=run(true,1);
+  check('v4 aligned countersteer reels faster',aligned.distance<straight.distance&&straight.distance<opposed.distance,true);
+  check('v4 aligned countersteer limits tension',aligned.tension<straight.tension&&straight.tension<opposed.tension,true);
+  const expired=run(false,0,true);
+  fishingV4.simulate(expired,at(2.5),1);
+  check('v4 paying lease expires to legacy neutral state',expired.control,{reeling:false,steer:0});
+}
+async function fishingV4PersistenceChecks(){
+  await createUser('v4-power-persist');
+  let response=await command('v4-power-persist','minigame.start',
+    {kind:'fishing',characterId:actor,baitId:'worm',spotId:'shore',fishingVersion:4});
+  assert.equal(response.ok,true,JSON.stringify(response));
+  let game=response.minigame;
+  response=await command('v4-power-persist','minigame.answer',
+    {...ref(game),roundId:game.challenge.id,counterMoves:['cast'],castPower:69},.1);
+  assert.equal(response.ok,true,JSON.stringify(response));game=response.minigame;
+  check('v4 power cast is persisted through life command',game.castZone,'mid');
+  const target={x:.7015,y:.4051};
+  check('v4 continuous target is returned to client',game.challenge.castTarget,target);
+  const stored=(await db.query('SELECT session FROM launcher_minigame_sessions WHERE session_id=$1',[game.id])).rows[0].session;
+  check('v4 continuous target is stored in existing castTarget',stored.challenge.castTarget,target);
+  check('v4 continuous target survives fresh state read',
+    (await get('v4-power-persist',.2)).activeMinigame.challenge.castTarget,target);
+  let time=seconds(game.challenge.biteAt)+.1;
+  response=await command('v4-power-persist','minigame.answer',
+    {...ref(game),roundId:game.challenge.id,counterMoves:['hook']},time);
+  assert.equal(response.ok,true,JSON.stringify(response));game=response.minigame;
+  time+=.1;
+  response=await command('v4-power-persist','minigame.answer',
+    {...ref(game),roundId:game.challenge.id,counterMoves:['control'],reeling:false,steer:1,paying:true},time);
+  assert.equal(response.ok,true,JSON.stringify(response));game=response.minigame;
+  check('v4 paying control survives fresh state read',
+    (await get('v4-power-persist',time)).activeMinigame.challenge.control,
+    {reeling:false,steer:1,paying:true});
+}
 async function main(){
   await db.exec('CREATE TABLE player_profiles(user_id SERIAL PRIMARY KEY,secret TEXT UNIQUE NOT NULL,name TEXT,avatar TEXT,stats JSONB,updated_at TIMESTAMPTZ DEFAULT now())');
   for(const job of ['supply','cooking','repair','navigation','fishing']){
@@ -529,6 +630,8 @@ async function main(){
   await fishingV3Checks();
   await fishingV4Checks();
   fishingV4SimulationStress();
+  fishingV4ControlChecks();
+  await fishingV4PersistenceChecks();
   const files=['server/launcher-life.js','server/launcher-life-store.js','server/launcher-minigames.js','server/launcher-fishing-v4.js','scripts/launcher_fishing_server_qa.js'];
   const report={schemaVersion:1,status:'PASS',checks:checks.length,results:checks,sourceHashes:Object.fromEntries(files.map(file=>[file,crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname,'..',file))).digest('hex')])),limitations:['In-memory PGlite service test with serialized transactions. Does not prove production PostgreSQL timing or human play.'],createdAt:new Date().toISOString()};
   if(process.argv[2]){fs.mkdirSync(path.dirname(path.resolve(process.argv[2])),{recursive:true});fs.writeFileSync(process.argv[2],JSON.stringify(report,null,2)+'\n');}

@@ -89,7 +89,7 @@ const FIELDS={
  'work.activate':['jobId'],'work.complete':['jobId'],'work.cancel':['jobId'],
  'directive.set':['directiveId'],'character.interact':['itemId','action'],
   'minigame.start':['characterId','kind','practice','jobId','fishingVersion','baitId','spotId'],
-  'minigame.answer':['sessionId','token','roundId','selections','directions','ingredients','rotations','path','counterMoves','castZone','reeling','steer'],
+  'minigame.answer':['sessionId','token','roundId','selections','directions','ingredients','rotations','path','counterMoves','castZone','castPower','reeling','steer','paying'],
  'minigame.finish':['sessionId','token'],'minigame.cancel':['sessionId','token'],
  'minigame.retry':['sessionId','token'],
  'fish.place':['fishId','inAquarium'],

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 17,
+  "revision": 18,
   "announcements": [
     {
       "id": "board-tavern-crew-20260928-1c453fcf83416d97",
@@ -389,6 +389,31 @@
       "requiredRelease": {
         "kind": "launcher",
         "version": "1.2.18"
+      }
+    },
+    {
+      "id": "launcher-1.2.19-fishing-controls",
+      "status": "published",
+      "publishedAt": "2026-10-02T04:58:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.19",
+      "title": "海釣操作更新｜啟動器 1.2.19",
+      "summary": "按住蓄力決定拋竿遠近；搏魚時可拖動控竿、主動放線，再把魚穩穩收近。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-rebuild-1.2.18.webp",
+        "alt": "騙人布在千陽號上持竿，魯夫在旁期待，紅白浮標被魚拉入海中濺起水花"
+      },
+      "body": [
+        "拋竿改為按住蓄力、放開出竿；力度條會顯示近處、中距或遠處落點，觸控和鍵盤都能操作。",
+        "魚咬鉤後，按住捲線可向左右拖動控竿；魚向左衝就往右牽，向右衝就往左牽。半圓釣線表會顯示張力，浮標也會隨收線靠向船邊；魚線吃緊時可按住放線再找時機收竿。",
+        "魚的拉扯和放線改由伺服器判定；重新連線時會恢復該竿進度，不靠畫面動畫自行發放漁獲。",
+        "六處釣點、26 種圖鑑魚、已收藏漁獲、水族箱及佛朗基釣竿改裝保留；釣魚仍不限次數，也不計入工作或發放商城金幣。",
+        "三款桌遊規則及存檔未調整。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.19"
       }
     }
   ]

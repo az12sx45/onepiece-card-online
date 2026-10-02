@@ -342,7 +342,7 @@ function resolveLauncherResource(requestUrl) {
       /^images\/launcher_room\/(?:motion|acting)_v5\/luffy\/(?:east|west|north|south)\.webp$/,
       /^images\/launcher_room\/portrait_v3\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\.webp$/,
       /^images\/launcher_room\/portrait_v4\/luffy\.webp$/,
-      /^images\/launcher_room\/reserved_v1\/(?:ace|sabo|law|hancock)\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
+      /^images\/launcher_room\/reserved_v1\/(?:sabo|law|hancock)\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
       /^images\/launcher_room\/reserved_v2\/ace\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
       /^images\/launcher_room\/robin_v2\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:(?:work|read)-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
       /^images\/launcher_room\/minigames_v1\/(?:deck|cargo-food|cargo-tools|cargo-books|fishing-sea|repair-workbench-v2|navigation-chart-v2|cooking-galley-v2|supply-deck-v2)\.webp$/,
@@ -1378,7 +1378,7 @@ async function runVisualOrSmokeCapture() {
           ...['east', 'west', 'north', 'south'].map(direction => `images/launcher_room/life_hd_v3/luffy/work-${direction}.webp`),
           ...['eat', 'rest', 'sleep', 'train'].map(action => `images/launcher_room/life_hd_v3/luffy/${action}-south.webp`),
           'images/launcher_room/portrait_v4/luffy.webp',
-          ...['ace', 'sabo', 'law', 'hancock'].flatMap(key => [
+          ...['sabo', 'law', 'hancock'].flatMap(key => [
             'portrait.webp', ...['walk', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south'].map(direction => `${kind}/${direction}.webp`)),
             ...['east', 'west', 'north', 'south'].map(direction => `life/work-${direction}.webp`),
             ...['eat', 'rest', 'sleep', 'train'].map(action => `life/${action}-south.webp`)

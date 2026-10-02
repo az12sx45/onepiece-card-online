@@ -305,20 +305,31 @@ function answerFishingV4(session,payload,now) {
     return{error:'invalid_minigame_answer'};
   const move=actions[0],at=now.getTime();
   if(move==='cast') {
-    if(typeof payload.castZone!=='string'||!Object.hasOwn(FISHING_CAST_ZONES,payload.castZone)||
-        payload.reeling!==undefined||payload.steer!==undefined)return{error:'invalid_fishing_cast_zone'};
+    const hasPower=payload.castPower!==undefined;
+    if(hasPower&&(!Number.isInteger(payload.castPower)||payload.castPower<0||payload.castPower>100)||
+        payload.castZone!==undefined&&(!Object.hasOwn(FISHING_CAST_ZONES,payload.castZone)||
+          hasPower&&payload.castZone!==fishingV4.castZoneForPower(payload.castPower))||
+        !hasPower&&typeof payload.castZone!=='string'||
+        payload.reeling!==undefined||payload.steer!==undefined||payload.paying!==undefined)
+      return{error:'invalid_fishing_cast_zone'};
   }else if(move==='control') {
-    if(payload.castZone!==undefined||typeof payload.reeling!=='boolean'||
-        !Number.isInteger(payload.steer)||![-1,0,1].includes(payload.steer))
+    if(payload.castZone!==undefined||payload.castPower!==undefined||typeof payload.reeling!=='boolean'||
+        !Number.isInteger(payload.steer)||![-1,0,1].includes(payload.steer)||
+        payload.paying!==undefined&&typeof payload.paying!=='boolean'||
+        payload.reeling&&payload.paying)
       return{error:'invalid_fishing_control'};
-  }else if(payload.castZone!==undefined||payload.reeling!==undefined||payload.steer!==undefined)
+  }else if(payload.castZone!==undefined||payload.castPower!==undefined||
+      payload.reeling!==undefined||payload.steer!==undefined||payload.paying!==undefined)
     return{error:'invalid_minigame_answer'};
   if(round.stage==='cast') {
     if(move==='sync'){fishingV4.observe(round,now);return{};}
     if(move!=='cast')return{error:'invalid_fishing_action'};
-    session.castZone=payload.castZone;
-    session.catchSpeciesId=fishingSpeciesFor(session.spotId,session.baitId,payload.castZone);
-    fishingV4.cast(round,now,session.baitId,payload.castZone,FISHING_CAST_ZONES[payload.castZone]);
+    const zone=payload.castPower===undefined?payload.castZone:fishingV4.castZoneForPower(payload.castPower);
+    const target=payload.castPower===undefined?FISHING_CAST_ZONES[zone]:
+      fishingV4.castTargetForPower(payload.castPower,FISHING_CAST_ZONES);
+    session.castZone=zone;
+    session.catchSpeciesId=fishingSpeciesFor(session.spotId,session.baitId,zone);
+    fishingV4.cast(round,now,session.baitId,zone,target);
     return{};
   }
   if(round.stage==='wait') {
@@ -341,10 +352,11 @@ function answerFishingV4(session,payload,now) {
   if(move!=='control')return{error:'invalid_fishing_action'};
   // Repeated heartbeat is allowed once per control lease; changes are accepted
   // immediately so releasing the button never waits on an action cooldown.
-  const same=round.control?.reeling===payload.reeling&&round.control?.steer===payload.steer;
+  const same=round.control?.reeling===payload.reeling&&round.control?.steer===payload.steer&&
+    Boolean(round.control?.paying)===Boolean(payload.paying);
   if(same&&Number.isFinite(Date.parse(round.lastControlAt))&&
       at-Date.parse(round.lastControlAt)<180)return{error:'fishing_action_cooldown'};
-  fishingV4.control(round,now,payload.reeling,payload.steer);
+  fishingV4.control(round,now,payload.reeling,payload.steer,payload.paying===true);
   round.lastControlAt=iso(at);
   return{};
 }
@@ -352,7 +364,7 @@ function answerFishingV2(session,payload,now) {
   const round=session.challenge,action=payload.counterMoves;
   if(!Array.isArray(action)||action.length!==1||!
     (round.fishingVersion===3?['cast','hook','reel','slack','steerLeft','steerRight','timeout']:['cast','hook','reel','slack','timeout']).includes(action[0])||
-    ['selections','directions','ingredients','rotations','path'].some(key=>payload[key]!==undefined))return{error:'invalid_minigame_answer'};
+    ['selections','directions','ingredients','rotations','path','castPower','paying'].some(key=>payload[key]!==undefined))return{error:'invalid_minigame_answer'};
   const move=action[0],at=now.getTime();
   if(payload.castZone!==undefined&&(round.fishingVersion!==3||move!=='cast')||
     round.fishingVersion===3&&move==='cast'&&
@@ -422,7 +434,7 @@ function answer(session,payload,now) {
   let correct=false;
   if(session.kind==='work') {
     const jobId=jobFor(session),field={supply:'selections',cooking:'ingredients',repair:'rotations',navigation:'path',fishing:'counterMoves'}[jobId];
-    if(!field||['selections','directions','ingredients','rotations','path','counterMoves','castZone'].some(key=>key!==field&&payload[key]!==undefined))return{error:'invalid_minigame_answer'};
+    if(!field||['selections','directions','ingredients','rotations','path','counterMoves','castZone','castPower','paying'].some(key=>key!==field&&payload[key]!==undefined))return{error:'invalid_minigame_answer'};
     if(jobId==='fishing') {
       if(!Array.isArray(payload.counterMoves)||payload.counterMoves.length>round.pulls.length||payload.counterMoves.some(move=>!['left','right','slack'].includes(move)))return{error:'invalid_minigame_answer'};
       correct=payload.counterMoves.length===round.pulls.length&&payload.counterMoves.every((move,index)=>move===FISH_COUNTER[round.pulls[index]]);
@@ -443,7 +455,7 @@ function answer(session,payload,now) {
     correct=expected.length===payload.selections.length&&expected.every(id=>payload.selections.includes(id));
     }
   } else {
-    if(['selections','ingredients','rotations','path','castZone'].some(key=>payload[key]!==undefined)||!Array.isArray(payload.directions)||payload.directions.length>5||
+    if(['selections','ingredients','rotations','path','castZone','castPower','paying'].some(key=>payload[key]!==undefined)||!Array.isArray(payload.directions)||payload.directions.length>5||
       payload.directions.some(value=>!DIRECTIONS.includes(value)))return{error:'invalid_minigame_answer'};
     correct=payload.directions.length===round.directions.length&&payload.directions.every((value,i)=>value===round.directions[i]);
   }

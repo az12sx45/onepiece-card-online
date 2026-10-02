@@ -1,5 +1,19 @@
 # Dev Workflow
 
+## 2026-10-02 啟動器 1.2.19 海釣拋竿、釣線與控竿（候選）
+
+範圍：玩家指出 1.2.18 海釣欠缺可控制遠近的力度條、釣竿張力表，且左右牽竿的操作與畫面回饋太弱。本次以使用者提供的 Wii 遊戲作釣魚操作參考，只讀核對其釣魚 HUD；沒有把 ISO 素材或程式放進啟動器。改動在獨立工作樹 `D:\Codex_Release_Worktrees\launcher-fishing-controls-1.2.19`，原有 `public/images/ranks/r5.PNG`、`r6.PNG` 的工作樹修改不納入本次變更。
+
+玩法與介面：`desktop/launcher-room-minigames.js/.css` 以按住蓄力、鬆開拋竿取代點海面三選一；力度條標出近／中／遠區及百分比，浮標預覽和實際落點沿海面連續移動。搏魚時顯示半圓釣線張力表、魚向提示、魚距與可見的釣竿偏轉；按住「捲線」可在按鈕內左右拖動牽竿，另一個「放線」按鈕可主動降張力。雙指操作時放線按住期間優先保持放線，放開後才恢復仍按住的捲線。鍵盤可用 Enter／空白鍵蓄力、方向鍵控竿、空白鍵捲線與向下鍵放線；觸控與滑鼠共用操作邏輯。
+
+伺服器：`server/launcher-fishing-v4.js`、`server/launcher-minigames.js`、`server/launcher-life-store.js` 於既有 v4 動作中接受選填的整數 `castPower`（0–100）和布林 `paying`。力度按 0–34／35–69／70–100 分近／中／遠魚池，落點在原近遠座標之間內插；遠投後起始魚距較長。主動放線比自然鬆線更快降低張力，但魚會游遠，且不可同時捲線。這些判定仍由伺服器時鐘和既有場次狀態負責；未帶新欄位的舊 v4 請求及 v1–v3 舊場次保持相容。魚種、餌料、水族箱、佛朗基釣竿升級與零金幣海釣規則未改。
+
+發行準備：`desktop/package.json`、`package-lock.json` 升到 1.2.19；`desktop/main.js`、`scripts/desktop_launcher_package_qa.js` 讓安裝包省略已由正式 `reserved_v2/ace` 取代的 17 張舊艾斯圖，原始素材仍保留於 source。`config/launcher-announcements-v1.json` 新增版本門檻的圖文公告，沿用現有 1.2.18 海釣主圖；`scripts/launcher_1219_announcement_qa.js`、`scripts/launcher_fishing_controls_browser_qa.js` 為本版定向驗證。
+
+目前候選驗證：最近一輪 `scripts/launcher_fishing_server_qa.js` 772 項 PASS；魚池抽選分支會使每輪檢查總數變動，772 並非固定門檻。修正第一輪 CDP 測試參數後，`scripts/launcher_fishing_controls_browser_qa.js` 以真實 Chromium 重跑 148/148 PASS，涵蓋桌機／390px 觸控、雙指觸控、蓄力拋竿、同步中的拋竿、張力預測、左右拖動、主動放線、鍵盤及失焦；未見 pageerror 或缺素材。此腳本以模擬 minigame API 檢查畫面和封包，不代替伺服器時序驗證。原 UA 畫面與漁獲回歸 `scripts/launcher_fishing_ua_ui_qa.js` 273/273 PASS，成功漁獲及入缸命令同樣採模擬回應。最新來源的 `scripts/desktop_launcher_package_qa.js` 及 `scripts/launcher_1219_announcement_qa.js` 均 PASS；本次 `node --check` 七檔及 `git diff --check` PASS。無 `DATABASE_URL` 的本機 `npm start` 能啟動靜態服務，`/board_start.html` HTTP 200；資料庫流程由獨立 QA 驗證。LATTICE 官方 Status 回 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，不宣稱任務或圖譜持久化。
+
+封裝與上傳狀態：R1、R2、R3 均是較舊且已中止的建置來源，不得發布。唯一採用的 R4 已完成逐檔來源／staging SHA 比對、ASAR／10 個正式依賴、來源與封裝 Electron smoke；兩者均讀取 701 個素材且 BGM 播放 PASS。R4 安裝檔為 265,806,288 bytes，SHA-256 `0d5c868225898ab4070c0dd57044bc78fbdb30c87862284590629c76f081347f`，比舊更新器 256 MiB 上限少 2,629,168 bytes。安裝檔已以 immutable R2 key 上傳，公開 HEAD、Range、完整 GET 的位元組數與 SHA 均比對通過；1.2.19 release manifest 已以現有 Ed25519 金鑰簽署並由啟動器驗簽通過。正式 Render 清單、下載頁與遊戲 runtime 仍待 Git 發布後公開讀回，因此目前不宣稱玩家已收到 1.2.19。封裝證據在 `D:\Codex_QA\launcher-fishing-controls-1.2.19-release-r4\`，上傳與公開 GET 證據在 `D:\Codex_QA\launcher-fishing-controls-1.2.19-release-r2\publish\`。上述自動測試不代表真人或實體裝置手感驗收。
+
 ## 2026-10-02 啟動器差分更新方案（文件，尚未實作）
 
 玩家希望後續啟動器更新不再每次下載約 269 MB 的完整安裝檔。唯讀核對 `desktop/launcher-update-service.js`、1.2.18 簽署清單、NSIS 設定與本機 1.2.17／1.2.18 `.blockmap`；後者顯示新安裝檔有 266,207,343／268,390,665 bytes 可由舊檔重用，僅 2,183,322 bytes 為不同區塊。這是估計差分下載量，不是已部署功能或實際網路流量。已把過渡版、小於舊版 256 MiB 上限、簽章／完整 SHA 驗證、Range 重建、無快取回退、真 Windows 安裝驗收寫入 `docs/LAUNCHER_DELTA_UPDATE_PLAN.md`。本輪只改文件，未變更 1.2.18 程式或公開更新清單。

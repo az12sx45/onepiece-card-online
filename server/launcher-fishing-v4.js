@@ -10,6 +10,18 @@ const CONTROL_LEASE_MS = 2000;
 const HOOK_WINDOW_MS = 4500;
 const rodLevel = value => Number.isInteger(value) && value >= 0 && value <= 3 ? value : 0;
 
+function castZoneForPower(power) {
+  return power<35?'near':power<70?'mid':'far';
+}
+
+function castTargetForPower(power,zones) {
+  const progress=power/100,from=zones.near,to=zones.far;
+  return {
+    x:Math.round((from.x+(to.x-from.x)*progress)*10000)/10000,
+    y:Math.round((from.y+(to.y-from.y)*progress)*10000)/10000
+  };
+}
+
 function position(seed,motionStartedAt,at) {
   const start=Date.parse(motionStartedAt);
   const t=Math.max(0,(at-start)/1000);
@@ -62,7 +74,11 @@ function cast(round,now,baitId,castZone,castTarget) {
 function hook(round,now,difficulty=1) {
   const at=now.getTime();
   round.stage='fight';round.hookedAt=iso(at);round.fightUntil=iso(at+DURATION_MS);
-  round.lastSimAt=iso(at);round.distance=73+clamp(difficulty,0,3)*4;
+  // The existing castTarget also records how far the float actually landed.
+  // A farther cast starts the fight farther out; older rounds without a target
+  // keep their original starting distance.
+  const targetY=Number(round.castTarget?.y),castOffset=Number.isFinite(targetY)?clamp((.45-targetY)*50,-5,5.5):0;
+  round.lastSimAt=iso(at);round.distance=73+clamp(difficulty,0,3)*4+castOffset;
   round.tension=10;round.control={reeling:false,steer:0};
   round.controlLeaseUntil=null;paintMotion(round,at);
 }
@@ -82,19 +98,20 @@ function simulate(round,now,difficulty=1) {
     const direction=motion.direction;
     const aligned=direction==='left'&&control.steer===1||direction==='right'&&control.steer===-1;
     const opposed=direction==='left'&&control.steer===-1||direction==='right'&&control.steer===1;
+    const paying=control.paying===true&&!control.reeling;
     const escape=.5+skill*.12+(direction==='deep'?.32:0);
     if(control.reeling){
-      const reel=9.8-skill*.2+gear*.45+(aligned?1.1:0)-(opposed?1.2:0)-(direction==='deep'?.7:0);
+      const reel=9.8-skill*.2+gear*.45+(aligned?1.8:0)-(opposed?1.9:0)-(direction==='deep'?.7:0);
       round.distance=clamp(round.distance-(reel-escape)*dt,0,100);
-      round.tension=clamp(round.tension+(7+skill*.65-gear*.4+(direction==='deep'?1.4:0)+(opposed?3.5:0)-(aligned?3:0))*dt,0,100);
+      round.tension=clamp(round.tension+(7+skill*.65-gear*.4+(direction==='deep'?1.4:0)+(opposed?4.4:0)-(aligned?4:0))*dt,0,100);
     }else{
-      round.distance=clamp(round.distance+escape*dt,0,100);
+      round.distance=clamp(round.distance+(escape+(paying?3.2:0))*dt,0,100);
       // A free fish still tugs the line. Slack relaxes toward that gentle
       // baseline instead of dropping to a lifeless zero.
       const resting=12+skill*1.5+(direction==='deep'?5:0);
       const difference=resting-round.tension;
       round.tension=clamp(round.tension+Math.sign(difference)*
-        Math.min(Math.abs(difference),(16+(aligned?2:0)-(opposed?2:0))*dt),0,100);
+        Math.min(Math.abs(difference),((paying?29:16)+(aligned?3:0)-(opposed?3:0))*dt),0,100);
     }
     cursor=next;round.lastSimAt=iso(cursor);
     if(round.tension>=100){paintMotion(round,cursor);return 'line_snapped';}
@@ -109,10 +126,11 @@ function simulate(round,now,difficulty=1) {
   return null;
 }
 
-function control(round,now,reeling,steer) {
-  round.control={reeling,steer};
+function control(round,now,reeling,steer,paying=false) {
+  round.control={reeling,steer,...(paying&&!reeling?{paying:true}:{})};
   round.controlLeaseUntil=iso(now.getTime()+CONTROL_LEASE_MS);
 }
 
 module.exports={create,cast,hook,simulate,control,observe,position,motionAt,rodLevel,
+  castZoneForPower,castTargetForPower,
   CONTROL_LEASE_MS,HOOK_WINDOW_MS,DURATION_MS};
