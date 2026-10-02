@@ -1,6 +1,6 @@
 # Dev Workflow
 
-## 2026-10-02 啟動器 1.2.18 海釣重製、UA 漁獲與釣竿改裝（候選）
+## 2026-10-02 啟動器 1.2.18 海釣重製、UA 漁獲與釣竿改裝（已部署）
 
 範圍：使用者認為 1.2.17 釣魚難玩，提供 `D:\abap.ind\wii\game\One Piece Unlimited Adventure(J).iso` 作參考，並允許整理其中的魚種。ISO 只讀辨認為日版 Wii `RIPJAF`；解碼魚圖只存 `D:\Codex_QA\launcher-fishing-iso-fish-audit\` 作魚種、外形與透明度核對。公開候選的 20 張 UA 魚圖是逐隻依原圖重繪的 GPT WebP，沒有將 ISO 原圖、音效或程式打包，也不宣稱復刻原作演算法或親自玩到其釣魚段落。正式候選為 `D:\Codex_Release_Worktrees\launcher-fishing-rebuild-1.2.18`，從 1.2.17 主線建立；原有 `public/images/ranks/r5.PNG`、`r6.PNG` 未納入本次修改。LATTICE 工具未提供，官方 Status 回 `CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，故未虛稱任務登記或圖譜完成。
 
@@ -10,7 +10,9 @@
 
 素材與索引：`desktop/launcher-room-aquarium.js` 與海釣結果共用 20 張 `public/images/launcher_room/fish_ua/*.webp`（256×256）；新增三處 1024×576 釣點畫面 `public/images/launcher_room/fishing_v4/*.webp`。23 張 GPT 公開素材共 562,836 bytes，`tools/launcher-room/fishing-ua-v1218/manifest.json` 記錄實際 bytes、SHA-256 與本地來源比對。1.2.18 GPT 公告圖 `public/images/launcher_announcements/launcher-fishing-rebuild-1.2.18.webp` 為 800×450、84,372 bytes、SHA-256 `e2a93c8314ed07ad9c44e54ecb09ed6179d2cbfcb94f268c1e8db2d9164e7ebc`，`config/launcher-announcements-v1.json` 以版本閘門顯示新增魚種與佛朗基工房。更新 `desktop/main.js`、`desktop/package.json`／lock 的資源白名單與封裝清單；安裝包省略已由 `fish_ua` 取代的舊熊貓鯊、冒險魚、象鼻鮪魚三張重複圖，歷史原檔仍留 source。封裝只留繁體中文與英文 Electron 語系以符合舊版更新器 256 MiB 上限；r2 超出大小上限、r3 發現上線前互動問題，其建置與 QA 證據均保留於獨立目錄。ISO 核對資料／重繪對照圖留在 QA 目錄，不是玩家安裝素材。
 
-驗證：最終候選釣竿交易獨立 PGlite 38/38、UA 20 種／全部 26 種可釣魚池 233/233、伺服器 716/716、實際 WebP 的 Chromium UI 273/273，另用獨立 Chromium/PGlite 完成三竿三魚及舊 v3 場次恢復 73/73。真畫面檢查曾找到隨機魚種剪影與實際漁獲矛盾，已改為不指向魚種的水影；改裝回應遺失時會鎖住按鈕並刷新帳號狀態，防止誤買下一級。`npm start` 在無 `DATABASE_URL` 的本機環境仍可啟動靜態頁，`/desktop-download.html` HTTP 200；資料庫相關路由由獨立 PGlite 驗證。最終 r4 安裝檔 268,390,665 bytes，SHA-256 `008d3fac4d309221c245440ba6faaf2928e4aff3773a8f7d541984f102627df2`；封裝 QA、10 項依賴、兩個 Electron 語系、來源與封裝版 718/718 本機素材載入、BGM 播放、簽章及啟動器信任讀回均通過。安裝檔已上傳至 R2；公開 HEAD、Range、完整 GET 的大小與 SHA-256 皆一致，證據在 `D:\Codex_QA\launcher-fishing-rebuild-1.2.18-release-r4\publish\public-installer-verification.json`。`public/desktop/launcher-release-v1.json` 已置入相同安裝檔的 Ed25519 簽署清單，`public/desktop-download.html` 更新 1.2.18 回退連結與版本文字；網站發布與正式站讀回仍待完成。真人／實體手機手感仍未驗收。
+驗證：最終候選釣竿交易獨立 PGlite 38/38、UA 20 種／全部 26 種可釣魚池 233/233、伺服器 716/716、實際 WebP 的 Chromium UI 273/273，另用獨立 Chromium/PGlite 完成三竿三魚及舊 v3 場次恢復 73/73。真畫面檢查曾找到隨機魚種剪影與實際漁獲矛盾，已改為不指向魚種的水影；改裝回應遺失時會鎖住按鈕並刷新帳號狀態，防止誤買下一級。`npm start` 在無 `DATABASE_URL` 的本機環境仍可啟動靜態頁，`/desktop-download.html` HTTP 200；資料庫相關路由由獨立 PGlite 驗證。最終 r4 安裝檔 268,390,665 bytes，SHA-256 `008d3fac4d309221c245440ba6faaf2928e4aff3773a8f7d541984f102627df2`；封裝 QA、10 項依賴、兩個 Electron 語系、來源與封裝版 718/718 本機素材載入、BGM 播放、簽章及啟動器信任讀回均通過。安裝檔已上傳至 R2；公開 HEAD、Range、完整 GET 的大小與 SHA-256 皆一致，證據在 `D:\Codex_QA\launcher-fishing-rebuild-1.2.18-release-r4\publish\public-installer-verification.json`。`public/desktop/launcher-release-v1.json` 已置入相同安裝檔的 Ed25519 簽署清單，`public/desktop-download.html` 更新 1.2.18 回退連結與版本文字。真人／實體手機手感仍未驗收。
+
+正式發布：程式提交 `61cc189c1a7f95849da8cbc90d431487470017b2` 已推送 `main`，2026-10-02 12:14（Asia/Taipei）Render 公開清單切換至 1.2.18。公開清單 676 bytes、SHA-256 `bc8b8797ad8c68990adc631b91a1fa261d866b983319ff9b4ff934e2f814afdd`，與提交及簽署候選逐位元組相同，現行啟動器 Ed25519 驗簽通過。公開下載頁文字與回退連結同來源一致；三款遊戲 runtime 身分與 `catalog-v3.json` 全部讀回通過。證據在 `D:\Codex_QA\launcher-fishing-rebuild-1.2.18-release-r4\publish\public-release-manifest-verification.json`、`public-download-verification.json`、`public-runtime-verification.json` 與 `public-assets-verification.json`；正式帳號下佛朗基改裝及魚收藏的真人操作與實體裝置手感未驗收。
 
 ## 2026-10-02 啟動器 1.2.17 自由選餌、落點與一竿一魚
 
