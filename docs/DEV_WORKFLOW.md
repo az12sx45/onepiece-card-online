@@ -1,5 +1,9 @@
 # Dev Workflow
 
+## 2026-10-02 啟動器差分更新方案（文件，尚未實作）
+
+玩家希望後續啟動器更新不再每次下載約 269 MB 的完整安裝檔。唯讀核對 `desktop/launcher-update-service.js`、1.2.18 簽署清單、NSIS 設定與本機 1.2.17／1.2.18 `.blockmap`；後者顯示新安裝檔有 266,207,343／268,390,665 bytes 可由舊檔重用，僅 2,183,322 bytes 為不同區塊。這是估計差分下載量，不是已部署功能或實際網路流量。已把過渡版、小於舊版 256 MiB 上限、簽章／完整 SHA 驗證、Range 重建、無快取回退、真 Windows 安裝驗收寫入 `docs/LAUNCHER_DELTA_UPDATE_PLAN.md`。本輪只改文件，未變更 1.2.18 程式或公開更新清單。
+
 ## 2026-10-02 啟動器 1.2.18 海釣重製、UA 漁獲與釣竿改裝（已部署）
 
 範圍：使用者認為 1.2.17 釣魚難玩，提供 `D:\abap.ind\wii\game\One Piece Unlimited Adventure(J).iso` 作參考，並允許整理其中的魚種。ISO 只讀辨認為日版 Wii `RIPJAF`；解碼魚圖只存 `D:\Codex_QA\launcher-fishing-iso-fish-audit\` 作魚種、外形與透明度核對。公開候選的 20 張 UA 魚圖是逐隻依原圖重繪的 GPT WebP，沒有將 ISO 原圖、音效或程式打包，也不宣稱復刻原作演算法或親自玩到其釣魚段落。正式候選為 `D:\Codex_Release_Worktrees\launcher-fishing-rebuild-1.2.18`，從 1.2.17 主線建立；原有 `public/images/ranks/r5.PNG`、`r6.PNG` 未納入本次修改。LATTICE 工具未提供，官方 Status 回 `CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，故未虛稱任務登記或圖譜完成。

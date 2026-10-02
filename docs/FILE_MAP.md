@@ -1,5 +1,9 @@
 # File Map
 
+## 2026-10-02 啟動器差分更新方案（尚未實作）
+
+- `docs/LAUNCHER_DELTA_UPDATE_PLAN.md`：現行完整 NSIS 更新的限制、1.2.17→1.2.18 blockmap 重用量測、下一版過渡、差分重建與全量回退及正式驗收條件。1.2.18 更新程式未改。
+
 ## 2026-10-02 啟動器 1.2.18 海釣重製、魚種與釣竿
 
 - `server/launcher-fishing-v4.js`、`server/launcher-minigames.js`：時鐘驅動的魚影／張力／距離、六釣點×三種餌×三投距魚池、20 種 UA 漁獲與六種舊魚、拋竿／抽竿／控竿／同步動作。
