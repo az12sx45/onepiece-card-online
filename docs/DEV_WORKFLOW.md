@@ -1,6 +1,6 @@
 # Dev Workflow
 
-## 2026-10-03 啟動器 1.2.23 海釣內容修訂 2
+## 2026-10-03 啟動器 1.2.23 海釣內容修訂 2（已部署）
 
 範圍：`desktop/launcher-room-minigames.js/.css` 把搏魚線輪最外圈改為當下的線壓力顯示；收線、魚衝刺及逆向牽竿會增加壓力，放線和順向牽竿降低壓力，中央線輪及雙端手把仍獨立正反轉。魚線剩餘強度另在輪下以小字顯示，不再誤作外圈壓力。拋竿等咬時，近／遠落點改變浮標和水花的可見大小；上鉤後浮標消失，魚距越近水花越大、越靠船，水花與魚線入水點跟隨魚向左右移動。釣竿橫軌掛件讀數改為依本作拋竿落點換算的公尺數，伺服器的 0–100 相對魚距及上岸／逃跑判定維持原值；不宣稱此換算是 Wii 原作的實際公尺或逐幀複製。`scripts/launcher_fishing_v5_browser_qa.js` 加入壓力外圈、放線降壓、遠近落點與 960×640 視窗水花／浮標檢查。
 
@@ -9,6 +9,8 @@
 驗證：`scripts/launcher_fishing_v5_browser_qa.js` 於 1440×900、960×640 及落點、舊版相容 fixture 共 216/216 PASS，pageErrors=0、missingAssets=0；報告與截圖在 `D:\Codex_QA\launcher-fishing-pressure-depth-1.2.23\full-r4\`。`scripts/launcher_fishing_species_qa.js` 233/233 PASS，`scripts/launcher_fishing_ua_ui_qa.js` 273/273 PASS；發行工具 49/49、內容槽安全測試 45/45 PASS。`npm start` 以隔離 QA 依賴啟動後，本機 Board 首頁、內容清單與下載頁皆 HTTP 200；沒有資料庫連線，故此項只驗靜態服務。兩張魚的 96/256px 人工視覺對照與原圖 SHA 在 `D:\Codex_QA\launcher-fishing-iso-fish-audit\pumpkin-whale-asset-audit-20261003.json`。原有 `public/images/ranks/r5.PNG`、`r6.PNG` 未納入本次變更。
 
 內容發行：沿用 1.2.23 核心的 Ed25519 金鑰，`public/desktop/launcher-content-v1.json` 升修訂 2；僅列 `launcher-room-minigames.js/.css` 與上述兩張既有魚圖，合計 268,896 bytes，簽署清單 SHA-256 `1b2294bc5cf2ee5aa46ff788937768cf2274dcdc2484c972226f1c247b610e02`。四個不可覆寫 R2 blob 已上傳並從公開網址完整 GET，大小／SHA 逐檔一致；正式內容更新器以候選簽章清單及公開 blob 實測 stage/load/readVerified，修訂 2 的四檔下載 268,896 bytes 並逐檔驗雜湊，沒有新安裝檔。隔離候選、前一版清單與公開 blob 核對存於 `D:\Codex_QA\launcher-fishing-content-1.2.23-r2\`。此段本機及 R2 證據不代替 Render 正式清單與玩家裝置套用驗收。
+
+公開讀回：來源提交 `3bcb100fe5de5dec8e7291a426ecd117418cf019` 已推送 `origin/main`；2026-10-02T18:45:34Z Render `/desktop/launcher-content-v1.json` HTTP 200，1187 bytes、revision 2、SHA-256 `1b2294bc5cf2ee5aa46ff788937768cf2274dcdc2484c972226f1c247b610e02`，與正式簽章候選逐位元組一致。正式內容更新器從 Render 清單與 R2 下載四個檔案共 268,896 bytes，stage/load/readVerified 全部通過；隔離的 revision 1→2 模擬也只下載新四檔，第二次檢查不重複下載。正式安裝檔清單仍為 1.2.23，下載頁 HTTP 200。報告在 `D:\Codex_QA\launcher-fishing-content-1.2.23-r2\public-render-verification.json`、`public-content-runtime-report.json`、`r1-to-r2-upgrade-report.json`；這些是公開自動化讀回，玩家裝置及真人手感另待實測。
 
 ## 2026-10-03 啟動器 1.2.23 海釣儀表與內容增量更新（已部署）
 
