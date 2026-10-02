@@ -82,6 +82,19 @@ async function main() {
       signature.canonicalPayloadBytes(unsigned).toString('utf8'),
       '{"schema":1,"channel":"stable","platform":"win32","arch":"x64","version":"1.1.3","publishedAt":"2026-09-06T00:00:00.000Z","artifact":{"fileName":"ONE-PIECE-Tabletop-Launcher-1.1.3-x64.exe","bytes":123456,"sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","url":"https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.3/ONE-PIECE-Tabletop-Launcher-1.1.3-x64.exe"}}'
     );
+    const overFormerLimit = releaseDocument();
+    overFormerLimit.artifact.bytes = 256 * 1024 * 1024 + 1;
+    const largeSigned = signature.signReleaseDocument(overFormerLimit, {
+      privateKeyPkcs8Base64: privateBase64, publicKeySpki, keyId
+    });
+    assert.deepEqual(signature.verifyReleaseDocument(largeSigned, { publicKeySpki, expectedKeyId: keyId }), {
+      ok: true, keyId, version: '1.1.3'
+    });
+    for (const invalid of [0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1]) {
+      const rejected = releaseDocument();
+      rejected.artifact.bytes = invalid;
+      assert.throws(() => signature.validateReleaseDocument(rejected), /positive safe integer/);
+    }
 
     await signature.writeCandidate(outputPath, inputPath, signed);
     assert.equal(await fsp.readFile(inputPath, 'utf8'), inputBytes, 'signing must not modify the unsigned input');

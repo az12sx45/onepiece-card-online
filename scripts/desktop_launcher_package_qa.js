@@ -34,7 +34,6 @@ const MAX_LOCKED_CREW_CANDIDATE_BYTES = 4 * 1024 * 1024;
 // in the source and in existing installs' caches.
 const MAX_CATALOG_BYTES = 5 * 1024 * 1024;
 const MAX_ASAR_BYTES = 32 * 1024 * 1024;
-const MAX_INSTALLER_BYTES = 256 * 1024 * 1024;
 const RETAINED_ROLLOUT_MANIFESTS = Object.freeze({
   'chess-package-cdab9e869c05f12d.json': '9eeda0136c2781bb29196f67ac97350a94dba0fa826b3af4f117b4f69cd49043',
   'board-package-68ec6b205918f818.json': '80c4c8135e9bea62bffef7936326289b31e2d6b2062bb4864c83ae4df6f0365b',
@@ -661,8 +660,8 @@ function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
   const luffyArtEnabled = require('../desktop/launcher-room-motion.js').LUFFY_ART_ENABLED === true;
-  assert(luffyArtEnabled && packageJson.version === '1.2.19',
-    'Luffy art gate must remain enabled in launcher 1.2.19.');
+  assert(luffyArtEnabled && packageJson.version === '1.2.21',
+    'Luffy art gate must remain enabled in launcher 1.2.21.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   const announcementConfig = readJson(path.join(ROOT, 'config/launcher-announcements-v1.json'), 'launcher announcements');
   require('../server/launcher-announcements').validateConfig(announcementConfig);
@@ -734,13 +733,25 @@ function validateSourcePackage() {
   const fishingControlsAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.19-fishing-controls');
   assert(announcementConfig.revision >= 18 && fishingControlsAnnouncement?.status === 'published' &&
     fishingControlsAnnouncement.scope === 'launcher' &&
-    fishingControlsAnnouncement.version === packageJson.version &&
+    fishingControlsAnnouncement.version === '1.2.19' &&
     fishingControlsAnnouncement.requiredRelease?.kind === 'launcher' &&
-    fishingControlsAnnouncement.requiredRelease?.version === packageJson.version &&
+    fishingControlsAnnouncement.requiredRelease?.version === '1.2.19' &&
     fishingControlsAnnouncement.image?.asset === `images/launcher_announcements/${FISHING_V1218_ANNOUNCEMENT.asset}` &&
     /蓄力/.test(fishingControlsAnnouncement.body.join('\n')) &&
     /放線/.test(fishingControlsAnnouncement.body.join('\n')),
-  'Launcher 1.2.19 controls announcement must match the release and use reviewed local art.');
+  'Historical Launcher 1.2.19 controls announcement must retain its release gate and reviewed local art.');
+  const fishingVisualAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.21-fishing-visual-catch-and-updates');
+  assert(announcementConfig.revision >= 19 && fishingVisualAnnouncement?.status === 'published' &&
+    fishingVisualAnnouncement.scope === 'launcher' &&
+    fishingVisualAnnouncement.version === packageJson.version &&
+    fishingVisualAnnouncement.requiredRelease?.kind === 'launcher' &&
+    fishingVisualAnnouncement.requiredRelease?.version === packageJson.version &&
+    fishingVisualAnnouncement.image?.asset === `images/launcher_announcements/${FISHING_V1218_ANNOUNCEMENT.asset}` &&
+    /魚線/.test(fishingVisualAnnouncement.body.join('\n')) &&
+    /張力/.test(fishingVisualAnnouncement.body.join('\n')) &&
+    /上岸/.test(fishingVisualAnnouncement.body.join('\n')) &&
+    /固定 256 MiB/.test(fishingVisualAnnouncement.body.join('\n')),
+  'Launcher 1.2.21 fishing visual, catch, and updates announcement must match this release and use reviewed local art.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
   assert(packageJson.build?.appId === 'com.onepiece.tabletop.desktop', 'Desktop appId changed unexpectedly.');
@@ -1503,7 +1514,6 @@ function validatePortableExecutable(filePath, label) {
   assert(stat?.isFile(), `${label} is missing: ${filePath}`);
   assert(path.extname(filePath).toLowerCase() === '.exe', `${label} must be a Windows .exe.`);
   assert(stat.size >= 1024 * 1024, `${label} is unexpectedly small (${stat.size} bytes).`);
-  assert(stat.size <= MAX_INSTALLER_BYTES, `${label} exceeds the small-launcher ceiling (${stat.size} bytes).`);
   const handle = fs.openSync(filePath, 'r');
   try {
     const dosHeader = Buffer.alloc(64);

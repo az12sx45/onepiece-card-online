@@ -1,5 +1,17 @@
 # File Map
 
+## 2026-10-02 啟動器 1.2.21 海釣視覺與更新容量檔案
+
+- `desktop/launcher-room-minigames.js/.css`：細魚線、五孔圓形張力表、魚獲持續展示與長按結果頁保護。
+- `desktop/launcher-update-service.js`：取消固定 256 MiB 更新檔上限，維持簽署清單、串流位元組數與 SHA-256 驗證。
+- `tools/desktop-r2-publisher/publish-launcher-artifact.js`、`launcher-manifest-signature.js`、`publish-saved-launcher.ps1`、`README.md`：發行工具接受正安全整數大小，文件註明整檔讀入記憶體的實際條件。
+- `desktop/package.json`、`desktop/package-lock.json`、`config/launcher-announcements-v1.json`：1.2.21 版號與現有海釣主圖的版本門檻公告。
+- `scripts/desktop_launcher_package_qa.js`、`scripts/launcher_1221_announcement_qa.js`、`scripts/desktop_launcher_update_qa.js`、`scripts/desktop_r2_launcher_publish_qa.js`：封裝、公告與較大檔案 metadata 驗證；`scripts/launcher_announcements_server_qa.js`：正式 roster 與歷史公告 fixture；`scripts/launcher_fishing_controls_browser_qa.js`、`scripts/launcher_fishing_catch_reveal_browser_qa.js`：控竿與魚獲 Chromium QA。
+
+## 2026-10-02 啟動器 1.2.20（未公開候選）檔案
+
+初版魚線、儀表與魚獲展示的變更已納入上方 1.2.21；1.2.20 候選未發佈更新清單。
+
 ## 2026-10-02 啟動器 1.2.19 海釣操作檔案
 
 - `desktop/launcher-room-minigames.js/.css`：蓄力力度條、連續浮標預覽、半圓張力表、捲線拖動左右與主動放線的桌機／觸控／鍵盤操作。

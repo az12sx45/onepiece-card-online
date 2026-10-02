@@ -179,6 +179,7 @@
 .room-fishing-v3-sea .room-fishing-v2-action.steer{background:#31505ced;color:#fff2cd}
 .room-fishing-v3-result{display:flex;flex-direction:column;align-items:center;gap:6px;padding:20px;border:1px solid #bea76c;border-radius:15px;background:radial-gradient(circle at 50% 0,#426878,#123944 58%,#082531);text-align:center}
 .room-fishing-v3-result h3{font-size:32px;margin:0;color:#ffe5a5}.room-fishing-v3-result p{max-width:570px;margin:3px 0;color:#e4ebe5}
+.room-fishing-v3-result h3:focus{outline:2px solid #e7c680;outline-offset:5px;border-radius:4px}
 .room-fishing-v3-result-spot{font-weight:700;color:#a9e3d3!important}
 .room-fishing-v3-catch-art{width:min(340px,70vw);height:230px;object-fit:contain;animation:room-fishing-v3-catch .65s cubic-bezier(.2,.9,.3,1.2) both;filter:drop-shadow(0 12px 9px #001d2b88)}
 .room-fishing-v3-catch-name{font-size:27px;color:#ffe4a0}
@@ -260,38 +261,50 @@
 .room-fishing-v4-sea[data-stage=fight][data-steer="-1"] .room-fishing-v4-rod{--rod-tilt:-18deg}
 .room-fishing-v4-sea[data-stage=fight][data-steer="1"] .room-fishing-v4-rod{--rod-tilt:18deg}
 .room-fishing-v4-sea[data-stage=fight][data-risk=danger] .room-fishing-v4-rod{animation:room-fishing-v4-rod-strain .42s ease-in-out infinite}
-.room-fishing-v4-line{position:absolute;z-index:3;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;filter:drop-shadow(0 1px 2px #002b3e)}
-.room-fishing-v4-line path{fill:none;stroke:var(--line-color,#ffedb5);stroke-width:3;opacity:0;transition:stroke .2s}
-.room-fishing-v4-sea:not([data-stage=cast]) .room-fishing-v4-line path{opacity:.95}
-.room-fishing-v4-sea[data-risk=warning]{--line-color:#ffd27a}
-.room-fishing-v4-sea[data-risk=danger]{--line-color:#ff6961}
+.room-fishing-v4-line{position:absolute;z-index:3;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.room-fishing-v4-line path{fill:none;opacity:0;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
+.room-fishing-v4-line-shadow{stroke:#123b45;stroke-width:3.4;opacity:0}
+.room-fishing-v4-line-thread{stroke:#f4e9cd;stroke-width:1.35;opacity:0}
+.room-fishing-v4-sea:not([data-stage=cast]) .room-fishing-v4-line-shadow{opacity:.66}
+.room-fishing-v4-sea:not([data-stage=cast]) .room-fishing-v4-line-thread{opacity:.92}
 .room-fishing-v4-fish{position:absolute;z-index:2;left:var(--fish-x,50%);top:var(--fish-y,55%);width:clamp(90px,16%,175px);height:96px;border-radius:50%;background:radial-gradient(ellipse at center,#013d52b8 0%,#0068868c 43%,#9be6ec30 65%,transparent 78%);transform:translate(-50%,-50%) scale(var(--fish-scale,1));filter:blur(4px) drop-shadow(0 0 9px #94e9ed66);opacity:.87;pointer-events:none;will-change:left,top}
 .room-fishing-v4-sea[data-stage=cast] .room-fishing-v4-fish{opacity:0}
 .room-fishing-v4-sea[data-stage=wait] .room-fishing-v4-fish{opacity:.72}
 .room-fishing-v4-sea[data-nibbling=true] .room-fishing-v4-fish,.room-fishing-v4-sea[data-biting=true] .room-fishing-v4-fish{opacity:.9}
 .room-fishing-v4-target{position:absolute;z-index:5;left:var(--cast-x,66%);top:var(--cast-y,45%);width:62px;height:34px;transform:translate(-50%,-50%);border:3px solid #ffe6a0;border-radius:50%;box-shadow:0 0 0 7px #ffe6a033,0 0 18px #ffe8af;pointer-events:none;animation:room-fishing-v3-target 1.4s ease-in-out infinite}
 .room-fishing-v4-sea:not([data-stage=cast]) .room-fishing-v4-target{display:none}
-.room-fishing-v4-bobber{position:absolute;z-index:5;left:var(--float-x,66%);top:var(--float-y,45%);width:clamp(44px,6%,63px);height:82px;object-fit:contain;scale:var(--bobber-scale,1);transform:translate(-50%,-50%);filter:drop-shadow(0 5px 5px #00334cbd);pointer-events:none;animation:room-fishing-v4-bob 1.55s ease-in-out infinite}
+.room-fishing-v4-bobber{position:absolute;z-index:5;left:var(--float-x,66%);top:calc(var(--float-y,45%) + var(--bob-offset,0px));width:clamp(44px,6%,63px);height:82px;object-fit:contain;scale:var(--bobber-scale,1);transform:translate(-50%,-50%) rotate(var(--bob-tilt,0deg));filter:drop-shadow(0 5px 5px #00334cbd);pointer-events:none}
 .room-fishing-v4-sea[data-stage=cast] .room-fishing-v4-bobber{display:none}
-.room-fishing-v4-sea[data-nibbling=true] .room-fishing-v4-bobber{animation:room-fishing-v4-nibble .3s ease-in-out infinite}
 .room-fishing-v4-sea[data-biting=true] .room-fishing-v4-bobber{top:calc(var(--float-y,45%) + 38px);transform:translate(-50%,-50%) scale(.82);opacity:.56}
 .room-fishing-v4-splash{position:absolute;z-index:4;left:var(--float-x,66%);top:var(--float-y,45%);width:clamp(120px,20%,210px);height:auto;transform:translate(-50%,-50%) scale(.7);opacity:0;pointer-events:none}
 .room-fishing-v4-sea[data-biting=true] .room-fishing-v4-splash{opacity:1;animation:room-fishing-splash .7s ease-out infinite}
 .room-fishing-v4-sea[data-stage=fight] .room-fishing-v4-splash{opacity:.55}
 .room-fishing-v4-signal{position:absolute;z-index:7;top:12px;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 24px);padding:9px 16px;border:1px solid #ecd69d99;border-radius:999px;background:#062c3bdc;color:#fff3c5;text-align:center;font-size:18px;line-height:1.3;text-shadow:0 1px 3px #002537;pointer-events:none;backdrop-filter:blur(5px)}
 .room-fishing-v4-sea[data-biting=true] .room-fishing-v4-signal{background:#6b3b25ed;box-shadow:0 0 0 4px #ffde7b55;animation:room-fishing-v4-bite .7s ease-in-out infinite}
-.room-fishing-v4-gauge{position:absolute;z-index:7;top:65px;left:12px;width:164px;height:158px;padding:7px 7px 5px;border:1px solid #d5cc9fc7;border-radius:18px;background:#072d40de;color:#fff1c9;text-align:center;pointer-events:none;box-shadow:0 4px 15px #001b2b9a;backdrop-filter:blur(6px)}
+.room-fishing-v4-gauge{position:absolute;z-index:7;top:59px;left:12px;width:160px;height:184px;color:#fff1c9;text-align:center;pointer-events:none;filter:drop-shadow(0 3px 6px #001927bb)}
 .room-fishing-v4-sea:not([data-stage=fight]) .room-fishing-v4-gauge,.room-fishing-v4-sea:not([data-stage=fight]) .room-fishing-v4-direction{display:none}
-.room-fishing-v4-gauge-label{display:block;font:800 14px/1.1 inherit;letter-spacing:.08em}
-.room-fishing-v4-gauge svg{display:block;width:100%;height:91px;overflow:visible;margin-top:-2px}
-.room-fishing-v4-gauge-base,.room-fishing-v4-gauge-arc{fill:none;stroke-width:13;stroke-linecap:round}
-.room-fishing-v4-gauge-base{stroke:#1d4b58}
-.room-fishing-v4-gauge-arc{stroke:url(#roomFishingV4GaugePaint)}
-.room-fishing-v4-gauge-needle{transform-origin:82px 91px;transition:transform .2s ease}
-.room-fishing-v4-gauge-needle path{stroke:#fff9d6;stroke-width:5;stroke-linecap:round;fill:none;filter:drop-shadow(0 2px 2px #031c29)}
-.room-fishing-v4-gauge-needle circle{fill:#ffe4a3;stroke:#153944;stroke-width:3}
-.room-fishing-v4-gauge-value{position:absolute;top:99px;left:0;right:0;font:900 21px/1 inherit;text-shadow:0 2px 2px #001c28}
-.room-fishing-v4-gauge-status{display:block;margin-top:14px;color:#bdebdc;font:700 11px/1.2 inherit}
+.room-fishing-v4-gauge-label{position:absolute;z-index:2;top:0;left:50%;transform:translateX(-50%);width:max-content;padding:4px 11px;border:1px solid #e7c680;border-radius:999px;background:linear-gradient(#214c58,#092c3d);color:#fff0bd;font:800 12px/1.1 inherit;letter-spacing:.08em;box-shadow:0 2px 5px #001d29ac}
+.room-fishing-v4-gauge svg{display:block;width:160px;height:160px;overflow:visible;margin-top:14px}
+.room-fishing-v4-dial-shadow{fill:#072938d9;stroke:#345765;stroke-width:2}
+.room-fishing-v4-dial-bezel{fill:url(#roomFishingV4Brass);stroke:#ffedae;stroke-width:1.3}
+.room-fishing-v4-dial-track,.room-fishing-v4-dial-progress,.room-fishing-v4-dial-danger{fill:none;stroke-linecap:round}
+.room-fishing-v4-dial-track{stroke:#163e49;stroke-width:8}
+.room-fishing-v4-dial-progress{stroke:#87d9c8;stroke-width:5;stroke-dasharray:0 312;transition:stroke .18s}
+.room-fishing-v4-dial-danger{stroke:#8f2b28;stroke-width:8;stroke-dasharray:2 7;opacity:.93}
+.room-fishing-v4-dial-face{fill:url(#roomFishingV4Navy);stroke:#0a2634;stroke-width:3}
+.room-fishing-v4-dial-spool{transform-origin:80px 80px}
+.room-fishing-v4-dial-spool ellipse{fill:#061e2c;stroke:#2c7785;stroke-width:1.3}
+.room-fishing-v4-dial-hub{fill:url(#roomFishingV4Brass);stroke:#ffe9a7;stroke-width:1.4}
+.room-fishing-v4-dial-arm{transform-origin:80px 80px;transition:transform .18s ease}
+.room-fishing-v4-dial-arm path{fill:none;stroke:url(#roomFishingV4Steel);stroke-width:7;stroke-linecap:round;filter:drop-shadow(1px 2px 2px #001b29)}
+.room-fishing-v4-dial-arm circle{fill:url(#roomFishingV4Steel);stroke:#e9ecdc;stroke-width:1.5}
+.room-fishing-v4-dial-pin{fill:#ffedb2;stroke:#6c4a25;stroke-width:2}
+.room-fishing-v4-gauge-value{position:absolute;z-index:2;top:136px;left:50%;transform:translateX(-50%);min-width:57px;padding:3px 6px;border:1px solid #e5bd72;border-radius:8px;background:#072b3df2;color:#fff4c9;font:900 17px/1 inherit;text-shadow:0 1px 2px #001c28}
+.room-fishing-v4-gauge-status{display:block;position:absolute;top:166px;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% + 4px);padding:3px 7px;border:1px solid #7bafa9a6;border-radius:999px;background:#062c3ddd;color:#bdebdc;font:800 11px/1.2 inherit;text-shadow:0 1px 2px #001825}
+.room-fishing-v4-sea[data-reeling=true] .room-fishing-v4-dial-spool{animation:room-fishing-v4-spool 1.1s linear infinite}
+.room-fishing-v4-sea[data-paying=true] .room-fishing-v4-dial-spool{animation:room-fishing-v4-spool 1.4s linear infinite reverse}
+.room-fishing-v4-sea[data-risk=warning] .room-fishing-v4-dial-progress{stroke:#f0cb7d}
+.room-fishing-v4-sea[data-risk=danger] .room-fishing-v4-dial-progress{stroke:#f2806b}
 .room-fishing-v4-sea[data-risk=warning] .room-fishing-v4-gauge-status{color:#ffe18d}
 .room-fishing-v4-sea[data-risk=danger] .room-fishing-v4-gauge-status{color:#ff9289}
 .room-fishing-v4-direction{position:absolute;z-index:7;top:83px;right:12px;width:min(170px,42%);padding:10px 11px;border:1px solid #b6dbd0b5;border-radius:14px;background:#062e41de;color:#f4f0d6;text-align:center;pointer-events:none;box-shadow:0 4px 15px #001b2b9a;backdrop-filter:blur(6px)}
@@ -327,6 +340,7 @@
 @keyframes room-fishing-v4-bob{50%{transform:translate(-50%,-45%) rotate(4deg)}}
 @keyframes room-fishing-v4-nibble{50%{transform:translate(-50%,-42%) rotate(9deg)}}
 @keyframes room-fishing-v4-rod-strain{50%{filter:drop-shadow(2px 7px 5px #ff9b74a8) brightness(1.15)}}
+@keyframes room-fishing-v4-spool{to{transform:rotate(360deg)}}
 @media(max-width:600px){
   .room-minigame-overlay[data-job=fishing] .room-minigame-card{max-height:calc(100dvh - 12px)}
   .room-minigame-overlay[data-job=fishing] .room-minigame-body{padding:0 8px 9px}
@@ -352,11 +366,11 @@
   .room-fishing-v4-bobber{width:44px;height:61px}
   .room-fishing-v4-splash{width:125px}
   .room-fishing-v4-signal{top:8px;padding:7px 10px;font-size:15px}
-  .room-fishing-v4-gauge{top:55px;left:7px;width:134px;height:136px;padding:5px}
-  .room-fishing-v4-gauge-label{font-size:12px}
-  .room-fishing-v4-gauge svg{height:78px}
-  .room-fishing-v4-gauge-value{top:84px;font-size:18px}
-  .room-fishing-v4-gauge-status{margin-top:12px;font-size:10px}
+  .room-fishing-v4-gauge{top:51px;left:7px;width:134px;height:159px}
+  .room-fishing-v4-gauge-label{font-size:10px;padding:3px 8px}
+  .room-fishing-v4-gauge svg{width:134px;height:134px;margin-top:12px}
+  .room-fishing-v4-gauge-value{top:111px;font-size:15px;min-width:49px}
+  .room-fishing-v4-gauge-status{top:140px;font-size:10px;padding:2px 5px}
   .room-fishing-v4-direction{top:70px;right:7px;width:140px;padding:8px 5px}
   .room-fishing-v4-direction strong{font-size:15px}
   .room-fishing-v4-direction span,.room-fishing-v4-direction small{font-size:11px}
@@ -368,4 +382,4 @@
   .room-fishing-v4-reel strong{font-size:14px}
   .room-fishing-v4-pay{font-size:16px!important}
 }
-@media(prefers-reduced-motion:reduce){.room-fishing-v4-water,.room-fishing-v4-target,.room-fishing-v4-bobber,.room-fishing-v4-splash,.room-fishing-v4-signal,.room-fishing-v4-rod{animation:none!important}}
+@media(prefers-reduced-motion:reduce){.room-fishing-v4-water,.room-fishing-v4-target,.room-fishing-v4-bobber,.room-fishing-v4-splash,.room-fishing-v4-signal,.room-fishing-v4-rod,.room-fishing-v4-dial-spool{animation:none!important}}

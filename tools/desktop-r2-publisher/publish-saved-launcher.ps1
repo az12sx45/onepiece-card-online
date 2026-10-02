@@ -12,8 +12,16 @@ param(
   [string]$ExpectedSha256,
 
   [Parameter(Mandatory = $true)]
-  [ValidateRange(1, 268435456)]
-  [long]$ExpectedBytes,
+  [ValidateScript({
+    $parsed = 0L
+    if ($_ -notmatch '^[1-9][0-9]*$' -or
+        -not [long]::TryParse($_, [ref]$parsed) -or
+        $parsed -gt 9007199254740991L) {
+      throw 'ExpectedBytes must be a positive safe integer.'
+    }
+    $true
+  })]
+  [string]$ExpectedBytes,
 
   [switch]$Json
 )
@@ -69,7 +77,7 @@ try {
     '--file', $resolvedFile,
     '--version', $Version,
     '--expected-sha256', $ExpectedSha256.ToLowerInvariant(),
-    '--expected-bytes', [string]$ExpectedBytes
+    '--expected-bytes', $ExpectedBytes
   )
   if ($Json) { $arguments += '--json' }
   & node @arguments

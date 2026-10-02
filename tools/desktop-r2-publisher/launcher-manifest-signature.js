@@ -7,7 +7,6 @@ const path = require('node:path');
 
 const ALGORITHM = 'Ed25519';
 const MAX_MANIFEST_BYTES = 64 * 1024;
-const MAX_INSTALLER_BYTES = 256 * 1024 * 1024;
 const HASH_PATTERN = /^[a-f0-9]{64}$/;
 const KEY_ID_PATTERN = /^launcher-ed25519-[a-f0-9]{32}$/;
 const SEMVER_PATTERN = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$/;
@@ -66,8 +65,8 @@ function validateArtifact(artifact, version) {
   if (artifact.fileName !== expectedFileName || path.basename(artifact.fileName) !== artifact.fileName) {
     fail(`Manifest artifact.fileName must be ${expectedFileName}.`);
   }
-  if (!Number.isSafeInteger(artifact.bytes) || artifact.bytes < 1 || artifact.bytes > MAX_INSTALLER_BYTES) {
-    fail(`Manifest artifact.bytes must be an integer from 1 through ${MAX_INSTALLER_BYTES}.`);
+  if (!Number.isSafeInteger(artifact.bytes) || artifact.bytes < 1) {
+    fail('Manifest artifact.bytes must be a positive safe integer.');
   }
   if (typeof artifact.sha256 !== 'string' || !HASH_PATTERN.test(artifact.sha256)) {
     fail('Manifest artifact.sha256 must be 64 lower-case hexadecimal characters.');
@@ -336,7 +335,6 @@ module.exports = {
   HASH_PATTERN,
   KEY_ID_ENV,
   KEY_ID_PATTERN,
-  MAX_INSTALLER_BYTES,
   PRIVATE_KEY_ENV,
   PUBLIC_KEY_ENV,
   canonicalPayloadBytes,

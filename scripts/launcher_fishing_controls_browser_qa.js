@@ -5,7 +5,7 @@ const fs=require('node:fs');
 const http=require('node:http');
 const path=require('node:path');
 const root=path.resolve(__dirname,'..');
-const out=process.env.LAUNCHER_FISH_CONTROLS_QA_OUT||'D:/Codex_QA/launcher-fishing-controls-1.2.19/browser';
+const out=process.env.LAUNCHER_FISH_CONTROLS_QA_OUT||'D:/Codex_QA/launcher-fishing-visual-1.2.20/controls';
 const runtimeBase=path.join(process.env.LOCALAPPDATA||'','OpenAI/Codex/runtimes/cua_node');
 const playwrightPath=fs.existsSync(runtimeBase)?fs.readdirSync(runtimeBase)
   .map(name=>path.join(runtimeBase,name,'bin/node_modules/playwright')).find(fs.existsSync):null;
@@ -143,9 +143,11 @@ async function rodLineAlignment(page){
   return page.evaluate(()=>{
     const sea=document.querySelector('.room-fishing-v4-sea');
     const rod=sea.querySelector('.room-fishing-v4-rod');
-    const d=sea.querySelector('.room-fishing-v4-line path').getAttribute('d');
+    const lines=[...sea.querySelectorAll('.room-fishing-v4-line path')];
+    const d=lines[0]?.getAttribute('d')||'';
     const move=/^M\s+(-?[\d.]+)\s+(-?[\d.]+)/.exec(d);
-    if(!move||!rod.naturalWidth||!rod.naturalHeight)return null;
+    const finish=/\s(-?[\d.]+)\s+(-?[\d.]+)$/.exec(d);
+    if(!move||!finish||!rod.naturalWidth||!rod.naturalHeight)return null;
     const width=rod.offsetWidth,height=rod.offsetHeight;
     const artWidth=Math.min(width,height*rod.naturalWidth/rod.naturalHeight);
     const artHeight=artWidth*rod.naturalHeight/rod.naturalWidth;
@@ -157,8 +159,41 @@ async function rodLineAlignment(page){
     const tip={x:rod.offsetLeft+origin[0]+matrix.a*dx+matrix.c*dy,
       y:rod.offsetTop+origin[1]+matrix.b*dx+matrix.d*dy};
     const start={x:Number(move[1])*sea.clientWidth/1000,y:Number(move[2])*sea.clientHeight/600};
-    return{tip,start,gap:Math.hypot(tip.x-start.x,tip.y-start.y)};
+    const svg=sea.querySelector('.room-fishing-v4-line'),svgRect=svg.getBoundingClientRect();
+    const end={x:svgRect.left+Number(finish[1])*svgRect.width/1000,
+      y:svgRect.top+Number(finish[2])*svgRect.height/600};
+    const bobber=sea.querySelector('.room-fishing-v4-bobber'),bobRect=bobber.getBoundingClientRect();
+    const bobberScale=parseFloat(getComputedStyle(bobber).scale)||1;
+    // The artwork's small gold line ring sits about 39% of its height above
+    // the center. Compare rendered screen geometry, not the game's float vars.
+    const ring={x:(bobRect.left+bobRect.right)/2,
+      y:(bobRect.top+bobRect.bottom)/2-bobber.offsetHeight*.39*bobberScale*(sea.dataset.biting==='true'?.82:1)};
+    return{tip,start,gap:Math.hypot(tip.x-start.x,tip.y-start.y),
+      paths:lines.map(line=>line.getAttribute('d')),end,ring,
+      ringGap:Math.hypot(end.x-ring.x,end.y-ring.y),
+      visible:lines.map(line=>Number(getComputedStyle(line).opacity)>.5)};
   });
+}
+async function checkLineRig(page,name,stage){
+  const rig=await rodLineAlignment(page);
+  assert(rig,`${name} ${stage}: rendered rod, bobber and SVG path available`);
+  check(`${name} ${stage}: shadow and thread share one curve`,rig.paths.length===2&&rig.paths[0]===rig.paths[1],true);
+  check(`${name} ${stage}: both line layers visible`,rig.visible,[true,true]);
+  check(`${name} ${stage}: line starts at rod tip`,rig.gap<3,true);
+  check(`${name} ${stage}: line ends at bobber ring (${rig.ringGap.toFixed(1)} px)`,rig.ringGap<8,true);
+}
+async function checkReelGauge(page,name){
+  const gauge=await page.locator('.room-fishing-v4-gauge').evaluate(node=>{
+    const holes=[...node.querySelectorAll('.room-fishing-v4-dial-spool ellipse')];
+    const track=node.querySelector('.room-fishing-v4-dial-track');
+    const progress=node.querySelector('.room-fishing-v4-dial-progress');
+    return{holes:holes.length,trackLength:track?.getTotalLength(),
+      progressLength:progress?.getTotalLength(),dash:progress?.style.strokeDasharray,
+      spoolVisible:holes.every(hole=>getComputedStyle(hole).display!=='none')};
+  });
+  check(`${name}: reel has five visible spool holes`,[gauge.holes,gauge.spoolVisible],[5,true]);
+  check(`${name}: gauge has a full arc and progress path`,gauge.trackLength>300&&gauge.progressLength>300,true);
+  check(`${name}: gauge progress follows tension`,parseFloat(gauge.dash)>0,true);
 }
 async function checkRodSteer(page,name,steer){
   if(steer===0)return;
@@ -172,7 +207,7 @@ async function visualSample(page){
   return page.locator('.room-fishing-v4-sea').evaluate(sea=>{
     const style=sea.style;
     return{tension:Number(sea.querySelector('.room-fishing-v4-gauge').getAttribute('aria-valuenow')),
-      needle:parseFloat(sea.querySelector('.room-fishing-v4-gauge-needle').style.transform.match(/-?[\d.]+/)?.[0]),
+      needle:parseFloat(sea.querySelector('.room-fishing-v4-dial-arm').style.transform.match(/-?[\d.]+/)?.[0]),
       fishX:parseFloat(style.getPropertyValue('--fish-x')),fishY:parseFloat(style.getPropertyValue('--fish-y')),
       floatX:parseFloat(style.getPropertyValue('--float-x')),floatY:parseFloat(style.getPropertyValue('--float-y')),
       fishScale:parseFloat(style.getPropertyValue('--fish-scale'))};
@@ -473,6 +508,10 @@ async function runViewport(name,width,height,touch){
       check(`${name} ${label}: continuous bobber x`,Math.abs(visual.x-point.x)<.01,true);
       check(`${name} ${label}: continuous bobber y`,Math.abs(visual.y-point.y)<.01,true);
       check(`${name} ${label}: visual cast zone`,visual.castZone,label);
+      if(label==='near'){
+        check(`${name} wait: bobber has not submerged`,await page.locator('.room-fishing-v4-sea').getAttribute('data-biting'),'false');
+        await checkLineRig(page,name,'wait');
+      }
       if(label!=='far'){
         await page.evaluate(()=>{__minigame.dismiss();__minigame.open({kind:'fishing',characterId:'room-character-luffy'});});
         await page.locator('.room-fishing-v4-start').waitFor();
@@ -483,6 +522,8 @@ async function runViewport(name,width,height,touch){
     await page.locator('.room-fishing-v4-sea[data-stage="fight"]').waitFor({timeout:5000});
     const sea=page.locator('.room-fishing-v4-sea');
     check(`${name}: fight gauge visible`,await page.locator('.room-fishing-v4-gauge').isVisible(),true);
+    await checkLineRig(page,name,'fight');
+    await checkReelGauge(page,name);
     const initialTension=Number(await page.locator('.room-fishing-v4-gauge').getAttribute('aria-valuenow'));
     check(`${name}: initial gauge near server tension`,initialTension>=60&&initialTension<=62,true);
     check(`${name}: reel and pay visible`,[
@@ -515,7 +556,7 @@ async function runViewport(name,width,height,touch){
     await waitForControl(page,{reeling:false,steer:0,paying:false});
     check(`${name}: reel release clears hold`,await sea.getAttribute('data-reeling'),'false');
     const before=Number(await page.locator('.room-fishing-v4-gauge').getAttribute('aria-valuenow'));
-    const needleBefore=await page.locator('.room-fishing-v4-gauge-needle').evaluate(node=>node.style.transform);
+    const needleBefore=await page.locator('.room-fishing-v4-dial-arm').evaluate(node=>node.style.transform);
     const pay=page.locator('.room-fishing-v4-pay');const payBox=await pay.boundingBox();assert(payBox,`${name}: pay button visible`);
     await gesture(page,payBox,220,[.5],touch);
     await waitForControl(page,{reeling:false,steer:0,paying:true});
@@ -529,7 +570,7 @@ async function runViewport(name,width,height,touch){
     check(`${name}: paying reduces gauge`,after<before,true);
     check(`${name}: pay release clears hold`,await sea.getAttribute('data-paying'),'false');
     check(`${name}: gauge needle changes after paying`,
-      await page.locator('.room-fishing-v4-gauge-needle').evaluate((node,prior)=>node.style.transform!==prior,needleBefore),true);
+      await page.locator('.room-fishing-v4-dial-arm').evaluate((node,prior)=>node.style.transform!==prior,needleBefore),true);
     const geometry=await page.evaluate(()=>{
       const rect=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return{x:r.x,right:r.right,width:r.width};};
       const sea=rect('.room-fishing-v4-sea');

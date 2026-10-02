@@ -103,7 +103,12 @@ without changing `public/desktop/launcher-release-v1.json`. The installer must:
 - contain valid `MZ` and `PE` signatures;
 - use a valid semantic version and the canonical file name
   `ONE-PIECE-Tabletop-Launcher-<version>-x64.exe`;
-- be at most 256 MiB, matching the launcher's update download limit.
+- have a byte count from 1 through JavaScript's maximum safe integer
+  (`9007199254740991`); there is no fixed 256 MiB release ceiling. The
+  publisher currently reads the full installer into a Node.js `Buffer` before
+  upload, so actual file size is limited by available process memory and the
+  runtime's `Buffer` limit. Live publishing requires the exact reviewed
+  SHA-256 and byte count. Verify larger installers on the publishing host.
 
 First run a local-only dry run. It never initializes the R2 client and prints the
 exact `artifact` object that can later be placed in the launcher release manifest:

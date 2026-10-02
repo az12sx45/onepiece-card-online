@@ -12,7 +12,6 @@ const SEMVER_PATTERN = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]
 const IMMUTABLE_CACHE_CONTROL = assetPublisher.IMMUTABLE_CACHE_CONTROL;
 const INSTALLER_CONTENT_TYPE = 'application/vnd.microsoft.portable-executable';
 const RELEASE_PREFIX = 'desktop/launcher/releases';
-const MAX_INSTALLER_BYTES = 256 * 1024 * 1024;
 
 function fail(message) {
   throw new Error(message);
@@ -69,9 +68,10 @@ function publicObjectUrl(publicBaseUrl, key) {
 }
 
 function parseExpectedBytes(value, label = 'Expected byte count') {
-  const parsed = typeof value === 'number' ? value : Number(String(value || ''));
-  if (!Number.isSafeInteger(parsed) || parsed < 1 || parsed > MAX_INSTALLER_BYTES) {
-    fail(`${label} must be an integer from 1 through ${MAX_INSTALLER_BYTES}.`);
+  const parsed = typeof value === 'number' ? value :
+    typeof value === 'string' && /^[1-9]\d*$/.test(value) ? Number(value) : NaN;
+  if (!Number.isSafeInteger(parsed) || parsed < 1) {
+    fail(`${label} must be a positive safe integer.`);
   }
   return parsed;
 }
@@ -364,7 +364,6 @@ module.exports = {
   HASH_PATTERN,
   IMMUTABLE_CACHE_CONTROL,
   INSTALLER_CONTENT_TYPE,
-  MAX_INSTALLER_BYTES,
   RELEASE_PREFIX,
   SEMVER_PATTERN,
   createAwsLiveContext,

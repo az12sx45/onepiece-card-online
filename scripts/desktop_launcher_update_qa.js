@@ -316,6 +316,39 @@ async function testManifestPolicy(root) {
   await assert.rejects(manifestSizeService.checkForUpdates(), (error) => ['download_too_large', 'manifest_too_large'].includes(error?.code));
 }
 
+async function testSignedLargeInstallerMetadata(root) {
+  // The fixture remains 4 KiB; only signed metadata crosses the old 256 MiB
+  // boundary. A lying HTTP response must still fail the exact byte count.
+  const fixture = makePortableExecutable();
+  const declaredBytes = 300 * 1024 * 1024 + 123;
+  const document = manifestFor(fixture, { bytes: declaredBytes });
+  const service = makeService(root, makeFetch(new Map([
+    [MANIFEST_URL, () => manifestResponse(document)],
+    [ARTIFACT_URL, () => fakeResponse(fixture, {
+      url: ARTIFACT_URL,
+      headers: { 'content-length': String(declaredBytes) }
+    })]
+  ]), []));
+  const available = await service.checkForUpdates();
+  assert.equal(available.status, 'available', 'a signed installer above 256 MiB must be offered');
+  assert.equal(available.totalBytes, declaredBytes);
+  await rejectsCode(service.downloadUpdate(), 'size_mismatch');
+  assert.equal(filesUnder(root).some(file => file.endsWith('.part')), false);
+
+  const overSafeInteger = manifestFor(fixture, { bytes: Number.MAX_SAFE_INTEGER + 1 });
+  assert.throws(() => validateReleaseManifest(overSafeInteger, {
+    manifestUrl: new URL(MANIFEST_URL), currentVersion: '1.1.3',
+    trustedReleaseKeys: TEST_TRUSTED_RELEASE_KEYS
+  }), error => error?.code === 'download_too_large');
+  assert.throws(() => makeService(path.join(root, 'invalid-limit'), async () => {}, {
+    maxInstallerBytes: Number.MAX_SAFE_INTEGER + 1
+  }), error => error?.code === 'invalid_size_limit');
+  const configured = makeService(path.join(root, 'large-limit'), async () => {}, {
+    maxInstallerBytes: declaredBytes + 1
+  });
+  assert.equal(configured.maxInstallerBytes, declaredBytes + 1);
+}
+
 async function testUpToDate(root) {
   const bytes = makePortableExecutable();
   const document = manifestFor(bytes, { version: '1.1.3', omitArtifact: true });
@@ -439,6 +472,19 @@ async function testIntegrityFailures(root) {
   await rejectsCode(lengthService.downloadUpdate(), 'size_mismatch');
   assert.equal(filesUnder(lengthRoot).some((file) => file.endsWith('.part')), false);
 
+  const extra = Buffer.concat([good, Buffer.from([0x7f])]);
+  const overRoot = path.join(root, 'stream-overrun');
+  const overService = makeService(overRoot, makeFetch(new Map([
+    [MANIFEST_URL, () => manifestResponse(manifestFor(good))],
+    [ARTIFACT_URL, () => fakeResponse(extra, {
+      url: ARTIFACT_URL, omitLength: true, chunkSizes: [good.length, 1]
+    })]
+  ]), []));
+  await overService.checkForUpdates();
+  await rejectsCode(overService.downloadUpdate(), 'download_too_large');
+  assert.equal(filesUnder(overRoot).some(file => file.endsWith('.part')), false,
+    'an extra streamed byte must not leave a partial installer');
+
   const notPe = Buffer.alloc(4096, 0x62);
   const peDocument = manifestFor(notPe);
   const peCalls = [];
@@ -514,6 +560,7 @@ async function main() {
     testSemver();
     testManifestSignatures();
     await testManifestPolicy(path.join(temporaryRoot, 'policy'));
+    await testSignedLargeInstallerMetadata(path.join(temporaryRoot, 'large-metadata'));
     await testUpToDate(path.join(temporaryRoot, 'up-to-date'));
     const valid = await testDownloadAndInstall(path.join(temporaryRoot, 'valid'));
     await testIntegrityFailures(path.join(temporaryRoot, 'failures'));
@@ -521,7 +568,7 @@ async function main() {
     await testTamperAndSpawnFailure(path.join(temporaryRoot, 'valid'), valid);
     console.log(
       'DESKTOP_LAUNCHER_UPDATE_QA=PASS ' +
-      'sourceManifest=PASS semver=PASS ed25519Manifest=PASS tamperMatrix=PASS unknownKeyAlgorithm=PASS renderAndR2Origins=PASS optionalArtifact=PASS manifestLimit=PASS sizeShaPe=PASS partRename=PASS ' +
+      'sourceManifest=PASS semver=PASS ed25519Manifest=PASS tamperMatrix=PASS unknownKeyAlgorithm=PASS renderAndR2Origins=PASS optionalArtifact=PASS manifestLimit=PASS signedLargeMetadata=PASS exactContentLength=PASS streamOverrun=PASS sizeShaPe=PASS partRename=PASS ' +
       'events=PASS cancelCleanup=PASS tamperRecheck=PASS nsisArgs=--updated,/S,--force-run spawnBeforeQuit=PASS'
     );
   } finally {

@@ -1,5 +1,21 @@
 # Dev Workflow
 
+## 2026-10-02 啟動器 1.2.21 海釣視覺、漁獲展示與更新容量（候選）
+
+玩家在 1.2.20 候選已封裝並上傳後，追加取消更新檔固定大小限制的要求；1.2.20 安裝檔雖已經 R2 完整 GET／SHA 核對，但未進入公開簽署更新清單或下載頁。正式發行改為 1.2.21。海釣的 `desktop/launcher-room-minigames.js/.css` 改為竿尖到浮標金環的細魚線、原創五孔圓形張力表；上岸魚獲圖與名稱保持可見，直到玩家明確選擇下一竿、換餌或返回房間。釣魚伺服器規則、魚池、收藏、三款桌遊及存檔未變。
+
+`desktop/launcher-update-service.js` 取消固定 256 MiB 門檻，以正安全整數作位元組數可表示範圍，仍逐一核對 Ed25519 簽署清單、HTTP Content-Length、實際串流大小、SHA-256 與 PE 標頭；超過宣告值會停止並清除暫存檔。`tools/desktop-r2-publisher/publish-launcher-artifact.js`、`launcher-manifest-signature.js`、`publish-saved-launcher.ps1` 取消相同固定門檻，保留正安全整數與精確 SHA／位元組數驗證，並更新 `README.md`。發行工具目前把整檔讀入 Node Buffer，極大檔案仍受實際 RAM／Buffer 限制。舊 1.2.19 更新器仍受 256 MiB 門檻約束，因此本次 1.2.21 橋接安裝檔須通過獨立的舊客戶端相容大小檢查；往後的新版更新器沒有此固定產品門檻。
+
+`desktop/package.json`／`package-lock.json` 升為 1.2.21；`config/launcher-announcements-v1.json` revision 19 的單則圖文公告改以 1.2.21 為發布門檻，沿用已核對的 1.2.18 海釣圖，沒有新增安裝包素材。`scripts/desktop_launcher_package_qa.js` 取消通用 installer ceiling 並驗證本版公告；`scripts/launcher_1221_announcement_qa.js` 驗證 1.2.20 隱藏、1.2.21 顯示、圖像 SHA 與已讀持久化。`scripts/launcher_announcements_server_qa.js` 修正過時的 Ace 單人預期，依現行 Ace／Law／Sabo roster revision 3 和歷史 fixture 驗證，PGlite／Socket 82/82 PASS。
+
+定向驗證：`scripts/launcher_fishing_controls_browser_qa.js` 的 Chromium 桌機／390px 觸控 172/172 PASS，含雙層魚線同曲線、竿尖與浮標金環實際渲染幾何（最遠 2.8px）、五孔輪盤與張力弧線；`scripts/launcher_fishing_catch_reveal_browser_qa.js` 魚圖、焦點、長按及按鈕 42/42 PASS。截圖與報告在 `D:\Codex_QA\launcher-fishing-visual-1.2.20\controls\`、`catch\`。`scripts/desktop_launcher_update_qa.js`、`scripts/desktop_r2_launcher_publish_qa.js` 與簽章 QA 以小檔及 >256 MiB metadata 驗證新界線與超量拒絕，均 PASS。1.2.21 公告 QA、歷史 1.2.19 公告 QA、來源 package QA、`git diff --check` PASS。無 `DATABASE_URL` 的本機 `npm start` 可啟動靜態服務，`/desktop-download.html` HTTP 200；本機下載頁 Chromium 38/38 PASS，此環境的資料庫路由不作正式帳號驗收。真人及實體裝置手感未驗收。工作樹原有 `public/images/ranks/r5.PNG`、`r6.PNG` 修改不納入本版。
+
+1.2.21 R1 安裝檔為 265,807,620 bytes，SHA-256 `0c99f8afcbad3e37ed8c305ce0044083b1c045c60670768864a9990c6a5ead9a`；仍低於舊更新器的 268,435,456 bytes 橋接門檻。來源與封裝 ASAR 中的更新器、釣魚 JS／CSS 位元組一致；封裝依賴 10 個、正式 Electron 語系 2 個，實際封裝啟動載入 701 個本機素材且 BGM 播放 PASS。1.2.19 舊更新器對本版已簽署候選清單驗證為可更新。正式 R2 安裝檔已公開，HEAD、Range、完整 GET 位元組與 SHA-256 均一致；證據在 `D:\Codex_QA\launcher-fishing-visual-1.2.21-release-r1\publish\public-installer-verification.json`。Render 更新清單與下載頁讀回尚待正式提交後核對；封裝證據在同一 QA 目錄。
+
+## 2026-10-02 啟動器 1.2.20（未公開候選）
+
+海釣釣線、圓表與魚獲展示的初版曾完成 265,807,509 bytes 安裝檔，SHA-256 `d1d4b0789264b73f39edd108b8dac9738adccd69d85f6ca48a06d75dd2c810f2`；R2 版本物件已上傳且公開完整 GET／SHA 相同。使用者隨後要求取消更新檔固定上限，故沒有將 1.2.20 更新清單或下載頁推送為正式版，改以 1.2.21 發布合併變更。原候選 QA 位於 `D:\Codex_QA\launcher-fishing-visual-1.2.20-release-r1\`。
+
 ## 2026-10-02 啟動器 1.2.19 海釣拋竿、釣線與控竿（已部署）
 
 範圍：玩家指出 1.2.18 海釣欠缺可控制遠近的力度條、釣竿張力表，且左右牽竿的操作與畫面回饋太弱。本次以使用者提供的 Wii 遊戲作釣魚操作參考，只讀核對其釣魚 HUD；沒有把 ISO 素材或程式放進啟動器。改動在獨立工作樹 `D:\Codex_Release_Worktrees\launcher-fishing-controls-1.2.19`，原有 `public/images/ranks/r5.PNG`、`r6.PNG` 的工作樹修改不納入本次變更。

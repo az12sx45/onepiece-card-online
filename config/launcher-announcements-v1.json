@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 18,
+  "revision": 19,
   "announcements": [
     {
       "id": "board-tavern-crew-20260928-1c453fcf83416d97",
@@ -414,6 +414,30 @@
       "requiredRelease": {
         "kind": "launcher",
         "version": "1.2.19"
+      }
+    },
+    {
+      "id": "launcher-1.2.21-fishing-visual-catch-and-updates",
+      "status": "published",
+      "publishedAt": "2026-10-02T06:38:14.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.21",
+      "title": "海釣釣線、漁獲展示與更新｜啟動器 1.2.21",
+      "summary": "重畫釣線與張力表；魚獲會留在畫面；啟動器更新不再受固定 256 MiB 上限限制。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-rebuild-1.2.18.webp",
+        "alt": "騙人布在千陽號上持竿，魯夫在旁期待，紅白浮標被魚拉入海中濺起水花"
+      },
+      "body": [
+        "魚線改為連接釣竿尖端與浮標的細線，隨竿尖、落點與張力變化；張力提示改為圓形航海儀表，更容易辨認危險區和當前讀數。",
+        "魚成功上岸後，畫面會保留魚圖、名稱與收藏結果，直到玩家選擇再釣一竿、換餌與釣點，或返回房間。長按收線的按鍵不會在結算瞬間誤觸跳過。",
+        "啟動器更新移除固定 256 MiB 檔案上限，下載時仍核對簽署清單、實際位元組數與 SHA-256。",
+        "釣魚仍由伺服器判定，六處釣點、26 種圖鑑魚、漁獲收藏、水族箱與佛朗基釣竿改裝規則保留。三款桌遊規則及存檔沒有調整。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.21"
       }
     }
   ]

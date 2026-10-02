@@ -10,7 +10,9 @@ const { spawn: nodeSpawn } = require('node:child_process');
 const MANIFEST_SCHEMA = 1;
 const DEFAULT_MANIFEST_PATH = '/desktop/launcher-release-v1.json';
 const MAX_MANIFEST_BYTES = 64 * 1024;
-const MAX_INSTALLER_BYTES = 256 * 1024 * 1024;
+// No product-size ceiling: the signed manifest declares the exact byte count.
+// The safe-integer boundary keeps size arithmetic and stream checks exact.
+const MAX_INSTALLER_BYTES = Number.MAX_SAFE_INTEGER;
 const DEFAULT_MANIFEST_TIMEOUT_MS = 10_000;
 const DEFAULT_DOWNLOAD_TIMEOUT_MS = 30 * 60_000;
 const DEFAULT_SPAWN_TIMEOUT_MS = 5_000;

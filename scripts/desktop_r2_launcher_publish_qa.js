@@ -154,6 +154,30 @@ async function run() {
     () => publisher.parseArguments(['--file', 'relative.exe', '--version', '1.2.3', '--public-base-url', 'http://example.com']),
     /HTTPS origin/
   );
+  const overFormerLimit = 256 * 1024 * 1024 + 1;
+  assert.equal(publisher.parseArguments(['--file', 'relative.exe', '--version', '1.2.3',
+    '--expected-bytes', String(overFormerLimit)]).expectedBytes, overFormerLimit);
+  for (const invalid of ['0', '-1', '1.5', '1e9', String(Number.MAX_SAFE_INTEGER + 1)]) {
+    assertThrowsMessage(() => publisher.parseArguments(['--file', 'relative.exe', '--version', '1.2.3',
+      '--expected-bytes', invalid]), /positive safe integer/);
+  }
+  if (process.platform === 'win32') {
+    const missingInstaller = path.join(os.tmpdir(), `launcher-publisher-nonexistent-${process.pid}.exe`);
+    const invokeWrapper = expectedBytes => spawnSync('powershell.exe', [
+      '-NoProfile', '-NonInteractive', '-File', wrapperPath,
+      '-FilePath', missingInstaller, '-Version', '1.2.3',
+      '-ExpectedSha256', 'a'.repeat(64), '-ExpectedBytes', expectedBytes
+    ], { encoding: 'utf8', windowsHide: true, maxBuffer: 1024 * 1024 });
+    const acceptedLarge = invokeWrapper(String(overFormerLimit));
+    assert.equal(acceptedLarge.status, 1);
+    assert.match(acceptedLarge.stderr, /Resolve-Path/, 'Large metadata must pass PowerShell validation before the missing path fails.');
+    for (const invalid of ['0', '1.5', String(Number.MAX_SAFE_INTEGER + 1)]) {
+      const rejected = invokeWrapper(invalid);
+      assert.notEqual(rejected.status, 0);
+      assert.match(rejected.stderr, /ExpectedBytes/);
+      assert.doesNotMatch(rejected.stderr, /Resolve-Path/, 'Invalid size must fail before file or credential access.');
+    }
+  }
 
   const root = await fsp.mkdtemp(path.join(os.tmpdir(), 'desktop-r2-launcher-publish-qa-'));
   try {

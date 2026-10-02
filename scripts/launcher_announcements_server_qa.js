@@ -7,6 +7,7 @@ const crypto = require('node:crypto');
 const vm = require('node:vm');
 const { PGlite } = require(process.env.BOARD_QA_PGLITE || 'D:/Codex_QA/draw-result-art-20260922/deps/node_modules/@electric-sql/pglite');
 const { createLauncherAnnouncements, validateConfig } = require('../server/launcher-announcements');
+const crewRelease = require('../server/launcher-crew-release');
 const shipping = require('../config/launcher-announcements-v1.json');
 const root = path.resolve(__dirname, '..');
 const sourcePaths = ['config/launcher-announcements-v1.json','config/launcher-crew-release-v1.json',
@@ -19,6 +20,9 @@ const beforeHashes = sourceHashes(false);
 const checks = [], check = (name, actual, expected) => { assert.deepEqual(actual, expected, name); checks.push({name,status:'PASS'}); };
 const rejects = (name, config) => { assert.throws(() => validateConfig(config), /Invalid launcher announcement/); checks.push({name,status:'PASS'}); };
 const clone = value => JSON.parse(JSON.stringify(value));
+const initialNoticeIds = ['launcher-1.2.6-announcements', 'crew-ace-1.2.6'];
+const initialRelease = { schemaVersion: shipping.schemaVersion, revision: 1,
+  announcements: initialNoticeIds.map(id => clone(shipping.announcements.find(item => item.id === id))) };
 const cap = { crewContentRevision: 1 }, gameA = 'package-1234567890abcdef', gameB = 'package-fedcba0987654321';
 const db = new PGlite(), pool = { query:(...args) => db.query(...args) };
 let currentLauncher = '1.2.5', currentGame = gameA, verifierFails = false;
@@ -37,9 +41,12 @@ async function main() {
   await db.exec('CREATE TABLE player_profiles(user_id BIGSERIAL PRIMARY KEY,secret TEXT UNIQUE NOT NULL,stats JSONB)');
   await db.query('INSERT INTO player_profiles(secret,stats) VALUES($1,$3::jsonb),($2,$3::jsonb)', ['a','b',JSON.stringify({client:{totals:{coins:73}},launcherWalletV1:{coins:100},launcherRoomV1:{revision:4}})]);
   const profileBefore = (await db.query('SELECT * FROM player_profiles ORDER BY user_id')).rows;
-  const api = service(shipping);
-  check('shipping roster opens only Ace',require('../config/launcher-crew-release-v1.json'),{schemaVersion:1,rosterRevision:2,characters:{ace:true,sabo:false,law:false,hancock:false}});
-  check('shipping contains only two truthful current notices',shipping.announcements.map(item=>[item.id,item.scope,item.requiredRelease]),[
+  validateConfig(shipping);
+  const api = service(initialRelease);
+  check('shipping roster opens Ace, Law and Sabo',require('../config/launcher-crew-release-v1.json'),{schemaVersion:1,rosterRevision:3,characters:{ace:true,sabo:true,law:true,hancock:false}});
+  check('shipping metadata exposes Ace, Law and Sabo to updated clients',
+    ['ace','law','sabo'].every(key=>crewRelease.metadata(cap).releasedCharacterIds.includes('room-character-'+key)),true);
+  check('shipping retains initial two truthful notices',initialRelease.announcements.map(item=>[item.id,item.scope,item.requiredRelease]),[
     ['launcher-1.2.6-announcements','launcher',{kind:'launcher',version:'1.2.6'}],['crew-ace-1.2.6','shop',{kind:'launcher',version:'1.2.6'}]]);
   for (const secret of ['',null,{},'missing','x'.repeat(257)]) check('unauthorized GET '+String(secret).slice(0,10),(await get(api,secret)).error,'bad secret');
   check('unauthenticated requests do not create tables',(await db.query("SELECT to_regclass('launcher_announcement_reads') AS value")).rows[0].value,null);
@@ -73,14 +80,14 @@ async function main() {
   const once = await readRows(); await api.read(pool,'a',{announcementId:'crew-ace-1.2.6'},cap);
   check('read idempotent including original timestamp',await readRows(),once);
   check('account B remains unread',(await get(api,'b')).unreadCount,2);
-  read = await api.read(pool,'a',{announcementIds:shipping.announcements.map(item=>item.id)},cap);
+  read = await api.read(pool,'a',{announcementIds:initialRelease.announcements.map(item=>item.id)},cap);
   check('explicit snapshot batch read',[read.ok,read.unreadCount,read.readIds.length],[true,0,2]);
-  check('new service instance retains account reads',(await get(service(shipping))).unreadCount,0);
+  check('new service instance retains account reads',(await get(service(initialRelease))).unreadCount,0);
   currentLauncher = '1.2.7'; verifierFails = true;
-  check('published history survives later release verifier outage',ids(await get(service(shipping))),['crew-ace-1.2.6','launcher-1.2.6-announcements']);
+  check('published history survives later release verifier outage',ids(await get(service(initialRelease))),['crew-ace-1.2.6','launcher-1.2.6-announcements']);
   verifierFails = false;
-  const fixture = clone(shipping); fixture.revision = 2;
-  const baseEntry = clone(shipping.announcements[0]);
+  const fixture = clone(initialRelease); fixture.revision = 2;
+  const baseEntry = clone(initialRelease.announcements[0]);
   fixture.announcements.push(
     {...baseEntry,id:'draft',status:'draft'},
     {...baseEntry,id:'future',publishedAt:'2027-01-01T00:00:00.000Z'},
@@ -88,23 +95,30 @@ async function main() {
     {...baseEntry,id:'locked-sabo',scope:'shop',category:'character',requiresCharacterId:'room-character-sabo',cta:{kind:'shop',itemId:'room-character-sabo'}},
     ...['card','board','chess'].map(scope=>({...baseEntry,id:scope+'-update',scope,version:gameA,requiredRelease:{kind:scope,releaseId:gameA},cta:{kind:'game',gameId:scope}})),
     {...baseEntry,id:'board-future',scope:'board',version:gameB,requiredRelease:{kind:'board',releaseId:gameB}});
-  response = await get(service(fixture));
-  check('all three verified game categories publish',ids(response),['board-update','card-update','chess-update','crew-ace-1.2.6','launcher-1.2.6-announcements']);
-  check('hidden notes omitted before global counts',[response.total,response.unreadCount],[5,3]);
-  check('game notes expose real release identifier',response.announcements.filter(item=>['card','board','chess'].includes(item.scope)).every(item=>item.releaseId===gameA),true);
-  check('hidden statuses never enter publication ledger',(await publicationRows()).some(row=>['draft','future','locked-sabo','later-launcher','board-future'].includes(row.announcement_id)),false);
-  currentGame = gameB;
-  response = await get(service(fixture));
-  check('next package keeps game history and adds newly verified note',ids(response),['board-future','board-update','card-update','chess-update','crew-ace-1.2.6','launcher-1.2.6-announcements']);
-  const edited = clone(fixture); edited.announcements.find(item=>item.id==='board-update').body=['未經目前版本核對的新敘述'];
-  check('edited historical content cannot inherit stale witness',ids(await get(service(edited))).includes('board-update'),false);
-  const draftWithdrawal = clone(shipping); draftWithdrawal.announcements[1].status='draft';
-  check('withdrawn notice remains hidden despite historic witness',ids(await get(service(draftWithdrawal))),['launcher-1.2.6-announcements']);
-  const oldSupport = require('../server/launcher-crew-release').metadata;
+  // The shipping roster now includes Sabo. Simulate a later unreleased crew
+  // member so this fixture still proves the publication gate independently.
+  const shippingMetadata = crewRelease.metadata;
+  crewRelease.metadata = capability => ({...shippingMetadata(capability),
+    releasedCharacterIds:shippingMetadata(capability).releasedCharacterIds.filter(id=>id!=='room-character-sabo')});
   try {
-    require('../server/launcher-crew-release').metadata = () => ({releasedCharacterIds:[],rosterRevision:2});
-    check('character release gate rechecked even after publication',ids(await get(service(shipping))),['launcher-1.2.6-announcements']);
-  } finally { require('../server/launcher-crew-release').metadata=oldSupport; }
+    response = await get(service(fixture));
+    check('all three verified game categories publish',ids(response),['board-update','card-update','chess-update','crew-ace-1.2.6','launcher-1.2.6-announcements']);
+    check('hidden notes omitted before global counts',[response.total,response.unreadCount],[5,3]);
+    check('game notes expose real release identifier',response.announcements.filter(item=>['card','board','chess'].includes(item.scope)).every(item=>item.releaseId===gameA),true);
+    check('hidden statuses never enter publication ledger',(await publicationRows()).some(row=>['draft','future','locked-sabo','later-launcher','board-future'].includes(row.announcement_id)),false);
+    currentGame = gameB;
+    response = await get(service(fixture));
+    check('next package keeps game history and adds newly verified note',ids(response),['board-future','board-update','card-update','chess-update','crew-ace-1.2.6','launcher-1.2.6-announcements']);
+    const edited = clone(fixture); edited.announcements.find(item=>item.id==='board-update').body=['未經目前版本核對的新敘述'];
+    check('edited historical content cannot inherit stale witness',ids(await get(service(edited))).includes('board-update'),false);
+  } finally { crewRelease.metadata = shippingMetadata; }
+  const draftWithdrawal = clone(initialRelease); draftWithdrawal.announcements[1].status='draft';
+  check('withdrawn notice remains hidden despite historic witness',ids(await get(service(draftWithdrawal))),['launcher-1.2.6-announcements']);
+  const oldSupport = crewRelease.metadata;
+  try {
+    crewRelease.metadata = () => ({releasedCharacterIds:[],rosterRevision:3});
+    check('character release gate rechecked even after publication',ids(await get(service(initialRelease))),['launcher-1.2.6-announcements']);
+  } finally { crewRelease.metadata=oldSupport; }
   // Malformed/private metadata cannot turn into raw HTML or external navigation.
   for (const [name,mutate] of [
     ['HTML title',c=>c.announcements[0].title='<img src=x>'], ['duplicate ids',c=>c.announcements[1].id=c.announcements[0].id],
@@ -118,7 +132,7 @@ async function main() {
     ['game note missing package',c=>c.announcements[0].scope='card'],
     ['empty body',c=>c.announcements[0].body=[]], ['oversized body',c=>c.announcements[0].body=['a'.repeat(1001)]],
     ['invalid character metadata',c=>c.announcements[1].requiresCharacterId='javascript:alert(1)']]) {
-    const config=clone(shipping);mutate(config);rejects(name,config);
+    const config=clone(initialRelease);mutate(config);rejects(name,config);
   }
   const index = fs.readFileSync(path.join(root,'server/index.js'),'utf8'), handlers=new Map();
   const start=index.indexOf("socket.on('LAUNCHER_ANNOUNCEMENTS_GET'"),end=index.indexOf("socket.on('LAUNCHER_COMMENTS_GET'",start);
