@@ -1,27 +1,27 @@
 # File Map
 
-## 2026-10-03 釣魚內容差分清單（修訂 8 候選）
+## 2026-10-03 釣魚內容差分清單（修訂 8，已部署）
 
 - `public/desktop/launcher-content-v1.json`：簽署清單修訂 8，包含本次釣魚介面、角色釣竿、水族箱腳本及十張新魚透明圖；不含使用者先前修改的 rank 圖。來源檢查與差分下載紀錄在 `D:\Codex_QA\launcher-fishing-firstperson-content-r8\`。
 
-## 2026-10-03 新魚圖鑑與四級標記（1.2.23 內容修訂 8 候選）
+## 2026-10-03 新魚圖鑑與四級標記（1.2.23 內容修訂 8，已部署）
 
 - `server/launcher-minigames.js`：原有 26 魚保留，新增十魚、四級稀有度、指定餌／釣點／投距魚池；權重為啟動器規則。
 - `server/launcher-fishing-v5.js`、`server/launcher-life-store.js`：十魚各自的搏魚節奏，結算時回傳稀有度；既有保存欄位不變。
 - `public/images/launcher_room/fish_master/*.webp`：十種魚各自透明圖；`desktop/launcher-room-minigames.js/.css` 與 `desktop/launcher-room-aquarium.js`：圖鑑、上岸、房間水族箱使用同一名稱與圖路徑，新增四級標記。
 - `scripts/launcher_fishing_species_qa.js`、`launcher_fishing_v5_server_qa.js`、`launcher_fishing_server_qa.js`、`launcher_fishing_catalog_parity_qa.js`、`launcher_fishing_master_aquarium_qa.js`：魚池、36 魚行為、舊保存格式、三處圖鑑一致與去背素材驗證。
 
-## 2026-10-03 海釣原創合成音效（1.2.23 內容修訂 8 候選）
+## 2026-10-03 海釣原創合成音效（1.2.23 內容修訂 8，已部署）
 
 - `desktop/launcher-room-minigames.js`：WebAudio 短音與合成水花、蓄力／拋竿／咬餌／抽竿／耐壓／收放線／結算事件；沿用失焦暫停與關閉釋放。
 - `scripts/launcher_fishing_v5_browser_qa.js`：以實際 Chromium 記錄振盪器和雜訊播放、事件單次性、稀有度與舊結果回退、錯過咬餌、失焦與關閉。
 
-## 2026-10-03 海釣角色釣竿與魚勢預兆（1.2.23 內容修訂 8，候選）
+## 2026-10-03 海釣角色釣竿與魚勢預兆（1.2.23 內容修訂 8，已部署）
 
 - `public/images/launcher_room/fishing_v5/rod-no-line-v1.webp`：13 支正式角色專屬透明釣竿、每支四格線輪手把與左／右／上反擊圖示的原創圖集；生成來源、逐格檢查和壓縮資訊保存在 `D:\Codex_QA\fishing-rods-20261003\`。
 - `desktop/launcher-room-minigames.js/.css`：中央第一人稱釣竿、依實際收放線轉動手把、竿尖連線與竿身彎曲、水花附近的預兆及半透明反擊提示；保留線輪錶與舊場次畫面。
 - `server/launcher-fishing-v5.js`：新場次增加依魚行為計時的 `flickTell` 和魚拉力相關的甩竿獎懲；舊場次維持原判定。`config/launcher-announcements-v1.json`：修訂 23 的帶圖公告，沿用既有釣魚主圖。
-- `scripts/launcher_fishing_flick_server_qa.js`、`scripts/launcher_fishing_flick_life_qa.js`、`scripts/launcher_fishing_v5_browser_qa.js`：新魚勢預兆、場次保存、桌機圖面、魚勢與三方向互動回歸；正式內容清單、差分與公開讀回證據待完成。
+- `scripts/launcher_fishing_flick_server_qa.js`、`scripts/launcher_fishing_flick_life_qa.js`、`scripts/launcher_fishing_v5_browser_qa.js`：新魚勢預兆、場次保存、桌機圖面、魚勢與三方向互動回歸；正式內容清單、差分與公開讀回證據見 `docs/DEV_WORKFLOW.md` 本日發布段。
 
 ## 2026-10-03 海釣限時甩竿與動態海面（1.2.23 內容修訂 7，已部署）
 
