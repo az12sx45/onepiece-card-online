@@ -58,14 +58,16 @@ const FISHING_CAST_ZONES = Object.freeze({
 // for this launcher; they are not claimed to be the original game's odds.
 // Each ordered triple supplies the near, middle and far cast pools through the
 // existing weighting rule. Magma deliberately has only its two source fish.
+// Shellfish are occasional catches on shore/reef worm or rainbow shrimp;
+// they are not the default near-water catch across unrelated bait and seas.
 const FISHING_V3_POOLS = Object.freeze({
   shore:Object.freeze({
-    worm:Object.freeze([['striped-clam',5],['lovely-angel',4],['adventure-fish',2]]),
+    worm:Object.freeze([['lovely-angel',5],['striped-clam',1],['adventure-fish',2]]),
     shrimp:Object.freeze([['claw-shrimp',5],['pumpkin-octopus',4],['panda-shark',2]]),
     lure:Object.freeze([['glistening-saury',5],['demon-bonito',4],['elephant-tuna',2]])
   }),
   reef:Object.freeze({
-    worm:Object.freeze([['butterflyfish',5],['adventure-fish',4],['treasure-pearl-clam',2]]),
+    worm:Object.freeze([['butterflyfish',5],['treasure-pearl-clam',1],['panda-shark',2]]),
     shrimp:Object.freeze([['smile-jellyfish',5],['pumpkin-octopus',4],['panda-shark',2]]),
     lure:Object.freeze([['cola-sunfish',5],['panda-shark',4],['reef-shark',2]])
   }),
@@ -85,9 +87,9 @@ const FISHING_V3_POOLS = Object.freeze({
     lure:Object.freeze([['lava-flounder',6],['lava-flounder',5],['burning-dragon',3]])
   }),
   rainbow:Object.freeze({
-    worm:Object.freeze([['striped-clam',5],['lovely-angel',4],['adventure-fish',2]]),
-    shrimp:Object.freeze([['striped-clam',5],['treasure-pearl-clam',4],['aurora-sunfish',2]]),
-    lure:Object.freeze([['adventure-fish',5],['treasure-pearl-clam',4],['aurora-sunfish',2]])
+    worm:Object.freeze([['lovely-angel',5],['adventure-fish',4],['aurora-sunfish',1]]),
+    shrimp:Object.freeze([['adventure-fish',5],['treasure-pearl-clam',1],['aurora-sunfish',2]]),
+    lure:Object.freeze([['adventure-fish',5],['lovely-angel',4],['aurora-sunfish',2]])
   })
 });
 const FISHING_V3_DIFFICULTY = Object.freeze({

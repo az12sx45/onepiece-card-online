@@ -7,7 +7,6 @@
   const FISH_SPOTS=Object.freeze({shore:{label:'近岸水流',note:'船邊的淺水與緩流',x:57,y:45},reef:{label:'珊瑚礁邊',note:'礁石間的魚影較活躍',x:68,y:46},deep:{label:'外海深水',note:'深處可能遇到有力的大魚',x:80,y:47},freshwater:{label:'淡水池',note:'淡水魚與水邊生物出沒',x:59,y:48},magma:{label:'熔岩潭',note:'炙熱水域有罕見魚影',x:67,y:50},rainbow:{label:'虹色水域',note:'彩色水面藏著稀有魚群',x:72,y:47}});
   const FISH_CAST_ZONES=Object.freeze({near:{label:'近處水面',key:'↓',x:46,y:55},mid:{label:'中距水面',key:'●',x:66,y:45},far:{label:'遠處水面',key:'↑',x:81,y:34}});
   const ROD_UPGRADE_COSTS=Object.freeze([20,35,55]);
-  const FISH_SFX_KEY='onepiece.launcher.fishingSfx.v1';
   const UA_FISH=new Set(['adventure-fish','panda-shark','elephant-tuna','lovely-angel','striped-clam','cutie-piranha','claw-shrimp','pumpkin-octopus','maple-salmon','lava-flounder','treasure-pearl-clam','electric-catfish','demon-bonito','guiding-anglerfish','ice-fish','beat-alligator','aurora-sunfish','burning-dragon','great-terigius','golden-whale']);
   const fishArt=id=>`${ASSET}${UA_FISH.has(id)?'fish_ua':Object.hasOwn({'balloon-catfish':1,'glistening-saury':1,'smile-jellyfish':1,'panda-shark':1},id)?'fish_v1':'fish_v3'}/${id==='golden-whale'?'golden-whale-v2':id}.webp`;
   const spotArt=id=>`${ASSET}${['freshwater','magma','rainbow'].includes(id)?'fishing_v4':'fishing_v3'}/sea-${id}.webp`;
@@ -81,8 +80,7 @@
     let fishingV5BitePlayed=false,fishingV5ReelSample=null,fishingV5MeasuredRate=NaN,fishingV5MeasuredAt=0,fishingV5MeasuredControl='',fishingV5ReelSpeed=0,fishingV5ReelAngle=0,fishingV5ReelAt=0,fishingV5ClickAngle=0,fishingV5LastClickAt=0;
     let fishingV4ClockAnchor=null,fishingV4ClockPerf=0,fishingV4ClockLast=0,lastClockSample=null;
     let fishingResultShownAt=0;
-    let fishingSfxEnabled=true,fishingAudio=null,fishingAudioMaster=null;
-    try{const saved=localStorage.getItem(FISH_SFX_KEY);if(saved!==null)fishingSfxEnabled=saved==='on';}catch{}
+    let fishingAudio=null,fishingAudioMaster=null;
     const fishingResultHeldKeys=new Set();
     let fishingRodLevel=0,fishingRodKnown=false,fishingRodNextCost=ROD_UPGRADE_COSTS[0];
     const reactionCounts={good:0,miss:0};
@@ -113,7 +111,7 @@
     const active=()=>phase!=='closed';
     function say(text) {if(feedback)feedback.textContent=text;if(live)live.textContent=text;}
     function fishingSoundContext(){
-      if(!fishingSfxEnabled||!windowFocused||document.hidden)return null;
+      if(!windowFocused||document.hidden)return null;
       if(!fishingAudio){
         const AudioContextClass=root.AudioContext||root.webkitAudioContext;if(!AudioContextClass)return null;
         try{fishingAudio=new AudioContextClass();fishingAudioMaster=fishingAudio.createGain();fishingAudioMaster.gain.value=.28;fishingAudioMaster.connect(fishingAudio.destination);}catch{fishingAudio=null;fishingAudioMaster=null;return null;}
@@ -122,7 +120,7 @@
       if(fishingAudio.state==='suspended'){
         const current=fishingAudio;
         void current.resume().then(()=>{
-          if(fishingAudio===current&&(!fishingSfxEnabled||!windowFocused||document.hidden)&&current.state==='running')void current.suspend().catch(()=>{});
+          if(fishingAudio===current&&(!windowFocused||document.hidden)&&current.state==='running')void current.suspend().catch(()=>{});
         }).catch(()=>{});
       }
       return fishingAudio;
@@ -137,9 +135,6 @@
     function fishingBiteSound(){fishingTone(260,105,.18,.28,'triangle');fishingTone(610,850,.14,.18,'sine',.065);fishingTone(920,680,.12,.13,'sine',.17);}
     function fishingCatchSound(){fishingTone(300,160,.14,.22,'triangle');for(const [index,pitch] of [520,660,880].entries())fishingTone(pitch,pitch*1.05,.19,.19,'sine',.08+index*.105);}
     function fishingReelClick(inward,speed){const level=clamp(Math.abs(speed)/580,.3,1);fishingTone(inward?650:380,inward?290:180,.038+.014*(1-level),(.13+.08*level)*(inward?1:.76),inward?'triangle':'sawtooth');}
-    function updateFishingSoundButtons(){for(const control of layer?.querySelectorAll('.room-fishing-sfx')||[]){control.dataset.muted=String(!fishingSfxEnabled);control.setAttribute('aria-pressed',String(fishingSfxEnabled));control.setAttribute('aria-label',`釣魚音效${fishingSfxEnabled?'已開啟，按下可關閉':'已關閉，按下可開啟'}`);control.title=fishingSfxEnabled?'關閉釣魚音效':'開啟釣魚音效';}}
-    function toggleFishingSound(){fishingSfxEnabled=!fishingSfxEnabled;try{localStorage.setItem(FISH_SFX_KEY,fishingSfxEnabled?'on':'off');}catch{}if(fishingSfxEnabled)fishingSoundContext();else if(fishingAudio?.state==='running')void fishingAudio.suspend().catch(()=>{});updateFishingSoundButtons();}
-    function fishingSoundButton(){const control=button('♪',toggleFishingSound,'room-fishing-sfx');control.dataset.muted=String(!fishingSfxEnabled);control.setAttribute('aria-pressed',String(fishingSfxEnabled));control.setAttribute('aria-label',`釣魚音效${fishingSfxEnabled?'已開啟，按下可關閉':'已關閉，按下可開啟'}`);control.title=fishingSfxEnabled?'關閉釣魚音效':'開啟釣魚音效';return control;}
     function closeFishingSound(){const audio=fishingAudio;fishingAudio=null;fishingAudioMaster=null;if(audio&&audio.state!=='closed')void audio.close().catch(()=>{});}
     function safeResume(){if(held){held=false;options.onClose?.();}}
     function ensure() {
@@ -216,7 +211,7 @@
         const setup=node('div','room-fishing-v4-intro');
         const scene=node('div','room-fishing-v4-intro-scene');
         scene.style.backgroundImage='linear-gradient(90deg,#062735ad,#06273522),url("'+spotArt(selectedSpot)+'")';
-        scene.append(node('span','room-fishing-v4-eyebrow','千陽號 · 自由海釣'),node('strong','',FISH_SPOTS[selectedSpot].label),node('span','',FISH_SPOTS[selectedSpot].note),fishingSoundButton());
+        scene.append(node('span','room-fishing-v4-eyebrow','千陽號 · 自由海釣'),node('strong','',FISH_SPOTS[selectedSpot].label),node('span','',FISH_SPOTS[selectedSpot].note));
         const spots=node('fieldset','room-fishing-v4-choices room-fishing-v4-spots');spots.append(node('legend','','釣點'));
         for(const [id,definition] of Object.entries(FISH_SPOTS)){
           const choice=button(definition.label,()=>{selectedSpot=id;renderIntro();body.querySelector('[data-spot="'+id+'"]')?.focus({preventScroll:true});},'room-fishing-v4-choice');
@@ -283,7 +278,7 @@
       catch{return current===generation?{ok:false,error:'offline'}:null;}
       finally{if(current===generation){requesting=false;setDisabled(false);updateRodWorkshop();updateFishingV2();updateFishingV4();}}
     }
-    function setDisabled(value){if(!layer)return;layer.dataset.pending=String(value);for(const b of body.querySelectorAll('button'))b.disabled=(value&&b.dataset.fishAction!=='reel'&&!b.classList.contains('room-fishing-v4-reel')&&!b.classList.contains('room-fishing-v4-pay')&&!b.classList.contains('room-fishing-v4-hook'))||b.dataset.permanentDisabled==='true';}
+    function setDisabled(value){if(!layer)return;layer.dataset.pending=String(value);for(const b of body.querySelectorAll('button'))b.disabled=(value&&b.dataset.fishAction!=='reel'&&!b.classList.contains('room-fishing-v4-reel')&&!b.classList.contains('room-fishing-v4-pay')&&!b.classList.contains('room-fishing-v4-cast')&&!b.classList.contains('room-fishing-v4-hook'))||b.dataset.permanentDisabled==='true';}
     async function start(){if(phase!=='intro')return;if(kind==='fishing')fishingSoundContext();const response=await request('minigame.start',{characterId,kind,...kind==='fishing'?{baitId:selectedBait,spotId:selectedSpot,fishingVersion:5}:kind==='work'?{jobId}:{},...kind==='work'&&jobId==='fishing'?{fishingVersion:2}:{},...practice?{practice:true}:{}});if(!response)return;if(response.minigame&&['playing','ready','failed'].includes(response.minigame.state)){game=response.minigame;if(game.characterId!==characterId||game.kind!==kind){renderRecovery();return;}accept(response);return;}renderIntro(kind==='fishing'&&response.error==='work_active'?'夥伴正在分工。完成原有分工後即可自由釣魚；釣魚不消耗工作次數。':ERRORS[response.error]||response.message||'暫時無法開始，請稍候再試。');}
     function renderRecovery(){phase='recovery';body.replaceChildren(node('h3','','上一次挑戰尚未結束'),node('p','','結束舊挑戰後，即可重新選擇夥伴。未完成的獎勵不會發放。'),button('結束舊挑戰',()=>void cancel(false)));say('不會自動領取獎勵。');}
     function accept(response) {
@@ -508,9 +503,10 @@
     function setFishingV4Control(reeling,steer,paying=fishingV4Paying){
       const challenge=fishingV4Challenge();if(!challenge||challenge.stage!=='fight')return;
       if(body?.querySelector('.room-minigame-confirm'))return;
-      // A second finger may keep moving on the reel pad while the pay button
-      // is held. The active pay pointer always takes priority until release.
-      const nextPaying=Boolean(paying)||fishingV4PayPointer!==null,nextReeling=Boolean(reeling)&&!nextPaying,nextSteer=Math.sign(clamp(steer,-1,1));
+      // V5 lets the fish pull line whenever the player stops reeling. V4 keeps
+      // its explicit pay control for saved sessions from the previous rules.
+      const nextPaying=challenge.fishingVersion===5?false:Boolean(paying)||fishingV4PayPointer!==null;
+      const nextReeling=Boolean(reeling)&&!nextPaying,nextSteer=Math.sign(clamp(steer,-1,1));
       if(fishingV4Reeling===nextReeling&&fishingV4Steer===nextSteer&&fishingV4Paying===nextPaying)return;
       fishingV4Reeling=nextReeling;fishingV4Paying=nextPaying;fishingV4Steer=nextSteer;
       const sea=body.querySelector('.room-fishing-v4-sea');if(sea){sea.dataset.reeling=String(nextReeling);sea.dataset.paying=String(nextPaying);sea.dataset.steer=String(nextSteer);}
@@ -541,7 +537,7 @@
     }
     function renderFishingV4(stage,challenge){
       const isV5=challenge.fishingVersion===5;
-      const sea=node('div','room-fishing-v4-sea');sea.dataset.spot=selectedSpot;sea.setAttribute('role','group');sea.setAttribute('aria-label',isV5?'千陽號釣魚海面。按住拋竿蓄力、放開決定距離；浮標沉下時抽竿；上鉤後看魚的方向，把釣竿帶往同側，鬆開捲線回復魚線強度。':'千陽號釣魚海面。按住拋竿蓄力、放開決定距離；浮標沉下時抽竿；上鉤後拖動捲線控制左右方向，魚線過緊時按住放線。');
+      const sea=node('div','room-fishing-v4-sea');sea.dataset.spot=selectedSpot;sea.setAttribute('role','group');sea.setAttribute('aria-label',isV5?'千陽號釣魚海面。按住拋竿蓄力、放開決定距離；浮標沉下時抽竿；上鉤後看魚的方向，把釣竿帶往同側；鬆開捲線就會自動放線並回復魚線強度。':'千陽號釣魚海面。按住拋竿蓄力、放開決定距離；浮標沉下時抽竿；上鉤後拖動捲線控制左右方向，魚線過緊時按住放線。');
       sea.style.backgroundImage='linear-gradient(0deg,#04283850,transparent 52%),url("'+spotArt(selectedSpot)+'")';
       const water=node('div','room-fishing-v4-water'),fish=node('div','room-fishing-v4-fish'),target=node('div','room-fishing-v4-target');
       // The actual catch stays hidden until landing; a neutral water shadow
@@ -593,19 +589,22 @@
       const reelZones=node('span','room-fishing-v4-reel-zones');
       if(isV5)reelZones.append(node('span','room-fishing-v5-steer-left','◀'),node('span','room-fishing-v5-reel-key','空白'),node('span','room-fishing-v5-steer-right','▶'));
       else reelZones.textContent='← 左　　中　　右 →';
-      reel.append(reelZones,node('strong','',isV5?'按住收線':'按住捲線 · 拖動控竿'));
+      reel.append(reelZones,node('strong','',isV5?'按住收線 · 鬆開自動放線':'按住捲線 · 拖動控竿'));
       reel.addEventListener('pointerdown',event=>{if(event.button!==0||reel.disabled)return;event.preventDefault();event.stopPropagation();fishingV4ReelPointer=event.pointerId;reel.setPointerCapture(event.pointerId);const rect=reel.getBoundingClientRect(),ratio=(event.clientX-rect.left)/rect.width;setFishingV4Control(true,isV5?(ratio<.36?-1:ratio>.64?1:0):0,fishingV4Paying);});
       reel.addEventListener('pointermove',event=>{if(fishingV4ReelPointer!==event.pointerId)return;const rect=reel.getBoundingClientRect(),ratio=(event.clientX-rect.left)/rect.width;setFishingV4Control(true,ratio<.36?-1:ratio>.64?1:0,fishingV4Paying);});
       reel.addEventListener('pointerup',event=>{event.preventDefault();event.stopPropagation();if(fishingV4ReelPointer!==event.pointerId)return;fishingV4ReelPointer=null;setFishingV4Control(false,isV5?fishingV4Steer:0,fishingV4Paying);});
       reel.addEventListener('pointercancel',event=>{event.stopPropagation();if(fishingV4ReelPointer!==event.pointerId)return;fishingV4ReelPointer=null;setFishingV4Control(false,isV5?fishingV4Steer:0,fishingV4Paying);});
       reel.addEventListener('click',event=>{if(event.detail!==0)return;setFishingV4Control(true,fishingV4Steer);setTimeout(()=>setFishingV4Control(false,fishingV4Steer),450);});
-      const pay=node('button','room-fishing-v4-primary room-fishing-v4-pay','↓ 放線');pay.type='button';pay.dataset.paying='false';pay.setAttribute('aria-label',isV5?'按住放線，讓魚游開並回復魚線強度':'按住放線，降低釣線張力');
-      pay.addEventListener('pointerdown',event=>{if(event.button!==0||pay.disabled)return;event.preventDefault();event.stopPropagation();fishingV4PayPointer=event.pointerId;pay.setPointerCapture(event.pointerId);setFishingV4Control(false,fishingV4Steer,true);});
-      pay.addEventListener('pointerup',event=>{if(fishingV4PayPointer!==event.pointerId)return;event.preventDefault();event.stopPropagation();fishingV4PayPointer=null;setFishingV4Control(fishingV4ReelPointer!==null,fishingV4Steer,false);});
-      pay.addEventListener('pointercancel',event=>{if(fishingV4PayPointer!==event.pointerId)return;event.stopPropagation();fishingV4PayPointer=null;setFishingV4Control(fishingV4ReelPointer!==null,fishingV4Steer,false);});
-      pay.addEventListener('click',event=>{if(event.detail!==0)return;setFishingV4Control(false,fishingV4Steer,true);setTimeout(()=>setFishingV4Control(fishingV4ReelPointer!==null,fishingV4Steer,false),450);});
-      fightControls.append(reel,pay);
-      sea.append(water,fish,line,rod,splash,bobber,target,signal,...(isV5?[fishingV5Hud]:[gauge,directionCue]),castMeter,cast,hook,fightControls,...(isV5?[fishingSoundButton()]:[]));stage.append(sea);
+      fightControls.append(reel);
+      if(!isV5){
+        const pay=node('button','room-fishing-v4-primary room-fishing-v4-pay','↓ 放線');pay.type='button';pay.dataset.paying='false';pay.setAttribute('aria-label','按住放線，降低釣線張力');
+        pay.addEventListener('pointerdown',event=>{if(event.button!==0||pay.disabled)return;event.preventDefault();event.stopPropagation();fishingV4PayPointer=event.pointerId;pay.setPointerCapture(event.pointerId);setFishingV4Control(false,fishingV4Steer,true);});
+        pay.addEventListener('pointerup',event=>{if(fishingV4PayPointer!==event.pointerId)return;event.preventDefault();event.stopPropagation();fishingV4PayPointer=null;setFishingV4Control(fishingV4ReelPointer!==null,fishingV4Steer,false);});
+        pay.addEventListener('pointercancel',event=>{if(fishingV4PayPointer!==event.pointerId)return;event.stopPropagation();fishingV4PayPointer=null;setFishingV4Control(fishingV4ReelPointer!==null,fishingV4Steer,false);});
+        pay.addEventListener('click',event=>{if(event.detail!==0)return;setFishingV4Control(false,fishingV4Steer,true);setTimeout(()=>setFishingV4Control(fishingV4ReelPointer!==null,fishingV4Steer,false),450);});
+        fightControls.append(pay);
+      }
+      sea.append(water,fish,line,rod,splash,bobber,target,signal,...(isV5?[fishingV5Hud]:[gauge,directionCue]),castMeter,cast,hook,fightControls);stage.append(sea);
       sea.addEventListener('pointerdown',event=>{
         if(event.button!==0||event.target.closest('button'))return;
         const current=fishingV4Challenge();if(!current)return;
@@ -752,32 +751,29 @@
         catchTrack.querySelector('.room-fishing-v5-rail-marker').style.left=`${(11+remainingDistance*.82).toFixed(2)}%`;
       }
       const signal=sea.querySelector('.room-fishing-v4-signal');
-      const next=challenge.stage==='cast'?fishingV4ChargeStarted?'放開拋竿，依力度決定落點':'按住下方拋竿，蓄力後放開':challenge.stage==='wait'?biting?'浮標猛沉！現在抽竿！':nibbling?'輕啄而已，等浮標猛沉':'等浮標整個沉下再抽竿':risk==='danger'?'魚線強度快耗盡！鬆開捲線':surge&&direction==='left'?'魚向左衝！點海面左側，先鬆開捲線':surge&&direction==='right'?'魚向右衝！點海面右側，先鬆開捲線':strengthRatio<.6?'鬆開捲線，讓魚線強度回復':'魚勢平穩，按住捲線把魚帶近';
+      const next=challenge.stage==='cast'?fishingV4ChargeStarted?'放開拋竿，依力度決定落點':'按住下方拋竿，蓄力後放開':challenge.stage==='wait'?biting?'浮標猛沉！現在抽竿！':nibbling?'輕啄而已，等浮標猛沉':'等浮標整個沉下再抽竿':risk==='danger'?'魚線快斷了！鬆開收線，讓魚自動出線':surge&&direction==='left'?'魚向左衝！把釣竿帶往左側':surge&&direction==='right'?'魚向右衝！把釣竿帶往右側':strengthRatio<.6?'鬆開收線，自動出線並恢復耐壓':'魚勢平穩，按住收線把魚帶近';
       if(signal.textContent!==next)signal.textContent=next;
       const cast=sea.querySelector('.room-fishing-v4-cast'),hook=sea.querySelector('.room-fishing-v4-hook'),fightControls=sea.querySelector('.room-fishing-v4-fight-controls');
       cast.hidden=challenge.stage!=='cast';hook.hidden=challenge.stage!=='wait';fightControls.hidden=challenge.stage!=='fight';hook.disabled=!biting;
       sea.querySelector('.room-fishing-v4-reel').dataset.reeling=String(fishingV4Reeling);
-      sea.querySelector('.room-fishing-v4-pay').dataset.paying=String(fishingV4Paying);
+      const pay=sea.querySelector('.room-fishing-v4-pay');if(pay)pay.dataset.paying=String(fishingV4Paying);
       const castPoint=challenge.castTarget&&Number.isFinite(challenge.castTarget.x)&&Number.isFinite(challenge.castTarget.y)?{x:challenge.castTarget.x*100,y:challenge.castTarget.y*100}:FISH_CAST_ZONES[challenge.castZone||selectedCastZone]||FISH_CAST_ZONES.mid;
       // During the wait, the cast landing point sets perspective. Once hooked,
       // the remaining fish distance drives the water disturbance toward the
       // boat. The fish's horizontal position remains the source of left/right
       // movement, so the splash never becomes a disconnected direction icon.
-      const castFarness=clamp((FISH_CAST_ZONES.near.y-castPoint.y)/(FISH_CAST_ZONES.near.y-FISH_CAST_ZONES.far.y),0,1);
-      const apparentNearness=challenge.stage==='fight'?closeness:1-castFarness;
-      sea.style.setProperty('--bobber-scale',(.58+.90*apparentNearness).toFixed(3));
-      // Fight splashes need a stronger depth curve than cast ripples: at a
-      // distant 72% they are compact, but at 28% they are clearly larger even
-      // at opposite points of the splash animation. Cap the near end by the
-      // fish's 18–82% horizontal projection so no edge is clipped.
-      const splashScale=challenge.stage==='fight'?.20+1.48*closeness*closeness:.48+1.05*apparentNearness;
-      const splashWidth=clamp(sea.clientWidth*.2,120,210)*splashScale;
+      // Hold the hook at its chosen near/mid/far depth, then bring its water
+      // disturbance toward the boat as server distance falls. Sizing follows
+      // that same projected water line, rather than an independent scale.
+      const floatY=challenge.stage==='fight'?castPoint.y+(62-castPoint.y)*closeness+(fish.y-.57)*8:castPoint.y;
+      const perspective=clamp((floatY-30)/33,0,1);
+      sea.style.setProperty('--bobber-scale',(.24+.42*perspective).toFixed(3));
+      const splashWidth=clamp(sea.clientWidth*.13,75,120)*(.20+.62*perspective*perspective);
       sea.style.setProperty('--splash-width',`${splashWidth.toFixed(1)}px`);
-      const visualX=50+(fish.x-.5)*76;
+      const visualX=clamp((castPoint.x+(fish.x-.5)*30)*(1-closeness)+(48+(fish.x-.5)*68)*closeness,7,93);
       const floatX=challenge.stage==='fight'?visualX:castPoint.x;
-      const floatY=challenge.stage==='fight'?31+30*closeness+(fish.y-.57)*10:castPoint.y;
       sea.style.setProperty('--fish-x',visualX.toFixed(2)+'%');sea.style.setProperty('--fish-y',(floatY+4).toFixed(2)+'%');
-      sea.style.setProperty('--fish-scale',(.8+.65*closeness).toFixed(3));
+      sea.style.setProperty('--fish-scale',(.55+.45*perspective).toFixed(3));
       sea.style.setProperty('--float-x',floatX.toFixed(2)+'%');sea.style.setProperty('--float-y',floatY.toFixed(2)+'%');
       const bobOffset=biting?0:nibbling?Math.sin(at/90)*3:Math.sin(at/270)*2.5+(challenge.stage==='fight'?Math.sin(at/(145-pullIntensity*70))*pullIntensity*5:0);
       sea.style.setProperty('--bob-offset',`${bobOffset.toFixed(1)}px`);
@@ -1014,7 +1010,7 @@
           event.preventDefault();setFishingV4Control(fishingV4Reeling,event.key==='ArrowLeft'?-1:1);return;
         }
         if(stage==='fight'&&event.key==='ArrowDown'){
-          event.preventDefault();setFishingV4Control(false,fishingV4Steer,true);return;
+          event.preventDefault();if(game.challenge.fishingVersion===4)setFishingV4Control(false,fishingV4Steer,true);return;
         }
         if(event.key===' '||event.key==='Enter'){
           event.preventDefault();if(stage==='cast'&&!event.repeat){fishingV4ChargeKey=true;startFishingV4Charge();}
@@ -1048,7 +1044,7 @@
       if(game.challenge.stage==='cast'&&(event.key===' '||event.key==='Enter')&&fishingV4ChargeKey){event.preventDefault();fishingV4ChargeKey=false;finishFishingV4Charge();return;}
       if(game.challenge.stage!=='fight')return;
       if(event.key===' '){event.preventDefault();setFishingV4Control(false,fishingV4Steer);}
-      if(event.key==='ArrowDown'){event.preventDefault();setFishingV4Control(false,fishingV4Steer,false);}
+      if(event.key==='ArrowDown'&&game.challenge.fishingVersion===4){event.preventDefault();setFishingV4Control(false,fishingV4Steer,false);}
       if(event.key==='ArrowLeft'&&fishingV4Steer===-1||event.key==='ArrowRight'&&fishingV4Steer===1){event.preventDefault();setFishingV4Control(fishingV4Reeling,0);}
     }
     // A challenge keeps its clock while unfocused. No free restart or offscreen reward.

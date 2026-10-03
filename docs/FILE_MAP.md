@@ -1,5 +1,11 @@
 # File Map
 
+## 2026-10-03 海釣景深、放線與魚池（1.2.23 內容修訂 6，公開部署待驗）
+
+- `desktop/launcher-room-minigames.js/.css`：浮標與水花按投距／魚距縮放、寬短場景景深構圖、v5 鬆開收線自動放線、移除釣魚音效按鈕；v4 畫面相容。
+- `server/launcher-minigames.js`：六釣點×三餌×三投距魚池權重，降低貝類重複命中率，維持 26 種魚可取得；`server/launcher-fishing-v5.js`：保留來源行為槽，加入每魚節奏倍率與自動放線判定，接受舊版 `paying` 請求。
+- `scripts/launcher_fishing_v5_server_qa.js`、`scripts/launcher_fishing_species_qa.js`、`scripts/launcher_fishing_server_qa.js`、`scripts/launcher_fishing_v5_browser_qa.js`：魚勢與策略、可釣魚種、舊版伺服器以及桌機／960×640 圖面回歸。魚池機率與伺服器證據在 `D:\Codex_QA\launcher-fishing-balance-1.2.25\`，瀏覽器三組報告在 `D:\Codex_QA\launcher-fishing-depth-controls-1.2.25\`。`public/desktop/launcher-content-v1.json` 為已簽署的修訂 6 清單；候選更新器讀回 21 檔並驗證修訂 5→6 只下載兩個變更 blob，共 243,181 bytes，報告在 `D:\Codex_QA\launcher-fishing-depth-controls-content-r6\candidate-report.json`；Render 正式讀回待驗。
+
 ## 2026-10-03 海釣音效、線輪與房間像素點擊（內容修訂 5，已部署）
 
 - `desktop/launcher-room-minigames.js/.css`：上鉤／釣獲／收放線音效與靜音、依伺服器魚距正反轉的手把、連續漸層耐壓外圈。

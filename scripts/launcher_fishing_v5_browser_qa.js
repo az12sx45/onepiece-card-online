@@ -144,7 +144,8 @@ async function setup(page,client){
     }
     for(const type of ['pointerdown','pointerup','pointercancel','click'])document.addEventListener(type,event=>{
       if(event.target.closest?.('.room-fishing-v4-cast'))__qa.pointerEvents.push({type,button:event.button,
-        pointerType:event.pointerType,detail:event.detail,charging:document.querySelector('.room-fishing-v4-sea')?.dataset.charging,
+        pointerType:event.pointerType,detail:event.detail,disabled:event.target.closest('.room-fishing-v4-cast')?.disabled,
+        phase:__minigame?.inspect?.().phase,charging:document.querySelector('.room-fishing-v4-sea')?.dataset.charging,
         power:Number(document.querySelector('.room-fishing-v4-cast-track')?.getAttribute('aria-valuenow'))});
     },true);
     const command=async(type,payload)=>{
@@ -403,14 +404,8 @@ async function catchArtVisible(page){
   });
 }
 async function begin(page,label){
-  const sound=page.locator('.room-fishing-v4-intro-scene .room-fishing-sfx');
-  check(`${label}: fishing sound starts enabled with a compact mute control`,
-    await sound.getAttribute('aria-pressed')==='true');
-  await sound.click();
-  check(`${label}: mute control persists its off state`,await sound.getAttribute('aria-pressed')==='false'&&
-    await page.evaluate(()=>localStorage.getItem('onepiece.launcher.fishingSfx.v1'))==='off');
-  await sound.click();
-  check(`${label}: sound can be restored before fishing`,await sound.getAttribute('aria-pressed')==='true');
+  check(`${label}: intro has no separate sound control`,
+    await page.locator('.room-fishing-v4-intro-scene .room-fishing-sfx').count()===0);
   await page.getByRole('button',{name:'開始釣魚'}).click();
   await page.locator('.room-fishing-v4-sea[data-stage="cast"]').waitFor();
   check(`${label}: v5 is selected`,await page.locator('.fishing-v5').count()===1);
@@ -487,6 +482,9 @@ async function castAndHook(page,label){
   check(`${label}: strength and direction HUD fits viewport`,geometry.hudVisible&&geometry.noHorizontalOverflow);
   check(`${label}: fighting actions visible and reachable`,geometry.controlsVisible);
   check(`${label}: control pad stays compact on the right`,geometry.compactRightPad);
+  check(`${label}: releasing the reel pays line automatically without a pay button`,
+    await page.locator('.room-fishing-v4-pay,.room-fishing-sfx').count()===0&&
+    (await page.locator('.room-fishing-v4-reel').textContent()).includes('鬆開自動放線'));
   const meter=await fightMeterState(page);
   check(`${label}: line wheel, pull arc and distance ruler are visible`,
     meter.dialVisible&&meter.arcVisible&&meter.progressVisible&&meter.needleVisible&&meter.staticOuterRing);
@@ -594,39 +592,27 @@ async function fightInteraction(page,label){
   const surgeWater=await fightWaterVisual(page);
   check(`${label}: surge water splash remains visible`,surgeWater.bobberHidden&&surgeWater.splashVisible);
   await snapshot(page,`${label}-surge`);
-  const pay=page.locator('.room-fishing-v4-pay');await pay.scrollIntoViewIfNeeded();
-  const payBox=await pay.boundingBox();assert(payBox,`${label}: pay hit area`);
-  await page.mouse.move(payBox.x+payBox.width*.5,payBox.y+payBox.height*.5);await page.mouse.down();
-  await page.waitForTimeout(220);
-  const payVisual=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>({
+  const automaticLine=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>({
     movement:wheel.closest('.room-fishing-v5-hud').dataset.reelDirection,
     signedRate:Number(wheel.closest('.room-fishing-v5-hud').dataset.reelRate),
     animation:getComputedStyle(wheel).animationName,
-    angle:(()=>{const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
-      return Math.atan2(matrix.b,matrix.a)*180/Math.PI;})(),
     attached:wheel.querySelector('.room-fishing-v5-dial-crank')?.parentElement===wheel,
     label:document.querySelector('.room-fishing-v5-strength-copy>span')?.textContent}));
-  const payPressure=await fightMeterState(page);
-  await page.waitForTimeout(140);
-  const payAngle=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>{
-    const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
-    return Math.atan2(matrix.b,matrix.a)*180/Math.PI;
-  });
-  const payDelta=(payAngle-payVisual.angle+540)%360-180;
-  check(`${label}: paying reverses reel and attached crank at line speed`,payVisual.movement==='out'&&
-     payVisual.signedRate<0&&payVisual.animation==='none'&&payVisual.attached&&payVisual.label==='耐壓'&&
-    payDelta< -4&&payDelta> -150);
-  check(`${label}: releasing line keeps the outer ring tied to server strength`,
-    meterMatchesServer(payPressure)&&payPressure.pressureRingVisible);
+  const automaticPressure=await fightMeterState(page);
+  check(`${label}: line goes out as soon as reeling stops`,automaticLine.movement==='out'&&
+    automaticLine.signedRate<0&&automaticLine.animation==='none'&&automaticLine.attached&&
+    automaticLine.label==='耐壓');
+  check(`${label}: automatic payout keeps the outer ring tied to server strength`,
+    meterMatchesServer(automaticPressure)&&automaticPressure.pressureRingVisible);
   fs.writeFileSync(path.join(out,`${label}-reel-motion.json`),JSON.stringify({
     winding:{before:reelBefore,after:reelAfter,delta:reelDelta,pressure:reelPressure},
-    paying:{before:payVisual,afterAngle:payAngle,delta:payDelta,pressure:payPressure}},null,2));
-  await snapshot(page,`${label}-paying`);
-  await page.waitForTimeout(230);await page.mouse.up();
-  check(`${label}: reel keeps reflecting fish draw after paying ends`,
+    automaticLine:{visual:automaticLine,pressure:automaticPressure,delta:fishPullDelta}},null,2));
+  await snapshot(page,`${label}-automatic-payout`);
+  check(`${label}: reel keeps reflecting fish draw while resting`,
     await page.locator('.room-fishing-v5-hud').getAttribute('data-reel-direction')==='out');
   const paid=(await actionCalls(page,'control')).slice(beforeControls);
-  check(`${label}: pay and release reach server`,paid.some(c=>c.payload.paying===true)&&paid.at(-1)?.payload.paying===false);
+  check(`${label}: automatic payout needs no paying action`,paid.some(c=>c.payload.reeling===false)&&
+    paid.every(c=>c.payload.paying!==true));
   const before=(await visual(page)).strength;
   await page.waitForTimeout(1100);
   const after=(await visual(page)).strength;
@@ -650,13 +636,10 @@ async function fightInteraction(page,label){
   check(`${label}: calm water lets recovered line wind clockwise faster than idle fish draw`,
     calmBefore.direction==='in'&&calmBefore.rate>2&&calmDelta>20&&calmDelta<150&&
     calmBefore.rate>Math.abs(fishPullBefore.rate));
-  const mute=page.locator('.room-fishing-v4-sea>.room-fishing-sfx');
-  await mute.click();
-  const soundWhileMuted=await page.evaluate(()=>__qa.soundStarts.length);
+  const soundsBeforeNextReel=await page.evaluate(()=>__qa.soundStarts.length);
   await holdPointer(page,reel,420);
-  check(`${label}: muted reel makes no additional sound`,
-    await page.evaluate(()=>__qa.soundStarts.length)===soundWhileMuted);
-  await mute.click();
+  check(`${label}: the next reel still makes mechanical sound without a visible audio toggle`,
+    await page.evaluate(()=>__qa.soundStarts.length)>soundsBeforeNextReel);
   const beforeBlur=await page.evaluate(()=>({sounds:__qa.soundStarts.length,suspends:__qa.audioSuspends,state:__qa.audioContext?.state}));
   await page.evaluate(()=>window.dispatchEvent(new Event('blur')));
   await page.waitForTimeout(220);
@@ -683,20 +666,23 @@ async function verifyDistanceRuler(page,label){
     const meter=await fightMeterState(page);
     return{...meter,water:await waterPerspective(page)};
   };
-  const far=await setDistance(72),near=await setDistance(28);
+  const far=await setDistance(72);
+  await snapshot(page,`${label}-ruler-far`);
+  const near=await setDistance(28);
   fs.writeFileSync(path.join(out,`${label}-distance-ruler.json`),JSON.stringify({far,near},null,2));
   check(`${label}: fish marker travels toward boat when server distance falls`,
     far.progress-near.progress>=30&&far.markerCenter-near.markerCenter>50&&
     far.fillRatio-near.fillRatio>.3);
   check(`${label}: distance ruler remains bound to server`,meterMatchesServer(far)&&meterMatchesServer(near));
-  check(`${label}: nearer fish makes a larger water splash`,
-    near.water.splashWidth/far.water.splashWidth>1.8);
+  check(`${label}: projected fish depth controls a compact water splash`,
+    near.water.splashWidth>far.water.splashWidth*1.1&&
+    near.water.splashWidth<=105&&far.water.splashWidth<=105);
   check(`${label}: nearer fish pulls splash toward foreground`,
-    near.water.splashY-far.water.splashY>near.water.seaHeight*.10);
+    near.water.splashY-far.water.splashY>near.water.seaHeight*.025);
   const edgeSplash=await page.locator('.room-fishing-v4-sea').evaluate(sea=>{
     const splash=sea.querySelector('.room-fishing-v4-splash');
     const priorX=sea.style.getPropertyValue('--float-x'),priorWidth=sea.style.getPropertyValue('--splash-width');
-    const maxWidth=Math.max(120,Math.min(210,sea.clientWidth*.2))*1.68;
+    const maxWidth=Math.max(75,Math.min(120,sea.clientWidth*.13))*.82;
     sea.style.setProperty('--splash-width',`${maxWidth}px`);
     const samples=[18,82].map(x=>{
       sea.style.setProperty('--float-x',`${x}%`);
@@ -815,7 +801,10 @@ async function runCastDepth(label,width,height){
     fs.writeFileSync(path.join(out,`${label}-cast-depth.json`),JSON.stringify({near,far},null,2));
     check(`${label}: near cast bobber visibly larger than far cast`,
       near.bobberWidth/far.bobberWidth>1.7&&near.bobberHeight/far.bobberHeight>1.7);
+    check(`${label}: both cast bobbers stay small against the sea`,
+      near.bobberWidth<46&&far.bobberWidth<24);
     check(`${label}: near cast splash visibly larger than far cast`,near.splashWidth/far.splashWidth>2);
+    check(`${label}: near cast splash does not dominate the foreground`,near.splashWidth<105);
     check(`${label}: cast distance shifts bobber across sea perspective`,
       near.bobberX<far.bobberX-near.seaWidth*.25&&
       near.bobberY>far.bobberY+near.seaHeight*.06);
@@ -832,7 +821,15 @@ async function runLegacy(){
     check('legacy: v4 session renders without v5 marker',await page.locator('.fishing-v4:not(.fishing-v5)').count()===1);
     check('legacy: tension meter preserved',await page.locator('.room-fishing-v4-gauge').getAttribute('aria-label')==='釣線張力');
     await holdPointer(page,page.locator('.room-fishing-v4-cast'),180);
-    await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor();
+    try{await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor({timeout:6000});}
+    catch(error){
+      const diagnostic=await page.evaluate(()=>({stage:document.querySelector('.room-fishing-v4-sea')?.dataset.stage,
+        feedback:document.querySelector('[data-testid=minigame-feedback]')?.textContent,
+        castDisabled:document.querySelector('.room-fishing-v4-cast')?.disabled,
+        pointerEvents:__qa.pointerEvents,calls:__qa.calls,responses:__qa.responses}));
+      fs.writeFileSync(path.join(out,'legacy-cast-failure.json'),JSON.stringify({diagnostic,server:sessions.get('legacy')},null,2));
+      throw error;
+    }
     check('legacy: cast accepted by v4 core',sessions.get('legacy')?.challenge.stage==='wait');
     await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.biting==='true',null,{timeout:7500});
     await page.locator('.room-fishing-v4-hook').click();

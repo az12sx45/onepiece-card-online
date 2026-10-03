@@ -35,6 +35,8 @@ check('new habitat ids exactly added',M.FISHING_SPOTS,
   ['shore','reef','deep','freshwater','magma','rainbow']);
 
 const reachable=new Set();
+const shellIds=new Set(['striped-clam','treasure-pearl-clam']);
+const shellHabitats=new Set(['shore/worm','reef/worm','rainbow/shrimp']);
 for(const spotId of M.FISHING_SPOTS){
   for(const baitId of M.FISHING_BAITS){
     for(const zone of Object.keys(M.FISHING_CAST_ZONES)){
@@ -42,6 +44,10 @@ for(const spotId of M.FISHING_SPOTS){
       check(`${spotId}/${baitId}/${zone} has weighted fish`,
         Array.isArray(pool)&&pool.length>0&&pool.every(([id,weight])=>
           catalogue.has(id)&&Number.isSafeInteger(weight)&&weight>0),true);
+      const total=pool.reduce((sum,[,weight])=>sum+weight,0);
+      const shell=pool.reduce((sum,[id,weight])=>sum+(shellIds.has(id)?weight:0),0);
+      check(`${spotId}/${baitId}/${zone} shell chance follows habitat and stays at most 15%`,
+        shellHabitats.has(`${spotId}/${baitId}`)?shell>0&&shell/total<=.15:shell===0,true);
       for(const [id] of pool)reachable.add(id);
       const session=M.create('fishing','room-character-luffy',1,
         new Date('2026-10-02T00:00:00.000Z'),false,'supply',4,baitId,spotId,2);

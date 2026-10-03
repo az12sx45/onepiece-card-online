@@ -100,6 +100,9 @@ function main(){
       steer:r.pullDirection==='left'?-1:1,
       paying:!(r.strength>65&&v5.displayIntensity(r.pullIntensity,r.runState)<.85)}:
     {reeling:r.strength>=38,steer:0,paying:r.strength<38};
+  const autoRelease=r=>({...responsive(r),paying:false});
+  const reelAndRelease=r=>({reeling:r.runState==='calm'&&r.strength>38,
+    steer:0,paying:false});
   const outcomes=[];
   for(const skill of [0,1,2,3])for(const seed of [1,2,10,12345]){
     const b=fight(skill,seed,blind),i=fight(skill,seed,idle),s=fight(skill,seed,responsive);
@@ -124,7 +127,19 @@ function main(){
     check('matching fish direction reduces lateral fish motion',
       Math.abs(toward.fishX-before.fishX)<Math.abs(away.fishX-before.fishX),true);
     check('matching fish direction reduces fish escape',toward.distance<away.distance,true);
+    const automatic=JSON.parse(JSON.stringify(before));
+    const hardReel=JSON.parse(JSON.stringify(before));
+    v5.control(automatic,date(turnAt),false,sign,false);
+    v5.control(hardReel,date(turnAt),true,0,false);
+    v5.simulate(automatic,date(turnAt+700),2);
+    v5.simulate(hardReel,date(turnAt+700),2);
+    check('releasing reel automatically pays line like legacy explicit payout',
+      [automatic.distance,automatic.strength],[toward.distance,toward.strength]);
+    check('automatic payout preserves more strength than hard reeling into a run',
+      automatic.strength>hardReel.strength,true);
   }
+  check('weak patient fish is playable with only reel and release',
+    fight(0,12345,reelAndRelease,0,70,'striped-clam').result,'landed');
   const basicGear=fight(3,1,blind,0,5),upgradedGear=fight(3,1,blind,3,5);
   check('rod upgrade keeps line stronger',upgradedGear.round.strength>basicGear.round.strength,true);
   check('rod upgrade helps reel fish closer',upgradedGear.round.distance<basicGear.round.distance,true);
@@ -157,14 +172,23 @@ function main(){
     const skill=minigames.FISHING_V3_DIFFICULTY[fish.id]??1;
     const result=fight(skill,12345,responsive,0,70,fish.id);
     const slowNetwork=fight(skill,12345,responsive,0,70,fish.id,1000);
+    const autoResult=fight(skill,12345,autoRelease,0,70,fish.id,1000);
     const blindResult=fight(skill,12345,blind,0,70,fish.id);
     styles.add(result.round.behavior.style);
     speciesOutcomes.push({id:fish.id,style:result.round.behavior.style,force:result.round.behavior.force,
       normal:result.result,normalSeconds:result.elapsed,oneSecond:slowNetwork.result,oneSecondSeconds:slowNetwork.elapsed,
-      blind:blindResult.result});
+      blind:blindResult.result,auto:autoResult.result});
   }
   check('all species have a responsive catch',speciesOutcomes.filter(item=>item.normal!=='landed').map(item=>item.id),[]);
   check('all species survive one-second control cadence',speciesOutcomes.filter(item=>item.oneSecond!=='landed').map(item=>item.id),[]);
+  check('all species can be landed without an explicit payout button',
+    speciesOutcomes.filter(item=>item.auto!=='landed').map(item=>item.id),[]);
+  check('all species use distinct launcher fight accents',
+    new Set(minigames.FISH_SPECIES.map(fish=>{
+      const round=v5.create('accent',0);round.motionSeed=71;
+      v5.cast(round,date(100),'worm','mid',{x:.66,y:.45});v5.hook(round,date(4000),1,fish.id);
+      return JSON.stringify(round.behavior.accent);
+    })).size,minigames.FISH_SPECIES.length);
   check('blind held reel cannot land any species',speciesOutcomes.filter(item=>item.blind==='landed').map(item=>item.id),[]);
   const variationFailures=[];
   const sampledSeeds=[1,2,10,70,71,100,101,1000,12345,54321,7654321,

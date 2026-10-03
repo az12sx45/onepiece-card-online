@@ -66,12 +66,37 @@ const ISO_STYLES = Object.freeze({
 });
 const EXTRA_STYLES = Object.freeze({'balloon-catfish':'patient','glistening-saury':'dart',
   'smile-jellyfish':'patient','butterflyfish':'dart','cola-sunfish':'patient','reef-shark':'heavy'});
-// These two ISO records are numerically identical. A small launcher-only
-// movement accent makes their silhouette and pacing distinguishable without
-// changing either fish's sourced force coefficient.
-const PRESENTATION_ACCENTS = Object.freeze({
-  'great-terigius':Object.freeze({duration:.94,swim:1.18}),
-  'golden-whale':Object.freeze({duration:1.08,swim:.82})
+// Launcher-authored species accents make fish of the same broad movement style
+// feel different. They do not alter the sourced ISO slot weights or raw F:
+// duration controls the lull/run, swim the lateral speed, pull line escape,
+// fatigue the strength cost of hard reeling, and grip the reeling gain.
+const FIGHT_ACCENTS = Object.freeze({
+  'balloon-catfish':Object.freeze({duration:1.08,swim:.9,pull:.87,fatigue:.86,grip:1.07}),
+  'glistening-saury':Object.freeze({duration:.84,swim:1.27,pull:1.03,fatigue:.96,grip:1.02}),
+  'smile-jellyfish':Object.freeze({duration:1.14,swim:.74,pull:.83,fatigue:.8,grip:1.1}),
+  'panda-shark':Object.freeze({duration:1.06,swim:1.12,pull:1.12,fatigue:1.1,grip:.95}),
+  'butterflyfish':Object.freeze({duration:.91,swim:1.19,pull:.91,fatigue:.9,grip:1.06}),
+  'adventure-fish':Object.freeze({duration:.97,swim:1.12,pull:1.03,fatigue:1.01,grip:1.01}),
+  'cola-sunfish':Object.freeze({duration:1.16,swim:.77,pull:1.04,fatigue:1.02,grip:.97}),
+  'reef-shark':Object.freeze({duration:1.08,swim:1.15,pull:1.18,fatigue:1.14,grip:.91}),
+  'elephant-tuna':Object.freeze({duration:.94,swim:1.21,pull:1.14,fatigue:1.11,grip:.94}),
+  'lovely-angel':Object.freeze({duration:1.06,swim:.87,pull:.86,fatigue:.86,grip:1.08}),
+  'striped-clam':Object.freeze({duration:1.12,swim:.72,pull:.82,fatigue:.83,grip:1.1}),
+  'cutie-piranha':Object.freeze({duration:.88,swim:1.24,pull:1.06,fatigue:1.04,grip:1.02}),
+  'claw-shrimp':Object.freeze({duration:.94,swim:1.16,pull:.94,fatigue:.93,grip:1.05}),
+  'pumpkin-octopus':Object.freeze({duration:1.09,swim:1.08,pull:1.08,fatigue:1.06,grip:.97}),
+  'maple-salmon':Object.freeze({duration:.93,swim:1.13,pull:.98,fatigue:.96,grip:1.03}),
+  'lava-flounder':Object.freeze({duration:1.13,swim:.86,pull:1.08,fatigue:1.05,grip:.99}),
+  'treasure-pearl-clam':Object.freeze({duration:1.1,swim:.79,pull:1.04,fatigue:1.11,grip:.95}),
+  'electric-catfish':Object.freeze({duration:.9,swim:1.18,pull:1.13,fatigue:1.1,grip:.94}),
+  'demon-bonito':Object.freeze({duration:.85,swim:1.26,pull:1.08,fatigue:1.08,grip:.97}),
+  'guiding-anglerfish':Object.freeze({duration:1.11,swim:.83,pull:1.12,fatigue:1.11,grip:.93}),
+  'ice-fish':Object.freeze({duration:.87,swim:1.23,pull:1.05,fatigue:1.03,grip:1.01}),
+  'beat-alligator':Object.freeze({duration:1.08,swim:.92,pull:1.16,fatigue:1.12,grip:.92}),
+  'aurora-sunfish':Object.freeze({duration:1.06,swim:1.05,pull:1.03,fatigue:1.07,grip:1.08}),
+  'burning-dragon':Object.freeze({duration:.88,swim:1.27,pull:1.24,fatigue:1.18,grip:.9}),
+  'great-terigius':Object.freeze({duration:.94,swim:1.18,pull:1.19,fatigue:1.13,grip:.91}),
+  'golden-whale':Object.freeze({duration:1.12,swim:.82,pull:1.16,fatigue:1.13,grip:.91})
 });
 const BEHAVIOR_STYLES = Object.freeze({
   patient:Object.freeze({calmMs:5100,surgeMs:1600,turns:0,swimSpeed:.11,reelGain:6.25,surgeEscape:1.45,reelDrain:5.6,recovery:9.2}),
@@ -86,10 +111,10 @@ function directedFraction(slots){
 function behaviorFor(id) {
   const iso=ISO_BEHAVIOR_MODES[id];
   if(iso)return{style:ISO_STYLES[id],source:'iso',sourceId:iso[0],slots:iso[1],
-    directedFraction:directedFraction(iso[1]),accent:PRESENTATION_ACCENTS[id]||null};
+    directedFraction:directedFraction(iso[1]),accent:FIGHT_ACCENTS[id]||null};
   const slots=EXTRA_BEHAVIOR_MODES[id]||[[0,65,1000,1800,700],[1,35,1000,1500,700]];
   return{style:EXTRA_STYLES[id]||'weave',source:'launcher',slots,
-    directedFraction:directedFraction(slots)};
+    directedFraction:directedFraction(slots),accent:FIGHT_ACCENTS[id]||null};
 }
 
 function castZoneForPower(power) {return power<35?'near':power<70?'mid':'far';}
@@ -167,7 +192,7 @@ function selectPhase(round,skill,index,at) {
   const turns=round.behavior.source==='iso'?0:rules.turns;
   round.turnsRemaining=mode?turns:0;
   round.nextTurnAt=mode&&turns?iso(at+Math.round(length/(turns+1))):null;
-  const pull=rules.surgeEscape*round.behavior.force;
+  const pull=rules.surgeEscape*round.behavior.force*(round.behavior.accent?.pull||1);
   round.pullIntensity=round4(mode?clamp(.12+pull/5,0,1):clamp(.06+pull/30,0,.2));
 }
 
@@ -214,8 +239,12 @@ function simulate(round,now,difficulty=1) {
     const control=held?round.control:{reeling:false,steer:0,paying:false};
     const surge=round.runState==='surge',fishSign=round.pullDirection==='left'?-1:round.pullDirection==='right'?1:0;
     const aligned=surge&&control.steer===fishSign,opposed=surge&&control.steer===-fishSign;
-    const paying=control.paying===true&&!control.reeling;
-    const {style,force}=round.behavior,rules=BEHAVIOR_STYLES[style],surgePull=rules.surgeEscape*force;
+    // Releasing the reel automatically lets line run. Older clients may still
+    // send `paying`; their requests remain valid, but the extra button is not
+    // required to protect the line. Steering with the run limits the payout.
+    const paying=!control.reeling;
+    const {style,force,accent}=round.behavior,rules=BEHAVIOR_STYLES[style];
+    const surgePull=rules.surgeEscape*force*(accent?.pull||1);
     const speed=surge?(fishSign*rules.swimSpeed*(round.behavior.accent?.swim||1)*
       (.75+force*.25)*(aligned?.42:opposed?1.2:1)):
       (.5-round.fishX)*.65+.027*Math.sin((next-Date.parse(round.hookedAt))/830+(round.motionSeed%71));
@@ -229,14 +258,14 @@ function simulate(round,now,difficulty=1) {
       // A fish that draws directed runs most of the time must still be
       // catchable by following it and reeling on a one-second input cadence.
       const alignedGain=7.2+Math.max(0,round.behavior.directedFraction-.5)*4+gear*.18;
-      const gain=surge?(aligned?alignedGain:.3):(rules.reelGain-force*.25+gear*.28);
+      const gain=(surge?(aligned?alignedGain:.3):(rules.reelGain-force*.25+gear*.28))*(accent?.grip||1);
       const escape=surge?surgePull*(aligned?.62:opposed?1.3:1.06):.5;
       round.distance=clamp(round.distance+(escape-gain)*dt,0,100);
       // Holding the reel without a pause costs increasing strength. This
       // makes release a real choice even for a patient, easy-to-catch fish.
       const heldCost=clamp((round.reelHoldMs-2500)/1000*2,0,15);
       const drain=(surge?rules.reelDrain*force*(aligned?.72:opposed?1.28:1)+skill*.25-gear*.45:
-        2.15+force*.4+skill*.2-gear*.25)+heldCost;
+        2.15+force*.4+skill*.2-gear*.25)*(accent?.fatigue||1)+heldCost;
       round.strength=clamp(round.strength-drain*dt,0,round.maxStrength);
     }else{
       round.reelHoldMs=0;
