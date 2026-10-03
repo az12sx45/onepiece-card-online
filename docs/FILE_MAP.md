@@ -1,10 +1,11 @@
 # File Map
 
-## 2026-10-03 海釣限時甩竿與動態海面（1.2.23 內容修訂 7，候選）
+## 2026-10-03 海釣限時甩竿與動態海面（1.2.23 內容修訂 7，已部署）
 
 - `server/launcher-fishing-v5.js`、`server/launcher-minigames.js`、`server/launcher-life-store.js`：只讓新場次選用伺服器限時甩竿；左／右／上提示、單次判定、逾時與持久化路由，舊場次維持原節奏。
 - `desktop/launcher-room-minigames.js/.css`：海面拖甩及方向鍵、甩竿與魚線連接動畫、遠近水層及天光動態；既有線輪耐壓、拉力弧、魚距軌道不變。
 - `scripts/launcher_fishing_flick_server_qa.js`、`scripts/launcher_fishing_flick_life_qa.js`、`scripts/launcher_fishing_v5_browser_qa.js`：三方向時窗、獎懲、舊場次及實際滑鼠／鍵盤操作回歸；本次沒有將 XAPK 或影片素材加入玩家資產。
+- `config/launcher-announcements-v1.json`：修訂 22 的圖文海釣更新公告，沿用安裝包內已有的海釣主圖。`public/desktop/launcher-content-v1.json`：修訂 7 的正式簽署清單，21 檔；公開 SHA-256 `4a23a58cdffc9fab36c89e1334cf1fda4f5974d3a1ec48fc894e500018d3da79`，舊修訂 6→7 只下載 JS/CSS 兩個 blob、255,954 bytes。公開更新器證據在 `D:\Codex_QA\launcher-fishing-master-flick-content-r7\public-report.json`。
 
 ## 2026-10-03 海釣景深、放線與魚池（1.2.23 內容修訂 6，已部署）
 

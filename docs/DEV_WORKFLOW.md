@@ -1,10 +1,12 @@
 # Dev Workflow
 
-## 2026-10-03 海釣參照《歡樂釣魚大師》加入限時甩竿與分層海面（1.2.23 內容修訂 7，候選）
+## 2026-10-03 海釣參照《歡樂釣魚大師》加入限時甩竿與分層海面（1.2.23 內容修訂 7，已部署）
 
 範圍：`server/launcher-fishing-v5.js`、`server/launcher-minigames.js`、`server/launcher-life-store.js` 為新 v5 場次加伺服器權威的左／右／上甩竿提示與單次限時判定，2.6 秒作答窗、至少 2.9 秒的對應衝刺；正確、錯誤、超時各有明確的耐壓與魚距結果。`desktop/launcher-room-minigames.js/.css` 加入海面拖甩、方向鍵、提示與竿身反應，保留既有線輪錶資訊及收線／自動放線；用 CSS 分層天光、遠近水紋，沿用現有航海王彩繪圖，不取用 XAPK 或影片原圖。`scripts/launcher_fishing_flick_server_qa.js`、`launcher_fishing_flick_life_qa.js` 及 `launcher_fishing_v5_browser_qa.js` 增加核心、資料庫、實際滑鼠／鍵盤 QA。原有 r5/r6 rank 圖是先前使用者修改，不屬本次範圍。
 
-已完成候選驗證：限時甩竿核心 217/217，26 種魚×兩種種子均可上岸；既有 v5 伺服器 1211/1211；PGlite 命令與 JSONB 保存 20/20；Chromium 左、右、上三種甩竿含動作期間竿尖連線 24/24，完整桌機、960×640、遠近投距、舊 v4、不同魚勢及音效回歸共 276/276，報告在 `D:\Codex_QA\launcher-fishing-master-v5-browser-final-r3\report.json`。魚種 287/287、其他小遊戲 104/104、舊釣魚場次另一次完整測試 778/778、既有 v5 生活流程 21/21、公告服務 82/82 通過；舊釣魚 QA 第一次因亂數魚種 21 秒超過原有 20 秒門檻而失敗，第二次通過，未修改該門檻或玩法。`npm start` 以隔離 8894 埠啟動，靜態 Board 首頁及內容清單 HTTP 200；沒有 `DATABASE_URL`，此項不代表正式帳號功能驗收。簽署內容清單修訂 7 SHA-256 `4a23a58cdffc9fab36c89e1334cf1fda4f5974d3a1ec48fc894e500018d3da79`，21 個邏輯檔中只更換 JS/CSS 兩個 blob、合計 255,954 bytes；R2 已上傳且候選更新器 stage/load/readVerified 與修訂 6→7 差分啟用通過，報告在 `D:\Codex_QA\launcher-fishing-master-flick-content-r7\candidate-report.json`。正式 Git／Render 公開讀回待發布後補記。
+驗證：限時甩竿核心 217/217，26 種魚×兩種種子均可上岸；既有 v5 伺服器 1211/1211；PGlite 命令與 JSONB 保存 20/20；Chromium 左、右、上三種甩竿含動作期間竿尖連線 24/24，完整桌機、960×640、遠近投距、舊 v4、不同魚勢及音效回歸共 276/276，報告在 `D:\Codex_QA\launcher-fishing-master-v5-browser-final-r3\report.json`。魚種 287/287、其他小遊戲 104/104、舊釣魚場次另一次完整測試 778/778、既有 v5 生活流程 21/21、公告服務 82/82 通過；舊釣魚 QA 第一次因亂數魚種 21 秒超過原有 20 秒門檻而失敗，第二次通過，未修改該門檻或玩法。`npm start` 以隔離 8894 埠啟動，靜態 Board 首頁及內容清單 HTTP 200；沒有 `DATABASE_URL`，此項不代表正式帳號功能驗收。舊的安裝包來源 QA 另因黃金鯨圖片的歷史精確雜湊斷言與目前圖不符而失敗；本次沒有重封安裝包，改以內容更新器核對全部 21 個實際下載檔。
+
+部署：簽署內容清單修訂 7 SHA-256 `4a23a58cdffc9fab36c89e1334cf1fda4f5974d3a1ec48fc894e500018d3da79`，21 個邏輯檔中只更換 JS/CSS 兩個 blob、合計 255,954 bytes；R2 已上傳，候選更新器 stage/load/readVerified 與修訂 6→7 差分啟用通過，報告在 `D:\Codex_QA\launcher-fishing-master-flick-content-r7\candidate-report.json`。正式來源提交 `d1da9d309361411c481b7917a9f1c9f8104567ca` 已推送 `origin/main`，2026-10-03 11:06:40 UTC 從 Render 正式網址讀回修訂 7，原始位元組 SHA-256 與簽署候選一致。啟動器更新器從公開 Render 清單和 R2 blob 下載、驗簽、啟用全部 21 檔共 2,309,731 bytes；修訂 6→7 僅下載兩個變更檔 255,954 bytes，再次檢查不重複下載，證據在同目錄 `public-report.json`。公告修訂 22 附已有的本機海釣主圖，公告服務 QA 通過；未以真人正式帳號驗收公告顯示或實機操作。LATTICE 本機 Status 回報 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，本階段沒有可呼叫的 LATTICE 任務工具，故未宣稱任務寫入或圖譜驗收。
 
 ## 2026-10-03 海釣景深、放線與魚種手感（1.2.23 內容修訂 6，已部署）
 
