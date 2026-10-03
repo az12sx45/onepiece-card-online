@@ -129,7 +129,19 @@ async function setup(page,client){
   page.on('pageerror',error=>pageErrors.push(`${client}: ${error.message}`));
   await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'load'});
   await page.evaluate(client=>{
-    window.__qa={client,calls:[],responses:[],pointerEvents:[]};
+    window.__qa={client,calls:[],responses:[],pointerEvents:[],soundStarts:[],audioCloses:0,audioSuspends:0};
+    if(window.OscillatorNode){
+      const start=OscillatorNode.prototype.start;
+      OscillatorNode.prototype.start=function(...args){__qa.soundStarts.push({at:performance.now(),frequency:this.frequency.value});return start.apply(this,args);};
+    }
+    if(window.AudioContext){
+      const createOscillator=AudioContext.prototype.createOscillator;
+      AudioContext.prototype.createOscillator=function(...args){__qa.audioContext=this;return createOscillator.apply(this,args);};
+      const close=AudioContext.prototype.close;
+      AudioContext.prototype.close=function(...args){__qa.audioCloses++;return close.apply(this,args);};
+      const suspend=AudioContext.prototype.suspend;
+      AudioContext.prototype.suspend=function(...args){__qa.audioSuspends++;return suspend.apply(this,args);};
+    }
     for(const type of ['pointerdown','pointerup','pointercancel','click'])document.addEventListener(type,event=>{
       if(event.target.closest?.('.room-fishing-v4-cast'))__qa.pointerEvents.push({type,button:event.button,
         pointerType:event.pointerType,detail:event.detail,charging:document.querySelector('.room-fishing-v4-sea')?.dataset.charging,
@@ -391,6 +403,14 @@ async function catchArtVisible(page){
   });
 }
 async function begin(page,label){
+  const sound=page.locator('.room-fishing-v4-intro-scene .room-fishing-sfx');
+  check(`${label}: fishing sound starts enabled with a compact mute control`,
+    await sound.getAttribute('aria-pressed')==='true');
+  await sound.click();
+  check(`${label}: mute control persists its off state`,await sound.getAttribute('aria-pressed')==='false'&&
+    await page.evaluate(()=>localStorage.getItem('onepiece.launcher.fishingSfx.v1'))==='off');
+  await sound.click();
+  check(`${label}: sound can be restored before fishing`,await sound.getAttribute('aria-pressed')==='true');
   await page.getByRole('button',{name:'開始釣魚'}).click();
   await page.locator('.room-fishing-v4-sea[data-stage="cast"]').waitFor();
   check(`${label}: v5 is selected`,await page.locator('.fishing-v5').count()===1);
@@ -441,6 +461,11 @@ async function castAndHook(page,label){
   await snapshot(page,`${label}-wait`);
   await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.biting==='true',null,{timeout:7500});
   check(`${label}: hook enabled on full sink`,await page.locator('.room-fishing-v4-hook').isEnabled());
+  const biteSounds=await page.evaluate(()=>__qa.soundStarts.length);
+  check(`${label}: one fish bite emits a distinct three-part cue`,biteSounds===3);
+  await page.waitForTimeout(160);
+  check(`${label}: bite cue does not repeat each animation frame`,
+    await page.evaluate(()=>__qa.soundStarts.length)===biteSounds);
   await page.locator('.room-fishing-v4-hook').click();
   await page.locator('.room-fishing-v4-sea[data-stage="fight"]').waitFor({timeout:5000});
   check(`${label}: genuine server hook accepted`,(await actionCalls(page,'hook')).length===1&&sessions.get(label)?.challenge.stage==='fight');
@@ -494,9 +519,12 @@ async function fightInteraction(page,label){
   const box=await reel.boundingBox();assert(box,`${label}: reel hit area`);
   const x=box.x+box.width*(sign<0?.18:.82),y=box.y+box.height*.5;
   const beforeControls=(await actionCalls(page,'control')).length;
+  const soundBeforeReel=await page.evaluate(()=>__qa.soundStarts.length);
   await page.mouse.move(x,y);await page.mouse.down();await page.waitForTimeout(600);
   const reelBefore=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>({
     transform:getComputedStyle(wheel).transform,animation:getComputedStyle(wheel).animationName,
+    movement:wheel.closest('.room-fishing-v5-hud').dataset.reelDirection,
+    signedRate:Number(wheel.closest('.room-fishing-v5-hud').dataset.reelRate),
     angle:(()=>{const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
       return Math.atan2(matrix.b,matrix.a)*180/Math.PI;})(),
     art:getComputedStyle(wheel).backgroundImage,
@@ -517,14 +545,22 @@ async function fightInteraction(page,label){
       crankWidth:box.width,crankHeight:box.height};
   });
   const reelDelta=(reelAfter.angle-reelBefore.angle+540)%360-180;
-  check(`${label}: inner reel rotates while brass rim stays fixed`,reelBefore.animation.includes('spool')&&
+  fs.writeFileSync(path.join(out,`${label}-reel-first-sample.json`),JSON.stringify({reelBefore,reelAfter,reelDelta,serverDistance:sessions.get(label)?.challenge.distance,serverControl:sessions.get(label)?.challenge.control},null,2));
+  check(`${label}: inner reel rotates from signed line motion while brass rim stays fixed`,reelBefore.animation==='none'&&
     reelBefore.art.includes('hud-reel-v2.webp')&&reelBefore.transform!==reelAfter.transform&&
     reelBefore.outerAnimation==='none'&&reelBefore.outerTransform==='none'&&reelBefore.label==='耐壓');
-  check(`${label}: winding turns reel and crank clockwise`,reelDelta>15&&reelDelta<150);
+  check(`${label}: held reel follows the actual signed line direction`,
+    Math.abs(reelBefore.signedRate)>.2&&
+    reelBefore.movement===(reelBefore.signedRate>0?'in':'out')&&
+    reelDelta*reelBefore.signedRate>3);
+  check(`${label}: reeling produces mechanical sound tied to rotation`,
+    await page.evaluate(()=>__qa.soundStarts.length)>soundBeforeReel);
   check(`${label}: visible crank is attached to and travels with inner reel`,reelBefore.crank.attached&&
-    reelBefore.crank.width>=8&&reelBefore.crank.height>=40&&
+    Math.hypot(reelBefore.crank.width,reelBefore.crank.height)>70&&
     reelBefore.crank.topKnob.includes('gradient')&&reelBefore.crank.bottomKnob.includes('gradient')&&
-    reelBefore.crank.hub==='block'&&Math.abs(reelBefore.crank.width-reelAfter.crankWidth)>3);
+    reelBefore.crank.hub==='block'&&
+    Math.abs(reelBefore.crank.width-reelAfter.crankWidth)+
+      Math.abs(reelBefore.crank.height-reelAfter.crankHeight)>3);
   await page.waitForTimeout(1560);
   const held=await visual(page);
   const heldMeter=await fightMeterState(page);
@@ -535,9 +571,19 @@ async function fightInteraction(page,label){
   fs.writeFileSync(path.join(out,`${label}-reeling-line-diagnostics.json`),JSON.stringify(await lineGeometry(page),null,2));
   await snapshot(page,`${label}-reeling`);
   await page.mouse.up();
-  await page.waitForFunction(()=>getComputedStyle(document.querySelector('.room-fishing-v5-dial-spool')).animationName==='none',null,{timeout:2000});
-  check(`${label}: inner reel stops after releasing winding`,await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>
-    getComputedStyle(wheel).animationName==='none'));
+  await page.waitForFunction(()=>document.querySelector('.room-fishing-v5-hud')?.dataset.reelDirection==='out',null,{timeout:2000});
+  const fishPullBefore=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>({
+    angle:Math.atan2(new DOMMatrixReadOnly(getComputedStyle(wheel).transform).b,
+      new DOMMatrixReadOnly(getComputedStyle(wheel).transform).a)*180/Math.PI,
+    rate:Number(wheel.closest('.room-fishing-v5-hud').dataset.reelRate)}));
+  await page.waitForTimeout(180);
+  const fishPullAfter=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>{
+    const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
+    return Math.atan2(matrix.b,matrix.a)*180/Math.PI;
+  });
+  const fishPullDelta=(fishPullAfter-fishPullBefore.angle+540)%360-180;
+  check(`${label}: fish draws line backward with the reel released`,
+    fishPullBefore.rate<0&&fishPullDelta< -4&&fishPullDelta> -150);
   const controls=(await actionCalls(page,'control')).slice(beforeControls);
   check(`${label}: held control refreshes server lease`,controls.filter(c=>c.payload.reeling&&c.payload.steer===sign).length>=2);
   check(`${label}: reel release reaches server`,controls.some(c=>c.payload.reeling===false));
@@ -553,7 +599,9 @@ async function fightInteraction(page,label){
   await page.mouse.move(payBox.x+payBox.width*.5,payBox.y+payBox.height*.5);await page.mouse.down();
   await page.waitForTimeout(220);
   const payVisual=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>({
-    direction:getComputedStyle(wheel).animationDirection,animation:getComputedStyle(wheel).animationName,
+    movement:wheel.closest('.room-fishing-v5-hud').dataset.reelDirection,
+    signedRate:Number(wheel.closest('.room-fishing-v5-hud').dataset.reelRate),
+    animation:getComputedStyle(wheel).animationName,
     angle:(()=>{const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
       return Math.atan2(matrix.b,matrix.a)*180/Math.PI;})(),
     attached:wheel.querySelector('.room-fishing-v5-dial-crank')?.parentElement===wheel,
@@ -565,9 +613,9 @@ async function fightInteraction(page,label){
     return Math.atan2(matrix.b,matrix.a)*180/Math.PI;
   });
   const payDelta=(payAngle-payVisual.angle+540)%360-180;
-  check(`${label}: paying reverses reel and attached crank`,payVisual.direction==='reverse'&&
-     payVisual.animation.includes('spool')&&payVisual.attached&&payVisual.label==='耐壓'&&
-    payDelta< -10&&payDelta> -150);
+  check(`${label}: paying reverses reel and attached crank at line speed`,payVisual.movement==='out'&&
+     payVisual.signedRate<0&&payVisual.animation==='none'&&payVisual.attached&&payVisual.label==='耐壓'&&
+    payDelta< -4&&payDelta> -150);
   check(`${label}: releasing line keeps the outer ring tied to server strength`,
     meterMatchesServer(payPressure)&&payPressure.pressureRingVisible);
   fs.writeFileSync(path.join(out,`${label}-reel-motion.json`),JSON.stringify({
@@ -575,15 +623,48 @@ async function fightInteraction(page,label){
     paying:{before:payVisual,afterAngle:payAngle,delta:payDelta,pressure:payPressure}},null,2));
   await snapshot(page,`${label}-paying`);
   await page.waitForTimeout(230);await page.mouse.up();
-  await page.waitForFunction(()=>getComputedStyle(document.querySelector('.room-fishing-v5-dial-spool')).animationName==='none',null,{timeout:2000});
-  check(`${label}: inner reel stops after releasing line`,await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>
-    getComputedStyle(wheel).animationName==='none'));
+  check(`${label}: reel keeps reflecting fish draw after paying ends`,
+    await page.locator('.room-fishing-v5-hud').getAttribute('data-reel-direction')==='out');
   const paid=(await actionCalls(page,'control')).slice(beforeControls);
   check(`${label}: pay and release reach server`,paid.some(c=>c.payload.paying===true)&&paid.at(-1)?.payload.paying===false);
   const before=(await visual(page)).strength;
   await page.waitForTimeout(1100);
   const after=(await visual(page)).strength;
   check(`${label}: line strength recovers after release`,after>=before);
+  await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.runState==='calm',null,{timeout:10000});
+  const calmBox=await reel.boundingBox();assert(calmBox,`${label}: calm reel hit area`);
+  await page.mouse.move(calmBox.x+calmBox.width*.5,calmBox.y+calmBox.height*.5);await page.mouse.down();
+  await page.waitForTimeout(400);
+  const calmBefore=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>{
+    const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform),hud=wheel.closest('.room-fishing-v5-hud');
+    return{angle:Math.atan2(matrix.b,matrix.a)*180/Math.PI,rate:Number(hud.dataset.reelRate),direction:hud.dataset.reelDirection};
+  });
+  await page.waitForTimeout(140);
+  const calmAfter=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>{
+    const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
+    return Math.atan2(matrix.b,matrix.a)*180/Math.PI;
+  });
+  await page.mouse.up();
+  const calmDelta=(calmAfter-calmBefore.angle+540)%360-180;
+  fs.writeFileSync(path.join(out,`${label}-calm-reel-sample.json`),JSON.stringify({calmBefore,calmAfter,calmDelta,fishPullBefore,server:sessions.get(label)?.challenge&&{distance:sessions.get(label).challenge.distance,runState:sessions.get(label).challenge.runState,pullDirection:sessions.get(label).challenge.pullDirection,control:sessions.get(label).challenge.control}},null,2));
+  check(`${label}: calm water lets recovered line wind clockwise faster than idle fish draw`,
+    calmBefore.direction==='in'&&calmBefore.rate>2&&calmDelta>20&&calmDelta<150&&
+    calmBefore.rate>Math.abs(fishPullBefore.rate));
+  const mute=page.locator('.room-fishing-v4-sea>.room-fishing-sfx');
+  await mute.click();
+  const soundWhileMuted=await page.evaluate(()=>__qa.soundStarts.length);
+  await holdPointer(page,reel,420);
+  check(`${label}: muted reel makes no additional sound`,
+    await page.evaluate(()=>__qa.soundStarts.length)===soundWhileMuted);
+  await mute.click();
+  const beforeBlur=await page.evaluate(()=>({sounds:__qa.soundStarts.length,suspends:__qa.audioSuspends,state:__qa.audioContext?.state}));
+  await page.evaluate(()=>window.dispatchEvent(new Event('blur')));
+  await page.waitForTimeout(220);
+  const afterBlur=await page.evaluate(()=>({sounds:__qa.soundStarts.length,suspends:__qa.audioSuspends,state:__qa.audioContext?.state}));
+  fs.writeFileSync(path.join(out,`${label}-audio-blur.json`),JSON.stringify({beforeBlur,afterBlur},null,2));
+  check(`${label}: lost focus suspends fishing audio and stops clicks`,
+    afterBlur.state==='suspended'&&afterBlur.sounds===beforeBlur.sounds);
+  await page.evaluate(()=>window.dispatchEvent(new Event('focus')));
   const card=await page.locator('.room-minigame-card').boundingBox();
   check(`${label}: modal stays inside viewport`,card&&card.width<=page.viewportSize().width+1&&
     card.x>=-1&&card.x+card.width<=page.viewportSize().width+1);
@@ -673,11 +754,15 @@ function verifyZeroStrengthBreak(){
     result==='line_snapped'&&round.strength===0);
 }
 async function settle(page,label){
+  const soundsBeforeLanding=await page.evaluate(()=>__qa.soundStarts.length);
   const response=await page.evaluate(client=>fetch(`/qa-land?client=${client}`,{method:'POST'}).then(r=>r.json()),label);
   check(`${label}: settlement fixture armed`,response.ok===true);
   await page.locator('.room-fishing-v3-result.caught').waitFor({timeout:6000});
   await page.waitForFunction(()=>{const img=document.querySelector('.room-fishing-v3-catch-art');return img?.complete&&img.naturalWidth>0;});
   check(`${label}: server core decided landing`,sessions.get(label)?.feedback?.reason==='landed');
+  const soundsAfterLanding=await page.evaluate(()=>__qa.soundStarts.length);
+  check(`${label}: confirmed catch plays its four-part landing cue`,
+    sessions.get(label)?.result?.catch&&soundsAfterLanding-soundsBeforeLanding>=4);
   check(`${label}: result fish image visible`,await page.locator('.room-fishing-v3-catch-art').isVisible());
   const catchArt=await catchArtVisible(page);
   check(`${label}: complete fish art fits without covering actions`,catchArt.loaded&&catchArt.fullyVisible&&catchArt.separateFromActions);
@@ -692,6 +777,11 @@ async function settle(page,label){
   await page.locator('.room-fishing-v4-sea[data-stage="cast"]').waitFor({timeout:5000});
   check(`${label}: next cast starts new v5 session`,sessions.get(label).id!==previousId&&
     sessions.get(label).challenge.fishingVersion===5);
+  const beforeClose=await page.evaluate(()=>__qa.audioCloses);
+  await page.evaluate(()=>__minigame.dismiss());
+  await page.waitForTimeout(140);
+  check(`${label}: closing fishing modal releases its AudioContext`,
+    await page.evaluate(()=>__qa.audioCloses)>beforeClose);
 }
 async function runV5(label,width,height){
   const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1});

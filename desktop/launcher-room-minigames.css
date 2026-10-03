@@ -351,9 +351,15 @@
 
 /* Fishing v4: one ocean scene, one contextual action, direct rod gestures. */
 .room-fishing-v4-intro{display:grid;gap:11px}
-.room-fishing-v4-intro-scene{display:flex;flex-direction:column;justify-content:flex-end;min-height:156px;padding:19px 22px;border:1px solid #b9d4bc9c;border-radius:16px;background-color:#0d5269;background-position:center 52%;background-size:cover;text-shadow:0 2px 7px #001824}
+.room-fishing-v4-intro-scene{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:156px;padding:19px 22px;border:1px solid #b9d4bc9c;border-radius:16px;background-color:#0d5269;background-position:center 52%;background-size:cover;text-shadow:0 2px 7px #001824}
+.room-fishing-sfx{z-index:10;display:grid;place-items:center;width:36px;height:36px;padding:0;border:1px solid #e8cf99;border-radius:50%;background:#0a3545d9;color:#fff0b9;font-family:inherit;font-size:21px;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 2px 8px #001b29a8;backdrop-filter:blur(4px)}
+.room-fishing-sfx[data-muted=true]{color:#a8b9b8;border-color:#99ada9;background:#112c38d9}
+.room-fishing-sfx[data-muted=true]::after{content:'';position:absolute;width:30px;height:2px;background:#e09b88;transform:rotate(-45deg);box-shadow:0 0 2px #102b38}
+.room-fishing-sfx:focus-visible{outline:2px solid #fff2ba;outline-offset:2px}
+.room-fishing-v4-intro-scene>.room-fishing-sfx{position:absolute;top:9px;right:9px}
+.room-fishing-v4-sea>.room-fishing-sfx{position:absolute;top:10px;right:10px}
 .room-fishing-v4-intro-scene strong{color:#fff0bb;font-size:26px;line-height:1.2}
-.room-fishing-v4-intro-scene>span:last-child{color:#f2f4dc;font-size:13px}
+.room-fishing-v4-intro-scene>span:last-of-type{color:#f2f4dc;font-size:13px}
 .room-fishing-v4-eyebrow{color:#d7eddf;font-size:11px;font-weight:800;letter-spacing:.1em}
 .room-fishing-v4-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;min-width:0;margin:0;padding:20px 0 0;border:0}
 .room-fishing-v4-choices legend{position:absolute;margin-top:-4px;color:#f1dda8;font-weight:800;font-size:13px}
@@ -473,8 +479,6 @@
 @property --pressure-angle{syntax:'<angle>';inherits:true;initial-value:300deg}
 .room-fishing-v5-hud{--pull-tone:#7ddac4;--pressure-tone:#67dfbf;position:absolute;z-index:7;top:10px;left:11px;display:none;width:min(650px,calc(100% - 22px));height:154px;color:#eaf4e9;pointer-events:none;text-shadow:0 1px 3px #032333;transition:--pressure-angle .22s linear}
 .fishing-v5 .room-fishing-v4-sea[data-stage=fight] .room-fishing-v5-hud{display:block}
-.room-fishing-v5-hud[data-pressure-risk=warning]{--pressure-tone:#f7ca68}
-.room-fishing-v5-hud[data-pressure-risk=danger]{--pressure-tone:#f07561}
 .room-fishing-v5-hud[data-force=light]{--pull-tone:#d6d477}
 .room-fishing-v5-hud[data-force=hard]{--pull-tone:#efb666}
 .room-fishing-v5-hud[data-force=fierce]{--pull-tone:#ed7968}
@@ -489,8 +493,6 @@
 .room-fishing-v5-strength-value{color:#fff2c6;font-size:13px}
 .room-fishing-v5-pressure-value{color:var(--pressure-tone);font-size:15px}
 .room-fishing-v5-strength-copy small{color:#dfebd6;font-size:10px;white-space:nowrap}
-.room-fishing-v5-hud[data-pressure-risk=warning] .room-fishing-v5-pressure-value{color:#ffe099}
-.room-fishing-v5-hud[data-pressure-risk=danger] .room-fishing-v5-pressure-value{color:#ff9d90}
 .room-fishing-v5-hud[data-risk=danger] .room-fishing-v5-strength-value{color:#ffad9f}
 .room-fishing-v5-pull-arc{position:absolute;top:62px;left:123px;width:80px;height:77px}
 .room-fishing-v5-pull-arc-band{position:absolute;left:0;top:0;width:78px;height:78px;border-radius:50%;background:conic-gradient(from 204deg,var(--pull-tone) 0 var(--pull-arc-angle,15deg),#2b5059 var(--pull-arc-angle,15deg) 130deg,transparent 130deg 360deg);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 11px),#000 calc(100% - 10px));mask:radial-gradient(farthest-side,transparent calc(100% - 11px),#000 calc(100% - 10px));filter:drop-shadow(0 0 3px #001f2b)}
@@ -515,10 +517,12 @@
 .room-fishing-v5-dial{width:12.1cqw;height:12.1cqw;border:0;background:#123842;box-shadow:none}
 .room-fishing-v5-dial::before{display:none}
 .room-fishing-v5-dial::after{content:'';position:absolute;z-index:3;inset:0;background:url('opui://launcher/images/launcher_room/fishing_v5/hud-reel-v2.webp') center/contain no-repeat;-webkit-mask:radial-gradient(circle,transparent 0 42%,#000 43%);mask:radial-gradient(circle,transparent 0 42%,#000 43%);pointer-events:none}
-.room-fishing-v5-pressure-ring{--ring-width:clamp(7px,.95cqw,12px);position:absolute;z-index:5;inset:2px;border-radius:50%;background:conic-gradient(from 210deg,#f07561 0deg 78deg,#f7ca68 78deg 156deg,#67dfbf 156deg 300deg,transparent 300deg 360deg);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - var(--ring-width)),#000 calc(100% - var(--ring-width) + 1px));mask:radial-gradient(farthest-side,transparent calc(100% - var(--ring-width)),#000 calc(100% - var(--ring-width) + 1px));filter:drop-shadow(0 0 2px #061c24);pointer-events:none}
+.room-fishing-v5-pressure-ring{--ring-width:clamp(9px,1.15cqw,15px);position:absolute;z-index:5;inset:2px;border-radius:50%;background:conic-gradient(from 210deg,#e95c58 0deg,#f07a59 48deg,#f5aa60 105deg,#f6d476 158deg,#bfdd83 220deg,#6adfbd 300deg,transparent 300deg 360deg);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - var(--ring-width)),#000 calc(100% - var(--ring-width) + 1px));mask:radial-gradient(farthest-side,transparent calc(100% - var(--ring-width)),#000 calc(100% - var(--ring-width) + 1px));filter:drop-shadow(0 0 2px #061c24);pointer-events:none}
 .room-fishing-v5-pressure-ring::after{content:'';position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 210deg,transparent 0deg var(--pressure-angle,300deg),#263339 var(--pressure-angle,300deg) 300deg,transparent 300deg 360deg)}
+.room-fishing-v5-pressure-tip{position:absolute;z-index:6;top:50%;left:50%;width:10px;height:10px;border:1px solid #fff0c8;border-radius:50%;background:var(--pressure-tone);box-shadow:0 0 8px var(--pressure-tone),0 1px 3px #10232c;transform:translate(-50%,-50%) rotate(calc(210deg + var(--pressure-angle,300deg))) translateY(calc(-6.05cqw + 6px));pointer-events:none}
+.room-fishing-v5-hud[data-pressure-empty=true] .room-fishing-v5-pressure-tip{opacity:0}
 .room-fishing-v5-hud[data-pressure-risk=danger] .room-fishing-v5-pressure-ring{filter:drop-shadow(0 0 5px #f07561)}
-.room-fishing-v5-dial-spool{display:block;inset:0;border:0;border-radius:50%;background:url('opui://launcher/images/launcher_room/fishing_v5/hud-reel-v2.webp') center/contain no-repeat;box-shadow:none;clip-path:circle(42% at 50% 50%);transform-origin:50% 50%}
+.room-fishing-v5-dial-spool{display:block;inset:0;border:0;border-radius:50%;background:url('opui://launcher/images/launcher_room/fishing_v5/hud-reel-v2.webp') center/contain no-repeat;box-shadow:none;clip-path:circle(42% at 50% 50%);transform-origin:50% 50%;will-change:transform}
 .room-fishing-v5-dial-crank{position:absolute;z-index:2;top:17%;left:45.5%;width:9%;height:66%;border:1px solid #b08c58;border-radius:999px;background:linear-gradient(90deg,#161d20,#715b47 38%,#2e3031 68%,#121d21);box-shadow:1px 0 3px #001b27ad;pointer-events:none}
 .room-fishing-v5-dial-crank::before,.room-fishing-v5-dial-crank::after{content:'';position:absolute;left:50%;width:160%;height:17%;border:2px solid #5d3b1d;border-radius:50%;background:radial-gradient(circle at 34% 26%,#fff0b6 0 15%,#d6a64c 45%,#805024 78%);box-shadow:0 1px 4px #071a22b3;transform:translate(-50%,-50%)}
 .room-fishing-v5-dial-crank::before{top:0}
@@ -528,8 +532,6 @@
 .room-fishing-v5-dial-hub::before,.room-fishing-v5-dial-hub::after{content:'';position:absolute;top:50%;left:50%;border-radius:2px;background:#4b3018;transform:translate(-50%,-50%)}
 .room-fishing-v5-dial-hub::before{width:60%;height:22%}
 .room-fishing-v5-dial-hub::after{width:22%;height:60%}
-.room-fishing-v5-hud[data-reeling=true] .room-fishing-v5-dial-spool{animation:room-fishing-v4-spool .62s linear infinite}
-.room-fishing-v5-hud[data-paying=true] .room-fishing-v5-dial-spool{animation:room-fishing-v4-spool 1.15s linear infinite reverse}
 .room-fishing-v5-strength-copy{width:12.1cqw;min-width:92px;margin-top:0;padding:1px 3px;border:0;border-radius:2px;background:#1c1712a8;font-size:11px}
 .room-fishing-v5-pull-arc{top:9.8cqw;left:20.7cqw;width:max(5.4cqw,50px);height:8.6cqw;background:url('opui://launcher/images/launcher_room/fishing_v5/hud-pull-arc-v2.webp') center/100% 100% no-repeat;filter:none}
 .room-fishing-v5-pull-arc-band{inset:0;width:100%;height:100%;border-radius:0;background:var(--pull-tone);-webkit-mask:url('opui://launcher/images/launcher_room/fishing_v5/hud-pull-arc-v2.webp') center/100% 100% no-repeat;mask:url('opui://launcher/images/launcher_room/fishing_v5/hud-pull-arc-v2.webp') center/100% 100% no-repeat;clip-path:inset(calc(100% - var(--pull-fill,12%)) 0 0);mix-blend-mode:screen;opacity:.62;filter:none}

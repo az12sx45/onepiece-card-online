@@ -684,6 +684,106 @@
     const rect = $('roomStage').getBoundingClientRect();
     return { x: (event.clientX - rect.left) / rect.width * WIDTH, y: (event.clientY - rect.top) / rect.height * HEIGHT };
   }
+  const roomMaskCache = new Map();
+  const ROOM_ART_PREFIX = 'opui://launcher/images/launcher_room/';
+  function roomArtPath(source) {
+    const value = String(source || '');
+    return value.startsWith(ROOM_ART_PREFIX) ? value.slice(ROOM_ART_PREFIX.length).split(/[?#]/, 1)[0] : '';
+  }
+  function roomMask(path) {
+    if (roomMaskCache.has(path)) return roomMaskCache.get(path);
+    const encoded = window.OnePieceRoomAlphaMasks?.assets?.[path];
+    if (!encoded) return null;
+    const bytes = atob(encoded);
+    let offset = 0;
+    const count = bytes.charCodeAt(offset++), rows = [];
+    for (let frame = 0; frame < count; frame++) {
+      const frameRows = [];
+      for (let y = 0; y < 64; y++) {
+        const intervals = [], length = bytes.charCodeAt(offset++);
+        for (let i = 0; i < length; i++) intervals.push([bytes.charCodeAt(offset++), bytes.charCodeAt(offset++)]);
+        frameRows.push(intervals);
+      }
+      rows.push(frameRows);
+    }
+    if (offset !== bytes.length) return null;
+    roomMaskCache.set(path, rows);
+    return rows;
+  }
+  function roomMaskedPixel(source, frame, x, y) {
+    if (x < 0 || x >= 1 || y < 0 || y >= 1) return false;
+    const frames = roomMask(roomArtPath(source));
+    const rows = frames?.[frame];
+    if (!rows) return false;
+    const px = Math.min(63, Math.floor(x * 64)), py = Math.min(63, Math.floor(y * 64));
+    return rows[py].some(([start, end]) => px >= start && px < end);
+  }
+  function roomElementPoint(element, clientX, clientY) {
+    const rect = element.getBoundingClientRect();
+    if (!rect.width || !rect.height) return null;
+    const x = (clientX - rect.left) / rect.width, y = (clientY - rect.top) / rect.height;
+    return x >= 0 && x < 1 && y >= 0 && y < 1 ? { x, y } : null;
+  }
+  function roomImagePoint(image, clientX, clientY) {
+    const at = roomElementPoint(image, clientX, clientY);
+    if (!at || !image.naturalWidth || !image.naturalHeight) return null;
+    // Use the untransformed layout box to account for object-fit: contain and
+    // the portrait's bottom alignment; the outer point already includes CSS scale.
+    const width = image.clientWidth, height = image.clientHeight;
+    const fit = Math.min(width / image.naturalWidth, height / image.naturalHeight);
+    const drawnWidth = image.naturalWidth * fit, drawnHeight = image.naturalHeight * fit;
+    const left = (width - drawnWidth) / 2;
+    const top = image.classList.contains('room-chibi') ? height - drawnHeight : (height - drawnHeight) / 2;
+    return { x: (at.x * width - left) / drawnWidth, y: (at.y * height - top) / drawnHeight };
+  }
+  function roomVisiblePixel(node, clientX, clientY) {
+    if (node.classList.contains('room-object-shell')) {
+      const image = node.querySelector('.room-object');
+      const at = image && roomImagePoint(image, clientX, clientY);
+      return !!at && roomMaskedPixel(image.currentSrc || image.src, 0, at.x, at.y);
+    }
+    const canvas = node.querySelector('.room-walk-sprite');
+    if (canvas && !canvas.hidden && node.classList.contains('has-directional-sprite')) {
+      const walker = walkers.find(entry => entry.node === node);
+      const direction = node.dataset.direction || walker?.motion?.direction || 'south';
+      const source = node.dataset.actionSource || '';
+      const art = source.startsWith('motion_') ? walker?.motionArt?.sources?.[direction]
+        : source.startsWith('acting_') ? walker?.actionArt?.sources?.[direction]
+          : source === 'life_v1' ? window.OnePieceLifeActions?.preload?.(walker?.key, node.dataset.pose, direction)?.source : '';
+      const frame = Number(source.startsWith('motion_') ? node.dataset.motionFrame : node.dataset.actionFrame);
+      const at = roomElementPoint(canvas, clientX, clientY);
+      return !!at && Number.isInteger(frame) && roomMaskedPixel(art, frame, at.x, at.y);
+    }
+    const image = node.querySelector('.room-chibi');
+    const at = image && roomImagePoint(image, clientX, clientY);
+    return !!at && roomMaskedPixel(image.currentSrc || image.src, 0, at.x, at.y);
+  }
+  function roomHitAt(clientX, clientY) {
+    const stage = $('roomStage'), rect = stage.getBoundingClientRect();
+    if (clientX < rect.left || clientX >= rect.right || clientY < rect.top || clientY >= rect.bottom) return null;
+    const seen = new Set();
+    for (const element of document.elementsFromPoint(clientX, clientY)) {
+      const node = element.closest?.('.room-object-shell[data-room-key], .room-character-shell[data-room-key]');
+      if (!node || seen.has(node) || !stage.contains(node)) continue;
+      seen.add(node);
+      if (roomVisiblePixel(node, clientX, clientY)) return node;
+    }
+    return null;
+  }
+  let hoveredRoomNode = null;
+  let hoverPoint = null;
+  let nextHoverRefresh = 0;
+  function updateRoomHover(event) {
+    const stage = $('roomStage');
+    hoverPoint = { clientX: event.clientX, clientY: event.clientY };
+    const node = roomHitAt(event.clientX, event.clientY);
+    if (hoveredRoomNode !== node) {
+      hoveredRoomNode?.classList.remove('is-hit-hovered');
+      hoveredRoomNode = node;
+      node?.classList.add('is-hit-hovered');
+    }
+    stage.style.cursor = node ? editing ? 'grab' : node.classList.contains('room-character-shell') || assignment ? 'pointer' : '' : '';
+  }
   function floorCellAt(position) {
     const depth = (position.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top);
     if (depth < 0 || depth > 1) return null;
@@ -1291,6 +1391,7 @@
       }
     }
     updateInteraction(now, delta);
+    if (hoverPoint && now >= nextHoverRefresh) { updateRoomHover(hoverPoint); nextHoverRefresh = now + 100; }
     if (now - companionPositionAt >= 32) { positionCompanion(); companionPositionAt = now; }
     animationId = requestAnimationFrame(frame);
   }
@@ -1494,7 +1595,6 @@
       node.setAttribute('aria-controls', 'roomCompanionPanel');
       node.setAttribute('aria-expanded', String(!editing && companionId === entry.itemId));
       node.setAttribute('aria-label', `查看${item.name || '夥伴'}的詳情與互動`);
-      node.onclick = () => { if (!editing) openCompanion(entry.itemId); };
       node.onkeydown = event => {
         if (editing || (event.key !== 'Enter' && event.key !== ' ')) return;
         event.preventDefault(); openCompanion(entry.itemId, true);
@@ -1802,7 +1902,7 @@
   document.addEventListener('scroll', positionCompanion, true);
   document.addEventListener('pointerdown', event => {
     if (!companionId || $('roomCompanionPanel').contains(event.target)) return;
-    if (event.target.closest('#roomCharacters [data-room-key]')) return;
+    if (roomHitAt(event.clientX, event.clientY)?.classList.contains('room-character-shell')) return;
     closeCompanion();
   });
   document.addEventListener('keydown', event => {
@@ -1816,8 +1916,8 @@
   $('roomStage').addEventListener('pointerdown', event => {
     if (!editing || saving || event.button > 0) return;
     if (event.target.closest('.room-canvas-controls')) return;
-    const node = event.target.closest('[data-room-key]');
-    if (!node || !$('roomStage').contains(node)) return;
+    const node = roomHitAt(event.clientX, event.clientY);
+    if (!node) return;
     const key = node.dataset.roomKey;
     const kind = key.startsWith('f:') ? 'furniture' : 'character';
     const itemId = key.slice(2);
@@ -1829,19 +1929,25 @@
     $('roomStage').focus(); event.preventDefault();
   });
   $('roomStage').addEventListener('click', event => {
-    if (!assignment || editing || assignmentBusy) return;
-    const object = event.target.closest('.room-object-shell[data-room-key]');
-    if (object && $('roomStage').contains(object)) {
-      void submitAssignment({ kind: 'furniture', itemId: object.dataset.roomKey.slice(2) }); return;
+    if (editing || event.target.closest('.room-canvas-controls')) return;
+    const hit = roomHitAt(event.clientX, event.clientY);
+    if (!assignment) {
+      if (hit?.classList.contains('room-character-shell')) void openCompanion(hit.dataset.roomKey.slice(2));
+      return;
     }
-    if (event.target.closest('.room-character-shell')) return;
+    if (assignmentBusy) return;
+    if (hit?.classList.contains('room-object-shell')) {
+      void submitAssignment({ kind: 'furniture', itemId: hit.dataset.roomKey.slice(2) }); return;
+    }
+    if (hit?.classList.contains('room-character-shell')) return;
     const cell = floorCellAt(point(event));
     if (!cell) { status('請點選地板範圍，或直接點一件家具。', true); return; }
     assignment.cell = cell; positionAssignmentMarker();
     void submitAssignment({ kind: 'floor', cell });
   });
   $('roomStage').addEventListener('pointermove', event => {
-    if (assignment && !editing && event.pointerType === 'mouse' && !event.target.closest('[data-room-key]')) {
+    if (!drag) updateRoomHover(event);
+    if (assignment && !editing && event.pointerType === 'mouse' && !roomHitAt(event.clientX, event.clientY)) {
       const cell = floorCellAt(point(event));
       if (cell) { assignment.cell = cell; positionAssignmentMarker(); }
     }
@@ -1849,6 +1955,12 @@
     const position = point(event);
     moveSelection(position.x - drag.dx, position.y - drag.dy);
     event.preventDefault();
+  });
+  $('roomStage').addEventListener('pointerleave', () => {
+    hoveredRoomNode?.classList.remove('is-hit-hovered');
+    hoveredRoomNode = null;
+    hoverPoint = null;
+    $('roomStage').style.cursor = '';
   });
   const endDrag = event => { if (drag?.pointerId === event.pointerId) drag = null; };
   $('roomStage').addEventListener('pointerup', endDrag);
@@ -1890,6 +2002,7 @@
     onPurchase: (result, itemId) => lifeRoom?.onPurchase(result, itemId) };
   // Enabled only by the local QA harness, never by the packaged launcher.
   if (window.__LAUNCHER_ROOM_QA__ === true) window.__launcherRoomTest = {
+    hitAt: (x, y) => roomHitAt(x, y)?.dataset.roomKey || null,
     snapshot: () => ({ interaction: interaction && { type: interaction.type, phase: interaction.phase,
       sceneId: interaction.scene?.id, sceneCursor: interaction.scene?.cursor, pair: interaction.scene?.pair,
       turnIndex: interaction.turnIndex, turns: interaction.scene?.turns.length },

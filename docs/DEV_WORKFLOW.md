@@ -1,5 +1,13 @@
 # Dev Workflow
 
+## 2026-10-03 海釣音效、線輪與房間點擊（內容修訂 5，待公開驗證）
+
+範圍：`desktop/launcher-room-minigames.js/.css` 讓上鉤、確認釣獲和收／放線播放本機合成音效，提供記住偏好的靜音鍵；線輪雙端手把依 v5 伺服器魚距的相鄰樣本判定實際收線或被魚拉走，控制剛改變時短暫預測，按方向與速率轉動、發聲。耐壓外圈維持伺服器 `strength/maxStrength` 的真實 0–100% 與歸零斷線，將紅、橙、黃、綠色階改為連續漸層。`desktop/launcher-room.js/.css` 以 64×64 透明度遮罩核對當前家具朝向、角色站姿或走路／動作影格；空白處可穿透到下層家具或地板，選取、拖動、指派與滑鼠提示共用可見像素命中。`desktop/launcher-room-motion-data.js` 的遮罩由 `scripts/generate_launcher_room_hit_masks.py` 自正式 WebP 素材產生；素材、角色／商品 ID、伺服器漁獲及房間存檔規則不變。`public/images/ranks/r5.PNG`、`r6.PNG` 的既有修改不納入本次發行。
+
+本機驗證：`node scripts/launcher_fishing_v5_browser_qa.js` 在 1440×900、960×640 及不同魚勢場景共 255/255 PASS，pageErrors=[]、missingAssets=[]；測到魚咬餌、釣獲、音效靜音／失焦／關閉、魚反拉倒轉、正向收線與耐壓漸層，證據與六張耐壓截圖在 `D:\Codex_QA\launcher-fishing-audio-reel-1.2.24\browser-full\`。`scripts/launcher_room_alpha_hit_qa.js` 21/21 PASS，涵蓋角色／家具透明點擊穿透、四向家具圖像旋轉、角色動作影格、生活動作素材備援、編輯拖動及 390px 窄版；證據在 `D:\Codex_QA\launcher-room-alpha-hit\`。家具／天氣素材桌機及窄版 QA 9/9 PASS；遮罩生成器 `--check`、JavaScript 語法與 `git diff --check` 通過。`npm start` 以隔離依賴啟動後，本機 Board 首頁及既有內容清單 HTTP 200；未接資料庫，故此項只驗靜態服務。舊 radial／room wheel 腳本仍對先前輪盤順序和隱藏按鈕作過時假設，舊 room browser fixture 缺少先前 Ace idle 素材；其失敗不視為新像素互動驗收。公開簽章清單與真正下載啟用結果待發佈後補記。
+
+最後修正介紹場景音效鈕與文字的 CSS 選擇器後，從最終檔案重跑完整釣魚瀏覽器 QA，仍為 255/255 PASS；最終報告在 `D:\Codex_QA\launcher-fishing-audio-reel-1.2.24\browser-release\report.json`。簽署內容修訂 5 清單 SHA-256 為 `54345e96eaf8c1bdf20592789227ba7ed9a805fe8b3fd0d8175ffe7ca919ee8d`，共 21 個邏輯檔；其中五個變更檔 1,108,694 bytes 已上傳 R2，另外 16 個重用既有 blob。候選清單的更新器 stage/load/readVerified 21 檔及隔離修訂 4→5 差分啟用通過，只下載變更的 1,108,694 bytes；報告在 `D:\Codex_QA\launcher-fishing-reel-room-content-r5\candidate-report.json`。本段證明候選與公開 blob，正式 Render 清單仍待讀回。
+
 ## 2026-10-03 海釣外圈耐壓讀數（內容修訂 4，已部署）
 
 範圍：`desktop/launcher-room-minigames.js/.css` 把 v5 線輪最外圈改為伺服器魚線剩餘強度的 0–100% 讀數，滿格時為綠色，降至 52%／26% 以下分別轉黃／紅，外圈彩色弧隨捲線縮短，鬆開或放線回復時增長。顯著標示「耐壓」及「0% 斷線」，避免把前端估算的即時拉力誤讀為斷線值；魚勢拉力仍由原有短弧顯示。`scripts/launcher_fishing_v5_browser_qa.js` 改驗外圈與伺服器強度、收放線趨勢及歸零斷線。未修改伺服器魚線消耗、回復、漁獲或獎勵規則，保留原有 ID 與資料欄位；`public/images/ranks/r5.PNG`、`r6.PNG` 的既有修改不屬本次範圍。
