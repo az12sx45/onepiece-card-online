@@ -2,13 +2,32 @@
 (function(root) {
   'use strict';
   const ASSET='opui://launcher/images/launcher_room/';
-  const FISH_LABELS=Object.freeze({'balloon-catfish':'氣球鯰魚','glistening-saury':'閃亮秋刀魚','smile-jellyfish':'微笑水母','panda-shark':'熊貓鯊','butterflyfish':'蝶魚','adventure-fish':'冒險魚','cola-sunfish':'可樂翻車魚','reef-shark':'鯊魚','elephant-tuna':'象鼻鮪魚','lovely-angel':'可愛天使魚','striped-clam':'條紋蛤蜊','cutie-piranha':'可愛食人魚','claw-shrimp':'剪刀蝦','pumpkin-octopus':'南瓜章魚','maple-salmon':'紅葉鮭魚','lava-flounder':'熔岩比目魚','treasure-pearl-clam':'寶藏珍珠貝','electric-catfish':'感電鯰魚','demon-bonito':'鬼鰹魚','guiding-anglerfish':'引路鮟鱇魚','ice-fish':'冰晶魚','beat-alligator':'節奏鱷魚','aurora-sunfish':'極光翻車魚','burning-dragon':'燃燒龍','great-terigius':'巨型泰利吉烏斯','golden-whale':'黃金鯨'});
+  const FISH_LABELS=Object.freeze({'balloon-catfish':'氣球鯰魚','glistening-saury':'閃亮秋刀魚','smile-jellyfish':'微笑水母','panda-shark':'熊貓鯊','butterflyfish':'蝶魚','adventure-fish':'冒險魚','cola-sunfish':'可樂翻車魚','reef-shark':'鯊魚','elephant-tuna':'象鼻鮪魚','lovely-angel':'可愛天使魚','striped-clam':'條紋蛤蜊','cutie-piranha':'可愛食人魚','claw-shrimp':'剪刀蝦','pumpkin-octopus':'南瓜章魚','maple-salmon':'紅葉鮭魚','lava-flounder':'熔岩比目魚','treasure-pearl-clam':'寶藏珍珠貝','electric-catfish':'感電鯰魚','demon-bonito':'鬼鰹魚','guiding-anglerfish':'引路鮟鱇魚','ice-fish':'冰晶魚','beat-alligator':'節奏鱷魚','aurora-sunfish':'極光翻車魚','burning-dragon':'燃燒龍','great-terigius':'巨型泰利吉烏斯','golden-whale':'黃金鯨','largemouth-bass':'大嘴鱸魚',warmouth:'暖口太陽魚','congo-bichir':'剛果多鰭魚',paddlefish:'匙吻鱘','alligator-gar':'鱷雀鱔',dolphinfish:'鯕鰍',lionfish:'獅子魚','dusky-grouper':'褐石斑魚','goliath-grouper':'巨型石斑魚','white-marlin':'白馬林魚'});
+  const FISH_RARITY_BY_ID=Object.freeze({
+    'balloon-catfish':'common','glistening-saury':'common','smile-jellyfish':'common',
+    butterflyfish:'common','lovely-angel':'common','claw-shrimp':'common',
+    'cutie-piranha':'common','maple-salmon':'common','lava-flounder':'common',
+    'adventure-fish':'uncommon','cola-sunfish':'uncommon','pumpkin-octopus':'uncommon',
+    'electric-catfish':'uncommon','demon-bonito':'uncommon','ice-fish':'uncommon',
+    'striped-clam':'uncommon','guiding-anglerfish':'uncommon',
+    'panda-shark':'rare','reef-shark':'rare','elephant-tuna':'rare',
+    'treasure-pearl-clam':'rare','beat-alligator':'rare','aurora-sunfish':'rare',
+    'great-terigius':'rare','burning-dragon':'legendary','golden-whale':'legendary',
+    'largemouth-bass':'common',warmouth:'common','congo-bichir':'uncommon',
+    dolphinfish:'uncommon',lionfish:'uncommon',paddlefish:'rare',
+    'alligator-gar':'rare','dusky-grouper':'rare',
+    'goliath-grouper':'legendary','white-marlin':'legendary'
+  });
+  const FISH_RARITY_LABELS=Object.freeze({common:'普通',uncommon:'優良',rare:'稀有',legendary:'傳說'});
   const FISH_BAITS=Object.freeze({worm:{label:'蟲餌',note:'適合近岸的小型魚'},shrimp:{label:'蝦餌',note:'吸引礁區魚群'},lure:{label:'亮片擬餌',note:'遠處的大魚也會追逐'}});
   const FISH_SPOTS=Object.freeze({shore:{label:'近岸水流',note:'船邊的淺水與緩流',x:57,y:45},reef:{label:'珊瑚礁邊',note:'礁石間的魚影較活躍',x:68,y:46},deep:{label:'外海深水',note:'深處可能遇到有力的大魚',x:80,y:47},freshwater:{label:'淡水池',note:'淡水魚與水邊生物出沒',x:59,y:48},magma:{label:'熔岩潭',note:'炙熱水域有罕見魚影',x:67,y:50},rainbow:{label:'虹色水域',note:'彩色水面藏著稀有魚群',x:72,y:47}});
   const FISH_CAST_ZONES=Object.freeze({near:{label:'近處水面',key:'↓',x:46,y:55},mid:{label:'中距水面',key:'●',x:66,y:45},far:{label:'遠處水面',key:'↑',x:81,y:34}});
   const ROD_UPGRADE_COSTS=Object.freeze([20,35,55]);
+  // All released crew share one perspective/line anchor in the signed rod atlas.
+  const FISHING_ROD_ATLAS=Object.freeze(['luffy','zoro','nami','usopp','sanji','chopper','robin','franky','brook','jinbe','ace','sabo','law']);
   const UA_FISH=new Set(['adventure-fish','panda-shark','elephant-tuna','lovely-angel','striped-clam','cutie-piranha','claw-shrimp','pumpkin-octopus','maple-salmon','lava-flounder','treasure-pearl-clam','electric-catfish','demon-bonito','guiding-anglerfish','ice-fish','beat-alligator','aurora-sunfish','burning-dragon','great-terigius','golden-whale']);
-  const fishArt=id=>`${ASSET}${UA_FISH.has(id)?'fish_ua':Object.hasOwn({'balloon-catfish':1,'glistening-saury':1,'smile-jellyfish':1,'panda-shark':1},id)?'fish_v1':'fish_v3'}/${id==='golden-whale'?'golden-whale-v2':id}.webp`;
+  const MASTER_FISH=new Set(['largemouth-bass','warmouth','congo-bichir','paddlefish','alligator-gar','dolphinfish','lionfish','dusky-grouper','goliath-grouper','white-marlin']);
+  const fishArt=id=>`${ASSET}${MASTER_FISH.has(id)?'fish_master':UA_FISH.has(id)?'fish_ua':Object.hasOwn({'balloon-catfish':1,'glistening-saury':1,'smile-jellyfish':1,'panda-shark':1},id)?'fish_v1':'fish_v3'}/${id==='golden-whale'?'golden-whale-v2':id}.webp`;
   const spotArt=id=>`${ASSET}${['freshwater','magma','rainbow'].includes(id)?'fishing_v4':'fishing_v3'}/sea-${id}.webp`;
   const hideMissingFishArt=art=>{art.onerror=null;art.remove();};
   const keyOf=value=>String(value||'').replace(/^room-character-/,'');
@@ -69,6 +88,12 @@
   const ERRORS={offline:'連線中斷，這一輪暫停送出。重新連線後可再送出。',unavailable:'暫時連不上基地，請稍後再試。',minigame_active:'上一場挑戰還沒結束，可繼續查看或結束後重開。',minigame_expired:'這場挑戰已逾時，請關閉後重新開始。',minigame_cooldown:'夥伴剛完成訓練，休息一下再來。',cooldown:'夥伴還在休息，稍後再來。',work_daily_limit:'暫時無法結算工作，請稍後再試。',insufficient_energy:'夥伴的精神不足，先讓他休息一下。',character_busy:'夥伴正在工作，請先完成原有分工。',work_active:'夥伴正在工作，請先完成原有分工。',not_placed:'請先把這位夥伴放進房間。',character_not_released:'這位夥伴尚未開放。',readonly:'參觀好友時不能指派主人的夥伴。',minigame_not_ready:'還沒到交卷時間，稍候再試。',minigame_invalid:'這場挑戰已失效，請關閉後重新開始。',fish_collection_full:'漁獲收藏已滿；仍可繼續海釣，若要保存新魚請先放生一尾。',fish_aquarium_locked:'先取得千陽號水族館酒吧場景或水族箱家具，才能展示漁獲。',fish_aquarium_full:'魚缸目前最多展示六尾魚。'};
   Object.assign(ERRORS,{needs_rest:'夥伴有些累了，先休息恢復精神；也可以自由練習，不領取獎勵。',interaction_cooldown:'訓練還在冷卻中。可以先自由練習，不領取獎勵。',invalid_minigame_session:'這場挑戰已失效，請關閉後重新開始。',minigame_too_early:'這一輪仍在判定，稍候片刻再送出。',minigame_round_conflict:'挑戰進度已更新，請關閉後重新進入。',wallet_full:'商城錢包需要先空出至少 10 枚金幣，才能開始有酬工作。',insufficient_coins:'商城金幣不足；先完成有酬工作，再回來請佛朗基改裝。',rod_max_level:'這支釣竿已經改裝到最高等級。'});
   function node(tag,className,text) {const value=document.createElement(tag);if(className)value.className=className;if(text!==undefined)value.textContent=text;return value;}
+  function fishRarityBadge(speciesId,declared){
+    const rarity=Object.hasOwn(FISH_RARITY_LABELS,declared)?declared:FISH_RARITY_BY_ID[speciesId]||'common';
+    const badge=node('span','room-fishing-rarity',FISH_RARITY_LABELS[rarity]);
+    badge.dataset.rarity=rarity;badge.setAttribute('aria-label',`漁獲等級：${FISH_RARITY_LABELS[rarity]}`);
+    return badge;
+  }
   function create(options) {
     let layer=null,card=null,body=null,feedback=null,progress=null,closeButton=null,live=null;
     let game=null,kind='',jobId='supply',characterId='',phase='closed',generation=0,frame=0,requesting=false,queued=null,roundStart=0,choice=[],directions=[],ingredients=[],rotations=[],course=[],counterMoves=[],previousFocus=null,lastRound='',lastResult='',lastFeedback=-1;
@@ -78,10 +103,10 @@
     let fishingV4VisualChallenge=null,fishingV4VisualTension=10,fishingV4VisualDistance=100,fishingV4VisualAt=0;
     let fishingV5PositionAt=0,fishingV5Display=null,fishingV5Hud=null;
     let fishingV5BitePlayed=false,fishingV5ReelSample=null,fishingV5MeasuredRate=NaN,fishingV5MeasuredAt=0,fishingV5MeasuredControl='',fishingV5ReelSpeed=0,fishingV5ReelAngle=0,fishingV5ReelAt=0,fishingV5ClickAngle=0,fishingV5LastClickAt=0;
-    let fishingV5QueuedFlick=null,fishingV5FeedbackId=null,fishingV5FeedbackUntil=0,fishingV5MotionUntil=0;
+    let fishingV5QueuedFlick=null,fishingV5FeedbackId=null,fishingV5FeedbackUntil=0,fishingV5MotionUntil=0,fishingV5TellId=null,fishingV5CueSoundId=null;
     let fishingV4ClockAnchor=null,fishingV4ClockPerf=0,fishingV4ClockLast=0,lastClockSample=null;
     let fishingResultShownAt=0;
-    let fishingAudio=null,fishingAudioMaster=null;
+    let fishingAudio=null,fishingAudioMaster=null,fishingChargeSoundAt=0,fishingStressSoundAt=0,fishingSoundRisk='safe';
     const fishingResultHeldKeys=new Set();
     let fishingRodLevel=0,fishingRodKnown=false,fishingRodNextCost=ROD_UPGRADE_COSTS[0];
     const reactionCounts={good:0,miss:0};
@@ -133,10 +158,41 @@
       envelope.gain.setValueAtTime(.001,start);envelope.gain.exponentialRampToValueAtTime(level,start+.012);envelope.gain.exponentialRampToValueAtTime(.001,start+duration);
       oscillator.connect(envelope);envelope.connect(fishingAudioMaster);oscillator.onended=()=>{oscillator.disconnect();envelope.disconnect();};oscillator.start(start);oscillator.stop(start+duration+.01);
     }
-    function fishingBiteSound(){fishingTone(260,105,.18,.28,'triangle');fishingTone(610,850,.14,.18,'sine',.065);fishingTone(920,680,.12,.13,'sine',.17);}
-    function fishingCatchSound(){fishingTone(300,160,.14,.22,'triangle');for(const [index,pitch] of [520,660,880].entries())fishingTone(pitch,pitch*1.05,.19,.19,'sine',.08+index*.105);}
-    function fishingReelClick(inward,speed){const level=clamp(Math.abs(speed)/580,.3,1);fishingTone(inward?650:380,inward?290:180,.038+.014*(1-level),(.13+.08*level)*(inward?1:.76),inward?'triangle':'sawtooth');}
-    function closeFishingSound(){const audio=fishingAudio;fishingAudio=null;fishingAudioMaster=null;if(audio&&audio.state!=='closed')void audio.close().catch(()=>{});}
+    function fishingNoise(duration,level,from,to,delay=0){
+      const context=fishingSoundContext();if(!context||!fishingAudioMaster)return;
+      const start=context.currentTime+delay,buffer=context.createBuffer(1,Math.ceil(context.sampleRate*duration),context.sampleRate);
+      const samples=buffer.getChannelData(0);let seed=0x6d2b79f5;
+      for(let index=0;index<samples.length;index++){seed=(Math.imul(seed,1664525)+1013904223)|0;samples[index]=seed/2147483648;}
+      const source=context.createBufferSource(),filter=context.createBiquadFilter(),envelope=context.createGain();source.buffer=buffer;
+      filter.type='lowpass';filter.frequency.setValueAtTime(from,start);filter.frequency.exponentialRampToValueAtTime(to,start+duration);
+      envelope.gain.setValueAtTime(.001,start);envelope.gain.exponentialRampToValueAtTime(level,start+.012);envelope.gain.exponentialRampToValueAtTime(.001,start+duration);
+      source.connect(filter);filter.connect(envelope);envelope.connect(fishingAudioMaster);
+      source.onended=()=>{source.disconnect();filter.disconnect();envelope.disconnect();};source.start(start);
+    }
+    function fishingChargeSound(power){
+      const at=now();if(at-fishingChargeSoundAt<190)return;fishingChargeSoundAt=at;
+      const strength=clamp(power/100,0,1);fishingTone(170+strength*180,130+strength*150,.065,.055+strength*.025,'triangle');
+    }
+    function fishingCastReleaseSound(power){const strength=clamp(power/100,0,1);fishingNoise(.23,.075+strength*.035,2300,500);fishingTone(470+strength*140,120,.22,.10,'triangle');}
+    function fishingSplashSound(power){const strength=clamp(power/100,0,1);fishingNoise(.28,.10+strength*.035,1700,320);fishingTone(210,85,.18,.10,'sine',.025);}
+    function fishingBiteSound(){fishingTone(260,105,.18,.25,'triangle');fishingTone(610,850,.14,.16,'sine',.065);fishingTone(920,680,.12,.12,'sine',.17);fishingNoise(.12,.045,1100,430);}
+    function fishingHookSound(){fishingTone(190,410,.13,.14,'triangle');fishingTone(810,260,.16,.08,'sine',.045);fishingNoise(.09,.04,2400,850);}
+    function fishingStressSound(risk,intensity){
+      const at=now(),interval=risk==='danger'?1050:2300;
+      if(risk===fishingSoundRisk&&at-fishingStressSoundAt<interval)return;
+      fishingSoundRisk=risk;fishingStressSoundAt=at;
+      const urgent=risk==='danger';fishingTone(urgent?460:350,urgent?220:280,.21,urgent?.085:.055,'sawtooth');
+      fishingNoise(.11,.025+clamp(intensity,0,1)*.025,1500,580,.025);
+    }
+    function fishingCatchSound(rarity){
+      fishingTone(300,160,.14,.18,'triangle');
+      for(const [index,pitch] of [520,660,880].entries())fishingTone(pitch,pitch*1.05,.19,.16,'sine',.08+index*.105);
+      const flourish={uncommon:[980],rare:[980,1240],legendary:[1040,1320,1580]}[rarity]||[];
+      for(const [index,pitch] of flourish.entries())fishingTone(pitch,pitch*1.04,.22,.095,'sine',.42+index*.105);
+    }
+    function fishingFailSound(){fishingTone(340,170,.18,.12,'triangle');fishingTone(225,95,.24,.09,'sine',.13);}
+    function fishingReelClick(inward,speed){const level=clamp(Math.abs(speed)/580,.3,1);fishingTone(inward?650:380,inward?290:180,.038+.014*(1-level),(.11+.07*level)*(inward?1:.72),inward?'triangle':'sawtooth');}
+    function closeFishingSound(){const audio=fishingAudio;fishingAudio=null;fishingAudioMaster=null;fishingChargeSoundAt=0;fishingStressSoundAt=0;fishingSoundRisk='safe';if(audio&&audio.state!=='closed')void audio.close().catch(()=>{});}
     function safeResume(){if(held){held=false;options.onClose?.();}}
     function ensure() {
       if(layer)return;
@@ -259,7 +315,7 @@
       collection.append(node('p','',fish.length?`已發現 ${discovered} / ${Object.keys(FISH_LABELS).length} 種，收藏 ${fish.length} / 64 尾；魚缸展示 ${fish.filter(entry=>entry.inAquarium).length} / 6 尾。${fish.length>=64?'收藏已滿；仍可釣魚，若要保存新魚請先放生一尾。':''}`:'尚未釣到魚。每次成功釣起一尾就會加入收藏。'));
       const list=node('div','room-fishing-collection-list');for(const entry of [...fish].reverse()){
         const card=node('div','room-fishing-collection-item');const art=node('img');art.src=fishArt(entry.speciesId);art.alt='';art.draggable=false;art.onerror=()=>hideMissingFishArt(art);
-        const name=node('strong','',FISH_LABELS[entry.speciesId]||entry.label||'未知漁獲');const action=button(entry.inAquarium?'收回收藏':'放進水族箱',async()=>{
+        const name=node('div','room-fishing-collection-name');name.append(node('strong','',FISH_LABELS[entry.speciesId]||entry.label||'未知漁獲'),fishRarityBadge(entry.speciesId));const action=button(entry.inAquarium?'收回收藏':'放進水族箱',async()=>{
           const response=await request('fish.place',{fishId:entry.id,inAquarium:!entry.inAquarium});
           if(response?.ok){renderIntro();body.querySelector(`[data-fish-id="${entry.id}"]`)?.focus({preventScroll:true});say(entry.inAquarium?'已收回收藏。':'已放進水族箱。');options.onResult?.(game);}
           else if(response)say(ERRORS[response.error]||'目前無法變更魚缸展示，請稍後再試。');
@@ -287,6 +343,10 @@
       syncServerClock(response);
       const previousFishingStage=game?.challenge?.id&&game.challenge.id===response.minigame.challenge?.id&&[2,3,4,5].includes(game.challenge.fishingVersion)?game.challenge.stage:null;
       game=response.minigame;
+      if(kind==='fishing'&&game.challenge?.fishingVersion===5){
+        if(previousFishingStage==='cast'&&game.challenge.stage==='wait')fishingSplashSound(fishingV4CastPower);
+        else if(previousFishingStage==='wait'&&game.challenge.stage==='fight')fishingHookSound();
+      }
       if(kind==='work'){jobId=JOBS[game.jobId]?game.jobId:'supply';updateTitle();}
       if(kind==='fishing'){selectedBait=Object.hasOwn(FISH_BAITS,game.baitId)?game.baitId:selectedBait;selectedSpot=Object.hasOwn(FISH_SPOTS,game.spotId)?game.spotId:selectedSpot;}
       if(game.feedback&&game.feedback.roundIndex!==lastFeedback){lastFeedback=game.feedback.roundIndex;say(reaction(game.feedback.correct?'good':'miss'));}
@@ -304,7 +364,7 @@
         }
         return;
       }
-      stopReeling();fishingV4Reeling=false;fishingV4Paying=false;fishingV4Steer=0;fishingV4ChargeStarted=0;fishingV4ChargePointer=null;fishingV4ChargeKey=false;fishingV4PayPointer=null;fishingV4ReelPointer=null;fishingV4CastClickSuppressed=false;fishingV4QueuedCast=false;fishingV4QueuedControl=false;fishingV4QueuedHook=false;fishingV5QueuedFlick=null;fishingV5FeedbackId=null;fishingV5FeedbackUntil=0;fishingV5MotionUntil=0;fishingV4VisualChallenge=null;fishingV5Display=null;fishingV5Hud=null;fishingV5BitePlayed=false;fishingV5ReelSample=null;fishingV5MeasuredRate=NaN;fishingV5ReelSpeed=0;fishingV5ReelAt=0;fishingV5ClickAngle=0;lastRound=game.challenge.id;choice=[];directions=[];ingredients=[];rotations=game.challenge.tiles?.map(tile=>tile.rotation)||[];course=Number.isInteger(game.challenge.start)?[game.challenge.start]:[];counterMoves=[];queued=null;roundStart=now();phase=jobId==='fishing'&&[2,3,4,5].includes(game.challenge.fishingVersion)?'answer':'showcase';renderRound();cancelAnimationFrame(frame);frame=requestAnimationFrame(tick);
+      stopReeling();fishingV4Reeling=false;fishingV4Paying=false;fishingV4Steer=0;fishingV4ChargeStarted=0;fishingV4ChargePointer=null;fishingV4ChargeKey=false;fishingV4PayPointer=null;fishingV4ReelPointer=null;fishingV4CastClickSuppressed=false;fishingV4QueuedCast=false;fishingV4QueuedControl=false;fishingV4QueuedHook=false;fishingV5QueuedFlick=null;fishingV5FeedbackId=null;fishingV5FeedbackUntil=0;fishingV5MotionUntil=0;fishingV5TellId=null;fishingV5CueSoundId=null;fishingV4VisualChallenge=null;fishingV5Display=null;fishingV5Hud=null;fishingV5BitePlayed=false;fishingV5ReelSample=null;fishingV5MeasuredRate=NaN;fishingV5ReelSpeed=0;fishingV5ReelAngle=0;fishingV5ReelAt=0;fishingV5ClickAngle=0;lastRound=game.challenge.id;choice=[];directions=[];ingredients=[];rotations=game.challenge.tiles?.map(tile=>tile.rotation)||[];course=Number.isInteger(game.challenge.start)?[game.challenge.start]:[];counterMoves=[];queued=null;roundStart=now();phase=jobId==='fishing'&&[2,3,4,5].includes(game.challenge.fishingVersion)?'answer':'showcase';renderRound();cancelAnimationFrame(frame);frame=requestAnimationFrame(tick);
     }
     function renderRound() {
       body.replaceChildren();const challenge=game.challenge;
@@ -485,16 +545,18 @@
       const readout=sea.querySelector('.room-fishing-v4-cast-readout');if(readout)readout.textContent=`${fishingV4CastPower}% · ${FISH_CAST_ZONES[selectedCastZone].label}`;
       const track=sea.querySelector('.room-fishing-v4-cast-track');if(track)track.setAttribute('aria-valuenow',String(fishingV4CastPower));
       if(fishingV4Challenge()?.fishingVersion===5)sea.querySelectorAll('.room-fishing-v4-cast-zones span').forEach((label,index)=>label.classList.toggle('active',['near','mid','far'][index]===selectedCastZone));
+      if(fishingV4ChargeStarted&&fishingV4Challenge()?.fishingVersion===5)fishingChargeSound(fishingV4CastPower);
     }
     function startFishingV4Charge(){
       if(fishingV4Challenge()?.stage!=='cast'||fishingV4ChargeStarted)return;
-      fishingV4ChargeStarted=now();setFishingV4Power(0);
+      fishingV4ChargeStarted=now();fishingChargeSoundAt=fishingV4ChargeStarted-190;setFishingV4Power(0);
       const sea=body.querySelector('.room-fishing-v4-sea');if(sea)sea.dataset.charging='true';
     }
     function finishFishingV4Charge(){
       if(!fishingV4ChargeStarted)return;
       setFishingV4Power(fishingV4Challenge()?.fishingVersion===5?fishingV5CastPower(now()-fishingV4ChargeStarted):Math.max(8,(now()-fishingV4ChargeStarted)/15));
       fishingV4ChargeStarted=0;
+      if(fishingV4Challenge()?.fishingVersion===5)fishingCastReleaseSound(fishingV4CastPower);
       const sea=body?.querySelector('.room-fishing-v4-sea');if(sea){
         sea.dataset.charging='false';sea.classList.add('cast-release');setTimeout(()=>sea.classList.remove('cast-release'),560);
         if(fishingV4Challenge()?.fishingVersion===5){sea.classList.add('line-settling');setTimeout(()=>sea.classList.remove('line-settling'),850);}
@@ -523,7 +585,7 @@
       const flick={direction,cueId:cue.id};
       if(requesting){fishingV5QueuedFlick=flick;return;}
       const sea=body?.querySelector('.room-fishing-v4-sea');
-      if(sea){sea.dataset.flickMotion=direction;fishingV5MotionUntil=now()+430;}
+      if(sea){sea.dataset.flickMotion=direction;fishingV5MotionUntil=now()+500;}
       const response=await request('minigame.answer',{sessionId:game.id,token:game.token,roundId:challenge.id,
         counterMoves:['flick'],flickDirection:direction,flickCueId:cue.id});
       if(response?.ok)accept(response);
@@ -571,10 +633,25 @@
       for(const className of ['room-fishing-v4-line-shadow','room-fishing-v4-line-thread']){
         const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('class',className);line.append(path);
       }
-      const rod=node('img','room-fishing-v4-rod');rod.src=ASSET+(isV5?'fishing_v5/rod-no-line-v1.webp':'fishing_v2/rod.webp');rod.alt='';rod.draggable=false;rod.addEventListener('load',()=>updateFishingV4());
+      let rod;
+      if(isV5){
+        rod=node('div','room-fishing-v4-rod room-fishing-v5-rod');rod.setAttribute('aria-hidden','true');
+        const slot=Math.max(0,FISHING_ROD_ATLAS.indexOf(keyOf(characterId)));
+        rod.dataset.character=FISHING_ROD_ATLAS[slot];
+        rod.dataset.slot=String(slot);
+        rod.style.setProperty('--rod-atlas-x',`${(slot%4)*100/3}%`);
+        rod.style.setProperty('--rod-atlas-y',`${Math.floor(slot/4)*25}%`);
+        const shaft=node('span','room-fishing-v5-rod-shaft');
+        shaft.append(node('span','room-fishing-v5-rod-tip'));
+        const crank=node('span','room-fishing-v5-rod-crank');crank.dataset.frame='0';
+        const crankCol=slot*4%18,crankRow=Math.floor(slot*4/18);
+        crank.style.backgroundPosition=`${(crankCol*227/3869*100).toFixed(4)}% ${((3072+crankRow*227)/3613*100).toFixed(4)}%`;
+        rod.append(shaft,node('span','room-fishing-v5-rod-grip'),crank);
+      }else{rod=node('img','room-fishing-v4-rod');rod.src=ASSET+'fishing_v2/rod.webp';rod.alt='';rod.draggable=false;rod.addEventListener('load',()=>updateFishingV4());}
       const splash=node('img','room-fishing-v4-splash');splash.src=ASSET+(selectedSpot==='magma'?'fishing_v5/splash-magma-v1.webp':'fishing_v2/splash.webp');splash.alt='';splash.draggable=false;
       const bobber=node('img','room-fishing-v4-bobber');bobber.src=ASSET+'fishing_v2/bobber.webp';bobber.alt='';bobber.draggable=false;
       const signal=node('strong','room-fishing-v4-signal');signal.setAttribute('aria-live','polite');
+      const flickTell=node('div','room-fishing-v5-flick-tell');flickTell.setAttribute('aria-hidden','true');
       const flickCue=node('div','room-fishing-v5-flick-cue');flickCue.dataset.active='false';
       flickCue.append(node('strong','','↑'),node('small','','上甩'));
       const gauge=node('div','room-fishing-v4-gauge');gauge.setAttribute('role','meter');gauge.setAttribute('aria-label',isV5?'魚線強度':'釣線張力');gauge.setAttribute('aria-valuemin','0');gauge.setAttribute('aria-valuemax','100');
@@ -630,7 +707,7 @@
         pay.addEventListener('click',event=>{if(event.detail!==0)return;setFishingV4Control(false,fishingV4Steer,true);setTimeout(()=>setFishingV4Control(fishingV4ReelPointer!==null,fishingV4Steer,false),450);});
         fightControls.append(pay);
       }
-      sea.append(water,fish,line,rod,splash,bobber,target,signal,...(isV5?[fishingV5Hud,flickCue]:[gauge,directionCue]),castMeter,cast,hook,fightControls);stage.append(sea);
+      sea.append(water,fish,line,rod,splash,bobber,target,signal,...(isV5?[fishingV5Hud,flickTell,flickCue]:[gauge,directionCue]),castMeter,cast,hook,fightControls);stage.append(sea);
       sea.addEventListener('pointerdown',event=>{
         if(event.button!==0||event.target.closest('button'))return;
         const current=fishingV4Challenge();if(!current)return;
@@ -658,18 +735,27 @@
     }
     function fishingV4RodTip(sea){
       const rod=sea.querySelector('.room-fishing-v4-rod'),width=rod.offsetWidth,height=rod.offsetHeight;
-      if(!rod.naturalWidth||!rod.naturalHeight||!width||!height)return{x:450,y:245};
-      // Tip coordinates measured on the bundled 1536x1024 transparent rod art.
-      const contentWidth=Math.min(width,height*rod.naturalWidth/rod.naturalHeight);
-      const contentHeight=contentWidth*rod.naturalHeight/rod.naturalWidth;
-      const tipX=(width-contentWidth)/2+contentWidth*(1484/1536);
-      const tipY=(height-contentHeight)/2+contentHeight*(42/1024);
+      if(!width||!height)return{x:450,y:245};
+      let tipX,tipY;
+      if(rod.classList.contains('room-fishing-v5-rod')){
+        // The marker follows both the full-rod swing and the shaft's flex.
+        const marker=rod.querySelector('.room-fishing-v5-rod-tip');
+        const tip=marker.getBoundingClientRect(),scene=sea.getBoundingClientRect();
+        return{x:(tip.left+tip.width/2-scene.left)*1000/Math.max(1,scene.width),
+          y:(tip.top+tip.height/2-scene.top)*600/Math.max(1,scene.height)};
+      }else{
+        if(!rod.naturalWidth||!rod.naturalHeight)return{x:450,y:245};
+        const contentWidth=Math.min(width,height*rod.naturalWidth/rod.naturalHeight);
+        const contentHeight=contentWidth*rod.naturalHeight/rod.naturalWidth;
+        tipX=(width-contentWidth)/2+contentWidth*(1484/1536);
+        tipY=(height-contentHeight)/2+contentHeight*(42/1024);
+      }
       const style=getComputedStyle(rod),origin=style.transformOrigin.split(' ').map(parseFloat);
       const pivotX=Number.isFinite(origin[0])?origin[0]:width*.25,pivotY=Number.isFinite(origin[1])?origin[1]:height*.82;
       const matrix=style.transform==='none'||typeof DOMMatrixReadOnly!=='function'?null:new DOMMatrixReadOnly(style.transform);
       const dx=tipX-pivotX,dy=tipY-pivotY;
-      const x=rod.offsetLeft+pivotX+(matrix?matrix.a*dx+matrix.c*dy:dx);
-      const y=rod.offsetTop+pivotY+(matrix?matrix.b*dx+matrix.d*dy:dy);
+      const x=rod.offsetLeft+pivotX+(matrix?matrix.a*dx+matrix.c*dy+matrix.e:dx);
+      const y=rod.offsetTop+pivotY+(matrix?matrix.b*dx+matrix.d*dy+matrix.f:dy);
       return{x:x/Math.max(1,sea.clientWidth)*1000,y:y/Math.max(1,sea.clientHeight)*600};
     }
     function updateFishingV5Reel(challenge,displayAt,pullIntensity){
@@ -707,6 +793,16 @@
       const advance=fishingV5ReelSpeed*elapsed;
       fishingV5ReelAngle=(fishingV5ReelAngle+advance)%360;
       fishingV5Hud.querySelector('.room-fishing-v5-dial-spool').style.transform=`rotate(${fishingV5ReelAngle.toFixed(2)}deg)`;
+      const crank=body?.querySelector('.room-fishing-v5-rod-crank');
+      if(crank){
+        const frame=Math.floor(((fishingV5ReelAngle+360)%360)/90)%4;
+        if(crank.dataset.frame!==String(frame)){
+          const atlasIndex=Number(crank.parentElement.dataset.slot)*4+frame;
+          const col=atlasIndex%18,row=Math.floor(atlasIndex/18);
+          crank.dataset.frame=String(frame);
+          crank.style.backgroundPosition=`${(col*227/3869*100).toFixed(4)}% ${((3072+row*227)/3613*100).toFixed(4)}%`;
+        }
+      }
       const movement=fishingV5ReelSpeed>18?'in':fishingV5ReelSpeed< -18?'out':'still';
       fishingV5Hud.dataset.reelDirection=movement;fishingV5Hud.dataset.reelRate=lineRate.toFixed(2);
       if(movement==='still'||paused){fishingV5ClickAngle=0;return;}
@@ -716,6 +812,13 @@
     function updateFishingV5(){
       const challenge=fishingV4Challenge(),sea=body?.querySelector('.room-fishing-v4-sea');
       if(challenge?.fishingVersion!==5||!sea)return;
+      // Keep the tip at the prior waterline while making room for the crank's
+      // lowest painted pose inside the sea, including a short desktop window.
+      const firstPersonRod=sea.querySelector('.room-fishing-v5-rod');
+      if(firstPersonRod){
+        const rodWidth=Math.min(sea.clientWidth*.82,sea.clientHeight*1.30,920);
+        if(Math.abs(firstPersonRod.offsetWidth-rodWidth)>1)firstPersonRod.style.width=`${rodWidth.toFixed(1)}px`;
+      }
       const at=fishingNow(),bite=Date.parse(challenge.biteAt),nibble=Date.parse(challenge.nibbleAt),hookUntil=Date.parse(challenge.hookUntil);
       const biting=challenge.stage==='wait'&&at>=bite&&at<=hookUntil,nibbling=challenge.stage==='wait'&&at>=nibble&&at<bite;
       if(biting&&!fishingV5BitePlayed){fishingV5BitePlayed=true;fishingBiteSound();}
@@ -737,6 +840,8 @@
       const pullIntensity=Number.isFinite(challenge.pullIntensity)?clamp(challenge.pullIntensity,0,1):(surge?0.55:0.08);
       const maxStrength=Math.max(1,Number(challenge.maxStrength)||100),strength=clamp(challenge.strength,0,maxStrength);
       const strengthRatio=clamp(strength/maxStrength,0,1),risk=strengthRatio<=.26?'danger':strengthRatio<=.52?'warning':'safe';
+      if(challenge.stage==='fight'&&risk!=='safe')fishingStressSound(risk,pullIntensity);
+      else fishingSoundRisk='safe';
       const distance=clamp(challenge.distance,0,100),closeness=1-distance/100;
       sea.dataset.stage=challenge.stage;sea.dataset.biting=String(biting);sea.dataset.nibbling=String(nibbling);
       layer.dataset.fishingStage=challenge.stage;
@@ -746,9 +851,17 @@
       sea.style.setProperty('--pull-intensity',pullIntensity.toFixed(3));
       sea.style.setProperty('--pull-period',`${Math.round(940-pullIntensity*530)}ms`);
       sea.style.setProperty('--pull-bend',`${((direction==='left'?-1:direction==='right'?1:0)*pullIntensity*9).toFixed(2)}deg`);
+      sea.style.setProperty('--shaft-bend',`${((direction==='left'?-1:direction==='right'?1:0)*pullIntensity*4.2).toFixed(2)}deg`);
       sea.style.setProperty('--pull-splash-opacity',(0.36+pullIntensity*0.53).toFixed(3));
+      sea.style.setProperty('--camera-pan-x',`${(surge?(direction==='left'?7:direction==='right'?-7:0)*pullIntensity:0).toFixed(1)}px`);
+      sea.style.setProperty('--camera-pan-y',`${(surge?4*pullIntensity:0).toFixed(1)}px`);
+      const tell=challenge.flickTell,tellActive=challenge.stage==='fight'&&Number.isInteger(tell?.id)&&
+        ['left','right','up'].includes(tell.direction)&&at<Date.parse(tell.until);
       const cue=challenge.flickCue,cueActive=challenge.stage==='fight'&&Number.isInteger(cue?.id)&&
         ['left','right','up'].includes(cue.direction)&&at<Date.parse(cue.until);
+      sea.dataset.flickTell=String(tellActive);
+      if(tellActive&&tell.id!==fishingV5TellId){fishingV5TellId=tell.id;fishingTone(180,270,.14,.11,'sawtooth');}
+      if(cueActive&&cue.id!==fishingV5CueSoundId){fishingV5CueSoundId=cue.id;fishingTone(420,780,.18,.13,'triangle');}
       const flick=sea.querySelector('.room-fishing-v5-flick-cue');
       if(flick){
         const feedback=challenge.flickFeedback;
@@ -831,6 +944,9 @@
       sea.style.setProperty('--fish-x',visualX.toFixed(2)+'%');sea.style.setProperty('--fish-y',(floatY+4).toFixed(2)+'%');
       sea.style.setProperty('--fish-scale',(.55+.45*perspective).toFixed(3));
       sea.style.setProperty('--float-x',floatX.toFixed(2)+'%');sea.style.setProperty('--float-y',floatY.toFixed(2)+'%');
+      const actionDirection=cueActive?cue.direction:challenge.flickFeedback?.direction;
+      sea.style.setProperty('--flick-x',`${clamp(floatX+(actionDirection==='left'?-10:10),17,83).toFixed(2)}%`);
+      sea.style.setProperty('--flick-y',`${clamp(floatY-5,28,68).toFixed(2)}%`);
       const bobOffset=biting?0:nibbling?Math.sin(at/90)*3:Math.sin(at/270)*2.5+(challenge.stage==='fight'?Math.sin(at/(145-pullIntensity*70))*pullIntensity*5:0);
       sea.style.setProperty('--bob-offset',`${bobOffset.toFixed(1)}px`);
       sea.style.setProperty('--bob-tilt',`${(nibbling?Math.sin(at/130)*5:Math.sin(at/390)*2+(challenge.stage==='fight'?Math.sin(at/(180-pullIntensity*90))*pullIntensity*9:0)).toFixed(1)}deg`);
@@ -1023,14 +1139,16 @@
       fishingResultShownAt=now();
       const caught=result.catch&&typeof result.catch.speciesId==='string'?result.catch:null;
       fishingV5ReelSpeed=0;fishingV5ClickAngle=0;
-      if(caught||result.catchCollectionFull)fishingCatchSound();
+      if(caught||result.catchCollectionFull)fishingCatchSound(caught?.rarity);
+      else fishingFailSound();
       const box=node('div',`room-fishing-v3-result ${caught?'caught':'miss'}`);
+      if(caught)box.dataset.rarity=Object.hasOwn(FISH_RARITY_LABELS,caught.rarity)?caught.rarity:FISH_RARITY_BY_ID[caught.speciesId]||'common';
       const heading=node('h3','',caught?'釣起來了！':result.catchCollectionFull?'釣到了，收藏已滿':'這一竿讓魚逃走了');heading.tabIndex=-1;
       box.append(node('span','room-minigame-eyebrow',caught?'NEW CATCH':'THE FISH GOT AWAY'),heading);
       box.append(node('p','room-fishing-v3-result-spot',`${FISH_SPOTS[selectedSpot].label} · ${FISH_BAITS[selectedBait].label}`));
       if(caught){
         const art=node('img','room-fishing-v3-catch-art');art.src=fishArt(caught.speciesId);art.alt=caught.label||FISH_LABELS[caught.speciesId]||'釣到的魚';art.draggable=false;art.onerror=()=>hideMissingFishArt(art);
-        box.append(art,node('strong','room-fishing-v3-catch-name',caught.label||FISH_LABELS[caught.speciesId]||'新漁獲'),node('p','','這尾魚已加入漁獲收藏。看完後再按下方按鈕繼續。'));
+        box.append(fishRarityBadge(caught.speciesId,caught.rarity),art,node('strong','room-fishing-v3-catch-name',caught.label||FISH_LABELS[caught.speciesId]||'新漁獲'),node('p','','這尾魚已加入漁獲收藏。看完後再按下方按鈕繼續。'));
         const place=button('放進水族箱',fishingResultAction(async()=>{const response=await request('fish.place',{fishId:caught.id,inAquarium:true});if(response?.ok){place.textContent='已放進水族箱';place.dataset.permanentDisabled='true';place.disabled=true;say('魚已放進水族箱。');options.onResult?.(game);}else if(response)say(ERRORS[response.error]||'目前無法放進水族箱，漁獲仍保存在收藏。');}),'room-minigame-secondary');box.append(place);
       }else box.append(node('p','',result.catchCollectionFull?'先到漁獲收藏放生一尾，就能保存新魚。':'換個餌或釣點，再試著觀察浮標下沉的時機。'));
       const row=node('div','room-minigame-result-actions');row.append(button('看完了，再釣一竿',fishingResultAction(()=>{game=null;lastResult='';lastRound='';lastFeedback=-1;phase='intro';body.replaceChildren(node('p','room-fishing-v4-loading','正在回到同一處海面…'));void start();}),'room-minigame-primary'),button('換魚餌與釣點',fishingResultAction(()=>{game=null;lastResult='';lastRound='';lastFeedback=-1;renderIntro();}),'room-minigame-secondary'),button('返回房間',fishingResultAction(()=>void askClose()),'room-minigame-secondary'));box.append(row);body.append(box);
@@ -1042,7 +1160,7 @@
       const rewards=node('div','room-minigame-rewards');rewards.append(node('strong','',game.practice?'自由練習 · 不領獎勵':result.coins?`商城金幣 +${result.coins}`:kind==='work'&&result.passed?'金幣已達 500 枚上限':kind==='work'?'本次沒有金幣獎勵':'工作意願 +'+(result.workMotivation||0)));if(result.affinity)rewards.append(node('span','',`親密度 +${result.affinity}`));box.append(rewards,node('p','room-minigame-cost',result.catchCollectionFull?'漁獲收藏已滿 64 尾；本次仍照常計算成績與金幣。要留下新魚，請先在收藏中放生一尾。':result.canRetry?`這一場還能重試 ${result.attemptsRemaining} 次；新的一場也不限次數。`:kind==='work'?'工作小遊戲可不限次數再玩；持有金幣上限 500 枚。':'訓練可不限次數再玩。'));
       if(result.catch&&Object.hasOwn(FISH_LABELS,result.catch.speciesId)){
         const catchCard=node('div','room-fishing-catch');const fish=node('img');fish.src=fishArt(result.catch.speciesId);fish.alt=result.catch.label||'釣到的魚';fish.draggable=false;fish.onerror=()=>hideMissingFishArt(fish);
-        const copy=node('div');copy.append(node('span','room-minigame-eyebrow','NEW CATCH'),node('strong','',result.catch.label||'新漁獲'),node('small','','已加入漁獲收藏。香吉士料理菜單將於後續更新開放。'));
+        const copy=node('div');copy.append(node('span','room-minigame-eyebrow','NEW CATCH'),fishRarityBadge(result.catch.speciesId,result.catch.rarity),node('strong','',result.catch.label||'新漁獲'),node('small','','已加入漁獲收藏。香吉士料理菜單將於後續更新開放。'));
         const place=button('放進水族箱',async()=>{const response=await request('fish.place',{fishId:result.catch.id,inAquarium:true});if(response?.ok){place.textContent='已放進水族箱';place.dataset.permanentDisabled='true';place.disabled=true;say('魚已放進千陽號水族館酒吧的魚缸。');options.onResult?.(game);}else if(response){say(ERRORS[response.error]||'現在無法把魚放進水族箱，漁獲已保存在收藏。');}},'room-minigame-secondary');
         copy.append(place);catchCard.append(fish,copy);box.append(catchCard);
       }

@@ -44,8 +44,40 @@ const FISH_SPECIES = Object.freeze([
   Object.freeze({id:'aurora-sunfish',label:'極光翻車魚',sourceName:'オーロラマンボウ',weight:0}),
   Object.freeze({id:'burning-dragon',label:'燃燒龍',sourceName:'バーニングドラゴン',weight:0}),
   Object.freeze({id:'great-terigius',label:'巨型泰利吉烏斯',sourceName:'グレートテリギウス',weight:0}),
-  Object.freeze({id:'golden-whale',label:'黃金鯨',sourceName:'ゴールデンホエール',weight:0})
+  Object.freeze({id:'golden-whale',label:'黃金鯨',sourceName:'ゴールデンホエール',weight:0}),
+  // Species names below are confirmed by bundle entry names in the supplied
+  // Fishing Master XAPK. Rarity, habitats and fighting rules are launcher art.
+  Object.freeze({id:'largemouth-bass',label:'大嘴鱸魚',sourceName:'largemouthbass',weight:0}),
+  Object.freeze({id:'warmouth',label:'暖口太陽魚',sourceName:'warmouth',weight:0}),
+  Object.freeze({id:'congo-bichir',label:'剛果多鰭魚',sourceName:'congobichir',weight:0}),
+  Object.freeze({id:'paddlefish',label:'匙吻鱘',sourceName:'paddlefish',weight:0}),
+  Object.freeze({id:'alligator-gar',label:'鱷雀鱔',sourceName:'alligatorgar',weight:0}),
+  Object.freeze({id:'dolphinfish',label:'鯕鰍',sourceName:'dolphinfish_rare_b01',weight:0}),
+  Object.freeze({id:'lionfish',label:'獅子魚',sourceName:'lionfish_elite_b01',weight:0}),
+  Object.freeze({id:'dusky-grouper',label:'褐石斑魚',sourceName:'duskygrouper_rare',weight:0}),
+  Object.freeze({id:'goliath-grouper',label:'巨型石斑魚',sourceName:'goliathgrouper',weight:0}),
+  Object.freeze({id:'white-marlin',label:'白馬林魚',sourceName:'whitemarlin_monster_b01',weight:0})
 ]);
+// These collectible grades are authored for the launcher. The supplied ISO
+// identifies species and fight behavior; it does not define this rarity scale.
+// Keeping rarity derived from the species ID preserves existing collection
+// records and makes catches saved before this release display consistently.
+const FISH_RARITY_BY_ID = Object.freeze({
+  'balloon-catfish':'common','glistening-saury':'common','smile-jellyfish':'common',
+  'butterflyfish':'common','lovely-angel':'common','claw-shrimp':'common',
+  'cutie-piranha':'common','maple-salmon':'common','lava-flounder':'common',
+  'adventure-fish':'uncommon','cola-sunfish':'uncommon','pumpkin-octopus':'uncommon',
+  'electric-catfish':'uncommon','demon-bonito':'uncommon','ice-fish':'uncommon',
+  'striped-clam':'uncommon','guiding-anglerfish':'uncommon',
+  'panda-shark':'rare','reef-shark':'rare','elephant-tuna':'rare',
+  'treasure-pearl-clam':'rare','beat-alligator':'rare','aurora-sunfish':'rare',
+  'great-terigius':'rare',
+  'burning-dragon':'legendary','golden-whale':'legendary',
+  'largemouth-bass':'common','warmouth':'common',
+  'congo-bichir':'uncommon','dolphinfish':'uncommon','lionfish':'uncommon',
+  'paddlefish':'rare','alligator-gar':'rare','dusky-grouper':'rare',
+  'goliath-grouper':'legendary','white-marlin':'legendary'
+});
 const FISHING_BAITS = Object.freeze(['worm','shrimp','lure']);
 const FISHING_SPOTS = Object.freeze(['shore','reef','deep','freshwater','magma','rainbow']);
 const FISHING_CAST_ZONES = Object.freeze({
@@ -92,6 +124,24 @@ const FISHING_V3_POOLS = Object.freeze({
     lure:Object.freeze([['adventure-fish',5],['lovely-angel',4],['aurora-sunfish',2]])
   })
 });
+// Additional target fish do not replace any existing route. The three weights
+// correspond to near/middle/far casts; zero makes a species absent at range.
+const FISHING_GUEST_POOLS = Object.freeze({
+  freshwater:Object.freeze({
+    worm:Object.freeze([['largemouth-bass',4,2,0],['warmouth',3,1,0]]),
+    shrimp:Object.freeze([['congo-bichir',0,3,2],['paddlefish',0,1,2]]),
+    lure:Object.freeze([['alligator-gar',0,1,2]])
+  }),
+  shore:Object.freeze({lure:Object.freeze([['dolphinfish',1,2,2]])}),
+  reef:Object.freeze({
+    shrimp:Object.freeze([['lionfish',1,2,2]]),
+    lure:Object.freeze([['dusky-grouper',0,1,2]])
+  }),
+  deep:Object.freeze({
+    shrimp:Object.freeze([['goliath-grouper',0,1,1]]),
+    lure:Object.freeze([['white-marlin',0,1,1]])
+  })
+});
 const FISHING_V3_DIFFICULTY = Object.freeze({
   'balloon-catfish':0,'butterflyfish':0,'striped-clam':0,'lovely-angel':0,'claw-shrimp':0,
   'cutie-piranha':1,'adventure-fish':1,'glistening-saury':1,'smile-jellyfish':1,
@@ -99,7 +149,10 @@ const FISHING_V3_DIFFICULTY = Object.freeze({
   'cola-sunfish':2,'panda-shark':2,'treasure-pearl-clam':2,'electric-catfish':2,
   'demon-bonito':2,'guiding-anglerfish':2,'ice-fish':2,
   'reef-shark':3,'elephant-tuna':3,'beat-alligator':3,'aurora-sunfish':3,
-  'burning-dragon':3,'great-terigius':3,'golden-whale':3
+  'burning-dragon':3,'great-terigius':3,'golden-whale':3,
+  'warmouth':0,'largemouth-bass':1,'congo-bichir':1,'dolphinfish':1,'lionfish':1,
+  'paddlefish':2,'alligator-gar':2,'dusky-grouper':2,
+  'goliath-grouper':3,'white-marlin':3
 });
 const FISH_COUNTER = Object.freeze({left:'right',right:'left',deep:'slack'});
 const FISHING_V2_ROUNDS = 3;
@@ -149,9 +202,20 @@ function prepareFishingFight(round,speciesId) {
 function fishingPoolFor(spotId,baitId,castZone) {
   const entries=FISHING_V3_POOLS[spotId]?.[baitId];
   if(!entries||!Object.hasOwn(FISHING_CAST_ZONES,castZone))return null;
-  if(castZone==='near')return [[entries[0][0],entries[0][1]*3],entries[1]];
-  if(castZone==='far')return [entries[1],[entries[2][0],entries[2][1]*3]];
-  return entries;
+  const extras=FISHING_GUEST_POOLS[spotId]?.[baitId]||[];
+  const index={near:1,mid:2,far:3}[castZone];
+  const guest=extras.filter(entry=>entry[index]>0).map(entry=>[entry[0],entry[index]]);
+  if(castZone==='near')return [[entries[0][0],entries[0][1]*3],entries[1],...guest];
+  // Legendary fish are an occasional targeted catch at far range, rather
+  // than becoming the default catch simply because the last slot is boosted.
+  // The middle pool is lower still, so distance remains meaningful.
+  if(FISH_RARITY_BY_ID[entries[2][0]]==='legendary'){
+    if(castZone==='far')return [[entries[1][0],entries[1][1]*5],[entries[2][0],1],...guest];
+    return [[entries[0][0],entries[0][1]*5],[entries[1][0],entries[1][1]*5],
+      [entries[2][0],1],...guest];
+  }
+  if(castZone==='far')return [entries[1],[entries[2][0],entries[2][1]*3],...guest];
+  return [...entries,...guest];
 }
 function fishingSpeciesFor(spotId,baitId,castZone) {
   const entries=fishingPoolFor(spotId,baitId,castZone);
@@ -501,4 +565,4 @@ function answer(session,payload,now) {
   if(!Number.isFinite(latestAnswerMs)||now.getTime()>latestAnswerMs)correct=false;
   return advanceRound(session,correct,now);
 }
-module.exports={ACTIVE,CATEGORIES,WORK_JOBS,FISH_SPECIES,FISHING_BAITS,FISHING_SPOTS,FISHING_CAST_ZONES,FISHING_V3_POOLS,FISHING_V3_DIFFICULTY,fishingPoolFor,ensure,save,view,active,create,retry,load,answer,contextValid};
+module.exports={ACTIVE,CATEGORIES,WORK_JOBS,FISH_SPECIES,FISH_RARITY_BY_ID,FISHING_BAITS,FISHING_SPOTS,FISHING_CAST_ZONES,FISHING_V3_POOLS,FISHING_GUEST_POOLS,FISHING_V3_DIFFICULTY,fishingPoolFor,ensure,save,view,active,create,retry,load,answer,contextValid};

@@ -109,7 +109,7 @@ function addFishCatch(state,session,result,now) {
   if(state.fishCollection.length>=L.MAX_FISH){result.catchCollectionFull=true;return;}
   const caught={id:crypto.randomUUID(),speciesId:species.id,caughtAt:now.toISOString(),inAquarium:false};
   state.fishCollection.push(caught);
-  result.catch={...caught,label:species.label};
+  result.catch={...caught,label:species.label,rarity:M.FISH_RARITY_BY_ID[species.id]};
 }
 async function performMinigame(db,row,state,companions,command,room,now,sessions) {
   const p=command.payload;

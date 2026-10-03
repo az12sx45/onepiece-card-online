@@ -148,7 +148,8 @@ function main(){
     [...Object.keys(v5.ISO_BEHAVIOR_MODES),...Object.keys(v5.EXTRA_BEHAVIOR_MODES)].sort(),
     minigames.FISH_SPECIES.map(fish=>fish.id).sort());
   check('twenty catches use verified ISO fish records',Object.keys(v5.ISO_BEHAVIOR_MODES).length,20);
-  check('six launcher catches have separate authored modes',Object.keys(v5.EXTRA_BEHAVIOR_MODES).length,6);
+  check('six retained plus ten guest catches have separate authored modes',
+    Object.keys(v5.EXTRA_BEHAVIOR_MODES).length,16);
   check('first phase also follows ISO 65/35 weight',firstPhaseModes('lovely-angel'),{calm:65,surge:35});
   check('first phase also follows ISO 20/80 weight',firstPhaseModes('aurora-sunfish'),{calm:20,surge:80});
   for(const seed of [1,2,70,12345,67890]){

@@ -15,7 +15,8 @@ const CONTROL_LEASE_MS = 2000;
 const HOOK_WINDOW_MS = 4500;
 const STEP_MS = 100;
 const FLICK_WINDOW_MS = 2600;
-const FLICK_MIN_SURGE_MS = 2900;
+const FLICK_TELL_MS = Object.freeze({patient:850,dart:550,heavy:950,weave:700});
+const FLICK_MIN_SURGE_MS = 3850;
 const FLICK_RELIEF_MS = 1400;
 const rodLevel = value => Number.isInteger(value)&&value>=0&&value<=3?value:0;
 
@@ -57,7 +58,17 @@ const EXTRA_BEHAVIOR_MODES = Object.freeze({
   'smile-jellyfish':[[0,75,600,2800,700],[1,25,550,1700,700]],
   'butterflyfish':[[0,50,800,1700,700],[1,50,850,1200,800]],
   'cola-sunfish':[[0,70,900,2600,900],[1,30,850,1600,800]],
-  'reef-shark':[[0,70,1400,2600,700],[1,30,1900,2300,800]]
+  'reef-shark':[[0,70,1400,2600,700],[1,30,1900,2300,800]],
+  'largemouth-bass':[[0,55,950,1800,700],[1,45,1200,1350,600]],
+  'warmouth':[[0,80,700,2400,700],[1,20,550,1100,500]],
+  'congo-bichir':[[0,55,950,1800,700],[1,45,1000,1700,700]],
+  'paddlefish':[[0,75,1250,2200,900],[1,25,1700,1800,800]],
+  'alligator-gar':[[0,55,1450,2000,700],[1,45,1900,1600,800]],
+  'dolphinfish':[[0,45,1100,1500,650],[1,55,1550,1250,650]],
+  'lionfish':[[0,70,800,2100,600],[1,30,1250,1500,700]],
+  'dusky-grouper':[[0,70,1300,2200,700],[1,30,1750,1800,800]],
+  'goliath-grouper':[[0,70,1600,2600,800],[1,30,2050,2100,900]],
+  'white-marlin':[[0,50,1450,1600,600],[1,50,2100,1550,800]]
 });
 const ISO_STYLES = Object.freeze({
   'lovely-angel':'patient','adventure-fish':'weave','claw-shrimp':'dart','beat-alligator':'heavy',
@@ -68,7 +79,11 @@ const ISO_STYLES = Object.freeze({
   'ice-fish':'dart','aurora-sunfish':'weave'
 });
 const EXTRA_STYLES = Object.freeze({'balloon-catfish':'patient','glistening-saury':'dart',
-  'smile-jellyfish':'patient','butterflyfish':'dart','cola-sunfish':'patient','reef-shark':'heavy'});
+  'smile-jellyfish':'patient','butterflyfish':'dart','cola-sunfish':'patient','reef-shark':'heavy',
+  'largemouth-bass':'dart','warmouth':'patient','congo-bichir':'weave',
+  'paddlefish':'heavy','alligator-gar':'heavy','dolphinfish':'dart',
+  'lionfish':'weave','dusky-grouper':'heavy','goliath-grouper':'heavy',
+  'white-marlin':'dart'});
 // Launcher-authored species accents make fish of the same broad movement style
 // feel different. They do not alter the sourced ISO slot weights or raw F:
 // duration controls the lull/run, swim the lateral speed, pull line escape,
@@ -99,7 +114,17 @@ const FIGHT_ACCENTS = Object.freeze({
   'aurora-sunfish':Object.freeze({duration:1.06,swim:1.05,pull:1.03,fatigue:1.07,grip:1.08}),
   'burning-dragon':Object.freeze({duration:.88,swim:1.27,pull:1.24,fatigue:1.18,grip:.9}),
   'great-terigius':Object.freeze({duration:.94,swim:1.18,pull:1.19,fatigue:1.13,grip:.91}),
-  'golden-whale':Object.freeze({duration:1.12,swim:.82,pull:1.16,fatigue:1.13,grip:.91})
+  'golden-whale':Object.freeze({duration:1.12,swim:.82,pull:1.16,fatigue:1.13,grip:.91}),
+  'largemouth-bass':Object.freeze({duration:.94,swim:1.12,pull:.96,fatigue:.92,grip:1.04}),
+  'warmouth':Object.freeze({duration:1.1,swim:.78,pull:.8,fatigue:.81,grip:1.11}),
+  'congo-bichir':Object.freeze({duration:1.06,swim:.98,pull:1.01,fatigue:.96,grip:1.03}),
+  'paddlefish':Object.freeze({duration:1.12,swim:.91,pull:1.12,fatigue:1.04,grip:.98}),
+  'alligator-gar':Object.freeze({duration:.92,swim:1.16,pull:1.18,fatigue:1.11,grip:.94}),
+  'dolphinfish':Object.freeze({duration:.86,swim:1.3,pull:1.1,fatigue:1.01,grip:.99}),
+  'lionfish':Object.freeze({duration:1.1,swim:.87,pull:.89,fatigue:.88,grip:1.06}),
+  'dusky-grouper':Object.freeze({duration:1.14,swim:.85,pull:1.17,fatigue:1.1,grip:.94}),
+  'goliath-grouper':Object.freeze({duration:1.07,swim:.78,pull:1.06,fatigue:1.06,grip:1.07}),
+  'white-marlin':Object.freeze({duration:.88,swim:1.3,pull:1.16,fatigue:1.08,grip:.96})
 });
 const BEHAVIOR_STYLES = Object.freeze({
   patient:Object.freeze({calmMs:5100,surgeMs:1600,turns:0,swimSpeed:.11,reelGain:6.25,surgeEscape:1.45,reelDrain:5.6,recovery:9.2}),
@@ -150,7 +175,8 @@ function create(id,issuedAt,equippedRodLevel=0,flickMode=false) {
     pullDirection:'steady',runState:'calm',fishX:.5,fishY:.57,fishVelocityX:0,fishVelocityY:0,
     motionSeed:crypto.randomInt(1,0x80000000),rodLevel:rodLevel(equippedRodLevel),motionStartedAt:null,
     phaseIndex:0,phaseUntil:null,nextTurnAt:null,turnsRemaining:0,behavior:null,reelHoldMs:0,
-    ...(flickMode===true?{flickMode:true,flickCue:null,flickFeedback:null,flickReliefUntil:null}:{}),
+    ...(flickMode===true?{flickMode:true,flickTell:null,flickCue:null,flickFeedback:null,
+      flickReliefUntil:null}:{}),
     control:{reeling:false,steer:0},controlLeaseUntil:null,
     showcaseMs:0,answerWindowMs:90000,notBefore:iso(issuedAt)};
 }
@@ -187,8 +213,8 @@ function selectPhase(round,skill,index,at) {
   const rawLength=Math.max(1250,Math.round((mode?rules.surgeMs:rules.calmMs)*durationFactor*
     (round.behavior.accent?.duration||1)+
     (mode?skill*65:0)+wobble));
-  // Only new opt-in sessions get the gesture layer. Old saved V5 rounds keep
-  // their exact lateral run timing and are never asked for a new control.
+  // Only opt-in sessions get the gesture layer. Non-flick V5 rounds keep
+  // their lateral run timing and are never asked for a new control.
   const cuePhase=Boolean(mode&&round.flickMode&&((round.motionSeed>>>2)+index)%2===0);
   const length=cuePhase?Math.max(rawLength,FLICK_MIN_SURGE_MS):rawLength;
   round.runState=mode?'surge':'calm';
@@ -197,9 +223,11 @@ function selectPhase(round,skill,index,at) {
   if(cuePhase){
     const direction=((round.motionSeed>>>3)+index)%3===0?'up':round.pullDirection;
     if(direction==='up')round.pullDirection='deep';
-    round.flickCue={id:index+1,direction,startedAt:iso(at),until:iso(at+FLICK_WINDOW_MS)};
+    const tellMs=FLICK_TELL_MS[round.behavior.style];
+    round.flickTell={id:index+1,direction,startedAt:iso(at),until:iso(at+tellMs)};
+    round.flickCue=null;
     round.flickFeedback=null;
-  }else if(round.flickMode)round.flickCue=null;
+  }else if(round.flickMode){round.flickTell=null;round.flickCue=null;}
   round.phaseUntil=iso(at+length);
   // The ISO source picks one lateral heading for a behavior slot. This new
   // opt-in launcher gesture layer may replace one run with an upward dive;
@@ -243,16 +271,29 @@ function resolveFlick(round,at,result) {
   if(!cue)return null;
   round.flickCue=null;
   round.flickFeedback={id:cue.id,direction:cue.direction,result,at:iso(at)};
+  // A strong fish makes a clean counter more valuable and a missed counter
+  // more costly, while the existing line-strength meter remains authoritative.
+  const force=round.behavior?.force||1;
   if(result==='hit'){
-    round.strength=round4(clamp(round.strength+11,0,round.maxStrength));
-    round.distance=round4(clamp(round.distance-3.2,0,100));
+    round.strength=round4(clamp(round.strength+10+force*2,0,round.maxStrength));
+    round.distance=round4(clamp(round.distance-(3.8+force*1.5),0,100));
     round.flickReliefUntil=iso(at+FLICK_RELIEF_MS);
   }else{
-    round.strength=round4(clamp(round.strength-(result==='wrong'?9:7),0,round.maxStrength));
-    round.distance=round4(clamp(round.distance+(result==='wrong'?3.2:2.6),0,100));
+    round.strength=round4(clamp(round.strength-(result==='wrong'?8+force*2:6+force*2),0,
+      round.maxStrength));
+    round.distance=round4(clamp(round.distance+(result==='wrong'?2.8+force*1.2:
+      2.2+force*1.2),0,100));
   }
   round.tension=round4(100-round.strength);
   return round.strength<=0?'line_snapped':round.distance<=0?'landed':round.distance>=100?'escaped':null;
+}
+
+function revealFlickCue(round,at) {
+  const tell=round.flickTell;
+  if(!tell)return;
+  round.flickTell=null;
+  round.flickCue={id:tell.id,direction:tell.direction,startedAt:iso(at),
+    until:iso(at+FLICK_WINDOW_MS)};
 }
 
 function flick(round,now,direction,cueId) {
@@ -278,13 +319,16 @@ function simulate(round,now,difficulty=1) {
   while(cursor<end) {
     if(cursor>=Date.parse(round.phaseUntil))advancePhase(round,skill,cursor);
     if(round.nextTurnAt&&cursor>=Date.parse(round.nextTurnAt))turnFish(round,cursor);
+    if(round.flickTell&&cursor>=Date.parse(round.flickTell.until))revealFlickCue(round,cursor);
     if(round.flickCue&&cursor>=Date.parse(round.flickCue.until)){
       const outcome=resolveFlick(round,cursor,'miss');
       if(outcome)return outcome;
     }
     const turnAt=round.nextTurnAt?Date.parse(round.nextTurnAt):Infinity;
+    const tellUntil=round.flickTell?Date.parse(round.flickTell.until):Infinity;
     const cueUntil=round.flickCue?Date.parse(round.flickCue.until):Infinity;
-    const next=Math.min(end,cursor+STEP_MS,Date.parse(round.phaseUntil),turnAt,cueUntil),dt=(next-cursor)/1000;
+    const next=Math.min(end,cursor+STEP_MS,Date.parse(round.phaseUntil),turnAt,tellUntil,cueUntil),
+      dt=(next-cursor)/1000;
     if(next<=cursor)return 'escaped';
     const held=Number.isFinite(lease)&&cursor<lease;
     const control=held?round.control:{reeling:false,steer:0,paying:false};
@@ -303,8 +347,10 @@ function simulate(round,now,difficulty=1) {
     const speed=surge?(deep?(.5-round.fishX)*.5:fishSign*rules.swimSpeed*(round.behavior.accent?.swim||1)*
       (.75+force*.25)*(aligned?.42:opposed?1.2:1)):
       (.5-round.fishX)*.65+.027*Math.sin((next-Date.parse(round.hookedAt))/830+(round.motionSeed%71));
-    const depth=deep?.76:{patient:.59,dart:.63,heavy:.7,weave:.66}[style];
-    const vertical=surge?(depth-round.fishY)*1.7:(.56-round.fishY)*1.2;
+    // A successful upward counter briefly lifts a diving fish back toward
+    // the surface. Lateral counters already slow the fish's sideways run.
+    const depth=deep?(relief?.53:.76):{patient:.59,dart:.63,heavy:.7,weave:.66}[style];
+    const vertical=surge?(depth-round.fishY)*(deep&&relief?2.2:1.7):(.56-round.fishY)*1.2;
     round.fishX=round4(clamp(round.fishX+speed*dt,.08,.92));
     round.fishY=round4(clamp(round.fishY+vertical*dt,.4,.75));
     round.fishVelocityX=round4(speed);round.fishVelocityY=round4(vertical);
@@ -346,6 +392,7 @@ function simulate(round,now,difficulty=1) {
     const outcome=resolveFlick(round,cursor,'miss');
     if(outcome)return outcome;
   }
+  if(round.flickTell&&cursor>=Date.parse(round.flickTell.until))revealFlickCue(round,cursor);
   if(cursor>=Date.parse(round.phaseUntil))advancePhase(round,skill,cursor);
   else if(round.nextTurnAt&&cursor>=Date.parse(round.nextTurnAt))turnFish(round,cursor);
   if(Number.isFinite(lease)&&end>=lease){round.control={reeling:false,steer:0};round.controlLeaseUntil=null;}
@@ -368,4 +415,4 @@ function displayIntensity(value,state) {
 module.exports={create,cast,hook,simulate,control,flick,observe,position,rodLevel,
   ISO_BEHAVIOR_MODES,EXTRA_BEHAVIOR_MODES,
   castZoneForPower,castTargetForPower,displayIntensity,CONTROL_LEASE_MS,HOOK_WINDOW_MS,DURATION_MS,
-  FLICK_WINDOW_MS,FLICK_MIN_SURGE_MS,FLICK_RELIEF_MS};
+  FLICK_WINDOW_MS,FLICK_TELL_MS,FLICK_MIN_SURGE_MS,FLICK_RELIEF_MS};

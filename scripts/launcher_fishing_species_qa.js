@@ -19,15 +19,26 @@ const LEGACY_IDS=Object.freeze([
   'balloon-catfish','glistening-saury','smile-jellyfish','butterflyfish',
   'cola-sunfish','reef-shark'
 ]);
+const FISHING_MASTER_IDS=Object.freeze([
+  'largemouth-bass','warmouth','congo-bichir','paddlefish','alligator-gar',
+  'dolphinfish','lionfish','dusky-grouper','goliath-grouper','white-marlin'
+]);
 const checks=[];
 function check(name,actual,expected){assert.deepEqual(actual,expected,name);checks.push(name);}
 const catalogue=new Map(M.FISH_SPECIES.map(fish=>[fish.id,fish]));
 check('all catalogue ids unique',catalogue.size,M.FISH_SPECIES.length);
-check('20 Unlimited Adventure fish plus 6 retained saves',catalogue.size,26);
+check('20 Unlimited Adventure, 6 retained and 10 new guest species',catalogue.size,36);
 check('all 20 Unlimited Adventure fish present',UA_IDS.every(id=>catalogue.has(id)),true);
 check('all 6 other prior fish ids retained',LEGACY_IDS.every(id=>catalogue.has(id)),true);
+check('all 10 supplied Fishing Master XAPK species added',
+  FISHING_MASTER_IDS.every(id=>catalogue.has(id)),true);
 check('every fish has a usable display and source name',
   M.FISH_SPECIES.every(fish=>fish.label.length>0&&fish.sourceName.length>0),true);
+check('every fish has exactly one launcher rarity grade',
+  [...catalogue.keys()].sort(),Object.keys(M.FISH_RARITY_BY_ID).sort());
+check('rarity grades use the four published labels',
+  [...new Set(Object.values(M.FISH_RARITY_BY_ID))].sort(),
+  ['common','legendary','rare','uncommon']);
 check('all fish have a defined fight difficulty',
   M.FISH_SPECIES.every(fish=>Number.isInteger(M.FISHING_V3_DIFFICULTY[fish.id])&&
     M.FISHING_V3_DIFFICULTY[fish.id]>=0&&M.FISHING_V3_DIFFICULTY[fish.id]<=3),true);
@@ -62,9 +73,39 @@ for(const spotId of M.FISHING_SPOTS){
 }
 check('every catalogue fish has a positive catch route',
   [...catalogue.keys()].filter(id=>!reachable.has(id)),[]);
+const guestRoutes={
+  'largemouth-bass':['freshwater','worm','near','largemouthbass'],
+  warmouth:['freshwater','worm','near','warmouth'],
+  'congo-bichir':['freshwater','shrimp','mid','congobichir'],
+  paddlefish:['freshwater','shrimp','far','paddlefish'],
+  'alligator-gar':['freshwater','lure','far','alligatorgar'],
+  dolphinfish:['shore','lure','far','dolphinfish_rare_b01'],
+  lionfish:['reef','shrimp','mid','lionfish_elite_b01'],
+  'dusky-grouper':['reef','lure','far','duskygrouper_rare'],
+  'goliath-grouper':['deep','shrimp','far','goliathgrouper'],
+  'white-marlin':['deep','lure','far','whitemarlin_monster_b01']
+};
+for(const [id,[spot,bait,zone,bundleName]] of Object.entries(guestRoutes)){
+  check(`${id} preserves XAPK bundle-name provenance`,catalogue.get(id)?.sourceName,bundleName);
+  check(`${id} is catchable at its authored spot, bait and distance`,
+    M.fishingPoolFor(spot,bait,zone).some(([species,weight])=>species===id&&weight>0),true);
+  check(`${id} is absent from unrelated water`,
+    M.FISHING_SPOTS.filter(other=>other!==spot).some(other=>
+      M.FISHING_BAITS.some(item=>Object.keys(M.FISHING_CAST_ZONES).some(distance=>
+        M.fishingPoolFor(other,item,distance).some(([species])=>species===id)))),false);
+}
 check('magma contains exactly its two source fish',
   [...new Set(Object.values(M.FISHING_V3_POOLS.magma).flatMap(pool=>pool.map(([id])=>id)))].sort(),
   ['burning-dragon','lava-flounder']);
+for(const [spot,bait,id] of [['deep','shrimp','golden-whale'],
+  ['deep','lure','golden-whale'],['magma','worm','burning-dragon'],
+  ['magma','shrimp','burning-dragon'],['magma','lure','burning-dragon']]){
+  const chance=zone=>{const pool=M.fishingPoolFor(spot,bait,zone);
+    return pool.filter(([species])=>species===id).reduce((sum,[,weight])=>sum+weight,0)/
+      pool.reduce((sum,[,weight])=>sum+weight,0);};
+  check(`${spot}/${bait} legendary chance rises at far range without dominating`,
+    chance('mid')<chance('far')&&chance('far')<.1,true);
+}
 check('rainbow water can produce Aurora Sunfish',
   Object.values(M.FISHING_V3_POOLS.rainbow).some(pool=>pool.some(([id])=>id==='aurora-sunfish')),true);
 check('freshwater can produce Ice Fish',
@@ -83,4 +124,5 @@ check('invalid fish id is excluded from persisted collection',
   L.normalizeState({fishCollection:[{id:crypto.randomUUID(),speciesId:'shadow',caughtAt:now.toISOString()}]},[],[],now)
     .fishCollection.length,0);
 console.log(`launcher_fishing_species_qa: ${checks.length}/${checks.length} PASS; `+
-  `${UA_IDS.length} Unlimited Adventure species, ${catalogue.size} total catchable fish`);
+  `${UA_IDS.length} Unlimited Adventure and ${FISHING_MASTER_IDS.length} guest species, `+
+  `${catalogue.size} total catchable fish`);

@@ -40,10 +40,18 @@ async function main(){
     ...ref(),counterMoves:['cast'],castPower:50,castZone:'mid'},.2);
   check('opt-in cast',cast.ok,true);game=cast.minigame;
   await db.query("UPDATE launcher_minigame_sessions SET session=jsonb_set(jsonb_set(session,'{catchSpeciesId}',to_jsonb($2::text)),'{challenge,motionSeed}',to_jsonb($3::integer)) WHERE session_id=$1",
-    [game.id,'glistening-saury',1]);
+    [game.id,'glistening-saury',48]);
   const biteSeconds=(Date.parse(game.challenge.biteAt)-base)/1000+.1;
   const hook=await command('minigame.answer',{...ref(),counterMoves:['hook']},biteSeconds);
   check('opt-in hook',hook.ok,true);game=hook.minigame;
+  check('public response exposes direction before cue',game.challenge.flickTell?.direction,'up');
+  check('hook does not open a flick window immediately',game.challenge.flickCue,null);
+  const tell=game.challenge.flickTell;
+  const early=await command('minigame.answer',{...ref(),counterMoves:['flick'],
+    flickDirection:tell.direction,flickCueId:tell.id},biteSeconds+.1);
+  check('telegraphed flick cannot be submitted before cue',early.error,'fishing_flick_stale');
+  const held=await db.query('SELECT session FROM launcher_minigame_sessions WHERE session_id=$1',[game.id]);
+  check('tell persists through a rejected early input',held.rows[0].session.challenge.flickTell?.id,tell.id);
   let clock=biteSeconds,cue=null;
   for(let i=0;i<35&&!cue&&game.challenge;i++){
     clock+=1;
@@ -52,6 +60,8 @@ async function main(){
     cue=game.challenge?.flickCue;
   }
   check('new cue survives persistence and public projection',Boolean(cue),true);
+  check('cue keeps the telegraphed direction and id',[cue.direction,cue.id],
+    [tell.direction,tell.id]);
   check('cue direction is a legal gesture',['left','right','up'].includes(cue.direction),true);
   check('server-private relief deadline is hidden',Object.hasOwn(game.challenge,'flickReliefUntil'),false);
   const answer=await command('minigame.answer',{

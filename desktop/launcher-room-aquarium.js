@@ -27,21 +27,32 @@
     'aurora-sunfish': '極光翻車魚',
     'burning-dragon': '燃燒龍',
     'great-terigius': '巨型泰利吉烏斯',
-    'golden-whale': '黃金鯨'
+    'golden-whale': '黃金鯨',
+    'largemouth-bass': '大嘴鱸魚',
+    warmouth: '暖口太陽魚',
+    'congo-bichir': '剛果多鰭魚',
+    paddlefish: '匙吻鱘',
+    'alligator-gar': '鱷雀鱔',
+    dolphinfish: '鯕鰍',
+    lionfish: '獅子魚',
+    'dusky-grouper': '褐石斑魚',
+    'goliath-grouper': '巨型石斑魚',
+    'white-marlin': '白馬林魚'
   });
   const LEGACY_FISH = new Set(['balloon-catfish', 'panda-shark', 'glistening-saury', 'smile-jellyfish']);
   const UA_FISH = new Set(['adventure-fish', 'panda-shark', 'elephant-tuna', 'lovely-angel', 'striped-clam', 'cutie-piranha', 'claw-shrimp', 'pumpkin-octopus', 'maple-salmon', 'lava-flounder', 'treasure-pearl-clam', 'electric-catfish', 'demon-bonito', 'guiding-anglerfish', 'ice-fish', 'beat-alligator', 'aurora-sunfish', 'burning-dragon', 'great-terigius', 'golden-whale']);
-  const fishArt = speciesId => `opui://launcher/images/launcher_room/${UA_FISH.has(speciesId) ? 'fish_ua' : LEGACY_FISH.has(speciesId) ? 'fish_v1' : 'fish_v3'}/${speciesId === 'golden-whale' ? 'golden-whale-v2' : speciesId}.webp`;
+  const MASTER_FISH = new Set(['largemouth-bass', 'warmouth', 'congo-bichir', 'paddlefish', 'alligator-gar', 'dolphinfish', 'lionfish', 'dusky-grouper', 'goliath-grouper', 'white-marlin']);
+  const fishArt = speciesId => `opui://launcher/images/launcher_room/${MASTER_FISH.has(speciesId) ? 'fish_master' : UA_FISH.has(speciesId) ? 'fish_ua' : LEGACY_FISH.has(speciesId) ? 'fish_v1' : 'fish_v3'}/${speciesId === 'golden-whale' ? 'golden-whale-v2' : speciesId}.webp`;
   // The cutouts do not all face the same way. Keep their head in the direction
   // of travel; shellfish and other bottom dwellers should not patrol the tank.
   const LEFT_FACING = new Set(['glistening-saury', 'adventure-fish', 'panda-shark', 'elephant-tuna', 'lovely-angel', 'cutie-piranha', 'maple-salmon', 'lava-flounder', 'electric-catfish', 'demon-bonito', 'ice-fish', 'beat-alligator', 'aurora-sunfish', 'burning-dragon', 'great-terigius']);
   const CLAMS = new Set(['striped-clam', 'treasure-pearl-clam']);
-  const LARGE = new Set(['panda-shark', 'reef-shark', 'elephant-tuna', 'beat-alligator', 'great-terigius', 'golden-whale']);
-  const SMALL = new Set(['glistening-saury', 'butterflyfish', 'cutie-piranha', 'claw-shrimp', 'striped-clam', 'treasure-pearl-clam', 'ice-fish']);
+  const LARGE = new Set(['panda-shark', 'reef-shark', 'elephant-tuna', 'beat-alligator', 'great-terigius', 'golden-whale', 'paddlefish', 'alligator-gar', 'dolphinfish', 'dusky-grouper', 'goliath-grouper', 'white-marlin']);
+  const SMALL = new Set(['glistening-saury', 'butterflyfish', 'cutie-piranha', 'claw-shrimp', 'striped-clam', 'treasure-pearl-clam', 'ice-fish', 'warmouth', 'lionfish']);
 
   function motionFor(speciesId) {
     if (CLAMS.has(speciesId)) return 'perch';
-    if (speciesId === 'smile-jellyfish') return 'drift';
+    if (speciesId === 'smile-jellyfish' || speciesId === 'lionfish') return 'drift';
     if (speciesId === 'pumpkin-octopus') return 'pulse';
     if (speciesId === 'claw-shrimp') return 'backstep';
     return 'swim';
@@ -57,7 +68,9 @@
   function laneFor(fish, index, compact) {
     const variation = seed(fish.id + 'lane');
     if (fish.speciesId === 'golden-whale') return compact ? 7 + variation % 4 : 8 + variation % 3;
+    if (fish.speciesId === 'alligator-gar') return compact ? 12 + variation % 5 : 14 + variation % 5;
     if (fish.speciesId === 'beat-alligator') return compact ? 35 + variation % 8 : 42 + variation % 7;
+    if (fish.speciesId === 'dusky-grouper' || fish.speciesId === 'goliath-grouper') return compact ? 35 + variation % 9 : 57 + variation % 8;
     if (fish.speciesId === 'pumpkin-octopus') return compact ? 36 + variation % 5 : 60 + variation % 3;
     if (CLAMS.has(fish.speciesId)) return compact ? 51 + variation % 7 : 76 + variation % 3;
     if (fish.speciesId === 'claw-shrimp') return compact ? 51 + variation % 7 : 73 + variation % 4;
@@ -91,7 +104,7 @@
       ? fish.speciesId === 'striped-clam' ? 16 + seed(fish.id + 'home') % 8 : 68 + seed(fish.id + 'home') % 8
       : 12 + (index * 13 + seed(fish.id + 'home') % 15) % 62}%`);
     lane.style.setProperty('--fish-duration', `${motion === 'swim'
-      ? fish.speciesId === 'golden-whale' || fish.speciesId === 'beat-alligator' ? 26 + seed(fish.id + 'speed') % 6 : 13 + seed(fish.id + 'speed') % 8
+      ? fish.speciesId === 'golden-whale' || fish.speciesId === 'beat-alligator' || fish.speciesId === 'goliath-grouper' ? 26 + seed(fish.id + 'speed') % 6 : 13 + seed(fish.id + 'speed') % 8
       : motion === 'perch' ? 3 + seed(fish.id + 'speed') % 3 : 6 + seed(fish.id + 'speed') % 4}s`);
     lane.style.setProperty('--fish-delay', `${-(seed(fish.id + 'phase') % 160) / 10}s`);
     lane.style.setProperty('--fish-bob', `${1.4 + (seed(fish.id + 'bob') % 12) / 10}s`);

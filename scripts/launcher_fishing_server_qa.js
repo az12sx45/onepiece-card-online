@@ -275,6 +275,11 @@ async function fishingV3Checks(){
     check('fishing v3: one landed fish is a pass',finished.minigame.result.passed,true);
     check('fishing v3: catch comes from chosen spot, bait and cast distance',
       minigames.fishingPoolFor(spotId,baitId,castZone).some(([id])=>id===finished.minigame.result.catch.speciesId),true);
+    check('fishing v3: catch rarity matches species without changing saved fish schema',
+      finished.minigame.result.catch.rarity,
+      minigames.FISH_RARITY_BY_ID[finished.minigame.result.catch.speciesId]);
+    check('fishing v3: saved fish keeps existing fields only',
+      Object.hasOwn(finished.life.fishCollection.at(-1),'rarity'),false);
     check('fishing v3: every landed cast adds one fish',finished.life.fishCollection.length,index+1);
     check('fishing v3: fishing awards no work coins',finished.wallet.coins,100);
     const duplicate=await command('v3-catch','minigame.finish',ref(game),t+0.02);

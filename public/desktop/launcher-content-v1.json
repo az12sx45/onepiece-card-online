@@ -4,10 +4,60 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 7,
-  "publishedAt": "2026-10-03T10:53:43.610Z",
+  "revision": 8,
+  "publishedAt": "2026-10-03T13:03:56.178Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
+    {
+      "path": "images/launcher_room/fish_master/alligator-gar.webp",
+      "bytes": 49976,
+      "sha256": "e8ceccdf0084cf405d102d012c5aef056c1f3f10894784adf155503e4140b2c6"
+    },
+    {
+      "path": "images/launcher_room/fish_master/congo-bichir.webp",
+      "bytes": 55700,
+      "sha256": "b79e33682f3ec3fb16687c91676119109549cd973390efcdad8d63d19d3a5030"
+    },
+    {
+      "path": "images/launcher_room/fish_master/dolphinfish.webp",
+      "bytes": 63934,
+      "sha256": "ca9c49a8dc3d0cf06f49427b1e9b67665951eae97545a87bdfbfe4f8ef09c70d"
+    },
+    {
+      "path": "images/launcher_room/fish_master/dusky-grouper.webp",
+      "bytes": 114364,
+      "sha256": "e5421b9e52858432b8d127570ba2cad70011f168fd6613986da164851d77a677"
+    },
+    {
+      "path": "images/launcher_room/fish_master/goliath-grouper.webp",
+      "bytes": 124214,
+      "sha256": "01b7d2065df4310ecb69dba0c1152b95ea400a40f7c90496045175cec3dd5e27"
+    },
+    {
+      "path": "images/launcher_room/fish_master/largemouth-bass.webp",
+      "bytes": 74302,
+      "sha256": "8b104cc27a7d61d5c686b69bf052f5b68a6593cec12642e5283500cf7e6405ec"
+    },
+    {
+      "path": "images/launcher_room/fish_master/lionfish.webp",
+      "bytes": 297254,
+      "sha256": "fb5395e0896ff857004a2881e642351490132681487de54bdaaf8b04610b667a"
+    },
+    {
+      "path": "images/launcher_room/fish_master/paddlefish.webp",
+      "bytes": 38736,
+      "sha256": "5858e0a90575b0e52d29a3a9c6631f6d3d99475387d3fd4c56129c3355e7c5f3"
+    },
+    {
+      "path": "images/launcher_room/fish_master/warmouth.webp",
+      "bytes": 77510,
+      "sha256": "248622e25b084a11634e2e44ef64953cfdf329bf71fe6fef97e3b814b7912460"
+    },
+    {
+      "path": "images/launcher_room/fish_master/white-marlin.webp",
+      "bytes": 72922,
+      "sha256": "f9747bd40db6c03c8e0dc6efa7f5a1110efecd043c1fbe93a0d7917942270810"
+    },
     {
       "path": "images/launcher_room/fish_ua/golden-whale-v2.webp",
       "bytes": 22008,
@@ -17,6 +67,11 @@
       "path": "images/launcher_room/fish_ua/pumpkin-octopus.webp",
       "bytes": 29862,
       "sha256": "a3e55da2b26fef25c9fde283f9c463c3f2a0cdbe60e21aea1e5a11723c99f886"
+    },
+    {
+      "path": "images/launcher_room/fishing_v5/rod-no-line-v1.webp",
+      "bytes": 1329848,
+      "sha256": "f14b2a302fae4d05b772c1db5be3457b5dbec1da5c0fd9f35a24064ca4d492e4"
     },
     {
       "path": "images/launcher_room/minigames_v2/ingredient-apple.webp",
@@ -89,14 +144,19 @@
       "sha256": "dc0d2664b05c2045c1095f06c8e422724865b145267aa3a6d1dc45fba836f239"
     },
     {
+      "path": "launcher-room-aquarium.js",
+      "bytes": 8917,
+      "sha256": "5a8efacc55de6e56480aea0fb0c8511f5ab6525f478bc69c2819a217dd6a0022"
+    },
+    {
       "path": "launcher-room-minigames.css",
-      "bytes": 105699,
-      "sha256": "84e8ccbee9af76d6ed069595cd2bf2c1d19acca5316bd9c1527388f29eb6ac47"
+      "bytes": 115168,
+      "sha256": "a67fed2cf33d1349244fe0cb67c1caaa98646c6229cb64d8b211fb640b292f32"
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 150255,
-      "sha256": "2a242b3c7f3769547f9c217dc715daea5258a01be959ea7e7080f747bf70ce2d"
+      "bytes": 160117,
+      "sha256": "a3d08ffd7b6fdb43eecea86634226aefa2b86faecf58c68e00ff73169939b48e"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -117,6 +177,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "IjDqDFZJG4Us8ek3nN3I8yD9oYwjphjX3wlbzyogGs1RnDBckaAfzvXoZZj8d2o3DVDSSZ5I2NY9DTkJiOpEAA=="
+    "value": "3mXqT2+N6MnAuK90j1Owmln3ebVdtfalV8KiPhwOSCNDf1DByxRQ7ICydDkg3YedU97yOQQ7764IyFFtCRaCCw=="
   }
 }

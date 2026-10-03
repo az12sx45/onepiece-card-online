@@ -22,25 +22,32 @@ function firstCue(seed,speciesId='glistening-saury'){
   }
   return null;
 }
+function initialTell(speciesId='glistening-saury'){
+  for(let seed=1;seed<=5000;seed++){
+    const round=makeRound(seed,speciesId);
+    if(round.flickTell)return{round,seed};
+  }
+  return null;
+}
 function responsive(round){
   const reeling=round.runState==='surge'?
     round.strength>65&&v5.displayIntensity(round.pullIntensity,round.runState)<.85:
     round.strength>=38;
   return{reeling,steer:round.pullDirection==='left'?-1:round.pullDirection==='right'?1:0};
 }
-function fightWithFlicks(seed,speciesId,skill){
+function fightWithFlicks(seed,speciesId,skill,cadenceMs=350){
   const round=makeRound(seed,speciesId);let at=4000,result=null,flicks=0;
-  for(;at<93000&&!result;at+=350){
-    result=v5.simulate(round,date(at+350),skill);
+  for(;at<93000&&!result;at+=cadenceMs){
+    result=v5.simulate(round,date(at+cadenceMs),skill);
     if(result)break;
     if(round.flickCue){
-      const outcome=v5.flick(round,date(at+350),round.flickCue.direction,round.flickCue.id);
+      const outcome=v5.flick(round,date(at+cadenceMs),round.flickCue.direction,round.flickCue.id);
       check('valid cue resolves once',outcome.error,undefined);
       flicks++;
       if(outcome.settlement){result=outcome.settlement;break;}
     }
     const input=responsive(round);
-    v5.control(round,date(at+350),input.reeling,input.steer);
+    v5.control(round,date(at+cadenceMs),input.reeling,input.steer);
   }
   return{result,flicks};
 }
@@ -48,6 +55,7 @@ function fightWithFlicks(seed,speciesId,skill){
 function main(){
   const legacy=makeRound(71,'glistening-saury',false);
   check('old V5 round has no flick opt-in',legacy.flickMode,undefined);
+  check('old V5 round has no telegraph field',legacy.flickTell,undefined);
   for(let at=4100;at<24000;at+=100){
     if(v5.simulate(legacy,date(at),1))break;
     check('old V5 never receives a flick cue',legacy.flickCue,undefined);
@@ -59,16 +67,40 @@ function main(){
     if(Object.keys(directions).length===3)break;
   }
   check('left/right/up cues are all reachable',Object.keys(directions).sort(),['left','right','up']);
-  const initialCues={};
-  for(let seed=1;seed<=5000&&Object.keys(initialCues).length<3;seed++){
-    const round=makeRound(seed),direction=round.flickCue?.direction;
-    if(direction&&!initialCues[direction])initialCues[direction]=seed;
+  const initialTells={};
+  for(let seed=1;seed<=5000&&Object.keys(initialTells).length<3;seed++){
+    const round=makeRound(seed),direction=round.flickTell?.direction;
+    if(direction&&!initialTells[direction])initialTells[direction]=seed;
   }
-  check('all three flicks can appear immediately after hook',Object.keys(initialCues).sort(),['left','right','up']);
+  check('all three directional tells can appear after hook',Object.keys(initialTells).sort(),
+    ['left','right','up']);
+  for(const [speciesId,style] of [['striped-clam','patient'],['glistening-saury','dart'],
+    ['golden-whale','heavy'],['pumpkin-octopus','weave']]){
+    const found=initialTell(speciesId);
+    check(`${style} has an initial tell`,Boolean(found),true);
+    const {round}=found,tell=round.flickTell,at=Date.parse(tell.until);
+    check(`${style} has a distinct warning duration`,at-Date.parse(tell.startedAt),
+      v5.FLICK_TELL_MS[style]);
+    check(`${style} has no immediate response cue`,round.flickCue,null);
+    check(`${style} cannot flick during warning`,v5.flick(round,date(at-1),tell.direction,tell.id).error,
+      'fishing_flick_stale');
+    v5.simulate(round,date(at-1),1);
+    check(`${style} warning survives until its deadline`,round.flickTell?.id,tell.id);
+    check(`${style} response cue waits until deadline`,round.flickCue,null);
+    v5.simulate(round,date(at),1);
+    check(`${style} warning clears at deadline`,round.flickTell,null);
+    check(`${style} cue keeps identity and direction`,
+      [round.flickCue.id,round.flickCue.direction],[tell.id,tell.direction]);
+    check(`${style} cue starts at warning deadline`,Date.parse(round.flickCue.startedAt),at);
+    check(`${style} cue gets full response time`,Date.parse(round.flickCue.until)-at,v5.FLICK_WINDOW_MS);
+    check(`${style} surge outlasts full response time`,
+      Date.parse(round.phaseUntil)>Date.parse(round.flickCue.until),true);
+  }
   for(const direction of ['left','right','up']){
     const {round}=directions[direction],cue=round.flickCue;
     check(`${direction} public cue has a 2.6s window`,Date.parse(cue.until)-Date.parse(cue.startedAt),2600);
-    check(`${direction} surge lasts through the response window`,Date.parse(round.phaseUntil)-Date.parse(cue.startedAt)>=2900,true);
+    check(`${direction} surge lasts through the response window`,
+      Date.parse(round.phaseUntil)>Date.parse(cue.until),true);
     check(`${direction} fish motion matches cue`,round.pullDirection,direction==='up'?'deep':direction);
     const hit=JSON.parse(JSON.stringify(round)),wrong=JSON.parse(JSON.stringify(round));
     const at=Date.parse(cue.startedAt)+500;
@@ -84,8 +116,30 @@ function main(){
     check(`${direction} missed cue has feedback`,missed.flickFeedback.result,'miss');
     check(`${direction} missed cue cannot be replayed`,v5.flick(missed,date(Date.parse(cue.until)+101),direction,cue.id).error,'fishing_flick_expired');
   }
+  const light=firstCue(initialTell('striped-clam').seed,'striped-clam').round;
+  const heavy=firstCue(initialTell('golden-whale').seed,'golden-whale').round;
+  check('heavy fish has a higher current pull force',heavy.behavior.force>light.behavior.force,true);
+  const lightHit=JSON.parse(JSON.stringify(light)),heavyHit=JSON.parse(JSON.stringify(heavy));
+  v5.flick(lightHit,date(Date.parse(light.flickCue.startedAt)+100),light.flickCue.direction,light.flickCue.id);
+  v5.flick(heavyHit,date(Date.parse(heavy.flickCue.startedAt)+100),heavy.flickCue.direction,heavy.flickCue.id);
+  check('strong fish gives a bigger distance counter',
+    heavy.distance-heavyHit.distance>light.distance-lightHit.distance,true);
+  const lightWrong=JSON.parse(JSON.stringify(light)),heavyWrong=JSON.parse(JSON.stringify(heavy));
+  v5.flick(lightWrong,date(Date.parse(light.flickCue.startedAt)+100),
+    light.flickCue.direction==='left'?'right':'left',light.flickCue.id);
+  v5.flick(heavyWrong,date(Date.parse(heavy.flickCue.startedAt)+100),
+    heavy.flickCue.direction==='left'?'right':'left',heavy.flickCue.id);
+  check('strong fish makes a wrong counter cost more line',
+    heavyWrong.distance-heavy.distance>lightWrong.distance-light.distance,true);
   const up=directions.up.round;
   check('up flick is a deep dive, not neutral lateral steer',up.pullDirection,'deep');
+  const upHit=JSON.parse(JSON.stringify(up)),upIgnored=JSON.parse(JSON.stringify(up));
+  const upAt=Date.parse(up.flickCue.startedAt)+100;
+  v5.flick(upHit,date(upAt),'up',up.flickCue.id);
+  v5.simulate(upHit,date(upAt+700),1);
+  v5.simulate(upIgnored,date(upAt+700),1);
+  check('upward counter interrupts the fish dive',upHit.fishY<upIgnored.fishY,true);
+  check('upward counter slows escape while line is relieved',upHit.distance<upIgnored.distance,true);
   const direct=v5.create('public',0,1,true);
   check('direct opt-in persisted',direct.flickMode,true);
   const session=minigames.create('fishing','luffy',1,date(0),false,'supply',5,'lure','shore',1,true);
@@ -114,15 +168,17 @@ function main(){
   const failures=[];let totalFlicks=0;
   for(const speciesId of fishIds)for(const seed of [7,71]){
     const skill=minigames.FISHING_V3_DIFFICULTY[speciesId]??1;
-    const fight=fightWithFlicks(seed,speciesId,skill);
-    totalFlicks+=fight.flicks;
-    if(fight.result!=='landed')failures.push({speciesId,seed,...fight});
+    for(const cadenceMs of [350,1000]){
+      const fight=fightWithFlicks(seed,speciesId,skill,cadenceMs);
+      totalFlicks+=fight.flicks;
+      if(fight.result!=='landed')failures.push({speciesId,seed,cadenceMs,...fight});
+    }
   }
-  check('all 26 species are catchable with responsive reel and flick input',failures,[]);
+  check('all 26 species are catchable with responsive flicks at 350ms and 1s cadence',failures,[]);
   check('sampled fights actually trigger directional flicks',totalFlicks>0,true);
-  console.log(JSON.stringify({status:'PASS',checks,species:fishIds.length,scenarios:fishIds.length*2,totalFlicks,
+  console.log(JSON.stringify({status:'PASS',checks,species:fishIds.length,scenarios:fishIds.length*4,totalFlicks,
     cueSeeds:Object.fromEntries(Object.entries(directions).map(([direction,value])=>
       [direction,{seed:value.seed,speciesId:'glistening-saury',afterHookMs:value.at-4000}])),
-    initialCueSeeds:initialCues},null,2));
+    initialTellSeeds:initialTells},null,2));
 }
 main();

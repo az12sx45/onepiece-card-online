@@ -57,7 +57,8 @@ async function command(client,type,payload){
     if(session.roundIndex!==1)return{ok:false,error:'minigame_not_ready',serverNow:now.toISOString()};
     session.state='completed';
     session.result={passed:session.feedback?.reason==='landed',
-      ...(session.feedback?.reason==='landed'?{catch:{id:`browser-fish-${client}`,speciesId:'balloon-catfish',label:'氣球鯰魚'}}:{})};
+      ...(session.feedback?.reason==='landed'?{catch:{id:`browser-fish-${client}`,speciesId:'balloon-catfish',label:'氣球鯰魚',
+        ...(client==='desktop'?{rarity:'legendary'}:{})}}:{})};
     return{ok:true,serverNow:now.toISOString(),minigame:minigames.view(session)};
   }
   return{ok:false,error:'invalid_qa_command',serverNow:now.toISOString()};
@@ -76,6 +77,14 @@ async function serve(){
         // UI settlement fixture: the engine itself still decides the landing
         // on the next genuine sync/control call.
         session.challenge.distance=-1;session.challenge.strength=Math.max(50,session.challenge.strength);
+        respond(res,{ok:true});return;
+      }
+      if(rel==='qa-miss'&&req.method==='POST'){
+        const session=sessions.get(client);
+        if(!session||session.challenge?.stage!=='wait'){respond(res,{ok:false});return;}
+        // The normal timeout action settles a bite that was missed; only its
+        // authoritative deadline is accelerated for this sound regression.
+        session.challenge.hookUntil=new Date(Date.now()-1000).toISOString();
         respond(res,{ok:true});return;
       }
       if(rel==='qa-cast-target'&&req.method==='POST'){
@@ -131,10 +140,14 @@ async function setup(page,client){
   page.on('pageerror',error=>pageErrors.push(`${client}: ${error.message}`));
   await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'load'});
   await page.evaluate(client=>{
-    window.__qa={client,calls:[],responses:[],pointerEvents:[],soundStarts:[],audioCloses:0,audioSuspends:0};
+    window.__qa={client,calls:[],responses:[],pointerEvents:[],soundStarts:[],noiseStarts:[],audioCloses:0,audioSuspends:0};
     if(window.OscillatorNode){
       const start=OscillatorNode.prototype.start;
       OscillatorNode.prototype.start=function(...args){__qa.soundStarts.push({at:performance.now(),frequency:this.frequency.value});return start.apply(this,args);};
+    }
+    if(window.AudioBufferSourceNode){
+      const start=AudioBufferSourceNode.prototype.start;
+      AudioBufferSourceNode.prototype.start=function(...args){__qa.noiseStarts.push(performance.now());return start.apply(this,args);};
     }
     if(window.AudioContext){
       const createOscillator=AudioContext.prototype.createOscillator;
@@ -189,16 +202,24 @@ async function lineGeometry(page){
     const d=lines[0]?.getAttribute('d')||'';
     const move=/^M\s+(-?[\d.]+)\s+(-?[\d.]+)/.exec(d);
     const finish=/\s(-?[\d.]+)\s+(-?[\d.]+)$/.exec(d);
-    if(!move||!finish||!rod.naturalWidth||!rod.naturalHeight)return null;
+    if(!move||!finish)return null;
     const width=rod.offsetWidth,height=rod.offsetHeight;
-    const artWidth=Math.min(width,height*rod.naturalWidth/rod.naturalHeight);
-    const artHeight=artWidth*rod.naturalHeight/rod.naturalWidth;
-    const localX=(width-artWidth)/2+artWidth*1484/1536;
-    const localY=(height-artHeight)/2+artHeight*42/1024;
     const style=getComputedStyle(rod),origin=style.transformOrigin.split(' ').map(parseFloat);
-    const matrix=new DOMMatrixReadOnly(style.transform),dx=localX-origin[0],dy=localY-origin[1];
-    const tip={x:rod.offsetLeft+origin[0]+matrix.a*dx+matrix.c*dy,
-      y:rod.offsetTop+origin[1]+matrix.b*dx+matrix.d*dy};
+    let tip,artWidth=width,artHeight=height;
+    const atlasMarker=rod.querySelector('.room-fishing-v5-rod-tip');
+    if(atlasMarker){
+      const marker=atlasMarker.getBoundingClientRect(),scene=sea.getBoundingClientRect();
+      tip={x:marker.left+marker.width/2-scene.left,y:marker.top+marker.height/2-scene.top};
+    }else{
+      if(!rod.naturalWidth||!rod.naturalHeight)return null;
+      artWidth=Math.min(width,height*rod.naturalWidth/rod.naturalHeight);
+      artHeight=artWidth*rod.naturalHeight/rod.naturalWidth;
+      const localX=(width-artWidth)/2+artWidth*1484/1536;
+      const localY=(height-artHeight)/2+artHeight*42/1024;
+      const matrix=new DOMMatrixReadOnly(style.transform),dx=localX-origin[0],dy=localY-origin[1];
+      tip={x:rod.offsetLeft+origin[0]+matrix.a*dx+matrix.c*dy+matrix.e,
+        y:rod.offsetTop+origin[1]+matrix.b*dx+matrix.d*dy+matrix.f};
+    }
     const start={x:Number(move[1])*sea.clientWidth/1000,y:Number(move[2])*sea.clientHeight/600};
     const svg=sea.querySelector('.room-fishing-v4-line'),svgRect=svg.getBoundingClientRect();
     const end={x:svgRect.left+Number(finish[1])*svgRect.width/1000,
@@ -217,7 +238,7 @@ async function lineGeometry(page){
     const splashCenter={x:(splashRect.left+splashRect.right)/2,y:(splashRect.top+splashRect.bottom)/2};
     const rodRect=rod.getBoundingClientRect();
     return{paths:lines.map(line=>line.getAttribute('d')),
-      rod:{naturalWidth:rod.naturalWidth,naturalHeight:rod.naturalHeight,
+      rod:{naturalWidth:rod.naturalWidth||0,naturalHeight:rod.naturalHeight||0,
         offsetLeft:rod.offsetLeft,offsetTop:rod.offsetTop,offsetWidth:width,offsetHeight:height,
         contentWidth:artWidth,contentHeight:artHeight,transform:style.transform,
         transformOrigin:style.transformOrigin,
@@ -417,10 +438,14 @@ async function begin(page,label){
 }
 async function castAndHook(page,label){
   const cast=page.locator('.room-fishing-v4-cast');await cast.scrollIntoViewIfNeeded();
+  const soundBeforeCast=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
   const powerBefore=(await visual(page)).castPower;
   const sweep=label==='desktop'?await oscillatingCast(page,cast):null;
   if(!sweep)await holdPointer(page,cast,730);
   await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor({timeout:5000});
+  const soundAfterCast=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
+  check(`${label}: charged cast, release and confirmed splash emit layered original audio`,
+    soundAfterCast.tones-soundBeforeCast.tones>=3&&soundAfterCast.noise-soundBeforeCast.noise>=2);
   const calls=await actionCalls(page,'cast'),power=calls.at(-1)?.payload.castPower;
   const pointerEvents=await page.evaluate(()=>__qa.pointerEvents);
   fs.writeFileSync(path.join(out,`${label}-cast-diagnostics.json`),JSON.stringify({power,powerBefore,sweep,calls,pointerEvents},null,2));
@@ -456,15 +481,21 @@ async function castAndHook(page,label){
   check(`${label}: waiting sea hides decorative fish silhouette`,await page.locator('.room-fishing-v4-fish').evaluate(fish=>
     getComputedStyle(fish).display==='none'));
   await snapshot(page,`${label}-wait`);
+  const soundBeforeBite=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
   await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.biting==='true',null,{timeout:7500});
   check(`${label}: hook enabled on full sink`,await page.locator('.room-fishing-v4-hook').isEnabled());
-  const biteSounds=await page.evaluate(()=>__qa.soundStarts.length);
-  check(`${label}: one fish bite emits a distinct three-part cue`,biteSounds===3);
+  const biteSounds=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
+  check(`${label}: one fish bite emits a distinct three-part cue and water accent`,
+    biteSounds.tones-soundBeforeBite.tones===3&&biteSounds.noise-soundBeforeBite.noise===1);
   await page.waitForTimeout(160);
   check(`${label}: bite cue does not repeat each animation frame`,
-    await page.evaluate(()=>__qa.soundStarts.length)===biteSounds);
+    await page.evaluate(()=>__qa.soundStarts.length)===biteSounds.tones);
+  const soundBeforeHook=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
   await page.locator('.room-fishing-v4-hook').click();
   await page.locator('.room-fishing-v4-sea[data-stage="fight"]').waitFor({timeout:5000});
+  const soundAfterHook=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
+  check(`${label}: confirmed hook has a separate line-set sound`,
+    soundAfterHook.tones-soundBeforeHook.tones>=2&&soundAfterHook.noise-soundBeforeHook.noise>=1);
   check(`${label}: genuine server hook accepted`,(await actionCalls(page,'hook')).length===1&&sessions.get(label)?.challenge.stage==='fight');
   const fightLine=await lineGeometry(page);
   fs.writeFileSync(path.join(out,`${label}-fight-line-diagnostics.json`),JSON.stringify(fightLine,null,2));
@@ -521,6 +552,13 @@ async function fightInteraction(page,label){
   const beforeControls=(await actionCalls(page,'control')).length;
   const soundBeforeReel=await page.evaluate(()=>__qa.soundStarts.length);
   await page.mouse.move(x,y);await page.mouse.down();await page.waitForTimeout(600);
+  await page.evaluate(()=>{
+    const crank=document.querySelector('.room-fishing-v5-rod-crank');
+    __qa.rodFrameHistory=[crank?.dataset.frame];
+    __qa.rodFrameObserver?.disconnect();
+    __qa.rodFrameObserver=new MutationObserver(()=>__qa.rodFrameHistory.push(crank.dataset.frame));
+    __qa.rodFrameObserver.observe(crank,{attributes:true,attributeFilter:['data-frame']});
+  });
   const reelBefore=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>({
     transform:getComputedStyle(wheel).transform,animation:getComputedStyle(wheel).animationName,
     movement:wheel.closest('.room-fishing-v5-hud').dataset.reelDirection,
@@ -535,6 +573,15 @@ async function fightInteraction(page,label){
         topKnob:getComputedStyle(handle,'::before').backgroundImage,
         bottomKnob:getComputedStyle(handle,'::after').backgroundImage,
         hub:getComputedStyle(wheel.parentElement.querySelector('.room-fishing-v5-dial-hub')).display};})(),
+    rodCrank:(()=>{const handle=document.querySelector('.room-fishing-v5-rod-crank');
+      const scene=handle?.closest('.room-fishing-v4-sea')?.getBoundingClientRect();
+      const box=handle?.getBoundingClientRect();
+      return{frame:Number(handle?.dataset.frame),art:getComputedStyle(handle).backgroundImage,
+        position:getComputedStyle(handle).backgroundPosition,
+        rect:box&&{left:box.left,top:box.top,right:box.right,bottom:box.bottom},
+        scene:scene&&{left:scene.left,top:scene.top,right:scene.right,bottom:scene.bottom},
+        visible:Boolean(box&&scene&&box.left<scene.right&&box.right>scene.left&&
+          box.top<scene.bottom&&box.bottom>scene.top)};})(),
     label:document.querySelector('.room-fishing-v5-strength-copy>span')?.textContent}));
   const reelPressure=await fightMeterState(page);
   await page.waitForTimeout(140);
@@ -542,7 +589,8 @@ async function fightInteraction(page,label){
     const box=wheel.querySelector('.room-fishing-v5-dial-crank').getBoundingClientRect();
     const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
     return{transform:getComputedStyle(wheel).transform,angle:Math.atan2(matrix.b,matrix.a)*180/Math.PI,
-      crankWidth:box.width,crankHeight:box.height};
+      crankWidth:box.width,crankHeight:box.height,
+      rodFrame:Number(document.querySelector('.room-fishing-v5-rod-crank')?.dataset.frame)};
   });
   const reelDelta=(reelAfter.angle-reelBefore.angle+540)%360-180;
   fs.writeFileSync(path.join(out,`${label}-reel-first-sample.json`),JSON.stringify({reelBefore,reelAfter,reelDelta,serverDistance:sessions.get(label)?.challenge.distance,serverControl:sessions.get(label)?.challenge.control},null,2));
@@ -561,7 +609,17 @@ async function fightInteraction(page,label){
     reelBefore.crank.hub==='block'&&
     Math.abs(reelBefore.crank.width-reelAfter.crankWidth)+
       Math.abs(reelBefore.crank.height-reelAfter.crankHeight)>3);
+  const reelFrame=angle=>Math.floor((((angle+360)%360)/90))%4;
+  check(`${label}: character rod crank uses its registered four-frame art`,reelBefore.rodCrank.visible&&
+    reelBefore.rodCrank.art.includes('rod-no-line-v1.webp')&&
+    reelBefore.rodCrank.frame===reelFrame(reelBefore.angle)&&
+    reelAfter.rodFrame===reelFrame(reelAfter.angle));
   await page.waitForTimeout(1560);
+  const rodFrameHistory=await page.evaluate(()=>{
+    __qa.rodFrameObserver?.disconnect();return __qa.rodFrameHistory;
+  });
+  check(`${label}: character rod crank cycles through painted frames while reeling`,
+    new Set(rodFrameHistory).size>=3);
   const held=await visual(page);
   const heldMeter=await fightMeterState(page);
   check(`${label}: holding the reel visibly drains the outer line-strength ring`,
@@ -716,9 +774,15 @@ async function verifyLineWheel(page,label){
   };
   const safe=await setStrength(80);
   await snapshot(page,`${label}-wheel-safe`);
+  const beforeStress=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
   const warning=await setStrength(34);
+  const warningStress=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
   await snapshot(page,`${label}-wheel-warning`);
   const danger=await setStrength(12);
+  const dangerStress=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
+  check(`${label}: warning and danger each sound line stress without a continuous loop`,
+    warningStress.tones>beforeStress.tones&&warningStress.noise>beforeStress.noise&&
+    dangerStress.tones>warningStress.tones&&dangerStress.noise>warningStress.noise);
   fs.writeFileSync(path.join(out,`${label}-line-wheel.json`),JSON.stringify({safe,warning,danger},null,2));
   check(`${label}: the outer ring drains with server line strength`,
     safe.dial-warning.dial>30&&warning.dial-danger.dial>15&&
@@ -750,8 +814,9 @@ async function settle(page,label){
   await page.waitForFunction(()=>{const img=document.querySelector('.room-fishing-v3-catch-art');return img?.complete&&img.naturalWidth>0;});
   check(`${label}: server core decided landing`,sessions.get(label)?.feedback?.reason==='landed');
   const soundsAfterLanding=await page.evaluate(()=>__qa.soundStarts.length);
-  check(`${label}: confirmed catch plays its four-part landing cue`,
-    sessions.get(label)?.result?.catch&&soundsAfterLanding-soundsBeforeLanding>=4);
+  check(`${label}: confirmed catch plays its rarity stinger or ordinary fallback`,
+    sessions.get(label)?.result?.catch&&soundsAfterLanding-soundsBeforeLanding>=
+      (sessions.get(label).result.catch.rarity==='legendary'?7:4));
   check(`${label}: result fish image visible`,await page.locator('.room-fishing-v3-catch-art').isVisible());
   const catchArt=await catchArtVisible(page);
   check(`${label}: complete fish art fits without covering actions`,catchArt.loaded&&catchArt.fullyVisible&&catchArt.separateFromActions);
@@ -766,6 +831,15 @@ async function settle(page,label){
   await page.locator('.room-fishing-v4-sea[data-stage="cast"]').waitFor({timeout:5000});
   check(`${label}: next cast starts new v5 session`,sessions.get(label).id!==previousId&&
     sessions.get(label).challenge.fishingVersion===5);
+  await holdPointer(page,page.locator('.room-fishing-v4-cast'),180);
+  await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor({timeout:5000});
+  const soundsBeforeMiss=await page.evaluate(()=>__qa.soundStarts.length);
+  const miss=await page.evaluate(client=>fetch(`/qa-miss?client=${client}`,{method:'POST'}).then(r=>r.json()),label);
+  check(`${label}: missed-bite deadline fixture armed`,miss.ok===true);
+  await page.locator('.room-fishing-v3-result.miss').waitFor({timeout:10000});
+  check(`${label}: missed fish plays its own descending failure cue`,
+    sessions.get(label)?.feedback?.reason==='missed_bite'&&
+    await page.evaluate(()=>__qa.soundStarts.length)>=soundsBeforeMiss+2);
   const beforeClose=await page.evaluate(()=>__qa.audioCloses);
   await page.evaluate(()=>__minigame.dismiss());
   await page.waitForTimeout(140);
@@ -895,6 +969,7 @@ async function forceProbe(label){
     check(`${label}: fixture selected the requested real fish`,sessions.get(label)?.catchSpeciesId===forcedSpecies.get(label));
     await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.runState==='surge',null,{timeout:8500});
     await page.waitForTimeout(230);
+    const line=await lineGeometry(page);
     const samples=[];let serverIntensityAtSample,publicIntensityAtSample;
     for(let index=0;index<7;index++){
       samples.push(await visual(page));
@@ -905,7 +980,6 @@ async function forceProbe(label){
       }
       await page.waitForTimeout(80);
     }
-    const line=await lineGeometry(page);
     await snapshot(page,`${label}-surge`);
     return{label,speciesId:forcedSpecies.get(label),samples,line,
       serverIntensityAtSample,publicIntensityAtSample};

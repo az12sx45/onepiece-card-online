@@ -1,5 +1,29 @@
 # Dev Workflow
 
+## 2026-10-03 啟動器釣魚內容修訂 8 發布候選
+
+正式來源 `public/desktop/launcher-content-v1.json` 已放入 Ed25519 簽署的 1.2.23／修訂 8 清單，原始檔 SHA-256 `f34c08a698619c91add0b5e24584219ec39773d22029dce4481ebf97f9f27c4e`。承接修訂 7 的 21 個路徑，增加水族箱 JS、釣竿圖集與十張透明魚圖，共 33 個內容檔；其中 14 個路徑變更，2,582,962 bytes 的新 blob 已上傳 R2，另 19 個 blob 重用。`D:\Codex_QA\launcher-fishing-firstperson-content-r8\candidate-report-2026-10-03T13-05-18-280Z-7468.json` 證明公開 blob HEAD／完整 GET／SHA、全新安裝驗簽啟用 33 檔及修訂 7→8 只下載 2,582,962 bytes、重查不重複下載皆通過。此階段尚待 Git 推送、Render 正式清單讀回及公開更新器驗證，不能把候選檢查當成正式部署完成。既有 `public/images/ranks/r5.PNG`、`r6.PNG` 與測試失敗產物不納入本次提交。
+
+## 2026-10-03 海釣新增魚種與四級標記（1.2.23 內容修訂 8 候選）
+
+範圍：`server/launcher-minigames.js` 在保留原有 26 魚 ID／可釣路線下新增十種來自使用者提供《歡樂釣魚大師》XAPK 資源名稱的魚，依淡水、近岸、珊瑚礁、外海及魚餌／投距增設魚池，另為 36 魚標上普通、優良、稀有、傳說四級。`server/launcher-fishing-v5.js` 配置十魚個別游速、衝刺、拉線與收線節奏；`server/launcher-life-store.js` 在上岸回應加可選的 `rarity`，不改既有保存格式。`desktop/launcher-room-minigames.js/.css` 顯示新魚與分級；`desktop/launcher-room-aquarium.js` 配置十魚水族箱的名稱、圖路徑及游動規格；`public/images/launcher_room/fish_master/*.webp` 為各魚獨立的透明畫。此版本的魚池權重、分級與新魚行為是本啟動器設計，不能當成原遊戲數值或稀有度資料；未使用加密 XAPK 內的圖或音檔。
+
+驗證：`scripts/launcher_fishing_species_qa.js` 325/325，`launcher_fishing_v5_server_qa.js` 1,211/1,211（36 魚可按魚勢上岸，盲目長按皆失敗），`launcher_fishing_server_qa.js` 786/786，`launcher_fishing_flick_server_qa.js` 398/398，`launcher_fishing_flick_life_qa.js` 19/19，`launcher_fishing_v5_life_qa.js` 21/21，`launcher_fishing_catalog_parity_qa.js` 197/197，`launcher_fishing_master_aquarium_qa.js --require-art` 109/109，公告伺服器 82/82。十張 `fish_master` 各 512×512、真透明、頭向右；正式圖及來源 SHA 紀錄在 `D:\Codex_QA\fishing-fish-20261003\final-six\` 和 `ocean-batch\`。隔離 Chromium 確認十魚在 960×640 與 1440×900 的上岸／水族箱共 40 個呈現情境，皆可解碼、無裁切／模糊／按鈕重疊、無水平溢位或缺圖；報告在 `D:\Codex_QA\fishing-rarity-20261003\master-art-browser\report.json`。原有二十種 Wii 魚的圖鑑回歸 273/273，並將稀有徽章移出魚名 `strong`，保留其精確文字；完整 v5 Chromium 操作／音效 294/294，報告在 `D:\Codex_QA\launcher-fishing-r8-final-browser\report.json`。短視窗上岸按鈕原本超出可視區，已縮短空白與圖高；三個按鈕底部 y=502、卡片底部 y=621，圖仍可辨識。正式 D: 樹以 QA 專用 `NODE_PATH` 執行 `npm start`，隔離 18878 埠首頁 HTTP 200／10,594 bytes，未連真實資料庫；報告在 `D:\Codex_QA\launcher-fishing-firstperson-content-r8\static-smoke-report.json`。公告舊客戶端 QA 因缺舊 IPC sender policy 停於第 3 項，QA 專用修正版補正式 sender policy 後修訂 23 圖文 20/20 PASS，報告在同 QA 目錄 `announcements-client-r23\ANNOUNCEMENTS_CLIENT_QA.json`。差分更新與公開讀回仍待完成。
+
+## 2026-10-03 海釣原創合成音效（1.2.23 內容修訂 8 候選）
+
+範圍：`desktop/launcher-room-minigames.js` 沿用既有 WebAudio `AudioContext`，以短振盪器和程式產生的濾波雜訊加上蓄力節拍、拋竿風聲、伺服器確認落水的水花、咬餌、抽竿、收放線、線弱警示與結算音。警示按風險變化節流；漁獲依可選的 `result.catch.rarity` 使用 `common`／`uncommon`／`rare`／`legendary` 收尾，舊結果缺欄位仍有一般上岸音，失敗則是不同的下降短音。未加入外部音檔或取用參考遊戲素材；沒有改釣魚音效按鈕、個人頁 BGM 靜音／音量設定或伺服器獎勵。失焦時仍暫停聲音，關閉視窗仍釋放音訊脈絡。
+
+驗證：`scripts/launcher_fishing_v5_browser_qa.js` 增加拋竿三階段、咬餌單次、抽竿、耐壓警示、稀有與舊結果收尾、錯過咬餌、失焦與關閉音訊檢查。桌機 1440×900 94/94、短窗 960×640 92/92，完整 v5／甩竿／遠近投／v4 回歸 294/294 項通過，完整報告在 `D:\Codex_QA\fishing-audio-20261003\full-browser\report.json`；此為本機 Chromium 與伺服器核心／結算 fixture，並非真人聽感、實體裝置或正式發布驗收。另照專案流程嘗試 `npm start`，正式工作樹沒有安裝相依套件，直接啟動缺少 `express`；借用既有 C: 工作樹的 `NODE_PATH` 後仍缺 `chess.js`，故沒有宣稱本機整站啟動成功，也沒有改動 `node_modules`。
+
+## 2026-10-03 海釣第一人稱角色釣竿與魚勢預兆（1.2.23 內容修訂 8，候選）
+
+範圍：`public/images/launcher_room/fishing_v5/rod-no-line-v1.webp` 換成 4096×3840 透明圖集，前 13 格為已開放的魯夫、索隆、娜美、騙人布、香吉士、喬巴、羅賓、佛朗基、布魯克、吉貝爾、艾斯、薩波、羅專屬釣竿，接著三格為左、右、上反擊圖示；圖集下方另收錄 13 人各四格、依角色配色的線輪手把。每支竿共用 1024×768 格與竿尖 (512,96) 錨點，手把使用 227×227 格；原始 PNG、逐格圖、縮圖及來源記錄在 `D:\Codex_QA\fishing-rods-20261003\`。`desktop/launcher-room-minigames.js/.css` 改為畫面中央第一人稱釣竿、依實際收放線正反轉的四格手把、分段竿身彎曲、魚線隨竿尖連動，依魚點顯示警示、較大的半透明反擊圖示和結果；短桌機視窗以海面高度限制竿身大小，讓最下方的手把影格仍在畫面內。既有 Wii 風格線輪與外圈耐壓錶保留。
+
+規則：`server/launcher-fishing-v5.js` 讓新場次的提示前先有依魚行為 550–950 ms 的 `flickTell`，再開原有 2.6 秒 `flickCue`。正確、失誤對耐壓與魚距的變化依魚拉力調整，成功向上反擊短暫抬起下潛魚；舊非甩竿 v5 場次不增加欄位。`config/launcher-announcements-v1.json` 修訂 23 增加帶圖更新公告；公告沿用已封裝的釣魚主圖，避免本次純內容更新要求重裝核心。修改的測試為 `scripts/launcher_fishing_flick_server_qa.js`、`launcher_fishing_flick_life_qa.js`、`launcher_fishing_v5_browser_qa.js`；既有魚 ID、收藏欄位、釣竿等級、金幣與三款桌遊規則未改，新增魚種見本日上節。兩張既有未提交 rank 圖沒有納入。
+
+參考與驗證界線：使用者提供的《歡樂釣王傳奇》影片可看到第一人稱握竿、遠近水花、警示後短暫方向操作；本機 XAPK 的相關 Unity bundle 為加密，無法據此宣稱取得原貼圖或精確機制。本版圖與介面自行繪製，未複製影片或 XAPK 像素。第一輪四格手把因軸心與姿態不自然遭退回；第二輪重繪 atlas SHA-256 `f14b2a302fae4d05b772c1db5be3457b5dbec1da5c0fd9f35a24064ca4d492e4`，獨立檢查 13 角色×4 相位在 960×640、六種 1440×900 海域與每格 150ms 連播，未見脫軸、穿輪、裁切或 HUD 重疊，證據在 `D:\Codex_QA\fishing-rods-20261003\animation-redraw-all\`。候選測試：新甩竿伺服器 398 項、舊 v5 伺服器 1,211 項、持久化流程 19 項；第一輪三方向 Chromium 24 項通過。完整瀏覽器、差分更新與正式公開讀回仍在進行，完成後補實際結果。
+
 ## 2026-10-03 海釣參照《歡樂釣魚大師》加入限時甩竿與分層海面（1.2.23 內容修訂 7，已部署）
 
 範圍：`server/launcher-fishing-v5.js`、`server/launcher-minigames.js`、`server/launcher-life-store.js` 為新 v5 場次加伺服器權威的左／右／上甩竿提示與單次限時判定，2.6 秒作答窗、至少 2.9 秒的對應衝刺；正確、錯誤、超時各有明確的耐壓與魚距結果。`desktop/launcher-room-minigames.js/.css` 加入海面拖甩、方向鍵、提示與竿身反應，保留既有線輪錶資訊及收線／自動放線；用 CSS 分層天光、遠近水紋，沿用現有航海王彩繪圖，不取用 XAPK 或影片原圖。`scripts/launcher_fishing_flick_server_qa.js`、`launcher_fishing_flick_life_qa.js` 及 `launcher_fishing_v5_browser_qa.js` 增加核心、資料庫、實際滑鼠／鍵盤 QA。原有 r5/r6 rank 圖是先前使用者修改，不屬本次範圍。
