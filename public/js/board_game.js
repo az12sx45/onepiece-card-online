@@ -12355,6 +12355,22 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       player.finalGateAttempts = Math.max(0, Number(player.finalGateAttempts || 0));
       player.finalGateRetreat = player.finalGateRetreat && typeof player.finalGateRetreat === "object" ? player.finalGateRetreat : null;
       player.finalEndingSeen = Array.isArray(player.finalEndingSeen) ? [...new Set(player.finalEndingSeen.map((id) => String(id || "").trim()).filter(Boolean))] : [];
+      player.featureIslandIntroSeen = Array.isArray(player.featureIslandIntroSeen)
+        ? [...new Set(player.featureIslandIntroSeen.map((id) => String(id || "").trim()).filter(Boolean))]
+        : [];
+      const pendingFeatureIntro = player.pendingFeatureIslandIntro;
+      player.pendingFeatureIslandIntro = pendingFeatureIntro && typeof pendingFeatureIntro === "object"
+        && String(pendingFeatureIntro.key || "").trim()
+        && String(pendingFeatureIntro.islandId || "").trim()
+        && !player.featureIslandIntroSeen.includes(String(pendingFeatureIntro.key))
+        && player.location?.kind === "island"
+        && String(player.location.islandId || "") === String(pendingFeatureIntro.islandId)
+        ? {
+          key: String(pendingFeatureIntro.key),
+          islandId: String(pendingFeatureIntro.islandId),
+          previousTurnStep: String(pendingFeatureIntro.previousTurnStep || "停靠結算"),
+        }
+        : null;
       player.finalEndingChoice = String(player.finalEndingChoice || "");
       player.finalEndingCleared = Boolean(player.finalEndingCleared);
       normalizePlayerMainMissionState(player);
@@ -13766,6 +13782,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       finalGateAttempts: 0,
       finalGateRetreat: null,
       finalEndingSeen: [],
+      featureIslandIntroSeen: [],
+      pendingFeatureIslandIntro: null,
       finalEndingChoice: "",
       finalEndingCleared: false,
       defeatedEnemies: [],
@@ -29151,7 +29169,118 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     ],
   };
 
+  const FEATURE_ISLAND_STORY_BASE = "images/board/story/backgrounds/island_intro/";
+  const FEATURE_ISLAND_LUFFY_ENIES = "images/board/story/speakers/luffy_pre_timeskip_enies.webp";
+  const FEATURE_ISLAND_LUFFY_WAR = "images/board/story/speakers/luffy_pre_timeskip_war.webp";
+  const FEATURE_ISLAND_STORIES = Object.freeze({
+    shop: {
+      title: "補給港的選擇", badge: "商店島", beats: [
+        { speaker: "旁白", text: "{{island}}的碼頭堆滿補給箱。遠航前，這裡是添購物資的好地方。" },
+        { speaker: "娜美", pose: "chart", text: "先看看錢袋，再看看貨架。不同港口的商品和價格可不一樣。" },
+        { speaker: "騙人布", pose: "brave", text: "恢復品和航海道具都檢查一遍，下一段海路可不會等我們！" },
+      ],
+    },
+    hospital: {
+      title: "出航前的診療", badge: "醫院島", beats: [
+        { speaker: "旁白", text: "{{island}}的診療所亮著燈，受傷的船員可以在這裡整備。" },
+        { speaker: "喬巴", pose: "determined", text: "傷員先進來！我會檢查大家的 HP 和 PP。" },
+        { speaker: "娜美", pose: "chart", text: "治療需要貝里。先確認隊伍的傷勢，再決定怎麼補給。" },
+      ],
+    },
+    tavern: {
+      title: "港口的相遇", badge: "酒館島", beats: [
+        { speaker: "旁白", text: "{{island}}的酒館傳來笑聲與冒險故事，也許能遇見新的夥伴。" },
+        { speaker: "魯夫", pose: "laugh", text: "這裡好熱鬧！一定有很有趣的人。" },
+        { speaker: "娜美", pose: "chart", text: "先看候選夥伴，再決定要不要花貝里招募。想遇到特定的人，也能先重點招待。" },
+      ],
+    },
+    mission: {
+      title: "碼頭的委託", badge: "任務島", beats: [
+        { speaker: "旁白", text: "{{island}}的任務牆貼滿航海委託與懸賞情報。" },
+        { speaker: "羅賓", pose: "reading", text: "航行、戰鬥和探訪島嶼，都可能是完成委託的線索。" },
+        { speaker: "娜美", pose: "chart", text: "先看清目標與報酬，再接下適合我們的任務。" },
+      ],
+    },
+    research_lab: {
+      title: "航海研究所", badge: "研究所", beats: [
+        { speaker: "旁白", text: "{{island}}的診療所如今擴建成研究所，醫療區仍為船員開放。" },
+        { speaker: "喬巴", pose: "determined", text: "受傷就先來找我。這裡可以替大家恢復 HP 和 PP。" },
+        { speaker: "莉莉絲", pose: "explain", text: "研究收藏、血統因子和登船名單也能在這裡整理。別把樣本弄丟了！" },
+      ],
+    },
+    arena: {
+      title: "登上競技場", badge: "競技場", beats: [
+        { speaker: "旁白", text: "{{island}}的酒館換上了競技場的旗幟，擂台正等著新的挑戰者。" },
+        { speaker: "索隆", pose: "ready", text: "挑兩名船員上場吧。正好試試現在的本事。" },
+        { speaker: "娜美", pose: "chart", text: "選好對手再開打；勝利後可以取得研究點數，也有機會抽取血統因子。" },
+      ],
+    },
+    water_seven: {
+      title: "水之七島的船塢", badge: "水之七島", beats: [
+        { speaker: "旁白", text: "水道穿過層層街區，船匠的敲擊聲從水之七島的船塢傳來。" },
+        { speaker: "佛朗基", pose: "engineer", text: "想讓船變強，就來船塢！帆、舵和船上設施都能慢慢升級。" },
+        { speaker: "娜美", pose: "chart", text: "升級要材料和貝里；船隻道具也得先有孔位才能裝上。" },
+      ],
+    },
+    judicial: {
+      title: "司法島的六道防線", badge: "司法島", beats: [
+        { speaker: "旁白", text: "不見黑夜的司法島矗立在海淵上。巨門後，是必須逐一突破的六道防線。" },
+        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_ENIES, text: "羅賓在裡面。誰也別攔我，我們一起把她帶回來！" },
+        { speaker: "旁白", text: "可以發起討伐，或加入已開始的隊伍；擊破各階段敵人後領取對應獎勵。" },
+      ],
+    },
+    impel_down: {
+      title: "深海大監獄", badge: "推進城", beats: [
+        { speaker: "旁白", text: "推進城的牢塔沒入海面之下。越往深處，越難找到出口。" },
+        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_WAR, text: "艾斯在下面！我一定要把他救出來！" },
+        { speaker: "旁白", text: "可以從入口展開救援；若自己被關進監獄，就得應付樓層事件、選路與逃獄。" },
+      ],
+    },
+    marineford: {
+      title: "海軍本部的倒數", badge: "海軍本部", beats: [
+        { speaker: "旁白", text: "海軍本部的砲台環繞海灣。處刑台上的時間，正在一點一點減少。" },
+        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_WAR, text: "艾斯就在處刑台！不管前面有誰，我都要救他！" },
+        { speaker: "旁白", text: "頂上戰爭要連續挑戰海軍將領；取得救援骰後，擇機擲骰爭取時間。" },
+      ],
+    },
+  });
+
+  function featureIslandStoryKey(island, kind) {
+    return island?.id === WATER_SEVEN_ISLAND_ID ? "water_seven" : String(kind || "");
+  }
+
+  function hasPendingFeatureIslandIntroVisit(player, island, kind) {
+    const pending = player?.pendingFeatureIslandIntro;
+    return pending?.key === featureIslandStoryKey(island, kind)
+      && String(pending.islandId || "") === String(island?.id || "");
+  }
+
+  function featureIslandStoryDefinition(island, kind) {
+    const key = featureIslandStoryKey(island, kind);
+    const story = FEATURE_ISLAND_STORIES[key];
+    if (!story) return null;
+    return {
+      id: `feature_island_${key}`,
+      title: story.title,
+      routeName: island?.name || story.badge,
+      badge: story.badge,
+      tone: "history",
+      sceneDuration: 23000,
+      finishLabel: "進入島嶼",
+      showPoneglyphs: false,
+      chapters: [{
+        scene: `feature-island-${key}`,
+        bg: `${FEATURE_ISLAND_STORY_BASE}${key}.webp`,
+        beats: story.beats.map((beat) => ({
+          ...beat,
+          text: beat.text.replaceAll("{{island}}", island?.name || story.badge),
+        })),
+      }],
+    };
+  }
+
   let reverseMountainStoryActive = false;
+  let featureIslandStoryActive = false;
 
   function openingStorySessionSeeds() {
     try {
@@ -33691,6 +33820,49 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     state.gameState.turnStep = "顛倒山：請點亮起的海格選擇主航線";
     addLog(`${player.name} 抵達顛倒山，請點亮起的海格選擇五條主航線之一。`);
     renderAll();
+  }
+
+  function openFeatureIslandStory(player, island, kind, openService) {
+    const key = featureIslandStoryKey(island, kind);
+    const story = featureIslandStoryDefinition(island, kind);
+    if (!story || isCpuPlayer(player) || !canBoardLanControlCurrentPlayer(player)) return openService();
+    if (featureIslandStoryActive && !document.querySelector(".final-ending-screen.scene-feature-island-" + key)) {
+      featureIslandStoryActive = false;
+    }
+    if (featureIslandStoryActive) return true;
+    const seen = Array.isArray(player.featureIslandIntroSeen) ? player.featureIslandIntroSeen : [];
+    if (seen.includes(key)) {
+      if (hasPendingFeatureIslandIntroVisit(player, island, kind)) player.pendingFeatureIslandIntro = null;
+      return openService();
+    }
+
+    const game = state.gameState;
+    const previousTurnStep = hasPendingFeatureIslandIntroVisit(player, island, kind)
+      ? String(player.pendingFeatureIslandIntro.previousTurnStep || "停靠結算")
+      : game.turnStep;
+    featureIslandStoryActive = true;
+    player.pendingFeatureIslandIntro = { key, islandId: String(island.id), previousTurnStep };
+    game.turnStep = `${island.name}登島劇情`;
+    addLog(`${player.name} 首次進入 ${island.name}，開始了解這座島。`);
+    renderAll();
+    scheduleBoardLanStatePush("feature-island-story-start", 0, { force: true });
+    startFinalEndingCinematicSession(player, story, () => {
+      featureIslandStoryActive = false;
+      closeModal();
+      const activePlayer = currentPlayer();
+      if (state.gameState !== game || String(activePlayer?.id || "") !== String(player.id || "")
+        || activePlayer?.location?.kind !== "island"
+        || String(activePlayer.location.islandId || "") !== String(island.id || "")) {
+        renderAll();
+        return;
+      }
+      activePlayer.featureIslandIntroSeen = [...new Set([...(activePlayer.featureIslandIntroSeen || []), key])];
+      activePlayer.pendingFeatureIslandIntro = null;
+      game.turnStep = previousTurnStep;
+      openService();
+      scheduleBoardLanStatePush("feature-island-story-complete", 0, { force: true });
+    });
+    return true;
   }
 
   async function commitReverseMountainRouteChoice(player, routeItem, stepsRemaining) {
@@ -39149,21 +39321,23 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       return;
     }
     if (maybeOpenIslandCoopPrompt(player)) return;
-    recordMissionEvent(player, { type: "visit_island_kind", islandKind, islandId: island.id });
+    if (!hasPendingFeatureIslandIntroVisit(player, island, islandKind)) {
+      recordMissionEvent(player, { type: "visit_island_kind", islandKind, islandId: island.id });
+    }
     if (island.kind === "judicial" || islandKind === "judicial") {
-      openJudicialRaidModal(player, island, islandState);
+      openFeatureIslandStory(player, island, "judicial", () => openJudicialRaidModal(player, island, islandState));
       return;
     }
     if (island.kind === "impel_down" || islandKind === "impel_down") {
-      openImpelDownModal(player, island, islandState);
+      openFeatureIslandStory(player, island, "impel_down", () => openImpelDownModal(player, island, islandState));
       return;
     }
     if (island.kind === "marineford" || islandKind === "marineford") {
-      openMarinefordModal(player, island, islandState);
+      openFeatureIslandStory(player, island, "marineford", () => openMarinefordModal(player, island, islandState));
       return;
     }
     if (island.id === WATER_SEVEN_ISLAND_ID) {
-      openWaterSevenWindow(player);
+      openFeatureIslandStory(player, island, "water_seven", () => openWaterSevenWindow(player));
       return;
     }
       if ((island.kind === "enemy" && islandState.enemyProfile && !islandState.isDefeated) || (island.kind === "yonko" && islandState.enemyProfile)) {
@@ -39171,27 +39345,27 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       return;
     }
     if (islandKind === "shop") {
-      openShopModal(player, island, islandState);
+      openFeatureIslandStory(player, island, islandKind, () => openShopModal(player, island, islandState));
       return;
     }
     if (islandKind === "hospital") {
-      openHospitalModal(player, island);
+      openFeatureIslandStory(player, island, islandKind, () => openHospitalModal(player, island));
       return;
     }
     if (islandKind === "research_lab") {
-      openResearchLabModal(player, island);
+      openFeatureIslandStory(player, island, islandKind, () => openResearchLabModal(player, island));
       return;
     }
     if (islandKind === "tavern") {
-      openTavernModal(player, island);
+      openFeatureIslandStory(player, island, islandKind, () => openTavernModal(player, island));
       return;
     }
     if (islandKind === "arena") {
-      openArenaModal(player, island);
+      openFeatureIslandStory(player, island, islandKind, () => openArenaModal(player, island));
       return;
     }
     if (islandKind === "mission") {
-      openMissionBoardModal(player, island, islandState, "", "", { newVisit: true });
+      openFeatureIslandStory(player, island, islandKind, () => openMissionBoardModal(player, island, islandState, "", "", { newVisit: true }));
       return;
     }
       if (island.kind === "final") {
@@ -61105,34 +61279,29 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function enterIslandService(action) {
     if (!action?.player || !action.island || !action.islandState) return false;
     if (warnBoardLanTurnLocked(action.player)) return false;
-    recordMissionEvent(action.player, { type: "visit_island_kind", islandKind: action.kind, islandId: action.island.id });
+    if (!hasPendingFeatureIslandIntroVisit(action.player, action.island, action.kind)) {
+      recordMissionEvent(action.player, { type: "visit_island_kind", islandKind: action.kind, islandId: action.island.id });
+    }
     if (action.island.id === WATER_SEVEN_ISLAND_ID) {
-      openWaterSevenWindow(action.player);
-      return true;
+      return openFeatureIslandStory(action.player, action.island, "water_seven", () => { openWaterSevenWindow(action.player); return true; });
     }
     if (action.kind === "shop") {
-      openShopModal(action.player, action.island, action.islandState);
-      return true;
+      return openFeatureIslandStory(action.player, action.island, action.kind, () => { openShopModal(action.player, action.island, action.islandState); return true; });
     }
     if (action.kind === "hospital") {
-      openHospitalModal(action.player, action.island);
-      return true;
+      return openFeatureIslandStory(action.player, action.island, action.kind, () => { openHospitalModal(action.player, action.island); return true; });
     }
     if (action.kind === "research_lab") {
-      openResearchLabModal(action.player, action.island);
-      return true;
+      return openFeatureIslandStory(action.player, action.island, action.kind, () => { openResearchLabModal(action.player, action.island); return true; });
     }
     if (action.kind === "tavern") {
-      openTavernModal(action.player, action.island);
-      return true;
+      return openFeatureIslandStory(action.player, action.island, action.kind, () => { openTavernModal(action.player, action.island); return true; });
     }
     if (action.kind === "arena") {
-      openArenaModal(action.player, action.island);
-      return true;
+      return openFeatureIslandStory(action.player, action.island, action.kind, () => { openArenaModal(action.player, action.island); return true; });
     }
     if (action.kind === "mission") {
-      openMissionBoardModal(action.player, action.island, action.islandState, "", "", { newVisit: true });
-      return true;
+      return openFeatureIslandStory(action.player, action.island, action.kind, () => { openMissionBoardModal(action.player, action.island, action.islandState, "", "", { newVisit: true }); return true; });
     }
     return false;
   }
@@ -64468,6 +64637,11 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     playOpeningStory: () => startOpeningStory({ force: true }),
     getOpeningStoryDefinition: () => safeJsonClone(OPENING_STORY_DEFINITION),
     getReverseMountainStoryDefinition: () => safeJsonClone(REVERSE_MOUNTAIN_STORY_DEFINITION),
+    getFeatureIslandStoryDefinitions: () => Object.fromEntries(Object.keys(FEATURE_ISLAND_STORIES).map((key) => [
+      key, safeJsonClone(featureIslandStoryDefinition({ id: key, name: key }, key)),
+    ])),
+    resolveLanding: (player = currentPlayer()) => resolveLanding(player),
+    enterIslandService: (action) => enterIslandService(action),
     getOpeningStoryStatus: () => ({
       active: openingStoryActive,
       seed: openingStorySeed,

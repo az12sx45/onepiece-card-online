@@ -1489,3 +1489,10 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 - `config/launcher-announcements-v1.json`、`public/images/launcher_announcements/launcher-life-fishing-1.2.15.webp`、`scripts/launcher_1215_announcement_qa.js`：版本門檻圖文公告及本機隔離驗證。
 - `desktop/auth-service.js`、`desktop/main.js`、`desktop/package.json`、`desktop/package-lock.json`、`scripts/desktop_launcher_package_qa.js`：資源允許清單與 1.2.15 封裝門檻；`scripts/launcher_fishing_server_qa.js`、`launcher_fishing_client_qa.js`、`launcher_furniture_weather_browser_qa.js`、`launcher_work_art_client_qa.js`、`launcher_1215_crew_release_qa.js`：定向 PGlite／Chromium 驗證。
 - `public/desktop/launcher-release-v1.json`、`public/desktop-download.html`：已簽署的 1.2.15 版本／安裝檔 SHA-256 清單與下載頁回退連結；公開讀回證據另存 `D:/Codex_QA/launcher-life-fishing-weather-1.2.15-release-r4/publish/`。
+
+## 2026-10-04 Board 功能島初訪劇情
+
+- `public/js/board_game.js`：10 種功能島的劇情定義、首訪旗標正規化、落點與進島服務銜接，以及完成後返回原功能的邏輯。
+- `public/images/board/story/backgrounds/island_intro/*.webp`：商店、醫院、酒館、任務、研究所、競技場、水之七島、司法島、推進城、海軍本部的 10 張全螢幕場景圖。
+- `public/images/board/story/speakers/luffy_pre_timeskip_enies.webp`、`luffy_pre_timeskip_war.webp`：司法島與推進城／頂上戰爭時期的魯夫對話立繪，不覆寫既有後期立繪。
+- `scripts/board_feature_island_intro_qa.js`：首訪、略過／完整播畢、回到原功能、重訪、舊存檔、任務事件、素材及桌機／窄視窗 Chromium 測試。`scripts/build_board_island_intro_release.js`：只為本次 Board 程式及 12 張圖建立可核對的發布候選。
