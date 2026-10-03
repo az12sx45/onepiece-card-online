@@ -1,5 +1,11 @@
 # File Map
 
+## 2026-10-03 海釣外圈耐壓與斷線提示（內容修訂 4，待發布）
+
+- `desktop/launcher-room-minigames.js/.css`：v5 外圈改讀魚線剩餘強度，顯示耐壓百分比、紅黃綠分區及 0% 斷線；魚勢短弧不變。
+- `scripts/launcher_fishing_v5_browser_qa.js`：外圈讀數、色階、收放線趨勢與伺服器斷線回歸。
+- `public/desktop/launcher-content-v1.json`：沿用 1.2.23 核心的已簽章內容修訂 4，18 檔中只更換兩個 renderer blob；候選更新器實測修訂 3→4 下載 234,674 bytes。正式 Render 讀回待部署後補證據。
+
 ## 2026-10-03 啟動器五種工作／訓練大畫面（已部署）
 
 - `desktop/launcher-room-minigames.js/.css`：四種非釣魚工作的圖卡開場、五種玩法放大及精簡提示；食材圖載入、海圖圖示、管路連通視覺與放大的訓練角色／航道。既有伺服器請求與答案欄位不變。

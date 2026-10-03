@@ -470,10 +470,11 @@
 .fishing-v5 .room-fishing-v4-sea[data-stage=fight] .room-fishing-v4-bobber{display:none}
 .fishing-v5 .room-fishing-v4-sea:is([data-stage=wait],[data-stage=fight]) .room-fishing-v4-fish{display:none}
 .room-minigame-overlay[data-fishing-version="5"] .room-minigame-progress{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:47px;padding-bottom:7px;color:#cce0d9}
-.room-fishing-v5-hud{--pull-tone:#7ddac4;--pressure-tone:#70d9c2;position:absolute;z-index:7;top:10px;left:11px;display:none;width:min(650px,calc(100% - 22px));height:154px;color:#eaf4e9;pointer-events:none;text-shadow:0 1px 3px #032333}
+@property --pressure-angle{syntax:'<angle>';inherits:true;initial-value:300deg}
+.room-fishing-v5-hud{--pull-tone:#7ddac4;--pressure-tone:#67dfbf;position:absolute;z-index:7;top:10px;left:11px;display:none;width:min(650px,calc(100% - 22px));height:154px;color:#eaf4e9;pointer-events:none;text-shadow:0 1px 3px #032333;transition:--pressure-angle .22s linear}
 .fishing-v5 .room-fishing-v4-sea[data-stage=fight] .room-fishing-v5-hud{display:block}
-.room-fishing-v5-hud[data-pressure-risk=warning]{--pressure-tone:#f1c576}
-.room-fishing-v5-hud[data-pressure-risk=danger]{--pressure-tone:#ef8071}
+.room-fishing-v5-hud[data-pressure-risk=warning]{--pressure-tone:#f7ca68}
+.room-fishing-v5-hud[data-pressure-risk=danger]{--pressure-tone:#f07561}
 .room-fishing-v5-hud[data-force=light]{--pull-tone:#d6d477}
 .room-fishing-v5-hud[data-force=hard]{--pull-tone:#efb666}
 .room-fishing-v5-hud[data-force=fierce]{--pull-tone:#ed7968}
@@ -486,7 +487,7 @@
 .room-fishing-v5-strength-copy{display:flex;align-items:baseline;justify-content:center;gap:5px;width:126px;margin-top:2px;padding:2px 5px;border:1px solid #92c8bc8a;border-radius:7px;background:#092f3bcf;font:800 12px/1.2 inherit}
 .room-fishing-v5-strength-copy>span{color:#d3eee3}
 .room-fishing-v5-strength-value{color:#fff2c6;font-size:13px}
-.room-fishing-v5-pressure-value{color:#aaf1dd;font-size:13px}
+.room-fishing-v5-pressure-value{color:var(--pressure-tone);font-size:15px}
 .room-fishing-v5-strength-copy small{color:#dfebd6;font-size:10px;white-space:nowrap}
 .room-fishing-v5-hud[data-pressure-risk=warning] .room-fishing-v5-pressure-value{color:#ffe099}
 .room-fishing-v5-hud[data-pressure-risk=danger] .room-fishing-v5-pressure-value{color:#ff9d90}
@@ -514,7 +515,9 @@
 .room-fishing-v5-dial{width:12.1cqw;height:12.1cqw;border:0;background:#123842;box-shadow:none}
 .room-fishing-v5-dial::before{display:none}
 .room-fishing-v5-dial::after{content:'';position:absolute;z-index:3;inset:0;background:url('opui://launcher/images/launcher_room/fishing_v5/hud-reel-v2.webp') center/contain no-repeat;-webkit-mask:radial-gradient(circle,transparent 0 42%,#000 43%);mask:radial-gradient(circle,transparent 0 42%,#000 43%);pointer-events:none}
-.room-fishing-v5-pressure-ring{position:absolute;z-index:5;inset:2px;border-radius:50%;background:conic-gradient(from 210deg,var(--pressure-tone) 0deg var(--pressure-angle,0deg),#252b2a var(--pressure-angle,0deg) 300deg,transparent 300deg 360deg);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 9px),#000 calc(100% - 8px));mask:radial-gradient(farthest-side,transparent calc(100% - 9px),#000 calc(100% - 8px));filter:drop-shadow(0 0 3px var(--pressure-tone));pointer-events:none}
+.room-fishing-v5-pressure-ring{--ring-width:clamp(7px,.95cqw,12px);position:absolute;z-index:5;inset:2px;border-radius:50%;background:conic-gradient(from 210deg,#f07561 0deg 78deg,#f7ca68 78deg 156deg,#67dfbf 156deg 300deg,transparent 300deg 360deg);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - var(--ring-width)),#000 calc(100% - var(--ring-width) + 1px));mask:radial-gradient(farthest-side,transparent calc(100% - var(--ring-width)),#000 calc(100% - var(--ring-width) + 1px));filter:drop-shadow(0 0 2px #061c24);pointer-events:none}
+.room-fishing-v5-pressure-ring::after{content:'';position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 210deg,transparent 0deg var(--pressure-angle,300deg),#263339 var(--pressure-angle,300deg) 300deg,transparent 300deg 360deg)}
+.room-fishing-v5-hud[data-pressure-risk=danger] .room-fishing-v5-pressure-ring{filter:drop-shadow(0 0 5px #f07561)}
 .room-fishing-v5-dial-spool{display:block;inset:0;border:0;border-radius:50%;background:url('opui://launcher/images/launcher_room/fishing_v5/hud-reel-v2.webp') center/contain no-repeat;box-shadow:none;clip-path:circle(42% at 50% 50%);transform-origin:50% 50%}
 .room-fishing-v5-dial-crank{position:absolute;z-index:2;top:17%;left:45.5%;width:9%;height:66%;border:1px solid #b08c58;border-radius:999px;background:linear-gradient(90deg,#161d20,#715b47 38%,#2e3031 68%,#121d21);box-shadow:1px 0 3px #001b27ad;pointer-events:none}
 .room-fishing-v5-dial-crank::before,.room-fishing-v5-dial-crank::after{content:'';position:absolute;left:50%;width:160%;height:17%;border:2px solid #5d3b1d;border-radius:50%;background:radial-gradient(circle at 34% 26%,#fff0b6 0 15%,#d6a64c 45%,#805024 78%);box-shadow:0 1px 4px #071a22b3;transform:translate(-50%,-50%)}

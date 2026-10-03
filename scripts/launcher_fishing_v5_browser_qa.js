@@ -9,6 +9,7 @@ const fs=require('node:fs');
 const http=require('node:http');
 const path=require('node:path');
 const minigames=require('../server/launcher-minigames');
+const fishingV5=require('../server/launcher-fishing-v5');
 const root=path.resolve(__dirname,'..');
 const out=process.env.LAUNCHER_FISH_V5_BROWSER_QA_OUT||'D:/Codex_QA/launcher-fishing-wii-1.2.22/browser-final-r7';
 const runtimeBase=path.join(process.env.LOCALAPPDATA||'','OpenAI/Codex/runtimes/cua_node');
@@ -221,7 +222,7 @@ async function visual(page){
     fishY:parseFloat(sea.style.getPropertyValue('--fish-y')),
     floatX:parseFloat(sea.style.getPropertyValue('--float-x')),
     floatY:parseFloat(sea.style.getPropertyValue('--float-y')),
-    strength:Number(document.querySelector('.room-fishing-v5-strength-value')?.textContent.match(/線\s*(\d+)/)?.[1]||
+    strength:Number(document.querySelector('.room-fishing-v5-dial')?.getAttribute('aria-valuenow')||
       sea.querySelector('.room-fishing-v4-gauge')?.getAttribute('aria-valuenow')),
     direction:sea.dataset.pullDirection,run:sea.dataset.runState,
     steer:sea.dataset.steer,reeling:sea.dataset.reeling,paying:sea.dataset.paying,
@@ -324,6 +325,10 @@ async function fightMeterState(page){
        dial:Number(dial.getAttribute('aria-valuenow')),dialVisible:dialBox.width>=90&&dialBox.height>=90,
        pressureAngle:Number.parseFloat(hud.style.getPropertyValue('--pressure-angle')),
        pressureRingVisible:pressureBox.width>=80&&getComputedStyle(pressureRing).display!=='none',
+       pressureRisk:hud.dataset.pressureRisk,
+       pressureColor:getComputedStyle(hud).getPropertyValue('--pressure-tone').trim(),
+       ringGradient:getComputedStyle(pressureRing).backgroundImage,
+       pressureLabel:hud.querySelector('.room-fishing-v5-strength-copy>span')?.textContent,
       arcGrade:Number(arc.getAttribute('aria-valuenow')),
       arcFill:Number.parseFloat(hud.style.getPropertyValue('--pull-fill')),
       needleX:Number.parseFloat(hud.style.getPropertyValue('--pull-needle-x')),
@@ -333,7 +338,7 @@ async function fightMeterState(page){
       staticOuterRing:getComputedStyle(dial,'::after').transform==='none'&&
         getComputedStyle(dial,'::after').animationName==='none',
       arcVisible:arc.getBoundingClientRect().width>=50,
-       strength:hud.querySelector('.room-fishing-v5-strength-value').textContent,
+       strengthHint:hud.querySelector('.room-fishing-v5-strength-value')?.textContent,
        pressure:hud.querySelector('.room-fishing-v5-pressure-value').textContent,
       distanceLabel:hud.querySelector('.room-fishing-v5-distance').textContent,
       progress:Number(progress.getAttribute('aria-valuenow')),
@@ -346,14 +351,18 @@ async function fightMeterState(page){
 function meterMatchesServer(meter){
   const server=meter.challenge;if(!server)return false;
   const grade=server.pullIntensity<.25?0:server.pullIntensity<.58?1:server.pullIntensity<.82?2:3;
+  const remaining=Math.round(server.strength/server.maxStrength*100);
+  const ratio=server.strength/server.maxStrength;
+  const risk=ratio<=.26?'danger':ratio<=.52?'warning':'safe';
   const castFarness=Math.max(0,Math.min(1,(.55-(server.castTarget?.y??.45))/.21));
   const meters=(server.distance/100*(18+36*castFarness)).toFixed(1)+' m';
-  return meter.dial>=0&&meter.dial<=100&&meter.pressureRingVisible&&
+  return Math.abs(meter.dial-remaining)<=2&&meter.pressureRingVisible&&
     Math.abs(meter.pressureAngle-meter.dial*3)<2&&meter.pressure===`${meter.dial}%`&&
+    meter.pressureRisk===risk&&meter.pressureLabel==='耐壓'&&meter.strengthHint==='0% 斷線'&&
+    meter.ringGradient.includes('conic-gradient')&&
     meter.arcGrade===grade&&Math.abs(meter.arcFill-server.pullIntensity*100)<1&&
     Math.abs(meter.needleX-(21+54*Math.sin(Math.PI*server.pullIntensity)))<1&&
     Math.abs(meter.needleY-(88-76*server.pullIntensity))<1&&
-    meter.strength===`線${Math.round(server.strength)}`&&
     meter.progress===Math.round(server.distance)&&meter.distanceLabel===meters&&
     Math.abs(meter.fillRatio-meter.progress*.82/100)<.035&&
     Math.abs(meter.markerRatio-(.11+meter.progress*.82/100))<.035;
@@ -510,7 +519,7 @@ async function fightInteraction(page,label){
   const reelDelta=(reelAfter.angle-reelBefore.angle+540)%360-180;
   check(`${label}: inner reel rotates while brass rim stays fixed`,reelBefore.animation.includes('spool')&&
     reelBefore.art.includes('hud-reel-v2.webp')&&reelBefore.transform!==reelAfter.transform&&
-     reelBefore.outerAnimation==='none'&&reelBefore.outerTransform==='none'&&reelBefore.label==='壓力');
+    reelBefore.outerAnimation==='none'&&reelBefore.outerTransform==='none'&&reelBefore.label==='耐壓');
   check(`${label}: winding turns reel and crank clockwise`,reelDelta>15&&reelDelta<150);
   check(`${label}: visible crank is attached to and travels with inner reel`,reelBefore.crank.attached&&
     reelBefore.crank.width>=8&&reelBefore.crank.height>=40&&
@@ -518,6 +527,10 @@ async function fightInteraction(page,label){
     reelBefore.crank.hub==='block'&&Math.abs(reelBefore.crank.width-reelAfter.crankWidth)>3);
   await page.waitForTimeout(1560);
   const held=await visual(page);
+  const heldMeter=await fightMeterState(page);
+  check(`${label}: holding the reel visibly drains the outer line-strength ring`,
+    heldMeter.dial<reelPressure.dial-3&&heldMeter.pressureAngle<reelPressure.pressureAngle-9&&
+    meterMatchesServer(heldMeter));
   check(`${label}: pointer reel steers the visible rod toward the fish`,held.steer===String(sign)&&held.reeling==='true');
   fs.writeFileSync(path.join(out,`${label}-reeling-line-diagnostics.json`),JSON.stringify(await lineGeometry(page),null,2));
   await snapshot(page,`${label}-reeling`);
@@ -553,11 +566,10 @@ async function fightInteraction(page,label){
   });
   const payDelta=(payAngle-payVisual.angle+540)%360-180;
   check(`${label}: paying reverses reel and attached crank`,payVisual.direction==='reverse'&&
-     payVisual.animation.includes('spool')&&payVisual.attached&&payVisual.label==='壓力'&&
+     payVisual.animation.includes('spool')&&payVisual.attached&&payVisual.label==='耐壓'&&
     payDelta< -10&&payDelta> -150);
-  check(`${label}: releasing line lowers the live outer pressure bar`,
-    reelPressure.dial-payPressure.dial>10&&
-    reelPressure.pressureRingVisible&&payPressure.pressureRingVisible);
+  check(`${label}: releasing line keeps the outer ring tied to server strength`,
+    meterMatchesServer(payPressure)&&payPressure.pressureRingVisible);
   fs.writeFileSync(path.join(out,`${label}-reel-motion.json`),JSON.stringify({
     winding:{before:reelBefore,after:reelAfter,delta:reelDelta,pressure:reelPressure},
     paying:{before:payVisual,afterAngle:payAngle,delta:payDelta,pressure:payPressure}},null,2));
@@ -624,21 +636,41 @@ async function verifyLineWheel(page,label){
     }).then(result=>result.json()),{client:label,strength:target});
     check(`${label}: line-strength fixture accepted ${target}`,response.ok===true);
     await page.waitForFunction(target=>{
-      const value=Number(document.querySelector('.room-fishing-v5-strength-value')?.textContent.match(/線\s*(\d+)/)?.[1]);
+      const value=Number(document.querySelector('.room-fishing-v5-dial')?.getAttribute('aria-valuenow'));
       // The server restores line strength while the fixture waits for its next 1 s sync.
       return Math.abs(value-target)<15;
     },target,{timeout:4000});
+    // Let the ring's 220 ms color/angle transition finish before inspecting or capturing it.
+    await page.waitForTimeout(330);
     return fightMeterState(page);
   };
-  const healthy=await setStrength(42),weak=await setStrength(20);
-  fs.writeFileSync(path.join(out,`${label}-line-wheel.json`),JSON.stringify({healthy,weak},null,2));
-  check(`${label}: line strength changes without using the outer pressure arc as a strength meter`,
-    healthy.challenge.strength-weak.challenge.strength>15&&
-    weak.dial-healthy.dial<20&&
-    Math.abs(healthy.pressureAngle-healthy.dial*3)<2&&Math.abs(weak.pressureAngle-weak.dial*3)<2);
-  check(`${label}: pressure arc and line strength readouts remain valid`,meterMatchesServer(healthy)&&meterMatchesServer(weak));
+  const safe=await setStrength(80);
+  await snapshot(page,`${label}-wheel-safe`);
+  const warning=await setStrength(34);
+  await snapshot(page,`${label}-wheel-warning`);
+  const danger=await setStrength(12);
+  fs.writeFileSync(path.join(out,`${label}-line-wheel.json`),JSON.stringify({safe,warning,danger},null,2));
+  check(`${label}: the outer ring drains with server line strength`,
+    safe.dial-warning.dial>30&&warning.dial-danger.dial>15&&
+    safe.pressureAngle-warning.pressureAngle>90&&warning.pressureAngle-danger.pressureAngle>45);
+  check(`${label}: remaining line strength uses visible green, yellow and red states`,
+    [safe,warning,danger].map(state=>state.pressureRisk).join(',')==='safe,warning,danger'&&
+    new Set([safe.pressureColor,warning.pressureColor,danger.pressureColor]).size===3&&
+    [safe,warning,danger].every(state=>state.pressureColor.length>0));
+  check(`${label}: remaining line readout follows server and shows break threshold`,
+    [safe,warning,danger].every(meterMatchesServer));
   await snapshot(page,`${label}-wheel-weak`);
   await setStrength(80);
+}
+function verifyZeroStrengthBreak(){
+  const hookedAt=new Date('2026-10-03T00:00:00.000Z');
+  const round=fishingV5.create('qa-zero-strength',hookedAt,0);
+  fishingV5.hook(round,hookedAt,1,'golden-whale');
+  round.strength=.001;
+  fishingV5.control(round,hookedAt,true,0);
+  const result=fishingV5.simulate(round,new Date(hookedAt.getTime()+100),1);
+  check('zero remaining line strength snaps the line in the real fight engine',
+    result==='line_snapped'&&round.strength===0);
 }
 async function settle(page,label){
   const response=await page.evaluate(client=>fetch(`/qa-land?client=${client}`,{method:'POST'}).then(r=>r.json()),label);
@@ -770,6 +802,7 @@ async function main(){
   fs.mkdirSync(out,{recursive:true});await serve();
   browser=await chromium.launch({executablePath:chrome,headless:true});
   try{
+    verifyZeroStrengthBreak();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='desktop')await runV5('desktop',1440,900);
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='minimum')await runV5('minimum',960,640);
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='depth'){

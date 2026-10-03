@@ -1,5 +1,11 @@
 # Dev Workflow
 
+## 2026-10-03 海釣外圈耐壓讀數（內容修訂 4，待發布）
+
+範圍：`desktop/launcher-room-minigames.js/.css` 把 v5 線輪最外圈改為伺服器魚線剩餘強度的 0–100% 讀數，滿格時為綠色，降至 52%／26% 以下分別轉黃／紅，外圈彩色弧隨捲線縮短，鬆開或放線回復時增長。顯著標示「耐壓」及「0% 斷線」，避免把前端估算的即時拉力誤讀為斷線值；魚勢拉力仍由原有短弧顯示。`scripts/launcher_fishing_v5_browser_qa.js` 改驗外圈與伺服器強度、收放線趨勢及歸零斷線。未修改伺服器魚線消耗、回復、漁獲或獎勵規則，保留原有 ID 與資料欄位；`public/images/ranks/r5.PNG`、`r6.PNG` 的既有修改不屬本次範圍。
+
+驗證：`node scripts/launcher_fishing_v5_browser_qa.js` 於桌機、960×640 及既有相容場景共 223/223 PASS，pageErrors=[]、missingAssets=[]；實際 v5 引擎耗盡強度回傳 `line_snapped`。截圖在 `D:\Codex_QA\launcher-fishing-pressure-1.2.24\browser\`，轉場結束後 89% 顯示綠黃紅、43% 顯示黃紅、21% 顯示紅色；收線下降、放線回復均由瀏覽器測試檢查。`npm start` 本機 Board 首頁、內容清單及下載頁 HTTP 200；此靜態服務檢查未連資料庫。正式簽章內容修訂 4 清單 SHA-256 `31e99cb84972809c92269612910229c0b6cc16818783c69eecfb6047c58936a5`，18 個邏輯檔中 2 個 renderer blob 上傳 R2、16 個既有 blob 重用；候選簽章清單與公開 blob 的更新器 stage/load/readVerified 18 檔通過，修訂 3→4 僅下載 234,674 bytes。候選報告位於 `D:\Codex_QA\launcher-fishing-pressure-content-1.2.23-r4\candidate-report.json`；Render 正式清單讀回待部署後補證。本節為修訂 4 現況；下方修訂 2 的「即時線壓力外圈」描述是當時版本紀錄。
+
 ## 2026-10-03 啟動器非釣魚小遊戲與訓練大畫面升級（已部署）
 
 範圍：`desktop/launcher-room-minigames.js/.css` 更新海上補給、香吉士出餐、佛朗基管路、娜美航線及甲板特訓共五個畫面；桌機卡片擴至 1160px、遊戲場景至少 560px，補給箱、食譜／備料格、管路板、海圖及訓練航道與角色同步放大。開場改為場景圖卡與單句目標，詳細操作收進可展開說明；回合提示縮成短句。新增 `public/images/launcher_room/minigames_v2/` 的 14 張正式圖片：訓練甲板一張、航線船／礁／港三張、十種食材十張。四項工作的既有背景及補給箱圖繼續使用 `minigames_v1`。管線以放大的向量金屬／水流部件繪製，接通路段提供即時視覺回饋。釣魚視覺與玩法未改。

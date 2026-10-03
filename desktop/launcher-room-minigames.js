@@ -23,7 +23,7 @@
     cooking:{title:'香吉士的出餐考驗',guide:'廚房幫手',short:'食材順序',round:'訂單',description:'依照食譜順序備料，讓大家準時開飯。',rules:['共 8 張訂單，依上方食譜，按順序點選食材；同一種食材可以加入多次。','點食材或按 1～6；點「退回一份」或按 Backspace 修正，Enter 出餐。','每張訂單限時 10 秒，完成 6 張即可過關。看清楚再動手，不浪費食材！']},
     repair:{title:'佛朗基的管路檢修',guide:'船塢助手',short:'旋轉接管',round:'管路',description:'轉動管線，讓左側入口一路接到右側出口。',rules:['共 8 面管路板。直管與彎管每點一次順時針轉 90 度；不需要用到全部管線。','點管線或按 1～9 轉動，接好後點「測試通水」或按 Enter。','每面限時 18 秒，修好 6 面即可過關。兩端開口要對齊，相鄰管線才接得上。']},
     navigation:{title:'娜美的航線演練',guide:'航海助手',short:'避礁規劃',round:'航線',description:'避開暗礁，用有限的步數畫出抵達港口的航線。',rules:['共 8 張海圖。從起點逐格點選上下左右相鄰海域，避開暗礁，抵達港口。','可以使用方向鍵移動；點前一格或按 Backspace 退回，Enter 確認出航。','每張海圖限時 16 秒，不能重走格子或超過步數上限。完成 6 張即可過關。']},
-    fishing:{title:'千陽號海釣',guide:'浮標與魚線',short:'拋竿 · 抽竿 · 捲線',round:'釣點',description:'拋出釣竿，盯著大浮標；真正沉入水面才抽竿，再交替捲線與放線。',rules:['共有 3 個釣點，成功釣起 2 次就能收藏一尾作品中出現的魚。可以一直再玩，商城金幣最多持有 500 枚。','點「拋竿」後等魚靠近。浮標輕晃只是試餌；浮標猛地沉下、水花濺起時，按「抽竿」或空白鍵。太早抽竿會驚走魚。','上鉤後按住「捲線」縮短魚的距離；張力變黃、變紅時，鬆開捲線並點「放線」降低張力。張力滿格會斷線。']}
+    fishing:{title:'千陽號海釣',guide:'浮標與魚線',short:'拋竿 · 抽竿 · 捲線',round:'釣點',description:'拋出釣竿，盯著大浮標；真正沉入水面才抽竿，再交替捲線與放線。',rules:['共有 3 個釣點，成功釣起 2 次就能收藏一尾作品中出現的魚。可以一直再玩，商城金幣最多持有 500 枚。','點「拋竿」後等魚靠近。浮標輕晃只是試餌；浮標猛地沉下、水花濺起時，按「抽竿」或空白鍵。太早抽竿會驚走魚。','上鉤後按住「捲線」縮短魚的距離；外圈耐壓由綠轉黃、紅，耗到 0% 就斷線。鬆開捲線或放線可回復。']}
   });
   const JOB_LINES={
     cooking:{luffy:'香吉士說得照食譜來……我會忍住不偷吃啦！',zoro:'切好的食材放哪？你報順序，我來備料。',nami:'先照食譜備好，別讓魯夫把晚餐吃光了。',usopp:'這可是大廚騙人布的……咳，香吉士寫的食譜！',sanji:'照順序備料，火候我來顧。可別糟蹋食物。',chopper:'蔬菜也要吃喔！我來幫忙把食材排好。',robin:'呵呵，晚餐的線索都寫在食譜上了。',franky:'備料也得 SUPER 俐落！別把我的可樂倒進鍋裡啊。',brook:'讓我幫忙備料，晚餐後再為大家演奏吧。',jinbe:'照著食譜慢慢來，廚房也講究彼此配合。',ace:'我也來幫忙。放心，還沒開飯我不會先睡著。',sabo:'先把食材備妥，魯夫才不會趁我們不注意偷吃。',law:'食材按順序來。處理魚的刀具別和其他食材混放。'},
@@ -76,7 +76,7 @@
     let fishingV4Reeling=false,fishingV4Paying=false,fishingV4Steer=0,fishingV4Pointer=null,fishingV4ReelPointer=null,fishingV4PayPointer=null,fishingV4QueuedCast=false,fishingV4QueuedControl=false,fishingV4QueuedHook=false,fishingV4LastSync=0;
     let fishingV4CastPower=52,fishingV4ChargeStarted=0,fishingV4ChargePointer=null,fishingV4ChargeKey=false,fishingV4CastClickSuppressed=false;
     let fishingV4VisualChallenge=null,fishingV4VisualTension=10,fishingV4VisualDistance=100,fishingV4VisualAt=0;
-    let fishingV5PositionAt=0,fishingV5Display=null,fishingV5Hud=null,fishingV5PressureAt=0,fishingV5Pressure=0;
+    let fishingV5PositionAt=0,fishingV5Display=null,fishingV5Hud=null;
     let fishingV4ClockAnchor=null,fishingV4ClockPerf=0,fishingV4ClockLast=0,lastClockSample=null;
     let fishingResultShownAt=0;
     const fishingResultHeldKeys=new Set();
@@ -532,17 +532,17 @@
       const directionCue=node('div','room-fishing-v4-direction');directionCue.append(node('span','','魚的方向'),node('strong','','—'),node('small','',isV5?'釣竿要跟著魚移動':'拖動捲線牽制'));
       directionCue.append(node('em','','已收回 0%'));
       if(isV5){
-        const hud=node('div','room-fishing-v5-hud');hud.setAttribute('role','group');hud.setAttribute('aria-label','釣竿表：即時線壓力、魚線強度、魚的拉力與剩餘魚距');
+        const hud=node('div','room-fishing-v5-hud');hud.setAttribute('role','group');hud.setAttribute('aria-label','釣竿表：魚線耐壓、魚的拉力與剩餘魚距；耐壓歸零就會斷線');
         hud.append(node('span','room-fishing-v5-handle'));
         const strengthBox=node('div','room-fishing-v5-strength');
-        const dial=node('div','room-fishing-v5-dial');dial.setAttribute('role','meter');dial.setAttribute('aria-label','即時線壓力');dial.setAttribute('aria-valuemin','0');dial.setAttribute('aria-valuemax','100');const spool=node('span','room-fishing-v5-dial-spool');spool.append(node('span','room-fishing-v5-dial-crank'));dial.append(node('span','room-fishing-v5-pressure-ring'),spool,node('span','room-fishing-v5-dial-hub'));
-        const strengthCopy=node('div','room-fishing-v5-strength-copy');strengthCopy.append(node('span','','壓力'),node('strong','room-fishing-v5-pressure-value','0%'),node('small','room-fishing-v5-strength-value','線100'));strengthBox.append(dial,strengthCopy);
+        const dial=node('div','room-fishing-v5-dial');dial.setAttribute('role','meter');dial.setAttribute('aria-label','魚線耐壓');dial.setAttribute('aria-valuemin','0');dial.setAttribute('aria-valuemax','100');const spool=node('span','room-fishing-v5-dial-spool');spool.append(node('span','room-fishing-v5-dial-crank'));dial.append(node('span','room-fishing-v5-pressure-ring'),spool,node('span','room-fishing-v5-dial-hub'));
+        const strengthCopy=node('div','room-fishing-v5-strength-copy');strengthCopy.append(node('span','','耐壓'),node('strong','room-fishing-v5-pressure-value','100%'),node('small','room-fishing-v5-strength-value','0% 斷線'));strengthBox.append(dial,strengthCopy);
         const pullArc=node('div','room-fishing-v5-pull-arc');pullArc.setAttribute('role','meter');pullArc.setAttribute('aria-label','魚的拉力等級');pullArc.setAttribute('aria-valuemin','0');pullArc.setAttribute('aria-valuemax','3');pullArc.append(node('span','room-fishing-v5-pull-arc-band'),node('span','room-fishing-v5-pull-needle'),node('strong','room-fishing-v5-force-value','平穩'));
         const position=node('div','room-fishing-v5-position');
         const catchLabel=node('div','room-fishing-v5-catch-label');catchLabel.append(node('span','','剩餘魚距'),node('strong','room-fishing-v5-distance','0.0 m'));
         const catchTrack=node('div','room-fishing-v5-catch-track');catchTrack.setAttribute('role','meter');catchTrack.setAttribute('aria-label','剩餘魚距');catchTrack.setAttribute('aria-valuemin','0');catchTrack.setAttribute('aria-valuemax','100');const catchRail=node('span','room-fishing-v5-catch-rail');catchRail.append(node('span','room-fishing-v5-catch-fill'));for(let index=1;index<10;index++){const guide=node('span','room-fishing-v5-guide');guide.style.setProperty('--guide',String(index));catchRail.append(guide);}catchRail.append(node('span','room-fishing-v5-rail-marker'));catchTrack.append(node('span','room-fishing-v5-boat','船'),catchRail,node('span','room-fishing-v5-fish-end','魚'));
         position.append(catchLabel,catchTrack);
-        hud.append(strengthBox,pullArc,position);fishingV5Hud=hud;fishingV5Pressure=0;fishingV5PressureAt=0;
+        hud.append(strengthBox,pullArc,position);fishingV5Hud=hud;
       }
       const castMeter=node('div','room-fishing-v4-cast-meter');castMeter.append(node('div','room-fishing-v4-cast-heading','拋竿力度'),node('strong','room-fishing-v4-cast-readout','52% · 中距離'));
       const castTrack=node('div','room-fishing-v4-cast-track');castTrack.setAttribute('role','progressbar');castTrack.setAttribute('aria-label','拋竿力度');castTrack.setAttribute('aria-valuemin','0');castTrack.setAttribute('aria-valuemax','100');castTrack.append(node('span'));
@@ -648,32 +648,18 @@
         const forceGrade=pullIntensity<.25?0:pullIntensity<.58?1:pullIntensity<.82?2:3;
         const forceNames=['平穩','輕拉','急拉','猛拉'];
         fishingV5Hud.dataset.force=['calm','light','hard','fierce'][forceGrade];
-        // This outer ring reports the pull happening now, not the slowly changing
-        // amount of line strength left. The reel and its crank rotate separately.
-        const fishSign=direction==='left'?-1:direction==='right'?1:0;
-        const aligned=surge&&fishSign!==0&&fishingV4Steer===fishSign;
-        const opposed=surge&&fishSign!==0&&fishingV4Steer===-fishSign;
-        const pressureTarget=clamp((surge?24+pullIntensity*44:6+pullIntensity*18)
-          +(fishingV4Reeling?18+pullIntensity*11:0)
-          +(aligned?-20:opposed?17:0)
-          -(fishingV4Paying?48:0)
-          +(1-strengthRatio)*8,0,100);
-        const pressureElapsed=fishingV5PressureAt?clamp((displayAt-fishingV5PressureAt)/1000,0,.1):0;
-        fishingV5Pressure=fishingV5PressureAt
-          ?fishingV5Pressure+(pressureTarget-fishingV5Pressure)*(1-Math.exp(-pressureElapsed*(fishingV4Paying?14:11)))
-          :pressureTarget;
-        fishingV5PressureAt=displayAt;
-        const pressure=Math.round(fishingV5Pressure);
-        fishingV5Hud.dataset.pressureRisk=pressure>=75?'danger':pressure>=45?'warning':'safe';
-        fishingV5Hud.style.setProperty('--pressure-angle',`${(fishingV5Pressure*3).toFixed(1)}deg`);
+        // The outer ring is the remaining line capacity used by the server's
+        // snap rule. A shrinking colored arc now reaches zero when the line breaks.
+        const remainingPressure=Math.round(strengthRatio*100);
+        fishingV5Hud.dataset.pressureRisk=risk;
+        fishingV5Hud.style.setProperty('--pressure-angle',`${(strengthRatio*300).toFixed(1)}deg`);
         fishingV5Hud.style.setProperty('--pull-fill',`${Math.round(pullIntensity*100)}%`);
         fishingV5Hud.style.setProperty('--pull-needle-x',`${(21+54*Math.sin(Math.PI*pullIntensity)).toFixed(1)}%`);
         fishingV5Hud.style.setProperty('--pull-needle-y',`${(88-76*pullIntensity).toFixed(1)}%`);
-        const dial=fishingV5Hud.querySelector('.room-fishing-v5-dial');dial.setAttribute('aria-valuenow',String(pressure));dial.setAttribute('aria-valuetext',`即時線壓力 ${pressure}%；魚線強度 ${Math.round(strength)} / ${Math.round(maxStrength)}`);
+        const dial=fishingV5Hud.querySelector('.room-fishing-v5-dial');dial.setAttribute('aria-valuenow',String(remainingPressure));dial.setAttribute('aria-valuetext',`魚線耐壓剩餘 ${remainingPressure}%；歸零斷線`);
         const pullArc=fishingV5Hud.querySelector('.room-fishing-v5-pull-arc');pullArc.setAttribute('aria-valuenow',String(forceGrade));pullArc.setAttribute('aria-valuetext',forceNames[forceGrade]);
         fishingV5Hud.querySelector('.room-fishing-v5-force-value').textContent=forceNames[forceGrade];
-        fishingV5Hud.querySelector('.room-fishing-v5-pressure-value').textContent=`${pressure}%`;
-        const strengthValue=fishingV5Hud.querySelector('.room-fishing-v5-strength-value');strengthValue.textContent=`線${Math.round(strength)}`;strengthValue.title=`魚線強度 ${Math.round(strength)} / ${Math.round(maxStrength)}`;
+        fishingV5Hud.querySelector('.room-fishing-v5-pressure-value').textContent=`${remainingPressure}%`;
         const remainingDistance=Math.round(distance);
         const castY=Number.isFinite(challenge.castTarget?.y)?challenge.castTarget.y*100:(FISH_CAST_ZONES[challenge.castZone||selectedCastZone]||FISH_CAST_ZONES.mid).y;
         const castFarness=clamp((FISH_CAST_ZONES.near.y-castY)/(FISH_CAST_ZONES.near.y-FISH_CAST_ZONES.far.y),0,1);
