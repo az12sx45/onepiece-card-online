@@ -1,11 +1,11 @@
 # File Map
 
-## 2026-10-04 海釣 Pixabay 線輪音效（1.2.23 內容修訂 10，發行候選）
+## 2026-10-04 海釣 Pixabay 線輪音效（1.2.23 內容修訂 10，已部署）
 
 - desktop/launcher-room-minigames.js：收線、被魚拉走線、線壓警示的音效事件及原有合成聲回退。
 - public/audio/launcher_room/pixabay_fishing_v1/{reel_in_fast,line_out_drag,line_strain}.ogg：三段遊戲內短音；desktop/main.js、desktop/package.json、scripts/desktop_launcher_package_qa.js：精確放行與封裝，私人 APK 音檔不在公開清單。
 - docs/LAUNCHER_PIXABAY_FISHING_AUDIO_20261004.json：Pixabay 作者、原頁、授權、截取處理和原檔／輸出 SHA；config/launcher-announcements-v1.json：修訂 24，沿用海釣主圖的 1.2.23 r10 公告。
-- scripts/launcher_fishing_v5_browser_qa.js：收放線及警戒事件的瀏覽器音效回歸；正式簽署內容清單與公開結果在發行完成後補記於 DEV_WORKFLOW.md。
+- scripts/launcher_fishing_v5_browser_qa.js：收放線及警戒事件的瀏覽器音效回歸；正式簽署內容清單、公開讀回與實際安裝結果已記於 DEV_WORKFLOW.md。
 
 
 ## 2026-10-03 釣魚內容差分清單（修訂 8，已部署）
