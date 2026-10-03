@@ -1,5 +1,11 @@
 # File Map
 
+## 2026-10-03 海釣限時甩竿與動態海面（1.2.23 內容修訂 7，候選）
+
+- `server/launcher-fishing-v5.js`、`server/launcher-minigames.js`、`server/launcher-life-store.js`：只讓新場次選用伺服器限時甩竿；左／右／上提示、單次判定、逾時與持久化路由，舊場次維持原節奏。
+- `desktop/launcher-room-minigames.js/.css`：海面拖甩及方向鍵、甩竿與魚線連接動畫、遠近水層及天光動態；既有線輪耐壓、拉力弧、魚距軌道不變。
+- `scripts/launcher_fishing_flick_server_qa.js`、`scripts/launcher_fishing_flick_life_qa.js`、`scripts/launcher_fishing_v5_browser_qa.js`：三方向時窗、獎懲、舊場次及實際滑鼠／鍵盤操作回歸；本次沒有將 XAPK 或影片素材加入玩家資產。
+
 ## 2026-10-03 海釣景深、放線與魚池（1.2.23 內容修訂 6，已部署）
 
 - `desktop/launcher-room-minigames.js/.css`：浮標與水花按投距／魚距縮放、寬短場景景深構圖、v5 鬆開收線自動放線、移除釣魚音效按鈕；v4 畫面相容。

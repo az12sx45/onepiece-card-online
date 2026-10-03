@@ -88,8 +88,8 @@ const FIELDS={
  'work.reserve':['itemId','stationId','roomRevision','stationType','furnitureId'],
  'work.activate':['jobId'],'work.complete':['jobId'],'work.cancel':['jobId'],
  'directive.set':['directiveId'],'character.interact':['itemId','action'],
-  'minigame.start':['characterId','kind','practice','jobId','fishingVersion','baitId','spotId'],
-  'minigame.answer':['sessionId','token','roundId','selections','directions','ingredients','rotations','path','counterMoves','castZone','castPower','reeling','steer','paying'],
+  'minigame.start':['characterId','kind','practice','jobId','fishingVersion','baitId','spotId','flickMode'],
+  'minigame.answer':['sessionId','token','roundId','selections','directions','ingredients','rotations','path','counterMoves','castZone','castPower','reeling','steer','paying','flickDirection','flickCueId'],
  'minigame.finish':['sessionId','token'],'minigame.cancel':['sessionId','token'],
  'minigame.retry':['sessionId','token'],
  'fish.place':['fishId','inAquarium'],
@@ -119,6 +119,7 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
       p.jobId!==undefined&&(p.kind!=='work'||!M.WORK_JOBS.includes(p.jobId))||
       p.fishingVersion!==undefined&&!(p.kind==='fishing'&&[4,5].includes(p.fishingVersion)||
         p.fishingVersion===2&&p.kind==='work'&&p.jobId==='fishing')||
+      p.flickMode!==undefined&&!(p.kind==='fishing'&&p.fishingVersion===5&&p.flickMode===true)||
       (p.kind==='fishing'?!M.FISHING_BAITS.includes(p.baitId)||!M.FISHING_SPOTS.includes(p.spotId):
         p.baitId!==undefined||p.spotId!==undefined))return{ok:false,error:'invalid_minigame'};
     const actor=state.characters[p.characterId];
@@ -131,7 +132,7 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
       companions.workStartsToday++;old.worksStartedToday++;
     }
     const session=M.create(p.kind,p.characterId,room.revision,now,practice,p.jobId||'supply',
-      p.kind==='fishing'&&[4,5].includes(p.fishingVersion)?p.fishingVersion:p.fishingVersion===2?2:1,p.baitId,p.spotId,state.fishingRodLevel);
+      p.kind==='fishing'&&[4,5].includes(p.fishingVersion)?p.fishingVersion:p.fishingVersion===2?2:1,p.baitId,p.spotId,state.fishingRodLevel,p.flickMode===true);
     await M.save(db,row.user_id,session);
     return{ok:true,minigame:M.view(session)};
   }

@@ -1,5 +1,11 @@
 # Dev Workflow
 
+## 2026-10-03 海釣參照《歡樂釣魚大師》加入限時甩竿與分層海面（1.2.23 內容修訂 7，候選）
+
+範圍：`server/launcher-fishing-v5.js`、`server/launcher-minigames.js`、`server/launcher-life-store.js` 為新 v5 場次加伺服器權威的左／右／上甩竿提示與單次限時判定，2.6 秒作答窗、至少 2.9 秒的對應衝刺；正確、錯誤、超時各有明確的耐壓與魚距結果。`desktop/launcher-room-minigames.js/.css` 加入海面拖甩、方向鍵、提示與竿身反應，保留既有線輪錶資訊及收線／自動放線；用 CSS 分層天光、遠近水紋，沿用現有航海王彩繪圖，不取用 XAPK 或影片原圖。`scripts/launcher_fishing_flick_server_qa.js`、`launcher_fishing_flick_life_qa.js` 及 `launcher_fishing_v5_browser_qa.js` 增加核心、資料庫、實際滑鼠／鍵盤 QA。原有 r5/r6 rank 圖是先前使用者修改，不屬本次範圍。
+
+已完成候選驗證：限時甩竿核心 217/217，26 種魚×兩種種子均可上岸；既有 v5 伺服器 1211/1211；PGlite 命令與 JSONB 保存 20/20；Chromium 左、右、上三種甩竿含動作期間竿尖連線 24/24，完整桌機、960×640、遠近投距、舊 v4、不同魚勢及音效回歸共 276/276，報告在 `D:\Codex_QA\launcher-fishing-master-v5-browser-final-r3\report.json`。魚種 287/287、其他小遊戲 104/104、舊釣魚場次另一次完整測試 778/778、既有 v5 生活流程 21/21、公告服務 82/82 通過；舊釣魚 QA 第一次因亂數魚種 21 秒超過原有 20 秒門檻而失敗，第二次通過，未修改該門檻或玩法。`npm start` 以隔離 8894 埠啟動，靜態 Board 首頁及內容清單 HTTP 200；沒有 `DATABASE_URL`，此項不代表正式帳號功能驗收。簽署內容清單修訂 7 SHA-256 `4a23a58cdffc9fab36c89e1334cf1fda4f5974d3a1ec48fc894e500018d3da79`，21 個邏輯檔中只更換 JS/CSS 兩個 blob、合計 255,954 bytes；R2 已上傳且候選更新器 stage/load/readVerified 與修訂 6→7 差分啟用通過，報告在 `D:\Codex_QA\launcher-fishing-master-flick-content-r7\candidate-report.json`。正式 Git／Render 公開讀回待發布後補記。
+
 ## 2026-10-03 海釣景深、放線與魚種手感（1.2.23 內容修訂 6，已部署）
 
 範圍：`desktop/launcher-room-minigames.js/.css` 重校浮標與水花的投距、魚距透視，遠處明顯縮小，近處也不再佔據大量海面；寬而矮的遊戲視窗重新構圖場景，保留遠景與地平線。v5 搏魚時放開收線鍵即由伺服器自動放線，不需另按「放線」；釣魚畫面的音效按鈕不再顯示，音效沿用既有本機合成方式。`server/launcher-minigames.js` 調整六釣點、三種餌、三投距的加權魚池，貝類不再是近岸與虹色水域的預設漁獲；各組合中貝類最高理論機率為 14.29%，26 種魚仍可在其指定組合釣到。`server/launcher-fishing-v5.js` 為 26 種魚各自配置游速、衝刺長度、拉線、疲勞與收線效率的節奏倍率，讓持續盲目收線與順勢停手、跟魚控竿有不同結果。這些倍率是本作調校；保留所提供 ISO 的原始魚種行為槽與來源界線。舊客戶端傳入 `paying` 仍接受，進行中的 v4／v3 場次維持原規則；魚種 ID、收藏、金幣與存檔欄位不變。既有 `public/images/ranks/r5.PNG`、`r6.PNG` 修改未納入。

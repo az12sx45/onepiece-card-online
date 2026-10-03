@@ -14,6 +14,9 @@ const DURATION_MS = 90000;
 const CONTROL_LEASE_MS = 2000;
 const HOOK_WINDOW_MS = 4500;
 const STEP_MS = 100;
+const FLICK_WINDOW_MS = 2600;
+const FLICK_MIN_SURGE_MS = 2900;
+const FLICK_RELIEF_MS = 1400;
 const rodLevel = value => Number.isInteger(value)&&value>=0&&value<=3?value:0;
 
 // Exact numeric behavior slots extracted read-only from the user's Unlimited
@@ -140,13 +143,14 @@ function observe(round,now) {
   round.lastSimAt=iso(Math.max(now.getTime(),Date.parse(round.lastSimAt)||0));
 }
 
-function create(id,issuedAt,equippedRodLevel=0) {
+function create(id,issuedAt,equippedRodLevel=0,flickMode=false) {
   return{id,fishingVersion:5,stage:'cast',castAt:null,castZone:null,castTarget:null,
     nibbleAt:null,biteAt:null,hookUntil:null,hookedAt:null,fightUntil:null,
     lastSimAt:iso(issuedAt),distance:100,strength:100,maxStrength:100,tension:0,pullIntensity:0,
     pullDirection:'steady',runState:'calm',fishX:.5,fishY:.57,fishVelocityX:0,fishVelocityY:0,
     motionSeed:crypto.randomInt(1,0x80000000),rodLevel:rodLevel(equippedRodLevel),motionStartedAt:null,
     phaseIndex:0,phaseUntil:null,nextTurnAt:null,turnsRemaining:0,behavior:null,reelHoldMs:0,
+    ...(flickMode===true?{flickMode:true,flickCue:null,flickFeedback:null,flickReliefUntil:null}:{}),
     control:{reeling:false,steer:0},controlLeaseUntil:null,
     showcaseMs:0,answerWindowMs:90000,notBefore:iso(issuedAt)};
 }
@@ -180,16 +184,27 @@ function selectPhase(round,skill,index,at) {
   const rules=BEHAVIOR_STYLES[round.behavior.style];
   const durationFactor=clamp(1+(durationRaw-1900)/6000,.82,1.25);
   const wobble=((round.motionSeed+index*37)%5-2)*65;
-  const length=Math.max(1250,Math.round((mode?rules.surgeMs:rules.calmMs)*durationFactor*
+  const rawLength=Math.max(1250,Math.round((mode?rules.surgeMs:rules.calmMs)*durationFactor*
     (round.behavior.accent?.duration||1)+
     (mode?skill*65:0)+wobble));
+  // Only new opt-in sessions get the gesture layer. Old saved V5 rounds keep
+  // their exact lateral run timing and are never asked for a new control.
+  const cuePhase=Boolean(mode&&round.flickMode&&((round.motionSeed>>>2)+index)%2===0);
+  const length=cuePhase?Math.max(rawLength,FLICK_MIN_SURGE_MS):rawLength;
   round.runState=mode?'surge':'calm';
   const side=round.behavior.style==='heavy'?Math.floor(index/2):index;
   round.pullDirection=mode?((round.motionSeed+side)%2?'left':'right'):'steady';
+  if(cuePhase){
+    const direction=((round.motionSeed>>>3)+index)%3===0?'up':round.pullDirection;
+    if(direction==='up')round.pullDirection='deep';
+    round.flickCue={id:index+1,direction,startedAt:iso(at),until:iso(at+FLICK_WINDOW_MS)};
+    round.flickFeedback=null;
+  }else if(round.flickMode)round.flickCue=null;
   round.phaseUntil=iso(at+length);
-  // The source picks a single lateral heading for each behavior slot. Keep
-  // that heading until the next draw; extra launcher fish may still zigzag.
-  const turns=round.behavior.source==='iso'?0:rules.turns;
+  // The ISO source picks one lateral heading for a behavior slot. This new
+  // opt-in launcher gesture layer may replace one run with an upward dive;
+  // otherwise keep that heading until the next draw.
+  const turns=cuePhase||round.behavior.source==='iso'?0:rules.turns;
   round.turnsRemaining=mode?turns:0;
   round.nextTurnAt=mode&&turns?iso(at+Math.round(length/(turns+1))):null;
   const pull=rules.surgeEscape*round.behavior.force*(round.behavior.accent?.pull||1);
@@ -218,8 +233,39 @@ function hook(round,now,difficulty=1,speciesId=null) {
   round.runState='calm';round.pullDirection='steady';round.phaseIndex=0;
   selectPhase(round,skill,0,at);
   round.lastSimAt=iso(at);round.control={reeling:false,steer:0};round.controlLeaseUntil=null;
+  if(round.flickMode){round.flickFeedback=null;round.flickReliefUntil=null;}
   round.reelHoldMs=0;
   round.fishVelocityX=0;round.fishVelocityY=0;
+}
+
+function resolveFlick(round,at,result) {
+  const cue=round.flickCue;
+  if(!cue)return null;
+  round.flickCue=null;
+  round.flickFeedback={id:cue.id,direction:cue.direction,result,at:iso(at)};
+  if(result==='hit'){
+    round.strength=round4(clamp(round.strength+11,0,round.maxStrength));
+    round.distance=round4(clamp(round.distance-3.2,0,100));
+    round.flickReliefUntil=iso(at+FLICK_RELIEF_MS);
+  }else{
+    round.strength=round4(clamp(round.strength-(result==='wrong'?9:7),0,round.maxStrength));
+    round.distance=round4(clamp(round.distance+(result==='wrong'?3.2:2.6),0,100));
+  }
+  round.tension=round4(100-round.strength);
+  return round.strength<=0?'line_snapped':round.distance<=0?'landed':round.distance>=100?'escaped':null;
+}
+
+function flick(round,now,direction,cueId) {
+  if(!round.flickMode)return{error:'invalid_fishing_action'};
+  const cue=round.flickCue;
+  if(!cue)return{error:round.flickFeedback?.id===cueId?
+    round.flickFeedback.result==='miss'?'fishing_flick_expired':'fishing_flick_replayed':
+    'fishing_flick_stale'};
+  if(cue.id!==cueId)return{error:'fishing_flick_stale'};
+  const at=now.getTime();
+  if(at>=Date.parse(cue.until))return{error:'fishing_flick_expired'};
+  const result=direction===cue.direction?'hit':'wrong';
+  return{result,settlement:resolveFlick(round,at,result)};
 }
 
 function simulate(round,now,difficulty=1) {
@@ -232,23 +278,32 @@ function simulate(round,now,difficulty=1) {
   while(cursor<end) {
     if(cursor>=Date.parse(round.phaseUntil))advancePhase(round,skill,cursor);
     if(round.nextTurnAt&&cursor>=Date.parse(round.nextTurnAt))turnFish(round,cursor);
+    if(round.flickCue&&cursor>=Date.parse(round.flickCue.until)){
+      const outcome=resolveFlick(round,cursor,'miss');
+      if(outcome)return outcome;
+    }
     const turnAt=round.nextTurnAt?Date.parse(round.nextTurnAt):Infinity;
-    const next=Math.min(end,cursor+STEP_MS,Date.parse(round.phaseUntil),turnAt),dt=(next-cursor)/1000;
+    const cueUntil=round.flickCue?Date.parse(round.flickCue.until):Infinity;
+    const next=Math.min(end,cursor+STEP_MS,Date.parse(round.phaseUntil),turnAt,cueUntil),dt=(next-cursor)/1000;
     if(next<=cursor)return 'escaped';
     const held=Number.isFinite(lease)&&cursor<lease;
     const control=held?round.control:{reeling:false,steer:0,paying:false};
-    const surge=round.runState==='surge',fishSign=round.pullDirection==='left'?-1:round.pullDirection==='right'?1:0;
-    const aligned=surge&&control.steer===fishSign,opposed=surge&&control.steer===-fishSign;
+    const surge=round.runState==='surge',deep=round.pullDirection==='deep';
+    const fishSign=round.pullDirection==='left'?-1:round.pullDirection==='right'?1:0;
+    const relief=Boolean(round.flickMode&&Number.isFinite(Date.parse(round.flickReliefUntil))&&
+      cursor<Date.parse(round.flickReliefUntil));
+    const aligned=surge&&(relief||!deep&&control.steer===fishSign);
+    const opposed=surge&&!deep&&!relief&&control.steer===-fishSign;
     // Releasing the reel automatically lets line run. Older clients may still
     // send `paying`; their requests remain valid, but the extra button is not
     // required to protect the line. Steering with the run limits the payout.
     const paying=!control.reeling;
     const {style,force,accent}=round.behavior,rules=BEHAVIOR_STYLES[style];
     const surgePull=rules.surgeEscape*force*(accent?.pull||1);
-    const speed=surge?(fishSign*rules.swimSpeed*(round.behavior.accent?.swim||1)*
+    const speed=surge?(deep?(.5-round.fishX)*.5:fishSign*rules.swimSpeed*(round.behavior.accent?.swim||1)*
       (.75+force*.25)*(aligned?.42:opposed?1.2:1)):
       (.5-round.fishX)*.65+.027*Math.sin((next-Date.parse(round.hookedAt))/830+(round.motionSeed%71));
-    const depth={patient:.59,dart:.63,heavy:.7,weave:.66}[style];
+    const depth=deep?.76:{patient:.59,dart:.63,heavy:.7,weave:.66}[style];
     const vertical=surge?(depth-round.fishY)*1.7:(.56-round.fishY)*1.2;
     round.fishX=round4(clamp(round.fishX+speed*dt,.08,.92));
     round.fishY=round4(clamp(round.fishY+vertical*dt,.4,.75));
@@ -279,9 +334,17 @@ function simulate(round,now,difficulty=1) {
     round.strength=round4(round.strength);round.distance=round4(round.distance);
     round.tension=round4(100-round.strength);
     cursor=next;round.lastSimAt=iso(cursor);
+    if(round.flickCue&&cursor>=Date.parse(round.flickCue.until)){
+      const outcome=resolveFlick(round,cursor,'miss');
+      if(outcome)return outcome;
+    }
     if(round.strength<=0)return 'line_snapped';
     if(round.distance<=0)return 'landed';
     if(round.distance>=100)return 'escaped';
+  }
+  if(round.flickCue&&cursor>=Date.parse(round.flickCue.until)){
+    const outcome=resolveFlick(round,cursor,'miss');
+    if(outcome)return outcome;
   }
   if(cursor>=Date.parse(round.phaseUntil))advancePhase(round,skill,cursor);
   else if(round.nextTurnAt&&cursor>=Date.parse(round.nextTurnAt))turnFish(round,cursor);
@@ -302,6 +365,7 @@ function displayIntensity(value,state) {
   return value<.55?.45:value<.85?.7:.95;
 }
 
-module.exports={create,cast,hook,simulate,control,observe,position,rodLevel,
+module.exports={create,cast,hook,simulate,control,flick,observe,position,rodLevel,
   ISO_BEHAVIOR_MODES,EXTRA_BEHAVIOR_MODES,
-  castZoneForPower,castTargetForPower,displayIntensity,CONTROL_LEASE_MS,HOOK_WINDOW_MS,DURATION_MS};
+  castZoneForPower,castTargetForPower,displayIntensity,CONTROL_LEASE_MS,HOOK_WINDOW_MS,DURATION_MS,
+  FLICK_WINDOW_MS,FLICK_MIN_SURGE_MS,FLICK_RELIEF_MS};

@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 6,
-  "publishedAt": "2026-10-03T09:43:38.388Z",
+  "revision": 7,
+  "publishedAt": "2026-10-03T10:53:43.610Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -90,13 +90,13 @@
     },
     {
       "path": "launcher-room-minigames.css",
-      "bytes": 98036,
-      "sha256": "6a5f54a193a82cb6c2e2d6b9544ac57956c4ce8f7368fe8a29cc9da4f5bd95cb"
+      "bytes": 105699,
+      "sha256": "84e8ccbee9af76d6ed069595cd2bf2c1d19acca5316bd9c1527388f29eb6ac47"
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 145145,
-      "sha256": "385119ac7ab73cacaaa980c4304baf228dd41051ecee119ab384b486c249c695"
+      "bytes": 150255,
+      "sha256": "2a242b3c7f3769547f9c217dc715daea5258a01be959ea7e7080f747bf70ce2d"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -117,6 +117,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "HUIayESJ0d1vrpBKcHEUM5QHgPLvMbZsTnaqe8o6//1ZnO/69ZQ+U361sm9+ZgUcBrvuahxGvN4LRu4m5NbaBw=="
+    "value": "IjDqDFZJG4Us8ek3nN3I8yD9oYwjphjX3wlbzyogGs1RnDBckaAfzvXoZZj8d2o3DVDSSZ5I2NY9DTkJiOpEAA=="
   }
 }

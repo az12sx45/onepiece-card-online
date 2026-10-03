@@ -216,9 +216,9 @@ function workChallenge(jobId,id,roundIndex,issuedAt,fishingVersion=1) {
   }
   return null;
 }
-function challenge(kind, roundIndex, now, jobId='supply',fishingVersion=1,speciesId=null,rodLevel=0) {
+function challenge(kind, roundIndex, now, jobId='supply',fishingVersion=1,speciesId=null,rodLevel=0,flickMode=false) {
   const id=crypto.randomUUID(), issuedAt=now.getTime();
-  if(kind==='fishing')return fishingVersion===5?fishingV5.create(id,issuedAt,rodLevel):
+  if(kind==='fishing')return fishingVersion===5?fishingV5.create(id,issuedAt,rodLevel,flickMode):
     fishingVersion===4?fishingV4.create(id,issuedAt,rodLevel):fishingChallengeV3(id,issuedAt);
   if(kind==='work') {
     const variant=workChallenge(jobId,id,roundIndex,issuedAt,fishingVersion);if(variant)return variant;
@@ -258,6 +258,7 @@ function view(session) {
       delete result.challenge.turnsRemaining;delete result.challenge.phaseIndex;
       delete result.challenge.phaseUntil;
       delete result.challenge.motionSeed;
+      delete result.challenge.flickReliefUntil;
       result.challenge.pullIntensity=fishingV5.displayIntensity(
         result.challenge.pullIntensity,result.challenge.runState);
     }
@@ -278,24 +279,26 @@ async function active(db,userId,now,state,room) {
   }
   return result;
 }
-function create(kind,characterId,roomRevision,now,practice=false,jobId='supply',fishingVersion=1,baitId=null,spotId=null,rodLevel=0) {
+function create(kind,characterId,roomRevision,now,practice=false,jobId='supply',fishingVersion=1,baitId=null,spotId=null,rodLevel=0,flickMode=false) {
   const clockedFishingVersion=fishingVersion===5?5:fishingVersion===4?4:3;
+  const enabledFlickMode=kind==='fishing'&&clockedFishingVersion===5&&flickMode===true;
   const catchSpeciesId=kind==='work'&&jobId==='fishing'?
     pick(FISH_SPECIES.filter(species=>species.weight>0).flatMap(species=>Array(species.weight).fill(species.id))):null;
   const session={id:crypto.randomUUID(),token:crypto.randomBytes(24).toString('hex'),kind,characterId,practice,
     ...(kind==='work'?{jobId}:{}),
     ...(catchSpeciesId?{catchSpeciesId}:{}),
     ...(kind==='fishing'?{fishingVersion:clockedFishingVersion,baitId,spotId,castZone:null,
+      ...(enabledFlickMode?{flickMode:true}:{}),
       ...(clockedFishingVersion>=4?{rodLevel:fishingV4.rodLevel(rodLevel)}:{})}:kind==='work'&&jobId==='fishing'?{fishingVersion}:{}),
     state:'playing',roomRevision,attempt:1,maxAttempts:kind==='fishing'?1:3,roundIndex:0,totalRounds:kind==='fishing'?1:kind==='work'?(jobId==='fishing'&&fishingVersion===2?FISHING_V2_ROUNDS:jobId==='fishing'?5:8):4,
     startedAt:now.toISOString(),finishNotBefore:iso(now.getTime()+(kind==='fishing'?0:kind==='work'?24000:20000)),
-    challenge:challenge(kind,0,now,jobId,kind==='fishing'?clockedFishingVersion:fishingVersion,catchSpeciesId,rodLevel),score:0,combo:0,correctRounds:0,feedback:null,result:null};
+    challenge:challenge(kind,0,now,jobId,kind==='fishing'?clockedFishingVersion:fishingVersion,catchSpeciesId,rodLevel,enabledFlickMode),score:0,combo:0,correctRounds:0,feedback:null,result:null};
   session.expiresAt=iso(now.getTime()+durationFor(session));return session;
 }
 function retry(session,now) {
   session.attempt++;session.state='playing';session.roundIndex=0;session.score=0;session.combo=0;session.correctRounds=0;session.feedback=null;session.result=null;
   session.startedAt=now.toISOString();session.expiresAt=iso(now.getTime()+durationFor(session));session.finishNotBefore=iso(now.getTime()+(session.kind==='work'?24000:20000));
-  session.challenge=challenge(session.kind,0,now,jobFor(session),session.fishingVersion||1,session.catchSpeciesId,session.rodLevel);
+  session.challenge=challenge(session.kind,0,now,jobFor(session),session.fishingVersion||1,session.catchSpeciesId,session.rodLevel,session.flickMode===true);
 }
 function validId(value){return typeof value==='string'&&/^[a-f0-9-]{36}$/.test(value);}
 function validToken(value){return typeof value==='string'&&/^[a-f0-9]{48}$/.test(value);}
@@ -311,14 +314,14 @@ function advanceRound(session,correct,now,reason='') {
   if(correct){session.correctRounds++;session.score+=100+Math.min(4,session.combo-1)*25;}
   session.feedback={roundIndex:session.roundIndex,correct,combo:session.combo,correctRounds:session.correctRounds,score:session.score,...reason?{reason}:{}};
   session.roundIndex++;
-  session.challenge=session.roundIndex<session.totalRounds?challenge(session.kind,session.roundIndex,now,jobFor(session),session.fishingVersion||1,session.catchSpeciesId,session.rodLevel):null;
+  session.challenge=session.roundIndex<session.totalRounds?challenge(session.kind,session.roundIndex,now,jobFor(session),session.fishingVersion||1,session.catchSpeciesId,session.rodLevel,session.flickMode===true):null;
   return{};
 }
 function answerClockedFishing(session,payload,now) {
   const round=session.challenge,actions=payload.counterMoves;
   const engine=round.fishingVersion===5?fishingV5:fishingV4;
   if(!Array.isArray(actions)||actions.length!==1||
-      !['cast','hook','control','sync','timeout'].includes(actions[0])||
+      !['cast','hook','control','flick','sync','timeout'].includes(actions[0])||
       ['selections','directions','ingredients','rotations','path'].some(key=>payload[key]!==undefined))
     return{error:'invalid_minigame_answer'};
   const move=actions[0],at=now.getTime();
@@ -328,16 +331,25 @@ function answerClockedFishing(session,payload,now) {
         payload.castZone!==undefined&&(!Object.hasOwn(FISHING_CAST_ZONES,payload.castZone)||
           hasPower&&payload.castZone!==engine.castZoneForPower(payload.castPower))||
         !hasPower&&typeof payload.castZone!=='string'||
-        payload.reeling!==undefined||payload.steer!==undefined||payload.paying!==undefined)
+        payload.reeling!==undefined||payload.steer!==undefined||payload.paying!==undefined||
+        payload.flickDirection!==undefined||payload.flickCueId!==undefined)
       return{error:'invalid_fishing_cast_zone'};
   }else if(move==='control') {
     if(payload.castZone!==undefined||payload.castPower!==undefined||typeof payload.reeling!=='boolean'||
         !Number.isInteger(payload.steer)||![-1,0,1].includes(payload.steer)||
         payload.paying!==undefined&&typeof payload.paying!=='boolean'||
-        payload.reeling&&payload.paying)
+        payload.reeling&&payload.paying||payload.flickDirection!==undefined||
+        payload.flickCueId!==undefined)
       return{error:'invalid_fishing_control'};
+  }else if(move==='flick'){
+    if(round.fishingVersion!==5||payload.castZone!==undefined||payload.castPower!==undefined||
+        payload.reeling!==undefined||payload.steer!==undefined||payload.paying!==undefined||
+        !['left','right','up'].includes(payload.flickDirection)||
+        !Number.isInteger(payload.flickCueId)||payload.flickCueId<1||payload.flickCueId>10000)
+      return{error:'invalid_fishing_flick'};
   }else if(payload.castZone!==undefined||payload.castPower!==undefined||
-      payload.reeling!==undefined||payload.steer!==undefined||payload.paying!==undefined)
+      payload.reeling!==undefined||payload.steer!==undefined||payload.paying!==undefined||
+      payload.flickDirection!==undefined||payload.flickCueId!==undefined)
     return{error:'invalid_minigame_answer'};
   if(round.stage==='cast') {
     if(move==='sync'){engine.observe(round,now);return{};}
@@ -367,6 +379,12 @@ function answerClockedFishing(session,payload,now) {
   if(result)return advanceRound(session,result==='landed',now,result);
   if(move==='timeout')return{error:'invalid_fishing_action'};
   if(move==='sync')return{};
+  if(move==='flick'){
+    const flickResult=engine.flick(round,now,payload.flickDirection,payload.flickCueId);
+    if(flickResult.error)return{error:flickResult.error};
+    if(flickResult.settlement)return advanceRound(session,flickResult.settlement==='landed',now,flickResult.settlement);
+    return{};
+  }
   if(move!=='control')return{error:'invalid_fishing_action'};
   // Repeated heartbeat is allowed once per control lease; changes are accepted
   // immediately so releasing the button never waits on an action cooldown.

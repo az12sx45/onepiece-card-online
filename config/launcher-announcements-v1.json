@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 21,
+  "revision": 22,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r7-fishing-flick-and-sea",
+      "status": "published",
+      "publishedAt": "2026-10-03T10:47:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r7",
+      "title": "海釣甩竿與動態海面｜內容修訂 7",
+      "summary": "搏魚時看準方向向左、右或上甩竿；海面與釣竿會隨魚勢回應。原有線輪錶保留。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-rebuild-1.2.18.webp",
+        "alt": "千陽號上釣魚的航海王主題插圖"
+      },
+      "body": [
+        "部分魚衝刺時會短暫提示左、右或上甩竿。在海面朝提示方向拖甩，或按方向鍵；判對可護住魚線並把魚拉近，方向錯誤或錯過時機則會讓魚取得優勢。",
+        "遠近水面與天光增加動態，竿身會跟著魚的拉力與甩竿方向動作。原本的線輪耐壓、魚勢與剩餘魚距讀數保持原樣。",
+        "只有更新後開始的新海釣場次使用甩竿提示；釣到一半的舊場次可繼續。魚種、釣點、魚餌、漁獲收藏與商城金幣規則不變。此為差分內容更新，重新開啟啟動器後即可取得。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "board-tavern-crew-20260928-1c453fcf83416d97",
       "status": "published",
