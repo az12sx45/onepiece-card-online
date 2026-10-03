@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 23,
+  "revision": 24,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r10-pixabay-fishing-reel",
+      "status": "published",
+      "publishedAt": "2026-10-03T17:00:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r10",
+      "title": "海釣收線更有力｜線輪與拉扯音效更新",
+      "summary": "收線、魚拉走線和魚線吃力時，會聽到各自的機械與繃緊聲；音效跟著搏魚動作變化。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-rebuild-1.2.18.webp",
+        "alt": "千陽號上釣魚的航海王主題插圖，海面有魚造成的水花"
+      },
+      "body": [
+        "海釣收線改用線輪快速回收的短音；魚把線拉走時改用另一段逆向拖線聲。線輪手把照實際收線或被拉走的方向與速度轉動，聲音也跟著當下操作出現。",
+        "魚線耐壓吃緊或魚突然發力時，增加短促的繃線聲。判斷是否快斷線仍請看線輪外圈的耐壓顏色與剩餘讀數；聲音是操作提示，不改伺服器的釣魚結果。",
+        "蓄力、拋竿、落水、咬餌、抽竿、甩竿與上岸仍有原本的短音。這次透過簽署內容差分更新取得新音效，重新開啟啟動器即可下載；魚種、漁獲收藏、釣竿改裝、金幣與三款桌遊規則不變。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r8-first-person-crew-rods",
       "status": "published",

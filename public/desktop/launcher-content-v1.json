@@ -4,10 +4,25 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 8,
-  "publishedAt": "2026-10-03T13:03:56.178Z",
+  "revision": 10,
+  "publishedAt": "2026-10-03T17:03:39.439Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
+    {
+      "path": "audio/launcher_room/pixabay_fishing_v1/line_out_drag.ogg",
+      "bytes": 9860,
+      "sha256": "93f1149c18ae6a6697de9ca1a03b9645c259b336ae23249a7d11d07ed30b57b7"
+    },
+    {
+      "path": "audio/launcher_room/pixabay_fishing_v1/line_strain.ogg",
+      "bytes": 11486,
+      "sha256": "856fe1b51061add470111b2309f4afad9045fd5ca290fe53d7cd6fbbb1bafb7d"
+    },
+    {
+      "path": "audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg",
+      "bytes": 9020,
+      "sha256": "9220cff3d7cfd8a3c63f77632163a0b3932a7a00a74aaee41b4dd6647669482d"
+    },
     {
       "path": "images/launcher_room/fish_master/alligator-gar.webp",
       "bytes": 49976,
@@ -155,8 +170,8 @@
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 160117,
-      "sha256": "a3d08ffd7b6fdb43eecea86634226aefa2b86faecf58c68e00ff73169939b48e"
+      "bytes": 169013,
+      "sha256": "93f417a0a6ede2bd812e9380ae79e2d9c55ea3c19872346bf3f5d8d89678e993"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -177,6 +192,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "3mXqT2+N6MnAuK90j1Owmln3ebVdtfalV8KiPhwOSCNDf1DByxRQ7ICydDkg3YedU97yOQQ7764IyFFtCRaCCw=="
+    "value": "XKdPUTW03ipKj3rV5k4XnShI+turTvrem3HpTgWyuR1AiPrRJrAqTeNtQbBMC/DpNfrfUGU1wIUpJ5x9d4UBDQ=="
   }
 }

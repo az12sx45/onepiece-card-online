@@ -406,6 +406,7 @@ function resolveLauncherResource(requestUrl) {
       /^images\/launcher_room\/furniture\/(?:aquarium-tank|crew-tea-table|fishing-gear-rack|galley-icebox)\.webp$/,
       /^images\/launcher_room\/furniture_views\/(?:aquarium-tank|crew-tea-table|fishing-gear-rack|galley-icebox)\/[0-3]\.webp$/,
       /^audio\/profile_bgm\/(?:harbor|night-watch|voyage)\.ogg$/,
+      /^audio\/launcher_room\/pixabay_fishing_v1\/(?:reel_in_fast|line_out_drag|line_strain)\.ogg$/,
       /^audio\/bgm\/track(?:0[1-9]|1[0-9]|20)\.mp3$/,
       /^videos\/game_launcher\/[A-Za-z0-9._-]+$/
     ];

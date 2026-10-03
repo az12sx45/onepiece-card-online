@@ -1,0 +1,79 @@
+{
+  "schema": "launcher-pixabay-fishing-audio-provenance-v1",
+  "recordedAt": "2026-10-04",
+  "launcherCore": "1.2.23",
+  "contentRevision": 10,
+  "licenseSummary": "https://pixabay.com/service/license-summary/",
+  "fullTerms": "https://pixabay.com/service/terms/",
+  "licenseUse": "Pixabay Content License permits use and adaptation as part of a larger game work; no attribution is required, but authors and pages are recorded here. Do not offer the OGGs as a standalone audio asset package. Cropping or filtering alone does not remove the standalone restriction.",
+  "scope": "Three trimmed sounds are integrated into active fishing-game events. Private Fishing Master APK audio is not part of this public release.",
+  "inspection": "Source pages, source descriptions, decoded lengths, energy windows, peak/mean levels and SHA-256 were inspected. No human listening acceptance was performed by the agent.",
+  "assets": [
+    {
+      "role": "reel_in_fast",
+      "author": "AudioPapkin (Paweł Spychała)",
+      "title": "Old fishing reel fast rewinding fishing line",
+      "sourcePage": "https://pixabay.com/sound-effects/film-special-effects-old-fishing-reel-fast-rewinding-fishing-line-297884/",
+      "sourceSHA256": "7eafa24f088264563025fe8ff1b058dcfd6dd6a7a3989fc50b90cff163857440",
+      "edit": {
+        "startSeconds": 0.55,
+        "durationSeconds": 0.95,
+        "volumeMultiplier": 0.78,
+        "fadeInSeconds": 0.012,
+        "fadeOutStartSeconds": 0.87,
+        "fadeOutSeconds": 0.08,
+        "codec": "Ogg Vorbis q3",
+        "sampleRateHz": 24000,
+        "channels": 1
+      },
+      "gameFile": "public/audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg",
+      "gameBytes": 9020,
+      "gameSHA256": "9220cff3d7cfd8a3c63f77632163a0b3932a7a00a74aaee41b4dd6647669482d",
+      "durationSeconds": 0.95
+    },
+    {
+      "role": "line_out_drag",
+      "author": "paulprit (Freesound), published by freesound_community on Pixabay",
+      "title": "Fly Reel Fish Pulling Saricione",
+      "sourcePage": "https://pixabay.com/sound-effects/film-special-effects-fly-reel-fish-pulling-saricione-94671/",
+      "sourceSHA256": "2fb0a4c6003068a67cfa7eb3f9d78376868bcea798a28f93052126632916074f",
+      "edit": {
+        "startSeconds": 0.1,
+        "durationSeconds": 1.12,
+        "volumeMultiplier": 2.2,
+        "fadeInSeconds": 0.012,
+        "fadeOutStartSeconds": 1.02,
+        "fadeOutSeconds": 0.1,
+        "codec": "Ogg Vorbis q3",
+        "sampleRateHz": 24000,
+        "channels": 1
+      },
+      "gameFile": "public/audio/launcher_room/pixabay_fishing_v1/line_out_drag.ogg",
+      "gameBytes": 9860,
+      "gameSHA256": "93f1149c18ae6a6697de9ca1a03b9645c259b336ae23249a7d11d07ed30b57b7",
+      "durationSeconds": 1.12
+    },
+    {
+      "role": "line_strain",
+      "author": "floraphonic",
+      "title": "Rope Tighten and Stretch 1",
+      "sourcePage": "https://pixabay.com/sound-effects/film-special-effects-rope-tighten-and-stretch-1-171531/",
+      "sourceSHA256": "b3a0f0a03ee406c6b080dcaae2a634881384536d0d9ce4be1fb3c11ba42a65aa",
+      "edit": {
+        "startSeconds": 1.22,
+        "durationSeconds": 0.88,
+        "volumeMultiplier": 0.85,
+        "fadeInSeconds": 0.012,
+        "fadeOutStartSeconds": 0.78,
+        "fadeOutSeconds": 0.1,
+        "codec": "Ogg Vorbis q3",
+        "sampleRateHz": 24000,
+        "channels": 1
+      },
+      "gameFile": "public/audio/launcher_room/pixabay_fishing_v1/line_strain.ogg",
+      "gameBytes": 11486,
+      "gameSHA256": "856fe1b51061add470111b2309f4afad9045fd5ca290fe53d7cd6fbbb1bafb7d",
+      "durationSeconds": 0.88
+    }
+  ]
+}

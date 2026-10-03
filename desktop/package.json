@@ -819,6 +819,15 @@
         ]
       },
       {
+        "from": "../public/audio/launcher_room/pixabay_fishing_v1",
+        "to": "launcher-assets/audio/launcher_room/pixabay_fishing_v1",
+        "filter": [
+          "reel_in_fast.ogg",
+          "line_out_drag.ogg",
+          "line_strain.ogg"
+        ]
+      },
+      {
         "from": "../public/audio/bgm",
         "to": "launcher-assets/audio/bgm",
         "filter": [

@@ -18,7 +18,9 @@ const playwrightPath=fs.existsSync(runtimeBase)?fs.readdirSync(runtimeBase)
 const {chromium}=require(process.env.BOARD_QA_PLAYWRIGHT||playwrightPath||'playwright');
 const chrome=process.env.BOARD_QA_CHROMIUM||'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const html='<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;min-height:100%;background:#071b27;color:#fff;font-family:Arial,"Microsoft JhengHei",sans-serif}</style><link rel="stylesheet" href="/desktop/launcher-room-minigames.css"><body><script src="/desktop/launcher-room-minigames.js"></script></body></html>';
-const sessions=new Map(),checks=[],pageErrors=[],missingAssets=[];
+const fishingAudioDir='/pixabay_fishing_v1/';
+const fishingAudioNames=['reel_in_fast.ogg','line_out_drag.ogg','line_strain.ogg'];
+const sessions=new Map(),checks=[],pageErrors=[],missingAssets=[],blockedMedia=new Set();
 const forcedSpecies=new Map([['light-force','lovely-angel'],['heavy-force','golden-whale'],
   ['flick-up','glistening-saury'],['flick-right','glistening-saury'],['flick-left','glistening-saury']]);
 const flickSeeds={'flick-up':48,'flick-right':56,'flick-left':57};
@@ -121,11 +123,12 @@ async function serve(){
         respond(res,{ok:true});return;
       }
       if(!rel){res.setHeader('Content-Type','text/html; charset=utf-8');res.end(html);return;}
-      if(!['desktop/launcher-room-minigames.js','desktop/launcher-room-minigames.css'].includes(rel)){
+       if(!['desktop/launcher-room-minigames.js','desktop/launcher-room-minigames.css'].includes(rel)&&
+         !/^audio\/launcher_room\/pixabay_fishing_v1\/(?:reel_in_fast|line_out_drag|line_strain)\.ogg$/.test(rel)){
         res.writeHead(404);res.end();return;
       }
-      res.setHeader('Content-Type',rel.endsWith('.css')?'text/css':'text/javascript');
-      res.end(fs.readFileSync(path.join(root,rel)));
+       res.setHeader('Content-Type',rel.endsWith('.css')?'text/css':rel.endsWith('.ogg')?'audio/ogg':'text/javascript');
+       res.end(fs.readFileSync(path.join(root,rel.startsWith('audio/')?'public':'.',rel)));
     }catch(error){res.writeHead(500);res.end(error.stack||String(error));}
   });
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
@@ -133,6 +136,7 @@ async function serve(){
 async function setup(page,client){
   await page.route('opui://**',route=>{
     const rel=decodeURIComponent(new URL(route.request().url()).pathname).replace(/^\//,'');
+    if(blockedMedia.has(client)&&rel.startsWith('audio/launcher_room/pixabay_fishing_v1/'))return route.abort('failed');
     const file=path.join(root,'public',rel);
     if(rel.includes('..')||!fs.existsSync(file)){missingAssets.push(rel);return route.fulfill({status:404,body:'missing'});}
     return route.fulfill({path:file});
@@ -140,18 +144,75 @@ async function setup(page,client){
   page.on('pageerror',error=>pageErrors.push(`${client}: ${error.message}`));
   await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'load'});
   await page.evaluate(client=>{
-    window.__qa={client,calls:[],responses:[],pointerEvents:[],soundStarts:[],noiseStarts:[],audioCloses:0,audioSuspends:0};
+    window.__qa={client,calls:[],responses:[],pointerEvents:[],soundStarts:[],noiseStarts:[],sampleStarts:[],sampleStops:[],sampleLoaded:[],sampleElements:[],audioCloses:0,audioSuspends:0};
+    const nativeAudio=window.Audio;
+    window.Audio=function(...args){
+      if(__qa.blockSamples)throw Error('audio element unavailable');
+      const media=new nativeAudio(...args);__qa.sampleElements.push(media);
+      media.addEventListener('canplay',()=>{
+        if(media.__qaLoaded)return;media.__qaLoaded=true;
+        __qa.sampleLoaded.push({duration:media.duration,readyState:media.readyState,src:media.currentSrc});
+      });
+      return media;
+    };
+    window.Audio.prototype=nativeAudio.prototype;
+    const nativeMediaPlay=HTMLMediaElement.prototype.play;
+    HTMLMediaElement.prototype.play=function(...args){
+      const recorded=this.src.includes('/pixabay_fishing_v1/')?{at:performance.now(),duration:this.duration,
+        rate:this.playbackRate,src:this.src,volume:this.volume,readyState:this.readyState,
+        promise:'pending'}:null;
+      if(recorded)__qa.sampleStarts.push(recorded);
+      const started=nativeMediaPlay.apply(this,args);
+      if(recorded&&started?.then)started.then(()=>{recorded.promise='fulfilled';},
+        error=>{recorded.promise=`rejected: ${error.name}`;});
+      return started;
+    };
+    const nativeMediaPause=HTMLMediaElement.prototype.pause;
+    HTMLMediaElement.prototype.pause=function(...args){
+      if(this.src.includes('/pixabay_fishing_v1/')&&!this.paused)__qa.sampleStops.push({at:performance.now(),duration:this.duration,src:this.src});
+      return nativeMediaPause.apply(this,args);
+    };
     if(window.OscillatorNode){
       const start=OscillatorNode.prototype.start;
-      OscillatorNode.prototype.start=function(...args){__qa.soundStarts.push({at:performance.now(),frequency:this.frequency.value});return start.apply(this,args);};
+      OscillatorNode.prototype.start=function(...args){__qa.soundStarts.push({at:performance.now(),frequency:this.frequency.__qaStartValue??this.frequency.value,
+        destinationFrequency:this.frequency.__qaRampTarget,type:this.type});return start.apply(this,args);};
+    }
+    if(window.AudioParam){
+      const set=AudioParam.prototype.setValueAtTime;
+      AudioParam.prototype.setValueAtTime=function(value,...args){
+        if(this.__qaOscillatorFrequency)this.__qaStartValue=value;
+        return set.call(this,value,...args);
+      };
+      const ramp=AudioParam.prototype.exponentialRampToValueAtTime;
+      AudioParam.prototype.exponentialRampToValueAtTime=function(value,...args){
+        if(this.__qaOscillatorFrequency)this.__qaRampTarget=value;
+        return ramp.call(this,value,...args);
+      };
     }
     if(window.AudioBufferSourceNode){
+      const connect=AudioBufferSourceNode.prototype.connect;
+      AudioBufferSourceNode.prototype.connect=function(destination,...args){
+        if(destination instanceof BiquadFilterNode)this.__qaFilter=destination;
+        return connect.call(this,destination,...args);
+      };
       const start=AudioBufferSourceNode.prototype.start;
-      AudioBufferSourceNode.prototype.start=function(...args){__qa.noiseStarts.push(performance.now());return start.apply(this,args);};
+       AudioBufferSourceNode.prototype.start=function(...args){
+         const event={at:performance.now(),duration:this.buffer?.duration||0,rate:this.playbackRate.value};
+         if(this.__qaFilter)__qa.noiseStarts.push({...event,filter:this.__qaFilter.type});
+          else __qa.sampleStarts.push(event);
+         return start.apply(this,args);
+       };
+       const stop=AudioBufferSourceNode.prototype.stop;
+       AudioBufferSourceNode.prototype.stop=function(...args){
+         if(!this.__qaFilter)__qa.sampleStops.push({at:performance.now(),duration:this.buffer?.duration||0});
+         return stop.apply(this,args);
+       };
     }
     if(window.AudioContext){
       const createOscillator=AudioContext.prototype.createOscillator;
-      AudioContext.prototype.createOscillator=function(...args){__qa.audioContext=this;return createOscillator.apply(this,args);};
+      AudioContext.prototype.createOscillator=function(...args){__qa.audioContext=this;
+        const oscillator=createOscillator.apply(this,args);oscillator.frequency.__qaOscillatorFrequency=true;
+        return oscillator;};
       const close=AudioContext.prototype.close;
       AudioContext.prototype.close=function(...args){__qa.audioCloses++;return close.apply(this,args);};
       const suspend=AudioContext.prototype.suspend;
@@ -167,12 +228,19 @@ async function setup(page,client){
       __qa.calls.push({type,payload:JSON.parse(JSON.stringify(payload)),at:Date.now()});
       const response=await fetch(`/qa-command?client=${client}`,{method:'POST',
         headers:{'Content-Type':'application/json'},body:JSON.stringify({type,payload})});
-      const data=await response.json();__qa.responses.push({type,data,at:Date.now()});return data;
+      const data=await response.json();__qa.responses.push({type,data,at:Date.now(),perfAt:performance.now(),
+        move:payload?.counterMoves?.[0]});return data;
     };
     window.__minigame=OnePieceRoomMinigames.create({fishCollection:()=>[],command,
       onOpen:()=>{},onClose:()=>{},onResult:()=>{}});
     __minigame.open({kind:'fishing',characterId:'room-character-luffy'});
   },client);
+   await page.waitForFunction(()=>__qa.sampleLoaded.length===3,null,{timeout:7000});
+   const loaded=await page.evaluate(()=>__qa.sampleLoaded);
+   fs.writeFileSync(path.join(out,`${client}-loaded-audio.json`),JSON.stringify(loaded,null,2));
+   check(`${client}: three public OGG clips preload as playable media`,
+     loaded.length===3&&loaded.every(clip=>clip.duration>.7&&clip.duration<1.3&&clip.readyState>=2&&
+       fishingAudioNames.some(name=>clip.src.endsWith(`${fishingAudioDir}${name}`))));
 }
 const actionCalls=(page,move)=>page.evaluate(move=>__qa.calls.filter(item=>
   item.type==='minigame.answer'&&item.payload.counterMoves?.[0]===move),move);
@@ -438,14 +506,23 @@ async function begin(page,label){
 }
 async function castAndHook(page,label){
   const cast=page.locator('.room-fishing-v4-cast');await cast.scrollIntoViewIfNeeded();
-  const soundBeforeCast=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
+  const soundBeforeCast=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length,samples:__qa.sampleStarts.length,
+    at:performance.now()}));
   const powerBefore=(await visual(page)).castPower;
   const sweep=label==='desktop'?await oscillatingCast(page,cast):null;
   if(!sweep)await holdPointer(page,cast,730);
   await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor({timeout:5000});
-  const soundAfterCast=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
-  check(`${label}: charged cast, release and confirmed splash emit layered original audio`,
-    soundAfterCast.tones-soundBeforeCast.tones>=3&&soundAfterCast.noise-soundBeforeCast.noise>=2);
+  const soundAfterCast=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length,samples:__qa.sampleStarts.length}));
+  check(`${label}: charged cast, release and confirmed splash play synthesized fallback`,
+    soundAfterCast.tones-soundBeforeCast.tones>=3&&soundAfterCast.noise-soundBeforeCast.noise>=3);
+  const castAudio=await page.evaluate(at=>({
+    tones:__qa.soundStarts.filter(sound=>sound.at>=at),
+    noise:__qa.noiseStarts.filter(sound=>sound.at>=at),
+    samples:__qa.sampleStarts.filter(sound=>sound.at>=at)}),soundBeforeCast.at);
+  check(`${label}: cast air-cut and water landing retain separate effects`,
+    castAudio.noise.some(sound=>sound.filter==='bandpass')&&
+    castAudio.noise.some(sound=>sound.filter==='highpass')&&
+    castAudio.noise.some(sound=>sound.filter==='lowpass'));
   const calls=await actionCalls(page,'cast'),power=calls.at(-1)?.payload.castPower;
   const pointerEvents=await page.evaluate(()=>__qa.pointerEvents);
   fs.writeFileSync(path.join(out,`${label}-cast-diagnostics.json`),JSON.stringify({power,powerBefore,sweep,calls,pointerEvents},null,2));
@@ -490,11 +567,11 @@ async function castAndHook(page,label){
   await page.waitForTimeout(160);
   check(`${label}: bite cue does not repeat each animation frame`,
     await page.evaluate(()=>__qa.soundStarts.length)===biteSounds.tones);
-  const soundBeforeHook=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
+  const soundBeforeHook=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length,samples:__qa.sampleStarts.length}));
   await page.locator('.room-fishing-v4-hook').click();
   await page.locator('.room-fishing-v4-sea[data-stage="fight"]').waitFor({timeout:5000});
-  const soundAfterHook=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
-  check(`${label}: confirmed hook has a separate line-set sound`,
+  const soundAfterHook=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length,samples:__qa.sampleStarts.length}));
+  check(`${label}: confirmed hook plays its synthesized fish-on cue`,
     soundAfterHook.tones-soundBeforeHook.tones>=2&&soundAfterHook.noise-soundBeforeHook.noise>=1);
   check(`${label}: genuine server hook accepted`,(await actionCalls(page,'hook')).length===1&&sessions.get(label)?.challenge.stage==='fight');
   const fightLine=await lineGeometry(page);
@@ -550,7 +627,7 @@ async function fightInteraction(page,label){
   const box=await reel.boundingBox();assert(box,`${label}: reel hit area`);
   const x=box.x+box.width*(sign<0?.18:.82),y=box.y+box.height*.5;
   const beforeControls=(await actionCalls(page,'control')).length;
-  const soundBeforeReel=await page.evaluate(()=>__qa.soundStarts.length);
+  const soundBeforeReel=await page.evaluate(()=>({tones:__qa.soundStarts.length,samples:__qa.sampleStarts.length,at:performance.now()}));
   await page.mouse.move(x,y);await page.mouse.down();await page.waitForTimeout(600);
   await page.evaluate(()=>{
     const crank=document.querySelector('.room-fishing-v5-rod-crank');
@@ -601,8 +678,17 @@ async function fightInteraction(page,label){
     Math.abs(reelBefore.signedRate)>.2&&
     reelBefore.movement===(reelBefore.signedRate>0?'in':'out')&&
     reelDelta*reelBefore.signedRate>3);
-  check(`${label}: reeling produces mechanical sound tied to rotation`,
-    await page.evaluate(()=>__qa.soundStarts.length)>soundBeforeReel);
+  check(`${label}: reel sound follows signed line direction while the fish surges`,
+    reelBefore.movement==='out'
+      ? !await page.evaluate(at=>__qa.sampleStarts.some(sound=>sound.at>=at&&sound.src?.endsWith('/reel_in_fast.ogg')),soundBeforeReel.at)
+      : await page.evaluate(at=>__qa.sampleStarts.some(sound=>sound.at>=at&&sound.src?.endsWith('/reel_in_fast.ogg')),soundBeforeReel.at));
+  const inwardAudio=await page.evaluate(at=>({
+    tones:__qa.soundStarts.filter(sound=>sound.at>=at),
+    noise:__qa.noiseStarts.filter(sound=>sound.at>=at),
+    samples:__qa.sampleStarts.filter(sound=>sound.at>=at)}),soundBeforeReel.at);
+  const inwardReelStarts=inwardAudio.samples.filter(sound=>sound.src?.endsWith('/reel_in_fast.ogg'));
+  check(`${label}: inward reel sample never stacks at tick cadence`,
+    inwardReelStarts.every((sound,index)=>index===0||sound.at-inwardReelStarts[index-1].at>=500));
   check(`${label}: visible crank is attached to and travels with inner reel`,reelBefore.crank.attached&&
     Math.hypot(reelBefore.crank.width,reelBefore.crank.height)>70&&
     reelBefore.crank.topKnob.includes('gradient')&&reelBefore.crank.bottomKnob.includes('gradient')&&
@@ -628,6 +714,7 @@ async function fightInteraction(page,label){
   check(`${label}: pointer reel steers the visible rod toward the fish`,held.steer===String(sign)&&held.reeling==='true');
   fs.writeFileSync(path.join(out,`${label}-reeling-line-diagnostics.json`),JSON.stringify(await lineGeometry(page),null,2));
   await snapshot(page,`${label}-reeling`);
+  const soundBeforeLineOut=await page.evaluate(()=>performance.now());
   await page.mouse.up();
   await page.waitForFunction(()=>document.querySelector('.room-fishing-v5-hud')?.dataset.reelDirection==='out',null,{timeout:2000});
   const fishPullBefore=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>({
@@ -642,6 +729,32 @@ async function fightInteraction(page,label){
   const fishPullDelta=(fishPullAfter-fishPullBefore.angle+540)%360-180;
   check(`${label}: fish draws line backward with the reel released`,
     fishPullBefore.rate<0&&fishPullDelta< -4&&fishPullDelta> -150);
+  await page.waitForFunction(at=>__qa.sampleStarts.some(sound=>sound.at>=at&&
+    sound.src?.endsWith('/line_out_drag.ogg')),soundBeforeLineOut,{timeout:1400});
+  const outwardAudio=await page.evaluate(at=>({
+    tones:__qa.soundStarts.filter(sound=>sound.at>=at),
+    noise:__qa.noiseStarts.filter(sound=>sound.at>=at),
+    samples:__qa.sampleStarts.filter(sound=>sound.at>=at)}),soundBeforeLineOut);
+  check(`${label}: released fish draw plays the separate line-drag recording`,
+    outwardAudio.samples.some(sound=>sound.src?.endsWith('/line_out_drag.ogg')&&
+      sound.volume>=.7&&sound.promise==='fulfilled')&&
+    !outwardAudio.samples.some(sound=>sound.src?.endsWith('/reel_in_fast.ogg')));
+  const lineOutPlayback=await page.evaluate(()=>{
+    const media=__qa.sampleElements.find(item=>item.src.endsWith('/line_out_drag.ogg'));
+    return{at:performance.now(),volume:media?.volume,paused:media?.paused,
+      currentTime:media?.currentTime,readyState:media?.readyState,muted:media?.muted};
+  });
+  await page.waitForTimeout(170);
+  const lineOutProgress=await page.evaluate(()=>{
+    const media=__qa.sampleElements.find(item=>item.src.endsWith('/line_out_drag.ogg'));
+    return{at:performance.now(),paused:media?.paused,currentTime:media?.currentTime};
+  });
+  fs.writeFileSync(path.join(out,`${label}-line-out-playback.json`),
+    JSON.stringify({lineOutPlayback,lineOutProgress},null,2));
+  check(`${label}: line-out recording advances at the intended volume`,
+    lineOutPlayback.paused===false&&lineOutProgress.paused===false&&
+    lineOutPlayback.readyState>=2&&lineOutPlayback.muted===false&&
+    lineOutPlayback.volume>=.75&&lineOutProgress.currentTime>lineOutPlayback.currentTime+.045);
   const controls=(await actionCalls(page,'control')).slice(beforeControls);
   check(`${label}: held control refreshes server lease`,controls.filter(c=>c.payload.reeling&&c.payload.steer===sign).length>=2);
   check(`${label}: reel release reaches server`,controls.some(c=>c.payload.reeling===false));
@@ -679,6 +792,7 @@ async function fightInteraction(page,label){
   check(`${label}: line strength recovers after release`,after>=before);
   await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.runState==='calm',null,{timeout:10000});
   const calmBox=await reel.boundingBox();assert(calmBox,`${label}: calm reel hit area`);
+  const soundBeforeCalm=await page.evaluate(()=>performance.now());
   await page.mouse.move(calmBox.x+calmBox.width*.5,calmBox.y+calmBox.height*.5);await page.mouse.down();
   await page.waitForTimeout(400);
   const calmBefore=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>{
@@ -690,25 +804,86 @@ async function fightInteraction(page,label){
     const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
     return Math.atan2(matrix.b,matrix.a)*180/Math.PI;
   });
+  const reelPlayback=await page.evaluate(()=>{
+    const media=__qa.sampleElements.find(item=>item.src.endsWith('/reel_in_fast.ogg'));
+    const started=__qa.sampleStarts.filter(item=>item.src?.endsWith('/reel_in_fast.ogg')).at(-1);
+    return{at:performance.now(),volume:media?.volume,paused:media?.paused,
+      currentTime:media?.currentTime,readyState:media?.readyState,muted:media?.muted,
+      started};
+  });
+  await page.waitForTimeout(120);
+  const reelProgress=await page.evaluate(()=>{
+    const media=__qa.sampleElements.find(item=>item.src.endsWith('/reel_in_fast.ogg'));
+    return{at:performance.now(),volume:media?.volume,paused:media?.paused,
+      currentTime:media?.currentTime,readyState:media?.readyState};
+  });
+  fs.writeFileSync(path.join(out,`${label}-reel-playback.json`),JSON.stringify({reelPlayback,reelProgress},null,2));
+  check(`${label}: reel OGG actually plays and advances at an audible level`,
+    reelPlayback.started?.promise==='fulfilled'&&reelPlayback.paused===false&&
+    reelProgress.paused===false&&reelPlayback.muted===false&&
+    reelPlayback.readyState>=2&&reelProgress.currentTime>reelPlayback.currentTime+.07&&
+    reelPlayback.volume>=.8&&reelProgress.volume>=.8);
+  const reelStopsBefore=await page.evaluate(()=>__qa.sampleStops.length);
   await page.mouse.up();
+  await page.waitForFunction(count=>__qa.sampleStops.length>count,reelStopsBefore,{timeout:1200});
+  const reelReleased=await page.evaluate(()=>{
+    const media=__qa.sampleElements.find(item=>item.src.endsWith('/reel_in_fast.ogg'));
+    return{paused:media?.paused,currentTime:media?.currentTime,volume:media?.volume};
+  });
+  check(`${label}: releasing reel stops the sample without a quiet tail`,
+    reelReleased.paused===true&&reelReleased.currentTime===0&&reelReleased.volume>=.8);
   const calmDelta=(calmAfter-calmBefore.angle+540)%360-180;
   fs.writeFileSync(path.join(out,`${label}-calm-reel-sample.json`),JSON.stringify({calmBefore,calmAfter,calmDelta,fishPullBefore,server:sessions.get(label)?.challenge&&{distance:sessions.get(label).challenge.distance,runState:sessions.get(label).challenge.runState,pullDirection:sessions.get(label).challenge.pullDirection,control:sessions.get(label).challenge.control}},null,2));
   check(`${label}: calm water lets recovered line wind clockwise faster than idle fish draw`,
     calmBefore.direction==='in'&&calmBefore.rate>2&&calmDelta>20&&calmDelta<150&&
     calmBefore.rate>Math.abs(fishPullBefore.rate));
-  const soundsBeforeNextReel=await page.evaluate(()=>__qa.soundStarts.length);
+  const calmAudio=await page.evaluate(at=>({
+    tones:__qa.soundStarts.filter(sound=>sound.at>=at),
+    noise:__qa.noiseStarts.filter(sound=>sound.at>=at)}),soundBeforeCalm);
+  check(`${label}: actual inward winding restarts the public reel recording`,
+    await page.evaluate(at=>__qa.sampleStarts.some(sound=>sound.at>=at&&
+      sound.src?.endsWith('/reel_in_fast.ogg')),soundBeforeCalm));
+  fs.writeFileSync(path.join(out,`${label}-fight-audio.json`),JSON.stringify({
+    duringSurge:inwardAudio,inward:calmAudio,outward:outwardAudio},null,2));
+  const soundsBeforeNextReel=await page.evaluate(()=>__qa.sampleStarts.filter(sound=>
+    sound.src?.endsWith('/reel_in_fast.ogg')).length);
   await holdPointer(page,reel,420);
   check(`${label}: the next reel still makes mechanical sound without a visible audio toggle`,
-    await page.evaluate(()=>__qa.soundStarts.length)>soundsBeforeNextReel);
-  const beforeBlur=await page.evaluate(()=>{const state={sounds:__qa.soundStarts.length,suspends:__qa.audioSuspends,
+    await page.evaluate(()=>__qa.sampleStarts.filter(sound=>
+      sound.src?.endsWith('/reel_in_fast.ogg')).length)>soundsBeforeNextReel);
+  const quickBox=await reel.boundingBox();assert(quickBox,`${label}: short reel hit area`);
+  const quickX=quickBox.x+quickBox.width*.5,quickY=quickBox.y+quickBox.height*.5;
+  const shortPointerAt=await page.evaluate(()=>performance.now());
+  await page.mouse.move(quickX,quickY);await page.mouse.down();
+  const shortPointer=await page.evaluate(at=>({
+    engaged:__qa.soundStarts.some(sound=>sound.at>=at&&sound.type==='triangle'&&
+      Math.abs(sound.frequency-680)<1&&Math.abs(sound.destinationFrequency-260)<1),
+    reeling:document.querySelector('.room-fishing-v4-reel')?.dataset.reeling}),shortPointerAt);
+  await page.mouse.up();
+  check(`${label}: a short pointer press makes an immediate reel engagement sound`,
+    shortPointer.engaged&&shortPointer.reeling==='true');
+  const shortKeyAt=await page.evaluate(()=>performance.now());
+  await page.keyboard.down('Space');
+  const shortKey=await page.evaluate(at=>({
+    engaged:__qa.soundStarts.some(sound=>sound.at>=at&&sound.type==='triangle'&&
+      Math.abs(sound.frequency-680)<1&&Math.abs(sound.destinationFrequency-260)<1),
+    reeling:document.querySelector('.room-fishing-v4-reel')?.dataset.reeling}),shortKeyAt);
+  await page.keyboard.up('Space');
+  check(`${label}: a short keyboard press makes the same reel sound`,
+    shortKey.engaged&&shortKey.reeling==='true');
+  const beforeBlur=await page.evaluate(()=>{const state={sounds:__qa.soundStarts.length,samples:__qa.sampleStarts.length,suspends:__qa.audioSuspends,
     state:__qa.audioContext?.state};window.dispatchEvent(new Event('blur'));
-    return{...state,soundsAtBlur:__qa.soundStarts.length};});
+    return{...state,soundsAtBlur:__qa.soundStarts.length,samplesAtBlur:__qa.sampleStarts.length};});
   await page.waitForTimeout(220);
-  const afterBlur=await page.evaluate(()=>({sounds:__qa.soundStarts.length,suspends:__qa.audioSuspends,state:__qa.audioContext?.state}));
+  const afterBlur=await page.evaluate(()=>({sounds:__qa.soundStarts.length,samples:__qa.sampleStarts.length,suspends:__qa.audioSuspends,
+    state:__qa.audioContext?.state,playingMedia:__qa.sampleElements.filter(media=>media.src.includes('/pixabay_fishing_v1/')&&!media.paused).length}));
   fs.writeFileSync(path.join(out,`${label}-audio-blur.json`),JSON.stringify({beforeBlur,afterBlur},null,2));
   check(`${label}: lost focus suspends fishing audio and stops clicks`,
-    afterBlur.state==='suspended'&&afterBlur.sounds===beforeBlur.soundsAtBlur);
-  await page.evaluate(()=>window.dispatchEvent(new Event('focus')));
+    afterBlur.state==='suspended'&&afterBlur.sounds===beforeBlur.soundsAtBlur&&afterBlur.samples===beforeBlur.samplesAtBlur&&afterBlur.playingMedia===0);
+  const focused=await page.evaluate(()=>{window.dispatchEvent(new Event('focus'));return{
+    windowFocused:__minigame.inspect().windowFocused,
+    ready:__qa.sampleElements.filter(media=>media.src.includes('/pixabay_fishing_v1/')&&media.readyState>=2).length};});
+  check(`${label}: refocusing keeps three public media clips preloaded`,focused.windowFocused&&focused.ready===3);
   const card=await page.locator('.room-minigame-card').boundingBox();
   check(`${label}: modal stays inside viewport`,card&&card.width<=page.viewportSize().width+1&&
     card.x>=-1&&card.x+card.width<=page.viewportSize().width+1);
@@ -774,15 +949,39 @@ async function verifyLineWheel(page,label){
   };
   const safe=await setStrength(80);
   await snapshot(page,`${label}-wheel-safe`);
-  const beforeStress=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
+  const beforeStress=await page.evaluate(()=>__qa.sampleStarts.filter(sound=>
+    sound.src?.endsWith('/line_strain.ogg')).length);
   const warning=await setStrength(34);
-  const warningStress=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
+  const warningStress=await page.evaluate(()=>__qa.sampleStarts.filter(sound=>
+    sound.src?.endsWith('/line_strain.ogg')).length);
   await snapshot(page,`${label}-wheel-warning`);
   const danger=await setStrength(12);
-  const dangerStress=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length}));
-  check(`${label}: warning and danger each sound line stress without a continuous loop`,
-    warningStress.tones>beforeStress.tones&&warningStress.noise>beforeStress.noise&&
-    dangerStress.tones>warningStress.tones&&dangerStress.noise>warningStress.noise);
+  const dangerStress=await page.evaluate(()=>__qa.sampleStarts.filter(sound=>
+    sound.src?.endsWith('/line_strain.ogg')).length);
+  check(`${label}: warning and danger trigger the short line-strain cue without a continuous loop`,
+    warningStress>beforeStress&&dangerStress>warningStress);
+  const strainPlayback=await page.evaluate(()=>{
+    const media=__qa.sampleElements.find(item=>item.src.endsWith('/line_strain.ogg'));
+    const started=__qa.sampleStarts.filter(item=>item.src?.endsWith('/line_strain.ogg')).at(-1);
+    return{at:performance.now(),volume:media?.volume,paused:media?.paused,
+      currentTime:media?.currentTime,readyState:media?.readyState,muted:media?.muted,started};
+  });
+  await page.waitForTimeout(110);
+  const strainProgress=await page.evaluate(()=>{
+    const media=__qa.sampleElements.find(item=>item.src.endsWith('/line_strain.ogg'));
+    return{at:performance.now(),paused:media?.paused,currentTime:media?.currentTime};
+  });
+  fs.writeFileSync(path.join(out,`${label}-strain-playback.json`),
+    JSON.stringify({strainPlayback,strainProgress},null,2));
+  check(`${label}: danger strain recording advances at its intentional level`,
+    strainPlayback.started?.promise==='fulfilled'&&strainPlayback.paused===false&&
+    strainProgress.paused===false&&strainPlayback.readyState>=2&&
+    strainPlayback.muted===false&&strainPlayback.volume>=.7&&
+    strainProgress.currentTime>strainPlayback.currentTime+.06);
+  const strainStarts=await page.evaluate(()=>__qa.sampleStarts.filter(sound=>
+    sound.src?.endsWith('/line_strain.ogg')).map(sound=>sound.at));
+  check(`${label}: surge and tension do not stack strain recordings`,
+    strainStarts.every((at,index)=>index===0||at-strainStarts[index-1]>=500));
   fs.writeFileSync(path.join(out,`${label}-line-wheel.json`),JSON.stringify({safe,warning,danger},null,2));
   check(`${label}: the outer ring drains with server line strength`,
     safe.dial-warning.dial>30&&warning.dial-danger.dial>15&&
@@ -854,6 +1053,31 @@ async function runV5(label,width,height){
     await verifyLineWheel(page,label);await settle(page,label);
   }finally{await context.close();}
 }
+async function runAudioFallback(){
+  const context=await browser.newContext({viewport:{width:1280,height:800}}),page=await context.newPage();
+  try{
+    await setup(page,'audio-fallback');
+    for(const mode of ['constructor','media-error']){
+      if(mode==='media-error')blockedMedia.add('audio-fallback');
+      const before=await page.evaluate(mode=>{
+        __minigame.dismiss();__qa.blockSamples=mode==='constructor';
+        const snapshot={tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length,samples:__qa.sampleStarts.length};
+        __minigame.open({kind:'fishing',characterId:'room-character-luffy'});
+        return snapshot;
+      },mode);
+      await page.getByRole('button',{name:'開始釣魚'}).click();
+      await page.locator('.room-fishing-v4-sea[data-stage="cast"]').waitFor();
+      await holdPointer(page,page.locator('.room-fishing-v4-cast'),220);
+      await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor({timeout:5000});
+      const after=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length,
+        samples:__qa.sampleStarts.length}));
+      fs.writeFileSync(path.join(out,`audio-fallback-${mode}.json`),JSON.stringify({before,after},null,2));
+      check(`audio fallback: ${mode} failure keeps the synthesized cast and splash`,
+        after.samples===before.samples&&after.tones-before.tones>=3&&after.noise-before.noise>=2);
+    }
+    await page.evaluate(()=>__minigame.dismiss());
+  }finally{await context.close();}
+}
 async function runFlick(label,width,height){
   const direction=label.slice('flick-'.length);
   const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1});
@@ -876,6 +1100,7 @@ async function runFlick(label,width,height){
     const meterBefore=await fightMeterState(page);
     check(`${label}: existing reel meter remains visible`,meterBefore.dialVisible&&meterBefore.arcVisible&&meterBefore.progressVisible);
     if(direction==='up')await snapshot(page,'flick-up-cue');
+    const flickSoundAt=await page.evaluate(()=>performance.now());
     if(direction==='up')await page.keyboard.press('ArrowUp');
     else{
       const sea=await page.locator('.room-fishing-v4-sea').boundingBox();assert(sea);
@@ -892,6 +1117,20 @@ async function runFlick(label,width,height){
       calls[0].payload.flickDirection===direction&&calls[0].payload.flickCueId===1);
     check(`${label}: server accepts the flick`,sessions.get(label)?.challenge.flickFeedback?.result==='hit'&&
       sessions.get(label)?.challenge.flickCue===null);
+    const flickAudio=await page.evaluate(at=>({
+      tones:__qa.soundStarts.filter(sound=>sound.at>=at),
+      noise:__qa.noiseStarts.filter(sound=>sound.at>=at),
+      samples:__qa.sampleStarts.filter(sound=>sound.at>=at),
+      responseAt:__qa.responses.find(response=>response.move==='flick')?.perfAt}),flickSoundAt);
+    check(`${label}: the player's flick starts a rising rod sweep before server hit feedback`,
+      Number.isFinite(flickAudio.responseAt)&&
+      flickAudio.tones.some(sound=>sound.type==='sawtooth'&&
+        sound.destinationFrequency>sound.frequency*2&&sound.at<flickAudio.responseAt)&&
+      flickAudio.noise.some(sound=>sound.filter==='bandpass'&&sound.at<flickAudio.responseAt));
+    check(`${label}: flick and confirmed hit have different air-cut and impact layers`,
+      flickAudio.noise.some(sound=>sound.filter==='highpass')&&
+      flickAudio.noise.some(sound=>sound.filter==='lowpass'));
+    fs.writeFileSync(path.join(out,`${label}-flick-audio.json`),JSON.stringify(flickAudio,null,2));
     await page.waitForTimeout(520);
     const line=await lineGeometry(page);
     check(`${label}: animated rod keeps line attached`,line&&line.tipGap<3&&line.splashGap<4);
@@ -1014,6 +1253,7 @@ async function main(){
     verifyZeroStrengthBreak();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='desktop')await runV5('desktop',1440,900);
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='minimum')await runV5('minimum',960,640);
+    if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='audio')await runAudioFallback();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='flick'){
       await runFlick('flick-up',1440,900);
       await runFlick('flick-left',1440,900);

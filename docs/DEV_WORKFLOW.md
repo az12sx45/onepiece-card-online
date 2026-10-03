@@ -1,5 +1,14 @@
 # Dev Workflow
 
+## 2026-10-04 海釣線輪與拉扯聲（1.2.23 內容修訂 10，發行候選）
+
+範圍：desktop/launcher-room-minigames.js 讓收線、魚拉走線與耐壓吃緊各自觸發不同音效；原有拋竿、落水、咬餌、甩竿與上岸仍保留合成音。三個短 OGG 放在 public/audio/launcher_room/pixabay_fishing_v1/，desktop/main.js、desktop/package.json 和 scripts/desktop_launcher_package_qa.js 只列入這三個公開素材，釣魚以外的個人頁配樂與音量偏好、伺服器魚勢、收藏、釣竿升級和商城金幣不變。公開內容修訂 10 承接修訂 8 與本機私人修訂 9，只含可公開交付的素材；使用者本機的 Fishing Master APK 音檔不複製到公開儲存或 Git。
+
+來源：收線用 AudioPapkin 的舊式線輪回收、魚拉走線用 paulprit／freesound_community 的 fly reel、耐壓用 floraphonic 的繩索繃緊短音。各素材頁、作者、原檔／遊戲 OGG SHA-256、截取秒數、處理方式及 Pixabay 授權連結保存在 docs/LAUNCHER_PIXABAY_FISHING_AUDIO_20261004.json。授權允許將素材作為遊戲作品的一部分使用，不能把節選 OGG 當成獨立音效包提供。來源描述和波形、音量可客觀核對，但尚無真人試聽或實際玩家聽感驗收。
+
+公告：config/launcher-announcements-v1.json 修訂 24 新增 launcher-1.2.23-r10-pixabay-fishing-reel，沿用既有海釣主圖。公告服務的 requiredRelease 僅驗核心版 1.2.23，無法單獨判定內容修訂；因此須先讓三個內容 blob 與簽署修訂 10 在正式服務可取用，再公開帶有此公告的設定。源碼／公告 QA、內容簽署、R2 上傳、Render 正式讀回與實機試聽分別驗收，未完成前不可宣稱已公開或真人確認。正式驗證結果由發行者追加。
+
+
 ## 2026-10-03 啟動器釣魚內容修訂 8 已部署
 
 正式來源 `public/desktop/launcher-content-v1.json` 已放入 Ed25519 簽署的 1.2.23／修訂 8 清單，原始檔 SHA-256 `f34c08a698619c91add0b5e24584219ec39773d22029dce4481ebf97f9f27c4e`。承接修訂 7 的 21 個路徑，增加水族箱 JS、釣竿圖集與十張透明魚圖，共 33 個內容檔；其中 14 個路徑變更，2,582,962 bytes 的新 blob 已上傳 R2，另 19 個 blob 重用。候選報告 `D:\Codex_QA\launcher-fishing-firstperson-content-r8\candidate-report-2026-10-03T13-05-18-280Z-7468.json` 通過。程式提交 `76d6db50769968ed6763332ff4e679d5bb33039b` 已推送 `origin/main`；2026-10-03 13:18:14 UTC 從 Render 正式清單讀回修訂 8，原始位元組 SHA-256 與簽署候選一致。正式更新器從公開 Render 清單與 R2 下載、驗簽、啟用全部 33 檔；隔離修訂 7→8 僅下載 14 個新 blob 共 2,582,962 bytes，重查不重複下載。公開報告在 `D:\Codex_QA\launcher-fishing-firstperson-content-r8\public-report-2026-10-03T13-17-44-724Z-19984.json`。以上是公開內容交付與自動化驗證，不等於真人正式帳號的釣魚手感驗收。既有 `public/images/ranks/r5.PNG`、`r6.PNG` 與測試失敗產物不納入本次提交；本段文件補記以 `[skip render]` 提交，不重啟已驗收服務。

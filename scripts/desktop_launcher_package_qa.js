@@ -391,6 +391,11 @@ const EXTRA_RESOURCES = [
     filter: ['harbor.ogg', 'night-watch.ogg', 'voyage.ogg']
   },
   {
+    from: '../public/audio/launcher_room/pixabay_fishing_v1',
+    to: 'launcher-assets/audio/launcher_room/pixabay_fishing_v1',
+    filter: ['reel_in_fast.ogg', 'line_out_drag.ogg', 'line_strain.ogg']
+  },
+  {
     from: '../public/audio/bgm',
     to: 'launcher-assets/audio/bgm',
     filter: Array.from({ length: 20 }, (_, index) => `track${String(index + 1).padStart(2, '0')}.mp3`)
@@ -831,6 +836,13 @@ function validateSourcePackage() {
   }
   assert(resolveScene('opui://launcher/images/launcher_room/reserved_v1/ace/portrait.webp') === null,
     'Obsolete Ace v1 portrait must not be admitted by the packaged protocol.');
+  for (const fileName of ['reel_in_fast.ogg', 'line_out_drag.ogg', 'line_strain.ogg']) {
+    const relative = `audio/launcher_room/pixabay_fishing_v1/${fileName}`;
+    assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, 'public', relative),
+      `Public fishing sound is blocked by the packaged protocol: ${fileName}`);
+  }
+  assert(resolveScene('opui://launcher/audio/launcher_room/fishing_master_v1/se_click_play_reel_in.ogg') === null,
+    'Private extracted fishing audio must not be admitted by the packaged protocol.');
   for (const item of ACE_V2_MANIFEST.items) {
     const relative = item.path.replace(/^public\//, '');
     assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, item.path), `Ace v2 atlas blocked by packaged protocol: ${relative}`);
@@ -1409,6 +1421,7 @@ function collectExpectedLauncherAssets() {
     ['launcher-assets/images/launcher_announcements', path.join(PUBLIC_ROOT, 'images', 'launcher_announcements')],
     ['launcher-assets/images/launcher_room', path.join(PUBLIC_ROOT, 'images', 'launcher_room')],
     ['launcher-assets/audio/profile_bgm', path.join(PUBLIC_ROOT, 'audio', 'profile_bgm')],
+    ['launcher-assets/audio/launcher_room/pixabay_fishing_v1', path.join(PUBLIC_ROOT, 'audio', 'launcher_room', 'pixabay_fishing_v1')],
     ['launcher-assets/audio/bgm', path.join(PUBLIC_ROOT, 'audio', 'bgm')]
   ]) {
     const resource = EXTRA_RESOURCES.find((entry) => entry.to === resourceTo);
