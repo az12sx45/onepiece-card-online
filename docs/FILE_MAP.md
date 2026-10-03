@@ -1,11 +1,11 @@
 # File Map
 
-## 2026-10-03 海釣音效、線輪與房間像素點擊（內容修訂 5，待公開驗證）
+## 2026-10-03 海釣音效、線輪與房間像素點擊（內容修訂 5，已部署）
 
 - `desktop/launcher-room-minigames.js/.css`：上鉤／釣獲／收放線音效與靜音、依伺服器魚距正反轉的手把、連續漸層耐壓外圈。
 - `desktop/launcher-room.js/.css`：角色與家具依目前圖像透明度命中，支援重疊穿透、家具旋轉、角色影格、點擊／指派／拖動。
 - `desktop/launcher-room-motion-data.js`、`scripts/generate_launcher_room_hit_masks.py`：現有 771 張房間 WebP 的可重現 64×64 透明度遮罩，和既有房間 renderer 一起經簽署內容通道交付。
-- `scripts/launcher_room_alpha_hit_qa.js`、`scripts/launcher_fishing_v5_browser_qa.js`：房間像素互動及海釣儀表、音效／線輪回歸；`public/desktop/launcher-content-v1.json` 為修訂 5 的正式簽署清單，共 21 個檔案、五個變更 blob，候選升級只下載 1,108,694 bytes。正式 Render 清單讀回待驗。
+- `scripts/launcher_room_alpha_hit_qa.js`、`scripts/launcher_fishing_v5_browser_qa.js`：房間像素互動及海釣儀表、音效／線輪回歸；`public/desktop/launcher-content-v1.json` 為修訂 5 的正式簽署清單，共 21 個檔案、五個變更 blob，候選升級只下載 1,108,694 bytes。Render 正式清單與啟動器公開讀回已通過；證據在 `D:\Codex_QA\launcher-fishing-reel-room-content-r5\public-report.json`。
 
 ## 2026-10-03 海釣外圈耐壓與斷線提示（內容修訂 4，已部署）
 
