@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 24,
+  "revision": 25,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r11-fishing-audio-continuity",
+      "status": "published",
+      "publishedAt": "2026-10-04T00:55:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r11",
+      "title": "海釣線輪聲更連續｜方向提示與甩竿回饋",
+      "summary": "收線、魚拉走線改為連續的線輪聲；左、右、上有不同合成提示，命中與失誤也聽得出來。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-rebuild-1.2.18.webp",
+        "alt": "千陽號上釣魚的航海王主題插圖，海面有魚造成的水花"
+      },
+      "body": [
+        "搏魚收線和魚把線拉走時，原有兩段線輪音效改為可連續播放的版本，跟著魚線方向與速度變化；換向時舊聲淡出、新聲淡入，停下來便收束。",
+        "魚勢出現左、右或上甩竿機會時，各方向以本作合成音做出可辨別的提示；甩竿後命中與失誤也有不同的合成短音。判斷時機仍以畫面的魚勢提示與線輪耐壓讀數為準，聲音不會改變釣魚判定。",
+        "這次參考了你提供的 APK 釣魚事件分層與觸發時機；公開版仍只使用可作為遊戲內容使用的 Pixabay 節選及本作合成音，沒有放入 APK 原音檔。重新啟動啟動器取得簽署內容差分更新；魚種、釣點、漁獲、釣竿改裝、金幣與三款桌遊規則不變。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r10-pixabay-fishing-reel",
       "status": "published",

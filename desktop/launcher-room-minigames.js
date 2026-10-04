@@ -3,9 +3,9 @@
   'use strict';
   const ASSET='opui://launcher/images/launcher_room/';
   const FISHING_SFX=Object.freeze({
-    reel:['reel_in_fast.ogg',.82],
-    lineOut:['line_out_drag.ogg',.76],
-    strain:['line_strain.ogg',.72]
+    reel:['reel_in_fast.ogg',.55],
+    lineOut:['line_out_drag.ogg',.56],
+    strain:['line_strain.ogg',.62]
   });
   const FISH_LABELS=Object.freeze({'balloon-catfish':'氣球鯰魚','glistening-saury':'閃亮秋刀魚','smile-jellyfish':'微笑水母','panda-shark':'熊貓鯊','butterflyfish':'蝶魚','adventure-fish':'冒險魚','cola-sunfish':'可樂翻車魚','reef-shark':'鯊魚','elephant-tuna':'象鼻鮪魚','lovely-angel':'可愛天使魚','striped-clam':'條紋蛤蜊','cutie-piranha':'可愛食人魚','claw-shrimp':'剪刀蝦','pumpkin-octopus':'南瓜章魚','maple-salmon':'紅葉鮭魚','lava-flounder':'熔岩比目魚','treasure-pearl-clam':'寶藏珍珠貝','electric-catfish':'感電鯰魚','demon-bonito':'鬼鰹魚','guiding-anglerfish':'引路鮟鱇魚','ice-fish':'冰晶魚','beat-alligator':'節奏鱷魚','aurora-sunfish':'極光翻車魚','burning-dragon':'燃燒龍','great-terigius':'巨型泰利吉烏斯','golden-whale':'黃金鯨','largemouth-bass':'大嘴鱸魚',warmouth:'暖口太陽魚','congo-bichir':'剛果多鰭魚',paddlefish:'匙吻鱘','alligator-gar':'鱷雀鱔',dolphinfish:'鯕鰍',lionfish:'獅子魚','dusky-grouper':'褐石斑魚','goliath-grouper':'巨型石斑魚','white-marlin':'白馬林魚'});
   const FISH_RARITY_BY_ID=Object.freeze({
@@ -108,6 +108,7 @@
     let fishingV4VisualChallenge=null,fishingV4VisualTension=10,fishingV4VisualDistance=100,fishingV4VisualAt=0;
     let fishingV5PositionAt=0,fishingV5Display=null,fishingV5Hud=null;
     let fishingV5BitePlayed=false,fishingV5ReelSample=null,fishingV5MeasuredRate=NaN,fishingV5MeasuredAt=0,fishingV5MeasuredControl='',fishingV5ReelSpeed=0,fishingV5ReelAngle=0,fishingV5ReelAt=0,fishingV5ClickAngle=0,fishingV5LastClickAt=0,fishingV5LastLineSoundAt=0,fishingV5WasWinding=false,fishingV5WasSurging=false;
+    let fishingMotorDirection='still',fishingMotorAt=0,fishingMotorSpeed=0,fishingMotorDuckingUntil=0;
     let fishingV5QueuedFlick=null,fishingV5FeedbackId=null,fishingV5FeedbackUntil=0,fishingV5MotionUntil=0,fishingV5TellId=null,fishingV5CueSoundId=null;
     let fishingV4ClockAnchor=null,fishingV4ClockPerf=0,fishingV4ClockLast=0,lastClockSample=null;
     let fishingResultShownAt=0;
@@ -173,7 +174,7 @@
           const entry={audio,ready:false};fishingClips.set(key,entry);
           audio.preload='auto';
           audio.addEventListener('canplay',()=>{if(generation===fishingClipGeneration)entry.ready=true;});
-          audio.addEventListener('error',()=>{entry.ready=false;});
+          audio.addEventListener('error',()=>{if(generation!==fishingClipGeneration)return;entry.ready=false;const playing=fishingPlayingClips.get(key);if(playing)finishFishingSample(key,playing);});
           audio.src=`opui://launcher/audio/launcher_room/pixabay_fishing_v1/${file}`;
           audio.load();
         }catch{fishingClips.delete(key);} // Missing local media keeps the synthesized effect.
@@ -184,10 +185,11 @@
       if(playing.fadeTimer)clearInterval(playing.fadeTimer);
       playing.audio.pause();
       try{playing.audio.currentTime=0;}catch{}
+      playing.audio.loop=false;
       playing.audio.volume=playing.baseVolume;
       fishingPlayingClips.delete(key);
     }
-    function fishingSample(key,rate=1){
+    function fishingSample(key,rate=1,onFailed=null){
       if(!windowFocused||document.hidden)return false;
       const entry=fishingClips.get(key),audio=entry?.audio;
       if(!entry?.ready||!audio||audio.readyState<2)return false;
@@ -202,17 +204,61 @@
       // Normalized public clips have independent levels beside the room ambience.
       const baseVolume=clamp(FISHING_SFX[key][1],0,1),playing={audio,baseVolume,stopping:false,fadeTimer:null};
       try{
-        audio.currentTime=0;audio.volume=baseVolume;audio.playbackRate=clamp(rate,.75,1.55);
+        audio.currentTime=0;audio.loop=false;audio.volume=baseVolume;audio.playbackRate=clamp(rate,.75,1.55);
         audio.onended=()=>finishFishingSample(key,playing);
         const started=audio.play();
         fishingPlayingClips.set(key,playing);
-        if(started?.catch)void started.catch(()=>{if(fishingPlayingClips.get(key)===playing)entry.ready=false;finishFishingSample(key,playing);});
+        const generation=fishingClipGeneration;
+        if(started?.catch)void started.catch(()=>{if(fishingPlayingClips.get(key)===playing)entry.ready=false;finishFishingSample(key,playing);if(generation===fishingClipGeneration)onFailed?.();});
         return true;
       }catch{
         audio.pause();try{audio.currentTime=0;}catch{}
         audio.volume=baseVolume;audio.onended=null;
         return false;
       }
+    }
+    function fishingLoopLayer(key,target,rate,elapsed){
+      const entry=fishingClips.get(key),audio=entry?.audio;
+      if(!entry?.ready||!audio||audio.readyState<2){
+        const existing=fishingPlayingClips.get(key);if(existing)finishFishingSample(key,existing);
+        return false;
+      }
+      let playing=fishingPlayingClips.get(key);
+      if(!playing&&target>0){
+        const baseVolume=FISHING_SFX[key][1];
+        playing={audio,baseVolume,stopping:false,fadeTimer:null};
+        try{
+          audio.currentTime=0;audio.volume=0;audio.loop=true;audio.playbackRate=rate;audio.onended=null;
+          const started=audio.play();fishingPlayingClips.set(key,playing);
+          if(started?.catch)void started.catch(()=>{
+            if(fishingPlayingClips.get(key)===playing)entry.ready=false;
+            finishFishingSample(key,playing);
+          });
+        }catch{audio.loop=false;audio.pause();return false;}
+      }
+      if(!playing)return false;
+      if(playing.fadeTimer){clearInterval(playing.fadeTimer);playing.fadeTimer=null;}
+      playing.stopping=false;
+      audio.playbackRate=rate;
+      const desired=playing.baseVolume*target;
+      const blend=1-Math.exp(-Math.max(.008,elapsed)/.13);
+      audio.volume=clamp(audio.volume+(desired-audio.volume)*blend,0,1);
+      if(target===0&&audio.volume<.006)finishFishingSample(key,playing);
+      return target>0;
+    }
+    function fishingMotorAudio(speed,paused){
+      const at=now(),elapsed=fishingMotorAt?clamp((at-fishingMotorAt)/1000,0,.09):.016;
+      fishingMotorAt=at;
+      // A small dead band keeps a server measurement from chattering between
+      // inward and outward samples. The old layer fades while the new one rises.
+      if(paused||Math.abs(speed)<12)fishingMotorDirection='still';
+      else if(speed>54)fishingMotorDirection='in';
+      else if(speed< -54)fishingMotorDirection='out';
+      const strength=clamp(Math.abs(speed)/880,.18,1);
+      const level=(.52+strength*.48)*(at<fishingMotorDuckingUntil?.4:1);
+      const rate=clamp(.82+strength*.47,.82,1.3);
+      fishingLoopLayer('reel',fishingMotorDirection==='in'?level:0,rate,elapsed);
+      fishingLoopLayer('lineOut',fishingMotorDirection==='out'?level:0,rate,elapsed);
     }
     function fishingStopSample(key,immediate=false){
       const playing=fishingPlayingClips.get(key);if(!playing||playing.stopping)return;
@@ -226,14 +272,18 @@
         else playing.audio.volume=playing.baseVolume*remaining;
       },16);
     }
-    function fishingTone(from,to,duration,level,type='sine',delay=0){
+    function fishingTone(from,to,duration,level,type='sine',delay=0,pan=0){
       const context=fishingSoundContext();if(!context||!fishingAudioMaster)return;
       const start=context.currentTime+delay,oscillator=context.createOscillator(),envelope=context.createGain();
       oscillator.type=type;oscillator.frequency.setValueAtTime(from,start);oscillator.frequency.exponentialRampToValueAtTime(to,start+duration);
       envelope.gain.setValueAtTime(.001,start);envelope.gain.exponentialRampToValueAtTime(level,start+.012);envelope.gain.exponentialRampToValueAtTime(.001,start+duration);
-      oscillator.connect(envelope);envelope.connect(fishingAudioMaster);oscillator.onended=()=>{oscillator.disconnect();envelope.disconnect();};oscillator.start(start);oscillator.stop(start+duration+.01);
+      const panner=context.createStereoPanner?.();
+      oscillator.connect(envelope);
+      if(panner){panner.pan.value=clamp(pan,-1,1);envelope.connect(panner);panner.connect(fishingAudioMaster);}
+      else envelope.connect(fishingAudioMaster);
+      oscillator.onended=()=>{oscillator.disconnect();envelope.disconnect();panner?.disconnect();};oscillator.start(start);oscillator.stop(start+duration+.01);
     }
-    function fishingNoise(duration,level,from,to,delay=0,filterType='lowpass',attack=.012){
+    function fishingNoise(duration,level,from,to,delay=0,filterType='lowpass',attack=.012,pan=0){
       const context=fishingSoundContext();if(!context||!fishingAudioMaster)return;
       const start=context.currentTime+delay,buffer=context.createBuffer(1,Math.ceil(context.sampleRate*duration),context.sampleRate);
       const samples=buffer.getChannelData(0);fishingNoiseSeed=(Math.imul(fishingNoiseSeed,1664525)+1013904223)|0;let seed=fishingNoiseSeed;
@@ -241,8 +291,11 @@
       const source=context.createBufferSource(),filter=context.createBiquadFilter(),envelope=context.createGain();source.buffer=buffer;
       filter.type=filterType;filter.frequency.setValueAtTime(from,start);filter.frequency.exponentialRampToValueAtTime(to,start+duration);
       envelope.gain.setValueAtTime(.001,start);envelope.gain.exponentialRampToValueAtTime(level,start+Math.min(attack,duration*.7));envelope.gain.exponentialRampToValueAtTime(.001,start+duration);
-      source.connect(filter);filter.connect(envelope);envelope.connect(fishingAudioMaster);
-      source.onended=()=>{source.disconnect();filter.disconnect();envelope.disconnect();};source.start(start);
+      const panner=context.createStereoPanner?.();
+      source.connect(filter);filter.connect(envelope);
+      if(panner){panner.pan.value=clamp(pan,-1,1);envelope.connect(panner);panner.connect(fishingAudioMaster);}
+      else envelope.connect(fishingAudioMaster);
+      source.onended=()=>{source.disconnect();filter.disconnect();envelope.disconnect();panner?.disconnect();};source.start(start);
     }
     function fishingChargeSound(power){
       const at=now();if(at-fishingChargeSoundAt<190)return;fishingChargeSoundAt=at;
@@ -263,9 +316,11 @@
       const at=now(),interval=risk==='danger'?1050:2300;
       if(risk===fishingSoundRisk&&at-fishingStressSoundAt<interval)return;
       fishingSoundRisk=risk;fishingStressSoundAt=at;
-      if(fishingSample('strain',risk==='danger'?1.16:1))return;
-      const urgent=risk==='danger';fishingTone(urgent?460:350,urgent?220:280,.21,urgent?.085:.055,'sawtooth');
-      fishingNoise(.11,.025+clamp(intensity,0,1)*.025,1500,580,.025);
+      const fallback=()=>{
+        const urgent=risk==='danger';fishingTone(urgent?460:350,urgent?220:280,.21,urgent?.085:.055,'sawtooth');
+        fishingNoise(.11,.025+clamp(intensity,0,1)*.025,1500,580,.025);
+      };
+      if(!fishingSample('strain',risk==='danger'?1.16:1,fallback))fallback();
     }
     function fishingCatchSound(rarity){
       fishingTone(300,160,.14,.18,'triangle');
@@ -275,11 +330,10 @@
     }
     function fishingFailSound(){fishingTone(340,170,.18,.12,'triangle');fishingTone(225,95,.24,.09,'sine',.13);}
     function fishingReelClick(speed){
-      if(fishingSample('reel',clamp(Math.abs(speed)/650,.8,1.35)))return;
       const speedRatio=clamp(Math.abs(speed)/880,.18,1),duration=.048-speedRatio*.015;
-      fishingNoise(duration,.07+speedRatio*.035,3100,1150,0,'bandpass');
-      fishingTone(250+speedRatio*95,105+speedRatio*35,duration,.07+speedRatio*.035,'square');
-      fishingTone(1050+speedRatio*230,550+speedRatio*110,.024,.025+speedRatio*.02,'triangle',.012);
+      fishingNoise(duration,.035+speedRatio*.018,3100,1150,0,'bandpass');
+      fishingTone(250+speedRatio*95,105+speedRatio*35,duration,.035+speedRatio*.018,'square');
+      fishingTone(1050+speedRatio*230,550+speedRatio*110,.024,.014+speedRatio*.012,'triangle',.012);
     }
     function fishingReelEngageSound(){
       fishingNoise(.07,.18,3800,700,0,'bandpass',.004);
@@ -287,10 +341,9 @@
     }
     function fishingLinePullSound(speed,pullIntensity,risk){
       const rate=clamp(Math.abs(speed)/880,0,1),force=clamp(pullIntensity,0,1);
-      if(fishingSample('lineOut',.9+rate*.38))return;
       const danger=risk==='danger'?.025:0,duration=.11+force*.045;
-      fishingNoise(duration,.065+force*.045+danger,4200+rate*900,900+force*360,0,'highpass',.025);
-      fishingTone(720+rate*280+force*210,440+force*160,duration,.036+force*.03,'sawtooth');
+      fishingNoise(duration,.028+force*.02+danger,4200+rate*900,900+force*360,0,'highpass',.025);
+      fishingTone(720+rate*280+force*210,440+force*160,duration,.018+force*.016,'sawtooth');
     }
     function fishingSurgeSound(pullIntensity){
       const force=clamp(pullIntensity,0,1);
@@ -300,25 +353,39 @@
       fishingNoise(.19,.055+force*.04,2600,420,0,'bandpass',.024);
       fishingTone(390+force*120,760+force*190,.11,.025+force*.01,'triangle',.06);
     }
-    function fishingFlickSwingSound(direction,pullIntensity){
-      if(direction==='left'||direction==='right'){
-        if(fishingSample(direction==='left'?'swingLeft':'swingRight'))return;
+    function fishingFlickCueSound(direction){
+      fishingMotorDuckingUntil=now()+340;
+      const pan=direction==='left'?-.65:direction==='right'?.65:0;
+      if(direction==='left'){
+        fishingTone(760,480,.12,.16,'triangle',0,pan);
+        fishingTone(540,310,.13,.14,'triangle',.11,pan);
+      }else if(direction==='right'){
+        fishingTone(430,670,.12,.16,'triangle',0,pan);
+        fishingTone(590,900,.13,.14,'triangle',.11,pan);
+      }else{
+        fishingTone(370,600,.11,.14,'triangle',0,0);
+        fishingTone(600,1020,.16,.16,'triangle',.11,0);
       }
-      const force=clamp(pullIntensity,0,1),lift=direction==='up',base=lift?185:direction==='left'?150:165;
-      fishingNoise(.21,.13+force*.045,460,4200+force*800,0,'bandpass',.105);
-      fishingTone(base,base*(lift?2.9:2.35),.15,.085+force*.04,'sawtooth');
-      fishingNoise(.075,.11+force*.04,5800,1250,.135,'highpass');
-      fishingTone(lift?130:155,70,.11,.075+force*.025,'triangle',.135);
     }
-    function fishingFlickImpactSound(hit,pullIntensity){
+    function fishingFlickSwingSound(direction,pullIntensity){
+      fishingMotorDuckingUntil=now()+290;
+      const force=clamp(pullIntensity,0,1),lift=direction==='up',base=lift?185:direction==='left'?150:165;
+      const pan=direction==='left'?-.6:direction==='right'?.6:0;
+      fishingNoise(.21,.13+force*.045,460,4200+force*800,0,'bandpass',.105,pan);
+      fishingTone(base,base*(lift?2.9:2.35),.15,.085+force*.04,'sawtooth',0,pan);
+      fishingNoise(.075,.11+force*.04,5800,1250,.135,'highpass',.012,pan);
+      fishingTone(lift?130:155,70,.11,.075+force*.025,'triangle',.135,pan);
+    }
+    function fishingFlickImpactSound(result,direction,pullIntensity){
       const force=clamp(pullIntensity,0,1);
-      if(hit){
-        fishingNoise(.15,.12+force*.055,2400,340,0,'lowpass');
-        fishingTone(145+force*45,63,.19,.13+force*.055,'sawtooth');
-        fishingTone(540,960,.17,.06,'triangle',.055);
+      if(result==='hit'){
+        const pan=direction==='left'?-.55:direction==='right'?.55:0;
+        fishingNoise(.15,.12+force*.055,2400,340,0,'lowpass',.012,pan);
+        fishingTone(145+force*45,63,.19,.13+force*.055,'sawtooth',0,pan);
+        fishingTone(direction==='up'?660:540,direction==='up'?1140:960,.17,.085,'triangle',.055,pan);
       }else{
         fishingNoise(.15,.055,1700,350,0,'bandpass');
-        fishingTone(280,115,.19,.08,'triangle');
+        fishingTone(result==='wrong'?300:250,115,.19,.08,'triangle');
       }
     }
     function closeFishingSound(){
@@ -328,6 +395,7 @@
         clip.pause();clip.removeAttribute('src');clip.load();
       }
       fishingClips.clear();fishingPlayingClips.clear();fishingAudio=null;fishingAudioMaster=null;fishingAudioLimiter=null;
+      fishingMotorDirection='still';fishingMotorAt=0;fishingMotorSpeed=0;fishingMotorDuckingUntil=0;
       fishingNoiseSeed=0x6d2b79f5;fishingChargeSoundAt=0;fishingStressSoundAt=0;fishingSoundRisk='safe';
       if(audio&&audio.state!=='closed')void audio.close().catch(()=>{});
     }
@@ -350,6 +418,7 @@
     function portraitUrl(){const key=keyOf(characterId);return key==='robin'?`${ASSET}robin_v2/portrait.webp`:root.OnePieceReservedCrew?.assetUrl(key,'portrait.webp')||`${ASSET}${root.OnePieceRoomMotion?.LUFFY_ART_ENABLED===true&&key==='luffy'?'portrait_v4':'portrait_v3'}/${key}.webp`;}
     function open(input) {
       if(active()||!VOICES[keyOf(input.characterId)])return false;
+      fishingMotorDirection='still';fishingMotorAt=0;fishingMotorSpeed=0;fishingMotorDuckingUntil=0;
       ensure();generation++;game=null;queued=null;requesting=false;lastRound='';lastResult='';lastFeedback=-1;practice=false;serverClockOffset=0;fishingV4ClockAnchor=null;fishingV4ClockPerf=0;fishingV4ClockLast=0;lastClockSample=null;fishingResultShownAt=0;fishingResultHeldKeys.clear();lastKeyboardReel=0;selectedBait='worm';selectedSpot='shore';selectedCastZone='mid';fishingV4CastPower=52;fishingV4ChargeStarted=0;fishingV4ChargePointer=null;fishingV4ChargeKey=false;fishingV4CastClickSuppressed=false;fishingV5BitePlayed=false;fishingV5ReelSample=null;fishingV5MeasuredRate=NaN;fishingV5ReelSpeed=0;fishingV5ReelAngle=0;fishingV5ReelAt=0;fishingV5ClickAngle=0;fishingV5LastClickAt=0;fishingV5LastLineSoundAt=0;fishingV5WasWinding=false;fishingV5WasSurging=false;reactionCounts.good=0;reactionCounts.miss=0;kind=input.kind;characterId=input.characterId;phase='intro';previousFocus=document.activeElement;root.OnePieceRoomMotion?.preload(keyOf(characterId));
       jobId=kind==='fishing'?'fishing':JOBS[input.jobId]?input.jobId:'supply';held=true;options.onOpen?.(characterId);layer.hidden=false;updateTitle();document.getElementById('roomMinigameName').textContent=voice().name;
       if(kind==='fishing')preloadFishingClips();
@@ -503,6 +572,8 @@
         }
         return;
       }
+      fishingMotorDirection='still';fishingMotorAt=0;fishingMotorSpeed=0;fishingMotorDuckingUntil=0;
+      fishingStopSample('reel');fishingStopSample('lineOut');
       stopReeling();fishingV4Reeling=false;fishingV4Paying=false;fishingV4Steer=0;fishingV4ChargeStarted=0;fishingV4ChargePointer=null;fishingV4ChargeKey=false;fishingV4PayPointer=null;fishingV4ReelPointer=null;fishingV4CastClickSuppressed=false;fishingV4QueuedCast=false;fishingV4QueuedControl=false;fishingV4QueuedHook=false;fishingV5QueuedFlick=null;fishingV5FeedbackId=null;fishingV5FeedbackUntil=0;fishingV5MotionUntil=0;fishingV5TellId=null;fishingV5CueSoundId=null;fishingV4VisualChallenge=null;fishingV5Display=null;fishingV5Hud=null;fishingV5BitePlayed=false;fishingV5ReelSample=null;fishingV5MeasuredRate=NaN;fishingV5ReelSpeed=0;fishingV5ReelAngle=0;fishingV5ReelAt=0;fishingV5ClickAngle=0;fishingV5LastClickAt=0;fishingV5LastLineSoundAt=0;fishingV5WasWinding=false;fishingV5WasSurging=false;lastRound=game.challenge.id;choice=[];directions=[];ingredients=[];rotations=game.challenge.tiles?.map(tile=>tile.rotation)||[];course=Number.isInteger(game.challenge.start)?[game.challenge.start]:[];counterMoves=[];queued=null;roundStart=now();phase=jobId==='fishing'&&[2,3,4,5].includes(game.challenge.fishingVersion)?'answer':'showcase';renderRound();cancelAnimationFrame(frame);frame=requestAnimationFrame(tick);
     }
     function renderRound() {
@@ -712,8 +783,8 @@
       if(fishingV4Reeling===nextReeling&&fishingV4Steer===nextSteer&&fishingV4Paying===nextPaying)return;
       const startingReel=nextReeling&&!fishingV4Reeling;
       fishingV4Reeling=nextReeling;fishingV4Paying=nextPaying;fishingV4Steer=nextSteer;
-      if(!nextReeling){fishingStopSample('reel');fishingV5WasWinding=false;}
-      else if(startingReel&&challenge.fishingVersion===5){fishingStopSample('lineOut');fishingReelEngageSound();}
+      if(!nextReeling){if(challenge.fishingVersion!==5)fishingStopSample('reel');fishingV5WasWinding=false;}
+      else if(startingReel&&challenge.fishingVersion===5)fishingReelEngageSound();
       const sea=body.querySelector('.room-fishing-v4-sea');if(sea){sea.dataset.reeling=String(nextReeling);sea.dataset.paying=String(nextPaying);sea.dataset.steer=String(nextSteer);}
       const control=body.querySelector('.room-fishing-v4-reel');if(control)control.dataset.reeling=String(nextReeling);
       const pay=body.querySelector('.room-fishing-v4-pay');if(pay)pay.dataset.paying=String(nextPaying);
@@ -930,7 +1001,10 @@
       const lineRate=challenge.stage==='fight'?(measured?fishingV5MeasuredRate:prediction):0;
       const paused=!windowFocused||document.hidden||Boolean(body?.querySelector('.room-minigame-confirm'));
       const reduceMotion=root.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-      const target=paused||reduceMotion?0:clamp(lineRate*106,-880,880);
+      const motorTarget=paused?0:clamp(lineRate*106,-880,880);
+      fishingMotorSpeed+=(motorTarget-fishingMotorSpeed)*(1-Math.exp(-elapsed*9));
+      if(Math.abs(fishingMotorSpeed)<2)fishingMotorSpeed=0;
+      const target=reduceMotion?0:motorTarget;
       fishingV5ReelSpeed+=(target-fishingV5ReelSpeed)*(1-Math.exp(-elapsed*9));
       if(Math.abs(fishingV5ReelSpeed)<2)fishingV5ReelSpeed=0;
       const advance=fishingV5ReelSpeed*elapsed;
@@ -949,8 +1023,8 @@
       const movement=fishingV5ReelSpeed>18?'in':fishingV5ReelSpeed< -18?'out':'still';
       fishingV5Hud.dataset.reelDirection=movement;fishingV5Hud.dataset.reelRate=lineRate.toFixed(2);
       const winding=movement==='in'&&!paused&&fishingV4Reeling;
-      if(!winding){fishingStopSample('reel');fishingV5ClickAngle=0;}
-      if(movement!=='out'||paused)fishingStopSample('lineOut');
+      fishingMotorAudio(challenge.stage==='fight'?fishingMotorSpeed:0,paused);
+      if(!winding)fishingV5ClickAngle=0;
       if(movement==='still'||paused){fishingV5WasWinding=false;return;}
       if(movement==='in'){
         const firstWindingFrame=winding&&!fishingV5WasWinding;
@@ -1024,13 +1098,13 @@
         ['left','right','up'].includes(cue.direction)&&at<Date.parse(cue.until);
       sea.dataset.flickTell=String(tellActive);
       if(tellActive&&tell.id!==fishingV5TellId){fishingV5TellId=tell.id;fishingTone(180,270,.14,.07,'sawtooth');}
-      if(cueActive&&cue.id!==fishingV5CueSoundId){fishingV5CueSoundId=cue.id;fishingTone(530,650,.09,.055,'triangle');fishingTone(740,920,.07,.05,'triangle',.09);}
+      if(cueActive&&cue.id!==fishingV5CueSoundId){fishingV5CueSoundId=cue.id;fishingFlickCueSound(cue.direction);}
       const flick=sea.querySelector('.room-fishing-v5-flick-cue');
       if(flick){
         const feedback=challenge.flickFeedback;
         if(Number.isInteger(feedback?.id)&&feedback.id!==fishingV5FeedbackId){
           fishingV5FeedbackId=feedback.id;fishingV5FeedbackUntil=displayAt+900;
-          fishingFlickImpactSound(feedback.result==='hit',pullIntensity);
+          fishingFlickImpactSound(feedback.result,feedback.direction,pullIntensity);
         }
         const showingFeedback=!cueActive&&displayAt<fishingV5FeedbackUntil;
         flick.dataset.active=String(cueActive||showingFeedback);
@@ -1301,7 +1375,7 @@
     function renderFishingV3Result(result){
       fishingResultShownAt=now();
       const caught=result.catch&&typeof result.catch.speciesId==='string'?result.catch:null;
-      fishingV5ReelSpeed=0;fishingV5ClickAngle=0;fishingV5WasWinding=false;fishingStopSample('reel');fishingStopSample('lineOut');
+      fishingV5ReelSpeed=0;fishingV5ClickAngle=0;fishingV5WasWinding=false;fishingMotorSpeed=0;fishingMotorDirection='still';fishingStopSample('reel');fishingStopSample('lineOut');
       if(caught||result.catchCollectionFull)fishingCatchSound(caught?.rarity);
       else fishingFailSound();
       const box=node('div',`room-fishing-v3-result ${caught?'caught':'miss'}`);
@@ -1391,7 +1465,7 @@
     }
     // A challenge keeps its clock while unfocused. No free restart or offscreen reward.
     root.addEventListener('keyup',event=>fishingResultHeldKeys.delete(event.key));
-    root.addEventListener('blur',()=>{fishingV5ReelSpeed=0;fishingV5ClickAngle=0;for(const key of fishingPlayingClips.keys())fishingStopSample(key,true);if(fishingAudio?.state==='running')void fishingAudio.suspend().catch(()=>{});});
+    root.addEventListener('blur',()=>{fishingV5ReelSpeed=0;fishingV5ClickAngle=0;fishingMotorSpeed=0;fishingMotorDirection='still';for(const key of fishingPlayingClips.keys())fishingStopSample(key,true);if(fishingAudio?.state==='running')void fishingAudio.suspend().catch(()=>{});});
     root.addEventListener('blur',()=>{windowFocused=false;stopReeling();fishingResultHeldKeys.clear();fishingV4ReelPointer=null;fishingV4PayPointer=null;fishingV4ChargePointer=null;fishingV4ChargeStarted=0;fishingV4ChargeKey=false;const sea=body?.querySelector('.room-fishing-v4-sea');if(sea)sea.dataset.charging='false';if(fishingV4Challenge()?.stage==='cast'&&!fishingV4QueuedCast)setFishingV4Power(52);setFishingV4Control(false,0,false);});root.addEventListener('focus',()=>{windowFocused=true;});root.addEventListener('pointerup',event=>{stopReeling();if(fishingV4ReelPointer===event.pointerId){fishingV4ReelPointer=null;setFishingV4Control(false,0,fishingV4Paying);}if(fishingV4PayPointer===event.pointerId){fishingV4PayPointer=null;setFishingV4Control(fishingV4ReelPointer!==null,fishingV4Steer,false);}});root.addEventListener('pointercancel',event=>{stopReeling();if(fishingV4ReelPointer===event.pointerId){fishingV4ReelPointer=null;setFishingV4Control(false,0,fishingV4Paying);}if(fishingV4PayPointer===event.pointerId){fishingV4PayPointer=null;setFishingV4Control(fishingV4ReelPointer!==null,fishingV4Steer,false);}});
     return Object.freeze({open,dismiss,active,receive:response=>{updateFishingRod(response);if(active()&&game&&response?.minigame?.id===game.id&&['expired','invalidated','cancelled'].includes(response.minigame.state))accept(response);},inspect:()=>({phase,kind,jobId,characterId,roundIndex:game?.roundIndex,selected:[...choice],entered:[...directions],ingredients:[...ingredients],rotations:[...rotations],course:[...course],counterMoves:[...counterMoves],requesting,windowFocused})});
   }

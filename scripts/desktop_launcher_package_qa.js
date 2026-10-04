@@ -836,10 +836,18 @@ function validateSourcePackage() {
   }
   assert(resolveScene('opui://launcher/images/launcher_room/reserved_v1/ace/portrait.webp') === null,
     'Obsolete Ace v1 portrait must not be admitted by the packaged protocol.');
-  for (const fileName of ['reel_in_fast.ogg', 'line_out_drag.ogg', 'line_strain.ogg']) {
+  const publicFishingSounds = ['reel_in_fast.ogg', 'line_out_drag.ogg', 'line_strain.ogg'];
+  assertExactJson(sorted(fs.readdirSync(path.join(PUBLIC_ROOT, 'audio/launcher_room/pixabay_fishing_v1'))),
+    sorted(publicFishingSounds), 'Launcher fishing audio is restricted to the three installed 1.2.23 paths');
+  for (const fileName of publicFishingSounds) {
     const relative = `audio/launcher_room/pixabay_fishing_v1/${fileName}`;
     assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, 'public', relative),
       `Public fishing sound is blocked by the packaged protocol: ${fileName}`);
+  }
+  for (const fileName of ['reel_in_loop.ogg', 'line_out_loop.ogg',
+    'direction_left.ogg', 'direction_right.ogg', 'direction_up.ogg']) {
+    assert(resolveScene(`opui://launcher/audio/launcher_room/pixabay_fishing_v1/${fileName}`) === null,
+      `An uninstalled fishing audio path was admitted by the packaged protocol: ${fileName}`);
   }
   assert(resolveScene('opui://launcher/audio/launcher_room/fishing_master_v1/se_click_play_reel_in.ogg') === null,
     'Private extracted fishing audio must not be admitted by the packaged protocol.');

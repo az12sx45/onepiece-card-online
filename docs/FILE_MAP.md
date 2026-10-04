@@ -1,5 +1,12 @@
 # File Map
 
+## 2026-10-04 海釣連續音效與方向提示（1.2.23 內容修訂 11，發行候選）
+
+- desktop/launcher-room-minigames.js：收線／拉出兩路循環聲、換向淡入淡出，以及左／右／上與命中／失誤的合成短音。
+- public/audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg、line_out_drag.ogg：沿用現有 opui 白名單檔名，以新版循環段替換內容；line_strain.ogg 保留。不新增公開音訊檔名，也不修改 desktop/main.js 或 desktop/package.json。
+- docs/LAUNCHER_FISHING_AUDIO_R11_20261004.json：來源、Pixabay 授權、APK 事件分析界線、改製方法和兩個正式路徑 SHA。
+- config/launcher-announcements-v1.json：修訂 25，沿用海釣主圖的 1.2.23 r11 公告；scripts/launcher_fishing_v5_browser_qa.js：連續播放、換向、失焦、三方向提示與回饋測試。正式簽署內容清單與公開驗證結果完成後補記於 DEV_WORKFLOW.md。
+
 ## 2026-10-04 海釣 Pixabay 線輪音效（1.2.23 內容修訂 10，已部署）
 
 - desktop/launcher-room-minigames.js：收線、被魚拉走線、線壓警示的音效事件及原有合成聲回退。

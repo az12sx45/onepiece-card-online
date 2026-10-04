@@ -1,5 +1,13 @@
 # Dev Workflow
 
+## 2026-10-04 海釣線輪連續聲與方向回饋（1.2.23 內容修訂 11，發行候選）
+
+範圍：desktop/launcher-room-minigames.js 將收線與魚拉走線分成獨立循環聲層，隨魚線速度調整播放速度與音量、換向淡出淡入，停手、失焦與離開釣魚畫面時停止。左、右、上甩竿提示與命中／失誤回饋使用本作合成聲；原有線輪耐壓表和伺服器判定維持不變。受已安裝的啟動器 opui 精確白名單限制，簽署內容修訂 11 只以可循環的 Pixabay 製作段替換既有 public/audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg 與 line_out_drag.ogg 的內容，保留 line_strain.ogg；不新增任何公開音訊路徑，也不修改 desktop/main.js 或 desktop/package.json。桌機音效回歸範圍在 scripts/launcher_fishing_v5_browser_qa.js；實際發布前需核對兩檔 SHA、白名單、音訊生命週期及差分讀回。
+
+參考界線：使用者提供的 Fishing Master APK 僅用於分析收線、放線與甩竿的事件分類和觸發時序。公開聲音使用授權可納入遊戲的 Pixabay 節選與本作原創合成聲，不匯入 APK 原音檔。原來源、改製方式、兩個沿用檔名的遊戲輸出 SHA 與授權記在 docs/LAUNCHER_FISHING_AUDIO_R11_20261004.json；r10 原素材的來源見 docs/LAUNCHER_PIXABAY_FISHING_AUDIO_20261004.json。無真人試聽證據前不宣稱實際聽感。
+
+公告：config/launcher-announcements-v1.json 修訂 25 增加 launcher-1.2.23-r11-fishing-audio-continuity，沿用已封裝海釣主圖。公告服務只核對核心 1.2.23，不能判斷內容修訂 11；須先完成公開 blob 上傳與簽署清單可取用，再推送此公告。版本發行、公告服務測試、差分更新與正式讀回結果由發行者實測後補記。本候選不更動魚池、耐壓／魚距算法、漁獲、釣竿等級、金幣、存檔或三款桌遊規則。
+
 ## 2026-10-04 海釣線輪與拉扯聲（1.2.23 內容修訂 10，已部署）
 
 範圍：desktop/launcher-room-minigames.js 讓收線、魚拉走線與耐壓吃緊各自觸發不同音效；原有拋竿、落水、咬餌、甩竿與上岸仍保留合成音。三個短 OGG 放在 public/audio/launcher_room/pixabay_fishing_v1/，desktop/main.js、desktop/package.json 和 scripts/desktop_launcher_package_qa.js 只列入這三個公開素材，釣魚以外的個人頁配樂與音量偏好、伺服器魚勢、收藏、釣竿升級和商城金幣不變。公開內容修訂 10 承接修訂 8 與本機私人修訂 9，只含可公開交付的素材；使用者本機的 Fishing Master APK 音檔不複製到公開儲存或 Git。

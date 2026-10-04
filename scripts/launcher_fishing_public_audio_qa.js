@@ -9,10 +9,23 @@ const vm=require('node:vm');
 const root=path.resolve(__dirname,'..');
 const directory='audio/launcher_room/pixabay_fishing_v1';
 const expected=new Map([
-  ['reel_in_fast.ogg','9220cff3d7cfd8a3c63f77632163a0b3932a7a00a74aaee41b4dd6647669482d'],
-  ['line_out_drag.ogg','93f1149c18ae6a6697de9ca1a03b9645c259b336ae23249a7d11d07ed30b57b7'],
+  ['reel_in_fast.ogg','0bba6c5ca6478f9aed58db21c2061a7724f12841df4a697a2795ad5551dd70d8'],
+  ['line_out_drag.ogg','272bfd01799aee0edeb4f9daa8bb86cc70ea263bc35bd89b09c31b03f1c81971'],
   ['line_strain.ogg','856fe1b51061add470111b2309f4afad9045fd5ca290fe53d7cd6fbbb1bafb7d']
 ]);
+const provenance=JSON.parse(fs.readFileSync(path.join(root,'docs/LAUNCHER_FISHING_AUDIO_R11_20261004.json'),'utf8'));
+assert.equal(provenance.schema,'launcher-fishing-audio-r11-provenance-v1');
+assert.equal(provenance.contentRevision,11);
+assert.deepEqual(provenance.selectedAudio.map(item=>item.gamePath).sort(),
+  ['reel_in_fast.ogg','line_out_drag.ogg'].map(name=>`public/${directory}/${name}`).sort());
+for(const item of provenance.selectedAudio){
+  const name=path.basename(item.gamePath);
+  assert.equal(item.gameSHA256,expected.get(name),`${name} differs from reviewed R11 provenance.`);
+  assert.equal(item.gameBytes,fs.statSync(path.join(root,item.gamePath)).size,
+    `${name} byte count differs from reviewed R11 provenance.`);
+  assert.equal(new URL(item.sourcePage).host,'pixabay.com');
+}
+assert.equal(provenance.unchangedAudio.gameSHA256,expected.get('line_strain.ogg'));
 const files=fs.readdirSync(path.join(root,'public',directory)).sort();
 assert.deepEqual(files,[...expected.keys()].sort(),'Only reviewed public fishing sounds may be distributed.');
 let totalBytes=0;
@@ -43,6 +56,11 @@ for(const name of expected.keys()){
   assert.equal(resolveResource(`opui://launcher/${relative}`),path.join(root,'public',relative),
     `Packaged public audio is unreachable: ${name}.`);
 }
+assert(totalBytes<50000,'Fishing audio content update unexpectedly grew.');
 assert.equal(resolveResource(`opui://launcher/${directory}/unreviewed.ogg`),null);
+for(const name of ['reel_in_loop.ogg','line_out_loop.ogg',
+  'direction_left.ogg','direction_right.ogg','direction_up.ogg'])
+  assert.equal(resolveResource(`opui://launcher/${directory}/${name}`),null,
+    `${name} is not an installed 1.2.23 resource path.`);
 assert.equal(resolveResource('opui://launcher/audio/launcher_room/fishing_master_v1/se_click_play_reel_in.ogg'),null);
 console.log(`LAUNCHER_FISHING_PUBLIC_AUDIO_QA=PASS clips=${expected.size} bytes=${totalBytes}`);

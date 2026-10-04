@@ -1,0 +1,65 @@
+{
+  "schema": "launcher-fishing-audio-r11-provenance-v1",
+  "recordedAt": "2026-10-04",
+  "launcherCore": "1.2.23",
+  "contentRevision": 11,
+  "scope": "Existing two whitelisted OGG paths receive continuous loop edits. Directional cues and flick feedback are original client synthesis; no new audio paths are published.",
+  "licenseSummary": "https://pixabay.com/service/license-summary/",
+  "fullTerms": "https://pixabay.com/service/terms/",
+  "licenseUse": "Pixabay effects are integrated into active fishing gameplay as part of a larger work. Do not offer the OGGs as a standalone audio pack; trimming or filtering alone does not remove that restriction.",
+  "apkReference": {
+    "basis": "Read-only inspection of the user-supplied Fishing Master XAPK asset inventory found separate left/right QTE scene groups, left/right/up QTE UI effect groups, warning effects, and rod animation groups. These filenames are evidence of separate event categories only; they do not establish exact waveform, playback timing, or gameplay rules.",
+    "designInference": "Keep continuous reel motion, fish pulling line out, a directional response opportunity, and hit/miss response distinct in this launcher's own audio event model.",
+    "useBoundary": "No APK sound bytes, waveform, model, texture, or code are included in these public assets."
+  },
+  "inspection": "Source page descriptions, decoded PCM duration, RMS/peak and loop seam metrics were checked. The agent did not perform human listening; subjective audio acceptance remains open.",
+  "selectedAudio": [
+    {
+      "role": "continuous reel-in layer",
+      "gamePath": "public/audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg",
+      "gameBytes": 23162,
+      "gameSHA256": "0bba6c5ca6478f9aed58db21c2061a7724f12841df4a697a2795ad5551dd70d8",
+      "derivedFromCandidate": "reel_in_loop.ogg",
+      "sourceTitle": "reel-fast-297884.mp3",
+      "sourceAuthor": "AudioPapkin (Paweł Spychała)",
+      "sourcePage": "https://pixabay.com/sound-effects/film-special-effects-old-fishing-reel-fast-rewinding-fishing-line-297884/",
+      "sourceSHA256": "7eafa24f088264563025fe8ff1b058dcfd6dd6a7a3989fc50b90cff163857440",
+      "edit": {
+        "startSeconds": 0.18,
+        "endSeconds": 3.78,
+        "overlapSeconds": 0.24,
+        "gainMultiplier": 0.78,
+        "method": "equal-power cyclic tail-to-head crossfade, no silence fade"
+      },
+      "durationSeconds": 3.36,
+      "measuredRmsDbFS": -16.61,
+      "measuredPeakDbFS": -0.58
+    },
+    {
+      "role": "continuous line-out layer",
+      "gamePath": "public/audio/launcher_room/pixabay_fishing_v1/line_out_drag.ogg",
+      "gameBytes": 8718,
+      "gameSHA256": "272bfd01799aee0edeb4f9daa8bb86cc70ea263bc35bd89b09c31b03f1c81971",
+      "derivedFromCandidate": "line_out_alt2.ogg",
+      "sourceTitle": "line-out-94671.mp3",
+      "sourceAuthor": "paulprit, published by freesound_community on Pixabay",
+      "sourcePage": "https://pixabay.com/sound-effects/film-special-effects-fly-reel-fish-pulling-saricione-94671/",
+      "sourceSHA256": "2fb0a4c6003068a67cfa7eb3f9d78376868bcea798a28f93052126632916074f",
+      "edit": {
+        "startSeconds": 0.3,
+        "endSeconds": 1.4,
+        "overlapSeconds": 0.2,
+        "gainMultiplier": 2.2,
+        "method": "equal-power cyclic tail-to-head crossfade, no silence fade"
+      },
+      "durationSeconds": 0.9067,
+      "measuredRmsDbFS": -14.39,
+      "measuredPeakDbFS": -0.75
+    }
+  ],
+  "unchangedAudio": {
+    "gamePath": "public/audio/launcher_room/pixabay_fishing_v1/line_strain.ogg",
+    "gameSHA256": "856fe1b51061add470111b2309f4afad9045fd5ca290fe53d7cd6fbbb1bafb7d"
+  },
+  "publicationStatus": "candidate; live upload, signed manifest and player playback require separate verification"
+}
