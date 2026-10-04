@@ -3,6 +3,7 @@ const path = require("path");
 const { chromium } = require("playwright");
 
 const ROOT_URL = process.env.BOARD_QA_URL || "http://127.0.0.1:8787";
+const DESKTOP_USER_AGENT = process.env.BOARD_QA_DESKTOP_USER_AGENT;
 const CHROME_PATH = process.env.BOARD_QA_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const OUTPUT_DIR = process.env.BOARD_QA_OUTPUT || "D:/Codex_QA/board-island-intros-20261004/browser-qa";
 const PUBLIC_DIR = path.resolve(__dirname, "../public");
@@ -35,7 +36,11 @@ function attachErrors(page, errors, label) {
 }
 
 async function openGame(browser, label, errors, viewport = { width: 1600, height: 900 }) {
-  const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
+  const context = await browser.newContext({
+    viewport,
+    deviceScaleFactor: 1,
+    ...(DESKTOP_USER_AGENT ? { userAgent: DESKTOP_USER_AGENT } : {}),
+  });
   const page = await context.newPage();
   attachErrors(page, errors, label);
   await page.goto(`${ROOT_URL}/board_game.html?skipOpeningStory=1&feature_island_intro_qa=1`, {
@@ -212,6 +217,15 @@ async function runCase(browser, entry, errors, failures, useServiceAction = fals
       || !story.dialogueInside || story.overflow) {
       failures.push(`${label}: invalid cinematic presentation: ${JSON.stringify(story)}`);
     }
+    if (entry.overrideName && !story.text.includes(entry.overrideName)) {
+      failures.push(`${label}: story omitted actual island name: ${story.text}`);
+    }
+    if (entry.variant === "named-mission-wall" && story.text.includes("任務牆的任務牆")) {
+      failures.push(`${label}: island name repeated service label: ${story.text}`);
+    }
+    if (entry.variant === "named-tavern" && story.text.includes("酒館港的酒館")) {
+      failures.push(`${label}: island name repeated service label: ${story.text}`);
+    }
     if (entry.variant === "zou" && (!story.text.includes("象主背上市集") || /碼頭|港口/.test(story.text))) {
       failures.push(`${label}: elephant-back market copy is inconsistent: ${story.text}`);
     }
@@ -377,6 +391,8 @@ async function runInterruptedRestoreCase(browser, errors, failures) {
     const runs = [];
     for (const entry of CASES) runs.push(await runCase(browser, entry, errors, failures));
     runs.push(await runCase(browser, { ...CASES[0], variant: "zou", overrideName: "象主背上市集", expectedBg: "shop_zou_market" }, errors, failures));
+    runs.push(await runCase(browser, { ...CASES[2], variant: "named-tavern", overrideName: "雙子酒館港" }, errors, failures));
+    runs.push(await runCase(browser, { ...CASES[3], variant: "named-mission-wall", overrideName: "世界經濟新聞任務牆" }, errors, failures));
     runs.push(await runCase(browser, CASES[0], errors, failures, true));
     runs.push(await runCase(browser, CASES[1], errors, failures, false, true));
     for (const key of ["shop", "judicial", "marineford"]) {

@@ -29197,14 +29197,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     },
     tavern: {
       title: "港口的相遇", badge: "酒館島", beats: [
-        { speaker: "瑪姬", speakerImage: FEATURE_ISLAND_MAKINO, text: "歡迎來{{island}}的酒館。今天也有想上船的客人呢。" },
+        { speaker: "瑪姬", speakerImage: FEATURE_ISLAND_MAKINO, text: "歡迎來{{island}}！今天也有想上船的客人呢。" },
         { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_TAVERN, text: "有趣的人在哪裡？我想和他聊聊！" },
         { speaker: "瑪姬", speakerImage: FEATURE_ISLAND_MAKINO, text: "先看看候選夥伴；想特別招待誰，也可以在這裡安排。" },
       ],
     },
     mission: {
       title: "碼頭的委託", badge: "任務島", beats: [
-        { speaker: "摩爾岡斯", speakerImage: FEATURE_ISLAND_MORGANS, text: "嘎哈哈！{{island}}的任務牆又貼滿新情報了！" },
+        { speaker: "摩爾岡斯", speakerImage: FEATURE_ISLAND_MORGANS, text: "嘎哈哈！{{island}}有新委託了，這可是大新聞！" },
         { speaker: "羅賓", pose: "reading", text: "航行、戰鬥和探訪島嶼……每張委託的條件都不同吧？" },
         { speaker: "摩爾岡斯", speakerImage: FEATURE_ISLAND_MORGANS, text: "正是！先看清目標再接，完成委託就來領報酬。" },
       ],

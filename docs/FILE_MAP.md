@@ -1515,4 +1515,4 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 
 - `public/js/board_game.js`：十種首訪劇情的三句人物往返與逐句說話者立繪對應；水之七島改由船塢配置的保利接待，競技場不新增虛構主持人。
 - `public/images/board/story/speakers/island_intro_{shopkeeper,spandam,magellan}.webp`：店主、斯潘達姆及麥哲倫三張新透明對話立繪；瑪姬、摩爾岡斯、保利、青雉及草帽團沿用既有透明素材。
-- `scripts/board_feature_island_intro_qa.js`：逐島人物配置、逐句立繪解碼、象主市場與服務返回等 17 個 Chromium 情境；`scripts/build_board_island_dialogue_release.js`：以已公開 Board 清單為基底，只加入 `public/board_game.html`、`public/js/board_game.js` 及上述三張新圖，保護 Card、Chess 與其他 Board 素材。
+- `scripts/board_feature_island_intro_qa.js`：逐島人物配置、逐句立繪解碼、象主市場、重名島名與服務返回等 19 個 Chromium 情境；`scripts/build_board_island_dialogue_release.js`：以先前公開 Board 清單為基底，只加入 `public/board_game.html`、`public/js/board_game.js` 及上述三張新圖，保護 Card、Chess 與其他 Board 素材。`scripts/build_board_island_dialogue_copy_release.js` 從已提交的中繼套件只更新兩個 Board 程式檔。
