@@ -1,12 +1,12 @@
 # Dev Workflow
 
-## 2026-10-05 水族箱漁獲管理與料理／售魚（1.2.23 內容修訂 13，部署候選）
+## 2026-10-05 水族箱漁獲管理與料理／售魚（1.2.23 內容修訂 13，已部署）
 
 範圍：`server/launcher-life-store.js` 在原有帳號列鎖、`launcher_life_state` 與冪等操作紀錄上新增 `fish.cook`／`fish.sell`。每尾魚的料理資格、餐點名稱、稀有度售價與親密增量由伺服器回傳 `fishOffers`；料理只允許已擁有角色且親密度未滿，成功消耗該尾魚、增加親密度並改善飢餓／心情。出售成功消耗該尾魚，將完整售價寫入既有 `launcherWalletV1` 與錢包 ledger，現有佛朗基 `rod.upgrade` 可直接花這筆金幣；錢包 500 枚上限裝不下全價時不出售。重送、競態與交易失敗不重複耗魚或入帳。沿用漁獲 UUID、收藏／展示欄位、原釣竿等級及三款桌遊規則。
 
 畫面：`desktop/launcher-room.js`、`launcher-life-room.js`、`launcher-room-aquarium.js/.css` 讓頁主點家具魚缸或水族館背景缸進入管理；列出完整收藏、展示狀態、魚圖、伺服器售價與料理對象，提供展示切換、料理、出售及佛朗基改裝。好友參觀只讀公開展示的魚。`config/launcher-announcements-v1.json` 修訂 27 沿用已封裝的千陽號魚缸插圖。來源測試為 `scripts/launcher_aquarium_management_qa.js` 與 `launcher_aquarium_browser_qa.js`，發行後更新 `public/desktop/launcher-content-v1.json` 為簽署修訂 13。
 
-本機驗證：料理／出售 PGlite 30／30、釣竿 38／38、生活系統 162／162、漁獲名稱與圖片對照 197／197、原水族箱 89／89、公告服務 82／82、內容清單 49／49 與更新器夾具 45／45 通過。實際 Chromium 水族箱操作 28／28 通過，涵蓋背景缸／家具缸的滑鼠與鍵盤入口、展示、料理、售魚、改裝、好友唯讀，以及 1366×980、960×640、390×844 畫面；零頁面錯誤或缺魚圖。截圖和報告在 `D:\Codex_QA\launcher-aquarium-r13\root-browser\`。`node --check` 與 `git diff --check` 通過。`npm start` 以未設定 `DATABASE_URL` 的隔離程序回應遊戲入口與內容清單 HTTP 200；帳號資料只由 PGlite 驗證，未連正式玩家資料庫。簽署內容清單修訂 13 共 38 路徑、SHA-256 `19c1d6d3a7151bcfb55c41a5dd1c56fc74328e3756a0c74f396be9d87731ed65`；R2 只上傳 4 個新 JS/CSS blob 共 194,104 bytes、重用 34 個，四檔公開 HEAD／GET／大小／SHA 均通過。Render 正式清單與本機差分套用仍待讀回，不以候選狀態冒充已部署。既有未關聯 `public/images/ranks/r5.PNG`、`r6.PNG` 修改不納入本次提交。LATTICE 本階段無任務 MCP；官方 Status 為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未宣稱任務或 Graphify 持久化成功。
+正式驗證：料理／出售 PGlite 30／30、釣竿 38／38、生活系統 162／162、漁獲名稱與圖片對照 197／197、原水族箱 89／89、公告服務 82／82、內容清單 49／49 與更新器夾具 45／45 通過。實際 Chromium 水族箱操作 28／28 通過，涵蓋背景缸／家具缸的滑鼠與鍵盤入口、展示、料理、售魚、改裝、好友唯讀，以及 1366×980、960×640、390×844 畫面；零頁面錯誤或缺魚圖。截圖和報告在 `D:\Codex_QA\launcher-aquarium-r13\root-browser\`。`node --check` 與 `git diff --check` 通過。`npm start` 以未設定 `DATABASE_URL` 的隔離程序回應遊戲入口與內容清單 HTTP 200；帳號資料只由 PGlite 驗證，未連正式玩家資料庫。來源提交 `11b2af7dd8cb4487095b4e9d0ced89e778b46c00` 已非強制推送至 `origin/main`；Render 公開清單 GET 回傳修訂 13、38 路徑，原始位元組 SHA-256 `19c1d6d3a7151bcfb55c41a5dd1c56fc74328e3756a0c74f396be9d87731ed65` 與簽署來源一致。R2 上傳 4 個新 JS/CSS blob 共 194,104 bytes、重用 34 個，四檔公開 HEAD／GET／大小／SHA 均通過。隔離更新器及本機正式內容快取均由修訂 12→13，只下載 194,104 bytes、讀回全部 38 檔；此機原始快取先備份在 `D:\Codex_QA\launcher-aquarium-r13\userdata-overlay-before-r13`。這些是自動測試及公開讀回，未使用正式玩家帳號交易驗收。既有未關聯 `public/images/ranks/r5.PNG`、`r6.PNG` 修改不納入本次提交。LATTICE 本階段無任務 MCP；官方 Status 為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未宣稱任務或 Graphify 持久化成功。
 
 ## 2026-10-05 海釣方向提示頻率、收線助力與甩竿聲（1.2.23 內容修訂 12，已部署）
 

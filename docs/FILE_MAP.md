@@ -1,6 +1,6 @@
 # File Map
 
-## 2026-10-05 水族箱漁獲管理（1.2.23 內容修訂 13，部署候選）
+## 2026-10-05 水族箱漁獲管理（1.2.23 內容修訂 13，已部署）
 
 - `server/launcher-life-store.js`：從既有漁獲收藏產生每尾魚的伺服器售價與料理資格，新增 `fish.cook`／`fish.sell`；同一帳號交易中消耗魚、增加指定角色親密度或把售價記入金幣錢包／ledger。原 `fish.place`、`rod.upgrade`、存檔欄位與好友公開投影沿用。
 - `desktop/launcher-room.js`、`launcher-life-room.js`、`launcher-room-aquarium.js/.css`：家具缸與水族館背景缸入口、完整收藏管理、伺服器報價、選擇料理對象、售魚、展示切換、佛朗基釣竿改裝及窄視窗介面；好友唯讀。
