@@ -10,7 +10,7 @@ const PUBLIC_DIR = path.resolve(__dirname, "../public");
 
 const CASES = [
   { key: "shop", kind: "shop", service: ".shop-shell", speakers: ["店主", "娜美", "店主"], islandPortrait: "island_intro_shopkeeper.webp" },
-  { key: "hospital", kind: "hospital", service: ".hospital-ui", speakers: ["喬巴", "娜美", "喬巴"] },
+  { key: "hospital", kind: "hospital", service: ".hospital-ui", speakers: ["可樂克斯", "娜美", "可樂克斯"], islandPortrait: "island_intro_crocus.webp" },
   { key: "tavern", kind: "tavern", service: ".tavern-game-shell", speakers: ["瑪姬", "魯夫", "瑪姬"], islandPortrait: "tavern_owner_makino.webp" },
   { key: "mission", kind: "mission", service: ".mission-shell", speakers: ["摩爾岡斯", "羅賓", "摩爾岡斯"], islandPortrait: "morgans_open.webp" },
   { key: "research_lab", kind: "hospital", service: ".research-lab-ui", postgame: true, speakers: ["莉莉絲", "喬巴", "莉莉絲"] },
@@ -79,6 +79,9 @@ async function checkDefinitions(page, failures) {
     if (entry.islandPortrait && [beats[0], beats[beats.length - 1]].some((beat) =>
       !String(beat?.speakerImage || "").endsWith(entry.islandPortrait))) {
       failures.push(`${entry.key}: island character missing dedicated portrait`);
+    }
+    if (entry.key === "hospital" && (!beats[2]?.text.includes("這趟診療") || beats[2].text.includes("{{island}}"))) {
+      failures.push("hospital: Crocus dialogue must not imply he is stationed on a named island");
     }
     const requiredPortrait = {
       tavern: "luffy_pre_timeskip_tavern_invite.webp",
@@ -211,7 +214,9 @@ async function runCase(browser, entry, errors, failures, useServiceAction = fals
         overflow: document.documentElement.scrollWidth > innerWidth + 2 || document.documentElement.scrollHeight > innerHeight + 2,
       };
     });
-    if (!story.background.includes(`${entry.expectedBg || entry.key}.webp`) || story.text.includes("{{island}}")
+    const expectedBg = entry.expectedBg || (entry.key === "shop" && before.islandName.includes("象主背上市集")
+      ? "shop_zou_market" : entry.key);
+    if (!story.background.includes(`${expectedBg}.webp`) || story.text.includes("{{island}}")
       || story.speaker !== entry.speakers[0] || !story.text || !story.portraitReady
       || (entry.islandPortrait && !story.portraitSrc.endsWith(entry.islandPortrait))
       || !story.dialogueInside || story.overflow) {
@@ -411,7 +416,7 @@ async function runInterruptedRestoreCase(browser, errors, failures) {
     runs.push(await runCase(browser, { ...CASES[3], variant: "named-mission-wall", overrideName: "世界經濟新聞任務牆" }, errors, failures));
     runs.push(await runCase(browser, CASES[0], errors, failures, true));
     runs.push(await runCase(browser, CASES[1], errors, failures, false, true));
-    for (const key of ["shop", "judicial", "marineford"]) {
+    for (const key of ["shop", "hospital", "judicial", "marineford"]) {
       runs.push(await runCase(browser, CASES.find((entry) => entry.key === key), errors, failures,
         false, false, { width: 390, height: 844 }));
     }

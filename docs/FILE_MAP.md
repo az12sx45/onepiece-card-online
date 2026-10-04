@@ -1516,3 +1516,9 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 - `public/js/board_game.js`：十種首訪劇情的三句人物往返與逐句說話者立繪對應；水之七島改由船塢配置的保利接待，競技場不新增虛構主持人。
 - `public/images/board/story/speakers/island_intro_{shopkeeper,spandam,magellan}.webp`：店主、斯潘達姆及麥哲倫三張新透明對話立繪；瑪姬、摩爾岡斯、保利、青雉及草帽團沿用既有透明素材。
 - `scripts/board_feature_island_intro_qa.js`：逐島人物配置、逐句立繪解碼、象主市場、重名島名與服務返回等 19 個 Chromium 情境；`scripts/build_board_island_dialogue_release.js`：以先前公開 Board 清單為基底，只加入 `public/board_game.html`、`public/js/board_game.js` 及上述三張新圖，保護 Card、Chess 與其他 Board 素材。`scripts/build_board_island_dialogue_copy_release.js` 從已提交的中繼套件只更新兩個 Board 程式檔。
+
+### 醫院島可樂克斯人物修正（2026-10-04）
+
+- `public/js/board_game.js`：醫院島首訪的可樂克斯／娜美三句與專用立繪路徑；醫院服務音樂移除原喬巴人物標籤，研究所喬巴對話不變。`public/board_game.html`：更新 Board 主程式快取查詢版本。
+- `public/images/board/story/speakers/island_intro_crocus.webp`：新增可樂克斯透明對話立繪，既有人物圖片未覆寫。
+- `scripts/board_feature_island_intro_qa.js`：醫院首訪逐句說話者及立繪核對；`scripts/build_board_hospital_crocus_release.js`：建立只含本次 Board 程式與新立繪的候選，實際驗證及公開部署須另記錄。

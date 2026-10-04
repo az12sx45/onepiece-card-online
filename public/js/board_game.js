@@ -29179,6 +29179,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   const FEATURE_ISLAND_PAULIE = "images/board/water_seven/paulie.webp";
   const FEATURE_ISLAND_SPANDAM = "images/board/story/speakers/island_intro_spandam.webp";
   const FEATURE_ISLAND_MAGELLAN = "images/board/story/speakers/island_intro_magellan.webp";
+  const FEATURE_ISLAND_CROCUS = "images/board/story/speakers/island_intro_crocus.webp";
   const FEATURE_ISLAND_AOKIJI = "images/board/story/aokiji_capture/source/aokiji_capture_serious_v3.webp";
   const FEATURE_ISLAND_STORIES = Object.freeze({
     shop: {
@@ -29190,9 +29191,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     },
     hospital: {
       title: "出航前的診療", badge: "醫院島", beats: [
-        { speaker: "喬巴", pose: "determined", text: "有人受傷嗎？先讓我看看大家的 HP 和 PP！" },
-        { speaker: "娜美", pose: "chart", text: "能一起照顧全隊的傷員嗎？我們還要繼續航行。" },
-        { speaker: "喬巴", pose: "happy", text: "當然可以！{{island}}的診療不收貝里，整備好再出發吧。" },
+        { speaker: "可樂克斯", speakerImage: FEATURE_ISLAND_CROCUS, text: "傷員先過來。要逞強出海，至少先讓老夫看看你們還站不站得穩。" },
+        { speaker: "娜美", pose: "chart", text: "醫生，能替全隊檢查嗎？我們還要繼續航行。" },
+        { speaker: "可樂克斯", speakerImage: FEATURE_ISLAND_CROCUS, text: "先把傷治好。這趟診療不收貝里，全隊的 HP 和 PP 恢復了再出港。" },
       ],
     },
     tavern: {
@@ -42747,7 +42748,6 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       sceneType: "hospital",
       locationType: "island",
       islandType: "hospital",
-      character: "chopper",
       environment: ["healing", "village"],
       eventTags: ["healing", "doctor", "recovery"],
       storyMood: "healing",
