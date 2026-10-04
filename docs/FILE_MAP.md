@@ -1521,4 +1521,9 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 
 - `public/js/board_game.js`：醫院島首訪的可樂克斯／娜美三句與專用立繪路徑；醫院服務音樂移除原喬巴人物標籤，研究所喬巴對話不變。`public/board_game.html`：更新 Board 主程式快取查詢版本。
 - `public/images/board/story/speakers/island_intro_crocus.webp`：新增可樂克斯透明對話立繪，既有人物圖片未覆寫。
+
+### 可樂克斯半身立繪替換（2026-10-04）
+
+- `public/images/board/story/speakers/island_intro_crocus.webp`：同路徑替換為依使用者參考圖製作的 1024×1536 透明半身像；其他角色立繪及 `public/js/board_game.js` 路徑不變。
+- `scripts/build_board_crocus_portrait_release.js`：從已發布 Board package 建 image-only 候選，只允許上述既有圖的 SHA／大小變化，保持 Card、Chess 與其餘 Board manifest 記錄。
 - `scripts/board_feature_island_intro_qa.js`：醫院首訪逐句說話者及立繪核對；`scripts/build_board_hospital_crocus_release.js`：建立只含本次 Board 程式與新立繪的候選，實際驗證及公開部署須另記錄。
