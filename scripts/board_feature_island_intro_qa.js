@@ -278,6 +278,22 @@ async function runCase(browser, entry, errors, failures, useServiceAction = fals
     if (before.visitsAtStory !== before.visitsBefore + 1 || after.visits !== before.visitsAtStory) {
       failures.push(`${label}: visit mission event duplicated or missing: ${JSON.stringify({ before, after })}`);
     }
+    await page.waitForTimeout(5000);
+    const serviceVisuals = await page.evaluate((selector) => {
+      const service = document.querySelector(selector);
+      const root = service?.closest(".board-modal") || service;
+      return Array.from(root?.querySelectorAll("img") || []).filter((img) => {
+        const rect = img.getBoundingClientRect();
+        const style = getComputedStyle(img);
+        return !img.hidden && style.display !== "none" && style.visibility !== "hidden"
+          && rect.width > 0 && rect.height > 0
+          && rect.right > 0 && rect.bottom > 0 && rect.left < innerWidth && rect.top < innerHeight;
+      }).map((img) => ({ src: img.currentSrc || img.src, ready: img.complete && img.naturalWidth > 0 }));
+    }, entry.service);
+    const pendingServiceImages = serviceVisuals.filter((img) => !img.ready);
+    if (pendingServiceImages.length) {
+      failures.push(`${label}: visible service images are not ready: ${JSON.stringify(pendingServiceImages.slice(0, 5))}`);
+    }
     await page.screenshot({ path: path.join(OUTPUT_DIR, `${label}-service.png`) });
 
     const repeat = await page.evaluate((entry) => {
