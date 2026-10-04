@@ -1,12 +1,14 @@
 # Dev Workflow
 
-## 2026-10-04 海釣線輪連續聲與方向回饋（1.2.23 內容修訂 11，發行候選）
+## 2026-10-04 海釣線輪連續聲與方向回饋（1.2.23 內容修訂 11，已部署）
 
-範圍：desktop/launcher-room-minigames.js 將收線與魚拉走線分成獨立循環聲層，隨魚線速度調整播放速度與音量、換向淡出淡入，停手、失焦與離開釣魚畫面時停止。左、右、上甩竿提示與命中／失誤回饋使用本作合成聲；原有線輪耐壓表和伺服器判定維持不變。受已安裝的啟動器 opui 精確白名單限制，簽署內容修訂 11 只以可循環的 Pixabay 製作段替換既有 public/audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg 與 line_out_drag.ogg 的內容，保留 line_strain.ogg；不新增任何公開音訊路徑，也不修改 desktop/main.js 或 desktop/package.json。桌機音效回歸範圍在 scripts/launcher_fishing_v5_browser_qa.js；實際發布前需核對兩檔 SHA、白名單、音訊生命週期及差分讀回。
+範圍：desktop/launcher-room-minigames.js 將收線與魚拉走線分成獨立循環聲層，隨魚線速度調整播放速度與音量、換向淡出淡入，線輪停止、失焦與離開釣魚畫面時停止。左、右、上甩竿提示與命中／失誤回饋使用本作合成聲；原有線輪耐壓表和伺服器判定維持不變。受已安裝的啟動器 opui 精確白名單限制，簽署內容修訂 11 只以可循環的 Pixabay 製作段替換既有 public/audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg 與 line_out_drag.ogg 的內容，保留 line_strain.ogg；不新增任何公開音訊路徑，也不修改 desktop/main.js 或 desktop/package.json。桌機音效回歸範圍在 scripts/launcher_fishing_v5_browser_qa.js。
 
 參考界線：使用者提供的 Fishing Master APK 僅用於分析收線、放線與甩竿的事件分類和觸發時序。公開聲音使用授權可納入遊戲的 Pixabay 節選與本作原創合成聲，不匯入 APK 原音檔。原來源、改製方式、兩個沿用檔名的遊戲輸出 SHA 與授權記在 docs/LAUNCHER_FISHING_AUDIO_R11_20261004.json；r10 原素材的來源見 docs/LAUNCHER_PIXABAY_FISHING_AUDIO_20261004.json。無真人試聽證據前不宣稱實際聽感。
 
-公告：config/launcher-announcements-v1.json 修訂 25 增加 launcher-1.2.23-r11-fishing-audio-continuity，沿用已封裝海釣主圖。公告服務只核對核心 1.2.23，不能判斷內容修訂 11；須先完成公開 blob 上傳與簽署清單可取用，再推送此公告。版本發行、公告服務測試、差分更新與正式讀回結果由發行者實測後補記。本候選不更動魚池、耐壓／魚距算法、漁獲、釣竿等級、金幣、存檔或三款桌遊規則。
+公告：config/launcher-announcements-v1.json 修訂 25 增加 launcher-1.2.23-r11-fishing-audio-continuity，沿用已封裝海釣主圖。公告服務只核對核心 1.2.23，不能判斷內容修訂 11；本次先上傳並核對全部新 blob，再以同一正式提交發布簽署清單與公告。不更動魚池、耐壓／魚距算法、漁獲、釣竿等級、金幣、存檔或三款桌遊規則。
+
+正式驗證：提交 `8169eed55439457c2e7be13a3021df3ed76c5883` 已推送 `origin/main`；Render 公開 GET 讀回 1.2.23 修訂 11、36 檔清單，原始 SHA-256 `3187175db8a817e2e61f18ad598c837098163bfb1d8889ef04e5fb7ed5fe90c5` 與本機簽署候選一致。R2 對 JS 和兩段 OGG 上傳 3 個不可覆寫 blob，共 205,291 bytes，重用 33 個；三檔公開 HEAD／GET／長度／SHA 逐一通過。隔離修訂 10→11 更新器只下載 205,291 bytes、讀回 36 檔；此機正式使用者內容快取也由 10→11，只下載同樣 205,291 bytes、讀回 36 檔。變更前的本機內容快取已複製至 `D:\Codex_QA\launcher-audio-continuity-r11\userdata-overlay-before-r11`。釣魚 Chromium 完整回歸 389/389（零 page error、零缺素材），內容清單 49/49、音效檔及白名單 3/3、公告服務 82/82 通過；`npm start` 的靜態頁 HTTP 200，資料庫連線未啟用。全量安裝包 QA 仍被先前釣竿圖的雜湊不符擋下，本次沒有重建安裝包，也沒有真人喇叭試聽。瀏覽器及差分報告在 `D:\Codex_QA\launcher-audio-continuity-r11\`。既有未關聯的 `public/images/ranks/r5.PNG` 與 `r6.PNG` 修改未納入提交。
 
 ## 2026-10-04 海釣線輪與拉扯聲（1.2.23 內容修訂 10，已部署）
 
