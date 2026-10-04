@@ -1504,7 +1504,7 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 - `public/images/board/story/speakers/luffy_pre_timeskip_enies.webp`、`luffy_pre_timeskip_war.webp`：司法島與推進城／頂上戰爭時期的魯夫對話立繪，不覆寫既有後期立繪。
 - `scripts/board_feature_island_intro_qa.js`：首訪、略過／完整播畢、回到原功能、重訪、舊存檔、任務事件、素材及桌機／窄視窗 Chromium 測試。`scripts/build_board_island_intro_release.js`：只為本次 Board 程式及 12 張圖建立可核對的發布候選。
 
-### 首訪劇情校正（2026-10-04，發行待驗）
+### 首訪劇情校正（2026-10-04，已公開驗證）
 
 - `public/js/board_game.js`：修正商店、醫院及三座關鍵島台詞；象主背上市集選用專屬市場背景，酒館魯夫與水之七島佛朗基指定時期立繪；海軍本部入口面板加專用 class。
 - `public/board_game.html`：首訪劇情立繪實色圖層及桌機／窄視窗位置、海軍本部入口面板視覺。
