@@ -1,5 +1,13 @@
 # Dev Workflow
 
+## 2026-10-05 海釣方向提示頻率、收線助力與甩竿聲（1.2.23 內容修訂 12）
+
+範圍：`server/launcher-fishing-v5.js` 將甩竿場次的方向提示由約半數提高到約四分之三定向魚衝階段，提示所在階段至少 3.85 秒；正確反擊後的助力從 1.4 秒延長為 3.5 秒，其間收線增益 20%、魚反拉降至 65%、收線耗線降至 70%，錯向或漏按取消助力。漏按回饋保留到下次甩竿結算，避免與下一魚勢在同次同步時消失；舊提示仍不能重複結算。`server/launcher-minigames.js` 僅以 `flickAssistUntil` 回傳有效期限，不公開內部 `flickReliefUntil`。`desktop/launcher-room-minigames.js/.css` 加入左／右／上多層揮動合成聲、靠近海面的助力倒數徽章；未新增公開音檔路徑，沿用 1.2.23 核心及既有音訊白名單。
+
+檔案：`server/launcher-fishing-v5.js`、`server/launcher-minigames.js`、`desktop/launcher-room-minigames.js/.css`、`scripts/launcher_fishing_flick_server_qa.js`、`scripts/launcher_fishing_flick_life_qa.js`、`scripts/launcher_fishing_v5_browser_qa.js`、`config/launcher-announcements-v1.json`、`public/desktop/launcher-content-v1.json` 與本次專案文件。公告修訂 26 沿用既有海釣圖；釣魚收藏、魚池、釣竿改裝、金幣與三款桌遊規則不變。LATTICE 目前無可呼叫的任務 MCP，官方 `D:\LATTICE\LATTICE.ps1 -Action Status` 回傳 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，故未宣稱任務或 Graphify 已持久化。
+
+候選驗證：釣魚方向伺服器 1,593 項（36 魚、144 個操作場景）、釣魚持久化 21 項、v5 伺服器 1,211 項、v5 持久化 21 項及公告服務 82 項通過。完整 Chromium 操作、正式服務讀回與差分更新結果待發布後記錄；自動化播放節點測試不等於真人喇叭試聽。
+
 ## 2026-10-04 海釣線輪連續聲與方向回饋（1.2.23 內容修訂 11，已部署）
 
 範圍：desktop/launcher-room-minigames.js 將收線與魚拉走線分成獨立循環聲層，隨魚線速度調整播放速度與音量、換向淡出淡入，線輪停止、失焦與離開釣魚畫面時停止。左、右、上甩竿提示與命中／失誤回饋使用本作合成聲；原有線輪耐壓表和伺服器判定維持不變。受已安裝的啟動器 opui 精確白名單限制，簽署內容修訂 11 只以可循環的 Pixabay 製作段替換既有 public/audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg 與 line_out_drag.ogg 的內容，保留 line_strain.ogg；不新增任何公開音訊路徑，也不修改 desktop/main.js 或 desktop/package.json。桌機音效回歸範圍在 scripts/launcher_fishing_v5_browser_qa.js。

@@ -17,7 +17,7 @@ const STEP_MS = 100;
 const FLICK_WINDOW_MS = 2600;
 const FLICK_TELL_MS = Object.freeze({patient:850,dart:550,heavy:950,weave:700});
 const FLICK_MIN_SURGE_MS = 3850;
-const FLICK_RELIEF_MS = 1400;
+const FLICK_RELIEF_MS = 3500;
 const rodLevel = value => Number.isInteger(value)&&value>=0&&value<=3?value:0;
 
 // Exact numeric behavior slots extracted read-only from the user's Unlimited
@@ -215,7 +215,9 @@ function selectPhase(round,skill,index,at) {
     (mode?skill*65:0)+wobble));
   // Only opt-in sessions get the gesture layer. Non-flick V5 rounds keep
   // their lateral run timing and are never asked for a new control.
-  const cuePhase=Boolean(mode&&round.flickMode&&((round.motionSeed>>>2)+index)%2===0);
+  // Most directed runs now offer a counter. A cue-bearing run is at least
+  // 3.85s long, so even consecutive cues leave time to reel between them.
+  const cuePhase=Boolean(mode&&round.flickMode&&((round.motionSeed>>>2)+index)%4!==0);
   const length=cuePhase?Math.max(rawLength,FLICK_MIN_SURGE_MS):rawLength;
   round.runState=mode?'surge':'calm';
   const side=round.behavior.style==='heavy'?Math.floor(index/2):index;
@@ -226,7 +228,9 @@ function selectPhase(round,skill,index,at) {
     const tellMs=FLICK_TELL_MS[round.behavior.style];
     round.flickTell={id:index+1,direction,startedAt:iso(at),until:iso(at+tellMs)};
     round.flickCue=null;
-    round.flickFeedback=null;
+    // Keep the last settled result until another counter settles. A sync may
+    // cross both a missed cue and the next phase; clearing here would hide
+    // that miss from the player even though the penalty was already applied.
   }else if(round.flickMode){round.flickTell=null;round.flickCue=null;}
   round.phaseUntil=iso(at+length);
   // The ISO source picks one lateral heading for a behavior slot. This new
@@ -279,6 +283,8 @@ function resolveFlick(round,at,result) {
     round.distance=round4(clamp(round.distance-(3.8+force*1.5),0,100));
     round.flickReliefUntil=iso(at+FLICK_RELIEF_MS);
   }else{
+    // A wrong or missed counter cancels any reward from the previous cue.
+    round.flickReliefUntil=null;
     round.strength=round4(clamp(round.strength-(result==='wrong'?8+force*2:6+force*2),0,
       round.maxStrength));
     round.distance=round4(clamp(round.distance+(result==='wrong'?2.8+force*1.2:
@@ -359,14 +365,15 @@ function simulate(round,now,difficulty=1) {
       // A fish that draws directed runs most of the time must still be
       // catchable by following it and reeling on a one-second input cadence.
       const alignedGain=7.2+Math.max(0,round.behavior.directedFraction-.5)*4+gear*.18;
-      const gain=(surge?(aligned?alignedGain:.3):(rules.reelGain-force*.25+gear*.28))*(accent?.grip||1);
-      const escape=surge?surgePull*(aligned?.62:opposed?1.3:1.06):.5;
+      const gain=(surge?(aligned?alignedGain:.3):(rules.reelGain-force*.25+gear*.28))*
+        (accent?.grip||1)*(relief?1.2:1);
+      const escape=(surge?surgePull*(aligned?.62:opposed?1.3:1.06):.5)*(relief?.65:1);
       round.distance=clamp(round.distance+(escape-gain)*dt,0,100);
       // Holding the reel without a pause costs increasing strength. This
       // makes release a real choice even for a patient, easy-to-catch fish.
       const heldCost=clamp((round.reelHoldMs-2500)/1000*2,0,15);
-      const drain=(surge?rules.reelDrain*force*(aligned?.72:opposed?1.28:1)+skill*.25-gear*.45:
-        2.15+force*.4+skill*.2-gear*.25)*(accent?.fatigue||1)+heldCost;
+      const drain=((surge?rules.reelDrain*force*(aligned?.72:opposed?1.28:1)+skill*.25-gear*.45:
+        2.15+force*.4+skill*.2-gear*.25)*(accent?.fatigue||1)+heldCost)*(relief?.7:1);
       round.strength=clamp(round.strength-drain*dt,0,round.maxStrength);
     }else{
       round.reelHoldMs=0;

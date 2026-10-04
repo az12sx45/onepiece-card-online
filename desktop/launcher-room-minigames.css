@@ -678,6 +678,9 @@
 .fishing-v5 .room-fishing-v5-flick-cue[data-feedback=success] strong,.fishing-v5 .room-fishing-v5-flick-cue[data-feedback=miss] strong{font-size:55px;color:#e8ffef}
 .fishing-v5 .room-fishing-v5-flick-cue[data-feedback=success] strong{color:#93fbd8;filter:drop-shadow(0 0 12px #92ffe0)}
 .fishing-v5 .room-fishing-v5-flick-cue[data-feedback=miss] strong{color:#ffd0ac;filter:drop-shadow(0 0 12px #ff805e)}
+.fishing-v5 .room-fishing-v5-assist{position:absolute;z-index:7;top:18%;left:57%;transform:translate(-50%,-50%);padding:7px 15px;border:1px solid #a9f7d6c9;border-radius:999px;background:linear-gradient(120deg,#07343fe8,#0b6458ed);box-shadow:0 3px 14px #002936a8,inset 0 0 12px #a3f5cd29;color:#e6fff4;font-size:15px;font-weight:900;line-height:1.2;white-space:nowrap;text-shadow:0 2px 3px #012e32;pointer-events:none}
+.fishing-v5 .room-fishing-v5-assist[hidden]{display:none}
+@media(max-width:1000px){.fishing-v5 .room-fishing-v5-assist{top:calc(19% + 4px);left:56%;padding:5px 10px;font-size:12px}}
 @keyframes room-fishing-v5-sweep{from{opacity:.15;transform:scale(.52) rotate(-12deg)}to{opacity:1;transform:scale(1) rotate(0deg)}}
 .fishing-v5 .room-fishing-v4-sea[data-flick-feedback=success] .room-fishing-v4-splash{filter:drop-shadow(0 0 14px #b9fff2) var(--spot-splash-filter,none) brightness(1.4)}
 .fishing-v5 .room-fishing-v4-sea[data-flick-feedback=miss] .room-fishing-v4-splash{filter:drop-shadow(0 0 10px #ff9270) var(--spot-splash-filter,none)}

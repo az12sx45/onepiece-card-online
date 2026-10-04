@@ -1,5 +1,12 @@
 # File Map
 
+## 2026-10-05 海釣方向機會與助力（1.2.23 內容修訂 12）
+
+- `server/launcher-fishing-v5.js`：方向提示頻率、有提示階段的操作時長與命中後 3.5 秒的收線／抗拉力增益；`server/launcher-minigames.js`：只對外回傳有效的 `flickAssistUntil`，保留內部期限欄位不公開。
+- `desktop/launcher-room-minigames.js`、`desktop/launcher-room-minigames.css`：方向甩竿的多層揮動合成聲、靠近海面的助力倒數徽章與命中回饋；沒有增加音檔路徑。
+- `scripts/launcher_fishing_flick_server_qa.js`、`launcher_fishing_flick_life_qa.js`、`launcher_fishing_v5_browser_qa.js`：提示頻率、期限、好拉效果、持久化與操作／音效回歸。
+- `config/launcher-announcements-v1.json`：修訂 26 的海釣圖文公告；`public/desktop/launcher-content-v1.json`：修訂 12 的簽署差分清單。發布讀回與驗證記錄在 `docs/DEV_WORKFLOW.md`。
+
 ## 2026-10-04 海釣連續音效與方向提示（1.2.23 內容修訂 11，已部署）
 
 - desktop/launcher-room-minigames.js：收線／拉出兩路循環聲、換向淡入淡出，以及左／右／上與命中／失誤的合成短音。

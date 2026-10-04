@@ -322,6 +322,10 @@ function view(session) {
       delete result.challenge.turnsRemaining;delete result.challenge.phaseIndex;
       delete result.challenge.phaseUntil;
       delete result.challenge.motionSeed;
+      if(result.challenge.stage==='fight'&&result.challenge.flickMode&&
+        Date.parse(result.challenge.flickReliefUntil)>Date.parse(result.challenge.lastSimAt)){
+        result.challenge.flickAssistUntil=result.challenge.flickReliefUntil;
+      }
       delete result.challenge.flickReliefUntil;
       result.challenge.pullIntensity=fishingV5.displayIntensity(
         result.challenge.pullIntensity,result.challenge.runState);

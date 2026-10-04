@@ -24,7 +24,7 @@ const sessions=new Map(),checks=[],pageErrors=[],missingAssets=[],blockedMedia=n
 const forcedSpecies=new Map([['light-force','lovely-angel'],['heavy-force','golden-whale'],
   ['flick-up','glistening-saury'],['flick-right','glistening-saury'],['flick-left','glistening-saury'],
   ['flick-wrong','glistening-saury'],['flick-miss','glistening-saury']]);
-const flickSeeds={'flick-up':48,'flick-right':56,'flick-left':57,'flick-wrong':48,'flick-miss':48};
+const flickSeeds={'flick-up':52,'flick-right':56,'flick-left':57,'flick-wrong':52,'flick-miss':52};
 let server,browser;
 const check=(name,condition)=>{assert(condition,name);checks.push(name);};
 const readJson=req=>new Promise((resolve,reject)=>{
@@ -1262,14 +1262,23 @@ async function runFlick(label,width,height){
       samples:__qa.sampleStarts.filter(sound=>sound.at>=at),
       responseAt:__qa.responses.find(response=>response.move==='flick')?.perfAt}),flickSoundAt);
     const swingFrom={left:150,right:165,up:185}[direction];
-    const swingPan={left:-.6,right:.6,up:0}[direction];
+    const swingStartPan={left:.48,right:-.48,up:0}[direction];
+    const swingEndPan={left:-.76,right:.76,up:0}[direction];
+    const swingNoise=flickAudio.noise.filter(sound=>sound.at<flickAudio.responseAt);
     check(`${label}: the player's flick starts a rising rod sweep before server hit feedback`,
       Number.isFinite(flickAudio.responseAt)&&
       flickAudio.tones.some(sound=>sound.type==='sawtooth'&&
         Math.abs(sound.frequency-swingFrom)<2&&sound.destinationFrequency>sound.frequency*2&&
         sound.at<flickAudio.responseAt)&&
-      flickAudio.pans.some(item=>Math.abs(item.pan-swingPan)<.03&&item.at<flickAudio.responseAt)&&
-      flickAudio.noise.some(sound=>sound.filter==='bandpass'&&sound.at<flickAudio.responseAt));
+      flickAudio.pans.some(item=>Math.abs(item.pan-swingEndPan)<.03&&item.at<flickAudio.responseAt)&&
+      swingNoise.some(sound=>sound.filter==='bandpass'));
+    check(`${label}: the audible swing has a continuous, directional air cut and line snap`,
+      swingNoise.length>=4&&swingNoise.filter(sound=>sound.filter==='bandpass').length>=2&&
+      swingNoise.some(sound=>sound.filter==='lowpass'&&sound.duration>=.14)&&
+      swingNoise.some(sound=>sound.filter==='highpass'&&sound.duration>=.1)&&
+      flickAudio.pans.some(item=>Math.abs(item.pan-swingStartPan)<.03&&item.at<flickAudio.responseAt)&&
+      flickAudio.pans.some(item=>Math.abs(item.pan-swingEndPan)<.03&&item.at<flickAudio.responseAt)&&
+      await page.evaluate(()=>__qa.audioContext?.state==='running'));
     check(`${label}: flick and confirmed hit have different air-cut and impact layers`,
       flickAudio.noise.some(sound=>sound.filter==='highpass')&&
       flickAudio.noise.some(sound=>sound.filter==='lowpass')&&
@@ -1278,6 +1287,44 @@ async function runFlick(label,width,height){
       flickAudio.pans.some(item=>item.at>=flickAudio.responseAt&&
         Math.abs(item.pan-({left:-.55,right:.55,up:0}[direction]))<.03));
     fs.writeFileSync(path.join(out,`${label}-flick-audio.json`),JSON.stringify(flickAudio,null,2));
+    const assist=await page.evaluate(()=>({
+      active:document.querySelector('.room-fishing-v4-sea')?.dataset.flickAssist,
+      text:document.querySelector('.room-fishing-v4-signal')?.textContent,
+      until:__qa.responses.find(response=>response.move==='flick')?.data?.minigame?.challenge?.flickAssistUntil,
+      badge:(()=>{
+        const badge=document.querySelector('.room-fishing-v5-assist');
+        const box=badge?.getBoundingClientRect(),style=badge&&getComputedStyle(badge);
+        const meters=[...document.querySelectorAll('.room-fishing-v5-dial,.room-fishing-v5-pull-arc,.room-fishing-v5-distance,.room-fishing-v5-catch-track')]
+          .map(element=>element.getBoundingClientRect());
+        const reel=document.querySelector('.room-fishing-v4-reel')?.getBoundingClientRect();
+        const cue=document.querySelector('.room-fishing-v5-flick-cue[data-active=true]')?.getBoundingClientRect();
+        const overlaps=(first,second)=>first&&second&&first.right>second.left&&
+          first.left<second.right&&first.bottom>second.top&&first.top<second.bottom;
+        return{hidden:badge?.hidden,text:badge?.textContent,width:box?.width,height:box?.height,
+          visible:style?.visibility,display:style?.display,geometry:{box,meters,reel,cue},
+          coversMeter:meters.some(meter=>overlaps(box,meter)),coversReel:overlaps(box,reel),coversCue:overlaps(box,cue)};
+      })()
+    }));
+    const assistSeconds=Number(assist.badge.text?.match(/收線助力 (\d+(?:\.\d+)?) 秒/)?.[1]);
+    fs.writeFileSync(path.join(out,`${label}-assist-geometry.json`),JSON.stringify(assist,null,2));
+    await snapshot(page,`${label}-assist`);
+    check(`${label}: confirmed direction shows the server-authoritative short reel assist`,
+      assist.active==='true'&&Number.isFinite(Date.parse(assist.until))&&
+      assistSeconds>0&&assistSeconds<=3.5&&assist.text==='甩竿成功！接下來幾秒收線更快');
+    check(`${label}: reel-assist badge is actually visible without covering the meter, reel or direction cue`,
+      assist.badge.hidden===false&&assist.badge.display!=='none'&&assist.badge.visible==='visible'&&
+      assist.badge.width>90&&assist.badge.height>20&&assist.badge.text.includes('收線助力')&&
+      !assist.badge.coversMeter&&!assist.badge.coversReel&&!assist.badge.coversCue);
+    await page.waitForTimeout(250);
+    const nextAssist=await page.evaluate(()=>({
+      active:document.querySelector('.room-fishing-v4-sea')?.dataset.flickAssist,
+      text:document.querySelector('.room-fishing-v4-signal')?.textContent,
+      badge:document.querySelector('.room-fishing-v5-assist')?.textContent
+    }));
+    const nextSeconds=Number(nextAssist.badge?.match(/收線助力 (\d+(?:\.\d+)?) 秒/)?.[1]);
+    check(`${label}: reel-assist countdown advances during the fight`,
+      nextAssist.active==='true'&&nextSeconds>0&&nextSeconds<assistSeconds&&
+      nextAssist.text===assist.text&&nextAssist.badge.includes(`${nextSeconds} 秒`));
     await page.waitForTimeout(520);
     const line=await lineGeometry(page);
     check(`${label}: animated rod keeps line attached`,line&&line.tipGap<3&&line.splashGap<4);
@@ -1316,6 +1363,8 @@ async function runFlickNegativeFeedback(mode){
     check(`${label}: server determines the negative flick result`,audit.result===mode&&
       (mode==='miss'?audit.flickCalls.length===0:
         audit.flickCalls.length===1&&audit.flickCalls[0].payload.flickDirection==='left'));
+    check(`${label}: missed direction does not grant reel assist`,
+      await page.locator('.room-fishing-v4-sea').getAttribute('data-flick-assist')==='false');
     check(`${label}: distinct ${mode} cue sounds without a success flourish`,
       audit.tones.some(item=>item.type==='triangle'&&
         Math.abs(item.frequency-(mode==='wrong'?300:250))<2&&

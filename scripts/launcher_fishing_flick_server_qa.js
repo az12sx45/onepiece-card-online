@@ -51,6 +51,27 @@ function fightWithFlicks(seed,speciesId,skill,cadenceMs=350){
   }
   return{result,flicks};
 }
+function cueFrequency(seed,speciesId){
+  const round=makeRound(seed,speciesId),counts={surges:0,cues:0};
+  for(let index=1;index<=200;index++){
+    // Inspect deterministic phase draws without ending the sample when the
+    // fish is caught; the production fight still uses the normal deadlines.
+    const at=5000+index*10;
+    round.phaseUntil=date(at).toISOString();round.lastSimAt=date(at).toISOString();
+    round.fightUntil=date(at+10000).toISOString();round.distance=50;round.strength=100;
+    check('phase sample stays active',v5.simulate(round,date(at+1),1),null);
+    if(round.runState==='surge'){
+      counts.surges++;
+      if(round.flickTell){
+        counts.cues++;
+        check('every directional cue gives room to respond',
+          Date.parse(round.phaseUntil)-Date.parse(round.flickTell.startedAt)>=
+            v5.FLICK_MIN_SURGE_MS,true);
+      }
+    }else check('calm phase has no directional cue',round.flickTell,null);
+  }
+  return counts;
+}
 
 function main(){
   const legacy=makeRound(71,'glistening-saury',false);
@@ -74,6 +95,14 @@ function main(){
   }
   check('all three directional tells can appear after hook',Object.keys(initialTells).sort(),
     ['left','right','up']);
+  check('counter reward lasts 3.5 seconds',v5.FLICK_RELIEF_MS,3500);
+  const frequency={};
+  for(const speciesId of ['striped-clam','glistening-saury','aurora-sunfish']){
+    const sampled=cueFrequency(71,speciesId);
+    frequency[speciesId]=sampled;
+    check(`${speciesId} offers counters in roughly three quarters of directed runs`,
+      sampled.cues/sampled.surges>=.7&&sampled.cues/sampled.surges<=.8,true);
+  }
   for(const [speciesId,style] of [['striped-clam','patient'],['glistening-saury','dart'],
     ['golden-whale','heavy'],['pumpkin-octopus','weave']]){
     const found=initialTell(speciesId);
@@ -106,15 +135,58 @@ function main(){
     const at=Date.parse(cue.startedAt)+500;
     check(`${direction} correct flick accepted`,v5.flick(hit,date(at),direction,cue.id).result,'hit');
     check(`${direction} correct flick has line relief`,hit.strength>round.strength&&hit.distance<round.distance,true);
+    check(`${direction} correct flick grants an exact assist window`,
+      Date.parse(hit.flickReliefUntil)-at,v5.FLICK_RELIEF_MS);
+    const assisted=JSON.parse(JSON.stringify(hit)),unassisted=JSON.parse(JSON.stringify(hit));
+    assisted.distance=unassisted.distance=50;assisted.strength=unassisted.strength=75;
+    unassisted.flickReliefUntil=null;
+    v5.control(assisted,date(at),true,0);v5.control(unassisted,date(at),true,0);
+    v5.simulate(assisted,date(at+1000),1);v5.simulate(unassisted,date(at+1000),1);
+    check(`${direction} assist pulls the fish closer during its active window`,
+      assisted.distance<unassisted.distance,true);
+    check(`${direction} assist protects the line while reeling`,
+      assisted.strength>unassisted.strength,true);
+    v5.control(assisted,date(at+1000),true,0);
+    v5.control(unassisted,date(at+1000),true,0);
+    v5.simulate(assisted,date(at+3000),1);v5.simulate(unassisted,date(at+3000),1);
+    check(`${direction} assist still helps three seconds after the counter`,
+      assisted.distance<unassisted.distance&&assisted.strength>unassisted.strength,true);
+    const expired=JSON.parse(JSON.stringify(hit)),normal=JSON.parse(JSON.stringify(hit));
+    const expiry=Date.parse(hit.flickReliefUntil);
+    expired.distance=normal.distance=50;expired.strength=normal.strength=75;
+    expired.lastSimAt=normal.lastSimAt=date(expiry).toISOString();
+    expired.phaseUntil=normal.phaseUntil=date(expiry+1000).toISOString();
+    expired.fightUntil=normal.fightUntil=date(expiry+10000).toISOString();
+    expired.flickTell=normal.flickTell=null;normal.flickReliefUntil=null;
+    v5.control(expired,date(expiry),true,0);v5.control(normal,date(expiry),true,0);
+    v5.simulate(expired,date(expiry+500),1);v5.simulate(normal,date(expiry+500),1);
+    check(`${direction} assist ends at its server deadline`,
+      [expired.distance,expired.strength],[normal.distance,normal.strength]);
     check(`${direction} flick cannot be replayed`,v5.flick(hit,date(at+5),direction,cue.id).error,'fishing_flick_replayed');
     check(`${direction} wrong cue id is stale`,v5.flick(wrong,date(at),'left',cue.id+1).error,'fishing_flick_stale');
     const incorrect=direction==='left'?'right':'left';
     check(`${direction} wrong flick consumes cue`,v5.flick(wrong,date(at),incorrect,cue.id).result,'wrong');
     check(`${direction} wrong flick costs line and distance`,wrong.strength<round.strength&&wrong.distance>round.distance,true);
+    check(`${direction} wrong flick gets no assist`,wrong.flickReliefUntil,null);
+    const wrongDuringOldAssist=JSON.parse(JSON.stringify(round));
+    wrongDuringOldAssist.flickReliefUntil=date(at+1000).toISOString();
+    v5.flick(wrongDuringOldAssist,date(at),incorrect,cue.id);
+    check(`${direction} wrong flick cancels a previous assist`,wrongDuringOldAssist.flickReliefUntil,null);
     const missed=JSON.parse(JSON.stringify(round));
     v5.simulate(missed,date(Date.parse(cue.until)+100),1);
     check(`${direction} missed cue has feedback`,missed.flickFeedback.result,'miss');
-    check(`${direction} missed cue cannot be replayed`,v5.flick(missed,date(Date.parse(cue.until)+101),direction,cue.id).error,'fishing_flick_expired');
+    check(`${direction} missed cue gets no assist`,missed.flickReliefUntil,null);
+    check(`${direction} missed cue cannot be replayed`,
+      v5.flick(missed,date(Date.parse(cue.until)+101),direction,cue.id).error,'fishing_flick_expired');
+    const missedId=missed.flickFeedback.id;
+    v5.simulate(missed,date(Date.parse(missed.phaseUntil)+100),1);
+    check(`${direction} next phase preserves the missed cue for the next sync`,
+      [missed.flickFeedback.id,missed.flickFeedback.result],[missedId,'miss']);
+    check(`${direction} public view keeps the missed cue result across phases`,
+      minigames.view({kind:'fishing',challenge:missed}).challenge.flickFeedback.result,'miss');
+    check(`${direction} old missed cue cannot settle twice`,
+      v5.flick(missed,date(Date.parse(missed.lastSimAt)+10),direction,missedId).error,
+      missed.flickCue?'fishing_flick_stale':'fishing_flick_expired');
   }
   const light=firstCue(initialTell('striped-clam').seed,'striped-clam').round;
   const heavy=firstCue(initialTell('golden-whale').seed,'golden-whale').round;
@@ -158,11 +230,17 @@ function main(){
   }
   check('public session receives cue',Boolean(cue),true);
   check('public view hides flick relief internals',Object.hasOwn(minigames.view(session).challenge,'flickReliefUntil'),false);
+  check('public view has no assist before a correct counter',
+    Object.hasOwn(minigames.view(session).challenge,'flickAssistUntil'),false);
   const invalid={roundId:session.challenge.id,counterMoves:['flick'],flickCueId:cue.id};
   check('missing direction rejected',minigames.answer(session,invalid,date(clock+10)).error,'invalid_fishing_flick');
   check('stale cue id rejected',minigames.answer(session,{...invalid,flickDirection:cue.direction,flickCueId:cue.id+1},date(clock+20)).error,'fishing_flick_stale');
   check('server route accepts correct flick',minigames.answer(session,{...invalid,flickDirection:cue.direction},date(clock+30)).error,undefined);
   check('server route publishes hit feedback',minigames.view(session).challenge.flickFeedback.result,'hit');
+  check('public assist deadline matches authoritative round',
+    minigames.view(session).challenge.flickAssistUntil,session.challenge.flickReliefUntil);
+  check('public view still hides internal relief deadline',
+    Object.hasOwn(minigames.view(session).challenge,'flickReliefUntil'),false);
   check('server route rejects replay',minigames.answer(session,{...invalid,flickDirection:cue.direction},date(clock+40)).error,'fishing_flick_replayed');
   const fishIds=[...Object.keys(v5.ISO_BEHAVIOR_MODES),...Object.keys(v5.EXTRA_BEHAVIOR_MODES)];
   const failures=[];let totalFlicks=0;
@@ -174,9 +252,9 @@ function main(){
       if(fight.result!=='landed')failures.push({speciesId,seed,cadenceMs,...fight});
     }
   }
-  check('all 26 species are catchable with responsive flicks at 350ms and 1s cadence',failures,[]);
+  check('all species are catchable with responsive flicks at 350ms and 1s cadence',failures,[]);
   check('sampled fights actually trigger directional flicks',totalFlicks>0,true);
-  console.log(JSON.stringify({status:'PASS',checks,species:fishIds.length,scenarios:fishIds.length*4,totalFlicks,
+  console.log(JSON.stringify({status:'PASS',checks,species:fishIds.length,scenarios:fishIds.length*4,totalFlicks,frequency,
     cueSeeds:Object.fromEntries(Object.entries(directions).map(([direction,value])=>
       [direction,{seed:value.seed,speciesId:'glistening-saury',afterHookMs:value.at-4000}])),
     initialTellSeeds:initialTells},null,2));

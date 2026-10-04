@@ -40,7 +40,7 @@ async function main(){
     ...ref(),counterMoves:['cast'],castPower:50,castZone:'mid'},.2);
   check('opt-in cast',cast.ok,true);game=cast.minigame;
   await db.query("UPDATE launcher_minigame_sessions SET session=jsonb_set(jsonb_set(session,'{catchSpeciesId}',to_jsonb($2::text)),'{challenge,motionSeed}',to_jsonb($3::integer)) WHERE session_id=$1",
-    [game.id,'glistening-saury',48]);
+    [game.id,'glistening-saury',52]);
   const biteSeconds=(Date.parse(game.challenge.biteAt)-base)/1000+.1;
   const hook=await command('minigame.answer',{...ref(),counterMoves:['hook']},biteSeconds);
   check('opt-in hook',hook.ok,true);game=hook.minigame;
@@ -69,6 +69,10 @@ async function main(){
   check('flick accepted through persisted command',answer.ok,true);game=answer.minigame;
   check('hit feedback returns to renderer',game.challenge.flickFeedback.result,'hit');
   check('cue is consumed once',game.challenge.flickCue,null);
+  check('public response exposes the server assist deadline',
+    Date.parse(game.challenge.flickAssistUntil)-Date.parse(game.challenge.flickFeedback.at),3500);
+  check('public response still hides internal relief field',
+    Object.hasOwn(game.challenge,'flickReliefUntil'),false);
   const replay=await command('minigame.answer',{
     ...ref(),counterMoves:['flick'],flickDirection:cue.direction,flickCueId:cue.id},clock+.1);
   check('replayed flick rejected by persisted command',replay.error,'fishing_flick_replayed');

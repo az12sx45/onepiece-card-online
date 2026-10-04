@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 25,
+  "revision": 26,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r12-fishing-flick-assist",
+      "status": "published",
+      "publishedAt": "2026-10-04T16:35:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r12",
+      "title": "海釣甩竿更有回報｜方向機會與短暫助力",
+      "summary": "左、右、上甩竿機會更常出現；按對後短暫更容易把魚收近，甩竿也有獨立的揮動聲。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-rebuild-1.2.18.webp",
+        "alt": "千陽號上釣魚的航海王主題插圖，海面有魚造成的水花"
+      },
+      "body": [
+        "搏魚時左、右、上方向提示更常出現。看準魚勢按方向鍵或在海面拖甩；按對後會獲得短暫收線助力，畫面顯示剩餘秒數，這段時間魚較難把線拉走，也較容易被捲近。",
+        "甩動釣竿加入有方向感的揮動聲，命中與失誤仍各有回饋聲。線輪耐壓與魚距仍以伺服器數值為準，錯向或錯過提示依原規則受罰。",
+        "重新啟動啟動器即可取得簽署內容差分更新；釣魚不用重新安裝。魚種、魚餌、釣點、漁獲收藏、釣竿改裝、商城金幣與三款桌遊規則維持原樣。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r11-fishing-audio-continuity",
       "status": "published",
