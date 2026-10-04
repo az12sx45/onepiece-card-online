@@ -7756,7 +7756,7 @@
       display:none;
     }
     @media (min-width:861px){
-      .final-ending-cinematic:is(.scene-feature-island-tavern,.scene-feature-island-judicial,.scene-feature-island-impel_down,.scene-feature-island-marineford) .final-ending-speaker-portrait{
+      .final-ending-cinematic[class*="scene-feature-island-"] .final-ending-speaker-portrait{
         right:clamp(130px,11vw,190px);
       }
     }
@@ -8001,7 +8001,7 @@
         width:clamp(170px,42vw,260px);
         height:clamp(240px,50vh,420px);
       }
-      .final-ending-cinematic:is(.scene-feature-island-tavern,.scene-feature-island-judicial,.scene-feature-island-impel_down,.scene-feature-island-marineford) .final-ending-speaker-portrait{
+      .final-ending-cinematic[class*="scene-feature-island-"] .final-ending-speaker-portrait{
         left:0;
         right:auto;
         width:min(38vw,220px);
@@ -27764,6 +27764,6 @@
   <script src="js/board_art_collection.js?v=20260922-adventure-art-v1"></script>
   <script src="js/board_audio_ui.js?v=20260921-board-audio-v1"></script>
   <script src="js/board_hotkeys.js?v=20260922-hotkeys-v1"></script>
-  <script src="js/board_game.js?v=20260924-ship-relief-v3"></script>
+  <script src="js/board_game.js?v=20261004-island-dialogue-cast-v1"></script>
 </body>
 </html>

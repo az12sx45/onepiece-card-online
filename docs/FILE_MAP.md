@@ -1508,5 +1508,11 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 
 - `public/js/board_game.js`：修正商店、醫院及三座關鍵島台詞；象主背上市集選用專屬市場背景，酒館魯夫與水之七島佛朗基指定時期立繪；海軍本部入口面板加專用 class。
 - `public/board_game.html`：首訪劇情立繪實色圖層及桌機／窄視窗位置、海軍本部入口面板視覺。
-- `public/images/board/story/backgrounds/island_intro/shop_zou_market.webp`：象主背上市集首訪場景；`public/images/board/story/speakers/luffy_pre_timeskip_tavern_invite.webp`、`franky_pre_timeskip_shipwright.webp`：酒館魯夫與水之七島佛朗基專用立繪。既有素材不覆寫。
+- `public/images/board/story/backgrounds/island_intro/shop_zou_market.webp`：象主背上市集首訪場景；`public/images/board/story/speakers/luffy_pre_timeskip_tavern_invite.webp`：酒館魯夫專用立繪。`franky_pre_timeskip_shipwright.webp` 是前版水之七島首訪素材，本版由保利接待，不再引用；既有素材不覆寫。
 - `scripts/board_feature_island_intro_qa.js`：增加象主市場與人物時期素材核對；`scripts/build_board_island_intro_corrections_release.js`：以已發布 Board 清單為基底建立限定修正檔案的候選，保留 Card、Chess 與其他 Board 素材記錄。
+
+### 島上人物對話立繪（2026-10-04）
+
+- `public/js/board_game.js`：十種首訪劇情的三句人物往返與逐句說話者立繪對應；水之七島改由船塢配置的保利接待，競技場不新增虛構主持人。
+- `public/images/board/story/speakers/island_intro_{shopkeeper,spandam,magellan}.webp`：店主、斯潘達姆及麥哲倫三張新透明對話立繪；瑪姬、摩爾岡斯、保利、青雉及草帽團沿用既有透明素材。
+- `scripts/board_feature_island_intro_qa.js`：逐島人物配置、逐句立繪解碼、象主市場與服務返回等 17 個 Chromium 情境；`scripts/build_board_island_dialogue_release.js`：以已公開 Board 清單為基底，只加入 `public/board_game.html`、`public/js/board_game.js` 及上述三張新圖，保護 Card、Chess 與其他 Board 素材。

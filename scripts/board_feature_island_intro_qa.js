@@ -8,16 +8,16 @@ const OUTPUT_DIR = process.env.BOARD_QA_OUTPUT || "D:/Codex_QA/board-island-intr
 const PUBLIC_DIR = path.resolve(__dirname, "../public");
 
 const CASES = [
-  { key: "shop", kind: "shop", service: ".shop-shell" },
-  { key: "hospital", kind: "hospital", service: ".hospital-ui" },
-  { key: "tavern", kind: "tavern", service: ".tavern-game-shell" },
-  { key: "mission", kind: "mission", service: ".mission-shell" },
-  { key: "research_lab", kind: "hospital", service: ".research-lab-ui", postgame: true },
-  { key: "arena", kind: "tavern", service: ".arena-ui", postgame: true },
-  { key: "water_seven", islandId: "island-24", service: "#waterSevenPageOverlay.open" },
-  { key: "judicial", islandId: "island-25", service: ".judicial-raid-ui" },
-  { key: "impel_down", islandId: "island-26", service: ".impel-entry-rescue-ui" },
-  { key: "marineford", islandId: "island-19", service: "#enterMarinefordIslandBtn" },
+  { key: "shop", kind: "shop", service: ".shop-shell", speakers: ["店主", "娜美", "店主"], islandPortrait: "island_intro_shopkeeper.webp" },
+  { key: "hospital", kind: "hospital", service: ".hospital-ui", speakers: ["喬巴", "娜美", "喬巴"] },
+  { key: "tavern", kind: "tavern", service: ".tavern-game-shell", speakers: ["瑪姬", "魯夫", "瑪姬"], islandPortrait: "tavern_owner_makino.webp" },
+  { key: "mission", kind: "mission", service: ".mission-shell", speakers: ["摩爾岡斯", "羅賓", "摩爾岡斯"], islandPortrait: "morgans_open.webp" },
+  { key: "research_lab", kind: "hospital", service: ".research-lab-ui", postgame: true, speakers: ["莉莉絲", "喬巴", "莉莉絲"] },
+  { key: "arena", kind: "tavern", service: ".arena-ui", postgame: true, speakers: ["索隆", "娜美", "索隆"] },
+  { key: "water_seven", islandId: "island-24", service: "#waterSevenPageOverlay.open", speakers: ["保利", "魯夫", "保利"], islandPortrait: "paulie.webp" },
+  { key: "judicial", islandId: "island-25", service: ".judicial-raid-ui", speakers: ["斯潘達姆", "魯夫", "斯潘達姆"], islandPortrait: "island_intro_spandam.webp" },
+  { key: "impel_down", islandId: "island-26", service: ".impel-entry-rescue-ui", speakers: ["麥哲倫", "魯夫", "麥哲倫"], islandPortrait: "island_intro_magellan.webp" },
+  { key: "marineford", islandId: "island-19", service: "#enterMarinefordIslandBtn", speakers: ["青雉", "魯夫", "青雉"], islandPortrait: "aokiji_capture_serious_v3.webp" },
 ];
 
 function attachErrors(page, errors, label) {
@@ -67,9 +67,17 @@ async function checkDefinitions(page, failures) {
     if (beats.length < 3 || beats.length > 5 || beats.some((beat) => !beat.speaker || !beat.text)) {
       failures.push(`${entry.key}: expected 3-5 complete dialogue beats`);
     }
+    const speakers = beats.map((beat) => beat.speaker);
+    if (JSON.stringify(speakers) !== JSON.stringify(entry.speakers)) {
+      failures.push(`${entry.key}: expected island conversation ${entry.speakers.join(" -> ")}; got ${speakers.join(" -> ")}`);
+    }
+    if (entry.islandPortrait && [beats[0], beats[beats.length - 1]].some((beat) =>
+      !String(beat?.speakerImage || "").endsWith(entry.islandPortrait))) {
+      failures.push(`${entry.key}: island character missing dedicated portrait`);
+    }
     const requiredPortrait = {
       tavern: "luffy_pre_timeskip_tavern_invite.webp",
-      water_seven: "franky_pre_timeskip_shipwright.webp",
+      water_seven: "luffy_pre_timeskip_enies.webp",
       judicial: "luffy_pre_timeskip_enies.webp",
       impel_down: "luffy_pre_timeskip_war.webp",
       marineford: "luffy_pre_timeskip_war.webp",
@@ -184,35 +192,49 @@ async function runCase(browser, entry, errors, failures, useServiceAction = fals
       const screen = document.querySelector(".final-ending-screen");
       const portrait = document.querySelector(".final-ending-speaker-portrait img");
       const lines = document.querySelector(".final-ending-lines");
+      const speaker = document.querySelector(".final-ending-speaker");
       const dialogue = document.querySelector(".final-ending-dialogue");
       const rect = dialogue?.getBoundingClientRect();
       return {
         title: document.querySelector(".final-ending-screen")?.textContent?.trim().slice(0, 120) || "",
+        speaker: speaker?.textContent?.trim() || "",
         text: lines?.textContent?.trim() || "",
         background: screen ? getComputedStyle(screen).getPropertyValue("--ending-bg") : "",
-        portraitReady: portrait ? portrait.complete && portrait.naturalWidth > 0 : true,
+        portraitReady: Boolean(portrait?.complete && portrait.naturalWidth > 0 && portrait.getBoundingClientRect().width > 100),
+        portraitSrc: portrait?.getAttribute("src") || "",
         dialogueInside: Boolean(rect && rect.left >= -1 && rect.top >= -1 && rect.right <= innerWidth + 1 && rect.bottom <= innerHeight + 1),
         overflow: document.documentElement.scrollWidth > innerWidth + 2 || document.documentElement.scrollHeight > innerHeight + 2,
       };
     });
     if (!story.background.includes(`${entry.expectedBg || entry.key}.webp`) || story.text.includes("{{island}}")
-      || !story.text || !story.portraitReady || !story.dialogueInside || story.overflow) {
+      || story.speaker !== entry.speakers[0] || !story.text || !story.portraitReady
+      || (entry.islandPortrait && !story.portraitSrc.endsWith(entry.islandPortrait))
+      || !story.dialogueInside || story.overflow) {
       failures.push(`${label}: invalid cinematic presentation: ${JSON.stringify(story)}`);
     }
     if (entry.variant === "zou" && (!story.text.includes("象主背上市集") || /碼頭|港口/.test(story.text))) {
       failures.push(`${label}: elephant-back market copy is inconsistent: ${story.text}`);
     }
     await page.screenshot({ path: path.join(OUTPUT_DIR, `${label}-story.png`) });
-    if (["judicial", "impel_down", "marineford"].includes(entry.key)) {
+    for (let index = 1; index < entry.speakers.length; index += 1) {
       await page.locator("#finalEndingNextBtn").click();
-      await page.waitForFunction(() => {
+      await page.waitForFunction((speakerName) => {
         const portrait = document.querySelector(".final-ending-speaker-portrait img");
-        return document.querySelector(".final-ending-speaker")?.textContent?.trim() === "魯夫"
-          && portrait?.complete && portrait.naturalWidth > 0
+        return document.querySelector(".final-ending-speaker")?.textContent?.trim() === speakerName
+          && portrait?.complete && portrait.naturalWidth > 0 && portrait.getBoundingClientRect().width > 100
           && !document.getElementById("finalEndingNextBtn")?.disabled;
-      }, null, { timeout: 10000 });
+      }, entry.speakers[index], { timeout: 10000 });
       await page.waitForTimeout(120);
-      await page.screenshot({ path: path.join(OUTPUT_DIR, `${label}-luffy.png`) });
+      const beat = await page.evaluate(() => ({
+        speaker: document.querySelector(".final-ending-speaker")?.textContent?.trim() || "",
+        text: document.querySelector(".final-ending-lines")?.textContent?.trim() || "",
+        portraitSrc: document.querySelector(".final-ending-speaker-portrait img")?.getAttribute("src") || "",
+      }));
+      if (beat.speaker !== entry.speakers[index] || !beat.text || !beat.portraitSrc
+        || (index === entry.speakers.length - 1 && entry.islandPortrait && !beat.portraitSrc.endsWith(entry.islandPortrait))) {
+        failures.push(`${label}: beat ${index + 1} missing speaker or portrait: ${JSON.stringify(beat)}`);
+      }
+      await page.screenshot({ path: path.join(OUTPUT_DIR, `${label}-beat-${index + 1}.png`) });
     }
     if (finishNormally) {
       for (let step = 0; step < 12 && await page.locator(".final-ending-screen").count(); step += 1) {

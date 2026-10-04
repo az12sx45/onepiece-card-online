@@ -29173,76 +29173,82 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   const FEATURE_ISLAND_LUFFY_TAVERN = "images/board/story/speakers/luffy_pre_timeskip_tavern_invite.webp";
   const FEATURE_ISLAND_LUFFY_ENIES = "images/board/story/speakers/luffy_pre_timeskip_enies.webp";
   const FEATURE_ISLAND_LUFFY_WAR = "images/board/story/speakers/luffy_pre_timeskip_war.webp";
-  const FEATURE_ISLAND_FRANKY_WATER_SEVEN = "images/board/story/speakers/franky_pre_timeskip_shipwright.webp";
+  const FEATURE_ISLAND_SHOPKEEPER = "images/board/story/speakers/island_intro_shopkeeper.webp";
+  const FEATURE_ISLAND_MAKINO = "images/board/tavern_recruit/characters/tavern_owner_makino.webp";
+  const FEATURE_ISLAND_MORGANS = "images/board/mission_island/morgans_open.webp";
+  const FEATURE_ISLAND_PAULIE = "images/board/water_seven/paulie.webp";
+  const FEATURE_ISLAND_SPANDAM = "images/board/story/speakers/island_intro_spandam.webp";
+  const FEATURE_ISLAND_MAGELLAN = "images/board/story/speakers/island_intro_magellan.webp";
+  const FEATURE_ISLAND_AOKIJI = "images/board/story/aokiji_capture/source/aokiji_capture_serious_v3.webp";
   const FEATURE_ISLAND_STORIES = Object.freeze({
     shop: {
       title: "遠航前的補給", badge: "商店島", beats: [
-        { speaker: "旁白", text: "來到{{island}}，攤位上擺著遠航所需的補給。正好替下一段旅程做準備。" },
-        { speaker: "娜美", pose: "chart", text: "先看清價格再買，貝里還得留著應付後面的航程。" },
-        { speaker: "騙人布", pose: "brave", text: "恢復品和航海道具都檢查一遍，下一段海路可不會等我們！" },
+        { speaker: "店主", speakerImage: FEATURE_ISLAND_SHOPKEEPER, text: "歡迎來{{island}}！恢復品和航海道具都在這兒，慢慢挑。" },
+        { speaker: "娜美", pose: "chart", text: "先讓我看價目。補給買齊，也得留貝里給下一段航程。" },
+        { speaker: "店主", speakerImage: FEATURE_ISLAND_SHOPKEEPER, text: "每件都標好價了。選好再結帳，別把航海的盤纏花光！" },
       ],
     },
     hospital: {
       title: "出航前的診療", badge: "醫院島", beats: [
-        { speaker: "旁白", text: "{{island}}的診療所亮著燈，受傷的船員可以在這裡整備。" },
-        { speaker: "喬巴", pose: "determined", text: "傷員先進來！我會檢查大家的 HP 和 PP。" },
-        { speaker: "娜美", pose: "chart", text: "不用花貝里就能替全隊整備？那就把大家的 HP 和 PP 都補滿再走！" },
+        { speaker: "喬巴", pose: "determined", text: "有人受傷嗎？先讓我看看大家的 HP 和 PP！" },
+        { speaker: "娜美", pose: "chart", text: "能一起照顧全隊的傷員嗎？我們還要繼續航行。" },
+        { speaker: "喬巴", pose: "happy", text: "當然可以！{{island}}的診療不收貝里，整備好再出發吧。" },
       ],
     },
     tavern: {
       title: "港口的相遇", badge: "酒館島", beats: [
-        { speaker: "旁白", text: "{{island}}的酒館傳來笑聲與冒險故事，也許能遇見新的夥伴。" },
-        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_TAVERN, text: "這裡好熱鬧！一定有很有趣的人。" },
-        { speaker: "娜美", pose: "chart", text: "先看候選夥伴，再決定要不要花貝里招募。想遇到特定的人，也能先重點招待。" },
+        { speaker: "瑪姬", speakerImage: FEATURE_ISLAND_MAKINO, text: "歡迎來{{island}}的酒館。今天也有想上船的客人呢。" },
+        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_TAVERN, text: "有趣的人在哪裡？我想和他聊聊！" },
+        { speaker: "瑪姬", speakerImage: FEATURE_ISLAND_MAKINO, text: "先看看候選夥伴；想特別招待誰，也可以在這裡安排。" },
       ],
     },
     mission: {
       title: "碼頭的委託", badge: "任務島", beats: [
-        { speaker: "旁白", text: "{{island}}的任務牆貼滿航海委託與懸賞情報。" },
-        { speaker: "羅賓", pose: "reading", text: "航行、戰鬥和探訪島嶼，都可能是完成委託的線索。" },
-        { speaker: "娜美", pose: "chart", text: "先看清目標與報酬，再接下適合我們的任務。" },
+        { speaker: "摩爾岡斯", speakerImage: FEATURE_ISLAND_MORGANS, text: "嘎哈哈！{{island}}的任務牆又貼滿新情報了！" },
+        { speaker: "羅賓", pose: "reading", text: "航行、戰鬥和探訪島嶼……每張委託的條件都不同吧？" },
+        { speaker: "摩爾岡斯", speakerImage: FEATURE_ISLAND_MORGANS, text: "正是！先看清目標再接，完成委託就來領報酬。" },
       ],
     },
     research_lab: {
       title: "航海研究所", badge: "研究所", beats: [
-        { speaker: "旁白", text: "{{island}}的診療所如今擴建成研究所，醫療區仍為船員開放。" },
-        { speaker: "喬巴", pose: "determined", text: "受傷就先來找我。這裡可以替大家恢復 HP 和 PP。" },
-        { speaker: "莉莉絲", pose: "explain", text: "研究收藏、血統因子和登船名單也能在這裡整理。別把樣本弄丟了！" },
+        { speaker: "莉莉絲", pose: "explain", text: "喂，別碰桌上的樣本！{{island}}是研究所，不是你們的倉庫。" },
+        { speaker: "喬巴", pose: "determined", text: "我先去醫療區檢查船員。HP 和 PP 都能恢復吧？" },
+        { speaker: "莉莉絲", pose: "explain", text: "醫療區照常開放。收藏、血統因子和登船名單，到研究台整理！" },
       ],
     },
     arena: {
       title: "登上競技場", badge: "競技場", beats: [
-        { speaker: "旁白", text: "{{island}}的酒館換上了競技場的旗幟，擂台正等著新的挑戰者。" },
-        { speaker: "索隆", pose: "ready", text: "挑兩名船員上場吧。正好試試現在的本事。" },
-        { speaker: "娜美", pose: "chart", text: "選好對手再開打；勝利後可以取得研究點數，也有機會抽取血統因子。" },
+        { speaker: "索隆", pose: "ready", text: "前面就是{{island}}的擂台。娜美，這次能挑誰打？" },
+        { speaker: "娜美", pose: "chart", text: "對手由我們選。先派好兩名船員，再決定挑戰對象。" },
+        { speaker: "索隆", pose: "smirk", text: "好。贏了還有研究點數，也有機會拿到血統因子。" },
       ],
     },
     water_seven: {
       title: "水之七島的船塢", badge: "水之七島", beats: [
-        { speaker: "旁白", text: "水道穿過層層街區，船匠的敲擊聲從水之七島的船塢傳來。" },
-        { speaker: "佛朗基", speakerImage: FEATURE_ISLAND_FRANKY_WATER_SEVEN, text: "想讓船變強，就來船塢！帆、舵和船上設施都能慢慢升級。" },
-        { speaker: "娜美", pose: "chart", text: "升級要材料和貝里；船隻道具也得先有孔位才能裝上。" },
+        { speaker: "保利", speakerImage: FEATURE_ISLAND_PAULIE, text: "船要進塢，先讓我看看帆和舵。別把它開壞了！" },
+        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_ENIES, text: "這艘船還能變得更厲害嗎？那就拜託你了！" },
+        { speaker: "保利", speakerImage: FEATURE_ISLAND_PAULIE, text: "當然能。帆、舵、設施都可以改；材料和貝里備齊，裝道具前先留孔位。" },
       ],
     },
     judicial: {
       title: "司法島的六道防線", badge: "司法島", beats: [
-        { speaker: "旁白", text: "不見黑夜的司法島矗立在海淵上。巨門後，是必須逐一突破的六道防線。" },
-        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_ENIES, text: "不管有幾道門，誰擋路我就把誰打飛！" },
-        { speaker: "旁白", text: "可以發起討伐，或加入已開始的隊伍；擊破各階段敵人後領取對應獎勵。" },
+        { speaker: "斯潘達姆", speakerImage: FEATURE_ISLAND_SPANDAM, text: "這裡是司法島！CP9 的六道防線，你們一關都別想過！" },
+        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_ENIES, text: "六關又怎樣？誰擋路，我就把誰打飛！" },
+        { speaker: "斯潘達姆", speakerImage: FEATURE_ISLAND_SPANDAM, text: "少囂張！要討伐就叫齊隊伍，一道一道闖過來！" },
       ],
     },
     impel_down: {
       title: "深海大監獄", badge: "推進城", beats: [
-        { speaker: "旁白", text: "推進城的牢塔沒入海面之下。越往深處，越難找到出口。" },
-        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_WAR, text: "有人被關在裡面？那就去救！我可不會丟下夥伴！" },
-        { speaker: "旁白", text: "可以從入口展開救援；若自己被關進監獄，就得應付樓層事件、選路與逃獄。" },
+        { speaker: "麥哲倫", speakerImage: FEATURE_ISLAND_MAGELLAN, text: "推進城不是觀光港。入了這座監獄，就別想輕易出去。" },
+        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_WAR, text: "我不是來參觀的！被關住的夥伴，我會帶出去！" },
+        { speaker: "麥哲倫", speakerImage: FEATURE_ISLAND_MAGELLAN, text: "那就試試看。每一層都有守衛，出口也不會自己打開。" },
       ],
     },
     marineford: {
       title: "海軍本部的倒數", badge: "海軍本部", beats: [
-        { speaker: "旁白", text: "海軍本部的砲台環繞海灣。處刑台上的時間，正在一點一點減少。" },
-        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_WAR, text: "處刑台上的人，我會把他救回來！擋路的海軍都讓開！" },
-        { speaker: "旁白", text: "頂上戰爭要連續挑戰海軍將領；取得救援骰後，擇機擲骰爭取時間。" },
+        { speaker: "青雉", speakerImage: FEATURE_ISLAND_AOKIJI, text: "啊啦啦……都到本部海灣了，還要往處刑台走嗎？" },
+        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_WAR, text: "我要救人！你們擋在前面，我就打過去！" },
+        { speaker: "青雉", speakerImage: FEATURE_ISLAND_AOKIJI, text: "先過我這一關吧。後面還有更難纏的傢伙等著。" },
       ],
     },
   });
