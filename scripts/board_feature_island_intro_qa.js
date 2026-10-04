@@ -67,13 +67,15 @@ async function checkDefinitions(page, failures) {
     if (beats.length < 3 || beats.length > 5 || beats.some((beat) => !beat.speaker || !beat.text)) {
       failures.push(`${entry.key}: expected 3-5 complete dialogue beats`);
     }
-    const requiredLuffyPortrait = {
+    const requiredPortrait = {
+      tavern: "luffy_pre_timeskip_tavern_invite.webp",
+      water_seven: "franky_pre_timeskip_shipwright.webp",
       judicial: "luffy_pre_timeskip_enies.webp",
       impel_down: "luffy_pre_timeskip_war.webp",
       marineford: "luffy_pre_timeskip_war.webp",
     }[entry.key];
-    if (requiredLuffyPortrait && !beats.some((beat) => String(beat.speakerImage || "").endsWith(requiredLuffyPortrait))) {
-      failures.push(`${entry.key}: wrong-era Luffy portrait in story definition`);
+    if (requiredPortrait && !beats.some((beat) => String(beat.speakerImage || "").endsWith(requiredPortrait))) {
+      failures.push(`${entry.key}: wrong-era portrait in story definition`);
     }
     for (const beat of beats) {
       if (!beat.speakerImage) continue;
@@ -142,6 +144,7 @@ async function prepareLanding(page, entry, useServiceAction = false) {
       ? debug.getIslandById(entry.islandId)
       : game.boardData.islands.find((candidate) => candidate.kind === entry.kind && candidate.id !== "island-24");
     if (!island) throw new Error(`No ${entry.key} island in test map`);
+    if (entry.overrideName) island.name = entry.overrideName;
     const islandState = debug.getIslandState(island.id);
     if (!islandState) throw new Error(`No state for ${island.id}`);
     player.location = { kind: "island", islandId: island.id, entryDirection: null };
@@ -163,7 +166,7 @@ async function prepareLanding(page, entry, useServiceAction = false) {
 }
 
 async function runCase(browser, entry, errors, failures, useServiceAction = false, finishNormally = false, viewport = null) {
-  const label = `${entry.key}${useServiceAction ? "-service-return" : ""}${finishNormally ? "-complete" : ""}${viewport ? "-narrow" : ""}`;
+  const label = `${entry.key}${entry.variant ? `-${entry.variant}` : ""}${useServiceAction ? "-service-return" : ""}${finishNormally ? "-complete" : ""}${viewport ? "-narrow" : ""}`;
   const { context, page } = await openGame(browser, label, errors, viewport || undefined);
   try {
     const before = await prepareLanding(page, entry, useServiceAction);
@@ -192,9 +195,12 @@ async function runCase(browser, entry, errors, failures, useServiceAction = fals
         overflow: document.documentElement.scrollWidth > innerWidth + 2 || document.documentElement.scrollHeight > innerHeight + 2,
       };
     });
-    if (!story.background.includes(`${entry.key}.webp`) || story.text.includes("{{island}}")
+    if (!story.background.includes(`${entry.expectedBg || entry.key}.webp`) || story.text.includes("{{island}}")
       || !story.text || !story.portraitReady || !story.dialogueInside || story.overflow) {
       failures.push(`${label}: invalid cinematic presentation: ${JSON.stringify(story)}`);
+    }
+    if (entry.variant === "zou" && (!story.text.includes("象主背上市集") || /碼頭|港口/.test(story.text))) {
+      failures.push(`${label}: elephant-back market copy is inconsistent: ${story.text}`);
     }
     await page.screenshot({ path: path.join(OUTPUT_DIR, `${label}-story.png`) });
     if (["judicial", "impel_down", "marineford"].includes(entry.key)) {
@@ -348,6 +354,7 @@ async function runInterruptedRestoreCase(browser, errors, failures) {
     }
     const runs = [];
     for (const entry of CASES) runs.push(await runCase(browser, entry, errors, failures));
+    runs.push(await runCase(browser, { ...CASES[0], variant: "zou", overrideName: "象主背上市集", expectedBg: "shop_zou_market" }, errors, failures));
     runs.push(await runCase(browser, CASES[0], errors, failures, true));
     runs.push(await runCase(browser, CASES[1], errors, failures, false, true));
     for (const key of ["shop", "judicial", "marineford"]) {

@@ -29170,13 +29170,15 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   };
 
   const FEATURE_ISLAND_STORY_BASE = "images/board/story/backgrounds/island_intro/";
+  const FEATURE_ISLAND_LUFFY_TAVERN = "images/board/story/speakers/luffy_pre_timeskip_tavern_invite.webp";
   const FEATURE_ISLAND_LUFFY_ENIES = "images/board/story/speakers/luffy_pre_timeskip_enies.webp";
   const FEATURE_ISLAND_LUFFY_WAR = "images/board/story/speakers/luffy_pre_timeskip_war.webp";
+  const FEATURE_ISLAND_FRANKY_WATER_SEVEN = "images/board/story/speakers/franky_pre_timeskip_shipwright.webp";
   const FEATURE_ISLAND_STORIES = Object.freeze({
     shop: {
-      title: "補給港的選擇", badge: "商店島", beats: [
-        { speaker: "旁白", text: "{{island}}的碼頭堆滿補給箱。遠航前，這裡是添購物資的好地方。" },
-        { speaker: "娜美", pose: "chart", text: "先看看錢袋，再看看貨架。不同港口的商品和價格可不一樣。" },
+      title: "遠航前的補給", badge: "商店島", beats: [
+        { speaker: "旁白", text: "來到{{island}}，攤位上擺著遠航所需的補給。正好替下一段旅程做準備。" },
+        { speaker: "娜美", pose: "chart", text: "先看清價格再買，貝里還得留著應付後面的航程。" },
         { speaker: "騙人布", pose: "brave", text: "恢復品和航海道具都檢查一遍，下一段海路可不會等我們！" },
       ],
     },
@@ -29184,13 +29186,13 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       title: "出航前的診療", badge: "醫院島", beats: [
         { speaker: "旁白", text: "{{island}}的診療所亮著燈，受傷的船員可以在這裡整備。" },
         { speaker: "喬巴", pose: "determined", text: "傷員先進來！我會檢查大家的 HP 和 PP。" },
-        { speaker: "娜美", pose: "chart", text: "治療需要貝里。先確認隊伍的傷勢，再決定怎麼補給。" },
+        { speaker: "娜美", pose: "chart", text: "不用花貝里就能替全隊整備？那就把大家的 HP 和 PP 都補滿再走！" },
       ],
     },
     tavern: {
       title: "港口的相遇", badge: "酒館島", beats: [
         { speaker: "旁白", text: "{{island}}的酒館傳來笑聲與冒險故事，也許能遇見新的夥伴。" },
-        { speaker: "魯夫", pose: "laugh", text: "這裡好熱鬧！一定有很有趣的人。" },
+        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_TAVERN, text: "這裡好熱鬧！一定有很有趣的人。" },
         { speaker: "娜美", pose: "chart", text: "先看候選夥伴，再決定要不要花貝里招募。想遇到特定的人，也能先重點招待。" },
       ],
     },
@@ -29218,28 +29220,28 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     water_seven: {
       title: "水之七島的船塢", badge: "水之七島", beats: [
         { speaker: "旁白", text: "水道穿過層層街區，船匠的敲擊聲從水之七島的船塢傳來。" },
-        { speaker: "佛朗基", pose: "engineer", text: "想讓船變強，就來船塢！帆、舵和船上設施都能慢慢升級。" },
+        { speaker: "佛朗基", speakerImage: FEATURE_ISLAND_FRANKY_WATER_SEVEN, text: "想讓船變強，就來船塢！帆、舵和船上設施都能慢慢升級。" },
         { speaker: "娜美", pose: "chart", text: "升級要材料和貝里；船隻道具也得先有孔位才能裝上。" },
       ],
     },
     judicial: {
       title: "司法島的六道防線", badge: "司法島", beats: [
         { speaker: "旁白", text: "不見黑夜的司法島矗立在海淵上。巨門後，是必須逐一突破的六道防線。" },
-        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_ENIES, text: "羅賓在裡面。誰也別攔我，我們一起把她帶回來！" },
+        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_ENIES, text: "不管有幾道門，誰擋路我就把誰打飛！" },
         { speaker: "旁白", text: "可以發起討伐，或加入已開始的隊伍；擊破各階段敵人後領取對應獎勵。" },
       ],
     },
     impel_down: {
       title: "深海大監獄", badge: "推進城", beats: [
         { speaker: "旁白", text: "推進城的牢塔沒入海面之下。越往深處，越難找到出口。" },
-        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_WAR, text: "艾斯在下面！我一定要把他救出來！" },
+        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_WAR, text: "有人被關在裡面？那就去救！我可不會丟下夥伴！" },
         { speaker: "旁白", text: "可以從入口展開救援；若自己被關進監獄，就得應付樓層事件、選路與逃獄。" },
       ],
     },
     marineford: {
       title: "海軍本部的倒數", badge: "海軍本部", beats: [
         { speaker: "旁白", text: "海軍本部的砲台環繞海灣。處刑台上的時間，正在一點一點減少。" },
-        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_WAR, text: "艾斯就在處刑台！不管前面有誰，我都要救他！" },
+        { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_WAR, text: "處刑台上的人，我會把他救回來！擋路的海軍都讓開！" },
         { speaker: "旁白", text: "頂上戰爭要連續挑戰海軍將領；取得救援骰後，擇機擲骰爭取時間。" },
       ],
     },
@@ -29270,7 +29272,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       showPoneglyphs: false,
       chapters: [{
         scene: `feature-island-${key}`,
-        bg: `${FEATURE_ISLAND_STORY_BASE}${key}.webp`,
+        bg: `${FEATURE_ISLAND_STORY_BASE}${key === "shop" && island?.name === "象主背上市集" ? "shop_zou_market" : key}.webp`,
         beats: story.beats.map((beat) => ({
           ...beat,
           text: beat.text.replaceAll("{{island}}", island?.name || story.badge),
@@ -33358,7 +33360,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         <button type="button" class="modal-btn primary" id="enterMarinefordIslandBtn">進入頂上戰爭篇</button>
         <button type="button" class="modal-btn secondary" id="leaveMarinefordIslandBtn">暫不進入</button>
       </div>
-    `, "no-backdrop-close");
+    `, "no-backdrop-close marineford-island-entry-modal");
     document.getElementById("enterMarinefordIslandBtn")?.addEventListener("click", () => {
       enterMarineford(player, mode, reason);
       closeModal();
