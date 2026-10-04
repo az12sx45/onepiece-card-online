@@ -16,7 +16,7 @@
   const ERRORS={client_update_required:'請更新啟動器後再使用這位夥伴；原有配置與工作會保留。',character_not_released:'這位夥伴尚未開放。',offline:'暫時無法連線，工作紀錄會在連線後更新。',unavailable:'正在讀取基地資料。',readonly:'參觀時無法指派主人的夥伴。',no_station:'目前沒有可到達且空閒的工作位置。',no_route:'這個位置目前走不到，換個地板格子試試。',invalid_target:'請點房間內的地板或已擺出的家具。',not_owned:'尚未收藏這位夥伴。',busy:'夥伴正在忙，稍候再來。',work_daily_limit:'今天的有酬工作已完成，夥伴仍會自由活動。',wallet_full:'商城金幣已滿，工作成果會保留。',insufficient_coins:'商城金幣不足。',cooldown:'剛剛才互動過，讓夥伴忙一下吧。',revision_conflict:'基地資料已更新，請再試一次。',work_active:'這位夥伴已有工作。',station_busy:'這個工作位置正在使用中。',not_placed:'請先把這位夥伴放進房間。'};
   function create(env) {
     const api=root.onePieceDesktop;
-    let controller=null,snapshot=null,serverLife=null,serverRoster=null,scope='',epoch=0,requestSerial=0,pending=Promise.resolve();
+    let controller=null,snapshot=null,serverLife=null,serverRoster=null,serverWallet=null,serverRod=null,serverFishOffers=[],scope='',epoch=0,requestSerial=0,pending=Promise.resolve();
     let savedPositions=new Map(),savedRevision=-1,fetching=null,nextSync=0,lastTick=0,lastUi=0,manualBusy=false,manualKey='',panelKey='',suspending=false;
     const taps=new Map();
     function walker(key){return env.walkers().find(w=>w.key===keyOf(key));}
@@ -169,6 +169,9 @@
       if(serverLife&&Number(result.life.revision)<Number(serverLife.revision))return false;
       const previousFish=JSON.stringify(serverLife?.fishCollection||[]);
       serverLife=result.life;
+      if(result.wallet)serverWallet=result.wallet;
+      if(result.rod)serverRod=result.rod;
+      if(Array.isArray(result.fishOffers))serverFishOffers=result.fishOffers;
       serverRoster={releasedCharacterIds:(reserved?.releasedKeys(result)||data.characterKeys).map(itemOf),rosterRevision:Number(result.rosterRevision)||0};
       if(result.wallet&&owner())root.LauncherProfileShop?.onCompanionWalletChanged(result.wallet);
       if(result.profile?.userId===profile()?.userId)env.acceptProfile(result.profile);
@@ -176,6 +179,7 @@
       minigames?.receive(result);
       hideAwaitingArrivals();
       if(previousFish!==JSON.stringify(serverLife.fishCollection||[]))env.onFishChanged?.();
+      env.onLifeChanged?.();
       return true;
     }
     function command(type,payload={}) {
@@ -222,7 +226,7 @@
       const next=`${env.accountId()}:${profile()?.userId||0}:${owner()}`;
       if(next!==scope) {
         suspending=true;minigames?.dismiss();suspending=false;
-        controller?.dispose();controller=null;snapshot=null;serverLife=null;serverRoster=null;scope=next;epoch++;
+        controller?.dispose();controller=null;snapshot=null;serverLife=null;serverRoster=null;serverWallet=null;serverRod=null;serverFishOffers=[];scope=next;epoch++;
         savedPositions.clear();savedRevision=-1;pending=Promise.resolve();fetching=null;taps.clear();
         nextSync=0;lastTick=0;manualBusy=false;manualKey='';panelKey='';
       }
@@ -423,7 +427,12 @@
       isBusy:key=>!!controller?.isBusy(key)||!!minigames?.active(),reservations:()=>controller?.reservations()||[],
       cancel:key=>controller?.cancel(key),onPurchase(result){if(!owner())return;accept(result);void refresh();},
       snapshot:()=>snapshot,controller:()=>controller,world,
-      fishCollection:()=>serverLife?.fishCollection||profile()?.life?.fishCollection||[]};
+      fishCollection:()=>serverLife?.fishCollection||profile()?.life?.fishCollection||[],
+      fishOffers:()=>serverFishOffers,
+      ownedCharacterIds:()=>ownedIds(),
+      wallet:()=>serverWallet,
+      rod:()=>serverRod,
+      aquariumCommand:command};
   }
   root.OnePieceLifeRoom=Object.freeze({create});
 })(window);

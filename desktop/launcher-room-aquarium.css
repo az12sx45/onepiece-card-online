@@ -6,6 +6,9 @@
   isolation: isolate;
 }
 .room-aquarium-scene-window { z-index: 1; }
+.room-stage[data-room-scene='sunny-aquarium']:not(.is-editing, .is-assigning) .room-aquarium-scene-window { pointer-events: auto; cursor: pointer; }
+.room-aquarium-scene-window:focus-visible { outline: 3px solid #ffe1a4; outline-offset: -3px; }
+.room-stage:not(.is-editing, .is-assigning) .room-aquarium-furniture.is-hit-hovered .room-object { filter: drop-shadow(0 0 8px #b4eaf0) drop-shadow(0 2px 2px #03171b75); }
 .room-aquarium-window { z-index: 2; }
 .room-aquarium-window .room-aquarium-fish { --fish-swim-start: 8%; --fish-swim-end: 70%; }
 .room-aquarium-furniture:is([data-rotation='1'], [data-rotation='3']) .room-aquarium-fish { width: calc(var(--fish-size, 11%) * 1.7); --fish-swim-end: 55%; }
@@ -53,4 +56,96 @@
 @media (prefers-reduced-motion: reduce) {
   .room-aquarium-fish { animation: none; left: var(--fish-home, 32%); }
   .room-aquarium-fish img { animation: none; }
+}
+
+.room-aquarium-manager-overlay[hidden] { display: none; }
+.room-aquarium-manager-overlay { position: fixed; z-index: 2000; inset: 0; display: grid; place-items: center; padding: 24px; background: #021219d9; backdrop-filter: blur(7px); }
+.room-aquarium-manager-card { box-sizing: border-box; width: min(940px, 100%); max-height: min(760px, calc(100vh - 48px)); display: flex; flex-direction: column; overflow: hidden; border: 1px solid #c4d7c49e; border-radius: 20px; background: linear-gradient(150deg, #113b49, #082733 45%, #071d29); box-shadow: 0 26px 75px #000b, inset 0 1px #f1dca24a; color: #f4eee0; font-family: inherit; }
+.room-aquarium-manager-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 22px 24px 13px; background: linear-gradient(90deg, #1a526076, transparent); }
+.room-aquarium-manager-header h2 { margin: 4px 0; color: #ffe2a6; font-size: 25px; }
+.room-aquarium-manager-header p { margin: 0; color: #c2d9d7; font-size: 13px; line-height: 1.45; }
+.room-aquarium-manager-eyebrow { color: #9bdbd6; font-size: 10px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+.room-aquarium-manager-close { flex: none; width: 37px; height: 37px; padding: 0; border: 1px solid #e2d29c90; border-radius: 50%; background: #123b46; color: #ffebc2; cursor: pointer; font: 26px/1 Georgia, serif; }
+.room-aquarium-manager-stats { display: flex; flex-wrap: wrap; gap: 7px; padding: 0 24px 12px; }
+.room-aquarium-manager-stats span { padding: 5px 10px; border: 1px solid #9ec7c27a; border-radius: 999px; background: #1a515680; color: #d6f0e7; font-size: 12px; }
+.room-aquarium-manager-status { min-height: 17px; margin: 0 24px 9px; color: #aee4c8; font-size: 12px; }
+.room-aquarium-manager-status.is-error { color: #ffc4a9; }
+.room-aquarium-manager-body { display: grid; grid-template-columns: minmax(200px, 30%) minmax(0, 1fr); min-height: 0; overflow: hidden; border-top: 1px solid #b4cebe4a; border-bottom: 1px solid #b4cebe4a; }
+.room-aquarium-manager-list { min-height: 0; overflow-y: auto; padding: 10px; border-right: 1px solid #b4cebe4a; scrollbar-color: #89aaa1 #103743; }
+.room-aquarium-manager-fish { box-sizing: border-box; display: flex; align-items: center; gap: 8px; width: 100%; min-height: 64px; margin: 0 0 6px; padding: 6px 8px; border: 1px solid #78b3b15e; border-radius: 10px; background: #1b4650a6; color: #f4eee0; text-align: left; cursor: pointer; }
+.room-aquarium-manager-fish:hover, .room-aquarium-manager-fish.is-selected { border-color: #f3d38d; background: #28545b; }
+.room-aquarium-manager-fish[aria-selected='true'] { box-shadow: inset 3px 0 #f3d38d; }
+.room-aquarium-manager-fish img { flex: none; width: 55px; height: 49px; object-fit: contain; filter: drop-shadow(0 3px 3px #001923); }
+.room-aquarium-manager-fish > span:not(.room-aquarium-manager-rarity) { display: grid; gap: 2px; flex: 1; min-width: 0; }
+.room-aquarium-manager-fish strong { overflow: hidden; color: #fff1c7; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+.room-aquarium-manager-fish small { color: #9fcac4; font-size: 10px; }
+.room-aquarium-manager-rarity { flex: none; padding: 3px 6px; border: 1px solid #a8c3ae99; border-radius: 5px; color: #d9ead1; font-size: 10px; }
+.room-aquarium-manager-rarity[data-rarity='uncommon'] { border-color: #91dfc6; color: #9debd2; }
+.room-aquarium-manager-rarity[data-rarity='rare'] { border-color: #c4b5ec; color: #e1ccff; }
+.room-aquarium-manager-rarity[data-rarity='legendary'] { border-color: #f4d689; color: #ffe3a1; }
+.room-aquarium-manager-detail { min-height: 0; overflow-y: auto; padding: 14px 20px 20px; scrollbar-color: #89aaa1 #103743; }
+.room-aquarium-manager-hero { display: block; width: 100%; height: 142px; object-fit: contain; background: radial-gradient(ellipse at center, #6bd1d43d, transparent 69%); filter: drop-shadow(0 6px 7px #001923a6); }
+.room-aquarium-manager-fish-heading { display: flex; align-items: baseline; gap: 10px; margin: 5px 0 0; }
+.room-aquarium-manager-fish-heading h3 { margin: 0; color: #ffe2a6; font-size: 20px; }
+.room-aquarium-manager-fish-state { margin: 4px 0 8px; color: #b3d6d2; font-size: 12px; }
+.room-aquarium-manager-display, .room-aquarium-manager-primary, .room-aquarium-manager-sell, .room-aquarium-manager-upgrade { min-height: 36px; padding: 7px 12px; border: 1px solid #d5c28f; border-radius: 8px; background: #28545b; color: #fff0c7; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 700; line-height: 1.35; }
+.room-aquarium-manager-primary { background: #986945; border-color: #f8dc9a; color: #fff4d4; }
+.room-aquarium-manager-sell, .room-aquarium-manager-upgrade { background: #1e5d61; }
+.room-aquarium-manager-card button:hover:not(:disabled) { filter: brightness(1.15); }
+.room-aquarium-manager-card button:focus-visible, .room-aquarium-manager-card select:focus-visible { outline: 2px solid #ffe2a6; outline-offset: 2px; }
+.room-aquarium-manager-card button:disabled { opacity: .52; cursor: not-allowed; }
+.room-aquarium-manager-action { display: grid; gap: 5px; margin-top: 11px; padding: 12px; border: 1px solid #95c0b65c; border-radius: 11px; background: #173f4973; }
+.room-aquarium-manager-action h4 { margin: 0; color: #ffe2a6; font-size: 15px; }
+.room-aquarium-manager-action p { margin: 0 0 3px; color: #c1d7d5; font-size: 12px; line-height: 1.45; }
+.room-aquarium-manager-recipient { display: grid; gap: 5px; color: #cfe9e3; font-size: 11px; }
+.room-aquarium-manager-recipient select { max-width: 100%; min-height: 34px; padding: 5px 9px; border: 1px solid #99bbb2; border-radius: 7px; background: #0c303b; color: #f5e9c7; font-family: inherit; font-size: 12px; }
+.room-aquarium-manager-limit { color: #ffc4a9; font-size: 11px; }
+.room-aquarium-manager-workshop { display: flex; align-items: center; gap: 12px; padding: 12px 24px 16px; background: #0a303ac7; }
+.room-aquarium-manager-workshop span { color: #ffe1a6; font-size: 13px; font-weight: 800; }
+.room-aquarium-manager-workshop small { flex: 1; color: #bdd6cf; font-size: 11px; }
+.room-aquarium-manager-empty { padding: 45px 24px 60px; text-align: center; }
+.room-aquarium-manager-empty strong { color: #ffe2a6; font-size: 18px; }
+.room-aquarium-manager-empty p, .room-aquarium-manager-readonly { color: #bed9d3; font-size: 12px; line-height: 1.55; }
+@media (min-width: 850px) {
+  .room-aquarium-manager-detail { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; gap: 6px 12px; }
+  .room-aquarium-manager-hero, .room-aquarium-manager-fish-heading,
+  .room-aquarium-manager-fish-state, .room-aquarium-manager-display,
+  .room-aquarium-manager-readonly { grid-column: 1 / -1; }
+  .room-aquarium-manager-hero { height: 110px; }
+  .room-aquarium-manager-action { align-self: stretch; align-content: start; margin: 4px 0 0; }
+}
+@media (min-width: 850px) and (max-height: 700px) {
+  .room-aquarium-manager-header { padding: 12px 20px 7px; }
+  .room-aquarium-manager-header h2 { margin: 2px 0; font-size: 20px; }
+  .room-aquarium-manager-header p { font-size: 11px; }
+  .room-aquarium-manager-stats { padding: 0 20px 6px; }
+  .room-aquarium-manager-status { min-height: 13px; margin: 0 20px 5px; }
+  .room-aquarium-manager-detail { gap: 4px 10px; padding: 8px 13px 11px; }
+  .room-aquarium-manager-hero { height: 74px; }
+  .room-aquarium-manager-fish-heading { margin: 0; }
+  .room-aquarium-manager-fish-heading h3 { font-size: 17px; }
+  .room-aquarium-manager-fish-state { margin: 0; font-size: 11px; }
+  .room-aquarium-manager-display { justify-self: start; min-height: 30px; padding: 4px 9px; }
+  .room-aquarium-manager-action { align-self: stretch; align-content: start; margin: 2px 0 0; padding: 8px; }
+  .room-aquarium-manager-action h4 { font-size: 13px; }
+  .room-aquarium-manager-action p { font-size: 11px; }
+  .room-aquarium-manager-recipient select { min-height: 29px; }
+  .room-aquarium-manager-primary, .room-aquarium-manager-sell { min-height: 30px; padding: 5px 8px; }
+  .room-aquarium-manager-workshop { padding: 8px 20px; }
+}
+@media (max-width: 620px) {
+  .room-aquarium-manager-overlay { padding: 9px; }
+  .room-aquarium-manager-card { max-height: calc(100vh - 18px); border-radius: 13px; }
+  .room-aquarium-manager-header { padding: 15px 15px 8px; }
+  .room-aquarium-manager-header h2 { font-size: 20px; }
+  .room-aquarium-manager-header p { font-size: 11px; }
+  .room-aquarium-manager-stats { padding: 0 15px 8px; }
+  .room-aquarium-manager-status { margin: 0 15px 7px; }
+  .room-aquarium-manager-body { grid-template-columns: 1fr; overflow-y: auto; }
+  .room-aquarium-manager-list { display: flex; gap: 6px; flex: none; min-height: 75px; max-height: 95px; overflow-x: auto; overflow-y: hidden; border-right: 0; border-bottom: 1px solid #b4cebe4a; }
+  .room-aquarium-manager-fish { flex: none; width: 175px; min-height: 62px; margin: 0; }
+  .room-aquarium-manager-fish .room-aquarium-manager-rarity { display: none; }
+  .room-aquarium-manager-detail { overflow: visible; padding: 12px 15px 18px; }
+  .room-aquarium-manager-hero { height: 100px; }
+  .room-aquarium-manager-workshop { flex-wrap: wrap; padding: 10px 15px 13px; }
 }

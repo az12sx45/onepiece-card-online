@@ -8,6 +8,36 @@ const crewRelease = require('./launcher-crew-release');
 const M = require('./launcher-minigames');
 const initializers = new WeakMap();
 const ACTIVITY_EFFECTS=Object.freeze({Eat:{hunger:-8,mood:1},Rest:{energy:6,mood:1},Sleep:{energy:10},Train:{energy:-4,workMotivation:3},UseFurniture:{mood:1,workMotivation:1}});
+const FISH_SALE_COINS=Object.freeze({common:4,uncommon:7,rare:12,legendary:20});
+const FISH_MEAL_AFFINITY=Object.freeze({common:2,uncommon:3,rare:4,legendary:5});
+// These are meals created for this launcher, not names of canon ONE PIECE dishes.
+// Aquarium-only and dangerous fantasy species stay collectible or sellable.
+const FISH_MEALS=Object.freeze({
+  'balloon-catfish':'香吉士特製・香草鯰魚湯',
+  'glistening-saury':'香吉士特製・檸香秋刀魚',
+  'adventure-fish':'香吉士特製・航海香煎魚',
+  'cola-sunfish':'香吉士特製・可樂風味魚排',
+  'elephant-tuna':'香吉士特製・象鼻鮪魚排',
+  'striped-clam':'香吉士特製・蛤蜊濃湯',
+  'claw-shrimp':'香吉士特製・蒜香剪刀蝦',
+  'maple-salmon':'香吉士特製・紅葉鮭魚排',
+  'lava-flounder':'香吉士特製・香煎熔岩比目魚',
+  'demon-bonito':'香吉士特製・香煎鬼鰹魚',
+  'ice-fish':'香吉士特製・奶油冰晶魚',
+  'largemouth-bass':'香吉士特製・香草鱸魚',
+  'warmouth':'香吉士特製・暖口魚湯',
+  'paddlefish':'香吉士特製・匙吻鱘魚排',
+  'dolphinfish':'香吉士特製・檸香鯕鰍魚排',
+  'dusky-grouper':'香吉士特製・石斑魚湯',
+  'white-marlin':'香吉士特製・炙烤馬林魚'
+});
+const FISH_SPECIES_BY_ID=new Map(M.FISH_SPECIES.map(species=>[species.id,species]));
+function fishOffer(fish) {
+  const rarity=M.FISH_RARITY_BY_ID[fish.speciesId]||'common';
+  return {fishId:fish.id,speciesId:fish.speciesId,label:FISH_SPECIES_BY_ID.get(fish.speciesId)?.label||fish.speciesId,
+    rarity,saleCoins:FISH_SALE_COINS[rarity],cookable:Object.hasOwn(FISH_MEALS,fish.speciesId),
+    dishLabel:FISH_MEALS[fish.speciesId]||null,affinityGain:FISH_MEALS[fish.speciesId]?FISH_MEAL_AFFINITY[rarity]:0};
+}
 function applyActivityNeeds(actor,activity) {
   for(const [key,delta] of Object.entries(ACTIVITY_EFFECTS[activity]||{})){
     const bounds=L.content().needBounds?.[key]||[0,100];actor.needs[key]=L.clamp(actor.needs[key]+delta,bounds[0],bounds[1]);
@@ -57,7 +87,8 @@ function reconcileLegacy(state,companions,room,now) {
   state.jobs=state.jobs.filter(j=>j.legacy?live.has(j.jobId):L.validJobContext(j,jobState(state,room),room));
 }
 function snapshot(row,state,now,extra={}) {
-  const S=shop();return {ok:true,serverNow:now.toISOString(),life:L.publicLife(state),rod:L.rodStatus(state),room:S.launcherRoom(row.stats),wallet:S.launcherWalletPublic(row.stats),profile:S.toPublicProfile(row,true),...extra};
+  const S=shop();return {ok:true,serverNow:now.toISOString(),life:L.publicLife(state),fishOffers:state.fishCollection.map(fishOffer),
+    rod:L.rodStatus(state),room:S.launcherRoom(row.stats),wallet:S.launcherWalletPublic(row.stats),profile:S.toPublicProfile(row,true),...extra};
 }
 async function ledger(db,userId,operationId) {
   const result=await db.query('SELECT receipt FROM launcher_wallet_ledger WHERE user_id=$1 AND operation_id=$2',[userId,operationId]);return result.rows[0]?.receipt||null;
@@ -94,6 +125,8 @@ const FIELDS={
  'minigame.retry':['sessionId','token'],
  'fish.place':['fishId','inAquarium'],
  'fish.release':['fishId'],
+ 'fish.cook':['fishId','itemId'],
+ 'fish.sell':['fishId'],
  'rod.upgrade':[],
  'event.record':['eventId','participants'],'activity.record':['itemId','activity'],'arrival.ack':['arrivalId'],'checkpoint':['exit']
 };
@@ -200,6 +233,34 @@ async function perform(db,row,state,companions,command,room,now,sessions=[],jobs
     if(index<0)return{ok:false,error:'fish_not_owned'};
     const [fish]=state.fishCollection.splice(index,1);
     return{ok:true,releasedFish:{...fish}};
+  }
+  if(command.type==='fish.cook'||command.type==='fish.sell') {
+    if(typeof p.fishId!=='string'||command.type==='fish.cook'&&typeof p.itemId!=='string')return{ok:false,error:'invalid_fish'};
+    const index=state.fishCollection.findIndex(entry=>entry.id===p.fishId);
+    if(index<0)return{ok:false,error:'fish_not_owned'};
+    const fish=state.fishCollection[index],offer=fishOffer(fish);
+    if(command.type==='fish.cook') {
+      if(!offer.cookable)return{ok:false,error:'fish_not_cookable'};
+      const recipient=state.characters[p.itemId],companion=companions.characters[p.itemId];
+      if(!L.keyOf(p.itemId)||!recipient||!companion)return{ok:false,error:'not_owned'};
+      if(companion.affinity>=100)return{ok:false,error:'affinity_full'};
+      state.fishCollection.splice(index,1);
+      const before=companion.affinity;
+      companion.affinity=Math.min(100,before+offer.affinityGain);
+      recipient.needs.hunger=L.clamp(recipient.needs.hunger-14);
+      recipient.needs.mood=L.clamp(recipient.needs.mood+3);
+      L.addMemory(state,p.itemId,'player.fish_meal',[p.itemId],now,.8);
+      return{ok:true,meal:{fishId:fish.id,speciesId:fish.speciesId,itemId:p.itemId,
+        dishLabel:offer.dishLabel,affinityGained:companion.affinity-before,affinityAfter:companion.affinity}};
+    }
+    const wallet=row.stats.launcherWalletV1,cap=shop().launcherWalletPublic(row.stats).cap;
+    if(wallet.coins+offer.saleCoins>cap)return{ok:false,error:'wallet_full'};
+    state.fishCollection.splice(index,1);
+    wallet.coins+=offer.saleCoins;
+    const operationId='life-fish-sale:'+command.requestId;
+    const sale={operationId,fishId:fish.id,speciesId:fish.speciesId,amount:offer.saleCoins,soldAt:now.toISOString()};
+    await writeLedger(db,row,operationId,null,offer.saleCoins,sale);
+    return{ok:true,sale};
   }
   if(command.type==='rod.upgrade') {
     const level=L.rodLevel(state.fishingRodLevel),cost=L.ROD_UPGRADE_COSTS[level];

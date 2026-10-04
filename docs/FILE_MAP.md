@@ -1,5 +1,11 @@
 # File Map
 
+## 2026-10-05 水族箱漁獲管理（1.2.23 內容修訂 13，部署候選）
+
+- `server/launcher-life-store.js`：從既有漁獲收藏產生每尾魚的伺服器售價與料理資格，新增 `fish.cook`／`fish.sell`；同一帳號交易中消耗魚、增加指定角色親密度或把售價記入金幣錢包／ledger。原 `fish.place`、`rod.upgrade`、存檔欄位與好友公開投影沿用。
+- `desktop/launcher-room.js`、`launcher-life-room.js`、`launcher-room-aquarium.js/.css`：家具缸與水族館背景缸入口、完整收藏管理、伺服器報價、選擇料理對象、售魚、展示切換、佛朗基釣竿改裝及窄視窗介面；好友唯讀。
+- `scripts/launcher_aquarium_management_qa.js`：料理／出售的所有權、重送、競態、錢包上限與回滾；`scripts/launcher_aquarium_browser_qa.js`：魚缸入口、展示／料理／售魚／改裝、好友唯讀與三種視窗。`config/launcher-announcements-v1.json`：修訂 27 圖文公告，沿用已封裝的水族箱／海釣插圖；`public/desktop/launcher-content-v1.json`：已簽署的內容修訂 13 清單，SHA-256 `19c1d6d3a7151bcfb55c41a5dd1c56fc74328e3756a0c74f396be9d87731ed65`。正式讀回見 `docs/DEV_WORKFLOW.md`。
+
 ## 2026-10-05 海釣方向機會與助力（1.2.23 內容修訂 12，已部署）
 
 - `server/launcher-fishing-v5.js`：方向提示頻率、有提示階段的操作時長與命中後 3.5 秒的收線／抗拉力增益；`server/launcher-minigames.js`：只對外回傳有效的 `flickAssistUntil`，保留內部期限欄位不公開。

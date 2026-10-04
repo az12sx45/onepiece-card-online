@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 12,
-  "publishedAt": "2026-10-04T16:47:27.284Z",
+  "revision": 13,
+  "publishedAt": "2026-10-04T17:47:38.152Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -159,9 +159,19 @@
       "sha256": "dc0d2664b05c2045c1095f06c8e422724865b145267aa3a6d1dc45fba836f239"
     },
     {
+      "path": "launcher-life-room.js",
+      "bytes": 32265,
+      "sha256": "60677e72704149ad56c0a91a2179df5bafdf27fde7d3fe76f1996e76a65d3720"
+    },
+    {
+      "path": "launcher-room-aquarium.css",
+      "bytes": 13187,
+      "sha256": "9041cb220e1c17a8ff57506eccb7b5ba6dd8448f25df8a608a8537c5f9633d56"
+    },
+    {
       "path": "launcher-room-aquarium.js",
-      "bytes": 8917,
-      "sha256": "5a8efacc55de6e56480aea0fb0c8511f5ab6525f478bc69c2819a217dd6a0022"
+      "bytes": 26883,
+      "sha256": "ef686e3341669e8b69afbea167ee63263edfe0cfe094258292fe670963bfb6df"
     },
     {
       "path": "launcher-room-minigames.css",
@@ -185,13 +195,13 @@
     },
     {
       "path": "launcher-room.js",
-      "bytes": 119055,
-      "sha256": "bd33d84d8c443b6092465b30a9f87052d7694661b1cfcad73a31dba48fb88d60"
+      "bytes": 121769,
+      "sha256": "0322a154ab177c88901037ad57b41bbf8fc73e37bd8079706a9ce88e15d9ed9e"
     }
   ],
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "7Etd7F81N9WzCGnBYKhrxSbVrbtOcqY0huP+M2+mj6EYldnnbWdhcgA6rlM918lPGxuPj/Kbri3BO679hsAfBQ=="
+    "value": "/K+0m/tJeGo4NAgbiqZ5BTZ9Ns7wF0r52g0oVPq2D0Ie8gXgnQHfHqfILxV/75TlNTzThZu34Gnn0fVLmBLlAQ=="
   }
 }

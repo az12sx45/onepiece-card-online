@@ -215,6 +215,7 @@
   let assignment = null;
   let assignmentBusy = false;
   const companionStats = new Map();
+  let aquariumManager = null;
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let renderedRevision = -1;
   const lifeRoom = window.OnePieceLifeRoom?.create({
@@ -226,6 +227,7 @@
     editing: () => editing, reducedMotion: () => motion.matches, roomStatus: status,
     focus: holdCompanionAttention, deferAttentionMovement,
     onFishChanged() { renderAquarium(); },
+    onLifeChanged() { aquariumManager?.render(); },
     finishManual(itemId) {
       if (companionId !== itemId) return;
       const walker = walkers.find(entry => entry.item?.id === itemId);
@@ -257,6 +259,31 @@
         queueMicrotask(() => { if (epoch === viewEpoch && !editing) render(); });
       }
     }
+  });
+  aquariumManager = window.OnePieceRoomAquarium?.createManager?.({
+    isOwner,
+    collection: () => lifeRoom?.fishCollection?.() || profile?.life?.fishCollection || [],
+    fishOffers: () => lifeRoom?.fishOffers?.() || [],
+    ownedCharacterIds: () => lifeRoom?.ownedCharacterIds?.() || [],
+    wallet: () => lifeRoom?.wallet?.() || shop?.wallet,
+    rod: () => lifeRoom?.rod?.(),
+    recipient(itemId) {
+      const item = resolvedItem(itemId, 'character');
+      const key = String(itemId || '').replace(/^room-character-/, '');
+      const record = companionRecord(itemId);
+      return { name: item?.name || dialogue?.profile?.(key)?.name || key,
+        affinity: Number.isFinite(Number(record?.affinity)) ? Number(record.affinity) : null };
+    },
+    command: (type, payload) => lifeRoom?.aquariumCommand?.(type, payload),
+    refresh: () => lifeRoom?.refresh?.(),
+    focusStage: () => $('roomStage').focus({ preventScroll: true }),
+    onMeal(meal) {
+      if (!meal?.itemId || !Number.isFinite(Number(meal.affinityAfter))) return;
+      companionStats.set(meal.itemId, { ...(companionRecord(meal.itemId) || {}),
+        itemId: meal.itemId, affinity: Number(meal.affinityAfter) });
+      renderCompanionPanel();
+    },
+    onResult() { renderAquarium(); }
   });
 
   function status(message = '', error = false) {
@@ -782,7 +809,7 @@
       hoveredRoomNode = node;
       node?.classList.add('is-hit-hovered');
     }
-    stage.style.cursor = node ? editing ? 'grab' : node.classList.contains('room-character-shell') || assignment ? 'pointer' : '' : '';
+    stage.style.cursor = node ? editing ? 'grab' : node.classList.contains('room-character-shell') || assignment || node.dataset.roomKey === 'f:room-furniture-aquarium-tank' ? 'pointer' : '' : '';
   }
   function floorCellAt(position) {
     const depth = (position.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top);
@@ -817,6 +844,9 @@
       if (active) {
         node.tabIndex = 0; node.setAttribute('role', 'button');
         node.setAttribute('aria-label', `指派${assignment.name}使用${resolvedItem(node.dataset.roomKey.slice(2), 'furniture')?.name || '家具'}`);
+      } else if (!editing && node.dataset.roomKey === 'f:room-furniture-aquarium-tank') {
+        node.tabIndex = 0; node.setAttribute('role', 'button');
+        node.setAttribute('aria-label', '查看並管理水族箱漁獲');
       } else {
         node.removeAttribute('tabindex'); node.removeAttribute('role'); node.removeAttribute('aria-label');
       }
@@ -1558,6 +1588,11 @@
       if (keyForFurniture(item) === 'aquarium-tank') {
         node.classList.add('room-aquarium-furniture');
         node.dataset.aquariumTank = 'true';
+        node.setAttribute('tabindex', editing ? '-1' : '0');
+        node.setAttribute('role', 'button');
+        node.setAttribute('aria-haspopup', 'dialog');
+        node.setAttribute('aria-controls', 'roomAquariumManager');
+        node.setAttribute('aria-label', '查看並管理水族箱漁獲');
         const waterWindow = el('div', 'room-aquarium-window');
         waterWindow.dataset.aquariumTank = 'furniture';
         waterWindow.setAttribute('aria-hidden', 'true');
@@ -1565,6 +1600,10 @@
       }
       node.dataset.roomKey = `f:${entry.itemId}`;
       node.onkeydown = event => {
+        if (!editing && !assignment && keyForFurniture(item) === 'aquarium-tank' &&
+            (event.key === 'Enter' || event.key === ' ')) {
+          event.preventDefault(); event.stopPropagation(); aquariumManager?.open(); return;
+        }
         if (!assignment || (event.key !== 'Enter' && event.key !== ' ')) return;
         event.preventDefault(); event.stopPropagation();
         void submitAssignment({ kind: 'furniture', itemId: entry.itemId });
@@ -1764,6 +1803,7 @@
   function render() { renderStage(); renderSceneSwitcher(); renderEditor(); renderCompanionPanel(); }
   async function openEditor() {
     if (!isOwner() || editing || saving) return;
+    aquariumManager?.close();
     if (assignment) cancelAssignment();
     const openEpoch = viewEpoch;
     const openAccountId = accountId;
@@ -1829,7 +1869,7 @@
       viewEpoch++;
       clearTimeout(sceneSwitchTimer); sceneSwitchTimer = 0; displaySceneId = '';
     }
-    if (changedOwner) { closeCompanion(); companionStats.clear(); pairHistory.clear(); }
+    if (changedOwner) { closeCompanion(); aquariumManager?.close(); companionStats.clear(); pairHistory.clear(); }
     profile = nextProfile || null; accountId = nextAccount; preview = nextPreview;
     if (assignment && (changedOwner || !isOwner() || assignment.sceneId !== activeRoom().sceneId ||
         !activeRoom().characters.some(entry => entry.itemId === assignment.itemId))) cancelAssignment();
@@ -1841,7 +1881,7 @@
     if (sameRoom && !editing && $('roomCharacters').children.length) { renderEditor(); renderCompanionPanel(); }
     else render();
   }
-  function onVisible(panel) { visible = panel === 'profile'; if (!visible) { closeCompanion(); cancelAssignment(); } refreshAnimation(); }
+  function onVisible(panel) { visible = panel === 'profile'; if (!visible) { closeCompanion(); aquariumManager?.close(); cancelAssignment(); } refreshAnimation(); }
 
   $('roomEditToggle').onclick = () => editing ? closeEditor() : openEditor();
   $('roomCancel').onclick = closeEditor;
@@ -1933,6 +1973,8 @@
     const hit = roomHitAt(event.clientX, event.clientY);
     if (!assignment) {
       if (hit?.classList.contains('room-character-shell')) void openCompanion(hit.dataset.roomKey.slice(2));
+      else if (hit?.dataset.roomKey === 'f:room-furniture-aquarium-tank' ||
+          event.target.closest?.('.room-aquarium-scene-window')) aquariumManager?.open();
       return;
     }
     if (assignmentBusy) return;
@@ -1966,6 +2008,10 @@
   $('roomStage').addEventListener('pointerup', endDrag);
   $('roomStage').addEventListener('pointercancel', endDrag);
   $('roomStage').addEventListener('keydown', event => {
+    if (!editing && !assignment && event.target.classList?.contains('room-aquarium-scene-window') &&
+        (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault(); aquariumManager?.open(); return;
+    }
     if (assignment && event.target === $('roomStage')) {
       const delta = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[event.key];
       if (delta) {
