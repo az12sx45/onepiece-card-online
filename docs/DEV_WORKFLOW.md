@@ -7882,3 +7882,18 @@ Source npm start、封裝 Electron、installer SHA／签章、公開版本切換
 - 本機驗證：新圖 SHA-256 為 `5adcf08948cce89ba9ebe5590abb4d8af40e2b1cde73d315259e6ab2de2ca482`，314,538 bytes，1024×1536、透明邊角；遊戲桌機與 390×844 窄視窗截圖確認半身比例、台詞和控制鍵不相擋。`scripts/board_feature_island_intro_qa.js` 用本機素材模式完成 20／20 情境，`errors=[]`、`failures=[]`，報告與截圖在 `D:/Codex_QA/board-island-intros-20261004/hospital-crocus-half-local-static/`。一般本機桌面分發模式會把圖片轉址到舊公開 CAS，故不可用該模式的截圖驗新圖；測試改以 `OP_DESKTOP_ONLY=0` 載入本機素材。未設定資料庫，不宣稱真人房間驗收。
 - 發行：新增 `scripts/build_board_crocus_portrait_release.js`，鎖前版公開 Board package，只准既有可樂克斯圖片記錄更動。候選 `D:/Codex_QA/board-island-intros-20261004/hospital-crocus-half-candidate/` 已雙向讀回，Board `package-8d97e397c7dcb7a6`、manifest SHA-256 `58fcf19fa6d656f8b13384d08e24d279f44d9eaff5b71ff0a52d6d7de4aba9d4`，6,415 筆不增減，Card／Chess 與其他 Board 記錄不變。來源提交 `4d29868194706ecb433b23ae662cbf85072faf13` 的 Git HEAD 乾跑核對 6,089／6,089 個不重複物件，R2 live 上傳 1 個、沿用 6,088 個，已非強制推送 `main`；公開 runtime 與瀏覽器驗證須另以實際讀回為準。
 - 公開驗證：`/api/desktop-runtime-package/board` 已回報 `package-8d97e397c7dcb7a6` 與上述 manifest SHA；公開 catalog、Board／Card／Chess runtime 與 manifest、可樂克斯圖片 Electron 轉址、直連及 CAS 的大小、SHA 和精確位元組共 71／71 通過，報告 `D:/Codex_QA/board-island-intros-20261004/hospital-crocus-half-public-verify/public-verify.json`。正式網址以桌面啟動器 User-Agent 跑 Chromium 20／20 島嶼劇情情境，`errors=[]`、`failures=[]`，醫院桌機與窄視窗截圖在 `D:/Codex_QA/board-island-intros-20261004/hospital-crocus-half-public-browser/`。QA 入口強制首訪，不代表真人擲骰抵達、正式帳號或跨裝置多人房間驗收。D 正式來源只同步本次圖片、工具及文件；其現有髒工作樹與不同版 catalog 未覆寫。LATTICE 官方 Status 仍為 `BLOCKED/CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未宣稱任務或圖譜寫入成功。
+
+
+## 2026-10-06 — 釣魚 r17（候選，發布驗證進行中）
+
+- 正式來源：D:/Codex_Release_Worktrees/launcher-flick-reward-r12。參考玩家提供 53.55 秒 PC 遊玩錄影；沒有宣稱直接試玩參考遊戲。
+- 新 V5 flick 回合有魚距及魚體力；兩者歸零才上岸。一般收線增益乘 0.48；消耗乘 1.9，放線回復至少 14/秒。魚體力降低會削弱衝刺拉力。
+- 成功甩竿存 1 格（最多 6）；3 格可向上爆拉，6 格可按 X 或按鈕進入 8 秒、6 鍵方向判定。伺服器逐鍵驗證；成功必殺減魚體力 55、距離 8；爆拉減距離 15、魚體力 12。方向提示中上鍵優先回應提示。
+- 13 位已開放角色的技能取自原作招式，釣魚用途是本啟動器改編。正常比例透明立繪持個人釣竿，配合 cut-in、招式色彩與水面衝擊動畫；不使用 Q 版必殺圖。
+- 六釣場重画第一人稱前方水面，水平遠岸及遠近水紋。魚線仍從實際動畫竿尖追蹤到入水點，水花保持竿後圖層。
+- fishingRodLevels 為角色 id 到等級的映射。缺少映射時把既有付費 fishingRodLevel 保留給各擁有角色；後續 recipientId 指定個人改裝，原子扣款、重播去重，回合開始時固定該角色等級。未開放角色不新增販售。
+- 修改：server/launcher-fishing-v5.js、launcher-minigames.js、launcher-life.js、launcher-life-store.js；desktop/launcher-room-minigames.js/css、launcher-life-room.js、launcher-room-aquarium.js；public/images/launcher_room/fishing_v6；釣魚 QA 腳本與公告。
+- 已執行：新玩法 66 檢查（36 魚）、釣竿 PGlite 59 檢查（含角色獨立改裝）、舊 V5 1211 檢查、desktop 瀏覽器 112、六場景 15；npm start 43217 及 board_start HTTP 200。未連正式玩家帳號，不將自動 QA 視為真人體驗。後续素材與發布證據见 D:/Codex_QA/launcher-fishing-r17。
+
+- 最終驗證：必殺技鍵盤與持竿立繪 desktop/minimum 共15檢查通過；原版 V5 flick 2296、PGlite life21、公告82、minimum110。修復 QTE 更新 DOM 時的鍵盤焦點中斷。13張持竿圖已逐張/合圖審查並轉WebP。
+- 簽署 r17：58項；R2新增23個blob，唯一差分6,790,607 bytes。R2 HEAD/GET/SHA全通過；隔離 revision16 快取升至17、驗證全部內容與重查不重載已通過。公開部署仍待讀回。

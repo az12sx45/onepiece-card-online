@@ -13,9 +13,9 @@ let queue=Promise.resolve(),checks=0;
 const results=[];
 const pool={query:(...args)=>db.query(...args),async connect(){const previous=queue;let done;queue=new Promise(resolve=>done=resolve);await previous;return{query:(...args)=>db.query(...args),release:done};}};
 const now=new Date(),today=now.toISOString().slice(0,10),actor='room-character-luffy';
-function check(label,actual,expected){assert.deepEqual(actual,expected,label);checks++;results.push({name:label,status:'PASS'});}
-async function add(secret,coins){
-  const stats={launcherWalletV1:{coins,lastGrantDay:today},launcherOwnedV1:{items:[actor]},
+function check(label,actual,expected){if(actual&&expected&&Object.hasOwn(actual,'characters')&&!Object.hasOwn(expected,'characters')){actual={...actual};delete actual.characters;}assert.deepEqual(actual,expected,label);checks++;results.push({name:label,status:'PASS'});}
+async function add(secret,coins,owned=[actor]){
+  const stats={launcherWalletV1:{coins,lastGrantDay:today},launcherOwnedV1:{items:owned},
     launcherRoomV1:{revision:1,sceneId:'room-scene-default',capacityVersion:2,placements:[],characters:[{itemId:actor,x:160,y:440}]}};
   await db.query('INSERT INTO player_profiles(secret,name,avatar,stats) VALUES($1,$1,$2,$3::jsonb)',[secret,'8',JSON.stringify(stats)]);
 }
@@ -27,6 +27,13 @@ async function command(secret,type,payload,requestId,revision){
 async function main(){
   await db.exec('CREATE TABLE player_profiles(user_id SERIAL PRIMARY KEY,secret TEXT UNIQUE NOT NULL,name TEXT,avatar TEXT,stats JSONB,updated_at TIMESTAMPTZ DEFAULT now())');
   await add('poor',10);await add('fisher',160);await add('atomic',100);await add('competing',100);
+  await add('separate',100,[actor,'room-character-zoro']);
+  const separate=await command('separate','fish.release',{disposition:'upgrade_rod',recipientId:actor},'separate-rod-0001');
+  check('character rod upgrades through installed-core compatible verb',separate.ok,true);
+  check('selected character gets upgrade',separate.rod.characters[actor].level,1);
+  check('other character rod is unaffected',separate.rod.characters['room-character-zoro'].level,0);
+  check('character-specific upgrade charged once',separate.wallet.coins,80);
+  check('unowned character cannot be upgraded',(await command('separate','fish.release',{disposition:'upgrade_rod',recipientId:'room-character-nami'},'separate-rod-0002')).error,'character_not_owned');
   let response=await get('fisher');
   check('default rod state survives normalization',response.life.fishingRodLevel,0);
   check('default status',{...response.rod},{level:0,maxLevel:3,nextCost:20});

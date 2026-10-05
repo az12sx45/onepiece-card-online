@@ -288,15 +288,19 @@
     function appendWorkshop(rod, balance) {
       if (!owner()) return;
       const workshop = element('footer', 'room-aquarium-manager-workshop');
-      const level = Number.isInteger(rod?.level) ? rod.level : null;
+      const selectedRod=rod?.characters?.[recipientId]||rod;
+      const chooser=element('select','room-aquarium-manager-rod-character');chooser.setAttribute('aria-label','選擇改裝釣竿的角色');
+      for(const id of ownedCharacters()){const option=element('option','',options.recipient?.(id)?.name||id);option.value=id;chooser.append(option);}
+      chooser.value=recipientId;chooser.disabled=busy;chooser.onchange=()=>{recipientId=chooser.value;clearConfirmation();renderManager();};workshop.append(chooser);
+      const level = Number.isInteger(selectedRod?.level) ? selectedRod.level : null;
       const maxLevel = Number.isInteger(rod?.maxLevel) ? rod.maxLevel : 3;
-      const nextCost = Number.isInteger(rod?.nextCost) ? rod.nextCost : null;
+      const nextCost = Number.isInteger(selectedRod?.nextCost) ? selectedRod.nextCost : null;
       workshop.append(element('span', '', `佛朗基釣竿工房 · ${level === null ? '等級讀取中' : `Lv ${level} / ${maxLevel}`}`),
         element('small', '', level === null ? '正在讀取改裝資料' : level >= maxLevel ? '釣竿已達最高等級' : `下一級需 ${nextCost ?? '—'} 枚金幣 · 目前 ${balance ?? '—'} 枚`));
       const upgrade = button(confirmation === 'rod.upgrade' ? '確定請佛朗基改裝' : level >= maxLevel ? '已滿級' : '請佛朗基改裝釣竿',
         'room-aquarium-manager-upgrade', () => {
           if (!askConfirmation('rod.upgrade')) return;
-          void perform('rod.upgrade', {}, result => `佛朗基已把釣竿改裝到 Lv ${result.rod?.level ?? '—'}。`);
+          void perform('rod.upgrade', {itemId:recipientId}, result => `佛朗基已把這位夥伴的釣竿改裝到 Lv ${result.rod?.characters?.[recipientId]?.level ?? '—'}。`);
         });
       upgrade.disabled = busy || level === null || level >= maxLevel || nextCost === null || balance === null || balance < nextCost;
       workshop.append(upgrade); card.append(workshop);

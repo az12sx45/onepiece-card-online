@@ -26,7 +26,7 @@ const forcedSpecies=new Map([['light-force','lovely-angel'],['heavy-force','gold
   ['flick-up','glistening-saury'],['flick-right','glistening-saury'],['flick-left','glistening-saury'],
   ['flick-wrong','glistening-saury'],['flick-miss','glistening-saury'],
   ['flick-pre-cue-blur','glistening-saury']]);
-const flickSeeds={'flick-up':52,'flick-right':56,'flick-left':57,'flick-wrong':52,'flick-miss':52,
+const flickSeeds={'power':71,'flick-up':52,'flick-right':56,'flick-left':57,'flick-wrong':52,'flick-miss':52,
   'flick-pre-cue-blur':52};
 let server,browser;
 const check=(name,condition)=>{assert(condition,name);checks.push(name);};
@@ -86,7 +86,7 @@ async function serve(){
         if(!session||session.challenge?.stage!=='fight'){respond(res,{ok:false});return;}
         // UI settlement fixture: the engine itself still decides the landing
         // on the next genuine sync/control call.
-        session.challenge.distance=-1;session.challenge.strength=Math.max(50,session.challenge.strength);
+        session.challenge.distance=-1;session.challenge.fishStamina=0;session.challenge.strength=Math.max(50,session.challenge.strength);
         respond(res,{ok:true});return;
       }
       if(rel==='qa-miss'&&req.method==='POST'){
@@ -128,6 +128,11 @@ async function serve(){
           respond(res,{ok:false});return;
         }
         session.challenge.strength=strength;session.challenge.tension=100-strength;
+        respond(res,{ok:true});return;
+      }
+      if(rel==='qa-power'&&req.method==='POST'){
+        const session=sessions.get(client);if(!session?.challenge){respond(res,{ok:false});return;}
+        session.challenge.powerCharge=6;session.challenge.fishStamina=90;
         respond(res,{ok:true});return;
       }
       if(rel==='qa-audio-calm'&&req.method==='POST'){
@@ -1007,6 +1012,7 @@ async function verifyDistanceRuler(page,label){
 }
 async function verifyLineWheel(page,label){
   const setStrength=async target=>{
+    await page.waitForTimeout(800); // Separate stress fixtures beyond the production sound cooldown.
     const response=await page.evaluate(({client,strength})=>fetch(`/qa-strength?client=${client}`,{
       method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({strength})
     }).then(result=>result.json()),{client:label,strength:target});
@@ -1647,17 +1653,50 @@ async function runSpotProjection(){
       await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor();
       await page.waitForFunction(()=>!document.querySelector('.room-fishing-v4-sea')?.classList.contains('cast-flight'));
       const water=await waterPerspective(page),layers=await lineLayer(page);
-      check(`${label}: forward landing lies on the visible middle water`,water.floatY>=34&&water.floatY<=59&&
-        water.floatX>=59&&water.floatX<=65&&layers.splash<layers.rod&&layers.line<layers.rod);
+      check(`${label}: forward landing lies on the visible middle water`,water.floatY>=43&&water.floatY<=68&&
+        water.floatX>=51&&water.floatX<=53&&layers.splash<layers.rod&&layers.line<layers.rod);
       await snapshot(page,label);await page.evaluate(()=>__minigame.dismiss());
     }
   }finally{await context.close();}
 }
+async function runPower(){
+ for(const [label,width,height] of [['power-desktop',1440,900],['power-minimum',960,640]]){
+  const context=await browser.newContext({viewport:{width,height}}),page=await context.newPage();
+  try{
+   await setup(page,'power');await page.getByRole('button',{name:'開始釣魚'}).click();
+   await page.locator('.room-fishing-v4-cast').evaluate(b=>b.click());
+   await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.biting==='true',null,{timeout:8000});
+   await page.locator('.room-fishing-v4-hook').click();
+   await page.locator('.room-fishing-v4-sea[data-stage="fight"]').waitFor();
+   await page.evaluate(()=>fetch('/qa-power?client=power',{method:'POST'}));
+   await page.waitForFunction(()=>!document.querySelector('.room-fishing-special')?.disabled);
+   check(label+': stamina meter and six charge lights visible',await page.locator('.room-fishing-fish-stamina').isVisible()&&await page.locator('.room-fishing-power-charge i[data-full=true]').count()===6);
+   await snapshot(page,label+'-fight');await page.locator('.room-fishing-special').click();
+   await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
+   await snapshot(page,label+'-rhythm');
+   const sequence=sessions.get('power').challenge.special.sequence.slice();
+   for(const direction of sequence){await page.keyboard.press({left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown'}[direction]);await page.waitForTimeout(220);}
+   await page.locator('.room-fishing-special-character').waitFor();
+   await page.waitForFunction(()=>{const i=document.querySelector('.room-fishing-special-character');return i?.complete&&i.naturalWidth>0;});
+   check(label+': normal-proportion dedicated character art used',await page.locator('.room-fishing-special-character').evaluate(i=>i.src.includes('fishing_v6/special-luffy.webp')&&i.naturalWidth>=900));
+   check(label+': skill really reduces fish stamina',sessions.get('power').challenge.fishStamina<=35);
+   check(label+': skill consumes charges',sessions.get('power').challenge.powerCharge===0);
+   await page.waitForTimeout(550);await snapshot(page,label+'-skill');
+   await page.evaluate(()=>fetch('/qa-power?client=power',{method:'POST'}));
+   await page.waitForFunction(()=>!document.querySelector('.room-fishing-burst')?.disabled);
+   await page.locator('.room-fishing-burst').click();await page.waitForTimeout(400);
+   check(label+': burst spends three charges',sessions.get('power').challenge.powerCharge===3);
+   await snapshot(page,label+'-burst');
+  }finally{await context.close();}
+ }
+}
+
 async function main(){
   fs.mkdirSync(out,{recursive:true});await serve();
   browser=await chromium.launch({executablePath:chrome,headless:true});
   try{
     verifyZeroStrengthBreak();
+    if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='power')await runPower();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='cast')await runCastInputs();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='spots')await runSpotProjection();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='desktop')await runV5('desktop',1440,900);

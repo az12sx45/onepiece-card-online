@@ -389,8 +389,9 @@ function answerClockedFishing(session,payload,now) {
   const round=session.challenge,actions=payload.counterMoves;
   const engine=round.fishingVersion===5?fishingV5:fishingV4;
   if(!Array.isArray(actions)||actions.length!==1||
-      !['cast','hook','control','flick','sync','timeout'].includes(actions[0])||
-      ['selections','directions','ingredients','rotations','path'].some(key=>payload[key]!==undefined))
+      !['cast','hook','control','flick','burst','special','specialKey','sync','timeout'].includes(actions[0])||
+      ['selections','ingredients','rotations','path'].some(key=>payload[key]!==undefined)||
+      payload.directions!==undefined&&!(actions[0]==='specialKey'&&Array.isArray(payload.directions)&&payload.directions.length===1&&['left','right','up','down'].includes(payload.directions[0])))
     return{error:'invalid_minigame_answer'};
   const move=actions[0],at=now.getTime();
   if(move==='cast') {
@@ -439,6 +440,7 @@ function answerClockedFishing(session,payload,now) {
     if(move==='timeout')return{error:'invalid_fishing_action'};
     if(move!=='hook')return{error:'invalid_fishing_action'};
     if(at<Date.parse(round.biteAt))return{error:'fishing_not_bitten'};
+    round.characterKey=session.characterId.slice(15);
     engine.hook(round,now,FISHING_V3_DIFFICULTY[session.catchSpeciesId]??1,session.catchSpeciesId);
     return{};
   }
@@ -447,6 +449,13 @@ function answerClockedFishing(session,payload,now) {
   if(result)return advanceRound(session,result==='landed',now,result);
   if(move==='timeout')return{error:'invalid_fishing_action'};
   if(move==='sync')return{};
+  if(['burst','special','specialKey'].includes(move)){
+    if(round.fishingVersion!==5||move==='specialKey'&&!payload.directions)return{error:'invalid_fishing_action'};
+    const response=engine.power(round,now,move,payload.directions?.[0]);
+    if(response.error)return response;
+    if(response.settlement)return advanceRound(session,response.settlement==='landed',now,response.settlement);
+    return{};
+  }
   if(move==='flick'){
     const flickResult=engine.flick(round,now,payload.flickDirection,payload.flickCueId);
     if(flickResult.error)return{error:flickResult.error};

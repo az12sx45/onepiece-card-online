@@ -2486,3 +2486,18 @@ This describes the prepared 1.2.7 candidate. Public release status requires the 
 ### 可樂克斯半身立繪校正（2026-10-04）
 
 醫院島首訪沿用原有台詞、說話者與服務流程，僅將可樂克斯透明立繪依使用者提供的角色參考修成 1024×1536 半身規格。花瓣頭飾、眼鏡、白色八字鬍、細長綠鬍鬚和粉紅／綠／黃服飾保留，腿與鞋不再出現在對話畫面；同路徑素材替換，不增加遊戲狀態或改動其他人物圖。Board `package-8d97e397c7dcb7a6` 已公開讀回，正式網址劇情測試 20／20 通過；驗證邊界見 `DEV_WORKFLOW.md`。
+
+
+## 2026-10-06 — 釣魚 r17（候選，發布驗證進行中）
+
+- 正式來源：D:/Codex_Release_Worktrees/launcher-flick-reward-r12。參考玩家提供 53.55 秒 PC 遊玩錄影；沒有宣稱直接試玩參考遊戲。
+- 新 V5 flick 回合有魚距及魚體力；兩者歸零才上岸。一般收線增益乘 0.48；消耗乘 1.9，放線回復至少 14/秒。魚體力降低會削弱衝刺拉力。
+- 成功甩竿存 1 格（最多 6）；3 格可向上爆拉，6 格可按 X 或按鈕進入 8 秒、6 鍵方向判定。伺服器逐鍵驗證；成功必殺減魚體力 55、距離 8；爆拉減距離 15、魚體力 12。方向提示中上鍵優先回應提示。
+- 13 位已開放角色的技能取自原作招式，釣魚用途是本啟動器改編。正常比例透明立繪持個人釣竿，配合 cut-in、招式色彩與水面衝擊動畫；不使用 Q 版必殺圖。
+- 六釣場重画第一人稱前方水面，水平遠岸及遠近水紋。魚線仍從實際動畫竿尖追蹤到入水點，水花保持竿後圖層。
+- fishingRodLevels 為角色 id 到等級的映射。缺少映射時把既有付費 fishingRodLevel 保留給各擁有角色；後續 recipientId 指定個人改裝，原子扣款、重播去重，回合開始時固定該角色等級。未開放角色不新增販售。
+- 修改：server/launcher-fishing-v5.js、launcher-minigames.js、launcher-life.js、launcher-life-store.js；desktop/launcher-room-minigames.js/css、launcher-life-room.js、launcher-room-aquarium.js；public/images/launcher_room/fishing_v6；釣魚 QA 腳本與公告。
+- 已執行：新玩法 66 檢查（36 魚）、釣竿 PGlite 59 檢查（含角色獨立改裝）、舊 V5 1211 檢查、desktop 瀏覽器 112、六場景 15；npm start 43217 及 board_start HTTP 200。未連正式玩家帳號，不將自動 QA 視為真人體驗。後续素材與發布證據见 D:/Codex_QA/launcher-fishing-r17。
+
+- 最終驗證：必殺技鍵盤與持竿立繪 desktop/minimum 共15檢查通過；原版 V5 flick 2296、PGlite life21、公告82、minimum110。修復 QTE 更新 DOM 時的鍵盤焦點中斷。13張持竿圖已逐張/合圖審查並轉WebP。
+- 簽署 r17：58項；R2新增23個blob，唯一差分6,790,607 bytes。R2 HEAD/GET/SHA全通過；隔離 revision16 快取升至17、驗證全部內容與重查不重載已通過。公開部署仍待讀回。

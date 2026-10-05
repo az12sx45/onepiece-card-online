@@ -19,8 +19,10 @@ const keyOf = id => typeof id === 'string' && id.startsWith('room-character-') &
 const iso = value => typeof value === 'string' && Number.isFinite(Date.parse(value)) ? new Date(value).toISOString() : null;
 const day = now => now.toISOString().slice(0,10);
 const rodLevel = value => Number.isInteger(value) && value >= 0 && value <= ROD_UPGRADE_COSTS.length ? value : 0;
+const characterRodLevel=(state,id)=>rodLevel(state.fishingRodLevels?.[id]??state.fishingRodLevel);
 const rodStatus = state => ({level:rodLevel(state.fishingRodLevel),maxLevel:ROD_UPGRADE_COSTS.length,
-  nextCost:ROD_UPGRADE_COSTS[rodLevel(state.fishingRodLevel)] ?? null});
+  nextCost:ROD_UPGRADE_COSTS[rodLevel(state.fishingRodLevel)] ?? null,
+  characters:Object.fromEntries(state.ownedCharacterIds.map(id=>{const level=characterRodLevel(state,id);return[id,{level,nextCost:ROD_UPGRADE_COSTS[level]??null}];}))});
 const pairKey = (a,b) => [keyOf(a) || a,keyOf(b) || b].sort().join(':');
 function content() { return require('../desktop/launcher-life-data'); }
 function canonical(value) {
@@ -59,6 +61,7 @@ function normalizeState(raw, ownedIds, activeIds, now) {
     arrivedCharacterIds: (Array.isArray(saved.arrivedCharacterIds) ? saved.arrivedCharacterIds : owned).filter(id => set.has(id)),
     recentEvents: (Array.isArray(saved.recentEvents) ? saved.recentEvents : []).filter(e => e && typeof e.eventId === 'string' && iso(e.at)).slice(-32),
     fishCollection, fishingRodLevel:rodLevel(saved.fishingRodLevel),
+    fishingRodLevels:Object.fromEntries(owned.map(id=>[id,rodLevel(object(saved.fishingRodLevels)[id]??saved.fishingRodLevel)])),
     lastSimulatedAt: iso(saved.lastSimulatedAt) || now.toISOString(), lastSeenAt: iso(saved.lastSeenAt) || now.toISOString(),
     lastExitAt: iso(saved.lastExitAt), offlineSummary: { elapsedMs:0,completedJobs:0,coins:0 } };
   for (let a=0;a<owned.length;a++) for(let b=a+1;b<owned.length;b++) {

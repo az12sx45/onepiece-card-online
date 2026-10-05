@@ -193,7 +193,7 @@
         const wireType=['fish.cook','fish.sell','rod.upgrade'].includes(type)?'fish.release':type;
         const wirePayload=type==='fish.cook'?{fishId:payload.fishId,disposition:'cook',recipientId:payload.itemId}:
           type==='fish.sell'?{fishId:payload.fishId,disposition:'sell'}:
-          type==='rod.upgrade'?{disposition:'upgrade_rod'}:{...payload};
+          type==='rod.upgrade'?{disposition:'upgrade_rod',...payload.itemId?{recipientId:payload.itemId}:{}}:{...payload};
         const body={requestId,expectedRevision:serverLife?.revision||0,type:wireType,payload:wirePayload};
         if(type==='work.reserve')body.payload.roomRevision=env.room().revision;
         if(type==='directive.set'&&!body.payload.directiveId){body.payload.directiveId=body.payload.directive;delete body.payload.directive;}

@@ -37,7 +37,7 @@ function responsive(round){
 }
 function fightWithFlicks(seed,speciesId,skill,cadenceMs=350){
   const round=makeRound(seed,speciesId);let at=4000,result=null,flicks=0;
-  for(;at<93000&&!result;at+=cadenceMs){
+  for(;at<4000+v5.DURATION_MS&&!result;at+=cadenceMs){
     result=v5.simulate(round,date(at+cadenceMs),skill);
     if(result)break;
     if(round.flickCue){
@@ -134,7 +134,7 @@ function main(){
     const hit=JSON.parse(JSON.stringify(round)),wrong=JSON.parse(JSON.stringify(round));
     const at=Date.parse(cue.startedAt)+500;
     check(`${direction} correct flick accepted`,v5.flick(hit,date(at),direction,cue.id).result,'hit');
-    check(`${direction} correct flick has line relief`,hit.strength>round.strength&&hit.distance<round.distance,true);
+    check(`${direction} correct flick has line relief`,(hit.strength>round.strength||round.strength===round.maxStrength)&&hit.distance<round.distance,true);
     check(`${direction} correct flick grants an exact assist window`,
       Date.parse(hit.flickReliefUntil)-at,v5.FLICK_RELIEF_MS);
     const assisted=JSON.parse(JSON.stringify(hit)),unassisted=JSON.parse(JSON.stringify(hit));

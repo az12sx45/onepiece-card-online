@@ -658,23 +658,23 @@
 .fishing-v5 .room-fishing-v4-sea[data-stage=fight][data-run-state=surge]::after{opacity:.34}
 .fishing-v5 .room-fishing-v4-sea[data-stage=fight][data-risk=danger]::after{opacity:.8;background:radial-gradient(ellipse at 50% 42%,transparent 27%,#75302f82 100%);animation:room-fishing-v5-vignette .66s ease-in-out infinite alternate}
 @keyframes room-fishing-v5-vignette{to{opacity:.96}}
-.fishing-v5 .room-fishing-v5-rod{left:50%;bottom:0;width:min(82%,920px);height:auto;aspect-ratio:4/3;object-fit:initial;transform-origin:50% 100%;filter:drop-shadow(0 5px 8px #06232d9c);transform:translateX(-50%) rotate(var(--rod-tilt,0deg));transition:transform .13s cubic-bezier(.2,.75,.2,1)}
+.fishing-v5 .room-fishing-v5-rod{left:50%;bottom:0;width:min(82%,920px);height:auto;aspect-ratio:4/3;object-fit:initial;transform-origin:50% 100%;filter:drop-shadow(0 5px 8px #06232d9c);transform:translateX(-50%) rotate(calc(16deg + var(--rod-tilt,0deg)));transition:transform .13s cubic-bezier(.2,.75,.2,1)}
 .fishing-v5 .room-fishing-v4-sea.cast-flight .room-fishing-v5-rod{animation:room-fishing-v5-cast-sweep .86s cubic-bezier(.18,.72,.27,1) both}
-@keyframes room-fishing-v5-cast-sweep{0%{transform:translateX(-50%) rotate(-20deg)}22%{transform:translateX(calc(-50% - 38px)) translateY(22px) rotate(-29deg)}46%{transform:translateX(calc(-50% + 22px)) translateY(28px) rotate(13deg)}72%{transform:translateX(calc(-50% + 6px)) translateY(-16px) rotate(4deg)}100%{transform:translateX(-50%) rotate(0deg)}}
+@keyframes room-fishing-v5-cast-sweep{0%{transform:translateX(-50%) rotate(-4deg)}22%{transform:translateX(calc(-50% - 38px)) translateY(22px) rotate(-13deg)}46%{transform:translateX(calc(-50% + 22px)) translateY(28px) rotate(29deg)}72%{transform:translateX(calc(-50% + 6px)) translateY(-16px) rotate(20deg)}100%{transform:translateX(-50%) rotate(16deg)}}
 .room-fishing-v5-rod-shaft,.room-fishing-v5-rod-grip{position:absolute;inset:0;display:block;background-image:url('opui://launcher/images/launcher_room/fishing_v5/rod-no-line-v1.webp');background-size:400% 500%;background-position:var(--rod-atlas-x,0%) var(--rod-atlas-y,0%);background-repeat:no-repeat;pointer-events:none}
 .room-fishing-v5-rod-shaft{z-index:1;clip-path:inset(0 0 34% 0);transform-origin:50% 66%;transform:rotate(var(--shaft-bend,0deg));transition:transform .11s cubic-bezier(.15,.85,.25,1)}
 .room-fishing-v5-rod-grip{z-index:2;clip-path:inset(63% 0 0 0)}
 .room-fishing-v5-rod-crank{position:absolute;z-index:3;left:51.953%;top:66.927%;width:22.168%;height:29.557%;background-image:url('opui://launcher/images/launcher_room/fishing_v5/rod-no-line-v1.webp');background-size:1804.405% 1691.630%;background-repeat:no-repeat;pointer-events:none}
 .room-fishing-v5-rod-tip{position:absolute;left:50%;top:12.5%;width:2px;height:2px;opacity:0;pointer-events:none}
-.fishing-v5 .room-fishing-v4-sea[data-stage=fight] .room-fishing-v5-rod{transform:translateX(-50%) rotate(calc(var(--rod-tilt,0deg) + var(--pull-bend,0deg)))}
+.fishing-v5 .room-fishing-v4-sea[data-stage=fight] .room-fishing-v5-rod{transform:translateX(-50%) rotate(calc(16deg + var(--rod-tilt,0deg) + var(--pull-bend,0deg)))}
 .fishing-v5 .room-fishing-v4-sea[data-stage=fight][data-run-state=surge] .room-fishing-v5-rod{animation:room-fishing-v5-center-strain var(--pull-period,820ms) ease-in-out infinite}
-@keyframes room-fishing-v5-center-strain{0%,100%{transform:translateX(-50%) translateY(0) rotate(calc(var(--rod-tilt,0deg) + var(--pull-bend,0deg)))}50%{transform:translateX(calc(-50% + var(--camera-pan-x,0px))) translateY(8px) rotate(calc(var(--rod-tilt,0deg) + var(--pull-bend,0deg)))}}
+@keyframes room-fishing-v5-center-strain{0%,100%{transform:translateX(-50%) translateY(0) rotate(calc(16deg + var(--rod-tilt,0deg) + var(--pull-bend,0deg)))}50%{transform:translateX(calc(-50% + var(--camera-pan-x,0px))) translateY(8px) rotate(calc(16deg + var(--rod-tilt,0deg) + var(--pull-bend,0deg)))}}
 .fishing-v5 .room-fishing-v4-sea[data-stage=fight][data-flick-motion=left] .room-fishing-v5-rod{animation:room-fishing-v5-center-left .46s cubic-bezier(.18,.8,.25,1) both}
 .fishing-v5 .room-fishing-v4-sea[data-stage=fight][data-flick-motion=right] .room-fishing-v5-rod{animation:room-fishing-v5-center-right .46s cubic-bezier(.18,.8,.25,1) both}
 .fishing-v5 .room-fishing-v4-sea[data-stage=fight][data-flick-motion=up] .room-fishing-v5-rod{animation:room-fishing-v5-center-up .46s cubic-bezier(.18,.8,.25,1) both}
-@keyframes room-fishing-v5-center-left{0%,100%{transform:translateX(-50%) rotate(calc(var(--rod-tilt,0deg) + var(--pull-bend,0deg)))}38%{transform:translateX(calc(-50% - 24px)) translateY(5px) rotate(calc(var(--rod-tilt,0deg) + var(--pull-bend,0deg) - 17deg))}}
-@keyframes room-fishing-v5-center-right{0%,100%{transform:translateX(-50%) rotate(calc(var(--rod-tilt,0deg) + var(--pull-bend,0deg)))}38%{transform:translateX(calc(-50% + 24px)) translateY(5px) rotate(calc(var(--rod-tilt,0deg) + var(--pull-bend,0deg) + 17deg))}}
-@keyframes room-fishing-v5-center-up{0%,100%{transform:translateX(-50%) rotate(calc(var(--rod-tilt,0deg) + var(--pull-bend,0deg)))}36%{transform:translateX(-50%) translateY(-34px) scaleY(.96) rotate(calc(var(--rod-tilt,0deg) + var(--pull-bend,0deg) - 5deg))}}
+@keyframes room-fishing-v5-center-left{0%,100%{transform:translateX(-50%) rotate(calc(16deg + var(--rod-tilt,0deg) + var(--pull-bend,0deg)))}38%{transform:translateX(calc(-50% - 24px)) translateY(5px) rotate(calc(16deg + var(--rod-tilt,0deg) + var(--pull-bend,0deg) - 17deg))}}
+@keyframes room-fishing-v5-center-right{0%,100%{transform:translateX(-50%) rotate(calc(16deg + var(--rod-tilt,0deg) + var(--pull-bend,0deg)))}38%{transform:translateX(calc(-50% + 24px)) translateY(5px) rotate(calc(16deg + var(--rod-tilt,0deg) + var(--pull-bend,0deg) + 17deg))}}
+@keyframes room-fishing-v5-center-up{0%,100%{transform:translateX(-50%) rotate(calc(16deg + var(--rod-tilt,0deg) + var(--pull-bend,0deg)))}36%{transform:translateX(-50%) translateY(-34px) scaleY(.96) rotate(calc(16deg + var(--rod-tilt,0deg) + var(--pull-bend,0deg) - 5deg))}}
 .room-fishing-v5-flick-tell{position:absolute;z-index:6;left:var(--float-x,50%);top:var(--float-y,45%);width:clamp(50px,8.5cqw,100px);height:clamp(50px,8.5cqw,100px);border:3px solid #ffb36c;border-radius:50%;box-shadow:0 0 0 7px #e9654245,0 0 26px #ffd59b;opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,-50%) scale(.5)}
 .fishing-v5 .room-fishing-v4-sea[data-flick-tell=true] .room-fishing-v5-flick-tell{opacity:1;visibility:visible;animation:room-fishing-v5-tell .54s ease-out infinite}
 @keyframes room-fishing-v5-tell{0%{transform:translate(-50%,-50%) scale(.5);opacity:1}100%{transform:translate(-50%,-50%) scale(1.34);opacity:.18}}
@@ -750,3 +750,40 @@
 @media(min-width:601px) and (max-height:700px){.room-fishing-v5-flick-cue{top:39%;left:65%;width:72px;height:72px}.room-fishing-v5-flick-cue strong{font-size:31px}.room-fishing-v5-flick-cue small{font-size:9px}}
 @media(min-width:601px) and (max-height:700px){.fishing-v5 .room-fishing-v4-sea .room-fishing-v5-flick-cue:is([data-direction=left],[data-direction=right]){top:calc(var(--flick-y,45%) + 14%)}}
 @media(prefers-reduced-motion:reduce){.room-fishing-v4-water,.room-fishing-v4-target,.room-fishing-v4-bobber,.room-fishing-v4-splash,.room-fishing-v4-signal,.room-fishing-v4-rod,.room-fishing-v4-dial-spool,.room-fishing-v5-dial-spool,.fishing-v5 .room-fishing-v4-sea::before,.fishing-v5 .room-fishing-v4-water::before,.fishing-v5 .room-fishing-v4-water::after,.room-fishing-v5-flick-cue::before{animation:none!important}}
+/* Fish stamina and six successful counter charges; the existing reel dial is preserved. */
+.room-fishing-power-panel{position:absolute;z-index:8;left:50%;top:12%;transform:translateX(-50%);width:min(400px,45%);display:grid;grid-template-columns:1fr 1fr;gap:8px;color:#fff;pointer-events:none}
+.room-fishing-power-panel[hidden],.room-fishing-rhythm[hidden],.room-fishing-power-effect[hidden]{display:none!important}
+.room-fishing-fish-stamina{grid-column:1/-1;display:flex;align-items:center;gap:10px;text-shadow:0 2px 3px #000;font-weight:700}
+.room-fishing-fish-stamina i{flex:1;height:12px;background:linear-gradient(90deg,#22cebb,#d8e95c);clip-path:inset(0 calc(100% - var(--fish-stamina,100%)) 0 0);box-shadow:0 0 0 2px #132a32}
+.room-fishing-power-charge{grid-column:1/-1;display:flex;justify-content:center;gap:7px}
+.room-fishing-power-charge i{width:27px;height:8px;border:1px solid #e9d8a6;border-radius:5px;background:#102733a6}
+.room-fishing-power-charge i[data-full=true]{background:#ffc85b;box-shadow:0 0 9px #ffc85b}
+.room-fishing-power-panel button{pointer-events:auto;color:#fff1cd;border:1px solid #e5ba5a;border-radius:25px;padding:8px;background:#112d3bd9;font-weight:700}
+.room-fishing-power-panel button:disabled{opacity:.4;pointer-events:none}
+.room-fishing-rhythm{position:absolute;z-index:14;left:50%;top:40%;transform:translateX(-50%);background:#091f33eb;padding:20px;border:1px solid #e6c171;border-radius:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;width:min(480px,85%);box-shadow:0 0 40px #79cbdf44}
+.room-fishing-rhythm strong,.room-fishing-rhythm small{width:100%;text-align:center;color:#ffe7a7}
+.room-fishing-rhythm:after{content:'';width:100%;height:5px;background:linear-gradient(90deg,#ffd369 var(--rhythm-time),#243c50 var(--rhythm-time))}
+.room-fishing-rhythm-arrow{font-size:27px;width:48px;height:48px;background:#182d40;color:#b4c9d7;border:1px solid #58778d;border-radius:50%}
+.room-fishing-rhythm-arrow[data-step=next]{background:#ffe2a4;color:#13293a;box-shadow:0 0 20px #ffc661}
+.room-fishing-rhythm-arrow[data-step=done]{color:#4be4bf;background:#154b43}
+.room-fishing-power-effect{position:absolute;z-index:9;inset:27% 10% 30%;display:grid;place-items:center;pointer-events:none;color:#ffe4a5;font-size:clamp(23px,3vw,44px);font-weight:900;text-shadow:0 3px 4px #071728,0 0 25px #ffc456;background:radial-gradient(ellipse,#ffdc7044,transparent 65%);animation:room-fishing-power-flash .45s ease-out}
+.room-fishing-power-effect[data-theme=flame]{color:#ffd15b;background:radial-gradient(ellipse,#ff602077,transparent 65%)}
+.room-fishing-power-effect[data-theme=wave],.room-fishing-power-effect[data-theme=room],.room-fishing-power-effect[data-theme=soul]{color:#a6f3ff;background:radial-gradient(ellipse,#47dfff66,transparent 65%)}
+.room-fishing-power-effect[data-theme=heart],.room-fishing-power-effect[data-theme=flower]{color:#ffb9df;background:radial-gradient(ellipse,#fb67c466,transparent 65%)}
+.room-fishing-power-effect[data-type=miss]{font-size:24px;background:none;color:#ddd}
+.room-fishing-v4-sea[data-power-active=true] .room-fishing-v4-splash{filter:brightness(1.5);transform:scale(1.3)}
+@keyframes room-fishing-power-flash{from{opacity:0;scale:.8}to{opacity:1;scale:1}}
+@media(max-width:600px){.room-fishing-power-panel{top:10%;width:70%}.room-fishing-power-panel button{font-size:11px;padding:5px}.room-fishing-rhythm-arrow{width:34px;height:34px;font-size:22px}.room-fishing-rhythm{gap:5px}}
+/* r17 first-person view: center water runway, rod anchored to the left hand. */
+.fishing-v5 .room-fishing-v4-sea{background-position:center center;background-size:cover}
+.fishing-v5 .room-fishing-v5-rod{left:28%;width:min(72%,820px);bottom:-2%;transform-origin:50% 100%}
+.fishing-v5 .room-fishing-v4-line-thread{stroke:#dce9e6;stroke-width:1.1;opacity:.8}
+.fishing-v5 .room-fishing-v4-line-shadow{stroke:#153741;stroke-width:1.6;opacity:.2}
+.room-fishing-power-effect[data-type=special]{inset:10% 4% 13%;grid-template-columns:45% 55%;background:linear-gradient(110deg,#10263bde,transparent 90%);overflow:visible;animation:room-fishing-special-cut .35s ease-out}
+.room-fishing-special-character{width:100%;height:100%;max-height:450px;object-fit:contain;object-position:center;filter:drop-shadow(0 0 18px #83f7ff);animation:room-fishing-character-enter .45s cubic-bezier(.15,.8,.25,1)}
+.room-fishing-power-effect[data-type=special] strong{align-self:center;animation:room-fishing-skill-name .45s ease-out;text-align:center}
+@keyframes room-fishing-character-enter{from{transform:translateX(-60px) scale(.85);opacity:0}to{transform:translateX(0) scale(1);opacity:1}}
+@keyframes room-fishing-skill-name{from{transform:translateX(60px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes room-fishing-special-cut{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
+.room-fishing-power-panel{left:auto;right:3%;top:5%;transform:none;width:32%;gap:6px}
+@media(max-width:600px){.room-fishing-power-panel{right:2%;top:4%;width:39%;gap:4px}.room-fishing-power-charge i{width:17px}.room-fishing-fish-stamina{font-size:11px;gap:5px}}

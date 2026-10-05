@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 16,
-  "publishedAt": "2026-10-05T12:03:12.162Z",
+  "revision": 17,
+  "publishedAt": "2026-10-05T17:51:54.071Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -22,6 +22,11 @@
       "path": "audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg",
       "bytes": 16176,
       "sha256": "6afa2406345448a4ee6fc9fc2ef3b88a508c1519fe3518f33f53b6216849f66f"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-fishing-power-r17.webp",
+      "bytes": 289904,
+      "sha256": "079a6b1e35c76d8e3737090ad1f69117fc15022b4f3692e8ca5534a44c0581a3"
     },
     {
       "path": "images/launcher_room/fish_master/alligator-gar.webp",
@@ -87,6 +92,101 @@
       "path": "images/launcher_room/fishing_v5/rod-no-line-v1.webp",
       "bytes": 1329848,
       "sha256": "f14b2a302fae4d05b772c1db5be3457b5dbec1da5c0fd9f35a24064ca4d492e4"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/sea-deep.webp",
+      "bytes": 281756,
+      "sha256": "2783440fc75c1430993ac4bf256ca0bd8f826f82a57d44fdd55f81a4edb75d44"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/sea-freshwater.webp",
+      "bytes": 398672,
+      "sha256": "7f29ac01c8a0507f53970fb16ad2cfcc155b94e04d5ddade5b2bacb49e705aec"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/sea-magma.webp",
+      "bytes": 255880,
+      "sha256": "b8100db71680475c5a970d4b2966382aae1fbbc7e58a09f3f641c93e515cebfd"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/sea-rainbow.webp",
+      "bytes": 322712,
+      "sha256": "1395b0049228c087afa41a7c7cb1a7050ab89f9ac888ada99a7fa5090ca57ef6"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/sea-reef.webp",
+      "bytes": 292226,
+      "sha256": "cb4216efa0a44d4cc681994aea62353fc4b1310d65790a071432d9a30fdea8cb"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/sea-shore.webp",
+      "bytes": 289904,
+      "sha256": "079a6b1e35c76d8e3737090ad1f69117fc15022b4f3692e8ca5534a44c0581a3"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/special-ace.webp",
+      "bytes": 371874,
+      "sha256": "a0261acac67f3af8ae73f1dc6e9ca58c7403fd5d5484ed458c9df03e3d96fabc"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/special-brook.webp",
+      "bytes": 313738,
+      "sha256": "29d0fd57ef142c42cd87209a16148c737a134de39d258743a5b0d802f7efebdd"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/special-chopper.webp",
+      "bytes": 297584,
+      "sha256": "6fbbb79167844e41d500dce157e37f8a9be0fb176cbcfc8320ec37b45042e612"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/special-franky.webp",
+      "bytes": 530084,
+      "sha256": "f5d6ef0c4f93e5e74586f3c9e70d50c0e367b36d065ad46422d6fd212c492871"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/special-jinbe.webp",
+      "bytes": 465964,
+      "sha256": "7b9f5fe697cad272e46bd109c5a8371cc5821a5f2c300a48cfcc897129217888"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/special-law.webp",
+      "bytes": 271258,
+      "sha256": "52531fa2b1cdc28c4bf88f892c8d2d7a57eeaa93c8adae63b25b84d0cd92b0b8"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/special-luffy.webp",
+      "bytes": 334126,
+      "sha256": "d1e06f5577f8a6d7b4d61c8b6b2908459646f8640ed6d921ae4801de0c820a0a"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/special-nami.webp",
+      "bytes": 354248,
+      "sha256": "55bc36c9c2473244eeff083e1e2c9d2c76c6adbab8f615154ce60dbc38f17edf"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/special-robin.webp",
+      "bytes": 330554,
+      "sha256": "fab6743792b481437b9c13b5241e4ceb834ad5dd7eb8677d6c19b6a4674712d5"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/special-sabo.webp",
+      "bytes": 308606,
+      "sha256": "a36f95ded6cd16595cd692165c43e61baad9443b4a59e49c20f88a766389fd71"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/special-sanji.webp",
+      "bytes": 307912,
+      "sha256": "1bbcdafa1e0629f6e96da5905cf1d6e6808bc5cb63e8cafefb50b2a7b0de6d1a"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/special-usopp.webp",
+      "bytes": 245310,
+      "sha256": "50458f7e859ff516deef7aa841a0a9d8a231b14cafa0734172d32331f01f8c43"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/special-zoro.webp",
+      "bytes": 402584,
+      "sha256": "1305571cb5dbfb2d31140a37480f4b4a675666272902664dca2797dc5726669b"
     },
     {
       "path": "images/launcher_room/minigames_v2/ingredient-apple.webp",
@@ -160,8 +260,8 @@
     },
     {
       "path": "launcher-life-room.js",
-      "bytes": 32875,
-      "sha256": "a120e9423c6b7b180eb79304d779ba1a671bc57b70eaa29ceb9ebbe079223e7f"
+      "bytes": 32925,
+      "sha256": "138cf21c6f7e58492ec42630285479ea9eaf812d6ada56271986989dd0b088fd"
     },
     {
       "path": "launcher-room-aquarium.css",
@@ -170,18 +270,18 @@
     },
     {
       "path": "launcher-room-aquarium.js",
-      "bytes": 26883,
-      "sha256": "ef686e3341669e8b69afbea167ee63263edfe0cfe094258292fe670963bfb6df"
+      "bytes": 27498,
+      "sha256": "4db5dc93f30dc6a9d361c6a8c49634ad75f3a76d0ae4a899cfe32fb89e78e859"
     },
     {
       "path": "launcher-room-minigames.css",
-      "bytes": 118011,
-      "sha256": "747bd9f4bbc2fbe7a8ec64dcb1cb9a08e4117bb3efb618251e7a6a1bc54ae6f6"
+      "bytes": 123264,
+      "sha256": "b3ab3504f838388a43fdcaec9883249ad5ff080c0e6ef05a8490204c787ac9b6"
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 226364,
-      "sha256": "8aaa288789199a1c6262628f5178a97e08720f8eede3d70b13d8de21f94e5607"
+      "bytes": 231928,
+      "sha256": "ad890d54061db6dbd5626ffb7495ea7ce9da75eb5ed12e899b1707d97dedc253"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -202,6 +302,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "FF7syTiQtFbBwneJ1ldd2MRKThu8JgBcsannmcf6okreUChbJ7dfN4Rv0hEY18+fpv5yDweFRW0uLTwIG06ZDA=="
+    "value": "iFNVigm4PvduypC9oxY6ae8TJi894e8AT9filYkZ7P1YNKZ0Yio480p7+1wphbbE4ZIzLsjKp6PrkHG6PwZuDA=="
   }
 }

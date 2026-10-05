@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 30,
+  "revision": 31,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r17-fishing-power-and-character-rods",
+      "status": "published",
+      "publishedAt": "2026-10-05T17:50:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r17",
+      "title": "海釣必殺技｜六格蓄力、魚體力與個人釣竿",
+      "summary": "成功甩竿3次爆拉，存滿6格挑戰方向鍵，施放原作招式改編的釣魚必殺技。六個釣場重畫第一人稱視角。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-power-r17.webp",
+        "alt": "新繪製的第一人稱近岸釣場，前方海面與遠方千陽號"
+      },
+      "body": [
+        "魚現在有體力條，魚距與體力都耗盡才可釣起。一般收線放慢，耐壓消耗和放線回復加快；體力下降後魚的拉力變弱。",
+        "成功甩竿存1格，3格可向上爆拉；保留到6格，按必殺技或X挑戰連續方向鍵。成功後顯示正常比例角色持個人釣竿的專用立繪與動態效果，大幅削減魚體力。招式取自原作，釣魚效果為本作改編。",
+        "佛朗基改裝現在按角色分開計算。既有付費釣竿等級保留給所有已擁有夥伴，之後只升級選中的夥伴。六釣場重畫水面視角，魚線從動畫竿尖連到落水點。",
+        "重新啟動可取得簽署內容差分，不必重裝。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r16-fishing-cast-perspective-and-cues",
       "status": "published",

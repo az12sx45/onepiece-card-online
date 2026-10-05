@@ -129,7 +129,7 @@ const FIELDS={
  'fish.release':['fishId','disposition','recipientId'],
  'fish.cook':['fishId','itemId'],
  'fish.sell':['fishId'],
- 'rod.upgrade':[],
+ 'rod.upgrade':['itemId'],
  'event.record':['eventId','participants'],'activity.record':['itemId','activity'],'arrival.ack':['arrivalId'],'checkpoint':['exit']
 };
 function validCommand(command) {
@@ -167,7 +167,7 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
       companions.workStartsToday++;old.worksStartedToday++;
     }
     const session=M.create(p.kind,p.characterId,room.revision,now,practice,p.jobId||'supply',
-      p.kind==='fishing'&&[4,5].includes(p.fishingVersion)?p.fishingVersion:p.fishingVersion===2?2:1,p.baitId,p.spotId,state.fishingRodLevel,p.flickMode===true);
+      p.kind==='fishing'&&[4,5].includes(p.fishingVersion)?p.fishingVersion:p.fishingVersion===2?2:1,p.baitId,p.spotId,state.fishingRodLevels?.[p.characterId]??state.fishingRodLevel,p.flickMode===true);
     await M.save(db,row.user_id,session);
     return{ok:true,minigame:M.view(session)};
   }
@@ -225,7 +225,7 @@ async function perform(db,row,state,companions,command,room,now,sessions=[],jobs
     fishAction===null||p.disposition===undefined&&p.recipientId!==undefined||
     fishAction==='fish.cook'&&typeof p.recipientId!=='string'||
     fishAction==='fish.sell'&&p.recipientId!==undefined||
-    fishAction==='rod.upgrade'&&(p.fishId!==undefined||p.recipientId!==undefined)))return{ok:false,error:'invalid_fish'};
+    fishAction==='rod.upgrade'&&p.fishId!==undefined))return{ok:false,error:'invalid_fish'};
   if(command.type.startsWith('minigame.'))return performMinigame(db,row,state,companions,command,room,now,sessions);
   if(command.type==='fish.place') {
     if(typeof p.fishId!=='string'||typeof p.inAquarium!=='boolean')return{ok:false,error:'invalid_fish'};
@@ -274,13 +274,17 @@ async function perform(db,row,state,companions,command,room,now,sessions=[],jobs
     return{ok:true,sale};
   }
   if(fishAction==='rod.upgrade') {
-    const level=L.rodLevel(state.fishingRodLevel),cost=L.ROD_UPGRADE_COSTS[level];
+    const requestedCharacter=command.type==='fish.release'?p.recipientId:p.itemId;
+    const characterId=requestedCharacter??state.activeCharacterIds[0]??state.ownedCharacterIds[0];
+    if(!state.ownedCharacterIds.includes(characterId))return{ok:false,error:'character_not_owned'};
+    const level=L.rodLevel(state.fishingRodLevels?.[characterId]??state.fishingRodLevel),cost=L.ROD_UPGRADE_COSTS[level];
     if(cost===undefined)return{ok:false,error:'rod_max_level'};
     if(row.stats.launcherWalletV1.coins<cost)return{ok:false,error:'insufficient_coins'};
     row.stats.launcherWalletV1.coins-=cost;
-    state.fishingRodLevel=level+1;
+    state.fishingRodLevels[characterId]=level+1;
+    if(requestedCharacter===undefined)state.fishingRodLevel=level+1; // Old UI summary only; other owned rods remain unchanged.
     const operationId='life-rod:'+command.requestId;
-    const receipt={operationId,level:state.fishingRodLevel,amount:-cost,claimedAt:now.toISOString()};
+    const receipt={operationId,level:level+1,...characterId?{characterId}:{},amount:-cost,claimedAt:now.toISOString()};
     await writeLedger(db,row,operationId,null,-cost,receipt);
     return{ok:true,receipt};
   }
