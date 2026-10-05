@@ -7,6 +7,7 @@ const crypto=require('node:crypto');
 const {PGlite}=require(process.env.BOARD_QA_PGLITE||'D:/Codex_QA/draw-result-art-20260922/deps/node_modules/@electric-sql/pglite');
 const life=require('../server/launcher-life-store');
 const fishing=require('../server/launcher-fishing-v4');
+const fishingV5=require('../server/launcher-fishing-v5');
 const db=new PGlite(),cap={crewContentRevision:1};
 let queue=Promise.resolve(),checks=0;
 const results=[];
@@ -55,8 +56,8 @@ async function main(){
     {sessionId:started.minigame.id,token:started.minigame.token},'rod-cancel-0001');
   check('active fishing cancelled',response.cancelled,true);
   const next=await command('fisher','minigame.start',
-    {kind:'fishing',characterId:actor,baitId:'worm',spotId:'shore',fishingVersion:4},'rod-start-0002');
-  check('new session uses new level',[next.minigame.rodLevel,next.minigame.challenge.rodLevel],[2,2]);
+    {kind:'fishing',characterId:actor,baitId:'worm',spotId:'shore',fishingVersion:5,flickMode:true},'rod-start-0002');
+  check('new v5 session uses new level',[next.minigame.rodLevel,next.minigame.challenge.rodLevel],[2,2]);
   await command('fisher','minigame.cancel',{sessionId:next.minigame.id,token:next.minigame.token},'rod-cancel-0002');
   response=await command('fisher','rod.upgrade',{},'rod-third-0001');
   check('third level reaches cap',response.rod,{level:3,maxLevel:3,nextCost:null});
@@ -102,10 +103,40 @@ async function main(){
   const basic=compare(0),upgraded=compare(3);
   check('upgraded rod reels more distance',upgraded.distance<basic.distance,true);
   check('upgraded rod accumulates less tension',upgraded.tension<basic.tension,true);
+  const v5Fight=(level,phase,reeling,steer)=>{
+    const round=fishingV5.create('compare-v5',now.getTime(),level);
+    Object.assign(round,{stage:'fight',hookedAt:now.toISOString(),fightUntil:new Date(now.getTime()+90000).toISOString(),
+      lastSimAt:now.toISOString(),phaseUntil:new Date(now.getTime()+5000).toISOString(),
+      behavior:{style:'patient',force:1,directedFraction:.5,accent:null},
+      runState:phase,pullDirection:phase==='surge'?'right':'steady',
+      distance:60,strength:70,maxStrength:100,tension:30});
+    fishingV5.control(round,now,reeling,steer);
+    fishingV5.simulate(round,new Date(now.getTime()+1000),1);
+    return round;
+  };
+  const near=(actual,expected)=>Math.abs(actual-expected)<.0002;
+  const calm=Array.from({length:4},(_,level)=>v5Fight(level,'calm',true,0));
+  const surge=Array.from({length:4},(_,level)=>v5Fight(level,'surge',true,1));
+  const release=Array.from({length:4},(_,level)=>v5Fight(level,'calm',false,0));
+  for(let level=1;level<=3;level++){
+    check(`v5 Lv${level} calm reel bonus tracks actual fish distance`,
+      near(calm[level-1].distance-calm[level].distance,fishingV5.ROD_EFFECT_PER_LEVEL.reelGain),true);
+    check(`v5 Lv${level} aligned surge reel bonus tracks actual fish distance`,
+      near(surge[level-1].distance-surge[level].distance,fishingV5.ROD_EFFECT_PER_LEVEL.reelGain),true);
+    check(`v5 Lv${level} reel conserves actual line strength`,
+      near(calm[level].strength-calm[level-1].strength,fishingV5.ROD_EFFECT_PER_LEVEL.reelDrain),true);
+    check(`v5 Lv${level} free line restores actual strength faster`,
+      near(release[level].strength-release[level-1].strength,fishingV5.ROD_EFFECT_PER_LEVEL.freeLineRecovery),true);
+    check(`v5 Lv${level} free line slows actual fish escape`,
+      near(release[level-1].distance-release[level].distance,fishingV5.ROD_EFFECT_PER_LEVEL.freeLineEscape),true);
+  }
+  const wrong0=v5Fight(0,'surge',true,-1),wrong3=v5Fight(3,'surge',true,-1);
+  check('v5 max rod cannot brute-force a wrong steering direction',wrong3.distance,wrong0.distance);
   check('rod upgrade does not change fish species pool',
     require('../server/launcher-minigames').FISH_SPECIES.length>0,true);
   const files=['server/launcher-life.js','server/launcher-life-store.js','server/launcher-minigames.js',
-    'server/launcher-fishing-v4.js','scripts/launcher_fishing_rod_qa.js'];
+    'server/launcher-fishing-v4.js','server/launcher-fishing-v5.js',
+    'desktop/launcher-room-minigames.js','scripts/launcher_fishing_rod_qa.js'];
   const report={schemaVersion:1,status:'PASS',checks,results,
     sourceHashes:Object.fromEntries(files.map(file=>[file,crypto.createHash('sha256')
       .update(fs.readFileSync(path.join(__dirname,'..',file))).digest('hex')])),

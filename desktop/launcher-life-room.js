@@ -187,7 +187,14 @@
       const requestId=requestUuid();
       const work=async()=>{
         if(requestEpoch!==epoch||!owner())return{ok:false,error:'readonly'};
-        const body={requestId,expectedRevision:serverLife?.revision||0,type,payload:{...payload}};
+        // Signed room content also runs inside older installed Electron cores.
+        // Their command allowlist includes fish.release, but not these newer
+        // actions. The server handles these exact dispositions atomically.
+        const wireType=['fish.cook','fish.sell','rod.upgrade'].includes(type)?'fish.release':type;
+        const wirePayload=type==='fish.cook'?{fishId:payload.fishId,disposition:'cook',recipientId:payload.itemId}:
+          type==='fish.sell'?{fishId:payload.fishId,disposition:'sell'}:
+          type==='rod.upgrade'?{disposition:'upgrade_rod'}:{...payload};
+        const body={requestId,expectedRevision:serverLife?.revision||0,type:wireType,payload:wirePayload};
         if(type==='work.reserve')body.payload.roomRevision=env.room().revision;
         if(type==='directive.set'&&!body.payload.directiveId){body.payload.directiveId=body.payload.directive;delete body.payload.directive;}
         let result=await api.commandLauncherLife(body);

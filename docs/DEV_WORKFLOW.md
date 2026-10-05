@@ -1,5 +1,13 @@
 # Dev Workflow
 
+## 2026-10-05 水族箱料理／售魚修復與釣竿實效（1.2.23 內容修訂 14，部署候選）
+
+原因：修訂 13 的 `fish.cook`、`fish.sell`、`rod.upgrade` 雖已在伺服器與房間 UI 實作，現有 1.2.23 安裝版的 `desktop/auth-service.js` 命令白名單只接受舊有 `fish.release`，三項新請求在 IPC 層就被回絕為 `invalid_command`。原本分層測試未經過真正安裝版白名單。為讓已安裝玩家取得差分修復，`desktop/launcher-life-room.js` 將三項操作在送出前轉成已允許的 `fish.release` 專用 disposition；`server/launcher-life-store.js` 嚴格辨識料理／售魚／釣竿改裝的 payload 並委派給原本交易。舊版單純放生 `{fishId}` 不變；帳號鎖、revision、冪等、魚所有權、售價、錢包上限與回滾維持伺服器權威。Electron 核心、版本號和安裝檔不變。
+
+釣竿：`server/launcher-fishing-v5.js` 在現行 V5 搏魚公式中依場次固定的等級套用每級基礎收線距離增益 `+0.45/秒`、收線耐壓消耗 `−0.60/秒`、鬆線耐壓回復 `+0.40/秒`、鬆線被拖走距離 `−0.12/秒`；依魚勢、方向、魚種倍率及耐壓上下限結算，錯向硬收不能靠升級直接拉近魚。`desktop/launcher-room-minigames.js` 工房文案同步現行 V5 數值，釣竿等級在開始新海釣場次時固定；魚池及咬鉤機率不變。`config/launcher-announcements-v1.json` 修訂 28 沿用已封裝的水族箱／海釣插圖。
+
+候選驗證：隔離 PGlite 水族箱交易 40／40；真正的已安裝核心 `AuthService` 經命令白名單、模擬 socket 轉入伺服器交易，再讀回 PGlite 的料理／售魚／釣竿連續流程 28／28；Chromium 水族箱 28／28；釣竿同魚同操作 Lv 0–3 實算 54／54；V5 伺服器 1,211／1,211、V5 瀏覽器 403／403、原水族箱 89／89、公告 82／82、簽署內容工具 49／49、更新器 45／45 通過。`node --check`、`git diff --check` 通過；`npm start` 在隔離且未連正式資料庫時，遊戲入口和內容清單 HTTP 200。正式帳號交易與真人搏魚手感仍未驗收。已簽署修訂 14 清單涵蓋 38 路徑，SHA-256 `9a7bf7f9284c2c2be9fc471c310f5afe00aa081b0f9e13dae70f30616eccdb52`；R2 上傳兩個新 renderer blob 共 207,903 bytes、沿用 36 個，兩檔公開 HEAD／GET／大小／SHA 通過。候選更新器由修訂 13→14 只下載 207,903 bytes 並讀回全部 38 檔。Render 正式清單與此機實際快取尚待發布後讀回。未關聯的 `public/images/ranks/r5.PNG`、`r6.PNG` 工作樹修改不納入本次發布。LATTICE 無可呼叫的任務 MCP，官方 Status 為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，不宣稱任務或圖譜已寫入。
+
 ## 2026-10-05 水族箱漁獲管理與料理／售魚（1.2.23 內容修訂 13，已部署）
 
 範圍：`server/launcher-life-store.js` 在原有帳號列鎖、`launcher_life_state` 與冪等操作紀錄上新增 `fish.cook`／`fish.sell`。每尾魚的料理資格、餐點名稱、稀有度售價與親密增量由伺服器回傳 `fishOffers`；料理只允許已擁有角色且親密度未滿，成功消耗該尾魚、增加親密度並改善飢餓／心情。出售成功消耗該尾魚，將完整售價寫入既有 `launcherWalletV1` 與錢包 ledger，現有佛朗基 `rod.upgrade` 可直接花這筆金幣；錢包 500 枚上限裝不下全價時不出售。重送、競態與交易失敗不重複耗魚或入帳。沿用漁獲 UUID、收藏／展示欄位、原釣竿等級及三款桌遊規則。

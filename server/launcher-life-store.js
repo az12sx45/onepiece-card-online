@@ -124,7 +124,9 @@ const FIELDS={
  'minigame.finish':['sessionId','token'],'minigame.cancel':['sessionId','token'],
  'minigame.retry':['sessionId','token'],
  'fish.place':['fishId','inAquarium'],
- 'fish.release':['fishId'],
+ // Older desktop cores allow fish.release but not the newer aquarium verbs.
+ // A disposition carries those actions through the existing authenticated IPC.
+ 'fish.release':['fishId','disposition','recipientId'],
  'fish.cook':['fishId','itemId'],
  'fish.sell':['fishId'],
  'rod.upgrade':[],
@@ -216,6 +218,14 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
 }
 async function perform(db,row,state,companions,command,room,now,sessions=[],jobsRoom=room) {
   const p=command.payload,content=L.content(),actor=state.characters[p.itemId];
+  const fishAction=command.type==='fish.release'&&p.disposition!==undefined
+    ?p.disposition==='cook'?'fish.cook':p.disposition==='sell'?'fish.sell':
+      p.disposition==='upgrade_rod'?'rod.upgrade':null:command.type;
+  if(command.type==='fish.release'&&(
+    fishAction===null||p.disposition===undefined&&p.recipientId!==undefined||
+    fishAction==='fish.cook'&&typeof p.recipientId!=='string'||
+    fishAction==='fish.sell'&&p.recipientId!==undefined||
+    fishAction==='rod.upgrade'&&(p.fishId!==undefined||p.recipientId!==undefined)))return{ok:false,error:'invalid_fish'};
   if(command.type.startsWith('minigame.'))return performMinigame(db,row,state,companions,command,room,now,sessions);
   if(command.type==='fish.place') {
     if(typeof p.fishId!=='string'||typeof p.inAquarium!=='boolean')return{ok:false,error:'invalid_fish'};
@@ -227,30 +237,31 @@ async function perform(db,row,state,companions,command,room,now,sessions=[],jobs
     fish.inAquarium=p.inAquarium;
     return{ok:true,fish:{...fish}};
   }
-  if(command.type==='fish.release') {
+  if(fishAction==='fish.release') {
     if(typeof p.fishId!=='string')return{ok:false,error:'invalid_fish'};
     const index=state.fishCollection.findIndex(entry=>entry.id===p.fishId);
     if(index<0)return{ok:false,error:'fish_not_owned'};
     const [fish]=state.fishCollection.splice(index,1);
     return{ok:true,releasedFish:{...fish}};
   }
-  if(command.type==='fish.cook'||command.type==='fish.sell') {
-    if(typeof p.fishId!=='string'||command.type==='fish.cook'&&typeof p.itemId!=='string')return{ok:false,error:'invalid_fish'};
+  if(fishAction==='fish.cook'||fishAction==='fish.sell') {
+    const recipientId=command.type==='fish.release'?p.recipientId:p.itemId;
+    if(typeof p.fishId!=='string'||fishAction==='fish.cook'&&typeof recipientId!=='string')return{ok:false,error:'invalid_fish'};
     const index=state.fishCollection.findIndex(entry=>entry.id===p.fishId);
     if(index<0)return{ok:false,error:'fish_not_owned'};
     const fish=state.fishCollection[index],offer=fishOffer(fish);
-    if(command.type==='fish.cook') {
+    if(fishAction==='fish.cook') {
       if(!offer.cookable)return{ok:false,error:'fish_not_cookable'};
-      const recipient=state.characters[p.itemId],companion=companions.characters[p.itemId];
-      if(!L.keyOf(p.itemId)||!recipient||!companion)return{ok:false,error:'not_owned'};
+      const recipient=state.characters[recipientId],companion=companions.characters[recipientId];
+      if(!L.keyOf(recipientId)||!recipient||!companion)return{ok:false,error:'not_owned'};
       if(companion.affinity>=100)return{ok:false,error:'affinity_full'};
       state.fishCollection.splice(index,1);
       const before=companion.affinity;
       companion.affinity=Math.min(100,before+offer.affinityGain);
       recipient.needs.hunger=L.clamp(recipient.needs.hunger-14);
       recipient.needs.mood=L.clamp(recipient.needs.mood+3);
-      L.addMemory(state,p.itemId,'player.fish_meal',[p.itemId],now,.8);
-      return{ok:true,meal:{fishId:fish.id,speciesId:fish.speciesId,itemId:p.itemId,
+      L.addMemory(state,recipientId,'player.fish_meal',[recipientId],now,.8);
+      return{ok:true,meal:{fishId:fish.id,speciesId:fish.speciesId,itemId:recipientId,
         dishLabel:offer.dishLabel,affinityGained:companion.affinity-before,affinityAfter:companion.affinity}};
     }
     const wallet=row.stats.launcherWalletV1,cap=shop().launcherWalletPublic(row.stats).cap;
@@ -262,7 +273,7 @@ async function perform(db,row,state,companions,command,room,now,sessions=[],jobs
     await writeLedger(db,row,operationId,null,offer.saleCoins,sale);
     return{ok:true,sale};
   }
-  if(command.type==='rod.upgrade') {
+  if(fishAction==='rod.upgrade') {
     const level=L.rodLevel(state.fishingRodLevel),cost=L.ROD_UPGRADE_COSTS[level];
     if(cost===undefined)return{ok:false,error:'rod_max_level'};
     if(row.stats.launcherWalletV1.coins<cost)return{ok:false,error:'insufficient_coins'};

@@ -1,5 +1,11 @@
 # File Map
 
+## 2026-10-05 水族箱交易橋接與 V5 釣竿（1.2.23 內容修訂 14，部署候選）
+
+- `desktop/launcher-life-room.js`：將料理、售魚、釣竿改裝送入既有安裝版允許的 `fish.release` 命令並附嚴格 disposition；`server/launcher-life-store.js`：識別該相容 payload、沿用原伺服器交易，單純放生保持原樣。`desktop/auth-service.js` 是安裝版核心，未納入內容覆蓋清單，也未在本次修改。
+- `server/launcher-fishing-v5.js`：Lv 0–3 實際收線、耗線、鬆線回復與魚距係數；`desktop/launcher-room-minigames.js`：工房數值說明。`config/launcher-announcements-v1.json`：修訂 28 的圖文公告，沿用現有千陽號釣魚圖。
+- `scripts/launcher_aquarium_management_qa.js`、`scripts/launcher_aquarium_installed_core_qa.js`、`scripts/launcher_aquarium_browser_qa.js`、`scripts/launcher_fishing_rod_qa.js`：伺服器持久交易、安裝版命令白名單到 PGlite 真實交易、實際 UI 與各級搏魚數值驗證。簽署內容清單 `public/desktop/launcher-content-v1.json` 是內容修訂 14、38 檔，SHA-256 `9a7bf7f9284c2c2be9fc471c310f5afe00aa081b0f9e13dae70f30616eccdb52`；正式部署證據見 `docs/DEV_WORKFLOW.md`。
+
 ## 2026-10-05 水族箱漁獲管理（1.2.23 內容修訂 13，已部署）
 
 - `server/launcher-life-store.js`：從既有漁獲收藏產生每尾魚的伺服器售價與料理資格，新增 `fish.cook`／`fish.sell`；同一帳號交易中消耗魚、增加指定角色親密度或把售價記入金幣錢包／ledger。原 `fish.place`、`rod.upgrade`、存檔欄位與好友公開投影沿用。

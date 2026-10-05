@@ -445,8 +445,8 @@
       const workshop=body?.querySelector('.room-fishing-v4-workshop');if(!workshop)return;
       const level=fishingRodLevel,max=ROD_UPGRADE_COSTS.length,cost=fishingRodNextCost;
       workshop.querySelector('.room-fishing-v4-workshop-level').textContent=fishingRodKnown?`Lv ${level} / ${max}`:'資料讀取中';
-      workshop.querySelector('.room-fishing-v4-workshop-current').textContent=!fishingRodKnown?'正在讀取釣竿狀態。':level===0?'目前：標準釣竿。':`目前：收線每秒多縮短 ${(level*.45).toFixed(2)} 距離；捲線時張力每秒少增加 ${(level*.4).toFixed(1)}。`;
-      workshop.querySelector('.room-fishing-v4-workshop-next').textContent=!fishingRodKnown?'連上基地後才能改裝。':level===max?'已滿級；魚種與咬鉤機率不受釣竿等級影響。':'下一級：收線每秒再多縮短 0.45 距離，捲線時張力每秒再少增加 0.4；魚種與咬鉤機率不變。';
+      workshop.querySelector('.room-fishing-v4-workshop-current').textContent=!fishingRodKnown?'正在讀取釣竿狀態。':level===0?'目前：標準釣竿。':`目前：平穩或順著魚衝刺方向收線時，基礎距離每秒額外縮短 ${(level*.45).toFixed(2)}；收線的基礎耐壓消耗每秒減少 ${(level*.6).toFixed(2)}。`;
+      workshop.querySelector('.room-fishing-v4-workshop-next').textContent=!fishingRodKnown?'連上基地後才能改裝。':level===max?'已滿級；魚種與咬鉤機率不受釣竿等級影響。':'下一級：基礎收線速度 +0.45 距離／秒、基礎耐壓消耗 −0.60／秒；鬆開收線時回復 +0.40／秒，魚拖走距離 −0.12／秒。魚的習性仍會影響結果。';
       const upgrade=workshop.querySelector('.room-fishing-v4-workshop-upgrade');
       upgrade.textContent=!fishingRodKnown?'釣竿資料讀取中':level===max?'已升至最高等級':`請佛朗基改裝 · ${cost} 金幣`;
       upgrade.disabled=requesting||!fishingRodKnown||level===max;
@@ -454,7 +454,7 @@
     function rodWorkshop(){
       const workshop=node('details','room-fishing-v4-details room-fishing-v4-workshop');
       const summary=node('summary');summary.append(node('strong','','佛朗基的釣竿工房'),node('span','room-fishing-v4-workshop-level'));
-      workshop.append(summary,node('p','room-fishing-v4-workshop-copy','騙人布想出釣具機關，佛朗基在千陽號工房加固魚竿。每次改裝都會讓收線稍快、張力累積稍慢。'),node('p','room-fishing-v4-workshop-current'),node('p','room-fishing-v4-workshop-next'));
+      workshop.append(summary,node('p','room-fishing-v4-workshop-copy','騙人布想出釣具機關，佛朗基在千陽號工房加固魚竿。每次改裝都會讓順勢收線更快、魚線更耐用。'),node('p','room-fishing-v4-workshop-current'),node('p','room-fishing-v4-workshop-next'));
       const upgrade=button('',()=>void upgradeFishingRod(),'room-fishing-v4-workshop-upgrade');workshop.append(upgrade,node('p','room-fishing-v4-workshop-feedback'));
       return workshop;
     }

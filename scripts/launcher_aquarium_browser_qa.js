@@ -111,27 +111,36 @@ async function main() {
       getLauncherShop: async () => ({ ok: true, shop: structuredClone(f.shop) }),
       getLauncherCharacter: async id => ({ ok: true, character: f.profile.companions.find(c => c.itemId === id) }),
       commandLauncherLife: async command => {
+        // Match the allowlist in the currently installed Electron core. A
+        // renderer-only fixture must not silently accept newer command types.
+        const allowed = ['work.reserve','work.activate','work.complete','work.cancel','directive.set',
+          'character.interact','event.record','activity.record','arrival.ack','checkpoint',
+          'minigame.start','minigame.answer','minigame.finish','minigame.cancel','minigame.retry',
+          'fish.place','fish.release'];
+        if (!allowed.includes(command.type)) return { ok: false, error: 'invalid_command' };
         f.calls.push(structuredClone(command));
         const { type, payload } = command;
         if (command.expectedRevision !== f.life.revision) return response({ ok: false, error: 'revision_conflict' });
+        const action = type === 'fish.release' ? ({ cook: 'fish.cook', sell: 'fish.sell',
+          upgrade_rod: 'rod.upgrade' })[payload.disposition] || type : type;
         const fish = f.life.fishCollection.find(entry => entry.id === payload.fishId);
-        if (type.startsWith('fish.') && !fish) return response({ ok: false, error: 'fish_not_owned' });
+        if (action.startsWith('fish.') && !fish) return response({ ok: false, error: 'fish_not_owned' });
         let extra = {};
-        if (type === 'fish.place') fish.inAquarium = payload.inAquarium;
-        else if (type === 'fish.cook') {
+        if (action === 'fish.place') fish.inAquarium = payload.inAquarium;
+        else if (action === 'fish.cook') {
           if (fish.speciesId !== 'balloon-catfish') return response({ ok: false, error: 'fish_not_cookable' });
-          const companion = f.profile.companions.find(entry => entry.itemId === payload.itemId);
+          const companion = f.profile.companions.find(entry => entry.itemId === payload.recipientId);
           if (!companion || companion.affinity >= 100) return response({ ok: false, error: 'affinity_full' });
           companion.affinity += 2;
           f.life.fishCollection = f.life.fishCollection.filter(entry => entry !== fish);
-          extra.meal = { fishId: fish.id, speciesId: fish.speciesId, itemId: payload.itemId,
+          extra.meal = { fishId: fish.id, speciesId: fish.speciesId, itemId: payload.recipientId,
             dishLabel: '香吉士特製・香草鯰魚湯', affinityGained: 2, affinityAfter: companion.affinity };
-        } else if (type === 'fish.sell') {
+        } else if (action === 'fish.sell') {
           if (f.wallet.coins + 4 > f.wallet.cap) return response({ ok: false, error: 'wallet_full' });
           f.wallet.coins += 4;
           f.life.fishCollection = f.life.fishCollection.filter(entry => entry !== fish);
           extra.sale = { fishId: fish.id, speciesId: fish.speciesId, amount: 4 };
-        } else if (type === 'rod.upgrade') {
+        } else if (action === 'rod.upgrade') {
           if (f.rod.nextCost == null || f.wallet.coins < f.rod.nextCost)
             return response({ ok: false, error: 'insufficient_coins' });
           f.wallet.coins -= f.rod.nextCost;
@@ -199,9 +208,14 @@ async function main() {
   await page.waitForFunction(() => window.__aquariumFixture.rod.level === 1);
   pass('same wallet pays Franky rod upgrade in aquarium',
     await page.evaluate(() => window.__aquariumFixture.wallet.coins === 84 && window.__aquariumFixture.rod.level === 1));
-  pass('commands use revisioned life bridge and full fish IDs',
-    await page.evaluate(() => window.__aquariumFixture.calls.filter(c => ['fish.place','fish.cook','fish.sell','rod.upgrade'].includes(c.type))
-      .every(c => !!c.requestId && Number.isInteger(c.expectedRevision))));
+  pass('cook sell and upgrade cross the installed core allowlist with exact dispositions',
+    await page.evaluate(() => {
+      const commands = window.__aquariumFixture.calls.filter(c => c.type === 'fish.release');
+      return commands.length === 3 && commands.every(c => !!c.requestId && Number.isInteger(c.expectedRevision)) &&
+        commands.some(c => c.payload.fishId === 'fish-balloon' && c.payload.disposition === 'cook' && c.payload.recipientId === 'room-character-sanji') &&
+        commands.some(c => c.payload.fishId === 'fish-jelly' && c.payload.disposition === 'sell') &&
+        commands.some(c => !Object.hasOwn(c.payload, 'fishId') && c.payload.disposition === 'upgrade_rod');
+    }));
   await page.locator('.room-aquarium-manager-close').click();
   await page.evaluate(() => {
     const f = window.__aquariumFixture;

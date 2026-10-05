@@ -34,6 +34,7 @@ async function command(secret,type,payload,requestId,revision){
 async function main(){
   await db.exec('CREATE TABLE player_profiles(user_id SERIAL PRIMARY KEY,secret TEXT UNIQUE NOT NULL,name TEXT,avatar TEXT,stats JSONB,updated_at TIMESTAMPTZ DEFAULT now())');
   await add('cook',10,0,true);await add('sell',16);await add('full',499);await add('max',10,100);await add('race',0);await add('atomic',0);await add('friend',0);
+  await add('bridge',16);await add('bridge-cook',10);
   const cookedFish=await seed('cook','glistening-saury',true);
   const cookOffer=(await get('cook')).fishOffers[0];
   check('offers server-authored meal and common sale',
@@ -91,6 +92,46 @@ async function main(){
   check('wallet cap leaves fish and balance intact',[(await get('full')).life.fishCollection.length,(await get('full')).wallet.coins],[1,499]);
   check('client cannot inject sale value',
     (await command('full','fish.sell',{fishId:fullFish.id,amount:500},'sell-cheat-0001')).error,'invalid_command');
+
+  // Existing desktop cores only forward fish.release. These dispositions must
+  // reach the same authoritative transactions without changing plain release.
+  const bridgeFish=await seed('bridge','glistening-saury');
+  const bridgeBefore=await get('bridge');
+  const bridgeSale={type:'fish.release',payload:{fishId:bridgeFish.id,disposition:'sell'},
+    requestId:'bridge-sale-0001',expectedRevision:bridgeBefore.life.revision};
+  const bridgeSold=await life.commandLauncherLife(pool,'bridge',bridgeSale,now,cap);
+  check('legacy-core sale credits wallet and consumes fish',
+    [bridgeSold.ok,bridgeSold.sale.amount,bridgeSold.wallet.coins,bridgeSold.life.fishCollection.length],
+    [true,4,20,0]);
+  check('legacy-core sale replay is idempotent',
+    [(await life.commandLauncherLife(pool,'bridge',bridgeSale,now,cap)).duplicate,(await get('bridge')).wallet.coins],
+    [true,20]);
+  check('legacy-core rod upgrade requires no fishId and spends sale proceeds',
+    [(await command('bridge','fish.release',{disposition:'upgrade_rod'},'bridge-rod-0001')).rod.level,
+      (await get('bridge')).wallet.coins],[1,0]);
+  check('rod bridge rejects an injected fishId',
+    (await command('bridge','fish.release',{disposition:'upgrade_rod',fishId:bridgeFish.id},'bridge-rod-invalid-0001')).error,
+    'invalid_fish');
+  check('sale bridge requires a fishId',
+    (await command('bridge','fish.release',{disposition:'sell'},'bridge-sale-invalid-0001')).error,'invalid_fish');
+
+  const bridgeMealFish=await seed('bridge-cook','glistening-saury');
+  const bridgeMeal=await command('bridge-cook','fish.release',
+    {fishId:bridgeMealFish.id,disposition:'cook',recipientId:actor},'bridge-cook-0001');
+  check('legacy-core cook feeds selected owned character',
+    [bridgeMeal.ok,bridgeMeal.meal.itemId,bridgeMeal.meal.affinityGained,bridgeMeal.life.fishCollection.length],
+    [true,actor,2,0]);
+  const stillOwned=await seed('bridge-cook','glistening-saury');
+  check('legacy-core cook rejects missing recipient without consuming fish',
+    (await command('bridge-cook','fish.release',{fishId:stillOwned.id,disposition:'cook'},'bridge-cook-invalid-0001')).error,
+    'invalid_fish');
+  check('legacy-core cook preserves fish after invalid recipient',
+    (await get('bridge-cook')).life.fishCollection.map(fish=>fish.id),[stillOwned.id]);
+  check('plain release still removes fish without sale or meal',
+    (await command('bridge-cook','fish.release',{fishId:stillOwned.id},'bridge-release-0001')).releasedFish.id,
+    stillOwned.id);
+  check('plain release did not change wallet or affinity',
+    [(await get('bridge-cook')).wallet.coins,(await get('bridge-cook')).profile.companions[0].affinity],[10,2]);
 
   const raceFish=await seed('race','glistening-saury');
   const raceBefore=await get('race');

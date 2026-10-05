@@ -19,6 +19,11 @@ const FLICK_TELL_MS = Object.freeze({patient:850,dart:550,heavy:950,weave:700});
 const FLICK_MIN_SURGE_MS = 3850;
 const FLICK_RELIEF_MS = 3500;
 const rodLevel = value => Number.isInteger(value)&&value>=0&&value<=3?value:0;
+// Franky's three upgrades improve the player-controlled parts of a fight.
+// The bonuses do not alter the species pool, bite timing, cast reach or fish
+// force. Misaligned reeling still gains almost no distance, even at level 3.
+const ROD_EFFECT_PER_LEVEL = Object.freeze({reelGain:.45,reelDrain:.6,
+  freeLineRecovery:.4,freeLineEscape:.12});
 
 // Exact numeric behavior slots extracted read-only from the user's Unlimited
 // Adventure ISO (fish_prm.bin SHA-256 4c713eee0191385339f5f16650789412045f2e545eb9988cf9b13dcd0f961ea4).
@@ -364,25 +369,31 @@ function simulate(round,now,difficulty=1) {
       round.reelHoldMs+=dt*1000;
       // A fish that draws directed runs most of the time must still be
       // catchable by following it and reeling on a one-second input cadence.
-      const alignedGain=7.2+Math.max(0,round.behavior.directedFraction-.5)*4+gear*.18;
-      const gain=(surge?(aligned?alignedGain:.3):(rules.reelGain-force*.25+gear*.28))*
+      const alignedGain=7.2+Math.max(0,round.behavior.directedFraction-.5)*4+
+        gear*ROD_EFFECT_PER_LEVEL.reelGain;
+      const gain=(surge?(aligned?alignedGain:.3):(rules.reelGain-force*.25+
+        gear*ROD_EFFECT_PER_LEVEL.reelGain))*
         (accent?.grip||1)*(relief?1.2:1);
       const escape=(surge?surgePull*(aligned?.62:opposed?1.3:1.06):.5)*(relief?.65:1);
       round.distance=clamp(round.distance+(escape-gain)*dt,0,100);
       // Holding the reel without a pause costs increasing strength. This
       // makes release a real choice even for a patient, easy-to-catch fish.
       const heldCost=clamp((round.reelHoldMs-2500)/1000*2,0,15);
-      const drain=((surge?rules.reelDrain*force*(aligned?.72:opposed?1.28:1)+skill*.25-gear*.45:
-        2.15+force*.4+skill*.2-gear*.25)*(accent?.fatigue||1)+heldCost)*(relief?.7:1);
+      const drain=((surge?rules.reelDrain*force*(aligned?.72:opposed?1.28:1)+skill*.25-
+        gear*ROD_EFFECT_PER_LEVEL.reelDrain:
+        2.15+force*.4+skill*.2-gear*ROD_EFFECT_PER_LEVEL.reelDrain)*
+        (accent?.fatigue||1)+heldCost)*(relief?.7:1);
       round.strength=clamp(round.strength-drain*dt,0,round.maxStrength);
     }else{
       round.reelHoldMs=0;
       const escape=surge?surgePull*(paying?(aligned?.3:opposed?1.2:1):
         (aligned?.58:opposed?1.28:1.12)):(paying?.85:.6);
-      round.distance=clamp(round.distance+Math.max(.08,escape-gear*.08)*dt,0,100);
+      round.distance=clamp(round.distance+Math.max(.08,escape-
+        gear*ROD_EFFECT_PER_LEVEL.freeLineEscape)*dt,0,100);
       const restore=surge?(aligned?(paying?rules.recovery-force*.4:rules.recovery*.58):
-        opposed?-(2+force*2.8):-(1+force*1.8)):(paying?10:8.6)+gear*.25;
-      round.strength=clamp(round.strength+restore*dt,0,round.maxStrength);
+        opposed?-(2+force*2.8):-(1+force*1.8)):(paying?10:8.6);
+      round.strength=clamp(round.strength+(restore+gear*ROD_EFFECT_PER_LEVEL.freeLineRecovery)*dt,
+        0,round.maxStrength);
     }
     round.strength=round4(round.strength);round.distance=round4(round.distance);
     round.tension=round4(100-round.strength);
@@ -420,6 +431,7 @@ function displayIntensity(value,state) {
 }
 
 module.exports={create,cast,hook,simulate,control,flick,observe,position,rodLevel,
+  ROD_EFFECT_PER_LEVEL,
   ISO_BEHAVIOR_MODES,EXTRA_BEHAVIOR_MODES,
   castZoneForPower,castTargetForPower,displayIntensity,CONTROL_LEASE_MS,HOOK_WINDOW_MS,DURATION_MS,
   FLICK_WINDOW_MS,FLICK_TELL_MS,FLICK_MIN_SURGE_MS,FLICK_RELIEF_MS};

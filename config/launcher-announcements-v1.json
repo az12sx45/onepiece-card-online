@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 27,
+  "revision": 28,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r14-aquarium-actions-rod-effects",
+      "status": "published",
+      "publishedAt": "2026-10-05T04:25:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r14",
+      "title": "水族箱料理與售魚修復｜釣竿改裝真正影響搏魚",
+      "summary": "修復料理、出售及佛朗基改裝請求被已安裝啟動器擋下的問題；各級釣竿改裝的收線與耐壓效果現在對應實際海釣數值。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-life-fishing-1.2.15.webp",
+        "alt": "千陽號甲板上的水族箱、漁獲與釣竿"
+      },
+      "body": [
+        "在自己的房間點水族箱，選一尾漁獲送給已擁有的夥伴做料理，或出售換商城金幣；佛朗基改裝釣竿也能使用售魚所得。交易成功後，魚會從收藏與展示缸同步移除。",
+        "釣竿每升一級，順勢收線更快、收線時耐壓損耗更少，鬆開收線時耐壓恢復更快、魚也較難把線拖遠。釣竿不能取代看魚勢與正確控竿；魚種、咬鉤機率不受等級影響。",
+        "重新啟動啟動器即可取得簽署內容差分更新，不需重新安裝。好友參觀仍只能觀看你公開展示的漁獲。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r13-aquarium-catch-management",
       "status": "published",
