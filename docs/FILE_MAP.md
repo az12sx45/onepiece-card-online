@@ -1,6 +1,6 @@
 # File Map
 
-## 2026-10-05 水族箱交易橋接與 V5 釣竿（1.2.23 內容修訂 14，部署候選）
+## 2026-10-05 水族箱交易橋接與 V5 釣竿（1.2.23 內容修訂 14，已部署）
 
 - `desktop/launcher-life-room.js`：將料理、售魚、釣竿改裝送入既有安裝版允許的 `fish.release` 命令並附嚴格 disposition；`server/launcher-life-store.js`：識別該相容 payload、沿用原伺服器交易，單純放生保持原樣。`desktop/auth-service.js` 是安裝版核心，未納入內容覆蓋清單，也未在本次修改。
 - `server/launcher-fishing-v5.js`：Lv 0–3 實際收線、耗線、鬆線回復與魚距係數；`desktop/launcher-room-minigames.js`：工房數值說明。`config/launcher-announcements-v1.json`：修訂 28 的圖文公告，沿用現有千陽號釣魚圖。
