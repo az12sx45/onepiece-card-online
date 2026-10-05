@@ -130,7 +130,7 @@ async function serve(){
         // restart or silence. Control, line motion and settlement still run in
         // the actual server core on each one-second sync.
         const round=session.challenge;
-        round.runState='calm';round.pullDirection='steady';round.phaseUntil=new Date(Date.now()+18000).toISOString();
+        round.runState='calm';round.pullDirection='steady';round.phaseUntil=new Date(Date.now()+30000).toISOString();
         round.nextTurnAt=null;round.turnsRemaining=0;
         round.distance=88;round.strength=round.maxStrength=100;round.tension=0;
         respond(res,{ok:true});return;
@@ -340,6 +340,13 @@ async function lineGeometry(page){
       sea:{width:sea.clientWidth,height:sea.clientHeight},svg:{width:svgRect.width,height:svgRect.height}};
   });
 }
+async function lineLayer(page){
+  return page.locator('.room-fishing-v4-sea').evaluate(sea=>({
+    line:Number(getComputedStyle(sea.querySelector('.room-fishing-v4-line')).zIndex),
+    rod:Number(getComputedStyle(sea.querySelector('.room-fishing-v4-rod')).zIndex),
+    water:Number(getComputedStyle(sea.querySelector('.room-fishing-v4-water')).zIndex)
+  }));
+}
 async function visual(page){
   return page.locator('.room-fishing-v4-sea').evaluate(sea=>({
     fishX:parseFloat(sea.style.getPropertyValue('--fish-x')),
@@ -543,6 +550,9 @@ async function castAndHook(page,label){
     castAudio.noise.some(sound=>sound.filter==='bandpass')&&
     castAudio.noise.some(sound=>sound.filter==='highpass')&&
     castAudio.noise.some(sound=>sound.filter==='lowpass'));
+  check(`${label}: cast and splash play distinct decoded game effects`,
+    castAudio.samples.some(sound=>sound.duration>.33&&sound.duration<.38)&&
+    castAudio.samples.some(sound=>sound.duration>.67&&sound.duration<.74));
   const calls=await actionCalls(page,'cast'),power=calls.at(-1)?.payload.castPower;
   const pointerEvents=await page.evaluate(()=>__qa.pointerEvents);
   fs.writeFileSync(path.join(out,`${label}-cast-diagnostics.json`),JSON.stringify({power,powerBefore,sweep,calls,pointerEvents},null,2));
@@ -572,6 +582,8 @@ async function castAndHook(page,label){
     await page.locator('.room-fishing-v4-sea').getAttribute('data-biting')==='true');
   const waitLine=await lineGeometry(page);check(`${label}: waiting line joins rod and bobber`,
     waitLine&&waitLine.tipGap<3&&waitLine.ringGap<8&&waitLine.paths[0]===waitLine.paths[1]);
+  const waitLayers=await lineLayer(page);check(`${label}: waiting line sits behind the rod foreground`,
+    waitLayers.water<waitLayers.line&&waitLayers.line<waitLayers.rod);
   fs.writeFileSync(path.join(out,`${label}-wait-line-diagnostics.json`),JSON.stringify(waitLine,null,2));
   const waitBobber=await bobberVisible(page);
   check(`${label}: waiting bobber fully visible`,waitBobber.loaded&&waitBobber.inside&&waitBobber.opacity>.5&&waitBobber.overlap===0);
@@ -598,6 +610,8 @@ async function castAndHook(page,label){
   fs.writeFileSync(path.join(out,`${label}-fight-line-diagnostics.json`),JSON.stringify(fightLine,null,2));
   check(`${label}: fighting line joins rod and water splash`,
     fightLine&&fightLine.tipGap<3&&fightLine.splashGap<4);
+  const fightLayers=await lineLayer(page);check(`${label}: fighting line sits behind the rod foreground`,
+    fightLayers.water<fightLayers.line&&fightLayers.line<fightLayers.rod);
   const fightHeader=await headerVisible(page);
   check(`${label}: header fully visible while fighting`,fightHeader.visible);
   const waterVisual=await fightWaterVisual(page);
@@ -859,7 +873,8 @@ async function fightInteraction(page,label){
     return{paused:media?.paused,currentTime:media?.currentTime,volume:media?.volume};
   });
   check(`${label}: releasing reel fades then stops the continuous layer`,
-    reelReleased.paused===true&&reelReleased.currentTime===0&&reelReleased.volume>=.5);
+    reelReleased.paused===true&&reelReleased.currentTime===0&&
+    Math.abs(reelReleased.volume-.43)<.02);
   const calmDelta=(calmAfter-calmBefore.angle+540)%360-180;
   fs.writeFileSync(path.join(out,`${label}-calm-reel-sample.json`),JSON.stringify({calmBefore,calmAfter,calmDelta,fishPullBefore,server:sessions.get(label)?.challenge&&{distance:sessions.get(label).challenge.distance,runState:sessions.get(label).challenge.runState,pullDirection:sessions.get(label).challenge.pullDirection,control:sessions.get(label).challenge.control}},null,2));
   check(`${label}: calm water lets recovered line wind clockwise faster than idle fish draw`,
@@ -1131,6 +1146,7 @@ async function runAudioContinuity(){
         paused:media?.paused,loop:media?.loop,duration:media?.duration,volume:media?.volume,
         direction:document.querySelector('.room-fishing-v5-hud')?.dataset.reelDirection};
     },firstAt);
+    fs.writeFileSync(path.join(out,`${label}-inward-sustained.json`),JSON.stringify(held,null,2));
     check(`${label}: inward motor remains one audible loop after more than four seconds`,
       held.starts.length===1&&held.starts[0].loop===true&&held.starts[0].promise==='fulfilled'&&
       held.loop===true&&held.paused===false&&held.duration<4&&held.volume>.1&&held.direction==='in');
@@ -1174,8 +1190,11 @@ async function runAudioContinuity(){
     const sustainedOut=await page.evaluate(at=>{
       const media=__qa.sampleElements.find(item=>item.src.endsWith('/line_out_drag.ogg'));
       return{starts:__qa.sampleStarts.filter(item=>item.at>=at&&item.src?.endsWith('/line_out_drag.ogg')),
-        loop:media?.loop,paused:media?.paused,volume:media?.volume,duration:media?.duration};
+        loop:media?.loop,paused:media?.paused,volume:media?.volume,duration:media?.duration,
+        direction:document.querySelector('.room-fishing-v5-hud')?.dataset.reelDirection,
+        challenge:__minigame.inspect().game?.challenge?.stage};
     },releasedAt);
+    fs.writeFileSync(path.join(out,`${label}-outward-sustained.json`),JSON.stringify(sustainedOut,null,2));
     check(`${label}: outward drag remains one audible loop after more than four seconds`,
       sustainedOut.starts.length===1&&sustainedOut.loop===true&&sustainedOut.paused===false&&
       sustainedOut.duration<4&&sustainedOut.volume>.1);
@@ -1279,6 +1298,9 @@ async function runFlick(label,width,height){
       flickAudio.pans.some(item=>Math.abs(item.pan-swingStartPan)<.03&&item.at<flickAudio.responseAt)&&
       flickAudio.pans.some(item=>Math.abs(item.pan-swingEndPan)<.03&&item.at<flickAudio.responseAt)&&
       await page.evaluate(()=>__qa.audioContext?.state==='running'));
+    check(`${label}: the player's flick plays its decoded swish before hit feedback`,
+      flickAudio.samples.some(sound=>sound.duration>.29&&sound.duration<.33&&
+        sound.at<flickAudio.responseAt));
     check(`${label}: flick and confirmed hit have different air-cut and impact layers`,
       flickAudio.noise.some(sound=>sound.filter==='highpass')&&
       flickAudio.noise.some(sound=>sound.filter==='lowpass')&&

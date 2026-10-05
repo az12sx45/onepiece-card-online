@@ -1,5 +1,11 @@
 # Dev Workflow
 
+## 2026-10-05 海釣音效重混與魚線圖層（1.2.23 內容修訂 15，候選）
+
+原因與修改：V5 樣式曾把魚線設為 `z-index: 6`，高於釣竿的 4，讓魚線穿到竿身前面；`desktop/launcher-room-minigames.css` 改為 3，仍高於水面 1，保留現有竿尖、浮標、水花的動態連線。`desktop/launcher-room-minigames.js` 重整三條收線、魚拉線、線壓錄音的音量與交接，減少尖銳合成節拍；既有三個 1.2.23 已封裝的 OGG 路徑重新混合，另把短促的拋竿、落水與甩竿片段內嵌為本機解碼事件音，不增加核心媒體白名單或重新安裝需求。音源使用既有已審閱的 Pixabay 釣線／繩索音效與 OpenGameArt 的 Fisheefects、Swishes CC0 遊戲音效；完整來源、原檔和輸出 SHA-256 記於 `docs/LAUNCHER_FISHING_AUDIO_R15_20261005.json`。沒有使用玩家提供的 APK 音效。
+
+檔案與驗證：變動為上述 JS/CSS、`public/audio/launcher_room/pixabay_fishing_v1/` 內原三段 OGG、`scripts/launcher_fishing_v5_browser_qa.js`、`scripts/launcher_fishing_public_audio_qa.js`、`config/launcher-announcements-v1.json` 修訂 29 和本次四份專案文件／來源紀錄。桌機 1440×900 與 960×640 等待咬餌、搏魚的魚線層級與端點各 107 項 Chromium 檢查通過，左右甩竿畫面目視核對；完整 V5 Chromium 音效／操作 421／421，含拋竿、落水、甩竿的解碼片段、持續收放線、缺媒體回退、失焦／關閉。完整報告 `D:\Codex_QA\launcher-fishing-audio-r15\browser-final-fixed-fixture\report.json`。聲音原檔與內嵌位元組 3 路徑／3 短音 QA 通過；公告服務 82／82、簽署內容工具 49／49、更新器 45／45 通過。`npm start` 以未設資料庫的隔離 18897 埠啟動，Board 入口與內容清單 HTTP 200；`node --check`、`git diff --check` 通過。三段 OGG 共 34,367 bytes，修訂 15 簽署清單 SHA-256 `12a8050ebb5c40b14bedc882dd6977b5974e80992a98f06973564c19db288f9c`，38 路徑；五個新 JS/CSS/OGG blob 共 346,905 bytes 已上傳 R2 並逐檔公開 HEAD／GET／大小／SHA 核對，隔離修訂 14→15 只下載該五檔、讀回 38 檔。Render 正式公開清單與本機玩家快取仍待發布後讀回。釣魚機率、魚勢、魚竿等級、漁獲、商城金幣和三款桌遊規則不變；正式帳號與真人喇叭聽感尚未驗收。既有未關聯 `public/images/ranks/r5.PNG`、`r6.PNG` 修改不納入發布。LATTICE 本階段無可呼叫的任務 MCP，官方 Status 為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未宣稱任務或圖譜持久化成功。
+
 ## 2026-10-05 水族箱料理／售魚修復與釣竿實效（1.2.23 內容修訂 14，已部署）
 
 原因：修訂 13 的 `fish.cook`、`fish.sell`、`rod.upgrade` 雖已在伺服器與房間 UI 實作，現有 1.2.23 安裝版的 `desktop/auth-service.js` 命令白名單只接受舊有 `fish.release`，三項新請求在 IPC 層就被回絕為 `invalid_command`。原本分層測試未經過真正安裝版白名單。為讓已安裝玩家取得差分修復，`desktop/launcher-life-room.js` 將三項操作在送出前轉成已允許的 `fish.release` 專用 disposition；`server/launcher-life-store.js` 嚴格辨識料理／售魚／釣竿改裝的 payload 並委派給原本交易。舊版單純放生 `{fishId}` 不變；帳號鎖、revision、冪等、魚所有權、售價、錢包上限與回滾維持伺服器權威。Electron 核心、版本號和安裝檔不變。

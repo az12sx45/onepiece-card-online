@@ -3,9 +3,15 @@
   'use strict';
   const ASSET='opui://launcher/images/launcher_room/';
   const FISHING_SFX=Object.freeze({
-    reel:['reel_in_fast.ogg',.55],
-    lineOut:['line_out_drag.ogg',.56],
-    strain:['line_strain.ogg',.62]
+    reel:['reel_in_fast.ogg',.43],
+    lineOut:['line_out_drag.ogg',.46],
+    strain:['line_strain.ogg',.50]
+  });
+  // CC0 fishing Foley is decoded from local bytes; no new opui resource path is needed.
+  const FISHING_INLINE_SFX=Object.freeze({
+    cast:'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',
+    splash:'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',
+    flick:'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'
   });
   const FISH_LABELS=Object.freeze({'balloon-catfish':'氣球鯰魚','glistening-saury':'閃亮秋刀魚','smile-jellyfish':'微笑水母','panda-shark':'熊貓鯊','butterflyfish':'蝶魚','adventure-fish':'冒險魚','cola-sunfish':'可樂翻車魚','reef-shark':'鯊魚','elephant-tuna':'象鼻鮪魚','lovely-angel':'可愛天使魚','striped-clam':'條紋蛤蜊','cutie-piranha':'可愛食人魚','claw-shrimp':'剪刀蝦','pumpkin-octopus':'南瓜章魚','maple-salmon':'紅葉鮭魚','lava-flounder':'熔岩比目魚','treasure-pearl-clam':'寶藏珍珠貝','electric-catfish':'感電鯰魚','demon-bonito':'鬼鰹魚','guiding-anglerfish':'引路鮟鱇魚','ice-fish':'冰晶魚','beat-alligator':'節奏鱷魚','aurora-sunfish':'極光翻車魚','burning-dragon':'燃燒龍','great-terigius':'巨型泰利吉烏斯','golden-whale':'黃金鯨','largemouth-bass':'大嘴鱸魚',warmouth:'暖口太陽魚','congo-bichir':'剛果多鰭魚',paddlefish:'匙吻鱘','alligator-gar':'鱷雀鱔',dolphinfish:'鯕鰍',lionfish:'獅子魚','dusky-grouper':'褐石斑魚','goliath-grouper':'巨型石斑魚','white-marlin':'白馬林魚'});
   const FISH_RARITY_BY_ID=Object.freeze({
@@ -113,7 +119,7 @@
     let fishingV4ClockAnchor=null,fishingV4ClockPerf=0,fishingV4ClockLast=0,lastClockSample=null;
     let fishingResultShownAt=0;
     let fishingAudio=null,fishingAudioMaster=null,fishingAudioLimiter=null,fishingNoiseSeed=0x6d2b79f5,fishingChargeSoundAt=0,fishingStressSoundAt=0,fishingSoundRisk='safe';
-    const fishingClips=new Map(),fishingPlayingClips=new Map();let fishingClipGeneration=0;
+    const fishingClips=new Map(),fishingPlayingClips=new Map(),fishingInlineBuffers=new Map(),fishingInlineSources=new Set();let fishingClipGeneration=0,fishingInlineGeneration=0;
     const fishingResultHeldKeys=new Set();
     let fishingRodLevel=0,fishingRodKnown=false,fishingRodNextCost=ROD_UPGRADE_COSTS[0];
     const reactionCounts={good:0,miss:0};
@@ -148,8 +154,8 @@
       if(!fishingAudio){
         const AudioContextClass=root.AudioContext||root.webkitAudioContext;if(!AudioContextClass)return null;
         try{
-          fishingAudio=new AudioContextClass();fishingAudioMaster=fishingAudio.createGain();fishingAudioMaster.gain.value=.28;
-          fishingAudioLimiter=fishingAudio.createDynamicsCompressor();fishingAudioLimiter.threshold.value=-14;
+          fishingAudio=new AudioContextClass();fishingAudioMaster=fishingAudio.createGain();fishingAudioMaster.gain.value=.21;
+          fishingAudioLimiter=fishingAudio.createDynamicsCompressor();fishingAudioLimiter.threshold.value=-18;
           fishingAudioLimiter.knee.value=12;fishingAudioLimiter.ratio.value=5;
           fishingAudioLimiter.attack.value=.003;fishingAudioLimiter.release.value=.18;
           fishingAudioMaster.connect(fishingAudioLimiter);fishingAudioLimiter.connect(fishingAudio.destination);
@@ -179,6 +185,34 @@
           audio.load();
         }catch{fishingClips.delete(key);} // Missing local media keeps the synthesized effect.
       }
+    }
+    function preloadFishingInline(){
+      const context=fishingSoundContext();
+      if(!context||typeof root.atob!=='function'||fishingInlineBuffers.size)return;
+      const generation=++fishingInlineGeneration;
+      for(const [key,encoded] of Object.entries(FISHING_INLINE_SFX)){
+        try{
+          const bytes=Uint8Array.from(root.atob(encoded),character=>character.charCodeAt(0));
+          void context.decodeAudioData(bytes.buffer).then(buffer=>{
+            if(generation===fishingInlineGeneration&&fishingAudio===context)fishingInlineBuffers.set(key,buffer);
+          }).catch(()=>{});
+        }catch{} // The quieter synthesized action cue remains usable without decoded Foley.
+      }
+    }
+    function fishingInlineSample(key,rate=1,volume=1,pan=0){
+      // Missing packaged audio keeps the original synthesized fallback path.
+      if(!windowFocused||document.hidden||![...fishingClips.values()].every(item=>item.ready)||fishingClips.size!==3)return false;
+      const context=fishingSoundContext(),buffer=fishingInlineBuffers.get(key);
+      if(!context||!buffer||!fishingAudioMaster)return false;
+      try{
+        const source=context.createBufferSource(),gain=context.createGain(),panner=context.createStereoPanner?.();
+        source.buffer=buffer;source.playbackRate.value=clamp(rate,.75,1.4);gain.gain.value=volume;
+        source.connect(gain);
+        if(panner){panner.pan.value=clamp(pan,-1,1);gain.connect(panner);panner.connect(fishingAudioMaster);}
+        else gain.connect(fishingAudioMaster);
+        const release=()=>{fishingInlineSources.delete(source);source.disconnect();gain.disconnect();panner?.disconnect();};
+        source.onended=release;fishingInlineSources.add(source);source.start();return true;
+      }catch{return false;}
     }
     function finishFishingSample(key,playing){
       if(fishingPlayingClips.get(key)!==playing)return;
@@ -299,72 +333,73 @@
     }
     function fishingChargeSound(power){
       const at=now();if(at-fishingChargeSoundAt<190)return;fishingChargeSoundAt=at;
-      const strength=clamp(power/100,0,1);fishingTone(170+strength*180,130+strength*150,.065,.055+strength*.025,'triangle');
+      const strength=clamp(power/100,0,1);fishingTone(170+strength*180,130+strength*150,.065,.022+strength*.011,'triangle');
     }
     function fishingCastReleaseSound(power){
       if(fishingSample('cast',.9+clamp(power/100,0,1)*.2))return;
       const strength=clamp(power/100,0,1);
-      fishingNoise(.25,.11+strength*.04,480,4300,0,'bandpass',.11);
-      fishingTone(145+strength*45,340+strength*100,.16,.075+strength*.025,'sawtooth');
-      fishingNoise(.07,.07+strength*.035,5400,1000,.17,'highpass');
-      fishingTone(540,180,.09,.07,'triangle',.17);
+      fishingInlineSample('cast',.92+strength*.16,1.55);
+      fishingNoise(.29,.071+strength*.023,380,3300,0,'bandpass',.12);
+      fishingTone(145+strength*45,340+strength*100,.16,.033+strength*.014,'triangle');
+      fishingNoise(.085,.047+strength*.022,3100,850,.19,'highpass');
+      fishingTone(540,180,.09,.034,'triangle',.19);
     }
-    function fishingSplashSound(power){if(fishingSample('splash'))return;const strength=clamp(power/100,0,1);fishingNoise(.28,.10+strength*.035,1700,320);fishingTone(210,85,.18,.10,'sine',.025);}
-    function fishingBiteSound(){fishingTone(260,105,.18,.25,'triangle');fishingTone(610,850,.14,.16,'sine',.065);fishingTone(920,680,.12,.12,'sine',.17);fishingNoise(.12,.045,1100,430);}
-    function fishingHookSound(){if(fishingSample('hook'))return;fishingTone(190,410,.13,.14,'triangle');fishingTone(810,260,.16,.08,'sine',.045);fishingNoise(.09,.04,2400,850);}
+    function fishingSplashSound(power){if(fishingSample('splash'))return;const strength=clamp(power/100,0,1);fishingInlineSample('splash',.92+strength*.12,1.45);fishingNoise(.31,.064+strength*.022,1400,310);fishingTone(210,85,.18,.042,'sine',.025);}
+    function fishingBiteSound(){fishingTone(260,105,.18,.105,'triangle');fishingTone(610,850,.14,.065,'sine',.065);fishingTone(920,680,.12,.048,'sine',.17);fishingNoise(.12,.028,900,360);}
+    function fishingHookSound(){if(fishingSample('hook'))return;fishingTone(190,410,.13,.075,'triangle');fishingTone(810,260,.16,.036,'sine',.045);fishingNoise(.09,.031,1900,680);}
     function fishingStressSound(risk,intensity){
       const at=now(),interval=risk==='danger'?1050:2300;
       if(risk===fishingSoundRisk&&at-fishingStressSoundAt<interval)return;
       fishingSoundRisk=risk;fishingStressSoundAt=at;
       const fallback=()=>{
-        const urgent=risk==='danger';fishingTone(urgent?460:350,urgent?220:280,.21,urgent?.085:.055,'sawtooth');
-        fishingNoise(.11,.025+clamp(intensity,0,1)*.025,1500,580,.025);
+        const urgent=risk==='danger';fishingTone(urgent?460:350,urgent?220:280,.21,urgent?.039:.026,'triangle');
+        fishingNoise(.11,.016+clamp(intensity,0,1)*.018,1200,480,.025);
       };
       if(!fishingSample('strain',risk==='danger'?1.16:1,fallback))fallback();
     }
     function fishingCatchSound(rarity){
-      fishingTone(300,160,.14,.18,'triangle');
-      for(const [index,pitch] of [520,660,880].entries())fishingTone(pitch,pitch*1.05,.19,.16,'sine',.08+index*.105);
+      fishingTone(300,160,.14,.085,'triangle');
+      for(const [index,pitch] of [520,660,880].entries())fishingTone(pitch,pitch*1.05,.19,.077,'sine',.08+index*.105);
       const flourish={uncommon:[980],rare:[980,1240],legendary:[1040,1320,1580]}[rarity]||[];
-      for(const [index,pitch] of flourish.entries())fishingTone(pitch,pitch*1.04,.22,.095,'sine',.42+index*.105);
+      for(const [index,pitch] of flourish.entries())fishingTone(pitch,pitch*1.04,.22,.043,'sine',.42+index*.105);
     }
-    function fishingFailSound(){fishingTone(340,170,.18,.12,'triangle');fishingTone(225,95,.24,.09,'sine',.13);}
+    function fishingFailSound(){fishingTone(340,170,.18,.06,'triangle');fishingTone(225,95,.24,.043,'sine',.13);}
     function fishingReelClick(speed){
-      const speedRatio=clamp(Math.abs(speed)/880,.18,1),duration=.048-speedRatio*.015;
-      fishingNoise(duration,.035+speedRatio*.018,3100,1150,0,'bandpass');
-      fishingTone(250+speedRatio*95,105+speedRatio*35,duration,.035+speedRatio*.018,'square');
-      fishingTone(1050+speedRatio*230,550+speedRatio*110,.024,.014+speedRatio*.012,'triangle',.012);
+      const speedRatio=clamp(Math.abs(speed)/880,.18,1),duration=.038-speedRatio*.01;
+      // The continuous recorded spool carries the texture; this is only a soft tactile notch.
+      fishingNoise(duration,.013+speedRatio*.009,1900,620,0,'bandpass');
+      fishingTone(250+speedRatio*95,105+speedRatio*35,duration,.010+speedRatio*.007,'triangle');
     }
     function fishingReelEngageSound(){
-      fishingNoise(.07,.18,3800,700,0,'bandpass',.004);
-      fishingTone(680,260,.065,.23,'triangle');
+      fishingNoise(.07,.082,2500,620,0,'bandpass',.004);
+      fishingTone(680,260,.065,.091,'triangle');
     }
     function fishingLinePullSound(speed,pullIntensity,risk){
       const rate=clamp(Math.abs(speed)/880,0,1),force=clamp(pullIntensity,0,1);
-      const danger=risk==='danger'?.025:0,duration=.11+force*.045;
-      fishingNoise(duration,.028+force*.02+danger,4200+rate*900,900+force*360,0,'highpass',.025);
-      fishingTone(720+rate*280+force*210,440+force*160,duration,.018+force*.016,'sawtooth');
+      const danger=risk==='danger'?.012:0,duration=.11+force*.045;
+      fishingNoise(duration,.012+force*.012+danger,2400+rate*600,700+force*220,0,'highpass',.025);
+      fishingTone(720+rate*280+force*210,440+force*160,duration,.008+force*.008,'triangle');
     }
     function fishingSurgeSound(pullIntensity){
       const force=clamp(pullIntensity,0,1);
       fishingSample('strain',1+force*.16);
       // A surge keeps its low impact even if the short strain clip is already playing.
-      fishingTone(180+force*65,72+force*25,.20,.075+force*.045,'sawtooth');
-      fishingNoise(.19,.055+force*.04,2600,420,0,'bandpass',.024);
-      fishingTone(390+force*120,760+force*190,.11,.025+force*.01,'triangle',.06);
+      fishingTone(180+force*65,72+force*25,.20,.042+force*.022,'triangle');
+      fishingNoise(.19,.028+force*.022,1800,360,0,'bandpass',.024);
+      fishingTone(390+force*120,760+force*190,.11,.012+force*.005,'triangle',.06);
     }
     function fishingFlickCueSound(direction){
       fishingMotorDuckingUntil=now()+340;
       const pan=direction==='left'?-.65:direction==='right'?.65:0;
       if(direction==='left'){
-        fishingTone(760,480,.12,.16,'triangle',0,pan);
-        fishingTone(540,310,.13,.14,'triangle',.11,pan);
+        fishingTone(760,480,.12,.082,'triangle',0,pan);
+        fishingTone(540,310,.13,.067,'triangle',.11,pan);
       }else if(direction==='right'){
-        fishingTone(430,670,.12,.16,'triangle',0,pan);
-        fishingTone(590,900,.13,.14,'triangle',.11,pan);
+        fishingTone(430,670,.12,.082,'triangle',0,pan);
+        fishingTone(590,900,.13,.067,'triangle',.11,pan);
       }else{
-        fishingTone(370,600,.11,.14,'triangle',0,0);
-        fishingTone(600,1020,.16,.16,'triangle',.11,0);
+        fishingTone(370,600,.11,.072,'triangle',0,0);
+        fishingTone(600,1020,.16,.079,'triangle',.11,0);
       }
     }
     function fishingFlickSwingSound(direction,pullIntensity){
@@ -376,27 +411,31 @@
       const force=clamp(pullIntensity,0,1),lift=direction==='up',base=lift?185:direction==='left'?150:165;
       const startPan=direction==='left'?.48:direction==='right'?-.48:0;
       const endPan=direction==='left'?-.76:direction==='right'?.76:0;
-      fishingNoise(.15,.16+force*.035,820,260,0,'lowpass',.012,startPan);
-      fishingNoise(.34,.28+force*.075,650,5600+force*1000,.015,'bandpass',.16,startPan);
-      fishingNoise(.245,.24+force*.065,1800,7100+force*900,.105,'bandpass',.085,endPan);
-      fishingTone(base,base*(lift?2.9:2.35),.23,.075+force*.025,'sawtooth',.015,endPan);
-      fishingNoise(.13,.22+force*.05,6900,1350,.245,'highpass',.008,endPan);
-      fishingTone(lift?280:235,85,.135,.10+force*.025,'triangle',.245,endPan);
+      fishingInlineSample('flick',.9+force*.18,1.6,endPan);
+      fishingNoise(.15,.070+force*.018,720,230,0,'lowpass',.012,startPan);
+      fishingNoise(.34,.108+force*.029,530,3400+force*700,.015,'bandpass',.16,startPan);
+      fishingNoise(.245,.092+force*.026,1400,4200+force*600,.105,'bandpass',.085,endPan);
+      fishingTone(base,base*(lift?2.9:2.35),.23,.029+force*.011,'sawtooth',.015,endPan);
+      fishingNoise(.13,.079+force*.021,3900,900,.245,'highpass',.008,endPan);
+      fishingTone(lift?280:235,85,.135,.042+force*.011,'triangle',.245,endPan);
     }
     function fishingFlickImpactSound(result,direction,pullIntensity){
       const force=clamp(pullIntensity,0,1);
       if(result==='hit'){
         const pan=direction==='left'?-.55:direction==='right'?.55:0;
-        fishingNoise(.15,.12+force*.055,2400,340,0,'lowpass',.012,pan);
-        fishingTone(145+force*45,63,.19,.13+force*.055,'sawtooth',0,pan);
-        fishingTone(direction==='up'?660:540,direction==='up'?1140:960,.17,.085,'triangle',.055,pan);
+        fishingNoise(.15,.054+force*.026,1700,310,0,'lowpass',.012,pan);
+        fishingTone(145+force*45,63,.19,.055+force*.023,'sawtooth',0,pan);
+        fishingTone(direction==='up'?660:540,direction==='up'?1140:960,.17,.038,'triangle',.055,pan);
       }else{
-        fishingNoise(.15,.055,1700,350,0,'bandpass');
-        fishingTone(result==='wrong'?300:250,115,.19,.08,'triangle');
+        fishingNoise(.15,.026,1300,320,0,'bandpass');
+        fishingTone(result==='wrong'?300:250,115,.19,.042,'triangle');
       }
     }
     function closeFishingSound(){
       const audio=fishingAudio;++fishingClipGeneration;
+      ++fishingInlineGeneration;
+      for(const source of fishingInlineSources){try{source.stop();}catch{}}
+      fishingInlineSources.clear();fishingInlineBuffers.clear();
       for(const [key,playing] of fishingPlayingClips)finishFishingSample(key,playing);
       for(const {audio:clip} of fishingClips.values()){
         clip.pause();clip.removeAttribute('src');clip.load();
@@ -551,7 +590,7 @@
       finally{if(current===generation){requesting=false;setDisabled(false);updateRodWorkshop();updateFishingV2();updateFishingV4();}}
     }
     function setDisabled(value){if(!layer)return;layer.dataset.pending=String(value);for(const b of body.querySelectorAll('button'))b.disabled=(value&&b.dataset.fishAction!=='reel'&&!b.classList.contains('room-fishing-v4-reel')&&!b.classList.contains('room-fishing-v4-pay')&&!b.classList.contains('room-fishing-v4-cast')&&!b.classList.contains('room-fishing-v4-hook'))||b.dataset.permanentDisabled==='true';}
-    async function start(){if(phase!=='intro')return;if(kind==='fishing')fishingSoundContext();const response=await request('minigame.start',{characterId,kind,...kind==='fishing'?{baitId:selectedBait,spotId:selectedSpot,fishingVersion:5,flickMode:true}:kind==='work'?{jobId}:{},...kind==='work'&&jobId==='fishing'?{fishingVersion:2}:{},...practice?{practice:true}:{}});if(!response)return;if(response.minigame&&['playing','ready','failed'].includes(response.minigame.state)){game=response.minigame;if(game.characterId!==characterId||game.kind!==kind){renderRecovery();return;}accept(response);return;}renderIntro(kind==='fishing'&&response.error==='work_active'?'夥伴正在分工。完成原有分工後即可自由釣魚；釣魚不消耗工作次數。':ERRORS[response.error]||response.message||'暫時無法開始，請稍候再試。');}
+    async function start(){if(phase!=='intro')return;if(kind==='fishing'){fishingSoundContext();preloadFishingInline();}const response=await request('minigame.start',{characterId,kind,...kind==='fishing'?{baitId:selectedBait,spotId:selectedSpot,fishingVersion:5,flickMode:true}:kind==='work'?{jobId}:{},...kind==='work'&&jobId==='fishing'?{fishingVersion:2}:{},...practice?{practice:true}:{}});if(!response)return;if(response.minigame&&['playing','ready','failed'].includes(response.minigame.state)){game=response.minigame;if(game.characterId!==characterId||game.kind!==kind){renderRecovery();return;}accept(response);return;}renderIntro(kind==='fishing'&&response.error==='work_active'?'夥伴正在分工。完成原有分工後即可自由釣魚；釣魚不消耗工作次數。':ERRORS[response.error]||response.message||'暫時無法開始，請稍候再試。');}
     function renderRecovery(){phase='recovery';body.replaceChildren(node('h3','','上一次挑戰尚未結束'),node('p','','結束舊挑戰後，即可重新選擇夥伴。未完成的獎勵不會發放。'),button('結束舊挑戰',()=>void cancel(false)));say('不會自動領取獎勵。');}
     function accept(response) {
       if(!response?.minigame){showRetry(response);return;}
@@ -1039,13 +1078,13 @@
         fishingV5WasWinding=winding;
         if(winding){
           fishingV5ClickAngle+=Math.abs(advance);
-          if(firstWindingFrame||fishingV5ClickAngle>=42&&displayAt-fishingV5LastClickAt>=85){
-            fishingV5ClickAngle%=42;fishingV5LastClickAt=displayAt;fishingReelClick(fishingV5ReelSpeed);
+          if(firstWindingFrame||fishingV5ClickAngle>=84&&displayAt-fishingV5LastClickAt>=125){
+            fishingV5ClickAngle%=84;fishingV5LastClickAt=displayAt;fishingReelClick(fishingV5ReelSpeed);
           }
         }
       }else{
         fishingV5WasWinding=false;
-        const cadence=clamp(270-Math.abs(fishingV5ReelSpeed)*.16,130,250);
+        const cadence=clamp(370-Math.abs(fishingV5ReelSpeed)*.15,220,350);
         if(displayAt-fishingV5LastLineSoundAt>=cadence){
           fishingV5LastLineSoundAt=displayAt;
           fishingLinePullSound(fishingV5ReelSpeed,pullIntensity,fishingSoundRisk);
@@ -1484,7 +1523,7 @@
     }
     // A challenge keeps its clock while unfocused. No free restart or offscreen reward.
     root.addEventListener('keyup',event=>fishingResultHeldKeys.delete(event.key));
-    root.addEventListener('blur',()=>{fishingV5ReelSpeed=0;fishingV5ClickAngle=0;fishingMotorSpeed=0;fishingMotorDirection='still';for(const key of fishingPlayingClips.keys())fishingStopSample(key,true);if(fishingAudio?.state==='running')void fishingAudio.suspend().catch(()=>{});});
+    root.addEventListener('blur',()=>{fishingV5ReelSpeed=0;fishingV5ClickAngle=0;fishingMotorSpeed=0;fishingMotorDirection='still';for(const key of fishingPlayingClips.keys())fishingStopSample(key,true);for(const source of fishingInlineSources){try{source.stop();}catch{}}fishingInlineSources.clear();if(fishingAudio?.state==='running')void fishingAudio.suspend().catch(()=>{});});
     root.addEventListener('blur',()=>{windowFocused=false;stopReeling();fishingResultHeldKeys.clear();fishingV4ReelPointer=null;fishingV4PayPointer=null;fishingV4ChargePointer=null;fishingV4ChargeStarted=0;fishingV4ChargeKey=false;const sea=body?.querySelector('.room-fishing-v4-sea');if(sea)sea.dataset.charging='false';if(fishingV4Challenge()?.stage==='cast'&&!fishingV4QueuedCast)setFishingV4Power(52);setFishingV4Control(false,0,false);});root.addEventListener('focus',()=>{windowFocused=true;});root.addEventListener('pointerup',event=>{stopReeling();if(fishingV4ReelPointer===event.pointerId){fishingV4ReelPointer=null;setFishingV4Control(false,0,fishingV4Paying);}if(fishingV4PayPointer===event.pointerId){fishingV4PayPointer=null;setFishingV4Control(fishingV4ReelPointer!==null,fishingV4Steer,false);}});root.addEventListener('pointercancel',event=>{stopReeling();if(fishingV4ReelPointer===event.pointerId){fishingV4ReelPointer=null;setFishingV4Control(false,0,fishingV4Paying);}if(fishingV4PayPointer===event.pointerId){fishingV4PayPointer=null;setFishingV4Control(fishingV4ReelPointer!==null,fishingV4Steer,false);}});
     return Object.freeze({open,dismiss,active,receive:response=>{updateFishingRod(response);if(active()&&game&&response?.minigame?.id===game.id&&['expired','invalidated','cancelled'].includes(response.minigame.state))accept(response);},inspect:()=>({phase,kind,jobId,characterId,roundIndex:game?.roundIndex,selected:[...choice],entered:[...directions],ingredients:[...ingredients],rotations:[...rotations],course:[...course],counterMoves:[...counterMoves],requesting,windowFocused})});
   }

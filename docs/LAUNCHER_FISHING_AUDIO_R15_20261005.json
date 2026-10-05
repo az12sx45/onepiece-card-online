@@ -1,0 +1,248 @@
+{
+  "schema": "launcher-fishing-audio-r15-candidate-v1",
+  "recordedAt": "2026-10-05",
+  "status": "local candidate, no human listening acceptance",
+  "licenseEvidence": [
+    {
+      "source": "https://opengameart.org/content/fisheefects",
+      "author": "Memoraphile @ You're Perfect Studio",
+      "license": "CC0 among offered licenses; page says use with or without attribution",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "archiveUrl": "https://opengameart.org/sites/default/files/FisheefectsComplete.zip",
+      "archiveSha256": "4532eca6b9829a56e91be2e3136d4c7ff2f987ee13e4a35bfdfb25fc3ce43d36",
+      "usedFile": "reel.wav",
+      "usedFileSha256": "9ccb4dfaaff7a79b5eec36c9276fead51f0dbab78bc5223fadac8ad1bf05bf51"
+    },
+    {
+      "source": "https://pixabay.com/service/terms/",
+      "license": "Pixabay Content License section 5; adaptation inside a game allowed; no standalone audio pack"
+    },
+    {
+      "source": "https://opengameart.org/content/swishes-sound-pack",
+      "author": "artisticdude",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "archiveUrl": "https://opengameart.org/sites/default/files/swishes.zip",
+      "archiveSha256": "7980215241b739a787dcf26f660ce510bb237900968789395a86911619795693"
+    }
+  ],
+  "audio": [
+    {
+      "role": "reel_in_fast",
+      "path": "public/audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg",
+      "previousPackagedAudio": {
+        "bytes": 23162,
+        "sha256": "0bba6c5ca6478f9aed58db21c2061a7724f12841df4a697a2795ad5551dd70d8"
+      },
+      "previousSource": {
+        "author": "AudioPapkin (Paweł Spychała)",
+        "sourcePage": "https://pixabay.com/sound-effects/film-special-effects-old-fishing-reel-fast-rewinding-fishing-line-297884/",
+        "rawOriginalSha256PreviouslyRecorded": "7eafa24f088264563025fe8ff1b058dcfd6dd6a7a3989fc50b90cff163857440",
+        "verification": "prior project provenance; raw original was not re-downloaded in r15"
+      },
+      "newAudio": {
+        "file": "reel_in_fast.ogg",
+        "bytes": 16176,
+        "sha256": "6afa2406345448a4ee6fc9fc2ef3b88a508c1519fe3518f33f53b6216849f66f",
+        "duration": 2.72,
+        "rmsDbFS": -20.74,
+        "peakDbFS": -6.42,
+        "seamDelta": 0.06181,
+        "interSampleDelta95": 0.13841
+      },
+      "composition": "79% filtered previous Pixabay mechanical loop plus 21% filtered OpenGameArt CC0 reel.wav. Each 2.72 seconds with 0.23-second cyclic crossfade; 90-3200 / 120-3800 Hz filters; soft peak cap; 24 kHz mono Ogg Vorbis q2."
+    },
+    {
+      "role": "line_out_drag",
+      "path": "public/audio/launcher_room/pixabay_fishing_v1/line_out_drag.ogg",
+      "previousPackagedAudio": {
+        "bytes": 8718,
+        "sha256": "272bfd01799aee0edeb4f9daa8bb86cc70ea263bc35bd89b09c31b03f1c81971"
+      },
+      "previousSource": {
+        "author": "paulprit (Freesound), published by freesound_community on Pixabay",
+        "sourcePage": "https://pixabay.com/sound-effects/film-special-effects-fly-reel-fish-pulling-saricione-94671/",
+        "rawOriginalSha256PreviouslyRecorded": "2fb0a4c6003068a67cfa7eb3f9d78376868bcea798a28f93052126632916074f",
+        "verification": "prior project provenance; raw original was not re-downloaded in r15"
+      },
+      "newAudio": {
+        "file": "line_out_drag.ogg",
+        "bytes": 10670,
+        "sha256": "e3b05cad60b01354829b798b0ed87e121a443a5ce08559b8612b2f5c7e09c17d",
+        "duration": 1.82,
+        "rmsDbFS": -21.72,
+        "peakDbFS": -9.73,
+        "seamDelta": 0.04644,
+        "interSampleDelta95": 0.06186
+      },
+      "composition": "82% filtered previous Pixabay drag loop plus 18% filtered OpenGameArt CC0 reel.wav from another source window. 1.82 seconds with 0.19-second cyclic crossfade; 80-2900 / 160-3600 Hz filters; soft peak cap; 24 kHz mono Ogg Vorbis q2."
+    },
+    {
+      "role": "line_strain",
+      "path": "public/audio/launcher_room/pixabay_fishing_v1/line_strain.ogg",
+      "previousPackagedAudio": {
+        "bytes": 11486,
+        "sha256": "856fe1b51061add470111b2309f4afad9045fd5ca290fe53d7cd6fbbb1bafb7d"
+      },
+      "previousSource": {
+        "author": "floraphonic",
+        "sourcePage": "https://pixabay.com/sound-effects/film-special-effects-rope-tighten-and-stretch-1-171531/",
+        "rawOriginalSha256PreviouslyRecorded": "b3a0f0a03ee406c6b080dcaae2a634881384536d0d9ce4be1fb3c11ba42a65aa",
+        "verification": "prior project provenance; raw original was not re-downloaded in r15"
+      },
+      "newAudio": {
+        "file": "line_strain.ogg",
+        "bytes": 7521,
+        "sha256": "da30ac86421c85b64f4eea3c94aaf3218aef47bbcc7200ff5ead5e6c4e10a1a2",
+        "duration": 0.7593,
+        "rmsDbFS": -23.14,
+        "peakDbFS": -6.36,
+        "seamDelta": 0.00705,
+        "interSampleDelta95": 0.04349
+      },
+      "composition": "82% previous Pixabay rope creak plus 18% CC0 OpenGameArt swish-7.wav offset at 90 ms. Both filtered 75-2600 / 100-2200 Hz, 16 ms onset and 100 ms tail fade, soft peak cap, 24 kHz mono Ogg Vorbis q2."
+    }
+  ],
+  "runtimeMix": "Same three previously whitelisted opui paths. Browser gain uses .43 reel, .46 line-out, .50 strain. Web Audio master .21 and lower synthesized cue levels; reel click angle threshold 84 degrees / 125 ms and line-out extra cue cadence 220-350 ms; all gameplay events and server rules unchanged.",
+  "noPrivateAudio": "No Fishing Master APK sound bytes or extracted effects are in these files.",
+  "inlineBank": {
+    "runtime": "Only three short processed excerpts are embedded as base64 in existing desktop/launcher-room-minigames.js. Decode via AudioContext.decodeAudioData; no fetch, no new opui resource or full original library. Missing packaged media, missing decoder, lost focus and modal closure retain synthesis/stop behavior.",
+    "assets": [
+      {
+        "event": "cast",
+        "sources": [
+          {
+            "file": "swish-7.wav",
+            "sourceSHA256": "e6de737a34de16afed094d6170d7679149022f149e0a8356d2f029b0e8f4a4d7",
+            "sourcePage": "https://opengameart.org/content/swishes-sound-pack"
+          },
+          {
+            "file": "swish-9.wav",
+            "sourceSHA256": "123883f006ce55feecbff11eea5f87c4493df4399989983037144570a23723c1",
+            "sourcePage": "https://opengameart.org/content/swishes-sound-pack"
+          }
+        ],
+        "composition": "CC0 swish-7 and swish-9, offset 90 ms, softened above 3.6 kHz, 8 ms entrance/50 ms tail, 24 kHz mono Vorbis q1; layered under low-gain procedural cast air.",
+        "outputSHA256": "51463751bab683db4190abac7751cfa4231412afe887efe8c88a4d9548f95468",
+        "encodedBytes": 4312,
+        "embeddedBase64Bytes": 5752,
+        "durationSeconds": 0.35
+      },
+      {
+        "event": "splash",
+        "sources": [
+          {
+            "file": "splash.wav",
+            "sourceSHA256": "f0cabb047509b0ad0237f1d82966d39e2f46ce6df9f69e350952f7b4fa235de8",
+            "sourcePage": "https://opengameart.org/content/fisheefects"
+          }
+        ],
+        "composition": "First 700 ms of CC0 Fisheefects splash.wav, softened above 3.6 kHz and faded, 24 kHz mono Vorbis q1; layered under low-gain procedural water sound.",
+        "outputSHA256": "1ea66110ff281dfe10a31f0314852c031f072d629e813d4576b1b07177bdc2c8",
+        "encodedBytes": 5873,
+        "embeddedBase64Bytes": 7832,
+        "durationSeconds": 0.7
+      },
+      {
+        "event": "flick",
+        "sources": [
+          {
+            "file": "swish-9.wav",
+            "sourceSHA256": "123883f006ce55feecbff11eea5f87c4493df4399989983037144570a23723c1",
+            "sourcePage": "https://opengameart.org/content/swishes-sound-pack"
+          },
+          {
+            "file": "swish-3.wav",
+            "sourceSHA256": "55b100e2c67fa43dad8510e31e85bbd51a68d5ce84a6e0259e21e19030083e24",
+            "sourcePage": "https://opengameart.org/content/swishes-sound-pack"
+          }
+        ],
+        "composition": "CC0 swish-9 and swish-3, offset 80 ms, softened above 3.6 kHz, 8 ms entrance/50 ms tail, 24 kHz mono Vorbis q1; panned to the chosen swing side.",
+        "outputSHA256": "2c0f42f3fd1733cac97f5f7292d45e30decd44fcdbc7a50d896562835faae090",
+        "encodedBytes": 4178,
+        "embeddedBase64Bytes": 5572,
+        "durationSeconds": 0.31
+      }
+    ]
+  },
+  "qa": {
+    "nodeCheck": "passed",
+    "gitDiffCheck": "passed",
+    "v5BrowserChecks": 421,
+    "output": "D:/Codex_QA/launcher-fishing-audio-r15/browser-final-fixed-fixture/report.json",
+    "subjectiveListening": "not performed by this agent; sample-derived metrics and browser playback are not a listening panel",
+    "note": "Full final browser run after final strain remix; QA-only calm window extended from 18 to 30 seconds for slow load. No production rule changed."
+  },
+  "preview": {
+    "description": "14.5 s sample-only mix preview, with all active game samples and a uniform audition gain; live synthesized cues/room ambience are not included.",
+    "events": [
+      {
+        "event": "cast",
+        "startSeconds": 0.35,
+        "durationSeconds": 0.35,
+        "gain": 0.33,
+        "pan": 0
+      },
+      {
+        "event": "splash",
+        "startSeconds": 1.45,
+        "durationSeconds": 0.7,
+        "gain": 0.31,
+        "pan": 0
+      },
+      {
+        "event": "reel_in_fast",
+        "startSeconds": 2.95,
+        "durationSeconds": 2.85,
+        "gain": 0.43,
+        "pan": 0
+      },
+      {
+        "event": "line_out_drag",
+        "startSeconds": 6.05,
+        "durationSeconds": 2.7,
+        "gain": 0.46,
+        "pan": 0
+      },
+      {
+        "event": "line_strain",
+        "startSeconds": 8.18,
+        "durationSeconds": 0.759,
+        "gain": 0.5,
+        "pan": 0
+      },
+      {
+        "event": "flick",
+        "startSeconds": 9.3,
+        "durationSeconds": 0.31,
+        "gain": 0.34,
+        "pan": -0.75
+      },
+      {
+        "event": "reel_in_fast",
+        "startSeconds": 9.76,
+        "durationSeconds": 2.15,
+        "gain": 0.43,
+        "pan": 0
+      },
+      {
+        "event": "flick",
+        "startSeconds": 12.25,
+        "durationSeconds": 0.31,
+        "gain": 0.34,
+        "pan": 0.75
+      },
+      {
+        "event": "reel_in_fast",
+        "startSeconds": 12.65,
+        "durationSeconds": 1.5,
+        "gain": 0.43,
+        "pan": 0
+      }
+    ],
+    "wavSha256": "c590c0602f2429039356139bb0e3f6248ee9f0c2142d0b65ad15cc9a34316f51",
+    "mp3Sha256": "51e00baf176750614c3c5c2b5363a432ad294658cdb27f09bd6c7377067a8ddd",
+    "mp3Bytes": 175148,
+    "path": "D:/Codex_QA/launcher-fishing-audio-r15/fishing-r15-sound-preview.mp3"
+  }
+}

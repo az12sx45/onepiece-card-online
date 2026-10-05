@@ -4,24 +4,24 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 14,
-  "publishedAt": "2026-10-05T04:28:30.302Z",
+  "revision": 15,
+  "publishedAt": "2026-10-05T07:55:16.263Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
       "path": "audio/launcher_room/pixabay_fishing_v1/line_out_drag.ogg",
-      "bytes": 8718,
-      "sha256": "272bfd01799aee0edeb4f9daa8bb86cc70ea263bc35bd89b09c31b03f1c81971"
+      "bytes": 10670,
+      "sha256": "e3b05cad60b01354829b798b0ed87e121a443a5ce08559b8612b2f5c7e09c17d"
     },
     {
       "path": "audio/launcher_room/pixabay_fishing_v1/line_strain.ogg",
-      "bytes": 11486,
-      "sha256": "856fe1b51061add470111b2309f4afad9045fd5ca290fe53d7cd6fbbb1bafb7d"
+      "bytes": 7521,
+      "sha256": "da30ac86421c85b64f4eea3c94aaf3218aef47bbcc7200ff5ead5e6c4e10a1a2"
     },
     {
       "path": "audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg",
-      "bytes": 23162,
-      "sha256": "0bba6c5ca6478f9aed58db21c2061a7724f12841df4a697a2795ad5551dd70d8"
+      "bytes": 16176,
+      "sha256": "6afa2406345448a4ee6fc9fc2ef3b88a508c1519fe3518f33f53b6216849f66f"
     },
     {
       "path": "images/launcher_room/fish_master/alligator-gar.webp",
@@ -176,12 +176,12 @@
     {
       "path": "launcher-room-minigames.css",
       "bytes": 115772,
-      "sha256": "11e47dcd3e55fe03631d98038892ea857acb2b0d7d307f69a6a0dda6ec4ef018"
+      "sha256": "3238d0b4638636d35849e5c73ca1204617e633546f66626c8587a9230d959a4a"
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 175028,
-      "sha256": "9e0c5a6730401c10ae68c4bfa5636a04a82569b3ff3574337431ba28dbdc3357"
+      "bytes": 196766,
+      "sha256": "51c78ff175b5ee5b7887c9fe8eb4ad7c558770c9c72e80e58621e8ea5b7661b7"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -202,6 +202,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "Aeuy4i0iHP3hVdhTHAZS6osqlT2bHAdZZ6A5h4/aN6JjZZ5e84pWhPgGrN3kVhW6E9rTqhPUDAsPfwB8K0ElDg=="
+    "value": "z8yFxVlXyR8IdsvTqAc06lDG8UwCj9CzAQl8MjDqRR3igvaEqVZTwX972Eu1cwPVwqLTJTkRDilk7+eFLC0nAw=="
   }
 }

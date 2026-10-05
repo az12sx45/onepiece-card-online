@@ -1,5 +1,11 @@
 # File Map
 
+## 2026-10-05 海釣音效與魚線圖層（1.2.23 內容修訂 15，候選）
+
+- `desktop/launcher-room-minigames.js/.css`：收放線混音、拋竿／落水／甩竿短錄音、魚線位於水面與釣竿之間；沿用竿尖與水面端點座標。
+- `public/audio/launcher_room/pixabay_fishing_v1/{reel_in_fast,line_out_drag,line_strain}.ogg`：三個既有白名單路徑的新混合音檔；`docs/LAUNCHER_FISHING_AUDIO_R15_20261005.json`：OpenGameArt／Pixabay 來源、授權、輸出 SHA 與測量。
+- `scripts/launcher_fishing_v5_browser_qa.js`、`scripts/launcher_fishing_public_audio_qa.js`：實際畫面層級、錄音事件、音檔與內嵌素材檢查；`config/launcher-announcements-v1.json` 修訂 29 沿用既有釣魚插圖。`public/desktop/launcher-content-v1.json` 已放入簽署修訂 15 候選，38 檔、SHA-256 `12a8050ebb5c40b14bedc882dd6977b5974e80992a98f06973564c19db288f9c`；正式公開讀回見 `docs/DEV_WORKFLOW.md` 後續補記。
+
 ## 2026-10-05 水族箱交易橋接與 V5 釣竿（1.2.23 內容修訂 14，已部署）
 
 - `desktop/launcher-life-room.js`：將料理、售魚、釣竿改裝送入既有安裝版允許的 `fish.release` 命令並附嚴格 disposition；`server/launcher-life-store.js`：識別該相容 payload、沿用原伺服器交易，單純放生保持原樣。`desktop/auth-service.js` 是安裝版核心，未納入內容覆蓋清單，也未在本次修改。

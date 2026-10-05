@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 28,
+  "revision": 29,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r15-fishing-sound-and-line-layer",
+      "status": "published",
+      "publishedAt": "2026-10-05T07:40:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r15",
+      "title": "海釣線輪音效重混｜魚線回到釣竿後方",
+      "summary": "重整收線、魚拉線與耐壓聲音的混音，並修正魚線蓋過釣竿的圖層問題。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-rebuild-1.2.18.webp",
+        "alt": "千陽號甲板上的釣竿與海面魚影"
+      },
+      "body": [
+        "海釣的收線與魚拉線使用重新處理的遊戲音效，配合實際線輪速度與方向播放；線吃緊時有較柔和的提醒。拋竿、咬餌、甩竿與上岸的合成聲也重新平衡，減少刺耳與重複的感覺。",
+        "魚線現在畫在釣竿後方，仍跟著竿尖連到浮標或水花；等待咬餌、搏魚和左右甩竿時都保持正確層級。",
+        "重新啟動啟動器即可取得簽署內容差分更新，不必重新安裝。魚種、魚勢、釣竿數值、漁獲和商城金幣規則不變。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r14-aquarium-actions-rod-effects",
       "status": "published",

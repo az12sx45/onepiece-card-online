@@ -499,7 +499,7 @@
 .room-fishing-v4-direction strong{display:block;margin:4px 0;font:900 17px/1.2 inherit}
 .room-fishing-v4-direction em{display:block;margin-top:6px;padding-top:5px;border-top:1px solid #c6e4d172;color:#ffe3a5;font:800 12px/1.2 inherit;font-style:normal}
 .room-fishing-v4-sea[data-pull-direction=left] .room-fishing-v4-direction,.room-fishing-v4-sea[data-pull-direction=right] .room-fishing-v4-direction{border-color:#ffe3a9}
-.fishing-v5 .room-fishing-v4-line{z-index:6}
+.fishing-v5 .room-fishing-v4-line{z-index:3}
 .fishing-v5 .room-fishing-v4-line-thread{stroke:#eaf7ee;stroke-width:1.15;opacity:.92}
 .fishing-v5 .room-fishing-v4-line-shadow{stroke:#082936;stroke-width:2.7;opacity:.52}
 .fishing-v5 .room-fishing-v4-sea[data-stage=cast] .room-fishing-v4-line path{opacity:0}
