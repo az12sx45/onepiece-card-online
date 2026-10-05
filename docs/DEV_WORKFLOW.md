@@ -7897,3 +7897,6 @@ Source npm start、封裝 Electron、installer SHA／签章、公開版本切換
 
 - 最終驗證：必殺技鍵盤與持竿立繪 desktop/minimum 共15檢查通過；原版 V5 flick 2296、PGlite life21、公告82、minimum110。修復 QTE 更新 DOM 時的鍵盤焦點中斷。13張持竿圖已逐張/合圖審查並轉WebP。
 - 簽署 r17：58項；R2新增23個blob，唯一差分6,790,607 bytes。R2 HEAD/GET/SHA全通過；隔離 revision16 快取升至17、驗證全部內容與重查不重載已通過。公開部署仍待讀回。
+
+- 公開部署完成（2026-10-06）：Render dep-db1u8nff3r2c73evdtrg 顯示 Deploy succeeded | Live，來源 e2b6a88568db265bbf20ac55d271abb91a6a3ce3；正式 PostgreSQL 連線成功。公開 r17 清單 SHA256 f3136c085c8dacdf7a98285d1c28cbc2956750e5bca6fb342e52b484e26594da 完全一致。
+- 已備份實際 launcher-content-v1 快取到 D:/Codex_QA/launcher-fishing-r17/actual-cache-before-r17，再以公開來源升級16→17；58項讀回校驗、6,790,607 bytes 唯一差分、重查零下載通過。真人帳號實際釣魚驗收未執行。
