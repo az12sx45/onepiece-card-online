@@ -1,14 +1,14 @@
 # Dev Workflow
 
-## 2026-10-05 海釣拋投透視、飛餌與預兆音（1.2.23 內容修訂 16，候選）
+## 2026-10-05 海釣拋投透視、飛餌與預兆音（1.2.23 內容修訂 16，已部署）
 
 修改：`desktop/launcher-room-minigames.js/.css` 將 V5 的既有伺服器落點投影到竿前約 x=59–65%、y=59–34% 的水面；近中遠影響縱深與浮標／水花比例，不再大幅偏向右側。指標和鍵盤共用拋竿流程；飛餌與魚線共用逐幀端點，竿短掃後前伸，慢回覆時留住線與餌，確認入水的同一幀才顯示水花及播放落水聲。水花 z-index 2、魚線／飛餌 3、釣竿 4，避免水面演出蓋竿。V5 可見搏魚畫面以 240ms 控制 heartbeat 取得狀態，隱藏／失焦及其他階段仍為 1000ms，避免漏掉 550ms 預兆；伺服器仍處理正常 cooldown。
 
 音效：甩竿方向揭示前使用同一清脆 CC0 預兆，揭示後再播放方向聲像；咬餌、抽竿與甩竿混音降低刺耳合成層。新增短音內嵌在既有 renderer，三個既有 OGG 與核心白名單不變。來源、授權、衍生 SHA 和處理參數見 `docs/LAUNCHER_FISHING_AUDIO_R16_20261005.json`。參考使用者影片 b0wj5UWE7HM 31.75–33s 及補充試玩 guapXuHdBVA 144–149.5s；影片能核對第一人稱竿前透視、掃竿、細線和小水花，不能核對力度公式或精確原版音效。
 
-驗證：桌機 1440×900 完整 Chromium 112 項通過；慢回覆 1250ms、鍵盤 click／按住放開、落水聲與水花同幀專項 28 項通過。独立 dart 預兆審閱於正常及 130ms 回覆延遲皆 65／65，延遲下 53 次 control、2 次正常 cooldown。音效 fallback 6／6、continuity 48／48，音檔及七個內嵌片段與來源雜湊通過；公告服務 82／82。最終完整 Chromium 回歸 476／476 通過，pageErrors=[]、missingAssets=[]，含六釣點與 1440×900／960×640；報告在候選 qa/full-final/report.json。npm start 正式靜態入口及內容清單 HTTP 200，未連資料庫。簽署工具在受限執行身分下回傳 DPAPI Unprotect「機碼用在特定狀態時無效」，沒有產生 signed-r16.json，未上傳或部署。`config/launcher-announcements-v1.json` 修訂 30 使用已封裝釣魚插圖。測試用 `LAUNCHER_FISH_V5_ASSET_ROOT` 僅提供唯讀正式圖像來源；正式執行仍從根目錄 public 取素材。既有 rank r5.PNG/r6.PNG 修改不納入本次範圍。環境途中切為受限存取，後續候選與 QA 保存在 C 槽可寫目錄，正式同步與公開發布尚待權限。
+驗證：桌機 1440×900 完整 Chromium 112 項通過；慢回覆 1250ms、鍵盤 click／按住放開、落水聲與水花同幀專項 28 項通過。獨立 dart 預兆審閱於正常及 130ms 回覆延遲皆 65／65，延遲下 53 次 control、2 次正常 cooldown。音效 fallback 6／6、continuity 48／48，音檔及七個內嵌片段與來源雜湊通過；公告服務 82／82。最終完整 Chromium 回歸 476／476 通過，pageErrors=[]、missingAssets=[]，含六釣點與 1440×900／960×640；報告在候選 qa/full-final/report.json。npm start 正式靜態入口及內容清單 HTTP 200，未連資料庫。簽署工具在受限執行身分下回傳 DPAPI Unprotect「機碼用在特定狀態時無效」，沒有產生 signed-r16.json，未上傳或部署。`config/launcher-announcements-v1.json` 修訂 30 使用已封裝釣魚插圖。測試用 `LAUNCHER_FISH_V5_ASSET_ROOT` 僅提供唯讀正式圖像來源；正式執行仍從根目錄 public 取素材。既有 rank r5.PNG/r6.PNG 修改不納入本次範圍。環境途中切為受限存取，後續候選與 QA 保存在 C 槽可寫目錄，正式同步與公開發布尚待權限。
 
-發布準備：完整存取恢復後，候選 10 個來源／文件檔先逐檔驗 SHA 再同步正式 D 槽。原 Ed25519／DPAPI 金鑰簽署成功；修訂 16 清單 38 檔，SHA-256 `a6f6d1ce878f235b20b127183d6e7bd720118401fddc4e5f1aa915434b900035`。僅 JS/CSS 兩個 blob 變更，共 344,375 bytes；發行 dry-run 38 檔、工具 49／49、差分更新器 45／45 通過。公開部署讀回尚待完成。
+發布準備：完整存取恢復後，候選 10 個來源／文件檔先逐檔驗 SHA 再同步正式 D 槽。原 Ed25519／DPAPI 金鑰簽署成功；修訂 16 清單 38 檔，SHA-256 `a6f6d1ce878f235b20b127183d6e7bd720118401fddc4e5f1aa915434b900035`。僅 JS/CSS 兩個 blob 變更，共 344,375 bytes；發行 dry-run 38 檔、工具 49／49、差分更新器 45／45 通過。來源提交 `11537b98d92e89d1b3e3aee5e921bef0ad60219e` 已推送 origin/main。Render 正式清單 GET 讀回修訂 16，與簽署候選原始位元組 SHA 完全一致；兩個 R2 blob 公開 HEAD／GET／大小／SHA 通過。隔離公開更新器與此機正式內容快取均由 15→16，只下載 344,375 bytes，全部 38 檔讀回驗證，第二次檢查不重複下載。正式快取先備份至 `D:\Codex_QA\launcher-fishing-r16\actual-cache-before-r16`，公開及此機報告在同目錄 public-delta-report.json／actual-cache-delta-report.json。這是瀏覽器、自動化公開交付及內容快取驗證；真人正式帳號與喇叭聽感仍未驗收。
 
 ## 2026-10-05 海釣音效重混與魚線圖層（1.2.23 內容修訂 15，已部署）
 

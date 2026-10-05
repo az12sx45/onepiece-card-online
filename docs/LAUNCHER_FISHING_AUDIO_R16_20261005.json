@@ -1,7 +1,7 @@
 {
   "schema": "launcher-fishing-audio-r16-candidate-v1",
   "recordedAt": "2026-10-05",
-  "status": "local candidate; no human listening acceptance",
+  "status": "published in signed launcher content revision 16; browser/public verification passed; no human listening acceptance",
   "licenseSources": [
     {
       "name": "Kenney Interface Sounds",

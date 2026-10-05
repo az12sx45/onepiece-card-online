@@ -1,10 +1,10 @@
 # File Map
 
-## 2026-10-05 海釣拋竿透視與提示音（1.2.23 內容修訂 16，候選）
+## 2026-10-05 海釣拋竿透視與提示音（1.2.23 內容修訂 16，已部署）
 
 - `desktop/launcher-room-minigames.js/.css`：V5 落點透視、共用拋竿輸入、飛餌魚線、水花遮擋、同幀落水聲、清脆預兆及可見 fight 240ms heartbeat。
 - `docs/LAUNCHER_FISHING_AUDIO_R16_20261005.json`：Kenney／Fisheefects／Swishes CC0 來源和五個新／重混內嵌短音；既有 cast/splash 與三個 OGG 承接 r15。
-- `scripts/launcher_fishing_v5_browser_qa.js`：桌機／較小視窗、投距、慢回覆、鍵盤輸入、音畫時序及六釣點；`scripts/launcher_fishing_public_audio_qa.js`：既有 OGG 和七個有效內嵌片段的來源／SHA。`config/launcher-announcements-v1.json` 修訂 30 附釣魚插圖。發布清單及公開證據待補。
+- `scripts/launcher_fishing_v5_browser_qa.js`：桌機／較小視窗、投距、慢回覆、鍵盤輸入、音畫時序及六釣點；`scripts/launcher_fishing_public_audio_qa.js`：既有 OGG 和七個有效內嵌片段的來源／SHA。`config/launcher-announcements-v1.json` 修訂 30 附釣魚插圖。正式簽署清單為修訂 16；公開清單、blob 與 15→16 差分讀回已通過，見 DEV_WORKFLOW.md。
 
 ## 2026-10-05 海釣音效與魚線圖層（1.2.23 內容修訂 15，已部署）
 
