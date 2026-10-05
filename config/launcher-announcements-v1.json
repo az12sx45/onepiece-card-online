@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 29,
+  "revision": 30,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r16-fishing-cast-perspective-and-cues",
+      "status": "published",
+      "publishedAt": "2026-10-05T09:30:00.000Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r16",
+      "title": "海釣拋竿視角與落水動畫｜甩竿前清脆提示",
+      "summary": "校正近、中、遠落點的第一人稱透視，改善飛餌魚線與落水水花，加入甩竿方向出現前的清脆提示音。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-rebuild-1.2.18.webp",
+        "alt": "千陽號甲板向海面拋竿的畫面"
+      },
+      "body": [
+        "拋竿時，竿尖與餌的飛行動作現在銜接到入水點；畫面把相同的近、中、遠拋投判定投影到竿前的海面，浮標與水花依遠近顯示大小。魚線與水花位於釣竿後方，不再蓋住竿身。",
+        "甩竿方向出現前先響一聲相同的清脆預兆，方向亮出後再以不同聲像提示左、右或向上；拋竿、咬餌和抽竿也加入可用於遊戲的免費音效。",
+        "重新啟動啟動器即可取得簽署內容差分更新，不必重裝。魚種、釣點、魚勢、釣竿等級、漁獲與商城金幣規則不變。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r15-fishing-sound-and-line-layer",
       "status": "published",

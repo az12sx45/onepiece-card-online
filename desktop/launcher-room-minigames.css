@@ -455,7 +455,7 @@
 .room-fishing-v4-bobber{position:absolute;z-index:5;left:var(--float-x,66%);top:calc(var(--float-y,45%) + var(--bob-offset,0px));width:clamp(44px,6%,63px);height:82px;object-fit:contain;scale:var(--bobber-scale,1);transform:translate(-50%,-50%) rotate(var(--bob-tilt,0deg));filter:drop-shadow(0 5px 5px #00334cbd);pointer-events:none}
 .room-fishing-v4-sea[data-stage=cast] .room-fishing-v4-bobber{display:none}
 .room-fishing-v4-sea[data-biting=true] .room-fishing-v4-bobber{top:calc(var(--float-y,45%) + 38px);transform:translate(-50%,-50%) scale(.82);opacity:.56}
-.room-fishing-v4-splash{position:absolute;z-index:4;left:var(--float-x,66%);top:var(--float-y,45%);width:clamp(120px,20%,210px);height:auto;transform:translate(-50%,-50%) scale(.7);opacity:0;pointer-events:none;filter:var(--spot-splash-filter,none)}
+.room-fishing-v4-splash{position:absolute;z-index:2;left:var(--float-x,66%);top:var(--float-y,45%);width:clamp(120px,20%,210px);height:auto;transform:translate(-50%,-50%) scale(.7);opacity:0;pointer-events:none;filter:var(--spot-splash-filter,none)}
 .room-fishing-v4-sea[data-spot=shore]{--spot-splash-filter:hue-rotate(-6deg) saturate(1.08)}
 .room-fishing-v4-sea[data-spot=reef]{--spot-splash-filter:hue-rotate(-20deg) saturate(1.2)}
 .room-fishing-v4-sea[data-spot=deep]{--spot-splash-filter:hue-rotate(33deg) saturate(1.12) brightness(.94)}
@@ -503,7 +503,18 @@
 .fishing-v5 .room-fishing-v4-line-thread{stroke:#eaf7ee;stroke-width:1.15;opacity:.92}
 .fishing-v5 .room-fishing-v4-line-shadow{stroke:#082936;stroke-width:2.7;opacity:.52}
 .fishing-v5 .room-fishing-v4-sea[data-stage=cast] .room-fishing-v4-line path{opacity:0}
-.fishing-v5 .room-fishing-v4-sea.line-settling .room-fishing-v4-line path{opacity:0}
+.fishing-v5 .room-fishing-v4-sea.cast-flight .room-fishing-v4-line .room-fishing-v4-line-shadow{opacity:.62}
+.fishing-v5 .room-fishing-v4-sea.cast-flight .room-fishing-v4-line .room-fishing-v4-line-thread{opacity:.9}
+.fishing-v5 .room-fishing-v4-sea.cast-flight[data-stage=cast] .room-fishing-v4-line .room-fishing-v4-line-shadow{opacity:.62}
+.fishing-v5 .room-fishing-v4-sea.cast-flight[data-stage=cast] .room-fishing-v4-line .room-fishing-v4-line-thread{opacity:.9}
+.fishing-v5 .room-fishing-v4-sea.cast-flight[data-stage=cast] .room-fishing-v4-cast,
+.fishing-v5 .room-fishing-v4-sea.cast-flight[data-stage=cast] .room-fishing-v4-cast-meter{visibility:hidden;pointer-events:none}
+.room-fishing-v5-cast-bait{position:absolute;z-index:3;left:var(--flight-x,59%);top:var(--flight-y,41%);width:34px;height:34px;object-fit:contain;opacity:0;transform:translate(-50%,-50%) scale(var(--flight-scale,.6));filter:drop-shadow(0 0 3px #fff5ce) drop-shadow(0 2px 2px #05344b);pointer-events:none}
+.fishing-v5 .room-fishing-v4-sea.cast-flight .room-fishing-v5-cast-bait{opacity:1}
+.fishing-v5 .room-fishing-v4-sea.cast-flight .room-fishing-v4-bobber{visibility:hidden}
+.fishing-v5 .room-fishing-v4-sea.cast-flight .room-fishing-v4-target{opacity:0}
+.fishing-v5 .room-fishing-v4-sea.cast-landed[data-stage=wait] .room-fishing-v4-splash{animation:room-fishing-v5-cast-landing .52s ease-out both}
+@keyframes room-fishing-v5-cast-landing{0%{opacity:0;transform:translate(-50%,-50%) scale(.22)}38%{opacity:.82;transform:translate(-50%,-50%) scale(.75)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.04)}}
 .fishing-v5 .room-fishing-v4-sea[data-stage=fight] .room-fishing-v4-bobber{display:none}
 .fishing-v5 .room-fishing-v4-sea:is([data-stage=wait],[data-stage=fight]) .room-fishing-v4-fish{display:none}
 .room-minigame-overlay[data-fishing-version="5"] .room-minigame-progress{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:47px;padding-bottom:7px;color:#cce0d9}
@@ -648,6 +659,8 @@
 .fishing-v5 .room-fishing-v4-sea[data-stage=fight][data-risk=danger]::after{opacity:.8;background:radial-gradient(ellipse at 50% 42%,transparent 27%,#75302f82 100%);animation:room-fishing-v5-vignette .66s ease-in-out infinite alternate}
 @keyframes room-fishing-v5-vignette{to{opacity:.96}}
 .fishing-v5 .room-fishing-v5-rod{left:50%;bottom:0;width:min(82%,920px);height:auto;aspect-ratio:4/3;object-fit:initial;transform-origin:50% 100%;filter:drop-shadow(0 5px 8px #06232d9c);transform:translateX(-50%) rotate(var(--rod-tilt,0deg));transition:transform .13s cubic-bezier(.2,.75,.2,1)}
+.fishing-v5 .room-fishing-v4-sea.cast-flight .room-fishing-v5-rod{animation:room-fishing-v5-cast-sweep .86s cubic-bezier(.18,.72,.27,1) both}
+@keyframes room-fishing-v5-cast-sweep{0%{transform:translateX(-50%) rotate(-20deg)}22%{transform:translateX(calc(-50% - 38px)) translateY(22px) rotate(-29deg)}46%{transform:translateX(calc(-50% + 22px)) translateY(28px) rotate(13deg)}72%{transform:translateX(calc(-50% + 6px)) translateY(-16px) rotate(4deg)}100%{transform:translateX(-50%) rotate(0deg)}}
 .room-fishing-v5-rod-shaft,.room-fishing-v5-rod-grip{position:absolute;inset:0;display:block;background-image:url('opui://launcher/images/launcher_room/fishing_v5/rod-no-line-v1.webp');background-size:400% 500%;background-position:var(--rod-atlas-x,0%) var(--rod-atlas-y,0%);background-repeat:no-repeat;pointer-events:none}
 .room-fishing-v5-rod-shaft{z-index:1;clip-path:inset(0 0 34% 0);transform-origin:50% 66%;transform:rotate(var(--shaft-bend,0deg));transition:transform .11s cubic-bezier(.15,.85,.25,1)}
 .room-fishing-v5-rod-grip{z-index:2;clip-path:inset(63% 0 0 0)}
@@ -730,6 +743,9 @@
   .room-fishing-v4-fight-controls .room-fishing-v4-primary{min-height:67px}
   .room-fishing-v4-reel strong{font-size:14px}
   .room-fishing-v4-pay{font-size:16px!important}
+}
+@media(min-width:601px) and (max-height:700px){
+  .fishing-v5 .room-fishing-v4-sea:is([data-stage=cast],[data-stage=wait]) .room-fishing-v4-signal{left:auto;right:12px;max-width:43%;transform:none;font-size:14px}
 }
 @media(min-width:601px) and (max-height:700px){.room-fishing-v5-flick-cue{top:39%;left:65%;width:72px;height:72px}.room-fishing-v5-flick-cue strong{font-size:31px}.room-fishing-v5-flick-cue small{font-size:9px}}
 @media(min-width:601px) and (max-height:700px){.fishing-v5 .room-fishing-v4-sea .room-fishing-v5-flick-cue:is([data-direction=left],[data-direction=right]){top:calc(var(--flick-y,45%) + 14%)}}

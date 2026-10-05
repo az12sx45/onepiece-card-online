@@ -48,11 +48,10 @@ assert(!source.includes('fishing_master_v1'),'Public renderer must not reference
 for(const name of expected.keys())assert(source.includes(name),`Fishing renderer does not load ${name}.`);
 const inlineHashes=new Map([
   ['cast','51463751bab683db4190abac7751cfa4231412afe887efe8c88a4d9548f95468'],
-  ['splash','1ea66110ff281dfe10a31f0314852c031f072d629e813d4576b1b07177bdc2c8'],
-  ['flick','2c0f42f3fd1733cac97f5f7292d45e30decd44fcdbc7a50d896562835faae090']
+  ['splash','1ea66110ff281dfe10a31f0314852c031f072d629e813d4576b1b07177bdc2c8']
 ]);
-assert.deepEqual(provenance.inlineBank.assets.map(item=>item.event).sort(),[...inlineHashes.keys()].sort());
-for(const item of provenance.inlineBank.assets){
+assert.deepEqual(provenance.inlineBank.assets.map(item=>item.event).sort(),['cast','flick','splash']);
+for(const item of provenance.inlineBank.assets.filter(item=>inlineHashes.has(item.event))){
   const match=source.match(new RegExp(`\\b${item.event}:'([A-Za-z0-9+/=]+)'`));
   assert(match,`Missing inline ${item.event} game effect.`);
   const bytes=Buffer.from(match[1],'base64');
@@ -60,6 +59,27 @@ for(const item of provenance.inlineBank.assets){
   assert.equal(bytes.length,item.encodedBytes);
   assert.equal(hash(bytes),item.outputSHA256);
   assert.equal(item.outputSHA256,inlineHashes.get(item.event));
+}
+const revision16=JSON.parse(fs.readFileSync(path.join(root,'docs/LAUNCHER_FISHING_AUDIO_R16_20261005.json'),'utf8'));
+assert.equal(revision16.schema,'launcher-fishing-audio-r16-candidate-v1');
+assert(revision16.licenseSources.some(item=>item.officialPage==='https://kenney.nl/assets/interface-sounds'&&item.license.includes('CC0')));
+const r16Hashes=new Map([
+  ['anticipation','9bc89f6d7bc548f8ebc3f838540a7a2abc57fe8a55740a3f93af314ed37ad0c2'],
+  ['direction','306486d9df15c147e9be612fe120864e83742b3efcdd90954644b8cc2e032140'],
+  ['bite','62a28aa2ed99240d7544f6c4b5d2f3d5bb759c2ebe66ff22ada68a4ed15a9c66'],
+  ['hook','ed62e98719a3f4df1be55abeffcd1609c2442479f75153a2c1d58274be797db5'],
+  ['flick','15cfb1a27f749e870ff7af909fcaf7813373cd3d4771c8e148f0dbdc04c89cae']
+]);
+assert.deepEqual(revision16.derivedInlineClips.map(item=>item.name).sort(),[...r16Hashes.keys()].sort());
+for(const item of revision16.derivedInlineClips){
+  const match=source.match(new RegExp(`\\b${item.name}:'([A-Za-z0-9+/=]+)'`));
+  assert(match,`Missing inline R16 ${item.name} sound.`);
+  const bytes=Buffer.from(match[1],'base64');
+  assert.equal(bytes.subarray(0,4).toString('ascii'),'OggS');
+  assert.equal(bytes.length,item.bytes);
+  assert.equal(hash(bytes),item.outputSha256);
+  assert.equal(item.outputSha256,r16Hashes.get(item.name));
+  assert(item.sourceParts.every(part=>part.license.includes('CC0')&&/^https:\/\//.test(part.sourcePage)));
 }
 const main=fs.readFileSync(path.join(root,'desktop/main.js'),'utf8');
 const resolverSource=main.match(/function resolveLauncherResource\(requestUrl\) \{[\s\S]*?\r?\n\}/)?.[0];

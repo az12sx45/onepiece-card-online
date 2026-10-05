@@ -1,0 +1,375 @@
+{
+  "schema": "launcher-fishing-audio-r16-candidate-v1",
+  "recordedAt": "2026-10-05",
+  "status": "local candidate; no human listening acceptance",
+  "licenseSources": [
+    {
+      "name": "Kenney Interface Sounds",
+      "officialPage": "https://kenney.nl/assets/interface-sounds",
+      "uploaderPage": "https://opengameart.org/content/interface-sounds",
+      "download": "https://opengameart.org/sites/default/files/kenney_interfaceSounds.zip",
+      "archiveSha256": "f2193d072726d6758a5f7871b2dcc54dcce0d5c35c6f0a62f92549b327c81232",
+      "bundledLicense": "kenney/License.txt",
+      "bundledLicenseSha256": "f7966c773bbed0eca6a9c75081c44a178b38eae112724dbb5fdfbd4192d118a9",
+      "license": "Creative Commons Zero (CC0); bundled text explicitly allows commercial projects"
+    },
+    {
+      "name": "Fisheefects",
+      "sourcePage": "https://opengameart.org/content/fisheefects",
+      "download": "https://opengameart.org/sites/default/files/FisheefectsComplete.zip",
+      "archiveSha256": "4532eca6b9829a56e91be2e3136d4c7ff2f987ee13e4a35bfdfb25fc3ce43d36",
+      "license": "CC0 among offered licenses; page permits use with or without attribution"
+    },
+    {
+      "name": "Swishes Sound Pack",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "download": "https://opengameart.org/sites/default/files/swishes.zip",
+      "archiveSha256": "7980215241b739a787dcf26f660ce510bb237900968789395a86911619795693",
+      "license": "CC0"
+    }
+  ],
+  "derivedInlineClips": [
+    {
+      "name": "anticipation",
+      "durationSeconds": 0.38,
+      "outputSha256": "9bc89f6d7bc548f8ebc3f838540a7a2abc57fe8a55740a3f93af314ed37ad0c2",
+      "bytes": 4432,
+      "sourceParts": [
+        {
+          "file": "select_007.ogg",
+          "sourceSha256": "cd4390dd2b24f09016a5fa1be63334fa0f1859811f4cf29c02e8e2750f6a2cd0",
+          "offset": 0.0,
+          "gain": 0.58,
+          "speed": 0.94,
+          "sourcePage": "https://kenney.nl/assets/interface-sounds",
+          "license": "CC0",
+          "sourceSha256Verified": "cd4390dd2b24f09016a5fa1be63334fa0f1859811f4cf29c02e8e2750f6a2cd0"
+        },
+        {
+          "file": "confirmation_003.ogg",
+          "sourceSha256": "3091bf0be0497f825769ee0733ca7bdc3bcd59bd6c6e8f2ba8f93d580ff38022",
+          "offset": 0.052,
+          "gain": 0.48,
+          "speed": 1.0,
+          "sourcePage": "https://kenney.nl/assets/interface-sounds",
+          "license": "CC0",
+          "sourceSha256Verified": "3091bf0be0497f825769ee0733ca7bdc3bcd59bd6c6e8f2ba8f93d580ff38022"
+        }
+      ],
+      "samplePeak": 0.58,
+      "rmsDbFs": -19.25535067031791
+    },
+    {
+      "name": "direction",
+      "durationSeconds": 0.41,
+      "outputSha256": "306486d9df15c147e9be612fe120864e83742b3efcdd90954644b8cc2e032140",
+      "bytes": 4633,
+      "sourceParts": [
+        {
+          "file": "tick_004.ogg",
+          "sourceSha256": "0253d5f7d8d2afbbc370eac2a4539bb844239f0c98343e516d376b137c06d27c",
+          "offset": 0.0,
+          "gain": 0.22,
+          "speed": 1.0,
+          "sourcePage": "https://kenney.nl/assets/interface-sounds",
+          "license": "CC0",
+          "sourceSha256Verified": "0253d5f7d8d2afbbc370eac2a4539bb844239f0c98343e516d376b137c06d27c"
+        },
+        {
+          "file": "select_003.ogg",
+          "sourceSha256": "9a612fd2f513d52a296906b41071c990f75defe56be3bee60d2d4e2423b51b8b",
+          "offset": 0.027,
+          "gain": 0.66,
+          "speed": 1.0,
+          "sourcePage": "https://kenney.nl/assets/interface-sounds",
+          "license": "CC0",
+          "sourceSha256Verified": "9a612fd2f513d52a296906b41071c990f75defe56be3bee60d2d4e2423b51b8b"
+        }
+      ],
+      "samplePeak": 0.61,
+      "rmsDbFs": -22.77438923325114
+    },
+    {
+      "name": "bite",
+      "durationSeconds": 0.34,
+      "outputSha256": "62a28aa2ed99240d7544f6c4b5d2f3d5bb759c2ebe66ff22ada68a4ed15a9c66",
+      "bytes": 5178,
+      "sourceParts": [
+        {
+          "file": "bloop.wav",
+          "sourceSha256": "b7da8a518ae538144ecc955cbecd0d8d2ae82523a90dce0295ce7df7a32dff2b",
+          "offset": 0.0,
+          "gain": 0.75,
+          "speed": 1.08,
+          "sourcePage": "https://opengameart.org/content/fisheefects",
+          "license": "CC0 option offered",
+          "sourceSha256Verified": "b7da8a518ae538144ecc955cbecd0d8d2ae82523a90dce0295ce7df7a32dff2b"
+        },
+        {
+          "file": "pluck_002.ogg",
+          "sourceSha256": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9",
+          "offset": 0.1,
+          "gain": 0.18,
+          "speed": 0.9,
+          "sourcePage": "https://kenney.nl/assets/interface-sounds",
+          "license": "CC0",
+          "sourceSha256Verified": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9"
+        }
+      ],
+      "samplePeak": 0.57,
+      "rmsDbFs": -19.67681212231253
+    },
+    {
+      "name": "hook",
+      "durationSeconds": 0.28,
+      "outputSha256": "ed62e98719a3f4df1be55abeffcd1609c2442479f75153a2c1d58274be797db5",
+      "bytes": 4165,
+      "sourceParts": [
+        {
+          "file": "pluck_002.ogg",
+          "sourceSha256": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9",
+          "offset": 0.0,
+          "gain": 0.62,
+          "speed": 0.78,
+          "sourcePage": "https://kenney.nl/assets/interface-sounds",
+          "license": "CC0",
+          "sourceSha256Verified": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9"
+        },
+        {
+          "file": "swish-2.wav",
+          "sourceSha256": "1ce7752cce3d43f16fc222ad7f7ffb69d9a5fc01e64b93d205765fc37b8e9b0d",
+          "offset": 0.035,
+          "gain": 0.45,
+          "speed": 0.9,
+          "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+          "license": "CC0",
+          "sourceSha256Verified": "1ce7752cce3d43f16fc222ad7f7ffb69d9a5fc01e64b93d205765fc37b8e9b0d"
+        }
+      ],
+      "samplePeak": 0.63,
+      "rmsDbFs": -20.09452025475339
+    },
+    {
+      "name": "flick",
+      "durationSeconds": 0.31,
+      "outputSha256": "15cfb1a27f749e870ff7af909fcaf7813373cd3d4771c8e148f0dbdc04c89cae",
+      "bytes": 4780,
+      "sourceParts": [
+        {
+          "file": "swish-2.wav",
+          "sourceSha256": "1ce7752cce3d43f16fc222ad7f7ffb69d9a5fc01e64b93d205765fc37b8e9b0d",
+          "offset": 0.0,
+          "gain": 0.7,
+          "speed": 0.9,
+          "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+          "license": "CC0",
+          "sourceSha256Verified": "1ce7752cce3d43f16fc222ad7f7ffb69d9a5fc01e64b93d205765fc37b8e9b0d"
+        },
+        {
+          "file": "swish-4.wav",
+          "sourceSha256": "0060f4a7040edce4cc50d1daa10a9cb76764128a942e4688339e69cd1d5d784c",
+          "offset": 0.105,
+          "gain": 0.55,
+          "speed": 0.94,
+          "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+          "license": "CC0",
+          "sourceSha256Verified": "0060f4a7040edce4cc50d1daa10a9cb76764128a942e4688339e69cd1d5d784c"
+        },
+        {
+          "file": "pluck_001.ogg",
+          "sourceSha256": "be97ec4893a02d6eccfb678daa76c83e34cb2583b834ec2593d2641def739fa4",
+          "offset": 0.205,
+          "gain": 0.12,
+          "speed": 0.85,
+          "sourcePage": "https://kenney.nl/assets/interface-sounds",
+          "license": "CC0",
+          "sourceSha256Verified": "be97ec4893a02d6eccfb678daa76c83e34cb2583b834ec2593d2641def739fa4"
+        }
+      ],
+      "samplePeak": 0.6500000000000001,
+      "rmsDbFs": -18.184930043731256
+    }
+  ],
+  "unchangedMediaPaths": [
+    {
+      "path": "public/audio/launcher_room/pixabay_fishing_v1/line_out_drag.ogg",
+      "sha256": "e3b05cad60b01354829b798b0ed87e121a443a5ce08559b8612b2f5c7e09c17d",
+      "bytes": 10670
+    },
+    {
+      "path": "public/audio/launcher_room/pixabay_fishing_v1/line_strain.ogg",
+      "sha256": "da30ac86421c85b64f4eea3c94aaf3218aef47bbcc7200ff5ead5e6c4e10a1a2",
+      "bytes": 7521
+    },
+    {
+      "path": "public/audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg",
+      "sha256": "6afa2406345448a4ee6fc9fc2ef3b88a508c1519fe3518f33f53b6216849f66f",
+      "bytes": 16176
+    }
+  ],
+  "integration": {
+    "path": "desktop/launcher-room-minigames.js",
+    "transport": "Existing signed renderer JS inline OGG bank. No new opui media path or core installer whitelist.",
+    "preCue": "One neutral 0.38 s clip on flickTell. The arrow remains hidden until flickCue; direction 0.41 s clip then uses pitch and stereo pan.",
+    "mix": "Sample primary; cast, splash, bite, hook, direction, flick synthesized layers drop to 18-30 percent when a decoded sample plays. Master gain 0.21 and limiter retained.",
+    "focus": "Blur stops every inline source, stops media elements, and suspends AudioContext; same cue id does not replay after focus.",
+    "thirdPartyGameBytes": "None from Fishing Master APK, game recording, or Wii ISO."
+  },
+  "qa": {
+    "flickBrowserChecks": 65,
+    "flickReport": "D:\\Codex_QA\\launcher-fishing-audio-r16\\browser-flick\\report.json",
+    "audioFallbackChecks": 6,
+    "audioFallbackReport": "D:\\Codex_QA\\launcher-fishing-audio-r16\\browser-audio\\report.json",
+    "audioContinuityChecks": 48,
+    "audioContinuityReport": "D:\\Codex_QA\\launcher-fishing-audio-r16\\browser-continuity\\report.json",
+    "nodeSyntax": "passed",
+    "gitDiffCheck": "passed",
+    "subjectiveListening": "Not performed by agent; supplied 13.9 second preview for user evaluation."
+  },
+  "preview": {
+    "durationSeconds": 13.9,
+    "description": "Sample-only stereo approximation of live gain and pan, globally normalized for audition. Room ambience and lower procedural fallback layers omitted.",
+    "events": [
+      {
+        "event": "cast",
+        "atSeconds": 0.22,
+        "durationSeconds": 0.35,
+        "gain": 0.31079999999999997,
+        "pan": 0,
+        "rate": 1
+      },
+      {
+        "event": "splash",
+        "atSeconds": 1.02,
+        "durationSeconds": 0.7,
+        "gain": 0.294,
+        "pan": 0,
+        "rate": 1
+      },
+      {
+        "event": "bite",
+        "atSeconds": 1.92,
+        "durationSeconds": 0.329,
+        "gain": 0.3255,
+        "pan": 0,
+        "rate": 1
+      },
+      {
+        "event": "hook",
+        "atSeconds": 2.47,
+        "durationSeconds": 0.269,
+        "gain": 0.31079999999999997,
+        "pan": 0,
+        "rate": 1
+      },
+      {
+        "event": "reel_in_fast",
+        "atSeconds": 3.02,
+        "durationSeconds": 1.95,
+        "gain": 0.3096,
+        "pan": 0,
+        "rate": 1.04
+      },
+      {
+        "event": "line_out_drag",
+        "atSeconds": 5.15,
+        "durationSeconds": 1.28,
+        "gain": 0.3128,
+        "pan": 0,
+        "rate": 0.98
+      },
+      {
+        "event": "anticipation",
+        "atSeconds": 6.62,
+        "durationSeconds": 0.38,
+        "gain": 0.3276,
+        "pan": 0,
+        "rate": 1
+      },
+      {
+        "event": "direction",
+        "atSeconds": 7.28,
+        "durationSeconds": 0.41,
+        "gain": 0.3024,
+        "pan": -0.65,
+        "rate": 0.91
+      },
+      {
+        "event": "flick",
+        "atSeconds": 7.73,
+        "durationSeconds": 0.293,
+        "gain": 0.31079999999999997,
+        "pan": -0.76,
+        "rate": 1.02
+      },
+      {
+        "event": "reel_in_fast",
+        "atSeconds": 8.15,
+        "durationSeconds": 0.8,
+        "gain": 0.2795,
+        "pan": 0,
+        "rate": 1.12
+      },
+      {
+        "event": "anticipation",
+        "atSeconds": 9.12,
+        "durationSeconds": 0.38,
+        "gain": 0.3276,
+        "pan": 0,
+        "rate": 1
+      },
+      {
+        "event": "direction",
+        "atSeconds": 9.77,
+        "durationSeconds": 0.37,
+        "gain": 0.3024,
+        "pan": 0.65,
+        "rate": 1.08
+      },
+      {
+        "event": "flick",
+        "atSeconds": 10.21,
+        "durationSeconds": 0.293,
+        "gain": 0.31079999999999997,
+        "pan": 0.76,
+        "rate": 1.02
+      },
+      {
+        "event": "anticipation",
+        "atSeconds": 11.04,
+        "durationSeconds": 0.38,
+        "gain": 0.3276,
+        "pan": 0,
+        "rate": 1
+      },
+      {
+        "event": "direction",
+        "atSeconds": 11.7,
+        "durationSeconds": 0.325,
+        "gain": 0.3024,
+        "pan": 0,
+        "rate": 1.23
+      },
+      {
+        "event": "flick",
+        "atSeconds": 12.17,
+        "durationSeconds": 0.285,
+        "gain": 0.31079999999999997,
+        "pan": 0,
+        "rate": 1.05
+      },
+      {
+        "event": "line_out_drag",
+        "atSeconds": 12.73,
+        "durationSeconds": 0.55,
+        "gain": 0.23920000000000002,
+        "pan": 0,
+        "rate": 0.88
+      }
+    ],
+    "mixPeakDbFs": -3.349821745875273,
+    "mp3Sha256": "c9cffd3231fe6a6959371ecdbf5eca3fb4836c08fe67a2d9f7b4d9062e1c4b01",
+    "mp3Bytes": 223916,
+    "path": "D:\\Codex_QA\\launcher-fishing-audio-r16\\fishing-r16-sound-preview.mp3"
+  }
+}

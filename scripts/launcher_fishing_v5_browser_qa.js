@@ -11,6 +11,7 @@ const path=require('node:path');
 const minigames=require('../server/launcher-minigames');
 const fishingV5=require('../server/launcher-fishing-v5');
 const root=path.resolve(__dirname,'..');
+const assetRoot=path.resolve(process.env.LAUNCHER_FISH_V5_ASSET_ROOT||path.join(root,'public'));
 const out=process.env.LAUNCHER_FISH_V5_BROWSER_QA_OUT||'D:/Codex_QA/launcher-fishing-wii-1.2.22/browser-final-r7';
 const runtimeBase=path.join(process.env.LOCALAPPDATA||'','OpenAI/Codex/runtimes/cua_node');
 const playwrightPath=fs.existsSync(runtimeBase)?fs.readdirSync(runtimeBase)
@@ -23,8 +24,10 @@ const fishingAudioNames=['reel_in_fast.ogg','line_out_drag.ogg','line_strain.ogg
 const sessions=new Map(),checks=[],pageErrors=[],missingAssets=[],blockedMedia=new Set();
 const forcedSpecies=new Map([['light-force','lovely-angel'],['heavy-force','golden-whale'],
   ['flick-up','glistening-saury'],['flick-right','glistening-saury'],['flick-left','glistening-saury'],
-  ['flick-wrong','glistening-saury'],['flick-miss','glistening-saury']]);
-const flickSeeds={'flick-up':52,'flick-right':56,'flick-left':57,'flick-wrong':52,'flick-miss':52};
+  ['flick-wrong','glistening-saury'],['flick-miss','glistening-saury'],
+  ['flick-pre-cue-blur','glistening-saury']]);
+const flickSeeds={'flick-up':52,'flick-right':56,'flick-left':57,'flick-wrong':52,'flick-miss':52,
+  'flick-pre-cue-blur':52};
 let server,browser;
 const check=(name,condition)=>{assert(condition,name);checks.push(name);};
 const readJson=req=>new Promise((resolve,reject)=>{
@@ -72,7 +75,11 @@ async function serve(){
       const url=new URL(req.url,'http://localhost'),rel=decodeURIComponent(url.pathname).replace(/^\//,'');
       const client=url.searchParams.get('client')||'desktop';
       if(rel==='qa-command'&&req.method==='POST'){
-        const {type,payload}=await readJson(req);respond(res,await command(client,type,payload));return;
+        const {type,payload}=await readJson(req),result=await command(client,type,payload);
+        // Delay delivery, not the authoritative cast, to cover a slow reply.
+        if(client==='cast-latency'&&type==='minigame.answer'&&payload.counterMoves?.[0]==='cast')
+          await new Promise(resolve=>setTimeout(resolve,1250));
+        respond(res,result);return;
       }
       if(rel==='qa-land'&&req.method==='POST'){
         const session=sessions.get(client);
@@ -92,7 +99,7 @@ async function serve(){
       }
       if(rel==='qa-cast-target'&&req.method==='POST'){
         const session=sessions.get(client),{zone}=await readJson(req);
-        if(session?.challenge?.stage!=='wait'||!['near','far'].includes(zone)){
+        if(session?.challenge?.stage!=='wait'||!['near','mid','far'].includes(zone)){
           respond(res,{ok:false});return;
         }
         // Visual fixture: keep the real cast round waiting while the same
@@ -150,7 +157,7 @@ async function setup(page,client){
   await page.route('opui://**',route=>{
     const rel=decodeURIComponent(new URL(route.request().url()).pathname).replace(/^\//,'');
     if(blockedMedia.has(client)&&rel.startsWith('audio/launcher_room/pixabay_fishing_v1/'))return route.abort('failed');
-    const file=path.join(root,'public',rel);
+    const file=path.join(assetRoot,rel);
     if(rel.includes('..')||!fs.existsSync(file)){missingAssets.push(rel);return route.fulfill({status:404,body:'missing'});}
     return route.fulfill({path:file});
   });
@@ -173,6 +180,7 @@ async function setup(page,client){
     HTMLMediaElement.prototype.play=function(...args){
       const recorded=this.src.includes('/pixabay_fishing_v1/')?{at:performance.now(),duration:this.duration,
         rate:this.playbackRate,src:this.src,volume:this.volume,loop:this.loop,readyState:this.readyState,
+        lineDirection:document.querySelector('.room-fishing-v5-hud')?.dataset.reelDirection,
         promise:'pending'}:null;
       if(recorded)__qa.sampleStarts.push(recorded);
       const started=nativeMediaPlay.apply(this,args);
@@ -242,7 +250,8 @@ async function setup(page,client){
       if(event.target.closest?.('.room-fishing-v4-cast'))__qa.pointerEvents.push({type,button:event.button,
         pointerType:event.pointerType,detail:event.detail,disabled:event.target.closest('.room-fishing-v4-cast')?.disabled,
         phase:__minigame?.inspect?.().phase,charging:document.querySelector('.room-fishing-v4-sea')?.dataset.charging,
-        power:Number(document.querySelector('.room-fishing-v4-cast-track')?.getAttribute('aria-valuenow'))});
+        power:Number(document.querySelector('.room-fishing-v4-cast-track')?.getAttribute('aria-valuenow')),
+        perfAt:performance.now()});
     },true);
     const command=async(type,payload)=>{
       __qa.calls.push({type,payload:JSON.parse(JSON.stringify(payload)),at:Date.now()});
@@ -324,6 +333,8 @@ async function lineGeometry(page){
     const ring={x:center.x+Math.sin(tilt)*radius,y:center.y-Math.cos(tilt)*radius};
     const splash=sea.querySelector('.room-fishing-v4-splash'),splashRect=splash.getBoundingClientRect();
     const splashCenter={x:(splashRect.left+splashRect.right)/2,y:(splashRect.top+splashRect.bottom)/2};
+    const castBait=sea.querySelector('.room-fishing-v5-cast-bait')?.getBoundingClientRect();
+    const baitCenter=castBait?{x:(castBait.left+castBait.right)/2,y:(castBait.top+castBait.bottom)/2}:null;
     const rodRect=rod.getBoundingClientRect();
     return{paths:lines.map(line=>line.getAttribute('d')),
       rod:{naturalWidth:rod.naturalWidth||0,naturalHeight:rod.naturalHeight||0,
@@ -333,7 +344,8 @@ async function lineGeometry(page){
         rect:{x:rodRect.x,y:rodRect.y,width:rodRect.width,height:rodRect.height}},
       tipGap:Math.hypot(tip.x-start.x,tip.y-start.y),ringGap:Math.hypot(end.x-ring.x,end.y-ring.y),
       splashGap:Math.hypot(end.x-splashCenter.x,end.y-splashCenter.y),
-      start,end,ring,center,splashCenter,bobber:{rect:{x:bobRect.x,y:bobRect.y,width:bobRect.width,height:bobRect.height},
+      baitGap:baitCenter?Math.hypot(end.x-baitCenter.x,end.y-baitCenter.y):null,
+      start,end,ring,center,splashCenter,baitCenter,bobber:{rect:{x:bobRect.x,y:bobRect.y,width:bobRect.width,height:bobRect.height},
         offsetWidth:bobber.offsetWidth,offsetHeight:bobber.offsetHeight,naturalWidth:bobber.naturalWidth,
         naturalHeight:bobber.naturalHeight,paintedWidth,paintedHeight,scale,
         tiltDegrees:tilt*180/Math.PI,transform:bobStyle.transform},
@@ -344,7 +356,10 @@ async function lineLayer(page){
   return page.locator('.room-fishing-v4-sea').evaluate(sea=>({
     line:Number(getComputedStyle(sea.querySelector('.room-fishing-v4-line')).zIndex),
     rod:Number(getComputedStyle(sea.querySelector('.room-fishing-v4-rod')).zIndex),
-    water:Number(getComputedStyle(sea.querySelector('.room-fishing-v4-water')).zIndex)
+    water:Number(getComputedStyle(sea.querySelector('.room-fishing-v4-water')).zIndex),
+    splash:Number(getComputedStyle(sea.querySelector('.room-fishing-v4-splash')).zIndex),
+    bait:sea.querySelector('.room-fishing-v5-cast-bait')?
+      Number(getComputedStyle(sea.querySelector('.room-fishing-v5-cast-bait')).zIndex):null
   }));
 }
 async function visual(page){
@@ -539,6 +554,36 @@ async function castAndHook(page,label){
   const sweep=label==='desktop'?await oscillatingCast(page,cast):null;
   if(!sweep)await holdPointer(page,cast,730);
   await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor({timeout:5000});
+  const calls=await actionCalls(page,'cast'),power=calls.at(-1)?.payload.castPower;
+  const pointerEvents=await page.evaluate(()=>__qa.pointerEvents);
+  fs.writeFileSync(path.join(out,`${label}-cast-diagnostics.json`),JSON.stringify({power,powerBefore,sweep,calls,pointerEvents},null,2));
+  if(sweep){
+    check(`${label}: power rises then falls during a held cast`,sweep[1].power>=80&&sweep[2].power<=25&&
+      sweep[1].power-sweep[0].power>=40&&sweep[3].power-sweep[2].power>=25);
+    check(`${label}: power begins a second sweep before release`,
+      sweep[3].power>sweep[2].power+25&&sweep[3].power<=100);
+  }
+  check(`${label}: cast sends power at pointer release`,Number.isInteger(power)&&power>=0&&power<=100&&
+    Math.abs(power-pointerEvents.filter(event=>event.type==='pointerup').at(-1)?.power)<=8);
+  check(`${label}: cast zone matches released power`,calls.at(-1)?.payload.castZone===
+    (power<35?'near':power<70?'mid':'far'));
+  check(`${label}: server uses matching zone`,sessions.get(label)?.challenge.castZone===calls.at(-1)?.payload.castZone);
+  const transition=await page.locator('.room-fishing-v4-sea').evaluate(sea=>{
+    const bait=sea.querySelector('.room-fishing-v5-cast-bait').getBoundingClientRect();
+    return{castRelease:sea.classList.contains('cast-release'),
+      castFlight:sea.classList.contains('cast-flight'),
+      lineOpacity:Number(getComputedStyle(sea.querySelector('.room-fishing-v4-line-thread')).opacity),
+      bait:{x:(bait.left+bait.right)/2,y:(bait.top+bait.bottom)/2}};
+  });
+  fs.writeFileSync(path.join(out,`${label}-cast-transition.json`),JSON.stringify(transition,null,2));
+  const movingLine=await lineGeometry(page);
+  check(`${label}: cast swing draws line from moving tip to flying bait`,transition.castFlight&&
+    transition.lineOpacity>.3&&movingLine?.tipGap<3&&movingLine.baitGap<4);
+  const castLayers=await lineLayer(page);
+  check(`${label}: cast bait and water splash stay behind the foreground rod`,
+    castLayers.splash<castLayers.rod&&castLayers.bait<castLayers.rod);
+  await snapshot(page,`${label}-cast-transition`);
+  await page.waitForFunction(()=>!document.querySelector('.room-fishing-v4-sea')?.classList.contains('cast-flight'));
   const soundAfterCast=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length,samples:__qa.sampleStarts.length}));
   check(`${label}: charged cast, release and confirmed splash play synthesized fallback`,
     soundAfterCast.tones-soundBeforeCast.tones>=3&&soundAfterCast.noise-soundBeforeCast.noise>=3);
@@ -553,37 +598,20 @@ async function castAndHook(page,label){
   check(`${label}: cast and splash play distinct decoded game effects`,
     castAudio.samples.some(sound=>sound.duration>.33&&sound.duration<.38)&&
     castAudio.samples.some(sound=>sound.duration>.67&&sound.duration<.74));
-  const calls=await actionCalls(page,'cast'),power=calls.at(-1)?.payload.castPower;
-  const pointerEvents=await page.evaluate(()=>__qa.pointerEvents);
-  fs.writeFileSync(path.join(out,`${label}-cast-diagnostics.json`),JSON.stringify({power,powerBefore,sweep,calls,pointerEvents},null,2));
-  if(sweep){
-    check(`${label}: power rises then falls during a held cast`,sweep[1].power>=80&&sweep[2].power<=25&&
-      sweep[1].power-sweep[0].power>=40&&sweep[3].power-sweep[2].power>=25);
-    check(`${label}: power begins a second sweep before release`,sweep[3].power>=35&&sweep[3].power<=85);
-  }
-  check(`${label}: cast sends power at pointer release`,Number.isInteger(power)&&power>=0&&power<=100&&
-    Math.abs(power-pointerEvents.filter(event=>event.type==='pointerup').at(-1)?.power)<=8);
-  check(`${label}: cast zone matches released power`,calls.at(-1)?.payload.castZone===
-    (power<35?'near':power<70?'mid':'far'));
-  check(`${label}: server uses matching zone`,sessions.get(label)?.challenge.castZone===calls.at(-1)?.payload.castZone);
-  const transition=await page.locator('.room-fishing-v4-sea').evaluate(sea=>({
-    castRelease:sea.classList.contains('cast-release'),
-    lineSettling:sea.classList.contains('line-settling'),
-    lineOpacity:Number(getComputedStyle(sea.querySelector('.room-fishing-v4-line-thread')).opacity)}));
-  fs.writeFileSync(path.join(out,`${label}-cast-transition.json`),JSON.stringify(transition,null,2));
-  check(`${label}: cast swing cannot show a detached line`,!transition.lineSettling||transition.lineOpacity<.1);
-  await snapshot(page,`${label}-cast-transition`);
+  const splashAudio=castAudio.samples.find(sound=>sound.duration>.67&&sound.duration<.74);
+  check(`${label}: water sound starts when the cast reaches the surface`,
+    splashAudio?.at>=pointerEvents.filter(event=>event.type==='pointerup').at(-1)?.perfAt+650);
   // The cast-release rod pose has a short transition; inspect the settled
   // waiting pose separately from the snap animation.
-  await page.waitForTimeout(950);
+  await page.waitForTimeout(150);
   const waitHeader=await headerVisible(page);
   check(`${label}: header fully visible while waiting`,waitHeader.visible);
   check(`${label}: hook available only after bite`,await page.locator('.room-fishing-v4-hook').isDisabled()||
     await page.locator('.room-fishing-v4-sea').getAttribute('data-biting')==='true');
   const waitLine=await lineGeometry(page);check(`${label}: waiting line joins rod and bobber`,
     waitLine&&waitLine.tipGap<3&&waitLine.ringGap<8&&waitLine.paths[0]===waitLine.paths[1]);
-  const waitLayers=await lineLayer(page);check(`${label}: waiting line sits behind the rod foreground`,
-    waitLayers.water<waitLayers.line&&waitLayers.line<waitLayers.rod);
+  const waitLayers=await lineLayer(page);check(`${label}: waiting line and splash sit behind the rod foreground`,
+    waitLayers.water<waitLayers.line&&waitLayers.line<waitLayers.rod&&waitLayers.splash<waitLayers.rod);
   fs.writeFileSync(path.join(out,`${label}-wait-line-diagnostics.json`),JSON.stringify(waitLine,null,2));
   const waitBobber=await bobberVisible(page);
   check(`${label}: waiting bobber fully visible`,waitBobber.loaded&&waitBobber.inside&&waitBobber.opacity>.5&&waitBobber.overlap===0);
@@ -700,6 +728,7 @@ async function fightInteraction(page,label){
     const box=wheel.querySelector('.room-fishing-v5-dial-crank').getBoundingClientRect();
     const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
     return{transform:getComputedStyle(wheel).transform,angle:Math.atan2(matrix.b,matrix.a)*180/Math.PI,
+      signedRate:Number(wheel.closest('.room-fishing-v5-hud').dataset.reelRate),movement:wheel.closest('.room-fishing-v5-hud').dataset.reelDirection,
       crankWidth:box.width,crankHeight:box.height,
       rodFrame:Number(document.querySelector('.room-fishing-v5-rod-crank')?.dataset.frame)};
   });
@@ -711,11 +740,12 @@ async function fightInteraction(page,label){
   check(`${label}: held reel follows the actual signed line direction`,
     Math.abs(reelBefore.signedRate)>.2&&
     reelBefore.movement===(reelBefore.signedRate>0?'in':'out')&&
-    reelDelta*reelBefore.signedRate>3);
+    (Math.sign(reelBefore.signedRate)===Math.sign(reelAfter.signedRate)
+      ?reelDelta*reelBefore.signedRate>3
+      :reelAfter.movement===(reelAfter.signedRate>0?'in':'out')&&Math.abs(reelDelta)>1));
   check(`${label}: reel sound follows signed line direction while the fish surges`,
-    reelBefore.movement==='out'
-      ? !await page.evaluate(at=>__qa.sampleStarts.some(sound=>sound.at>=at&&sound.src?.endsWith('/reel_in_fast.ogg')),soundBeforeReel.at)
-      : await page.evaluate(at=>__qa.sampleStarts.some(sound=>sound.at>=at&&sound.src?.endsWith('/reel_in_fast.ogg')),soundBeforeReel.at));
+    await page.evaluate(at=>__qa.sampleStarts.filter(sound=>sound.at>=at&&sound.src?.endsWith('/reel_in_fast.ogg'))
+      .every(sound=>sound.lineDirection==='in'),soundBeforeReel.at));
   const inwardAudio=await page.evaluate(at=>({
     tones:__qa.soundStarts.filter(sound=>sound.at>=at),
     noise:__qa.noiseStarts.filter(sound=>sound.at>=at),
@@ -1016,11 +1046,16 @@ async function verifyLineWheel(page,label){
   });
   fs.writeFileSync(path.join(out,`${label}-strain-playback.json`),
     JSON.stringify({strainPlayback,strainProgress},null,2));
+  const naturallyFinished=strainProgress.paused===true&&strainProgress.currentTime===0&&
+    strainPlayback.started?.duration-strainPlayback.currentTime<=
+      (strainProgress.at-strainPlayback.at)/1000*strainPlayback.started?.rate+.03;
   check(`${label}: danger strain recording advances at its intentional level`,
     strainPlayback.started?.promise==='fulfilled'&&strainPlayback.paused===false&&
-    strainProgress.paused===false&&strainPlayback.readyState>=2&&
+    strainPlayback.currentTime>.05&&
+    (strainProgress.paused===false&&strainProgress.currentTime>strainPlayback.currentTime+.06||naturallyFinished)&&
+    strainPlayback.readyState>=2&&
     strainPlayback.muted===false&&strainPlayback.volume>=.5&&strainPlayback.volume<=.75&&
-    strainProgress.currentTime>strainPlayback.currentTime+.06);
+    strainPlayback.started?.loop===false);
   const strainStarts=await page.evaluate(()=>__qa.sampleStarts.filter(sound=>
     sound.src?.endsWith('/line_strain.ogg')).map(sound=>sound.at));
   check(`${label}: surge and tension do not stack strain recordings`,
@@ -1112,11 +1147,14 @@ async function runAudioFallback(){
       await page.locator('.room-fishing-v4-sea[data-stage="cast"]').waitFor();
       await holdPointer(page,page.locator('.room-fishing-v4-cast'),220);
       await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor({timeout:5000});
-      const after=await page.evaluate(()=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length,
-        samples:__qa.sampleStarts.length}));
+      await page.waitForFunction(()=>!document.querySelector('.room-fishing-v4-sea')?.classList.contains('cast-flight'));
+      const after=await page.evaluate(sampleIndex=>({tones:__qa.soundStarts.length,noise:__qa.noiseStarts.length,
+        samples:__qa.sampleStarts.length,played:__qa.sampleStarts.slice(sampleIndex)}),before.samples);
       fs.writeFileSync(path.join(out,`audio-fallback-${mode}.json`),JSON.stringify({before,after},null,2));
-      check(`audio fallback: ${mode} failure keeps the synthesized cast and splash`,
-        after.samples===before.samples&&after.tones-before.tones>=3&&after.noise-before.noise>=2);
+      check(`audio fallback: ${mode} failure keeps local cast and splash with synthesis backup`,
+        after.played.some(sound=>sound.duration>.33&&sound.duration<.38)&&
+        after.played.some(sound=>sound.duration>.67&&sound.duration<.74)&&
+        after.tones-before.tones>=3&&after.noise-before.noise>=2);
     }
     await page.evaluate(()=>__minigame.dismiss());
   }finally{await context.close();}
@@ -1237,7 +1275,18 @@ async function runFlick(label,width,height){
       call.type==='minigame.start')?.payload.flickMode))===true&&sessions.get(label)?.flickMode===true);
     await holdPointer(page,page.locator('.room-fishing-v4-cast'),180);
     await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor();
+    await page.waitForFunction(()=>!document.querySelector('.room-fishing-v4-sea')?.classList.contains('cast-flight'));
     await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.biting==='true',null,{timeout:8000});
+    await page.evaluate(()=>{
+      __qa.flickVisual=[];
+      const sea=document.querySelector('.room-fishing-v4-sea');
+      const observer=new MutationObserver(()=>{
+        __qa.flickVisual.push({at:performance.now(),tell:sea.dataset.flickTell,
+          cue:sea.dataset.flickCue});
+      });
+      observer.observe(sea,{attributes:true,attributeFilter:['data-flick-tell','data-flick-cue']});
+      __qa.flickVisualObserver=observer;
+    });
     await page.locator('.room-fishing-v4-hook').click();
     await page.locator('.room-fishing-v4-sea[data-stage="fight"]').waitFor();
     const cueSoundAt=await page.evaluate(()=>performance.now());
@@ -1245,6 +1294,17 @@ async function runFlick(label,width,height){
       document.querySelector('.room-fishing-v5-flick-cue')?.dataset.active==='true',direction,{timeout:1300});
     check(`${label}: real fish surge publishes the matching cue`,sessions.get(label)?.challenge.flickCue?.direction===direction&&
       (await page.locator('.room-fishing-v4-sea').getAttribute('data-flick-cue'))===direction);
+    const preCueAudio=await page.evaluate(()=>({
+      visual:__qa.flickVisual,
+      anticipation:__qa.sampleStarts.filter(sound=>sound.duration>.37&&sound.duration<.39),
+      direction:__qa.sampleStarts.filter(sound=>sound.duration>.395&&sound.duration<.42)}));
+    const tellVisualAt=preCueAudio.visual.find(item=>item.tell==='true')?.at;
+    const cueVisualAt=preCueAudio.visual.find(item=>item.cue===direction)?.at;
+    fs.writeFileSync(path.join(out,`${label}-pre-cue-audio.json`),JSON.stringify(preCueAudio,null,2));
+    check(`${label}: bright pre-cue plays once before the direction becomes visible`,
+      Number.isFinite(tellVisualAt)&&Number.isFinite(cueVisualAt)&&
+      preCueAudio.anticipation.length===1&&preCueAudio.anticipation[0].at<cueVisualAt-80&&
+      tellVisualAt<cueVisualAt&&preCueAudio.direction.length===1);
     const meterBefore=await fightMeterState(page);
     check(`${label}: existing reel meter remains visible`,meterBefore.dialVisible&&meterBefore.arcVisible&&meterBefore.progressVisible);
     const cueAudio=await page.evaluate(at=>({
@@ -1397,6 +1457,36 @@ async function runFlickNegativeFeedback(mode){
           Math.abs(item.frequency-660)<2&&Math.abs(item.destinationFrequency-1140)<2)));
   }finally{await context.close();}
 }
+async function runPreCueBlur(){
+  const label='flick-pre-cue-blur';
+  const context=await browser.newContext({viewport:{width:1280,height:800},deviceScaleFactor:1});
+  const page=await context.newPage();
+  try{
+    await setup(page,label);
+    await page.getByRole('button',{name:'開始釣魚'}).click();
+    await page.locator('.room-fishing-v4-sea[data-stage="cast"]').waitFor();
+    await holdPointer(page,page.locator('.room-fishing-v4-cast'),180);
+    await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor();
+    await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.biting==='true',null,{timeout:8000});
+    await page.locator('.room-fishing-v4-hook').click();
+    await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.flickTell==='true'&&
+      __qa.sampleStarts.some(sound=>sound.duration>.37&&sound.duration<.39),null,{timeout:1600});
+    const before=await page.evaluate(()=>({sampleCount:__qa.sampleStarts.filter(sound=>
+      sound.duration>.37&&sound.duration<.39).length,blurAt:performance.now()}));
+    await page.evaluate(()=>window.dispatchEvent(new Event('blur')));
+    await page.waitForFunction(()=>__qa.audioContext?.state==='suspended',null,{timeout:1000});
+    const after=await page.evaluate(()=>({stops:__qa.sampleStops.filter(sound=>
+      sound.duration>.37&&sound.duration<.39),focused:__minigame.inspect().windowFocused,
+      sampleCount:__qa.sampleStarts.filter(sound=>sound.duration>.37&&sound.duration<.39).length}));
+    check(`${label}: focus loss stops the active anticipation clip and suspends audio`,
+      before.sampleCount===1&&after.sampleCount===1&&after.focused===false&&
+      after.stops.some(item=>item.at>=before.blurAt));
+    await page.evaluate(()=>window.dispatchEvent(new Event('focus')));
+    await page.waitForTimeout(90);
+    check(`${label}: returning focus does not repeat the same anticipation cue`,
+      await page.evaluate(()=>__qa.sampleStarts.filter(sound=>sound.duration>.37&&sound.duration<.39).length)===1);
+  }finally{await context.close();}
+}
 async function runCastDepth(label,width,height){
   const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1});
   const page=await context.newPage();
@@ -1417,18 +1507,22 @@ async function runCastDepth(label,width,height){
       await snapshot(page,`${label}-${zone}-depth`);
       return visual;
     };
-    const near=await sample('near',46),far=await sample('far',81);
-    fs.writeFileSync(path.join(out,`${label}-cast-depth.json`),JSON.stringify({near,far},null,2));
+    const near=await sample('near',59),mid=await sample('mid',62.35),far=await sample('far',65);
+    fs.writeFileSync(path.join(out,`${label}-cast-depth.json`),JSON.stringify({near,mid,far},null,2));
     check(`${label}: near cast bobber visibly larger than far cast`,
-      near.bobberWidth/far.bobberWidth>1.7&&near.bobberHeight/far.bobberHeight>1.7);
+      near.bobberWidth/mid.bobberWidth>1.2&&mid.bobberWidth/far.bobberWidth>1.2&&
+      near.bobberHeight/far.bobberHeight>1.7);
     check(`${label}: both cast bobbers stay small against the sea`,
       near.bobberWidth<46&&far.bobberWidth<24);
     check(`${label}: near cast splash visibly larger than far cast`,near.splashWidth/far.splashWidth>2);
     check(`${label}: near cast splash does not dominate the foreground`,near.splashWidth<105);
-    check(`${label}: cast distance shifts bobber across sea perspective`,
-      near.bobberX<far.bobberX-near.seaWidth*.25&&
-      near.bobberY>far.bobberY+near.seaHeight*.06);
-    check(`${label}: cast bobbers remain inside sea`,[near,far].every(sample=>
+    check(`${label}: cast distance moves mostly deeper into the rod's forward lane`,
+      near.bobberX<mid.bobberX&&mid.bobberX<far.bobberX&&
+      far.bobberX-near.bobberX<near.seaWidth*.1&&
+      near.floatY-mid.floatY>10&&mid.floatY-far.floatY>10&&
+      near.bobberY>mid.bobberY+near.seaHeight*.08&&
+      mid.bobberY>far.bobberY+near.seaHeight*.08);
+    check(`${label}: cast bobbers remain inside sea`,[near,mid,far].every(sample=>
       sample.bobberX-sample.bobberWidth/2>=0&&sample.bobberX+sample.bobberWidth/2<=sample.seaWidth&&
       sample.bobberY-sample.bobberHeight/2>=0&&sample.bobberY+sample.bobberHeight/2<=sample.seaHeight));
   }finally{await context.close();}
@@ -1506,11 +1600,66 @@ async function runForceComparison(){
     first(heavy).pullArcFill-first(light).pullArcFill>30&&
     first(light).pullNeedleY-first(heavy).pullNeedleY>20);
 }
+async function runCastInputs(){
+  for(const label of ['cast-latency','cast-keyboard-click','cast-keyboard-hold']){
+    const context=await browser.newContext({viewport:{width:1440,height:900}}),page=await context.newPage();
+    try{
+      await setup(page,label);await begin(page,label);
+      const before=await page.evaluate(()=>performance.now());
+      if(label==='cast-keyboard-click')await page.locator('.room-fishing-v4-cast').evaluate(button=>button.click());
+      else if(label==='cast-keyboard-hold'){
+        await page.keyboard.down(' ');await page.waitForTimeout(180);await page.keyboard.up(' ');
+      }else await holdPointer(page,page.locator('.room-fishing-v4-cast'),180);
+      await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.classList.contains('cast-flight'));
+      check(`${label}: all cast inputs start a flying bait and cast sound`,await page.evaluate(at=>
+        __qa.sampleStarts.some(sound=>sound.at>=at&&sound.duration>.33&&sound.duration<.38),before));
+      if(label==='cast-latency'){
+        await page.waitForTimeout(940);
+        const pending=await page.locator('.room-fishing-v4-sea').evaluate(sea=>({
+          stage:sea.dataset.stage,flight:sea.classList.contains('cast-flight'),
+          line:Number(getComputedStyle(sea.querySelector('.room-fishing-v4-line-thread')).opacity),
+          bait:Number(getComputedStyle(sea.querySelector('.room-fishing-v5-cast-bait')).opacity),
+          splashes:__qa.sampleStarts.filter(sound=>sound.duration>.67&&sound.duration<.74).length}));
+        check('cast-latency: line and bait remain while the cast reply is pending',
+          pending.stage==='cast'&&pending.flight&&pending.line>.5&&pending.bait>.5&&pending.splashes===0);
+        await snapshot(page,'cast-latency-pending');
+      }
+      await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor({timeout:5000});
+      await page.waitForFunction(()=>!document.querySelector('.room-fishing-v4-sea')?.classList.contains('cast-flight'));
+      const landing=await page.evaluate(at=>({landed:document.querySelector('.room-fishing-v4-sea').classList.contains('cast-landed'),
+        splashes:__qa.sampleStarts.filter(sound=>sound.at>=at&&sound.duration>.67&&sound.duration<.74)}),before);
+      check(`${label}: landing splash and sound occur together once`,landing.landed&&landing.splashes.length===1&&
+        landing.splashes[0].at>=before+(label==='cast-latency'?1200:700));
+      check(`${label}: one cast input sends one authoritative cast`,(await actionCalls(page,'cast')).length===1);
+      await snapshot(page,`${label}-landed`);
+      fs.writeFileSync(path.join(out,`${label}-landing.json`),JSON.stringify(landing,null,2));
+    }finally{await context.close();}
+  }
+}
+async function runSpotProjection(){
+  const context=await browser.newContext({viewport:{width:1440,height:900}}),page=await context.newPage();
+  try{
+    for(const spot of ['shore','reef','deep','freshwater','magma','rainbow']){
+      const label=`spot-${spot}`;await setup(page,label);
+      await page.locator(`button[data-spot="${spot}"]`).click();
+      await page.getByRole('button',{name:'開始釣魚'}).click();
+      await page.locator('.room-fishing-v4-cast').evaluate(button=>button.click());
+      await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor();
+      await page.waitForFunction(()=>!document.querySelector('.room-fishing-v4-sea')?.classList.contains('cast-flight'));
+      const water=await waterPerspective(page),layers=await lineLayer(page);
+      check(`${label}: forward landing lies on the visible middle water`,water.floatY>=34&&water.floatY<=59&&
+        water.floatX>=59&&water.floatX<=65&&layers.splash<layers.rod&&layers.line<layers.rod);
+      await snapshot(page,label);await page.evaluate(()=>__minigame.dismiss());
+    }
+  }finally{await context.close();}
+}
 async function main(){
   fs.mkdirSync(out,{recursive:true});await serve();
   browser=await chromium.launch({executablePath:chrome,headless:true});
   try{
     verifyZeroStrengthBreak();
+    if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='cast')await runCastInputs();
+    if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='spots')await runSpotProjection();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='desktop')await runV5('desktop',1440,900);
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='minimum')await runV5('minimum',960,640);
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='audio')await runAudioFallback();
@@ -1521,6 +1670,7 @@ async function main(){
       await runFlick('flick-right',960,640);
       await runFlickNegativeFeedback('wrong');
       await runFlickNegativeFeedback('miss');
+      await runPreCueBlur();
     }
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='depth'){
       await runCastDepth('depth-desktop',1440,900);
