@@ -1764,10 +1764,10 @@ async function runDamage(){
    await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.biting==='true',null,{timeout:8000});await page.locator('.room-fishing-v4-hook').click();
    await page.locator('.room-fishing-v4-sea[data-stage=fight]').waitFor();await page.locator('#roomMinigameOverlay').focus();await page.keyboard.down('Space');
    await page.locator('.room-fishing-damage[data-kind=reel]').first().waitFor({timeout:4000});
-   check(label+': holding reel produces authoritative damage jump',Number(await page.locator('.room-fishing-damage[data-kind=reel]').first().getAttribute('data-amount'))>0&&sessions.get('power').challenge.fishStamina<100);
+   check(label+': holding reel produces authoritative damage jump',Number(await page.locator('.room-fishing-damage[data-kind=reel]').first().getAttribute('data-amount'))>0&&sessions.get('power').challenge.fishStamina<2000);
    await snapshot(page,label+'-reel');await page.keyboard.up('Space');await page.waitForTimeout(1500);
    check(label+': releasing reel stops new damage jumps',await page.locator('.room-fishing-damage[data-kind=reel]').count()===0);
-   await page.evaluate(()=>fetch('/qa-grade?client=power',{method:'POST'}));await page.waitForFunction(()=>document.querySelector('.room-fishing-fish-stamina')?.getAttribute('aria-valuemax')==='1800');
+   await page.evaluate(()=>fetch('/qa-grade?client=power',{method:'POST'}));await page.waitForFunction(()=>document.querySelector('.room-fishing-fish-stamina')?.getAttribute('aria-valuemax')==='36000');
    check(label+': grade IV shows actual HP and recommended rod',await page.locator('.room-fishing-tier').textContent()==='階級 IV · 建議釣竿 Lv 3');
    await snapshot(page,label+'-grade-iv');
   }finally{await context.close();}

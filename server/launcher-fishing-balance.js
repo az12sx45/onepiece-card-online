@@ -15,6 +15,6 @@ const FISH_RARITY_BY_ID = Object.freeze({
   'paddlefish':'rare','alligator-gar':'rare','dusky-grouper':'rare',
   'goliath-grouper':'legendary','white-marlin':'legendary'
 });
-const TIERS=Object.freeze({common:{level:1,hp:100,pull:1,rod:0},uncommon:{level:2,hp:280,pull:1.8,rod:1},rare:{level:3,hp:720,pull:3,rod:2},legendary:{level:4,hp:1800,pull:4.8,rod:3}});
+const TIERS=Object.freeze({common:{level:1,hp:2000,pull:1,rod:0},uncommon:{level:2,hp:5600,pull:1.8,rod:1},rare:{level:3,hp:14400,pull:3,rod:2},legendary:{level:4,hp:36000,pull:4.8,rod:3}});
 const RODS=Object.freeze([{reel:2,flick:3,burst:8,special:35,counter:1},{reel:6,flick:8,burst:24,special:105,counter:1.6},{reel:17,flick:21,burst:65,special:275,counter:2.65},{reel:45,flick:52,burst:170,special:720,counter:4.4}]);
 module.exports={FISH_RARITY_BY_ID,TIERS,RODS};

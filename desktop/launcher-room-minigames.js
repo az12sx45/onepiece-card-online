@@ -622,7 +622,7 @@
       const percentage=clamp(hp/Math.max(1,max)*100,0,100);
       if(!panel)return;
       panel.querySelector('.room-fishing-fish-stamina i').style.setProperty('--fish-stamina',`${percentage}%`);
-      panel.querySelector('.room-fishing-fish-stamina strong').textContent=`${Math.round(hp)} / ${max}`;
+      panel.querySelector('.room-fishing-fish-stamina strong').textContent=`${Math.round(hp).toLocaleString('en-US')} / ${Math.round(max).toLocaleString('en-US')}`;
       const meter=panel.querySelector('.room-fishing-fish-stamina');meter.setAttribute('aria-valuemax',String(max));meter.setAttribute('aria-valuenow',String(Math.round(hp)));meter.dataset.level=percentage<=25?'low':percentage<=55?'mid':'high';
     }
     function fishingImpactStamina(sea,target){

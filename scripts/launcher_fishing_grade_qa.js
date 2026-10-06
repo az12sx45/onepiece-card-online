@@ -9,12 +9,12 @@ function round(id,level,seed=71){const r=V.create('grade',0,level,true);r.motion
 for(const fish of M.FISH_SPECIES){const r=round(fish.id,0),tier=B.TIERS[M.FISH_RARITY_BY_ID[fish.id]];check(fish.id+' uses canonical grade',r.maxFishStamina===tier.hp&&r.fishTier===tier.level&&r.recommendedRodLevel===tier.rod);}
 const weak=round('golden-whale',0),strong=round('golden-whale',3);
 for(const r of [weak,strong]){r.distance=40;r.phaseUntil=date(10000).toISOString();r.runState='calm';r.flickTell=null;V.control(r,date(4000),true,0);V.simulate(r,date(5000),1);}
-check('upgrading substantially raises real damage',1800-strong.fishStamina>20*(1800-weak.fishStamina));
+check('upgrading substantially raises real damage',36000-strong.fishStamina>20*(36000-weak.fishStamina));
 check('upgrading actually counters fish pull',weak.distance>40&&strong.distance<40);
 const ledger=round('golden-whale',3);ledger.distance=40;ledger.phaseUntil=date(12000).toISOString();ledger.runState='calm';ledger.flickTell=null;
 V.control(ledger,date(4000),true,0);V.simulate(ledger,date(5100),1);V.control(ledger,date(5100),false,0);
 const hp=ledger.fishStamina,events=ledger.damageEvents.length;
-check('reel events equal actual spent HP',Math.abs(ledger.damageEvents.reduce((n,e)=>n+e.amount,0)-(1800-hp))<.001);
+check('reel events equal actual spent HP',Math.abs(ledger.damageEvents.reduce((n,e)=>n+e.amount,0)-(36000-hp))<.001);
 V.simulate(ledger,date(6100),1);check('release produces neither damage nor extra events',ledger.fishStamina===hp&&ledger.damageEvents.length===events);
 ledger.powerCharge=6;V.power(ledger,date(6200),'special');for(const key of ledger.special.sequence.slice())V.power(ledger,date(6300),'specialKey',key);
 check('special event is actual authoritative damage',ledger.damageEvents.at(-1).kind==='special'&&ledger.damageEvents.at(-1).amount===720&&ledger.powerFeedback.damage===720);
@@ -35,5 +35,5 @@ for(const fish of M.FISH_SPECIES){const required=B.TIERS[M.FISH_RARITY_BY_ID[fis
 for(const id of ['burning-dragon','golden-whale','goliath-grouper','white-marlin']){const r=round(id,0);let outcome;for(let t=4100;t<154000&&!outcome;t+=200){if(r.flickCue)V.flick(r,date(t),r.flickCue.direction,r.flickCue.id);V.control(r,date(t),r.strength>35,r.pullDirection==='left'?-1:r.pullDirection==='right'?1:0);outcome=V.simulate(r,date(t+200),1);}check(id+' is beyond starter rod despite correct steering',outcome!=='landed');}
 const session=M.create('fishing','room-character-luffy',1,date(0),false,'supply',5,'worm','shore',3,true);
 M.answer(session,{roundId:session.challenge.id,counterMoves:['cast'],castPower:80},date(100));session.catchSpeciesId='golden-whale';M.answer(session,{roundId:session.challenge.id,counterMoves:['hook']},date(Date.parse(session.challenge.biteAt)+100));
-const publicRound=M.view(session).challenge;check('real route exposes grade but no hidden species',publicRound.maxFishStamina===1800&&publicRound.fishTier===4&&!publicRound.behavior&&!M.view(session).catchSpeciesId&&!Object.hasOwn(publicRound,'damageSequence'));
+const publicRound=M.view(session).challenge;check('real route exposes grade but no hidden species',publicRound.maxFishStamina===36000&&publicRound.fishTier===4&&!publicRound.behavior&&!M.view(session).catchSpeciesId&&!Object.hasOwn(publicRound,'damageSequence'));
 console.log(JSON.stringify({status:'PASS',checks,results},null,2));
