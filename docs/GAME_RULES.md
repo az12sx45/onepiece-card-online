@@ -1654,3 +1654,6 @@ Board 多人模式不是 server authoritative。實際規則在前端執行，se
 - 驗證：新玩法67檢查（包含真實answer路由0m但有體力的結算）；甩竿3204檢查、36魚144情境、1764次甩竿；desktop與960×640必殺／爆拉／魚標／直接上岸27項瀏覽器檢查，無JS錯誤或缺圖；公告82檢查；npm start 43218、board_start HTTP200。一般QA不是正式玩家帳號體驗；公開部署證據待讀回。LATTICE目前無可呼叫API，未宣稱持久任務紀錄。
 
 - r18簽署候選：60項、SHA256 296c85436fe1aae0cb883b01834bdcad82ff84157461cb189d0425f272dd7fdb。R2 changed blobs HEAD/GET/size/SHA通過；隔離17→18僅下載589524 bytes，60項校驗、重查零下載通過。被拒絕的徽章原稿僅刪除該單一1,504,285 bytes檔案，未接入專案；魚剪影素材保留。
+
+- r18公開部署完成：2026-10-06 08:43:52（台北），Render dep-db243ueq1p3s73e8o8a0 顯示 Deploy succeeded | Live；來源50c00efa837dbbd6ff1b4a2d0c4dc01d467ede2e，新服務PostgreSQL ready。公開revision18清單 SHA256 296c85436fe1aae0cb883b01834bdcad82ff84157461cb189d0425f272dd7fdb完全一致。
+- 實際快取先備份至D:/Codex_QA/launcher-fishing-r18/actual-cache-before-r18；公開17→18下載589,524 bytes，60項讀回校驗與重查零下載通過。新公告包含本次實際魚標／體力條畫面。正式玩家帳號操作驗收未執行。
