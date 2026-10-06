@@ -1273,7 +1273,7 @@
       // lowest painted pose inside the sea, including a short desktop window.
       const firstPersonRod=sea.querySelector('.room-fishing-v5-rod');
       if(firstPersonRod){
-        const rodWidth=Math.min(sea.clientWidth*.72,sea.clientHeight*1.16,820);
+        const rodWidth=Math.min(sea.clientWidth*.45,sea.clientHeight*.82,600);
         if(Math.abs(firstPersonRod.offsetWidth-rodWidth)>1)firstPersonRod.style.width=`${rodWidth.toFixed(1)}px`;
       }
       const at=fishingNow(),bite=Date.parse(challenge.biteAt),nibble=Date.parse(challenge.nibbleAt),hookUntil=Date.parse(challenge.hookUntil);
@@ -1452,7 +1452,7 @@
       const approach=Math.pow(closeness,2.8);
       const floatY=challenge.stage==='fight'?castPoint.y+(73-castPoint.y)*approach+(fish.y-.57)*(1+6*approach):castPoint.y;
       const perspective=clamp((floatY-30)/44,0,1);
-      sea.style.setProperty('--bobber-scale',(.18+.42*perspective).toFixed(3));
+      sea.style.setProperty('--bobber-scale',(.13+.32*perspective).toFixed(3));
       const splashWidth=clamp(sea.clientWidth*.13,75,120)*(.12+.64*perspective*perspective);
       sea.style.setProperty('--splash-width',`${splashWidth.toFixed(1)}px`);
       const visualX=clamp((castPoint.x+(fish.x-.5)*(8+26*approach))*(1-approach)+(51+(fish.x-.5)*58)*approach,12,88);

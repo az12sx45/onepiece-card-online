@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 41,
+  "revision": 42,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r28-fishing-viewport",
+      "status": "published",
+      "publishedAt": "2026-10-06T16:56:30.305Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r28",
+      "title": "海面放大，遠投視野更清楚",
+      "summary": "擴大釣魚畫面、縮小前景魚竿與浮標。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-viewport-r28.webp",
+        "alt": "實際遠投畫面：海面放大，魚竿與浮標縮小"
+      },
+      "body": [
+        "釣魚海面使用接近整個桌機視窗的空間，減少上方留白。",
+        "前景魚竿縮小並保持釣線與竿尖連接；浮標縮小約四分之一，遠處仍依距離縮小。",
+        "差分更新，重新啟動啟動器即可。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r27-fishing-wallet",
       "status": "published",

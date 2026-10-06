@@ -1525,6 +1525,8 @@ async function runCastDepth(label,width,height){
     };
     const near=await sample('near',51),mid=await sample('mid',52.285),far=await sample('far',53);
     fs.writeFileSync(path.join(out,`${label}-cast-depth.json`),JSON.stringify({near,mid,far},null,2));
+    check(`${label}: sea uses most of desktop viewport`,far.seaWidth>width*.9&&far.seaHeight>height*.7);
+    check(`${label}: foreground rod stays compact`,await page.locator('.room-fishing-v5-rod').evaluate(r=>r.offsetWidth<=600));
     check(`${label}: far cast approaches the horizon with strong depth separation`,far.floatY<=35&&near.floatY-far.floatY>=35);
     check(`${label}: scaled far float stays centered on its projected water depth`,Math.abs(far.bobberY-far.floatY*far.seaHeight/100)<4);
     check(`${label}: near cast bobber visibly larger than far cast`,

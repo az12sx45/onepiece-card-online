@@ -844,3 +844,13 @@
 @keyframes rodForgeSpark{50%{opacity:1;transform:scale(.4)}85%{opacity:0;transform:scale(1.5)}}
 @keyframes rodForgeReveal{0%,80%{opacity:0;transform:scale(.5)}100%{opacity:1;transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.room-rod-forge *{animation:none}.room-rod-forge-result{opacity:1}}
+
+/* r28: give the sea the desktop viewport, keep foreground tackle compact. */
+.room-minigame-overlay[data-fishing-version="5"]{padding:12px}
+.room-minigame-overlay[data-fishing-version="5"] .room-minigame-card{width:100%;max-height:calc(100dvh - 24px)}
+.room-minigame-overlay[data-fishing-version="5"]:is([data-fishing-stage="cast"],[data-fishing-stage="wait"],[data-fishing-stage="fight"]) .room-minigame-head{padding:8px 18px 3px}
+.room-minigame-overlay[data-fishing-version="5"]:is([data-fishing-stage="cast"],[data-fishing-stage="wait"],[data-fishing-stage="fight"]) .room-minigame-head h2{font-size:23px}
+.room-minigame-overlay[data-fishing-version="5"]:is([data-fishing-stage="cast"],[data-fishing-stage="wait"],[data-fishing-stage="fight"]) .room-minigame-progress{min-height:35px;padding:0 18px 4px}
+.room-minigame-overlay[data-fishing-version="5"]:is([data-fishing-stage="cast"],[data-fishing-stage="wait"],[data-fishing-stage="fight"]) .room-minigame-body{padding:0 12px 12px;min-height:0}
+.fishing-v5 .room-fishing-v4-sea,.fishing-v5 .room-fishing-v4-sea[data-stage=fight]{height:max(340px,calc(100dvh - 155px))}
+.fishing-v5 .room-fishing-v5-rod{width:min(45%,600px);left:28%;bottom:-2%}
