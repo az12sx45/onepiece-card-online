@@ -615,11 +615,31 @@
     function setDisabled(value){if(!layer)return;layer.dataset.pending=String(value);for(const b of body.querySelectorAll('button'))b.disabled=(value&&!b.classList.contains('room-fishing-rhythm-arrow')&&b.dataset.fishAction!=='reel'&&!b.classList.contains('room-fishing-v4-reel')&&!b.classList.contains('room-fishing-v4-pay')&&!b.classList.contains('room-fishing-v4-cast')&&!b.classList.contains('room-fishing-v4-hook'))||b.dataset.permanentDisabled==='true';}
     async function start(){if(phase!=='intro')return;if(kind==='fishing'){fishingSoundContext();preloadFishingInline();}const response=await request('minigame.start',{characterId,kind,...kind==='fishing'?{baitId:selectedBait,spotId:selectedSpot,fishingVersion:5,flickMode:true}:kind==='work'?{jobId}:{},...kind==='work'&&jobId==='fishing'?{fishingVersion:2}:{},...practice?{practice:true}:{}});if(!response)return;if(response.minigame&&['playing','ready','failed'].includes(response.minigame.state)){game=response.minigame;if(game.characterId!==characterId||game.kind!==kind){renderRecovery();return;}accept(response);return;}renderIntro(kind==='fishing'&&response.error==='work_active'?'夥伴正在分工。完成原有分工後即可自由釣魚；釣魚不消耗工作次數。':ERRORS[response.error]||response.message||'暫時無法開始，請稍候再試。');}
     function renderRecovery(){phase='recovery';body.replaceChildren(node('h3','','上一次挑戰尚未結束'),node('p','','結束舊挑戰後，即可重新選擇夥伴。未完成的獎勵不會發放。'),button('結束舊挑戰',()=>void cancel(false)));say('不會自動領取獎勵。');}
+    function paintFishingStamina(panel,hp){
+      if(!panel)return;
+      panel.querySelector('.room-fishing-fish-stamina i').style.setProperty('--fish-stamina',`${hp}%`);
+      panel.querySelector('.room-fishing-fish-stamina strong').textContent=`${Math.ceil(hp)}%`;
+      const meter=panel.querySelector('.room-fishing-fish-stamina');meter.setAttribute('aria-valuenow',String(Math.ceil(hp)));meter.dataset.level=hp<=25?'low':hp<=55?'mid':'high';
+    }
+    function fishingImpactStamina(sea,target){
+      const impact=sea?.__powerStamina;
+      if(!impact||impact.generation!==generation)return target;
+      const t=clamp((now()-impact.startedAt-impact.delay)/900,0,1);
+      if(t>=1){sea.__powerStamina=null;return target;}
+      return impact.from+(impact.to-impact.from)*(t*t*(3-2*t));
+    }
     function accept(response) {
       if(!response?.minigame){showRetry(response);return;}
       syncServerClock(response);
       const previousFishingStage=game?.challenge?.id&&game.challenge.id===response.minigame.challenge?.id&&[2,3,4,5].includes(game.challenge.fishingVersion)?game.challenge.stage:null;
+      const previousFishStamina=game?.challenge?.fishStamina;
       game=response.minigame;
+      const impactFeedback=game.feedback?.powerFinish||game.challenge?.powerFeedback;
+      const impactSea=body?.querySelector('.room-fishing-v4-sea');
+      if(impactSea&&impactFeedback&&['special','burst'].includes(impactFeedback.type)&&impactSea.dataset.staminaImpact!==impactFeedback.at&&Number.isFinite(previousFishStamina)){
+        impactSea.dataset.staminaImpact=impactFeedback.at;
+        impactSea.__powerStamina={generation,startedAt:now(),delay:impactFeedback.type==='special'?900:250,from:previousFishStamina,to:game.challenge?.fishStamina??impactFeedback.fishStamina??previousFishStamina};
+      }
       if(kind==='fishing'&&game.challenge?.fishingVersion===5){
         if(previousFishingStage==='cast'&&game.challenge.stage==='wait'&&!body?.querySelector('.room-fishing-v4-sea')?.__castFlight)
           fishingSplashSound(fishingV4CastPower);
@@ -639,7 +659,16 @@
           effect.append(node('strong','',power.name));sea.dataset.burstActive=String(power.type==='burst');sea.querySelector('.room-fishing-rhythm').hidden=true;
           for(const b of sea.querySelectorAll('button'))b.disabled=true;
           if(power.type==='burst')fishingBurstSound();else fishingFlickImpactSound('hit','up',1);
-          const current=generation;setTimeout(()=>{if(current===generation&&active()&&phase==='landing')void finish();},power.type==='burst'?1500:2600);return;
+          sea.dataset.landingImpact='true';
+          const current=generation,started=now(),duration=power.type==='burst'?2200:3200;
+          const finalStamina=power.fishStamina??previousFishStamina??0;
+          const showHit=()=>{
+            if(current!==generation||!active()||phase!=='landing')return;
+            paintFishingStamina(sea.querySelector('.room-fishing-power-panel'),fishingImpactStamina(sea,finalStamina));
+            if(now()-started<duration){frame=requestAnimationFrame(showHit);return;}
+            effect.hidden=true;sea.dataset.landingImpact='false';void finish();
+          };
+          frame=requestAnimationFrame(showHit);return;
         }
         if(phase!=='landing')void finish();return;
       }
@@ -1260,10 +1289,8 @@
       if(panel){
         panel.hidden=challenge.stage!=='fight'||!challenge.powerMode;
         sea.dataset.powerMode=String(Boolean(challenge.powerMode));
-        const hp=clamp(challenge.fishStamina??100,0,100),charge=challenge.powerCharge||0;
-        panel.querySelector('.room-fishing-fish-stamina i').style.setProperty('--fish-stamina',`${hp}%`);
-        panel.querySelector('.room-fishing-fish-stamina strong').textContent=`${Math.ceil(hp)}%`;
-        const stamina=panel.querySelector('.room-fishing-fish-stamina');stamina.setAttribute('aria-valuenow',String(Math.ceil(hp)));stamina.dataset.level=hp<=25?'low':hp<=55?'mid':'high';
+        const hp=clamp(fishingImpactStamina(sea,challenge.fishStamina??100),0,100),charge=challenge.powerCharge||0;
+        paintFishingStamina(panel,hp);
         [...panel.querySelectorAll('.room-fishing-power-charge i')].forEach((item,i)=>item.dataset.full=String(i<charge));
         panel.querySelector('.room-fishing-burst').disabled=charge<3||Boolean(challenge.special)||requesting;
         panel.querySelector('.room-fishing-special').disabled=charge<6||Boolean(challenge.special)||requesting;

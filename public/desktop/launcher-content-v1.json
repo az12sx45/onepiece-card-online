@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 19,
-  "publishedAt": "2026-10-06T04:43:13.078Z",
+  "revision": 20,
+  "publishedAt": "2026-10-06T08:35:55.169Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -22,6 +22,11 @@
       "path": "audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg",
       "bytes": 16176,
       "sha256": "6afa2406345448a4ee6fc9fc2ef3b88a508c1519fe3518f33f53b6216849f66f"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-fishing-impact-r20.webp",
+      "bytes": 97934,
+      "sha256": "0ad6d4912563e496fc10c03fbed0fa69b428a7e641a0133d862e10b0c7388d36"
     },
     {
       "path": "images/launcher_announcements/launcher-fishing-power-r17.webp",
@@ -290,13 +295,13 @@
     },
     {
       "path": "launcher-room-minigames.css",
-      "bytes": 127148,
-      "sha256": "0476a268ead9bc104eb0ffc706dd2642cf74fe1a7ab7dd9ac410fa50a73abd24"
+      "bytes": 127407,
+      "sha256": "2b59e6dd34af8ec69dba532b9532d297b10ba21f48968c71d911ff48c684bafa"
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 237657,
-      "sha256": "95705179761f4838f336b5cacd0772b62b263e903a8231cb9cff453034cd43ef"
+      "bytes": 239333,
+      "sha256": "edad9d40300eaf252e2c15b023f8d0cc9f2fdaa480f93ec151aabb2c1f5736df"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -317,6 +322,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "JAg7EDaJORIyGSXKqPuxBRAJQ2gVilfRQMVl2456+b6Hui8NCPFcDp4ZZlRKxIQwWT3lhIcIwcTq6SeEgnHiCA=="
+    "value": "H1YisofcM9F6wyroTek1i9qh6HniVpDxp66Q/cKEyEkakceaZbYTAZylsu3DPLuT5PwTpcUXPlKsx+LefJa9AA=="
   }
 }

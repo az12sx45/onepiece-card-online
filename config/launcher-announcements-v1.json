@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 33,
+  "revision": 34,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r20-fishing-impact-before-catch",
+      "status": "published",
+      "publishedAt": "2026-10-06T08:35:52.644Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r20",
+      "title": "海釣必殺命中｜看見體力扣除，再釣上來",
+      "summary": "必殺技先出招，魚體力條再逐格扣除；致命一擊停留在0%後才顯示漁獲。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-impact-r20.webp",
+        "alt": "實際必殺技畫面：魯夫出招後，魚體力條清空至0%，尚未切換漁獲結果"
+      },
+      "body": [
+        "必殺技先展示角色與招式，約0.9秒後魚體力條開始扣除，約0.9秒完成，再保留歸零畫面後釣起。",
+        "魚體力條提高圖層，技能立繪不會遮住體力。非致命技能也呈現實際扣血，爆拉最後一擊同樣保留扣除畫面。",
+        "保留伺服器決定的漁獲與傷害，演出完成才送出領取；不重新抽魚、不新增獎勵。",
+        "重新啟動即可取得簽署差分內容更新。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r19-fishing-rhythm-recovery",
       "status": "published",

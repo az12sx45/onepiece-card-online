@@ -7929,3 +7929,13 @@ Source npm start、封裝 Electron、installer SHA／签章、公開版本切換
 
 - r19公開部署完成：2026-10-06 12:56:32（台北），Render dep-db27pobncjis73cb3ef0 顯示 Deploy succeeded | Live，來源bd38302eaea92e78c9c9f3dd08f1643d8f7560d0；PostgreSQL ready並連線成功。公開revision19清單 SHA256 8786e0ad9e7b890844d114b1546fd9bc4530fa25fe6afb1e878ab965f8470b4e完全一致。
 - 實際r18快取已備份並核對60項素材，再由公開來源18→19下載465,355 bytes；61項讀回校驗與重查零下載通過。39項瀏覽器、78項新玩法、3204項甩竿、82項公告檢查通過。正式玩家帳號實際操作驗收未執行；完整證據D:/Codex_QA/launcher-fishing-r19/release-evidence.json。
+
+
+## 2026-10-06 — 釣魚 r20 必殺命中扣血後上岸
+
+- desktop/launcher-room-minigames.js/css：固定先出招、體力逐格扣除、歸零停留、最後漁獲結果的演出順序。必殺技能起手900ms、扣血900ms，致命演出總長3200ms；爆拉起手250ms、扣血900ms，致命演出2200ms。體力條在立繪上方，非致命技能也沿實際魚體力顯示扣除。
+- server/launcher-minigames.js：powerFinish保存終局魚體力供顯示，傷害、魚距上岸規則與伺服器權威沿用；玩家領取等演出結束，不能重複發獎。
+- scripts/launcher_fishing_v5_browser_qa.js：新增致命出招保留原HP、過程HP下降、0%時尚未出現漁獲、最後漁獲的檢查，desktop/960×640共45項通過；包含r19失敗／逾時後甩竿與快速按鍵回歸。新玩法78項通過；npm start 43220及board_start HTTP200。本機未設定DATABASE_URL，帳號儲存與領取使用fixture、answer使用真實核心；正式玩家帳號驗收未執行。
+- config/launcher-announcements-v1.json 公告附實際0%技能畫面，public/images/launcher_announcements/launcher-fishing-impact-r20.webp。公開部署證據待讀回；LATTICE無可呼叫API，未宣稱持久紀錄。
+
+- r20簽署候選：62項，SHA256 4f01bcb7d5594b8934c1fa98e9ed51469c3d00d2b8e4f95912d8bccfa3dfa3e9。R2 changed blobs HEAD/GET/size/SHA及隔離19→20快取升級通過，僅下載464674 bytes，62項驗證、重查零下載。證據D:/Codex_QA/launcher-fishing-r20。

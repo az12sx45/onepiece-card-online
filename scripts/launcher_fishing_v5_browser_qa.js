@@ -1729,6 +1729,14 @@ async function runPower(){
    for(const direction of finishSequence){await page.keyboard.press({left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown'}[direction]);await page.waitForTimeout(220);}
    await page.locator('.room-fishing-special-character').waitFor();
    check(label+': killing skill still presents the character before the catch result',await page.evaluate(()=>__minigame.inspect().phase==='landing')&&sessions.get('power').feedback.reason==='landed');
+   const hpAtHit=Number(await page.locator('.room-fishing-fish-stamina').getAttribute('aria-valuenow'));
+   check(label+': lethal skill keeps the previous stamina visible during wind-up',hpAtHit>0);
+   await page.waitForTimeout(1250);
+   const hpDuringHit=Number(await page.locator('.room-fishing-fish-stamina').getAttribute('aria-valuenow'));
+   check(label+': lethal skill visibly drains stamina before landing',hpDuringHit>0&&hpDuringHit<hpAtHit);
+   await page.waitForTimeout(750);
+   check(label+': zero stamina remains visible before the catch screen',await page.locator('.room-fishing-fish-stamina').getAttribute('aria-valuenow')==='0'&&await page.locator('.room-fishing-v3-catch-name').count()===0);
+   await snapshot(page,label+'-zero-stamina');
    await page.locator('.room-fishing-v3-catch-name').waitFor({timeout:35000});
    check(label+': exhausted fish actually reaches the catch screen',await page.locator('.room-fishing-v3-catch-name').isVisible());
   }finally{await context.close();}

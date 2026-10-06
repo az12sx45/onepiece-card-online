@@ -383,7 +383,7 @@ function advanceRound(session,correct,now,reason='') {
   session.feedback={roundIndex:session.roundIndex,correct,combo:session.combo,correctRounds:session.correctRounds,score:session.score,...reason?{reason}:{}};
   const powerFinish=session.challenge?.powerFeedback;
   if(reason==='landed'&&powerFinish&&['burst','special'].includes(powerFinish.type)&&now.getTime()-Date.parse(powerFinish.at)<1800)
-    session.feedback.powerFinish={...powerFinish};
+    session.feedback.powerFinish={...powerFinish,fishStamina:session.challenge.fishStamina};
   session.roundIndex++;
   session.challenge=session.roundIndex<session.totalRounds?challenge(session.kind,session.roundIndex,now,jobFor(session),session.fishingVersion||1,session.catchSpeciesId,session.rodLevel,session.flickMode===true):null;
   return{};

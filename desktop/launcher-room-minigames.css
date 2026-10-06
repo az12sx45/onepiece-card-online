@@ -818,3 +818,6 @@
 
 .room-fishing-rhythm-arrow[data-step="queued"]{background:#135d67;color:#e1ffef;border-color:#59d6c0;transform:scale(.94)}
 .room-fishing-rhythm-arrow[data-step="wrong"]{background:#772f3f;color:#fff;border-color:#ff8e8e}
+
+.room-fishing-v4-sea[data-landing-impact=true] .room-fishing-power-panel,.room-fishing-v4-sea[data-power-active=true] .room-fishing-power-panel{z-index:16}
+.room-fishing-v4-sea[data-landing-impact=true] .room-fishing-power-panel button{visibility:hidden}
