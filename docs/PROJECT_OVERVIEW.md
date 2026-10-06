@@ -2576,3 +2576,5 @@ This describes the prepared 1.2.7 candidate. Public release status requires the 
 收線DPS減半至2/6/17/45；甩竿3/8/21/52、爆拉8/24/65/170、必殺35/105/275/720。魚分級HP與拉力不變。launcher-fishing-balance.js、launcher-room-minigames.js與釣魚QA同步；UI傷害及體力顯示整數，內部精度保留。公告已加入。驗證與公開部署證據待本次實測補入。
 
 驗證：155項分級後端（含108種子案例）、11項收線桌面UI、49項必殺節奏UI、82項公告QA通過。npm start已啟動；本機無DATABASE_URL，帳號儲存與獎勵為測試替身。已目視傷害整數畫面。63檔差分驗證通過，僅241462 bytes。LATTICE任務API本階段未提供，未宣稱任務持久化。公開Live尚待讀回。
+
+正式驗證完成：7ca727ff8da0346fd663ab8240a4790df6d31d42，Render dep-db2cso67bikc73drufo0 2026-10-06 18:42:33（台北）Live，PostgreSQL ready。公開r23 SHA256 42a642d27a88424f50625e6f2a48211959c5b4a1a115de9771cd128ba9b15c6f；R2單一變更blob HEAD/GET/大小/SHA通過。實際安裝快取22→23僅241462 bytes，63檔讀回通過，再檢查零下載；更新前62 blobs備份雜湊通過。證據 D:/Codex_QA/launcher-fishing-r23/release-evidence.json。尚未進行正式玩家帳號人工驗收。
