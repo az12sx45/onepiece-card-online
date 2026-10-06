@@ -9,7 +9,7 @@ const CREW = require('./launcher-crew-release').releasedKeys;
 const FISH_IDS = new Set(require('./launcher-minigames').FISH_SPECIES.map(species => species.id));
 const MAX_FISH = 64;
 const MAX_AQUARIUM_FISH = 6;
-const ROD_UPGRADE_COSTS = Object.freeze([20,35,55]);
+const {ROD_UPGRADE_COSTS}=require('./launcher-fishing-balance');
 const NEED_KEYS = Object.freeze(['energy','hunger','mood','social','workMotivation']);
 const DEFAULT_NEEDS = Object.freeze({ energy: 80, hunger: 20, mood: 75, social: 70, workMotivation: 70 });
 const object = value => value && typeof value === 'object' && !Array.isArray(value) ? value : {};
@@ -52,6 +52,7 @@ function normalizeState(raw, ownedIds, activeIds, now) {
     fishCollection.push({ id:fish.id, speciesId:fish.speciesId, caughtAt:iso(fish.caughtAt),
       inAquarium:fish.inAquarium === true && fishCollection.filter(entry => entry.inAquarium).length < MAX_AQUARIUM_FISH });
   }
+  const savedRodLevel=value=>saved.fishingRodProgression===2?rodLevel(value):[0,33,66,99][Number.isInteger(value)&&value>=0&&value<=3?value:0];
   const state = { schemaVersion: 1, revision: Number.isSafeInteger(saved.revision) && saved.revision >= 0 ? saved.revision : 0,
     ownedCharacterIds: owned, activeCharacterIds: activeIds.filter(id => set.has(id)),
     characters: Object.fromEntries(owned.map(id => [id,character(id,object(saved.characters)[id],now)])),
@@ -60,8 +61,8 @@ function normalizeState(raw, ownedIds, activeIds, now) {
     pendingArrivals: (Array.isArray(saved.pendingArrivals) ? saved.pendingArrivals : []).filter(a => a && set.has(a.itemId) && typeof a.arrivalId === 'string').slice(0, CREW.length),
     arrivedCharacterIds: (Array.isArray(saved.arrivedCharacterIds) ? saved.arrivedCharacterIds : owned).filter(id => set.has(id)),
     recentEvents: (Array.isArray(saved.recentEvents) ? saved.recentEvents : []).filter(e => e && typeof e.eventId === 'string' && iso(e.at)).slice(-32),
-    fishCollection, fishingRodLevel:rodLevel(saved.fishingRodLevel),
-    fishingRodLevels:Object.fromEntries(owned.map(id=>[id,rodLevel(object(saved.fishingRodLevels)[id]??saved.fishingRodLevel)])),
+    fishCollection, fishingRodProgression:2, fishingRodLevel:savedRodLevel(saved.fishingRodLevel),
+    fishingRodLevels:Object.fromEntries(owned.map(id=>[id,savedRodLevel(object(saved.fishingRodLevels)[id]??saved.fishingRodLevel)])),
     lastSimulatedAt: iso(saved.lastSimulatedAt) || now.toISOString(), lastSeenAt: iso(saved.lastSeenAt) || now.toISOString(),
     lastExitAt: iso(saved.lastExitAt), offlineSummary: { elapsedMs:0,completedJobs:0,coins:0 } };
   for (let a=0;a<owned.length;a++) for(let b=a+1;b<owned.length;b++) {

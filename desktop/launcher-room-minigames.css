@@ -832,3 +832,15 @@
 .room-fishing-damage[data-kind=special]{font-size:clamp(42px,5vw,70px);color:#ffc74b;-webkit-text-stroke:2px #9e2518}
 .room-fishing-damage[data-kind=burst]{font-size:clamp(32px,4vw,52px);color:#ff9769}
 @keyframes room-fishing-damage-rise{0%{opacity:0;transform:translate(var(--damage-jitter,0),10px) scale(.7)}15%{opacity:1;transform:translate(var(--damage-jitter,0),0) scale(1.12)}75%{opacity:1}100%{opacity:0;transform:translate(var(--damage-jitter,0),-55px) scale(1)}}
+
+.room-rod-forge{height:180px;position:relative;overflow:hidden;border:1px solid #cfa75970;border-radius:12px;background:radial-gradient(ellipse at 65% 70%,#72512e,#102c39 65%);margin-top:12px}
+.room-rod-forge-franky{position:absolute;height:170px;width:180px;object-fit:contain;left:5%;bottom:0}
+.room-rod-forge-rod{position:absolute;height:125px;width:170px;object-fit:contain;left:45%;bottom:10px;transform:rotate(60deg);animation:rodForgeShake .3s 5}
+.room-rod-forge-hammer{position:absolute;left:65%;top:14px;font-size:54px;transform-origin:100% 100%;animation:rodForgeHammer .3s 5}
+.room-rod-forge-sparks{position:absolute;left:62%;top:90px;font-size:55px;color:#ffde73;text-shadow:0 0 18px #ff911a;animation:rodForgeSpark .3s 5;opacity:0}
+.room-rod-forge-result{position:absolute;right:5%;bottom:12px;color:#ffe08a;font-size:24px;animation:rodForgeReveal 1.6s both}
+@keyframes rodForgeHammer{0%,100%{transform:rotate(-35deg)}60%{transform:rotate(25deg)}}
+@keyframes rodForgeShake{60%{transform:translateY(4px) rotate(60deg)}}
+@keyframes rodForgeSpark{50%{opacity:1;transform:scale(.4)}85%{opacity:0;transform:scale(1.5)}}
+@keyframes rodForgeReveal{0%,80%{opacity:0;transform:scale(.5)}100%{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.room-rod-forge *{animation:none}.room-rod-forge-result{opacity:1}}

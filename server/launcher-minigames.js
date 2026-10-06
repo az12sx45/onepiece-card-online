@@ -268,7 +268,7 @@ function workChallenge(jobId,id,roundIndex,issuedAt,fishingVersion=1) {
 function challenge(kind, roundIndex, now, jobId='supply',fishingVersion=1,speciesId=null,rodLevel=0,flickMode=false) {
   const id=crypto.randomUUID(), issuedAt=now.getTime();
   if(kind==='fishing')return fishingVersion===5?fishingV5.create(id,issuedAt,rodLevel,flickMode):
-    fishingVersion===4?fishingV4.create(id,issuedAt,rodLevel):fishingChallengeV3(id,issuedAt);
+    fishingVersion===4?fishingV4.create(id,issuedAt,Math.min(3,Math.round(rodLevel/33))):fishingChallengeV3(id,issuedAt);
   if(kind==='work') {
     const variant=workChallenge(jobId,id,roundIndex,issuedAt,fishingVersion);if(variant)return variant;
     const category=pick(Object.keys(CATEGORIES)), targets=1+crypto.randomInt(2);
@@ -343,7 +343,7 @@ function create(kind,characterId,roomRevision,now,practice=false,jobId='supply',
     ...(catchSpeciesId?{catchSpeciesId}:{}),
     ...(kind==='fishing'?{fishingVersion:clockedFishingVersion,baitId,spotId,castZone:null,
       ...(enabledFlickMode?{flickMode:true}:{}),
-      ...(clockedFishingVersion>=4?{rodLevel:fishingV4.rodLevel(rodLevel)}:{})}:kind==='work'&&jobId==='fishing'?{fishingVersion}:{}),
+      ...(clockedFishingVersion>=4?{rodLevel:fishingV5.rodLevel(rodLevel)}:{})}:kind==='work'&&jobId==='fishing'?{fishingVersion}:{}),
     state:'playing',roomRevision,attempt:1,maxAttempts:kind==='fishing'?1:3,roundIndex:0,totalRounds:kind==='fishing'?1:kind==='work'?(jobId==='fishing'&&fishingVersion===2?FISHING_V2_ROUNDS:jobId==='fishing'?5:8):4,
     startedAt:now.toISOString(),finishNotBefore:iso(now.getTime()+(kind==='fishing'?0:kind==='work'?24000:20000)),
     challenge:challenge(kind,0,now,jobId,kind==='fishing'?clockedFishingVersion:fishingVersion,catchSpeciesId,rodLevel,enabledFlickMode),score:0,combo:0,correctRounds:0,feedback:null,result:null};
@@ -367,7 +367,7 @@ function advanceRound(session,correct,now,reason='') {
   session.combo=correct?session.combo+1:0;
   if(correct){session.correctRounds++;session.score+=100+Math.min(4,session.combo-1)*25;}
   session.feedback={roundIndex:session.roundIndex,correct,combo:session.combo,correctRounds:session.correctRounds,score:session.score,...reason?{reason}:{}};
-  if(reason==='landed'&&session.challenge?.battleVersion===2)session.feedback.fishingEnd={fishStamina:session.challenge.fishStamina,maxFishStamina:session.challenge.maxFishStamina,fishTier:session.challenge.fishTier,damageEvents:session.challenge.damageEvents};
+  if(reason==='landed'&&session.challenge?.battleVersion>=2)session.feedback.fishingEnd={fishStamina:session.challenge.fishStamina,maxFishStamina:session.challenge.maxFishStamina,fishTier:session.challenge.fishTier,damageEvents:session.challenge.damageEvents};
   const powerFinish=session.challenge?.powerFeedback;
   if(reason==='landed'&&powerFinish&&['burst','special'].includes(powerFinish.type)&&now.getTime()-Date.parse(powerFinish.at)<1800)
     session.feedback.powerFinish={...powerFinish,fishStamina:session.challenge.fishStamina,maxFishStamina:session.challenge.maxFishStamina,damageEvents:session.challenge.damageEvents};

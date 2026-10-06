@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 24,
-  "publishedAt": "2026-10-06T11:56:04.213Z",
+  "revision": 25,
+  "publishedAt": "2026-10-06T12:42:35.059Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -47,6 +47,11 @@
       "path": "images/launcher_announcements/launcher-fishing-target-r18.webp",
       "bytes": 154362,
       "sha256": "511774d78ab898d2c1ed51064afa7e5e3bccc7ca0de7dc5aa7d84d904ca9d813"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-rod-forge-r25.webp",
+      "bytes": 61528,
+      "sha256": "387f77b95516afe8260a89434cf3b515eb8b975af0cb135167db027cb4c8efe1"
     },
     {
       "path": "images/launcher_room/fish_master/alligator-gar.webp",
@@ -295,18 +300,18 @@
     },
     {
       "path": "launcher-room-aquarium.js",
-      "bytes": 27498,
-      "sha256": "4db5dc93f30dc6a9d361c6a8c49634ad75f3a76d0ae4a899cfe32fb89e78e859"
+      "bytes": 27496,
+      "sha256": "76aceffe8938c3b23ff53516ad0cf242c887fdf8c8157d234a5f8f33d86fa0df"
     },
     {
       "path": "launcher-room-minigames.css",
-      "bytes": 128863,
-      "sha256": "146e6fc3956d8e96a25320dc6d12e9df75edabdc85e56b752d1bac1eab0a469a"
+      "bytes": 130197,
+      "sha256": "1b5eaafceed2ccd7c92991ba385593628b4076ac37d3df72b4d06f002166c838"
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 241522,
-      "sha256": "aecf20b34dad2408d43998d742c4efb9c14ab3f55e72dbe69b7d1a0a95022b32"
+      "bytes": 242699,
+      "sha256": "8d915fd5639cfe9fb642cd576a215fce72c1a36577df736d5227bc6441588fd8"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -327,6 +332,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "9DBJqqcBPzDdHY7r/zpAM92vNPGnH3GJQDxbWR5YEyS9QZr0DpfoPunIV2Qgi+XPV5k40DZ9BCllEkkNTZNqDQ=="
+    "value": "VVdi9jOQ+vTcFiYFsagFDVKdP6gQk6cbvgaxFvohdRgCglkQCAMBW96qfSGP1MO9p3b0oTrKXnqULc/23FhOCw=="
   }
 }

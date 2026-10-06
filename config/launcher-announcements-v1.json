@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 38,
+  "revision": 39,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r25-rod-plus99-franky-forge",
+      "status": "published",
+      "publishedAt": "2026-10-06T12:42:32.558Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r25",
+      "title": "SUPER強化｜各角色釣竿 +1～+99",
+      "summary": "佛朗基工房強化演出，各角色獨立成長；+99挑戰最強魚约需兩次成功必殺。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-rod-forge-r25.webp",
+        "alt": "實際佛朗基釣竿工房 +99 強化成功演出"
+      },
+      "body": [
+        "各角色釣竿從+0強化至+99；舊Lv1／2／3轉換為+33／+66／+99，保留角色各自進度。強化金幣由伺服器扣除，相同請求不會重複收費。",
+        "+99收線基礎傷害100／秒、必殺18000。最強級魚體力36000，必須耗盡體力才能釣起，正常成功甩竿蓄力玩法約需兩次必殺。每級增加攻擊與抗拉能力。",
+        "佛朗基工房加入角色圖、敲打、火花與SUPER成功演出。只有升級交易成功才播放，動畫不另收金幣、不會影響強化成功率。",
+        "新回合套用新公式；舊進行中回合保留舊數值。差分更新，重新啟動即可。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r24-fish-stamina-times20",
       "status": "published",

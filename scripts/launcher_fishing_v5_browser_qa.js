@@ -37,6 +37,7 @@ const readJson=req=>new Promise((resolve,reject)=>{
 const respond=(res,data)=>{res.setHeader('Content-Type','application/json; charset=utf-8');res.end(JSON.stringify(data));};
 async function command(client,type,payload){
   const now=new Date();let session=sessions.get(client);
+  if(type==='rod.upgrade'&&client==='forge'){return {ok:true,rod:{maxLevel:99,characters:{'room-character-luffy':{level:99,nextCost:null}}},serverNow:now.toISOString()};}
   if(type==='minigame.start'){
     const version=client==='legacy'?4:5;
     session=minigames.create('fishing','room-character-luffy',1,now,false,'supply',version,
@@ -133,11 +134,11 @@ async function serve(){
       }
       if(rel==='qa-grade'&&req.method==='POST'){
         const session=sessions.get(client);if(session?.challenge?.stage!=='fight'){respond(res,{ok:false});return;}
-        session.catchSpeciesId='golden-whale';session.challenge.rodLevel=3;fishingV5.hook(session.challenge,new Date(),1,'golden-whale');respond(res,{ok:true});return;
+        session.catchSpeciesId='golden-whale';session.challenge.rodLevel=99;fishingV5.hook(session.challenge,new Date(),1,'golden-whale');respond(res,{ok:true});return;
       }
       if(rel==='qa-power'&&req.method==='POST'){
         const session=sessions.get(client);if(!session?.challenge){respond(res,{ok:false});return;}
-        session.challenge.powerCharge=6;session.challenge.fishStamina=url.searchParams.get('stamina')==='20'?20:90;
+        session.challenge.powerCharge=6;session.challenge.fishStamina=url.searchParams.get('stamina')==='20'?20:900;
         respond(res,{ok:true});return;
       }
       if(rel==='qa-audio-calm'&&req.method==='POST'){
@@ -1720,8 +1721,8 @@ async function runPower(){
    await page.waitForFunction(()=>{const i=document.querySelector('.room-fishing-special-character');return i?.complete&&i.naturalWidth>0;});
    check(label+': normal-proportion dedicated character art used',await page.locator('.room-fishing-special-character').evaluate(i=>i.src.includes('fishing_v6/special-luffy.webp')&&i.naturalWidth>=900));
    await page.locator('.room-fishing-damage[data-kind=special]').waitFor();
-   check(label+': special jump shows actual 35 damage',await page.locator('.room-fishing-damage[data-kind=special]').last().getAttribute('data-amount')==='35');
-   check(label+': skill really reduces fish stamina',sessions.get('power').challenge.fishStamina<=55);
+   check(label+': special jump shows actual 600 damage',await page.locator('.room-fishing-damage[data-kind=special]').last().getAttribute('data-amount')==='600');
+   check(label+': skill really reduces fish stamina',sessions.get('power').challenge.fishStamina<=300);
    check(label+': skill consumes charges',sessions.get('power').challenge.powerCharge===0);
    await page.waitForTimeout(550);await snapshot(page,label+'-skill');
    await page.evaluate(()=>fetch('/qa-power?client=power',{method:'POST'}));
@@ -1768,18 +1769,36 @@ async function runDamage(){
    await snapshot(page,label+'-reel');await page.keyboard.up('Space');await page.waitForTimeout(1500);
    check(label+': releasing reel stops new damage jumps',await page.locator('.room-fishing-damage[data-kind=reel]').count()===0);
    await page.evaluate(()=>fetch('/qa-grade?client=power',{method:'POST'}));await page.waitForFunction(()=>document.querySelector('.room-fishing-fish-stamina')?.getAttribute('aria-valuemax')==='36000');
-   check(label+': grade IV shows actual HP and recommended rod',await page.locator('.room-fishing-tier').textContent()==='階級 IV · 建議釣竿 Lv 3');
+   check(label+': grade IV shows actual HP and recommended rod',await page.locator('.room-fishing-tier').textContent()==='階級 IV · 建議釣竿 +99');
    await snapshot(page,label+'-grade-iv');
   }finally{await context.close();}
  }
 }
 
+async function runForge(){
+ for(const [label,width,height] of [['forge-desktop',1440,900],['forge-minimum',960,640]]){
+  const context=await browser.newContext({viewport:{width,height}}),page=await context.newPage();await setup(page,'forge');
+  await page.evaluate(()=>__minigame.receive({rod:{maxLevel:99,characters:{'room-character-luffy':{level:98,nextCost:411}}}}));
+  await page.locator('.room-fishing-v4-workshop summary').click();
+  check(label+': shows +98 / +99',await page.locator('.room-fishing-v4-workshop-level').textContent()==='+98 / +99');
+  await page.locator('.room-fishing-v4-workshop-upgrade').click();
+  await page.locator('.room-rod-forge').waitFor();
+  await page.waitForFunction(()=>{const i=document.querySelector('.room-rod-forge-franky');return i?.complete&&i.naturalWidth>0;});
+  check(label+': Franky art and rod loaded',await page.locator('.room-rod-forge').evaluate(s=>[...s.querySelectorAll('img')].every(i=>i.complete&&i.naturalWidth>0)));
+  check(label+': animated hammer is active',await page.locator('.room-rod-forge-hammer').evaluate(s=>getComputedStyle(s).animationName==='rodForgeHammer'));
+  check(label+': purchase button remains disabled at cap',!(await page.locator('.room-fishing-v4-workshop-upgrade').isEnabled()));
+  await snapshot(page,label+'-hammer');await page.waitForTimeout(2100);
+  check(label+': +99 result and max stats displayed',(await page.locator('.room-rod-forge-result').textContent()).includes('+99')&&(await page.locator('.room-fishing-v4-workshop-current').textContent()).includes('18000'));
+  await snapshot(page,label+'-success');await context.close();
+ }
+}
 async function main(){
   fs.mkdirSync(out,{recursive:true});await serve();
   browser=await chromium.launch({executablePath:chrome,headless:true});
   try{
     verifyZeroStrengthBreak();
     if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='damage')await runDamage();
+    if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='forge')await runForge();
     if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='power')await runPower();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='cast')await runCastInputs();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='spots')await runSpotProjection();

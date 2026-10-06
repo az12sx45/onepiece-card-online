@@ -37,7 +37,8 @@
   const FISH_BAITS=Object.freeze({worm:{label:'蟲餌',note:'適合近岸的小型魚'},shrimp:{label:'蝦餌',note:'吸引礁區魚群'},lure:{label:'亮片擬餌',note:'遠處的大魚也會追逐'}});
   const FISH_SPOTS=Object.freeze({shore:{label:'近岸水流',note:'船邊的淺水與緩流',x:57,y:45},reef:{label:'珊瑚礁邊',note:'礁石間的魚影較活躍',x:68,y:46},deep:{label:'外海深水',note:'深處可能遇到有力的大魚',x:80,y:47},freshwater:{label:'淡水池',note:'淡水魚與水邊生物出沒',x:59,y:48},magma:{label:'熔岩潭',note:'炙熱水域有罕見魚影',x:67,y:50},rainbow:{label:'虹色水域',note:'彩色水面藏著稀有魚群',x:72,y:47}});
   const FISH_CAST_ZONES=Object.freeze({near:{label:'近處水面',key:'↓',x:46,y:55},mid:{label:'中距水面',key:'●',x:66,y:45},far:{label:'遠處水面',key:'↑',x:81,y:34}});
-  const ROD_UPGRADE_COSTS=Object.freeze([20,35,55]);
+  const ROD_UPGRADE_COSTS=Object.freeze(Array.from({length:99},(_,n)=>n<3?[20,35,55][n]:Math.round(55+2*n+n*n/60)));
+  const rodAttack=n=>({reel:Math.round(18+82*(n/99)**2),special:Math.round(600+17400*(n/99)**1.7)});
   // All released crew share one perspective/line anchor in the signed rod atlas.
   const FISHING_ROD_ATLAS=Object.freeze(['luffy','zoro','nami','usopp','sanji','chopper','robin','franky','brook','jinbe','ace','sabo','law']);
   const UA_FISH=new Set(['adventure-fish','panda-shark','elephant-tuna','lovely-angel','striped-clam','cutie-piranha','claw-shrimp','pumpkin-octopus','maple-salmon','lava-flounder','treasure-pearl-clam','electric-catfish','demon-bonito','guiding-anglerfish','ice-fish','beat-alligator','aurora-sunfish','burning-dragon','great-terigius','golden-whale']);
@@ -509,12 +510,13 @@
     function updateRodWorkshop(){
       const workshop=body?.querySelector('.room-fishing-v4-workshop');if(!workshop)return;
       const level=fishingRodLevel,max=ROD_UPGRADE_COSTS.length,cost=fishingRodNextCost;
-      workshop.querySelector('.room-fishing-v4-workshop-level').textContent=fishingRodKnown?`Lv ${level} / ${max}`:'資料讀取中';
-      workshop.querySelector('.room-fishing-v4-workshop-current').textContent=!fishingRodKnown?'正在讀取釣竿狀態。':level===0?'目前：標準釣竿，收線2傷害／秒、必殺35；適合階級I。':`目前：收線傷害 ${[2,6,17,45][level]}／秒，必殺傷害 ${[35,105,275,720][level]}；可挑戰階級 ${['I','II','III','IV'][level]}。`;
-      workshop.querySelector('.room-fishing-v4-workshop-next').textContent=!fishingRodKnown?'連上基地後才能改裝。':level===max?'已滿級；魚種與咬鉤機率不受釣竿等級影響。':`下一級：收線 ${[2,6,17,45][Math.min(3,level+1)]}傷害／秒，必殺 ${[35,105,275,720][Math.min(3,level+1)]}；竿力提高，適合階級 ${['I','II','III','IV'][Math.min(3,level+1)]}。`;
+      workshop.querySelector('.room-fishing-v4-workshop-level').textContent=fishingRodKnown?`+${level} / +${max}`:'資料讀取中';
+      const attack=rodAttack(level),next=rodAttack(Math.min(99,level+1));
+      workshop.querySelector('.room-fishing-v4-workshop-current').textContent=!fishingRodKnown?'正在讀取釣竿狀態。':`收線 ${attack.reel}／秒 · 必殺 ${attack.special}傷害` ;
+      workshop.querySelector('.room-fishing-v4-workshop-next').textContent=!fishingRodKnown?'連上基地後才能強化。':level===max?'SUPER！+99已滿級；最強魚約需兩次成功必殺。':`+${level+1}：收線 ${next.reel}／秒 · 必殺 ${next.special}`;
       const upgrade=workshop.querySelector('.room-fishing-v4-workshop-upgrade');
       upgrade.textContent=!fishingRodKnown?'釣竿資料讀取中':level===max?'已升至最高等級':`請佛朗基改裝 · ${cost} 金幣`;
-      upgrade.disabled=requesting||!fishingRodKnown||level===max;
+      upgrade.disabled=requesting||workshop.dataset.forging==='true'||!fishingRodKnown||level===max;
     }
     function rodWorkshop(){
       const workshop=node('details','room-fishing-v4-details room-fishing-v4-workshop');
@@ -523,12 +525,21 @@
       const upgrade=button('',()=>void upgradeFishingRod(),'room-fishing-v4-workshop-upgrade');workshop.append(upgrade,node('p','room-fishing-v4-workshop-feedback'));
       return workshop;
     }
+    function showRodForge(workshop){
+      workshop.querySelector('.room-rod-forge')?.remove();workshop.dataset.forging='true';updateRodWorkshop();
+      const stage=node('div','room-rod-forge');stage.setAttribute('role','status');stage.setAttribute('aria-label',`佛朗基強化完成，釣竿+${fishingRodLevel}`);
+      const portrait=node('img','room-rod-forge-franky');portrait.src=ASSET+'fishing_v6/special-franky.webp';portrait.alt='佛朗基';
+      const rod=node('img','room-rod-forge-rod');rod.src=ASSET+'fishing_v2/rod.webp';rod.alt='釣竿';
+      const hammer=node('span','room-rod-forge-hammer','🔨');hammer.setAttribute('aria-hidden','true');
+      stage.append(portrait,rod,hammer,node('span','room-rod-forge-sparks','✦'),node('strong','room-rod-forge-result',`SUPER！+${fishingRodLevel}`));workshop.append(stage);requestAnimationFrame(()=>{if(stage.isConnected)stage.scrollIntoView({block:'center'});});
+      const token=generation;setTimeout(()=>{if(token===generation&&workshop.isConnected){workshop.dataset.forging='false';stage.dataset.done='true';updateRodWorkshop();}},1900);
+    }
     async function upgradeFishingRod(){
-      if(kind!=='fishing'||phase!=='intro'||requesting||!fishingRodKnown||fishingRodLevel===ROD_UPGRADE_COSTS.length)return;
+      if(kind!=='fishing'||phase!=='intro'||requesting||!fishingRodKnown||fishingRodLevel===ROD_UPGRADE_COSTS.length||body?.querySelector('.room-fishing-v4-workshop')?.dataset.forging==='true')return;
       const response=await request('rod.upgrade',{itemId:characterId});if(!response)return;
       const workshop=body.querySelector('.room-fishing-v4-workshop');if(!workshop)return;
       workshop.open=true;
-      if(response.ok){updateFishingRod(response);const message=`佛朗基已把釣竿改裝到 Lv ${fishingRodLevel}。下一竿就能用上新釣竿。`;workshop.querySelector('.room-fishing-v4-workshop-feedback').textContent=message;say(message);}
+      if(response.ok){updateFishingRod(response);showRodForge(workshop);const message=`佛朗基已把釣竿強化到 +${fishingRodLevel}。下一竿就能用上新釣竿。`;workshop.querySelector('.room-fishing-v4-workshop-feedback').textContent=message;say(message);}
       else if(response.error==='offline'||response.error==='unavailable'){
         // The server may have committed the debit even if its reply was lost.
         // Block another purchase until a fresh life read resolves the level.
@@ -537,7 +548,7 @@
         workshop.querySelector('.room-fishing-v4-workshop-feedback').textContent=message;say(message);
         try{await options.refreshLife?.();}catch{}
         if(workshop.isConnected&&fishingRodKnown){
-          workshop.querySelector('.room-fishing-v4-workshop-feedback').textContent=`已重新讀取釣竿：Lv ${fishingRodLevel}。請確認等級後再決定是否改裝。`;
+          workshop.querySelector('.room-fishing-v4-workshop-feedback').textContent=`已重新讀取釣竿：+${fishingRodLevel}。請確認等級後再決定是否改裝。`;
         }
       }
       else{const message=ERRORS[response.error]||response.message||'改裝未完成，請稍後再試。';workshop.querySelector('.room-fishing-v4-workshop-feedback').textContent=message;say(message);}
@@ -1314,7 +1325,7 @@
         sea.dataset.powerMode=String(Boolean(challenge.powerMode));
         const hp=clamp(fishingImpactStamina(sea,challenge.fishStamina??100),0,challenge.maxFishStamina||100),charge=challenge.powerCharge||0;
         paintFishingStamina(panel,hp,challenge.maxFishStamina||100);
-        panel.querySelector('.room-fishing-tier').textContent=challenge.fishTier?`階級 ${['','I','II','III','IV'][challenge.fishTier]} · 建議釣竿 Lv ${challenge.recommendedRodLevel}`:'';
+        panel.querySelector('.room-fishing-tier').textContent=challenge.fishTier?`階級 ${['','I','II','III','IV'][challenge.fishTier]} · 建議釣竿 +${challenge.recommendedRodLevel}`:'';
         [...panel.querySelectorAll('.room-fishing-power-charge i')].forEach((item,i)=>item.dataset.full=String(i<charge));
         panel.querySelector('.room-fishing-burst').disabled=charge<3||Boolean(challenge.special)||requesting;
         panel.querySelector('.room-fishing-special').disabled=charge<6||Boolean(challenge.special)||requesting;
