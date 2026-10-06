@@ -612,7 +612,7 @@
       catch{return current===generation?{ok:false,error:'offline'}:null;}
       finally{if(current===generation){requesting=false;setDisabled(false);updateRodWorkshop();updateFishingV2();updateFishingV4();}}
     }
-    function setDisabled(value){if(!layer)return;layer.dataset.pending=String(value);for(const b of body.querySelectorAll('button'))b.disabled=(value&&b.dataset.fishAction!=='reel'&&!b.classList.contains('room-fishing-v4-reel')&&!b.classList.contains('room-fishing-v4-pay')&&!b.classList.contains('room-fishing-v4-cast')&&!b.classList.contains('room-fishing-v4-hook'))||b.dataset.permanentDisabled==='true';}
+    function setDisabled(value){if(!layer)return;layer.dataset.pending=String(value);for(const b of body.querySelectorAll('button'))b.disabled=(value&&!b.classList.contains('room-fishing-rhythm-arrow')&&b.dataset.fishAction!=='reel'&&!b.classList.contains('room-fishing-v4-reel')&&!b.classList.contains('room-fishing-v4-pay')&&!b.classList.contains('room-fishing-v4-cast')&&!b.classList.contains('room-fishing-v4-hook'))||b.dataset.permanentDisabled==='true';}
     async function start(){if(phase!=='intro')return;if(kind==='fishing'){fishingSoundContext();preloadFishingInline();}const response=await request('minigame.start',{characterId,kind,...kind==='fishing'?{baitId:selectedBait,spotId:selectedSpot,fishingVersion:5,flickMode:true}:kind==='work'?{jobId}:{},...kind==='work'&&jobId==='fishing'?{fishingVersion:2}:{},...practice?{practice:true}:{}});if(!response)return;if(response.minigame&&['playing','ready','failed'].includes(response.minigame.state)){game=response.minigame;if(game.characterId!==characterId||game.kind!==kind){renderRecovery();return;}accept(response);return;}renderIntro(kind==='fishing'&&response.error==='work_active'?'夥伴正在分工。完成原有分工後即可自由釣魚；釣魚不消耗工作次數。':ERRORS[response.error]||response.message||'暫時無法開始，請稍候再試。');}
     function renderRecovery(){phase='recovery';body.replaceChildren(node('h3','','上一次挑戰尚未結束'),node('p','','結束舊挑戰後，即可重新選擇夥伴。未完成的獎勵不會發放。'),button('結束舊挑戰',()=>void cancel(false)));say('不會自動領取獎勵。');}
     function accept(response) {
@@ -910,22 +910,42 @@
       }
     }
     const fishingPowerKeys=[];
-    let fishingPowerSending=false,fishingPowerFeedbackAt='';
+    let fishingPowerSending=false,fishingPowerFeedbackAt='',fishingPowerPreview=null;
     async function sendFishingPower(move,direction=null){
-      if(direction)fishingPowerKeys.push(direction);
+      const activeSpecial=fishingV4Challenge()?.special;
+      if(direction){
+        if(!activeSpecial||fishingPowerPreview?.id!==activeSpecial.id||fishingPowerPreview.failed||fishingPowerPreview.index>=activeSpecial.sequence.length)return;
+        fishingPowerKeys.push(direction);
+        if(direction===activeSpecial.sequence[fishingPowerPreview.index]){
+          fishingPowerPreview.index++;
+          const tone=480+fishingPowerPreview.index*70;fishingTone(tone,tone*1.08,.075,.027,'sine');
+        }else{fishingPowerPreview.failed=true;fishingTone(230,160,.1,.025,'triangle');}
+        updateFishingV4();
+      }
       if(fishingPowerSending)return;
       const challenge=fishingV4Challenge();
-      if(phase!=='answer'||challenge?.stage!=='fight'||!challenge.powerMode)return;
+      if(phase!=='answer'||challenge?.stage!=='fight'||!challenge.powerMode||move==='specialKey'&&!challenge.special){fishingPowerKeys.length=0;return;}
       if(requesting){if(fishingPowerKeys.length)setTimeout(()=>void sendFishingPower('specialKey'),80);return;}
       fishingPowerSending=true;
       const key=move==='specialKey'?fishingPowerKeys.shift():null;
       if(move==='specialKey'&&!key){fishingPowerSending=false;return;}
       if(move==='special'){fishingV4Reeling=false;fishingV4Steer=0;}
+      const powerGeneration=generation;
       const response=await request('minigame.answer',{sessionId:game.id,token:game.token,roundId:challenge.id,counterMoves:[move],...key?{directions:[key]}:{}});
+      if(powerGeneration!==generation)return;
       if(response?.minigame)accept(response);
+      if(!response?.ok){
+        fishingPowerKeys.length=0;
+        if(fishingPowerPreview&&fishingV4Challenge()?.special){fishingPowerPreview.index=fishingV4Challenge().special.index;fishingPowerPreview.failed=false;updateFishingV4();}
+        if(response?.error==='offline')say('連線暫時中斷，請重新輸入亮起的方向。');
+      }
       fishingPowerSending=false;
       if(fishingPowerKeys.length&&fishingV4Challenge()?.special)setTimeout(()=>void sendFishingPower('specialKey'),80);
-      else if(!fishingV4Challenge()?.special)fishingPowerKeys.length=0;
+      else if(!fishingV4Challenge()?.special){
+        fishingPowerKeys.length=0;
+        if(fishingV5QueuedFlick){const pending=fishingV5QueuedFlick;fishingV5QueuedFlick=null;queueMicrotask(()=>void sendFishingV5Flick(pending.direction,pending.cueId));}
+        else if(fishingV4QueuedControl){fishingV4QueuedControl=false;queueMicrotask(()=>void sendFishingV4Action('control'));}
+      }
     }
     async function sendFishingV4Action(action){
       const challenge=fishingV4Challenge();if(phase!=='answer'||!challenge)return;
@@ -1247,13 +1267,27 @@
         [...panel.querySelectorAll('.room-fishing-power-charge i')].forEach((item,i)=>item.dataset.full=String(i<charge));
         panel.querySelector('.room-fishing-burst').disabled=charge<3||Boolean(challenge.special)||requesting;
         panel.querySelector('.room-fishing-special').disabled=charge<6||Boolean(challenge.special)||requesting;
-        const rhythm=sea.querySelector('.room-fishing-rhythm');rhythm.hidden=!challenge.special;
+        const rhythm=sea.querySelector('.room-fishing-rhythm');
+        const restoreFishingFocus=!rhythm.hidden&&!challenge.special&&rhythm.contains(document.activeElement);
+        rhythm.hidden=!challenge.special;
         if(challenge.special){
-          const s=challenge.special,stamp=s.id+':'+s.index;
-          if(rhythm.dataset.stamp!==stamp){rhythm.dataset.stamp=stamp;rhythm.tabIndex=-1;rhythm.replaceChildren(node('strong','','必殺技判定'));
-            s.sequence.forEach((direction,i)=>{const arrow=button({left:'←',right:'→',up:'↑',down:'↓'}[direction],()=>void sendFishingPower('specialKey',direction),'room-fishing-rhythm-arrow');arrow.dataset.step=i<s.index?'done':i===s.index?'next':'waiting';rhythm.append(arrow);});
-            rhythm.append(node('small','','方向鍵連續輸入'));rhythm.focus({preventScroll:true});}
+          const s=challenge.special;
+          if(rhythm.dataset.stamp!==s.id){
+            rhythm.dataset.stamp=s.id;rhythm.tabIndex=-1;
+            fishingPowerPreview={id:s.id,index:s.index,failed:false};fishingPowerKeys.length=0;
+            rhythm.replaceChildren(node('strong','','必殺技判定'));
+            s.sequence.forEach(direction=>rhythm.append(button({left:'←',right:'→',up:'↑',down:'↓'}[direction],()=>void sendFishingPower('specialKey',direction),'room-fishing-rhythm-arrow')));
+            rhythm.append(node('small','','依序輸入方向鍵'));rhythm.focus({preventScroll:true});
+          }
+          fishingPowerPreview.index=Math.max(s.index,fishingPowerPreview.index);
+          [...rhythm.querySelectorAll('.room-fishing-rhythm-arrow')].forEach((arrow,i)=>{
+            arrow.disabled=false;
+            arrow.dataset.step=i<s.index?'done':i<fishingPowerPreview.index?'queued':i===fishingPowerPreview.index?(fishingPowerPreview.failed?'wrong':'next'):'waiting';
+          });
           rhythm.style.setProperty('--rhythm-time',`${clamp((Date.parse(s.until)-at)/8000,0,1)*100}%`);
+        }else{
+          fishingPowerPreview=null;fishingPowerKeys.length=0;
+          if(restoreFishingFocus)layer.focus({preventScroll:true});
         }
         const effect=sea.querySelector('.room-fishing-power-effect'),feedback=challenge.powerFeedback;
         effect.hidden=!feedback||at-Date.parse(feedback.at)>3000;
@@ -1628,8 +1662,11 @@
       if(event.key==='Escape'){event.preventDefault();event.stopPropagation();void askClose();return;}if(confirmation)return;
       if(phase==='answer'&&fishingV4Challenge()){
         const stage=game.challenge.stage;
+        if(stage==='fight'&&game.challenge.powerMode&&game.challenge.special){
+          if(event.key.startsWith('Arrow')){event.preventDefault();const dir={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'}[event.key];if(dir&&!event.repeat)void sendFishingPower('specialKey',dir);return;}
+          if([' ','Enter','x','X'].includes(event.key)){event.preventDefault();return;}
+        }
         if(stage==='fight'&&game.challenge.powerMode&&!event.repeat){
-          if(game.challenge.special&&event.key.startsWith('Arrow')){event.preventDefault();const dir={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'}[event.key];if(dir)void sendFishingPower('specialKey',dir);return;}
           if(event.key==='ArrowUp'&&!game.challenge.flickCue&&(game.challenge.powerCharge||0)>=3){event.preventDefault();void sendFishingPower('burst');return;}
           if((event.key==='x'||event.key==='X')&&(game.challenge.powerCharge||0)>=6){event.preventDefault();void sendFishingPower('special');return;}
         }
@@ -1674,7 +1711,7 @@
       fishingResultHeldKeys.delete(event.key);
       if(phase!=='answer'||!fishingV4Challenge())return;
       if(game.challenge.stage==='cast'&&(event.key===' '||event.key==='Enter')&&fishingV4ChargeKey){event.preventDefault();fishingV4ChargeKey=false;finishFishingV4Charge();return;}
-      if(game.challenge.stage!=='fight')return;
+      if(game.challenge.stage!=='fight'||game.challenge.special)return;
       if(event.key===' '){event.preventDefault();setFishingV4Control(false,fishingV4Steer);}
       if(event.key==='ArrowDown'&&game.challenge.fishingVersion===4){event.preventDefault();setFishingV4Control(false,fishingV4Steer,false);}
       if(event.key==='ArrowLeft'&&fishingV4Steer===-1||event.key==='ArrowRight'&&fishingV4Steer===1){event.preventDefault();setFishingV4Control(fishingV4Reeling,0);}

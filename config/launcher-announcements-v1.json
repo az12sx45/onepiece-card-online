@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 32,
+  "revision": 33,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r19-fishing-rhythm-recovery",
+      "status": "published",
+      "publishedAt": "2026-10-06T04:43:10.569Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r19",
+      "title": "海釣必殺技｜連續輸入更順，失敗後照常甩竿",
+      "summary": "方向鍵立即亮起並回應按鍵音；按錯或逾時後恢復甩竿，可再次蓄力挑戰。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-rhythm-r19.webp",
+        "alt": "實際釣魚畫面：必殺技方向列與已輸入的亮起箭頭"
+      },
+      "body": [
+        "必殺技方向列維持固定，連按時立即亮起並播放短按鍵音，不必等每次連線回應才看到下一步。",
+        "修正按錯或逾時後鍵盤焦點遺失：結束判定即回到海釣，稍後繼續出現甩竿機會並可重新蓄力。",
+        "按住方向鍵的連發不會吃掉下一步；移除過快輸入誤判，傷害與六步成功仍由伺服器核對。",
+        "採簽署差分更新，重新啟動即可更新。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r18-fishing-target-and-burst",
       "status": "published",

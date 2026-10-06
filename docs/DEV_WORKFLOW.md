@@ -7916,3 +7916,13 @@ Source npm start、封裝 Electron、installer SHA／签章、公開版本切換
 
 - r18公開部署完成：2026-10-06 08:43:52（台北），Render dep-db243ueq1p3s73e8o8a0 顯示 Deploy succeeded | Live；來源50c00efa837dbbd6ff1b4a2d0c4dc01d467ede2e，新服務PostgreSQL ready。公開revision18清單 SHA256 296c85436fe1aae0cb883b01834bdcad82ff84157461cb189d0425f272dd7fdb完全一致。
 - 實際快取先備份至D:/Codex_QA/launcher-fishing-r18/actual-cache-before-r18；公開17→18下載589,524 bytes，60項讀回校驗與重查零下載通過。新公告包含本次實際魚標／體力條畫面。正式玩家帳號操作驗收未執行。
+
+
+## 2026-10-06 — 釣魚 r19 必殺技輸入與甩竿恢復
+
+- desktop/launcher-room-minigames.js/css：固定六步方向列、輸入立即顯色與短音效；伺服器回應確認進度，按鍵佇列保持順序。按錯／逾時後恢復 overlay 焦點並清空舊必殺鍵，處理普通甩竿／控制佇列；長按連發不進入普通控制。
+- server/launcher-fishing-v5.js：取消70ms過快誤判，各次仍消耗一個正確序列步驟，六步後才造成一次技能傷害。失敗／逾時後700ms恢復下一個魚行為階段，沿用不同魚風格提示。
+- scripts/launcher_fishing_power_qa.js、launcher_fishing_v5_browser_qa.js：錯鍵與逾時後甩竿、快速方向輸入、鍵盤連發與延遲回應回歸。config/launcher-announcements-v1.json 新增附實際畫面的 r19 公告，素材 images/launcher_announcements/launcher-fishing-rhythm-r19.webp。
+- 目前新玩法78檢查、甩竿3204檢查通過；npm start 43219及board_start HTTP200。未設定本機DATABASE_URL，瀏覽器帳號／最後獎勵儲存使用fixture，實際answer核心；正式玩家帳號驗收未執行。最終瀏覽器39檢查（180ms回應延遲、長按與快速連按）通過；公開部署證據待讀回；LATTICE無可呼叫API，未宣稱持久記錄。
+
+- 簽署r19候選：61項，SHA256 8786e0ad9e7b890844d114b1546fd9bc4530fa25fe6afb1e878ab965f8470b4e。R2 changed blobs HEAD/GET/size/SHA及隔離18→19快取升級通過，僅下載465355 bytes；61項校驗、重查零下載。證據：D:/Codex_QA/launcher-fishing-r19。

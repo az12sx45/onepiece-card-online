@@ -79,6 +79,7 @@ async function serve(){
         // Delay delivery, not the authoritative cast, to cover a slow reply.
         if(client==='cast-latency'&&type==='minigame.answer'&&payload.counterMoves?.[0]==='cast')
           await new Promise(resolve=>setTimeout(resolve,1250));
+        if(client==='power'&&payload.counterMoves?.[0]==='specialKey')await new Promise(resolve=>setTimeout(resolve,180));
         respond(res,result);return;
       }
       if(rel==='qa-land'&&req.method==='POST'){
@@ -1676,8 +1677,35 @@ async function runPower(){
    await snapshot(page,label+'-fight');await page.locator('.room-fishing-special').click();
    await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
    await snapshot(page,label+'-rhythm');
+   const wrong=sessions.get('power').challenge.special.sequence[0]==='left'?'ArrowRight':'ArrowLeft';
+   await page.keyboard.press(wrong);
+   await page.locator('.room-fishing-rhythm:not([hidden])').waitFor({state:'hidden'});
+   check(label+': failed trial returns keyboard focus to fishing',await page.evaluate(()=>document.activeElement===document.querySelector('#roomMinigameOverlay')));
+   await page.waitForFunction(()=>['left','right','up'].includes(document.querySelector('.room-fishing-v4-sea')?.dataset.flickCue),null,{timeout:8000});
+   const cue=sessions.get('power').challenge.flickCue;
+   await page.keyboard.press({left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp'}[cue.direction]);
+   await page.waitForFunction(()=>document.querySelector('.room-fishing-power-charge i[data-full=true]'));
+   check(label+': ordinary flick succeeds after failed trial',sessions.get('power').challenge.flickFeedback?.id===cue.id&&sessions.get('power').challenge.flickFeedback.result==='hit');
+   await page.evaluate(()=>fetch('/qa-power?client=power',{method:'POST'}));
+   await page.waitForFunction(()=>!document.querySelector('.room-fishing-special')?.disabled);
+   await page.locator('.room-fishing-special').click();await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
+   await page.locator('.room-fishing-rhythm:not([hidden])').waitFor({state:'hidden',timeout:11000});
+   check(label+': expired trial also restores fishing focus',await page.evaluate(()=>document.activeElement===document.querySelector('#roomMinigameOverlay')));
+   await page.waitForFunction(()=>['left','right','up'].includes(document.querySelector('.room-fishing-v4-sea')?.dataset.flickCue),null,{timeout:8000});
+   const timeoutCue=sessions.get('power').challenge.flickCue;
+   await page.keyboard.press({left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp'}[timeoutCue.direction]);
+   await page.waitForFunction(()=>document.querySelector('.room-fishing-power-charge i[data-full=true]'));
+   check(label+': ordinary flick succeeds after timeout',sessions.get('power').challenge.flickFeedback?.id===timeoutCue.id&&sessions.get('power').challenge.flickFeedback.result==='hit');
+   await page.evaluate(()=>fetch('/qa-power?client=power',{method:'POST'}));
+   await page.waitForFunction(()=>!document.querySelector('.room-fishing-special')?.disabled);
+   await page.locator('.room-fishing-special').click();await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
    const sequence=sessions.get('power').challenge.special.sequence.slice();
-   for(const direction of sequence){await page.keyboard.press({left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown'}[direction]);await page.waitForTimeout(220);}
+   const firstKey={left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown'}[sequence[0]];
+   await page.keyboard.down(firstKey);await page.keyboard.down(firstKey);await page.keyboard.up(firstKey);
+   check(label+': held-key repeat does not consume the next arrow',await page.locator('.room-fishing-rhythm-arrow[data-step=queued]').count()===1);
+   for(const direction of sequence.slice(1)){await page.keyboard.press({left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown'}[direction]);await page.waitForTimeout(25);}
+   await snapshot(page,label+'-rapid-input');
+   check(label+': rapid sequence responds before all server acknowledgments',await page.locator('.room-fishing-rhythm-arrow[data-step=queued]').count()>0);
    await page.locator('.room-fishing-special-character').waitFor();
    await page.waitForFunction(()=>{const i=document.querySelector('.room-fishing-special-character');return i?.complete&&i.naturalWidth>0;});
    check(label+': normal-proportion dedicated character art used',await page.locator('.room-fishing-special-character').evaluate(i=>i.src.includes('fishing_v6/special-luffy.webp')&&i.naturalWidth>=900));

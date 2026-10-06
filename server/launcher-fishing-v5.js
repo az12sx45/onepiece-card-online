@@ -326,9 +326,9 @@ function power(round,now,move,direction){
   }
   const s=round.special;
   if(!s||at>=Date.parse(s.until))return{error:'fishing_special_expired'};
-  if(at-s.lastKeyAt<70)return{error:'fishing_special_too_fast'};
+  // Each input consumes one authoritative sequence step; fast consecutive keys are valid.
   s.lastKeyAt=at;
-  if(direction!==s.sequence[s.index]){round.special=null;round.powerFeedback={at:iso(at),type:'miss',name:'節奏中斷',theme:'gold'};return{};}
+  if(direction!==s.sequence[s.index]){round.special=null;round.phaseUntil=iso(at+700);round.nextTurnAt=null;round.powerFeedback={at:iso(at),type:'miss',name:'節奏中斷',theme:'gold'};return{};}
   if(++s.index===s.sequence.length){
     round.special=null;round.fishStamina=round4(Math.max(0,round.fishStamina-55));
     round.distance=round4(Math.max(0,round.distance-8));round.strength=Math.min(100,round.strength+25);round.flickReliefUntil=iso(at+5000);
@@ -372,7 +372,7 @@ function simulate(round,now,difficulty=1) {
       const stop=Math.min(end,Date.parse(round.special.until));
       // The input challenge freezes the fish and line; its eight seconds still count toward the fight deadline.
       cursor=stop;round.lastSimAt=iso(cursor);
-      if(cursor>=Date.parse(round.special.until)){round.special=null;round.powerFeedback={at:iso(cursor),type:'miss',name:'節奏中斷',theme:'gold'};round.phaseUntil=iso(cursor+1000);}
+      if(cursor>=Date.parse(round.special.until)){round.special=null;round.powerFeedback={at:iso(cursor),type:'miss',name:'節奏中斷',theme:'gold'};round.phaseUntil=iso(cursor+700);round.nextTurnAt=null;}
       if(cursor>=end)break;
       continue;
     }

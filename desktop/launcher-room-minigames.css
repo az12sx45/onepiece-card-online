@@ -815,3 +815,6 @@
 .room-fishing-target-distance{font-size:clamp(16px,1.6vw,24px);color:#fff;line-height:1.1;white-space:nowrap;text-shadow:0 2px 2px #001625,1px 0 #001625,-1px 0 #001625}
 .fishing-v5 .room-fishing-v4-sea[data-stage=fight][data-power-mode=true] .room-fishing-v5-position{display:none}
 @media(prefers-reduced-motion:reduce){.fishing-v5 .room-fishing-v4-sea[data-burst-active=true] .room-fishing-v5-rod,.fishing-v5 .room-fishing-v4-sea[data-burst-active=true] .room-fishing-v5-rod-shaft{animation:none}}
+
+.room-fishing-rhythm-arrow[data-step="queued"]{background:#135d67;color:#e1ffef;border-color:#59d6c0;transform:scale(.94)}
+.room-fishing-rhythm-arrow[data-step="wrong"]{background:#772f3f;color:#fff;border-color:#ff8e8e}

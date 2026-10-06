@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 18,
-  "publishedAt": "2026-10-06T00:32:33.423Z",
+  "revision": 19,
+  "publishedAt": "2026-10-06T04:43:13.078Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -27,6 +27,11 @@
       "path": "images/launcher_announcements/launcher-fishing-power-r17.webp",
       "bytes": 289904,
       "sha256": "079a6b1e35c76d8e3737090ad1f69117fc15022b4f3692e8ca5534a44c0581a3"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-fishing-rhythm-r19.webp",
+      "bytes": 100550,
+      "sha256": "99dac5e86953d059918174870799481d31eb4ab238ca7dca5a8edc4d6fb14553"
     },
     {
       "path": "images/launcher_announcements/launcher-fishing-target-r18.webp",
@@ -285,13 +290,13 @@
     },
     {
       "path": "launcher-room-minigames.css",
-      "bytes": 126923,
-      "sha256": "5e8417adb6cd4c1de7fff9358a704f5b061bce7981301ef119b52726d0fa818c"
+      "bytes": 127148,
+      "sha256": "0476a268ead9bc104eb0ffc706dd2642cf74fe1a7ab7dd9ac410fa50a73abd24"
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 235291,
-      "sha256": "65e33fd8bb2c9c0c043e8fcb35e27766017f7b9e942622fafde9c4f7bde6fd8a"
+      "bytes": 237657,
+      "sha256": "95705179761f4838f336b5cacd0772b62b263e903a8231cb9cff453034cd43ef"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -312,6 +317,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "vjhwZeHI3dUPmYJ+3BzSNI2mOVif9wm0bne1fMtb5BjmExAQjAKDR7o5GD0gUfKSeTokIRnV/VKInj1b6xMrDA=="
+    "value": "JAg7EDaJORIyGSXKqPuxBRAJQ2gVilfRQMVl2456+b6Hui8NCPFcDp4ZZlRKxIQwWT3lhIcIwcTq6SeEgnHiCA=="
   }
 }

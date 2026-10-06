@@ -23,6 +23,14 @@ check('wrong sequence cancels without damage',fail.special===null&&fail.fishStam
 const frozen=round();frozen.powerCharge=6;v.power(frozen,d(4100),'special');const dist=frozen.distance;v.simulate(frozen,d(5000),1);
 check('rhythm input freezes fish distance and line pressure',frozen.distance===dist&&frozen.strength===100);
 v.simulate(frozen,d(12200),1);check('trial times out and resumes fight',!frozen.special&&frozen.powerFeedback.type==='miss');
+for(const [name,recovered,time] of [['wrong-key',fail,7000],['timeout',frozen,15000]]){
+ v.simulate(recovered,d(time),1);
+ const cue=recovered.flickCue;check(name+' publishes a fresh ordinary cue',Boolean(cue));
+ check(name+' counter is usable again',v.flick(recovered,d(time+10),cue.direction,cue.id).result==='hit'&&recovered.powerCharge===1);
+}
+const rapid=round();rapid.powerCharge=6;v.power(rapid,d(4100),'special');
+for(const key of rapid.special.sequence.slice())check('consecutive rapid input accepted',!v.power(rapid,d(4200),'specialKey',key).error);
+check('rapid trial executes skill exactly once',rapid.powerFeedback.type==='special'&&rapid.fishStamina===45);
 const line=round();line.phaseUntil=d(20000).toISOString();line.runState='calm';line.flickTell=null;line.strength=70;v.control(line,d(4000),true,0);v.simulate(line,d(5000),1);const drain=70-line.strength;
 check('normal reeling reduced below four distance units per second',line.distance>76);
 check('line pressure depletes promptly',drain>4);
