@@ -22,7 +22,7 @@ const html='<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name
 const fishingAudioDir='/pixabay_fishing_v1/';
 const fishingAudioNames=['reel_in_fast.ogg','line_out_drag.ogg','line_strain.ogg'];
 const sessions=new Map(),checks=[],pageErrors=[],missingAssets=[],blockedMedia=new Set();
-const forcedSpecies=new Map([['light-force','lovely-angel'],['heavy-force','golden-whale'],
+const forcedSpecies=new Map([['power','glistening-saury'],['light-force','lovely-angel'],['heavy-force','golden-whale'],
   ['flick-up','glistening-saury'],['flick-right','glistening-saury'],['flick-left','glistening-saury'],
   ['flick-wrong','glistening-saury'],['flick-miss','glistening-saury'],
   ['flick-pre-cue-blur','glistening-saury']]);
@@ -130,6 +130,10 @@ async function serve(){
         }
         session.challenge.strength=strength;session.challenge.tension=100-strength;
         respond(res,{ok:true});return;
+      }
+      if(rel==='qa-grade'&&req.method==='POST'){
+        const session=sessions.get(client);if(session?.challenge?.stage!=='fight'){respond(res,{ok:false});return;}
+        session.catchSpeciesId='golden-whale';session.challenge.rodLevel=3;fishingV5.hook(session.challenge,new Date(),1,'golden-whale');respond(res,{ok:true});return;
       }
       if(rel==='qa-power'&&req.method==='POST'){
         const session=sessions.get(client);if(!session?.challenge){respond(res,{ok:false});return;}
@@ -1715,6 +1719,8 @@ async function runPower(){
    await page.locator('.room-fishing-special-character').waitFor();
    await page.waitForFunction(()=>{const i=document.querySelector('.room-fishing-special-character');return i?.complete&&i.naturalWidth>0;});
    check(label+': normal-proportion dedicated character art used',await page.locator('.room-fishing-special-character').evaluate(i=>i.src.includes('fishing_v6/special-luffy.webp')&&i.naturalWidth>=900));
+   await page.locator('.room-fishing-damage[data-kind=special]').waitFor();
+   check(label+': special jump shows actual 55 damage',await page.locator('.room-fishing-damage[data-kind=special]').last().getAttribute('data-amount')==='55');
    check(label+': skill really reduces fish stamina',sessions.get('power').challenge.fishStamina<=35);
    check(label+': skill consumes charges',sessions.get('power').challenge.powerCharge===0);
    await page.waitForTimeout(550);await snapshot(page,label+'-skill');
@@ -1739,6 +1745,7 @@ async function runPower(){
    check(label+': lethal skill keeps the previous stamina visible during wind-up',hpAtHit>0);
    await page.waitForTimeout(1250);
    const hpDuringHit=Number(await page.locator('.room-fishing-fish-stamina').getAttribute('aria-valuenow'));
+   check(label+': lethal jump clips damage to remaining 40 HP',await page.locator('.room-fishing-damage[data-kind=special]').last().getAttribute('data-amount')==='40');
    check(label+': lethal skill visibly drains stamina before landing',hpDuringHit>0&&hpDuringHit<hpAtHit);
    await page.waitForTimeout(750);
    check(label+': zero stamina remains visible before the catch screen',await page.locator('.room-fishing-fish-stamina').getAttribute('aria-valuenow')==='0'&&await page.locator('.room-fishing-v3-catch-name').count()===0);
@@ -1749,11 +1756,30 @@ async function runPower(){
  }
 }
 
+async function runDamage(){
+ for(const [label,width,height] of [['damage-desktop',1440,900],['damage-minimum',960,640]]){
+  const context=await browser.newContext({viewport:{width,height}}),page=await context.newPage();
+  try{
+   await setup(page,'power');await page.getByRole('button',{name:'開始釣魚'}).click();await page.locator('.room-fishing-v4-cast').evaluate(b=>b.click());
+   await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.biting==='true',null,{timeout:8000});await page.locator('.room-fishing-v4-hook').click();
+   await page.locator('.room-fishing-v4-sea[data-stage=fight]').waitFor();await page.locator('#roomMinigameOverlay').focus();await page.keyboard.down('Space');
+   await page.locator('.room-fishing-damage[data-kind=reel]').first().waitFor({timeout:4000});
+   check(label+': holding reel produces authoritative damage jump',Number(await page.locator('.room-fishing-damage[data-kind=reel]').first().getAttribute('data-amount'))>0&&sessions.get('power').challenge.fishStamina<100);
+   await snapshot(page,label+'-reel');await page.keyboard.up('Space');await page.waitForTimeout(1500);
+   check(label+': releasing reel stops new damage jumps',await page.locator('.room-fishing-damage[data-kind=reel]').count()===0);
+   await page.evaluate(()=>fetch('/qa-grade?client=power',{method:'POST'}));await page.waitForFunction(()=>document.querySelector('.room-fishing-fish-stamina')?.getAttribute('aria-valuemax')==='1800');
+   check(label+': grade IV shows actual HP and recommended rod',await page.locator('.room-fishing-tier').textContent()==='階級 IV · 建議釣竿 Lv 3');
+   await snapshot(page,label+'-grade-iv');
+  }finally{await context.close();}
+ }
+}
+
 async function main(){
   fs.mkdirSync(out,{recursive:true});await serve();
   browser=await chromium.launch({executablePath:chrome,headless:true});
   try{
     verifyZeroStrengthBreak();
+    if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='damage')await runDamage();
     if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='power')await runPower();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='cast')await runCastInputs();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='spots')await runSpotProjection();

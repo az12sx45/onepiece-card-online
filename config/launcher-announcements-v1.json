@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 35,
+  "revision": 36,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r22-fishing-damage-and-grades",
+      "status": "published",
+      "publishedAt": "2026-10-06T09:09:58.531Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r22",
+      "title": "海釣傷害跳字｜四級魚力與個人釣竿成長",
+      "summary": "持續收線顯示實際傷害，放開停止。魚分四級，體力與拉力拉開差距，釣竿升級提升攻擊及抗拉能力。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-damage-r22.webp",
+        "alt": "實際海釣畫面：水面魚標旁紅色傷害跳字、階級I與數字體力"
+      },
+      "body": [
+        "依玩家提供的釣王傳奇PC錄影參考：水面魚標旁連續跳出收線傷害，放開收線不再新增；必殺與爆拉顯示伺服器實際扣血值，超過魚剩餘體力時只顯示真正扣除的數量。",
+        "魚沿既有收藏稀有度分I／II／III／IV級，體力100／280／720／1800，基礎拉力倍率1／1.8／3／4.8。對應建議釣竿Lv0／1／2／3。",
+        "各角色釣竿升級獨立保留：收線基礎傷害每秒4／12／34／90，必殺傷害55／160／420／1100；竿力倍率1／1.6／2.65／4.4。逆著魚方向硬收時只有四分之一傷害，成功甩竿短暫增加收線傷害。",
+        "高階魚對弱竿會更快拖走魚線，升級後才有足夠攻擊與竿力挑戰。既有進行中的舊回合沿原數值結束，新開回合套用分級。採簽署差分，重新啟動即可更新。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r21-fishing-impact-swing-depth",
       "status": "published",

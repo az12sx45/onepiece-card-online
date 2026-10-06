@@ -1628,3 +1628,14 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 
 - r21公開部署完成：2026-10-06 16:54:49（台北），Render dep-db2ba57lk1mc738njobg 顯示 Deploy succeeded | Live，來源c8f50cc8cfecccd75258dc52fe7d26210707bcbe；PostgreSQL ready並連線成功。公開revision21清單 SHA256 339473011dfc107a81e91f3bbaaf2b0a1d5e0174773890a543ed548bed0f3f91完全一致。
 - 已核對實際r19快取備份61項，公開19→21只下載465,304 bytes；62項讀回校驗與重查零下載通過。必殺45／甩竿71／拋竿28／遠近27／六場景15項瀏覽器檢查通過，合圖確認最遠浮標位於水面。新玩法78、公告82通過。真人正式玩家帳號操作验收未執行；完整證據D:/Codex_QA/launcher-fishing-r21/release-evidence.json。
+
+
+## 2026-10-06 — 釣魚 r22 實際傷害跳字與魚／釣竿分級
+
+- 新server/launcher-fishing-balance.js共享既有36魚收藏稀有度（未改id）；I/II/III/IV體力100/280/720/1800，基礎拉力倍率1/1.8/3/4.8，建議個人釣竿Lv0/1/2/3。竿力倍率1/1.6/2.65/4.4，收線基礎傷害每秒4/12/34/90，甩竿4/12/32/80，爆拉12/36/100/260，必殺55/160/420/1100。逆向／未對準的衝刺收線傷害×0.25，甩竿助力×1.25；竿力相对鱼拉力决定逃线、压强及距离技能效率。參考玩家PC錄影fight圖的傷害跳字，數值為本啟動器設計，不宣稱來源遊戲公式。
+- server/launcher-fishing-v5.js新開power回合battleVersion2套用分級；沒有marker的舊active回合保留100HP及原數值。傷害事件由伺服器按實際扣血产生（收線每500ms聚合、技能按命中），上限16則；停止收線不扣HP。server/launcher-minigames.js公開等級／體力／事件，維持species與行為表隱藏；終局保存剩餘HP與事件供演出，不新增玩家獎勵或改漁獲id。
+- desktop/launcher-room-minigames.js/css數字體力與階級／建議竿級、紅色收線／金色必殺跳字，去重伺服器事件，放開本機收線後取消尚未显示的收線跳字。仍先展示技能、扣血、歸零停留再出漁獲；普通收線耗盡亦先呈現終局體力。釣竿頁列出實際成長數值，沿用角色獨立等級及既有改裝費用。
+- 測試：新增scripts/launcher_fishing_grade_qa.js共155檢查，36魚×3種seed在建議竿级釣起，四種傳說魚對新手竿失敗；升級提高實際傷害20倍以上，抗拉改變進度，事件總額等於消耗HP，釋放停止傷害，真實answer路由與舊active相容。新玩法78、PGlite個人釣竿59；新增damage瀏覽器11與必殺49通過（desktop/960×640），包含55普通必殺和剩40HP致命只扣40。npm start43222及board_startHTTP200，本機無DATABASE_URL，帳號／領取使用fixture；正式玩家帳號驗收未執行。
+- 文件／公告config/launcher-announcements-v1.json及images/launcher_announcements/launcher-fishing-damage-r22.webp實際畫面。證據D:/Codex_QA/launcher-fishing-r22。LATTICE無可呼叫API，未宣稱持久紀錄或圖譜成功；公開部署證據待讀回。
+
+- r22簽署候選63項，SHA256 34cf3110724cbaa6d773b0382c6e2257e03cd2a32048bc731c508e54aa7e1d10；changed blobs HEAD/GET/size/SHA通過，隔離21→22下載477006 bytes，63項校驗與重查零下載通過。內部事件保留16則、常態公開快照只傳最新6則；進入必殺時先結清收線傷害。分級155／新玩法78再驗證通過，公告82通過。公开部署待讀回。

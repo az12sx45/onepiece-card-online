@@ -62,22 +62,7 @@ const FISH_SPECIES = Object.freeze([
 // identifies species and fight behavior; it does not define this rarity scale.
 // Keeping rarity derived from the species ID preserves existing collection
 // records and makes catches saved before this release display consistently.
-const FISH_RARITY_BY_ID = Object.freeze({
-  'balloon-catfish':'common','glistening-saury':'common','smile-jellyfish':'common',
-  'butterflyfish':'common','lovely-angel':'common','claw-shrimp':'common',
-  'cutie-piranha':'common','maple-salmon':'common','lava-flounder':'common',
-  'adventure-fish':'uncommon','cola-sunfish':'uncommon','pumpkin-octopus':'uncommon',
-  'electric-catfish':'uncommon','demon-bonito':'uncommon','ice-fish':'uncommon',
-  'striped-clam':'uncommon','guiding-anglerfish':'uncommon',
-  'panda-shark':'rare','reef-shark':'rare','elephant-tuna':'rare',
-  'treasure-pearl-clam':'rare','beat-alligator':'rare','aurora-sunfish':'rare',
-  'great-terigius':'rare',
-  'burning-dragon':'legendary','golden-whale':'legendary',
-  'largemouth-bass':'common','warmouth':'common',
-  'congo-bichir':'uncommon','dolphinfish':'uncommon','lionfish':'uncommon',
-  'paddlefish':'rare','alligator-gar':'rare','dusky-grouper':'rare',
-  'goliath-grouper':'legendary','white-marlin':'legendary'
-});
+const {FISH_RARITY_BY_ID}=require('./launcher-fishing-balance');
 const FISHING_BAITS = Object.freeze(['worm','shrimp','lure']);
 const FISHING_SPOTS = Object.freeze(['shore','reef','deep','freshwater','magma','rainbow']);
 const FISHING_CAST_ZONES = Object.freeze({
@@ -317,7 +302,8 @@ function view(session) {
     result.challenge={...result.challenge};delete result.challenge.fightPattern;
     if(result.challenge.fishingVersion===5){
       // Species rhythm is server-private until the catch is settled.
-      delete result.challenge.behavior;delete result.challenge.reelHoldMs;
+      delete result.challenge.behavior;delete result.challenge.reelHoldMs;delete result.challenge.reelDamagePending;delete result.challenge.damageTickAt;delete result.challenge.damageSequence;
+      if(result.challenge.damageEvents)result.challenge.damageEvents=result.challenge.damageEvents.slice(-6);
       delete result.challenge.nextTurnAt;
       delete result.challenge.turnsRemaining;delete result.challenge.phaseIndex;
       delete result.challenge.phaseUntil;
@@ -381,9 +367,10 @@ function advanceRound(session,correct,now,reason='') {
   session.combo=correct?session.combo+1:0;
   if(correct){session.correctRounds++;session.score+=100+Math.min(4,session.combo-1)*25;}
   session.feedback={roundIndex:session.roundIndex,correct,combo:session.combo,correctRounds:session.correctRounds,score:session.score,...reason?{reason}:{}};
+  if(reason==='landed'&&session.challenge?.battleVersion===2)session.feedback.fishingEnd={fishStamina:session.challenge.fishStamina,maxFishStamina:session.challenge.maxFishStamina,fishTier:session.challenge.fishTier,damageEvents:session.challenge.damageEvents};
   const powerFinish=session.challenge?.powerFeedback;
   if(reason==='landed'&&powerFinish&&['burst','special'].includes(powerFinish.type)&&now.getTime()-Date.parse(powerFinish.at)<1800)
-    session.feedback.powerFinish={...powerFinish,fishStamina:session.challenge.fishStamina};
+    session.feedback.powerFinish={...powerFinish,fishStamina:session.challenge.fishStamina,maxFishStamina:session.challenge.maxFishStamina,damageEvents:session.challenge.damageEvents};
   session.roundIndex++;
   session.challenge=session.roundIndex<session.totalRounds?challenge(session.kind,session.roundIndex,now,jobFor(session),session.fishingVersion||1,session.catchSpeciesId,session.rodLevel,session.flickMode===true):null;
   return{};

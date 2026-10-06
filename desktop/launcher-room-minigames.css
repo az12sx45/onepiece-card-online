@@ -825,3 +825,10 @@
 /* Keep scaled floats centered on the same projected water point as the line. */
 .fishing-v5 .room-fishing-v4-bobber{scale:none;transform:translate(-50%,-50%) rotate(var(--bob-tilt,0deg)) scale(var(--bobber-scale,1))}
 .fishing-v5 .room-fishing-v4-sea[data-biting=true] .room-fishing-v4-bobber{top:calc(var(--float-y,45%) + var(--bobber-scale,1) * 18px);transform:translate(-50%,-50%) rotate(var(--bob-tilt,0deg)) scale(calc(var(--bobber-scale,1) * .82))}
+
+.room-fishing-tier{grid-column:1/-1;text-align:center;font-size:12px;color:#ffe3a0;text-shadow:0 2px 3px #000}
+.room-fishing-damage-layer{position:absolute;inset:0;z-index:18;pointer-events:none;overflow:hidden}
+.room-fishing-damage{position:absolute;left:clamp(15%,calc(var(--float-x,53%) + 5%),75%);top:calc(var(--float-y,50%) - 5%);font:900 clamp(24px,3vw,42px)/1 Arial;color:#ff4b39;-webkit-text-stroke:1px #601a16;text-shadow:0 2px 0 #401612,0 0 9px #fff2;animation:room-fishing-damage-rise 1s ease-out both}
+.room-fishing-damage[data-kind=special]{font-size:clamp(42px,5vw,70px);color:#ffc74b;-webkit-text-stroke:2px #9e2518}
+.room-fishing-damage[data-kind=burst]{font-size:clamp(32px,4vw,52px);color:#ff9769}
+@keyframes room-fishing-damage-rise{0%{opacity:0;transform:translate(var(--damage-jitter,0),10px) scale(.7)}15%{opacity:1;transform:translate(var(--damage-jitter,0),0) scale(1.12)}75%{opacity:1}100%{opacity:0;transform:translate(var(--damage-jitter,0),-55px) scale(1)}}
