@@ -1667,3 +1667,6 @@ Board 多人模式不是 server authoritative。實際規則在前端執行，se
 - 目前新玩法78檢查、甩竿3204檢查通過；npm start 43219及board_start HTTP200。未設定本機DATABASE_URL，瀏覽器帳號／最後獎勵儲存使用fixture，實際answer核心；正式玩家帳號驗收未執行。最終瀏覽器39檢查（180ms回應延遲、長按與快速連按）通過；公開部署證據待讀回；LATTICE無可呼叫API，未宣稱持久記錄。
 
 - 簽署r19候選：61項，SHA256 8786e0ad9e7b890844d114b1546fd9bc4530fa25fe6afb1e878ab965f8470b4e。R2 changed blobs HEAD/GET/size/SHA及隔離18→19快取升級通過，僅下載465355 bytes；61項校驗、重查零下載。證據：D:/Codex_QA/launcher-fishing-r19。
+
+- r19公開部署完成：2026-10-06 12:56:32（台北），Render dep-db27pobncjis73cb3ef0 顯示 Deploy succeeded | Live，來源bd38302eaea92e78c9c9f3dd08f1643d8f7560d0；PostgreSQL ready並連線成功。公開revision19清單 SHA256 8786e0ad9e7b890844d114b1546fd9bc4530fa25fe6afb1e878ab965f8470b4e完全一致。
+- 實際r18快取已備份並核對60項素材，再由公開來源18→19下載465,355 bytes；61項讀回校驗與重查零下載通過。39項瀏覽器、78項新玩法、3204項甩竿、82項公告檢查通過。正式玩家帳號實際操作驗收未執行；完整證據D:/Codex_QA/launcher-fishing-r19/release-evidence.json。
