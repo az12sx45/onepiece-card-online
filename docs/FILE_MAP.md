@@ -1615,3 +1615,13 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 - config/launcher-announcements-v1.json 公告附實際0%技能畫面，public/images/launcher_announcements/launcher-fishing-impact-r20.webp。公開部署證據待讀回；LATTICE無可呼叫API，未宣稱持久紀錄。
 
 - r20簽署候選：62項，SHA256 4f01bcb7d5594b8934c1fa98e9ed51469c3d00d2b8e4f95912d8bccfa3dfa3e9。R2 changed blobs HEAD/GET/size/SHA及隔離19→20快取升級通過，僅下載464674 bytes，62項驗證、重查零下載。證據D:/Codex_QA/launcher-fishing-r20。
+
+
+## 2026-10-06 — 釣魚 r21 合併命中演出、音效與遠投深度
+
+- r20候選通過45項必殺瀏覽器及78項新玩法檢查；因玩家追加音效／甩竿／遠投修正，取消尚未上線的Render r20（dep-db2b637avr4c73afkf7g，約1m27s），目前公開r19，合併發布r21。r20公告未單獨發布，r21包含全部變更。
+- desktop/launcher-room-minigames.js/css：成功甩竿雙音880→1175、1320→1760Hz，壓低背景600ms；本機揮竿sample音量1.48→2.1，合成氣流伴奏保留65%，QTE確認短音加强。左右甩竿17→30度，24→48px；上甩34→70px，動畫0.62秒、動作狀態650ms，魚線持續依實際竿尖繪製。
+- 遠投投影近70%、中50.11%、遠34%水面深度，保留既有伺服器拋投座標與魚池判定。浮標／水花隨透視縮小，取消浮標獨立scale造成的座標漂移，把縮放放入transform；浮標咬餌下沉距離也隨尺度縮小。
+- scripts/launcher_fishing_v5_browser_qa.js：更新r18後已移除舊橫向軌道的測試；恢復甩竿測試核對新鮮cue，避免DOM舊提示與私有引擎時鐘的讀取競爭。必殺45項、拋竿28項、深度27項通過；音效71項與六釣場15項最終回歸待讀回。公告config/launcher-announcements-v1.json附實際0%技能圖。證據D:/Codex_QA/launcher-fishing-r21。
+
+- r21最終甩竿71項及六場景遠投15項通過；合圖核對六個最遠落點都在水面，浮標／線端對齊。公告82項通過。簽署r21含62项，SHA256 339473011dfc107a81e91f3bbaaf2b0a1d5e0174773890a543ed548bed0f3f91；R2 changed blob HEAD/GET/size/SHA通過，隔離19→21下載465304 bytes，62項校驗及重查零下載。公開讀回待完成。

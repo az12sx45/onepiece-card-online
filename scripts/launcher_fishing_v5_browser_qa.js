@@ -1313,7 +1313,7 @@ async function runFlick(label,width,height){
       preCueAudio.anticipation.length===1&&preCueAudio.anticipation[0].at<cueVisualAt-80&&
       tellVisualAt<cueVisualAt&&preCueAudio.direction.length===1);
     const meterBefore=await fightMeterState(page);
-    check(`${label}: existing reel meter remains visible`,meterBefore.dialVisible&&meterBefore.arcVisible&&meterBefore.progressVisible);
+    check(`${label}: existing reel meter remains visible`,meterBefore.dialVisible&&meterBefore.arcVisible&&await page.locator('.room-fishing-fish-target').isVisible());
     const cueAudio=await page.evaluate(at=>({
       tones:__qa.soundStarts.filter(sound=>sound.at>=at),
       pans:__qa.pans.filter(item=>item.at>=at)}),cueSoundAt);
@@ -1375,6 +1375,8 @@ async function runFlick(label,width,height){
         Math.abs(sound.frequency-(direction==='up'?660:540))<2)&&
       flickAudio.pans.some(item=>item.at>=flickAudio.responseAt&&
         Math.abs(item.pan-({left:-.55,right:.55,up:0}[direction]))<.03));
+    check(`${label}: correct direction has a separate bright confirmation chime`,flickAudio.tones.some(sound=>sound.at>=flickAudio.responseAt&&Math.abs(sound.frequency-880)<2)&&flickAudio.tones.some(sound=>sound.at>=flickAudio.responseAt&&Math.abs(sound.frequency-1320)<2));
+    check(`${label}: larger rod swing stays active long enough to read`,await page.locator('.room-fishing-v5-rod').evaluate(r=>getComputedStyle(r).animationDuration==='0.62s'));
     fs.writeFileSync(path.join(out,`${label}-flick-audio.json`),JSON.stringify(flickAudio,null,2));
     const assist=await page.evaluate(()=>({
       active:document.querySelector('.room-fishing-v4-sea')?.dataset.flickAssist,
@@ -1514,8 +1516,10 @@ async function runCastDepth(label,width,height){
       await snapshot(page,`${label}-${zone}-depth`);
       return visual;
     };
-    const near=await sample('near',59),mid=await sample('mid',62.35),far=await sample('far',65);
+    const near=await sample('near',51),mid=await sample('mid',52.285),far=await sample('far',53);
     fs.writeFileSync(path.join(out,`${label}-cast-depth.json`),JSON.stringify({near,mid,far},null,2));
+    check(`${label}: far cast approaches the horizon with strong depth separation`,far.floatY<=35&&near.floatY-far.floatY>=35);
+    check(`${label}: scaled far float stays centered on its projected water depth`,Math.abs(far.bobberY-far.floatY*far.seaHeight/100)<4);
     check(`${label}: near cast bobber visibly larger than far cast`,
       near.bobberWidth/mid.bobberWidth>1.2&&mid.bobberWidth/far.bobberWidth>1.2&&
       near.bobberHeight/far.bobberHeight>1.7);
@@ -1653,8 +1657,10 @@ async function runSpotProjection(){
       await page.locator('.room-fishing-v4-cast').evaluate(button=>button.click());
       await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor();
       await page.waitForFunction(()=>!document.querySelector('.room-fishing-v4-sea')?.classList.contains('cast-flight'));
+      await page.evaluate(client=>fetch(`/qa-cast-target?client=${client}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({zone:'far'})}),label);
+      await page.waitForFunction(()=>Math.abs(parseFloat(document.querySelector('.room-fishing-v4-sea')?.style.getPropertyValue('--float-y'))-34)<.15);
       const water=await waterPerspective(page),layers=await lineLayer(page);
-      check(`${label}: forward landing lies on the visible middle water`,water.floatY>=43&&water.floatY<=68&&
+      check(`${label}: forward landing lies on the visible middle water`,water.floatY>=34&&water.floatY<=70&&
         water.floatX>=51&&water.floatX<=53&&layers.splash<layers.rod&&layers.line<layers.rod);
       await snapshot(page,label);await page.evaluate(()=>__minigame.dismiss());
     }
@@ -1682,7 +1688,7 @@ async function runPower(){
    await page.locator('.room-fishing-rhythm:not([hidden])').waitFor({state:'hidden'});
    check(label+': failed trial returns keyboard focus to fishing',await page.evaluate(()=>document.activeElement===document.querySelector('#roomMinigameOverlay')));
    await page.waitForFunction(()=>['left','right','up'].includes(document.querySelector('.room-fishing-v4-sea')?.dataset.flickCue),null,{timeout:8000});
-   const cue=sessions.get('power').challenge.flickCue;
+   let cue;for(let i=0;i<80;i++){cue=sessions.get('power')?.challenge?.flickCue;if(cue&&Date.parse(cue.until)-Date.now()>500&&await page.locator('.room-fishing-v4-sea').getAttribute('data-flick-cue')===cue.direction)break;await page.waitForTimeout(100);}assert(cue,'Fresh recovery cue');
    await page.keyboard.press({left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp'}[cue.direction]);
    await page.waitForFunction(()=>document.querySelector('.room-fishing-power-charge i[data-full=true]'));
    check(label+': ordinary flick succeeds after failed trial',sessions.get('power').challenge.flickFeedback?.id===cue.id&&sessions.get('power').challenge.flickFeedback.result==='hit');
@@ -1692,7 +1698,7 @@ async function runPower(){
    await page.locator('.room-fishing-rhythm:not([hidden])').waitFor({state:'hidden',timeout:11000});
    check(label+': expired trial also restores fishing focus',await page.evaluate(()=>document.activeElement===document.querySelector('#roomMinigameOverlay')));
    await page.waitForFunction(()=>['left','right','up'].includes(document.querySelector('.room-fishing-v4-sea')?.dataset.flickCue),null,{timeout:8000});
-   const timeoutCue=sessions.get('power').challenge.flickCue;
+   let timeoutCue;for(let i=0;i<80;i++){timeoutCue=sessions.get('power')?.challenge?.flickCue;if(timeoutCue&&Date.parse(timeoutCue.until)-Date.now()>500&&await page.locator('.room-fishing-v4-sea').getAttribute('data-flick-cue')===timeoutCue.direction)break;await page.waitForTimeout(100);}assert(timeoutCue,'Fresh timeout recovery cue');
    await page.keyboard.press({left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp'}[timeoutCue.direction]);
    await page.waitForFunction(()=>document.querySelector('.room-fishing-power-charge i[data-full=true]'));
    check(label+': ordinary flick succeeds after timeout',sessions.get('power').challenge.flickFeedback?.id===timeoutCue.id&&sessions.get('power').challenge.flickFeedback.result==='hit');

@@ -421,11 +421,11 @@
       // layers move from the opposite side to the chosen direction, then a
       // short line snap ends the stroke. Keep this local: installed launchers
       // only whitelist the existing fishing audio paths.
-      fishingMotorDuckingUntil=now()+470;
+      fishingMotorDuckingUntil=now()+650;
       const force=clamp(pullIntensity,0,1),lift=direction==='up',base=lift?185:direction==='left'?150:165;
       const startPan=direction==='left'?.48:direction==='right'?-.48:0;
       const endPan=direction==='left'?-.76:direction==='right'?.76:0;
-      const backing=fishingInlineSample('flick',.93+force*.14,1.48,endPan),mix=backing?.18:1;
+      const backing=fishingInlineSample('flick',.93+force*.14,2.1,endPan),mix=backing?.65:1;
       fishingNoise(.15,(.070+force*.018)*mix,720,230,0,'lowpass',.012,startPan);
       fishingNoise(.34,(.108+force*.029)*mix,530,3400+force*700,.015,'bandpass',.16,startPan);
       fishingNoise(.245,(.092+force*.026)*mix,1400,4200+force*600,.105,'bandpass',.085,endPan);
@@ -436,7 +436,10 @@
     function fishingFlickImpactSound(result,direction,pullIntensity){
       const force=clamp(pullIntensity,0,1);
       if(result==='hit'){
+        fishingMotorDuckingUntil=now()+600;
         const pan=direction==='left'?-.55:direction==='right'?.55:0;
+        fishingTone(880,1175,.13,.18,'sine',.015,pan);
+        fishingTone(1320,1760,.16,.14,'sine',.105,pan);
         fishingNoise(.15,.054+force*.026,1700,310,0,'lowpass',.012,pan);
         fishingTone(145+force*45,63,.19,.055+force*.023,'sawtooth',0,pan);
         fishingTone(direction==='up'?660:540,direction==='up'?1140:960,.17,.038,'triangle',.055,pan);
@@ -861,7 +864,7 @@
       // first-person rod instead of sending stronger casts sideways.
       const depth=clamp((55-point.y)/21,0,1);
       const originalX=46+35*depth;
-      return{x:51+2*depth+clamp((point.x-originalX)*.1,-2,2),y:68-25*depth};
+      return{x:51+2*depth+clamp((point.x-originalX)*.1,-2,2),y:70-36*Math.pow(depth,.8)};
     }
     function fishingV4SteerAt(sea,event){const rect=sea.getBoundingClientRect(),x=(event.clientX-rect.left)/rect.width;return x<.42?-1:x>.58?1:0;}
     function setFishingV4Power(power){
@@ -925,7 +928,7 @@
       const flick={direction,cueId:cue.id};
       if(requesting){fishingV5QueuedFlick=flick;return;}
       const sea=body?.querySelector('.room-fishing-v4-sea');
-      if(sea){sea.dataset.flickMotion=direction;fishingV5MotionUntil=now()+500;}
+      if(sea){sea.dataset.flickMotion=direction;fishingV5MotionUntil=now()+650;}
       fishingFlickSwingSound(direction,challenge.pullIntensity);
       const response=await request('minigame.answer',{sessionId:game.id,token:game.token,roundId:challenge.id,
         counterMoves:['flick'],flickDirection:direction,flickCueId:cue.id});
@@ -947,7 +950,7 @@
         fishingPowerKeys.push(direction);
         if(direction===activeSpecial.sequence[fishingPowerPreview.index]){
           fishingPowerPreview.index++;
-          const tone=480+fishingPowerPreview.index*70;fishingTone(tone,tone*1.08,.075,.027,'sine');
+          const tone=480+fishingPowerPreview.index*70;fishingTone(tone,tone*1.08,.075,.1,'sine');
         }else{fishingPowerPreview.failed=true;fishingTone(230,160,.1,.025,'triangle');}
         updateFishingV4();
       }
@@ -1413,9 +1416,9 @@
       // disturbance toward the boat as server distance falls. Sizing follows
       // that same projected water line, rather than an independent scale.
       const floatY=challenge.stage==='fight'?castPoint.y+(73-castPoint.y)*closeness+(fish.y-.57)*7:castPoint.y;
-      const perspective=clamp((floatY-38)/36,0,1);
-      sea.style.setProperty('--bobber-scale',(.24+.42*perspective).toFixed(3));
-      const splashWidth=clamp(sea.clientWidth*.13,75,120)*(.20+.62*perspective*perspective);
+      const perspective=clamp((floatY-32)/42,0,1);
+      sea.style.setProperty('--bobber-scale',(.18+.42*perspective).toFixed(3));
+      const splashWidth=clamp(sea.clientWidth*.13,75,120)*(.12+.64*perspective*perspective);
       sea.style.setProperty('--splash-width',`${splashWidth.toFixed(1)}px`);
       const visualX=clamp((castPoint.x+(fish.x-.5)*34)*(1-closeness)+(51+(fish.x-.5)*58)*closeness,12,88);
       const floatX=challenge.stage==='fight'?visualX:castPoint.x;
