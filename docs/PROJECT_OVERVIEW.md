@@ -2582,3 +2582,5 @@ This describes the prepared 1.2.7 candidate. Public release status requires the 
 
 ## 2026-10-06 海釣r24
 依玩家指定魚HP提高20倍：2000/5600/14400/36000，傷害、拉力、釣竿升級不變。已存在回合保留既有HP，新開一竿套用。launcher-fishing-balance.js及相關QA、公告同步。驗證待補。
+
+驗證完成：155項分級QA（108種子建議竿釣起）、11項UI、82项公告、3種普通魚最高級竿成功甩3次仍剩1385~1406HP；npm start根頁200。本機無DB，帳號/結算測試替身，未正式帳號人工驗收。Render dep-db2e3srncjis73ci2cq0、03a0e4be79c37e3d0333f655ad43eace291bf999，2026-10-06 20:06:43台北Live及PostgreSQL ready。公開r24 SHA256 11bf0be99f21dea220fc7a0b602cabddb127aa03e75b9782338e3a389fb802a3，blob驗證及實際快取23→24：241522 bytes，63檔讀回、重查零下載、62舊blob備份雜湊皆通過。LATTICE任務API不可用，未宣稱持久寫入。證據D:/Codex_QA/launcher-fishing-r24/release-evidence.json。
