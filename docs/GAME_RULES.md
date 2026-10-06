@@ -1751,3 +1751,5 @@ server/launcher-life.js新增fishingCoins、舊存檔預設0而不複製商城�
 修改 desktop/launcher-room-minigames.css、launcher-room-minigames.js：放大桌機海面、縮短頁首與進度留白，魚竿依海面寬45%/高82%及600px上限縮小，浮標縮放係數由.18+.42p改為.13+.32p。既有方向、釣線接點、玩法與帳號資料保留。scripts/launcher_fishing_v5_browser_qa.js加入海面佔比及實際魚竿尺寸檢查；1440x900與960x640遠近31項、拋竿28項通過，搏魚檢查待完成。公告附實測截圖。LATTICE任務API不可用，未保存任務狀態；公開發布待核驗。
 
 補充：最終縮小魚竿版本搏魚112項及公告82項通過；npm start根頁200，未連本機DB。
+
+公開r28驗證完成：source 80f747a0b8255142e943f6694fda196cc27ce2d7；Render dep-db2ih6rl550s73bcll80 2026-10-07 01:10:25台北Live，PostgreSQL ready。公開manifest SHA256 7ca2545a15fa753b6146d4a96dde05354b986ec8383c4ccaeaebfc933ab21e87。已安裝快取27→28差分564768bytes，67檔SHA/大小及再檢查零下載通過；變更blob遠端驗證通過。證據D:/Codex_QA/launcher-fishing-r28/release-evidence.json。QA帳號與獎勵為替身，未正式玩家人工驗收。
