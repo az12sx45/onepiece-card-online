@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 25,
-  "publishedAt": "2026-10-06T12:42:35.059Z",
+  "revision": 26,
+  "publishedAt": "2026-10-06T14:07:18.654Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -47,6 +47,11 @@
       "path": "images/launcher_announcements/launcher-fishing-target-r18.webp",
       "bytes": 154362,
       "sha256": "511774d78ab898d2c1ed51064afa7e5e3bccc7ca0de7dc5aa7d84d904ca9d813"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-pull-depth-r26.webp",
+      "bytes": 150712,
+      "sha256": "3292b6727c78c60b2a19beca26703e12105c4e153e00eca5cfb11a60139469f5"
     },
     {
       "path": "images/launcher_announcements/launcher-rod-forge-r25.webp",
@@ -310,8 +315,8 @@
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 242699,
-      "sha256": "8d915fd5639cfe9fb642cd576a215fce72c1a36577df736d5227bc6441588fd8"
+      "bytes": 242769,
+      "sha256": "c2739bc9e3b6ece70a7d6bd8b3c7a3b76377cd04c7b42b8dfa428a31ebb83772"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -332,6 +337,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "VVdi9jOQ+vTcFiYFsagFDVKdP6gQk6cbvgaxFvohdRgCglkQCAMBW96qfSGP1MO9p3b0oTrKXnqULc/23FhOCw=="
+    "value": "CLHTuuT5yHXVVEa+vq5cDu5d8jShyfFBJG5BW9NwFwwxriIn6MC5TXSmYXRC61G1oURyD7PL4qvNnIX9h78/BQ=="
   }
 }

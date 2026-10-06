@@ -1665,3 +1665,8 @@ launcher-life.js新增fishingRodProgression:2的冪等正規化，舊0/1/2/3→0
 最後期限核對：新版battleVersion3整場minigame期限360秒（含拋竿及咬鉤），搏魚上限300秒；舊session期限不變，避免新長搏魚被原180秒session提前中止。
 
 公開驗證完成：最終source f46b772a6b95d69fe0eac0e0ef2aff77a8bc1add（含88aa2a3bd內容），Render dep-db2eq750qq3c73d4hrg0 2026-10-06 20:54:09台北Live、PostgreSQL ready；先前88aa建置已取消未上線。公開r25 SHA256 c5e25185577c642d64f4d25391fb54748f9d98ea89e1f5f4bbaaf10c48d35919；4變更blob HEAD/GET/大小/SHA通過，實際已安裝快取24→25僅461920 bytes，64檔讀回與再檢查零下載通過，62舊blob備份雜湊通過。最終session期限360秒直接建立實測通過。證據D:/Codex_QA/launcher-fishing-r25/release-evidence.json。尚未正式玩家帳號人工驗收。
+
+## 2026-10-06 r26 拉魚遠近投影
+修改 desktop/launcher-room-minigames.js：最遠落點30%水深（原34%），approach=closeness^2.8，前段維持遠處、後段靠近；水平及垂直掙扎按深度縮小，水花／浮標共用透視；顯示24～120m換算，非改動後端傷害或收線難度。新增拉魚90/72/28/10距離QA及六海域投影核對，兩桌面尺寸15項拉魚與15項海域檢查通過；公告附實測截圖。發布待讀回。完整desktop測試曾在等待期線接點檢查失敗，未列為通過。LATTICE API未提供，不宣稱保存。
+
+補充驗證：完整desktop搏魚112項通過；舊QA原先漏算bobber transform矩陣縮放，已修正量測，米數期望與遠處左右幅度同步新投影。npm start / GET200及公告82項通過；本機無DB，帳號與結算測試替身。候選65檔SHA讀回、差分393481bytes、重查0下載通過。

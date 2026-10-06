@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 39,
+  "revision": 40,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r26-pull-depth",
+      "status": "published",
+      "publishedAt": "2026-10-06T14:09:15.633Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r26",
+      "title": "遠投與拉魚距離感調整",
+      "summary": "遠處水花貼近地平線，接近船邊才逐漸放大。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-pull-depth-r26.webp",
+        "alt": "實際遠投搏魚畫面"
+      },
+      "body": [
+        "遠投落點投影加深，拉魚前段維持遠處的小水花；接近船邊才明顯靠近與放大。",
+        "左右掙扎幅度隨距離縮小，釣線端點跟隨水花。近投至遠投以24～120公尺換算顯示，雙處米數同步。",
+        "差分更新，重新啟動啟動器即可套用。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r25-rod-plus99-franky-forge",
       "status": "published",

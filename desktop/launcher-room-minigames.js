@@ -894,7 +894,7 @@
       // first-person rod instead of sending stronger casts sideways.
       const depth=clamp((55-point.y)/21,0,1);
       const originalX=46+35*depth;
-      return{x:51+2*depth+clamp((point.x-originalX)*.1,-2,2),y:70-36*Math.pow(depth,.8)};
+      return{x:51+2*depth+clamp((point.x-originalX)*.1,-2,2),y:70-40*Math.pow(depth,.8)};
     }
     function fishingV4SteerAt(sea,event){const rect=sea.getBoundingClientRect(),x=(event.clientX-rect.left)/rect.width;return x<.42?-1:x>.58?1:0;}
     function setFishingV4Power(power){
@@ -1422,7 +1422,7 @@
         const castFarness=clamp((FISH_CAST_ZONES.near.y-castY)/(FISH_CAST_ZONES.near.y-FISH_CAST_ZONES.far.y),0,1);
         // The fight engine owns a relative 0–100 distance. Convert it using
         // this cast's landing depth so the rod rail reads like a distance gauge.
-        const shownMeters=Math.max(distance>0?.1:0,distance/100*(18+36*castFarness)).toFixed(1);
+        const shownMeters=Math.max(distance>0?.1:0,distance/100*(24+96*castFarness)).toFixed(1);
         const targetMeters=sea.querySelector('.room-fishing-target-distance');if(targetMeters)targetMeters.textContent=`${shownMeters} m`;
         const distanceLabel=fishingV5Hud.querySelector('.room-fishing-v5-distance');distanceLabel.textContent=`${shownMeters} m`;
         distanceLabel.title='依本作拋竿落點換算的魚距';
@@ -1447,12 +1447,13 @@
       // Hold the hook at its chosen near/mid/far depth, then bring its water
       // disturbance toward the boat as server distance falls. Sizing follows
       // that same projected water line, rather than an independent scale.
-      const floatY=challenge.stage==='fight'?castPoint.y+(73-castPoint.y)*closeness+(fish.y-.57)*7:castPoint.y;
-      const perspective=clamp((floatY-32)/42,0,1);
+      const approach=Math.pow(closeness,2.8);
+      const floatY=challenge.stage==='fight'?castPoint.y+(73-castPoint.y)*approach+(fish.y-.57)*(1+6*approach):castPoint.y;
+      const perspective=clamp((floatY-30)/44,0,1);
       sea.style.setProperty('--bobber-scale',(.18+.42*perspective).toFixed(3));
       const splashWidth=clamp(sea.clientWidth*.13,75,120)*(.12+.64*perspective*perspective);
       sea.style.setProperty('--splash-width',`${splashWidth.toFixed(1)}px`);
-      const visualX=clamp((castPoint.x+(fish.x-.5)*34)*(1-closeness)+(51+(fish.x-.5)*58)*closeness,12,88);
+      const visualX=clamp((castPoint.x+(fish.x-.5)*(8+26*approach))*(1-approach)+(51+(fish.x-.5)*58)*approach,12,88);
       const floatX=challenge.stage==='fight'?visualX:castPoint.x;
       sea.style.setProperty('--fish-x',visualX.toFixed(2)+'%');sea.style.setProperty('--fish-y',(floatY+4).toFixed(2)+'%');
       sea.style.setProperty('--fish-scale',(.55+.45*perspective).toFixed(3));

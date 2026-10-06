@@ -115,13 +115,14 @@ async function serve(){
         respond(res,{ok:true});return;
       }
       if(rel==='qa-distance'&&req.method==='POST'){
-        const session=sessions.get(client),{distance}=await readJson(req);
+        const session=sessions.get(client),{distance,zone}=await readJson(req);
         if(!session||session.challenge?.stage!=='fight'||!Number.isFinite(distance)||distance<10||distance>90){
           respond(res,{ok:false});return;
         }
         // Test bridge only: let the real sync core publish two controlled
         // distances so the ruler's travel direction can be inspected.
         session.challenge.distance=distance;
+        if(zone && minigames.FISHING_CAST_ZONES[zone])session.challenge.castTarget={...minigames.FISHING_CAST_ZONES[zone]};
         respond(res,{ok:true});return;
       }
       if(rel==='qa-strength'&&req.method==='POST'){
@@ -333,13 +334,14 @@ async function lineGeometry(page){
     const end={x:svgRect.left+Number(finish[1])*svgRect.width/1000,
       y:svgRect.top+Number(finish[2])*svgRect.height/600};
     const bobber=sea.querySelector('.room-fishing-v4-bobber'),bobRect=bobber.getBoundingClientRect();
-    const bobStyle=getComputedStyle(bobber),scale=parseFloat(bobStyle.scale)||1;
+    const bobStyle=getComputedStyle(bobber),bobMatrix=new DOMMatrixReadOnly(bobStyle.transform);
+    const scale=(parseFloat(bobStyle.scale)||1)*Math.hypot(bobMatrix.a,bobMatrix.b);
     const tilt=(parseFloat(sea.style.getPropertyValue('--bob-tilt'))||0)*Math.PI/180;
     const paintedWidth=Math.min(bobber.offsetWidth,bobber.offsetHeight*bobber.naturalWidth/bobber.naturalHeight);
     const paintedHeight=paintedWidth*bobber.naturalHeight/bobber.naturalWidth;
     // The bobber image's transparent top-ring hole spans source y=95..187,
     // centered at 141/1199; use painted content, not its letterboxed CSS box.
-    const radius=paintedHeight*(.5-141/1199)*scale*(sea.dataset.biting==='true'?.82:1);
+    const radius=paintedHeight*(.5-141/1199)*scale;
     const center={x:(bobRect.left+bobRect.right)/2,y:(bobRect.top+bobRect.bottom)/2};
     const ring={x:center.x+Math.sin(tilt)*radius,y:center.y-Math.cos(tilt)*radius};
     const splash=sea.querySelector('.room-fishing-v4-splash'),splashRect=splash.getBoundingClientRect();
@@ -512,7 +514,7 @@ function meterMatchesServer(meter){
   const ratio=server.strength/server.maxStrength;
   const risk=ratio<=.26?'danger':ratio<=.52?'warning':'safe';
   const castFarness=Math.max(0,Math.min(1,(.55-(server.castTarget?.y??.45))/.21));
-  const meters=(server.distance/100*(18+36*castFarness)).toFixed(1)+' m';
+  const meters=(server.distance/100*(24+96*castFarness)).toFixed(1)+' m';
   return Math.abs(meter.dial-remaining)<=2&&meter.pressureRingVisible&&
     Math.abs(meter.pressureAngle-meter.dial*3)<2&&meter.pressure===`${meter.dial}%`&&
     meter.pressureRisk===risk&&meter.pressureLabel==='耐壓'&&meter.strengthHint==='0% 斷線'&&
@@ -619,7 +621,7 @@ async function castAndHook(page,label){
   check(`${label}: header fully visible while waiting`,waitHeader.visible);
   check(`${label}: hook available only after bite`,await page.locator('.room-fishing-v4-hook').isDisabled()||
     await page.locator('.room-fishing-v4-sea').getAttribute('data-biting')==='true');
-  const waitLine=await lineGeometry(page);check(`${label}: waiting line joins rod and bobber`,
+  const waitLine=await lineGeometry(page);fs.writeFileSync(path.join(out,label+'-wait-line.json'),JSON.stringify(waitLine,null,2));check(`${label}: waiting line joins rod and bobber`,
     waitLine&&waitLine.tipGap<3&&waitLine.ringGap<8&&waitLine.paths[0]===waitLine.paths[1]);
   const waitLayers=await lineLayer(page);check(`${label}: waiting line and splash sit behind the rod foreground`,
     waitLayers.water<waitLayers.line&&waitLayers.line<waitLayers.rod&&waitLayers.splash<waitLayers.rod);
@@ -692,7 +694,7 @@ async function fightInteraction(page,label){
   check(`${label}: water splash follows visible fish`,Math.abs(moved.floatX-moved.fishX)<.02);
   const directed=motion.filter(sample=>sample.run==='surge'&&sample.direction===initial.direction);
   check(`${label}: splash travels toward the fish's left or right run`,
-    directed.length>1&&sign*(directed.at(-1).floatX-directed[0].floatX)>1.5);
+    directed.length>1&&sign*(directed.at(-1).floatX-directed[0].floatX)>.35);
   const water=await waterPerspective(page);
   check(`${label}: splash image stays centered on lateral water point`,
     Math.abs(water.splashX-water.floatX*water.seaWidth/100)<5);
@@ -1652,6 +1654,31 @@ async function runCastInputs(){
     }finally{await context.close();}
   }
 }
+async function runPullDepth(){
+ for(const [label,width,height] of [['pull-desktop',1440,900],['pull-minimum',960,640]]){
+  const context=await browser.newContext({viewport:{width,height}}),page=await context.newPage();
+  try{
+   await setup(page,label);await page.getByRole('button',{name:'開始釣魚'}).click();
+   await page.locator('.room-fishing-v4-cast').evaluate(b=>b.click());
+   await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.biting==='true',null,{timeout:8000});
+   await page.locator('.room-fishing-v4-hook').click();
+   await page.locator('.room-fishing-v4-sea[data-stage="fight"]').waitFor();
+   const samples=[];
+   for(const distance of [90,72,28,10]){
+    await page.evaluate(({label,distance})=>fetch(`/qa-distance?client=${label}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({distance,zone:'far'})}),{label,distance});
+    await page.waitForTimeout(700);
+    samples.push({distance,water:await waterPerspective(page),meters:await page.locator('.room-fishing-v5-distance').textContent()});
+    await snapshot(page,`${label}-${distance}distance`);
+   }
+   fs.writeFileSync(path.join(out,`${label}-depth.json`),JSON.stringify(samples,null,2));
+   check(label+': hooked far fish remains near horizon',samples[0].water.floatY<32);
+   check(label+': early reeling keeps fish far away',samples[1].water.floatY<34);
+   check(label+': approach progressively reaches foreground',samples[2].water.floatY>43&&samples[3].water.floatY>58);
+   check(label+': near disturbance scales up visibly',samples[3].water.splashWidth>samples[0].water.splashWidth*3);
+   check(label+': far meter exceeds 100m',parseFloat(samples[0].meters)>100);
+  }finally{await context.close();}
+ }
+}
 async function runSpotProjection(){
   const context=await browser.newContext({viewport:{width:1440,height:900}}),page=await context.newPage();
   try{
@@ -1663,9 +1690,9 @@ async function runSpotProjection(){
       await page.locator('.room-fishing-v4-sea[data-stage="wait"]').waitFor();
       await page.waitForFunction(()=>!document.querySelector('.room-fishing-v4-sea')?.classList.contains('cast-flight'));
       await page.evaluate(client=>fetch(`/qa-cast-target?client=${client}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({zone:'far'})}),label);
-      await page.waitForFunction(()=>Math.abs(parseFloat(document.querySelector('.room-fishing-v4-sea')?.style.getPropertyValue('--float-y'))-34)<.15);
+      await page.waitForFunction(()=>Math.abs(parseFloat(document.querySelector('.room-fishing-v4-sea')?.style.getPropertyValue('--float-y'))-30)<.15);
       const water=await waterPerspective(page),layers=await lineLayer(page);
-      check(`${label}: forward landing lies on the visible middle water`,water.floatY>=34&&water.floatY<=70&&
+      check(`${label}: forward landing lies on the visible middle water`,water.floatY>=30&&water.floatY<=70&&
         water.floatX>=51&&water.floatX<=53&&layers.splash<layers.rod&&layers.line<layers.rod);
       await snapshot(page,label);await page.evaluate(()=>__minigame.dismiss());
     }
@@ -1797,6 +1824,7 @@ async function main(){
   browser=await chromium.launch({executablePath:chrome,headless:true});
   try{
     verifyZeroStrengthBreak();
+    if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='pull')await runPullDepth();
     if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='damage')await runDamage();
     if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='forge')await runForge();
     if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='power')await runPower();
