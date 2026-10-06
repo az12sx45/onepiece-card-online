@@ -1726,3 +1726,5 @@ Board 多人模式不是 server authoritative。實際規則在前端執行，se
 ## 2026-10-06 r25 各角色釣竿+99與佛朗基強化
 launcher-life.js新增fishingRodProgression:2的冪等正規化，舊0/1/2/3→0/33/66/99；既有active session不遷移。launcher-fishing-balance.js提供100級單調攻擊與抗拉、99級單調費用（20/35/55起，最高411<500金幣上限）。launcher-minigames.js保留角色等級與V4相容映射。launcher-fishing-v5.js battleVersion3新回合、有效控制gear=level/33，舊2回合用LEGACY_RODS；最強魚須體力0才可釣起，新回合保護期限300秒。+99 DPS100、必殺18000，最強HP36000。UI釣魚工房／水族箱顯示+數字；加入1900ms佛朗基敲擊/火花/成功演出及減少動態偏好。新公告附實測截圖WebP。
 167項後端魚分級（108種子可釣起、12種子最強魚恰好2次必殺）、74項PGlite升級扣款/防重/角色独立/遷移冪等/+99邊界、49項必殺UI、11項傷害UI、15項工房桌面與960x640動畫UI通過並目視。npm start根頁200，本機無DB；測試帳號/獎勵為替身，未正式玩家帳號人工驗收。公開部署待讀回。LATTICE任務API不可用，未宣稱持久化或圖譜驗收。
+
+最後期限核對：新版battleVersion3整場minigame期限360秒（含拋竿及咬鉤），搏魚上限300秒；舊session期限不變，避免新長搏魚被原180秒session提前中止。

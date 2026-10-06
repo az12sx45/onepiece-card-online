@@ -156,7 +156,7 @@ function shuffled(list) {
   const result=[...list];for(let i=result.length-1;i>0;i--){const j=crypto.randomInt(i+1);[result[i],result[j]]=[result[j],result[i]];}return result;
 }
 function jobFor(session) {return session.kind==='work'?(session.jobId||'supply'):null;}
-function durationFor(session) {return session.kind==='work'&&jobFor(session)!=='supply'?300000:180000;}
+function durationFor(session) {if(session.kind==='fishing'&&session.challenge?.battleVersion===3)return 360000;return session.kind==='work'&&jobFor(session)!=='supply'?300000:180000;}
 function fishingChallenge(id,roundIndex,issuedAt) {
   // The fight pattern stays on the server; only the current pull is shown.
   const pattern=Array.from({length:24},(_,index)=>index<2?'steady':pick(['steady','steady','surge']));
