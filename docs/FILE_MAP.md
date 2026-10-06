@@ -1670,3 +1670,5 @@ launcher-life.js新增fishingRodProgression:2的冪等正規化，舊0/1/2/3→0
 修改 desktop/launcher-room-minigames.js：最遠落點30%水深（原34%），approach=closeness^2.8，前段維持遠處、後段靠近；水平及垂直掙扎按深度縮小，水花／浮標共用透視；顯示24～120m換算，非改動後端傷害或收線難度。新增拉魚90/72/28/10距離QA及六海域投影核對，兩桌面尺寸15項拉魚與15項海域檢查通過；公告附實測截圖。發布待讀回。完整desktop測試曾在等待期線接點檢查失敗，未列為通過。LATTICE API未提供，不宣稱保存。
 
 補充驗證：完整desktop搏魚112項通過；舊QA原先漏算bobber transform矩陣縮放，已修正量測，米數期望與遠處左右幅度同步新投影。npm start / GET200及公告82項通過；本機無DB，帳號與結算測試替身。候選65檔SHA讀回、差分393481bytes、重查0下載通過。
+
+公開發布完成：source 2819fc20bcf1792061f1445540d23588548bfced；Render dep-db2g2vvf3r2c73fkpleg 2026-10-06 22:21:07台北Live，PostgreSQL ready。公開r26 SHA256 71052f1e148b4d5a0e2a98f2bcefbac48cdb2d28afd3292776bb167a371c6d0f。實際已安裝快取25→26下載393481bytes，65檔SHA與再檢查零下載通過，變更blob遠端驗證通過。證據D:/Codex_QA/launcher-fishing-r26/release-evidence.json。未正式玩家人工驗收。
