@@ -137,7 +137,7 @@ async function serve(){
       }
       if(rel==='qa-power'&&req.method==='POST'){
         const session=sessions.get(client);if(!session?.challenge){respond(res,{ok:false});return;}
-        session.challenge.powerCharge=6;session.challenge.fishStamina=url.searchParams.get('stamina')==='40'?40:90;
+        session.challenge.powerCharge=6;session.challenge.fishStamina=url.searchParams.get('stamina')==='20'?20:90;
         respond(res,{ok:true});return;
       }
       if(rel==='qa-audio-calm'&&req.method==='POST'){
@@ -1720,8 +1720,8 @@ async function runPower(){
    await page.waitForFunction(()=>{const i=document.querySelector('.room-fishing-special-character');return i?.complete&&i.naturalWidth>0;});
    check(label+': normal-proportion dedicated character art used',await page.locator('.room-fishing-special-character').evaluate(i=>i.src.includes('fishing_v6/special-luffy.webp')&&i.naturalWidth>=900));
    await page.locator('.room-fishing-damage[data-kind=special]').waitFor();
-   check(label+': special jump shows actual 55 damage',await page.locator('.room-fishing-damage[data-kind=special]').last().getAttribute('data-amount')==='55');
-   check(label+': skill really reduces fish stamina',sessions.get('power').challenge.fishStamina<=35);
+   check(label+': special jump shows actual 35 damage',await page.locator('.room-fishing-damage[data-kind=special]').last().getAttribute('data-amount')==='35');
+   check(label+': skill really reduces fish stamina',sessions.get('power').challenge.fishStamina<=55);
    check(label+': skill consumes charges',sessions.get('power').challenge.powerCharge===0);
    await page.waitForTimeout(550);await snapshot(page,label+'-skill');
    await page.evaluate(()=>fetch('/qa-power?client=power',{method:'POST'}));
@@ -1734,7 +1734,7 @@ async function runPower(){
    await page.waitForTimeout(1700);
    const burstSound=await page.evaluate(t=>({pans:__qa.pans.filter(x=>x.at>=t).map(x=>x.pan),tones:__qa.soundStarts.filter(x=>x.at>=t).map(x=>x.frequency)}),burstSoundStart);
    check(label+': burst sounds move left and right and vary their pitches',burstSound.pans.some(x=>x<-.4)&&burstSound.pans.some(x=>x>.4)&&new Set(burstSound.tones).size>=5);
-   await page.evaluate(()=>fetch('/qa-power?client=power&stamina=40',{method:'POST'}));
+   await page.evaluate(()=>fetch('/qa-power?client=power&stamina=20',{method:'POST'}));
    await page.waitForFunction(()=>!document.querySelector('.room-fishing-special')?.disabled);
    await page.locator('.room-fishing-special').click();await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
    const finishSequence=sessions.get('power').challenge.special.sequence.slice();
@@ -1745,7 +1745,7 @@ async function runPower(){
    check(label+': lethal skill keeps the previous stamina visible during wind-up',hpAtHit>0);
    await page.waitForTimeout(1250);
    const hpDuringHit=Number(await page.locator('.room-fishing-fish-stamina').getAttribute('aria-valuenow'));
-   check(label+': lethal jump clips damage to remaining 40 HP',await page.locator('.room-fishing-damage[data-kind=special]').last().getAttribute('data-amount')==='40');
+   check(label+': lethal jump clips damage to remaining 20 HP',await page.locator('.room-fishing-damage[data-kind=special]').last().getAttribute('data-amount')==='20');
    check(label+': lethal skill visibly drains stamina before landing',hpDuringHit>0&&hpDuringHit<hpAtHit);
    await page.waitForTimeout(750);
    check(label+': zero stamina remains visible before the catch screen',await page.locator('.room-fishing-fish-stamina').getAttribute('aria-valuenow')==='0'&&await page.locator('.room-fishing-v3-catch-name').count()===0);

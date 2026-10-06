@@ -510,8 +510,8 @@
       const workshop=body?.querySelector('.room-fishing-v4-workshop');if(!workshop)return;
       const level=fishingRodLevel,max=ROD_UPGRADE_COSTS.length,cost=fishingRodNextCost;
       workshop.querySelector('.room-fishing-v4-workshop-level').textContent=fishingRodKnown?`Lv ${level} / ${max}`:'資料讀取中';
-      workshop.querySelector('.room-fishing-v4-workshop-current').textContent=!fishingRodKnown?'正在讀取釣竿狀態。':level===0?'目前：標準釣竿，收線4傷害／秒、必殺55；適合階級I。':`目前：收線傷害 ${[4,12,34,90][level]}／秒，必殺傷害 ${[55,160,420,1100][level]}；可挑戰階級 ${['I','II','III','IV'][level]}。`;
-      workshop.querySelector('.room-fishing-v4-workshop-next').textContent=!fishingRodKnown?'連上基地後才能改裝。':level===max?'已滿級；魚種與咬鉤機率不受釣竿等級影響。':`下一級：收線 ${[4,12,34,90][Math.min(3,level+1)]}傷害／秒，必殺 ${[55,160,420,1100][Math.min(3,level+1)]}；竿力提高，適合階級 ${['I','II','III','IV'][Math.min(3,level+1)]}。`;
+      workshop.querySelector('.room-fishing-v4-workshop-current').textContent=!fishingRodKnown?'正在讀取釣竿狀態。':level===0?'目前：標準釣竿，收線2傷害／秒、必殺35；適合階級I。':`目前：收線傷害 ${[2,6,17,45][level]}／秒，必殺傷害 ${[35,105,275,720][level]}；可挑戰階級 ${['I','II','III','IV'][level]}。`;
+      workshop.querySelector('.room-fishing-v4-workshop-next').textContent=!fishingRodKnown?'連上基地後才能改裝。':level===max?'已滿級；魚種與咬鉤機率不受釣竿等級影響。':`下一級：收線 ${[2,6,17,45][Math.min(3,level+1)]}傷害／秒，必殺 ${[35,105,275,720][Math.min(3,level+1)]}；竿力提高，適合階級 ${['I','II','III','IV'][Math.min(3,level+1)]}。`;
       const upgrade=workshop.querySelector('.room-fishing-v4-workshop-upgrade');
       upgrade.textContent=!fishingRodKnown?'釣竿資料讀取中':level===max?'已升至最高等級':`請佛朗基改裝 · ${cost} 金幣`;
       upgrade.disabled=requesting||!fishingRodKnown||level===max;
@@ -622,8 +622,8 @@
       const percentage=clamp(hp/Math.max(1,max)*100,0,100);
       if(!panel)return;
       panel.querySelector('.room-fishing-fish-stamina i').style.setProperty('--fish-stamina',`${percentage}%`);
-      panel.querySelector('.room-fishing-fish-stamina strong').textContent=`${Number(hp.toFixed(1))} / ${max}`;
-      const meter=panel.querySelector('.room-fishing-fish-stamina');meter.setAttribute('aria-valuemax',String(max));meter.setAttribute('aria-valuenow',String(Number(hp.toFixed(1))));meter.dataset.level=percentage<=25?'low':percentage<=55?'mid':'high';
+      panel.querySelector('.room-fishing-fish-stamina strong').textContent=`${Math.round(hp)} / ${max}`;
+      const meter=panel.querySelector('.room-fishing-fish-stamina');meter.setAttribute('aria-valuemax',String(max));meter.setAttribute('aria-valuenow',String(Math.round(hp)));meter.dataset.level=percentage<=25?'low':percentage<=55?'mid':'high';
     }
     function fishingImpactStamina(sea,target){
       const impact=sea?.__powerStamina;
@@ -642,7 +642,7 @@
         const delay=event.kind==='special'?900:event.kind==='burst'?250:event.kind==='reel'?reelIndex++*350:0;
         setTimeout(()=>{
           if(current!==generation||!active()||!sea.isConnected||!['answer','landing'].includes(phase)||event.kind==='reel'&&!fishingV4Reeling)return;
-          const label=node('span','room-fishing-damage',`−${Number(event.amount.toFixed(1))}`);label.dataset.kind=event.kind;label.dataset.amount=String(event.amount);
+          const label=node('span','room-fishing-damage',`−${Math.max(1,Math.round(event.amount))}`);label.dataset.kind=event.kind;label.dataset.amount=String(event.amount);
           label.style.setProperty('--damage-jitter',`${((event.id%3)-1)*22}px`);sea.querySelector('.room-fishing-damage-layer').append(label);
           setTimeout(()=>label.remove(),1050);
         },delay);

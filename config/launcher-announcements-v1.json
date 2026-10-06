@@ -1,7 +1,29 @@
 {
   "schemaVersion": 1,
-  "revision": 36,
+  "revision": 37,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r23-fishing-stamina-pace",
+      "status": "published",
+      "publishedAt": "2026-10-06T10:31:06.318Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r23",
+      "title": "海釣調整｜拉長搏魚節奏、整數傷害",
+      "summary": "收線體力消耗減半，甩竿與必殺傷害降低；傷害跳字改成整數。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-damage-r22.webp",
+        "alt": "實際海釣畫面：水面魚標旁紅色傷害跳字、階級I與數字體力"
+      },
+      "body": [
+        "收線基礎傷害調整為每秒2／6／17／45；必殺35／105／275／720，爆拉8／24／65／170。保留四級魚體力及各角色釣竿的獨立升級。",
+        "傷害跳字與體力數字改為整數，內部保留精準計算；收線放開仍停止傷害。重新啟動取得簽署差分。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r22-fishing-damage-and-grades",
       "status": "published",

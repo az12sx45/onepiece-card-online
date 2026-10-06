@@ -17,7 +17,7 @@ const hp=ledger.fishStamina,events=ledger.damageEvents.length;
 check('reel events equal actual spent HP',Math.abs(ledger.damageEvents.reduce((n,e)=>n+e.amount,0)-(1800-hp))<.001);
 V.simulate(ledger,date(6100),1);check('release produces neither damage nor extra events',ledger.fishStamina===hp&&ledger.damageEvents.length===events);
 ledger.powerCharge=6;V.power(ledger,date(6200),'special');for(const key of ledger.special.sequence.slice())V.power(ledger,date(6300),'specialKey',key);
-check('special event is actual authoritative damage',ledger.damageEvents.at(-1).kind==='special'&&ledger.damageEvents.at(-1).amount===1100&&ledger.powerFeedback.damage===1100);
+check('special event is actual authoritative damage',ledger.damageEvents.at(-1).kind==='special'&&ledger.damageEvents.at(-1).amount===720&&ledger.powerFeedback.damage===720);
 check('old active round retains 100 HP and old skill damage',(()=>{const r=round('golden-whale',0);delete r.battleVersion;V.hook(r,date(4000),1,'golden-whale');r.powerCharge=6;V.power(r,date(4100),'special');for(const key of r.special.sequence.slice())V.power(r,date(4200),'specialKey',key);return r.maxFishStamina===100&&r.fishStamina===45;})());
 const results=[];
 for(const fish of M.FISH_SPECIES){const required=B.TIERS[M.FISH_RARITY_BY_ID[fish.id]].rod;

@@ -1707,3 +1707,9 @@ Board 多人模式不是 server authoritative。實際規則在前端執行，se
 
 - r22公開部署完成：2026-10-06 17:21:02（台北），Render dep-db2bmcegekts739r7cpg 顯示 Deploy succeeded | Live，來源65e9f2143578fa99cf2920546825a3bdf6d59525；PostgreSQL ready與連線成功。公開revision22清單 SHA256 34cf3110724cbaa6d773b0382c6e2257e03cd2a32048bc731c508e54aa7e1d10完全一致。
 - 實際r21快取備份已核對62項素材，公開21→22下載477,006 bytes；63項读回校驗及重查零下載通過。分級155（108建議竿級釣魚情境）／新玩法78／PGlite釣竿59／公告82／傷害11＋必殺49瀏覽器檢查通過。新開一竿套用分級，舊active回合相容已測。正式玩家帳號操作驗收未執行；證據D:/Codex_QA/launcher-fishing-r22/release-evidence.json。
+
+
+## 2026-10-06 海釣 r23
+收線DPS減半至2/6/17/45；甩竿3/8/21/52、爆拉8/24/65/170、必殺35/105/275/720。魚分級HP與拉力不變。launcher-fishing-balance.js、launcher-room-minigames.js與釣魚QA同步；UI傷害及體力顯示整數，內部精度保留。公告已加入。驗證與公開部署證據待本次實測補入。
+
+驗證：155項分級後端（含108種子案例）、11項收線桌面UI、49項必殺節奏UI、82項公告QA通過。npm start已啟動；本機無DATABASE_URL，帳號儲存與獎勵為測試替身。已目視傷害整數畫面。63檔差分驗證通過，僅241462 bytes。LATTICE任務API本階段未提供，未宣稱任務持久化。公開Live尚待讀回。
