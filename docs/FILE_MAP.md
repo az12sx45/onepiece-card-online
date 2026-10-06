@@ -1663,3 +1663,5 @@ launcher-life.js新增fishingRodProgression:2的冪等正規化，舊0/1/2/3→0
 167項後端魚分級（108種子可釣起、12種子最強魚恰好2次必殺）、74項PGlite升級扣款/防重/角色独立/遷移冪等/+99邊界、49項必殺UI、11項傷害UI、15項工房桌面與960x640動畫UI通過並目視。npm start根頁200，本機無DB；測試帳號/獎勵為替身，未正式玩家帳號人工驗收。公開部署待讀回。LATTICE任務API不可用，未宣稱持久化或圖譜驗收。
 
 最後期限核對：新版battleVersion3整場minigame期限360秒（含拋竿及咬鉤），搏魚上限300秒；舊session期限不變，避免新長搏魚被原180秒session提前中止。
+
+公開驗證完成：最終source f46b772a6b95d69fe0eac0e0ef2aff77a8bc1add（含88aa2a3bd內容），Render dep-db2eq750qq3c73d4hrg0 2026-10-06 20:54:09台北Live、PostgreSQL ready；先前88aa建置已取消未上線。公開r25 SHA256 c5e25185577c642d64f4d25391fb54748f9d98ea89e1f5f4bbaaf10c48d35919；4變更blob HEAD/GET/大小/SHA通過，實際已安裝快取24→25僅461920 bytes，64檔讀回與再檢查零下載通過，62舊blob備份雜湊通過。最終session期限360秒直接建立實測通過。證據D:/Codex_QA/launcher-fishing-r25/release-evidence.json。尚未正式玩家帳號人工驗收。
