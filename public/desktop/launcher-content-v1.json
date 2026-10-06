@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 17,
-  "publishedAt": "2026-10-05T17:51:54.071Z",
+  "revision": 18,
+  "publishedAt": "2026-10-06T00:32:33.423Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -27,6 +27,11 @@
       "path": "images/launcher_announcements/launcher-fishing-power-r17.webp",
       "bytes": 289904,
       "sha256": "079a6b1e35c76d8e3737090ad1f69117fc15022b4f3692e8ca5534a44c0581a3"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-fishing-target-r18.webp",
+      "bytes": 154362,
+      "sha256": "511774d78ab898d2c1ed51064afa7e5e3bccc7ca0de7dc5aa7d84d904ca9d813"
     },
     {
       "path": "images/launcher_room/fish_master/alligator-gar.webp",
@@ -92,6 +97,11 @@
       "path": "images/launcher_room/fishing_v5/rod-no-line-v1.webp",
       "bytes": 1329848,
       "sha256": "f14b2a302fae4d05b772c1db5be3457b5dbec1da5c0fd9f35a24064ca4d492e4"
+    },
+    {
+      "path": "images/launcher_room/fishing_v6/fish-target-silhouette.webp",
+      "bytes": 72948,
+      "sha256": "d0e51fb49a69c9a29e22c4007c64639f00ff9d9ab86d4c57afaf4964eb4952b2"
     },
     {
       "path": "images/launcher_room/fishing_v6/sea-deep.webp",
@@ -275,13 +285,13 @@
     },
     {
       "path": "launcher-room-minigames.css",
-      "bytes": 123264,
-      "sha256": "b3ab3504f838388a43fdcaec9883249ad5ff080c0e6ef05a8490204c787ac9b6"
+      "bytes": 126923,
+      "sha256": "5e8417adb6cd4c1de7fff9358a704f5b061bce7981301ef119b52726d0fa818c"
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 231928,
-      "sha256": "ad890d54061db6dbd5626ffb7495ea7ce9da75eb5ed12e899b1707d97dedc253"
+      "bytes": 235291,
+      "sha256": "65e33fd8bb2c9c0c043e8fcb35e27766017f7b9e942622fafde9c4f7bde6fd8a"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -302,6 +312,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "iFNVigm4PvduypC9oxY6ae8TJi894e8AT9filYkZ7P1YNKZ0Yio480p7+1wphbbE4ZIzLsjKp6PrkHG6PwZuDA=="
+    "value": "vjhwZeHI3dUPmYJ+3BzSNI2mOVif9wm0bne1fMtb5BjmExAQjAKDR7o5GD0gUfKSeTokIRnV/VKInj1b6xMrDA=="
   }
 }

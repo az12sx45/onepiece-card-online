@@ -223,14 +223,16 @@ function selectPhase(round,skill,index,at) {
   // their lateral run timing and are never asked for a new control.
   // Most directed runs now offer a counter. A cue-bearing run is at least
   // 3.85s long, so even consecutive cues leave time to reel between them.
-  const cuePhase=Boolean(mode&&round.flickMode&&((round.motionSeed>>>2)+index)%4!==0);
-  const length=cuePhase?Math.max(rawLength,FLICK_MIN_SURGE_MS):rawLength;
+  const cuePhase=Boolean(round.flickMode&&(round.powerMode||mode&&((round.motionSeed>>>2)+index)%4!==0));
+  const length=round.powerMode?Math.max(3700,Math.min(rawLength,4400)):
+    cuePhase?Math.max(rawLength,FLICK_MIN_SURGE_MS):rawLength;
   round.runState=mode?'surge':'calm';
   const side=round.behavior.style==='heavy'?Math.floor(index/2):index;
   round.pullDirection=mode?((round.motionSeed+side)%2?'left':'right'):'steady';
   if(cuePhase){
-    const direction=((round.motionSeed>>>3)+index)%3===0?'up':round.pullDirection;
-    if(direction==='up')round.pullDirection='deep';
+    const direction=((round.motionSeed>>>3)+index)%3===0?'up':mode?round.pullDirection:
+      ((round.motionSeed+index)%2?'left':'right');
+    round.pullDirection=direction==='up'?'deep':direction;
     const tellMs=FLICK_TELL_MS[round.behavior.style];
     round.flickTell={id:index+1,direction,startedAt:iso(at),until:iso(at+tellMs)};
     round.flickCue=null;
@@ -302,7 +304,7 @@ function resolveFlick(round,at,result) {
   return settlement(round);
 }
 
-function settlement(round){return round.strength<=0?'line_snapped':round.distance<=0&&(!round.powerMode||round.fishStamina<=0)?'landed':round.distance>=100?'escaped':null;}
+function settlement(round){return round.strength<=0?'line_snapped':round.distance<=0||round.powerMode&&round.fishStamina<=0?'landed':round.distance>=100?'escaped':null;}
 const SPECIALS=Object.freeze({luffy:['橡膠橡膠・JET手槍','rubber'],zoro:['三刀流・百八煩惱鳳','sword'],nami:['雷光槍天候','weather'],usopp:['必殺・綠星梧桐手裏劍','star'],sanji:['惡魔風腳・畫龍點睛踢','flame'],chopper:['刻蹄・櫻','strength'],robin:['千紫萬紅・巨大樹','flower'],franky:['Franky Radical Beam','cola'],brook:['靈魂之劍','soul'],jinbe:['魚人柔術・海流過肩摔','wave'],ace:['火拳','flame'],sabo:['龍爪拳・龍之鉤爪','flame'],law:['ROOM・指揮棒','room'],hancock:['芳香腳','heart']});
 function power(round,now,move,direction){
   if(!round.powerMode)return{error:'invalid_fishing_action'};
@@ -359,6 +361,7 @@ function flick(round,now,direction,cueId) {
 
 function simulate(round,now,difficulty=1) {
   if(round.stage!=='fight')return null;
+  const completed=settlement(round);if(completed)return completed;
   const requested=now.getTime(),deadline=Date.parse(round.fightUntil),end=Math.min(requested,deadline);
   let cursor=Date.parse(round.lastSimAt);
   if(!Number.isFinite(cursor)||!Number.isFinite(end))return 'escaped';
@@ -421,7 +424,7 @@ function simulate(round,now,difficulty=1) {
         gear*ROD_EFFECT_PER_LEVEL.reelGain))*
         (accent?.grip||1)*(relief?1.2:1);
       const escape=(surge?surgePull*(aligned?.62:opposed?1.3:1.06):.5)*(relief?.65:1);
-      round.distance=clamp(round.distance+(escape-gain*(round.powerMode?.48:1))*dt,0,100);
+      round.distance=clamp(round.distance+(escape-gain*(round.powerMode?.30:1))*dt,0,100);
       if(round.powerMode)round.fishStamina=round4(Math.max(0,round.fishStamina-(surge&&!aligned?.35:1.35+gear*.12)*dt));
       // Holding the reel without a pause costs increasing strength. This
       // makes release a real choice even for a patient, easy-to-catch fish.
@@ -450,7 +453,7 @@ function simulate(round,now,difficulty=1) {
       if(outcome)return outcome;
     }
     if(round.strength<=0)return 'line_snapped';
-    if(round.distance<=0&&(!round.powerMode||round.fishStamina<=0))return 'landed';
+    if(round.distance<=0||round.powerMode&&round.fishStamina<=0)return 'landed';
     if(round.distance>=100)return 'escaped';
   }
   if(round.flickCue&&cursor>=Date.parse(round.flickCue.until)){

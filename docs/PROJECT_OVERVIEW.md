@@ -2504,3 +2504,16 @@ This describes the prepared 1.2.7 candidate. Public release status requires the 
 
 - 公開部署完成（2026-10-06）：Render dep-db1u8nff3r2c73evdtrg 顯示 Deploy succeeded | Live，來源 e2b6a88568db265bbf20ac55d271abb91a6a3ce3；正式 PostgreSQL 連線成功。公開 r17 清單 SHA256 f3136c085c8dacdf7a98285d1c28cbc2956750e5bca6fb342e52b484e26594da 完全一致。
 - 已備份實際 launcher-content-v1 快取到 D:/Codex_QA/launcher-fishing-r17/actual-cache-before-r17，再以公開來源升級16→17；58項讀回校驗、6,790,607 bytes 唯一差分、重查零下載通過。真人帳號實際釣魚驗收未執行。
+
+
+## 2026-10-06 — 釣魚 r18（水面目標與爆拉，候選發布）
+
+- 參考玩家 PC 錄影21秒畫面核對：水面白色魚剪影、紅環和下方米數；上方獨立分格魚體力條。沒有採用徽章方案；既有捲線錶保留，新 power UI 隱藏重複的橫向釣竿魚距軌道。
+- 上岸判定修正為魚距歸零或魚體力耗盡，任一達成即進入伺服器上岸流程；魚線強度耗盡仍優先斷線。simulate 開始即核對終局，避免0 m被下一步魚逃脫重新拉走。未上岸魚距顯示至少0.1 m，避免小數四捨五入顯示假的0 m。
+- powerMode 基礎收線倍率0.48→0.30（約慢37.5%），個人升級增益顯示更新至每級0.135／秒。每個3.7～4.4秒階段提供方向甩竿，包括平穩階段；維持各魚風格的警告時間及2.6秒按鍵窗口。舊非power V5時間與收線倍率維持原值。
+- 爆拉五段左、右、左、右、上動作、竿身彎曲與捲線器加速。五段音效使用已載入的本機Foley和不同音高／左右聲像合成，離開畫面或失焦停止；沒有新增外部聲音下載。
+- 上岸時保存最近爆拉／必殺技展示資訊到 session.feedback.powerFinish；前端先展示1.5／2.6秒再結算，不讓造成最後一擊的技能畫面消失。伺服器仍決定漁獲，視覺延時不能重複領取。
+- 檔案：server/launcher-fishing-v5.js、launcher-minigames.js；desktop/launcher-room-minigames.js/css；public/images/launcher_room/fishing_v6/fish-target-silhouette.webp；公告圖、config/launcher-announcements-v1.json、相關釣魚QA腳本。
+- 驗證：新玩法67檢查（包含真實answer路由0m但有體力的結算）；甩竿3204檢查、36魚144情境、1764次甩竿；desktop與960×640必殺／爆拉／魚標／直接上岸27項瀏覽器檢查，無JS錯誤或缺圖；公告82檢查；npm start 43218、board_start HTTP200。一般QA不是正式玩家帳號體驗；公開部署證據待讀回。LATTICE目前無可呼叫API，未宣稱持久任務紀錄。
+
+- r18簽署候選：60項、SHA256 296c85436fe1aae0cb883b01834bdcad82ff84157461cb189d0425f272dd7fdb。R2 changed blobs HEAD/GET/size/SHA通過；隔離17→18僅下載589524 bytes，60項校驗、重查零下載通過。被拒絕的徽章原稿僅刪除該單一1,504,285 bytes檔案，未接入專案；魚剪影素材保留。

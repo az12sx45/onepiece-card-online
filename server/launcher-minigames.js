@@ -381,6 +381,9 @@ function advanceRound(session,correct,now,reason='') {
   session.combo=correct?session.combo+1:0;
   if(correct){session.correctRounds++;session.score+=100+Math.min(4,session.combo-1)*25;}
   session.feedback={roundIndex:session.roundIndex,correct,combo:session.combo,correctRounds:session.correctRounds,score:session.score,...reason?{reason}:{}};
+  const powerFinish=session.challenge?.powerFeedback;
+  if(reason==='landed'&&powerFinish&&['burst','special'].includes(powerFinish.type)&&now.getTime()-Date.parse(powerFinish.at)<1800)
+    session.feedback.powerFinish={...powerFinish};
   session.roundIndex++;
   session.challenge=session.roundIndex<session.totalRounds?challenge(session.kind,session.roundIndex,now,jobFor(session),session.fishingVersion||1,session.catchSpeciesId,session.rodLevel,session.flickMode===true):null;
   return{};

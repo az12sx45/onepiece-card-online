@@ -52,7 +52,7 @@ function fightWithFlicks(seed,speciesId,skill,cadenceMs=350){
   return{result,flicks};
 }
 function cueFrequency(seed,speciesId){
-  const round=makeRound(seed,speciesId),counts={surges:0,cues:0};
+  const round=makeRound(seed,speciesId),counts={surges:0,cues:0,calmCues:0};
   for(let index=1;index<=200;index++){
     // Inspect deterministic phase draws without ending the sample when the
     // fish is caught; the production fight still uses the normal deadlines.
@@ -66,9 +66,9 @@ function cueFrequency(seed,speciesId){
         counts.cues++;
         check('every directional cue gives room to respond',
           Date.parse(round.phaseUntil)-Date.parse(round.flickTell.startedAt)>=
-            v5.FLICK_MIN_SURGE_MS,true);
+            3700,true);
       }
-    }else check('calm phase has no directional cue',round.flickTell,null);
+    }else{check('power mode calm phase also offers a directional cue',Boolean(round.flickTell),true);counts.calmCues++;}
   }
   return counts;
 }
@@ -100,8 +100,8 @@ function main(){
   for(const speciesId of ['striped-clam','glistening-saury','aurora-sunfish']){
     const sampled=cueFrequency(71,speciesId);
     frequency[speciesId]=sampled;
-    check(`${speciesId} offers counters in roughly three quarters of directed runs`,
-      sampled.cues/sampled.surges>=.7&&sampled.cues/sampled.surges<=.8,true);
+    check(`${speciesId} offers a counter in every phase including calm water`,
+      sampled.cues+sampled.calmCues===200,true);
   }
   for(const [speciesId,style] of [['striped-clam','patient'],['glistening-saury','dart'],
     ['golden-whale','heavy'],['pumpkin-octopus','weave']]){
@@ -205,6 +205,7 @@ function main(){
     heavyWrong.distance-heavy.distance>lightWrong.distance-light.distance,true);
   const up=directions.up.round;
   check('up flick is a deep dive, not neutral lateral steer',up.pullDirection,'deep');
+  up.runState='surge'; // Compare a dive rather than the new calm-water gesture cue.
   const upHit=JSON.parse(JSON.stringify(up)),upIgnored=JSON.parse(JSON.stringify(up));
   const upAt=Date.parse(up.flickCue.startedAt)+100;
   v5.flick(upHit,date(upAt),'up',up.flickCue.id);

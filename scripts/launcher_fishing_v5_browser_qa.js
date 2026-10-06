@@ -132,7 +132,7 @@ async function serve(){
       }
       if(rel==='qa-power'&&req.method==='POST'){
         const session=sessions.get(client);if(!session?.challenge){respond(res,{ok:false});return;}
-        session.challenge.powerCharge=6;session.challenge.fishStamina=90;
+        session.challenge.powerCharge=6;session.challenge.fishStamina=url.searchParams.get('stamina')==='40'?40:90;
         respond(res,{ok:true});return;
       }
       if(rel==='qa-audio-calm'&&req.method==='POST'){
@@ -1671,6 +1671,8 @@ async function runPower(){
    await page.evaluate(()=>fetch('/qa-power?client=power',{method:'POST'}));
    await page.waitForFunction(()=>!document.querySelector('.room-fishing-special')?.disabled);
    check(label+': stamina meter and six charge lights visible',await page.locator('.room-fishing-fish-stamina').isVisible()&&await page.locator('.room-fishing-power-charge i[data-full=true]').count()===6);
+   check(label+': fish silhouette is over water, separate from stamina bar',await page.locator('.room-fishing-fish-target').isVisible()&&await page.locator('.room-fishing-fish-stamina img').count()===0);
+   check(label+': target shows the distance under the silhouette',/m$/.test(await page.locator('.room-fishing-target-distance').textContent()));
    await snapshot(page,label+'-fight');await page.locator('.room-fishing-special').click();
    await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
    await snapshot(page,label+'-rhythm');
@@ -1684,9 +1686,23 @@ async function runPower(){
    await page.waitForTimeout(550);await snapshot(page,label+'-skill');
    await page.evaluate(()=>fetch('/qa-power?client=power',{method:'POST'}));
    await page.waitForFunction(()=>!document.querySelector('.room-fishing-burst')?.disabled);
+   const burstSoundStart=await page.evaluate(()=>performance.now());
    await page.locator('.room-fishing-burst').click();await page.waitForTimeout(400);
    check(label+': burst spends three charges',sessions.get('power').challenge.powerCharge===3);
+   check(label+': burst animates the rod with rapid alternating pulls',await page.locator('.room-fishing-v5-rod').evaluate(r=>getComputedStyle(r).animationName==='room-fishing-burst-pulls'));
    await snapshot(page,label+'-burst');
+   await page.waitForTimeout(1700);
+   const burstSound=await page.evaluate(t=>({pans:__qa.pans.filter(x=>x.at>=t).map(x=>x.pan),tones:__qa.soundStarts.filter(x=>x.at>=t).map(x=>x.frequency)}),burstSoundStart);
+   check(label+': burst sounds move left and right and vary their pitches',burstSound.pans.some(x=>x<-.4)&&burstSound.pans.some(x=>x>.4)&&new Set(burstSound.tones).size>=5);
+   await page.evaluate(()=>fetch('/qa-power?client=power&stamina=40',{method:'POST'}));
+   await page.waitForFunction(()=>!document.querySelector('.room-fishing-special')?.disabled);
+   await page.locator('.room-fishing-special').click();await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
+   const finishSequence=sessions.get('power').challenge.special.sequence.slice();
+   for(const direction of finishSequence){await page.keyboard.press({left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown'}[direction]);await page.waitForTimeout(220);}
+   await page.locator('.room-fishing-special-character').waitFor();
+   check(label+': killing skill still presents the character before the catch result',await page.evaluate(()=>__minigame.inspect().phase==='landing')&&sessions.get('power').feedback.reason==='landed');
+   await page.locator('.room-fishing-v3-catch-name').waitFor({timeout:35000});
+   check(label+': exhausted fish actually reaches the catch screen',await page.locator('.room-fishing-v3-catch-name').isVisible());
   }finally{await context.close();}
  }
 }

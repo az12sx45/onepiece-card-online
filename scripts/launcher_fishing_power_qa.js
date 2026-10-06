@@ -27,7 +27,14 @@ const line=round();line.phaseUntil=d(20000).toISOString();line.runState='calm';l
 check('normal reeling reduced below four distance units per second',line.distance>76);
 check('line pressure depletes promptly',drain>4);
 v.control(line,d(5000),false,0);v.simulate(line,d(6000),1);check('released line recovers over fourteen per second',line.strength>70+8);
-const near=round();near.distance=0;near.fishStamina=40;near.phaseUntil=d(20000).toISOString();near.runState='calm';near.flickTell=null;v.control(near,d(4000),true,0);check('fish near shore is not caught while stamina remains',v.simulate(near,d(4100),1)!=='landed');near.fishStamina=0;near.distance=0;check('both stamina and distance exhausted lands fish',v.simulate(near,d(4200),1)==='landed');
+const near=round();near.distance=0;near.fishStamina=40;near.phaseUntil=d(20000).toISOString();near.runState='calm';near.flickTell=null;v.control(near,d(4000),true,0);check('zero distance lands immediately despite remaining fish stamina',v.simulate(near,d(4100),1)==='landed');
+const exhausted=round();exhausted.fishStamina=0;exhausted.distance=50;check('exhausted fish lands without grinding remaining distance',v.simulate(exhausted,d(4100),1)==='landed');
+const session=M.create('fishing','room-character-luffy',1,d(0),false,'supply',5,'worm','shore',0,true);
+M.answer(session,{roundId:session.challenge.id,counterMoves:['cast'],castPower:50,castZone:'mid'},d(100));
+const hookAt=Date.parse(session.challenge.biteAt)+100;M.answer(session,{roundId:session.challenge.id,counterMoves:['hook']},d(hookAt));
+session.challenge.distance=0;session.challenge.fishStamina=70;
+M.answer(session,{roundId:session.challenge.id,counterMoves:['sync']},d(hookAt+100));
+check('real answer route settles zero metres with remaining stamina',session.feedback.reason==='landed'&&session.roundIndex===1);
 const ids=['room-character-luffy','room-character-zoro'];const state=L.normalizeState({fishingRodLevel:2},ids,ids,d(0));check('legacy paid level preserved for both characters',state.fishingRodLevels[ids[0]]===2&&state.fishingRodLevels[ids[1]]===2);state.fishingRodLevels[ids[0]]=3;const saved=L.normalizeState(state,ids,ids,d(0));check('independent rod levels survive save normalization',saved.fishingRodLevels[ids[0]]===3&&saved.fishingRodLevels[ids[1]]===2);
 for(const key of require('../server/launcher-crew-release').releasedKeys)check(key+' has unique skill',Boolean(v.SPECIALS[key]));
 const results=[];
