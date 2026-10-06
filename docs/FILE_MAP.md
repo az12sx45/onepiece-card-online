@@ -1672,3 +1672,6 @@ launcher-life.js新增fishingRodProgression:2的冪等正規化，舊0/1/2/3→0
 補充驗證：完整desktop搏魚112項通過；舊QA原先漏算bobber transform矩陣縮放，已修正量測，米數期望與遠處左右幅度同步新投影。npm start / GET200及公告82項通過；本機無DB，帳號與結算測試替身。候選65檔SHA讀回、差分393481bytes、重查0下載通過。
 
 公開發布完成：source 2819fc20bcf1792061f1445540d23588548bfced；Render dep-db2g2vvf3r2c73fkpleg 2026-10-06 22:21:07台北Live，PostgreSQL ready。公開r26 SHA256 71052f1e148b4d5a0e2a98f2bcefbac48cdb2d28afd3292776bb167a371c6d0f。實際已安裝快取25→26下載393481bytes，65檔SHA與再檢查零下載通過，變更blob遠端驗證通過。證據D:/Codex_QA/launcher-fishing-r26/release-evidence.json。未正式玩家人工驗收。
+
+## 2026-10-07 單一帳號釣竿維護
+依帳號本人要求，正式PostgreSQL交易內將該帳號13名角色及預設釣竿強化等級歸0，保留progression=2；未改公式、其他玩家或進行中釣魚session。先備份原等級，保留交易receipt於launcher_life_operations。鎖定玩家及life row、更新一列，確認其他life欄位及profile.stats雜湊相同；COMMIT後獨立讀回allZero=true。證據/可還原等級於D:/Codex_QA/launcher-rod-reset-20261007。無程式或素材變更，無需重新部署。
