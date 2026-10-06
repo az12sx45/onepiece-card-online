@@ -1690,3 +1690,6 @@ Board 多人模式不是 server authoritative。實際規則在前端執行，se
 - scripts/launcher_fishing_v5_browser_qa.js：更新r18後已移除舊橫向軌道的測試；恢復甩竿測試核對新鮮cue，避免DOM舊提示與私有引擎時鐘的讀取競爭。必殺45項、拋竿28項、深度27項通過；音效71項與六釣場15項最終回歸待讀回。公告config/launcher-announcements-v1.json附實際0%技能圖。證據D:/Codex_QA/launcher-fishing-r21。
 
 - r21最終甩竿71項及六場景遠投15項通過；合圖核對六個最遠落點都在水面，浮標／線端對齊。公告82項通過。簽署r21含62项，SHA256 339473011dfc107a81e91f3bbaaf2b0a1d5e0174773890a543ed548bed0f3f91；R2 changed blob HEAD/GET/size/SHA通過，隔離19→21下載465304 bytes，62項校驗及重查零下載。公開讀回待完成。
+
+- r21公開部署完成：2026-10-06 16:54:49（台北），Render dep-db2ba57lk1mc738njobg 顯示 Deploy succeeded | Live，來源c8f50cc8cfecccd75258dc52fe7d26210707bcbe；PostgreSQL ready並連線成功。公開revision21清單 SHA256 339473011dfc107a81e91f3bbaaf2b0a1d5e0174773890a543ed548bed0f3f91完全一致。
+- 已核對實際r19快取備份61項，公開19→21只下載465,304 bytes；62項讀回校驗與重查零下載通過。必殺45／甩竿71／拋竿28／遠近27／六場景15項瀏覽器檢查通過，合圖確認最遠浮標位於水面。新玩法78、公告82通過。真人正式玩家帳號操作验收未執行；完整證據D:/Codex_QA/launcher-fishing-r21/release-evidence.json。
