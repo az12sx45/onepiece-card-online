@@ -265,7 +265,7 @@
     collection: () => lifeRoom?.fishCollection?.() || profile?.life?.fishCollection || [],
     fishOffers: () => lifeRoom?.fishOffers?.() || [],
     ownedCharacterIds: () => lifeRoom?.ownedCharacterIds?.() || [],
-    wallet: () => lifeRoom?.wallet?.() || shop?.wallet,
+    wallet: () => lifeRoom?.fishingWallet?.(),
     rod: () => lifeRoom?.rod?.(),
     recipient(itemId) {
       const item = resolvedItem(itemId, 'character');

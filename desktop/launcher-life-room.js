@@ -438,6 +438,7 @@
       fishOffers:()=>serverFishOffers,
       ownedCharacterIds:()=>ownedIds(),
       wallet:()=>serverWallet,
+      fishingWallet:()=>({coins:serverLife?.fishingCoins??null,cap:2147483647,currency:"fishing"}),
       rod:()=>serverRod,
       aquariumCommand:command};
   }

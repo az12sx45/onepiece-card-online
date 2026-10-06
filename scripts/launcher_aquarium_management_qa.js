@@ -17,6 +17,8 @@ async function add(secret,coins,affinity=0,includeOther=false){
       characters:[{itemId:actor,x:160,y:440},...(includeOther?[{itemId:otherActor,x:240,y:440}]:[])]}};
   await db.query('INSERT INTO player_profiles(secret,name,avatar,stats) VALUES($1,$1,$2,$3::jsonb)',[secret,'8',JSON.stringify(stats)]);
   await life.getLauncherLife(pool,secret,now,cap);
+  await db.query('UPDATE launcher_life_state SET state=jsonb_set(state,$1,$2::jsonb) WHERE user_id=(SELECT user_id FROM player_profiles WHERE secret=$3)',[['fishingCoins'],JSON.stringify(coins),secret]);
+  await life.getLauncherLife(pool,secret,now,cap);
 }
 async function seed(secret,speciesId,inAquarium=false){
   const user=(await db.query('SELECT user_id FROM player_profiles WHERE secret=$1',[secret])).rows[0].user_id;
@@ -75,21 +77,23 @@ async function main(){
   const beforeSale=await get('sell');
   const saleCommand={type:'fish.sell',payload:{fishId:soldFish.id},requestId:'sell-common-0001',expectedRevision:beforeSale.life.revision};
   const sold=await life.commandLauncherLife(pool,'sell',saleCommand,now,cap);
-  check('sale credits full price and consumes fish',[sold.sale.amount,sold.wallet.coins,sold.life.fishCollection.length],[4,20,0]);
+  check('sale keeps shop balance unchanged',sold.wallet.coins,16);
+  check('sale credits full price and consumes fish',[sold.sale.amount,sold.fishingWallet.coins,sold.life.fishCollection.length],[4,20,0]);
   const replaySale=await life.commandLauncherLife(pool,'sell',saleCommand,now,cap);
-  check('sale replay never duplicates coins',[replaySale.duplicate,replaySale.wallet.coins],[true,20]);
+  check('sale replay never duplicates coins',[replaySale.duplicate,replaySale.fishingWallet.coins],[true,20]);
   check('second sale cannot sell consumed fish',
     (await command('sell','fish.sell',{fishId:soldFish.id},'sell-again-0001')).error,'fish_not_owned');
   check('fish proceeds can pay Franky upgrade',
     (await command('sell','rod.upgrade',{},'sell-rod-0001')).rod.level,1);
-  check('rod upgrade uses fish proceeds',(await get('sell')).wallet.coins,0);
+  check('rod upgrade uses fish proceeds',(await get('sell')).fishingWallet.coins,0);
   const saleLedger=(await db.query("SELECT amount,balance_after FROM launcher_wallet_ledger WHERE operation_id='life-fish-sale:sell-common-0001'")).rows;
   check('sale has one durable wallet ledger row',saleLedger,[{amount:4,balance_after:20}]);
 
+  await db.query('UPDATE launcher_life_state SET state=jsonb_set(state,$1,$2::jsonb) WHERE user_id=(SELECT user_id FROM player_profiles WHERE secret=$3)',[['fishingCoins'],JSON.stringify(2147483647-1),'full']);
   const fullFish=await seed('full','glistening-saury');
   check('sale above wallet cap is rejected without consuming fish',
     (await command('full','fish.sell',{fishId:fullFish.id},'sell-full-0001')).error,'wallet_full');
-  check('wallet cap leaves fish and balance intact',[(await get('full')).life.fishCollection.length,(await get('full')).wallet.coins],[1,499]);
+  check('wallet cap leaves fish and balance intact',[(await get('full')).life.fishCollection.length,(await get('full')).fishingWallet.coins],[1,2147483647-1]);
   check('client cannot inject sale value',
     (await command('full','fish.sell',{fishId:fullFish.id,amount:500},'sell-cheat-0001')).error,'invalid_command');
 
@@ -101,14 +105,14 @@ async function main(){
     requestId:'bridge-sale-0001',expectedRevision:bridgeBefore.life.revision};
   const bridgeSold=await life.commandLauncherLife(pool,'bridge',bridgeSale,now,cap);
   check('legacy-core sale credits wallet and consumes fish',
-    [bridgeSold.ok,bridgeSold.sale.amount,bridgeSold.wallet.coins,bridgeSold.life.fishCollection.length],
+    [bridgeSold.ok,bridgeSold.sale.amount,bridgeSold.fishingWallet.coins,bridgeSold.life.fishCollection.length],
     [true,4,20,0]);
   check('legacy-core sale replay is idempotent',
-    [(await life.commandLauncherLife(pool,'bridge',bridgeSale,now,cap)).duplicate,(await get('bridge')).wallet.coins],
+    [(await life.commandLauncherLife(pool,'bridge',bridgeSale,now,cap)).duplicate,(await get('bridge')).fishingWallet.coins],
     [true,20]);
   check('legacy-core rod upgrade requires no fishId and spends sale proceeds',
     [(await command('bridge','fish.release',{disposition:'upgrade_rod'},'bridge-rod-0001')).rod.level,
-      (await get('bridge')).wallet.coins],[1,0]);
+      (await get('bridge')).fishingWallet.coins],[1,0]);
   check('rod bridge rejects an injected fishId',
     (await command('bridge','fish.release',{disposition:'upgrade_rod',fishId:bridgeFish.id},'bridge-rod-invalid-0001')).error,
     'invalid_fish');
@@ -131,7 +135,7 @@ async function main(){
     (await command('bridge-cook','fish.release',{fishId:stillOwned.id},'bridge-release-0001')).releasedFish.id,
     stillOwned.id);
   check('plain release did not change wallet or affinity',
-    [(await get('bridge-cook')).wallet.coins,(await get('bridge-cook')).profile.companions[0].affinity],[10,2]);
+    [(await get('bridge-cook')).fishingWallet.coins,(await get('bridge-cook')).profile.companions[0].affinity],[10,2]);
 
   const raceFish=await seed('race','glistening-saury');
   const raceBefore=await get('race');

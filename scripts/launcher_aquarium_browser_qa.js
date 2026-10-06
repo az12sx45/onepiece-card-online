@@ -68,8 +68,8 @@ async function main() {
     const luffy = { itemId: 'room-character-luffy', ...point(11, 5) };
     const owned = ['room-character-luffy', 'room-character-sanji'];
     const f = window.__aquariumFixture = {
-      calls: [], wallet: { coins: 100, cap: 500 }, rod: { level: 0, maxLevel: 3, nextCost: 20 },
-      life: { schemaVersion: 1, revision: 1, ownedCharacterIds: owned, activeCharacterIds: [luffy.itemId],
+      calls: [], wallet: { coins: 100, cap: 500 }, rod: { level: 0, maxLevel: 99, nextCost: 20 },
+      life: { fishingCoins:100, schemaVersion: 1, revision: 1, ownedCharacterIds: owned, activeCharacterIds: [luffy.itemId],
         characters: { [luffy.itemId]: { itemId: luffy.itemId, key: 'luffy',
           needs: { energy: 85, hunger: 20, mood: 70, social: 70, workMotivation: 70 }, memories: [] } },
         jobs: [], pendingArrivals: [], directive: 'free_day', pairs: {}, recentEvents: [],
@@ -136,14 +136,14 @@ async function main() {
           extra.meal = { fishId: fish.id, speciesId: fish.speciesId, itemId: payload.recipientId,
             dishLabel: '香吉士特製・香草鯰魚湯', affinityGained: 2, affinityAfter: companion.affinity };
         } else if (action === 'fish.sell') {
-          if (f.wallet.coins + 4 > f.wallet.cap) return response({ ok: false, error: 'wallet_full' });
-          f.wallet.coins += 4;
+          if (f.life.fishingCoins + 4 > 2147483647) return response({ ok: false, error: 'wallet_full' });
+          f.life.fishingCoins += 4;
           f.life.fishCollection = f.life.fishCollection.filter(entry => entry !== fish);
           extra.sale = { fishId: fish.id, speciesId: fish.speciesId, amount: 4 };
         } else if (action === 'rod.upgrade') {
-          if (f.rod.nextCost == null || f.wallet.coins < f.rod.nextCost)
+          if (f.rod.nextCost == null || f.life.fishingCoins < f.rod.nextCost)
             return response({ ok: false, error: 'insufficient_coins' });
-          f.wallet.coins -= f.rod.nextCost;
+          f.life.fishingCoins -= f.rod.nextCost;
           f.rod.level++;
           f.rod.nextCost = [20, 35, 55][f.rod.level] ?? null;
         }
@@ -199,15 +199,16 @@ async function main() {
   await page.locator('.room-aquarium-manager-sell').click();
   await page.waitForFunction(() => window.__aquariumFixture.life.fishCollection.length === 0);
   pass('selling last fish raises wallet and leaves upgrade button visible',
-    await page.evaluate(() => window.__aquariumFixture.wallet.coins) === 104 &&
+    await page.evaluate(() => window.__aquariumFixture.life.fishingCoins) === 104 &&
     await page.locator('.room-aquarium-manager-upgrade').isVisible());
   pass('sold displayed fish immediately leaves aquarium',
     await page.locator('#roomStage').getAttribute('data-aquarium-fish-count') === '0');
   await page.locator('.room-aquarium-manager-upgrade').click();
   await page.locator('.room-aquarium-manager-upgrade').click();
   await page.waitForFunction(() => window.__aquariumFixture.rod.level === 1);
-  pass('same wallet pays Franky rod upgrade in aquarium',
-    await page.evaluate(() => window.__aquariumFixture.wallet.coins === 84 && window.__aquariumFixture.rod.level === 1));
+  pass('shop balance remains unchanged',await page.evaluate(()=>window.__aquariumFixture.wallet.coins)===100);
+  pass('fishing wallet pays Franky rod upgrade in aquarium',
+    await page.evaluate(() => window.__aquariumFixture.life.fishingCoins === 84 && window.__aquariumFixture.rod.level === 1));
   pass('cook sell and upgrade cross the installed core allowlist with exact dispositions',
     await page.evaluate(() => {
       const commands = window.__aquariumFixture.calls.filter(c => c.type === 'fish.release');

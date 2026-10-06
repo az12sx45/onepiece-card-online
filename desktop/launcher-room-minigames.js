@@ -102,7 +102,7 @@
   };
   for(const [key,extra] of Object.entries(EXTRA_REACTIONS)){VOICES[key].good=[VOICES[key].good,...extra.good];VOICES[key].miss=[VOICES[key].miss,...extra.miss];}
   const ERRORS={offline:'連線中斷，這一輪暫停送出。重新連線後可再送出。',unavailable:'暫時連不上基地，請稍後再試。',minigame_active:'上一場挑戰還沒結束，可繼續查看或結束後重開。',minigame_expired:'這場挑戰已逾時，請關閉後重新開始。',minigame_cooldown:'夥伴剛完成訓練，休息一下再來。',cooldown:'夥伴還在休息，稍後再來。',work_daily_limit:'暫時無法結算工作，請稍後再試。',insufficient_energy:'夥伴的精神不足，先讓他休息一下。',character_busy:'夥伴正在工作，請先完成原有分工。',work_active:'夥伴正在工作，請先完成原有分工。',not_placed:'請先把這位夥伴放進房間。',character_not_released:'這位夥伴尚未開放。',readonly:'參觀好友時不能指派主人的夥伴。',minigame_not_ready:'還沒到交卷時間，稍候再試。',minigame_invalid:'這場挑戰已失效，請關閉後重新開始。',fish_collection_full:'漁獲收藏已滿；仍可繼續海釣，若要保存新魚請先放生一尾。',fish_aquarium_locked:'先取得千陽號水族館酒吧場景或水族箱家具，才能展示漁獲。',fish_aquarium_full:'魚缸目前最多展示六尾魚。'};
-  Object.assign(ERRORS,{needs_rest:'夥伴有些累了，先休息恢復精神；也可以自由練習，不領取獎勵。',interaction_cooldown:'訓練還在冷卻中。可以先自由練習，不領取獎勵。',invalid_minigame_session:'這場挑戰已失效，請關閉後重新開始。',minigame_too_early:'這一輪仍在判定，稍候片刻再送出。',minigame_round_conflict:'挑戰進度已更新，請關閉後重新進入。',wallet_full:'商城錢包需要先空出至少 10 枚金幣，才能開始有酬工作。',insufficient_coins:'商城金幣不足；先完成有酬工作，再回來請佛朗基改裝。',rod_max_level:'這支釣竿已經改裝到最高等級。'});
+  Object.assign(ERRORS,{needs_rest:'夥伴有些累了，先休息恢復精神；也可以自由練習，不領取獎勵。',interaction_cooldown:'訓練還在冷卻中。可以先自由練習，不領取獎勵。',invalid_minigame_session:'這場挑戰已失效，請關閉後重新開始。',minigame_too_early:'這一輪仍在判定，稍候片刻再送出。',minigame_round_conflict:'挑戰進度已更新，請關閉後重新進入。',wallet_full:'商城錢包需要先空出至少 10 枚金幣，才能開始有酬工作。',insufficient_coins:'釣魚金幣不足；先出售漁獲，再回來請佛朗基改裝。',rod_max_level:'這支釣竿已經改裝到最高等級。'});
   function node(tag,className,text) {const value=document.createElement(tag);if(className)value.className=className;if(text!==undefined)value.textContent=text;return value;}
   function fishRarityBadge(speciesId,declared){
     const rarity=Object.hasOwn(FISH_RARITY_LABELS,declared)?declared:FISH_RARITY_BY_ID[speciesId]||'common';
@@ -126,7 +126,7 @@
     let fishingAudio=null,fishingAudioMaster=null,fishingAudioLimiter=null,fishingNoiseSeed=0x6d2b79f5,fishingChargeSoundAt=0,fishingStressSoundAt=0,fishingSoundRisk='safe';
     const fishingClips=new Map(),fishingPlayingClips=new Map(),fishingInlineBuffers=new Map(),fishingInlineSources=new Set();let fishingClipGeneration=0,fishingInlineGeneration=0;
     const fishingResultHeldKeys=new Set();
-    let fishingRodLevel=0,fishingRodKnown=false,fishingRodNextCost=ROD_UPGRADE_COSTS[0],lastKnownRodResponse=null;
+    let fishingCoins=null,fishingRodLevel=0,fishingRodKnown=false,fishingRodNextCost=ROD_UPGRADE_COSTS[0],lastKnownRodResponse=null;
     const reactionCounts={good:0,miss:0};
     const now=()=>performance.now();
     const fishingNow=()=>{
@@ -499,6 +499,8 @@
     }
     function button(label,fn,className='room-minigame-primary'){const b=node('button',className,label);b.type='button';b.onclick=fn;return b;}
     function updateFishingRod(response){
+      const coins=response?.fishingWallet?.coins??response?.life?.fishingCoins;
+      if(Number.isSafeInteger(coins)&&coins>=0)fishingCoins=coins;
       if(response?.rod||response?.life?.fishingRodLevels)lastKnownRodResponse=response;
       const raw=response?.rod?.characters?.[characterId]?.level??response?.life?.fishingRodLevels?.[characterId]??response?.rod?.level??response?.life?.fishingRodLevel;
       if(!Number.isInteger(raw)||raw<0||raw>ROD_UPGRADE_COSTS.length)return;
@@ -515,13 +517,13 @@
       workshop.querySelector('.room-fishing-v4-workshop-current').textContent=!fishingRodKnown?'正在讀取釣竿狀態。':`收線 ${attack.reel}／秒 · 必殺 ${attack.special}傷害` ;
       workshop.querySelector('.room-fishing-v4-workshop-next').textContent=!fishingRodKnown?'連上基地後才能強化。':level===max?'SUPER！+99已滿級；最強魚約需兩次成功必殺。':`+${level+1}：收線 ${next.reel}／秒 · 必殺 ${next.special}`;
       const upgrade=workshop.querySelector('.room-fishing-v4-workshop-upgrade');
-      upgrade.textContent=!fishingRodKnown?'釣竿資料讀取中':level===max?'已升至最高等級':`請佛朗基改裝 · ${cost} 金幣`;
+      upgrade.textContent=!fishingRodKnown?'釣竿資料讀取中':level===max?'已升至最高等級':`請佛朗基改裝 · ${cost} 釣魚金幣（持有 ${fishingCoins??"—"}）`;
       upgrade.disabled=requesting||workshop.dataset.forging==='true'||!fishingRodKnown||level===max;
     }
     function rodWorkshop(){
       const workshop=node('details','room-fishing-v4-details room-fishing-v4-workshop');
       const summary=node('summary');summary.append(node('strong','','佛朗基的釣竿工房'),node('span','room-fishing-v4-workshop-level'));
-      workshop.append(summary,node('p','room-fishing-v4-workshop-copy','騙人布想出釣具機關，佛朗基在千陽號工房加固魚竿。每次改裝都會讓順勢收線更快、魚線更耐用。'),node('p','room-fishing-v4-workshop-current'),node('p','room-fishing-v4-workshop-next'));
+      workshop.append(summary,node('p','room-fishing-v4-workshop-copy','出售漁獲賺取釣魚金幣，請佛朗基強化釣竿。釣魚金幣與商城金幣分開使用。'),node('p','room-fishing-v4-workshop-current'),node('p','room-fishing-v4-workshop-next'));
       const upgrade=button('',()=>void upgradeFishingRod(),'room-fishing-v4-workshop-upgrade');workshop.append(upgrade,node('p','room-fishing-v4-workshop-feedback'));
       return workshop;
     }

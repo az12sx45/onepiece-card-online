@@ -88,13 +88,13 @@ function reconcileLegacy(state,companions,room,now) {
 }
 function snapshot(row,state,now,extra={}) {
   const S=shop();return {ok:true,serverNow:now.toISOString(),life:L.publicLife(state),fishOffers:state.fishCollection.map(fishOffer),
-    rod:L.rodStatus(state),room:S.launcherRoom(row.stats),wallet:S.launcherWalletPublic(row.stats),profile:S.toPublicProfile(row,true),...extra};
+    fishingWallet:{coins:state.fishingCoins,cap:2147483647,currency:"fishing"},rod:L.rodStatus(state),room:S.launcherRoom(row.stats),wallet:S.launcherWalletPublic(row.stats),profile:S.toPublicProfile(row,true),...extra};
 }
 async function ledger(db,userId,operationId) {
   const result=await db.query('SELECT receipt FROM launcher_wallet_ledger WHERE user_id=$1 AND operation_id=$2',[userId,operationId]);return result.rows[0]?.receipt||null;
 }
-async function writeLedger(db,row,operationId,jobId,amount,receipt) {
-  await db.query('INSERT INTO launcher_wallet_ledger(user_id,operation_id,job_id,amount,balance_after,receipt) VALUES($1,$2,$3,$4,$5,$6::jsonb)',[row.user_id,operationId,jobId,amount,row.stats.launcherWalletV1.coins,JSON.stringify(receipt)]);
+async function writeLedger(db,row,operationId,jobId,amount,receipt,balance=row.stats.launcherWalletV1.coins) {
+  await db.query('INSERT INTO launcher_wallet_ledger(user_id,operation_id,job_id,amount,balance_after,receipt) VALUES($1,$2,$3,$4,$5,$6::jsonb)',[row.user_id,operationId,jobId,amount,balance,JSON.stringify(receipt)]);
 }
 async function settleJob(db,row,state,companions,job,room,now) {
   const operationId='life-work:'+job.jobId,existing=await ledger(db,row.user_id,operationId);
@@ -264,13 +264,13 @@ async function perform(db,row,state,companions,command,room,now,sessions=[],jobs
       return{ok:true,meal:{fishId:fish.id,speciesId:fish.speciesId,itemId:recipientId,
         dishLabel:offer.dishLabel,affinityGained:companion.affinity-before,affinityAfter:companion.affinity}};
     }
-    const wallet=row.stats.launcherWalletV1,cap=shop().launcherWalletPublic(row.stats).cap;
-    if(wallet.coins+offer.saleCoins>cap)return{ok:false,error:'wallet_full'};
+    const cap=2147483647;
+    if(state.fishingCoins+offer.saleCoins>cap)return{ok:false,error:'wallet_full'};
     state.fishCollection.splice(index,1);
-    wallet.coins+=offer.saleCoins;
+    state.fishingCoins+=offer.saleCoins;
     const operationId='life-fish-sale:'+command.requestId;
-    const sale={operationId,fishId:fish.id,speciesId:fish.speciesId,amount:offer.saleCoins,soldAt:now.toISOString()};
-    await writeLedger(db,row,operationId,null,offer.saleCoins,sale);
+    const sale={operationId,fishId:fish.id,speciesId:fish.speciesId,currency:"fishing",amount:offer.saleCoins,soldAt:now.toISOString()};
+    await writeLedger(db,row,operationId,null,offer.saleCoins,sale,state.fishingCoins);
     return{ok:true,sale};
   }
   if(fishAction==='rod.upgrade') {
@@ -279,13 +279,13 @@ async function perform(db,row,state,companions,command,room,now,sessions=[],jobs
     if(!state.ownedCharacterIds.includes(characterId))return{ok:false,error:'character_not_owned'};
     const level=L.rodLevel(state.fishingRodLevels?.[characterId]??state.fishingRodLevel),cost=L.ROD_UPGRADE_COSTS[level];
     if(cost===undefined)return{ok:false,error:'rod_max_level'};
-    if(row.stats.launcherWalletV1.coins<cost)return{ok:false,error:'insufficient_coins'};
-    row.stats.launcherWalletV1.coins-=cost;
+    if(state.fishingCoins<cost)return{ok:false,error:'insufficient_coins'};
+    state.fishingCoins-=cost;
     state.fishingRodLevels[characterId]=level+1;
     if(requestedCharacter===undefined)state.fishingRodLevel=level+1; // Old UI summary only; other owned rods remain unchanged.
     const operationId='life-rod:'+command.requestId;
-    const receipt={operationId,level:level+1,...characterId?{characterId}:{},amount:-cost,claimedAt:now.toISOString()};
-    await writeLedger(db,row,operationId,null,-cost,receipt);
+    const receipt={operationId,level:level+1,...characterId?{characterId}:{},currency:"fishing",amount:-cost,claimedAt:now.toISOString()};
+    await writeLedger(db,row,operationId,null,-cost,receipt,state.fishingCoins);
     return{ok:true,receipt};
   }
   if(command.type.startsWith('work.')&&command.type!=='work.reserve') {

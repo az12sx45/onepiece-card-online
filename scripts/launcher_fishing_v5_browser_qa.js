@@ -1805,8 +1805,9 @@ async function runDamage(){
 async function runForge(){
  for(const [label,width,height] of [['forge-desktop',1440,900],['forge-minimum',960,640]]){
   const context=await browser.newContext({viewport:{width,height}}),page=await context.newPage();await setup(page,'forge');
-  await page.evaluate(()=>__minigame.receive({rod:{maxLevel:99,characters:{'room-character-luffy':{level:98,nextCost:411}}}}));
+  await page.evaluate(()=>__minigame.receive({fishingWallet:{coins:900,currency:'fishing'},rod:{maxLevel:99,characters:{'room-character-luffy':{level:98,nextCost:411}}}}));
   await page.locator('.room-fishing-v4-workshop summary').click();
+  check(label+': workshop shows separate fishing currency',(await page.locator('.room-fishing-v4-workshop-upgrade').textContent()).includes('釣魚金幣（持有 900）'));
   check(label+': shows +98 / +99',await page.locator('.room-fishing-v4-workshop-level').textContent()==='+98 / +99');
   await page.locator('.room-fishing-v4-workshop-upgrade').click();
   await page.locator('.room-rod-forge').waitFor();

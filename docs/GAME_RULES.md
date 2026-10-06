@@ -1740,3 +1740,7 @@ launcher-life.js新增fishingRodProgression:2的冪等正規化，舊0/1/2/3→0
 
 ## 2026-10-07 單一帳號釣竿維護
 依帳號本人要求，正式PostgreSQL交易內將該帳號13名角色及預設釣竿強化等級歸0，保留progression=2；未改公式、其他玩家或進行中釣魚session。先備份原等級，保留交易receipt於launcher_life_operations。鎖定玩家及life row、更新一列，確認其他life欄位及profile.stats雜湊相同；COMMIT後獨立讀回allZero=true。證據/可還原等級於D:/Codex_QA/launcher-rod-reset-20261007。無程式或素材變更，無需重新部署。
+
+## 2026-10-07 r27 釣魚專用錢包
+server/launcher-life.js新增fishingCoins、舊存檔預設0而不複製商城餘額；launcher-life-store.js售魚與強化走專用餘額，snapshot提供fishingWallet。原ledger id及表保留，釣魚receipt新增currency=fishing、balance_after取專用餘額，商城工作仍原錢包。沿用INTEGER帳本安全上界2147483647，不受商城500上限。desktop/launcher-life-room.js、launcher-room.js、launcher-room-aquarium.js、launcher-room-minigames.js接專用餘額与用語。
+79項rod後端（舊錢包不複製、商店錢不能強化、防重、回滚、角色獨立）、41項水族箱交易、29項管理UI及17項工房UI通過。帳號/獎勵為測試替身，npm start根頁200本機無DB；未正式玩家交易驗收。公告附實測截圖。發布待讀回，LATTICE任務API不可用。

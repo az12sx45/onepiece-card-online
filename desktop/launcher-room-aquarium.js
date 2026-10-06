@@ -172,7 +172,7 @@
     const present = () => !!layer && !layer.hidden;
     const ownedCharacters = () => (Array.isArray(options.ownedCharacterIds?.()) ? options.ownedCharacterIds() : [])
       .filter(id => typeof id === 'string' && id.startsWith('room-character-'));
-    const coin = wallet => Number.isFinite(Number(wallet?.coins)) ? Number(wallet.coins) : null;
+    const coin = wallet => wallet?.coins!==null&&wallet?.coins!==undefined&&Number.isFinite(Number(wallet?.coins)) ? Number(wallet.coins) : null;
     const cap = wallet => Number.isFinite(Number(wallet?.cap)) ? Number(wallet.cap) : 500;
     function clearConfirmation() {
       confirmation = '';
@@ -251,10 +251,10 @@
         fish_not_owned: '這尾魚已不在收藏，正在重新核對。',
         fish_not_cookable: '這尾魚不適合料理，請選擇其他魚。',
         affinity_full: '這位夥伴的親密度已滿，魚仍留在收藏。',
-        wallet_full: '展示室金幣放不下這尾魚的售價；魚仍留在收藏。',
+        wallet_full: '釣魚金幣放不下這尾魚的售價；魚仍留在收藏。',
         fish_aquarium_full: '魚缸最多展示六尾魚，先收回一尾。',
         fish_aquarium_locked: '需先收藏水族箱家具或千陽號水族館場景。',
-        insufficient_coins: '改裝金幣不足，先出售漁獲或完成工作。',
+        insufficient_coins: '釣魚金幣不足，先出售漁獲。',
         rod_max_level: '釣竿已改裝到最高等級。',
         readonly: '參觀好友房間時不能使用對方的漁獲。',
         offline: '連線中斷，正在核對最新漁獲與金幣。',
@@ -296,7 +296,7 @@
       const maxLevel = Number.isInteger(rod?.maxLevel) ? rod.maxLevel : 99;
       const nextCost = Number.isInteger(selectedRod?.nextCost) ? selectedRod.nextCost : null;
       workshop.append(element('span', '', `佛朗基釣竿工房 · ${level === null ? '等級讀取中' : `+${level} / +${maxLevel}`}`),
-        element('small', '', level === null ? '正在讀取改裝資料' : level >= maxLevel ? '釣竿已達最高等級' : `下一級需 ${nextCost ?? '—'} 枚金幣 · 目前 ${balance ?? '—'} 枚`));
+        element('small', '', level === null ? '正在讀取改裝資料' : level >= maxLevel ? '釣竿已達最高等級' : `下一級需 ${nextCost ?? '—'} 枚釣魚金幣 · 目前 ${balance ?? '—'} 枚`));
       const upgrade = button(confirmation === 'rod.upgrade' ? '確定請佛朗基改裝' : level >= maxLevel ? '已滿級' : '請佛朗基改裝釣竿',
         'room-aquarium-manager-upgrade', () => {
           if (!askConfirmation('rod.upgrade')) return;
@@ -331,7 +331,7 @@
       const stats = element('div', 'room-aquarium-manager-stats');
       stats.append(element('span', '', `${owner() ? '漁獲收藏' : '展示漁獲'} ${fish.length}${owner() ? ' / 64' : ''}`),
         element('span', '', `缸中 ${fish.filter(entry => entry.inAquarium).length} / 6`));
-      if (owner()) stats.append(element('span', '', `展示室金幣 ${balance == null ? '讀取中' : `${balance} / ${maxCoins}`}`));
+      if (owner()) stats.append(element('span', '', `釣魚金幣 ${balance == null ? '讀取中' : balance.toLocaleString()}`));
       card.append(stats);
       const notice = element('p', 'room-aquarium-manager-status', message);
       notice.setAttribute('role', 'status'); notice.setAttribute('aria-live', 'polite');
@@ -417,12 +417,12 @@
           element('h4', '', '出售漁獲 · 釣竿改裝'));
         const saleCoins = Number.isInteger(offer?.saleCoins) ? offer.saleCoins : null;
         const fullWallet = saleCoins !== null && balance !== null && balance + saleCoins > maxCoins;
-        sale.append(element('p', '', saleCoins === null ? '正在讀取售價…' : `售出可得 ${saleCoins} 枚展示室金幣，用於佛朗基釣竿改裝，也能在商店使用。`));
-        const sell = button(confirmation === `sell:${selected.id}` ? '確定出售這尾魚' : `出售${saleCoins === null ? '' : ` · +${saleCoins} 金幣`}`,
+        sale.append(element('p', '', saleCoins === null ? '正在讀取售價…' : `售出可得 ${saleCoins} 枚釣魚金幣，用於佛朗基釣竿改裝，與商城金幣分開。`));
+        const sell = button(confirmation === `sell:${selected.id}` ? '確定出售這尾魚' : `出售${saleCoins === null ? '' : ` · +${saleCoins} 釣魚金幣`}`,
           'room-aquarium-manager-sell', () => {
             if (!askConfirmation(`sell:${selected.id}`)) return;
             void perform('fish.sell', { fishId: selected.id }, result =>
-              `${SPECIES[selected.speciesId]}已出售，展示室金幣 +${result.sale?.amount ?? saleCoins}。`);
+              `${SPECIES[selected.speciesId]}已出售，釣魚金幣 +${result.sale?.amount ?? saleCoins}。`);
           });
         sell.disabled = busy || saleCoins === null || balance === null || fullWallet;
         if (fullWallet) sell.title = `金幣上限 ${maxCoins}，先花掉一些才能出售`; sale.append(sell);

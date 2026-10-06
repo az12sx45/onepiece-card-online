@@ -61,7 +61,7 @@ function normalizeState(raw, ownedIds, activeIds, now) {
     pendingArrivals: (Array.isArray(saved.pendingArrivals) ? saved.pendingArrivals : []).filter(a => a && set.has(a.itemId) && typeof a.arrivalId === 'string').slice(0, CREW.length),
     arrivedCharacterIds: (Array.isArray(saved.arrivedCharacterIds) ? saved.arrivedCharacterIds : owned).filter(id => set.has(id)),
     recentEvents: (Array.isArray(saved.recentEvents) ? saved.recentEvents : []).filter(e => e && typeof e.eventId === 'string' && iso(e.at)).slice(-32),
-    fishCollection, fishingRodProgression:2, fishingRodLevel:savedRodLevel(saved.fishingRodLevel),
+    fishCollection, fishingCoins:Number.isSafeInteger(saved.fishingCoins)&&saved.fishingCoins>=0?Math.min(2147483647,saved.fishingCoins):0, fishingRodProgression:2, fishingRodLevel:savedRodLevel(saved.fishingRodLevel),
     fishingRodLevels:Object.fromEntries(owned.map(id=>[id,savedRodLevel(object(saved.fishingRodLevels)[id]??saved.fishingRodLevel)])),
     lastSimulatedAt: iso(saved.lastSimulatedAt) || now.toISOString(), lastSeenAt: iso(saved.lastSeenAt) || now.toISOString(),
     lastExitAt: iso(saved.lastExitAt), offlineSummary: { elapsedMs:0,completedJobs:0,coins:0 } };
