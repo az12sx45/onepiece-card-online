@@ -1704,3 +1704,6 @@ Board 多人模式不是 server authoritative。實際規則在前端執行，se
 - 文件／公告config/launcher-announcements-v1.json及images/launcher_announcements/launcher-fishing-damage-r22.webp實際畫面。證據D:/Codex_QA/launcher-fishing-r22。LATTICE無可呼叫API，未宣稱持久紀錄或圖譜成功；公開部署證據待讀回。
 
 - r22簽署候選63項，SHA256 34cf3110724cbaa6d773b0382c6e2257e03cd2a32048bc731c508e54aa7e1d10；changed blobs HEAD/GET/size/SHA通過，隔離21→22下載477006 bytes，63項校驗與重查零下載通過。內部事件保留16則、常態公開快照只傳最新6則；進入必殺時先結清收線傷害。分級155／新玩法78再驗證通過，公告82通過。公开部署待讀回。
+
+- r22公開部署完成：2026-10-06 17:21:02（台北），Render dep-db2bmcegekts739r7cpg 顯示 Deploy succeeded | Live，來源65e9f2143578fa99cf2920546825a3bdf6d59525；PostgreSQL ready與連線成功。公開revision22清單 SHA256 34cf3110724cbaa6d773b0382c6e2257e03cd2a32048bc731c508e54aa7e1d10完全一致。
+- 實際r21快取備份已核對62項素材，公開21→22下載477,006 bytes；63項读回校驗及重查零下載通過。分級155（108建議竿級釣魚情境）／新玩法78／PGlite釣竿59／公告82／傷害11＋必殺49瀏覽器檢查通過。新開一竿套用分級，舊active回合相容已測。正式玩家帳號操作驗收未執行；證據D:/Codex_QA/launcher-fishing-r22/release-evidence.json。
