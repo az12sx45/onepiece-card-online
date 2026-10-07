@@ -8027,3 +8027,8 @@ server/launcher-fish-records.js定義36物種遊戲cm尺寸區間，非原作生
 QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真實路徑與重送、舊session/operation去重與nested紀錄、不造尺寸；Journal Chromium42項含兩桌機三次失焦Space、尺寸與海域餌UI；整房31項含真實可捲動容器中固定鈕位置、圖示與直開dex、好友唯讀；npm start根頁200本機無DB。帳號/結算為QA替身，未正式玩家扣款驗收。公告附示意圖，發布待讀回。LATTICE Runtime/task API未提供，未宣稱持久登記。
 
 公開r30驗證完成：source 238cd341c05de1bf2b33501e541d71d322cdbe10；Render dep-db2tkq95efls73cbs1t0 2026-10-07 13:47:11台北Live及PostgreSQL ready。公開manifest SHA256 9d3d2a3a5acb5418da21ec8e8f386f74fa4953a19ca109dc734a3a37ab74c109；變更blob远端SHA/大小驗證；已安裝快取29→30差分735795bytes，75檔讀回與再檢查零下載通過。證據D:/Codex_QA/launcher-fishing-r30/release-evidence.json。功能交易與畫面驗收使用PGlite/Chromium測試帳號，未對正式玩家執行強化扣款。
+
+
+### 2026-10-07 魚圖鑑獨立詳情頁
+- launcher-room-aquarium.js/css：點選已發現魚卡後切換獨立詳情頁，大型魚圖與繪製紀錄面板並列；返回保留列表頁數，Escape 返回列表。
+- 沿用已生成 journal/record-panel 素材；最大最小及實際海域魚餌資料不變。launcher_fishing_journal_qa.js 驗證獨立詳情與返回，另確認啟動。
