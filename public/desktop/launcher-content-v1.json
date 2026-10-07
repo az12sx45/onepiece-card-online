@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 35,
-  "publishedAt": "2026-10-07T09:52:35.782Z",
+  "revision": 36,
+  "publishedAt": "2026-10-07T16:06:02.053Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -92,6 +92,11 @@
       "path": "images/launcher_announcements/launcher-rod-forge-r25.webp",
       "bytes": 61528,
       "sha256": "387f77b95516afe8260a89434cf3b515eb8b975af0cb135167db027cb4c8efe1"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-wii-meter-r36.webp",
+      "bytes": 202288,
+      "sha256": "874e1505ae1f7d20bd0c90f505ccbac00c1e0b59d0c7184a47d473b98692ede1"
     },
     {
       "path": "images/launcher_room/fish_master/alligator-gar.webp",
@@ -187,6 +192,11 @@
       "path": "images/launcher_room/fishing_ui_r33/button-plate.webp",
       "bytes": 173028,
       "sha256": "41264fbc95cb85da5ff7d8d625da453573a7f6c02499f90c8ed4c78d0342b191"
+    },
+    {
+      "path": "images/launcher_room/fishing_ui_r36/wii-rod-meter.webp",
+      "bytes": 182854,
+      "sha256": "fa95c794b14563c0f1ef3aec4cd5156587d20ac5aef1d540b5d5e2dde9ec7255"
     },
     {
       "path": "images/launcher_room/fishing_v5/rod-no-line-v1.webp",
@@ -380,13 +390,13 @@
     },
     {
       "path": "launcher-room-minigames.css",
-      "bytes": 134471,
-      "sha256": "a840279b212e913cbd90c6767044467743659031e0f5b169461fe57e6386b68c"
+      "bytes": 139847,
+      "sha256": "600e4f7e78760ced0000f7301cc15fde0c5501ba168a4407b0c0fdce7408deaa"
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 287749,
-      "sha256": "5c784b889759d893706207ca49387540d6874e0897a58a51d0d0d9c4470a88cf"
+      "bytes": 288423,
+      "sha256": "3d1d661d50a7f1fcfa575ba03af6bb26c7012b60edf26815695b58dbe3b21807"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -412,6 +422,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "gVNAyR41hYhyNxqO7OxNa2u8dX+BUseWtwQTeZZNMNFIqtQewVR2n+t5Oym+RpuQUkNFv8oMRc/1UFe0hmhFCw=="
+    "value": "8FaHyPWYmxSv7449UrUqWpOnWHKAI1LWMRq7mC75GwIjPteNVulkIhO8DhlDjinuMoMHHrb3htvQugfnPpB1AA=="
   }
 }

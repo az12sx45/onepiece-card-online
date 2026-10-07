@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 48,
+  "revision": 49,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r36-wii-meter",
+      "status": "published",
+      "publishedAt": "2026-10-07T16:05:56.576Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r36",
+      "title": "Wii 風格釣竿表與魚體力環",
+      "summary": "細竿橫軌與相連捲線器；魚體力只用魚圖示外圈呈現。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-wii-meter-r36.webp",
+        "alt": "Wii風格釣竿儀表與魚體力圓環功能示意"
+      },
+      "body": [
+        "依提供的Wii釣魚影片及ISO介面圖集重做釣竿表：細竿橫軌、左下捲線器、相連彎月拉力表與移動魚距標記。捲線器保留收線／放線方向與速度動畫。",
+        "魚體力改成魚圖示外圈，隨實際傷害逐漸减少，不再顯示HP長條與數字。C／X移到操作區，能量顯示在竿身導環。",
+        "修正必殺判定與演出期間海面、海浪及背景before／after動畫仍在動作；釣獲待確認時背景也保持暫停。",
+        "保留本機釣魚、四級必殺與原有資料。差分更新，重新啟動啟動器即可；公告圖片為功能示意。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r35-local-fishing",
       "status": "published",

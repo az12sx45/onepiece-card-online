@@ -1,0 +1,12 @@
+{
+  "tool": "image_gen.imagegen",
+  "references": [
+    "https://www.youtube.com/watch?v=K9Do_E05r1k",
+    "D:/Codex_QA/launcher-fishing-wii-1.2.22/wii-reference-13m-10.png",
+    "D:/Codex_QA/launcher-fishing-iso-fish-audit/reference-hud/fishing-atlas-reference-only.png"
+  ],
+  "iso": "D:/abap.ind/wii/game/One Piece Unlimited Adventure(J).iso",
+  "verifiedAarSha256": "0763fb4279ec1f5fe425448832d7460eb133369216077e8303dc929d7cb9a77a",
+  "asset": "fishing_ui_r36/wii-rod-meter.webp",
+  "prompt": "Reconstruct the Wii upper-left thin rod rail, hanging five-hole reel and connected force crescent; transparent circular center and thin meter window; no big rectangular panel, labels or characters."
+}
