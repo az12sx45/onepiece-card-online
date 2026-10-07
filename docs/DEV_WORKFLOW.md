@@ -8051,3 +8051,5 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 ### 2026-10-07 圖鑑關閉鈕內縮
 - desktop/launcher-room-aquarium.css標題右側留白25→57px，窄視窗0→24px，關閉鈕往左移離開邊框。
 - 使用既有圖鑑瀏覽器QA核對桌面、最低及窄視窗，不改資料或操作。
+
+- 公開r34驗證：8d384d0b6／dep-db30bi8473hc7385308g於2026-10-07 16:52:55 +08:00 Live，資料庫已連線；實際內容快取33→34下載725011 bytes，79檔雜湊與二次零下載通過。77項介面、82項公告QA通過，npm start本機HTTP200。證據D:/Codex_QA/launcher-fishing-r34/release-evidence.json。
