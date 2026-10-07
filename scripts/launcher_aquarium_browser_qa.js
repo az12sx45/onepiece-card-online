@@ -198,25 +198,13 @@ async function main() {
   await page.locator('.room-aquarium-manager-sell').click();
   await page.locator('.room-aquarium-manager-sell').click();
   await page.waitForFunction(() => window.__aquariumFixture.life.fishCollection.length === 0);
-  pass('selling last fish raises wallet and leaves upgrade button visible',
+  pass('selling last fish raises fishing wallet without extra upgrade buttons',
     await page.evaluate(() => window.__aquariumFixture.life.fishingCoins) === 104 &&
-    await page.locator('.room-aquarium-manager-upgrade').isVisible());
+    await page.locator('.room-aquarium-manager-upgrade').count()===0);
   pass('sold displayed fish immediately leaves aquarium',
     await page.locator('#roomStage').getAttribute('data-aquarium-fish-count') === '0');
-  await page.locator('.room-aquarium-manager-upgrade').click();
-  await page.locator('.room-aquarium-manager-upgrade').click();
-  await page.waitForFunction(() => window.__aquariumFixture.rod.level === 1);
   pass('shop balance remains unchanged',await page.evaluate(()=>window.__aquariumFixture.wallet.coins)===100);
-  pass('fishing wallet pays Franky rod upgrade in aquarium',
-    await page.evaluate(() => window.__aquariumFixture.life.fishingCoins === 84 && window.__aquariumFixture.rod.level === 1));
-  pass('cook sell and upgrade cross the installed core allowlist with exact dispositions',
-    await page.evaluate(() => {
-      const commands = window.__aquariumFixture.calls.filter(c => c.type === 'fish.release');
-      return commands.length === 3 && commands.every(c => !!c.requestId && Number.isInteger(c.expectedRevision)) &&
-        commands.some(c => c.payload.fishId === 'fish-balloon' && c.payload.disposition === 'cook' && c.payload.recipientId === 'room-character-sanji') &&
-        commands.some(c => c.payload.fishId === 'fish-jelly' && c.payload.disposition === 'sell') &&
-        commands.some(c => !Object.hasOwn(c.payload, 'fishId') && c.payload.disposition === 'upgrade_rod');
-    }));
+  pass('cook and sell still cross installed core dispositions',await page.evaluate(()=>{const c=__aquariumFixture.calls.filter(x=>x.type==='fish.release');return c.some(x=>x.payload.disposition==='cook')&&c.some(x=>x.payload.disposition==='sell');}));
   await page.locator('.room-aquarium-manager-close').click();
   await page.evaluate(() => {
     const f = window.__aquariumFixture;

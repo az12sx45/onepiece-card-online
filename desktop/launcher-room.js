@@ -335,6 +335,12 @@
     for (const item of catalog()) if (isValidProduct(item, TYPES[kind].type) && owned.has(item.id)) byId.set(item.id, item);
     return [...byId.values()];
   }
+  const fishingJournal=window.OnePieceFishingJournal?.create({
+    owner:isOwner,life:()=>({fishCollection:lifeRoom?.fishCollection?.()||[],fishDex:lifeRoom?.fishDex?.()||[],rod:lifeRoom?.rod?.(),coins:lifeRoom?.fishingWallet?.()?.coins}),
+    name:id=>resolvedItem(id,'character')?.name||String(id).replace('room-character-',''),command:(type,payload)=>lifeRoom?.aquariumCommand?.(type,payload),refresh:()=>lifeRoom?.refresh?.()
+  });
+  window.OnePieceFishingJournal.open=id=>fishingJournal?.open(id);
+  const fishingJournalButton=document.createElement('button');fishingJournalButton.type='button';fishingJournalButton.className='ghost-button';fishingJournalButton.textContent='釣竿・魚圖鑑';fishingJournalButton.onclick=()=>fishingJournal?.open();document.querySelector('#profilePanel .voyage-heading-actions')?.append(fishingJournalButton);
   function sceneProducts() {
     const items = isOwner() ? roomItems('scene') : ownedProfileItems()
       .filter(item => item?.type === TYPES.scene.type && isValidProduct(item, TYPES.scene.type));
@@ -1800,7 +1806,7 @@
     $('roomCancel').disabled = saving;
     if (editing) { renderEditorTabs(); renderEditorItems(); renderSelection(); }
   }
-  function render() { renderStage(); renderSceneSwitcher(); renderEditor(); renderCompanionPanel(); }
+  function render() { fishingJournalButton.hidden=!isOwner();if(!isOwner())fishingJournal?.close();renderStage(); renderSceneSwitcher(); renderEditor(); renderCompanionPanel(); }
   async function openEditor() {
     if (!isOwner() || editing || saving) return;
     aquariumManager?.close();

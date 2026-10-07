@@ -149,3 +149,20 @@
   .room-aquarium-manager-hero { height: 100px; }
   .room-aquarium-manager-workshop { flex-wrap: wrap; padding: 10px 15px 13px; }
 }
+
+.fishing-journal-overlay{position:fixed;inset:0;z-index:2600;display:grid;place-items:center;padding:16px;background:#00131cd9}
+.fishing-journal{width:min(1200px,100%);height:min(820px,calc(100dvh - 32px));background:url('opui://launcher/images/launcher_room/fishing_ui_r29/journal.webp') center/100% 100% no-repeat;color:#302a20;display:flex;flex-direction:column;padding:25px 6% 35px;box-sizing:border-box;outline:none}
+.fishing-journal-header{display:flex;align-items:center;justify-content:space-between;min-height:58px;color:#fff0bb}
+.fishing-journal-header h2{margin:0;font-size:30px}.fishing-journal-header button{color:#fff0bb}
+.fishing-journal-tabs{display:flex;justify-content:center;gap:20px;margin:22px 0 10px}
+.fishing-journal button{font:inherit;cursor:pointer;padding:10px 18px}.fishing-journal button:disabled{cursor:default;opacity:.45}.fishing-journal-tabs button[aria-pressed=true]{font-weight:bold;color:#116764}
+.fishing-journal-content{flex:1;min-height:0;overflow:auto;padding:2px 8px}.fishing-journal-character{font:inherit;min-width:200px;padding:8px;color:#302a20}.fishing-rod-overview{display:flex;justify-content:center;align-items:center;gap:35px;min-height:210px}.fishing-journal-rod{width:220px;height:230px;object-fit:contain}.fishing-rod-stats h3{font-size:24px}.fishing-rod-stats p{font-size:18px}
+.fishing-dex-count{text-align:center;margin:0 0 8px}.fishing-dex-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 14px}.fishing-dex-card{background:url('opui://launcher/images/launcher_room/fishing_ui_r29/card.webp') center/100% 100% no-repeat;min-height:180px;aspect-ratio:4/5;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:16px;box-sizing:border-box}.fishing-dex-fish{width:100%;height:72%;object-fit:contain;margin:auto}.fishing-dex-card[data-discovered=false] .fishing-dex-fish{filter:brightness(0)}.fishing-dex-card strong{text-align:center;font-size:14px;margin-bottom:6px}.fishing-dex-pages{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:10px}
+.fishing-forge{position:relative;display:grid;gap:16px;justify-items:center;padding-left:150px;min-height:150px}.fishing-forge-franky{position:absolute;left:0;bottom:0;width:150px;height:170px;object-fit:contain}.fishing-forge-franky.strike{animation:fishing-forge-strike .3s ease-out}.fishing-forge-rail{width:min(560px,90%);height:30px;background:#193d45;position:relative;overflow:hidden}.fishing-forge-zone{position:absolute;inset:0 39%;background:#e7c463}.fishing-forge-pointer{position:absolute;left:var(--forge-position,0%);top:0;width:5px;height:100%;background:#fff}.fishing-journal-feedback{min-height:24px;font-weight:bold}.fishing-journal-upgrade{display:block;margin:10px auto}
+@keyframes fishing-forge-strike{50%{transform:rotate(-12deg) translateY(-8px)}}
+@media(max-height:760px){.fishing-journal{padding-top:16px}.fishing-journal-tabs{margin:10px 0 6px}.fishing-journal-header{min-height:45px}.fishing-dex-card{min-height:145px;max-height:185px}.fishing-rod-overview{min-height:170px}.fishing-journal-rod{height:180px}}
+@media(prefers-reduced-motion:reduce){.fishing-forge-franky.strike{animation:none}}
+
+.fishing-journal-rod{background-image:url('opui://launcher/images/launcher_room/fishing_v5/rod-no-line-v1.webp');background-size:400% 500%;background-repeat:no-repeat;aspect-ratio:4/3}
+
+.fishing-dex-card{--card-height:min(245px,calc((100dvh - 320px)/2));height:var(--card-height);width:min(100%,calc(var(--card-height)*.8));min-height:0;max-height:none;aspect-ratio:auto;justify-self:center}.fishing-dex-card strong{margin-bottom:12px}.fishing-journal-header h2{margin-left:55px}.fishing-journal-tabs button[aria-pressed=true]{color:#ffe6a5;background:#0d3f45}

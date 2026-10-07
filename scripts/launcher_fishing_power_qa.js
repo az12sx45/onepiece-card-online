@@ -1,11 +1,12 @@
 'use strict';
+// Legacy battle-v1 compatibility plus shared skill pause semantics. Current v3 stats are covered by rod/browser QA.
 const assert=require('node:assert/strict');
 const v=require('../server/launcher-fishing-v5');
 const M=require('../server/launcher-minigames');
 const L=require('../server/launcher-life');
 const d=t=>new Date(t);let checks=0;
 function check(name,value){assert.ok(value,name);checks++;}
-function round(species='glistening-saury',level=0){const r=v.create('power',0,level,true);r.motionSeed=71;v.cast(r,d(0),'lure','mid',{x:.66,y:.45});v.hook(r,d(4000),1,species);return r;}
+function round(species='glistening-saury',level=0){const r=v.create('power',0,level,true);r.battleVersion=1;r.motionSeed=71;v.cast(r,d(0),'lure','mid',{x:.66,y:.45});v.hook(r,d(4000),1,species);return r;}
 const r=round();r.characterKey='ace';r.distance=60;r.strength=50;
 check('burst requires three earned charges',v.power(r,d(4100),'burst').error==='fishing_power_not_ready');
 for(let i=0;i<6;i++){r.flickCue={id:i+1,direction:'left',startedAt:d(4100+i*100).toISOString(),until:d(20000).toISOString()};v.flick(r,d(4200+i*100),'left',i+1);}
@@ -16,8 +17,9 @@ const seq=r.special.sequence.slice();seq.forEach((key,i)=>v.power(r,d(5100+i*150
 check('successful trial deals large fish stamina damage',r.fishStamina<=before-55&&r.powerFeedback.type==='special');
 check('Ace has his own cut-in technique',r.powerFeedback.theme==='flame'&&r.powerFeedback.name.includes('火拳'));
 check('old key cannot repeat skill damage',v.power(r,d(7000),'specialKey','left').error==='fishing_special_expired');
-r.powerCharge=3;r.distance=50;r.fishStamina=60;v.power(r,d(7100),'burst');
+r.powerCharge=3;r.distance=50;r.fishStamina=60;v.power(r,d(9100),'burst');
 check('burst spends exactly three charges and pulls distance',r.powerCharge===0&&r.distance===35&&r.fishStamina===48);
+const frozenBurst={distance:r.distance,strength:r.strength,stamina:r.fishStamina,x:r.fishX};v.control(r,d(9500),true,1);v.simulate(r,d(10000),1);check('burst freezes distance stamina pressure and fish',r.distance===frozenBurst.distance&&r.strength===frozenBurst.strength&&r.fishStamina===frozenBurst.stamina&&r.fishX===frozenBurst.x&&!r.control.reeling);
 const fail=round();fail.powerCharge=6;v.power(fail,d(4100),'special');const wrong=fail.special.sequence[0]==='left'?'right':'left';v.power(fail,d(4300),'specialKey',wrong);
 check('wrong sequence cancels without damage',fail.special===null&&fail.fishStamina===100);
 const frozen=round();frozen.powerCharge=6;v.power(frozen,d(4100),'special');const dist=frozen.distance;v.simulate(frozen,d(5000),1);
@@ -43,7 +45,8 @@ const hookAt=Date.parse(session.challenge.biteAt)+100;M.answer(session,{roundId:
 session.challenge.distance=0;session.challenge.fishStamina=70;
 M.answer(session,{roundId:session.challenge.id,counterMoves:['sync']},d(hookAt+100));
 check('real answer route settles zero metres with remaining stamina',session.feedback.reason==='landed'&&session.roundIndex===1);
-const ids=['room-character-luffy','room-character-zoro'];const state=L.normalizeState({fishingRodLevel:2},ids,ids,d(0));check('legacy paid level preserved for both characters',state.fishingRodLevels[ids[0]]===2&&state.fishingRodLevels[ids[1]]===2);state.fishingRodLevels[ids[0]]=3;const saved=L.normalizeState(state,ids,ids,d(0));check('independent rod levels survive save normalization',saved.fishingRodLevels[ids[0]]===3&&saved.fishingRodLevels[ids[1]]===2);
+const pausedSession=M.create('fishing','room-character-luffy',1,d(0),false,'supply',5,'worm','shore',99,true);M.answer(pausedSession,{roundId:pausedSession.challenge.id,counterMoves:['cast'],castPower:50,castZone:'mid'},d(100));const pausedHook=Date.parse(pausedSession.challenge.biteAt)+100;M.answer(pausedSession,{roundId:pausedSession.challenge.id,counterMoves:['hook']},d(pausedHook));pausedSession.challenge.powerCharge=3;M.answer(pausedSession,{roundId:pausedSession.challenge.id,counterMoves:['burst']},d(pausedHook+100));check('session lifetime covers skill pause and fight deadline',Date.parse(pausedSession.expiresAt)>=Date.parse(pausedSession.challenge.fightUntil)+60000);
+const ids=['room-character-luffy','room-character-zoro'];const state=L.normalizeState({fishingRodLevel:2,fishingRodProgression:2},ids,ids,d(0));check('legacy paid level preserved for both characters',state.fishingRodLevels[ids[0]]===2&&state.fishingRodLevels[ids[1]]===2);state.fishingRodLevels[ids[0]]=3;const saved=L.normalizeState(state,ids,ids,d(0));check('independent rod levels survive save normalization',saved.fishingRodLevels[ids[0]]===3&&saved.fishingRodLevels[ids[1]]===2);
 for(const key of require('../server/launcher-crew-release').releasedKeys)check(key+' has unique skill',Boolean(v.SPECIALS[key]));
 const results=[];
 for(const fish of M.FISH_SPECIES){

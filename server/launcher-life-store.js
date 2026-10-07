@@ -141,6 +141,7 @@ function validCommand(command) {
 function addFishCatch(state,session,result,now) {
   const species=M.FISH_SPECIES.find(entry=>entry.id===session.catchSpeciesId);
   if(!species)return;
+  if(!state.fishDex.includes(species.id))state.fishDex.push(species.id);
   if(state.fishCollection.length>=L.MAX_FISH){result.catchCollectionFull=true;return;}
   const caught={id:crypto.randomUUID(),speciesId:species.id,caughtAt:now.toISOString(),inAquarium:false};
   state.fishCollection.push(caught);
@@ -220,7 +221,7 @@ async function perform(db,row,state,companions,command,room,now,sessions=[],jobs
   const p=command.payload,content=L.content(),actor=state.characters[p.itemId];
   const fishAction=command.type==='fish.release'&&p.disposition!==undefined
     ?p.disposition==='cook'?'fish.cook':p.disposition==='sell'?'fish.sell':
-      p.disposition==='upgrade_rod'?'rod.upgrade':null:command.type;
+      p.disposition==='upgrade_rod'?'rod.upgrade':['forge_start','forge_tap'].includes(p.disposition)?'rod.forge':null:command.type;
   if(command.type==='fish.release'&&(
     fishAction===null||p.disposition===undefined&&p.recipientId!==undefined||
     fishAction==='fish.cook'&&typeof p.recipientId!=='string'||
@@ -273,21 +274,35 @@ async function perform(db,row,state,companions,command,room,now,sessions=[],jobs
     await writeLedger(db,row,operationId,null,offer.saleCoins,sale,state.fishingCoins);
     return{ok:true,sale};
   }
-  if(fishAction==='rod.upgrade') {
-    const requestedCharacter=command.type==='fish.release'?p.recipientId:p.itemId;
-    const characterId=requestedCharacter??state.activeCharacterIds[0]??state.ownedCharacterIds[0];
+  if(command.type==='fish.release'&&['forge_start','forge_tap'].includes(p.disposition)) {
+    const characterId=p.recipientId;
     if(!state.ownedCharacterIds.includes(characterId))return{ok:false,error:'character_not_owned'};
-    const level=L.rodLevel(state.fishingRodLevels?.[characterId]??state.fishingRodLevel),cost=L.ROD_UPGRADE_COSTS[level];
+    const level=L.rodLevel(state.fishingRodLevels[characterId]),cost=L.ROD_UPGRADE_COSTS[level];
     if(cost===undefined)return{ok:false,error:'rod_max_level'};
-    if(state.fishingCoins<cost)return{ok:false,error:'insufficient_coins'};
-    state.fishingCoins-=cost;
-    state.fishingRodLevels[characterId]=level+1;
-    if(requestedCharacter===undefined)state.fishingRodLevel=level+1; // Old UI summary only; other owned rods remain unchanged.
-    const operationId='life-rod:'+command.requestId;
-    const receipt={operationId,level:level+1,...characterId?{characterId}:{},currency:"fishing",amount:-cost,claimedAt:now.toISOString()};
-    await writeLedger(db,row,operationId,null,-cost,receipt,state.fishingCoins);
+    if(p.disposition==='forge_start') {
+      if(state.fishingCoins<cost)return{ok:false,error:'insufficient_coins'};
+      state.rodForge={id:crypto.randomUUID(),characterId,level,cost,startedAt:now.toISOString(),expiresAt:new Date(now.getTime()+15000).toISOString(),hits:[],lastTapAt:0};
+      return{ok:true,forge:state.rodForge};
+    }
+    const f=state.rodForge;
+    if(f.id!==p.fishId||f.characterId!==characterId||f.level!==level||now.getTime()>Date.parse(f.expiresAt))return{ok:false,error:'forge_expired'};
+    if(now.getTime()-f.lastTapAt<250)return{ok:false,error:'forge_too_fast'};
+    if(!Array.isArray(f.hits)||f.hits.length>=3)return{ok:false,error:'forge_expired'};
+    if(state.fishingCoins<f.cost)return{ok:false,error:'insufficient_coins'};
+    const phase=((now.getTime()-Date.parse(f.startedAt))%1400)/1400;
+    const position=1-Math.abs(phase*2-1),accuracy=Math.max(0,1-Math.abs(position-.5)/.22);
+    f.hits.push(Math.round(accuracy*100));f.lastTapAt=now.getTime();
+    if(f.hits.length<3)return{ok:true,forge:f};
+    if(state.fishingCoins<f.cost)return{ok:false,error:'insufficient_coins'};
+    const chance=Math.min(100,55+Math.round(f.hits.reduce((a,b)=>a+b,0)*.15));
+    const success=crypto.randomInt(100)<chance;state.fishingCoins-=f.cost;
+    if(success)state.fishingRodLevels[characterId]=level+1;
+    state.rodForge={};
+    const receipt={operationId:'life-rod-forge:'+command.requestId,characterId,level:level+(success?1:0),success,chance,hits:f.hits,currency:'fishing',amount:-f.cost,claimedAt:now.toISOString()};
+    await writeLedger(db,row,receipt.operationId,null,-f.cost,receipt,state.fishingCoins);
     return{ok:true,receipt};
   }
+  if(fishAction==='rod.upgrade')return{ok:false,error:'forge_required'};
   if(command.type.startsWith('work.')&&command.type!=='work.reserve') {
     if(typeof p.jobId!=='string'||p.jobId.length>100)return {ok:false,error:'invalid_job'};
     const existing=command.type==='work.complete'?await ledger(db,row.user_id,'life-work:'+p.jobId):null;
@@ -418,6 +433,11 @@ async function run(pool,secret,command,suppliedNow,capability) {
     row.stats=L.clone(L.object(row.stats));
     const S=shop(),room=S.launcherRoom(row.stats),jobsRoom=deployedRoom(row.stats),
       state=await loadState(db,row,now),companions=S.launcherCompanionState(row.stats,now);
+    if(!state.fishDexImported){
+      const history=await db.query("SELECT DISTINCT result->'catch'->>'speciesId' AS species_id FROM launcher_life_operations WHERE user_id=$1 AND result ? 'catch' UNION SELECT DISTINCT receipt->>'speciesId' AS species_id FROM launcher_wallet_ledger WHERE user_id=$1 AND receipt ? 'speciesId'",[row.user_id]);
+      const valid=new Set(M.FISH_SPECIES.map(f=>f.id));for(const h of history.rows)if(valid.has(h.species_id)&&!state.fishDex.includes(h.species_id))state.fishDex.push(h.species_id);
+      state.fishDexImported=true;
+    }
     row.stats.launcherWalletV1=S.prepareLauncherWallet(row.stats,now).wallet;
     reconcileLegacy(state,companions,jobsRoom,now);
     const sessions=await M.active(db,row.user_id,now,state,room);

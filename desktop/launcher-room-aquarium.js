@@ -285,26 +285,6 @@
       image.onerror = () => { image.onerror = null; image.hidden = true; };
       return image;
     }
-    function appendWorkshop(rod, balance) {
-      if (!owner()) return;
-      const workshop = element('footer', 'room-aquarium-manager-workshop');
-      const selectedRod=rod?.characters?.[recipientId]||rod;
-      const chooser=element('select','room-aquarium-manager-rod-character');chooser.setAttribute('aria-label','選擇改裝釣竿的角色');
-      for(const id of ownedCharacters()){const option=element('option','',options.recipient?.(id)?.name||id);option.value=id;chooser.append(option);}
-      chooser.value=recipientId;chooser.disabled=busy;chooser.onchange=()=>{recipientId=chooser.value;clearConfirmation();renderManager();};workshop.append(chooser);
-      const level = Number.isInteger(selectedRod?.level) ? selectedRod.level : null;
-      const maxLevel = Number.isInteger(rod?.maxLevel) ? rod.maxLevel : 99;
-      const nextCost = Number.isInteger(selectedRod?.nextCost) ? selectedRod.nextCost : null;
-      workshop.append(element('span', '', `佛朗基釣竿工房 · ${level === null ? '等級讀取中' : `+${level} / +${maxLevel}`}`),
-        element('small', '', level === null ? '正在讀取改裝資料' : level >= maxLevel ? '釣竿已達最高等級' : `下一級需 ${nextCost ?? '—'} 枚釣魚金幣 · 目前 ${balance ?? '—'} 枚`));
-      const upgrade = button(confirmation === 'rod.upgrade' ? '確定請佛朗基改裝' : level >= maxLevel ? '已滿級' : '請佛朗基改裝釣竿',
-        'room-aquarium-manager-upgrade', () => {
-          if (!askConfirmation('rod.upgrade')) return;
-          void perform('rod.upgrade', {itemId:recipientId}, result => `佛朗基已把這位夥伴的釣竿強化到 +${result.rod?.characters?.[recipientId]?.level ?? '—'}。`);
-        });
-      upgrade.disabled = busy || level === null || level >= maxLevel || nextCost === null || balance === null || balance < nextCost;
-      workshop.append(upgrade); card.append(workshop);
-    }
     function renderManager() {
       if (!present()) return;
       const fish = collection();
@@ -340,7 +320,7 @@
         const empty = element('div', 'room-aquarium-manager-empty');
         empty.append(element('strong', '', owner() ? '水族箱還沒有漁獲' : '好友還沒有展示漁獲'),
           element('p', '', owner() ? '釣到魚後會先收進漁獲收藏，再回到這裡決定展示、料理或出售。' : '等好友放進魚缸，就能在這裡看到。'));
-        card.append(empty); appendWorkshop(rod, balance); return;
+        card.append(empty); return;
       }
       const body = element('div', 'room-aquarium-manager-body');
       const list = element('div', 'room-aquarium-manager-list');
@@ -430,10 +410,88 @@
         detail.append(sale);
       }
       body.append(detail); card.append(body);
-      appendWorkshop(rod, balance);
+
     }
     return Object.freeze({ open, close, render: renderManager, isOpen: present });
   }
 
-  window.OnePieceRoomAquarium = Object.freeze({ render, displayedFish, species: SPECIES, createManager });
+  window.OnePieceRoomAquarium = Object.freeze({ render, displayedFish, species: SPECIES, fishArt, createManager });
+})();
+
+'use strict';
+(() => {
+  const ASSET='opui://launcher/images/launcher_room/fishing_ui_r29/';
+  const el=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls||'';if(text!==undefined)n.textContent=text;return n;};
+  function create(env){
+    let layer,card,tab='rods',selected='',page=0,forge=null,busy=false,frame=0,clock=0,feedback='',previousFocus;
+    function button(text,fn){const b=el('button','ghost-button',text);b.type='button';b.onclick=fn;return b;}
+    function close(){if(busy)return;cancelAnimationFrame(frame);forge=null;layer?.remove();layer=null;previousFocus?.focus?.();}
+    function picture(src,alt,cls){const n=el('img',cls);n.src=src;n.alt=alt;n.draggable=false;return n;}
+    function open(id){
+      if(!env.owner())return;
+      if(!layer){previousFocus=document.activeElement;layer=el('div','fishing-journal-overlay');card=el('section','fishing-journal');card.setAttribute('role','dialog');card.setAttribute('aria-modal','true');card.setAttribute('aria-label','釣竿與魚圖鑑');card.tabIndex=-1;layer.append(card);document.body.append(layer);
+        layer.onkeydown=e=>{if(forge&&e.key===' '){e.preventDefault();if(!e.repeat)void tapForge();return;}if(e.key==='Escape'){e.preventDefault();close();}if(e.key==='Tab'){const nodes=[...card.querySelectorAll('button:not(:disabled),select')].filter(n=>n.getClientRects().length);if(!nodes.length)return;const first=nodes[0],last=nodes.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}};
+      }
+      if(id){selected=id;tab='rods';}render();card.focus();void env.refresh?.().then(()=>{if(layer&&!forge)render();});
+    }
+    async function command(disposition,extra={}){
+      busy=true;const tap=card.querySelector('.fishing-forge-tap');if(tap)tap.disabled=true;
+      let result;try{result=await env.command('fish.release',{disposition,recipientId:selected,...extra});}catch{result={ok:false,error:'offline'};}
+      busy=false;if(!layer)return result;
+      if(!result?.ok){feedback=({forge_expired:'強化挑戰已過期，未扣款。',forge_too_fast:'慢一點敲，等指針回來。',insufficient_coins:'釣魚金幣不足。',offline:'連線中斷，請重新整理核對強化結果。'})[result?.error]||'強化未完成，請重新整理核對。';forge=null;cancelAnimationFrame(frame);render();return result;}
+      return result;
+    }
+    async function startForge(){
+      if(busy||forge)return;feedback='';const result=await command('forge_start');if(!result?.ok||!layer)return;
+      forge=result.forge||result.life?.rodForge;clock=Date.parse(result.serverNow)||Date.now();const local=performance.now();forge.localAnchor=local;
+      render();animate();
+    }
+    async function tapForge(){
+      if(busy||!forge)return;const id=forge.id,anchor=forge.localAnchor;
+      const hammer=card.querySelector('.fishing-forge-franky');hammer?.classList.remove('strike');if(hammer){void hammer.offsetWidth;hammer.classList.add('strike');}
+      const result=await command('forge_tap',{fishId:id});if(!result?.ok||!layer)return;
+      if(result.receipt){feedback=result.receipt.success?`SUPER！強化成功 +${result.receipt.level} · 成功率 ${result.receipt.chance}%`:`強化未成功！維持 +${result.receipt.level} · 成功率 ${result.receipt.chance}%`;
+        forge=null;cancelAnimationFrame(frame);render();return;}
+      forge=result.forge||result.life?.rodForge;forge.localAnchor=anchor;render();
+    }
+    function animate(){
+      if(!layer||!forge)return;
+      const at=clock+performance.now()-forge.localAnchor,phase=((at-Date.parse(forge.startedAt))%1400)/1400;
+      const rail=card.querySelector('.fishing-forge-rail');rail?.style.setProperty('--forge-position',`${(1-Math.abs(phase*2-1))*100}%`);
+      if(at>Date.parse(forge.expiresAt)&&!busy){forge=null;feedback='強化挑戰已過期，未扣款。';render();return;}
+      frame=requestAnimationFrame(animate);
+    }
+    function render(){
+      if(!layer)return;const data=env.life(),rod=data.rod,ids=Object.keys(rod?.characters||{});
+      if(!ids.includes(selected))selected=ids[0]||'';
+      card.replaceChildren();const header=el('header','fishing-journal-header');header.append(el('h2','',tab==='dex'?'漁獲圖鑑':'個人釣竿'),button('關閉',close));card.append(header);
+      const tabs=el('nav','fishing-journal-tabs');for(const [id,text] of [['rods','個人釣竿'],['dex','魚圖鑑']]){const b=button(text,()=>{if(busy||forge)return;tab=id;render();});b.setAttribute('aria-pressed',String(tab===id));b.disabled=busy||Boolean(forge);tabs.append(b);}card.append(tabs);
+      const content=el('div','fishing-journal-content');card.append(content);
+      if(tab==='dex'){
+        const species=window.OnePieceRoomAquarium.species,known=new Set([...(data.fishDex||[]),...(data.fishCollection||[]).map(f=>f.speciesId)]),all=Object.keys(species),size=8,total=Math.ceil(all.length/size);page=Math.max(0,Math.min(total-1,page));
+        content.append(el('p','fishing-dex-count',`已發現 ${all.filter(id=>known.has(id)).length} / ${all.length}`));
+        const grid=el('div','fishing-dex-grid');content.append(grid);
+        for(const id of all.slice(page*size,(page+1)*size)){
+          const found=known.has(id),tile=el('article','fishing-dex-card');tile.dataset.discovered=String(found);tile.append(picture(window.OnePieceRoomAquarium.fishArt(id),found?species[id]:'未發現魚種','fishing-dex-fish'),el('strong','',found?species[id]:'????????????'));grid.append(tile);
+        }
+        const controls=el('footer','fishing-dex-pages');const prev=button('‹ 上一頁',()=>{page--;render();}),next=button('下一頁 ›',()=>{page++;render();});prev.disabled=page===0;next.disabled=page===total-1;controls.append(prev,el('span','',`${page+1} / ${total}`),next);content.append(controls);return;
+      }
+      const selector=el('select','fishing-journal-character');selector.setAttribute('aria-label','角色釣竿');for(const id of ids){const o=el('option','',env.name(id));o.value=id;selector.append(o);}selector.value=selected;selector.disabled=busy||Boolean(forge);selector.onchange=()=>{selected=selector.value;feedback='';render();};content.append(selector);
+      const item=rod?.characters?.[selected];if(!item){content.append(el('p','','正在讀取釣竿資料…'));return;}
+      const key=selected.replace('room-character-',''),level=item.level;
+      const overview=el('div','fishing-rod-overview');const rodArt=el('div','fishing-journal-rod');const keys=['luffy','zoro','nami','usopp','sanji','chopper','robin','franky','brook','jinbe','ace','sabo','law'];const slot=Math.max(0,keys.indexOf(key));rodArt.style.backgroundPosition=`${slot%4*100/3}% ${Math.floor(slot/4)*25}%`;rodArt.setAttribute('role','img');rodArt.setAttribute('aria-label',env.name(selected)+'的釣竿');overview.append(rodArt);
+      const stats=el('div','fishing-rod-stats');stats.append(el('h3','',`${env.name(selected)} · +${level} / +99`),el('p','',`收線傷害 ${Math.round(18+82*(level/99)**2)}／秒`),el('p','',`必殺傷害 ${Math.round(600+17400*(level/99)**1.7)}`),el('p','',`釣魚金幣 ${data.coins??'—'}`));overview.append(stats);content.append(overview);
+      if(forge){
+        const game=el('section','fishing-forge');game.append(picture('opui://launcher/images/launcher_room/fishing_v6/special-franky.webp','佛朗基','fishing-forge-franky'));
+        const hits=forge.hits||[],chance=Math.min(100,55+Math.round(hits.reduce((a,b)=>a+b,0)*.15));game.append(el('strong','',`敲擊 ${hits.length}/3 · 成功率 ${chance}% → 最高100%`));
+        const rail=el('div','fishing-forge-rail');rail.append(el('span','fishing-forge-zone'),el('i','fishing-forge-pointer'));game.append(rail);const tap=button('敲！· 空白鍵',()=>void tapForge());tap.classList.add('fishing-forge-tap');tap.disabled=busy;game.append(tap);content.append(game);
+      }else{
+        content.append(el('p','',level>=99?'已達最高強化':`費用 ${item.nextCost} 釣魚金幣 · 基礎55%，三次敲擊可提高至100%。失敗不降級，完成三次才扣款。`));
+        const upgrade=button(level>=99?'已滿級':'佛朗基強化挑戰',()=>void startForge());upgrade.classList.add('fishing-journal-upgrade');upgrade.disabled=busy||level>=99||!Number.isInteger(data.coins)||data.coins<item.nextCost;content.append(upgrade);
+      }
+      const status=el('p','fishing-journal-feedback',feedback);status.setAttribute('role','status');content.append(status);
+    }
+    return {open,close,render};
+  }
+  window.OnePieceFishingJournal={create};
 })();

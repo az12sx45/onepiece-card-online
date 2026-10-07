@@ -335,10 +335,12 @@ const SPECIALS=Object.freeze({luffy:['橡膠橡膠・JET手槍','rubber'],zoro:[
 function power(round,now,move,direction){
   if(!round.powerMode)return{error:'invalid_fishing_action'};
   const at=now.getTime();
+  if(Date.parse(round.powerPauseUntil)>at)return{error:move==='specialKey'?'fishing_special_expired':'fishing_power_not_ready'};
   if(move==='burst'){
     if(round.special||round.powerCharge<3)return{error:'fishing_power_not_ready'};
     round.powerCharge-=3;round.distance=round4(Math.max(0,round.distance-15*leverage(round)));
     damage(round,at,round.battleVersion>=2?rodStats(round).burst:12,'burst');round.flickReliefUntil=iso(at+4000);
+    pausePower(round,at,2200);
     round.powerFeedback={at:iso(at),type:'burst',name:'爆拉',theme:'gold'};
     return{settlement:settlement(round)};
   }
@@ -360,6 +362,7 @@ function power(round,now,move,direction){
     round.special=null;const hit=damage(round,at,round.battleVersion>=2?rodStats(round).special:55,'special');
     round.distance=round4(Math.max(0,round.distance-8*leverage(round)));round.strength=Math.min(100,round.strength+25);round.flickReliefUntil=iso(at+5000);
     const skill=SPECIALS[round.characterKey]||SPECIALS.luffy;
+    pausePower(round,at,3200);
     round.powerFeedback={at:iso(at),type:'special',name:skill[0],theme:skill[1],damage:hit};
   }
   return{settlement:settlement(round)};
@@ -386,8 +389,13 @@ function flick(round,now,direction,cueId) {
   return{result,settlement:resolveFlick(round,at,result)};
 }
 
+function pausePower(round,at,ms){
+  round.powerPauseUntil=iso(at+ms);round.control={reeling:false,steer:0};round.controlLeaseUntil=null;
+  for(const key of ['phaseUntil','nextTurnAt','fightUntil','nextFlickAt','flickReliefUntil'])if(Number.isFinite(Date.parse(round[key])))round[key]=iso(Date.parse(round[key])+ms);
+  round.lastSimAt=iso(at+ms);round.flickTell=null;round.flickCue=null;
+}
 function simulate(round,now,difficulty=1) {
-  if(round.stage!=='fight')return null;
+  if(round.stage!=='fight'||now.getTime()<Date.parse(round.powerPauseUntil))return null;
   const completed=settlement(round);if(completed)return completed;
   const requested=now.getTime(),deadline=Date.parse(round.fightUntil),end=Math.min(requested,deadline);
   let cursor=Date.parse(round.lastSimAt);
@@ -500,6 +508,7 @@ function simulate(round,now,difficulty=1) {
 }
 
 function control(round,now,reeling,steer,paying=false) {
+  if(round.special||now.getTime()<Date.parse(round.powerPauseUntil))return;
   if(round.battleVersion>=2&&!reeling)flushReelDamage(round,now.getTime());
   round.control={reeling,steer,...paying&&!reeling?{paying:true}:{}};
   round.controlLeaseUntil=iso(now.getTime()+CONTROL_LEASE_MS);

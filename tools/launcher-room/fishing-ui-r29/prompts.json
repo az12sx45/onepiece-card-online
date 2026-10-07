@@ -1,0 +1,26 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in",
+  "assets": [
+    {
+      "asset": "directions.webp",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Create a production game UI sprite sheet for a One Piece themed nautical fishing ultimate-skill directional rhythm input. Transparent background. Single horizontal row of FOUR separate, identical-sized round buttons evenly spaced, arrows LEFT, UP, RIGHT, DOWN respectively. Each button brushed antique gold thin circular metal rim, dark teal enamel center, luminous ivory arrow, subtle turquoise glow and clean bold arrow silhouette. Hand-painted polished anime adventure videogame UI, readable at 64 pixels. No characters, no lettering, no numbers, no background, no extra objects. All four circles fully contained, equal 20 percent canvas width, ample transparent spacing. This exact sheet will be displayed as four game buttons."
+    },
+    {
+      "asset": "journal.webp",
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Production UI background for a One Piece themed fishing species encyclopedia, polished hand-painted anime nautical adventure game, 1536 by 1024 landscape. A large open captain's field journal, ivory weathered parchment pages with very subtle texture, dark ocean teal leather cover, restrained antique gold compass corners, small anchor and fishing hook decorations only in corners. Flat front view, perfectly rectangular, 8 percent thin border, 84 percent central area completely empty pale parchment for dynamically rendered fish cards and text. Top 12 percent reserved wide clean dark teal title plaque, blank no lettering. Bottom right small illustrated page-turn corner. No fish, no people, no characters, NO text or numbers. Readable functional game UI, not a scene mockup, no perspective tilt. Entire canvas filled with the open journal UI."
+    },
+    {
+      "asset": "card.webp",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. One standalone blank collectible fish encyclopedia card for a One Piece nautical anime videogame UI. Transparent outside the card. Upright portrait aspect ratio 4:5, card nearly fills canvas. Flat straight-on, no tilt. Weathered ivory parchment inner area, thin dark teal leather border with antique gold metal corner caps and tiny fishing hook motifs, tasteful polished hand painted anime adventure game texture. Center top 65 percent blank for a dynamic fish cutout, bottom 25 percent a blank pale nameplate for dynamic Chinese species names. No words, no numbers, no fish, no people, no scenes. Functional readable decorative game card UI, restrained detail, fully contained rounded rectangular border."
+    },
+    {
+      "asset": "rhythm-panel.webp",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Production game UI panel frame only, extremely wide horizontal aspect ratio 3.5:1, entire canvas should match this wide shape. One Piece nautical anime fishing ultimate-skill rhythm bar. Dark ocean teal enamel rectangular center, restrained antique gold frame, bevel edges, small metal corner rivets and simple rope details. Flat front view, no perspective. Blank slim header space along the top 18 percent for the Chinese title added by code; blank large center 65 percent reserved for SIX 90 pixel circular directional icons in one horizontal row; blank slim bottom for time bar. All inner regions empty. Transparent background outside the frame. No text, no arrows, no people, no illustrations, no compass circles, no skull or badge, no mockup. Polished hand-painted anime videogame UI, elegant and readable, not crowded."
+    }
+  ]
+}

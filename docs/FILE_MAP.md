@@ -1688,3 +1688,9 @@ server/launcher-life.js新增fishingCoins、舊存檔預設0而不複製商城�
 補充：最終縮小魚竿版本搏魚112項及公告82項通過；npm start根頁200，未連本機DB。
 
 公開r28驗證完成：source 80f747a0b8255142e943f6694fda196cc27ce2d7；Render dep-db2ih6rl550s73bcll80 2026-10-07 01:10:25台北Live，PostgreSQL ready。公開manifest SHA256 7ca2545a15fa753b6146d4a96dde05354b986ec8383c4ccaeaebfc933ab21e87。已安裝快取27→28差分564768bytes，67檔SHA/大小及再檢查零下載通過；變更blob遠端驗證通過。證據D:/Codex_QA/launcher-fishing-r28/release-evidence.json。QA帳號與獎勵為替身，未正式玩家人工驗收。
+
+## 2026-10-07 r29 釣魚互動、圖鑑與機率強化
+正式來源 launcher-flick-reward-r12。desktop/launcher-room-minigames.js/css：移除準備頁強化入口，C爆拉/X必殺，網路忙碌時保留指令、立即聲光回饋、離開時清除待送技能。米數與水花共用線性拉回比例；QTE固定魚/程序晃動/一般捲線，爆拉保留自身動畫。server/launcher-fishing-v5.js：爆拉2200ms與必殺演出3200ms停止一般模擬，輸入QTE沿用8秒凍結；launcher-minigames.js對齊session與fight期限。
+server/launcher-life.js/state：fishDex、fishDexImported、rodForge新增並核對舊存檔與+99保留；launcher-life-store.js從自己的舊catch或ledger物種證據補圖鑑，一次匯入，不新增假漁獲。forge_start/forge_tap透過既有fish.release傳輸；server時間1400ms往返針、250ms防重、15秒期限，三次hits合計決定55+round(sum*.15)%、最高100%。第三次才扣費與用crypto.randomInt擲成功；失敗不降級、他人釣竿不變；交易與requestId防重，帳本失敗回滾。舊rod.upgrade/upgrade_rod回forge_required，不能繞過機率。
+desktop/launcher-room-aquarium.js/css內加入OnePieceFishingJournal，沿用既有renderer白名單，沒有新增需完整安裝的核心檔。個人頁單一釣竿/圖鑑入口，水族箱含空收藏都移除升級按鈕；launcher-room.js接真實life資料、朋友隱藏入口；launcher-life-room.js角色詳情顯示獨立等級/傷害並可開頁。36物種分頁，每頁8張；未知亮度0剪影及12問號，已解鎖售出仍顯示。手繪資源 public/images/launcher_room/fishing_ui_r29 的directions/journal/card/rhythm-panel.webp，built-in imagegen；完整prompt於tools/launcher-room/fishing-ui-r29/prompts.json。CSS只負責布局/互動、亮光與剪影，底板卡框方向使用生成圖。
+QA：forge PGlite30項（扣費/100%/55%/不降級/防重/過期/上限/歷史解鎖/帳本回滾）、Journal Chromium32項、整房水族箱28項、拉回15項、技能兩桌機53項（X/C、失敗與逾時恢复、Rapid輸入、生成素材、程序動作凍結、致命技能HP歸0再catch）、舊battle-v1與共享技能暫停80項通過。npm start根頁200，本機未連DB；QA帳號/結算為測試替身，不代替正式玩家人工驗收。公告附圖；公開部署待核驗。LATTICE runtime/task API未提供，不假稱持久登記。

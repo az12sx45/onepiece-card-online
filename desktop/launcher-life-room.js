@@ -339,6 +339,11 @@
       details.replaceChildren();
       const heading=document.createElement('p');heading.textContent=STATE_NAMES[actor.state]||'自由活動';details.append(heading);
       for(const [label,value] of values){const span=document.createElement('span');span.textContent=`${label} ${Math.round(Number(value)||0)}`;details.append(span);}
+      if(owner()){
+        const id='room-character-'+key,rod=serverRod?.characters?.[id];
+        const p=document.createElement('p');p.textContent=rod?`個人釣竿 +${rod.level} / +99 · 收線 ${Math.round(18+82*(rod.level/99)**2)}／秒 · 必殺 ${Math.round(600+17400*(rod.level/99)**1.7)}`:'個人釣竿資料讀取中';details.append(p);
+        const b=document.createElement('button');b.type='button';b.className='ghost-button';b.textContent='查看釣竿與魚圖鑑';b.onclick=()=>root.OnePieceFishingJournal?.open(id);details.append(b);
+      }
       const task=snapshot.tasks.find(t=>t.key===key);
       if(task?.jobId&&owner()){const cancel=document.createElement('button');cancel.type='button';cancel.className='ghost-button';cancel.textContent='結束這次分工';cancel.onclick=()=>controller.cancel(key);details.append(cancel);}
       const memories=(actor.memories||[]).filter(m=>m.currentStrength>.15).slice(-2);
@@ -435,6 +440,7 @@
       cancel:key=>controller?.cancel(key),onPurchase(result){if(!owner())return;accept(result);void refresh();},
       snapshot:()=>snapshot,controller:()=>controller,world,
       fishCollection:()=>serverLife?.fishCollection||profile()?.life?.fishCollection||[],
+      fishDex:()=>serverLife?.fishDex||[],
       fishOffers:()=>serverFishOffers,
       ownedCharacterIds:()=>ownedIds(),
       wallet:()=>serverWallet,

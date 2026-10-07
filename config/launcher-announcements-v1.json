@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 42,
+  "revision": 43,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r29-fishing-journal",
+      "status": "published",
+      "publishedAt": "2026-10-07T03:27:05.227Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r29",
+      "title": "漁獲圖鑑與佛朗基強化挑戰",
+      "summary": "手繪魚圖鑑、個人釣竿與敲擊強化，必殺和爆拉操作更即時。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-journal-r29.webp",
+        "alt": "手繪漁獲圖鑑：已發現魚種與未知黑色剪影"
+      },
+      "body": [
+        "個人頁新增「釣竿・魚圖鑑」。未釣過的魚顯示黑色剪影與????????????；曾釣獲後賣掉的魚會從歷史紀錄補回。",
+        "角色詳情顯示獨立釣竿等級與實際傷害。強化集中在個人釣竿頁，佛朗基三次敲擊判定可將成功率從55%提高至100%；完成三次才扣釣魚金幣，失敗不降級。",
+        "X啟動必殺判定，C啟動爆拉；按鍵立即回饋，連線忙碌時保留指令。爆拉及必殺输入期間暫停魚和一般收線動作，生成方向圖示與面板加上命中光效、左右聲道回饋。",
+        "拉回米數與水面位置使用同一個距離比例。差分更新，重新啟動啟動器即可。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r28-fishing-viewport",
       "status": "published",

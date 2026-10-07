@@ -443,6 +443,7 @@ function answerClockedFishing(session,payload,now) {
     if(round.fishingVersion!==5||move==='specialKey'&&!payload.directions)return{error:'invalid_fishing_action'};
     const response=engine.power(round,now,move,payload.directions?.[0]);
     if(response.error)return response;
+    if(Number.isFinite(Date.parse(round.powerPauseUntil)))session.expiresAt=iso(Math.max(Date.parse(session.expiresAt),Date.parse(round.fightUntil)+60000));
     if(response.settlement)return advanceRound(session,response.settlement==='landed',now,response.settlement);
     return{};
   }

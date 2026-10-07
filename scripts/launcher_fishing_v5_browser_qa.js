@@ -1673,8 +1673,8 @@ async function runPullDepth(){
     await snapshot(page,`${label}-${distance}distance`);
    }
    fs.writeFileSync(path.join(out,`${label}-depth.json`),JSON.stringify(samples,null,2));
-   check(label+': hooked far fish remains near horizon',samples[0].water.floatY<32);
-   check(label+': early reeling keeps fish far away',samples[1].water.floatY<34);
+   check(label+': distance meter and water position use the same return ratio',samples.every(s=>Math.abs(s.water.floatY-(73-43*parseFloat(s.meters)/120))<1.5));
+   check(label+': early reeling moves toward player as metres fall',samples[1].water.floatY>samples[0].water.floatY+6);
    check(label+': approach progressively reaches foreground',samples[2].water.floatY>43&&samples[3].water.floatY>58);
    check(label+': near disturbance scales up visibly',samples[3].water.splashWidth>samples[0].water.splashWidth*3);
    check(label+': far meter exceeds 100m',parseFloat(samples[0].meters)>100);
@@ -1716,6 +1716,10 @@ async function runPower(){
    check(label+': target shows the distance under the silhouette',/m$/.test(await page.locator('.room-fishing-target-distance').textContent()));
    await snapshot(page,label+'-fight');await page.locator('.room-fishing-special').click();
    await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
+   check(label+': rhythm uses generated direction and UI artwork',await page.locator('.room-fishing-rhythm-arrow').first().evaluate(n=>getComputedStyle(n).backgroundImage.includes('directions.webp'))&&await page.locator('.room-fishing-rhythm').evaluate(n=>getComputedStyle(n).backgroundImage.includes('rhythm-panel.webp')));
+   const frozenPosition=await page.locator('.room-fishing-v4-sea').evaluate(n=>({x:n.style.getPropertyValue('--float-x'),y:n.style.getPropertyValue('--float-y'),bob:n.style.getPropertyValue('--bob-offset'),paused:n.dataset.skillPaused}));
+   await page.waitForTimeout(350);
+   check(label+': fish and procedural motion freeze during command input',await page.locator('.room-fishing-v4-sea').evaluate((n,old)=>n.dataset.skillPaused==='true'&&n.style.getPropertyValue('--float-x')===old.x&&n.style.getPropertyValue('--float-y')===old.y&&n.style.getPropertyValue('--bob-offset')===old.bob,frozenPosition));
    await snapshot(page,label+'-rhythm');
    const wrong=sessions.get('power').challenge.special.sequence[0]==='left'?'ArrowRight':'ArrowLeft';
    await page.keyboard.press(wrong);
@@ -1728,7 +1732,7 @@ async function runPower(){
    check(label+': ordinary flick succeeds after failed trial',sessions.get('power').challenge.flickFeedback?.id===cue.id&&sessions.get('power').challenge.flickFeedback.result==='hit');
    await page.evaluate(()=>fetch('/qa-power?client=power',{method:'POST'}));
    await page.waitForFunction(()=>!document.querySelector('.room-fishing-special')?.disabled);
-   await page.locator('.room-fishing-special').click();await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
+   await page.keyboard.press('x');await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
    await page.locator('.room-fishing-rhythm:not([hidden])').waitFor({state:'hidden',timeout:11000});
    check(label+': expired trial also restores fishing focus',await page.evaluate(()=>document.activeElement===document.querySelector('#roomMinigameOverlay')));
    await page.waitForFunction(()=>['left','right','up'].includes(document.querySelector('.room-fishing-v4-sea')?.dataset.flickCue),null,{timeout:8000});
@@ -1738,7 +1742,7 @@ async function runPower(){
    check(label+': ordinary flick succeeds after timeout',sessions.get('power').challenge.flickFeedback?.id===timeoutCue.id&&sessions.get('power').challenge.flickFeedback.result==='hit');
    await page.evaluate(()=>fetch('/qa-power?client=power',{method:'POST'}));
    await page.waitForFunction(()=>!document.querySelector('.room-fishing-special')?.disabled);
-   await page.locator('.room-fishing-special').click();await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
+   await page.keyboard.press('x');await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
    const sequence=sessions.get('power').challenge.special.sequence.slice();
    const firstKey={left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown'}[sequence[0]];
    await page.keyboard.down(firstKey);await page.keyboard.down(firstKey);await page.keyboard.up(firstKey);
@@ -1757,7 +1761,7 @@ async function runPower(){
    await page.evaluate(()=>fetch('/qa-power?client=power',{method:'POST'}));
    await page.waitForFunction(()=>!document.querySelector('.room-fishing-burst')?.disabled);
    const burstSoundStart=await page.evaluate(()=>performance.now());
-   await page.locator('.room-fishing-burst').click();await page.waitForTimeout(400);
+   await page.keyboard.press('c');await page.waitForTimeout(400);
    check(label+': burst spends three charges',sessions.get('power').challenge.powerCharge===3);
    check(label+': burst animates the rod with rapid alternating pulls',await page.locator('.room-fishing-v5-rod').evaluate(r=>getComputedStyle(r).animationName==='room-fishing-burst-pulls'));
    await snapshot(page,label+'-burst');
@@ -1766,7 +1770,7 @@ async function runPower(){
    check(label+': burst sounds move left and right and vary their pitches',burstSound.pans.some(x=>x<-.4)&&burstSound.pans.some(x=>x>.4)&&new Set(burstSound.tones).size>=5);
    await page.evaluate(()=>fetch('/qa-power?client=power&stamina=20',{method:'POST'}));
    await page.waitForFunction(()=>!document.querySelector('.room-fishing-special')?.disabled);
-   await page.locator('.room-fishing-special').click();await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
+   await page.keyboard.press('x');await page.locator('.room-fishing-rhythm:not([hidden])').waitFor();
    const finishSequence=sessions.get('power').challenge.special.sequence.slice();
    for(const direction of finishSequence){await page.keyboard.press({left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown'}[direction]);await page.waitForTimeout(220);}
    await page.locator('.room-fishing-special-character').waitFor();

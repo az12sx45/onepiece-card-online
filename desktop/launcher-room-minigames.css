@@ -854,3 +854,15 @@
 .room-minigame-overlay[data-fishing-version="5"]:is([data-fishing-stage="cast"],[data-fishing-stage="wait"],[data-fishing-stage="fight"]) .room-minigame-body{padding:0 12px 12px;min-height:0}
 .fishing-v5 .room-fishing-v4-sea,.fishing-v5 .room-fishing-v4-sea[data-stage=fight]{height:max(340px,calc(100dvh - 155px))}
 .fishing-v5 .room-fishing-v5-rod{width:min(45%,600px);left:28%;bottom:-2%}
+
+/* r29: generated nautical input art; freeze gameplay layers during skills. */
+.room-fishing-rhythm-arrow{width:90px;height:90px;border:0!important;border-radius:0!important;background-color:transparent!important;background-image:url('opui://launcher/images/launcher_room/fishing_ui_r29/directions.webp')!important;background-size:400% auto!important;background-repeat:no-repeat!important;background-position:0% 50%!important;box-shadow:none!important}
+.room-fishing-rhythm-arrow[data-direction=up]{background-position:33.333% 50%!important}.room-fishing-rhythm-arrow[data-direction=right]{background-position:66.666% 50%!important}.room-fishing-rhythm-arrow[data-direction=down]{background-position:100% 50%!important}
+.room-fishing-rhythm-arrow[data-step=waiting]{opacity:.4}.room-fishing-rhythm-arrow[data-step=next]{filter:drop-shadow(0 0 9px #ffed95)}.room-fishing-rhythm-arrow.hit{animation:fishing-rhythm-hit .28s ease-out}.room-fishing-rhythm-arrow[data-step=done],.room-fishing-rhythm-arrow[data-step=queued]{filter:drop-shadow(0 0 7px #58ffcd)}
+@keyframes fishing-rhythm-hit{50%{transform:scale(1.35);filter:brightness(1.8) drop-shadow(0 0 20px #7effdd)}}
+.room-fishing-v4-sea[data-skill-paused=true] *{animation-play-state:paused!important}.room-fishing-v4-sea[data-skill-paused=true] :is(.room-fishing-power-effect,.room-fishing-power-effect *,.room-fishing-rhythm,.room-fishing-rhythm *){animation-play-state:running!important}
+.room-fishing-v4-sea[data-power-pending=burst] .room-fishing-v5-rod{animation:room-fishing-burst-pulls .35s ease-in-out infinite!important}.room-fishing-v4-sea[data-power-pending=special] .room-fishing-power-charge{filter:brightness(2)}
+
+.room-fishing-rhythm{width:min(660px,85%);background:url('opui://launcher/images/launcher_room/fishing_ui_r29/rhythm-panel.webp') center/100% 100% no-repeat;border:0;border-radius:0;padding:26px 24px 20px;box-shadow:none}
+.room-fishing-rhythm small{color:#e4e5c9}.room-fishing-v4-sea[data-skill-paused=true] .room-fishing-v4-signal{visibility:hidden}
+.room-fishing-v4-sea[data-skill-paused=true][data-burst-active=true] :is(.room-fishing-v5-rod,.room-fishing-v5-rod-shaft),.room-fishing-v4-sea[data-power-pending=burst] .room-fishing-v5-rod{animation-play-state:running!important}
