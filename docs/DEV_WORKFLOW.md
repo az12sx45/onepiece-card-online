@@ -8067,3 +8067,5 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - 已安裝核心auth-service限制payload≤2048字元；本機事件以精簡陣列傳送並將整個payload控制在1900字元以下，不需重新安裝核心。伺服器接受精簡格式並嚴格檢查每一欄。
 
 - 驗證：17評級邊界／整数傷害、8本機與伺服器重播／重送／致命判定、91 PGlite帳號與收藏強化交易、舊流程57瀏覽器驗證通過；本機瀏覽器另測2.2秒網路延遲及致命演出。npm start本機HTTP200。新腳本launcher_fishing_local_qa.js、launcher_fishing_grades_qa.js及原forge/v5 QA已更新。
+
+- 公開交付驗證：r35公開manifest於2026-10-07T13:55:49.975Z讀回，SHA256 87b8e84264b3c8c06e65788f4e218d3e71d906f70c9c83b83e573806947fc0e6；提交71fe8c8ee。本機實際overlay34→35下載600418 bytes，80檔核對及二次零下載通過。24本機瀏覽器、57舊版瀏覽器、17評級、8重播、91帳號PGlite、80舊規則及82公告驗證通過。未執行正式玩家交易；中斷後Render瀏覽器不可用，未宣稱其Live時間或DB日誌。證據D:/Codex_QA/launcher-fishing-r35/release-evidence.json。
