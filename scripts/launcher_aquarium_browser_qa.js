@@ -264,6 +264,14 @@ async function main() {
   await page.locator('#roomAquariumManager').screenshot({ path: path.join(out, 'aquarium-390x844.png') });
   await page.setViewportSize({ width: 960, height: 640 });
   await page.locator('.room-aquarium-manager-close').click();
+  await page.evaluate(()=>{document.getElementById('profilePanel').hidden=false;});
+  const shortcut=page.getByRole('button',{name:'開啟魚圖鑑',exact:true});await shortcut.waitFor();
+  pass('fixed journal shortcut uses generated icon',await shortcut.evaluate(n=>getComputedStyle(n).position==='fixed'&&n.querySelector('img').src.includes('journal-button.webp')));
+  await page.waitForFunction(()=>document.querySelector('.fishing-journal-shortcut img')?.naturalWidth>0);await page.screenshot({path:path.join(out,'fixed-shortcut.png')});
+  const originalBox=await shortcut.boundingBox();await page.evaluate(()=>{const p=document.getElementById('profilePanel');p.style.height='440px';p.style.overflow='auto';const spacer=document.createElement('div');spacer.id='qaScrollSpacer';spacer.style.height='1400px';p.append(spacer);p.scrollTop=500;});
+  const movedBox=await shortcut.boundingBox();pass('journal shortcut stays at same viewport point after scroll',await page.evaluate(()=>document.getElementById('profilePanel').scrollTop>0)&&Math.abs(originalBox.x-movedBox.x)<1&&Math.abs(originalBox.y-movedBox.y)<1);
+  await shortcut.click();await page.locator('.fishing-dex-grid').waitFor();pass('fixed shortcut opens fish encyclopedia directly',await page.locator('.fishing-dex-grid').count()===1);
+  await page.getByRole('button',{name:'關閉',exact:true}).click();await page.evaluate(()=>{const p=document.getElementById('profilePanel');p.scrollTop=0;p.style.height='';p.style.overflow='';document.getElementById('qaScrollSpacer')?.remove();});
   await page.evaluate(() => {
     const f = window.__aquariumFixture;
     f.profile.isSelf = false;

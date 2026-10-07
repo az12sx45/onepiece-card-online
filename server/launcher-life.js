@@ -1,6 +1,7 @@
 'use strict';
 
 const crypto = require('node:crypto');
+const fishRecords=require('./launcher-fish-records');
 const DAY_MS = 86400000;
 const MAX_OFFLINE_MS = 8 * 60 * 60 * 1000;
 const RESERVATION_MS = 10 * 60 * 1000;
@@ -50,7 +51,7 @@ function normalizeState(raw, ownedIds, activeIds, now) {
         !FISH_IDS.has(fish.speciesId) || !iso(fish.caughtAt) ||
         fishCollection.some(existing => existing.id === fish.id)) continue;
     fishCollection.push({ id:fish.id, speciesId:fish.speciesId, caughtAt:iso(fish.caughtAt),
-      inAquarium:fish.inAquarium === true && fishCollection.filter(entry => entry.inAquarium).length < MAX_AQUARIUM_FISH });
+      ...fishRecords.evidence(fish),inAquarium:fish.inAquarium === true && fishCollection.filter(entry => entry.inAquarium).length < MAX_AQUARIUM_FISH });
   }
   const savedRodLevel=value=>saved.fishingRodProgression===2?rodLevel(value):[0,33,66,99][Number.isInteger(value)&&value>=0&&value<=3?value:0];
   const state = { schemaVersion: 1, revision: Number.isSafeInteger(saved.revision) && saved.revision >= 0 ? saved.revision : 0,
@@ -61,7 +62,7 @@ function normalizeState(raw, ownedIds, activeIds, now) {
     pendingArrivals: (Array.isArray(saved.pendingArrivals) ? saved.pendingArrivals : []).filter(a => a && set.has(a.itemId) && typeof a.arrivalId === 'string').slice(0, CREW.length),
     arrivedCharacterIds: (Array.isArray(saved.arrivedCharacterIds) ? saved.arrivedCharacterIds : owned).filter(id => set.has(id)),
     recentEvents: (Array.isArray(saved.recentEvents) ? saved.recentEvents : []).filter(e => e && typeof e.eventId === 'string' && iso(e.at)).slice(-32),
-    fishCollection, fishDexImported:saved.fishDexImported===true, fishDex:[...new Set([...(Array.isArray(saved.fishDex)?saved.fishDex:[]).filter(id=>FISH_IDS.has(id)),...fishCollection.map(f=>f.speciesId)])], rodForge:object(saved.rodForge), fishingCoins:Number.isSafeInteger(saved.fishingCoins)&&saved.fishingCoins>=0?Math.min(2147483647,saved.fishingCoins):0, fishingRodProgression:2, fishingRodLevel:savedRodLevel(saved.fishingRodLevel),
+    fishCollection, fishRecordsVersion:saved.fishRecordsVersion===1?1:0, fishRecords:fishRecords.normalize(saved.fishRecords,FISH_IDS), fishDexImported:saved.fishDexImported===true, fishDex:[...new Set([...(Array.isArray(saved.fishDex)?saved.fishDex:[]).filter(id=>FISH_IDS.has(id)),...fishCollection.map(f=>f.speciesId)])], rodForge:object(saved.rodForge), fishingCoins:Number.isSafeInteger(saved.fishingCoins)&&saved.fishingCoins>=0?Math.min(2147483647,saved.fishingCoins):0, fishingRodProgression:2, fishingRodLevel:savedRodLevel(saved.fishingRodLevel),
     fishingRodLevels:Object.fromEntries(owned.map(id=>[id,savedRodLevel(object(saved.fishingRodLevels)[id]??saved.fishingRodLevel)])),
     lastSimulatedAt: iso(saved.lastSimulatedAt) || now.toISOString(), lastSeenAt: iso(saved.lastSeenAt) || now.toISOString(),
     lastExitAt: iso(saved.lastExitAt), offlineSummary: { elapsedMs:0,completedJobs:0,coins:0 } };

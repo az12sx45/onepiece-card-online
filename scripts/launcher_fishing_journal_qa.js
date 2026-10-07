@@ -2,7 +2,7 @@
 // Real UI/assets in Chromium with account transport fixtures. Real ledger and
 // probability/timing enforcement is covered by launcher_fishing_rod_qa.js.
 const fs=require('fs'),path=require('path'),assert=require('assert/strict');
-const root=path.resolve(__dirname,'..'),out='D:/Codex_QA/launcher-fishing-r29/journal';
+const root=path.resolve(__dirname,'..'),out='D:/Codex_QA/launcher-fishing-r30/journal';
 const runtime=path.join(process.env.LOCALAPPDATA,'OpenAI/Codex/runtimes/cua_node');
 const pw=fs.readdirSync(runtime).map(n=>path.join(runtime,n,'bin/node_modules/playwright')).find(fs.existsSync);
 const {chromium}=require(pw);const checks=[],missing=[],errors=[];
@@ -16,7 +16,7 @@ const pass=(name,v)=>{assert.ok(v,name);checks.push(name);};
   for(const file of ['launcher.css','launcher-room-aquarium.css'])await page.addStyleTag({path:path.join(root,'desktop',file)});
   for(const file of ['launcher-room-aquarium.js'])await page.addScriptTag({path:path.join(root,'desktop',file)});
   await page.evaluate(()=>{
-   const data={fishCollection:[],fishDex:['glistening-saury'],coins:200,rod:{characters:{'room-character-luffy':{level:0,nextCost:20},'room-character-zoro':{level:7,nextCost:70}}}};
+   const data={fishCollection:[],fishDex:['glistening-saury'],fishRecords:{'glistening-saury':{minCatch:{lengthCm:16.4,spotId:'shore',baitId:'worm'},maxCatch:{lengthCm:31.8,spotId:'reef',baitId:'shrimp'},grounds:[{spotId:'reef',baitId:'shrimp',count:2}]}},coins:200,rod:{characters:{'room-character-luffy':{level:0,nextCost:20},'room-character-zoro':{level:7,nextCost:70}}}};
    window.fixture=data;window.owner=true;window.commands=[];let active;
    window.journal=OnePieceFishingJournal.create({owner:()=>window.owner,life:()=>data,name:id=>id.endsWith('zoro')?'索隆':'魯夫',refresh:async()=>{},command:async(type,payload)=>{
     window.commands.push({type,payload});await new Promise(r=>setTimeout(r,80));
@@ -35,7 +35,7 @@ const pass=(name,v)=>{assert.ok(v,name);checks.push(name);};
   pass(label+' timing needle moves',Math.abs(before-await page.locator('.fishing-forge-pointer').evaluate(n=>n.getBoundingClientRect().left))>10);
   pass(label+' starting forge costs nothing',await page.evaluate(()=>fixture.coins===200));
   await page.screenshot({path:path.join(out,label+'-forge.png')});
-  for(let i=0;i<3;i++){await page.locator('.fishing-forge-tap').click();await page.waitForTimeout(160);}
+  for(let i=0;i<3;i++){await page.evaluate(()=>document.activeElement.blur());await page.keyboard.press('Space');await page.waitForTimeout(350);pass(label+' Space registers tap '+(i+1),await page.evaluate(i=>commands.filter(c=>c.payload.disposition==='forge_tap').length===i+1,i));}
   pass(label+' three taps increase own rod only',await page.evaluate(()=>fixture.rod.characters['room-character-luffy'].level===1&&fixture.rod.characters['room-character-zoro'].level===7));
   pass(label+' one charge on completion',await page.evaluate(()=>fixture.coins===180));
   pass(label+' correct success result displayed',(await page.locator('.fishing-journal-feedback').textContent()).includes('100%'));
@@ -47,6 +47,7 @@ const pass=(name,v)=>{assert.ok(v,name);checks.push(name);};
   await page.waitForFunction(()=>[...document.images].every(i=>i.complete&&i.naturalWidth>0));
   const bounds=await page.locator('.fishing-journal').evaluate(n=>{const b=n.getBoundingClientRect();return b.left>=0&&b.right<=innerWidth&&b.top>=0&&b.bottom<=innerHeight;});pass(label+' journal fits desktop viewport',bounds);
   await page.screenshot({path:path.join(out,label+'-dex.png')});
+  await page.getByRole('button',{name:/查看.*最大最小與釣點紀錄/}).click();const text=await page.locator('.fishing-dex-records').textContent();pass(label+' maximum and minimum measurements',text.includes('31.8 cm')&&text.includes('16.4 cm'));pass(label+' records carry actual sea and bait',text.includes('珊瑚礁邊 · 蝦餌')&&text.includes('近岸水流 · 蟲餌'));await page.screenshot({path:path.join(out,label+'-records.png')});
   await page.getByRole('button',{name:'下一頁 ›'}).click();pass(label+' pages navigate',(await page.locator('.fishing-dex-pages').textContent()).includes('2 /'));
   await page.getByRole('button',{name:'關閉',exact:true}).click();await page.evaluate(()=>{owner=false;journal.open();});pass(label+' friend cannot forge with owner inventory',await page.locator('.fishing-journal').count()===0);
   await page.close();

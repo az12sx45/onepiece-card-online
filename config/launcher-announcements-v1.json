@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 43,
+  "revision": 44,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r30-fish-records",
+      "status": "published",
+      "publishedAt": "2026-10-07T05:32:15.629Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r30",
+      "title": "固定圖鑑入口與漁獲尺寸紀錄",
+      "summary": "手繪圖鑑快捷鈕，保存最大最小魚與實際海域、魚餌。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fish-records-r30.webp",
+        "alt": "魚圖鑑最大最小尺寸、海域與魚餌功能示意"
+      },
+      "body": [
+        "個人頁右下角固定手繪魚圖鑑按鈕，捲動時仍可直接開啟圖鑑。",
+        "新版釣獲開始保存尺寸cm、海域和魚餌，魚卡可查看最大、最小紀錄及曾成功釣獲的海域／餌組合。出售或料理後紀錄仍保留。",
+        "舊紀錄會依自己的釣魚session或操作紀錄補回能查證的海域與魚餌；沒有尺寸證據時顯示尚無尺寸紀錄，不補造最大或最小數字。圖為功能示意，個人紀錄依實際釣獲。",
+        "修正佛朗基強化頁重繪後失焦，空白鍵可以連續敲击。差分更新，重新啟動啟動器即可。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r29-fishing-journal",
       "status": "published",

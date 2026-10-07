@@ -3,6 +3,7 @@
 // All mutations lock player_profiles first, then the life row. The wallet and
 // unique receipt are committed together; no renderer state is trusted here.
 const crypto = require('node:crypto');
+const fishRecords=require('./launcher-fish-records');
 const L = require('./launcher-life');
 const crewRelease = require('./launcher-crew-release');
 const M = require('./launcher-minigames');
@@ -142,8 +143,9 @@ function addFishCatch(state,session,result,now) {
   const species=M.FISH_SPECIES.find(entry=>entry.id===session.catchSpeciesId);
   if(!species)return;
   if(!state.fishDex.includes(species.id))state.fishDex.push(species.id);
-  if(state.fishCollection.length>=L.MAX_FISH){result.catchCollectionFull=true;return;}
-  const caught={id:crypto.randomUUID(),speciesId:species.id,caughtAt:now.toISOString(),inAquarium:false};
+  const caught={id:crypto.randomUUID(),speciesId:species.id,caughtAt:now.toISOString(),inAquarium:false,lengthCm:fishRecords.measuredLength(species.id),spotId:session.spotId||null,baitId:session.baitId||null};
+  fishRecords.record(state.fishRecords,caught);
+  if(state.fishCollection.length>=L.MAX_FISH){result.catchCollectionFull=true;result.catchRecord={...caught};return;}
   state.fishCollection.push(caught);
   result.catch={...caught,label:species.label,rarity:M.FISH_RARITY_BY_ID[species.id]};
 }
@@ -437,6 +439,15 @@ async function run(pool,secret,command,suppliedNow,capability) {
       const history=await db.query("SELECT DISTINCT result->'catch'->>'speciesId' AS species_id FROM launcher_life_operations WHERE user_id=$1 AND result ? 'catch' UNION SELECT DISTINCT receipt->>'speciesId' AS species_id FROM launcher_wallet_ledger WHERE user_id=$1 AND receipt ? 'speciesId'",[row.user_id]);
       const valid=new Set(M.FISH_SPECIES.map(f=>f.id));for(const h of history.rows)if(valid.has(h.species_id)&&!state.fishDex.includes(h.species_id))state.fishDex.push(h.species_id);
       state.fishDexImported=true;
+    }
+    if(state.fishRecordsVersion!==1){
+      const sessions=await db.query("SELECT session->'result'->'catch' AS fish,session->>'spotId' AS spot_id,session->>'baitId' AS bait_id FROM launcher_minigame_sessions WHERE user_id=$1 AND session->'result' ? 'catch'",[row.user_id]);
+      const operations=await db.query("SELECT COALESCE(result->'catch',result->'minigame'->'result'->'catch') AS fish,result->'minigame'->>'spotId' AS spot_id,result->'minigame'->>'baitId' AS bait_id FROM launcher_life_operations WHERE user_id=$1 AND (result ? 'catch' OR result->'minigame'->'result' ? 'catch')",[row.user_id]);
+      const seen=new Set();
+      for(const h of [...sessions.rows,...operations.rows,...state.fishCollection.map(f=>({fish:f}))]){
+        if(!h.fish?.id||seen.has(h.fish.id))continue;seen.add(h.fish.id);fishRecords.record(state.fishRecords,h.fish,{spotId:h.spot_id,baitId:h.bait_id});if(Object.hasOwn(fishRecords.SIZE_BANDS,h.fish.speciesId)&&!state.fishDex.includes(h.fish.speciesId))state.fishDex.push(h.fish.speciesId);
+      }
+      state.fishRecordsVersion=1;
     }
     row.stats.launcherWalletV1=S.prepareLauncherWallet(row.stats,now).wallet;
     reconcileLegacy(state,companions,jobsRoom,now);

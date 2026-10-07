@@ -2624,3 +2624,8 @@ desktop/launcher-room-aquarium.js/css內加入OnePieceFishingJournal，沿用既
 QA：forge PGlite30項（扣費/100%/55%/不降級/防重/過期/上限/歷史解鎖/帳本回滾）、Journal Chromium32項、整房水族箱28項、拉回15項、技能兩桌機53項（X/C、失敗與逾時恢复、Rapid輸入、生成素材、程序動作凍結、致命技能HP歸0再catch）、舊battle-v1與共享技能暫停80項通過。npm start根頁200，本機未連DB；QA帳號/結算為測試替身，不代替正式玩家人工驗收。公告附圖；公開部署待核驗。LATTICE runtime/task API未提供，不假稱持久登記。
 
 公開r29驗證完成：source 97d0ac92bd7a905d371ac67737774b4072cddafd；Render dep-db2rpae7bikc73bi77eg 2026-10-07 11:39:25台北Live及PostgreSQL ready。公開manifest SHA256 839f05932bfab99f7aeb5faf09564f8d6a1cab0134db952ad9a43b069e41bb9a；變更blob遠端SHA/大小核對；已安裝快取28→29差分1768499bytes，72檔讀回與再檢查零下載通過。36種圖鑑圖片本機路徑存在。證據D:/Codex_QA/launcher-fishing-r29/release-evidence.json。未操作正式玩家強化扣款，功能交易/畫面驗收為PGlite与Chromium帳號替身。
+
+## 2026-10-07 r30 固定圖鑑、尺寸與釣點紀錄、強化Space
+desktop/launcher-room.js/aquarium.js/css：個人頁右下固定生成圖鑑快捷鈕，直接開dex；角色詳情仍開釣竿頁。強化時window capture只攔截當前forge的Space並防default/repeat，三次重繪後恢復card焦點，避免移除button導致焦點掉回body。圖鑑魚卡可選最大/最小尺寸與各自海域/魚餌，另列實際海域與餌組合計數；未知剪影保留。launcher-life-room.js提供fishRecords。public/images/launcher_room/fishing_ui_r30包含journal-button.webp、record-panel.webp；built-in imagegen與prompts於tools/launcher-room/fishing-ui-r30/prompts.json。
+server/launcher-fish-records.js定義36物種遊戲cm尺寸區間，非原作生物尺寸主張；新釣獲完成時server crypto生成一次尺寸並保存catch及min/max/grounds。launcher-life-store.js在collection滿時仍保存捕獲紀錄，finish requestId重送不重擲。launcher-life.js新增fishRecords/Version與collection量測欄位，正規化過濾有效id/尺寸/海域/餌。首次從自己的完成session、top或nested operation.catch及現有collection補紀錄，同id去重；舊尺寸缺失用null，不隨機回填，證據可解鎖fishDex，售出/料理不刪record。既有rod與coins不變。
+QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真實路徑與重送、舊session/operation去重與nested紀錄、不造尺寸；Journal Chromium42項含兩桌機三次失焦Space、尺寸與海域餌UI；整房31項含真實可捲動容器中固定鈕位置、圖示與直開dex、好友唯讀；npm start根頁200本機無DB。帳號/結算為QA替身，未正式玩家扣款驗收。公告附示意圖，發布待讀回。LATTICE Runtime/task API未提供，未宣稱持久登記。

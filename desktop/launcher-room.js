@@ -336,11 +336,11 @@
     return [...byId.values()];
   }
   const fishingJournal=window.OnePieceFishingJournal?.create({
-    owner:isOwner,life:()=>({fishCollection:lifeRoom?.fishCollection?.()||[],fishDex:lifeRoom?.fishDex?.()||[],rod:lifeRoom?.rod?.(),coins:lifeRoom?.fishingWallet?.()?.coins}),
+    owner:isOwner,life:()=>({fishCollection:lifeRoom?.fishCollection?.()||[],fishDex:lifeRoom?.fishDex?.()||[],fishRecords:lifeRoom?.fishRecords?.()||{},rod:lifeRoom?.rod?.(),coins:lifeRoom?.fishingWallet?.()?.coins}),
     name:id=>resolvedItem(id,'character')?.name||String(id).replace('room-character-',''),command:(type,payload)=>lifeRoom?.aquariumCommand?.(type,payload),refresh:()=>lifeRoom?.refresh?.()
   });
   window.OnePieceFishingJournal.open=id=>fishingJournal?.open(id);
-  const fishingJournalButton=document.createElement('button');fishingJournalButton.type='button';fishingJournalButton.className='ghost-button';fishingJournalButton.textContent='釣竿・魚圖鑑';fishingJournalButton.onclick=()=>fishingJournal?.open();document.querySelector('#profilePanel .voyage-heading-actions')?.append(fishingJournalButton);
+  const fishingJournalButton=document.createElement('button');fishingJournalButton.type='button';fishingJournalButton.className='fishing-journal-shortcut';fishingJournalButton.setAttribute('aria-label','開啟魚圖鑑');fishingJournalButton.title='魚圖鑑與個人釣竿';const journalIcon=document.createElement('img');journalIcon.src='opui://launcher/images/launcher_room/fishing_ui_r30/journal-button.webp';journalIcon.alt='';fishingJournalButton.append(journalIcon,Object.assign(document.createElement('span'),{textContent:'魚圖鑑'}));fishingJournalButton.onclick=()=>fishingJournal?.open(null,'dex');document.querySelector('#profilePanel .voyage-heading-actions')?.append(fishingJournalButton);
   function sceneProducts() {
     const items = isOwner() ? roomItems('scene') : ownedProfileItems()
       .filter(item => item?.type === TYPES.scene.type && isValidProduct(item, TYPES.scene.type));

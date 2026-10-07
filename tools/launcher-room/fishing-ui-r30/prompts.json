@@ -1,0 +1,16 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in",
+  "assets": [
+    {
+      "asset": "journal-button.webp",
+      "transparent": true,
+      "prompt": "Production UI icon for a One Piece themed nautical fish encyclopedia. A single small open field journal with a recognizable silver fish illustration across its ivory pages, antique gold corners and deep ocean teal leather cover, a small gold anchor bookmark, flat front three-quarter tiny tilt, polished hand-painted anime adventure videogame art. Intended fixed desktop shortcut button at 80 pixels. Strong clean silhouette, generous transparent margin, genuinely transparent outside icon. No text, no people, no extra scenery, no letters or numbers. Restrained teal and gold matching nautical game UI, clean readable circular-compatible icon."
+    },
+    {
+      "asset": "record-panel.webp",
+      "transparent": true,
+      "prompt": "Production One Piece nautical anime fishing record UI frame. One wide horizontal rectangular blank parchment panel, aspect ratio 3.5:1, entire canvas wide. Very thin antique gold and dark teal border, tiny corner rivets only, ivory parchment inner center occupying 90 percent, subtle paper texture. Completely flat front view. Center entirely empty for five lines of dynamic text. No lettering, no fish, no people, no icons or skull or compass, no title plaque, no decorations intruding into the center. Transparent background outside the frame, polished hand painted videogame UI, minimal and functional, legible as a desktop records panel."
+    }
+  ]
+}

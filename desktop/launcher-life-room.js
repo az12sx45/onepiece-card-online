@@ -441,6 +441,7 @@
       snapshot:()=>snapshot,controller:()=>controller,world,
       fishCollection:()=>serverLife?.fishCollection||profile()?.life?.fishCollection||[],
       fishDex:()=>serverLife?.fishDex||[],
+      fishRecords:()=>serverLife?.fishRecords||{},
       fishOffers:()=>serverFishOffers,
       ownedCharacterIds:()=>ownedIds(),
       wallet:()=>serverWallet,
