@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 49,
+  "revision": 50,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r37-fishing-controls",
+      "status": "published",
+      "publishedAt": "2026-10-07T16:24:44.479Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r37",
+      "title": "釣魚儀表完成與操作整理",
+      "summary": "Wii釣竿表、魚體力圓環與必殺背景暫停；操作只在拉魚時出現。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-wii-meter-r36.webp",
+        "alt": "Wii風格釣竿儀表與魚體力圓環功能示意"
+      },
+      "body": [
+        "保留Wii風格細竿橫軌與捲線器，魚體力只以魚圖示外圈呈現，沒有HP數字或長條。",
+        "收線與C／X操作改為只在拉魚階段顯示，避免拋竿或待魚畫面混入不適用按鈕。",
+        "必殺期間海面與背景動畫暫停。重新啟動啟動器套用差分；圖片為功能示意。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r36-wii-meter",
       "status": "published",
