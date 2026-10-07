@@ -1,15 +1,15 @@
 'use strict';
 // Real UI/assets in Chromium with account transport fixtures. Real ledger and
-// probability/timing enforcement is covered by launcher_fishing_rod_qa.js.
+// probability/timing enforcement is covered by launcher_fishing_forge_qa.js.
 const fs=require('fs'),path=require('path'),assert=require('assert/strict');
-const root=path.resolve(__dirname,'..'),out='D:/Codex_QA/launcher-fishing-r31/journal';
+const root=path.resolve(__dirname,'..'),out='D:/Codex_QA/launcher-fishing-r33/journal';
 const runtime=path.join(process.env.LOCALAPPDATA,'OpenAI/Codex/runtimes/cua_node');
 const pw=fs.readdirSync(runtime).map(n=>path.join(runtime,n,'bin/node_modules/playwright')).find(fs.existsSync);
 const {chromium}=require(pw);const checks=[],missing=[],errors=[];
 const pass=(name,v)=>{assert.ok(v,name);checks.push(name);};
 (async()=>{
  fs.mkdirSync(out,{recursive:true});const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
- try{for(const [label,width,height] of [['desktop',1440,900],['minimum',960,640]]){
+ try{for(const [label,width,height] of [['desktop',1440,900],['minimum',960,640],['compact',600,800]]){
   const page=await browser.newPage({viewport:{width,height}});page.on('pageerror',e=>errors.push(e.message));
   await page.route('opui://**',route=>{const p=path.join(root,'public',new URL(route.request().url()).pathname);if(fs.existsSync(p))return route.fulfill({path:p});missing.push(p);return route.fulfill({status:404,body:''});});
   await page.setContent('<html><body><button id="previous">個人頁</button></body></html>');
@@ -47,7 +47,7 @@ const pass=(name,v)=>{assert.ok(v,name);checks.push(name);};
   await page.waitForFunction(()=>[...document.images].every(i=>i.complete&&i.naturalWidth>0));
   const bounds=await page.locator('.fishing-journal').evaluate(n=>{const b=n.getBoundingClientRect();return b.left>=0&&b.right<=innerWidth&&b.top>=0&&b.bottom<=innerHeight;});pass(label+' journal fits desktop viewport',bounds);
   await page.screenshot({path:path.join(out,label+'-dex.png')});
-  await page.getByRole('button',{name:/查看.*最大最小與釣點紀錄/}).click();const text=await page.locator('.fishing-dex-records').textContent();pass(label+' maximum and minimum measurements',text.includes('31.8 cm')&&text.includes('16.4 cm'));pass(label+' records carry actual sea and bait',text.includes('珊瑚礁邊 · 蝦餌')&&text.includes('近岸水流 · 蟲餌'));await page.screenshot({path:path.join(out,label+'-records.png')});
+  await page.getByRole('button',{name:/查看.*最大最小與釣點紀錄/}).click();const text=await page.locator('.fishing-dex-records').textContent();pass(label+' maximum and minimum measurements',text.includes('31.8 cm')&&text.includes('16.4 cm'));pass(label+' records carry actual sea and bait',text.includes('珊瑚礁邊 · 蝦餌')&&text.includes('近岸水流 · 蟲餌'));await page.evaluate(()=>document.fonts.ready);pass(label+' local handwritten font loaded',await page.evaluate(()=>document.fonts.check('18px "LXGW WenKai TC Journal"','漁獲圖鑑最大紀錄')));pass(label+' records directly use original book page',await page.locator('.fishing-dex-records').evaluate(n=>getComputedStyle(n).backgroundImage==='none'));pass(label+' buttons use drawn plate',await page.locator('.fishing-dex-back').evaluate(n=>getComputedStyle(n).backgroundImage.includes('button-plate.webp')));await page.screenshot({path:path.join(out,label+'-records.png')});
   pass(label+' separate detail hides fish grid',await page.locator('.fishing-dex-grid').count()===0);await page.getByRole('button',{name:'‹ 返回圖鑑'}).click();pass(label+' back restores fish grid',await page.locator('.fishing-dex-grid').count()===1);await page.getByRole('button',{name:'下一頁 ›'}).click();pass(label+' pages navigate',(await page.locator('.fishing-dex-pages').textContent()).includes('2 /'));
   await page.getByRole('button',{name:'關閉',exact:true}).click();await page.evaluate(()=>{owner=false;journal.open();});pass(label+' friend cannot forge with owner inventory',await page.locator('.fishing-journal').count()===0);
   await page.close();

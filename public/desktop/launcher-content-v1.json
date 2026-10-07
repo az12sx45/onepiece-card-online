@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 32,
-  "publishedAt": "2026-10-07T06:47:01.080Z",
+  "revision": 33,
+  "publishedAt": "2026-10-07T08:15:34.065Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -72,6 +72,11 @@
       "path": "images/launcher_announcements/launcher-fishing-wallet-r27.webp",
       "bytes": 44484,
       "sha256": "872c554dfb942808068ed9a0c35013c2d54b95d8203f68e13e2c8ed394bcfd58"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-journal-style-r33.webp",
+      "bytes": 111660,
+      "sha256": "5aed3944ca3ca90c2cc6da8abb37fa7ad76e0c24c0319976f5dc57df04f9738d"
     },
     {
       "path": "images/launcher_announcements/launcher-pull-depth-r26.webp",
@@ -172,6 +177,11 @@
       "path": "images/launcher_room/fishing_ui_r30/record-panel.webp",
       "bytes": 160792,
       "sha256": "52de2478a8f8652fd2ffaa058393bb2ca40a3b5ad6ac6c606b9717d8019bca47"
+    },
+    {
+      "path": "images/launcher_room/fishing_ui_r33/button-plate.webp",
+      "bytes": 173028,
+      "sha256": "41264fbc95cb85da5ff7d8d625da453573a7f6c02499f90c8ed4c78d0342b191"
     },
     {
       "path": "images/launcher_room/fishing_v5/rod-no-line-v1.webp",
@@ -355,13 +365,13 @@
     },
     {
       "path": "launcher-room-aquarium.css",
-      "bytes": 18931,
-      "sha256": "a8d58c1c681d9301f8011e2da65896147256419e3840b258761832a90e0529cd"
+      "bytes": 725008,
+      "sha256": "872298b08030de004f780e257f25e0d63c9a1f4e36494ee50633a95334678f43"
     },
     {
       "path": "launcher-room-aquarium.js",
-      "bytes": 37106,
-      "sha256": "1430c012bd19cdc76b0a2f140c766e01fd70e5e584ac9eba2e9da866d9299cc8"
+      "bytes": 37224,
+      "sha256": "3a57f2735c30a36e4224525b599e025e967deedeca44499d846e7b5c75803bd1"
     },
     {
       "path": "launcher-room-minigames.css",
@@ -387,11 +397,16 @@
       "path": "launcher-room.js",
       "bytes": 123094,
       "sha256": "b04e585296492b4325346ac566398f7f8226439ee4b6d9f1341485ffa53feccc"
+    },
+    {
+      "path": "launcher.html",
+      "bytes": 39564,
+      "sha256": "61de409bd5a700572ea0e8da0586d79cc9f96af7c2b3a7849a0f04fd20b0fae1"
     }
   ],
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "5/fTtzP+ZMEL0JIB0C50cCQcWsBZFhN7cdh41G1dLQz5jzKqvYczMjMMy0R50a7uYGkA91PZ4zaRUyvdr0/NCg=="
+    "value": "ZvJTQO6IANb8W5AzIaxgODRp4QqMr+NoM64WUFFjdlAP7otI3fOvYjVpmoWjZRYDBW75dj7hUN9n5rj2XHk8CQ=="
   }
 }

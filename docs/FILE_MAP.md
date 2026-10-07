@@ -1712,3 +1712,11 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - 驗證：46項圖鑑介面、82項公告測試通過；npm start本機HTTP200。公告圖片遵守既有WebP格式，發布內容修訂32；未改玩家魚類、錢包或釣竿資料。
 
 - 公開驗證：r32／787e6c265，Render dep-db2um01a4tcc738ior50於2026-10-07 14:59:14 +08:00 Live，PostgreSQL已連線。公開簽署manifest SHA256 bfede28caa290a9cb38b2f59e29cbbf1705bd839855a82d877e08f1a590ce5b2。本機實際內容overlay 30→32只下載166607 bytes，76檔核對通過，二次下載為零；介面71項及公告82項通過。證據 D:/Codex_QA/launcher-fishing-r31/release-evidence.json。未執行玩家帳號交易。
+
+
+### 2026-10-07 圖鑑原底圖、手寫字體與按鈕整理
+- desktop/launcher-room-aquarium.js/css保留r29書本背景，移除詳情內嵌面板背景；左魚圖右紀錄，返回放頁底，關閉在標題右側，詳情隱藏非必要頁籤。
+- fishing_ui_r33/button-plate.webp生成共用青綠金框按鈕，fonts/launcher-journal本機霞鶩文楷TC與OFL授權，支援繁體手寫風格；不依賴玩家外部字體請求。
+- scripts/launcher_fishing_journal_qa.js檢查三種視窗、字體載入、原背景與繪製按鈕，保留紀錄與強化驗證。
+
+- 字體產生527216 bytes WOFF2網頁子集，內嵌CSS；launcher.html字體來源支援本機data，以相容已安裝核心。fonts/launcher-journal保留子集與OFL；來源及生成圖提示記於tools/launcher-room/fishing-ui-r33/provenance.json。

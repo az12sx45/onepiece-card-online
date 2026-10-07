@@ -468,18 +468,18 @@
     const spotNames={shore:'近岸水流',reef:'珊瑚礁邊',deep:'外海深水',freshwater:'淡水池',magma:'熔岩潭',rainbow:'虹色水域'},baitNames={worm:'蟲餌',shrimp:'蝦餌',lure:'亮片擬餌'};
     const capturePlace=c=>`${spotNames[c?.spotId]||'海域未記錄'} · ${baitNames[c?.baitId]||'魚餌未記錄'}`;
     function recordDetails(content,id,records){
-      const back=button('‹ 返回圖鑑',()=>{selectedSpecies='';render();card.querySelector('[data-species-id="'+id+'"]')?.focus();});back.classList.add('fishing-dex-back');content.append(back);const hero=el('div','fishing-dex-detail-hero');hero.append(picture(window.OnePieceRoomAquarium.fishArt(id),window.OnePieceRoomAquarium.species[id],'fishing-dex-detail-fish'));content.append(hero);const panel=el('section','fishing-dex-records');panel.setAttribute('aria-label','漁獲尺寸與釣點紀錄');panel.append(el('h3','',window.OnePieceRoomAquarium.species[id]));
+      const back=button('‹ 返回圖鑑',()=>{selectedSpecies='';render();card.querySelector('[data-species-id="'+id+'"]')?.focus();});back.classList.add('fishing-dex-back');const hero=el('div','fishing-dex-detail-hero');hero.append(picture(window.OnePieceRoomAquarium.fishArt(id),window.OnePieceRoomAquarium.species[id],'fishing-dex-detail-fish'));content.append(hero);const panel=el('section','fishing-dex-records');panel.setAttribute('aria-label','漁獲尺寸與釣點紀錄');panel.append(el('h3','',window.OnePieceRoomAquarium.species[id]));
       const record=records[id];
       for(const [field,label] of [['maxCatch','最大紀錄'],['minCatch','最小紀錄']]){const c=record?.[field];panel.append(el('p','',c?.lengthCm?`${label} ${c.lengthCm.toFixed(1)} cm · ${capturePlace(c)}`:`${label}：尚無尺寸紀錄`));}
       const grounds=record?.grounds||[];panel.append(el('h4','','實際釣獲的海域與魚餌'));
       if(!grounds.length)panel.append(el('p','','舊紀錄尚未保存海域或魚餌；新版釣獲後會補上。'));
-      for(const g of grounds)panel.append(el('p','',`${capturePlace(g)} · ${g.count} 次`));content.append(panel);
+      for(const g of grounds)panel.append(el('p','',`${capturePlace(g)} · ${g.count} 次`));content.append(panel,back);
     }
     function render(){
       if(!layer)return;const data=env.life(),rod=data.rod,ids=Object.keys(rod?.characters||{});
       if(!ids.includes(selected))selected=ids[0]||'';
-      card.replaceChildren();const header=el('header','fishing-journal-header');header.append(el('h2','',tab==='dex'?'漁獲圖鑑':'個人釣竿'),button('關閉',close));card.append(header);
-      const tabs=el('nav','fishing-journal-tabs');for(const [id,text] of [['rods','個人釣竿'],['dex','魚圖鑑']]){const b=button(text,()=>{if(busy||forge)return;tab=id;render();});b.setAttribute('aria-pressed',String(tab===id));b.disabled=busy||Boolean(forge);tabs.append(b);}card.append(tabs);
+      card.replaceChildren();card.dataset.detail=String(tab==='dex'&&Boolean(selectedSpecies));const header=el('header','fishing-journal-header');header.append(el('h2','',tab==='dex'?(selectedSpecies?'魚種詳情':'漁獲圖鑑'):'個人釣竿'),button('關閉',close));card.append(header);
+      const tabs=el('nav','fishing-journal-tabs');for(const [id,text] of [['rods','個人釣竿'],['dex','魚圖鑑']]){const b=button(text,()=>{if(busy||forge)return;tab=id;render();});b.setAttribute('aria-pressed',String(tab===id));b.disabled=busy||Boolean(forge);tabs.append(b);}if(!(tab==='dex'&&selectedSpecies))card.append(tabs);
       const content=el('div','fishing-journal-content');card.append(content);
       if(tab==='dex'){
         const species=window.OnePieceRoomAquarium.species,known=new Set([...(data.fishDex||[]),...(data.fishCollection||[]).map(f=>f.speciesId)]),all=Object.keys(species),size=8,total=Math.ceil(all.length/size);page=Math.max(0,Math.min(total-1,page));
