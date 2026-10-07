@@ -8032,3 +8032,5 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 ### 2026-10-07 魚圖鑑獨立詳情頁
 - launcher-room-aquarium.js/css：點選已發現魚卡後切換獨立詳情頁，大型魚圖與繪製紀錄面板並列；返回保留列表頁數，Escape 返回列表。
 - 沿用已生成 journal/record-panel 素材；最大最小及實際海域魚餌資料不變。launcher_fishing_journal_qa.js 驗證獨立詳情與返回，另確認啟動。
+
+- 驗證：46項圖鑑介面、82項公告測試通過；npm start本機HTTP200。公告圖片遵守既有WebP格式，發布內容修訂32；未改玩家魚類、錢包或釣竿資料。

@@ -8,11 +8,11 @@
       "publishedAt": "2026-10-07T06:44:22.792Z",
       "scope": "launcher",
       "category": "update",
-      "version": "1.2.23 r31",
+      "version": "1.2.23 r32",
       "title": "魚圖鑑獨立詳情頁",
       "summary": "點魚卡查看大型魚圖與漁獲紀錄，返回保留圖鑑頁數。",
       "image": {
-        "asset": "images/launcher_announcements/launcher-fish-detail-r31.png",
+        "asset": "images/launcher_announcements/launcher-fish-detail-r31.webp",
         "alt": "魚圖鑑獨立詳情頁功能示意"
       },
       "body": [

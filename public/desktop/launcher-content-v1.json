@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 31,
-  "publishedAt": "2026-10-07T06:44:56.280Z",
+  "revision": 32,
+  "publishedAt": "2026-10-07T06:47:01.080Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -24,9 +24,9 @@
       "sha256": "6afa2406345448a4ee6fc9fc2ef3b88a508c1519fe3518f33f53b6216849f66f"
     },
     {
-      "path": "images/launcher_announcements/launcher-fish-detail-r31.png",
-      "bytes": 1349531,
-      "sha256": "94d3517f31c05a2913aef247da5a781cdd168f1404b5a113683993c5d6e64786"
+      "path": "images/launcher_announcements/launcher-fish-detail-r31.webp",
+      "bytes": 110570,
+      "sha256": "69d7122d5d85813f53c7dffa112719e039a7342e35ef71c952404a46d01bf477"
     },
     {
       "path": "images/launcher_announcements/launcher-fish-records-r30.webp",
@@ -392,6 +392,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "g6iprql4eLEi99QQZw2UGhsKxXbC1xj2DlzfnoSqDI916eTcamxvvzscdYPNdzmwBY/p8JHdgqaGYPDJnIbACA=="
+    "value": "5/fTtzP+ZMEL0JIB0C50cCQcWsBZFhN7cdh41G1dLQz5jzKqvYczMjMMy0R50a7uYGkA91PZ4zaRUyvdr0/NCg=="
   }
 }
