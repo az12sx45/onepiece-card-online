@@ -8034,3 +8034,5 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - 沿用已生成 journal/record-panel 素材；最大最小及實際海域魚餌資料不變。launcher_fishing_journal_qa.js 驗證獨立詳情與返回，另確認啟動。
 
 - 驗證：46項圖鑑介面、82項公告測試通過；npm start本機HTTP200。公告圖片遵守既有WebP格式，發布內容修訂32；未改玩家魚類、錢包或釣竿資料。
+
+- 公開驗證：r32／787e6c265，Render dep-db2um01a4tcc738ior50於2026-10-07 14:59:14 +08:00 Live，PostgreSQL已連線。公開簽署manifest SHA256 bfede28caa290a9cb38b2f59e29cbbf1705bd839855a82d877e08f1a590ce5b2。本機實際內容overlay 30→32只下載166607 bytes，76檔核對通過，二次下載為零；介面71項及公告82項通過。證據 D:/Codex_QA/launcher-fishing-r31/release-evidence.json。未執行玩家帳號交易。
