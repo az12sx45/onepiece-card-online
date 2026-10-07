@@ -8046,3 +8046,8 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - 字體產生527216 bytes WOFF2網頁子集，內嵌CSS；launcher.html字體來源支援本機data，以相容已安裝核心。fonts/launcher-journal保留子集與OFL；來源及生成圖提示記於tools/launcher-room/fishing-ui-r33/provenance.json。
 
 - 公開驗證：r33／44c996eb3，Render dep-db2vvoc9v7es73c5fm00於2026-10-07 16:27:36 +08:00 Live，PostgreSQL已連線。公開manifest SHA256 423d3baa3e2c0a81f368de3b84e5326c5aba2a4cc0e0cbdbccc7578a6cd9e5b1。實際安裝快取32→33只下載1086484 bytes，79檔核對及二次零下載通過；77項圖鑑介面、82項公告及正式CSP字體載入通過。證據D:/Codex_QA/launcher-fishing-r33/release-evidence.json；未執行玩家交易。
+
+
+### 2026-10-07 圖鑑關閉鈕內縮
+- desktop/launcher-room-aquarium.css標題右側留白25→57px，窄視窗0→24px，關閉鈕往左移離開邊框。
+- 使用既有圖鑑瀏覽器QA核對桌面、最低及窄視窗，不改資料或操作。

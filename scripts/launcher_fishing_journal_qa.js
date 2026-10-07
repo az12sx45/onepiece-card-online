@@ -2,7 +2,7 @@
 // Real UI/assets in Chromium with account transport fixtures. Real ledger and
 // probability/timing enforcement is covered by launcher_fishing_forge_qa.js.
 const fs=require('fs'),path=require('path'),assert=require('assert/strict');
-const root=path.resolve(__dirname,'..'),out='D:/Codex_QA/launcher-fishing-r33/journal';
+const root=path.resolve(__dirname,'..'),out='D:/Codex_QA/launcher-fishing-r34/journal';
 const runtime=path.join(process.env.LOCALAPPDATA,'OpenAI/Codex/runtimes/cua_node');
 const pw=fs.readdirSync(runtime).map(n=>path.join(runtime,n,'bin/node_modules/playwright')).find(fs.existsSync);
 const {chromium}=require(pw);const checks=[],missing=[],errors=[];
