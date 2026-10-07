@@ -23,9 +23,9 @@ async function add(secret,coins,owned=[actor]){
   await db.query('UPDATE launcher_life_state SET state=jsonb_set(state,$1,$2::jsonb) WHERE user_id=(SELECT user_id FROM player_profiles WHERE secret=$3)',[['fishingCoins'],JSON.stringify(coins),secret]);
 }
 const get=secret=>life.getLauncherLife(pool,secret,now,cap);
-async function command(secret,type,payload,requestId,revision){
+async function command(secret,type,payload,requestId,revision,at=now){
   const snap=await get(secret);
-  return life.commandLauncherLife(pool,secret,{type,payload,requestId,expectedRevision:revision??snap.life.revision},now,cap);
+  return life.commandLauncherLife(pool,secret,{type,payload,requestId,expectedRevision:revision??snap.life.revision},at,cap);
 }
 async function main(){
  await db.exec('CREATE TABLE player_profiles(user_id SERIAL PRIMARY KEY,secret TEXT UNIQUE NOT NULL,name TEXT,avatar TEXT,stats JSONB,updated_at TIMESTAMPTZ DEFAULT now())');
@@ -113,7 +113,13 @@ async function main(){
  await add('records-nested',100);await db.query('UPDATE launcher_life_state SET state=jsonb_set(state,$1,$2::jsonb) WHERE user_id=(SELECT user_id FROM player_profiles WHERE secret=$3)',[['fishRecordsVersion'],'0','records-nested']);
  await db.query("INSERT INTO launcher_life_operations(user_id,request_id,payload_hash,result) SELECT user_id,'nested-catch','h',$1::jsonb FROM player_profiles WHERE secret=$2",[JSON.stringify({minigame:{spotId:'deep',baitId:'lure',result:{catch:{id:'10000000-0000-4000-8000-000000000003',speciesId:'panda-shark',caughtAt:now.toISOString()}}}}),'records-nested']);
  const nested=(await get('records-nested')).life;check('nested old finish restores fishing location',nested.fishRecords['panda-shark'].grounds,[{spotId:'deep',baitId:'lure',count:1}]);check('nested catch also unlocks missing discovery',nested.fishDex.includes('panda-shark'),true);check('nested catch never fabricates dimensions',nested.fishRecords['panda-shark'].maxCatch,null);
+
+ await add('local-capture',100);const localStart=await command('local-capture','minigame.start',{kind:'fishing',characterId:actor,fishingVersion:5,baitId:'worm',spotId:'shore',flickMode:true,localMode:true},'local-start-0001');check('local start flag accepted by real account command',localStart.ok,true);check('local mode persisted and returned',localStart.minigame.localMode,true);
+ const localSession=(await db.query('SELECT session FROM launcher_minigame_sessions WHERE session_id=$1',[localStart.minigame.id])).rows[0].session;const localAt=now.getTime()+10000;fishingV5.cast(localSession.challenge,new Date(now.getTime()+100),'worm','mid',{x:.5,y:.5});localSession.challenge.localSimulation=true;fishingV5.hook(localSession.challenge,new Date(localAt),1,'glistening-saury');localSession.catchSpeciesId='glistening-saury';await db.query('UPDATE launcher_minigame_sessions SET session=$1::jsonb WHERE session_id=$2',[JSON.stringify(localSession),localSession.id]);
+ const localBatch={sessionId:localSession.id,token:localSession.token,roundId:localSession.challenge.id,localBatchId:'local-account-batch-1',localActions:[[localAt+100,1,1,0,0]]};const localResult=await command('local-capture','minigame.answer',localBatch,'local-batch-0001',undefined,new Date(localAt+200));check('real account accepts local event batch',localResult.ok,true);check('validated controls persisted',localResult.minigame.challenge.control.reeling,true);
+ const localRetry=await command('local-capture','minigame.answer',localBatch,'local-batch-0002',undefined,new Date(localAt+250));check('retry batch leaves validated time unchanged',localRetry.minigame.challenge.lastSimAt,localResult.minigame.challenge.lastSimAt);
+
  const report={status:'PASS',checks,results,kind:'PGlite authoritative forging and discovery transactions'};
- fs.writeFileSync('D:/Codex_QA/launcher-fishing-r30/forge-server-report.json',JSON.stringify(report,null,2));console.log('PASS '+checks+' forge server checks');await db.close();
+ fs.writeFileSync('D:/Codex_QA/launcher-fishing-r35/forge-server-report.json',JSON.stringify(report,null,2));console.log('PASS '+checks+' forge server checks');await db.close();
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

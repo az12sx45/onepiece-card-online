@@ -350,7 +350,8 @@ function power(round,now,move,direction){
     round.powerCharge-=6;round.flickTell=null;round.flickCue=null;
     round.control={reeling:false,steer:0};round.controlLeaseUntil=null;
     const arrows=['left','up','right','down'];
-    round.special={id:crypto.randomUUID(),sequence:Array.from({length:6},()=>arrows[crypto.randomInt(4)]),index:0,until:iso(at+8000),lastKeyAt:at-100};
+    let skillSeed=(round.motionSeed^Math.imul((round.skillOrdinal=(round.skillOrdinal||0)+1),2654435761))>>>0;const nextArrow=()=>{skillSeed^=skillSeed<<13;skillSeed^=skillSeed>>>17;skillSeed^=skillSeed<<5;return arrows[(skillSeed>>>0)%4];};
+    round.special={id:round.localSimulation?round.id+'-skill-'+round.skillOrdinal:crypto.randomUUID(),startedAt:iso(at),sequence:Array.from({length:6},()=>round.localSimulation?nextArrow():arrows[crypto.randomInt(4)]),index:0,until:iso(at+8000),lastKeyAt:at-100};
     return{};
   }
   const s=round.special;
@@ -359,11 +360,12 @@ function power(round,now,move,direction){
   s.lastKeyAt=at;
   if(direction!==s.sequence[s.index]){round.special=null;round.phaseUntil=iso(at+700);round.nextTurnAt=null;round.powerFeedback={at:iso(at),type:'miss',name:'節奏中斷',theme:'gold'};return{};}
   if(++s.index===s.sequence.length){
-    round.special=null;const hit=damage(round,at,round.battleVersion>=2?rodStats(round).special:55,'special');
+    const elapsedMs=Math.max(0,at-(Date.parse(s.startedAt)||Date.parse(s.until)-8000));const rating=elapsedMs<=1500?['S',1.5]:elapsedMs<=3000?['A',1.25]:elapsedMs<=5000?['B',1.1]:['C',1];
+    round.special=null;const hit=damage(round,at,Math.round((round.battleVersion>=2?rodStats(round).special:55)*(round.battleVersion>=3?rating[1]:1)),'special');
     round.distance=round4(Math.max(0,round.distance-8*leverage(round)));round.strength=Math.min(100,round.strength+25);round.flickReliefUntil=iso(at+5000);
     const skill=SPECIALS[round.characterKey]||SPECIALS.luffy;
     pausePower(round,at,3200);
-    round.powerFeedback={at:iso(at),type:'special',name:skill[0],theme:skill[1],damage:hit};
+    round.powerFeedback={at:iso(at),type:'special',name:skill[0],theme:skill[1],damage:hit,...round.battleVersion>=3?{grade:rating[0],multiplier:rating[1],elapsedMs}:{}};
   }
   return{settlement:settlement(round)};
 }

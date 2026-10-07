@@ -1,0 +1,5 @@
+'use strict';
+const fs=require('fs'),path=require('path');const root=path.resolve(__dirname,'../../..'),target=path.join(root,'desktop/launcher-room-minigames.js'),marker='\n/* BEGIN GENERATED LOCAL FISHING ENGINE */';
+let ui=fs.readFileSync(target,'utf8').split(marker)[0];const balance=fs.readFileSync(path.join(root,'server/launcher-fishing-balance.js'),'utf8');const engine=fs.readFileSync(path.join(root,'server/launcher-fishing-v5.js'),'utf8').replace("const crypto = require('node:crypto');", "const crypto={randomUUID:()=>window.crypto.randomUUID(),randomInt:(a,b)=>{const v=new Uint32Array(1);window.crypto.getRandomValues(v);return b===undefined?v[0]%a:a+v[0]%(b-a);}};").replace("require('./launcher-fishing-balance')",'balance');
+fs.writeFileSync(target,ui+marker+'\n(()=>{const balance=(()=>{const module={exports:{}};\n'+balance+'\nreturn module.exports;})();const module={exports:{}};\n'+engine+'\nwindow.OnePieceFishingLocalEngine=module.exports;})();\n');
+console.log('Generated local engine from current server source');

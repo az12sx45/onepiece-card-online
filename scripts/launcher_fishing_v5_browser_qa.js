@@ -22,11 +22,11 @@ const html='<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name
 const fishingAudioDir='/pixabay_fishing_v1/';
 const fishingAudioNames=['reel_in_fast.ogg','line_out_drag.ogg','line_strain.ogg'];
 const sessions=new Map(),checks=[],pageErrors=[],missingAssets=[],blockedMedia=new Set();
-const forcedSpecies=new Map([['power','glistening-saury'],['light-force','lovely-angel'],['heavy-force','golden-whale'],
+const forcedSpecies=new Map([['local-finish','glistening-saury'],['local-power','glistening-saury'],['power','glistening-saury'],['light-force','lovely-angel'],['heavy-force','golden-whale'],
   ['flick-up','glistening-saury'],['flick-right','glistening-saury'],['flick-left','glistening-saury'],
   ['flick-wrong','glistening-saury'],['flick-miss','glistening-saury'],
   ['flick-pre-cue-blur','glistening-saury']]);
-const flickSeeds={'power':71,'flick-up':52,'flick-right':56,'flick-left':57,'flick-wrong':52,'flick-miss':52,
+const flickSeeds={'local-finish':71,'local-power':71,'power':71,'flick-up':52,'flick-right':56,'flick-left':57,'flick-wrong':52,'flick-miss':52,
   'flick-pre-cue-blur':52};
 let server,browser;
 const check=(name,condition)=>{assert(condition,name);checks.push(name);};
@@ -42,7 +42,7 @@ async function command(client,type,payload){
     const version=client==='legacy'?4:5;
     session=minigames.create('fishing','room-character-luffy',1,now,false,'supply',version,
       payload.baitId||'worm',payload.spotId||'shore',0,payload.flickMode===true&&Object.hasOwn(flickSeeds,client));
-    session.challenge.motionSeed=flickSeeds[client]??70;sessions.set(client,session);
+    if(client.startsWith('local-'))session.localMode=true;session.challenge.motionSeed=flickSeeds[client]??70;sessions.set(client,session);
     return{ok:true,serverNow:now.toISOString(),minigame:minigames.view(session)};
   }
   if(type==='minigame.cancel'){
@@ -58,6 +58,7 @@ async function command(client,type,payload){
     // decides the bite, fight, and strength changes.
     if(result&&!result.error&&payload.counterMoves?.[0]==='cast'&&forcedSpecies.has(client))
       session.catchSpeciesId=forcedSpecies.get(client);
+    if(client.startsWith('local-')&&payload.counterMoves?.[0]==='hook'&&!result.error){session.challenge.powerCharge=6;session.challenge.fishStamina=client==='local-finish'?20:36000;session.challenge.maxFishStamina=36000;}
     return{ok:!result.error,...result,serverNow:now.toISOString(),minigame:minigames.view(session)};
   }
   if(type==='minigame.finish'){
@@ -80,7 +81,8 @@ async function serve(){
         // Delay delivery, not the authoritative cast, to cover a slow reply.
         if(client==='cast-latency'&&type==='minigame.answer'&&payload.counterMoves?.[0]==='cast')
           await new Promise(resolve=>setTimeout(resolve,1250));
-        if(client==='power'&&payload.counterMoves?.[0]==='specialKey')await new Promise(resolve=>setTimeout(resolve,180));
+        if(client==='power'&&payload.counterMoves?.[0]==='specialKey')await new Promise(resolve=>setTimeout(resolve,1400));
+        if(client.startsWith('local-')&&payload.localActions)await new Promise(resolve=>setTimeout(resolve,2200));
         respond(res,result);return;
       }
       if(rel==='qa-land'&&req.method==='POST'){
@@ -139,7 +141,7 @@ async function serve(){
       }
       if(rel==='qa-power'&&req.method==='POST'){
         const session=sessions.get(client);if(!session?.challenge){respond(res,{ok:false});return;}
-        session.challenge.powerCharge=6;session.challenge.fishStamina=url.searchParams.get('stamina')==='20'?20:900;
+        session.challenge.powerCharge=6;session.challenge.fishStamina=url.searchParams.get('stamina')==='20'?20:1800;
         respond(res,{ok:true});return;
       }
       if(rel==='qa-audio-calm'&&req.method==='POST'){
@@ -270,7 +272,7 @@ async function setup(page,client){
       const response=await fetch(`/qa-command?client=${client}`,{method:'POST',
         headers:{'Content-Type':'application/json'},body:JSON.stringify({type,payload})});
       const data=await response.json();__qa.responses.push({type,data,at:Date.now(),perfAt:performance.now(),
-        move:payload?.counterMoves?.[0]});return data;
+        move:payload?.counterMoves?.[0],localBatch:Boolean(payload.localActions)});return data;
     };
     window.__minigame=OnePieceRoomMinigames.create({fishCollection:()=>[],command,
       onOpen:()=>{},onClose:()=>{},onResult:()=>{}});
@@ -1700,6 +1702,28 @@ async function runSpotProjection(){
     }
   }finally{await context.close();}
 }
+
+async function runLocalPower(){
+ for(const [label,width,height]of [['local-desktop',1440,900],['local-minimum',960,640]]){
+ const context=await browser.newContext({viewport:{width,height}}),page=await context.newPage();try{
+ await setup(page,'local-power');await page.getByRole('button',{name:'開始釣魚'}).click();await page.locator('.room-fishing-v4-cast').evaluate(b=>b.click());await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.biting==='true',null,{timeout:8000});await page.locator('.room-fishing-v4-hook').click();await page.waitForFunction(()=>__minigame.inspect().localFishing);
+ check('local combat initialized from authoritative hook',await page.evaluate(()=>__minigame.inspect().fishing.localSimulation===true));
+ await page.keyboard.press('x');const seq=await page.evaluate(()=>__minigame.inspect().fishing.special.sequence);for(const d of seq)await page.keyboard.press({left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown'}[d]);
+ check('skill executes locally before delayed network',await page.evaluate(()=>__minigame.inspect().fishing.powerFeedback?.type==='special'&&__minigame.inspect().fishing.powerFeedback.grade==='S'&&__minigame.inspect().fishing.fishStamina===35100));
+ await page.locator('.room-fishing-special-character').waitFor({timeout:500});check('cut-in appears without waiting 2200ms',await page.locator('.room-fishing-skill-grade').isVisible());await page.waitForFunction(()=>{const n=document.querySelector('.room-fishing-power-effect');const clip=getComputedStyle(n).clipPath;return clip==='none'||n.getAnimations().every(a=>a.playState==='finished');},null,{timeout:1800});fs.writeFileSync(path.join(out,label+'-effect.json'),JSON.stringify(await page.locator('.room-fishing-power-effect').evaluate(n=>({hidden:n.hidden,clip:getComputedStyle(n).clipPath,animation:getComputedStyle(n).animationPlayState,animations:n.getAnimations().map(a=>({time:a.currentTime,state:a.playState})),children:n.textContent})),null,2));await snapshot(page,label+'-immediate-skill');
+ await page.waitForTimeout(6500);check('server replay agrees with local skill',sessions.get('local-power').challenge.powerFeedback?.grade==='S'&&sessions.get('local-power').challenge.powerFeedback.damage===900);check('native core payload limit respected',await page.evaluate(()=>__qa.calls.filter(c=>c.payload.localActions).every(c=>JSON.stringify(c.payload).length<=1900)));check('no local batch validation errors',await page.evaluate(()=>__qa.responses.filter(r=>r.localBatch).length>=1&&__qa.responses.filter(r=>r.localBatch).every(r=>r.data.ok)));
+ const before=await page.evaluate(()=>__minigame.inspect().fishing.fishStamina);await page.keyboard.down('Space');await page.waitForTimeout(1300);await page.keyboard.up('Space');check('reel damage progresses locally during delayed replies',await page.evaluate(before=>__minigame.inspect().fishing.fishStamina<before,before));
+ await snapshot(page,label+'-reel');
+ }finally{await context.close();}
+ }
+}
+
+
+async function runLocalFinish(){const context=await browser.newContext({viewport:{width:1440,height:900}}),page=await context.newPage();try{
+ await setup(page,'local-finish');await page.getByRole('button',{name:'開始釣魚'}).click();await page.locator('.room-fishing-v4-cast').evaluate(b=>b.click());await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.biting==='true',null,{timeout:8000});await page.locator('.room-fishing-v4-hook').click();await page.waitForFunction(()=>__minigame.inspect().localFishing);await page.keyboard.press('x');const seq=await page.evaluate(()=>__minigame.inspect().fishing.special.sequence);for(const d of seq)await page.keyboard.press({left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown'}[d]);
+ check('local lethal damage is capped to remaining 20 HP',await page.evaluate(()=>__minigame.inspect().fishing.powerFeedback.damage===20));await page.waitForTimeout(1300);const hp=Number(await page.locator('.room-fishing-fish-stamina').getAttribute('aria-valuenow'));check('local lethal cut-in visibly drains fish HP',hp>0&&hp<20);await page.waitForTimeout(750);check('zero HP shown before server catch confirmation',await page.locator('.room-fishing-fish-stamina').getAttribute('aria-valuenow')==='0'&&await page.locator('.room-fishing-v3-catch-name').count()===0);await page.locator('.room-fishing-v3-result.caught').waitFor({timeout:15000});check('verified local catch finishes once',await page.evaluate(()=>__qa.calls.filter(c=>c.type==='minigame.finish').length===1));await snapshot(page,'local-finish');
+ }finally{await context.close();}}
+
 async function runPower(){
  for(const [label,width,height] of [['power-desktop',1440,900],['power-minimum',960,640]]){
   const context=await browser.newContext({viewport:{width,height}}),page=await context.newPage();
@@ -1754,9 +1778,9 @@ async function runPower(){
    await page.waitForFunction(()=>{const i=document.querySelector('.room-fishing-special-character');return i?.complete&&i.naturalWidth>0;});
    check(label+': normal-proportion dedicated character art used',await page.locator('.room-fishing-special-character').evaluate(i=>i.src.includes('fishing_v6/special-luffy.webp')&&i.naturalWidth>=900));
    await page.locator('.room-fishing-damage[data-kind=special]').waitFor();
-   check(label+': special jump shows actual 600 damage',await page.locator('.room-fishing-damage[data-kind=special]').last().getAttribute('data-amount')==='600');
-   check(label+': skill really reduces fish stamina',sessions.get('power').challenge.fishStamina<=300);
-   check(label+': skill consumes charges',sessions.get('power').challenge.powerCharge===0);
+   fs.writeFileSync(path.join(out,label+'-skill-state.json'),JSON.stringify(sessions.get('power'),null,2));check(label+': special jump matches authoritative integer damage',await page.locator('.room-fishing-damage[data-kind=special]').last().getAttribute('data-amount')===String(sessions.get('power').challenge.powerFeedback.damage));
+   check(label+': skill really reduces fish stamina',sessions.get('power').challenge.fishStamina<1800);
+   check(label+': completed sequence sent in one server request',await page.evaluate(()=>__qa.calls.filter(c=>c.payload?.counterMoves?.[0]==='specialKey').at(-1)?.payload.directions.length===6));check(label+': four-tier rating and multiplier visible',(await page.locator('.room-fishing-skill-grade').textContent()).includes(`${sessions.get('power').challenge.powerFeedback.grade} · ×${sessions.get('power').challenge.powerFeedback.multiplier}`));check(label+': skill consumes charges',sessions.get('power').challenge.powerCharge===0);
    await page.waitForTimeout(550);await snapshot(page,label+'-skill');
    await page.evaluate(()=>fetch('/qa-power?client=power',{method:'POST'}));
    await page.waitForFunction(()=>!document.querySelector('.room-fishing-burst')?.disabled);
@@ -1834,6 +1858,7 @@ async function main(){
     if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='pull')await runPullDepth();
     if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='damage')await runDamage();
     if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='forge')await runForge();
+    if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='local'){await runLocalPower();await runLocalFinish();}
     if(process.env.LAUNCHER_FISH_V5_QA_ONLY==='power')await runPower();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='cast')await runCastInputs();
     if(!process.env.LAUNCHER_FISH_V5_QA_ONLY||process.env.LAUNCHER_FISH_V5_QA_ONLY==='spots')await runSpotProjection();

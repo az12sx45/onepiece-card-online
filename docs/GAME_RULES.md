@@ -1794,3 +1794,17 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - 使用既有圖鑑瀏覽器QA核對桌面、最低及窄視窗，不改資料或操作。
 
 - 公開r34驗證：8d384d0b6／dep-db30bi8473hc7385308g於2026-10-07 16:52:55 +08:00 Live，資料庫已連線；實際內容快取33→34下載725011 bytes，79檔雜湊與二次零下載通過。77項介面、82項公告QA通過，npm start本機HTTP200。證據D:/Codex_QA/launcher-fishing-r34/release-evidence.json。
+
+
+### 2026-10-07 必殺指令批次與四級傷害
+- launcher-room-minigames.js/css與server launcher-minigames.js、launcher-fishing-v5.js：六方向本機即時回饋後一次提交，伺服器逐步驗證，保留舊版單方向介面；錯誤指令立即提交失敗。
+- battle v3依伺服器開始到完成時間：S≤1.5秒×1.5、A≤3秒×1.25、B≤5秒×1.1、C其餘有效時間×1。傷害整數且不超過剩餘體力；舊v1/v2傷害不變。施放顯示評級倍率傷害，逾時明確提示。
+
+- 必殺動畫顯示計時改從收到新回覆開始，避免連線延遲吃掉伺服器時間戳的3秒展示。階級使用伺服器判定時間；不能由客戶端指定倍率。
+
+- 加入localMode海釣：抽魚與咬餌由伺服器建立，拉魚戰鬥使用同源本機engine即時判定、2秒批次同步；伺服器依原始輸入與時間逐步重播驗證，獎勵入庫／交易／釣竿仍在伺服器。新批次序號防重複，最多128事件，時間單調且不得提前超過1秒。
+- tools/launcher-room/local-fishing/build.js從server平衡與v5規則產生既有renderer檔案內的本機模組；localSimulation使用同種子必殺序列。倍率按本機實際操作時間計算，伺服器重播同時間核對。斷線保留待同步操作，未核對不發獎勵。
+
+- 已安裝核心auth-service限制payload≤2048字元；本機事件以精簡陣列傳送並將整個payload控制在1900字元以下，不需重新安裝核心。伺服器接受精簡格式並嚴格檢查每一欄。
+
+- 驗證：17評級邊界／整数傷害、8本機與伺服器重播／重送／致命判定、91 PGlite帳號與收藏強化交易、舊流程57瀏覽器驗證通過；本機瀏覽器另測2.2秒網路延遲及致命演出。npm start本機HTTP200。新腳本launcher_fishing_local_qa.js、launcher_fishing_grades_qa.js及原forge/v5 QA已更新。

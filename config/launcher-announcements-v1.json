@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 47,
+  "revision": 48,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r35-local-fishing",
+      "status": "published",
+      "publishedAt": "2026-10-07T09:52:33.387Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r35",
+      "title": "本機海釣與四級必殺評價",
+      "summary": "拉魚與必殺即時判定，完成越快傷害倍率越高。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-local-fishing-r35.webp",
+        "alt": "魯夫必殺與S級傷害倍率示意，數值為測試資料"
+      },
+      "body": [
+        "新開海釣的拉魚戰鬥在本機判定，收線、甩竿與必殺不必逐次等待網路回覆；伺服器批次重播核對後才將魚與獎勵入庫。開始釣魚及入庫仍需連線。",
+        "六方向必殺完成速度：S（1.5秒內）×1.5、A（3秒內）×1.25、B（5秒內）×1.1、C（有效時間內）×1。顯示評價、倍率與實際整數傷害。",
+        "必殺畫面從本機施放開始，魚體力會先扣至零再釣起；修正按對方向卻等待逐步回覆或錯過動畫的問題。",
+        "原本釣竿等級、金幣與魚紀錄保留。差分更新，重開啟動器並開始新一竿即可。圖片為功能示意。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r34-journal-close",
       "status": "published",

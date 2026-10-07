@@ -300,7 +300,7 @@ function view(session) {
   delete result.catchSpeciesId;
   if(result.challenge?.fishingVersion>=2){
     result.challenge={...result.challenge};delete result.challenge.fightPattern;
-    if(result.challenge.fishingVersion===5){
+    if(result.challenge.fishingVersion===5&&!session.localMode){
       // Species rhythm is server-private until the catch is settled.
       delete result.challenge.behavior;delete result.challenge.reelHoldMs;delete result.challenge.reelDamagePending;delete result.challenge.damageTickAt;delete result.challenge.damageSequence;
       if(result.challenge.damageEvents)result.challenge.damageEvents=result.challenge.damageEvents.slice(-6);
@@ -317,6 +317,7 @@ function view(session) {
         result.challenge.pullIntensity,result.challenge.runState);
     }
   }
+  if(session.localMode&&result.challenge?.stage==='fight')result.localDifficulty=FISHING_V3_DIFFICULTY[session.catchSpeciesId]??1;
   return JSON.parse(JSON.stringify(result));
 }
 function contextValid(session,state,room) {
@@ -381,7 +382,7 @@ function answerClockedFishing(session,payload,now) {
   if(!Array.isArray(actions)||actions.length!==1||
       !['cast','hook','control','flick','burst','special','specialKey','sync','timeout'].includes(actions[0])||
       ['selections','ingredients','rotations','path'].some(key=>payload[key]!==undefined)||
-      payload.directions!==undefined&&!(actions[0]==='specialKey'&&Array.isArray(payload.directions)&&payload.directions.length===1&&['left','right','up','down'].includes(payload.directions[0])))
+      payload.directions!==undefined&&!(actions[0]==='specialKey'&&Array.isArray(payload.directions)&&payload.directions.length>=1&&payload.directions.length<=6&&payload.directions.every(d=>['left','right','up','down'].includes(d))))
     return{error:'invalid_minigame_answer'};
   const move=actions[0],at=now.getTime();
   if(move==='cast') {
@@ -431,6 +432,7 @@ function answerClockedFishing(session,payload,now) {
     if(move!=='hook')return{error:'invalid_fishing_action'};
     if(at<Date.parse(round.biteAt))return{error:'fishing_not_bitten'};
     round.characterKey=session.characterId.slice(15);
+    if(session.localMode)round.localSimulation=true;
     engine.hook(round,now,FISHING_V3_DIFFICULTY[session.catchSpeciesId]??1,session.catchSpeciesId);
     return{};
   }
@@ -441,7 +443,7 @@ function answerClockedFishing(session,payload,now) {
   if(move==='sync')return{};
   if(['burst','special','specialKey'].includes(move)){
     if(round.fishingVersion!==5||move==='specialKey'&&!payload.directions)return{error:'invalid_fishing_action'};
-    const response=engine.power(round,now,move,payload.directions?.[0]);
+    let response={};for(const direction of move==='specialKey'?payload.directions:[undefined]){response=engine.power(round,now,move,direction);if(response.error||response.settlement||move==='specialKey'&&!round.special)break;}
     if(response.error)return response;
     if(Number.isFinite(Date.parse(round.powerPauseUntil)))session.expiresAt=iso(Math.max(Date.parse(session.expiresAt),Date.parse(round.fightUntil)+60000));
     if(response.settlement)return advanceRound(session,response.settlement==='landed',now,response.settlement);
@@ -458,7 +460,7 @@ function answerClockedFishing(session,payload,now) {
   // immediately so releasing the button never waits on an action cooldown.
   const same=round.control?.reeling===payload.reeling&&round.control?.steer===payload.steer&&
     Boolean(round.control?.paying)===Boolean(payload.paying);
-  if(same&&Number.isFinite(Date.parse(round.lastControlAt))&&
+  if(!session.localMode&&same&&Number.isFinite(Date.parse(round.lastControlAt))&&
       at-Date.parse(round.lastControlAt)<180)return{error:'fishing_action_cooldown'};
   engine.control(round,now,payload.reeling,payload.steer,payload.paying===true);
   round.lastControlAt=iso(at);
@@ -528,11 +530,26 @@ function answerFishingV2(session,payload,now) {
   }else round.pull=round.fightPattern[round.pullIndex%round.fightPattern.length];
   return{};
 }
+
+function answerLocalFishing(session,payload,now){
+  if(!session.localMode||session.challenge?.fishingVersion!==5||session.challenge.stage!=='fight'||typeof payload.localBatchId!=='string'||payload.localBatchId.length>80)return{error:'invalid_local_fishing'};
+  if(session.lastLocalBatchId===payload.localBatchId)return{};
+  const wire=payload.localActions;if(!Array.isArray(wire)||!wire.length||wire.length>128)return{error:'invalid_local_fishing'};
+  const events=wire.map(e=>{if(!Array.isArray(e))return e;const [at,kind,a,b,c]=e,move=['sync','control','flick','special','specialKey','burst'][kind];if(!Number.isInteger(kind)||!move||e.length!==(kind===1?5:kind===2?4:kind===4?3:2)||kind===1&&(![0,1].includes(a)||![0,1].includes(c)))return null;return{at,move,...kind===1?{reeling:Boolean(a),steer:b,paying:Boolean(c)}:kind===2?{flickDirection:a,flickCueId:b}:kind===4?{directions:[a]}:{}};});
+  let previous=session.localTime??Date.parse(session.challenge.hookedAt);
+  for(const e of events){if(!e||Object.keys(e).some(k=>!['at','move','reeling','steer','paying','directions','flickDirection','flickCueId'].includes(k))||!Number.isSafeInteger(e.at)||e.at<previous||e.at>now.getTime()+1000||!['sync','control','flick','special','specialKey','burst'].includes(e.move))return{error:'invalid_local_fishing'};previous=e.at;}
+  const trial=JSON.parse(JSON.stringify(session));let end=false;
+  for(const e of events){if(end)break;const {at,move,...values}=e;const result=answerClockedFishing(trial,{roundId:trial.challenge.id,counterMoves:[move],...values},new Date(at));if(result.error)return result;trial.localTime=at;end=trial.state!=='playing'||!trial.challenge;}
+  trial.lastLocalBatchId=payload.localBatchId;Object.assign(session,trial);return{};
+}
+
 function answer(session,payload,now) {
   if(session.state!=='playing'||!session.challenge)return{error:'minigame_round_complete'};
   const round=session.challenge;
   if(payload.roundId!==round.id)return{error:'minigame_round_conflict'};
   if(now.getTime()<Date.parse(round.notBefore))return{error:'minigame_too_early'};
+  if(payload.localActions!==undefined)return answerLocalFishing(session,payload,now);
+  if(session.localMode&&round.stage==='fight')return{error:'local_fishing_required'};
   if(session.kind==='fishing'&&(round.fishingVersion===4||round.fishingVersion===5))return answerClockedFishing(session,payload,now);
   if((session.kind==='fishing'||session.kind==='work'&&jobFor(session)==='fishing')&&round.fishingVersion>=2)return answerFishingV2(session,payload,now);
   let correct=false;
