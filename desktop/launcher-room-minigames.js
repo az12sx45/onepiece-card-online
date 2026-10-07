@@ -1137,14 +1137,14 @@
         const hud=node('div','room-fishing-v5-hud');hud.setAttribute('role','group');hud.setAttribute('aria-label','釣竿表：魚線耐壓、魚的拉力與剩餘魚距；耐壓歸零就會斷線');
         hud.append(node('span','room-fishing-v5-handle'));
         const strengthBox=node('div','room-fishing-v5-strength');
-        const dial=node('div','room-fishing-v5-dial');dial.setAttribute('role','meter');dial.setAttribute('aria-label','魚線耐壓');dial.setAttribute('aria-valuemin','0');dial.setAttribute('aria-valuemax','100');const spool=node('span','room-fishing-v5-dial-spool');spool.append(node('span','room-fishing-v5-dial-crank'));dial.append(node('span','room-fishing-v5-pressure-ring'),spool,node('span','room-fishing-v5-dial-hub'),node('span','room-fishing-v5-pressure-tip'));
+        const dial=node('div','room-fishing-v5-dial');dial.setAttribute('role','meter');dial.setAttribute('aria-label','魚線耐壓');dial.setAttribute('aria-valuemin','0');dial.setAttribute('aria-valuemax','100');const spool=node('span','room-fishing-v5-dial-spool');const crankLayer=node('div','room-fishing-v5-crank-layer');crankLayer.append(node('span','room-fishing-v5-dial-crank'));dial.append(node('span','room-fishing-v5-pressure-ring'),spool,node('span','room-fishing-v5-dial-hub'),node('span','room-fishing-v5-pressure-tip'));
         const strengthCopy=node('div','room-fishing-v5-strength-copy');strengthCopy.append(node('span','','魚線耐力'),node('strong','room-fishing-v5-pressure-value','100%'),node('small','room-fishing-v5-strength-value','0% 斷線'));strengthBox.append(dial,strengthCopy);
         const pullArc=node('div','room-fishing-v5-pull-arc');pullArc.setAttribute('role','meter');pullArc.setAttribute('aria-label','魚的拉力等級');pullArc.setAttribute('aria-valuemin','0');pullArc.setAttribute('aria-valuemax','3');pullArc.append(node('span','room-fishing-v5-pull-arc-band'),node('span','room-fishing-v5-pull-needle'),node('strong','room-fishing-v5-force-value','平穩'));
         const position=node('div','room-fishing-v5-position');
         const catchLabel=node('div','room-fishing-v5-catch-label');catchLabel.append(node('span','','剩餘魚距'),node('strong','room-fishing-v5-distance','0.0 m'));
         const catchTrack=node('div','room-fishing-v5-catch-track');catchTrack.setAttribute('role','meter');catchTrack.setAttribute('aria-label','剩餘魚距');catchTrack.setAttribute('aria-valuemin','0');catchTrack.setAttribute('aria-valuemax','100');const catchRail=node('span','room-fishing-v5-catch-rail');catchRail.append(node('span','room-fishing-v5-catch-fill'));for(let index=1;index<10;index++){const guide=node('span','room-fishing-v5-guide');guide.style.setProperty('--guide',String(index));catchRail.append(guide);}catchRail.append(node('span','room-fishing-v5-rail-marker'));catchTrack.append(node('span','room-fishing-v5-boat','船'),catchRail,node('span','room-fishing-v5-fish-end','魚'));
         position.append(catchLabel,catchTrack);
-        position.append(catchRail.querySelector('.room-fishing-v5-rail-marker'));hud.append(strengthBox,pullArc,position,powerPanel);hud.setAttribute('aria-label','Wii風格釣竿表：魚線耐力、拉力、魚距與必殺能量');fishingV5Hud=hud;
+        position.append(catchRail.querySelector('.room-fishing-v5-rail-marker'));hud.append(strengthBox,pullArc,position,powerPanel,crankLayer);hud.setAttribute('aria-label','Wii風格釣竿表：魚線耐力、拉力、魚距與必殺能量');fishingV5Hud=hud;
       }
       const castMeter=node('div','room-fishing-v4-cast-meter');castMeter.append(node('div','room-fishing-v4-cast-heading','拋竿力度'),node('strong','room-fishing-v4-cast-readout','52% · 中距離'));
       const castTrack=node('div','room-fishing-v4-cast-track');castTrack.setAttribute('role','progressbar');castTrack.setAttribute('aria-label','拋竿力度');castTrack.setAttribute('aria-valuemin','0');castTrack.setAttribute('aria-valuemax','100');castTrack.append(node('span'));
@@ -1267,7 +1267,7 @@
       if(Math.abs(fishingV5ReelSpeed)<2)fishingV5ReelSpeed=0;
       const advance=fishingV5ReelSpeed*elapsed;
       fishingV5ReelAngle=(fishingV5ReelAngle+advance)%360;
-      fishingV5Hud.querySelector('.room-fishing-v5-dial-spool').style.transform=`rotate(${fishingV5ReelAngle.toFixed(2)}deg)`;
+      fishingV5Hud.querySelector('.room-fishing-v5-dial-spool').style.transform=`rotate(${fishingV5ReelAngle.toFixed(2)}deg)`;fishingV5Hud.querySelector('.room-fishing-v5-dial-crank').style.transform=`rotate(${fishingV5ReelAngle.toFixed(2)}deg)`;
       const crank=body?.querySelector('.room-fishing-v5-rod-crank');
       if(crank){
         const frame=Math.floor(((fishingV5ReelAngle+360)%360)/90)%4;

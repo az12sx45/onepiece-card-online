@@ -893,3 +893,11 @@
 .fishing-v5 .room-fishing-v5-catch-label strong{position:static;display:block;transform:none;white-space:nowrap;font:bold italic clamp(13px,2.3cqw,19px) Georgia,serif}.fishing-v5 .room-fishing-v5-rail-marker{display:block}
 
 .fishing-v5 .room-fishing-power-panel .room-fishing-tier{left:3%;top:28%;max-width:19%;font-size:9px;white-space:nowrap;text-shadow:0 1px 2px #120700}
+
+/* Back to front: reel face / endurance ring / brass frame / independent rotating crank. */
+.fishing-v5 .room-fishing-v5-strength{z-index:1}.fishing-v5 .room-fishing-v5-dial{--line-band:clamp(7px,1.15cqw,10px);background:#123842}
+.fishing-v5 .room-fishing-v5-pressure-ring{z-index:3;--ring-width:var(--line-band);inset:8%}.fishing-v5 .room-fishing-v5-dial-spool{z-index:1;clip-path:circle(35% at 50% 50%)}.fishing-v5 .room-fishing-v5-dial-hub{z-index:4}.fishing-v5 .room-fishing-v5-pressure-tip{z-index:4;transform:translate(-50%,-50%) rotate(calc(var(--pressure-angle,300deg) + 210deg)) translateY(calc(-8.19cqw + var(--line-band)/2))}
+.fishing-v5 .room-fishing-v5-crank-layer{position:absolute;left:2.5%;top:37%;width:19.5%;height:52.7%;z-index:20;pointer-events:none}.fishing-v5 .room-fishing-v5-crank-layer .room-fishing-v5-dial-crank{z-index:1;transform-origin:50% 50%;will-change:transform}
+
+/* Reel center measured from the illustrated alpha opening: 255/2061, 472/763. */
+.fishing-v5 .room-fishing-v5-hud{--reel-x:2.623%;--reel-y:35.536%}.fishing-v5 .room-fishing-v5-strength,.fishing-v5 .room-fishing-v5-crank-layer{left:var(--reel-x);top:var(--reel-y)}.fishing-v5 .room-fishing-v5-dial{clip-path:circle(39% at 50% 50%)}.fishing-v5 .room-fishing-v5-pressure-ring{inset:12%}.fishing-v5 .room-fishing-v5-pressure-tip{transform:translate(-50%,-50%) rotate(calc(var(--pressure-angle,300deg) + 210deg)) translateY(calc(-7.41cqw + var(--line-band)/2))}

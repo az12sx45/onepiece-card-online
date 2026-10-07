@@ -722,8 +722,8 @@ async function fightInteraction(page,label){
     art:getComputedStyle(wheel).backgroundImage,
     outerAnimation:getComputedStyle(wheel.parentElement,'::after').animationName,
     outerTransform:getComputedStyle(wheel.parentElement,'::after').transform,
-    crank:(()=>{const handle=wheel.querySelector('.room-fishing-v5-dial-crank');const box=handle?.getBoundingClientRect();
-      return{attached:handle?.parentElement===wheel,width:box?.width,height:box?.height,
+    crank:(()=>{const handle=wheel.closest('.room-fishing-v5-hud').querySelector('.room-fishing-v5-dial-crank');const box=handle?.getBoundingClientRect();
+      return{attached:handle?.parentElement.classList.contains('room-fishing-v5-crank-layer'),width:box?.width,height:box?.height,
         topKnob:getComputedStyle(handle,'::before').backgroundImage,
         bottomKnob:getComputedStyle(handle,'::after').backgroundImage,
         hub:getComputedStyle(wheel.parentElement.querySelector('.room-fishing-v5-dial-hub')).display};})(),
@@ -740,7 +740,7 @@ async function fightInteraction(page,label){
   const reelPressure=await fightMeterState(page);
   await page.waitForTimeout(140);
   const reelAfter=await page.locator('.room-fishing-v5-dial-spool').evaluate(wheel=>{
-    const box=wheel.querySelector('.room-fishing-v5-dial-crank').getBoundingClientRect();
+    const box=wheel.closest('.room-fishing-v5-hud').querySelector('.room-fishing-v5-dial-crank').getBoundingClientRect();
     const matrix=new DOMMatrixReadOnly(getComputedStyle(wheel).transform);
     return{transform:getComputedStyle(wheel).transform,angle:Math.atan2(matrix.b,matrix.a)*180/Math.PI,
       signedRate:Number(wheel.closest('.room-fishing-v5-hud').dataset.reelRate),movement:wheel.closest('.room-fishing-v5-hud').dataset.reelDirection,
@@ -855,7 +855,7 @@ async function fightInteraction(page,label){
     movement:wheel.closest('.room-fishing-v5-hud').dataset.reelDirection,
     signedRate:Number(wheel.closest('.room-fishing-v5-hud').dataset.reelRate),
     animation:getComputedStyle(wheel).animationName,
-    attached:wheel.querySelector('.room-fishing-v5-dial-crank')?.parentElement===wheel,
+    attached:wheel.closest('.room-fishing-v5-hud').querySelector('.room-fishing-v5-dial-crank')?.parentElement.classList.contains('room-fishing-v5-crank-layer'),
     label:document.querySelector('.room-fishing-v5-strength-copy>span')?.textContent}));
   const automaticPressure=await fightMeterState(page);
   check(`${label}: line goes out as soon as reeling stops`,automaticLine.movement==='out'&&
@@ -1707,7 +1707,7 @@ async function runLocalPower(){
  for(const [label,width,height]of [['local-desktop',1440,900],['local-minimum',960,640]]){
  const context=await browser.newContext({viewport:{width,height}}),page=await context.newPage();try{
  await setup(page,'local-power');await page.getByRole('button',{name:'開始釣魚'}).click();check('fight controls hidden before cast',!await page.locator('.room-fishing-v4-fight-controls').isVisible());await page.locator('.room-fishing-v4-cast').evaluate(b=>b.click());check('fight controls hidden while waiting for bite',!await page.locator('.room-fishing-v4-fight-controls').isVisible());await page.waitForFunction(()=>document.querySelector('.room-fishing-v4-sea')?.dataset.biting==='true',null,{timeout:8000});await page.locator('.room-fishing-v4-hook').click();await page.waitForFunction(()=>__minigame.inspect().localFishing);
- check('Wii instrument groups line force distance and charge',await page.locator('.room-fishing-v5-hud').evaluate(n=>getComputedStyle(n,'::before').backgroundImage.includes('wii-rod-meter.webp')&&n.contains(document.querySelector('.room-fishing-fish-stamina'))&&n.contains(document.querySelector('.room-fishing-power-charge'))&&n.contains(document.querySelector('.room-fishing-v5-distance'))));check('fish HP uses visible outer ring without numeric bar',await page.locator('.room-fishing-fish-target-ring').isVisible()&&!await page.locator('.room-fishing-fish-stamina').isVisible());check('local combat initialized from authoritative hook',await page.evaluate(()=>__minigame.inspect().fishing.localSimulation===true));
+ check('Wii instrument groups line force distance and charge',await page.locator('.room-fishing-v5-hud').evaluate(n=>getComputedStyle(n,'::before').backgroundImage.includes('wii-rod-meter.webp')&&n.contains(document.querySelector('.room-fishing-fish-stamina'))&&n.contains(document.querySelector('.room-fishing-power-charge'))&&n.contains(document.querySelector('.room-fishing-v5-distance'))));check('fish HP uses visible outer ring without numeric bar',await page.locator('.room-fishing-fish-target-ring').isVisible()&&!await page.locator('.room-fishing-fish-stamina').isVisible());check('crank front layer and dial share exact center',await page.locator('.room-fishing-v5-hud').evaluate(n=>{const a=n.querySelector('.room-fishing-v5-strength').getBoundingClientRect(),b=n.querySelector('.room-fishing-v5-crank-layer').getBoundingClientRect();return Math.hypot(a.x+a.width/2-b.x-b.width/2,a.y+a.height/2-b.y-b.height/2)<1&&+getComputedStyle(n.querySelector('.room-fishing-v5-crank-layer')).zIndex>+getComputedStyle(n,'::before').zIndex&&+getComputedStyle(n,'::before').zIndex>+getComputedStyle(n.querySelector('.room-fishing-v5-strength')).zIndex;}));check('endurance pointer lies within color band',await page.locator('.room-fishing-v5-dial').evaluate(n=>{const d=n.getBoundingClientRect(),r=n.querySelector('.room-fishing-v5-pressure-ring').getBoundingClientRect(),p=n.querySelector('.room-fishing-v5-pressure-tip').getBoundingClientRect(),v=Math.hypot(p.x+p.width/2-d.x-d.width/2,p.y+p.height/2-d.y-d.height/2);return v<=r.width/2+1&&v>=r.width/2-11;}));check('local combat initialized from authoritative hook',await page.evaluate(()=>__minigame.inspect().fishing.localSimulation===true));
  await page.keyboard.press('x');check('sea and water pseudo animations pause during special',await page.locator('.room-fishing-v4-sea').evaluate(n=>getComputedStyle(n,'::before').animationPlayState==='paused'&&getComputedStyle(n,'::after').animationPlayState==='paused'&&getComputedStyle(n.querySelector('.room-fishing-v4-water'),'::before').animationPlayState==='paused'));const seq=await page.evaluate(()=>__minigame.inspect().fishing.special.sequence);for(const d of seq)await page.keyboard.press({left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown'}[d]);
  check('skill executes locally before delayed network',await page.evaluate(()=>__minigame.inspect().fishing.powerFeedback?.type==='special'&&__minigame.inspect().fishing.powerFeedback.grade==='S'&&__minigame.inspect().fishing.fishStamina===35100));
  await page.locator('.room-fishing-special-character').waitFor({timeout:500});check('cut-in appears without waiting 2200ms',await page.locator('.room-fishing-skill-grade').isVisible());await page.waitForFunction(()=>{const n=document.querySelector('.room-fishing-power-effect');const clip=getComputedStyle(n).clipPath;return clip==='none'||n.getAnimations().every(a=>a.playState==='finished');},null,{timeout:1800});fs.writeFileSync(path.join(out,label+'-effect.json'),JSON.stringify(await page.locator('.room-fishing-power-effect').evaluate(n=>({hidden:n.hidden,clip:getComputedStyle(n).clipPath,animation:getComputedStyle(n).animationPlayState,animations:n.getAnimations().map(a=>({time:a.currentTime,state:a.playState})),children:n.textContent})),null,2));await snapshot(page,label+'-immediate-skill');

@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 50,
+  "revision": 51,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r38-reel-layers",
+      "status": "published",
+      "publishedAt": "2026-10-07T17:00:03.922Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r38",
+      "title": "魚線耐力表與旋轉手把層次修正",
+      "summary": "耐力環對齊框內緣，旋轉手把固定最上層。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-reel-layers-r38.webp",
+        "alt": "金框內側耐力環與最上層旋轉手把示意"
+      },
+      "body": [
+        "耐力條移到金色外框內側，圓心對齊，指標沿色帶中心移動。",
+        "旋轉手把獨立在最上層，與內部捲線器保持同角度及收／放線方向、速度，不被耐力環、外框或軸心蓋住。",
+        "保留魚體力外圈與Wii儀表。重新啟動啟動器套用差分；圖片為功能示意。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r37-fishing-controls",
       "status": "published",
