@@ -355,7 +355,10 @@
   function cancelForgeVisit(message='已取消找佛朗基。') {
     if(!forgeVisit)return;
     const pending=forgeVisit;forgeVisit=null;
-    for(const id of pending.ids){const w=walkers.find(v=>v.item.id===id);if(w){w.mode='wander';w.route=[];w.pause=0;setPose(w,'idle');}}
+    for(const id of pending.ids){
+      const r=residents.get(id);if(r){r.destination='';r.nextVisit=performance.now()+60000;}
+      const w=walkers.find(v=>v.item.id===id);if(w){w.mode='wander';w.route=w.segmentCell?[w.segmentCell]:[];w.pause=0;w.node.classList.remove('is-room-departing');setPose(w,'idle');}
+    }
     pending.resolve({ok:false,error:'cancelled'});if(message)status(message,true);
   }
   const forgeRequests={luffy:'佛朗基！幫我把釣竿弄得更厲害吧！',zoro:'佛朗基，幫我把這根竿子強化一下。',nami:'佛朗基，這筆錢要花得值得喔。',usopp:'佛朗基！一起把它改成超級釣竿吧！',sanji:'佛朗基，幫我弄好釣竿。今晚的食材就靠它了。',chopper:'佛朗基，你能幫我把釣竿變強嗎？',robin:'佛朗基，能請你幫我調整一下釣竿嗎？',brook:'喲呵呵呵！佛朗基先生，這根釣竿就拜託你了！',jinbe:'佛朗基，釣竿的強化就有勞你了。',ace:'佛朗基，幫我把這根竿子再改強一點吧。',sabo:'佛朗基，能幫我調整一下這根釣竿嗎？',law:'佛朗基屋，這根竿子的強化交給你。'};

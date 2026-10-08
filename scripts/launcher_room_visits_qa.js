@@ -28,6 +28,10 @@ await rod.hover();const box=await rod.boundingBox();await page.mouse.move(box.x+
 pass(label+' detail opens on press before release',await page.locator('.fishing-journal').isVisible());await page.mouse.move(20,20);await page.mouse.up();
 pass(label+' only selected actor rod with no selector',await page.locator('.fishing-journal-character').count()===0&&(await page.locator('.fishing-rod-showcase').textContent()).includes('魯夫'));
 await page.locator('.fishing-journal-upgrade').click();pass(label+' trip starts without charging or starting forge',await page.evaluate(()=>__launcherRoomTest.visits().forge?.phase==='depart'&&!__integration.calls.some(c=>c.payload?.disposition==='forge_start')));
+await page.evaluate(()=>__launcherRoomTest.openCompanion('room-character-luffy'));
+pass(label+' selecting actor cancels departure destination',await page.evaluate(()=>!__launcherRoomTest.visits().forge&&!__launcherRoomTest.visits().residents.find(r=>r.id==='room-character-luffy').destination));
+pass(label+' cancelled departure has no forge charge',await page.evaluate(()=>!__integration.calls.some(c=>c.payload?.disposition==='forge_start')));
+await page.evaluate(()=>OnePieceFishingJournal.open('room-character-luffy'));await page.locator('.fishing-journal-upgrade').click();
 await wait(page,()=>document.querySelector('.fishing-forge')!==null);
 pass(label+' finds Franky in workshop before forge',await page.evaluate(()=>__launcherRoomTest.visits().residents.find(r=>r.id==='room-character-luffy').sceneId==='room-scene-sunny-workshop'&&__integration.calls.filter(c=>c.payload?.disposition==='forge_start').length===1));
 await page.screenshot({path:path.join(out,label+'-forge.png')});await page.getByRole('button',{name:'關閉',exact:true}).click();
