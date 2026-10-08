@@ -5,7 +5,7 @@
 // The rates, phase lengths and trajectories below are original launcher rules:
 // static disc analysis cannot establish the original game's exact timing.
 const crypto = require('node:crypto');
-const {FISH_RARITY_BY_ID,TIERS,RODS,LEGACY_RODS}=require('./launcher-fishing-balance');
+const {FISH_RARITY_BY_ID,TIERS,RODS,LEGACY_RODS,typedRodStats}=require('./launcher-fishing-balance');
 const iso = value => new Date(value).toISOString();
 const clamp = (value,min,max) => Math.max(min,Math.min(max,value));
 const round4 = value => Math.round(value*10000)/10000;
@@ -182,7 +182,7 @@ function create(id,issuedAt,equippedRodLevel=0,flickMode=false) {
     motionSeed:crypto.randomInt(1,0x80000000),rodLevel:rodLevel(equippedRodLevel),motionStartedAt:null,
     phaseIndex:0,phaseUntil:null,nextTurnAt:null,turnsRemaining:0,behavior:null,reelHoldMs:0,
     ...(flickMode===true?{flickMode:true,flickTell:null,flickCue:null,flickFeedback:null,
-      flickReliefUntil:null,powerMode:true,battleVersion:3,powerCharge:0,fishStamina:100,maxFishStamina:100,
+      flickReliefUntil:null,powerMode:true,battleVersion:3,rulesVersion:39,powerCharge:0,fishStamina:100,maxFishStamina:100,
       special:null,powerFeedback:null}:{}),
     control:{reeling:false,steer:0},controlLeaseUntil:null,
     showcaseMs:0,answerWindowMs:90000,notBefore:iso(issuedAt)};
@@ -278,15 +278,17 @@ function hook(round,now,difficulty=1,speciesId=null) {
   if(round.powerMode){
     round.powerCharge=0;round.special=null;
     const tier=TIERS[FISH_RARITY_BY_ID[speciesId]||'common'];
-    round.maxFishStamina=round.fishStamina=round.battleVersion>=2?tier.hp:100;
-    if(round.battleVersion>=2){round.fishTier=tier.level;round.recommendedRodLevel=tier.rod;round.fishPullMultiplier=tier.pull;round.damageEvents=[];round.damageSequence=0;round.reelDamagePending=0;round.damageTickAt=at;}
+    const size=round.rulesVersion>=39?clamp(round.fishSizeRatio||1,.65,1.45):1;
+    round.fishSpeedMultiplier=round.rulesVersion>=39?clamp(1.25-size*.25,.85,1.1):1;
+    round.maxFishStamina=round.fishStamina=round.battleVersion>=2?Math.round(tier.hp*size):100;
+    if(round.battleVersion>=2){round.fishTier=tier.level;round.recommendedRodLevel=tier.rod;round.fishPullMultiplier=tier.pull*(round.rulesVersion>=39?(.75+size*.25):1);round.rodType=typedRodStats(round.rodLevel,round.characterKey).type;round.damageEvents=[];round.damageSequence=0;round.reelDamagePending=0;round.damageTickAt=at;}
   }
   round.reelHoldMs=0;
   round.fishVelocityX=0;round.fishVelocityY=0;
 }
 
-function rodStats(round){return round.battleVersion===3?RODS[rodLevel(round.rodLevel)]:LEGACY_RODS[Math.min(3,rodLevel(round.rodLevel))];}
-function canLand(round){return round.powerMode&&round.fishStamina<=0||round.distance<=0&&!(round.battleVersion===3&&round.fishTier===4);}
+function rodStats(round){if(round.rulesVersion>=39)return typedRodStats(rodLevel(round.rodLevel),round.characterKey);return round.battleVersion===3?RODS[rodLevel(round.rodLevel)]:LEGACY_RODS[Math.min(3,rodLevel(round.rodLevel))];}
+function canLand(round){return round.powerMode&&round.fishStamina<=0||round.distance<=0&&!(!(round.rulesVersion>=39)&&round.battleVersion===3&&round.fishTier===4);}
 function leverage(round){return round.battleVersion>=2?Math.min(1,rodStats(round).counter/(round.fishPullMultiplier||1)):1;}
 function damageEvent(round,at,amount,kind){
   if(!(amount>0))return;
@@ -316,7 +318,7 @@ function resolveFlick(round,at,result) {
   if(result==='hit'){
     round.strength=round4(clamp(round.strength+10+force*2,0,round.maxStrength));
     round.distance=round4(clamp(round.distance-(round.powerMode?.8+force*.4:3.8+force*1.5)*leverage(round),0,100));
-    if(round.powerMode){round.powerCharge=Math.min(6,round.powerCharge+1);damage(round,at,round.battleVersion>=2?rodStats(round).flick:4,'flick');}
+    if(round.powerMode){round.powerCharge=Math.min(round.rulesVersion>=39?9:6,round.powerCharge+1);damage(round,at,round.battleVersion>=2?rodStats(round).flick:4,'flick');}
     round.flickReliefUntil=iso(at+FLICK_RELIEF_MS);
   }else{
     // A wrong or missed counter cancels any reward from the previous cue.
@@ -338,8 +340,8 @@ function power(round,now,move,direction){
   if(Date.parse(round.powerPauseUntil)>at)return{error:move==='specialKey'?'fishing_special_expired':'fishing_power_not_ready'};
   if(move==='burst'){
     if(round.special||round.powerCharge<3)return{error:'fishing_power_not_ready'};
-    round.powerCharge-=3;round.distance=round4(Math.max(0,round.distance-15*leverage(round)));
-    damage(round,at,round.battleVersion>=2?rodStats(round).burst:12,'burst');round.flickReliefUntil=iso(at+4000);
+    round.powerCharge-=3;round.distance=round4(Math.max(0,round.distance-15*leverage(round)*(round.rulesVersion>=39?rodStats(round).distanceMultiplier:1)));
+    if(!(round.rulesVersion>=39))damage(round,at,round.battleVersion>=2?rodStats(round).burst:12,'burst');round.flickReliefUntil=iso(at+4000);
     pausePower(round,at,2200);
     round.powerFeedback={at:iso(at),type:'burst',name:'爆拉',theme:'gold'};
     return{settlement:settlement(round)};
@@ -362,7 +364,7 @@ function power(round,now,move,direction){
   if(++s.index===s.sequence.length){
     const elapsedMs=Math.max(0,at-(Date.parse(s.startedAt)||Date.parse(s.until)-8000));const rating=elapsedMs<=1500?['S',1.5]:elapsedMs<=3000?['A',1.25]:elapsedMs<=5000?['B',1.1]:['C',1];
     round.special=null;const hit=damage(round,at,Math.round((round.battleVersion>=2?rodStats(round).special:55)*(round.battleVersion>=3?rating[1]:1)),'special');
-    round.distance=round4(Math.max(0,round.distance-8*leverage(round)));round.strength=Math.min(100,round.strength+25);round.flickReliefUntil=iso(at+5000);
+    if(!(round.rulesVersion>=39))round.distance=round4(Math.max(0,round.distance-8*leverage(round)));round.strength=Math.min(100,round.strength+25);round.flickReliefUntil=iso(at+5000);
     const skill=SPECIALS[round.characterKey]||SPECIALS.luffy;
     pausePower(round,at,3200);
     round.powerFeedback={at:iso(at),type:'special',name:skill[0],theme:skill[1],damage:hit,...round.battleVersion>=3?{grade:rating[0],multiplier:rating[1],elapsedMs}:{}};
@@ -444,9 +446,9 @@ function simulate(round,now,difficulty=1) {
     const tierPressure=round.battleVersion>=2?Math.pow((round.fishPullMultiplier||1)/rodStats(round).counter,2):1;
     const staminaFactor=round.powerMode?.45+.55*round.fishStamina/(round.maxFishStamina||100):1;
     const surgePull=rules.surgeEscape*force*(accent?.pull||1)*staminaFactor;
-    const speed=surge?(deep?(.5-round.fishX)*.5:fishSign*rules.swimSpeed*(round.behavior.accent?.swim||1)*
+    const speed=(round.fishSpeedMultiplier||1)*(surge?(deep?(.5-round.fishX)*.5:fishSign*rules.swimSpeed*(round.behavior.accent?.swim||1)*
       (.75+force*.25)*(aligned?.42:opposed?1.2:1)):
-      (.5-round.fishX)*.65+.027*Math.sin((next-Date.parse(round.hookedAt))/830+(round.motionSeed%71));
+      (.5-round.fishX)*.65+.027*Math.sin((next-Date.parse(round.hookedAt))/830+(round.motionSeed%71)));
     // A successful upward counter briefly lifts a diving fish back toward
     // the surface. Lateral counters already slow the fish's sideways run.
     const depth=deep?(relief?.53:.76):{patient:.59,dart:.63,heavy:.7,weave:.66}[style];
@@ -464,7 +466,7 @@ function simulate(round,now,difficulty=1) {
         effectiveGear*ROD_EFFECT_PER_LEVEL.reelGain))*
         (accent?.grip||1)*(relief?1.2:1);
       const escape=(surge?surgePull*(aligned?.62:opposed?1.3:1.06):.5*tierPressure)*(relief?.65:1);
-      round.distance=clamp(round.distance+(escape-gain*(round.powerMode?.30*leverage(round):1))*dt,0,100);
+      round.distance=clamp(round.distance+(escape-gain*(round.powerMode?.30*leverage(round):1)*(round.rulesVersion>=39?rodStats(round).distanceMultiplier:1))*dt,0,100);
       if(round.powerMode)damage(round,next,(round.battleVersion>=2?rodStats(round).reel*(surge&&!aligned?.25:1)*(relief?1.25:1):surge&&!aligned?.35:1.35+gear*.12)*dt,'reel');
       // Holding the reel without a pause costs increasing strength. This
       // makes release a real choice even for a patient, easy-to-catch fish.
@@ -487,7 +489,7 @@ function simulate(round,now,difficulty=1) {
     }
     round.strength=round4(round.strength);round.distance=round4(round.distance);
     round.tension=round4(100-round.strength);
-    if(round.battleVersion===3&&round.fishTier===4&&round.fishStamina>0)round.distance=Math.max(1,round.distance);
+    if(!(round.rulesVersion>=39)&&round.battleVersion===3&&round.fishTier===4&&round.fishStamina>0)round.distance=Math.max(1,round.distance);
     cursor=next;round.lastSimAt=iso(cursor);
     if(round.flickCue&&cursor>=Date.parse(round.flickCue.until)){
       const outcome=resolveFlick(round,cursor,'miss');

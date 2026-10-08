@@ -629,7 +629,7 @@
       finally{if(current===generation){requesting=false;setDisabled(false);updateRodWorkshop();updateFishingV2();updateFishingV4();}}
     }
     function setDisabled(value){if(!layer)return;layer.dataset.pending=String(value);for(const b of body.querySelectorAll('button'))b.disabled=(value&&!b.classList.contains('room-fishing-rhythm-arrow')&&b.dataset.fishAction!=='reel'&&!b.classList.contains('room-fishing-v4-reel')&&!b.classList.contains('room-fishing-v4-pay')&&!b.classList.contains('room-fishing-v4-cast')&&!b.classList.contains('room-fishing-v4-hook'))||b.dataset.permanentDisabled==='true';}
-    async function start(){if(phase!=='intro')return;if(kind==='fishing'){fishingSoundContext();preloadFishingInline();}const response=await request('minigame.start',{characterId,kind,...kind==='fishing'?{baitId:selectedBait,spotId:selectedSpot,fishingVersion:5,flickMode:true,localMode:true}:kind==='work'?{jobId}:{},...kind==='work'&&jobId==='fishing'?{fishingVersion:2}:{},...practice?{practice:true}:{}});if(!response)return;if(response.minigame&&['playing','ready','failed'].includes(response.minigame.state)){game=response.minigame;if(game.characterId!==characterId||game.kind!==kind){renderRecovery();return;}accept(response);return;}renderIntro(kind==='fishing'&&response.error==='work_active'?'夥伴正在分工。完成原有分工後即可自由釣魚；釣魚不消耗工作次數。':ERRORS[response.error]||response.message||'暫時無法開始，請稍候再試。');}
+    async function start(){if(phase!=='intro')return;if(kind==='fishing'){fishingSoundContext();preloadFishingInline();}const response=await request('minigame.start',{characterId,kind,...kind==='fishing'?{baitId:selectedBait,spotId:selectedSpot,fishingVersion:5,flickMode:true,localMode:true,fishingRulesVersion:39}:kind==='work'?{jobId}:{},...kind==='work'&&jobId==='fishing'?{fishingVersion:2}:{},...practice?{practice:true}:{}});if(!response)return;if(response.minigame&&['playing','ready','failed'].includes(response.minigame.state)){game=response.minigame;if(game.characterId!==characterId||game.kind!==kind){renderRecovery();return;}accept(response);return;}renderIntro(kind==='fishing'&&response.error==='work_active'?'夥伴正在分工。完成原有分工後即可自由釣魚；釣魚不消耗工作次數。':ERRORS[response.error]||response.message||'暫時無法開始，請稍候再試。');}
     function renderRecovery(){phase='recovery';body.replaceChildren(node('h3','','上一次挑戰尚未結束'),node('p','','結束舊挑戰後，即可重新選擇夥伴。未完成的獎勵不會發放。'),button('結束舊挑戰',()=>void cancel(false)));say('不會自動領取獎勵。');}
     function paintFishingStamina(panel,hp,max=100){
       const percentage=clamp(hp/Math.max(1,max)*100,0,100);
@@ -657,6 +657,7 @@
         setTimeout(()=>{
           if(current!==generation||!active()||!sea.isConnected||!['answer','landing'].includes(phase)||event.kind==='reel'&&!fishingV4Reeling)return;
           const label=node('span','room-fishing-damage',`−${Math.max(1,Math.round(event.amount))}`);label.dataset.kind=event.kind;label.dataset.amount=String(event.amount);
+          if(event.kind==='special'){const hit=node('img','room-fishing-hit-icon');hit.src=ASSET+'fishing_ui_r39/impact.webp';hit.alt='受擊';sea.querySelector('.room-fishing-damage-layer').append(hit);setTimeout(()=>hit.remove(),1100);label.prepend(node('small','','必殺！ '));}
           label.style.setProperty('--damage-jitter',`${((event.id%3)-1)*22}px`);sea.querySelector('.room-fishing-damage-layer').append(label);
           setTimeout(()=>label.remove(),1050);
         },delay);
@@ -705,18 +706,18 @@
             if(current!==generation||!active()||phase!=='landing')return;
             paintFishingStamina(sea.querySelector('.room-fishing-power-panel'),fishingImpactStamina(sea,finalStamina),power.maxFishStamina||100);
             if(now()-started<duration){frame=requestAnimationFrame(showHit);return;}
-            effect.hidden=true;sea.dataset.landingImpact='false';void finish();
+            effect.hidden=true;sea.dataset.landingImpact='false';animateFishingLanding(sea,terminal?.distance??0);
           };
           frame=requestAnimationFrame(showHit);return;
         }
-        if(phase!=='landing')void finish();return;
+        if(phase!=='landing'){if(kind==='fishing'&&sea&&game.feedback?.reason==='landed')animateFishingLanding(sea,terminal?.distance??0);else void finish();}return;
       }
       if(lastRound===game.challenge.id){
         if(jobId==='fishing'&&[2,3,4,5].includes(game.challenge.fishingVersion)){
           if([4,5].includes(game.challenge.fishingVersion))updateFishingV4();else updateFishingV2();
           if(previousFishingStage!==game.challenge.stage){
             const target=[4,5].includes(game.challenge.fishingVersion)?body.querySelector(game.challenge.stage==='wait'?'.room-fishing-v4-hook':'.room-fishing-v4-reel')||layer:game.challenge.stage==='fight'?body.querySelector('[data-fish-action=reel]'):layer;
-            target?.focus({preventScroll:true});
+            (target?.getClientRects().length?target:layer).focus({preventScroll:true});
           }
         }
         return;
@@ -1116,9 +1117,11 @@
       const fishTarget=node('div','room-fishing-fish-target');fishTarget.setAttribute('role','meter');fishTarget.setAttribute('aria-label','魚剩餘體力');fishTarget.setAttribute('aria-valuemin','0');fishTarget.setAttribute('aria-valuemax','100');
       const fishTargetRing=node('div','room-fishing-fish-target-ring'),fishTargetIcon=node('img');fishTargetIcon.src=ASSET+'fishing_v6/fish-target-silhouette.webp';fishTargetIcon.alt='';fishTargetIcon.draggable=false;fishTargetRing.append(fishTargetIcon);fishTarget.append(fishTargetRing,node('strong','room-fishing-target-distance',''));
       const powerCharge=node('div','room-fishing-power-charge');
-      for(let i=0;i<6;i++)powerCharge.append(node('i'));
+      for(let i=0;i<9;i++){const segment=node('i');segment.style.setProperty('--energy-angle',i*40+'deg');powerCharge.append(segment);}
       const burst=button('C 爆拉 · 3格',()=>void sendFishingPower('burst'),'room-fishing-burst');
       const special=button('X 必殺技 · 6格',()=>void sendFishingPower('special'),'room-fishing-special');
+      burst.textContent='';burst.setAttribute('aria-label','C 爆拉，消耗3格能量');burst.title='C 爆拉';special.textContent='';special.setAttribute('aria-label','X 必殺技，消耗6格能量');special.title='X 必殺技';
+      for(const [b,name,key] of [[burst,'burst','C'],[special,'special','X']]){const icon=node('img');icon.src=ASSET+'fishing_ui_r39/'+name+'.webp';icon.alt='';b.append(icon,node('kbd','',key));}
       powerPanel.append(node('small','room-fishing-tier'),stamina,powerCharge,burst,special);
       sea.append(node('div','room-fishing-damage-layer'));
       const rhythm=node('div','room-fishing-rhythm');rhythm.hidden=true;
@@ -1144,7 +1147,7 @@
         const catchLabel=node('div','room-fishing-v5-catch-label');catchLabel.append(node('span','','剩餘魚距'),node('strong','room-fishing-v5-distance','0.0 m'));
         const catchTrack=node('div','room-fishing-v5-catch-track');catchTrack.setAttribute('role','meter');catchTrack.setAttribute('aria-label','剩餘魚距');catchTrack.setAttribute('aria-valuemin','0');catchTrack.setAttribute('aria-valuemax','100');const catchRail=node('span','room-fishing-v5-catch-rail');catchRail.append(node('span','room-fishing-v5-catch-fill'));for(let index=1;index<10;index++){const guide=node('span','room-fishing-v5-guide');guide.style.setProperty('--guide',String(index));catchRail.append(guide);}catchRail.append(node('span','room-fishing-v5-rail-marker'));catchTrack.append(node('span','room-fishing-v5-boat','船'),catchRail,node('span','room-fishing-v5-fish-end','魚'));
         position.append(catchLabel,catchTrack);
-        position.append(catchRail.querySelector('.room-fishing-v5-rail-marker'));hud.append(strengthBox,pullArc,position,powerPanel,crankLayer);hud.setAttribute('aria-label','Wii風格釣竿表：魚線耐力、拉力、魚距與必殺能量');fishingV5Hud=hud;
+        position.append(catchRail.querySelector('.room-fishing-v5-rail-marker'));hud.append(strengthBox,pullArc,position,crankLayer);hud.setAttribute('aria-label','Wii風格釣竿表：魚線耐力、拉力、魚距與必殺能量');fishingV5Hud=hud;
       }
       const castMeter=node('div','room-fishing-v4-cast-meter');castMeter.append(node('div','room-fishing-v4-cast-heading','拋竿力度'),node('strong','room-fishing-v4-cast-readout','52% · 中距離'));
       const castTrack=node('div','room-fishing-v4-cast-track');castTrack.setAttribute('role','progressbar');castTrack.setAttribute('aria-label','拋竿力度');castTrack.setAttribute('aria-valuemin','0');castTrack.setAttribute('aria-valuemax','100');castTrack.append(node('span'));
@@ -1168,7 +1171,7 @@
       reel.addEventListener('pointerup',event=>{event.preventDefault();event.stopPropagation();if(fishingV4ReelPointer!==event.pointerId)return;fishingV4ReelPointer=null;setFishingV4Control(false,isV5?fishingV4Steer:0,fishingV4Paying);});
       reel.addEventListener('pointercancel',event=>{event.stopPropagation();if(fishingV4ReelPointer!==event.pointerId)return;fishingV4ReelPointer=null;setFishingV4Control(false,isV5?fishingV4Steer:0,fishingV4Paying);});
       reel.addEventListener('click',event=>{if(event.detail!==0)return;setFishingV4Control(true,fishingV4Steer);setTimeout(()=>setFishingV4Control(false,fishingV4Steer),450);});
-      fightControls.append(reel);if(isV5)fightControls.append(burst,special);
+      fightControls.append(reel);
       if(!isV5){
         const pay=node('button','room-fishing-v4-primary room-fishing-v4-pay','↓ 放線');pay.type='button';pay.dataset.paying='false';pay.setAttribute('aria-label','按住放線，降低釣線張力');
         pay.addEventListener('pointerdown',event=>{if(event.button!==0||pay.disabled)return;event.preventDefault();event.stopPropagation();fishingV4PayPointer=event.pointerId;pay.setPointerCapture(event.pointerId);setFishingV4Control(false,fishingV4Steer,true);});
@@ -1719,6 +1722,17 @@
       if(messages[response?.error]){say(messages[response.error]);body.replaceChildren(node('p','',messages[response.error]),button('返回房間',()=>closeLocal()));return;}
       const old=body.querySelector('.room-minigame-retry');old?.remove();const strip=node('div','room-minigame-retry');strip.append(node('p','',text),button(queued?'重新送出這一輪':'重新結算',()=>void (queued?sendAnswer():finish())));body.append(strip);
     }
+    function animateFishingLanding(sea,distance){
+      phase='landing';cancelAnimationFrame(frame);stopReeling();fishingV4Reeling=false;sea.dataset.skillPaused='false';sea.dataset.landingReturn='true';sea.dataset.burstActive='false';sea.querySelector('.room-fishing-rhythm').hidden=true;
+      for(const b of sea.querySelectorAll('button'))b.disabled=true;
+      const current=generation,started=now(),fromX=parseFloat(sea.style.getPropertyValue('--float-x'))||50,fromY=parseFloat(sea.style.getPropertyValue('--float-y'))||45;
+      const shownDistance=parseFloat(sea.querySelector('.room-fishing-v5-distance').textContent)||0,startSplash=parseFloat(sea.style.getPropertyValue('--splash-width'))||10;const duration=1600+Math.max(0,Math.min(100,distance))*14;
+      const pull=()=>{if(current!==generation||!active()||phase!=='landing')return;const t=Math.min(1,(now()-started)/duration),ease=t*t*(3-2*t);
+        sea.style.setProperty('--float-x',fromX+(52-fromX)*ease+'%');sea.style.setProperty('--float-y',fromY+(86-fromY)*ease+'%');sea.style.setProperty('--splash-width',startSplash+(85-startSplash)*ease+'px');
+        const remaining=Math.max(0,distance*(1-ease));sea.querySelector('.room-fishing-v5-distance').textContent=(shownDistance*(1-ease)).toFixed(1)+' m';sea.querySelector('.room-fishing-v5-position').style.setProperty('--marker-percent',25+remaining*.65+'%');sea.querySelector('.room-fishing-v5-rail-marker').style.left=25+remaining*.65+'%';
+        const tip=fishingV4RodTip(sea);for(const line of sea.querySelectorAll('.room-fishing-v4-line path'))line.setAttribute('d','M '+tip.x+' '+tip.y+' Q '+((tip.x+(fromX+(52-fromX)*ease)*10)/2)+' '+((tip.y+(fromY+(86-fromY)*ease)*6)/2+15)+' '+((fromX+(52-fromX)*ease)*10)+' '+((fromY+(86-fromY)*ease)*6));
+        if(t<1){frame=requestAnimationFrame(pull);return;}sea.dataset.landingReturn='false';void finish();};frame=requestAnimationFrame(pull);
+    }
     async function finish(){phase='waiting';cancelAnimationFrame(frame);body.replaceChildren(node('h3','',kind==='fishing'?'魚正被帶上甲板…':'挑戰完成，正在結算…'));say(kind==='fishing'?'正在確認這次漁獲。':'成果確認後才會發放獎勵。');const current=generation,wait=Math.max(0,Date.parse(game.finishNotBefore)-fishingNow()+60);if(wait>0)await new Promise(resolve=>setTimeout(resolve,Math.min(wait,30000)));if(current!==generation||!active())return;const response=await request('minigame.finish',{sessionId:game.id,token:game.token});if(!response)return;if(response.ok)accept(response);else showRetry(response);}
     function fishingResultAction(action){return event=>{
       // A still-held reel key or pointer must never dismiss the catch as the
@@ -1739,7 +1753,7 @@
       box.append(node('p','room-fishing-v3-result-spot',`${FISH_SPOTS[selectedSpot].label} · ${FISH_BAITS[selectedBait].label}`));
       if(caught){
         const art=node('img','room-fishing-v3-catch-art');art.src=fishArt(caught.speciesId);art.alt=caught.label||FISH_LABELS[caught.speciesId]||'釣到的魚';art.draggable=false;art.onerror=()=>hideMissingFishArt(art);
-        box.append(fishRarityBadge(caught.speciesId,caught.rarity),art,node('strong','room-fishing-v3-catch-name',caught.label||FISH_LABELS[caught.speciesId]||'新漁獲'),node('p','','這尾魚已加入漁獲收藏。看完後再按下方按鈕繼續。'));
+        box.append(fishRarityBadge(caught.speciesId,caught.rarity),art,node('strong','room-fishing-v3-catch-name',caught.label||FISH_LABELS[caught.speciesId]||'新漁獲'),node('p','room-fishing-catch-length',Number.isFinite(caught.lengthCm)?'全長 '+caught.lengthCm.toFixed(1)+' cm':'全長未記錄'));
         const place=button('放進水族箱',fishingResultAction(async()=>{const response=await request('fish.place',{fishId:caught.id,inAquarium:true});if(response?.ok){place.textContent='已放進水族箱';place.dataset.permanentDisabled='true';place.disabled=true;say('魚已放進水族箱。');options.onResult?.(game);}else if(response)say(ERRORS[response.error]||'目前無法放進水族箱，漁獲仍保存在收藏。');}),'room-minigame-secondary');box.append(place);
       }else box.append(node('p','',result.catchCollectionFull?'先到漁獲收藏放生一尾，就能保存新魚。':'換個餌或釣點，再試著觀察浮標下沉的時機。'));
       const row=node('div','room-minigame-result-actions');row.append(button('看完了，再釣一竿',fishingResultAction(()=>{game=null;lastResult='';lastRound='';lastFeedback=-1;phase='intro';body.replaceChildren(node('p','room-fishing-v4-loading','正在回到同一處海面…'));void start();}),'room-minigame-primary'),button('換魚餌與釣點',fishingResultAction(()=>{game=null;lastResult='';lastRound='';lastFeedback=-1;renderIntro();}),'room-minigame-secondary'),button('返回房間',fishingResultAction(()=>void askClose()),'room-minigame-secondary'));box.append(row);body.append(box);
@@ -1857,7 +1871,11 @@ const TIERS=Object.freeze({common:{level:1,hp:2000,pull:1,rod:0},uncommon:{level
 const LEGACY_RODS=Object.freeze([{reel:2,flick:3,burst:8,special:35,counter:1},{reel:6,flick:8,burst:24,special:105,counter:1.6},{reel:17,flick:21,burst:65,special:275,counter:2.65},{reel:45,flick:52,burst:170,special:720,counter:4.4}]);
 const ROD_UPGRADE_COSTS=Object.freeze(Array.from({length:99},(_,n)=>n<3?[20,35,55][n]:Math.round(55+2*n+n*n/60)));
 const RODS=Object.freeze(Array.from({length:100},(_,n)=>{const t=n/99;return Object.freeze({reel:Math.round(18+82*t*t),flick:Math.round(30+170*t*t),burst:Math.round(100+900*t*t),special:Math.round(600+17400*Math.pow(t,1.7)),counter:1+4*t});}));
-module.exports={FISH_RARITY_BY_ID,TIERS,RODS,LEGACY_RODS,ROD_UPGRADE_COSTS};
+const ROD_TYPES=Object.freeze({speed:Object.freeze({label:'速拉型',distance:1.55,damage:.72}),power:Object.freeze({label:'力量型',distance:.72,damage:1.55}),balanced:Object.freeze({label:'平衡型',distance:1,damage:1})});
+const CHARACTER_ROD_TYPES=Object.freeze({nami:'speed',usopp:'speed',brook:'speed',law:'speed',zoro:'power',sanji:'power',franky:'power',jinbe:'power',ace:'power',luffy:'balanced',chopper:'balanced',robin:'balanced',sabo:'balanced',hancock:'balanced'});
+const rodTypeFor=key=>CHARACTER_ROD_TYPES[key]||'balanced';
+function typedRodStats(level,key){const base=RODS[Math.max(0,Math.min(99,level))],type=rodTypeFor(key),bonus=ROD_TYPES[type];return {...base,type,label:bonus.label,distanceMultiplier:bonus.distance,damageMultiplier:bonus.damage,reel:Math.round(base.reel*bonus.damage),flick:Math.round(base.flick*bonus.damage),special:Math.round(base.special*bonus.damage)};}
+module.exports={FISH_RARITY_BY_ID,TIERS,RODS,LEGACY_RODS,ROD_UPGRADE_COSTS,ROD_TYPES,CHARACTER_ROD_TYPES,rodTypeFor,typedRodStats};
 
 return module.exports;})();const module={exports:{}};
 'use strict';
@@ -1867,7 +1885,7 @@ return module.exports;})();const module={exports:{}};
 // The rates, phase lengths and trajectories below are original launcher rules:
 // static disc analysis cannot establish the original game's exact timing.
 const crypto={randomUUID:()=>window.crypto.randomUUID(),randomInt:(a,b)=>{const v=new Uint32Array(1);window.crypto.getRandomValues(v);return b===undefined?v[0]%a:a+v[0]%(b-a);}};
-const {FISH_RARITY_BY_ID,TIERS,RODS,LEGACY_RODS}=balance;
+const {FISH_RARITY_BY_ID,TIERS,RODS,LEGACY_RODS,typedRodStats}=balance;
 const iso = value => new Date(value).toISOString();
 const clamp = (value,min,max) => Math.max(min,Math.min(max,value));
 const round4 = value => Math.round(value*10000)/10000;
@@ -2044,7 +2062,7 @@ function create(id,issuedAt,equippedRodLevel=0,flickMode=false) {
     motionSeed:crypto.randomInt(1,0x80000000),rodLevel:rodLevel(equippedRodLevel),motionStartedAt:null,
     phaseIndex:0,phaseUntil:null,nextTurnAt:null,turnsRemaining:0,behavior:null,reelHoldMs:0,
     ...(flickMode===true?{flickMode:true,flickTell:null,flickCue:null,flickFeedback:null,
-      flickReliefUntil:null,powerMode:true,battleVersion:3,powerCharge:0,fishStamina:100,maxFishStamina:100,
+      flickReliefUntil:null,powerMode:true,battleVersion:3,rulesVersion:39,powerCharge:0,fishStamina:100,maxFishStamina:100,
       special:null,powerFeedback:null}:{}),
     control:{reeling:false,steer:0},controlLeaseUntil:null,
     showcaseMs:0,answerWindowMs:90000,notBefore:iso(issuedAt)};
@@ -2140,15 +2158,17 @@ function hook(round,now,difficulty=1,speciesId=null) {
   if(round.powerMode){
     round.powerCharge=0;round.special=null;
     const tier=TIERS[FISH_RARITY_BY_ID[speciesId]||'common'];
-    round.maxFishStamina=round.fishStamina=round.battleVersion>=2?tier.hp:100;
-    if(round.battleVersion>=2){round.fishTier=tier.level;round.recommendedRodLevel=tier.rod;round.fishPullMultiplier=tier.pull;round.damageEvents=[];round.damageSequence=0;round.reelDamagePending=0;round.damageTickAt=at;}
+    const size=round.rulesVersion>=39?clamp(round.fishSizeRatio||1,.65,1.45):1;
+    round.fishSpeedMultiplier=round.rulesVersion>=39?clamp(1.25-size*.25,.85,1.1):1;
+    round.maxFishStamina=round.fishStamina=round.battleVersion>=2?Math.round(tier.hp*size):100;
+    if(round.battleVersion>=2){round.fishTier=tier.level;round.recommendedRodLevel=tier.rod;round.fishPullMultiplier=tier.pull*(round.rulesVersion>=39?(.75+size*.25):1);round.rodType=typedRodStats(round.rodLevel,round.characterKey).type;round.damageEvents=[];round.damageSequence=0;round.reelDamagePending=0;round.damageTickAt=at;}
   }
   round.reelHoldMs=0;
   round.fishVelocityX=0;round.fishVelocityY=0;
 }
 
-function rodStats(round){return round.battleVersion===3?RODS[rodLevel(round.rodLevel)]:LEGACY_RODS[Math.min(3,rodLevel(round.rodLevel))];}
-function canLand(round){return round.powerMode&&round.fishStamina<=0||round.distance<=0&&!(round.battleVersion===3&&round.fishTier===4);}
+function rodStats(round){if(round.rulesVersion>=39)return typedRodStats(rodLevel(round.rodLevel),round.characterKey);return round.battleVersion===3?RODS[rodLevel(round.rodLevel)]:LEGACY_RODS[Math.min(3,rodLevel(round.rodLevel))];}
+function canLand(round){return round.powerMode&&round.fishStamina<=0||round.distance<=0&&!(!(round.rulesVersion>=39)&&round.battleVersion===3&&round.fishTier===4);}
 function leverage(round){return round.battleVersion>=2?Math.min(1,rodStats(round).counter/(round.fishPullMultiplier||1)):1;}
 function damageEvent(round,at,amount,kind){
   if(!(amount>0))return;
@@ -2178,7 +2198,7 @@ function resolveFlick(round,at,result) {
   if(result==='hit'){
     round.strength=round4(clamp(round.strength+10+force*2,0,round.maxStrength));
     round.distance=round4(clamp(round.distance-(round.powerMode?.8+force*.4:3.8+force*1.5)*leverage(round),0,100));
-    if(round.powerMode){round.powerCharge=Math.min(6,round.powerCharge+1);damage(round,at,round.battleVersion>=2?rodStats(round).flick:4,'flick');}
+    if(round.powerMode){round.powerCharge=Math.min(round.rulesVersion>=39?9:6,round.powerCharge+1);damage(round,at,round.battleVersion>=2?rodStats(round).flick:4,'flick');}
     round.flickReliefUntil=iso(at+FLICK_RELIEF_MS);
   }else{
     // A wrong or missed counter cancels any reward from the previous cue.
@@ -2200,8 +2220,8 @@ function power(round,now,move,direction){
   if(Date.parse(round.powerPauseUntil)>at)return{error:move==='specialKey'?'fishing_special_expired':'fishing_power_not_ready'};
   if(move==='burst'){
     if(round.special||round.powerCharge<3)return{error:'fishing_power_not_ready'};
-    round.powerCharge-=3;round.distance=round4(Math.max(0,round.distance-15*leverage(round)));
-    damage(round,at,round.battleVersion>=2?rodStats(round).burst:12,'burst');round.flickReliefUntil=iso(at+4000);
+    round.powerCharge-=3;round.distance=round4(Math.max(0,round.distance-15*leverage(round)*(round.rulesVersion>=39?rodStats(round).distanceMultiplier:1)));
+    if(!(round.rulesVersion>=39))damage(round,at,round.battleVersion>=2?rodStats(round).burst:12,'burst');round.flickReliefUntil=iso(at+4000);
     pausePower(round,at,2200);
     round.powerFeedback={at:iso(at),type:'burst',name:'爆拉',theme:'gold'};
     return{settlement:settlement(round)};
@@ -2224,7 +2244,7 @@ function power(round,now,move,direction){
   if(++s.index===s.sequence.length){
     const elapsedMs=Math.max(0,at-(Date.parse(s.startedAt)||Date.parse(s.until)-8000));const rating=elapsedMs<=1500?['S',1.5]:elapsedMs<=3000?['A',1.25]:elapsedMs<=5000?['B',1.1]:['C',1];
     round.special=null;const hit=damage(round,at,Math.round((round.battleVersion>=2?rodStats(round).special:55)*(round.battleVersion>=3?rating[1]:1)),'special');
-    round.distance=round4(Math.max(0,round.distance-8*leverage(round)));round.strength=Math.min(100,round.strength+25);round.flickReliefUntil=iso(at+5000);
+    if(!(round.rulesVersion>=39))round.distance=round4(Math.max(0,round.distance-8*leverage(round)));round.strength=Math.min(100,round.strength+25);round.flickReliefUntil=iso(at+5000);
     const skill=SPECIALS[round.characterKey]||SPECIALS.luffy;
     pausePower(round,at,3200);
     round.powerFeedback={at:iso(at),type:'special',name:skill[0],theme:skill[1],damage:hit,...round.battleVersion>=3?{grade:rating[0],multiplier:rating[1],elapsedMs}:{}};
@@ -2306,9 +2326,9 @@ function simulate(round,now,difficulty=1) {
     const tierPressure=round.battleVersion>=2?Math.pow((round.fishPullMultiplier||1)/rodStats(round).counter,2):1;
     const staminaFactor=round.powerMode?.45+.55*round.fishStamina/(round.maxFishStamina||100):1;
     const surgePull=rules.surgeEscape*force*(accent?.pull||1)*staminaFactor;
-    const speed=surge?(deep?(.5-round.fishX)*.5:fishSign*rules.swimSpeed*(round.behavior.accent?.swim||1)*
+    const speed=(round.fishSpeedMultiplier||1)*(surge?(deep?(.5-round.fishX)*.5:fishSign*rules.swimSpeed*(round.behavior.accent?.swim||1)*
       (.75+force*.25)*(aligned?.42:opposed?1.2:1)):
-      (.5-round.fishX)*.65+.027*Math.sin((next-Date.parse(round.hookedAt))/830+(round.motionSeed%71));
+      (.5-round.fishX)*.65+.027*Math.sin((next-Date.parse(round.hookedAt))/830+(round.motionSeed%71)));
     // A successful upward counter briefly lifts a diving fish back toward
     // the surface. Lateral counters already slow the fish's sideways run.
     const depth=deep?(relief?.53:.76):{patient:.59,dart:.63,heavy:.7,weave:.66}[style];
@@ -2326,7 +2346,7 @@ function simulate(round,now,difficulty=1) {
         effectiveGear*ROD_EFFECT_PER_LEVEL.reelGain))*
         (accent?.grip||1)*(relief?1.2:1);
       const escape=(surge?surgePull*(aligned?.62:opposed?1.3:1.06):.5*tierPressure)*(relief?.65:1);
-      round.distance=clamp(round.distance+(escape-gain*(round.powerMode?.30*leverage(round):1))*dt,0,100);
+      round.distance=clamp(round.distance+(escape-gain*(round.powerMode?.30*leverage(round):1)*(round.rulesVersion>=39?rodStats(round).distanceMultiplier:1))*dt,0,100);
       if(round.powerMode)damage(round,next,(round.battleVersion>=2?rodStats(round).reel*(surge&&!aligned?.25:1)*(relief?1.25:1):surge&&!aligned?.35:1.35+gear*.12)*dt,'reel');
       // Holding the reel without a pause costs increasing strength. This
       // makes release a real choice even for a patient, easy-to-catch fish.
@@ -2349,7 +2369,7 @@ function simulate(round,now,difficulty=1) {
     }
     round.strength=round4(round.strength);round.distance=round4(round.distance);
     round.tension=round4(100-round.strength);
-    if(round.battleVersion===3&&round.fishTier===4&&round.fishStamina>0)round.distance=Math.max(1,round.distance);
+    if(!(round.rulesVersion>=39)&&round.battleVersion===3&&round.fishTier===4&&round.fishStamina>0)round.distance=Math.max(1,round.distance);
     cursor=next;round.lastSimAt=iso(cursor);
     if(round.flickCue&&cursor>=Date.parse(round.flickCue.until)){
       const outcome=resolveFlick(round,cursor,'miss');

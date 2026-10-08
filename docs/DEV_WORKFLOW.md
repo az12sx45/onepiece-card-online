@@ -8090,3 +8090,12 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - 原圖透明開口bbox100,316,410,628；以圓心255/2061、472/763校準輪心，兩層共用位置變數，色帶收至框內，指標落於色帶。39本機瀏覽器檢查包含前景層順序、同心及指標位置；npm start本機HTTP200。發布修訂38。
 
 - 2026-10-08 r38公開交付核對：source76968b2d76f377c9eea2ca0f8b509cefe25414df；公開manifest於2026-10-07T17:14:46.905Z核對SHA256 df905e18a90da08e2a7da561ce9c458f717d150ed76a0770c3fd184ef136d4d5。實際安裝快取37→38僅下載637026 bytes，83檔核對通過，二次檢查零下載。39本機UI及82公告檢查通過，npm start HTTP200。未執行正式玩家交易，未宣稱Render Live時間或DB日誌；證據D:/Codex_QA/launcher-fishing-r38/release-evidence.json。
+
+### 2026-10-08 r39 九格能量與釣竿流派
+- 範圍：desktop/launcher-room-minigames.js/css、launcher-room-aquarium.js；server/launcher-fishing-balance.js、launcher-fishing-v5.js、launcher-minigames.js、launcher-life.js、launcher-life-store.js；fishing_ui_r39四張透明WebP與附圖公告。左上魚竿表縮小；移除側邊操作提示，右下圓形九格能量及生成爆拉／必殺圖示；手把維持最高前景。
+- 新建rulesVersion39保留舊場次規則；速拉型收距×1.55／傷害×0.72，力量型收距×0.72／傷害×1.55，平衡型×1。娜美／騙人布／布魯克／羅為速拉，索隆／香吉士／佛朗基／甚平／艾斯為力量，其餘平衡；在個人釣竿顯示實際能力，每角色+0至+99維持。
+- 成功甩竿最多累積9格；爆拉花3格只增加收距，必殺花6格只消耗體力。新場次任何魚可用抵岸或耗盡體力兩路捕獲；HP歸零先拉回岸邊演出，再結算，必殺有生成受擊圖與特殊整數扣血。
+- 魚尺寸在拋竿時由server選定，HP×0.65至1.45、拉力×0.9125至1.1125、游速×1.0875至0.8875；戰鬥與收藏尺寸一致，售價按同種尺寸×0.65至1.45，未知舊尺寸維持原价；釣起顯示全長。金幣帳本仍由server結算，不動商城餘額。
+- 驗證：14玩法檢查、8本機/server重播一致、17必殺速度分級、99 PGlite交易／強化／尺寸售價、50桌機1440x900與最小960x640畫面檢查、82公告服務檢查，npm start靜態HTTP200。未執行正式玩家交易，公開部署證據待完成。圖稿來源與匯出記錄tools/launcher-room/fishing-ui-r39/provenance.json。
+
+- 相容性補充：新版start帶fishingRulesVersion39，server僅讓明確新版使用三流派／九格／雙捕獲規則；舊客戶端與既有场次保留原規則。原生bridge泛用payload允許此欄位且仍低於2048字元，不需重装核心。

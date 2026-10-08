@@ -36,7 +36,7 @@ const FISH_SPECIES_BY_ID=new Map(M.FISH_SPECIES.map(species=>[species.id,species
 function fishOffer(fish) {
   const rarity=M.FISH_RARITY_BY_ID[fish.speciesId]||'common';
   return {fishId:fish.id,speciesId:fish.speciesId,label:FISH_SPECIES_BY_ID.get(fish.speciesId)?.label||fish.speciesId,
-    rarity,saleCoins:FISH_SALE_COINS[rarity],cookable:Object.hasOwn(FISH_MEALS,fish.speciesId),
+    rarity,saleCoins:Math.max(1,Math.round(FISH_SALE_COINS[rarity]*(Number.isFinite(fish.lengthCm)?(.65+.8*Math.max(0,Math.min(1,(fish.lengthCm-(fishRecords.SIZE_BANDS[fish.speciesId]||[10,80])[0])/((fishRecords.SIZE_BANDS[fish.speciesId]||[10,80])[1]-(fishRecords.SIZE_BANDS[fish.speciesId]||[10,80])[0])))):1))),cookable:Object.hasOwn(FISH_MEALS,fish.speciesId),
     dishLabel:FISH_MEALS[fish.speciesId]||null,affinityGain:FISH_MEALS[fish.speciesId]?FISH_MEAL_AFFINITY[rarity]:0};
 }
 function applyActivityNeeds(actor,activity) {
@@ -120,7 +120,7 @@ const FIELDS={
  'work.reserve':['itemId','stationId','roomRevision','stationType','furnitureId'],
  'work.activate':['jobId'],'work.complete':['jobId'],'work.cancel':['jobId'],
  'directive.set':['directiveId'],'character.interact':['itemId','action'],
-  'minigame.start':['characterId','kind','practice','jobId','fishingVersion','baitId','spotId','flickMode','localMode'],
+  'minigame.start':['characterId','kind','practice','jobId','fishingVersion','baitId','spotId','flickMode','localMode','fishingRulesVersion'],
   'minigame.answer':['sessionId','token','roundId','selections','directions','ingredients','rotations','path','counterMoves','castZone','castPower','reeling','steer','paying','flickDirection','flickCueId','localActions','localBatchId'],
  'minigame.finish':['sessionId','token'],'minigame.cancel':['sessionId','token'],
  'minigame.retry':['sessionId','token'],
@@ -143,7 +143,7 @@ function addFishCatch(state,session,result,now) {
   const species=M.FISH_SPECIES.find(entry=>entry.id===session.catchSpeciesId);
   if(!species)return;
   if(!state.fishDex.includes(species.id))state.fishDex.push(species.id);
-  const caught={id:crypto.randomUUID(),speciesId:species.id,caughtAt:now.toISOString(),inAquarium:false,lengthCm:fishRecords.measuredLength(species.id),spotId:session.spotId||null,baitId:session.baitId||null};
+  const caught={id:crypto.randomUUID(),speciesId:species.id,caughtAt:now.toISOString(),inAquarium:false,lengthCm:Number.isFinite(session.fishLengthCm)?session.fishLengthCm:fishRecords.measuredLength(species.id),spotId:session.spotId||null,baitId:session.baitId||null};
   fishRecords.record(state.fishRecords,caught);
   if(state.fishCollection.length>=L.MAX_FISH){result.catchCollectionFull=true;result.catchRecord={...caught};return;}
   state.fishCollection.push(caught);
@@ -157,6 +157,7 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
       p.jobId!==undefined&&(p.kind!=='work'||!M.WORK_JOBS.includes(p.jobId))||
       p.fishingVersion!==undefined&&!(p.kind==='fishing'&&[4,5].includes(p.fishingVersion)||
         p.fishingVersion===2&&p.kind==='work'&&p.jobId==='fishing')||
+      p.fishingRulesVersion!==undefined&&!(p.kind==='fishing'&&p.fishingVersion===5&&p.flickMode===true&&p.fishingRulesVersion===39)||
       p.localMode!==undefined&&!(p.kind==='fishing'&&p.fishingVersion===5&&p.localMode===true)||
       p.flickMode!==undefined&&!(p.kind==='fishing'&&p.fishingVersion===5&&p.flickMode===true)||
       (p.kind==='fishing'?!M.FISHING_BAITS.includes(p.baitId)||!M.FISHING_SPOTS.includes(p.spotId):
@@ -172,6 +173,7 @@ async function performMinigame(db,row,state,companions,command,room,now,sessions
     }
     const session=M.create(p.kind,p.characterId,room.revision,now,practice,p.jobId||'supply',
       p.kind==='fishing'&&[4,5].includes(p.fishingVersion)?p.fishingVersion:p.fishingVersion===2?2:1,p.baitId,p.spotId,state.fishingRodLevels?.[p.characterId]??state.fishingRodLevel,p.flickMode===true);
+    if(p.fishingRulesVersion!==39&&session.challenge)delete session.challenge.rulesVersion;
     if(p.localMode===true)session.localMode=true;
     await M.save(db,row.user_id,session);
     return{ok:true,minigame:M.view(session)};

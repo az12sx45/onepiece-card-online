@@ -1,0 +1,16 @@
+{
+  "tool": "built-in image_gen",
+  "sourceAtlas": "C:/Users/王曜瑋/.codex/generated_images/01a0d3fa-03ef-7ec1-8eff-2ae51b74567e/exec-e8d8649a-0472-4c07-bd9f-d74d53c91839.png",
+  "sourceFrame": "exec-bb464d5a-073d-43bb-a9b3-d4a6a0a64793.png",
+  "exports": [
+    "energy-frame",
+    "burst",
+    "special",
+    "impact"
+  ],
+  "note": "Atlas frame with eight sockets rejected; final frame has blank energy channel for nine runtime segments.",
+  "prompts": {
+    "atlas": "Create one production game UI sprite atlas on transparent background, square 1024x1024, a 2 by 2 grid with four separate centered sprites each occupying its 512x512 cell and 60px clear margin. No text no numbers no letters. Style: polished hand painted One Piece nautical anime game interface, navy teal sea enamel and warm brass gold edges, readable simple silhouettes, not realism. Top left: circular energy meter frame, exactly nine evenly spaced recessed outer ring sockets around full circle; central inner disk split into two symmetric inset button regions left/right, both empty dark navy for separate icons; clean ring no handles no rod. Top right: simple bright gold fishing reel rapid-pull icon, stylized spool with two backward motion chevrons, designed to fit circular button. Bottom left: simple bright turquoise powerful fist with sharp manga lightning burst silhouette, designed to fit circular button. Bottom right: bold small manga impact starburst with orange red sparks and cream center, suited as a fish hit overlay. All four distinct, no connected artwork between cells, true transparent background. Strong clean outlines, restrained detail, match brass and turquoise nautical HUD.",
+    "frame": "One single circular nautical anime game energy UI frame, perfectly centered square image, true transparent background. Warm brass gold rim, deep navy and teal enamel, polished hand-painted One Piece game HUD aesthetic, readable small. Outer energy channel is ONE CONTINUOUS EMPTY dark navy annulus, bounded by two thin brass rings. Absolutely no sockets, no dots, no discrete gems, no subdivisions on this outer channel: runtime will add nine energy segments. Center circular inner disk split vertically into TWO symmetric dark inset button halves for runtime icon overlays, thin gold seam. No icons, no writing, no numbers, no letters, no handles, no rod, no extra decorations outside circular silhouette. Circle occupies 88 percent image width. Front-on orthographic, clean symmetric geometry."
+  }
+}

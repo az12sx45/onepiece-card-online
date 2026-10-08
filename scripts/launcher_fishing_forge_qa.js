@@ -101,13 +101,13 @@ async function main(){
  const restored=(await get('records-old')).life.fishRecords['glistening-saury'];
  check('legacy capture does not invent size',restored.minCatch,null);check('legacy session restores real sea and bait',restored.grounds,[{spotId:'reef',baitId:'shrimp',count:1}]);check('legacy duplicate session and operation counted once',restored.catches,1);
  check('repeated read does not duplicate legacy records',(await get('records-old')).life.fishRecords['glistening-saury'].catches,1);
- await add('capture',100);const startCapture=await command('capture','minigame.start',{kind:'fishing',characterId:actor,fishingVersion:5,baitId:'shrimp',spotId:'reef',flickMode:true},'capture-start-0001');
+ await add('capture',100);const startCapture=await command('capture','minigame.start',{kind:'fishing',characterId:actor,fishingVersion:5,baitId:'shrimp',spotId:'reef',flickMode:true},'capture-start-0001');check('old client start retains original rules',startCapture.minigame.challenge.rulesVersion,undefined);
  check('capture integration starts real session',startCapture.ok,true);
  const sid=startCapture.minigame.id,session=(await db.query('SELECT session FROM launcher_minigame_sessions WHERE session_id=$1',[sid])).rows[0].session;
- session.state='ready';session.roundIndex=session.totalRounds;session.correctRounds=session.totalRounds;session.challenge=null;session.catchSpeciesId='glistening-saury';session.finishNotBefore=new Date(now.getTime()-1000).toISOString();
+ session.state='ready';session.roundIndex=session.totalRounds;session.correctRounds=session.totalRounds;session.challenge=null;session.catchSpeciesId='glistening-saury';session.fishLengthCm=32.1;session.finishNotBefore=new Date(now.getTime()-1000).toISOString();
  await db.query('UPDATE launcher_minigame_sessions SET session=$1::jsonb,status=$2 WHERE session_id=$3',[JSON.stringify(session),'ready',sid]);
  const finished=await command('capture','minigame.finish',{sessionId:sid,token:session.token},'capture-finish-0001');const fish=finished.minigame.result.catch;
- check('settled catch includes real selected sea',fish.spotId,'reef');check('settled catch includes selected bait',fish.baitId,'shrimp');check('settled fish gets persisted gameplay size',Number.isFinite(fish.lengthCm),true);
+ check('settled catch includes real selected sea',fish.spotId,'reef');check('settled catch includes selected bait',fish.baitId,'shrimp');check('settled fish gets persisted gameplay size',Number.isFinite(fish.lengthCm),true);check('settlement preserves actual battle fish size',fish.lengthCm,32.1);
  check('largest record equals settled fish size',finished.life.fishRecords['glistening-saury'].maxCatch.lengthCm,fish.lengthCm);
  const repeated=await command('capture','minigame.finish',{sessionId:sid,token:session.token},'capture-finish-0001');check('finish replay does not reroll size',repeated.minigame.result.catch.lengthCm,fish.lengthCm);check('finish replay does not duplicate catch record',repeated.life.fishRecords['glistening-saury'].catches,1);
  await add('records-nested',100);await db.query('UPDATE launcher_life_state SET state=jsonb_set(state,$1,$2::jsonb) WHERE user_id=(SELECT user_id FROM player_profiles WHERE secret=$3)',[['fishRecordsVersion'],'0','records-nested']);
@@ -119,7 +119,13 @@ async function main(){
  const localBatch={sessionId:localSession.id,token:localSession.token,roundId:localSession.challenge.id,localBatchId:'local-account-batch-1',localActions:[[localAt+100,1,1,0,0]]};const localResult=await command('local-capture','minigame.answer',localBatch,'local-batch-0001',undefined,new Date(localAt+200));check('real account accepts local event batch',localResult.ok,true);check('validated controls persisted',localResult.minigame.challenge.control.reeling,true);
  const localRetry=await command('local-capture','minigame.answer',localBatch,'local-batch-0002',undefined,new Date(localAt+250));check('retry batch leaves validated time unchanged',localRetry.minigame.challenge.lastSimAt,localResult.minigame.challenge.lastSimAt);
 
+ await add('new-client',100);const revised=await command('new-client','minigame.start',{kind:'fishing',characterId:actor,fishingVersion:5,baitId:'worm',spotId:'shore',flickMode:true,localMode:true,fishingRulesVersion:39},'new-client-start-0001');check('new client explicitly opts into version39',revised.minigame?.challenge?.rulesVersion,39);check('rod detail exposes actual typed stats',revised.rod.characters[actor].stats.label,'平衡型');
+ await add('size-sale',100);
+ const smallFish={id:'20000000-0000-4000-8000-000000000001',speciesId:'glistening-saury',lengthCm:15,caughtAt:now.toISOString(),inAquarium:false},largeFish={...smallFish,id:'20000000-0000-4000-8000-000000000002',lengthCm:45};
+ await db.query('UPDATE launcher_life_state SET state=jsonb_set(state,$1,$2::jsonb) WHERE user_id=(SELECT user_id FROM player_profiles WHERE secret=$3)',[['fishCollection'],JSON.stringify([smallFish,largeFish]),'size-sale']);
+ const price=await get('size-sale'),offers=price.fishOffers;check('large specimen has higher actual sale offer',offers.find(f=>f.fishId===largeFish.id).saleCoins>offers.find(f=>f.fishId===smallFish.id).saleCoins,true);
+ const sold=await command('size-sale','fish.sell',{fishId:largeFish.id},'size-sale-large-0001');check('actual sale applies quoted specimen price',sold.sale.amount,offers.find(f=>f.fishId===largeFish.id).saleCoins);check('sale credits only fishing wallet',sold.fishingWallet.coins,100+sold.sale.amount);check('sale preserves shop wallet',sold.wallet.coins,price.wallet.coins);
  const report={status:'PASS',checks,results,kind:'PGlite authoritative forging and discovery transactions'};
- fs.writeFileSync('D:/Codex_QA/launcher-fishing-r35/forge-server-report.json',JSON.stringify(report,null,2));console.log('PASS '+checks+' forge server checks');await db.close();
+ fs.writeFileSync(process.env.LAUNCHER_FISH_FORGE_QA_OUT||'D:/Codex_QA/launcher-fishing-r35/forge-server-report.json',JSON.stringify(report,null,2));console.log('PASS '+checks+' forge server checks');await db.close();
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

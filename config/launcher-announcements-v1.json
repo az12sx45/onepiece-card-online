@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 51,
+  "revision": 52,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r39-fishing-types",
+      "status": "published",
+      "publishedAt": "2026-10-08T02:49:41.139Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r39",
+      "title": "九格能量輪與三種釣竿流派",
+      "summary": "爆拉收線、必殺扣體力，大魚有更強的拉力與更高售價。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-types-r39.webp",
+        "alt": "左上細竿表與右下九格圓形能量介面實際畫面"
+      },
+      "body": [
+        "魚竿表縮小並靠左上，右側操作提示移除。右下能量外環最多9格，爆拉消耗3格、必殺消耗6格，準備好時圖示亮起。",
+        "各角色釣竿分為速拉型、力量型與平衡型。速拉型收距更快，力量型扣魚體力更快；個人釣竿可查看實際加成。",
+        "魚可透過收回岸邊或耗盡體力釣起。耗盡體力後會先拉回岸邊，必殺命中有受擊圖與專屬傷害。",
+        "同魚種依尺寸有不同體力、拉力、游速與售價；釣起後顯示全長，戰鬥尺寸與收藏紀錄一致。重新開啟啟動器套用差分。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r38-reel-layers",
       "status": "published",

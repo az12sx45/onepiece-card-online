@@ -5,6 +5,7 @@
 const crypto = require('node:crypto');
 const fishingV4 = require('./launcher-fishing-v4');
 const fishingV5 = require('./launcher-fishing-v5');
+const fishRecords = require('./launcher-fish-records');
 const ACTIVE = new Set(['playing', 'ready', 'failed']);
 const CATEGORIES = Object.freeze({food:'食材',tools:'工具',books:'書籍'});
 const SUPPLIES = Object.freeze({
@@ -368,7 +369,7 @@ function advanceRound(session,correct,now,reason='') {
   session.combo=correct?session.combo+1:0;
   if(correct){session.correctRounds++;session.score+=100+Math.min(4,session.combo-1)*25;}
   session.feedback={roundIndex:session.roundIndex,correct,combo:session.combo,correctRounds:session.correctRounds,score:session.score,...reason?{reason}:{}};
-  if(reason==='landed'&&session.challenge?.battleVersion>=2)session.feedback.fishingEnd={fishStamina:session.challenge.fishStamina,maxFishStamina:session.challenge.maxFishStamina,fishTier:session.challenge.fishTier,damageEvents:session.challenge.damageEvents};
+  if(reason==='landed'&&session.challenge?.battleVersion>=2)session.feedback.fishingEnd={fishStamina:session.challenge.fishStamina,maxFishStamina:session.challenge.maxFishStamina,fishTier:session.challenge.fishTier,distance:session.challenge.distance,fishLengthCm:session.challenge.fishLengthCm,damageEvents:session.challenge.damageEvents};
   const powerFinish=session.challenge?.powerFeedback;
   if(reason==='landed'&&powerFinish&&['burst','special'].includes(powerFinish.type)&&now.getTime()-Date.parse(powerFinish.at)<1800)
     session.feedback.powerFinish={...powerFinish,fishStamina:session.challenge.fishStamina,maxFishStamina:session.challenge.maxFishStamina,damageEvents:session.challenge.damageEvents};
@@ -419,6 +420,7 @@ function answerClockedFishing(session,payload,now) {
       engine.castTargetForPower(payload.castPower,FISHING_CAST_ZONES);
     session.castZone=zone;
     session.catchSpeciesId=fishingSpeciesFor(session.spotId,session.baitId,zone);
+    if(round.rulesVersion>=39){session.fishLengthCm=fishRecords.measuredLength(session.catchSpeciesId);const band=fishRecords.SIZE_BANDS[session.catchSpeciesId]||[10,80];round.fishLengthCm=session.fishLengthCm;round.fishSizeRatio=.65+.8*(session.fishLengthCm-band[0])/(band[1]-band[0]);}
     engine.cast(round,now,session.baitId,zone,target);
     return{};
   }

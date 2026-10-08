@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 38,
-  "publishedAt": "2026-10-07T17:00:06.344Z",
+  "revision": 39,
+  "publishedAt": "2026-10-08T02:55:56.887Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -62,6 +62,11 @@
       "path": "images/launcher_announcements/launcher-fishing-target-r18.webp",
       "bytes": 154362,
       "sha256": "511774d78ab898d2c1ed51064afa7e5e3bccc7ca0de7dc5aa7d84d904ca9d813"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-fishing-types-r39.webp",
+      "bytes": 122582,
+      "sha256": "9489d5683130794957cd2221b7cb19c6d03d05b7ae6edbdc43c4a03f613531ab"
     },
     {
       "path": "images/launcher_announcements/launcher-fishing-viewport-r28.webp",
@@ -202,6 +207,26 @@
       "path": "images/launcher_room/fishing_ui_r36/wii-rod-meter.webp",
       "bytes": 182854,
       "sha256": "fa95c794b14563c0f1ef3aec4cd5156587d20ac5aef1d540b5d5e2dde9ec7255"
+    },
+    {
+      "path": "images/launcher_room/fishing_ui_r39/burst.webp",
+      "bytes": 36814,
+      "sha256": "140dfdb120301ea3d0a85276cc05eff4c41ee0381a5de3f43af9f05ac72b3249"
+    },
+    {
+      "path": "images/launcher_room/fishing_ui_r39/energy-frame.webp",
+      "bytes": 54270,
+      "sha256": "dbb8af6a9d63f3e27d96ee2e4d08c20d04541b5f7f7e0882ff9e09f869914514"
+    },
+    {
+      "path": "images/launcher_room/fishing_ui_r39/impact.webp",
+      "bytes": 36882,
+      "sha256": "86c98a750237650a92bb6ded1b675ecbf5f491e74717ff843a64c1fb8179c002"
+    },
+    {
+      "path": "images/launcher_room/fishing_ui_r39/special.webp",
+      "bytes": 42908,
+      "sha256": "f89f1aa218bf0f256221e0d142a9fb206eb1d2ba0ba0d589ae42d4c071eb09a6"
     },
     {
       "path": "images/launcher_room/fishing_v5/rod-no-line-v1.webp",
@@ -390,18 +415,18 @@
     },
     {
       "path": "launcher-room-aquarium.js",
-      "bytes": 37224,
-      "sha256": "3a57f2735c30a36e4224525b599e025e967deedeca44499d846e7b5c75803bd1"
+      "bytes": 37409,
+      "sha256": "12242a0ebbc3cca66d46e802b04bdf89037817eaf62e55fefee085fd73cdbe9f"
     },
     {
       "path": "launcher-room-minigames.css",
-      "bytes": 141318,
-      "sha256": "9f88692abc0541c7c6b2a20b81b477ee623427409a3d79d1e3882f881f45b1d2"
+      "bytes": 144345,
+      "sha256": "ab15ac46263f82c321236dd3285a64da46429911df33cebf3030973d21fed093"
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 288618,
-      "sha256": "1c8b04818c715127696c45645674d0b7c11cd5b2f6d3d1273b24bc1085abe9d7"
+      "bytes": 293195,
+      "sha256": "e822130acfe2ad9acf5e070ca9be0defe46efa4a0b4a4d2b0ff6ecd7f30fd0b4"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -427,6 +452,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "LrJnwxj8HMPCtPAksK97Ku4UijDZ1mBoX5mJ7sfp7sFYIqERx/mLgeGnqwobydIlfldi9Qe4J7QrRzTvxvlfAg=="
+    "value": "d2uRIuJxFItDPoZ/+L9ZLTeX8JzZvW7G7XLJNuzQ3XaD0XtjjT7P4oJVVB5gyPR4tyRx4VzGov0IWE1b98Q6Bg=="
   }
 }
