@@ -1750,6 +1750,11 @@
       if(caught)box.dataset.rarity=Object.hasOwn(FISH_RARITY_LABELS,caught.rarity)?caught.rarity:FISH_RARITY_BY_ID[caught.speciesId]||'common';
       const heading=node('h3','',caught?'釣起來了！':result.catchCollectionFull?'釣到了，收藏已滿':'這一竿讓魚逃走了');heading.tabIndex=-1;
       box.append(node('span','room-minigame-eyebrow',caught?'NEW CATCH':'THE FISH GOT AWAY'),heading);
+      if(phase==='result'&&game?.result===result){
+        const rarity=caught&&(Object.hasOwn(FISH_RARITY_LABELS,caught.rarity)?caught.rarity:FISH_RARITY_BY_ID[caught.speciesId]);
+        const beat=options.resultDialogue?.({characterId,resultKey:`${game.id}:${game.attempt||1}`,event:caught?['rare','legendary'].includes(rarity)?'rare_fish':'fish_win':result.catchCollectionFull?null:'fish_loss'});
+        if(beat)box.append(node('p','room-fishing-v3-result-voice',beat.line));
+      }
       box.append(node('p','room-fishing-v3-result-spot',`${FISH_SPOTS[selectedSpot].label} · ${FISH_BAITS[selectedBait].label}`));
       if(caught){
         const art=node('img','room-fishing-v3-catch-art');art.src=fishArt(caught.speciesId);art.alt=caught.label||FISH_LABELS[caught.speciesId]||'釣到的魚';art.draggable=false;art.onerror=()=>hideMissingFishArt(art);

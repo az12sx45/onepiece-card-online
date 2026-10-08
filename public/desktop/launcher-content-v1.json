@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 46,
-  "publishedAt": "2026-10-08T09:54:03.796Z",
+  "revision": 47,
+  "publishedAt": "2026-10-08T12:53:10.706Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -92,6 +92,11 @@
       "path": "images/launcher_announcements/launcher-journal-style-r33.webp",
       "bytes": 111660,
       "sha256": "5aed3944ca3ca90c2cc6da8abb37fa7ad76e0c24c0319976f5dc57df04f9738d"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-life-dialogue-r47.webp",
+      "bytes": 71404,
+      "sha256": "302f7abb36e8f027209a4b7499d0090311b5bcbcd10e0ce0131381931cc37cb2"
     },
     {
       "path": "images/launcher_announcements/launcher-local-fishing-r35.webp",
@@ -510,8 +515,8 @@
     },
     {
       "path": "launcher-life-room.js",
-      "bytes": 34978,
-      "sha256": "d6a4cf8f6c3b1635e917214aca11ccea22d2edbc5b2d7fe329a0826f955ff90f"
+      "bytes": 35695,
+      "sha256": "dd83d9210592deb35a6613302474acacaa7d148ef9d48d8b28ea26c16cc24eaf"
     },
     {
       "path": "launcher-room-aquarium.css",
@@ -530,8 +535,8 @@
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 294263,
-      "sha256": "f00ff944108ab0e168293e59f9034c2106ecbc8211ace08a5408ad50d08f3001"
+      "bytes": 294757,
+      "sha256": "1cfd13995ef54af1ed0e241efa73fb2529ad9c18786dcfd344ad6e4cd6ad9bd2"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -545,8 +550,8 @@
     },
     {
       "path": "launcher-room.js",
-      "bytes": 133307,
-      "sha256": "0159ac02a724196c4e7a4ececb6294e93359532ad05220ab83cec3ad3ca94a12"
+      "bytes": 140222,
+      "sha256": "06e8f19a063ec167c1076408c2523e3197b6cda5b08523fe4a2fc683430b2d93"
     },
     {
       "path": "launcher.html",
@@ -557,6 +562,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "SElHcoeUwbkN0wGJwUqQjVQ8+bM60QXpVHRC+8Kbgo8ARtUifshmrdzY3M7KldaHKb9H9PmcBbYk5vmVo/6jAw=="
+    "value": "7sxXzxjCjs1/w/qL1xSVZI5q+JYAUpGt8Zi20vpQuxepEP9aRWLtStJXnyLWCF5JFK6AAO0Kkwepeehj7G+6CA=="
   }
 }

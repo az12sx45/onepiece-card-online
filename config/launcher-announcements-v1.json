@@ -1,7 +1,33 @@
 {
   "schemaVersion": 1,
-  "revision": 58,
+  "revision": 59,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r47-life-dialogue",
+      "status": "published",
+      "publishedAt": "2026-10-08T12:51:42.952Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r47",
+      "title": "船上的日常，多聊幾句吧！",
+      "summary": "13位夥伴新增273條情境短句與29組三輪互動。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-life-dialogue-r47.webp",
+        "alt": "索隆與香吉士的日常對話，兩人保持清楚站位"
+      },
+      "body": [
+        "串門子的問候與道別、熟悉或不擅長的家具、工作與訓練、季節與時段，都有更多符合角色口吻的短句。",
+        "角色在場、天候與活動條件符合才選句；釣魚勝敗和稀有魚台詞讀取正式結果，不猜魚的特徵。",
+        "找佛朗基強化時，符合條件的角色會完成多輪對話；羅的備援稱呼也改得更自然。",
+        "新增互動輪次保留聽者姿態与短暫接話間隔，新增對話站位優先相隔兩格，避免人物擠在一起。",
+        "本批皆為遊戲原創日常台詞，沒有冒稱原作逐字引文；13條交魚句、7組缺可靠銜接的互動、39個尚無素材的新動作繼續停用。",
+        "說話／聆聽使用已存在的完整人物姿態圖；工作與訓練沿用既有連續動作序列。全部本機選句，不使用雲端AI生成。重新開啟啟動器套用差分。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r46-room-visits",
       "status": "published",

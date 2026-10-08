@@ -539,7 +539,7 @@
             if(beat?.line&&(!beat.speaker||beat.speaker===task.key)) {
               activityCursor.set(task.key,index+1);
               lastActivityLineAt.set(task.key,now);nextActivityLineAt=now+7000;
-              const reactionPose=task.directiveKind==='use'&&!context.specialist
+              const reactionPose=beat.mode==='acting'?beat.pose:task.directiveKind==='use'&&!context.specialist
                 ?beat.mood==='annoyed'?'talk_annoyed':'surprised':'';
               safeCall('speak',task.key,String(beat.line).slice(0,160),beat.mood||'focused',{
                 token:task.token,activity:true,clip,state:task.state,direction:task.direction,stationId:task.station?.id,
@@ -619,7 +619,7 @@
       const contact=initialSteps.find(step=>step.kind==='act'&&step.station);
       const station=world().stations.find(s=>contact?s.furnitureKey===contact.station:list(event.requiredFurniture).includes(s.furnitureKey));
       const center=station?.cell || leader.cell;
-      const offsets=[[0,1],[-1,0],[1,0],[0,-1],[-1,1],[1,1],[-1,-1],[1,-1],[0,2],[-2,0]];
+      const offsets=event.expanded?[[-2,0],[2,0],[0,2],[0,-2],[-2,1],[2,1],[-2,-1],[2,-1]]:[[0,1],[-1,0],[1,0],[0,-1],[-1,1],[1,1],[-1,-1],[1,-1],[0,2],[-2,0]];
       const entries=[];
       for(let i=0;i<keys.length;i++) {
         const key=keys[i];
@@ -690,6 +690,7 @@
           leases.delete(event.token+':'+key);
           if(!target||!reserveBatch([{key,cell:target,stationId:'',slotId:'step'}],event.token)||safeCall('move',key,target,event.token)!==true){finishEvent(false,'step_route_failed');return;}
         } else if(step.kind==='speak') {
+          if(event.event.expanded&&!event.expansionStarted){safeCall('sceneStarted',event.event);event.expansionStarted=true;}
           const line=String(step.line||'').slice(0,160),id=key+':'+line;
           if(!line || now<(lineCooldown.get(id)||0)){event.index++;event.stepAt=0;return;}
           for(const member of event.keys)safeCall('clearSpeech',member,event.token);
@@ -736,7 +737,7 @@
           memories:[...record(a).memories,...record(b).memories].slice(-8).map(clone)
         });
         if(!scene?.id||!list(scene.turns).length)continue;
-        const legacy={...scene,id:scene.id,requiredCharacters:[a,b],steps:scene.turns.map(turn=>({...turn,kind:'speak'})),legacy:true};
+        const legacy={...scene,id:scene.id,requiredCharacters:[a,b],steps:scene.turns.flatMap(turn=>[{...turn,kind:'speak'},...(turn.gapAfterMs?[{kind:'wait',durationMs:turn.gapAfterMs}]:[])]),legacy:true};
         if(now<(eventCooldown.get(scene.id)||0))continue;
         const fresh=1/(1+recentEvents.filter(e=>e.id===scene.id).length);
         social.push({value:legacy,weight:(.3+relationship.friendship/100+relationship.respect/150+relationship.rivalry/300+(200-record(a).needs.social-record(b).needs.social)/100)*fresh});

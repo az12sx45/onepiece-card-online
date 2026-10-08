@@ -81,6 +81,7 @@ async function create(options={}) {
       const data=window.OnePieceLifeData,zero=Object.fromEntries(['Idle','Wander','Work','Eat','Rest','Sleep','Train','Socialize','UseFurniture','SpecialAction'].map(state=>[state,0]));
       window.OnePieceLifeData={...data,characters:Object.fromEntries(Object.entries(data.characters).map(([key,value])=>[key,{...value,weights:{...zero,Idle:1}}]))};
       if(!options.enableRoomChat)window.OnePieceRoomDialogue={...window.OnePieceRoomDialogue,scene:()=>null};
+      if(options.extraEvents)window.OnePieceLifeData={...window.OnePieceLifeData,events:[...(options.onlyExtraEvents?[]:window.OnePieceLifeData.events),...options.extraEvents]};
     },options);
   }
   await page.evaluate(options=>{

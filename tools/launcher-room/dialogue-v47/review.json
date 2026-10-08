@@ -1,0 +1,1416 @@
+{
+  "source": "C:/Users/王曜瑋/Documents/Codex/2026-04-20-1-2-start-html-game-html/handoffs/launcher-life-dialogue-expansion-20261008/proposal.json",
+  "sourceSha256": "cc32f89ba726818e262929cbe205469fc6f1c4f494dc9919fa735bc5633d2e2a",
+  "counts": {
+    "solo": 286,
+    "pairs": 36,
+    "turns": 108
+  },
+  "edits": [
+    {
+      "id": "life26_luffy_arrive_01",
+      "before": "你們在這裡啊！剛才在玩什麼？",
+      "after": "你們在這裡啊！一起玩吧！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_luffy_favorite_furniture_01",
+      "before": "這張桌子能坐好多人！等一下都來吃吧！",
+      "after": "這張桌子不錯！吃飯的時候叫大家一起來吧！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_luffy_awkward_furniture_01",
+      "before": "這些瓶子長得一樣耶。喬巴，哪個不能碰？",
+      "after": "這些藥瓶我看不懂，還是別亂碰好了！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_luffy_fish_loss_01",
+      "before": "跑掉了！我剛才都看到牠的尾巴了！",
+      "after": "跑掉了！我還想釣上來看看呢！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_luffy_rare_fish_01",
+      "before": "喂！這條會發光！先叫大家來看！",
+      "after": "喂！這條好特別！先叫大家來看！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_luffy_forge_request_01",
+      "before": "佛朗基！這裡拉起來卡卡的，幫我看看！",
+      "after": "佛朗基！幫我的釣竿變得更厲害吧！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_luffy_work_01",
+      "before": "箱子搬到哪裡？你指給我看！",
+      "after": "有什麼要幫忙的？指給我看！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_luffy_train_01",
+      "before": "再來一次！剛才那下沒站穩！",
+      "after": "再來一次！我要練得更厲害！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_luffy_rain_01",
+      "before": "雨好大！衣服貼在身上了！",
+      "after": "雨好大！等雨停了再出去玩吧！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_luffy_spring_01",
+      "before": "樹又長葉子了！我們去外面看看！",
+      "after": "春天到了！天氣好的時候一起去外面看看吧！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_zoro_favorite_furniture_01",
+      "before": "刀架穩了，拿刀也順手。",
+      "after": "刀放在架上，拿的時候也順手。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_zoro_fish_loss_01",
+      "before": "拉早了。再放一次。",
+      "after": "跑了。再試一次。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_zoro_forge_request_01",
+      "before": "佛朗基，握把鬆了。幫我固定一下。",
+      "after": "佛朗基，這根竿子還能再強化吧？",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_zoro_train_01",
+      "before": "腳別浮起來。站穩了再出刀。",
+      "after": "腳下站穩，別只顧著使力。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_zoro_spring_01",
+      "before": "院子能用了。找塊平地練。",
+      "after": "天氣暖了。找塊平地練練。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_nami_favorite_furniture_01",
+      "before": "這個角度看圖，窗子的反光剛好避開。",
+      "after": "把海圖攤開，航線就看得清楚了。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_nami_awkward_furniture_01",
+      "before": "這把椅子太高了。坐上去都碰不到桌面。",
+      "after": "工具這麼多，先告訴我該用哪一把。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_nami_fish_win_01",
+      "before": "今天的魚夠一餐了，先收線吧。",
+      "after": "釣到了！回去看看香吉士打算怎麼料理吧。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_nami_fish_loss_01",
+      "before": "別急著再拋。線結還沒解開。",
+      "after": "先別急著再拋，檢查一下魚線。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_nami_forge_request_01",
+      "before": "佛朗基，先看磨損。能修好的部分就別換。",
+      "after": "佛朗基，強化交給你了。別把好好的零件浪費掉喔。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_nami_meal_01",
+      "before": "最後那份留著，有人還沒回來。",
+      "after": "大家的份都要留好，別讓魯夫全拿走。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_nami_work_01",
+      "before": "這疊按港口分，舊圖不要丟。",
+      "after": "東西按用途分好，舊的先別急著丟。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_nami_train_01",
+      "before": "肩膀放鬆，別每次都把線甩到自己身上。",
+      "after": "肩膀放鬆，別只想著使蠻力。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_nami_morning_01",
+      "before": "風轉了。出門先看一下窗外。",
+      "after": "早上的風怎麼樣？出門前先看一下窗外。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_nami_dusk_01",
+      "before": "趁天還亮，把外面的布收進來。",
+      "after": "趁天還亮，把外面的東西收進來。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_nami_night_01",
+      "before": "聲音小一點。有人已經睡了。",
+      "after": "聲音小一點，別吵到準備休息的人。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_nami_rain_01",
+      "before": "衣服先晾開。堆在一起明天也不會乾。",
+      "after": "要是衣服淋濕了，記得攤開晾。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_nami_spring_01",
+      "before": "橘子樹發新芽了，別拿它當扶手。",
+      "after": "橘子樹也喜歡暖一點的天氣呢。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_usopp_favorite_furniture_01",
+      "before": "看這個夾具！細線也能固定住！",
+      "after": "細的活也難不倒本大爺！先把工具準備好！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_usopp_awkward_furniture_01",
+      "before": "這藥櫃……我還是等喬巴來再開。",
+      "after": "這藥櫃……我還是等船醫來再開。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_usopp_fish_win_01",
+      "before": "看到了吧！這就是熟練的手法！",
+      "after": "看到了吧！這就是本大爺的釣魚技術！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_usopp_forge_request_01",
+      "before": "佛朗基，這裡加個護邊，收線就不刮手了。",
+      "after": "佛朗基，這根竿子還能加點厲害的機關吧？",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_usopp_meal_01",
+      "before": "本大爺忙了一上午，這份剛好補充體力！",
+      "after": "吃飽了，本大爺才能繼續大顯身手！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_usopp_work_01",
+      "before": "別碰那張紙！零件的位置全畫在上面！",
+      "after": "先想好做法再動手！這可是本大爺的經驗！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_usopp_night_01",
+      "before": "那個影子只是衣架吧？你也看到了吧？",
+      "after": "這時候看什麼都像怪影子……我只是確認一下！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_usopp_snow_01",
+      "before": "腳印這麼大！啊，是佛朗基走過去的。",
+      "after": "這種天氣最容易留下腳印！本大爺可不會看漏！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_usopp_spring_01",
+      "before": "花粉黏上漆了。得重新磨這一塊。",
+      "after": "花粉別黏到剛上的漆就好了。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_arrive_01",
+      "before": "洗過手沒有？坐吧，湯還熱著。",
+      "after": "喲，過來歇一會兒吧。吃飯前記得洗手。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_depart_01",
+      "before": "我去看看爐火，你們先聊。",
+      "after": "我去看看廚房，你們先聊。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_favorite_furniture_01",
+      "before": "桌面夠平，熱湯端過來也安心。",
+      "after": "吃飯的地方乾淨，大家才能安心坐下。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_awkward_furniture_01",
+      "before": "工具別放砧板上。這裡要處理食材。",
+      "after": "這些工具還是交給船匠吧，我可不讓它們碰食材。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_fish_win_01",
+      "before": "肉質不錯。今天可以少跑一趟市場。",
+      "after": "釣到了。先確認魚種，再想想怎麼料理。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_fish_loss_01",
+      "before": "空手也得吃飯。別垂著頭進廚房。",
+      "after": "空手也得吃飯。別垂著頭回來。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_rare_fish_01",
+      "before": "先放進清水裡，確定能吃再動刀。",
+      "after": "先確認牠習慣什麼水、能不能吃，再決定怎麼處理。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_fish_handoff_01",
+      "before": "給我吧。你把濕袖子挽起來，別著涼。",
+      "after": "交給廚師就好，你先去洗手。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_forge_request_01",
+      "before": "佛朗基，竿尖有裂痕。修好了我再去釣。",
+      "after": "佛朗基，幫我把竿子強化一下。晚餐的食材就靠它了。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_work_01",
+      "before": "骨頭留下熬湯，別和垃圾混在一起。",
+      "after": "先把這件做好。忙歸忙，也別糟蹋東西。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_morning_01",
+      "before": "早餐好了。還沒起來的，我留在鍋裡。",
+      "after": "早飯可不能省。起來的人都好好吃一頓。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_dusk_01",
+      "before": "這時候的魚新鮮，晚飯換一道做法。",
+      "after": "晚飯想吃什麼？我再想個做法。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_night_01",
+      "before": "餓了就說。留的那份還在。",
+      "after": "餓了就說，我可不讓人空著肚子睡。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_rain_01",
+      "before": "回來先擦乾。熱湯馬上給你。",
+      "after": "要是淋濕了，先擦乾再喝熱湯。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_snow_01",
+      "before": "鞋濕了就換。坐著等，我端熱的來。",
+      "after": "鞋子濕了就換，別光顧著看雪。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_thunder_01",
+      "before": "先離開窗邊，鍋子我看著。",
+      "after": "離窗邊遠一點，天氣這麼差就別出去了。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_spring_01",
+      "before": "嫩葉少放一點，味道才不會把魚蓋住。",
+      "after": "春天的食材，清爽一點的做法也不錯。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sanji_summer_01",
+      "before": "冷盤放陰涼處，吃多少拿多少。",
+      "after": "天熱，食物別在外面放太久。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_chopper_arrive_01",
+      "before": "你來啦！鞋子濕了嗎？先看看！",
+      "after": "你來啦！有不舒服就告訴我喔！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_chopper_awkward_furniture_01",
+      "before": "這張椅子太高！我要拿東西，不是坐在上面！",
+      "after": "這本我還看不懂，我再慢慢查！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_chopper_fish_win_01",
+      "before": "成功了！欸，我的手還在抖！",
+      "after": "成功了！欸，真的釣上來了！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_chopper_fish_handoff_01",
+      "before": "香吉士，牠背上有刺，你切的時候小心！",
+      "after": "香吉士，處理之前先看看有沒有尖刺喔！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_chopper_forge_request_01",
+      "before": "佛朗基，握把能細一點嗎？我抓得有點吃力。",
+      "after": "佛朗基，能幫我把釣竿做得更好握嗎？",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_chopper_meal_01",
+      "before": "我有吃菜！不是只吃甜的！",
+      "after": "吃飯也要吃菜！不是只有甜的就夠了！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_chopper_work_01",
+      "before": "這兩瓶不能放一起，標籤再看一遍！",
+      "after": "先看清楚再動手，弄混了可不行！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_chopper_dusk_01",
+      "before": "光太暗了，細字明天再看也行。",
+      "after": "光太暗就別勉強看細字了。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_chopper_rain_01",
+      "before": "頭髮濕著不能直接睡！先擦乾！",
+      "after": "要是頭髮濕了，先擦乾再休息！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_chopper_snow_01",
+      "before": "耳朵冷了！我找帽子，你也戴上！",
+      "after": "外面好冷！你也記得戴好帽子！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_chopper_summer_01",
+      "before": "曬太久要休息！來這裡，有陰影！",
+      "after": "曬太久要休息！找個陰涼的地方！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_robin_arrive_01",
+      "before": "這裡的位置空著嗎？我坐一會兒。",
+      "after": "這裡很舒服呢，我待一會兒。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_robin_favorite_furniture_01",
+      "before": "頁邊還有筆記。以前的讀者也在這裡停過呢。",
+      "after": "看看這些書，也許會找到有趣的記錄呢。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_robin_forge_request_01",
+      "before": "佛朗基，線輪有聲音。能替我看看嗎？",
+      "after": "佛朗基，能請你替我的釣竿做些調整嗎？",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_robin_dusk_01",
+      "before": "影子已經移到這一頁了。今天讀得真久。",
+      "after": "光慢慢暗了，讀書的人也該歇一會兒了。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_robin_night_01",
+      "before": "最後一頁就好。書籤已經準備好了。",
+      "after": "夜裡適合安靜地聊一會兒呢。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_robin_rain_01",
+      "before": "書先離窗子遠一點，雨會飄進來。",
+      "after": "書別放得太靠窗，萬一雨飄進來就可惜了。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_robin_spring_01",
+      "before": "新葉遮住了窗角。這一季換個座位也好。",
+      "after": "春天的光，坐在窗邊也很舒服呢。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_robin_summer_01",
+      "before": "咖啡不必急著喝，等它涼一些吧。",
+      "after": "熱飲不必急著喝，等它涼一些吧。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_franky_arrive_01",
+      "before": "來啦！先看這裡，剛修好的！",
+      "after": "來啦！有什麼想做的，儘管說！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_franky_depart_01",
+      "before": "我去拿工具，成品先別搬！",
+      "after": "我去另一間看看，需要船匠就叫我！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_franky_favorite_furniture_01",
+      "before": "工作檯不晃了！細活就得這麼做！",
+      "after": "有個穩當的工作檯，細活就好做多啦！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_franky_awkward_furniture_01",
+      "before": "這椅子太窄。讓我看看能不能加寬。",
+      "after": "這些書怎麼分類？我可得先問清楚！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_franky_fish_loss_01",
+      "before": "線跑偏了。不是你的手不行，我看看導環。",
+      "after": "跑了啊。先看看導環，再試一次！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_franky_forge_request_01",
+      "before": "我先把竿子固定。工具一件一件拿，別催！",
+      "after": "SUPER！先把工具準備好，讓這根釣竿更帶勁！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_franky_work_01",
+      "before": "底座壓住！我鎖最後這顆！",
+      "after": "先把底座弄穩，做東西可不能馬虎！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_franky_dusk_01",
+      "before": "天暗了，先把切口收好。",
+      "after": "天暗了，手上的活先安全收好。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_franky_night_01",
+      "before": "我收完工具就停，別留螺絲在地上。",
+      "after": "工具都要收好，別留零件在地上。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_franky_rain_01",
+      "before": "木板蓋起來！這面還沒上保護漆！",
+      "after": "怕潮的材料先蓋好，雨可不會等我們！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_franky_spring_01",
+      "before": "新木材到了！先晾，不急著下料！",
+      "after": "天氣暖了，正好把新點子做出來！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_franky_summer_01",
+      "before": "可樂真涼！你們也歇一會兒！",
+      "after": "這天氣，真想來一瓶冰可樂！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_brook_arrive_01",
+      "before": "打擾了。這裡能坐下聽一會兒嗎？",
+      "after": "打擾了，可以在這裡待一會兒嗎？",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_brook_favorite_furniture_01",
+      "before": "琴鍵擦乾淨了，聲音也像精神了一點。",
+      "after": "琴鍵乾乾淨淨的，看著就想彈一曲呢。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_brook_awkward_furniture_01",
+      "before": "這把椅子有點硬……雖然我也挺硬的。",
+      "after": "開飯之前，我先等廚師安排吧。喲呵呵呵！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_brook_fish_win_01",
+      "before": "魚上鉤了！節奏慢一點果然有用。",
+      "after": "魚上鉤了！今天真是好節奏！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_brook_forge_request_01",
+      "before": "佛朗基先生，線輪轉起來有雜音，能看看嗎？",
+      "after": "佛朗基先生，釣竿的強化就拜託您了。喲呵呵呵！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_brook_meal_01",
+      "before": "請再添一點湯。熱乎乎的真好。",
+      "after": "大家一起用餐，連湯都格外暖呢。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_brook_work_01",
+      "before": "琴弦先鬆一點，再收進盒子。",
+      "after": "樂器要好好收，不然下回可唱不痛快。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_brook_morning_01",
+      "before": "早安。今天先彈一段輕快的吧。",
+      "after": "早安，要是想聽一段輕快的，儘管說。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_brook_snow_01",
+      "before": "雪落得真安靜，配一段慢曲如何？",
+      "after": "雪落得真安靜，真想配一段慢曲呢。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_brook_thunder_01",
+      "before": "剛才的低音可真響。我還是把琴收起來。",
+      "after": "剛才的低音可真響。我還是等天氣好些再演奏。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_jinbe_favorite_furniture_01",
+      "before": "舵的阻力正好，不必用蠻力。",
+      "after": "握舵不必只靠蠻力，感受船的回應。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_jinbe_awkward_furniture_01",
+      "before": "這小抽屜不好握，容老夫慢慢來。",
+      "after": "細的活容老夫慢慢學，先說說該如何做。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_jinbe_rare_fish_01",
+      "before": "先讓牠安定，別把魚桶搖得太厲害。",
+      "after": "先查清楚魚種，別隨意換水折騰牠。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_jinbe_forge_request_01",
+      "before": "佛朗基，這握把受力不均，請你調整一下。",
+      "after": "佛朗基，釣竿的強化就有勞你了。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_jinbe_work_01",
+      "before": "船邊的繩結再查一遍，鬆了可不是小事。",
+      "after": "手上的事再查一遍，穩妥些總是好的。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_jinbe_morning_01",
+      "before": "早潮平穩，外面走走也無妨。",
+      "after": "早上出去之前，先看看海面是否平穩。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_jinbe_dusk_01",
+      "before": "風向變了，晾的東西該收了。",
+      "after": "風涼了，外面的東西也該收了。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_jinbe_rain_01",
+      "before": "地板濕了，慢些走。老夫把水擦乾。",
+      "after": "地板要是濕了，走路就慢些。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_jinbe_spring_01",
+      "before": "水暖了一些，魚也換了活動的地方。",
+      "after": "水暖起來，魚活動的地方也會變呢。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_ace_depart_01",
+      "before": "我去找魯夫。你們先吃，別等我。",
+      "after": "我去另一間看看。你們先聊，別等我。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_ace_favorite_furniture_01",
+      "before": "這張桌子真熱鬧，擠一擠還坐得下。",
+      "after": "有張桌子讓大家一起坐，就熱鬧多了。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_ace_awkward_furniture_01",
+      "before": "細零件給你來。我一伸手就擋住了。",
+      "after": "這些細零件，先告訴我怎麼用吧。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_ace_fish_win_01",
+      "before": "這條挺有精神！剛才差點拉住我。",
+      "after": "這條真有精神！剛才可沒那麼容易拉！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_ace_forge_request_01",
+      "before": "佛朗基，竿身受力有點歪，麻煩你看看。",
+      "after": "佛朗基，幫我把竿子再弄強一點吧。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_ace_meal_01",
+      "before": "好吃！……嗯？我剛才睡著了？",
+      "after": "哈哈，吃太飽可別又睡著了！",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_ace_work_01",
+      "before": "搬這邊？行。你替我看一下後面。",
+      "after": "有需要搬的就叫我，我來搭把手。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_ace_morning_01",
+      "before": "早啊。魯夫是不是又先跑出去了？",
+      "after": "早啊。今天都打算去哪裡？",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_ace_rain_01",
+      "before": "別拿能力烤衣服，靠火太近可不行。",
+      "after": "濕衣服慢慢晾，別靠火太近。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_ace_snow_01",
+      "before": "手冷了？進來，熱的留了一份。",
+      "after": "手冷了就進來歇歇，別硬撐。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_ace_spring_01",
+      "before": "這些花以前沒注意過。今天開得真多。",
+      "after": "春天的景色，坐下來看一會兒也不錯。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sabo_favorite_furniture_01",
+      "before": "地圖留了空白，正好把新路補進去。",
+      "after": "地圖上的路線，出發前再核對一次吧。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sabo_fish_win_01",
+      "before": "不錯。晚餐又多了一樣。",
+      "after": "不錯，先看看這條魚要怎麼安排。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sabo_fish_loss_01",
+      "before": "別急，我替你看看線是不是纏住了。",
+      "after": "別急，我陪你檢查一下魚線。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sabo_forge_request_01",
+      "before": "佛朗基，收線的阻力有點大，能幫我檢查嗎？",
+      "after": "佛朗基，能幫我把釣竿調整得更好用嗎？",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sabo_work_01",
+      "before": "我清點實物，你把缺的記下來。",
+      "after": "我來幫忙清點，你把需要留意的記下來。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sabo_night_01",
+      "before": "這封信寫完就收。你先去休息。",
+      "after": "手上的事做完就歇歇，不用一個人全扛著。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_sabo_rain_01",
+      "before": "門邊留塊乾布，後面的人也用得到。",
+      "after": "門邊可以留塊乾布，回來的人也用得到。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_law_favorite_furniture_01",
+      "before": "這層分類清楚，取用時不會拿錯。",
+      "after": "分類清楚，取用的時候才不會拿錯。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_law_fish_loss_01",
+      "before": "拉力突然鬆了。下次別立刻往後扯。",
+      "after": "先檢查魚線。別一失敗就急著再拋。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_law_forge_request_01",
+      "before": "佛朗基，這根竿子的導環磨損了。能修嗎？",
+      "after": "佛朗基，這根竿子的強化交給你。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_law_meal_01",
+      "before": "我的那份先放旁邊，我洗完手就來。",
+      "after": "洗完手再吃。我不急。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_law_work_01",
+      "before": "這一盒已核對，別再混回未整理的。",
+      "after": "核對過的和沒核對的分開，別混在一起。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_law_train_01",
+      "before": "動作變形了。停下來，休息後再練。",
+      "after": "姿勢不對就先停。休息過再練。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_law_dusk_01",
+      "before": "光不夠了。細的留到明天。",
+      "after": "光不夠的時候，精細的活留到明天。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_law_snow_01",
+      "before": "手指僵了就停，別硬做精細的活。",
+      "after": "手指要是凍僵了就停，別硬做精細的活。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_law_winter_01",
+      "before": "手還僵著。精細的留到暖起來再做。",
+      "after": "手暖起來再做精細的活。別逞強。",
+      "reason": "Remove unsupported prop, injury, damage, outcome or target assumptions"
+    },
+    {
+      "id": "life26_pair_luffy_zoro_arrive_01",
+      "turn": 1,
+      "before": "等我擦完刀。",
+      "after": "先歇一下吧。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_zoro_arrive_01",
+      "turn": 2,
+      "before": "好！我在門口等你！",
+      "after": "好！那我們一起待一會兒！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_nami_depart_02",
+      "turn": 1,
+      "before": "先拿外套，外面要下雨了。",
+      "after": "先看看天氣，外套也記得拿。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_nami_depart_02",
+      "turn": 2,
+      "before": "喔！那我拿完再走！",
+      "after": "喔！那我準備好再走！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_usopp_rare_fish_03",
+      "turn": 0,
+      "before": "牠的尾巴像旗子！",
+      "after": "這條好特別！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_usopp_rare_fish_03",
+      "turn": 1,
+      "before": "先別晃！我還沒畫好！",
+      "after": "先別晃！我得把牠的樣子記下來！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_usopp_rare_fish_03",
+      "turn": 2,
+      "before": "那你快點，我手快麻了！",
+      "after": "好！那你快看！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_chopper_train_05",
+      "turn": 0,
+      "before": "我還能練！",
+      "after": "我還想再練！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_chopper_train_05",
+      "turn": 1,
+      "before": "你的手在抖，先休息！",
+      "after": "練習也得休息，別勉強自己！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_robin_favorite_furniture_06",
+      "turn": 0,
+      "before": "這本畫了怪獸！",
+      "after": "這些故事真有趣！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_robin_favorite_furniture_06",
+      "turn": 1,
+      "before": "也可能是以前的人畫自己。",
+      "after": "以前的人留下來的記錄，有時比故事更有意思呢。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_robin_favorite_furniture_06",
+      "turn": 2,
+      "before": "他們長這樣？真有趣！",
+      "after": "那也說給我聽吧！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_franky_forge_request_07",
+      "turn": 0,
+      "before": "拉起來一直卡住！",
+      "after": "佛朗基！幫我的釣竿變得更厲害吧！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_franky_forge_request_07",
+      "turn": 1,
+      "before": "拿來！我先看導環。",
+      "after": "交給我！先看看怎麼強化最合適！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_franky_forge_request_07",
+      "turn": 2,
+      "before": "修好我就去釣大的！",
+      "after": "弄好我就去釣大的！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_ace_meal_10",
+      "turn": 0,
+      "before": "艾斯，你剛才又睡著了！",
+      "after": "艾斯，吃飯可別又睡著啦！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_ace_meal_10",
+      "turn": 1,
+      "before": "啊，吃太飽了。你沒拿我的那份吧？",
+      "after": "你也是。大家的份可別全拿走喔。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_ace_meal_10",
+      "turn": 2,
+      "before": "沒有！那盤本來就是我的！",
+      "after": "知道啦！一起吃吧！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_sabo_work_11",
+      "turn": 0,
+      "before": "這個箱子搬出去就行了吧？",
+      "after": "有什麼要搬的？交給我吧！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_sabo_work_11",
+      "turn": 1,
+      "before": "等一下，裡面有玻璃。兩個人搬。",
+      "after": "先看清楚裡面裝什麼，重的我們一起搬。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_luffy_sabo_work_11",
+      "turn": 2,
+      "before": "那你拿另一邊！",
+      "after": "好！那你拿另一邊！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_zoro_chopper_train_14",
+      "turn": 0,
+      "before": "這點擦傷不用管。",
+      "after": "練完再休息就行。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_zoro_chopper_train_14",
+      "turn": 1,
+      "before": "伸手！小傷也要清理！",
+      "after": "還是要留意有沒有受傷！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_zoro_chopper_train_14",
+      "turn": 2,
+      "before": "……別綁得太緊。",
+      "after": "……知道了。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_zoro_nami_depart_15",
+      "turn": 0,
+      "before": "出口在那邊吧。",
+      "after": "我去另一間看看。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_zoro_nami_depart_15",
+      "turn": 1,
+      "before": "你指的是儲藏室。門在你身後。",
+      "after": "先看清楚方向，別又走錯。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_nami_robin_dusk_17",
+      "turn": 0,
+      "before": "這個地名和新圖不一樣。",
+      "after": "海圖上的地名，有時候會換名字呢。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_nami_robin_dusk_17",
+      "turn": 1,
+      "before": "也許舊名字記著更早的港口。",
+      "after": "舊名字也可能記著更早的港口。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_nami_robin_dusk_17",
+      "turn": 2,
+      "before": "那我先把兩個都留著。",
+      "after": "那我會把兩個都留著。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_nami_usopp_work_19",
+      "turn": 0,
+      "before": "這抽屜又卡了。",
+      "after": "家具用得不順的時候，你能修吧？",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_nami_usopp_work_19",
+      "turn": 1,
+      "before": "等一下，是木頭膨起來，不用換。",
+      "after": "那當然！先找出是哪裡不順，不用急著全換！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_nami_usopp_work_19",
+      "turn": 2,
+      "before": "能修就好，我替你扶住。",
+      "after": "能修就好。那就拜託你啦。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_nami_franky_forge_request_20",
+      "turn": 0,
+      "before": "能修的地方別全換掉。",
+      "after": "強化的時候，能用的零件別全換掉。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_nami_franky_forge_request_20",
+      "turn": 1,
+      "before": "放心！先量磨損，再決定！",
+      "after": "放心！先看怎麼做最合適！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_usopp_brook_night_23",
+      "turn": 0,
+      "before": "那個影子剛才動了！",
+      "after": "晚上看什麼都像怪影子……",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_usopp_brook_night_23",
+      "turn": 1,
+      "before": "是我的琴盒。抱歉，嚇到您了。",
+      "after": "喲呵呵呵！要我陪您待一會兒嗎？",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_sanji_chopper_fish_handoff_24",
+      "turn": 0,
+      "before": "這條有刺，你站旁邊看就好。",
+      "after": "處理魚之前，先看看有沒有尖刺。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_sanji_chopper_fish_handoff_24",
+      "turn": 1,
+      "before": "我認得！刺在這裡，別碰到！",
+      "after": "沒錯！不認得的魚也得先查清楚！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_sanji_chopper_fish_handoff_24",
+      "turn": 2,
+      "before": "謝了，醫生。你去洗手等飯。",
+      "after": "謝了，醫生。先洗手等飯吧。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_sanji_jinbe_fish_handoff_26",
+      "turn": 0,
+      "before": "這條肉很結實。",
+      "after": "這條魚要怎麼料理，得先看牠的習性。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_sanji_jinbe_fish_handoff_26",
+      "turn": 1,
+      "before": "牠在急流裡活動，處理時得多費心。",
+      "after": "在急流裡生活的魚，肉質也常有不同。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_sanji_jinbe_fish_handoff_26",
+      "turn": 2,
+      "before": "正好，煮湯應該不錯。",
+      "after": "那我先查清楚，再決定做法。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_chopper_robin_work_27",
+      "turn": 0,
+      "before": "這兩本寫得不一樣！",
+      "after": "有時兩本書說的不一樣，要怎麼辦？",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_chopper_robin_work_27",
+      "turn": 1,
+      "before": "先看它們記的是不是同一種植物。",
+      "after": "先看它們記的是不是同一種植物呢。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_chopper_robin_work_27",
+      "turn": 2,
+      "before": "啊，名字很像，葉子不一樣！",
+      "after": "對！名字很像，也要看清楚葉子！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_chopper_law_work_28",
+      "turn": 0,
+      "before": "這個標籤快看不清了。",
+      "after": "藥品標籤看不清楚的時候，不能隨便猜吧？",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_chopper_law_work_28",
+      "turn": 1,
+      "before": "先核對原記錄，再重寫。別猜。",
+      "after": "先核對原記錄，再重寫。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_chopper_law_work_28",
+      "turn": 2,
+      "before": "嗯！我把記錄拿來！",
+      "after": "嗯！我會仔細核對！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_robin_franky_favorite_furniture_29",
+      "turn": 0,
+      "before": "這本書的封面鬆了。",
+      "after": "這些書能陪我們很久，書架也要好好保養呢。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_robin_franky_favorite_furniture_29",
+      "turn": 1,
+      "before": "交給我！不碰裡面的字！",
+      "after": "交給我！保管重要的東西，也是船匠的工作！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_robin_franky_favorite_furniture_29",
+      "turn": 2,
+      "before": "謝謝。它還能陪我們很久。",
+      "after": "謝謝。這樣讀起來也安心。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_franky_brook_work_30",
+      "turn": 0,
+      "before": "琴架底座我加寬了！",
+      "after": "琴架也得站得穩，演奏起來才痛快！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_franky_brook_work_30",
+      "turn": 1,
+      "before": "太好了，轉身也不會碰倒。",
+      "after": "喲呵呵呵！那還要請您多照看呢。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_franky_brook_work_30",
+      "turn": 2,
+      "before": "試著彈一段，聽聽有沒有雜音！",
+      "after": "包在我身上！有哪裡不順就說！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_ace_sabo_meal_32",
+      "turn": 0,
+      "before": "魯夫又把盤子堆高了。",
+      "after": "魯夫一看到飯就想全拿走。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_ace_sabo_meal_32",
+      "turn": 1,
+      "before": "你自己的也沒少多少。",
+      "after": "你吃起來也沒客氣多少啊。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_sabo_robin_work_34",
+      "turn": 0,
+      "before": "這張記錄少了來源。",
+      "after": "查到的資料，還是得把來源記清楚。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_sabo_robin_work_34",
+      "turn": 1,
+      "before": "那就先放在待核對的那一邊。",
+      "after": "不確定的，先放在待核對的那一邊呢。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_law_franky_forge_request_35",
+      "turn": 0,
+      "before": "佛朗基，導環磨損了。能修嗎？",
+      "after": "佛朗基，釣竿的強化交給你。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_law_franky_forge_request_35",
+      "turn": 1,
+      "before": "能！你握住這邊，我看受力！",
+      "after": "沒問題！先看看受力和零件，再動手！",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_law_franky_forge_request_35",
+      "turn": 2,
+      "before": "等你固定好，我再放手。",
+      "after": "那就拜託了。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_law_sanji_fish_handoff_36",
+      "turn": 0,
+      "before": "這條的種類確認了嗎？",
+      "after": "處理魚之前，種類確認了再動手。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_law_sanji_fish_handoff_36",
+      "turn": 1,
+      "before": "確認過了。你不放心就先看記錄。",
+      "after": "那當然。我可不拿大家的晚餐冒險。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    },
+    {
+      "id": "life26_pair_law_sanji_fish_handoff_36",
+      "turn": 2,
+      "before": "好。處理完我幫你收拾。",
+      "after": "好。需要人手的時候再叫我。",
+      "reason": "Remove unsupported scene facts while preserving relationship"
+    }
+  ],
+  "stagedNewActions": [
+    {
+      "id": "luffy_offer_item",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "luffy_inspect_rod",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "zoro_offer_item",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "zoro_inspect_rod",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "nami_offer_item",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "nami_inspect_rod",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "usopp_offer_item",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "usopp_inspect_rod",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "sanji_offer_item",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "sanji_inspect_rod",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "chopper_offer_item",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "chopper_inspect_rod",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "robin_offer_item",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "robin_inspect_rod",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "franky_offer_item",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "franky_inspect_rod",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "brook_offer_item",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "brook_inspect_rod",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "jinbe_offer_item",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "jinbe_inspect_rod",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "ace_offer_item",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "ace_inspect_rod",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "sabo_offer_item",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "sabo_inspect_rod",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "law_offer_item",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "law_inspect_rod",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "luffy_signature_daily",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "zoro_signature_daily",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "nami_signature_daily",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "usopp_signature_daily",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "sanji_signature_daily",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "chopper_signature_daily",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "robin_signature_daily",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "franky_signature_daily",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "brook_signature_daily",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "jinbe_signature_daily",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "ace_signature_daily",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "sabo_signature_daily",
+      "status": "not_generated_not_loaded"
+    },
+    {
+      "id": "law_signature_daily",
+      "status": "not_generated_not_loaded"
+    }
+  ],
+  "limits": [
+    "All text is original game adaptation; zero verified original quotations",
+    "No handoff, rod inspection or injury animation is claimed; existing full-body acting loops only",
+    "Eligibility must be proven by room/event adapter"
+  ],
+  "status": "DRAFT_NOT_APPROVED",
+  "pending": "User requested author to redo unsupported dialogue and actions; awaiting proposal-v2.json and audit-v2.json"
+}

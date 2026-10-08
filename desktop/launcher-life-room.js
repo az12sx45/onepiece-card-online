@@ -61,7 +61,7 @@
     function contextAt(now) {
       const sceneKey=String(env.room().sceneId||'room-scene-crew-cabin').replace(/^room-scene-/,'');
       const fish=serverLife?.fishCollection||profile()?.life?.fishCollection||[];
-      return {...(root.OnePieceRoomAmbience?.compute?.(new Date(now),sceneKey)||{}),aquariumFishCount:fish.filter(entry=>entry.inAquarium).length};
+      return {...(env.dialogueContext?.()||{}),...(root.OnePieceRoomAmbience?.compute?.(new Date(now),sceneKey)||{}),aquariumFishCount:fish.filter(entry=>entry.inAquarium).length};
     }
     function face(key,cell) {const w=walker(key);return !!w&&env.face(w,cell,performance.now());}
     function setClip(key,clip,meta={}) {
@@ -98,7 +98,7 @@
       getWorld:world,
       getContext:contextAt,
       favoriteFurniture:key=>root.OnePieceRoomDialogue?.profile?.(key)?.favorite||[],
-      activityBeat:(key,furnitureKey,index,context)=>root.OnePieceRoomDialogue?.activity?.(key,furnitureKey,index,context),
+      activityBeat:(key,furnitureKey,index,context)=>root.OnePieceRoomDialogue?.activity?.(key,furnitureKey,index,{...(env.dialogueContext?.()||{}),...context,activityPhase:'performing',liveClip:!!walker(key)?.lifeClip}),
       directiveBeat:(key,furnitureKey,kind,index,context)=>root.OnePieceRoomDialogue?.directiveBeat?.(key,furnitureKey,kind,index,context),
       attending:key=>!!walker(key)?.attention,
       hold(key,token){const w=walker(key);if(!w)return false;w.lifeClip=null;w.lifeReaction=null;w.lifeToken=token;w.mode='life-act';w.route=[];w.pause=0;env.hideSpeech(w);env.setPose(w,'idle');return true;},
@@ -129,7 +129,7 @@
       },
       hasClip(key,clip,direction){
         const definition=root.OnePieceLifeActions?.describe(clip,direction||walker(key)?.motion?.direction||'south');
-        if(!definition)return ['idle','wave','listen','talk_happy','talk_annoyed','surprised'].includes(clip);
+        if(!definition)return ['idle','wave','listen','talk_happy','talk_annoyed','surprised','focused_use','sit'].includes(clip);
         return root.OnePieceLifeActions.preload(key,clip,definition.direction)?.ready===true;
       },
       speak(key,line,mood,meta={}){
@@ -149,6 +149,7 @@
       release(key,token){const w=walker(key);if(!w||w.lifeToken&&w.lifeToken!==token)return;w.lifeClip=null;w.lifeReaction=null;w.lifeToken=null;w.lifeDockReady=null;w.lifeDockStation=null;delete w.node.dataset.lifeState;env.hideSpeech(w);env.setPose(w,'idle');env.wander(w);},
       wander(key){const w=walker(key);if(w){w.lifeClip=null;env.wander(w);}},
       socialScene(a,b,context){return root.OnePieceRoomDialogue?.scene?.(a,b,Math.floor(Math.random()*10000),context);},
+      sceneStarted(scene){if(scene.expanded)root.OnePieceRoomDialogue?.commitExpansion?.(scene.id,env.dialogueContext?.()||{});},
       entry(key){
         const w=walker(key);if(!w)return null;
         const blocked=env.blockedFor(w);
@@ -285,7 +286,9 @@
         if(value){w.node.dataset.actionFrame=String(value.frame);w.node.dataset.actionSource='life_v1';}
         return true;
       }
-      return w.mode==='life-act';
+      // Acting-atlas poses (listen/talk/wave) are advanced by the room renderer.
+      // Only lifeClip loops above consume the frame here.
+      return false;
     }
     function renderUi() {
       const toolbar=$('roomLifeToolbar');if(!toolbar)return;
@@ -445,6 +448,10 @@
     };
     window.addEventListener('pagehide',()=>{if(owner()&&active())void command('checkpoint',{exit:true});});
     const minigames=root.OnePieceRoomMinigames?.create({command,refreshLife:refresh,
+      resultDialogue({characterId,resultKey,event}){
+        if(!owner()||!event)return null;const key=keyOf(characterId);
+        return root.OnePieceRoomDialogue?.expansionBeat?.(key,event,0,{...(env.dialogueContext?.()||{}),actorKey:key,event,resultKey,confirmedResult:true,locked:false});
+      },
       fishCollection(){return serverLife?.fishCollection||profile()?.life?.fishCollection||[];},
       onOpen(id){controller?.pause();const w=walker(id);if(w)env.focus(w);renderUi();},
       onClose(){if(!suspending&&env.canAnimate())controller?.resume();renderUi();},

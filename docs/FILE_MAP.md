@@ -1818,3 +1818,16 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - r46交付修正：取消強化委託同時清除角色跨房目的地與離房標示，保留正在走的單一地板段，避免點選角色後仍換房；待辦取消後60秒再恢復自主串門子。r45曾推送候選，最終以r46核對公開交付。scripts/launcher_room_visits_qa.js新增取消出發目的地与未開始forge的檢查。
 
 - r46公開交付：source21e98f56d1aa08749b9e3d904d62ca423a493197；10/08/2026 11:29:25確認公開revision46與SHA256 efc91d14607317cf06a7fcd934f87f1023f213a462ac5c74d0de5bd511e7de11。實際cache44→46下載389834 bytes，109檔與二次零下載通過。34房間、110圖鑑、5既有生活流程、82公告與npm start靜態HTTP200通過；未宣稱正式帳號交易驗收或Render Live時間。證據D:/Codex_QA/launcher-fishing-r46/release-evidence.json；前置QA在launcher-fishing-r45。LATTICE工具未提供，未宣稱任務或圖譜寫入。
+
+### 2026-10-08 生活對話設計稿退回重作（未部署）
+- 使用者授權請「整理《航海王》資訊與猜測」重作不合理內容。原稿286短句与36組108輪；tools/launcher-room/dialogue-v47/review.json記錄196筆初審修改線索（含單輪，非196組），全部DRAFT_NOT_APPROVED。build.js僅允許--draft-only輸出草稿，不修改renderer；draft-content.json不載入正式遊戲。
+- 問題：缺少釣竿損壞／魚發光／人物在場／家具道具等真實條件，且39個新動作尚未生成；已要求作者逐ID提交proposal-v2.json与audit-v2.json。臨時嵌入的草稿區塊已撤除，launcher-room-dialogue.js與HEAD無差異，r46玩家行為未改。原作核實引文0條；未聲稱新動畫、接入或部署完成。
+
+### 2026-10-08 r47 生活對話v2審查與接入
+- 審查handoffs/launcher-life-dialogue-expansion-20261008/proposal-v2.json、audit-v2.json，逐條閱讀286原短句与36組108輪的修訂／停用結果。接入273短句、29組87輪，13交魚短句与7組互動不啟用，39新動作無素材保持staged；原作核實逐字引文0。本批為game_original，不宣稱官方引文或新接觸動畫。
+- tools/launcher-room/dialogue-v47/build-v2.js將核准schema轉成integrated-v2.json、acceptance-v2.json与launcher-room-dialogue.js內嵌資料；舊build.js只可--draft-only產生初審草稿，不載入正式資料。when字串不eval；僅映射可證明的實際場景、在場／擁有／開放角色、解碼、活動、正式結果與強化前置。
+- desktop/launcher-room-dialogue.js：本機選句與主動時鐘，短句600秒／角色45秒、配對1800秒／角色300秒，近期去重、當天顯示上限與環境變化記號；正式釣魚結果id去重。未知條件跳過，好友唯讀不使用此新增owner語料。未啟用新上下文的舊API輸出與r46對照一致。
+- desktop/launcher-room.js：進出房問候、道別與鄰近夥伴對話；入房記號可提供同房相遇語境，出房對話完成才重新計算離房路徑時間；找佛朗基可用三輪對話完成後才接原強化。點角色會清除出發目的地，不因新對話繼續換房。羅備援稱呼刪除生硬的屋。
+- desktop/launcher-life-room.js／launcher-life.js：現有活動階段與圖稿解碼上下文，話輪間隔、說話者／聽者姿態与新增對話的兩格站位；acting姿態由房間重繪，lifeClip連續動作仍在原播放器。本次像素核對確認acting一種pose是一張圖，不宣稱這39種新動畫已生成。
+- desktop/launcher-room-minigames.js：正式釣魚結果頁使用確認的成功／失敗／rare或legendary短句；未知稀有度不推測。無新金融命令，沒有更改魚／金幣／釣竿等級或存檔欄位。
+- scripts/launcher_life_dialogue_v47_qa.js：2111資料／條件與舊API對照斷言通過（含逐273句／29組與不在場、未解鎖、未知天候、非正式結果）；scripts/launcher_life_dialogue_v47_browser_qa.js：1440×900與960×640真Chromium／BFS／控制器／已解碼人物姿態，三輪原定顺序与接話、無經濟命令通過。25控制器測試、34房間訪問檢查與5既有生活流程回歸通過；本機npm start靜態HTTP200，資料庫未配置。自動QA不代表正式玩家交易或粉絲偏好全量驗收。公開交付待核對。
