@@ -2735,3 +2735,10 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - 每魚頁4張、每釣點頁4筆，18筆紀錄可以前後頁閱讀，content overflow hidden而非裁掉內容。scripts/launcher_fishing_journal_qa.js加入scrollHeight<=clientHeight、右頁footer、按下未放開即開啟／移出再放開不掉點擊，以及18紀錄分頁檢查；120桌機1440×900／最小960×640介面檢查通過。附圖公告config/launcher-announcements-v1.json與launcher-journal-layout-r44.webp；公開交付待完成。
 
 - r44公開交付：source396e121ee0cc8efcc63aa84bb910636d98ebcd62，公開manifest於10/08/2026 09:00:04核對SHA256 bfe22d552b21f48723c53a8b3381e21160ae8efbfa329924bc5399c85ba27f2d。實際cache43→44下載862936 bytes，108檔與二次零下載通過。120 UI、82公告與npm start靜態HTTP200通過；未宣稱正式玩家點擊驗收或Render Live時間／DB日誌。證據D:/Codex_QA/launcher-fishing-r44/release-evidence.json。
+
+### 2026-10-08 r45 跨房間訪客與角色自己的釣竿
+- desktop/launcher-life-room.js：詳情每個角色只建立一次按鈕，狀態更新只改文字；查看釣竿與魚圖鑑各有44px點擊區，pointerdown立即開啟，鍵盤click仍可使用。每秒與控制器刷新不會拆除按鈕。刪除舊推算速率摘要，詳細數值沿用實測書頁。
+- desktop/launcher-room-aquarium.js：釣竿鎖定角色id，無切換選單，不以第一個角色替代；帳號共用魚圖鑑保留。強化先await實際房間尋找佛朗基的流程，對話完成才forge_start；費用、三敲與機率仍由server驗證。
+- desktop/launcher-room.js/css：移除常駐圖鑑dock。以已配置夥伴的原始房間為起點，45秒後依角色錯開串門子、走向左右地板出口，入房保持唯一角色及10人上限；只進入已解鎖場景，家具阻擋時延後，不移動正在工作／活動／被選取的角色。訪客位置只在當次頁面活動，不修改保存的佈置與id；編輯顯示原佈置。不同房間的重綁不套用上一房間位置。
+- 找佛朗基：先邀請佛朗基到任一房間；角色跨房靠近、互相轉向、委託與回覆後才開啟強化；佛朗基自身準備工具後可強化自己的竿。台詞為符合個性設計的遊戲原創短句，非官方引文。切換房間、帳號、離開個人頁或編輯取消待辦，不扣款。
+- scripts/launcher_room_visits_qa.js：30項真Chromium／BFS／控制器fixture檢查，1440×900與960×640包含詳情按鈕3.5秒不被替換、實際pointerdown、專屬竿、跨房強化、同房相遇、自動出口步行與到達、真實待辦取消；原始scenes不變。scripts/launcher_fishing_journal_qa.js改為角色入口，110項圖鑑／版面／強化檢查通過。scripts/launcher_life_integration_qa.js納入真實圖鑑資源，5項既有位置／工作事件／訪客唯讀／遲到帳號回覆／編輯工作釋放通過。公開交付待核對。

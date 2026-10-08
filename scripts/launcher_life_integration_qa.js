@@ -10,7 +10,7 @@ const {CATALOG}=require('../server/launcher-profile-shop');
 const root=path.resolve(__dirname,'..');
 const out=process.env.LAUNCHER_LIFE_INTEGRATION_OUT||'C:/Codex_Candidates/launcher-life-qa-1.2.0/integration';
 const read=file=>fs.readFileSync(path.join(root,'desktop',file),'utf8');
-const files=['launcher-room-dialogue.js','launcher-room-motion-data.js','launcher-room-motion.js','launcher-life-data.js','launcher-life-actions.js','launcher-life.js','launcher-life-room.js','launcher-room.js'];
+const files=['launcher-room-dialogue.js','launcher-room-motion-data.js','launcher-room-motion.js','launcher-life-data.js','launcher-life-actions.js','launcher-life.js','launcher-life-room.js','launcher-room-aquarium.js','launcher-room.js'];
 const keys=['luffy','zoro','nami','usopp','sanji','chopper','robin','franky','brook','jinbe'];
 fs.mkdirSync(out,{recursive:true});
 let browser;const results=[];
@@ -28,7 +28,7 @@ async function create(options={}) {
   let html=read('launcher.html').replace(/<meta[^>]+Content-Security-Policy[^>]+>/i,'').replace(/<script[\s\S]*?<\/script>/g,'').replace(/<link[^>]+>/g,'')
     .replace('<body data-stage="boot">','<body data-stage="app">').replace('<main class="launcher-app screen" id="launcherApp" hidden>','<main class="launcher-app screen is-active" id="launcherApp">');
   await page.setContent(html,{waitUntil:'domcontentloaded'});
-  await page.addStyleTag({content:['launcher.css','launcher-social.css','launcher-profile-shop.css','launcher-room.css'].map(read).join('\n')});
+  await page.addStyleTag({content:['launcher.css','launcher-social.css','launcher-profile-shop.css','launcher-room.css','launcher-room-aquarium.css'].map(read).join('\n')});
   await page.evaluate(({catalog,options})=>{
     window.__LAUNCHER_ROOM_QA__=true;Math.random=()=>0;
     const clone=v=>structuredClone(v),item=id=>catalog.find(p=>p.id===id);
@@ -75,13 +75,13 @@ async function create(options={}) {
   },{catalog:CATALOG,options});
   for(const file of files){
     await page.addScriptTag({content:read(file)});
-    if(file==='launcher-life-data.js')await page.evaluate(()=>{
+    if(file==='launcher-life-data.js')await page.evaluate(options=>{
       // Only random autonomous choice is suppressed in the fixture. Explicit
       // events keep real authored definitions, eligibility and navigation.
       const data=window.OnePieceLifeData,zero=Object.fromEntries(['Idle','Wander','Work','Eat','Rest','Sleep','Train','Socialize','UseFurniture','SpecialAction'].map(state=>[state,0]));
       window.OnePieceLifeData={...data,characters:Object.fromEntries(Object.entries(data.characters).map(([key,value])=>[key,{...value,weights:{...zero,Idle:1}}]))};
-      window.OnePieceRoomDialogue={...window.OnePieceRoomDialogue,scene:()=>null};
-    });
+      if(!options.enableRoomChat)window.OnePieceRoomDialogue={...window.OnePieceRoomDialogue,scene:()=>null};
+    },options);
   }
   await page.evaluate(options=>{
     window.__integrationSnapshot=()=>{const snapshot=window.__launcherRoomTest.snapshot();return{...snapshot,now:Date.now(),editing:!document.getElementById('roomEditor').hidden,

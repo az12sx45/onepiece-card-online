@@ -193,3 +193,10 @@
 #roomLifeGift { --room-action-icon:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M4%2011v10h16V11M3%207h18v4H3zM12%207v14%22%2F%3E%3Cpath%20d%3D%22M12%207C4%208%204%201%208%203c2%201%204%204%204%204Zm0%200c8%201%208-6%204-4-2%201-4%204-4%204Z%22%2F%3E%3C%2Fsvg%3E"); }
 #roomLifeTrain { --room-action-icon:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%206v12M3%209v6M18%206v12M21%209v6M6%2012h12%22%2F%3E%3C%2Fsvg%3E"); }
 #roomLifeStatus { --room-action-icon:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22%2F%3E%3Cpath%20d%3D%22M12%2011v6M12%207v1%22%2F%3E%3C%2Fsvg%3E"); }
+
+/* Stable character detail hit targets; no permanent journal dock. */
+.room-life-journal-actions { display:flex; gap:8px; flex-wrap:wrap; margin:10px 0; }
+.room-life-journal-button { min-height:44px; min-width:112px; touch-action:manipulation; padding:10px 16px; }
+.room-character-shell.is-room-departing { opacity:.45; transition:opacity .35s; }
+.room-character-shell.is-room-arriving { animation:room-visitor-arrival .6s ease-out; }
+@keyframes room-visitor-arrival { from {opacity:0} to {opacity:1} }

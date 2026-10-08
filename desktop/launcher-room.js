@@ -215,6 +215,10 @@
   let assignment = null;
   let assignmentBusy = false;
   const companionStats = new Map();
+  // Saved placements are home positions. Visits are presentation state only,
+  // so entering rooms never edits the owner's layout or friend save data.
+  const residents = new Map();
+  let residentSource = '', visitRenderPending = false, forgeVisit = null;
   let aquariumManager = null;
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let renderedRevision = -1;
@@ -225,6 +229,7 @@
     face: faceWalker, setPose, startDock: startFurnitureDock, moveDock: moveFurnitureDock,
     speak: showSpeech, hideSpeech, wander: chooseDestination, canAnimate,
     editing: () => editing, reducedMotion: () => motion.matches, roomStatus: status,
+    reservedForVisit: id => !!residents.get(id)?.destination || !!forgeVisit?.ids.includes(id),
     focus: holdCompanionAttention, deferAttentionMovement,
     onFishChanged() { renderAquarium(); },
     onLifeChanged() { aquariumManager?.render(); },
@@ -301,7 +306,110 @@
       room.placements = room.scenes[displaySceneId].placements;
       room.characters = room.scenes[displaySceneId].characters;
     }
+    syncResidents(room);
+    room.characters=[...residents.values()].filter(r=>r.sceneId===room.sceneId).map(r=>({...r.entry}));
     return room;
+  }
+  function syncResidents(room) {
+    const source=JSON.stringify([profile?.userId,Object.entries(room.scenes).map(([id,s])=>[id,s.characters])]);
+    if(source===residentSource)return;
+    cancelForgeVisit('房間佈置已變更，請重新找佛朗基。');
+    residentSource=source;residents.clear();
+    for(const [sceneId,s]of Object.entries(room.scenes))for(const entry of s.characters){
+      if(!residents.has(entry.itemId)&&resolvedItem(entry.itemId,'character'))residents.set(entry.itemId,{sceneId,entry:{...entry},nextVisit:performance.now()+45000+residents.size*9000});
+    }
+  }
+  function rememberResidents() {
+    for(const w of walkers){const r=residents.get(w.item.id);if(r&&r.sceneId===w.sceneId)positionInCell(r.entry,w.cell,{width:1,height:1});}
+  }
+  function renderVisit() {
+    if(visitRenderPending)return;visitRenderPending=true;
+    queueMicrotask(()=>{visitRenderPending=false;if(!editing&&visible)render();});
+  }
+  function visitEntry(id,sceneId) {
+    const saved=copyRoom(profile?.room),s=saved.scenes[sceneId]||blankScene();
+    const characters=[...residents.values()].filter(r=>r.sceneId===sceneId&&r.entry.itemId!==id).map(r=>r.entry);
+    if(characters.length>=ROOM_MAX_CHARACTERS)return null;
+    const occupied=layoutRoom({placements:s.placements,characters}).occupied;
+    for(const col of [0,15,1,14,2,13])for(const row of [4,5,6,3,7,2,1,0])if(!cellBlocked({col,row},occupied))return {col,row};
+    return null;
+  }
+  function transferResident(id,sceneId,now) {
+    const r=residents.get(id),cell=visitEntry(id,sceneId);if(!r||!cell)return false;
+    rememberResidents();r.sceneId=sceneId;r.destination='';r.arriving=true;r.nextVisit=now+60000+Math.random()*45000;
+    positionInCell(r.entry,cell,{width:1,height:1});renderVisit();return true;
+  }
+  function startRoomVisit(id,sceneId,now=performance.now()) {
+    const r=residents.get(id);if(!r||r.sceneId===sceneId||!sceneChoiceIds().includes(sceneId)||!visitEntry(id,sceneId))return false;
+    const w=walkers.find(v=>v.item.id===id);
+    if(!w)return transferResident(id,sceneId,now);
+    const task=lifeRoom?.snapshot()?.tasks?.find(t=>t.key===w.key);
+    if(task&&!task.jobId&&['Idle','Wander'].includes(task.state)&&!w.attention)lifeRoom?.cancel(w.key);
+    if(w.attention||w.mode!=='wander'||w.dockOrigin||w.segmentCell&&!forgeVisit?.ids.includes(id)||lifeRoom?.isBusy(w.key))return false;
+    const exits=[];for(const col of [0,15])for(let row=0;row<FLOOR.rows;row++)exits.push({col,row});
+    exits.sort((a,b)=>Math.abs(a.col-w.cell.col)+Math.abs(a.row-w.cell.row)-Math.abs(b.col-w.cell.col)-Math.abs(b.row-w.cell.row));
+    if(!exits.some(cell=>routeTo(w,cell)))return false;
+    r.destination=sceneId;r.expires=now+approachDuration(w);w.mode='room-travel';w.pause=0;
+    w.node.classList.add('is-room-departing');return true;
+  }
+  function cancelForgeVisit(message='已取消找佛朗基。') {
+    if(!forgeVisit)return;
+    const pending=forgeVisit;forgeVisit=null;
+    for(const id of pending.ids){const w=walkers.find(v=>v.item.id===id);if(w){w.mode='wander';w.route=[];w.pause=0;setPose(w,'idle');}}
+    pending.resolve({ok:false,error:'cancelled'});if(message)status(message,true);
+  }
+  const forgeRequests={luffy:'佛朗基！幫我把釣竿弄得更厲害吧！',zoro:'佛朗基，幫我把這根竿子強化一下。',nami:'佛朗基，這筆錢要花得值得喔。',usopp:'佛朗基！一起把它改成超級釣竿吧！',sanji:'佛朗基，幫我弄好釣竿。今晚的食材就靠它了。',chopper:'佛朗基，你能幫我把釣竿變強嗎？',robin:'佛朗基，能請你幫我調整一下釣竿嗎？',brook:'喲呵呵呵！佛朗基先生，這根釣竿就拜託你了！',jinbe:'佛朗基，釣竿的強化就有勞你了。',ace:'佛朗基，幫我把這根竿子再改強一點吧。',sabo:'佛朗基，能幫我調整一下這根釣竿嗎？',law:'佛朗基屋，這根竿子的強化交給你。'};
+  async function findFrankyForForge(id) {
+    activeRoom();const r=residents.get(id),f=residents.get('room-character-franky');
+    if(!isOwner()||!r||!f||forgeVisit){status(!f?'請先邀請佛朗基到任一房間，他就能幫夥伴強化釣竿。':'夥伴正在找佛朗基，請稍候。',true);return {ok:false};}
+    const ids=[...new Set([id,'room-character-franky'])];
+    if(lifeRoom?.isMinigameActive()||ids.some(x=>lifeRoom?.snapshot()?.jobs?.some(j=>j.itemId===x))){status('夥伴正在忙，完成目前的活動後再找佛朗基。',true);return {ok:false};}
+    for(const x of ids)lifeRoom?.cancel(x.replace('room-character-',''));
+    closeCompanion();if(interaction)finishInteraction(performance.now());
+    const w=walkers.find(v=>v.item.id===id);if(!w){status('請先在房間中選取這位夥伴。',true);return {ok:false};}
+    w.mode='wander';w.route=w.segmentCell?[w.segmentCell]:[];w.lifeClip=null;w.lifeReaction=null;
+    status(id==='room-character-franky'?'佛朗基正準備強化工具。':`${w.item.name}正去找佛朗基。`);
+    return new Promise(resolve=>{forgeVisit={ids,id,targetScene:f.sceneId,phase:r.sceneId===f.sceneId?'approach':'depart',expires:performance.now()+180000,epoch:viewEpoch,resolve};
+      if(forgeVisit.phase==='depart'&&!startRoomVisit(id,f.sceneId)){cancelForgeVisit('前往佛朗基的通道被擋住，請調整家具位置。');}
+    });
+  }
+  function tickVisits(now) {
+    if(editing||!visible||document.hidden)return;
+    for(const r of residents.values())if(r.destination){
+      const w=walkers.find(v=>v.item.id===r.entry.itemId);
+      if(!w||now>=r.expires){r.destination='';if(w){w.mode='wander';w.node.classList.remove('is-room-departing');chooseDestination(w);}if(forgeVisit?.id===r.entry.itemId)cancelForgeVisit('暫時走不到佛朗基，請空出通道。');continue;}
+      if(!w.route.length&&!w.segmentCell){const target=r.destination;if(!transferResident(w.item.id,target,now)){r.destination='';w.mode='wander';chooseDestination(w);}else if(forgeVisit?.id===w.item.id){displaySceneId=target;forgeVisit.phase='approach';}}
+    }
+    if(forgeVisit){
+      const p=forgeVisit;if(p.epoch!==viewEpoch||!isOwner()||now>=p.expires){cancelForgeVisit('找佛朗基已取消，沒有扣款。');return;}
+      if(p.phase==='depart'||visitRenderPending)return;
+      const a=walkers.find(w=>w.item.id===p.id),f=walkers.find(w=>w.key==='franky');if(!a||!f){cancelForgeVisit('佛朗基目前不在這個房間。');return;}
+      if(p.phase==='approach'){
+        f.lifeClip=null;f.lifeReaction=null;f.pause=0;
+        if(f.segmentCell){f.mode='forge-approach';f.route=[f.segmentCell];return;}
+        f.mode='forge-wait';f.route=[];
+        if(a===f){a.mode='forge-wait';p.phase='speaking';p.until=now+2600;showSpeech(a,'SUPER！先把工具準備好，讓這根釣竿更帶勁！','happy','準備強化');setPose(a,'focused_use');return;}
+        if(a.mode!=='forge-approach'){
+          const cells=[[1,0],[-1,0],[0,1],[0,-1]].map(([c,r])=>({col:f.cell.col+c,row:f.cell.row+r}));
+          if(!cells.some(cell=>routeTo(a,cell))){cancelForgeVisit('佛朗基身邊沒有可站的位置，請空出一格。');return;}
+          a.mode='forge-approach';a.pause=0;return;
+        }
+        if(a.route.length||a.segmentCell)return;
+        if(!faceWalker(a,f.cell,now)||!faceWalker(f,a.cell,now))return;
+        a.mode='forge-wait';setPose(a,'talk_happy');setPose(f,'listen');showSpeech(a,forgeRequests[a.key]||'佛朗基，釣竿的強化就拜託你了。','happy','委託強化');p.phase='reply';p.until=now+3100;return;
+      }
+      if(p.phase==='reply'&&now>=p.until){showSpeech(f,'SUPER！交給我吧！來，看準時機一起敲！','happy','接下強化');setPose(f,'focused_use');setPose(a,'listen');p.phase='speaking';p.until=now+3000;return;}
+      if(p.phase==='speaking'&&now>=p.until){forgeVisit=null;for(const w of new Set([a,f])){hideSpeech(w);w.mode='wander';chooseDestination(w);}p.resolve({ok:true});}
+      return;
+    }
+    if(assignment||companionId||interaction||lifeRoom?.snapshot()?.foreground||document.querySelector('.fishing-journal-overlay'))return;
+    const choices=sceneChoiceIds();if(choices.length<2)return;
+    for(const r of residents.values()){
+      const key=r.entry.itemId.replace('room-character-',''),task=lifeRoom?.snapshot()?.tasks?.find(t=>t.key===key);
+      if(r.destination||now<r.nextVisit||lifeRoom?.isMinigameActive()||task&&!['Idle','Wander'].includes(task.state)||lifeRoom?.snapshot()?.jobs?.some(j=>j.itemId===r.entry.itemId))continue;
+      const targets=choices.filter(id=>id!==r.sceneId);const target=targets[Math.floor(Math.random()*targets.length)];
+      r.nextVisit=now+15000;if(startRoomVisit(r.entry.itemId,target,now))break;
+    }
   }
   function catalog() { return Array.isArray(shop?.catalog) ? shop.catalog : []; }
   function fromShop(itemId) { return catalog().find(item => item.id === itemId) || null; }
@@ -337,11 +445,10 @@
   }
   const fishingJournal=window.OnePieceFishingJournal?.create({
     owner:isOwner,life:()=>({fishCollection:lifeRoom?.fishCollection?.()||[],fishDex:lifeRoom?.fishDex?.()||[],fishRecords:lifeRoom?.fishRecords?.()||{},rod:lifeRoom?.rod?.(),coins:lifeRoom?.fishingWallet?.()?.coins}),
-    name:id=>resolvedItem(id,'character')?.name||String(id).replace('room-character-',''),command:(type,payload)=>lifeRoom?.aquariumCommand?.(type,payload),refresh:()=>lifeRoom?.refresh?.()
+    name:id=>resolvedItem(id,'character')?.name||String(id).replace('room-character-',''),command:(type,payload)=>lifeRoom?.aquariumCommand?.(type,payload),refresh:()=>lifeRoom?.refresh?.(),prepareForge:findFrankyForForge
   });
-  window.OnePieceFishingJournal.open=id=>fishingJournal?.open(id);
-  const fishingJournalButton=window.OnePieceFishingJournal.createShortcuts((id,tab)=>fishingJournal?.open(id,tab));fishingJournalButton.hidden=true;
-  function syncJournalShortcuts(){const hidden=!visible||!isOwner();if(fishingJournalButton.hidden!==hidden)fishingJournalButton.hidden=hidden;}
+  if(window.OnePieceFishingJournal)window.OnePieceFishingJournal.open=(id,tab)=>fishingJournal?.open(id,tab);
+  function syncJournalShortcuts(){document.querySelector('.fishing-journal-dock')?.remove();}
   function sceneProducts() {
     const items = isOwner() ? roomItems('scene') : ownedProfileItems()
       .filter(item => item?.type === TYPES.scene.type && isValidProduct(item, TYPES.scene.type));
@@ -380,6 +487,7 @@
     }
   }
   function switchScene(id) {
+    cancelForgeVisit('已切換房間，取消這次強化委託。');
     if (!isOwner() || saving ||
         id !== DEFAULT_SCENE && !sceneProducts().some(item => item.id === id)) return;
     if (assignment) cancelAssignment();
@@ -642,6 +750,7 @@
     }
   }
   async function openCompanion(itemId, keyboard = false) {
+    cancelForgeVisit('已取消這次強化委託。');
     if (assignment) cancelAssignment();
     if (editing || !activeRoom().characters.some(entry => entry.itemId === itemId)) return;
     if (companionId === itemId && companionBusy) { renderCompanionPanel(); return; }
@@ -1041,7 +1150,7 @@
     return true;
   }
   function chooseDestination(walker) {
-    if (walker.attention) return;
+    if (walker.attention || residents.get(walker.item?.id)?.destination || forgeVisit?.ids.includes(walker.item?.id)) return;
     if (walker.dockOrigin) { walker.mode = 'undock'; walker.route = []; walker.pause = 0; return; }
     walker.mode = 'wander'; walker.route = []; walker.targetCell = null;
     const origin = walker.segmentCell || walker.cell;
@@ -1448,12 +1557,13 @@
       const startY = placed.anchor.y;
       node.style.left = `${startX / WIDTH * 100}%`;
       node.style.top = `${startY / HEIGHT * 100}%`;
-      const walker = { node, item, key: keyForCharacter(item), cell: placed.cell, x: startX, y: startY,
+      const walker = { node, item, sceneId:room.sceneId, key: keyForCharacter(item), cell: placed.cell, x: startX, y: startY,
         pause: Math.random() * 350, route: [], targetCell: null, mode: 'wander', pose: '',
         motion: locomotion?.createState(), motionArt: locomotion?.preload(keyForCharacter(item)),
         actionArt: locomotion?.preloadActions(keyForCharacter(item)) };
       keepSpeechInsideStage(walker);
       walkers.push(walker);
+      if(residents.get(item.id)?.arriving){node.classList.add('is-room-arriving');residents.get(item.id).arriving=false;}
       setPose(walker, 'idle');
       walker.motionArt?.promise.then(() => {
         if (walkers.includes(walker) && walker.pose === 'idle') setPose(walker, 'idle');
@@ -1466,6 +1576,7 @@
       chooseDestination(walker);
     }
     lifeRoom?.resume();
+    for(const walker of walkers){const r=residents.get(walker.item.id);if(r?.destination){const destination=r.destination;r.destination='';startRoomVisit(walker.item.id,destination);}}
     for (const walker of walkers) if (walker.item?.id === companionId) { holdCompanionAttention(walker); walker.node.classList.add('is-companion-selected'); }
     if (walkers.length) { nextInteractionAt = performance.now() + 1800; animationId = requestAnimationFrame(frame); }
   }
@@ -1539,6 +1650,7 @@
     sprite.src = furnitureView(item, rotation);
   }
   function renderStage() {
+    if(!editing)rememberResidents();
     stopAnimation();
     const room = activeRoom();
     renderedRevision = room.revision;
@@ -1809,6 +1921,7 @@
   }
   function render() { if(!isOwner())fishingJournal?.close();renderStage(); renderSceneSwitcher(); renderEditor(); renderCompanionPanel(); }
   async function openEditor() {
+    cancelForgeVisit('已進入佈置，取消這次委託。');
     if (!isOwner() || editing || saving) return;
     aquariumManager?.close();
     if (assignment) cancelAssignment();
@@ -1873,6 +1986,7 @@
     const changedOwner = nextAccount !== accountId || nextPreview !== preview || (profile?.userId || 0) !== (nextProfile?.userId || 0);
     const sameRoom = !changedOwner && JSON.stringify(profile?.room) === JSON.stringify(nextProfile?.room) && JSON.stringify(profile?.releasedCharacterIds) === JSON.stringify(nextProfile?.releasedCharacterIds);
     if (changedOwner) {
+      cancelForgeVisit('');residentSource='';residents.clear();
       viewEpoch++;
       clearTimeout(sceneSwitchTimer); sceneSwitchTimer = 0; displaySceneId = '';
     }
@@ -1888,7 +2002,7 @@
     if (sameRoom && !editing && $('roomCharacters').children.length) { renderEditor(); renderCompanionPanel(); }
     else render();
   }
-  function onVisible(panel) { visible = panel === 'profile';syncJournalShortcuts();if(!visible)fishingJournal?.close(); if (!visible) { closeCompanion(); aquariumManager?.close(); cancelAssignment(); } refreshAnimation(); }
+  function onVisible(panel) { visible = panel === 'profile';syncJournalShortcuts();if(!visible)fishingJournal?.close(); if (!visible) { cancelForgeVisit('');closeCompanion(); aquariumManager?.close(); cancelAssignment(); } refreshAnimation(); }
 
   $('roomEditToggle').onclick = () => editing ? closeEditor() : openEditor();
   $('roomCancel').onclick = closeEditor;
@@ -2050,11 +2164,19 @@
     event.preventDefault();
   });
   document.addEventListener('visibilitychange', refreshAnimation);
+  const visitClock=setInterval(()=>tickVisits(performance.now()),500);
+  window.addEventListener('pagehide',()=>{clearInterval(visitClock);cancelForgeVisit('');});
   motion.addEventListener?.('change', refreshAnimation);
   window.LauncherRoom = { setProfile, onVisible, openEditor, refreshCompanion, beginAssignment,
     onPurchase: (result, itemId) => lifeRoom?.onPurchase(result, itemId) };
   // Enabled only by the local QA harness, never by the packaged launcher.
   if (window.__LAUNCHER_ROOM_QA__ === true) window.__launcherRoomTest = {
+    openCompanion,
+    switchScene,
+    startRoomVisit,
+    tickVisits,
+    findFrankyForForge,
+    visits:()=>({residents:[...residents.values()].map(r=>({id:r.entry.itemId,sceneId:r.sceneId,destination:r.destination})),forge:forgeVisit&&{id:forgeVisit.id,phase:forgeVisit.phase,targetScene:forgeVisit.targetScene}}),
     hitAt: (x, y) => roomHitAt(x, y)?.dataset.roomKey || null,
     snapshot: () => ({ interaction: interaction && { type: interaction.type, phase: interaction.phase,
       sceneId: interaction.scene?.id, sceneCursor: interaction.scene?.cursor, pair: interaction.scene?.pair,

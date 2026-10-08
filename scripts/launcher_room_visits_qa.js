@@ -1,0 +1,57 @@
+'use strict';
+// Real room renderer, animation/BFS/controller with isolated account transport.
+const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
+const H=require('./launcher_life_integration_qa'),B=require('../server/launcher-fishing-balance'),E=require('../server/launcher-fishing-v5');
+const out='D:/Codex_QA/launcher-fishing-r45/visits',checks=[];fs.mkdirSync(out,{recursive:true});
+const pass=(name,v)=>{assert.ok(v,name);checks.push(name);};
+async function wait(page,test,ms=160000){for(let t=0;t<ms;t+=500){if(await page.evaluate(test))return;await H.advance(page,500);}throw Error('Timed out: '+await page.evaluate(()=>JSON.stringify({state:__launcherRoomTest.snapshot(),visits:__launcherRoomTest.visits(),status:document.getElementById('roomStatus').textContent})));}
+(async()=>{const browser=await H.chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});H.setBrowser(browser);
+try{for(const [label,width,height]of [['desktop',1440,900],['minimum',960,640]]){
+const {page,errors}=await H.create({owned:['luffy','franky','sanji'],enableRoomChat:true});await page.setViewportSize({width,height});
+await page.evaluate(profiles=>{
+ const f=__integration,db=f.db[42],p=db.profile,all=p.room.characters;
+ p.room.scenes={'room-scene-default':{placements:[],characters:all.filter(c=>c.itemId.endsWith('luffy'))},'room-scene-sunny-workshop':{placements:[],characters:all.filter(c=>c.itemId.endsWith('franky'))},'room-scene-sunny-deck':{placements:[],characters:all.filter(c=>c.itemId.endsWith('sanji'))}};
+ p.room.characters=p.room.scenes['room-scene-default'].characters;
+ p.collection.launcher.items=[{id:'room-scene-sunny-workshop',type:'room_scene',key:'sunny-workshop',name:'佛朗基工坊',asset:'opui://launcher/images/launcher_room/scenes/sunny-workshop.webp'},{id:'room-scene-sunny-deck',type:'room_scene',key:'sunny-deck',name:'千陽號甲板',asset:'opui://launcher/images/launcher_room/scenes/sunny-deck.webp'}];
+ db.life.fishingCoins=200;db.rod={characters:profiles};
+ const old=onePieceDesktop.commandLauncherLife;
+ onePieceDesktop.commandLauncherLife=async body=>{if(body.type==='fish.release'){f.calls.push(structuredClone(body));if(body.payload.disposition==='forge_start')return {...f.response(42),forge:{id:'test-forge',startedAt:new Date().toISOString(),hits:[]}};}return old(body);};
+ f.use(42);window.homeBefore=JSON.stringify(p.room.scenes);
+},Object.fromEntries(['luffy','franky','sanji'].map(k=>['room-character-'+k,{level:0,nextCost:20,stats:{...B.typedRodStats(0,k),performance:E.rodPerformance(0,k)}}])));
+await page.waitForFunction(()=>__launcherRoomTest.snapshot().walkers.every(w=>w.ready.length===4));
+pass(label+' no permanent journal buttons',await page.locator('.fishing-journal-dock').count()===0);
+await page.locator('[data-room-key="c:room-character-luffy"]').scrollIntoViewIfNeeded();await page.evaluate(()=>__launcherRoomTest.openCompanion('room-character-luffy'));await page.evaluate(()=>document.getElementById('roomLifeStatus').click());
+const rod=page.locator('[data-journal-tab=rods]');await rod.scrollIntoViewIfNeeded();
+await page.evaluate(()=>window.stableButton=document.querySelector('[data-journal-tab=rods]'));await H.advance(page,3500);
+pass(label+' detail button survives live refresh',await page.evaluate(()=>stableButton===document.querySelector('[data-journal-tab=rods]')&&stableButton.isConnected));
+await rod.hover();const box=await rod.boundingBox();await page.mouse.move(box.x+8,box.y+box.height/2);await page.mouse.down();
+pass(label+' detail opens on press before release',await page.locator('.fishing-journal').isVisible());await page.mouse.move(20,20);await page.mouse.up();
+pass(label+' only selected actor rod with no selector',await page.locator('.fishing-journal-character').count()===0&&(await page.locator('.fishing-rod-showcase').textContent()).includes('魯夫'));
+await page.locator('.fishing-journal-upgrade').click();pass(label+' trip starts without charging or starting forge',await page.evaluate(()=>__launcherRoomTest.visits().forge?.phase==='depart'&&!__integration.calls.some(c=>c.payload?.disposition==='forge_start')));
+await wait(page,()=>document.querySelector('.fishing-forge')!==null);
+pass(label+' finds Franky in workshop before forge',await page.evaluate(()=>__launcherRoomTest.visits().residents.find(r=>r.id==='room-character-luffy').sceneId==='room-scene-sunny-workshop'&&__integration.calls.filter(c=>c.payload?.disposition==='forge_start').length===1));
+await page.screenshot({path:path.join(out,label+'-forge.png')});await page.getByRole('button',{name:'關閉',exact:true}).click();
+pass(label+' visits preserve saved furniture and actor homes',await page.evaluate(()=>homeBefore===JSON.stringify(__integration.db[42].profile.room.scenes)));
+await page.evaluate(()=>{__launcherRoomTest.startRoomVisit('room-character-sanji','room-scene-sunny-workshop');});await H.advance(page,1000);
+pass(label+' offscreen resident enters visible room once',await page.evaluate(()=>__launcherRoomTest.visits().residents.find(r=>r.id==='room-character-sanji').sceneId==='room-scene-sunny-workshop'&&document.querySelectorAll('[data-room-key="c:room-character-sanji"]').length===1));
+await page.waitForFunction(()=>__launcherRoomTest.snapshot().walkers.every(w=>w.ready.length===4));
+await page.evaluate(()=>__launcherRoomTest.openCompanion('room-character-sanji'));await page.evaluate(()=>document.getElementById('roomLifeStatus').click());await page.locator('[data-journal-tab=dex]').click();
+pass(label+' own detail opens fish dex directly',(await page.locator('.fishing-journal-header').textContent()).includes('漁獲圖鑑'));
+await page.getByRole('button',{name:'個人釣竿',exact:true}).click();pass(label+' dex return remains Sanji own rod',(await page.locator('.fishing-rod-showcase').textContent()).includes('香吉士')&&await page.locator('.fishing-journal select').count()===0);
+await page.getByRole('button',{name:'關閉',exact:true}).click();await page.evaluate(()=>__launcherRoomTest.openCompanion('room-character-sanji'));
+await page.locator('#roomCompanionClose').click();
+await page.evaluate(()=>{for(const k of ['luffy','sanji','franky'])__launcherRoomTest.lifeCancel(k);});await H.advance(page,1000);
+pass(label+' characters can meet after changing rooms',await page.evaluate(()=>__launcherRoomTest.beginChat('luffy','sanji')));
+await H.advance(page,25000);await page.locator('#roomStage').screenshot({path:path.join(out,label+'-visitors.png')});
+await wait(page,()=>__launcherRoomTest.visits().residents.some(r=>r.destination));
+pass(label+' scheduled autonomous room visits use walking exit',await page.evaluate(()=>__launcherRoomTest.snapshot().walkers.some(w=>w.mode==='room-travel'&&w.route.length>0)));
+await page.evaluate(()=>{window.beforeTrip=__launcherRoomTest.visits().residents.map(r=>({id:r.id,sceneId:r.sceneId}));});
+await wait(page,()=>__launcherRoomTest.visits().residents.some(r=>r.sceneId!==beforeTrip.find(v=>v.id===r.id).sceneId));
+pass(label+' autonomous trip arrives in a different unlocked room',await page.evaluate(()=>new Set(__launcherRoomTest.visits().residents.map(r=>r.id)).size===3));
+await page.evaluate(()=>{const w=__launcherRoomTest.snapshot().walkers.find(w=>w.mode!=='room-travel');window.OnePieceFishingJournal.open('room-character-'+w.key);});await page.locator('.fishing-journal-upgrade').click();
+pass(label+' cancellation test has a real pending rendezvous',await page.evaluate(()=>Boolean(__launcherRoomTest.visits().forge)));
+await page.evaluate(()=>LauncherRoom.onVisible('library'));await H.advance(page,4000);
+pass(label+' leaving profile cancels trip without forge charge',await page.evaluate(()=>!__launcherRoomTest.visits().forge&&__integration.calls.filter(c=>c.payload?.disposition==='forge_start').length===1));
+assert.deepEqual(errors,[]);await page.close();
+}fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({status:'PASS',checks,scope:'Real Chromium room/BFS/live details; isolated account transport, no production account transaction'},null,2));console.log('PASS '+checks.length+' room visit checks');}finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

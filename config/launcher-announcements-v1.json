@@ -1,7 +1,32 @@
 {
   "schemaVersion": 1,
-  "revision": 57,
+  "revision": 58,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r45-room-visits",
+      "status": "published",
+      "publishedAt": "2026-10-08T09:43:33.995Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r45",
+      "title": "夥伴串門子，找佛朗基強化釣竿",
+      "summary": "從角色詳情查看自己的釣竿；夥伴會到其他已解鎖房間活動。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-room-visits-r45.webp",
+        "alt": "角色專屬釣竿書頁，取消切換選单，找佛朗基強化"
+      },
+      "body": [
+        "查看釣竿與魚圖鑑只在角色詳情裡出現，按下立即開啟，狀態刷新不再重建按鈕。",
+        "釣竿鎖定選取的角色，不再提供角色切換；魚圖鑑仍共用玩家的漁獲紀錄。",
+        "已放進基地的夥伴會從房間出口走到其他已解鎖房間，和當地夥伴接觸；工作與特定活動期間不串門子。",
+        "找佛朗基強化：請先將佛朗基邀請到任一房間，夥伴會前往、對話後開始原有敲擊挑戰；出發與对話階段不扣款，離開個人頁可取消。",
+        "佈置模式保留原本配置，串門子不改房間存檔。重新開啟啟動器套用差分更新。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r44-journal-layout",
       "status": "published",

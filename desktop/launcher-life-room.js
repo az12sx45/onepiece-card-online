@@ -17,7 +17,7 @@
   function create(env) {
     const api=root.onePieceDesktop;
     let controller=null,snapshot=null,serverLife=null,serverRoster=null,serverWallet=null,serverRod=null,serverFishOffers=[],scope='',epoch=0,requestSerial=0,pending=Promise.resolve();
-    let savedPositions=new Map(),savedRevision=-1,fetching=null,nextSync=0,lastTick=0,lastUi=0,manualBusy=false,manualKey='',panelKey='',suspending=false;
+    let savedPositions=new Map(),savedRevision=-1,savedScene='',fetching=null,nextSync=0,lastTick=0,lastUi=0,manualBusy=false,manualKey='',panelKey='',suspending=false;
     const taps=new Map();
     function walker(key){return env.walkers().find(w=>w.key===keyOf(key));}
     function owner(){return env.isOwner();}
@@ -57,7 +57,7 @@
       }
       return result;
     }
-    function world(){const owned=new Set(ownedIds());return{...roster(),ownedItemIds:[...owned],roomRevision:env.room().revision,stations:stations(),actors:env.walkers().filter(w=>owned.has(w.item.id)).map(w=>({key:w.key,itemId:w.item.id,cell:{...w.cell},moving:!w.attention&&(!!w.segmentCell||!!w.route.length||!!w.dockTravel),available:manualKey===w.key||!w.attention&&w.mode!=='focused'}))};}
+    function world(){const owned=new Set(ownedIds());return{...roster(),ownedItemIds:[...owned],roomRevision:env.room().revision,stations:stations(),actors:env.walkers().filter(w=>owned.has(w.item.id)).map(w=>({key:w.key,itemId:w.item.id,cell:{...w.cell},moving:!w.attention&&(!!w.segmentCell||!!w.route.length||!!w.dockTravel),available:!env.reservedForVisit?.(w.item.id)&&(manualKey===w.key||!w.attention&&w.mode!=='focused')}))};}
     function contextAt(now) {
       const sceneKey=String(env.room().sceneId||'room-scene-crew-cabin').replace(/^room-scene-/,'');
       const fish=serverLife?.fishCollection||profile()?.life?.fishCollection||[];
@@ -244,11 +244,12 @@
       if(env.walkers().length) {
         savedPositions=new Map(env.walkers().map(w=>[w.key,{cell:{...w.cell},x:w.x,y:w.y,segmentCell:w.segmentCell&&{...w.segmentCell},direction:w.motion?.direction}]));
         savedRevision=env.renderedRevision();
+        savedScene=env.walkers()[0]?.sceneId||env.room().sceneId;
       }
       controller?.pause();
     }
     function resume() {
-      if(savedRevision===env.room().revision&&!env.editing())for(const w of env.walkers()) {
+      if(savedRevision===env.room().revision&&savedScene===env.room().sceneId&&!env.editing())for(const w of env.walkers()) {
         const saved=savedPositions.get(w.key);if(saved)env.restoreWalker(w,saved);
       }
       ensureController();
@@ -333,21 +334,35 @@
       $('roomCompanionActions').hidden=false;
       $('roomCompanionTalk').hidden=!owner();
       for(const button of wrap.querySelectorAll('button')){button.hidden=button.id!=='roomLifeStatus'&&!owner();button.disabled=manualBusy||minigames?.active()||!actor||(button.id!=='roomLifeStatus'&&!owner());}
-      const details=$('roomLifeDetails');if(!actor){details.textContent='';syncPanelShell();return;}
+      const details=$('roomLifeDetails');if(!actor){details.textContent='';delete details.dataset.actor;syncPanelShell();return;}
       const needs=actor.needs||{};
       const values=[['精神',needs.energy],['飢餓',needs.hunger],['心情',needs.mood],['社交滿足',needs.social],['工作意願',needs.workMotivation]];
-      details.replaceChildren();
-      const heading=document.createElement('p');heading.textContent=STATE_NAMES[actor.state]||'自由活動';details.append(heading);
-      for(const [label,value] of values){const span=document.createElement('span');span.textContent=`${label} ${Math.round(Number(value)||0)}`;details.append(span);}
-      if(owner()){
-        const id='room-character-'+key,rod=serverRod?.characters?.[id];
-        const p=document.createElement('p');p.textContent=rod?`個人釣竿 +${rod.level} / +99 · 收線 ${Math.round(18+82*(rod.level/99)**2)}／秒 · 必殺 ${Math.round(600+17400*(rod.level/99)**1.7)}`:'個人釣竿資料讀取中';details.append(p);
-        const b=document.createElement('button');b.type='button';b.className='ghost-button';b.textContent='查看釣竿與魚圖鑑';b.onclick=()=>root.OnePieceFishingJournal?.open(id);details.append(b);
+      // Keep hit targets connected across controller ticks: replacing them between
+      // pointer-down and pointer-up prevented native click dispatch.
+      const detailKey=key+':'+owner();
+      if(details.dataset.actor!==detailKey){
+        details.dataset.actor=detailKey;details.replaceChildren();
+        const heading=document.createElement('p');heading.className='room-life-state';details.append(heading);
+        for(const [label]of values){const span=document.createElement('span');span.dataset.need=label;details.append(span);}
+        if(owner()){
+          const id=itemOf(key),p=document.createElement('p');p.className='room-life-rod-summary';details.append(p);
+          const actions=document.createElement('div');actions.className='room-life-journal-actions';
+          for(const [tab,label]of [['rods','查看釣竿'],['dex','魚圖鑑']]){
+            const b=document.createElement('button');b.type='button';b.className='ghost-button room-life-journal-button';b.dataset.journalTab=tab;b.textContent=label;
+            const open=()=>root.OnePieceFishingJournal?.open(id,tab);
+            b.onpointerdown=e=>{if(e.button!==0)return;e.preventDefault();e.stopImmediatePropagation();open();};
+            b.onclick=e=>{e.stopPropagation();if(e.detail===0)open();};actions.append(b);
+          }details.append(actions);
+          const cancel=document.createElement('button');cancel.type='button';cancel.className='ghost-button room-life-cancel-job';cancel.textContent='結束這次分工';cancel.onclick=()=>controller.cancel(key);details.append(cancel);
+        }
+        const memory=document.createElement('small');memory.className='room-life-memory';memory.textContent='還記得最近和夥伴一起度過的片刻。';details.append(memory);
       }
-      const task=snapshot.tasks.find(t=>t.key===key);
-      if(task?.jobId&&owner()){const cancel=document.createElement('button');cancel.type='button';cancel.className='ghost-button';cancel.textContent='結束這次分工';cancel.onclick=()=>controller.cancel(key);details.append(cancel);}
-      const memories=(actor.memories||[]).filter(m=>m.currentStrength>.15).slice(-2);
-      if(memories.length){const p=document.createElement('small');p.textContent='還記得最近和夥伴一起度過的片刻。';details.append(p);}
+      details.querySelector('.room-life-state').textContent=STATE_NAMES[actor.state]||'自由活動';
+      for(const [label,value]of values)details.querySelector('[data-need="'+label+'"]').textContent=`${label} ${Math.round(Number(value)||0)}`;
+      const p=details.querySelector('.room-life-rod-summary'),rod=serverRod?.characters?.[itemOf(key)];
+      if(p)p.textContent=rod?`個人釣竿 +${rod.level} / +99`:'個人釣竿資料讀取中';
+      const cancel=details.querySelector('.room-life-cancel-job');if(cancel)cancel.hidden=!snapshot.tasks.some(t=>t.key===key&&t.jobId);
+      details.querySelector('.room-life-memory').hidden=!(actor.memories||[]).some(m=>m.currentStrength>.15);
       syncPanelShell();
     }
     function showWorkChoices() {
@@ -437,6 +452,7 @@
     });
     return {setContext,suspend,resume,tick,animate,active,renderPanel,tapped,refresh,assignDestination,
       isBusy:key=>!!controller?.isBusy(key)||!!minigames?.active(),reservations:()=>controller?.reservations()||[],
+      isMinigameActive:()=>!!minigames?.active(),
       cancel:key=>controller?.cancel(key),onPurchase(result){if(!owner())return;accept(result);void refresh();},
       snapshot:()=>snapshot,controller:()=>controller,world,
       fishCollection:()=>serverLife?.fishCollection||profile()?.life?.fishCollection||[],
