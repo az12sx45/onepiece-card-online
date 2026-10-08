@@ -1850,3 +1850,5 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - 最終檢查發現耗盡體力後，animateFishingLanding只縮短讀值與標記，色條仍停在原長度；desktop/launcher-room-minigames.js現在同時更新色條寬度及魚距meter。新增瀏覽器檢查證明浮標向岸邊移動時色條縮短。r40圖稿、三流派與尺寸系統沿用；config公告附同一最終畫面。公開部署證據待完成。
 
 - r41驗證：57瀏覽器檢查（含拉回期間色條實際縮短）、82公告服務檢查通過。返回演出停用色條額外transition，與每幀浮標／標記／讀值保持一致。候選40→41僅下載新JS／CSS，92檔與二次零下載核對通過。
+
+- 2026-10-08 最終公開交付r41：source5e01ed04034911f773ceb6d229989b80a12674c7，公開manifest於2026-10-08T03:40:39.757Z核對SHA256 14412a152ab68eb78a1ff7619de19289598ace0777090f5ab1742ab414e7f1cd。先以相同簽章候選將實際cache38→41下載975103 bytes；公開後核對相同簽章及92檔，二次零下載通過。57畫面、14玩法、8本機/server重播、17技能分級、99隔離PGlite交易、82公告檢查通過；未執行正式玩家交易，未宣稱Render Live時間或DB日誌。證據D:/Codex_QA/launcher-fishing-r41/release-evidence.json；r39及r40由r41完整涵蓋。
