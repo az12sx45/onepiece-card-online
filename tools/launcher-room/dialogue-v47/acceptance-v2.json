@@ -1,5 +1,5 @@
 {
-  "status": "EDITORIAL_AND_TARGETED_RUNTIME_GATES_PASS_PUBLIC_PENDING",
+  "status": "EDITORIAL_AND_TARGETED_RUNTIME_GATES_PASS_PUBLIC_R48_VERIFIED",
   "sourceSha256": "744b6ce8fb701f83143c723af51b93f91d81d9216eae21ea2b5701ccafcf65dd",
   "reviewed": 394,
   "acceptedSolo": 273,
@@ -79,5 +79,6 @@
     "browser": "D:/Codex_QA/launcher-fishing-r47/dialogue-browser/report.json",
     "controller": "D:/Codex_QA/launcher-fishing-r47/dialogue/controller-report.json",
     "regression": "D:/Codex_QA/launcher-fishing-r47/life-regression/report.json"
-  }
+  },
+  "releaseEvidence": "D:/Codex_QA/launcher-fishing-r48/release-evidence.json"
 }

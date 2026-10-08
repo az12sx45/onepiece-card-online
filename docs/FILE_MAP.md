@@ -1833,3 +1833,5 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - scripts/launcher_life_dialogue_v47_qa.js：2111資料／條件與舊API對照斷言通過（含逐273句／29組與不在場、未解鎖、未知天候、非正式結果）；scripts/launcher_life_dialogue_v47_browser_qa.js：1440×900與960×640真Chromium／BFS／控制器／已解碼人物姿態，三輪原定顺序与接話、無經濟命令通過。25控制器測試、34房間訪問檢查與5既有生活流程回歸通過；本機npm start靜態HTTP200，資料庫未配置。自動QA不代表正式玩家交易或粉絲偏好全量驗收。公開交付待核對。
 
 - r48交付清單修正：build的預設inventory不包含原本core內建launcher-room-dialogue.js与launcher-life.js；這兩個已修改renderer必須明確--include，否則r47候選只有外層流程，不能宣稱新台詞已交付。最終以r48公開manifest與所有修改renderer SHA核對；r47 QA源碼仍適用，沒有新增功能或更改規則。
+
+- r48公開交付完成：source5a8777ad7647df7c2b9bff7193ba8886e542db24；10/08/2026 13:16:51核對公開revision48、SHA256 bc738ef3370251b42ac4dccbfe94ca1daa58efae22b1f5306729cf20446db15d。5個修改renderer全部列入manifest，6個變動blob公開HEAD/GET/size/SHA通過；實際cache46→48下載853113 bytes，112檔与二次零下載通過。QA與審稿在launcher-fishing-r47；2111選句／舊r46 API斷言、兩視窗三輪與全身姿態切換、25控制器、34房間與5生活回歸、82公告、npm start靜態HTTP200；非正式玩家帳號交易驗收，不宣稱39未製作動畫或原作引文。證據D:/Codex_QA/launcher-fishing-r48/release-evidence.json。
