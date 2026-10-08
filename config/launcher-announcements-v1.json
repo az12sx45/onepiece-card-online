@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 52,
+  "revision": 53,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r40-fishing-ui",
+      "status": "published",
+      "publishedAt": "2026-10-08T03:12:29.198Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r40",
+      "title": "看得清楚的魚距條與簡潔能量輪",
+      "summary": "魚距條加粗並移到前景，能量輪與技能圖示簡化。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-ui-r40.webp",
+        "alt": "加粗橘金魚距條與簡潔九格能量輪實際畫面"
+      },
+      "body": [
+        "魚距條移到竿圖上方，加粗並使用橘金高對比色；保留移動浮標，公尺數改在固定位置清楚顯示。",
+        "能量輪重畫成細框與簡單收線／拳頭閃電圖示，九格青綠能量沿外環表示，可用技能會亮起。",
+        "保留r39三種釣竿流派、爆拉收距、必殺扣體力、魚尺寸影響能力與售價，以及耗盡體力後拉回岸邊演出。重新開啟啟動器取得差分更新。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r39-fishing-types",
       "status": "published",

@@ -922,3 +922,22 @@
 .fishing-v5 .room-fishing-v4-sea[data-landing-return=true] .room-fishing-v5-rod{animation:room-fishing-burst-pulls .6s ease-in-out infinite}
 .fishing-v5 .room-fishing-v4-sea[data-landing-return=true] .room-fishing-v4-splash{opacity:1}
 .room-fishing-catch-length{font-size:24px;color:#ffe6a2}
+/* r40: expose remaining-distance rail above illustration and simplify the energy wheel. */
+.fishing-v5 .room-fishing-v5-position{z-index:3}
+.fishing-v5 .room-fishing-v5-catch-track{top:36.4%;height:clamp(7px,1.3cqw,10px);border:1px solid #052537;border-radius:5px;background:#061f2ee8;box-shadow:0 0 0 1px #dcf6f4a6;overflow:hidden}
+.fishing-v5 .room-fishing-v5-catch-rail{background:transparent;border-radius:4px;overflow:hidden}
+.fishing-v5 .room-fishing-v5-catch-fill{background:linear-gradient(#fff1a2,#ffb43d 45%,#ee8d20);box-shadow:0 0 6px #ffc04b;border-radius:3px}
+.fishing-v5 .room-fishing-v5-rail-marker{filter:drop-shadow(0 0 3px #fff7c4)}
+.fishing-v5 .room-fishing-v5-catch-label{left:auto;right:8%;top:44%;width:23%;text-align:right;text-shadow:0 2px 2px #001722,1px 0 #001722,-1px 0 #001722}
+.fishing-v5 .room-fishing-v5-catch-label>span{display:inline;font-size:11px;color:#f3f6e7;margin-right:5px}
+.fishing-v5 .room-fishing-v5-catch-label strong{display:inline;font-size:clamp(17px,2.8cqw,23px);color:#fff7bd}
+.fishing-v5 .room-fishing-power-panel{background-image:url('opui://launcher/images/launcher_room/fishing_ui_r40/energy-frame.webp');width:clamp(148px,16cqw,205px)}
+.fishing-v5 .room-fishing-power-charge i{background:conic-gradient(from -18deg,#071f36b8 0deg 35deg,transparent 35deg 360deg);mask:radial-gradient(closest-side,transparent 70%,#000 71% 86%,transparent 87%)}
+.fishing-v5 .room-fishing-power-charge i[data-full=true]{background:conic-gradient(from -18deg,#b4fff1 0deg,#40dbc1 35deg,transparent 35deg 360deg);filter:drop-shadow(0 0 2px #73ffe0)}
+.fishing-v5 .room-fishing-power-panel button{left:20%;top:29%;width:30%;height:44%;filter:drop-shadow(0 0 3px #71ffd7)}
+.fishing-v5 .room-fishing-power-panel .room-fishing-special{left:51%}
+.fishing-v5 .room-fishing-power-panel button img{width:100%;height:85%;object-fit:contain}
+.fishing-v5 .room-fishing-power-panel button kbd{bottom:-3%;font-size:14px}
+.fishing-v5 .room-fishing-v5-catch-fill{opacity:1;mix-blend-mode:normal}
+.fishing-v5 .room-fishing-power-charge i{mask:radial-gradient(closest-side,transparent 74%,#000 75% 85%,transparent 86%)}
+.fishing-v5 .room-fishing-v5-catch-label{top:55%}

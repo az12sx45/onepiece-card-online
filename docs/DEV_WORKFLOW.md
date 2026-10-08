@@ -8099,3 +8099,8 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - 驗證：14玩法檢查、8本機/server重播一致、17必殺速度分級、99 PGlite交易／強化／尺寸售價、50桌機1440x900與最小960x640畫面檢查、82公告服務檢查，npm start靜態HTTP200。未執行正式玩家交易，公開部署證據待完成。圖稿來源與匯出記錄tools/launcher-room/fishing-ui-r39/provenance.json。
 
 - 相容性補充：新版start帶fishingRulesVersion39，server僅讓明確新版使用三流派／九格／雙捕獲規則；舊客戶端與既有场次保留原規則。原生bridge泛用payload允許此欄位且仍低於2048字元，不需重装核心。
+
+### 2026-10-08 r40 魚距條與能量UI修正
+- 使用者回饋能量介面醜、魚距條不明顯；desktop/launcher-room-minigames.js/css改用簡潔生成圖示與細框，圖稿public/images/launcher_room/fishing_ui_r40/，來源tools/launcher-room/fishing-ui-r40/provenance.json；舊失敗atlas已刪，884176 bytes，最終圖稿保留。
+- 魚距條由竿圖下移到前景z3、至少7px，橘金色、取消screen混色與半透明，移動標記保留，固定魚距讀值避免與拉力表互蓋。能量輪縮至148至205px，九格青綠色帶对齐生成框，中央使用較大簡單收線／拳頭閃電圖。
+- scripts/launcher_fishing_v5_browser_qa.js新增距離條層次／厚度／對比與圖示來源檢查，56桌機／最小桌機、本機技能／server重播／拉回演出檢查通過，npm start靜態HTTP200。r39的14玩法、8本機重播、17技能分級、99 PGlite交易及82公告檢查仍為本輪實際證據；公開r39manifest已核對，r40公开与实际cache交付待完成。

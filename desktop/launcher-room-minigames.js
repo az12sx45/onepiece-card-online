@@ -1121,7 +1121,7 @@
       const burst=button('C 爆拉 · 3格',()=>void sendFishingPower('burst'),'room-fishing-burst');
       const special=button('X 必殺技 · 6格',()=>void sendFishingPower('special'),'room-fishing-special');
       burst.textContent='';burst.setAttribute('aria-label','C 爆拉，消耗3格能量');burst.title='C 爆拉';special.textContent='';special.setAttribute('aria-label','X 必殺技，消耗6格能量');special.title='X 必殺技';
-      for(const [b,name,key] of [[burst,'burst','C'],[special,'special','X']]){const icon=node('img');icon.src=ASSET+'fishing_ui_r39/'+name+'.webp';icon.alt='';b.append(icon,node('kbd','',key));}
+      for(const [b,name,key] of [[burst,'burst','C'],[special,'special','X']]){const icon=node('img');icon.src=ASSET+'fishing_ui_r40/'+name+'.webp';icon.alt='';b.append(icon,node('kbd','',key));}
       powerPanel.append(node('small','room-fishing-tier'),stamina,powerCharge,burst,special);
       sea.append(node('div','room-fishing-damage-layer'));
       const rhythm=node('div','room-fishing-rhythm');rhythm.hidden=true;
@@ -1144,7 +1144,7 @@
         const strengthCopy=node('div','room-fishing-v5-strength-copy');strengthCopy.append(node('span','','魚線耐力'),node('strong','room-fishing-v5-pressure-value','100%'),node('small','room-fishing-v5-strength-value','0% 斷線'));strengthBox.append(dial,strengthCopy);
         const pullArc=node('div','room-fishing-v5-pull-arc');pullArc.setAttribute('role','meter');pullArc.setAttribute('aria-label','魚的拉力等級');pullArc.setAttribute('aria-valuemin','0');pullArc.setAttribute('aria-valuemax','3');pullArc.append(node('span','room-fishing-v5-pull-arc-band'),node('span','room-fishing-v5-pull-needle'),node('strong','room-fishing-v5-force-value','平穩'));
         const position=node('div','room-fishing-v5-position');
-        const catchLabel=node('div','room-fishing-v5-catch-label');catchLabel.append(node('span','','剩餘魚距'),node('strong','room-fishing-v5-distance','0.0 m'));
+        const catchLabel=node('div','room-fishing-v5-catch-label');catchLabel.append(node('span','','魚距'),node('strong','room-fishing-v5-distance','0.0 m'));
         const catchTrack=node('div','room-fishing-v5-catch-track');catchTrack.setAttribute('role','meter');catchTrack.setAttribute('aria-label','剩餘魚距');catchTrack.setAttribute('aria-valuemin','0');catchTrack.setAttribute('aria-valuemax','100');const catchRail=node('span','room-fishing-v5-catch-rail');catchRail.append(node('span','room-fishing-v5-catch-fill'));for(let index=1;index<10;index++){const guide=node('span','room-fishing-v5-guide');guide.style.setProperty('--guide',String(index));catchRail.append(guide);}catchRail.append(node('span','room-fishing-v5-rail-marker'));catchTrack.append(node('span','room-fishing-v5-boat','船'),catchRail,node('span','room-fishing-v5-fish-end','魚'));
         position.append(catchLabel,catchTrack);
         position.append(catchRail.querySelector('.room-fishing-v5-rail-marker'));hud.append(strengthBox,pullArc,position,crankLayer);hud.setAttribute('aria-label','Wii風格釣竿表：魚線耐力、拉力、魚距與必殺能量');fishingV5Hud=hud;
