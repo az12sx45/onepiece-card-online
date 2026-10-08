@@ -3,12 +3,12 @@
   "revision": 60,
   "announcements": [
     {
-      "id": "launcher-1.2.23-r49-room-doors",
+      "id": "launcher-1.2.23-r50-room-doors",
       "status": "published",
-      "publishedAt": "2026-10-08T14:23:11.401Z",
+      "publishedAt": "2026-10-08T14:34:13.724Z",
       "scope": "launcher",
       "category": "update",
-      "version": "1.2.23 r49",
+      "version": "1.2.23 r50",
       "title": "從船艙的門進出吧！",
       "summary": "夥伴走到背景門前，開門後直接從黑色門洞出現或離開。",
       "image": {

@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 49,
-  "publishedAt": "2026-10-08T14:23:14.711Z",
+  "revision": 50,
+  "publishedAt": "2026-10-08T14:35:56.072Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -560,8 +560,8 @@
     },
     {
       "path": "launcher-room.css",
-      "bytes": 29058,
-      "sha256": "ddec6c2bcb7eb0ea1d52eeb2ad08a5f406d8eceffde3717ebe0a83d3dd5d8994"
+      "bytes": 29118,
+      "sha256": "c7cc63db89742ba6eb46043b2e17a14bd96df844f3cadc70de7532f2cb57bbc8"
     },
     {
       "path": "launcher-room.js",
@@ -577,6 +577,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "3bJwWOBxY/dtTAfOpKD27mQEk+JyuPqO73ZO/m6399K+dg0ybgEXktksqm09zMPBl8XFoUSg3+00hlEGH7c5DQ=="
+    "value": "bu8vyKNdZ91EJN9yW8evV/nea4MEZt5BnhdND0sUc6GSYWBX4AowGQi4nGfostVOvNla1CY9fYFYdvss8jvEAg=="
   }
 }

@@ -2765,3 +2765,5 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - 出房抵達門前後開門350ms再消失；入房先開門，至少250ms与完整人物素材ready後直接顯示，不用淡入。frame与500ms tick均有revealed進度保障；門約1200ms自動關閉。找佛朗基等待入門顯示後才繼續；取消委託或選角色清除doorExitAt，編輯／場景切換不留下舊門洞。
 - desktop/launcher-life-room.js：新角色購買進場改env.doorEntry／openArrivalDoor，抵達判定包含doorRevealAt，ack不會早於角色顯示。使用既有門圖作CSS材質，无新作圖／角色素材。
 - scripts/launcher_room_visits_qa.js增加可配置輸出，38項兩視窗流程含門前格子、純黑門洞与原畫中心對齊、新進場唯一角色與強化；scripts/launcher_life_integration_qa.js更新舊side-entry斷言為真實door-entry，arrival-once／訪客唯讀／編輯工作釋放3項通過。圖片D:/Codex_QA/launcher-fishing-r49/visits/desktop-door-arrival.png已檢視。npm start靜態HTTP200，資料庫未配置；未宣稱正式玩家帳號交易驗收。附圖公告與差分交付待核對。
+
+- r50最終可見性修正：實際Chromium核對到room-character-shell的display:block蓋過HTML hidden；新增[hidden] display:none!important，確保角色不是在開門前已露出。r49門口／路徑測試結果仍保留，r50重測進場與可見性後再核對交付。

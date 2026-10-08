@@ -209,3 +209,5 @@
 .room-painted-door.is-open .room-door-leaf { transform:rotateY(-88deg); }
 .room-character-shell.is-room-departing { opacity:1; transition:none; }
 .room-character-shell.is-room-arriving { animation:none; }
+
+.room-character-shell[hidden] { display:none!important; }
