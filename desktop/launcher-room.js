@@ -340,7 +340,8 @@
     name:id=>resolvedItem(id,'character')?.name||String(id).replace('room-character-',''),command:(type,payload)=>lifeRoom?.aquariumCommand?.(type,payload),refresh:()=>lifeRoom?.refresh?.()
   });
   window.OnePieceFishingJournal.open=id=>fishingJournal?.open(id);
-  const fishingJournalButton=window.OnePieceFishingJournal.createShortcuts((id,tab)=>fishingJournal?.open(id,tab));document.querySelector('#profilePanel')?.append(fishingJournalButton);
+  const fishingJournalButton=window.OnePieceFishingJournal.createShortcuts((id,tab)=>fishingJournal?.open(id,tab));fishingJournalButton.hidden=true;
+  function syncJournalShortcuts(){const hidden=!visible||!isOwner();if(fishingJournalButton.hidden!==hidden)fishingJournalButton.hidden=hidden;}
   function sceneProducts() {
     const items = isOwner() ? roomItems('scene') : ownedProfileItems()
       .filter(item => item?.type === TYPES.scene.type && isValidProduct(item, TYPES.scene.type));
@@ -1806,7 +1807,7 @@
     $('roomCancel').disabled = saving;
     if (editing) { renderEditorTabs(); renderEditorItems(); renderSelection(); }
   }
-  function render() { fishingJournalButton.hidden=!isOwner();if(!isOwner())fishingJournal?.close();renderStage(); renderSceneSwitcher(); renderEditor(); renderCompanionPanel(); }
+  function render() { if(!isOwner())fishingJournal?.close();renderStage(); renderSceneSwitcher(); renderEditor(); renderCompanionPanel(); }
   async function openEditor() {
     if (!isOwner() || editing || saving) return;
     aquariumManager?.close();
@@ -1876,7 +1877,7 @@
       clearTimeout(sceneSwitchTimer); sceneSwitchTimer = 0; displaySceneId = '';
     }
     if (changedOwner) { closeCompanion(); aquariumManager?.close(); companionStats.clear(); pairHistory.clear(); }
-    profile = nextProfile || null; accountId = nextAccount; preview = nextPreview;
+    profile = nextProfile || null; accountId = nextAccount; preview = nextPreview;syncJournalShortcuts();
     if (assignment && (changedOwner || !isOwner() || assignment.sceneId !== activeRoom().sceneId ||
         !activeRoom().characters.some(entry => entry.itemId === assignment.itemId))) cancelAssignment();
     if (changedOwner || !isOwner()) {
@@ -1887,7 +1888,7 @@
     if (sameRoom && !editing && $('roomCharacters').children.length) { renderEditor(); renderCompanionPanel(); }
     else render();
   }
-  function onVisible(panel) { visible = panel === 'profile'; if (!visible) { closeCompanion(); aquariumManager?.close(); cancelAssignment(); } refreshAnimation(); }
+  function onVisible(panel) { visible = panel === 'profile';syncJournalShortcuts();if(!visible)fishingJournal?.close(); if (!visible) { closeCompanion(); aquariumManager?.close(); cancelAssignment(); } refreshAnimation(); }
 
   $('roomEditToggle').onclick = () => editing ? closeEditor() : openEditor();
   $('roomCancel').onclick = closeEditor;

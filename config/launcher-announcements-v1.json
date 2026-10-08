@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 55,
+  "revision": 56,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r43-rod-catalog",
+      "status": "published",
+      "publishedAt": "2026-10-08T07:34:46.372Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r43",
+      "title": "角色釣竿商品展示圖與穩定圖鑑入口",
+      "summary": "13位角色釣竿重新繪成完整側面廣告圖，可點擊放大。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-rod-catalog-r43.webp",
+        "alt": "魯夫釣竿完整商品廣告展示"
+      },
+      "body": [
+        "釣竿與魚圖鑑入口移到獨立固定區，顯示狀態只在個人頁與主人切換時更新，取消會造成位置與畫面變化的hover動畫。",
+        "圖鑑按鈕移入時保留原本繪製圖稿，修正通用hover樣式蓋成黑底的問題。",
+        "13位已開放角色各有全新完整側面釣竿展示圖，依角色配色与主題逐張生成，捲線器與手把完整連接；點圖可放大看細節。",
+        "圖鑑背景、能力數值與遊戲內釣竿仍保留，這次更新展示圖與操作介面。重新啟動啟動器套用差分。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r42-rod-journal",
       "status": "published",

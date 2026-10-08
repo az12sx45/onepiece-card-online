@@ -423,13 +423,13 @@
   const ASSET='opui://launcher/images/launcher_room/fishing_ui_r29/';
   const el=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls||'';if(text!==undefined)n.textContent=text;return n;};
   function create(env){
-    let layer,card,tab='rods',selected='',page=0,selectedSpecies='',forge=null,busy=false,frame=0,clock=0,feedback='',previousFocus;
+    let artworkLayer,layer,card,tab='rods',selected='',page=0,selectedSpecies='',forge=null,busy=false,frame=0,clock=0,feedback='',previousFocus;
     function button(text,fn){const b=el('button','ghost-button',text);b.type='button';b.onclick=fn;return b;}
     window.addEventListener('keydown',e=>{
       if(!layer?.isConnected||!forge||!(e.code==='Space'||e.key===' '))return;
       e.preventDefault();e.stopImmediatePropagation();if(!e.repeat)void tapForge();
     },true);
-    function close(){if(busy)return;cancelAnimationFrame(frame);forge=null;layer?.remove();layer=null;previousFocus?.focus?.();}
+    function close(){if(busy)return;artworkLayer?.remove();artworkLayer=null;cancelAnimationFrame(frame);forge=null;layer?.remove();layer=null;previousFocus?.focus?.();}
     function picture(src,alt,cls){const n=el('img',cls);n.src=src;n.alt=alt;n.draggable=false;return n;}
     function open(id,initialTab=null){
       if(!env.owner())return;
@@ -467,6 +467,10 @@
     }
     const spotNames={shore:'近岸水流',reef:'珊瑚礁邊',deep:'外海深水',freshwater:'淡水池',magma:'熔岩潭',rainbow:'虹色水域'},baitNames={worm:'蟲餌',shrimp:'蝦餌',lure:'亮片擬餌'};
     const capturePlace=c=>`${spotNames[c?.spotId]||'海域未記錄'} · ${baitNames[c?.baitId]||'魚餌未記錄'}`;
+    function showRodArt(src,name){
+      artworkLayer?.remove();const view=el('section','fishing-rod-preview');view.setAttribute('role','dialog');view.setAttribute('aria-modal','true');view.setAttribute('aria-label',name+'釣竿完整展示');
+      const header=el('header','fishing-rod-preview-header'),dismiss=button('關閉展示',()=>{view.remove();artworkLayer=null;card?.querySelector('.fishing-journal-rod')?.focus();});header.append(el('h2','',name+' · 釣竿展示'),dismiss);view.append(header,picture(src,name+'的完整釣竿設計圖','fishing-rod-preview-image'));view.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();dismiss.click();}if(e.key==='Tab'){e.preventDefault();dismiss.focus();}};artworkLayer=view;document.body.append(view);dismiss.focus({preventScroll:true});
+    }
     function recordDetails(content,id,records){
       const back=button('‹ 返回圖鑑',()=>{selectedSpecies='';render();card.querySelector('[data-species-id="'+id+'"]')?.focus();});back.classList.add('fishing-dex-back');const hero=el('div','fishing-dex-detail-hero');hero.append(picture(window.OnePieceRoomAquarium.fishArt(id),window.OnePieceRoomAquarium.species[id],'fishing-dex-detail-fish'));content.append(hero);const panel=el('section','fishing-dex-records');panel.setAttribute('aria-label','漁獲尺寸與釣點紀錄');panel.append(el('h3','',window.OnePieceRoomAquarium.species[id]));
       const record=records[id];
@@ -495,7 +499,9 @@
       const selector=el('select','fishing-journal-character');selector.setAttribute('aria-label','角色釣竿');for(const id of ids){const o=el('option','',env.name(id));o.value=id;selector.append(o);}selector.value=selected;selector.disabled=busy||Boolean(forge);selector.onchange=()=>{selected=selector.value;feedback='';render();};const controls=el('div','fishing-rod-controls');const field=el('div','fishing-rod-selector-field'),label=el('label','','夥伴');selector.id='fishingJournalCharacter';label.htmlFor=selector.id;field.append(label,selector);controls.append(field,el('strong','fishing-rod-wallet','釣魚金幣 '+(data.coins??'—')));content.append(controls);
       const item=rod?.characters?.[selected];if(!item){content.append(el('p','','正在讀取釣竿資料…'));return;}
       const key=selected.replace('room-character-',''),level=item.level;
-      const overview=el('div','fishing-rod-overview');const rodArt=el('div','fishing-journal-rod');const keys=['luffy','zoro','nami','usopp','sanji','chopper','robin','franky','brook','jinbe','ace','sabo','law'];const slot=Math.max(0,keys.indexOf(key));rodArt.style.backgroundPosition=`${slot%4*100/3}% ${Math.floor(slot/4)*25}%`;rodArt.setAttribute('role','img');rodArt.setAttribute('aria-label',env.name(selected)+'的釣竿');const showcase=el('section','fishing-rod-showcase');showcase.append(el('h3','',env.name(selected)),el('p','fishing-rod-level',`+${level} / +99 · ${item.stats?.label||'資料讀取中'}`),rodArt);overview.append(showcase);
+      const overview=el('div','fishing-rod-overview'),rodArt=el('div','fishing-journal-rod'),keys=['luffy','zoro','nami','usopp','sanji','chopper','robin','franky','brook','jinbe','ace','sabo','law'];
+      if(keys.includes(key)){const src='opui://launcher/images/launcher_room/fishing_rod_catalog_r43/'+key+'.webp';rodArt.append(picture(src,env.name(selected)+'的釣竿商品展示圖','fishing-journal-rod-image'));rodArt.setAttribute('role','button');rodArt.setAttribute('aria-label','放大'+env.name(selected)+'釣竿展示圖');rodArt.tabIndex=0;rodArt.onclick=()=>showRodArt(src,env.name(selected));rodArt.onkeydown=e=>{if(e.key==='Enter'||e.code==='Space'){e.preventDefault();e.stopPropagation();rodArt.click();}};}else rodArt.append(el('span','','展示圖準備中'));
+      const showcase=el('section','fishing-rod-showcase');showcase.append(el('h3','',env.name(selected)),el('p','fishing-rod-level',`+${level} / +99 · ${item.stats?.label||'資料讀取中'}`),rodArt);overview.append(showcase);
       const values=item.stats,perf=values?.performance,stats=el('div','fishing-rod-stats');
       stats.setAttribute('aria-label','釣竿能力詳細數值');
       const metrics=el('dl','fishing-rod-metrics');const metric=(label,value,key)=>{const row=el('div','fishing-rod-metric');row.dataset.stat=key;row.append(el('dt','',label),el('dd','',value));metrics.append(row);};
@@ -523,7 +529,7 @@
     const dock=el('nav','fishing-journal-dock');dock.setAttribute('aria-label','釣竿與魚圖鑑快捷入口');
     for(const [tab,label,art]of [['rods','釣竿・強化','fishing_v2/rod.webp'],['dex','魚圖鑑','fishing_ui_r30/journal-button.webp']]){
       const b=el('button','fishing-journal-shortcut fishing-journal-shortcut-'+tab);b.type='button';b.setAttribute('aria-label','開啟'+label);const icon=el('img');icon.src='opui://launcher/images/launcher_room/'+art;icon.alt='';icon.draggable=false;b.append(icon,el('span','',label));b.onpointerdown=e=>e.stopPropagation();b.onclick=e=>{e.stopPropagation();open(null,tab);};dock.append(b);
-    }return dock;
+    }dock.hidden=true;document.body.append(dock);return dock;
   }
   window.OnePieceFishingJournal={create,createShortcuts};
 })();
