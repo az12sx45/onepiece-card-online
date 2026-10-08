@@ -1912,3 +1912,5 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - animateFishingLanding逐frame沿實際顯示距離的smoothstep收回速度呼叫同一updateFishingV5Reel，讓上層儀表手把／輪盤与釣竿atlas手把繼續正向轉動。landingRate只有phase landing与landingReturn=true才生效，保留失焦、hidden、確認視窗暫停條件；技能演出與本機terminal仍暫停，只有技能完畢後回岸才恢復。
 - 持續fishingMotorAudio的既有reel音檔與機械聲，回岸後停止reel／lineOut。未改嵌入本機引擎、魚／竿能力、判定、經濟或存檔資料。
 - scripts/launcher_fishing_v5_browser_qa.js local分支61項真Chromium檢查通過，新增力竭字樣、回岸handle transform改變、reel音檔loop與volume>0.1、到岸後paused；保留必殺先顯示扣血、距離回收／fill與一次結算檢查。D:/Codex_QA/launcher-fishing-r51/browser-final；npm start静態HTTP200，資料庫未配置。附圖公告，差分公開交付待核對。
+
+- r51公開交付完成：source944ae718c57b250ccc7970fa0fa116f1889dd5f7；10/08/2026 15:33:27確認公開revision51與SHA256 94d6bc2133f712c4024c69a9a052bb77f2e72df5a253caef1d145a0e5073e65b。兩個修改renderer列入manifest，3個變動blob公開HEAD/GET/size/SHA通過。實際cache50→51下載678241 bytes，114檔与二次零下載通過；219檔更新快取備份。61釣魚瀏覽器檢查、82公告与npm start靜態HTTP200通過；非正式玩家交易或音質偏好驗收。證據D:/Codex_QA/launcher-fishing-r51/release-evidence.json。
