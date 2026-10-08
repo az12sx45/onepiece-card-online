@@ -942,3 +942,5 @@
 .fishing-v5 .room-fishing-power-charge i{mask:radial-gradient(closest-side,transparent 74%,#000 75% 85%,transparent 86%)}
 .fishing-v5 .room-fishing-v5-catch-label{top:55%}
 .fishing-v5 .room-fishing-v4-sea[data-landing-return=true] .room-fishing-v5-catch-fill{transition:none}
+
+.room-fishing-exhausted { position:absolute; z-index:18; top:14%; left:50%; transform:translateX(-50%); color:#ffe6a5; font-size:clamp(20px,2.5vw,32px); text-shadow:0 2px 4px #00141f,0 0 12px #00141f; pointer-events:none; white-space:nowrap; }

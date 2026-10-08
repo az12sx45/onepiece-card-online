@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 60,
+  "revision": 61,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r51-exhausted-reel",
+      "status": "published",
+      "publishedAt": "2026-10-08T15:21:12.949Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r51",
+      "title": "魚已力竭！把牠捲回岸邊",
+      "summary": "力竭提示與拉回岸邊的捲線音效、手把轉動接上完整流程。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-exhausted-r51.webp",
+        "alt": "魚已力竭提示，魚距隨自動收線逐步縮短"
+      },
+      "body": [
+        "魚體力耗光時顯示「魚已力竭」，必殺技仍先呈現命中與體力耗盡，再開始拉回。",
+        "自動拉回岸邊時，儀表捲線器與釣竿手把繼續轉動，持續播放既有收線循環音效與機械聲；回岸後停止。",
+        "移除力竭時殘留的收線助力提示，避免文字重疊。",
+        "魚距、水面位置、距離條與收線呈現同步；沒有更改釣魚判定、魚體力、釣竿能力或獎勵。重新開啟啟動器套用差分。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r50-room-doors",
       "status": "published",

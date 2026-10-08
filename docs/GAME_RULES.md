@@ -1906,3 +1906,9 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - r50最終可見性修正：實際Chromium核對到room-character-shell的display:block蓋過HTML hidden；新增[hidden] display:none!important，確保角色不是在開門前已露出。r49門口／路徑測試結果仍保留，r50重測進場與可見性後再核對交付。
 
 - r50公開交付完成：source9105d497f90394511252c9a308d443bd78c8a669；10/08/2026 14:47:14核對公開revision50與SHA256 0b174900ecb8f956a2abbab509fa65e978ae228bd3d4470f1593c756c90df97b。3個修改renderer全部在manifest，公開blob HEAD/GET/size/SHA通過；實際cache48→50下載297800 bytes，113檔与二次零下載通過。40項房間檢查含hidden實際display:none、3生活流程回歸与82公告、npm start靜態HTTP200通過；r49快取備份215檔。證據D:/Codex_QA/launcher-fishing-r50/release-evidence.json。未宣稱正式玩家交易驗收；無新增作圖或存檔欄位。
+
+### 2026-10-08 r51 力竭與回岸捲線呈現
+- desktop/launcher-room-minigames.js/css：shownStamina確實歸零時showFishExhausted加入「魚已力竭」status，隱藏舊assist避免重疊；距離勝利但魚體力尚有時不冒稱力竭。
+- animateFishingLanding逐frame沿實際顯示距離的smoothstep收回速度呼叫同一updateFishingV5Reel，讓上層儀表手把／輪盤与釣竿atlas手把繼續正向轉動。landingRate只有phase landing与landingReturn=true才生效，保留失焦、hidden、確認視窗暫停條件；技能演出與本機terminal仍暫停，只有技能完畢後回岸才恢復。
+- 持續fishingMotorAudio的既有reel音檔與機械聲，回岸後停止reel／lineOut。未改嵌入本機引擎、魚／竿能力、判定、經濟或存檔資料。
+- scripts/launcher_fishing_v5_browser_qa.js local分支61項真Chromium檢查通過，新增力竭字樣、回岸handle transform改變、reel音檔loop與volume>0.1、到岸後paused；保留必殺先顯示扣血、距離回收／fill與一次結算檢查。D:/Codex_QA/launcher-fishing-r51/browser-final；npm start静態HTTP200，資料庫未配置。附圖公告，差分公開交付待核對。
