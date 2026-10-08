@@ -2744,3 +2744,5 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - scripts/launcher_room_visits_qa.js：30項真Chromium／BFS／控制器fixture檢查，1440×900與960×640包含詳情按鈕3.5秒不被替換、實際pointerdown、專屬竿、跨房強化、同房相遇、自動出口步行與到達、真實待辦取消；原始scenes不變。scripts/launcher_fishing_journal_qa.js改為角色入口，110項圖鑑／版面／強化檢查通過。scripts/launcher_life_integration_qa.js納入真實圖鑑資源，5項既有位置／工作事件／訪客唯讀／遲到帳號回覆／編輯工作釋放通過。公開交付待核對。
 
 - r46交付修正：取消強化委託同時清除角色跨房目的地與離房標示，保留正在走的單一地板段，避免點選角色後仍換房；待辦取消後60秒再恢復自主串門子。r45曾推送候選，最終以r46核對公開交付。scripts/launcher_room_visits_qa.js新增取消出發目的地与未開始forge的檢查。
+
+- r46公開交付：source21e98f56d1aa08749b9e3d904d62ca423a493197；10/08/2026 11:29:25確認公開revision46與SHA256 efc91d14607317cf06a7fcd934f87f1023f213a462ac5c74d0de5bd511e7de11。實際cache44→46下載389834 bytes，109檔與二次零下載通過。34房間、110圖鑑、5既有生活流程、82公告與npm start靜態HTTP200通過；未宣稱正式帳號交易驗收或Render Live時間。證據D:/Codex_QA/launcher-fishing-r46/release-evidence.json；前置QA在launcher-fishing-r45。LATTICE工具未提供，未宣稱任務或圖譜寫入。
