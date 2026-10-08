@@ -3,12 +3,12 @@
   "revision": 59,
   "announcements": [
     {
-      "id": "launcher-1.2.23-r47-life-dialogue",
+      "id": "launcher-1.2.23-r48-life-dialogue",
       "status": "published",
-      "publishedAt": "2026-10-08T12:51:42.952Z",
+      "publishedAt": "2026-10-08T12:57:50.940Z",
       "scope": "launcher",
       "category": "update",
-      "version": "1.2.23 r47",
+      "version": "1.2.23 r48",
       "title": "船上的日常，多聊幾句吧！",
       "summary": "13位夥伴新增273條情境短句與29組三輪互動。",
       "image": {
