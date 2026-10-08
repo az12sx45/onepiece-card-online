@@ -1780,3 +1780,8 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - 使用者回饋能量介面醜、魚距條不明顯；desktop/launcher-room-minigames.js/css改用簡潔生成圖示與細框，圖稿public/images/launcher_room/fishing_ui_r40/，來源tools/launcher-room/fishing-ui-r40/provenance.json；舊失敗atlas已刪，884176 bytes，最終圖稿保留。
 - 魚距條由竿圖下移到前景z3、至少7px，橘金色、取消screen混色與半透明，移動標記保留，固定魚距讀值避免與拉力表互蓋。能量輪縮至148至205px，九格青綠色帶对齐生成框，中央使用較大簡單收線／拳頭閃電圖。
 - scripts/launcher_fishing_v5_browser_qa.js新增距離條層次／厚度／對比與圖示來源檢查，56桌機／最小桌機、本機技能／server重播／拉回演出檢查通過，npm start靜態HTTP200。r39的14玩法、8本機重播、17技能分級、99 PGlite交易及82公告檢查仍為本輪實際證據；公開r39manifest已核對，r40公开与实际cache交付待完成。
+
+### 2026-10-08 r41 拉回魚距同步
+- 最終檢查發現耗盡體力後，animateFishingLanding只縮短讀值與標記，色條仍停在原長度；desktop/launcher-room-minigames.js現在同時更新色條寬度及魚距meter。新增瀏覽器檢查證明浮標向岸邊移動時色條縮短。r40圖稿、三流派與尺寸系統沿用；config公告附同一最終畫面。公開部署證據待完成。
+
+- r41驗證：57瀏覽器檢查（含拉回期間色條實際縮短）、82公告服務檢查通過。返回演出停用色條額外transition，與每幀浮標／標記／讀值保持一致。候選40→41僅下載新JS／CSS，92檔與二次零下載核對通過。

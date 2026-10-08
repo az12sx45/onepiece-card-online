@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 53,
+  "revision": 54,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r41-fishing-distance",
+      "status": "published",
+      "publishedAt": "2026-10-08T03:22:18.494Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r41",
+      "title": "清楚的魚距條、簡潔能量輪與拉回同步",
+      "summary": "橘金魚距條與九格能量輪更新，拉回岸邊時色條同步縮短。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-fishing-ui-r40.webp",
+        "alt": "清楚的魚距條與簡潔九格能量輪實際画面"
+      },
+      "body": [
+        "魚距條加粗置於竿圖上方，橘金色高對比，數字與浮標分開；能量輪使用簡潔生成圖示，外環九格，爆拉／必殺可用時亮起。",
+        "耗盡魚體力後先拉回岸邊，魚距條、移動標記、公尺數與水面位置同步縮短，再顯示全長與漁獲。",
+        "保留速拉型／力量型／平衡型、爆拉收距與必殺扣體力、尺寸影響體力／拉力／游速與售價。重新開啟啟動器取得差分更新。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r40-fishing-ui",
       "status": "published",
