@@ -1864,3 +1864,5 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - desktop/launcher-room.js／launcher-room-aquarium.js/css：入口在body獨立掛載，只在onVisible與setContext變更hidden，不由房間render循環改狀態；取消hover位移、filter及transition。圖鑑按鈕高優先hover保留繪製plate，修正ghost-button:hover的background shorthand蓋成黑底；已選頁籤移入保留亮度。
 - 圖鑑由遊戲4×5視角atlas改成13個獨立側面商品廣告圖，點擊開大型展示，Escape／關閉可返回。public/images/launcher_room/fishing_rod_catalog_r43/；工具built-in image_gen，13條完整竿與相連捲線器，真透明WebP1280px。完整提示詞与来源tools/launcher-room/fishing-rod-catalog-r43/prompts.json，遊戲內素材與規則不改。
 - scripts/launcher_fishing_journal_qa.js：100桌機1440×900／最小960×640檢查包含持續hover＋房間容器刷新時bbox與opacity穩定、圖稿不被黑底覆蓋、13位角色各自圖片載入、放大與返回、強化／紀錄原流程。13圖人工逐張檢查与alpha比例檢查通過，npm start靜態HTTP200。附圖公告新增；公開交付待完成。
+
+- r43公開交付：sourceed2b1efa2484792fdcc468e7aa16a6abbb85034e，公開manifest於2026-10-08T07:50:31.868Z核對SHA256 1c7be65ba2daf669778d804eb920205268e7476b695c2e0000400ae79fee0171。實際cache42→43下載2126080 bytes，107檔与二次零下載通過。100 UI、13圖逐張檢查與真alpha、82公告與npm start靜態HTTP200通過；未宣稱正式玩家點擊驗收或Render Live時間／DB日誌。證據D:/Codex_QA/launcher-fishing-r43/release-evidence.json。
