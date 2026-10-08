@@ -118,7 +118,7 @@ async function main(){
       assert(queued.nodes[0].hidden||queued.life.tasks.some(t=>t.key==='luffy'&&t.token.startsWith('arrival-')),'unstarted arrival stays hidden instead of flashing at saved position');
       const trail=await until(page,async()=>page.evaluate(()=>window.__integration.calls.some(c=>c.type==='arrival.ack')));
       const moving=trail.filter(s=>s.life.tasks.some(t=>t.key==='luffy'&&t.phase==='approach'));
-      assert(moving.length>2);assert(moving.some(s=>s.walkers[0]?.cell.col===0&&s.walkers[0]?.cell.row===6));
+      assert(moving.length>2);assert(moving.some(s=>[7,8].includes(s.walkers[0]?.cell.col)&&s.walkers[0]?.cell.row===0));
       assert(trail.some(s=>s.nodes.some(n=>n.key==='luffy'&&n.pose==='wave')&&s.walkers[0]?.route.length===0));
       assert(moving.every(s=>s.walkers[0].route.every((cell,i,list)=>i===0||Math.abs(cell.col-list[i-1].col)+Math.abs(cell.row-list[i-1].row)===1)));
       const positions=moving.map(s=>s.walkers[0]);for(let i=1;i<positions.length;i++)assert(Math.hypot(positions[i].x-positions[i-1].x,positions[i].y-positions[i-1].y)<45,'no spawn teleport after entry');

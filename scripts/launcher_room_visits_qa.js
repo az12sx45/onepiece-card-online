@@ -2,7 +2,7 @@
 // Real room renderer, animation/BFS/controller with isolated account transport.
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
 const H=require('./launcher_life_integration_qa'),B=require('../server/launcher-fishing-balance'),E=require('../server/launcher-fishing-v5');
-const out='D:/Codex_QA/launcher-fishing-r45/visits',checks=[];fs.mkdirSync(out,{recursive:true});
+const out=process.env.LAUNCHER_ROOM_VISITS_QA_OUT||'D:/Codex_QA/launcher-fishing-r45/visits',checks=[];fs.mkdirSync(out,{recursive:true});
 const pass=(name,v)=>{assert.ok(v,name);checks.push(name);};
 async function wait(page,test,ms=160000){for(let t=0;t<ms;t+=500){if(await page.evaluate(test))return;await H.advance(page,500);}throw Error('Timed out: '+await page.evaluate(()=>JSON.stringify({state:__launcherRoomTest.snapshot(),visits:__launcherRoomTest.visits(),status:document.getElementById('roomStatus').textContent})));}
 (async()=>{const browser=await H.chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});H.setBrowser(browser);
@@ -37,6 +37,9 @@ pass(label+' finds Franky in workshop before forge',await page.evaluate(()=>__la
 await page.screenshot({path:path.join(out,label+'-forge.png')});await page.getByRole('button',{name:'關閉',exact:true}).click();
 pass(label+' visits preserve saved furniture and actor homes',await page.evaluate(()=>homeBefore===JSON.stringify(__integration.db[42].profile.room.scenes)));
 await page.evaluate(()=>{__launcherRoomTest.startRoomVisit('room-character-sanji','room-scene-sunny-workshop');});await H.advance(page,1000);
+pass(label+' arrival uses painted door floor cells',await page.evaluate(()=>{const w=__launcherRoomTest.snapshot().walkers.find(w=>w.key==='sanji');return w.cell.row===0&&[7,8].includes(w.cell.col);}));
+await page.locator('#roomStage').screenshot({path:path.join(out,label+'-door-arrival.png')});
+pass(label+' door opening is black and aligned with background',await page.locator('.room-painted-door').evaluate(n=>{const r=n.getBoundingClientRect(),s=n.parentElement.getBoundingClientRect();return getComputedStyle(n.querySelector('.room-door-dark')).backgroundColor==='rgb(0, 0, 0)'&&Math.abs(r.left+r.width/2-s.left-s.width/2)<s.width*.02&&n.classList.contains('is-open');}));
 pass(label+' offscreen resident enters visible room once',await page.evaluate(()=>__launcherRoomTest.visits().residents.find(r=>r.id==='room-character-sanji').sceneId==='room-scene-sunny-workshop'&&document.querySelectorAll('[data-room-key="c:room-character-sanji"]').length===1));
 await page.waitForFunction(()=>__launcherRoomTest.snapshot().walkers.every(w=>w.ready.length===4));
 await page.evaluate(()=>__launcherRoomTest.openCompanion('room-character-sanji'));await page.evaluate(()=>document.getElementById('roomLifeStatus').click());await page.locator('[data-journal-tab=dex]').click();

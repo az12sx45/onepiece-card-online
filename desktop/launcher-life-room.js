@@ -111,7 +111,7 @@
       plan(key,cell){const w=walker(key);return !!w&&!!env.routeBetween(w.segmentCell||w.cell,cell,env.blockedFor(w));},
       reserve(entries){return entries.every(entry=>adapter.plan(entry.key,entry.cell));},
       move(key,cell,token){const w=walker(key);if(!w)return false;env.hideSpeech(w);w.lifeClip=null;w.lifeReaction=null;w.lifeToken=token;w.pause=0;w.mode='life-approach';const result=env.routeTo(w,cell);if(w.attention&&manualKey!==key)env.deferAttentionMovement(w);return result;},
-      arrived(key){const w=walker(key);return !!w&&!w.route.length&&!w.segmentCell&&!w.returnDockBeforeRoute&&!w.dockTravel;},
+      arrived(key){const w=walker(key);return !!w&&!w.doorRevealAt&&!w.route.length&&!w.segmentCell&&!w.returnDockBeforeRoute&&!w.dockTravel;},
       face,
       dock(key,station){
         const w=walker(key);if(!w)return false;
@@ -153,16 +153,16 @@
       entry(key){
         const w=walker(key);if(!w)return null;
         const blocked=env.blockedFor(w);
-        const entry=[{col:0,row:6},{col:15,row:6},{col:0,row:7},{col:15,row:7}].find(cell=>!env.cellBlocked(cell,blocked));
+        const entry=env.doorEntry?.(key);
         if(!entry)return null;
-        const targets=[{col:entry.col===0?3:12,row:6},{col:8,row:6},w.cell];
+        const targets=[{col:entry.col,row:2},{col:8,row:3},w.cell];
         const to=targets.find(cell=>!!env.routeBetween(entry,cell,blocked));
         return to?{from:entry,to}:null;
       },
       spawnArrival(key,from,token){
         const w=walker(key);if(!w||!ownedIds().includes(itemOf(key)))return false;
         // This is the single entry spawn, before the actor becomes visible in the room.
-        env.placeWalker(w,from);w.lifeToken=token;w.node.hidden=false;return true;
+        env.placeWalker(w,from);w.lifeToken=token;env.openArrivalDoor?.(w);return true;
       }
     };
     function accept(result,requestEpoch=epoch) {

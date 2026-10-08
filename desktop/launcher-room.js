@@ -19,6 +19,8 @@
   const POSES = new Set(['idle', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave', 'listen']);
   const CARDINAL = ['正向', '右轉', '背向', '左轉'];
   const FLOOR = Object.freeze({ columns: 16, rows: 8, top: 267, bottom: 515, backLeft: 164, backRight: 796, frontLeft: 28, frontRight: 932 });
+  // Inner leaves measured against the existing 1600x900 paintings, not new doors.
+  const ROOM_DOORS={default:[752,307,95,133],'sunny-kitchen':[754,315,91,124],'sunny-library':[755,285,90,118],'sunny-workshop':[753,310,93,129],'sunny-aquarium':[751,273,97,146],'sunny-deck':[762,294,76,110]};
   const FURNITURE_FOOTPRINTS = {
     helm: [2, 2], 'map-table': [3, 2], 'treasure-chest': [2, 1], 'tangerine-tree': [2, 2],
     'swords-rack': [2, 1], 'kitchen-table': [3, 2], 'galley-stove': [3, 2], bookshelf: [2, 1],
@@ -223,6 +225,7 @@
   let lastExpansionAt=0;
   const environmentTokens={daypart:0,weather:0,season:0},environmentValues={};
   const roomNarration=new Map();
+  let doorOpenUntil=0,doorSceneId='';
   let aquariumManager = null;
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let renderedRevision = -1;
@@ -234,7 +237,9 @@
     speak: showSpeech, hideSpeech, wander: chooseDestination, canAnimate,
     editing: () => editing, reducedMotion: () => motion.matches, roomStatus: status,
     dialogueContext,
-    reservedForVisit: id => !!residents.get(id)?.destination || !!residents.get(id)?.arrivalLinePending||!!forgeVisit?.ids.includes(id)||roomNarration.has(id)||!!interaction?.actors?.some(w=>w.item.id===id),
+    reservedForVisit: id => !!residents.get(id)?.destination || !!residents.get(id)?.doorArrivalPending||!!residents.get(id)?.arrivalLinePending||!!forgeVisit?.ids.includes(id)||roomNarration.has(id)||!!interaction?.actors?.some(w=>w.item.id===id),
+    doorEntry:key=>{const w=walkers.find(w=>w.key===key);return w&&doorCells().find(cell=>!cellBlocked(cell,blockedFor(w)));},
+    openArrivalDoor(w){startDoorArrival(w,performance.now());},
     focus: holdCompanionAttention, deferAttentionMovement,
     onFishChanged() { renderAquarium(); },
     onLifeChanged() { aquariumManager?.render(); },
@@ -336,9 +341,21 @@
     const characters=[...residents.values()].filter(r=>r.sceneId===sceneId&&r.entry.itemId!==id).map(r=>r.entry);
     if(characters.length>=ROOM_MAX_CHARACTERS)return null;
     const occupied=layoutRoom({placements:s.placements,characters}).occupied;
-    for(const col of [0,15,1,14,2,13])for(const row of [4,5,6,3,7,2,1,0])if(!cellBlocked({col,row},occupied))return {col,row};
+    for(const cell of doorCells())if(!cellBlocked(cell,occupied))return cell;
     return null;
   }
+  function doorCells(){return [{col:7,row:0},{col:8,row:0}];}
+  function renderDoor(sceneId,source){
+    const stage=$('roomStage');let node=stage.querySelector('.room-painted-door');
+    if(!node){node=el('div','room-painted-door');node.setAttribute('aria-hidden','true');node.append(el('div','room-door-dark'),el('div','room-door-leaf'));stage.append(node);}
+    const key=sceneId.replace(/^room-scene-/,''),[x,y,w,h]=ROOM_DOORS[key]||ROOM_DOORS.default;
+    node.style.left=`${x/16}%`;node.style.top=`${y/9}%`;node.style.width=`${w/16}%`;node.style.height=`${h/9}%`;
+    const leaf=node.querySelector('.room-door-leaf');leaf.style.backgroundImage=`url("${source}")`;leaf.style.backgroundSize=`${1600/w*100}% ${900/h*100}%`;leaf.style.backgroundPosition=`${x/(1600-w)*100}% ${y/(900-h)*100}%`;
+    const hidden=editing||doorSceneId!==sceneId||performance.now()>=doorOpenUntil;
+    if(!hidden&&node.hidden){node.hidden=false;node.classList.remove('is-open');void node.offsetWidth;node.classList.add('is-open');}else{node.hidden=hidden;node.classList.toggle('is-open',!hidden);}
+  }
+  function openDoor(now){doorSceneId=activeRoom().sceneId;doorOpenUntil=Math.max(doorOpenUntil,now+1200);renderDoor(doorSceneId,$('roomScene').getAttribute('src'));}
+  function startDoorArrival(w,now){w.node.hidden=true;w.doorRevealAt=now+250;const r=residents.get(w.item.id);if(r)r.doorArrivalPending=true;openDoor(now);}
   function transferResident(id,sceneId,now) {
     const r=residents.get(id),cell=visitEntry(id,sceneId);if(!r||!cell)return false;
     rememberResidents();r.sceneId=sceneId;r.destination='';r.arriving=true;r.nextVisit=now+60000+Math.random()*45000;
@@ -351,7 +368,7 @@
     const task=lifeRoom?.snapshot()?.tasks?.find(t=>t.key===w.key);
     if(task&&!task.jobId&&['Idle','Wander'].includes(task.state)&&!w.attention)lifeRoom?.cancel(w.key);
     if(w.attention||w.mode!=='wander'||w.dockOrigin||w.segmentCell&&!forgeVisit?.ids.includes(id)||lifeRoom?.isBusy(w.key))return false;
-    const exits=[];for(const col of [0,15])for(let row=0;row<FLOOR.rows;row++)exits.push({col,row});
+    const exits=doorCells();
     exits.sort((a,b)=>Math.abs(a.col-w.cell.col)+Math.abs(a.row-w.cell.row)-Math.abs(b.col-w.cell.col)-Math.abs(b.row-w.cell.row));
     if(!exits.some(cell=>routeTo(w,cell)))return false;
     r.destination=sceneId;r.expires=now+approachDuration(w);w.mode='room-travel';w.pause=0;
@@ -373,7 +390,7 @@
     if(!forgeVisit)return;
     const pending=forgeVisit;forgeVisit=null;
     for(const id of pending.ids){
-      const r=residents.get(id);if(r){r.destination='';r.nextVisit=performance.now()+60000;}
+      const r=residents.get(id);if(r){r.destination='';delete r.doorExitAt;r.nextVisit=performance.now()+60000;}
       const w=walkers.find(v=>v.item.id===id);if(w){w.mode='wander';w.route=w.segmentCell?[w.segmentCell]:[];w.pause=0;w.node.classList.remove('is-room-departing');setPose(w,'idle');}
     }
     pending.resolve({ok:false,error:'cancelled'});if(message)status(message,true);
@@ -395,6 +412,8 @@
   }
   function tickVisits(now) {
     if(editing||!visible||document.hidden)return;
+    for(const w of walkers)if(w.doorRevealAt&&now>=w.doorRevealAt&&w.motionArt?.atlases?.south){w.node.hidden=false;delete w.doorRevealAt;const r=residents.get(w.item.id);if(r)r.doorArrivalPending=false;if(w.mode==='door-arrival')w.mode=r?.arrivalLinePending?'visit-arrival':'wander';setPose(w,'idle');}
+    const door=$('roomStage').querySelector('.room-painted-door');if(door&&now>=doorOpenUntil){door.hidden=true;door.classList.remove('is-open');}
     dialogue?.advanceExpansion?.(lastExpansionAt?Math.min(1000,now-lastExpansionAt):500);lastExpansionAt=now;
     const environmental=dialogueContext();for(const field of ['daypart','weather','season'])if(environmentValues[field]!==environmental[field]){environmentValues[field]=environmental[field];environmentTokens[field]++;}
     for(const [id,note]of roomNarration)if(now>=note.until){const w=walkers.find(w=>w.item.id===id);roomNarration.delete(id);if(w){hideSpeech(w);w.mode='wander';chooseDestination(w);}}
@@ -409,12 +428,17 @@
       const w=walkers.find(v=>v.item.id===r.entry.itemId);
       if(r.departSpeakUntil){if(now<r.departSpeakUntil)continue;delete r.departSpeakUntil;if(w){hideSpeech(w);w.mode='room-travel';}}
       if(!w||now>=r.expires){r.destination='';if(w){w.mode='wander';w.node.classList.remove('is-room-departing');chooseDestination(w);}if(forgeVisit?.id===r.entry.itemId)cancelForgeVisit('暫時走不到佛朗基，請空出通道。');continue;}
-      if(!w.route.length&&!w.segmentCell){const target=r.destination;if(!transferResident(w.item.id,target,now)){r.destination='';w.mode='wander';chooseDestination(w);}else if(forgeVisit?.id===w.item.id){displaySceneId=target;forgeVisit.phase='approach';}}
+      if(!w.route.length&&!w.segmentCell){
+        if(!r.doorExitAt){openDoor(now);r.doorExitAt=now+350;continue;}
+        if(now<r.doorExitAt)continue;delete r.doorExitAt;
+        const target=r.destination;if(!transferResident(w.item.id,target,now)){r.destination='';w.mode='wander';chooseDestination(w);}else{w.node.hidden=true;if(forgeVisit?.id===w.item.id){displaySceneId=target;forgeVisit.phase='approach';}}
+      }
     }
     if(forgeVisit){
       const p=forgeVisit;if(p.epoch!==viewEpoch||!isOwner()||now>=p.expires){cancelForgeVisit('找佛朗基已取消，沒有扣款。');return;}
       if(p.phase==='depart'||visitRenderPending)return;
       const a=walkers.find(w=>w.item.id===p.id),f=walkers.find(w=>w.key==='franky');if(!a||!f){cancelForgeVisit('佛朗基目前不在這個房間。');return;}
+      if(a.doorRevealAt||f.doorRevealAt)return;
       if(p.phase==='approach'){
         f.lifeClip=null;f.lifeReaction=null;f.pause=0;
         if(f.segmentCell){f.mode='forge-approach';f.route=[f.segmentCell];return;}
@@ -788,7 +812,7 @@
   async function openCompanion(itemId, keyboard = false) {
     cancelForgeVisit('已取消這次強化委託。');
     const resident=residents.get(itemId);roomNarration.delete(itemId);
-    if(resident){resident.arrivalLinePending=false;delete resident.departSpeakUntil;if(resident.destination){resident.destination='';resident.nextVisit=performance.now()+60000;const w=walkers.find(w=>w.item.id===itemId);if(w){w.mode='wander';w.route=w.segmentCell?[w.segmentCell]:[];w.node.classList.remove('is-room-departing');}}}
+    if(resident){resident.arrivalLinePending=false;delete resident.departSpeakUntil;delete resident.doorExitAt;if(resident.destination){resident.destination='';resident.nextVisit=performance.now()+60000;const w=walkers.find(w=>w.item.id===itemId);if(w){w.mode='wander';w.route=w.segmentCell?[w.segmentCell]:[];w.node.classList.remove('is-room-departing');}}}
     if (assignment) cancelAssignment();
     if (editing || !activeRoom().characters.some(entry => entry.itemId === itemId)) return;
     if (companionId === itemId && companionBusy) { renderCompanionPanel(); return; }
@@ -1501,6 +1525,11 @@
     lifeRoom?.tick(now);
     if (!lifeRoom?.active()) startInteraction(now);
     for (const walker of walkers) {
+      if(walker.doorRevealAt){
+        if(now<walker.doorRevealAt||!walker.motionArt?.atlases?.south){openDoor(now);continue;}
+        walker.node.hidden=false;delete walker.doorRevealAt;const r=residents.get(walker.item.id);if(r)r.doorArrivalPending=false;
+        if(walker.mode==='door-arrival')walker.mode=r?.arrivalLinePending?'visit-arrival':'wander';setPose(walker,'idle');
+      }
       if(walker.mode==='visit-speaking'){showAction(walker,walker.pose||'idle',now);continue;}
       if (walker.attention) {
         walker.mode = 'focused'; walker.node.classList.remove('is-walking', 'is-turning');
@@ -1607,7 +1636,7 @@
       keepSpeechInsideStage(walker);
       walkers.push(walker);
       if(residents.get(item.id)?.arrivalLinePending&&!forgeVisit)walker.mode='visit-arrival';
-      if(residents.get(item.id)?.arriving){node.classList.add('is-room-arriving');residents.get(item.id).arriving=false;}
+      if(residents.get(item.id)?.arriving){walker.mode='door-arrival';startDoorArrival(walker,performance.now());residents.get(item.id).arriving=false;}
       setPose(walker, 'idle');
       walker.motionArt?.promise.then(() => {
         if (walkers.includes(walker) && walker.pose === 'idle') setPose(walker, 'idle');
@@ -1703,6 +1732,7 @@
     const image = $('roomScene');
     const sceneAsset = assetFor(scene) || SCENE_FALLBACK;
     if (image.getAttribute('src') !== sceneAsset) image.src = sceneAsset;
+    renderDoor(room.sceneId,sceneAsset);
     image.alt = scene?.name || '航海夥伴房間';
     image.onerror = () => { image.onerror = null; image.src = SCENE_FALLBACK; };
     const stage = $('roomStage');

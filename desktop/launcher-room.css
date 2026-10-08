@@ -200,3 +200,12 @@
 .room-character-shell.is-room-departing { opacity:.45; transition:opacity .35s; }
 .room-character-shell.is-room-arriving { animation:room-visitor-arrival .6s ease-out; }
 @keyframes room-visitor-arrival { from {opacity:0} to {opacity:1} }
+
+.room-painted-door { position:absolute; z-index:3; pointer-events:none; perspective:400px; }
+.room-painted-door[hidden] { display:none; }
+.room-door-dark,.room-door-leaf { position:absolute; inset:0; border-radius:48% 48% 0 0 / 26% 26% 0 0; }
+.room-door-dark { background:#000; }
+.room-door-leaf { background-repeat:no-repeat; transform-origin:left center; transform:rotateY(0); transition:transform .25s ease-out; }
+.room-painted-door.is-open .room-door-leaf { transform:rotateY(-88deg); }
+.room-character-shell.is-room-departing { opacity:1; transition:none; }
+.room-character-shell.is-room-arriving { animation:none; }

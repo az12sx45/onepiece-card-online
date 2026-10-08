@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 48,
-  "publishedAt": "2026-10-08T12:57:51.027Z",
+  "revision": 49,
+  "publishedAt": "2026-10-08T14:23:14.711Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -127,6 +127,11 @@
       "path": "images/launcher_announcements/launcher-rod-journal-r42.webp",
       "bytes": 66756,
       "sha256": "4f53543b5f2896d73cda84d86685e19aa3c920abe7f5cc507fc546f19b6a8676"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-room-doors-r49.webp",
+      "bytes": 89782,
+      "sha256": "7bdd71dc2462f5d895c36906a65919c4ab7e4fc845bb6d911e021d4b38c9d4cc"
     },
     {
       "path": "images/launcher_announcements/launcher-room-visits-r45.webp",
@@ -515,8 +520,8 @@
     },
     {
       "path": "launcher-life-room.js",
-      "bytes": 35695,
-      "sha256": "dd83d9210592deb35a6613302474acacaa7d148ef9d48d8b28ea26c16cc24eaf"
+      "bytes": 35626,
+      "sha256": "6903d815c771698776209ffad577c3d098aa8786ba51ed054017dda439c87730"
     },
     {
       "path": "launcher-life.js",
@@ -555,13 +560,13 @@
     },
     {
       "path": "launcher-room.css",
-      "bytes": 28434,
-      "sha256": "9a08e8c810049ec7d0e1068f9299ace630a1f59a978094d7a29d9a7da36a841f"
+      "bytes": 29058,
+      "sha256": "ddec6c2bcb7eb0ea1d52eeb2ad08a5f406d8eceffde3717ebe0a83d3dd5d8994"
     },
     {
       "path": "launcher-room.js",
-      "bytes": 140222,
-      "sha256": "06e8f19a063ec167c1076408c2523e3197b6cda5b08523fe4a2fc683430b2d93"
+      "bytes": 143274,
+      "sha256": "33c73cbe84ae4396efeb1c477b320edce93aa94b801f17a1655ebcf1401054dd"
     },
     {
       "path": "launcher.html",
@@ -572,6 +577,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "zJSdq8kLq+sCTmXqpGXVQypb4ve88tfvjv6bI4nsxyUzSSCown7nV7C7UcbzwBQesA9ACWSQ5wrvADyz3kq8Ag=="
+    "value": "3bJwWOBxY/dtTAfOpKD27mQEk+JyuPqO73ZO/m6399K+dg0ybgEXktksqm09zMPBl8XFoUSg3+00hlEGH7c5DQ=="
   }
 }
