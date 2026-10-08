@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 43,
-  "publishedAt": "2026-10-08T07:34:48.826Z",
+  "revision": 44,
+  "publishedAt": "2026-10-08T08:39:27.007Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -82,6 +82,11 @@
       "path": "images/launcher_announcements/launcher-fishing-wallet-r27.webp",
       "bytes": 44484,
       "sha256": "872c554dfb942808068ed9a0c35013c2d54b95d8203f68e13e2c8ed394bcfd58"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-journal-layout-r44.webp",
+      "bytes": 86818,
+      "sha256": "aa8b3487b18940d9f2fbbfc8358269c9612c2dff66edd9a72646708d811c012d"
     },
     {
       "path": "images/launcher_announcements/launcher-journal-style-r33.webp",
@@ -505,13 +510,13 @@
     },
     {
       "path": "launcher-room-aquarium.css",
-      "bytes": 732205,
-      "sha256": "0c499def55e9611e142ad5283b97ec0ca7a09f28a19a7d7ca9568c1da5f921a6"
+      "bytes": 734374,
+      "sha256": "4f5688abb4735ce1b7e8ab77813a33269ed7c75341202e08b62512a4b3745cfd"
     },
     {
       "path": "launcher-room-aquarium.js",
-      "bytes": 41011,
-      "sha256": "be459a33590621ce219e493046c87c39716bd17ab79a2a01654cdc400d395a92"
+      "bytes": 41744,
+      "sha256": "625d8ce74f68b10132e9c63dc5df32212bc0cfa2f95b8411735bf9a45b5f828e"
     },
     {
       "path": "launcher-room-minigames.css",
@@ -547,6 +552,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "tJgej5h6omQadhLbnGj+cXYqz/2hmzhY6dHEbDah272utOd3IPbYBgRxTDt/pjYQOqXbjZOCutt505vYJGSYBw=="
+    "value": "9VVNp3MFWE9ivCVkthsgOStcEj4FDXmqTmAra49gEr0LC+UXvDKkfJ64Q1vHuReaWk2lAGkEwQKbmoP8HePQDg=="
   }
 }

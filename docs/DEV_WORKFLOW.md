@@ -8125,3 +8125,7 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - scripts/launcher_fishing_journal_qa.js：100桌機1440×900／最小960×640檢查包含持續hover＋房間容器刷新時bbox與opacity穩定、圖稿不被黑底覆蓋、13位角色各自圖片載入、放大與返回、強化／紀錄原流程。13圖人工逐張檢查与alpha比例檢查通過，npm start靜態HTTP200。附圖公告新增；公開交付待完成。
 
 - r43公開交付：sourceed2b1efa2484792fdcc468e7aa16a6abbb85034e，公開manifest於2026-10-08T07:50:31.868Z核對SHA256 1c7be65ba2daf669778d804eb920205268e7476b695c2e0000400ae79fee0171。實際cache42→43下載2126080 bytes，107檔与二次零下載通過。100 UI、13圖逐張檢查與真alpha、82公告與npm start靜態HTTP200通過；未宣稱正式玩家點擊驗收或Render Live時間／DB日誌。證據D:/Codex_QA/launcher-fishing-r43/release-evidence.json。
+
+### 2026-10-08 r44 立即開啟入口與無捲軸書頁
+- desktop/launcher-room-aquarium.js/css：入口改pointerdown左鍵立即open，阻止拖曳並忽略後續pointer click，keyboard click仍有效；移到右上190×72大按鈕。強化footer與說明限右頁44%，成功／錯誤訊息取代說明，空白訊息不產生p高度；強化中不附角色選單。
+- 每魚頁4張、每釣點頁4筆，18筆紀錄可以前後頁閱讀，content overflow hidden而非裁掉內容。scripts/launcher_fishing_journal_qa.js加入scrollHeight<=clientHeight、右頁footer、按下未放開即開啟／移出再放開不掉點擊，以及18紀錄分頁檢查；120桌機1440×900／最小960×640介面檢查通過。附圖公告config/launcher-announcements-v1.json與launcher-journal-layout-r44.webp；公開交付待完成。

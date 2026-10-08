@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 56,
+  "revision": 57,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r44-journal-layout",
+      "status": "published",
+      "publishedAt": "2026-10-08T08:39:24.676Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r44",
+      "title": "按下即開的圖鑑入口與完整書頁排版",
+      "summary": "強化操作移到右頁，圖鑑改用分頁，不再需要側邊捲軸。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-journal-layout-r44.webp",
+        "alt": "右頁強化說明與按鈕，無側邊捲軸的書頁"
+      },
+      "body": [
+        "入口固定右上角的大按鈕，按下立即開啟，游標移出再放開也不會丟失點擊。",
+        "強化說明與操作鈕移到右頁，結果訊息沿用同一區，移除空白提示區占用的高度。",
+        "魚圖鑑每頁4張，釣點紀錄每頁4筆；釣竿、強化、魚種頁與完整18組釣點紀錄皆在書頁內顯示，沒有側邊捲軸。",
+        "保留13位角色的釣竿廣告展示圖與放大檢視。重新啟動啟動器套用差分。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r43-rod-catalog",
       "status": "published",

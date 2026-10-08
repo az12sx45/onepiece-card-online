@@ -235,3 +235,17 @@
 .fishing-rod-preview-image{width:min(1280px,100%);height:calc(100% - 80px);object-fit:contain;min-height:0}
 .fishing-rod-preview button,.fishing-rod-preview button:hover{background:transparent url('opui://launcher/images/launcher_room/fishing_ui_r33/button-plate.webp') center/100% 100% no-repeat;border:0;color:#fff0c4;font:18px 'LXGW WenKai TC Journal','Microsoft JhengHei',sans-serif;width:160px;min-height:56px;cursor:pointer}
 .fishing-journal-tabs button[aria-pressed=true]:hover:not(:disabled){filter:brightness(1.25)}
+/* r44: press-to-open controls, paper-contained actions, no scrolling book. */
+.fishing-journal-dock{top:110px;bottom:auto;right:24px;gap:12px;z-index:2100}
+.fishing-journal-dock .fishing-journal-shortcut{width:190px;min-height:72px}
+.fishing-journal-content{overflow:hidden!important;box-sizing:border-box}
+.fishing-rod-footer{align-self:flex-end;width:44%;margin-right:16px;align-items:center;padding:0 0 4px;box-sizing:border-box}
+.fishing-rod-footer .fishing-rod-forge-note{width:100%;text-align:left;white-space:pre-line;line-height:1.45;font-size:14px;margin:4px 0 7px}
+.fishing-rod-footer .fishing-journal-upgrade{margin:0}
+.fishing-dex-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;align-items:center}
+.fishing-dex-card{width:100%;max-width:195px;min-height:0;height:min(250px,calc(100dvh - 325px));aspect-ratio:auto}
+.fishing-dex-detail{padding-top:14px;padding-bottom:8px;grid-template-rows:minmax(0,1fr) auto;gap:10px 45px}
+.fishing-dex-detail .fishing-dex-records h3{font-size:27px;margin:0 0 13px}.fishing-dex-detail .fishing-dex-records h4{margin:13px 0 7px;font-size:17px}.fishing-dex-detail .fishing-dex-records p{font-size:16px;line-height:1.5;margin:6px 0}
+.fishing-record-pages{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:10px}.fishing-journal .fishing-record-pages button{width:100px;min-height:40px;padding:5px 10px;font-size:15px}
+@media(max-height:760px){.fishing-journal-dock{top:100px}.fishing-rod-footer{width:44%;margin-right:12px}.fishing-rod-footer .fishing-rod-forge-note{font-size:12px;margin:2px 0 5px}.fishing-rod-controls{margin-bottom:7px}.fishing-rod-showcase .fishing-journal-rod{max-width:220px}.fishing-rod-stats .fishing-rod-reference{margin-top:6px}.fishing-dex-card{height:210px}.fishing-dex-detail-hero{min-height:180px}.fishing-dex-detail-fish{height:195px}.fishing-dex-detail .fishing-dex-records h3{font-size:24px}.fishing-dex-detail .fishing-dex-records p{font-size:14px;line-height:1.45}.fishing-dex-back{min-height:44px!important}}
+.fishing-rod-footer .fishing-journal-feedback{min-height:0;font-size:13px;line-height:1.4;margin:3px 0 7px;width:100%;text-align:left}
