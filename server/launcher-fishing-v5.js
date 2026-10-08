@@ -525,7 +525,18 @@ function displayIntensity(value,state) {
   return value<.55?.45:value<.85?.7:.95;
 }
 
-module.exports={create,cast,hook,simulate,control,flick,power,SPECIALS,observe,position,rodLevel,
+// Comparable equipment sheet, measured by the real simulator rather than a second formula.
+// One normalized distance unit = 1m on this 100m reference cast.
+function rodPerformance(level,key){
+  const r=create('rod-reference',0,level,true);r.characterKey=key;r.motionSeed=71;r.fishSizeRatio=1;
+  hook(r,new Date(1000),0,'lovely-angel');r.distance=95;r.fishStamina=r.maxFishStamina=100000;
+  r.behavior.force=1;r.runState='calm';r.pullDirection='steady';r.phaseUntil=iso(10000);r.nextTurnAt=null;r.flickTell=null;r.flickCue=null;
+  control(r,new Date(1000),true,0);simulate(r,new Date(2000),0);
+  const metersPerSecond=round4(95-r.distance),staminaPerSecond=Math.round(100000-r.fishStamina);
+  r.powerCharge=3;const from=r.distance;power(r,new Date(2100),'burst');
+  return {metersPerSecond,staminaPerSecond,burstMeters:round4(from-r.distance),reference:'100m普通魚平穩收線'};
+}
+module.exports={rodPerformance,create,cast,hook,simulate,control,flick,power,SPECIALS,observe,position,rodLevel,
   ROD_EFFECT_PER_LEVEL,
   ISO_BEHAVIOR_MODES,EXTRA_BEHAVIOR_MODES,
   castZoneForPower,castTargetForPower,displayIntensity,CONTROL_LEASE_MS,HOOK_WINDOW_MS,DURATION_MS,

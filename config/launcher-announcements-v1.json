@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 54,
+  "revision": 55,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r42-rod-journal",
+      "status": "published",
+      "publishedAt": "2026-10-08T05:38:18.923Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r42",
+      "title": "釣竿能力詳情與大按鈕圖鑑入口",
+      "summary": "每秒收線距離與每秒魚體力傷害分開顯示。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-rod-journal-r42.webp",
+        "alt": "左右書頁排列的個人釣竿與能力數值"
+      },
+      "body": [
+        "個人頁右下改為釣竿・強化與魚圖鑑兩個大按鈕，整個按鈕含文字與邊緣都能點。",
+        "左頁展示夥伴、強化等級與釣竿，右頁列每秒收線公尺、每秒削減魚體力、爆拉收距、必殺傷害、甩竿傷害及抗拉能力。",
+        "每秒速率由實際模擬器測量100公尺普通魚平穩收線基準；實戰會依魚況與拋距變動。必殺C/B/A/S傷害分開列出。",
+        "強化按鈕固定在書頁下方；強化挑戰不再被能力內容擠到下面，魚圖鑑翻頁按鈕亦固定。重新啟動啟動器取得差分。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r41-fishing-distance",
       "status": "published",

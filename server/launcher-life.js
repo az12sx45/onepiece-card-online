@@ -23,7 +23,7 @@ const rodLevel = value => Number.isInteger(value) && value >= 0 && value <= ROD_
 const characterRodLevel=(state,id)=>rodLevel(state.fishingRodLevels?.[id]??state.fishingRodLevel);
 const rodStatus = state => ({level:rodLevel(state.fishingRodLevel),maxLevel:ROD_UPGRADE_COSTS.length,
   nextCost:ROD_UPGRADE_COSTS[rodLevel(state.fishingRodLevel)] ?? null,
-  characters:Object.fromEntries(state.ownedCharacterIds.map(id=>{const level=characterRodLevel(state,id);return[id,{level,nextCost:ROD_UPGRADE_COSTS[level]??null,stats:typedRodStats(level,id.slice(15))}];}))});
+  characters:Object.fromEntries(state.ownedCharacterIds.map(id=>{const level=characterRodLevel(state,id);return[id,{level,nextCost:ROD_UPGRADE_COSTS[level]??null,stats:{...typedRodStats(level,id.slice(15)),performance:require('./launcher-fishing-v5').rodPerformance(level,id.slice(15))}}];}))});
 const pairKey = (a,b) => [keyOf(a) || a,keyOf(b) || b].sort().join(':');
 function content() { return require('../desktop/launcher-life-data'); }
 function canonical(value) {

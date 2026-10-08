@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 41,
-  "publishedAt": "2026-10-08T03:23:45.606Z",
+  "revision": 42,
+  "publishedAt": "2026-10-08T05:38:21.372Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -107,6 +107,11 @@
       "path": "images/launcher_announcements/launcher-rod-forge-r25.webp",
       "bytes": 61528,
       "sha256": "387f77b95516afe8260a89434cf3b515eb8b975af0cb135167db027cb4c8efe1"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-rod-journal-r42.webp",
+      "bytes": 66756,
+      "sha256": "4f53543b5f2896d73cda84d86685e19aa3c920abe7f5cc507fc546f19b6a8676"
     },
     {
       "path": "images/launcher_announcements/launcher-wii-meter-r36.webp",
@@ -430,13 +435,13 @@
     },
     {
       "path": "launcher-room-aquarium.css",
-      "bytes": 725011,
-      "sha256": "4bfc57b175ad7f9262da630f2c3a613a17ebe455e57b5315386d429acde08517"
+      "bytes": 730238,
+      "sha256": "8a64d91a64abca4a21493450ce77c72cc879e8bb1ce10ab7381e6de098b74910"
     },
     {
       "path": "launcher-room-aquarium.js",
-      "bytes": 37409,
-      "sha256": "12242a0ebbc3cca66d46e802b04bdf89037817eaf62e55fefee085fd73cdbe9f"
+      "bytes": 39737,
+      "sha256": "0c351421f7482fb2c3c3164428859cdfea06e5e3fd16468d94850750ac1f8c05"
     },
     {
       "path": "launcher-room-minigames.css",
@@ -445,8 +450,8 @@
     },
     {
       "path": "launcher-room-minigames.js",
-      "bytes": 293362,
-      "sha256": "1087da29bd65edafa8cea2f404fb9d6a90a69c743fef951e91c49ad2fd3a67ef"
+      "bytes": 294263,
+      "sha256": "f00ff944108ab0e168293e59f9034c2106ecbc8211ace08a5408ad50d08f3001"
     },
     {
       "path": "launcher-room-motion-data.js",
@@ -460,8 +465,8 @@
     },
     {
       "path": "launcher-room.js",
-      "bytes": 123094,
-      "sha256": "b04e585296492b4325346ac566398f7f8226439ee4b6d9f1341485ffa53feccc"
+      "bytes": 122573,
+      "sha256": "9a2461dd871c7a7026b9174ec39862e8793c1dfc816afd11a6ed0387d1a9c79b"
     },
     {
       "path": "launcher.html",
@@ -472,6 +477,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "MxQJfYCkTxLX/dGakRmOMLfBil5DRYDkpY64DSsL7YTQr2umj1qR0EsLfXQQ/bKOtKRsNg64/dIZ3gknOVTlDw=="
+    "value": "Dl+JBPUr8oFbMLskDVDRmiWceYyJBWaw3kF5KnJ6TCG/MltyNHAHZpTTo1jqmfQ9oM5VVVn4JMvET/PAQLuFCQ=="
   }
 }

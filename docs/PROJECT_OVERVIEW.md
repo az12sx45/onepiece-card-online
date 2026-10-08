@@ -2715,3 +2715,8 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - r41驗證：57瀏覽器檢查（含拉回期間色條實際縮短）、82公告服務檢查通過。返回演出停用色條額外transition，與每幀浮標／標記／讀值保持一致。候選40→41僅下載新JS／CSS，92檔與二次零下載核對通過。
 
 - 2026-10-08 最終公開交付r41：source5e01ed04034911f773ceb6d229989b80a12674c7，公開manifest於2026-10-08T03:40:39.757Z核對SHA256 14412a152ab68eb78a1ff7619de19289598ace0777090f5ab1742ab414e7f1cd。先以相同簽章候選將實際cache38→41下載975103 bytes；公開後核對相同簽章及92檔，二次零下載通過。57畫面、14玩法、8本機/server重播、17技能分級、99隔離PGlite交易、82公告檢查通過；未執行正式玩家交易，未宣稱Render Live時間或DB日誌。證據D:/Codex_QA/launcher-fishing-r41/release-evidence.json；r39及r40由r41完整涵蓋。
+
+### 2026-10-08 r42 釣竿詳情與圖鑑入口
+- desktop/launcher-room.js、launcher-room-aquarium.js/css：共用createShortcuts建立兩個166×66大入口，全按鈕命中、阻止房間拖曳事件冒泡；書本左展示右能力，固定強化／敲擊操作底列，圖鑑分頁移出捲動內容，保留原生成背景及字體。
+- server/launcher-fishing-v5.js新增rodPerformance，以真實simulate量測100m普通魚平穩收線基準；server/launcher-life.js的rodStatus帶performance。每秒距離m/s與HP/s各自顯示，另列爆拉、基礎必殺、C/B/A/S、甩竿及抗拉倍率。基準不冒充任意魚況的固定速度；戰鬥參數與存檔欄位不變。生成本機引擎更新desktop/launcher-room-minigames.js。
+- scripts/launcher_fishing_journal_qa.js涵蓋桌機1440×900、最小960×640、按鈕邊緣命中、書頁不遮擋、固定強化鈕及升級能力刷新；64UI、36基準速率斷言、8本機重播、99隔離PGlite強化／交易檢查通過。npm start靜態HTTP200。附圖公告config/launcher-announcements-v1.json與images/launcher_announcements/launcher-rod-journal-r42.webp；公開交付待完成。
