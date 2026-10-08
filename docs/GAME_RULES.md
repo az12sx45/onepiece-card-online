@@ -1870,3 +1870,5 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 ### 2026-10-08 r44 立即開啟入口與無捲軸書頁
 - desktop/launcher-room-aquarium.js/css：入口改pointerdown左鍵立即open，阻止拖曳並忽略後續pointer click，keyboard click仍有效；移到右上190×72大按鈕。強化footer與說明限右頁44%，成功／錯誤訊息取代說明，空白訊息不產生p高度；強化中不附角色選單。
 - 每魚頁4張、每釣點頁4筆，18筆紀錄可以前後頁閱讀，content overflow hidden而非裁掉內容。scripts/launcher_fishing_journal_qa.js加入scrollHeight<=clientHeight、右頁footer、按下未放開即開啟／移出再放開不掉點擊，以及18紀錄分頁檢查；120桌機1440×900／最小960×640介面檢查通過。附圖公告config/launcher-announcements-v1.json與launcher-journal-layout-r44.webp；公開交付待完成。
+
+- r44公開交付：source396e121ee0cc8efcc63aa84bb910636d98ebcd62，公開manifest於10/08/2026 09:00:04核對SHA256 bfe22d552b21f48723c53a8b3381e21160ae8efbfa329924bc5399c85ba27f2d。實際cache43→44下載862936 bytes，108檔與二次零下載通過。120 UI、82公告與npm start靜態HTTP200通過；未宣稱正式玩家點擊驗收或Render Live時間／DB日誌。證據D:/Codex_QA/launcher-fishing-r44/release-evidence.json。
