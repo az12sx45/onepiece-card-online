@@ -1843,3 +1843,5 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - scripts/launcher_room_visits_qa.js增加可配置輸出，38項兩視窗流程含門前格子、純黑門洞与原畫中心對齊、新進場唯一角色與強化；scripts/launcher_life_integration_qa.js更新舊side-entry斷言為真實door-entry，arrival-once／訪客唯讀／編輯工作釋放3項通過。圖片D:/Codex_QA/launcher-fishing-r49/visits/desktop-door-arrival.png已檢視。npm start靜態HTTP200，資料庫未配置；未宣稱正式玩家帳號交易驗收。附圖公告與差分交付待核對。
 
 - r50最終可見性修正：實際Chromium核對到room-character-shell的display:block蓋過HTML hidden；新增[hidden] display:none!important，確保角色不是在開門前已露出。r49門口／路徑測試結果仍保留，r50重測進場與可見性後再核對交付。
+
+- r50公開交付完成：source9105d497f90394511252c9a308d443bd78c8a669；10/08/2026 14:47:14核對公開revision50與SHA256 0b174900ecb8f956a2abbab509fa65e978ae228bd3d4470f1593c756c90df97b。3個修改renderer全部在manifest，公開blob HEAD/GET/size/SHA通過；實際cache48→50下載297800 bytes，113檔与二次零下載通過。40項房間檢查含hidden實際display:none、3生活流程回歸与82公告、npm start靜態HTTP200通過；r49快取備份215檔。證據D:/Codex_QA/launcher-fishing-r50/release-evidence.json。未宣稱正式玩家交易驗收；無新增作圖或存檔欄位。
