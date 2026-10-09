@@ -1,0 +1,15 @@
+'use strict';
+const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),H=require('./launcher_life_integration_qa'),S=require('../server/launcher-profile-shop');
+const out='D:/Codex_QA/launcher-fishing-r52/capacity';fs.mkdirSync(out,{recursive:true});const results=[];
+(async()=>{assert(S.CATALOG.filter(x=>x.type==='room_character').every(x=>!x.name.includes('Q版')));assert.equal(S.roomCharacterLimit('room-scene-default'),4);assert.equal(S.roomCharacterLimit('room-scene-sunny-deck'),6);
+const b=await H.chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});H.setBrowser(b);
+try{for(const [label,width,height]of [['desktop',1440,900],['minimum',960,640]]){
+const {page,errors}=await H.create({owned:['luffy','zoro','nami','usopp','sanji','chopper','robin','franky','brook','jinbe']});await page.setViewportSize({width,height});
+assert.equal((await H.snap(page)).walkers.length,4);assert.equal(await page.evaluate(()=>__launcherRoomTest.visits().residents.filter(r=>!r.sceneId).length),6);
+await page.evaluate(catalog=>{const p=__integration.db[42].profile;window.originalHome=JSON.stringify(p.room);p.room.scenes={'room-scene-default':{placements:p.room.placements,characters:p.room.characters},'room-scene-sunny-kitchen':{placements:[],characters:[]},'room-scene-sunny-deck':{placements:[],characters:[]}};p.collection.launcher.items=catalog.filter(x=>['room-scene-sunny-kitchen','room-scene-sunny-deck'].includes(x.id));__integration.refresh();},S.CATALOG);
+const counts=await page.evaluate(()=>{const c={};for(const r of __launcherRoomTest.visits().residents)c[r.sceneId]=(c[r.sceneId]||0)+1;return c;});assert.deepEqual(counts,{'room-scene-default':4,'room-scene-sunny-kitchen':3,'room-scene-sunny-deck':3});
+const reserved=await page.evaluate(()=>{const w=__launcherRoomTest.snapshot().walkers;for(const x of w)__launcherRoomTest.lifeCancel(x.key);return [__launcherRoomTest.startRoomVisit('room-character-'+w[0].key,'room-scene-sunny-kitchen'),__launcherRoomTest.startRoomVisit('room-character-'+w[1].key,'room-scene-sunny-kitchen')];});assert.deepEqual(reserved,[true,false]);
+await page.evaluate(()=>__launcherRoomTest.openCompanion('room-character-luffy'));assert(!(await page.locator('#roomCompanionName').textContent()).includes('Q版'));
+await page.locator('#roomStage').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,label+'.png')});assert.equal(await page.evaluate(()=>__integration.db[42].profile.room.scenes['room-scene-default'].characters.length),10);assert.deepEqual(errors,[]);results.push({label,singleRoomVisible:4,waiting:6,distributed:counts,incomingReservationPreventsOverflow:true,legacySavedCharacters:10});await page.close();
+}fs.writeFileSync(path.join(out,'browser-report.json'),JSON.stringify({status:'PASS',results,scope:'Real room/renderer with fixture transport; original saved characters preserved'},null,2));console.log('PASS capacity distribution reservation names at two widths');}finally{await b.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

@@ -136,7 +136,7 @@ const CATALOG = Object.freeze([
     ...crewRelease.RESERVED_KEYS.filter(key => crewRelease.releasedKeys.includes(key))
       .map(key => [key, reservedCrew.shopMetadata[key].name, reservedCrew.shopMetadata[key].rarity])
   ].map(([key, name, rarity]) => ({
-    id: `room-character-${key}`, type: 'room_character', key, name: `Q版${name}`, rarity,
+    id: `room-character-${key}`, type: 'room_character', key, name, rarity,
     asset: reservedCrew.shopMetadata[key]?.asset || `opui://launcher/images/launcher_room/chibi/${key}.webp`
   })),
   ...[
@@ -145,7 +145,7 @@ const CATALOG = Object.freeze([
     ['footer', 'sanji', '香吉士'], ['footer', 'robin', '羅賓']
   ].map(([slot, key, name]) => ({
     id: `decor-${slot}-${key}-chibi`, type: 'decoration', key: `${slot}-${key}-chibi`, slot,
-    name: `Q版${name}貼紙`, rarity: 'rare',
+    name: `${name}貼紙`, rarity: 'rare',
     asset: `opui://launcher/images/launcher_room/chibi/${key}.webp`
   })),
   ...[
@@ -160,13 +160,14 @@ const CATALOG = Object.freeze([
   { id: 'layout-sunny-deck', type: 'layout', key: 'sunny-deck', name: '千陽號甲板排版', rarity: 'rare' },
   { id: 'layout-sunny-kitchen', type: 'layout', key: 'sunny-kitchen', name: '千陽號廚房排版', rarity: 'rare' },
   { id: 'layout-sunny-library', type: 'layout', key: 'sunny-library', name: '千陽號圖書室排版', rarity: 'rare' }
-].map(item => Object.freeze({ ...item, price: item.price ?? PRICES[item.rarity] })));
+].map(item => Object.freeze({ ...item,name:String(item.name||'').replace(/Q版/gi,''), price: item.price ?? PRICES[item.rarity] })));
 const BY_ID = new Map(CATALOG.map(item => [item.id, item]));
 const LAUNCHER_ITEM_TYPES = Object.freeze(['layout', 'background', 'frame', 'decoration', 'bgm', 'guestbook', 'room_scene', 'room_furniture', 'room_character']);
 const ROOM_ITEM_TYPES = Object.freeze(['room_scene', 'room_furniture', 'room_character']);
 const ROOM_DEFAULT_SCENE = 'room-scene-default';
 const ROOM_MAX_FURNITURE = 24;
 const ROOM_MAX_CHARACTERS = 10;
+const roomCharacterLimit=id=>id==='room-scene-sunny-deck'?6:4;
 const ROOM_WIDTH = 960;
 const ROOM_HEIGHT = 540;
 const COMPANION_MAX_AFFINITY = 100;
@@ -716,13 +717,15 @@ async function changeLauncherItem(pool, secret, itemId, action, capability) {
       }
       if (lifePurchase) {
         const rooms = launcherRooms(stats);
-        const room = rooms.scenes[rooms.sceneId];
+        const candidates=[...new Set([rooms.sceneId,...Object.keys(rooms.scenes),...launcherOwned.filter(id=>BY_ID.get(id)?.type==='room_scene')])];
+        const target=candidates.find(id=>(rooms.scenes[id]?.characters.length||0)<roomCharacterLimit(id));
+        const room = rooms.scenes[target]||{placements:[],characters:[]};
         // Ownership and room occupancy are separate: a full room must not block
         // buying a released character. The owner can swap the new character in.
-        const spawn = room.characters.length < ROOM_MAX_CHARACTERS && rooms.revision < Number.MAX_SAFE_INTEGER
+        const spawn = target&&room.characters.length < roomCharacterLimit(target) && rooms.revision < Number.MAX_SAFE_INTEGER
           ? require('./launcher-life').safeSpawn(room) : null;
         if (spawn) {
-          rooms.scenes[rooms.sceneId] = { ...room,
+          rooms.scenes[target] = { ...room,
             characters: [...room.characters, { itemId: item.id, ...spawn }] };
           rooms.revision++;
           storeLauncherRooms(stats, rooms);
@@ -924,6 +927,10 @@ async function setLauncherRoom(pool, secret, snapshot, capability) {
     if (canonicalError) { await db.query('ROLLBACK'); return crewRelease.failure(canonicalError, capability); }
     const stats = { ...object(row.stats) };
     const current = launcherRooms(stats);
+    for(const [id,value]of Object.entries(submitted)){
+      const before=current.scenes[id]?.characters||[];
+      if(value.characters.length>roomCharacterLimit(id)&&(value.characters.length>before.length||value.characters.some(c=>!before.some(old=>old.itemId===c.itemId)))){await db.query('ROLLBACK');return {ok:false,error:'room_character_limit'};}
+    }
     if ((current.scenes[current.sceneId].characters.length > 8 || snapshot.characters.length > 8) && snapshot.capacityVersion !== 2) {
       await db.query('ROLLBACK'); return { ok: false, error: 'upgrade_required', profile: toPublicProfile(row, true) };
     }
@@ -1083,7 +1090,7 @@ const claimLauncherCharacterWork = (pool, secret, itemId, now, capability) => la
 // The capability is an optional final argument so old server callers remain legacy.
 const withRoster = (fn, capabilityIndex) => async (...args) =>
   crewRelease.projectResponse(await fn(...args), args[capabilityIndex]);
-module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop,
+module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop,roomCharacterLimit,
   getLauncherProfile: withRoster(getLauncherProfile, 4), getLauncherShop: withRoster(getLauncherShop, 3),
   changeLauncherItem: withRoster(changeLauncherItem, 4),
   setLauncherBgmPlaylist: withRoster(setLauncherBgmPlaylist, 3),

@@ -1,7 +1,32 @@
 {
   "schemaVersion": 1,
-  "revision": 61,
+  "revision": 62,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r52-room-capacity",
+      "status": "published",
+      "publishedAt": "2026-10-09T03:57:51.950Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r52",
+      "title": "每間房間都有自己的空間",
+      "summary": "室內4人、甲板6人，夥伴分散活動，角色名稱移除Q版。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-room-capacity-r52.webp",
+        "alt": "原始船艙顯示4/4人，夥伴分配到其他房間"
+      },
+      "body": [
+        "室內房間最多4位，甲板最多6位；房間標籤顯示目前人數與上限。",
+        "舊配置中超額的角色在遊玩時分流到有空位的已解鎖房間；沒有空位則候補，原收藏與儲存配置不刪除。",
+        "前往房間中的夥伴會先占用名額，避免多人同時入房超額；優先前往人較少的房間，散步與對話站位也留出間距。",
+        "購買新夥伴時滿房會選其他已擁有的房間；全部滿員仍可購入收藏，稍後再安排。新保存配置不能增加超額角色；舊超額配置保留相容性。",
+        "商店及角色顯示名稱移除Q版，商品id、價格、收藏與釣竿資料不改。重新開啟啟動器套用差分。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r51-exhausted-reel",
       "status": "published",

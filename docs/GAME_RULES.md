@@ -1914,3 +1914,9 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - scripts/launcher_fishing_v5_browser_qa.js local分支61項真Chromium檢查通過，新增力竭字樣、回岸handle transform改變、reel音檔loop與volume>0.1、到岸後paused；保留必殺先顯示扣血、距離回收／fill與一次結算檢查。D:/Codex_QA/launcher-fishing-r51/browser-final；npm start静態HTTP200，資料庫未配置。附圖公告，差分公開交付待核對。
 
 - r51公開交付完成：source944ae718c57b250ccc7970fa0fa116f1889dd5f7；10/08/2026 15:33:27確認公開revision51與SHA256 94d6bc2133f712c4024c69a9a052bb77f2e72df5a253caef1d145a0e5073e65b。兩個修改renderer列入manifest，3個變動blob公開HEAD/GET/size/SHA通過。實際cache50→51下載678241 bytes，114檔与二次零下載通過；219檔更新快取備份。61釣魚瀏覽器檢查、82公告与npm start靜態HTTP200通過；非正式玩家交易或音質偏好驗收。證據D:/Codex_QA/launcher-fishing-r51/release-evidence.json。
+
+### 2026-10-09 r52 房間人數與名稱
+- desktop/launcher-room.js：室內4／甲板6；legacy解析仍最多10，不裁掉舊存檔。residents初始配置優先現有工作角色，超額分配已解鎖有空位房間，無空位sceneId空字串作本次候補；原配置不寫回。visitEntry計入destination入房預約，選房優先較少人，散步目的地距其他腳底至少兩格；標籤顯示人數／上限與候補，編輯新增限額。
+- desktop/launcher-life.js：聊天團體優先两格偏移，保留家具contact slot，不改工作／經濟命令。server/launcher-profile-shop.js：新存檔不可增加超額人數或新增超額id；既有超額id集合可保存以保護舊配置。買角色先找其他已擁有房間，全部滿員保留roomPlacementDeferred且不影響購買收藏。無資料刪除或id更名，沒有改room normalizer10人上限。
+- CATALOG名字統一移除Q版（角色／貼紙／舊頭像顯示名），id/key/價格不變；renderer對舊metadata亦清除角色名稱前綴，詳情与釣竿沿用該名字。
+- scripts/launcher_room_capacity_qa.js：兩視窗真Chromium，10人舊配置可見4／候補6，三房分配4/3/3，進房预約可拒第二位避免溢出、名稱乾淨、原10人保存不變。scripts/launcher_room_capacity_server_qa.js：真SQL隔離PGlite，新第五人拒絕、4人接受、甲板6接受7拒絕、舊10保存与收藏保留、滿房買入其他房間与全滿候補通過。25控制器、4既有生活事件／工作／唯讀回歸、40門口訪問檢查通過。旧launcher_profile_shop_qa.js硬編CATALOG125但現況已140，未把其失敗宣稱通過；上述定向SQL測試覆盖本次變更。npm start靜態HTTP200，無正式玩家帳號交易驗收。差分与公開後端部署待核對。

@@ -619,7 +619,7 @@
       const contact=initialSteps.find(step=>step.kind==='act'&&step.station);
       const station=world().stations.find(s=>contact?s.furnitureKey===contact.station:list(event.requiredFurniture).includes(s.furnitureKey));
       const center=station?.cell || leader.cell;
-      const offsets=event.expanded?[[-2,0],[2,0],[0,2],[0,-2],[-2,1],[2,1],[-2,-1],[2,-1]]:[[0,1],[-1,0],[1,0],[0,-1],[-1,1],[1,1],[-1,-1],[1,-1],[0,2],[-2,0]];
+      const offsets=[[-2,0],[2,0],[0,2],[0,-2],[-2,1],[2,1],[-2,-1],[2,-1],[-2,2],[2,2]];
       const entries=[];
       for(let i=0;i<keys.length;i++) {
         const key=keys[i];

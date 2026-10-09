@@ -5,6 +5,8 @@
   const WIDTH = 960;
   const HEIGHT = 540;
   const ROOM_MAX_CHARACTERS = 10;
+  const roomCharacterLimit=sceneId=>sceneId==='room-scene-sunny-deck'?6:4;
+  const characterDisplay=item=>item?.type===TYPES.character.type?{...item,name:String(item.name||'').replace(/Q版/gi,'')}:item;
   const DEFAULT_SCENE = 'room-scene-default';
   const SCENE_FALLBACK = 'opui://launcher/images/launcher_room/scenes/crew-cabin-cutout-v3.webp';
   const TYPES = {
@@ -321,12 +323,17 @@
     return room;
   }
   function syncResidents(room) {
-    const source=JSON.stringify([profile?.userId,Object.entries(room.scenes).map(([id,s])=>[id,s.characters])]);
+    const available=[...new Set([DEFAULT_SCENE,...Object.keys(room.scenes),...sceneChoiceIds()])];
+    const source=JSON.stringify([profile?.userId,available,Object.entries(room.scenes).map(([id,s])=>[id,s.characters])]);
     if(source===residentSource)return;
     cancelForgeVisit('房間佈置已變更，請重新找佛朗基。');
     residentSource=source;residents.clear();
-    for(const [sceneId,s]of Object.entries(room.scenes))for(const entry of s.characters){
-      if(!residents.has(entry.itemId)&&resolvedItem(entry.itemId,'character'))residents.set(entry.itemId,{sceneId,entry:{...entry},nextVisit:performance.now()+45000+residents.size*9000});
+    const count=id=>[...residents.values()].filter(r=>r.sceneId===id).length;
+    const entries=Object.entries(room.scenes).flatMap(([sceneId,s])=>s.characters.map(entry=>({sceneId,entry}))),jobs=new Set((profile?.life?.jobs||[]).map(j=>j.itemId));
+    entries.sort((a,b)=>Number(jobs.has(b.entry.itemId))-Number(jobs.has(a.entry.itemId)));
+    for(const {sceneId,entry}of entries)if(!residents.has(entry.itemId)&&resolvedItem(entry.itemId,'character')){
+      const target=count(sceneId)<roomCharacterLimit(sceneId)?sceneId:available.filter(id=>count(id)<roomCharacterLimit(id)).sort((a,b)=>count(a)-count(b))[0]||'';
+      residents.set(entry.itemId,{sceneId:target,homeSceneId:sceneId,entry:{...entry},nextVisit:performance.now()+45000+residents.size*9000});
     }
   }
   function rememberResidents() {
@@ -339,7 +346,8 @@
   function visitEntry(id,sceneId) {
     const saved=copyRoom(profile?.room),s=saved.scenes[sceneId]||blankScene();
     const characters=[...residents.values()].filter(r=>r.sceneId===sceneId&&r.entry.itemId!==id).map(r=>r.entry);
-    if(characters.length>=ROOM_MAX_CHARACTERS)return null;
+    const incoming=[...residents.values()].filter(r=>r.entry.itemId!==id&&r.destination===sceneId&&r.sceneId!==sceneId).length;
+    if(characters.length+incoming>=roomCharacterLimit(sceneId))return null;
     const occupied=layoutRoom({placements:s.placements,characters}).occupied;
     for(const cell of doorCells())if(!cellBlocked(cell,occupied))return cell;
     return null;
@@ -462,11 +470,12 @@
       return;
     }
     if(assignment||companionId||interaction||lifeRoom?.snapshot()?.foreground||document.querySelector('.fishing-journal-overlay'))return;
-    const choices=sceneChoiceIds();if(choices.length<2)return;
+    const choices=sceneChoiceIds();if(!choices.length)return;
     for(const r of residents.values()){
       const key=r.entry.itemId.replace('room-character-',''),task=lifeRoom?.snapshot()?.tasks?.find(t=>t.key===key);
       if(r.destination||now<r.nextVisit||lifeRoom?.isMinigameActive()||task&&!['Idle','Wander'].includes(task.state)||lifeRoom?.snapshot()?.jobs?.some(j=>j.itemId===r.entry.itemId))continue;
-      const targets=choices.filter(id=>id!==r.sceneId);const target=targets[Math.floor(Math.random()*targets.length)];
+      const targets=choices.filter(id=>id!==r.sceneId&&!!visitEntry(r.entry.itemId,id));if(!targets.length)continue;
+      targets.sort((a,b)=>[...residents.values()].filter(v=>v.sceneId===a||v.destination===a).length-[...residents.values()].filter(v=>v.sceneId===b||v.destination===b).length);const target=targets[0];
       r.nextVisit=now+15000;if(startRoomVisit(r.entry.itemId,target,now))break;
     }
   }
@@ -485,12 +494,12 @@
       if(!owned.includes(itemId))return null;
     }
     const bought = fromShop(itemId) || ownedProfileItems().find(item => item.id === itemId);
-    if (isValidProduct(bought, type)) return bought;
+    if (isValidProduct(bought, type)) return characterDisplay(bought);
     const resolved = profile?.roomItems || {};
     const list = kind === 'scene' ? [resolved.scene] : kind === 'furniture' ? resolved.placements : resolved.characters;
     const entry = (Array.isArray(list) ? list : []).find(value => (value?.itemId || value?.id) === itemId);
     const item = kind === 'scene' ? entry : entry?.item;
-    return isValidProduct(item, type) && item.id === itemId ? item : null;
+    return isValidProduct(item, type) && item.id === itemId ? characterDisplay(item) : null;
   }
   function ownedIds(kind) {
     const values = shop?.owned?.[TYPES[kind].owned];
@@ -501,7 +510,7 @@
     const byId = new Map();
     for (const item of ownedProfileItems()) if (isValidProduct(item, TYPES[kind].type)) byId.set(item.id, item);
     for (const item of catalog()) if (isValidProduct(item, TYPES[kind].type) && owned.has(item.id)) byId.set(item.id, item);
-    return [...byId.values()];
+    return [...byId.values()].map(characterDisplay);
   }
   const fishingJournal=window.OnePieceFishingJournal?.create({
     owner:isOwner,life:()=>({fishCollection:lifeRoom?.fishCollection?.()||[],fishDex:lifeRoom?.fishDex?.()||[],fishRecords:lifeRoom?.fishRecords?.()||{},rod:lifeRoom?.rod?.(),coins:lifeRoom?.fishingWallet?.()?.coins}),
@@ -533,7 +542,8 @@
     const choices = sceneChoiceIds();
     const index = Math.max(0, choices.indexOf(room.sceneId));
     const suffix = isOwner() && choices.length > 1 ? `${index + 1} / ${choices.length} · ` : '';
-    $('roomSceneCurrent').textContent = `${suffix}${sceneName(room.sceneId)}`;
+    const waiting=[...residents.values()].filter(r=>!r.sceneId).length;
+    $('roomSceneCurrent').textContent = `${suffix}${sceneName(room.sceneId)} · ${room.characters.length}/${roomCharacterLimit(room.sceneId)}人${waiting?` · 候補${waiting}`:''}`;
     for (const [buttonId, offset] of [['roomScenePrev', -1], ['roomSceneNext', 1]]) {
       const button = $(buttonId);
       button.hidden = !isOwner() || choices.length < 2;
@@ -841,7 +851,8 @@
   const COMPANION_ERRORS = {
     client_update_required: '請更新啟動器後再使用這位夥伴；原有配置與工作會保留。', character_not_released: '這位夥伴尚未開放。',
     talk_cooldown: '這位夥伴剛聊過天，稍後再來。', talk_daily_limit: '今天的聊天次數已用完。',
-    not_placed: '這位夥伴已離開房間，請重新整理。', not_owned: '這位夥伴尚未收藏。'
+    not_placed: '這位夥伴已離開房間，請重新整理。', not_owned: '這位夥伴尚未收藏。',
+    room_character_limit:'這個房間的人數已達上限，請把夥伴放到其他房間。'
   };
   async function performCompanionTalk() {
     if (!isOwner() || !companionId || companionBusy || !companionRecord(companionId)) return;
@@ -1225,6 +1236,7 @@
     }
     options.sort(() => Math.random() - .5);
     for (const candidate of options) {
+      if(walkers.some(other=>other!==walker&&Math.abs(candidate.col-other.cell.col)+Math.abs(candidate.row-other.cell.row)<2))continue;
       const route = routeBetween(origin, candidate, blockedFor(walker));
       if (!route) continue;
       walker.route = walker.segmentCell ? [walker.segmentCell, ...route] : route; walker.targetCell = candidate; break;
@@ -1938,7 +1950,7 @@
     const existing = list.find(value => value.itemId === item.id);
     if (existing) { setSelected(kind, item.id); $('roomStage').focus(); return; }
     const previousScene = deployedScene(item.id);
-    if (list.length >= (kind === 'furniture' ? 24 : ROOM_MAX_CHARACTERS)) { status(kind === 'furniture' ? '房間最多擺 24 件家具。' : `房間最多邀請 ${ROOM_MAX_CHARACTERS} 位夥伴。`, true); return; }
+    if (list.length >= (kind === 'furniture' ? 24 : roomCharacterLimit(draft.sceneId))) { status(kind === 'furniture' ? '房間最多擺 24 件家具。' : `這間房間最多邀請 ${roomCharacterLimit(draft.sceneId)} 位夥伴，請改放其他房間。`, true); return; }
     const index = list.length;
     const entry = kind === 'furniture'
       ? { itemId: item.id, x: [300, 705, 480, 610][index % 4], y: 385 + Math.floor(index / 4) * 28, scale: 1, rotation: 0, flip: false }
