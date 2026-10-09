@@ -1,25 +1,25 @@
 {
   "schemaVersion": 1,
-  "revision": 63,
+  "revision": 65,
   "announcements": [
     {
-      "id": "launcher-1.2.23-r53-rod-names",
+      "id": "launcher-1.2.23-r55-rod-names",
       "status": "published",
-      "publishedAt": "2026-10-09T05:01:49.066Z",
+      "publishedAt": "2026-10-09T06:20:02.030Z",
       "scope": "launcher",
       "category": "update",
-      "version": "1.2.23 r53",
+      "version": "1.2.23 r55",
       "title": "每一支釣竿，都有自己的名字",
-      "summary": "逐夢號、黑足焰、千紫萬紅：夥伴專用釣竿正式命名。",
+      "summary": "釣竿以專屬系列名搭配TYPE型別，圖鑑、展示與強化名稱一致。",
       "image": {
-        "asset": "images/launcher_announcements/launcher-rod-names-r53.webp",
-        "alt": "魯夫的逐夢號釣竿展示與能力頁"
+        "asset": "images/launcher_announcements/launcher-rod-names-r55.webp",
+        "alt": "魯夫的黎明冒險TYPE B釣竿展示"
       },
       "body": [
-        "13位已開放夥伴的釣竿依各自特色命名，個人釣竿、大圖展示與強化挑戰使用相同名稱。",
-        "魯夫「逐夢號」、索隆「三刀流」、娜美「天候棒」、騙人布「狙擊王」、香吉士「黑足焰」、喬巴「櫻花丸」、羅賓「千紫萬紅」。",
-        "佛朗基「鋼鐵將軍」、布魯克「靈魂樂章」、吉貝爾「海流一本背負」、艾斯「炎帝」、薩波「龍爪焰」、羅「ROOM」。",
-        "沿用現有釣竿造型與強化進度；重新開啟啟動器取得本次差分更新。"
+        "個人釣竿主標顯示系列名，副標顯示TYPE B／S／P、能力類型與強化等級；展示與強化畫面同步使用新名稱。",
+        "魯夫「黎明冒險」、索隆「鬼徹」、娜美「天候」、騙人布「狙王」、香吉士「黑焰」、喬巴「櫻吹雪」、羅賓「千花」。",
+        "佛朗基「鐵人」、布魯克「夜奏」、吉貝爾「海俠」、艾斯「炎帝」、薩波「龍爪」、羅「鬼哭」。",
+        "B為平衡、S為速拉、P為力量。沿用既有能力與強化進度；薩波依現有能力標示TYPE B。重新開啟啟動器取得差分更新。"
       ],
       "requiredRelease": {
         "kind": "launcher",

@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 53,
-  "publishedAt": "2026-10-09T05:01:49.157Z",
+  "revision": 55,
+  "publishedAt": "2026-10-09T06:20:47.742Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -137,6 +137,11 @@
       "path": "images/launcher_announcements/launcher-rod-names-r53.webp",
       "bytes": 78110,
       "sha256": "0ecc612d0384f22ad438789b209562a3b757f9d3240f7945aff7c6f98923d8c3"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-rod-names-r55.webp",
+      "bytes": 78470,
+      "sha256": "57e2549f6b433cee5c05ba08f7894a895917be3f630f53daa6eff492f4d4ffb1"
     },
     {
       "path": "images/launcher_announcements/launcher-room-capacity-r52.webp",
@@ -550,8 +555,8 @@
     },
     {
       "path": "launcher-room-aquarium.js",
-      "bytes": 42124,
-      "sha256": "492dff2c01bfaa0e33c0fed8ce0c3cef7d877c5912254662d61b27bac4b5d8af"
+      "bytes": 42366,
+      "sha256": "faf07aa06ce3878f361fb10c46887a4ee722e28cf8e6092c0a083a9cfccba342"
     },
     {
       "path": "launcher-room-dialogue.js",
@@ -592,6 +597,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "VMXvyfeeoTJkN06cnSDsFwmH0MDMvpSaXoHkEkvmdoJ5krlYmXljFr49ZqdYR7qgnsHrLm3q3Dgg8fWZ/FoJDA=="
+    "value": "7dIkaAe+TlSI/C1nEGkSP0L+Au1Cz/Yb4nEzGKJ2qzcp7HTquNutC/vC2NmPbYm+SxUBkSDtG85SK3kjAA92Aw=="
   }
 }
