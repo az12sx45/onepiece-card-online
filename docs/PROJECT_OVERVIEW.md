@@ -2808,3 +2808,5 @@ luffy：草帽遠航竿；zoro：三刀斬浪竿；nami：天候引潮竿；usop
 r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格式，釣具系列名採黎明冒險、鬼徹、天候、狙王、黑焰、櫻吹雪、千花、鐵人、夜奏、海俠、炎帝、龍爪、鬼哭。`desktop/launcher-room-aquarium.js` 主標顯示系列名，副標TYPE B/S/P與現有類型、強化等級；展示及強化使用完整型號。漢考克僅預留名稱，不解鎖。無經濟與存檔變更。
 
 驗證：Chromium圖鑑110項通過，桌機與小視窗排版正常；薩波現行能力為平衡型，TYPE B依實際資料修正先前提案。r53階段已驗證npm start頁面HTTP200，本次只改顯示文字。
+
+發布驗收：r55公開簽章清單SHA256 `27304a176a71664eacc80520feabc275166fe350018c1448e59e02451e8f8a69`；2個變更blob經HEAD/GET/大小/SHA核對，本機差分53→55、117檔案完整驗證、重試下載0。證據 `D:/Codex_QA/launcher-fishing-r55/release-evidence.json`。
