@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 62,
+  "revision": 63,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r53-rod-names",
+      "status": "published",
+      "publishedAt": "2026-10-09T05:01:49.066Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r53",
+      "title": "每一支釣竿，都有自己的名字",
+      "summary": "逐夢號、黑足焰、千紫萬紅：夥伴專用釣竿正式命名。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-rod-names-r53.webp",
+        "alt": "魯夫的逐夢號釣竿展示與能力頁"
+      },
+      "body": [
+        "13位已開放夥伴的釣竿依各自特色命名，個人釣竿、大圖展示與強化挑戰使用相同名稱。",
+        "魯夫「逐夢號」、索隆「三刀流」、娜美「天候棒」、騙人布「狙擊王」、香吉士「黑足焰」、喬巴「櫻花丸」、羅賓「千紫萬紅」。",
+        "佛朗基「鋼鐵將軍」、布魯克「靈魂樂章」、吉貝爾「海流一本背負」、艾斯「炎帝」、薩波「龍爪焰」、羅「ROOM」。",
+        "沿用現有釣竿造型與強化進度；重新開啟啟動器取得本次差分更新。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r52-room-capacity",
       "status": "published",

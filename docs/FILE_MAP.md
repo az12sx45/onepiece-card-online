@@ -1861,3 +1861,13 @@ QA：PGlite86項含強化/回滾/保存相容、36種尺寸範圍、新finish真
 - scripts/launcher_room_capacity_qa.js：兩視窗真Chromium，10人舊配置可見4／候補6，三房分配4/3/3，進房预約可拒第二位避免溢出、名稱乾淨、原10人保存不變。scripts/launcher_room_capacity_server_qa.js：真SQL隔離PGlite，新第五人拒絕、4人接受、甲板6接受7拒絕、舊10保存与收藏保留、滿房買入其他房間与全滿候補通過。25控制器、4既有生活事件／工作／唯讀回歸、40門口訪問檢查通過。旧launcher_profile_shop_qa.js硬編CATALOG125但現況已140，未把其失敗宣稱通過；上述定向SQL測試覆盖本次變更。npm start靜態HTTP200，無正式玩家帳號交易驗收。差分与公開後端部署待核對。
 
 - r52公開交付完成：source4575a558fd99d8ecba1ce07976086b17e9a21a9b；10/09/2026 04:09:52確認公開revision52、SHA256 658aa0874b1ab07e392e2efad838dbe574db9191e88d5297e51ce793279db46e。兩個修改renderer在manifest，3個變動blob公開HEAD/GET/size/SHA通過。實際cache51→52下載315475 bytes，115檔与二次零下載通過；222檔快取備份。兩視窗容量／名稱／預約、7隔離SQL場景、25控制器、4生活回歸、40門口、82公告、npm start靜態HTTP200通過。匿名公開Socket.IO預覽被HTTP403拒絕，未宣稱live名稱讀回或正式玩家購買驗收；未使用真玩家交易。證據D:/Codex_QA/launcher-fishing-r52/release-evidence.json。
+
+
+## 2026-10-09 釣竿命名 r53
+
+`desktop/launcher-room-aquarium.js` 統一個人釣竿、展示大圖與強化挑戰的名稱。名稱為遊戲原創、依角色主題命名；不宣稱原作釣具。角色 id、能力、等級、錢包及存檔不變。漢考克僅預留名稱，不開放角色。
+
+luffy：逐夢號；zoro：三刀流；nami：天候棒；usopp：狙擊王；sanji：黑足焰；chopper：櫻花丸；robin：千紫萬紅；franky：鋼鐵將軍；brook：靈魂樂章；jinbe：海流一本背負；ace：炎帝；sabo：龍爪焰；law：ROOM；hancock：虜之箭。
+驗證與部署結果待本次實測補記。
+
+驗證：JavaScript 語法與 Chromium 圖鑑110項檢查通過（1440×900、960×640）；npm start 的 board_start.html 回應200。本機未設定資料庫，不作正式帳號交易驗證。公告設定及實際畫面圖已加入。

@@ -422,6 +422,9 @@
 (() => {
   const ASSET='opui://launcher/images/launcher_room/fishing_ui_r29/';
   const el=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls||'';if(text!==undefined)n.textContent=text;return n;};
+  // Game-original rod names inspired by each owner; these are not canonical equipment.
+  const ROD_NAMES=Object.freeze({"luffy":"逐夢號","zoro":"三刀流","nami":"天候棒","usopp":"狙擊王","sanji":"黑足焰","chopper":"櫻花丸","robin":"千紫萬紅","franky":"鋼鐵將軍","brook":"靈魂樂章","jinbe":"海流一本背負","ace":"炎帝","sabo":"龍爪焰","law":"ROOM","hancock":"虜之箭"});
+  function rodName(id){return ROD_NAMES[String(id).replace("room-character-","")]||"航海釣竿";}
   function create(env){
     let artworkLayer,layer,card,tab='rods',selected='',page=0,groundPage=0,selectedSpecies='',forge=null,busy=false,journey=false,frame=0,clock=0,feedback='',previousFocus;
     function button(text,fn){const b=el('button','ghost-button',text);b.type='button';b.onclick=fn;return b;}
@@ -504,8 +507,8 @@
       const item=rod?.characters?.[selected];if(!item){content.append(el('p','','正在讀取釣竿資料…'));return;}
       const key=selected.replace('room-character-',''),level=item.level;
       const overview=el('div','fishing-rod-overview'),rodArt=el('div','fishing-journal-rod'),keys=['luffy','zoro','nami','usopp','sanji','chopper','robin','franky','brook','jinbe','ace','sabo','law'];
-      if(keys.includes(key)){const src='opui://launcher/images/launcher_room/fishing_rod_catalog_r43/'+key+'.webp';rodArt.append(picture(src,env.name(selected)+'的釣竿商品展示圖','fishing-journal-rod-image'));rodArt.setAttribute('role','button');rodArt.setAttribute('aria-label','放大'+env.name(selected)+'釣竿展示圖');rodArt.tabIndex=0;rodArt.onclick=()=>showRodArt(src,env.name(selected));rodArt.onkeydown=e=>{if(e.key==='Enter'||e.code==='Space'){e.preventDefault();e.stopPropagation();rodArt.click();}};}else rodArt.append(el('span','','展示圖準備中'));
-      const showcase=el('section','fishing-rod-showcase');showcase.append(el('h3','',env.name(selected)),el('p','fishing-rod-level',`+${level} / +99 · ${item.stats?.label||'資料讀取中'}`),rodArt);overview.append(showcase);
+      if(keys.includes(key)){const src='opui://launcher/images/launcher_room/fishing_rod_catalog_r43/'+key+'.webp';rodArt.append(picture(src,rodName(selected)+'・'+env.name(selected)+'專用釣竿展示圖','fishing-journal-rod-image'));rodArt.setAttribute('role','button');rodArt.setAttribute('aria-label','放大'+rodName(selected)+'釣竿展示圖');rodArt.tabIndex=0;rodArt.onclick=()=>showRodArt(src,rodName(selected));rodArt.onkeydown=e=>{if(e.key==='Enter'||e.code==='Space'){e.preventDefault();e.stopPropagation();rodArt.click();}};}else rodArt.append(el('span','','展示圖準備中'));
+      const showcase=el('section','fishing-rod-showcase');showcase.append(el('h3','',rodName(selected)),el('p','fishing-rod-level',`+${level} / +99 · ${item.stats?.label||'資料讀取中'}`),rodArt);overview.append(showcase);
       const values=item.stats,perf=values?.performance,stats=el('div','fishing-rod-stats');
       stats.setAttribute('aria-label','釣竿能力詳細數值');
       const metrics=el('dl','fishing-rod-metrics');const metric=(label,value,key)=>{const row=el('div','fishing-rod-metric');row.dataset.stat=key;row.append(el('dt','',label),el('dd','',value));metrics.append(row);};
@@ -518,7 +521,7 @@
       if(values){const grades=el('div','fishing-rod-grades');for(const [grade,mul]of [['C',1],['B',1.1],['A',1.25],['S',1.5]])grades.append(el('span','',grade+' '+Math.round(values.special*mul)));stats.append(grades);}
       stats.append(el('p','fishing-rod-reference','基準：100公尺、普通魚平穩收線。實戰速度會隨魚的拉力、掙扎與拋投距離變動。'));overview.append(stats);if(!forge)content.append(overview);
       if(forge){
-        const game=el('section','fishing-forge');game.append(el('h3','',env.name(selected)+' · 佛朗基強化挑戰'),picture('opui://launcher/images/launcher_room/fishing_v6/special-franky.webp','佛朗基','fishing-forge-franky'));
+        const game=el('section','fishing-forge');game.append(el('h3','',rodName(selected)+' · 佛朗基強化挑戰'),picture('opui://launcher/images/launcher_room/fishing_v6/special-franky.webp','佛朗基','fishing-forge-franky'));
         const hits=forge.hits||[],chance=Math.min(100,55+Math.round(hits.reduce((a,b)=>a+b,0)*.15));game.append(el('strong','',`敲擊 ${hits.length}/3 · 成功率 ${chance}% → 最高100%`));
         const rail=el('div','fishing-forge-rail');rail.append(el('span','fishing-forge-zone'),el('i','fishing-forge-pointer'));game.append(rail);const tap=button('敲！· 空白鍵',()=>void tapForge());tap.classList.add('fishing-forge-tap');tap.disabled=busy;content.append(game);const footer=el('footer','fishing-rod-footer');footer.append(tap);card.append(footer);
       }else{
@@ -535,5 +538,5 @@
       const b=el('button','fishing-journal-shortcut fishing-journal-shortcut-'+tab);b.type='button';b.setAttribute('aria-label','開啟'+label);const icon=el('img');icon.src='opui://launcher/images/launcher_room/'+art;icon.alt='';icon.draggable=false;b.append(icon,el('span','',label));b.onpointerdown=e=>{if(e.button!==0)return;e.preventDefault();e.stopImmediatePropagation();open(null,tab);};b.onclick=e=>{e.stopPropagation();if(e.detail===0)open(null,tab);};dock.append(b);
     }dock.hidden=true;document.body.append(dock);return dock;
   }
-  window.OnePieceFishingJournal={create,createShortcuts};
+  window.OnePieceFishingJournal={create,createShortcuts,rodName};
 })();
