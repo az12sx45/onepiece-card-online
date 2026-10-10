@@ -32,6 +32,7 @@ jobs:
           xcodebuild -project ios/TabletopIOS.xcodeproj -scheme TabletopIOS -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath ios/build CODE_SIGNING_ALLOWED=NO build
       - name: Package unsigned IPA for local signing
         run: |
+          node ios/package-qa.mjs ios/build/Build/Products/Release-iphoneos/TabletopIOS.app
           mkdir -p ios/build/Payload
           cp -R ios/build/Build/Products/Release-iphoneos/TabletopIOS.app ios/build/Payload/
           cd ios/build

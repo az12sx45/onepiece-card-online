@@ -9,9 +9,9 @@ targets:
     platform: iOS
     sources:
       - path: Sources
-    resources:
       - path: Resources
         type: folder
+        buildPhase: resources
     info:
       path: Info.plist
       properties:

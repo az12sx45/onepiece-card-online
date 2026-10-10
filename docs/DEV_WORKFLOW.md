@@ -8285,3 +8285,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 2026-10-11 接續：第一版 GitHub run 38068467970 編譯與 unsigned IPA 成功。其後新增 ios/Sources/LoopbackServer.swift（只綁定手機 loopback、穩定存檔來源、媒體 Range）及 ContentUpdate.swift（Ed25519／SHA256 內容更新、原子套用）、signature-qa.swift 原生簽章驗證。下載限制四路。最新改動另送編譯；尚未宣稱實機可玩。
 `n2026-10-11 iOS 試用身份相容：ios/Sources/App.swift 在載入遊戲前清除既有桌面登入快取鍵，再注入目前帳號；保留遊戲存檔鍵。驗證：橋接 QA 與後續雲端編譯，實機尚待。
+
+2026-10-11 修正 iOS XcodeGen 資源封裝：Resources 改用 sources/buildPhase resources；新增 ios/package-qa.mjs 逐檔比對 app bundle 與準備資源 SHA256，workflow 在封裝前強制執行，缺檔即失敗。舊 121KB IPA 不交付。
