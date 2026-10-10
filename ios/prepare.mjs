@@ -39,7 +39,7 @@ async function exactBytes(local, record, launcher = false) {
   if (!response.ok) throw new Error(`Missing verified blob: ${record.path}: ${response.status}`);
   return verified(Buffer.from(await response.arrayBuffer()), record.sha256, size);
 }
-const rendererNames = [...fs.readFileSync(path.join(root,'desktop/launcher.html'),'utf8').matchAll(/(?:href|src)="(launcher[^"/]+\.(?:js|css))"/g)].map(m => m[1]);
+const rendererNames = [...fs.readFileSync(path.join(root,'desktop/launcher.html'),'utf8').matchAll(/(?:href|src)="(launcher[^"/]*\.(?:js|css))"/g)].map(m => m[1]);
 rendererNames.push('launcher.html');
 for (const name of new Set(rendererNames)) {
   const record = content.files.find(f => f.path === name);

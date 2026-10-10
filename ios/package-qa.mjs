@@ -7,6 +7,7 @@ if(!bundle)throw new Error('App bundle path required');
 let reservedExists=false;
 try {await access(join(bundle,'Resources')); reservedExists=true;} catch(error) {if(error.code!=='ENOENT')throw error;}
 if(reservedExists)throw new Error('Reserved Resources directory must not exist in the iOS app root');
+for(const file of ['launcher.html','launcher.css','launcher.js','bridge.js','modules.js','ios.css'])await access(join(bundle,'GameAssets','launcher',file));
 let count=0,bytes=0;
 const hash=data=>createHash('sha256').update(data).digest('hex');
 const evidence=JSON.parse(await readFile(join(source,'build-evidence.json'),'utf8'));
