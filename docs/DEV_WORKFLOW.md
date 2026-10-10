@@ -8308,3 +8308,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-11 本機完整素材 QA：9564 筆清單引用與全部 blob SHA256 通過，現有資源樹 9768 檔 / 2,807,893,525 bytes；雲端乾淨 app bundle 另驗證。
 
 2026-10-11 完整 IPA 轉移：原 artifact 約 2.74GB 超出 connector 512MB 上限，新增 ios-full-transfer.yml 讀取已驗證 run 38072566416、不重新編譯，核對原 IPA SHA 後按 400MiB 切分七段；本機合併仍须對原 SHA，避免改包。
+
+2026-10-11 全素材候選交付詳見 IOS_TRIAL_20261011.md：雲端編譯、9659 檔封裝、本機合併 IPA 原 SHA 與 App/清單檢查通過；原檔存 D:/Codex_QA/ios-full-trial-20261011，暫存均保留。手機尚未確認裝好。
