@@ -8211,7 +8211,7 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 發布驗收：r55公開簽章清單SHA256 `27304a176a71664eacc80520feabc275166fe350018c1448e59e02451e8f8a69`；2個變更blob經HEAD/GET/大小/SHA核對，本機差分53→55、117檔案完整驗證、重試下載0。證據 `D:/Codex_QA/launcher-fishing-r55/release-evidence.json`。
 
-## 2026-10-10 彈幕留言板與主題商城 r56（候選）
+## 2026-10-10 彈幕留言板與主題商城 r56
 
 正式來源：D:/Codex_Release_Worktrees/launcher-flick-reward-r12；沿用 core 1.2.23，以簽章內容差分更新交付。LATTICE 工具在本工作階段不可用，沒有宣稱任務寫入或圖譜驗收。
 
@@ -8223,4 +8223,4 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - 已實測：scripts/launcher_guestbook_styles_qa.js 的49項隔離PGlite SQL/舊AuthService傳輸檢查PASS；scripts/launcher_guestbook_danmaku_qa.js 的51項Chromium互動與素材存在檢查PASS（1440×900、960×640，缺圖0，程式來源未在測試中改變），公告82項PASS。scripts/launcher_guestbook_gallery_qa.js 逐張20紙實際排版、全長240字千陽登船證紙安全區及展示截圖通過，範例留言不是正式玩家資料。npm start於41956啟動與靜態HTTP200；本機未設定DATABASE_URL，不代表正式帳號交易驗收。另由獨立agent只讀審查登入頭像競態、留言mutation、預設樣式/裝備與好友舊core兼容，未發現阻擋項目。
 - 簽署前驗收：60張最終素材尺寸/透明角/唯一輸出hash與目視複核完成，共7,560,982 bytes；頭像63–83、84–92的實際prompt與QA已合併，蕾貝卡為競技場頭盔版。斯摩格疤痕、培羅娜帽型、白星髮飾、柯拉松眼妝與留言紙碎邊等失敗候選已重畫替換，11張本次已確認失敗PNG精準刪除，成功原圖保留。公告使用真正介面的範例留言截圖。
 - r56簽章清單SHA256：dd4f0b756556dc9bf6a8789b79bc8dc70665375109193a4af70423f3f0287ea9。R2的66個變更blob全部HEAD/GET/大小/SHA通過。隔離候選overlay55→56只下載7,937,059 bytes（約7.57MiB）、182檔校驗、第二次下載0。npm start清單HTTP200；新圖片路徑直接對Render要求回404是desktop-only分流預期，資源由已核對R2 blob經本機opui供應，沒有放寬該分流。
-- 正式cache更新前已備份229檔並逐一hash相同。公開Render清單及正式cache讀回待部署後補記，不以push代替發布驗收。
+- 正式發布驗收：source a026b2fd09725f8264beafacae8f761b222983f7；2026-10-10T08:47:33.845Z 已讀回公開revision56，SHA256 dd4f0b756556dc9bf6a8789b79bc8dc70665375109193a4af70423f3f0287ea9與簽署候選逐byte相同。正式cache 55→56，本次下載7937059 bytes，182檔全部校驗、二次下載0；更新前229檔備份逐一hash相同。證據D:/Codex_QA/launcher-guestbook-r56/release-evidence.json。未使用正式玩家帳號購買或發文；購買/留言及舊core傳輸由隔離SQL與實際AuthService測試覆蓋。收尾還原server/index.js既有混合換行，與已发布來源忽略行尾後完全相同，沒有新增功能變更。
