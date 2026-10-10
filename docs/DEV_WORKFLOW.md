@@ -8278,3 +8278,7 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - r59封裝驗證：source 641275bff79f753d680c72f071581465767ebfe6；316檔簽章清單SHA256 ca80dabd0fadbc911453d3fb4afab8ae36d606c4eece6adfaef44809203bd33a。13個變更blob已公開HEAD/GET/大小/SHA核對；候選58→59下載2,488,715 bytes、316檔校驗、314個舊blob保留與二次0下載通過。三款遊戲11個共用頭像blob共2,214,810 bytes已不可覆寫上傳；688條本機頭像route驗證成功、網路fallback 0。正式公開切版與正式cache仍待讀回。
 
 - 2026-10-11 r59公開交付：release 6a5e616c1cf15bbcc47f0bab4b99803dcaaeafe7，公開清單SHA256 ca80dabd0fadbc911453d3fb4afab8ae36d606c4eece6adfaef44809203bd33a 與候選逐byte相同。三遊戲公開catalog、manifest、runtime-package版本、11個素材blob及22條共用alias完成讀回；商城330項公開資料核對。正式啟動器cache 58→59下載2,488,715 bytes、316檔校驗、舊314檔不變與二次0下載通過。僅備份兩個manifest槽位，沒有重複複製整份素材。證據docs/LAUNCHER_AVATAR_R59_RELEASE.json；未使用正式玩家帳號進行交易。
+
+## 2026-10-11 iOS 完整啟動器測試版接入（進行中）
+
+新增 ios/Sources/App.swift、ios/bridge.js、ios/prepare.mjs、ios/bridge-qa.mjs、ios/project.yml 與 .github/workflows/ios-trial.yml。原生 Keychain／素材雜湊快取與 46 項 renderer 契約，內附 card/board/chess 程式；更新接入仍 unavailable。詳見 docs/IOS_TRIAL_20261011.md。驗證：內容清單簽章與 109 個程式檔準備成功；橋接 QA 46 介面、未登入交易、密碼不持久化、拒絕交易、遊戲身份、登出清理通過。npm start 因缺 pg 失敗。未宣稱雲端編譯、手機安裝、實機效能或完整功能驗收完成。未修改遊戲規則、ID 或玩家存檔。

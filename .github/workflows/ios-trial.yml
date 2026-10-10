@@ -1,0 +1,40 @@
+name: iOS trial build
+on:
+  push:
+    branches: [codex/tabletop-ios-trial]
+    paths: ['ios/**', '.github/workflows/ios-trial.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Prepare verified launcher and three games
+        env:
+          IOS_SOURCE_COMMIT: ${{ github.sha }}
+        run: node ios/prepare.mjs
+      - name: Generate Xcode project
+        run: |
+          brew install xcodegen
+          xcodegen generate --spec ios/project.yml --project ios
+      - name: Compile unsigned device app
+        run: |
+          xcodebuild -project ios/TabletopIOS.xcodeproj -scheme TabletopIOS -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath ios/build CODE_SIGNING_ALLOWED=NO build
+      - name: Package unsigned IPA for local signing
+        run: |
+          mkdir -p ios/build/Payload
+          cp -R ios/build/Build/Products/Release-iphoneos/TabletopIOS.app ios/build/Payload/
+          cd ios/build
+          zip -qr TabletopIOS-unsigned.ipa Payload
+          shasum -a 256 TabletopIOS-unsigned.ipa > TabletopIOS-unsigned.sha256
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: tabletop-ios-unsigned
+          path: |
+            ios/build/TabletopIOS-unsigned.ipa
+            ios/build/TabletopIOS-unsigned.sha256
+            ios/Resources/build-evidence.json
+          retention-days: 7

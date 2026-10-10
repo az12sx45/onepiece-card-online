@@ -1,0 +1,28 @@
+name: TabletopIOS
+options:
+  bundleIdPrefix: tw.rihdi
+  deploymentTarget:
+    iOS: '17.0'
+targets:
+  TabletopIOS:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+    resources:
+      - path: Resources
+        type: folder
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: tw.rihdi.tabletop.trial
+        MARKETING_VERSION: 0.1.0
+        CURRENT_PROJECT_VERSION: 1
+        TARGETED_DEVICE_FAMILY: '1,2'
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: 海賊桌遊測試版
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
+        SWIFT_VERSION: '5.0'
+        CODE_SIGNING_ALLOWED: NO
+        ENABLE_USER_SCRIPT_SANDBOXING: YES

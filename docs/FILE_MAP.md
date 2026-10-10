@@ -1936,3 +1936,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - docs/LAUNCHER_AVATAR_R59.json：11張素材格式/SHA與本機商店驗證；D:/Codex_QA/launcher-shop-r59為完整QA。
 
 - docs/LAUNCHER_AVATAR_R59_RELEASE.json：2026-10-11公開清單/遊戲alias/blob與正式cache差分驗收收據。
+
+- ios/：iOS 測試版容器、登入／社交橋接、原生素材快取與雲端建置；狀態詳見 docs/IOS_TRIAL_20261011.md。
