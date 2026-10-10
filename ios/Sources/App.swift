@@ -100,11 +100,11 @@ final class ResourceStore {
         while let data = try handle.read(upToCount: 65536), !data.isEmpty { hash.update(data: data) }
         return hash.finalize().map { String(format: "%02x", $0) }.joined()
     }
-    func obtain(_ asset: Asset, launcher: Bool) async throws -> URL {
+    func obtain(_ asset: Asset, launcher: Bool, allowNetwork: Bool = false) async throws -> URL {
         guard safePath(asset.path), validHash(asset.sha256), asset.expectedSize >= 0 else { throw PortError.invalidFile }
         let bundled=resources.appendingPathComponent("blobs/\(asset.sha256)")
         if FileManager.default.fileExists(atPath:bundled.path) { return bundled }
-        if !launcher { throw PortError.invalidFile }
+        if !allowNetwork { throw PortError.invalidFile }
         let target = cache.appendingPathComponent(asset.sha256)
         if FileManager.default.fileExists(atPath: target.path), (try? digest(target)) == asset.sha256 { return target }
         if !launcher {

@@ -54,7 +54,7 @@ final class ContentUpdater {
         if manifest.revision <= store.content.revision { state=["status":"current","revision":store.content.revision];progress(state);return state }
         var downloaded=0;let total=manifest.files.reduce(0){$0 + $1.expectedSize}
         for file in manifest.files {
-            _ = try await store.obtain(file,launcher:true);downloaded += file.expectedSize
+            _ = try await store.obtain(file,launcher:true,allowNetwork:true);downloaded += file.expectedSize
             state=["status":"downloading","revision":manifest.revision,"downloadedBytes":downloaded,"totalBytes":total];progress(state)
         }
         staged=data;state=["status":"ready","revision":manifest.revision,"downloadedBytes":downloaded,"totalBytes":total];progress(state);return state

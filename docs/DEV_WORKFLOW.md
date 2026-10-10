@@ -8296,3 +8296,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-11 使用者指定完整素材內附：ios/prepare.mjs 將三遊戲及啟動器 manifest 的全部資源按 SHA256 去重納入 Resources/blobs；App.swift 優先讀 bundle，遊戲缺檔不回退 CDN；workflow 時限 60 分鐘。預估 8,392 個唯一 blob / 2,501,813,945 bytes。語法與橋接 QA 通過，完整準備／編譯／封裝及實機待驗證。
 
 2026-10-11 完整素材準備修正：核對 desktop/asset-store.js encodeAssetBlobUrl，遊戲 blob CDN 路徑含雜湊前兩碼；準備器已修正。啟動器 baseline 的 public 素材目錄亦全部內附，簽署 overlay 資源逐 SHA 驗證。
+
+2026-10-11 全素材版網路邊界：App.swift obtain 預設禁止素材網路回退，只有 ContentUpdate.swift 明確更新下載允許；signature-qa.swift 同步契約。prepare 對非本任務修改的 baseline 素材使用 HEAD 原始內容，避免混入 r5/r6 PNG 改動。

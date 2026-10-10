@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import {execFileSync} from 'node:child_process';
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const root = path.resolve(import.meta.dirname, '..');
@@ -11,6 +12,7 @@ const contentBytes = fs.readFileSync(path.join(root, 'public/desktop/launcher-co
 const content = JSON.parse(contentBytes);
 validateManifest(content, '1.2.23');
 const catalog = JSON.parse(fs.readFileSync(path.join(root, 'public/desktop/catalog-v3.json')));
+const modified = new Set(execFileSync('git',['diff','--name-only','HEAD'],{cwd:root,encoding:'utf8'}).trim().split(/\r?\n/));
 function put(name, bytes) {
   if (name.includes('..') || path.isAbsolute(name)) throw new Error('unsafe resource path');
   const target = path.join(output, name);
@@ -29,7 +31,7 @@ async function exactBytes(local, record, launcher = false) {
     try { return verified(Buffer.from(text),record.sha256,size); } catch {}
   }
   const base = launcher ? content.baseUrl : catalog.assetBlobBaseUrl + '/';
-  const response = await fetch(base + (launcher ? '' : record.sha256.slice(0,2)+'/') + record.sha256);
+  const response = await fetch(base + (launcher ? '' : record.sha256.slice(0,2)+'/') + record.sha256,{signal:AbortSignal.timeout(120000)});
   if (!response.ok) throw new Error(`Missing verified blob: ${record.path}: ${response.status}`);
   return verified(Buffer.from(await response.arrayBuffer()), record.sha256, size);
 }
@@ -69,7 +71,8 @@ async function bundleLauncherDirectory(relative){
     if(entry.isDirectory()){await bundleLauncherDirectory(item);continue;}
     if(!entry.isFile())throw new Error('Unsupported launcher asset: '+item);
     const record=content.files.find(f=>f.path===item);
-    put('launcher/'+item,record?await exactBytes(path.join(root,'public',item),record,true):fs.readFileSync(path.join(root,'public',item)));
+    const sourceBytes=modified.has('public/'+item)?execFileSync('git',['show','HEAD:public/'+item],{cwd:root,maxBuffer:128*1024*1024}):fs.readFileSync(path.join(root,'public',item));
+    put('launcher/'+item,record?verified(sourceBytes,record.sha256,record.bytes):sourceBytes);
     launcherBaselineFiles++;
   }
 }

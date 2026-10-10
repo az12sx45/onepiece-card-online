@@ -6,7 +6,7 @@ final class ResourceStore {
     var content:ContentManifest;var activeContentOverlay=false
     let cache=URL(fileURLWithPath:"/unused-signature-qa")
     init(_ content:ContentManifest){self.content=content}
-    func obtain(_ asset:Asset,launcher:Bool)async throws->URL{throw PortError.invalidRequest}
+    func obtain(_ asset:Asset,launcher:Bool,allowNetwork:Bool=false)async throws->URL{throw PortError.invalidRequest}
 }
 @main struct SignatureQA {
     static func main() throws {
