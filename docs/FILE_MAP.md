@@ -1922,3 +1922,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - docs/LAUNCHER_AVATAR_R58.json：100張素材規格與來源收據；config/launcher-announcements-v1.json revision68及public/images/launcher_announcements/launcher-avatar-r58.webp為圖文公告。
 - scripts/launcher_avatar_announcement_capture.js：實際商城預覽畫面的公告擷取。
 - D:/Codex_QA/launcher-shop-r58：QA、素材目視聯絡表、差分簽署/發布/讀回證據。
+
+- docs/LAUNCHER_AVATAR_R58_RELEASE.json：公開r58簽章/三遊戲套件/商品及正式cache差分收據、QA範圍與限制。

@@ -8244,7 +8244,7 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - 簽署候選SHA256 b60132321b740325d8fc33d2673a5fa3f0e2e9bf82c69bf76ece85410acf1a73；36個變更blob公開HEAD/GET/bytes/SHA全部PASS。隔離core1.2.23 overlay 56→57只下載7554740 bytes，213檔完整驗證，二次下載0。正式cache已備份295檔並核對SHA。2026-10-10T10:07:13.772Z 公開revision57與簽署候選逐byte相同；source 4d5934df3738a5c9ba837f37fbffe0423b20063d，manifest SHA256 b60132321b740325d8fc33d2673a5fa3f0e2e9bf82c69bf76ece85410acf1a73。正式cache 56→57，下載7554740 bytes、213檔校驗與二次0下載通過。完整證據 D:/Codex_QA/launcher-shop-r57/release-evidence.json。
 
 
-## 2026-10-10 全遊戲共用頭像與100款新畫風 r58（候選驗證完成，待公開發布）
+## 2026-10-10 全遊戲共用頭像與100款新畫風 r58（已公開發布）
 
 正式發布來源：D:/Codex_Release_Worktrees/launcher-flick-reward-r12，延續 core 1.2.23 差分。現行公共 catalog-v3 的三款清單與本機一致；112個既有 programFiles 均比對 Git HEAD 15d3eb7af blob 與現行manifest SHA相符。board-voyage-records-v1 的無關未提交修改保留，未作本次發布來源。此階段沒有可呼叫的 LATTICE 工具，沒有虛構 task/graph 紀錄。
 
@@ -8258,3 +8258,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - 頭像選單追加修正：保留未購買鎖頭及透明度、移除每張灰階filter，預設GPU路徑已目視完整顯示。瀏覽器QA在可視圖片decode完成後等待兩個frame。強制--disable-gpu的headless軟體raster仍可重現部分空圓，記為測試限制；正式main預設高效能GPU，此次不改核心或素材。
 
 - r58封裝驗證：source e1aae80ab8c7172e2f27a24ef6dfd1a5a8e40848；314檔簽章清單SHA256 57c25a8d7b4e7df82b9e457a22aed9d44041f1be69f07cb6b7071b0b261a5dd1。初次封裝攔截兩renderer工作檔CRLF與Git LF差異；只將三個核准變更renderer規整為Git精確bytes再簽，所有carry仍保留r57原SHA。104變更blob公開HEAD/GET/size/SHA通過；候選core1.2.23從57→58下載22,779,690 bytes、314檔驗證及二次0下載通過。三款新manifest的688條共用頭像route使用實際core快取類別，全部命中、網路fallback 0；175個遊戲CAS blob已不可覆寫上傳。正式公開切版與正式cache讀回仍待下一步。
+
+- r58公開驗證完成（2026-10-10T13:44:11.408Z）：簽章清單SHA256 57c25a8d7b4e7df82b9e457a22aed9d44041f1be69f07cb6b7071b0b261a5dd1 與候選逐byte一致；公開商城100新頭像、三遊戲catalog/manifest/runtime-package及175個CAS blob完整核對。正式啟動器cache從57→58，下載22779690 bytes、314檔校驗、二次0下載通過；沒有重新安裝核心或修改正式玩家交易。完整收據docs/LAUNCHER_AVATAR_R58_RELEASE.json。

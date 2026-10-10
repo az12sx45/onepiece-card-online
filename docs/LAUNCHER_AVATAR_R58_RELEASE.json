@@ -1,0 +1,140 @@
+{
+  "status": "PASS",
+  "coreVersion": "1.2.23",
+  "revision": 58,
+  "announcementRevision": 68,
+  "sourceCommit": "e1aae80ab8c7172e2f27a24ef6dfd1a5a8e40848",
+  "releaseCommit": "baa0e4b3ad419a0c42b4b5e1a61160c06e97457b",
+  "verifiedAt": "2026-10-10T13:44:11.408Z",
+  "manifestSha256": "57c25a8d7b4e7df82b9e457a22aed9d44041f1be69f07cb6b7071b0b261a5dd1",
+  "public": {
+    "status": "PASS",
+    "revision": 58,
+    "sha256": "57c25a8d7b4e7df82b9e457a22aed9d44041f1be69f07cb6b7071b0b261a5dd1",
+    "verifiedAt": "2026-10-10T13:39:18.186Z"
+  },
+  "games": {
+    "card": {
+      "releaseId": "package-69fb97aaf9644cbb",
+      "manifestSha256": "65d6dc1546051620564f08b5e82f2356c55067330ff1968275c854eed4988c44",
+      "runtimeProgramsVerified": true
+    },
+    "board": {
+      "releaseId": "package-5919e6e159cb3bf1",
+      "manifestSha256": "a0061b7fb0b4c431a3d1952e2ad7da86a2328d12399c2411808223f363b95182",
+      "runtimeProgramsVerified": true
+    },
+    "chess": {
+      "releaseId": "package-f1dd1442ff4fce94",
+      "manifestSha256": "b135981b1c88288ae7393caf7ae9dde56180b8b9c506ac2a276f218dc0660380",
+      "runtimeProgramsVerified": true
+    }
+  },
+  "avatars": {
+    "new": 100,
+    "styles": 20,
+    "ids": [
+      123,
+      222
+    ],
+    "size": [
+      735,
+      735
+    ],
+    "format": "RGBA WebP",
+    "shape": "circular with transparent exterior"
+  },
+  "differential": {
+    "from": 57,
+    "to": 58,
+    "launcherBytes": 22779690,
+    "logicalFiles": 314,
+    "secondDownload": 0,
+    "gameUniqueChangedBytes": 35441372,
+    "sharedGameBlobs": 175
+  },
+  "tests": {
+    "art": 100,
+    "isolatedSync": 23,
+    "twoBrowserThreeGames": 16,
+    "shopPreview": 521,
+    "guestbook": 50,
+    "backend": 49,
+    "announcements": 82,
+    "runtimeAvatarRoutes": 688,
+    "publicLauncherBlobs": 104,
+    "publicGameBlobs": 175
+  },
+  "scope": "Real public signed manifest, catalog, runtime-package endpoints and immutable blob SHA verified. Formal local launcher content cache updated after SHA-verified backup. Account transactions were exercised only on isolated PGlite, not on a formal player account.",
+  "limitations": [
+    "Forced --disable-gpu headless software raster can show partial blank picker circles; default GPU path after removing grayscale filters was visually verified.",
+    "LATTICE tools unavailable; no persistent task or graph verification claimed.",
+    "Automatic approval review blocked deletion of 12 rejected source PNGs; they remain outside published assets."
+  ],
+  "evidence": {
+    "publicManifest": {
+      "path": "D:/Codex_QA/launcher-shop-r58/public-manifest-report.json",
+      "sha256": "a1a3aed1c7f90e4ece21aae6195ffbad3b22dd1badc06d8595cdf5ca3a0abfba"
+    },
+    "publicGames": {
+      "path": "D:/Codex_QA/launcher-shop-r58/public-games-report.json",
+      "sha256": "128891f248a684bf78972e8d298cab681f885098019815dbfe1cc97ec1b679cc"
+    },
+    "publicShop": {
+      "path": "D:/Codex_QA/launcher-shop-r58/public-shop-report.json",
+      "sha256": "483dd7ecd216fe4faaa114bc038c92c6cb8a6f3e963dc9639fac268ef8a6d3b9"
+    },
+    "actualCache": {
+      "path": "D:/Codex_QA/launcher-shop-r58/actual-delta-report.json",
+      "sha256": "fc47f3df43d4b04ebce8c3bff6c12e6df119567ccb252e181f7e86066a5ef47c"
+    },
+    "backup": {
+      "path": "D:/Codex_QA/launcher-shop-r58/backup-report.json",
+      "sha256": "f39364f0772bcbd9f9d259075097ed78bcd7b2b1d49d1cf8a6ff1ed7907cfb73"
+    },
+    "render": {
+      "path": "D:/Codex_QA/launcher-shop-r58/render-deploy-report.json",
+      "sha256": "54f70ebac349809b345879603d7ed5ab3cb590776b9f2b1602449a7e14879607"
+    },
+    "candidate": {
+      "path": "D:/Codex_QA/launcher-shop-r58/candidate-delta-report.json",
+      "sha256": "fdcdb98829c175a3be991c1d309ccc6f20db6fd9e24b719943fd56231df743ea"
+    },
+    "blobs": {
+      "path": "D:/Codex_QA/launcher-shop-r58/public-blobs-report.json",
+      "sha256": "ac00f927aa833e82155bd81b2dcdea52d025e1bd7bb0aa688f6859668b43ee56"
+    },
+    "packageRuntime": {
+      "path": "D:/Codex_QA/launcher-shop-r58/package-runtime-report.json",
+      "sha256": "39eecf659e858c1a0ef1128652b340b645e4a7ef0cf1c15275075a38a4b608a6"
+    },
+    "art": {
+      "path": "D:/Codex_QA/launcher-shop-r58/art-pixel-report.json",
+      "sha256": "8cf8371da23984ea9c55ee50e8168b823b07a436ede088d5fc53b393df943a3e"
+    },
+    "sync": {
+      "path": "D:/Codex_QA/launcher-shop-r58/sync-server-report.json",
+      "sha256": "cafe9d78ff68b86cce0f2d00882978ad0e1c79b8cf0de59496fad6903cad5684"
+    },
+    "browser": {
+      "path": "D:/Codex_QA/launcher-shop-r58/game-browser/report.json",
+      "sha256": "a688b2a618385eb6c3c3be3a058d7b13a91413166dd0cde1a1e41cce0824a107"
+    },
+    "shopPreview": {
+      "path": "D:/Codex_QA/launcher-shop-r58/preview/preview-report.json",
+      "sha256": "fc29cb9356de692fe5e5ce6d476073c51e840db816261b9049602f9273b1596c"
+    },
+    "guestbook": {
+      "path": "D:/Codex_QA/launcher-shop-r58/guestbook-regression/report.json",
+      "sha256": "8e7585106dc525123af249f5dd01a5b98f438a9ddba88f58f5fe31eaafe75398"
+    },
+    "backend": {
+      "path": "D:/Codex_QA/launcher-shop-r58/backend-report.json",
+      "sha256": "7b6341dcf1f018718f257ef9424304c93676c87315dc642f52bba3421ca7fcbc"
+    },
+    "announcements": {
+      "path": "D:/Codex_QA/launcher-shop-r58/announcement-service-report.json",
+      "sha256": "9a44681a4ff295dee2389b0175b0f1e4ac6891a7db37cac729b68b14da052329"
+    }
+  }
+}
