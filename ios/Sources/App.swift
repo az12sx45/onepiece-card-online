@@ -301,7 +301,7 @@ final class LauncherController: UIViewController, WKScriptMessageHandlerWithRepl
                     try updater.apply();replyHandler(["ok":true,"state":updater.state],nil)
                     DispatchQueue.main.asyncAfter(deadline:.now()+0.2){[weak self] in self?.web.reload()}
                 case "getLauncherUpdateState","checkLauncherUpdate":
-                    replyHandler(["ok":true,"state":["status":"current","currentVersion":"0.1.0","message":"iOS 核心更新需重新簽署安裝；內容可在 App 內更新"]],nil)
+                    replyHandler(["ok":true,"state":["status":"current","currentVersion":Bundle.main.object(forInfoDictionaryKey:"CFBundleShortVersionString") as? String ?? "unknown","message":"iOS 核心更新需重新簽署安裝；內容可在 App 內更新"]],nil)
                 default:
                     // Explicitly pending; never claim a Windows binary updater can update an iOS app.
                     replyHandler(["ok":false,"state":["status":"unavailable","message":"iOS 更新接入尚未完成；測試版需重新安裝"]],nil)

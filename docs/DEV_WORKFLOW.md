@@ -8302,3 +8302,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-11 順序修正：正常顯示可讀已驗證的更新快取，無檔才拒絕網路回退，保持內容更新後的本機讀取。
 
 2026-10-11 全素材封裝驗收：package-qa.mjs 強制 fully-bundled、逐 manifest 資源大小及 blob 檔名 SHA256、來源／App bundle 全檔對照；project 0.1.1 build 2，artifact 改名 tabletop-ios-full-assets，避免拿到舊版。工作流程只保留同分支最新版編譯。
+
+2026-10-11 iOS 核心版本顯示直接讀 Info.plist，與 full-assets 0.1.1 build 2 一致。
