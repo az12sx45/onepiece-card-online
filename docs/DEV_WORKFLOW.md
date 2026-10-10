@@ -8241,4 +8241,4 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 - r57簽署前驗證：30張尺寸/alpha/圓形/唯一SHA；321項商城大圖測試（230商品、14種類、鍵盤/切頁/帳號/試聽、1440/960/540寬度）、51項彈幕與頭像回歸（1440×900、960×640，缺圖0，來源穩定）、49項PGlite/舊AuthService SQL橋接與82項公告檢查全部PASS。npm start於41957靜態頁及清單HTTP200；DATABASE_URL未配置，未作正式玩家購買或發文。
 
-- 簽署候選SHA256 b60132321b740325d8fc33d2673a5fa3f0e2e9bf82c69bf76ece85410acf1a73；36個變更blob公開HEAD/GET/bytes/SHA全部PASS。隔離core1.2.23 overlay 56→57只下載7554740 bytes，213檔完整驗證，二次下載0。正式cache已備份295檔並核對SHA，公開Render清單與正式cache讀回待部署後補記。
+- 簽署候選SHA256 b60132321b740325d8fc33d2673a5fa3f0e2e9bf82c69bf76ece85410acf1a73；36個變更blob公開HEAD/GET/bytes/SHA全部PASS。隔離core1.2.23 overlay 56→57只下載7554740 bytes，213檔完整驗證，二次下載0。正式cache已備份295檔並核對SHA。2026-10-10T10:07:13.772Z 公開revision57與簽署候選逐byte相同；source 4d5934df3738a5c9ba837f37fbffe0423b20063d，manifest SHA256 b60132321b740325d8fc33d2673a5fa3f0e2e9bf82c69bf76ece85410acf1a73。正式cache 56→57，下載7554740 bytes、213檔校驗與二次0下載通過。完整證據 D:/Codex_QA/launcher-shop-r57/release-evidence.json。
