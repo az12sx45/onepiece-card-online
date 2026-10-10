@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 58,
-  "publishedAt": "2026-10-10T13:24:33.553Z",
+  "revision": 59,
+  "publishedAt": "2026-10-10T15:59:19.621Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -60,8 +60,8 @@
     },
     {
       "path": "images/board/avatars/107.webp",
-      "bytes": 202392,
-      "sha256": "7a92c9a5aa7feaa54eacdd71d97047fba787dd17d0cc5c5842e7bdab48503b76"
+      "bytes": 154746,
+      "sha256": "9bd79716b9717194f77b52c10f1073a63cfd949ea919c6e7ae2d4302d93f4882"
     },
     {
       "path": "images/board/avatars/108.webp",
@@ -265,8 +265,8 @@
     },
     {
       "path": "images/board/avatars/148.webp",
-      "bytes": 252760,
-      "sha256": "eb0346d341d167341b7f8c913190f47778bbcabf0b5fbc2015c5c37a07503321"
+      "bytes": 207278,
+      "sha256": "41b730e5abe6736d31c791edaf7362fe45151b6a1c5a8fbc59c345465ba50013"
     },
     {
       "path": "images/board/avatars/149.webp",
@@ -275,8 +275,8 @@
     },
     {
       "path": "images/board/avatars/150.webp",
-      "bytes": 258112,
-      "sha256": "843032748ba9413f8661d6fb94e9f52ce3af9e23e3e2bff30e2cee2d92819461"
+      "bytes": 248372,
+      "sha256": "c14fed907e4f792e4ef0bf81e68ac2d2749d882366cfb8cf2cbc5d815c3f0aaa"
     },
     {
       "path": "images/board/avatars/151.webp",
@@ -285,8 +285,8 @@
     },
     {
       "path": "images/board/avatars/152.webp",
-      "bytes": 219024,
-      "sha256": "4cb373a20712eaab4320c7d30a67e1c065f9f7cf8567811e5180651b29fcb4df"
+      "bytes": 240612,
+      "sha256": "28e24d3e9934019370407b694359664969e716fb0c5ec51f31d406c3cd8ac2b6"
     },
     {
       "path": "images/board/avatars/153.webp",
@@ -335,8 +335,8 @@
     },
     {
       "path": "images/board/avatars/162.webp",
-      "bytes": 178994,
-      "sha256": "fe619681c111cc1218d423e0dc8c0b793d3508e9957a2ab86d2f3b939e6de55e"
+      "bytes": 163450,
+      "sha256": "11c7a193c8f3f45e081a67cf0edb861ea4ea3f164e027e4a0fa20a7645442ca6"
     },
     {
       "path": "images/board/avatars/163.webp",
@@ -435,8 +435,8 @@
     },
     {
       "path": "images/board/avatars/182.webp",
-      "bytes": 345580,
-      "sha256": "bf0b39e2a322bc5736719a58f539dbc4a67d62128261b487d419167ca0218e96"
+      "bytes": 272176,
+      "sha256": "1d6cd139c68f0344075210f66674d2b2f3335ea6ace7b4059a9b3323b43ae101"
     },
     {
       "path": "images/board/avatars/183.webp",
@@ -450,8 +450,8 @@
     },
     {
       "path": "images/board/avatars/185.webp",
-      "bytes": 255326,
-      "sha256": "763112205a4129f84a2d0d1f898b9254dd1b3da5ed040ef56d622000dddf7dd5"
+      "bytes": 234068,
+      "sha256": "b9cbbc183738275923ea6dd5c2f1da6815a7a2c4cb02cdfa6030fe8a932469c9"
     },
     {
       "path": "images/board/avatars/186.webp",
@@ -535,8 +535,8 @@
     },
     {
       "path": "images/board/avatars/202.webp",
-      "bytes": 298756,
-      "sha256": "4a157421e5da554db13bfa62c428c4b9bcfe9823690f0348837b92f0f55da8c3"
+      "bytes": 286392,
+      "sha256": "4c9a72c06d0031d0575e1815d8acd78124b09223ac6321b3d85d7f5bbd4f0425"
     },
     {
       "path": "images/board/avatars/203.webp",
@@ -639,6 +639,11 @@
       "sha256": "ac7a1201e43db1d75723ea2d3ee98be52de1b8c127b912fcf2bf1f68b8f3354b"
     },
     {
+      "path": "images/board/avatars/53.webp",
+      "bytes": 116680,
+      "sha256": "8bc785f72cff2729bbeeecde88200140a45c15f9a7165550f4320ad0b76c4a78"
+    },
+    {
       "path": "images/board/avatars/63.webp",
       "bytes": 131864,
       "sha256": "0e576b9e7147a5702f45dc8b2976a2965b098172d4ec867c5fc916e24f065afa"
@@ -690,8 +695,8 @@
     },
     {
       "path": "images/board/avatars/73.webp",
-      "bytes": 134744,
-      "sha256": "e7be001921e284b67b2f96fff4a059e5cc2fad3941d855978d5eff67a38cd787"
+      "bytes": 136984,
+      "sha256": "be53bb821887c9886d0a360cec137279c614d86eebf4d6d205eddd35c1c347d2"
     },
     {
       "path": "images/board/avatars/74.webp",
@@ -750,8 +755,8 @@
     },
     {
       "path": "images/board/avatars/85.webp",
-      "bytes": 144158,
-      "sha256": "83aa30042d5f501fe2ad50f801b4bc2e117fa22684f9ea17900a6a4826f989e5"
+      "bytes": 154052,
+      "sha256": "c2d1034df0f4ad2bc6f7e45750387b85ea0e1d89cfa02686c6bc5a19034cff6c"
     },
     {
       "path": "images/board/avatars/86.webp",
@@ -827,6 +832,11 @@
       "path": "images/launcher_announcements/launcher-avatar-r58.webp",
       "bytes": 152164,
       "sha256": "3b044cfdf924a8b7e00c3067c7820dd14fdb3a02532ff853ad8e087f1d373ffa"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-avatar-r59.webp",
+      "bytes": 141220,
+      "sha256": "01361c082b0b6256b6013e82934025971cafb5ac548cb4ebe0578d6509f4940e"
     },
     {
       "path": "images/launcher_announcements/launcher-fish-detail-r31.webp",
@@ -1520,8 +1530,8 @@
     },
     {
       "path": "launcher-profile-shop.js",
-      "bytes": 74266,
-      "sha256": "f34d76017326596cd6a21a57eba38cdf4ff4f72852dabf96d8925da8a6ca4356"
+      "bytes": 132685,
+      "sha256": "855947e33bdd30e4fc14176af225f3c2dbf5f72b40d00b5294d58a24d0327b40"
     },
     {
       "path": "launcher-room-aquarium.css",
@@ -1582,6 +1592,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "oQPzsbrug72urN4hclETWbuGqPrBcSguyAREnKMSMFWuLNcq3b8c9iRAnC3H7SNLlr4Epj7BqrhCA5nsO47UDg=="
+    "value": "yeTB1f4A9kYG22U63AaaWvimXEdqF6pFhMSACh/NgFWy+z0Ix2Y0uOJ5MPuT+SThTSjdV6lV7tOxVsvVnUrgCQ=="
   }
 }

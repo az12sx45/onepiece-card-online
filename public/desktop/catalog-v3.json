@@ -1,37 +1,37 @@
 {
   "schema": 3,
-  "createdAt": "2026-10-10T13:22:29.754Z",
+  "createdAt": "2026-10-10T15:59:09.068Z",
   "assetBlobBaseUrl": "https://game-assets.rihdi.tw/desktop/blobs/sha256",
   "sourceTrees": {
-    "images": "c9d37d53bc8a26c055f21435065f8d0ae9b5099d",
+    "images": "74fa0c9a822f0098f115f7e2313b31836298c58e",
     "audio": "71145f65e84fa61b975f706c99d428651b3161d1",
     "videos": "6ec01c6dfb4b86197680f43dfc96603ed14c8ec7",
     "fonts": "58fb1e833fe9c80e4713ae953c1ce2fc43a5b9f4"
   },
   "games": {
     "card": {
-      "releaseId": "package-69fb97aaf9644cbb",
-      "manifestPath": "desktop/manifests/card-package-69fb97aaf9644cbb.json",
-      "manifestSha256": "65d6dc1546051620564f08b5e82f2356c55067330ff1968275c854eed4988c44",
+      "releaseId": "package-a7d368a6e3feae01",
+      "manifestPath": "desktop/manifests/card-package-a7d368a6e3feae01.json",
+      "manifestSha256": "5ec74d1890d06c58e1086ef6df646b247c3926a5a82a059d4abba4bcd0903bcd",
       "entryPath": "start.html",
       "totalFiles": 1083,
-      "totalBytes": 780751357
+      "totalBytes": 780381981
     },
     "board": {
-      "releaseId": "package-5919e6e159cb3bf1",
-      "manifestPath": "desktop/manifests/board-package-5919e6e159cb3bf1.json",
-      "manifestSha256": "a0061b7fb0b4c431a3d1952e2ad7da86a2328d12399c2411808223f363b95182",
+      "releaseId": "package-5b099a798dac9202",
+      "manifestPath": "desktop/manifests/board-package-5b099a798dac9202.json",
+      "manifestSha256": "1e64a775b1c2c12dba55ab34bdaa94827a8651cc70b30949315d448fe112efd2",
       "entryPath": "board_start.html",
       "totalFiles": 6587,
-      "totalBytes": 1597711254
+      "totalBytes": 1597526566
     },
     "chess": {
-      "releaseId": "package-f1dd1442ff4fce94",
-      "manifestPath": "desktop/manifests/chess-package-f1dd1442ff4fce94.json",
-      "manifestSha256": "b135981b1c88288ae7393caf7ae9dde56180b8b9c506ac2a276f218dc0660380",
+      "releaseId": "package-ee4627881596bdad",
+      "manifestPath": "desktop/manifests/chess-package-ee4627881596bdad.json",
+      "manifestSha256": "a456de14211bac9ab767ae2a7a56525cadb7a85516d3fb32f86ca1f6f4058ce5",
       "entryPath": "chess/index.html",
       "totalFiles": 1578,
-      "totalBytes": 374994967
+      "totalBytes": 374810279
     }
   }
 }

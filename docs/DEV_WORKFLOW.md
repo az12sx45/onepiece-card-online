@@ -8273,3 +8273,6 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - scripts/launcher_shop_local_catalog.js由權威CATALOG產出本機公開目錄。商品或開放角色更新必跑node scripts/launcher_shop_local_catalog.js --write；發布前不帶--write驗證一致與無私有wallet/owned/equipped資料。
 - scripts/build_avatar_repair_release.js只更新11個image記錄，Card的legacy與Board alias同SHA，三款既有program逐檔锁baseline；tools/launcher-shop-r59/build-overlay.js保留r58 carry SHA。verify-delta helper候選/正式cache已依mode鎖exact realpath，禁止reparse；正式更新前備份manifest，更新後驗證原immutable blobs不變，避免複製一整份素材。
 - 公告revision69/launcher-1.2.23-r59-local-shop，附真實商店克比大圖預覽。QA及差分讀回放D:/Codex_QA/launcher-shop-r59。
+
+
+- r59封裝驗證：source 641275bff79f753d680c72f071581465767ebfe6；316檔簽章清單SHA256 ca80dabd0fadbc911453d3fb4afab8ae36d606c4eece6adfaef44809203bd33a。13個變更blob已公開HEAD/GET/大小/SHA核對；候選58→59下載2,488,715 bytes、316檔校驗、314個舊blob保留與二次0下載通過。三款遊戲11個共用頭像blob共2,214,810 bytes已不可覆寫上傳；688條本機頭像route驗證成功、網路fallback 0。正式公開切版與正式cache仍待讀回。
