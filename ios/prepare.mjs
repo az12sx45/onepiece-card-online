@@ -5,7 +5,7 @@ import {execFileSync} from 'node:child_process';
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const root = path.resolve(import.meta.dirname, '..');
-const output = path.join(root, 'ios', 'Resources');
+const output = path.join(root, 'ios', 'GameAssets');
 const { validateManifest } = require('../desktop/launcher-content-overlay.js');
 const { RENDERER_FILES } = require('../desktop/launcher-content-overlay.js');
 const contentBytes = fs.readFileSync(path.join(root, 'public/desktop/launcher-content-v1.json'));

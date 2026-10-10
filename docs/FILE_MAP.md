@@ -1944,3 +1944,6 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - ios/Resources/blobs（生成且不提交）：啟動器及三遊戲全部素材 SHA256 去重存放。
 
 - .github/workflows/ios-full-transfer.yml：將已驗證全素材 IPA 分段傳輸，維持原檔案 bytes。
+
+
+2026-10-11 iOS 安裝修正候選 0.1.2 build 3：Sideloadly 已上傳 100%，實機安裝回報 IXErrorDomain Code 13 / Missing bundle ID。原 IPA 的 Info.plist 確有 tw.rihdi.tabletop.trial；參考 dotnet/macios#22852，同名 Resources 根目錄可造成相同錯誤。將 ios/prepare.mjs、project.yml、App.swift、bridge-qa.mjs、package-qa.mjs 與 ios-trial.yml 的資源根目錄改為 GameAssets，素材內容與遊戲身份不改。封裝 QA 拒絕 App 根目錄 Resources，CI 增加 simulator install 與小型 core artifact 供本機保留全部原素材組裝。實機原因與修復成功仍待驗證；LATTICE API 本階段未提供，沒有假稱持久登記。

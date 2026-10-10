@@ -8316,3 +8316,6 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-11 簽署工具接續：Sideloadly 0.70.1 由官方下載安裝，USB/iOS27.2 辨識成功；同一份全素材 IPA 待匯入。AltServer Cocoa4 錯誤來源未確定，未改包或削減素材。
 
 2026-10-11 Sideloadly 成功載入全素材 IPA 並讀出 App metadata，Start 可用，登入與實機安裝結果待使用者操作。
+
+
+2026-10-11 iOS 安裝修正候選 0.1.2 build 3：Sideloadly 已上傳 100%，實機安裝回報 IXErrorDomain Code 13 / Missing bundle ID。原 IPA 的 Info.plist 確有 tw.rihdi.tabletop.trial；參考 dotnet/macios#22852，同名 Resources 根目錄可造成相同錯誤。將 ios/prepare.mjs、project.yml、App.swift、bridge-qa.mjs、package-qa.mjs 與 ios-trial.yml 的資源根目錄改為 GameAssets，素材內容與遊戲身份不改。封裝 QA 拒絕 App 根目錄 Resources，CI 增加 simulator install 與小型 core artifact 供本機保留全部原素材組裝。實機原因與修復成功仍待驗證；LATTICE API 本階段未提供，沒有假稱持久登記。

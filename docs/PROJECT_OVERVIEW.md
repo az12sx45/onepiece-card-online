@@ -2845,3 +2845,6 @@ r57公開發布完成：30張素材、321項大圖预覽、51項留言板/新頭
 完整啟動器與三款遊戲的獨立測試分支。使用 native 儲存與 WKWebView，尚未達完整功能／實機驗收；更新功能待接入，詳見 docs/IOS_TRIAL_20261011.md。
 
 2026-10-11 iOS 試用範圍改為啟動器／三款遊戲全部素材內附；帳號與多人 API 仍需連線。
+
+
+2026-10-11 iOS 安裝修正候選 0.1.2 build 3：Sideloadly 已上傳 100%，實機安裝回報 IXErrorDomain Code 13 / Missing bundle ID。原 IPA 的 Info.plist 確有 tw.rihdi.tabletop.trial；參考 dotnet/macios#22852，同名 Resources 根目錄可造成相同錯誤。將 ios/prepare.mjs、project.yml、App.swift、bridge-qa.mjs、package-qa.mjs 與 ios-trial.yml 的資源根目錄改為 GameAssets，素材內容與遊戲身份不改。封裝 QA 拒絕 App 根目錄 Resources，CI 增加 simulator install 與小型 core artifact 供本機保留全部原素材組裝。實機原因與修復成功仍待驗證；LATTICE API 本階段未提供，沒有假稱持久登記。

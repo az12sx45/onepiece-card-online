@@ -75,7 +75,7 @@ final class ResourceStore {
     private var states: [String: [String: Any]] = [:]
     private let gate=DownloadGate()
     init() throws {
-        guard let resources = Bundle.main.url(forResource: "Resources", withExtension: nil) else { throw PortError.invalidFile }
+        guard let resources = Bundle.main.url(forResource: "GameAssets", withExtension: nil) else { throw PortError.invalidFile }
         self.resources = resources
         cache = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("tabletop-sha256", isDirectory: true)
         try FileManager.default.createDirectory(at: cache, withIntermediateDirectories: true)

@@ -29,7 +29,7 @@ context.window.io=()=>{
   return socket;
 };
 try {
-  vm.runInContext(fs.readFileSync(new URL('./Resources/launcher/modules.js',import.meta.url),'utf8'),context);
+  vm.runInContext(fs.readFileSync(new URL('./GameAssets/launcher/modules.js',import.meta.url),'utf8'),context);
   vm.runInContext(fs.readFileSync(new URL('./bridge.js',import.meta.url),'utf8'),context);
   const api=context.window.onePieceDesktop;
   const preload=fs.readFileSync(new URL('../desktop/preload.js',import.meta.url),'utf8');
