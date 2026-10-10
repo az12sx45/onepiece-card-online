@@ -1899,3 +1899,13 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - scripts/launcher_guestbook_styles_qa.js、launcher_guestbook_danmaku_qa.js：隔離SQL/舊core橋接與真實DOM/CSS互動檢查。輸出D:/Codex_QA/launcher-guestbook-r56；非正式玩家帳號交易紀錄。
 - scripts/launcher_guestbook_gallery_qa.js：正式HTML/CSS配範例留言，逐紙張排版、240字全文安全區、商城分類與公告用實際畫面截圖。
 - config/launcher-announcements-v1.json、public/images/launcher_announcements/launcher-guestbook-r56.webp：r56更新公告與實際介面預覽圖。
+
+
+## 2026-10-10 商城預覽 r57
+
+- desktop/launcher-profile-shop.js/.css、launcher.html：完整留言板與通用商品預覽對話框。
+- server/launcher-profile-shop.js、desktop/launcher.js、launcher-social.js：93–122頭像商品與顯示上限。
+- public/images/board/avatars/93..122.webp：30款735×735透明圓形頭像。
+- tools/launcher-shop-r57/：六種風格規格、逐張生圖來源、提示與QA紀錄。
+- scripts/launcher_shop_preview_qa.js：所有商品預覽、無誤購、切頁/切帳號與完整板面測試；scripts/launcher_guestbook_styles_qa.js與launcher_guestbook_danmaku_qa.js延續SQL和介面回歸。
+- D:/Codex_QA/launcher-shop-r57：本次驗證、截圖與簽署差分證據，不包含正式玩家交易。

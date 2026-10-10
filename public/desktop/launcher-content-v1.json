@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 56,
-  "publishedAt": "2026-10-10T08:31:40.944Z",
+  "revision": 57,
+  "publishedAt": "2026-10-10T09:53:16.643Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -22,6 +22,121 @@
       "path": "audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg",
       "bytes": 16176,
       "sha256": "6afa2406345448a4ee6fc9fc2ef3b88a508c1519fe3518f33f53b6216849f66f"
+    },
+    {
+      "path": "images/board/avatars/100.webp",
+      "bytes": 299404,
+      "sha256": "c797aff6dd80a750bd0570944627691b8c3ac47c1088641b4d90cb35efc1ead1"
+    },
+    {
+      "path": "images/board/avatars/101.webp",
+      "bytes": 282240,
+      "sha256": "1c5f587debf9b172290f9bf2c697a9b21f281ffbd3e019bb898b4c5c8c14eb8d"
+    },
+    {
+      "path": "images/board/avatars/102.webp",
+      "bytes": 306292,
+      "sha256": "0c2df8294694608002aa47adfc9d93f2f87e5d4a3d149a8543004d25e8aae1a0"
+    },
+    {
+      "path": "images/board/avatars/103.webp",
+      "bytes": 235380,
+      "sha256": "51d6e72f9400d984d229c1bb50f60c1b9e678901606e8e3ae42d96e5bb2c561b"
+    },
+    {
+      "path": "images/board/avatars/104.webp",
+      "bytes": 243820,
+      "sha256": "749270ed0e133ffe4654f7d893126e22c962b09186f6c6c9c2f2404016347a18"
+    },
+    {
+      "path": "images/board/avatars/105.webp",
+      "bytes": 223622,
+      "sha256": "0f9b1a4e1ba1040411da2c38eeaf6b6dc7c1e79deac18dddce97e4e3e9ad1665"
+    },
+    {
+      "path": "images/board/avatars/106.webp",
+      "bytes": 219574,
+      "sha256": "c4aeeb8d6e098f8272139ac306ccafd64f296d8d45ae38817b66c0c3ad22b431"
+    },
+    {
+      "path": "images/board/avatars/107.webp",
+      "bytes": 202392,
+      "sha256": "7a92c9a5aa7feaa54eacdd71d97047fba787dd17d0cc5c5842e7bdab48503b76"
+    },
+    {
+      "path": "images/board/avatars/108.webp",
+      "bytes": 226106,
+      "sha256": "ddf2aa5d56df2832b7b99374f4aa55d4f46d54f553ba60f1713162e82204097e"
+    },
+    {
+      "path": "images/board/avatars/109.webp",
+      "bytes": 246020,
+      "sha256": "29136053586eed232dd0785a6a4292dc9d0f8a6e7b625f9a6783d52e30b7d69c"
+    },
+    {
+      "path": "images/board/avatars/110.webp",
+      "bytes": 215168,
+      "sha256": "856c1ada0e204dbeb62ea55aff0d88c1dff0bde09b13b0e3e930eb99844aabd8"
+    },
+    {
+      "path": "images/board/avatars/111.webp",
+      "bytes": 187324,
+      "sha256": "4f58c9bec185f5c62e810c00847ececab5fb7851e13e32e0b308254ae7c1e9a6"
+    },
+    {
+      "path": "images/board/avatars/112.webp",
+      "bytes": 260366,
+      "sha256": "b39b69a53037a66bba9f7e512c03181f04d133444ea3bb60ce45494498c667f8"
+    },
+    {
+      "path": "images/board/avatars/113.webp",
+      "bytes": 255936,
+      "sha256": "7ef62f0978ddb83904e6a41405704cb30ce80fe5ea90a8d70bf8d8dbdfc40807"
+    },
+    {
+      "path": "images/board/avatars/114.webp",
+      "bytes": 272052,
+      "sha256": "5a87378c6f4b153952ab7d7c09cb7db61357715c6c116ffbd3b6778997d9750e"
+    },
+    {
+      "path": "images/board/avatars/115.webp",
+      "bytes": 269082,
+      "sha256": "432e6e756e41de60f00a2c5b74e093c87d6b3c45e8b77e102b09afa12e6edc10"
+    },
+    {
+      "path": "images/board/avatars/116.webp",
+      "bytes": 292872,
+      "sha256": "1f4157d0afaa53263494df4f99f01a20d17b5f7aba6f4c570c4041285e898c8f"
+    },
+    {
+      "path": "images/board/avatars/117.webp",
+      "bytes": 264552,
+      "sha256": "1835456c5dd815b1bb94bfb6835a90a3bcd27a7ef71d4bad2e991117c0b13584"
+    },
+    {
+      "path": "images/board/avatars/118.webp",
+      "bytes": 174822,
+      "sha256": "4718311f6ab8b9a9710587570b65a10657b0d1730e56e06f88c9082208f6c894"
+    },
+    {
+      "path": "images/board/avatars/119.webp",
+      "bytes": 184144,
+      "sha256": "122e8bbfa76310e9b75c8dfd2e24a0fe4a65b5d1cc5f94095cf05df1011d9ab4"
+    },
+    {
+      "path": "images/board/avatars/120.webp",
+      "bytes": 188998,
+      "sha256": "5b3780e4e7ea2eec4647bb05d8b09920f87a03931a32db3a347cbbccb683920a"
+    },
+    {
+      "path": "images/board/avatars/121.webp",
+      "bytes": 201918,
+      "sha256": "bd6e01750ddc0db26f4ade09329727e1211c88fd34216b23e7f2a81722fc12b2"
+    },
+    {
+      "path": "images/board/avatars/122.webp",
+      "bytes": 188742,
+      "sha256": "5dffca5ed5534ff202066935b9d95d2e0e74bcab9566ac918eb7036621d50046"
     },
     {
       "path": "images/board/avatars/63.webp",
@@ -174,6 +289,41 @@
       "sha256": "b2e39b3a9e4999a60566a21bdb09b0346f4431c62be02e05fc7607e3cdecb2b7"
     },
     {
+      "path": "images/board/avatars/93.webp",
+      "bytes": 248624,
+      "sha256": "0bafe0d2f20ebeca60b344cd3b8c5aa986f9a640c966a68330af00714f6fc5bd"
+    },
+    {
+      "path": "images/board/avatars/94.webp",
+      "bytes": 224204,
+      "sha256": "44b03b5e3f5759df387202642c0fb92e85528542ad426cfaff196df189a625d3"
+    },
+    {
+      "path": "images/board/avatars/95.webp",
+      "bytes": 220358,
+      "sha256": "a9c6ffdaff1be97a9aade991aacc51886b3d927b231c7b035f29e799196959a6"
+    },
+    {
+      "path": "images/board/avatars/96.webp",
+      "bytes": 226006,
+      "sha256": "b717198e12ccd49acac272fb9be7ae6622eac6e72879694b8c66b748dbceaa25"
+    },
+    {
+      "path": "images/board/avatars/97.webp",
+      "bytes": 224938,
+      "sha256": "d0adb25d97dff56aafef9587764dfca503195482dad69d5cf38104faa34e8a7f"
+    },
+    {
+      "path": "images/board/avatars/98.webp",
+      "bytes": 303394,
+      "sha256": "e4f8f861b60f28f4abd0e1cccc9833053c3dd3005650051c2a4e2bb5e969333c"
+    },
+    {
+      "path": "images/board/avatars/99.webp",
+      "bytes": 312940,
+      "sha256": "621b86d00963972bed427b36e1a41e017b3e564f1f3063279d17721b87b05a44"
+    },
+    {
       "path": "images/launcher_announcements/launcher-fish-detail-r31.webp",
       "bytes": 110570,
       "sha256": "69d7122d5d85813f53c7dffa112719e039a7342e35ef71c952404a46d01bf477"
@@ -312,6 +462,11 @@
       "path": "images/launcher_announcements/launcher-room-visits-r45.webp",
       "bytes": 151528,
       "sha256": "3f0df56475bd2e889e795d5b1163511dbe529eac80f5c19f67633466818ce11d"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-shop-r57.webp",
+      "bytes": 134772,
+      "sha256": "d5d9457f3984492bd1d65bb74baa8f69dc9610587b4a237ae1c3a41bcfe91d75"
     },
     {
       "path": "images/launcher_announcements/launcher-wii-meter-r36.webp",
@@ -855,13 +1010,13 @@
     },
     {
       "path": "launcher-profile-shop.css",
-      "bytes": 33198,
-      "sha256": "88588101160a623d3071397374fe156593f8cecf5fbe6322a211ef40cbc28f6a"
+      "bytes": 36528,
+      "sha256": "e301b7d8ffd86638df4ea941ea670e4df590359453741ffe9c081d0b41def68e"
     },
     {
       "path": "launcher-profile-shop.js",
-      "bytes": 70612,
-      "sha256": "d24faecd4705a305747e2ffbf95bb9500d959812bb2d9e4538475919d5ba37e7"
+      "bytes": 75332,
+      "sha256": "17fc8715f5fed84b988f3014559c0191f13f4354bbc3dae0448600c168ac4e4c"
     },
     {
       "path": "launcher-room-aquarium.css",
@@ -905,23 +1060,23 @@
     },
     {
       "path": "launcher-social.js",
-      "bytes": 13963,
-      "sha256": "f1730f7b2813347df9f5f94e50510d1cce50f161fe05ed1e0730a5a0a3252346"
+      "bytes": 13965,
+      "sha256": "94cf68b86ab3797e03b5300d6e61d7346419e2c5b073ba648e79c18c9382acd4"
     },
     {
       "path": "launcher.html",
-      "bytes": 40647,
-      "sha256": "4636456ca3e62390b33763644ef53485abbb951efd07d0febdfe9116362bb362"
+      "bytes": 41273,
+      "sha256": "b90fa7dc0466fcec68313a2011b516067e3a23f38f675ee61ee42e29d78f3b92"
     },
     {
       "path": "launcher.js",
-      "bytes": 51579,
-      "sha256": "d5275c68ef0ec4be22b5c38b21bafcf68dc9e3fde8650955f1edb083716848f7"
+      "bytes": 51580,
+      "sha256": "775c87336cd48b25c1c918f7f66b1c9a0a90361a771508f44fe2d981507dcf70"
     }
   ],
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "NTxXRLIIW8fksn4fPPeV8qbs2e2+ax0dXyCrTimdRA9GMvzrrOKwfU52pxI+eJzbyLiLa2FUM7Qvd2TzHg2kBg=="
+    "value": "rTSPmapagMgkz4af8oqjaxNmOo1e3rOh6Rf6PrJzYZWtYd88SerD3FF4Z3bNfOYt93sAtZgCq2i2GHjpB8h/Cw=="
   }
 }

@@ -1,7 +1,36 @@
 {
   "schemaVersion": 1,
-  "revision": 66,
+  "revision": 67,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r57-shop-preview",
+      "status": "published",
+      "publishedAt": "2026-10-10T09:48:17.668Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r57",
+      "title": "新風格，新的航海名片",
+      "summary": "再添30款風格頭像！留言板完整顯示，所有商城商品都能點開預覽。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-shop-r57.webp",
+        "alt": "漢考克彩窗頭像的大圖預覽，後方為本次新增頭像展示"
+      },
+      "body": [
+        "新增30款由GPT逐張繪製的角色頭像，分為漫畫墨線、復古套色、和風木版、水彩、彩窗與雙色光海報六組。",
+        "魯夫、索隆、艾斯、羅賓、娜美等角色換上不同畫風；全部沿用735×735透明圓形規格，可用商店金幣收藏。",
+        "留言板依原圖比例完整顯示，四周裝飾不再裁掉；個人頁新增「查看板面」，可放大欣賞。",
+        "商店所有商品都能點圖或名稱開啟預覽，圖片保留原始比例。排版可看名片示意，音樂可試聽30秒；預覽不會扣款或套用裝備。",
+        "重新開啟啟動器取得差分更新，只下載新增與變更檔案。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      },
+      "cta": {
+        "kind": "shop",
+        "itemId": "ava-93"
+      }
+    },
     {
       "id": "launcher-1.2.23-r56-guestbook",
       "status": "published",

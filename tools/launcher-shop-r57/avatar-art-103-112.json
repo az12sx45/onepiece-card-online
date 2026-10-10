@@ -1,0 +1,381 @@
+{
+  "generator": "builtin image_gen",
+  "requestedSize": [
+    735,
+    735
+  ],
+  "format": "WebP RGBA",
+  "postprocess": "Pillow RGBA conversion, LANCZOS resize, WebP encoding only; no masks, overlays, recoloring, or synthetic artwork",
+  "items": [
+    {
+      "id": 103,
+      "generator": "builtin image_gen",
+      "prompt": "Use case: style-transfer. Create ONE finished 1:1 circular game avatar of Roronoa Zoro as Zorojuro in Wano, from supplied character reference. Keep identity/costume, but completely redraw composition in authentic Japanese ukiyo-e woodblock print style: deliberate carved ink outlines, flat moss green and indigo shapes, muted vermilion accents, fine paper/woodgrain texture only inside circle. Background within circle: stylized indigo curling waves and an off-center pale moon, not blue sky. Portrait in slight three-quarter pose facing viewer-left, confident restrained smile. Adult angular face; moss-green short spiky hair with complete small samurai topknot fitting inside circle; own LEFT eye closed with vertical scar (viewer-right); THREE small dangling gold earrings on own LEFT ear. White inner kimono and dark-green haori with green sun-crests at shoulders, no sword/no hands. Natural adult head-to-shoulder proportions, not chibi. All artwork strictly contained in perfect circle inscribed edge-to-edge in square; TRUE alpha transparency outside circular edge, all four corners fully transparent. No border/rim, no lettering, no signature, no logo. No photorealism, no generic samurai, no extra characters. The reference is only canon costume and facial identity; new woodblock illustration, not recolor.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12528-f911-7cc0-afc3-8e1144338c82\\exec-9af2205b-3155-4984-b0f0-efb64fea359f.png",
+      "reference": "public/images/board/avatars/90.webp",
+      "output": "public/images/board/avatars/103.webp",
+      "style": "ukiyoe",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "和之國髮髻、本人左眼閉合與疤痕、左耳三耳飾",
+          "白內襟與綠羽織、木版浪紋與仰月；角色成年比例"
+        ],
+        "note": "已逐張核對原始生成圖與最終 735 WebP；服裝身分與風格可辨識，透明四角及 RGBA 像素規格通過。"
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 235380,
+        "sha256": "51d6e72f9400d984d229c1bb50f60c1b9e678901606e8e3ae42d96e5bb2c561b",
+        "sourceSha256": "8042f899ae8ff318977184efd0e80aced74a4466239b35733ff17a61830f729b"
+      }
+    },
+    {
+      "id": 104,
+      "generator": "builtin image_gen",
+      "prompt": "Use case: style-transfer. Create ONE finished square circular game avatar of Monkey D. Luffy as Luffytaro in early Wano, using supplied image ONLY for identity and correct clothing. Completely new Japanese ukiyo-e woodblock illustration with carved black ink contours and matte vermilion/indigo/ochre print, visible delicate handmade paper grain INSIDE circle. Interior design is stylized wave curls and warm red sun behind upper shoulders, with graphic flowing wind ribbons not blue sky. Head-and-shoulders looking slightly up and to viewer-right, joyful unmistakable toothy grin, round black eyes, scar beneath own LEFT eye (viewer-right). Black tousled hair and small samurai topknot fully INSIDE circle. Straw hat hanging behind head on cord, NOT worn on head. Canon red kimono with pale blue-white square patched fabric and blue circle motifs. Natural young adult face proportions, not chibi, no hands, no swords. Perfect circular crop inscribed edge-to-edge within square, truly transparent alpha outside circle, all corners zero alpha. Do not let hair stick outside circle. No frame/border/lettering/signature/logo. No copied face of other character. Preserve era and face identity while using new stylized print composition.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12528-f911-7cc0-afc3-8e1144338c82\\exec-a950a5b1-0818-429e-b13c-8f8e1a0f6a8a.png",
+      "reference": "public/images/board/avatars/89.webp",
+      "output": "public/images/board/avatars/104.webp",
+      "style": "ukiyoe",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "和之國髮髻、草帽在背、本人左眼下疤",
+          "红和服藍白補丁、新仰視笑容和浪紋構圖"
+        ],
+        "note": "已逐張核對原始生成圖與最終 735 WebP；服裝身分與風格可辨識，透明四角及 RGBA 像素規格通過。"
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 243820,
+        "sha256": "749270ed0e133ffe4654f7d893126e22c962b09186f6c6c9c2f2404016347a18",
+        "sourceSha256": "48a601d8a1775e161743c45b8401ef8e23fb3a06e65468097b4817618fd7eca3"
+      }
+    },
+    {
+      "id": 105,
+      "generator": "builtin image_gen",
+      "prompt": "Use case: style-transfer. Make ONE circular production game avatar, Nami as O-Nami in early Wano, from supplied canon identity/clothing reference. Redraw in elegant Japanese ukiyo-e woodblock art: fine hand-carved ink lines, confidently flattened color blocks, indigo with orange hair, pale turquoise, cream and muted gold, subtle print grain INSIDE circular composition. New three-quarter shoulder portrait facing viewer-left with mischievous confident small smile. Orange parted hair tied in a LOW ponytail at nape with BLUE bow, brown eyes, pale cyan sleeveless kimono with pale blossom patterns, crossed collar; canon blue pinwheel/tangerine left upper arm tattoo only if visible. Natural adult proportions and recognizable One Piece face. Interior background stylized curling ocean waves with floating maple leaves and graphic wind lines, not sky. Perfect geometric circle inscribed edge-to-edge inside square; true alpha fully transparent exterior and four corners, no hair outside boundary. Entire face and bow inside circle. No decorative rim, no text, no watermark, no fan, no hands, no bikini, no invented kimono, no chibi. Reference is identity/costume only, make a distinctly new woodblock illustration.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12528-f911-7cc0-afc3-8e1144338c82\\exec-1ca7a5bd-d1cc-44eb-bd71-8d05147eba3f.png",
+      "reference": "public/images/board/avatars/91.webp",
+      "output": "public/images/board/avatars/105.webp",
+      "style": "ukiyoe",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "橘色低馬尾藍蝴蝶結、青色花紋無袖和服",
+          "本人左上臂刺青、自然三分側肩姿勢"
+        ],
+        "note": "已逐張核對原始生成圖與最終 735 WebP；服裝身分與風格可辨識，透明四角及 RGBA 像素規格通過。"
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 223622,
+        "sha256": "0f9b1a4e1ba1040411da2c38eeaf6b6dc7c1e79deac18dddce97e4e3e9ad1665",
+        "sourceSha256": "6ed45629ffd2272cff90ff6ff41246bf0346cec2f62e7bfbc5d6b878d2b23645"
+      }
+    },
+    {
+      "id": 106,
+      "generator": "builtin image_gen",
+      "prompt": "Use case: style-transfer. Create ONE circular game-avatar portrait of Nico Robin as O-Robi Wano geisha. Supplied image verifies correct canon hairstyle, face and clothing, not style to copy. Newly draw elegant ukiyo-e woodblock portrait, very fine carved dark ink contours and flat black/cream/muted red/indigo colors, subtle washi print texture entirely INSIDE circle. Face at slight three-quarter angle, calm knowing small smile, distinctive slim adult angular face and long straight nose, blue eyes. Glossy BLACK large geisha swept-roll updo, long slim sidelocks, GOLD horizontal hairpins with PURPLE hanging teardrop beads. Show all hairpins neatly INSIDE circular boundary. Black kimono with red inner collar, no extra ornaments, no fan or hands. Interior background stylized plum blossom branch and low indigo waves, warm cream quiet negative space. Square canvas with exact circle inscribed edge-to-edge, genuine fully transparent exterior and corners. No printed rim, border, letters, kanji, signature, watermark. Preserve clear recognizable One Piece Robin identity; do not make generic geisha, not chibi, not photorealistic.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12528-f911-7cc0-afc3-8e1144338c82\\exec-219066a9-0ac2-4729-b3c4-22481b9a1aec.png",
+      "reference": "public/images/board/avatars/92.webp",
+      "output": "public/images/board/avatars/106.webp",
+      "style": "ukiyoe",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "羅賓長鼻藍眼、和之國黑色藝妓髮髻",
+          "金髮簪紫珠與黑衣紅襟、梅枝木版背景"
+        ],
+        "note": "已逐張核對原始生成圖與最終 735 WebP；服裝身分與風格可辨識，透明四角及 RGBA 像素規格通過。"
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 219574,
+        "sha256": "c4aeeb8d6e098f8272139ac306ccafd64f296d8d45ae38817b66c0c3ad22b431",
+        "sourceSha256": "0a779996447aba3cf833e47001c7e083a3c1cebbca4d5bf224b1f924afadaa30"
+      }
+    },
+    {
+      "id": 107,
+      "generator": "builtin image_gen",
+      "prompt": "Use case: style-transfer. Create ONE 1:1 circular avatar of Jinbe from ONE PIECE. Supplied approved image is identity/costume reference, redraw completely as premium Japanese ukiyo-e woodblock print with flat indigo/sea-blue/muted ochre/vermilion, bold carved ink contours, fine print grain only inside circle. New slightly turned head-and-shoulders pose with dignified stern calm expression. Preserve canon whale shark fishman blue skin, broad powerful face, small dark eyes, wide nose, two large lower jaw tusks, curled light eyebrows/sideburns, black hair and topknot, short black beard, lightning scar by own LEFT eye (viewer-right). Yellow patterned kimono, orange-red cloak shoulder edges, red Sun Pirates chest marking at neckline only if visible. Deliberately broad canon Jinbe proportions, not human, not chibi. Background graphic cresting ocean wave arches and pale circular moon, no blue-sky backdrop. Entire figure and topknot remain within perfect circle inscribed edge-to-edge within square. TRUE alpha transparent pixels outside circle/all four corners. No rim, text, logo, signature, hands or weapon. Maintain recognizable Jinbe face, not generic oni.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12528-f911-7cc0-afc3-8e1144338c82\\exec-b3e54d49-5718-432e-989e-ab26a60728bd.png",
+      "reference": "public/images/board/avatars/53.webp",
+      "output": "public/images/board/avatars/107.webp",
+      "style": "ukiyoe",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "甚平藍皮膚、獠牙、眉卷、本人左眼側閃電疤",
+          "黃紋衣紅肩披風、保留原作寬闊魚人身材"
+        ],
+        "note": "已逐張核對原始生成圖與最終 735 WebP；服裝身分與風格可辨識，透明四角及 RGBA 像素規格通過。"
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 202392,
+        "sha256": "7a92c9a5aa7feaa54eacdd71d97047fba787dd17d0cc5c5842e7bdab48503b76",
+        "sourceSha256": "48fe10c80fa72229a1fc009464557a13b9bc87f8e11f81ce0b3d34ffcc8b5f6c"
+      }
+    },
+    {
+      "id": 108,
+      "generator": "builtin image_gen",
+      "prompt": "Use case: style-transfer. Produce ONE circular game avatar of Nefertari Vivi from ONE PIECE, using supplied approved avatar as canon identity reference only. Redraw new hand-painted watercolor portrait with controlled slender ink linework, luminous translucent pigment blooms, soft watercolor edges but face still sharply recognizable at icon size. Natural anime proportions; gentle confident smile in slight three-quarter angle, pale blue hair in high ponytail with tiny curled forelock, brown eyes, small gold earrings, Alabasta pink sleeveless top edged gold. Portrait head and shoulders, entire face and ponytail crown remain inside circle. Background inside circle a watercolor Alabasta desert dusk palette of turquoise and sandy gold with faint soft palace silhouette and airy paint washes, not old flat blue sky. Soft paper texture only INSIDE perfect geometric circle inscribed edge-to-edge in square. All pixels OUTSIDE circle truly alpha transparent including four corners; no paint splashes outside circle. No rim/border/text/signature, no extra character, no chibi, no photorealism, no hand. Make a distinct art print composition not a filter over reference.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12528-f911-7cc0-afc3-8e1144338c82\\exec-69cd9ebc-be51-44d1-921b-84029d5c9b0e.png",
+      "reference": "public/images/board/avatars/63.webp",
+      "output": "public/images/board/avatars/108.webp",
+      "style": "watercolor",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "薇薇淺藍高馬尾小前額捲、棕眼金耳飾",
+          "粉紅金邊衣、水彩阿拉巴斯坦沙色夕景"
+        ],
+        "note": "已逐張核對原始生成圖與最終 735 WebP；服裝身分與風格可辨識，透明四角及 RGBA 像素規格通過。"
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 226106,
+        "sha256": "ddf2aa5d56df2832b7b99374f4aa55d4f46d54f553ba60f1713162e82204097e",
+        "sourceSha256": "137847e85b86fab520fa8379db3c029ad40c74a605775445845881f97da1d58f"
+      }
+    },
+    {
+      "id": 109,
+      "generator": "builtin image_gen",
+      "prompt": "Use case: style-transfer. Generate ONE circular game avatar of Princess Shirahoshi from ONE PIECE, supplied image for accurate facial/hair identity only. Completely redraw as luminous watercolor and fine ink portrait, delicate rose-pink/gold/lagoon-blue palette, rich pigment blooms and painterly transitions visible inside circle. Head and upper shoulders in gentle three-quarter angle, shy hopeful smile, very large blue eyes, blush, long flowing PINK hair, enormous canon HIGH double-loop ponytail tied with dark red band and GOLD fish-fin-shaped hair ornaments. Fit distinctive loops fully inside the circular frame. No crown, no earrings. Preserve sweet canon anime identity and natural shoulder/neck, not chibi and not photorealistic. Modest neckline/shoulder crop, no chest emphasis. Backdrop inside circle luminous underwater watercolor with diffuse coral shapes and rising bubbles, textured pale paper under pigment; do not reuse sky. EXACT perfect circular silhouette touching four square sides, transparent alpha outside circle/all corners. No decorative ring, text, signatures or watermarks, no splashes outside circle, no extra characters, no hands.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12528-f911-7cc0-afc3-8e1144338c82\\exec-707ab719-7c09-4b1f-914f-19e9537cdf51.png",
+      "reference": "public/images/board/avatars/68.webp",
+      "output": "public/images/board/avatars/109.webp",
+      "style": "watercolor",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "白星粉紅雙圈髮、紅髮束和金魚鰭髮飾",
+          "藍眼、無冠無耳環、水下珊瑚水彩背景"
+        ],
+        "note": "已逐張核對原始生成圖與最終 735 WebP；服裝身分與風格可辨識，透明四角及 RGBA 像素規格通過。"
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 246020,
+        "sha256": "29136053586eed232dd0785a6a4292dc9d0f8a6e7b625f9a6783d52e30b7d69c",
+        "sourceSha256": "c1b3b905fe81c1f8831c5bd19f017cd8a34021ed31a07c9511c201eeab2aea47"
+      }
+    },
+    {
+      "id": 110,
+      "generator": "builtin image_gen",
+      "prompt": "Use case: style-transfer. Create exactly ONE circular game avatar of Perona from ONE PIECE after timeskip at Mihawk island, with supplied image for approved canon identity and clothes. Completely NEW fine ink and watercolor illustration: luminous pink, lavender, dusky teal pigment blooms, visible watercolor paper inside circle, strong clean facial features at small size. Head-and-shoulders, slight tilted three-quarter pose, mischievous little smile, distinctive perfectly round eyes with dark pupils and long separated lashes. Long loose pink spiral-drill curls, broad black round hat with dark red underside, pale blue-white roses on hat. Black strapless bodice with narrow white cross-ribbon trim. No crown, no twin-tail ties, no new costume. Fit whole hat horizontally inside circle. Background an evocative muted watercolor gothic arch and softly painted translucent ONE PIECE negative hollow ghost silhouettes, subdued behind her, not extra humans. TRUE transparent outside perfect circle inscribed edge-to-edge within square; every corner transparent and no watercolor splatters beyond circle. Natural canon proportions, not chibi. No decorative frame, letters, signature, watermark or hands.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12528-f911-7cc0-afc3-8e1144338c82\\exec-c35ae354-7848-4e87-a8e9-36c4d2c1bdbc.png",
+      "reference": "public/images/board/avatars/64.webp",
+      "output": "public/images/board/avatars/110.webp",
+      "style": "watercolor",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "培羅娜圓眼長睫毛、粉紅長螺旋髮",
+          "兩年後黑寬帽白藍玫瑰與紅帽裏、黑白飾邊衣"
+        ],
+        "note": "已逐張核對原始生成圖與最終 735 WebP；服裝身分與風格可辨識，透明四角及 RGBA 像素規格通過。"
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 215168,
+        "sha256": "856c1ada0e204dbeb62ea55aff0d88c1dff0bde09b13b0e3e930eb99844aabd8",
+        "sourceSha256": "bd61d6364c9e0a67cab7f2dde9cebb56f0b54a97d03e77939e8f5aab6c39ec2c"
+      }
+    },
+    {
+      "id": 111,
+      "generator": "builtin image_gen",
+      "prompt": "Use case: style-transfer. Create ONE circular game avatar of Carrot from ONE PIECE, her NORMAL rabbit Mink form, not Sulong. Supplied approved portrait is canon identity/clothing reference. Completely new luminous watercolor and delicate ink illustration with warm golden-yellow, fresh mint, pale cream paint blooms, real soft paper texture only inside circle, lively recognizable anime face with sharply readable eyes. Head and shoulders in playful slight three-quarter pose, cheerful open smile. Blonde short bob, white rabbit fur, large red-brown eyes, tiny pink triangular nose, long white rabbit ears with pale pink interior curved naturally to fit almost entirely inside circle. Orange sleeveless outfit with fluffy WHITE fur neckline matching reference. Backdrop dreamy watercolor green forest bokeh with warm floating dandelion seeds and broad leaf silhouettes, no generic sky, no extra creatures. Exactly circular silhouette edge-to-edge in square with true alpha outside circle/all corners, no artwork outside circle. No decorative ring, words, signatures, hands, human ears, invented jewelry or extra fingers. Preserve actual Carrot anatomy and proportions, not chibi toy, no photorealism.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12528-f911-7cc0-afc3-8e1144338c82\\exec-4d346e33-7674-4b64-8fc9-df62c39a7cf6.png",
+      "reference": "public/images/board/avatars/69.webp",
+      "output": "public/images/board/avatars/111.webp",
+      "style": "watercolor",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "凱洛特金色短髮、兔耳與白毛、紅棕眼粉鼻",
+          "橘衣白毛領與森林水彩；非月獅形態"
+        ],
+        "note": "已逐張核對原始生成圖與最終 735 WebP；服裝身分與風格可辨識，透明四角及 RGBA 像素規格通過。"
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 187324,
+        "sha256": "4f58c9bec185f5c62e810c00847ececab5fb7851e13e32e0b308254ae7c1e9a6",
+        "sourceSha256": "0fe7573a46c3e2d63bdcaa9ae06c68d9b6da4149edac6431709902585e31d4ef"
+      }
+    },
+    {
+      "id": 112,
+      "generator": "builtin image_gen",
+      "prompt": "Use case: stylized-concept. Create ONE square circular production game avatar of Tony Tony Chopper from ONE PIECE in his original BEFORE TIMESKIP Brain Point form. Use supplied Chopper image only for recognizable face and pink hat details, not pose or rendering. Paint as delicate hand-painted watercolor with fine expressive ink linework, luminous tan/rose/icy-blue pigment blooms and paper texture inside circle. New close head-and-upper-shoulders portrait, sweet determined smile, recognizable big round dark eyes, bright BLUE nose, tan reindeer fur, small deer ears, branching brown antlers and original large PINK top hat with white X medical mark. BOTH antlers and complete hat should fit inside circular field. No modern blue helmet, no human body, no extra arms. Background watercolor snowy Drum Island mountain silhouettes and sparse pale pink cherry blossoms, soft snow glow; no sky-cloud screenshot. Perfect circle inscribed edge-to-edge in square, all pixels outside circle TRULY alpha transparent, all four corners zero alpha. No decorative border/rim, no letters except canon white X on hat, no signature/logo/watermark. Beautiful readable mascot portrait not 3D toy; preserve canon Brain Point proportions, do not make a human or original character.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12528-f911-7cc0-afc3-8e1144338c82\\exec-268cf20d-ab3b-4e57-8961-51ff83f84181.png",
+      "reference": "public/images/profile_decor/sticker-chopper.webp",
+      "output": "public/images/board/avatars/112.webp",
+      "style": "watercolor",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "喬巴兩年前Brain Point粉紅X帽、藍鼻與馴鹿角",
+          "雪山櫻花背景、水彩而非3D；不是人類比例"
+        ],
+        "note": "已逐張核對原始生成圖與最終 735 WebP；服裝身分與風格可辨識，透明四角及 RGBA 像素規格通過。"
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 260366,
+        "sha256": "b39b69a53037a66bba9f7e512c03181f04d133444ea3bb60ce45494498c667f8",
+        "sourceSha256": "e801087a57c6665db3154d357c5dccec92a1c945e4d5edad15d34739ad2a0d56"
+      }
+    }
+  ]
+}

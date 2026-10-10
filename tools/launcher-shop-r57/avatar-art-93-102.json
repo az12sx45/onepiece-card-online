@@ -1,0 +1,416 @@
+{
+  "schemaVersion": 1,
+  "scope": "r57 GPT avatar art 93-102",
+  "generator": "builtin image_gen",
+  "intent": "New individually generated portraits; no style-filter conversion or sprite sheet",
+  "status": "completed",
+  "postprocess": "Resize/encode only; original GPT alpha is preserved; no masking, drawing or compositing.",
+  "entries": [
+    {
+      "id": 93,
+      "prompt": "Use case: stylized-concept. Create ONE finished circular profile avatar for a One Piece desktop game, a standalone 1024x1024 RGBA PNG with TRUE transparent alpha outside a perfect circular disk occupying 94% of canvas. Absolutely nothing extends outside circle; no drop shadow outside; no white square; no checkerboard pixels. All face, hair and headwear completely inside the circle. Bust portrait with proportionate adult/young-adult head and shoulders, NOT chibi, face clear at small size. No text, letters, numerals, logos, UI, title or watermark. This is a new designed illustration, not a photographic filter. Character: Monkey D. Luffy from ONE PIECE, post-timeskip default costume, recognizable messy short BLACK hair, big confident grin, round black eyes, exactly one small stitched scar BELOW HIS LEFT EYE (on viewer RIGHT). Wearing iconic straw hat with red band, open red captain cardigan at the shoulders, hint of upper chest only. No Wano topknot or kimono. Pose head tilted slightly, brim and hat entirely inside circular safe area. STYLE: spectacular hand-drawn black-and-white manga brush ink, deep expressive chunky black shadows, thin crosshatching and halftone screentone, primarily black/ivory with exactly one muted crimson-red accent limited to hat band and bold curved ink stroke behind him. Dynamic diagonal ink hatching/speed marks contained within disk, NOT ordinary blue sky. Maintain Luffy's youthful slim recognizable face, no stubble. Draw every line with manga illustrator care.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12526-69db-7e03-ae15-07272fb0cef7\\exec-acadbfa7-469f-4745-86c7-197844533956.png",
+      "output": "public/images/board/avatars/93.webp",
+      "referencesViewed": [
+        "public/images/board/avatars/56.webp",
+        "public/images/board/avatars/76.webp",
+        "public/images/board/avatars/81.webp",
+        "public/images/board/avatars/83.webp",
+        "public/images/board/avatars/58.webp",
+        "public/images/board/avatars/59.webp",
+        "public/images/board/avatars/74.webp",
+        "public/images/board/avatars/34.webp",
+        "public/images/board/avatars/89.webp",
+        "public/images/board/avatars/90.webp"
+      ],
+      "canonVisualReview": "Viewed individual GPT output: black hair, straw hat/red band, slim youthful grin and stitched scar under character-left eye. Strong manga hatching and red stroke composition; no text.",
+      "style": "manga-ink",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "428a2845f3f751dee9642ebaa1d3a2c5fc98e48c448b224b083093e9bc4f3958",
+      "sha256": "0bafe0d2f20ebeca60b344cd3b8c5aa986f9a640c966a68330af00714f6fc5bd",
+      "bytes": 248624,
+      "size": [
+        735,
+        735
+      ],
+      "mode": "RGBA",
+      "format": "WebP",
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "validation": "PASS: original alpha preserved; exact dimensions; corners transparent; individual canon/style visual review recorded"
+    },
+    {
+      "id": 94,
+      "prompt": "Use case: stylized-concept. Create ONE finished circular profile avatar for a One Piece desktop game, a standalone 1024x1024 RGBA PNG with TRUE transparent alpha outside a perfect circular disk occupying 94% of canvas. Absolutely nothing extends outside circle; no drop shadow outside; no white square; no checkerboard pixels. All face, hair and headwear completely inside the circle. Bust portrait with proportionate adult/young-adult head and shoulders, NOT chibi, face clear at small size. No text, letters, numerals, logos, UI, title or watermark. This is a new designed illustration, not a photographic filter. Character: Roronoa Zoro from ONE PIECE, post-timeskip default green open robe and muscular neck, recognizable short spiky hair (no topknot), stern asymmetrical confident expression. HIS LEFT EYE is CLOSED with one vertical scar (viewer RIGHT); his RIGHT EYE open. Exactly three small hoop earrings on HIS LEFT EAR (viewer RIGHT). No scar across mouth, no earrings on right ear. Portrait 3/4 turning slightly toward viewer left, eyes readable, entire hair silhouette inside disk. STYLE: premium bold black-and-white manga ink with chiselled large black shadow shapes, dry brush hatching and screentone; single moss-green accent in small hair strokes and an abstract triple sword-slash motif in the circular background. Black/ivory dominant, not ordinary full-color anime and not blue sky. Restrained, fierce and unmistakably Zoro. Do not include swords across face.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12526-69db-7e03-ae15-07272fb0cef7\\exec-1d5c8f5e-67ca-49ee-8b2c-ca1df4e8b6b9.png",
+      "output": "public/images/board/avatars/94.webp",
+      "referencesViewed": [
+        "public/images/board/avatars/56.webp",
+        "public/images/board/avatars/76.webp",
+        "public/images/board/avatars/81.webp",
+        "public/images/board/avatars/83.webp",
+        "public/images/board/avatars/58.webp",
+        "public/images/board/avatars/59.webp",
+        "public/images/board/avatars/74.webp",
+        "public/images/board/avatars/34.webp",
+        "public/images/board/avatars/89.webp",
+        "public/images/board/avatars/90.webp"
+      ],
+      "canonVisualReview": "Viewed individual GPT output: short spiky green hair, character-left closed scarred eye, exactly three earrings on character-left ear; green open robe, adult proportions. Ink brush style clear.",
+      "style": "manga-ink",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "48a0a9d272700c33ab8a072690eb7e1395da08f5864cd6167643613b961a6d8f",
+      "sha256": "44b03b5e3f5759df387202642c0fb92e85528542ad426cfaff196df189a625d3",
+      "bytes": 224204,
+      "size": [
+        735,
+        735
+      ],
+      "mode": "RGBA",
+      "format": "WebP",
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "validation": "PASS: original alpha preserved; exact dimensions; corners transparent; individual canon/style visual review recorded"
+    },
+    {
+      "id": 95,
+      "prompt": "Use case: stylized-concept. Create ONE finished circular profile avatar for a One Piece desktop game, a standalone 1024x1024 RGBA PNG with TRUE transparent alpha outside a perfect circular disk occupying 94% of canvas. Absolutely nothing extends outside circle; no drop shadow outside; no white square; no checkerboard pixels. All face, hair and headwear completely inside the circle. Bust portrait with proportionate adult/young-adult head and shoulders, NOT chibi, face clear at small size. No text, letters, numerals, logos, UI, title or watermark. This is a new designed illustration, not a photographic filter. Character: Trafalgar D. Water Law from ONE PIECE, recognizable lean angular young adult face, short dark sideburns and small pointed goatee, narrow calculating grey eyes, white fluffy round cap with irregular black leopard-like spots, gold double small hoop earrings each ear. Black hoodie with a small mustard collar accent. Head-and-shoulders frontal three-quarter portrait, calm half-smile, complete hat top retained inside circle. STYLE: masterful black-and-white manga brush ink, fine hatching, dense screentone shadows, only a restrained mustard-gold accent. Abstract concentric surgical ROOM-like curved rings behind his head inside circular disk, charcoal and parchment negative space; no ordinary blue sky, no badge logos, no lettering. Do not cover eyes with hat. Neck has no invented markings; crop above chest to avoid tattoos. Clean handsome unmistakable Law face.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12526-69db-7e03-ae15-07272fb0cef7\\exec-024ba9aa-fb0a-4e40-87ae-feb5c3b5bb89.png",
+      "output": "public/images/board/avatars/95.webp",
+      "referencesViewed": [
+        "public/images/board/avatars/56.webp",
+        "public/images/board/avatars/76.webp",
+        "public/images/board/avatars/81.webp",
+        "public/images/board/avatars/83.webp",
+        "public/images/board/avatars/58.webp",
+        "public/images/board/avatars/59.webp",
+        "public/images/board/avatars/74.webp",
+        "public/images/board/avatars/34.webp",
+        "public/images/board/avatars/89.webp",
+        "public/images/board/avatars/90.webp"
+      ],
+      "canonVisualReview": "Viewed individual GPT output: spotted white fluffy hat, black sideburns/pointed goatee, two hoops each ear, grey eyes. Black hoodie and mustard accent; distinct surgical circular graphics. No letters.",
+      "style": "manga-ink",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "5c9b966a6e378c37dc570732b2c9c0c89c299f685262ac02a37aea5654ea80f7",
+      "sha256": "a9c6ffdaff1be97a9aade991aacc51886b3d927b231c7b035f29e799196959a6",
+      "bytes": 220358,
+      "size": [
+        735,
+        735
+      ],
+      "mode": "RGBA",
+      "format": "WebP",
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "validation": "PASS: original alpha preserved; exact dimensions; corners transparent; individual canon/style visual review recorded"
+    },
+    {
+      "id": 96,
+      "prompt": "Use case: stylized-concept. Create ONE finished circular profile avatar for a One Piece desktop game, a standalone 1024x1024 RGBA PNG with TRUE transparent alpha outside a perfect circular disk occupying 94% of canvas. Absolutely nothing extends outside circle; no drop shadow outside; no white square; no checkerboard pixels. All face, hair and headwear completely inside the circle. Bust portrait with proportionate adult/young-adult head and shoulders, NOT chibi, face clear at small size. No text, letters, numerals, logos, UI, title or watermark. This is a new designed illustration, not a photographic filter. Character: Eustass Kid from ONE PIECE post-timeskip, fierce lean angular face, towering spiky flame-shaped RED hair, square gold-rimmed dark goggles resting on forehead with riveted black strap, maroon lipstick, visible long jagged scar down HIS LEFT forehead/eye/cheek (viewer RIGHT). Exaggerated hostile confident grin, no earrings invented. Shoulders wrapped in heavy dark feather/fur collar; chest barely visible. Character-specific industrial magnetism motif of angular black iron fragments behind him. STYLE: bold dramatic black-and-white manga brush inks, rough dry-brush shadows and screentones, only crimson-red accent hair and background slashes. Full wild hair silhouette must fit inside round disk with space above spikes. No blue sky, no extra people, no mech arm in foreground, no lettering, no original costume. Adult head proportions and recognizable Kid facial features.",
+      "source": "C:/Users/王曜瑋/.codex/generated_images/01a12526-69db-7e03-ae15-07272fb0cef7/exec-5f480af4-7328-4642-baf9-cd7088d7ca03.png",
+      "output": "public/images/board/avatars/96.webp",
+      "referencesViewed": [
+        "public/images/board/avatars/56.webp",
+        "public/images/board/avatars/76.webp",
+        "public/images/board/avatars/81.webp",
+        "public/images/board/avatars/83.webp",
+        "public/images/board/avatars/58.webp",
+        "public/images/board/avatars/59.webp",
+        "public/images/board/avatars/74.webp",
+        "public/images/board/avatars/34.webp",
+        "public/images/board/avatars/89.webp",
+        "public/images/board/avatars/90.webp"
+      ],
+      "canonVisualReview": "Viewed individual GPT output: spiky red hair, forehead rectangular goggles, left-side scar and dark lipstick, fur collar; adult Kid identity preserved. Magnet fragments remain background.",
+      "style": "manga-ink",
+      "originalSourceBeforeAlphaCorrection": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12526-69db-7e03-ae15-07272fb0cef7\\exec-c317d1b2-73f8-4483-b52f-0b1599419b71.png",
+      "alphaCorrection": "GPT background-extraction edit, no programmatic masking; canonical character/style unchanged.",
+      "correctionPrompt": "Use case: background-extraction. Precise production alpha correction of this completed Eustass Kid circular manga avatar. Keep EVERYTHING INSIDE the circular illustrated disk exactly unchanged: character face, hair, goggles, colors, brush-ink texture, scar, layout. The only requested correction is true completely empty transparent pixels OUTSIDE the circular disk, including all four corners; the original has an almost invisible alpha=1 speck at bottom-left. Remove that alpha noise through image generation. A clean circular boundary with restrained antialiasing exactly at boundary, no semi-transparent noise or faint artwork outside, no rectangular checkerboard, no solid background. Preserve square RGBA and exact identical framing/content within circle. No added text.",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "31166b7cd5b25ec536603d548c4b2cbb68eadcc33a450a4f6bc105f008f1ec9a",
+      "sha256": "b717198e12ccd49acac272fb9be7ae6622eac6e72879694b8c66b748dbceaa25",
+      "bytes": 226006,
+      "size": [
+        735,
+        735
+      ],
+      "mode": "RGBA",
+      "format": "WebP",
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "validation": "PASS: original alpha preserved; exact dimensions; corners transparent; individual canon/style visual review recorded",
+      "discardedCandidateCleanup": "Not deleted: exact PowerShell Remove-Item was rejected by automatic approval review with blocked by policy. No cleanup workaround attempted."
+    },
+    {
+      "id": 97,
+      "prompt": "Use case: stylized-concept. Create ONE finished circular profile avatar for a One Piece desktop game, a standalone 1024x1024 RGBA PNG with TRUE transparent alpha outside a perfect circular disk occupying 94% of canvas. Absolutely nothing extends outside circle; no drop shadow outside; no white square; no checkerboard pixels. All face, hair and headwear completely inside the circle. Bust portrait with proportionate adult/young-adult head and shoulders, NOT chibi, face clear at small size. No text, letters, numerals, logos, UI, title or watermark. This is a new designed illustration, not a photographic filter. Character: Charlotte Katakuri from ONE PIECE, stern broad-jawed angular face, short spiky dark burgundy hair, intense narrow eyes, short stitched diagonal scars across both cheeks. His lower face and mouth concealed behind his huge characteristic pale fur scarf with bold dark zigzag stripes, dark studded leather vest at shoulders. Not chibi, formidable adult. Head facing slightly right, gaze toward viewer. Complete hair retained inside circular border. STYLE: spectacular black-and-white manga pen and brush ink, sculpted black shadows, dense hatching and screentone, only a muted burgundy/magenta spot-color accent in hair and three diagonal graphic blocks behind portrait. White scarf must contrast with charcoal background. No ordinary blue sky, no generic costume, no lettering, no exposed fang mouth.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12526-69db-7e03-ae15-07272fb0cef7\\exec-bb2f8dc2-81bd-4fe2-bac8-34b699568924.png",
+      "output": "public/images/board/avatars/97.webp",
+      "referencesViewed": [
+        "public/images/board/avatars/56.webp",
+        "public/images/board/avatars/76.webp",
+        "public/images/board/avatars/81.webp",
+        "public/images/board/avatars/83.webp",
+        "public/images/board/avatars/58.webp",
+        "public/images/board/avatars/59.webp",
+        "public/images/board/avatars/74.webp",
+        "public/images/board/avatars/34.webp",
+        "public/images/board/avatars/89.webp",
+        "public/images/board/avatars/90.webp"
+      ],
+      "canonVisualReview": "Viewed individual GPT output: burgundy spiky hair, narrow eyes and paired stitched cheek scars, mouth covered by striped fur scarf, studded leather shoulders. Strong ink and plum accent.",
+      "style": "manga-ink",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "a21e05bbcdeacda9f67d319515abcb050bf6f0346d03dddb8fbc535db4d09a86",
+      "sha256": "d0adb25d97dff56aafef9587764dfca503195482dad69d5cf38104faa34e8a7f",
+      "bytes": 224938,
+      "size": [
+        735,
+        735
+      ],
+      "mode": "RGBA",
+      "format": "WebP",
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "validation": "PASS: original alpha preserved; exact dimensions; corners transparent; individual canon/style visual review recorded"
+    },
+    {
+      "id": 98,
+      "prompt": "Use case: stylized-concept. Create ONE finished circular profile avatar for a One Piece desktop game, a standalone 1024x1024 RGBA PNG with TRUE transparent alpha outside a perfect circular disk occupying 94% of canvas. Absolutely nothing extends outside circle; no drop shadow outside; no white square; no checkerboard pixels. All face, hair and headwear completely inside the circle. Bust portrait with proportionate adult/young-adult head and shoulders, NOT chibi, face clear at small size. No text, letters, numerals, logos, UI, title or watermark. This is a new designed illustration, not a photographic filter. Character: Portgas D. Ace from ONE PIECE, adult slim masculine face, medium tousled BLACK hair and clear freckles on BOTH cheeks, warm confident sideways grin, black eyes. Bare shoulders, RED round bead necklace visible. His iconic orange cowboy hat worn on head, the TWO small circular hat badges show one blue smiling face and one blue sad face, not letters. Entire hat brim, crown and face fully visible INSIDE circular border, pull back composition to fit. No shirt, no original uniform, no facial scar. Background has refined engraved waves and flowing flame curls contained in round disk.  STYLE: vintage maritime hand-pulled SCREEN PRINT / engraved bookplate, clearly flat limited sepia, weathered cream, deep petrol teal and muted vermilion palette, tactile coarse registration textures and wood-engraving carved hatch marks. Deliberately crafted 1920s nautical print design with a thin rope-like printed circular border, without text, digits or pseudo-lettering. All parchment texture INSIDE the circular disk, outside genuine alpha transparent. No ordinary blue sky, no glossy 3D or standard full-color cel anime. ",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12526-69db-7e03-ae15-07272fb0cef7\\exec-1c68784c-7417-4c4d-87e0-d50af276fc3e.png",
+      "output": "public/images/board/avatars/98.webp",
+      "referencesViewed": [
+        "public/images/board/avatars/56.webp",
+        "public/images/board/avatars/76.webp",
+        "public/images/board/avatars/81.webp",
+        "public/images/board/avatars/83.webp",
+        "public/images/board/avatars/58.webp",
+        "public/images/board/avatars/59.webp",
+        "public/images/board/avatars/74.webp",
+        "public/images/board/avatars/34.webp",
+        "public/images/board/avatars/89.webp",
+        "public/images/board/avatars/90.webp"
+      ],
+      "canonVisualReview": "Viewed individual GPT output: freckles both cheeks, black hair, orange hat with smile/sad badges, red bead necklace, bare shoulders. Vintage carved wave/flame print; no text.",
+      "style": "vintage-print",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "afb5f4a2b51948b0c87ea5ce0243e07d504bca158846e7eb77d86df2f14ceaad",
+      "sha256": "e4f8f861b60f28f4abd0e1cccc9833053c3dd3005650051c2a4e2bb5e969333c",
+      "bytes": 303394,
+      "size": [
+        735,
+        735
+      ],
+      "mode": "RGBA",
+      "format": "WebP",
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "validation": "PASS: original alpha preserved; exact dimensions; corners transparent; individual canon/style visual review recorded"
+    },
+    {
+      "id": 99,
+      "prompt": "Use case: stylized-concept. Create ONE finished circular profile avatar for a One Piece desktop game, a standalone 1024x1024 RGBA PNG with TRUE transparent alpha outside a perfect circular disk occupying 94% of canvas. Absolutely nothing extends outside circle; no drop shadow outside; no white square; no checkerboard pixels. All face, hair and headwear completely inside the circle. Bust portrait with proportionate adult/young-adult head and shoulders, NOT chibi, face clear at small size. No text, letters, numerals, logos, UI, title or watermark. This is a new designed illustration, not a photographic filter. Character: Red-Haired Shanks from ONE PIECE, mature angular handsome face, swept medium RED hair parted to show forehead, sparse stubble. Exactly THREE parallel diagonal scars across HIS LEFT EYE (viewer RIGHT), both eyes open. White open collar shirt with black cape shoulders. Close shoulders portrait looking toward left, relaxed knowing confident smile. Complete hair fits inside circular safe area. No strawhat, no earring, no invented face tattoos. Background engraved rolling sea with small distant sailing ship silhouette and one compass needle motif, all contained in circle.  STYLE: vintage maritime hand-pulled SCREEN PRINT / engraved bookplate, clearly flat limited sepia, weathered cream, deep petrol teal and muted vermilion palette, tactile coarse registration textures and wood-engraving carved hatch marks. Deliberately crafted 1920s nautical print design with a thin rope-like printed circular border, without text, digits or pseudo-lettering. All parchment texture INSIDE the circular disk, outside genuine alpha transparent. No ordinary blue sky, no glossy 3D or standard full-color cel anime. ",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12526-69db-7e03-ae15-07272fb0cef7\\exec-6300d5cd-9315-4128-b897-31b1fe273f1e.png",
+      "output": "public/images/board/avatars/99.webp",
+      "referencesViewed": [
+        "public/images/board/avatars/56.webp",
+        "public/images/board/avatars/76.webp",
+        "public/images/board/avatars/81.webp",
+        "public/images/board/avatars/83.webp",
+        "public/images/board/avatars/58.webp",
+        "public/images/board/avatars/59.webp",
+        "public/images/board/avatars/74.webp",
+        "public/images/board/avatars/34.webp",
+        "public/images/board/avatars/89.webp",
+        "public/images/board/avatars/90.webp"
+      ],
+      "canonVisualReview": "Viewed individual GPT output: red hair, three parallel scars across character-left eye, sparse stubble, white open shirt and black cape. Engraved maritime print; no text.",
+      "style": "vintage-print",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "86053486c2e5c799137975c7badf6137a79407a791eb476ad3d9b331e28e8be4",
+      "sha256": "621b86d00963972bed427b36e1a41e017b3e564f1f3063279d17721b87b05a44",
+      "bytes": 312940,
+      "size": [
+        735,
+        735
+      ],
+      "mode": "RGBA",
+      "format": "WebP",
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "validation": "PASS: original alpha preserved; exact dimensions; corners transparent; individual canon/style visual review recorded"
+    },
+    {
+      "id": 100,
+      "prompt": "Use case: stylized-concept. Create ONE finished circular profile avatar for a One Piece desktop game, a standalone 1024x1024 RGBA PNG with TRUE transparent alpha outside a perfect circular disk occupying 94% of canvas. Absolutely nothing extends outside circle; no drop shadow outside; no white square; no checkerboard pixels. All face, hair and headwear completely inside the circle. Bust portrait with proportionate adult/young-adult head and shoulders, NOT chibi, face clear at small size. No text, letters, numerals, logos, UI, title or watermark. This is a new designed illustration, not a photographic filter. Character: adult Sabo from ONE PIECE, recognizable wavy BLOND hair, large black irises, uneven burn scar around HIS LEFT EYE (viewer RIGHT). BLACK TOP HAT with BLUE goggles above brim, royal-blue high collar under a black coat and WHITE cravat. Full tall hat and its brim MUST fit inside circle, leave a clear margin around crown, face still readable, bust framing as required. Youthful determined smile, not old, not chibi. Background engraved curled flame and wind ribbons, old sea-chart contour arcs without any text or letters.  STYLE: vintage maritime hand-pulled SCREEN PRINT / engraved bookplate, clearly flat limited sepia, weathered cream, deep petrol teal and muted vermilion palette, tactile coarse registration textures and wood-engraving carved hatch marks. Deliberately crafted 1920s nautical print design with a thin rope-like printed circular border, without text, digits or pseudo-lettering. All parchment texture INSIDE the circular disk, outside genuine alpha transparent. No ordinary blue sky, no glossy 3D or standard full-color cel anime. ",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12526-69db-7e03-ae15-07272fb0cef7\\exec-4df0d67c-3a7a-4ec3-b178-59f35c8261c2.png",
+      "output": "public/images/board/avatars/100.webp",
+      "referencesViewed": [
+        "public/images/board/avatars/56.webp",
+        "public/images/board/avatars/76.webp",
+        "public/images/board/avatars/81.webp",
+        "public/images/board/avatars/83.webp",
+        "public/images/board/avatars/58.webp",
+        "public/images/board/avatars/59.webp",
+        "public/images/board/avatars/74.webp",
+        "public/images/board/avatars/34.webp",
+        "public/images/board/avatars/89.webp",
+        "public/images/board/avatars/90.webp"
+      ],
+      "canonVisualReview": "Viewed individual GPT output: blond wavy hair, character-left eye burn scar, black top hat with blue goggles, blue high collar and white cravat. Entire hat inside border; vintage print.",
+      "style": "vintage-print",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "94fab6ff3af2d9af33aa1a3bf7b6bc1047bf6b114855b2300360bec11b2fffd3",
+      "sha256": "c797aff6dd80a750bd0570944627691b8c3ac47c1088641b4d90cb35efc1ead1",
+      "bytes": 299404,
+      "size": [
+        735,
+        735
+      ],
+      "mode": "RGBA",
+      "format": "WebP",
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "validation": "PASS: original alpha preserved; exact dimensions; corners transparent; individual canon/style visual review recorded"
+    },
+    {
+      "id": 101,
+      "prompt": "Use case: stylized-concept. Create ONE finished circular profile avatar for a One Piece desktop game, a standalone 1024x1024 RGBA PNG with TRUE transparent alpha outside a perfect circular disk occupying 94% of canvas. Absolutely nothing extends outside circle; no drop shadow outside; no white square; no checkerboard pixels. All face, hair and headwear completely inside the circle. Bust portrait with proportionate adult/young-adult head and shoulders, NOT chibi, face clear at small size. No text, letters, numerals, logos, UI, title or watermark. This is a new designed illustration, not a photographic filter. Character: Sir Crocodile from ONE PIECE Alabasta outfit, unmistakable sleek BLACK hair combed straight back, narrow calculating eyes, wide horizontal STITCHED scar traversing both cheeks and bridge of nose. Cigar held at corner of mouth, gold small hoop earring on HIS RIGHT EAR (viewer LEFT). Rich dark fur collar, orange checkered waistcoat glimpsed, teal cravat. Adult long angular face, smug composed expression, no beard. Head and shoulders, no hand or hook required. Background ornate engraved sand whorls and a tiny desert-pyramid silhouette in cream and sepia, all inside round disk.  STYLE: vintage maritime hand-pulled SCREEN PRINT / engraved bookplate, clearly flat limited sepia, weathered cream, deep petrol teal and muted vermilion palette, tactile coarse registration textures and wood-engraving carved hatch marks. Deliberately crafted 1920s nautical print design with a thin rope-like printed circular border, without text, digits or pseudo-lettering. All parchment texture INSIDE the circular disk, outside genuine alpha transparent. No ordinary blue sky, no glossy 3D or standard full-color cel anime. ",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12526-69db-7e03-ae15-07272fb0cef7\\exec-a003b141-b8d1-42c6-84d5-fade08a66601.png",
+      "output": "public/images/board/avatars/101.webp",
+      "referencesViewed": [
+        "public/images/board/avatars/56.webp",
+        "public/images/board/avatars/76.webp",
+        "public/images/board/avatars/81.webp",
+        "public/images/board/avatars/83.webp",
+        "public/images/board/avatars/58.webp",
+        "public/images/board/avatars/59.webp",
+        "public/images/board/avatars/74.webp",
+        "public/images/board/avatars/34.webp",
+        "public/images/board/avatars/89.webp",
+        "public/images/board/avatars/90.webp"
+      ],
+      "canonVisualReview": "Viewed individual GPT output: slicked black hair, horizontal stitched nose/cheek scar, cigar, character-right ear hoop, fur collar, teal cravat/orange check vest. Sepia sand engraving.",
+      "style": "vintage-print",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "9c6f6f953a58f8f4034e8f568c9d1e2cbee98aa69bd767db43856c117391a901",
+      "sha256": "1c5f587debf9b172290f9bf2c697a9b21f281ffbd3e019bb898b4c5c8c14eb8d",
+      "bytes": 282240,
+      "size": [
+        735,
+        735
+      ],
+      "mode": "RGBA",
+      "format": "WebP",
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "validation": "PASS: original alpha preserved; exact dimensions; corners transparent; individual canon/style visual review recorded"
+    },
+    {
+      "id": 102,
+      "prompt": "Use case: stylized-concept. Create ONE finished circular profile avatar for a One Piece desktop game, a standalone 1024x1024 RGBA PNG with TRUE transparent alpha outside a perfect circular disk occupying 94% of canvas. Absolutely nothing extends outside circle; no drop shadow outside; no white square; no checkerboard pixels. All face, hair and headwear completely inside the circle. Bust portrait with proportionate adult/young-adult head and shoulders, NOT chibi, face clear at small size. No text, letters, numerals, logos, UI, title or watermark. This is a new designed illustration, not a photographic filter. Character: Donquixote Rosinante / Corazon from ONE PIECE, slim tall adult face, messy BLOND fringe, soft gentle eyes. Burgundy-red soft hood with two long flaps and pointed loose top, black feather coat at shoulders, pale pink shirt with simple dark heart shapes. Iconic clown makeup: extended dark-red curved lipstick smile and a single blue elongated pointed teardrop below HIS RIGHT EYE (viewer LEFT). No makeup below the other eye. Slight soft sorrowful smile. Complete hood silhouette and face fully inside circular disk, no cigarette required, no text. Background delicate engraved feathers, heart-shaped ornamental curls and wave curves in faded teal and warm sepia.  STYLE: vintage maritime hand-pulled SCREEN PRINT / engraved bookplate, clearly flat limited sepia, weathered cream, deep petrol teal and muted vermilion palette, tactile coarse registration textures and wood-engraving carved hatch marks. Deliberately crafted 1920s nautical print design with a thin rope-like printed circular border, without text, digits or pseudo-lettering. All parchment texture INSIDE the circular disk, outside genuine alpha transparent. No ordinary blue sky, no glossy 3D or standard full-color cel anime. ",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12526-69db-7e03-ae15-07272fb0cef7\\exec-2430f1eb-ebdd-477e-97b3-3a96f261d7ed.png",
+      "output": "public/images/board/avatars/102.webp",
+      "referencesViewed": [
+        "public/images/board/avatars/56.webp",
+        "public/images/board/avatars/76.webp",
+        "public/images/board/avatars/81.webp",
+        "public/images/board/avatars/83.webp",
+        "public/images/board/avatars/58.webp",
+        "public/images/board/avatars/59.webp",
+        "public/images/board/avatars/74.webp",
+        "public/images/board/avatars/34.webp",
+        "public/images/board/avatars/89.webp",
+        "public/images/board/avatars/90.webp"
+      ],
+      "canonVisualReview": "Viewed individual GPT output: blond fringe, red hood, dark feather coat, pink heart shirt, character-right blue teardrop makeup and extended red lips. Vintage nautical feather design; no text.",
+      "style": "vintage-print",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "8810786babd23ed81a6931914925c882b0e88a0fe36bde5be710413d8256250d",
+      "sha256": "0c2df8294694608002aa47adfc9d93f2f87e5d4a3d149a8543004d25e8aae1a0",
+      "bytes": 306292,
+      "size": [
+        735,
+        735
+      ],
+      "mode": "RGBA",
+      "format": "WebP",
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "validation": "PASS: original alpha preserved; exact dimensions; corners transparent; individual canon/style visual review recorded"
+    }
+  ],
+  "encodedReadback": "PASS: 10/10 WebP decode, 735x735 RGBA, transparent four corners, recorded SHA256 match",
+  "totalBytes": 2648400
+}

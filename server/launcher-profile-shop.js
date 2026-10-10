@@ -20,7 +20,13 @@ const avatarNames = [
   '布琳', '達絲琪', '斯摩格', '克洛克達爾', '多佛朗明哥', '卡塔克利', '艾涅爾',
   '路奇 CP0', '巴托洛米奧', '卡文迪許', '基德', '基拉', '柯拉松', '雷利',
   '克比', '貝魯梅伯', '希娜', '戰桃丸', '魯夫・和之國', '索隆・和之國',
-  '娜美・和之國', '羅賓・和之國'
+  '娜美・和之國', '羅賓・和之國',
+  '魯夫・墨影', '索隆・墨影', '羅・墨影', '基德・墨影', '卡塔克利・墨影',
+  '艾斯・航海印記', '紅髮傑克・航海印記', '薩波・航海印記', '克洛克達爾・航海印記', '柯拉松・航海印記',
+  '索隆・和之國・浮世浪', '魯夫・和之國・浮世浪', '娜美・和之國・浮世浪', '羅賓・和之國・浮世浪', '甚平・浮世浪',
+  '薇薇・水彩航信', '白星・水彩航信', '培羅娜・水彩航信', '凱洛特・水彩航信', '喬巴・水彩航信',
+  '漢考克・彩窗', '羅賓・彩窗', '布魯克・彩窗', '佛朗基・彩窗', '騙人布・彩窗',
+  '香吉士・霓光', '娜美・霓光', '艾斯・霓光', '薩波・霓光', '魯夫・尼卡・霓光'
 ];
 const avatarRarity = [
   'common', 'common', 'common', 'common', 'common', 'common', 'common',
@@ -31,7 +37,13 @@ const avatarRarity = [
   'rare', 'rare', 'common', 'rare', 'common', 'epic', 'rare', 'rare',
   'rare', 'common', 'rare', 'epic', 'epic', 'legend', 'epic',
   'epic', 'rare', 'rare', 'epic', 'rare', 'rare', 'legend',
-  'rare', 'common', 'common', 'rare', 'legend', 'epic', 'epic', 'epic'
+  'rare', 'common', 'common', 'rare', 'legend', 'epic', 'epic', 'epic',
+  'rare', 'rare', 'rare', 'rare', 'rare',
+  'rare', 'rare', 'rare', 'rare', 'rare',
+  'rare', 'rare', 'rare', 'rare', 'rare',
+  'rare', 'rare', 'rare', 'rare', 'rare',
+  'epic', 'epic', 'epic', 'epic', 'epic',
+  'epic', 'epic', 'epic', 'epic', 'epic'
 ];
 const LAUNCHER_AVATAR_MIN = 51;
 const LAUNCHER_AVATAR_MAX = 30 + avatarNames.length;

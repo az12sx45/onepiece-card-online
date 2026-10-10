@@ -9,7 +9,7 @@ const runtimeRoot = 'C:/Users/王曜瑋/AppData/Local/OpenAI/Codex/runtimes/cua_
 const bundled = fs.existsSync(runtimeRoot) && fs.readdirSync(runtimeRoot).map(x => path.join(runtimeRoot,x,'bin/node_modules/playwright')).find(x => fs.existsSync(path.join(x,'package.json')));
 const { chromium } = require(process.env.BOARD_QA_PLAYWRIGHT || bundled || 'playwright');
 const root = path.resolve(__dirname,'..');
-const out = process.env.LAUNCHER_GUESTBOOK_UI_QA_OUT || 'D:/Codex_QA/launcher-guestbook-r56/ui';
+const out = process.env.LAUNCHER_GUESTBOOK_UI_QA_OUT || 'D:/Codex_QA/launcher-shop-r57/guestbook-regression';
 const styleNames = ['launcher.css','launcher-social.css','launcher-profile-shop.css','launcher-room.css','launcher-room-ambience.css','launcher-room-aquarium.css','launcher-room-minigames.css','launcher-announcements.css'];
 const inputs = ['launcher.html',...styleNames,'launcher-profile-shop.js','launcher-social.js'];
 const sources = Object.fromEntries(inputs.map(name => [name,fs.readFileSync(path.join(root,'desktop',name),'utf8')]));
@@ -21,14 +21,14 @@ const check = (name,pass,detail) => {report.checks.push({name,pass:!!pass,...(de
 const boards=S.CATALOG.filter(x=>x.type==='guestbook_style'),notes=S.CATALOG.filter(x=>x.type==='comment_style'),newAvatars=S.CATALOG.filter(x=>x.type==='avatar'&&x.key>=63);
 const ownIds=[...boards,...notes,...newAvatars].map(x=>x.id);
 const mkRow=(id,name,own,appearance)=>({user_id:id,name,avatar:'8',stats:{launcherWalletV1:{coins:500,lastGrantDay:new Date().toISOString().slice(0,10)},launcherOwnedV1:{items:own},launcherAppearanceV1:appearance,client:{social:{friends:[42,44]}}}});
-const ownerRow=mkRow(42,'測試船長',ownIds,{avatarId:92,guestbookStyleId:boards[0].id,commentStyleId:notes[0].id});
+const ownerRow=mkRow(42,'測試船長',ownIds,{avatarId:122,guestbookStyleId:boards[0].id,commentStyleId:notes[0].id});
 const friendRow=mkRow(44,'好友航海士',[boards[1].id,'ava-63'],{avatarId:63,guestbookStyleId:boards[1].id});
 const fullBody='航'.repeat(240)+'🚢😊';
 const comments=[
   {id:100,authorUserId:44,authorName:'好友航海士',authorAvatar:63,body:fullBody,createdAt:1780000000000,styleId:notes[0].id,style:notes[0]},
-  {id:99,authorUserId:42,authorName:'測試船長',authorAvatar:92,body:'<img src=x onerror="window.__xss=1"> 航程順利！',createdAt:1780000000000,styleId:notes[1].id,style:notes[1]},
+  {id:99,authorUserId:42,authorName:'測試船長',authorAvatar:122,body:'<img src=x onerror="window.__xss=1"> 航程順利！',createdAt:1780000000000,styleId:notes[1].id,style:notes[1]},
   {id:98,authorUserId:44,authorName:'<script>window.__xss=2</script>',authorAvatar:63,body:'舊版素紙留言',createdAt:1780000000000},
-  ...Array.from({length:6},(_,i)=>({id:97-i,authorUserId:i%2?42:44,authorName:i%2?'測試船長':'好友航海士',authorAvatar:i%2?92:63,body:['一起在甲板吹海風！','今天釣到最大的魚了！','下次一起挑戰霸海戰棋！'][i%3],createdAt:1780000000000,styleId:notes[i+2].id,style:notes[i+2]}))
+  ...Array.from({length:6},(_,i)=>({id:97-i,authorUserId:i%2?42:44,authorName:i%2?'測試船長':'好友航海士',authorAvatar:i%2?122:63,body:['一起在甲板吹海風！','今天釣到最大的魚了！','下次一起挑戰霸海戰棋！'][i%3],createdAt:1780000000000,styleId:notes[i+2].id,style:notes[i+2]}))
 ];
 const blankPng=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLZnwAAAABJRU5ErkJggg==','base64');
 
@@ -61,12 +61,12 @@ async function setup(browser,viewport){
       async commandLauncherLife(c){
         qa.calls.push(['command',copy(c)]);const p=c.payload;
         if(p.scope!=='launcher-profile-v1'||c.type!=='event.record')return{ok:false,error:'invalid_profile_command'};
-        if(p.operation==='social.avatars'){const owner=qa.socialAccount;if(qa.deferAvatars)await new Promise(resolve=>qa.avatarResolvers.push(resolve));return{ok:true,avatars:[{userId:44,avatar:owner===42?92:63}]};}
+        if(p.operation==='social.avatars'){const owner=qa.socialAccount;if(qa.deferAvatars)await new Promise(resolve=>qa.avatarResolvers.push(resolve));return{ok:true,avatars:[{userId:44,avatar:owner===42?122:63}]};}
         if(p.operation==='comment.post'){
           if(qa.deferPost)await new Promise(resolve=>qa.postResolvers.push(resolve));
           if(qa.replays[c.requestId])return{ok:true,comment:copy(qa.replays[c.requestId]),duplicate:true};
           const style=qa.shop.catalog.find(x=>x.id===p.styleId)||{id:'comment-style-default',name:'素紙便條'};
-          const entry={id:qa.nextId++,authorUserId:42,authorName:'測試船長',authorAvatar:92,body:p.body,createdAt:Date.now(),styleId:style.id,style};
+          const entry={id:qa.nextId++,authorUserId:42,authorName:'測試船長',authorAvatar:122,body:p.body,createdAt:Date.now(),styleId:style.id,style};
           qa.comments[p.userId||42].unshift(entry);qa.replays[c.requestId]=entry;return{ok:true,comment:copy(entry)};
         }
         if(p.operation==='card.set'){qa.profiles[42].card=copy(p.card);return{ok:true,profile:copy(qa.profiles[42]),shop:copy(qa.shop)};}
@@ -150,20 +150,20 @@ async function main(){
       await page.waitForFunction(()=>!document.querySelector('#profileGuestbookList [data-comment-id="101"]'));
       check(label+' deleting own comment removes all marquee copies',await page.locator('#profileGuestbookList [data-comment-id="101"]').count()===0);
 
-      for(const [tab,count] of [['guestbook_style',10],['comment_style',20],['avatar',62]]){
+      for(const [tab,count] of [['guestbook_style',10],['comment_style',20],['avatar',92]]){
         await page.evaluate(tab=>window.LauncherProfileShop.openShopCategory(tab),tab);await page.waitForFunction(count=>document.querySelectorAll('#shopGrid .shop-item').length===count,count);
         check(label+' shop category '+tab+' complete',await page.locator('#shopGrid .shop-item').count()===count);
       }
-      check(label+' all 30 new avatars appear in shop',await page.locator('#shopGrid .shop-item').evaluateAll(nodes=>nodes.filter(n=>Number(n.dataset.itemId.slice(4))>=63).length)===30);
+      check(label+' all 60 extended avatars appear in shop',await page.locator('#shopGrid .shop-item').evaluateAll(nodes=>nodes.filter(n=>Number(n.dataset.itemId.slice(4))>=63).length)===60);
       await page.evaluate(()=>window.LauncherProfileShop.openProfile(0));await page.waitForFunction(()=>!document.getElementById('profileCardEdit').hidden);
-      await page.locator('#profileCardEdit').click();await page.locator('#profileCardAvatar').selectOption('92');await page.locator('#profileCardName').fill('羅賓航海者');await page.locator('#profileCardSave').click();
+      await page.locator('#profileCardEdit').click();await page.locator('#profileCardAvatar').selectOption('122');await page.locator('#profileCardName').fill('羅賓航海者');await page.locator('#profileCardSave').click();
       await page.waitForFunction(()=>window.__guestbookQa.calls.some(x=>x[0]==='command'&&x[1].payload.operation==='card.set'));
-      check(label+' avatar 92 card saves through compatibility bridge',await page.evaluate(()=>window.__guestbookQa.calls.some(x=>x[0]==='command'&&x[1].payload.operation==='card.set'&&x[1].payload.card.avatarId===92)));
+      check(label+' avatar 122 card saves through compatibility bridge',await page.evaluate(()=>window.__guestbookQa.calls.some(x=>x[0]==='command'&&x[1].payload.operation==='card.set'&&x[1].payload.card.avatarId===122)));
       await page.emulateMedia({reducedMotion:'reduce'});
       check(label+' reduced motion switches to reading mode',await stage.getAttribute('data-reading')==='true');
       await page.evaluate(()=>{window.LauncherSocial.setAccount({authenticated:true,profile:{userId:42}});window.launcherSwitchPanel('social');});
-      await page.waitForFunction(()=>document.querySelector('#socialFriendsList img')?.src.endsWith('/92.webp'));
-      check(label+' old core avatar 8 is replaced by social projection 92',await page.locator('#socialFriendsList img').getAttribute('src')==='opui://launcher/images/board/avatars/92.webp');
+      await page.waitForFunction(()=>document.querySelector('#socialFriendsList img')?.src.endsWith('/122.webp'));
+      check(label+' old core avatar 8 is replaced by social projection 122',await page.locator('#socialFriendsList img').getAttribute('src')==='opui://launcher/images/board/avatars/122.webp');
       await page.evaluate(()=>{window.__guestbookQa.deferAvatars=true;document.getElementById('socialRefresh').click();});
       await page.waitForFunction(()=>window.__guestbookQa.avatarResolvers.length===1);
       await page.evaluate(()=>{window.__guestbookQa.socialAccount=45;window.__guestbookQa.deferAvatars=false;window.LauncherSocial.setAccount({authenticated:true,profile:{userId:45}});});

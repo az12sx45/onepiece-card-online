@@ -1,0 +1,366 @@
+{
+  "generator": "builtin image_gen",
+  "generatedAt": "2026-10-10",
+  "operation": "individual image per requested avatar; no sprite sheets",
+  "export": "735x735 RGBA WebP, image alpha retained; LANCZOS resize and WebP encode only",
+  "items": [
+    {
+      "id": 113,
+      "character": "漢考克",
+      "name": "漢考克・彩窗",
+      "style": "stained-glass",
+      "styleDescription": "Artistic stained-glass mosaic portrait with fine dark lead contours, jewel color panes and nautical radial geometry; expressive anime face must remain unmistakable, not a faceless symbol.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/113.webp",
+      "prompt": "Use case: stylized-concept. Asset: premium collectible circular ONE PIECE player avatar for a desktop game, one image only. Square canvas with a perfect centered circular medallion filling 96% of width; absolutely transparent outside the circle, including all four corners. All hair, earrings, hat and decoration inside circle. Full detailed head plus shoulders, face readable at thumbnail scale, natural anime proportions, no chibi, no text, no lettering, no watermark. Entire image inside circle is a meticulously crafted luminous stained-glass artwork: fine dark lead contours, jewel colored glass panes with subtle rippling glass texture, intricate maritime radial geometry. Face is finely painted on larger ivory/peach glass panes with recognizable anime linework and expressive detailed eyes. Do not break facial anatomy into coarse polygons; not an abstract symbol or faceless emblem. Subject: Boa Hancock, adult Empress from ONE PIECE. Front three-quarter portrait, dignified haughty elegant expression, very long glossy black hair with center part and face-framing strands, recognizable narrow dark-blue anime eyes, pale skin, two large gold snake-shaped hoop earrings. Canon elegant red high-collar Kuja pirate garment at shoulders, no invented armor. Ruby red, amethyst, black and gold snake-coil-shaped glass geometry, tiny heart-shaped ruby accents at outer ring. Face remains unmistakably Hancock, lips subtle, no giant lips.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12529-1842-7ae2-b8cf-16b4fb9a591d\\exec-58090b7d-d328-48dc-a77a-e9b424fdc74f.png",
+      "visualReview": {
+        "status": "reviewed",
+        "notes": "Hancock: long black center-part hair, narrow blue eyes, gold snake hoops, dignified expression; ruby/black/gold glazed design."
+      },
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 255936,
+        "sha256": "7ef62f0978ddb83904e6a41405704cb30ce80fe5ea90a8d70bf8d8dbdfc40807",
+        "sourceSha256": "5e26ca16b5ba7d991c59f681ced113eb5482c3a6fef9447fbe3d54703676cdea"
+      }
+    },
+    {
+      "id": 114,
+      "character": "羅賓",
+      "name": "羅賓・彩窗",
+      "style": "stained-glass",
+      "styleDescription": "Artistic stained-glass mosaic portrait with fine dark lead contours, jewel color panes and nautical radial geometry; expressive anime face must remain unmistakable, not a faceless symbol.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/114.webp",
+      "prompt": "Use case: stylized-concept. Asset: premium collectible circular ONE PIECE player avatar for a desktop game, one image only. Square canvas with a perfect centered circular medallion filling 96% of width; absolutely transparent outside the circle, including all four corners. All hair, earrings, hat and decoration inside circle. Full detailed head plus shoulders, face readable at thumbnail scale, natural anime proportions, no chibi, no text, no lettering, no watermark. Entire image inside circle is a meticulously crafted luminous stained-glass artwork: fine dark lead contours, jewel colored glass panes with subtle rippling glass texture, intricate maritime radial geometry. Face is finely painted on larger ivory/peach glass panes with recognizable anime linework and expressive detailed eyes. Do not break facial anatomy into coarse polygons; not an abstract symbol or faceless emblem. Subject: Nico Robin from ONE PIECE, pre-timeskip Enies Lobby look matching reference identity: straight dark blue-black shoulder-length hair with straight bangs, almond-shaped blue eyes, signature long straight nose with angular bridge, calm knowing small smile, mature slender face. Black collared jacket with narrow white lace neckline visible at shoulders. Three-quarter tilt. Indigo, teal, violet glass background with ancient-stone/rubbing geometric motifs and a pair of stylized blossom glass panels, no letters or runes, natural elegant facial anatomy. Circle silhouette must be perfectly round with a plain circular outermost rim: do not add ornaments sticking beyond the circular rim.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12529-1842-7ae2-b8cf-16b4fb9a591d\\exec-d925e5d9-74f5-4e93-94c4-7ffcc3ee2a4b.png",
+      "visualReview": {
+        "status": "reviewed",
+        "notes": "Pre-timeskip Robin: straight bangs, angular long nose, almond blue eyes, black collared outfit and white lace; mature calm face."
+      },
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 272052,
+        "sha256": "5a87378c6f4b153952ab7d7c09cb7db61357715c6c116ffbd3b6778997d9750e",
+        "sourceSha256": "5ad7b2086e2511d0822c000b0f10aa21579c77f2b236f114a257540ef877550e"
+      }
+    },
+    {
+      "id": 115,
+      "character": "布魯克",
+      "name": "布魯克・彩窗",
+      "style": "stained-glass",
+      "styleDescription": "Artistic stained-glass mosaic portrait with fine dark lead contours, jewel color panes and nautical radial geometry; expressive anime face must remain unmistakable, not a faceless symbol.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/115.webp",
+      "prompt": "Use case: stylized-concept. Asset: premium collectible circular ONE PIECE player avatar for a desktop game, one image only. Square canvas with a perfect centered circular medallion filling 96% of width; absolutely transparent outside the circle, including all four corners. All hair, earrings, hat and decoration inside circle. Full detailed head plus shoulders, face readable at thumbnail scale, natural anime proportions, no chibi, no text, no lettering, no watermark. Entire image inside circle is a meticulously crafted luminous stained-glass artwork: fine dark lead contours, jewel colored glass panes with subtle rippling glass texture, intricate maritime radial geometry. Face is finely painted on larger ivory/peach glass panes with recognizable anime linework and expressive detailed eyes. Do not break facial anatomy into coarse polygons; not an abstract symbol or faceless emblem. Subject: Brook from ONE PIECE, a cheerful actual skeleton musician, enormous round black afro and small black top hat entirely within circle, ivory skull with empty black round eye sockets, triangular nose opening, recognizable forehead crack, broad neat bony teeth, no human skin or eyes. His classic black coat with yellow-orange lapels and blue cravat with three purple beads at shoulders. Joyful tilted head. Amethyst, cobalt blue and gold radial glass sound-wave motifs; do not put music notation text. Clearly Brook not generic skull pirate.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12529-1842-7ae2-b8cf-16b4fb9a591d\\exec-748df310-3e09-4d27-94df-9f95fd51b797.png",
+      "visualReview": {
+        "status": "reviewed",
+        "notes": "Brook: real ivory skeleton, empty black sockets, forehead crack, afro and top hat, orange lapels, three purple cravat beads."
+      },
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 269082,
+        "sha256": "432e6e756e41de60f00a2c5b74e093c87d6b3c45e8b77e102b09afa12e6edc10",
+        "sourceSha256": "9cd7ffd7c5cf77fbd53f34d9a937753b31033aa762a14b5db1c1a66532d70b9b"
+      }
+    },
+    {
+      "id": 116,
+      "character": "佛朗基",
+      "name": "佛朗基・彩窗",
+      "style": "stained-glass",
+      "styleDescription": "Artistic stained-glass mosaic portrait with fine dark lead contours, jewel color panes and nautical radial geometry; expressive anime face must remain unmistakable, not a faceless symbol.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/116.webp",
+      "prompt": "Use case: stylized-concept. Asset: premium collectible circular ONE PIECE player avatar for a desktop game, one image only. Square canvas with a perfect centered circular medallion filling 96% of width; absolutely transparent outside the circle, including all four corners. All hair, earrings, hat and decoration inside circle. Full detailed head plus shoulders, face readable at thumbnail scale, natural anime proportions, no chibi, no text, no lettering, no watermark. Entire image inside circle is a meticulously crafted luminous stained-glass artwork: fine dark lead contours, jewel colored glass panes with subtle rippling glass texture, intricate maritime radial geometry. Face is finely painted on larger ivory/peach glass panes with recognizable anime linework and expressive detailed eyes. Do not break facial anatomy into coarse polygons; not an abstract symbol or faceless emblem. Subject: Franky from ONE PIECE, pre-timeskip Water Seven cyborg design. Huge angular squared smiling jaw and broad adult head, brilliant cyan blue swept-up pompadour, thick blue sideburns, signature flat triangular STEEL METAL nose with rivets, sunglasses resting atop forehead, heavy black lower eyelashes, exuberant toothy grin. Canon open red Hawaiian shirt with yellow palm silhouettes at broad shoulders, hint of muscular upper chest; do not add mech helmet or extra face armor. Cyan, steel blue, crimson and brass glass nautical shipwright rivet/gear radial pattern; expressive unmistakable Franky face.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12529-1842-7ae2-b8cf-16b4fb9a591d\\exec-4358ae1a-4e73-4910-b74a-55b8f121c580.png",
+      "visualReview": {
+        "status": "reviewed",
+        "notes": "Pre-timeskip Franky: cyan pompadour and sideburns, steel riveted triangular nose, lower lashes, strong squared jaw, red/yellow Hawaiian shirt."
+      },
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 292872,
+        "sha256": "1f4157d0afaa53263494df4f99f01a20d17b5f7aba6f4c570c4041285e898c8f",
+        "sourceSha256": "56789e65168aeb5e74adf3fdd339434ac6305f12f60637244aca4bf9491c3582"
+      }
+    },
+    {
+      "id": 117,
+      "character": "騙人布",
+      "name": "騙人布・彩窗",
+      "style": "stained-glass",
+      "styleDescription": "Artistic stained-glass mosaic portrait with fine dark lead contours, jewel color panes and nautical radial geometry; expressive anime face must remain unmistakable, not a faceless symbol.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/117.webp",
+      "prompt": "Use case: stylized-concept. Asset: premium collectible circular ONE PIECE player avatar for a desktop game, one image only. Square canvas with a perfect centered circular medallion filling 96% of width; absolutely transparent outside the circle, including all four corners. All hair, earrings, hat and decoration inside circle. Full detailed head plus shoulders, face readable at thumbnail scale, natural anime proportions, no chibi, no text, no lettering, no watermark. Entire image inside circle is a meticulously crafted luminous stained-glass artwork: fine dark lead contours, jewel colored glass panes with subtle rippling glass texture, intricate maritime radial geometry. Face is finely painted on larger ivory/peach glass panes with recognizable anime linework and expressive detailed eyes. Do not break facial anatomy into coarse polygons; not an abstract symbol or faceless emblem. Subject: Usopp from ONE PIECE in original pre-timeskip look, slim adult face, tan skin, unmistakably VERY LONG protruding nose seen in three-quarter view pointing to viewer right, broad confident toothy grin, large expressive black-pupil eyes, thick lips, curly black hair, brown bandana and goggles resting on top. White shoulder strap at lower edge. Amber, olive green, turquoise stained-glass with slingshot fork silhouettes and concentric aiming geometry. Keep the nose fully within circle, do not shorten it to normal nose, no Pinocchio wooden skin.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12529-1842-7ae2-b8cf-16b4fb9a591d\\exec-51cfc627-3dc9-4461-8145-4e3e1d7fca3d.png",
+      "visualReview": {
+        "status": "reviewed",
+        "notes": "Pre-timeskip Usopp: long nose fully visible in three-quarter view, curly black hair, bandana/goggles, broad lips and tan skin."
+      },
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 264552,
+        "sha256": "1835456c5dd815b1bb94bfb6835a90a3bcd27a7ef71d4bad2e991117c0b13584",
+        "sourceSha256": "ab9d0c84825cd0ed8419fb19a7d3a641c746f2110ae5d9560d925d4433241bde"
+      }
+    },
+    {
+      "id": 118,
+      "character": "香吉士",
+      "name": "香吉士・霓光",
+      "style": "graphic-poster",
+      "styleDescription": "Bold premium anime editorial poster portrait, crisp cel shading, dramatic two-color rim light and character-specific graphic motifs; no photo realism, no generic cyberpunk clothing, no text.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/118.webp",
+      "prompt": "Use case: stylized-concept. Asset: premium collectible circular ONE PIECE player avatar for a desktop game, one image only. Square canvas with a perfect centered circular medallion filling 96% of width; absolutely transparent outside the circle, including all four corners. All hair, earrings, hat and decoration inside circle. Full detailed head plus shoulders, face readable at thumbnail scale, natural anime proportions, no chibi, no text, no lettering, no watermark. Premium graphic anime editorial poster illustration, bold asymmetrical shapes, crisp hand-inked cel shading, dramatic warm/cool two-color rim light and strong visual hierarchy. A real stylized illustration, not 3D, not photograph, no generic cyberpunk costume. Detailed face rendered with hard geometric highlight shapes and sophisticated negative space. Subject: Sanji from ONE PIECE, post-timeskip canonical normal form. Slim angular attractive adult male face, blond straight hair covering HIS RIGHT eye (on VIEWER LEFT), ONLY HIS LEFT EYE is visible on VIEWER RIGHT, visible curled eyebrow with spiral at inner end toward nose, small pointed chin goatee, cigarette at corner of confident smirk. Black double-breasted suit, deep blue collared shirt and black tie. Deliberate 3/4 head pose with hair side still unambiguous. Background is stylized hot orange flame slices crossed with navy and electric cyan rim light, elegant chef and martial-artist attitude. No reversed hair side, no duplicated visible eye, no extra goggles, no suit armor. New independent graphic-poster design. NO stained glass, no mosaic, no lead outlines, no ornate ring.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12529-1842-7ae2-b8cf-16b4fb9a591d\\exec-1942172a-33a2-4f90-885d-97f1b9abb5cd.png",
+      "visualReview": {
+        "status": "reviewed",
+        "notes": "Post-timeskip Sanji: his right eye hidden on viewer left, his left eye and inner eyebrow spiral visible on viewer right, blond hair and chin goatee, black/blue suit, cigarette."
+      },
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 174822,
+        "sha256": "4718311f6ab8b9a9710587570b65a10657b0d1730e56e06f88c9082208f6c894",
+        "sourceSha256": "8ba21e22c30d4cb8fb59783f3f37a40b81a55b5a8699599a0d9b9d9d2f9ff536"
+      }
+    },
+    {
+      "id": 119,
+      "character": "娜美",
+      "name": "娜美・霓光",
+      "style": "graphic-poster",
+      "styleDescription": "Bold premium anime editorial poster portrait, crisp cel shading, dramatic two-color rim light and character-specific graphic motifs; no photo realism, no generic cyberpunk clothing, no text.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/119.webp",
+      "prompt": "Use case: stylized-concept. Asset: premium collectible circular ONE PIECE player avatar for a desktop game, one image only. Square canvas with a perfect centered circular medallion filling 96% of width; absolutely transparent outside the circle, including all four corners. All hair, earrings, hat and decoration inside circle. Full detailed head plus shoulders, face readable at thumbnail scale, natural anime proportions, no chibi, no text, no lettering, no watermark. Premium graphic anime editorial poster illustration, bold asymmetrical shapes, crisp hand-inked cel shading, dramatic warm/cool two-color rim light and strong visual hierarchy. A real stylized illustration, not 3D, not photograph, no generic cyberpunk costume. Detailed face rendered with hard geometric highlight shapes and sophisticated negative space. Subject: Nami from ONE PIECE, post-timeskip iconic look. Orange long wavy hair with side part and forehead visible, brown anime eyes, confident sly smile, adult slender face and shoulders. Green-and-white striped bikini top only modest upper edge visible in chest-up portrait; no exaggerated bust. Small glimpse of her blue pinwheel/tangerine tattoo on her left upper arm if visible. Orange sunburst and electric turquoise map-grid/compass curves, one fine lightning zigzag behind her, without any numerals or letters. Original anime identity, not generic orange-haired model. New independent graphic-poster design. NO stained glass, no mosaic, no lead outlines, no ornate ring.",
+      "correctionPrompt": "Use case: identity-preserve. Edit this Nami avatar to correct canon accuracy and framing. Preserve Nami's orange long hair, brown anime eyes, confident sly smile, adult slim proportions, green-and-white striped canon top, orange/turquoise graphic light, compass lightning motifs, and circular true-transparent outside. Change composition to a closer head-and-neck/upper-shoulder portrait so BOTH upper arms and the entire tattoo area are BELOW the bottom circular crop: do NOT depict a tattoo at all because it must be outside the frame. Do not merely erase a visible tattoo on bare upper arm. Keep enough negative space above the hair to avoid clipping the top of head. Make the illustrated face unmistakably ONE PIECE Nami with clean expressive anime contours, a small simple nose and larger lively anime eyes; reduce cosmetic glossy lips. Keep the whole silhouette a clean perfect circle. No text, no lettering, no additional characters. The previous tattoo was an incorrect generic pinwheel; none of it should remain visible in this corrected portrait.",
+      "rejectedSource": {
+        "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12529-1842-7ae2-b8cf-16b4fb9a591d\\exec-5d9d99a3-0638-4da9-9536-3ad8df3c3b0d.png",
+        "reason": "Incorrect generic pinwheel tattoo, too broad shoulder crop",
+        "sha256": "decb4e2e0a48570b7c307b9ba9f2f19118b47978f36c6b8f3693971426b407e2",
+        "deleted": true,
+        "deletionReason": "Incorrect Nami tattoo; corrected portrait accepted"
+      },
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12529-1842-7ae2-b8cf-16b4fb9a591d\\exec-133ccdf0-45ce-4ce3-b26a-8b922d0dccd7.png",
+      "visualReview": {
+        "status": "reviewed",
+        "notes": "Post-timeskip Nami: orange long hair, brown eyes, green-white top neckline. Corrected framing excludes upper-arm tattoo rather than showing the incorrect generic pinwheel."
+      },
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 184144,
+        "sha256": "122e8bbfa76310e9b75c8dfd2e24a0fe4a65b5d1cc5f94095cf05df1011d9ab4",
+        "sourceSha256": "3b0568b67fb95226956a2602c8bc206d5f16bb626a7bb1fd57e3c6027605ba1a"
+      }
+    },
+    {
+      "id": 120,
+      "character": "艾斯",
+      "name": "艾斯・霓光",
+      "style": "graphic-poster",
+      "styleDescription": "Bold premium anime editorial poster portrait, crisp cel shading, dramatic two-color rim light and character-specific graphic motifs; no photo realism, no generic cyberpunk clothing, no text.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/120.webp",
+      "prompt": "Use case: stylized-concept. Asset: premium collectible circular ONE PIECE player avatar for a desktop game, one image only. Square canvas with a perfect centered circular medallion filling 96% of width; absolutely transparent outside the circle, including all four corners. All hair, earrings, hat and decoration inside circle. Full detailed head plus shoulders, face readable at thumbnail scale, natural anime proportions, no chibi, no text, no lettering, no watermark. Premium graphic anime editorial poster illustration, bold asymmetrical shapes, crisp hand-inked cel shading, dramatic warm/cool two-color rim light and strong visual hierarchy. A real stylized illustration, not 3D, not photograph, no generic cyberpunk costume. Detailed face rendered with hard geometric highlight shapes and sophisticated negative space. Subject: Portgas D. Ace from ONE PIECE. Lean angular face and broad friendly daring grin, black mid-length wavy hair, characteristic small freckles across BOTH cheeks, orange wide-brim hat with the TWO round blue ornaments displaying one smile and one frown, visible red bead necklace. Bare shoulders only, slim athletic proportions not fat. Hat completely within circular edge; face high prominence. Orange-red fire sweeping upward on one side and deep cobalt blue shadow planes on other, flame-shaped graphic composition, no slogans. Preserve recognizable Ace, no new scars or tattoos on face. New independent graphic-poster design. NO stained glass, no mosaic, no lead outlines, no ornate ring.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12529-1842-7ae2-b8cf-16b4fb9a591d\\exec-b7ac8d41-102e-4089-8bc9-592b001fe23f.png",
+      "visualReview": {
+        "status": "reviewed",
+        "notes": "Ace: both-cheek freckles, wavy black hair, orange hat smile/frown ornaments, red beads, lean angular face."
+      },
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 188998,
+        "sha256": "5b3780e4e7ea2eec4647bb05d8b09920f87a03931a32db3a347cbbccb683920a",
+        "sourceSha256": "6b38bcba352d9ccc4d060dec7b005f5983ec0b7a128211034237536521f2387e"
+      }
+    },
+    {
+      "id": 121,
+      "character": "薩波",
+      "name": "薩波・霓光",
+      "style": "graphic-poster",
+      "styleDescription": "Bold premium anime editorial poster portrait, crisp cel shading, dramatic two-color rim light and character-specific graphic motifs; no photo realism, no generic cyberpunk clothing, no text.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/121.webp",
+      "prompt": "Use case: stylized-concept. Asset: premium collectible circular ONE PIECE player avatar for a desktop game, one image only. Square canvas with a perfect centered circular medallion filling 96% of width; absolutely transparent outside the circle, including all four corners. All hair, earrings, hat and decoration inside circle. Full detailed head plus shoulders, face readable at thumbnail scale, natural anime proportions, no chibi, no text, no lettering, no watermark. Premium graphic anime editorial poster illustration, bold asymmetrical shapes, crisp hand-inked cel shading, dramatic warm/cool two-color rim light and strong visual hierarchy. A real stylized illustration, not 3D, not photograph, no generic cyberpunk costume. Detailed face rendered with hard geometric highlight shapes and sophisticated negative space. Subject: Sabo from ONE PIECE, grown-up Revolutionary Army chief of staff, slender adult face, wavy blond hair, black tall top hat with blue goggles around crown, hat fully inside circle. A clearly visible burn scar around HIS LEFT eye (VIEWER RIGHT), confident gentle grin. Dark blue formal coat, high-collared vest and white cravat. Amber flame-shaped diagonal poster graphics and rich turquoise/deep-navy shadows, a subtle steel pipe silhouette behind shoulder, no insignia lettering. Not Ace; no freckles, no red bead necklace. New independent graphic-poster design. NO stained glass, no mosaic, no lead outlines, no ornate ring.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12529-1842-7ae2-b8cf-16b4fb9a591d\\exec-ffb679e7-54bc-44ab-8ab8-7fa45ef52dee.png",
+      "visualReview": {
+        "status": "reviewed",
+        "notes": "Sabo: wavy blond hair, blue goggles on black hat, burn scar at his left/viewer right eye, white cravat/dark blue coat, pipe."
+      },
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 201918,
+        "sha256": "bd6e01750ddc0db26f4ade09329727e1211c88fd34216b23e7f2a81722fc12b2",
+        "sourceSha256": "1768af3d9b15a7b4c8754e7cb9722c169ed308a15ca2b56d1d173c30d65b5a49"
+      }
+    },
+    {
+      "id": 122,
+      "character": "魯夫・尼卡",
+      "name": "魯夫・尼卡・霓光",
+      "style": "graphic-poster",
+      "styleDescription": "Bold premium anime editorial poster portrait, crisp cel shading, dramatic two-color rim light and character-specific graphic motifs; no photo realism, no generic cyberpunk clothing, no text.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/122.webp",
+      "prompt": "Use case: stylized-concept. Asset: premium collectible circular ONE PIECE player avatar for a desktop game, one image only. Square canvas with a perfect centered circular medallion filling 96% of width; absolutely transparent outside the circle, including all four corners. All hair, earrings, hat and decoration inside circle. Full detailed head plus shoulders, face readable at thumbnail scale, natural anime proportions, no chibi, no text, no lettering, no watermark. Premium graphic anime editorial poster illustration, bold asymmetrical shapes, crisp hand-inked cel shading, dramatic warm/cool two-color rim light and strong visual hierarchy. A real stylized illustration, not 3D, not photograph, no generic cyberpunk costume. Detailed face rendered with hard geometric highlight shapes and sophisticated negative space. Subject: Monkey D. Luffy in canonical Gear Five Nika form from ONE PIECE, joyful laughing face, small stitched scar under HIS LEFT eye (VIEWER RIGHT), fluffy white hair shaped like flowing flame clouds and white curled eyebrows, red/pink irises. White open collar upper garment, hint of smoke-cloud loop around shoulders. High-spirited broad open laughter showing upper teeth, head tilted back slightly but eyes and scar still clear. Pearl white highlights, deep indigo negative-space shadows and fuchsia/cyan graphic lightning arcs, energetic bold poster geometry. Clearly Luffy not generic white-haired boy. No straw hat on head, no yellow hair, no chibi. New independent graphic-poster design. NO stained glass, no mosaic, no lead outlines, no ornate ring.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a12529-1842-7ae2-b8cf-16b4fb9a591d\\exec-0f7fe1b6-4a11-4c3c-abd9-c0006049ceb7.png",
+      "visualReview": {
+        "status": "reviewed",
+        "notes": "Gear Five Luffy: cloud-like white hair, curled white eyebrows, pink/red iris, stitched scar under left/viewer-right eye, joyful laughter, white clothes and cloud ring."
+      },
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 188742,
+        "sha256": "5dffca5ed5534ff202066935b9d95d2e0e74bcab9566ac918eb7036621d50046",
+        "sourceSha256": "ed8df50669dde2a05476f6a187458dcee9b3c42fdb239658680af994fe976001"
+      }
+    }
+  ]
+}

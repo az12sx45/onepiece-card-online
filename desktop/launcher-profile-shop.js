@@ -15,13 +15,13 @@
   const ROOM_TYPES = ['room_scene', 'room_furniture', 'room_character'];
   const SLOTS = [['header', '上方'], ['side', '側邊'], ['footer', '下方']];
   const RARITY = { common: '普通', rare: '稀有', epic: '史詩', legend: '傳說' };
-  const MAX_AVATAR_ID = 92;
+  const MAX_AVATAR_ID = 122;
   // Versioned profile operations ride the existing authenticated desktop bridge.
   // The server validates catalog IDs, ownership and permissions for each action.
   const profileCommand = (operation, payload = {}, requestId = crypto.randomUUID()) => api.commandLauncherLife({
     requestId, expectedRevision: 0, type: 'event.record', payload: { scope: 'launcher-profile-v1', operation, ...payload }
   });
-  const extendedItem = id => /^(?:guestbook-style-|comment-style-)/.test(id) || /^ava-(?:6[3-9]|[78][0-9]|9[0-2])$/.test(id);
+  const extendedItem = id => /^(?:guestbook-style-|comment-style-)/.test(id) || /^ava-[1-9][0-9]*$/.test(id) && Number(id.slice(4)) >= 63 && Number(id.slice(4)) <= MAX_AVATAR_ID;
   const number = value => Number.isSafeInteger(Number(value)) && Number(value) >= 0 ? Number(value) : 0;
   const fmt = value => number(value).toLocaleString('zh-TW');
   const el = (tag, className, content) => {
@@ -256,7 +256,7 @@
       return;
     }
     if (category === 'launcher') {
-      const ids = Array.isArray(profile?.collection?.launcher?.itemIds) ? profile.collection.launcher.itemIds.filter(id => typeof id === 'string' && /^[a-z0-9-]{3,64}$/.test(id)).slice(0, 150) : [];
+      const ids = Array.isArray(profile?.collection?.launcher?.itemIds) ? profile.collection.launcher.itemIds.filter(id => typeof id === 'string' && /^[a-z0-9-]{3,64}$/.test(id)) : [];
       const summaries = Array.isArray(profile?.collection?.launcher?.items) ? profile.collection.launcher.items : [];
       $('profileCollectionCount').textContent = `${ids.length} 件展示室收藏`;
       for (const id of ids) {
@@ -389,7 +389,7 @@
   }
   function syncGuestbookMotion() {
     const stage = $('profileGuestbookStage');
-    stage.dataset.paused = String(guestbookPaused || document.hidden || !profileVisible || $('profileCommentReadDialog').open);
+    stage.dataset.paused = String(guestbookPaused || document.hidden || !profileVisible || $('profileCommentReadDialog').open || $('shopItemPreviewDialog')?.open);
     stage.dataset.reading = String(guestbookReading);
     $('profileGuestbookMotion').textContent = guestbookPaused ? '繼續彈幕' : '暫停彈幕';
     $('profileGuestbookMotion').setAttribute('aria-pressed', String(guestbookPaused));
@@ -443,11 +443,14 @@
     stage.previousElementSibling.hidden=!profile||!enabled;
     const theme=profile?.appearanceItems?.guestbookStyle,background=safeImageAsset(theme?.asset);
     stage.style.setProperty('--board-art',background?`url("${background}")`:'none');
+    $('profileGuestbookPreview').hidden=!background;
+    $('profileGuestbookPreview').onclick=()=>{if(background)showItemPreview({...theme,type:'guestbook_style'});};
     $('profileGuestbookTheme').textContent=theme?.name||'航海留言';
     syncGuestbookMotion();renderStationery();
     if(!profile||!enabled)return;
     if(!Array.isArray(comments)||!comments.length){list.append(el('p','captain-guestbook-empty',Array.isArray(comments)?'下一段航程，從一句問候開始。':'正在讀取好友留言…'));return;}
-    const rows=guestbookReading?1:Math.min(3,comments.length);const lanes=[];
+    const laneCount=()=>Math.min(3,comments.length,Math.max(1,Math.floor(((stage.clientWidth||1200)*9/16-32)/178)));
+    const rows=guestbookReading?1:laneCount();const lanes=[];
     for(let i=0;i<rows;i++){
       const lane=el('div','captain-danmaku-lane'),track=el('div','captain-danmaku-track'),sequence=el('div','captain-danmaku-sequence');
       for(let n=i;n<comments.length;n+=rows)sequence.append(makeComment(comments[n]));
@@ -456,7 +459,7 @@
       for(const card of duplicate.children){card.tabIndex=-1;card.removeAttribute('role');card.removeAttribute('aria-label');const entry=comments.find(c=>String(c.id)===card.dataset.commentId);card.onclick=()=>showComment(entry);}
       track.append(sequence,duplicate);lane.append(track);list.append(lane);lanes.push({track,sequence});
     }
-    const measure=()=>{for(let i=0;i<lanes.length;i++){const {track,sequence}=lanes[i];const width=Math.max(stage.clientWidth,sequence.scrollWidth);track.style.setProperty('--lap',width+'px');track.style.setProperty('--duration',(width/(i===1?31:37))+'s');track.style.setProperty('--offset',(-i*2)+'s');}};
+    const measure=()=>{if(!guestbookReading&&stage.clientWidth&&laneCount()!==rows){renderGuestbook();return;}for(let i=0;i<lanes.length;i++){const {track,sequence}=lanes[i];const width=Math.max(stage.clientWidth,sequence.scrollWidth);track.style.setProperty('--lap',width+'px');track.style.setProperty('--duration',(width/(i===1?31:37))+'s');track.style.setProperty('--offset',(-i*2)+'s');}};
     guestbookObserver=new ResizeObserver(measure);guestbookObserver.observe(stage);measure();
   }
 
@@ -765,7 +768,7 @@
     }
   }
   function updateShopPreviewButtons() {
-    for (const button of $('shopGrid').querySelectorAll('.shop-preview-button')) {
+    for (const button of document.querySelectorAll('#shopGrid .shop-preview-button, #shopItemPreviewActions .shop-preview-button')) {
       const active = button.dataset.previewId === shopPreviewId;
       button.textContent = active ? shopPreviewPending ? '載入中…按此取消' : '停止試聽' : '♫ 試聽 30 秒';
       button.setAttribute('aria-pressed', String(active));
@@ -808,6 +811,47 @@
     stopShopPreview();
     status('shopStatus', '這首音樂目前無法試聽，請稍後再試。', true);
   };
+  let previewedItem = null, previewPanel = '';
+  function closeItemPreview() {
+    if (previewedItem?.type === 'bgm') stopShopPreview();
+    $('shopItemPreviewDialog').close();
+  }
+  function showItemPreview(item) {
+    if (!item) return;
+    stopShopPreview();
+    previewedItem = item;
+    previewPanel = profileVisible ? 'profile' : 'shop';
+    const dialog=$('shopItemPreviewDialog'), stage=$('shopItemPreviewStage'), actions=$('shopItemPreviewActions');
+    dialog.dataset.type=item.type; dialog.dataset.itemId=item.id||'';
+    $('shopItemPreviewName').textContent=String(item.name||'商品預覽').slice(0,80);
+    $('shopItemPreviewMeta').textContent=TYPE_LABEL[item.type]||'商品預覽';
+    stage.replaceChildren(); actions.replaceChildren();
+    const source=itemImage(item);
+    if(source){
+      const image=el('img','shop-large-preview-image'); image.alt=String(item.name||'商品圖片').slice(0,80);
+      image.onload=()=>{image.style.maxWidth=image.naturalWidth+'px';image.style.maxHeight=image.naturalHeight+'px';};
+      image.onerror=()=>{image.hidden=true;stage.append(el('p','shop-preview-message','圖片暫時無法載入，請關閉後重試。'));};
+      if(item.type==='room_character'&&item.key==='luffy'&&window.OnePieceRoomMotion?.LUFFY_ART_ENABLED===true){
+        const failure=image.onerror;image.onerror=()=>{image.onerror=failure;image.src='opui://launcher/images/launcher_room/portrait_v3/luffy.webp';};
+      }
+      image.src=source;stage.append(image);
+    }else if(item.type==='layout'){
+      const sample=el('div','captain-hero shop-layout-sample'); sample.dataset.layout=item.id;
+      const body=el('div','captain-hero-body'),avatar=el('span','captain-hero-avatar'),image=el('img');image.src=imageFor('avatar',8);image.alt='排版示意頭像';avatar.append(image);
+      const copy=el('div','captain-hero-copy');copy.append(el('p','eyebrow','CAPTAIN'),el('h3','','你的航海名片'),el('p','','下一段冒險，從這裡開始。'),el('small','','排版示意'));
+      body.append(avatar,copy);sample.append(el('div','captain-hero-art'),body);stage.append(sample);
+    }else if(item.type==='bgm'){
+      const music=el('div','shop-preview-feature');music.append(el('span','shop-symbol','♫'),el('strong','',String(item.name||'個人頁音樂').slice(0,80)));stage.append(music);
+      const play=el('button','shop-preview-button','♫ 試聽 30 秒');play.type='button';play.dataset.previewId=item.id;play.onclick=()=>toggleShopPreview(item);actions.append(play);
+    }else{
+      const sample=el('div','shop-preview-feature shop-unlock-sample'),paper=el('div','captain-guestbook-entry');
+      paper.append(el('header','','好友航海者'),el('p','','來坐一下，留下今天的航海回憶！'));
+      sample.append(paper,el('strong','','開放好友留言'),el('p','','解鎖留言功能；主題板面與留言紙可另外選購。'));stage.append(sample);
+    }
+    updateShopPreviewButtons();
+    if(!dialog.open)dialog.showModal();
+    syncGuestbookMotion();
+  }
   function renderShop() {
     const wallet = number(shop?.wallet?.coins);
     $('shopWallet').textContent = shop && !shop.preview ? fmt(wallet) : '—';
@@ -821,11 +865,13 @@
     if (!list.length) { grid.append(el('p', 'voyage-collection-empty', shop ? '此分類目前沒有商品。' : '正在等待商店資料。')); return; }
     for (const item of list) {
       const article = el('article', 'shop-item'); article.dataset.rarity = item.rarity || 'common'; article.dataset.type = item.type; article.dataset.itemId = item.id;
-      const visual = el('div', 'shop-item-image');
+      const visual = el('button', 'shop-item-image');visual.type='button';visual.setAttribute('aria-label',`預覽「${String(item.name||item.id).slice(0,80)}」`);visual.title='點開大圖預覽';visual.onclick=()=>showItemPreview(item);
       const source = itemImage(item);
       if (source) { const image = el('img'); portraitFallback(image, item); image.src = source; image.alt = ''; image.loading='lazy'; image.decoding='async'; if (item.type === 'avatar') avatarFallback(image); visual.append(image); }
       else if (item.type === 'layout') { const miniature = el('div', 'shop-layout-preview'); miniature.dataset.layout = item.id; miniature.append(el('i'), el('span', '', 'CAPTAIN')); visual.append(miniature); }
       else visual.append(el('span', 'shop-symbol', item.type === 'bgm' ? '♫' : '✒'));
+      visual.append(el('span','shop-image-preview-label','放大預覽'));
+      article.onclick=event=>{if(!event.target.closest('button'))showItemPreview(item);};
       const body = el('div', 'shop-item-body');
       body.append(el('small', '', `${RARITY[item.rarity] || '普通'} · ${TYPE_LABEL[item.type]}${item.slot ? ` · ${SLOTS.find(([slot]) => slot === item.slot)?.[1] || ''}` : ''}`), el('strong', '', String(item.name || item.id).slice(0, 80)));
       if (item.type === 'bgm') {
@@ -973,11 +1019,16 @@
   $('shopConfirmBuy').onclick = buy;
   $('shopConfirmDialog').addEventListener('close', () => { pendingPurchase = null; });
   $('shopConfirmDialog').addEventListener('click', event => { if (event.target === $('shopConfirmDialog')) $('shopConfirmDialog').close(); });
+  $('shopItemPreviewClose').onclick=closeItemPreview;
+  $('shopItemPreviewDialog').addEventListener('cancel',()=>{if(previewedItem?.type==='bgm')stopShopPreview();});
+  $('shopItemPreviewDialog').addEventListener('close',()=>{if($('shopItemPreviewDialog').open)return;if(previewedItem?.type==='bgm')stopShopPreview();previewedItem=null;syncGuestbookMotion();});
+  $('shopItemPreviewDialog').addEventListener('click',event=>{const box=$('shopItemPreviewDialog').getBoundingClientRect();if(event.target===$('shopItemPreviewDialog')&&(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom))closeItemPreview();});
   window.LauncherProfileShop = {
     setAccount(snapshot) {
       const id = snapshot?.authenticated && !snapshot.profile?.needsDisplayName ? number(snapshot.profile?.userId) : 0;
       const isPreview = snapshot?.previewMode === true;
       if (id === accountId && isPreview === preview) return;
+      closeItemPreview();
       stopShopPreview();
       clearBgm(); profileVisible = false;
       shopMutation++; shopBusy = false;
@@ -995,6 +1046,7 @@
       renderProfile(); renderShopTabs(); renderShop();
     },
     openProfile(userId = 0) {
+      closeItemPreview();
       const id = number(userId);
       clearBgm();
       cardMutation++; cardBusy = false; decorBusy = false; $('profileCardEditor').hidden = true; $('profileCardSave').disabled = false; $('profileCardCancel').disabled = false;
@@ -1007,6 +1059,7 @@
       else loadProfile();
     },
     onVisible(panel) {
+      if (previewedItem && panel !== previewPanel) closeItemPreview();
       if (panel !== 'shop') stopShopPreview();
       if (panel !== 'profile') { profileVisible = false; stopBgm(); }
       else if (!profileVisible) { profileVisible = true; bgmPausedByUser = false; bgmAutoplayBlocked = false; }
@@ -1018,6 +1071,7 @@
     },
     openShopCategory(category) {
       if (!SHOP_TABS.some(([id]) => id === category)) return;
+      closeItemPreview();
       if (category !== shopTab) stopShopPreview();
       shopTab = category;
       window.launcherSwitchPanel?.('shop');

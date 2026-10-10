@@ -1,0 +1,281 @@
+{
+  "generator": "builtin image_gen",
+  "size": [
+    735,
+    735
+  ],
+  "format": "WebP RGBA",
+  "shape": "perfect circular portrait; true alpha outside circle",
+  "items": [
+    {
+      "id": 93,
+      "character": "魯夫",
+      "name": "魯夫・墨影",
+      "style": "manga-ink",
+      "styleDescription": "Bold black-and-white manga brush inks, screentone and expressive silhouette; restrained single character-associated accent color, no lettering.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/93.webp"
+    },
+    {
+      "id": 94,
+      "character": "索隆",
+      "name": "索隆・墨影",
+      "style": "manga-ink",
+      "styleDescription": "Bold black-and-white manga brush inks, screentone and expressive silhouette; restrained single character-associated accent color, no lettering.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/94.webp"
+    },
+    {
+      "id": 95,
+      "character": "羅",
+      "name": "羅・墨影",
+      "style": "manga-ink",
+      "styleDescription": "Bold black-and-white manga brush inks, screentone and expressive silhouette; restrained single character-associated accent color, no lettering.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/95.webp"
+    },
+    {
+      "id": 96,
+      "character": "基德",
+      "name": "基德・墨影",
+      "style": "manga-ink",
+      "styleDescription": "Bold black-and-white manga brush inks, screentone and expressive silhouette; restrained single character-associated accent color, no lettering.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/96.webp"
+    },
+    {
+      "id": 97,
+      "character": "卡塔克利",
+      "name": "卡塔克利・墨影",
+      "style": "manga-ink",
+      "styleDescription": "Bold black-and-white manga brush inks, screentone and expressive silhouette; restrained single character-associated accent color, no lettering.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/97.webp"
+    },
+    {
+      "id": 98,
+      "character": "艾斯",
+      "name": "艾斯・航海印記",
+      "style": "vintage-print",
+      "styleDescription": "Vintage maritime screen print, warm parchment and weathered engraving, limited sepia/teal/red palette; no wanted poster text or bounty numbers.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/98.webp"
+    },
+    {
+      "id": 99,
+      "character": "紅髮傑克",
+      "name": "紅髮傑克・航海印記",
+      "style": "vintage-print",
+      "styleDescription": "Vintage maritime screen print, warm parchment and weathered engraving, limited sepia/teal/red palette; no wanted poster text or bounty numbers.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/99.webp"
+    },
+    {
+      "id": 100,
+      "character": "薩波",
+      "name": "薩波・航海印記",
+      "style": "vintage-print",
+      "styleDescription": "Vintage maritime screen print, warm parchment and weathered engraving, limited sepia/teal/red palette; no wanted poster text or bounty numbers.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/100.webp"
+    },
+    {
+      "id": 101,
+      "character": "克洛克達爾",
+      "name": "克洛克達爾・航海印記",
+      "style": "vintage-print",
+      "styleDescription": "Vintage maritime screen print, warm parchment and weathered engraving, limited sepia/teal/red palette; no wanted poster text or bounty numbers.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/101.webp"
+    },
+    {
+      "id": 102,
+      "character": "柯拉松",
+      "name": "柯拉松・航海印記",
+      "style": "vintage-print",
+      "styleDescription": "Vintage maritime screen print, warm parchment and weathered engraving, limited sepia/teal/red palette; no wanted poster text or bounty numbers.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/102.webp"
+    },
+    {
+      "id": 103,
+      "character": "索隆・和之國",
+      "name": "索隆・和之國・浮世浪",
+      "style": "ukiyoe",
+      "styleDescription": "Japanese woodblock print inspired flat wave and cloud shapes, hand ink contours and muted indigo/vermilion/gold; retain canon costume.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/103.webp"
+    },
+    {
+      "id": 104,
+      "character": "魯夫・和之國",
+      "name": "魯夫・和之國・浮世浪",
+      "style": "ukiyoe",
+      "styleDescription": "Japanese woodblock print inspired flat wave and cloud shapes, hand ink contours and muted indigo/vermilion/gold; retain canon costume.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/104.webp"
+    },
+    {
+      "id": 105,
+      "character": "娜美・和之國",
+      "name": "娜美・和之國・浮世浪",
+      "style": "ukiyoe",
+      "styleDescription": "Japanese woodblock print inspired flat wave and cloud shapes, hand ink contours and muted indigo/vermilion/gold; retain canon costume.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/105.webp"
+    },
+    {
+      "id": 106,
+      "character": "羅賓・和之國",
+      "name": "羅賓・和之國・浮世浪",
+      "style": "ukiyoe",
+      "styleDescription": "Japanese woodblock print inspired flat wave and cloud shapes, hand ink contours and muted indigo/vermilion/gold; retain canon costume.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/106.webp"
+    },
+    {
+      "id": 107,
+      "character": "甚平",
+      "name": "甚平・浮世浪",
+      "style": "ukiyoe",
+      "styleDescription": "Japanese woodblock print inspired flat wave and cloud shapes, hand ink contours and muted indigo/vermilion/gold; retain canon costume.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/107.webp"
+    },
+    {
+      "id": 108,
+      "character": "薇薇",
+      "name": "薇薇・水彩航信",
+      "style": "watercolor",
+      "styleDescription": "Luminous hand-painted watercolor with controlled ink lines, soft paper texture INSIDE circle only, rich recognizable face details and natural adult proportions.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/108.webp"
+    },
+    {
+      "id": 109,
+      "character": "白星",
+      "name": "白星・水彩航信",
+      "style": "watercolor",
+      "styleDescription": "Luminous hand-painted watercolor with controlled ink lines, soft paper texture INSIDE circle only, rich recognizable face details and natural adult proportions.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/109.webp"
+    },
+    {
+      "id": 110,
+      "character": "培羅娜",
+      "name": "培羅娜・水彩航信",
+      "style": "watercolor",
+      "styleDescription": "Luminous hand-painted watercolor with controlled ink lines, soft paper texture INSIDE circle only, rich recognizable face details and natural adult proportions.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/110.webp"
+    },
+    {
+      "id": 111,
+      "character": "凱洛特",
+      "name": "凱洛特・水彩航信",
+      "style": "watercolor",
+      "styleDescription": "Luminous hand-painted watercolor with controlled ink lines, soft paper texture INSIDE circle only, rich recognizable face details and natural adult proportions.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/111.webp"
+    },
+    {
+      "id": 112,
+      "character": "喬巴",
+      "name": "喬巴・水彩航信",
+      "style": "watercolor",
+      "styleDescription": "Luminous hand-painted watercolor with controlled ink lines, soft paper texture INSIDE circle only, rich recognizable face details and natural adult proportions.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/112.webp"
+    },
+    {
+      "id": 113,
+      "character": "漢考克",
+      "name": "漢考克・彩窗",
+      "style": "stained-glass",
+      "styleDescription": "Artistic stained-glass mosaic portrait with fine dark lead contours, jewel color panes and nautical radial geometry; expressive anime face must remain unmistakable, not a faceless symbol.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/113.webp"
+    },
+    {
+      "id": 114,
+      "character": "羅賓",
+      "name": "羅賓・彩窗",
+      "style": "stained-glass",
+      "styleDescription": "Artistic stained-glass mosaic portrait with fine dark lead contours, jewel color panes and nautical radial geometry; expressive anime face must remain unmistakable, not a faceless symbol.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/114.webp"
+    },
+    {
+      "id": 115,
+      "character": "布魯克",
+      "name": "布魯克・彩窗",
+      "style": "stained-glass",
+      "styleDescription": "Artistic stained-glass mosaic portrait with fine dark lead contours, jewel color panes and nautical radial geometry; expressive anime face must remain unmistakable, not a faceless symbol.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/115.webp"
+    },
+    {
+      "id": 116,
+      "character": "佛朗基",
+      "name": "佛朗基・彩窗",
+      "style": "stained-glass",
+      "styleDescription": "Artistic stained-glass mosaic portrait with fine dark lead contours, jewel color panes and nautical radial geometry; expressive anime face must remain unmistakable, not a faceless symbol.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/116.webp"
+    },
+    {
+      "id": 117,
+      "character": "騙人布",
+      "name": "騙人布・彩窗",
+      "style": "stained-glass",
+      "styleDescription": "Artistic stained-glass mosaic portrait with fine dark lead contours, jewel color panes and nautical radial geometry; expressive anime face must remain unmistakable, not a faceless symbol.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/117.webp"
+    },
+    {
+      "id": 118,
+      "character": "香吉士",
+      "name": "香吉士・霓光",
+      "style": "graphic-poster",
+      "styleDescription": "Bold premium anime editorial poster portrait, crisp cel shading, dramatic two-color rim light and character-specific graphic motifs; no photo realism, no generic cyberpunk clothing, no text.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/118.webp"
+    },
+    {
+      "id": 119,
+      "character": "娜美",
+      "name": "娜美・霓光",
+      "style": "graphic-poster",
+      "styleDescription": "Bold premium anime editorial poster portrait, crisp cel shading, dramatic two-color rim light and character-specific graphic motifs; no photo realism, no generic cyberpunk clothing, no text.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/119.webp"
+    },
+    {
+      "id": 120,
+      "character": "艾斯",
+      "name": "艾斯・霓光",
+      "style": "graphic-poster",
+      "styleDescription": "Bold premium anime editorial poster portrait, crisp cel shading, dramatic two-color rim light and character-specific graphic motifs; no photo realism, no generic cyberpunk clothing, no text.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/120.webp"
+    },
+    {
+      "id": 121,
+      "character": "薩波",
+      "name": "薩波・霓光",
+      "style": "graphic-poster",
+      "styleDescription": "Bold premium anime editorial poster portrait, crisp cel shading, dramatic two-color rim light and character-specific graphic motifs; no photo realism, no generic cyberpunk clothing, no text.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/121.webp"
+    },
+    {
+      "id": 122,
+      "character": "魯夫・尼卡",
+      "name": "魯夫・尼卡・霓光",
+      "style": "graphic-poster",
+      "styleDescription": "Bold premium anime editorial poster portrait, crisp cel shading, dramatic two-color rim light and character-specific graphic motifs; no photo realism, no generic cyberpunk clothing, no text.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/122.webp"
+    }
+  ]
+}

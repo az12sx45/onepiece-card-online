@@ -8224,3 +8224,21 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - 簽署前驗收：60張最終素材尺寸/透明角/唯一輸出hash與目視複核完成，共7,560,982 bytes；頭像63–83、84–92的實際prompt與QA已合併，蕾貝卡為競技場頭盔版。斯摩格疤痕、培羅娜帽型、白星髮飾、柯拉松眼妝與留言紙碎邊等失敗候選已重畫替換，11張本次已確認失敗PNG精準刪除，成功原圖保留。公告使用真正介面的範例留言截圖。
 - r56簽章清單SHA256：dd4f0b756556dc9bf6a8789b79bc8dc70665375109193a4af70423f3f0287ea9。R2的66個變更blob全部HEAD/GET/大小/SHA通過。隔離候選overlay55→56只下載7,937,059 bytes（約7.57MiB）、182檔校驗、第二次下載0。npm start清單HTTP200；新圖片路徑直接對Render要求回404是desktop-only分流預期，資源由已核對R2 blob經本機opui供應，沒有放寬該分流。
 - 正式發布驗收：source a026b2fd09725f8264beafacae8f761b222983f7；2026-10-10T08:47:33.845Z 已讀回公開revision56，SHA256 dd4f0b756556dc9bf6a8789b79bc8dc70665375109193a4af70423f3f0287ea9與簽署候選逐byte相同。正式cache 55→56，本次下載7937059 bytes，182檔全部校驗、二次下載0；更新前229檔備份逐一hash相同。證據D:/Codex_QA/launcher-guestbook-r56/release-evidence.json。未使用正式玩家帳號購買或發文；購買/留言及舊core傳輸由隔離SQL與實際AuthService測試覆蓋。收尾還原server/index.js既有混合換行，與已发布來源忽略行尾後完全相同，沒有新增功能變更。
+
+
+## 2026-10-10 完整板面、大圖預覽與多風格頭像 r57
+
+正式來源 D:/Codex_Release_Worktrees/launcher-flick-reward-r12；沿用 core 1.2.23 的簽章差分更新。LATTICE 工具本工作階段未提供，未宣稱任務或圖譜已寫入。
+
+- desktop/launcher-profile-shop.js/.css 與 launcher.html：留言板改為16:9完整容納，依寬度安排彈幕行數；增加「查看板面」與商品通用大圖對話框，按鈕/商品文字可開啟、Esc/關閉鈕可關閉、切頁與切帳號關閉。所有14類商品可預覽；圖片依原比例，排版提供實際名片示意，音樂保留30秒試聽，留言功能顯示示意。預覽不購買或裝備。
+- server/launcher-profile-shop.js 新增93–122共30個頭像商品；desktop/launcher-profile-shop.js、launcher-social.js、launcher.js上限同步122，沿用既有63以上的core相容profile子協定，舊id、收藏、錢包和生命系統不改。
+- tools/launcher-shop-r57/avatars-spec.json記錄六組美術規格，每組5款：漫畫墨線、復古套色、和風木版、水彩、彩窗、雙色光海報。public/images/board/avatars/93..122.webp保持735×735透明圓形WebP；逐張GPT作圖與人工目視，素材未完成前不得發布。
+- scripts/launcher_shop_preview_qa.js 測試所有商品、頁面與帳號切換、鍵盤與多視窗寬度；既有guestbook SQL與介面QA更新到122上限。後端49項隔離PGlite與舊AuthService傳輸檢查已通過。介面、素材與部署驗收完成後補記，不視為正式玩家交易驗收。
+
+- 最終素材核對：30張皆為735×735 RGBA WebP，四角透明、圓外強像素與唯一SHA檢查通過；合計7,201,290 bytes。分工者逐張目視，主代理另核對全部30款縮圖。娜美錯誤紋身候選已刪；基德微弱alpha殘點由GPT重畫後通過，但舊失敗PNG的精準刪除被自動審查以「blocked by policy」拒絕，保留並記錄，未納入商品。
+- 獨立審查補正：大預覽音樂按鈕同步載入/取消/停止與aria狀態；按關閉或Esc立即停止試聽，close事件保留後備處理。展示室收藏移除150件截斷，新增超過150件仍顯示最後一件與正確總數的介面檢查。
+- config/launcher-announcements-v1.json revision67附公告，public/images/launcher_announcements/launcher-shop-r57.webp為實際renderer的漢考克彩窗大預覽截圖，後方只展示本次新品的測試商品資料，非正式玩家帳號。
+
+- r57簽署前驗證：30張尺寸/alpha/圓形/唯一SHA；321項商城大圖測試（230商品、14種類、鍵盤/切頁/帳號/試聽、1440/960/540寬度）、51項彈幕與頭像回歸（1440×900、960×640，缺圖0，來源穩定）、49項PGlite/舊AuthService SQL橋接與82項公告檢查全部PASS。npm start於41957靜態頁及清單HTTP200；DATABASE_URL未配置，未作正式玩家購買或發文。
+
+- 簽署候選SHA256 b60132321b740325d8fc33d2673a5fa3f0e2e9bf82c69bf76ece85410acf1a73；36個變更blob公開HEAD/GET/bytes/SHA全部PASS。隔離core1.2.23 overlay 56→57只下載7554740 bytes，213檔完整驗證，二次下載0。正式cache已備份295檔並核對SHA，公開Render清單與正式cache讀回待部署後補記。
