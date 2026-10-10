@@ -313,6 +313,7 @@ final class LauncherController: UIViewController, WKScriptMessageHandlerWithRepl
         let json = String(data:data,encoding:.utf8)!
         let injection = """
         if(location.hostname==='127.0.0.1'){
+        for(const key of ['opSecret','op_secret','op_user_id','op_board_user_id','op_name','op_player_name','op_avatar','op_player_avatar','op_board_title','op_board_coins','op_device_id','op_last_password'])localStorage.removeItem(key);
         for(const [key,value] of Object.entries(\(json)))localStorage.setItem(key,value);
         localStorage.setItem('op_desktop_launcher','1');
         Object.defineProperty(window,'devicePixelRatio',{get:()=>1});

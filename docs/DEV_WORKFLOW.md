@@ -8284,3 +8284,4 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 新增 ios/Sources/App.swift、ios/bridge.js、ios/prepare.mjs、ios/bridge-qa.mjs、ios/project.yml 與 .github/workflows/ios-trial.yml。原生 Keychain／素材雜湊快取與 46 項 renderer 契約，內附 card/board/chess 程式；更新接入仍 unavailable。詳見 docs/IOS_TRIAL_20261011.md。驗證：內容清單簽章與 109 個程式檔準備成功；橋接 QA 46 介面、未登入交易、密碼不持久化、拒絕交易、遊戲身份、登出清理通過。npm start 因缺 pg 失敗。未宣稱雲端編譯、手機安裝、實機效能或完整功能驗收完成。未修改遊戲規則、ID 或玩家存檔。
 
 2026-10-11 接續：第一版 GitHub run 38068467970 編譯與 unsigned IPA 成功。其後新增 ios/Sources/LoopbackServer.swift（只綁定手機 loopback、穩定存檔來源、媒體 Range）及 ContentUpdate.swift（Ed25519／SHA256 內容更新、原子套用）、signature-qa.swift 原生簽章驗證。下載限制四路。最新改動另送編譯；尚未宣稱實機可玩。
+`n2026-10-11 iOS 試用身份相容：ios/Sources/App.swift 在載入遊戲前清除既有桌面登入快取鍵，再注入目前帳號；保留遊戲存檔鍵。驗證：橋接 QA 與後續雲端編譯，實機尚待。
