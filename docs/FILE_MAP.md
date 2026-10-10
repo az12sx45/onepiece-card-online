@@ -1924,3 +1924,13 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - D:/Codex_QA/launcher-shop-r58：QA、素材目視聯絡表、差分簽署/發布/讀回證據。
 
 - docs/LAUNCHER_AVATAR_R58_RELEASE.json：公開r58簽章/三遊戲套件/商品及正式cache差分收據、QA範圍與限制。
+
+
+## r59 商店本機預覽與頭像修正
+
+- desktop/launcher-profile-shop.js：公開商品快照、背景核對、穩定商品DOM、帳號/錢包競態防護。
+- scripts/launcher_shop_local_catalog.js / launcher_shop_local_loading_qa.js：目錄生成與一致性gate、慢網路/離線/交易測試。
+- scripts/build_avatar_repair_release.js：在r58三款套件上僅替換核准11張；launcher_avatar_package_qa.js可用AVATAR_PACKAGE_QA_OUT指定驗證收據。
+- scripts/launcher_avatar_r59_capture.js：隔離fixture下擷取正式商店頭像預覽，供圖文公告。
+- tools/launcher-shop-r59：GPT提示/來源/匯出工具、release-assets.json白名單、build-overlay.js與check-art.py。
+- docs/LAUNCHER_AVATAR_R59.json：11張素材格式/SHA與本機商店候選驗證；D:/Codex_QA/launcher-shop-r59為完整QA。

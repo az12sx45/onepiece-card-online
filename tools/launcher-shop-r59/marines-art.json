@@ -1,0 +1,335 @@
+{
+  "generator": "builtin image_gen",
+  "mode": "edit, one asset per call",
+  "date": "2026-10-10",
+  "format": {
+    "width": 735,
+    "height": 735,
+    "mode": "RGBA",
+    "format": "WebP",
+    "shape": "circle with transparent corners"
+  },
+  "postprocess": "Pillow resize and WebP encode only; no redraw, alpha masks or repaint",
+  "sources": [
+    {
+      "page": "https://store.toei-anim.co.jp/shop/g/gMOVONP975155/",
+      "image": "https://store.toei-anim.co.jp/img/goods/L/MOVONP975155.jpg",
+      "local": "D:/Codex_QA/launcher-shop-r59/art/official-koby.jpg",
+      "role": "Koby official Toei identity/outfit reference"
+    },
+    {
+      "page": "https://www.onepiece-movie.jp/character/",
+      "image": "https://www.onepiece-movie.jp/character/img/chara-14_pc.png",
+      "local": "D:/Codex_QA/launcher-shop-r59/art/official-smoker-stampede.png",
+      "role": "Smoker official film facial identity/scar/cigars, movie costume deliberately not used"
+    },
+    {
+      "page": "https://one-piece.com/character/Coby/index.html",
+      "role": "Official character text captain; character image 403 therefore not used"
+    },
+    {
+      "page": "https://one-piece.com/character/smoker/index.html",
+      "role": "Official character text Marine vice-admiral; image 403 therefore not used"
+    }
+  ],
+  "audit": [
+    {
+      "id": 40,
+      "decision": "retain",
+      "reason": "Original Marineford-style intense Koby close-up already has canonical pink hair, forehead bandana/goggles, cross scar and recognized facial expression."
+    },
+    {
+      "id": 73,
+      "decision": "redraw",
+      "reason": "White swept hair, square jaw, open eyes, curved stitched own-right forehead/cheek scar, two distinct cigars held in mouth, usual white Marine coat and dark fur collar."
+    },
+    {
+      "id": 85,
+      "decision": "redraw",
+      "reason": "Pink hair, green floral forehead bandana, round goggles above uncovered eyes, single cross scar on own right forehead, high collar and blue scarf."
+    },
+    {
+      "id": 150,
+      "decision": "redraw",
+      "reason": "White swept hair, square jaw, open eyes, curved stitched own-right forehead/cheek scar, two distinct cigars held in mouth, usual white Marine coat and dark fur collar."
+    },
+    {
+      "id": 152,
+      "decision": "redraw",
+      "reason": "Pink hair, green floral forehead bandana, round goggles above uncovered eyes, single cross scar on own right forehead, high collar and blue scarf."
+    },
+    {
+      "id": 182,
+      "decision": "redraw",
+      "reason": "White swept hair, square jaw, open eyes, curved stitched own-right forehead/cheek scar, two distinct cigars held in mouth, usual white Marine coat and dark fur collar."
+    }
+  ],
+  "rejected": [
+    {
+      "id": 85,
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-2c68-7e62-b7c5-33ec63cd49c5\\exec-11502b2b-3813-478a-8041-f71b1666b313.png",
+      "reason": "Two transverse scar strokes rather than single canonical cross",
+      "status": "deleted after selected replacement exported and hash verified"
+    },
+    {
+      "id": 182,
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-2c68-7e62-b7c5-33ec63cd49c5\\exec-ea630b12-d846-4d9b-b989-dc929772019c.png",
+      "reason": "Initial generated output corner alpha 1; GPT cleaned complete outside alpha; final all corners 0",
+      "status": "deleted after selected replacement exported and hash verified"
+    }
+  ],
+  "items": [
+    {
+      "id": 73,
+      "character": "斯摩格",
+      "status": "ready",
+      "prompt": "Use case: identity-preserve. Image1 is existing circular game avatar of Smoker from ONE PIECE, image2 official character reference. Correct canonical identity and retain image1's crisp traditional anime cel shading, blue sky with clouds, large complete circle. Smoker is a stern mature muscular Marine with short swept-back white-gray hair, broad angular SQUARE jaw and light stubble, sharp grey eyes both open, heavy furrowed brows, short broad nose. Face must resemble reference2 rather than generic grey-haired anime hero. His canonical curved stitched scar travels diagonally from his OWN RIGHT forehead (viewer-left) down past the outer corner of his RIGHT eye onto cheek; reproduce this single scar properly, do not invent one across both eyes or stop only on forehead. Exactly TWO clearly separated parallel brown cigars are bitten between his lips at corner of mouth and extend outward to viewer-right and slightly downward, both cylindrical lengths and ash ends visible. Roots inside same mouth bite; never put a cigar under his lip, in chin, from throat; no third cigar. Smoke from both tips drifts behind head. Keep his usual white open Marine coat with navy stripes, dark green fur collar and gold epaulets; NOT the movie's sunglasses or movie outfit. Natural head-and-shoulders proportions, no hands, text, letters, watermark. Square1:1 circular portrait with all artwork inside ONE full circular disc touching canvas edges; outside disc must have true transparent alpha, no white or checkerboard.",
+      "references": [
+        "D:/Codex_QA/launcher-shop-r59/art/marines-before/73.webp",
+        "D:/Codex_QA/launcher-shop-r59/art/official-smoker-stampede.png"
+      ],
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-2c68-7e62-b7c5-33ec63cd49c5\\exec-2e20afb0-d6cc-4581-aa42-593b6c0b7072.png",
+      "output": "public/images/board/avatars/73.webp",
+      "before": "D:/Codex_QA/launcher-shop-r59/art/marines-before/73.webp",
+      "visualQA": {
+        "reviewed": true,
+        "identity": true,
+        "canonicalScarSide": true,
+        "circularComposition": true,
+        "styleRetained": true,
+        "notes": "White swept hair, square jaw, open eyes, curved stitched own-right forehead/cheek scar, two distinct cigars held in mouth, usual white Marine coat and dark fur collar."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "sha256": "be53bb821887c9886d0a360cec137279c614d86eebf4d6d205eddd35c1c347d2",
+        "sourceSha256": "f1e054eab56133868c0b1f8aecd952df64a405b0ba7beadd51d6a111c53bd142",
+        "beforeSha256": "e7be001921e284b67b2f96fff4a059e5cc2fad3941d855978d5eff67a38cd787",
+        "bytes": 136984,
+        "corner32MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": 85,
+      "character": "克比",
+      "status": "ready",
+      "prompt": "Precise-object-edit on this otherwise correct Koby ONE PIECE circular avatar. Change ONLY the forehead scar on the viewer-left forehead. It currently has TWO little crossing strokes along the diagonal and looks like two X marks. Replace this with the canonical SINGLE irregular X/cross: ONE long thin diagonal healed scar from above right eyebrow toward center hairline, crossed by just ONE shorter diagonal stroke near the top half. Exactly ONE intersection, exactly TWO total strokes, not two crosses, no stitching ticks, no additional scars. Preserve his natural youthful face, uncovered eyes, pink hair, goggles on green floral headband, high collar zipped white shirt, blue scarf, captain epaulets, all facial expression/pose/sky/anime cel style unchanged. Preserve complete circle and transparent outside. Do not put any new text or graphics.",
+      "references": [
+        "C:/Users/王曜瑋/.codex/generated_images/01a1267f-2c68-7e62-b7c5-33ec63cd49c5/exec-11502b2b-3813-478a-8041-f71b1666b313.png"
+      ],
+      "previousPrompt": "Use case: identity-preserve. Correct this circular portrait of Koby (Coby) from ONE PIECE. Image1 is existing avatar to improve, Image2 official Toei reference for his precise captain appearance. Preserve crisp anime cel shading, clean flat blue sky behind, complete transparent-outside circular format, front head-and-shoulders framing. Make him unmistakably Koby: youthful slim natural face, short tousled pink hair, GREEN bandana with white flowers, large round navy-blue goggles perched on headband on his FOREHEAD, eyes completely uncovered. His forehead scar on his OWN RIGHT side (viewer-left) is a prominent narrow crooked CROSS-SHAPED scar with a long diagonal stem and one short crossing stroke, located between bandana and right eyebrow. Correct image1's two weak disconnected scratch marks into that distinctive healed scar. Soft earnest confident smile; bright round eyes; no round eyeglasses over eyes, no giant head, no aggressive Shanks expression. Canonical white HIGH COLLARED shirt zipped up to throat, two navy horizontal strips across collar, bright blue scarf under coat, white captain's Marine coat draped at shoulders with gold epaulets. Do not leave bare chest. No text, watermark, letters or hands. Fully complete circular disc touching square canvas edges, truly transparent alpha outside. Natural consistent anatomy, polished ONE PIECE anime identity.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-2c68-7e62-b7c5-33ec63cd49c5\\exec-4be44c56-2015-4f0b-82c8-bdaed3d4310f.png",
+      "output": "public/images/board/avatars/85.webp",
+      "before": "D:/Codex_QA/launcher-shop-r59/art/marines-before/85.webp",
+      "visualQA": {
+        "reviewed": true,
+        "identity": true,
+        "canonicalScarSide": true,
+        "circularComposition": true,
+        "styleRetained": true,
+        "notes": "Pink hair, green floral forehead bandana, round goggles above uncovered eyes, single cross scar on own right forehead, high collar and blue scarf."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "sha256": "c2d1034df0f4ad2bc6f7e45750387b85ea0e1d89cfa02686c6bc5a19034cff6c",
+        "sourceSha256": "ebcac93f8c227728178fd38705b3efde3183ea423a99f72f502471fcc40ab630",
+        "beforeSha256": "83aa30042d5f501fe2ad50f801b4bc2e117fa22684f9ea17900a6a4826f989e5",
+        "bytes": 154052,
+        "corner32MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": 150,
+      "character": "斯摩格",
+      "status": "ready",
+      "prompt": "Use case: identity-preserve. Image1 is edit target, image2 is official character identity reference. Correct image1 into an unmistakably canonical post-timeskip Smoker from ONE PIECE, in his usual WHITE Marine uniform with navy stripes, dark green fluffy fur collar and gold epaulets, not the movie costume. Preserve image1's fine pen outlines and delicate ocean watercolor-on-paper painting, stormy harbor setting and circular avatar composition. Main correction: replace the too-long pointed face with his strong broad SQUARE jaw, small stern grey eyes, heavy angular brow, short WHITE swept-back hair. Correct his stitched scar: on his OWN RIGHT side, viewer-left, curved diagonal from upper forehead down past the outer corner of his right eye to upper cheek, matching image2 rather than a long straight line on opposite cheek. Both eyes open. In the mouth there must be EXACTLY TWO clearly separated parallel brown CIGARS with visible long sides and ash tips, extending sideways at a slight downward angle from one shared bite at the corner of his mouth. Both roots are held between upper/lower lips, neither pokes from chin or below lip; no branching, no third cigar, no tooth resembling cigar. Soft wisps leave BOTH ash tips and curl behind rather than obscuring face. Natural mature masculine anatomy, head and shoulders, no hands. Keep all art inside one complete perfect edge-to-edge circular disc on 1:1 square canvas, fully transparent alpha outside circle. No letters, text, logos or new characters. Avoid generic pretty boy, narrow pointed chin, Zoro scar, scars over both eyes, unnatural cigar overlap.",
+      "references": [
+        "D:/Codex_QA/launcher-shop-r59/art/marines-before/150.webp",
+        "D:/Codex_QA/launcher-shop-r59/art/official-smoker-stampede.png"
+      ],
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-2c68-7e62-b7c5-33ec63cd49c5\\exec-abf76bb6-799b-4853-86b0-60d1b87fd35e.png",
+      "output": "public/images/board/avatars/150.webp",
+      "before": "D:/Codex_QA/launcher-shop-r59/art/marines-before/150.webp",
+      "visualQA": {
+        "reviewed": true,
+        "identity": true,
+        "canonicalScarSide": true,
+        "circularComposition": true,
+        "styleRetained": true,
+        "notes": "White swept hair, square jaw, open eyes, curved stitched own-right forehead/cheek scar, two distinct cigars held in mouth, usual white Marine coat and dark fur collar."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "sha256": "c14fed907e4f792e4ef0bf81e68ac2d2749d882366cfb8cf2cbc5d815c3f0aaa",
+        "sourceSha256": "f9bb43f4f059dff68609ec6ab5348944a8178502dfe9580f73cfc2d91e099e44",
+        "beforeSha256": "843032748ba9413f8661d6fb94e9f52ce3af9e23e3e2bff30e2cee2d92819461",
+        "bytes": 248372,
+        "corner32MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": 152,
+      "character": "克比",
+      "status": "ready",
+      "prompt": "Use case: identity-preserve. Edit image 1, a circular game portrait, redraw to be the unmistakable canonical Koby/Coby from ONE PIECE in his post-timeskip Marine captain appearance. Image2 is the official Toei reference for identity, headband, hairstyle, outfit. Image1 artwork style and composition should remain: subtle precise pen outlines with delicate watercolor wash on paper, circular harbor ocean backdrop. The rejected image1 is NOT a correct facial identity: fix it. Koby has short tousled PINK hair, green patterned bandana with small white flowers wrapped across his forehead, large ROUND dark blue goggles/glasses RESTING ON HIS FOREHEAD above his eyes; his eyes must remain fully uncovered, no spectacles worn over the eyes. His signature narrow cross-shaped stitched scar is on his OWN RIGHT forehead, viewer-left, descending diagonally toward the brow, visible below headband. Earnest determined clear round eyes, youthful lean face, NOT a generic handsome pink-haired adult. Canon white high-collared Marine jacket with blue piping, light blue scarf, white coat and gold shoulder epaulets. Expression a modest confident smile. Head and shoulders with natural proportions, readable at icon size. No hands, no new characters, no text. All artwork must stay inside ONE complete perfect circular disc touching the square canvas edges. The area outside the circle must be true alpha transparency, not white/black/checkerboard. 1:1 square, large high detail, retain pen-and-watercolor medium. Reconstruct cleanly rather than preserving wrong face.",
+      "references": [
+        "D:/Codex_QA/launcher-shop-r59/art/marines-before/152.webp",
+        "D:/Codex_QA/launcher-shop-r59/art/official-koby.jpg"
+      ],
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-2c68-7e62-b7c5-33ec63cd49c5\\exec-2420254d-ae7d-4116-86b9-55642aaed2f3.png",
+      "output": "public/images/board/avatars/152.webp",
+      "before": "D:/Codex_QA/launcher-shop-r59/art/marines-before/152.webp",
+      "visualQA": {
+        "reviewed": true,
+        "identity": true,
+        "canonicalScarSide": true,
+        "circularComposition": true,
+        "styleRetained": true,
+        "notes": "Pink hair, green floral forehead bandana, round goggles above uncovered eyes, single cross scar on own right forehead, high collar and blue scarf."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "sha256": "28e24d3e9934019370407b694359664969e716fb0c5ec51f31d406c3cd8ac2b6",
+        "sourceSha256": "125c1d24616c376fc440b096e82ee072c173e322b0c0d27e4c5cb4b5f60247cb",
+        "beforeSha256": "4cb373a20712eaab4320c7d30a67e1c065f9f7cf8567811e5180651b29fcb4df",
+        "bytes": 240612,
+        "corner32MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": 182,
+      "character": "斯摩格",
+      "status": "ready",
+      "prompt": "Use case: identity-preserve. Redraw image1 circular avatar as unmistakable Smoker of ONE PIECE with correct canonical facial identity and Marine outfit. Image2 is the official identity reference, use its face, short brushed-back white hair, stern angular eyes, stubbled strong rectangular jaw and scar placement; NOT its movie outfit or sunglasses. Keep image1's premium vintage copper-plate engraved illustration style, navy ink crosshatching on warm tan paper with maritime compass/waves inside the circle. Keep portrait looking slightly to viewer-right. Correct outfit to his usual open WHITE Marine coat, dark fur collar, navy edge stripes and gold epaulets; no invented dark double-breasted fantasy naval tunic. The stitched scar is on his OWN RIGHT forehead (viewer-left in this view), curving down from forehead past outer right eye onto upper cheek, not a small cut ending at eyebrow, not the opposite eye. Both eyes open. Exactly TWO brown cigars held together between lips at one corner of his mouth, two parallel cylinders pointing outward to viewer-right and slightly downward, clearly separate outlines and grey ash tips; each begins at the same mouth bite, no root protruding below lip or from chin. Subtle smoke behind shoulder. Keep head natural proportions, mature masculine wide square face, no pretty-boy chin. All engraved artwork enclosed in a complete perfect circular disc on square 1:1 canvas. True transparent alpha outside the circle. No text, logos, watermark, no hands, no extra people.",
+      "references": [
+        "D:/Codex_QA/launcher-shop-r59/art/marines-before/182.webp",
+        "D:/Codex_QA/launcher-shop-r59/art/official-smoker-stampede.png"
+      ],
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-2c68-7e62-b7c5-33ec63cd49c5\\exec-b60a0556-6e29-4271-961f-c700b33961a9.png",
+      "alphaCleanupPrompt": "Background extraction and edge cleanup ONLY. Preserve this exact circular engraved Smoker ONE PIECE portrait without changing ANY character artwork, face, two cigars, scar, coat, texture, compass or interior colors. Remove ALL faint stray pixels outside the circular disc. The four square corners and the entire area outside the circular frame must have genuinely fully transparent alpha = 0, not almost transparent pixels, not white, grey, checkerboard or black. Keep the complete circular border intact and centered on square 1:1 canvas. Do not crop the circle. Make the outer transparent region perfectly empty and clean. Return a transparent PNG asset.",
+      "output": "public/images/board/avatars/182.webp",
+      "before": "D:/Codex_QA/launcher-shop-r59/art/marines-before/182.webp",
+      "visualQA": {
+        "reviewed": true,
+        "identity": true,
+        "canonicalScarSide": true,
+        "circularComposition": true,
+        "styleRetained": true,
+        "notes": "White swept hair, square jaw, open eyes, curved stitched own-right forehead/cheek scar, two distinct cigars held in mouth, usual white Marine coat and dark fur collar."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "sha256": "1d6cd139c68f0344075210f66674d2b2f3335ea6ace7b4059a9b3323b43ae101",
+        "sourceSha256": "8c0ca26f76ee6e8982bb0cf48371e0e5e8e37709a214a3fd8e87b61ec3db887e",
+        "beforeSha256": "bf0b39e2a322bc5736719a58f539dbc4a67d62128261b487d419167ca0218e96",
+        "bytes": 272176,
+        "corner32MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  ],
+  "cleanup": {
+    "deletedGeneratedSources": 2,
+    "approvedSourcesPreserved": 5,
+    "proof": "Exact source paths resolved within this task generated_images directory, removed by LiteralPath and absence checked; all selected source SHA256 rechecked"
+  },
+  "retained40Sha256": "05c9a04771bbbd6dda68f6f35dbe81fbc61f2b41d1f8c9b7506b22fe007aeea7"
+}

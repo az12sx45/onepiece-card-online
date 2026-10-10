@@ -1,7 +1,35 @@
 {
   "schemaVersion": 1,
-  "revision": 68,
+  "revision": 69,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r59-local-shop",
+      "status": "published",
+      "publishedAt": "2026-10-10T15:52:14.052Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r59",
+      "title": "海軍與海俠新肖像，商店開啟更俐落",
+      "summary": "修正吉貝爾、克比與斯摩格多款頭像；商店直接顯示本機商品，不再等雲端回覆才開始瀏覽。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-avatar-r59.webp",
+        "alt": "重新繪製的克比頭像，商店實際大圖預覽"
+      },
+      "body": [
+        "重新繪製吉貝爾、克比、斯摩格的多款頭像，依官方角色參考修正臉型、五官、傷疤、眼鏡與服裝細節。原本的畫風、735×735圓形透明規格與收藏資格都保留。",
+        "商店現在會立即顯示本機商品，可先瀏覽與開啟大圖；帳號餘額與收藏會在背景核對，核對完成後即可購買或套用。",
+        "重新進入商店、切換分類和更新餘額時，沿用已載入的商品圖片，減少重複讀取與閃爍。離線時仍可預覽本機商品。",
+        "既有頭像收藏自動套用修正版，不用重新購買。重新開啟啟動器取得差分更新；三款遊戲請關閉再進入。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      },
+      "cta": {
+        "kind": "shop",
+        "itemId": "ava-152"
+      }
+    },
     {
       "id": "launcher-1.2.23-r58-shared-avatars",
       "status": "published",

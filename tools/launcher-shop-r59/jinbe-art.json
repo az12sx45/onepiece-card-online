@@ -1,0 +1,224 @@
+{
+  "generator": "builtin image_gen",
+  "character": "Jinbe / 吉貝爾",
+  "reviewedAt": "2026-10-10T15:55:16.018Z",
+  "references": [
+    {
+      "url": "https://one-piece.com/character/Jinbe/index.html",
+      "purpose": "official character and anime silhouette audit"
+    },
+    {
+      "url": "https://opbr.bn-ent.net/character/detail/0010.html",
+      "image": "https://opbr.bn-ent.net/assets/data/webp/character/0010_2d.png.webp",
+      "purpose": "official anatomy and left upper temple scar visual reference",
+      "localReference": "C:/Users/王曜瑋/Downloads/0010_2d.png.webp",
+      "publishReference": false
+    }
+  ],
+  "items": [
+    {
+      "id": 107,
+      "key": "107fix",
+      "reason": "Move cheek scar to canonical left temple; preserve existing woodblock portrait.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-1114-7da2-b82c-1108c93f15a6\\exec-f70ac3a2-4937-46e3-9323-4d64e04c9380.png",
+      "prompt": "Use case: precise-object-edit. Correct ONLY one tiny facial marking in this circular Jinbe portrait. The current brown zigzag scar is on the WRONG SIDE, at the UPPER LEFT of the image. ERASE that small brown mark near image coordinate (590,350), restore its blue-skin/black-hair background cleanly. Put the same small brown lightning mark on the UPPER RIGHT forehead beside the other brow, near image coordinate (888,367), next to the viewer-RIGHT hairline and ABOVE the golden eyebrow. The correct side is Jinbe's anatomical LEFT = viewer RIGHT. No scar on viewer-left or below either eye. Do not mirror or change the portrait. Keep the face, expression, hair, yellow kimono, wave background, print texture, crop, exact circular transparency and every other detail unchanged.",
+      "initialPrompt": "Use case: precise-object-edit. Image1 is the existing circular Japanese woodblock-print avatar of Jinbe from ONE PIECE. Image2 is official character reference. Make only a careful local correction: DELETE the red zigzag scar on the viewer-right cheek below his eye, restoring that cheek to ordinary blue skin. Recreate his small dark-brown lightning scar correctly on the viewer-right UPPER TEMPLE above the OUTER end of the eyebrow just below the hairline. This is his LEFT upper forehead, never the cheek. Preserve the entire existing Image1 ukiyo-e woodblock look, aged washi paper, navy sea waves and cream moon, orange cape/yellow flower-pattern kimono, head/topknot, ears, golden curled eyebrows/sideburns, blue broad chin, rounded black chin beard, lower jaw tusks, expression, composition and circle. Do not change any other character feature, clothing, color or framing. True alpha transparency outside circular avatar including every corner; no text.",
+      "output": "public/images/board/avatars/107.webp",
+      "visualReview": "PASS: approved ukiyo-e composition retained; scar located above viewer-right brow by hairline, blue cheeks clean.",
+      "beforeSha256": "7a92c9a5aa7feaa54eacdd71d97047fba787dd17d0cc5c5842e7bdab48503b76",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 154746,
+        "sha256": "9bd79716b9717194f77b52c10f1073a63cfd949ea919c6e7ae2d4302d93f4882",
+        "sourceSha256": "b9cd34bbae6f0a317b1d3052c5c61a1d121e85824675b31213b7daa05b93c8fa"
+      }
+    },
+    {
+      "id": 53,
+      "key": "53",
+      "reason": "Move misplaced cheek scar to left upper temple; preserve existing cel portrait.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-1114-7da2-b82c-1108c93f15a6\\exec-8a408df2-54e2-4c0e-a96f-958eca38dda3.png",
+      "prompt": "Use case: precise-object-edit. Image1 is an existing circular Jinbe game portrait; Image2 is the official character reference. Make a VERY SMALL correction to Image1 only. Move Jinbe's lightning-shaped scar from the viewer-right CHEEK to the viewer-right UPPER TEMPLE above the OUTER end of his eyebrow, immediately under his hairline. The official scar is above and outside his LEFT eyebrow, not below the eye. Completely erase the current cheek zigzag and restore plain blue cheek. Add a small dark-brown zigzag scar at the correct upper temple. Keep EVERYTHING else exactly: round avatar composition, face and tusks, topknot, soft gold eyebrows/sideburns, blue skin, black round chin beard, yellow floral kimono, orange shoulders, blue sky, current cel-anime drawing. Do not change expression, framing, colors, clothes, background or proportions. Output square circular portrait with genuine alpha transparency outside the circle; no text or outside marks.",
+      "output": "public/images/board/avatars/53.webp",
+      "visualReview": "PASS: canonical Jinbe identity, upward lower-jaw tusks, curled brows/sideburns, topknot, small round beard, scar above outer left eyebrow, complete circular silhouette.",
+      "beforeSha256": "16e8b3730d08d3a746d8bcbd5380184f62710ec954c3a7f1c13d6022f4c7172d",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 116680,
+        "sha256": "8bc785f72cff2729bbeeecde88200140a45c15f9a7165550f4320ad0b76c4a78",
+        "sourceSha256": "17cf3a4d9eb172dd92e26efe4c9bdc5e8a16b6b8ba172bfbda7132118189594c"
+      }
+    },
+    {
+      "id": 148,
+      "key": "148fix",
+      "reason": "Restore broad continuous lower jaw, remove separate human-like neck/grin, move scar to left temple.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-1114-7da2-b82c-1108c93f15a6\\exec-bebd6314-9484-4bee-80bd-a9bf9fcd1d76.png",
+      "prompt": "Use case: precise-object-edit. Image1 is this project's circular Jinbe portrait to correct. Image2 is the official Jinbe anatomy reference. Keep Image1's beautiful fountain-pen/watercolor technique, orange diamond-pattern kimono, pose, circular composition, blue skin and facial anatomy unchanged. Correct ONLY the misplaced facial scar: completely REMOVE the red zigzag mark from BELOW the eye (viewer RIGHT cheek), leave that cheek clear blue. Jinbe's scar belongs at his LEFT TEMPLE, near the HAIRLINE ABOVE and outside his left eyebrow (viewer RIGHT upper forehead). Add a small dark brown lightning scar there, matching the position visible on Image2. Do not put any scar on either cheek or below eyes. No other edits. Keep the original blue lower jaw and compact rounded beard. Genuine transparent alpha outside circle, square canvas, no text.",
+      "output": "public/images/board/avatars/148.webp",
+      "visualReview": "PASS: canonical Jinbe identity, upward lower-jaw tusks, curled brows/sideburns, topknot, small round beard, scar above outer left eyebrow, complete circular silhouette.",
+      "beforeSha256": "eb0346d341d167341b7f8c913190f47778bbcabf0b5fbc2015c5c37a07503321",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 207278,
+        "sha256": "41b730e5abe6736d31c791edaf7362fe45151b6a1c5a8fbc59c345465ba50013",
+        "sourceSha256": "7e20e5c78a04eb4775474e063d310b08ae644b0fb3fe13b42b425480f1270006"
+      }
+    },
+    {
+      "id": 162,
+      "key": "162",
+      "reason": "Restore broad continuous lower jaw, remove human-like neck/oval head, move scar to left temple.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-1114-7da2-b82c-1108c93f15a6\\exec-a14eb733-f5f2-4ea5-ba11-d64e709a57de.png",
+      "prompt": "Use case: style-transfer. Redraw ONE canonical Jinbe ONE PIECE circular avatar. Image 1 gives approved character proportions and face: maintain his huge continuous triangular blue lower face, no separate narrow neck, small eyes and broad flat nose high on face, curled golden eyebrows and sideburns, two ivory tusks from LOWER jaw, compact rounded scalloped black beard, black curly topknot and side hair. The small brown zigzag scar is at his LEFT TEMPLE ABOVE the eyebrow near hairline (viewer right), never on his cheek. Image 2 is ONLY the desired existing layered cut-paper style. Create a beautiful handcrafted layered-paper portrait with tactile matte paper, precise curved cut edges and soft shadows between colored layers. Preserve canonical Jinbe anatomy from Image1, a calm dignified closed mouth expression, huge broad chin flowing into blue chest with red Sun Pirates tattoo visible at bottom. Orange kimono with dark lapel and black-cream concentric diamond pattern. Original premium composition, head and shoulders, gentle three-quarter angle, dark teal curling sea-wave paper background inside the circle. All topknot/hair/shoulders contained within a true circular disc filling 98% of square. True transparency outside circle including all corners, no extra shadow outside circle. No text or watermark. Do not copy Image2's human neck, narrow oval face, generic grin or cheek scar. No 3D human face.",
+      "output": "public/images/board/avatars/162.webp",
+      "visualReview": "PASS: canonical Jinbe identity, upward lower-jaw tusks, curled brows/sideburns, topknot, small round beard, scar above outer left eyebrow, complete circular silhouette.",
+      "beforeSha256": "fe619681c111cc1218d423e0dc8c0b793d3508e9957a2ab86d2f3b939e6de55e",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 163450,
+        "sha256": "11c7a193c8f3f45e081a67cf0edb861ea4ea3f164e027e4a0fa20a7645442ca6",
+        "sourceSha256": "3dea1d9916eb1f1abf23f54fdb4b88e7711f89bdcb3dfa3f437eb2c549815bad"
+      }
+    },
+    {
+      "id": 185,
+      "key": "185",
+      "reason": "Restore canonical large lower jaw rather than ball-shaped human head and move scar to left temple.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-1114-7da2-b82c-1108c93f15a6\\exec-3de49b3b-9939-426a-9024-2ed9c09dc6f5.png",
+      "prompt": "Use case: style-transfer. Create one corrected circular ONE PIECE Jinbe portrait. Image 1 gives approved canonical facial anatomy and proportions. Image 2 is ONLY reference for luxurious carved wood bas-relief style. Make a warm walnut and honey maple relief, sculpted shallow hand-carved facets and layered carved ocean waves behind him, with restrained pale blue paint in his skin, orange kimono and black hair. Jinbe's huge lower face/chin is continuous with the chest; the eyes/nose are compact and high, do not form a human ball head or separate neck. Keep his two big upturned LOWER-jaw tusks, small flat broad nose, long curly pale-gold eyebrows and sideburns, black topknot/side curls, small rounded scalloped black chin beard. Small lightning scar only at LEFT TEMPLE ABOVE eyebrow near hairline (viewer right forehead); absolutely no cheek scar or marks under eyes. Dignified stoic closed mouth. Orange kimono with black lapel and concentric black/cream diamond pattern. Use gentle three-quarter head and shoulders bust, all hair/topknot inside circle. Preserve sophisticated warm wood grain materials from Image2 but correct face to Image1. Perfect circular wooden disc within 98% square width, real transparent alpha outside disc, four transparent corners. No writing/watermark, no outside shadow, no extra props or characters.",
+      "output": "public/images/board/avatars/185.webp",
+      "visualReview": "PASS: canonical Jinbe identity, upward lower-jaw tusks, curled brows/sideburns, topknot, small round beard, scar above outer left eyebrow, complete circular silhouette.",
+      "beforeSha256": "763112205a4129f84a2d0d1f898b9254dd1b3da5ed040ef56d622000dddf7dd5",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 234068,
+        "sha256": "b9cbbc183738275923ea6dd5c2f1da6815a7a2c4cb02cdfa6030fe8a932469c9",
+        "sourceSha256": "eda32ef836a3dabc744816cd57ec49e5192c3bb9924dff0bb13aae2b7df1a98c"
+      }
+    },
+    {
+      "id": 202,
+      "key": "202",
+      "reason": "Replace pointed beard with compact rounded beard, restore correct orange diamond kimono and move scar to left temple.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-1114-7da2-b82c-1108c93f15a6\\exec-f682a2a3-1791-4823-b652-8038815653cb.png",
+      "prompt": "Use case: style-transfer. Redraw ONE elegant circular embroidered game avatar of Jinbe from ONE PIECE. Image1 supplies corrected canon anatomy and clothing. Image2 is ONLY reference for dense directional satin stitch embroidery texture, navy wave backdrop, red setting sun and gold braided rim. Keep recognizable wide blue whale-shark fishman anatomy from Image1: huge broad continuous triangular lower jaw merging into chest, compact high-set eyes and small flattened broad nose, golden curled eyebrows/sideburns, black curls and high black topknot, two tusks growing UP from LOWER mouth corners, a SMALL ROUND scalloped black chin beard (never pointy or goatee-shaped). Small brown zigzag scar at LEFT TEMPLE ABOVE outer eyebrow by hairline, viewer-right upper forehead; absolutely no scar beneath eye or on cheek. Dignified stern calm closed mouth. Canon ORANGE kimono, black lapel and black/cream concentric diamond patterns; avoid invented red cloak/flowers. Head-and-shoulders 3/4 bust fits entirely inside round blue textile medallion including topknot. Beautiful sea waves stitched in cream and navy, subtle red sun. Fabric and satin threads look carefully handmade while retaining fine anime facial shapes. Round outer silhouette fills 98% of square canvas, truly transparent alpha outside including all corners. No text, labels, watermarks, detached threads outside rim.",
+      "output": "public/images/board/avatars/202.webp",
+      "visualReview": "PASS: canonical Jinbe identity, upward lower-jaw tusks, curled brows/sideburns, topknot, small round beard, scar above outer left eyebrow, complete circular silhouette.",
+      "beforeSha256": "4a157421e5da554db13bfa62c428c4b9bcfe9823690f0348837b92f0f55da8c3",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 286392,
+        "sha256": "4c9a72c06d0031d0575e1815d8acd78124b09223ac6321b3d85d7f5bbd4f0425",
+        "sourceSha256": "ecab36c12c3337685f75168132215cfa096ad835e00e3272a396cac7eba7f2c5"
+      }
+    }
+  ],
+  "rejected": [
+    {
+      "id": 107,
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a1267f-1114-7da2-b82c-1108c93f15a6\\exec-f90a4d38-1d2c-4372-8051-c2f20782fc63.png",
+      "reason": "Scar moved above brow but mirrored to wrong side; corrected final version selected.",
+      "cleanup": {
+        "status": "DELETED",
+        "sha256": "41f110f043f2d86f8493cc82e9228fe755f272e2c340277effb08b9670cb155e",
+        "verifiedAbsent": true
+      }
+    },
+    {
+      "id": 148,
+      "source": "C:/Users/王曜瑋/.codex/generated_images/01a1267f-1114-7da2-b82c-1108c93f15a6/exec-12d6718d-16e8-4db3-a1e5-8417528ec24c.png",
+      "reason": "First redraw retained cheek scar; corrected in final",
+      "prompt": "Use case: identity-preserve. Redraw ONE circular game-shop avatar of canonical Jinbe (Jimbei/ジンベエ) from ONE PIECE. Image 1 is the OFFICIAL character reference and takes precedence for anatomy; Image 2 is ONLY a reference for the existing fountain-pen/watercolor rendering style and round avatar layout, NOT its inaccurate face proportions. Rebuild the face to match Image 1: very broad imposing blue whale-shark fishman, small concentrated eyes and small flat broad nose high on a towering wide triangular lower face, enormous continuous lower jaw flowing into chest without a separate narrow human neck or jowls. Two white tusks rise from the LOWER mouth corners, pale golden curled eyebrows and long curled sideburns, dense black topknot and side curls, compact round scalloped BLACK chin beard, small canonical lightning scar above his LEFT eye. The lower face/jaw is the major volume, not a ball head sitting on a neck. Dignified calm firm CLOSED mouth, no generic human grin. Orange kimono with black-and-cream concentric diamond patterns, dark lapel, no invented flower kimono. Gentle three-quarter head-and-shoulders composition with all topknot and shoulders contained inside circle. STYLE: sophisticated fountain pen travel sketch and restrained blue-grey watercolor washes, fine cream paper grain, airy sketched sea waves behind him; preserve clear expressive anime identity. Perfect circular illustration occupying 98% of square canvas. TRUE alpha transparency everywhere outside the circle; four empty transparent corners. No text, signature, extra people, hands, rectangular background or extra border. Render fresh refined art with correct canonical anatomy.",
+      "cleanup": {
+        "status": "DELETED",
+        "sha256": "c28ffdcd232a1a76563f74ac2d41c5a121b17650483b3dfdfb46ad4a14c31c44",
+        "verifiedAbsent": true
+      }
+    }
+  ]
+}

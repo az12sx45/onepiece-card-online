@@ -4,7 +4,7 @@ const fs=require('fs'),path=require('path'),assert=require('assert/strict'),cryp
 const C=require('./desktop_program_package_common');
 const {RuntimeAssetCache}=require('../desktop/runtime-asset-cache');
 const {HttpsProgramRuntime}=require('../desktop/program-runtime');
-const root=path.resolve(__dirname,'..'),out='D:/Codex_QA/launcher-shop-r58/package-runtime-report.json';
+const root=path.resolve(__dirname,'..'),out=process.env.AVATAR_PACKAGE_QA_OUT||'D:/Codex_QA/launcher-shop-r58/package-runtime-report.json';
 const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
 async function main(){
  const catalog=C.validateCatalog(JSON.parse(fs.readFileSync(path.join(root,'public/desktop/catalog-v3.json'))));

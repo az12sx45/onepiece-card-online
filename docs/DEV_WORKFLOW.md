@@ -8260,3 +8260,16 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - r58封裝驗證：source e1aae80ab8c7172e2f27a24ef6dfd1a5a8e40848；314檔簽章清單SHA256 57c25a8d7b4e7df82b9e457a22aed9d44041f1be69f07cb6b7071b0b261a5dd1。初次封裝攔截兩renderer工作檔CRLF與Git LF差異；只將三個核准變更renderer規整為Git精確bytes再簽，所有carry仍保留r57原SHA。104變更blob公開HEAD/GET/size/SHA通過；候選core1.2.23從57→58下載22,779,690 bytes、314檔驗證及二次0下載通過。三款新manifest的688條共用頭像route使用實際core快取類別，全部命中、網路fallback 0；175個遊戲CAS blob已不可覆寫上傳。正式公開切版與正式cache讀回仍待下一步。
 
 - r58公開驗證完成（2026-10-10T13:44:11.408Z）：簽章清單SHA256 57c25a8d7b4e7df82b9e457a22aed9d44041f1be69f07cb6b7071b0b261a5dd1 與候選逐byte一致；公開商城100新頭像、三遊戲catalog/manifest/runtime-package及175個CAS blob完整核對。正式啟動器cache從57→58，下載22779690 bytes、314檔校驗、二次0下載通過；沒有重新安裝核心或修改正式玩家交易。完整收據docs/LAUNCHER_AVATAR_R58_RELEASE.json。
+
+
+## 2026-10-10 r59 角色頭像修正與本機商店（候選驗證完成，待公開發布）
+
+正式來源 D:/Codex_Release_Worktrees/launcher-flick-reward-r12，baseline 14b85203384077a1d2705aa278921b7d6d93b961；公開r58簽章和三遊戲catalog已逐byte對上。此階段LATTICE沒有可呼叫工具，未宣稱持久task或graph成功。
+
+- GPT重繪53、73、85、107、148、150、152、162、182、185、202，共11款吉貝爾/克比/斯摩格頭像；修正五官、頭巾、傷疤位置、下顎和兩根雪茄。735×735 RGBA WebP、透明四角與32px角塊、SHA不同於原稿全通過；root逐張視覺接受。保留商品ID、售價、持有權及40原圖。提示與官方參考見tools/launcher-shop-r59/*-art.json，素材收據docs/LAUNCHER_AVATAR_R59.json。
+- desktop/launcher-profile-shop.js內嵌由server CATALOG生成的330筆公開商品；登入預載/合併請求、30秒同帳號新鮮快照、過期仍顯示圖片但鎖交易、可離線大圖預覽、分類保留image DOM。雲端核對錢包與持有權，不把帳號資料寫進本機目錄。帳號切換與較新錢包事件有競態保護。
+- 正式r58 cache的160張頭像(33,529,080bytes)透過實際readVerified讀回只花178ms，網路0次。測試以1500ms延遲API重現原版等1518ms後才建立商品；修正後建立192卡片5.899999998509884ms，首12圖decode+兩frame約297ms，再開店10ms且不新增API。這是本機測試觀察，不是保證所有電腦耗時。
+- QA：21項載入/離線/TTL/帳號/交易保護、521項330商品14類大圖預覽(1440/960/540)、50項留言板回歸、82項隔離公告服務全部PASS。521/50執行後僅調整餘額狀態文案，最終renderer已重跑21項；無正式玩家交易。npm start在無正式DB狀態下6頁HTTP200。
+- scripts/launcher_shop_local_catalog.js由權威CATALOG產出本機公開目錄。商品或開放角色更新必跑node scripts/launcher_shop_local_catalog.js --write；發布前不帶--write驗證一致與無私有wallet/owned/equipped資料。
+- scripts/build_avatar_repair_release.js只更新11個image記錄，Card的legacy與Board alias同SHA，三款既有program逐檔锁baseline；tools/launcher-shop-r59/build-overlay.js保留r58 carry SHA。verify-delta helper候選/正式cache已依mode鎖exact realpath，禁止reparse；正式更新前備份manifest，更新後驗證原immutable blobs不變，避免複製一整份素材。
+- 公告revision69/launcher-1.2.23-r59-local-shop，附真實商店克比大圖預覽。QA及差分讀回放D:/Codex_QA/launcher-shop-r59。

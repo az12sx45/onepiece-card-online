@@ -1,0 +1,20 @@
+{
+  "baseline": "14b85203384077a1d2705aa278921b7d6d93b961",
+  "avatarIds": [
+    53,
+    73,
+    85,
+    107,
+    148,
+    150,
+    152,
+    162,
+    182,
+    185,
+    202
+  ],
+  "rendererFiles": [
+    "launcher-profile-shop.js"
+  ],
+  "policy": "Existing IDs, names, prices, ownership and canonical image aliases stay unchanged."
+}
