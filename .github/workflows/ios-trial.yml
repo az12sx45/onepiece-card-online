@@ -6,6 +6,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: ios-trial-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: macos-15
@@ -36,13 +39,13 @@ jobs:
           mkdir -p ios/build/Payload
           cp -R ios/build/Build/Products/Release-iphoneos/TabletopIOS.app ios/build/Payload/
           cd ios/build
-          zip -qr TabletopIOS-unsigned.ipa Payload
-          shasum -a 256 TabletopIOS-unsigned.ipa > TabletopIOS-unsigned.sha256
+          zip -qr TabletopIOS-full-assets.ipa Payload
+          shasum -a 256 TabletopIOS-full-assets.ipa > TabletopIOS-full-assets.sha256
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: tabletop-ios-unsigned
+          name: tabletop-ios-full-assets
           path: |
-            ios/build/TabletopIOS-unsigned.ipa
-            ios/build/TabletopIOS-unsigned.sha256
+            ios/build/TabletopIOS-full-assets.ipa
+            ios/build/TabletopIOS-full-assets.sha256
             ios/Resources/build-evidence.json
           retention-days: 7

@@ -24,6 +24,10 @@ function verified(bytes, hash, size) {
   return bytes;
 }
 async function exactBytes(local, record, launcher = false) {
+  const existing=path.join(output,'blobs',record.sha256);
+  if(fs.existsSync(existing)){
+    try{return verified(fs.readFileSync(existing),record.sha256,record.bytes??record.size);}catch{}
+  }
   let bytes = fs.existsSync(local) ? fs.readFileSync(local) : Buffer.alloc(0);
   const size = record.bytes ?? record.size;
   try { return verified(bytes, record.sha256, size); } catch {}
