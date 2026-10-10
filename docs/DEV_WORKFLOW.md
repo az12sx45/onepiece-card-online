@@ -8304,3 +8304,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-11 全素材封裝驗收：package-qa.mjs 強制 fully-bundled、逐 manifest 資源大小及 blob 檔名 SHA256、來源／App bundle 全檔對照；project 0.1.1 build 2，artifact 改名 tabletop-ios-full-assets，避免拿到舊版。工作流程只保留同分支最新版編譯。
 
 2026-10-11 iOS 核心版本顯示直接讀 Info.plist，與 full-assets 0.1.1 build 2 一致。
+
+2026-10-11 本機完整素材 QA：9564 筆清單引用與全部 blob SHA256 通過，現有資源樹 9768 檔 / 2,807,893,525 bytes；雲端乾淨 app bundle 另驗證。
