@@ -12,6 +12,11 @@ targets:
     resources:
       - path: Resources
         type: folder
+    info:
+      path: Info.plist
+      properties:
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: tw.rihdi.tabletop.trial

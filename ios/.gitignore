@@ -2,3 +2,4 @@ Resources/
 build/
 *.xcodeproj/
 *.ipa
+Info.plist

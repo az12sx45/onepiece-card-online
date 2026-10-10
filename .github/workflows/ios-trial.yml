@@ -20,6 +20,13 @@ jobs:
         run: |
           brew install xcodegen
           xcodegen generate --spec ios/project.yml --project ios
+      - name: Verify launcher bridge contracts
+        run: node ios/bridge-qa.mjs
+      - name: Verify native content signatures
+        run: |
+          mkdir -p ios/build
+          swiftc ios/Sources/ContentUpdate.swift ios/signature-qa.swift -o ios/build/signature-qa
+          ios/build/signature-qa ios/Resources/launcher-content.json
       - name: Compile unsigned device app
         run: |
           xcodebuild -project ios/TabletopIOS.xcodeproj -scheme TabletopIOS -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath ios/build CODE_SIGNING_ALLOWED=NO build

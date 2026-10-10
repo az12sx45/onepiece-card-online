@@ -52,20 +52,38 @@ struct Asset: Decodable {
 struct GameManifest: Decodable { let gameId: String; let releaseId: String; let entryPath: String; let assets: [Asset] }
 struct ContentManifest: Decodable { let revision: Int; let files: [Asset] }
 
+actor DownloadGate {
+    private var active=0
+    private var waiting:[CheckedContinuation<Void,Never>]=[]
+    func acquire() async {
+        if active < 4 { active += 1;return }
+        await withCheckedContinuation { waiting.append($0) }
+    }
+    func release() {
+        if waiting.isEmpty { active -= 1 } else { waiting.removeFirst().resume() }
+    }
+}
+
 final class ResourceStore {
     let resources: URL
     let cache: URL
     var games: [String: GameManifest] = [:]
     var content: ContentManifest
+    var activeContentOverlay=false
     let lock = NSLock()
     private var cancelled = Set<String>()
     private var states: [String: [String: Any]] = [:]
+    private let gate=DownloadGate()
     init() throws {
         guard let resources = Bundle.main.url(forResource: "Resources", withExtension: nil) else { throw PortError.invalidFile }
         self.resources = resources
         cache = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("tabletop-sha256", isDirectory: true)
         try FileManager.default.createDirectory(at: cache, withIntermediateDirectories: true)
         content = try JSONDecoder().decode(ContentManifest.self, from: Data(contentsOf: resources.appendingPathComponent("launcher-content.json")))
+        let active=cache.appendingPathComponent("active-launcher-content.json")
+        if let bytes=try? Data(contentsOf:active),let verified=try? ContentVerifier.validate(bytes),verified.revision >= content.revision {
+            content=verified;activeContentOverlay=true
+        }
         for id in ["card", "board", "chess"] {
             games[id] = try JSONDecoder().decode(GameManifest.self, from: Data(contentsOf: resources.appendingPathComponent("manifests/\(id).json")))
             states[id] = ["status": "installed", "hasInstalled": true, "installedVersion": games[id]!.releaseId,
@@ -93,6 +111,8 @@ final class ResourceStore {
             }
         }
         let base = launcher ? "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/" : "https://game-assets.rihdi.tw/desktop/blobs/sha256/"
+        await gate.acquire()
+        defer { Task { await gate.release() } }
         let (temporary, response) = try await URLSession.shared.download(from: URL(string: base + asset.sha256)!)
         defer { try? FileManager.default.removeItem(at: temporary) }
         guard (response as? HTTPURLResponse)?.statusCode == 200,
@@ -105,7 +125,24 @@ final class ResourceStore {
     func resolve(_ url: URL) async throws -> (URL, String) {
         let filePath = String(url.path.dropFirst())
         guard safePath(filePath) else { throw PortError.invalidFile }
+        if url.scheme == "opgame", ["api/board-runtime", "api/desktop-runtime-package/card", "api/desktop-runtime-package/board", "api/desktop-runtime-package/chess"].contains(filePath) {
+            let (data,response)=try await URLSession.shared.data(from:URL(string:"https://onepiece-card-online.onrender.com/" + filePath)!)
+            guard (response as? HTTPURLResponse)?.statusCode == 200,data.count <= 1048576 else { throw PortError.invalidFile }
+            let temporary=cache.appendingPathComponent("runtime-" + (url.host ?? "game") + "-" + filePath.replacingOccurrences(of:"/",with:"-"))
+            try data.write(to:temporary,options:.atomic); return (temporary,"application/json")
+        }
         if url.scheme == "opui", url.host == "launcher" {
+            if activeContentOverlay,let record=content.files.first(where:{$0.path == filePath}) {
+                let file=try await obtain(record,launcher:true)
+                if filePath == "launcher.html" {
+                    let original=try String(contentsOf:file,encoding:.utf8)
+                    var html=original.replacingOccurrences(of:"connect-src 'none'",with:"connect-src https://onepiece-card-online.onrender.com wss://onepiece-card-online.onrender.com")
+                    html=html.replacingOccurrences(of:"<script src=\"launcher.js\"",with:"<link rel=\"stylesheet\" href=\"ios.css\"><script src=\"socket.io.min.js\"></script><script src=\"modules.js\"></script><script src=\"bridge.js\"></script><script src=\"launcher.js\"")
+                    let adapted=cache.appendingPathComponent("ios-launcher-\(record.sha256).html");try html.write(to:adapted,atomically:true,encoding:.utf8)
+                    return (adapted,"text/html")
+                }
+                return (file,mime(filePath))
+            }
             let local = resources.appendingPathComponent("launcher/\(filePath)")
             if FileManager.default.fileExists(atPath: local.path) { return (local, mime(filePath)) }
             if let record = content.files.first(where: { $0.path == filePath }) { return (try await obtain(record, launcher: true), mime(filePath)) }
@@ -192,10 +229,14 @@ final class LauncherController: UIViewController, WKScriptMessageHandlerWithRepl
     private var store: ResourceStore!
     private let vault = SessionVault()
     private var downloads: [String:Task<Void,Never>] = [:]
+    private var servers: [String:LoopbackServer] = [:]
+    private var updater:ContentUpdater!
+    private var updating=false
     override func viewDidLoad() {
         super.viewDidLoad()
         do {
             store = try ResourceStore()
+            updater=ContentUpdater(store:store)
             let configuration = WKWebViewConfiguration()
             let handler = ResourceHandler(store)
             configuration.setURLSchemeHandler(handler, forURLScheme:"opui")
@@ -203,7 +244,13 @@ final class LauncherController: UIViewController, WKScriptMessageHandlerWithRepl
             configuration.userContentController.addScriptMessageHandler(self, contentWorld:.page, name:"launcher")
             web = WKWebView(frame:view.bounds,configuration:configuration); web.autoresizingMask = [.flexibleWidth,.flexibleHeight]
             web.navigationDelegate = self; view.addSubview(web)
-            web.load(URLRequest(url:URL(string:"opui://launcher/launcher.html")!))
+            let server=try LoopbackServer(port:49152,store:store);servers["launcher"]=server
+            server.start { [weak self] result in DispatchQueue.main.async {
+                switch result {
+                case .success: self?.web.load(URLRequest(url:URL(string:"http://127.0.0.1:49152/launcher.html")!))
+                case .failure: self?.showError("無法啟動手機本機資源服務")
+                }
+            }}
         } catch { showError("無法載入已驗證的測試版資源") }
     }
     func showError(_ message:String) {
@@ -216,8 +263,8 @@ final class LauncherController: UIViewController, WKScriptMessageHandlerWithRepl
     }
     func userContentController(_ userContentController:WKUserContentController,didReceive message:WKScriptMessage,
         replyHandler:@escaping(Any?,String?)->Void) {
-        guard message.frameInfo.isMainFrame, message.frameInfo.securityOrigin.protocol == "opui",
-            message.frameInfo.securityOrigin.host == "launcher", let body = message.body as? [String:Any],
+        guard message.frameInfo.isMainFrame, message.frameInfo.securityOrigin.protocol == "http",
+            message.frameInfo.securityOrigin.host == "127.0.0.1", message.frameInfo.securityOrigin.port == 49152, let body = message.body as? [String:Any],
             let method = body["method"] as? String else { replyHandler(nil,"Forbidden bridge origin"); return }
         let args = body["args"] as? [Any] ?? []
         Task { @MainActor in
@@ -240,6 +287,18 @@ final class LauncherController: UIViewController, WKScriptMessageHandlerWithRepl
                     guard let id = args.first as? String, let game = store.games[id], args.count == 2,
                         let bootstrap = args[1] as? [String:String] else { throw PortError.invalidRequest }
                     try openGame(id,game:game,bootstrap:bootstrap); replyHandler(["ok":true],nil)
+                case "getLauncherContentUpdateState": replyHandler(["ok":true,"state":updater.state],nil)
+                case "checkLauncherContentUpdate":
+                    guard !updating else { throw PortError.invalidRequest };updating=true
+                    do {
+                        let state=try await updater.check { [weak self] value in Task { @MainActor in self?.send("content",value) } }
+                        updating=false;replyHandler(["ok":true,"state":state],nil)
+                    } catch { updating=false;updater.state=["status":"error","error":"內容更新驗證／下載失敗"];send("content",updater.state);throw error }
+                case "applyLauncherContentUpdate":
+                    try updater.apply();replyHandler(["ok":true,"state":updater.state],nil)
+                    DispatchQueue.main.asyncAfter(deadline:.now()+0.2){[weak self] in self?.web.reload()}
+                case "getLauncherUpdateState","checkLauncherUpdate":
+                    replyHandler(["ok":true,"state":["status":"current","currentVersion":"0.1.0","message":"iOS 核心更新需重新簽署安裝；內容可在 App 內更新"]],nil)
                 default:
                     // Explicitly pending; never claim a Windows binary updater can update an iOS app.
                     replyHandler(["ok":false,"state":["status":"unavailable","message":"iOS 更新接入尚未完成；測試版需重新安裝"]],nil)
@@ -253,14 +312,15 @@ final class LauncherController: UIViewController, WKScriptMessageHandlerWithRepl
         let data = try JSONSerialization.data(withJSONObject:bootstrap)
         let json = String(data:data,encoding:.utf8)!
         let injection = """
-        if(location.protocol==='opgame:'){
+        if(location.hostname==='127.0.0.1'){
         for(const [key,value] of Object.entries(\(json)))localStorage.setItem(key,value);
         localStorage.setItem('op_desktop_launcher','1');
         Object.defineProperty(window,'devicePixelRatio',{get:()=>1});
         let library;Object.defineProperty(window,'io',{configurable:true,get:()=>library,set:fn=>{
-          library=(uri,options)=>fn(typeof uri==='string'&&/^https?:/.test(uri)?uri:'https://onepiece-card-online.onrender.com',typeof uri==='object'?uri:options);
+          library=(uri,options)=>fn(typeof uri==='string'&&/^https?:/.test(uri)&&!uri.includes('127.0.0.1')&&!uri.includes('localhost')?uri:'https://onepiece-card-online.onrender.com',typeof uri==='object'?uri:options);
           Object.assign(library,fn);
         }});
+        if(navigator.serviceWorker){try{Object.defineProperty(navigator.serviceWorker,'register',{value:()=>Promise.reject(new Error('iOS native cache owns resources'))});}catch{}}
         }
         """
         configuration.userContentController.addUserScript(WKUserScript(source:injection,injectionTime:.atDocumentStart,forMainFrameOnly:true))
@@ -270,11 +330,19 @@ final class LauncherController: UIViewController, WKScriptMessageHandlerWithRepl
         controller.navigationItem.leftBarButtonItem = UIBarButtonItem(title:"返回啟動器",style:.plain,target:self,action:#selector(closeGame))
         navigation.modalPresentationStyle = .fullScreen
         present(navigation,animated:true)
-        gameView.load(URLRequest(url:URL(string:"opgame://\(id)/\(game.entryPath)")!))
+        let port:UInt16 = id == "card" ? 49153 : id == "board" ? 49154 : 49155
+        if servers[id] != nil { gameView.load(URLRequest(url:URL(string:"http://127.0.0.1:\(port)/\(game.entryPath)")!));return }
+        let server=try LoopbackServer(port:port,store:store,gameId:id);servers[id]=server
+        server.start { [weak self,weak gameView] result in DispatchQueue.main.async {
+            switch result {
+            case .success: gameView?.load(URLRequest(url:URL(string:"http://127.0.0.1:\(port)/\(game.entryPath)")!))
+            case .failure: self?.showError("無法啟動遊戲本機資源服務")
+            }
+        }}
     }
     @objc func closeGame() { presentedViewController?.dismiss(animated:true) }
     func webView(_ webView:WKWebView,decidePolicyFor navigationAction:WKNavigationAction,decisionHandler:@escaping(WKNavigationActionPolicy)->Void) {
-        guard navigationAction.request.url?.scheme == "opui", navigationAction.request.url?.host == "launcher" else { decisionHandler(.cancel); return }
+        guard navigationAction.request.url?.scheme == "http", navigationAction.request.url?.host == "127.0.0.1",navigationAction.request.url?.port == 49152 else { decisionHandler(.cancel); return }
         decisionHandler(.allow)
     }
     func webViewWebContentProcessDidTerminate(_ webView:WKWebView) { showError("畫面程序被 iOS 結束，尚需實機效能診斷。請重新開啟測試版。") }
