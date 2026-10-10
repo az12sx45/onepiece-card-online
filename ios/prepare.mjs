@@ -29,7 +29,7 @@ async function exactBytes(local, record, launcher = false) {
     try { return verified(Buffer.from(text),record.sha256,size); } catch {}
   }
   const base = launcher ? content.baseUrl : catalog.assetBlobBaseUrl + '/';
-  const response = await fetch(base + record.sha256);
+  const response = await fetch(base + (launcher ? '' : record.sha256.slice(0,2)+'/') + record.sha256);
   if (!response.ok) throw new Error(`Missing verified blob: ${record.path}: ${response.status}`);
   return verified(Buffer.from(await response.arrayBuffer()), record.sha256, size);
 }
@@ -60,9 +60,23 @@ modules += '})();';
 put('launcher/modules.js', modules);
 put('launcher-content.json',contentBytes);
 put('catalog.json',JSON.stringify(catalog));
+let launcherBaselineFiles=0;
+async function bundleLauncherDirectory(relative){
+  const directory=path.join(root,'public',relative);
+  if(!fs.existsSync(directory))return;
+  for(const entry of fs.readdirSync(directory,{withFileTypes:true})){
+    const item=relative+'/'+entry.name;
+    if(entry.isDirectory()){await bundleLauncherDirectory(item);continue;}
+    if(!entry.isFile())throw new Error('Unsupported launcher asset: '+item);
+    const record=content.files.find(f=>f.path===item);
+    put('launcher/'+item,record?await exactBytes(path.join(root,'public',item),record,true):fs.readFileSync(path.join(root,'public',item)));
+    launcherBaselineFiles++;
+  }
+}
+for(const directory of ['images/game_launcher','images/desktop_launcher','images/profile_decor','images/launcher_room','images/avatars','images/ranks','audio/profile_bgm','audio/launcher_room','audio/bgm','videos/game_launcher'])await bundleLauncherDirectory(directory);
 let bundled = 0;
 const blobs = new Map();
-for (const file of content.files) blobs.set(file.sha256,{file,launcher:true,local:path.join(root,'desktop',file.path)});
+for (const file of content.files) blobs.set(file.sha256,{file,launcher:true,local:path.join(root,RENDERER_FILES.has(file.path)?'desktop':'public',file.path)});
 for (const [id,game] of Object.entries(catalog.games)) {
   const bytes = fs.readFileSync(path.join(root,'public',game.manifestPath));
   if (crypto.createHash('sha256').update(bytes).digest('hex') !== game.manifestSha256) throw new Error('manifest hash mismatch');
@@ -85,5 +99,5 @@ await Promise.all(Array.from({length:8},async()=>{
     if(completed%500===0)console.log(JSON.stringify({bundledAssets:completed,total:tasks.length}));
   }
 }));
-put('build-evidence.json',JSON.stringify({sourceCommit:process.env.IOS_SOURCE_COMMIT||null,launcherVersion:'1.2.23',contentRevision:content.revision,bundledProgramFiles:bundled,bundledUniqueAssets:completed,bundledAssetBytes:totalBytes,assetMode:'fully-bundled',deviceTests:'NOT_RUN',fullFeatureAcceptance:'NOT_RUN'},null,2));
+put('build-evidence.json',JSON.stringify({sourceCommit:process.env.IOS_SOURCE_COMMIT||null,launcherVersion:'1.2.23',contentRevision:content.revision,bundledProgramFiles:bundled,launcherBaselineFiles,bundledUniqueAssets:completed,bundledAssetBytes:totalBytes,assetMode:'fully-bundled',deviceTests:'NOT_RUN',fullFeatureAcceptance:'NOT_RUN'},null,2));
 console.log(JSON.stringify({contentRevision:content.revision,bundledProgramFiles:bundled,output}));
