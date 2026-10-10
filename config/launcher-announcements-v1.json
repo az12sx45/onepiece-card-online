@@ -1,7 +1,36 @@
 {
   "schemaVersion": 1,
-  "revision": 67,
+  "revision": 68,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r58-shared-avatars",
+      "status": "published",
+      "publishedAt": "2026-10-10T12:47:18.591Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r58",
+      "title": "100款新頭像，三款遊戲同一張航海名片",
+      "summary": "100款角色頭像、20種畫風上架！啟動器、三款遊戲與好友個人頁共用你選擇的頭像。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-avatar-r58.webp",
+        "alt": "本次新上架的魯夫夜光彩墨頭像，商店實際大圖預覽"
+      },
+      "body": [
+        "新增100款由GPT逐張繪製的航海王角色頭像，維持735×735、圓形及透明外圍的既有規格；全部可在啟動器商店點開大圖預覽。",
+        "20組畫風包括懷舊動畫、油彩典藏、冒險厚塗、彩鉛航記、柔彩海風、鋼筆航誌、黑金刻印、疊紙航旅、手塑物語、像素冒險、琺瑯寶彩、海圖銅刻、木刻傳承、彩頁躍動、夜光彩墨、織線航章、航海映金、炭筆航誌、赤潮刻印與粉彩航夢。",
+        "同一帳號選擇的頭像會套用到啟動器、偉大航道爭霸戰、新世界航海錄、霸海戰棋、好友名單與參觀個人頁；自訂名片指定的頭像也會同步。",
+        "已購買的頭像保留，舊遊戲自動存檔不再蓋掉你新選的頭像。可以在啟動器商店或個人名片更換，也能在偉大航道爭霸戰個人頁選取已收藏的頭像。",
+        "重新開啟啟動器取得差分更新，各遊戲也會下載變更內容；已開啟的遊戲請關閉再進入以套用新版。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      },
+      "cta": {
+        "kind": "shop",
+        "itemId": "ava-193"
+      }
+    },
     {
       "id": "launcher-1.2.23-r57-shop-preview",
       "status": "published",

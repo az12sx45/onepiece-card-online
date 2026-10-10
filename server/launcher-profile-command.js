@@ -50,7 +50,7 @@ async function socialAvatars(pool, secret) {
       .map(Number).filter(id => Number.isSafeInteger(id) && id > 0 && id !== Number(me.user_id))))];
   if (!ids.length) return { ok: true, avatars: [] };
   const rows = await pool.query(`SELECT user_id, avatar,
-    jsonb_build_object('launcherOwnedV1', stats->'launcherOwnedV1', 'launcherAppearanceV1', stats->'launcherAppearanceV1') AS stats
+    jsonb_build_object('launcherOwnedV1', stats->'launcherOwnedV1', 'launcherAppearanceV1', stats->'launcherAppearanceV1', 'launcherCardV1', stats->'launcherCardV1', 'client', jsonb_build_object('shop', stats#>'{client,shop}')) AS stats
     FROM player_profiles WHERE user_id = ANY($1::bigint[])`, [ids]);
   return { ok: true, avatars: rows.rows.map(row => ({ userId: Number(row.user_id), avatar: shop.launcherAvatarForRow(row) })) };
 }

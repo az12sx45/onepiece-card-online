@@ -1909,3 +1909,16 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - tools/launcher-shop-r57/：六種風格規格、逐張生圖來源、提示與QA紀錄。
 - scripts/launcher_shop_preview_qa.js：所有商品預覽、無誤購、切頁/切帳號與完整板面測試；scripts/launcher_guestbook_styles_qa.js與launcher_guestbook_danmaku_qa.js延續SQL和介面回歸。
 - D:/Codex_QA/launcher-shop-r57：本次驗證、截圖與簽署差分證據，不包含正式玩家交易。
+
+
+## 2026-10-10 共用頭像 r58
+
+- server/launcher-profile-shop.js、server/index.js、server/launcher-profile-command.js：帳號頭像投影、收藏驗證、明確選取與好友同步。
+- desktop/launcher-profile-shop.js、launcher-social.js、launcher.js：222頭像上限、現有core相容橋接。
+- public/start.html、profile.html、game.html：Card共用頭像與已購買選取。
+- public/images/board/avatars/123..222.webp、tools/launcher-shop-r58/：100張GPT素材及20種畫風規格/來源。
+- scripts/launcher_avatar_sync_server_qa.js、launcher_avatar_sync_browser_qa.js：隔離真實伺服器、雙帳號與三遊戲顯示驗證。
+- scripts/build_shared_avatar_release.js、publish_shared_avatar_release.js、launcher_avatar_package_qa.js：三款遊戲SHA共用頭像差分，保護既有基線內容並測試實際runtime快取路由。
+- docs/LAUNCHER_AVATAR_R58.json：100張素材規格與來源收據；config/launcher-announcements-v1.json revision68及public/images/launcher_announcements/launcher-avatar-r58.webp為圖文公告。
+- scripts/launcher_avatar_announcement_capture.js：實際商城預覽畫面的公告擷取。
+- D:/Codex_QA/launcher-shop-r58：QA、素材目視聯絡表、差分簽署/發布/讀回證據。

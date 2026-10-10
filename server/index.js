@@ -1028,7 +1028,7 @@ async function getProfileBySecret(secret){
     "SELECT user_id, name, avatar, stats FROM player_profiles WHERE secret=$1",
     [secret]
   );
-  return r.rows?.[0] ? (await withDisplayNames(pool, [r.rows[0]]))[0] : null;
+  return r.rows?.[0] ? launcherProfileShop.toGameProfile((await withDisplayNames(pool, [r.rows[0]]))[0]) : null;
 }
 function ensureSocial(client){
   if(!client || typeof client!=="object") return;
@@ -4619,16 +4619,13 @@ socket.on("FRIENDS_GET", async ({ secret, launcher } = {}, cb) => {
       return cb?.({ ok:true, friends:[], requestsIn:[], requestsOut:[] });
     }
 
-    const launcherView = launcher === true;
     const r = await pool.query(
-      launcherView
-        ? "SELECT user_id, name, avatar, jsonb_build_object('launcherOwnedV1', stats->'launcherOwnedV1', 'launcherAppearanceV1', stats->'launcherAppearanceV1') AS stats FROM player_profiles WHERE user_id = ANY($1::int[])"
-        : "SELECT user_id, name, avatar FROM player_profiles WHERE user_id = ANY($1::int[])",
+      "SELECT user_id, name, avatar, jsonb_build_object('launcherOwnedV1', stats->'launcherOwnedV1', 'launcherAppearanceV1', stats->'launcherAppearanceV1', 'launcherCardV1', stats->'launcherCardV1', 'client', jsonb_build_object('shop', stats#>'{client,shop}')) AS stats FROM player_profiles WHERE user_id = ANY($1::int[])",
       [wantIds]
     );
     const rows = await withDisplayNames(pool, r.rows || []);
     const byId = new Map(rows.map(x=>[Number(x.user_id), x]));
-    const visibleAvatar = x => launcherView ? launcherProfileShop.launcherAvatarForRow(x) : Number(x.avatar)||1;
+    const visibleAvatar = x => launcherProfileShop.launcherAvatarForRow(x);
 
     const friendList = friends
       .map(id=>{
@@ -4867,7 +4864,7 @@ socket.on("FRIEND_ADD_BY_NAME", async ({ secret, name }, cb) => {
     emitToUser(myId, "FRIENDS_DIRTY", { by:"request_out", userId: otherId });
     emitToUser(otherId, "FRIENDS_DIRTY", { by:"request_in", userId: myId });
 
-    return cb?.({ ok:true, pending:true, to:{ userId: otherId, name:String(other.name||""), avatar:Number(other.avatar)||1, online:isOnline(otherId) } });
+    return cb?.({ ok:true, pending:true, to:{ userId: otherId, name:String(other.name||""), avatar:launcherProfileShop.launcherAvatarForRow(other), online:isOnline(otherId) } });
   }catch(e){
     console.error("[FRIEND_ADD_BY_NAME] error:", e);
     return cb?.({ ok:false, error:String(e?.message||e) });
@@ -5207,7 +5204,7 @@ socket.on("PROFILE_GET", async ({ secret }, cb) => {
       "SELECT * FROM player_profiles WHERE secret=$1",
       [secret]
     );
-    cb?.({ ok: true, profile: rows[0] || null });
+    cb?.({ ok: true, profile: launcherProfileShop.toGameProfile(rows[0]) });
   } catch (err) {
   console.error("[PROFILE_GET] db error:", err);
   cb?.({ ok: false, error: String(err.message || err) });
@@ -5413,7 +5410,7 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
 
     // ✅ 沒傳就不改（避免其它頁只更新 stats 時把 name/avatar 洗成空字串）
     let nameParam   = has("name")   ? String(patch.name ?? "") : null;
-    const avatarParam = has("avatar") ? String(patch.avatar ?? "") : null;
+    let avatarParam = has("avatar") ? String(patch.avatar ?? "") : null;
 
     // =============================
     // ✅ 名稱：全服唯一（大小寫不分、去頭尾空白）
@@ -5432,6 +5429,19 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
 
       // 用清理後的名字寫入（避免 "  路飛  " 這種）
       nameParam = cleaned;
+    }
+
+    // Only an explicit avatar-picker action changes a shared equipped avatar.
+    // Legacy autosaves can contain a stale/default avatar; preserve the selection.
+    if (patch.avatarSelection === true) {
+      const chosen = Number(patch.avatar);
+      if (!Number.isSafeInteger(chosen) || chosen < 1 || chosen > launcherProfileShop.LAUNCHER_AVATAR_MAX) return cb?.({ ok:false, error:'invalid_avatar' });
+      const equipped = await launcherProfileShop.changeLauncherItem(pool, secret, `ava-${chosen}`, 'equip', { crewContentRevision:1 });
+      if (!equipped.ok) return cb?.(equipped);
+      avatarParam = null;
+    } else if (avatarParam !== null) {
+      const current = await pool.query('SELECT stats FROM player_profiles WHERE secret=$1', [secret]);
+      if (current.rows[0]?.stats?.launcherAppearanceV1 || current.rows[0]?.stats?.launcherCardV1 || Number(avatarParam) > 50) avatarParam = null;
     }
 
     // ✅ stats：JSONB 合併（保留 stats.client.shop / stats.client.titles / …）
@@ -5472,12 +5482,12 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
       [secret, nameParam, avatarParam, statsParam, titlesParam, bountiesParam, recentParam]
     );
 
-    if (nameParam !== null && rows[0]?.user_id) {
+    if ((nameParam !== null || patch.avatarSelection === true) && rows[0]?.user_id) {
       const uid = Number(rows[0].user_id);
       const friendIds = rows[0].stats?.client?.social?.friends || [];
       for (const id of [uid, ...friendIds]) emitToUser(Number(id), "FRIENDS_DIRTY", { by:"profile", userId:uid });
     }
-    cb?.({ ok: true, profile: rows[0] });
+    cb?.({ ok: true, profile: launcherProfileShop.toGameProfile(rows[0]) });
   } catch (err) {
     console.error("[PROFILE_UPDATE] error:", err);
     // 23505 = unique_violation（若有建 unique index）
@@ -5908,6 +5918,7 @@ if (myId == null) {
     // 寫入玩家 meta（state 端），順便記住 secret
 const p = st.players[myId];
 
+let sharedAvatar = avatar;
 let pickedTitle = String(title || "").trim();
 let pickedTier  = Number(titleTier || 1) || 1;
 
@@ -5918,9 +5929,10 @@ let pickedRank = null;
 if ((!pickedTitle || !pickedRank) && sec) {
   try {
     const r = await pool.query(
-      "SELECT stats FROM player_profiles WHERE secret=$1",
+      "SELECT avatar, stats FROM player_profiles WHERE secret=$1",
       [sec]
     );
+    if (r.rows[0]) sharedAvatar = launcherProfileShop.launcherAvatarForRow(r.rows[0]);
     const client = r.rows?.[0]?.stats?.client;
 
     // --- title ---
@@ -5952,9 +5964,9 @@ const safeTier  = Math.max(1, Math.min(6, Number(pickedTier || 1) || 1));
 // ✅ rank 防呆
 const safeRank = (pickedRank && typeof pickedRank === "object") ? pickedRank : null;
 
-p.client = { displayName, avatar, pid, title: safeTitle, titleTier: safeTier, rank: safeRank, offline:false, offlineSince:0 };
+p.client = { displayName, avatar:sharedAvatar, pid, title: safeTitle, titleTier: safeTier, rank: safeRank, offline:false, offlineSince:0 };
 p.displayName = displayName;
-p.avatar = avatar;
+p.avatar = sharedAvatar;
 p.secret = sec;
 
 p.title = safeTitle;
@@ -5980,7 +5992,7 @@ p.rank = safeRank;
       playerId: myId,
       secret: sec,
       displayName: (displayName || "").trim() || `P${myId + 1}`,
-      avatar: Number(avatar) || 1,
+      avatar: Number(sharedAvatar) || 1,
     });
 
     joinedRoom = roomId;

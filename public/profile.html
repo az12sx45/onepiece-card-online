@@ -753,6 +753,12 @@
     .help{font-size:11px;color:var(--muted);line-height:1.5}
     .modal .actions2{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px}
 
+    /* Keep the growing collection scrollable while Apply stays visible. */
+    #avatarModalBack .modal{max-height:calc(100vh - 36px);max-height:calc(100dvh - 36px);display:flex;flex-direction:column}
+    #avatarModalBack .mh,#avatarModalBack .help,#avatarModalBack .actions2{flex-shrink:0}
+    #avatarModalBack .mb{display:flex;flex-direction:column;min-height:0}
+    #avatarModalBack .avaGrid{min-height:0;overflow-y:auto;overscroll-behavior:contain;align-content:start;grid-auto-rows:max-content;padding:4px}
+
     /* avatar picker grid */
     .avaGrid{
       display:grid;
@@ -783,7 +789,7 @@
 
     .avaBtn.locked{
       opacity:.55;
-      filter: grayscale(1);
+      /* Keep art readable without hundreds of grayscale compositing layers. */
       position:relative;
     }
     .avaBtn.locked::after{
@@ -1203,7 +1209,7 @@
       </div>
       <div class="mb">
         <div class="help" style="margin-bottom:10px">
-          使用路徑：<span class="mono">images/avatars/{1..40}.webp</span>（1~30 免費；31~40 需先在商店購買）。
+          頭像與啟動器、三款遊戲共用；1～30 免費，其餘可在啟動器商店收藏。
         </div>
         <div class="avaGrid" id="avaGrid"></div>
         <div class="actions2">
@@ -1354,7 +1360,7 @@ window.socket = socket;
 })();
 
 
-const AVATAR_COUNT = 50;
+const AVATAR_COUNT = 222;
 const WALL_COUNT = 8;
 const FLAG_COUNT = 15;
 
@@ -2668,7 +2674,7 @@ function renderAll(){
 }
 
 // ===== save to cloud (single source of truth) =====
-async function saveClientToCloud(nextClient, {reason=''} = {}){
+async function saveClientToCloud(nextClient, {reason='', avatarSelection=false} = {}){
   if(__viewOnly) { alert('參觀模式：不可修改對方資料'); return; }
   if(__saving) return;
   __saving = true;
@@ -2689,6 +2695,7 @@ async function saveClientToCloud(nextClient, {reason=''} = {}){
   const patch = {
     name,
     avatar: String(avatar),
+    ...(avatarSelection ? {avatarSelection:true} : {}),
     stats: {
       ...(__cloudProfile?.stats || {}),
       client: mergedClient,
@@ -2711,7 +2718,8 @@ async function saveClientToCloud(nextClient, {reason=''} = {}){
   }
 
   // 儲存成功：更新 memory state（不落地）
-  __client = mergedClient;
+  __cloudProfile = res.profile || __cloudProfile;
+  __client = __cloudProfile?.stats?.client || mergedClient;
   hideLoading();
   __saving = false;
   renderAll();
@@ -3037,11 +3045,14 @@ function buildAvatarGrid(){
 
     const img = document.createElement('img');
     img.src = avatarUrlById(i);
+    img.loading = 'lazy';
+    img.decoding = 'async';
     img.alt = `avatar-${i}`;
     btn.appendChild(img);
 
     btn.onclick = () => {
       if(!isOwned){
+        if (i > 50) { alert('請回到桌面啟動器的商店收藏此頭像。'); return; }
         const ok = confirm(`頭像 #${i} 需要先在商店購買才能使用。
 要現在前往商店嗎？`);
         if(ok) location.href = 'shop.html';
@@ -3082,7 +3093,7 @@ document.getElementById('avatarSave').onclick = async () => {
   const next = { ...( __client || defaultClient(name, avatar) ) };
   next.player = { ...(next.player||{}), name, avatar };
 
-  await saveClientToCloud(next, { reason:'更換頭貼' });
+  await saveClientToCloud(next, { reason:'更換頭貼', avatarSelection:true });
 
   closeAvatar();
 };

@@ -15,7 +15,7 @@ const equippedRow = {
 };
 assert.equal(launcherProfileShop.launcherAvatarForRow(equippedRow), 51);
 assert.equal(launcherProfileShop.toPublicProfile(equippedRow).avatar, 51);
-assert.equal(launcherProfileShop.toCardPublicProfile(equippedRow).avatar, 31);
+assert.equal(launcherProfileShop.toCardPublicProfile(equippedRow).avatar, 51);
 assert.equal(launcherProfileShop.launcherAvatarForRow({ ...equippedRow, stats: { launcherAppearanceV1: { avatarId: 51 } } }), 31);
 assert.equal(launcherProfileShop.launcherAvatarForRow({ ...equippedRow, stats: { launcherOwnedV1: { items: ['ava-51'] }, launcherAppearanceV1: { avatarId: 99 } } }), 31);
 
@@ -42,9 +42,9 @@ async function socketProjection() {
   const request = payload => new Promise(resolve => handler(payload, resolve));
   const legacy = await request({ secret: 'mine' });
   assert.equal(legacy.ok, true);
-  assert.equal(legacy.friends[0].avatar, 31);
+  assert.equal(legacy.friends[0].avatar, 51);
   assert.equal(legacy.requestsIn[0].avatar, 4);
-  assert.ok(!queries[0].includes('AS stats'));
+  assert.ok(queries[0].includes('AS stats'));
   const launcher = await request({ secret: 'mine', launcher: true });
   assert.equal(launcher.ok, true);
   assert.equal(launcher.friends[0].avatar, 51);
@@ -80,5 +80,5 @@ async function desktopProjection() {
 }
 
 Promise.all([socketProjection(), desktopProjection()]).then(() => {
-  console.log(JSON.stringify({ ok: true, scope: 'launcher social avatar projection, legacy Card response, desktop friend state' }));
+  console.log(JSON.stringify({ ok: true, scope: 'launcher social avatar projection, shared Card response, desktop friend state' }));
 }).catch(error => { console.error(error); process.exitCode = 1; });

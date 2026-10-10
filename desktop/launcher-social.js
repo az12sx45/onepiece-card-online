@@ -26,7 +26,7 @@
         avatarOverrides.clear();
         for (const entry of result.avatars) {
           const id = Number(entry.userId), value = Number(entry.avatar);
-          if (Number.isSafeInteger(id) && id > 0 && Number.isSafeInteger(value) && value >= 1 && value <= 122) avatarOverrides.set(id, value);
+          if (Number.isSafeInteger(id) && id > 0 && Number.isSafeInteger(value) && value >= 1 && value <= 222) avatarOverrides.set(id, value);
         }
         avatarRoster = roster; avatarFetchedAt = Date.now();
         renderList(); renderChat();
@@ -45,7 +45,7 @@
   const el = (tag, cls, text) => { const node = document.createElement(tag); if (cls) node.className = cls; if (text != null) node.textContent = text; return node; };
   function avatar(img, p) {
     const avatarId = avatarOverrides.get(Number(p.userId)) || Number(p.avatar);
-    img.src = `opui://launcher/images/board/avatars/${Number.isSafeInteger(avatarId) && avatarId >= 1 && avatarId <= 122 ? avatarId : 8}.webp`;
+    img.src = `opui://launcher/images/board/avatars/${Number.isSafeInteger(avatarId) && avatarId >= 1 && avatarId <= 222 ? avatarId : 8}.webp`;
     img.onerror = () => { img.onerror = null; img.src = 'opui://launcher/images/board/avatars/8.webp'; };
   }
   const errors = { 'not authenticated': '請先登入帳號。', 'not friends': '你們目前不是好友，請先送出好友邀請。', 'not found': '找不到這個玩家名稱，請確認拼字。', 'already friends': '你們已經是好友了。', 'request already sent': '已送出邀請，等待對方接受。', 'cannot add self': '無法將自己加入好友。', 'no name': '請輸入玩家名稱。', 'invalid message': '請輸入 1～400 字的訊息。', timeout: '連線逾時，請稍後再試。', offline: '目前無法連線，請稍後再試。' };

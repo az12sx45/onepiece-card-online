@@ -8242,3 +8242,17 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - r57簽署前驗證：30張尺寸/alpha/圓形/唯一SHA；321項商城大圖測試（230商品、14種類、鍵盤/切頁/帳號/試聽、1440/960/540寬度）、51項彈幕與頭像回歸（1440×900、960×640，缺圖0，來源穩定）、49項PGlite/舊AuthService SQL橋接與82項公告檢查全部PASS。npm start於41957靜態頁及清單HTTP200；DATABASE_URL未配置，未作正式玩家購買或發文。
 
 - 簽署候選SHA256 b60132321b740325d8fc33d2673a5fa3f0e2e9bf82c69bf76ece85410acf1a73；36個變更blob公開HEAD/GET/bytes/SHA全部PASS。隔離core1.2.23 overlay 56→57只下載7554740 bytes，213檔完整驗證，二次下載0。正式cache已備份295檔並核對SHA。2026-10-10T10:07:13.772Z 公開revision57與簽署候選逐byte相同；source 4d5934df3738a5c9ba837f37fbffe0423b20063d，manifest SHA256 b60132321b740325d8fc33d2673a5fa3f0e2e9bf82c69bf76ece85410acf1a73。正式cache 56→57，下載7554740 bytes、213檔校驗與二次0下載通過。完整證據 D:/Codex_QA/launcher-shop-r57/release-evidence.json。
+
+
+## 2026-10-10 全遊戲共用頭像與100款新畫風 r58（候選驗證完成，待公開發布）
+
+正式發布來源：D:/Codex_Release_Worktrees/launcher-flick-reward-r12，延續 core 1.2.23 差分。現行公共 catalog-v3 的三款清單與本機一致；112個既有 programFiles 均比對 Git HEAD 15d3eb7af blob 與現行manifest SHA相符。board-voyage-records-v1 的無關未提交修改保留，未作本次發布來源。此階段沒有可呼叫的 LATTICE 工具，沒有虛構 task/graph 紀錄。
+
+- server/launcher-profile-shop.js：共用經收藏驗證的頭像投影 toGameProfile；自訂名片、商店裝備、Card公開個人頁一致，舊存檔格式/錢包保留。新增123–222共100商品，全部20種GPT畫風；完成圖735×735 RGBA WebP。
+- server/index.js、launcher-profile-command.js：PROFILE_GET、FRIENDS_GET、三款入房讀取共用頭像。Card PROFILE_UPDATE 僅 avatarSelection 明確選取才更換；已選頭像不被舊遊戲自動儲存洗掉。好友查詢只讀必要外觀/收藏欄位，公開投影不含secret/好友資料。
+- public/start.html、profile.html、game.html：Card支援1–222，個人頁同步伺服器收藏與avatarSelection。desktop/launcher-profile-shop.js、launcher-social.js、launcher.js沿用63以上相容profile子協定，顯示上限222；沒有修改必須重安裝的main/preload/auth核心。
+- scripts/build_shared_avatar_release.js：以已發布基線新增三遊戲頭像資產，Card舊路徑images/avatars與images/board/avatars共用同SHA。其餘資產record與112個程式blob逐項保護；只變更Card三HTML。scripts/publish_shared_avatar_release.js只發布已commit的精準差分，沿用R2不可覆寫及SHA驗證。
+- tools/launcher-shop-r58/：100張規格、各分工實際prompt/來源/目視/輸出hash。D:/Codex_QA/launcher-shop-r58保留隔離測試、預覽和發布候選。100張均完成，20種畫風、735×735 RGBA、圓外透明及唯一SHA通過；素材共22,489,040 bytes。docs/LAUNCHER_AVATAR_R58.json保存逐張來源、prompt、尺寸與SHA。
+- 已實測：scripts/launcher_avatar_sync_server_qa.js於實際server與隔離PGlite通過23項，包含100商品購買裝備、雙Socket帳號三遊戲房間、好友/訪客一致、收藏防偽、舊存檔保護。guestbook SQL49項與social avatar QA通過。npm start於41959啟動，health與五個入口頁HTTP200；無正式DATABASE_URL，正式玩家資料未改。其後已完成521項商城預覽（330商品、14種類、1440/960/540寬度、零缺圖）、50項留言板回歸、82項公告，以及雙瀏覽器三遊戲/好友/重整/222選項捲動16項。Card頭像選單的套用/取消固定保留於可視範圍。套件與公開發布驗證仍待完成，不能視為已部署。
+
+- 頭像選單追加修正：保留未購買鎖頭及透明度、移除每張灰階filter，預設GPU路徑已目視完整顯示。瀏覽器QA在可視圖片decode完成後等待兩個frame。強制--disable-gpu的headless軟體raster仍可重現部分空圓，記為測試限制；正式main預設高效能GPU，此次不改核心或素材。

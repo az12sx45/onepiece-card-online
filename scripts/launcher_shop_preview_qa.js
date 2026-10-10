@@ -1,7 +1,7 @@
 'use strict';
 // Real renderer, CSS and artwork; isolated preload fixture, never real purchases.
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
-const out=process.env.LAUNCHER_SHOP_PREVIEW_QA_OUT||'D:/Codex_QA/launcher-shop-r57/preview';
+const out=process.env.LAUNCHER_SHOP_PREVIEW_QA_OUT||'D:/Codex_QA/launcher-shop-r58/preview';
 process.env.LAUNCHER_GUESTBOOK_UI_QA_OUT=out;
 const {setup,chromium,report:fixture}=require('./launcher_guestbook_danmaku_qa');
 const {CATALOG}=require('../server/launcher-profile-shop');
@@ -20,7 +20,7 @@ async function main(){
   const collection=CATALOG.filter(x=>!['wall','flag'].includes(x.type)&&(x.type!=='avatar'||x.key>=51));
   await page.evaluate(items=>{const c=window.__guestbookQa.profiles[42].collection.launcher;c.itemIds=items.map(x=>x.id);c.items=items;window.LauncherProfileShop.openProfile(0);},collection);
   await page.locator('#profileCollectionTabs button').filter({hasText:'展示室'}).click();
-  check('collection above 150 preserves last new avatar and true count',(await page.locator('#profileCollectionCount').textContent()).includes(String(collection.length))&&(await page.locator('#profileCollectionGrid').textContent()).includes('魯夫・尼卡・霓光'));
+  check('collection above 150 preserves last new avatar and true count',(await page.locator('#profileCollectionCount').textContent()).includes(String(collection.length))&&(await page.locator('#profileCollectionGrid').textContent()).includes(CATALOG.find(x=>x.id==='ava-222').name));
   const allTypes=[...new Set(CATALOG.map(x=>x.type))];
   for(const type of allTypes){
    await category(page,type);
@@ -30,6 +30,7 @@ async function main(){
     await preview(page,item.id,item===items[0]);
     const state=await page.locator('#shopItemPreviewDialog').evaluate(n=>{const b=n.getBoundingClientRect(),img=n.querySelector('.shop-large-preview-image'),s=img&&getComputedStyle(img);return{title:n.querySelector('h2').textContent,fits:b.left>=0&&b.right<=innerWidth&&b.top>=0&&b.bottom<=innerHeight,hasContent:!!n.querySelector('#shopItemPreviewStage').children.length,img:img?{width:img.naturalWidth,height:img.naturalHeight,fit:s.objectFit,radius:s.borderRadius,hidden:img.hidden,source:img.src}:null};});
     check(item.id+' large preview',state.title===item.name&&state.fits&&state.hasContent&&(!state.img||(state.img.fit==='contain'&&!state.img.hidden)),state);
+    if(item.type==='avatar'&&item.key>=123)check(item.id+' real 735px artwork loaded',state.img.width===735&&state.img.height===735);
     if(item===items[0])await shot(page,type+'-preview');
     if(item.id==='frame-luffy')check('rectangular frame retains full transparent source',state.img.width===1599&&state.img.height===900&&state.img.radius==='0px');
     if(item.type==='room_character')check(item.id+' uses verified portrait',state.img.source.includes('/portrait_v3/')||state.img.source.includes('/portrait_v4/')||state.img.source===item.asset);

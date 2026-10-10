@@ -638,7 +638,7 @@ function renderAccount() {
   $('#accountTitle').textContent = profile.title || 'TABLETOP MEMBER';
   const updated=window.LauncherProfileAvatar;
   const avatar = [updated?.userId===Number(profile.userId)?updated.avatar:0,profile.launcherAvatar, profile.avatar].map(Number)
-    .find(id => Number.isSafeInteger(id) && id >= 1 && id <= 122) || 8;
+    .find(id => Number.isSafeInteger(id) && id >= 1 && id <= 222) || 8;
   $('#accountAvatar').src = `opui://launcher/images/board/avatars/${avatar}.webp`;
   storageSummary.textContent = Number.isFinite(snapshot.freeBytes) ? `可用 ${formatBytes(snapshot.freeBytes)}` : '下載位置';
   cachePath.textContent = snapshot.cacheRoot || '尚未選擇下載位置';

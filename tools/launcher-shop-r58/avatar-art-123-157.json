@@ -1,0 +1,1470 @@
+{
+  "generator": "builtin image_gen",
+  "requestedSize": [
+    735,
+    735
+  ],
+  "format": "WebP RGBA",
+  "postprocess": "Pillow RGBA conversion, LANCZOS resize, WebP encoding only; no masks, overlays, recoloring or synthetic artwork",
+  "items": [
+    {
+      "id": 123,
+      "character": "魯夫",
+      "name": "魯夫・懷舊動畫",
+      "style": "retro-cel",
+      "styleDescription": "1990s hand-painted animation cel aesthetic, crisp irregular ink contours, warm cel shading, subtle analog grain, muted cyan sea and cream graphic background",
+      "rarity": "rare",
+      "identity": "Monkey D. Luffy early East Blue era, straw hat with red band worn on head, black tousled hair, black round eyes, stitched scar below his LEFT eye (viewer-right), open red sleeveless vest, broad joyful grin",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: 1990s hand-painted animation cel aesthetic, crisp irregular ink contours, warm cel shading, subtle analog grain, muted cyan sea and cream graphic background.\nSubject: Monkey D. Luffy early East Blue era, straw hat with red band worn on head, black tousled hair, black round eyes, stitched scar below his LEFT eye (viewer-right), open red sleeveless vest, broad joyful grin.",
+      "output": "public/images/board/avatars/123.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-72add5e9-6f6b-4524-a2d5-a9ee8554ba1a.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity and early East Blue costume reviewed",
+          "Circular portrait; no lettering; style reviewed"
+        ],
+        "note": "Generated output visually inspected individually; pixel format verified during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 149068,
+        "sha256": "74250e9ef1bd9200e2a0377c92b87cf9859454cb25d89c4e6b962e3d9390e950",
+        "sourceSha256": "0e738bc9d42bd7e17ed06fcc9d411919fff329af12c7e02b81c009b99982fe64"
+      }
+    },
+    {
+      "id": 124,
+      "character": "索隆",
+      "name": "索隆・懷舊動畫",
+      "style": "retro-cel",
+      "styleDescription": "1990s hand-painted animation cel aesthetic, crisp irregular ink contours, warm cel shading, subtle analog grain, muted cyan sea and cream graphic background",
+      "rarity": "rare",
+      "identity": "Roronoa Zoro early East Blue era BEFORE timeskip, both eyes OPEN with NO eye scar, short spiky moss green hair, three gold earrings on his LEFT ear, white short sleeve shirt, green haramaki barely visible, confident smirk",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: 1990s hand-painted animation cel aesthetic, crisp irregular ink contours, warm cel shading, subtle analog grain, muted cyan sea and cream graphic background.\nSubject: Roronoa Zoro early East Blue era BEFORE timeskip, both eyes OPEN with NO eye scar, short spiky moss green hair, three gold earrings on his LEFT ear, white short sleeve shirt, green haramaki barely visible, confident smirk.",
+      "output": "public/images/board/avatars/124.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-719b8218-71f0-459d-bd65-9177a90906a9.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity and early East Blue costume reviewed",
+          "Circular portrait; no lettering; style reviewed"
+        ],
+        "note": "Generated output visually inspected individually; pixel format verified during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 141916,
+        "sha256": "41f2792261927474cec0f712f47f9b5c684fd711c2fb420c28c40627faec196f",
+        "sourceSha256": "747f50a763ae7e600c75e7cc7dfcedcb7917b29a86f98926f8dfefeaaa33c777"
+      }
+    },
+    {
+      "id": 125,
+      "character": "娜美",
+      "name": "娜美・懷舊動畫",
+      "style": "retro-cel",
+      "styleDescription": "1990s hand-painted animation cel aesthetic, crisp irregular ink contours, warm cel shading, subtle analog grain, muted cyan sea and cream graphic background",
+      "rarity": "rare",
+      "identity": "Nami early East Blue era, short orange bob haircut, brown eyes, cheerful clever smile, white shirt with blue horizontal stripes, head and upper shoulders only so upper-arm tattoo not visible",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: 1990s hand-painted animation cel aesthetic, crisp irregular ink contours, warm cel shading, subtle analog grain, muted cyan sea and cream graphic background.\nSubject: Nami early East Blue era, short orange bob haircut, brown eyes, cheerful clever smile, white shirt with blue horizontal stripes, head and upper shoulders only so upper-arm tattoo not visible.",
+      "output": "public/images/board/avatars/125.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-2ca95c3a-19b7-4946-aa22-71e34a71d47c.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity and early East Blue costume reviewed",
+          "Circular portrait; no lettering; style reviewed"
+        ],
+        "note": "Generated output visually inspected individually; pixel format verified during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 158952,
+        "sha256": "365b517bd437e259397ce9efe50701310c4d35dfe80a50d11bfb57c4a54ebd4a",
+        "sourceSha256": "0447b1e81eb625073099e67bb2bfa79c1950ce2fd4201d1fdbc2c0934dddadc4"
+      }
+    },
+    {
+      "id": 126,
+      "character": "香吉士",
+      "name": "香吉士・懷舊動畫",
+      "style": "retro-cel",
+      "styleDescription": "1990s hand-painted animation cel aesthetic, crisp irregular ink contours, warm cel shading, subtle analog grain, muted cyan sea and cream graphic background",
+      "rarity": "rare",
+      "identity": "Sanji early East Blue BEFORE timeskip, blond fringe covers his LEFT eye (viewer-right); visible RIGHT eye with curly eyebrow, clean youthful angular jaw without beard, black suit and blue shirt, elegant sly smile",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: 1990s hand-painted animation cel aesthetic, crisp irregular ink contours, warm cel shading, subtle analog grain, muted cyan sea and cream graphic background.\nSubject: Sanji early East Blue BEFORE timeskip, blond fringe covers his LEFT eye (viewer-right); visible RIGHT eye with curly eyebrow, clean youthful angular jaw without beard, black suit and blue shirt, elegant sly smile.",
+      "output": "public/images/board/avatars/126.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-a0b7ee10-3d8c-4ea7-857c-03c7b5870ab6.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity and early East Blue costume reviewed",
+          "Circular portrait; no lettering; style reviewed"
+        ],
+        "note": "Generated output visually inspected individually; pixel format verified during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 136486,
+        "sha256": "5b77c76dea07553659208171cf41a20272231d3fa4ba422ab608db0d5e4b7b2d",
+        "sourceSha256": "b1ae93b1698be6b6f143d25cbba35dfb79f3d1037354354faeca088da392b65c"
+      }
+    },
+    {
+      "id": 127,
+      "character": "騙人布",
+      "name": "騙人布・懷舊動畫",
+      "style": "retro-cel",
+      "styleDescription": "1990s hand-painted animation cel aesthetic, crisp irregular ink contours, warm cel shading, subtle analog grain, muted cyan sea and cream graphic background",
+      "rarity": "rare",
+      "identity": "Usopp early East Blue era, dark curly hair under olive green bandanna, long distinctive nose, brown overall suspenders, round pilot goggles resting on bandanna, joyous lively smile",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: 1990s hand-painted animation cel aesthetic, crisp irregular ink contours, warm cel shading, subtle analog grain, muted cyan sea and cream graphic background.\nSubject: Usopp early East Blue era, dark curly hair under olive green bandanna, long distinctive nose, brown overall suspenders, round pilot goggles resting on bandanna, joyous lively smile.",
+      "output": "public/images/board/avatars/127.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-1c7322e4-724d-4032-869e-01b9c01662c1.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity and early East Blue costume reviewed",
+          "Circular portrait; no lettering; style reviewed"
+        ],
+        "note": "Generated output visually inspected individually; pixel format verified during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 141216,
+        "sha256": "b6245e7e83419ae7d4e2ea9f3191259b6410dae2cf1763832dd520cae3c880e0",
+        "sourceSha256": "4a013ddc33c846f507be794d768dd47b898aedf776318f824fe1a87bc8a78229"
+      }
+    },
+    {
+      "id": 128,
+      "character": "紅髮傑克",
+      "name": "紅髮傑克・油彩典藏",
+      "style": "oil-portrait",
+      "styleDescription": "luminous hand-painted oil portrait, visible rich brush strokes, subtle canvas texture, museum painting color depth, marine blue and warm sienna chiaroscuro",
+      "rarity": "epic",
+      "identity": "Shanks, adult pirate with red hair, three parallel vertical scars across his LEFT eye (viewer-right), light stubble, white open shirt and black cape, relaxed friendly smile",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: luminous hand-painted oil portrait, visible rich brush strokes, subtle canvas texture, museum painting color depth, marine blue and warm sienna chiaroscuro.\nSubject: Shanks, adult pirate with red hair, three parallel vertical scars across his LEFT eye (viewer-right), light stubble, white open shirt and black cape, relaxed friendly smile.",
+      "output": "public/images/board/avatars/128.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-40aa50b0-f9e4-4b9b-8cef-68eb41cb26ae.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, signature scars and costume reviewed individually",
+          "Oil brushwork style and fully circular portrait reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 226898,
+        "sha256": "2f85c87bf371319d576a44f3b56ed95b3dd6ab8d09267aaea71e66a8fabfe2a7",
+        "sourceSha256": "09ca4c4d33a3ed6313f6068772a6f8868ebad73f114570a48ca3cfc857b28e40"
+      }
+    },
+    {
+      "id": 129,
+      "character": "鷹眼",
+      "name": "鷹眼・油彩典藏",
+      "style": "oil-portrait",
+      "styleDescription": "luminous hand-painted oil portrait, visible rich brush strokes, subtle canvas texture, museum painting color depth, marine blue and warm sienna chiaroscuro",
+      "rarity": "epic",
+      "identity": "Dracule Mihawk, sharp golden hawk eyes, thin curled moustache and pointed goatee, black wide-brimmed hat with pale plume fitting completely within circle, black coat with burgundy patterned inner collar, gold cross necklace",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: luminous hand-painted oil portrait, visible rich brush strokes, subtle canvas texture, museum painting color depth, marine blue and warm sienna chiaroscuro.\nSubject: Dracule Mihawk, sharp golden hawk eyes, thin curled moustache and pointed goatee, black wide-brimmed hat with pale plume fitting completely within circle, black coat with burgundy patterned inner collar, gold cross necklace.",
+      "output": "public/images/board/avatars/129.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-0526badd-971e-4e2c-80f7-a1a4ca2b05a2.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, signature scars and costume reviewed individually",
+          "Oil brushwork style and fully circular portrait reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 207108,
+        "sha256": "70d78cad04b8db99be5134b72a540af0042bd029e0e6b76bca22cd0d2dd1a997",
+        "sourceSha256": "adf7fca20898aae64333a60d438d4db9cfa02d7e44805a2bb500e84b04b2fabe"
+      }
+    },
+    {
+      "id": 130,
+      "character": "漢考克",
+      "name": "漢考克・油彩典藏",
+      "style": "oil-portrait",
+      "styleDescription": "luminous hand-painted oil portrait, visible rich brush strokes, subtle canvas texture, museum painting color depth, marine blue and warm sienna chiaroscuro",
+      "rarity": "epic",
+      "identity": "Boa Hancock, elegant adult woman long straight black hair with center part, deep blue eyes, iconic golden snake earrings, high-collar red Qipao with gold edging, proud composed face",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: luminous hand-painted oil portrait, visible rich brush strokes, subtle canvas texture, museum painting color depth, marine blue and warm sienna chiaroscuro.\nSubject: Boa Hancock, elegant adult woman long straight black hair with center part, deep blue eyes, iconic golden snake earrings, high-collar red Qipao with gold edging, proud composed face.",
+      "output": "public/images/board/avatars/130.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-8f7d1b27-9c78-478e-9923-baabbb353875.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, signature scars and costume reviewed individually",
+          "Oil brushwork style and fully circular portrait reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 231636,
+        "sha256": "1bc9f316bb6c8d6e6238e10f937fb80e6855371ced41fb0599295132d335217a",
+        "sourceSha256": "dc4585c54a7e7b3d63cb40153e8fa3f331592d7f56ecbe9a76b1f4663f0ce1a7"
+      }
+    },
+    {
+      "id": 131,
+      "character": "克洛克達爾",
+      "name": "克洛克達爾・油彩典藏",
+      "style": "oil-portrait",
+      "styleDescription": "luminous hand-painted oil portrait, visible rich brush strokes, subtle canvas texture, museum painting color depth, marine blue and warm sienna chiaroscuro",
+      "rarity": "epic",
+      "identity": "Sir Crocodile, adult man slicked-back black hair, distinctive long horizontal stitched scar across face and nose, broad stern face, purple cravat and orange black-checkered vest beneath fur collar, no hands visible",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: luminous hand-painted oil portrait, visible rich brush strokes, subtle canvas texture, museum painting color depth, marine blue and warm sienna chiaroscuro.\nSubject: Sir Crocodile, adult man slicked-back black hair, distinctive long horizontal stitched scar across face and nose, broad stern face, purple cravat and orange black-checkered vest beneath fur collar, no hands visible.",
+      "output": "public/images/board/avatars/131.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-c1808684-0acc-4db8-8864-6e926b056c23.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, signature scars and costume reviewed individually",
+          "Oil brushwork style and fully circular portrait reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 226008,
+        "sha256": "44e812c641ec2dd463087c7e0a9cbff6e61ae2b4a3ad96a19a23ec3e6383dcaa",
+        "sourceSha256": "5190e7c9a5c6e06dfce16b008026c01de201689ea1a2fda98b93000aabdb09b4"
+      }
+    },
+    {
+      "id": 132,
+      "character": "雷利",
+      "name": "雷利・油彩典藏",
+      "style": "oil-portrait",
+      "styleDescription": "luminous hand-painted oil portrait, visible rich brush strokes, subtle canvas texture, museum painting color depth, marine blue and warm sienna chiaroscuro",
+      "rarity": "epic",
+      "identity": "Silvers Rayleigh older man, shoulder-length silver hair swept back, round thin spectacles, neat silver beard, vertical scar over his RIGHT eye (viewer-left), composed warm knowing smile, pale cloak",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: luminous hand-painted oil portrait, visible rich brush strokes, subtle canvas texture, museum painting color depth, marine blue and warm sienna chiaroscuro.\nSubject: Silvers Rayleigh older man, shoulder-length silver hair swept back, round thin spectacles, neat silver beard, vertical scar over his RIGHT eye (viewer-left), composed warm knowing smile, pale cloak.",
+      "output": "public/images/board/avatars/132.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-2cf05e59-b1c8-40a5-abe0-874743a923ca.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, signature scars and costume reviewed individually",
+          "Oil brushwork style and fully circular portrait reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 244212,
+        "sha256": "ad3b74ce6d271b6795eec05661102db4f4e78065277747f1815f169cc2293d41",
+        "sourceSha256": "8f858390f2acbfdf38a60888d58d6c4e837f54e2ae864194e16a6ca9505a1270"
+      }
+    },
+    {
+      "id": 133,
+      "character": "艾斯",
+      "name": "艾斯・冒險厚塗",
+      "style": "adventure-paint",
+      "styleDescription": "dynamic polished adventure concept illustration, broad confident painted color planes and textured brushwork, intense cinematic rim light, energetic abstract ocean backdrop inside circle",
+      "rarity": "epic",
+      "identity": "Portgas D. Ace, slim athletic young adult face, black medium-length hair, brown freckles on both cheeks, orange cowboy hat with blue goggles and two blue emblems one smiling one frowning, red bead necklace, black cord, bare upper shoulders, warm charismatic grin",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: dynamic polished adventure concept illustration, broad confident painted color planes and textured brushwork, intense cinematic rim light, energetic abstract ocean backdrop inside circle.\nSubject: Portgas D. Ace, slim athletic young adult face, black medium-length hair, brown freckles on both cheeks, orange cowboy hat with blue goggles and two blue emblems one smiling one frowning, red bead necklace, black cord, bare upper shoulders, warm charismatic grin.",
+      "output": "public/images/board/avatars/133.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-5b59e823-28e6-424a-b3b4-70ce516dc9ec.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, freckles/scars/headgear and costume reviewed individually",
+          "Adventure impasto painted style and circular portrait reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 223172,
+        "sha256": "156974f19305b2f574aa45de646a4b9097a1918d58fccd332867668bc3e4be45",
+        "sourceSha256": "58a160ed9c136ec04a8f47d2223c37711f7290adb336b383392fde11962f4e5c"
+      }
+    },
+    {
+      "id": 134,
+      "character": "薩波",
+      "name": "薩波・冒險厚塗",
+      "style": "adventure-paint",
+      "styleDescription": "dynamic polished adventure concept illustration, broad confident painted color planes and textured brushwork, intense cinematic rim light, energetic abstract ocean backdrop inside circle",
+      "rarity": "epic",
+      "identity": "Sabo adult revolutionary, wavy blond hair, distinctive burn scar around his LEFT eye (viewer-right), black top hat with blue goggles fitting fully inside circle, black coat, blue shirt and white cravat, confident smile",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: dynamic polished adventure concept illustration, broad confident painted color planes and textured brushwork, intense cinematic rim light, energetic abstract ocean backdrop inside circle.\nSubject: Sabo adult revolutionary, wavy blond hair, distinctive burn scar around his LEFT eye (viewer-right), black top hat with blue goggles fitting fully inside circle, black coat, blue shirt and white cravat, confident smile.",
+      "output": "public/images/board/avatars/134.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-ac0ec7e2-88f9-4a16-86fc-a42269d34d2e.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, freckles/scars/headgear and costume reviewed individually",
+          "Adventure impasto painted style and circular portrait reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 207040,
+        "sha256": "f8ddfcd54ec8c741c3796327fa269ac16d9b8140e63084bb3dd644c4e2c1a1dc",
+        "sourceSha256": "70a183549ded341b088b5a7ecd76181de19dd5bbb84e628d31763f7185b07d22"
+      }
+    },
+    {
+      "id": 135,
+      "character": "羅",
+      "name": "羅・冒險厚塗",
+      "style": "adventure-paint",
+      "styleDescription": "dynamic polished adventure concept illustration, broad confident painted color planes and textured brushwork, intense cinematic rim light, energetic abstract ocean backdrop inside circle",
+      "rarity": "epic",
+      "identity": "Trafalgar D. Water Law adult, white furry hat with irregular black spots, narrow grey eyes, short dark sideburns and pointed small goatee, two gold earrings on each visible ear, yellow high-collar hoodie, sardonic calm expression",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: dynamic polished adventure concept illustration, broad confident painted color planes and textured brushwork, intense cinematic rim light, energetic abstract ocean backdrop inside circle.\nSubject: Trafalgar D. Water Law adult, white furry hat with irregular black spots, narrow grey eyes, short dark sideburns and pointed small goatee, two gold earrings on each visible ear, yellow high-collar hoodie, sardonic calm expression.",
+      "output": "public/images/board/avatars/135.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-50c9f8a8-65eb-4bf3-b629-4f08b15c29c8.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, freckles/scars/headgear and costume reviewed individually",
+          "Adventure impasto painted style and circular portrait reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 205874,
+        "sha256": "340c3a919432cb1ab9a1ad7fe471775de5e81bb91c4c7c41036a3b9d76886473",
+        "sourceSha256": "34e5c6f6f44565051195ec4321464225e019aa999c6a0e5abef0640ad706f9e2"
+      }
+    },
+    {
+      "id": 136,
+      "character": "基德",
+      "name": "基德・冒險厚塗",
+      "style": "adventure-paint",
+      "styleDescription": "dynamic polished adventure concept illustration, broad confident painted color planes and textured brushwork, intense cinematic rim light, energetic abstract ocean backdrop inside circle",
+      "rarity": "epic",
+      "identity": "Eustass Kid adult, wild red hair, metal goggles on forehead, red fur coat collar, fierce grin and sharply defined angular face, no arms visible",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: dynamic polished adventure concept illustration, broad confident painted color planes and textured brushwork, intense cinematic rim light, energetic abstract ocean backdrop inside circle.\nSubject: Eustass Kid adult, wild red hair, metal goggles on forehead, red fur coat collar, fierce grin and sharply defined angular face, no arms visible.",
+      "output": "public/images/board/avatars/136.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-aafd3004-4501-4e3e-83b6-521253749f69.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, freckles/scars/headgear and costume reviewed individually",
+          "Adventure impasto painted style and circular portrait reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 254546,
+        "sha256": "23c608f7ea6d49277eb30990fb3a7c42c3ab974a91ffa58707884a89bf34e6f4",
+        "sourceSha256": "bde1dc039ff5bd1f7bbe75cad15c25290e40822c17279c9a38dc975837995d47"
+      }
+    },
+    {
+      "id": 137,
+      "character": "卡塔克利",
+      "name": "卡塔克利・冒險厚塗",
+      "style": "adventure-paint",
+      "styleDescription": "dynamic polished adventure concept illustration, broad confident painted color planes and textured brushwork, intense cinematic rim light, energetic abstract ocean backdrop inside circle",
+      "rarity": "epic",
+      "identity": "Charlotte Katakuri adult, short spiky maroon hair, sharp red eyes, massive pale scarf covering mouth and lower face completely, dark leather vest, stern focused gaze",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: dynamic polished adventure concept illustration, broad confident painted color planes and textured brushwork, intense cinematic rim light, energetic abstract ocean backdrop inside circle.\nSubject: Charlotte Katakuri adult, short spiky maroon hair, sharp red eyes, massive pale scarf covering mouth and lower face completely, dark leather vest, stern focused gaze.",
+      "output": "public/images/board/avatars/137.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-f40c3277-30b5-4670-8356-ae68fcc689f9.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, freckles/scars/headgear and costume reviewed individually",
+          "Adventure impasto painted style and circular portrait reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 204152,
+        "sha256": "567c5edd128497c63248acd0d1cba6b36b44b9047a5e316e4617e62796e85435",
+        "sourceSha256": "55bad6557b5107110b1ae46f91efb0ddff5b318517568a820c8884959e32e5e2"
+      }
+    },
+    {
+      "id": 138,
+      "character": "喬巴",
+      "name": "喬巴・彩鉛航記",
+      "style": "colored-pencil",
+      "styleDescription": "premium hand-drawn colored pencil portrait on textured ivory paper, visible fine colored pencil hatching and gentle layered shading, bright coherent character colors, miniature seascape inside circle",
+      "rarity": "rare",
+      "identity": "Tony Tony Chopper pre-timeskip small reindeer, canon compact animal anatomy, huge pink cylindrical hat with a white X, two brown antlers, blue nose, brown fur, dark round eyes, friendly open smile, NO human face",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: premium hand-drawn colored pencil portrait on textured ivory paper, visible fine colored pencil hatching and gentle layered shading, bright coherent character colors, miniature seascape inside circle.\nSubject: Tony Tony Chopper pre-timeskip small reindeer, canon compact animal anatomy, huge pink cylindrical hat with a white X, two brown antlers, blue nose, brown fur, dark round eyes, friendly open smile, NO human face.",
+      "output": "public/images/board/avatars/138.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-f0508049-2532-471c-93c0-b4b63c60fb5a.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon identity and anatomy reviewed individually including Chopper and Brook",
+          "Colored pencil shading and complete circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "priorSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-120e9095-4678-4bdf-b07c-d14af45564bc.png",
+      "repair": "GPT regenerated transparency; source had lower-left alpha 1",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 221416,
+        "sha256": "9f1cb32ad319a236f79f560821500e55f6789e6f77bb681267a2005060d3319b",
+        "sourceSha256": "54152bf2fac83e1839023ef726872be96dbcc1f517c2a4bf5d63bb5d125b258b"
+      },
+      "repairPrompt": "Edit the supplied Chopper circular colored-pencil avatar. Preserve character face, pink hat with white X, antlers, blue nose, colored pencil technique, interior seascape and composition exactly. ONLY clean transparency outside the circular artwork: every pixel outside circle must have fully zero alpha, no pale dots, no stray 1-alpha pixels, no opaque backdrop or matte. Leave a narrow transparent gutter around the whole circle. Four square corners fully 100% transparent. Keep genuine RGBA transparency, no checkerboard drawn into pixels. No other changes."
+    },
+    {
+      "id": 139,
+      "character": "薇薇",
+      "name": "薇薇・彩鉛航記",
+      "style": "colored-pencil",
+      "styleDescription": "premium hand-drawn colored pencil portrait on textured ivory paper, visible fine colored pencil hatching and gentle layered shading, bright coherent character colors, miniature seascape inside circle",
+      "rarity": "rare",
+      "identity": "Nefertari Vivi adult woman, long pale blue hair with front strands framing face, dark brown eyes, pale rose sleeveless collar clothing and tiny gold earrings, gentle determined smile",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: premium hand-drawn colored pencil portrait on textured ivory paper, visible fine colored pencil hatching and gentle layered shading, bright coherent character colors, miniature seascape inside circle.\nSubject: Nefertari Vivi adult woman, long pale blue hair with front strands framing face, dark brown eyes, pale rose sleeveless collar clothing and tiny gold earrings, gentle determined smile.",
+      "output": "public/images/board/avatars/139.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-c8079d60-fd63-4ae2-9776-74b9e9b9e88a.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon identity and anatomy reviewed individually including Chopper and Brook",
+          "Colored pencil shading and complete circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 267610,
+        "sha256": "e8c2950b52cc77218d4c857d0a92f2b391302925f4c37fc43e4bb184bde2c7dd",
+        "sourceSha256": "eba97806b41da9e4a8d13d28c6199d831882d32583faaf032a1ef7b22b745f7c"
+      }
+    },
+    {
+      "id": 140,
+      "character": "羅賓",
+      "name": "羅賓・彩鉛航記",
+      "style": "colored-pencil",
+      "styleDescription": "premium hand-drawn colored pencil portrait on textured ivory paper, visible fine colored pencil hatching and gentle layered shading, bright coherent character colors, miniature seascape inside circle",
+      "rarity": "rare",
+      "identity": "Nico Robin adult post-timeskip, long straight black hair swept back, sunglasses resting atop head, blue eyes, angular mature face with straight narrow nose, deep blue zipped upper garment, quiet intelligent smile",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: premium hand-drawn colored pencil portrait on textured ivory paper, visible fine colored pencil hatching and gentle layered shading, bright coherent character colors, miniature seascape inside circle.\nSubject: Nico Robin adult post-timeskip, long straight black hair swept back, sunglasses resting atop head, blue eyes, angular mature face with straight narrow nose, deep blue zipped upper garment, quiet intelligent smile.",
+      "output": "public/images/board/avatars/140.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-bcb5df2e-75a8-4ac4-b244-96c0deff0b13.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon identity and anatomy reviewed individually including Chopper and Brook",
+          "Colored pencil shading and complete circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 259942,
+        "sha256": "e8aa57d93201d801b232c1095037d0d8ba899ac47fd08b816c9bff2c994c8650",
+        "sourceSha256": "c045a31fd6258917f39047715d6969b0b29eb77268ec42754edc5c0e2e872d27"
+      }
+    },
+    {
+      "id": 141,
+      "character": "佛朗基",
+      "name": "佛朗基・彩鉛航記",
+      "style": "colored-pencil",
+      "styleDescription": "premium hand-drawn colored pencil portrait on textured ivory paper, visible fine colored pencil hatching and gentle layered shading, bright coherent character colors, miniature seascape inside circle",
+      "rarity": "rare",
+      "identity": "Franky pre-timeskip adult cyborg, bright blue pompadour hair, metal triangular nose, square jaw and strong chin, open red Hawaiian shirt with palm prints, playful broad grin, no giant shoulder cannons",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: premium hand-drawn colored pencil portrait on textured ivory paper, visible fine colored pencil hatching and gentle layered shading, bright coherent character colors, miniature seascape inside circle.\nSubject: Franky pre-timeskip adult cyborg, bright blue pompadour hair, metal triangular nose, square jaw and strong chin, open red Hawaiian shirt with palm prints, playful broad grin, no giant shoulder cannons.",
+      "output": "public/images/board/avatars/141.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-0c58d894-120e-4788-b69b-60a0e2c65629.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon identity and anatomy reviewed individually including Chopper and Brook",
+          "Colored pencil shading and complete circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 279240,
+        "sha256": "a9a5c5a222ad7357eeab618745a702645f022a0f0df61b05b93c0eaa82f989a1",
+        "sourceSha256": "56d9c9ce82b2b4a6c27e7865a5c742611e464798f80f2e3b32d8c85b83b0c0cd"
+      }
+    },
+    {
+      "id": 142,
+      "character": "布魯克",
+      "name": "布魯克・彩鉛航記",
+      "style": "colored-pencil",
+      "styleDescription": "premium hand-drawn colored pencil portrait on textured ivory paper, visible fine colored pencil hatching and gentle layered shading, bright coherent character colors, miniature seascape inside circle",
+      "rarity": "rare",
+      "identity": "Brook the canon skeleton musician, anatomically clear skull face with empty black eye sockets, black spherical afro, black top hat fitting within circle, dark gentleman suit and blue cravat, cheerful toothy skull smile, NO human skin",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: premium hand-drawn colored pencil portrait on textured ivory paper, visible fine colored pencil hatching and gentle layered shading, bright coherent character colors, miniature seascape inside circle.\nSubject: Brook the canon skeleton musician, anatomically clear skull face with empty black eye sockets, black spherical afro, black top hat fitting within circle, dark gentleman suit and blue cravat, cheerful toothy skull smile, NO human skin.",
+      "output": "public/images/board/avatars/142.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-20d9c78b-5744-4667-8c26-2716500546c0.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon identity and anatomy reviewed individually including Chopper and Brook",
+          "Colored pencil shading and complete circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 271434,
+        "sha256": "232c521c39ccb23ce751d5c0e92e3f2e779a7cbf50287bb6d9f486178fa24fab",
+        "sourceSha256": "65aaadbf01ec386b14ab58d7926aa075ed3b7dcac9effe1213e0f12511229e30"
+      }
+    },
+    {
+      "id": 143,
+      "character": "培羅娜",
+      "name": "培羅娜・柔彩海風",
+      "style": "soft-pastel",
+      "styleDescription": "soft luminous dry pastel illustration, velvety pigment, airy color blends, delicate clean portrait linework, joyful pearlescent sea colors, painterly pastel backdrop contained in circle",
+      "rarity": "rare",
+      "identity": "Perona pre-timeskip, long pink hair in two symmetrical ringlet pigtails, small crown, black round wide eyes, red-and-white gothic frilled headdress, red gothic clothing, playful mischievous expression, canon human adult proportions",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: soft luminous dry pastel illustration, velvety pigment, airy color blends, delicate clean portrait linework, joyful pearlescent sea colors, painterly pastel backdrop contained in circle.\nSubject: Perona pre-timeskip, long pink hair in two symmetrical ringlet pigtails, small crown, black round wide eyes, red-and-white gothic frilled headdress, red gothic clothing, playful mischievous expression, canon human adult proportions.",
+      "output": "public/images/board/avatars/143.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-658affda-f37d-49e1-af16-fbdeb9a2fffd.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, hair, headwear and costume reviewed individually",
+          "Soft pastel style and circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 225912,
+        "sha256": "eee045f0714b96f8bdae95c0aeb991804aae7b45c60f17d4b8382ce82ee2d42b",
+        "sourceSha256": "b26aad54982e6b5f474f2e475d9eedf20ee605bddd3e533ffc60a7fcd5629e31"
+      }
+    },
+    {
+      "id": 144,
+      "character": "凱洛特",
+      "name": "凱洛特・柔彩海風",
+      "style": "soft-pastel",
+      "styleDescription": "soft luminous dry pastel illustration, velvety pigment, airy color blends, delicate clean portrait linework, joyful pearlescent sea colors, painterly pastel backdrop contained in circle",
+      "rarity": "rare",
+      "identity": "Carrot from One Piece in NORMAL mink form not Sulong, white rabbit ears fitting completely in circle, short blonde hair, brown eyes, cream white rabbit muzzle, orange short cape collar, energetic delighted grin",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: soft luminous dry pastel illustration, velvety pigment, airy color blends, delicate clean portrait linework, joyful pearlescent sea colors, painterly pastel backdrop contained in circle.\nSubject: Carrot from One Piece in NORMAL mink form not Sulong, white rabbit ears fitting completely in circle, short blonde hair, brown eyes, cream white rabbit muzzle, orange short cape collar, energetic delighted grin.",
+      "output": "public/images/board/avatars/144.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-796f9965-6c72-4ad1-9622-cf2027958c00.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, hair, headwear and costume reviewed individually",
+          "Soft pastel style and circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "priorSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-17afba54-95cc-49f8-88b3-9dde122da7bc.png",
+      "repair": "GPT regenerated transparent exterior; original had corner alpha 1",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 203452,
+        "sha256": "b458d7de5988d06382ce1d96296bb29e390bcd98e3d0f8b8430d42c1cb033677",
+        "sourceSha256": "15b2fde245b68b09eb54442496205fe242b3a2d4ea62a5e028117200487a36ce"
+      },
+      "repairPrompt": "Clean transparent background of supplied circular pastel avatar of Carrot from One Piece. Keep her white rabbit ears, short blonde hair, orange cape, happy face, pastel medium and circular sea backdrop. Critical: perfectly clean fully transparent alpha outside circle including all four square corners, absolutely no stray pixels in transparent region. Narrow transparent gutter around circular artwork. Do not draw checkerboard, white background, border or text. The four corners must be fully invisible with alpha zero."
+    },
+    {
+      "id": 145,
+      "character": "白星",
+      "name": "白星・柔彩海風",
+      "style": "soft-pastel",
+      "styleDescription": "soft luminous dry pastel illustration, velvety pigment, airy color blends, delicate clean portrait linework, joyful pearlescent sea colors, painterly pastel backdrop contained in circle",
+      "rarity": "rare",
+      "identity": "Shirahoshi the canon mermaid princess, very long flowing pastel pink hair, turquoise-blue eyes, fish-shaped golden hair ornament, pearl earrings, gentle shy expression, modest close crop head and shoulders",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: soft luminous dry pastel illustration, velvety pigment, airy color blends, delicate clean portrait linework, joyful pearlescent sea colors, painterly pastel backdrop contained in circle.\nSubject: Shirahoshi the canon mermaid princess, very long flowing pastel pink hair, turquoise-blue eyes, fish-shaped golden hair ornament, pearl earrings, gentle shy expression, modest close crop head and shoulders.",
+      "output": "public/images/board/avatars/145.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-f44b524e-1fbd-419b-a5cb-94db92d97442.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, hair, headwear and costume reviewed individually",
+          "Soft pastel style and circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "priorSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-03e2203f-f28d-4a9d-be22-2482e4880970.png",
+      "repair": "GPT regenerated transparent exterior; original had corner alpha 1",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 166178,
+        "sha256": "8c52553bc4fce2e9219310c99d9f9d0a1b6899ffa07f47e56c617027fd0701f1",
+        "sourceSha256": "1a56986322b93f523f046c3fafed95c58a404ad69c0e42be3527414360e93cd4"
+      },
+      "repairPrompt": "Clean transparent background of supplied circular pastel portrait avatar of Shirahoshi from One Piece. Keep gentle face, long pink hair, fish gold ornament, pearls, pastel medium and circular underwater backdrop. Critical: perfectly clean fully transparent alpha outside circle including all four square corners, absolutely no stray pixels in transparent region. Narrow transparent gutter around circular artwork. Do not draw checkerboard, white background, border or text. The four corners must be fully invisible with alpha zero. Preserve modest head/shoulders composition."
+    },
+    {
+      "id": 146,
+      "character": "可亞拉",
+      "name": "可亞拉・柔彩海風",
+      "style": "soft-pastel",
+      "styleDescription": "soft luminous dry pastel illustration, velvety pigment, airy color blends, delicate clean portrait linework, joyful pearlescent sea colors, painterly pastel backdrop contained in circle",
+      "rarity": "rare",
+      "identity": "Koala adult revolutionary, short warm orange bob, bright brown eyes, burgundy beret with brass goggles resting atop it, white ruffled shirt collar and burgundy dress shoulders, warm friendly smile",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: soft luminous dry pastel illustration, velvety pigment, airy color blends, delicate clean portrait linework, joyful pearlescent sea colors, painterly pastel backdrop contained in circle.\nSubject: Koala adult revolutionary, short warm orange bob, bright brown eyes, burgundy beret with brass goggles resting atop it, white ruffled shirt collar and burgundy dress shoulders, warm friendly smile.",
+      "output": "public/images/board/avatars/146.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-ad96b181-72e7-4c7d-8249-ade1179ea863.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, hair, headwear and costume reviewed individually",
+          "Soft pastel style and circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 216974,
+        "sha256": "aed34ed6ffd3adb81d7566071afe6c965bbb8002fba0627b1179b5cc1141fa9b",
+        "sourceSha256": "ab78c1a63e29c1d5fb43fd88c315519cb5cfc1bfa136db424cdf3a7649ba8d1e"
+      }
+    },
+    {
+      "id": 147,
+      "character": "大和",
+      "name": "大和・柔彩海風",
+      "style": "soft-pastel",
+      "styleDescription": "soft luminous dry pastel illustration, velvety pigment, airy color blends, delicate clean portrait linework, joyful pearlescent sea colors, painterly pastel backdrop contained in circle",
+      "rarity": "rare",
+      "identity": "Yamato adult One Piece, long white hair fading to turquoise ends, orange eyes and prominent red horns curving upward fitting in circle, gold hoop earrings, sleeveless white upper garment with deep red collar trim, powerful open-hearted smile",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: soft luminous dry pastel illustration, velvety pigment, airy color blends, delicate clean portrait linework, joyful pearlescent sea colors, painterly pastel backdrop contained in circle.\nSubject: Yamato adult One Piece, long white hair fading to turquoise ends, orange eyes and prominent red horns curving upward fitting in circle, gold hoop earrings, sleeveless white upper garment with deep red collar trim, powerful open-hearted smile.",
+      "output": "public/images/board/avatars/147.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-dfd26d97-044f-4628-93e0-03c38ffabadc.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, hair, headwear and costume reviewed individually",
+          "Soft pastel style and circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 240292,
+        "sha256": "ee1bb3c2c25f4418880acdbf75f19644d224a72ba801af35211bcd316fceef08",
+        "sourceSha256": "7a0ba3f526ebb9ee4518f1f6383e651c34c676fe66a7632dbb3bd38d380ab106"
+      }
+    },
+    {
+      "id": 148,
+      "character": "吉貝爾",
+      "name": "吉貝爾・鋼筆航誌",
+      "style": "pen-wash",
+      "styleDescription": "sophisticated travel sketch portrait, fluid black fountain pen contours and restrained transparent watercolor washes, elegant blue-grey and muted character-color palette, fine paper grain and sketched waves inside circle",
+      "rarity": "rare",
+      "identity": "Jinbe the canon large blue whale-shark fishman, broad face with pale blue skin, rounded dark brows, yellow-orange lower facial hair, side tusks protruding upward, black hair tied in a topknot, orange patterned kimono, kind dignified smile",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: sophisticated travel sketch portrait, fluid black fountain pen contours and restrained transparent watercolor washes, elegant blue-grey and muted character-color palette, fine paper grain and sketched waves inside circle.\nSubject: Jinbe the canon large blue whale-shark fishman, broad face with pale blue skin, rounded dark brows, yellow-orange lower facial hair, side tusks protruding upward, black hair tied in a topknot, orange patterned kimono, kind dignified smile.",
+      "output": "public/images/board/avatars/148.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-0d5bb5f4-a3cf-4ee7-bdf0-5a765767d5b9.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity and recognizable hair, glasses, fangs and costume reviewed individually",
+          "Pen and watercolor style and circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 252760,
+        "sha256": "eb0346d341d167341b7f8c913190f47778bbcabf0b5fbc2015c5c37a07503321",
+        "sourceSha256": "6f41b817d0977cf41033e280b7f36e5b7956e4f2c79a46a0358705775194feac"
+      }
+    },
+    {
+      "id": 149,
+      "character": "馬可",
+      "name": "馬可・鋼筆航誌",
+      "style": "pen-wash",
+      "styleDescription": "sophisticated travel sketch portrait, fluid black fountain pen contours and restrained transparent watercolor washes, elegant blue-grey and muted character-color palette, fine paper grain and sketched waves inside circle",
+      "rarity": "rare",
+      "identity": "Marco the Phoenix adult, short upright blond pineapple-like crest haircut, calm sleepy eyes, short blond chin stubble, purple open jacket, relaxed smile, no flames covering face",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: sophisticated travel sketch portrait, fluid black fountain pen contours and restrained transparent watercolor washes, elegant blue-grey and muted character-color palette, fine paper grain and sketched waves inside circle.\nSubject: Marco the Phoenix adult, short upright blond pineapple-like crest haircut, calm sleepy eyes, short blond chin stubble, purple open jacket, relaxed smile, no flames covering face.",
+      "output": "public/images/board/avatars/149.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-a9b0f0b6-befb-44e7-9b53-abd4030e56c0.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity and recognizable hair, glasses, fangs and costume reviewed individually",
+          "Pen and watercolor style and circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "priorSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-507f684f-2edb-4087-b886-12b232c2f5e5.png",
+      "repair": "GPT regenerated transparent exterior; original had exact final corner alpha 1",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 210322,
+        "sha256": "455f72622c21b0ec39bba82c97593349cd628bc439af7b7a9ca1980887bb0c6a",
+        "sourceSha256": "6ba88b55a35d2d2766e3d2020cba1004d597b2a9622fa9b292d795aba0018fdc"
+      },
+      "repairPrompt": "Clean transparent exterior of supplied circular pen-and-watercolor portrait of Marco the Phoenix. Keep exact face, blond crest, purple jacket, calm expression, delicate pen contours and watercolor sea backdrop. ONLY clean alpha transparency outside circular art. Absolutely all four corners fully transparent zero alpha; no scattered faint pixels outside circle. Keep circular image about98% of square, a small clear gutter. Do not introduce white background, checkerboard, frame or text."
+    },
+    {
+      "id": 150,
+      "character": "斯摩格",
+      "name": "斯摩格・鋼筆航誌",
+      "style": "pen-wash",
+      "styleDescription": "sophisticated travel sketch portrait, fluid black fountain pen contours and restrained transparent watercolor washes, elegant blue-grey and muted character-color palette, fine paper grain and sketched waves inside circle",
+      "rarity": "rare",
+      "identity": "Smoker adult Marine, short upright white hair, square mature face, visible cheek scar, two cigars at one corner of mouth, white coat with fluffy collar, stern look",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: sophisticated travel sketch portrait, fluid black fountain pen contours and restrained transparent watercolor washes, elegant blue-grey and muted character-color palette, fine paper grain and sketched waves inside circle.\nSubject: Smoker adult Marine, short upright white hair, square mature face, visible cheek scar, two cigars at one corner of mouth, white coat with fluffy collar, stern look.",
+      "output": "public/images/board/avatars/150.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-232092bf-7dfe-4ce7-9d97-a5b67cd31a93.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity and recognizable hair, glasses, fangs and costume reviewed individually",
+          "Pen and watercolor style and circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 258112,
+        "sha256": "843032748ba9413f8661d6fb94e9f52ce3af9e23e3e2bff30e2cee2d92819461",
+        "sourceSha256": "4e48c3a26aa835e3f7d23c8d9a840109282435d106b3506173bbd3c23ba5dcf1"
+      }
+    },
+    {
+      "id": 151,
+      "character": "達絲琪",
+      "name": "達絲琪・鋼筆航誌",
+      "style": "pen-wash",
+      "styleDescription": "sophisticated travel sketch portrait, fluid black fountain pen contours and restrained transparent watercolor washes, elegant blue-grey and muted character-color palette, fine paper grain and sketched waves inside circle",
+      "rarity": "rare",
+      "identity": "Tashigi adult woman, short dark navy-black bob, red-framed glasses, brown eyes, navy collared floral shirt and white Marine coat collar, serious thoughtful expression",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: sophisticated travel sketch portrait, fluid black fountain pen contours and restrained transparent watercolor washes, elegant blue-grey and muted character-color palette, fine paper grain and sketched waves inside circle.\nSubject: Tashigi adult woman, short dark navy-black bob, red-framed glasses, brown eyes, navy collared floral shirt and white Marine coat collar, serious thoughtful expression.",
+      "output": "public/images/board/avatars/151.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-baf2ab7c-3840-471d-ae14-0617257c2808.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity and recognizable hair, glasses, fangs and costume reviewed individually",
+          "Pen and watercolor style and circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 252742,
+        "sha256": "a8a497d47f4d5d09f8f84f012de15e62980fdca7a7a7ac8ea76924e5be374605",
+        "sourceSha256": "3cb9aaf140fba5af6dd8f1be8cf23519314a742a8e730d742d39592d8070c70a"
+      }
+    },
+    {
+      "id": 152,
+      "character": "克比",
+      "name": "克比・鋼筆航誌",
+      "style": "pen-wash",
+      "styleDescription": "sophisticated travel sketch portrait, fluid black fountain pen contours and restrained transparent watercolor washes, elegant blue-grey and muted character-color palette, fine paper grain and sketched waves inside circle",
+      "rarity": "rare",
+      "identity": "Koby adult Marine captain, short pink hair, round spectacles, small X-shaped scar on right side of forehead (viewer-left), white navy uniform collar and blue neck scarf, earnest confident smile",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: sophisticated travel sketch portrait, fluid black fountain pen contours and restrained transparent watercolor washes, elegant blue-grey and muted character-color palette, fine paper grain and sketched waves inside circle.\nSubject: Koby adult Marine captain, short pink hair, round spectacles, small X-shaped scar on right side of forehead (viewer-left), white navy uniform collar and blue neck scarf, earnest confident smile.",
+      "output": "public/images/board/avatars/152.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-dcb7a94a-32b6-4d5f-8e8f-a500e13a7e13.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity and recognizable hair, glasses, fangs and costume reviewed individually",
+          "Pen and watercolor style and circular composition reviewed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "priorSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-256349b3-e4ec-4b33-a76a-1f2fc5146114.png",
+      "repair": "GPT regenerated transparent exterior; original had exact final corner alpha 1",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 219024,
+        "sha256": "4cb373a20712eaab4320c7d30a67e1c065f9f7cf8567811e5180651b29fcb4df",
+        "sourceSha256": "2f6d0835dd0b10b7b227ce8da744ed1250c49b7b2f56564498f423478abdc88a"
+      },
+      "repairPrompt": "Clean transparent exterior of supplied circular pen-and-watercolor portrait of Koby from One Piece. Keep exact face, pink hair, forehead scar, round glasses, navy clothes, earnest expression, delicate pen contours and watercolor sea backdrop. ONLY clean alpha transparency outside circular art. Absolutely all four corners fully transparent zero alpha; no scattered faint pixels outside circle. Keep circular image about98% of square, a small clear gutter. Do not introduce white background, checkerboard, frame or text."
+    },
+    {
+      "id": 153,
+      "character": "白鬍子",
+      "name": "白鬍子・黑金刻印",
+      "style": "black-gold-etch",
+      "styleDescription": "exquisite black and antique gold etched portrait, gold engraved crosshatching on deep charcoal ink shapes, metallic-looking gold highlight accents, dramatic engraved sea and subtle compass motif inside circle, all face details readable",
+      "rarity": "legend",
+      "identity": "Edward Newgate Whitebeard old adult, huge unmistakable upward crescent white moustache BELOW nose, white black-edged pirate bandanna, strong square jaw, deep wrinkles, white captain coat with gold epaulettes over broad shoulders, stern powerful face, no ordinary thin moustache",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: exquisite black and antique gold etched portrait, gold engraved crosshatching on deep charcoal ink shapes, metallic-looking gold highlight accents, dramatic engraved sea and subtle compass motif inside circle, all face details readable.\nSubject: Edward Newgate Whitebeard old adult, huge unmistakable upward crescent white moustache BELOW nose, white black-edged pirate bandanna, strong square jaw, deep wrinkles, white captain coat with gold epaulettes over broad shoulders, stern powerful face, no ordinary thin moustache.",
+      "output": "public/images/board/avatars/153.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-745d5496-47d1-4e68-8980-4c7247131e5e.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, facial hair, horns and clothing reviewed individually",
+          "Black-gold etched style and circular composition reviewed",
+          "Kaido invented patterned shirt removed; Doflamingo invented earrings removed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 282304,
+        "sha256": "d6be80cd63b9113851a1a6c8dd2d4b0b3d48f771bf09827e0af140e4a57d4808",
+        "sourceSha256": "d83e7e66e7d3c32eb84aaadd89dc7372689a34d7d79da3fdeeba3a969d0e09ec"
+      }
+    },
+    {
+      "id": 154,
+      "character": "羅傑",
+      "name": "羅傑・黑金刻印",
+      "style": "black-gold-etch",
+      "styleDescription": "exquisite black and antique gold etched portrait, gold engraved crosshatching on deep charcoal ink shapes, metallic-looking gold highlight accents, dramatic engraved sea and subtle compass motif inside circle, all face details readable",
+      "rarity": "legend",
+      "identity": "Gol D. Roger adult Pirate King, iconic thick curved black moustache, black tousled hair, red tricorn pirate captain hat with skull mark and red captain coat with gold trim, wide fearless grin, hat completely in circle",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: exquisite black and antique gold etched portrait, gold engraved crosshatching on deep charcoal ink shapes, metallic-looking gold highlight accents, dramatic engraved sea and subtle compass motif inside circle, all face details readable.\nSubject: Gol D. Roger adult Pirate King, iconic thick curved black moustache, black tousled hair, red tricorn pirate captain hat with skull mark and red captain coat with gold trim, wide fearless grin, hat completely in circle.",
+      "output": "public/images/board/avatars/154.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-0f50e228-5659-4e11-b6c1-03df1092e13d.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, facial hair, horns and clothing reviewed individually",
+          "Black-gold etched style and circular composition reviewed",
+          "Kaido invented patterned shirt removed; Doflamingo invented earrings removed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 297746,
+        "sha256": "242484d1854013c54eb53238913d73266873dee749eb528420e6a15578c09901",
+        "sourceSha256": "7b7ee1b2348dcf07976b35cd7b635739e4f5928cfe56a41463ed170144921fd9"
+      }
+    },
+    {
+      "id": 155,
+      "character": "凱多",
+      "name": "凱多・黑金刻印",
+      "style": "black-gold-etch",
+      "styleDescription": "exquisite black and antique gold etched portrait, gold engraved crosshatching on deep charcoal ink shapes, metallic-looking gold highlight accents, dramatic engraved sea and subtle compass motif inside circle, all face details readable",
+      "rarity": "legend",
+      "identity": "Kaido adult emperor, long dark hair, two huge cream curved horns fitting completely inside circle, very long drooping black moustache, heavy brow and fierce eyes, broad muscular neck, blue dragon-scale patterned upper shoulder and purple fur trim",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: exquisite black and antique gold etched portrait, gold engraved crosshatching on deep charcoal ink shapes, metallic-looking gold highlight accents, dramatic engraved sea and subtle compass motif inside circle, all face details readable.\nSubject: Kaido adult emperor, long dark hair, two huge cream curved horns fitting completely inside circle, very long drooping black moustache, heavy brow and fierce eyes, broad muscular neck, blue dragon-scale patterned upper shoulder and purple fur trim.",
+      "output": "public/images/board/avatars/155.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-c1efdf73-3b1f-473b-a2b6-deed1c04a9a5.png",
+      "repairPrompt": "Correct only Kaido's upper body clothing in supplied circular black-and-antique-gold engraved avatar. Keep exact horns, fierce face, long moustache, beard, black hair, circle, gold sea backdrop and etched line technique. He has a BARE chest and shoulders under a black/purple fur cape. Remove the invented blue scale-pattern shirt entirely: NO SHIRT. His characteristic dragon-scale tattoo may appear on his OWN LEFT upper arm (viewer-right) only, as tattoo markings on skin, not clothing, and his exposed central upper chest must remain clear skin. Keep portrait entirely within circle and all exterior corners truly transparent alpha zero. No typography. Preserve mature bulky Kaido likeness.",
+      "priorSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-b1bda753-ba4a-4e34-9003-13c1c821885e.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, facial hair, horns and clothing reviewed individually",
+          "Black-gold etched style and circular composition reviewed",
+          "Kaido invented patterned shirt removed; Doflamingo invented earrings removed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 244990,
+        "sha256": "cd3a98a3638135a4757de94652b8d3423abaff9c71b718f9371da2cca4587f70",
+        "sourceSha256": "140eb451557cabb8055ecdc1ef297089b60ce06fcfc0aa718c0db8955eedbb3a"
+      }
+    },
+    {
+      "id": 156,
+      "character": "燼",
+      "name": "燼・黑金刻印",
+      "style": "black-gold-etch",
+      "styleDescription": "exquisite black and antique gold etched portrait, gold engraved crosshatching on deep charcoal ink shapes, metallic-looking gold highlight accents, dramatic engraved sea and subtle compass motif inside circle, all face details readable",
+      "rarity": "legend",
+      "identity": "King from One Piece UNMASKED Lunarian adult, dark brown skin, long white hair swept back, dark wing-like tattoo surrounding his LEFT eye (viewer-right), gold earrings, black high collar leather outfit, calm severe eyes, no mask and no helmet",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: exquisite black and antique gold etched portrait, gold engraved crosshatching on deep charcoal ink shapes, metallic-looking gold highlight accents, dramatic engraved sea and subtle compass motif inside circle, all face details readable.\nSubject: King from One Piece UNMASKED Lunarian adult, dark brown skin, long white hair swept back, dark wing-like tattoo surrounding his LEFT eye (viewer-right), gold earrings, black high collar leather outfit, calm severe eyes, no mask and no helmet.",
+      "output": "public/images/board/avatars/156.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-05e92101-ea06-40c4-a8d3-62ec732069ce.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, facial hair, horns and clothing reviewed individually",
+          "Black-gold etched style and circular composition reviewed",
+          "Kaido invented patterned shirt removed; Doflamingo invented earrings removed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 267944,
+        "sha256": "0f2ea37d0bef3d7313c7775150a2e3ec4f6c4d57cab2cbbfc7bf6c1d9ad26941",
+        "sourceSha256": "27495ba1a4a6ef50428cbc2da73340752d44de017ee023b7393f4c378fea9c0f"
+      }
+    },
+    {
+      "id": 157,
+      "character": "多佛朗明哥",
+      "name": "多佛朗明哥・黑金刻印",
+      "style": "black-gold-etch",
+      "styleDescription": "exquisite black and antique gold etched portrait, gold engraved crosshatching on deep charcoal ink shapes, metallic-looking gold highlight accents, dramatic engraved sea and subtle compass motif inside circle, all face details readable",
+      "rarity": "legend",
+      "identity": "Donquixote Doflamingo adult, very short spiky blond hair, iconic narrow red angular sunglasses with white rims, enormous pink feather coat collar, broad menacing teeth-baring grin, mature angular face",
+      "prompt": "Use case: stylized-concept. Create ONE premium circular profile avatar for a One Piece game shop. Head-and-shoulders portrait of the named CANON character, instantly recognizable. Natural canon face and adult head/shoulder proportions except nonhuman characters. Single subject. Perfect circular artwork inscribed almost edge-to-edge within a square (about 98% diameter), smooth circular boundary; EVERYTHING fully contained inside the circle. TRUE alpha transparency outside circle, all four square corners fully transparent and no stray marks. Complete hair, ears, hat and horns fit within circular silhouette. Interior has painted background to fill circle. No text, watermark, labels, frame, typography, hands or extra people. Do not imitate generic fan characters.\nStyle/medium: exquisite black and antique gold etched portrait, gold engraved crosshatching on deep charcoal ink shapes, metallic-looking gold highlight accents, dramatic engraved sea and subtle compass motif inside circle, all face details readable.\nSubject: Donquixote Doflamingo adult, very short spiky blond hair, iconic narrow red angular sunglasses with white rims, enormous pink feather coat collar, broad menacing teeth-baring grin, mature angular face.",
+      "output": "public/images/board/avatars/157.webp",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-071f9923-4aa9-4b72-bc9b-21f4a7c6a222.png",
+      "repairPrompt": "Correct ONE minor canon detail in supplied black-and-gold engraved circular portrait of Donquixote Doflamingo: remove ALL earrings and ear piercings from both ears. He has bare ears. Preserve exact short blond hair, angular red sunglasses, grin, pink feather coat, face, gold etched medium and circular sea backdrop. No other changes. Exterior of the circle must remain true transparent zero alpha including four corners; no stray pixels, border changes or text.",
+      "priorSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-7335-7782-b271-1d57c324395c\\exec-f78f30e5-ccee-4724-b771-f40ca3414dd1.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Canon facial identity, facial hair, horns and clothing reviewed individually",
+          "Black-gold etched style and circular composition reviewed",
+          "Kaido invented patterned shirt removed; Doflamingo invented earrings removed"
+        ],
+        "note": "Original GPT output inspected individually. Pixel QA recorded during export."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 239196,
+        "sha256": "ee2cc14b4d2b85e71965b2cc06f63c2dc709a612a3e40919f69e024d46f96cc6",
+        "sourceSha256": "dcc5e78c32d955c5e7dd8d506a03d57f935640cc38a7ebd219699558c53374a8"
+      }
+    }
+  ]
+}

@@ -35,7 +35,7 @@ const equip = (secret, itemId) => invoke(secret, { operation: 'shop.equip', item
     }
     const boards = S.CATALOG.filter(x => x.type === 'guestbook_style');
     const notes = S.CATALOG.filter(x => x.type === 'comment_style');
-    const avatars = S.CATALOG.filter(x => x.type === 'avatar' && x.key >= 93);
+    const avatars = S.CATALOG.filter(x => x.type === 'avatar' && x.key >= 93 && x.key <= 122);
     await check('catalog_10_boards_20_notes_30_new_avatars_93_to_122', () => { assert.equal(boards.length,10); assert.equal(notes.length,20); assert.deepEqual(avatars.map(x=>x.key),Array.from({length:30},(_,i)=>93+i)); });
     await check('catalog_matches_art_registry_and_pricing', () => {
       const art = JSON.parse(fs.readFileSync(path.join(__dirname,'../tools/launcher-guestbook-r56/styles.json'),'utf8'));
@@ -78,9 +78,9 @@ const equip = (secret, itemId) => invoke(secret, { operation: 'shop.equip', item
       assert.equal((await buy('friend','ava-122')).ok,true);const r=await equip('friend','ava-122');assert.equal(r.profile.avatar,122);assert.equal(r.shop.equipped.avatar,122);assert.ok(r.profile.collection.card.avatars.includes(122));
       const card=await invoke('friend',{operation:'card.set',card:{displayName:'羅賓迷',tagline:'一起航海',avatarId:122}});assert.equal(card.profile.card.avatarId,122);
       await ageComments();const post=await G.postLauncherComment(pool,'friend',1,'新頭貼');assert.equal(post.comment.authorAvatar,122);assert.equal((await G.getLauncherComments(pool,'owner')).comments[0].authorAvatar,122);
-      assert.equal(S.toCardPublicProfile(await profile('friend')).avatar,8);
+      assert.equal(S.toCardPublicProfile(await profile('friend')).avatar,122);
     });
-    await check('unowned_and_out_of_range_avatar_rejected', async () => { assert.equal((await equip('friend','ava-91')).error,'not_owned');assert.equal((await buy('friend','ava-123')).error,'invalid_profile_command');assert.equal((await invoke('friend',{operation:'card.set',card:{displayName:'x',tagline:'',avatarId:91}})).error,'not_owned'); });
+    await check('unowned_and_out_of_range_avatar_rejected', async () => { assert.equal((await equip('friend','ava-91')).error,'not_owned');assert.equal((await buy('friend','ava-223')).error,'invalid_profile_command');assert.equal((await invoke('friend',{operation:'card.set',card:{displayName:'x',tagline:'',avatarId:91}})).error,'not_owned'); });
     await check('all_30_new_avatars_buy_equip_and_card_set', async () => {
       await db.query('INSERT INTO player_profiles(user_id,secret,name,avatar,stats) VALUES(7,$1,$1,$2,$3::jsonb)',['avatar-buyer','8',JSON.stringify({launcherWalletV1:{coins:500,lastGrantDay:today}})]);
       assert.ok(avatars.reduce((sum,item)=>sum+item.price,0)<=500);
@@ -88,7 +88,7 @@ const equip = (secret, itemId) => invoke(secret, { operation: 'shop.equip', item
     });
     await check('old_appearance_and_avatar_remain_compatible', () => {const r=S.toPublicProfile({user_id:7,name:'old',avatar:31,stats:{launcherOwnedV1:{items:['guestbook-1']},launcherAppearanceV1:{layoutId:'layout-default'},client:{shop:{ownedAvatars:[31]}}}});assert.equal(r.avatar,31);assert.equal(r.guestbookUnlocked,true);assert.equal(r.appearance.commentStyleId,S.DEFAULT_COMMENT_STYLE.id);});
     await check('private_existing_data_and_currency_preserved', async () => {const row=await profile('friend');assert.equal(row.stats.client.totals.coins,77);assert.equal(row.stats.launcherLifeV1.keep,'original');assert.equal(row.stats.custom,'preserved');assert.equal((await db.query("SELECT to_regclass('launcher_life_state') relation")).rows[0].relation,null);});
-    await check('all_230_catalog_items_remain_in_public_collection', () => {const items=S.CATALOG.filter(x=>!['wall','flag'].includes(x.type)).map(x=>x.id);const r=S.toPublicProfile({user_id:1,name:'all',avatar:8,stats:{launcherOwnedV1:{items}}});assert.equal(r.collection.launcher.items.length,r.collection.launcher.itemIds.length);assert.ok(r.collection.launcher.items.length>150);});
+    await check('all_330_catalog_items_remain_in_public_collection', () => {const items=S.CATALOG.filter(x=>!['wall','flag'].includes(x.type)).map(x=>x.id);const r=S.toPublicProfile({user_id:1,name:'all',avatar:8,stats:{launcherOwnedV1:{items}}});assert.equal(r.collection.launcher.items.length,r.collection.launcher.itemIds.length);assert.ok(r.collection.launcher.items.length>150);});
     await check('bridge_requires_secret', async () => {assert.equal((await buy('',boards[0].id)).error,'bad secret');assert.equal((await buy('wrong',boards[0].id)).error,'bad secret');});
     await check('bridge_exact_fields_and_operation_allowlist', () => {
       const base=command({operation:'shop.buy',itemId:boards[0].id});
@@ -128,7 +128,7 @@ const equip = (secret, itemId) => invoke(secret, { operation: 'shop.equip', item
     await check('new_protocol_bad_type_rejected_before_life_engine', async () => {const c=command({operation:'shop.buy',itemId:boards[0].id});c.type='minigame.answer';const r=await auth.commandLauncherLife(c);assert.equal(r.error,'invalid_profile_command');assert.equal(lifeCalls,1);});
     await check('unchanged_core_social_avatar_projection_bypasses_lossy_person_filter', async () => {const r=await auth.commandLauncherLife(command({operation:'social.avatars'}));assert.equal(r.ok,true);assert.ok(r.avatars.some(x=>x.userId===1));assert.equal(lifeCalls,1);});
     const report={status:'PASS',checks:checks.length,passed:checks,scope:'Isolated PGlite SQL; existing AuthService method and index route exercised. No formal player account transactions.',catalog:{boards:boards.length,notes:notes.length,avatars:avatars.length}};
-    const out=process.env.LAUNCHER_GUESTBOOK_STYLES_QA_OUT||'D:/Codex_QA/launcher-shop-r57/backend-report.json';
+    const out=process.env.LAUNCHER_GUESTBOOK_STYLES_QA_OUT||'D:/Codex_QA/launcher-shop-r58/backend-report.json';
     fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
   } finally {await db.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

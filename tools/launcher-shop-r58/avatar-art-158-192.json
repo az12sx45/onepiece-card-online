@@ -1,0 +1,1673 @@
+{
+  "generator": "builtin image_gen",
+  "requestedSize": [
+    735,
+    735
+  ],
+  "format": "WebP RGBA",
+  "postprocess": "Pillow resize and WebP encode only; no masks or artwork modification",
+  "items": [
+    {
+      "id": 158,
+      "character": "魯夫",
+      "name": "魯夫・疊紙航旅",
+      "style": "layered-paper",
+      "styleDescription": "Dimensional layered cut-paper illustration, stacked crisp matte paper contours, shallow warm shadows between paper layers, sculpted paper hair and natural recognizable face; interior ocean-wave shapes, teal coral ivory palette.",
+      "rarity": "epic",
+      "identity": "Monkey D. Luffy, black tousled hair, straw hat with red band, wide cheerful grin, small stitched scar beneath his own LEFT eye viewer-right, red open vest. Warm golden sun in ocean background.",
+      "output": "public/images/board/avatars/158.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Dimensional layered cut-paper illustration, stacked crisp matte paper contours, shallow warm shadows between paper layers, sculpted paper hair and natural recognizable face; interior ocean-wave shapes, teal coral ivory palette. Subject: Monkey D. Luffy, black tousled hair, straw hat with red band, wide cheerful grin, small stitched scar beneath his own LEFT eye viewer-right, red open vest. Warm golden sun in ocean background. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-5a9777d2-d38f-4f00-af77-d55a6f2fb2c8.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Character identity and outfit recognized",
+          "Layered paper medium visibly differentiated",
+          "Complete circular composition inspected"
+        ],
+        "note": "Reviewed builtin original output; final pixel/alpha checked by export script."
+      },
+      "discardedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-38b41124-0ea4-4f7b-a4c4-b5cc9e060b05.png",
+      "editPrompt": "Edit only the alpha outside the circular avatar. Preserve all art, subject, paper texture, colors, facial identity and circular composition exactly. Remove every tiny semi-transparent speck and color fringe outside the circle, especially the upper-left corner. All corners and area outside clean circular edge must be completely empty true alpha zero. No checkerboard or solid background. Do not redraw character.",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 165794,
+        "sha256": "edd40c156daa8479cb78386795f4a43534cd553593a7a017f8140553d45ce21c",
+        "sourceSha256": "2beddc7262d457425bfbb1585cf02cb8b8b04cc20fd45082c22c40ec471bf7b1"
+      }
+    },
+    {
+      "id": 159,
+      "character": "娜美",
+      "name": "娜美・疊紙航旅",
+      "style": "layered-paper",
+      "styleDescription": "Dimensional layered cut-paper illustration, stacked crisp matte paper contours, shallow warm shadows between paper layers, sculpted paper hair and natural recognizable face; interior ocean-wave shapes, teal coral ivory palette.",
+      "rarity": "epic",
+      "identity": "Nami after timeskip, long wavy orange hair, brown eyes, confident bright smile, turquoise and white striped bikini shoulder straps, blue stylized pinwheel-and-tangerine tattoo on her own LEFT shoulder viewer-right, modest shoulder portrait. Tangerine foliage accents.",
+      "output": "public/images/board/avatars/159.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Dimensional layered cut-paper illustration, stacked crisp matte paper contours, shallow warm shadows between paper layers, sculpted paper hair and natural recognizable face; interior ocean-wave shapes, teal coral ivory palette. Subject: Nami after timeskip, long wavy orange hair, brown eyes, confident bright smile, turquoise and white striped bikini shoulder straps, blue stylized pinwheel-and-tangerine tattoo on her own LEFT shoulder viewer-right, modest shoulder portrait. Tangerine foliage accents. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-8fde6aad-eb40-48e0-95ed-c508abc26c47.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Character identity and outfit recognized",
+          "Layered paper medium visibly differentiated",
+          "Complete circular composition inspected"
+        ],
+        "note": "Reviewed builtin original output; final pixel/alpha checked by export script."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 159200,
+        "sha256": "18874e7a9f7d1cdfbea3fec7cab9f96ec4a5ead331e7e6eec86dae1de127fbbf",
+        "sourceSha256": "c255e5fbb6477ef0fa49107a53e0c3d960c951397a09e5afcc9ec3e6d886d375"
+      },
+      "discardedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-36fe3827-0dc0-4e2d-aad4-8fcb6bd865a4.png",
+      "editPrompt": "Recompose as close face and neck portrait; upper arms and tattoo area outside circular crop. Preserve paper art and identity; true transparent corners."
+    },
+    {
+      "id": 160,
+      "character": "羅賓",
+      "name": "羅賓・疊紙航旅",
+      "style": "layered-paper",
+      "styleDescription": "Dimensional layered cut-paper illustration, stacked crisp matte paper contours, shallow warm shadows between paper layers, sculpted paper hair and natural recognizable face; interior ocean-wave shapes, teal coral ivory palette.",
+      "rarity": "epic",
+      "identity": "Nico Robin after timeskip, long sleek black hair parted at center, blue eyes, long straight nose, sunglasses resting on head, dark blue zippered sleeveless top collar, calm intelligent smile. Layered paper blue sea and lilac florals.",
+      "output": "public/images/board/avatars/160.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Dimensional layered cut-paper illustration, stacked crisp matte paper contours, shallow warm shadows between paper layers, sculpted paper hair and natural recognizable face; interior ocean-wave shapes, teal coral ivory palette. Subject: Nico Robin after timeskip, long sleek black hair parted at center, blue eyes, long straight nose, sunglasses resting on head, dark blue zippered sleeveless top collar, calm intelligent smile. Layered paper blue sea and lilac florals. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-e1206f9a-341d-439e-8c7e-63d83d41d2f8.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Character identity and outfit recognized",
+          "Layered paper medium visibly differentiated",
+          "Complete circular composition inspected"
+        ],
+        "note": "Reviewed builtin original output; final pixel/alpha checked by export script."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 194588,
+        "sha256": "899f5486b2de11d3f512e8500535774d020c4c6f845127ad4e57156a78ea629f",
+        "sourceSha256": "4558804adc679034441ee2ee07a859337f9234e0d9692dc2130f45819fa987bb"
+      }
+    },
+    {
+      "id": 161,
+      "character": "騙人布",
+      "name": "騙人布・疊紙航旅",
+      "style": "layered-paper",
+      "styleDescription": "Dimensional layered cut-paper illustration, stacked crisp matte paper contours, shallow warm shadows between paper layers, sculpted paper hair and natural recognizable face; interior ocean-wave shapes, teal coral ivory palette.",
+      "rarity": "epic",
+      "identity": "Usopp after timeskip, long distinctive pointed nose, black curly hair, white head bandana, goggles above forehead, friendly brave grin, yellow shoulder suspenders over bare upper shoulders; no mask. Ochre sea and cloud shapes.",
+      "output": "public/images/board/avatars/161.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Dimensional layered cut-paper illustration, stacked crisp matte paper contours, shallow warm shadows between paper layers, sculpted paper hair and natural recognizable face; interior ocean-wave shapes, teal coral ivory palette. Subject: Usopp after timeskip, long distinctive pointed nose, black curly hair, white head bandana, goggles above forehead, friendly brave grin, yellow shoulder suspenders over bare upper shoulders; no mask. Ochre sea and cloud shapes. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-d293dc05-f37c-48f8-bd3b-e7311c3060f1.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Character identity and outfit recognized",
+          "Layered paper medium visibly differentiated",
+          "Complete circular composition inspected"
+        ],
+        "note": "Reviewed builtin original output; final pixel/alpha checked by export script."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 164042,
+        "sha256": "e9a0ca5c38e6758fcf3a82b056bab3cfa43805fe4f7f8e0a35fdb7beccbe1a99",
+        "sourceSha256": "e7cacad3a11eff859be3a969dd0601b48d3724e23f75a1f5a084ea18c88b5d29"
+      }
+    },
+    {
+      "id": 162,
+      "character": "吉貝爾",
+      "name": "吉貝爾・疊紙航旅",
+      "style": "layered-paper",
+      "styleDescription": "Dimensional layered cut-paper illustration, stacked crisp matte paper contours, shallow warm shadows between paper layers, sculpted paper hair and natural recognizable face; interior ocean-wave shapes, teal coral ivory palette.",
+      "rarity": "epic",
+      "identity": "Jinbe, broad blue-skinned whale-shark fish-man, broad nose, black curly side hair tied topknot, upward tusks from lower jaw, orange kimono with black geometric pattern, calm warm smile. Dark teal curling paper ocean waves.",
+      "output": "public/images/board/avatars/162.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Dimensional layered cut-paper illustration, stacked crisp matte paper contours, shallow warm shadows between paper layers, sculpted paper hair and natural recognizable face; interior ocean-wave shapes, teal coral ivory palette. Subject: Jinbe, broad blue-skinned whale-shark fish-man, broad nose, black curly side hair tied topknot, upward tusks from lower jaw, orange kimono with black geometric pattern, calm warm smile. Dark teal curling paper ocean waves. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-8473559f-162d-49e0-ab3d-19a1a1501400.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Character identity and outfit recognized",
+          "Layered paper medium visibly differentiated",
+          "Complete circular composition inspected"
+        ],
+        "note": "Reviewed builtin original output; final pixel/alpha checked by export script."
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 178994,
+        "sha256": "fe619681c111cc1218d423e0dc8c0b793d3508e9957a2ab86d2f3b939e6de55e",
+        "sourceSha256": "f5859e67ed14a1f90fab63e6bdfbf6dec9e93dd92ac1d70f9a57eddcb6eea6a8"
+      }
+    },
+    {
+      "id": 163,
+      "character": "香吉士",
+      "name": "香吉士・手塑物語",
+      "style": "clay-animation",
+      "styleDescription": "Refined stop-motion clay animation look, finely hand-sculpted matte polymer clay, delicate fingerworked texture, studio soft light, normal mature head-to-shoulders proportions not chibi or toy bobblehead; bright clean colored sea backdrop within disc.",
+      "rarity": "epic",
+      "identity": "Sanji after timeskip, lean adult narrow elegant face, blond straight hair covers his own RIGHT eye viewer-left; visible own LEFT eye and curled eyebrow on viewer-right; small goatee, black suit and blue shirt, sly charming smile, no cigarette.",
+      "output": "public/images/board/avatars/163.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Refined stop-motion clay animation look, finely hand-sculpted matte polymer clay, delicate fingerworked texture, studio soft light, normal mature head-to-shoulders proportions not chibi or toy bobblehead; bright clean colored sea backdrop within disc. Subject: Sanji after timeskip, lean adult narrow elegant face, blond straight hair covers his own RIGHT eye viewer-left; visible own LEFT eye and curled eyebrow on viewer-right; small goatee, black suit and blue shirt, sly charming smile, no cigarette. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-5f14d70b-c434-4aed-bf62-df580c5cc82d.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Recognizable character and era-correct clothing",
+          "Natural adult proportions and clay sculpting visible",
+          "Scars, eyes and key accessories visually reviewed"
+        ]
+      },
+      "discardedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-d16913bb-f66b-4cfc-b33b-b36f3ee0028c.png",
+      "editPrompt": "Clean alpha outside circle; preserve all artwork. Corners alpha=0.",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 121376,
+        "sha256": "f489c6a17196b37059708e1c0ccd143131fb6b3968cc89cd5f17dc96ce7d5849",
+        "sourceSha256": "c6b881873f9c3c0e7dbe84f90aec5d7d1e9b5c93d37874f4d639073f031a5f67"
+      }
+    },
+    {
+      "id": 164,
+      "character": "艾斯",
+      "name": "艾斯・手塑物語",
+      "style": "clay-animation",
+      "styleDescription": "Refined stop-motion clay animation look, finely hand-sculpted matte polymer clay, delicate fingerworked texture, studio soft light, normal mature head-to-shoulders proportions not chibi or toy bobblehead; bright clean colored sea backdrop within disc.",
+      "rarity": "epic",
+      "identity": "Portgas D. Ace, lean young adult face with freckles, black medium-length messy hair, orange cowboy hat with TWO blue circular face badges, red bead necklace, bare shoulders, warm mischievous smile, no flames obscuring face.",
+      "output": "public/images/board/avatars/164.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Refined stop-motion clay animation look, finely hand-sculpted matte polymer clay, delicate fingerworked texture, studio soft light, normal mature head-to-shoulders proportions not chibi or toy bobblehead; bright clean colored sea backdrop within disc. Subject: Portgas D. Ace, lean young adult face with freckles, black medium-length messy hair, orange cowboy hat with TWO blue circular face badges, red bead necklace, bare shoulders, warm mischievous smile, no flames obscuring face. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-ac93d2a9-d999-4f4b-87c3-62f62c547c17.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Recognizable character and era-correct clothing",
+          "Natural adult proportions and clay sculpting visible",
+          "Scars, eyes and key accessories visually reviewed"
+        ]
+      },
+      "discardedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-9e335092-760d-48ae-aecf-79edf2d5d45c.png",
+      "editPrompt": "Clean alpha outside circle; preserve all artwork. Corners alpha=0.",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 151012,
+        "sha256": "c2b81f4881972b636a7f0207d91d5611fe7b511294009b44811616aa0f7e3af8",
+        "sourceSha256": "30dd5b8a25a5cdbe81b38224dcffdf37b62f3f793dcb7f5107d82d006cde8a76"
+      }
+    },
+    {
+      "id": 165,
+      "character": "薩波",
+      "name": "薩波・手塑物語",
+      "style": "clay-animation",
+      "styleDescription": "Refined stop-motion clay animation look, finely hand-sculpted matte polymer clay, delicate fingerworked texture, studio soft light, normal mature head-to-shoulders proportions not chibi or toy bobblehead; bright clean colored sea backdrop within disc.",
+      "rarity": "epic",
+      "identity": "Sabo adult, blond wavy hair, black top hat with blue goggles and blue lenses, burn scar surrounding his own LEFT eye viewer-right, blue jacket with white cravat, confident friendly smile.",
+      "output": "public/images/board/avatars/165.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Refined stop-motion clay animation look, finely hand-sculpted matte polymer clay, delicate fingerworked texture, studio soft light, normal mature head-to-shoulders proportions not chibi or toy bobblehead; bright clean colored sea backdrop within disc. Subject: Sabo adult, blond wavy hair, black top hat with blue goggles and blue lenses, burn scar surrounding his own LEFT eye viewer-right, blue jacket with white cravat, confident friendly smile. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-c388f974-0f84-4c91-8eca-4c096c3ef79c.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Recognizable character and era-correct clothing",
+          "Natural adult proportions and clay sculpting visible",
+          "Scars, eyes and key accessories visually reviewed"
+        ]
+      },
+      "discardedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-db324dda-5013-4f08-8313-2e553049bb3d.png",
+      "editPrompt": "Clean alpha outside circle; preserve all artwork. Corners alpha=0.",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 148276,
+        "sha256": "11f643a5e558e8949342df131045530ded3a4adc95a3eb6da94f95c007d87106",
+        "sourceSha256": "8266b1f6e6c627b0d60708941b6e0bad1a8ceebfa013e0d6675b901679158717"
+      }
+    },
+    {
+      "id": 166,
+      "character": "紅髮傑克",
+      "name": "紅髮傑克・手塑物語",
+      "style": "clay-animation",
+      "styleDescription": "Refined stop-motion clay animation look, finely hand-sculpted matte polymer clay, delicate fingerworked texture, studio soft light, normal mature head-to-shoulders proportions not chibi or toy bobblehead; bright clean colored sea backdrop within disc.",
+      "rarity": "epic",
+      "identity": "Shanks adult, red hair, short red-brown stubble, exactly three diagonal scars across his own LEFT eye viewer-right, white shirt open collar and black cape on shoulders, quiet easy smile, amber sea background.",
+      "output": "public/images/board/avatars/166.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Refined stop-motion clay animation look, finely hand-sculpted matte polymer clay, delicate fingerworked texture, studio soft light, normal mature head-to-shoulders proportions not chibi or toy bobblehead; bright clean colored sea backdrop within disc. Subject: Shanks adult, red hair, short red-brown stubble, exactly three diagonal scars across his own LEFT eye viewer-right, white shirt open collar and black cape on shoulders, quiet easy smile, amber sea background. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-5ff7d956-0428-40a3-97f9-61344dd920c0.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Recognizable character and era-correct clothing",
+          "Natural adult proportions and clay sculpting visible",
+          "Scars, eyes and key accessories visually reviewed"
+        ]
+      },
+      "discardedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-2ca2465e-178f-4df2-9913-92f9738ca472.png",
+      "editPrompt": "Add visibly third parallel scar across Shanks own left eye; preserve clay style and clean alpha.",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 138014,
+        "sha256": "4b1cfc9d1ede9dd568e937d6354457e583f55e00567875f6a7649733651c7c65",
+        "sourceSha256": "8b523129730b625541c1428124983d633fc340f6d38f4e0435d06459fa9e62da"
+      }
+    },
+    {
+      "id": 167,
+      "character": "培羅娜",
+      "name": "培羅娜・手塑物語",
+      "style": "clay-animation",
+      "styleDescription": "Refined stop-motion clay animation look, finely hand-sculpted matte polymer clay, delicate fingerworked texture, studio soft light, normal mature head-to-shoulders proportions not chibi or toy bobblehead; bright clean colored sea backdrop within disc.",
+      "rarity": "epic",
+      "identity": "Perona as adult, long pink hair in twin tails, small gold crown, black-and-white gothic collar, large round recognizable eyes, playful smug closed-mouth smile, burgundy and pale rose cloud background.",
+      "output": "public/images/board/avatars/167.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Refined stop-motion clay animation look, finely hand-sculpted matte polymer clay, delicate fingerworked texture, studio soft light, normal mature head-to-shoulders proportions not chibi or toy bobblehead; bright clean colored sea backdrop within disc. Subject: Perona as adult, long pink hair in twin tails, small gold crown, black-and-white gothic collar, large round recognizable eyes, playful smug closed-mouth smile, burgundy and pale rose cloud background. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-37afb802-6f87-41e4-bd2f-97c42530a7dd.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Recognizable character and era-correct clothing",
+          "Natural adult proportions and clay sculpting visible",
+          "Scars, eyes and key accessories visually reviewed"
+        ]
+      },
+      "discardedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-64382def-c563-4840-ba36-19540cc81e9f.png",
+      "editPrompt": "Clean alpha outside circle; preserve all artwork. Corners alpha=0.",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 142766,
+        "sha256": "c05d89e8f8bd072d175fb98e6302d9d543b766a5809c3327fae2390276ad0a16",
+        "sourceSha256": "f8dc7bdb970ceaad8b320381000c073559c33bdaaa52d20a7d9fa505898ae988"
+      }
+    },
+    {
+      "id": 168,
+      "character": "索隆",
+      "name": "索隆・像素冒險",
+      "style": "pixel-art",
+      "styleDescription": "Premium handcrafted 16-bit pixel-art portrait with readable tightly controlled square pixels, clusters and deliberate stepped contours, rich restrained palette, no blur, no artificial CRT scanlines. Natural canonical proportions. Ocean and geometric sky pixel backdrop within circular disc.",
+      "rarity": "rare",
+      "identity": "Roronoa Zoro after timeskip, green short spiky hair, own LEFT eye viewer-right closed under vertical scar, three small gold earrings own LEFT ear, dark green robe collar, stern confident mouth, no swords in face.",
+      "output": "public/images/board/avatars/168.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Premium handcrafted 16-bit pixel-art portrait with readable tightly controlled square pixels, clusters and deliberate stepped contours, rich restrained palette, no blur, no artificial CRT scanlines. Natural canonical proportions. Ocean and geometric sky pixel backdrop within circular disc. Subject: Roronoa Zoro after timeskip, green short spiky hair, own LEFT eye viewer-right closed under vertical scar, three small gold earrings own LEFT ear, dark green robe collar, stern confident mouth, no swords in face. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-b4e66bf9-233a-4786-8f3d-d19e304496d5.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Pixel-art silhouette and cluster shading visible",
+          "Character canonical facial identity and accessories visually reviewed",
+          "Circle and no rectangular background reviewed"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 154812,
+        "sha256": "0e528adabd058db5ceac3b3dd6f4cd708e785b153119807bc116b777cc0622f7",
+        "sourceSha256": "aa9710e0207e72692607de4016cbe7843e1f04692459693778151961baad31d0"
+      }
+    },
+    {
+      "id": 169,
+      "character": "羅",
+      "name": "羅・像素冒險",
+      "style": "pixel-art",
+      "styleDescription": "Premium handcrafted 16-bit pixel-art portrait with readable tightly controlled square pixels, clusters and deliberate stepped contours, rich restrained palette, no blur, no artificial CRT scanlines. Natural canonical proportions. Ocean and geometric sky pixel backdrop within circular disc.",
+      "rarity": "rare",
+      "identity": "Trafalgar Law adult, white fluffy hat with irregular black leopard spots, black sideburns and small goatee, gray eyes, two gold earrings per ear, yellow hoodie collar with black jacket, knowing smirk.",
+      "output": "public/images/board/avatars/169.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Premium handcrafted 16-bit pixel-art portrait with readable tightly controlled square pixels, clusters and deliberate stepped contours, rich restrained palette, no blur, no artificial CRT scanlines. Natural canonical proportions. Ocean and geometric sky pixel backdrop within circular disc. Subject: Trafalgar Law adult, white fluffy hat with irregular black leopard spots, black sideburns and small goatee, gray eyes, two gold earrings per ear, yellow hoodie collar with black jacket, knowing smirk. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-eb197800-58d6-413a-b01d-252901670002.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Pixel-art silhouette and cluster shading visible",
+          "Character canonical facial identity and accessories visually reviewed",
+          "Circle and no rectangular background reviewed"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 137460,
+        "sha256": "10d1ff4e1db65908ebe2a3050e138d7057c0375bc8f0e2f10b923556ac042f9d",
+        "sourceSha256": "380da7741218bfd2a09d46447d704a466a0dedc1ce9987dc3ed9d66fc88c344e"
+      }
+    },
+    {
+      "id": 170,
+      "character": "佛朗基",
+      "name": "佛朗基・像素冒險",
+      "style": "pixel-art",
+      "styleDescription": "Premium handcrafted 16-bit pixel-art portrait with readable tightly controlled square pixels, clusters and deliberate stepped contours, rich restrained palette, no blur, no artificial CRT scanlines. Natural canonical proportions. Ocean and geometric sky pixel backdrop within circular disc.",
+      "rarity": "rare",
+      "identity": "Franky after timeskip, strong angular human cyborg face, blue pompadour hair, metal angular nose, sunglasses pushed onto forehead, broad toothy grin, open red Hawaiian shirt, broad upper shoulders framed sensibly.",
+      "output": "public/images/board/avatars/170.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Premium handcrafted 16-bit pixel-art portrait with readable tightly controlled square pixels, clusters and deliberate stepped contours, rich restrained palette, no blur, no artificial CRT scanlines. Natural canonical proportions. Ocean and geometric sky pixel backdrop within circular disc. Subject: Franky after timeskip, strong angular human cyborg face, blue pompadour hair, metal angular nose, sunglasses pushed onto forehead, broad toothy grin, open red Hawaiian shirt, broad upper shoulders framed sensibly. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-f98f2bdf-91f2-4226-974b-679766791b66.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Pixel-art silhouette and cluster shading visible",
+          "Character canonical facial identity and accessories visually reviewed",
+          "Circle and no rectangular background reviewed"
+        ]
+      },
+      "discardedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-92dc4ada-229d-4f85-9285-bc423e47e776.png",
+      "editPrompt": "Clean alpha outside circle; preserve artwork.",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 178376,
+        "sha256": "85fb16b0a29d3fa5659412d4d987387881e363e93ceb5fa95d09126b0fa37297",
+        "sourceSha256": "4f88553432aeb9b1a774f54e2fc47bd78ee06c1498ded01faf7ae170871b7ada"
+      }
+    },
+    {
+      "id": 171,
+      "character": "布魯克",
+      "name": "布魯克・像素冒險",
+      "style": "pixel-art",
+      "styleDescription": "Premium handcrafted 16-bit pixel-art portrait with readable tightly controlled square pixels, clusters and deliberate stepped contours, rich restrained palette, no blur, no artificial CRT scanlines. Natural canonical proportions. Ocean and geometric sky pixel backdrop within circular disc.",
+      "rarity": "rare",
+      "identity": "Brook, canonical skeleton musician with very large dense black afro, black hollow eye sockets, wide skeleton grin, gold crown ornament atop afro, orange feather collar and black suit. Recognizable skeleton, no flesh or human nose.",
+      "output": "public/images/board/avatars/171.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Premium handcrafted 16-bit pixel-art portrait with readable tightly controlled square pixels, clusters and deliberate stepped contours, rich restrained palette, no blur, no artificial CRT scanlines. Natural canonical proportions. Ocean and geometric sky pixel backdrop within circular disc. Subject: Brook, canonical skeleton musician with very large dense black afro, black hollow eye sockets, wide skeleton grin, gold crown ornament atop afro, orange feather collar and black suit. Recognizable skeleton, no flesh or human nose. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-cdb0e049-23ce-440d-b24f-7a4fc51e31b7.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Pixel-art silhouette and cluster shading visible",
+          "Character canonical facial identity and accessories visually reviewed",
+          "Circle and no rectangular background reviewed"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 155258,
+        "sha256": "6e145dd81a0baa7708956df6489766be10ac3608c15d088c2b3ba8c369f619c8",
+        "sourceSha256": "966618318c9ca9eabef0c0ebff30c4584100c26db6e114bd97c7913b7900dbce"
+      }
+    },
+    {
+      "id": 172,
+      "character": "漢考克",
+      "name": "漢考克・像素冒險",
+      "style": "pixel-art",
+      "styleDescription": "Premium handcrafted 16-bit pixel-art portrait with readable tightly controlled square pixels, clusters and deliberate stepped contours, rich restrained palette, no blur, no artificial CRT scanlines. Natural canonical proportions. Ocean and geometric sky pixel backdrop within circular disc.",
+      "rarity": "rare",
+      "identity": "Boa Hancock adult, long straight black hair, blue eyes, gold snake earrings, elegant magenta patterned high collar, proud composed gaze, tall elegant head-and-shoulders proportions.",
+      "output": "public/images/board/avatars/172.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Premium handcrafted 16-bit pixel-art portrait with readable tightly controlled square pixels, clusters and deliberate stepped contours, rich restrained palette, no blur, no artificial CRT scanlines. Natural canonical proportions. Ocean and geometric sky pixel backdrop within circular disc. Subject: Boa Hancock adult, long straight black hair, blue eyes, gold snake earrings, elegant magenta patterned high collar, proud composed gaze, tall elegant head-and-shoulders proportions. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-529c1852-3664-4b24-bc72-9a879ae2b7e9.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Pixel-art silhouette and cluster shading visible",
+          "Character canonical facial identity and accessories visually reviewed",
+          "Circle and no rectangular background reviewed"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          1,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 163392,
+        "sha256": "ee62d737f158547cf71db658df13a9651faad1592e3cd9d02a9ad2eb7a509500",
+        "sourceSha256": "a6171695b198a00ac86262d06ad99ed18fa4dc14388d935254c3bfb3ce28e302"
+      }
+    },
+    {
+      "id": 173,
+      "character": "薇薇",
+      "name": "薇薇・琺瑯寶彩",
+      "style": "enamel-jewel",
+      "styleDescription": "Fine cloisonne enamel jewelry illustration, richly colored glossy enamel inlays separated by delicate gold contours, jewel-like ocean backdrop, face remains expressive painted enamel and recognizable, elegant collector medallion feel but no thick external border; gemstone glints restrained.",
+      "rarity": "legend",
+      "identity": "Nefertari Vivi young adult, long blue hair, gentle brown eyes, small serene smile, royal ivory and turquoise clothing at shoulders, subtle gold head ornament, desert-sun and blue sea backdrop.",
+      "output": "public/images/board/avatars/173.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Fine cloisonne enamel jewelry illustration, richly colored glossy enamel inlays separated by delicate gold contours, jewel-like ocean backdrop, face remains expressive painted enamel and recognizable, elegant collector medallion feel but no thick external border; gemstone glints restrained. Subject: Nefertari Vivi young adult, long blue hair, gentle brown eyes, small serene smile, royal ivory and turquoise clothing at shoulders, subtle gold head ornament, desert-sun and blue sea backdrop. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-c5f3f082-be52-4b69-8ea2-f1aede17abd7.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Cloisonne enamel texture and gold contours visible",
+          "Character canonical face, hair and key accessories recognizable",
+          "Circular portrait composition reviewed; ornaments meet the circular crop"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 282670,
+        "sha256": "a6b8581342abfe9778f09c5c562f6e274abe28d7d71c35894a87083b0daa4696",
+        "sourceSha256": "78398f7a17a4177b067c0b1958e474e0584a83b82c2cdf5862c24ce99ea5669a"
+      }
+    },
+    {
+      "id": 174,
+      "character": "白星",
+      "name": "白星・琺瑯寶彩",
+      "style": "enamel-jewel",
+      "styleDescription": "Fine cloisonne enamel jewelry illustration, richly colored glossy enamel inlays separated by delicate gold contours, jewel-like ocean backdrop, face remains expressive painted enamel and recognizable, elegant collector medallion feel but no thick external border; gemstone glints restrained.",
+      "rarity": "legend",
+      "identity": "Shirahoshi, canonical pink-haired mermaid princess, long flowing pink hair, large blue eyes, gold hair ornaments and pink shell-like shoulder details, innocent gentle smile, portrait only, no cleavage emphasis.",
+      "output": "public/images/board/avatars/174.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Fine cloisonne enamel jewelry illustration, richly colored glossy enamel inlays separated by delicate gold contours, jewel-like ocean backdrop, face remains expressive painted enamel and recognizable, elegant collector medallion feel but no thick external border; gemstone glints restrained. Subject: Shirahoshi, canonical pink-haired mermaid princess, long flowing pink hair, large blue eyes, gold hair ornaments and pink shell-like shoulder details, innocent gentle smile, portrait only, no cleavage emphasis. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-0f6ccf31-40ef-441f-8b2f-9f58b2b9b1e8.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Cloisonne enamel texture and gold contours visible",
+          "Character canonical face, hair and key accessories recognizable",
+          "Circular portrait composition reviewed; ornaments meet the circular crop"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          1,
+          1,
+          1
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 287958,
+        "sha256": "1e33124fa30cc7c379decbd9383f10602154976f85d33910f5d2ce9eba0a5dae",
+        "sourceSha256": "2e539dbb5dc54b4d85774794af3ee90ff09684139f99141b574bfe17af04406c"
+      }
+    },
+    {
+      "id": 175,
+      "character": "凱洛特",
+      "name": "凱洛特・琺瑯寶彩",
+      "style": "enamel-jewel",
+      "styleDescription": "Fine cloisonne enamel jewelry illustration, richly colored glossy enamel inlays separated by delicate gold contours, jewel-like ocean backdrop, face remains expressive painted enamel and recognizable, elegant collector medallion feel but no thick external border; gemstone glints restrained.",
+      "rarity": "legend",
+      "identity": "Carrot, canonical female white rabbit mink, upright long white rabbit ears fully fit within circle, blonde bob hair, warm brown eyes, soft white fur, orange cape collar, cheerful grin; correct rabbit features.",
+      "output": "public/images/board/avatars/175.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Fine cloisonne enamel jewelry illustration, richly colored glossy enamel inlays separated by delicate gold contours, jewel-like ocean backdrop, face remains expressive painted enamel and recognizable, elegant collector medallion feel but no thick external border; gemstone glints restrained. Subject: Carrot, canonical female white rabbit mink, upright long white rabbit ears fully fit within circle, blonde bob hair, warm brown eyes, soft white fur, orange cape collar, cheerful grin; correct rabbit features. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-db4ebaa6-b19c-4b47-a71f-399ed6fddb37.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Cloisonne enamel texture and gold contours visible",
+          "Character canonical face, hair and key accessories recognizable",
+          "Circular portrait composition reviewed; ornaments meet the circular crop"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 267148,
+        "sha256": "a84c0dcb58b19bc22ed37f7765461a21efb3d8940bbab3540daea1f34ebbeae0",
+        "sourceSha256": "f04eade05378dc86e9a21e776d42050737b21e199697a109999d6788c1cc781e"
+      }
+    },
+    {
+      "id": 176,
+      "character": "大和",
+      "name": "大和・琺瑯寶彩",
+      "style": "enamel-jewel",
+      "styleDescription": "Fine cloisonne enamel jewelry illustration, richly colored glossy enamel inlays separated by delicate gold contours, jewel-like ocean backdrop, face remains expressive painted enamel and recognizable, elegant collector medallion feel but no thick external border; gemstone glints restrained.",
+      "rarity": "legend",
+      "identity": "Yamato adult, long white hair transitioning turquoise at ends, red horns fully fit within circle, orange eyes, gold hoop earrings, white sleeveless kimono and red trim, purple-white thick rope behind shoulders, confident friendly smile.",
+      "output": "public/images/board/avatars/176.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Fine cloisonne enamel jewelry illustration, richly colored glossy enamel inlays separated by delicate gold contours, jewel-like ocean backdrop, face remains expressive painted enamel and recognizable, elegant collector medallion feel but no thick external border; gemstone glints restrained. Subject: Yamato adult, long white hair transitioning turquoise at ends, red horns fully fit within circle, orange eyes, gold hoop earrings, white sleeveless kimono and red trim, purple-white thick rope behind shoulders, confident friendly smile. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-63f04456-8449-4c89-be14-0f4bb9320dac.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Cloisonne enamel texture and gold contours visible",
+          "Character canonical face, hair and key accessories recognizable",
+          "Circular portrait composition reviewed; ornaments meet the circular crop"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          1,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 261008,
+        "sha256": "ff19a09f6728f65707036f008536443b8c98ca800d9f04f646bcb6994baa8c6c",
+        "sourceSha256": "ad4defa2c85ffa488e01b2b489fc458b6e6eb0e2a751d6989e5663a15f0fd828"
+      }
+    },
+    {
+      "id": 177,
+      "character": "鷹眼",
+      "name": "鷹眼・琺瑯寶彩",
+      "style": "enamel-jewel",
+      "styleDescription": "Fine cloisonne enamel jewelry illustration, richly colored glossy enamel inlays separated by delicate gold contours, jewel-like ocean backdrop, face remains expressive painted enamel and recognizable, elegant collector medallion feel but no thick external border; gemstone glints restrained.",
+      "rarity": "legend",
+      "identity": "Dracule Mihawk adult, black wide-brimmed hat with white plume fitting completely within disc, black pointed beard and mustache, unmistakable golden concentric-ring eyes, burgundy patterned coat and gold cross necklace.",
+      "output": "public/images/board/avatars/177.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Fine cloisonne enamel jewelry illustration, richly colored glossy enamel inlays separated by delicate gold contours, jewel-like ocean backdrop, face remains expressive painted enamel and recognizable, elegant collector medallion feel but no thick external border; gemstone glints restrained. Subject: Dracule Mihawk adult, black wide-brimmed hat with white plume fitting completely within disc, black pointed beard and mustache, unmistakable golden concentric-ring eyes, burgundy patterned coat and gold cross necklace. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-5e25c92d-f453-4b0e-9cf7-bf484b68b13e.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Cloisonne enamel texture and gold contours visible",
+          "Character canonical face, hair and key accessories recognizable",
+          "Circular portrait composition reviewed; ornaments meet the circular crop"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 255890,
+        "sha256": "e674dd1a38a13a3e7007994125c18a109e4b0408db7574f56a72dfd7535f5953",
+        "sourceSha256": "d8666c34579dbc5dfe78c7fa968eab311b09b96604be9884e5de1dbc13da8c8d"
+      }
+    },
+    {
+      "id": 178,
+      "character": "羅傑",
+      "name": "羅傑・海圖銅刻",
+      "style": "chart-engraving",
+      "styleDescription": "Antique maritime copperplate engraved illustration, fine confident crosshatching etched in indigo and warm copper on ivory chart paper, two restrained color inks. Character identity exact, circular interior features subtle compass arcs, waves and contour lines with NO text or fake writing.",
+      "rarity": "epic",
+      "identity": "Gol D. Roger adult pirate king, thick black hair, immense curved black mustache, red captain coat with gold epaulettes, red pirate captain hat with skull motif, huge fearless grin.",
+      "output": "public/images/board/avatars/178.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Antique maritime copperplate engraved illustration, fine confident crosshatching etched in indigo and warm copper on ivory chart paper, two restrained color inks. Character identity exact, circular interior features subtle compass arcs, waves and contour lines with NO text or fake writing. Subject: Gol D. Roger adult pirate king, thick black hair, immense curved black mustache, red captain coat with gold epaulettes, red pirate captain hat with skull motif, huge fearless grin. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-3e3c403d-2051-4b79-ab4c-0b88953044b3.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Engraved crosshatching and antique chart interior visible",
+          "Character canonical age and distinctive beard/mustache or face reviewed",
+          "Complete circular composition reviewed"
+        ]
+      },
+      "discardedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-07228a04-af4a-4530-acd3-e200ecd2f235.png",
+      "editPrompt": "Clean alpha outside circle; preserve artwork.",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 284736,
+        "sha256": "043eaa99cfe57bba22b97dcde6edf27c619afe01b2127b685275560fe8ba4208",
+        "sourceSha256": "52dbff3d65c860f3436fd1589f7a6ad92fdfaf0b14fdac5c21e46ea840c894d9"
+      }
+    },
+    {
+      "id": 179,
+      "character": "雷利",
+      "name": "雷利・海圖銅刻",
+      "style": "chart-engraving",
+      "styleDescription": "Antique maritime copperplate engraved illustration, fine confident crosshatching etched in indigo and warm copper on ivory chart paper, two restrained color inks. Character identity exact, circular interior features subtle compass arcs, waves and contour lines with NO text or fake writing.",
+      "rarity": "epic",
+      "identity": "Silvers Rayleigh elderly, long swept-back white hair, white beard, round thin glasses, vertical scar at his own RIGHT eye viewer-left, calm knowing smile, simple light cloak collar.",
+      "output": "public/images/board/avatars/179.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Antique maritime copperplate engraved illustration, fine confident crosshatching etched in indigo and warm copper on ivory chart paper, two restrained color inks. Character identity exact, circular interior features subtle compass arcs, waves and contour lines with NO text or fake writing. Subject: Silvers Rayleigh elderly, long swept-back white hair, white beard, round thin glasses, vertical scar at his own RIGHT eye viewer-left, calm knowing smile, simple light cloak collar. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-250ccf68-fd8d-4985-8718-c2ceb4f119d0.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Engraved crosshatching and antique chart interior visible",
+          "Character canonical age and distinctive beard/mustache or face reviewed",
+          "Complete circular composition reviewed"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 341526,
+        "sha256": "28954376da5df79dfa6870f588a8342507cc6f51fe1ce613bdc03656efb4839f",
+        "sourceSha256": "7a3663020165fcfea07ead581e8dbef1e349f00577ea81d62a6b3186e8388f9e"
+      }
+    },
+    {
+      "id": 180,
+      "character": "白鬍子",
+      "name": "白鬍子・海圖銅刻",
+      "style": "chart-engraving",
+      "styleDescription": "Antique maritime copperplate engraved illustration, fine confident crosshatching etched in indigo and warm copper on ivory chart paper, two restrained color inks. Character identity exact, circular interior features subtle compass arcs, waves and contour lines with NO text or fake writing.",
+      "rarity": "epic",
+      "identity": "Edward Newgate Whitebeard older adult, huge distinctive white crescent mustache pointing upward, long rugged face with wrinkles, black bandana, bare broad shoulders and white captain coat with gold epaulettes, formidable composed smile. NO beard.",
+      "output": "public/images/board/avatars/180.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Antique maritime copperplate engraved illustration, fine confident crosshatching etched in indigo and warm copper on ivory chart paper, two restrained color inks. Character identity exact, circular interior features subtle compass arcs, waves and contour lines with NO text or fake writing. Subject: Edward Newgate Whitebeard older adult, huge distinctive white crescent mustache pointing upward, long rugged face with wrinkles, black bandana, bare broad shoulders and white captain coat with gold epaulettes, formidable composed smile. NO beard. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-8c0544d4-fbf9-421e-a378-82b34b2e4f1d.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Engraved crosshatching and antique chart interior visible",
+          "Character canonical age and distinctive beard/mustache or face reviewed",
+          "Complete circular composition reviewed"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 320360,
+        "sha256": "3f3366015c8fb7c001fae47eb8b85a9c099273bc2b3f4fb57969a307923909a8",
+        "sourceSha256": "70fac190cbfcb8933a4d3a97174b2519408677f72d3b2ae9cd0c03952408b001"
+      }
+    },
+    {
+      "id": 181,
+      "character": "卡普",
+      "name": "卡普・海圖銅刻",
+      "style": "chart-engraving",
+      "styleDescription": "Antique maritime copperplate engraved illustration, fine confident crosshatching etched in indigo and warm copper on ivory chart paper, two restrained color inks. Character identity exact, circular interior features subtle compass arcs, waves and contour lines with NO text or fake writing.",
+      "rarity": "epic",
+      "identity": "Monkey D. Garp elderly, short spiky gray hair, gray beard and mustache, scar at own LEFT eye viewer-right, broad joyful laughing smile, white Marine coat with epaulettes over dark shirt.",
+      "output": "public/images/board/avatars/181.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Antique maritime copperplate engraved illustration, fine confident crosshatching etched in indigo and warm copper on ivory chart paper, two restrained color inks. Character identity exact, circular interior features subtle compass arcs, waves and contour lines with NO text or fake writing. Subject: Monkey D. Garp elderly, short spiky gray hair, gray beard and mustache, scar at own LEFT eye viewer-right, broad joyful laughing smile, white Marine coat with epaulettes over dark shirt. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-09a5f449-841f-4c47-ba88-20333b2a95fb.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Engraved crosshatching and antique chart interior visible",
+          "Character canonical age and distinctive beard/mustache or face reviewed",
+          "Complete circular composition reviewed"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 336534,
+        "sha256": "35ff32fbf50cc0663990607ce7fed5df3770b3c5d10a939a5312fa2a0e58bbcf",
+        "sourceSha256": "5c689d5fa234238ebda96448232a1b026fd5d4f9528b75ec0e40c2019348bc3b"
+      }
+    },
+    {
+      "id": 182,
+      "character": "斯摩格",
+      "name": "斯摩格・海圖銅刻",
+      "style": "chart-engraving",
+      "styleDescription": "Antique maritime copperplate engraved illustration, fine confident crosshatching etched in indigo and warm copper on ivory chart paper, two restrained color inks. Character identity exact, circular interior features subtle compass arcs, waves and contour lines with NO text or fake writing.",
+      "rarity": "epic",
+      "identity": "Smoker adult, short swept-back white hair, rugged squared jaw, confident stern expression, thick white-fur collar on green Marine coat, two unlit cigars held at mouth, pale smoke curls remain inside circle.",
+      "output": "public/images/board/avatars/182.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Antique maritime copperplate engraved illustration, fine confident crosshatching etched in indigo and warm copper on ivory chart paper, two restrained color inks. Character identity exact, circular interior features subtle compass arcs, waves and contour lines with NO text or fake writing. Subject: Smoker adult, short swept-back white hair, rugged squared jaw, confident stern expression, thick white-fur collar on green Marine coat, two unlit cigars held at mouth, pale smoke curls remain inside circle. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-36859577-be49-4141-929f-807e096c6571.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Engraved crosshatching and antique chart interior visible",
+          "Character canonical age and distinctive beard/mustache or face reviewed",
+          "Complete circular composition reviewed"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 345580,
+        "sha256": "bf0b39e2a322bc5736719a58f539dbc4a67d62128261b487d419167ca0218e96",
+        "sourceSha256": "1d9862b226f5cb24bf22d10b4f70c3be3bae137c26d1bfbd475685934e453baa"
+      }
+    },
+    {
+      "id": 183,
+      "character": "魯夫",
+      "name": "魯夫・木刻傳承",
+      "style": "wood-relief",
+      "styleDescription": "Luxurious carved wood bas-relief portrait, warm walnut and honey maple grain, sculpted shallow relief with hand-carved chisel facets, layered carved ocean waves behind portrait; selective restrained natural character colors worked into wood, clearly recognizable faces; no text or external frame.",
+      "rarity": "legend",
+      "identity": "Monkey D. Luffy, black tousled hair and straw hat with red band, scar under own LEFT eye viewer-right, youthful natural proportion, joyful open grin, red vest upper shoulders.",
+      "output": "public/images/board/avatars/183.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Luxurious carved wood bas-relief portrait, warm walnut and honey maple grain, sculpted shallow relief with hand-carved chisel facets, layered carved ocean waves behind portrait; selective restrained natural character colors worked into wood, clearly recognizable faces; no text or external frame. Subject: Monkey D. Luffy, black tousled hair and straw hat with red band, scar under own LEFT eye viewer-right, youthful natural proportion, joyful open grin, red vest upper shoulders. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-09d9c8a0-419d-4da6-bece-f7cf64117f66.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Wood bas-relief facets and grain visibly differentiated",
+          "Natural character face and key hairstyle/scar identity reviewed",
+          "Complete circular composition reviewed"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 269966,
+        "sha256": "047bb11bee8892cb66447fe7bbde053e1d0681e20a334bcc779fce1344faf35b",
+        "sourceSha256": "0be70729ca502a2ab94eb8cb111af783f430f63472cd6a4673f0c671d70a9f20"
+      }
+    },
+    {
+      "id": 184,
+      "character": "索隆",
+      "name": "索隆・木刻傳承",
+      "style": "wood-relief",
+      "styleDescription": "Luxurious carved wood bas-relief portrait, warm walnut and honey maple grain, sculpted shallow relief with hand-carved chisel facets, layered carved ocean waves behind portrait; selective restrained natural character colors worked into wood, clearly recognizable faces; no text or external frame.",
+      "rarity": "legend",
+      "identity": "Roronoa Zoro after timeskip, moss green spiky hair, own LEFT eye viewer-right closed with vertical scar, three gold earrings on own LEFT ear, dark green robe collar, confident restrained smile.",
+      "output": "public/images/board/avatars/184.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Luxurious carved wood bas-relief portrait, warm walnut and honey maple grain, sculpted shallow relief with hand-carved chisel facets, layered carved ocean waves behind portrait; selective restrained natural character colors worked into wood, clearly recognizable faces; no text or external frame. Subject: Roronoa Zoro after timeskip, moss green spiky hair, own LEFT eye viewer-right closed with vertical scar, three gold earrings on own LEFT ear, dark green robe collar, confident restrained smile. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-9bdc842c-5975-4d9e-a21b-26bbf77522c2.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Wood bas-relief facets and grain visibly differentiated",
+          "Natural character face and key hairstyle/scar identity reviewed",
+          "Complete circular composition reviewed"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 225854,
+        "sha256": "d5b1d20863d77775f9ad4094fe1645d11fb7d7e5e89e6c5aa1b2c9679299e1c9",
+        "sourceSha256": "19f8ec6e40c0f0a284c5ff442e0b3b0b04331e9a1a8c1aff278b994e45c73ae8"
+      }
+    },
+    {
+      "id": 185,
+      "character": "吉貝爾",
+      "name": "吉貝爾・木刻傳承",
+      "style": "wood-relief",
+      "styleDescription": "Luxurious carved wood bas-relief portrait, warm walnut and honey maple grain, sculpted shallow relief with hand-carved chisel facets, layered carved ocean waves behind portrait; selective restrained natural character colors worked into wood, clearly recognizable faces; no text or external frame.",
+      "rarity": "legend",
+      "identity": "Jinbe whale-shark fish-man, blue skin, black curled hair and topknot, very broad nose, two short upturned lower-jaw tusks, orange patterned kimono collar, calm kind smile.",
+      "output": "public/images/board/avatars/185.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Luxurious carved wood bas-relief portrait, warm walnut and honey maple grain, sculpted shallow relief with hand-carved chisel facets, layered carved ocean waves behind portrait; selective restrained natural character colors worked into wood, clearly recognizable faces; no text or external frame. Subject: Jinbe whale-shark fish-man, blue skin, black curled hair and topknot, very broad nose, two short upturned lower-jaw tusks, orange patterned kimono collar, calm kind smile. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-31055633-4388-4594-9bc7-7763239f69d1.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Wood bas-relief facets and grain visibly differentiated",
+          "Natural character face and key hairstyle/scar identity reviewed",
+          "Complete circular composition reviewed"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 255326,
+        "sha256": "763112205a4129f84a2d0d1f898b9254dd1b3da5ed040ef56d622000dddf7dd5",
+        "sourceSha256": "f681a1d6c022f1ccfee114374101ac71fbb2036ece77d429eaa04412361957b6"
+      }
+    },
+    {
+      "id": 186,
+      "character": "紅髮傑克",
+      "name": "紅髮傑克・木刻傳承",
+      "style": "wood-relief",
+      "styleDescription": "Luxurious carved wood bas-relief portrait, warm walnut and honey maple grain, sculpted shallow relief with hand-carved chisel facets, layered carved ocean waves behind portrait; selective restrained natural character colors worked into wood, clearly recognizable faces; no text or external frame.",
+      "rarity": "legend",
+      "identity": "Shanks, medium red hair, red-brown facial stubble, three parallel diagonal scars across own LEFT eye viewer-right, white shirt and black cape, mellow confident smile.",
+      "output": "public/images/board/avatars/186.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Luxurious carved wood bas-relief portrait, warm walnut and honey maple grain, sculpted shallow relief with hand-carved chisel facets, layered carved ocean waves behind portrait; selective restrained natural character colors worked into wood, clearly recognizable faces; no text or external frame. Subject: Shanks, medium red hair, red-brown facial stubble, three parallel diagonal scars across own LEFT eye viewer-right, white shirt and black cape, mellow confident smile. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle. All THREE scar lines must be clearly visible across own LEFT eye (viewer's right); arrange red hair away from this scar, use short medium red hair not long hair.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-be53fb1e-c353-4e37-9665-880e2b4ed6f3.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Wood bas-relief facets and grain visibly differentiated",
+          "Natural character face and key hairstyle/scar identity reviewed",
+          "Complete circular composition reviewed"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 236488,
+        "sha256": "dd80b8211872ca3147e3b343e620305dd4d5887c4404f8866582c2fef4ad3757",
+        "sourceSha256": "1804bb4a45f7c89c0b5ca8dcfe0b036993a9f40af25fae757091a6c3fd09d825"
+      }
+    },
+    {
+      "id": 187,
+      "character": "御田",
+      "name": "御田・木刻傳承",
+      "style": "wood-relief",
+      "styleDescription": "Luxurious carved wood bas-relief portrait, warm walnut and honey maple grain, sculpted shallow relief with hand-carved chisel facets, layered carved ocean waves behind portrait; selective restrained natural character colors worked into wood, clearly recognizable faces; no text or external frame.",
+      "rarity": "legend",
+      "identity": "Kozuki Oden adult, long black hair with distinctive large flat circular topknot forming the broad mushroom-like hair crown, black thick eyebrows, strong squared face, confident broad grin, orange kimono collar, thick purple and white rope loop behind shoulders.",
+      "output": "public/images/board/avatars/187.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect edge-to-edge circular disc. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. Luxurious carved wood bas-relief portrait, warm walnut and honey maple grain, sculpted shallow relief with hand-carved chisel facets, layered carved ocean waves behind portrait; selective restrained natural character colors worked into wood, clearly recognizable faces; no text or external frame. Subject: Kozuki Oden adult, long black hair with distinctive large flat circular topknot forming the broad mushroom-like hair crown, black thick eyebrows, strong squared face, confident broad grin, orange kimono collar, thick purple and white rope loop behind shoulders. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle.",
+      "generator": "builtin image_gen",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-d865dbc5-3d77-4b46-b9bc-b2a8a0331d86.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Wood bas-relief facets and grain visibly differentiated",
+          "Natural character face and key hairstyle/scar identity reviewed",
+          "Complete circular composition reviewed"
+        ]
+      },
+      "discardedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a125bc-99c1-78f3-aeb3-0b1f72989784\\exec-71110f99-08df-43d7-9480-bf4a86826b93.png",
+      "editPrompt": "Clean alpha outside circle; preserve artwork.",
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner48MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 204992,
+        "sha256": "0479b214293f0d3ad7e3f2427d629b8613ae0e24c873bd9c5bb6ac47a95f8658",
+        "sourceSha256": "bba9dd375b820a7c20a3960ed85140c3521b0ee556a480b20d072451643223b6"
+      }
+    },
+    {
+      "id": 188,
+      "character": "艾斯",
+      "name": "艾斯・彩頁躍動",
+      "style": "manga-color-halftone",
+      "styleDescription": "High-end colorful shonen manga color-opening illustration, bold energetic ink contours, crisp cel-shading and deliberate visible halftone dot textures, dynamic colored wave shapes and speedline accents inside disc, vivid character-specific palette. Adult character identity and natural proportions.",
+      "rarity": "epic",
+      "identity": "Portgas D. Ace, slim athletic young-adult face, freckles across cheeks, black tousled hair, orange hat with two blue circular face badges, red-bead necklace, bright mischievous grin, bare shoulders. Flame-colored orange halftone backdrop.",
+      "output": "public/images/board/avatars/188.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect circular disc that fills 96% of the square width. Absolutely transparent alpha outside the circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. STYLE: High-end colorful shonen manga color-opening illustration, bold energetic ink contours, crisp cel-shading and deliberate visible halftone dot textures, dynamic colored wave shapes and speedline accents inside disc, vivid character-specific palette. Adult character identity and natural proportions. SUBJECT: Portgas D. Ace, slim athletic young-adult face, freckles across cheeks, black tousled hair, orange hat with two BLUE circular face badges, one smiling and one frowning, red-bead necklace, bright mischievous grin, bare shoulders. Flame-colored orange halftone backdrop. Full complete circular shape, no cropping the circular edge; all four corner pixels and surrounding corner regions are completely transparent alpha=0.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-87341cae-d87e-4e59-857f-877e76018ecd.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Ace narrow adult face, freckles, orange hat, blue happy/sad badges, red bead necklace",
+          "Complete circular halftone illustration, source visually reviewed"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner32MaxAlpha": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 256174,
+        "sha256": "9472a4264134a27d2c89781207c0e42238be2f386d64586882195169d42ff33f",
+        "sourceSha256": "8f54aca53e8b00b182ea5a3d0254d10410b1cbe066b8d33435ae87d442b6553a"
+      }
+    },
+    {
+      "id": 189,
+      "character": "香吉士",
+      "name": "香吉士・彩頁躍動",
+      "style": "manga-color-halftone",
+      "styleDescription": "High-end colorful shonen manga color-opening illustration, bold energetic ink contours, crisp cel-shading and deliberate visible halftone dot textures, dynamic colored wave shapes and speedline accents inside disc, vivid character-specific palette. Adult character identity and natural proportions.",
+      "rarity": "epic",
+      "identity": "Sanji post-timeskip, slim angular face, blond hair completely covers own RIGHT eye viewer-left, visible own LEFT eye with curly eyebrow viewer-right, small chin beard, black suit blue shirt, confident charming slight smile. Cobalt and lemon halftones.",
+      "output": "public/images/board/avatars/189.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect circular disc filling 96% of canvas width. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. High-end colorful shonen manga color-opening illustration, bold energetic ink contours, crisp cel-shading and deliberate visible halftone dot textures, dynamic colored wave shapes and speedline accents inside disc, vivid character-specific palette. Adult character identity and natural proportions. Subject: Sanji post-timeskip, slim angular face, blond hair completely covers own RIGHT eye viewer-left, visible own LEFT eye with curly eyebrow viewer-right, small chin beard, black suit blue shirt, confident charming slight smile. Cobalt and lemon halftones. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle. Preserve a completely empty transparent margin outside the disc with all actual four corner pixels exactly zero alpha.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-0c629f9f-10cf-46d9-aa37-756560fabb4d.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Sanji post-timeskip hair covers own right eye, visible inner curly eyebrow, angular face, black suit/blue shirt and chin beard.",
+          "Root inspected full generated image; circular manga halftone composition accepted"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner32MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 227836,
+        "sha256": "cba116e0aa3dbb1087ffb2379fbebe398752d56c3852a18a3aa62580ed26716b",
+        "sourceSha256": "1755c25a553e026d5f1ce00f0e7874fa1bd461417ea90f63c717a553569ab247"
+      }
+    },
+    {
+      "id": 190,
+      "character": "娜美",
+      "name": "娜美・彩頁躍動",
+      "style": "manga-color-halftone",
+      "styleDescription": "High-end colorful shonen manga color-opening illustration, bold energetic ink contours, crisp cel-shading and deliberate visible halftone dot textures, dynamic colored wave shapes and speedline accents inside disc, vivid character-specific palette. Adult character identity and natural proportions.",
+      "rarity": "epic",
+      "identity": "Nami after timeskip, long orange wavy hair, brown eyes, turquoise white striped bikini straps at shoulders, blue pinwheel-tangerine tattoo on own LEFT shoulder viewer-right, confident playful smile. Sea teal orange halftones.",
+      "output": "public/images/board/avatars/190.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect circular disc filling 96% of canvas width. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. High-end colorful shonen manga color-opening illustration, bold energetic ink contours, crisp cel-shading and deliberate visible halftone dot textures, dynamic colored wave shapes and speedline accents inside disc, vivid character-specific palette. Adult character identity and natural proportions. Subject: Nami after timeskip, long orange wavy hair, brown eyes, turquoise white striped bikini straps at shoulders, blue pinwheel-tangerine tattoo on own LEFT shoulder viewer-right, confident playful smile. Sea teal orange halftones. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle. Preserve a completely empty transparent margin outside the disc with all actual four corner pixels exactly zero alpha.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-681377e5-6c56-4950-afd6-8f7f45c0e8a5.png",
+      "discardedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-5dbdc177-8588-408b-84f1-a9f745821e93.png",
+      "editPrompt": "Edit this Nami circular avatar. Keep her recognizable adult face, long orange hair, brown eyes, pose, turquoise/orange manga halftone art style and perfectly round alpha silhouette. Recompose as a close head-and-neck portrait: raise the bottom portrait crop to the collarbones, so BOTH upper arms and the shoulder tattoo are entirely OUTSIDE the circular picture. The blue tattoo currently shown is inaccurate and must not be visible anywhere. Her long orange hair may drape naturally across shoulder tips; only tiny strap hints at the bottom. Preserve beautiful waves and orange graphic sun behind her, crisp manga shading, no lettering, no new symbols. Everything stays inside a circle filling about 96% of a square. Completely true transparent outside with exact zero-alpha corner pixels, no stray colored dots.",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Nami adult long orange hair and brown eyes; final close-up keeps tattooed upper arm outside frame, no invented tattoo exposed.",
+          "Root inspected full generated image; circular manga halftone composition accepted"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner32MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 214664,
+        "sha256": "e5bc644d716b53601185549cdd114760d989eeee04083b10ef2a8344afbb3275",
+        "sourceSha256": "111e22c149e6c9a59af37b25f87a608396f7c1932dfd68b0d490433f4d74a948"
+      }
+    },
+    {
+      "id": 191,
+      "character": "羅賓",
+      "name": "羅賓・彩頁躍動",
+      "style": "manga-color-halftone",
+      "styleDescription": "High-end colorful shonen manga color-opening illustration, bold energetic ink contours, crisp cel-shading and deliberate visible halftone dot textures, dynamic colored wave shapes and speedline accents inside disc, vivid character-specific palette. Adult character identity and natural proportions.",
+      "rarity": "epic",
+      "identity": "Nico Robin after timeskip, long center-parted black hair, blue eyes, sunglasses on head, dark blue sleeveless top collar, long straight nose, knowing serene smile. Violet and azure halftones.",
+      "output": "public/images/board/avatars/191.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect circular disc filling 96% of canvas width. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. High-end colorful shonen manga color-opening illustration, bold energetic ink contours, crisp cel-shading and deliberate visible halftone dot textures, dynamic colored wave shapes and speedline accents inside disc, vivid character-specific palette. Adult character identity and natural proportions. Subject: Nico Robin after timeskip, long center-parted black hair, blue eyes, sunglasses on head, dark blue sleeveless top collar, long straight nose, knowing serene smile. Violet and azure halftones. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle. Preserve a completely empty transparent margin outside the disc with all actual four corner pixels exactly zero alpha.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-06e9504c-313e-4db0-8abe-4e5e5a6db5a7.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Robin adult long black hair, blue eyes, nose shape, sunglasses and sleeveless blue zipped collar match post-timeskip identity.",
+          "Root inspected full generated image; circular manga halftone composition accepted"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner32MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 204826,
+        "sha256": "b4f887cb0f32a5b22f790d4356c638f9596ec6eb8781ca6da7cfd20a412fc8f1",
+        "sourceSha256": "8cc267b6298e37152fc17202ddc382878c86f9379a3ff962d1456d0e45a0b7a4"
+      }
+    },
+    {
+      "id": 192,
+      "character": "卡塔克利",
+      "name": "卡塔克利・彩頁躍動",
+      "style": "manga-color-halftone",
+      "styleDescription": "High-end colorful shonen manga color-opening illustration, bold energetic ink contours, crisp cel-shading and deliberate visible halftone dot textures, dynamic colored wave shapes and speedline accents inside disc, vivid character-specific palette. Adult character identity and natural proportions.",
+      "rarity": "epic",
+      "identity": "Charlotte Katakuri adult, short spiky maroon hair, angular face with scars and stitch-like marks near mouth but mouth entirely hidden by thick white feather scarf, narrow intense crimson eyes, black leather shoulder straps, imposing mature proportions. Berry and charcoal halftones.",
+      "output": "public/images/board/avatars/192.webp",
+      "prompt": "Use case: stylized-concept. Create ONE premium ONE PIECE game avatar, square 1:1 canvas, head-and-shoulders portrait with natural young-adult/adult anatomy and medium head size. All artwork inside a perfect circular disc filling 96% of canvas width. Absolutely transparent alpha outside circular disc, no shadow or stray pixels in transparent corners. No text, letters, watermark, signature, separate frame, hands or extra characters. Recognizable canonical character, no original character. High-end colorful shonen manga color-opening illustration, bold energetic ink contours, crisp cel-shading and deliberate visible halftone dot textures, dynamic colored wave shapes and speedline accents inside disc, vivid character-specific palette. Adult character identity and natural proportions. Subject: Charlotte Katakuri adult, short spiky maroon hair, angular face with scars and stitch-like marks near mouth but mouth entirely hidden by thick white feather scarf, narrow intense crimson eyes, black leather shoulder straps, imposing mature proportions. Berry and charcoal halftones. Full complete circular shape, no cropping the circular edge, alpha=0 at every point well outside the circle. Preserve a completely empty transparent margin outside the disc with all actual four corner pixels exactly zero alpha.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-c921129a-3d29-4a21-8f6f-f6127f8dfc00.png",
+      "visualQA": {
+        "reviewed": true,
+        "checks": [
+          "Katakuri short maroon hair, red eyes, stitched cheek, covered mouth, feather scarf, spiked black shoulder strap.",
+          "Root inspected full generated image; circular manga halftone composition accepted"
+        ]
+      },
+      "pixelQA": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "corner32MaxAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 231724,
+        "sha256": "3a0eab6a2448402d6d7f4b3de60e9a970b15b59254dab8e0eb0279f21827e916",
+        "sourceSha256": "3dbb310eea9f159bf9279ad5075bf9e34adc066e49be80b9f0b838fad0a4963a"
+      }
+    }
+  ]
+}

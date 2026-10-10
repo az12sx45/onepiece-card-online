@@ -15,7 +15,7 @@
   const ROOM_TYPES = ['room_scene', 'room_furniture', 'room_character'];
   const SLOTS = [['header', '上方'], ['side', '側邊'], ['footer', '下方']];
   const RARITY = { common: '普通', rare: '稀有', epic: '史詩', legend: '傳說' };
-  const MAX_AVATAR_ID = 122;
+  const MAX_AVATAR_ID = 222;
   // Versioned profile operations ride the existing authenticated desktop bridge.
   // The server validates catalog IDs, ownership and permissions for each action.
   const profileCommand = (operation, payload = {}, requestId = crypto.randomUUID()) => api.commandLauncherLife({

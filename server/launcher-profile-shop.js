@@ -26,7 +26,28 @@ const avatarNames = [
   '索隆・和之國・浮世浪', '魯夫・和之國・浮世浪', '娜美・和之國・浮世浪', '羅賓・和之國・浮世浪', '甚平・浮世浪',
   '薇薇・水彩航信', '白星・水彩航信', '培羅娜・水彩航信', '凱洛特・水彩航信', '喬巴・水彩航信',
   '漢考克・彩窗', '羅賓・彩窗', '布魯克・彩窗', '佛朗基・彩窗', '騙人布・彩窗',
-  '香吉士・霓光', '娜美・霓光', '艾斯・霓光', '薩波・霓光', '魯夫・尼卡・霓光'
+  '香吉士・霓光', '娜美・霓光', '艾斯・霓光', '薩波・霓光', '魯夫・尼卡・霓光',
+  // r58: one hundred independently generated portraits, IDs 123–222.
+  "魯夫・懷舊動畫", "索隆・懷舊動畫", "娜美・懷舊動畫", "香吉士・懷舊動畫", "騙人布・懷舊動畫",
+  "紅髮傑克・油彩典藏", "鷹眼・油彩典藏", "漢考克・油彩典藏", "克洛克達爾・油彩典藏", "雷利・油彩典藏",
+  "艾斯・冒險厚塗", "薩波・冒險厚塗", "羅・冒險厚塗", "基德・冒險厚塗", "卡塔克利・冒險厚塗",
+  "喬巴・彩鉛航記", "薇薇・彩鉛航記", "羅賓・彩鉛航記", "佛朗基・彩鉛航記", "布魯克・彩鉛航記",
+  "培羅娜・柔彩海風", "凱洛特・柔彩海風", "白星・柔彩海風", "可亞拉・柔彩海風", "大和・柔彩海風",
+  "吉貝爾・鋼筆航誌", "馬可・鋼筆航誌", "斯摩格・鋼筆航誌", "達絲琪・鋼筆航誌", "克比・鋼筆航誌",
+  "白鬍子・黑金刻印", "羅傑・黑金刻印", "凱多・黑金刻印", "燼・黑金刻印", "多佛朗明哥・黑金刻印",
+  "魯夫・疊紙航旅", "娜美・疊紙航旅", "羅賓・疊紙航旅", "騙人布・疊紙航旅", "吉貝爾・疊紙航旅",
+  "香吉士・手塑物語", "艾斯・手塑物語", "薩波・手塑物語", "紅髮傑克・手塑物語", "培羅娜・手塑物語",
+  "索隆・像素冒險", "羅・像素冒險", "佛朗基・像素冒險", "布魯克・像素冒險", "漢考克・像素冒險",
+  "薇薇・琺瑯寶彩", "白星・琺瑯寶彩", "凱洛特・琺瑯寶彩", "大和・琺瑯寶彩", "鷹眼・琺瑯寶彩",
+  "羅傑・海圖銅刻", "雷利・海圖銅刻", "白鬍子・海圖銅刻", "卡普・海圖銅刻", "斯摩格・海圖銅刻",
+  "魯夫・木刻傳承", "索隆・木刻傳承", "吉貝爾・木刻傳承", "紅髮傑克・木刻傳承", "御田・木刻傳承",
+  "艾斯・彩頁躍動", "香吉士・彩頁躍動", "娜美・彩頁躍動", "羅賓・彩頁躍動", "卡塔克利・彩頁躍動",
+  "魯夫・夜光彩墨", "艾斯・夜光彩墨", "馬可・夜光彩墨", "羅・夜光彩墨", "布魯克・夜光彩墨",
+  "娜美・織線航章", "羅賓・織線航章", "薇薇・織線航章", "香吉士・織線航章", "吉貝爾・織線航章",
+  "漢考克・航海映金", "克洛克達爾・航海映金", "多佛朗明哥・航海映金", "羅布・路基・航海映金", "紅髮傑克・航海映金",
+  "索隆・炭筆航誌", "雷利・炭筆航誌", "白鬍子・炭筆航誌", "薩波・炭筆航誌", "卡普・炭筆航誌",
+  "羅傑・赤潮刻印", "魯夫・赤潮刻印", "卡塔克利・赤潮刻印", "基德・赤潮刻印", "香吉士・赤潮刻印",
+  "娜美・粉彩航夢", "培羅娜・粉彩航夢", "羅賓・粉彩航夢", "艾斯・粉彩航夢", "喬巴・粉彩航夢"
 ];
 const avatarRarity = [
   'common', 'common', 'common', 'common', 'common', 'common', 'common',
@@ -43,7 +64,28 @@ const avatarRarity = [
   'rare', 'rare', 'rare', 'rare', 'rare',
   'rare', 'rare', 'rare', 'rare', 'rare',
   'epic', 'epic', 'epic', 'epic', 'epic',
-  'epic', 'epic', 'epic', 'epic', 'epic'
+  'epic', 'epic', 'epic', 'epic', 'epic',
+  // r58: one hundred independently generated portraits, IDs 123–222.
+  "rare", "rare", "rare", "rare", "rare",
+  "epic", "epic", "epic", "epic", "epic",
+  "epic", "epic", "epic", "epic", "epic",
+  "rare", "rare", "rare", "rare", "rare",
+  "rare", "rare", "rare", "rare", "rare",
+  "rare", "rare", "rare", "rare", "rare",
+  "legend", "legend", "legend", "legend", "legend",
+  "epic", "epic", "epic", "epic", "epic",
+  "epic", "epic", "epic", "epic", "epic",
+  "rare", "rare", "rare", "rare", "rare",
+  "legend", "legend", "legend", "legend", "legend",
+  "epic", "epic", "epic", "epic", "epic",
+  "legend", "legend", "legend", "legend", "legend",
+  "epic", "epic", "epic", "epic", "epic",
+  "epic", "epic", "epic", "epic", "epic",
+  "epic", "epic", "epic", "epic", "epic",
+  "epic", "epic", "epic", "epic", "epic",
+  "rare", "rare", "rare", "rare", "rare",
+  "rare", "rare", "rare", "rare", "rare",
+  "epic", "epic", "epic", "epic", "epic"
 ];
 const LAUNCHER_AVATAR_MIN = 51;
 const LAUNCHER_AVATAR_MAX = 30 + avatarNames.length;
@@ -487,7 +529,21 @@ function launcherAppearance(stats) {
   return { avatarId: launcherAvatarId, layoutId, backgroundId, frameId, bgmId, bgmIds, guestbookStyleId, commentStyleId, decorations, decorationPlacement };
 }
 const launcherAvatarForRow = (row, appearance = launcherAppearance(object(row?.stats))) =>
-  appearance.avatarId || boundedId(row?.avatar, 50, 8);
+  launcherCard(row || {}).avatarId || appearance.avatarId || boundedId(row?.avatar, 50, 8);
+
+// Project one equipped, ownership-checked avatar into every game's existing
+// profile shape. This is a read projection, never a write to legacy inventories.
+function toGameProfile(row) {
+  if (!row) return null;
+  const stats = object(row.stats), client = object(stats.client);
+  const avatar = launcherAvatarForRow(row);
+  const ownedAvatars = [...new Set([...purchasedCollection(client).avatars,
+    ...launcherOwnedItemIds(stats).map(id => BY_ID.get(id)).filter(item => item?.type === 'avatar').map(item => item.key)])].sort((a, b) => a - b);
+  return { ...row, avatar, stats: { ...stats, client: { ...client,
+    player: { ...object(client.player), avatar },
+    shop: { ...object(client.shop), ownedAvatars }
+  } } };
+}
 const appearanceItems = appearance => ({
   layout: BY_ID.get(appearance.layoutId) || null,
   background: BY_ID.get(appearance.backgroundId) || null,
@@ -621,7 +677,7 @@ function toCardPublicProfile(row) {
   return {
     user_id: count(row.user_id),
     name: String(row.name || '').slice(0, 40),
-    avatar: boundedId(row.avatar, 50, 1),
+    avatar: launcherAvatarForRow(row),
     stats: {
       wall: { id: boundedId(object(stats.wall).id, 8), flagId: boundedId(object(stats.wall).flagId, 15) },
       client: {
@@ -642,10 +698,10 @@ function toCardPublicProfile(row) {
           title: String(object(value).title || '').slice(0, 120),
           name: String(object(value).name || '').slice(0, 60),
           bounty: String(object(value).bounty || '').slice(0, 60),
-          avatarId: boundedId(object(value).avatarId, 50)
+          avatarId: boundedId(object(value).avatarId, LAUNCHER_AVATAR_MAX)
         })).filter(value => value.key).sort((a, b) => b.ts - a.ts).slice(0, 1),
         deluxeUnlocked: numberIds(client.deluxeUnlocked, 0, 19),
-        shop: { ownedAvatars: shop.avatars, ownedWalls: shop.walls, ownedFlags: shop.flags, ownedItems: [] }
+        shop: { ownedAvatars: toGameProfile(row).stats.client.shop.ownedAvatars, ownedWalls: shop.walls, ownedFlags: shop.flags, ownedItems: [] }
       }
     },
     updated_at: row.updated_at || null
@@ -814,6 +870,9 @@ async function changeLauncherItem(pool, secret, itemId, action, capability) {
       await db.query('ROLLBACK');
       return { ok: false, error: 'invalid action' };
     }
+    if (action === 'equip' && item.type === 'avatar' && object(stats.launcherCardV1).avatarId) {
+      stats.launcherCardV1 = { ...stats.launcherCardV1, avatarId: item.key };
+    }
     const updated = await db.query(
       'UPDATE player_profiles SET avatar=$1, stats=$2::jsonb, updated_at=now() WHERE user_id=$3 RETURNING user_id, name, avatar, stats, updated_at',
       [nextAvatar, JSON.stringify(stats), row.user_id]
@@ -916,9 +975,10 @@ async function setLauncherCard(pool, secret, card, capability) {
       return { ok: false, error: 'not_owned' };
     }
     stats.launcherCardV1 = { displayName: card.displayName.trim(), tagline: card.tagline.trim(), avatarId };
+    if (avatarId) stats.launcherAppearanceV1 = { ...launcherAppearance(stats), avatarId: avatarId >= LAUNCHER_AVATAR_MIN ? avatarId : null };
     const updated = await db.query(
-      'UPDATE player_profiles SET stats=$1::jsonb, updated_at=now() WHERE user_id=$2 RETURNING user_id, name, avatar, stats, updated_at',
-      [JSON.stringify(stats), row.user_id]
+      'UPDATE player_profiles SET stats=$1::jsonb, avatar=$3, updated_at=now() WHERE user_id=$2 RETURNING user_id, name, avatar, stats, updated_at',
+      [JSON.stringify(stats), row.user_id, avatarId && avatarId < LAUNCHER_AVATAR_MIN ? String(avatarId) : row.avatar]
     );
     await db.query('COMMIT');
     return { ok: true, profile: toPublicProfile(updated.rows[0], true), shop: toShop(updated.rows[0]) };
@@ -1149,7 +1209,7 @@ const claimLauncherCharacterWork = (pool, secret, itemId, now, capability) => la
 // The capability is an optional final argument so old server callers remain legacy.
 const withRoster = (fn, capabilityIndex) => async (...args) =>
   crewRelease.projectResponse(await fn(...args), args[capabilityIndex]);
-module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop,roomCharacterLimit,
+module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toGameProfile, toShop,roomCharacterLimit,
   getLauncherProfile: withRoster(getLauncherProfile, 4), getLauncherShop: withRoster(getLauncherShop, 3),
   changeLauncherItem: withRoster(changeLauncherItem, 4),
   setLauncherBgmPlaylist: withRoster(setLauncherBgmPlaylist, 3),

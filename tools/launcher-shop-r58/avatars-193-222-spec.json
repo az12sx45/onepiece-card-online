@@ -1,0 +1,311 @@
+{
+  "generator": "builtin image_gen",
+  "size": [
+    735,
+    735
+  ],
+  "format": "WebP RGBA",
+  "shape": "perfect circular portrait; true alpha outside circle",
+  "items": [
+    {
+      "id": 193,
+      "character": "魯夫",
+      "name": "魯夫・夜光彩墨",
+      "style": "luminous-ink",
+      "styleDescription": "Fluid luminous colored ink, indigo-black paper texture inside circle, electric cyan and magenta ink halos, sensitive hand-painted anime facial features, no technological clothing.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/193.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Fluid luminous colored ink, indigo-black paper texture inside circle, electric cyan and magenta ink halos, sensitive hand-painted anime facial features, no technological clothing. SUBJECT: Monkey D. Luffy in his classic pre-timeskip look, straw hat with red band, messy black hair, small stitched scar under his LEFT eye, wide joyous grin, open red vest. Both eyes open."
+    },
+    {
+      "id": 194,
+      "character": "艾斯",
+      "name": "艾斯・夜光彩墨",
+      "style": "luminous-ink",
+      "styleDescription": "Fluid luminous colored ink, indigo-black paper texture inside circle, electric cyan and magenta ink halos, sensitive hand-painted anime facial features, no technological clothing.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/194.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Fluid luminous colored ink, indigo-black paper texture inside circle, electric cyan and magenta ink halos, sensitive hand-painted anime facial features, no technological clothing. SUBJECT: Portgas D. Ace, orange cowboy hat with blue smiling and frowning badges, black wavy hair, freckles across both cheeks, red bead necklace, friendly confident smile, ordinary bare shoulders only, lean natural anatomy."
+    },
+    {
+      "id": 195,
+      "character": "馬可",
+      "name": "馬可・夜光彩墨",
+      "style": "luminous-ink",
+      "styleDescription": "Fluid luminous colored ink, indigo-black paper texture inside circle, electric cyan and magenta ink halos, sensitive hand-painted anime facial features, no technological clothing.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/195.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Fluid luminous colored ink, indigo-black paper texture inside circle, electric cyan and magenta ink halos, sensitive hand-painted anime facial features, no technological clothing. SUBJECT: Marco the Phoenix, adult blond short pineapple-shaped tuft hair, rectangular glasses, short blond chin stubble, relaxed smile, canonical purple open jacket over chest. Blue phoenix fire abstract ink motifs behind head."
+    },
+    {
+      "id": 196,
+      "character": "羅",
+      "name": "羅・夜光彩墨",
+      "style": "luminous-ink",
+      "styleDescription": "Fluid luminous colored ink, indigo-black paper texture inside circle, electric cyan and magenta ink halos, sensitive hand-painted anime facial features, no technological clothing.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/196.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Fluid luminous colored ink, indigo-black paper texture inside circle, electric cyan and magenta ink halos, sensitive hand-painted anime facial features, no technological clothing. SUBJECT: Trafalgar Law, white fuzzy cap with irregular dark spots, short black sideburns and goatee, gold hoop earrings, yellow hoodie neckline, calculating calm eyes. No sword obscuring face."
+    },
+    {
+      "id": 197,
+      "character": "布魯克",
+      "name": "布魯克・夜光彩墨",
+      "style": "luminous-ink",
+      "styleDescription": "Fluid luminous colored ink, indigo-black paper texture inside circle, electric cyan and magenta ink halos, sensitive hand-painted anime facial features, no technological clothing.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/197.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Fluid luminous colored ink, indigo-black paper texture inside circle, electric cyan and magenta ink halos, sensitive hand-painted anime facial features, no technological clothing. SUBJECT: Brook, friendly grinning living skeleton with unmistakable black round afro, black top hat, orange feather boa and blue cravat as Soul King; black eye sockets remain skeletal, never human eyes or skin. Musical ink flourishes without actual musical notation."
+    },
+    {
+      "id": 198,
+      "character": "娜美",
+      "name": "娜美・織線航章",
+      "style": "embroidered-portrait",
+      "styleDescription": "Fine embroidered portrait made from directional satin stitches and woven thread texture, nuanced recognizable anime face, textile ring and nautical stitch pattern. All stitching contained inside round silhouette.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/198.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Fine embroidered portrait made from directional satin stitches and woven thread texture, nuanced recognizable anime face, textile ring and nautical stitch pattern. All stitching contained inside round silhouette. SUBJECT: Nami post-timeskip, long orange hair, brown eyes, bright confident smile, green-and-white striped bikini top only at shoulder crop, visible correct blue stylized tangerine pinwheel tattoo on left upper arm if included, otherwise crop above tattoo."
+    },
+    {
+      "id": 199,
+      "character": "羅賓",
+      "name": "羅賓・織線航章",
+      "style": "embroidered-portrait",
+      "styleDescription": "Fine embroidered portrait made from directional satin stitches and woven thread texture, nuanced recognizable anime face, textile ring and nautical stitch pattern. All stitching contained inside round silhouette.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/199.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Fine embroidered portrait made from directional satin stitches and woven thread texture, nuanced recognizable anime face, textile ring and nautical stitch pattern. All stitching contained inside round silhouette. SUBJECT: Nico Robin pre-timeskip Enies Lobby look: black shoulder-length straight hair with straight bangs, angular long nose, blue almond eyes, calm knowing smile, black collared jacket with small white lace neckline."
+    },
+    {
+      "id": 200,
+      "character": "薇薇",
+      "name": "薇薇・織線航章",
+      "style": "embroidered-portrait",
+      "styleDescription": "Fine embroidered portrait made from directional satin stitches and woven thread texture, nuanced recognizable anime face, textile ring and nautical stitch pattern. All stitching contained inside round silhouette.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/200.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Fine embroidered portrait made from directional satin stitches and woven thread texture, nuanced recognizable anime face, textile ring and nautical stitch pattern. All stitching contained inside round silhouette. SUBJECT: Nefertari Vivi, long flowing pale blue hair pulled back at top, graceful blue-brown anime eyes, friendly determined expression, canonical pale blue Alabasta royal gown neckline and gold earrings."
+    },
+    {
+      "id": 201,
+      "character": "香吉士",
+      "name": "香吉士・織線航章",
+      "style": "embroidered-portrait",
+      "styleDescription": "Fine embroidered portrait made from directional satin stitches and woven thread texture, nuanced recognizable anime face, textile ring and nautical stitch pattern. All stitching contained inside round silhouette.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/201.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Fine embroidered portrait made from directional satin stitches and woven thread texture, nuanced recognizable anime face, textile ring and nautical stitch pattern. All stitching contained inside round silhouette. SUBJECT: Sanji post-timeskip, blond hair covering RIGHT eye, LEFT eye visible, characteristic curly eyebrow on visible eye, small goatee, black suit jacket with blue shirt and black tie, amused dignified expression. No cigarette needed."
+    },
+    {
+      "id": 202,
+      "character": "吉貝爾",
+      "name": "吉貝爾・織線航章",
+      "style": "embroidered-portrait",
+      "styleDescription": "Fine embroidered portrait made from directional satin stitches and woven thread texture, nuanced recognizable anime face, textile ring and nautical stitch pattern. All stitching contained inside round silhouette.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/202.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Fine embroidered portrait made from directional satin stitches and woven thread texture, nuanced recognizable anime face, textile ring and nautical stitch pattern. All stitching contained inside round silhouette. SUBJECT: Jinbe (Jimbei), adult blue-skinned whale shark fishman, broad canonical face with thick sideburns, curled eyebrows and tusk-like lower teeth, black topknot, orange/yellow kimono neckline with black angular pattern. Warm dignified smile."
+    },
+    {
+      "id": 203,
+      "character": "漢考克",
+      "name": "漢考克・航海映金",
+      "style": "art-deco-portrait",
+      "styleDescription": "Art Deco luxury illustration, crisp stepped geometric radiating shapes, flat navy ivory and metallic gold colors, elegant detailed anime head portrait with fine engraved contours. Geometry in background only, no abstract face.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/203.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Art Deco luxury illustration, crisp stepped geometric radiating shapes, flat navy ivory and metallic gold colors, elegant detailed anime head portrait with fine engraved contours. Geometry in background only, no abstract face. SUBJECT: Boa Hancock, very long straight black center-parted hair, narrow blue eyes, elegant imperious small smile, gold snake-shaped hoop earrings, canonical red Kuja high-collar dress neckline."
+    },
+    {
+      "id": 204,
+      "character": "克洛克達爾",
+      "name": "克洛克達爾・航海映金",
+      "style": "art-deco-portrait",
+      "styleDescription": "Art Deco luxury illustration, crisp stepped geometric radiating shapes, flat navy ivory and metallic gold colors, elegant detailed anime head portrait with fine engraved contours. Geometry in background only, no abstract face.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/204.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Art Deco luxury illustration, crisp stepped geometric radiating shapes, flat navy ivory and metallic gold colors, elegant detailed anime head portrait with fine engraved contours. Geometry in background only, no abstract face. SUBJECT: Sir Crocodile, slicked-back black hair, long horizontal stitched scar across nose and both cheeks, heavy-lidded eyes, cigar at corner of mouth, canonical dark coat with pale fur collar over orange vest, imposing mature face. No hook needed."
+    },
+    {
+      "id": 205,
+      "character": "多佛朗明哥",
+      "name": "多佛朗明哥・航海映金",
+      "style": "art-deco-portrait",
+      "styleDescription": "Art Deco luxury illustration, crisp stepped geometric radiating shapes, flat navy ivory and metallic gold colors, elegant detailed anime head portrait with fine engraved contours. Geometry in background only, no abstract face.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/205.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Art Deco luxury illustration, crisp stepped geometric radiating shapes, flat navy ivory and metallic gold colors, elegant detailed anime head portrait with fine engraved contours. Geometry in background only, no abstract face. SUBJECT: Donquixote Doflamingo, short blond hair, distinctive narrow magenta sunglasses with white frame, broad toothy grin, canonical pink feather coat around shoulders, no eyes visible through glasses."
+    },
+    {
+      "id": 206,
+      "character": "羅布・路基",
+      "name": "羅布・路基・航海映金",
+      "style": "art-deco-portrait",
+      "styleDescription": "Art Deco luxury illustration, crisp stepped geometric radiating shapes, flat navy ivory and metallic gold colors, elegant detailed anime head portrait with fine engraved contours. Geometry in background only, no abstract face.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/206.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Art Deco luxury illustration, crisp stepped geometric radiating shapes, flat navy ivory and metallic gold colors, elegant detailed anime head portrait with fine engraved contours. Geometry in background only, no abstract face. SUBJECT: Rob Lucci human form, black top hat with band, long black wavy hair, thin arched eyebrows and distinctive long dark pointed goatee, cool stern eyes, black suit and white shirt. Human face, not leopard hybrid, no pigeon needed."
+    },
+    {
+      "id": 207,
+      "character": "紅髮傑克",
+      "name": "紅髮傑克・航海映金",
+      "style": "art-deco-portrait",
+      "styleDescription": "Art Deco luxury illustration, crisp stepped geometric radiating shapes, flat navy ivory and metallic gold colors, elegant detailed anime head portrait with fine engraved contours. Geometry in background only, no abstract face.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/207.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Art Deco luxury illustration, crisp stepped geometric radiating shapes, flat navy ivory and metallic gold colors, elegant detailed anime head portrait with fine engraved contours. Geometry in background only, no abstract face. SUBJECT: Shanks, medium-length red hair, three long parallel scars over LEFT eye, short stubble, calm confident smile, canonical white open-neck shirt and black cape on shoulders. Do not mirror eye scars."
+    },
+    {
+      "id": 208,
+      "character": "索隆",
+      "name": "索隆・炭筆航誌",
+      "style": "charcoal-sketch",
+      "styleDescription": "Refined charcoal and graphite atelier portrait on warm ivory textured paper inside circle, soft smudged shadow, fine confident construction lines, natural anime identity preserved, monochrome with muted sea-gray rim.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/208.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Refined charcoal and graphite atelier portrait on warm ivory textured paper inside circle, soft smudged shadow, fine confident construction lines, natural anime identity preserved, monochrome with muted sea-gray rim. SUBJECT: Roronoa Zoro POST-TIMESKIP, short spiky green hair rendered grayscale, healed vertical scar over CLOSED LEFT eye, RIGHT eye open, three earrings on LEFT ear, stern confident face, open dark-green robe neckline. Never both eyes open with this era."
+    },
+    {
+      "id": 209,
+      "character": "雷利",
+      "name": "雷利・炭筆航誌",
+      "style": "charcoal-sketch",
+      "styleDescription": "Refined charcoal and graphite atelier portrait on warm ivory textured paper inside circle, soft smudged shadow, fine confident construction lines, natural anime identity preserved, monochrome with muted sea-gray rim.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/209.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Refined charcoal and graphite atelier portrait on warm ivory textured paper inside circle, soft smudged shadow, fine confident construction lines, natural anime identity preserved, monochrome with muted sea-gray rim. SUBJECT: Silvers Rayleigh elderly, swept-back medium long white hair, short white beard and moustache, round wire-rim glasses, vertical scar across RIGHT eye, amiable experienced smile, simple canonical collared shirt."
+    },
+    {
+      "id": 210,
+      "character": "白鬍子",
+      "name": "白鬍子・炭筆航誌",
+      "style": "charcoal-sketch",
+      "styleDescription": "Refined charcoal and graphite atelier portrait on warm ivory textured paper inside circle, soft smudged shadow, fine confident construction lines, natural anime identity preserved, monochrome with muted sea-gray rim.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/210.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Refined charcoal and graphite atelier portrait on warm ivory textured paper inside circle, soft smudged shadow, fine confident construction lines, natural anime identity preserved, monochrome with muted sea-gray rim. SUBJECT: Edward Newgate Whitebeard, massively strong elderly pirate, unmistakable huge WHITE CRESCENT MUSTACHE pointing upward on both sides, black bandana, mature square face, white captain coat with shoulder epaulettes, controlled confident grin. Mustache never beard."
+    },
+    {
+      "id": 211,
+      "character": "薩波",
+      "name": "薩波・炭筆航誌",
+      "style": "charcoal-sketch",
+      "styleDescription": "Refined charcoal and graphite atelier portrait on warm ivory textured paper inside circle, soft smudged shadow, fine confident construction lines, natural anime identity preserved, monochrome with muted sea-gray rim.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/211.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Refined charcoal and graphite atelier portrait on warm ivory textured paper inside circle, soft smudged shadow, fine confident construction lines, natural anime identity preserved, monochrome with muted sea-gray rim. SUBJECT: Adult Sabo, short wavy blond hair, burn scar around LEFT eye, black tall top hat with blue-lens goggles wrapped around it, white cravat and dark-blue coat, confident warm smile."
+    },
+    {
+      "id": 212,
+      "character": "卡普",
+      "name": "卡普・炭筆航誌",
+      "style": "charcoal-sketch",
+      "styleDescription": "Refined charcoal and graphite atelier portrait on warm ivory textured paper inside circle, soft smudged shadow, fine confident construction lines, natural anime identity preserved, monochrome with muted sea-gray rim.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/212.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Refined charcoal and graphite atelier portrait on warm ivory textured paper inside circle, soft smudged shadow, fine confident construction lines, natural anime identity preserved, monochrome with muted sea-gray rim. SUBJECT: Monkey D. Garp elderly, short spiky gray-white hair, short square gray beard, scar beside LEFT eye, broad jovial grin, white marine coat over white suit and blue tie. No dog hat."
+    },
+    {
+      "id": 213,
+      "character": "羅傑",
+      "name": "羅傑・赤潮刻印",
+      "style": "red-black-linocut",
+      "styleDescription": "Powerful red black and ivory reduction linocut wood engraving, bold cut-gouge directional marks, three-quarter profile composition, broad negative-space shapes and vermilion sun or wave, recognizable detailed face. Not soft manga ink wash.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/213.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Powerful red black and ivory reduction linocut wood engraving, bold cut-gouge directional marks, three-quarter profile composition, broad negative-space shapes and vermilion sun or wave, recognizable detailed face. Not soft manga ink wash. SUBJECT: Gol D. Roger adult Pirate King, thick black curved mustache, exuberant toothy grin, black hair under red pirate captain hat with canonical skull motif, red captain coat with gold epaulettes. Canon robust face."
+    },
+    {
+      "id": 214,
+      "character": "魯夫",
+      "name": "魯夫・赤潮刻印",
+      "style": "red-black-linocut",
+      "styleDescription": "Powerful red black and ivory reduction linocut wood engraving, bold cut-gouge directional marks, three-quarter profile composition, broad negative-space shapes and vermilion sun or wave, recognizable detailed face. Not soft manga ink wash.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/214.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Powerful red black and ivory reduction linocut wood engraving, bold cut-gouge directional marks, three-quarter profile composition, broad negative-space shapes and vermilion sun or wave, recognizable detailed face. Not soft manga ink wash. SUBJECT: Monkey D. Luffy classic form, straw hat red band, black hair, small stitched scar under LEFT eye, dynamic determined grin in three-quarter profile, red sleeveless vest. Normal black eyes, no Gear Five."
+    },
+    {
+      "id": 215,
+      "character": "卡塔克利",
+      "name": "卡塔克利・赤潮刻印",
+      "style": "red-black-linocut",
+      "styleDescription": "Powerful red black and ivory reduction linocut wood engraving, bold cut-gouge directional marks, three-quarter profile composition, broad negative-space shapes and vermilion sun or wave, recognizable detailed face. Not soft manga ink wash.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/215.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Powerful red black and ivory reduction linocut wood engraving, bold cut-gouge directional marks, three-quarter profile composition, broad negative-space shapes and vermilion sun or wave, recognizable detailed face. Not soft manga ink wash. SUBJECT: Charlotte Katakuri, adult strong man with short spiky dark crimson hair, angular narrowed eyes, thick white fluffy scarf completely covering mouth and lower cheeks, studded dark shoulder garment. Facial markings visible above scarf where appropriate. No exposed fangs."
+    },
+    {
+      "id": 216,
+      "character": "基德",
+      "name": "基德・赤潮刻印",
+      "style": "red-black-linocut",
+      "styleDescription": "Powerful red black and ivory reduction linocut wood engraving, bold cut-gouge directional marks, three-quarter profile composition, broad negative-space shapes and vermilion sun or wave, recognizable detailed face. Not soft manga ink wash.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/216.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Powerful red black and ivory reduction linocut wood engraving, bold cut-gouge directional marks, three-quarter profile composition, broad negative-space shapes and vermilion sun or wave, recognizable detailed face. Not soft manga ink wash. SUBJECT: Eustass Kid PRE-TIMESKIP, bright spiky red hair, square goggles resting on forehead, dark lipstick, aggressive confident grin, pale skin, dark fur-trimmed coat. No post-timeskip eye scar and no missing arm shown; only head and shoulders."
+    },
+    {
+      "id": 217,
+      "character": "香吉士",
+      "name": "香吉士・赤潮刻印",
+      "style": "red-black-linocut",
+      "styleDescription": "Powerful red black and ivory reduction linocut wood engraving, bold cut-gouge directional marks, three-quarter profile composition, broad negative-space shapes and vermilion sun or wave, recognizable detailed face. Not soft manga ink wash.",
+      "rarity": "rare",
+      "output": "public/images/board/avatars/217.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Powerful red black and ivory reduction linocut wood engraving, bold cut-gouge directional marks, three-quarter profile composition, broad negative-space shapes and vermilion sun or wave, recognizable detailed face. Not soft manga ink wash. SUBJECT: Sanji PRE-TIMESKIP, blond hair covers LEFT eye, RIGHT eye visible with signature curly eyebrow, clean chin or tiny stubble appropriate original look, black suit and blue shirt, sly confident expression, three-quarter profile. Do not use post-timeskip hair side."
+    },
+    {
+      "id": 218,
+      "character": "娜美",
+      "name": "娜美・粉彩航夢",
+      "style": "dream-pastel",
+      "styleDescription": "Sophisticated pastel color-block illustration, velvety gouache flat shapes in apricot lilac mint and sky blue, soft luminous edges with refined anime face contours, airy sea/cloud motifs, natural canon head-to-shoulder proportions, no chibi.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/218.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Sophisticated pastel color-block illustration, velvety gouache flat shapes in apricot lilac mint and sky blue, soft luminous edges with refined anime face contours, airy sea/cloud motifs, natural canon head-to-shoulder proportions, no chibi. SUBJECT: Nami post-timeskip, long orange hair, brown eyes, confident cheerful expression, canonical green-striped top cropped at collarbone so no tattoo visible, clear recognizable adult face."
+    },
+    {
+      "id": 219,
+      "character": "培羅娜",
+      "name": "培羅娜・粉彩航夢",
+      "style": "dream-pastel",
+      "styleDescription": "Sophisticated pastel color-block illustration, velvety gouache flat shapes in apricot lilac mint and sky blue, soft luminous edges with refined anime face contours, airy sea/cloud motifs, natural canon head-to-shoulder proportions, no chibi.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/219.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Sophisticated pastel color-block illustration, velvety gouache flat shapes in apricot lilac mint and sky blue, soft luminous edges with refined anime face contours, airy sea/cloud motifs, natural canon head-to-shoulder proportions, no chibi. SUBJECT: Perona post-timeskip, long bright pink hair in twin tails, large round dark eyes with her distinctive lashes, tiny crown and black-and-white Gothic outfit neckline, amused pout; a small round ghost motif behind her, not an extra character portrait."
+    },
+    {
+      "id": 220,
+      "character": "羅賓",
+      "name": "羅賓・粉彩航夢",
+      "style": "dream-pastel",
+      "styleDescription": "Sophisticated pastel color-block illustration, velvety gouache flat shapes in apricot lilac mint and sky blue, soft luminous edges with refined anime face contours, airy sea/cloud motifs, natural canon head-to-shoulder proportions, no chibi.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/220.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Sophisticated pastel color-block illustration, velvety gouache flat shapes in apricot lilac mint and sky blue, soft luminous edges with refined anime face contours, airy sea/cloud motifs, natural canon head-to-shoulder proportions, no chibi. SUBJECT: Nico Robin post-timeskip, long straight blue-black hair swept back with sunglasses resting on top of head, long straight angular nose, blue almond eyes, serene gentle smile, canonical blue zip-front jacket neckline."
+    },
+    {
+      "id": 221,
+      "character": "艾斯",
+      "name": "艾斯・粉彩航夢",
+      "style": "dream-pastel",
+      "styleDescription": "Sophisticated pastel color-block illustration, velvety gouache flat shapes in apricot lilac mint and sky blue, soft luminous edges with refined anime face contours, airy sea/cloud motifs, natural canon head-to-shoulder proportions, no chibi.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/221.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Sophisticated pastel color-block illustration, velvety gouache flat shapes in apricot lilac mint and sky blue, soft luminous edges with refined anime face contours, airy sea/cloud motifs, natural canon head-to-shoulder proportions, no chibi. SUBJECT: Portgas D. Ace, orange wide-brim cowboy hat with blue smiling and frowning badges, wavy black hair, freckles across cheeks, red bead necklace, soft happy smile, ordinary lean head and shoulders."
+    },
+    {
+      "id": 222,
+      "character": "喬巴",
+      "name": "喬巴・粉彩航夢",
+      "style": "dream-pastel",
+      "styleDescription": "Sophisticated pastel color-block illustration, velvety gouache flat shapes in apricot lilac mint and sky blue, soft luminous edges with refined anime face contours, airy sea/cloud motifs, natural canon head-to-shoulder proportions, no chibi.",
+      "rarity": "epic",
+      "output": "public/images/board/avatars/222.webp",
+      "prompt": "Use case: stylized-concept. Deliver ONE premium collectible ONE PIECE avatar. Square canvas, perfectly circular portrait medallion filling 96% of square width, mathematically round outside silhouette with clear continuous round rim. Absolutely true transparent alpha outside entire circle; corners completely empty and no stray dots or shadow outside circle. Everything including hat, hair, shoulders, accents contained INSIDE circle. Head and shoulders, recognizable canonical anime facial proportions (no chibi), pleasant refined composition, high clarity at thumbnail scale. No text, no letters, no watermark, no labels, no invented character or costume. STYLE: Sophisticated pastel color-block illustration, velvety gouache flat shapes in apricot lilac mint and sky blue, soft luminous edges with refined anime face contours, airy sea/cloud motifs, natural canon head-to-shoulder proportions, no chibi. SUBJECT: Tony Tony Chopper in his CANONICAL pre-timeskip Brain Point reindeer appearance from ONE PIECE: soft brown fur, round dark expressive eyes, BLUE nose, classic tall pink top hat with a white X centered on front, two brown reindeer antlers poking out to sides and small round ears. Happy open-mouthed smile and adorable but canonical face proportions; this character is naturally small, do not turn him into a human or an original mascot. Head and tiny shoulder fur only inside circular medallion. Warm sky blue and mint pastel clouds."
+    }
+  ]
+}

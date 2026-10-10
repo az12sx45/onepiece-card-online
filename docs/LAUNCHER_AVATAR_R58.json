@@ -1,0 +1,920 @@
+{
+  "status": "PASS",
+  "generator": "builtin GPT image_gen; individually generated",
+  "count": 100,
+  "styles": 20,
+  "size": [
+    735,
+    735
+  ],
+  "format": "RGBA WebP",
+  "shape": "circular with transparent outside",
+  "sourceReceipts": [
+    "tools/launcher-shop-r58/avatar-art-123-157.json",
+    "tools/launcher-shop-r58/avatar-art-158-192.json",
+    "tools/launcher-shop-r58/avatar-art-193-222.json"
+  ],
+  "scope": "Source and output SHA checks, per-image generator visual reviews and root contact-sheet review; no procedural character painting or alpha masks.",
+  "items": [
+    {
+      "id": 123,
+      "name": "魯夫・懷舊動畫",
+      "style": "retro-cel",
+      "path": "public/images/board/avatars/123.webp",
+      "bytes": 149068,
+      "sha256": "74250e9ef1bd9200e2a0377c92b87cf9859454cb25d89c4e6b962e3d9390e950",
+      "sourceSha256": "0e738bc9d42bd7e17ed06fcc9d411919fff329af12c7e02b81c009b99982fe64"
+    },
+    {
+      "id": 124,
+      "name": "索隆・懷舊動畫",
+      "style": "retro-cel",
+      "path": "public/images/board/avatars/124.webp",
+      "bytes": 141916,
+      "sha256": "41f2792261927474cec0f712f47f9b5c684fd711c2fb420c28c40627faec196f",
+      "sourceSha256": "747f50a763ae7e600c75e7cc7dfcedcb7917b29a86f98926f8dfefeaaa33c777"
+    },
+    {
+      "id": 125,
+      "name": "娜美・懷舊動畫",
+      "style": "retro-cel",
+      "path": "public/images/board/avatars/125.webp",
+      "bytes": 158952,
+      "sha256": "365b517bd437e259397ce9efe50701310c4d35dfe80a50d11bfb57c4a54ebd4a",
+      "sourceSha256": "0447b1e81eb625073099e67bb2bfa79c1950ce2fd4201d1fdbc2c0934dddadc4"
+    },
+    {
+      "id": 126,
+      "name": "香吉士・懷舊動畫",
+      "style": "retro-cel",
+      "path": "public/images/board/avatars/126.webp",
+      "bytes": 136486,
+      "sha256": "5b77c76dea07553659208171cf41a20272231d3fa4ba422ab608db0d5e4b7b2d",
+      "sourceSha256": "b1ae93b1698be6b6f143d25cbba35dfb79f3d1037354354faeca088da392b65c"
+    },
+    {
+      "id": 127,
+      "name": "騙人布・懷舊動畫",
+      "style": "retro-cel",
+      "path": "public/images/board/avatars/127.webp",
+      "bytes": 141216,
+      "sha256": "b6245e7e83419ae7d4e2ea9f3191259b6410dae2cf1763832dd520cae3c880e0",
+      "sourceSha256": "4a013ddc33c846f507be794d768dd47b898aedf776318f824fe1a87bc8a78229"
+    },
+    {
+      "id": 128,
+      "name": "紅髮傑克・油彩典藏",
+      "style": "oil-portrait",
+      "path": "public/images/board/avatars/128.webp",
+      "bytes": 226898,
+      "sha256": "2f85c87bf371319d576a44f3b56ed95b3dd6ab8d09267aaea71e66a8fabfe2a7",
+      "sourceSha256": "09ca4c4d33a3ed6313f6068772a6f8868ebad73f114570a48ca3cfc857b28e40"
+    },
+    {
+      "id": 129,
+      "name": "鷹眼・油彩典藏",
+      "style": "oil-portrait",
+      "path": "public/images/board/avatars/129.webp",
+      "bytes": 207108,
+      "sha256": "70d78cad04b8db99be5134b72a540af0042bd029e0e6b76bca22cd0d2dd1a997",
+      "sourceSha256": "adf7fca20898aae64333a60d438d4db9cfa02d7e44805a2bb500e84b04b2fabe"
+    },
+    {
+      "id": 130,
+      "name": "漢考克・油彩典藏",
+      "style": "oil-portrait",
+      "path": "public/images/board/avatars/130.webp",
+      "bytes": 231636,
+      "sha256": "1bc9f316bb6c8d6e6238e10f937fb80e6855371ced41fb0599295132d335217a",
+      "sourceSha256": "dc4585c54a7e7b3d63cb40153e8fa3f331592d7f56ecbe9a76b1f4663f0ce1a7"
+    },
+    {
+      "id": 131,
+      "name": "克洛克達爾・油彩典藏",
+      "style": "oil-portrait",
+      "path": "public/images/board/avatars/131.webp",
+      "bytes": 226008,
+      "sha256": "44e812c641ec2dd463087c7e0a9cbff6e61ae2b4a3ad96a19a23ec3e6383dcaa",
+      "sourceSha256": "5190e7c9a5c6e06dfce16b008026c01de201689ea1a2fda98b93000aabdb09b4"
+    },
+    {
+      "id": 132,
+      "name": "雷利・油彩典藏",
+      "style": "oil-portrait",
+      "path": "public/images/board/avatars/132.webp",
+      "bytes": 244212,
+      "sha256": "ad3b74ce6d271b6795eec05661102db4f4e78065277747f1815f169cc2293d41",
+      "sourceSha256": "8f858390f2acbfdf38a60888d58d6c4e837f54e2ae864194e16a6ca9505a1270"
+    },
+    {
+      "id": 133,
+      "name": "艾斯・冒險厚塗",
+      "style": "adventure-paint",
+      "path": "public/images/board/avatars/133.webp",
+      "bytes": 223172,
+      "sha256": "156974f19305b2f574aa45de646a4b9097a1918d58fccd332867668bc3e4be45",
+      "sourceSha256": "58a160ed9c136ec04a8f47d2223c37711f7290adb336b383392fde11962f4e5c"
+    },
+    {
+      "id": 134,
+      "name": "薩波・冒險厚塗",
+      "style": "adventure-paint",
+      "path": "public/images/board/avatars/134.webp",
+      "bytes": 207040,
+      "sha256": "f8ddfcd54ec8c741c3796327fa269ac16d9b8140e63084bb3dd644c4e2c1a1dc",
+      "sourceSha256": "70a183549ded341b088b5a7ecd76181de19dd5bbb84e628d31763f7185b07d22"
+    },
+    {
+      "id": 135,
+      "name": "羅・冒險厚塗",
+      "style": "adventure-paint",
+      "path": "public/images/board/avatars/135.webp",
+      "bytes": 205874,
+      "sha256": "340c3a919432cb1ab9a1ad7fe471775de5e81bb91c4c7c41036a3b9d76886473",
+      "sourceSha256": "34e5c6f6f44565051195ec4321464225e019aa999c6a0e5abef0640ad706f9e2"
+    },
+    {
+      "id": 136,
+      "name": "基德・冒險厚塗",
+      "style": "adventure-paint",
+      "path": "public/images/board/avatars/136.webp",
+      "bytes": 254546,
+      "sha256": "23c608f7ea6d49277eb30990fb3a7c42c3ab974a91ffa58707884a89bf34e6f4",
+      "sourceSha256": "bde1dc039ff5bd1f7bbe75cad15c25290e40822c17279c9a38dc975837995d47"
+    },
+    {
+      "id": 137,
+      "name": "卡塔克利・冒險厚塗",
+      "style": "adventure-paint",
+      "path": "public/images/board/avatars/137.webp",
+      "bytes": 204152,
+      "sha256": "567c5edd128497c63248acd0d1cba6b36b44b9047a5e316e4617e62796e85435",
+      "sourceSha256": "55bad6557b5107110b1ae46f91efb0ddff5b318517568a820c8884959e32e5e2"
+    },
+    {
+      "id": 138,
+      "name": "喬巴・彩鉛航記",
+      "style": "colored-pencil",
+      "path": "public/images/board/avatars/138.webp",
+      "bytes": 221416,
+      "sha256": "9f1cb32ad319a236f79f560821500e55f6789e6f77bb681267a2005060d3319b",
+      "sourceSha256": "54152bf2fac83e1839023ef726872be96dbcc1f517c2a4bf5d63bb5d125b258b"
+    },
+    {
+      "id": 139,
+      "name": "薇薇・彩鉛航記",
+      "style": "colored-pencil",
+      "path": "public/images/board/avatars/139.webp",
+      "bytes": 267610,
+      "sha256": "e8c2950b52cc77218d4c857d0a92f2b391302925f4c37fc43e4bb184bde2c7dd",
+      "sourceSha256": "eba97806b41da9e4a8d13d28c6199d831882d32583faaf032a1ef7b22b745f7c"
+    },
+    {
+      "id": 140,
+      "name": "羅賓・彩鉛航記",
+      "style": "colored-pencil",
+      "path": "public/images/board/avatars/140.webp",
+      "bytes": 259942,
+      "sha256": "e8aa57d93201d801b232c1095037d0d8ba899ac47fd08b816c9bff2c994c8650",
+      "sourceSha256": "c045a31fd6258917f39047715d6969b0b29eb77268ec42754edc5c0e2e872d27"
+    },
+    {
+      "id": 141,
+      "name": "佛朗基・彩鉛航記",
+      "style": "colored-pencil",
+      "path": "public/images/board/avatars/141.webp",
+      "bytes": 279240,
+      "sha256": "a9a5c5a222ad7357eeab618745a702645f022a0f0df61b05b93c0eaa82f989a1",
+      "sourceSha256": "56d9c9ce82b2b4a6c27e7865a5c742611e464798f80f2e3b32d8c85b83b0c0cd"
+    },
+    {
+      "id": 142,
+      "name": "布魯克・彩鉛航記",
+      "style": "colored-pencil",
+      "path": "public/images/board/avatars/142.webp",
+      "bytes": 271434,
+      "sha256": "232c521c39ccb23ce751d5c0e92e3f2e779a7cbf50287bb6d9f486178fa24fab",
+      "sourceSha256": "65aaadbf01ec386b14ab58d7926aa075ed3b7dcac9effe1213e0f12511229e30"
+    },
+    {
+      "id": 143,
+      "name": "培羅娜・柔彩海風",
+      "style": "soft-pastel",
+      "path": "public/images/board/avatars/143.webp",
+      "bytes": 225912,
+      "sha256": "eee045f0714b96f8bdae95c0aeb991804aae7b45c60f17d4b8382ce82ee2d42b",
+      "sourceSha256": "b26aad54982e6b5f474f2e475d9eedf20ee605bddd3e533ffc60a7fcd5629e31"
+    },
+    {
+      "id": 144,
+      "name": "凱洛特・柔彩海風",
+      "style": "soft-pastel",
+      "path": "public/images/board/avatars/144.webp",
+      "bytes": 203452,
+      "sha256": "b458d7de5988d06382ce1d96296bb29e390bcd98e3d0f8b8430d42c1cb033677",
+      "sourceSha256": "15b2fde245b68b09eb54442496205fe242b3a2d4ea62a5e028117200487a36ce"
+    },
+    {
+      "id": 145,
+      "name": "白星・柔彩海風",
+      "style": "soft-pastel",
+      "path": "public/images/board/avatars/145.webp",
+      "bytes": 166178,
+      "sha256": "8c52553bc4fce2e9219310c99d9f9d0a1b6899ffa07f47e56c617027fd0701f1",
+      "sourceSha256": "1a56986322b93f523f046c3fafed95c58a404ad69c0e42be3527414360e93cd4"
+    },
+    {
+      "id": 146,
+      "name": "可亞拉・柔彩海風",
+      "style": "soft-pastel",
+      "path": "public/images/board/avatars/146.webp",
+      "bytes": 216974,
+      "sha256": "aed34ed6ffd3adb81d7566071afe6c965bbb8002fba0627b1179b5cc1141fa9b",
+      "sourceSha256": "ab78c1a63e29c1d5fb43fd88c315519cb5cfc1bfa136db424cdf3a7649ba8d1e"
+    },
+    {
+      "id": 147,
+      "name": "大和・柔彩海風",
+      "style": "soft-pastel",
+      "path": "public/images/board/avatars/147.webp",
+      "bytes": 240292,
+      "sha256": "ee1bb3c2c25f4418880acdbf75f19644d224a72ba801af35211bcd316fceef08",
+      "sourceSha256": "7a0ba3f526ebb9ee4518f1f6383e651c34c676fe66a7632dbb3bd38d380ab106"
+    },
+    {
+      "id": 148,
+      "name": "吉貝爾・鋼筆航誌",
+      "style": "pen-wash",
+      "path": "public/images/board/avatars/148.webp",
+      "bytes": 252760,
+      "sha256": "eb0346d341d167341b7f8c913190f47778bbcabf0b5fbc2015c5c37a07503321",
+      "sourceSha256": "6f41b817d0977cf41033e280b7f36e5b7956e4f2c79a46a0358705775194feac"
+    },
+    {
+      "id": 149,
+      "name": "馬可・鋼筆航誌",
+      "style": "pen-wash",
+      "path": "public/images/board/avatars/149.webp",
+      "bytes": 210322,
+      "sha256": "455f72622c21b0ec39bba82c97593349cd628bc439af7b7a9ca1980887bb0c6a",
+      "sourceSha256": "6ba88b55a35d2d2766e3d2020cba1004d597b2a9622fa9b292d795aba0018fdc"
+    },
+    {
+      "id": 150,
+      "name": "斯摩格・鋼筆航誌",
+      "style": "pen-wash",
+      "path": "public/images/board/avatars/150.webp",
+      "bytes": 258112,
+      "sha256": "843032748ba9413f8661d6fb94e9f52ce3af9e23e3e2bff30e2cee2d92819461",
+      "sourceSha256": "4e48c3a26aa835e3f7d23c8d9a840109282435d106b3506173bbd3c23ba5dcf1"
+    },
+    {
+      "id": 151,
+      "name": "達絲琪・鋼筆航誌",
+      "style": "pen-wash",
+      "path": "public/images/board/avatars/151.webp",
+      "bytes": 252742,
+      "sha256": "a8a497d47f4d5d09f8f84f012de15e62980fdca7a7a7ac8ea76924e5be374605",
+      "sourceSha256": "3cb9aaf140fba5af6dd8f1be8cf23519314a742a8e730d742d39592d8070c70a"
+    },
+    {
+      "id": 152,
+      "name": "克比・鋼筆航誌",
+      "style": "pen-wash",
+      "path": "public/images/board/avatars/152.webp",
+      "bytes": 219024,
+      "sha256": "4cb373a20712eaab4320c7d30a67e1c065f9f7cf8567811e5180651b29fcb4df",
+      "sourceSha256": "2f6d0835dd0b10b7b227ce8da744ed1250c49b7b2f56564498f423478abdc88a"
+    },
+    {
+      "id": 153,
+      "name": "白鬍子・黑金刻印",
+      "style": "black-gold-etch",
+      "path": "public/images/board/avatars/153.webp",
+      "bytes": 282304,
+      "sha256": "d6be80cd63b9113851a1a6c8dd2d4b0b3d48f771bf09827e0af140e4a57d4808",
+      "sourceSha256": "d83e7e66e7d3c32eb84aaadd89dc7372689a34d7d79da3fdeeba3a969d0e09ec"
+    },
+    {
+      "id": 154,
+      "name": "羅傑・黑金刻印",
+      "style": "black-gold-etch",
+      "path": "public/images/board/avatars/154.webp",
+      "bytes": 297746,
+      "sha256": "242484d1854013c54eb53238913d73266873dee749eb528420e6a15578c09901",
+      "sourceSha256": "7b7ee1b2348dcf07976b35cd7b635739e4f5928cfe56a41463ed170144921fd9"
+    },
+    {
+      "id": 155,
+      "name": "凱多・黑金刻印",
+      "style": "black-gold-etch",
+      "path": "public/images/board/avatars/155.webp",
+      "bytes": 244990,
+      "sha256": "cd3a98a3638135a4757de94652b8d3423abaff9c71b718f9371da2cca4587f70",
+      "sourceSha256": "140eb451557cabb8055ecdc1ef297089b60ce06fcfc0aa718c0db8955eedbb3a"
+    },
+    {
+      "id": 156,
+      "name": "燼・黑金刻印",
+      "style": "black-gold-etch",
+      "path": "public/images/board/avatars/156.webp",
+      "bytes": 267944,
+      "sha256": "0f2ea37d0bef3d7313c7775150a2e3ec4f6c4d57cab2cbbfc7bf6c1d9ad26941",
+      "sourceSha256": "27495ba1a4a6ef50428cbc2da73340752d44de017ee023b7393f4c378fea9c0f"
+    },
+    {
+      "id": 157,
+      "name": "多佛朗明哥・黑金刻印",
+      "style": "black-gold-etch",
+      "path": "public/images/board/avatars/157.webp",
+      "bytes": 239196,
+      "sha256": "ee2cc14b4d2b85e71965b2cc06f63c2dc709a612a3e40919f69e024d46f96cc6",
+      "sourceSha256": "dcc5e78c32d955c5e7dd8d506a03d57f935640cc38a7ebd219699558c53374a8"
+    },
+    {
+      "id": 158,
+      "name": "魯夫・疊紙航旅",
+      "style": "layered-paper",
+      "path": "public/images/board/avatars/158.webp",
+      "bytes": 165794,
+      "sha256": "edd40c156daa8479cb78386795f4a43534cd553593a7a017f8140553d45ce21c",
+      "sourceSha256": "2beddc7262d457425bfbb1585cf02cb8b8b04cc20fd45082c22c40ec471bf7b1"
+    },
+    {
+      "id": 159,
+      "name": "娜美・疊紙航旅",
+      "style": "layered-paper",
+      "path": "public/images/board/avatars/159.webp",
+      "bytes": 159200,
+      "sha256": "18874e7a9f7d1cdfbea3fec7cab9f96ec4a5ead331e7e6eec86dae1de127fbbf",
+      "sourceSha256": "c255e5fbb6477ef0fa49107a53e0c3d960c951397a09e5afcc9ec3e6d886d375"
+    },
+    {
+      "id": 160,
+      "name": "羅賓・疊紙航旅",
+      "style": "layered-paper",
+      "path": "public/images/board/avatars/160.webp",
+      "bytes": 194588,
+      "sha256": "899f5486b2de11d3f512e8500535774d020c4c6f845127ad4e57156a78ea629f",
+      "sourceSha256": "4558804adc679034441ee2ee07a859337f9234e0d9692dc2130f45819fa987bb"
+    },
+    {
+      "id": 161,
+      "name": "騙人布・疊紙航旅",
+      "style": "layered-paper",
+      "path": "public/images/board/avatars/161.webp",
+      "bytes": 164042,
+      "sha256": "e9a0ca5c38e6758fcf3a82b056bab3cfa43805fe4f7f8e0a35fdb7beccbe1a99",
+      "sourceSha256": "e7cacad3a11eff859be3a969dd0601b48d3724e23f75a1f5a084ea18c88b5d29"
+    },
+    {
+      "id": 162,
+      "name": "吉貝爾・疊紙航旅",
+      "style": "layered-paper",
+      "path": "public/images/board/avatars/162.webp",
+      "bytes": 178994,
+      "sha256": "fe619681c111cc1218d423e0dc8c0b793d3508e9957a2ab86d2f3b939e6de55e",
+      "sourceSha256": "f5859e67ed14a1f90fab63e6bdfbf6dec9e93dd92ac1d70f9a57eddcb6eea6a8"
+    },
+    {
+      "id": 163,
+      "name": "香吉士・手塑物語",
+      "style": "clay-animation",
+      "path": "public/images/board/avatars/163.webp",
+      "bytes": 121376,
+      "sha256": "f489c6a17196b37059708e1c0ccd143131fb6b3968cc89cd5f17dc96ce7d5849",
+      "sourceSha256": "c6b881873f9c3c0e7dbe84f90aec5d7d1e9b5c93d37874f4d639073f031a5f67"
+    },
+    {
+      "id": 164,
+      "name": "艾斯・手塑物語",
+      "style": "clay-animation",
+      "path": "public/images/board/avatars/164.webp",
+      "bytes": 151012,
+      "sha256": "c2b81f4881972b636a7f0207d91d5611fe7b511294009b44811616aa0f7e3af8",
+      "sourceSha256": "30dd5b8a25a5cdbe81b38224dcffdf37b62f3f793dcb7f5107d82d006cde8a76"
+    },
+    {
+      "id": 165,
+      "name": "薩波・手塑物語",
+      "style": "clay-animation",
+      "path": "public/images/board/avatars/165.webp",
+      "bytes": 148276,
+      "sha256": "11f643a5e558e8949342df131045530ded3a4adc95a3eb6da94f95c007d87106",
+      "sourceSha256": "8266b1f6e6c627b0d60708941b6e0bad1a8ceebfa013e0d6675b901679158717"
+    },
+    {
+      "id": 166,
+      "name": "紅髮傑克・手塑物語",
+      "style": "clay-animation",
+      "path": "public/images/board/avatars/166.webp",
+      "bytes": 138014,
+      "sha256": "4b1cfc9d1ede9dd568e937d6354457e583f55e00567875f6a7649733651c7c65",
+      "sourceSha256": "8b523129730b625541c1428124983d633fc340f6d38f4e0435d06459fa9e62da"
+    },
+    {
+      "id": 167,
+      "name": "培羅娜・手塑物語",
+      "style": "clay-animation",
+      "path": "public/images/board/avatars/167.webp",
+      "bytes": 142766,
+      "sha256": "c05d89e8f8bd072d175fb98e6302d9d543b766a5809c3327fae2390276ad0a16",
+      "sourceSha256": "f8dc7bdb970ceaad8b320381000c073559c33bdaaa52d20a7d9fa505898ae988"
+    },
+    {
+      "id": 168,
+      "name": "索隆・像素冒險",
+      "style": "pixel-art",
+      "path": "public/images/board/avatars/168.webp",
+      "bytes": 154812,
+      "sha256": "0e528adabd058db5ceac3b3dd6f4cd708e785b153119807bc116b777cc0622f7",
+      "sourceSha256": "aa9710e0207e72692607de4016cbe7843e1f04692459693778151961baad31d0"
+    },
+    {
+      "id": 169,
+      "name": "羅・像素冒險",
+      "style": "pixel-art",
+      "path": "public/images/board/avatars/169.webp",
+      "bytes": 137460,
+      "sha256": "10d1ff4e1db65908ebe2a3050e138d7057c0375bc8f0e2f10b923556ac042f9d",
+      "sourceSha256": "380da7741218bfd2a09d46447d704a466a0dedc1ce9987dc3ed9d66fc88c344e"
+    },
+    {
+      "id": 170,
+      "name": "佛朗基・像素冒險",
+      "style": "pixel-art",
+      "path": "public/images/board/avatars/170.webp",
+      "bytes": 178376,
+      "sha256": "85fb16b0a29d3fa5659412d4d987387881e363e93ceb5fa95d09126b0fa37297",
+      "sourceSha256": "4f88553432aeb9b1a774f54e2fc47bd78ee06c1498ded01faf7ae170871b7ada"
+    },
+    {
+      "id": 171,
+      "name": "布魯克・像素冒險",
+      "style": "pixel-art",
+      "path": "public/images/board/avatars/171.webp",
+      "bytes": 155258,
+      "sha256": "6e145dd81a0baa7708956df6489766be10ac3608c15d088c2b3ba8c369f619c8",
+      "sourceSha256": "966618318c9ca9eabef0c0ebff30c4584100c26db6e114bd97c7913b7900dbce"
+    },
+    {
+      "id": 172,
+      "name": "漢考克・像素冒險",
+      "style": "pixel-art",
+      "path": "public/images/board/avatars/172.webp",
+      "bytes": 163392,
+      "sha256": "ee62d737f158547cf71db658df13a9651faad1592e3cd9d02a9ad2eb7a509500",
+      "sourceSha256": "a6171695b198a00ac86262d06ad99ed18fa4dc14388d935254c3bfb3ce28e302"
+    },
+    {
+      "id": 173,
+      "name": "薇薇・琺瑯寶彩",
+      "style": "enamel-jewel",
+      "path": "public/images/board/avatars/173.webp",
+      "bytes": 282670,
+      "sha256": "a6b8581342abfe9778f09c5c562f6e274abe28d7d71c35894a87083b0daa4696",
+      "sourceSha256": "78398f7a17a4177b067c0b1958e474e0584a83b82c2cdf5862c24ce99ea5669a"
+    },
+    {
+      "id": 174,
+      "name": "白星・琺瑯寶彩",
+      "style": "enamel-jewel",
+      "path": "public/images/board/avatars/174.webp",
+      "bytes": 287958,
+      "sha256": "1e33124fa30cc7c379decbd9383f10602154976f85d33910f5d2ce9eba0a5dae",
+      "sourceSha256": "2e539dbb5dc54b4d85774794af3ee90ff09684139f99141b574bfe17af04406c"
+    },
+    {
+      "id": 175,
+      "name": "凱洛特・琺瑯寶彩",
+      "style": "enamel-jewel",
+      "path": "public/images/board/avatars/175.webp",
+      "bytes": 267148,
+      "sha256": "a84c0dcb58b19bc22ed37f7765461a21efb3d8940bbab3540daea1f34ebbeae0",
+      "sourceSha256": "f04eade05378dc86e9a21e776d42050737b21e199697a109999d6788c1cc781e"
+    },
+    {
+      "id": 176,
+      "name": "大和・琺瑯寶彩",
+      "style": "enamel-jewel",
+      "path": "public/images/board/avatars/176.webp",
+      "bytes": 261008,
+      "sha256": "ff19a09f6728f65707036f008536443b8c98ca800d9f04f646bcb6994baa8c6c",
+      "sourceSha256": "ad4defa2c85ffa488e01b2b489fc458b6e6eb0e2a751d6989e5663a15f0fd828"
+    },
+    {
+      "id": 177,
+      "name": "鷹眼・琺瑯寶彩",
+      "style": "enamel-jewel",
+      "path": "public/images/board/avatars/177.webp",
+      "bytes": 255890,
+      "sha256": "e674dd1a38a13a3e7007994125c18a109e4b0408db7574f56a72dfd7535f5953",
+      "sourceSha256": "d8666c34579dbc5dfe78c7fa968eab311b09b96604be9884e5de1dbc13da8c8d"
+    },
+    {
+      "id": 178,
+      "name": "羅傑・海圖銅刻",
+      "style": "chart-engraving",
+      "path": "public/images/board/avatars/178.webp",
+      "bytes": 284736,
+      "sha256": "043eaa99cfe57bba22b97dcde6edf27c619afe01b2127b685275560fe8ba4208",
+      "sourceSha256": "52dbff3d65c860f3436fd1589f7a6ad92fdfaf0b14fdac5c21e46ea840c894d9"
+    },
+    {
+      "id": 179,
+      "name": "雷利・海圖銅刻",
+      "style": "chart-engraving",
+      "path": "public/images/board/avatars/179.webp",
+      "bytes": 341526,
+      "sha256": "28954376da5df79dfa6870f588a8342507cc6f51fe1ce613bdc03656efb4839f",
+      "sourceSha256": "7a3663020165fcfea07ead581e8dbef1e349f00577ea81d62a6b3186e8388f9e"
+    },
+    {
+      "id": 180,
+      "name": "白鬍子・海圖銅刻",
+      "style": "chart-engraving",
+      "path": "public/images/board/avatars/180.webp",
+      "bytes": 320360,
+      "sha256": "3f3366015c8fb7c001fae47eb8b85a9c099273bc2b3f4fb57969a307923909a8",
+      "sourceSha256": "70fac190cbfcb8933a4d3a97174b2519408677f72d3b2ae9cd0c03952408b001"
+    },
+    {
+      "id": 181,
+      "name": "卡普・海圖銅刻",
+      "style": "chart-engraving",
+      "path": "public/images/board/avatars/181.webp",
+      "bytes": 336534,
+      "sha256": "35ff32fbf50cc0663990607ce7fed5df3770b3c5d10a939a5312fa2a0e58bbcf",
+      "sourceSha256": "5c689d5fa234238ebda96448232a1b026fd5d4f9528b75ec0e40c2019348bc3b"
+    },
+    {
+      "id": 182,
+      "name": "斯摩格・海圖銅刻",
+      "style": "chart-engraving",
+      "path": "public/images/board/avatars/182.webp",
+      "bytes": 345580,
+      "sha256": "bf0b39e2a322bc5736719a58f539dbc4a67d62128261b487d419167ca0218e96",
+      "sourceSha256": "1d9862b226f5cb24bf22d10b4f70c3be3bae137c26d1bfbd475685934e453baa"
+    },
+    {
+      "id": 183,
+      "name": "魯夫・木刻傳承",
+      "style": "wood-relief",
+      "path": "public/images/board/avatars/183.webp",
+      "bytes": 269966,
+      "sha256": "047bb11bee8892cb66447fe7bbde053e1d0681e20a334bcc779fce1344faf35b",
+      "sourceSha256": "0be70729ca502a2ab94eb8cb111af783f430f63472cd6a4673f0c671d70a9f20"
+    },
+    {
+      "id": 184,
+      "name": "索隆・木刻傳承",
+      "style": "wood-relief",
+      "path": "public/images/board/avatars/184.webp",
+      "bytes": 225854,
+      "sha256": "d5b1d20863d77775f9ad4094fe1645d11fb7d7e5e89e6c5aa1b2c9679299e1c9",
+      "sourceSha256": "19f8ec6e40c0f0a284c5ff442e0b3b0b04331e9a1a8c1aff278b994e45c73ae8"
+    },
+    {
+      "id": 185,
+      "name": "吉貝爾・木刻傳承",
+      "style": "wood-relief",
+      "path": "public/images/board/avatars/185.webp",
+      "bytes": 255326,
+      "sha256": "763112205a4129f84a2d0d1f898b9254dd1b3da5ed040ef56d622000dddf7dd5",
+      "sourceSha256": "f681a1d6c022f1ccfee114374101ac71fbb2036ece77d429eaa04412361957b6"
+    },
+    {
+      "id": 186,
+      "name": "紅髮傑克・木刻傳承",
+      "style": "wood-relief",
+      "path": "public/images/board/avatars/186.webp",
+      "bytes": 236488,
+      "sha256": "dd80b8211872ca3147e3b343e620305dd4d5887c4404f8866582c2fef4ad3757",
+      "sourceSha256": "1804bb4a45f7c89c0b5ca8dcfe0b036993a9f40af25fae757091a6c3fd09d825"
+    },
+    {
+      "id": 187,
+      "name": "御田・木刻傳承",
+      "style": "wood-relief",
+      "path": "public/images/board/avatars/187.webp",
+      "bytes": 204992,
+      "sha256": "0479b214293f0d3ad7e3f2427d629b8613ae0e24c873bd9c5bb6ac47a95f8658",
+      "sourceSha256": "bba9dd375b820a7c20a3960ed85140c3521b0ee556a480b20d072451643223b6"
+    },
+    {
+      "id": 188,
+      "name": "艾斯・彩頁躍動",
+      "style": "manga-color-halftone",
+      "path": "public/images/board/avatars/188.webp",
+      "bytes": 256174,
+      "sha256": "9472a4264134a27d2c89781207c0e42238be2f386d64586882195169d42ff33f",
+      "sourceSha256": "8f54aca53e8b00b182ea5a3d0254d10410b1cbe066b8d33435ae87d442b6553a"
+    },
+    {
+      "id": 189,
+      "name": "香吉士・彩頁躍動",
+      "style": "manga-color-halftone",
+      "path": "public/images/board/avatars/189.webp",
+      "bytes": 227836,
+      "sha256": "cba116e0aa3dbb1087ffb2379fbebe398752d56c3852a18a3aa62580ed26716b",
+      "sourceSha256": "1755c25a553e026d5f1ce00f0e7874fa1bd461417ea90f63c717a553569ab247"
+    },
+    {
+      "id": 190,
+      "name": "娜美・彩頁躍動",
+      "style": "manga-color-halftone",
+      "path": "public/images/board/avatars/190.webp",
+      "bytes": 214664,
+      "sha256": "e5bc644d716b53601185549cdd114760d989eeee04083b10ef2a8344afbb3275",
+      "sourceSha256": "111e22c149e6c9a59af37b25f87a608396f7c1932dfd68b0d490433f4d74a948"
+    },
+    {
+      "id": 191,
+      "name": "羅賓・彩頁躍動",
+      "style": "manga-color-halftone",
+      "path": "public/images/board/avatars/191.webp",
+      "bytes": 204826,
+      "sha256": "b4f887cb0f32a5b22f790d4356c638f9596ec6eb8781ca6da7cfd20a412fc8f1",
+      "sourceSha256": "8cc267b6298e37152fc17202ddc382878c86f9379a3ff962d1456d0e45a0b7a4"
+    },
+    {
+      "id": 192,
+      "name": "卡塔克利・彩頁躍動",
+      "style": "manga-color-halftone",
+      "path": "public/images/board/avatars/192.webp",
+      "bytes": 231724,
+      "sha256": "3a0eab6a2448402d6d7f4b3de60e9a970b15b59254dab8e0eb0279f21827e916",
+      "sourceSha256": "3dbb310eea9f159bf9279ad5075bf9e34adc066e49be80b9f0b838fad0a4963a"
+    },
+    {
+      "id": 193,
+      "name": "魯夫・夜光彩墨",
+      "style": "luminous-ink",
+      "path": "public/images/board/avatars/193.webp",
+      "bytes": 291048,
+      "sha256": "77e2171c7250805a784a34fedd8ad75e29466d6f65b0c5355d149e8162146a72",
+      "sourceSha256": "7ccdea0d0731d54640875c37dfe68bb28c9ef3980e6aa249c33b5d9e61a1e71f"
+    },
+    {
+      "id": 194,
+      "name": "艾斯・夜光彩墨",
+      "style": "luminous-ink",
+      "path": "public/images/board/avatars/194.webp",
+      "bytes": 288320,
+      "sha256": "0de1ee97f3d30992b97b53c92d18fea7048ba805685cdd75896c194573c1176b",
+      "sourceSha256": "ebd91743d30b791c2e0766773c052bbe8474f9505ffdc381646ae655f64b8b84"
+    },
+    {
+      "id": 195,
+      "name": "馬可・夜光彩墨",
+      "style": "luminous-ink",
+      "path": "public/images/board/avatars/195.webp",
+      "bytes": 283548,
+      "sha256": "a6862ef8912571802c7301271084eb61bd559c6bcbd28badea6ec0acbf40feea",
+      "sourceSha256": "660516e83c304f22f7aa7a01b89678fe9893cd535688ff44892dd72970a9a268"
+    },
+    {
+      "id": 196,
+      "name": "羅・夜光彩墨",
+      "style": "luminous-ink",
+      "path": "public/images/board/avatars/196.webp",
+      "bytes": 206084,
+      "sha256": "489aac6425e9421ba52695dc669622de32a0f5428b9a7d8e35fbdd9d73d0662c",
+      "sourceSha256": "7ae7f725c59c2f471052539429357c02b81d99d293971834d53bb1f4a5986a5a"
+    },
+    {
+      "id": 197,
+      "name": "布魯克・夜光彩墨",
+      "style": "luminous-ink",
+      "path": "public/images/board/avatars/197.webp",
+      "bytes": 288578,
+      "sha256": "dd221956fb9c50cfdefdb18921825d81c14ba75142d5b22349adf926e635f89c",
+      "sourceSha256": "4a9a268fa9b1ef203831915e0f5866adc78f5111e8775a8bf81b7fdda99d4096"
+    },
+    {
+      "id": 198,
+      "name": "娜美・織線航章",
+      "style": "embroidered-portrait",
+      "path": "public/images/board/avatars/198.webp",
+      "bytes": 255968,
+      "sha256": "2cf0312e43216bd500d1b8575d81487eaf8b7777ffa893ba1be446070c784a83",
+      "sourceSha256": "229364fefb8226e4e8dae699704c2848a923bc545bd796f633adfd354e54cd51"
+    },
+    {
+      "id": 199,
+      "name": "羅賓・織線航章",
+      "style": "embroidered-portrait",
+      "path": "public/images/board/avatars/199.webp",
+      "bytes": 315284,
+      "sha256": "85a07e97f8b720f82ab59f458f0034de7be11c0dd19cda1c4b812554b0db938f",
+      "sourceSha256": "08a568f36300e4e2d99f82341e7a629aab63aa1ada0859f42d58e4911121362c"
+    },
+    {
+      "id": 200,
+      "name": "薇薇・織線航章",
+      "style": "embroidered-portrait",
+      "path": "public/images/board/avatars/200.webp",
+      "bytes": 251664,
+      "sha256": "a974d42908f6bb18c76ec2aeb0590eba5144f3f3ed8965b1e27d2148876f7611",
+      "sourceSha256": "80140541642c64683d343439f3ba492d91a39fc5ce75c8d10e06d9676072bcdb"
+    },
+    {
+      "id": 201,
+      "name": "香吉士・織線航章",
+      "style": "embroidered-portrait",
+      "path": "public/images/board/avatars/201.webp",
+      "bytes": 302538,
+      "sha256": "68daf8ee549b5f7833b35fb227221cf45817572ab33a5c571bb762a7e468d136",
+      "sourceSha256": "4283bdeda1170b9eb49b83a46b7d58ba1193a225bcaedc8e985f2dcd8711e608"
+    },
+    {
+      "id": 202,
+      "name": "吉貝爾・織線航章",
+      "style": "embroidered-portrait",
+      "path": "public/images/board/avatars/202.webp",
+      "bytes": 298756,
+      "sha256": "4a157421e5da554db13bfa62c428c4b9bcfe9823690f0348837b92f0f55da8c3",
+      "sourceSha256": "7ff3745a29675690a5ebca1aa8fc5fd115bdc3126d27f9b886521b56f770f299"
+    },
+    {
+      "id": 203,
+      "name": "漢考克・航海映金",
+      "style": "art-deco-portrait",
+      "path": "public/images/board/avatars/203.webp",
+      "bytes": 173732,
+      "sha256": "fe5885bf8f2f16994a8e7afa1a2c70c7e43c5d0a670fa45eee9834dbd5af2401",
+      "sourceSha256": "740e3c5ffd6e3fa5c36fb076d71d715b54b8ccaa671ad386b21fa7f1aa5a0c3d"
+    },
+    {
+      "id": 204,
+      "name": "克洛克達爾・航海映金",
+      "style": "art-deco-portrait",
+      "path": "public/images/board/avatars/204.webp",
+      "bytes": 195294,
+      "sha256": "444f37d3c45ec63b426d535243d4b8c930875a6188f9d5c1ce938fd527112515",
+      "sourceSha256": "0c92235d6fb458678b801c1c4f0f398280c18013a5e8cb309c113d2db5c3957f"
+    },
+    {
+      "id": 205,
+      "name": "多佛朗明哥・航海映金",
+      "style": "art-deco-portrait",
+      "path": "public/images/board/avatars/205.webp",
+      "bytes": 212438,
+      "sha256": "1af37bdf1523073d9d2d6958a931f87ca9df8d91358f3834f416385108c28d8d",
+      "sourceSha256": "adcab22cbce7629212e0b12de9fd68f2fec65abe27387313fef5bed1c5e53301"
+    },
+    {
+      "id": 206,
+      "name": "羅布・路基・航海映金",
+      "style": "art-deco-portrait",
+      "path": "public/images/board/avatars/206.webp",
+      "bytes": 138278,
+      "sha256": "ee76e2f47707889492f892b4f25159105c19e323ed26461675c998deaaf75395",
+      "sourceSha256": "b32d3c48938ecf6ca5cd94bc59c1f0d75e1a4817ee95d0adb55d2f9e2b2b1d49"
+    },
+    {
+      "id": 207,
+      "name": "紅髮傑克・航海映金",
+      "style": "art-deco-portrait",
+      "path": "public/images/board/avatars/207.webp",
+      "bytes": 205462,
+      "sha256": "2888fb5dd0294159f6f92089a27429995be82056e973f2aed92432f07b1677fc",
+      "sourceSha256": "725c82a5c89071d4bfab0ced5c96c2a6f7fe3d2f970eb42f99348f869897b39d"
+    },
+    {
+      "id": 208,
+      "name": "索隆・炭筆航誌",
+      "style": "charcoal-sketch",
+      "path": "public/images/board/avatars/208.webp",
+      "bytes": 227678,
+      "sha256": "8480feed3454ae31e47ab79a89cc3202a769c8d7f6ae1b381bc5b884044f4aa3",
+      "sourceSha256": "daaa2e24d459a69e5733ad89644dc45e7109797d995ad053d349efaf65739530"
+    },
+    {
+      "id": 209,
+      "name": "雷利・炭筆航誌",
+      "style": "charcoal-sketch",
+      "path": "public/images/board/avatars/209.webp",
+      "bytes": 244590,
+      "sha256": "74972b663763928ea901f2147742939246c82dcf56440eeddd79d56e5e087b33",
+      "sourceSha256": "d4ffceb3158a37287fb853862d767f74fc557c5485dd262919afd6a86a53a8e3"
+    },
+    {
+      "id": 210,
+      "name": "白鬍子・炭筆航誌",
+      "style": "charcoal-sketch",
+      "path": "public/images/board/avatars/210.webp",
+      "bytes": 215958,
+      "sha256": "9ab24fff38e87385d952cbba094ddf08763ba443d8a66bb25fd7d3f5a29e1cd0",
+      "sourceSha256": "13d3d8c68ed9fc1e0bf6ec99642f0cb47496cb0ef6cb90a0650d90946c00b7a8"
+    },
+    {
+      "id": 211,
+      "name": "薩波・炭筆航誌",
+      "style": "charcoal-sketch",
+      "path": "public/images/board/avatars/211.webp",
+      "bytes": 254386,
+      "sha256": "9309d6d66ef873e9afd8484e3bcaffc8db442432518a4755db4ea64e0c323155",
+      "sourceSha256": "3ad7fefc7d670f4091765255885a5716fb9f4235b91d8e2505e19786fdd29a33"
+    },
+    {
+      "id": 212,
+      "name": "卡普・炭筆航誌",
+      "style": "charcoal-sketch",
+      "path": "public/images/board/avatars/212.webp",
+      "bytes": 195344,
+      "sha256": "c1e5a4e470114dc17a6de74a0e688b32e61bd13aa9b2f519bfe3a8757cddb3e9",
+      "sourceSha256": "9d1aa2f9dec88d7a54187ffda2af5922a95b80fe8cf2046a98a8fb27d20b6e49"
+    },
+    {
+      "id": 213,
+      "name": "羅傑・赤潮刻印",
+      "style": "red-black-linocut",
+      "path": "public/images/board/avatars/213.webp",
+      "bytes": 282466,
+      "sha256": "53ab4fd93421ce2ceaeff00a03d52b8114bd8bdf50f9ef673040f3bfb8d4ecc8",
+      "sourceSha256": "fd401598216efec4c759a5bba3c80aa2274d53f1dc67bfa22618d8efd8acc7f1"
+    },
+    {
+      "id": 214,
+      "name": "魯夫・赤潮刻印",
+      "style": "red-black-linocut",
+      "path": "public/images/board/avatars/214.webp",
+      "bytes": 231032,
+      "sha256": "de94bf91fe55ae58306a781acdb081a73ce2beaa78be3b8cb84c5eca0bed075f",
+      "sourceSha256": "3da3b7e4c1fabc000e40e207800c5228ac5b1b13aaee3394b940f9d858e5b524"
+    },
+    {
+      "id": 215,
+      "name": "卡塔克利・赤潮刻印",
+      "style": "red-black-linocut",
+      "path": "public/images/board/avatars/215.webp",
+      "bytes": 307564,
+      "sha256": "df72109358038bcd153d8c2ede29ba5375b72b0eb0361d436f24c9bf1bc51b4e",
+      "sourceSha256": "405ad49ff261f9e7122be257c5bee08a78c5c496ea2a465dd509c6610ea8f7eb"
+    },
+    {
+      "id": 216,
+      "name": "基德・赤潮刻印",
+      "style": "red-black-linocut",
+      "path": "public/images/board/avatars/216.webp",
+      "bytes": 270064,
+      "sha256": "278a483ecfc0788f6b36d9b391f2fd74c74e34ced707fce07701100722147ffe",
+      "sourceSha256": "752ebc1d5fcc509e9c77d7805a7b1d0aad50da1ffcb4d93983e1975e100ec42c"
+    },
+    {
+      "id": 217,
+      "name": "香吉士・赤潮刻印",
+      "style": "red-black-linocut",
+      "path": "public/images/board/avatars/217.webp",
+      "bytes": 273952,
+      "sha256": "b00c14a8617c6d5a8e0b86b048dba0a90ce35c1c0ad58df371b7577b248acf83",
+      "sourceSha256": "f26ef58417179436272b648b027a805f57fc0edfd7e634b889a22d91dfae5a3a"
+    },
+    {
+      "id": 218,
+      "name": "娜美・粉彩航夢",
+      "style": "dream-pastel",
+      "path": "public/images/board/avatars/218.webp",
+      "bytes": 155382,
+      "sha256": "e56b2c8d58453d3e1c2e68b1aa038e0803638bb8f8748f4a9427bab097a51a34",
+      "sourceSha256": "ce0e63cdf0bdbc76bb898b47de2207af315e1a7f072c42348cfe198b62390035"
+    },
+    {
+      "id": 219,
+      "name": "培羅娜・粉彩航夢",
+      "style": "dream-pastel",
+      "path": "public/images/board/avatars/219.webp",
+      "bytes": 171376,
+      "sha256": "b776ab90062c24a07082d9538cf3d40ae3942ead778bc2cdb6361fe0537b3936",
+      "sourceSha256": "8e0c19a1717cd1ef303d3097858af3d9e43dbdb68873883f14c32959cc84de42"
+    },
+    {
+      "id": 220,
+      "name": "羅賓・粉彩航夢",
+      "style": "dream-pastel",
+      "path": "public/images/board/avatars/220.webp",
+      "bytes": 154842,
+      "sha256": "a6b4025a22d0f1402bfe16b0567c46c16b269e114e28cacd0d3d0cf59a94e7ee",
+      "sourceSha256": "8b931a10585776e128591336d2fdaabe4f149f25337ef2a783788f0ae7aea4e5"
+    },
+    {
+      "id": 221,
+      "name": "艾斯・粉彩航夢",
+      "style": "dream-pastel",
+      "path": "public/images/board/avatars/221.webp",
+      "bytes": 159262,
+      "sha256": "aeb14269e41f0c39f62111e012f2d0d0dd281741c5be1d563af02e10a9e01b6b",
+      "sourceSha256": "5afeea04fba9f5ffbea6a82ed1a243ec1e9eb9ed2562c54be0e075ca9be0efd3"
+    },
+    {
+      "id": 222,
+      "name": "喬巴・粉彩航夢",
+      "style": "dream-pastel",
+      "path": "public/images/board/avatars/222.webp",
+      "bytes": 137658,
+      "sha256": "ac7a1201e43db1d75723ea2d3ee98be52de1b8c127b912fcf2bf1f68b8f3354b",
+      "sourceSha256": "aa52dcc0a5c21292fea473122dfc142ecab8976d4b0efae854239059e0729bdd"
+    }
+  ]
+}
