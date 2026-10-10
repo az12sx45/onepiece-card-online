@@ -1,0 +1,231 @@
+{
+  "date": "2026-10-10",
+  "generator": "built-in image_gen",
+  "requestedAssets": 30,
+  "generatedCalls": 35,
+  "assetValidation": {
+    "status": "PASS",
+    "checks": 82,
+    "totalBytes": 3722232,
+    "report": "D:/Codex_QA/launcher-guestbook-r56-art/asset-qa.json",
+    "contactSheetsReviewed": true,
+    "rejectedPngFilesRemoved": 5,
+    "rejectedPngBytesFreed": 9178097
+  },
+  "finalAssets": [
+    {
+      "key": "sunny-deck",
+      "kind": "boards",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-f776fd6c-d2de-4253-a0e8-9d910d82d260.png"
+    },
+    {
+      "key": "merry-log",
+      "kind": "boards",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-09cfe6b1-7056-465c-b76e-ef70b4762471.png"
+    },
+    {
+      "key": "water-seven",
+      "kind": "boards",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-35570029-5cca-47fc-8ec1-fe3ea41b5ba4.png"
+    },
+    {
+      "key": "skypiea",
+      "kind": "boards",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-335e0cea-27e8-49da-b486-14633f6dc315.png"
+    },
+    {
+      "key": "alabasta",
+      "kind": "boards",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-5324880f-6c59-479d-b3e2-1fe6b68e3141.png"
+    },
+    {
+      "key": "wano",
+      "kind": "boards",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-624a4bce-a4b1-437b-a756-b79a81157de0.png"
+    },
+    {
+      "key": "fishman-island",
+      "kind": "boards",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-e1ef3d48-0b37-4d92-8a8b-282c75674e3d.png"
+    },
+    {
+      "key": "marineford",
+      "kind": "boards",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-956ed31f-6aa4-46c0-845a-88e09f8c3fbd.png"
+    },
+    {
+      "key": "grand-line-chart",
+      "kind": "boards",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-648f68ea-2715-455e-8e2d-a6f9382475b1.png"
+    },
+    {
+      "key": "tabletop-captain",
+      "kind": "boards",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-39e04ff5-65ac-49c3-b285-cd19cfa71608.png"
+    },
+    {
+      "key": "strawhat-note",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-65268270-a829-4397-9694-36d6406cf420.png"
+    },
+    {
+      "key": "zoro-tag",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-7cadd688-1217-4d85-b600-112ce7062c72.png"
+    },
+    {
+      "key": "nami-chart",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-8065c831-4cb0-42e9-ab32-098d7949b50e.png"
+    },
+    {
+      "key": "usopp-letter",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-2d412e46-3ad8-42c4-aa78-a98d0ae2f6b1.png"
+    },
+    {
+      "key": "sanji-menu",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-c3d1ae20-c780-49e3-82cd-520b463f2f17.png"
+    },
+    {
+      "key": "chopper-prescription",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-1c07fc35-8036-488a-a5cc-9efbc9c0dab1.png"
+    },
+    {
+      "key": "robin-rubbing",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-8f1b069e-4ae4-4dda-b142-d40966b57a43.png"
+    },
+    {
+      "key": "franky-blueprint",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-cbd88188-3762-4917-a7b3-a81ef5a82f38.png"
+    },
+    {
+      "key": "brook-score",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-e6ac62f1-193d-4aa4-afc3-45acabb05093.png"
+    },
+    {
+      "key": "jinbe-letter",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-646c03a4-c17b-4097-a35f-35c6ae02ffaf.png"
+    },
+    {
+      "key": "ace-postcard",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-407e1f23-e13c-43ed-9b4c-c7e97c0ae1bb.png"
+    },
+    {
+      "key": "sabo-dispatch",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-69062e65-bf61-406c-8efd-b3b662cf6f34.png"
+    },
+    {
+      "key": "law-chart",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-89a19f6e-e04c-475d-be89-945be4713d59.png"
+    },
+    {
+      "key": "hancock-letter",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-e2102176-647e-4d6b-9a38-13e6dd49af4a.png"
+    },
+    {
+      "key": "shanks-note",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-320ffa17-acd5-46be-9785-d641487be745.png"
+    },
+    {
+      "key": "merry-ticket",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-d2e683f3-ae74-46cb-8030-7632897dde52.png"
+    },
+    {
+      "key": "sunny-pass",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-41479fea-7bdb-4db1-89b1-d87f8eec3c44.png"
+    },
+    {
+      "key": "log-pose-card",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-96b37ca2-13b8-48e0-86b4-945aa73e5356.png"
+    },
+    {
+      "key": "fishing-catch",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-1a97412c-44a0-46b2-8979-24a00caa9aaa.png"
+    },
+    {
+      "key": "tabletop-invite",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-6becd390-f65b-40c0-98cb-110c74fa4aca.png"
+    }
+  ],
+  "rejectedVariants": [
+    {
+      "key": "log-pose-card",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-d352756f-f6d3-4903-b1e0-00376a58cc9c.png",
+      "reason": "Visible detached white edge speckles"
+    },
+    {
+      "key": "tabletop-invite",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-8caae47b-2ed4-4d96-ad69-3720f01f685d.png",
+      "reason": "Visible detached white edge speckles"
+    },
+    {
+      "key": "log-pose-card",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-485eec40-209a-4d28-ba2a-83bf5454a8d3.png",
+      "reason": "GPT cleanup retained detached white speckles"
+    },
+    {
+      "key": "tabletop-invite",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-c9099852-0c68-4bcb-bc0b-bdc2f41dcd2d.png",
+      "reason": "GPT cleanup retained detached white speckles"
+    },
+    {
+      "key": "tabletop-invite",
+      "kind": "notes",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-aa73-7e43-9551-902684fc7d77\\exec-24a1c528-dece-4a62-b939-eedf0ebd2594.png",
+      "reason": "Corner objects still overlapped the text-safe area"
+    }
+  ],
+  "cleanupPrompt": "Use case: background-extraction. Edit the supplied game message stationery image. Preserve the exact illustration, paper shape, central blank writing area, colors, corner objects, proportions and 2:1 canvas. Clean up ONLY the outside silhouette: remove ALL detached white speckles, stray fringes and white debris above/below paper, plus colored edge artifacts outside the clean outline. Make all space outside the actual paper and attached corner objects truly transparent alpha with crisp antialiased edge. NO shadow, NO background, NO painted checkerboard. The image must be a clean premium UI sticker. Do not add text or any new object.",
+  "redrawPrompts": [
+    {
+      "key": "log-pose-card",
+      "kind": "notes",
+      "prompt": "Generate a single clean anime game sticker UI asset with TRUE TRANSPARENT BACKGROUND, landscape 2:1. A WIDE FOLDING NAVIGATOR ROUTE CARD from One Piece. Thick smooth SOLID DARK NAVY outline around the ENTIRE outer silhouette, including paper edges, to ensure a perfectly clean die-cut sticker edge. The card is pale warm ivory, three unfolded panels with two subtle vertical fold creases, light blue folded tabs at outer sides. Tiny brass Log Pose wrist compass sits ONLY at bottom left corner; three tiny teal triangle marks ONLY at upper right border. Center 70% completely blank and flat pale ivory for user message text. No writing or numbers. Front view, wide horizontal design occupies92%width82%height with clear transparent margin on every side. Crisp cel-shaded hand-painted anime stationery. NO dust, NO speckles, NO glow, NO shadow, NO distressed edges, NO frayed fibers, NO white fringes, NO texture outside silhouette, no photo, no characters. Clean solid continuous dark outline is essential."
+    },
+    {
+      "key": "tabletop-invite",
+      "kind": "notes",
+      "prompt": "Generate a single clean anime pirate RPG guestbook UI sticker asset with TRUE TRANSPARENT BACKGROUND, landscape 2:1. One Piece Tabletop Series FOLDED GAME INVITATION CARD. Thick smooth SOLID DARK NAVY outline around ENTIRE outer silhouette including paper edges so it looks precisely die-cut with NO fringe. Pale ivory wide card with clean straight edges, subtle vertical fold crease near left third, navy blue envelope peeks from lower-left only. Tiny pair of dice, navy playing-card back bearing a strawhat skull and small brass ship pawn are clustered ONLY at far lower-left corner taking up less than20%width. Small red ribbon bow ONLY at upper-right corner. No other decoration, no text, no numbers. Center70% blank pale ivory for dark user message. Flat front view, clean crisp cel-shading, premium anime game stationery. Transparent margin on every side. NO dust, NO speckles, NO watercolor bleeds, NO glow, NO drop shadow, NO ragged edges, NO frayed fibers, NO white fringes, NO texture outside silhouette. Solid clean continuous navy outline is mandatory."
+    }
+  ],
+  "tabletopFinalEditPrompt": "Use case: precise-object-edit. Edit this invitation sticker. Keep same paper shape, blank ivory surface, navy envelope, red ribbon, palette, clean thick navy outline, transparent background, 2:1 canvas. Change ONLY the bottom-left dice and golden miniature ship: shrink BOTH dice and ship cluster by about 50 percent and move the complete cluster left, entirely inside the leftmost 15 percent of the image width. The blank writing rectangle from x18% to82% and y21% to82% must have NO objects overlapping it. Make the red upper-right ribbon smaller by30percent and move it toward the right edge so it stays outside this writing rectangle too. Absolutely no detached white speckles or dirty edge fringe. Transparent background with clean sharp continuous edge. No text.",
+  "visualReview": {
+    "reviewedCount": 30,
+    "notes": "Each asset visually reviewed independently; 10 boards have clear dark central field; 20 notes have pale text-safe center and true transparent outside. Final log-pose and tabletop images redrawn with crisp dark silhouette. Final tabletop corner motifs moved outside text-safe bounds.",
+    "textSafeArea": {
+      "normal": {
+        "x": 0.18,
+        "y": 0.21,
+        "width": 0.64,
+        "height": 0.61
+      },
+      "sunnyPass": {
+        "x": 0.26,
+        "y": 0.22,
+        "width": 0.66,
+        "height": 0.48
+      }
+    }
+  }
+}

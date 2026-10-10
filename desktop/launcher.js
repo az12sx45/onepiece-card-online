@@ -631,12 +631,14 @@ function renderFeature() {
   setFeatureVideo(game);
 }
 
+window.addEventListener('launcher-profile-avatar',()=>renderAccount());
 function renderAccount() {
   const profile = snapshot.profile || {};
   $('#accountName').textContent = profile.name || profile.username || '航海者';
   $('#accountTitle').textContent = profile.title || 'TABLETOP MEMBER';
-  const avatar = [profile.launcherAvatar, profile.avatar].map(Number)
-    .find(id => Number.isSafeInteger(id) && id >= 1 && id <= 62) || 8;
+  const updated=window.LauncherProfileAvatar;
+  const avatar = [updated?.userId===Number(profile.userId)?updated.avatar:0,profile.launcherAvatar, profile.avatar].map(Number)
+    .find(id => Number.isSafeInteger(id) && id >= 1 && id <= 92) || 8;
   $('#accountAvatar').src = `opui://launcher/images/board/avatars/${avatar}.webp`;
   storageSummary.textContent = Number.isFinite(snapshot.freeBytes) ? `可用 ${formatBytes(snapshot.freeBytes)}` : '下載位置';
   cachePath.textContent = snapshot.cacheRoot || '尚未選擇下載位置';

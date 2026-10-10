@@ -10,12 +10,18 @@
   const COLLECTION_TABS = [
     ['avatars', '頭像'], ['walls', '牆面'], ['flags', '旗幟'], ['launcher', '展示室'], ['titles', '榮譽'], ['board', '航海圖鑑'], ['chess', '戰棋']
   ];
-  const SHOP_TABS = [['avatar', '頭像'], ['room_scene', '房間場景'], ['room_furniture', '房間家具'], ['room_character', 'Q版夥伴'], ['background', '背景'], ['frame', '相框'], ['wall', '牆面'], ['flag', '旗幟'], ['layout', '排版'], ['decoration', '貼紙'], ['bgm', '音樂'], ['guestbook', '留言板']];
-  const TYPE_LABEL = { avatar: '頭像', room_scene: '房間場景', room_furniture: '房間家具', room_character: 'Q版夥伴', background: '背景', frame: '相框', wall: '牆面', flag: '旗幟', layout: '排版', decoration: '貼紙', bgm: '音樂', guestbook: '留言板' };
+  const SHOP_TABS = [['avatar', '頭像'], ['room_scene', '房間場景'], ['room_furniture', '房間家具'], ['room_character', 'Q版夥伴'], ['background', '背景'], ['frame', '相框'], ['wall', '牆面'], ['flag', '旗幟'], ['layout', '排版'], ['decoration', '貼紙'], ['bgm', '音樂'], ['guestbook_style', '留言板'], ['comment_style', '留言紙'], ['guestbook', '留言板解鎖']];
+  const TYPE_LABEL = { avatar: '頭像', room_scene: '房間場景', room_furniture: '房間家具', room_character: 'Q版夥伴', background: '背景', frame: '相框', wall: '牆面', flag: '旗幟', layout: '排版', decoration: '貼紙', bgm: '音樂', guestbook: '留言板解鎖', guestbook_style: '留言板', comment_style: '留言紙' };
   const ROOM_TYPES = ['room_scene', 'room_furniture', 'room_character'];
   const SLOTS = [['header', '上方'], ['side', '側邊'], ['footer', '下方']];
   const RARITY = { common: '普通', rare: '稀有', epic: '史詩', legend: '傳說' };
-  const MAX_AVATAR_ID = 62;
+  const MAX_AVATAR_ID = 92;
+  // Versioned profile operations ride the existing authenticated desktop bridge.
+  // The server validates catalog IDs, ownership and permissions for each action.
+  const profileCommand = (operation, payload = {}, requestId = crypto.randomUUID()) => api.commandLauncherLife({
+    requestId, expectedRevision: 0, type: 'event.record', payload: { scope: 'launcher-profile-v1', operation, ...payload }
+  });
+  const extendedItem = id => /^(?:guestbook-style-|comment-style-)/.test(id) || /^ava-(?:6[3-9]|[78][0-9]|9[0-2])$/.test(id);
   const number = value => Number.isSafeInteger(Number(value)) && Number(value) >= 0 ? Number(value) : 0;
   const fmt = value => number(value).toLocaleString('zh-TW');
   const el = (tag, className, content) => {
@@ -56,13 +62,14 @@
     'already_owned': '已經收藏這件商品。', 'not_owned': '尚未收藏這件商品。',
     'room_full': '房間最多同時放 10 位夥伴。請先在佈置模式收回一位，再放入新夥伴。',
     'invalid item': '這件商品目前無法購買，請更新啟動器後再試。',
+    'invalid_comment_style': '請重新選擇留言紙。', 'comment_style_not_owned': '尚未收藏這款留言紙。', 'comment_deleted': '這則留言已刪除。', 'request_id_conflict': '內容已變更，請修改文字後重新送出。',
     'guestbook_locked': '留言板尚未解鎖。', 'not_friends': '目前只有好友可以留言。',
     'invalid placement': '佈置位置不正確，請重新調整。', 'rate_limited': '留言太頻繁，請稍後再試。',
     'invalid card': '名片內容不正確，請檢查名稱、簡介與頭像。', 'invalid_card': '名片內容不正確，請檢查名稱、簡介與頭像。',
     timeout: '伺服器回應逾時，請重新整理確認結果。', offline: '目前無法連線，請稍後再試。'
   })[String(code || '')] || '操作未完成，請稍後再試。';
 
-  let accountId = 0;
+  let accountId = 0, accountAvatarVersion = 0;
   let preview = false;
   let viewUserId = 0;
   let profile = null;
@@ -127,6 +134,7 @@
   function renderHero() {
     const own = profile ? profile.isSelf !== false : !viewUserId;
     const p = profile || {};
+    if(p.isSelf&&number(p.userId)===accountId)publishAccountAvatar(p);
     $('profilePageTitle').textContent = own ? '個人頁' : '好友個人頁';
     $('profilePageHint').textContent = own ? '三款遊戲的航行紀錄與珍藏。' : '參觀好友的遊戲紀錄與公開蒐藏。';
     $('profileBackToFriends').hidden = own;
@@ -165,6 +173,12 @@
     }
     $('profileCardEdit').hidden = !own || !p.isSelf || !accountId || preview;
     if (!own || !p.isSelf || !accountId || preview) $('profileCardEditor').hidden = true;
+  }
+  function publishAccountAvatar(p){
+    if(!p?.isSelf||number(p.userId)!==accountId)return;
+    accountAvatarVersion++;
+    window.LauncherProfileAvatar={userId:accountId,avatar:number(p.avatar)};
+    window.dispatchEvent(new Event('launcher-profile-avatar'));
   }
   function metric(label, value) { const wrap = el('div'); wrap.append(el('dt', '', label), el('dd', '', value)); return wrap; }
   function gameMetrics(id, data) {
@@ -364,32 +378,88 @@
     renderMusicControls();
     if (bgmSource && bgmState !== 'error') playBgm(true);
   }
+  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let guestbookPaused = false, guestbookReading = motionPreference.matches, guestbookObserver;
+  let stationery = [], stationeryRequest = 0, selectedStationery = 'comment-style-default', postRequestId = '', commentMutation = 0;
+  function noteAsset(entry) { return safeImageAsset(entry?.style?.asset); }
+  function paintNote(node, asset) {
+    node.classList.toggle('has-note-art', Boolean(asset));
+    node.dataset.noteStyle = asset ? asset.split('/').pop().replace(/\.webp$/, '') : 'default';
+    node.style.setProperty('--note-art', asset ? `url("${asset}")` : 'none');
+  }
+  function syncGuestbookMotion() {
+    const stage = $('profileGuestbookStage');
+    stage.dataset.paused = String(guestbookPaused || document.hidden || !profileVisible || $('profileCommentReadDialog').open);
+    stage.dataset.reading = String(guestbookReading);
+    $('profileGuestbookMotion').textContent = guestbookPaused ? '繼續彈幕' : '暫停彈幕';
+    $('profileGuestbookMotion').setAttribute('aria-pressed', String(guestbookPaused));
+    $('profileGuestbookMotion').disabled = guestbookReading;
+    $('profileGuestbookRead').textContent = guestbookReading ? '返回彈幕' : '閱讀模式';
+    $('profileGuestbookRead').setAttribute('aria-pressed', String(guestbookReading));
+  }
+  function showComment(entry) {
+    const holder=$('profileCommentReadBody'); holder.replaceChildren(makeComment(entry,true));
+    $('profileCommentReadDialog').showModal(); syncGuestbookMotion();
+  }
+  function makeComment(entry, full=false) {
+    const card=el('article','captain-guestbook-entry'); card.dataset.commentId=String(entry.id);
+    paintNote(card,noteAsset(entry));
+    const header=el('header'), avatar=el('img'); avatar.alt=''; avatar.src=imageFor('avatar',entry.authorAvatar)||imageFor('avatar',8); avatarFallback(avatar);
+    header.append(avatar,el('strong','',String(entry.authorName||'航海者').slice(0,40)));
+    const when=new Date(entry.createdAt||entry.created_at||0);
+    if(full&&Number.isFinite(when.getTime())){const time=el('time','',when.toLocaleString('zh-TW'));time.dateTime=when.toISOString();header.append(time);}
+    card.append(header,el('p','',String(entry.body||'').slice(0,280)));
+    if(full){
+      const authorId=number(entry.authorUserId??entry.authorId??entry.userId);
+      if(profile?.isSelf||authorId===accountId){const remove=el('button','','刪除留言');remove.type='button';remove.onclick=()=>{pendingCommentDelete=entry.id;$('profileCommentDeleteHint').textContent='';$('profileCommentDeleteDialog').showModal();};card.append(remove);}
+    }else{
+      card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label',`${String(entry.authorName||'航海者').slice(0,40)}：${String(entry.body||'').slice(0,80)}，點開閱讀`);
+      card.onclick=()=>showComment(entry);card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showComment(entry);}};
+    }
+    return card;
+  }
+  function renderStationery() {
+    const select=$('profileCommentStyle');select.replaceChildren();
+    const base=el('option','','航海素紙');base.value='comment-style-default';select.append(base);
+    for(const item of stationery){const option=el('option','',item.name);option.value=item.id;select.append(option);}
+    if(![...select.options].some(o=>o.value===selectedStationery))selectedStationery='comment-style-default';
+    select.value=selectedStationery;paintNote($('profileCommentPreview'),safeImageAsset(stationery.find(s=>s.id===selectedStationery)?.asset));
+  }
+  async function loadStationery() {
+    const request=++stationeryRequest,owner=accountId;if(!owner||preview)return;
+    try{const result=await api.getLauncherShop();if(request!==stationeryRequest||owner!==accountId||!result?.ok)return;
+      const owned=new Set(result.shop?.owned?.commentStyles||[]);stationery=(result.shop?.catalog||[]).filter(i=>i.type==='comment_style'&&owned.has(i.id)&&safeImageAsset(i.asset));
+      selectedStationery=result.shop?.equipped?.commentStyleId||'comment-style-default';renderStationery();
+    }catch{if(request===stationeryRequest)renderStationery();}
+  }
   function renderGuestbook() {
     const enabled = profile?.guestbookUnlocked === true || profile?.guestbook?.enabled === true;
     $('profileGuestbookCount').textContent = enabled ? `${fmt(profile?.guestbook?.commentCount ?? comments?.length ?? 0)} 則留言` : '';
     $('profileGuestbookLocked').hidden = !profile || enabled;
     $('profileGuestbookForm').hidden = !profile || !enabled || !accountId || preview;
     $('profileGuestbookMore').hidden = !enabled || !commentHasMore;
-    const list = $('profileGuestbookList'); list.replaceChildren();
-    if (!profile || !enabled) return;
-    if (!Array.isArray(comments)) { list.append(el('p', 'voyage-collection-empty', '正在讀取好友留言…')); return; }
-    if (!comments.length) { list.append(el('p', 'voyage-collection-empty', '還沒有留言。歡迎留下第一句問候。')); return; }
-    for (const entry of comments) {
-      const card = el('article', 'captain-guestbook-entry');
-      const header = el('header'); const avatar = el('img'); avatar.alt = ''; avatar.src = imageFor('avatar', entry.authorAvatar) || imageFor('avatar', 8); avatarFallback(avatar);
-      header.append(avatar, el('strong', '', String(entry.authorName || '航海者').slice(0, 40)));
-      const when = new Date(entry.createdAt || entry.created_at || 0);
-      if (Number.isFinite(when.getTime())) { const time = el('time', '', when.toLocaleString('zh-TW')); time.dateTime = when.toISOString(); header.append(time); }
-      card.append(header, el('p', '', String(entry.body || '').slice(0, 240)));
-      const authorId = number(entry.authorUserId ?? entry.authorId ?? entry.userId);
-      if (profile.isSelf || authorId === accountId) {
-        const remove = el('button', '', '刪除留言'); remove.type = 'button';
-        remove.onclick = () => { pendingCommentDelete = entry.id; $('profileCommentDeleteHint').textContent = ''; $('profileCommentDeleteDialog').showModal(); };
-        card.append(remove);
-      }
-      list.append(card);
+    const list=$('profileGuestbookList');list.replaceChildren();guestbookObserver?.disconnect();
+    const stage=$('profileGuestbookStage');stage.hidden=!profile||!enabled;
+    stage.previousElementSibling.hidden=!profile||!enabled;
+    const theme=profile?.appearanceItems?.guestbookStyle,background=safeImageAsset(theme?.asset);
+    stage.style.setProperty('--board-art',background?`url("${background}")`:'none');
+    $('profileGuestbookTheme').textContent=theme?.name||'航海留言';
+    syncGuestbookMotion();renderStationery();
+    if(!profile||!enabled)return;
+    if(!Array.isArray(comments)||!comments.length){list.append(el('p','captain-guestbook-empty',Array.isArray(comments)?'下一段航程，從一句問候開始。':'正在讀取好友留言…'));return;}
+    const rows=guestbookReading?1:Math.min(3,comments.length);const lanes=[];
+    for(let i=0;i<rows;i++){
+      const lane=el('div','captain-danmaku-lane'),track=el('div','captain-danmaku-track'),sequence=el('div','captain-danmaku-sequence');
+      for(let n=i;n<comments.length;n+=rows)sequence.append(makeComment(comments[n]));
+      const duplicate=sequence.cloneNode(true);duplicate.classList.add('is-duplicate');duplicate.setAttribute('aria-hidden','true');
+      // Visual copies open the same persisted comment, but have no extra tab stops.
+      for(const card of duplicate.children){card.tabIndex=-1;card.removeAttribute('role');card.removeAttribute('aria-label');const entry=comments.find(c=>String(c.id)===card.dataset.commentId);card.onclick=()=>showComment(entry);}
+      track.append(sequence,duplicate);lane.append(track);list.append(lane);lanes.push({track,sequence});
     }
+    const measure=()=>{for(let i=0;i<lanes.length;i++){const {track,sequence}=lanes[i];const width=Math.max(stage.clientWidth,sequence.scrollWidth);track.style.setProperty('--lap',width+'px');track.style.setProperty('--duration',(width/(i===1?31:37))+'s');track.style.setProperty('--offset',(-i*2)+'s');}};
+    guestbookObserver=new ResizeObserver(measure);guestbookObserver.observe(stage);measure();
   }
+
   function renderProfile() { renderHero(); renderMusic(); window.LauncherRoom?.setProfile(profile, { accountId, preview }); renderGames(); renderCollectionTabs(); renderCollection(); renderGuestbook(); }
   function renderCardAvatarOptions() {
     const select = $('profileCardAvatar'); select.replaceChildren();
@@ -498,7 +568,7 @@
     status('profileCardStatus', '正在儲存名片…');
     const current = () => mutation === cardMutation && accountId === ownerId && viewUserId === viewId && number(profile?.userId) === userId && profile?.isSelf === true;
     try {
-      const result = await api.saveLauncherCard({ displayName, tagline, avatarId });
+      const result = await (avatarId > 62 ? profileCommand('card.set', {card:{displayName,tagline,avatarId}}) : api.saveLauncherCard({ displayName, tagline, avatarId }));
       if (!current()) return;
       if (!result?.ok || !result.profile) { status('profileCardStatus', errorText(result?.error), true); return; }
       profile = result.profile;
@@ -526,7 +596,7 @@
       if (!result?.ok || !result.profile) { profile = null; renderProfile(); status('profileStatus', errorText(result?.error), true); return; }
       profile = result.profile; renderProfile(); status('profileStatus', '');
       if (roomEditorRequested && profile.isSelf) { roomEditorRequested = false; window.LauncherRoom?.openEditor(); }
-      loadComments();
+      loadComments(); loadStationery();
     } catch {
       if (requestId === profileRequest) { profile = null; renderProfile(); status('profileStatus', errorText('offline'), true); }
     }
@@ -556,26 +626,32 @@
     event.preventDefault();
     const body = $('profileGuestbookInput').value.trim();
     if (commentBusy || !profile || !body || body.length > 240) return;
-    commentBusy = true; $('profileGuestbookPost').disabled = true; status('profileGuestbookStatus', '正在發表留言…');
+    const owner=accountId,target=viewUserId,mutation=++commentMutation;
+    commentBusy = true; $('profileGuestbookPost').disabled = true; $('profileGuestbookInput').disabled=true; $('profileCommentStyle').disabled=true; status('profileGuestbookStatus', '正在發表留言…');
     try {
-      const result = await api.postLauncherComment(viewUserId, body);
+      if(!postRequestId)postRequestId=crypto.randomUUID();
+      const result = await profileCommand('comment.post', {userId:viewUserId,body,styleId:selectedStationery},postRequestId);
+      if(owner!==accountId||target!==viewUserId||mutation!==commentMutation)return;
       if (!result?.ok) { status('profileGuestbookStatus', errorText(result?.error), true); return; }
+      postRequestId='';
       $('profileGuestbookInput').value = ''; $('profileGuestbookLength').textContent = '0 / 240';
       await loadProfile();
-      status('profileGuestbookStatus', '留言已發表。');
-    } catch { status('profileGuestbookStatus', errorText('offline'), true); }
-    finally { commentBusy = false; $('profileGuestbookPost').disabled = false; }
+      if(owner===accountId&&target===viewUserId&&mutation===commentMutation)status('profileGuestbookStatus', '留言已發表。');
+    } catch { if(owner===accountId&&target===viewUserId&&mutation===commentMutation)status('profileGuestbookStatus', errorText('offline'), true); }
+    finally { if(mutation===commentMutation){commentBusy = false; $('profileGuestbookPost').disabled = false; $('profileGuestbookInput').disabled=false; $('profileCommentStyle').disabled=false;} }
   }
   async function deleteComment() {
     if (!pendingCommentDelete || commentBusy) return;
+    const owner=accountId,target=viewUserId,mutation=++commentMutation,messageId=pendingCommentDelete;
     commentBusy = true; $('profileCommentDeleteConfirm').disabled = true; $('profileCommentDeleteHint').textContent = '正在刪除留言…';
     try {
-      const result = await api.deleteLauncherComment(pendingCommentDelete);
+      const result = await api.deleteLauncherComment(messageId);
+      if(owner!==accountId||target!==viewUserId||mutation!==commentMutation)return;
       if (!result?.ok) { $('profileCommentDeleteHint').textContent = errorText(result?.error); return; }
-      $('profileCommentDeleteDialog').close(); pendingCommentDelete = null;
-      await loadProfile(); status('profileGuestbookStatus', '留言已刪除。');
-    } catch { $('profileCommentDeleteHint').textContent = errorText('offline'); }
-    finally { commentBusy = false; $('profileCommentDeleteConfirm').disabled = false; }
+      $('profileCommentDeleteDialog').close(); $('profileCommentReadDialog').close(); pendingCommentDelete = null;
+      await loadProfile(); if(owner===accountId&&target===viewUserId&&mutation===commentMutation)status('profileGuestbookStatus', '留言已刪除。');
+    } catch { if(owner===accountId&&target===viewUserId&&mutation===commentMutation)$('profileCommentDeleteHint').textContent = errorText('offline'); }
+    finally { if(mutation===commentMutation){commentBusy = false; $('profileCommentDeleteConfirm').disabled = false;} }
   }
   async function toggleBgm() {
     const audio = $('profileBgmAudio');
@@ -628,7 +704,7 @@
       item && TYPE_LABEL[item.type] && typeof item.id === 'string' && /^[a-z0-9-]{3,64}$/.test(item.id) &&
       Number.isSafeInteger(Number(item.price)) && Number(item.price) >= 0 &&
       (['avatar', 'wall', 'flag'].includes(item.type) ? !!imageFor(item.type, item.key) :
-        ['background', 'frame'].includes(item.type) ? !!safeImageAsset(item.asset) :
+        ['background', 'frame', 'guestbook_style', 'comment_style'].includes(item.type) ? !!safeImageAsset(item.asset) :
         item.type === 'decoration' ? !!safeImageAsset(item.asset) && SLOTS.some(([slot]) => slot === item.slot) :
         item.type === 'bgm' ? !!safeAudioAsset(item.asset) :
         item.type === 'layout' ? ['layout-grand-line', 'layout-bounty-board', 'layout-captain-quarters', 'layout-sunny-deck', 'layout-sunny-kitchen', 'layout-sunny-library'].includes(item.id) :
@@ -641,8 +717,8 @@
       const field = { room_scene: 'roomScenes', room_furniture: 'roomFurniture', room_character: 'roomCharacters' }[item.type];
       return Array.isArray(shop?.owned?.[field]) && shop.owned[field].includes(item.id);
     }
-    if (['background', 'frame', 'layout', 'decoration', 'bgm'].includes(item.type)) {
-      const field = { background: 'backgrounds', frame: 'frames', layout: 'layouts', decoration: 'decorations', bgm: 'bgms' }[item.type];
+    if (['background', 'frame', 'layout', 'decoration', 'bgm', 'guestbook_style', 'comment_style'].includes(item.type)) {
+      const field = { background: 'backgrounds', frame: 'frames', layout: 'layouts', decoration: 'decorations', bgm: 'bgms', guestbook_style: 'guestbookStyles', comment_style: 'commentStyles' }[item.type];
       return Array.isArray(shop?.owned?.[field]) && shop.owned[field].includes(item.id);
     }
     const field = item.type === 'avatar' ? 'avatars' : item.type === 'wall' ? 'walls' : 'flags';
@@ -651,6 +727,8 @@
   function equipped(item) {
     if (item.type === 'guestbook') return owned(item);
     if (ROOM_TYPES.includes(item.type)) return false;
+    if (item.type === 'guestbook_style') return shop?.equipped?.guestbookStyleId === item.id;
+    if (item.type === 'comment_style') return shop?.equipped?.commentStyleId === item.id;
     if (item.type === 'background') return shop?.equipped?.backgroundId === item.id;
     if (item.type === 'frame') return shop?.equipped?.frameId === item.id;
     if (item.type === 'layout') return shop?.equipped?.layoutId === item.id;
@@ -668,6 +746,8 @@
     const choices = shopTab === 'background' ? [['background-default', '恢復原始背景']] :
       shopTab === 'frame' ? [['frame-none', '移除相框']] :
       shopTab === 'layout' ? [['layout-default', '恢復原始排版']] :
+      shopTab === 'guestbook_style' ? [['guestbook-style-default', '使用原始留言板']] :
+      shopTab === 'comment_style' ? [['comment-style-default', '使用素紙留言']] :
       shopTab === 'bgm' ? [['bgm-none', '停用個人頁音樂']] :
       shopTab === 'decoration' ? SLOTS.map(([slot, label]) => [`decor-none-${slot}`, `移除${label}貼紙`]) : [];
     for (const [id, label] of choices) {
@@ -743,7 +823,7 @@
       const article = el('article', 'shop-item'); article.dataset.rarity = item.rarity || 'common'; article.dataset.type = item.type; article.dataset.itemId = item.id;
       const visual = el('div', 'shop-item-image');
       const source = itemImage(item);
-      if (source) { const image = el('img'); portraitFallback(image, item); image.src = source; image.alt = ''; if (item.type === 'avatar') avatarFallback(image); visual.append(image); }
+      if (source) { const image = el('img'); portraitFallback(image, item); image.src = source; image.alt = ''; image.loading='lazy'; image.decoding='async'; if (item.type === 'avatar') avatarFallback(image); visual.append(image); }
       else if (item.type === 'layout') { const miniature = el('div', 'shop-layout-preview'); miniature.dataset.layout = item.id; miniature.append(el('i'), el('span', '', 'CAPTAIN')); visual.append(miniature); }
       else visual.append(el('span', 'shop-symbol', item.type === 'bgm' ? '♫' : '✒'));
       const body = el('div', 'shop-item-body');
@@ -816,11 +896,11 @@
     const mutation = ++shopMutation;
     shopBusy = true; $('shopConfirmBuy').disabled = true; $('shopConfirmHint').textContent = '正在確認購買…';
     try {
-      const result = await api.buyLauncherItem(item.id);
+      const result = await (extendedItem(item.id) ? profileCommand('shop.buy', {itemId:item.id}) : api.buyLauncherItem(item.id));
       if (owner !== accountId || mutation !== shopMutation || !accountId || preview) return;
       if (!result?.ok || !result.shop) { $('shopConfirmHint').textContent = result?.error === 'timeout' ? '結果尚未確認。請關閉後重新整理商店，避免重複購買。' : errorText(result?.error); return; }
       shopRequest++;
-      shop = result.shop; $('shopConfirmDialog').close(); renderShop();
+      shop = result.shop; void loadStationery(); publishAccountAvatar(result.profile); $('shopConfirmDialog').close(); renderShop();
       const purchasedName = String(item.name || item.id).slice(0, 80);
       status('shopStatus', result.roomPlacementDeferred
         ? `已收藏「${purchasedName}」。房間最多同時放 10 位夥伴；請到佈置模式替換角色。`
@@ -845,10 +925,10 @@
     const owner=accountId,mutation=++shopMutation;
     shopBusy = true; renderShop(); status('shopStatus', '正在套用裝扮…');
     try {
-      const result = await api.equipLauncherItem(itemId);
+      const result = await (extendedItem(itemId) ? profileCommand('shop.equip', {itemId}) : api.equipLauncherItem(itemId));
       if(owner!==accountId||mutation!==shopMutation||!accountId||preview)return;
       if (!result?.ok || !result.shop) { status('shopStatus', errorText(result?.error), true); return; }
-      shop = result.shop; status('shopStatus', `已套用「${label}」。`);
+      shop = result.shop; void loadStationery(); publishAccountAvatar(result.profile); status('shopStatus', `已套用「${label}」。`);
       if (profile?.isSelf) loadProfile();
     } catch { if(owner===accountId&&mutation===shopMutation)status('shopStatus', errorText('offline'), true); }
     finally { if(owner===accountId&&mutation===shopMutation){shopBusy = false; renderShop();} }
@@ -877,7 +957,13 @@
   $('profileBgmVolume').oninput = () => { bgmListener.volume = clamp(Number($('profileBgmVolume').value) / 100, 0, 1, .35); saveMusicListener(); };
   $('profileBgmAudio').onended = () => { if (bgmPlaylist.length > 1) nextBgm(true); else stopBgm(); };
   $('profileGuestbookForm').onsubmit = postComment;
-  $('profileGuestbookInput').oninput = () => { $('profileGuestbookLength').textContent = `${$('profileGuestbookInput').value.length} / 240`; };
+  $('profileGuestbookInput').oninput = () => { postRequestId=''; $('profileGuestbookLength').textContent = `${$('profileGuestbookInput').value.length} / 240`; };
+  $('profileCommentStyle').onchange=()=>{selectedStationery=$('profileCommentStyle').value;postRequestId='';renderStationery();};
+  $('profileGuestbookMotion').onclick=()=>{guestbookPaused=!guestbookPaused;syncGuestbookMotion();};
+  $('profileGuestbookRead').onclick=()=>{guestbookReading=!guestbookReading;renderGuestbook();};
+  $('profileCommentReadClose').onclick=()=>$('profileCommentReadDialog').close();
+  $('profileCommentReadDialog').addEventListener('close',syncGuestbookMotion);
+  motionPreference.addEventListener('change',e=>{guestbookReading=e.matches;renderGuestbook();});
   $('profileGuestbookMore').onclick = () => loadComments(true);
   $('profileCommentDeleteCancel').onclick = () => $('profileCommentDeleteDialog').close();
   $('profileCommentDeleteConfirm').onclick = deleteComment;
@@ -896,17 +982,25 @@
       clearBgm(); profileVisible = false;
       shopMutation++; shopBusy = false;
       cardMutation++; cardBusy = false; decorBusy = false; $('profileCardEditor').hidden = true; $('profileCardSave').disabled = false; $('profileCardCancel').disabled = false;
-      accountId = id; preview = isPreview; viewUserId = 0; profile = null; shop = null; roomEditorRequested = false;
+      accountId = id; preview = isPreview; window.LauncherProfileAvatar=null;
+      const avatarVersion=++accountAvatarVersion;
+      if(id&&!isPreview)void api.getLauncherProfile(0).then(r=>{if(accountId===id&&accountAvatarVersion===avatarVersion&&r?.ok)publishAccountAvatar(r.profile);}).catch(()=>{}); viewUserId = 0; profile = null; shop = null; roomEditorRequested = false;
       announcementShopItem = '';
+      commentMutation++;commentBusy=false;$('profileGuestbookPost').disabled=false;$('profileGuestbookInput').disabled=false;$('profileCommentStyle').disabled=false;
+      stationeryRequest++;stationery=[];selectedStationery='comment-style-default';postRequestId='';guestbookObserver?.disconnect();$('profileCommentReadDialog').close();
       profileRequest++; shopRequest++; commentRequest++; comments = null; commentHasMore = false; commentNextBeforeId = 0; pendingPurchase = null; pendingCommentDelete = null;
       if ($('shopConfirmDialog').open) $('shopConfirmDialog').close();
       if ($('profileCommentDeleteDialog').open) $('profileCommentDeleteDialog').close();
+      $('profileCommentDeleteConfirm').disabled=false;
       renderProfile(); renderShopTabs(); renderShop();
     },
     openProfile(userId = 0) {
       const id = number(userId);
       clearBgm();
       cardMutation++; cardBusy = false; decorBusy = false; $('profileCardEditor').hidden = true; $('profileCardSave').disabled = false; $('profileCardCancel').disabled = false;
+      commentMutation++;commentBusy=false;$('profileGuestbookPost').disabled=false;$('profileGuestbookInput').disabled=false;$('profileCommentStyle').disabled=false;
+      $('profileCommentDeleteDialog').close();pendingCommentDelete=null;$('profileCommentDeleteConfirm').disabled=false;
+      $('profileCommentReadDialog').close();postRequestId='';guestbookObserver?.disconnect();
       viewUserId = id && id !== accountId ? id : 0;
       profile = null; comments = null; profileRequest++; commentRequest++; commentHasMore = false; commentNextBeforeId = 0;
       if (window.launcherSwitchPanel) window.launcherSwitchPanel('profile');
@@ -916,6 +1010,7 @@
       if (panel !== 'shop') stopShopPreview();
       if (panel !== 'profile') { profileVisible = false; stopBgm(); }
       else if (!profileVisible) { profileVisible = true; bgmPausedByUser = false; bgmAutoplayBlocked = false; }
+      syncGuestbookMotion();
       window.LauncherRoom?.onVisible(panel);
       if (panel === 'profile' && !profile) loadProfile();
       else if (panel === 'profile') playBgm(true);
@@ -950,6 +1045,6 @@
       }
     }
   };
-  document.addEventListener('visibilitychange', () => { if (document.hidden) { stopBgm(); stopShopPreview(); } else playBgm(true); });
+  document.addEventListener('visibilitychange', () => { syncGuestbookMotion(); if (document.hidden) { stopBgm(); stopShopPreview(); } else playBgm(true); });
   renderProfile(); renderShopTabs(); renderShop();
 })();

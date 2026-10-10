@@ -1,0 +1,608 @@
+{
+  "status": "PASS",
+  "boards": [
+    {
+      "key": "sunny-deck",
+      "name": "千陽號甲板",
+      "width": 1536,
+      "height": 864,
+      "hasAlpha": false,
+      "bytes": 210570,
+      "sha256": "1fa0e5ccbb1f1dca621021ae9796a05af57e80e0cc62381af3f00733d11d36a5"
+    },
+    {
+      "key": "merry-log",
+      "name": "梅利號航海日誌",
+      "width": 1536,
+      "height": 864,
+      "hasAlpha": false,
+      "bytes": 201408,
+      "sha256": "aaf257b6b23938c216da45270c7283693f5914cf423cbf7db8ba37444404c416"
+    },
+    {
+      "key": "water-seven",
+      "name": "水之七島船塢",
+      "width": 1536,
+      "height": 864,
+      "hasAlpha": false,
+      "bytes": 279966,
+      "sha256": "aa3fb8237a04a51aac761f3629662dc375b5c97921a1a4de0150a266f7587117"
+    },
+    {
+      "key": "skypiea",
+      "name": "空島雲海",
+      "width": 1536,
+      "height": 864,
+      "hasAlpha": false,
+      "bytes": 209442,
+      "sha256": "79d89bc480f1ffbcfe74b231e34b44202a78b786730d4effdf81d51a18e7e755"
+    },
+    {
+      "key": "alabasta",
+      "name": "阿拉巴斯坦王國",
+      "width": 1536,
+      "height": 864,
+      "hasAlpha": false,
+      "bytes": 246696,
+      "sha256": "b3a80acf21588d834890337d4742f86e88ec2f96a4490faf71644c72c6d2fb42"
+    },
+    {
+      "key": "wano",
+      "name": "和之國櫻夜",
+      "width": 1536,
+      "height": 864,
+      "hasAlpha": false,
+      "bytes": 174890,
+      "sha256": "fbcbda22a79b9d10f635341f79c7b30dc2c032efdd4c0b5492e15cb5eec8d023"
+    },
+    {
+      "key": "fishman-island",
+      "name": "魚人島深海",
+      "width": 1536,
+      "height": 864,
+      "hasAlpha": false,
+      "bytes": 157060,
+      "sha256": "1219006284c84a301ff2916de11b680d634fc2f481387b15a280984e21c7ea78"
+    },
+    {
+      "key": "marineford",
+      "name": "馬林福特要塞",
+      "width": 1536,
+      "height": 864,
+      "hasAlpha": false,
+      "bytes": 197080,
+      "sha256": "9dc978a14b79662887507d4a4c8b56dcf15741ac4e3b8b9ef2f363d30ee55cde"
+    },
+    {
+      "key": "grand-line-chart",
+      "name": "偉大航道海圖",
+      "width": 1536,
+      "height": 864,
+      "hasAlpha": false,
+      "bytes": 239558,
+      "sha256": "45fbc2abbffa303a5fafd3e11e7cf9896975e0b58937e05d8a06fab21ec081e6"
+    },
+    {
+      "key": "tabletop-captain",
+      "name": "船長的桌遊航路",
+      "width": 1536,
+      "height": 864,
+      "hasAlpha": false,
+      "bytes": 225034,
+      "sha256": "4255818d73cfce80ad51910a9d338dfd8a84240f4a079325c952184df607d28a"
+    }
+  ],
+  "notes": [
+    {
+      "key": "strawhat-note",
+      "name": "草帽便條",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 83042,
+      "sha256": "d2835a9302da330f9621f4dc729b18bc7ff54ef5c8a333d6be27d4eaba8276bc"
+    },
+    {
+      "key": "zoro-tag",
+      "name": "三刀流掛箋",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 84458,
+      "sha256": "179375b707b11bad92272255e000b3b7933f771318ffb0edbec0174e78ec2446"
+    },
+    {
+      "key": "nami-chart",
+      "name": "航海士海圖紙",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 122918,
+      "sha256": "31b6947c49965917664d36e3a0d47c407a2116b2d3445bc55eaca247826a72cd"
+    },
+    {
+      "key": "usopp-letter",
+      "name": "狙擊手手札",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 92024,
+      "sha256": "210645aef871b9c510556f1713822b24ce45a2420a6e78a5e23b33d331efac57"
+    },
+    {
+      "key": "sanji-menu",
+      "name": "海上餐廳菜單",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 81212,
+      "sha256": "387da2a35d64c34236bb8dff00d402689994c34f42e759680bb094a7438a84e6"
+    },
+    {
+      "key": "chopper-prescription",
+      "name": "櫻花醫師處方箋",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 86258,
+      "sha256": "4d1006c94ca6f6e35fa97e75a76ab864f37d022e8e8797cfb3808b4b1d21d36c"
+    },
+    {
+      "key": "robin-rubbing",
+      "name": "考古學家拓印紙",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 121916,
+      "sha256": "ac167f3662d609c7b78a7a0fda6e976cb2da1a29f0b384f1afacd3b13e498087"
+    },
+    {
+      "key": "franky-blueprint",
+      "name": "船匠設計圖",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 75250,
+      "sha256": "25284f5f7befc3560bec0bf62d94ae3475ee8e90c10a885151ce30cbe33287e4"
+    },
+    {
+      "key": "brook-score",
+      "name": "靈魂之王樂譜",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 103934,
+      "sha256": "b014f5373c008c8e6660a76531f08e625730e9895accdef0ffb2130b5bad6777"
+    },
+    {
+      "key": "jinbe-letter",
+      "name": "海俠波紋信箋",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 107360,
+      "sha256": "aa40c7a5b809512fc4ea3c32d2427944dc83e8876bed5853131dc1f7f83c697f"
+    },
+    {
+      "key": "ace-postcard",
+      "name": "火拳旅行明信片",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 110404,
+      "sha256": "d5b30ff9ddbd762d7b5db341c824eabc8385915ccab86560ef061449ddfe19b1"
+    },
+    {
+      "key": "sabo-dispatch",
+      "name": "革命軍密函",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 92726,
+      "sha256": "c71bdd4362b5c8c017138f880ac0f56264bf4e67be82b82dccdbe46010719ee5"
+    },
+    {
+      "key": "law-chart",
+      "name": "紅心船醫紀錄紙",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 43726,
+      "sha256": "8f318cb85a86a6de960e92f2bfe77ef25705a04caa9ec47ddfe9532ff9fb1cf7"
+    },
+    {
+      "key": "hancock-letter",
+      "name": "九蛇女帝信紙",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 48602,
+      "sha256": "2680057b87f81b3907f8a09859b2ed99f594c20f0cd554ca68649dbaf2a3b8a7"
+    },
+    {
+      "key": "shanks-note",
+      "name": "紅髮航海便箋",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 55812,
+      "sha256": "47d6662a6f3ceff55a32194281699d4eac09bfce867f24b537e7a546159bf205"
+    },
+    {
+      "key": "merry-ticket",
+      "name": "梅利號乘船券",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 62130,
+      "sha256": "b09405a6371e46ecc203f47212d1f4566eeffbb98f6eaedc5935a937c100da15"
+    },
+    {
+      "key": "sunny-pass",
+      "name": "千陽號登船證",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 54180,
+      "sha256": "ced0854d55f99b0b6ed2930783463e246f73be2e548269dc1e44458a7112ebec"
+    },
+    {
+      "key": "log-pose-card",
+      "name": "紀錄指針航路卡",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 45882,
+      "sha256": "ab305453b964ba17c3248b47fb7406e0ced2409a42db3a8c29567e1d2441f873"
+    },
+    {
+      "key": "fishing-catch",
+      "name": "釣手漁獲紀念卡",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 65696,
+      "sha256": "c0740c0c8a03537698feccd71c9802ebbbe4429e823c2c86b12e93670f64f315"
+    },
+    {
+      "key": "tabletop-invite",
+      "name": "海賊桌遊邀請函",
+      "width": 960,
+      "height": 480,
+      "hasAlpha": true,
+      "bytes": 42998,
+      "sha256": "59a948008e5f53e4f4d1d6a045bd27241260fd34177e18734951d1785527a49a"
+    }
+  ],
+  "totalBytes": 3722232,
+  "checks": [
+    {
+      "name": "10 board styles",
+      "pass": true
+    },
+    {
+      "name": "20 note styles",
+      "pass": true
+    },
+    {
+      "name": "sunny-deck dimensions",
+      "pass": true
+    },
+    {
+      "name": "sunny-deck unique bytes",
+      "pass": true
+    },
+    {
+      "name": "merry-log dimensions",
+      "pass": true
+    },
+    {
+      "name": "merry-log unique bytes",
+      "pass": true
+    },
+    {
+      "name": "water-seven dimensions",
+      "pass": true
+    },
+    {
+      "name": "water-seven unique bytes",
+      "pass": true
+    },
+    {
+      "name": "skypiea dimensions",
+      "pass": true
+    },
+    {
+      "name": "skypiea unique bytes",
+      "pass": true
+    },
+    {
+      "name": "alabasta dimensions",
+      "pass": true
+    },
+    {
+      "name": "alabasta unique bytes",
+      "pass": true
+    },
+    {
+      "name": "wano dimensions",
+      "pass": true
+    },
+    {
+      "name": "wano unique bytes",
+      "pass": true
+    },
+    {
+      "name": "fishman-island dimensions",
+      "pass": true
+    },
+    {
+      "name": "fishman-island unique bytes",
+      "pass": true
+    },
+    {
+      "name": "marineford dimensions",
+      "pass": true
+    },
+    {
+      "name": "marineford unique bytes",
+      "pass": true
+    },
+    {
+      "name": "grand-line-chart dimensions",
+      "pass": true
+    },
+    {
+      "name": "grand-line-chart unique bytes",
+      "pass": true
+    },
+    {
+      "name": "tabletop-captain dimensions",
+      "pass": true
+    },
+    {
+      "name": "tabletop-captain unique bytes",
+      "pass": true
+    },
+    {
+      "name": "strawhat-note dimensions",
+      "pass": true
+    },
+    {
+      "name": "strawhat-note unique bytes",
+      "pass": true
+    },
+    {
+      "name": "strawhat-note real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "zoro-tag dimensions",
+      "pass": true
+    },
+    {
+      "name": "zoro-tag unique bytes",
+      "pass": true
+    },
+    {
+      "name": "zoro-tag real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "nami-chart dimensions",
+      "pass": true
+    },
+    {
+      "name": "nami-chart unique bytes",
+      "pass": true
+    },
+    {
+      "name": "nami-chart real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "usopp-letter dimensions",
+      "pass": true
+    },
+    {
+      "name": "usopp-letter unique bytes",
+      "pass": true
+    },
+    {
+      "name": "usopp-letter real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "sanji-menu dimensions",
+      "pass": true
+    },
+    {
+      "name": "sanji-menu unique bytes",
+      "pass": true
+    },
+    {
+      "name": "sanji-menu real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "chopper-prescription dimensions",
+      "pass": true
+    },
+    {
+      "name": "chopper-prescription unique bytes",
+      "pass": true
+    },
+    {
+      "name": "chopper-prescription real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "robin-rubbing dimensions",
+      "pass": true
+    },
+    {
+      "name": "robin-rubbing unique bytes",
+      "pass": true
+    },
+    {
+      "name": "robin-rubbing real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "franky-blueprint dimensions",
+      "pass": true
+    },
+    {
+      "name": "franky-blueprint unique bytes",
+      "pass": true
+    },
+    {
+      "name": "franky-blueprint real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "brook-score dimensions",
+      "pass": true
+    },
+    {
+      "name": "brook-score unique bytes",
+      "pass": true
+    },
+    {
+      "name": "brook-score real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "jinbe-letter dimensions",
+      "pass": true
+    },
+    {
+      "name": "jinbe-letter unique bytes",
+      "pass": true
+    },
+    {
+      "name": "jinbe-letter real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "ace-postcard dimensions",
+      "pass": true
+    },
+    {
+      "name": "ace-postcard unique bytes",
+      "pass": true
+    },
+    {
+      "name": "ace-postcard real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "sabo-dispatch dimensions",
+      "pass": true
+    },
+    {
+      "name": "sabo-dispatch unique bytes",
+      "pass": true
+    },
+    {
+      "name": "sabo-dispatch real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "law-chart dimensions",
+      "pass": true
+    },
+    {
+      "name": "law-chart unique bytes",
+      "pass": true
+    },
+    {
+      "name": "law-chart real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "hancock-letter dimensions",
+      "pass": true
+    },
+    {
+      "name": "hancock-letter unique bytes",
+      "pass": true
+    },
+    {
+      "name": "hancock-letter real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "shanks-note dimensions",
+      "pass": true
+    },
+    {
+      "name": "shanks-note unique bytes",
+      "pass": true
+    },
+    {
+      "name": "shanks-note real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "merry-ticket dimensions",
+      "pass": true
+    },
+    {
+      "name": "merry-ticket unique bytes",
+      "pass": true
+    },
+    {
+      "name": "merry-ticket real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "sunny-pass dimensions",
+      "pass": true
+    },
+    {
+      "name": "sunny-pass unique bytes",
+      "pass": true
+    },
+    {
+      "name": "sunny-pass real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "log-pose-card dimensions",
+      "pass": true
+    },
+    {
+      "name": "log-pose-card unique bytes",
+      "pass": true
+    },
+    {
+      "name": "log-pose-card real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "fishing-catch dimensions",
+      "pass": true
+    },
+    {
+      "name": "fishing-catch unique bytes",
+      "pass": true
+    },
+    {
+      "name": "fishing-catch real transparent outside",
+      "pass": true
+    },
+    {
+      "name": "tabletop-invite dimensions",
+      "pass": true
+    },
+    {
+      "name": "tabletop-invite unique bytes",
+      "pass": true
+    },
+    {
+      "name": "tabletop-invite real transparent outside",
+      "pass": true
+    }
+  ]
+}

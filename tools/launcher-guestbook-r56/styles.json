@@ -1,0 +1,186 @@
+{
+  "boards": [
+    {
+      "key": "sunny-deck",
+      "name": "千陽號甲板",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/boards/sunny-deck.webp"
+    },
+    {
+      "key": "merry-log",
+      "name": "梅利號航海日誌",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/boards/merry-log.webp"
+    },
+    {
+      "key": "water-seven",
+      "name": "水之七島船塢",
+      "rarity": "epic",
+      "asset": "opui://launcher/images/launcher_guestbook/boards/water-seven.webp"
+    },
+    {
+      "key": "skypiea",
+      "name": "空島雲海",
+      "rarity": "epic",
+      "asset": "opui://launcher/images/launcher_guestbook/boards/skypiea.webp"
+    },
+    {
+      "key": "alabasta",
+      "name": "阿拉巴斯坦王國",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/boards/alabasta.webp"
+    },
+    {
+      "key": "wano",
+      "name": "和之國櫻夜",
+      "rarity": "epic",
+      "asset": "opui://launcher/images/launcher_guestbook/boards/wano.webp"
+    },
+    {
+      "key": "fishman-island",
+      "name": "魚人島深海",
+      "rarity": "epic",
+      "asset": "opui://launcher/images/launcher_guestbook/boards/fishman-island.webp"
+    },
+    {
+      "key": "marineford",
+      "name": "馬林福特要塞",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/boards/marineford.webp"
+    },
+    {
+      "key": "grand-line-chart",
+      "name": "偉大航道海圖",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/boards/grand-line-chart.webp"
+    },
+    {
+      "key": "tabletop-captain",
+      "name": "船長的桌遊航路",
+      "rarity": "epic",
+      "asset": "opui://launcher/images/launcher_guestbook/boards/tabletop-captain.webp"
+    }
+  ],
+  "notes": [
+    {
+      "key": "strawhat-note",
+      "name": "草帽便條",
+      "rarity": "common",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/strawhat-note.webp"
+    },
+    {
+      "key": "zoro-tag",
+      "name": "三刀流掛箋",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/zoro-tag.webp"
+    },
+    {
+      "key": "nami-chart",
+      "name": "航海士海圖紙",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/nami-chart.webp"
+    },
+    {
+      "key": "usopp-letter",
+      "name": "狙擊手手札",
+      "rarity": "common",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/usopp-letter.webp"
+    },
+    {
+      "key": "sanji-menu",
+      "name": "海上餐廳菜單",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/sanji-menu.webp"
+    },
+    {
+      "key": "chopper-prescription",
+      "name": "櫻花醫師處方箋",
+      "rarity": "common",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/chopper-prescription.webp"
+    },
+    {
+      "key": "robin-rubbing",
+      "name": "考古學家拓印紙",
+      "rarity": "epic",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/robin-rubbing.webp"
+    },
+    {
+      "key": "franky-blueprint",
+      "name": "船匠設計圖",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/franky-blueprint.webp"
+    },
+    {
+      "key": "brook-score",
+      "name": "靈魂之王樂譜",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/brook-score.webp"
+    },
+    {
+      "key": "jinbe-letter",
+      "name": "海俠波紋信箋",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/jinbe-letter.webp"
+    },
+    {
+      "key": "ace-postcard",
+      "name": "火拳旅行明信片",
+      "rarity": "epic",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/ace-postcard.webp"
+    },
+    {
+      "key": "sabo-dispatch",
+      "name": "革命軍密函",
+      "rarity": "epic",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/sabo-dispatch.webp"
+    },
+    {
+      "key": "law-chart",
+      "name": "紅心船醫紀錄紙",
+      "rarity": "epic",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/law-chart.webp"
+    },
+    {
+      "key": "hancock-letter",
+      "name": "九蛇女帝信紙",
+      "rarity": "epic",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/hancock-letter.webp"
+    },
+    {
+      "key": "shanks-note",
+      "name": "紅髮航海便箋",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/shanks-note.webp"
+    },
+    {
+      "key": "merry-ticket",
+      "name": "梅利號乘船券",
+      "rarity": "common",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/merry-ticket.webp"
+    },
+    {
+      "key": "sunny-pass",
+      "name": "千陽號登船證",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/sunny-pass.webp"
+    },
+    {
+      "key": "log-pose-card",
+      "name": "紀錄指針航路卡",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/log-pose-card.webp"
+    },
+    {
+      "key": "fishing-catch",
+      "name": "釣手漁獲紀念卡",
+      "rarity": "common",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/fishing-catch.webp"
+    },
+    {
+      "key": "tabletop-invite",
+      "name": "海賊桌遊邀請函",
+      "rarity": "rare",
+      "asset": "opui://launcher/images/launcher_guestbook/notes/tabletop-invite.webp"
+    }
+  ]
+}

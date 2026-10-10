@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 55,
-  "publishedAt": "2026-10-09T06:20:47.742Z",
+  "revision": 56,
+  "publishedAt": "2026-10-10T08:31:40.944Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -22,6 +22,156 @@
       "path": "audio/launcher_room/pixabay_fishing_v1/reel_in_fast.ogg",
       "bytes": 16176,
       "sha256": "6afa2406345448a4ee6fc9fc2ef3b88a508c1519fe3518f33f53b6216849f66f"
+    },
+    {
+      "path": "images/board/avatars/63.webp",
+      "bytes": 131864,
+      "sha256": "0e576b9e7147a5702f45dc8b2976a2965b098172d4ec867c5fc916e24f065afa"
+    },
+    {
+      "path": "images/board/avatars/64.webp",
+      "bytes": 135046,
+      "sha256": "94f48b47ccf1e419552012e83d85624987bde77053553925fafed392613e2601"
+    },
+    {
+      "path": "images/board/avatars/65.webp",
+      "bytes": 128572,
+      "sha256": "4adce736c8006637ef570235c4dba6ede1e7c71134b4168fc8b106395855ddb1"
+    },
+    {
+      "path": "images/board/avatars/66.webp",
+      "bytes": 136646,
+      "sha256": "8d243b7e671ad2fc40efdae3b57213b9f0eebf5cd89288020d065ac5bd3487cb"
+    },
+    {
+      "path": "images/board/avatars/67.webp",
+      "bytes": 137658,
+      "sha256": "004bf7cb660e4e075fb29d404d65914603c26a5c7c12c8bccf7fe3b71ca61e9e"
+    },
+    {
+      "path": "images/board/avatars/68.webp",
+      "bytes": 150396,
+      "sha256": "7afd7c6ed633f936ccd6ebe49d3b6f1f8aa758a2aebcf0cb9b69bb53dc912092"
+    },
+    {
+      "path": "images/board/avatars/69.webp",
+      "bytes": 120906,
+      "sha256": "f2caf5d3fd9663a6574dd869fb1c7222ce96cf6f59e260038af6b9c4a1fe777b"
+    },
+    {
+      "path": "images/board/avatars/70.webp",
+      "bytes": 131266,
+      "sha256": "d8524725071a10b7547f985516350417f36da9ccae84fecd8be0550b242eebfd"
+    },
+    {
+      "path": "images/board/avatars/71.webp",
+      "bytes": 129866,
+      "sha256": "a48812fbb996a765ba5dbcdace89c7efcc7380a6d3fd1501390b0fe6549b2b7e"
+    },
+    {
+      "path": "images/board/avatars/72.webp",
+      "bytes": 119122,
+      "sha256": "fe1b7b5bb1062723f42ce90dd20c994a4b6a53c1a4053c63bfef5cede5b272e6"
+    },
+    {
+      "path": "images/board/avatars/73.webp",
+      "bytes": 134744,
+      "sha256": "e7be001921e284b67b2f96fff4a059e5cc2fad3941d855978d5eff67a38cd787"
+    },
+    {
+      "path": "images/board/avatars/74.webp",
+      "bytes": 112378,
+      "sha256": "815d815684b4d7b8cc3d9ef068ad6e529d30748372aee6f205fb1f547018d1d6"
+    },
+    {
+      "path": "images/board/avatars/75.webp",
+      "bytes": 135270,
+      "sha256": "495b3122cb87fc92d6f516021723df310405a3670881352e921773e938137b84"
+    },
+    {
+      "path": "images/board/avatars/76.webp",
+      "bytes": 127268,
+      "sha256": "8ca745b0dace0414420737fc3e05e2f4c3f2d437e4d67fb145416ec17fdbae8c"
+    },
+    {
+      "path": "images/board/avatars/77.webp",
+      "bytes": 115420,
+      "sha256": "6a16201aa3cbaaa289dc97c156f435db3cedc9cd241d9a3142c80ab6be8a8abf"
+    },
+    {
+      "path": "images/board/avatars/78.webp",
+      "bytes": 99820,
+      "sha256": "68ab4c0767816d4f743437f05f308bad546d4950881a8a5798e0c3998a36e0d2"
+    },
+    {
+      "path": "images/board/avatars/79.webp",
+      "bytes": 114462,
+      "sha256": "9470ec8b385128ed58db21ff10b766c9f6cd3f162640d73495a256b3d5e8bbf4"
+    },
+    {
+      "path": "images/board/avatars/80.webp",
+      "bytes": 134832,
+      "sha256": "18307c9a098a70c53f64262510cb4edad6495fa5f50ada2d161c36cdbbb54c22"
+    },
+    {
+      "path": "images/board/avatars/81.webp",
+      "bytes": 121154,
+      "sha256": "ea4851a89774418cbaf1afe49ee33ff2fecda60792ead07d82b86f744ce61def"
+    },
+    {
+      "path": "images/board/avatars/82.webp",
+      "bytes": 120292,
+      "sha256": "1558d79083988806b110221d931459183302516e6b1d00ba6bc086cd49b494c3"
+    },
+    {
+      "path": "images/board/avatars/83.webp",
+      "bytes": 115716,
+      "sha256": "6d4ac427ff7945877c38baa2d8e2fa8dcd22ec9fea9ee758ea49bd23ebf09516"
+    },
+    {
+      "path": "images/board/avatars/84.webp",
+      "bytes": 163732,
+      "sha256": "97ea67d73fc29e14b21b326718501fd938fb3adff35f5fb3fc34d892e1656ea0"
+    },
+    {
+      "path": "images/board/avatars/85.webp",
+      "bytes": 144158,
+      "sha256": "83aa30042d5f501fe2ad50f801b4bc2e117fa22684f9ea17900a6a4826f989e5"
+    },
+    {
+      "path": "images/board/avatars/86.webp",
+      "bytes": 115212,
+      "sha256": "4a98d3f841c2dfd0da5c5a1bd34fafaae90e402cbfc5cc179d424b72b7b2a7b6"
+    },
+    {
+      "path": "images/board/avatars/87.webp",
+      "bytes": 147982,
+      "sha256": "a6b7bc4993a00599093a07c3695936bef059eca842f7e19b91eb1ef07e30e42b"
+    },
+    {
+      "path": "images/board/avatars/88.webp",
+      "bytes": 96412,
+      "sha256": "068b4b498d4b5732a3d79e175fd2443f1e7b0b9bc2f265d0927fff4016c5a7f5"
+    },
+    {
+      "path": "images/board/avatars/89.webp",
+      "bytes": 127582,
+      "sha256": "d8c697e2909d4560ba04eaffdffb05f3525c22f6a591d2cde9c98caff3ca0e16"
+    },
+    {
+      "path": "images/board/avatars/90.webp",
+      "bytes": 131870,
+      "sha256": "006fe067e9bf005b9eaeeb3ff2f00785e056ba25e14b27fba562bdf9b10aeb77"
+    },
+    {
+      "path": "images/board/avatars/91.webp",
+      "bytes": 140000,
+      "sha256": "3d83a7b5ce3760f4a743f08123b1c05a0d2a7ac6cb0f9bf13db130f9de6ff8d8"
+    },
+    {
+      "path": "images/board/avatars/92.webp",
+      "bytes": 119104,
+      "sha256": "b2e39b3a9e4999a60566a21bdb09b0346f4431c62be02e05fc7607e3cdecb2b7"
     },
     {
       "path": "images/launcher_announcements/launcher-fish-detail-r31.webp",
@@ -87,6 +237,11 @@
       "path": "images/launcher_announcements/launcher-fishing-wallet-r27.webp",
       "bytes": 44484,
       "sha256": "872c554dfb942808068ed9a0c35013c2d54b95d8203f68e13e2c8ed394bcfd58"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-guestbook-r56.webp",
+      "bytes": 166078,
+      "sha256": "78a390c1266e139d5a81153701a5d5dc74c26c296c3f2fdb6c7a90ed8348745a"
     },
     {
       "path": "images/launcher_announcements/launcher-journal-layout-r44.webp",
@@ -162,6 +317,156 @@
       "path": "images/launcher_announcements/launcher-wii-meter-r36.webp",
       "bytes": 202288,
       "sha256": "874e1505ae1f7d20bd0c90f505ccbac00c1e0b59d0c7184a47d473b98692ede1"
+    },
+    {
+      "path": "images/launcher_guestbook/boards/alabasta.webp",
+      "bytes": 246696,
+      "sha256": "b3a80acf21588d834890337d4742f86e88ec2f96a4490faf71644c72c6d2fb42"
+    },
+    {
+      "path": "images/launcher_guestbook/boards/fishman-island.webp",
+      "bytes": 157060,
+      "sha256": "1219006284c84a301ff2916de11b680d634fc2f481387b15a280984e21c7ea78"
+    },
+    {
+      "path": "images/launcher_guestbook/boards/grand-line-chart.webp",
+      "bytes": 239558,
+      "sha256": "45fbc2abbffa303a5fafd3e11e7cf9896975e0b58937e05d8a06fab21ec081e6"
+    },
+    {
+      "path": "images/launcher_guestbook/boards/marineford.webp",
+      "bytes": 197080,
+      "sha256": "9dc978a14b79662887507d4a4c8b56dcf15741ac4e3b8b9ef2f363d30ee55cde"
+    },
+    {
+      "path": "images/launcher_guestbook/boards/merry-log.webp",
+      "bytes": 201408,
+      "sha256": "aaf257b6b23938c216da45270c7283693f5914cf423cbf7db8ba37444404c416"
+    },
+    {
+      "path": "images/launcher_guestbook/boards/skypiea.webp",
+      "bytes": 209442,
+      "sha256": "79d89bc480f1ffbcfe74b231e34b44202a78b786730d4effdf81d51a18e7e755"
+    },
+    {
+      "path": "images/launcher_guestbook/boards/sunny-deck.webp",
+      "bytes": 210570,
+      "sha256": "1fa0e5ccbb1f1dca621021ae9796a05af57e80e0cc62381af3f00733d11d36a5"
+    },
+    {
+      "path": "images/launcher_guestbook/boards/tabletop-captain.webp",
+      "bytes": 225034,
+      "sha256": "4255818d73cfce80ad51910a9d338dfd8a84240f4a079325c952184df607d28a"
+    },
+    {
+      "path": "images/launcher_guestbook/boards/wano.webp",
+      "bytes": 174890,
+      "sha256": "fbcbda22a79b9d10f635341f79c7b30dc2c032efdd4c0b5492e15cb5eec8d023"
+    },
+    {
+      "path": "images/launcher_guestbook/boards/water-seven.webp",
+      "bytes": 279966,
+      "sha256": "aa3fb8237a04a51aac761f3629662dc375b5c97921a1a4de0150a266f7587117"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/ace-postcard.webp",
+      "bytes": 110404,
+      "sha256": "d5b30ff9ddbd762d7b5db341c824eabc8385915ccab86560ef061449ddfe19b1"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/brook-score.webp",
+      "bytes": 103934,
+      "sha256": "b014f5373c008c8e6660a76531f08e625730e9895accdef0ffb2130b5bad6777"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/chopper-prescription.webp",
+      "bytes": 86258,
+      "sha256": "4d1006c94ca6f6e35fa97e75a76ab864f37d022e8e8797cfb3808b4b1d21d36c"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/fishing-catch.webp",
+      "bytes": 65696,
+      "sha256": "c0740c0c8a03537698feccd71c9802ebbbe4429e823c2c86b12e93670f64f315"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/franky-blueprint.webp",
+      "bytes": 75250,
+      "sha256": "25284f5f7befc3560bec0bf62d94ae3475ee8e90c10a885151ce30cbe33287e4"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/hancock-letter.webp",
+      "bytes": 48602,
+      "sha256": "2680057b87f81b3907f8a09859b2ed99f594c20f0cd554ca68649dbaf2a3b8a7"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/jinbe-letter.webp",
+      "bytes": 107360,
+      "sha256": "aa40c7a5b809512fc4ea3c32d2427944dc83e8876bed5853131dc1f7f83c697f"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/law-chart.webp",
+      "bytes": 43726,
+      "sha256": "8f318cb85a86a6de960e92f2bfe77ef25705a04caa9ec47ddfe9532ff9fb1cf7"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/log-pose-card.webp",
+      "bytes": 45882,
+      "sha256": "ab305453b964ba17c3248b47fb7406e0ced2409a42db3a8c29567e1d2441f873"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/merry-ticket.webp",
+      "bytes": 62130,
+      "sha256": "b09405a6371e46ecc203f47212d1f4566eeffbb98f6eaedc5935a937c100da15"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/nami-chart.webp",
+      "bytes": 122918,
+      "sha256": "31b6947c49965917664d36e3a0d47c407a2116b2d3445bc55eaca247826a72cd"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/robin-rubbing.webp",
+      "bytes": 121916,
+      "sha256": "ac167f3662d609c7b78a7a0fda6e976cb2da1a29f0b384f1afacd3b13e498087"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/sabo-dispatch.webp",
+      "bytes": 92726,
+      "sha256": "c71bdd4362b5c8c017138f880ac0f56264bf4e67be82b82dccdbe46010719ee5"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/sanji-menu.webp",
+      "bytes": 81212,
+      "sha256": "387da2a35d64c34236bb8dff00d402689994c34f42e759680bb094a7438a84e6"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/shanks-note.webp",
+      "bytes": 55812,
+      "sha256": "47d6662a6f3ceff55a32194281699d4eac09bfce867f24b537e7a546159bf205"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/strawhat-note.webp",
+      "bytes": 83042,
+      "sha256": "d2835a9302da330f9621f4dc729b18bc7ff54ef5c8a333d6be27d4eaba8276bc"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/sunny-pass.webp",
+      "bytes": 54180,
+      "sha256": "ced0854d55f99b0b6ed2930783463e246f73be2e548269dc1e44458a7112ebec"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/tabletop-invite.webp",
+      "bytes": 42998,
+      "sha256": "59a948008e5f53e4f4d1d6a045bd27241260fd34177e18734951d1785527a49a"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/usopp-letter.webp",
+      "bytes": 92024,
+      "sha256": "210645aef871b9c510556f1713822b24ce45a2420a6e78a5e23b33d331efac57"
+    },
+    {
+      "path": "images/launcher_guestbook/notes/zoro-tag.webp",
+      "bytes": 84458,
+      "sha256": "179375b707b11bad92272255e000b3b7933f771318ffb0edbec0174e78ec2446"
     },
     {
       "path": "images/launcher_room/fish_master/alligator-gar.webp",
@@ -549,6 +854,16 @@
       "sha256": "5af356478bf1c44b73c90f546499027f1b20349715a3111f1a8bf21536593392"
     },
     {
+      "path": "launcher-profile-shop.css",
+      "bytes": 33198,
+      "sha256": "88588101160a623d3071397374fe156593f8cecf5fbe6322a211ef40cbc28f6a"
+    },
+    {
+      "path": "launcher-profile-shop.js",
+      "bytes": 70612,
+      "sha256": "d24faecd4705a305747e2ffbf95bb9500d959812bb2d9e4538475919d5ba37e7"
+    },
+    {
       "path": "launcher-room-aquarium.css",
       "bytes": 734374,
       "sha256": "4f5688abb4735ce1b7e8ab77813a33269ed7c75341202e08b62512a4b3745cfd"
@@ -589,14 +904,24 @@
       "sha256": "f4ca3a74e4f9b4ae940f6137032f7d514e15b83282b08f02a578edddeca96fd8"
     },
     {
+      "path": "launcher-social.js",
+      "bytes": 13963,
+      "sha256": "f1730f7b2813347df9f5f94e50510d1cce50f161fe05ed1e0730a5a0a3252346"
+    },
+    {
       "path": "launcher.html",
-      "bytes": 39564,
-      "sha256": "61de409bd5a700572ea0e8da0586d79cc9f96af7c2b3a7849a0f04fd20b0fae1"
+      "bytes": 40647,
+      "sha256": "4636456ca3e62390b33763644ef53485abbb951efd07d0febdfe9116362bb362"
+    },
+    {
+      "path": "launcher.js",
+      "bytes": 51579,
+      "sha256": "d5275c68ef0ec4be22b5c38b21bafcf68dc9e3fde8650955f1edb083716848f7"
     }
   ],
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "7dIkaAe+TlSI/C1nEGkSP0L+Au1Cz/Yb4nEzGKJ2qzcp7HTquNutC/vC2NmPbYm+SxUBkSDtG85SK3kjAA92Aw=="
+    "value": "NTxXRLIIW8fksn4fPPeV8qbs2e2+ax0dXyCrTimdRA9GMvzrrOKwfU52pxI+eJzbyLiLa2FUM7Qvd2TzHg2kBg=="
   }
 }

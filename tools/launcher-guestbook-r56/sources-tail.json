@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "entries": [
+    {
+      "id": 84,
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-d8b2b3ba-03a6-4639-8134-9c666018d55c.png",
+      "output": "public/images/board/avatars/84.webp",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/official-Silvers_Rayleigh.jpg",
+      "referenceUrl": "https://one-piece.com/character/Silvers_Rayleigh/index.html",
+      "generatedBy": "builtin image_gen",
+      "visualReview": "PASS",
+      "visualNotes": "Old age, right eye scar, wire glasses, white pointed beard and olive-lined white cloak match official reference."
+    },
+    {
+      "id": 85,
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-583573c4-f91a-4c4c-bc8a-b1b1d39486b2.png",
+      "output": "public/images/board/avatars/85.webp",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/official-Coby.png",
+      "referenceUrl": "https://one-piece.com/character/Coby/index.html",
+      "generatedBy": "builtin image_gen",
+      "visualReview": "PASS",
+      "visualNotes": "Pink hair, forehead goggles/flower band, scar, white blue-trim open jacket match official reference. Medal is viewer-left as in official image."
+    },
+    {
+      "id": 86,
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-eb13fea5-4c5c-41ed-a048-84759ce85c9b.png",
+      "output": "public/images/board/avatars/86.webp",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/official-Helmeppo.jpg",
+      "referenceUrl": "https://one-piece.com/character/Helmeppo/index.html",
+      "generatedBy": "builtin image_gen",
+      "visualReview": "PASS",
+      "visualNotes": "Swept long blond hair, black visor, angular face and green vest/white shirt match official reference."
+    },
+    {
+      "id": 87,
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-a61e6141-170f-40f5-931b-3c741cb7379d.png",
+      "output": "public/images/board/avatars/87.webp",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/official-Hina.jpg",
+      "referenceUrl": "https://one-piece.com/character/Hina/index.html",
+      "generatedBy": "builtin image_gen",
+      "visualReview": "PASS",
+      "visualNotes": "Pink hair, purple sunglasses, cigarette, burgundy gold-trim top and Marine cloak match official reference."
+    },
+    {
+      "id": 88,
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-62a4fe0e-9e90-46f1-97c0-7118026d021b.png",
+      "output": "public/images/board/avatars/88.webp",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/official-Sentomaru.png",
+      "referenceUrl": "https://one-piece.com/character/Sentomaru/index.html",
+      "generatedBy": "builtin image_gen",
+      "visualReview": "PASS",
+      "visualNotes": "Heavy canon build, flared blunt black hair, left zigzag facial scar, red apron and Marine coat; no invented necklace."
+    },
+    {
+      "id": 89,
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-f6e0cb3e-6f06-4020-8891-cbcf12366b13.png",
+      "output": "public/images/board/avatars/89.webp",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/bandai-13334.jpg",
+      "referenceUrl": "https://tamashiiweb.com/item/13334/",
+      "generatedBy": "builtin image_gen",
+      "visualReview": "PASS",
+      "visualNotes": "Wano topknot, straw hat behind head, red kimono and blue/white patches; left stitch scar.",
+      "rejectedSources": [
+        {
+          "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-a4abd60c-6e7e-42ea-b71c-cde20a63844a.png",
+          "reason": "Resized alpha at bottom-left corner was 1 instead of 0. Replaced via built-in image edit, no manual mask."
+        }
+      ],
+      "repairPrompt": "Edit this exact finished circular Luffytaro avatar. Preserve the character drawing, facial features, canon Wano topknot, strawhat hanging behind him, red kimono with blue-white patches, composition, blue sky and clouds. Repair ONLY the circle cutout alpha: the entire area outside a smooth, precise circle must be fully transparent alpha ZERO, especially ALL FOUR CORNERS. Remove all isolated tiny colored/translucent pixel speckles outside the circle and make its boundary clean anti-aliased. No checkerboard, no white or black background paint, no new rim. Output square 1:1 PNG RGBA with TRUE transparency outside the circle. It will be reduced to 735px and must have exact zero corner-alpha. Keep the content inside unchanged."
+    },
+    {
+      "id": 90,
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-cc065bd8-0f87-43db-9610-eb2554a26a7b.png",
+      "output": "public/images/board/avatars/90.webp",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/bandai-13335.jpg",
+      "referenceUrl": "https://tamashiiweb.com/item/13335/",
+      "generatedBy": "builtin image_gen",
+      "visualReview": "PASS",
+      "visualNotes": "Wano topknot, closed scarred left eye, three left earrings, white robe and green haori with crest."
+    },
+    {
+      "id": 91,
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-e21d19f6-e783-44fc-8f3c-2ef817d61f23.png",
+      "output": "public/images/board/avatars/91.webp",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/bandai-13368.jpg",
+      "referenceUrl": "https://tamashiiweb.com/item/13368/",
+      "generatedBy": "builtin image_gen",
+      "visualReview": "PASS",
+      "visualNotes": "Wano low ponytail with blue bow, light cyan floral kimono and canon left arm tattoo."
+    },
+    {
+      "id": 92,
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-ae23b734-2c3d-4518-82a5-1dcfe7161f74.png",
+      "output": "public/images/board/avatars/92.webp",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/bandai-13369.jpg",
+      "referenceUrl": "https://tamashiiweb.com/item/13369/",
+      "generatedBy": "builtin image_gen",
+      "visualReview": "PASS",
+      "visualNotes": "Wano geisha hair rolls/pins and hanging decorations, black kimono and red inner collar; long straight Robin nose."
+    }
+  ]
+}

@@ -261,3 +261,54 @@
   .captain-cabin-music { align-items: start; flex-direction: column; }
   .captain-guestbook-list { grid-template-columns: 1fr; }
 }
+/* Illustrated guestbook: three separate lanes, full text remains available by click. */
+.captain-guestbook-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;color:#f4dbad}
+.captain-guestbook-toolbar>div{display:flex;gap:8px;flex-wrap:wrap}
+.captain-guestbook-toolbar button{min-height:38px;padding:8px 14px;font-size:12px}
+.captain-guestbook-stage{position:relative;isolation:isolate;overflow:hidden;border:1px solid #baa46b5e;border-radius:16px;background:#0b2532 var(--board-art) center/cover no-repeat;box-shadow:inset 0 0 55px #0008;min-height:250px;padding:24px 0}
+.captain-guestbook-stage[hidden],.captain-guestbook-toolbar[hidden]{display:none}
+.captain-guestbook-stage .captain-guestbook-list{display:block;position:relative;z-index:1}
+.captain-danmaku-lane{overflow:hidden;margin:8px 0;height:170px}
+.captain-danmaku-track{display:flex;width:max-content;animation:captain-danmaku-travel var(--duration,30s) linear infinite;animation-delay:var(--offset,0s);will-change:transform}
+.captain-danmaku-sequence{display:flex;gap:28px;padding-right:28px;min-width:var(--lap,600px);width:max-content;flex:none;box-sizing:border-box}
+@keyframes captain-danmaku-travel{to{transform:translateX(calc(-1 * var(--lap,600px)))}}
+.captain-guestbook-stage[data-paused=true] .captain-danmaku-track,.captain-guestbook-stage:hover .captain-danmaku-track,.captain-guestbook-stage:focus-within .captain-danmaku-track{animation-play-state:paused}
+.captain-guestbook-entry{position:relative;flex:none;width:330px;height:165px;padding:35px 60px 30px;border:0;border-radius:6px;background:#f4e5bd;color:#392b22;box-shadow:0 6px 12px #0004;cursor:pointer;outline-offset:-8px}
+.captain-guestbook-entry.has-note-art{background:var(--note-art) center/100% 100% no-repeat;box-shadow:none;border-radius:0}
+.captain-guestbook-entry header{gap:7px;align-items:center}
+.captain-guestbook-entry header img{width:25px;height:25px;background:#17343b}
+.captain-guestbook-entry header strong{color:#493321;font-size:12px;font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.captain-guestbook-entry p{color:#392b22;font-size:13px;font-weight:600;line-height:1.5;margin:7px 0 0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap;overflow-wrap:anywhere;text-shadow:0 1px #fff7}
+.captain-guestbook-entry:hover,.captain-guestbook-entry:focus-visible{filter:brightness(1.045);outline:2px solid #f2cb7c}
+.captain-guestbook-empty{color:#f6e5bd;text-align:center;margin:80px 24px;font-size:15px;text-shadow:0 2px 8px #000}
+.captain-guestbook-stage[data-reading=true]{padding:24px}
+.captain-guestbook-stage[data-reading=true] .captain-danmaku-lane{height:auto;overflow:visible;margin:0}
+.captain-guestbook-stage[data-reading=true] .captain-danmaku-track{animation:none;width:auto;display:block;will-change:auto}
+.captain-guestbook-stage[data-reading=true] .captain-danmaku-sequence{display:flex;flex-wrap:wrap;gap:12px;min-width:0;width:100%;padding:0;margin:0 0 12px}
+.captain-guestbook-stage[data-reading=true] .is-duplicate{display:none}
+.captain-guestbook-compose-style{justify-content:flex-start!important;flex-wrap:wrap;margin:0 0 10px!important}
+.captain-guestbook-compose-style label{margin:0;font-weight:700}
+.captain-guestbook-compose-style select{max-width:100%;padding:8px 30px 8px 10px;border:1px solid #92bba76b;border-radius:7px;background:#122f39;color:#f8e5bc;font:inherit;font-size:13px}
+.captain-guestbook-compose-style span{font-size:11px;color:#abc7c2}
+.captain-note-preview{width:300px;max-width:100%;height:150px;display:flex;align-items:center;justify-content:center;padding:30px;color:#4b3725;background:#f4e5bd;font-size:13px}
+.captain-guestbook-form>.captain-note-preview{margin:0 0 12px}
+.captain-note-preview.has-note-art{background:var(--note-art) center/100% 100% no-repeat}
+.captain-note-dialog{width:min(690px,calc(100vw - 32px));max-height:90vh;padding:18px;background:#102e37;overflow:auto}
+.captain-note-dialog-toolbar{display:flex;align-items:center;justify-content:space-between;gap:20px;color:#f4dfb2;margin-bottom:15px}
+.captain-note-dialog-toolbar button{min-height:40px}
+.captain-note-dialog .captain-guestbook-entry{width:100%;min-height:270px;height:auto;padding:12% 18%;cursor:default;outline:none;filter:none}
+.captain-note-dialog .captain-guestbook-entry.has-note-art{background-size:100% 100%}
+.captain-note-dialog .captain-guestbook-entry header{flex-wrap:wrap}
+.captain-note-dialog .captain-guestbook-entry time{width:100%;color:#6b5140;margin-top:4px}
+.captain-note-dialog .captain-guestbook-entry p{display:block;overflow:visible;font-size:16px;line-height:1.9;-webkit-line-clamp:unset}
+.captain-note-dialog .captain-guestbook-entry button{color:#932a22;min-height:38px;font-size:13px}
+.shop-item[data-type=comment_style] .shop-item-image,.shop-item[data-type=guestbook_style] .shop-item-image{height:170px}
+.shop-item[data-type=comment_style] .shop-item-image img,.shop-item[data-type=guestbook_style] .shop-item-image img{width:100%;height:100%;object-fit:contain;border-radius:0}
+.shop-item[data-type=avatar] .shop-item-image img{border-radius:50%;object-fit:contain}
+.captain-guestbook-entry[data-note-style=sunny-pass]{padding-left:86px;padding-right:26px}
+.captain-guestbook-entry[data-note-style=sunny-pass] p{-webkit-line-clamp:2}
+.captain-note-preview[data-note-style=sunny-pass]{padding:33px 24px 45px 78px}
+.captain-note-dialog .captain-guestbook-entry[data-note-style=sunny-pass]{padding:16% 8% 28% 26%}
+.captain-note-dialog .captain-guestbook-entry[data-note-style=sunny-pass] p{-webkit-line-clamp:unset}
+@media(max-width:760px){.captain-guestbook-toolbar{align-items:flex-start;flex-direction:column}.captain-guestbook-entry{width:290px;height:155px;padding:33px 53px 28px}.captain-danmaku-lane{height:159px}.captain-guestbook-stage[data-reading=true]{padding:14px}.captain-guestbook-stage[data-reading=true] .captain-guestbook-entry{max-width:100%}.captain-note-dialog .captain-guestbook-entry{padding:12% 18%}.captain-note-dialog .captain-guestbook-entry p{font-size:14px}}
+@media(max-width:760px){.captain-guestbook-entry[data-note-style=sunny-pass]{padding-left:76px;padding-right:23px}.captain-note-dialog .captain-guestbook-entry[data-note-style=sunny-pass]{padding:16% 8% 28% 26%}}

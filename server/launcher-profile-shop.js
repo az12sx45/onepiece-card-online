@@ -15,14 +15,23 @@ const avatarNames = [
   'ACE', '不死鳥馬可', '未來海賊王的左右手', '艾斯剪影', '魯夫Q版',
   '海軍元帥 赤犬', '尼卡大笑', '尼卡防風鏡',
   '香吉士', '騙人布', '甚平', '布魯克', '妮可·羅賓', '托拉法爾加·羅',
-  '波雅·漢考克', '薩波', '紅髮傑克', '喬拉可爾·密佛格', '白鬍子', '巴其'
+  '波雅·漢考克', '薩波', '紅髮傑克', '喬拉可爾·密佛格', '白鬍子', '巴其',
+  '薇薇', '培羅娜', '可亞拉', '波妮', '蕾貝卡・競技場', '白星', '凱洛特', '麗珠',
+  '布琳', '達絲琪', '斯摩格', '克洛克達爾', '多佛朗明哥', '卡塔克利', '艾涅爾',
+  '路奇 CP0', '巴托洛米奧', '卡文迪許', '基德', '基拉', '柯拉松', '雷利',
+  '克比', '貝魯梅伯', '希娜', '戰桃丸', '魯夫・和之國', '索隆・和之國',
+  '娜美・和之國', '羅賓・和之國'
 ];
 const avatarRarity = [
   'common', 'common', 'common', 'common', 'common', 'common', 'common',
   'rare', 'epic', 'epic', 'common', 'common',
   'rare', 'rare', 'rare', 'rare', 'rare', 'epic', 'legend', 'legend',
   'rare', 'common', 'rare', 'rare', 'rare', 'epic',
-  'epic', 'epic', 'legend', 'legend', 'legend', 'rare'
+  'epic', 'epic', 'legend', 'legend', 'legend', 'rare',
+  'rare', 'rare', 'common', 'rare', 'common', 'epic', 'rare', 'rare',
+  'rare', 'common', 'rare', 'epic', 'epic', 'legend', 'epic',
+  'epic', 'rare', 'rare', 'epic', 'rare', 'rare', 'legend',
+  'rare', 'common', 'common', 'rare', 'legend', 'epic', 'epic', 'epic'
 ];
 const LAUNCHER_AVATAR_MIN = 51;
 const LAUNCHER_AVATAR_MAX = 30 + avatarNames.length;
@@ -77,6 +86,31 @@ const CATALOG = Object.freeze([
     };
   }),
   { id: 'guestbook-1', type: 'guestbook', key: 'guestbook', name: '好友留言板', rarity: 'rare' },
+  ...[
+    ['sunny-deck', '千陽號甲板', 'rare'], ['merry-log', '梅利號航海日誌', 'rare'],
+    ['water-seven', '水之七島船塢', 'epic'], ['skypiea', '空島雲海', 'epic'],
+    ['alabasta', '阿拉巴斯坦王國', 'rare'], ['wano', '和之國櫻夜', 'epic'],
+    ['fishman-island', '魚人島深海', 'epic'], ['marineford', '馬林福特要塞', 'rare'],
+    ['grand-line-chart', '偉大航道海圖', 'rare'], ['tabletop-captain', '船長的桌遊航路', 'epic']
+  ].map(([key, name, rarity]) => ({
+    id: `guestbook-style-${key}`, type: 'guestbook_style', key, name, rarity,
+    asset: `opui://launcher/images/launcher_guestbook/boards/${key}.webp`
+  })),
+  ...[
+    ['strawhat-note', '草帽便條', 'common'], ['zoro-tag', '三刀流掛箋', 'rare'],
+    ['nami-chart', '航海士海圖紙', 'rare'], ['usopp-letter', '狙擊手手札', 'common'],
+    ['sanji-menu', '海上餐廳菜單', 'rare'], ['chopper-prescription', '櫻花醫師處方箋', 'common'],
+    ['robin-rubbing', '考古學家拓印紙', 'epic'], ['franky-blueprint', '船匠設計圖', 'rare'],
+    ['brook-score', '靈魂之王樂譜', 'rare'], ['jinbe-letter', '海俠波紋信箋', 'rare'],
+    ['ace-postcard', '火拳旅行明信片', 'epic'], ['sabo-dispatch', '革命軍密函', 'epic'],
+    ['law-chart', '紅心船醫紀錄紙', 'epic'], ['hancock-letter', '九蛇女帝信紙', 'epic'],
+    ['shanks-note', '紅髮航海便箋', 'rare'], ['merry-ticket', '梅利號乘船券', 'common'],
+    ['sunny-pass', '千陽號登船證', 'rare'], ['log-pose-card', '紀錄指針航路卡', 'rare'],
+    ['fishing-catch', '釣手漁獲紀念卡', 'common'], ['tabletop-invite', '海賊桌遊邀請函', 'rare']
+  ].map(([key, name, rarity]) => ({
+    id: `comment-style-${key}`, type: 'comment_style', key, name, rarity,
+    asset: `opui://launcher/images/launcher_guestbook/notes/${key}.webp`
+  })),
   ...[
     ['sunny-deck', '千陽號甲板', 'rare'],
     ['sunny-kitchen', '千陽號廚房', 'epic'],
@@ -162,7 +196,10 @@ const CATALOG = Object.freeze([
   { id: 'layout-sunny-library', type: 'layout', key: 'sunny-library', name: '千陽號圖書室排版', rarity: 'rare' }
 ].map(item => Object.freeze({ ...item,name:String(item.name||'').replace(/Q版/gi,''), price: item.price ?? PRICES[item.rarity] })));
 const BY_ID = new Map(CATALOG.map(item => [item.id, item]));
-const LAUNCHER_ITEM_TYPES = Object.freeze(['layout', 'background', 'frame', 'decoration', 'bgm', 'guestbook', 'room_scene', 'room_furniture', 'room_character']);
+const DEFAULT_GUESTBOOK_STYLE = Object.freeze({ id: 'guestbook-style-default', type: 'guestbook_style', key: 'default', name: '經典留言板', price: 0 });
+const DEFAULT_COMMENT_STYLE = Object.freeze({ id: 'comment-style-default', type: 'comment_style', key: 'default', name: '素紙便條', price: 0 });
+const commentStyleById = id => id === DEFAULT_COMMENT_STYLE.id ? DEFAULT_COMMENT_STYLE : BY_ID.get(id)?.type === 'comment_style' ? BY_ID.get(id) : null;
+const LAUNCHER_ITEM_TYPES = Object.freeze(['layout', 'background', 'frame', 'decoration', 'bgm', 'guestbook', 'guestbook_style', 'comment_style', 'room_scene', 'room_furniture', 'room_character']);
 const ROOM_ITEM_TYPES = Object.freeze(['room_scene', 'room_furniture', 'room_character']);
 const ROOM_DEFAULT_SCENE = 'room-scene-default';
 const ROOM_MAX_FURNITURE = 24;
@@ -251,7 +288,7 @@ const purchasedCollection = client => ({
 const launcherOwnedItemIds = stats => [...new Set((Array.isArray(object(stats.launcherOwnedV1).items) ? stats.launcherOwnedV1.items : [])
   .filter(id => typeof id === 'string' && (LAUNCHER_ITEM_TYPES.includes(BY_ID.get(id)?.type) ||
     (BY_ID.get(id)?.type === 'avatar' && BY_ID.get(id)?.key >= LAUNCHER_AVATAR_MIN && BY_ID.get(id)?.key <= LAUNCHER_AVATAR_MAX))))];
-const guestbookUnlocked = stats => launcherOwnedItemIds(stats).includes('guestbook-1');
+const guestbookUnlocked = stats => launcherOwnedItemIds(stats).some(id => id === 'guestbook-1' || BY_ID.get(id)?.type === 'guestbook_style');
 const validRoomCoordinate = (x, y) => typeof x === 'number' && Number.isFinite(x) && x >= 0 && x <= ROOM_WIDTH &&
   typeof y === 'number' && Number.isFinite(y) && y >= 0 && y <= ROOM_HEIGHT;
 const roundRoomNumber = value => Math.round(value * 100) / 100;
@@ -418,6 +455,8 @@ function launcherAppearance(stats) {
   const layoutId = saved.layoutId !== 'layout-default' && owned.has(saved.layoutId) && BY_ID.get(saved.layoutId)?.type === 'layout' ? saved.layoutId : 'layout-default';
   const backgroundId = saved.backgroundId !== 'background-default' && owned.has(saved.backgroundId) && BY_ID.get(saved.backgroundId)?.type === 'background' ? saved.backgroundId : 'background-default';
   const frameId = saved.frameId !== 'frame-none' && owned.has(saved.frameId) && BY_ID.get(saved.frameId)?.type === 'frame' ? saved.frameId : 'frame-none';
+  const guestbookStyleId = owned.has(saved.guestbookStyleId) && BY_ID.get(saved.guestbookStyleId)?.type === 'guestbook_style' ? saved.guestbookStyleId : DEFAULT_GUESTBOOK_STYLE.id;
+  const commentStyleId = owned.has(saved.commentStyleId) && BY_ID.get(saved.commentStyleId)?.type === 'comment_style' ? saved.commentStyleId : DEFAULT_COMMENT_STYLE.id;
   // Keep the old single-song field readable for clients and existing saves.
   // An explicit empty list means the owner chose silence; an absent list means
   // a pre-playlist save and falls back to its old equipped song.
@@ -433,7 +472,7 @@ function launcherAppearance(stats) {
     decorations[slot] = owned.has(id) && BY_ID.get(id)?.type === 'decoration' && BY_ID.get(id)?.slot === slot ? id : null;
     decorationPlacement[slot] = validPlacement(savedPlacement[slot]) ? normalizedPlacement(savedPlacement[slot]) : { ...DEFAULT_DECORATION_PLACEMENT[slot] };
   }
-  return { avatarId: launcherAvatarId, layoutId, backgroundId, frameId, bgmId, bgmIds, decorations, decorationPlacement };
+  return { avatarId: launcherAvatarId, layoutId, backgroundId, frameId, bgmId, bgmIds, guestbookStyleId, commentStyleId, decorations, decorationPlacement };
 }
 const launcherAvatarForRow = (row, appearance = launcherAppearance(object(row?.stats))) =>
   appearance.avatarId || boundedId(row?.avatar, 50, 8);
@@ -443,6 +482,8 @@ const appearanceItems = appearance => ({
   frame: BY_ID.get(appearance.frameId) || null,
   bgm: BY_ID.get(appearance.bgmId) || null,
   bgms: appearance.bgmIds.map(id => BY_ID.get(id)).filter(Boolean),
+  guestbookStyle: BY_ID.get(appearance.guestbookStyleId) || DEFAULT_GUESTBOOK_STYLE,
+  commentStyle: commentStyleById(appearance.commentStyleId) || DEFAULT_COMMENT_STYLE,
   decorations: Object.fromEntries(DECORATION_SLOTS.map(slot => [slot, BY_ID.get(appearance.decorations[slot]) || null]))
 });
 function sanitizeLauncherStatsPatch(stats) {
@@ -494,7 +535,7 @@ function toPublicProfile(row, isSelf = false, boardSummary = null) {
   const launcherItemIds = launcherOwnedItemIds(stats);
   const launcherAvatarIds = launcherItemIds
     .map(id => BY_ID.get(id)).filter(item => item?.type === 'avatar').map(item => item.key);
-  const launcherItems = launcherItemIds.slice(0, 150).map(id => BY_ID.get(id))
+  const launcherItems = launcherItemIds.map(id => BY_ID.get(id))
     .filter(Boolean).map(item => ({ id: item.id, name: item.name, type: item.type, ...(item.asset ? { asset: item.asset } : {}) }));
   const cardItems = cardCollection(client);
   cardItems.avatars = [...new Set([...cardItems.avatars, ...launcherAvatarIds])].sort((a, b) => a - b);
@@ -539,6 +580,8 @@ function toShop(row) {
       frames: newOwned.filter(id => BY_ID.get(id)?.type === 'frame'),
       decorations: newOwned.filter(id => BY_ID.get(id)?.type === 'decoration'),
       bgms: newOwned.filter(id => BY_ID.get(id)?.type === 'bgm'),
+      guestbookStyles: newOwned.filter(id => BY_ID.get(id)?.type === 'guestbook_style'),
+      commentStyles: newOwned.filter(id => BY_ID.get(id)?.type === 'comment_style'),
       roomScenes: newOwned.filter(id => BY_ID.get(id)?.type === 'room_scene'),
       roomFurniture: newOwned.filter(id => BY_ID.get(id)?.type === 'room_furniture'),
       roomCharacters: newOwned.filter(id => BY_ID.get(id)?.type === 'room_character'),
@@ -627,7 +670,7 @@ async function getLauncherShop(pool, secret, preview = false, capability) {
     ok: true,
     shop: {
       catalog: CATALOG, wallet: null, preview: true,
-      owned: { avatars: [], walls: [], flags: [], layouts: [], backgrounds: [], frames: [], decorations: [], bgms: [], roomScenes: [], roomFurniture: [], roomCharacters: [], guestbook: false },
+      owned: { avatars: [], walls: [], flags: [], layouts: [], backgrounds: [], frames: [], decorations: [], bgms: [], guestbookStyles: [], commentStyles: [], roomScenes: [], roomFurniture: [], roomCharacters: [], guestbook: false },
       equipped: { avatar: 8, wall: 1, flag: 1, ...launcherAppearance({}) }
     }
   };
@@ -676,6 +719,8 @@ async function changeLauncherItem(pool, secret, itemId, action, capability) {
     id === 'background-default' ? { id, type: 'background' } :
     id === 'frame-none' ? { id, type: 'frame' } :
     id === 'bgm-none' ? { id, type: 'bgm' } :
+    id === DEFAULT_GUESTBOOK_STYLE.id ? DEFAULT_GUESTBOOK_STYLE :
+    id === DEFAULT_COMMENT_STYLE.id ? DEFAULT_COMMENT_STYLE :
     freeDecor ? { id, type: 'decoration', slot: freeDecor[1] } : null : null;
   const item = catalogItem || freeItem || (baseAllowed ? { type: baseType, key: baseKey } : null);
   if (!item) return { ok: false, error: 'invalid item' };
@@ -747,6 +792,8 @@ async function changeLauncherItem(pool, secret, itemId, action, capability) {
         if (item.type === 'layout') appearance.layoutId = item.id;
         else if (item.type === 'background') appearance.backgroundId = item.id;
         else if (item.type === 'frame') appearance.frameId = item.id;
+        else if (item.type === 'guestbook_style') appearance.guestbookStyleId = item.id;
+        else if (item.type === 'comment_style') appearance.commentStyleId = item.id;
         else if (item.type === 'bgm') { appearance.bgmId = item.id; appearance.bgmIds = item.id === 'bgm-none' ? [] : [item.id]; }
         else if (item.type === 'decoration') appearance.decorations[item.slot] = freeItem ? null : item.id;
         stats.launcherAppearanceV1 = appearance;
@@ -1098,6 +1145,7 @@ module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop,roomCha
   setLauncherCard: withRoster(setLauncherCard, 3), setLauncherRoom: withRoster(setLauncherRoom, 3),
   getLauncherCharacter: withRoster(getLauncherCharacter, 4), interactLauncherCharacter: withRoster(interactLauncherCharacter, 5),
   startLauncherCharacterWork: withRoster(startLauncherCharacterWork, 4), claimLauncherCharacterWork: withRoster(claimLauncherCharacterWork, 4),
-  sanitizeLauncherStatsPatch, guestbookUnlocked, launcherAvatarForRow,
+  sanitizeLauncherStatsPatch, guestbookUnlocked, launcherAvatarForRow, launcherAppearance,
+  DEFAULT_GUESTBOOK_STYLE, DEFAULT_COMMENT_STYLE, commentStyleById, LAUNCHER_AVATAR_MAX,
   launcherOwnedItemIds, launcherRoom, launcherCompanionState, prepareLauncherWallet, launcherWalletPublic,
   launcherWorkPayout };

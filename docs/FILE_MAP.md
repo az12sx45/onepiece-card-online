@@ -1886,3 +1886,16 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 驗證：Chromium圖鑑110項通過，桌機與小視窗排版正常；薩波現行能力為平衡型，TYPE B依實際資料修正先前提案。r53階段已驗證npm start頁面HTTP200，本次只改顯示文字。
 
 發布驗收：r55公開簽章清單SHA256 `27304a176a71664eacc80520feabc275166fe350018c1448e59e02451e8f8a69`；2個變更blob經HEAD/GET/大小/SHA核對，本機差分53→55、117檔案完整驗證、重試下載0。證據 `D:/Codex_QA/launcher-fishing-r55/release-evidence.json`。
+
+## 2026-10-10 彈幕留言與主題美術 r56檔案
+
+- desktop/launcher-profile-shop.js、.css、launcher.html：彈幕軌道、全文閱讀/刪除、紙張選擇、商城分類、profile子協定呼叫。
+- desktop/launcher.js、launcher-social.js：帳號與好友63–92頭像顯示投影，切帳號隔離。
+- server/launcher-profile-shop.js：200個總商品、10留言板/20紙/30新頭像、收藏與裝備相容。
+- server/launcher-guestbook.js：留言樣式快照、可重複DB遷移、requestId去重。
+- server/launcher-profile-command.js、server/index.js：launcher-profile-v1嚴格白名單路由，經舊核心已驗證IPC/Socket傳輸；social.avatars僅可讀自己的好友/邀請圖譜，不接受任意用戶id。
+- public/images/launcher_guestbook/boards/*.webp、notes/*.webp：GPT主題圖；public/images/board/avatars/63..92.webp：GPT圓形頭像。
+- tools/launcher-guestbook-r56/：商品美術規格、完整prompt、來源與輸出hash、轉檔腳本、validate-assets.py檔案規格檢查與複核索引。
+- scripts/launcher_guestbook_styles_qa.js、launcher_guestbook_danmaku_qa.js：隔離SQL/舊core橋接與真實DOM/CSS互動檢查。輸出D:/Codex_QA/launcher-guestbook-r56；非正式玩家帳號交易紀錄。
+- scripts/launcher_guestbook_gallery_qa.js：正式HTML/CSS配範例留言，逐紙張排版、240字全文安全區、商城分類與公告用實際畫面截圖。
+- config/launcher-announcements-v1.json、public/images/launcher_announcements/launcher-guestbook-r56.webp：r56更新公告與實際介面預覽圖。

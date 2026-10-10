@@ -5,6 +5,35 @@
   let data = { friends: [], requestsIn: [], requestsOut: [], unread: {}, conversations: {} };
   let account = null, peer = 0, tab = 'friends', sending = false, historyToken = 0, messageSignature = '';
   const drafts = new Map();
+  const avatarOverrides = new Map();
+  let avatarToken = 0, avatarPending = false, avatarFetchedAt = 0, avatarRoster = '', avatarTimer = 0;
+  const rosterKey = () => [...data.friends, ...data.requestsIn, ...data.requestsOut].map(p => Number(p.userId)).sort((a, b) => a - b).join(',');
+  async function refreshAvatars(force = false) {
+    if (!account || !api.commandLauncherLife || avatarPending) return;
+    const roster = rosterKey();
+    const remaining = 30000 - (Date.now() - avatarFetchedAt);
+    if (!force && roster === avatarRoster && remaining > 0) {
+      if (!avatarTimer) avatarTimer = setTimeout(() => { avatarTimer = 0; void refreshAvatars(); }, remaining + 20);
+      return;
+    }
+    clearTimeout(avatarTimer); avatarTimer = 0;
+    const owner = account, token = ++avatarToken;
+    avatarPending = true;
+    try {
+      const result = await api.commandLauncherLife({ requestId: crypto.randomUUID(), expectedRevision: 0, type: 'event.record', payload: { scope: 'launcher-profile-v1', operation: 'social.avatars' } });
+      if (owner !== account || token !== avatarToken) return;
+      if (result?.ok && Array.isArray(result.avatars)) {
+        avatarOverrides.clear();
+        for (const entry of result.avatars) {
+          const id = Number(entry.userId), value = Number(entry.avatar);
+          if (Number.isSafeInteger(id) && id > 0 && Number.isSafeInteger(value) && value >= 1 && value <= 92) avatarOverrides.set(id, value);
+        }
+        avatarRoster = roster; avatarFetchedAt = Date.now();
+        renderList(); renderChat();
+      }
+    } catch { /* Keep the existing social snapshot during a connection failure. */ }
+    finally { if (owner === account && token === avatarToken) { avatarPending = false; if (roster !== rosterKey()) void refreshAvatars(); } }
+  }
   const activity = p => {
     if (!p?.online) return '離線';
     const page = String(p.page || '').toLowerCase();
@@ -15,8 +44,8 @@
   };
   const el = (tag, cls, text) => { const node = document.createElement(tag); if (cls) node.className = cls; if (text != null) node.textContent = text; return node; };
   function avatar(img, p) {
-    const avatarId = Number(p.avatar);
-    img.src = `opui://launcher/images/board/avatars/${Number.isSafeInteger(avatarId) && avatarId >= 1 && avatarId <= 62 ? avatarId : 8}.webp`;
+    const avatarId = avatarOverrides.get(Number(p.userId)) || Number(p.avatar);
+    img.src = `opui://launcher/images/board/avatars/${Number.isSafeInteger(avatarId) && avatarId >= 1 && avatarId <= 92 ? avatarId : 8}.webp`;
     img.onerror = () => { img.onerror = null; img.src = 'opui://launcher/images/board/avatars/8.webp'; };
   }
   const errors = { 'not authenticated': '請先登入帳號。', 'not friends': '你們目前不是好友，請先送出好友邀請。', 'not found': '找不到這個玩家名稱，請確認拼字。', 'already friends': '你們已經是好友了。', 'request already sent': '已送出邀請，等待對方接受。', 'cannot add self': '無法將自己加入好友。', 'no name': '請輸入玩家名稱。', 'invalid message': '請輸入 1～400 字的訊息。', timeout: '連線逾時，請稍後再試。', offline: '目前無法連線，請稍後再試。' };
@@ -132,7 +161,7 @@
   $('socialFriendsTab').onclick = () => { tab = 'friends'; renderList(); };
   $('socialRequestsTab').onclick = () => { tab = 'requests'; renderList(); };
   $('socialSearch').oninput = renderList;
-  $('socialRefresh').onclick = async () => { const result = await request('refresh'); if (!result.ok) notice(errorText(result.error)); if (peer) await openPeer(peer); };
+  $('socialRefresh').onclick = async () => { const result = await request('refresh'); if (!result.ok) notice(errorText(result.error)); void refreshAvatars(true); if (peer) await openPeer(peer); };
   $('socialBack').onclick = () => { drafts.set(peer, $('socialMessageInput').value); peer = 0; render(); };
   $('socialVisitProfile').onclick = () => { if (data.friends.some(p => p.userId === peer)) window.LauncherProfileShop?.openProfile(peer); };
   $('socialComposer').onsubmit = send; $('socialMessageInput').oninput = updateCounter;
@@ -141,19 +170,21 @@
   $('socialRemove').onclick = () => { removing = peer; $('socialRemoveCopy').textContent = `將 ${$('socialPeerName').textContent} 從好友清單移除？之後需要重新加為好友才能傳送訊息。`; $('socialRemoveDialog').showModal(); };
   $('socialRemoveCancel').onclick = () => $('socialRemoveDialog').close();
   $('socialRemoveConfirm').onclick = async () => { const result = await request('remove', { userId: removing }); if (result.ok) { $('socialRemoveDialog').close(); if (peer === removing) peer = 0; render(); } else notice(errorText(result.error)); };
-  api?.onSocialState?.(next => { if (!account || next.userId !== account) return; data = next; render(); });
+  api?.onSocialState?.(next => { if (!account || next.userId !== account) return; data = next; render(); void refreshAvatars(); });
   window.LauncherSocial = {
     activity,
     setAccount(snapshot) {
       const id = snapshot?.authenticated && !snapshot.profile?.needsDisplayName ? Number(snapshot.profile?.userId) : 0;
       if (id === account) return;
       account = id; peer = 0; historyToken++; drafts.clear(); messageSignature = '';
+      avatarToken++; avatarPending = false; avatarFetchedAt = 0; avatarRoster = ''; avatarOverrides.clear();
+      clearTimeout(avatarTimer); avatarTimer = 0;
       data = { friends: [], requestsIn: [], requestsOut: [], unread: {}, conversations: {} };
       for (const dialog of [$('socialAddDialog'), $('socialRemoveDialog')]) if (dialog.open) dialog.close();
       $('socialMessageInput').value = ''; $('socialAddName').value = ''; render();
-      if (id) { request('refresh'); api.getSocialState?.().then(result => { if (result.state?.userId === account) { data = result.state; render(); } }); }
+      if (id) { request('refresh'); api.getSocialState?.().then(result => { if (id === account && result.state?.userId === account) { data = result.state; render(); void refreshAvatars(); } }); }
     },
-    onVisible() { read(); if (account && !data.ready) request('refresh'); }
+    onVisible() { read(); if (account && !data.ready) request('refresh'); void refreshAvatars(); }
   };
   window.addEventListener('focus', read);
 })();

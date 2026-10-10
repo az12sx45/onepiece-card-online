@@ -1,7 +1,37 @@
 {
   "schemaVersion": 1,
-  "revision": 65,
+  "revision": 66,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r56-guestbook",
+      "status": "published",
+      "publishedAt": "2026-10-10T08:17:55.426Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r56",
+      "title": "讓好友的留言，飄過你的航海基地",
+      "summary": "彈幕留言板登場！10款板面、20款留言紙與30張新頭像同步上架。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-guestbook-r56.webp",
+        "alt": "千陽號主題留言板與不同樣式的好友留言紙"
+      },
+      "body": [
+        "好友的留言會分行緩緩飄過，移上去暫停，點一下讀全文；也可切換閱讀模式，慢慢看完每一則留言。",
+        "10款留言板包含千陽號、梅利號、水之七島、空島、阿拉巴斯坦、和之國、魚人島、馬林福特、偉大航道海圖與船長桌遊航路。購買任一樣式即可開啟留言板。",
+        "20款留言紙加入草帽便條、船匠設計圖、醫師處方箋、海上餐廳菜單、乘船票券與漁獲紀念卡等主題。到好友家留言時，選擇自己的收藏紙張，留下屬於你的樣式。",
+        "留言紙收藏後可重複使用，發表留言不會消耗紙張或另扣金幣。每則留言保留當時的樣式，換裝不影響舊留言。",
+        "新增30張航海王角色頭像，包括薇薇、培羅娜、可亞拉、白星、卡塔克利、柯拉松、雷利與和之國服裝的夥伴。維持735×735透明圓形格式，全部由GPT繪製。",
+        "重新開啟啟動器即可取得差分更新，只下載新增及變更內容。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      },
+      "cta": {
+        "kind": "shop",
+        "itemId": "guestbook-style-sunny-deck"
+      }
+    },
     {
       "id": "launcher-1.2.23-r55-rod-names",
       "status": "published",

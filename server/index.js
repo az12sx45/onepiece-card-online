@@ -16,6 +16,7 @@ const { updateProfileSocial } = require("./profile-social-stats");
 const launcherProfileShop = require("./launcher-profile-shop");
 const launcherLife = require("./launcher-life-store");
 const launcherGuestbook = require("./launcher-guestbook");
+const launcherProfileCommand = require('./launcher-profile-command');
 const { createLauncherAnnouncements } = require('./launcher-announcements');
 const { validateReleaseManifest: validateLauncherAnnouncementRelease } = require('../desktop/launcher-update-service');
 const launcherAnnouncements = createLauncherAnnouncements({ verifyRelease: async kind => {
@@ -5288,7 +5289,23 @@ socket.on('LAUNCHER_LIFE_GET', async ({ secret, crewContentRevision } = {}, cb) 
   catch (error) { console.error('[LAUNCHER_LIFE_GET] error:', error); cb?.({ ok: false, error: 'life unavailable' }); }
 });
 socket.on('LAUNCHER_LIFE_COMMAND', async ({ secret, requestId, expectedRevision, type, payload, crewContentRevision } = {}, cb) => {
-  try { cb?.(await launcherLife.commandLauncherLife(pool, String(secret || '').trim(), { requestId, expectedRevision, type, payload }, undefined, { crewContentRevision })); }
+  try {
+    const command = { requestId, expectedRevision, type, payload };
+    const normalizedSecret = String(secret || '').trim();
+    if (launcherProfileCommand.isProfileCommand(command)) {
+      const result = await launcherProfileCommand.commandLauncherProfile(pool, normalizedSecret, command, { crewContentRevision });
+      cb?.(result);
+      if (result.ok && (payload.operation === 'card.set' || payload.operation === 'shop.equip' && /^ava-/.test(payload.itemId))) {
+        try {
+          const profile = await getProfileBySecret(normalizedSecret);
+          const ids = profile?.stats?.client?.social?.friends || [];
+          for (const id of [profile?.user_id, ...ids]) emitToUser(Number(id), 'FRIENDS_DIRTY', { by: 'profile', userId: Number(profile.user_id) });
+        } catch (error) { console.warn('[LAUNCHER_PROFILE_COMMAND] friend refresh failed:', error); }
+      }
+      return;
+    }
+    cb?.(await launcherLife.commandLauncherLife(pool, normalizedSecret, command, undefined, { crewContentRevision }));
+  }
   catch (error) { console.error('[LAUNCHER_LIFE_COMMAND] error:', error); cb?.({ ok: false, error: 'life unavailable' }); }
 });
 
@@ -5344,8 +5361,8 @@ socket.on('LAUNCHER_COMMENTS_GET', async ({ secret, userId = 0, beforeId = 0 } =
   catch (error) { console.error('[LAUNCHER_COMMENTS_GET] error:', error); cb?.({ ok: false, error: 'comments unavailable' }); }
 });
 
-socket.on('LAUNCHER_COMMENT_POST', async ({ secret, userId = 0, body } = {}, cb) => {
-  try { cb?.(await launcherGuestbook.postLauncherComment(pool, String(secret || '').trim(), userId, body)); }
+socket.on('LAUNCHER_COMMENT_POST', async ({ secret, userId = 0, body, styleId, requestId } = {}, cb) => {
+  try { cb?.(await launcherGuestbook.postLauncherComment(pool, String(secret || '').trim(), userId, body, styleId, requestId)); }
   catch (error) { console.error('[LAUNCHER_COMMENT_POST] error:', error); cb?.({ ok: false, error: 'comment unavailable' }); }
 });
 

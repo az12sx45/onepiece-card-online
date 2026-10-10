@@ -8210,3 +8210,17 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 驗證：Chromium圖鑑110項通過，桌機與小視窗排版正常；薩波現行能力為平衡型，TYPE B依實際資料修正先前提案。r53階段已驗證npm start頁面HTTP200，本次只改顯示文字。
 
 發布驗收：r55公開簽章清單SHA256 `27304a176a71664eacc80520feabc275166fe350018c1448e59e02451e8f8a69`；2個變更blob經HEAD/GET/大小/SHA核對，本機差分53→55、117檔案完整驗證、重試下載0。證據 `D:/Codex_QA/launcher-fishing-r55/release-evidence.json`。
+
+## 2026-10-10 彈幕留言板與主題商城 r56（候選）
+
+正式來源：D:/Codex_Release_Worktrees/launcher-flick-reward-r12；沿用 core 1.2.23，以簽章內容差分更新交付。LATTICE 工具在本工作階段不可用，沒有宣稱任務寫入或圖譜驗收。
+
+- 範圍：desktop/launcher-profile-shop.js、.css、launcher.html 新增分行彈幕、滑鼠/鍵盤聚焦暫停、閱讀模式、完整留言對話框、已收藏留言紙選擇；document hidden、切離個人頁與全文對話框開啟時暫停。
+- server/launcher-profile-shop.js 新增10個 guestbook_style、20個 comment_style、30個頭像63–92，舊id與價格級距不變；購買任一留言板樣式會解鎖留言板。留言紙可重複使用，留言時不另扣金幣。
+- server/launcher-guestbook.js 以可重複遷移新增 style_id、client_request_id；舊留言回到免費素紙，新留言固定發表當時樣式。沿用好友雙向驗證、權限與限流，requestId重試不重複插入，刪除後不復活。
+- server/launcher-profile-command.js 與 server/index.js 透過既有已驗證的 LAUNCHER_LIFE_COMMAND 傳輸，先分流 scope=launcher-profile-v1，再執行profile/shop/guestbook；不進life engine、不改life revision。這是舊core相容協定，不改main/preload/auth allowlist。desktop/launcher.js與launcher-social.js取得正確63–92頭像投影，避免舊core截成8。
+- 美術：public/images/launcher_guestbook/boards、notes與public/images/board/avatars/63..92.webp，逐張GPT生成；規格/提示/provenance在tools/launcher-guestbook-r56。頭像735×735圓形RGBA，留言紙960×480真透明外緣，留言板1536×864。所有素材完成與目視複核後才發布。
+- 已實測：scripts/launcher_guestbook_styles_qa.js 的49項隔離PGlite SQL/舊AuthService傳輸檢查PASS；scripts/launcher_guestbook_danmaku_qa.js 的51項Chromium互動與素材存在檢查PASS（1440×900、960×640，缺圖0，程式來源未在測試中改變），公告82項PASS。scripts/launcher_guestbook_gallery_qa.js 逐張20紙實際排版、全長240字千陽登船證紙安全區及展示截圖通過，範例留言不是正式玩家資料。npm start於41956啟動與靜態HTTP200；本機未設定DATABASE_URL，不代表正式帳號交易驗收。另由獨立agent只讀審查登入頭像競態、留言mutation、預設樣式/裝備與好友舊core兼容，未發現阻擋項目。
+- 簽署前驗收：60張最終素材尺寸/透明角/唯一輸出hash與目視複核完成，共7,560,982 bytes；頭像63–83、84–92的實際prompt與QA已合併，蕾貝卡為競技場頭盔版。斯摩格疤痕、培羅娜帽型、白星髮飾、柯拉松眼妝與留言紙碎邊等失敗候選已重畫替換，11張本次已確認失敗PNG精準刪除，成功原圖保留。公告使用真正介面的範例留言截圖。
+- r56簽章清單SHA256：dd4f0b756556dc9bf6a8789b79bc8dc70665375109193a4af70423f3f0287ea9。R2的66個變更blob全部HEAD/GET/大小/SHA通過。隔離候選overlay55→56只下載7,937,059 bytes（約7.57MiB）、182檔校驗、第二次下載0。npm start清單HTTP200；新圖片路徑直接對Render要求回404是desktop-only分流預期，資源由已核對R2 blob經本機opui供應，沒有放寬該分流。
+- 正式cache更新前已備份229檔並逐一hash相同。公開Render清單及正式cache讀回待部署後補記，不以push代替發布驗收。

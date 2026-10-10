@@ -1,0 +1,1089 @@
+{
+  "generator": "image_gen built-in",
+  "spec": {
+    "width": 735,
+    "height": 735,
+    "format": "webp",
+    "mode": "RGBA",
+    "circular": true,
+    "alpha": "preserve generated transparency",
+    "styleReferences": [
+      51,
+      58
+    ]
+  },
+  "items": [
+    {
+      "id": 63,
+      "name": "薇薇",
+      "subject": "Nefertari Vivi, Alabasta era. Long bright pale blue hair in her high ponytail with a small curl at forehead, warm brown eyes, fine brows, gentle confident smile. Simple Alabasta-era pink sleeveless top with gold trim visible at shoulders, gold small earrings.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Nefertari Vivi, Alabasta era. Long bright pale blue hair in her high ponytail with a small curl at forehead, warm brown eyes, fine brows, gentle confident smile. Simple Alabasta-era pink sleeveless top with gold trim visible at shoulders, gold small earrings.",
+      "output": "public/images/board/avatars/63.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-d3b6e65d-6388-4dc0-8c44-9f21aeba05fc.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 131864,
+        "sha256": "0e576b9e7147a5702f45dc8b2976a2965b098172d4ec867c5fc916e24f065afa",
+        "sourceSha256": "e4b0b219851e14dead1eedb1a1a5151b40aded01ebdfcdb04a922e76bcee7de1",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "淺藍高馬尾與前額小捲髮、棕眼、金耳飾",
+          "粉紅金邊上衣與自然成人臉部比例；天空底圓形透明角"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 64,
+      "name": "培羅娜",
+      "subject": "Perona, after timeskip at Mihawk island. Pink hair with curled twin tails, huge distinctive round eyes and long lashes, tiny dark pupils, crown-like black headpiece, gothic black and deep red clothing, slightly mischievous smile.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Perona, after timeskip at Mihawk island. Pink hair with curled twin tails, huge distinctive round eyes and long lashes, tiny dark pupils, crown-like black headpiece, gothic black and deep red clothing, slightly mischievous smile.",
+      "output": "public/images/board/avatars/64.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-5a2e35fa-d531-4dd7-881e-8e09c2a1cc89.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 135046,
+        "sha256": "94f48b47ccf1e419552012e83d85624987bde77053553925fafed392613e2601",
+        "sourceSha256": "0a0582428cd47b013dbdf041b7e56a1b42c970a1d9bf188832a0535710ac8ed9",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "重畫為兩年後長粉紅螺旋捲髮、黑色寬帽、白藍花與紅色帽沿",
+          "黑色平口衣與白色飾邊；依 MegaHouse Sailing Again 官方正側面確認"
+        ],
+        "officialReferences": [
+          {
+            "url": "https://www.megahobby.jp/products/item/993/?dmode=pc",
+            "image": "https://www.megahobby.jp/images/item/item_0000000993_01.jpg"
+          },
+          {
+            "url": "https://www.megahobby.jp/products/item/993/?dmode=pc",
+            "image": "https://www.megahobby.jp/images/item/item_0000000993_03.jpg"
+          }
+        ]
+      },
+      "revisions": [
+        {
+          "reason": "Corrected canon details after direct official image comparison",
+          "prompt": "Edit this ONE PIECE Perona circular game avatar. The first image is the avatar to correct; second and third are official Perona AFTER TIMESKIP costume references. Preserve first image's crisp anime drawing style, face with circular eyes, blue maritime sky, edge-to-edge circle, transparent exterior, and head-and-shoulders format. Correct ONLY era-specific hair, headwear, and upper clothing: replace crown with a broad black round hat, dark red underbrim and band of pale blue-white roses; replace twin ponytails with long loose rose-pink spiral drill curls flowing down behind shoulders; wear the after-timeskip black strapless bodice with narrow white cross/ribbon trim visible at neckline, bare shoulders. No red ruff, no crown, no twin-tail hair ties, no pink bow. Exactly one character, no mascot, no parasol, no text. Face natural canon Perona proportions.",
+          "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-5a2e35fa-d531-4dd7-881e-8e09c2a1cc89.png"
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "name": "可亞拉",
+      "subject": "Koala as adult Revolutionary Army after timeskip. Short orange bob hair, blue eyes, burgundy rounded hat with goggles perched on it, burgundy top and white frilled high collar, friendly confident smile.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Koala as adult Revolutionary Army after timeskip. Short orange bob hair, blue eyes, burgundy rounded hat with goggles perched on it, burgundy top and white frilled high collar, friendly confident smile.",
+      "output": "public/images/board/avatars/65.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-9441125f-57fa-4b95-b911-518b4f141b36.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 128572,
+        "sha256": "4adce736c8006637ef570235c4dba6ede1e7c71134b4168fc8b106395855ddb1",
+        "sourceSha256": "f9efe17c8ce31ebf906b183c6d116e1d7fe4c139d5fff1a7c6350db6cc37432e",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "橘色短髮、酒紅帽與護目鏡、藍眼",
+          "白色荷葉領與酒紅衣、笑容與肩頸連續"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 66,
+      "name": "珠寶波妮",
+      "subject": "Jewelry Bonney in Sabaody outfit. Long straight pink hair, green eyes, gold crescent-shaped piercing beneath lower lip, white fur-trimmed brown patterned hat, deep pink scoop-neck top and white fur scarf edge. Smug confident expression. No food or hands.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Jewelry Bonney in Sabaody outfit. Long straight pink hair, green eyes, gold crescent-shaped piercing beneath lower lip, white fur-trimmed brown patterned hat, deep pink scoop-neck top and white fur scarf edge. Smug confident expression. No food or hands.",
+      "output": "public/images/board/avatars/66.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-8ada0740-b83e-4307-af52-93dc194b6b7b.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 136646,
+        "sha256": "8d243b7e671ad2fc40efdae3b57213b9f0eebf5cd89288020d065ac5bd3487cb",
+        "sourceSha256": "b878983394cf2d6c722508b77536693d9c810b41c384f5f515815a116af81054",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "粉紅長髮、綠眼、白毛邊棕帽",
+          "下唇金色新月飾物、粉紅衣；未混用其他角色五官"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 67,
+      "name": "蕾貝卡・競技場",
+      "subject": "Rebecca, Dressrosa gladiator head-and-shoulders portrait, gold Corinthian helmet with red crest, pink braid, teal cloak at shoulders.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Rebecca from Dressrosa in her modest civilian appearance, NOT gladiator armor. Long salmon-pink braided hair over shoulder, orange-brown eyes, side-swept bangs, small blue flower hair ornament, simple sleeveless white dress at shoulders, gentle relieved smile.",
+      "output": "public/images/board/avatars/67.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-8e8ac339-08d8-4810-98ea-40736de1fd01.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 137658,
+        "sha256": "004bf7cb660e4e075fb29d404d65914603c26a5c7c12c8bccf7fe3b71ca61e9e",
+        "sourceSha256": "b1f5cab22be4e4a0846f74839a6ea6761f293d997a08bce9e893cdbce2763bd1",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "重畫為蕾貝卡競技場金色頭盔、紅色盔冠、粉紅辮與青綠斗篷肩部",
+          "依 MegaHouse 官方頭盔輪廓確認；不標示為日常服"
+        ],
+        "officialReferences": [
+          {
+            "url": "https://www.megahobby.jp/products/item/1301/",
+            "image": "https://www.megahobby.jp/images/item/item_0000001301_01.jpg"
+          }
+        ]
+      },
+      "revisions": [
+        {
+          "reason": "Corrected canon details after direct official image comparison",
+          "prompt": "Edit first image into an accurate Rebecca from ONE PIECE circular avatar. Second image is an official character costume reference only. Keep anime cel-shading, friendly face, clean circular transparent exterior and blue-sky interior. Switch to her canon Dressrosa gladiator headwear and cloak: golden closed-cheek Corinthian helmet with narrow red-pink crest, her salmon-pink braid visible at side, blue-green cloak fastened over both shoulders. Frame tightly from helmet through neck and cloak-covered shoulders; do NOT show torso, armor bikini, cleavage, hips, legs or hands. No flower hairclip and no invented white dress. Neutral determined facial expression. No text. A respectful face portrait only.",
+          "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-8e8ac339-08d8-4810-98ea-40736de1fd01.png"
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "name": "白星",
+      "subject": "Shirahoshi mermaid princess, head-and-shoulders portrait only. Very long flowing pink hair, distinctive high pink side-buns, blue eyes, shell earrings, gold hair ornament, canonical white and pink clothing at shoulders, friendly shy smile. No human legs.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Shirahoshi mermaid princess, head-and-shoulders portrait only. Very long flowing pink hair, distinctive high pink side-buns, blue eyes, shell earrings, gold hair ornament, canonical white and pink clothing at shoulders, friendly shy smile. No human legs.",
+      "output": "public/images/board/avatars/68.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-73518485-ce8c-4f5f-9719-48b0cdfa2da3.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 150396,
+        "sha256": "7afd7c6ed633f936ccd6ebe49d3b6f1f8aa758a2aebcf0cb9b69bb53dc912092",
+        "sourceSha256": "17caaba1ce426b46d40a9d411de9be5c59781dee3dc351700f5976aa8412fbac",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "重畫高位雙環粉紅髮、紅束髮帶與金色魚鰭髮飾",
+          "藍眼；移除不符參考的王冠與貝殼耳飾；依 MegaHouse 官方圖確認"
+        ],
+        "officialReferences": [
+          {
+            "url": "https://www.megahobby.jp/products/item/823/?dmode=pc",
+            "image": "https://www.megahobby.jp/images/item/item_0000000823_01.jpg"
+          }
+        ]
+      },
+      "revisions": [
+        {
+          "reason": "Corrected canon details after direct official image comparison",
+          "prompt": "Edit first image of Shirahoshi into an accurate ONE PIECE circular game portrait. Second image is official costume reference for HEAD AND HAIR ONLY. Preserve anime cel-shaded blue-sky portrait and transparent circle. Correct her hair: one high ponytail tied with dark red binding and small gold fish-fin ornaments, large double-loop of pink hair like a bow atop her head; flowing long pink hair behind, no side buns. Remove invented princess tiara/crown and shell earrings. Preserve blue eyes and gentle shy expression. Thin golden ornamental ends near neck may show. Crop tightly from top hair loops down through face to base of neck/shoulders only; no torso or cleavage or bikini. Do not add another character, text, human legs or hands.",
+          "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-73518485-ce8c-4f5f-9719-48b0cdfa2da3.png"
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "name": "凱洛特",
+      "subject": "Carrot in normal form, NOT Sulong. White rabbit mink girl, long white rabbit ears, soft golden short hair, red-brown eyes, tiny pink rabbit nose, orange sleeveless outfit with fluffy white neckline; lively cheerful expression. Ears fit inside circle.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Carrot in normal form, NOT Sulong. White rabbit mink girl, long white rabbit ears, soft golden short hair, red-brown eyes, tiny pink rabbit nose, orange sleeveless outfit with fluffy white neckline; lively cheerful expression. Ears fit inside circle.",
+      "output": "public/images/board/avatars/69.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-50472c0c-0f45-4e9a-b7ab-cd1c0ff9e9de.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 120906,
+        "sha256": "f2caf5d3fd9663a6574dd869fb1c7222ce96cf6f59e260038af6b9c4a1fe777b",
+        "sourceSha256": "d817e15cc0d3ab70230d3fceccfa004c0720971e097886d5d0033f286d535506",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "普通型態白兔毛、金色短髮與長兔耳",
+          "紅棕眼、橘色毛邊領；非月獅形態"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 70,
+      "name": "麗珠",
+      "subject": "Vinsmoke Reiju in canon Germa outfit. Pink asymmetrical short hair covering her right eye, visible blue eye, distinctive curved eyebrow, purple lipstick, pink and purple butterfly-themed collar/upper outfit. Cool composed expression. No wings outside circle.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Vinsmoke Reiju in canon Germa outfit. Pink asymmetrical short hair covering her right eye, visible blue eye, distinctive curved eyebrow, purple lipstick, pink and purple butterfly-themed collar/upper outfit. Cool composed expression. No wings outside circle.",
+      "output": "public/images/board/avatars/70.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-9a8da466-5eec-463c-aed6-0afa06295f2f.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 131266,
+        "sha256": "d8524725071a10b7547f985516350417f36da9ccae84fecd8be0550b242eebfd",
+        "sourceSha256": "4ffad36616fab2dd10ab457450de3e9a8951feed22c8e816dacb1527aaf78058",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "粉紅側分短髮遮右眼、左側藍眼可見、捲眉與紫色唇色",
+          "Germa耳部裝備與粉紫領口；無多餘眼睛"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 71,
+      "name": "布琳",
+      "subject": "Charlotte Pudding, Whole Cake Island era. Brown twin-tailed hair, pink headband, two large warm brown normal eyes AND her third eye clearly visible at center forehead between separated bangs, white blouse neckline with pink bow, bashful smile. Exactly three eyes.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Charlotte Pudding, Whole Cake Island era. Brown twin-tailed hair, pink headband, two large warm brown normal eyes AND her third eye clearly visible at center forehead between separated bangs, white blouse neckline with pink bow, bashful smile. Exactly three eyes.",
+      "output": "public/images/board/avatars/71.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-fdb100ab-bd2f-464c-b325-b24ba7bcbccb.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 129866,
+        "sha256": "a48812fbb996a765ba5dbcdace89c7efcc7380a6d3fd1501390b0fe6549b2b7e",
+        "sourceSha256": "1624db76e4ae551e8fa0ee4e403e09d05c90ac08d58b324e4f8978b50fb87a36",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "棕色雙束髮與三隻棕眼，第三眼置於額頭",
+          "白色荷葉衣領與粉色蝴蝶結；眼睛與臉部比例清楚"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 72,
+      "name": "達絲琪",
+      "subject": "Tashigi after timeskip. Long dark blue-black hair tied back, brown eyes, red rectangular glasses over her eyes, pink floral blouse with white Marine coat at shoulders, serious earnest expression.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Tashigi after timeskip. Long dark blue-black hair tied back, brown eyes, red rectangular glasses over her eyes, pink floral blouse with white Marine coat at shoulders, serious earnest expression.",
+      "output": "public/images/board/avatars/72.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-c0515154-f862-4ac8-8a8d-ff4528c47762.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 119122,
+        "sha256": "fe1b7b5bb1062723f42ce90dd20c994a4b6a53c1a4053c63bfef5cede5b272e6",
+        "sourceSha256": "746da1ed7a82344aa699923e6152879bb863da6f8f9c8269e660c8a0802c3c6c",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "兩年後深色長馬尾、红框眼鏡",
+          "粉紅花紋襯衫與白色海軍衣肩部"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 73,
+      "name": "斯摩格",
+      "subject": "Smoker after timeskip. Short swept-back silver-white hair, rugged square jaw, stern narrow eyes, scar on right half of forehead/face, open white Marine coat with green-blue fur collar, two cigars held together in mouth, subtle smoke contained in circle.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Smoker after timeskip. Short swept-back silver-white hair, rugged square jaw, stern narrow eyes, scar on right half of forehead/face, open white Marine coat with green-blue fur collar, two cigars held together in mouth, subtle smoke contained in circle.",
+      "output": "public/images/board/avatars/73.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-bd5cd2a3-acc4-4502-9af4-4ac60314f3fe.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 134744,
+        "sha256": "e7be001921e284b67b2f96fff4a059e5cc2fad3941d855978d5eff67a38cd787",
+        "sourceSha256": "ea3ff0397d9a3aceb892f5ea12a0694555eee987ce5eb5e0f809104ba992182d",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "重畫疤痕為斜橫額頭延伸至角色右眉上方（觀者左），沒有穿過左眼至臉頰的錯誤縱疤",
+          "白髮、兩支雪茄、青綠毛領海軍衣；依 Tamashii 官方 Punk Hazard 近照確認"
+        ],
+        "officialReferences": [
+          {
+            "url": "https://tamashiiweb.com/item/10374/",
+            "image": "https://tamashiiweb.com/storage/images/products/imported/item_0000010374_05.jpg"
+          }
+        ]
+      },
+      "revisions": [
+        {
+          "reason": "Corrected canon details after direct official image comparison",
+          "prompt": "Use case: precise-object-edit. Image 1 is the edit target: ONE PIECE Smoker circular avatar. Image 2 is official Tamashii Punk Hazard Smoker figure detail and is the canon scar-position reference only. Correct ONLY the scar on the face to match Image 2: remove the entire incorrect straight vertical stitched scar currently down the viewer-right side across the eye and cheek. Instead, draw the canonical single curved diagonal stitched scar across his upper forehead, beginning at the hairline above the middle-right of the forehead and curving diagonally down-left across the forehead to end immediately above his RIGHT eyebrow (viewer LEFT). The scar stays on the forehead and does not run down either cheek. Match its placement and arc to Image 2. Preserve the same existing two cigars, stern face, eyes, white hair, teal fur Marine coat, sky-blue interior, illustration style, face proportions, circular crop and true-transparent exterior. No other edits, no text, no added accessories.",
+          "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-bd5cd2a3-acc4-4502-9af4-4ac60314f3fe.png"
+        }
+      ]
+    },
+    {
+      "id": 74,
+      "name": "克洛克達爾",
+      "subject": "Sir Crocodile during Alabasta. Slicked-back black hair, single long horizontal stitched scar crossing bridge of nose and both cheeks, narrow eyes, gold hoop earring, orange checkered vest with blue-green neck scarf, dark fur-collared coat. Cigar in mouth, cool sinister half-smile. No hook/hands in portrait.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Sir Crocodile during Alabasta. Slicked-back black hair, single long horizontal stitched scar crossing bridge of nose and both cheeks, narrow eyes, gold hoop earring, orange checkered vest with blue-green neck scarf, dark fur-collared coat. Cigar in mouth, cool sinister half-smile. No hook/hands in portrait.",
+      "output": "public/images/board/avatars/74.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-f94451f8-adee-48e6-acdd-d81e1880cda9.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 112378,
+        "sha256": "815d815684b4d7b8cc3d9ef068ad6e529d30748372aee6f205fb1f547018d1d6",
+        "sourceSha256": "ed12071b1c31aebcf21411668a58bd1a6d5c60e5803c2fe810cedbfe89ef1996",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "油頭黑髮、橫跨鼻梁雙頰的縫合疤、雪茄與金耳環",
+          "橘色格紋背心、深色毛領與青綠領巾"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 75,
+      "name": "多佛朗明哥",
+      "subject": "Donquixote Doflamingo during Dressrosa. Short blond spiky hair, narrow red angular sunglasses, broad toothy arrogant grin, pink feather coat filling shoulders, open white shirt. No black facial tattoos.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Donquixote Doflamingo during Dressrosa. Short blond spiky hair, narrow red angular sunglasses, broad toothy arrogant grin, pink feather coat filling shoulders, open white shirt. No black facial tattoos.",
+      "output": "public/images/board/avatars/75.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-676b2e3e-6253-4ef8-9584-648a52a1bb3f.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 135270,
+        "sha256": "495b3122cb87fc92d6f516021723df310405a3670881352e921773e938137b84",
+        "sourceSha256": "dfee6bf99b0a9295486ae503427e7c9d3237db701a23df4ef5399e953ca911c3",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "金色刺髮、紅色尖角墨鏡、粉紅羽毛披風",
+          "露齒笑容、白底黑點衣領；臉與肩部連續"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 76,
+      "name": "卡塔克利",
+      "subject": "Charlotte Katakuri in Whole Cake Island. Short spiky maroon hair, stern crimson eyes, two scars symmetrically at cheeks near outer mouth, huge fluffy off-white scarf covering mouth and lower jaw, black studded vest shoulders, intimidating but composed.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Charlotte Katakuri in Whole Cake Island. Short spiky maroon hair, stern crimson eyes, two scars symmetrically at cheeks near outer mouth, huge fluffy off-white scarf covering mouth and lower jaw, black studded vest shoulders, intimidating but composed.",
+      "output": "public/images/board/avatars/76.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-5faf4fde-7b39-43c1-822b-5041b3778120.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 127268,
+        "sha256": "8ca745b0dace0414420737fc3e05e2f4c3f2d437e4d67fb145416ec17fdbae8c",
+        "sourceSha256": "c71311db63be464ee3c7d085b17af9751f35067675fc3a97f891d4906e556c49",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "暗紅刺髮、紅色眼睛、臉頰疤痕",
+          "厚毛圍巾覆住嘴、黑色鉚釘背心；無額外嘴部"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 77,
+      "name": "艾涅爾",
+      "subject": "Enel, Skypiea era. White tightly wrapped bandanna over hair, narrow pale blue eyes, extremely long hanging earlobes with gold earrings, gold collar accessories, bare shoulders. Self-satisfied relaxed smile. Do not add drum halo because tight portrait.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Enel, Skypiea era. White tightly wrapped bandanna over hair, narrow pale blue eyes, extremely long hanging earlobes with gold earrings, gold collar accessories, bare shoulders. Self-satisfied relaxed smile. Do not add drum halo because tight portrait.",
+      "output": "public/images/board/avatars/77.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-dc446dcb-1115-40a4-bb30-28e2fc51f257.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 115420,
+        "sha256": "6a16201aa3cbaaa289dc97c156f435db3cedc9cd241d9a3142c80ab6be8a8abf",
+        "sourceSha256": "7e25fb019c9b1ddf0dde43f3bc18a3cf06dc71a0b17999306f125c01912b6a48",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "白頭巾、長耳垂及金色耳環",
+          "裸肩、淡金短髮邊緣與傲慢表情；未加原創冠飾"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 78,
+      "name": "路奇・CP0",
+      "subject": "Rob Lucci in canon CP0 white suit. Long wavy black hair, thin pointed beard and mustache, sharp narrow eyes, white top hat with dark band, white suit and dark tie, stern expression. His pigeon is NOT included.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Rob Lucci in canon CP0 white suit. Long wavy black hair, thin pointed beard and mustache, sharp narrow eyes, white top hat with dark band, white suit and dark tie, stern expression. His pigeon is NOT included.",
+      "output": "public/images/board/avatars/78.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-bbc40491-183a-41a9-b678-effe7a36778e.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 99820,
+        "sha256": "68ab4c0767816d4f743437f05f308bad546d4950881a8a5798e0c3998a36e0d2",
+        "sourceSha256": "b82748068372d2c0b5498ae1a5d69ad632b6c06fb26fd90b471e5d97efeb2ebe",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "CP0 白帽、白西裝與黑領帶",
+          "黑長髮、細鬍鬚與長尖鬍；非黑色CP9套裝"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 79,
+      "name": "巴托洛米奧",
+      "subject": "Bartolomeo during Dressrosa. Green tall mohawk, shaved sides, distinct dark-red tattoo beneath right eye, angular sharp teeth in cheeky grin, eyebrow piercing, nose ring, burgundy fur-trimmed open coat. Entire mohawk fits circular crop.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Bartolomeo during Dressrosa. Green tall mohawk, shaved sides, distinct dark-red tattoo beneath right eye, angular sharp teeth in cheeky grin, eyebrow piercing, nose ring, burgundy fur-trimmed open coat. Entire mohawk fits circular crop.",
+      "output": "public/images/board/avatars/79.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-8c42797c-3d86-4db4-bf6c-1f29b23b103a.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 114462,
+        "sha256": "9470ec8b385128ed58db21ff10b766c9f6cd3f162640d73495a256b3d5e8bbf4",
+        "sourceSha256": "f48d4ed4036f6c6b79aa2e397c6aa51b272e25ef24ed86832c606ac1c6b39bfd",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "綠色莫霍克髮、鼻環、尖牙與眼下記號",
+          "深酒紅毛領、耳部裝飾；角色五官辨識清楚"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 80,
+      "name": "卡文迪許",
+      "subject": "Cavendish in Dressrosa, normal handsome personality. Long flowing blond hair, blue eyes, elegant lashes, white wide-brimmed hat with black band and large blue plume contained within circle, white shirt with ruffled collar, confident theatrical smile.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Cavendish in Dressrosa, normal handsome personality. Long flowing blond hair, blue eyes, elegant lashes, white wide-brimmed hat with black band and large blue plume contained within circle, white shirt with ruffled collar, confident theatrical smile.",
+      "output": "public/images/board/avatars/80.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-0c421f81-2ccd-407f-8973-7ce81057350a.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 134832,
+        "sha256": "18307c9a098a70c53f64262510cb4edad6495fa5f50ada2d161c36cdbbb54c22",
+        "sourceSha256": "79e45ce82d4ce91ba77315e12f73bc278f4dd4aef079cf519961316b253a64ef",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "長金髮、藍眼、白色寬邊帽與藍羽飾",
+          "白色荷葉衣領與紫色衣邊"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 81,
+      "name": "基德",
+      "subject": "Eustass Kid after timeskip. Spiky bright red hair with goggles on forehead, fierce eyes, dark burgundy lipstick, distinctive scars down left side of face including vertical scar through left eye area, black open clothing and dark red fur coat at shoulders. No metal arm in close portrait.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Eustass Kid after timeskip. Spiky bright red hair with goggles on forehead, fierce eyes, dark burgundy lipstick, distinctive scars down left side of face including vertical scar through left eye area, black open clothing and dark red fur coat at shoulders. No metal arm in close portrait.",
+      "output": "public/images/board/avatars/81.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-d3f0f6b4-224a-43cb-89a9-bfacb12db86b.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 121154,
+        "sha256": "ea4851a89774418cbaf1afe49ee33ff2fecda60792ead07d82b86f744ce61def",
+        "sourceSha256": "0a0e5643e08477aff1dce7d588331d0c30a0270767d8c18ab5071f3dc5ab550d",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "红色刺髮、額頭護目鏡、左臉疤痕（觀者右）",
+          "深色唇色與酒紅毛領；未混用無疤早期版"
+        ],
+        "officialReferences": []
+      }
+    },
+    {
+      "id": 82,
+      "name": "基拉",
+      "subject": "Killer after timeskip. Long blond flowing hair, canon full-face light blue and white rounded metal mask with narrow black vertical holes, no visible eyes or mouth, navy sleeveless striped shirt visible at shoulders. Mask proportion faithful, no extra face.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Killer after timeskip. Long blond flowing hair, canon full-face light blue and white rounded metal mask with narrow black vertical holes, no visible eyes or mouth, navy sleeveless striped shirt visible at shoulders. Mask proportion faithful, no extra face.",
+      "output": "public/images/board/avatars/82.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-9eaf251e-cfc4-4d9e-80f7-1452e2b1304c.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 120292,
+        "sha256": "1558d79083988806b110221d931459183302516e6b1d00ba6bc086cd49b494c3",
+        "sourceSha256": "60dd033a349fabfb23985350aa7f6783c67aa0d44e989418c013a18d417d4811",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "金色長髮、藍白封閉金屬面罩",
+          "面罩直向排列深色橢圓孔、藍白条紋無袖上衣；與 MegaHouse 官方圖比對"
+        ],
+        "officialReferences": [
+          {
+            "url": "https://www.megahobby.jp/products/item/963/?dmode=pc",
+            "image": "https://www.megahobby.jp/images/item/item_0000000963_01.jpg"
+          }
+        ]
+      }
+    },
+    {
+      "id": 83,
+      "name": "柯拉松",
+      "subject": "Donquixote Rosinante, Corazon. Shaggy blond hair, pointed burgundy cap with dangling flaps, black heart-like makeup under right eye, red lipstick extended at mouth corners, black feather coat and pale pink heart-patterned shirt. Gentle awkward smile.",
+      "prompt": "Use case: stylized-concept. Create exactly ONE production game avatar for ONE PIECE tabletop launcher. Square canvas 1:1, output a clean perfect circular crop inscribed edge-to-edge in the square with TRUE transparent pixels everywhere outside the circle. The circle contains a crisp hand-drawn Japanese anime cel-shaded head-and-shoulders portrait. No metal rim, no extra decorative border, no badge, no typography, no watermark. Face prominently centered, natural anime proportions, not chibi; show recognizable canon face and upper clothing, keep ears/hair features inside circular silhouette wherever possible. Interior backdrop simple bright sky blue maritime sky with a few soft white clouds; detailed character with clean black ink contours and restrained two-tone shadows. Match established One Piece anime adult/teen characters accurately. Never produce an original character. No hands unless explicitly requested. \nSubject: Donquixote Rosinante, Corazon. Shaggy blond hair, pointed burgundy cap with dangling flaps, black heart-like makeup under right eye, red lipstick extended at mouth corners, black feather coat and pale pink heart-patterned shirt. Gentle awkward smile.",
+      "output": "public/images/board/avatars/83.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-fef82d19-c76d-424e-96da-43f5823234d2.png",
+      "qa": {
+        "size": [
+          735,
+          735
+        ],
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "bytes": 115716,
+        "sha256": "6d4ac427ff7945877c38baa2d8e2fa8dcd22ec9fea9ee758ea49bd23ebf09516",
+        "sourceSha256": "8140658da39801d7d0bdef76319480fdd996b1dd2153e2f6b9080c4cf8231920",
+        "reviewed": true,
+        "review": "Individual generated output and final circular WebP inspected. Specific visual checks below; direct official-image comparison applies only when officialReferences is nonempty.",
+        "visualChecks": [
+          "重畫右眼（觀者左）藍色直菱形眼妝、向兩側延伸的紅色嘴角",
+          "金色凌亂髮、酒紅帽兜、黑羽毛披風與愛心衣；與 MegaHouse 官方圖比對"
+        ],
+        "officialReferences": [
+          {
+            "url": "https://www.megahobby.jp/products/item/1775/",
+            "image": "https://www.megahobby.jp/images/item/item_0000001775_02.jpg"
+          }
+        ]
+      },
+      "revisions": [
+        {
+          "reason": "Corrected canon details after direct official image comparison",
+          "prompt": "Correct the first image, a circular ONE PIECE Donquixote Rosinante / Corazon avatar. The second official figure thumbnail is a reference for his distinctive facial makeup only (ignore child Law). Keep all framing, transparent exterior, anime shading, pink shirt with hearts, shaggy blond hair, purple-red hood and black feather coat. Crucial correction: REMOVE the black heart symbol on cheek completely. Corazon has turquoise/blue elongated diamond or spike-shaped clown makeup running vertically through his RIGHT eye (viewer LEFT): small turquoise point above eyelid and a long tapered turquoise tear/spike below that eye, black outline. The red lipstick line extends far up both mouth corners in his canon curled smile. No black heart facial tattoo anywhere. Exactly one adult male character and no text. Render clean circular face portrait.",
+          "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-fef82d19-c76d-424e-96da-43f5823234d2.png"
+        }
+      ]
+    },
+    {
+      "id": 84,
+      "name": "雷利",
+      "subject": "Silvers Rayleigh, elderly retired pirate, official reference as supplied. Long silver-white hair swept back, round thin wire glasses, vertical scar through his own RIGHT eye (viewer-left), many subtle age lines, distinctive white short beard split into vertical pointed tufts and thin moustache, confident relaxed smile. Mustard-yellow open-neck button shirt and white hooded cloak with dark olive-green lining at shoulders. No young face.",
+      "prompt": "Use case: stylized-concept. Production game avatar, exactly one character and one circular portrait. Adapt the supplied circular Sanji avatar's format/style to the specified canon character, using the other supplied image ONLY to verify that character's face, costume and colors. No Sanji facial features. Square canvas, perfect circle inscribed edge-to-edge, TRUE transparent pixels outside the circle, NO decorative rim, border, badge, labels or text. Tight head-and-shoulders framing, natural anime proportions not chibi, face centered filling about 65% circle height. Clean One Piece Japanese anime linework, clear flat cel shading, bright sky blue and soft white clouds inside circle. Recreate character as original clean 2D drawing, never a figurine/photo. No hands, no weapons. Keep hair and visible upper clothing inside circular boundary. Subject: Silvers Rayleigh, elderly retired pirate, official reference as supplied. Long silver-white hair swept back, round thin wire glasses, vertical scar through his own RIGHT eye (viewer-left), many subtle age lines, distinctive white short beard split into vertical pointed tufts and thin moustache, confident relaxed smile. Mustard-yellow open-neck button shirt and white hooded cloak with dark olive-green lining at shoulders. No young face.",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/official-Silvers_Rayleigh.jpg",
+      "referenceUrl": "https://one-piece.com/character/Silvers_Rayleigh/index.html",
+      "styleReference": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12/public/images/board/avatars/51.webp",
+      "output": "public/images/board/avatars/84.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-d8b2b3ba-03a6-4639-8134-9c666018d55c.png",
+      "qa": {
+        "generatedBy": "builtin image_gen",
+        "visualReview": "PASS",
+        "visualNotes": "Old age, right eye scar, wire glasses, white pointed beard and olive-lined white cloak match official reference.",
+        "width": 735,
+        "height": 735,
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "opaqueRatio": 0.77633,
+        "sourceSha256": "ecf6d65bcb51dbfe8bd4a7979bcc2fe3d82b3cf80a76660a13044876c691b5d9",
+        "sha256": "97ea67d73fc29e14b21b326718501fd938fb3adff35f5fb3fc34d892e1656ea0",
+        "bytes": 163732
+      }
+    },
+    {
+      "id": 85,
+      "name": "克比",
+      "subject": "Koby/Coby after timeskip in official supplied outfit. Short pink hair, distinctive green-framed round goggles with navyblue lenses and green headband RESTING ABOVE his eyes on forehead, small crossed scar on his own RIGHT forehead (viewer-left) near brow, large earnest round eyes, friendly determined smile. White high-collar open zip Marine jacket with blue side trim, bare upperchest visible, small round gold medal with red ribbons on his own left chest. No scarf, no Marine peaked cap, no eyeglasses over eyes.",
+      "prompt": "Use case: stylized-concept. Production game avatar, exactly one character and one circular portrait. Adapt the supplied circular Sanji avatar's format/style to the specified canon character, using the other supplied image ONLY to verify that character's face, costume and colors. No Sanji facial features. Square canvas, perfect circle inscribed edge-to-edge, TRUE transparent pixels outside the circle, NO decorative rim, border, badge, labels or text. Tight head-and-shoulders framing, natural anime proportions not chibi, face centered filling about 65% circle height. Clean One Piece Japanese anime linework, clear flat cel shading, bright sky blue and soft white clouds inside circle. Recreate character as original clean 2D drawing, never a figurine/photo. No hands, no weapons. Keep hair and visible upper clothing inside circular boundary. Subject: Koby/Coby after timeskip in official supplied outfit. Short pink hair, distinctive green-framed round goggles with navyblue lenses and green headband RESTING ABOVE his eyes on forehead, small crossed scar on his own RIGHT forehead (viewer-left) near brow, large earnest round eyes, friendly determined smile. White high-collar open zip Marine jacket with blue side trim, bare upperchest visible, small round gold medal with red ribbons on his own left chest. No scarf, no Marine peaked cap, no eyeglasses over eyes.",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/official-Coby.png",
+      "referenceUrl": "https://one-piece.com/character/Coby/index.html",
+      "styleReference": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12/public/images/board/avatars/51.webp",
+      "output": "public/images/board/avatars/85.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-583573c4-f91a-4c4c-bc8a-b1b1d39486b2.png",
+      "qa": {
+        "generatedBy": "builtin image_gen",
+        "visualReview": "PASS",
+        "visualNotes": "Pink hair, forehead goggles/flower band, scar, white blue-trim open jacket match official reference. Medal is viewer-left as in official image.",
+        "width": 735,
+        "height": 735,
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "opaqueRatio": 0.7755,
+        "sourceSha256": "e10e477d488e51c804c34fad9b7ab9ac020f39701d16e3b9fb44bc3c69b83e0b",
+        "sha256": "83aa30042d5f501fe2ad50f801b4bc2e117fa22684f9ea17900a6a4826f989e5",
+        "bytes": 144158
+      }
+    },
+    {
+      "id": 86,
+      "name": "貝魯梅伯",
+      "subject": "Helmeppo, official supplied post-training Water Seven Marine look, not the original bowl-haircut spoiled child. Long straight pale-blond hair combed back falling behind shoulders, long angular narrow face, canon single flat black horizontal visor covering both eyes, small angular confident smile. Green sleeveless V-neck Marine sweater vest over white open collar shirt and dark brown high-neck undershirt. Match reference, not purple suit and not sunglasses with round lenses.",
+      "prompt": "Use case: stylized-concept. Production game avatar, exactly one character and one circular portrait. Adapt the supplied circular Sanji avatar's format/style to the specified canon character, using the other supplied image ONLY to verify that character's face, costume and colors. No Sanji facial features. Square canvas, perfect circle inscribed edge-to-edge, TRUE transparent pixels outside the circle, NO decorative rim, border, badge, labels or text. Tight head-and-shoulders framing, natural anime proportions not chibi, face centered filling about 65% circle height. Clean One Piece Japanese anime linework, clear flat cel shading, bright sky blue and soft white clouds inside circle. Recreate character as original clean 2D drawing, never a figurine/photo. No hands, no weapons. Keep hair and visible upper clothing inside circular boundary. Subject: Helmeppo, official supplied post-training Water Seven Marine look, not the original bowl-haircut spoiled child. Long straight pale-blond hair combed back falling behind shoulders, long angular narrow face, canon single flat black horizontal visor covering both eyes, small angular confident smile. Green sleeveless V-neck Marine sweater vest over white open collar shirt and dark brown high-neck undershirt. Match reference, not purple suit and not sunglasses with round lenses.",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/official-Helmeppo.jpg",
+      "referenceUrl": "https://one-piece.com/character/Helmeppo/index.html",
+      "styleReference": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12/public/images/board/avatars/51.webp",
+      "output": "public/images/board/avatars/86.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-eb13fea5-4c5c-41ed-a048-84759ce85c9b.png",
+      "qa": {
+        "generatedBy": "builtin image_gen",
+        "visualReview": "PASS",
+        "visualNotes": "Swept long blond hair, black visor, angular face and green vest/white shirt match official reference.",
+        "width": 735,
+        "height": 735,
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "opaqueRatio": 0.77325,
+        "sourceSha256": "d5ad4fbc3a12e6c9e733065d6a4c472bfb41da35fbc00e01750326f6eed97e31",
+        "sha256": "4a98d3f841c2dfd0da5c5a1bd34fafaae90e402cbfc5cc179d424b72b7b2a7b6",
+        "bytes": 115212
+      }
+    },
+    {
+      "id": 87,
+      "name": "希娜",
+      "subject": "Hina, official supplied Marine rear admiral look. Adult woman, long straight pink hair with center part, purple-lensed sunglasses resting atop head, calm stern dark eyes with long lashes, cigarette held at mouth corner with restrained small smoke. Burgundy fitted jacket with visible decorative gold curling trim at collar, white Marine coat draped over shoulders with golden epaulettes and light violet lining. No shirt and tie.",
+      "prompt": "Use case: stylized-concept. Production game avatar, exactly one character and one circular portrait. Adapt the supplied circular Sanji avatar's format/style to the specified canon character, using the other supplied image ONLY to verify that character's face, costume and colors. No Sanji facial features. Square canvas, perfect circle inscribed edge-to-edge, TRUE transparent pixels outside the circle, NO decorative rim, border, badge, labels or text. Tight head-and-shoulders framing, natural anime proportions not chibi, face centered filling about 65% circle height. Clean One Piece Japanese anime linework, clear flat cel shading, bright sky blue and soft white clouds inside circle. Recreate character as original clean 2D drawing, never a figurine/photo. No hands, no weapons. Keep hair and visible upper clothing inside circular boundary. Subject: Hina, official supplied Marine rear admiral look. Adult woman, long straight pink hair with center part, purple-lensed sunglasses resting atop head, calm stern dark eyes with long lashes, cigarette held at mouth corner with restrained small smoke. Burgundy fitted jacket with visible decorative gold curling trim at collar, white Marine coat draped over shoulders with golden epaulettes and light violet lining. No shirt and tie.",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/official-Hina.jpg",
+      "referenceUrl": "https://one-piece.com/character/Hina/index.html",
+      "styleReference": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12/public/images/board/avatars/51.webp",
+      "output": "public/images/board/avatars/87.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-a61e6141-170f-40f5-931b-3c741cb7379d.png",
+      "qa": {
+        "generatedBy": "builtin image_gen",
+        "visualReview": "PASS",
+        "visualNotes": "Pink hair, purple sunglasses, cigarette, burgundy gold-trim top and Marine cloak match official reference.",
+        "width": 735,
+        "height": 735,
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "opaqueRatio": 0.77381,
+        "sourceSha256": "d5babe11ecac76f5afce072b205c517c2f82e3d3175048b17de7d2bd4e08bbc3",
+        "sha256": "a6b7bc4993a00599093a07c3695936bef059eca842f7e19b91eb1ef07e30e42b",
+        "bytes": 147982
+      }
+    },
+    {
+      "id": 88,
+      "name": "戰桃丸",
+      "subject": "Sentomaru, official supplied post-timeskip Marine Science Unit look. Canon broad thick neck and heavy square-round face, short blunt black bangs with longer flared black side hair, prominent zigzag scar descending down his own LEFT eye and cheek (viewer-right). Stern slightly grumpy expression. Red sleeveless sumo-style apron front with white tomoe motif partially visible below frame; white Marine coat on shoulders with gold epaulettes. NO necklace, NO magatama beads, no toy proportions.",
+      "prompt": "Use case: stylized-concept. Production game avatar, exactly one character and one circular portrait. Adapt the supplied circular Sanji avatar's format/style to the specified canon character, using the other supplied image ONLY to verify that character's face, costume and colors. No Sanji facial features. Square canvas, perfect circle inscribed edge-to-edge, TRUE transparent pixels outside the circle, NO decorative rim, border, badge, labels or text. Tight head-and-shoulders framing, natural anime proportions not chibi, face centered filling about 65% circle height. Clean One Piece Japanese anime linework, clear flat cel shading, bright sky blue and soft white clouds inside circle. Recreate character as original clean 2D drawing, never a figurine/photo. No hands, no weapons. Keep hair and visible upper clothing inside circular boundary. Subject: Sentomaru, official supplied post-timeskip Marine Science Unit look. Canon broad thick neck and heavy square-round face, short blunt black bangs with longer flared black side hair, prominent zigzag scar descending down his own LEFT eye and cheek (viewer-right). Stern slightly grumpy expression. Red sleeveless sumo-style apron front with white tomoe motif partially visible below frame; white Marine coat on shoulders with gold epaulettes. NO necklace, NO magatama beads, no toy proportions.",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/official-Sentomaru.png",
+      "referenceUrl": "https://one-piece.com/character/Sentomaru/index.html",
+      "styleReference": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12/public/images/board/avatars/51.webp",
+      "output": "public/images/board/avatars/88.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-62a4fe0e-9e90-46f1-97c0-7118026d021b.png",
+      "qa": {
+        "generatedBy": "builtin image_gen",
+        "visualReview": "PASS",
+        "visualNotes": "Heavy canon build, flared blunt black hair, left zigzag facial scar, red apron and Marine coat; no invented necklace.",
+        "width": 735,
+        "height": 735,
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "opaqueRatio": 0.77059,
+        "sourceSha256": "2a89da0011424c9e08e2599cca4187e86cc227be4384e7034ec4c146f8fb152b",
+        "sha256": "068b4b498d4b5732a3d79e175fd2443f1e7b0b9bc2f265d0927fff4016c5a7f5",
+        "bytes": 96412
+      }
+    },
+    {
+      "id": 89,
+      "name": "魯夫・和之國",
+      "subject": "Monkey D. Luffy as Luffytaro early Wano, based on official supplied outfit. Black tousled hair with small tied upright samurai topknot, straw hat hanging against upper back behind head on white chin cord NOT worn on crown, big round eyes, small stitch scar beneath his own LEFT eye (viewer-right), infectious broad toothy grin. Red kimono open slightly at chest, canon pale blue/white square patched fabric with blue circle motifs visible at shoulders. No yellow patches. Young adult age19. No Gear Five.",
+      "prompt": "Use case: stylized-concept. Production game avatar, exactly one character and one circular portrait. Adapt the supplied circular Sanji avatar's format/style to the specified canon character, using the other supplied image ONLY to verify that character's face, costume and colors. No Sanji facial features. Square canvas, perfect circle inscribed edge-to-edge, TRUE transparent pixels outside the circle, NO decorative rim, border, badge, labels or text. Tight head-and-shoulders framing, natural anime proportions not chibi, face centered filling about 65% circle height. Clean One Piece Japanese anime linework, clear flat cel shading, bright sky blue and soft white clouds inside circle. Recreate character as original clean 2D drawing, never a figurine/photo. No hands, no weapons. Keep hair and visible upper clothing inside circular boundary. Subject: Monkey D. Luffy as Luffytaro early Wano, based on official supplied outfit. Black tousled hair with small tied upright samurai topknot, straw hat hanging against upper back behind head on white chin cord NOT worn on crown, big round eyes, small stitch scar beneath his own LEFT eye (viewer-right), infectious broad toothy grin. Red kimono open slightly at chest, canon pale blue/white square patched fabric with blue circle motifs visible at shoulders. No yellow patches. Young adult age19. No Gear Five.",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/bandai-13334.jpg",
+      "referenceUrl": "https://tamashiiweb.com/item/13334/",
+      "styleReference": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12/public/images/board/avatars/51.webp",
+      "output": "public/images/board/avatars/89.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-f6e0cb3e-6f06-4020-8891-cbcf12366b13.png",
+      "qa": {
+        "generatedBy": "builtin image_gen",
+        "visualReview": "PASS",
+        "visualNotes": "Wano topknot, straw hat behind head, red kimono and blue/white patches; left stitch scar.",
+        "rejectedSources": [
+          {
+            "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-a4abd60c-6e7e-42ea-b71c-cde20a63844a.png",
+            "reason": "Resized alpha at bottom-left corner was 1 instead of 0. Replaced via built-in image edit, no manual mask."
+          }
+        ],
+        "repairPrompt": "Edit this exact finished circular Luffytaro avatar. Preserve the character drawing, facial features, canon Wano topknot, strawhat hanging behind him, red kimono with blue-white patches, composition, blue sky and clouds. Repair ONLY the circle cutout alpha: the entire area outside a smooth, precise circle must be fully transparent alpha ZERO, especially ALL FOUR CORNERS. Remove all isolated tiny colored/translucent pixel speckles outside the circle and make its boundary clean anti-aliased. No checkerboard, no white or black background paint, no new rim. Output square 1:1 PNG RGBA with TRUE transparency outside the circle. It will be reduced to 735px and must have exact zero corner-alpha. Keep the content inside unchanged.",
+        "width": 735,
+        "height": 735,
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "opaqueRatio": 0.7762,
+        "sourceSha256": "eb2bbda813c5911d7ae7438e2137cd09d94ef543f653083bbf62cb77ad7bf551",
+        "sha256": "d8c697e2909d4560ba04eaffdffb05f3525c22f6a591d2cde9c98caff3ca0e16",
+        "bytes": 127582
+      }
+    },
+    {
+      "id": 90,
+      "name": "索隆・和之國",
+      "subject": "Roronoa Zoro as Zorojuro in Wano. Moss green short spiky hair with small tied topknot at crown, his own LEFT eye closed with vertical scar (viewer-right), stern open right eye, THREE small dangling gold hoop earrings on his own LEFT ear (viewer-right), confident restrained smile. WHITE inner kimono robe and dark green haori loosely on shoulders with large green-on-green sun/flower crest motif as official reference. Natural strong adult neck, not inflated body. Do not dress in a solid green kimono. No sword in portrait.",
+      "prompt": "Use case: stylized-concept. Production game avatar, exactly one character and one circular portrait. Adapt the supplied circular Sanji avatar's format/style to the specified canon character, using the other supplied image ONLY to verify that character's face, costume and colors. No Sanji facial features. Square canvas, perfect circle inscribed edge-to-edge, TRUE transparent pixels outside the circle, NO decorative rim, border, badge, labels or text. Tight head-and-shoulders framing, natural anime proportions not chibi, face centered filling about 65% circle height. Clean One Piece Japanese anime linework, clear flat cel shading, bright sky blue and soft white clouds inside circle. Recreate character as original clean 2D drawing, never a figurine/photo. No hands, no weapons. Keep hair and visible upper clothing inside circular boundary. Subject: Roronoa Zoro as Zorojuro in Wano. Moss green short spiky hair with small tied topknot at crown, his own LEFT eye closed with vertical scar (viewer-right), stern open right eye, THREE small dangling gold hoop earrings on his own LEFT ear (viewer-right), confident restrained smile. WHITE inner kimono robe and dark green haori loosely on shoulders with large green-on-green sun/flower crest motif as official reference. Natural strong adult neck, not inflated body. Do not dress in a solid green kimono. No sword in portrait.",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/bandai-13335.jpg",
+      "referenceUrl": "https://tamashiiweb.com/item/13335/",
+      "styleReference": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12/public/images/board/avatars/51.webp",
+      "output": "public/images/board/avatars/90.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-cc065bd8-0f87-43db-9610-eb2554a26a7b.png",
+      "qa": {
+        "generatedBy": "builtin image_gen",
+        "visualReview": "PASS",
+        "visualNotes": "Wano topknot, closed scarred left eye, three left earrings, white robe and green haori with crest.",
+        "width": 735,
+        "height": 735,
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "opaqueRatio": 0.7757,
+        "sourceSha256": "041c4e98a7869eb8f136f70a26d8654a17fcd1fd7a7ddc1660dd85bfb08a9a36",
+        "sha256": "006fe067e9bf005b9eaeeb3ff2f00785e056ba25e14b27fba562bdf9b10aeb77",
+        "bytes": 131870
+      }
+    },
+    {
+      "id": 91,
+      "name": "娜美・和之國",
+      "subject": "Nami as O-Nami, early Wano outfit exactly from official supplied reference. Young adult with orange hair tied in LOW ponytail at nape with shiny BLUE bow, parted orange bangs, warm brown eyes, confident cheerful smile. LIGHT CYAN sleeveless kimono with pale floral motifs and crossed neckline, golden-yellow obi barely visible if at all. Her own left upper arm has blue pinwheel/tangerine tattoo if visible. No orange kimono, no bikini, no fan or coins, no high ponytail.",
+      "prompt": "Use case: stylized-concept. Production game avatar, exactly one character and one circular portrait. Adapt the supplied circular Sanji avatar's format/style to the specified canon character, using the other supplied image ONLY to verify that character's face, costume and colors. No Sanji facial features. Square canvas, perfect circle inscribed edge-to-edge, TRUE transparent pixels outside the circle, NO decorative rim, border, badge, labels or text. Tight head-and-shoulders framing, natural anime proportions not chibi, face centered filling about 65% circle height. Clean One Piece Japanese anime linework, clear flat cel shading, bright sky blue and soft white clouds inside circle. Recreate character as original clean 2D drawing, never a figurine/photo. No hands, no weapons. Keep hair and visible upper clothing inside circular boundary. Subject: Nami as O-Nami, early Wano outfit exactly from official supplied reference. Young adult with orange hair tied in LOW ponytail at nape with shiny BLUE bow, parted orange bangs, warm brown eyes, confident cheerful smile. LIGHT CYAN sleeveless kimono with pale floral motifs and crossed neckline, golden-yellow obi barely visible if at all. Her own left upper arm has blue pinwheel/tangerine tattoo if visible. No orange kimono, no bikini, no fan or coins, no high ponytail.",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/bandai-13368.jpg",
+      "referenceUrl": "https://tamashiiweb.com/item/13368/",
+      "styleReference": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12/public/images/board/avatars/51.webp",
+      "output": "public/images/board/avatars/91.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-e21d19f6-e783-44fc-8f3c-2ef817d61f23.png",
+      "qa": {
+        "generatedBy": "builtin image_gen",
+        "visualReview": "PASS",
+        "visualNotes": "Wano low ponytail with blue bow, light cyan floral kimono and canon left arm tattoo.",
+        "width": 735,
+        "height": 735,
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "opaqueRatio": 0.77649,
+        "sourceSha256": "4a69d15ec5ab984ac3466aa4c610b9f14baea808b5207ec3a622019d8461d6b5",
+        "sha256": "3d83a7b5ce3760f4a743f08123b1c05a0d2a7ac6cb0f9bf13db130f9de6ff8d8",
+        "bytes": 140000
+      }
+    },
+    {
+      "id": 92,
+      "name": "羅賓・和之國",
+      "subject": "Nico Robin as O-Robi, Wano geisha. Canon adult angular slim face, long distinctive straight nose, blue eyes, subtle confident calm smile. Glossy BLACK Japanese geisha updo with prominent elevated swept rolls, narrow long side locks framing face, golden horizontal hairpins with hanging purple bead decorations on side. BLACK kimono with RED inner collar lining and a hint of multicolor red/teal obi near lowercrop only if visible. Match supplied official hair/collar reference. No sunglasses, no purple kimono, no white collar, no fan or hands.",
+      "prompt": "Use case: stylized-concept. Production game avatar, exactly one character and one circular portrait. Adapt the supplied circular Sanji avatar's format/style to the specified canon character, using the other supplied image ONLY to verify that character's face, costume and colors. No Sanji facial features. Square canvas, perfect circle inscribed edge-to-edge, TRUE transparent pixels outside the circle, NO decorative rim, border, badge, labels or text. Tight head-and-shoulders framing, natural anime proportions not chibi, face centered filling about 65% circle height. Clean One Piece Japanese anime linework, clear flat cel shading, bright sky blue and soft white clouds inside circle. Recreate character as original clean 2D drawing, never a figurine/photo. No hands, no weapons. Keep hair and visible upper clothing inside circular boundary. Subject: Nico Robin as O-Robi, Wano geisha. Canon adult angular slim face, long distinctive straight nose, blue eyes, subtle confident calm smile. Glossy BLACK Japanese geisha updo with prominent elevated swept rolls, narrow long side locks framing face, golden horizontal hairpins with hanging purple bead decorations on side. BLACK kimono with RED inner collar lining and a hint of multicolor red/teal obi near lowercrop only if visible. Match supplied official hair/collar reference. No sunglasses, no purple kimono, no white collar, no fan or hands.",
+      "reference": "D:/Codex_QA/launcher-guestbook-r56/references/bandai-13369.jpg",
+      "referenceUrl": "https://tamashiiweb.com/item/13369/",
+      "styleReference": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12/public/images/board/avatars/51.webp",
+      "output": "public/images/board/avatars/92.webp",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-e161-74e0-ad5a-8d2a759010c6\\exec-ae23b734-2c3d-4518-82a5-1dcfe7161f74.png",
+      "qa": {
+        "generatedBy": "builtin image_gen",
+        "visualReview": "PASS",
+        "visualNotes": "Wano geisha hair rolls/pins and hanging decorations, black kimono and red inner collar; long straight Robin nose.",
+        "width": 735,
+        "height": 735,
+        "mode": "RGBA",
+        "cornerAlpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "opaqueRatio": 0.77742,
+        "sourceSha256": "bd332293311f6004fd289049f25336c2312ca810025c98a0fa57e4c8909c80aa",
+        "sha256": "b2e39b3a9e4999a60566a21bdb09b0346f4431c62be02e05fc7607e3cdecb2b7",
+        "bytes": 119104
+      }
+    }
+  ]
+}

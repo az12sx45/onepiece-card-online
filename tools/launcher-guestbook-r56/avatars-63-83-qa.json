@@ -1,0 +1,272 @@
+{
+  "scope": "63–83 final avatar visual review",
+  "reviewDate": "2026-10-10",
+  "method": "One built-in GPT image generation call per portrait; generated pixel content inspected individually. Official licensed reference images directly compared for the six explicitly listed IDs; remaining IDs reviewed visually against recognizable character features, not an exhaustive official source audit.",
+  "items": [
+    {
+      "id": 63,
+      "visualChecks": [
+        "淺藍高馬尾與前額小捲髮、棕眼、金耳飾",
+        "粉紅金邊上衣與自然成人臉部比例；天空底圓形透明角"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-d3b6e65d-6388-4dc0-8c44-9f21aeba05fc.png"
+    },
+    {
+      "id": 64,
+      "visualChecks": [
+        "重畫為兩年後長粉紅螺旋捲髮、黑色寬帽、白藍花與紅色帽沿",
+        "黑色平口衣與白色飾邊；依 MegaHouse Sailing Again 官方正側面確認"
+      ],
+      "officialReferences": [
+        {
+          "url": "https://www.megahobby.jp/products/item/993/?dmode=pc",
+          "image": "https://www.megahobby.jp/images/item/item_0000000993_01.jpg"
+        },
+        {
+          "url": "https://www.megahobby.jp/products/item/993/?dmode=pc",
+          "image": "https://www.megahobby.jp/images/item/item_0000000993_03.jpg"
+        }
+      ],
+      "revisionPrompt": "Edit this ONE PIECE Perona circular game avatar. The first image is the avatar to correct; second and third are official Perona AFTER TIMESKIP costume references. Preserve first image's crisp anime drawing style, face with circular eyes, blue maritime sky, edge-to-edge circle, transparent exterior, and head-and-shoulders format. Correct ONLY era-specific hair, headwear, and upper clothing: replace crown with a broad black round hat, dark red underbrim and band of pale blue-white roses; replace twin ponytails with long loose rose-pink spiral drill curls flowing down behind shoulders; wear the after-timeskip black strapless bodice with narrow white cross/ribbon trim visible at neckline, bare shoulders. No red ruff, no crown, no twin-tail hair ties, no pink bow. Exactly one character, no mascot, no parasol, no text. Face natural canon Perona proportions.",
+      "rejectedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-78f822c1-57a0-4f80-bfce-5ae16fc34c74.png",
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-5a2e35fa-d531-4dd7-881e-8e09c2a1cc89.png"
+    },
+    {
+      "id": 65,
+      "visualChecks": [
+        "橘色短髮、酒紅帽與護目鏡、藍眼",
+        "白色荷葉領與酒紅衣、笑容與肩頸連續"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-9441125f-57fa-4b95-b911-518b4f141b36.png"
+    },
+    {
+      "id": 66,
+      "visualChecks": [
+        "粉紅長髮、綠眼、白毛邊棕帽",
+        "下唇金色新月飾物、粉紅衣；未混用其他角色五官"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-8ada0740-b83e-4307-af52-93dc194b6b7b.png"
+    },
+    {
+      "id": 67,
+      "visualChecks": [
+        "重畫為蕾貝卡競技場金色頭盔、紅色盔冠、粉紅辮與青綠斗篷肩部",
+        "依 MegaHouse 官方頭盔輪廓確認；不標示為日常服"
+      ],
+      "officialReferences": [
+        {
+          "url": "https://www.megahobby.jp/products/item/1301/",
+          "image": "https://www.megahobby.jp/images/item/item_0000001301_01.jpg"
+        }
+      ],
+      "revisionPrompt": "Edit first image into an accurate Rebecca from ONE PIECE circular avatar. Second image is an official character costume reference only. Keep anime cel-shading, friendly face, clean circular transparent exterior and blue-sky interior. Switch to her canon Dressrosa gladiator headwear and cloak: golden closed-cheek Corinthian helmet with narrow red-pink crest, her salmon-pink braid visible at side, blue-green cloak fastened over both shoulders. Frame tightly from helmet through neck and cloak-covered shoulders; do NOT show torso, armor bikini, cleavage, hips, legs or hands. No flower hairclip and no invented white dress. Neutral determined facial expression. No text. A respectful face portrait only.",
+      "rejectedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-ddd812f1-6d95-4fd2-b075-4e73c5fb68ed.png",
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-8e8ac339-08d8-4810-98ea-40736de1fd01.png"
+    },
+    {
+      "id": 68,
+      "visualChecks": [
+        "重畫高位雙環粉紅髮、紅束髮帶與金色魚鰭髮飾",
+        "藍眼；移除不符參考的王冠與貝殼耳飾；依 MegaHouse 官方圖確認"
+      ],
+      "officialReferences": [
+        {
+          "url": "https://www.megahobby.jp/products/item/823/?dmode=pc",
+          "image": "https://www.megahobby.jp/images/item/item_0000000823_01.jpg"
+        }
+      ],
+      "revisionPrompt": "Edit first image of Shirahoshi into an accurate ONE PIECE circular game portrait. Second image is official costume reference for HEAD AND HAIR ONLY. Preserve anime cel-shaded blue-sky portrait and transparent circle. Correct her hair: one high ponytail tied with dark red binding and small gold fish-fin ornaments, large double-loop of pink hair like a bow atop her head; flowing long pink hair behind, no side buns. Remove invented princess tiara/crown and shell earrings. Preserve blue eyes and gentle shy expression. Thin golden ornamental ends near neck may show. Crop tightly from top hair loops down through face to base of neck/shoulders only; no torso or cleavage or bikini. Do not add another character, text, human legs or hands.",
+      "rejectedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-61a68de1-6b3e-4175-816e-87934e9885d4.png",
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-73518485-ce8c-4f5f-9719-48b0cdfa2da3.png"
+    },
+    {
+      "id": 69,
+      "visualChecks": [
+        "普通型態白兔毛、金色短髮與長兔耳",
+        "紅棕眼、橘色毛邊領；非月獅形態"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-50472c0c-0f45-4e9a-b7ab-cd1c0ff9e9de.png"
+    },
+    {
+      "id": 70,
+      "visualChecks": [
+        "粉紅側分短髮遮右眼、左側藍眼可見、捲眉與紫色唇色",
+        "Germa耳部裝備與粉紫領口；無多餘眼睛"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-9a8da466-5eec-463c-aed6-0afa06295f2f.png"
+    },
+    {
+      "id": 71,
+      "visualChecks": [
+        "棕色雙束髮與三隻棕眼，第三眼置於額頭",
+        "白色荷葉衣領與粉色蝴蝶結；眼睛與臉部比例清楚"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-fdb100ab-bd2f-464c-b325-b24ba7bcbccb.png"
+    },
+    {
+      "id": 72,
+      "visualChecks": [
+        "兩年後深色長馬尾、红框眼鏡",
+        "粉紅花紋襯衫與白色海軍衣肩部"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-c0515154-f862-4ac8-8a8d-ff4528c47762.png"
+    },
+    {
+      "id": 73,
+      "visualChecks": [
+        "重畫疤痕為斜橫額頭延伸至角色右眉上方（觀者左），沒有穿過左眼至臉頰的錯誤縱疤",
+        "白髮、兩支雪茄、青綠毛領海軍衣；依 Tamashii 官方 Punk Hazard 近照確認"
+      ],
+      "officialReferences": [
+        {
+          "url": "https://tamashiiweb.com/item/10374/",
+          "image": "https://tamashiiweb.com/storage/images/products/imported/item_0000010374_05.jpg"
+        }
+      ],
+      "revisionPrompt": "Use case: precise-object-edit. Image 1 is the edit target: ONE PIECE Smoker circular avatar. Image 2 is official Tamashii Punk Hazard Smoker figure detail and is the canon scar-position reference only. Correct ONLY the scar on the face to match Image 2: remove the entire incorrect straight vertical stitched scar currently down the viewer-right side across the eye and cheek. Instead, draw the canonical single curved diagonal stitched scar across his upper forehead, beginning at the hairline above the middle-right of the forehead and curving diagonally down-left across the forehead to end immediately above his RIGHT eyebrow (viewer LEFT). The scar stays on the forehead and does not run down either cheek. Match its placement and arc to Image 2. Preserve the same existing two cigars, stern face, eyes, white hair, teal fur Marine coat, sky-blue interior, illustration style, face proportions, circular crop and true-transparent exterior. No other edits, no text, no added accessories.",
+      "rejectedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-322faa41-6509-4693-a80a-a665084e5de5.png",
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-bd5cd2a3-acc4-4502-9af4-4ac60314f3fe.png"
+    },
+    {
+      "id": 74,
+      "visualChecks": [
+        "油頭黑髮、橫跨鼻梁雙頰的縫合疤、雪茄與金耳環",
+        "橘色格紋背心、深色毛領與青綠領巾"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-f94451f8-adee-48e6-acdd-d81e1880cda9.png"
+    },
+    {
+      "id": 75,
+      "visualChecks": [
+        "金色刺髮、紅色尖角墨鏡、粉紅羽毛披風",
+        "露齒笑容、白底黑點衣領；臉與肩部連續"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-676b2e3e-6253-4ef8-9584-648a52a1bb3f.png"
+    },
+    {
+      "id": 76,
+      "visualChecks": [
+        "暗紅刺髮、紅色眼睛、臉頰疤痕",
+        "厚毛圍巾覆住嘴、黑色鉚釘背心；無額外嘴部"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-5faf4fde-7b39-43c1-822b-5041b3778120.png"
+    },
+    {
+      "id": 77,
+      "visualChecks": [
+        "白頭巾、長耳垂及金色耳環",
+        "裸肩、淡金短髮邊緣與傲慢表情；未加原創冠飾"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-dc446dcb-1115-40a4-bb30-28e2fc51f257.png"
+    },
+    {
+      "id": 78,
+      "visualChecks": [
+        "CP0 白帽、白西裝與黑領帶",
+        "黑長髮、細鬍鬚與長尖鬍；非黑色CP9套裝"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-bbc40491-183a-41a9-b678-effe7a36778e.png"
+    },
+    {
+      "id": 79,
+      "visualChecks": [
+        "綠色莫霍克髮、鼻環、尖牙與眼下記號",
+        "深酒紅毛領、耳部裝飾；角色五官辨識清楚"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-8c42797c-3d86-4db4-bf6c-1f29b23b103a.png"
+    },
+    {
+      "id": 80,
+      "visualChecks": [
+        "長金髮、藍眼、白色寬邊帽與藍羽飾",
+        "白色荷葉衣領與紫色衣邊"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-0c421f81-2ccd-407f-8973-7ce81057350a.png"
+    },
+    {
+      "id": 81,
+      "visualChecks": [
+        "红色刺髮、額頭護目鏡、左臉疤痕（觀者右）",
+        "深色唇色與酒紅毛領；未混用無疤早期版"
+      ],
+      "officialReferences": [],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-d3f0f6b4-224a-43cb-89a9-bfacb12db86b.png"
+    },
+    {
+      "id": 82,
+      "visualChecks": [
+        "金色長髮、藍白封閉金屬面罩",
+        "面罩直向排列深色橢圓孔、藍白条紋無袖上衣；與 MegaHouse 官方圖比對"
+      ],
+      "officialReferences": [
+        {
+          "url": "https://www.megahobby.jp/products/item/963/?dmode=pc",
+          "image": "https://www.megahobby.jp/images/item/item_0000000963_01.jpg"
+        }
+      ],
+      "revisionPrompt": null,
+      "rejectedSource": null,
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-9eaf251e-cfc4-4d9e-80f7-1452e2b1304c.png"
+    },
+    {
+      "id": 83,
+      "visualChecks": [
+        "重畫右眼（觀者左）藍色直菱形眼妝、向兩側延伸的紅色嘴角",
+        "金色凌亂髮、酒紅帽兜、黑羽毛披風與愛心衣；與 MegaHouse 官方圖比對"
+      ],
+      "officialReferences": [
+        {
+          "url": "https://www.megahobby.jp/products/item/1775/",
+          "image": "https://www.megahobby.jp/images/item/item_0000001775_02.jpg"
+        }
+      ],
+      "revisionPrompt": "Correct the first image, a circular ONE PIECE Donquixote Rosinante / Corazon avatar. The second official figure thumbnail is a reference for his distinctive facial makeup only (ignore child Law). Keep all framing, transparent exterior, anime shading, pink shirt with hearts, shaggy blond hair, purple-red hood and black feather coat. Crucial correction: REMOVE the black heart symbol on cheek completely. Corazon has turquoise/blue elongated diamond or spike-shaped clown makeup running vertically through his RIGHT eye (viewer LEFT): small turquoise point above eyelid and a long tapered turquoise tear/spike below that eye, black outline. The red lipstick line extends far up both mouth corners in his canon curled smile. No black heart facial tattoo anywhere. Exactly one adult male character and no text. Render clean circular face portrait.",
+      "rejectedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-aa277edd-d341-4310-a442-66ffe5b1a600.png",
+      "finalSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a124d1-6644-7981-8980-2e9a7208dd0b\\exec-fef82d19-c76d-424e-96da-43f5823234d2.png"
+    }
+  ]
+}
