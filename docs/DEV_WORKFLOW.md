@@ -14,9 +14,7 @@
 
 原因與修改：V5 樣式曾把魚線設為 `z-index: 6`，高於釣竿的 4，讓魚線穿到竿身前面；`desktop/launcher-room-minigames.css` 改為 3，仍高於水面 1，保留現有竿尖、浮標、水花的動態連線。`desktop/launcher-room-minigames.js` 重整三條收線、魚拉線、線壓錄音的音量與交接，減少尖銳合成節拍；既有三個 1.2.23 已封裝的 OGG 路徑重新混合，另把短促的拋竿、落水與甩竿片段內嵌為本機解碼事件音，不增加核心媒體白名單或重新安裝需求。音源使用既有已審閱的 Pixabay 釣線／繩索音效與 OpenGameArt 的 Fisheefects、Swishes CC0 遊戲音效；完整來源、原檔和輸出 SHA-256 記於 `docs/LAUNCHER_FISHING_AUDIO_R15_20261005.json`。沒有使用玩家提供的 APK 音效。
 
-檔案與驗證：變動為上述 JS/CSS、`public/audio/launcher_room/pixabay_fishing_v1/` 內原三段 OGG、`scripts/launcher_fishing_v5_browser_qa.js`、`scripts/launcher_fishing_public_audio_qa.js`、`config/launcher-announcements-v1.json` 修訂 29 和本次四份專案文件／來源紀錄。桌機 1440×900 與 960×640 等待咬餌、搏魚的魚線層級與端點各 107 項 Chromium 檢查通過，左右甩竿畫面目視核對；完整 V5 Chromium 音效／操作 421／421，含拋竿、落水、甩竿的解碼片段、持續收放線、缺媒體回退、失焦／關閉。完整報告 `D:\Codex_QA\launcher-fishing-audio-r15\browser-final-fixed-fixture\report.json`。聲音原檔與內嵌位元組 3 路徑／3 短音 QA 通過；公告服務 82／82、簽署內容工具 49／49、更新器 45／45 通過。
-pm start` 以未設資料庫的隔離 18897 埠啟動，Board 入口與內容清單 HTTP 200；
-ode --check`、`git diff --check` 通過。三段 OGG 共 34,367 bytes，修訂 15 簽署清單 SHA-256 `12a8050ebb5c40b14bedc882dd6977b5974e80992a98f06973564c19db288f9c`，38 路徑；五個新 JS/CSS/OGG blob 共 346,905 bytes 已上傳 R2 並逐檔公開 HEAD／GET／大小／SHA 核對。來源提交 `23e277a59bde51b5422f426609145a54f832a756` 已非強制推送到 `origin/main`；Render 正式清單 GET 讀回修訂 15 與相同原始位元組 SHA。隔離公開更新器和此機正式內容快取均由修訂 14→15，只下載五檔共 346,905 bytes、讀回全部 38 檔；此機原快取先備份到 `D:\Codex_QA\launcher-fishing-audio-line-r15\userdata-overlay-before-r15`。釣魚機率、魚勢、魚竿等級、漁獲、商城金幣和三款桌遊規則不變；正式帳號與真人喇叭聽感尚未驗收。既有未關聯 `public/images/ranks/r5.PNG`、`r6.PNG` 修改不納入發布。LATTICE 本階段無可呼叫的任務 MCP，官方 Status 為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未宣稱任務或圖譜持久化成功。
+檔案與驗證：變動為上述 JS/CSS、`public/audio/launcher_room/pixabay_fishing_v1/` 內原三段 OGG、`scripts/launcher_fishing_v5_browser_qa.js`、`scripts/launcher_fishing_public_audio_qa.js`、`config/launcher-announcements-v1.json` 修訂 29 和本次四份專案文件／來源紀錄。桌機 1440×900 與 960×640 等待咬餌、搏魚的魚線層級與端點各 107 項 Chromium 檢查通過，左右甩竿畫面目視核對；完整 V5 Chromium 音效／操作 421／421，含拋竿、落水、甩竿的解碼片段、持續收放線、缺媒體回退、失焦／關閉。完整報告 `D:\Codex_QA\launcher-fishing-audio-r15\browser-final-fixed-fixture\report.json`。聲音原檔與內嵌位元組 3 路徑／3 短音 QA 通過；公告服務 82／82、簽署內容工具 49／49、更新器 45／45 通過。`npm start` 以未設資料庫的隔離 18897 埠啟動，Board 入口與內容清單 HTTP 200；`node --check`、`git diff --check` 通過。三段 OGG 共 34,367 bytes，修訂 15 簽署清單 SHA-256 `12a8050ebb5c40b14bedc882dd6977b5974e80992a98f06973564c19db288f9c`，38 路徑；五個新 JS/CSS/OGG blob 共 346,905 bytes 已上傳 R2 並逐檔公開 HEAD／GET／大小／SHA 核對。來源提交 `23e277a59bde51b5422f426609145a54f832a756` 已非強制推送到 `origin/main`；Render 正式清單 GET 讀回修訂 15 與相同原始位元組 SHA。隔離公開更新器和此機正式內容快取均由修訂 14→15，只下載五檔共 346,905 bytes、讀回全部 38 檔；此機原快取先備份到 `D:\Codex_QA\launcher-fishing-audio-line-r15\userdata-overlay-before-r15`。釣魚機率、魚勢、魚竿等級、漁獲、商城金幣和三款桌遊規則不變；正式帳號與真人喇叭聽感尚未驗收。既有未關聯 `public/images/ranks/r5.PNG`、`r6.PNG` 修改不納入發布。LATTICE 本階段無可呼叫的任務 MCP，官方 Status 為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未宣稱任務或圖譜持久化成功。
 
 ## 2026-10-05 水族箱料理／售魚修復與釣竿實效（1.2.23 內容修訂 14，已部署）
 
@@ -24,9 +22,7 @@ ode --check`、`git diff --check` 通過。三段 OGG 共 34,367 bytes，修訂 
 
 釣竿：`server/launcher-fishing-v5.js` 在現行 V5 搏魚公式中依場次固定的等級套用每級基礎收線距離增益 `+0.45/秒`、收線耐壓消耗 `−0.60/秒`、鬆線耐壓回復 `+0.40/秒`、鬆線被拖走距離 `−0.12/秒`；依魚勢、方向、魚種倍率及耐壓上下限結算，錯向硬收不能靠升級直接拉近魚。`desktop/launcher-room-minigames.js` 工房文案同步現行 V5 數值，釣竿等級在開始新海釣場次時固定；魚池及咬鉤機率不變。`config/launcher-announcements-v1.json` 修訂 28 沿用已封裝的水族箱／海釣插圖。
 
-正式驗證：隔離 PGlite 水族箱交易 40／40；正式核心來源的 `AuthService` 經命令白名單、模擬 socket 轉入伺服器交易，再讀回 PGlite 的料理／售魚／釣竿連續流程 28／28；Chromium 水族箱 28／28；釣竿同魚同操作 Lv 0–3 實算 54／54；V5 伺服器 1,211／1,211、V5 瀏覽器 403／403、原水族箱 89／89、公告 82／82、簽署內容工具 49／49、更新器 45／45 通過。
-ode --check`、`git diff --check` 通過；
-pm start` 在隔離且未連正式資料庫時，遊戲入口和內容清單 HTTP 200。正式帳號交易與真人搏魚手感仍未驗收。來源提交 `0cb697c78b42f5f0ca840958815e77c1a4512ee5` 已非強制推送到 `origin/main`；Render 公開清單 GET 回傳修訂 14、38 路徑，原始位元組 SHA-256 `9a7bf7f9284c2c2be9fc471c310f5afe00aa081b0f9e13dae70f30616eccdb52` 與簽署來源一致。R2 上傳兩個新 renderer blob 共 207,903 bytes、沿用 36 個，兩檔公開 HEAD／GET／大小／SHA 通過。隔離公開更新器及本機正式內容快取均由修訂 13→14，只下載 207,903 bytes 並讀回全部 38 檔；本機原快取先備份在 `D:\Codex_QA\launcher-aquarium-r14\userdata-overlay-before-r14`。未關聯的 `public/images/ranks/r5.PNG`、`r6.PNG` 工作樹修改不納入本次發布。LATTICE 無可呼叫的任務 MCP，官方 Status 為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，不宣稱任務或圖譜已寫入。
+正式驗證：隔離 PGlite 水族箱交易 40／40；正式核心來源的 `AuthService` 經命令白名單、模擬 socket 轉入伺服器交易，再讀回 PGlite 的料理／售魚／釣竿連續流程 28／28；Chromium 水族箱 28／28；釣竿同魚同操作 Lv 0–3 實算 54／54；V5 伺服器 1,211／1,211、V5 瀏覽器 403／403、原水族箱 89／89、公告 82／82、簽署內容工具 49／49、更新器 45／45 通過。`node --check`、`git diff --check` 通過；`npm start` 在隔離且未連正式資料庫時，遊戲入口和內容清單 HTTP 200。正式帳號交易與真人搏魚手感仍未驗收。來源提交 `0cb697c78b42f5f0ca840958815e77c1a4512ee5` 已非強制推送到 `origin/main`；Render 公開清單 GET 回傳修訂 14、38 路徑，原始位元組 SHA-256 `9a7bf7f9284c2c2be9fc471c310f5afe00aa081b0f9e13dae70f30616eccdb52` 與簽署來源一致。R2 上傳兩個新 renderer blob 共 207,903 bytes、沿用 36 個，兩檔公開 HEAD／GET／大小／SHA 通過。隔離公開更新器及本機正式內容快取均由修訂 13→14，只下載 207,903 bytes 並讀回全部 38 檔；本機原快取先備份在 `D:\Codex_QA\launcher-aquarium-r14\userdata-overlay-before-r14`。未關聯的 `public/images/ranks/r5.PNG`、`r6.PNG` 工作樹修改不納入本次發布。LATTICE 無可呼叫的任務 MCP，官方 Status 為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，不宣稱任務或圖譜已寫入。
 
 ## 2026-10-05 水族箱漁獲管理與料理／售魚（1.2.23 內容修訂 13，已部署）
 
@@ -34,9 +30,7 @@ pm start` 在隔離且未連正式資料庫時，遊戲入口和內容清單 HTT
 
 畫面：`desktop/launcher-room.js`、`launcher-life-room.js`、`launcher-room-aquarium.js/.css` 讓頁主點家具魚缸或水族館背景缸進入管理；列出完整收藏、展示狀態、魚圖、伺服器售價與料理對象，提供展示切換、料理、出售及佛朗基改裝。好友參觀只讀公開展示的魚。`config/launcher-announcements-v1.json` 修訂 27 沿用已封裝的千陽號魚缸插圖。來源測試為 `scripts/launcher_aquarium_management_qa.js` 與 `launcher_aquarium_browser_qa.js`，發行後更新 `public/desktop/launcher-content-v1.json` 為簽署修訂 13。
 
-正式驗證：料理／出售 PGlite 30／30、釣竿 38／38、生活系統 162／162、漁獲名稱與圖片對照 197／197、原水族箱 89／89、公告服務 82／82、內容清單 49／49 與更新器夾具 45／45 通過。實際 Chromium 水族箱操作 28／28 通過，涵蓋背景缸／家具缸的滑鼠與鍵盤入口、展示、料理、售魚、改裝、好友唯讀，以及 1366×980、960×640、390×844 畫面；零頁面錯誤或缺魚圖。截圖和報告在 `D:\Codex_QA\launcher-aquarium-r13\root-browser\`。
-ode --check` 與 `git diff --check` 通過。
-pm start` 以未設定 `DATABASE_URL` 的隔離程序回應遊戲入口與內容清單 HTTP 200；帳號資料只由 PGlite 驗證，未連正式玩家資料庫。來源提交 `11b2af7dd8cb4487095b4e9d0ced89e778b46c00` 已非強制推送至 `origin/main`；Render 公開清單 GET 回傳修訂 13、38 路徑，原始位元組 SHA-256 `19c1d6d3a7151bcfb55c41a5dd1c56fc74328e3756a0c74f396be9d87731ed65` 與簽署來源一致。R2 上傳 4 個新 JS/CSS blob 共 194,104 bytes、重用 34 個，四檔公開 HEAD／GET／大小／SHA 均通過。隔離更新器及本機正式內容快取均由修訂 12→13，只下載 194,104 bytes、讀回全部 38 檔；此機原始快取先備份在 `D:\Codex_QA\launcher-aquarium-r13\userdata-overlay-before-r13`。這些是自動測試及公開讀回，未使用正式玩家帳號交易驗收。既有未關聯 `public/images/ranks/r5.PNG`、`r6.PNG` 修改不納入本次提交。LATTICE 本階段無任務 MCP；官方 Status 為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未宣稱任務或 Graphify 持久化成功。
+正式驗證：料理／出售 PGlite 30／30、釣竿 38／38、生活系統 162／162、漁獲名稱與圖片對照 197／197、原水族箱 89／89、公告服務 82／82、內容清單 49／49 與更新器夾具 45／45 通過。實際 Chromium 水族箱操作 28／28 通過，涵蓋背景缸／家具缸的滑鼠與鍵盤入口、展示、料理、售魚、改裝、好友唯讀，以及 1366×980、960×640、390×844 畫面；零頁面錯誤或缺魚圖。截圖和報告在 `D:\Codex_QA\launcher-aquarium-r13\root-browser\`。`node --check` 與 `git diff --check` 通過。`npm start` 以未設定 `DATABASE_URL` 的隔離程序回應遊戲入口與內容清單 HTTP 200；帳號資料只由 PGlite 驗證，未連正式玩家資料庫。來源提交 `11b2af7dd8cb4487095b4e9d0ced89e778b46c00` 已非強制推送至 `origin/main`；Render 公開清單 GET 回傳修訂 13、38 路徑，原始位元組 SHA-256 `19c1d6d3a7151bcfb55c41a5dd1c56fc74328e3756a0c74f396be9d87731ed65` 與簽署來源一致。R2 上傳 4 個新 JS/CSS blob 共 194,104 bytes、重用 34 個，四檔公開 HEAD／GET／大小／SHA 均通過。隔離更新器及本機正式內容快取均由修訂 12→13，只下載 194,104 bytes、讀回全部 38 檔；此機原始快取先備份在 `D:\Codex_QA\launcher-aquarium-r13\userdata-overlay-before-r13`。這些是自動測試及公開讀回，未使用正式玩家帳號交易驗收。既有未關聯 `public/images/ranks/r5.PNG`、`r6.PNG` 修改不納入本次提交。LATTICE 本階段無任務 MCP；官方 Status 為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未宣稱任務或 Graphify 持久化成功。
 
 ## 2026-10-05 海釣方向提示頻率、收線助力與甩竿聲（1.2.23 內容修訂 12，已部署）
 
@@ -44,8 +38,7 @@ pm start` 以未設定 `DATABASE_URL` 的隔離程序回應遊戲入口與內容
 
 檔案：`server/launcher-fishing-v5.js`、`server/launcher-minigames.js`、`desktop/launcher-room-minigames.js/.css`、`scripts/launcher_fishing_flick_server_qa.js`、`scripts/launcher_fishing_flick_life_qa.js`、`scripts/launcher_fishing_v5_browser_qa.js`、`config/launcher-announcements-v1.json`、`public/desktop/launcher-content-v1.json` 與本次專案文件。公告修訂 26 沿用既有海釣圖；釣魚收藏、魚池、釣竿改裝、金幣與三款桌遊規則不變。LATTICE 目前無可呼叫的任務 MCP，官方 `D:\LATTICE\LATTICE.ps1 -Action Status` 回傳 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，故未宣稱任務或 Graphify 已持久化。
 
-正式驗證：釣魚方向伺服器 1,593 項（36 魚、144 個操作場景）、釣魚持久化 21 項、v5 伺服器 1,211 項、v5 持久化 21 項、公告服務 82 項、完整 Chromium 釣魚 403 項（零 page error／缺素材）、甩竿專項 56 項、內容清單 49 項與更新器夾具 45 項通過。
-pm start` 本機靜態頁與內容清單 HTTP 200；因未設 DATABASE_URL，本機沒有連到正式帳號資料庫。正式簽署清單 SHA-256 `4f5d3929fc28d9817a226d8bc9d93b89e6684e5ec37c8eeca03c2f116795a816`，36 路徑；兩個新 JS/CSS blob 合計 290,677 bytes，R2 上傳後逐檔公開 HEAD／GET／長度／SHA 通過。提交 `17eca16c0d2f008b9884c2a16cc771481cf96a5c` 已推送 `origin/main`；Render 正式 GET 讀回 1.2.23 修訂 12、36 路徑，原始清單 SHA 與本機簽署檔一致。隔離更新器與此機正式內容快取均由修訂 11→12，只下載 290,677 bytes、讀回全部 36 檔；此機原始內容快取先備份到 `D:\Codex_QA\launcher-flick-reward-r12\userdata-overlay-before-r12`。截圖與報告在 `D:\Codex_QA\launcher-flick-reward-r12\`。真人正式帳號的遊玩手感與實際喇叭試聽未在自動化測試中驗證。既有未關聯的 `public/images/ranks/r5.PNG`、`r6.PNG` 修改沒有納入提交。
+正式驗證：釣魚方向伺服器 1,593 項（36 魚、144 個操作場景）、釣魚持久化 21 項、v5 伺服器 1,211 項、v5 持久化 21 項、公告服務 82 項、完整 Chromium 釣魚 403 項（零 page error／缺素材）、甩竿專項 56 項、內容清單 49 項與更新器夾具 45 項通過。`npm start` 本機靜態頁與內容清單 HTTP 200；因未設 DATABASE_URL，本機沒有連到正式帳號資料庫。正式簽署清單 SHA-256 `4f5d3929fc28d9817a226d8bc9d93b89e6684e5ec37c8eeca03c2f116795a816`，36 路徑；兩個新 JS/CSS blob 合計 290,677 bytes，R2 上傳後逐檔公開 HEAD／GET／長度／SHA 通過。提交 `17eca16c0d2f008b9884c2a16cc771481cf96a5c` 已推送 `origin/main`；Render 正式 GET 讀回 1.2.23 修訂 12、36 路徑，原始清單 SHA 與本機簽署檔一致。隔離更新器與此機正式內容快取均由修訂 11→12，只下載 290,677 bytes、讀回全部 36 檔；此機原始內容快取先備份到 `D:\Codex_QA\launcher-flick-reward-r12\userdata-overlay-before-r12`。截圖與報告在 `D:\Codex_QA\launcher-flick-reward-r12\`。真人正式帳號的遊玩手感與實際喇叭試聽未在自動化測試中驗證。既有未關聯的 `public/images/ranks/r5.PNG`、`r6.PNG` 修改沒有納入提交。
 
 ## 2026-10-04 海釣線輪連續聲與方向回饋（1.2.23 內容修訂 11，已部署）
 
@@ -55,8 +48,7 @@ pm start` 本機靜態頁與內容清單 HTTP 200；因未設 DATABASE_URL，本
 
 公告：config/launcher-announcements-v1.json 修訂 25 增加 launcher-1.2.23-r11-fishing-audio-continuity，沿用已封裝海釣主圖。公告服務只核對核心 1.2.23，不能判斷內容修訂 11；本次先上傳並核對全部新 blob，再以同一正式提交發布簽署清單與公告。不更動魚池、耐壓／魚距算法、漁獲、釣竿等級、金幣、存檔或三款桌遊規則。
 
-正式驗證：提交 `8169eed55439457c2e7be13a3021df3ed76c5883` 已推送 `origin/main`；Render 公開 GET 讀回 1.2.23 修訂 11、36 檔清單，原始 SHA-256 `3187175db8a817e2e61f18ad598c837098163bfb1d8889ef04e5fb7ed5fe90c5` 與本機簽署候選一致。R2 對 JS 和兩段 OGG 上傳 3 個不可覆寫 blob，共 205,291 bytes，重用 33 個；三檔公開 HEAD／GET／長度／SHA 逐一通過。隔離修訂 10→11 更新器只下載 205,291 bytes、讀回 36 檔；此機正式使用者內容快取也由 10→11，只下載同樣 205,291 bytes、讀回 36 檔。變更前的本機內容快取已複製至 `D:\Codex_QA\launcher-audio-continuity-r11\userdata-overlay-before-r11`。釣魚 Chromium 完整回歸 389/389（零 page error、零缺素材），內容清單 49/49、音效檔及白名單 3/3、公告服務 82/82 通過；
-pm start` 的靜態頁 HTTP 200，資料庫連線未啟用。全量安裝包 QA 仍被先前釣竿圖的雜湊不符擋下，本次沒有重建安裝包，也沒有真人喇叭試聽。瀏覽器及差分報告在 `D:\Codex_QA\launcher-audio-continuity-r11\`。既有未關聯的 `public/images/ranks/r5.PNG` 與 `r6.PNG` 修改未納入提交。
+正式驗證：提交 `8169eed55439457c2e7be13a3021df3ed76c5883` 已推送 `origin/main`；Render 公開 GET 讀回 1.2.23 修訂 11、36 檔清單，原始 SHA-256 `3187175db8a817e2e61f18ad598c837098163bfb1d8889ef04e5fb7ed5fe90c5` 與本機簽署候選一致。R2 對 JS 和兩段 OGG 上傳 3 個不可覆寫 blob，共 205,291 bytes，重用 33 個；三檔公開 HEAD／GET／長度／SHA 逐一通過。隔離修訂 10→11 更新器只下載 205,291 bytes、讀回 36 檔；此機正式使用者內容快取也由 10→11，只下載同樣 205,291 bytes、讀回 36 檔。變更前的本機內容快取已複製至 `D:\Codex_QA\launcher-audio-continuity-r11\userdata-overlay-before-r11`。釣魚 Chromium 完整回歸 389/389（零 page error、零缺素材），內容清單 49/49、音效檔及白名單 3/3、公告服務 82/82 通過；`npm start` 的靜態頁 HTTP 200，資料庫連線未啟用。全量安裝包 QA 仍被先前釣竿圖的雜湊不符擋下，本次沒有重建安裝包，也沒有真人喇叭試聽。瀏覽器及差分報告在 `D:\Codex_QA\launcher-audio-continuity-r11\`。既有未關聯的 `public/images/ranks/r5.PNG` 與 `r6.PNG` 修改未納入提交。
 
 ## 2026-10-04 海釣線輪與拉扯聲（1.2.23 內容修訂 10，已部署）
 
@@ -75,16 +67,13 @@ pm start` 的靜態頁 HTTP 200，資料庫連線未啟用。全量安裝包 QA 
 
 範圍：`server/launcher-minigames.js` 在保留原有 26 魚 ID／可釣路線下新增十種來自使用者提供《歡樂釣魚大師》XAPK 資源名稱的魚，依淡水、近岸、珊瑚礁、外海及魚餌／投距增設魚池，另為 36 魚標上普通、優良、稀有、傳說四級。`server/launcher-fishing-v5.js` 配置十魚個別游速、衝刺、拉線與收線節奏；`server/launcher-life-store.js` 在上岸回應加可選的 `rarity`，不改既有保存格式。`desktop/launcher-room-minigames.js/.css` 顯示新魚與分級；`desktop/launcher-room-aquarium.js` 配置十魚水族箱的名稱、圖路徑及游動規格；`public/images/launcher_room/fish_master/*.webp` 為各魚獨立的透明畫。此版本的魚池權重、分級與新魚行為是本啟動器設計，不能當成原遊戲數值或稀有度資料；未使用加密 XAPK 內的圖或音檔。
 
-驗證：`scripts/launcher_fishing_species_qa.js` 325/325，`launcher_fishing_v5_server_qa.js` 1,211/1,211（36 魚可按魚勢上岸，盲目長按皆失敗），`launcher_fishing_server_qa.js` 786/786，`launcher_fishing_flick_server_qa.js` 398/398，`launcher_fishing_flick_life_qa.js` 19/19，`launcher_fishing_v5_life_qa.js` 21/21，`launcher_fishing_catalog_parity_qa.js` 197/197，`launcher_fishing_master_aquarium_qa.js --require-art` 109/109，公告伺服器 82/82。十張 `fish_master` 各 512×512、真透明、頭向右；正式圖及來源 SHA 紀錄在 `D:\Codex_QA\fishing-fish-20261003\final-six\` 和 `ocean-batch\`。隔離 Chromium 確認十魚在 960×640 與 1440×900 的上岸／水族箱共 40 個呈現情境，皆可解碼、無裁切／模糊／按鈕重疊、無水平溢位或缺圖；報告在 `D:\Codex_QA\fishing-rarity-20261003\master-art-browser\report.json`。原有二十種 Wii 魚的圖鑑回歸 273/273，並將稀有徽章移出魚名 `strong`，保留其精確文字；完整 v5 Chromium 操作／音效 294/294，報告在 `D:\Codex_QA\launcher-fishing-r8-final-browser\report.json`。短視窗上岸按鈕原本超出可視區，已縮短空白與圖高；三個按鈕底部 y=502、卡片底部 y=621，圖仍可辨識。正式 D: 樹以 QA 專用 `NODE_PATH` 執行 
-pm start`，隔離 18878 埠首頁 HTTP 200／10,594 bytes，未連真實資料庫；報告在 `D:\Codex_QA\launcher-fishing-firstperson-content-r8\static-smoke-report.json`。公告舊客戶端 QA 因缺舊 IPC sender policy 停於第 3 項，QA 專用修正版補正式 sender policy 後修訂 23 圖文 20/20 PASS，報告在同 QA 目錄 `announcements-client-r23\ANNOUNCEMENTS_CLIENT_QA.json`。差分更新與公開讀回結果見本日頂部發布段。
+驗證：`scripts/launcher_fishing_species_qa.js` 325/325，`launcher_fishing_v5_server_qa.js` 1,211/1,211（36 魚可按魚勢上岸，盲目長按皆失敗），`launcher_fishing_server_qa.js` 786/786，`launcher_fishing_flick_server_qa.js` 398/398，`launcher_fishing_flick_life_qa.js` 19/19，`launcher_fishing_v5_life_qa.js` 21/21，`launcher_fishing_catalog_parity_qa.js` 197/197，`launcher_fishing_master_aquarium_qa.js --require-art` 109/109，公告伺服器 82/82。十張 `fish_master` 各 512×512、真透明、頭向右；正式圖及來源 SHA 紀錄在 `D:\Codex_QA\fishing-fish-20261003\final-six\` 和 `ocean-batch\`。隔離 Chromium 確認十魚在 960×640 與 1440×900 的上岸／水族箱共 40 個呈現情境，皆可解碼、無裁切／模糊／按鈕重疊、無水平溢位或缺圖；報告在 `D:\Codex_QA\fishing-rarity-20261003\master-art-browser\report.json`。原有二十種 Wii 魚的圖鑑回歸 273/273，並將稀有徽章移出魚名 `strong`，保留其精確文字；完整 v5 Chromium 操作／音效 294/294，報告在 `D:\Codex_QA\launcher-fishing-r8-final-browser\report.json`。短視窗上岸按鈕原本超出可視區，已縮短空白與圖高；三個按鈕底部 y=502、卡片底部 y=621，圖仍可辨識。正式 D: 樹以 QA 專用 `NODE_PATH` 執行 `npm start`，隔離 18878 埠首頁 HTTP 200／10,594 bytes，未連真實資料庫；報告在 `D:\Codex_QA\launcher-fishing-firstperson-content-r8\static-smoke-report.json`。公告舊客戶端 QA 因缺舊 IPC sender policy 停於第 3 項，QA 專用修正版補正式 sender policy 後修訂 23 圖文 20/20 PASS，報告在同 QA 目錄 `announcements-client-r23\ANNOUNCEMENTS_CLIENT_QA.json`。差分更新與公開讀回結果見本日頂部發布段。
 
 ## 2026-10-03 海釣原創合成音效（1.2.23 內容修訂 8，已部署）
 
 範圍：`desktop/launcher-room-minigames.js` 沿用既有 WebAudio `AudioContext`，以短振盪器和程式產生的濾波雜訊加上蓄力節拍、拋竿風聲、伺服器確認落水的水花、咬餌、抽竿、收放線、線弱警示與結算音。警示按風險變化節流；漁獲依可選的 `result.catch.rarity` 使用 `common`／`uncommon`／`rare`／`legendary` 收尾，舊結果缺欄位仍有一般上岸音，失敗則是不同的下降短音。未加入外部音檔或取用參考遊戲素材；沒有改釣魚音效按鈕、個人頁 BGM 靜音／音量設定或伺服器獎勵。失焦時仍暫停聲音，關閉視窗仍釋放音訊脈絡。
 
-驗證：`scripts/launcher_fishing_v5_browser_qa.js` 增加拋竿三階段、咬餌單次、抽竿、耐壓警示、稀有與舊結果收尾、錯過咬餌、失焦與關閉音訊檢查。桌機 1440×900 94/94、短窗 960×640 92/92，完整 v5／甩竿／遠近投／v4 回歸 294/294 項通過，完整報告在 `D:\Codex_QA\fishing-audio-20261003\full-browser\report.json`；此為本機 Chromium 與伺服器核心／結算 fixture，並非真人聽感或實體裝置驗收。首次 
-pm start` 因正式工作樹無套件而缺 `express`，借用舊 C: 相依又缺 `chess.js`；後續改用 QA 專用依賴在正式 D: 樹啟動，靜態首頁 HTTP 200，見上節，不改正式 
-ode_modules`。
+驗證：`scripts/launcher_fishing_v5_browser_qa.js` 增加拋竿三階段、咬餌單次、抽竿、耐壓警示、稀有與舊結果收尾、錯過咬餌、失焦與關閉音訊檢查。桌機 1440×900 94/94、短窗 960×640 92/92，完整 v5／甩竿／遠近投／v4 回歸 294/294 項通過，完整報告在 `D:\Codex_QA\fishing-audio-20261003\full-browser\report.json`；此為本機 Chromium 與伺服器核心／結算 fixture，並非真人聽感或實體裝置驗收。首次 `npm start` 因正式工作樹無套件而缺 `express`，借用舊 C: 相依又缺 `chess.js`；後續改用 QA 專用依賴在正式 D: 樹啟動，靜態首頁 HTTP 200，見上節，不改正式 `node_modules`。
 
 ## 2026-10-03 海釣第一人稱角色釣竿與魚勢預兆（1.2.23 內容修訂 8，已部署）
 
@@ -98,8 +87,7 @@ ode_modules`。
 
 範圍：`server/launcher-fishing-v5.js`、`server/launcher-minigames.js`、`server/launcher-life-store.js` 為新 v5 場次加伺服器權威的左／右／上甩竿提示與單次限時判定，2.6 秒作答窗、至少 2.9 秒的對應衝刺；正確、錯誤、超時各有明確的耐壓與魚距結果。`desktop/launcher-room-minigames.js/.css` 加入海面拖甩、方向鍵、提示與竿身反應，保留既有線輪錶資訊及收線／自動放線；用 CSS 分層天光、遠近水紋，沿用現有航海王彩繪圖，不取用 XAPK 或影片原圖。`scripts/launcher_fishing_flick_server_qa.js`、`launcher_fishing_flick_life_qa.js` 及 `launcher_fishing_v5_browser_qa.js` 增加核心、資料庫、實際滑鼠／鍵盤 QA。原有 r5/r6 rank 圖是先前使用者修改，不屬本次範圍。
 
-驗證：限時甩竿核心 217/217，26 種魚×兩種種子均可上岸；既有 v5 伺服器 1211/1211；PGlite 命令與 JSONB 保存 20/20；Chromium 左、右、上三種甩竿含動作期間竿尖連線 24/24，完整桌機、960×640、遠近投距、舊 v4、不同魚勢及音效回歸共 276/276，報告在 `D:\Codex_QA\launcher-fishing-master-v5-browser-final-r3\report.json`。魚種 287/287、其他小遊戲 104/104、舊釣魚場次另一次完整測試 778/778、既有 v5 生活流程 21/21、公告服務 82/82 通過；舊釣魚 QA 第一次因亂數魚種 21 秒超過原有 20 秒門檻而失敗，第二次通過，未修改該門檻或玩法。
-pm start` 以隔離 8894 埠啟動，靜態 Board 首頁及內容清單 HTTP 200；沒有 `DATABASE_URL`，此項不代表正式帳號功能驗收。舊的安裝包來源 QA 另因黃金鯨圖片的歷史精確雜湊斷言與目前圖不符而失敗；本次沒有重封安裝包，改以內容更新器核對全部 21 個實際下載檔。
+驗證：限時甩竿核心 217/217，26 種魚×兩種種子均可上岸；既有 v5 伺服器 1211/1211；PGlite 命令與 JSONB 保存 20/20；Chromium 左、右、上三種甩竿含動作期間竿尖連線 24/24，完整桌機、960×640、遠近投距、舊 v4、不同魚勢及音效回歸共 276/276，報告在 `D:\Codex_QA\launcher-fishing-master-v5-browser-final-r3\report.json`。魚種 287/287、其他小遊戲 104/104、舊釣魚場次另一次完整測試 778/778、既有 v5 生活流程 21/21、公告服務 82/82 通過；舊釣魚 QA 第一次因亂數魚種 21 秒超過原有 20 秒門檻而失敗，第二次通過，未修改該門檻或玩法。`npm start` 以隔離 8894 埠啟動，靜態 Board 首頁及內容清單 HTTP 200；沒有 `DATABASE_URL`，此項不代表正式帳號功能驗收。舊的安裝包來源 QA 另因黃金鯨圖片的歷史精確雜湊斷言與目前圖不符而失敗；本次沒有重封安裝包，改以內容更新器核對全部 21 個實際下載檔。
 
 部署：簽署內容清單修訂 7 SHA-256 `4a23a58cdffc9fab36c89e1334cf1fda4f5974d3a1ec48fc894e500018d3da79`，21 個邏輯檔中只更換 JS/CSS 兩個 blob、合計 255,954 bytes；R2 已上傳，候選更新器 stage/load/readVerified 與修訂 6→7 差分啟用通過，報告在 `D:\Codex_QA\launcher-fishing-master-flick-content-r7\candidate-report.json`。正式來源提交 `d1da9d309361411c481b7917a9f1c9f8104567ca` 已推送 `origin/main`，2026-10-03 11:06:40 UTC 從 Render 正式網址讀回修訂 7，原始位元組 SHA-256 與簽署候選一致。啟動器更新器從公開 Render 清單和 R2 blob 下載、驗簽、啟用全部 21 檔共 2,309,731 bytes；修訂 6→7 僅下載兩個變更檔 255,954 bytes，再次檢查不重複下載，證據在同目錄 `public-report.json`。公告修訂 22 附已有的本機海釣主圖，公告服務 QA 通過；未以真人正式帳號驗收公告顯示或實機操作。LATTICE 本機 Status 回報 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，本階段沒有可呼叫的 LATTICE 任務工具，故未宣稱任務寫入或圖譜驗收。
 
@@ -107,17 +95,13 @@ pm start` 以隔離 8894 埠啟動，靜態 Board 首頁及內容清單 HTTP 200
 
 範圍：`desktop/launcher-room-minigames.js/.css` 重校浮標與水花的投距、魚距透視，遠處明顯縮小，近處也不再佔據大量海面；寬而矮的遊戲視窗重新構圖場景，保留遠景與地平線。v5 搏魚時放開收線鍵即由伺服器自動放線，不需另按「放線」；釣魚畫面的音效按鈕不再顯示，音效沿用既有本機合成方式。`server/launcher-minigames.js` 調整六釣點、三種餌、三投距的加權魚池，貝類不再是近岸與虹色水域的預設漁獲；各組合中貝類最高理論機率為 14.29%，26 種魚仍可在其指定組合釣到。`server/launcher-fishing-v5.js` 為 26 種魚各自配置游速、衝刺長度、拉線、疲勞與收線效率的節奏倍率，讓持續盲目收線與順勢停手、跟魚控竿有不同結果。這些倍率是本作調校；保留所提供 ISO 的原始魚種行為槽與來源界線。舊客戶端傳入 `paying` 仍接受，進行中的 v4／v3 場次維持原規則；魚種 ID、收藏、金幣與存檔欄位不變。既有 `public/images/ranks/r5.PNG`、`r6.PNG` 修改未納入。
 
-驗證：`D:\Codex_QA\launcher-fishing-balance-1.2.25\odds.json` 列出 18 種釣點×餌組合在近／中／遠投距的精確權重機率與修改前對照，26/26 種魚可取得；同目錄 `v5-server.json` 有 1,211 項伺服器魚勢檢查，盲目長按均失敗、可回應策略均能釣起，26 魚最快 16.45 秒、最慢 36.75 秒，且上岸時間有 20 種不同值。魚種核對 287/287、獨立舊版釣魚伺服器回歸 772/772、小遊戲回歸 104/104 通過。瀏覽器等待／浮標 QA 19/19、桌機搏魚 87/87、960×640 搏魚 85/85，`pageErrors=[]`、`missingAssets=[]`；報告依序位於 `D:\Codex_QA\launcher-fishing-depth-controls-1.2.25\depth-r2\report.json`、`desktop-r1\report.json`、`minimum-r1\report.json`。實測等待浮標近／遠在桌機約 35.8／19.0px、短窗約 30.5／15.7px；搏魚水花遠／近在桌機約 40.2／69.8px、短窗約 42.8／63.7px。
-pm start` 的本機靜態 `/board_start.html` 與 `/desktop/launcher-content-v1.json` HTTP 200，未連資料庫，故不能代表實際帳號流程。最終 `scripts/launcher_fishing_v5_browser_qa.js` 為 255/255 PASS，含 v4 舊場次；另修正背景同步期間拋竿鍵偶爾暫時失效的競態，保留原有佇列送出邏輯。完整 772 項伺服器報告在 `D:\Codex_QA\launcher-fishing-depth-controls-1.2.25\server-full.json`。內容更新器安全 QA 45/45 PASS；最終 
-pm start` 靜態首頁 HTTP 200，本機內容清單 SHA 與簽署候選相同。正式 Ed25519 內容修訂 6 清單 SHA-256 `ce14ba44d6df31cc31e412d9dcc24f2d5e89ac00a621bdaafa9c14ccd0162394`，21 個邏輯檔；兩個變更 blob 243,181 bytes 已上傳 R2，其他 19 個重用。更新器對候選清單的 stage/load/readVerified 及修訂 5→6 差分啟用已通過，報告在 `D:\Codex_QA\launcher-fishing-depth-controls-content-r6\candidate-report.json`。正式發布：來源提交 `1b064026a41a519c900bf5f5581b5f515757f5df` 已推送 `origin/main`；2026-10-03 09:59:10 UTC 從 Render 正式網址讀回修訂 6，原始位元組 SHA-256 `ce14ba44d6df31cc31e412d9dcc24f2d5e89ac00a621bdaafa9c14ccd0162394` 與簽署候選一致。啟動器更新器從公開網址與 R2 下載、驗證並啟用 21 個檔案，共 2,296,958 bytes；修訂 5→6 僅下載兩個變更檔 243,181 bytes，再次檢查不重複下載。公開報告在 `D:\Codex_QA\launcher-fishing-depth-controls-content-r6\public-report.json`。以上為自動化與公開更新驗證，正式帳號真人釣魚手感仍需另驗。
+驗證：`D:\Codex_QA\launcher-fishing-balance-1.2.25\odds.json` 列出 18 種釣點×餌組合在近／中／遠投距的精確權重機率與修改前對照，26/26 種魚可取得；同目錄 `v5-server.json` 有 1,211 項伺服器魚勢檢查，盲目長按均失敗、可回應策略均能釣起，26 魚最快 16.45 秒、最慢 36.75 秒，且上岸時間有 20 種不同值。魚種核對 287/287、獨立舊版釣魚伺服器回歸 772/772、小遊戲回歸 104/104 通過。瀏覽器等待／浮標 QA 19/19、桌機搏魚 87/87、960×640 搏魚 85/85，`pageErrors=[]`、`missingAssets=[]`；報告依序位於 `D:\Codex_QA\launcher-fishing-depth-controls-1.2.25\depth-r2\report.json`、`desktop-r1\report.json`、`minimum-r1\report.json`。實測等待浮標近／遠在桌機約 35.8／19.0px、短窗約 30.5／15.7px；搏魚水花遠／近在桌機約 40.2／69.8px、短窗約 42.8／63.7px。`npm start` 的本機靜態 `/board_start.html` 與 `/desktop/launcher-content-v1.json` HTTP 200，未連資料庫，故不能代表實際帳號流程。最終 `scripts/launcher_fishing_v5_browser_qa.js` 為 255/255 PASS，含 v4 舊場次；另修正背景同步期間拋竿鍵偶爾暫時失效的競態，保留原有佇列送出邏輯。完整 772 項伺服器報告在 `D:\Codex_QA\launcher-fishing-depth-controls-1.2.25\server-full.json`。內容更新器安全 QA 45/45 PASS；最終 `npm start` 靜態首頁 HTTP 200，本機內容清單 SHA 與簽署候選相同。正式 Ed25519 內容修訂 6 清單 SHA-256 `ce14ba44d6df31cc31e412d9dcc24f2d5e89ac00a621bdaafa9c14ccd0162394`，21 個邏輯檔；兩個變更 blob 243,181 bytes 已上傳 R2，其他 19 個重用。更新器對候選清單的 stage/load/readVerified 及修訂 5→6 差分啟用已通過，報告在 `D:\Codex_QA\launcher-fishing-depth-controls-content-r6\candidate-report.json`。正式發布：來源提交 `1b064026a41a519c900bf5f5581b5f515757f5df` 已推送 `origin/main`；2026-10-03 09:59:10 UTC 從 Render 正式網址讀回修訂 6，原始位元組 SHA-256 `ce14ba44d6df31cc31e412d9dcc24f2d5e89ac00a621bdaafa9c14ccd0162394` 與簽署候選一致。啟動器更新器從公開網址與 R2 下載、驗證並啟用 21 個檔案，共 2,296,958 bytes；修訂 5→6 僅下載兩個變更檔 243,181 bytes，再次檢查不重複下載。公開報告在 `D:\Codex_QA\launcher-fishing-depth-controls-content-r6\public-report.json`。以上為自動化與公開更新驗證，正式帳號真人釣魚手感仍需另驗。
 
 ## 2026-10-03 海釣音效、線輪與房間點擊（內容修訂 5，已部署）
 
 範圍：`desktop/launcher-room-minigames.js/.css` 讓上鉤、確認釣獲和收／放線播放本機合成音效，提供記住偏好的靜音鍵；線輪雙端手把依 v5 伺服器魚距的相鄰樣本判定實際收線或被魚拉走，控制剛改變時短暫預測，按方向與速率轉動、發聲。耐壓外圈維持伺服器 `strength/maxStrength` 的真實 0–100% 與歸零斷線，將紅、橙、黃、綠色階改為連續漸層。`desktop/launcher-room.js/.css` 以 64×64 透明度遮罩核對當前家具朝向、角色站姿或走路／動作影格；空白處可穿透到下層家具或地板，選取、拖動、指派與滑鼠提示共用可見像素命中。`desktop/launcher-room-motion-data.js` 的遮罩由 `scripts/generate_launcher_room_hit_masks.py` 自正式 WebP 素材產生；素材、角色／商品 ID、伺服器漁獲及房間存檔規則不變。`public/images/ranks/r5.PNG`、`r6.PNG` 的既有修改不納入本次發行。
 
-本機驗證：
-ode scripts/launcher_fishing_v5_browser_qa.js` 在 1440×900、960×640 及不同魚勢場景共 255/255 PASS，pageErrors=[]、missingAssets=[]；測到魚咬餌、釣獲、音效靜音／失焦／關閉、魚反拉倒轉、正向收線與耐壓漸層，證據與六張耐壓截圖在 `D:\Codex_QA\launcher-fishing-audio-reel-1.2.24\browser-full\`。`scripts/launcher_room_alpha_hit_qa.js` 21/21 PASS，涵蓋角色／家具透明點擊穿透、四向家具圖像旋轉、角色動作影格、生活動作素材備援、編輯拖動及 390px 窄版；證據在 `D:\Codex_QA\launcher-room-alpha-hit\`。家具／天氣素材桌機及窄版 QA 9/9 PASS；遮罩生成器 `--check`、JavaScript 語法與 `git diff --check` 通過。
-pm start` 以隔離依賴啟動後，本機 Board 首頁及既有內容清單 HTTP 200；未接資料庫，故此項只驗靜態服務。舊 radial／room wheel 腳本仍對先前輪盤順序和隱藏按鈕作過時假設，舊 room browser fixture 缺少先前 Ace idle 素材；其失敗不視為新像素互動驗收。公開讀回與啟用結果見下段。
+本機驗證：`node scripts/launcher_fishing_v5_browser_qa.js` 在 1440×900、960×640 及不同魚勢場景共 255/255 PASS，pageErrors=[]、missingAssets=[]；測到魚咬餌、釣獲、音效靜音／失焦／關閉、魚反拉倒轉、正向收線與耐壓漸層，證據與六張耐壓截圖在 `D:\Codex_QA\launcher-fishing-audio-reel-1.2.24\browser-full\`。`scripts/launcher_room_alpha_hit_qa.js` 21/21 PASS，涵蓋角色／家具透明點擊穿透、四向家具圖像旋轉、角色動作影格、生活動作素材備援、編輯拖動及 390px 窄版；證據在 `D:\Codex_QA\launcher-room-alpha-hit\`。家具／天氣素材桌機及窄版 QA 9/9 PASS；遮罩生成器 `--check`、JavaScript 語法與 `git diff --check` 通過。`npm start` 以隔離依賴啟動後，本機 Board 首頁及既有內容清單 HTTP 200；未接資料庫，故此項只驗靜態服務。舊 radial／room wheel 腳本仍對先前輪盤順序和隱藏按鈕作過時假設，舊 room browser fixture 缺少先前 Ace idle 素材；其失敗不視為新像素互動驗收。公開讀回與啟用結果見下段。
 
 最後修正介紹場景音效鈕與文字的 CSS 選擇器後，從最終檔案重跑完整釣魚瀏覽器 QA，仍為 255/255 PASS；最終報告在 `D:\Codex_QA\launcher-fishing-audio-reel-1.2.24\browser-release\report.json`。簽署內容修訂 5 清單 SHA-256 為 `54345e96eaf8c1bdf20592789227ba7ed9a805fe8b3fd0d8175ffe7ca919ee8d`，共 21 個邏輯檔；其中五個變更檔 1,108,694 bytes 已上傳 R2，另外 16 個重用既有 blob。候選清單的更新器 stage/load/readVerified 21 檔及隔離修訂 4→5 差分啟用通過，只下載變更的 1,108,694 bytes；報告在 `D:\Codex_QA\launcher-fishing-reel-room-content-r5\candidate-report.json`。本段證明候選與公開 blob，正式 Render 清單與公開更新器讀回見下段。
 
@@ -127,9 +111,7 @@ pm start` 以隔離依賴啟動後，本機 Board 首頁及既有內容清單 HT
 
 範圍：`desktop/launcher-room-minigames.js/.css` 把 v5 線輪最外圈改為伺服器魚線剩餘強度的 0–100% 讀數，滿格時為綠色，降至 52%／26% 以下分別轉黃／紅，外圈彩色弧隨捲線縮短，鬆開或放線回復時增長。顯著標示「耐壓」及「0% 斷線」，避免把前端估算的即時拉力誤讀為斷線值；魚勢拉力仍由原有短弧顯示。`scripts/launcher_fishing_v5_browser_qa.js` 改驗外圈與伺服器強度、收放線趨勢及歸零斷線。未修改伺服器魚線消耗、回復、漁獲或獎勵規則，保留原有 ID 與資料欄位；`public/images/ranks/r5.PNG`、`r6.PNG` 的既有修改不屬本次範圍。
 
-驗證：
-ode scripts/launcher_fishing_v5_browser_qa.js` 於桌機、960×640 及既有相容場景共 223/223 PASS，pageErrors=[]、missingAssets=[]；實際 v5 引擎耗盡強度回傳 `line_snapped`。截圖在 `D:\Codex_QA\launcher-fishing-pressure-1.2.24\browser\`，轉場結束後 89% 顯示綠黃紅、43% 顯示黃紅、21% 顯示紅色；收線下降、放線回復均由瀏覽器測試檢查。內容更新器安全測試 45/45 PASS。
-pm start` 本機 Board 首頁、內容清單及下載頁 HTTP 200；此靜態服務檢查未連資料庫。正式簽章內容修訂 4 清單 SHA-256 `31e99cb84972809c92269612910229c0b6cc16818783c69eecfb6047c58936a5`，18 個邏輯檔中 2 個 renderer blob 上傳 R2、16 個既有 blob 重用；候選簽章清單與公開 blob 的更新器 stage/load/readVerified 18 檔通過，修訂 3→4 僅下載 234,674 bytes。候選報告位於 `D:\Codex_QA\launcher-fishing-pressure-content-1.2.23-r4\candidate-report.json`。來源提交 `b63268f9f58d8bd27feee950e60dc90d8d5585b8` 已推送 `origin/main`；Render 正式清單於 2026-10-03 01:55:30 UTC 完整讀回並與簽署候選逐位元組一致。啟動器從正式清單下載、驗證並啟用 18 檔，共 1,423,856 bytes；隔離修訂 3→4 從正式公開來源只下載變更的 234,674 bytes。證據在同目錄 `public-report.json`、`public-delta-report.json`。這些是自動化發布驗證，玩家實機操作仍需另驗。本節為修訂 4 現況；下方修訂 2 的「即時線壓力外圈」描述是當時版本紀錄。
+驗證：`node scripts/launcher_fishing_v5_browser_qa.js` 於桌機、960×640 及既有相容場景共 223/223 PASS，pageErrors=[]、missingAssets=[]；實際 v5 引擎耗盡強度回傳 `line_snapped`。截圖在 `D:\Codex_QA\launcher-fishing-pressure-1.2.24\browser\`，轉場結束後 89% 顯示綠黃紅、43% 顯示黃紅、21% 顯示紅色；收線下降、放線回復均由瀏覽器測試檢查。內容更新器安全測試 45/45 PASS。`npm start` 本機 Board 首頁、內容清單及下載頁 HTTP 200；此靜態服務檢查未連資料庫。正式簽章內容修訂 4 清單 SHA-256 `31e99cb84972809c92269612910229c0b6cc16818783c69eecfb6047c58936a5`，18 個邏輯檔中 2 個 renderer blob 上傳 R2、16 個既有 blob 重用；候選簽章清單與公開 blob 的更新器 stage/load/readVerified 18 檔通過，修訂 3→4 僅下載 234,674 bytes。候選報告位於 `D:\Codex_QA\launcher-fishing-pressure-content-1.2.23-r4\candidate-report.json`。來源提交 `b63268f9f58d8bd27feee950e60dc90d8d5585b8` 已推送 `origin/main`；Render 正式清單於 2026-10-03 01:55:30 UTC 完整讀回並與簽署候選逐位元組一致。啟動器從正式清單下載、驗證並啟用 18 檔，共 1,423,856 bytes；隔離修訂 3→4 從正式公開來源只下載變更的 234,674 bytes。證據在同目錄 `public-report.json`、`public-delta-report.json`。這些是自動化發布驗證，玩家實機操作仍需另驗。本節為修訂 4 現況；下方修訂 2 的「即時線壓力外圈」描述是當時版本紀錄。
 
 ## 2026-10-03 啟動器非釣魚小遊戲與訓練大畫面升級（已部署）
 
@@ -137,9 +119,7 @@ pm start` 本機 Board 首頁、內容清單及下載頁 HTTP 200；此靜態服
 
 互動與資料：保留原有補給選箱、食材順序與退回、管線每次旋轉 90 度、海圖相鄰格避礁、訓練亮燈記憶與方向鍵操作。`server/launcher-minigames.js`、`server/launcher-life-store.js`、商品、角色與三款遊戲規則未修改；原有伺服器計分、限時、金幣／親密度結算、存檔欄位、素材／商品 ID 及一次性帳本維持原值。`public/images/ranks/r5.PNG`、`r6.PNG` 的既有工作樹修改不納入本次範圍。
 
-驗證：
-ode scripts/launcher_minigames_large_visual_qa.js` 在本機執行 90 項檢查、保存 12 張畫面截圖；涵蓋五個模式的開場、實際互動、圖片載入與桌機／窄版布局。既有釣魚 browser 回歸 216 項通過，
-pm start` 靜態頁面 HTTP 200。簽署內容清單修訂 3 已由 Render 正式入口完整讀回，SHA-256 `165fdc45e08d036b41a117000d0d4402127cc64611c5c1f0611437dd3bbedd36`；啟動器從公開網址下載並驗證 18 檔、1,424,481 bytes 後啟用，修訂 2 升級時只下載 1,372,611 bytes。這些是自動及公開交付驗證，未進行真人手感驗收。
+驗證：`node scripts/launcher_minigames_large_visual_qa.js` 在本機執行 90 項檢查、保存 12 張畫面截圖；涵蓋五個模式的開場、實際互動、圖片載入與桌機／窄版布局。既有釣魚 browser 回歸 216 項通過，`npm start` 靜態頁面 HTTP 200。簽署內容清單修訂 3 已由 Render 正式入口完整讀回，SHA-256 `165fdc45e08d036b41a117000d0d4402127cc64611c5c1f0611437dd3bbedd36`；啟動器從公開網址下載並驗證 18 檔、1,424,481 bytes 後啟用，修訂 2 升級時只下載 1,372,611 bytes。這些是自動及公開交付驗證，未進行真人手感驗收。
 
 ## 2026-10-03 啟動器 1.2.23 海釣內容修訂 2（已部署）
 
@@ -147,8 +127,7 @@ pm start` 靜態頁面 HTTP 200。簽署內容清單修訂 3 已由 Render 正�
 
 魚種核對：唯讀驗證使用者的 `D:\abap.ind\wii\game\One Piece Unlimited Adventure(J).iso` 為日版 RIPJAF，DolphinTool 完整驗證未發現問題。`fish_prm.bin` 有 20 個不同的可釣魚記錄，`fishp.bin` 的 49 個非空釣點槽是這 20 種的重複配置，不是 49 種魚；另兩個大型魚外觀檔無可核對的獨立漁獲 ID。啟動器原有 20/20 對應透明魚圖；本次檢查其 256px 原圖及 96px 顯示後，使用 GPT 重繪並替換裁邊的 `public/images/launcher_room/fish_ua/pumpkin-octopus.webp` 和較扁平的 `golden-whale-v2.webp`。原圖備份與 ISO 對照只存於 `D:\Codex_QA\launcher-fishing-iso-fish-audit\`，不打包 ISO 像素；魚種 ID、六個既有其他遊戲魚、魚池及漁獲存檔均不變。參考影片提供 HUD 與操作的畫面證據；ISO 靜態資源核對不等於在模擬器玩到釣魚場景。
 
-驗證：`scripts/launcher_fishing_v5_browser_qa.js` 於 1440×900、960×640 及落點、舊版相容 fixture 共 216/216 PASS，pageErrors=0、missingAssets=0；報告與截圖在 `D:\Codex_QA\launcher-fishing-pressure-depth-1.2.23\full-r4\`。`scripts/launcher_fishing_species_qa.js` 233/233 PASS，`scripts/launcher_fishing_ua_ui_qa.js` 273/273 PASS；發行工具 49/49、內容槽安全測試 45/45 PASS。
-pm start` 以隔離 QA 依賴啟動後，本機 Board 首頁、內容清單與下載頁皆 HTTP 200；沒有資料庫連線，故此項只驗靜態服務。兩張魚的 96/256px 人工視覺對照與原圖 SHA 在 `D:\Codex_QA\launcher-fishing-iso-fish-audit\pumpkin-whale-asset-audit-20261003.json`。原有 `public/images/ranks/r5.PNG`、`r6.PNG` 未納入本次變更。
+驗證：`scripts/launcher_fishing_v5_browser_qa.js` 於 1440×900、960×640 及落點、舊版相容 fixture 共 216/216 PASS，pageErrors=0、missingAssets=0；報告與截圖在 `D:\Codex_QA\launcher-fishing-pressure-depth-1.2.23\full-r4\`。`scripts/launcher_fishing_species_qa.js` 233/233 PASS，`scripts/launcher_fishing_ua_ui_qa.js` 273/273 PASS；發行工具 49/49、內容槽安全測試 45/45 PASS。`npm start` 以隔離 QA 依賴啟動後，本機 Board 首頁、內容清單與下載頁皆 HTTP 200；沒有資料庫連線，故此項只驗靜態服務。兩張魚的 96/256px 人工視覺對照與原圖 SHA 在 `D:\Codex_QA\launcher-fishing-iso-fish-audit\pumpkin-whale-asset-audit-20261003.json`。原有 `public/images/ranks/r5.PNG`、`r6.PNG` 未納入本次變更。
 
 內容發行：沿用 1.2.23 核心的 Ed25519 金鑰，`public/desktop/launcher-content-v1.json` 升修訂 2；僅列 `launcher-room-minigames.js/.css` 與上述兩張既有魚圖，合計 268,896 bytes，簽署清單 SHA-256 `1b2294bc5cf2ee5aa46ff788937768cf2274dcdc2484c972226f1c247b610e02`。四個不可覆寫 R2 blob 已上傳並從公開網址完整 GET，大小／SHA 逐檔一致；正式內容更新器以候選簽章清單及公開 blob 實測 stage/load/readVerified，修訂 2 的四檔下載 268,896 bytes 並逐檔驗雜湊，沒有新安裝檔。隔離候選、前一版清單與公開 blob 核對存於 `D:\Codex_QA\launcher-fishing-content-1.2.23-r2\`。此段本機及 R2 證據不代替 Render 正式清單與玩家裝置套用驗收。
 
@@ -194,8 +173,7 @@ r4 本機玩法驗收：`scripts/launcher_fishing_v5_browser_qa.js` 在 Windows 
 
 r4 隔離建置已完成本機驗證：`D:\\Codex_QA\\launcher-fishing-wii-1.2.22-build-r4\\dist\\ONE-PIECE-Tabletop-Launcher-1.2.22-x64.exe` 為 266,280,421 bytes，SHA-256 `8c0a865691c6201e665753bd78f8a66fea1eb918b88a2759ec2c72d834f29686`，低於舊更新器 268,435,456 bytes 上限 2,155,035 bytes。更新公告改稿後重跑的來源 staging 與封裝版 Electron 各 707/707 本機素材、BGM 播放 PASS；10 個正式依賴和 zh-TW／en-US 語系 PASS。小遊戲 JS／CSS、水族箱 JS／CSS 與六張最終圖在正式來源、staging 和封裝內的大小／SHA 一致；證據在 `D:\\Codex_QA\\launcher-fishing-wii-1.2.22-release-r4\\r4-handoff.json`、`packaged-artifact.json`、`packaged-client-verification.json`。公告 JSON 是伺服器來源，需隨正式程式一併發布。
 
-發行與部署：同一 r4 安裝檔已上傳至不可覆寫的 `desktop/launcher/releases/1.2.22/` R2 路徑；公開 HEAD 200、Range 206 及完整 GET 266,280,421 bytes／SHA-256 `8c0a865691c6201e665753bd78f8a66fea1eb918b88a2759ec2c72d834f29686` 均核對成功，證據在 `D:\\Codex_QA\\launcher-fishing-wii-1.2.22-release-r4\\publish\\public-installer-verification-r3.json`。程式與發行清單的提交 `2381b23ec46adb818e128183aa12325c828cf92a` 已推送至 `origin/main`。`public/desktop/launcher-release-v1.json` 的 Ed25519 簽署清單為 676 bytes、SHA-256 `be27b81bcb79742b30bdd555d9d0fdf7c3cc1957407ee507cc7de276873fd436`；2026-10-02T16:04:22Z 公開 Render canonical 清單讀回版號 1.2.22，原始位元組與提交一致且獲啟動器信任金鑰驗簽，證據在同目錄 `public-release-manifest-verification.json`。公開下載頁的 1.2.22 版本與回退網址、Card／Board／Chess 三款 runtime identity 及桌面 catalog 均讀回 PASS；證據為 `public-download-verification.json`、`public-runtime-verification.json`、`public-assets-verification.json`。公開下載頁 Chromium 38/38 PASS；以隔離依賴及停用資料庫的本機 
-pm start` 檢查靜態服務、發行清單和下載頁均 HTTP 200。`scripts/desktop_launcher_update_qa.js`、`scripts/launcher_announcements_server_qa.js`、來源封裝 QA 和 `git diff --check` 通過。正式登入帳號的公告呈現與真人操作尚未驗收。
+發行與部署：同一 r4 安裝檔已上傳至不可覆寫的 `desktop/launcher/releases/1.2.22/` R2 路徑；公開 HEAD 200、Range 206 及完整 GET 266,280,421 bytes／SHA-256 `8c0a865691c6201e665753bd78f8a66fea1eb918b88a2759ec2c72d834f29686` 均核對成功，證據在 `D:\\Codex_QA\\launcher-fishing-wii-1.2.22-release-r4\\publish\\public-installer-verification-r3.json`。程式與發行清單的提交 `2381b23ec46adb818e128183aa12325c828cf92a` 已推送至 `origin/main`。`public/desktop/launcher-release-v1.json` 的 Ed25519 簽署清單為 676 bytes、SHA-256 `be27b81bcb79742b30bdd555d9d0fdf7c3cc1957407ee507cc7de276873fd436`；2026-10-02T16:04:22Z 公開 Render canonical 清單讀回版號 1.2.22，原始位元組與提交一致且獲啟動器信任金鑰驗簽，證據在同目錄 `public-release-manifest-verification.json`。公開下載頁的 1.2.22 版本與回退網址、Card／Board／Chess 三款 runtime identity 及桌面 catalog 均讀回 PASS；證據為 `public-download-verification.json`、`public-runtime-verification.json`、`public-assets-verification.json`。公開下載頁 Chromium 38/38 PASS；以隔離依賴及停用資料庫的本機 `npm start` 檢查靜態服務、發行清單和下載頁均 HTTP 200。`scripts/desktop_launcher_update_qa.js`、`scripts/launcher_announcements_server_qa.js`、來源封裝 QA 和 `git diff --check` 通過。正式登入帳號的公告呈現與真人操作尚未驗收。
 
 發布後素材整理：四張被否決的 r3 生成 PNG 合計 3,847,995 bytes，已由 C 槽生成目錄移至 `D:\\Codex_QA\\launcher-fishing-wii-1.2.22\\rejected-r3-hud-originals\\`；`migration.json` 記錄原路徑、現路徑、大小及 SHA-256，搬移後逐檔雜湊讀回一致。四張 r3 v1 最佳化 WebP 保留在同一 QA 根目錄的 `rejected-r3-hud\\`，不在正式 r4 安裝資源內。已採用的 r4 生成 PNG、玩家遊戲原件及原有 `public/images/ranks/r5.PNG`、`r6.PNG` 修改均未清理或改寫。
 
@@ -207,8 +185,7 @@ pm start` 檢查靜態服務、發行清單和下載頁均 HTTP 200。`scripts/d
 
 `desktop/package.json`／`package-lock.json` 升為 1.2.21；`config/launcher-announcements-v1.json` revision 19 的單則圖文公告改以 1.2.21 為發布門檻，沿用已核對的 1.2.18 海釣圖，沒有新增安裝包素材。`scripts/desktop_launcher_package_qa.js` 取消通用 installer ceiling 並驗證本版公告；`scripts/launcher_1221_announcement_qa.js` 驗證 1.2.20 隱藏、1.2.21 顯示、圖像 SHA 與已讀持久化。`scripts/launcher_announcements_server_qa.js` 修正過時的 Ace 單人預期，依現行 Ace／Law／Sabo roster revision 3 和歷史 fixture 驗證，PGlite／Socket 82/82 PASS。
 
-定向驗證：`scripts/launcher_fishing_controls_browser_qa.js` 的 Chromium 桌機／390px 觸控 172/172 PASS，含雙層魚線同曲線、竿尖與浮標金環實際渲染幾何（最遠 2.8px）、五孔輪盤與張力弧線；`scripts/launcher_fishing_catch_reveal_browser_qa.js` 魚圖、焦點、長按及按鈕 42/42 PASS。截圖與報告在 `D:\Codex_QA\launcher-fishing-visual-1.2.20\controls\`、`catch\`。`scripts/desktop_launcher_update_qa.js`、`scripts/desktop_r2_launcher_publish_qa.js` 與簽章 QA 以小檔及 >256 MiB metadata 驗證新界線與超量拒絕，均 PASS。1.2.21 公告 QA、歷史 1.2.19 公告 QA、來源 package QA、`git diff --check` PASS。無 `DATABASE_URL` 的本機 
-pm start` 可啟動靜態服務，`/desktop-download.html` HTTP 200；本機下載頁 Chromium 38/38 PASS，此環境的資料庫路由不作正式帳號驗收。真人及實體裝置手感未驗收。工作樹原有 `public/images/ranks/r5.PNG`、`r6.PNG` 修改不納入本版。
+定向驗證：`scripts/launcher_fishing_controls_browser_qa.js` 的 Chromium 桌機／390px 觸控 172/172 PASS，含雙層魚線同曲線、竿尖與浮標金環實際渲染幾何（最遠 2.8px）、五孔輪盤與張力弧線；`scripts/launcher_fishing_catch_reveal_browser_qa.js` 魚圖、焦點、長按及按鈕 42/42 PASS。截圖與報告在 `D:\Codex_QA\launcher-fishing-visual-1.2.20\controls\`、`catch\`。`scripts/desktop_launcher_update_qa.js`、`scripts/desktop_r2_launcher_publish_qa.js` 與簽章 QA 以小檔及 >256 MiB metadata 驗證新界線與超量拒絕，均 PASS。1.2.21 公告 QA、歷史 1.2.19 公告 QA、來源 package QA、`git diff --check` PASS。無 `DATABASE_URL` 的本機 `npm start` 可啟動靜態服務，`/desktop-download.html` HTTP 200；本機下載頁 Chromium 38/38 PASS，此環境的資料庫路由不作正式帳號驗收。真人及實體裝置手感未驗收。工作樹原有 `public/images/ranks/r5.PNG`、`r6.PNG` 修改不納入本版。
 
 1.2.21 R1 安裝檔為 265,807,620 bytes，SHA-256 `0c99f8afcbad3e37ed8c305ce0044083b1c045c60670768864a9990c6a5ead9a`；仍低於舊更新器的 268,435,456 bytes 橋接門檻。來源與封裝 ASAR 中的更新器、釣魚 JS／CSS 位元組一致；封裝依賴 10 個、正式 Electron 語系 2 個，實際封裝啟動載入 701 個本機素材且 BGM 播放 PASS。1.2.19 舊更新器對本版已簽署候選清單驗證為可更新。正式 R2 安裝檔已公開，HEAD、Range、完整 GET 位元組與 SHA-256 均一致；證據在 `D:\Codex_QA\launcher-fishing-visual-1.2.21-release-r1\publish\public-installer-verification.json`。
 
@@ -228,9 +205,7 @@ pm start` 可啟動靜態服務，`/desktop-download.html` HTTP 200；本機下�
 
 發行準備：`desktop/package.json`、`package-lock.json` 升到 1.2.19；`desktop/main.js`、`scripts/desktop_launcher_package_qa.js` 讓安裝包省略已由正式 `reserved_v2/ace` 取代的 17 張舊艾斯圖，原始素材仍保留於 source。`config/launcher-announcements-v1.json` 新增版本門檻的圖文公告，沿用現有 1.2.18 海釣主圖；`scripts/launcher_1219_announcement_qa.js`、`scripts/launcher_fishing_controls_browser_qa.js` 為本版定向驗證。
 
-目前候選驗證：最近一輪 `scripts/launcher_fishing_server_qa.js` 772 項 PASS；魚池抽選分支會使每輪檢查總數變動，772 並非固定門檻。修正第一輪 CDP 測試參數後，`scripts/launcher_fishing_controls_browser_qa.js` 以真實 Chromium 重跑 148/148 PASS，涵蓋桌機／390px 觸控、雙指觸控、蓄力拋竿、同步中的拋竿、張力預測、左右拖動、主動放線、鍵盤及失焦；未見 pageerror 或缺素材。此腳本以模擬 minigame API 檢查畫面和封包，不代替伺服器時序驗證。原 UA 畫面與漁獲回歸 `scripts/launcher_fishing_ua_ui_qa.js` 273/273 PASS，成功漁獲及入缸命令同樣採模擬回應。最新來源的 `scripts/desktop_launcher_package_qa.js` 及 `scripts/launcher_1219_announcement_qa.js` 均 PASS；本次 
-ode --check` 七檔及 `git diff --check` PASS。無 `DATABASE_URL` 的本機 
-pm start` 能啟動靜態服務，`/board_start.html` HTTP 200；資料庫流程由獨立 QA 驗證。LATTICE 官方 Status 回 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，不宣稱任務或圖譜持久化。
+目前候選驗證：最近一輪 `scripts/launcher_fishing_server_qa.js` 772 項 PASS；魚池抽選分支會使每輪檢查總數變動，772 並非固定門檻。修正第一輪 CDP 測試參數後，`scripts/launcher_fishing_controls_browser_qa.js` 以真實 Chromium 重跑 148/148 PASS，涵蓋桌機／390px 觸控、雙指觸控、蓄力拋竿、同步中的拋竿、張力預測、左右拖動、主動放線、鍵盤及失焦；未見 pageerror 或缺素材。此腳本以模擬 minigame API 檢查畫面和封包，不代替伺服器時序驗證。原 UA 畫面與漁獲回歸 `scripts/launcher_fishing_ua_ui_qa.js` 273/273 PASS，成功漁獲及入缸命令同樣採模擬回應。最新來源的 `scripts/desktop_launcher_package_qa.js` 及 `scripts/launcher_1219_announcement_qa.js` 均 PASS；本次 `node --check` 七檔及 `git diff --check` PASS。無 `DATABASE_URL` 的本機 `npm start` 能啟動靜態服務，`/board_start.html` HTTP 200；資料庫流程由獨立 QA 驗證。LATTICE 官方 Status 回 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，不宣稱任務或圖譜持久化。
 
 封裝與部署：R1、R2、R3 均是較舊且已中止的建置來源，不得發布。唯一採用的 R4 已完成逐檔來源／staging SHA 比對、ASAR／10 個正式依賴、來源與封裝 Electron smoke；兩者均讀取 701 個素材且 BGM 播放 PASS。R4 安裝檔為 265,806,288 bytes，SHA-256 `0d5c868225898ab4070c0dd57044bc78fbdb30c87862284590629c76f081347f`，比舊更新器 256 MiB 上限少 2,629,168 bytes。安裝檔以 immutable R2 key 上傳，公開 HEAD、Range、完整 GET 的位元組數與 SHA 均比對通過；1.2.19 release manifest 已以現有 Ed25519 金鑰簽署並由啟動器驗簽通過。程式與清單發布 commit `8669415b3e4822b6e68a6ebdf26f64b055ca6b11` 推至 `origin/main`；2026-10-02T06:00:06Z 公開 Render canonical manifest 切到 1.2.19，位元組 SHA-256 `65800eb0e77c59a28a14185427ca0c8bf220dc5226ece015ad207c7cadb4f4fd` 與提交內容完全一致。公開下載頁 1.2.19 回退連結、catalog 與 Card／Board／Chess 三款 runtime identity 讀回均 PASS；公告內容與圖檔來源有提交及 R4 staging 證據，登入帳號的實際公告顯示未另做遠端驗收。封裝證據在 `D:\Codex_QA\launcher-fishing-controls-1.2.19-release-r4\`，上傳與公開驗證證據在 `D:\Codex_QA\launcher-fishing-controls-1.2.19-release-r2\publish\`。上述自動測試不代表真人或實體裝置手感驗收。
 
@@ -248,8 +223,7 @@ pm start` 能啟動靜態服務，`/board_start.html` HTTP 200；資料庫流程
 
 素材與索引：`desktop/launcher-room-aquarium.js` 與海釣結果共用 20 張 `public/images/launcher_room/fish_ua/*.webp`（256×256）；新增三處 1024×576 釣點畫面 `public/images/launcher_room/fishing_v4/*.webp`。23 張 GPT 公開素材共 562,836 bytes，`tools/launcher-room/fishing-ua-v1218/manifest.json` 記錄實際 bytes、SHA-256 與本地來源比對。1.2.18 GPT 公告圖 `public/images/launcher_announcements/launcher-fishing-rebuild-1.2.18.webp` 為 800×450、84,372 bytes、SHA-256 `e2a93c8314ed07ad9c44e54ecb09ed6179d2cbfcb94f268c1e8db2d9164e7ebc`，`config/launcher-announcements-v1.json` 以版本閘門顯示新增魚種與佛朗基工房。更新 `desktop/main.js`、`desktop/package.json`／lock 的資源白名單與封裝清單；安裝包省略已由 `fish_ua` 取代的舊熊貓鯊、冒險魚、象鼻鮪魚三張重複圖，歷史原檔仍留 source。封裝只留繁體中文與英文 Electron 語系以符合舊版更新器 256 MiB 上限；r2 超出大小上限、r3 發現上線前互動問題，其建置與 QA 證據均保留於獨立目錄。ISO 核對資料／重繪對照圖留在 QA 目錄，不是玩家安裝素材。
 
-驗證：最終候選釣竿交易獨立 PGlite 38/38、UA 20 種／全部 26 種可釣魚池 233/233、伺服器 716/716、實際 WebP 的 Chromium UI 273/273，另用獨立 Chromium/PGlite 完成三竿三魚及舊 v3 場次恢復 73/73。真畫面檢查曾找到隨機魚種剪影與實際漁獲矛盾，已改為不指向魚種的水影；改裝回應遺失時會鎖住按鈕並刷新帳號狀態，防止誤買下一級。
-pm start` 在無 `DATABASE_URL` 的本機環境仍可啟動靜態頁，`/desktop-download.html` HTTP 200；資料庫相關路由由獨立 PGlite 驗證。最終 r4 安裝檔 268,390,665 bytes，SHA-256 `008d3fac4d309221c245440ba6faaf2928e4aff3773a8f7d541984f102627df2`；封裝 QA、10 項依賴、兩個 Electron 語系、來源與封裝版 718/718 本機素材載入、BGM 播放、簽章及啟動器信任讀回均通過。安裝檔已上傳至 R2；公開 HEAD、Range、完整 GET 的大小與 SHA-256 皆一致，證據在 `D:\Codex_QA\launcher-fishing-rebuild-1.2.18-release-r4\publish\public-installer-verification.json`。`public/desktop/launcher-release-v1.json` 已置入相同安裝檔的 Ed25519 簽署清單，`public/desktop-download.html` 更新 1.2.18 回退連結與版本文字。真人／實體手機手感仍未驗收。
+驗證：最終候選釣竿交易獨立 PGlite 38/38、UA 20 種／全部 26 種可釣魚池 233/233、伺服器 716/716、實際 WebP 的 Chromium UI 273/273，另用獨立 Chromium/PGlite 完成三竿三魚及舊 v3 場次恢復 73/73。真畫面檢查曾找到隨機魚種剪影與實際漁獲矛盾，已改為不指向魚種的水影；改裝回應遺失時會鎖住按鈕並刷新帳號狀態，防止誤買下一級。`npm start` 在無 `DATABASE_URL` 的本機環境仍可啟動靜態頁，`/desktop-download.html` HTTP 200；資料庫相關路由由獨立 PGlite 驗證。最終 r4 安裝檔 268,390,665 bytes，SHA-256 `008d3fac4d309221c245440ba6faaf2928e4aff3773a8f7d541984f102627df2`；封裝 QA、10 項依賴、兩個 Electron 語系、來源與封裝版 718/718 本機素材載入、BGM 播放、簽章及啟動器信任讀回均通過。安裝檔已上傳至 R2；公開 HEAD、Range、完整 GET 的大小與 SHA-256 皆一致，證據在 `D:\Codex_QA\launcher-fishing-rebuild-1.2.18-release-r4\publish\public-installer-verification.json`。`public/desktop/launcher-release-v1.json` 已置入相同安裝檔的 Ed25519 簽署清單，`public/desktop-download.html` 更新 1.2.18 回退連結與版本文字。真人／實體手機手感仍未驗收。
 
 正式發布：程式提交 `61cc189c1a7f95849da8cbc90d431487470017b2` 已推送 `main`，2026-10-02 12:14（Asia/Taipei）Render 公開清單切換至 1.2.18。公開清單 676 bytes、SHA-256 `bc8b8797ad8c68990adc631b91a1fa261d866b983319ff9b4ff934e2f814afdd`，與提交及簽署候選逐位元組相同，現行啟動器 Ed25519 驗簽通過。公開下載頁文字與回退連結同來源一致；三款遊戲 runtime 身分與 `catalog-v3.json` 全部讀回通過。證據在 `D:\Codex_QA\launcher-fishing-rebuild-1.2.18-release-r4\publish\public-release-manifest-verification.json`、`public-download-verification.json`、`public-runtime-verification.json` 與 `public-assets-verification.json`；正式帳號下佛朗基改裝及魚收藏的真人操作與實體裝置手感未驗收。
 
@@ -267,16 +241,13 @@ r2 安裝檔 268,294,874 bytes、SHA-256 `6d764ca0261883d1042f1a869f1acb81b70d56
 
 程式：`server/launcher-minigames.js`、`launcher-life-store.js` 將釣魚獨立成 `kind:fishing`；三種餌、三海域、三個可瞄準投距共同決定伺服器魚池，在 cast 當下抽魚、結算前隱藏魚種。每次成功上岸且收藏未滿 64 尾即保存一尾，不合併三竿，不消耗工作次數或發工作金幣；滿收藏不刪舊魚且明確提示。舊 v1/v2 釣魚資料仍可讀。新增五種參照《ONE PIECE》遊戲漁獲清單的魚名；餌偏好／機率是本專案設計，不冒稱原作數值。`desktop/launcher-life-room.js`、`launcher-room.js/.css`、`launcher-room-minigames.js/.css` 與 `launcher-room-aquarium.js` 接角色半圓輪盤獨立入口、點擊／方向鍵落點、抽竿與魚向牽制、單尾結算、新魚入缸；`public/images/launcher_room/fishing_v3/`、`fish_v3/`、`public/images/launcher_announcements/launcher-fishing-adventure-1.2.17.webp` 為逐張檢查的 GPT WebP。封裝與公告同步改 `desktop/main.js`、`desktop/package.json`／lock、`config/launcher-announcements-v1.json`。
 
-驗證：`scripts/launcher_fishing_server_qa.js` 360/360、舊小遊戲伺服器 104/104、封裝來源 `scripts/desktop_launcher_package_qa.js` PASS；`scripts/launcher_fishing_v3_client_qa.js` 用真 PGlite＋Chromium 驗證桌機／390×844 手機、三個投距連續 3/3 漁獲、0 金幣及新魚入缸 52/52，舊 v2 用戶端 53/53；`scripts/launcher_minigames_room_wheel_qa.js` 驗證角色半圓輪盤入口與窄版滾動 9/9。
-pm start` 以隔離 8863 埠啟動、下載頁 HTTP 200（無 `DATABASE_URL`，不代表正式帳號功能驗收）。
-ode --check` 與 `git diff --check` 通過。來源與畫面候選證據在 `D:\Codex_QA\launcher-fishing-adventure-1.2.17\`；真人試玩與實體手機仍待使用者驗收。
+驗證：`scripts/launcher_fishing_server_qa.js` 360/360、舊小遊戲伺服器 104/104、封裝來源 `scripts/desktop_launcher_package_qa.js` PASS；`scripts/launcher_fishing_v3_client_qa.js` 用真 PGlite＋Chromium 驗證桌機／390×844 手機、三個投距連續 3/3 漁獲、0 金幣及新魚入缸 52/52，舊 v2 用戶端 53/53；`scripts/launcher_minigames_room_wheel_qa.js` 驗證角色半圓輪盤入口與窄版滾動 9/9。`npm start` 以隔離 8863 埠啟動、下載頁 HTTP 200（無 `DATABASE_URL`，不代表正式帳號功能驗收）。`node --check` 與 `git diff --check` 通過。來源與畫面候選證據在 `D:\Codex_QA\launcher-fishing-adventure-1.2.17\`；真人試玩與實體手機仍待使用者驗收。
 
 ## 2026-10-01 戰鬥整卡等距擊退（已部署）
 
 玩家指出攻擊方整張卡前衝約 192px，受擊方卻只晃約 13px。本次在 `public/board_battle.html` 加入依敵我方向向外的獨立擊退動畫，受擊可見峰值約 184–200px；原攻擊前衝、受擊微晃 keyframe、700ms／連擊 420ms 時長、3D 傾斜和命中時點保留。玩家明確選擇可短暫出框的完整等距擊退；桌面峰值時卡片仍有至少約七成可見。合作戰移動活動角色的內層卡片，Tot Musica 的獨立縱向鏡頭不套用一般水平擊退，減少動態仍無位移。`public/board_game.html` 備用戰鬥的可見擊退校準至攻擊的約 18px，真正堆疊的窄視窗則讓攻防都沿上下方向移動約 18px。未改傷害、HP、回合、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 
-`scripts/board_battle_hit_depth_qa.js` 加入攻擊／受擊配對的逐幀畫面中心、方向、可見比例和回位檢查，保留原始 transform keyframe／時長／easing、Tot Musica、減少動態、版面與狀態檢查。舊版基準 140/140、候選 432/432 通過，0 browser errors／blocked writes；桌面雙向、合作戰與 700×768 堆疊視窗截圖在 `D:\Codex_QA\board-battle-hit-depth-20261001\paired-knockback-final-v2\`。戰鬥時序 68/68、真 DOM 順序 38/38、接觸前後受擊／HP 檢查通過。發布建置器鎖定上一版 `package-e98ef3f16bf6e6e4` 並只准兩個 HTML，隔離建置 10/10、假公開回應 6/6。發布提交 `7ed7fda67` 已推送 `main`，並保留同時發布的啟動器 1.2.16；R2 新資產 2/2 讀回通過。2026-10-01 22:25（Asia/Taipei）公開 Board runtime 切換為 `package-660f4c4369f9177b`，manifest SHA-256 `0de8e2d5835f49e13d0063f997681c28a9a6d8af6541480bfb28f50d91143650`；公開專項 13/13、三款 runtime 與 Board 57 個程式等全量 61/61 通過，Card／Chess 套件不變。證據在 `D:\Codex_QA\board-hit-knockback-20261001\public-qa.json` 與 `spectator\`。正式 D 樹只定點同步兩個頁面且保留原檔備份；
-pm start` 在隔離 8862 埠啟動，兩頁桌面請求 HTTP 200，但無 `DATABASE_URL`，不代表帳號／多人驗收。本次自動化與模型審圖不等於真人試玩或實體裝置驗收。
+`scripts/board_battle_hit_depth_qa.js` 加入攻擊／受擊配對的逐幀畫面中心、方向、可見比例和回位檢查，保留原始 transform keyframe／時長／easing、Tot Musica、減少動態、版面與狀態檢查。舊版基準 140/140、候選 432/432 通過，0 browser errors／blocked writes；桌面雙向、合作戰與 700×768 堆疊視窗截圖在 `D:\Codex_QA\board-battle-hit-depth-20261001\paired-knockback-final-v2\`。戰鬥時序 68/68、真 DOM 順序 38/38、接觸前後受擊／HP 檢查通過。發布建置器鎖定上一版 `package-e98ef3f16bf6e6e4` 並只准兩個 HTML，隔離建置 10/10、假公開回應 6/6。發布提交 `7ed7fda67` 已推送 `main`，並保留同時發布的啟動器 1.2.16；R2 新資產 2/2 讀回通過。2026-10-01 22:25（Asia/Taipei）公開 Board runtime 切換為 `package-660f4c4369f9177b`，manifest SHA-256 `0de8e2d5835f49e13d0063f997681c28a9a6d8af6541480bfb28f50d91143650`；公開專項 13/13、三款 runtime 與 Board 57 個程式等全量 61/61 通過，Card／Chess 套件不變。證據在 `D:\Codex_QA\board-hit-knockback-20261001\public-qa.json` 與 `spectator\`。正式 D 樹只定點同步兩個頁面且保留原檔備份；`npm start` 在隔離 8862 埠啟動，兩頁桌面請求 HTTP 200，但無 `DATABASE_URL`，不代表帳號／多人驗收。本次自動化與模型審圖不等於真人試玩或實體裝置驗收。
 
 ## 2026-10-01 啟動器 1.2.16 海釣重做與小遊戲不限次數
 
@@ -286,9 +257,7 @@ pm start` 在隔離 8862 埠啟動，兩頁桌面請求 HTTP 200，但無 `DATAB
 
 素材與發布：GPT 生成透明釣竿、浮標、水花，轉為 `public/images/launcher_room/fishing_v2/*.webp`；公告主圖在 `public/images/launcher_announcements/launcher-fishing-play-1.2.16.webp`。`desktop/main.js`、`desktop/package.json`／lock 登記新圖；`config/launcher-announcements-v1.json` 增加綁定 1.2.16 的更新公告。`scripts/desktop_launcher_package_qa.js` 檢查四張圖的來源 SHA、封裝後位元組、精確資源白名單及公告閘門。
 
-驗證：`scripts/launcher_fishing_server_qa.js` 79/79、`scripts/launcher_minigames_server_qa.js` 104/104、`scripts/launcher_work_variants_server_qa.js` 129/129、`scripts/launcher_life_server_qa.js` 162/162 及角色經濟 QA 已通過；最終 Chromium 桌機／390px 53/53，含三輪結算、漁獲入缸、時鐘快 60 秒、抽竿後長按空白鍵與魚線 SVG 真正繪製，無頁面錯誤。來源 `scripts/desktop_launcher_package_qa.js`、
-ode --check`、`git diff --check` 通過；
-pm start` 首頁 HTTP 200，無資料庫功能測試。正式安裝檔 267,046,567 bytes，SHA-256 `824b9050ffb812f8145a32087b7bb3760ea92931c5cf26d8ec7115b5dae0d815`，封裝 QA 驗證 ASAR／10 個正式套件／4 語系；實際 Electron 啟動 685/685 本機素材、BGM 播放與無破圖通過。R2 以不可覆寫的 1.2.16 路徑上傳，公開 HEAD、Range 與完整 GET 的大小／SHA 一致；已產出目前啟動器信任的 Ed25519 簽署清單，`public/desktop/launcher-release-v1.json` 與下載頁靜態回退連結同步更新。公開 Render 清單與下載頁仍須在 Git 發布後核對；證據在 `D:\Codex_QA\launcher-fishing-rework-1.2.16-release-r1\` 與 `D:\Codex_QA\launcher-fishing-rework-1.2.16\fishing-client\`。上述為自動化與模型審圖，非真人試玩或實體手機驗收。
+驗證：`scripts/launcher_fishing_server_qa.js` 79/79、`scripts/launcher_minigames_server_qa.js` 104/104、`scripts/launcher_work_variants_server_qa.js` 129/129、`scripts/launcher_life_server_qa.js` 162/162 及角色經濟 QA 已通過；最終 Chromium 桌機／390px 53/53，含三輪結算、漁獲入缸、時鐘快 60 秒、抽竿後長按空白鍵與魚線 SVG 真正繪製，無頁面錯誤。來源 `scripts/desktop_launcher_package_qa.js`、`node --check`、`git diff --check` 通過；`npm start` 首頁 HTTP 200，無資料庫功能測試。正式安裝檔 267,046,567 bytes，SHA-256 `824b9050ffb812f8145a32087b7bb3760ea92931c5cf26d8ec7115b5dae0d815`，封裝 QA 驗證 ASAR／10 個正式套件／4 語系；實際 Electron 啟動 685/685 本機素材、BGM 播放與無破圖通過。R2 以不可覆寫的 1.2.16 路徑上傳，公開 HEAD、Range 與完整 GET 的大小／SHA 一致；已產出目前啟動器信任的 Ed25519 簽署清單，`public/desktop/launcher-release-v1.json` 與下載頁靜態回退連結同步更新。公開 Render 清單與下載頁仍須在 Git 發布後核對；證據在 `D:\Codex_QA\launcher-fishing-rework-1.2.16-release-r1\` 與 `D:\Codex_QA\launcher-fishing-rework-1.2.16\fishing-client\`。上述為自動化與模型審圖，非真人試玩或實體手機驗收。
 
 
 ## 2026-10-01 戰鬥受擊可見位移補償（已部署）
@@ -303,26 +272,19 @@ pm start` 首頁 HTTP 200，無資料庫功能測試。正式安裝檔 267,046,5
 
 範圍：對生活基地 14 位已發布角色以相同 128px 顯示尺寸檢查頭身；確認最明顯的魯夫頭／上身寬度異常後，用 GPT 原畫重新製作魯夫四向走路、四向互動、八個生活動作與圓形肖像共 17 張 WebP。素材只加入 `motion_v5`、`acting_v5`、`life_hd_v3`、`portrait_v4` 新路徑，未覆寫舊圖；透明邊緣、尺寸、腳跟與縮圖逐張檢查。`tools/launcher-room/luffy-v1214/manifest.json` 綁定 17 筆 SHA-256；`desktop/launcher-room-motion.js` 的 `LUFFY_ART_ENABLED=true` 控制房間、工作、商店與小遊戲，載入／解碼失敗時回退同方向舊圖。`config/launcher-announcements-v1.json` revision 13 附新增更新主圖，並由 1.2.14 發布版本決定是否顯示。角色 ID、商品、存檔與三款遊戲規則不變。
 
-驗證：隔離圖集結構 17/17、81 幀，魯夫 128px 接觸圖與公告主圖由 Codex 目視審核；
-ode scripts/launcher_luffy_art_switch_qa.js`、
-ode scripts/desktop_launcher_package_qa.js` 通過。`D:\Codex_QA\launcher-proportion-1.2.14-release` 的來源與封裝後真 Electron 測試各驗證 697 個素材路徑的 GET／Range、版本與 BGM；安裝檔 QA 驗證 ASAR、10 個實體 runtime 依賴與 SHA-256。這些是模型審圖與自動化驗證，沒有真人試玩；新側向圖仍未做出比 1.2.13 更自然的交替跨步，不記為步態改善。發行、正式 D 樹同步和公開驗證另見 `docs/LAUNCHER_LUFFY_ART_1.2.14_PREP.md`。
+驗證：隔離圖集結構 17/17、81 幀，魯夫 128px 接觸圖與公告主圖由 Codex 目視審核；`node scripts/launcher_luffy_art_switch_qa.js`、`node scripts/desktop_launcher_package_qa.js` 通過。`D:\Codex_QA\launcher-proportion-1.2.14-release` 的來源與封裝後真 Electron 測試各驗證 697 個素材路徑的 GET／Range、版本與 BGM；安裝檔 QA 驗證 ASAR、10 個實體 runtime 依賴與 SHA-256。這些是模型審圖與自動化驗證，沒有真人試玩；新側向圖仍未做出比 1.2.13 更自然的交替跨步，不記為步態改善。發行、正式 D 樹同步和公開驗證另見 `docs/LAUNCHER_LUFFY_ART_1.2.14_PREP.md`。
 
 ## 2026-09-29 Launcher 1.2.14 魯夫新圖接線準備（未發布）
 
 範圍：`desktop/launcher-room-motion.js` 的單一 `LUFFY_ART_ENABLED=false` 供 `launcher-life-actions.js`、`launcher-room.js`、`launcher-profile-shop.js`、`launcher-room-minigames.js` 共用；目前魯夫直接走舊 `motion_v4`／`acting_v4`／`life_hd_v2`／`portrait_v3`，不請求缺失的新圖。未來同一開關通過素材、封裝與版本閘門後，才優先接入 `motion_v5`／`acting_v5`／`life_hd_v3`／`portrait_v4`，失敗逐張回退。`desktop/main.js` 與 `scripts/desktop_launcher_package_qa.js` 加入精確協定白名單核對；專項 QA 測試關閉狀態無新圖請求，並在隔離 VM 測試未來回退。`docs/LAUNCHER_LUFFY_ART_1.2.14_PREP.md` 記錄 17 張素材及封裝閘門。其餘角色、Board 程式與既有存檔／ID 不動。
 
-目前尚無任何 17 張新圖；既有四類新版本目錄皆不存在。此輪不改 `desktop/package.json`／lock、`extraResources`、公告、公開版本 manifest，也不製作安裝檔或推送。測試：
-ode scripts/launcher_luffy_art_switch_qa.js` PASS，關閉狀態九筆合成 Image 請求及房間／商店／小遊戲三個實際來源肖像 resolver 都只用舊路徑，未來候選分支只在隔離 VM 測試；修改 JS 的 
-ode --check` PASS，
-ode scripts/desktop_launcher_package_qa.js` PASS，`git diff --check` PASS。把開關僅在 Node require cache 中模擬改為 true 而仍保留 1.2.13，封裝 QA 如預期 FAIL，錯誤為 `Luffy art gate and desktop launcher version must advance together.`。
-pm start` 在 `PORT=18946` 啟動，首頁 HTTP 200，停止測試程序。當前測試沒有 `DATABASE_URL`，因此登入／資料庫流程未驗證。舊 `launcher_reserved_crew_client_qa.js` 另外執行至第 8 項時因其歷史 `reserved_v1` 全路徑假設與現有 Ace `reserved_v2` 不符而失敗，未列為本次通過證據。美術、真瀏覽器、安裝檔與公開驗收尚未完成。
+目前尚無任何 17 張新圖；既有四類新版本目錄皆不存在。此輪不改 `desktop/package.json`／lock、`extraResources`、公告、公開版本 manifest，也不製作安裝檔或推送。測試：`node scripts/launcher_luffy_art_switch_qa.js` PASS，關閉狀態九筆合成 Image 請求及房間／商店／小遊戲三個實際來源肖像 resolver 都只用舊路徑，未來候選分支只在隔離 VM 測試；修改 JS 的 `node --check` PASS，`node scripts/desktop_launcher_package_qa.js` PASS，`git diff --check` PASS。把開關僅在 Node require cache 中模擬改為 true 而仍保留 1.2.13，封裝 QA 如預期 FAIL，錯誤為 `Luffy art gate and desktop launcher version must advance together.`。`npm start` 在 `PORT=18946` 啟動，首頁 HTTP 200，停止測試程序。當前測試沒有 `DATABASE_URL`，因此登入／資料庫流程未驗證。舊 `launcher_reserved_crew_client_qa.js` 另外執行至第 8 項時因其歷史 `reserved_v1` 全路徑假設與現有 Ace `reserved_v2` 不符而失敗，未列為本次通過證據。美術、真瀏覽器、安裝檔與公開驗收尚未完成。
 
 ## 2026-09-29 至 09-30 戰鬥受擊手感回調（已部署）
 
 玩家指出初版手感退步，原因是改掉原本的位移及地圖戰鬥時長。本次將 `public/board_battle.html` 的一般受擊 700ms、X 位移 0/-7/+8/-12/+13/-12/+8/-7/0，以及 Tot Musica 特殊演出的 X/Y 位移、縮放和 720ms 時長逐影格還原；`public/board_game.html` 地圖戰鬥恢復 460ms 和原 X 抖動，手機不再新增 Y 位移。只在原變形上疊 900px 透視和約 14 度、依攻擊方位相反的 X/Y 軸傾斜；`public/css/board_character_depth.css` 恢復原本受擊時內框亮度。角色圖本身的抖動、真命中時點、傷害、存檔和同步均未改。
 
-`scripts/board_battle_hit_depth_qa.js` 加入舊版每個關鍵影格中心位移、原時長及 easing 的唯讀核對。隔離瀏覽器 188/188、舊版比對 31/31、戰鬥時序 38/38、接觸前後命中檢查、封包隔離測試 10/10 與假公開回應測試通過；
-pm start` 在無 `DATABASE_URL` 的本機環境提供三個變更頁面／樣式 HTTP 200，不能據此宣稱多人連線驗收。
+`scripts/board_battle_hit_depth_qa.js` 加入舊版每個關鍵影格中心位移、原時長及 easing 的唯讀核對。隔離瀏覽器 188/188、舊版比對 31/31、戰鬥時序 38/38、接觸前後命中檢查、封包隔離測試 10/10 與假公開回應測試通過；`npm start` 在無 `DATABASE_URL` 的本機環境提供三個變更頁面／樣式 HTTP 200，不能據此宣稱多人連線驗收。
 
 公開交付：修正封包僅替換兩個 Board 頁面與一份還原的樣式，R2 本機全量驗證 6,070/6,070、實際上傳 2 筆並跳過 6,068 筆，三個變更資源公開 GET／SHA 通過。2026-09-30 00:25 UTC 正式 runtime 已切至 `package-4f719965bdc78c48`，manifest SHA-256 `f28563970af3553be7dbe5a00b48a77297d93f30b1bc06de3668f6e6fae86093`；公開驗證 15/15、Board 程式 57/57 GET／SHA 通過，Card／Chess 套件未變。這些是自動化驗證，非真人遊玩或實體手機驗收。
 
@@ -330,21 +292,18 @@ pm start` 在無 `DATABASE_URL` 的本機環境提供三個變更頁面／樣式
 
 本次只改 Board 客戶端受擊呈現：`public/board_battle.html` 依攻擊來源讓一般戰鬥我方往左、敵方往右後仰；Tot Musica 的上方 Boss 遭下方角色攻擊往上退，雙世界角色遭 Boss 攻擊往下退，沿用其特殊鏡頭命中節奏。`public/board_game.html` 的地圖戰鬥在左右排列時同向處理，手機上下排列時改為沿垂直方向退；`public/css/board_character_depth.css` 讓整張卡受擊傾斜時保留原有內框光澤。減少動態模式只有短暫亮度反饋，不做 3D 晃動。沒有修改攻擊判定、HP、擲骰、回合、存檔、`BOARD_GAME_STATE` 或 Socket.IO 合約。
 
-驗證腳本：`scripts/board_battle_hit_depth_qa.js` 檢查桌機／橫向手機／直向提示、左右及上下方向、3D 角度、版面和減少動態；`scripts/board_hit_depth_release_builder_qa.js` 檢查限定三個玩家程式的封包建置邊界；`scripts/board_hit_depth_public_qa.js` 在部署後比對正式 runtime、manifest、程式與 CAS 位元組。本機真瀏覽器 148/148、戰鬥出招時序 38/38、接觸前後命中檢查，以及嚴格封包建置測試 10/10 通過；
-pm start` 可提供三個變更頁面／樣式 HTTP 200，測試環境未提供 `DATABASE_URL`，因此沒有宣稱多人連線驗收。
+驗證腳本：`scripts/board_battle_hit_depth_qa.js` 檢查桌機／橫向手機／直向提示、左右及上下方向、3D 角度、版面和減少動態；`scripts/board_hit_depth_release_builder_qa.js` 檢查限定三個玩家程式的封包建置邊界；`scripts/board_hit_depth_public_qa.js` 在部署後比對正式 runtime、manifest、程式與 CAS 位元組。本機真瀏覽器 148/148、戰鬥出招時序 38/38、接觸前後命中檢查，以及嚴格封包建置測試 10/10 通過；`npm start` 可提供三個變更頁面／樣式 HTTP 200，測試環境未提供 `DATABASE_URL`，因此沒有宣稱多人連線驗收。
 
 公開交付：隔離候選僅替換三個 Board 玩家程式，沿用 6,339 筆未變更資源。R2 預演 6,070/6,070 回讀、實際上傳 3 筆並跳過 6,067 筆，三筆新程式 GET／SHA／CORS 通過。2026-09-29 07:47 UTC 正式 runtime 已切至 `package-a457977a2d6db004`，manifest SHA-256 `bd3b8a6edda7d61d9dbc4fa58e831c52c6d03ecb5cbe941bccac585d018879b1`；公開驗證 15/15、Board 程式完整盤點 57/57 GET／SHA 通過，Card／Chess 版本未變。發布時合併並行 launcher 1.2.13 更新，沒有覆蓋正式 D 樹的既有修改；D 樹僅定點同步兩個受擊頁面。上述均為自動化驗證，不等同人手試玩、實體手機或遠端多人驗收。
 
 
 ## 2026-09-28 酒館魯夫邀請、夥伴回應與 WebGL 抽卡特效（已部署）
 
-依玩家修正，魯夫固定說「你真有趣，要不要加入我們？」；確定加入／拒絕後才從其餘九人抽一位說對應歡迎／吐槽，滿隊於實際替換選定後才抽。先定稿 18 句短台詞與每句表情姿勢，製作 crew_v3 真透明圖；門新增微開漏光階段，S 白光核心與虹彩折射、A 金、B 紫、C 藍、D 綠、E 銀白，邀請至選擇的演出約 10.8 秒。新範圍為六個 Board 程式、crew_v3 新圖、Pixi 來源／依賴與獨立 builder/QA；正式 D 樹既有並行工作保持。最初以 main `4ca49f945`（launcher 1.2.9）為整合基底，
-pm start` 18931／health 200；此為早期進度，不代表本次新特效的驗收或部署。劇本與測試界線見 `BOARD_TAVERN_CAPTAIN_20260928.md`。
+依玩家修正，魯夫固定說「你真有趣，要不要加入我們？」；確定加入／拒絕後才從其餘九人抽一位說對應歡迎／吐槽，滿隊於實際替換選定後才抽。先定稿 18 句短台詞與每句表情姿勢，製作 crew_v3 真透明圖；門新增微開漏光階段，S 白光核心與虹彩折射、A 金、B 紫、C 藍、D 綠、E 銀白，邀請至選擇的演出約 10.8 秒。新範圍為六個 Board 程式、crew_v3 新圖、Pixi 來源／依賴與獨立 builder/QA；正式 D 樹既有並行工作保持。最初以 main `4ca49f945`（launcher 1.2.9）為整合基底，`npm start` 18931／health 200；此為早期進度，不代表本次新特效的驗收或部署。劇本與測試界線見 `BOARD_TAVERN_CAPTAIN_20260928.md`。
 
 玩家新增的 VFX 規格進一步要求白光核心、先白藍紫金後假金升彩、金粒內縮與短爆發。實作擴充 `src/board_tavern_vfx.mjs`、本機 bundle/build、`package.json`/lock、Board 程式 allowlist、既有揭曉 JS/CSS/HTML 與 strict release/QA；九人反應、2,500 貝里及 Board 同步權威不變。PixiJS 8.21.0、pixi-filters 6.1.5、GSAP 3.15.0、esbuild 0.28.2 使用固定版本；粒子採原生池，不安裝與 PixiJS 8 peer 不相容的 emitter。此段保留開發階段紀錄，最終部署證據見下方。
 
-本機 gate：`D:\Codex_QA\board-tavern-captain-20260928\v4-full-regression\result.json` 216/216、`v4-socket-regression\result.json` 31/31；`D:\Codex_QA\board-tavern-vfx-20260928\result.json` 59/59、`v4-stage-final-prisms\result.json` 78/78，後兩者涵蓋最新 S 虹彩門縫與 S–E 門光的真雙門截圖／像素及桌機、手機版面。嚴格候選 `package-3155f473aa76c19f` 已在本機提升，公告隔離 gate 20/20；R2 不可變發布 `uploaded=24`、`skipped=6046`，`D:\Codex_QA\board-tavern-captain-20260928\r2-final\r2-verify.json` 回讀新資源 24/24 SHA 通過。正式 D 樹僅定點同步本次檔案並保留並行修改，D 樹 
-pm start` 因既有依賴 `express` 未安裝而無法獨立驗證 HTTP。這是公開核驗前的本機紀錄；最終部署結果見下一段。
+本機 gate：`D:\Codex_QA\board-tavern-captain-20260928\v4-full-regression\result.json` 216/216、`v4-socket-regression\result.json` 31/31；`D:\Codex_QA\board-tavern-vfx-20260928\result.json` 59/59、`v4-stage-final-prisms\result.json` 78/78，後兩者涵蓋最新 S 虹彩門縫與 S–E 門光的真雙門截圖／像素及桌機、手機版面。嚴格候選 `package-3155f473aa76c19f` 已在本機提升，公告隔離 gate 20/20；R2 不可變發布 `uploaded=24`、`skipped=6046`，`D:\Codex_QA\board-tavern-captain-20260928\r2-final\r2-verify.json` 回讀新資源 24/24 SHA 通過。正式 D 樹僅定點同步本次檔案並保留並行修改，D 樹 `npm start` 因既有依賴 `express` 未安裝而無法獨立驗證 HTTP。這是公開核驗前的本機紀錄；最終部署結果見下一段。
 
 公開交付：2026-09-28 11:58 UTC，Render runtime 已切至 `package-3155f473aa76c19f`，manifest SHA-256 `5d704e4b4e95cf11ca677480e9edabc9f4a8c3367345fd10f5b78f6782fd6c38`。新增 `scripts/board_tavern_captain_public_qa.js`；`D:\Codex_QA\board-tavern-captain-20260928\public-final\result.json` 109/109 通過，包括 57 個 Board 程式 Electron UA GET／SHA、24 個變更 CAS 資源 GET／SHA／CORS、18 張新圖別名、公開 catalog／runtime／manifest，及一般瀏覽器 302 下載頁；Card／Chess releaseId 不變。這是自動化公開完整性證據，不是人手試玩、實體手機 60 FPS 或遠端多人玩家驗收。細節見 `BOARD_TAVERN_CAPTAIN_20260928.md`。
 
@@ -352,8 +311,7 @@ pm start` 因既有依賴 `express` 未安裝而無法獨立驗證 HTTP。這是
 
 最終已部署：發布提交 `5ce0b822f39a98950c6f9c696cd8ad9778bf33b2`，台灣時間 05:40:54 公開 runtime 切換 `package-1c453fcf83416d97`，05:43:06 正式站 60/60 通過；13 個變更資源完整公開 GET／SHA／CORS 及 R2 13/13 通過。保留 main 並行 launcher 1.2.8，公開發布 JSON／下載頁與提交 bytes 一致；合併公告 revision 5／六篇，隔離 gate 40/40 通過。新增 `BOARD_TAVERN_CREW_RELEASE_QA_20260928.json` 保存完整上線證據，主報告同步更新；以下本機候選敘述保留為執行歷史。收尾只提交文件並使用 `[skip render]`。
 
-本機交付 gate：新版 browser 163、真 Socket.IO 招募同步 44、六色／遮罩 9、既有 state wire 13 項皆通過；獨立響應式角色取景 60+6 畫面通過，含 320x568 羅賓與跳過按鈕碰撞修正。新增兩支 invitation QA、八張 crew_v2 圖與原始 art/QA JSON；CPU 名稱 selector 相容修正、WeakMap 全階段失權取消及小手機取景同步至正式樹。完整範圍與證據見 `BOARD_TAVERN_CREW_20260928.md`、`BOARD_TAVERN_CREW_QA_NOTES_20260928.md`。
-pm start` 18929 無正式資料庫，主頁／新資源 200；公開部署仍待 package/runtime 核驗。
+本機交付 gate：新版 browser 163、真 Socket.IO 招募同步 44、六色／遮罩 9、既有 state wire 13 項皆通過；獨立響應式角色取景 60+6 畫面通過，含 320x568 羅賓與跳過按鈕碰撞修正。新增兩支 invitation QA、八張 crew_v2 圖與原始 art/QA JSON；CPU 名稱 selector 相容修正、WeakMap 全階段失權取消及小手機取景同步至正式樹。完整範圍與證據見 `BOARD_TAVERN_CREW_20260928.md`、`BOARD_TAVERN_CREW_QA_NOTES_20260928.md`。`npm start` 18929 無正式資料庫，主頁／新資源 200；公開部署仍待 package/runtime 核驗。
 
 酒館加入十位草帽夥伴的獨立邀請／接受／拒絕台詞與表情演出，魯夫固定說「你真有趣，要不要加入我們？」。修改 `board_game.js` 的酒館限定 UI detail／一次性決策保護、HTML 與 allowlist；新增 `board_tavern_crew.js`，更新 reveal JS/CSS，保留原扣款、抽選、收人與替換結算。新素材與 QA／strict 發布 builder 分別記錄於 `BOARD_TAVERN_CREW_20260928.md` 及獨立 art／release plan 文件。正式 D 樹其他工作與 main launcher 1.2.7 保留；目前為本機候選，測試與公開部署證據完成後另記。
 
@@ -491,8 +449,7 @@ LATTICE 工具目前未提供；本階段官方 Status 回 `BLOCKED / CUSTOMER_D
 
 變更檔案：`desktop/launcher-room.js/css`、必要的 `launcher.html` 房間標記、`main.js`、`package.json`／lock；`public/images/launcher_room/action_frames/`、`furniture_views/`、`tools/launcher-room/action-source-png/`、`furniture-source-png/`、生成圖處理／檢查工具、素材清單；`scripts/launcher_room_browser_qa.js`、`desktop_launcher_package_qa.js` 及四份專案文件。
 
-定向驗證：`build_depth_art_manifest.py` 驗過 130 個輸出素材的 Alpha 外緣、尺寸、來源與 SHA；`review_depth_art.py` 的 10 位角色步行／情緒和 10 件家具方向圖沒有低差異組。完整 Chromium 房間 QA 49／49：六家具與六角色同房、格位碰撞、四向解碼與無回退、深度遮擋、人物本體動作、好友唯讀及 390px 橫向捲動通過；截圖與報告在 `D:\Codex_QA\launcher-room-browser\`。`launcher_profile_shop_browser_qa.js` 97／97、`desktop_distribution_gate_qa.js` 135／135、名片／持有權 SQL／留言板回歸均通過；`desktop_launcher_package_qa.js` 來源檢查通過。
-pm start` 在隔離的本機 18787 埠開啟靜態頁；未設 `DATABASE_URL`，不視為正式帳號交易驗收。
+定向驗證：`build_depth_art_manifest.py` 驗過 130 個輸出素材的 Alpha 外緣、尺寸、來源與 SHA；`review_depth_art.py` 的 10 位角色步行／情緒和 10 件家具方向圖沒有低差異組。完整 Chromium 房間 QA 49／49：六家具與六角色同房、格位碰撞、四向解碼與無回退、深度遮擋、人物本體動作、好友唯讀及 390px 橫向捲動通過；截圖與報告在 `D:\Codex_QA\launcher-room-browser\`。`launcher_profile_shop_browser_qa.js` 97／97、`desktop_distribution_gate_qa.js` 135／135、名片／持有權 SQL／留言板回歸均通過；`desktop_launcher_package_qa.js` 來源檢查通過。`npm start` 在隔離的本機 18787 埠開啟靜態頁；未設 `DATABASE_URL`，不視為正式帳號交易驗收。
 
 Windows x64 NSIS 1.1.11 已由隔離工作樹建置，`desktop_launcher_package_qa.js` 的來源、win-unpacked、installer 三層通過：245 個 ASAR entries、342 個 launcher files、安裝檔 235,406,029 bytes，SHA-256 `e396e46ee659f1ef1ff621b35f1889c7fbf04cb1df8655fbfffbba9bf542a8e4`。真封裝 Electron 隔離 userData 啟動 smoke `ok=true`，241／241 `opui` 素材 HEAD／Range／MIME 通過，BGM 可播放；報告在 `D:\Codex_QA\\launcher-room-world-1.1.11\\smoke-packaged.json`。Authenticode 為 NotSigned。
 
@@ -504,9 +461,7 @@ Windows x64 NSIS 1.1.11 已由隔離工作樹建置，`desktop_launcher_package_
 
 變更檔案：`server/launcher-profile-shop.js`、`index.js`、`desktop-distribution.js`；`desktop/launcher.html`、`launcher-profile-shop.js/css`、`launcher-room.js/css`、`auth-service.js`、`main.js`、`preload.js`、`package.json`／lock；`public/images/launcher_room/chibi/`、`emotions/`、`tools/launcher-room/source-png/`、`prepare_chibi_emotions.py`、`docs/LAUNCHER_ROOM_EXPANSION_ART_20260925.json`；名片／房間／封裝定向 QA 與本文件、`PROJECT_OVERVIEW.md`、`GAME_RULES.md`、`FILE_MAP.md`。
 
-定向驗證：`launcher_profile_shop_qa.js`、`profile_shop_ownership_sql_qa.js` 通過名片輸入／付費頭像持有權、好友讀取、八位房客與四向座標、舊翻轉相容、JSONB 保存及舊 Card 偽造 patch 拒絕；既有留言板與好友頭像回歸通過。`desktop_distribution_gate_qa.js` 135／135、個人頁 Chromium 97／97、房間 Chromium 32／32 通過；桌機與 390px、好友唯讀、八人同房、四方向與實際情緒肖像解碼皆查核。
-ode --check` 13 支 JS、`git diff --check` 通過。本機 
-pm start` 在 18980 提供下載頁與 health HTTP 200；未設定 `DATABASE_URL`，不可視為正式 PostgreSQL 驗收。美術來源與 44 張新增圖的 SHA／Alpha 記在 `LAUNCHER_ROOM_EXPANSION_ART_20260925.json`，已目視十人全身和 40 情緒 contact。
+定向驗證：`launcher_profile_shop_qa.js`、`profile_shop_ownership_sql_qa.js` 通過名片輸入／付費頭像持有權、好友讀取、八位房客與四向座標、舊翻轉相容、JSONB 保存及舊 Card 偽造 patch 拒絕；既有留言板與好友頭像回歸通過。`desktop_distribution_gate_qa.js` 135／135、個人頁 Chromium 97／97、房間 Chromium 32／32 通過；桌機與 390px、好友唯讀、八人同房、四方向與實際情緒肖像解碼皆查核。`node --check` 13 支 JS、`git diff --check` 通過。本機 `npm start` 在 18980 提供下載頁與 health HTTP 200；未設定 `DATABASE_URL`，不可視為正式 PostgreSQL 驗收。美術來源與 44 張新增圖的 SHA／Alpha 記在 `LAUNCHER_ROOM_EXPANSION_ART_20260925.json`，已目視十人全身和 40 情緒 contact。
 
 Windows x64 NSIS 1.1.10 由隔離工作樹建置，`desktop_launcher_package_qa.js` 的來源、win-unpacked、installer 三層通過：245 ASAR entries、212 個 launcher files；安裝檔 227,150,255 bytes，SHA-256 `241a851d14259b69f8fbf4894c3aa0af2adef95e5bfe2e310975d826647b580e`，低於更新器 256 MiB 限制。真封裝 Electron 隔離 userData 啟動 smoke `ok=true`，111／111 `opui` 素材 HEAD／Range／MIME 通過（含新增 44 圖），BGM 播放、程式頁、游標與協定測試通過，broken images 0；證據在 `D:\Codex_QA\launcher-room-1.1.10\smoke-packaged.json`。Authenticode 為 NotSigned。
 
@@ -518,10 +473,7 @@ Windows x64 NSIS 1.1.10 由隔離工作樹建置，`desktop_launcher_package_qa.
 
 個人頁增加 960×540 的獨立房間；頁主可購買場景／家具／房客，拖曳或鍵盤調整位置、縮放／翻轉家具，儲存完整配置。最多擺放 24 件不同家具、3 名不同 Q 版角色；角色在房間顯示時於可見地板區域自主短距離移動，頁面隱藏或使用者偏好減少動態時停止。雙向好友可唯讀參觀，收藏清單回傳伺服器固定商品的安全摘要。`stats.launcherRoomV1` 保存 `revision`、`sceneId`、`placements`、`characters`；`LAUNCHER_ROOM_SET` 在 PostgreSQL `FOR UPDATE` 交易內核對購買擁有權、座標與版本衝突，舊 Card `PROFILE_UPDATE` 不得覆寫。變更檔案：`server/launcher-profile-shop.js`、`index.js`、`desktop-distribution.js`；`desktop/launcher-room.js/css`、`launcher-profile-shop.js/css`、`launcher.html`、`main.js`、`preload.js`、`auth-service.js`、`package.json`／lock；`public/images/launcher_room/`、來源工具與素材清單，以及相關 QA。Board／Card／Chess 回合、傷害、存檔與 `BOARD_GAME_STATE` 不變。
 
-本機與封裝驗證：
-ode scripts/launcher_profile_shop_qa.js` 通過 120 件 catalog、購買／持有權、房間配置、好友唯讀、座標／上限／版本拒絕；
-ode scripts/profile_shop_ownership_sql_qa.js` 以 PGlite 核對真正 JSONB 合併下的房間保存、舊 Card 偽造 patch 拒絕及付款資料保留。
-ode --check`、scoped `git diff --check`、Windows NSIS 封裝 QA 通過。隔離 Chromium `scripts/launcher_room_browser_qa.js` 17／17，含拖曳、儲存 payload、Q 版移動、背景隱藏／減少動態、好友唯讀、390px 窄版及晚到回應；真封裝 Electron 的 67 個 `opui` 媒體檢查通過。五件定向家具於 `D:\Codex_QA\launcher-room-five-furniture\qa.json` 驗明透明角落與 SHA，140px 縮圖目視可辨。
+本機與封裝驗證：`node scripts/launcher_profile_shop_qa.js` 通過 120 件 catalog、購買／持有權、房間配置、好友唯讀、座標／上限／版本拒絕；`node scripts/profile_shop_ownership_sql_qa.js` 以 PGlite 核對真正 JSONB 合併下的房間保存、舊 Card 偽造 patch 拒絕及付款資料保留。`node --check`、scoped `git diff --check`、Windows NSIS 封裝 QA 通過。隔離 Chromium `scripts/launcher_room_browser_qa.js` 17／17，含拖曳、儲存 payload、Q 版移動、背景隱藏／減少動態、好友唯讀、390px 窄版及晚到回應；真封裝 Electron 的 67 個 `opui` 媒體檢查通過。五件定向家具於 `D:\Codex_QA\launcher-room-five-furniture\qa.json` 驗明透明角落與 SHA，140px 縮圖目視可辨。
 
 正式程式提交 `c96f87fda`、簽署清單提交 `936a234fa` 已發布。Windows x64 NSIS 1.1.9 安裝檔為 226,157,553 bytes，SHA-256 `60c580af768eeb896e8f724c6001b715ad56ad1b531b9041ab2a8ddabb7def19`，公開位址 `https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.9/ONE-PIECE-Tabletop-Launcher-1.1.9-x64.exe`。R2 公開完整 GET 與該 SHA 相符；Range 回 HTTP 206，檔首 MZ 可讀。公開 `/desktop/launcher-release-v1.json` 為 672 bytes，SHA-256 `1e9947c2202335fb00dd2c4fd7677b27248bda36d18e8272d2983dce7a4eb3de`，Ed25519 驗簽通過；1.1.8 查詢可更新，1.1.9 查詢為最新版。公開商店預覽回 120 SKU，ID 清單 SHA-256 `dad3239d224cc53c937a15cfb9a608c30f9b8dce236d3d369520442dead46373`；公開 Socket 10／10、下載頁 Chromium 38／38 通過。發行證據在 `D:\Codex_QA\launcher-room-1.1.9\`。未以真玩家帳號實際操作正式 PostgreSQL 購買與房間交易；Windows Authenticode 為 NotSigned。LATTICE 官方 Status 仍為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，本輪未聲稱持久任務或圖譜驗收成功。
 
@@ -545,9 +497,7 @@ ode --check`、scoped `git diff --check`、Windows NSIS 封裝 QA 通過。隔�
 
 程式範圍：`desktop/auth-service.js`、`main.js`、`preload.js`、`social-service.js`、`launcher.html/js`、`launcher-social.js`、`launcher-profile-shop.js/css`、`package.json`／lock；`server/index.js`、`launcher-profile-shop.js`、`launcher-guestbook.js`、`chess-match-records.js`、`board-art-collection.js`、`profile-social-stats.js`、`desktop-distribution.js`；新 WebP、PNG 原稿、Ogg、`tools/launcher-profile/compose_bgm.py` 與定向 QA。商店改用伺服器獨立 `launcherWalletV1`：首次 100 展示室金幣，每個 UTC 日期首次開商店／購買補 20，最多 500；舊 Card 遊戲金幣與快照更新均不增減此錢包。好友動作只合併 `stats.client.social`，避免較舊社交快照覆蓋付款後的錢包。保留新版 main 的 Board depth manifest 分流，僅擴增桌面啟動器 Socket 白名單；三遊戲 package 與 `BOARD_GAME_STATE` 不變。桌面版升為 1.1.8，`desktop/package.json` 將本次頁面、頭像、裝飾、原創曲與 20 首既有 OP 封裝；未修改玩家已安裝 1.1.7。
 
-驗證：隔離 1.1.8 發布樹的 
-ode --check` 21 檔與 scoped `git diff --check` 通過；`launcher_profile_shop_qa.js`、`profile_shop_ownership_sql_qa.js`（PGlite，含舊 Card 快照及獨立錢包）、`launcher_guestbook_qa.js`（PGlite）、`chess_match_records_qa.js`、`launcher_social_avatar_qa.js` 通過；`desktop_distribution_gate_qa.js` 135／135，隔離 Chromium `launcher_profile_shop_browser_qa.js` 89／89，報告在 `D:\Codex_QA\launcher-profile-shop-release-118\renderer\report.json`。隔離 
-pm start` 18951 的 `/health`、`/download`、兩份桌面清單皆 HTTP 200，真 Socket `LAUNCHER_SHOP_GET` 預覽回 87 件商品；無 `DATABASE_URL`，不代表真帳號交易成功，測試服務已停止。
+驗證：隔離 1.1.8 發布樹的 `node --check` 21 檔與 scoped `git diff --check` 通過；`launcher_profile_shop_qa.js`、`profile_shop_ownership_sql_qa.js`（PGlite，含舊 Card 快照及獨立錢包）、`launcher_guestbook_qa.js`（PGlite）、`chess_match_records_qa.js`、`launcher_social_avatar_qa.js` 通過；`desktop_distribution_gate_qa.js` 135／135，隔離 Chromium `launcher_profile_shop_browser_qa.js` 89／89，報告在 `D:\Codex_QA\launcher-profile-shop-release-118\renderer\report.json`。隔離 `npm start` 18951 的 `/health`、`/download`、兩份桌面清單皆 HTTP 200，真 Socket `LAUNCHER_SHOP_GET` 預覽回 87 件商品；無 `DATABASE_URL`，不代表真帳號交易成功，測試服務已停止。
 
 `desktop npm ci` 後建置 Windows x64 NSIS 1.1.8 候選，安裝檔 `D:\Codex_Release_Worktrees\launcher-profile-shop-1.1.8\desktop\dist\ONE-PIECE-Tabletop-Launcher-1.1.8-x64.exe` 為 221,792,955 bytes，SHA-256 `f00c94b92017c840f6a3fa12d3de33f1b0b7dfcdb781c347eebd61c515d7dca5`。來源、win-unpacked 與 installer 封裝 QA 均通過：243 ASAR entries、147 個啟動器檔案、29 個歷史 catalog manifest；最新 main 的 catalog 總量為 25,478,967 bytes，故 QA 容量上限由 24 MiB 調至 32 MiB，仍逐檔檢查精確名單與 SHA，沒有刪除歷史 manifest。真打包 EXE 在隔離預覽 userData 執行 `D:\Codex_QA\launcher-avatar-review\smoke-packaged-redraw.json`，46／46 新 `opui` 媒體 HEAD／Range／MIME 及原創曲實際播放通過。新版 Publisher dry-run 驗 SHA／大小；1.1.8 unsigned／Ed25519 signed candidate 保存在 D:\Codex_QA\launcher-profile-shop-release-118-circular，由桌面版內建公鑰驗證通過。真封裝 Electron 另實際播放 OP track01 至 0.861 秒、無媒體錯誤；證據為 D:\Codex_QA\launcher-avatar-review\packaged-op-playback-cdp.json。Windows Authenticode 為 NotSigned；R2、Render 與正式 PostgreSQL 仍未驗收，repo／公開更新清單仍為 1.1.7。本節只代表本機發行候選，尚未推送或部署。
 
@@ -563,8 +513,7 @@ pm start` 18951 的 `/health`、`/download`、兩份桌面清單皆 HTTP 200，�
 
 ## 遊戲改由桌面啟動器進入（2026-09-22）
 
-使用者同意保留下載頁、關閉一般網頁遊玩並部署。新增 `server/desktop-distribution.js`、`public/desktop-download.html`，於 `server/index.js` 掛接 HTTP／Socket.IO 分流；新增四支 distribution QA，原 LAN QA 支援明確測試 UA。一般瀏覽器導至下載頁、遊戲程式與連線拒絕；桌面 1.1.7 保留帳號／社交／更新／多人連線，6,192 個素材路徑只回 R2 重新導向。服務工作者退役保留瀏覽器存檔。同步四份專案文件，隔離 
-pm start` 18927；測試、R2 CORS 與部署證據見 [本次紀錄](DESKTOP_ONLY_20260922.md)。
+使用者同意保留下載頁、關閉一般網頁遊玩並部署。新增 `server/desktop-distribution.js`、`public/desktop-download.html`，於 `server/index.js` 掛接 HTTP／Socket.IO 分流；新增四支 distribution QA，原 LAN QA 支援明確測試 UA。一般瀏覽器導至下載頁、遊戲程式與連線拒絕；桌面 1.1.7 保留帳號／社交／更新／多人連線，6,192 個素材路徑只回 R2 重新導向。服務工作者退役保留瀏覽器存檔。同步四份專案文件，隔離 `npm start` 18927；測試、R2 CORS 與部署證據見 [本次紀錄](DESKTOP_ONLY_20260922.md)。
 
 使用者登入 Cloudflare 後完成公開素材 GET/HEAD CORS 與限定素材 hostname 的 CDN purge；27/27 跨來源檢查、完整 LAN 零錯誤、本機分流 131/131、Git 95 logical 程式 SHA 通過。公開 verifier 修正 Engine.IO 400 拒絕 upgrade 的精確原因判定；不調整產品 gate 或套件。首次 CORS 後 Electron 重跑受工具政策阻擋，既有真 Electron 66/66 與後續 Chromium 解碼證據分別記錄。
 
@@ -678,10 +627,8 @@ release 457673be 已生效；2026-09-20 00:06:21 公開完整性 42 checks／43 
 - 清單結果：Card `739` 檔／`710,948,844` bytes（program `29`）、Board `3,485` 檔／`1,284,459,311` bytes（program `34`）、Chess `1,406` 檔／`340,094,107` bytes（program `26`）；合計 `5,630` logical／`2,335,502,262` bytes、CAS `5,145` unique／`2,166,067,173` bytes。既有 `catalog-v2` 與三份舊 manifest bytes/SHA 保持不變。
 - R2：schema 3 正式發布逐檔驗證 `5,145` 個 unique blobs；`uploaded=81`、`skipped=5064`、`skippedRace=0`。發布器只使用 HEAD 與 `If-None-Match: *` PUT，沒有刪除或覆寫。DPAPI wrapper 新增顯式 `-CatalogVersion 3`，預設仍為 v2 以保護舊流程。
 - 啟動器：`desktop/package.json` 升為 `1.1.6`。x64 NSIS 位於 `D:\OnePieceDesktopBuilds\release-1.1.6\ONE-PIECE-Tabletop-Launcher-1.1.6-x64.exe`，`152,434,817` bytes，SHA-256 `21b31db506c146d0bef1785b5cf8f5efd9a8a56317a474d4c44ff11e7686c335`；immutable R2 URL 為 `https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.6/ONE-PIECE-Tabletop-Launcher-1.1.6-x64.exe`。`launcher-release-v1.json` 沿用既有 Ed25519 key 簽署，舊版 1.1.5 可由設定內檢查更新取得。
-- 驗證：program catalog、Git HEAD bytes、legacy v2 不變、AssetStore、runtime CAS、Service Worker isolation、HTTPS protocol Electron fixture、Render runtime endpoint、launcher update/settings/cursor/GPU、source／win-unpacked／installer package、R2 publisher、Chess bundle/fallback/multiplayer 與 deployment manifest 均 PASS。Electron fixture 實際確認 document/CSS/JS/Worker/WASM/image 本機命中、URL/origin 不變、API 走網路。正式 `main`／Render commit `89b45358` 上線後，5 份 catalog／manifest／release metadata 與 89 個 program files 全部逐 byte/SHA 符合 Git；三個 runtime identity 皆 `200`／
-o-store`、未知 game `404`。1.1.5 驗證線上 Ed25519 manifest 為可更新，R2 installer 完整 GET 為 `152,434,817` bytes、SHA 同上、MZ/PE 正確且 Cloudflare `HIT`。
-- 本機開發注意：Windows checkout 若因 Git `core.autocrlf` 把工作檔轉成 CRLF，本機 
-pm start` 的 runtime identity 會刻意 fail-closed `503`；Render Linux 正式 bytes 與 Git/R2 清單一致並已通過上述 live 驗收。這不影響本機網頁以 Render fallback 開啟，也不可為了讓 Windows 端點變 200 而放寬正式 SHA 檢查。
+- 驗證：program catalog、Git HEAD bytes、legacy v2 不變、AssetStore、runtime CAS、Service Worker isolation、HTTPS protocol Electron fixture、Render runtime endpoint、launcher update/settings/cursor/GPU、source／win-unpacked／installer package、R2 publisher、Chess bundle/fallback/multiplayer 與 deployment manifest 均 PASS。Electron fixture 實際確認 document/CSS/JS/Worker/WASM/image 本機命中、URL/origin 不變、API 走網路。正式 `main`／Render commit `89b45358` 上線後，5 份 catalog／manifest／release metadata 與 89 個 program files 全部逐 byte/SHA 符合 Git；三個 runtime identity 皆 `200`／`no-store`、未知 game `404`。1.1.5 驗證線上 Ed25519 manifest 為可更新，R2 installer 完整 GET 為 `152,434,817` bytes、SHA 同上、MZ/PE 正確且 Cloudflare `HIT`。
+- 本機開發注意：Windows checkout 若因 Git `core.autocrlf` 把工作檔轉成 CRLF，本機 `npm start` 的 runtime identity 會刻意 fail-closed `503`；Render Linux 正式 bytes 與 Git/R2 清單一致並已通過上述 live 驗收。這不影響本機網頁以 Render fallback 開啟，也不可為了讓 Windows 端點變 200 而放寬正式 SHA 檢查。
 - 回復：發布前 main 回復點為遠端 branch `codex/rollback-before-desktop-local-runtime-v1`，commit `46585bcb77776417447a8927bbfb51a9d65611b1`。需要停止新更新時先 scoped revert 1.1.6 release manifest／Render 程式；既有 v2、1.1.5 installer 與 R2 immutable blobs 均保留，不刪除已發布物件。
 
 ## 霸海戰棋好友邀請／CPU 首步防卡修正 V2（2026-09-07）
@@ -724,10 +671,8 @@ pm start` 的 runtime identity 會刻意 fail-closed `503`；Render Linux 正式
 - 使用者同意免費模型的本機製作流程。新增 `tools/card-depth/` 製作、檢視、SAM 局部 alpha 修補及逐卡保護配方；模型與獨立 Python 環境在 D:/Codex_Tools，不修改遊戲套件、不把模型傳給玩家。
 - 最終 80 張已完成美術審查與重建，`public/card-depth/v1/` 共 240 個 WebP、13,632,032 bytes；80 個原圖 SHA 與 240 個分層素材 SHA／大小全數核對通過。清單為 `docs/CARD_DEPTH_V1_ASSETS.json`，LF SHA-256：`88d1f47444cfc6bedbdfce27648947530909f1f8323d4ff8842ce699092969db`。
 - Card Finish JS/CSS 按需載入背景、人物及固定框 alpha mask，原字與框沿用原圖；人工修補僅改 alpha，不重畫、不改原卡或共用遊戲規則。C／D 的 22 份頂層工具與 6 份 jobs 雜湊一致，模型／venv 不進 Git 或 public。
-- 
-pm start` 8849 成功；runtime 單元 4,901、最終全卡 browser 2,262 項 PASS，涵蓋 80 組／320 個真實 HTTP 回應，page errors 0。最終素材清單與精確 282 個候選路徑均通過唯讀核對；這不是正式站部署後驗收。
-- 真實兩帳號 candidate 連續兩輪 PASS：`real-candidate-2026-09-06T17-59-45-524Z.json` 的 hand、drawn、peerSync、depthHand、depthDrawn 均為 true；`real-candidate-2026-09-06T18-00-44-158Z.json` 另完成 6 次出牌，涵蓋基德取回後繼續選牌與香吉士 PK，直到自然 ended。兩份證據均在 D 樹 `artifacts/card-finish-v1/`，page errors 皆為 0，console 仍各有 4 筆既有媒體 404；不宣稱全站零 404。首輪基拉對話 QA 失敗證據仍保留。
-aturalDisabledSeen` 只證明技能禁選數字；兩輪皆未完成禁選卡片的真人阻擋案例，不得把 `choiceDisabledBlocked: false` 改述為通過。
+- `npm start` 8849 成功；runtime 單元 4,901、最終全卡 browser 2,262 項 PASS，涵蓋 80 組／320 個真實 HTTP 回應，page errors 0。最終素材清單與精確 282 個候選路徑均通過唯讀核對；這不是正式站部署後驗收。
+- 真實兩帳號 candidate 連續兩輪 PASS：`real-candidate-2026-09-06T17-59-45-524Z.json` 的 hand、drawn、peerSync、depthHand、depthDrawn 均為 true；`real-candidate-2026-09-06T18-00-44-158Z.json` 另完成 6 次出牌，涵蓋基德取回後繼續選牌與香吉士 PK，直到自然 ended。兩份證據均在 D 樹 `artifacts/card-finish-v1/`，page errors 皆為 0，console 仍各有 4 筆既有媒體 404；不宣稱全站零 404。首輪基拉對話 QA 失敗證據仍保留。`naturalDisabledSeen` 只證明技能禁選數字；兩輪皆未完成禁選卡片的真人阻擋案例，不得把 `choiceDisabledBlocked: false` 改述為通過。
 - 本輪僅局部同步 C／D 的 `DEV_WORKFLOW.md`、`PROJECT_OVERVIEW.md`、`FILE_MAP.md`、`GAME_RULES.md` 頂端 Card Depth 狀態，保留各樹原有歷史與其他差異。三份新增驗收工具及來源／授權索引詳見 FILE_MAP。
 - 回復點 `01d6c760` / `codex/rollback-before-card-depth-v1` 已保留。尚未 push／部署，接續的部署、正式 live 與 SW 更新驗收由主流程完成；詳見 `docs/CARD_DEPTH_V1_RELEASE.md`，目前不宣稱正式上線。
 
@@ -773,8 +718,7 @@ aturalDisabledSeen` 只證明技能禁選數字；兩輪皆未完成禁選卡片
 - 內容與邊界：`1.1.4` Windows x64 安裝包已納入 V461 高效能 GPU 偏好與 V462 桌面遊戲游標接管；沒有新增 Card／Board gameplay、同步或存檔變更。《霸海戰棋》維持 disabled，`public/images/ranks/r5.PNG`、`r6.PNG` 繼續排除且未修改。
 - 產物：本機候選為 `D:\OnePieceDesktopBuilds\release-1.1.4\ONE-PIECE-Tabletop-Launcher-1.1.4-x64.exe`，大小 `152,113,427` bytes，SHA-256 `f6edd9313eb51bbc8e75ac52cdd55a7df26a39ec47090c0c97efab8b9d90bcb9`。同一 immutable installer 已上傳至 `https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.4/ONE-PIECE-Tabletop-Launcher-1.1.4-x64.exe`；完整下載為 HTTP 200、bytes／SHA 一致（cache MISS），Range `0-63` 為 HTTP 206、MZ 64 bytes（cache HIT）。
 - 更新信任：Ed25519 signed candidate 已驗證並提升為 `public/desktop/launcher-release-v1.json`。更新服務驗證 `current=1.1.3` 回傳 `updateAvailable=true`，同版 `1.1.4` 回傳 `false`；舊 `1.1.2` 因未內建新信任根，仍需手動安裝新版。
-- QA：GPU preference、Web cursor、source／packaged Electron cursor `168` assertions、update service、signature、R2 publisher、Service Worker isolation、deployment manifest、catalog，以及 source／packaged／installer package QA 均 PASS。packaged media 的 Range `206`、cache hit 與 NVIDIA active GPU smoke 亦 PASS；
-pm start` 於 8797 的三個入口回 HTTP 200。因本機沒有資料庫，本輪不宣稱新增正式登入驗證。
+- QA：GPU preference、Web cursor、source／packaged Electron cursor `168` assertions、update service、signature、R2 publisher、Service Worker isolation、deployment manifest、catalog，以及 source／packaged／installer package QA 均 PASS。packaged media 的 Range `206`、cache hit 與 NVIDIA active GPU smoke 亦 PASS；`npm start` 於 8797 的三個入口回 HTTP 200。因本機沒有資料庫，本輪不宣稱新增正式登入驗證。
 - 待發布驗證：R2 完整下載與 Range 已通過；Render source 尚待部署與線上驗證，因此 V463 仍不記為完整正式發布。V461／V462 的本機 hotpatch 紀錄保留為當時歷史狀態。
 
 ## 修改紀錄：桌面遊戲游標全框架接管 V462（2026-09-06）
@@ -783,14 +727,12 @@ pm start` 於 8797 的三個入口回 HTTP 200。因本機沒有資料庫，本�
 - Web 樣式：`public/css/card-cursor-buggy-v3.css` 與 `board-cursor-nami-v3.css` 升為 V4 規則，改以 `any-hover:hover`＋`any-pointer:fine` 支援同時具備觸控與滑鼠的裝置，讓一般、可互動與按下狀態一致使用各遊戲 theme cursor。原生文字、縮放、抓取、等待等游標外觀會被 theme 取代，但文字輸入 caret、點擊行為與明確拖曳功能本身不變。
 - Web 回饋：`public/js/game_cursor_feedback_v1.js` 加入 V4 guard，只處理必要的 pointer event；遇到 runtime inline `cursor:... !important` 時才做最小範圍修正，並預載三態圖。舊 V1 已存在時會升級同一 guard，不重複綁定或產生雙圈；不增加 `mousemove`、`requestAnimationFrame` 或全 DOM 輪詢。
 - 網頁接點：Card 六頁與 Board 九個正式 document／iframe 的 CSS、JS query 統一升版，避免沿用舊 V3 CSS／V1 feedback 快取；既有十五頁範圍、圖片路徑及黑墨／紅金點擊效果維持不變。
-- 桌面框架：新增 `desktop/game-cursor-policy.js`，在 `webContents` 的主 frame／`frame-created`／`dom-ready` 注入打包內同一份 theme CSS 與 feedback script。只允許遊戲正式 exact origin，繼承的 `about:blank`／`about:srcdoc` 還必須有可信任父 frame，且 payload 會在 renderer 再驗證 origin；不新增 IPC、
-odeIntegrationInSubFrames` 或 renderer Node 權限。`desktop/main.js` 在遊戲正式 launch 前安裝 policy，V461 GPU 偏好保持原樣。
+- 桌面框架：新增 `desktop/game-cursor-policy.js`，在 `webContents` 的主 frame／`frame-created`／`dom-ready` 注入打包內同一份 theme CSS 與 feedback script。只允許遊戲正式 exact origin，繼承的 `about:blank`／`about:srcdoc` 還必須有可信任父 frame，且 payload 會在 renderer 再驗證 origin；不新增 IPC、`nodeIntegrationInSubFrames` 或 renderer Node 權限。`desktop/main.js` 在遊戲正式 launch 前安裝 policy，V461 GPU 偏好保持原樣。
 - 打包：`desktop/package.json` 將 `game-cursor-policy.js` 列入 ASAR 白名單，並把兩份 public CSS 與 `game_cursor_feedback_v1.js` 原位元組複用到 `cursor-policy/` extraResources；不複製第二套游標規則或圖片。source 與本機已安裝版的 `desktop_launcher_package_qa` 均 PASS，結果為 `235` 個 ASAR entries、`77` 個 launcher files、catalog 加 Card／Board 兩份 manifest 共 `3` 檔，三份 cursor-policy 資源與 public 原檔 SHA 完全一致；Chess 仍是 disabled，只有 Card／Board 兩款可玩。
 - Web／框架驗證：本機 `GAME_CURSOR_QA=PASS`，涵蓋 Card 6 頁、Board 9 頁、touch、legacy guard、動態 native cursor 與 explicit drag。Electron 44.1.1 的 fallback fixture `desktop_game_cursor_qa` 在 source 為 `168` 項 assertions／`1.67s` PASS，在本機已安裝 ASAR＋resources 為 `168` 項／`3.78s` PASS，另一次獨立重跑為 `168` 項／`1.5s` PASS；涵蓋主／子／about frame、origin、inline `!important`、三態、input／drag 與 cached resources。
 - 本機套用：已 hotpatch `D:\ONE PIECE TABLETOP SERIES\resources\app.asar`，SHA-256 為 `8c66dc3d3aa840482aa57cdbfdf853b407f10dbcb8b5e256754838aa76d139ee`，並把三份實際資源複製到 `resources\cursor-policy\`。相較原有內容只變更 ASAR 既有 `main.js`／`package.json` 並新增 `game-cursor-policy.js`；復原檔重用 `D:\Codex_BuildCache\launcher-gpu-v461\app-gpu.asar`，SHA-256 `f923dd67a1a043ade779cfdb23a9655ed20981b262b99ad90b315c25bbed731b`，沒有再建立重複備份。
 - 已安裝回歸：`DESKTOP_INSTALLED_MEDIA_SMOKE=PASS source=packaged cache=hit chromiumCache=selected-root`；Card image／audio／video 與 Board audio／video 都由本機命中並通過 Range `206`。V461 的 high-performance request 保留，NVIDIA GeForce GTX 1050 Ti active、Intel HD 630 inactive，GPU compositing／rasterization／video decode／WebGL 均 enabled；GPU preference 與 Service Worker isolation QA 也 PASS。這些是游標、媒體及啟動接點驗證，不宣稱為完整遊戲長時間壓力或 FPS benchmark。
-- QA 診斷：已安裝 fixture 第一輪曾在 120 秒逾時；測試腳本補上 stage、bounded `loadURL`／`executeJavaScript` 與 teardown 診斷後重跑 3.78 秒通過，沒有因診斷而修改 product。
-pm start` 在本機 8797 的 `start.html`、`board_start.html`、`board_game.html` 都回 HTTP 200，檢查後已正常停止 server。
+- QA 診斷：已安裝 fixture 第一輪曾在 120 秒逾時；測試腳本補上 stage、bounded `loadURL`／`executeJavaScript` 與 teardown 診斷後重跑 3.78 秒通過，沒有因診斷而修改 product。`npm start` 在本機 8797 的 `start.html`、`board_start.html`、`board_game.html` 都回 HTTP 200，檢查後已正常停止 server。
 - 發布與相容：版本維持 `1.1.3`；本輪不重建 NSIS、不發布 Render／R2，其他玩家尚未取得 V462。只處理網頁內容區的桌面游標 UI；OS 對話框、原生視窗 titlebar 與網頁外的 native drag 不在此 cursor policy 範圍。本機套用沒有修改帳號、素材快取、遊戲儲存、Card／Board 規則、同步、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
 
 ## 修改紀錄：桌面啟動器高效能 GPU 偏好 V461（2026-09-06）
@@ -801,9 +743,7 @@ pm start` 在本機 8797 的 `start.html`、`board_start.html`、`board_game.htm
 - 診斷：只有既有 smoke 模式會以 `app.getGPUInfo('complete')` 收集 `requestedPreference`、active adapters、renderer 與 feature status。查詢設有 3 秒上限，逾時或 API 失敗只寫入 `unavailable` 診斷，不會拖慢或阻擋一般玩家啟動；正式 UI、日誌及遊戲狀態不新增 GPU 資訊。
 - QA：新增 `scripts/desktop_gpu_preference_qa.js`，靜態與 VM fixture 驗證 software／low-power／high-performance 三條路徑、冪等性、設定時機及未關閉硬體加速；結果為 `DESKTOP_GPU_PREFERENCE_QA=PASS`。`scripts/desktop_launcher_package_qa.js` 亦為 PASS。開發版及已安裝 1.1.3 executable 的 smoke 都通過，實機回報 active adapter 為 `NVIDIA GeForce GTX 1050 Ti`、renderer 為 ANGLE D3D11，`Intel(R) HD Graphics 630` 為 inactive；`gpu_compositing`、`rasterization`、`video_decode` 與 WebGL 都是 enabled。
 - 媒體回歸：Card／Board 抽樣的 image／audio／video 均通過完整讀取、Range `206` 與 `cache=hit`。這些結果證明 GPU request、硬體加速狀態與本機媒體供應接點正常，不等於完整遊戲場景的 FPS、延遲或長時間效能 benchmark。
-- 補充驗證：
-ode --check`、`git diff --check`、`desktop_runtime_asset_cache_qa`、`desktop_service_worker_isolation_qa` 均通過；
-pm start` 在本機 8797 成功啟動，`board_start.html`、`board_game.html`、`start.html` 皆 HTTP 200，檢查後停止測試 server。本機未設定 DATABASE_URL，因此此項僅確認靜態頁面可開，不宣稱驗證正式帳號與資料庫。既有 `r5.PNG`／`r6.PNG` 未修改。
+- 補充驗證：`node --check`、`git diff --check`、`desktop_runtime_asset_cache_qa`、`desktop_service_worker_isolation_qa` 均通過；`npm start` 在本機 8797 成功啟動，`board_start.html`、`board_game.html`、`start.html` 皆 HTTP 200，檢查後停止測試 server。本機未設定 DATABASE_URL，因此此項僅確認靜態頁面可開，不宣稱驗證正式帳號與資料庫。既有 `r5.PNG`／`r6.PNG` 未修改。
 - 本機套用：已把驗證後的 `main.js` 單檔套入 `D:\ONE PIECE TABLETOP SERIES\resources\app.asar`。套用前後共 `185` 個 ASAR 內檔逐一比對 SHA，只有 `main.js` 改變；新 ASAR SHA-256 為 `f923dd67a1a043ade779cfdb23a9655ed20981b262b99ad90b315c25bbed731b`。唯一 rollback 位於 `D:\Codex_BuildCache\launcher-gpu-v461\app-before-gpu.asar`，大小約 3 MB，原 SHA-256 為 `b87de74b5971f8bb0937b3bb918c7c2ad274094ad1431fdbf564e560e432772e`。
 - 發布狀態：本輪沒有發布 Render／R2、沒有重建 NSIS，也沒有變更 `1.1.3` 版號；R2 上 immutable 1.1.3 原始安裝包保持不變，因此其他玩家尚未取得本次 GPU preference，必須等未來新版安裝包才會配送。這次本機 ASAR 套用沒有修改帳號、素材快取、遊戲儲存或 Windows 登錄檔。
 - 相容範圍：沒有修改啟動器 UI、Card／Board 規則、戰鬥、同步、資料 id、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
@@ -840,8 +780,7 @@ pm start` 在本機 8797 成功啟動，`board_start.html`、`board_game.html`�
 - 根因：`startBattleRound()` 只清除 battle 頂層的 `playerPerformedAction`、骰值與摘要，沒有把新輪狀態存回 `battle.coop.runtimes[playerId]`。`prepareCoopBattleCommandRuntime()` 在玩家點招時因此把上一輪 `playerPerformedAction=true` 套回，結算器便略過玩家。另有 `firstActor`／`secondActor` 沒在新輪清除，使續戰可能沿用上一輪敵方先攻。
 - 修正：新輪一律清空兩個先攻欄位，並在一般開輪、Boss／四皇開輪提示、最終關卡提示、開輪狀態中斷及提示續行完成後，把清空及開場效果處理後的狀態寫回既有共鬥 runtime。沒有改 `gameState` schema、角色／招式／道具 ID、localStorage key、Socket.IO event 或完整快照架構。
 - 排版：`board_battle.html` 的主指令網格改為桌機左右各 5.25% 安全內縮、水平與垂直共用 `clamp(8px, 1vw, 14px)`；1100px 以下縮小 gap，且 600px 以下低高度橫向畫面改為左右各 15% 內縮，讓兩列維持正 gap 且不碰框。其他招式／道具／替補網格未改。
-- 驗證：
-ode --check public/js/board_game.js` 與新 QA 通過。`BATTLE_TURN_RESUME_ACTION_QA=PASS` 實跑兩玩家交棒：續戰由第 1 輪進第 2 輪，全域與 runtime 的 performed／dice／summary 皆清空，舊 enemy-first 亦清空；由 iframe 點香吉士招式後先得到玩家骰 5、敵骰仍空、PP 25→24。四鍵在 1920×1080 的左右內距各 48.375px、gap 14px，在 932×430 的左右內距約 55.03px、水平／垂直 gap 約 6.95／6.86px，均無溢出。
+- 驗證：`node --check public/js/board_game.js` 與新 QA 通過。`BATTLE_TURN_RESUME_ACTION_QA=PASS` 實跑兩玩家交棒：續戰由第 1 輪進第 2 輪，全域與 runtime 的 performed／dice／summary 皆清空，舊 enemy-first 亦清空；由 iframe 點香吉士招式後先得到玩家骰 5、敵骰仍空、PP 25→24。四鍵在 1920×1080 的左右內距各 48.375px、gap 14px，在 932×430 的左右內距約 55.03px、水平／垂直 gap 約 6.95／6.86px，均無溢出。
 - 相容回歸：`battle_refresh_recovery_qa.js` 五種 queued／visual／fallback／observer／spar 同輪刷新接回通過；`lan_refresh_flow_qa.js` 的兩裝置房間、回合同步及雙方續戰 overlay 通過；`coop_battle_view_switch_qa.js` 的三人共鬥操作／觀看切換、窄版與圖片檢查通過。本機未設定 `DATABASE_URL` 的警告只影響 DB 功能，靜態 Board QA 正常。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/battle_turn_resume_action_qa.js` 及四份專案文件；既有 `public/images/ranks/r5.PNG`／`r6.PNG` 工作樹差異未碰觸。
 
@@ -852,8 +791,7 @@ ode --check public/js/board_game.js` 與新 QA 通過。`BATTLE_TURN_RESUME_ACTI
 - 素材：保留所有 V2 原圖，新增 `board_cursor_nami_quill_*_v3.png`。三態均由核准 V2 精確逆時針旋轉 90 度，維持 48×48 RGBA 真透明；default／pointer 熱點校正在 `(4,43)`，pressed 校正在 `(5,43)`。
 - 接入：Board 九個正式頁改載入 `board-cursor-nami-v3.css`，主地圖、血統因子圓筒、水之七島船艦校位、Tot Musica 名單與原生 draggable 皆持續使用羽筆；拖曳按下時切到 pressed。Card 六頁改載入 `card-cursor-buggy-v3.css`，外觀仍沿用核准的 V2 巴奇白手套。兩款 V3 CSS 只隱藏 `html`／`body` 的卷軸外觀，不封鎖 overflow，因此滾輪、觸控與鍵盤捲動仍有效，聊天室／modal／清單等內層卷軸不受影響。
 - 邊界：文字輸入、卡牌海報放大、Board 準星／等待及 touch-only 原有語意不變；共用點擊腳本、帳號、房間、戰鬥、回合、存檔、`BOARD_GAME_STATE` 與 Socket.IO event 均未修改。
-- 驗證：
-ode --check scripts/game_cursor_qa.js` 通過；隔離 8847 伺服器實跑 15 頁，逐像素確認 V3 是 V2 的精確 90 度旋轉且筆尖位於左下，驗證拖曳前後都不掉筆、根層卷軸不可見但 Card／Board 各可滾動 640px、內層 overflow 未被鎖死及 932×430 touch-only 排除。結果為 `GAME_CURSOR_QA=PASS`。
+- 驗證：`node --check scripts/game_cursor_qa.js` 通過；隔離 8847 伺服器實跑 15 頁，逐像素確認 V3 是 V2 的精確 90 度旋轉且筆尖位於左下，驗證拖曳前後都不掉筆、根層卷軸不可見但 Card／Board 各可滾動 640px、內層 overflow 未被鎖死及 932×430 touch-only 排除。結果為 `GAME_CURSOR_QA=PASS`。
 - 桌面更新：重建 image／unified asset manifest 與遊戲 catalog，Board 更新為 `assets-eb95373ee6ab1aa3`（3451 檔）；Card 素材未變，沿用原 immutable manifest 與原 SHA。建置器現在會安全重用內容相同但建立時間較早的 immutable manifest，圖片清單以最後一次 `public/images` 變更 commit 為來源；舊 Board manifest 暫留正式站供 rollout 回退，但新版啟動器打包篩選只帶 catalog 當前引用的 Card／Board 兩份清單。
 
 ## 修改紀錄：巴奇白手套／娜美羽毛筆游標 V456（2026-09-05）
@@ -862,8 +800,7 @@ ode --check scripts/game_cursor_qa.js` 通過；隔離 8847 伺服器實跑 15 �
 - 素材：由核准的透明 ImageGen 母圖等比例縮製六張獨立 48×48 RGBA PNG，新增 `card_cursor_buggy_glove_*_v2.png` 與 `board_cursor_nami_quill_*_v2.png`；V1 素材與 CSS 保留作可回復版本，不覆寫原圖。
 - 接入：Card 六頁改載入 `card-cursor-buggy-v2.css`，Board 九頁改載入 `board-cursor-nami-v2.css`；既有 `game_cursor_feedback_v1.js` 的無狀態事件橋不改。巴奇點擊仍採短紅金回饋；娜美的點擊回饋改成不規則黑墨手繪圈與小墨點，不再顯示藍色光圈。
 - 邊界：只改桌機精準游標與視覺回饋；touch-only、文字輸入、disabled、卡牌海報放大，以及 Board 既有拖曳／準星行為維持原狀。沒有改帳號、房間、卡牌、戰鬥、回合、存檔、`BOARD_GAME_STATE` 或 Socket.IO event。
-- 驗證：
-ode --check` 通過；隔離 8846 伺服器的 `game_cursor_qa.js` 實跑 Card／Board 三態、六張不同 SHA 的 48×48 RGBA 真透明 PNG、巴奇／筆尖熱點、黑墨圈、disabled／text／zoom-in／grab／grabbing／crosshair／wait、按下清理與零水平溢出；932×430 touch-only 不套用自訂游標。結果為 `GAME_CURSOR_QA=PASS`。
+- 驗證：`node --check` 通過；隔離 8846 伺服器的 `game_cursor_qa.js` 實跑 Card／Board 三態、六張不同 SHA 的 48×48 RGBA 真透明 PNG、巴奇／筆尖熱點、黑墨圈、disabled／text／zoom-in／grab／grabbing／crosshair／wait、按下清理與零水平溢出；932×430 touch-only 不套用自訂游標。結果為 `GAME_CURSOR_QA=PASS`。
 
 ## 修改紀錄：兩款遊戲專屬三態游標 V455（2026-09-05）
 
@@ -871,8 +808,7 @@ ode --check` 通過；隔離 8846 伺服器的 `game_cursor_qa.js` 實跑 Card�
 - 素材：以內建 ImageGen 產生兩張 RGBA 透明母圖，再輸出六張 48×48 正式 PNG。卡牌素材放在 `public/images/ui/cursors/`，Board 素材放在 `public/images/board/cursors/`，讓桌面下載 manifest 自動分到正確遊戲且不互相混入。
 - 接入：新增 `public/css/card-cursor-buggy-v1.css`、`public/css/board-cursor-nami-v1.css` 與共用 `public/js/game_cursor_feedback_v1.js`。CSS 只在 `hover:hover` 且 `pointer:fine` 套用；既有 `pointer` 元素由語意 selector 或執行時 computed cursor 採用亮起態，按下時短暫使用 pressed 圖並顯示不攔截操作的 300ms 光圈。
 - 範圍：Card 六個正式頁與 Board 九個獨立 document／iframe 均載入各自 CSS 與共用腳本。文字輸入仍使用 `text`，卡牌海報仍保留 `zoom-in`，Board 的 `grab`／`grabbing`／`crosshair`／`wait` 既有功能不在未按下時被覆蓋；touch-only 平板完全不啟用自訂游標或點擊光圈。
-- 驗證：
-ode --check` 通過共用腳本與 `scripts/game_cursor_qa.js`。Chrome 實跑 1440×900 卡牌入口、Board 入口及戰鬥 iframe，確認三態檔名、按下 class／光圈建立與清理、文字輸入、六張 48×48 RGBA 真透明素材及零水平溢出；932×430 觸控情境確認不套用游標且不產生回饋節點。結果為 `GAME_CURSOR_QA=PASS`。
+- 驗證：`node --check` 通過共用腳本與 `scripts/game_cursor_qa.js`。Chrome 實跑 1440×900 卡牌入口、Board 入口及戰鬥 iframe，確認三態檔名、按下 class／光圈建立與清理、文字輸入、六張 48×48 RGBA 真透明素材及零水平溢出；932×430 觸控情境確認不套用游標且不產生回饋節點。結果為 `GAME_CURSOR_QA=PASS`。
 - 相容邊界：本次只新增客戶端游標外觀與輸入回饋，不改帳號、卡牌、角色、道具、回合、存檔、localStorage key、Socket.IO event、多人同步或 `BOARD_GAME_STATE`。
 
 ## 修改紀錄：桌面啟動器更新查詢入口 V454（2026-09-05）
@@ -887,9 +823,7 @@ ode --check` 通過共用腳本與 `scripts/game_cursor_qa.js`。Chrome 實跑 1
 - 修正：`public/game.html` 對 `#modal.hidden`、`#coinOverlay.hidden`、`#playedOverlay.hidden`、`#drawHint.hidden`、`#chooseHint.hidden` 加入明確 `display:none`；既有流程移除 `.hidden` 時仍照原條件開啟，不改對話框內容、動畫或操作入口。
 - 回歸保護：`scripts/card_runtime_performance_qa.js` 檢查五條明確隱藏規則；`scripts/card_render_batch_browser_qa.js` 在實際載入後讀取所有進場遮罩、掛機提示與階段提示的 computed style，不依賴 `.hidden` class 本身來放行，確認沒有任何隱藏層暴露或攔截進場操作。
 - 相容邊界：只修正卡牌頁 CSS cascade 與 QA，不改牌效、抽牌、回合、Socket.IO event、帳號、localStorage、存檔、桌面素材清單或 Board `BOARD_GAME_STATE`。
-- 驗證：`CARD_RUNTIME_PERFORMANCE_QA=PASS`、`CARD_RENDER_BATCH_BROWSER_QA=PASS`（含 `overlays=hidden`）；兩支 QA 腳本均通過 
-ode --check`。
-pm start` 後 `/game.html` 與靜態 CSS 均為 HTTP 200，頁面含 V434 selector 且沒有 Tailwind CDN。修改檔案另含四份專案文件，未碰使用者的 `r5.PNG`／`r6.PNG`。
+- 驗證：`CARD_RUNTIME_PERFORMANCE_QA=PASS`、`CARD_RENDER_BATCH_BROWSER_QA=PASS`（含 `overlays=hidden`）；兩支 QA 腳本均通過 `node --check`。`npm start` 後 `/game.html` 與靜態 CSS 均為 HTTP 200，頁面含 V434 selector 且沒有 Tailwind CDN。修改檔案另含四份專案文件，未碰使用者的 `r5.PNG`／`r6.PNG`。
 
 ## 修改紀錄：卡牌／桌面啟動器運行效能 V433（2026-09-04）
 
@@ -898,8 +832,7 @@ pm start` 後 `/game.html` 與靜態 CSS 均為 HTTP 200，頁面含 V434 select
 - 桌面端在遊戲開啟時把已驗證 manifest 建成 path／token 的記憶體索引，媒體 request hot path 只做 Map lookup，不再逐次執行 `stat` 或 SHA-256。單檔不超過 8 MiB 的素材共用最高 192 MiB 記憶體 LRU，並合併同檔並行讀取；超過 8 MiB 的影片／音訊維持串流與 Range 回應，不塞入 LRU。影音 seek／換場取消 Web stream 時會立即 unpipe 並關閉底層檔案串流，不會累積 HDD file handle；讀取長度異常才清除該遊戲索引並排入原有完整性／修復檢查，manifest／receipt／SHA 仍是內容權威。
 - Card／Board 繼續使用分離的非持久 Electron partition，並以 `cache:false` 關閉 Chromium HTTP 磁碟快取；登入 localStorage 仍只活在本次程序。一般關閉再開遊戲不清除同次程序中的音量／顯示設定與 Board 手動存檔，只有登出、被踢或切換素材根目錄才清除；舊視窗遲到的 closed／renderer gone／load failure 也不能清掉後開的新視窗索引。V8 code cache 與 Chromium session／GPU／network cache 改放在玩家已儲存的素材根目錄之下，因此目前選擇 D 槽時會使用 D 槽的 `runtime/code-cache/<gameId>` 與 `runtime/chromium-session-v1`，不再把這些遊戲快取壓到 C 槽。帳號加密狀態仍留在原 userData，不做不安全的密碼遷移。桌面啟動器版本升為 `1.1.1`，`runtime-asset-cache.js` 已列入 ASAR 白名單。
 - 相容邊界：沒有更動卡牌／Board 規則、角色或道具 ID、Socket.IO event 名稱、localStorage key、持久存檔 schema 或 `BOARD_GAME_STATE`。效能診斷初期 C 槽曾為 `0 bytes` 可用且 Chromium 明確回報 GPU／network cache 建立失敗；最後重測已有 32,965,406,720 bytes（約 30.7 GiB）可用。這個空間變化不是本次刪除使用者檔案所造成；程式仍將可安全移動的遊戲快取改放 D 槽，避免將來 C 槽壓力再度影響遊戲。
-- 驗證：`CARD_RUNTIME_PERFORMANCE_QA=PASS`（draw pending／背景麻痺即時處理）、`CARD_RENDER_BATCH_BROWSER_QA=PASS`、`DESKTOP_RUNTIME_ASSET_CACHE_QA=PASS`（影音 cancel closed、repair=0、window guard、harden once）；`desktop_asset_store_qa.js`、`desktop_service_worker_isolation_qa.js`、`desktop_launcher_package_qa.js`、`desktop_game_catalog_qa.js` 均通過。實際安裝 NSIS 到獨立 D 槽目錄後，`desktop_installed_media_smoke.js` 驗證 Card WebP／MP3／MP4 與 Board MP3／MP4 的 HEAD、Range、全檔 SHA 及 `cache=hit`，並確認 Chromium cache 實際位於選定素材根目錄。
-pm start` 後 `start.html`、`game.html`、卡牌靜態 CSS、`board_start.html` 與 `/api/board-runtime` 都回傳 HTTP 200；本機未設定 `DATABASE_URL` 的既有 DB environment warning 符合預期。最終 NSIS 為 `ONE-PIECE-Tabletop-Launcher-1.1.1-x64.exe`，131,819,132 bytes，SHA-256 `BC01662C9073193E9D04958A23EB1D46D266BA38F0281EC8E34F46FD92E257DF`。
+- 驗證：`CARD_RUNTIME_PERFORMANCE_QA=PASS`（draw pending／背景麻痺即時處理）、`CARD_RENDER_BATCH_BROWSER_QA=PASS`、`DESKTOP_RUNTIME_ASSET_CACHE_QA=PASS`（影音 cancel closed、repair=0、window guard、harden once）；`desktop_asset_store_qa.js`、`desktop_service_worker_isolation_qa.js`、`desktop_launcher_package_qa.js`、`desktop_game_catalog_qa.js` 均通過。實際安裝 NSIS 到獨立 D 槽目錄後，`desktop_installed_media_smoke.js` 驗證 Card WebP／MP3／MP4 與 Board MP3／MP4 的 HEAD、Range、全檔 SHA 及 `cache=hit`，並確認 Chromium cache 實際位於選定素材根目錄。`npm start` 後 `start.html`、`game.html`、卡牌靜態 CSS、`board_start.html` 與 `/api/board-runtime` 都回傳 HTTP 200；本機未設定 `DATABASE_URL` 的既有 DB environment warning 符合預期。最終 NSIS 為 `ONE-PIECE-Tabletop-Launcher-1.1.1-x64.exe`，131,819,132 bytes，SHA-256 `BC01662C9073193E9D04958A23EB1D46D266BA38F0281EC8E34F46FD92E257DF`。
 - 修改檔案：`public/game.html`、`public/css/card-tailwind-v1.min.css`、`styles/card-tailwind.input.css`、根 `package.json`／`package-lock.json`、`desktop/main.js`、`desktop/runtime-asset-cache.js`、`desktop/package.json`／`desktop/package-lock.json`、`scripts/card_runtime_performance_qa.js`、`scripts/card_render_batch_browser_qa.js`、`scripts/desktop_runtime_asset_cache_qa.js`、`scripts/desktop_installed_media_smoke.js`、`scripts/desktop_launcher_package_qa.js` 及四份專案文件；未碰使用者的 `r5.PNG`／`r6.PNG` 工作樹內容。
 
 ## 修改紀錄：桌面下載清單 Git 位元組一致性 V432（2026-09-04）
@@ -926,12 +859,10 @@ pm start` 後 `start.html`、`game.html`、卡牌靜態 CSS、`board_start.html`
 
 - 需求：讓 Windows 玩家先下載圖片素材再遊玩，降低正式網站大量角色圖、介面圖首次顯示時的等待；登入、好友、聊天室、房間、雲端存檔與多人同步仍使用正式 Render 服務。
 - 架構：新增獨立 `desktop/` Electron 殼，固定載入 `https://onepiece-card-online.onrender.com/game_launcher_preview.html?desktop=1`。只有同源 `/images/*` 請求可依受控 manifest 改由安裝目錄讀取；找不到檔案、大小不符、SHA-256 不符或 realpath 逸出圖片根目錄時，不攔截原請求並回退正式 HTTP。沒有把 server、資料庫設定、帳密或私人存檔包進安裝檔。
-- 安全：renderer 維持 
-odeIntegration:false`、`contextIsolation:true`、`sandbox:true`，拒絕新視窗、外站導覽與權限要求；本機圖片只經 token 化的安全 custom protocol 提供，不把任意檔案路徑交給頁面。
+- 安全：renderer 維持 `nodeIntegration:false`、`contextIsolation:true`、`sandbox:true`，拒絕新視窗、外站導覽與權限要求；本機圖片只經 token 化的安全 custom protocol 提供，不把任意檔案路徑交給頁面。
 - 素材：`scripts/build_desktop_image_manifest.js` 以 Git `HEAD` 與實體目錄雙重比對，從正式 `public/images` 建立 3,185 筆相對路徑、大小與 SHA-256；總量 1,198,481,706 bytes。Git tree 中 `r5/r6` 各有大小寫不同的兩份檔案，Windows 無法無歧義保存，因此四個 URL 明列於 `excludedCaseCollisions` 並固定走線上。QA 另拒絕其他未提交圖片、大小寫碰撞、symlink、禁入目錄與雜湊不符；`battle_chess`、`incoming`、`private`、備份與非圖片檔不進圖片包。
 - 打包：Electron `44.1.1`、electron-builder `26.15.3` 固定版本；輸出 Windows x64 NSIS 安裝檔 `ONE-PIECE-Tabletop-Desktop-1.0.0-x64.exe`，大小 1,307,344,862 bytes，SHA-256 `A6AB3F425100FA216D5A141DCDB8853BF4F0B4FA5CA043E3FF238AA0134AA992`。Beta 尚未設定正式 app icon 或程式碼簽章，Windows 可能顯示未知發行者警告。
-- 驗證：manifest full QA 為 `PASS files=3185 hashed=3185 excludedCaseCollisions=4`；開發模式、`win-unpacked` 與 NSIS 靜默安裝後三層 smoke 均成功。smoke 逐張重算安裝包內全部 3,185 份雜湊，並確認指定 launcher URL、標題入口、開始按鈕、收藏室與三盒 DOM；安裝後報告 `cacheHits=9`、`remoteFallbacks=0`、`validationFailures=0`、`smokeVerificationFailures=0`，強制探測 `avatars/1.png` byte 數相同且回應 `X-OnePiece-Desktop-Cache: hit`。另以 
-pm start` 在 8799 啟動正式 server，launcher、`/api/board-runtime` 與同一張圖片皆為 HTTP 200；本機未設定 `DATABASE_URL` 的既有警告符合預期。本版只本機化圖片，音樂與影片仍由網站串流。
+- 驗證：manifest full QA 為 `PASS files=3185 hashed=3185 excludedCaseCollisions=4`；開發模式、`win-unpacked` 與 NSIS 靜默安裝後三層 smoke 均成功。smoke 逐張重算安裝包內全部 3,185 份雜湊，並確認指定 launcher URL、標題入口、開始按鈕、收藏室與三盒 DOM；安裝後報告 `cacheHits=9`、`remoteFallbacks=0`、`validationFailures=0`、`smokeVerificationFailures=0`，強制探測 `avatars/1.png` byte 數相同且回應 `X-OnePiece-Desktop-Cache: hit`。另以 `npm start` 在 8799 啟動正式 server，launcher、`/api/board-runtime` 與同一張圖片皆為 HTTP 200；本機未設定 `DATABASE_URL` 的既有警告符合預期。本版只本機化圖片，音樂與影片仍由網站串流。
 - 修改檔案：`.gitignore`、`desktop/main.js`、`desktop/preload.js`、`desktop/offline.html`、`desktop/package.json`、`desktop/package-lock.json`、`desktop/generated/image-manifest.json`、`scripts/build_desktop_image_manifest.js`、`scripts/desktop_image_manifest_qa.js`、`docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`。
 
 ## 修改紀錄：Board 多人斷線重連防回朔與正式目錄整併 V429（2026-09-03）
@@ -941,9 +872,7 @@ pm start` 在 8799 啟動正式 server，launcher、`/api/board-runtime` 與同�
 - 伺服器：`server/index.js` 對 `BOARD_GAME_STATE` 採 compare-and-set，只有 `baseVersion` 等於房間目前版本且宣告版本等於 `current + 1` 才接受，接受後版本固定遞增一；過期寫入回覆 `stale_version`。一般 Board 遊戲中，`userId` 或 `clientId` 相同時，後加入的遊戲 socket 會成為唯一控制者，舊 socket 收到新增的 `BOARD_SOCKET_FENCED` 後離開遊戲房；其後送出的狀態、事件或快照請求一律回覆 `stale_socket`。campaign 重連流程未改。
 - 相容：沒有改名既有 Socket.IO event、角色／道具 id、localStorage key 或持久 `gameState` schema；`pendingState`、`inFlightState`、`joinedOnce` 都只是頁面 runtime。`public/board_game.html` 的正式主程式 query 更新為 `20260903-reconnect-monotonic-v429`。
 - QA：新增 `scripts/board_reconnect_client_qa.js`，重現一名真人＋一名 CPU 在真人結算中斷線、離線完成結算、收到同版舊快照及重連補傳，確認 CPU 停止、最新 round／標記／貝里保留、只送一份 `baseVersion=42`／`version=43`；另注入低版本的 `trade-close` 與 `battle-*` 快照，確認兩者都不能改回合、標記、戰鬥畫面或 LAN 版本。新增 `scripts/board_state_monotonicity_qa.js`，使用真實 Socket.IO 驗證新鮮版本接受、過期版本拒絕且不廣播，以及新 socket 接管後舊 socket 的 state／event／request 全遭拒絕。
-- 回歸：
-ode --check` 通過 `server/index.js`、`public/js/board_game.js` 與兩支新增 QA；`board_reconnect_client_qa.js`、`board_state_monotonicity_qa.js`、`spar_lan_sync_qa.js`、`refresh_resume_qa.js`、`lan_refresh_flow_qa.js` 均為 PASS／`failures=[]`。最後一支以兩個瀏覽器完成建房、加入、換手、刷新、滿 HP 選角與雙視窗戰鬥顯示。
-pm start` 已由唯一正式目錄啟動並監聽 8787；本機未設定 `DATABASE_URL` 的既有帳號資料庫警告不影響 Board 靜態頁與 Socket.IO 測試。
+- 回歸：`node --check` 通過 `server/index.js`、`public/js/board_game.js` 與兩支新增 QA；`board_reconnect_client_qa.js`、`board_state_monotonicity_qa.js`、`spar_lan_sync_qa.js`、`refresh_resume_qa.js`、`lan_refresh_flow_qa.js` 均為 PASS／`failures=[]`。最後一支以兩個瀏覽器完成建房、加入、換手、刷新、滿 HP 選角與雙視窗戰鬥顯示。`npm start` 已由唯一正式目錄啟動並監聽 8787；本機未設定 `DATABASE_URL` 的既有帳號資料庫警告不影響 Board 靜態頁與 Socket.IO 測試。
 - 目錄整理：先逐一確認工作樹狀態、commit 祖先關係與正式 `origin/main` 已包含歷史，再移除三個 C 槽重複 release worktree `2026-04-20-board-release-v389`、`2026-08-31-board-release-v394`、`2026-08-31-board-release-v396`，以及 D 槽暫存 `2026-09-03-board-launcher-release-v429`；本機 branches `codex/board-release-v389`、`codex/board-release-v394`、`codex/board-release-v396`、`codex/board-launcher-release-v428` 一併刪除。C 槽約釋放 5.64 GiB，D 槽約釋放 1.85 GiB，清理完成時 `git worktree list` 只保留正式開發目錄。刪除的是已驗證的重複工作樹／本機分支，檔案本身無資源回收筒備份，但其 commit 歷史仍在 `origin/main`；未碰 `tmp/`、`backups/`、`_codex_backups/`、素材來源或其他未判定為重複的日期資料夾。
 - 修改檔案：`server/index.js`、`public/js/board_game.js`、`public/board_game.html`、`scripts/board_reconnect_client_qa.js`、`scripts/board_state_monotonicity_qa.js`、`scripts/spar_lan_sync_qa.js`、`scripts/lan_refresh_flow_qa.js`、`docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`。
 
@@ -954,8 +883,7 @@ pm start` 已由唯一正式目錄啟動並監聽 8787；本機未設定 `DATABA
 - 後端邊界：release 以 `origin/main` 的正式 `server/index.js` 為底，只加入唯讀 `/api/board-runtime`；未帶入開發中的 `CHESS_*` 房間、邀請或戰鬥事件。`public/battle_chess/`、`incoming/`、`secret_modes/`、私人 save/campaign、未採用素材及西洋棋預覽影片一律排除。
 - 發布內容：更新 V397～V427 的 Board 正式入口、首頁／社交、BGM、青雉首次入獄劇情與正式素材；新增 launcher HTML／CSS／JS、九張實際引用圖片及卡牌／航海錄兩支 Hover 影片。沒有改 `BOARD_GAME_STATE`、既有 id、存檔 schema 或 Board Socket.IO event 名稱。
 - 開發驗證：launcher 專項實跑通過本機 press→auth→gallery、正式帳號假伺服器登入／secret 重驗、1540×660 三盒固定座標、932×430 與 390×844 containment；正式模式確認 Chess `href=null` 且無 Chess video。發布工作只在由 `origin/main` 建立的 `codex/board-launcher-release-v428` worktree 精準 stage，不由 detached 開發目錄直接推送。
-- 發布候選驗證：`DEPLOYMENT_ASSET_MANIFEST_QA=PASS`（3964 檔、1300 個 literal assets、49 個 linked files，無 Chess／incoming／私人存檔）；PostgreSQL campaign/save、BGM continuity、正式首頁／好友／私訊／Board 邀請、108/108 行動素材暖載、固定視角三尺寸、刷新續接，以及青雉單機五情境與 2 真人＋2 CPU 完整快照均通過。
-pm audit --omit=dev` 為 0 high／0 critical，仍有 Express 4 間接 `qs` 的 3 項 moderate，因自動修復會跨到 Express 5，本版不在發布途中做不相干的主版本升級。
+- 發布候選驗證：`DEPLOYMENT_ASSET_MANIFEST_QA=PASS`（3964 檔、1300 個 literal assets、49 個 linked files，無 Chess／incoming／私人存檔）；PostgreSQL campaign/save、BGM continuity、正式首頁／好友／私訊／Board 邀請、108/108 行動素材暖載、固定視角三尺寸、刷新續接，以及青雉單機五情境與 2 真人＋2 CPU 完整快照均通過。`npm audit --omit=dev` 為 0 high／0 critical，仍有 Express 4 間接 `qs` 的 3 項 moderate，因自動修復會跨到 Express 5，本版不在發布途中做不相干的主版本升級。
 
 ## 修改紀錄：三合一桌遊啟動／共用登入入口 V427（2026-09-03）
 
@@ -963,8 +891,7 @@ pm audit --omit=dev` 為 0 high／0 critical，仍有 Express 4 間接 `qs` 的 
 - 實作：`game_launcher_preview.html` 新增獨立全視窗 press、中央 auth 與 boot 失敗重試層；正式環境沿用同源 `AUTH_LOGIN`／`AUTH_REGISTER`／`PROFILE_GET`，驗證成功再送 `PRESENCE_SET` 並開放三個原連結。有效既有 secret 可在點擊後自動驗證；`SESSION_KICK` 會鎖回登入。密碼只存在送出當下的記憶體與表單，送出即清空，並移除舊 `op_last_password` 明文鍵。
 - 本機邊界：只有 loopback 且 `/api/board-runtime` 明確回報 `accountDatabaseEnabled:false` 時可空白登入；本機模式會清掉該 local origin 的失效 secret，建立和 Board 相同規則的穩定測試 user id。runtime 查詢有 8 秒中止與重試，非 loopback／狀態未知一律不開 bypass。
 - 相容：登入前以 `inert`／`aria-hidden` 鎖住收藏室及三個連結；登入後沿用原 `1540×660` 固定畫布、Logo、三個 `300×400` 盒座標、四點透視、160ms Hover 懶載／單盒播放／離開釋放，以及 `start.html`、`board_start.html`、`battle_chess/index.html` 三條 href。根路由仍維持既有卡牌入口，未改任何 Board 規則、存檔、`BOARD_GAME_STATE` 或 Socket.IO event 名稱。
-- 驗證：
-ode --check` 通過 launcher 與 `game_launcher_entry_qa.js`；8787 本機實跑 press→auth→空白登入→gallery，舊 local secret 被隔離，三盒座標仍為 `(180.656,213.813)`／`(619.984,213.813)`／`(1059.328,213.813)` 且皆 `300×400`，Hover 影片可播放並在離開後移除 `src`。932×430、390×844 登入卡皆在視窗內。8798 隔離帳號伺服器實際完成 `AUTH_LOGIN`→`PROFILE_GET`→`PRESENCE_SET`、重整後既有 secret 自動驗證，雙 secret key 與 user id 正確且密碼未落地；所有情境 `pageerror=[]`。
+- 驗證：`node --check` 通過 launcher 與 `game_launcher_entry_qa.js`；8787 本機實跑 press→auth→空白登入→gallery，舊 local secret 被隔離，三盒座標仍為 `(180.656,213.813)`／`(619.984,213.813)`／`(1059.328,213.813)` 且皆 `300×400`，Hover 影片可播放並在離開後移除 `src`。932×430、390×844 登入卡皆在視窗內。8798 隔離帳號伺服器實際完成 `AUTH_LOGIN`→`PROFILE_GET`→`PRESENCE_SET`、重整後既有 secret 自動驗證，雙 secret key 與 user id 正確且密碼未落地；所有情境 `pageerror=[]`。
 
 ## 修改紀錄：恢復共用好友／聊天室外殼 V426（2026-09-02）
 
@@ -985,9 +912,7 @@ ode --check` 通過 launcher 與 `game_launcher_entry_qa.js`；8787 本機實跑
 - 需求：先讓 `127.0.0.1:8787/board_start.html` 可由登入卡直接進入下一個主畫面，正式帳密整合留待部署時接回。
 - 實作：`server/index.js` 新增唯讀 `/api/board-runtime` 能力旗標；只有 loopback 主機且伺服器明確回報未啟用帳號資料庫時，`board_start.js` 才進入 `local-preview`，可空白按「登入」建立本機測試身分。正式站、非 loopback 網址與已啟用資料庫環境仍走既有同源帳密驗證。
 - 安全／相容：本機預覽不保存密碼或 secret、不呼叫正式帳號伺服器，Board 房間仍連本機 Socket；同時修正入口在 top-level await 前讀取尚未初始化常數，造成登入事件未掛載的 TDZ 問題。未新增 `gameState` 欄位或 Socket.IO event。
-- 驗證：
-ode --check public/js/board_start.js` 與 
-ode --check server/index.js` 通過；8787 `/api/board-runtime` 回傳 `accountDatabaseEnabled:false`；Chrome 實跑空白登入由 `auth` 進入 `app`，`data-entry-auth-source=local-preview` 且未寫入 `opSecret`／`op_secret`。
+- 驗證：`node --check public/js/board_start.js` 與 `node --check server/index.js` 通過；8787 `/api/board-runtime` 回傳 `accountDatabaseEnabled:false`；Chrome 實跑空白登入由 `auth` 進入 `app`，`data-entry-auth-source=local-preview` 且未寫入 `opSecret`／`op_secret`。
 
 ## 修改紀錄：新世界航海錄橫向主畫面／中央登入視窗 V422（2026-09-02）
 
@@ -995,8 +920,7 @@ ode --check server/index.js` 通過；8787 `/api/board-runtime` 回傳 `accountD
 - 素材：以內建 ImageGen 參考使用者圖片生成 `public/images/board/backgrounds/board_entry_horizontal_v1.webp`（1672×941、502,494 bytes）；四名角色、骰子、海上航線、船與四邊金框都留在畫面內。正式頁只載入 WebP，原始 1672×941 PNG 保存在 `backgrounds/incoming/`，完整提示詞記錄於 `board_entry_horizontal_v1.prompt.md`。
 - 畫面：press 階段使用橫向圖全螢幕 `cover`，正式 SVG Logo 疊在中央，底部顯示閃爍「點擊繼續」；透明 `#boardEntryStartBtn` 覆蓋完整視窗，所以滑鼠、觸控與原鍵盤入口都能繼續。auth／boot 維持同一背景，只顯示中央登入或讀取卡；移除舊左側封面 DOM，短橫向畫面套用緊湊登入排版。
 - 邊界：只修改 `public/board_start.html` 與新增入口背景素材／提示紀錄；`board_start.js`、`begin()`、secret 驗證、登入／註冊、直接 room/campaign 續接、好友、房間、存檔、Socket.IO event 與 `BOARD_GAME_STATE` 全部不變。入口使用獨立 `--board-entry-bg`，登入後 Board 主頁原 `--board-bg` 不受影響。
-- 驗證：
-pm start` 在 8787 正常提供頁面（本機未設定 `DATABASE_URL` 的既有警告不影響靜態入口）。`board_home_social_qa.js` 於乾淨 8797 QA server 通過 1600×900、1024×768、390×844 的主畫面、既有 secret boot、帳密登入、四入口、好友／私訊／房邀請與雙真人 lobby，結果 `ok:true / errors:[]`。另以 Chrome 932×430 定向量測，主畫面文件為 932×430、整頁按鈕邊界為 `(0,0)-(932,430)`、Logo 完整在視窗內；登入卡為 `(251,53)-(681,377)`、無水平或垂直 overflow、舊封面節點數為 0，背景 URL 正確且 `pageerror=[]`。
+- 驗證：`npm start` 在 8787 正常提供頁面（本機未設定 `DATABASE_URL` 的既有警告不影響靜態入口）。`board_home_social_qa.js` 於乾淨 8797 QA server 通過 1600×900、1024×768、390×844 的主畫面、既有 secret boot、帳密登入、四入口、好友／私訊／房邀請與雙真人 lobby，結果 `ok:true / errors:[]`。另以 Chrome 932×430 定向量測，主畫面文件為 932×430、整頁按鈕邊界為 `(0,0)-(932,430)`、Logo 完整在視窗內；登入卡為 `(251,53)-(681,377)`、無水平或垂直 overflow、舊封面節點數為 0，背景 URL 正確且 `pageerror=[]`。
 
 ## 修改紀錄：青雉 Lv99／劇情內嵌選項與海上背景 V421（2026-09-02）
 
@@ -1005,9 +929,7 @@ pm start` 在 8787 正常提供頁面（本機未設定 `DATABASE_URL` 的既有
 - 畫面：放行／挑戰選項直接嵌入既有全螢幕角色劇情對話框，選擇後在同一介面接續回應；玩家可見文案改用「接受青雉放行／直接挑戰青雉」，不使用「逃跑」字樣。青雉現身到兩種回應全段共用 `public/images/board/story/backgrounds/aokiji_capture/aokiji_capture_bicycle_sea_story_v1.webp`，三張透明立繪維持前景疊圖。
 - 同步／相容：沿用 `pendingAokijiCaptureStory`、每玩家 `impelDown.aokijiFirstCaptureStorySeen`、既有 battle snapshot 與完整 `BOARD_GAME_STATE`；內部選擇值仍為 `fight`／`leave`，不新增 Socket.IO event、localStorage key 或存檔欄位。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/images/board/story/backgrounds/aokiji_capture/aokiji_capture_bicycle_sea_story_v1.webp`、`public/images/board/story/backgrounds/aokiji_capture/aokiji_capture_bicycle_sea_story_v1.prompt.md`、`scripts/aokiji_first_capture_story_qa.js`、`scripts/aokiji_first_capture_lan_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過 `public/js/board_game.js` 與兩支青雉 QA，`git diff --check` 通過本次程式／素材紀錄／文件。
-pm start` 於 8787 啟動正式入口（本機未設定 `DATABASE_URL`，靜態頁與 Socket.IO QA 可正常使用）。`aokiji_first_capture_story_qa.js` 以五個隔離 BrowserContext 實跑桌機 1600×900、短橫向 932×430、罰款不足及挑戰強制勝／敗，結果 `ok:true / failures:[] / errors:[]`；確認兩顆選項留在同一劇情對話框、統一海面冰路背景、立繪完整、無 HUD／overflow，Lv99 青雉為 HP 952／攻 304／防 282／特攻 351／特防 295／速度 206。`aokiji_first_capture_lan_qa.js` 建立 2 真人＋2 CPU 房，確認 pending／release 完整快照一致、觀看端唯讀、控制端刷新可續選、同一背景與 CPU 自動放行，`failures:[] / errors:[]`。
+- 驗證：`node --check` 通過 `public/js/board_game.js` 與兩支青雉 QA，`git diff --check` 通過本次程式／素材紀錄／文件。`npm start` 於 8787 啟動正式入口（本機未設定 `DATABASE_URL`，靜態頁與 Socket.IO QA 可正常使用）。`aokiji_first_capture_story_qa.js` 以五個隔離 BrowserContext 實跑桌機 1600×900、短橫向 932×430、罰款不足及挑戰強制勝／敗，結果 `ok:true / failures:[] / errors:[]`；確認兩顆選項留在同一劇情對話框、統一海面冰路背景、立繪完整、無 HUD／overflow，Lv99 青雉為 HP 952／攻 304／防 282／特攻 351／特防 295／速度 206。`aokiji_first_capture_lan_qa.js` 建立 2 真人＋2 CPU 房，確認 pending／release 完整快照一致、觀看端唯讀、控制端刷新可續選、同一背景與 CPU 自動放行，`failures:[] / errors:[]`。
 
 ## 修改紀錄：青雉首次入獄透明立繪接入 V420（2026-09-02）
 
@@ -1015,8 +937,7 @@ pm start` 於 8787 啟動正式入口（本機未設定 `DATABASE_URL`，靜態�
 - 素材：正式 runtime 檔名為 `source/aokiji_capture_lazy_v3.webp`、`aokiji_capture_mercy_v3.webp`、`aokiji_capture_serious_v3.webp`。慵懶圖為 646×969，放行與認真圖為 1024×1536；三張都是有有效 alpha 的 RGBA WebP。僅改名，不重繪、縮放或覆寫圖片內容。
 - 接入：`AOKIJI_CAPTURE_STORY_PORTRAITS` 改引用 V3 WebP，主頁 query 更新為 `20260902-aokiji-cutout-portraits-v420`；舊的不存在 `*_source_v2.png` runtime 路徑不再使用。劇情規則、台詞、選項、存檔欄位及多人完整快照結構皆不變。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/images/board/story/aokiji_capture/`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過 `public/js/board_game.js` 與青雉單機 QA。以 Codex 內建 Playwright 依賴實跑 `aokiji_first_capture_story_qa.js` 的五個隔離 BrowserContext，桌機 1600×900 與短橫向 932×430 三姿勢皆成功載入且整張立繪位於視窗內，對話／選項無 overflow、劇情中 HP HUD 不可見；全滅放行、罰款不足、挑戰強制勝／敗均完成，結果 `ok:true / failures:[] / errors:[]`。三張正式 URL 均回應 HTTP 200，`git diff --check` 通過。
+- 驗證：`node --check` 通過 `public/js/board_game.js` 與青雉單機 QA。以 Codex 內建 Playwright 依賴實跑 `aokiji_first_capture_story_qa.js` 的五個隔離 BrowserContext，桌機 1600×900 與短橫向 932×430 三姿勢皆成功載入且整張立繪位於視窗內，對話／選項無 overflow、劇情中 HP HUD 不可見；全滅放行、罰款不足、挑戰強制勝／敗均完成，結果 `ok:true / failures:[] / errors:[]`。三張正式 URL 均回應 HTTP 200，`git diff --check` 通過。
 
 ## 修改紀錄：首次入獄青雉攔截劇情 V419（2026-09-02）
 
@@ -1025,9 +946,7 @@ ode --check` 通過 `public/js/board_game.js` 與青雉單機 QA。以 Codex 內
 - 規則：新增每玩家一次的 `impelDown.aokijiFirstCaptureStorySeen` 與全局 `pendingAokijiCaptureStory`。首次攔截立即滿 HP／PP並保存原押送來源；放行後依來源繼續或換回合。挑戰沿用 Marineford 青雉，禁止逃跑／共鬥與所有獎勵；勝利放行，敗北／投降正式入獄。CPU 自動放行，觀看端按鈕唯讀。
 - 同步／恢復：pending、選擇、battle snapshot 均走既有完整 `BOARD_GAME_STATE`，沒有新增 Socket.IO event 或 localStorage key；劇情選擇前、選擇後、挑戰開始／結束都強制推送，刷新可恢復幕次與控制權。既有澤法爆炸 QA 先標記本旗標，避免其專項測試被新的一次性劇情攔截。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/images/board/story/aokiji_capture/`、`scripts/aokiji_first_capture_story_qa.js`、`scripts/aokiji_first_capture_lan_qa.js`、`scripts/postgame_zephyr_end_point_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過主程式與三支相關 QA；`aokiji_first_capture_story_qa.js` 以五個隔離 BrowserContext 實跑全滅放行（1600×900／932×430）、罰款不足、挑戰強制勝／敗，確認台詞、兩顆選項、滿 HP／PP、無 HUD、無 overflow、每張立繪整體都在視窗內，`failures=0 / errors=0`。`aokiji_first_capture_lan_qa.js` 以本機 Socket.IO 建立 2 真人＋2 CPU 房，確認 pending／release 完整快照一致、觀看端不能選、控制端刷新仍可選、CPU 自動放行，`failures=[] / errors=[]`。`refresh_resume_qa.js` 與 `postgame_zephyr_end_point_qa.js` 均 exit 0；`git diff --check` 通過。
-pm start` 已有 8787 正式服務持續監聽，本輪沿用該服務完成 HTTP、Chrome 與 Socket.IO 驗證。
+- 驗證：`node --check` 通過主程式與三支相關 QA；`aokiji_first_capture_story_qa.js` 以五個隔離 BrowserContext 實跑全滅放行（1600×900／932×430）、罰款不足、挑戰強制勝／敗，確認台詞、兩顆選項、滿 HP／PP、無 HUD、無 overflow、每張立繪整體都在視窗內，`failures=0 / errors=0`。`aokiji_first_capture_lan_qa.js` 以本機 Socket.IO 建立 2 真人＋2 CPU 房，確認 pending／release 完整快照一致、觀看端不能選、控制端刷新仍可選、CPU 自動放行，`failures=[] / errors=[]`。`refresh_resume_qa.js` 與 `postgame_zephyr_end_point_qa.js` 均 exit 0；`git diff --check` 通過。`npm start` 已有 8787 正式服務持續監聽，本輪沿用該服務完成 HTTP、Chrome 與 Socket.IO 驗證。
 
 ## 修改紀錄：新世界航海錄主畫面／登入入口 V418（2026-09-02）
 
@@ -1035,8 +954,7 @@ pm start` 已有 8787 正式服務持續監聽，本輪沿用該服務完成 HTT
 - 畫面：新增全螢幕《新世界航海錄》主畫面，只保留既有核准封面、正式 Logo、簡短引導與「開始航海」；第二層為深海金色登入／註冊卡。桌機左右分欄，390px 手機改為封面底圖＋置中表單；登入前 `.page`、好友 dock、聊天室與邀請框都不建立。
 - 帳號：沿用同源 Socket.IO 的 `AUTH_LOGIN`／`AUTH_REGISTER`／`PROFILE_GET`，有效既有 `opSecret` 只需在主畫面按一次便驗證進入，不重選名稱與頭像。驗證成功後才同步 `opSecret`／`op_secret`、`op_user_id`、Board user id、名稱、頭像、稱號與金幣，再初始化原 `BoardShared`、campaign 與房間流程；只記住最後帳號，不新增或保存密碼。
 - 銜接：登入後仍只顯示 V394 的「開始航海／繼續航海／好友與聊天室／玩家資料」四入口；`view=lobby|modeSelect|campaigns|social`、`room`、`campaign` 會先驗證身分再直達。`SESSION_KICK` 改回本頁 `?kicked=1` 登入畫面，不再跳到卡牌頁。
-- 驗證：
-ode --check` 通過；`board_home_social_qa` 以隔離假帳號實際送出 `AUTH_LOGIN`、取得 `PROFILE_GET` 並確認不保存密碼，再於 1600×900、1024×768、390×844 驗證主畫面、登入／註冊、有效 secret boot、四選單、好友接受、即時私訊、房邀請、雙真人同房及直達 lobby，結果 `ok:true / errors:[]`。`board_portable_asset_prefetch_qa` 亦在先通過帳號入口後通過：108/108 暖載、0 解碼預建、96 張地圖圖、26 次導覽快取命中、強制首敗後重試成功，`errors:[] / failures:[]`。
+- 驗證：`node --check` 通過；`board_home_social_qa` 以隔離假帳號實際送出 `AUTH_LOGIN`、取得 `PROFILE_GET` 並確認不保存密碼，再於 1600×900、1024×768、390×844 驗證主畫面、登入／註冊、有效 secret boot、四選單、好友接受、即時私訊、房邀請、雙真人同房及直達 lobby，結果 `ok:true / errors:[]`。`board_portable_asset_prefetch_qa` 亦在先通過帳號入口後通過：108/108 暖載、0 解碼預建、96 張地圖圖、26 次導覽快取命中、強制首敗後重試成功，`errors:[] / failures:[]`。
 - 邊界：不修改帳號 schema、`AUTH_*`／`PROFILE_GET` payload、房號、campaign schema、任何 `BOARD_*` event、`BOARD_GAME_STATE`、遊戲規則或三款遊戲的其他入口。
 - 修改檔案：`public/board_start.html`、`public/js/board_start.js`、`public/js/board_shared.js`、`scripts/board_home_social_qa.js`、`scripts/board_home_social_qa_server.js`、`scripts/board_portable_asset_prefetch_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 
@@ -1062,8 +980,7 @@ ode --check` 通過；`board_home_social_qa` 以隔離假帳號實際送出 `AUT
 - 實作：新增 `1540×660` 的 `.launcher-stage`，把背景、暗角、Logo 與三盒包進同一張固定 7:3 設計畫布。移除會分別重排 Logo、間距、盒寬與手機橫向捲動的寬高 media query；JS 只依目前根視窗的可用寬高取單一比例、整張置中縮放，較寬或較高螢幕以深海黑留邊，不拉伸、不裁切、不改物件相對位置。query 更新為 `20260901-fixed-composition-v18`。
 - 互動：三個原 href、300×400 盒面、Hover 抬盒、160ms 按需影片、單盒播放、離開釋放、四點透視矩陣、觸控／reduced-motion 限制均保留；外層 transform 不改內部 300×400 邏輯座標。
 - 邊界：只修改隔離候選啟動頁及其專用 CSS／JS；未修改卡牌、Board、Chess 的入口、登入、房間、存檔、Socket.IO event、`BOARD_GAME_STATE` 或任何遊戲規則。
-- 驗證：重新載入原 `1540×660 @ DPR 1.25` 分頁後，Logo、盒架、shell 與三盒所有座標／尺寸逐項和修改前完全相同。另在 `1280×720`、`932×430`、`390×844`、`1920×1080` 重新載入，四種尺寸皆完整置中、零頁面 overflow，換算回設計畫布的最大幾何誤差小於 `0.00011px`；三盒 V2 影片逐盒實播成功，離開後 active/source 皆歸零。
-ode --check public/js/game_launcher_preview.js` 通過，頁面、V18 CSS／JS 均 HTTP 200，啟動頁自身 console warning／error 為 0。
+- 驗證：重新載入原 `1540×660 @ DPR 1.25` 分頁後，Logo、盒架、shell 與三盒所有座標／尺寸逐項和修改前完全相同。另在 `1280×720`、`932×430`、`390×844`、`1920×1080` 重新載入，四種尺寸皆完整置中、零頁面 overflow，換算回設計畫布的最大幾何誤差小於 `0.00011px`；三盒 V2 影片逐盒實播成功，離開後 active/source 皆歸零。`node --check public/js/game_launcher_preview.js` 通過，頁面、V18 CSS／JS 均 HTTP 200，啟動頁自身 console warning／error 為 0。
 - 修改檔案：`public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`、`public/js/game_launcher_preview.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 
 ## 修改紀錄：啟動頁三盒完整 Hover 示範影片 V414（2026-09-01）
@@ -1088,8 +1005,7 @@ ode --check public/js/game_launcher_preview.js` 通過，頁面、V18 CSS／JS �
 - 成片：三支皆為 H.264 High、30fps、BT.709、yuv420p、無音軌、faststart。`card_sanji_duel_preview_v2.mp4` 為 8.40 秒／1,554,991 bytes／SHA-256 `EABF37EB247D6EA0E17AF056558344D850C1A29DE8E4D7D628F49FCF02BF8D08`；`board_battle_preview_v2.mp4` 為 8.50 秒／2,781,349 bytes／SHA-256 `8E9511275A0690B442CFDBD250C9169FF62E3988B3D677C36786C5D9A33F1798`；`chess_king_attack_preview_v2.mp4` 為 5.70 秒／1,536,652 bytes／SHA-256 `15F929A037203C058FD2135573D2C048794B20EEFBDCA205D84842CAA47D3DB8`。
 - 接入：`game_launcher_preview.html` 改讀三支 V2，CSS／JS query 更新為 `20260901-hover-clips-v16`。V411 的各盒 `data-preview-quad`、homography `matrix3d`、延遲載入、一次只播一盒、離開釋放、reduced-motion 與觸控停用規則全部沿用。
 - 邊界：只改隔離候選啟動頁的影片來源、版本化成片、可重建剪輯工具與文件；沒有改卡牌、Board、Chess 的正式入口、規則、存檔、同步、音樂、Socket.IO event 或 `BOARD_GAME_STATE`。
-- 驗證：三支母帶均確認為 1920×1080／60fps；三支 V2 均確認為 720×960／30fps／3:4／BT.709 且無音軌。逐段 2fps 接觸圖人工檢查香吉士卡面與 PK、五檔／路基／骰子／命中跳字、KING 題字／飛行／命中均位於直式裁框，未出現黑邊、模糊補邊或人物拉伸。
-ode --check public/js/game_launcher_preview.js` 與 `py -3 -m py_compile scripts/game_launcher_video/render_true_3x4.py` 通過；獨立 `PORT=8830 npm start` 成功監聽，候選頁、V16 CSS、V16 JS 均 HTTP 200，三支 V2 均以 `Range: bytes=0-1023` 回傳 HTTP 206／`video/mp4`。本機未設 `DATABASE_URL` 的提示為既有靜態預覽行為，測試服務完成後已關閉。
+- 驗證：三支母帶均確認為 1920×1080／60fps；三支 V2 均確認為 720×960／30fps／3:4／BT.709 且無音軌。逐段 2fps 接觸圖人工檢查香吉士卡面與 PK、五檔／路基／骰子／命中跳字、KING 題字／飛行／命中均位於直式裁框，未出現黑邊、模糊補邊或人物拉伸。`node --check public/js/game_launcher_preview.js` 與 `py -3 -m py_compile scripts/game_launcher_video/render_true_3x4.py` 通過；獨立 `PORT=8830 npm start` 成功監聽，候選頁、V16 CSS、V16 JS 均 HTTP 200，三支 V2 均以 `Range: bytes=0-1023` 回傳 HTTP 206／`video/mp4`。本機未設 `DATABASE_URL` 的提示為既有靜態預覽行為，測試服務完成後已關閉。
 
 ## 修改紀錄：啟動頁影片四點透視 V411（2026-09-01）
 
@@ -1097,8 +1013,7 @@ ode --check public/js/game_launcher_preview.js` 與 `py -3 -m py_compile scripts
 - 實作：三個 `.game-slot` 新增各自沿用 V406 盒框內緣的四點百分比座標。`game_launcher_preview.js` 依 `.box-front` 實際寬高建立 homography，輸出響應式 `matrix3d` 到 `--preview-warp`，把影片左上、右上、右下、左下真正映射到對應盒面四角；`ResizeObserver` 會在盒面尺寸改變時重算。影片改用 `object-fit:cover`、左上為 transform origin、取消影片本身的 clip-path，反光層仍使用原四點裁切，外框繼續位於最上層遮邊。
 - 穩定性：投影矩陣保存在 `.game-slot` CSS 變數，不掛在會被停止播放流程替換的 `<video>` 節點，因此切換盒子、離開後釋放媒體圖層再重新播放，四點透視都不會遺失。三支 V410 MP4 未重新編碼、改名或覆蓋；query 更新為 `20260901-hover-clips-v15`。
 - 邊界：只調整隔離候選啟動頁的 HTML／CSS／JS 顯示層；三個入口、影片內容、卡牌／Board／Chess 規則、登入、房間、存檔、Socket.IO event 與 `BOARD_GAME_STATE` 均不變。
-- 驗證：
-ode --check public/js/game_launcher_preview.js` 通過。瀏覽器 `1280×720` 逐盒播放確認三支影片內容均隨盒面傾斜、四角受各自外框遮住，切換時仍只有目前盒子的影片有 `currentSrc` 並播放。以 `300×400`、手機盒寬 `278×370.6667`、放大 `900×1200` 三種尺寸逐角反算，三盒最大四角誤差不超過 `2.274e-13 px`。獨立 `PORT=8829 npm start` 成功監聽；候選頁、V15 CSS、V15 JS 均 HTTP 200。本機未設 `DATABASE_URL` 的提示為既有靜態預覽行為，測試服務完成後已關閉。
+- 驗證：`node --check public/js/game_launcher_preview.js` 通過。瀏覽器 `1280×720` 逐盒播放確認三支影片內容均隨盒面傾斜、四角受各自外框遮住，切換時仍只有目前盒子的影片有 `currentSrc` 並播放。以 `300×400`、手機盒寬 `278×370.6667`、放大 `900×1200` 三種尺寸逐角反算，三盒最大四角誤差不超過 `2.274e-13 px`。獨立 `PORT=8829 npm start` 成功監聽；候選頁、V15 CSS、V15 JS 均 HTTP 200。本機未設 `DATABASE_URL` 的提示為既有靜態預覽行為，測試服務完成後已關閉。
 
 ## 修改紀錄：三盒正式玩法 Hover 短片 V410（2026-09-01）
 
@@ -1107,8 +1022,7 @@ ode --check public/js/game_launcher_preview.js` 通過。瀏覽器 `1280×720` �
 - 素材：成片獨立放在 `public/videos/game_launcher/`，不混入三款遊戲原素材目錄。三支皆為 `720×960`、H.264 High、24fps、無音軌、faststart：`card_sanji_duel_preview_v1.mp4` 為 8.00 秒／464,771 bytes／SHA-256 `9F039D43208D99A5205C55F42B3D6B15123E37761AEA38D2EDC88DCD13B4069E`；`board_roll_encounter_preview_v1.mp4` 為 7.58 秒／543,694 bytes／SHA-256 `FB202D36820DC43F9DF7B4D19B283A44E89F73DD30B506D25533C39A3A5FDCA3`；`chess_king_attack_preview_v1.mp4` 為 5.50 秒／374,048 bytes／SHA-256 `9262E8FC3DC33B661F9A674BFA7C71EA9921D217A25CB5BCE2F92CB2FA56902D`。橫向實機畫面置於直式盒面的清楚中央視窗，上下以同幀暗化模糊延伸，不拉伸人物。
 - 播放：`game_launcher_preview.html` 的三個 `.box-front` 各加入一個沒有 `src` 的 muted／playsinline／loop `<video>`；`game_launcher_preview.js` 只在 `(hover:hover) and (pointer:fine)` 且未要求 reduced motion 時，停留 160ms 後才從 `data-src` 載入。一次只播放一盒，真正 `play()` 成功才淡入；離開、失焦、切換分頁或媒體偏好變更會立即停播、歸零並替換成乾淨 video 節點，既釋放硬體影片圖層又保留瀏覽器 HTTP 快取。影片 `pointer-events:none`，整盒原連結仍是唯一點擊區。三款影片分別沿用 V406 的梯形 clip-path，外框、反光和 hover 抬盒仍在影片之上；query 更新為 `20260901-hover-clips-v14`。
 - 邊界：只改隔離候選啟動頁、專用 CSS／JS、三支啟動頁影片與文件；沒有改卡牌牌組／香吉士規則、Board 擲骰／遭遇／`BOARD_GAME_STATE`、Chess KING 規則或三款入口，也沒有新增存檔欄位、localStorage key、Socket.IO event、登入或部署路由。
-- 驗證：
-ode --check public/js/game_launcher_preview.js` 通過；三支影片與 HTML／CSS／JS 皆 HTTP 200、影片支援 byte range。瀏覽器 `1280×720` 實測初始三支 `currentSrc` 全空、滑入後才載入與播放、切換時只有一支播放、離開後 `src`／`currentSrc` 清空且三盒完整復原；修正並複驗「播放過的中盒在另一盒播放時消失」的媒體合成層問題。`390×844` 觸控模擬為 `hover:false`、三支零載入、`scrollWidth=390`；`932×430` Logo bottom `134.48`、盒面 top `171.88`、零重疊且無頁面 overflow。reduced motion 模擬下滑入仍零載入；console warning／error 為 0。
+- 驗證：`node --check public/js/game_launcher_preview.js` 通過；三支影片與 HTML／CSS／JS 皆 HTTP 200、影片支援 byte range。瀏覽器 `1280×720` 實測初始三支 `currentSrc` 全空、滑入後才載入與播放、切換時只有一支播放、離開後 `src`／`currentSrc` 清空且三盒完整復原；修正並複驗「播放過的中盒在另一盒播放時消失」的媒體合成層問題。`390×844` 觸控模擬為 `hover:false`、三支零載入、`scrollWidth=390`；`932×430` Logo bottom `134.48`、盒面 top `171.88`、零重疊且無頁面 overflow。reduced motion 模擬下滑入仍零載入；console warning／error 為 0。
 
 ## 修改紀錄：手繪 TABLETOP SERIES 頂部 Logo V409（2026-09-01）
 
@@ -1134,9 +1048,7 @@ ode --check public/js/game_launcher_preview.js` 通過；三支影片與 HTML／
 - 導演：海上、一般島嶼、冷／熱島、商店、酒館、醫院、研究所、海上事件、一般戰、13 名周目 Boss、洛克斯、高潮、勝利、推進城樓層、頂上戰爭及各段漫畫劇情均有明確首選曲。登島選擇沿用地圖曲；Boss 遭遇視窗直接沿用即將開戰的專屬曲，不先插播一次通用前奏；服務 modal 停留 8 秒、事件停留 5 秒後才換，期間關閉會取消；整段漫畫劇情只建立一個 story scope，不逐幕切歌。
 - 影片：新增可巢狀 audio focus。卡塔庫栗見聞色與頂上戰爭霸王色影片播放時把 BGM 壓至 8%／6%，期間連舊 `force` 也不能換曲；結束、錯誤、逾時或離頁均釋放並平滑恢復。既有五檔與六王銃專屬流程不改。
 - 邊界：只改 Board 音樂 metadata、選曲、播放控制、Board／戰鬥／Marineford 接點、cache query、專項 QA 與文件；沒有新增 `BOARD_GAME_STATE` 欄位、Socket.IO event、角色／道具／地圖 id 或存檔 schema，也沒有碰卡牌與西洋棋遊戲。
-- 驗證：
-ode --check` 通過六份修改／測試 JS；
-ode scripts/board_bgm_continuity_qa.js` 驗證 56／56 音檔、片段／音量、首選路由、14 組周目／洛克斯 Boss 接線、只保留最後解鎖請求、短場景取消、同曲延續、載入失敗回復、cue loop、focus 鎖與靜態接線並 PASS。`PORT=8798 npm start` 成功監聽；正式頁、三支 BGM JS 與 5.36 MiB 冷島 MP3 均 HTTP 200，MP3 支援 byte range。本機未設 `DATABASE_URL` 為既有靜態預覽提示；當次沒有可用瀏覽器控制連線，因此沒有宣稱額外互動式／聽感 QA。
+- 驗證：`node --check` 通過六份修改／測試 JS；`node scripts/board_bgm_continuity_qa.js` 驗證 56／56 音檔、片段／音量、首選路由、14 組周目／洛克斯 Boss 接線、只保留最後解鎖請求、短場景取消、同曲延續、載入失敗回復、cue loop、focus 鎖與靜態接線並 PASS。`PORT=8798 npm start` 成功監聽；正式頁、三支 BGM JS 與 5.36 MiB 冷島 MP3 均 HTTP 200，MP3 支援 byte range。本機未設 `DATABASE_URL` 為既有靜態預覽提示；當次沒有可用瀏覽器控制連線，因此沒有宣稱額外互動式／聽感 QA。
 
 ## 修改紀錄：三款專屬盒彩框／逐框透視 V406（2026-09-01）
 
@@ -1212,8 +1124,7 @@ ode scripts/board_bgm_continuity_qa.js` 驗證 56／56 音檔、片段／音量�
 - 實作：新增隔離頁 `public/game_launcher_preview.html` 與專用樣式 `public/css/game_launcher_preview.css`。每盒以 HTML/CSS 建立正面、上緣、右側盒脊、下方盒厚、桌面接觸陰影、滑過抬起及鍵盤 focus；名稱、說明與入口按鈕保持 HTML，不燒進圖片。卡牌封面使用 `object-fit: contain`，不裁切或覆寫 `public/images/cover.jpg`。
 - 素材：將已展示的 Board／Chess ImageGen 候選各保留一份描述性副本於 `public/images/game_launcher/launcher_board_box_preview_v1.png` 與 `launcher_chess_box_preview_v1.png`；原生成檔不刪除，既有卡牌、Board 與西洋棋正式素材均未覆蓋。
 - 入口邊界：本頁仍是獨立候選網址，不修改 server 根路由 `/`、`public/start.html`、`public/board_start.html`、`BOARD_GAME_STATE`、登入／房間／存檔／同步或部署清單。三盒按鈕只由候選頁分別連到現有卡牌、Board 與本機 Chess 頁；正式線上入口與 EXE 打包方式等待使用者看圖後再決定。
-- 驗證：
-pm start` 已於 8787 啟動靜態頁；`game_launcher_preview.html`、`start.html`、`board_start.html`、`battle_chess/index.html` 均 HTTP 200。瀏覽器實測 1440×900、1024×768、932×430、390×844：三張圖片解碼完成、三盒與名稱皆存在、桌機／平板三欄、手機單欄、無橫向 overflow；932×430 經短視窗壓縮後三盒完整位於 viewport，console warnings／errors 為空。
+- 驗證：`npm start` 已於 8787 啟動靜態頁；`game_launcher_preview.html`、`start.html`、`board_start.html`、`battle_chess/index.html` 均 HTTP 200。瀏覽器實測 1440×900、1024×768、932×430、390×844：三張圖片解碼完成、三盒與名稱皆存在、桌機／平板三欄、手機單欄、無橫向 overflow；932×430 經短視窗壓縮後三盒完整位於 viewport，console warnings／errors 為空。
 
 ## 修改紀錄：行動裝置進場素材預下載 V397（2026-08-31）
 
@@ -1224,9 +1135,7 @@ pm start` 已於 8787 啟動靜態頁；`game_launcher_preview.html`、`start.ht
 - 快取：只有帶 `v=20260831-portable-prefetch-v397` 的 mobile／三張指定框圖，以及檔名已版本化的 manifest，回傳 `Cache-Control: public, max-age=31536000, immutable`；無版本素材、HTML 與 JS 仍為 `max-age=0`，日後換圖不會被舊快取鎖死。
 - 邊界：不改 `BOARD_GAME_STATE`、campaign、存檔、角色／道具／地圖 id、Socket.IO event、回合、戰鬥或原始大圖；桌機略過預下載，其他未列入 manifest 的素材仍按實際需要載入。
 - 檔案：修改 `public/board_start.html`、`public/board_game.html`、`public/js/board_start.js`、`public/js/board_shared.js`、`public/js/board_game.js`、`server/index.js`；新增 `public/images/board/mobile/manifest-v397.json`、`scripts/build_board_mobile_prefetch_manifest.js`、`scripts/board_portable_asset_prefetch_qa.js`，並同步四份專案文件。
-- 驗證：六支 V397 JS 均通過 
-ode --check`，manifest 重建為 108／108 且無缺檔；
-pm start` 於 8800 啟動，兩個正式 HTML 皆 HTTP 200。iPad QA 驗證 108／108 下載、預載 `<img>` 0、108／108 immutable、無版本素材 `max-age=0`、進圖後 96／96 mobile 地圖，24 個實際唯一素材逐一有 resource entry 且 `transferSize=0`；故意讓一張圖第一次回 503 後，進場閘門顯示 107／108，第二次請求恢復為 108／108、`attempts=2` 並自動進圖。既有固定視角 QA 在 1024×768、932×430、390×844 全部通過，三尺寸皆無原尺寸地圖、無提前解碼演出框及 browser error。
+- 驗證：六支 V397 JS 均通過 `node --check`，manifest 重建為 108／108 且無缺檔；`npm start` 於 8800 啟動，兩個正式 HTML 皆 HTTP 200。iPad QA 驗證 108／108 下載、預載 `<img>` 0、108／108 immutable、無版本素材 `max-age=0`、進圖後 96／96 mobile 地圖，24 個實際唯一素材逐一有 resource entry 且 `transferSize=0`；故意讓一張圖第一次回 503 後，進場閘門顯示 107／108，第二次請求恢復為 108／108、`attempts=2` 並自動進圖。既有固定視角 QA 在 1024×768、932×430、390×844 全部通過，三尺寸皆無原尺寸地圖、無提前解碼演出框及 browser error。
 
 ## 修改紀錄：iPad 進入地圖記憶體降載 V396（2026-08-31）
 
@@ -1235,9 +1144,7 @@ pm start` 於 8800 啟動，兩個正式 HTML 皆 HTTP 200。iPad QA 驗證 108�
 - 延遲載入：進化人物框、重要道具揭露框與約克線索牌框的初始 `src` 改成 `data-src`，只有真正播放該演出時才指定 `src`。沒有新增預載全部素材，避免第一次進房額外耗用 Render 流量；瀏覽器仍會依標準 HTTP cache 保存已使用的小圖。
 - 邊界：不改 `BOARD_GAME_STATE`、存檔、角色／道具／地圖 id、Socket.IO event、回合或戰鬥。主頁／共用模組 query 更新為 `20260831-ipad-memory-v396`。
 - 檔案：修改 `public/board_fixed_viewport.html`、`public/board_game.html`、`public/js/board_game.js`、`public/js/board_shared.js`、`scripts/board_fixed_viewport_qa.js`；新增 `public/images/board/mobile/` 105 張顯示衍生檔，並同步四份專案文件。
-- 驗證：
-ode --check` 通過主程式、共用模組與 QA；既有 8787 
-pm start` 頁面回傳 200。固定視角 QA 於 1024×768、932×430、390×844 驗證 1920×900 內頁、query 保留、縮放點擊、96/96 張地圖圖片皆讀 mobile 路徑、三張隱藏大框初始請求為 0、browser errors 為 0；重複元素解碼估算降為約 50.7 MiB、唯一地圖圖片約 14.8 MiB，三尺寸皆 `failures=[]`。桌機 1920×900 未被導向固定外框且維持原圖。
+- 驗證：`node --check` 通過主程式、共用模組與 QA；既有 8787 `npm start` 頁面回傳 200。固定視角 QA 於 1024×768、932×430、390×844 驗證 1920×900 內頁、query 保留、縮放點擊、96/96 張地圖圖片皆讀 mobile 路徑、三張隱藏大框初始請求為 0、browser errors 為 0；重複元素解碼估算降為約 50.7 MiB、唯一地圖圖片約 14.8 MiB，三尺寸皆 `failures=[]`。桌機 1920×900 未被導向固定外框且維持原圖。
 
 ## 修改紀錄：卡牌首頁裝置識別啟動修正 V395（2026-08-31）
 
@@ -1252,8 +1159,7 @@ pm start` 頁面回傳 200。固定視角 QA 於 1024×768、932×430、390×844
 - Board 房邀請：沿用既有 `LOBBY_INVITE_SEND`／`LOBBY_INVITE_RESPOND`，只增加 `mode:"board"` payload；server 會在 `boardRooms` 驗證邀請者確實在等待室、房間未開局、雙方為好友且接收者在線。Board 邀請用 `EMIT.type="board_lobby_invite"`，不會被舊卡牌頁誤當成卡牌房；接受後前往同一個 `board_start.html?view=lobby&room=...` 並由原 `BOARD_JOIN_ROOM` 加入。
 - 遊戲中：正式 `board_game.js` 的 LAN Socket 也交給同一份社交模組，因此好友與私訊在進入地圖後仍保持連線；沒有新增 `gameState`／campaign 欄位、角色／道具／地圖 id，也未改完整 `BOARD_GAME_STATE` 權威。
 - 檔案：修改 `public/board_start.html`、`public/js/board_start.js`、`public/js/board_shared.js`、`public/board_game.html`、`public/js/board_game.js`、`server/index.js`；新增 `scripts/board_home_social_qa_server.js`、`scripts/board_home_social_qa.js`，並同步四份專案文件。開始頁、共用模組與主遊戲 query 統一為 `20260831-home-social-v394`。
-- 驗證：
-ode --check` 通過 server、三支正式 JS 與兩支專項 QA；正式 `PORT=8798 npm start` 啟動，`board_start.html`／`board_game.html` 皆 HTTP 200 且載入 V394。帶 mock PostgreSQL 的真實 Socket.IO 專項測試以 1600×900 與 1024×768 兩個獨立登入身分完成：首頁 4 選單、首頁不展開房間／紀錄、好友確認、正式私訊寫入與另一端 `DM_NEW`、建立 Board 房、好友房邀請、接受後兩端同房 2/4；結果 `ok=true`、`errors=[]`，截圖與 JSON 位於 `.codex/qa/board_home_social_v394/`。
+- 驗證：`node --check` 通過 server、三支正式 JS 與兩支專項 QA；正式 `PORT=8798 npm start` 啟動，`board_start.html`／`board_game.html` 皆 HTTP 200 且載入 V394。帶 mock PostgreSQL 的真實 Socket.IO 專項測試以 1600×900 與 1024×768 兩個獨立登入身分完成：首頁 4 選單、首頁不展開房間／紀錄、好友確認、正式私訊寫入與另一端 `DM_NEW`、建立 Board 房、好友房邀請、接受後兩端同房 2/4；結果 `ok=true`、`errors=[]`，截圖與 JSON 位於 `.codex/qa/board_home_social_v394/`。
 
 ## 修改紀錄：觀看方正式介面補齊 V393（2026-08-31）
 
@@ -1261,9 +1167,7 @@ ode --check` 通過 server、三支正式 JS 與兩支專項 QA；正式 `PORT=8
 - 修正：最終之島重訪改由操作方與觀看方共用 `finalIslandRevisitPanelConfig()` 及既有航海情報框；大熊 Boss 航向羅盤改由雙方共用同一份 13 張 cover-flow markup。操作方每次左右切換線索牌都以輕量事件同步目前 `selectedBossKey`，不額外傳完整快照；觀看端立即切到相同卡片，但所有卡片、箭頭與確認均維持唯讀，只保留「關閉觀看」。
 - 防線：未知 `spectator-modal` kind 不再呼叫藍色 `showBoardUiHud()`，改以既有 `encounter_panel_frame.webp` 航海情報框顯示唯讀摘要。沒有新增 Socket.IO event 名稱、gameState／battleState 欄位、localStorage key、角色／道具／地圖 id；規則結果仍由操作方與完整 `BOARD_GAME_STATE` 決定。
 - 檔案：修改 `public/js/board_game.js`、`public/board_game.html`、新增 `scripts/spectator_modal_ui_qa.js`，並同步四份專案文件。正式主頁 query 更新為 `20260831-spectator-formal-ui-v393`。
-- 驗證：
-ode --check` 通過主程式與專項 QA；靜態比對顯示 15 種正式 emit kind 的未處理數為 0。獨立 8796 
-pm start` 服務建立兩個真人 Socket.IO 房，在 1280×720 與 1024×768 依序由房主送出最終之島重訪、13 卡大熊羅盤與未知 kind；觀看端分別得到正式航海框、13 張唯讀羅盤與正式後備框，三者 `oldBlueHudOpen=false`，兩尺寸均 `errors=[]`、`failures=[]`。首次直接以專案 Node 執行因專案未安裝 Playwright 而停止，未修改正式依賴；改用 Codex 隨附唯讀 Node 套件後完整通過。兩組截圖已目視確認無裁切。
+- 驗證：`node --check` 通過主程式與專項 QA；靜態比對顯示 15 種正式 emit kind 的未處理數為 0。獨立 8796 `npm start` 服務建立兩個真人 Socket.IO 房，在 1280×720 與 1024×768 依序由房主送出最終之島重訪、13 卡大熊羅盤與未知 kind；觀看端分別得到正式航海框、13 張唯讀羅盤與正式後備框，三者 `oldBlueHudOpen=false`，兩尺寸均 `errors=[]`、`failures=[]`。首次直接以專案 Node 執行因專案未安裝 Playwright 而停止，未修改正式依賴；改用 Codex 隨附唯讀 Node 套件後完整通過。兩組截圖已目視確認無裁切。
 
 ## 修改紀錄：觀看端寶箱完整演出同步 V392（2026-08-31）
 
@@ -1271,22 +1175,16 @@ pm start` 服務建立兩個真人 Socket.IO 房，在 1280×720 與 1024×768 �
 - 同步：沿用 V391 的非持久化 `BOARD_GAME_EVENT`，把寶箱流程拆成 `chest-draft`、`chest-shuffle`、`chest-result` 三個 `spectator-modal` kind。事件只帶四個候選的槽位／種類／最終順序、比例 id 與最後抽中的種類／圖片，不新增 Socket.IO event 名稱、不寫入 `BOARD_GAME_STATE` 或存檔。
 - UI：操作方與觀看方共用同一組寶箱 draft／result markup。觀看方依序顯示四個正式寶箱、翻面洗牌、最後抽中的木／銅／銀／金／寶石箱圖片與 `important_item_reveal_panel_frame.webp`；觀看卡片不綁選擇事件並禁止滑鼠操作。一般海域卡結果流程不改。
 - 檔案：修改 `public/js/board_game.js`、`public/board_game.html` 與四份專案文件；主頁 query 更新為 `20260831-lan-spectator-chest-sync-v392`。沒有新增頂層 state、localStorage key、角色／道具／地圖 id。
-- 驗證：
-ode --check public/js/board_game.js`、
-ode --check server/index.js`、`git diff --check` 通過。真實 Socket.IO 房以兩個正式 Board DOM 頁驗證：觀看方 draft 為 4 箱、洗牌完成為 4 張 ready 卡、結果取得實際 `gold` 種類、`chest_gold.webp` 與金色重要道具框，三段皆未建立 `.sea-event-result-ui` 通用藍框，雙頁 page error 為 0。
+- 驗證：`node --check public/js/board_game.js`、`node --check server/index.js`、`git diff --check` 通過。真實 Socket.IO 房以兩個正式 Board DOM 頁驗證：觀看方 draft 為 4 箱、洗牌完成為 4 張 ready 卡、結果取得實際 `gold` 種類、`chest_gold.webp` 與金色重要道具框，三段皆未建立 `.sea-event-result-ui` 通用藍框，雙頁 page error 為 0。
 
 ## 修改紀錄：多人流量瘦身／觀看端舊 UI 清除 V391（2026-08-31）
 
 - 需求：降低四人房的 Render 傳輸量，同時修正觀看方偶爾停留在舊骰子、舊提示或舊海域選擇畫面的問題；不得犧牲刷新後的完整狀態恢復。
 - 壓縮／紀錄：Socket.IO WebSocket 啟用 `perMessageDeflate`（1 KiB 以上、level 6、雙向 no-context-takeover）。`gameState.log` 在載入、追加與產生存檔前都只保留最新 500 筆；舊存檔會先把依歷史紀錄判斷的外觀獎勵轉成既有永久玩家狀態，再裁切。原本以紀錄長度作亂數鹽的流程改取最近紀錄雜湊，避免到 500 筆後固定重複。
 - 同步分層：`BOARD_GAME_STATE` 仍是玩家、地圖、戰鬥與刷新恢復的唯一完整權威快照。新增不快取、不寫存檔的 `BOARD_GAME_EVENT`，只傳短暫 UI 與逐格船位；移動每格傳輕量位置，最多每 4 格補一份完整檢查點，抵達、事件、戰鬥與其他重要狀態仍送完整快照。server 限制事件 64 KiB，並沿用目前行動者／戰鬥／切磋／交易控制權驗證。
-- 舊 UI：完整存檔的 `boardUiEvent` 固定為 
-ull`；短暫事件帶 `createdAt`／`expiresAt` 與 server 房間序號，觀看端拒絕過期或倒序事件，到期會清除 HUD、骰子與屬於該事件的觀看彈窗。交棒提示仍會延後套用下一份完整快照，維持原動畫順序。
+- 舊 UI：完整存檔的 `boardUiEvent` 固定為 `null`；短暫事件帶 `createdAt`／`expiresAt` 與 server 房間序號，觀看端拒絕過期或倒序事件，到期會清除 HUD、骰子與屬於該事件的觀看彈窗。交棒提示仍會延後套用下一份完整快照，維持原動畫順序。
 - 檔案：修改 `server/index.js`、`public/js/board_game.js`、`public/board_game.html`，並同步四份專案文件；主頁 query 為 `20260831-lan-event-compression-v391`。沒有新增頂層 `gameState` 欄位、localStorage key，也沒有改角色／道具／Boss／地圖 id。
-- 驗證：
-ode --check server/index.js`、
-ode --check public/js/board_game.js`、`git diff --check` 通過；
-pm start` 於 `127.0.0.1:8787` 啟動且主頁 HTTP 200。真實 WebSocket 雙端驗證壓縮協商、完整快照、輕量事件與非當前玩家拒絕；正式頁 DOM 驗證觀看船位會動但權威位置不變、短暫 HUD 到期清除、過期快照事件不重播且 page error 為 0。四連線房收到 3／3 fan-out，刷新請求取回相同完整版本。750 筆測試紀錄保存後為 500 筆且 `boardUiEvent=null`；現有 `B1007` 樣本由 1,887,341 bytes／gzip 232,420 bytes 降為 833,831／118,504，`CURRENT` 樣本由 4,879,566／169,088 降為 640,255／75,874（只在記憶體模擬，不覆寫玩家存檔）。
+- 驗證：`node --check server/index.js`、`node --check public/js/board_game.js`、`git diff --check` 通過；`npm start` 於 `127.0.0.1:8787` 啟動且主頁 HTTP 200。真實 WebSocket 雙端驗證壓縮協商、完整快照、輕量事件與非當前玩家拒絕；正式頁 DOM 驗證觀看船位會動但權威位置不變、短暫 HUD 到期清除、過期快照事件不重播且 page error 為 0。四連線房收到 3／3 fan-out，刷新請求取回相同完整版本。750 筆測試紀錄保存後為 500 筆且 `boardUiEvent=null`；現有 `B1007` 樣本由 1,887,341 bytes／gzip 232,420 bytes 降為 833,831／118,504，`CURRENT` 樣本由 4,879,566／169,088 降為 640,255／75,874（只在記憶體模擬，不覆寫玩家存檔）。
 
 ## 修改紀錄：線上發布隔離與 Board 雲端持久化 V390（2026-08-31）
 
@@ -1294,12 +1192,8 @@ pm start` 於 `127.0.0.1:8787` 啟動且主頁 HTTP 200。真實 WebSocket 雙�
 - 發布基底：正式部署鎖定 GitHub `az12sx45/onepiece-card-online` 的遠端 `main`（盤點時為 `885b0e7`），另建 `codex/board-release-v389` worktree／分支作發布組裝，不在目前 detached、含大量未追蹤檔案的工作區直接提交。
 - 持久化：Render 有 `DATABASE_URL` 時，`board_saves` 與 `board_campaigns` 使用新增的 PostgreSQL JSONB 表與時間索引，寫入採 upsert；沒有資料庫的本機測試仍沿用 `server/data/board_saves`、`server/data/board_campaigns` JSON，既有 API、Socket.IO event 與 `BOARD_GAME_STATE` schema 不改。
 - 發布排除：`.gitignore` 排除西洋棋 junction／圖示、所有 Board 素材 `incoming` 來源稿、本機 QA 輸出，以及本機玩家 save／campaign JSON；正式發布只整理執行頁、執行 JS、正式素材與伺服器程式。平板固定比例頁、切磋秘密選角頁與約克正式謎題頁雖保留歷史 `demo` 檔名，實際由正式流程載入，已列為發布必備檔。
-- 依賴安全：發布 worktree 移除遠端曾誤追蹤的 
-ode_modules`，以 lockfile 乾淨 
-pm ci`；
-pm audit fix --package-lock-only` 將既有 semver 範圍內套件鎖到 Express 4.22.2、Socket.IO 4.8.1、Engine.IO 6.6.9、ws 8.21.3 與 qs 6.15.3，production／全依賴 audit 均為 0 vulnerabilities，不執行跨 major 自動升級。
-- 發布前驗證：103 個正式／QA JavaScript 全部通過 
-ode --check`；無 `DATABASE_URL` 的檔案模式完成 PUT／GET／跨房號 fallback／DELETE；mock PostgreSQL 建表、upsert、讀取、最新備援與刪除輸出 `BOARD_PERSISTENCE_DB_QA=PASS`。素材清單共 3,836 檔、1,281 條直接素材引用與 37 條正式頁／script／stylesheet 引用全數存在，且不含西洋棋、`incoming`、私人 JSON 或超過 100 MiB 的單檔。另完成 2 真人＋2 CPU 一周目 5 Boss／二周目 15 Boss 長跑（29 張截圖、0 failure）、三裝置 LAN、切磋正式／LAN、戰鬥刷新五情境、Tot Musica 雙世界、13 Boss UI／素材、武器庫 94 件／4,371 組、卡塔庫栗與桌機／平板／手機固定視窗回歸；production npm audit 為 0 vulnerabilities。實際 GitHub 上傳、Render 建置與線上 smoke test 完成後再由部署回報保存結果。
+- 依賴安全：發布 worktree 移除遠端曾誤追蹤的 `node_modules`，以 lockfile 乾淨 `npm ci`；`npm audit fix --package-lock-only` 將既有 semver 範圍內套件鎖到 Express 4.22.2、Socket.IO 4.8.1、Engine.IO 6.6.9、ws 8.21.3 與 qs 6.15.3，production／全依賴 audit 均為 0 vulnerabilities，不執行跨 major 自動升級。
+- 發布前驗證：103 個正式／QA JavaScript 全部通過 `node --check`；無 `DATABASE_URL` 的檔案模式完成 PUT／GET／跨房號 fallback／DELETE；mock PostgreSQL 建表、upsert、讀取、最新備援與刪除輸出 `BOARD_PERSISTENCE_DB_QA=PASS`。素材清單共 3,836 檔、1,281 條直接素材引用與 37 條正式頁／script／stylesheet 引用全數存在，且不含西洋棋、`incoming`、私人 JSON 或超過 100 MiB 的單檔。另完成 2 真人＋2 CPU 一周目 5 Boss／二周目 15 Boss 長跑（29 張截圖、0 failure）、三裝置 LAN、切磋正式／LAN、戰鬥刷新五情境、Tot Musica 雙世界、13 Boss UI／素材、武器庫 94 件／4,371 組、卡塔庫栗與桌機／平板／手機固定視窗回歸；production npm audit 為 0 vulnerabilities。實際 GitHub 上傳、Render 建置與線上 smoke test 完成後再由部署回報保存結果。
 
 ## 修改紀錄：背景骰子融合與發布範圍修正 V389（2026-08-31）
 
@@ -1316,8 +1210,7 @@ ode --check`；無 `DATABASE_URL` 的檔案模式完成 PUT／GET／跨房號 fa
 - 顯示／互動：兩個入口由登入成功後才建立的 `MainMenu` 透過 React portal 放入背景層，因此登入前 DOM 數量仍為 0。兩者無文字、無按鈕底框，預設低亮度並帶輕微漂移；滑鼠、鍵盤聚焦或觸碰時才加亮。骰子進入 `board_start.html?from=secret-route` 並保留 V387 帳號交接，棋子進入 `battle_chess/index.html`。
 - 素材隔離：骰子沿用 Board 的正式 `odd_dice.webp`；新增透明 `public/images/secret_modes/battle_chess_piece.svg`，以西洋棋離線版既有 favicon 的皇冠棋子語彙重畫為橘金背景用的小圖標。線上測試以 `public/battle_chess` junction 指向原本西洋棋離線版，沒有複製、改名或混入其正式素材；`.gitignore` 排除該測試 junction。
 - 檔案：修改 `public/start.html`、`.gitignore`，新增 `public/images/secret_modes/battle_chess_piece.svg`，並同步三份專案文件；西洋棋原專案檔案未修改。
-- 驗證：秘密入口數量／portal／登入階段／兩目標路徑／16:9 cover／4:3 安全裁切與舊卡片圖標移除的靜態檢查全數通過，
-ode --check public/js/board_shared.js`、`git diff --check` 通過。線上測試站的骰子、皇冠棋子 SVG、西洋棋首頁及其主 JS 均回傳 200；實際瀏覽器在 1265×720 與 1024×768 載入卡牌首頁無 console error、無橫向 overflow，登入前入口數為 0。4:3 的虛擬背景左右各裁約 178px 後，兩入口以可視邊緣安全公式保留在畫面內。登入後位置與點擊交由使用者帳號實際查看，測試未代填或讀取帳密。
+- 驗證：秘密入口數量／portal／登入階段／兩目標路徑／16:9 cover／4:3 安全裁切與舊卡片圖標移除的靜態檢查全數通過，`node --check public/js/board_shared.js`、`git diff --check` 通過。線上測試站的骰子、皇冠棋子 SVG、西洋棋首頁及其主 JS 均回傳 200；實際瀏覽器在 1265×720 與 1024×768 載入卡牌首頁無 console error、無橫向 overflow，登入前入口數為 0。4:3 的虛擬背景左右各裁約 178px 後，兩入口以可視邊緣安全公式保留在畫面內。登入後位置與點擊交由使用者帳號實際查看，測試未代填或讀取帳密。
 
 ## 修改紀錄：卡牌登入後秘密航線入口 V387（2026-08-31）
 
@@ -1326,8 +1219,7 @@ ode --check public/js/board_shared.js`、`git diff --check` 通過。線上測�
 - 帳號交接：點擊時把 `PROFILE_GET` 的 `user_id`、玩家名稱、頭像、已裝備稱號、金幣與既有 `opSecret` 寫入 Board 已使用的本機帳號鍵，再進入 `board_start.html?from=secret-route`。`board_shared.js` 仍以 `op_user_id` 作正式身分，並補讀 Board 專用稱號／金幣鍵；沒有改角色、存檔 schema 或 Socket.IO event。
 - 上線修復：本機卡牌頁原先改為抓取不固定版本的 React／Babel，實際 Chrome 會在新版 Babel 轉換舊 JSX 時停止啟動；改回正式站已驗證的 React 18.3.1／Babel 7.24.7 固定網址，並補回非 React 社交程式會使用的 `window.getDeviceId`。這只修復啟動依賴，不改卡牌規則。
 - 檔案：修改 `public/start.html`、`public/js/board_shared.js`，並同步三份專案文件。
-- 驗證：
-ode --check public/js/board_shared.js`、秘密入口／帳號鍵／目標路徑靜態檢查與 `git diff --check` 通過。Cloudflare 線上測試網址的 `/`、`board_start.html`、`board_shared.js`、圖標素材及 Socket.IO polling handshake 均回傳 200；實際 Chrome 可正常顯示「按任意鍵開始」與登入頁，登入前 `.board-secret-entry` 為 0，頁面無本次程式錯誤。登入後畫面保留給使用者以自己的帳號實際確認，未由測試程式代填帳密。
+- 驗證：`node --check public/js/board_shared.js`、秘密入口／帳號鍵／目標路徑靜態檢查與 `git diff --check` 通過。Cloudflare 線上測試網址的 `/`、`board_start.html`、`board_shared.js`、圖標素材及 Socket.IO polling handshake 均回傳 200；實際 Chrome 可正常顯示「按任意鍵開始」與登入頁，登入前 `.board-secret-entry` 為 0，頁面無本次程式錯誤。登入後畫面保留給使用者以自己的帳號實際確認，未由測試程式代填帳密。
 
 ## 修改紀錄：帳號綁定開始頁主選單 V386（2026-08-31）
 
@@ -1336,8 +1228,7 @@ ode --check public/js/board_shared.js`、秘密入口／帳號鍵／目標路徑
 - 紀錄：`我的航海紀錄` 從第二層房間選擇頁移到首頁。server 仍只回傳目前 user id 所屬 campaign；每張卡新增此帳號的保存時間、輪數、位置、最多六名船員摘要與目前狀態，個人按鈕改名「繼續個人航海」。建立／加入新房仍走原本第二層頁面，沒有改 Socket.IO event、campaign schema 或既有 id。
 - 排版：首頁 hero 縮短以提早露出選單與紀錄；手機選單改單欄，玩家卡與紀錄維持 12px 安全邊距，並調整 hero 高度避開右上好友面板。開始頁 query 更新為 `20260831-account-menu-v386`。
 - 檔案：修改 `public/board_start.html`、`public/js/board_start.js`，並同步四份專案文件。
-- 驗證：
-ode --check public/js/board_start.js` 與 `git diff --check` 通過。正式 8787 實際開啟時首頁只顯示帳號卡、兩個主選單與我的航海紀錄；本機測試預設頭像按鈕數為 0，開啟玩家資料後才建立 50 個。建立／加入按鈕仍進入原建房／房號加入頁。桌機實際截圖正常；390×844 檢查文件 `scrollWidth === clientWidth`，選單與紀錄均在頁面內，好友面板不再遮住標題，console error 為 0。
+- 驗證：`node --check public/js/board_start.js` 與 `git diff --check` 通過。正式 8787 實際開啟時首頁只顯示帳號卡、兩個主選單與我的航海紀錄；本機測試預設頭像按鈕數為 0，開啟玩家資料後才建立 50 個。建立／加入按鈕仍進入原建房／房號加入頁。桌機實際截圖正常；390×844 檢查文件 `scrollWidth === clientWidth`，選單與紀錄均在頁面內，好友面板不再遮住標題，console error 為 0。
 
 ## 修改紀錄：個人分流直接讀取所選紀錄 V385（2026-08-31）
 
@@ -1345,9 +1236,7 @@ ode --check public/js/board_start.js` 與 `git diff --check` 通過。正式 878
 - 修正：`BOARD_CAMPAIGN_OPEN` 的個人房連線會標記為一次性換頁席位；只有相同 user id、相同 client id 的新遊戲頁可接手，接手後標記立即消失。正常遊戲中的第二條連線與集合局重複登入仍會拒絕，不放寬中途加入規則。
 - 讀檔保護：帶有 `campaign` query 的遊戲頁在收到 server 快照前不再渲染／播出新航海設定，也禁止以本機空白狀態 seed 房間；畫面改顯示「正在讀取個人航海紀錄」。加入或讀檔失敗時只顯示返回開始頁，不建立新局，避免覆蓋所選分流。
 - 檔案：修改 `server/index.js`、`public/js/board_game.js`、`public/board_game.html`、`public/board_campaign_2p2cpu_qa.html`，並同步四份專案文件。主頁 query 更新為 `20260831-campaign-direct-load-v385`。
-- 驗證：`server/index.js`、`public/js/board_game.js` 與 QA 內嵌 JS 均通過 
-ode --check`。全新 
-pm start` 於 `127.0.0.1:8788` 執行 4／4 輪 2 真人＋2 CPU 協定 QA；每名玩家皆以開始頁 socket 建立個人房，再由另一條相同裝置 socket 接手，兩份快照均直接保持 `phase: turn`，代理 CPU 捨棄、個人紀錄、集合合併、重複登入阻擋與刷新續接皆通過。正式 8787 換成新版後再跑 4／4 輪同測試，console error／warn 為 0；另以不存在的 campaign 實測失敗頁只顯示讀檔保護訊息與返回按鈕，沒有「開始出航」。兩批共 8 份 `QA玩家*` campaign 均在驗證成員後精確清除，正式 `伊多` 紀錄保持唯一一份。
+- 驗證：`server/index.js`、`public/js/board_game.js` 與 QA 內嵌 JS 均通過 `node --check`。全新 `npm start` 於 `127.0.0.1:8788` 執行 4／4 輪 2 真人＋2 CPU 協定 QA；每名玩家皆以開始頁 socket 建立個人房，再由另一條相同裝置 socket 接手，兩份快照均直接保持 `phase: turn`，代理 CPU 捨棄、個人紀錄、集合合併、重複登入阻擋與刷新續接皆通過。正式 8787 換成新版後再跑 4／4 輪同測試，console error／warn 為 0；另以不存在的 campaign 實測失敗頁只顯示讀檔保護訊息與返回按鈕，沒有「開始出航」。兩批共 8 份 `QA玩家*` campaign 均在驗證成員後精確清除，正式 `伊多` 紀錄保持唯一一份。
 
 ## 修改紀錄：二周目共有航海紀錄／個人分流重新集合 V384（2026-08-30）
 
@@ -1357,9 +1246,7 @@ pm start` 於 `127.0.0.1:8788` 執行 4／4 輪 2 真人＋2 CPU 協定 QA；每
 - Windows 安全寫入：同一 campaign 的寫入以 server promise queue 串行化；若 Windows／OneDrive／防毒暫鎖既有 JSON 而使 rename 回報 `EPERM`／`EACCES`／`EEXIST`，改用同一 queue 內的覆寫備援並清除暫存檔，避免兩名玩家同時存檔偶發失敗。
 - UI：開始頁桌機、平板與手機沿用海賊桌遊風格；窄版切換 view 時會回到頁首，並在好友列下方保留安全間距，避免遮住共有紀錄標題與按鈕。主頁 JS query 為 `20260830-shared-campaign-v384`；開始頁共用／頁面 query 為 `20260830-shared-campaign-v4`／`v6`。
 - 檔案：修改 `server/index.js`、`public/js/board_shared.js`、`public/js/board_start.js`、`public/js/board_game.js`、`public/board_start.html`、`public/board_game.html`；新增可重跑的 `public/board_campaign_2p2cpu_qa.html`，並同步四份專案文件。
-- 驗證：四份正式 JS 均通過 
-ode --check`，`git diff --check` 通過；全新 
-pm start` 於 `127.0.0.1:8787` 啟動（本機未設 `DATABASE_URL`，不影響 Board／Socket.IO）。QA 首批 4／4 通過後，第二批抓到一次 Windows `rename EPERM`；加入安全覆寫後重啟，再連續執行兩批共 8／8 輪通過。每輪均建立 2 真人＋2 原生 CPU，驗證兩個同時個人房、雙方並行存檔、代理進度捨棄、各自位置／船員帶回、發起者回合與原生 CPU 帶入、共享解鎖合併、固定名單、非成員／重複中途加入阻擋及 30 秒內續接。開始頁另以預設桌機、768×1024、390×844 檢查，手機版好友列與共有紀錄的實際 bounding rect 已無重疊。QA 產生的 14 份測試 campaign（含失敗暫存）確認成員皆為 `QA玩家*` 後已清除，正式目錄目前沒有殘留測試紀錄。
+- 驗證：四份正式 JS 均通過 `node --check`，`git diff --check` 通過；全新 `npm start` 於 `127.0.0.1:8787` 啟動（本機未設 `DATABASE_URL`，不影響 Board／Socket.IO）。QA 首批 4／4 通過後，第二批抓到一次 Windows `rename EPERM`；加入安全覆寫後重啟，再連續執行兩批共 8／8 輪通過。每輪均建立 2 真人＋2 原生 CPU，驗證兩個同時個人房、雙方並行存檔、代理進度捨棄、各自位置／船員帶回、發起者回合與原生 CPU 帶入、共享解鎖合併、固定名單、非成員／重複中途加入阻擋及 30 秒內續接。開始頁另以預設桌機、768×1024、390×844 檢查，手機版好友列與共有紀錄的實際 bounding rect 已無重疊。QA 產生的 14 份測試 campaign（含失敗暫存）確認成員皆為 `QA玩家*` 後已清除，正式目錄目前沒有殘留測試紀錄。
 
 ## 修改紀錄：圖鑑出沒區域簡化標示 V383（2026-08-29）
 
@@ -1367,9 +1254,7 @@ pm start` 於 `127.0.0.1:8787` 啟動（本機未設 `DATABASE_URL`，不影響 
 - 顯示規則：單側存在時以該側吸收航線本體，例如 A航線＋A東顯示為「A東」、F西＋F航線顯示為「F西」；西、東同時存在時不論是否另有航線本體，一律合併為「F航線區域」。只有航線本體時仍顯示「F航線」，南北四皇航線與二周目限定前綴不變。
 - 邊界／快取：只壓縮 `spawnRegionLabel` 的圖鑑文字，`spawnRegionIds`、正式 21 區配置、島嶼／海格抽選、等級追趕、存檔與多人同步均未改。主頁 JS query 更新為 `20260829-codex-region-labels-v383`。
 - 檔案：修改 `public/js/board_game.js`、`public/board_game.html`、`scripts/codex_encounter_unlock_qa.js`，並同步更新四份專案文件。
-- 驗證：兩份 JS 通過 
-ode --check`；全新 
-pm start` 服務於 `127.0.0.1:8793`。桌機／平板圖鑑 QA 確認巴其為「A東／B西」、摩利亞的 F西＋F東合併為「F航線區域」、二周目三名限定角色標示不變、無 overflow；雙真人 Socket.IO 房 `B9727` 同步通過，最終 `ok=true`、`errors=[]`、`failures=[]`。報告與截圖位於 `.codex/qa/codex_region_labels_v383/`。
+- 驗證：兩份 JS 通過 `node --check`；全新 `npm start` 服務於 `127.0.0.1:8793`。桌機／平板圖鑑 QA 確認巴其為「A東／B西」、摩利亞的 F西＋F東合併為「F航線區域」、二周目三名限定角色標示不變、無 overflow；雙真人 Socket.IO 房 `B9727` 同步通過，最終 `ok=true`、`errors=[]`、`failures=[]`。報告與截圖位於 `.codex/qa/codex_region_labels_v383/`。
 
 ## 修改紀錄：圖鑑顯示正式出沒區域 V382（2026-08-29）
 
@@ -1377,9 +1262,7 @@ pm start` 服務於 `127.0.0.1:8793`。桌機／平板圖鑑 QA 確認巴其為�
 - 實作：`lineageCodexCatalog()` 現在以角色的正式 enemy key 反查 `BoardEnemySpawnRegions.assignments`，依設計器相同順序產生 `spawnRegionIds` 與 `spawnRegionLabel`。一般角色列出所有實際候選區；伊姆、麒麟格姆、索瑪茲分別顯示「二周目限定：北四皇航線／G西／南四皇航線」。沒有區域配置的競技場或固定劇情角色仍回退原本地點文字。
 - UI／相容：圖鑑左側角色列改顯示區域摘要，詳情右下標題改為「出沒區域」並保留最後遇見位置；未遇見角色仍維持 `????`。沒有新增存檔欄位、localStorage key、Socket.IO event 或改動生成規則，主頁 JS query 更新為 `20260829-codex-spawn-regions-v382`。
 - 檔案：修改 `public/js/board_game.js`、`public/board_game.html`、`scripts/codex_encounter_unlock_qa.js`、`scripts/regional_enemy_spawn_qa.js`，並同步更新四份專案文件。區域 QA 的多人等待條件改成收到相同島嶼／enemy key／等級／區域／周目標記才繼續，避免只看版本號時過早取樣客端初始隨機敵人。
-- 驗證：三份 JS 均通過 
-ode --check`；全新 
-pm start` 服務於 `127.0.0.1:8792`。圖鑑專項在 1600×900 與 1024×768 實際打開圖鑑，確認巴其為「A航線／A東／B西」、三名二周目限定角色位置正確、角色列與詳情均顯示正式區域、無 overflow；雙真人 Socket.IO 房 `B2347` 的遇見解鎖完整快照同步亦通過。結果 `ok=true`、`errors=[]`、`failures=[]`，報告與截圖位於 `.codex/qa/codex_spawn_regions_v382/`。另跑完整區域生成／最低等級／主線隔離回歸，雙真人房 `B9840` 同步通過，報告位於 `.codex/qa/regional_enemy_spawns_v382_regression/`。
+- 驗證：三份 JS 均通過 `node --check`；全新 `npm start` 服務於 `127.0.0.1:8792`。圖鑑專項在 1600×900 與 1024×768 實際打開圖鑑，確認巴其為「A航線／A東／B西」、三名二周目限定角色位置正確、角色列與詳情均顯示正式區域、無 overflow；雙真人 Socket.IO 房 `B2347` 的遇見解鎖完整快照同步亦通過。結果 `ok=true`、`errors=[]`、`failures=[]`，報告與截圖位於 `.codex/qa/codex_spawn_regions_v382/`。另跑完整區域生成／最低等級／主線隔離回歸，雙真人房 `B9840` 同步通過，報告位於 `.codex/qa/regional_enemy_spawns_v382_regression/`。
 
 ## 修改紀錄：航線限定敵人生成／最低等級追趕 V381（2026-08-29）
 
@@ -1389,26 +1272,21 @@ pm start` 服務於 `127.0.0.1:8792`。圖鑑專項在 1600×900 與 1024×768 �
 - 等級：`regionalEncounterMinimumLevel()` 取整船隊最高角色等級－5，限制在 Lv.1～99。一般敵人島在新的正式 `startBattle()` 入口才往上補並保留當前 HP 比例；海格敵人在產生本次遭遇時套用同一下限。高於下限的敵人不降等，固定 Boss、四皇、副本、二周目 13 Boss、切磋與同一筆 `pendingBattle` 續戰都不受影響。
 - 同步／相容：沒有新增頂層 `gameState` 欄位、localStorage key 或 Socket.IO event；區域、預設版本、周目模式與最低等級標記只存在既有 `enemyProfile`／battle snapshot，繼續由完整 `BOARD_GAME_STATE` 廣播。主頁 query 為 `20260829-regional-enemy-spawns-v381`，battle iframe／battle JS 分別為 `v123`／`v359`。
 - 檔案：新增 `public/js/board_enemy_spawn_regions.js`、`scripts/regional_enemy_spawn_qa.js`；修改兩個正式戰鬥 HTML、`public/js/board_game.js`、`public/js/board_battle.js`、設計器 HTML／JS，並同步四份專案文件。
-- 驗證：四支正式 JS 與 QA 均通過 
-ode --check`，並另開全新 
-pm start` 服務於 `127.0.0.1:8791` 驗證正式頁。Chrome 專項 QA 驗證 21 區／30 名共用表、A～G／橫縱／南北／顛倒山映射、全部現役敵人島均只取區內敵人、一／二周目三名限定敵人、伊姆／神之騎士主線隔離、海格 Lv.55 下限，以及真正呼叫 `startBattle()` 時 Lv.7→Lv.55；兩個獨立真人瀏覽器建立 Socket.IO 房 `B8547`，房主把 Lv.10 敵人依 Lv.80 船隊提升到 Lv.75 後，客端收到相同 key、等級、區域與周目標記。最終 `ok=true`、`failures=[]`、`browserErrors=[]`，設計器 1440px 無 overflow；報告與截圖位於 `.codex/qa/regional_enemy_spawns_v381_fresh/`。另跑 `scripts/codex_encounter_unlock_qa.js`，桌機／平板遇見解鎖及雙真人房 `B8749` 完整快照同步均通過。
+- 驗證：四支正式 JS 與 QA 均通過 `node --check`，並另開全新 `npm start` 服務於 `127.0.0.1:8791` 驗證正式頁。Chrome 專項 QA 驗證 21 區／30 名共用表、A～G／橫縱／南北／顛倒山映射、全部現役敵人島均只取區內敵人、一／二周目三名限定敵人、伊姆／神之騎士主線隔離、海格 Lv.55 下限，以及真正呼叫 `startBattle()` 時 Lv.7→Lv.55；兩個獨立真人瀏覽器建立 Socket.IO 房 `B8547`，房主把 Lv.10 敵人依 Lv.80 船隊提升到 Lv.75 後，客端收到相同 key、等級、區域與周目標記。最終 `ok=true`、`failures=[]`、`browserErrors=[]`，設計器 1440px 無 overflow；報告與截圖位於 `.codex/qa/regional_enemy_spawns_v381_fresh/`。另跑 `scripts/codex_encounter_unlock_qa.js`，桌機／平板遇見解鎖及雙真人房 `B8749` 完整快照同步均通過。
 
 ## 修改紀錄：敵人出沒建議預設 V380（2026-08-29）
 
 - 需求：不要讓敵人出沒設計器維持空白，先由 Codex 依目前地圖與角色安排填一版可直接修改的預設。
 - 實作：21 個區域依 A→G 由弱至強、原作勢力／故地與相鄰航線過渡填入建議名單，並加入逐區設計備註。30 名候選都有至少一個預設區域；伊姆在北四皇航線、麒麟格姆在 G西、索瑪茲在南四皇航線，仍標為二周目限定。設計器新增「恢復建議預設」與「全部清空」，草稿 key 升為專用 V3；已有內容的 V2 草稿會保留，空白 V2 草稿則載入建議預設。
 - 邊界：仍只修改獨立設計工具與文件，沒有改主遊戲敵人抽選、地圖、存檔、`BOARD_GAME_STATE` 或 Socket.IO event。正式接入仍等待使用者完成 JSON。
-- 驗證：
-ode --check public/js/board_enemy_spawn_designer.js` 通過；預設共 21／21 區、30／30 名候選都有配置，引用 key 全數存在且無區域內重複。正式工具頁載入後摘要顯示 21 區／30 名，A→G 平均敵人階級單調上升；桌機與手機版無水平 overflow，console error／warn 為 0。
+- 驗證：`node --check public/js/board_enemy_spawn_designer.js` 通過；預設共 21／21 區、30／30 名候選都有配置，引用 key 全數存在且無區域內重複。正式工具頁載入後摘要顯示 21 區／30 名，A→G 平均敵人階級單調上升；桌機與手機版無水平 overflow，console error／warn 為 0。
 
 ## 修改紀錄：二周目伊姆／神之騎士團出沒設計 V379（2026-08-29）
 
 - 需求：伊姆與神之騎士團在二周目開放後也能依指定航線遇見；一周目不能混入。
 - 實作：目錄產生器除了 `ENEMY_POOLS`，另解析正式 `FINAL_GATE_ENEMY_PROFILE` 與 `ELBAPH_GOD_KNIGHT_PROFILES`。設計器新增伊姆、麒麟格姆、索瑪茲三名 S 級候選與「二周目」標籤，並新增一般／二周目限定篩選。JSON 會輸出 `availability: second_playthrough`、來源群組及 `game.postgameWorld.unlocked === true` 條件。
 - 邊界：只修改獨立設計工具、產生目錄與文件；主遊戲 `pickSeaEncounterEnemy()`、敵人島生成、存檔與多人同步尚未改動。三名角色要等使用者完成區域 JSON 後才接進指定航線，其他固定 Boss 不加入一般隨機候選。
-- 驗證：
-ode scripts/build_enemy_spawn_designer_catalog.js` 成功輸出 30 名，27 名一般、3 名二周目限定且 key 無重複；新增 JS 通過 
-ode --check`，正式工具頁 HTTP 200。S 級＋二周目篩選只顯示三名，敵人卡均顯示二周目標籤；輸出 JSON 保留三人的解鎖條件。桌機與窄版無水平 overflow，console error／warn 為 0。
+- 驗證：`node scripts/build_enemy_spawn_designer_catalog.js` 成功輸出 30 名，27 名一般、3 名二周目限定且 key 無重複；新增 JS 通過 `node --check`，正式工具頁 HTTP 200。S 級＋二周目篩選只顯示三名，敵人卡均顯示二周目標籤；輸出 JSON 保留三人的解鎖條件。桌機與窄版無水平 overflow，console error／warn 為 0。
 
 ## 修改紀錄：敵人出沒區域設計器 V378（2026-08-29）
 
@@ -1416,10 +1294,7 @@ ode --check`，正式工具頁 HTTP 200。S 級＋二周目篩選只顯示三名
 - 實作：新增 `public/board_enemy_spawn_designer.html`、`public/css/board_enemy_spawn_designer.css`、`public/js/board_enemy_spawn_designer.js`。頁面提供可高亮範圍的 7×7 航線示意圖、21 個區域、敵人肖像卡、名稱／ID 搜尋、階級篩選、區域備註、草稿自動保存、JSON 匯入／下載與「複製給 Codex」。輸出包含 schema、區域語意、正式 enemy key、區域反查、未配置敵人與目錄 hash。
 - 資料：新增 `scripts/build_enemy_spawn_designer_catalog.js`，以括號／字串安全解析正式 `public/js/board_game.js::ENEMY_POOLS`，產生 `public/js/board_enemy_spawn_designer_catalog.js`；本次解析 27 名一般敵人。四皇、劇情 Boss、推進城與固定戰役敵人不列入一般隨機池。
 - 邊界：未修改 `public/js/board_game.js`、地圖資料、敵人生成、圖鑑顯示、存檔、`BOARD_GAME_STATE`、localStorage 既有 key 或 Socket.IO event。新草稿 key 只屬獨立設計頁；正式主遊戲仍沿用 V377 前的距離／階級抽選，等待使用者交回 JSON 後另行接入。
-- 驗證：
-ode scripts/build_enemy_spawn_designer_catalog.js` 成功輸出 27 名且無重複 key；兩支新增 JS 通過 
-ode --check`。正式 
-pm start` 於 port 8787 啟動，設計頁 HTTP 200。實際配置 B航線 2 名、B西 1 名、北四皇航線 1 名，跨區切換與備註均保留；搜尋＋階級篩選、複製與下載按鈕正常，複製出的 JSON 可解析為 schema 1、21 區、27 名敵人。1280×720、932×430、390×844 均無水平 overflow；頁面 console error／warn 為 0。本機未設定 `DATABASE_URL`，不影響靜態工具頁驗證。
+- 驗證：`node scripts/build_enemy_spawn_designer_catalog.js` 成功輸出 27 名且無重複 key；兩支新增 JS 通過 `node --check`。正式 `npm start` 於 port 8787 啟動，設計頁 HTTP 200。實際配置 B航線 2 名、B西 1 名、北四皇航線 1 名，跨區切換與備註均保留；搜尋＋階級篩選、複製與下載按鈕正常，複製出的 JSON 可解析為 schema 1、21 區、27 名敵人。1280×720、932×430、390×844 均無水平 overflow；頁面 console error／warn 為 0。本機未設定 `DATABASE_URL`，不影響靜態工具頁驗證。
 
 ## 修改紀錄：全圖鑑遇見即解鎖 V377（2026-08-29）
 
@@ -1427,8 +1302,7 @@ pm start` 於 port 8787 啟動，設計頁 HTTP 200。實際配置 B航線 2 名
 - 修正：`lineageCodexCatalog()` 的 `revealed` 改以既有 `encounterCount > 0` 為唯一解鎖條件；船團資訊的全圖鑑摘要改顯示已遇見種類，圖鑑說明同步更新。一般戰鬥建立時仍沿用既有 `recordEncounteredEnemy()`；玩家主動加入共鬥或同島待續戰鬥自動合併時，新增該參戰者各自的遭遇紀錄，避免只有發起者解鎖。
 - 相容性：沒有新增或改名 `gameState` 欄位、角色／敵人 id、localStorage key 或 Socket.IO event；仍使用 `player.defeatedEnemies` 的既有 `encounterCount`、時間與地點欄位，由完整 `BOARD_GAME_STATE` 同步。舊存檔原本已有遇見但未擊敗／未持有的紀錄，開啟圖鑑時會直接依新規則揭露。
 - 檔案：修改 `public/js/board_game.js`、`public/board_game.html`、`scripts/draft_codex_privacy_qa.js`，新增 `scripts/codex_encounter_unlock_qa.js`，同步 `docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。主頁 query 為 `20260829-codex-encounter-unlock-v377`。
-- 驗證：
-ode --check` 通過主程式與兩支圖鑑 QA。專項 Chrome QA 在 1600×900、1024×768 驗證未遇見維持鎖定、第一次遇見在未持有且零擊敗時立即揭露、同一戰鬥重複正規化不重複計數、另一名參戰玩家獨立解鎖、新戰鬥再次遇見才累加至 2；清單／詳情正式圖與階級圖均載入，文字明確為「遇見・未討伐」，兩種 viewport 無文件 overflow。另以兩個獨立瀏覽器身分建立正式 Socket.IO 房 `B4390`，房主推送同場兩名玩家的遭遇紀錄後，客戶端在 `BOARD_GAME_STATE` version 2 同時看到房主與自身圖鑑解鎖。正式 `PORT=8841 npm start`、主頁 HTTP 200 與 V377 query 通過；整體 `ok=true`、`errors=[]`、`failures=[]`，證據位於 `.codex/qa/codex_encounter_unlock_v377/`。
+- 驗證：`node --check` 通過主程式與兩支圖鑑 QA。專項 Chrome QA 在 1600×900、1024×768 驗證未遇見維持鎖定、第一次遇見在未持有且零擊敗時立即揭露、同一戰鬥重複正規化不重複計數、另一名參戰玩家獨立解鎖、新戰鬥再次遇見才累加至 2；清單／詳情正式圖與階級圖均載入，文字明確為「遇見・未討伐」，兩種 viewport 無文件 overflow。另以兩個獨立瀏覽器身分建立正式 Socket.IO 房 `B4390`，房主推送同場兩名玩家的遭遇紀錄後，客戶端在 `BOARD_GAME_STATE` version 2 同時看到房主與自身圖鑑解鎖。正式 `PORT=8841 npm start`、主頁 HTTP 200 與 V377 query 通過；整體 `ok=true`、`errors=[]`、`failures=[]`，證據位於 `.codex/qa/codex_encounter_unlock_v377/`。
 
 ## 修改紀錄：2 真人＋2 CPU 全周目驗證與攻略書 V376（2026-08-29）
 
@@ -1436,8 +1310,7 @@ ode --check` 通過主程式與兩支圖鑑 QA。專項 Chrome QA 在 1600×900�
 - QA 防誤判：`scripts/lan_refresh_flow_qa.js` 改為等待真正顯示中的 lobby；`scripts/battle_entry_recovery_qa.js` 會等開場被動演出結束後才判定可操作；`scripts/spar_formal_battle_qa.js` 增加第二輪逾時診斷。完整長跑的截圖工具會等待雙頁快照套用完成，並固定 battle iframe 取景，避免測試器因連續瞬間切換 Boss 而把上一場退場遮罩誤認為遊戲卡死。
 - 攻略產物：新增 `scripts/annotate_guide_screenshots.py` 與 `scripts/build_one_piece_board_guide.py`，把 29 張實測畫面加上黃色編號與重點說明，並產生 `artifacts/one_piece_board_complete_guide_v1/航海王大富翁_一周目二周目全Boss超詳細攻略_V1.docx`。內容含完整流程、20 場主線／二周目關鍵戰（四皇、伊姆、13 Boss、洛基、洛克斯）、多人／共鬥／推進城／PK、208 件道具的取得方式與商店價格、巴雷特武器庫 4,371 種不同雙裝組合排行，以及卡住時的恢復判讀。
 - 相容性：本輪沒有改動正式角色、Boss、道具、掉落、地圖、戰鬥、`BOARD_GAME_STATE`、localStorage key 或 Socket.IO event；只新增／修正 QA 與文件產生工具。`docs/GAME_RULES.md` 規則內容不需變更。
-- 驗證：正式 
-pm start` 服務可開啟；完整 2 真人＋2 CPU 長跑輸出 29 張關鍵畫面，完成一周目 5 場關鍵 Boss、二周目 13 Boss＋洛基＋洛克斯、13／13 約克線索與最終雙端同步。專項回歸通過 `refresh_resume_qa.js`、`lan_refresh_flow_qa.js`、`battle_entry_recovery_qa.js`、`spar_formal_battle_qa.js`、`postgame_boss_fresh_hp_qa.js`、`postgame_boss_mechanics_qa.js`、`cpu_post_coop_island_choice_qa.js`、`tot_musica_player_world_coop_qa.js`、`tot_musica_full_dual_qa.js`、`battle_critical_system_qa.js`（45／45）、`bullet_arsenal_full_compatibility_qa.js`（95 件、94 件可用、4,371 組）、`coop_deferred_result_turn_qa.js`。未發現新的正式流程卡死；曾出現的 reload／遮罩問題來自加速器在同步套用中立刻切下一戰，已在 QA 等待條件中隔離，且不修改正式規則。
+- 驗證：正式 `npm start` 服務可開啟；完整 2 真人＋2 CPU 長跑輸出 29 張關鍵畫面，完成一周目 5 場關鍵 Boss、二周目 13 Boss＋洛基＋洛克斯、13／13 約克線索與最終雙端同步。專項回歸通過 `refresh_resume_qa.js`、`lan_refresh_flow_qa.js`、`battle_entry_recovery_qa.js`、`spar_formal_battle_qa.js`、`postgame_boss_fresh_hp_qa.js`、`postgame_boss_mechanics_qa.js`、`cpu_post_coop_island_choice_qa.js`、`tot_musica_player_world_coop_qa.js`、`tot_musica_full_dual_qa.js`、`battle_critical_system_qa.js`（45／45）、`bullet_arsenal_full_compatibility_qa.js`（95 件、94 件可用、4,371 組）、`coop_deferred_result_turn_qa.js`。未發現新的正式流程卡死；曾出現的 reload／遮罩問題來自加速器在同步套用中立刻切下一戰，已在 QA 等待條件中隔離，且不修改正式規則。
 
 ## 修改紀錄：四人實玩交棒／刷新完整接回 V375（2026-08-28）
 
@@ -1445,18 +1318,14 @@ pm start` 服務可開啟；完整 2 真人＋2 CPU 長跑輸出 29 張關鍵畫
 - 修正：`public/js/board_shared.js` 先以本機已保存的 `userId`／`clientId` 比對 server lobby，再以房主作最後後備；不改任何 storage key。地圖骰在動畫前就把最終步數寫入既有 `pendingMove`，附帶短期動畫結束時間，刷新後由原控制玩家等待同一顆骰演出時間到達再接著移動，不會重骰。海域選牌事件會依同步事件中的原兩張 `slotId`／`typeId` 為本人重建可操作介面；旁觀者仍只觀看。自動續戰與 pending movement 都等 `boardLan.applying` 解除後才啟動，確保新的 battle snapshot 會廣播給全房；相同同步版本的外部延遲重複快照會忽略，避免行動者剛開啟的續戰被舊畫面蓋掉，但 `turn-banner` 播完後的內部延後套用會明確放行，確保房主、客戶端與 CPU 真正切到下一位。戰鬥收尾時由主頁深海底色立即遮住正在關閉的 iframe 並標成隱藏，避免重整交棒邊界短暫露出空角色 HP 佔位。真人／CPU 選角統一先完成角色進度同步，再以校正後最大 HP 建立滿血新船員。
 - 相容性：`diceAnimationEndsAt` 只放在既有 `pendingMove` 物件且結束演出／接回移動時立即刪除；戰鬥收尾遮罩只在既有 overlay 的 `closing` 狀態生效。沒有新增頂層 `gameState` 欄位、localStorage key 或 Socket.IO event。角色、Boss、道具、地圖與戰鬥規則未改，13 Boss 全新挑戰滿血／同一 `pendingBattle` 殘血續戰規則維持。主頁 query 更新為 `20260828-lan-refresh-flow-v375`，大廳／主頁共用身分 query 為 `20260828-lan-refresh-identity-v3`。
 - 檔案：修改 `public/js/board_shared.js`、`public/js/board_game.js`、`public/board_game.html`、`public/board_start.html`，新增 `scripts/lan_refresh_flow_qa.js`，並同步 `docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`。
-- 驗證：
-ode --check` 通過正式 JS 與 QA。正式 server 於 port 8840 以 
-pm start` 成功啟動；本機未設定 `DATABASE_URL`，不影響 Board 靜態與 Socket.IO 測試。實際建立「2 真人＋2 CPU」房，完成 12 次選角並實玩四輪以上，覆蓋 CPU／真人航行、顛倒山分岔、海域二選一、寶箱、醫院、酒館、一般敵人島、持續戰鬥、戰鬥換人與雙頁旁觀。實玩先抓到相同版本保護誤擋 `turn-banner` 內部延後套用，導致一頁已到 CPU、另一頁仍停在上一位的卡點；修正後跨多次真人／CPU 交棒保持一致。非房主擲骰中刷新保留同一結果並落到敵人島；送出招式後刷新可接回傷害與 HP；房主在 CPU 戰鬥中刷新後 CPU 仍完成行動並交棒，兩頁 `console error=[]`。`scripts/lan_refresh_flow_qa.js` 增加同版本 `turn-banner` 延後套用回歸後連續三次通過，真實 Socket.IO 雙頁亦驗證身分、12 名滿血招募與雙頁續戰；桌機 1280×720、手機橫向 844×390 都確認戰鬥收尾遮罩為可見深海底色且 V375 query 生效。`scripts/refresh_resume_qa.js`、`scripts/postgame_boss_fresh_hp_qa.js` 亦通過，後者 13／13 Boss 均為新挑戰 100% HP、同場續戰 41% HP。
+- 驗證：`node --check` 通過正式 JS 與 QA。正式 server 於 port 8840 以 `npm start` 成功啟動；本機未設定 `DATABASE_URL`，不影響 Board 靜態與 Socket.IO 測試。實際建立「2 真人＋2 CPU」房，完成 12 次選角並實玩四輪以上，覆蓋 CPU／真人航行、顛倒山分岔、海域二選一、寶箱、醫院、酒館、一般敵人島、持續戰鬥、戰鬥換人與雙頁旁觀。實玩先抓到相同版本保護誤擋 `turn-banner` 內部延後套用，導致一頁已到 CPU、另一頁仍停在上一位的卡點；修正後跨多次真人／CPU 交棒保持一致。非房主擲骰中刷新保留同一結果並落到敵人島；送出招式後刷新可接回傷害與 HP；房主在 CPU 戰鬥中刷新後 CPU 仍完成行動並交棒，兩頁 `console error=[]`。`scripts/lan_refresh_flow_qa.js` 增加同版本 `turn-banner` 延後套用回歸後連續三次通過，真實 Socket.IO 雙頁亦驗證身分、12 名滿血招募與雙頁續戰；桌機 1280×720、手機橫向 844×390 都確認戰鬥收尾遮罩為可見深海底色且 V375 query 生效。`scripts/refresh_resume_qa.js`、`scripts/postgame_boss_fresh_hp_qa.js` 亦通過，後者 13／13 Boss 均為新挑戰 100% HP、同場續戰 41% HP。
 
 ## 修改紀錄：戰鬥刷新不中斷結算 V370（2026-08-28）
 
 - 問題：玩家與敵人的行動已鎖定、骰子／攻擊動畫正在播放時，完整快照可能正好保存「已有雙方指令但尚未完成結算」的中間狀態；刷新會清掉瀏覽器中的非同步動畫工作，載回後卻又因雙方指令已存在而無法重新選招，形成偶發卡住，再刷一次才可能碰到可恢復的快照。
 - 修正：`public/js/board_game.js` 在一般戰鬥／共鬥／切磋開始結算前，把本輪未執行的乾淨戰鬥與相關玩家狀態寫入同分頁 `sessionStorage` 暫存點；刷新載入同一場、同一輪、同一組行動時先還原該暫存點，再只由具控制權的玩家重新跑一次結算。正常結算、開新輪與離開戰鬥都會清除暫存；沒有新版暫存的舊快照仍會接回既有排隊行動。旁觀者只顯示快照，不會代替出戰玩家執行。
 - 相容性：暫存點只存在本機分頁、最長保留 10 分鐘，不加入 `gameState`、手動／雲端存檔或 `BOARD_GAME_STATE` payload schema；未更動角色／道具／招式 id、localStorage key、Socket.IO event、傷害規則、共鬥交棒與 PK 的 `A→B→C→D` 地圖回合順序。主頁 query 更新為 `20260828-battle-refresh-recovery-v370`。
-- 驗證：
-ode --check public/js/board_game.js`、
-ode --check scripts/battle_refresh_recovery_qa.js` 通過；`PORT=8838 npm start` 成功且正式頁／V370 腳本 HTTP 200。`scripts/battle_refresh_recovery_qa.js` 五種情境全部通過：雙方鎖招後立即刷新、攻擊動畫中刷新、沒有新版暫存的舊快照、非控制者旁觀、切磋 PK 刷新；均只接回一次、離開動畫鎖、到達可操作／可結算／正常交棒狀態並清除暫存，旁觀者沒有取得控制權。既有 `scripts/refresh_resume_qa.js`、`scripts/battle_entry_recovery_qa.js`、`scripts/spar_formal_battle_qa.js` 亦通過。13 Boss 行為回歸沒有新增規則 failure，但完整素材檢查仍因既有 Tot Musica／歐斯狀態圖與 KING 面板底圖缺檔而回報 3 組素材 failure，與本次刷新修正無關。
+- 驗證：`node --check public/js/board_game.js`、`node --check scripts/battle_refresh_recovery_qa.js` 通過；`PORT=8838 npm start` 成功且正式頁／V370 腳本 HTTP 200。`scripts/battle_refresh_recovery_qa.js` 五種情境全部通過：雙方鎖招後立即刷新、攻擊動畫中刷新、沒有新版暫存的舊快照、非控制者旁觀、切磋 PK 刷新；均只接回一次、離開動畫鎖、到達可操作／可結算／正常交棒狀態並清除暫存，旁觀者沒有取得控制權。既有 `scripts/refresh_resume_qa.js`、`scripts/battle_entry_recovery_qa.js`、`scripts/spar_formal_battle_qa.js` 亦通過。13 Boss 行為回歸沒有新增規則 failure，但完整素材檢查仍因既有 Tot Musica／歐斯狀態圖與 KING 面板底圖缺檔而回報 3 組素材 failure，與本次刷新修正無關。
 
 ## 修改紀錄：招式徽章精準置中／移除徽章文字 V369（2026-08-28）
 
@@ -1508,8 +1377,7 @@ ode --check scripts/battle_refresh_recovery_qa.js` 通過；`PORT=8838 npm start
 - 恢復流程：材料維持原定位，貼近角色下半部啟動；原角色依原關鍵影格連續黑白／彩色閃爍，接著切換進化後角色並再做相同黑白／彩色閃爍，最後恢復彩色定格。材料依原動畫在 68% 後縮小消失，不滑到右側。角色原本的 1.01～1.06 倍脈衝縮放與完整矩形畫面也一併恢復。
 - 單一框：正式 HUD 只保留 `evolution_portrait_frame_v1.webp`，沿用 V359 的 `evolutionCharacterFrame` 動畫覆蓋進化前後角色；移除第二張覺醒框 DOM、兩套框切換 keyframes、stage 偽元素特效與角色菱形／內緣裁切。V361／V362 素材留存但正式頁不引用。
 - 邊界／快取：只回復進化 HUD 顯示層，`flag`／`paper`／`prime`／`enma` 四類都使用同一套原動畫加框；未改進化條件、材料扣除、角色／招式資料、存檔、同步事件或戰鬥 iframe。主頁 query 更新為 `20260827-evolution-original-frame-only-v363`。
-- 驗證：`scripts/zorojuro_enma_qa.js` 28 項全部通過，實測材料與角色中心水平距離約 0、垂直間距 0；原角色與進化後角色都捕捉到 `grayscale(1) invert(1)` 黑白反相畫面，最終材料 opacity 0、單一框 opacity 1、stage 偽元素 animation 均為 
-one`。四類進化、1600×900 與 844×390 無 overflow；證據位於 `.codex/qa/zorojuro_evolution_frame_v363/`。`PORT=8803 npm start` 成功啟動，正式頁與共用框素材皆 HTTP 200；頁面包含 V363 query、單框動畫，不包含覺醒框、能量印或光柱引用。本機未設定 `DATABASE_URL`，不影響此次靜態 Board 頁驗證，完成後已停止測試程序。
+- 驗證：`scripts/zorojuro_enma_qa.js` 28 項全部通過，實測材料與角色中心水平距離約 0、垂直間距 0；原角色與進化後角色都捕捉到 `grayscale(1) invert(1)` 黑白反相畫面，最終材料 opacity 0、單一框 opacity 1、stage 偽元素 animation 均為 `none`。四類進化、1600×900 與 844×390 無 overflow；證據位於 `.codex/qa/zorojuro_evolution_frame_v363/`。`PORT=8803 npm start` 成功啟動，正式頁與共用框素材皆 HTTP 200；頁面包含 V363 query、單框動畫，不包含覺醒框、能量印或光柱引用。本機未設定 `DATABASE_URL`，不影響此次靜態 Board 頁驗證，完成後已停止測試程序。
 
 ## 修改紀錄：進化框克制版 V362（2026-08-27）
 
@@ -1540,23 +1408,20 @@ one`。四類進化、1600×900 與 844×390 無 overflow；證據位於 `.codex
 - 設計／素材：使用內建 ImageGen 生成 1086×1448、中央與外圍皆有真實 Alpha 的直式海賊 RPG 框；黑鐵、古金、海浪、羅盤與少量青紫能量只分布在邊緣，不把角色、武器、文字或底板畫進素材。正式素材為 `public/images/board/evolution_ui/evolution_portrait_frame_v1.webp`，WebP 仍為四通道透明，中央像素 RGBA 為 `0,0,0,0`，SHA-256 為 `A0A342DA9AF6C5D527F58E3E675623197ACEC208C663AAA618BB61F7A84355A0`；生成規格記錄於 `docs/EVOLUTION_PORTRAIT_FRAME_IMAGEGEN_PROMPT.md`。
 - 接入：共用 `evolution-hud` 的進化前／進化後角色圖上方新增同尺寸透明框層，素材物件仍在框層上方。框使用既有 `--evolution-glow`，並隨原本 8.2 秒覺醒節奏淡入、閃光與定格；selector 不綁單一角色或 `enma`，所以被打穿的旗幟、3D2Y 報紙、巔峰生命紙與閻魔四類正式進化演出全部套用。
 - 邊界：34 組正式進化 normal portrait 均確認為 1086×1448，框與角色圖共用相同 `max-width`／`max-height`／定位，不修改進化條件、角色資料、素材動畫、對話、存檔欄位、同步事件或戰鬥 iframe。主頁 query 更新為 `20260827-evolution-portrait-frame-v359`。
-- 驗證：
-pm start` 首次執行因 8787 已有既存 Node server 而回報 `EADDRINUSE`，改以 `PORT=8799 npm start` 成功啟動同一專案；正式 `board_game.html` HTTP 200 且包含新素材與 V359 query，完成後已停止 8799 測試程序。`scripts/zorojuro_enma_qa.js` 25 項全部通過，另逐一檢查 `flag`／`paper`／`prime`／`enma` 四類均套用共用框；素材 1086×1448／Alpha、框動畫、框與角色圖矩形精確一致、1600×900 與 844×390 無 overflow。視覺截圖位於 `.codex/qa/zorojuro_evolution_frame_v359/`。
+- 驗證：`npm start` 首次執行因 8787 已有既存 Node server 而回報 `EADDRINUSE`，改以 `PORT=8799 npm start` 成功啟動同一專案；正式 `board_game.html` HTTP 200 且包含新素材與 V359 query，完成後已停止 8799 測試程序。`scripts/zorojuro_enma_qa.js` 25 項全部通過，另逐一檢查 `flag`／`paper`／`prime`／`enma` 四類均套用共用框；素材 1086×1448／Alpha、框動畫、框與角色圖矩形精確一致、1600×900 與 844×390 無 overflow。視覺截圖位於 `.codex/qa/zorojuro_evolution_frame_v359/`。
 
 ## 修改紀錄：閻魔試煉完整畫面 V358（2026-08-27）
 
 - 原因：閻魔畫面原本使用 `object-fit: cover`，切幕還會由 `scale(1.035)` 縮回，抽取／奪回霸氣動畫最高放大到 `scale(1.05)`，因此切入與特效期間四周確實會被裁掉。
 - 修正：六張圖改用 `object-fit: contain`，移除切幕與兩組狀態動畫的縮放／位移；保留淡入、亮度、飽和度及紫光特效。不同螢幕比例會以深色留邊完整顯示，不再裁掉圖片內容。對話框仍按原設計覆蓋在畫面下方。
 - 邊界／快取：未改台詞、六幕節奏、HUD、觸發、戰鬥或進化規則。正式 query 為 `20260827-enma-trial-full-frame-v358`，iframe 為 `20260827-enma-trial-full-frame-v122`。
-- 驗證：三份 JS 
-ode --check` 通過；1600×900 與 932×430 六幕專項 `pass=true`、`errors=[]`，逐幕 computed `objectFit=contain`、無 overflow，台詞、HUD 隱藏與播完恢復操作亦正常。證據位於 `C:/Users/王曜瑋/.codex/qa/zoro_enma_trial_full_frame_v358/`。
+- 驗證：三份 JS `node --check` 通過；1600×900 與 932×430 六幕專項 `pass=true`、`errors=[]`，逐幕 computed `objectFit=contain`、無 overflow，台詞、HUD 隱藏與播完恢復操作亦正常。證據位於 `C:/Users/王曜瑋/.codex/qa/zoro_enma_trial_full_frame_v358/`。
 
 ## 修改紀錄：閻魔試煉六幕放慢 V357（2026-08-27）
 
 - 節奏：六幕停留時間依序調整為 3.0、3.0、2.4、2.4、3.8、4.2 秒；短促反應不低於 2.4 秒，較長的決意與勝戰宣言保留更長閱讀時間。
 - 邊界／快取：動態 recovery 會依新的六幕總長度自動延後，不會中途跳過；台詞、圖片、HUD、觸發、戰鬥與進化規則均不變。正式 query 為 `20260827-enma-trial-slower-pacing-v357`，iframe 為 `20260827-enma-trial-slower-pacing-v121`。
-- 驗證：三份 JS 
-ode --check` 通過；1600×900 與 932×430 六幕專項 `pass=true`、`errors=[]`，六幕時間、台詞、無 overflow、HUD 隱藏及播完恢復操作皆正常。證據位於 `C:/Users/王曜瑋/.codex/qa/zoro_enma_trial_slower_pacing_v357/`。
+- 驗證：三份 JS `node --check` 通過；1600×900 與 932×430 六幕專項 `pass=true`、`errors=[]`，六幕時間、台詞、無 overflow、HUD 隱藏及播完恢復操作皆正常。證據位於 `C:/Users/王曜瑋/.codex/qa/zoro_enma_trial_slower_pacing_v357/`。
 
 ## 修改紀錄：閻魔試煉第五幕決意台詞 V356（2026-08-27）
 
@@ -1567,30 +1432,26 @@ ode --check` 通過；1600×900 與 932×430 六幕專項 `pass=true`、`errors=
 
 - 台詞：依使用者指定，第一幕固定為「來測試這把新刀如何。」，第六幕固定為「你也想測試我嗎？我會贏下這場戰鬥，證明給你看的。」；第二至第五幕維持 V354 的原作試刀脈絡短句。
 - 邊界／快取：未改圖片、HUD 隱藏、正式對話框、動態 recovery、觸發條件、戰鬥數值或索隆十郎進化。正式 query 為 `20260827-enma-trial-fixed-bookends-v355`，iframe 為 `20260827-enma-trial-fixed-bookends-v119`。
-- 驗證：三份 JS 
-ode --check` 通過；1600×900 與 932×430 六幕專項 `pass=true`、`errors=[]`，首尾固定台詞、中間四句、HUD 隱藏、無標題／按鈕及播完恢復操作皆正常。證據位於 `C:/Users/王曜瑋/.codex/qa/zoro_enma_trial_fixed_bookends_v355/`。
+- 驗證：三份 JS `node --check` 通過；1600×900 與 932×430 六幕專項 `pass=true`、`errors=[]`，首尾固定台詞、中間四句、HUD 隱藏、無標題／按鈕及播完恢復操作皆正常。證據位於 `C:/Users/王曜瑋/.codex/qa/zoro_enma_trial_fixed_bookends_v355/`。
 
 ## 修改紀錄：閻魔試煉原作脈絡台詞 V354（2026-08-27）
 
 - 原作核對：試刀與手臂乾縮段落對應漫畫第 955 話、動畫第 956 集；依「試斬、察覺霸氣被抽取、短促咒罵、命令歸還霸氣、拒絕換刀、認定馴服後會更強」的原作順序重寫六幕。台詞採遊戲繁中改寫，不把來源字幕大段逐字照搬，也不混入羅格鎮三代鬼徹劇情。
 - 顯示／節奏：六幕依序為「那就試試看……！」、「……！這把刀在吸走我的霸氣。」、「可惡……！」、「給我還回來！」、「不，我就要這把刀。」與「閻魔嗎……等我習慣它，就能變得更強吧。」；全部沿用正式藍金玩家對話框。
-- 快取／驗證：正式 query 為 `20260827-enma-trial-original-dialogue-v354`，iframe 為 `20260827-enma-trial-original-dialogue-v118`。三份 JS 
-ode --check` 通過；1600×900 與 932×430 六幕專項均 `pass=true`、`errors=[]`，確認六句、素材、無標題／按鈕、HUD 隱藏及播完恢復皆正常。
+- 快取／驗證：正式 query 為 `20260827-enma-trial-original-dialogue-v354`，iframe 為 `20260827-enma-trial-original-dialogue-v118`。三份 JS `node --check` 通過；1600×900 與 932×430 六幕專項均 `pass=true`、`errors=[]`，確認六句、素材、無標題／按鈕、HUD 隱藏及播完恢復皆正常。
 
 ## 修改紀錄：閻魔試煉六幕完整對話與保護計時 V353（2026-08-27）
 
 - 對話／節奏：原本空白的第二至第五幕補上新世界索隆台詞，六幕現在依序呈現試刀、察覺霸氣被抽走、手臂乾縮、奪回霸氣、理解駕馭方式與勝戰宣言；中間四幕停留時間調整為 2.4～2.7 秒，全部沿用正式藍金玩家對話框。
 - 提前結束修正：原本一般開場共用的 9 秒 recovery watchdog 會在加長後於第四幕把劇情強制標成完成。現在只有閻魔 cinematic 依六幕實際總長度再加 3 秒容錯計算 recovery 時間；一般開戰仍維持原本 9 秒，不改戰鬥指令、同步格式、存檔欄位或索隆十郎進化條件。
 - 檔案／快取：修改 `public/js/board_game.js`、兩個正式 HTML、`scripts/zoro_enma_trial_intro_qa.js` 與四份專案文件。正式 query 為 `20260827-enma-trial-full-dialogue-v353`，iframe 為 `20260827-enma-trial-full-dialogue-v117`。
-- 驗證：三份 JS 
-ode --check` 通過；1600×900 與 932×430 專項逐幕確認六張 1672×941 素材、六句台詞／說話者、正式玩家對話框、無標題、無額外按鈕、劇情期間 HUD 隱藏、結束後 HUD／操作權恢復，結果 `pass=true`、`errors=[]`。證據位於 `C:/Users/王曜瑋/.codex/qa/zoro_enma_trial_full_dialogue_v353/`。
+- 驗證：三份 JS `node --check` 通過；1600×900 與 932×430 專項逐幕確認六張 1672×941 素材、六句台詞／說話者、正式玩家對話框、無標題、無額外按鈕、劇情期間 HUD 隱藏、結束後 HUD／操作權恢復，結果 `pass=true`、`errors=[]`。證據位於 `C:/Users/王曜瑋/.codex/qa/zoro_enma_trial_full_dialogue_v353/`。
 
 ## 修改紀錄：閻魔試煉移除頂部標題 V351（2026-08-27）
 
 - 顯示：移除六幕 cinematic 頂部的「閻魔試煉」標題節點與整組 badge CSS，避免遮住索隆頭部、刀身或背景。演出現在只保留六張畫面、需要時出現的正式玩家對話框，以及右下六點進度。
 - 邊界／快取：未改血量 HUD 隱藏、正式對話框、台詞、圖片、節奏、觸發、數值或同步。正式 query 為 `20260827-enma-trial-no-title-v351`，iframe 為 `20260827-enma-trial-no-title-v115`。
-- 檔案／驗證：修改 `public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_game.html`、`scripts/zoro_enma_trial_intro_qa.js` 及四份專案文件。三份 JS 
-ode --check` 通過；1600×900 與 932×430 閻魔專項 `pass=true`、`errors=[]`，六幕 `titleCount=0`，劇情期間 HUD／相剋圖示維持隱藏，正式玩家對話框正常，結束後 UI 與操作權完整恢復。證據位於 `C:/Users/王曜瑋/.codex/qa/zoro_enma_trial_no_title_v351/`。
+- 檔案／驗證：修改 `public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_game.html`、`scripts/zoro_enma_trial_intro_qa.js` 及四份專案文件。三份 JS `node --check` 通過；1600×900 與 932×430 閻魔專項 `pass=true`、`errors=[]`，六幕 `titleCount=0`，劇情期間 HUD／相剋圖示維持隱藏，正式玩家對話框正常，結束後 UI 與操作權完整恢復。證據位於 `C:/Users/王曜瑋/.codex/qa/zoro_enma_trial_no_title_v351/`。
 
 ## 修改紀錄：閻魔試煉隱藏戰鬥 HUD 與正式對話框 V350（2026-08-27）
 
@@ -1598,8 +1459,7 @@ ode --check` 通過；1600×900 與 932×430 閻魔專項 `pass=true`、`errors=
 - 對話：移除 V349 另外設計的紫黑長框。第一幕與第六幕改為直接使用遊戲既有 `prebattle-quote player` 結構、`prebattle-speaker`／`prebattle-text` 排版，以及正式 `images/board/battle_hud_dialogue_ui/battle_dialogue_player_frame.webp` 藍金玩家對話框；無台詞的中間四幕不顯示對話框。
 - 邊界／快取：只修改閻魔 cinematic 的顯示層與結束清理，不改六張圖、台詞、觸發條件、戰鬥數值、索隆十郎進化、普通開戰對話、按鈕、存檔或同步資料格式。正式 query 為 `20260827-enma-trial-dialogue-hud-v350`，iframe 為 `20260827-enma-trial-dialogue-hud-v114`。
 - 檔案：修改 `public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_game.html`、`scripts/zoro_enma_trial_intro_qa.js`，並同步更新本文件、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`。
-- 驗證：三份相關 JS 
-ode --check` 通過；閻魔專項於 1600×900 桌機與 932×430 平板皆 `pass=true`、`errors=[]`，逐幕確認 `playerHudVisible=false`、`enemyHudVisible=false`、`matchupChipVisible=false`，兩個台詞幕皆載入正式玩家對話框，結束後三項 UI 全恢復且 `canAct=true`，無水平／垂直溢位。一般開戰對話／CPU 回歸 `errors=[]`；進場恢復、watchdog 與海上遭遇回歸 `errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/qa/zoro_enma_trial_dialogue_hud_v350/`、`battle_prebattle_intro_v350/`、`battle_entry_recovery_v350/`。
+- 驗證：三份相關 JS `node --check` 通過；閻魔專項於 1600×900 桌機與 932×430 平板皆 `pass=true`、`errors=[]`，逐幕確認 `playerHudVisible=false`、`enemyHudVisible=false`、`matchupChipVisible=false`，兩個台詞幕皆載入正式玩家對話框，結束後三項 UI 全恢復且 `canAct=true`，無水平／垂直溢位。一般開戰對話／CPU 回歸 `errors=[]`；進場恢復、watchdog 與海上遭遇回歸 `errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/qa/zoro_enma_trial_dialogue_hud_v350/`、`battle_prebattle_intro_v350/`、`battle_entry_recovery_v350/`。
 
 ## 修改紀錄：新世界索隆・閻魔試煉戰鬥開場 V349（2026-08-27）
 
@@ -1609,9 +1469,7 @@ ode --check` 通過；閻魔專項於 1600×900 桌機與 932×430 平板皆 `pa
 - 素材：使用內建 ImageGen，以使用者提供的閻魔吸取霸氣畫面為主要動作／服裝參考、`Enma_Infobox.webp` 為刀身參考、新世界索隆正式 portrait 為身分參考，產出六張獨立畫面；正式 WebP 位於 `public/images/board/battle/cinematics/enma_trial_v1/`，皆為 1672×941。來源圖未被移動、修改或覆蓋，生成來源與逐幕 prompt 記錄於 `docs/ENMA_TRIAL_IMAGEGEN_PROMPTS.md`。
 - 同步／快取：cinematic 直接附在既有 `battle.prebattleIntro` 完整快照內，播放完成仍走既有 intro acknowledge 與 `BOARD_GAME_STATE` 推送；未新增 `gameState` 欄位、localStorage key、Socket.IO event 或第五顆按鈕。`BATTLE_PAGE_VERSION` 更新為 `20260827-enma-trial-intro-v113`，主頁與戰鬥頁 query 更新為 `20260827-enma-trial-intro-v349`。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_battle.html`、`public/board_game.html`；新增六張 cinematic WebP、`scripts/zoro_enma_trial_intro_qa.js` 與 `docs/ENMA_TRIAL_IMAGEGEN_PROMPTS.md`。
-- 驗證：相關三份 JS 
-ode --check` 通過；
-pm start` 於 8828 port 正常提供正式頁（本機未設定 `DATABASE_URL`）。閻魔開場專項 QA 通過：6／6 素材皆 HTTP 200 且為 1672×941、單件／武器庫皆觸發、五組排除條件正確、六幕順序與台詞正確、劇情期間無提前選招、結束後 `canAct=true`，1600×900 桌機及 932×430 平板均無 overflow。一般開戰對話／CPU 回歸 `errors=[]`；索隆十郎勝利進化 24／24 通過；戰鬥進場恢復、watchdog 與海上遭遇回歸 `errors=[]`、`failures=[]`。QA 證據位於工作區外 `C:/Users/王曜瑋/.codex/qa/*_v349/`。
+- 驗證：相關三份 JS `node --check` 通過；`npm start` 於 8828 port 正常提供正式頁（本機未設定 `DATABASE_URL`）。閻魔開場專項 QA 通過：6／6 素材皆 HTTP 200 且為 1672×941、單件／武器庫皆觸發、五組排除條件正確、六幕順序與台詞正確、劇情期間無提前選招、結束後 `canAct=true`，1600×900 桌機及 932×430 平板均無 overflow。一般開戰對話／CPU 回歸 `errors=[]`；索隆十郎勝利進化 24／24 通過；戰鬥進場恢復、watchdog 與海上遭遇回歸 `errors=[]`、`failures=[]`。QA 證據位於工作區外 `C:/Users/王曜瑋/.codex/qa/*_v349/`。
 
 ## 修改紀錄：閻魔勝利進化・索隆十郎 V348（2026-08-27）
 
@@ -1620,116 +1478,90 @@ pm start` 於 8828 port 正常提供正式頁（本機未設定 `DATABASE_URL`�
 - 掉落：KING 原本的「KING 的佩刀」10% 獨立掉落維持不變；另新增第二次獨立 10% 閻魔掉落判定，兩件可以同場一起獲得，且各自具有重複結算防護。
 - 素材：以使用者提供的索隆十郎與閻魔參考圖，透過 ImageGen 產出獨立 Board 素材。正式道具圖為 `public/images/board/items/postgame_boss_relics/enma.webp`（1254×1254 黑底）；七張戰鬥表情位於 `public/images/board/battle/portraits/evolutions/zoro_zorojuro/`（normal／angry／hit／hit_enemy／morale／weak／dizzy，皆 1086×1448）。normal 已修正為精確三把刀，hit_enemy 明確由畫面左側受擊。
 - 檔案：修改 `public/js/board_items.js`、`public/js/board_cards.js`、`public/js/board_game.js`、`public/board_game.html`、`scripts/generate_item_catalog.js`、`scripts/battle_critical_system_qa.js`、`scripts/bullet_arsenal_full_compatibility_qa.js`，新增 `scripts/zorojuro_enma_qa.js` 與上述八張正式 WebP；正式 query 為 `20260827-zorojuro-enma-v348`。
-- 驗證：相關 JS 與 QA 的 
-ode --check` 通過；索隆十郎／閻魔專項 24 項全部通過，包含真實 `startBattle`→`finishBattle`、四招換裝、PK 排除、武器庫、卸裝不退化、桌機與 844×390 平板進化 HUD。完整暴擊回歸 45／45、Boss 遺物玩家效果 36／36、武器庫 94／94 件與 4,371／4,371 組不同兵裝組合均通過；正式 `board_game.html` 回應 HTTP 200。
+- 驗證：相關 JS 與 QA 的 `node --check` 通過；索隆十郎／閻魔專項 24 項全部通過，包含真實 `startBattle`→`finishBattle`、四招換裝、PK 排除、武器庫、卸裝不退化、桌機與 844×390 平板進化 HUD。完整暴擊回歸 45／45、Boss 遺物玩家效果 36／36、武器庫 94／94 件與 4,371／4,371 組不同兵裝組合均通過；正式 `board_game.html` 回應 HTTP 200。
 
 ## 修改紀錄：斜切「爆擊」銘牌 V336（2026-08-26）
 
 - 顯示：依使用者最新指定，正式暴擊重新直接顯示「爆擊」二字。標牌置於白熱金傷害數字上方，以深紅／近黑斜切銘牌、細金色上下邊、兩側金色切片、金字暗紅硬影組成；標牌與數字在命中第一拍同步彈入，之後一起上飄淡出。普通傷害、MISS、治療與不屈／GUARD 不建立標牌。
 - 素材／邊界：V335 原創彎刀圖示、來源 PNG 與 prompt 均保留，沒有刪除或覆蓋，但正式傷害節點已停止建立圖示。沒有修改暴擊判定、角色／技能／道具機率、暴擊倍率、多段索引、傷害、HUD、存檔或同步。正式 query 為 `20260826-critical-label-plate-v336`，戰鬥 iframe 為 `20260826-critical-label-plate-v112`。
-- 驗證：`public/js/board_battle.js`、`public/js/board_game.js`、`scripts/battle_damage_numbers_qa.js` 的 
-ode --check` 通過；定向 QA 確認暴擊節點顯示精確文字「爆擊」、斜切 gradient／clip-path 與 `criticalLabelSnap` 生效、舊圖示不再建立，普通／三段／MISS／治療隔離維持，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。
-pm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`。證據位於 `C:/Users/王曜瑋/.codex/qa/battle_damage_numbers_v336/` 與 `C:/Users/王曜瑋/.codex/qa/battle_critical_system_v336/`。
+- 驗證：`public/js/board_battle.js`、`public/js/board_game.js`、`scripts/battle_damage_numbers_qa.js` 的 `node --check` 通過；定向 QA 確認暴擊節點顯示精確文字「爆擊」、斜切 gradient／clip-path 與 `criticalLabelSnap` 生效、舊圖示不再建立，普通／三段／MISS／治療隔離維持，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。`npm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`。證據位於 `C:/Users/王曜瑋/.codex/qa/battle_damage_numbers_v336/` 與 `C:/Users/王曜瑋/.codex/qa/battle_critical_system_v336/`。
 
 ## 修改紀錄：LoL 式小型暴擊圖示結構 V335（2026-08-26）
 
 - 設計：依使用者提出的 LoL 方向，採用「傷害數字維持可讀、旁邊附一枚固定暴擊符號、第一拍強化」的資訊結構；沒有複製 LoL 圖示或商標。使用內建 ImageGen 生成原創的「彎刀擊穿四芒羅盤星」透明圖示，白刃／古金／深紅／近黑配色對應目前海賊 UI。原始 1254×1254 RGBA PNG 保存在 `incoming/critical_strike_cutlass_icon_v1_source.png`，正式素材裁切與縮放成 128×128 透明 WebP `critical_strike_cutlass_icon_v1.webp`，生成 prompt 記錄於同資料夾的 `CRITICAL_STRIKE_CUTLASS_ICON_V1_PROMPT.md`。
 - 接入：撤下 V334 包圍數字的大型 CSS 金紅放射線與交叉閃切；正式暴擊保留 92.8px 白熱金數字、近黑硬框、紅黑立體影與短促命中停頓，另外只在暴擊節點建立小圖示。桌機圖示約 40px、932×430 平板約 26px，定位於負號左側並隨暴擊節點一起彈入／淡出；普通傷害、MISS、治療與被擋下均不建立圖示。
 - 邊界／快取：未修改暴擊判定、機率、倍率、多段索引、傷害、角色／技能／道具 id、戰鬥 HUD、存檔或同步。正式 query 為 `20260826-critical-cutlass-icon-v335`，戰鬥 iframe 為 `20260826-critical-cutlass-icon-v111`。
-- 驗證：正式 JS 與傷害 QA 的 
-ode --check` 通過；素材檢查確認來源及正式 WebP 都為四通道透明 alpha，正式檔為 128×128、SHA-256 `51AB5074E2B981B7905AEE8AAD5895E4DDD3EA3D70A7677D8A5B2B9A4A199EC0`。定向 QA 確認暴擊圖示載入成功、桌機 40px、`criticalIconSnap` 生效，非暴擊節點沒有圖示，普通／三段／MISS／治療隔離維持，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`；完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。
-pm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`。證據位於 `C:/Users/王曜瑋/.codex/qa/battle_damage_numbers_v335/` 與 `C:/Users/王曜瑋/.codex/qa/battle_critical_system_v335/`。
+- 驗證：正式 JS 與傷害 QA 的 `node --check` 通過；素材檢查確認來源及正式 WebP 都為四通道透明 alpha，正式檔為 128×128、SHA-256 `51AB5074E2B981B7905AEE8AAD5895E4DDD3EA3D70A7677D8A5B2B9A4A199EC0`。定向 QA 確認暴擊圖示載入成功、桌機 40px、`criticalIconSnap` 生效，非暴擊節點沒有圖示，普通／三段／MISS／治療隔離維持，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`；完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。`npm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`。證據位於 `C:/Users/王曜瑋/.codex/qa/battle_damage_numbers_v335/` 與 `C:/Users/王曜瑋/.codex/qa/battle_critical_system_v335/`。
 
 ## 修改紀錄：白熱金放射爆點暴擊 V334（2026-08-26）
 
 - 顯示：在使用者開放配色與樣式後，撤下 V333 的黑紅墨刷底板，改為個人定稿的經典遊戲暴擊語彙。數字維持桌機 92.8px，使用白熱金字面、近黑硬描邊、赤紅／暗紅／黑三層立體落影；命中瞬間從數字中心展開一圈金紅硬邊放射線，並加上兩道交叉閃切。前 6%～13% 保留短促命中停頓，放射線在動畫中段前收回，不增加任何文字或 bitmap。
 - 邊界／快取：辨識度來自金色高能量配色、放射爆點與停頓，不依靠永久放大字級。普通傷害、MISS、治療、戰鬥 HUD、暴擊判定／機率／倍率／多段索引及存檔／同步均未修改。正式 query 為 `20260826-critical-gold-burst-v334`，戰鬥 iframe 為 `20260826-critical-gold-burst-v110`。
-- 驗證：相關正式 JS 與傷害跳字 QA 的 
-ode --check` 通過；定向 QA 確認桌機 92.8px 白熱金字面 `rgb(255, 241, 160)`、近黑描邊、金紅 `criticalRayBurst` 與 `criticalCrossFlash` 生效，普通／三段／MISS／治療隔離維持，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。
-pm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`。證據位於 `C:/Users/王曜瑋/.codex/qa/battle_damage_numbers_v334/` 與 `C:/Users/王曜瑋/.codex/qa/battle_critical_system_v334/`。
+- 驗證：相關正式 JS 與傷害跳字 QA 的 `node --check` 通過；定向 QA 確認桌機 92.8px 白熱金字面 `rgb(255, 241, 160)`、近黑描邊、金紅 `criticalRayBurst` 與 `criticalCrossFlash` 生效，普通／三段／MISS／治療隔離維持，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。`npm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`。證據位於 `C:/Users/王曜瑋/.codex/qa/battle_damage_numbers_v334/` 與 `C:/Users/王曜瑋/.codex/qa/battle_critical_system_v334/`。
 
 ## 修改紀錄：原字級黑紅漫畫斬痕暴擊 V333（2026-08-26）
 
 - 顯示：依使用者指出「要樣式更明顯、不是把字變大」，將暴擊桌機字級由 V332 的 107.2px 退回 92.8px；亮白字面、鮮紅粗框、深紅硬影與黑色外輪廓保留。原本數字下方的單一紅線改為穿過數字後方的窄型黑紅漫畫墨刷斬痕，使用不規則刷痕輪廓與紅／黑／暗紅硬分層，搭配金色四芒羅盤星，以固定視覺符號區分暴擊，不再依靠放大字級。
 - 邊界／快取：沒有增加文字或 bitmap，普通傷害、MISS、治療、戰鬥 HUD、暴擊判定／機率／倍率／多段索引及存檔／同步均未修改。正式 query 為 `20260826-critical-ink-slash-v333`，戰鬥 iframe 為 `20260826-critical-ink-slash-v109`。
-- 驗證：相關正式 JS 與傷害跳字 QA 的 
-ode --check` 通過；定向 QA 確認桌機暴擊字級 92.8px、黑紅漸層墨刷斬痕 `criticalInkSlash`、金色羅盤星及數字樣式生效，普通／三段／MISS／治療隔離維持，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。
-pm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`。證據位於 `C:/Users/王曜瑋/.codex/qa/battle_damage_numbers_v333/` 與 `C:/Users/王曜瑋/.codex/qa/battle_critical_system_v333/`。
+- 驗證：相關正式 JS 與傷害跳字 QA 的 `node --check` 通過；定向 QA 確認桌機暴擊字級 92.8px、黑紅漸層墨刷斬痕 `criticalInkSlash`、金色羅盤星及數字樣式生效，普通／三段／MISS／治療隔離維持，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。`npm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`。證據位於 `C:/Users/王曜瑋/.codex/qa/battle_damage_numbers_v333/` 與 `C:/Users/王曜瑋/.codex/qa/battle_critical_system_v333/`。
 
 ## 修改紀錄：高對比大型暴擊數字 V332（2026-08-26）
 
 - 顯示：針對 V331 與普通傷害仍不夠分離的問題，暴擊桌機字級由 92.8px 提高到 107.2px，改成亮白字面、6px 鮮紅粗框、深紅硬質立體影與黑色外輪廓；右上羅盤星由深紅小記號改成更大的金色四芒星，下方紅色斬線同步加寬加粗。命中前段的縮放由 1.2 提高到 1.28，維持短促、清楚且不使用額外文字或滿畫面 bitmap 特效。
 - 邊界／快取：普通傷害仍為約 75.2px，MISS、治療、技能按鈕、戰鬥 HUD、暴擊判定／機率／倍率／多段索引及存檔／同步均未修改。正式 query 為 `20260826-critical-high-contrast-v332`，戰鬥 iframe 為 `20260826-critical-high-contrast-v108`。
-- 驗證：相關正式 JS 與傷害跳字 QA 的 
-ode --check` 通過；定向 QA 確認亮白填色 `rgb(255, 248, 232)`、鮮紅描邊 `rgb(200, 24, 50)`、107.2px 桌機尺寸、金色四芒星及紅斬線動畫生效，普通／三段／MISS／治療隔離維持，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。
-pm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`。證據位於 `C:/Users/王曜瑋/.codex/qa/battle_damage_numbers_v332/` 與 `C:/Users/王曜瑋/.codex/qa/battle_critical_system_v332/`。
+- 驗證：相關正式 JS 與傷害跳字 QA 的 `node --check` 通過；定向 QA 確認亮白填色 `rgb(255, 248, 232)`、鮮紅描邊 `rgb(200, 24, 50)`、107.2px 桌機尺寸、金色四芒星及紅斬線動畫生效，普通／三段／MISS／治療隔離維持，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。`npm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`。證據位於 `C:/Users/王曜瑋/.codex/qa/battle_damage_numbers_v332/` 與 `C:/Users/王曜瑋/.codex/qa/battle_critical_system_v332/`。
 
 ## 修改紀錄：遊戲案例研究版羅盤暴擊數字 V331（2026-08-26）
 
 - 顯示：參考動作 RPG 以顏色直接區別高傷害、狩獵遊戲用小型幾何記號標示會心，以及《航海王》遊戲的星形命中語彙後，重新設計為米白高對比字面、黑墨粗描邊、深紅錯位立體影、右上小型四芒羅盤閃光及數字下方短紅斬線。標記與斬線只在命中前段短促出現，取消大面積爆炸框與長時間模糊光暈，沒有額外文字或 bitmap。
 - 邊界／快取：只有正式傷害跳字 CSS、QA 斷言與快取版本改變；暴擊判定、機率、倍率、多段索引、角色／技能／道具資料、戰鬥 HUD、存檔與多人同步均未修改。正式 query 為 `20260826-critical-compass-number-v331`，戰鬥 iframe 為 `20260826-critical-compass-number-v107`。
-- 驗證：相關正式 JS 與 `scripts/battle_damage_numbers_qa.js` 的 
-ode --check` 通過；傷害跳字 QA 確認桌機暴擊數字 92.8px、米白填色 `rgb(255, 241, 208)`、黑墨描邊、深紅羅盤／斬線動畫均生效，普通／三段／MISS／治療隔離不變，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。
-pm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`，資料庫功能於本次靜態／戰鬥 QA 停用。證據位於 `C:/Users/王曜瑋/.codex/qa/battle_damage_numbers_v331/` 與 `C:/Users/王曜瑋/.codex/qa/battle_critical_system_v331/`。
+- 驗證：相關正式 JS 與 `scripts/battle_damage_numbers_qa.js` 的 `node --check` 通過；傷害跳字 QA 確認桌機暴擊數字 92.8px、米白填色 `rgb(255, 241, 208)`、黑墨描邊、深紅羅盤／斬線動畫均生效，普通／三段／MISS／治療隔離不變，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。`npm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`，資料庫功能於本次靜態／戰鬥 QA 停用。證據位於 `C:/Users/王曜瑋/.codex/qa/battle_damage_numbers_v331/` 與 `C:/Users/王曜瑋/.codex/qa/battle_critical_system_v331/`。
 
 ## 修改紀錄：黑字紅框與輕量暴擊光暈 V330（2026-08-26）
 
 - 顯示：依使用者指定將暴擊數字改為黑色字面、深紅色粗描邊，保留黑紅立體陰影；另加入只作用在數字本身的短暫紅色光暈，約前 10% 動畫達到最亮、之後快速收回。沒有爆炸外框、斬光、bitmap 或額外文字。
 - 邊界／快取：沿用 V329 的 96px 桌機尺寸與戰鬥 HUD 精簡；沒有修改暴擊判定、機率、倍率、多段索引、技能／角色詳情、角色／招式／道具 id、存檔或同步。修改 `public/board_battle.html`、`public/board_game.html`、`public/js/board_game.js`、`scripts/battle_damage_numbers_qa.js` 與四份正式文件；正式 query 為 `20260826-critical-black-red-outline-v330`，戰鬥 iframe 為 `20260826-critical-black-red-outline-v106`。
-- 驗證：相關 JS 的 
-ode --check` 通過；傷害數字 QA 確認黑色填色 `rgb(8, 0, 2)`、深紅描邊 `rgb(181, 18, 36)`、`criticalInkFlash` 生效、偽元素外框均為 none，普通／三段／MISS／治療隔離維持，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。
-pm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`，資料庫功能於本次靜態／戰鬥 QA 停用。
+- 驗證：相關 JS 的 `node --check` 通過；傷害數字 QA 確認黑色填色 `rgb(8, 0, 2)`、深紅描邊 `rgb(181, 18, 36)`、`criticalInkFlash` 生效、偽元素外框均為 none，普通／三段／MISS／治療隔離維持，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。`npm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`，資料庫功能於本次靜態／戰鬥 QA 停用。
 
 ## 修改紀錄：單純深紅黑暴擊字 V329（2026-08-26）
 
 - 顯示：依使用者回饋撤下 V328 的鋸齒爆炸外框，正式暴擊現在只保留深紅色 Impact 傾斜粗體、純黑描邊與輕量黑紅立體陰影；沒有漸層底圖、偽元素外框、斬光、額外發光或文字標籤。桌機暴擊字約 96px，一般傷害約 75px，仍以尺寸與深紅黑配色區分。
 - 邊界／快取：戰鬥 HUD 仍不顯示暴擊率／倍率，角色詳情與技能效果說明保留；沒有修改暴擊判定、機率、倍率、多段索引、角色／招式／道具 id、存檔或同步。修改 `public/board_battle.html`、`public/board_game.html`、`public/js/board_game.js`、`scripts/battle_damage_numbers_qa.js` 與四份正式文件；正式 query 為 `20260826-critical-dark-red-type-v329`，戰鬥 iframe 為 `20260826-critical-dark-red-type-v105`。
-- 驗證：`public/js/board_game.js`、`public/js/board_battle.js` 與傷害數字 QA 的 
-ode --check` 通過；傷害數字 QA 確認深紅填色 `rgb(173, 15, 34)`、黑描邊、前後偽元素／額外數字動畫均為 none，普通／三段／MISS／治療樣式不變，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。
-pm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`，資料庫功能於本次靜態／戰鬥 QA 停用。
+- 驗證：`public/js/board_game.js`、`public/js/board_battle.js` 與傷害數字 QA 的 `node --check` 通過；傷害數字 QA 確認深紅填色 `rgb(173, 15, 34)`、黑描邊、前後偽元素／額外數字動畫均為 none，普通／三段／MISS／治療樣式不變，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸 45／45 通過。`npm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`，資料庫功能於本次靜態／戰鬥 QA 停用。
 
 ## 修改紀錄：紅黑暴擊字與爆炸外框 V328（2026-08-26）
 
 - 顯示：依使用者指定將正式暴擊傷害數字主色由白金／紅色改為鮮紅、暗紅與黑色，描邊改為純黑，陰影與光暈只使用紅黑色系。V327 的兩道交叉斬光已移除，改成數字背後單一簡單鋸齒爆炸外框：外層紅至黑漸層、內層黑底，兩層都由 CSS polygon／gradient 組成。
 - 邊界／快取：維持不顯示「暴擊」／`CRITICAL!` 等額外文字、不載入 bitmap、戰鬥 HUD 不顯示暴擊率／倍率；沒有修改暴擊判定、機率、倍率、多段索引、技能效果文字、角色詳情、角色／招式／道具 id、存檔或同步。修改 `public/board_battle.html`、`public/board_game.html`、`public/js/board_game.js`、`scripts/battle_damage_numbers_qa.js` 與四份正式文件；正式 query 為 `20260826-critical-red-black-burst-v328`，戰鬥 iframe 為 `20260826-critical-red-black-burst-v104`。
-- 驗證：`public/js/board_game.js`、`public/js/board_battle.js` 與傷害數字 QA 的 
-ode --check` 通過；傷害數字 QA 確認桌機 102.4px 紅黑漸層、黑描邊、CSS 外／內爆炸框、無文字標牌／bitmap，普通／三段／MISS／治療樣式不變，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸仍為 45／45 通過。
-pm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`，資料庫功能於本次靜態／戰鬥 QA 停用。
+- 驗證：`public/js/board_game.js`、`public/js/board_battle.js` 與傷害數字 QA 的 `node --check` 通過；傷害數字 QA 確認桌機 102.4px 紅黑漸層、黑描邊、CSS 外／內爆炸框、無文字標牌／bitmap，普通／三段／MISS／治療樣式不變，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。完整暴擊規則、三段動畫與 HUD 回歸仍為 45／45 通過。`npm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`，資料庫功能於本次靜態／戰鬥 QA 停用。
 
 ## 修改紀錄：強化暴擊辨識與精簡戰鬥狀態列 V327（2026-08-26）
 
 - 暴擊顯示：維持不顯示「暴擊」／`CRITICAL!` 文字與不載入 bitmap 的規則，將暴擊傷害數字由桌機約 90px 提高至約 102px，並加強白黃紅漸層、黑色外框、立體陰影、瞬間縮放及兩道 CSS 交叉斬光的尺寸／亮度；一般傷害仍約 75px，因此可直接靠尺寸、色彩和動態辨認。
 - 狀態列：正式獨立戰鬥頁的我方 HUD 移除「暴擊率／暴擊傷害倍率」pill；主遊戲內嵌後備戰鬥資訊列同步移除同段文字。角色詳情仍顯示完整暴擊率、倍率、特性與來源，技能卡自身的「10%暴擊／20%暴擊」效果說明也保留。
 - 邊界／快取：沒有修改暴擊判定、角色 profile、等級／進化／兵裝加成、傷害倍率、多段判定、敵我限制、技能按鈕、角色／招式／道具 id、存檔或同步格式。修改 `public/board_battle.html`、`public/board_game.html`、`public/js/board_battle.js`、`public/js/board_game.js`、兩份暴擊 QA 與四份正式文件；正式 query 為 `20260826-critical-clear-hud-v327`，戰鬥 iframe 為 `20260826-critical-clear-hud-v103`。
-- 驗證：四份修改 JS 的 
-ode --check` 通過；`scripts/battle_damage_numbers_qa.js` 確認桌機暴擊數字 102.4px、無文字標牌／bitmap、普通傷害／三段一般傷害／MISS／治療樣式不變，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。`scripts/battle_critical_system_qa.js` 確認桌機與 1024×768 平板 HUD 均移除暴擊資訊、技能內文保留、三段暴擊索引正確，完整規則與 UI 共 45／45 通過。
-pm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`，資料庫功能於本次靜態／戰鬥 QA 停用。
+- 驗證：四份修改 JS 的 `node --check` 通過；`scripts/battle_damage_numbers_qa.js` 確認桌機暴擊數字 102.4px、無文字標牌／bitmap、普通傷害／三段一般傷害／MISS／治療樣式不變，932×430 平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。`scripts/battle_critical_system_qa.js` 確認桌機與 1024×768 平板 HUD 均移除暴擊資訊、技能內文保留、三段暴擊索引正確，完整規則與 UI 共 45／45 通過。`npm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`，資料庫功能於本次靜態／戰鬥 QA 停用。
 
 ## 修改紀錄：純 CSS 暴擊傷害數字 V326（2026-08-26）
 
 - 顯示：正式戰鬥頁不再於暴擊傷害數字後方載入 `critical_hit_burst_v1.webp`，也不增加「暴擊」或 `CRITICAL!` 等文字。暴擊只以傷害數字本身呈現：Impact 系列傾斜粗體、白金至赤紅漸層、深色立體描邊、亮度彈跳，以及兩條由 CSS gradient／clip-path 生成的交叉斬光；一般傷害、三段一般傷害與 MISS 保持原顯示。
 - 邊界：沒有刪除或覆蓋 V323 的既有生成圖與原始來源，只停止正式 CSS 引用，方便日後追溯；沒有修改暴擊率、傷害倍率、多段判定、敵我限制、角色／招式／道具 id、戰鬥指令、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 - 檔案／快取：修改 `public/board_battle.html`、`public/js/board_game.js`、`public/board_game.html`、`scripts/battle_damage_numbers_qa.js` 與四份正式文件。主頁 query 為 `20260826-critical-css-number-v326`，戰鬥 iframe 為 `20260826-critical-css-number-v102`。
-- 驗證：
-ode --check public/js/board_game.js` 與傷害數字 QA 語法通過；`scripts/battle_damage_numbers_qa.js` 實測普通傷害、暴擊、三段一般傷害、MISS、治療樣式隔離與 932×430 平板，確認暴擊節點沒有文字標牌／bitmap URL、兩條 CSS 斬光與數字動畫生效、治療仍走一般動畫、平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。`scripts/battle_critical_system_qa.js` 角色／敵將 profile、兵裝、單段／多段傷害、敵我限制與桌機／平板 UI 共 45／45 通過。
-pm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`，資料庫功能於本次靜態／戰鬥 QA 停用。
+- 驗證：`node --check public/js/board_game.js` 與傷害數字 QA 語法通過；`scripts/battle_damage_numbers_qa.js` 實測普通傷害、暴擊、三段一般傷害、MISS、治療樣式隔離與 932×430 平板，確認暴擊節點沒有文字標牌／bitmap URL、兩條 CSS 斬光與數字動畫生效、治療仍走一般動畫、平板在 viewport 內且無 overflow，`errors=[]`、`failures=[]`。`scripts/battle_critical_system_qa.js` 角色／敵將 profile、兵裝、單段／多段傷害、敵我限制與桌機／平板 UI 共 45／45 通過。`npm start` 於 8798 port 正常提供正式頁；本機未設定 `DATABASE_URL`，資料庫功能於本次靜態／戰鬥 QA 停用。
 
 ## 修改紀錄：全敵將血統暴擊與洛克斯 30% V325（2026-08-26）
 
 - 範圍／規則：正式血統因子培育可取得的 66 種敵人來源身份全部新增我方專屬 `criticalRateBase` 與 `criticalStyle`，涵蓋一般敵人、推進城、頂上戰爭、四皇、伊姆、神之騎士團、十三島 Boss 與洛克斯。判定仍依目前陣營：敵方／CPU／Boss 出戰時固定 0%，培育成我方永久角色後才使用自己的 profile，並正常疊加等級、進化、招式與兵裝。
 - 人物差異：數值依原作戰鬥方式與精準度配置，不按職能平均。例如斯潘達姆 3%、路基 19%、覺醒路基 22%、卡塔庫栗 24%、紅髮 25%；洛克斯依玩家指定為 Lv.1 基礎 30%，特性為「世界之王・霸王要害」。Lv.99 固定成長、技能／兵裝加成、50% 總上限與 ×2 傷害上限不變。
 - 培育／相容：新培育角色在永久實例建立時依 `factor.enemyKey` 寫入來源 profile；即使覺醒路基等來源共用基礎玩家模板，也會保留來源身份的暴擊率。讀取既有船上／研究收藏的血統角色時，依 `cultivatedFromEnemyKey`／`lineageSourceEnemyKey` 自動回填新版值，不需重新培育；沒有新增研究所 schema、localStorage key、Socket.IO event 或新的同步欄位。
-- 檔案／快取／驗證：修改 `public/js/board_game.js`、兩個正式 HTML、`scripts/battle_critical_system_qa.js`，並同步五份正式文件。正式 query 為 `20260826-lineage-critical-profiles-v325`，戰鬥 iframe 為 `20260826-lineage-critical-profiles-v101`。專項驗證 66／66 個 profile、66 個不同特性、66／66 種來源逐一正式培育、洛克斯 30%、我方／敵方陣營切換及舊存檔回填；連同既有角色、裝備、傷害與桌機／平板 UI 共 45／45，`errors=[]`、`failureCount=0`。
-pm start` 於獨立 8798 port 正常提供正式頁面；本機未設定 `DATABASE_URL`，資料庫功能於此次靜態／戰鬥 QA 中停用。
+- 檔案／快取／驗證：修改 `public/js/board_game.js`、兩個正式 HTML、`scripts/battle_critical_system_qa.js`，並同步五份正式文件。正式 query 為 `20260826-lineage-critical-profiles-v325`，戰鬥 iframe 為 `20260826-lineage-critical-profiles-v101`。專項驗證 66／66 個 profile、66 個不同特性、66／66 種來源逐一正式培育、洛克斯 30%、我方／敵方陣營切換及舊存檔回填；連同既有角色、裝備、傷害與桌機／平板 UI 共 45／45，`errors=[]`、`failureCount=0`。`npm start` 於獨立 8798 port 正常提供正式頁面；本機未設定 `DATABASE_URL`，資料庫功能於此次靜態／戰鬥 QA 中停用。
 
 ## 修改紀錄：玩家限定暴擊與角色形象機率 V324（2026-08-26）
 
 - 規則／角色：敵方、CPU 與 Boss 的最終暴擊率固定為 0%，敵方招式自帶暴擊加成、必定暴擊及巴雷特吸收的狙擊瞄準鏡等來源都不會使敵方暴擊。判定依目前陣營而非角色出身；原敵方角色被招募並在我方出戰後，會依自己的角色 profile、等級、進化、招式與兵裝正常暴擊。51 名正式玩家角色依人物戰鬥形象重新拉開 Lv.1 基礎值至 2%～18%；劍豪、狙擊手、殺手及精準型角色較高，例如索隆／羅／御田／比斯塔 15%、卡文迪許／奇拉／羅傑 16%、雷利／以藏 17%、鷹眼／騙人布 18%，魔人歐斯仍為 2%。
 - 成長／顯示：Lv.20／40／60／80／99 與一階／二階進化加成、招式與兵裝加成、50% 機率上限及 ×2 傷害上限不變。角色詳情與我方戰鬥 HUD 繼續顯示目前暴擊率／倍率；敵方 HUD 與主頁備援戰鬥框不再顯示暴擊資訊。實際玩家暴擊仍只用 V323 的無文字生成圖與傷害數字演出。
 - 檔案／快取：修改 `public/js/board_cards.js`、`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/battle_critical_system_qa.js`、`scripts/bullet_absorbed_items_qa.js`，並同步主文件與 Boss 遺物說明。正式資料／程式 query 為 `20260826-player-only-critical-profiles-v324`，戰鬥 iframe 為 `20260826-player-only-critical-profiles-v100`；沒有新增或改名角色、招式、道具 id、`gameState` 欄位、localStorage key 或 Socket.IO event。
-- 驗證：正式 JavaScript 與兩份修改後 QA 均通過 
-ode --check`。玩家限定暴擊專項 38／38；巴雷特六孔確認六個瞄準鏡與最低亂數仍為一般傷害 312、暴擊數 0；傷害數字／無文字圖片演出回歸、Boss 遺物 36／36、全量武器庫 93／93 與 4,278／4,278 組、十三 Boss 13／13 均為 `errors=[]`、`failures=[]`。
-pm start` 於獨立 8798 port 正常提供正式頁面；本機未設定 `DATABASE_URL`，資料庫功能於此次靜態／戰鬥 QA 中停用。
+- 驗證：正式 JavaScript 與兩份修改後 QA 均通過 `node --check`。玩家限定暴擊專項 38／38；巴雷特六孔確認六個瞄準鏡與最低亂數仍為一般傷害 312、暴擊數 0；傷害數字／無文字圖片演出回歸、Boss 遺物 36／36、全量武器庫 93／93 與 4,278／4,278 組、十三 Boss 13／13 均為 `errors=[]`、`failures=[]`。`npm start` 於獨立 8798 port 正常提供正式頁面；本機未設定 `DATABASE_URL`，資料庫功能於此次靜態／戰鬥 QA 中停用。
 
 ## 修改紀錄：暴擊命中改為無文字生成圖 V323（2026-08-26）
 
@@ -1744,17 +1576,13 @@ pm start` 於獨立 8798 port 正常提供正式頁面；本機未設定 `DATABA
 - 道具／倍率：狙擊瞄準鏡維持 10% 暴擊；疾風鉤爪與櫻十・木枯各新增 5% 暴擊。格里芬之劍使暴擊傷害倍率 +0.2，赤色伯爵的傘劍使倍率 +0.1；一般基礎仍為 ×1.5，合計上限 ×2。五件都走通用攜帶物 context，所以單件、巴雷特武器庫內裝與巴雷特吸收孔位共用相同規則；不新增道具 id、價格或取得方式。
 - 顯示／演出：角色詳情與戰鬥 HUD 同時顯示目前暴擊率和傷害倍率，技能維持在效果列顯示「10%暴擊／20%暴擊」且沒有角標或第五顆按鈕。V322 曾短暫使用英文標牌，已由上方 V323 完全移除並改成無文字生成圖。
 - 檔案／快取：修改 `public/js/board_cards.js`、`public/js/board_items.js`、`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、三份相關 QA，並重產 `docs/ITEM_CATALOG.md`、同步四份主文件與 `docs/POSTGAME_BOSS_RELICS.md`。正式資料／程式 query 為 `20260826-critical-profiles-items-fx-v322`，戰鬥 iframe 版本為 `20260826-critical-profiles-items-fx-v98`；未新增或改名 `gameState`、localStorage key、Socket.IO event 或同步欄位。
-- 驗證：
-ode --check` 通過正式 JavaScript 與 QA；暴擊專項 36／36，涵蓋 51／51 個別 profile、55 個技能、五件道具、50% 機率上限、×2 傷害上限、多段逐段、武器庫雙兵裝與桌機／平板 HUD。Boss 遺物 36／36、巴雷特六孔回歸及全量武器庫結構／玩家效果 93／93、4,278／4,278 組皆為 `errors=[]`、`failures=[]`。
-pm start` 於獨立 8798 port 正常提供頁面，本機 8787 既有服務未中止；未設定 `DATABASE_URL`，資料庫功能於本次靜態 QA 停用。
+- 驗證：`node --check` 通過正式 JavaScript 與 QA；暴擊專項 36／36，涵蓋 51／51 個別 profile、55 個技能、五件道具、50% 機率上限、×2 傷害上限、多段逐段、武器庫雙兵裝與桌機／平板 HUD。Boss 遺物 36／36、巴雷特六孔回歸及全量武器庫結構／玩家效果 93／93、4,278／4,278 組皆為 `errors=[]`、`failures=[]`。`npm start` 於獨立 8798 port 正常提供頁面，本機 8787 既有服務未中止；未設定 `DATABASE_URL`，資料庫功能於本次靜態 QA 停用。
 
 ## 修改紀錄：技能暴擊文字精簡與移除角標 V321（2026-08-26）
 
 - 介面／文字：依玩家定案移除正式戰鬥頁與主頁備援招式卡右上角的「暴+／暴++／必暴」小角標及其 CSS；暴擊 metadata 與計算完全保留，招式效果列直接顯示「10%暴擊／20%暴擊」，不使用「暴擊率+10%」格式。未增加、刪除或改排任何技能／主指令按鈕。
 - 範圍／快取：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html` 與 `scripts/battle_critical_system_qa.js`；主程式／戰鬥程式 query 為 `20260826-critical-text-only-v321`，戰鬥 iframe 版本為 `20260826-critical-text-only-v97`。角色、招式與道具 id、暴擊機率、傷害倍率、存檔欄位、localStorage key、Socket.IO event 均未改。
-- 驗證：三份 JavaScript 通過 
-ode --check`；暴擊專項 29／29，鎖定 0 個角標、四顆技能、技能內文「10%暴擊／20%暴擊」、桌機 1600×900、平板 1024×768、無 overflow 與逐段暴擊動畫。一般傷害數字／手機視窗及十三 Boss 機制回歸均為 `errors=[]`、`failures=[]`；
-pm start` 於獨立 8798 port 正常啟動，本機 8787 port 原已有其他服務，未予中止。本機未設定 `DATABASE_URL`，資料庫功能於此次靜態 QA 中停用。
+- 驗證：三份 JavaScript 通過 `node --check`；暴擊專項 29／29，鎖定 0 個角標、四顆技能、技能內文「10%暴擊／20%暴擊」、桌機 1600×900、平板 1024×768、無 overflow 與逐段暴擊動畫。一般傷害數字／手機視窗及十三 Boss 機制回歸均為 `errors=[]`、`failures=[]`；`npm start` 於獨立 8798 port 正常啟動，本機 8787 port 原已有其他服務，未予中止。本機未設定 `DATABASE_URL`，資料庫功能於此次靜態 QA 中停用。
 
 ## 修改紀錄：角色／招式通用暴擊系統 V320（2026-08-26）
 
@@ -1762,17 +1590,13 @@ pm start` 於獨立 8798 port 正常啟動，本機 8787 port 原已有其他服
 - 招式／介面：`public/js/board_cards.js` 以既有招式名稱加入暴擊 metadata，目前 349 個直接攻擊中 55 個有招式加成（36 個 +10%、19 個 +20%）；沒有增加第五顆按鈕，原招式卡只在右上角顯示「暴+／暴++」，並預留未來「必暴」metadata。角色詳情與正式戰鬥 HUD 顯示當前暴擊率，桌機與平板仍維持原本四顆主指令。
 - 裝備／巴雷特：瞄準鏡的 +10% 併入同一個角色暴擊率，不再另做一次獨立傷害倍率；單獨攜帶、武器庫內裝與巴雷特吸收孔位都走同一判定。即使吸收六個瞄準鏡也只會到 50% 上限，命中暴擊時仍只乘一次 1.5，而不是疊成 `1.5^6`。純傷害預覽不消耗隨機數，只有正式結算與演出才擲暴擊。
 - 檔案／相容性：修改 `public/js/board_cards.js`、`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`，新增 `scripts/battle_critical_system_qa.js`，並更新 `scripts/bullet_absorbed_items_qa.js`。正式主頁／戰鬥頁 query 為 `20260826-critical-system-v320`；沒有修改角色、招式、道具 id，沒有新增或改名 `gameState`、localStorage key 或 Socket.IO event。
-- 驗證：上述五份正式 JavaScript／QA 均通過 
-ode --check`；
-pm start` 於 8798 port 正常提供正式頁面。暴擊專項為 28／28，包含等級、進化、天賦、技能、瞄準鏡、武器庫、50% 上限、單段／多段、預覽不偷骰、桌機 1600×900、平板 1024×768 與逐段暴擊動畫；十件 Boss 遺物為 36／36，武器庫為結構／玩家效果 93／93、4,278 組，傷害數字與十三 Boss 機制回歸皆為 `errors=[]`、`failures=[]`。本機未設定 `DATABASE_URL`，資料庫功能於此次靜態 QA 中停用。
+- 驗證：上述五份正式 JavaScript／QA 均通過 `node --check`；`npm start` 於 8798 port 正常提供正式頁面。暴擊專項為 28／28，包含等級、進化、天賦、技能、瞄準鏡、武器庫、50% 上限、單段／多段、預覽不偷骰、桌機 1600×900、平板 1024×768 與逐段暴擊動畫；十件 Boss 遺物為 36／36，武器庫為結構／玩家效果 93／93、4,278 組，傷害數字與十三 Boss 機制回歸皆為 `errors=[]`、`failures=[]`。本機未設定 `DATABASE_URL`，資料庫功能於此次靜態 QA 中停用。
 
 ## 修改紀錄：疾風圍巾速度單次套用 V319（2026-08-26）
 
 - 原因／修正：`choice_scarf` 在玩家 `currentBattleStat()` 同時依固定 item id 乘 1.25，又依正式 `choice_lock_speed_bonus` effect kind 再乘一次 1.25，經整數取整後實測成約 1.565 倍。現移除舊 id 特判，只保留資料定義的 `speedBonus: 0.25` 單一來源，因此單件與武器庫內裝都只提高約 25% 速度；首次直接攻擊鎖招規則不變。
 - 範圍／快取：只修改 `public/js/board_game.js` 的玩家速度計算、`scripts/bullet_arsenal_full_compatibility_qa.js` 的修正後推薦池，以及 `public/board_game.html` 主程式 query；沒有修改道具 id、價格、取得方式、存檔欄位、localStorage key、Socket.IO event、巴雷特吸收版或其他速度道具。正式主程式 query 為 `20260826-choice-scarf-single-speed-v319`。
-- 驗證：
-ode --check` 通過 `public/js/board_game.js` 與全量 QA；
-pm start` 於 8798 port 正常提供 V319 主程式。正式瀏覽器實測疾風圍巾單件速度為 1.252 倍（基礎數值取整後的 +25%），疾風貝／黑焰羽衣對照為 1.15／1.299；全量結果為結構 93／93、玩家效果 93／93、4,278／4,278 組可用，`runtimeAnomalies=[]`、`errors=[]`、`failures=[]`。疾風圍巾已重新納入正常排名；本機未設定 `DATABASE_URL`，資料庫功能於此次靜態 QA 中停用。
+- 驗證：`node --check` 通過 `public/js/board_game.js` 與全量 QA；`npm start` 於 8798 port 正常提供 V319 主程式。正式瀏覽器實測疾風圍巾單件速度為 1.252 倍（基礎數值取整後的 +25%），疾風貝／黑焰羽衣對照為 1.15／1.299；全量結果為結構 93／93、玩家效果 93／93、4,278／4,278 組可用，`runtimeAnomalies=[]`、`errors=[]`、`failures=[]`。疾風圍巾已重新納入正常排名；本機未設定 `DATABASE_URL`，資料庫功能於此次靜態 QA 中停用。
 
 ## 修改紀錄：十件 Boss 遺物玩家端效果 V318（2026-08-26）
 
@@ -1780,9 +1604,7 @@ pm start` 於 8798 port 正常提供 V319 主程式。正式瀏覽器實測疾�
 - 定案規則：櫻十・木枯為速度／物攻各 +20% 與每場首次整招直接傷害 -40%；黃金戒三次有效直接攻擊後束縛一回合、雙防永久 -1，戰勝貝里為基礎值 +200%；Battle Smasher 三次命中蓄熱，下一次直接攻擊 +40%、無視 20% 防禦，命中或落空都消耗，反噬最大 HP 30% 但最低留 1；魔王樂譜只對多段招式依 +1%、+2%、+4% 無上限翻倍；七星劍每損失完整 5% 最大 HP 增傷 4%，最高 +76%。
 - 定案規則（續）：KING 佩刀背火受直接傷害 -25%，被直接命中後熄火，熄火時速度與下一次直接攻擊各 +25%，只有完成直接攻擊才復燃；土龍特攻 +30%，只反制敵人連續兩次行動使用同一直接招式；傘劍在整招結算後吸取實傷 20%，溢補轉最大 HP 15% 護盾；Ragnir 特攻 +20%，第三朵冰雲生成當下立即凍結並清空；生命種子低於 70% HP 時回復／累積，依 1／2／3 顆復活 12%／24%／36%，每場只復活一次。
 - 檔案／快取：修改 `public/js/board_items.js`、`public/js/board_game.js`、`public/board_game.html`，新增 `scripts/postgame_boss_relic_player_effects_qa.js`，更新 `scripts/bullet_arsenal_full_compatibility_qa.js` 與重產 `docs/ITEM_CATALOG.md`；並同步 `docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_BOSS_RELICS.md`。正式主頁資料／主程式 query 為 `20260826-postgame-relic-player-effects-v318`；沒有新增或改名 `gameState`、localStorage key 或 Socket.IO event。
-- 驗證：
-ode --check` 通過兩份正式 JavaScript 與兩份 QA；十件遺物以正式瀏覽器在單件／武器庫兩模式完成 36／36 專項檢查，`failures=0`、`errors=[]`。全 93 件兵裝仍為結構 93／93、玩家效果處理 93／93，4,278 種不同兵裝組合皆完成；既有武器庫裝卸／雙 runtime／空外殼／破孔恢復專項、十三 Boss 13／13 機制與桌機／手機圖像回歸均為 `failures=[]`、`errors=[]`。一般 CPU 戰鬥完整採樣 38 次，確認開場對話後會實際選招、扣除敵方 HP，`lastError=""`。V318 當時仍存在的疾風圍巾速度重複套用已由上方 V319 修正。
-pm start` 於 8798 port 正常啟動；本機未設定 `DATABASE_URL`，資料庫功能於此次靜態／戰鬥 QA 中停用。
+- 驗證：`node --check` 通過兩份正式 JavaScript 與兩份 QA；十件遺物以正式瀏覽器在單件／武器庫兩模式完成 36／36 專項檢查，`failures=0`、`errors=[]`。全 93 件兵裝仍為結構 93／93、玩家效果處理 93／93，4,278 種不同兵裝組合皆完成；既有武器庫裝卸／雙 runtime／空外殼／破孔恢復專項、十三 Boss 13／13 機制與桌機／手機圖像回歸均為 `failures=[]`、`errors=[]`。一般 CPU 戰鬥完整採樣 38 次，確認開場對話後會實際選招、扣除敵方 HP，`lastError=""`。V318 當時仍存在的疾風圍巾速度重複套用已由上方 V319 修正。`npm start` 於 8798 port 正常啟動；本機未設定 `DATABASE_URL`，資料庫功能於此次靜態／戰鬥 QA 中停用。
 
 ## 測試紀錄：武器庫全兵裝相容性與 4,278 組配對掃描 V317（2026-08-25）
 
@@ -1790,75 +1612,57 @@ pm start` 於 8798 port 正常啟動；本機未設定 `DATABASE_URL`，資料�
 - 結果（V317 當時）：93／93 件通過武器庫結構與生命週期測試，`structuralFailures=[]`、瀏覽器 `errors=[]`；當時玩家端效果處理器稽核為 83／93，列出的十件 Boss 遺物尚未完整執行玩家效果。這十件缺口已由上方 V318 修正並重測為 93／93，本段保留作歷史稽核紀錄。
 - 額外異常（V317 當時）：疾風圍巾的 `choice_scarf` item id 與 `choice_lock_speed_bonus` effect kind 在玩家速度計算中各乘一次 1.25，實測單件為 1.565 倍而非敘述的 1.25 倍；此異常已由 V319 修正。
 - 配對掃描（V317 當時）：93 件不同兵裝兩兩組合共 4,278 組全部完成計算；當時排除十件未接效果後為 3,403 組。V318 已讓 4,278 組全部具備玩家端處理器，V319 再把修正後的疾風圍巾重新納入正常推薦。
-- 檔案／驗證：只新增測試工具並同步 `docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`；沒有修改正式遊戲程式、資料 id、存檔欄位或 Socket.IO event。測試工具通過 
-ode --check`，完整結果輸出至工作區外 `arsenal_full_compatibility_v317/bullet_arsenal_full_compatibility_result.json`。工具依設計因 10 個效果缺口及 1 個倍率異常回傳非零，總計 `failures=11`；
-pm start` 於 8798 port 正常啟動，本機無 `DATABASE_URL`，資料庫功能在此次瀏覽器 QA 中停用。
+- 檔案／驗證：只新增測試工具並同步 `docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`；沒有修改正式遊戲程式、資料 id、存檔欄位或 Socket.IO event。測試工具通過 `node --check`，完整結果輸出至工作區外 `arsenal_full_compatibility_v317/bullet_arsenal_full_compatibility_result.json`。工具依設計因 10 個效果缺口及 1 個倍率異常回傳非零，總計 `failures=11`；`npm start` 於 8798 port 正常啟動，本機無 `DATABASE_URL`，資料庫功能在此次瀏覽器 QA 中停用。
 
 ## 修改紀錄：武器庫戰鬥狀態列內層兵裝選擇 V316（2026-08-25）
 
 - 問題／修正：戰鬥狀態列原本把「巴雷特的武器庫」與內裝兩件兵裝展開成三顆攜帶物標籤，會擠壓其他狀態。現在狀態列只保留一顆「巴雷特的武器庫」；點開後才在既有詳情浮窗內顯示兩個兵裝選項，玩家選擇其中一件即可查看該件目前狀態與完整效果。
 - 規則／邊界：兩件內裝兵裝仍同時生效並各自保存 runtime；禁止同種兵裝、背包扣還、巴雷特只吸收空外殼、破孔前封存與破孔後恢復等規則均未改。一般攜帶物仍維持原本單一詳情浮窗，Tot Musica 雙世界戰鬥沿用同一套武器庫顯示。沒有新增 `gameState` 欄位、localStorage key、Socket.IO event 或第五顆戰鬥指令。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`，新增 `scripts/bullet_arsenal_battle_hud_qa.js`，並同步 `docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`。正式主頁 query 為 `20260825-arsenal-nested-hud-v316`，戰鬥頁 query／iframe 版本為 `20260825-arsenal-nested-hud-v96`。
-- 驗證：三份 JavaScript 均通過 
-ode --check`。新戰鬥 HUD 專項在 1600×900 與 932×430 均確認狀態列只有 1 顆武器庫、舊兵裝標籤為 0、浮窗內有 2 個可選兵裝、兩件詳情切換正確、浮窗未超出視窗且 HUD 無 overflow，`errors=[]`、`failures=[]`。既有武器庫完整規則／桌機／平板 QA 全數通過；十三 Boss 隔離回歸亦為 `bossCount=13`、`errors=[]`、`failures=[]`。
-pm start` 於獨立 8798 port 啟動，兩個正式 HTML 與 V316／V96 JavaScript 四個網址均為 HTTP 200；本機未設定 `DATABASE_URL`，資料庫功能於此次靜態／戰鬥 QA 中停用，測試後停止臨時服務。
+- 驗證：三份 JavaScript 均通過 `node --check`。新戰鬥 HUD 專項在 1600×900 與 932×430 均確認狀態列只有 1 顆武器庫、舊兵裝標籤為 0、浮窗內有 2 個可選兵裝、兩件詳情切換正確、浮窗未超出視窗且 HUD 無 overflow，`errors=[]`、`failures=[]`。既有武器庫完整規則／桌機／平板 QA 全數通過；十三 Boss 隔離回歸亦為 `bossCount=13`、`errors=[]`、`failures=[]`。`npm start` 於獨立 8798 port 啟動，兩個正式 HTML 與 V316／V96 JavaScript 四個網址均為 HTTP 200；本機未設定 `DATABASE_URL`，資料庫功能於此次靜態／戰鬥 QA 中停用，測試後停止臨時服務。
 
 ## 修改紀錄：十三島 Boss 全新挑戰滿血 V315（2026-08-25）
 
 - 問題／修正：原本只有 Tot Musica、泰佐洛與澤法被列入「全新挑戰固定滿血」名單，其他十名 Boss 會直接沿用島嶼 `currentHp`；撤退、其他玩家留下的進度或舊快照因而可能讓吸血伯爵等 Boss 以殘血開始新戰。現在滿血名單直接由十三名正式 `POSTGAME_BOSS_DEFS` 產生，所有無風帶 Boss 的全新挑戰都會先把島嶼與戰鬥 HP 設為該 Boss 的完整最大值。
 - 續戰／邊界：同一筆 `pendingBattle` 仍從保存的 Boss HP、狀態與機制進度繼續，不會補滿；同島既有共鬥會先走共鬥加入流程。一般敵島、四皇、推進城、海軍本部、洛基試煉與洛克斯終戰沒有納入這個十三島名單。沒有新增 `gameState` 欄位、localStorage key 或 Socket.IO event。正式主頁 query 為 `20260825-postgame-fresh-full-hp-v315`。
 - 檔案：修改 `public/js/board_game.js`、`public/board_game.html`，新增 `scripts/postgame_boss_fresh_hp_qa.js`，並同步 `docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`。
-- 驗證：主程式與專項 QA 均通過 
-ode --check`。專項瀏覽器 QA 逐一將 13 名 Boss 的島嶼 HP 壓到 37% 後發起新挑戰，13／13 均恢復完整 HP；再將同一戰鬥保存為 41% HP 的 `pendingBattle`，13／13 均維持殘血續戰，`errors=[]`、`failures=[]`。既有十三 Boss 機制／桌機／手機隔離回歸亦為 `bossCount=13`、`errors=[]`、`failures=[]`。
-pm start` 等效的正式 server 於獨立 8798 port 啟動，主頁與 V315 主程式皆 HTTP 200；本機未設定 `DATABASE_URL`，資料庫功能於此次靜態／戰鬥 QA 中停用，測試後停止臨時服務。
+- 驗證：主程式與專項 QA 均通過 `node --check`。專項瀏覽器 QA 逐一將 13 名 Boss 的島嶼 HP 壓到 37% 後發起新挑戰，13／13 均恢復完整 HP；再將同一戰鬥保存為 41% HP 的 `pendingBattle`，13／13 均維持殘血續戰，`errors=[]`、`failures=[]`。既有十三 Boss 機制／桌機／手機隔離回歸亦為 `bossCount=13`、`errors=[]`、`failures=[]`。`npm start` 等效的正式 server 於獨立 8798 port 啟動，主頁與 V315 主程式皆 HTTP 200；本機未設定 `DATABASE_URL`，資料庫功能於此次靜態／戰鬥 QA 中停用，測試後停止臨時服務。
 
 ## 修改紀錄：覺醒路基六王銃先現身再受擊 V314（2026-08-25）
 
 - 順序修正：依使用者澄清，六王銃不應在黑幕衝擊途中就把我方切成受擊圖。現在 5.2 秒必殺動畫完整結束並退去黑幕後，先強制顯示我方正常角色圖 0.6 秒；第 5.8 秒才播放命中語音、切正式 `hit.webp`、扣除畫面 HP、跳傷害數字、播放命中特效與震動，受擊圖維持 1.6 秒。
 - 事件／邊界：主程式的六王銃專屬 attack visual duration 由 5.2 秒延長為 7.6 秒，確保下一回合不會插入三段演出；BGM 與一般音效保持鎖定到受擊完成再恢復。只修改六王銃顯示時序，威力 480、必中、無視 50% 防禦、六式循環、權威 HP、存檔、多人 event 與其他 Boss 不變。正式主頁／戰鬥頁 query 為 `20260825-lucci-rokuogan-reveal-before-hit-v314`。
-- 驗證：三份 JavaScript 均通過 
-ode --check`。路基專項 QA 在 1600×900／932×430 均實測：黑幕退去後先為 
-ormal.webp`、HP 800／800、無傷害字且最後語音仍為 `call`；下一段才成為 `hit.webp`、HP 479／800、顯示 `-321` 且最後語音改為 `hit`，`errors=[]`、`failures=[]`。六式 6／6、威力／必中／無視防禦與 BGM 生命週期亦通過；十三 Boss 隔離回歸為 13／13、`errors=[]`、`failures=[]`。
-pm start` 於獨立 8798 port 啟動，兩個正式 HTML 與 V314 主程式／戰鬥 UI 皆 HTTP 200；測試後已停止臨時服務。
+- 驗證：三份 JavaScript 均通過 `node --check`。路基專項 QA 在 1600×900／932×430 均實測：黑幕退去後先為 `normal.webp`、HP 800／800、無傷害字且最後語音仍為 `call`；下一段才成為 `hit.webp`、HP 479／800、顯示 `-321` 且最後語音改為 `hit`，`errors=[]`、`failures=[]`。六式 6／6、威力／必中／無視防禦與 BGM 生命週期亦通過；十三 Boss 隔離回歸為 13／13、`errors=[]`、`failures=[]`。`npm start` 於獨立 8798 port 啟動，兩個正式 HTML 與 V314 主程式／戰鬥 UI 皆 HTTP 200；測試後已停止臨時服務。
 
 ## 修改紀錄：覺醒路基六王銃受擊停留 V313（2026-08-25）
 
 - 原因／修正：六王銃在第 3.3 秒衝擊接觸時就已切換我方受擊圖，但受擊圖原本僅維持 1.1 秒，會在 5.2 秒黑幕完全退去前接近結束，玩家真正看見時只剩短暫一瞬。現保留命中語音、傷害跳字、顯示 HP 與衝擊時點，只把我方受擊圖停留延長為 2.5 秒，使黑幕退去後仍清楚可見。
 - 邊界：只修改 `public/js/board_battle.js` 的六王銃專屬受擊 pose 計時、更新戰鬥頁 cache query，並擴充既有路基專項 QA；沒有更動六式抽取、六王銃威力 480、必中、無視 50% 防禦、BGM／語音生命週期、存檔、多人 event 或其他 Boss。正式戰鬥頁 query 為 `20260825-lucci-rokuogan-hit-hold-v313`。
-- 驗證：
-ode --check` 通過戰鬥 UI 與路基專項 QA。`scripts/lucci_six_powers_qa.js` 在 1600×900 與 932×430 均實測黑幕完全退去後 `playerHitPose=true`、正式 `hit.webp` 已解碼，並再次通過六式 6／6、六王銃必中／威力／無視防禦、語音與 BGM 生命週期，`errors=[]`、`failures=[]`；十三 Boss 隔離回歸為 13／13、`errors=[]`、`failures=[]`。
-pm start` 於獨立 8798 port 啟動，正式戰鬥頁與 V313 戰鬥 UI 均 HTTP 200；測試後已停止臨時服務。
+- 驗證：`node --check` 通過戰鬥 UI 與路基專項 QA。`scripts/lucci_six_powers_qa.js` 在 1600×900 與 932×430 均實測黑幕完全退去後 `playerHitPose=true`、正式 `hit.webp` 已解碼，並再次通過六式 6／6、六王銃必中／威力／無視防禦、語音與 BGM 生命週期，`errors=[]`、`failures=[]`；十三 Boss 隔離回歸為 13／13、`errors=[]`、`failures=[]`。`npm start` 於獨立 8798 port 啟動，正式戰鬥頁與 V313 戰鬥 UI 均 HTTP 200；測試後已停止臨時服務。
 
 ## 修改紀錄：卡塔庫栗見聞色短版影片 V312（2026-08-25）
 
 - 素材：使用者已在 Board 專用路徑重新剪短 `public/videos/board/postgame_bosses/katakuri/future_sight_red_eyes.mp4`；新版為 4.671 秒、1,465,396 bytes、1920×1080、SHA-256 `BD9A48DA7894CDF90A22B3634E1965AD4C30482A3C723940550C0CF070590AF3`。實際檢查中段與結尾皆保留卡塔庫栗紅眼見聞色畫面。
 - 程式／邊界：正式演出時間由 5.6 秒同步縮為 4.8 秒，戰鬥頁 fallback 同步更新；流程仍為開戰對話 → 見聞色特寫 → 預知骰，沒有新增按鈕、存檔欄位或多人 event。另一款遊戲的 `public/videos/enh/15.mp4` 未移動、未改寫，SHA-256 仍為 `63F2BBB9C527768D01A4D8A51C1A51CB6EDF4CB03C90AA154323DBF2079A3516`。正式 query 更新為 `20260825-katakuri-short-video-v312`。
-- 驗證：新版影片由瀏覽器解碼為 4.671 秒、1920×1080、readyState 4，並實際檢視中段與結尾；四份 JavaScript 均通過 
-ode --check`。卡塔庫栗專項確認開戰對話 gate → Board 專用影片 → 預知骰、四顆原指令、桌機／932×430 與既有攻防規則，`errors=[]`、`failures=[]`；十三 Boss 隔離回歸為 13／13，`errors=[]`、`failures=[]`。
-pm start` 於獨立 8798 port 啟動，兩個正式 HTML、V312 主程式／戰鬥 UI 及新影片皆 HTTP 200；測試後已停止臨時服務。
+- 驗證：新版影片由瀏覽器解碼為 4.671 秒、1920×1080、readyState 4，並實際檢視中段與結尾；四份 JavaScript 均通過 `node --check`。卡塔庫栗專項確認開戰對話 gate → Board 專用影片 → 預知骰、四顆原指令、桌機／932×430 與既有攻防規則，`errors=[]`、`failures=[]`；十三 Boss 隔離回歸為 13／13，`errors=[]`、`failures=[]`。`npm start` 於獨立 8798 port 啟動，兩個正式 HTML、V312 主程式／戰鬥 UI 及新影片皆 HTTP 200；測試後已停止臨時服務。
 
 ## 修改紀錄：卡塔庫栗影片獨立為 Board 專用素材 V311（2026-08-25）
 
 - 素材隔離：V310 曾直接讀取另一款遊戲留下的 `public/videos/enh/15.mp4`；依使用者指正，現從原片 9.00 秒起精確裁切 5.47 秒紅眼見聞色段落，重新編碼為 1920×1080 H.264／AAC，另存至 `public/videos/board/postgame_bosses/katakuri/future_sight_red_eyes.mp4`。原 `15.mp4` 不移動、不覆蓋、不刪除，SHA-256 仍為 `63F2BBB9C527768D01A4D8A51C1A51CB6EDF4CB03C90AA154323DBF2079A3516`。
 - 程式／邊界：卡塔庫栗 visual event 與戰鬥頁影片 fallback 均改讀 Board 專用新檔，起播時間改為 0；正式頁 query 更新為 `20260825-katakuri-board-video-v311`。遊戲仍維持開戰對話 → 見聞色特寫 → 預知骰，沒有新增按鈕、存檔欄位、Socket.IO event，其他 Boss 不變。
-- 驗證：新檔為 5.472 秒、2,023,314 bytes、SHA-256 `F2D2C22143273973054EED0A39B805EC5D37C7993177D6D15B1233CF38DAAFBD`，瀏覽器解碼為 1920×1080、readyState 4，並實際檢視紅眼畫面。三份 JavaScript 
-ode --check` 通過；卡塔庫栗專項確認新路徑、三段順序、四顆原指令、桌機／932×430 及原攻防規則，`errors=[]`、`failures=[]`；十三 Boss 回歸 13／13，`errors=[]`、`failures=[]`。
+- 驗證：新檔為 5.472 秒、2,023,314 bytes、SHA-256 `F2D2C22143273973054EED0A39B805EC5D37C7993177D6D15B1233CF38DAAFBD`，瀏覽器解碼為 1920×1080、readyState 4，並實際檢視紅眼畫面。三份 JavaScript `node --check` 通過；卡塔庫栗專項確認新路徑、三段順序、四顆原指令、桌機／932×430 及原攻防規則，`errors=[]`、`failures=[]`；十三 Boss 回歸 13／13，`errors=[]`、`failures=[]`。
 
 ## 修改紀錄：卡塔庫栗見聞色特寫與預知骰演出 V310（2026-08-25）
 
 - 演出順序：卡塔庫栗戰每名玩家的行動開始時，現在固定等待原本開戰對話完整結束，接著播放 `public/videos/enh/15.mp4` 最後約 5.6 秒的見聞色紅眼特寫，特寫隱藏後才送出既有 `dice` visual event，讓預知骰實際翻滾並停在公開點數。三段演出不重疊，開場被動視覺也不會插入「對話 → 特寫 → 預知骰」之間。
 - 作用域／同步：只新增卡塔庫栗專屬 `postgame-katakuri-future-sight` 暫時 visual event、戰鬥頁影片遮罩與兩次既有完整戰鬥快照推送；沒有新增永久按鈕、頂層 `gameState` 欄位、localStorage key、Socket.IO event 或 server 欄位。正面出招後的攻擊／夥伴／道具／逃跑四顆指令、整輪防禦與其他十二名 Boss 規則不變。正式主頁與戰鬥頁 query 更新為 `20260825-katakuri-cinematic-dice-v310`。
-- 檔案／驗證：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/katakuri_future_sight_qa.js` 及四份專案文件；沿用使用者提供的既有 `public/videos/enh/15.mp4`，沒有改寫影片。三份 JavaScript 均通過 
-ode --check`。專項 QA 實測開戰對話期間 `visualType=""`、對話後特寫可見且影片路徑正確、特寫隱藏後預知骰為 `rolling=true`，並再次通過四顆一般指令、15%～90% 防禦、PP 消耗、桌機與 932×430，`errors=[]`、`failures=[]`；十三 Boss 回歸為 13／13、`errors=[]`、`failures=[]`。
-pm start` 於獨立 8798 port 啟動，兩個正式 HTML、V310 主程式／戰鬥 UI 及影片均 HTTP 200；資料庫功能因本機未設 `DATABASE_URL` 停用，測試後已停止臨時服務。
+- 檔案／驗證：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/katakuri_future_sight_qa.js` 及四份專案文件；沿用使用者提供的既有 `public/videos/enh/15.mp4`，沒有改寫影片。三份 JavaScript 均通過 `node --check`。專項 QA 實測開戰對話期間 `visualType=""`、對話後特寫可見且影片路徑正確、特寫隱藏後預知骰為 `rolling=true`，並再次通過四顆一般指令、15%～90% 防禦、PP 消耗、桌機與 932×430，`errors=[]`、`failures=[]`；十三 Boss 回歸為 13／13、`errors=[]`、`failures=[]`。`npm start` 於獨立 8798 port 啟動，兩個正式 HTML、V310 主程式／戰鬥 UI 及影片均 HTTP 200；資料庫功能因本機未設 `DATABASE_URL` 停用，測試後已停止臨時服務。
 
 ## 修改紀錄：卡塔庫栗正面出招保留一般指令 V309（2026-08-25）
 
 - 規則修正：選擇「正面出招」後不是強制立刻選招，而是回到原本四顆戰鬥指令；玩家仍可攻擊、換夥伴、使用道具或嘗試逃跑。只有最後真的使用招式時才比較該招第一骰與預知骰；換人、道具及逃跑不做未來視骰點比較，仍各自遵守原本的有效條件與 Boss 禁止逃跑等既有規則。
 - 介面／邏輯：移除卡塔庫栗專屬的 `attackOnly` 顯示限制及主程式對換人、道具、逃跑的二次拒絕；暫時二選一與永久四顆指令數量不變，防禦仍會放棄整個行動。沒有修改其他 Boss、頂層 `gameState`、localStorage key、Socket.IO event 或 server 欄位。正式主頁與戰鬥頁 query 更新為 `20260825-katakuri-normal-actions-v309`。
-- 檔案／驗證：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/katakuri_future_sight_qa.js` 及四份專案文件。四份 JavaScript 均通過 
-ode --check`；卡塔庫栗專項實際選擇正面出招後，攻擊／夥伴／道具／逃跑四顆按鈕皆為可用，桌機與 932×430 無 overflow，預知失效及 15%～90% 防禦回歸仍通過，`errors=[]`、`failures=[]`。十三 Boss 回歸為 13／13 且 `errors=[]`、`failures=[]`。
-pm start` 於獨立 8798 port 啟動，兩個正式 HTML 與 V309 主程式／戰鬥 UI JavaScript 均 HTTP 200；測試後已停止臨時服務。
+- 檔案／驗證：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/katakuri_future_sight_qa.js` 及四份專案文件。四份 JavaScript 均通過 `node --check`；卡塔庫栗專項實際選擇正面出招後，攻擊／夥伴／道具／逃跑四顆按鈕皆為可用，桌機與 932×430 無 overflow，預知失效及 15%～90% 防禦回歸仍通過，`errors=[]`、`failures=[]`。十三 Boss 回歸為 13／13 且 `errors=[]`、`failures=[]`。`npm start` 於獨立 8798 port 啟動，兩個正式 HTML 與 V309 主程式／戰鬥 UI JavaScript 均 HTTP 200；測試後已停止臨時服務。
 
 ## 修改紀錄：卡塔庫栗「預知未來」攻防抉擇 V308（2026-08-25）
 
@@ -1866,15 +1670,13 @@ pm start` 於獨立 8798 port 啟動，兩個正式 HTML 與 V309 主程式／�
 - 相容：奇數／偶數骰會分別限制預知骰、正常招式第一骰或防禦骰並消耗一次；共鬥每位交棒玩家各自預知、選擇，防禦只綁定該玩家與該輪。CPU 依預知點數、目前生命與收尾機會選擇出招或防禦。移除舊版猜招、冷靜、封鎖預知與 5% 反擊流程；卡塔庫栗仍為 1600 HP、原四招與原獎勵，其他十二名 Boss 不變。
 - UI／同步：戰鬥頁先顯示預知骰與兩顆暫時選項；選擇正面出招後才顯示原四招，沒有永久第五顆按鈕。新狀態只保存於既有 battle mechanic 快照；沒有新增頂層 `gameState` 欄位、localStorage key、Socket.IO event 或 server 欄位。正式主頁與戰鬥頁 query 為 `20260825-katakuri-future-sight-v308`。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/postgame_boss_mechanics_qa.js`、新增 `scripts/katakuri_future_sight_qa.js`，並同步四份專案文件。
-- 驗證：
-ode --check` 通過主程式、戰鬥 UI 與兩份 QA。十三 Boss 回歸為 13／13、`errors=[]`、`failures=[]`；卡塔庫栗專項確認永久按鈕 4、暫時選項 2，桌機與 932×430 均無 overflow，防禦骰 1～6 對 1000 直接傷害依序剩 850／700／550／400／250／100，預知 6 對第一骰 5 時敵方 HP 不變且 PP 扣 1。CPU 實戰在預知 5 時會選防禦、完成該輪並離開戰鬥，`lastError=""`。
+- 驗證：`node --check` 通過主程式、戰鬥 UI 與兩份 QA。十三 Boss 回歸為 13／13、`errors=[]`、`failures=[]`；卡塔庫栗專項確認永久按鈕 4、暫時選項 2，桌機與 932×430 均無 overflow，防禦骰 1～6 對 1000 直接傷害依序剩 850／700／550／400／250／100，預知 6 對第一骰 5 時敵方 HP 不變且 PP 扣 1。CPU 實戰在預知 5 時會選防禦、完成該輪並離開戰鬥，`lastError=""`。
 
 ## 修改紀錄：伊多雲端存檔入口復原與 QA 隔離（2026-08-25）
 
 - 存檔復原：確認伊多的正式房號存檔 `server/data/board_saves/B5611.json` 完整保留（2026-08-19 15:20、第 460 回合、伊多與 CPU1～CPU3），將其原樣接回跨房讀檔入口 `server/data/board_saves/RECOVERED.json`；沒有改寫遊戲內容、房號、玩家或 `gameState` 欄位。
 - 原因／修正：`scripts/york_clue_puzzle_formal_integration_qa.js` 原本在隔離房完成存讀檔測試後呼叫正式 `deleteManualSave()`，連帶刪除全域 `RECOVERED`。清理流程改為只移除該 QA 瀏覽器 context 的兩個本機測試 key，並只 DELETE 本次隨機 `YQ...` 測試房號，不再碰正式跨房備份。
-- 驗證：
-ode --check` 通過 QA 腳本；正式約克整合 QA 以隨機房 `YQ7FI8NP` 完成，存讀檔清理 `deleted=true`、多人同步收斂且 `errors=[]`。QA 前後 `RECOVERED.json` 都存在且 SHA-256 保持 `5BBB6E13E26D78F3DF6F3C4DCB16B9603B58D03FB829B9B8FF175585E62F8569`；復原檔與 `B5611.json` 的 SHA-256 完全一致，JSON 可解析且仍為第 460 回合、目前玩家伊多。正式 `/api/board-save/RECOVERED` 回傳伊多存檔，不再落入其他房號的最新檔案後備選擇。
+- 驗證：`node --check` 通過 QA 腳本；正式約克整合 QA 以隨機房 `YQ7FI8NP` 完成，存讀檔清理 `deleted=true`、多人同步收斂且 `errors=[]`。QA 前後 `RECOVERED.json` 都存在且 SHA-256 保持 `5BBB6E13E26D78F3DF6F3C4DCB16B9603B58D03FB829B9B8FF175585E62F8569`；復原檔與 `B5611.json` 的 SHA-256 完全一致，JSON 可解析且仍為第 460 回合、目前玩家伊多。正式 `/api/board-save/RECOVERED` 回傳伊多存檔，不再落入其他房號的最新檔案後備選擇。
 
 ## 修改紀錄：約克十三張牌三階後新題目練習 V307（2026-08-24）
 
@@ -1882,49 +1684,40 @@ ode --check` 通過 QA 腳本；正式約克整合 QA 以隨機房 `YQ7FI8NP` �
 - 新題目／權威驗證：每次重新開啟練習頁都由本次 overlay channel 建立新的暫時題目變體；同一次開啟內維持相同題目，重新開啟則換題。內嵌頁仍只回傳排牌答案，`board_game.js` 以自己保存的變體識別碼重建同一份唯一解後驗證，不信任 iframe 自報答案。
 - 無獎勵：練習成功只顯示完成結果；不新增或重複發放解碼器、不提高 `yorkDecoderTier`、名刀「日蝕」掉落率、線索數、蛋頭島狀態或其他道具／加成。沒有新增 `gameState` 欄位、localStorage key、Socket.IO event 或 server 欄位；一般第一次至三階的穩定題組與 CPU 只自動取得二階的規則不變。
 - 檔案：修改 `public/js/board_york_clue_puzzle.js`、`public/js/board_game.js`、`public/board_york_clue_puzzle_formal_demo.html`、`public/board_game.html`、`scripts/york_clue_puzzle_qa.js`、`scripts/york_clue_puzzle_formal_integration_qa.js` 及四份專案文件。正式 query 為 `20260824-york-tier3-practice-v307`；整合 QA 的十三 Boss 遺物清單同步由已移出孤島池的洛基改為正式第 12 位魔人歐斯。
-- 驗證：四份 JavaScript 均通過 
-ode --check`。題目產生器抽查 12 組基礎題與練習變體，確認變體可重現、重新開題會換答案且所有題目仍為唯一解，`failures=[]`。正式整合 QA 通過第一次簡單解碼、T1→T2→T3、三階缺少變體拒絕、三階練習成功、三難度可點、重新開啟取得不同變體、答案權威驗證、錯題、CPU 二階限制、存讀檔、多人觀看方鎖定及日蝕／十三 Boss 掉落回歸；練習前後 `tier=3`、解碼器 `[0,0,1]`、線索 `13`、蛋頭島狀態完全相同，`errors=[]`。
-pm start` 於 8787 啟動成功；資料庫功能因本機未設 `DATABASE_URL` 停用，但靜態 Board 與 Socket.IO QA 正常完成。
+- 驗證：四份 JavaScript 均通過 `node --check`。題目產生器抽查 12 組基礎題與練習變體，確認變體可重現、重新開題會換答案且所有題目仍為唯一解，`failures=[]`。正式整合 QA 通過第一次簡單解碼、T1→T2→T3、三階缺少變體拒絕、三階練習成功、三難度可點、重新開啟取得不同變體、答案權威驗證、錯題、CPU 二階限制、存讀檔、多人觀看方鎖定及日蝕／十三 Boss 掉落回歸；練習前後 `tier=3`、解碼器 `[0,0,1]`、線索 `13`、蛋頭島狀態完全相同，`errors=[]`。`npm start` 於 8787 啟動成功；資料庫功能因本機未設 `DATABASE_URL` 停用，但靜態 Board 與 Socket.IO QA 正常完成。
 
 ## 修改紀錄：巴雷特武器庫禁止同種兵裝 V306（2026-08-24）
 
 - 規則／UI：武器庫兩個兵裝槽只能裝入不同 id 的攜帶物；例如戰鬥服＋九尾幻面可以，兩件戰鬥服不行。另一槽已裝備的同種道具會在整備清單停用並顯示所在槽位，正式裝入函式也會再次拒絕，拒絕時不扣除背包或替換原槽。
 - 舊存檔：讀取到重複兵裝時保留第一個槽位，後一件安全退回玩家背包，不刪除物品；若涉及最大 HP 兵裝，會依原生命比例換算目前 HP。沒有新增頂層 gameState 欄位、localStorage key、Socket.IO event 或 server 欄位。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_items.js`、三個 Board HTML、`scripts/bullet_arsenal_qa.js`、道具清單及相關規則／總覽／檔案地圖／Boss 遺物文件。正式主程式與道具資料 query 為 `20260824-arsenal-unique-items-v306`。
-- 驗證：主程式、道具資料及兩份武器庫／吸收 QA 均通過 
-ode --check`。武器庫 17 項規則確認同種拒絕後背包數與兩槽不變、舊重複配置退回一件、不同兵裝雙效果、空外殼封存與破孔恢復；1600×900／932×430 整備 UI 均鎖住另一槽同種道具，無破圖或 overflow，`errors=[]`、`failures=[]`。六孔吸收／最高傷害回歸亦為 `errors=[]`、`failures=[]`，空武器庫倍率維持 1.0。
-pm start` 在 8787 啟動成功；三個 Board HTML、主程式及道具資料皆 HTTP 200 並載入 V306 query／文字。
+- 驗證：主程式、道具資料及兩份武器庫／吸收 QA 均通過 `node --check`。武器庫 17 項規則確認同種拒絕後背包數與兩槽不變、舊重複配置退回一件、不同兵裝雙效果、空外殼封存與破孔恢復；1600×900／932×430 整備 UI 均鎖住另一槽同種道具，無破圖或 overflow，`errors=[]`、`failures=[]`。六孔吸收／最高傷害回歸亦為 `errors=[]`、`failures=[]`，空武器庫倍率維持 1.0。`npm start` 在 8787 啟動成功；三個 Board HTML、主程式及道具資料皆 HTTP 200 並載入 V306 query／文字。
 
 ## 修改紀錄：巴雷特只吸收空武器庫、破孔後兵裝生效 V305（2026-08-24）
 
 - 巴雷特戰：六孔吸收到 `bullet_large_bullet_armor`「巴雷特的武器庫」時，只建立空武器庫外殼，不再展開兩件內裝兵裝，也不把內裝的增傷、速度、最大 HP、一次性效果或其他能力交給巴雷特。既有戰鬥快照若仍保存舊版 `arsenalItems`，載入時會清空巴雷特端的內裝副本。
 - 原持有人：兩件兵裝仍保存在原角色的武器庫資料內，但武器庫孔位未破壞前維持封存、不生效；第一骰對應的直接攻擊命中並破壞該孔後，原角色的兩件兵裝才同時恢復效果。六孔詳情顯示「空武器庫・內裝兵裝封存中（破孔後生效）」，不新增按鈕或存檔欄位。
 - 檔案：修改 `public/js/board_game.js`、`public/board_game.html`、`scripts/bullet_arsenal_qa.js`、`scripts/bullet_absorbed_items_qa.js` 及規則／總覽／檔案地圖／Boss 遺物文件；正式主程式 query 為 `20260824-cpu-battle-empty-arsenal-v305`。
-- 驗證：
-ode --check` 通過主程式與三份 QA JavaScript。武器庫專項 15 項邏輯確認巴雷特吸收效果數為 0、空外殼不提高巴雷特最大 HP、破孔前原持有人有效兵裝數為 0 且最大 HP 維持基礎值 118，破孔後兩件恢復並回到 153；1600×900／932×430 UI 均無破圖或 overflow，結果 `errors=[]`、`failures=[]`。六孔極限傷害回歸確認武器庫倍率為 1.0，其他重複吸收道具、護盾、回復、特殊效果與傷害 UI 全部通過；60 次 CPU 實戰採樣也完成巴雷特戰並離場，`errors=[]`、`lastError=""`。
-pm start` 因既有 8787 server 佔用回報 `EADDRINUSE`；沿用該 server 確認主頁與 V305 主程式皆 HTTP 200，且正式 query／空武器庫規則已載入。
+- 驗證：`node --check` 通過主程式與三份 QA JavaScript。武器庫專項 15 項邏輯確認巴雷特吸收效果數為 0、空外殼不提高巴雷特最大 HP、破孔前原持有人有效兵裝數為 0 且最大 HP 維持基礎值 118，破孔後兩件恢復並回到 153；1600×900／932×430 UI 均無破圖或 overflow，結果 `errors=[]`、`failures=[]`。六孔極限傷害回歸確認武器庫倍率為 1.0，其他重複吸收道具、護盾、回復、特殊效果與傷害 UI 全部通過；60 次 CPU 實戰採樣也完成巴雷特戰並離場，`errors=[]`、`lastError=""`。`npm start` 因既有 8787 server 佔用回報 `EADDRINUSE`；沿用該 server 確認主頁與 V305 主程式皆 HTTP 200，且正式 query／空武器庫規則已載入。
 
 ## 修改紀錄：CPU 戰鬥傷害結算卡死修正 V304（2026-08-24）
 
 - 原因：CPU 能正常等待開場台詞並選招，但一般招式進入傷害／治療／狀態與攜帶物結算後，數段由單攜帶物改成多攜帶物的程式提早結束迴圈，後續仍引用迴圈內的 `ctx`／`carryEffect`，依路徑拋出 `carryEffect is not defined` 或 `ctx is not defined`，令 `playerAction` 留在等待動畫／回合結算。
 - 修正：只校正 `storeBattleCarryDamageAfterHit()`、`applyPlayerHpThresholdBattleCarryEffects()`、`tryCancelStatusWithBattleCarry()` 的迴圈作用域，並讓 `applyBattleHealingEffects()` 明確尋找醫療背包 context；沒有更動 CPU 選招、傷害公式、道具效果、Boss 規則、回合權威、`BOARD_GAME_STATE`、localStorage key 或 Socket.IO event。
 - QA 工具：`scripts/battle_prebattle_intro_qa.js` 的頁面例外改記完整 stack，新增可調 sample 數及回合／HP／result 採樣，方便區分「CPU 已選招」與「戰鬥已實際結算」。
-- 驗證：修正前正式流程依序重現 `carryEffect is not defined`、`ctx is not defined`，堆疊最後定位至 `applyBattleHealingEffects()`；修正後 CPU 對薩卡完整出招並離開戰鬥、對巴雷特正常等待開場後出招，兩次均 `errors=[]`、`lastError=""`。
-ode --check` 通過主程式與 QA 腳本。`docs/GAME_RULES.md` 不需因 V304 更新，因戰鬥規則未改。
+- 驗證：修正前正式流程依序重現 `carryEffect is not defined`、`ctx is not defined`，堆疊最後定位至 `applyBattleHealingEffects()`；修正後 CPU 對薩卡完整出招並離開戰鬥、對巴雷特正常等待開場後出招，兩次均 `errors=[]`、`lastError=""`。`node --check` 通過主程式與 QA 腳本。`docs/GAME_RULES.md` 不需因 V304 更新，因戰鬥規則未改。
 
 ## 修改紀錄：背包道具圖統一黑底 V303（2026-08-24）
 
 - 顯示：正式道具圖片本身繼續保留透明 Alpha，背包左側大型預覽、右側道具清單縮圖及從背包開啟的船員選擇道具窗改由介面容器提供純黑底；九尾幻面、七星劍與傑爾馬66戰鬥服等去背圖在背包內因此仍與既有黑底道具圖一致。
 - 作用域：只修改 `public/board_game.html` 的背包專用 CSS，並將主程式 cache query 更新為 `20260824-backpack-item-black-v303`，確保重整後取得最新頁面；不修改任何圖片、道具資料、效果、戰鬥動畫、戰鬥頁、回合、存檔或多人同步。`docs/GAME_RULES.md` 不需更新，因規則未改。
-- 驗證：本機瀏覽器以 1280×720 桌機及 932×430 手機橫向實際載入含道具存檔；背包大型預覽、8 列可見清單縮圖及船員選擇道具窗皆為 `rgb(0, 0, 0)`，圖片全數載入且 modal／document 水平 overflow 均為 0。九尾幻面、七星劍與戰鬥服仍為 1254×1254 RGBA、Alpha 0～255。
-pm start` 因既有 8787 server 佔用回報 `EADDRINUSE`；沿用該正式 server 確認新版主頁 HTTP 200 且載入 `20260824-backpack-item-black-v303` query。
+- 驗證：本機瀏覽器以 1280×720 桌機及 932×430 手機橫向實際載入含道具存檔；背包大型預覽、8 列可見清單縮圖及船員選擇道具窗皆為 `rgb(0, 0, 0)`，圖片全數載入且 modal／document 水平 overflow 均為 0。九尾幻面、七星劍與戰鬥服仍為 1254×1254 RGBA、Alpha 0～255。`npm start` 因既有 8787 server 佔用回報 `EADDRINUSE`；沿用該正式 server 確認新版主頁 HTTP 200 且載入 `20260824-backpack-item-black-v303` query。
 
 ## 修改紀錄：戰鬥演出攜帶物透明素材替換 V302（2026-08-24）
 
 - 素材：依使用者指定，將 `D:\FFOutput` 的三張 Photoroom 去背 WebP 以剪下方式改成正式固定檔名，分別覆蓋戴彭的九尾幻面 `public/images/board/items/devon_kyubi_mask.webp`、七星劍 `public/images/board/items/postgame_boss_relics/saga_seven_star_sword.webp` 與傑爾馬66戰鬥服 `public/images/board/items/postgame_boss_relics/judge_germa66_battle_suit.webp`；三個外部來源檔移動完成後已不存在。
 - 作用域：只替換正式戰鬥動畫既有路徑所讀取的三張圖片，不修改道具 id、名稱、效果、戰鬥規則、HTML／JavaScript、`BOARD_GAME_STATE`、localStorage key 或 Socket.IO event；正式戰鬥頁仍沿用原三個素材路徑。
-- 驗證：移動前確認三張來源皆為 1254×1254 RGBA WebP，Alpha 範圍 0～255；移動後重新檢查正式檔尺寸、Alpha 與來源 SHA-256 一致，並確認 `D:\FFOutput` 三個來源路徑均已移除。
-pm start` 因既有 8787 server 佔用而回報 `EADDRINUSE`；沿用該正式 server 確認戰鬥頁與三張 WebP 均 HTTP 200，HTTP 內容 SHA-256 亦與移入來源一致。
+- 驗證：移動前確認三張來源皆為 1254×1254 RGBA WebP，Alpha 範圍 0～255；移動後重新檢查正式檔尺寸、Alpha 與來源 SHA-256 一致，並確認 `D:\FFOutput` 三個來源路徑均已移除。`npm start` 因既有 8787 server 佔用而回報 `EADDRINUSE`；沿用該正式 server 確認戰鬥頁與三張 WebP 均 HTTP 200，HTTP 內容 SHA-256 亦與移入來源一致。
 
 ## 修改紀錄：推進城同層邀請組隊與共鬥逃獄 V301（2026-08-24）
 
@@ -1932,9 +1725,7 @@ pm start` 因既有 8787 server 佔用而回報 `EADDRINUSE`；沿用該正式 s
 - 事件／路線：每回合仍由當前玩家抽事件與決定全隊路線；巡邏、鑰匙、麥哲倫與伊娃等事件作用於已正式組隊且仍在同樓層的成員，隱藏囚犯只由抽中事件的當前玩家個別抽取。當隊伍所有成員的全隊 HP 與所有招式 PP 都已全滿時，伊娃科夫不會進入本次事件池；任一成員有 HP 或 PP 缺口時才會出現。
 - 戰鬥／救援：非救援戰遇敵時建立推進城專用共鬥，同樓層隊員各行動一次後才完成本輪，隊員在全域玩家順序不相鄰也可正確交棒。單一玩家全隊瀕死先進入既有兩次本人回合的待救援；只有所有參戰隊員都倒下才判定逃獄失敗並押往海軍本部。既有牢外救援維持單人處理：成功救出目標，失敗只把救援者送往海軍本部。
 - UI／檔案：修改 `public/js/board_game.js`、`public/js/board_impel_down.js`、`public/board_impel_down.html`、`public/board_game.html`，新增 `scripts/impel_down_team_invite_coop_qa.js`，並同步更新四份專案文件。窄版組隊視窗改為固定於目前 viewport、內容可捲動，沒有使用新圖片或改動既有四顆推進城指令。正式主頁／推進城頁 query 為 `20260824-impel-team-invite-coop-v4`／`20260824-team-invite-coop-v16`。
-- 驗證：
-ode --check` 通過三份 JavaScript；專項 QA 實際呼叫正式邀請／接受指令，確認 A 發出邀請後回合交給中間順位 B、C 接受後仍停在 C 的回合，另覆蓋未組隊不共用、B 同層但未入隊、滿狀態排除伊娃／受傷後恢復、隱藏囚犯只給當前玩家、非相鄰 A→C 共鬥交棒、兩回合待救援及牢外救援保持單人，結果 `errors=[]`、`failures=[]`。1440×900 與 760×900 組隊 UI 無水平 overflow；
-pm start` 因既有 8787 server 佔用回報 `EADDRINUSE`，確認該 server 的正式主頁 HTTP 200 且已載入新版 query，未停止使用者現有 server。
+- 驗證：`node --check` 通過三份 JavaScript；專項 QA 實際呼叫正式邀請／接受指令，確認 A 發出邀請後回合交給中間順位 B、C 接受後仍停在 C 的回合，另覆蓋未組隊不共用、B 同層但未入隊、滿狀態排除伊娃／受傷後恢復、隱藏囚犯只給當前玩家、非相鄰 A→C 共鬥交棒、兩回合待救援及牢外救援保持單人，結果 `errors=[]`、`failures=[]`。1440×900 與 760×900 組隊 UI 無水平 overflow；`npm start` 因既有 8787 server 佔用回報 `EADDRINUSE`，確認該 server 的正式主頁 HTTP 200 且已載入新版 query，未停止使用者現有 server。
 
 ## 修改紀錄：商店取消懸賞鎖與戰略骰券定價 V300（2026-08-24）
 
@@ -1942,8 +1733,7 @@ pm start` 因既有 8787 server 佔用回報 `EADDRINUSE`，確認該 server 的
 - 戰略商品價格：`fixed_step`「指定步數券」由 650 提高為 3,800 貝里；`odd_dice`／`even_dice`「單數骰子／雙數骰子」由 900 提高為各 4,800 貝里。三者皆高於新局 3,000 貝里，開局看得到但買不起；奇偶骰能控制兩次戰鬥第一骰，故高於單次指定移動步數的券。
 - 相容與範圍：沒有改道具 id、效果、商店商品數、船隻商品、背包、折扣、回合、戰鬥、`BOARD_GAME_STATE`、localStorage key、Socket.IO event 或 server 快照。正式 query 更新為 `20260824-shop-no-bounty-lock-v3`。
 - 檔案：修改 `public/js/board_items.js`、`public/js/board_game.js`、`public/board_game.html`、`public/board_water_seven.html`、`public/board_角色編輯器.html`、兩份商店 QA、`docs/ITEM_CATALOG.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：資料 QA 確認一般商店 115 件、船隻 16／16、三件戰略商品皆高於 3,000、商店商品解鎖門檻全部為 0，且商店購買／數量流程沒有懸賞檢查。1440×900 與 932×430 正式商店 UI 以零懸賞玩家測試，兩者均為 115 列、鎖定列 0、鎖標 0、可捲動、無水平 overflow／破圖／頁面錯誤，並能購買 S 級寶樹亞當木片。
-pm start` 於 8799 啟動成功，正式 HTML／道具／主程式均 HTTP 200；瀏覽器另確認 8787 正式頁實際載入新版兩個 query。既有 `battle_parity_dice_relay_flag_qa.js` 重跑兩次皆在與本次無關的交棒海賊旗整輪替補等待（第 354 行）逾時；本次沒有修改該戰鬥／交棒規則，未把此舊測試問題誤列為通過。
+- 驗證：資料 QA 確認一般商店 115 件、船隻 16／16、三件戰略商品皆高於 3,000、商店商品解鎖門檻全部為 0，且商店購買／數量流程沒有懸賞檢查。1440×900 與 932×430 正式商店 UI 以零懸賞玩家測試，兩者均為 115 列、鎖定列 0、鎖標 0、可捲動、無水平 overflow／破圖／頁面錯誤，並能購買 S 級寶樹亞當木片。`npm start` 於 8799 啟動成功，正式 HTML／道具／主程式均 HTTP 200；瀏覽器另確認 8787 正式頁實際載入新版兩個 query。既有 `battle_parity_dice_relay_flag_qa.js` 重跑兩次皆在與本次無關的交棒海賊旗整輪替補等待（第 354 行）逾時；本次沒有修改該戰鬥／交棒規則，未把此舊測試問題誤列為通過。
 
 ## 修改紀錄：一般商店價格與全船隻商品 V299（2026-08-24）
 
@@ -1951,9 +1741,7 @@ pm start` 於 8799 啟動成功，正式 HTML／道具／主程式均 HTTP 200�
 - 船隻商店：16 件 `ship` 類道具全部加入一般道具商店且都有正售價。原本只在稀有池的 `ship_dream_medical_galley`「夢幻廚房與醫療聯艙」改為 9,800 貝里，`ship_adam_wood`「寶樹亞當木片」改為 6,000 貝里；其餘 14 件船裝／船材亦完成定價。商店原本會整批排除 S 級商品，現只對 `category === "ship"` 開例外，其他 S 級稀有道具仍不會進入一般商店。
 - 相容與範圍：只改既有道具的 `price`／`obtain.shops`、一般商店 S 級船隻篩選與 HTML cache query；沒有改 id、道具效果、庫存結構、回合、戰鬥、`BOARD_GAME_STATE`、localStorage key、Socket.IO event 或 server 快照。S 級船材實際購買仍走原 `addInventoryItem()` 與完整狀態同步。
 - 清單／檔案：重新產生 `docs/ITEM_CATALOG.md`，維持 207 件總數，現有 115 件一般商店商品且 16 件船隻道具全部可購買。修改 `public/js/board_items.js`、`public/js/board_game.js`、`public/board_game.html`、`public/board_water_seven.html`、`public/board_角色編輯器.html`、`scripts/generate_item_catalog.js`、四份必更文件；新增 `scripts/item_shop_balance_qa.js` 與 `scripts/item_shop_balance_ui_qa.js`。正式 query 為 `20260824-item-shop-rebalance-v2`。
-- 驗證：五份修改／新增 JavaScript 
-ode --check` 通過；資料 QA 確認正式道具 178、一般商店 115、船隻 16／16、商店零價船隻 0、非船隻 S 級誤上架 0，並鎖定 16 件船隻售價與永久攜帶物價格底線。正式商店 UI 於 1440×900／932×430 均顯示 115 列、可捲動、無水平 overflow／破圖／頁面錯誤，實際以 6,000 貝里購買寶樹亞當木片後正確扣款並進入背包。
-pm start` 於 8799 正常提供三個正式檔案 HTTP 200；未設定 `DATABASE_URL` 的訊息為既有本機狀態。巴雷特武器庫、吸收道具／不屈／九尾及十三 Boss 回歸均為 `failures=[]`。
+- 驗證：五份修改／新增 JavaScript `node --check` 通過；資料 QA 確認正式道具 178、一般商店 115、船隻 16／16、商店零價船隻 0、非船隻 S 級誤上架 0，並鎖定 16 件船隻售價與永久攜帶物價格底線。正式商店 UI 於 1440×900／932×430 均顯示 115 列、可捲動、無水平 overflow／破圖／頁面錯誤，實際以 6,000 貝里購買寶樹亞當木片後正確扣款並進入背包。`npm start` 於 8799 正常提供三個正式檔案 HTTP 200；未設定 `DATABASE_URL` 的訊息為既有本機狀態。巴雷特武器庫、吸收道具／不屈／九尾及十三 Boss 回歸均為 `failures=[]`。
 
 ## 修改紀錄：巴雷特的武器庫與全道具清單 V298（2026-08-24）
 
@@ -1963,17 +1751,14 @@ pm start` 於 8799 正常提供三個正式檔案 HTTP 200；未設定 `DATABASE
 - 素材：使用 OpenAI ImageGen 生成獨立黑底武器庫圖，正式 `bullet_arsenal.webp` 與原始 PNG 分開保存；舊 `bullet_large_bullet_armor.webp` 未修改或覆蓋。提示詞、尺寸與 SHA-256 記錄於 `docs/BULLET_ARSENAL_IMAGEGEN_PROMPT.md`。
 - 清單：新增 `scripts/generate_item_catalog.js`，直接讀取正式 `board_items.js` 的 178 件資料及 `board_game.js` 仍在使用的 29 件角色攜帶物，交叉整理商店、事件池、一般道具掉落、戰鬥攜帶物掉落與特殊獎勵來源，輸出 `docs/ITEM_CATALOG.md`。目前共 207 件：航海 15、戰鬥 27、船隻 16、角色攜帶物 94、重要道具 55；113 件列有一般道具商店價格，其餘明示不可購買或研究所價格。
 - 檔案：修改 `public/js/board_items.js`、`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/bullet_absorbed_items_qa.js`、`docs/POSTGAME_BOSS_RELICS.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`；新增正式／來源圖、`scripts/bullet_arsenal_qa.js`、`scripts/generate_item_catalog.js`、`docs/ITEM_CATALOG.md`、`docs/BULLET_ARSENAL_IMAGEGEN_PROMPT.md` 與 QA 截圖。正式 query 為 `20260824-bullet-arsenal-v1`。
-- 驗證：五份修改／新增 JavaScript 
-ode --check` 通過，
-pm start` 於 8787 正常提供正式頁；武器庫專項 QA 14 項規則、1600×900 與 932×430 UI 皆為 `errors=[]`、`failures=[]`。更新後巴雷特六孔／最高傷害回歸與既有巴雷特不屈／九尾／受擊順序回歸也全數 `failures=[]`。道具清單產生器確認 207 個 id 各只出現一次、五類總數相符、所有取得方式非空且 113 件一般商店品價格皆大於 0；正式圖與兩張 UI 截圖已人工檢查。
+- 驗證：五份修改／新增 JavaScript `node --check` 通過，`npm start` 於 8787 正常提供正式頁；武器庫專項 QA 14 項規則、1600×900 與 932×430 UI 皆為 `errors=[]`、`failures=[]`。更新後巴雷特六孔／最高傷害回歸與既有巴雷特不屈／九尾／受擊順序回歸也全數 `failures=[]`。道具清單產生器確認 207 個 id 各只出現一次、五類總數相符、所有取得方式非空且 113 件一般商店品價格皆大於 0；正式圖與兩張 UI 截圖已人工檢查。
 
 ## 修改紀錄：目前回合船形呼吸光 V297（2026-08-24）
 
 - 使用者修正：撤除 V296 的圓形呼吸環，改由目前可操作船的透明船圖本身套用金白色與玩家船色的 `drop-shadow` 呼吸光；發光依船帆、船身與桅杆透明輪廓延伸，不再形成固定圓框，玩家名稱牌與航線不參與發光。
 - 操作／相容：仍只在既有 `current.actionable` 成立時播放，滑入／聚焦會加快節奏，減少動態偏好保留靜態船形描邊；不可操作時完全停止。沒有修改船圖、船 token 點擊、回合、位置、同步或存檔。正式主頁 query 更新為 `20260824-current-ship-silhouette-glow-v144`。
 - 檔案：修改 `public/board_game.html`、`scripts/ship_turn_breathing_glow_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：重跑 
-ode --check`、1600×900／932×430 船形發光 QA、原指令盤點擊、解析鎖、減少動態模式與 overflow；結果記錄於 `tmp/ship_turn_breathing_glow_qa/`。
+- 驗證：重跑 `node --check`、1600×900／932×430 船形發光 QA、原指令盤點擊、解析鎖、減少動態模式與 overflow；結果記錄於 `tmp/ship_turn_breathing_glow_qa/`。
 
 ## 修改紀錄：目前回合船呼吸燈 V296（2026-08-24）
 
@@ -1981,9 +1766,7 @@ ode --check`、1600×900／932×430 船形發光 QA、原指令盤點擊、解�
 - 防誤導：移動、骰子、事件、彈窗、戰鬥、解析鎖或 LAN 非本機控制等使船隻暫時不可操作時，仍可保留目前回合標記，但不顯示呼吸燈。偏好減少動態效果的裝置改為靜態亮環，不持續縮放。
 - 相容：只讀既有船 token 的 `current`／`actionable` class 與 `--ship-color`，沒有修改回合權威、點擊事件、地圖位置、玩家／船隻 id、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。正式主頁 query 更新為 `20260824-current-ship-breathing-glow-v143`。
 - 檔案：修改 `public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`；新增 `scripts/ship_turn_breathing_glow_qa.js`。
-- 驗證：
-ode --check public/js/board_game.js` 與新 QA 腳本通過；
-pm start` 於 8843 正常提供正式頁，未設定 `DATABASE_URL` 的警告為既有開發環境狀態。Chrome QA 於 1600×900／932×430 均為 `errors=[]`、`failures=[]`，確認只有一艘目前可操作船顯示 84px 呼吸環、點擊可開原船長指令盤、`resolutionLock` 時保留目前船但移除 actionable／呼吸燈，且頁面無 overflow；兩張截圖已人工檢查光圈包住船身且未遮擋名稱與航線。
+- 驗證：`node --check public/js/board_game.js` 與新 QA 腳本通過；`npm start` 於 8843 正常提供正式頁，未設定 `DATABASE_URL` 的警告為既有開發環境狀態。Chrome QA 於 1600×900／932×430 均為 `errors=[]`、`failures=[]`，確認只有一艘目前可操作船顯示 84px 呼吸環、點擊可開原船長指令盤、`resolutionLock` 時保留目前船但移除 actionable／呼吸燈，且頁面無 overflow；兩張截圖已人工檢查光圈包住船身且未遮擋名稱與航線。
 
 ## 修改紀錄：共鬥提取／結算延至本人回合 V295（2026-08-24）
 
@@ -1992,9 +1775,7 @@ pm start` 於 8843 正常提供正式頁，未設定 `DATABASE_URL` 的警告為
 - 狀態／相容：新增每位玩家的 `pendingCoopBattleResults` 佇列並在舊存檔載入時正規化；每筆保存原 battle snapshot、個人抽取 entry 與既有共鬥結算預覽，沿用 `BOARD_GAME_STATE` 完整快照，不新增 `gameState` 頂層欄位、localStorage key、Socket.IO event 或 server 欄位。共同獎勵仍只在原戰鬥勝利時發放一次，延後頁只負責本人提取與查看，不會重送貝里、懸賞金、EXP 或道具。
 - 顯示：延後頁的完成按鈕改為「回到地圖，繼續本回合」；共鬥勝利時忽略手動共鬥視角切換，只顯示目前結算者。正式主頁／戰鬥頁 query 為 `20260824-coop-result-own-turn-v142`／`v95`。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/DEV_WORKFLOW.md`；新增 `scripts/coop_deferred_result_turn_qa.js`。
-- 驗證：三份 JavaScript 
-ode --check` 通過；
-pm start` 於 8842 正常提供靜態頁（未設定 `DATABASE_URL` 的 DB 警告為既有開發環境狀態）。新 QA 為 `errors=[]`、`failures=[]`，驗證三名真人拆分待結算、非本人回合雙重鎖定、本人回合自動開啟、抽取選擇、完成後不換回合、獎勵不重送及第三人佇列保留。既有共鬥視角、Tot Musica 玩家分世界、刷新恢復與三裝置 LAN 單獨重跑皆通過；血統敵卡 QA 的伽治正式流程與 12 名 Boss 通過，仍回報既有 Tot Musica 專用舞台使敵卡中心點不是最上層的 1 項檢查，與本次回合／同步修改無關。
+- 驗證：三份 JavaScript `node --check` 通過；`npm start` 於 8842 正常提供靜態頁（未設定 `DATABASE_URL` 的 DB 警告為既有開發環境狀態）。新 QA 為 `errors=[]`、`failures=[]`，驗證三名真人拆分待結算、非本人回合雙重鎖定、本人回合自動開啟、抽取選擇、完成後不換回合、獎勵不重送及第三人佇列保留。既有共鬥視角、Tot Musica 玩家分世界、刷新恢復與三裝置 LAN 單獨重跑皆通過；血統敵卡 QA 的伽治正式流程與 12 名 Boss 通過，仍回報既有 Tot Musica 專用舞台使敵卡中心點不是最上層的 1 項檢查，與本次回合／同步修改無關。
 
 ## 修改紀錄：奇偶骰子與交棒海賊旗 V294（2026-08-24）
 
@@ -2004,9 +1785,7 @@ pm start` 於 8842 正常提供靜態頁（未設定 `DATABASE_URL` 的 DB 警�
 - 素材：以 ImageGen 分別產生三張獨立 1:1 海賊 RPG 道具圖，原始 1254×1254 PNG 保存於 `public/images/board/items/incoming/`，正式頁使用黑底不透明 1024×1024 WebP `odd_dice.webp`、`even_dice.webp`、`relay_pirate_flag.webp`；既有素材未被覆蓋。
 - 取得：兩顆奇偶骰加入道具商店與進階補給池；交棒海賊旗加入道具商店與寶藏池。正式 query 為道具資料 `20260824-parity-dice-relay-flag-v3`、主頁 `v141`、戰鬥頁 `v94`。
 - 檔案：修改 `public/js/board_items.js`、`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`；新增三張正式 WebP、三張 `incoming` 原始 PNG 與 `scripts/battle_parity_dice_relay_flag_qa.js`。
-- 驗證：四份 JavaScript 
-ode --check` 通過；
-pm start` 於 8842 正常提供靜態頁（未設定 `DATABASE_URL` 的 DB 警告為既有開發環境狀態）。新道具 QA 為 `errors=[]`、`failures=[]`，涵蓋定義／商店／事件池、兩次第一骰奇偶、覆蓋重設、追加骰不套用、正式選邊按鈕可見、四顆主指令、Tot Musica `targetSide`／同世界交棒、完整敵我一輪後交棒、無後備／已換下／手動換人保護、1440×900／932×430 與圖片 HTTP。KING、Tot Musica 玩家分世界／反擊、十三 Boss、刷新恢復及三裝置 LAN 回歸均通過；`tot_musica_full_dual_qa.js` 的戰鬥與雙世界流程完成，但仍回報既有分隊名冊可見圖為 5/6 的單一素材檢查，與本次三個新道具無關。
+- 驗證：四份 JavaScript `node --check` 通過；`npm start` 於 8842 正常提供靜態頁（未設定 `DATABASE_URL` 的 DB 警告為既有開發環境狀態）。新道具 QA 為 `errors=[]`、`failures=[]`，涵蓋定義／商店／事件池、兩次第一骰奇偶、覆蓋重設、追加骰不套用、正式選邊按鈕可見、四顆主指令、Tot Musica `targetSide`／同世界交棒、完整敵我一輪後交棒、無後備／已換下／手動換人保護、1440×900／932×430 與圖片 HTTP。KING、Tot Musica 玩家分世界／反擊、十三 Boss、刷新恢復及三裝置 LAN 回歸均通過；`tot_musica_full_dual_qa.js` 的戰鬥與雙世界流程完成，但仍回報既有分隊名冊可見圖為 5/6 的單一素材檢查，與本次三個新道具無關。
 
 ## 修改紀錄：KING 背火狀態視覺 V293（2026-08-23）
 
@@ -2015,8 +1794,7 @@ pm start` 於 8842 正常提供靜態頁（未設定 `DATABASE_URL` 的 DB 警�
 - 切換與受擊：只有 `flameOn` 在同一場戰鬥中真正改變時，才於下一回合狀態套用後播放「背火燃起／背火熄滅」動畫與對應音效；首次載入、重整與相同快照重繪不重播。玩家攻擊點燃中的 KING 時，正式 attack visual event 會標記 `kingFlameGuarded`，命中位置播放「火焰防護」護盾脈衝，讓低傷害不會看起來像計算錯誤。
 - 隱藏與範圍：常駐狀態、切換大字與受擊提示都不公開奇偶、第一顆骰或 10% 數值；玩家仍需自行把 KING 顯示過的骰面與下一回合狀態連起來。只修改 `postgame_king` 顯示與既有 attack visual event 附加資料，不新增第五顆按鈕、戰鬥指令、`gameState` 頂層欄位、localStorage key、Socket.IO event 或 server 欄位，也不影響 KING 佩刀被巴雷特吸收時的效果。正式主頁／戰鬥頁 query 為 `20260823-king-flame-state-v140`／`v93`。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/king_hidden_parity_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：`board_game.js`、`board_battle.js` 與 `king_hidden_parity_qa.js` 的 
-ode --check` 通過。1440×900／932×430 定向 QA 的 `errors=[]`、`failures=[]`，覆蓋點燃／熄滅常駐狀態、燃／熄角標、兩種切換動畫、火焰防護受擊脈衝、100／1000 傷害與 visual metadata、隱藏資訊、圖片、文字與角色框越界；截圖人工檢查確認桌機與平板四顆指令未受影響。十三 Boss 整體回歸亦為 `errors=[]`、`failures=[]`，正式主頁在瀏覽器載入新版 query 且無 console error。
+- 驗證：`board_game.js`、`board_battle.js` 與 `king_hidden_parity_qa.js` 的 `node --check` 通過。1440×900／932×430 定向 QA 的 `errors=[]`、`failures=[]`，覆蓋點燃／熄滅常駐狀態、燃／熄角標、兩種切換動畫、火焰防護受擊脈衝、100／1000 傷害與 visual metadata、隱藏資訊、圖片、文字與角色框越界；截圖人工檢查確認桌機與平板四顆指令未受影響。十三 Boss 整體回歸亦為 `errors=[]`、`failures=[]`，正式主頁在瀏覽器載入新版 query 且無 console error。
 
 ## 修改紀錄：KING 隱藏奇偶背火 V292（2026-08-22）
 
@@ -2025,8 +1803,7 @@ ode --check` 通過。1440×900／932×430 定向 QA 的 `errors=[]`、`failures
 - 隱藏資訊：正式登島情報、機制面板與狀態文字不出現奇數、偶數、第一顆骰、10%、35% 或丹弓皇提示，只說明背火會在回合間變化並顯示當下「點燃／熄滅」；戰鬥骰本身照常顯示，讓玩家自行觀察下一回合狀態找出規律。
 - 相容與範圍：只修改 `postgame_king` 的 Boss 狀態、傷害規則與顯示文案；不修改 KING 佩刀被巴雷特吸收時的攜帶物效果，也不影響其他 Boss、四顆戰鬥指令、`gameState` 頂層欄位、localStorage key、Socket.IO event 或 server 欄位。舊 King 戰鬥快照保留當下背火狀態並移除舊窗口旗標。正式主頁／戰鬥頁 query 為 `20260822-king-hidden-parity-v139`／`v92`。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/postgame_boss_mechanics_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`；新增 `scripts/king_hidden_parity_qa.js`。
-- 驗證：`board_game.js`、`board_battle.js`、新 QA 與更新後十三 Boss QA 的 
-ode --check` 通過。1440×900 與 932×430 定向 QA 均為 `errors=[]`、`failures=[]`：總和為奇數但第一骰 2 時下一回合熄火；總和為偶數但第一骰 3 時下一回合點火；狀態在同回合不提前改變；1000 傷害於點燃／熄滅時分別結算 100／1000；玩家面板沒有洩漏隱藏規則、破圖或溢出。十三 Boss 整體回歸更新 King 正式預期後亦為 `errors=[]`、`failures=[]`。
+- 驗證：`board_game.js`、`board_battle.js`、新 QA 與更新後十三 Boss QA 的 `node --check` 通過。1440×900 與 932×430 定向 QA 均為 `errors=[]`、`failures=[]`：總和為奇數但第一骰 2 時下一回合熄火；總和為偶數但第一骰 3 時下一回合點火；狀態在同回合不提前改變；1000 傷害於點燃／熄滅時分別結算 100／1000；玩家面板沒有洩漏隱藏規則、破圖或溢出。十三 Boss 整體回歸更新 King 正式預期後亦為 `errors=[]`、`failures=[]`。
 
 ## 修改紀錄：巴雷特吸收道具結算、不屈與九尾幻化 V291（2026-08-20）
 
@@ -2035,8 +1812,7 @@ ode --check` 通過。1440×900 與 932×430 定向 QA 均為 `errors=[]`、`fai
 - 顯示：致命傷被擋時在受擊位置顯示「不屈」，六孔資料卡持續顯示「待命／已發動」，已破壞歸還後也保留本場使用狀態。巴雷特持有戴彭九尾幻面時，攻擊會轉為目前目標的克制屬性，戰鬥訊息、敵方效果提示、紀錄與六孔詳情都顯示「九尾幻化」及克制關係。
 - 相容與範圍：六孔結算順序與九尾提示只在 `postgame_douglas_bullet` 啟用；一般戰鬥只補上既有傑爾馬66戰鬥服的不屈視覺。沒有新增道具／Boss id、第五顆按鈕、`gameState` 頂層欄位、localStorage key、Socket.IO event 或 server 欄位。正式主頁／戰鬥頁 query 為 `20260820-bullet-item-activation-v138`／`v91`。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`；新增 `scripts/bullet_item_activation_qa.js`。
-- 驗證：`board_game.js`、`board_battle.js` 與新 QA 的 
-ode --check` 通過。1440×900 與 932×430 定向 QA 均為 `errors=[]`、`failures=[]`：確認不屈擋下致命傷、只消耗一孔的一次性效果、骰面孔照常破壞、六孔待命／已發動狀態、九尾幻化轉為克制屬性且屬性倍率為 ×2、六個衝擊貝先各儲存傷害再破壞命中孔。既有巴雷特重複裝備／最高傷害 QA 與十三 Boss 整體回歸亦為 `failures=[]`。
+- 驗證：`board_game.js`、`board_battle.js` 與新 QA 的 `node --check` 通過。1440×900 與 932×430 定向 QA 均為 `errors=[]`、`failures=[]`：確認不屈擋下致命傷、只消耗一孔的一次性效果、骰面孔照常破壞、六孔待命／已發動狀態、九尾幻化轉為克制屬性且屬性倍率為 ×2、六個衝擊貝先各儲存傷害再破壞命中孔。既有巴雷特重複裝備／最高傷害 QA 與十三 Boss 整體回歸亦為 `failures=[]`。
 
 ## 修改紀錄：Tot Musica 單人反擊銜接與受阻提示 V290（2026-08-20）
 
@@ -2045,8 +1821,7 @@ ode --check` 通過。1440×900 與 932×430 定向 QA 均為 `errors=[]`、`fai
 - 顯示：Tot Musica 因冰凍／束縛／麻痺無法行動時，仍在雙世界專用舞台顯示 Boss、受阻原因及左右「本輪未受攻擊」，停留後才進下一輪；這是既有狀態阻止行動的可視化，不取消控制招式效果，也不偽造傷害。
 - 相容與範圍：只修改 `postgame_tot_musica` 的玩家行動後整理、敵方受阻事件與戰鬥頁對應演出；沒有新增角色／招式／Boss id、第五顆按鈕、`gameState` 頂層欄位、localStorage key、Socket.IO event 或 server 欄位。正式主頁／戰鬥頁 query 為 `20260820-tot-musica-counterattack-v137`／`v90`。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`；新增 `scripts/tot_musica_counterattack_qa.js`。
-- 驗證：`board_game.js`、`board_battle.js` 與新 QA 的 
-ode --check` 通過。單人受阻定向 QA 在 1440×900 與 932×430 均為 `errors=[]`、`failures=[]`，確認冰凍原因、Boss 可見、左右未受攻擊、無橫向／文字溢出且正常進第二輪；單人完整實戰確認無異常狀態時玩家先攻後 Tot Musica 仍接續擲骰、向下攻擊、左右各自扣血與同世界自動替補，`errors=[]`、`failures=[]`。三玩家分世界 QA、十三 Boss 整體回歸及刷新恢復亦通過。
+- 驗證：`board_game.js`、`board_battle.js` 與新 QA 的 `node --check` 通過。單人受阻定向 QA 在 1440×900 與 932×430 均為 `errors=[]`、`failures=[]`，確認冰凍原因、Boss 可見、左右未受攻擊、無橫向／文字溢出且正常進第二輪；單人完整實戰確認無異常狀態時玩家先攻後 Tot Musica 仍接續擲骰、向下攻擊、左右各自扣血與同世界自動替補，`errors=[]`、`failures=[]`。三玩家分世界 QA、十三 Boss 整體回歸及刷新恢復亦通過。
 
 ## 修改紀錄：Tot Musica 多人分世界共鬥 V289（2026-08-20）
 
@@ -2056,20 +1831,15 @@ ode --check` 通過。單人受阻定向 QA 在 1440×900 與 932×430 均為 `e
 - 先攻：同步行動的有效速度改取兩名目前出戰者中的較快者，行動優先度取兩個已選行動中的較高者；仍先比較優先度，再比較有效速度，同值由玩家先手。Boss HP、樂章、奇偶同步、動畫與命中位置維持共用。
 - 狀態與相容：玩家世界、前線游標、目前待選世界及兩邊暫存行動都保存在既有 battle `postgameBossMechanic`，跟隨完整 `BOARD_GAME_STATE` 快照；沒有新增 `gameState` 頂層欄位、localStorage key、Socket.IO event 或 server 欄位。改動只在 `postgame_tot_musica` 且共鬥至少 2 人時啟用，其他 Boss 仍走原共鬥。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/tot_musica_full_dual_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`；新增 `scripts/tot_musica_player_world_coop_qa.js`。正式主頁／戰鬥頁 query 為 `20260820-tot-musica-player-world-coop-v136`／`v89`。
-- 驗證：四份本輪 JavaScript 
-ode --check` 通過，
-pm start` 於 8797 正常提供頁面。多人定向 QA 在 1600×900 與 932×430 均為 `errors=[]`、`failures=[]`，確認三名玩家分為 2＋1、新玩家補較少世界、完整六人船員隊不拆分、現實選完交棒歌世界、四顆指令不增生、較高優先度、較快有效速度、同玩家自動替補、同世界下一玩家接替及單世界全滅敗北。單人 Tot 完整實戰、十三 Boss 面板、傷害跳字、刷新恢復亦通過；三裝置 LAN 多入口回歸的房主／平板／手機 seed、版本、身分與選角控制一致，`errors=[]`、`failures=[]`。
+- 驗證：四份本輪 JavaScript `node --check` 通過，`npm start` 於 8797 正常提供頁面。多人定向 QA 在 1600×900 與 932×430 均為 `errors=[]`、`failures=[]`，確認三名玩家分為 2＋1、新玩家補較少世界、完整六人船員隊不拆分、現實選完交棒歌世界、四顆指令不增生、較高優先度、較快有效速度、同玩家自動替補、同世界下一玩家接替及單世界全滅敗北。單人 Tot 完整實戰、十三 Boss 面板、傷害跳字、刷新恢復亦通過；三裝置 LAN 多入口回歸的房主／平板／手機 seed、版本、身分與選角控制一致，`errors=[]`、`failures=[]`。
 
 ## 修改紀錄：Tot Musica 換人、先攻與連續攻擊鏡頭 V288（2026-08-20）
 
 - 規則：任一世界的目前船員倒下，依雙世界開戰編排自動換上該世界下一名存活船員；若現實世界或歌世界整隊倒下且無法立即復活，才判定挑戰失敗。先攻速度改取兩名出戰者套用狀態、攜帶物及隊伍效果後的較慢值，行動優先度亦採兩邊較低者。
-- 修正：Tot 專屬自動補位完成後同步清除通用 `replacement`／
-eedsReplacement` 並保存 coop runtime，避免死亡先發在下一輪被通用輪詢重新開啟一般替補。玩家先攻且 Boss 接著行動時，戰鬥頁維持高處視角直接接 Boss 骰鏈，不再回到玩家舞台後重爬；Boss 先攻仍保留原升鏡。
+- 修正：Tot 專屬自動補位完成後同步清除通用 `replacement`／`needsReplacement` 並保存 coop runtime，避免死亡先發在下一輪被通用輪詢重新開啟一般替補。玩家先攻且 Boss 接著行動時，戰鬥頁維持高處視角直接接 Boss 骰鏈，不再回到玩家舞台後重爬；Boss 先攻仍保留原升鏡。
 - 命中：我方合擊光束與爆點重新對準 Boss 中心並置於 Boss 前景；敵方紅紫雙路箭頭終點改為左右船員中心，桌機與手機均依相同比例落位。所有改動只在 `postgame_tot_musica`／`tot-dual` 生效，沒有新增按鈕、存檔欄位、localStorage key、Socket.IO event 或 server 狀態。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/tot_musica_full_dual_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁／戰鬥頁 query 為 `20260820-tot-musica-turn-camera-hit-v135`／`v88`。
-- 驗證：三份 JavaScript 
-ode --check` 通過；
-pm start` 於 8796 正常提供主頁與戰鬥頁。Tot 完整 Chrome QA 在 1600×900 與 932×430 均為 `errors=[]`、`failures=[]`：較慢邊決定先攻、玩家→Boss 連續高處視角沒有選招畫面或重複升鏡、我方爆點距 Boss 中心約 6～8px、敵方箭頭落在兩名船員範圍、首名倒下後同隊第二順位自動補位，第二回合可繼續擊倒 Boss 並完成血統決定、掉落揭露與返回。十三 Boss 面板、通用傷害跳字、刷新恢復均通過；三裝置 LAN QA 第一次同時加入超過既有 12 秒等待，立即重跑後房主／平板／手機的 seed、版本、身分與選角控制一致，`errors=[]`、`failures=[]`。
+- 驗證：三份 JavaScript `node --check` 通過；`npm start` 於 8796 正常提供主頁與戰鬥頁。Tot 完整 Chrome QA 在 1600×900 與 932×430 均為 `errors=[]`、`failures=[]`：較慢邊決定先攻、玩家→Boss 連續高處視角沒有選招畫面或重複升鏡、我方爆點距 Boss 中心約 6～8px、敵方箭頭落在兩名船員範圍、首名倒下後同隊第二順位自動補位，第二回合可繼續擊倒 Boss 並完成血統決定、掉落揭露與返回。十三 Boss 面板、通用傷害跳字、刷新恢復均通過；三裝置 LAN QA 第一次同時加入超過既有 12 秒等待，立即重跑後房主／平板／手機的 seed、版本、身分與選角控制一致，`errors=[]`、`failures=[]`。
 
 ## 修改紀錄：澤法炸藥岩倒數縮短為 4 V286（2026-08-20）
 
@@ -2077,8 +1847,7 @@ pm start` 於 8796 正常提供主頁與戰鬥頁。Tot 完整 Chrome QA 在 160
 - 相容：新戰鬥直接以 4／4 開始；舊待續快照若仍保存 5 或 6，載入時會壓到 4，已剩 1～4 的戰鬥保留原剩餘值。半血轉黑腕後炸藥岩仍存在、倒數繼續，只有真正解除才停止。
 - 範圍：只修改 `postgame_zephyr` 倒數常數、提示文字、快取版本、QA 與文件；2000 HP、1000 HP 黑腕線、左側場上炸藥岩、四顆 2×2 指令、其他 Boss 與一般戰鬥不變。正式主頁／戰鬥頁 query 為 `20260820-zephyr-countdown-four-v133`／`v86`。
 - 檔案：修改 `public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/postgame_zephyr_end_point_qa.js`、`scripts/postgame_boss_mechanics_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：四份相關 JavaScript 
-ode --check` 通過，正式主頁／戰鬥頁 HTTP 200 且載入 V133／V86。澤法定向 Chrome QA 在 1600×900 與 932×430 為 `ok=true`、`errors=[]`、`failures=[]`，確認 4／4 起始、每次行動減 1、四次歸零引爆、半血黑腕後仍顯示倒數 4、解除照常完成，以及舊 6→4 快照轉換。十三 Boss 回歸首次遇到既有圖片未及解碼的時序失敗，五個列出素材逐一 HTTP 200；立即重跑為 `bossCount=13`、`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/08/19/01a0185f-258e-73f0-817a-35e162778d0d/zephyr_countdown_four_v286/` 與同層 `postgame_boss_mechanics_v286_rerun/`。
+- 驗證：四份相關 JavaScript `node --check` 通過，正式主頁／戰鬥頁 HTTP 200 且載入 V133／V86。澤法定向 Chrome QA 在 1600×900 與 932×430 為 `ok=true`、`errors=[]`、`failures=[]`，確認 4／4 起始、每次行動減 1、四次歸零引爆、半血黑腕後仍顯示倒數 4、解除照常完成，以及舊 6→4 快照轉換。十三 Boss 回歸首次遇到既有圖片未及解碼的時序失敗，五個列出素材逐一 HTTP 200；立即重跑為 `bossCount=13`、`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/08/19/01a0185f-258e-73f0-817a-35e162778d0d/zephyr_countdown_four_v286/` 與同層 `postgame_boss_mechanics_v286_rerun/`。
 
 ## 修改紀錄：澤法 2000 HP 與黑腕階段炸藥岩持續 V285（2026-08-19）
 
@@ -2088,9 +1857,7 @@ ode --check` 通過，正式主頁／戰鬥頁 HTTP 200 且載入 V133／V86。�
 - 存檔相容：`POSTGAME_ZEPHYR_MECHANIC_VERSION` 升為 3。V2 快照若是半血轉階造成的錯誤自動解除，會依既有解除紀錄恢復實際進度並重新啟動原剩餘倒數；含「最後的炸藥岩解除成功」紀錄的真正解除則保持完成。沿用完整 battle snapshot，不新增 localStorage 或 Socket.IO 欄位。
 - 範圍：只修改 `postgame_zephyr` 的 HP 覆寫、轉階、正規化與炸藥岩可見／可操作條件；四顆共用指令、2×2 排版、其他十二名 Boss、一般戰鬥與玩家傷害公式不變。正式主頁／戰鬥頁 query 為 `20260819-zephyr-bomb-persist-v132`／`v85`。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/postgame_zephyr_end_point_qa.js`、`scripts/postgame_boss_mechanics_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：四份本輪 JavaScript 
-ode --check` 通過；
-pm start` 於 8794 正常提供靜態頁（未設定 `DATABASE_URL` 的 DB 警告為既有開發環境狀態）。澤法定向 Chrome QA 為 `ok=true`、`errors=[]`、`failures=[]`：驗證 2000／2000、2500 輸入被截為 1000 傷害、半血後黑腕＋炸藥岩同時顯示、仍可解除、第二階段倒數 0 敗北、V1→V3 及錯誤 V2 半血快照恢復；1600×900 與 932×430 均無越框。十三 Boss 回歸為 `bossCount=13`、`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/08/19/01a0185f-258e-73f0-817a-35e162778d0d/zephyr_bomb_persist_v285/` 與同層 `postgame_boss_mechanics_v285/`。
+- 驗證：四份本輪 JavaScript `node --check` 通過；`npm start` 於 8794 正常提供靜態頁（未設定 `DATABASE_URL` 的 DB 警告為既有開發環境狀態）。澤法定向 Chrome QA 為 `ok=true`、`errors=[]`、`failures=[]`：驗證 2000／2000、2500 輸入被截為 1000 傷害、半血後黑腕＋炸藥岩同時顯示、仍可解除、第二階段倒數 0 敗北、V1→V3 及錯誤 V2 半血快照恢復；1600×900 與 932×430 均無越框。十三 Boss 回歸為 `bossCount=13`、`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/08/19/01a0185f-258e-73f0-817a-35e162778d0d/zephyr_bomb_persist_v285/` 與同層 `postgame_boss_mechanics_v285/`。
 
 ## 修改紀錄：澤法場上炸藥岩雙目標選擇 V284（2026-08-19）
 
@@ -2098,9 +1865,7 @@ pm start` 於 8794 正常提供靜態頁（未設定 `DATABASE_URL` 的 DB 警�
 - 範圍：機制面板內的終結點Ⅲ改回純狀態卡，不再可點；共用戰鬥指令仍只有攻擊、夥伴、道具、逃跑四顆與固定 2×2。場上按鈕及敵方框 `overflow: visible` 只在 `postgame_zephyr` 第一階段、倒數有效且炸藥岩未解除／未引爆時啟用，第二階段與其他 Boss 不渲染。
 - 素材：依使用者提供的電影畫面，以內建 ImageGen 產生粉紅液體金屬圓筒炸藥岩；原始 1024×1536 透明 PNG 存於 `public/images/board/battle/postgame_mechanics/postgame_zephyr/incoming/dyna_stone_cylinder_source_v2.png`，正式 512×768 透明 WebP 為上一層 `dyna_stone_cylinder_v2.webp`（84,568 bytes）。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/postgame_zephyr_end_point_qa.js` 與 Boss／規則／流程文件；新增上述兩份素材。正式主頁／戰鬥頁 query 為 `20260819-zephyr-field-target-v131`／`v84`。
-- 驗證：四份本輪 JavaScript 
-ode --check` 通過；
-pm start` 測試服務的主頁、戰鬥頁與正式炸藥岩素材皆為 HTTP 200。澤法定向 Chrome QA 在 1600×900 與 932×430 都為 `ok=true`、`errors=[]`、`failures=[]`，確認場上目標跨住敵方框左緣、位於 viewport 內、命令只送一次、機制面板不再可點、解除／轉階後目標隱藏，且四顆主指令仍為 2×2。十三 Boss 回歸另驗證炸藥岩只在 `postgame_zephyr` 顯示，結果為 `bossCount=13`、`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/08/19/01a0185f-258e-73f0-817a-35e162778d0d/zephyr_field_target_v284/` 與同層 `postgame_boss_mechanics_v284/`。
+- 驗證：四份本輪 JavaScript `node --check` 通過；`npm start` 測試服務的主頁、戰鬥頁與正式炸藥岩素材皆為 HTTP 200。澤法定向 Chrome QA 在 1600×900 與 932×430 都為 `ok=true`、`errors=[]`、`failures=[]`，確認場上目標跨住敵方框左緣、位於 viewport 內、命令只送一次、機制面板不再可點、解除／轉階後目標隱藏，且四顆主指令仍為 2×2。十三 Boss 回歸另驗證炸藥岩只在 `postgame_zephyr` 顯示，結果為 `bossCount=13`、`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/08/19/01a0185f-258e-73f0-817a-35e162778d0d/zephyr_field_target_v284/` 與同層 `postgame_boss_mechanics_v284/`。
 
 ## 修改紀錄：澤法阻止引爆移回專屬面板 V283（2026-08-19）
 
@@ -2108,9 +1873,7 @@ pm start` 測試服務的主頁、戰鬥頁與正式炸藥岩素材皆為 HTTP 2
 - 修正：完全移除第五顆靜態按鈕、`has-zephyr-action` 三欄樣式、動態顯示邏輯與額外確認頁。攻擊、換人、道具、逃跑恢復固定四顆與原本 2×2 排列；只有澤法專屬機制面板內的「終結點Ⅲ」在倒數有效時可點擊，點下後直接沿用既有 `zephyr-disarm` 權威指令並消耗本回合。
 - 隔離：新增的可點擊卡片只由 `postgame_zephyr` 且 `state.canDisarm` 時渲染；其他 Boss、一般戰鬥、Tot Musica 專用操作、共同指令 DOM、戰鬥數值、回合、CPU、battle snapshot、localStorage key 與 Socket.IO event 均不改。
 - 檔案：修改 `public/js/board_battle.js`、`public/board_battle.html`、`public/js/board_game.js`、`public/board_game.html`、`scripts/postgame_zephyr_end_point_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁／戰鬥頁 query 為 `20260819-zephyr-panel-action-v130`／`v83`。
-- 驗證：三份 JavaScript 
-ode --check` 通過；正式 
-pm start` 服務的主頁、戰鬥頁與炸藥岩素材皆為 HTTP 200 並載入 V130／V83。澤法定向 Chrome QA 在 1600×900 與 932×430 均為 `ok=true`、`errors=[]`、`failures=[]`，兩種尺寸都確認主指令僅有 `attack`／`partners`／`items`／`escape` 四顆、欄列各 2、沒有 `has-zephyr-action`，且點擊終結點Ⅲ只送出一次既有解除命令。十三 Boss 整體機制回歸另為 `bossCount=13`、`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/08/19/01a0185f-258e-73f0-817a-35e162778d0d/zephyr_panel_action_v283/` 與同層 `postgame_boss_mechanics_v283/`。
+- 驗證：三份 JavaScript `node --check` 通過；正式 `npm start` 服務的主頁、戰鬥頁與炸藥岩素材皆為 HTTP 200 並載入 V130／V83。澤法定向 Chrome QA 在 1600×900 與 932×430 均為 `ok=true`、`errors=[]`、`failures=[]`，兩種尺寸都確認主指令僅有 `attack`／`partners`／`items`／`escape` 四顆、欄列各 2、沒有 `has-zephyr-action`，且點擊終結點Ⅲ只送出一次既有解除命令。十三 Boss 整體機制回歸另為 `bossCount=13`、`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/08/19/01a0185f-258e-73f0-817a-35e162778d0d/zephyr_panel_action_v283/` 與同層 `postgame_boss_mechanics_v283/`。
 
 ## 修改紀錄：澤法最終終結點阻止戰 V282（2026-08-19）
 
@@ -2120,8 +1883,7 @@ pm start` 服務的主頁、戰鬥頁與炸藥岩素材皆為 HTTP 200 並載入
 - UI 與素材：戰鬥頁新增三張終結點卡、6 次倒數、3 點解除進度、專屬「阻止引爆」按鈕與確認面板。以內建 ImageGen 的 `stylized-concept` 模式生成單顆透明炸藥岩；原始 1254×1254 PNG 存於 `public/images/board/battle/postgame_mechanics/postgame_zephyr/incoming/dyna_stone_source_v1.png`，正式 512×512 透明 WebP 為同目錄上一層的 `dyna_stone_v1.webp`。
 - 存檔相容：`POSTGAME_ZEPHYR_MECHANIC_VERSION` 升為 2；舊版 `heat`／`armor`／`overheat` 快照正規化為 6 次倒數與 0／3 解除進度並移除舊欄位。完整 battle snapshot 仍由既有 `BOARD_GAME_STATE` 推送／套用，不新增獨立儲存來源。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/js/board_items.js`、`public/js/onepiece_prebattle_lines.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/prebattle_dialogue_quality_qa.js`、`scripts/postgame_boss_mechanics_qa.js`、相關專案文件；新增 `scripts/postgame_zephyr_end_point_qa.js` 與上述兩個炸藥岩素材。
-- 驗證：本輪 JavaScript 
-ode --check` 與進場台詞品質 QA 通過；定向 Chrome QA 在 1600×900 與 932×430 均為 `ok=true`、`errors=[]`、`failures=[]`，確認正式名稱、三終結點、圖片載入、專屬按鈕／確認面板、2→+1、6→+2、3／3 解除、倒數 0 敗北、50% HP／解除兩條黑腕轉階、重複招式 100→65、舊名稱與 V1 快照轉換。十三 Boss 整體機制回歸另為 `bossCount=13`、`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/08/19/01a0185f-258e-73f0-817a-35e162778d0d/zephyr_end_point_v282_final/` 與同層 `postgame_boss_mechanics_v282_final/`。
+- 驗證：本輪 JavaScript `node --check` 與進場台詞品質 QA 通過；定向 Chrome QA 在 1600×900 與 932×430 均為 `ok=true`、`errors=[]`、`failures=[]`，確認正式名稱、三終結點、圖片載入、專屬按鈕／確認面板、2→+1、6→+2、3／3 解除、倒數 0 敗北、50% HP／解除兩條黑腕轉階、重複招式 100→65、舊名稱與 V1 快照轉換。十三 Boss 整體機制回歸另為 `bossCount=13`、`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/08/19/01a0185f-258e-73f0-817a-35e162778d0d/zephyr_end_point_v282_final/` 與同層 `postgame_boss_mechanics_v282_final/`。
 
 ## 修改紀錄：泰佐洛三段金流改用一般換人介面 V281（2026-08-19）
 
@@ -2129,9 +1891,7 @@ ode --check` 與進場台詞品質 QA 通過；定向 Chrome QA 在 1600×900 �
 - 修正：`postgameBossMechanicView()` 不再建立 `tesoro_forced_switch` 圖片提示，戰鬥頁也移除該專用渲染分支；3／3 仍建立既有 `replacement`，直接由 `renderReplacement()` 顯示名稱、等級、屬性、HP 與 PP。一般 `battleChooseReplacement` 現在同時負責清除退場角色的泰佐洛金流、取消專屬旗標並維持下回合才行動；舊快照若只有 `forcedSwitch`，也會先正規化成一般 replacement 再完成換人。
 - 相容與範圍：只改換人入口與相容處理；第三擊取消未執行指令、當回合選人、退場清流、下回合行動、致死第三擊走一般倒下、Golden Tesoro 40% 承傷均不變。沒有新增或改名 battle／`gameState` 欄位、資料 id、localStorage key、Socket.IO event 或 server 格式；正式主頁／戰鬥頁 query 為 `20260819-tesoro-ordinary-replacement-v128`／`v81`。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/battle_attribute_tesoro_scope_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：三支 JavaScript 
-ode --check` 通過；正式 8787 
-pm start` 服務的 `board_game.html`、`board_battle.html` 均為 HTTP 200 並載入 V128／V81。Chrome 1600×900、932×430 定向 QA 均為 `ok=true`、`failures=[]`、`errors=[]`；兩種尺寸的 3／3 畫面皆有 5 個一般替補按鈕、圖片數 0、專用提示數 0。實際以 `battleChooseReplacement` 換人後索引切到 1、原角色金流／控制歸零、`forcedSwitch`／replacement 清空；V2 舊狀態亦可用一般指令完成。證據位於 `tesoro_ordinary_replacement_v281/`。
+- 驗證：三支 JavaScript `node --check` 通過；正式 8787 `npm start` 服務的 `board_game.html`、`board_battle.html` 均為 HTTP 200 並載入 V128／V81。Chrome 1600×900、932×430 定向 QA 均為 `ok=true`、`failures=[]`、`errors=[]`；兩種尺寸的 3／3 畫面皆有 5 個一般替補按鈕、圖片數 0、專用提示數 0。實際以 `battleChooseReplacement` 換人後索引切到 1、原角色金流／控制歸零、`forcedSwitch`／replacement 清空；V2 舊狀態亦可用一般指令完成。證據位於 `tesoro_ordinary_replacement_v281/`。
 
 ## 修改紀錄：泰佐洛致死第三擊不觸發金流替補 V280（2026-08-19）
 
@@ -2139,9 +1899,7 @@ pm start` 服務的 `board_game.html`、`board_battle.html` 均為 HTTP 200 並�
 - 修正：`postgameTesoroSetControl()` 現在只替結算後仍存活的船員增加金流。若第三次命中同時使 HP 歸零，金流維持原本 2／3，不建立 `forcedSwitch`、`tesoro-gold` replacement 或金流淹滿提示，改由既有一般擊倒／替補流程接手；若角色經既有被動復活後仍存活，則照常增加金流。舊快照若已保存「死亡角色＋`tesoro-gold`」狀態，正規化時會移除專屬原因並保留一般 replacement。
 - 相容與範圍：存活角色承受第三次命中時仍會 3／3 並在同一回合強制替補；第一／Golden Tesoro 兩階段、3000 HP、40% 承傷、傷害、回合、CPU、battle snapshot、機制版本 4、localStorage key 與 Socket.IO event 均未改。正式主頁／戰鬥頁 query 為 `20260819-tesoro-lethal-third-hit-v127`／`v80`。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/battle_attribute_tesoro_scope_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：三支 JavaScript 
-ode --check` 通過。Chrome 1600×900、932×430 定向 QA 均為 `ok=true`、`failures=[]`、`errors=[]`；存活角色的第 1／2／3 次命中仍為 1／3、2／3、3／3 並正常強制替補，致死第三擊則為 HP 0、金流 2／3、`forced=false`、
-eedsReplacement=false`、`replacementReason=""`。錯誤舊快照另驗證可轉成 `result="replacement"`、保留原倒下索引且不再顯示 `tesoro_forced_switch`。一般戰鬥隔離、泰佐洛兩階段、三段液面、變身、40% 承傷及第一型態耐久回歸同步通過；證據位於 `tesoro_lethal_third_hit_v280/`。
+- 驗證：三支 JavaScript `node --check` 通過。Chrome 1600×900、932×430 定向 QA 均為 `ok=true`、`failures=[]`、`errors=[]`；存活角色的第 1／2／3 次命中仍為 1／3、2／3、3／3 並正常強制替補，致死第三擊則為 HP 0、金流 2／3、`forced=false`、`needsReplacement=false`、`replacementReason=""`。錯誤舊快照另驗證可轉成 `result="replacement"`、保留原倒下索引且不再顯示 `tesoro_forced_switch`。一般戰鬥隔離、泰佐洛兩階段、三段液面、變身、40% 承傷及第一型態耐久回歸同步通過；證據位於 `tesoro_lethal_third_hit_v280/`。
 
 ## 修改紀錄：專案暫存、備份與重複資產清理（2026-08-19）
 
@@ -2149,13 +1907,10 @@ eedsReplacement=false`、`replacementReason=""`。錯誤舊快照另驗證可轉
 - 刪除：移除 `.codex-runtime/` 34,347 檔／4,778.90 MiB、三組本機備份 1,634 檔／970.26 MiB、912 個舊 `tmp/` QA 檔／995.81 MiB、1,390 個未被文件引用的 `_codex_artifacts/` 檔／385.90 MiB、海軍本部 787 個未引用製作幀／766.13 MiB、Board 道具三組 137 個鏡像來源圖／220.87 MiB、54 個已有正式同雜湊副本的 `incoming/` 圖／24.99 MiB，以及 4 個 `_old` 圖、兩份舊交接、兩份「複製.js」與兩個臨時文字檔；合計約 7.95 GiB。
 - 保留：`tmp/tot-musica-full-dual-qa/` 保留最新 19 檔／34.26 MiB；`_codex_artifacts/` 保留 13 個文件直接引用證據／13.89 MiB；`incoming/` 保留 586 個沒有相同正式副本的來源檔；頂上戰爭保留正式頁實際引用的 24fps WebP、頂部守衛幀及左右守衛半圖共 4 檔／5.68 MiB。
 - 備份：刪除前已將本機 `backups/`、`_codex_backups/`、`_restore_backup_*/` 與 `.codex-runtime` 兩組還原點逐檔和 `D:/Codex_Project_Backups/20260725-before-lineage-factor-full/` 比對；1,659 檔全部 SHA-256 相同，沒有缺檔或差異。D 槽完整專案快照未刪除。
-- 防止復發：新增根目錄 `.gitignore`，排除 
-ode_modules/`、本機 Codex／QA 產物及本機備份／還原目錄；不忽略正式 `public/` 素材或 `incoming/` 原始來源。
+- 防止復發：新增根目錄 `.gitignore`，排除 `node_modules/`、本機 Codex／QA 產物及本機備份／還原目錄；不忽略正式 `public/` 素材或 `incoming/` 原始來源。
 - 相容與範圍：未修改遊戲規則、程式入口、資料 id、素材正式路徑、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。`docs/GAME_RULES.md` 不需更新。
 - 檔案：新增 `.gitignore`；刪除上述暫存、備份、重複圖與歷史／臨時文件；更新 `docs/NEXT_CHAT_HANDOFF_20260813.md`、`docs/FORMAL_LINEAGE_BATTLE_PARITY_PROMPT_20260728.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：所有核准刪除目標 `Test-Path` 均為 false；
-ode --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`。
-pm start` 正常在 8787 提供正式頁；`board_game.html`、`board_marineford.html`、海軍本部保留四檔與正式 Board 道具皆為 HTTP 200，被清除的來源影片為 404。Chrome 1440×900 載入兩頁皆無 page error、request failure 或 document overflow；主頁只保留專案原有的 `/favicon.ico` 404，頂上戰爭頁 console error 為 0。清理後 C 槽可用空間為 14.11 GiB。
+- 驗證：所有核准刪除目標 `Test-Path` 均為 false；`node --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`。`npm start` 正常在 8787 提供正式頁；`board_game.html`、`board_marineford.html`、海軍本部保留四檔與正式 Board 道具皆為 HTTP 200，被清除的來源影片為 404。Chrome 1440×900 載入兩頁皆無 page error、request failure 或 document overflow；主頁只保留專案原有的 `/favicon.ico` 404，頂上戰爭頁 console error 為 0。清理後 C 槽可用空間為 14.11 GiB。
 
 ## 修改紀錄：刷新快速恢復與同步降載 V279（2026-08-19）
 
@@ -2163,9 +1918,7 @@ pm start` 正常在 8787 提供正式頁；`board_game.html`、`board_marineford
 - 修正：初始化取得第一份既有快照時，直接套用遊戲進度並把舊回合提示標為已處理，不重播舊頁面的轉場。正常快速刷新不再改寫 `turnStep`、不額外 `renderAll()`、不顯示房間讀取視窗；只有超過 2.4 秒仍未取得快照才顯示等待說明。狀態索取改為遞增間隔且最多四次，成功、建局、失敗或斷線都會清除本機重試追蹤。
 - 相容與範圍：沿用完整 `BOARD_GAME_STATE`、既有 `gameState` 欄位、資料 id、localStorage key 與 Socket.IO event；只調整首次連線／刷新恢復，不修改一般回合同步、戰鬥、泰佐洛或 CPU 規則。正式主頁 query 為 `20260819-refresh-fast-resume-v126`。
 - 檔案：修改 `public/js/board_game.js`、`public/board_game.html`、`scripts/refresh_resume_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：兩份 JavaScript 
-ode --check` 通過。Chrome 專屬 QA 加入 2.8 秒舊回合提示，既有房仍在正常等待時間內直接恢復第 460 回合、沒有讀取視窗或殘留重試；房主 CPU 自行完成待續移動並交棒第 461 回合，非房主沒有代跑 CPU。另驗證房主真的無回應時只送四次請求、計時器停止並顯示延遲等待說明；全部 `failures=[]`、`errors=[]`。正式 8787 頁 HTTP 200 且載入 V126；
-pm start` 另啟因正式 server 已占用 8787 回報預期的 `EADDRINUSE`。
+- 驗證：兩份 JavaScript `node --check` 通過。Chrome 專屬 QA 加入 2.8 秒舊回合提示，既有房仍在正常等待時間內直接恢復第 460 回合、沒有讀取視窗或殘留重試；房主 CPU 自行完成待續移動並交棒第 461 回合，非房主沒有代跑 CPU。另驗證房主真的無回應時只送四次請求、計時器停止並顯示延遲等待說明；全部 `failures=[]`、`errors=[]`。正式 8787 頁 HTTP 200 且載入 V126；`npm start` 另啟因正式 server 已占用 8787 回報預期的 `EADDRINUSE`。
 
 ## 修改紀錄：泰佐洛第一型態耐久修正 V278（2026-08-19）
 
@@ -2173,8 +1926,7 @@ pm start` 另啟因正式 server 已占用 8787 回報預期的 `EADDRINUSE`。
 - 修正：泰佐洛專屬完整 HP 改為 3000；全新挑戰在通用平衡後重新套用 3000／3000，讀取同一場 `pendingBattle` 時不回滿。開場防禦、特防由各 +1 改為各 +2，並在既有被動說明中明示。Golden Tesoro 的半血變身、40% 承傷與金流河規則不變。
 - 相容與範圍：只調整 `postgame_gild_tesoro`，沿用既有島嶼、battle snapshot、localStorage key 與 Socket.IO event；一般戰鬥、其他 Boss、玩家傷害公式及刷新後 CPU 續行均未修改。正式主頁 query 為 `20260819-tesoro-first-phase-defense-v125`。
 - 檔案：修改 `public/js/board_game.js`、`public/board_game.html`、`scripts/battle_attribute_tesoro_scope_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：兩份 JavaScript 
-ode --check` 通過。Chrome 1600×900、932×430 專屬 QA 都確認第一型態為 3000 HP、防禦與特防 +2；模擬承受 1400 點重擊後仍為第一型態、HP 1600、沒有排入變身。既有三段金流、強制替補、Golden Tesoro 變身、第二階段 40% 承傷、普通戰隔離與桌機／手機 UI 回歸全部 `failures=[]`、`errors=[]`。
+- 驗證：兩份 JavaScript `node --check` 通過。Chrome 1600×900、932×430 專屬 QA 都確認第一型態為 3000 HP、防禦與特防 +2；模擬承受 1400 點重擊後仍為第一型態、HP 1600、沒有排入變身。既有三段金流、強制替補、Golden Tesoro 變身、第二階段 40% 承傷、普通戰隔離與桌機／手機 UI 回歸全部 `failures=[]`、`errors=[]`。
 
 ## 修改紀錄：刷新後 CPU 自動續行 V277（2026-08-19）
 
@@ -2182,8 +1934,7 @@ ode --check` 通過。Chrome 1600×900、932×430 專屬 QA 都確認第一型�
 - 修正：只有刷新後取得的第一份遠端快照會清除上述四個失效的頁面動畫鎖；真正的 `pendingMove`、路線／交易／共鬥／島嶼選擇與戰鬥快照仍保留。快照套用完成後，僅具 CPU 控制權的房主會重新排一次 CPU 自動步驟。後續一般 LAN 同步仍完整保留當下動畫鎖，不改正常演出時序。
 - 相容與範圍：沒有新增或改名 `gameState` 欄位、localStorage key、Socket.IO event 或資料 id；一般真人回合、非刷新同步及泰佐洛專屬戰鬥均未修改。正式主頁 query 為 `20260819-refresh-cpu-resume-v124`。
 - 檔案：修改 `public/js/board_game.js`、`public/board_game.html`、`scripts/refresh_resume_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：兩份 JavaScript 
-ode --check` 通過。專屬 Chrome QA 重播既有房刷新、含舊動畫鎖的 CPU 回合刷新、同局非房主觀看與全新房建立；房主 CPU 案由第 460 回合自行完成待續移動並交棒到第 461 回合，四個動畫鎖全部解除、`lastResult` 有值、同步版本 42→43；非房主保持第 460 回合且 `canRun=false`、沒有替 CPU 行動，全部 `failures=[]`、`errors=[]`。
+- 驗證：兩份 JavaScript `node --check` 通過。專屬 Chrome QA 重播既有房刷新、含舊動畫鎖的 CPU 回合刷新、同局非房主觀看與全新房建立；房主 CPU 案由第 460 回合自行完成待續移動並交棒到第 461 回合，四個動畫鎖全部解除、`lastResult` 有值、同步版本 42→43；非房主保持第 460 回合且 `canRun=false`、沒有替 CPU 行動，全部 `failures=[]`、`errors=[]`。
 
 ## 修改紀錄：泰佐洛變身前後統一金流河 V276（2026-08-19）
 
@@ -2191,19 +1942,14 @@ ode --check` 通過。專屬 Chrome QA 重播既有房刷新、含舊動畫鎖�
 - 變身：半血仍切換 Golden Tesoro 圖與四招，但不清除金流、不改成共用 -3～+3 戰線，也沒有兩層外殼或第三階段。Golden Tesoro 固定只承受玩家原傷害的 40%，HP 歸零後正常擊倒。
 - 相容與範圍：`POSTGAME_TESORO_MECHANIC_VERSION` 升為 4；舊第二階段的正向共用刻度轉入目前角色，舊第三階段回到 Golden Tesoro，舊外殼／必殺旗標歸零。沿用既有 battle snapshot、localStorage key 與 Socket.IO event，只修改泰佐洛專屬權威規則和戰鬥頁狀態顯示。正式主頁／戰鬥頁 query 為 `20260819-tesoro-gold-river-unified-v123`／`v79`。
 - 檔案：修改 `public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/battle_attribute_tesoro_scope_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：三份本輪 JavaScript 
-ode --check` 通過。Chrome 1600×900、932×430 專屬 QA 為 `ok=true`、`failures=[]`、`errors=[]`；實測變身保留後排角色 2／3 金流、Golden 命中令目前角色 0→1、玩家反擊不降低金流、100 點輸入只承受 40、HP 0 不被外殼救回、一般戰鬥金流隱藏。兩種比例的六人狀態框均在 viewport 內，無舊共用戰線／外殼文字；截圖為 `tesoro_rework_20260818/tesoro_golden_mechanic_detail_{desktop,phone_landscape}.png`。正式頁與戰鬥頁 HTTP 200 且載入新版 query；
-pm start` 另啟時因既有正式 server 已占用 8787 回報 `EADDRINUSE`，故沿用該 server 驗證。
+- 驗證：三份本輪 JavaScript `node --check` 通過。Chrome 1600×900、932×430 專屬 QA 為 `ok=true`、`failures=[]`、`errors=[]`；實測變身保留後排角色 2／3 金流、Golden 命中令目前角色 0→1、玩家反擊不降低金流、100 點輸入只承受 40、HP 0 不被外殼救回、一般戰鬥金流隱藏。兩種比例的六人狀態框均在 viewport 內，無舊共用戰線／外殼文字；截圖為 `tesoro_rework_20260818/tesoro_golden_mechanic_detail_{desktop,phone_landscape}.png`。正式頁與戰鬥頁 HTTP 200 且載入新版 query；`npm start` 另啟時因既有正式 server 已占用 8787 回報 `EADDRINUSE`，故沿用該 server 驗證。
 
 ## 修改紀錄：房主刷新恢復目前進度 V275（2026-08-18）
 
 - 問題：`BOARD_JOIN_GAME` 會先送 `BOARD_LOBBY`、再送既有 `BOARD_GAME_STATE`、最後才回覆 join 結果。房主刷新時，舊版在收到房間名單後便提前建立新局，令 `awaitingInitialState` 變成 false；隨後真正的既有快照若來源是同一個持久 `clientId`，便被當成自己的回傳訊息忽略，因此畫面跳回開局選角。
 - 修正：新增只存在本機連線流程的 `initialStateCanSeed` 門閂。必須等 join 回覆明確確認「房間沒有快照」且目前裝置可 seed，房主才能建立新局；收到既有快照、加入失敗或斷線時一律清除門閂。沒有新增或改名 `gameState` 欄位、localStorage key、Socket.IO event 或資料 id。
 - 檔案：修改 `public/js/board_game.js`、`public/board_game.html`，新增 `scripts/refresh_resume_qa.js`，並同步更新專案文件。正式主頁 query 為 `20260818-refresh-resume-v122`。
-- 驗證：
-ode --check public/js/board_game.js` 與 
-ode --check scripts/refresh_resume_qa.js` 通過。專屬 Chrome QA 依正式伺服器順序重播「房間名單 → 快照 → join 回覆」：既有房間正確恢復 `main`、第 460 回合與「擲骰前進」，全新房間仍進入 `setup-order`；兩案 `pageerror=[]`、初始等待／seed 門閂皆在完成後關閉。正式頁 HTTP 200 且載入新版 query；
-pm start` 另啟時因既有正式 server 已占用 8787 回報 `EADDRINUSE`，故沿用該 server 驗證。
+- 驗證：`node --check public/js/board_game.js` 與 `node --check scripts/refresh_resume_qa.js` 通過。專屬 Chrome QA 依正式伺服器順序重播「房間名單 → 快照 → join 回覆」：既有房間正確恢復 `main`、第 460 回合與「擲骰前進」，全新房間仍進入 `setup-order`；兩案 `pageerror=[]`、初始等待／seed 門閂皆在完成後關閉。正式頁 HTTP 200 且載入新版 query；`npm start` 另啟時因既有正式 server 已占用 8787 回報 `EADDRINUSE`，故沿用該 server 驗證。
 
 ## 修改紀錄：Golden Tesoro 變身回合解除卡死 V274（2026-08-18）
 
@@ -2218,14 +1964,12 @@ pm start` 另啟時因既有正式 server 已占用 8787 回報 `EADDRINUSE`，�
 - 素材：正式 WebP 位於 `public/images/board/battle/postgame_mechanics/tesoro_gold_shell/`；ImageGen 原始 PNG 保存在同目錄 `incoming/`，完整提示詞記錄於 `GOLD_RIVER_IMAGEGEN_PROMPT.md`。正式頁不引用收件區。
 - 相容：只替換泰佐洛第一階段金流的視覺素材；三次命中、當回合替補、退隊清流、Golden Tesoro 第二／三階段、傷害、回合、CPU、快照、localStorage key 與 Socket.IO event 均未修改。正式主頁／戰鬥頁 query 為 `20260818-tesoro-gold-river-art-v120`／`v77`。
 - 修改檔案：`public/board_battle.html`、`public/js/board_game.js`、`public/board_game.html`、`scripts/battle_attribute_tesoro_scope_qa.js`、金流正式／來源素材、提示詞與相關專案文件。
-- 驗證：三個 JS 
-ode --check` 通過；Chrome 1600×900 與 932×430 定向 QA 為 `ok=true`、`failures=[]`、`errors=[]`。正式圖 HTTP 載入為 1254×1254；一般戰鬥仍隱藏金流；三段實測高度約 35%／67%／103%，攻擊／受擊期間固定在角色框，第三次命中與替補規則仍通過。截圖位於 `tesoro_rework_20260818/tesoro_gold_river_level_{1,2,3}_desktop.png` 及手機橫向同名檔。
+- 驗證：三個 JS `node --check` 通過；Chrome 1600×900 與 932×430 定向 QA 為 `ok=true`、`failures=[]`、`errors=[]`。正式圖 HTTP 載入為 1254×1254；一般戰鬥仍隱藏金流；三段實測高度約 35%／67%／103%，攻擊／受擊期間固定在角色框，第三次命中與替補規則仍通過。截圖位於 `tesoro_rework_20260818/tesoro_gold_river_level_{1,2,3}_desktop.png` 及手機橫向同名檔。
 
 ## 修改紀錄：戰鬥屬性恢復原色文字 V272（2026-08-18）
 
 - 決定：依使用者確認，角色屬性不使用圖片圖示，恢復原本的彩色文字膠囊；`力` 為紅色、`速` 為藍色、`技` 為綠色，無屬性則顯示中性色 `無`。
-- 範圍：主遊戲角色資料、一般戰鬥雙方 HUD、中央屬性相剋提示及 Tot Musica 專用雙人戰鬥 HUD 全部使用同一文字規則；修行、船隻、司法島、推進城及其他功能圖片圖示不變。四張既有素材保留於素材目錄但不再作為屬性標籤，其中 
-eutral.webp` 仍可供非屬性的通用備援圖使用。
+- 範圍：主遊戲角色資料、一般戰鬥雙方 HUD、中央屬性相剋提示及 Tot Musica 專用雙人戰鬥 HUD 全部使用同一文字規則；修行、船隻、司法島、推進城及其他功能圖片圖示不變。四張既有素材保留於素材目錄但不再作為屬性標籤，其中 `neutral.webp` 仍可供非屬性的通用備援圖使用。
 - 檔案：修改 `public/js/board_game.js`、`public/board_game.html`、`public/js/board_battle.js`、`public/board_battle.html` 與 `scripts/single_character_icons_qa.js`；正式主頁 query 為 `20260818-attribute-text-v117`，battle iframe query 為 `20260818-attribute-text-v71`。
 - 驗證：三支 JavaScript 語法檢查通過；更新後的瀏覽器 QA 於 1600×900、1024×768、932×430 實際檢查主頁、戰鬥、水之七島及推進城，確認屬性節點只含文字、圖片數 0、破圖 0、越框 0、失敗 0。桌機截圖另人工確認文字置中及紅／藍／綠漸層正確。純顯示修改，不改屬性剋制、傷害、角色資料、回合、存檔或多人同步。
 
@@ -2248,8 +1992,7 @@ eutral.webp` 仍可供非屬性的通用備援圖使用。
 
 - 問題：V268 只驗證 `<img>` 元素沒有越過父容器，沒有檢查透明圖檔內真正可見圖案的位置；因此部分圖示雖然 CSS 置中，圖案本身仍偏上、偏下或貼近圓框。
 - 修正：`scripts/prepare_single_character_replacement_icons.js` 現在會依有效 Alpha 邊界裁切、保留光效安全距離、等比例縮放，最後重新放到 256×256 透明畫布的光學中心；司法島與推進城共用的 `unknown.webp` 也由同一份置中結果同步。
-- 檔案：當時重新輸出修行、船隻升級、司法島補給、推進城事件與屬性共 30 張正式 WebP；V272 已讓四張素材退出屬性標籤，目前 QA 對其餘 26 張功能圖示仍檢查圖案中心偏差、透明度、尺寸與四邊安全距離，
-eutral.webp` 的非屬性備援用途保留。
+- 檔案：當時重新輸出修行、船隻升級、司法島補給、推進城事件與屬性共 30 張正式 WebP；V272 已讓四張素材退出屬性標籤，目前 QA 對其餘 26 張功能圖示仍檢查圖案中心偏差、透明度、尺寸與四邊安全距離，`neutral.webp` 的非屬性備援用途保留。
 - 驗證：30/30 張皆為 256×256 Alpha WebP；有效圖案 X/Y 中心偏差皆不超過 0.5px，四邊安全距離至少 18px。Chrome 實際截圖檢查 1600×900、1024×768、932×430 的修行、船隻、水之七島、司法島、推進城、屬性、船團及圖鑑，QA `ok=true`、失敗 0、破圖 0、越框 0。
 - 相容性：只重新置中顯示素材並加強 UI QA；不修改遊戲規則、角色／招式／道具／島嶼 id、回合、戰鬥判定、存檔、同步或 `BOARD_GAME_STATE`。
 
@@ -2343,24 +2086,21 @@ eutral.webp` 的非屬性備援用途保留。
 - 範圍：四人三輪蛇形選角不再把同一玩家的頭像與名稱重複排列十二次；航程順位板改為四個固定玩家欄、三輪狀態列，上方摘要也只保留四名玩家與各自 `已選 x/3`。順位、正反向輪次與 12 次抽取順序不變。
 - 圖鑑（當時規則）：角色只有在玩家「目前擁有至少一個永久實例」且「曾正式擊敗」兩項同時成立時才揭露；此條件已由 V377 的「正式戰鬥遇見即解鎖」取代。未遇見列與詳情仍不建立角色 portrait／階級圖片節點。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`scripts/draft_codex_privacy_qa.js`，並同步更新三份專案文件。正式主頁 query 為 `20260817-draft-codex-privacy-v101`。
-- 驗證：
-ode --check` 通過；正式 Chrome 1600×900 與 1024×768 均確認四個玩家欄、十二個輪次格、候選卡、上方四人摘要全部在框內且頁面無溢出。圖鑑另覆蓋「擁有且擊敗／只擁有／只擊敗／兩者皆無」四種真值組合，三種鎖定狀態均未載入角色圖或階級圖，也未洩漏姓名、來源與地點。
+- 驗證：`node --check` 通過；正式 Chrome 1600×900 與 1024×768 均確認四個玩家欄、十二個輪次格、候選卡、上方四人摘要全部在框內且頁面無溢出。圖鑑另覆蓋「擁有且擊敗／只擁有／只擊敗／兩者皆無」四種真值組合，三種鎖定狀態均未載入角色圖或階級圖，也未洩漏姓名、來源與地點。
 - 相容性：沒有修改抽取順序、轉盤結果、候選池、角色／敵人 id、持久欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`；圖鑑揭露條件在開啟介面時由既有 `crew`／研究收藏及 `defeatedEnemies` 即時計算。
 
 ## 修改紀錄：大航海時代出航旁白 V256（2026-08-17）
 
 - 範圍：依使用者逐段確認的第二段劇情，將開局序章「大航海時代出航」三句宣傳式旁白改為直接承接羅傑遺言、眾人奔向大海與時代開幕；保留既有船隊出航背景及所有播放控制。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`scripts/opening_story_dialogue_qa.js`，並同步更新三份專案文件。正式主頁 query 為 `20260817-great-pirate-departure-v100`。
-- 驗證：
-ode --check` 通過；正式 Chrome 1600×900 從五句羅傑處刑連續播放至三句出航旁白，逐句核對內容、章節背景、人物圖、閃白標題與框位，頁面無溢出或瀏覽器例外，共保存八張逐句截圖。
+- 驗證：`node --check` 通過；正式 Chrome 1600×900 從五句羅傑處刑連續播放至三句出航旁白，逐句核對內容、章節背景、人物圖、閃白標題與框位，頁面無溢出或瀏覽器例外，共保存八張逐句截圖。
 - 相容性：沒有改動序章觸發、章節順序、播放時間、圖片、選角、主線、持久狀態、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
 
 ## 修改紀錄：羅傑處刑原句校正 V255（2026-08-17）
 
 - 範圍：依使用者逐段確認的第一段劇情，只校正開局序章「羅傑處刑」五個節拍；刪除虛構群眾問話與三句遊戲改寫，羅傑改說確認過的兩句繁中原意版本，保留原背景、平靜／微笑人物圖、處刑閃白與「大航海時代——開幕」。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`scripts/opening_story_dialogue_qa.js`，並同步更新三份專案文件。正式主頁 query 為 `20260817-roger-original-line-v99`。
-- 驗證：
-ode --check` 通過；正式 Chrome 1600×900 依序播放五句，逐句核對說話者、文字、羅傑 calm／smile 圖、處刑閃白與標題，人物圖載入、對話框框位及頁面溢出均正常，並保存五張逐句截圖。
+- 驗證：`node --check` 通過；正式 Chrome 1600×900 依序播放五句，逐句核對說話者、文字、羅傑 calm／smile 圖、處刑閃白與標題，人物圖載入、對話框框位及頁面溢出均正常，並保存五張逐句截圖。
 - 相容性：沒有改動序章觸發、播放時間、操作按鈕、選角、主線、持久狀態、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
 
 ## 修改紀錄：120 話主線流程與 CPU 推進修正 V254（2026-08-17）
@@ -2376,17 +2116,14 @@ ode --check` 通過；正式 Chrome 1600×900 依序播放五句，逐句核對�
 
 - 範圍：依實際人物性格重寫上一版新增的 22 位後期敵人台詞池及 25 組高關聯對話，移除「超越這份見聞色」、直接解說覺醒／血統因子／背火及暴露鹽弱點等不像人物會說的句子。
 - 檔案：`public/js/onepiece_prebattle_lines.js` 重寫口吻；`public/js/board_game.js` 新增能力／遊戲規則解說句過濾；`scripts/prebattle_dialogue_quality_qa.js` 新增規則旁白掃描；`scripts/battle_prebattle_intro_qa.js` 支援以 `BOARD_QA_BOSS_KEY` 指定實測 Boss；`public/board_game.html` 更新快取版本，並同步更新三份專案文件。
-- 驗證：
-ode --check` 與靜態對話 QA 均通過，3,760 組正式配對的系統句、機制解說句及超過 30 字台詞皆為 0；另以正式戰鬥頁指定卡塔庫栗，驗證新台詞可見、CPU 在對話結束前不行動、結束後才出招，桌機／手機畫面無溢出及瀏覽器例外。
+- 驗證：`node --check` 與靜態對話 QA 均通過，3,760 組正式配對的系統句、機制解說句及超過 30 字台詞皆為 0；另以正式戰鬥頁指定卡塔庫栗，驗證新台詞可見、CPU 在對話結束前不行動、結束後才出招，桌機／手機畫面無溢出及瀏覽器例外。
 - 相容性：沒有修改戰鬥演出時間、傷害、回合、CPU 戰術、角色／敵人 id、持久狀態或多人同步格式。正式 query 為 `20260817-prebattle-character-voice-v3`／`20260817-prebattle-character-voice-v97`。
 
 ## 修改紀錄：戰鬥進場自然對話完善 V252（2026-08-17）
 
 - 範圍：移除戰前對話中的「誰上場／出戰／迎戰／登場」式系統播報，補齊四皇、最終敵人、神之騎士團與十三 Boss 區域的後期對話；不修改戰鬥傷害、CPU 戰術、播放時間、回合、持久狀態或多人事件。
 - 檔案：`public/js/onepiece_prebattle_lines.js` 新增 22 位敵人的雙句台詞池與 25 組高關聯配對；`public/js/board_game.js` 擴充敵人 key、過濾系統式文字並加入形態／類型自然備援；`public/board_game.html` 更新快取；同步修訂兩份人工審閱清單，新增 `scripts/prebattle_dialogue_quality_qa.js`，並強化 `scripts/battle_prebattle_intro_qa.js` 的自然台詞檢查。
-- 驗證：
-ode --check` 通過正式對話資料、主遊戲與兩支 QA；靜態 QA 確認 42 個角色池、65 個敵人池、3,760 組配對、22 位擴充敵人及 83 個配對角色 key 均可取得自然台詞，系統式台詞與超長台詞皆為 0。另以 
-pm start` 執行正式戰鬥頁瀏覽器 QA，確認開場對話可見、CPU 會等待播放完成、完成後才行動、沒有文字／頁面溢出與瀏覽器例外。
+- 驗證：`node --check` 通過正式對話資料、主遊戲與兩支 QA；靜態 QA 確認 42 個角色池、65 個敵人池、3,760 組配對、22 位擴充敵人及 83 個配對角色 key 均可取得自然台詞，系統式台詞與超長台詞皆為 0。另以 `npm start` 執行正式戰鬥頁瀏覽器 QA，確認開場對話可見、CPU 會等待播放完成、完成後才行動、沒有文字／頁面溢出與瀏覽器例外。
 - 相容性：沒有新增或改名角色、敵人、招式、道具及地圖 id，沒有修改 `gameState`、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 快照格式。正式 query 為 `20260817-prebattle-natural-dialogue-v2`／`20260817-prebattle-natural-dialogue-v96`。
 
 ## 修改紀錄：開局角色階級重整 V251（2026-08-17）
@@ -2394,11 +2131,7 @@ pm start` 執行正式戰鬥頁瀏覽器 QA，確認開場對話可見、CPU 會
 - 範圍：依確認名單重整首周目開局角色階級，不修改劇情限定角色、最終之島後四人、選角流程、同步欄位或事件名稱。
 - 檔案：`public/js/board_cards.js` 調整薩波、雷利、烏塔、騙人布、娜美、曼雪莉、佩羅娜的 `tier`；`public/board_game.html` 與 `public/board_marineford.html` 更新正式角色資料快取版本；新增 `scripts/opening_roster_tier_qa.js`。
 - 規則結果：S 6、A 8、B 5、C 5、D 6、E 5，共 35 名。現有 `tier` 同時參與招募階級、預設基礎數值與成長率；烏塔保留自訂 `baseStats`，其成長率隨 B 級更新。
-- 驗證：執行 
-ode --check public/js/board_cards.js`、
-ode --check scripts/opening_roster_tier_qa.js`、
-ode scripts/opening_roster_tier_qa.js`，並以 
-pm start` 確認正式主頁、角色資料與頂上戰爭頁可載入。
+- 驗證：執行 `node --check public/js/board_cards.js`、`node --check scripts/opening_roster_tier_qa.js`、`node scripts/opening_roster_tier_qa.js`，並以 `npm start` 確認正式主頁、角色資料與頂上戰爭頁可載入。
 
 本文件描述修改大富翁 / Board 遊戲時的標準流程。
 
@@ -2463,8 +2196,7 @@ pm start` 確認正式主頁、角色資料與頂上戰爭頁可載入。
 - `public/js/board_game.js` 的 `pushBoardLanState()` / `pushBoardLanStateUnchecked()`。
 - `public/js/board_game.js` 的 `canPushBoardLanState()`。
 - `public/js/board_game.js` 的 `applyBoardLanPayload()`。
-- `public/js/board_game.js` 的 `createManualSavePayload()`、`loadManualGame()`、
-ormalizeLoadedGameState()`。
+- `public/js/board_game.js` 的 `createManualSavePayload()`、`loadManualGame()`、`normalizeLoadedGameState()`。
 
 ## 4. 修改時的原則
 
@@ -2478,13 +2210,11 @@ ormalizeLoadedGameState()`。
 
 ## 5. 測試流程
 
-目前 `package.json` 沒有 
-pm test` script。程式修改後至少做以下手動驗證。
+目前 `package.json` 沒有 `npm test` script。程式修改後至少做以下手動驗證。
 
 基本啟動：
 
-1. 執行 
-pm start`。
+1. 執行 `npm start`。
 2. 開啟 `http://localhost:3000` 或 server 實際印出的 port。
 3. 確認靜態頁面與 Socket.IO client 可載入。
 
@@ -2569,8 +2299,7 @@ UI / RWD：
 #### 戰鬥相反方向受擊圖全部完成
 
 - 日期：2026-07-30。
-- 範圍：重新掃描正式玩家、進化與敵人戰鬥 portrait 資料夾；只有同時具有非空 
-ormal.webp`、`angry.webp`、`hit.webp`、`morale.webp`、`weak.webp`、`dizzy.webp` 的資料夾列入。合格來源共 149 組（玩家 51、玩家進化 32、敵人 66），已全部建立相反方向受擊圖。
+- 範圍：重新掃描正式玩家、進化與敵人戰鬥 portrait 資料夾；只有同時具有非空 `normal.webp`、`angry.webp`、`hit.webp`、`morale.webp`、`weak.webp`、`dizzy.webp` 的資料夾列入。合格來源共 149 組（玩家 51、玩家進化 32、敵人 66），已全部建立相反方向受擊圖。
 - 檔案：玩家與玩家進化的正式輸出為各角色資料夾內的 `hit_enemy.webp`；敵人的正式輸出為各敵人資料夾內的 `hit_player.webp`。另更新 `public/images/board/battle/opposite_hit_incoming/`、`docs/BATTLE_OPPOSITE_HIT_GENERATION_PROGRESS.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 生成與人工驗證：每名角色以原 `hit.webp` 為主要編輯底圖，另把其餘五張正式狀態圖排成接觸表一併提供作角色一致性參考；候選圖先進中央收件區，再與來源並排檢查衝擊方向、頭部反應、角色身份、文字／刺青／疤痕、配件、武器與背景後才移入正式資料夾。左右固定特徵錯誤的候選均重生或局部修正，未通過稿沒有移入正式資料夾。
 - 檔案驗證：重新依六狀態資格掃描，確認正式輸出為玩家 51、玩家進化 32、敵人 66，共 149 張；每張均可解碼為 RGB WebP，尺寸與各自來源 `hit.webp` 完全一致，缺檔、格式、色彩模式、尺寸與解碼錯誤均為 0。`opposite_hit_incoming/` 最終檔案數為 0，進度表為 `verified` 149、`pending` 0。
@@ -2584,10 +2313,8 @@ ormal.webp`、`angry.webp`、`hit.webp`、`morale.webp`、`weak.webp`、`dizzy.w
 - 檔案：`public/js/board_cards.js`、`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、三份 portrait `README.md`、`docs/BATTLE_OPPOSITE_HIT_GENERATION_PROGRESS.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 正式資料驗證：`BoardCards` 51／51 玩家與 32／32 進化型態均帶兩個方向欄位；`arenaOpponentProfile("luffy")` 的最高型態五檔魯夫敵方受擊路徑為 `portraits/evolutions/luffy_gear_fifth/hit_enemy.webp`；`lineageCultivationTemplateForEnemy("akainu")` 的我方受擊路徑為 `enemies/akainu/hit_player.webp`。四個代表性正式路徑均回傳 HTTP 200。
 - 正式畫面驗證：以正式 `board_battle.html` 的 attack visual event 實際播放兩個跨陣營情境。Chrome 1440×900 中敵方五檔魯夫載入 `hit_enemy.webp`、我方赤犬培育個體載入 `hit_player.webp`；1024×768 平板再次確認敵方方向圖。兩張實際受擊圖均解碼為 1086×1448，沿用原卡片尺寸與排版。
-- 程式與素材驗證：
-ode --check` 通過 `board_cards.js`、`board_game.js`、`board_battle.js`；兩個 HTML 沒有 inline script；重新掃描 51 名玩家、32 種進化、66 名敵人，`hit_enemy.webp`／`hit_player.webp` 缺圖 0。8787 的正式入口、主遊戲、戰鬥頁、三支新版 query 腳本及代表性新圖均回應 HTTP 200，`git diff --check` 通過。
-- 相容性：舊存檔／舊多人快照沒有方向欄位時，戰鬥頁依序回退 `hit`、`hurt`、
-ormal`、`idle`。沒有新增或改名 `gameState`、battle state、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 欄位；戰鬥數值、招式、命中、回合、CPU 與觀看方同步規則不變。正式 query 更新為 `20260730-directional-hit-portraits-v1`。
+- 程式與素材驗證：`node --check` 通過 `board_cards.js`、`board_game.js`、`board_battle.js`；兩個 HTML 沒有 inline script；重新掃描 51 名玩家、32 種進化、66 名敵人，`hit_enemy.webp`／`hit_player.webp` 缺圖 0。8787 的正式入口、主遊戲、戰鬥頁、三支新版 query 腳本及代表性新圖均回應 HTTP 200，`git diff --check` 通過。
+- 相容性：舊存檔／舊多人快照沒有方向欄位時，戰鬥頁依序回退 `hit`、`hurt`、`normal`、`idle`。沒有新增或改名 `gameState`、battle state、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 欄位；戰鬥數值、招式、命中、回合、CPU 與觀看方同步規則不變。正式 query 更新為 `20260730-directional-hit-portraits-v1`。
 
 #### 約克十三張線索單人三難度排牌示範 V112
 
@@ -2604,37 +2331,28 @@ ormal`、`idle`。沒有新增或改名 `gameState`、battle state、localStorag
 
 - 範圍：把 6 組角色進化外觀框從示範頁正式接入遊戲。`新世界索隆框`、`新世界香吉士框`、`新世界娜美框`、`狙擊王框`、`新世界羅框`、`凱洛特月獅框` 會在對應進化形態的船員詳情外觀框清單中出現，尚未手動選框的對應形態會預設套用自己的角色框；正式戰鬥頁移除舊的固定通用框 `<img>`，改由 `public/js/board_battle.js` 依 `cosmeticFrameId` 動態插入框素材，並套用示範頁定稿的 X / Y / W / H / opacity / strength / z / blend。主頁與戰鬥頁 script query 更新為 `20260710-evolution-cosmetic-frames-v1`。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；解析 `public/board_cosmetic_frame_demo.html` 內嵌 script；掃描 6 組新角色框與 2 組通用框素材路徑，確認實體檔案存在；若伺服器在 `127.0.0.1:8787` 執行，確認 `board_game.html`、`board_battle.html`、新版主頁 / 戰鬥頁 JS 與代表性新框素材回應 200。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；解析 `public/board_cosmetic_frame_demo.html` 內嵌 script；掃描 6 組新角色框與 2 組通用框素材路徑，確認實體檔案存在；若伺服器在 `127.0.0.1:8787` 執行，確認 `board_game.html`、`board_battle.html`、新版主頁 / 戰鬥頁 JS 與代表性新框素材回應 200。
 - 風險：沿用船員卡 `cosmeticFrameId` 與既有 `ownedCosmeticFrameIds`，不新增 Socket.IO event、localStorage key 或新的同步主欄位；改動集中在船員詳情可選規則、戰鬥頁視覺圖層與快取版本，需實機確認不同框的前後 z 層符合示範頁。
 
 - 範圍：新增正式戰鬥頁外觀框測試入口 `public/board_battle_frame_test.html`。頁面提供新世界索隆、新世界香吉士、新世界娜美、狙擊王、新世界羅與凱洛特月獅型態六個按鈕，會寫入臨時 `onepiece-board-battle-snapshot-v1` 並開啟正式 `board_battle.html`，用正式 HUD / 戰鬥卡預覽外觀框效果。
 - 檔案：`public/board_battle_frame_test.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：解析 `public/board_battle_frame_test.html` 內嵌 script；掃描六名角色與測試敵人羅布・路基共 42 條戰鬥 portrait 路徑，缺圖 0；執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_battle_frame_test.html` 回應 200。
+- 驗證：解析 `public/board_battle_frame_test.html` 內嵌 script；掃描六名角色與測試敵人羅布・路基共 42 條戰鬥 portrait 路徑，缺圖 0；執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_battle_frame_test.html` 回應 200。
 - 風險：測試頁會覆寫本機 `onepiece-board-battle-snapshot-v1` 這個戰鬥頁快照，方便已開啟的正式戰鬥頁更新；不修改主遊戲手動存檔、房間狀態、Socket.IO event 或任何 `gameState` 欄位。若正在打一場正式戰鬥，測試完要從主遊戲重新進戰鬥讓快照回到正式狀態。
 
 - 範圍：集中整理 Board 遊戲圖片到 `public/images/board/`，並更新正式 Board 頁面、Board JS、戰鬥特效設定與素材說明檔的圖片引用。Board 專用資料夾已搬到 `board/backgrounds`、`board/battle`、`board/game`、`board/story`、`board/ui`、`board/decorations`、`board/evolution`、`board/final_island`、`board/impel_down`、`board/islands`、`board/marineford`、`board/mission_island`、`board/ships`、`board/shops`、`board/tavern_recruit`、`board/water_seven`；`avatars` 與 `items` 因舊頁面仍共用，保留原資料夾並複製一份到 `board/avatars`、`board/items` 供 Board 讀取。同步把主頁 / 戰鬥頁快取版本更新為 `20260710-board-image-folder-v1`。
 - 檔案：`public/images/board/`、`public/board*.html`、`public/js/board*.js`、`public/js/battle_hit_effect_settings.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行所有正式 Board JS 與 `public/js/battle_hit_effect_settings.js` 的 
-ode --check`；解析 `portrait-folder-tool.ps1`；掃描 288 條正式 Board 靜態圖片路徑，缺圖 0；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html`、新版 `/js/board_game.js?v=20260710-board-image-folder-v1`、`/js/board_battle.js?v=20260710-board-image-folder-v1` 與 9 個代表性 `images/board/...` 圖片路徑皆回應 200。
+- 驗證：執行所有正式 Board JS 與 `public/js/battle_hit_effect_settings.js` 的 `node --check`；解析 `portrait-folder-tool.ps1`；掃描 288 條正式 Board 靜態圖片路徑，缺圖 0；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html`、新版 `/js/board_game.js?v=20260710-board-image-folder-v1`、`/js/board_battle.js?v=20260710-board-image-folder-v1` 與 9 個代表性 `images/board/...` 圖片路徑皆回應 200。
 - 風險：這是大量素材路徑搬移，需特別確認平板 / 電腦瀏覽器沒有快取舊 JS；舊 battle 圖片根層已完整複製到 `public/images/board/battle/` 後移除，正式 Board 檔案已改讀 `images/board/...`。`avatars` 與 `items` 因舊頁面仍共用，原資料夾保留。
 
 - 範圍：讓角色專屬外觀框也能在船員詳情中選擇。五檔・尼卡會在自己的外觀框清單中看到 `五檔・尼卡框`，既有或新覺醒五檔若尚未手動選框會預設使用此框；若玩家改選 `3D2Y 框`、`黃金電話蟲框` 或無框，戰鬥頁會照該船員的 `cosmeticFrameId` 顯示，不再由五檔框強制壓過其他選擇。
 - 檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：與圖片搬移一起執行所有正式 Board JS 的 
-ode --check`；確認 `board_game.html`、`board_battle.html`、新版主遊戲 / 戰鬥 JS 回應 200；用 `rg` 確認文件不再保留五檔框強制壓過通用框的現行規則說法。
+- 驗證：與圖片搬移一起執行所有正式 Board JS 的 `node --check`；確認 `board_game.html`、`board_battle.html`、新版主遊戲 / 戰鬥 JS 回應 200；用 `rg` 確認文件不再保留五檔框強制壓過通用框的現行規則說法。
 - 風險：沿用船員卡 `cosmeticFrameId`，不新增 Socket.IO event 或 localStorage key；角色專屬框不寫入玩家通用 `activeCosmeticFrameId`，避免影響其他船員自動套框。
 
-- 範圍：預先建立 6 個角色進化專屬外觀框素材資料夾，讓使用者可直接放入待改名圖片。新增預留目錄 `zoro_new_world/`、`sanji_new_world/`、
-ami_new_world/`、`sogeking/`、`law_new_world/`、`carrot_moon_lion/`；此步只建素材目錄與文件索引，尚未接入正式外觀框資料、戰鬥頁或船員選框 UI。
+- 範圍：預先建立 6 個角色進化專屬外觀框素材資料夾，讓使用者可直接放入待改名圖片。新增預留目錄 `zoro_new_world/`、`sanji_new_world/`、`nami_new_world/`、`sogeking/`、`law_new_world/`、`carrot_moon_lion/`；此步只建素材目錄與文件索引，尚未接入正式外觀框資料、戰鬥頁或船員選框 UI。
 - 檔案：`public/images/board/battle/cosmetic_frames/zoro_new_world/`、`public/images/board/battle/cosmetic_frames/sanji_new_world/`、`public/images/board/battle/cosmetic_frames/nami_new_world/`、`public/images/board/battle/cosmetic_frames/sogeking/`、`public/images/board/battle/cosmetic_frames/law_new_world/`、`public/images/board/battle/cosmetic_frames/carrot_moon_lion/`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：用 PowerShell 建立並列出 6 個資料夾；未執行 
-pm start`，因本次未改正式遊戲程式或可載入素材。
-- 風險：目前資料夾為空，Git 不會追蹤空目錄；等使用者放入素材後需再改名、更新外觀框設定、接正式戰鬥頁並做路徑 200 / 
-ode --check` 驗證。
+- 驗證：用 PowerShell 建立並列出 6 個資料夾；未執行 `npm start`，因本次未改正式遊戲程式或可載入素材。
+- 風險：目前資料夾為空，Git 不會追蹤空目錄；等使用者放入素材後需再改名、更新外觀框設定、接正式戰鬥頁並做路徑 200 / `node --check` 驗證。
 
 - 範圍：整理使用者放入的 6 組角色進化外觀框素材，並加入外觀框示範頁供微調。新世界索隆素材改名為 `top_sword.webp`、`left_sword.webp`、`right_sword.webp`、`aura.webp`；新世界香吉士改名為 `frame.webp`、`aura.webp`、`left_flame_kick.webp`、`right_flame_kick.webp`；新世界娜美改名為 `frame.webp`、`aura.webp`、`zeus_cloud_left.webp`、`thunder_right.webp`；狙擊王改名為 `frame.webp`、`aura.webp`、`mask_top.webp`；新世界羅改名為 `frame.webp`、`room_aura.webp`；凱洛特月獅改名為 `frame.webp`、`left_fur_lightning.webp`、`right_moon_claw.webp`。`public/board_cosmetic_frame_demo.html` 下拉選單新增這 6 組，可切換五檔、新世界索隆、新世界香吉士、新世界娜美、狙擊王、新世界羅與凱洛特月獅的戰鬥半身圖 / 表情，並調整圖層 X / Y / W / H / opacity / strength / z / blend 後輸出 JSON。此筆當時只接示範頁；2026-07-10 已於上方紀錄正式接入戰鬥頁與船員選框 UI。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/images/board/battle/cosmetic_frames/zoro_new_world/`、`public/images/board/battle/cosmetic_frames/sanji_new_world/`、`public/images/board/battle/cosmetic_frames/nami_new_world/`、`public/images/board/battle/cosmetic_frames/sogeking/`、`public/images/board/battle/cosmetic_frames/law_new_world/`、`public/images/board/battle/cosmetic_frames/carrot_moon_lion/`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
@@ -2643,23 +2361,17 @@ ode --check` 驗證。
 
 - 範圍：補強舊紀錄外觀框回補條件。`public/js/board_game.js` 的讀檔同步現在不只依司法島通關寶箱與 `3D2Y 的報紙` 補框，也會用司法島 `clearCount` / `cleared` / 島嶼擊破狀態 / 舊 log 回補黃金電話蟲框，並用玩家 Marineford `win`、`rewards`、正式道具與舊 log 回補 3D2Y 框；回補後會自動套給尚未裝框的船員。`public/board_game.html` script query 更新為 `20260710-cosmetic-frame-backfill-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_game.html` 與新版 `/js/board_game.js?v=20260710-cosmetic-frame-backfill-v1` 回應 200。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_game.html` 與新版 `/js/board_game.js?v=20260710-cosmetic-frame-backfill-v1` 回應 200。
 - 風險：回補條件會讓有司法島通關紀錄的存檔內玩家都取得黃金電話蟲框；Marineford 的 3D2Y 框仍以玩家個別成功紀錄、獎勵或 log 判斷。未改 Socket.IO event 名稱或 localStorage key。
 
 - 範圍：讓玩家可在船員詳情中為單一船員選擇外觀框。`public/js/board_game.js` 新增船員卡 `cosmeticFrameId` 正規化、可裝框清單、裝備 / 卸下框操作與外觀框選擇 modal；船員詳情會顯示目前外觀框並提供「選擇外觀框」按鈕。戰鬥 view 改讀目前上場船員的 `cosmeticFrameId`，不同船員可各自使用不同框；新解鎖的司法島 / 3D2Y 框會自動套給目前尚未裝框的隊伍船員。`public/board_game.html` script query 更新為 `20260710-crew-cosmetic-frames-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_game.html`、新版 `/js/board_game.js?v=20260710-crew-cosmetic-frames-v1`、`/board_battle.html` 回應 200。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_game.html`、新版 `/js/board_game.js?v=20260710-crew-cosmetic-frames-v1`、`/board_battle.html` 回應 200。
 - 風險：新增船員卡 `cosmeticFrameId` 欄位並保留玩家 `ownedCosmeticFrameIds` / `activeCosmeticFrameId` 作為解鎖與舊版預設欄位；不改 Socket.IO event 名稱或 localStorage key。後續已改成五檔・尼卡框也是角色專屬可選框，會尊重玩家在船員詳情中的外觀框選擇。
 
 - 範圍：固定 `3D2Y 框` 與 `黃金電話蟲框` 的示範頁定稿座標，並接入正式戰鬥頁。`public/js/board_game.js` 新增玩家外觀框狀態 `ownedCosmeticFrameIds` / `activeCosmeticFrameId`、舊存檔依司法島通關寶箱與 `3D2Y 的報紙` 自動補框、司法島通關自動解鎖 / 裝備黃金電話蟲框、頂上戰爭成功救援自動解鎖 / 裝備 3D2Y 框，並將目前外觀框透過 battle view 傳給戰鬥 iframe。`public/board_battle.html` / `public/js/board_battle.js` 會在玩家戰鬥卡顯示對應通用外觀框；後續已改成五檔・尼卡框也是角色專屬可選框。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；解析 `public/board_cosmetic_frame_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_cosmetic_frame_demo.html`、`/board_battle.html`、新版 `/js/board_battle.js?v=20260710-cosmetic-frames-v1` 與兩組外觀框素材路徑回應 200。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；解析 `public/board_cosmetic_frame_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_cosmetic_frame_demo.html`、`/board_battle.html`、新版 `/js/board_battle.js?v=20260710-cosmetic-frames-v1` 與兩組外觀框素材路徑回應 200。
 - 風險：新增玩家外觀框欄位但不改 Socket.IO event 名稱或 localStorage key；此階段只做通關解鎖與正式戰鬥頁顯示，船員個別選框 UI 於後續修改補上。黃金電話蟲框仍使用使用者提供的原圖與目前定稿 z-index。
 
 ### 2026-07-09
@@ -2671,43 +2383,32 @@ ode --check public/js/board_battle.js`；解析 `public/board_cosmetic_frame_dem
 
 - 範圍：修正索瑪茲戰後到伊姆降臨的劇情銜接可能重複播放。`recoverPendingElbaphGateSequence()` 現在會在 `resolutionLock` 期間直接略過，避免 `renderAll()` 於索瑪茲戰後劇情 / 伊姆降臨動畫播放中又重啟同一段銜接；同時將舊命名 `FINAL_ELBAPH_AFTER_IMU_LANDING_ENDING` 改為 `FINAL_ELBAPH_GOD_KNIGHTS_ARRIVAL_ENDING`，讓程式名稱符合「神之騎士團先、伊姆後」的實際順序，並更新 `board_game.js` 載入版本為 `20260709-elbaph-recovery-lock-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 與新版 `js/board_game.js?v=20260709-elbaph-recovery-lock-v1` 回應 200；用 `rg` 確認程式碼中的舊 `FINAL_ELBAPH_AFTER_IMU_LANDING_ENDING` 名稱已移除，恢復器有 `resolutionLock` guard。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 與新版 `js/board_game.js?v=20260709-elbaph-recovery-lock-v1` 回應 200；用 `rg` 確認程式碼中的舊 `FINAL_ELBAPH_AFTER_IMU_LANDING_ENDING` 名稱已移除，恢復器有 `resolutionLock` guard。
 - 風險：只改艾爾巴夫劇情銜接防重入與快取版本，不改戰鬥規則、存檔欄位、Socket.IO event 或 localStorage key；若真的中斷重讀，讀檔 normalize 會把 `resolutionLock` 歸零後再恢復銜接。
 
 - 範圍：依使用者要求移除伊姆與黑轉支配惡魔化框上的角。正式戰鬥頁將 `.black-turn-demon-horns` 設為不顯示且惡魔化狀態 opacity 為 0；黑轉示範頁同步隱藏 `.demon-horns`，並從微調預設 / 輸出 JSON 移除 `horns` 圖層，讓目前只保留左翼、右翼、方框、紅眼與名牌。同步更新主頁 `BATTLE_PAGE_VERSION` 與戰鬥頁 script query 為 `20260709-blackturn-demo-port-v6`。
 - 檔案：`public/board_battle.html`、`public/board_black_turn_demo.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_battle.html`、`http://127.0.0.1:8787/js/board_battle.js?v=20260709-blackturn-demo-port-v6`、`http://127.0.0.1:8787/board_black_turn_demo.html` 回應 200；用 `rg` 確認示範頁不再有 `horns` 微調預設或「角」圖層標籤。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_battle.html`、`http://127.0.0.1:8787/js/board_battle.js?v=20260709-blackturn-demo-port-v6`、`http://127.0.0.1:8787/board_black_turn_demo.html` 回應 200；用 `rg` 確認示範頁不再有 `horns` 微調預設或「角」圖層標籤。
 - 風險：純視覺與快取版本更新；`demon_horns_shadow.webp` 素材與既有隱藏 img 標籤保留備用，不改黑轉規則、存檔格式、Socket.IO event 或 localStorage key。
 
 - 範圍：修正正式戰鬥頁黑轉支配前半段仍擋住原本戰鬥對象與伊姆的層級問題。正式頁的黑轉特效位於 `battle-fx-layer`，該外層原本固定 `z-index: 60`，會整包壓在角色卡上方，導致內層卡片即使 z-index 較低仍會擋住原本角色。新增 `battle-stage.black-turn-casting` 將 `battle-fx-layer` 降到 z-index 1，80% 翻面時再加 `black-turn-front` 升到 z-index 80，讓抽取過程與示範頁一致：前半段在角色卡後方，翻面完成才到前景；同步更新戰鬥頁版本為 `20260709-blackturn-demo-port-v5`。
 - 檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_battle.html` 與新版 `js/board_battle.js?v=20260709-blackturn-demo-port-v5` 回應 200；檢查黑轉開始會加 `black-turn-casting`，80% 才加 `black-turn-front`。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_battle.html` 與新版 `js/board_battle.js?v=20260709-blackturn-demo-port-v5` 回應 200；檢查黑轉開始會加 `black-turn-casting`，80% 才加 `black-turn-front`。
 - 風險：只改伊姆黑轉支配正式視覺層級與快取版本，不改黑轉規則、存檔格式、Socket.IO event 或 localStorage key。
 
 - 範圍：修正正式戰鬥頁黑轉支配翻轉後伊姆圖像又出現的問題。`blackTurnEnemyCardYield` 在 88% 之後將伊姆整張敵方卡 opacity 壓到 0，並且黑轉視覺結束清理時不再移除敵方卡的 `black-turn-receiver`，讓伊姆原卡保持退場狀態直到下一個 battle view 切到被黑轉角色；同步更新戰鬥頁版本為 `20260709-blackturn-demo-port-v4`。
 - 檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_battle.html` 與新版 `js/board_battle.js?v=20260709-blackturn-demo-port-v4` 回應 200；用 `rg` 確認 `blackTurnEnemyCardYield` 最後 opacity 為 0，且結束計時器不再移除 `black-turn-receiver`。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_battle.html` 與新版 `js/board_battle.js?v=20260709-blackturn-demo-port-v4` 回應 200；用 `rg` 確認 `blackTurnEnemyCardYield` 最後 opacity 為 0，且結束計時器不再移除 `black-turn-receiver`。
 - 風險：只改伊姆黑轉支配正式視覺結尾與快取版本，不改黑轉規則、存檔格式、Socket.IO event 或 localStorage key。
 
 - 範圍：修正正式戰鬥頁黑轉支配移植後與示範頁不一致的多餘演出。移除正式頁黑轉施放時額外觸發的 cut-in、畫面震動、敵方 angry pose、我方 hit pose 與浮動標題條；`swap-front` 改到 80% 翻面當下才套用，避免抽取卡在抵達伊姆後方但尚未翻面前跑到前景蓋住不該蓋的圖片。同步更新戰鬥頁版本為 `20260709-blackturn-demo-port-v3`。
 - 檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_battle.html` 與新版 `js/board_battle.js?v=20260709-blackturn-demo-port-v3` 回應 200；檢查 `playBlackTurnCastFx()` 已移除黑轉專用 cut-in / shake / 強制 pose，且 `swap-front` 排程為 `duration * 0.8`。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_battle.html` 與新版 `js/board_battle.js?v=20260709-blackturn-demo-port-v3` 回應 200；檢查 `playBlackTurnCastFx()` 已移除黑轉專用 cut-in / shake / 強制 pose，且 `swap-front` 排程為 `duration * 0.8`。
 - 風險：只收斂伊姆黑轉支配正式視覺演出與快取版本，不改黑轉規則、存檔格式、Socket.IO event 或 localStorage key。
 
 - 範圍：將已確認的黑轉支配示範頁演出接入正式戰鬥頁。`public/board_battle.html` 的黑轉抽取卡改用示範頁同款 `translate3d(...)` / linear 動畫，12% 後顯示、30% 走同一直線中繼點、35% 到伊姆整張卡中心後方、80% 側面切 angry / 惡魔化、80.01% 從另一側翻回；伊姆敵方卡改成整張卡與配件一起 `blackTurnEnemyCardYield` 退到後方，黑轉名牌只保留底圖不顯示名字。`public/js/board_battle.js` 補 `--black-turn-move-30-*` 計算與 8400ms 基準時間，`public/js/board_game.js` 將正式黑轉視覺事件 duration 改為 8400 並更新戰鬥頁版本。
 - 檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；解析 `public/board_battle.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_battle.html` 回應 200；用 `rg` 確認正式頁已使用 `translate3d`、`blackTurnEnemyCardYield`、`duration: 8400` 與新版 `BATTLE_PAGE_VERSION`。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；解析 `public/board_battle.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_battle.html` 回應 200；用 `rg` 確認正式頁已使用 `translate3d`、`blackTurnEnemyCardYield`、`duration: 8400` 與新版 `BATTLE_PAGE_VERSION`。
 - 風險：只改伊姆黑轉支配正式視覺演出、事件 duration 與快取版本，不新增或改名 `gameState` 欄位、不改 Socket.IO event 名稱、不改黑轉規則與存檔格式。
 
 - 範圍：依使用者提供的最新黑轉支配惡魔化配件 JSON，將 `public/board_black_turn_demo.html` 的 CSS fallback 同步到目前 `layerDefaults`。示範頁未套 JS 變數前也會使用左翼 `x-21 y46.5 w50 h100 strength0.5`、右翼 `x123 y46.5 w50 h100 strength0.5`、角 `x50 y-1.5 w71 h56 strength0.5`、方框 `x50 y50 w130.5 h135.5 strength1.35 z10`、紅眼 `x50 y22.5 w78.5 h86 opacity0.3 strength0.5 normal`、名牌 `x50 y101 w126 h26 strength0.5`，角色暗化 fallback 改為 brightness 80。
@@ -2762,85 +2463,57 @@ ode --check public/js/board_game.js`；解析 `public/board_battle.html` 內嵌 
 
 - 範圍：修正正式戰鬥頁黑轉抽取終點沒有完全對齊伊姆後方的問題。`public/js/board_battle.js` 的 `positionBlackTurnCastFx()` 改用整張 `playerCard` / `enemyCard` 的中心與尺寸計算 start / end / card-w / card-h，對齊 `public/board_black_turn_demo.html` 示範頁基準；不再用 `playerPortraitWrap` / `enemyPortraitWrap` 內部頭像框當終點，避免抽出的卡只對到伊姆圖框而不是伊姆整張戰鬥卡後方。同步更新主頁 `BATTLE_PAGE_VERSION` 與戰鬥頁 script query 為 `20260709-blackturn-card-align-v1`。
 - 檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；用 `rg` 確認正式頁黑轉定位使用 `refs.playerCard` / `refs.enemyCard` 且新版 `20260709-blackturn-card-align-v1` 已接入；示範頁未改動，仍維持基準節奏。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；用 `rg` 確認正式頁黑轉定位使用 `refs.playerCard` / `refs.enemyCard` 且新版 `20260709-blackturn-card-align-v1` 已接入；示範頁未改動，仍維持基準節奏。
 - 風險：只改正式戰鬥頁黑轉視覺定位基準與快取版本，不改示範頁、不改黑轉抽選規則、被支配船員資料、伊姆技能數值、戰鬥結算、`gameState` / `battleState` 欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：修正上一輪誤動黑轉示範頁的問題。依使用者指出「原本示範頁是對的」，將 `public/board_black_turn_demo.html` 的黑轉抽取 / 翻轉節奏恢復到原本基準：`end-entry` 使用原安全距離、66% 顯示「開始翻轉」、74% 才加 `swap-front`、80% 進入伊姆中心翻面；正式戰鬥頁也先恢復同一組基準節奏。同步更新主頁 `BATTLE_PAGE_VERSION` 與戰鬥頁 script query 為 `20260709-blackturn-demo-restore-v1`，避免讀到上一輪錯改的 `blackturn-flip-sync` 版本。
 - 檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_black_turn_demo.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；執行 Node 解析 `public/board_black_turn_demo.html` 內嵌 script；用 `rg` 確認示範頁恢復 `duration * 0.66` / `duration * 0.74`，正式頁版本為 `20260709-blackturn-demo-restore-v1`。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；執行 Node 解析 `public/board_black_turn_demo.html` 內嵌 script；用 `rg` 確認示範頁恢復 `duration * 0.66` / `duration * 0.74`，正式頁版本為 `20260709-blackturn-demo-restore-v1`。
 - 風險：只還原黑轉支配示範頁與正式頁的視覺節奏 / 快取版本，不改黑轉抽選規則、被支配船員資料、伊姆技能數值、戰鬥結算、`gameState` / `battleState` 欄位、Socket.IO event 或 localStorage key；後續若要修正式頁，應以此示範頁為不可改基準。
 
 - 範圍：依使用者回饋再修伊姆黑轉支配抽取與翻轉銜接。正式戰鬥頁與 `public/board_black_turn_demo.html` 將抽出卡的 `end-entry` 安全距離加大，讓抽出段停在伊姆卡外側；`swap-front` 從 74% 延後到 82%，伊姆複製圖也延後到翻轉段才顯示，避免抽出的角色圖在移動途中蓋住原本出戰角色或伊姆，並讓伊姆與被支配角色在同一段同步翻轉。同步更新主頁 `BATTLE_PAGE_VERSION` 與戰鬥頁 script query 為 `20260709-blackturn-flip-sync-v1`。
 - 檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_black_turn_demo.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；執行 Node 解析 `public/board_black_turn_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html`、`/board_black_turn_demo.html` 回應 200；用 `rg` 確認 `clearBase` / `0.82` / 新版 `20260709-blackturn-flip-sync-v1` 已接入；用 PowerShell 掃描本次修改檔案尾端空白。因本專案未安裝 Playwright，視覺仍需由使用者用示範頁與正式戰鬥頁實機確認。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；執行 Node 解析 `public/board_black_turn_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html`、`/board_black_turn_demo.html` 回應 200；用 `rg` 確認 `clearBase` / `0.82` / 新版 `20260709-blackturn-flip-sync-v1` 已接入；用 PowerShell 掃描本次修改檔案尾端空白。因本專案未安裝 Playwright，視覺仍需由使用者用示範頁與正式戰鬥頁實機確認。
 - 風險：只改黑轉支配的視覺路徑、翻轉時間點與快取版本，不改黑轉抽選規則、被支配船員資料、伊姆技能數值、戰鬥結算、`gameState` / `battleState` 欄位、Socket.IO event 或 localStorage key。
 
-- 範圍：依使用者要求試撤五檔・尼卡框的雲冠圖層。正式戰鬥頁 `public/board_battle.html` 不再插入 
-ika_cloud_crown.webp`，`public/board_nika_frame_demo.html` 也移除雲冠 CSS、圖片與微調面板中的 `cloudCrown` 圖層；目前尼卡框只保留日光、左右白煙、主方框與角色名字文字。同步更新主頁 `BATTLE_PAGE_VERSION` 與戰鬥頁 script query 為 `20260709-nika-no-crown-v1`，避免平板 / iframe 讀到舊雲冠。
+- 範圍：依使用者要求試撤五檔・尼卡框的雲冠圖層。正式戰鬥頁 `public/board_battle.html` 不再插入 `nika_cloud_crown.webp`，`public/board_nika_frame_demo.html` 也移除雲冠 CSS、圖片與微調面板中的 `cloudCrown` 圖層；目前尼卡框只保留日光、左右白煙、主方框與角色名字文字。同步更新主頁 `BATTLE_PAGE_VERSION` 與戰鬥頁 script query 為 `20260709-nika-no-crown-v1`，避免平板 / iframe 讀到舊雲冠。
 - 檔案：`public/board_battle.html`、`public/board_nika_frame_demo.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；執行 Node 解析 `public/board_nika_frame_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html`、`/board_nika_frame_demo.html` 回應 200；用 `rg` 確認正式頁與示範頁不再引用 
-ika_cloud_crown.webp`，新版 `20260709-nika-no-crown-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
-- 風險：只移除五檔・尼卡框的雲冠視覺與快取版本，不改五檔覺醒條件、角色資料、技能數值、`gameState` / `battleState` 欄位、Socket.IO event 或 localStorage key；
-ika_cloud_crown.webp` 檔案保留在素材資料夾備用。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；執行 Node 解析 `public/board_nika_frame_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html`、`/board_nika_frame_demo.html` 回應 200；用 `rg` 確認正式頁與示範頁不再引用 `nika_cloud_crown.webp`，新版 `20260709-nika-no-crown-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
+- 風險：只移除五檔・尼卡框的雲冠視覺與快取版本，不改五檔覺醒條件、角色資料、技能數值、`gameState` / `battleState` 欄位、Socket.IO event 或 localStorage key；`nika_cloud_crown.webp` 檔案保留在素材資料夾備用。
 
 - 範圍：再次修正伊姆黑轉支配抽取演出。正式戰鬥頁與 `public/board_black_turn_demo.html` 新增 `start-exit` / `end-entry` 座標，抽出的角色卡在玩家角色中心與伊姆中心時維持不可見，離開玩家角色卡後才顯示，靠近伊姆時先停在伊姆旁邊，翻轉階段才進入伊姆中心，避免遮住原本出戰角色與伊姆。另將伊姆本體與黑轉演出中的伊姆複製圖排除暗化：伊姆保留黑轉配件但不套黑轉暗化 / 褪色濾鏡，被支配船員才套暗化。同步更新主頁 `BATTLE_PAGE_VERSION` 與戰鬥頁 script query 為 `20260709-blackturn-clear-extract-v1`。
 - 檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_black_turn_demo.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；執行 Node 解析 `public/board_black_turn_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html`、`/board_black_turn_demo.html` 回應 200；用 `rg` 確認 `start-exit` / `end-entry`、`black-turn-imu-active` 與新版 `20260709-blackturn-clear-extract-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；執行 Node 解析 `public/board_black_turn_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html`、`/board_black_turn_demo.html` 回應 200；用 `rg` 確認 `start-exit` / `end-entry`、`black-turn-imu-active` 與新版 `20260709-blackturn-clear-extract-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
 - 風險：只改黑轉支配正式戰鬥頁與示範頁的視覺路徑 / 濾鏡 / 快取版本，不改黑轉抽選規則、被支配船員資料、伊姆技能數值、戰鬥結算、`gameState` / `battleState` 欄位、Socket.IO event 或 localStorage key；仍需實機看一次抽取路徑是否符合使用者期待。
 
 - 範圍：依使用者回饋修正伊姆黑轉支配抽取層級。正式戰鬥頁的 `black-turn-cast-fx` 預設 z-index 從 8 降到 1，低於玩家 / 敵方角色卡，讓被黑轉角色卡從原本角色圖後方抽出與移動時不蓋住原本角色；到翻轉階段仍沿用既有 `swap-front` 升到前景。同步更新主頁 `BATTLE_PAGE_VERSION` 與戰鬥頁 script query 為 `20260709-blackturn-behind-player-v1`，避免平板 / iframe 讀到舊層級。
 - 檔案：`public/board_battle.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 回應 200；用 `rg` 確認 `black-turn-cast-fx` 預設 `z-index: 1`、`swap-front` 保持 `z-index: 58`，且新版 `20260709-blackturn-behind-player-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 回應 200；用 `rg` 確認 `black-turn-cast-fx` 預設 `z-index: 1`、`swap-front` 保持 `z-index: 58`，且新版 `20260709-blackturn-behind-player-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
 - 風險：只改黑轉支配正式戰鬥頁視覺層級與快取版本，不改黑轉抽選規則、被支配船員資料、伊姆技能數值、戰鬥結算、`gameState` / `battleState` 欄位、Socket.IO event 或 localStorage key；仍需實機看一次抽取前段是否完全不遮住原本角色。
 
 - 範圍：套用使用者提供的五檔・尼卡框最新座標。正式戰鬥頁與 `public/board_nika_frame_demo.html` 的 `frame` 圖層由 `y 50 / w 119 / h 130` 改為 `y 48.5 / w 116 / h 116`，其他日光、左右白煙、雲冠與角色本體濾鏡維持使用者貼上的設定。同步更新主頁 `BATTLE_PAGE_VERSION` 與戰鬥頁 script query 為 `20260709-nika-frame-values-v1`，避免平板 / iframe 讀到舊座標。
 - 檔案：`public/board_battle.html`、`public/board_nika_frame_demo.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；執行 Node 解析 `public/board_nika_frame_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html`、`/board_nika_frame_demo.html` 回應 200；用 `rg` 確認 `20260709-nika-frame-values-v1` 與 `y: 48.5, w: 116, h: 116` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；執行 Node 解析 `public/board_nika_frame_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html`、`/board_nika_frame_demo.html` 回應 200；用 `rg` 確認 `20260709-nika-frame-values-v1` 與 `y: 48.5, w: 116, h: 116` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
 - 風險：只改五檔・尼卡框圖層座標與快取版本，不改五檔覺醒條件、角色資料、技能數值、戰鬥流程、`gameState` / `battleState` 欄位、Socket.IO event 或 localStorage key；仍需實機看一次桌機 / 平板框線是否貼齊角色卡。
 
-- 範圍：依使用者要求移除五檔・尼卡框的名牌底圖。正式戰鬥頁 `public/board_battle.html` 不再插入 
-ika_nameplate.webp` 圖層，`public/board_nika_frame_demo.html` 也移除名牌底圖圖片、CSS 與微調面板中的 
-ameplate` 圖層；角色名稱文字本身保留。同步更新主頁 `BATTLE_PAGE_VERSION` 與戰鬥頁 script query 為 `20260709-nika-no-nameplate-v1`，避免平板 / iframe 讀到舊框。
+- 範圍：依使用者要求移除五檔・尼卡框的名牌底圖。正式戰鬥頁 `public/board_battle.html` 不再插入 `nika_nameplate.webp` 圖層，`public/board_nika_frame_demo.html` 也移除名牌底圖圖片、CSS 與微調面板中的 `nameplate` 圖層；角色名稱文字本身保留。同步更新主頁 `BATTLE_PAGE_VERSION` 與戰鬥頁 script query 為 `20260709-nika-no-nameplate-v1`，避免平板 / iframe 讀到舊框。
 - 檔案：`public/board_battle.html`、`public/board_nika_frame_demo.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；執行 Node 解析 `public/board_nika_frame_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html`、`/board_nika_frame_demo.html` 回應 200；用 `rg` 確認正式頁與示範頁不再引用 
-ika_nameplate.webp`，新版 `20260709-nika-no-nameplate-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
-- 風險：只移除五檔・尼卡框的名牌底圖視覺與快取版本，不改五檔覺醒條件、角色資料、技能數值、`gameState` / `battleState` 欄位、Socket.IO event 或 localStorage key；
-ika_nameplate.webp` 檔案保留在素材資料夾備用。
+- 驗證：執行 `node --check public/js/board_game.js`；執行 Node 解析 `public/board_nika_frame_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html`、`/board_nika_frame_demo.html` 回應 200；用 `rg` 確認正式頁與示範頁不再引用 `nika_nameplate.webp`，新版 `20260709-nika-no-nameplate-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
+- 風險：只移除五檔・尼卡框的名牌底圖視覺與快取版本，不改五檔覺醒條件、角色資料、技能數值、`gameState` / `battleState` 欄位、Socket.IO event 或 localStorage key；`nika_nameplate.webp` 檔案保留在素材資料夾備用。
 
 - 範圍：依使用者回饋，讓正式戰鬥頁的伊姆黑轉抽取動畫對齊 `public/board_black_turn_demo.html` 示範頁。被抽出的角色卡在抽出與拖到伊姆後方階段維持完整不透明、不壓暗、不提前翻轉；抵達伊姆後方才切到前景、原地翻轉、切 angry / attack 圖並展開惡魔化配件，最後停住到視覺事件收尾。同步更新主頁 `BATTLE_PAGE_VERSION` 與戰鬥頁 script query 為 `20260709-blackturn-demo-match-v1`，避免 iframe 快取舊動畫。
 - 檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 回應 200；用 `rg` 確認 `blackTurnExtractCard`、`swap-front` 與新版 `20260709-blackturn-demo-match-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 回應 200；用 `rg` 確認 `blackTurnExtractCard`、`swap-front` 與新版 `20260709-blackturn-demo-match-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
 - 風險：只改黑轉支配的正式戰鬥頁視覺節奏與快取版本，不改黑轉抽選規則、被支配船員敵人資料、伊姆技能數值、戰鬥結算、`gameState` / `battleState` 欄位、Socket.IO event 或 localStorage key；仍需實機看一次伊姆施法是否完全符合示範頁觀感。
 
 - 範圍：將黑轉支配示範頁定稿的惡魔化配件正式接入獨立戰鬥頁。`public/board_battle.html` 新增黑轉左右翼、角、方框、紅眼與名牌圖層；伊姆本戰敵方卡片與 `final_black_turn_*` 被支配船員前哨戰會常駐惡魔化配件與暗化濾鏡，黑轉施法演出則在約 88% 進度切成被支配角色的 angry / attack 圖並展開同款配件。同步更新主頁 `BATTLE_PAGE_VERSION` 與戰鬥頁 script query，避免 iframe 快取舊頁面。
 - 檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_battle.html` 回應 200，且 6 張 `public/images/board/battle/black_turn/*.webp` 皆回應 200；用 `rg` 確認 `black-turn-demon-active`、`syncBlackTurnDemonFrame`、`blackTurnDemonCastName` 與新版 `20260709-blackturn-demon-frame-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_battle.html` 回應 200，且 6 張 `public/images/board/battle/black_turn/*.webp` 皆回應 200；用 `rg` 確認 `black-turn-demon-active`、`syncBlackTurnDemonFrame`、`blackTurnDemonCastName` 與新版 `20260709-blackturn-demon-frame-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
 - 風險：只改黑轉支配與伊姆 / 被支配船員的正式戰鬥頁視覺，不改黑轉抽選規則、被支配船員敵人資料、伊姆技能數值、戰鬥結算、`gameState` / `battleState` 欄位、Socket.IO event 或 localStorage key；仍需實機看一次伊姆戰、黑轉施法與切入前哨戰的配件尺寸。
 
 - 範圍：套用使用者輸出的五檔・尼卡框定稿座標，更新 `public/board_nika_frame_demo.html` 預設值，並正式接入獨立戰鬥頁玩家卡片。當目前上場角色為 `luffy_gear_fifth` 或顯示名稱含「五檔 / 尼卡」時，`public/board_battle.html` 會在玩家 `combat-card` 上顯示日光、左右白煙、雲冠、主方框與名牌配件；普通魯夫與覺醒前待機演出不會先顯示尼卡框。
 - 檔案：`public/board_nika_frame_demo.html`、`public/board_battle.html`、`public/js/board_battle.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`；執行 Node 解析 `public/board_nika_frame_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_battle.html` 與 `/board_nika_frame_demo.html` 回應 200；確認 6 張 `public/images/board/battle/nika_frame/*.webp` 皆回應 200；用 `rg` 確認 
-ika-frame-active`、`isNikaFrameCombatant` 與新版 `20260709-nika-frame-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
+- 驗證：執行 `node --check public/js/board_battle.js`；執行 Node 解析 `public/board_nika_frame_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_battle.html` 與 `/board_nika_frame_demo.html` 回應 200；確認 6 張 `public/images/board/battle/nika_frame/*.webp` 皆回應 200；用 `rg` 確認 `nika-frame-active`、`isNikaFrameCombatant` 與新版 `20260709-nika-frame-v1` 已接入；因目前 Board 檔案多為 git untracked，改用 PowerShell 掃描本次修改檔案尾端空白。
 - 風險：只改五檔上場時的戰鬥頁視覺與示範頁預設座標，不改五檔覺醒條件、角色資料、技能數值、`gameState` / `battleState` 欄位、Socket.IO event 或 localStorage key；仍需實機用五檔角色進戰鬥看一次桌機 / 平板比例。
 
 - 範圍：依使用者要求，把五檔・尼卡框本機示範頁改成沿用黑轉示範頁的調整方式。`public/board_nika_frame_demo.html` 由原本置中直式預覽改為方形 `combat-card` 戰鬥卡比例，保留尼卡 6 個實際素材圖層，並新增黑轉頁同款背景選擇、卡片大小選擇、圖層 blend、角色圖亮度 / 飽和 / 對比 / 白光 / 暗角 / 光影微調；輸出 JSON 會標示 `cardShape: "square"` 且保留各圖層 asset path。
@@ -2848,13 +2521,7 @@ ika-frame-active`、`isNikaFrameCombatant` 與新版 `20260709-nika-frame-v1` �
 - 驗證：執行 Node 解析 `public/board_nika_frame_demo.html` 內嵌 script；用 Python 確認尼卡框、五檔 portrait 與示範背景素材路徑皆存在；確認 `http://127.0.0.1:8787/board_nika_frame_demo.html` 回應 200；執行 `git diff --check -- public/board_nika_frame_demo.html docs/PROJECT_OVERVIEW.md docs/FILE_MAP.md docs/DEV_WORKFLOW.md`。
 - 風險：只改本機尼卡框示範頁與文件，不改正式戰鬥頁、五檔覺醒流程、存檔欄位、Socket.IO event 或 localStorage key；正式套用仍需等使用者確認方形卡座標。
 
-- 範圍：歸位五檔・尼卡框正式測試素材，並把本機示範頁從 CSS 假配件改為實際圖片圖層。`public/images/board/battle/nika_frame/` 現在包含 
-ika_card_frame.webp`、
-ika_cloud_crown.webp`、
-ika_sun_glow.webp`、
-ika_cloud_left.webp`、
-ika_cloud_right.webp`、
-ika_nameplate.webp`；`public/board_nika_frame_demo.html` 會用五檔魯夫五種 portrait 預覽這 6 個素材，並可微調各圖層 X / Y / W / H / opacity / strength / z，輸出含 asset path 的 JSON。
+- 範圍：歸位五檔・尼卡框正式測試素材，並把本機示範頁從 CSS 假配件改為實際圖片圖層。`public/images/board/battle/nika_frame/` 現在包含 `nika_card_frame.webp`、`nika_cloud_crown.webp`、`nika_sun_glow.webp`、`nika_cloud_left.webp`、`nika_cloud_right.webp`、`nika_nameplate.webp`；`public/board_nika_frame_demo.html` 會用五檔魯夫五種 portrait 預覽這 6 個素材，並可微調各圖層 X / Y / W / H / opacity / strength / z，輸出含 asset path 的 JSON。
 - 檔案：`public/board_nika_frame_demo.html`、`public/images/board/battle/nika_frame/*.webp`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 驗證：重新命名使用者放入的 6 張 WebP；用 Pillow 確認素材尺寸與 RGBA；執行 Node 解析 `public/board_nika_frame_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_nika_frame_demo.html` 回應 200；用瀏覽器確認頁面載入 6 張尼卡配件圖、圖層下拉與輸出 JSON 都正常；執行 `git diff --check -- public/board_nika_frame_demo.html docs/PROJECT_OVERVIEW.md docs/FILE_MAP.md docs/DEV_WORKFLOW.md`。
 - 風險：仍是獨立靜態示範頁，不讀寫 `gameState` / `battleState`、不連 Socket.IO、不新增 localStorage key、不影響正式戰鬥頁或五檔覺醒流程；正式接進戰鬥頁需等使用者確認座標。
@@ -2863,13 +2530,10 @@ ika_nameplate.webp`；`public/board_nika_frame_demo.html` 會用五檔魯夫五�
 
 - 範圍：新增五檔・尼卡框本機示範頁。`public/board_nika_frame_demo.html` 使用既有 `luffy_gear_fifth` 戰鬥半身圖，先以 CSS 做可調的尼卡框構圖：太陽光環、白煙雲框、尼卡方框、左右解放鼓、閃光與名牌；可切換普通 / 戰意 / 士氣 / 受擊 / 虛弱五種五檔表情，並輸出各圖層 X / Y / W / H / opacity / strength / z JSON。頁面另提供透明背景尼卡框生圖提示詞，方便之後用 GPT 生成正式素材再歸位。
 - 檔案：`public/board_nika_frame_demo.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 Node 解析 `public/board_nika_frame_demo.html` 內嵌 script；確認五檔 
-ormal` / `angry` / `morale` portrait 檔案存在；確認 `http://127.0.0.1:8787/board_nika_frame_demo.html` 回應 200；用瀏覽器確認頁面有 5 種表情、`sunHalo` / `cloudRing` / `frame` / `drumLeft` / `drumRight` / `sparkles` / 
-ameplate` 7 個圖層、輸出 JSON 與生圖提示文字；執行 `git diff --check -- public/board_nika_frame_demo.html`。
+- 驗證：執行 Node 解析 `public/board_nika_frame_demo.html` 內嵌 script；確認五檔 `normal` / `angry` / `morale` portrait 檔案存在；確認 `http://127.0.0.1:8787/board_nika_frame_demo.html` 回應 200；用瀏覽器確認頁面有 5 種表情、`sunHalo` / `cloudRing` / `frame` / `drumLeft` / `drumRight` / `sparkles` / `nameplate` 7 個圖層、輸出 JSON 與生圖提示文字；執行 `git diff --check -- public/board_nika_frame_demo.html`。
 - 風險：新增獨立靜態示範頁，不讀寫 `gameState` / `battleState`、不連 Socket.IO、不新增 localStorage key、不影響正式戰鬥頁或五檔覺醒流程；正式尼卡框仍需使用者確認示範效果或提供生圖素材後再接入。
 
-- 範圍：讓黑轉支配示範頁的伊姆初始卡片也套完整惡魔化配件，不只顯示方框。伊姆敵方卡片新增同款左翼、右翼、角、方框、紅眼與名牌圖層；配件使用與被黑轉角色相同的 CSS 變數，因此微調面板改動 `leftWing` / `rightWing` / `horns` / `frame` / `eyes` / 
-ameplate` 時，伊姆初始卡與被黑轉角色停格都會同步對齊。順手把圖層下拉預設從舊 `wings` 改為目前第一個 key `leftWing`。
+- 範圍：讓黑轉支配示範頁的伊姆初始卡片也套完整惡魔化配件，不只顯示方框。伊姆敵方卡片新增同款左翼、右翼、角、方框、紅眼與名牌圖層；配件使用與被黑轉角色相同的 CSS 變數，因此微調面板改動 `leftWing` / `rightWing` / `horns` / `frame` / `eyes` / `nameplate` 時，伊姆初始卡與被黑轉角色停格都會同步對齊。順手把圖層下拉預設從舊 `wings` 改為目前第一個 key `leftWing`。
 - 檔案：`public/board_black_turn_demo.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 驗證：執行 Node 解析 `public/board_black_turn_demo.html` 內嵌 script；確認伊姆卡片含 `enemy-demon-layer` 的左翼、右翼、角、方框、紅眼、名牌 6 個配件，且 `setLayerVars()` 同步寫入 `refs.fx` 與 `refs.enemyCard`；確認 `http://127.0.0.1:8787/board_black_turn_demo.html` 回應 200；用瀏覽器確認伊姆初始卡片有 6 個配件、圖層下拉預設為 `leftWing`，且伊姆卡片拿到 `--demon-leftWing-x: -21%`、`--demon-rightWing-x: 123%` 與 `--demon-horns-z: 7`；執行 `git diff --check -- public/board_black_turn_demo.html docs/PROJECT_OVERVIEW.md docs/FILE_MAP.md docs/DEV_WORKFLOW.md`。
 - 風險：只改本機黑轉示範頁與文件，不改正式戰鬥頁、黑轉規則、存檔、Socket.IO event 或 localStorage key；正式移植時需同步處理伊姆初始卡與被支配角色停格兩組配件。
@@ -2914,16 +2578,14 @@ ameplate` 時，伊姆初始卡與被黑轉角色停格都會同步對齊。順�
 - 驗證：用 `rg` 確認示範頁 5 個 `.demon-*` 裝飾圖層皆使用 `object-fit: fill`；執行 Node 解析 `public/board_black_turn_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_black_turn_demo.html` 回應 200。
 - 風險：只改本機黑轉示範頁裝飾圖層的顯示方式與文件，不改正式戰鬥頁、素材檔、黑轉規則、存檔、Socket.IO event 或 localStorage key。
 
-- 範圍：黑轉支配示範頁微調面板新增濃度、上下層級與混合模式控制。惡魔化裝飾素材皆確認為 RGBA alpha，因此翅膀、角、方框與名牌預設改用 
-ormal` 混合，紅眼保留 `screen`，並以 `brightness()` 提高預設濃度，減少裝飾看起來太透明的問題。每個圖層現在可調整 X / Y / W / H / opacity / strength / z / blend；名牌文字在惡魔化狀態下會跟隨名牌圖層 z 值保持在名牌圖前。
+- 範圍：黑轉支配示範頁微調面板新增濃度、上下層級與混合模式控制。惡魔化裝飾素材皆確認為 RGBA alpha，因此翅膀、角、方框與名牌預設改用 `normal` 混合，紅眼保留 `screen`，並以 `brightness()` 提高預設濃度，減少裝飾看起來太透明的問題。每個圖層現在可調整 X / Y / W / H / opacity / strength / z / blend；名牌文字在惡魔化狀態下會跟隨名牌圖層 z 值保持在名牌圖前。
 - 檔案：`public/board_black_turn_demo.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 驗證：用 Python/PIL 確認 `public/images/board/battle/black_turn/*.webp` 皆為 RGBA alpha；執行 Node 解析 `public/board_black_turn_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_black_turn_demo.html` 回應 200；用瀏覽器測試微調面板切到方框後調整 strength、z 與 blend，確認 CSS 變數與輸出 JSON 同步。
 - 風險：只改本機黑轉示範頁與文件，不改正式戰鬥頁、素材檔、黑轉規則、存檔、Socket.IO event 或 localStorage key；新座標 / 層級輸出仍需使用者確認後才移植正式戰鬥頁。
 
 ### 2026-07-07
 
-- 範圍：黑轉支配示範頁新增裝飾微調與座標輸出。示範頁寬度與舞台高度放大，降低惡魔化裝飾被邊界擋住的機率；新增「裝飾微調」面板，可切換翅膀、角、方框、紅眼與名牌，調整 X / Y / W / H / opacity，並即時套用到 CSS 變數。輸出框會產生百分比座標 JSON，包含 `unit`、`anchor`、
-ote` 與各圖層座標，並提供複製、重置單一圖層與全部重置。
+- 範圍：黑轉支配示範頁新增裝飾微調與座標輸出。示範頁寬度與舞台高度放大，降低惡魔化裝飾被邊界擋住的機率；新增「裝飾微調」面板，可切換翅膀、角、方框、紅眼與名牌，調整 X / Y / W / H / opacity，並即時套用到 CSS 變數。輸出框會產生百分比座標 JSON，包含 `unit`、`anchor`、`note` 與各圖層座標，並提供複製、重置單一圖層與全部重置。
 - 檔案：`public/board_black_turn_demo.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 驗證：執行 Node 解析 `public/board_black_turn_demo.html` 內嵌 script；確認 `http://127.0.0.1:8787/board_black_turn_demo.html` 回應 200；用瀏覽器載入示範頁，確認 `layerSelect` 有 5 個圖層、座標輸出 JSON 產生，並測試調整方框 X / W 會同步更新 CSS 變數與輸出值。
 - 風險：只改本機黑轉示範頁與文件，不改正式戰鬥頁、素材檔、黑轉規則、存檔、Socket.IO event 或 localStorage key；座標尚未移植到正式戰鬥頁。
@@ -3015,487 +2677,394 @@ ote` 與各圖層座標，並提供複製、重置單一圖層與全部重置。
 
 - 範圍：修正四皇與伊姆疊層血條的跨條傷害。玩家攻擊仍先依原公式計算傷害，但若敵人尚未進第二型態且本次傷害會跨過半血門檻，會把實際扣血與多段 hit 顯示封頂在剛好打穿第一條；超出的傷害不會延續到第二條。四皇 `activateYonkoSecondHpBar()` 與伊姆 `applyFinalGatePhaseTransitions()` 進入第二型態時都會把敵方 HP 設為最後一條滿血，伊姆第一條被打到 0 也會先進第二型態而不是直接勝利。主頁 script 版本更新為 `20260707-layered-boss-damage-cap-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、`git diff --check -- public/js/board_game.js public/board_game.html docs/PROJECT_OVERVIEW.md docs/GAME_RULES.md docs/DEV_WORKFLOW.md`；用 `rg` 確認 `capLayeredBossHitDamagesAtFirstHpBar()`、`canTriggerFinalGateSecondHpBar()`、`20260707-layered-boss-damage-cap-v1` 已接入；確認 `http://127.0.0.1:8787/board_game.html` 回應 200 並含新版 script query。
+- 驗證：執行 `node --check public/js/board_game.js`、`git diff --check -- public/js/board_game.js public/board_game.html docs/PROJECT_OVERVIEW.md docs/GAME_RULES.md docs/DEV_WORKFLOW.md`；用 `rg` 確認 `capLayeredBossHitDamagesAtFirstHpBar()`、`canTriggerFinalGateSecondHpBar()`、`20260707-layered-boss-damage-cap-v1` 已接入；確認 `http://127.0.0.1:8787/board_game.html` 回應 200 並含新版 script query。
 - 風險：只調整四皇 / 伊姆第一條血跨門檻時的實際扣血與第二型態 HP 重設，不改傷害公式、敵人最大 HP、技能倍率、掉落、Socket.IO event 或 localStorage key；仍需實機確認第一條打爆時傷害數字與切第二型態後滿血顯示符合預期。
 
 - 範圍：放慢並重做伊姆 `Domi Reversi・黑轉支配` 的戰鬥頁演出。黑轉視覺事件時間加長為 6200ms；戰鬥頁新增伊姆臨時複製圖，並依實際敵方 portrait 框尺寸設定被抽離船員圖片大小。演出改為從玩家角色圖後方抽出被支配船員，拖到伊姆角色圖後方，最後伊姆圖翻到後面、被支配船員圖翻到前面。主頁 `BATTLE_PAGE_VERSION`、主頁 script query 與戰鬥頁 script query 更新為 `20260707-blackturn-swap-fx-v1`。
 - 檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`、`git diff --check -- public/js/board_game.js public/js/board_battle.js public/board_game.html public/board_battle.html docs/PROJECT_OVERVIEW.md docs/GAME_RULES.md docs/FILE_MAP.md docs/DEV_WORKFLOW.md`；用 `rg` 確認 `blackTurnEnemyPortrait`、`blackTurnEnemySwap`、`duration: 6200`、`20260707-blackturn-swap-fx-v1` 已接入；確認 `http://127.0.0.1:8787/board_game.html` 與 `/board_battle.html` 回應 200 並含新版 script query。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`、`git diff --check -- public/js/board_game.js public/js/board_battle.js public/board_game.html public/board_battle.html docs/PROJECT_OVERVIEW.md docs/GAME_RULES.md docs/FILE_MAP.md docs/DEV_WORKFLOW.md`；用 `rg` 確認 `blackTurnEnemyPortrait`、`blackTurnEnemySwap`、`duration: 6200`、`20260707-blackturn-swap-fx-v1` 已接入；確認 `http://127.0.0.1:8787/board_game.html` 與 `/board_battle.html` 回應 200 並含新版 script query。
 - 風險：只改黑轉支配的戰鬥頁視覺節奏與快取版本，不改黑轉抽選規則、被支配船員資料、伊姆技能數值、戰鬥結算、Socket.IO event 或 localStorage key；仍需實機看一次平板與電腦上的尺寸、前後翻轉與切入支配戰節奏。
 
 - 範圍：調整伊姆 `Domi Reversi・黑轉支配` 的觸發時機與戰鬥頁演出。艾爾巴夫索瑪茲戰後、喬巴治療與伊姆降臨劇情結束後，先建立伊姆 `final_gate` 戰鬥；戰鬥開場對話與開場被動處理完成後，排入 `finalGateBlackTurnCastPending` 的 `black-turn-cast` 視覺事件。戰鬥頁新增黑轉專用 FX 層，會用被選中船員自己的半身圖，從玩家角色圖後方抽出、拖到伊姆角色圖後方並翻轉；事件播完後才呼叫原本 `startFinalGateBlackTurnBattle()`，抽出最低等可支配船員並切入 `final_gate_black_turn` 支配戰。主頁與戰鬥頁 script 版本更新為 `20260707-blackturn-cast-fx-v1`。
 - 檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；用 `rg` 確認 `finalGateBlackTurnCastPending`、`black-turn-cast`、`blackTurnCastFx`、`20260707-blackturn-cast-fx-v1` 已接入，且 `startFinalGateBattle()` 不再於伊姆降臨後直接 return `startFinalGateBlackTurnBattle()`。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；用 `rg` 確認 `finalGateBlackTurnCastPending`、`black-turn-cast`、`blackTurnCastFx`、`20260707-blackturn-cast-fx-v1` 已接入，且 `startFinalGateBattle()` 不再於伊姆降臨後直接 return `startFinalGateBlackTurnBattle()`。
 - 風險：不改黑轉支配抽選規則、被支配船員敵人資料、伊姆技能數值、戰鬥結算、Socket.IO event 或 localStorage key；新增的是 battleState 內暫時視覺事件與戰鬥頁純 UI 動畫，仍需實機看一次伊姆戰開場、黑轉施法、切入支配戰與擊敗後回伊姆本戰的節奏。
 
 - 範圍：依使用者固定流程復原 Board 伺服器存檔，不新增首頁按鈕或自動讀檔入口。將最新有五檔・尼卡的 `B4143` server 存檔複製成 `server/data/board_saves/B5036.json`、`server/data/board_saves/B3079.json`、`server/data/board_saves/B8098.json`，讓玩家維持從 `board_start.html` 進入、到 `board_game.html?room=<房號>&online=1` 的 setup / 選角畫面或右上角按「讀取存檔」讀回伺服器備份。另修正線上讀取舊伺服器存檔後無法操作的身份問題：所有伺服器讀檔入口在手動讀取時，若存檔內沒有任何真人玩家對得上目前瀏覽器 profile，會把目前行動的真人玩家 id / clientId 接到本機 profile；server 端允許房主送出的 `load-save` 狀態覆蓋舊快照，避免被舊行動者 id 卡住。伺服器讀檔 API 也恢復不同房號可讀的習慣：指定房號沒有存檔時，自動 fallback 到最新一份有效 Board server save。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`server/index.js`、`server/data/board_saves/B5036.json`、`server/data/board_saves/B3079.json`、`server/data/board_saves/B8098.json`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check server/index.js`；確認 `/api/board-save/B5036`、`/api/board-save/B3079`、`/api/board-save/B8098` 回傳 200，並確認不存在的測試房號會 fallback 回最新有效存檔；用 Node 解析三份存檔，確認房號正確、第 275 回合、目前玩家為伊多且包含 `luffy_gear_fifth`；用 in-app browser 走原流程開 `board_game.html?room=B5036&online=1`、`board_game.html?room=B3079&online=1` 與 `board_game.html?room=B8098&online=1`，按「讀取存檔」再按「讀伺服器備份」，確認伊多船 token 變為 `current actionable`，點船可開啟含「擲骰子 / 背包 / 任務 / 查看船員 / 船團資訊 / 船隻資訊」的操作選單。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check server/index.js`；確認 `/api/board-save/B5036`、`/api/board-save/B3079`、`/api/board-save/B8098` 回傳 200，並確認不存在的測試房號會 fallback 回最新有效存檔；用 Node 解析三份存檔，確認房號正確、第 275 回合、目前玩家為伊多且包含 `luffy_gear_fifth`；用 in-app browser 走原流程開 `board_game.html?room=B5036&online=1`、`board_game.html?room=B3079&online=1` 與 `board_game.html?room=B8098&online=1`，按「讀取存檔」再按「讀伺服器備份」，確認伊多船 token 變為 `current actionable`，點船可開啟含「擲骰子 / 背包 / 任務 / 查看船員 / 船團資訊 / 船隻資訊」的操作選單。
 - 風險：不新增首頁入口、不改手動存檔 payload 格式、localStorage key、Socket.IO event 名稱或遊戲規則；讀伺服器備份時可能會重綁第一位真人玩家身份，僅在目前 profile 沒有對上任何真人玩家時生效。
 
 ### 2026-07-06
 
 - 範圍：套用使用者定稿的艾爾巴夫 / 伊姆降臨劇情文字。重逢段落改為巨人族豪邁酒宴、卡西稱讚烏索普眼神可靠；神之騎士團突襲段落改為魯夫指揮索隆、香吉士、娜美、烏索普、喬巴先救孩子；麒麟格姆 / 索瑪茲戰後段落改為救下孩子、斬開荊棘、喬巴補藥與巨人反擊；伊姆降臨段落改為伊姆質問索瑪茲與麒麟格姆、魯夫確認幕後首領後進入黑轉支配；黑轉支配戰鬥 log 改用魯夫、娜美、索隆、香吉士提示。主頁 script / iframe 版本更新為 `20260706-elbaph-user-script-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、`git diff --check -- public/js/board_game.js public/board_game.html docs/PROJECT_OVERVIEW.md docs/GAME_RULES.md docs/DEV_WORKFLOW.md`；用 `rg` 確認新版台詞、黑轉支配提示與 `20260706-elbaph-user-script-v1` 已接入；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`、`git diff --check -- public/js/board_game.js public/board_game.html docs/PROJECT_OVERVIEW.md docs/GAME_RULES.md docs/DEV_WORKFLOW.md`；用 `rg` 確認新版台詞、黑轉支配提示與 `20260706-elbaph-user-script-v1` 已接入；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只改玩家可見劇情文字、戰鬥提示 log 與快取版本，不新增 `gameState` 欄位、不改敵人數值、黑轉支配抽選、戰鬥結算、Socket.IO event 或 localStorage key；仍需實機看一次艾爾巴夫完整劇情節奏與伊姆降臨 modal 排版。
 
 - 範圍：重排艾爾巴夫終局劇情順序，新增伊姆戰前「Domi Reversi・黑轉支配」前哨戰。玩家抵達艾爾巴夫後不再先播伊姆降臨，而是先播放巨人島重逢與麒麟格姆 / 索瑪茲突襲西村，接著依序進入麒麟格姆戰與索瑪茲戰。索瑪茲戰後，喬巴治療台詞會插在孩子救回後、戰場短暫安靜下來前，實際全隊 HP / PP 也在播放索瑪茲戰後劇情前先回滿；治療完成後才播放地圖伊姆降臨動畫與伊姆正式出場。伊姆出場後抽離目前玩家隊伍中最低等且可被支配的一名船員，建立 `final_gate_black_turn` 戰鬥。被支配船員使用自己的已學招式作為敵方招式並套用我方半身圖，該船員在隊伍中暫時以 0 HP 不可上場；擊敗後不給一般戰鬥掉落 / 任務獎勵，船員回隊並直接接入伊姆本戰。新增 player 進度欄位 `finalGateChopperHealed`、`finalGateBlackTurnCleared`、`finalGateBlackTurnCrewId`、`finalGateBlackTurnCrewName`，補上新玩家預設、讀檔 normalize、開發退回艾爾巴夫重置、pending battle 續戰、結果頁自動完成與多人一回合暫停保留流程。主頁 script / iframe 版本更新為 `20260706-elbaph-knights-first-imu-later-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認開場不再呼叫伊姆降臨、神之騎士團突襲劇情、索瑪茲戰後喬巴治療台詞、伊姆後降臨流程、快取版本與重置欄位已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認開場不再呼叫伊姆降臨、神之騎士團突襲劇情、索瑪茲戰後喬巴治療台詞、伊姆後降臨流程、快取版本與重置欄位已接入。
 - 風險：這次新增 player 存檔欄位與一種特殊 `battleState.islandKind`，並重排艾爾巴夫終局流程；未新增 Socket.IO event 或 localStorage key，多人同步仍靠完整 `BOARD_GAME_STATE` 快照。需要實機測一次艾爾巴夫開場神之騎士團先登場、兩場戰後喬巴治療、伊姆降臨動畫、黑轉前哨戰 round-pause 交棒、勝利後接伊姆本戰。
 
 ### 2026-07-04
 
 - 範圍：修正艾爾巴夫篇神之騎士團戰鬥不會自動跳下一位玩家。麒麟格姆 / 索瑪茲戰鬥的 `round-pause` 不再排除自動交棒；新增艾爾巴夫勝敗結果 auto finish timer，沿用操作權檢查避免觀看方觸發；多人勝利時不再立刻接戰後劇情與下一場，而是先 `endTurn()`，讓該玩家下次輪到時由 `recoverPendingElbaphGateSequence()` 接續麒麟格姆戰後 / 索瑪茲戰後劇情。多人局的艾爾巴夫銜接恢復也限制為目前行動玩家，避免其他玩家回合被非當前玩家的艾爾巴夫進度拉走。主頁 `BATTLE_PAGE_VERSION` 與 `board_game.js` script query 更新為 `20260704-elbaph-auto-handoff-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `scheduleElbaphGodKnightBattleAutoFinish`、艾爾巴夫救援戰暫停 log、`recoverAnyPendingElbaphGateSequence()` 的目前玩家限制與 `20260704-elbaph-auto-handoff-v1` 已接入；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `scheduleElbaphGodKnightBattleAutoFinish`、艾爾巴夫救援戰暫停 log、`recoverAnyPendingElbaphGateSequence()` 的目前玩家限制與 `20260704-elbaph-auto-handoff-v1` 已接入；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：改到多人戰鬥結算與終局劇情銜接，但不新增 `gameState` 欄位、不改神之騎士團敵人數值、獎勵、伊姆戰規則、Socket.IO event 或 localStorage key；實機需確認 3-4 人局中麒麟格姆未擊破、麒麟格姆擊破、索瑪茲擊破三種情境都會依序交棒並在原玩家下回合接續。
 
 - 範圍：修正戰鬥頁斬擊命中特效方向，讓斬擊 / 風斬圖依攻擊方掃向受擊方；拳擊、火焰、雷擊等爆點型特效維持原地命中。伊姆最終門戰接上四皇同款 `phaseHpBars` 顯示，第一層用目前層血量與 `X2`，第二型態顯示最後一條血；同步更新主頁 `BATTLE_PAGE_VERSION`、`board_game.js` script query 與戰鬥頁 `board_battle.js` script query 為 `20260704-battle-slash-imu-hp-v1`。
 - 檔案：`public/js/board_battle.js`、`public/board_battle.html`、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；用 `rg` 確認 `directionalSlashHit`、`battlePhaseHpBarsForView`、`finalGatePhaseHpBarsForView` 與 `20260704-battle-slash-imu-hp-v1` 已接入；啟動本機 server 後確認 `http://127.0.0.1:8787/board_game.html` 與 `http://127.0.0.1:8787/board_battle.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；用 `rg` 確認 `directionalSlashHit`、`battlePhaseHpBarsForView`、`finalGatePhaseHpBarsForView` 與 `20260704-battle-slash-imu-hp-v1` 已接入；啟動本機 server 後確認 `http://127.0.0.1:8787/board_game.html` 與 `http://127.0.0.1:8787/board_battle.html` 回應 `HTTP 200`。
 - 風險：只改戰鬥頁視覺方向與伊姆 HUD 顯示，不新增 `gameState` 欄位、不改伊姆總 HP、技能、傷害、第二型態觸發、Socket.IO event 或 localStorage key；實機仍需用玩家攻擊與敵人攻擊各看一次斬擊方向。
 
 - 範圍：替換並補強瑪麗喬亞支線五老星半身圖與崩壞台詞。將使用者提供的三張正常版圖複製到 `public/images/board/story/speakers/`，檔名為 `gorosei_mars_authority.webp`、`gorosei_warcury_contempt.webp`、`gorosei_nusjuro_cold_judgement.webp`；馬卡斯·馬茲聖、托普曼·沃裘利聖、伊特贊巴隆·V·納斯壽郎聖預設改用正常版，仍保留各自 `crumbling` pose。伊姆倒下後新增三句崩壞版台詞，納斯壽郎聖崩壞台詞改為「吾等的不老之身……在崩解。」；謝潑德·十·彼得聖與費加蘭德·加林聖維持原崩壞圖。主頁 `board_game.js` 快取版本更新為 `20260704-gorosei-nusjuro-line-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`public/images/board/story/speakers/gorosei_mars_authority.webp`、`public/images/board/story/speakers/gorosei_warcury_contempt.webp`、`public/images/board/story/speakers/gorosei_nusjuro_cold_judgement.webp`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 與三張新五老星半身圖路徑皆回應 `HTTP 200`；用 `rg` 確認三張正常版檔名、三句崩壞台詞與 `20260704-gorosei-nusjuro-line-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 與三張新五老星半身圖路徑皆回應 `HTTP 200`；用 `rg` 確認三張正常版檔名、三句崩壞台詞與 `20260704-gorosei-nusjuro-line-v1` 已接入。
 - 風險：只改玩家可見劇情半身圖、台詞與快取版本，不新增 `gameState` 欄位、不改戰鬥流程、敵人資料、Socket.IO event 或 localStorage key；保留舊崩壞圖避免後續需要老化 pose 時失去素材。
 
 ### 2026-07-03
 
 - 範圍：整理並接入伊姆戰後「同一時間・聖地瑪麗喬亞」劇情素材，並修正劇情播放順序與背景切點。將 `public/images/board/story/` 根目錄 12 張新圖改名歸位：2 張背景移到 `public/images/board/story/backgrounds/mary_geoise/`，10 張人物半身圖移到 `public/images/board/story/speakers/`；瑪麗喬亞支線改到艾爾巴夫託付與下一條航路播完後，先顯示「同一時間，在瑪麗喬亞……」過場，再切到聖地前線與盤古城深處兩幕；聖地前線保留到「克爾拉咬緊牙，也追了上去。」為止，盤古城深處背景從「兩人穿過崩塌的神之地。」才開始；同步為薩波、克爾拉、龍、五老星與加林聖接入 speaker pose，主頁 `board_game.js` 快取版本更新為 `20260703-mary-geoise-chamber-cut-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`public/images/board/story/backgrounds/mary_geoise/`、`public/images/board/story/speakers/`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 與新瑪麗喬亞背景 / 半身圖路徑皆回應 `HTTP 200`；用 `rg` 確認 `mary-geoise-time-card`、`maryGeoiseRevolutionBattle`、`pangaea-secret-chamber`、新版 speaker pose 與 `20260703-mary-geoise-chamber-cut-v1` 已接入；確認 `public/images/board/story` 根目錄已無散落 `.webp` 檔。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 與新瑪麗喬亞背景 / 半身圖路徑皆回應 `HTTP 200`；用 `rg` 確認 `mary-geoise-time-card`、`maryGeoiseRevolutionBattle`、`pangaea-secret-chamber`、新版 speaker pose 與 `20260703-mary-geoise-chamber-cut-v1` 已接入；確認 `public/images/board/story` 根目錄已無散落 `.webp` 檔。
 - 風險：只改玩家可見劇情素材路徑、章節背景、播放順序與 speaker pose，不新增 `gameState` 欄位、不改台詞文字、戰鬥流程、敵人資料、Socket.IO event 或 localStorage key；新增過場與章節切幕會多一次「下一幕」操作 / 自動播放節點。
 
 - 範圍：依使用者要求微調「同一時間・聖地瑪麗喬亞」劇情 speaker 與五老星台詞；不再讓「神之騎士團」有台詞，將五老星相關台詞分配給馬卡斯·馬茲聖、托普曼·沃裘利聖、伊特贊巴隆·V·納斯壽郎聖、謝潑德·十·彼得聖與費加蘭德·加林聖，並更新馬卡斯·馬茲聖 / 托普曼·沃裘利聖的壓迫台詞；同步更新主頁 `board_game.js` 快取版本為 `20260703-mary-geoise-gorosei-lines-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認五個五老星名字、新版五老星台詞與 `20260703-mary-geoise-gorosei-lines-v1` 已接入，且 `speaker: "神之騎士團"` 不再存在；啟動本機 server 後確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認五個五老星名字、新版五老星台詞與 `20260703-mary-geoise-gorosei-lines-v1` 已接入，且 `speaker: "神之騎士團"` 不再存在；啟動本機 server 後確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只改玩家可見 speaker 名稱、台詞文字與快取版本，不新增 `gameState` 欄位、不改台詞順序、戰鬥流程、敵人資料、Socket.IO event 或 localStorage key。
 
 ### 2026-07-02
 
 - 範圍：在擊退伊姆後、艾爾巴夫託付前新增並重寫「同一時間・聖地瑪麗喬亞」劇情章節。革命軍攻入聖地時原本被神之騎士團與五老星壓制，伊姆倒下後敵方急速老化、革命軍反擊，最後以薩波與克爾拉看見未知巨大輪廓並說「這是……」收尾，保留後續接最終之島真相的空間；同步更新主頁 `board_game.js` 快取版本為 `20260702-mary-geoise-script-v2`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；啟動本機 server 後確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認「同一時間・聖地瑪麗喬亞」、薩波 / 克爾拉懸念台詞與新版 `20260702-mary-geoise-script-v2` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；啟動本機 server 後確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認「同一時間・聖地瑪麗喬亞」、薩波 / 克爾拉懸念台詞與新版 `20260702-mary-geoise-script-v2` 已接入。
 - 風險：只新增玩家可見劇情文字與快取版本，不新增 `gameState` 欄位、不改伊姆 / 神之騎士團戰鬥、革命軍 gameplay、敵人資料、Socket.IO event 或 localStorage key。
 
 ### 2026-06-30
 
 - 範圍：依使用者提供的新版文字更新艾爾巴夫篇劇情台詞，涵蓋艾爾巴夫重逢、伊姆降臨後分兵、兩名神之騎士團戰後、艾爾巴夫託付與下一條航路；地圖降臨小段保留原本一致文字，並更新主頁 `board_game.js` 快取版本為 `20260630-elbaph-script-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認新版台詞與 `20260630-elbaph-script-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認新版台詞與 `20260630-elbaph-script-v1` 已接入。
 - 風險：只改玩家可見劇情文字與快取版本，不新增 `gameState` 欄位、不改艾爾巴夫 / 伊姆戰鬥流程、敵人資料、Socket.IO event 或 localStorage key。
 
 ### 2026-06-29
 
 - 範圍：將四皇與終局劇情中玩家可見的終局島名統一正名為「最終之島」，並更新主頁 `board_game.js` 快取版本為 `20260629-final-island-name-v1`；程式內既有 `finalIsland` / `final-island` 等穩定 id 不改名。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；啟動本機 server 後確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認 active 路徑 `public/js/board_game.js`、`public/board_game.html`、`docs/` 不再有舊終局島名，且新版 `20260629-final-island-name-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；啟動本機 server 後確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認 active 路徑 `public/js/board_game.js`、`public/board_game.html`、`docs/` 不再有舊終局島名，且新版 `20260629-final-island-name-v1` 已接入。
 - 風險：只改顯示文案與快取版本，不新增 `gameState` 欄位、不改最終島 / 最終門路線 id、Socket.IO event 或 localStorage key。
 
 - 範圍：補上地圖標記取消 / 改標入口。新增 `playerMapMarker()`、`mapMarkerMatchesTarget()`、`mapMarkerButtonsMarkup()` 與 `bindMapMarkerButtons()`，島嶼與海格查看 modal 會依目前玩家的既有標記顯示「標記這裡」、「改標這裡」、「取消標記」或「取消原標記」；每位玩家仍維持最多 1 個 `mapMarkers` 標記。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認 `mapMarkerButtonsMarkup`、`bindMapMarkerButtons`、`取消標記`、`取消原標記` 與新版 `20260629-map-marker-clear-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認 `mapMarkerButtonsMarkup`、`bindMapMarkerButtons`、`取消標記`、`取消原標記` 與新版 `20260629-map-marker-clear-v1` 已接入。
 - 風險：只改地圖標記 modal UI 與主頁快取版本，不新增 `gameState` 欄位、不改 `mapMarkers` 資料格式、Socket.IO event 或 localStorage key。
 
 - 範圍：接上艾爾巴夫正式島嶼圖。將使用者新增在 `public/images/board/islands/` 的 ChatGPT 原始長檔名圖片改名為 `elbaph_island.webp`，`ISLAND_IMAGE_MAP.elbaph` 改指向 `images/board/islands/elbaph_island.webp`，並把艾爾巴夫地圖節點樣式改為完整 `contain` 顯示島嶼 cutout，不再使用劇情背景裁切圖。
 - 檔案：`public/images/board/islands/elbaph_island.webp`、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 與 `/images/board/islands/elbaph_island.webp` 皆回應 `HTTP 200`；用 `rg` 確認 `ISLAND_IMAGE_MAP.elbaph`、新版 `20260629-elbaph-island-image-v1` 與正式圖片路徑已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 與 `/images/board/islands/elbaph_island.webp` 皆回應 `HTTP 200`；用 `rg` 確認 `ISLAND_IMAGE_MAP.elbaph`、新版 `20260629-elbaph-island-image-v1` 與正式圖片路徑已接入。
 - 風險：只改素材檔名、島嶼縮圖路徑、顯示樣式與快取版本，不改最終之島啟動條件、路線 id、`gameState` 欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：移除艾爾巴夫正式島圖後方 / 下方殘留文字。有正式 `elbaph_island.webp` 圖片時，`buildElbaphIslandVisual()` 只輸出島嶼圖，不再輸出「艾爾巴夫 / 巨人島」標籤；只有無圖 fallback 時才顯示文字徽章。
 - 檔案：`public/js/board_game.js`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；抽查 `buildElbaphIslandVisual()` 確認有圖分支不再輸出 `strong` / `small` 文字。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；抽查 `buildElbaphIslandVisual()` 確認有圖分支不再輸出 `strong` / `small` 文字。
 - 風險：只改艾爾巴夫地圖節點 HTML 顯示，不改素材、規則、同步欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：恢復抵達艾爾巴夫時的地圖降臨動畫。第一次觸發艾爾巴夫災變時，`startElbaphGateSequence()` 會先呼叫 `playFinalGateMapDescent()`，等地圖降臨動畫結束後才進入艾爾巴夫災變全螢幕劇情；後續伊姆 final gate 分支移除 `elbaph/finalGateAnchor` 的跳過判斷，抵達或回合開始仍會先播地圖降臨再開伊姆提示。同步更新主頁 script 版本為 `20260629-elbaph-map-descent-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html`、`/images/board/final_island/final_gate_map_portal.png`、`/images/board/final_island/final_gate_map_imu.png` 皆回應 `HTTP 200`；用 `rg` 確認 `skipMapDescent` 已移除，兩個分支都會呼叫 `playFinalGateMapDescent(player, source)`，且新版 `20260629-elbaph-map-descent-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html`、`/images/board/final_island/final_gate_map_portal.png`、`/images/board/final_island/final_gate_map_imu.png` 皆回應 `HTTP 200`；用 `rg` 確認 `skipMapDescent` 已移除，兩個分支都會呼叫 `playFinalGateMapDescent(player, source)`，且新版 `20260629-elbaph-map-descent-v1` 已接入。
 - 風險：只調整艾爾巴夫 / 伊姆流程的前置視覺等待與快取版本，不改最終之島條件、路線 id、戰鬥敵人、獎勵、`gameState` 欄位、Socket.IO event 或 localStorage key。
 
 ### 2026-06-28
 
 - 範圍：修正最終之島前一島沒有明確變成艾爾巴夫。`ensureFinalIslandLayout()` 會把最後航路 anchor 島與對應 `islandStates` 同步轉成 `elbaph` / `finalGateAnchor`，清掉原本敵島、商店、任務或暫時服務殘留；最終之島解鎖後艾爾巴夫會對所有玩家可見，主地圖也新增明確的艾爾巴夫節點樣式。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認 `kind-elbaph`、`buildElbaphIslandVisual` 與新版 `20260628-elbaph-anchor-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認 `kind-elbaph`、`buildElbaphIslandVisual` 與新版 `20260628-elbaph-anchor-v1` 已接入。
 - 風險：只修正最終島 layout 套用、地圖可見性與本機顯示，不改最終之島啟動條件、路線 id、Socket.IO event 或 localStorage key；舊存檔載入時會由 normalize 重套 anchor 狀態。
 
 - 範圍：補上艾爾巴夫連接點的島嶼圖片顯示。`ISLAND_IMAGE_MAP.elbaph` 暫用既有 `images/board/final_island/endings/backgrounds/elbaph_arrival_reunion.webp`，`buildElbaphIslandVisual()` 會用該圖做地圖縮圖並保留艾爾巴夫 / 巨人島標籤；若圖片讀取失敗仍保留文字 fallback。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 與 `/images/board/final_island/endings/backgrounds/elbaph_arrival_reunion.webp` 皆回應 `HTTP 200`；用 `rg` 確認 `ISLAND_IMAGE_MAP.elbaph`、`elbaph-island-art` 與 `buildElbaphIslandVisual()` 圖片分支已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 與 `/images/board/final_island/endings/backgrounds/elbaph_arrival_reunion.webp` 皆回應 `HTTP 200`；用 `rg` 確認 `ISLAND_IMAGE_MAP.elbaph`、`elbaph-island-art` 與 `buildElbaphIslandVisual()` 圖片分支已接入。
 - 風險：只接入既有圖片作為地圖縮圖，不新增素材、不改最終之島規則、同步欄位、Socket.IO event 或 localStorage key；未來若補正式 `images/board/islands/elbaph_island.webp` 可只替換路徑。
 
 - 範圍：移除開戰前對話的跳過按鈕。獨立戰鬥頁 `ensurePrebattleIntroLayer()` 不再渲染 `data-prebattle-skip` 按鈕與監聽，prebattle 對話固定自動播完以維持節奏；四皇第二階段 `data-phase2-skip` 與主劇情播放器跳過控制保留。同步更新 `BATTLE_PAGE_VERSION`、主頁與戰鬥頁 script query。
 - 檔案：`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_battle.html`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `data-prebattle-skip` 已不存在、`data-phase2-skip` 仍存在，且新版 `20260628-prebattle-no-skip-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `data-prebattle-skip` 已不存在、`data-phase2-skip` 仍存在，且新版 `20260628-prebattle-no-skip-v1` 已接入。
 - 風險：只改戰鬥頁開戰前對話的本機 UI，不改 prebattle 自動完成流程、`battleState` 欄位、Socket.IO event 或 localStorage key；實機需確認開戰前對話播完後仍正常解鎖行動。
 
 - 範圍：修正魯夫五檔・尼卡自動覺醒影片與背景音樂重疊。影片播放前會用 `BgmManager.fadeOut(0)` 立即暫停目前 BGM，播放期間 `playBgmForContext()` 會暫時忽略自動切歌；影片正常結束、讀取失敗或 fallback 後再恢復原本 BGM。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html` 與 `/board_game.html` 皆回應 `HTTP 200`；確認 `luffyGearFifthVideoBgmPaused`、`silenceBgmForLuffyGearFifthVideo()` 與新版 `20260628-nika-video-bgm-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html` 與 `/board_game.html` 皆回應 `HTTP 200`；確認 `luffyGearFifthVideoBgmPaused`、`silenceBgmForLuffyGearFifthVideo()` 與新版 `20260628-nika-video-bgm-v1` 已接入。
 - 風險：只改五檔覺醒影片的本機 BGM 播放控制與主頁 script 快取版本，不改五檔觸發條件、角色進化資料、`battleState` / `gameState` 欄位、Socket.IO event 或 localStorage key；實機需確認影片結束後戰鬥 BGM 會恢復。
 
 - 範圍：修正 CPU 使用安布里歐·伊娃科夫等輔助角色時可能只補血 / 上 buff 導致戰鬥打不完。CPU 戰鬥選招新增 `devObserverBattleMoveCanDamage()`，power 0 的純治療 / buff / 護盾 / 特殊支援招不再算攻擊招；CPU 自動學招替換時保留至少 1 招可造成傷害的技能；舊狀態若上場角色已沒有可用傷害招，戰鬥中會先補回攻擊招，補不回才換上其他有攻擊招的存活船員。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 Node 載入 `BoardCards` 抽查伊娃科夫技能分類，確認 `顏面衝擊`、`死亡媚眼` 為 damage，`人妖王奇蹟` 為 utility；確認 `http://127.0.0.1:8787/board_start.html` 與 `/board_game.html` 皆回應 `HTTP 200`；確認新版 `20260628-cpu-damage-move-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；用 Node 載入 `BoardCards` 抽查伊娃科夫技能分類，確認 `顏面衝擊`、`死亡媚眼` 為 damage，`人妖王奇蹟` 為 utility；確認 `http://127.0.0.1:8787/board_start.html` 與 `/board_game.html` 皆回應 `HTTP 200`；確認新版 `20260628-cpu-damage-move-v1` 已接入。
 - 風險：只改 CPU / 自動測試的戰鬥選招、學招替換與舊狀態修復，不改技能資料、真人手動學招、`gameState` 欄位、Socket.IO event 或 localStorage key；實機需確認 CPU 輔助角色仍會在低血量時合理補血，但不會無限拖戰。
 
 - 範圍：新增攜帶物選單返回按鈕。`openEquipBattleCarryModal()` 支援 `returnTo` 來源，從船員詳情進入時「返回」會回同一角色詳情，從船員管理列表進入時會回列表並保留同一列展開；從主畫面快捷入口進入時返回等同關閉。裝備 / 卸下後仍停留在攜帶物選單。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html` 與 `/board_game.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `backEquipCarryBtn`、`returnTo: "detail"`、`returnTo: "crewManage"` 與新版 `20260628-carry-modal-back-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html` 與 `/board_game.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `backEquipCarryBtn`、`returnTo: "detail"`、`returnTo: "crewManage"` 與新版 `20260628-carry-modal-back-v1` 已接入。
 - 風險：只改船員攜帶物 modal 的返回導覽與主頁 script 快取版本，不改攜帶物資料、背包資料、`gameState` 欄位、Socket.IO event 或 localStorage key；實機需確認三個入口的返回目的符合預期。
 
 - 範圍：修正船員頁面攜帶物操作後面板消失。攜帶物選單中裝備 / 卸下成功後改為刷新同一名船員的攜帶物選單；船員詳情直接卸下後回到同一角色詳情；船員管理列表直接卸下後回到船員管理並保留同一列展開。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html` 與 `/board_game.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `openCrewManagementModal(player, openIndex)` 與新版 `20260628-carry-modal-stay-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html` 與 `/board_game.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `openCrewManagementModal(player, openIndex)` 與新版 `20260628-carry-modal-stay-v1` 已接入。
 - 風險：只改船員 / 攜帶物 modal 的前端刷新流程與主頁 script 快取版本，不改攜帶物 id、效果、背包資料結構、`gameState` 欄位、Socket.IO event 或 localStorage key；實機需確認從角色詳情與船員管理兩個入口操作時都會停在預期面板。
 
 - 範圍：修正四皇特殊攜帶物無法卸下。四皇首次擊破獎勵不再以 `bound: true` 發放；新增 `isLockedBattleCarryItem()`，讓舊存檔中已帶 `bound` 的戴彭的九尾幻面、格里芬之劍、無畏之心、太陽海賊團的徽章仍可卸下、換裝並回到背包，其他真正綁定攜帶物維持不能卸下。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html` 與 `/board_game.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `YONKO_COUNTER_ITEM_IDS`、`isLockedBattleCarryItem` 與新版 `20260628-yonko-carry-unlock-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html` 與 `/board_game.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `YONKO_COUNTER_ITEM_IDS`、`isLockedBattleCarryItem` 與新版 `20260628-yonko-carry-unlock-v1` 已接入。
 - 風險：只改四皇對策攜帶物的綁定 / 卸下判斷與主頁 script 快取版本，不改道具 id、道具效果、取得條件、`gameState` 欄位、Socket.IO event 或 localStorage key；實機需確認舊存檔已裝備的四皇道具能正常卸下並回背包。
 
 - 範圍：修正 Marineford / 頂上戰爭篇最終 Boss 結算。`finalizeMarinefordBattleStep()` 新增可指定不交棒與清場後 callback 的選項；打倒最後一名 Boss 戰國元帥時，會完成救援、清除戰鬥狀態並立刻開回 Marineford 成功救援頁，不再等到玩家下一回合才看到成功救援。青雉、黃猿、赤犬擊破後仍維持推進下一名 Boss 但先交棒。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_marineford.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `finalizeMarinefordBattleStep` 的 `advanceTurn: false` 分支與新版 `20260628-marineford-final-success-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_marineford.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `finalizeMarinefordBattleStep` 的 `advanceTurn: false` 分支與新版 `20260628-marineford-final-success-v1` 已接入。
 - 風險：只調整 Marineford 最終 Boss 成功時的結算導向與主頁 script 快取版本，不新增 `gameState` 欄位、不改 `marinefordHold` 結構、Socket.IO event 或 localStorage key；仍建議實機確認戰國戰鬥結果顯示後能立即看到成功救援與 3D2Y 報紙道具展示。
 
 - 範圍：修正核心 EXP 分配。`grantExpToLivingCrew()` 不再跳過瀕死船員，改為瀕死隊員取得 50% EXP；存活支援仍為 95%，出戰者為 100%。同時將幸運海鷗蛋與其他 `exp_bonus_self` 攜帶物接入個人 EXP 結算，在低等追趕倍率後追加對應百分比，並在紀錄中顯示道具加成來源。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 
-pm.cmd start` 啟動本機 server 後確認 `http://127.0.0.1:8787/board_start.html` 與 `/board_game.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `FAINTED_CREW_EXP_RATIO`、`cardSelfExpBonusInfo`、`exp_bonus_self` 與新版 `20260628-exp-share-lucky-egg-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `npm.cmd start` 啟動本機 server 後確認 `http://127.0.0.1:8787/board_start.html` 與 `/board_game.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `FAINTED_CREW_EXP_RATIO`、`cardSelfExpBonusInfo`、`exp_bonus_self` 與新版 `20260628-exp-share-lucky-egg-v1` 已接入。
 - 風險：只改 EXP 數值分配與主頁 script 快取版本，不新增 `gameState` 欄位、不改角色 / 道具 id、Socket.IO event 或 localStorage key；實機仍需確認戰鬥 / 任務結算 log 的瀕死成長與幸運海鷗蛋加成顯示符合預期。
 
 - 範圍：簡化四皇疊層血條的 HP 文字顯示。底層戰鬥仍保留原本總 `maxHp` 作為兩階段判斷，避免實際耐久被翻倍；主遊戲戰鬥 modal 與獨立戰鬥頁 HUD 改用目前血條的 `layerCurrentHp/layerMaxHp` 顯示，例如上層血條顯示半血上限並搭配 `X2`，第二型態顯示最後一條血，不再顯示總血量造成混亂。同步更新 `BATTLE_PAGE_VERSION`、`board_game.js` 與 `board_battle.js` query，避免快取舊 HUD。
 - 檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `battleEnemyHpTextForDisplay`、`combatantHpTextForDisplay` 與新版 `20260628-yonko-layer-hp-v1` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `battleEnemyHpTextForDisplay`、`combatantHpTextForDisplay` 與新版 `20260628-yonko-layer-hp-v1` 已接入。
 - 風險：只改四皇 HP 文字與血條 HUD 顯示，不改四皇敵人 `maxHp`、傷害計算、半血換型態、獎勵、`gameState` 欄位、Socket.IO event 或 localStorage key；實機仍需確認攻擊動畫扣血時文字與血條同步。
 
 ### 2026-06-27
 
 - 範圍：修正 Marineford / 頂上戰爭篇戰鬥結果不會自動跳下一位玩家。主戰鬥結果渲染時，若目前戰鬥是 Marineford、已有結果且沒有瀕死換人，持有操作權的主遊戲端會用本機 timer 排程呼叫既有 `finishBattle()`；多人局會自動保存未擊破 Boss 的 `pendingBattle` 或推進下一名 Boss 後交棒，單人局則自動回到 Marineford 頁面。本機排程 key 不寫入同步快照，避免觀看方或重整後殘留旗標誤觸發。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_marineford.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `scheduleMarinefordBattleAutoFinish` 與新版 `board_game.js` query 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_marineford.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `scheduleMarinefordBattleAutoFinish` 與新版 `board_game.js` query 已接入。
 - 風險：只新增 Marineford 戰鬥結果的本機自動 finish 排程，不新增 `gameState` 欄位、不改 `marinefordHold` 結構、Socket.IO event 或 localStorage key；仍建議實機多人確認戰鬥結果顯示約 1.2 秒後會交棒，且觀看方不會自行觸發結算。
 
 - 範圍：收斂 Marineford / 頂上戰爭頁底部區塊。底部提示 / 操作區整段隱藏，不再顯示白鬍子池、隊伍狀態、處刑台調整、開始救援、進入戰鬥、整備按鈕與「自願挑戰 / 幫忙救援」說明文字；救援骰數量與按鈕移到右上「剩餘回合」chip 旁。主要流程改由點擊目前敵人卡片接續，未開戰時依狀態執行抽處刑台、抽支援、選處刑台或開始救援，救援中則進入目前 Boss 戰。同步更新 `MARINEFORD_PAGE_VERSION` 與 `board_game.js` query，避免 iframe 快取舊版。
 - 檔案：`public/board_marineford.html`、`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；抽出 `public/board_marineford.html` inline script 以 
-ew Function()` 解析通過；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_marineford.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `remainingTurnsText`、`handleBossCardAction`、`bottom-dock` hidden 與新版 `MARINEFORD_PAGE_VERSION` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；抽出 `public/board_marineford.html` inline script 以 `new Function()` 解析通過；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_marineford.html` 皆回應 `HTTP 200`；用 `Select-String` 確認 `remainingTurnsText`、`handleBossCardAction`、`bottom-dock` hidden 與新版 `MARINEFORD_PAGE_VERSION` 已接入。
 - 風險：只調整 Marineford 頁面操作入口與顯示位置，不改救援骰規則、處刑倒數、`marinefordHold.rescueDice` 欄位、Socket.IO event 或 localStorage key；實機需確認平板右上 chip 不擠壓狀態列。
 
 - 範圍：新增戴彭的九尾幻面戰鬥頁開場演出。當上場角色攜帶九尾幻面且原屬性沒有克制目前敵人屬性時，主戰鬥流程會在戰前對話與開場被動視覺事件結束後排入 `kyubi-mask` 視覺事件，演出期間納入 `openingPassiveVisualPending()` 鎖定，玩家不能先選招。戰鬥頁會顯示道具圖飛向角色圖，接著讓我方屬性欄輪轉約 2 秒後停在克制屬性；若原屬性已克制敵人則不播放。同步更新戰鬥頁與主頁 script / iframe 版本字串，避免快取舊頁面。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`public/js/board_battle.js`、`public/board_battle.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`；用 `rg` 確認 `kyubi-mask`、`kyubiMaskVisualPending`、`kyubiMaskFx` 與新版 `BATTLE_PAGE_VERSION` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`；用 `rg` 確認 `kyubi-mask`、`kyubiMaskVisualPending`、`kyubiMaskFx` 與新版 `BATTLE_PAGE_VERSION` 已接入。
 - 風險：新增的是戰鬥中的 transient 視覺事件欄位 `battle.kyubiMaskVisualPending` / `kyubiMaskVisualAnimating` / `kyubiMaskVisualPlayed`，不改道具 id、取得來源、裝備資料、Socket.IO event 或 localStorage key；實機仍需確認不同螢幕比例下道具飛行位置與屬性欄輪轉不遮擋操作面板。
 
-- 範圍：放寬 Marineford / 頂上戰爭篇處刑台倒數。主遊戲與獨立 Marineford 頁面的倒數由 20 回合調整為 40 回合；Boss 戰結束仍依實際戰鬥回合數扣除倒數。擊破非最終 Boss 後新增 1 顆救援骰，玩家可在頂上戰爭頁面自行決定何時擲 1d6，加回所有進行中、未救出 / 未處刑的處刑台 slot；若倒數已到 0 且手上有救援骰，會要求先擲骰才能進下一戰。
-ormalizeMarinefordHold()` 透過 `executionTurnVersion` v3 升級舊存檔，進行中的 slot 會補上 20 回合但最多不超過新版基礎 40 回合，並補 `rescueDice` 預設值維持舊存檔相容。
+- 範圍：放寬 Marineford / 頂上戰爭篇處刑台倒數。主遊戲與獨立 Marineford 頁面的倒數由 20 回合調整為 40 回合；Boss 戰結束仍依實際戰鬥回合數扣除倒數。擊破非最終 Boss 後新增 1 顆救援骰，玩家可在頂上戰爭頁面自行決定何時擲 1d6，加回所有進行中、未救出 / 未處刑的處刑台 slot；若倒數已到 0 且手上有救援骰，會要求先擲骰才能進下一戰。`normalizeMarinefordHold()` 透過 `executionTurnVersion` v3 升級舊存檔，進行中的 slot 會補上 20 回合但最多不超過新版基礎 40 回合，並補 `rescueDice` 預設值維持舊存檔相容。
 - 顯示修正：頂上戰爭頁面的底部 dock 改回可見；`擲救援骰 xN` 按鈕固定顯示，`x0` 時灰掉不可按、有骰子時可按並套用金色醒目樣式。同步更新 `MARINEFORD_PAGE_VERSION` 與 `board_game.js` script query，避免 iframe 或主頁快取舊版 Marineford 頁面而看不到按鈕。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`public/board_marineford.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；抽出 `public/board_marineford.html` 的 inline script 以 
-ew Function()` 解析通過；確認 `http://127.0.0.1:8787/board_start.html`、`board_game.html`、`board_marineford.html` 皆回應 200；用內建瀏覽器檢查 Marineford 頁面，底部 dock computed display 為 `grid`，救援骰按鈕在 `x0` 時仍可見但 disabled。
+- 驗證：執行 `node --check public/js/board_game.js`；抽出 `public/board_marineford.html` 的 inline script 以 `new Function()` 解析通過；確認 `http://127.0.0.1:8787/board_start.html`、`board_game.html`、`board_marineford.html` 皆回應 200；用內建瀏覽器檢查 Marineford 頁面，底部 dock computed display 為 `grid`，救援骰按鈕在 `x0` 時仍可見但 disabled。
 - 風險：此改動影響 Marineford 救援難度與舊存檔 normalize；新增 `marinefordHold.rescueDice` 內部欄位與 Marineford 頁面 `rollRescueDie` command type，已在 normalize 補預設值；未改 Socket.IO event 或 localStorage key。
 
 ### 2026-06-26
 
 - 範圍：調整戴彭的九尾幻面效果。正式道具說明改為攻擊屬性永遠轉為克制目前敵人的屬性；戰鬥判定在 `battleMoveAttackAttribute()` 先檢查裝備者是否攜帶九尾幻面，若有就回傳目前敵方屬性的克制屬性。紅髮香克斯轉相戰不再使用舊版每 3 回合 1 次 x1.3 補正，而是直接轉成克制目前轉相並使用正常 x2；原本干擾預判 / 敵方閃避下降輔助保留。
 - 檔案：`public/js/board_game.js`、`public/js/board_items.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_items.js`；用 `rg` 確認舊版 `canUseDevonMaskVsShanks`、`devonMaskShanksRound`、`wrongAttributeMultiplier` 與 `九尾幻面可補正` 已不在程式中，並確認 `devonKyubiMaskCounterAttribute` 與新版道具說明已接入。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_items.js`；用 `rg` 確認舊版 `canUseDevonMaskVsShanks`、`devonMaskShanksRound`、`wrongAttributeMultiplier` 與 `九尾幻面可補正` 已不在程式中，並確認 `devonKyubiMaskCounterAttribute` 與新版道具說明已接入。
 - 風險：此改動會顯著提高九尾幻面的泛用戰鬥強度，尤其所有有屬性的敵人都會被轉成克制；未改道具 id、取得來源、裝備欄位、`gameState` 主欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：新增劇情播放控制。四皇據點、最終島、最終門 / 艾爾巴夫 / 伊姆戰後等共用全螢幕劇情播放器新增「自動 / 速度 / 跳過」；速度設定保存在本機 `onepiece-board-story-playback-v1`，用於劇情等待與自動換句。最終之島啟動儀式與羅賓讀取段落改用可清除的計時器並提供跳過，獨立戰鬥頁的戰前對話與四皇第二階段對話新增本機跳過按鈕。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`public/js/board_battle.js`、`public/board_battle.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`；用 `rg` 確認 `finalEndingAutoBtn`、`finalEndingSpeedSelect`、`finalEndingSkipBtn`、`data-prebattle-skip`、`data-phase2-skip` 與 `final-story-skip-btn` 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`；用 `rg` 確認 `finalEndingAutoBtn`、`finalEndingSpeedSelect`、`finalEndingSkipBtn`、`data-prebattle-skip`、`data-phase2-skip` 與 `final-story-skip-btn` 已接入。
 - 風險：主劇情自動與速度是本機播放設定，不改戰鬥、掉落、回合、同步欄位或 Socket.IO event；戰鬥頁跳過只縮短本機視覺等待，仍需多人實機確認觀戰端跳過不會造成操作方節奏困惑。
 
 - 範圍：修正觀戰端瀕死角色消失後又閃回。`public/js/board_battle.js` 新增 KO 隱藏鎖，當玩家或敵方角色完成瀕死淡出後，若後續同步仍是同一名 0HP 角色，就維持 `portrait-ko` 隱藏狀態，不再重設 hit / dizzy 圖；換上新角色、復活或切換戰鬥時自動解除。
 - 檔案：`public/js/board_battle.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_battle.html` 回應 `HTTP 200`；用 `rg` 確認 `knockoutHiddenCombatantKeys` 與 KO 隱藏判斷已接入。
+- 驗證：執行 `node --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_battle.html` 回應 `HTTP 200`；用 `rg` 確認 `knockoutHiddenCombatantKeys` 與 KO 隱藏判斷已接入。
 - 風險：只改獨立戰鬥頁的前端顯示鎖，不改 HP、換人、共鬥交棒、`battleState` 欄位、Socket.IO event 或 localStorage key；仍需兩端實機觀戰確認瀕死淡出後不再閃回。
 
 - 範圍：調整紅髮劇情耶穌布半身圖比例。新增 speaker portrait 內層圖片的 CSS 縮放變數，並只針對 `耶穌布` 套用 `1.3` 倍顯示補正，讓包含完整長槍的圖不會顯得比其他角色小；原圖檔、台詞與 pose 對照不變。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認 `finalEndingSpeakerPortraitStyle` 與耶穌布縮放設定已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認 `finalEndingSpeakerPortraitStyle` 與耶穌布縮放設定已接入。
 - 風險：只改劇情 speaker 圖顯示比例，不改圖片素材、紅髮劇情台詞、四皇戰鬥機制、同步欄位、Socket.IO event 或 localStorage key；仍需實機觀看紅髮父子對話確認 1.3 倍是否剛好。
 
 - 範圍：微調紅髮劇情騙人布父子對話半身圖比例與高度。`騙人布` / `烏索普` 的 `conflicted` pose 因素材較接近上半身特寫，於「我有很多話想問你」、「也有很多話想罵你」等句顯得比其他 pose 大，現在僅針對該 pose 套用 `0.7` 倍顯示補正並上移 `24%`。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認 `conflicted` pose 縮放與上移設定已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`；用 `rg` 確認 `conflicted` pose 縮放與上移設定已接入。
 - 風險：只改騙人布單一劇情 pose 的顯示比例與高度，不改素材檔、紅髮劇情台詞、同步欄位、Socket.IO event 或 localStorage key；仍需實機看父子對話確認比例與位置是否自然。
 
 - 範圍：接入紅髮劇情拉奇魯專用半身圖。將使用者提供的拉奇魯大笑 / 調侃圖複製為 `public/images/board/story/speakers/lucky_roux_teasing_laugh.webp`，新增 `拉奇魯` 的 `tease` pose，並只把「一見面就說要搶東西，真不愧是你啊！」這句改用新 pose；前面丟肉段落仍使用原本 `lucky_roux_laugh_meat.webp`。
 - 檔案：`public/js/board_game.js`、`public/images/board/story/speakers/lucky_roux_teasing_laugh.webp`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 與 `/images/board/story/speakers/lucky_roux_teasing_laugh.webp` 皆回應 `HTTP 200`；用 `rg` 確認拉奇魯 `tease` pose 與該句台詞已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 與 `/images/board/story/speakers/lucky_roux_teasing_laugh.webp` 皆回應 `HTTP 200`；用 `rg` 確認拉奇魯 `tease` pose 與該句台詞已接入。
 - 風險：只新增一張紅髮劇情 speaker 素材與單句 pose 對照，不改紅髮劇情台詞、四皇戰鬥機制、同步欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：調整海上列車黃金票目的地。背包使用黃金票時，除了既有標記島之外，現在固定提供「水之七島」可選目的地；尚未標記島嶼也能先搭乘到水之七島，若標記島就是水之七島則不重複顯示。同步更新黃金票背包說明與道具資料描述。
 - 檔案：`public/js/board_game.js`、`public/js/board_items.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_items.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html` 皆回應 `HTTP 200`；用 `rg` 確認水之七島固定站與黃金票說明已接入。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_items.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html` 皆回應 `HTTP 200`；用 `rg` 確認水之七島固定站與黃金票說明已接入。
 - 風險：只改黃金票使用 modal 的目的地清單與道具文案，不新增 `gameState` 主欄位、不改道具 id、消耗規則、Socket.IO event 或 localStorage key；仍需實機確認搭乘到水之七島後會正常進入船塢 / 商店服務流程。
 
 - 範圍：簡化四皇疊層血條標記。四皇血條不再顯示「上層血條 / 最後一條」或額外 HP 說明；高於半血時血條縮短一點並只在右側顯示 `X2`，剩最後一層時回到原本血條寬度與紅橘色，不再顯示額外文字。
 - 檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_battle.html`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
 - 風險：只改四皇血條 UI 文字與寬度，不改半血切相、傷害、回復上限、同步欄位、Socket.IO event 或 localStorage key；仍需實機確認平板 / 電腦血條右側 `X2` 不擠壓版面。
 
 - 範圍：調整四皇疊層血條。四皇仍使用原本總 `maxHp`，不再把原本 900 多 HP 變成兩條各 900 多 HP；高於半血門檻時同一條血條用新色與右側 `X2` 表示上層血條，打到半血後清除四皇身上的狀態、能力階級與專屬 buff / 場地累積並切入第二型態，剩最後一層時回到原本紅橘血條且不顯示額外文字。第二階段後敵方回復 / 再生會被限制在最後一層半血上限內。
 - 檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_battle.html`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`。
 - 風險：只改 `battleState` 內既有四皇 `phase2` 判定與血條呈現，不新增 `gameState` 主欄位、不改 Socket.IO event 或 localStorage key；仍需實機打四皇確認半血切相、狀態清除、觀看方血條顏色與 `X2` 同步符合預期。
 
 - 範圍：替換四皇紅髮香克斯戰前劇情文本。`yonko_shanks.story.chapters` 改為「久別重逢的宴會」、「騙人布與耶穌布」、「正事開始」、「約定之戰」四段，移除原本混在劇情裡的轉相、見聞殺與蓄勢教學語氣；紅髮戰鬥 `mechanics` / `advice` 保持原樣。新背景與耶穌布、班貝克曼、拉奇魯半身圖尚未正式接入，暫時沿用既有紅髮背景與文字顯示。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
 - 風險：只替換紅髮戰前劇情文字與章節數 / 時長，不改四皇戰鬥機制、轉相 / 見聞蓄勢規則、獎勵、Road Poneglyph、同步欄位、Socket.IO event 或 localStorage key；缺圖角色會先以文字方式顯示，待素材補齊後再接 speaker portrait。
 
 - 範圍：整理並接入紅髮劇情素材。將 `public/images/board/story/` 根目錄中的 4 張紅髮背景改名移到 `public/images/board/story/backgrounds/yonko/`，對應「久別重逢的宴會」、「騙人布與耶穌布」、「正事開始」、「約定之戰」；將當時 15 張紅髮相關去背半身圖改名移到 `public/images/board/story/speakers/`，並更新紅髮劇情背景 key 與 speaker pose 對照。
 - 檔案：`public/js/board_game.js`、`public/images/board/story/backgrounds/yonko/`、`public/images/board/story/speakers/`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `public/images/board/story` 根目錄已無散落檔案；用 `rg` 確認紅髮四段劇情引用 `yonko_shanks_story_banquet_arrival`、`yonko_shanks_story_usopp_yasopp`、`yonko_shanks_story_challenge`、`yonko_shanks_story_promise_duel`，並確認新 speaker 檔名已接入對照表。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `public/images/board/story` 根目錄已無散落檔案；用 `rg` 確認紅髮四段劇情引用 `yonko_shanks_story_banquet_arrival`、`yonko_shanks_story_usopp_yasopp`、`yonko_shanks_story_challenge`、`yonko_shanks_story_promise_duel`，並確認新 speaker 檔名已接入對照表。
 - 風險：只搬移本次新增的紅髮劇情素材並更新劇情顯示路徑，不改四皇戰鬥機制、獎勵、Road Poneglyph、同步欄位、Socket.IO event 或 localStorage key；若未來再替換素材，需維持目前正式檔名或同步更新 speaker / background mapping。
 
 - 範圍：新增多人局敵人佔用排除。海格遭遇抽敵、敵島重新佔據與敵島新開戰前，會根據目前 `state.battleState` 與各玩家 `pendingBattle` 計算仍在進行的 enemy key，避免不同地點同時產生同一個敵人；同一敵島 / 同一海格格子的接續戰與共鬥會以 location key 排除，不受影響。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `activeEnemyReservationKeys`、`refreshEnemyIslandProfileIfReservedElsewhere`、海格遭遇重檢與「已在別處交戰」log 已接入。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `activeEnemyReservationKeys`、`refreshEnemyIslandProfileIfReservedElsewhere`、海格遭遇重檢與「已在別處交戰」log 已接入。
 - 風險：不新增 `gameState` 欄位、不改 Socket.IO event 或 localStorage key；若所有一般敵人都被佔用，最後 fallback 仍可能選到可用池中的敵人，因此 4 人局正常敵人數量下應不會撞名，但極端自訂池仍需留意。
 
 - 範圍：替換四皇凱多戰前劇情文本。`yonko_kaido.story.chapters` 改為「重返鬼島」、「百獸殘影」、「跨過我吧」三段，移除原本混在劇情裡的龍鱗破壞與覺醒教學語氣；凱多戰鬥 `mechanics` / `advice` 保持原樣。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
 - 風險：只替換凱多戰前劇情文字與劇情章節時長，不改四皇戰鬥機制、龍鱗 / 覺醒規則、獎勵、Road Poneglyph、同步欄位、Socket.IO event 或 localStorage key。
 
 ### 2026-06-25
 
 - 範圍：隱藏船員詳情的下一階進化名稱。船員詳情仍顯示目前階段 / 總階數與一般進化條件，但下一階提示不寫出進化形態名稱，條件符合時按鈕只顯示「進化」。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
 - 風險：只改船員詳情 modal 顯示文字，不改進化資料、進化條件、素材消耗、`gameState` 欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：調整船員詳情特殊覺醒顯示。魯夫五檔等 `specialAwakening` 會重新列入總進化階數，讓玩家看得到總共有幾階；但下一階條件與「進化」按鈕仍只顯示一般進化，不顯示特殊覺醒觸發方式。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
 - 風險：只改船員詳情的階段摘要顯示，不改五檔覺醒條件、戰鬥中覺醒流程、角色資料、`gameState` 欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：曾短暫隱藏船員詳情中的特殊覺醒階段顯示，後續同日依需求改為仍列入總階數，但不顯示特殊覺醒觸發方式。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
 - 風險：只改船員詳情的階段摘要顯示，不改五檔覺醒條件、戰鬥中覺醒流程、角色資料、`gameState` 欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：船員詳情新增進化階段摘要。依角色一般進化資料的最高 `stage` 顯示目前階段 / 總階數，無進化角色顯示「無進化」。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
 - 風險：只改船員詳情 modal 顯示文字，不改進化條件、素材消耗、角色資料、`gameState` 欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：調整船員詳情的進化操作顯示。下一階進化條件未滿足時不再顯示 disabled 的進化按鈕；只有等級與素材都符合時才顯示「進化」按鈕。背包進化素材選人清單保留不可進化原因顯示。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
 - 風險：只改船員詳情 modal 的按鈕生成條件，不改進化判定、素材消耗、角色資料、`gameState` 欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：移除一般敵人池中的副本 / 劇情敵人重複。麥哲倫、青雉、黃猿、赤犬與斯潘達姆只保留在推進城、Marineford、司法島專屬流程；一般 T1 敵人池留空，並補強選敵 fallback，讓指定階級池空掉時會改從其他一般敵人池抽取。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 Node 掃描 `enemyProfile` 定義，確認 51 筆定義、51 個 unique key、0 個重複 key；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 Node 掃描 `enemyProfile` 定義，確認 51 筆定義、51 個 unique key、0 個重複 key；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
 - 風險：不新增 `gameState` 欄位、不改 Socket.IO event 或 localStorage key；舊存檔若已經在敵島上保存了舊的一般敵人快照，可能要等敵島重新配置或重開局才會完全消失。
 
 - 範圍：調整戰鬥頁 buff / debuff 圖示出現順序。戰鬥頁會在 `passive-opening`、狀態技、強化技與攻擊附帶狀態期間先保留事件前的狀態圖示；等被動 / 招式文字與狀態特效播出後才刷新成新的 buff / debuff 圖示。開場被動尚未演出前也會暫時隱藏它新增的能力階級圖示，避免戰前對話期間先看到結果。
 - 檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
 - 風險：只新增戰鬥 view 的開場被動待播資訊與戰鬥頁顯示延遲，不改被動效果、傷害計算、Socket.IO event 名稱或 localStorage key；需實機確認連續多段 hit 附帶 debuff 時圖示刷新時機符合視覺節奏。
 
 - 範圍：調整開場被動 debuff 的視覺呈現。`passive-opening` 造成敵方 debuff 時不再讓目標播放受擊圖或場景震動，改為只顯示能力下降的 debuff 狀態特效與文字，避免玩家誤以為被動造成了直接傷害。
 - 檔案：`public/js/board_battle.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
 - 風險：只改戰鬥頁視覺呈現，不改被動效果、戰鬥數值、同步欄位、Socket.IO event 或 localStorage key；需實機確認紫色 debuff / 下降粒子在敵方身上足夠明顯。
 
 - 範圍：新增開場被動視覺演出並修正瀕死圖時序。角色開場被動造成 buff / debuff 時會排入 `passive-opening` 視覺事件，等戰前對話結束後播放角色出招、cut-in 與狀態特效，演出期間鎖住戰鬥行動；戰鬥頁最後一擊不再在命中中途提前切瀕死圖，改為招式受擊圖演完後由 knockout 事件切瀕死、淡出與替補，並避免舊 portrait timer 讓已淡出的角色又顯示回來。
 - 檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
 - 風險：新增的是 battleState 內的短暫視覺佇列與 `battle.visualEvent` 類型，不改 Socket.IO event 名稱、localStorage key 或角色被動數值；仍需多人實機確認觀看方能在戰前對話後同步看到開場被動，並確認最後一擊後的瀕死淡出不再閃回。
 
 - 範圍：補強開場被動提示。角色開場被動若套用我方 buff 或敵方 debuff，戰鬥紀錄改為明確顯示「開場被動」與實際能力變化，例如敵方攻擊-1、命中-1，避免玩家剛進新戰鬥看到敵方 debuff 時誤以為是上一場殘留。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html` 回應 `HTTP 200`。
 - 風險：只改戰鬥紀錄文字與文件，不改開場被動效果、戰鬥數值、同步欄位、Socket.IO event 或 localStorage key；實機需確認戰鬥 log 能清楚看到是哪位角色的開場被動造成 debuff。
 
 - 範圍：當時將四皇第二型態改成雙血條流程；此版本後續已於 2026-06-26 調整為原總血量內的半血疊層，同一條血條用右側 `X2` 與顏色表示仍有上層血。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`public/js/board_battle.js`、`public/board_battle.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；確認 `http://127.0.0.1:8787/board_start.html`、`/board_game.html`、`/board_battle.html` 皆回應 `HTTP 200`。
 - 風險：此為舊版流程紀錄；目前四皇血條規則以 2026-06-26 的半血疊層版本為準。
 
 - 範圍：修正重要道具展示未看完就切下一位玩家。新增 item reveal idle callback 與 `endTurn()` 等待鎖；只要重要道具展示 HUD 還在動畫、等待點擊或佇列中，回合交接會先延後，等玩家收下最後一個重要道具後才執行原本的下一位玩家橫幅與同步推送；同步在既有 debug 物件加入道具展示測試 helper。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 Node/jsdom 載入 `board_game.html` 與主程式，模擬 `queueImportantItemReveal("fearless_heart")` 後呼叫 `endTurn()`，確認 currentPlayerIndex 會停在原玩家，點掉道具 HUD 後才交棒；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 Node/jsdom 載入 `board_game.html` 與主程式，模擬 `queueImportantItemReveal("fearless_heart")` 後呼叫 `endTurn()`，確認 currentPlayerIndex 會停在原玩家，點掉道具 HUD 後才交棒；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只延後回合交接時機，不改道具取得、獎勵內容、戰鬥勝負、`gameState` 欄位、Socket.IO event 或 localStorage key；實機仍需確認多人房觀看方收到同步時已在道具展示後。
 
 - 範圍：替換四皇大媽戰前劇情文本。`yonko_bigmom.story.chapters` 改為使用者確認的「甜點王國」、「被撞破的寶物庫」、「茶會了結」三段，套用萬國外景、寶物庫被撞破與靈魂茶會大廳三張既有背景圖；台詞依使用者最後確認版寫入，不再保留原本混在劇情中的 HP、PP、代價支付等機制教學句。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認大媽新場景標題與使用者確認的關鍵台詞存在，且舊大媽劇情中的機制教學句已不在 `yonko_bigmom.story.chapters` 中；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認大媽新場景標題與使用者確認的關鍵台詞存在，且舊大媽劇情中的機制教學句已不在 `yonko_bigmom.story.chapters` 中；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只替換大媽戰前劇情文字、背景對應與 speaker pose，不改四皇戰鬥機制、靈魂拷問規則、獎勵、Road Poneglyph、同步欄位、Socket.IO event 或 localStorage key。
 
 ### 2026-06-24
 
 - 範圍：整理 Board 劇情半身圖素材。將四皇劇情與最終島劇情共用的 speaker portrait 統一移到 `public/images/board/story/speakers/`，原本的 87 張劇情半身圖與新加入的魯夫、甚平 / 吉貝爾、娜美憤怒半身圖共 90 張都由同一資料夾供應；同步將黑鬍子劇情中艾斯挑釁相關段落改用新的 `angry` pose。
 - 檔案：`public/js/board_game.js`、`public/images/board/story/speakers/`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認主程式不再引用舊 speaker 路徑且 `images/board/story/speakers`、`luffy_angry_ace`、`jinbe_angry_guard`、
-ami_angry_warning` 存在；確認三張新圖與舊共用半身圖皆可用 HTTP 200 讀取；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認主程式不再引用舊 speaker 路徑且 `images/board/story/speakers`、`luffy_angry_ace`、`jinbe_angry_guard`、`nami_angry_warning` 存在；確認三張新圖與舊共用半身圖皆可用 HTTP 200 讀取；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只搬移劇情半身圖素材與改劇情 pose / 圖片路徑，不改 `gameState` 欄位、Socket.IO event、戰鬥規則、獎勵或 localStorage key；需實機觀看黑鬍子劇情確認半身圖位置與尺寸符合預期。
 
 - 範圍：替換四皇黑鬍子戰前劇情文本。`yonko_blackbeard.story.chapters` 改為「抵達黑鬍子據點」、「黑暗吞噬」、「雙果實的震動」三段對峙式劇情，移除劇情中的 HP、PP、後排、暗穴層數等機制教學語氣；黑鬍子戰鬥 `mechanics` / `advice` 保持原樣。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認黑鬍子劇情新標題存在，且舊劇情教學句已不在 `yonko_blackbeard.story.chapters` 中；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認黑鬍子劇情新標題存在，且舊劇情教學句已不在 `yonko_blackbeard.story.chapters` 中；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只替換黑鬍子戰前劇情文字，不改四皇戰鬥機制、獎勵、Road Poneglyph、同步欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：將海格寶箱抽選與揭曉從一般對話框改成全螢幕舞台式 overlay。新增 `sea-chest-stage-modal` / `sea-chest-stage-backdrop` / `sea-chest-stage-shell` 等樣式，寶箱圖直接浮在舞台上，不再放在 `board-modal` 的白色 / 玻璃對話框卡片中；結果揭曉也沿用同一舞台樣式。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `sea-chest-stage-modal`、`sea-chest-stage-backdrop`、`sea-chest-stage-shell` 存在且寶箱抽選 / 揭曉 `openModal()` 均帶入舞台 class；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `sea-chest-stage-modal`、`sea-chest-stage-backdrop`、`sea-chest-stage-shell` 存在且寶箱抽選 / 揭曉 `openModal()` 均帶入舞台 class；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只調整寶箱 UI 呈現方式，不改寶箱比例、抽選結果、木箱陷阱、同步欄位、Socket.IO event 或 localStorage key；需實機確認桌機 / 平板寶箱沒有被一般對話框視覺包住。
 
 - 範圍：調整寶箱洗牌互動。寶箱候選展示後不再自動倒數洗牌，也不新增第二層確認對話框；同一個寶箱畫面內新增「確認洗牌」按鈕，玩家按下後才翻面、洗牌並開放抽選。CPU / 自動測試 selector 也加入 `#startSeaChestShuffleBtn:not(:disabled)`，避免 CPU 停在展示階段。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `startSeaTreasureChestShuffle`、`startSeaChestShuffleBtn`、`sea-chest-shuffle-row` 存在且舊 `armSeaTreasureChestShuffle` 已不存在；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `startSeaTreasureChestShuffle`、`startSeaChestShuffleBtn`、`sea-chest-shuffle-row` 存在且舊 `armSeaTreasureChestShuffle` 已不存在；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只調整寶箱洗牌的啟動方式與 CPU 點擊 selector，不改寶箱比例、獎懲、同步欄位、Socket.IO event 或 localStorage key；實機需確認玩家不按「確認洗牌」時不會自動洗牌。
 
 - 範圍：調整寶箱候選抽取規則。四選一寶箱的 4 個候選不再保證不同類型，改為每個候選位置都依該事件權重獨立抽一次，因此同一輪可重複出現木、銅、銀、金或寶石寶箱。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `drawWeightedTreasureChestTypes` 取代 `drawWeightedUniqueTreasureChestTypes`，且文件說明候選可重複；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `drawWeightedTreasureChestTypes` 取代 `drawWeightedUniqueTreasureChestTypes`，且文件說明候選可重複；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只調整候選寶箱抽取方式，不改寶箱權重數值、木箱陷阱效果、同步欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：調整海格寶箱抽選演出與木箱效果。四選一寶箱不再一開始就只顯示背面，而是先展示 4 個候選寶箱正面與類型，再翻成黑影背面並洗牌後啟用選擇；木寶箱改為必定陷阱，會隨機造成貝里損失、HP 損失或 PP 損耗，銅箱以上才給獎勵。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `applySeaWoodChestTrap`、`sea-chest-stage-note`、`seaChestShuffle` 存在；確認寶箱選擇按鈕初始為 disabled，洗牌完成後才啟用；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `applySeaWoodChestTrap`、`sea-chest-stage-note`、`seaChestShuffle` 存在；確認寶箱選擇按鈕初始為 disabled，洗牌完成後才啟用；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只調整寶箱 modal 演出與木箱獎懲，不新增 `gameState` 欄位、不改 Socket.IO event 或 localStorage key；需實機確認觀看方節奏與 CPU 不會在洗牌前點選。
 
 - 範圍：將所有寶藏類海格改成四選一寶箱抽選，不再有寶藏卡直接給指定步數券、守護護符、稀有補給或直接扣道具。新增 `SEA_TREASURE_CHEST_WEIGHT_PROFILES`，讓標準寶箱海域、漂流寶箱群、航路券寶箱、護符寶箱、被撬過的寶箱、假寶藏箱、沉船寶庫、古代遺物寶箱各自使用不同木、銅、銀、金、寶石候選權重；舊 `SEA_EVENT_DEFS` 中的寶藏定義也同步改成寶箱抽選旗標。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `SEA_TREASURE_CHEST_WEIGHT_PROFILES`、`chestProfile`、`seaTreasureChestProfilePool`、`seaTreasureChestProfileOddsText` 存在，且 `SEA_CARD_EFFECTS.treasure` 不再含直接給 / 扣道具流程；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `SEA_TREASURE_CHEST_WEIGHT_PROFILES`、`chestProfile`、`seaTreasureChestProfilePool`、`seaTreasureChestProfileOddsText` 存在，且 `SEA_CARD_EFFECTS.treasure` 不再含直接給 / 扣道具流程；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只調整寶藏海格的獎勵入口與權重，不新增 `gameState` 欄位、不改 Socket.IO event 或 localStorage key；實機需確認不同寶藏事件 modal 顯示不同權重文字且抽選結果正常。
 
 - 範圍：修正翻到海格寶箱卡沒有進入選寶箱流程。補上 `chest` 海格類型資訊、共用寶藏卡背、固定四選一寶箱效果與 CPU 選牌評分，讓舊存檔或舊資料中的寶箱海域不再 fallback 成金錢事件；二選一畫面點擊時沿用已抽出的效果，不再重新抽一次，避免偵查 / 顯示與實際結果不同；同步將寶石寶箱檔名修正為 `chest_gem.webp`。
 - 檔案：`public/js/board_game.js`、`public/images/board/game/sea_chests/chest_gem.webp`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `SEA_EVENT_TYPE_INFO`、`SEA_CARD_BACK_IMAGE_MAP`、`drawSeaCardEffect` 與 CPU 評分都包含 `chest`；確認 `public/images/board/game/sea_chests/chest_gem.webp` 存在且舊空白檔名不存在；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `SEA_EVENT_TYPE_INFO`、`SEA_CARD_BACK_IMAGE_MAP`、`drawSeaCardEffect` 與 CPU 評分都包含 `chest`；確認 `public/images/board/game/sea_chests/chest_gem.webp` 存在且舊空白檔名不存在；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只修正 `chest` 類型導向寶箱抽選與素材檔名，不改既有 `treasure` 卡池中的其他寶藏效果、不新增 `gameState` 欄位、不改 Socket.IO event 或 localStorage key。
 
 ### 2026-06-23
 
 - 範圍：強化海格事件與新增寶箱抽選。金錢、天氣、寶藏、藥物事件改成更有感的獎勵 / 代價，貝里獎勵會依海域與回合放大；寶藏事件「漂流寶箱群 / 沉船寶庫」與舊寶箱入口改成木、銅、銀、金、寶石 5 種寶箱抽 4 種洗牌後讓玩家選 1 張。新增寶箱抽選 UI、結果顯示、觀看方結果同步、CPU 自動點擊 selector 與 Board 專用圖片資料夾 `public/images/board/game/sea_chests/`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`public/images/board/game/sea_chests/`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `SEA_TREASURE_CHEST_TYPES`、`openSeaTreasureChestDraft`、`data-sea-treasure-chest`、`sea-chest-draft-grid` 與新事件名稱存在，且舊 `CHEST_POOL` / `CHEST_REWARD_POOL` 已無殘留；啟動 server 後確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `SEA_TREASURE_CHEST_TYPES`、`openSeaTreasureChestDraft`、`data-sea-treasure-chest`、`sea-chest-draft-grid` 與新事件名稱存在，且舊 `CHEST_POOL` / `CHEST_REWARD_POOL` 已無殘留；啟動 server 後確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：新增海格寶藏選擇 modal，但不新增 `gameState` 主欄位、不改 Socket.IO event 或 localStorage key；寶箱圖片尚待補入，缺圖時會以文字 fallback 顯示；需實機測試真人 / 觀看方 / CPU 抽寶箱節奏。
 
 - 範圍：將海格寶箱圖片路徑從舊卡牌素材區移出，改為 Board 專用 `public/images/board/game/sea_chests/`，避免新 Board 寶箱圖與舊卡牌遊戲素材混在一起；同步更新程式常數與文件說明。
 - 檔案：`public/js/board_game.js`、`public/images/board/game/sea_chests/`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認舊卡牌寶箱路徑已無引用，且新路徑 `images/board/game/sea_chests` / `public/images/board/game/sea_chests` 存在於程式與文件。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認舊卡牌寶箱路徑已無引用，且新路徑 `images/board/game/sea_chests` / `public/images/board/game/sea_chests` 存在於程式與文件。
 - 風險：只調整尚未放圖的寶箱素材路徑，不改抽選結果、同步欄位、Socket.IO event 或 localStorage key；海格卡背已於下一筆紀錄獨立搬出舊卡牌素材區。
 
 - 範圍：將海格事件二選一卡背圖片從舊卡牌素材區移出，改為 Board 專用 `public/images/board/game/sea_cards/backs/`。搬移 `money_back.webp`、`weather_back.webp`、`treasure_back.webp`、`medicine_back.webp`、`unknown_back.webp`，並更新 `SEA_CARD_BACK_IMAGE_MAP`。
 - 檔案：`public/js/board_game.js`、`public/images/board/game/sea_cards/backs/`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認主流程與文件已改用 `images/board/game/sea_cards/backs` / `public/images/board/game/sea_cards/backs`，且舊卡背資料夾已移除。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認主流程與文件已改用 `images/board/game/sea_cards/backs` / `public/images/board/game/sea_cards/backs`，且舊卡背資料夾已移除。
 - 風險：只搬移 Board 海格事件卡背，不改海格事件抽選、效果、同步欄位、Socket.IO event、localStorage key，也不動舊卡牌遊戲仍使用的 `public/images/cards/` 其他素材。
 
 - 範圍：取消主地圖船隻移動的目標格提示。移除金色目的格提示圈的 CSS、目的地推估 helper 與地圖 render 呼叫；保留每步約 0.32 秒的逐格移動節奏。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `map-move-destination-ring`、`mapMoveDestinationPulse`、`estimateMoveDestinationTarget`、`currentMoveDestinationTarget` 與 `renderMoveDestinationRing` 已不存在於 `public/board_game.html` / `public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `map-move-destination-ring`、`mapMoveDestinationPulse`、`estimateMoveDestinationTarget`、`currentMoveDestinationTarget` 與 `renderMoveDestinationRing` 已不存在於 `public/board_game.html` / `public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只移除純 UI 提示，不改擲骰、路線、移動結果、`gameState` 主欄位、Socket.IO event 或 localStorage key；實機需確認移動中沒有殘留金色圈，且平板 / 桌機地圖操作正常。
 
 ### 2026-06-22
 
 - 範圍：依使用者要求將海格事件視覺回復原本流程。移除海格二選一卡翻牌延遲、五色分類樣式與直接遭遇的紅色戰鬥卡預覽；保留島嶼抵達徽章 HUD。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `SEA_EVENT_VISUAL_INFO`、`selectSeaEventChoice`、`event-card-type-badge`、`seaCardFlip` 與海格五色分類樣式已不存在於 `public/js/board_game.js` / `public/board_game.html`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `SEA_EVENT_VISUAL_INFO`、`selectSeaEventChoice`、`event-card-type-badge`、`seaCardFlip` 與海格五色分類樣式已不存在於 `public/js/board_game.js` / `public/board_game.html`；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只回復海格 UI 呈現與點卡節奏，不改海格抽卡池、事件效果、戰鬥規則、`gameState` 主欄位、Socket.IO event 或 localStorage key；島嶼抵達徽章仍會同步顯示，需實機確認不擋後續落點 modal。
 
 - 範圍：海格事件視覺與島嶼落點提示。海格二選一事件卡改成翻牌式卡片，依紅戰鬥、金寶箱、青天氣、紫襲來、綠補給做視覺分類；直接遭遇海格在進戰鬥前顯示紅色戰鬥卡預覽。玩家抵達島嶼時會先顯示同步島嶼徽章 HUD，常見分類為商店、酒館、任務、敵島。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `SEA_EVENT_VISUAL_INFO`、`selectSeaEventChoice`、`islandArrivalBadgeInfo`、`event-card-type-badge` 與 `theme-island-*` 樣式存在；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `SEA_EVENT_VISUAL_INFO`、`selectSeaEventChoice`、`islandArrivalBadgeInfo`、`event-card-type-badge` 與 `theme-island-*` 樣式存在；確認 `http://127.0.0.1:8787/board_game.html` 回應 `HTTP 200`。
 - 風險：只新增 UI 呈現、翻牌延遲與同步 HUD 事件，不改海格抽卡池、事件效果、戰鬥規則、`gameState` 主欄位、Socket.IO event 或 localStorage key；仍需實機確認平板 / 桌機上卡片高度、觀看方結果彈窗與島嶼徽章時機符合預期。
 
 - 範圍：整理缺漏道具圖片。將新加入的五張道具圖依內容改名為正式 `GAME_ITEMS` 路徑，補齊四皇對策道具與舊時代進化素材圖。
@@ -3514,16 +3083,14 @@ ode --check public/js/board_game.js`；用 `rg` 確認 `SEA_EVENT_VISUAL_INFO`�
 
 - 範圍：修正 CPU 四皇據點自動流程。CPU 抵達四皇島並看到四皇劇情 / 機制面板時，會先依既有 `devObserverShouldChallengeYonkoNow()` 策略判斷；若應挑戰且開始按鈕可點，會自動按下進入四皇戰，不再停在面板上。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html` 回應 `HTTP 200`。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `http://127.0.0.1:8787/board_start.html` 回應 `HTTP 200`。
 - 風險：只補 CPU 自動點擊四皇開戰按鈕，不新增 `gameState` 欄位、不改四皇戰鬥規則、Socket.IO event 或 localStorage key；仍需實機 CPU 跑到四皇島確認劇情播放、策略判斷與開戰同步符合預期。
 
 ### 2026-06-22
 
 - 範圍：修正多人非共鬥戰鬥的瀕死替補節奏。敵方先攻或其他效果造成上場角色瀕死時，玩家選完替補並播完上場動畫後會將戰鬥設為 `round-pause`、保存進度並交棒；替補角色不會立刻進入可操作的新回合。司法島、推進城、Marineford 與一般敵島都共用此規則；單人測試仍會直接續下一輪。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`。
+- 驗證：執行 `node --check public/js/board_game.js`。
 - 風險：不新增 `gameState` 欄位、不改 Socket.IO event 或 localStorage key；仍需實機多人測試確認替補上場動畫、觀看方同步、交棒橫幅與副本續戰節奏符合預期。
 
 ### 2026-06-19
@@ -3537,8 +3104,7 @@ ode --check public/js/board_game.js`。
 
 - 範圍：整理角色進化資料，新增 / 調整新世界進化、凱洛特月獅型態、進化名稱與正式進化素材條件。
 - 檔案：`public/js/board_cards.js`、`docs/GAME_RULES.md`。
-- 驗證：執行 
-ode --check public/js/board_cards.js`；用 Node 載入 `BoardCards` 驗證 32 個進化與指定素材條件。
+- 驗證：執行 `node --check public/js/board_cards.js`；用 Node 載入 `BoardCards` 驗證 32 個進化與指定素材條件。
 - 風險：只改角色資料與文件，未新增 `gameState` 欄位；舊存檔中已取得角色會依目前進化資料讀取下一階段。
 
 ### 2026-06-19
@@ -3559,8 +3125,7 @@ ode --check public/js/board_cards.js`；用 Node 載入 `BoardCards` 驗證 32 �
 
 - 範圍：重新整理角色技能命名規則，保留 move id，補上角色味更明確的起手招式名稱，並讓同一角色進化鏈內的基礎、進化與後期技能不再重複名稱。
 - 檔案：`public/js/board_cards.js`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards`，確認 51 位角色、32 個進化形態、83 個可戰鬥形態都有 Lv.1 傷害招式，且每條進化鏈 duplicate move name 數為 0。
+- 驗證：執行 `node --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards`，確認 51 位角色、32 個進化形態、83 個可戰鬥形態都有 Lv.1 傷害招式，且每條進化鏈 duplicate move name 數為 0。
 - 風險：保留既有 move id 與 `gameState` 欄位，不影響多人同步 payload；技能顯示名稱改變，若玩家已記住舊名稱需要重新熟悉。
 
 ### 2026-06-19
@@ -3581,24 +3146,21 @@ ode --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards`，確認
 
 - 範圍：調整技能學習階段規則。有下一階進化的角色 / 形態只保留到下一階進化等級以前的技能，Lv.50-95 後期技能只加到無進化角色或最終形態。
 - 檔案：`public/js/board_cards.js`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards`，確認 51 位角色、32 個進化形態、83 個可戰鬥形態、1044 招，32 個有下一階的形態沒有超過進化等級上限，且同一進化鏈 duplicate move name 數為 0。
+- 驗證：執行 `node --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards`，確認 51 位角色、32 個進化形態、83 個可戰鬥形態、1044 招，32 個有下一階的形態沒有超過進化等級上限，且同一進化鏈 duplicate move name 數為 0。
 - 風險：保留 move id 與 `gameState` 欄位，不影響同步 payload；舊存檔中原形態已學到的高等招會在同步 catalog 時被移除，玩家需要進化到對應形態才能再使用後續招式。
 
 ### 2026-06-19
 
 - 範圍：再次檢查並收斂角色技能名稱，移除自動後綴與明顯自創招式名，優先使用動畫 / 漫畫出現過的招式、果實能力名、霸氣類型或角色已知戰鬥動作；可信名稱不足的後期補招改為不產生。
 - 檔案：`public/js/board_cards.js`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards`，確認 51 位角色、32 個進化形態、83 個可戰鬥形態、658 招，所有形態都有 Lv.1 傷害招式、沒有進化等級上限違規、同一角色內 duplicate move name 數為 0；掃描玩家實際可見招式名稱，未再命中進階 / 高階 / 終式 / 終擊 / 新世界等自創後綴。
+- 驗證：執行 `node --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards`，確認 51 位角色、32 個進化形態、83 個可戰鬥形態、658 招，所有形態都有 Lv.1 傷害招式、沒有進化等級上限違規、同一角色內 duplicate move name 數為 0；掃描玩家實際可見招式名稱，未再命中進階 / 高階 / 終式 / 終擊 / 新世界等自創後綴。
 - 風險：保留 move id 與 `gameState` 欄位，不影響同步 payload；部分角色後期可學招式數量變少，避免用自創名稱湊滿招式。
 
 ### 2026-06-19
 
 - 範圍：補強技能名稱與進化強度檢查，消除整條進化鏈內的剩餘同名招式，並調整新世界喬巴與新世界克洛克達爾的 Lv.1 代表攻擊威力，避免剛進化時低於進化前最高傷害。
 - 檔案：`public/js/board_cards.js`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards`，確認 51 位角色、32 個進化形態、83 個可戰鬥形態、651 招，所有形態都有 Lv.1 傷害招式、同形態 duplicate move name 數為 0、整條進化鏈 duplicate move name 數為 0、進化後最高傷害退化數為 0、剛進化 Lv.1 最高傷害低於進化前最高傷害數為 0。
+- 驗證：執行 `node --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards`，確認 51 位角色、32 個進化形態、83 個可戰鬥形態、651 招，所有形態都有 Lv.1 傷害招式、同形態 duplicate move name 數為 0、整條進化鏈 duplicate move name 數為 0、進化後最高傷害退化數為 0、剛進化 Lv.1 最高傷害低於進化前最高傷害數為 0。
 - 風險：保留 move id 與 `gameState` 欄位，不影響同步 payload；兩個進化形態的招式威力提高，會讓新世界喬巴與新世界克洛克達爾剛進化時更穩定。
 
 ### 2026-06-19
@@ -3619,60 +3181,49 @@ ode --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards`，確認
 
 - 範圍：調整進化後技能學習流程。一般進化保留原本上場技能，只將第一個真正新的進化招式排入待學習佇列讓玩家選擇替換；進化形態後續招式改由進化等級起逐級學習；五檔・尼卡保留特殊覺醒，直接切換五檔預設招式。
 - 檔案：`public/js/board_game.js`、`public/js/board_cards.js`、`character_skill_review_list.txt`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js` 與 
-ode --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards` 驗證 32 個進化形態中，31 個一般進化在進化等級只有 1 個真正新 move id 可學，五檔・尼卡可直接取得五檔招式；模擬進化後 active move ids，確認一般進化保留舊招且會排 1 招待學，五檔直接換招；重新產生技能審閱清單 1689 行、651 招。
+- 驗證：執行 `node --check public/js/board_game.js` 與 `node --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards` 驗證 32 個進化形態中，31 個一般進化在進化等級只有 1 個真正新 move id 可學，五檔・尼卡可直接取得五檔招式；模擬進化後 active move ids，確認一般進化保留舊招且會排 1 招待學，五檔直接換招；重新產生技能審閱清單 1689 行、651 招。
 - 風險：保留 `moveId`、`unlockedMoveIds` 與既有待學習佇列欄位，不新增同步 payload 欄位；舊存檔同步後，已進化角色會保留合法舊招並可透過新技能提示補學進化招。
 
 ### 2026-06-20
 
 - 範圍：修正技能學習等級重疊問題，除了基礎角色開局自帶與五檔覺醒直換外，同一角色 / 形態同一等級最多只會排入 1 招升級學習招式；沿用進化前同一 `moveId` 的招式不再佔用進化當下的新招等級。
 - 檔案：`public/js/board_cards.js`、`character_skill_review_list.txt`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards` 確認 51 位角色、32 個進化形態、651 招，非預期同級學習重複數為 0，31 個一般進化在進化等級都有且只有 1 個真正新 move id，五檔 4 招預設招式標記為 Lv.51 覺醒直換；重新產生 UTF-8 BOM 技能審閱清單 1690 行。
+- 驗證：執行 `node --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards` 確認 51 位角色、32 個進化形態、651 招，非預期同級學習重複數為 0，31 個一般進化在進化等級都有且只有 1 個真正新 move id，五檔 4 招預設招式標記為 Lv.51 覺醒直換；重新產生 UTF-8 BOM 技能審閱清單 1690 行。
 - 風險：保留既有 `moveId` 與 `gameState` 欄位，不影響多人同步 payload；部分招式的 `unlockLevel` 會往後錯開，舊存檔同步 catalog 後會依新等級顯示待學習招式。
 
 ### 2026-06-20
 
 - 範圍：依使用者手動修改的 `character_skill_review_list.txt` 校正正式技能名稱，將二檔魯夫「巨人手槍」改為「巨人槍」、四檔「彈力防禦」改為「坦克人」、新世界香吉士「牛肉爆裂」改為「魔神風腳」。
 - 檔案：`public/js/board_cards.js`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards` 並解析 `character_skill_review_list.txt`，確認 646 個唯一 move id 全部對上，文字檔與正式資料差異數為 0。
+- 驗證：執行 `node --check public/js/board_cards.js`；用 Node VM 載入 `BoardCards` 並解析 `character_skill_review_list.txt`，確認 646 個唯一 move id 全部對上，文字檔與正式資料差異數為 0。
 - 風險：只改顯示名稱與後期名稱候選，不改 `moveId`、技能威力、PP、效果、學習等級、`gameState` 或同步 payload。
 
 ### 2026-06-20
 
 - 範圍：修正司法島副本階段擊破後的回合交接。階段敵人被打倒後仍先完整播放獎勵 / buff 與下一階段換人選單；玩家選好下一位出戰角色後，只初始化下一階段共享敵人並交棒，不再立刻讓同一玩家開下一階段。輪到已參與司法島且仍在司法島的玩家時，即使沒有舊 `pendingBattle` 也會用共享 raid 狀態自動續戰。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`。
+- 驗證：執行 `node --check public/js/board_game.js`。
 - 風險：只調整司法島結算與自動續戰判斷，不新增 `gameState` 欄位，不改 Socket.IO event 或 localStorage key；需要實機多人測試確認一招擊破後的視覺節奏與旁觀同步符合預期。
 
 ### 2026-06-20
 
 - 範圍：新增戰鬥進場對話重新設計清單，將 51 個原角色、32 個進化形態與 45 個敵人對話 key 全部展開成 TSV，包含目前對話角色 key、敵人分類、配對類型、現有角色句 / 敵人句、來源與 GPT 改寫欄位。
 - 檔案：`prebattle_dialogue_redesign_list.tsv`、`scripts/generate_prebattle_dialogue_redesign_list.js`、`docs/FILE_MAP.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check scripts/generate_prebattle_dialogue_redesign_list.js`；執行 
-ode scripts/generate_prebattle_dialogue_redesign_list.js`，確認輸出 83 個可戰鬥形態、45 個敵人 key、3735 筆組合；抽查 TSV 前幾列、專屬配對與分類配對中文欄位正常。
+- 驗證：執行 `node --check scripts/generate_prebattle_dialogue_redesign_list.js`；執行 `node scripts/generate_prebattle_dialogue_redesign_list.js`，確認輸出 83 個可戰鬥形態、45 個敵人 key、3735 筆組合；抽查 TSV 前幾列、專屬配對與分類配對中文欄位正常。
 - 風險：只新增審閱清單與產生器，不改正式 `public/js/onepiece_prebattle_lines.js`、`gameState`、同步 payload 或戰鬥播放流程；清單暴露出部分進化形態目前缺獨立對話 key，需後續正式導入時再決定是否新增 alias 或獨立進場句。
 
 ### 2026-06-21
 
 - 範圍：修正 Marineford / 頂上戰爭篇多人回合交接。多人局中 Marineford 戰鬥結算後改走交棒流程；未擊破 Boss 的 round-pause 會保存為 `pendingBattle`，保留 Boss HP 與狀態，下次輪到該玩家時用 Marineford 專屬 resume 分支續戰；擊破 Boss 後推進下一戰但先交棒。單人測試仍維持結算後直接回 Marineford 頁面。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `isPendingMarinefordBattle`、`resumeMarinefordBattle`、`finalizeMarinefordBattleStep` 與 round-pause 保存流程皆存在。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `isPendingMarinefordBattle`、`resumeMarinefordBattle`、`finalizeMarinefordBattleStep` 與 round-pause 保存流程皆存在。
 - 風險：不新增 `gameState` 欄位、不改 Socket.IO event 或 localStorage key；需要實機多人測試確認 Marineford 戰鬥頁 finish 後的交棒橫幅、下次輪到原玩家時的自動續戰，以及通關後招募頁開啟時機符合預期。
 
 ### 2026-06-21
 
 - 範圍：匯入使用者完成的戰鬥進場對話 TSV，將 `GPT新版角色句` / `GPT新版敵人句` 寫入正式 `public/js/onepiece_prebattle_lines.js` 的 `pairLines`；同時讓 `prebattleHeroKey()` 與清單產生器優先使用角色實際形態名稱命中配對，保留白鬍子與愛德華·紐蓋特等進化差異。
 - 檔案：`public/js/onepiece_prebattle_lines.js`、`public/js/board_game.js`、`prebattle_dialogue_redesign_list.tsv`、`scripts/generate_prebattle_dialogue_redesign_list.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/onepiece_prebattle_lines.js`、
-ode --check public/js/board_game.js`、
-ode --check scripts/generate_prebattle_dialogue_redesign_list.js`；用 Node VM 載入正式資料確認 83 個形態、45 個敵人、3735 組 `pairLines` 全部可命中，缺 pair 數 0、超過 30 字台詞數 0。
+- 驗證：執行 `node --check public/js/onepiece_prebattle_lines.js`、`node --check public/js/board_game.js`、`node --check scripts/generate_prebattle_dialogue_redesign_list.js`；用 Node VM 載入正式資料確認 83 個形態、45 個敵人、3735 組 `pairLines` 全部可命中，缺 pair 數 0、超過 30 字台詞數 0。
 - 風險：只改進場對話資料與對話 key 查找順序，不新增 `gameState` 欄位、不改同步 payload；GPT 備註中的「原作語意」仍需日後人工逐字校稿，實機需確認戰鬥前對話視窗排版與節奏。
 
 ### 2026-06-21
@@ -3684,26 +3235,19 @@ ode --check scripts/generate_prebattle_dialogue_redesign_list.js`；用 Node VM 
 
 ### 2026-06-22
 
-- 範圍：長測發現共鬥瀕死替補後，交棒橫幅尚未真正切到下一位玩家前，原玩家可能再次送出戰鬥行動，造成 `turnStep=共鬥交棒`、`battle.result=replacement` 與 
-eedsReplacement=true` 殘留並在 seed `1940188` 第 117 回合 timeout。新增 `battle.coop.handoffPending` 短暫鎖，排程共鬥交棒橫幅時先鎖住戰鬥操作，橫幅 callback 完成真正 handoff 後再解除。
+- 範圍：長測發現共鬥瀕死替補後，交棒橫幅尚未真正切到下一位玩家前，原玩家可能再次送出戰鬥行動，造成 `turnStep=共鬥交棒`、`battle.result=replacement` 與 `needsReplacement=true` 殘留並在 seed `1940188` 第 117 回合 timeout。新增 `battle.coop.handoffPending` 短暫鎖，排程共鬥交棒橫幅時先鎖住戰鬥操作，橫幅 callback 完成真正 handoff 後再解除。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；使用 `scripts/growth_curve_playtest.js --seeds 940131,940148,940165 --turns 150 --players 4 --target-ending --no-focus-ending-captain` 回歸，5 次嘗試中 3 次跑滿 150 回合、2 次依既有早期重抽條件停止，未再出現 `turn-timeout`，stderr 為空。
+- 驗證：執行 `node --check public/js/board_game.js`；使用 `scripts/growth_curve_playtest.js --seeds 940131,940148,940165 --turns 150 --players 4 --target-ending --no-focus-ending-captain` 回歸，5 次嘗試中 3 次跑滿 150 回合、2 次依既有早期重抽條件停止，未再出現 `turn-timeout`，stderr 為空。
 - 風險：新增的是 `battleState.coop` 內的 transient handoff flag，不新增 `gameState` 主欄位、不改 Socket.IO event 或 localStorage key；仍需實機多人確認真人端與觀看方在交棒橫幅期間都無法插入舊玩家行動。
 
 - 範圍：長測 4 CPU 局反覆出現 `restart-reselect-bad-start-no-recruits`、`restart-reselect-early-economy-prison`，且部分玩家隊伍未滿 / 等級偏低就進推進城或高風險路線。調整正式 CPU 選路與 `scripts/growth_curve_playtest.js` 的自動玩家評分，新增早期保守期：隊伍未滿、平均等級太低或戰力不足時優先酒館補隊伍，並大幅降低司法島、推進城、Marineford 與非舒適敵島權重。
 - 檔案：`public/js/board_game.js`、`scripts/growth_curve_playtest.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check scripts/growth_curve_playtest.js`；確認 `http://127.0.0.1:8787/board_start.html` 回傳 200。長測批次持續執行中，後續會補充 4 CPU 開局與結局目標結果。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check scripts/growth_curve_playtest.js`；確認 `http://127.0.0.1:8787/board_start.html` 回傳 200。長測批次持續執行中，後續會補充 4 CPU 開局與結局目標結果。
 - 風險：只調整 CPU 路線評分與測試腳本，不新增 `gameState` 欄位、不改 Socket.IO event、localStorage key 或實際副本 / 戰鬥規則；仍需長測確認是否過度保守導致結局進度變慢。
 
-- 範圍：長測 seed `1950141` 第 49 回合發現海格共鬥 timeout：索隆仍在共鬥戰鬥中，但草帽路飛已逃跑的 runtime 殘留 
-eedsReplacement=true`，`battleView` 可能誤判成離場玩家需要替補，導致自動玩家一直等不到可選候補。調整共鬥 runtime sanitize、替補玩家搜尋、存活判斷與逃跑結算，讓已逃跑 / 已戰敗離場的 runtime 立即清除替補旗標並不再參與替補判定。
+- 範圍：長測 seed `1950141` 第 49 回合發現海格共鬥 timeout：索隆仍在共鬥戰鬥中，但草帽路飛已逃跑的 runtime 殘留 `needsReplacement=true`，`battleView` 可能誤判成離場玩家需要替補，導致自動玩家一直等不到可選候補。調整共鬥 runtime sanitize、替補玩家搜尋、存活判斷與逃跑結算，讓已逃跑 / 已戰敗離場的 runtime 立即清除替補旗標並不再參與替補判定。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check scripts/growth_curve_playtest.js`；確認 `http://127.0.0.1:8787/board_start.html` 回傳 200。以 `scripts/growth_curve_playtest.js --seeds 1950141 --turns 120 --players 4 --target-ending --no-focus-ending-captain` 重跑時，使用者要求停止，批次停在第 20 回合，stderr 為空，尚未跑到原 timeout 的第 49 回合。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check scripts/growth_curve_playtest.js`；確認 `http://127.0.0.1:8787/board_start.html` 回傳 200。以 `scripts/growth_curve_playtest.js --seeds 1950141 --turns 120 --players 4 --target-ending --no-focus-ending-captain` 重跑時，使用者要求停止，批次停在第 20 回合，stderr 為空，尚未跑到原 timeout 的第 49 回合。
 - 風險：只清理 `battleState.coop.runtimes` 的 transient 替補狀態，不新增 `gameState` 欄位、不改 Socket.IO event 或 localStorage key；仍需之後補跑同 seed 至第 49 回合以上，並用實機確認共鬥逃跑者不會被觀看方誤帶回替補選單。
 
 - 範圍：新增給外部 GPT / 遊戲設計助手閱讀的總報告，整理目前 Board 遊戲定位、技術同步架構、核心流程、地圖、角色技能與進化、道具、任務、戰鬥、共鬥、副本、CPU、旁觀同步需求、近期進度、已知風險，以及希望 GPT 回答的功能 / 視覺 / UI / 平衡 / 測試建議格式。
@@ -3713,9 +3257,7 @@ ode --check scripts/growth_curve_playtest.js`；確認 `http://127.0.0.1:8787/bo
 
 - 範圍：調整船隻移動體驗。主地圖移動步長統一為約 0.32 秒，符合每步 0.25 到 0.35 秒的可讀節奏；新增金色目的格提示圈，依目前 `pendingMove` 推估可確定的落點，遇到分岔、顛倒山或必須停靠互動的島時不預告未決路線；CPU / 測試快轉只壓縮每步等待動畫，不改實際擲骰、路線、落點或事件結果。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用 `rg` 確認 `map-move-destination-ring`、`MAP_MOVEMENT_STEP_MS` 與文件紀錄存在；啟動 
-pm start` 後確認 `http://127.0.0.1:8787/board_start.html` 回傳 200。
+- 驗證：執行 `node --check public/js/board_game.js`；用 `rg` 確認 `map-move-destination-ring`、`MAP_MOVEMENT_STEP_MS` 與文件紀錄存在；啟動 `npm start` 後確認 `http://127.0.0.1:8787/board_start.html` 回傳 200。
 - 風險：金色目的格圈為純 UI 推估，不新增 `gameState` 欄位、不改 Socket.IO event 或 localStorage key；實機仍需確認桌機 / 平板地圖縮放下金圈不遮擋船隻，且路線分岔與特殊島停靠時提示符合玩家預期。
 
 ### 2026-07-11
@@ -3737,26 +3279,22 @@ pm start` 後確認 `http://127.0.0.1:8787/board_start.html` 回傳 200。
 
 - 範圍：新增正式戰鬥頁測試用接入。`public/js/board_battle.js` 增加推進城麥哲倫框與四皇黑鬍子 / 大媽 / 凱多 / 紅髮框的 `COSMETIC_FRAME_CONFIGS`，正式頁外觀框圖層支援 `rotate`、`flipX`、`flipY`；`public/board_battle_frame_test.html` 增加 5 個成就框測試入口；`public/board_battle.html` 更新 JS 版本號避免快取。
 - 檔案：`public/js/board_battle.js`、`public/board_battle.html`、`public/board_battle_frame_test.html`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`；檢查正式戰鬥頁測試入口與正式戰鬥頁 HTML 內嵌 script 語法；掃描正式戰鬥 JS 與測試頁中的圖片路徑；確認 `http://127.0.0.1:8787/board_battle_frame_test.html` 與 `http://127.0.0.1:8787/board_battle.html?frameTest=1` 可回應；用 jsdom 點擊測試頁第 11 張紅髮框卡片，確認寫入的臨時 snapshot `cosmeticFrameId` 為 `yonkoShanks`。
+- 驗證：執行 `node --check public/js/board_battle.js`；檢查正式戰鬥頁測試入口與正式戰鬥頁 HTML 內嵌 script 語法；掃描正式戰鬥 JS 與測試頁中的圖片路徑；確認 `http://127.0.0.1:8787/board_battle_frame_test.html` 與 `http://127.0.0.1:8787/board_battle.html?frameTest=1` 可回應；用 jsdom 點擊測試頁第 11 張紅髮框卡片，確認寫入的臨時 snapshot `cosmeticFrameId` 為 `yonkoShanks`。
 - 風險：本次只讓新框能透過正式戰鬥頁測試入口預覽，不新增正式解鎖條件、不改船員詳情選框、不寫入主遊戲存檔欄位、不改 Socket.IO event 或 localStorage key。
 
 - 範圍：依使用者第二次輸出的 JSON 微調推進城・毒龍框與四皇大媽框座標。推進城左毒龍 X 改為 146，主框縮為 105 x 108.5；大媽主框移到 Y 48.5 並縮高為 106；同步更新正式戰鬥頁測試設定與示範頁預設值，並更新 `board_battle.html` 的 JS query 版本號。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/js/board_battle.js`、`public/board_battle.html`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`；檢查示範頁與正式測試頁內嵌 script 語法；掃描外觀框素材路徑；確認正式戰鬥頁測試入口與 `board_battle.html?frameTest=1` 可回應。
+- 驗證：執行 `node --check public/js/board_battle.js`；檢查示範頁與正式測試頁內嵌 script 語法；掃描外觀框素材路徑；確認正式戰鬥頁測試入口與 `board_battle.html?frameTest=1` 可回應。
 - 風險：仍只調整示範頁與正式戰鬥頁測試用視覺參數，不改正式外觀框解鎖、船員詳情選框、主遊戲存檔、Socket.IO event 或 localStorage key。
 
 - 範圍：調整角色專屬外觀框的可裝備判斷，讓 `狙擊王框` 可從狙擊王進化到新世界騙人布後保留並繼續在船員詳情中選用；原本騙人布仍不能直接裝備狙擊王框，角色框的自動預設也仍只在原對應形態套用。
 - 檔案：`public/js/board_game.js`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用靜態腳本檢查 `sogeking` 定義含 `inheritToFormIds: ["usopp_evolution_2"]`，且角色框預設函式以 `includeInherited: false` 避免新世界騙人布被自動強塞狙擊王框。
+- 驗證：執行 `node --check public/js/board_game.js`；用靜態腳本檢查 `sogeking` 定義含 `inheritToFormIds: ["usopp_evolution_2"]`，且角色框預設函式以 `includeInherited: false` 避免新世界騙人布被自動強塞狙擊王框。
 - 風險：不新增 `gameState` 主欄位、不改 localStorage key 或 Socket.IO event；既有存檔中已裝備狙擊王框的新世界騙人布會保留，未裝框者只是在船員詳情多出可手動選用的狙擊王框。
 
 - 範圍：把使用者測試 OK 的 `推進城・毒龍框`、`四皇黑鬍子框`、`四皇大媽框`、`四皇凱多框`、`四皇紅髮框` 正式接入主遊戲外觀框系統。`public/js/board_game.js` 新增 5 個通用成就框定義與別名；擊退麥哲倫會解鎖毒龍框，四皇首次打倒對應 glyph 時會解鎖對應四皇框；讀舊存檔時會用麥哲倫討伐紀錄 / 舊 log、玩家自己的四皇首勝 glyph、拓本欄位與拓本道具回補。主頁 script query 與戰鬥頁版本字串更新為 `20260711-achievement-cosmetic-frames-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用靜態腳本檢查 5 個新框定義、麥哲倫 / 四皇授予流程與舊紀錄回補流程；確認 `http://127.0.0.1:8787/board_start.html` / `board_game.html` 皆回應 200；執行 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js`；用靜態腳本檢查 5 個新框定義、麥哲倫 / 四皇授予流程與舊紀錄回補流程；確認 `http://127.0.0.1:8787/board_start.html` / `board_game.html` 皆回應 200；執行 `git diff --check`。
 - 風險：沿用既有 `ownedCosmeticFrameIds` / `cosmeticFrameId` 欄位，不新增 localStorage key、不改 Socket.IO event；新框是通用成就框，解鎖後可在船員詳情逐一選用。
 
 ### 2026-07-12
@@ -3773,27 +3311,22 @@ ode --check public/js/board_game.js`；用靜態腳本檢查 5 個新框定義�
 
 - 範圍：依使用者輸出的 JSON 更新 7 組新框座標，並同步接入正式戰鬥頁測試配置與測試入口：新世界騙人布、新世界喬巴、新世界羅賓、靈魂之王布魯克、佛朗基將軍、四皇全倒、空白王座。四檔魯夫框尚未收到座標，仍只保留示範頁預設值。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/js/board_battle.js`、`public/board_battle.html`、`public/board_battle_frame_test.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`；檢查示範頁與正式測試入口內嵌 script 語法；掃描示範頁、正式戰鬥 JS、測試入口中的 `images/board/battle/...webp` 引用；確認 `board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 可回應。
+- 驗證：執行 `node --check public/js/board_battle.js`；檢查示範頁與正式測試入口內嵌 script 語法；掃描示範頁、正式戰鬥 JS、測試入口中的 `images/board/battle/...webp` 引用；確認 `board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 可回應。
 - 風險：本次只讓 7 組新框能在正式戰鬥頁測試入口預覽，不新增 `COSMETIC_FRAME_DEFS`、不改主遊戲解鎖、船員詳情選框、存檔欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：補上四檔魯夫框的使用者調整座標，並同步接入正式戰鬥頁測試配置與 `public/board_battle_frame_test.html` 測試入口；更新 `board_battle.html` 的 JS query 版本避免快取。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/js/board_battle.js`、`public/board_battle.html`、`public/board_battle_frame_test.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`；檢查示範頁與正式測試入口內嵌 script 語法；掃描 95 個靜態 `images/board/battle/...webp` 引用；確認 `board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 可回應，並用靜態腳本確認 `luffyGearFourth` 測試入口與正式配置存在。
+- 驗證：執行 `node --check public/js/board_battle.js`；檢查示範頁與正式測試入口內嵌 script 語法；掃描 95 個靜態 `images/board/battle/...webp` 引用；確認 `board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 可回應，並用靜態腳本確認 `luffyGearFourth` 測試入口與正式配置存在。
 - 風險：本次仍只接正式戰鬥頁測試預覽，不新增主遊戲 `COSMETIC_FRAME_DEFS`、不改解鎖條件、船員詳情選框、存檔欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：將使用者測試 OK 的 8 組新外觀框正式接入主遊戲。四檔魯夫、新世界騙人布、新世界喬巴、新世界羅賓、靈魂之王布魯克與佛朗基將軍加入角色進化專屬框；四皇全倒框與空白王座框加入通用成就框。四皇全倒框會在四張四皇框都取得後解鎖，空白王座框會在擊退伊姆時解鎖；舊存檔載入時也會依既有四皇 glyph / 拓本道具 / 已擁有四皇框、`finalGateDefeated` / `finalGateDefeatedBy` 或伊姆擊退 log 回補。同步更新主頁 script 版本號避免快取。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；檢查 `public/board_cosmetic_frame_demo.html` 與 `public/board_battle_frame_test.html` 內嵌 script 語法；掃描 175 個靜態 `images/board/battle/...` 素材引用；用靜態腳本確認 8 個新框定義、進化形態對應、四皇全倒 / 伊姆回補與授予流程；確認 `http://127.0.0.1:8787/board_game.html`、`board_battle_frame_test.html`、`board_battle.html?frameTest=1` 皆回應 200；執行 `git diff --check` 未報錯。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；檢查 `public/board_cosmetic_frame_demo.html` 與 `public/board_battle_frame_test.html` 內嵌 script 語法；掃描 175 個靜態 `images/board/battle/...` 素材引用；用靜態腳本確認 8 個新框定義、進化形態對應、四皇全倒 / 伊姆回補與授予流程；確認 `http://127.0.0.1:8787/board_game.html`、`board_battle_frame_test.html`、`board_battle.html?frameTest=1` 皆回應 200；執行 `git diff --check` 未報錯。
 - 風險：沿用既有 `ownedCosmeticFrameIds`、`activeCosmeticFrameId` 與船員卡 `cosmeticFrameId` 欄位，不新增 localStorage key、不改 Socket.IO event；角色專屬框仍只在對應進化形態可選，通用成就框解鎖後可由船員詳情逐一選用。
 
 - 範圍：補齊角色進化框的舊紀錄 / 後階繼承規則。`四檔魯夫框` 現在可在魯夫覺醒成 `luffy_gear_fifth` 五檔・尼卡後保留並繼續於船員詳情選用；五檔本身仍預設使用 `五檔・尼卡框`，不會自動被四檔框覆蓋。主頁 script query 與戰鬥頁版本字串更新為 `20260712-cosmetic-frames-v2`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；用靜態腳本確認 `luffyGearFourth` 含 `inheritToFormIds: ["luffy_gear_fifth"]`、五檔 form id 存在、`defaultCharacterCosmeticFrameId()` 仍以 `includeInherited: false` 避免五檔自動套四檔框；確認 `http://127.0.0.1:8787/board_game.html` 回應 200；掃描本次修改檔案尾端空白。
+- 驗證：執行 `node --check public/js/board_game.js`；用靜態腳本確認 `luffyGearFourth` 含 `inheritToFormIds: ["luffy_gear_fifth"]`、五檔 form id 存在、`defaultCharacterCosmeticFrameId()` 仍以 `includeInherited: false` 避免五檔自動套四檔框；確認 `http://127.0.0.1:8787/board_game.html` 回應 200；掃描本次修改檔案尾端空白。
 - 風險：只調整角色專屬框可選判斷，不新增 `gameState` 欄位、不改 localStorage key 或 Socket.IO event；既有五檔魯夫讀檔後會在選框列表多出四檔魯夫框，但目前已裝備的框不會被強制改掉。
 
 - 範圍：記錄使用者指定的下一批想製作角色進化框待辦清單，包含二檔魯夫、司法島索隆、新世界斯摩格、新世界基德、上校克比、10號船長庫山、年輕雷利、愛德華·紐蓋特、新世界鷹眼、年輕羅傑、四皇巴奇與新世界克洛克達爾。
@@ -3813,8 +3346,7 @@ ode --check public/js/board_game.js`；用靜態腳本確認 `luffyGearFourth` �
 
 - 範圍：匯入下一批 12 組角色進化外觀框素材到通用框示範頁。每組素材依提示詞輸出順序改名為 `frame.webp`、`left_part.webp`、`right_part.webp`、`aura.webp`；`public/board_cosmetic_frame_demo.html` 新增 12 組框款、對應進化角色半身圖選項，以及共用四圖層初始座標，供使用者微調後輸出 JSON。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/images/board/battle/cosmetic_frames/luffy_gear_second/`、`public/images/board/battle/cosmetic_frames/zoro_enies_lobby/`、`public/images/board/battle/cosmetic_frames/smoker_new_world/`、`public/images/board/battle/cosmetic_frames/kid_new_world/`、`public/images/board/battle/cosmetic_frames/koby_colonel/`、`public/images/board/battle/cosmetic_frames/kuzan_tenth_captain/`、`public/images/board/battle/cosmetic_frames/rayleigh_young/`、`public/images/board/battle/cosmetic_frames/whitebeard_newgate/`、`public/images/board/battle/cosmetic_frames/mihawk_new_world/`、`public/images/board/battle/cosmetic_frames/roger_young/`、`public/images/board/battle/cosmetic_frames/buggy_yonko/`、`public/images/board/battle/cosmetic_frames/crocodile_new_world/`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：用 Node 檢查 `public/board_cosmetic_frame_demo.html` 內嵌 script 可解析；掃描示範頁中的 80 個靜態 `images/board/battle/...webp` 引用；確認 12 個新框資料夾皆包含 `frame.webp`、`left_part.webp`、`right_part.webp`、`aura.webp`，並確認 12 組對應進化 portrait 的 
-ormal` / `angry` / `morale` / `hit` / `weak` / `dizzy` 檔案存在。
+- 驗證：用 Node 檢查 `public/board_cosmetic_frame_demo.html` 內嵌 script 可解析；掃描示範頁中的 80 個靜態 `images/board/battle/...webp` 引用；確認 12 個新框資料夾皆包含 `frame.webp`、`left_part.webp`、`right_part.webp`、`aura.webp`，並確認 12 組對應進化 portrait 的 `normal` / `angry` / `morale` / `hit` / `weak` / `dizzy` 檔案存在。
 - 風險：本次只接入本機示範頁，不改正式戰鬥頁 `COSMETIC_FRAME_CONFIGS`、主遊戲 `COSMETIC_FRAME_DEFS`、解鎖條件、船員詳情選框、存檔欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：依使用者輸出的 JSON 定稿值更新 12 組待製作角色進化外觀框在 `public/board_cosmetic_frame_demo.html` 的預設座標、尺寸、層級、透明度、混合模式、角度與翻轉設定；二檔魯夫重複貼上的值採用同一組，基德與庫山段落中斷的大括號依圖層內容補回完整設定。
@@ -3824,15 +3356,12 @@ ormal` / `angry` / `morale` / `hit` / `weak` / `dizzy` 檔案存在。
 
 - 範圍：將 12 組已定稿座標接入正式戰鬥頁測試預覽。`public/js/board_battle.js` 新增二檔魯夫、司法島索隆、新世界斯摩格、新世界基德、上校克比、10號船長庫山、年輕雷利、愛德華・紐蓋特、新世界鷹眼、年輕羅傑、四皇巴奇與新世界克洛克達爾的 `COSMETIC_FRAME_CONFIGS` 與 alias；`public/board_battle_frame_test.html` 新增 12 個測試按鈕，會寫入臨時 battle snapshot 並用正式 `board_battle.html` 預覽；同步更新戰鬥頁 / 主頁戰鬥 iframe 版本避免快取。
 - 檔案：`public/js/board_battle.js`、`public/board_battle_frame_test.html`、`public/board_battle.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；檢查 `public/board_battle_frame_test.html` 內嵌 script 語法；掃描正式戰鬥 JS 與測試入口的 `images/board/battle/...webp` 引用；確認 `board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200；用 jsdom 點擊測試頁二檔魯夫卡片，確認臨時 snapshot 寫入 `cosmeticFrameId: "luffyGearSecond"`。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；檢查 `public/board_battle_frame_test.html` 內嵌 script 語法；掃描正式戰鬥 JS 與測試入口的 `images/board/battle/...webp` 引用；確認 `board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200；用 jsdom 點擊測試頁二檔魯夫卡片，確認臨時 snapshot 寫入 `cosmeticFrameId: "luffyGearSecond"`。
 - 風險：本次只接入正式戰鬥頁與測試入口，不新增主遊戲 `COSMETIC_FRAME_DEFS`、不改船員詳情選框 / 解鎖流程、不新增 `gameState` 欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：依使用者最新輸出的 JSON 微調二檔魯夫框左側 JET 拳圖層，同步更新示範頁與正式戰鬥頁預覽設定；新值為 `x: 87`、`y: 71`、`w: 97`、`rotate: -79`、`flipY: true`。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/js/board_battle.js`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`；檢查 `public/board_cosmetic_frame_demo.html` 與 `public/board_battle_frame_test.html` 內嵌 script 語法；確認 `board_cosmetic_frame_demo.html`、`board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
+- 驗證：執行 `node --check public/js/board_battle.js`；檢查 `public/board_cosmetic_frame_demo.html` 與 `public/board_battle_frame_test.html` 內嵌 script 語法；確認 `board_cosmetic_frame_demo.html`、`board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
 - 風險：本次只調整既有外觀框座標，不改素材檔名、不新增主遊戲外觀框解鎖、不改存檔欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：整理使用者新放入的新世界索隆新版外觀框素材，保留舊版正式遊戲素材不動，將新圖改名為 `frame_v2.webp`、`left_part_v2.webp`、`right_part_v2.webp`、`aura_v2.webp`，並讓 `public/board_cosmetic_frame_demo.html` 的新世界索隆框改用新版三刀主框、阿修羅鬼氣與亡者戲斬擊圖層供微調。
@@ -3842,43 +3371,32 @@ ode --check public/js/board_battle.js`；檢查 `public/board_cosmetic_frame_dem
 
 - 範圍：依使用者輸出的新世界索隆框 JSON 定稿值，更新示範頁與正式戰鬥頁 `zoroNewWorld` 為新版三刀主框 / 阿修羅鬼氣 / 亡者戲斬擊素材與座標；同步更新戰鬥頁 script 版本與主遊戲 battle iframe 版本，避免舊框快取殘留。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/js/board_battle.js`、`public/board_battle.html`、`public/js/board_game.js`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；檢查 `public/board_cosmetic_frame_demo.html` 與 `public/board_battle_frame_test.html` 內嵌 script 語法；掃描正式戰鬥 JS 與示範頁的 `images/board/battle/...webp` 引用；確認 `board_cosmetic_frame_demo.html`、`board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；檢查 `public/board_cosmetic_frame_demo.html` 與 `public/board_battle_frame_test.html` 內嵌 script 語法；掃描正式戰鬥 JS 與示範頁的 `images/board/battle/...webp` 引用；確認 `board_cosmetic_frame_demo.html`、`board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
 - 風險：本次只替換新世界索隆既有角色專屬框的視覺素材與座標，不新增 `COSMETIC_FRAME_DEFS`、不改解鎖條件、船員詳情選框邏輯、存檔欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：依使用者要求刪除新世界索隆舊版外觀框素材 `top_sword.webp`、`left_sword.webp`、`right_sword.webp` 與舊 `aura.webp`，將新版 `frame_v2.webp`、`left_part_v2.webp`、`right_part_v2.webp`、`aura_v2.webp` 改為正式檔名 `frame.webp`、`left_part.webp`、`right_part.webp`、`aura.webp`，並同步更新示範頁與正式戰鬥頁路徑；戰鬥頁版本更新避免快取舊圖。
 - 檔案：`public/images/board/battle/cosmetic_frames/zoro_new_world/`、`public/board_cosmetic_frame_demo.html`、`public/js/board_battle.js`、`public/board_battle.html`、`public/js/board_game.js`、`docs/DEV_WORKFLOW.md`。
-- 驗證：確認 `zoro_new_world` 目錄只剩新版 `frame.webp`、`left_part.webp`、`right_part.webp`、`aura.webp`；執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；檢查示範頁與正式戰鬥測試頁內嵌 script 語法；掃描相關頁面的 `images/board/battle/...webp` 引用；確認 `board_cosmetic_frame_demo.html`、`board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
+- 驗證：確認 `zoro_new_world` 目錄只剩新版 `frame.webp`、`left_part.webp`、`right_part.webp`、`aura.webp`；執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；檢查示範頁與正式戰鬥測試頁內嵌 script 語法；掃描相關頁面的 `images/board/battle/...webp` 引用；確認 `board_cosmetic_frame_demo.html`、`board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
 - 風險：本次只整理新世界索隆外觀框素材檔名與引用，不改主遊戲外觀框 id、解鎖條件、存檔欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：提高正式戰鬥頁 HUD 狀態欄層級，讓玩家 / 敵方名字、血條、階段血條、攜帶物 / 屬性資訊與狀態圖示固定顯示在角色外觀框裝飾之上；同步更新戰鬥頁與主遊戲 battle iframe 版本，避免舊 CSS 快取。
 - 檔案：`public/board_battle.html`、`public/js/board_game.js`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；檢查 `public/board_battle.html` 的 HUD z-index 與 `BATTLE_PAGE_VERSION` 已同步；確認 `board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
+- 驗證：執行 `node --check public/js/board_game.js`；檢查 `public/board_battle.html` 的 HUD z-index 與 `BATTLE_PAGE_VERSION` 已同步；確認 `board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
 - 風險：本次只改 HUD 層級與版本號，不改戰鬥邏輯、外觀框 id、解鎖條件、存檔欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：依使用者輸出的新世界索隆框 JSON 微調阿修羅鬼氣光效圖層，將 `aura` 改為 `y: 45`、`opacity: 0.45`、`strength: 2.3`；同步更新示範頁、正式戰鬥頁設定與戰鬥頁版本，避免舊座標快取。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/js/board_battle.js`、`public/board_battle.html`、`public/js/board_game.js`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；檢查示範頁與正式戰鬥測試頁內嵌 script 語法；確認 `board_cosmetic_frame_demo.html`、`board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；檢查示範頁與正式戰鬥測試頁內嵌 script 語法；確認 `board_cosmetic_frame_demo.html`、`board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
 - 風險：本次只調整新世界索隆既有外觀框的光效圖層，不改素材檔名、外觀框 id、解鎖條件、存檔欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：依使用者輸出的新世界索隆框 JSON 再次定稿整組外觀框數值：`aura` 改為 `y: 27.5 / w: 148 / h: 132.5 / opacity: 1 / z: 13`，左右配件 `strength` 分別為 `1.5` 與 `1.8`，主框 `flipY: true`；同步更新示範頁、正式戰鬥頁設定與戰鬥頁版本，避免舊座標快取。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/js/board_battle.js`、`public/board_battle.html`、`public/js/board_game.js`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；檢查示範頁與正式戰鬥測試頁內嵌 script 語法；確認 `board_cosmetic_frame_demo.html`、`board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；檢查示範頁與正式戰鬥測試頁內嵌 script 語法；確認 `board_cosmetic_frame_demo.html`、`board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
 - 風險：本次只調整新世界索隆既有外觀框的視覺圖層數值，不改素材檔名、外觀框 id、解鎖條件、存檔欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：依使用者輸出的新世界索隆框 JSON 微調阿修羅鬼氣光效位置，將 `zoroNewWorld.layers.aura.y` 從 `27.5` 改為 `38.5`；同步更新示範頁、正式戰鬥頁設定與戰鬥頁版本，避免舊座標快取。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/js/board_battle.js`、`public/board_battle.html`、`public/js/board_game.js`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；檢查示範頁與正式戰鬥測試頁內嵌 script 語法；確認 `board_cosmetic_frame_demo.html`、`board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；檢查示範頁與正式戰鬥測試頁內嵌 script 語法；確認 `board_cosmetic_frame_demo.html`、`board_battle_frame_test.html` 與 `board_battle.html?frameTest=1` 回應 200。
 - 風險：本次只調整新世界索隆既有外觀框的光效 y 座標，不改素材檔名、外觀框 id、解鎖條件、存檔欄位、Socket.IO event 或 localStorage key。
 
 ### 2026-07-14
@@ -3894,8 +3412,7 @@ ode --check public/js/board_game.js`；檢查示範頁與正式戰鬥測試頁�
 
 - 範圍：將 9 組敵人外觀框接入 `public/board_cosmetic_frame_demo.html` 供調整，新增敵人 portrait 選項與敵人半身圖路徑輸出；同時新增「顯示普通框」開關，關閉時只隱藏示範用普通戰鬥卡底框 / 內框，保留卡片尺寸，方便檢查較細的自製框。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/images/board/battle/enemy_frames/**`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：檢查 `public/board_cosmetic_frame_demo.html` 內嵌 script 語法；掃描示範頁 80 個靜態圖片引用；確認 9 組敵人框皆有 `aura.webp`、`frame.webp`、`left_part.webp`、`right_part.webp`，且 9 組敵人 portrait 皆有 
-ormal` / `angry` / `morale` / `hit` / `weak` / `dizzy`；確認 `http://127.0.0.1:8787/board_cosmetic_frame_demo.html` 回應 200。
+- 驗證：檢查 `public/board_cosmetic_frame_demo.html` 內嵌 script 語法；掃描示範頁 80 個靜態圖片引用；確認 9 組敵人框皆有 `aura.webp`、`frame.webp`、`left_part.webp`、`right_part.webp`，且 9 組敵人 portrait 皆有 `normal` / `angry` / `morale` / `hit` / `weak` / `dizzy`；確認 `http://127.0.0.1:8787/board_cosmetic_frame_demo.html` 回應 200。
 - 風險：本次只接入本機示範頁，不改正式戰鬥頁、敵人 id、主遊戲外觀框解鎖、存檔欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：依使用者輸出的 JSON 定稿 9 組敵人外觀框在通用示範頁的預設座標、尺寸、旋轉、翻轉、透明度、強度、層級與混合模式；同時讓每組外觀框可帶自己的 `showBaseFrame` 預設值，路基 / 卡古保留普通底框，其餘敵人框切換時預設隱藏普通底框。
@@ -3905,15 +3422,12 @@ ormal` / `angry` / `morale` / `hit` / `weak` / `dizzy`；確認 `http://127.0.0.
 
 - 範圍：將 9 組敵人外觀框從示範頁接入正式戰鬥頁與正式戰鬥頁測試入口。`public/js/board_battle.js` 新增敵人框正式設定與 alias，外觀框套用流程改為玩家 / 敵方卡共用，敵人 view 可用 `cosmeticFrameId` / `enemyCosmeticFrameId` 套框；`public/board_battle.html` 讓敵方卡可顯示外框外掛配件，並可依 `showBaseFrame: false` 隱藏普通底框；`public/board_battle_frame_test.html` 新增羅布・路基、卡古、多佛朗明哥、艾尼路、月光莫利亞、戰國、赤犬、黃猿、青雉 9 個正式戰鬥頁測試按鈕，會把框套到右側敵人卡。
 - 檔案：`public/js/board_battle.js`、`public/board_battle.html`、`public/board_battle_frame_test.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`；檢查 `public/board_battle_frame_test.html` 與 `public/board_cosmetic_frame_demo.html` 內嵌 script 語法；確認 9 組敵人框素材與 9 組敵人 portrait 檔案存在；靜態確認 9 個敵人框測試入口皆有 `target: "enemy"`，玩家框會清空、敵人物件會寫入 `cosmeticFrameId: fighter.frameId`；確認 `http://127.0.0.1:8787/board_battle_frame_test.html`、`http://127.0.0.1:8787/board_battle.html?frameTest=1` 與 `http://127.0.0.1:8787/js/board_battle.js?v=20260714-enemy-frame-formal-v1` 回應 200。
+- 驗證：執行 `node --check public/js/board_battle.js`；檢查 `public/board_battle_frame_test.html` 與 `public/board_cosmetic_frame_demo.html` 內嵌 script 語法；確認 9 組敵人框素材與 9 組敵人 portrait 檔案存在；靜態確認 9 個敵人框測試入口皆有 `target: "enemy"`，玩家框會清空、敵人物件會寫入 `cosmeticFrameId: fighter.frameId`；確認 `http://127.0.0.1:8787/board_battle_frame_test.html`、`http://127.0.0.1:8787/board_battle.html?frameTest=1` 與 `http://127.0.0.1:8787/js/board_battle.js?v=20260714-enemy-frame-formal-v1` 回應 200。
 - 風險：本次只接正式戰鬥頁顯示能力與正式戰鬥頁測試入口，不改主遊戲敵人自動套框、不新增掉落 / 解鎖流程、不改敵人 id、`gameState` 欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：將 9 組敵人外觀框接入主遊戲正式戰鬥流程。`public/js/board_game.js` 依敵人 key / 中文名稱在 `getBattleView()` 與戰鬥視覺 snapshot 暫時帶入 `cosmeticFrameId`，讓羅布・路基、卡古、多佛朗明哥、艾尼路、月光莫利亞、戰國、赤犬、黃猿、青雉進正式戰鬥時自動套用敵方外觀框；`public/board_battle.html` 提高招式 / 道具 / 換人面板、戰鬥文字、狀態提示、屬性按鈕與骰子動畫層級，避免外觀框配件遮住技能敘述或骰到幾點。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`；用靜態腳本確認 `getBattleView()` 與 `getBattleVisualSnapshot()` 都會輸出 `enemyCosmeticFrameIdFor(enemy)`，並確認 9 組敵人 key / 中文名稱對應敵人框；確認 `board_game.html`、`board_battle.html?frameTest=1` 與新版 `/js/board_battle.js?v=20260714-enemy-frames-live-v1` 可回應。
+- 驗證：執行 `node --check public/js/board_game.js`、`node --check public/js/board_battle.js`；用靜態腳本確認 `getBattleView()` 與 `getBattleVisualSnapshot()` 都會輸出 `enemyCosmeticFrameIdFor(enemy)`，並確認 9 組敵人 key / 中文名稱對應敵人框；確認 `board_game.html`、`board_battle.html?frameTest=1` 與新版 `/js/board_battle.js?v=20260714-enemy-frames-live-v1` 可回應。
 - 風險：本次只在戰鬥 view / visual snapshot 暫時帶入敵人框 id，不寫回 `battle.enemyCombatant`，不新增掉落 / 解鎖流程，不改敵人 id、`gameState` 欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：整理神之騎士團索瑪茲與麒麟格姆兩組敵人外觀框素材，依生成順序統一改名為 `frame.webp`、`left_part.webp`、`right_part.webp`、`aura.webp`；`public/board_cosmetic_frame_demo.html` 新增兩名敵人的 portrait 與四圖層框款，供使用者調整座標、尺寸、透明度、強度、層級、混合模式、角度與翻轉後輸出 JSON。
@@ -3930,22 +3444,17 @@ ode --check public/js/board_battle.js`；用靜態腳本確認 `getBattleView()`
 
 - 範圍：依使用者輸出的 JSON 定稿索瑪茲與麒麟格姆敵人框座標、尺寸、旋轉、翻轉、透明度、強度、層級與混合模式；同步加入正式 `public/js/board_battle.js` 框設定與 alias、`public/board_battle_frame_test.html` 兩個敵人測試入口，並讓主遊戲依 `god_knight_sommers` / `god_knight_killingham` 或中文名稱在正式戰鬥 view 自動套用框。戰鬥頁與主頁 JS 查詢版本更新為 `20260715-god-knight-frames-v1`。
 - 檔案：`public/board_cosmetic_frame_demo.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_battle_frame_test.html`、`public/board_battle.html`、`public/board_game.html`、`public/images/board/battle/enemy_frames/enemy_sommers/`、`public/images/board/battle/enemy_frames/enemy_killingham/`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；檢查示範頁與正式戰鬥測試頁內嵌 script 語法；確認 8 張敵人框素材存在；確認正式戰鬥測試頁、正式戰鬥頁、新版戰鬥 JS 與兩組主框素材皆回應 200。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；檢查示範頁與正式戰鬥測試頁內嵌 script 語法；確認 8 張敵人框素材存在；確認正式戰鬥測試頁、正式戰鬥頁、新版戰鬥 JS 與兩組主框素材皆回應 200。
 - 風險：本次只增加敵人框顯示、測試入口與戰鬥 view 暫時框 id，不改索瑪茲 / 麒麟格姆戰鬥數值、敵人 id、劇情順序、掉落 / 解鎖規則、`gameState` 欄位、Socket.IO event 或 localStorage key。
 
 - 範圍：修正正式戰鬥頁對話框被底部資訊／操作盤遮住。開戰前角色對話與第二階段敵方對話播放、淡出期間會隱藏左右底部面板；對話完整結束或第二階段對話按下「跳過」後才重新顯示操作盤。沿用戰鬥頁既有對話執行狀態，不新增遊戲快照欄位；主頁與戰鬥頁快取版本更新為 `20260715-battle-dialogue-controls-v1`。
 - 檔案：`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_battle.html`、`public/board_game.html`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`；確認固定入口、正式主遊戲頁、正式戰鬥頁與新版戰鬥 JS 回應 HTTP 200。使用獨立 Chrome headless 實際載入正式 `board_battle.html`：桌機 1440×900、平板 1024×768 在開戰對話期間的資訊／操作盤均為 `display: none`，對話淡出後恢復為 `display: grid` 且四個按鈕存在；第二階段對話正常結束與按「跳過」兩條路徑也都由隱藏恢復顯示，瀏覽器執行例外 0。另檢查修改 HTML 的 inline script 語法並執行 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`；確認固定入口、正式主遊戲頁、正式戰鬥頁與新版戰鬥 JS 回應 HTTP 200。使用獨立 Chrome headless 實際載入正式 `board_battle.html`：桌機 1440×900、平板 1024×768 在開戰對話期間的資訊／操作盤均為 `display: none`，對話淡出後恢復為 `display: grid` 且四個按鈕存在；第二階段對話正常結束與按「跳過」兩條路徑也都由隱藏恢復顯示，瀏覽器執行例外 0。另檢查修改 HTML 的 inline script 語法並執行 `git diff --check`。
 - 風險：只改正式戰鬥 iframe 的面板顯示時機與快取版本，不改戰鬥判定、對話文字、玩家控制權、`gameState` / `battleState` 欄位、localStorage key 或 Socket.IO event。
 
 - 範圍：調整指定步數券的正式使用流程。玩家在背包選定 1～6 步並成功消耗道具後，會直接呼叫既有 `rollDice()` 的指定步數分支，建立 `pendingMove`、顯示可選航線／海格並繼續移動，不再要求玩家關閉背包後再按一次「擲骰前進」；指定步數仍不播放隨機骰動畫、不套用一般擲骰船隻加成。主遊戲快取版本更新為 `20260715-fixed-step-auto-move-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、檢查 `public/board_game.html` inline script 語法，並確認正式入口、主遊戲頁與新版 JS 回應 HTTP 200。以正式 `board_game.html` 在桌機 1440×900、平板 1024×768 實際從背包選擇 4／6 步：擲骰按鈕點擊數皆為 0，`pendingMove` 步數正確、顛倒山 5 條航線與 25 個對應海格立即亮起、道具扣除、骰子動畫未出現且瀏覽器執行例外 0。另以兩個不同 `userId`／`clientId` 視窗加入臨時房間，操作方選擇 3 步後取得 server ACK，觀看方同步收到相同 `lastRoll`、`pendingMove`、5 條航線、25 個海格與道具扣除結果，且觀看方操作按鈕保持停用；最後執行 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js`、檢查 `public/board_game.html` inline script 語法，並確認正式入口、主遊戲頁與新版 JS 回應 HTTP 200。以正式 `board_game.html` 在桌機 1440×900、平板 1024×768 實際從背包選擇 4／6 步：擲骰按鈕點擊數皆為 0，`pendingMove` 步數正確、顛倒山 5 條航線與 25 個對應海格立即亮起、道具扣除、骰子動畫未出現且瀏覽器執行例外 0。另以兩個不同 `userId`／`clientId` 視窗加入臨時房間，操作方選擇 3 步後取得 server ACK，觀看方同步收到相同 `lastRoll`、`pendingMove`、5 條航線、25 個海格與道具扣除結果，且觀看方操作按鈕保持停用；最後執行 `git diff --check`。
 - 風險：沿用既有 `presetStep`、`pendingMove` 與 `BOARD_GAME_STATE` 推送流程，不新增或改名存檔欄位、localStorage key、Socket.IO event 或道具 id；一般擲骰、CPU 與船隻加成規則不變。
 
 - 範圍：建立開局序章素材收件目錄 `public/images/board/story/opening/`，供使用者放入已完成的 5 張背景、2 張羅傑處刑人物圖與 4 張夥伴職能徽記；本階段只準備素材目錄，尚未改名、搬移或接入正式開局流程。
@@ -3955,8 +3464,7 @@ ode --check public/js/board_game.js`、檢查 `public/board_game.html` inline sc
 
 - 範圍：將使用者放入的 11 張序章圖正式改名並接到開局選角前流程。全新 `setup-order` 會先用既有全螢幕劇情播放器呈現羅格鎮處刑、羅傑宣言、大航海時代、出發港與四種夥伴職能介紹，結束或跳過後才產生原本的隨機順位並進入三輪蛇形選秀；沒有新增個別角色被動說明。多人啟動順序改為先完成 `BOARD_JOIN_GAME` / 初始快照判斷，再開啟 setup UI；同種子 `setup-order` 同步不打斷觀看方本機序章，正式進入 `setup-draft` 才同步關閉。手動讀檔明確略過序章，主頁 script 版本更新為 `20260715-opening-prologue-v1`。
 - 檔案：`public/images/board/story/opening/` 內 11 張正式素材、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；瀏覽器載入 11 張序章素材皆成功，5 張背景為 1672×941、2 張羅傑人物圖為 1024×1536、4 張職能徽記為 1254×1254。以正式 `board_game.html` 實測桌機 1440×900 與平板 1024×768：羅傑 calm / smile 切換、處刑閃白與「大航海時代——開幕」、四種職能徽記、返回 / 繼續 / 自動 / 速度 / 跳過均可見，結束後開啟「本局選角順序」，平板無水平溢出或多餘文字捲軸，瀏覽器執行例外 0。另以兩個獨立 `userId` / `clientId` 視窗加入臨時房：兩端先取得同一 seed 序章，房主本機跳過不會中斷觀看方，房主按「開始選角」後兩端同步為同一 `setup-draft` / `draftOrder` 並關閉序章；再於序章播放中實際執行手動存檔與讀檔，讀回後不重播序章並正確回到「本局選角順序」。確認正式入口、主頁、新版 JS 與 11 張素材 HTTP 200；`board_game.html` 沒有可執行的 inline script，並執行 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js`；瀏覽器載入 11 張序章素材皆成功，5 張背景為 1672×941、2 張羅傑人物圖為 1024×1536、4 張職能徽記為 1254×1254。以正式 `board_game.html` 實測桌機 1440×900 與平板 1024×768：羅傑 calm / smile 切換、處刑閃白與「大航海時代——開幕」、四種職能徽記、返回 / 繼續 / 自動 / 速度 / 跳過均可見，結束後開啟「本局選角順序」，平板無水平溢出或多餘文字捲軸，瀏覽器執行例外 0。另以兩個獨立 `userId` / `clientId` 視窗加入臨時房：兩端先取得同一 seed 序章，房主本機跳過不會中斷觀看方，房主按「開始選角」後兩端同步為同一 `setup-draft` / `draftOrder` 並關閉序章；再於序章播放中實際執行手動存檔與讀檔，讀回後不重播序章並正確回到「本局選角順序」。確認正式入口、主頁、新版 JS 與 11 張素材 HTTP 200；`board_game.html` 沒有可執行的 inline script，並執行 `git diff --check`。
 - 風險：不新增或改名 `gameState` / `battleState` 欄位、Socket.IO event、角色 / 道具 / 地圖 id 或既有 localStorage key；只新增本機 `sessionStorage` key `onepiece-board-opening-story-session-v1` 記錄同一瀏覽器工作階段看過的 seed。開局多人啟動會等待 join callback，若房間加入失敗則回到本機 setup UI，不會卡在空白地圖。
 
 ### 2026-07-16
@@ -3968,14 +3476,12 @@ ode --check public/js/board_game.js`；瀏覽器載入 11 張序章素材皆成�
 
 - 範圍：將使用者放入的 13 張圖片統一改為正式英文檔名並接入開局選角。序章後的順位、命運轉盤、三名候選、角色詳情與登船確認改為全螢幕港口招募介面；候選卡顯示角色圖、職能徽記、屬性、代表招式與原始被動，詳情顯示既有數值、完整被動與招式。轉盤的 S～E 六區仍對應既有 1～6 / `T1`～`T6` 招募結果，三輪蛇形選秀、CPU、角色池與候選降階規則不變；觀看方新增 `draft-wheel` Board UI 演出同步，正式狀態仍走完整 `BOARD_GAME_STATE`。
 - 檔案：`public/images/board/draft_recruitment/` 內 13 張正式素材、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；以正式 `board_game.html` 在桌機 1440×900 跑完單人三輪順位、轉盤、候選、詳情、登船至 `phase=main`，並在平板 1024×768 實際檢查順位、轉盤、候選角色圖與詳情，兩種尺寸皆無頁面水平溢出且瀏覽器執行例外 0。另以兩個獨立 `userId` / `clientId` 視窗從正式 `board_start.html` 建房、加入與開始：操作方轉到 T6 後，觀看方同步播放轉盤、收到相同 `recruitRolls` 與三張候選、確認按鈕 disabled；選中 `corazon` 後兩端 `draftPickIndex` 與船員資料一致，例外 0。最後確認 13 張素材路徑與正式頁 HTTP 200、HTML inline script、JS 語法及 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js`；以正式 `board_game.html` 在桌機 1440×900 跑完單人三輪順位、轉盤、候選、詳情、登船至 `phase=main`，並在平板 1024×768 實際檢查順位、轉盤、候選角色圖與詳情，兩種尺寸皆無頁面水平溢出且瀏覽器執行例外 0。另以兩個獨立 `userId` / `clientId` 視窗從正式 `board_start.html` 建房、加入與開始：操作方轉到 T6 後，觀看方同步播放轉盤、收到相同 `recruitRolls` 與三張候選、確認按鈕 disabled；選中 `corazon` 後兩端 `draftPickIndex` 與船員資料一致，例外 0。最後確認 13 張素材路徑與正式頁 HTTP 200、HTML inline script、JS 語法及 `git diff --check`。
 - 風險：視覺與 Board UI 演出有調整，但不改角色 / 職能 / 被動文字、招募階級機率、CPU 規則、角色 id、`gameState` / `battleState` 欄位、localStorage key 或 Socket.IO event；底層繼續保存原本 `recruitRolls` 物件，舊存檔相容。平板使用響應式縮排，極窄手機仍需避免長被動文字造成詳情區過度捲動。
 
 - 範圍：修正正式轉盤選角的已選角色框與捲軸排版。`draft_crew_slots_frame.webp` 原始畫布上下含透明留白，現在由 CSS 依素材實際可見邊界裁切放大，船員窗口重新定位，角色圖在窗口內放大並裁切，不再掉到框體下方。候選名單依角色數動態計算桌機最多 6 欄、窄畫面最多 4 欄及所需列數，卡片自動縮放至同一頁；角色詳情改為使用目前 viewport 可容納的加大視窗，移除重複資訊並取消候選 / 被動區內部捲軸。主遊戲快取版本更新為 `20260716-draft-wheel-fit-v2`。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；以正式 `board_game.html` 在桌機 1440×900 完成三輪選角，實際確認第一名角色加入後完整位於放大的船員窗口內，9 名候選同頁顯示且候選 grid 的 `scrollHeight <= clientHeight`，加大詳情視窗為 1140×760、被動／招式內容完整容納，頁面水平溢出 0、瀏覽器例外 0。平板 1024×768 實測順位、船員框、轉盤、5 名候選與詳情視窗，候選和詳情均無可見捲軸、所有按鈕位於 viewport 內、水平／垂直頁面溢出 0、瀏覽器例外 0；最後確認正式入口、主頁、新版 JS HTTP 200 並執行 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js`；以正式 `board_game.html` 在桌機 1440×900 完成三輪選角，實際確認第一名角色加入後完整位於放大的船員窗口內，9 名候選同頁顯示且候選 grid 的 `scrollHeight <= clientHeight`，加大詳情視窗為 1140×760、被動／招式內容完整容納，頁面水平溢出 0、瀏覽器例外 0。平板 1024×768 實測順位、船員框、轉盤、5 名候選與詳情視窗，候選和詳情均無可見捲軸、所有按鈕位於 viewport 內、水平／垂直頁面溢出 0、瀏覽器例外 0；最後確認正式入口、主頁、新版 JS HTTP 200 並執行 `git diff --check`。
 - 風險：僅調整正式選角頁 CSS 與候選 / 詳情顯示 markup，不改角色圖路徑、角色／職能／被動文字、招募機率、蛇形順位、CPU、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`；極端長被動會使用較小的既有響應式字級直接排入詳情區，不以捲軸呈現。
 
 - 範圍：使用內建圖片生成流程製作「船長指令盤」改版來源素材。先定稿 1536×1024 主外框，再以其木材、古銅金、繩索、羅盤、深海藍與青綠海浪風格連續生成 1254×1254 共用主要按鈕框，以及擲骰／前進、背包、船員、技能、任務、船團、船隻資訊 7 個圖示；所有圖片不含 UI 功能文字並保留乾淨白底，供使用者後續自行去背。
@@ -3985,14 +3491,12 @@ ode --check public/js/board_game.js`；以正式 `board_game.html` 在桌機 144
 
 - 範圍：將使用者放入的 9 張去背船長指令盤 WebP 改為固定正式檔名並歸位到 `public/images/board/ship_command/` 根層，未去背 PNG 保留在 `source/`。正式地圖船隻操作選單改為圖片式海賊指令盤：中央顯示玩家目前船型，擲骰／續戰或特殊區域前進、背包、船員為三個主要入口，技能、任務、船團、船隻資訊位於底部；沒有可學技能時顯示停用狀態。CPU 指令盤保留回合速度、個性與三個資訊入口。指令盤會依地圖 viewport 自動改放船隻上／下方並水平收進畫面，主遊戲快取版本更新為 `20260716-ship-command-ui-v1`。
 - 檔案：`public/images/board/ship_command/` 內 9 張正式 WebP、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認固定入口、正式主遊戲頁、新版 JS 與 9 張正式素材皆回應 HTTP 200。使用獨立 Chrome headless 從正式 `board_game.html` 完成三輪選角至主地圖後點擊目前船隻：桌機 1440×900 與平板 1024×768 的指令盤皆完整位於地圖 viewport，頁面水平溢出 0；確認玩家目前船圖與全部指令盤素材載入成功、7 個原功能 action 存在、背包按鈕可開啟正式背包，瀏覽器執行例外 0。另執行 HTML inline script、素材透明通道與 `git diff --check` 檢查。
+- 驗證：執行 `node --check public/js/board_game.js`；確認固定入口、正式主遊戲頁、新版 JS 與 9 張正式素材皆回應 HTTP 200。使用獨立 Chrome headless 從正式 `board_game.html` 完成三輪選角至主地圖後點擊目前船隻：桌機 1440×900 與平板 1024×768 的指令盤皆完整位於地圖 viewport，頁面水平溢出 0；確認玩家目前船圖與全部指令盤素材載入成功、7 個原功能 action 存在、背包按鈕可開啟正式背包，瀏覽器執行例外 0。另執行 HTML inline script、素材透明通道與 `git diff --check` 檢查。
 - 風險：本次只改正式地圖船隻操作選單外觀、素材與 viewport 擺位；所有 action 繼續呼叫原本函式，不改擲骰、續戰、推進城／海軍本部前進、技能、任務、船員、船團、船隻或 CPU 規則，不新增或改名 `gameState` 欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 流程。去背素材外緣仍有少量低透明像素，但不影響目前正式畫面。
 
 - 範圍：修復跨房號雲端讀檔被新房號開局自動存檔取代的問題。正式「讀伺服器備份」改為固定讀取既有 `RECOVERED` 雲端槽，因此從任何房號都會看到同一份五檔尼卡紀錄；玩家主動按「存檔」時會同時更新目前房號與 `RECOVERED`，選角結束的靜默自動存檔仍只寫目前房號，不再污染跨房號雲端槽。「刪除全部存檔」則會清除目前房號與 `RECOVERED`。主遊戲快取版本更新為 `20260716-global-cloud-save-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認 `RECOVERED` API 回傳 HTTP 200、第 275 回合、4 名玩家且內容含 `luffy_gear_fifth`；確認正式主遊戲頁與 `board_game.js?v=20260716-global-cloud-save-v1` 回應 HTTP 200，並靜態確認正式讀檔固定使用 `GLOBAL_BOARD_SAVE_ROOM_CODE`、主動存檔才傳入 `updateGlobal: true`。最後執行 HTML inline script 與 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js`；確認 `RECOVERED` API 回傳 HTTP 200、第 275 回合、4 名玩家且內容含 `luffy_gear_fifth`；確認正式主遊戲頁與 `board_game.js?v=20260716-global-cloud-save-v1` 回應 HTTP 200，並靜態確認正式讀檔固定使用 `GLOBAL_BOARD_SAVE_ROOM_CODE`、主動存檔才傳入 `updateGlobal: true`。最後執行 HTML inline script 與 `git diff --check`。
 - 風險：不刪除或覆寫現有房號 JSON；既有 `RECOVERED.json` 的五檔尼卡第 275 回合內容原樣保留。不新增 `gameState` / `battleState` 欄位、localStorage key 或 Socket.IO event。日後玩家主動按「刪除全部存檔」會依畫面文字同時刪除跨房號雲端槽，需再次確認後再操作。
 
 - 範圍：建立背包第二層 UI 素材收件目錄，將逐張生成並人工確認完成的背包大型主框、分類標籤框、道具格框與使用／確認按鈕框 4 張白底 PNG 複製進專案並改為固定來源檔名，供使用者去背後放回；此階段尚未替換正式背包介面。
@@ -4002,16 +3506,14 @@ ode --check public/js/board_game.js`；確認 `RECOVERED` API 回傳 HTTP 200、
 
 - 範圍：將使用者放入的 4 張去背背包 UI WebP 改為固定正式檔名並歸位到 `public/images/board/backpack_ui/` 根層，白底 PNG 保留在 `source/`。正式 `openBackpackModal()` 改為同船長指令盤風格的「航海背包」大型第二層介面：5 種分類同時顯示，左側顯示背包開合動畫、選中道具圖、名稱、品質、說明與原操作按鈕，右側改成每頁最多 8 格的 2×4 道具分頁，底部提供上一頁、返回指令盤與下一頁；返回時會重新開啟目前船隻的船長指令盤。主遊戲快取版本更新為 `20260716-backpack-ui-v1`。
 - 檔案：`public/images/board/backpack_ui/` 內 4 張正式 WebP、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js` 與 `public/board_game.html` inline script 檢查；確認正式入口、主遊戲頁、新版 JS 與 4 張正式素材回應 HTTP 200。使用獨立 Chrome headless 從正式頁讀取第 275 回合五檔尼卡 `RECOVERED` 雲端紀錄，實際由船長指令盤點進背包：桌機 1440×900 顯示 5 分類、重要道具 8 格與 `1 / 2` 分頁，下一頁切換為 `2 / 2`；平板 1024×768 顯示航海道具 8 格、指定步數券「使用」按鈕與完整框體。兩種尺寸的 modal 均位於 viewport、道具 grid 無內部溢出、頁面水平溢出 0；實際點擊指定步數券可開啟 6 個步數按鈕，取消後返回新版背包，背包底部亦可返回新版船長指令盤，瀏覽器例外 0。最後檢查正式 WebP RGBA 透明通道並執行 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js` 與 `public/board_game.html` inline script 檢查；確認正式入口、主遊戲頁、新版 JS 與 4 張正式素材回應 HTTP 200。使用獨立 Chrome headless 從正式頁讀取第 275 回合五檔尼卡 `RECOVERED` 雲端紀錄，實際由船長指令盤點進背包：桌機 1440×900 顯示 5 分類、重要道具 8 格與 `1 / 2` 分頁，下一頁切換為 `2 / 2`；平板 1024×768 顯示航海道具 8 格、指定步數券「使用」按鈕與完整框體。兩種尺寸的 modal 均位於 viewport、道具 grid 無內部溢出、頁面水平溢出 0；實際點擊指定步數券可開啟 6 個步數按鈕，取消後返回新版背包，背包底部亦可返回新版船長指令盤，瀏覽器例外 0。最後檢查正式 WebP RGBA 透明通道並執行 `git diff --check`。
 - 風險：本次只改正式背包主介面的素材、排版、分頁與返回導覽；道具分類 id、數量、使用 action、指定步數自動移動、船員目標選擇、獎勵與解鎖條件皆沿用原邏輯。不新增或改名 `gameState` / `battleState` 欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 流程；指定步數／船員目標等下一層確認視窗仍保留既有外觀，後續依使用者指定再逐一改版。
 
 ### 2026-07-17
 
 - 範圍：依使用者要求移除正式航海背包左側的翻開背包圖與開啟動畫顯示，選中道具圖改為單獨置中並放大；背包分類、分頁、道具說明、使用按鈕與返回船長指令盤流程不變。主遊戲快取版本更新為 `20260717-backpack-preview-clean-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js` 與 `public/board_game.html` inline script 檢查；確認正式背包 markup 已無 `.backpack-bag-art`，選中道具框改為單欄置中排版，並執行正式頁 HTTP 與 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js` 與 `public/board_game.html` inline script 檢查；確認正式背包 markup 已無 `.backpack-bag-art`，選中道具框改為單欄置中排版，並執行正式頁 HTTP 與 `git diff --check`。
 - 風險：只移除背包圖的視覺元素並調整道具預覽尺寸；`backpack_open_ui.webp` / `backpack_closed_ui.webp` 素材與舊 CSS 保留備用，不改任何道具數量、使用 action、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
 
 - 範圍：重新校正正式航海背包分類、道具與底部按鈕的格線對齊。分類標籤與道具格不再常駐疊加第二層完整金框，只在目前分類、選中道具或滑過時顯示半透明發光，避免與主框既有格線形成雙框；右側移除佔用第一列高度的分類標題列，2×4 道具內容依主框實際內距與列距貼齊八格；底部按鈕改用主框原始窄／寬／窄比例，「返回指令盤」移到中央寬格左半部，避開羅盤。
@@ -4021,14 +3523,12 @@ ode --check public/js/board_game.js` 與 `public/board_game.html` inline script 
 
 - 範圍：依使用者要求將正式航海背包右側道具區由 2×4 分頁改回單欄橫條式清單。右側以深海藍內容底遮住主框原本八格內線，每個道具使用完整橫向道具框顯示圖片、名稱、分類與數量，所有道具一次寫入 DOM 並以金色垂直捲軸上下瀏覽；移除上一頁、下一頁與頁碼，只保留返回指令盤。主遊戲快取版本更新為 `20260717-backpack-scroll-list-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js` 與 HTML inline script 檢查；使用正式 `RECOVERED` 雲端紀錄實際開啟背包，桌機 1440×900 的重要道具分類一次建立 14 條橫列、可由 `scrollTop 0` 捲到最大 `915`，平板 1024×768 的航海道具建立 8 條橫列且可垂直捲動，兩種尺寸皆無水平溢出、modal 完整位於 viewport。指定步數可開啟 6 個步數按鈕並取消返回，返回指令盤正常，瀏覽器例外 0；最後執行 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js` 與 HTML inline script 檢查；使用正式 `RECOVERED` 雲端紀錄實際開啟背包，桌機 1440×900 的重要道具分類一次建立 14 條橫列、可由 `scrollTop 0` 捲到最大 `915`，平板 1024×768 的航海道具建立 8 條橫列且可垂直捲動，兩種尺寸皆無水平溢出、modal 完整位於 viewport。指定步數可開啟 6 個步數按鈕並取消返回，返回指令盤正常，瀏覽器例外 0；最後執行 `git diff --check`。
 - 風險：本次只改背包道具清單呈現與瀏覽方式；分類／道具 id、排序、數量、選中道具預覽、使用 action、指定步數與其他道具規則不變，不新增或改名 `gameState` / `battleState` 欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
 
 - 範圍：修正正式航海背包橫條道具選項看起來像兩張框拼接的問題。確認原 `backpack_item_slot_frame.webp` 素材本身包含左小框與右長框後，改由既有的單一長框 `backpack_category_tab_frame.webp` 直接以 `object-fit: fill` 拉伸覆蓋每一列；道具圖示、名稱、品質與數量繼續疊在同一個完整底框上。主遊戲快取版本更新為 `20260717-backpack-single-row-frame-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、HTML inline script 語法、正式頁與新版 JS HTTP 200、桌機 1440×900／平板 1024×768 正式背包畫面、道具清單垂直捲動與 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js`、HTML inline script 語法、正式頁與新版 JS HTTP 200、桌機 1440×900／平板 1024×768 正式背包畫面、道具清單垂直捲動與 `git diff --check`。
 - 風險：只替換道具橫列的底框視覺來源與快取版本，不刪除舊素材，不改道具 id、數量、排序、分類、使用 action、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
 
 - 範圍：建立船員介面改版素材收件資料夾 `public/images/board/crew_ui/incoming/`，供使用者放入已去背的船員名冊主框、單一船員橫條、船長徽章、角色詳情主框與資訊框；目前不改正式頁、角色資料或船員操作流程。
@@ -4038,8 +3538,7 @@ ode --check public/js/board_game.js`、HTML inline script 語法、正式頁與�
 
 - 範圍：將使用者完成去背的 5 張船員 UI WebP 由收件資料夾固定命名並歸檔至 `public/images/board/crew_ui/` 根層。正式 `openCrewManagementModal()` 改為海賊風格「船員名冊」：名冊主框、可捲動的單一船員橫條、目前船長徽章與原有展開操作；正式 `openCharacterDetail()` 改為角色詳情主框，角色圖置於左側透明挖空窗下層，右側以兩個資訊框呈現數值與招式／被動，並保留原有進化、修行、攜帶物、外觀框與關閉按鈕。主遊戲快取版本更新為 `20260717-crew-ui-v1`。
 - 檔案：`public/images/board/crew_ui/crew_roster_panel_frame.webp`、`crew_member_row_frame.webp`、`crew_captain_emblem.webp`、`crew_detail_panel_frame.webp`、`crew_info_section_frame.webp`、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：逐張檢查 5 張正式 WebP 的去背、外框與角色挖空窗；執行 
-ode --check public/js/board_game.js` 與 HTML inline script 檢查。使用正式 `RECOVERED` 雲端紀錄在 Chrome 實際由船長指令盤開啟「查看船員」：桌機 1440×900 名冊顯示 1～4 名以上船員的橫條、捲軸與展開按鈕；點擊詳情成功開啟新版角色詳情。平板 1024×768 的詳情 modal 為 983×655、未超出 viewport 或產生水平捲動，角色圖、兩個資訊框、修行／攜帶物／卸下／外觀框按鈕皆可見。確認所有 5 張正式素材可載入；最後執行正式頁 HTTP、素材 HTTP 與 `git diff --check`。
+- 驗證：逐張檢查 5 張正式 WebP 的去背、外框與角色挖空窗；執行 `node --check public/js/board_game.js` 與 HTML inline script 檢查。使用正式 `RECOVERED` 雲端紀錄在 Chrome 實際由船長指令盤開啟「查看船員」：桌機 1440×900 名冊顯示 1～4 名以上船員的橫條、捲軸與展開按鈕；點擊詳情成功開啟新版角色詳情。平板 1024×768 的詳情 modal 為 983×655、未超出 viewport 或產生水平捲動，角色圖、兩個資訊框、修行／攜帶物／卸下／外觀框按鈕皆可見。確認所有 5 張正式素材可載入；最後執行正式頁 HTTP、素材 HTTP 與 `git diff --check`。
 - 風險：只改正式船員名冊／角色詳情的 HTML、CSS 與素材引用；角色 id、頭像來源 fallback、隊伍人數、HP／EXP／數值計算、進化條件、攜帶物裝卸、船長切換、CPU、`gameState` / `battleState` 欄位、localStorage key、Socket.IO event、`BOARD_GAME_STATE` 推送與套用均沿用既有流程。角色詳情左側顯示既有角色圖片來源，若個別角色原圖本身含背景，仍會連同原圖背景一起顯示在挖空窗內。
 
 - 範圍：修正新版船員名冊展開操作與頭像定位。`hidden` 操作列改為只在目前點選的船員顯示，並在展開後以明確金框操作列呈現「詳情／更換或裝備攜帶物／卸下攜帶物／設為船長」；頭像改為相對橫條素材圓框的固定定位，姓名與 HP／EXP 欄改保留在右側資訊區，不再壓到頭像。
@@ -4051,24 +3550,21 @@ ode --check public/js/board_game.js` 與 HTML inline script 檢查。使用正�
 
 - 範圍：修正正式船員名冊橫條框的比例與互動流程。名冊改為兩欄等比例 2:1 的角色橫條，直接對應 `crew_member_row_frame.webp` 的原始 1774×887 畫布；圓形角色窗也改以素材實際挖空的位置與直徑定位，避免把圓框壓成橢圓或讓角色圖蓋住資訊欄。點擊名冊角色現在直接開啟角色詳情，不再展開名冊內的操作列；「設為船長」、裝備／更換／卸下攜帶物都集中於詳情，詳情可返回名冊，攜帶物與外觀框的返回也會保留這條路徑。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js` 與 HTML inline script 檢查；正式 `board_game.html`、新版 `board_game.js?v=20260717-crew-direct-detail-v1` HTTP 200。以正式 `RECOVERED` 雲端紀錄實測桌機 1440×900 與平板 1024×768：名冊橫條分別為 458×229、351×175，皆維持約 2:1；頭像窗 85×85、65×65，皆為 1:1；橫條素材使用 `object-fit: cover`，沒有名冊操作列。點第一名船員可直接開啟詳情，詳情同時可見「設為船長」與「更換攜帶物」，按返回名冊可回到名冊；兩種尺寸的頁面水平溢出皆為 0、瀏覽器例外 0。最後執行 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js` 與 HTML inline script 檢查；正式 `board_game.html`、新版 `board_game.js?v=20260717-crew-direct-detail-v1` HTTP 200。以正式 `RECOVERED` 雲端紀錄實測桌機 1440×900 與平板 1024×768：名冊橫條分別為 458×229、351×175，皆維持約 2:1；頭像窗 85×85、65×65，皆為 1:1；橫條素材使用 `object-fit: cover`，沒有名冊操作列。點第一名船員可直接開啟詳情，詳情同時可見「設為船長」與「更換攜帶物」，按返回名冊可回到名冊；兩種尺寸的頁面水平溢出皆為 0、瀏覽器例外 0。最後執行 `git diff --check`。
 - 風險：只調整正式船員 UI 的格線、素材定位與既有按鈕入口；不更動角色 id、角色數值、攜帶物資料、船長資料欄位、CPU、多人控制權、`BOARD_GAME_STATE`、localStorage key 或 Socket.IO event。船員超過四名時仍使用名冊既有垂直捲動以顯示後續兩欄列。
 
 #### 2026-07-17 — 船員視窗安全尺寸與詳情對位
 
 - 範圍：將正式船員名冊主框限制為最大 1080px／86vw／120vh，船員詳情再獨立縮至最大 980px／80vw／108vh，避免兩個圖片式 modal 佔滿或超出畫面。依 `crew_detail_panel_frame.webp` 的實際挖空重新校正左側角色窗、右側兩個資訊框、底部功能列與返回按鈕；角色圖保持比例並以底部為基準放大 1.16 倍，改善不同角色圖縮在挖空窗下半部的問題。資訊文字提高最小字級，保留框內捲動；功能按鈕集中在底部木板框，返回按鈕改為同尺寸可見按鈕。主頁快取版本更新為 `20260717-crew-layout-fit-v2`。
 - 檔案：`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js` 與 HTML inline script 檢查；以正式 `RECOVERED` 雲端紀錄實際檢查桌機 1440×900 與平板 1024×768。桌機名冊為 1080×720、詳情為 972×648；平板名冊為 881×587、詳情為 819×546，四個視窗均完整位於 viewport。角色窗、兩個資訊框、修行／船長／攜帶物／外觀框與返回按鈕全部有可見尺寸且落在素材框內，頁面水平／垂直溢出皆為 0、瀏覽器例外 0。正式主頁與新版 JS HTTP 200，最後執行 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js` 與 HTML inline script 檢查；以正式 `RECOVERED` 雲端紀錄實際檢查桌機 1440×900 與平板 1024×768。桌機名冊為 1080×720、詳情為 972×648；平板名冊為 881×587、詳情為 819×546，四個視窗均完整位於 viewport。角色窗、兩個資訊框、修行／船長／攜帶物／外觀框與返回按鈕全部有可見尺寸且落在素材框內，頁面水平／垂直溢出皆為 0、瀏覽器例外 0。正式主頁與新版 JS HTTP 200，最後執行 `git diff --check`。
 - 風險：只改正式船員 modal 的 CSS 尺寸、圖層縮放、文字與按鈕位置，不改角色圖來源、角色 id、船員數值、船長切換、攜帶物規則、`gameState`、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 同步流程。極長數值或招式內容仍在各自資訊框內垂直捲動，不會撐大整個詳情視窗。
 
 #### 2026-07-17 — 詳情角色圖上移與說明木板底
 
 - 範圍：依使用者正式頁截圖修正船員詳情左側角色窗。保留角色圖 1.16 倍等比例縮放與底部基準，再將圖片相對窗口向上移 14%，讓五檔尼卡等角色的圖像頂端貼到挖空窗頂，不再保留大段空白。角色圖下方的目前形態／進化說明改成近乎不透明的深色木板漸層，增加金色邊框、內框與陰影，左右及底部直接貼齊角色框，不再留下藍色空隙。主頁快取版本更新為 `20260717-crew-portrait-edge-v4`。
 - 檔案：`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js` 與 HTML inline script 檢查；使用正式 `RECOVERED` 雲端紀錄開啟五檔尼卡與鷹眼詳情，桌機 1440×900 實際確認五檔雲霧貼到窗口頂、鷹眼帽子沒有被裁掉、說明木板底與金邊可見，木板底部與角色窗底部間距為 0。詳情 modal 完整位於 viewport，頁面水平／垂直溢出為 0、瀏覽器例外 0；正式主頁與新版 JS HTTP 200，最後執行 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js` 與 HTML inline script 檢查；使用正式 `RECOVERED` 雲端紀錄開啟五檔尼卡與鷹眼詳情，桌機 1440×900 實際確認五檔雲霧貼到窗口頂、鷹眼帽子沒有被裁掉、說明木板底與金邊可見，木板底部與角色窗底部間距為 0。詳情 modal 完整位於 viewport，頁面水平／垂直溢出為 0、瀏覽器例外 0；正式主頁與新版 JS HTTP 200，最後執行 `git diff --check`。
 - 風險：只改船員詳情角色圖的視覺位移與說明區底色，不改角色圖片檔案、角色資料、進化文字、船員數值、遊戲狀態、存檔或多人同步流程；角色圖仍由窗口裁切，因此不會壓到右側資訊或底部操作列。
 
 #### 2026-07-17 — 船員透明矩形與角色窗縫隙修正
@@ -4105,8 +3601,7 @@ ode --check public/js/board_game.js` 與 HTML inline script 檢查；使用正�
 
 - 範圍：檢查使用者放入的 3 張去背 WebP 皆具 RGBA 透明通道後，由收件資料夾固定命名並歸檔為 `training_detail_panel_frame.webp`、`training_stat_row_frame.webp`、`training_material_rules_frame.webp`。正式 `openTrainingDetailModal()` 改為 3:2 海賊木框介面：左側沿用角色圖，中央以六條素材列顯示生命／攻擊／防禦／戰術／意志／速度的修行點數、修行與記憶來源、進度及實際加成，右側羊皮紙框搭配既有道具圖整理五組材料規則，內容超出時可框內捲動；底部保留完整換算規則、返回船員與關閉。從名冊進入詳情再進修行時會保留返回來源，返回詳情後仍可回名冊。主頁快取版本更新為 `20260718-training-ui-v1`。
 - 檔案：`public/images/board/training_ui/training_detail_panel_frame.webp`、`public/images/board/training_ui/training_stat_row_frame.webp`、`public/images/board/training_ui/training_material_rules_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：確認三張正式素材尺寸分別為 1536×1024、2400×360、1024×1536，模式皆為 RGBA 且 alpha 範圍為 0～255；執行 
-ode --check public/js/board_game.js` 與 HTML inline script 檢查。使用正式 `RECOVERED` 雲端紀錄由船員名冊點五檔尼卡，依序進入船員詳情與修行詳情：桌機 1440×900 的 modal 為 1240×827、四周至少保留 37px；平板 1024×768 為 963×642、四周至少保留 31px。兩種尺寸皆顯示 6 條修行列、5 組材料規則、三張正式素材與兩個底部按鈕，所有正式素材自然尺寸正確、頁面水平／垂直溢出為 0、瀏覽器例外 0；返回船員可回五檔詳情，再返回名冊。另確認正式頁、新版 JS 與三張素材 HTTP 200，最後執行 `git diff --check`。
+- 驗證：確認三張正式素材尺寸分別為 1536×1024、2400×360、1024×1536，模式皆為 RGBA 且 alpha 範圍為 0～255；執行 `node --check public/js/board_game.js` 與 HTML inline script 檢查。使用正式 `RECOVERED` 雲端紀錄由船員名冊點五檔尼卡，依序進入船員詳情與修行詳情：桌機 1440×900 的 modal 為 1240×827、四周至少保留 37px；平板 1024×768 為 963×642、四周至少保留 31px。兩種尺寸皆顯示 6 條修行列、5 組材料規則、三張正式素材與兩個底部按鈕，所有正式素材自然尺寸正確、頁面水平／垂直溢出為 0、瀏覽器例外 0；返回船員可回五檔詳情，再返回名冊。另確認正式頁、新版 JS 與三張素材 HTTP 200，最後執行 `git diff --check`。
 - 風險：本次只改修行詳情的正式 UI、素材引用與返回來源傳遞；`TRAINING_STATS`、每項修行上限、生命／五維／速度換算、材料效果、角色 id、角色數值、存檔欄位、localStorage key、Socket.IO event 與 `BOARD_GAME_STATE` 均未變更。右側材料規則使用代表性既有道具圖，不新增道具資料或素材 id。
 
 #### 修行詳情角色圖頂對齊與標題分區
@@ -4162,49 +3657,42 @@ ode --check public/js/board_game.js` 與 HTML inline script 檢查。使用正�
 
 - 範圍：正式修行詳情左下六角雷達圖改為預設顯示角色目前生命、攻擊、防禦、戰術、意志、速度總能力值；點擊圖面切換為六項修行點數，再點一次切回總能力。圖中央顯示目前模式，滑鼠、觸控與鍵盤皆使用同一按鈕入口；主頁快取版本更新為 `20260718-training-radar-toggle-v9`。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：以隔離正式流程完成三名角色選擇後進入修行詳情，桌機 1440×900 與平板 1024×768 都預設顯示總數據（測試角色為生命 132、攻擊 98、防禦 94、戰術 102、意志 108、速度 107）；點擊後完整切換為測試修行數據 6／9／12／15／18／21，再次點擊返回同一組總數據。兩種尺寸的六項標籤皆位於雷達木框內、modal 完整位於 viewport、頁面水平／垂直溢出皆為 0，瀏覽器無例外。另執行 
-ode --check public/js/board_game.js`、正式 HTML inline script 語法、正式頁／新版 JS HTTP 200 與 `git diff --check`。
+- 驗證：以隔離正式流程完成三名角色選擇後進入修行詳情，桌機 1440×900 與平板 1024×768 都預設顯示總數據（測試角色為生命 132、攻擊 98、防禦 94、戰術 102、意志 108、速度 107）；點擊後完整切換為測試修行數據 6／9／12／15／18／21，再次點擊返回同一組總數據。兩種尺寸的六項標籤皆位於雷達木框內、modal 完整位於 viewport、頁面水平／垂直溢出皆為 0，瀏覽器無例外。另執行 `node --check public/js/board_game.js`、正式 HTML inline script 語法、正式頁／新版 JS HTTP 200 與 `git diff --check`。
 - 風險：只切換雷達圖的顯示來源；總能力沿用角色已同步的 `baseStats`，修行點數沿用既有 training 資料，不新增或改名 `gameState` 欄位，不改角色能力計算、材料、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 同步流程。
 
 #### 修行道具圖片式數量視窗
 
 - 範圍：將使用者放入 `training_ui/incoming/` 的 `training_item_quantity_frame.webp` 檢查後移至正式素材根層，接入修行鳥羽／藍波飲／四階修行材料與戰鬥記憶貝的多數量選擇流程。新 16:9 圖片式視窗依素材框位顯示道具圖、道具名稱、持有數、目前角色與修行概況、減少／數量／增加、最多有效數量及確認／返回按鈕；既有控制項 id 與事件處理維持不變。主頁快取版本更新為 `20260718-training-quantity-ui-v10`。
 - 檔案：`public/images/board/training_ui/training_item_quantity_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：以隔離正式流程完成三名角色選擇後測試生命鳥羽與戰鬥記憶貝；桌機 1440×900 的視窗為 960×540，平板 1024×768 同為 960×540，均完整位於 viewport，所有控制項位於圖片框內且頁面水平／垂直溢出為 0。生命鳥羽持有 5 個時可由 1 加至 2、減回 1，再向下循環到最大有效 5；戰鬥記憶貝持有 3 個時可由 1 加至 2並顯示最大有效 3。取消均返回同一修行詳情；平板確認使用 2 個生命鳥羽後，持有數由 5 變 3、生命修行由 0 變 2並返回修行詳情。圖片載入尺寸為 1672×941，瀏覽器無例外。另執行 
-ode --check public/js/board_game.js`、正式 HTML inline script 語法、正式頁／新版 JS／新增 WebP HTTP 200 與 `git diff --check`。
+- 驗證：以隔離正式流程完成三名角色選擇後測試生命鳥羽與戰鬥記憶貝；桌機 1440×900 的視窗為 960×540，平板 1024×768 同為 960×540，均完整位於 viewport，所有控制項位於圖片框內且頁面水平／垂直溢出為 0。生命鳥羽持有 5 個時可由 1 加至 2、減回 1，再向下循環到最大有效 5；戰鬥記憶貝持有 3 個時可由 1 加至 2並顯示最大有效 3。取消均返回同一修行詳情；平板確認使用 2 個生命鳥羽後，持有數由 5 變 3、生命修行由 0 變 2並返回修行詳情。圖片載入尺寸為 1672×941，瀏覽器無例外。另執行 `node --check public/js/board_game.js`、正式 HTML inline script 語法、正式頁／新版 JS／新增 WebP HTTP 200 與 `git diff --check`。
 - 風險：只替換多數量選擇的 UI 結構與樣式；單一有效數量仍沿用原本直接使用，材料 id、持有數計算、最大有效數量、消耗、修行／記憶效果、角色能力、任務紀錄、localStorage key、Socket.IO event 與 `BOARD_GAME_STATE` 同步流程不變。
 
 #### 修行道具數量視窗文字對齊
 
 - 範圍：依 `training_item_quantity_frame.webp` 實際 1672×941 框位重新校正正式數量視窗文字層；標題、道具資料列、角色狀態列、減少／數量／增加、最多有效／使用數量及底部確認／返回文字分別下移至各自木框的垂直中心，不修改圖片本身。主頁快取版本更新為 `20260718-training-quantity-align-v11`。
 - 檔案：`public/board_game.html`、`docs/DEV_WORKFLOW.md`。
-- 驗證：在正式 `board_game.html` 以桌機 1440×900、平板 1024×768 實際開啟 960×540 數量視窗；逐項檢查標題、道具名稱／持有數、角色狀態、加減號、中央數量、最多有效／使用數量與確認／返回文字均落在素材對應框的垂直中央，視窗完整位於 viewport，頁面水平／垂直溢出皆為 0。另執行 
-ode --check public/js/board_game.js`、正式 HTML inline script 語法、正式頁／新版 JS／正式 WebP HTTP 200 與 `git diff --check`。
+- 驗證：在正式 `board_game.html` 以桌機 1440×900、平板 1024×768 實際開啟 960×540 數量視窗；逐項檢查標題、道具名稱／持有數、角色狀態、加減號、中央數量、最多有效／使用數量與確認／返回文字均落在素材對應框的垂直中央，視窗完整位於 viewport，頁面水平／垂直溢出皆為 0。另執行 `node --check public/js/board_game.js`、正式 HTML inline script 語法、正式頁／新版 JS／正式 WebP HTTP 200 與 `git diff --check`。
 - 風險：只調整數量視窗的 CSS 百分比位置與高度，不改圖片、控制項 id、加減事件、最大有效數量、道具消耗、返回流程、存檔或多人同步。
 
 #### 修行道具數量視窗圓形道具圖修正
 
 - 範圍：依 `training_item_quantity_frame.webp` 的實際透明圓孔（原圖約 x=310–519、y=247–457）重新校正左側道具圖遮罩；圓形容器擴大並移到素材內圈，補滿深黑底，圖片改為完整覆蓋後以圓形裁切，避免露出後方地圖或殘留方形黑底。主頁快取版本更新為 `20260718-training-quantity-icon-v12`。
 - 檔案：`public/board_game.html`、`docs/DEV_WORKFLOW.md`。
-- 驗證：在正式 `board_game.html` 以桌機 1440×900、平板 1024×768 開啟修行道具數量視窗，確認生命鳥羽圖片覆蓋圓孔、黑底完整、圓形邊緣不越過金框，視窗完整位於 viewport 且頁面無水平／垂直溢出；另執行 
-ode --check public/js/board_game.js`、正式 HTML inline script 語法、正式頁／新版 JS／道具圖 HTTP 200 與 `git diff --check`。
+- 驗證：在正式 `board_game.html` 以桌機 1440×900、平板 1024×768 開啟修行道具數量視窗，確認生命鳥羽圖片覆蓋圓孔、黑底完整、圓形邊緣不越過金框，視窗完整位於 viewport 且頁面無水平／垂直溢出；另執行 `node --check public/js/board_game.js`、正式 HTML inline script 語法、正式頁／新版 JS／道具圖 HTTP 200 與 `git diff --check`。
 - 風險：僅調整正式數量視窗道具圖的 CSS 定位、遮罩、底色與填滿方式；不修改素材檔、道具 id、持有數、使用效果、存檔欄位或多人同步。
 
 #### 修行道具數量視窗完整圖與加減鍵對齊
 
 - 範圍：保留左側圓孔已補滿的深黑底，將道具圖片縮回圓孔內 86% 並使用 `object-fit:contain`，使生命鳥羽等直向素材完整顯示、不再被圓邊裁掉；依數量底圖左右方框中心重新定位 `－` 與 `＋`，同步微調命中區的上緣、寬度與高度。主頁快取版本更新為 `20260718-training-quantity-controls-v13`。
 - 檔案：`public/board_game.html`、`docs/DEV_WORKFLOW.md`。
-- 驗證：在正式 `board_game.html` 以桌機 1440×900、平板 1024×768 開啟生命鳥羽數量視窗，確認完整羽毛位於黑色圓孔內，黑底仍填滿至金框；`－` 與 `＋` 的文字中心及按鈕命中區分別對準左右木框，視窗與頁面無溢出。另執行 
-ode --check public/js/board_game.js`、正式 HTML inline script、正式頁／新版 JS／道具圖 HTTP 200 與 `git diff --check`。
+- 驗證：在正式 `board_game.html` 以桌機 1440×900、平板 1024×768 開啟生命鳥羽數量視窗，確認完整羽毛位於黑色圓孔內，黑底仍填滿至金框；`－` 與 `＋` 的文字中心及按鈕命中區分別對準左右木框，視窗與頁面無溢出。另執行 `node --check public/js/board_game.js`、正式 HTML inline script、正式頁／新版 JS／道具圖 HTTP 200 與 `git diff --check`。
 - 風險：只調整道具圖內縮比例與加減鍵 CSS；控制項 id、循環／加減事件、最大有效數量、消耗、修行效果、存檔與多人同步不變。
 
 #### Board 手機／平板主畫面全螢幕範圍
 
 - 範圍：新增 Board 專用 `board_manifest.webmanifest`，入口固定為 `board_start.html`，scope 明確涵蓋同目錄正式流程，顯示模式優先使用 `fullscreen`、以 `standalone` 相容後備並鎖定橫向；在 `board_start.html`、`board_game.html` 補齊 manifest、Apple／通用 mobile web app、黑色透明狀態列、主畫面名稱、theme color 與 touch icon。舊卡牌入口的 `manifest.webmanifest` 不修改。大廳到主遊戲仍沿用同來源 `location.href`，正式戰鬥／推進城／Marineford／水之七島仍在主遊戲外層內以全畫面 iframe 顯示。
 - 檔案：`public/board_manifest.webmanifest`、`public/board_start.html`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：解析 Board manifest JSON，確認 `start_url=./board_start.html`、`scope=./`、`display=fullscreen`、fallback 含 `standalone`；檢查兩個正式外層頁皆載入同一 manifest 且具有 Apple／mobile web app 標記，確認正式入口、主遊戲、manifest 與兩個 icon HTTP 200。另執行 
-ode --check public/js/board_start.js`、
-ode --check public/js/board_game.js`、兩頁 HTML inline script 語法與 `git diff --check`。Safari 主畫面是否移除網址工具列須在 iPhone／iPad 刪除舊捷徑、重新加入後實機驗證。
+- 驗證：解析 Board manifest JSON，確認 `start_url=./board_start.html`、`scope=./`、`display=fullscreen`、fallback 含 `standalone`；檢查兩個正式外層頁皆載入同一 manifest 且具有 Apple／mobile web app 標記，確認正式入口、主遊戲、manifest 與兩個 icon HTTP 200。另執行 `node --check public/js/board_start.js`、`node --check public/js/board_game.js`、兩頁 HTML inline script 語法與 `git diff --check`。Safari 主畫面是否移除網址工具列須在 iPhone／iPad 刪除舊捷徑、重新加入後實機驗證。
 - 風險：iPhone／iPad 會把主畫面捷徑的 manifest／web clip 設定快取於安裝時，既有捷徑必須刪除後從 `board_start.html` 重新「加入主畫面」才會套用；本次不修改房間導航、Socket.IO event、遊戲狀態、存檔或同步。
 
 #### 2026-07-18 — 擲骰介面素材收件資料夾
@@ -4218,8 +3706,7 @@ ode --check public/js/board_game.js`、兩頁 HTML inline script 語法與 `git 
 
 - 範圍：檢查使用者提供的主框與 1～9 點共 10 張 RGBA WebP，確認點數、尺寸與透明通道後固定命名歸檔至 `public/images/board/dice_ui/`。正式 `dice-hud` 改為覆蓋整個 viewport 的航海木框介面，上方顯示玩家／行動、中央輪播實際骰面、下方顯示本次範圍或條件；數字／特殊文字骰仍保留文字 fallback。骰面預先載入，一般滾動延長為約 2.4～3.2 秒，結果停留 3 秒後才關閉。`getTeamEffects()` 將移動型有效人數封頂 3 名，移動骰最高由 10 修正為 9，符合職能被動最高 3 名規則；指定步數券流程不變。主頁快取版本更新為 `20260718-dice-ui-v1`。
 - 檔案：`public/images/board/dice_ui/dice_stage_frame.webp`、`public/images/board/dice_ui/dice_face_1.webp`～`dice_face_9.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：確認 10 張正式素材存在、主框為 1672×941、九張骰面均為 1254×1254 RGBA 且 alpha 範圍為 0～255；執行 
-ode --check public/js/board_game.js` 與正式 HTML script 檢查。使用正式 `board_game.html` 實際瀏覽器渲染桌機 1440×900 與平板 1024×768，檢查主框、標題、1～9 骰面、結果停格、底部說明、全螢幕遮罩及 viewport 溢出；確認正式頁、JS 與 10 張素材 HTTP 200，最後執行 `git diff --check`。
+- 驗證：確認 10 張正式素材存在、主框為 1672×941、九張骰面均為 1254×1254 RGBA 且 alpha 範圍為 0～255；執行 `node --check public/js/board_game.js` 與正式 HTML script 檢查。使用正式 `board_game.html` 實際瀏覽器渲染桌機 1440×900 與平板 1024×768，檢查主框、標題、1～9 骰面、結果停格、底部說明、全螢幕遮罩及 viewport 溢出；確認正式頁、JS 與 10 張素材 HTTP 200，最後執行 `git diff --check`。
 - 風險：移動型第 4 名以上不再額外提高移動骰上限、戰鬥速度或逃跑成功門檻，這是依「職能被動最高 3 名」規則修正既有漏封頂行為；不新增或改名 `gameState` 欄位，不改角色／道具 id、指定步數券、移動路線、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。多人觀看方仍使用既有 `dice` UI event 的 `maxFace`、`result` 與 `settleDelay` 播放相同骰面。
 
 #### 2026-07-18 — 攜帶物整備 UI 素材收件資料夾
@@ -4233,8 +3720,7 @@ ode --check public/js/board_game.js` 與正式 HTML script 檢查。使用正式
 
 - 範圍：檢查使用者放入的去背 WebP 為 1659×948 RGBA、alpha 範圍 0～255，確認左側道具窗為真正透明挖空後固定命名為 `carry_item_panel_frame.webp`。正式 `openEquipBattleCarryModal()` 改為圖片式 16:9 攜帶物整備：左側顯示目前道具、名稱、稀有度、效果與卸下按鈕，右側以可捲動橫列完成裝備／更換，底部返回來源；船員詳情與目前玩家船員卡都移除獨立卸下按鈕，統一只留「攜帶物」入口。依使用者檢查回饋，右側標題與數量向中間內縮並下移，避開上方海浪角飾；清單恢復較長的橫條寬度，上下邊界仍避開四角裝飾，每頁只呈現 5 個完整項目。主頁快取版本更新為 `20260718-carry-item-ui-v1`。
 - 檔案：`public/images/board/carry_item_ui/carry_item_panel_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認正式 `board_game.html` 與新 WebP HTTP 200。以隔離正式流程在 Chrome 實際建立 3 名船員並放入 76 個測試攜帶物：桌機 1440×900 的視窗為 1240×709、平板 1024×768 為 973×556，兩者均完整位於 viewport、頁面水平／垂直溢出為 0且無瀏覽器例外；實際由名冊進入船員詳情再開啟攜帶物，裝備後左側正確顯示 1254×1254 道具圖與可用的卸下按鈕，卸下後背包項目由 75 回到 76並顯示未裝備狀態，返回按鈕回到同一船員詳情。另確認平板右側標題與數量避開上方角飾，較長的清單橫條仍留在主框內且上下不壓四角裝飾；最後執行 HTML script、素材存在與 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js`；確認正式 `board_game.html` 與新 WebP HTTP 200。以隔離正式流程在 Chrome 實際建立 3 名船員並放入 76 個測試攜帶物：桌機 1440×900 的視窗為 1240×709、平板 1024×768 為 973×556，兩者均完整位於 viewport、頁面水平／垂直溢出為 0且無瀏覽器例外；實際由名冊進入船員詳情再開啟攜帶物，裝備後左側正確顯示 1254×1254 道具圖與可用的卸下按鈕，卸下後背包項目由 75 回到 76並顯示未裝備狀態，返回按鈕回到同一船員詳情。另確認平板右側標題與數量避開上方角飾，較長的清單橫條仍留在主框內且上下不壓四角裝飾；最後執行 HTML script、素材存在與 `git diff --check`。
 - 風險：本次只改正式攜帶物 UI 結構、入口文字及素材引用；`battleCarryItem` 欄位、攜帶物字串 id、能力者裝備限制、綁定／四皇對策卸下判斷、背包數量移轉、任務事件、角色資料、localStorage key、Socket.IO event 與 `BOARD_GAME_STATE` 同步流程全部沿用既有程式。觀看方與非目前操作玩家的控制權仍沿用原本外層入口判斷。
 
 ### 2026-07-19
@@ -4257,9 +3743,7 @@ ode --check public/js/board_game.js`；確認正式 `board_game.html` 與新 Web
 
 - 範圍：檢查使用者放入 `cosmetic_frame_ui/incoming/` 的去背 WebP 為 1672×941 RGBA、alpha 範圍 0～255，確認左側預覽舞台、右側捲動清單與底部雙按鈕安全區後固定命名為 `cosmetic_frame_panel_frame.webp`。正式 `openCrewCosmeticFrameModal()` 改用圖片式航海外觀框介面，左側以目前船員角色圖與正式戰鬥框相同的方形卡比例、圖片路徑及圖層座標即時呈現套框效果；右側可選無框、通用成就框與目前角色可用專屬框，依使用者回饋移除清單縮圖，只顯示框名、來源與使用／預覽狀態，並將清單四邊內縮避開素材角飾，每頁固定呈現 4 個完整文字列並整列吸附捲動，不露出被外框裁掉的半列。點選清單只更新本次預覽，不修改船員；按「裝備此框／改成無框」後才沿用既有 `equipCrewCosmeticFrame()` 寫入並推送 `BOARD_GAME_STATE`，返回則回到同一船員詳情。主頁快取版本更新為 `20260719-cosmetic-frame-ui-v1`。
 - 檔案：`public/images/board/cosmetic_frame_ui/cosmetic_frame_panel_frame.webp`、`public/js/board_cosmetic_frame_preview.js`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_cosmetic_frame_preview.js`、
-ode --check public/js/board_game.js`，確認預覽資料引用的 78 個正式圖片路徑全部存在。以正式 `board_game.html` 的隔離頁面狀態從船員名冊進入角色詳情與外觀框視窗：桌機 1440×900 實測黃金電話蟲框、平板 1024×768 實測 3D2Y 框，主框均完整位於 viewport、清單可捲動且頁面水平／垂直溢出為 0；再以 9 張已解鎖通用框加無框共 10 個文字選項測試捲到最末 `空白王座框`，畫面只顯示 4 個完整文字列，沒有縮圖、半列或文字壓住素材角飾，選中項仍完整可見。點選框後確認 `cosmeticFrameId` 仍未變更，按確認後才由空值改為 `goldenDenDen`。另確認正式頁、新版 JS 與正式 WebP HTTP 200、所有預覽圖層載入成功、HTML inline script 語法與 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_cosmetic_frame_preview.js`、`node --check public/js/board_game.js`，確認預覽資料引用的 78 個正式圖片路徑全部存在。以正式 `board_game.html` 的隔離頁面狀態從船員名冊進入角色詳情與外觀框視窗：桌機 1440×900 實測黃金電話蟲框、平板 1024×768 實測 3D2Y 框，主框均完整位於 viewport、清單可捲動且頁面水平／垂直溢出為 0；再以 9 張已解鎖通用框加無框共 10 個文字選項測試捲到最末 `空白王座框`，畫面只顯示 4 個完整文字列，沒有縮圖、半列或文字壓住素材角飾，選中項仍完整可見。點選框後確認 `cosmeticFrameId` 仍未變更，按確認後才由空值改為 `goldenDenDen`。另確認正式頁、新版 JS 與正式 WebP HTTP 200、所有預覽圖層載入成功、HTML inline script 語法與 `git diff --check`。
 - 風險：新增的是外觀框選擇的視覺主框與確認前預覽步驟；不新增或改名 `gameState` 欄位，不更動框款 id、解鎖／角色限制、舊存檔回補、實際戰鬥頁框效果、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。只有確認動作會沿用既有同步推送。
 
 #### 2026-07-19 — 任務日誌 UI 素材收件資料夾
@@ -4273,8 +3757,7 @@ ode --check public/js/board_game.js`，確認預覽資料引用的 78 個正式�
 
 - 範圍：檢查使用者放入的兩張去背 WebP，主框為 1672×941 RGBA、可重複任務橫條為 2172×724 RGBA，確認透明範圍與內容安全區後固定命名為 `mission_journal_panel_frame.webp`、`mission_journal_row_frame.webp`。正式 `openMissionJournalModal()` 改為圖片式任務日誌：左側以可捲動長條清單顯示任務等級、名稱、類型、進度及狀態，點選任務只更新本次 modal 的右側選取項；右側顯示等級徽記、條件、進度、獎勵、共同參與者／貢獻，以及既有領取、共同領取和放棄操作。空清單與關閉流程也納入同一主框。主頁快取版本更新為 `20260719-mission-journal-ui-v1`。
 - 檔案：`public/images/board/mission_journal_ui/mission_journal_panel_frame.webp`、`public/images/board/mission_journal_ui/mission_journal_row_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、正式 HTML inline script、兩張新素材存在與 HTTP 200、正式頁 HTTP 200 及 `git diff --check`。在正式 `board_game.html` 的隔離狀態建立 3 筆個人任務，桌機 1440×900 與平板 1024×768 實際開啟任務日誌；確認素材全數載入、主框完整位於 viewport、頁面無水平／垂直溢出、點選任務後右側標題與按鈕正確切換。另實際領取完成任務、放棄未完成任務並關閉視窗，任務清單分別由 3 筆降為 2 筆、再降為 1 筆。
+- 驗證：執行 `node --check public/js/board_game.js`、正式 HTML inline script、兩張新素材存在與 HTTP 200、正式頁 HTTP 200 及 `git diff --check`。在正式 `board_game.html` 的隔離狀態建立 3 筆個人任務，桌機 1440×900 與平板 1024×768 實際開啟任務日誌；確認素材全數載入、主框完整位於 viewport、頁面無水平／垂直溢出、點選任務後右側標題與按鈕正確切換。另實際領取完成任務、放棄未完成任務並關閉視窗，任務清單分別由 3 筆降為 2 筆、再降為 1 筆。
 - 風險：本次只替換正式任務日誌的呈現結構與本次視窗選取狀態；不新增或改名 `gameState` 欄位，不改任務 id、接取／共同任務上限、進度計算、貢獻、獎勵、領取與放棄函式、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。多人狀態仍由原本任務操作及完整快照同步。
 
 #### 2026-07-19 — 任務日誌圖文比例校正
@@ -4288,8 +3771,7 @@ ode --check public/js/board_game.js`、正式 HTML inline script、兩張新素�
 
 - 範圍：檢查使用者放入 `mission_journal_ui/` 的六張去背圓形等級章，依圖中文字確認第 1～6 張分別為 A、B、C、D、E、S，統一命名為 `mission_rank_a.webp`～`mission_rank_s.webp`。正式任務日誌的左側任務列小圓框與右側詳情大圓框改為依任務等級共用這套圓形圖，不再引用任務島的橫向 `rank_*.webp`。主頁快取版本更新為 `20260719-mission-rank-ui-v3`。
 - 檔案：`public/images/board/mission_journal_ui/mission_rank_a.webp`～`mission_rank_s.webp`、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：確認六張正式素材存在且檔名與圖中文字一一對應；執行 
-ode --check public/js/board_game.js`、HTML inline script、正式頁／新版 JS／六張素材 HTTP 200 與 `git diff --check`。以正式 `board_game.html` 在桌機 1440×900、平板 1024×768 開啟包含不同等級的任務日誌，確認小圓章與大圓章均等比例完整顯示在圓框內。
+- 驗證：確認六張正式素材存在且檔名與圖中文字一一對應；執行 `node --check public/js/board_game.js`、HTML inline script、正式頁／新版 JS／六張素材 HTTP 200 與 `git diff --check`。以正式 `board_game.html` 在桌機 1440×900、平板 1024×768 開啟包含不同等級的任務日誌，確認小圓章與大圓章均等比例完整顯示在圓框內。
 - 風險：只替換任務日誌的等級圖片來源與素材命名；任務島原有等級素材、任務 grade/id、進度、領取、放棄、共同任務、存檔及多人同步全部不變。
 
 #### 2026-07-19 — 任務日誌圓形等級章中心與直徑校正
@@ -4310,8 +3792,7 @@ ode --check public/js/board_game.js`、HTML inline script、正式頁／新版 J
 
 - 範圍：檢查使用者放入的 4 張 RGBA WebP，將兩張 1672×941 主框、2400×480 敵人橫列框固定命名歸檔；1920×819 職能階段橫列的實際 alpha 範圍僅為 1858×287，先裁掉上下透明留白後歸檔，避免正式介面縮小錯位。`openFleetInfoModal()` 改為圖片式船團資訊，左側切換四職能，右側同時顯示固有說明、完整 1～3 階效果、開啟／鎖定與尚差人數、目前實際效果，並區分偵查實際人數與瞭望台補正。`openDefeatedEnemyCodexModal()` 改為左側可捲動敵人清單與中右詳情，保留 portrait fallback、空紀錄、返回船團與關閉流程。主頁快取版本更新為 `20260719-fleet-codex-ui-v1`。
 - 檔案：`public/images/board/fleet_info_ui/fleet_info_panel_frame.webp`、`public/images/board/fleet_info_ui/fleet_role_stage_row_frame.webp`、`public/images/board/defeated_codex_ui/defeated_codex_panel_frame.webp`、`public/images/board/defeated_codex_ui/defeated_enemy_row_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、正式 HTML inline script、四張素材尺寸／alpha／路徑、正式頁與素材 HTTP 200、`git diff --check`；以正式 `board_game.html` 於桌機 1440×900 與平板 1024×768 開啟船團資訊及討伐紀錄，切換四職能與多筆敵人記錄，確認主框、圖片、文字、三階橫列、清單、詳情與按鈕皆在安全區且可操作。
+- 驗證：執行 `node --check public/js/board_game.js`、正式 HTML inline script、四張素材尺寸／alpha／路徑、正式頁與素材 HTTP 200、`git diff --check`；以正式 `board_game.html` 於桌機 1440×900 與平板 1024×768 開啟船團資訊及討伐紀錄，切換四職能與多筆敵人記錄，確認主框、圖片、文字、三階橫列、清單、詳情與按鈕皆在安全區且可操作。
 - 風險：只替換船團與討伐紀錄的呈現及視窗內選取狀態；不修改 `getTeamEffects()` 職能計算、敵人 id、討伐紀錄欄位、戰鬥累計、`gameState`、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
 
 #### 2026-07-19 — 船團資訊與討伐紀錄圖框精細對齊
@@ -4376,8 +3857,7 @@ ode --check public/js/board_game.js`、正式 HTML inline script、四張素材�
 
 - 範圍：查明正式敵人資料與舊討伐存檔使用穩定 key `lucci`，實際戰鬥立繪資料夾則為 `rob_lucci`；討伐紀錄原本直接用 key 組路徑，因而請求不存在的 `battle/enemies/lucci/normal.webp`。新增僅供討伐圖片路徑使用的 `lucci` → `rob_lucci` 相容對應，圖片與備援路徑共用同一轉換，不改敵人 key。主頁快取版本更新為 `20260720-defeated-cutout-v12`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/DEV_WORKFLOW.md`。
-- 驗證：確認 `public/images/board/battle/enemies/rob_lucci/normal.webp` 存在並可由正式頁 HTTP 200 載入；在正式頁的討伐 modal DOM 套用 `lucci` 相容後路徑，以桌機 1440×900 與平板 1024×768 實際截圖確認中央詳情顯示羅布・路基圖片，中央孔四邊亮青接縫像素為 0。另執行 
-ode --check`、HTML inline script、正式頁 HTTP 及 `git diff --check`。
+- 驗證：確認 `public/images/board/battle/enemies/rob_lucci/normal.webp` 存在並可由正式頁 HTTP 200 載入；在正式頁的討伐 modal DOM 套用 `lucci` 相容後路徑，以桌機 1440×900 與平板 1024×768 實際截圖確認中央詳情顯示羅布・路基圖片，中央孔四邊亮青接縫像素為 0。另執行 `node --check`、HTML inline script、正式頁 HTTP 及 `git diff --check`。
 - 風險：未改 `lucci`／`rob_lucci` 的既有資料 id、敵人數值、戰鬥流程、討伐存檔格式、localStorage、Socket.IO event 或 `BOARD_GAME_STATE`；只修正討伐 UI 的素材資料夾別名。
 
 #### 船隻資訊 UI 素材收件目錄建立
@@ -4391,8 +3871,7 @@ ode --check`、HTML inline script、正式頁 HTTP 及 `git diff --check`。
 
 - 範圍：檢查使用者放入的四張船隻資訊素材並統一命名為 `ship_info_panel_frame.webp`、`ship_info_slot_row_frame.webp`、`ship_info_upgrade_row_frame.webp`、`ship_info_item_row_frame.webp`。正式 `openShipInfoModal()` 攄為全螢幕航海主框，左側固定顯示目前船型與船名，右側提供船體總覽、裝備孔位、永久升級、船材道具四分頁；水之七島入口仍呼叫既有 `openWaterSevenWindow()`，其他地點顯示不可用提示。桌機孔位採雙欄、平板採單欄，升級與道具清單每次完整呈現三列後在素材框內捲動，避免顯示半列預覽。主頁快取版本更新為 `20260720-ship-info-ui-v1`。
 - 檔案：`public/images/board/ship_info_ui/ship_info_panel_frame.webp`、`public/images/board/ship_info_ui/ship_info_slot_row_frame.webp`、`public/images/board/ship_info_ui/ship_info_upgrade_row_frame.webp`、`public/images/board/ship_info_ui/ship_info_item_row_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：正式 `board_game.html` 套用與正式 DOM、CSS 相同的船隻資訊面板，在桌機 1440×900 與平板 1024×768 逐一檢查四個分頁；主框、船圖、標題、分頁、狀態列與按鈕均位於素材框內，升級／道具頁只顯示完整列並可內部捲動，兩種 viewport 皆無文件水平或垂直溢出。另執行 
-ode --check`、HTML inline script 語法檢查、正式頁／新版 JS／四張素材 HTTP 200 與 `git diff --check`。
+- 驗證：正式 `board_game.html` 套用與正式 DOM、CSS 相同的船隻資訊面板，在桌機 1440×900 與平板 1024×768 逐一檢查四個分頁；主框、船圖、標題、分頁、狀態列與按鈕均位於素材框內，升級／道具頁只顯示完整列並可內部捲動，兩種 viewport 皆無文件水平或垂直溢出。另執行 `node --check`、HTML inline script 語法檢查、正式頁／新版 JS／四張素材 HTTP 200 與 `git diff --check`。
 - 風險：只替換船隻資訊的顯示結構、素材與分頁事件；不修改船隻 id、裝備孔位、永久升級數值、材料數量、水之七服務、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
 
 #### 船隻資訊孔位單欄與道具文字框校正
@@ -4421,8 +3900,7 @@ ode --check`、HTML inline script 語法檢查、正式頁／新版 JS／四張�
 - 日期：2026-07-20。
 - 範圍：檢查使用者放入的 1672×941 RGBA 去背 WebP，確認左側角色窗是真正透明挖空後統一命名為 `move_learn_panel_frame.webp`。正式 `processNextPendingMoveLearn()` 在角色已滿 4 個招式時改為圖片式航海介面：左側顯示角色與等級資料，中央顯示新招式名稱、類型、需求等級、最大 PP、威力與效果，右側固定顯示 4 個既有招式。點右側招式只會選取並更新底部提示，必須再按「確認替換」才寫入；「先不學」、未滿 4 招時直接學會、待學習佇列清理及既有同步排程均保留。主頁快取版本更新為 `20260720-move-learn-ui-v1`。
 - 檔案：`public/images/board/move_learn_ui/move_learn_panel_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；以正式素材、正式 CSS 與等同正式 DOM 的技能替換面板，在桌機 1440×900、平板 1024×768 實際截圖檢查角色窗、中央資料、右側 4 招、選中狀態、提示與雙按鈕，兩種尺寸皆完整位於 viewport 且文字留在各自素材安全區。另確認正式頁、新版 JS 與素材 HTTP 200，完成 HTML inline script 語法與 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js`；以正式素材、正式 CSS 與等同正式 DOM 的技能替換面板，在桌機 1440×900、平板 1024×768 實際截圖檢查角色窗、中央資料、右側 4 招、選中狀態、提示與雙按鈕，兩種尺寸皆完整位於 viewport 且文字留在各自素材安全區。另確認正式頁、新版 JS 與素材 HTTP 200，完成 HTML inline script 語法與 `git diff --check`。
 - 風險：只替換學招／換招的顯示結構，並把原本點招式立即替換改為選取後確認；不修改招式 id、可攜帶上限、解鎖等級、技能效果、待學習佇列欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 同步格式。
 
 #### 招式修行卷使用後立即接續學招流程
@@ -4430,8 +3908,7 @@ ode --check public/js/board_game.js`；以正式素材、正式 CSS 與等同正
 - 日期：2026-07-20。
 - 範圍：修正 `applySkillTrainingItemToTarget()` 使用招式修行卷後只消耗道具、加入待學習佇列，卻又重開修行詳情或停在選人視窗，導致玩家看不到後續結果的問題。角色已滿 4 招時，使用捲軸後現在會立即關閉原視窗並開啟正式全螢幕替換介面；未滿 4 招時會立即學會、顯示提示，再回修行詳情或航海背包。主頁快取版本更新為 `20260720-move-learn-scroll-fix-v2`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`；確認滿 4 招分支在道具消耗及佇列建立後直接呼叫 `processNextPendingMoveLearn()`，未滿 4 招分支則寫入新招式並返回原來源。另確認正式頁、新版 JS HTTP 200，完成 HTML inline script 與 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js`；確認滿 4 招分支在道具消耗及佇列建立後直接呼叫 `processNextPendingMoveLearn()`，未滿 4 招分支則寫入新招式並返回原來源。另確認正式頁、新版 JS HTTP 200，完成 HTML inline script 與 `git diff --check`。
 - 風險：不修改招式修行卷 id、候選招式排序、道具消耗數量、4 招上限、待學習佇列資料格式、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`；只修正使用後的視窗接續與成功提示。
 
 #### 替換招式列 PP／威力框對齊
@@ -4455,8 +3932,7 @@ ode --check public/js/board_game.js`；確認滿 4 招分支在道具消耗及�
 - 日期：2026-07-20。
 - 範圍：檢查收件區兩張去背 WebP 的尺寸與 alpha，統一命名為 `captain_selection_panel_frame.webp`、`captain_selection_row_frame.webp` 並接入正式 `openCaptainSelectionModal()`。介面左側預覽目前點選船員的大圖、類型、等級、HP／PP／速度與被動，右側以共用橫列列出最多 4 名船員；點橫列只切換預覽，按「確認任命」後才改變船長。目前船長與瀕死船員會顯示狀態，瀕死船員維持不可選。主頁快取版本更新為 `20260720-captain-selection-ui-v1`。
 - 檔案：`public/images/board/captain_selection_ui/captain_selection_panel_frame.webp`、`public/images/board/captain_selection_ui/captain_selection_row_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js` 與 HTML inline script 語法檢查；用正式頁、正式 CSS、正式 `openCaptainSelectionModal()` 與四名正式角色資料，在 Chrome 1440×900、1024×768 實際截圖檢查主框、角色窗、圓形頭像、四列內容、狀態、提示與雙按鈕，兩種 viewport 均無文件溢出。另實際觸發確認任命，確認 `activeCrewIndex` 由 0 改為 1；瀕死列及確認按鈕皆 disabled。正式頁與兩張素材確認 HTTP 200，並完成 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js` 與 HTML inline script 語法檢查；用正式頁、正式 CSS、正式 `openCaptainSelectionModal()` 與四名正式角色資料，在 Chrome 1440×900、1024×768 實際截圖檢查主框、角色窗、圓形頭像、四列內容、狀態、提示與雙按鈕，兩種 viewport 均無文件溢出。另實際觸發確認任命，確認 `activeCrewIndex` 由 0 改為 1；瀕死列及確認按鈕皆 disabled。正式頁與兩張素材確認 HTTP 200，並完成 `git diff --check`。
 - 風險：只替換選擇船長的顯示與確認互動；不修改角色 id、船長效果、戰鬥上場規則、`activeCrewIndex` 欄位名稱、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。任命後仍沿用既有 `renderAll()` 同步路徑。
 
 #### 指定本回合步數 UI 素材收件目錄建立
@@ -4472,8 +3948,7 @@ ode --check public/js/board_game.js` 與 HTML inline script 語法檢查；用�
 - 日期：2026-07-20。
 - 範圍：檢查收件區 1672×941、含 alpha 的去背 WebP，統一命名為 `fixed_step_panel_frame.webp` 並接入正式 `openFixedStepModal()`。介面左側顯示指定步數券、目前持有數、道具說明及直接顯示路線提示；右側以兩排三列提供 1～6 步。點選步數後仍沿用既有道具扣除、`presetStep`、紀錄、重繪與 `rollDice()` 指定步數分支，直接進入可走路線／抵達格選擇，不再要求玩家另按骰子。主頁快取版本更新為 `20260720-fixed-step-ui-v1`。
 - 檔案：`public/images/board/fixed_step_ui/fixed_step_panel_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：以正式 `board_game.html`、正式素材及正式 `openFixedStepModal()` 在 Chrome 1440×900 與 1024×768 實際截圖，逐區確認左側道具圖／名稱／說明、六個步數框、底部提示與返回背包按鈕都位於素材安全區，兩種 viewport 均完整留在畫面內。另執行 
-ode --check public/js/board_game.js`、HTML inline script 語法、正式頁／新版 JS／兩張道具與主框素材 HTTP、圖片尺寸與 alpha、`git diff --check`。
+- 驗證：以正式 `board_game.html`、正式素材及正式 `openFixedStepModal()` 在 Chrome 1440×900 與 1024×768 實際截圖，逐區確認左側道具圖／名稱／說明、六個步數框、底部提示與返回背包按鈕都位於素材安全區，兩種 viewport 均完整留在畫面內。另執行 `node --check public/js/board_game.js`、HTML inline script 語法、正式頁／新版 JS／兩張道具與主框素材 HTTP、圖片尺寸與 alpha、`git diff --check`。
 - 風險：只替換指定步數視窗的顯示結構與素材；不修改 `fixed_step` id、持有數、消耗數量、1～6 步規則、`presetStep` 欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。
 
 #### 背包道具選擇角色 UI 素材收件目錄建立
@@ -4529,8 +4004,7 @@ ode --check public/js/board_game.js`、HTML inline script 語法、正式頁／�
 - 日期：2026-07-20。
 - 範圍：修正 CPU 蒙其・D・龍進入戰鬥後可能停在全螢幕轉場、必須 F5 才恢復的時序問題。CPU 會立即略過戰前對話，而龍的開場被動「革命風暴」同時排入首次上場速度 +1 視覺事件；原流程可能在戰鬥覆蓋層尚未完成開啟時重繪並重啟轉場。現在開場被動視覺只會在覆蓋層同時具備 `open`、`ready` 且戰鬥 iframe 已載入後播放，尚未就緒時以短間隔等待；進場計時已建立時的重繪不再清除或重設該轉場，視覺播放失敗亦會解除動畫鎖。主頁快取版本更新為 `20260720-cpu-opening-passive-entry-fix-v1`。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、HTML inline script 語法檢查、正式入口／主遊戲／新版 JS HTTP 200 與 `git diff --check`。另以正式 `board_game.html?cpu4=1` 注入正式蒙其・D・龍與隨機一般敵島，模擬 CPU 立即略過戰前對話；在 Chrome 1440×900、1024×768 逐段觀察 0.1～5 秒轉場，兩種尺寸都先保留被動佇列，直到覆蓋層具備 `open`／`ready` 且 iframe `loaded=true` 後才播放 `passive-opening`，5 秒內演出與動畫鎖均結束。戰鬥層完整覆蓋 viewport、文件無水平或垂直溢出，瀏覽器例外為 0。
+- 驗證：執行 `node --check public/js/board_game.js`、HTML inline script 語法檢查、正式入口／主遊戲／新版 JS HTTP 200 與 `git diff --check`。另以正式 `board_game.html?cpu4=1` 注入正式蒙其・D・龍與隨機一般敵島，模擬 CPU 立即略過戰前對話；在 Chrome 1440×900、1024×768 逐段觀察 0.1～5 秒轉場，兩種尺寸都先保留被動佇列，直到覆蓋層具備 `open`／`ready` 且 iframe `loaded=true` 後才播放 `passive-opening`，5 秒內演出與動畫鎖均結束。戰鬥層完整覆蓋 viewport、文件無水平或垂直溢出，瀏覽器例外為 0。
 - 風險：只調整戰鬥進場與開場被動視覺的本機時序；不修改「革命風暴」的速度、開場階級或風／暴風傷害效果，不新增 `gameState`／`battleState` 欄位，不改角色 id、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。其他具有開場被動的 CPU 角色亦會套用同一安全等待。
 
 #### 治療道具使用數量 UI 素材收件目錄建立
@@ -4546,8 +4020,7 @@ ode --check public/js/board_game.js`、HTML inline script 語法檢查、正式�
 - 日期：2026-07-20。
 - 範圍：檢查收件區 1672×941 RGBA 去背 WebP 的尺寸、alpha、正圓道具孔與各文字安全區，統一命名為 `healing_item_quantity_frame.webp` 並接入正式 `openBackpackHealingQuantityModal()`。介面顯示道具圖、名稱、持有數、目標角色目前／最大 HP、減少／數量／增加、最多有效數量、預計回復 HP，以及確定使用／返回選人；有效數量只有 1 時仍沿用原本直接使用。所有原事件 ID 與治療套用函式保留，主頁快取版本更新為 `20260720-healing-quantity-ui-v1`。
 - 檔案：`public/images/board/healing_quantity_ui/healing_item_quantity_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 通過；正式 `board_start.html`、`board_game.html` 與新素材皆以本機伺服器確認 HTTP 200。實際瀏覽器以 1440×900 桌機、1024×768 平板及 844×390 橫向手機進入航海背包、選擇小塊帶骨肉與目標船員；三種尺寸均無框位或視窗溢出。數量由 1 加到 2 時預覽由 60 更新為 120 HP，確定使用後角色 HP 由 1 變 121、持有數由 5 變 3；返回選人會關閉數量介面、回到原選人頁，且不扣道具也不改 HP。HTML 無可執行 inline script，`git diff --check` 已執行。
+- 驗證：`node --check public/js/board_game.js` 通過；正式 `board_start.html`、`board_game.html` 與新素材皆以本機伺服器確認 HTTP 200。實際瀏覽器以 1440×900 桌機、1024×768 平板及 844×390 橫向手機進入航海背包、選擇小塊帶骨肉與目標船員；三種尺寸均無框位或視窗溢出。數量由 1 加到 2 時預覽由 60 更新為 120 HP，確定使用後角色 HP 由 1 變 121、持有數由 5 變 3；返回選人會關閉數量介面、回到原選人頁，且不扣道具也不改 HP。HTML 無可執行 inline script，`git diff --check` 已執行。
 - 風險：本次只替換多數量治療視窗的圖片與排版；不修改道具 id、回復值、最大有效數量計算、只有 1 個時直接使用的分支、背包資料、`gameState` 欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。
 
 #### CPU 指令 UI 素材收件目錄建立
@@ -4563,8 +4036,7 @@ ode --check public/js/board_game.js` 通過；正式 `board_start.html`、`board
 - 日期：2026-07-20。
 - 範圍：將使用者提供的 1672×941 主框與重新生成的 2172×724 超寬 CPU 橫列框統一命名為 `cpu_strategy_panel_frame.webp`、`cpu_strategy_row_frame.webp`，接入正式 `openCpuStrategyModal()`。房間最多三名 CPU 各列顯示正圓頭像、名稱、目前策略說明、策略下拉選單與房主／觀看狀態；橫列依 alpha 可見範圍 2135×224（約 9.53:1）等比例裁切填入中央區，沒有橫向拉伸。CPU 名稱縮進上方名稱框金邊的安全區並水平／垂直置中，介面鎖定手機文字縮放，狀態文字則依素材小框中心定位。主頁腳本與橫列素材加入 `20260720-cpu-strategy-ui-v3`／`20260720-cpu-strategy-row-v2` 快取版本。
 - 檔案：`public/images/board/cpu_strategy_ui/cpu_strategy_panel_frame.webp`、`public/images/board/cpu_strategy_ui/cpu_strategy_row_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：兩張正式素材皆為 RGBA WebP 且具有透明 alpha；主框 1672×941、橫列 2172×724。實際瀏覽器以 1440×900 桌機、1024×768 平板及 844×390 橫向手機建立 1 名真人加 3 名 CPU，確認主框、三列、頭像、名稱、說明、策略選擇與狀態均在框內，素材保持 3:1 原圖畫布比例並以透明區裁切顯示，正式素材請求 HTTP 200。平板上把第一名 CPU 從均衡改為主線後，`gameState.settings.cpuStrategyByPlayerId` 更新為 `objective`，說明同步顯示「優先拓本、四皇與最終之島，較少繞去補資源。」；關閉按鈕可正常返回。另執行 
-ode --check public/js/board_game.js`、HTML inline script 語法檢查與 `git diff --check`。
+- 驗證：兩張正式素材皆為 RGBA WebP 且具有透明 alpha；主框 1672×941、橫列 2172×724。實際瀏覽器以 1440×900 桌機、1024×768 平板及 844×390 橫向手機建立 1 名真人加 3 名 CPU，確認主框、三列、頭像、名稱、說明、策略選擇與狀態均在框內，素材保持 3:1 原圖畫布比例並以透明區裁切顯示，正式素材請求 HTTP 200。平板上把第一名 CPU 從均衡改為主線後，`gameState.settings.cpuStrategyByPlayerId` 更新為 `objective`，說明同步顯示「優先拓本、四皇與最終之島，較少繞去補資源。」；關閉按鈕可正常返回。另執行 `node --check public/js/board_game.js`、HTML inline script 語法檢查與 `git diff --check`。
 - 風險：本次只替換 CPU 指令視窗的圖片、排版與素材快取版本；不修改 `balanced`／`level`／`support`／`objective` 策略 id、CPU 決策、房主控制權、`gameState.settings.cpuStrategyByPlayerId` 結構、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。橫列內容依三名 CPU 的正式上限配置，極窄直向手機仍建議橫向遊玩。
 
 ### 2026-07-21
@@ -4582,8 +4054,7 @@ ode --check public/js/board_game.js`、HTML inline script 語法檢查與 `git d
 - 日期：2026-07-21。
 - 範圍：檢查收件區主框 1672×941 RGBA WebP 與按鈕框 2172×724 RGBA WebP 的尺寸、透明範圍及文字安全區，統一命名為 `encounter_panel_frame.webp`、`encounter_action_button_frame.webp` 並接入正式普通敵人島、海格遭遇與同地點共鬥提示。共用版面將標題、角色圖、名稱、地點、六格情報、主要說明、規則／參戰名單及操作按鈕逐區定位；長名稱限制在各自框內省略，說明文字限制行數並保留安全內距。普通敵人島與海格遭遇仍只有進入／繼續戰鬥，敵人島共鬥仍只能加入，海格共鬥仍可加入或略過；四皇與司法島維持原介面。未開啟偵查效果時不顯示敵人圖、身份與數值。主頁快取版本更新為 `20260721-encounter-ui-v1`。
 - 檔案：`public/images/board/encounter_ui/encounter_panel_frame.webp`、`public/images/board/encounter_ui/encounter_action_button_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 通過；正式 `board_start.html`、`board_game.html` 與兩張正式素材確認 HTTP 200。以正式 `board_game.html`、正式 CSS／素材及代表性長敵人名稱，在 Chrome 1440×900 桌機與 1024×768 平板實際截圖；角色圖填滿左側窗口，六格情報、兩段長說明與按鈕均在素材安全區，兩種尺寸都沒有元素 scroll overflow。另檢查事件 ID 與原處理函式仍相連，並執行 HTML inline script 語法檢查與 `git diff --check`。
+- 驗證：`node --check public/js/board_game.js` 通過；正式 `board_start.html`、`board_game.html` 與兩張正式素材確認 HTTP 200。以正式 `board_game.html`、正式 CSS／素材及代表性長敵人名稱，在 Chrome 1440×900 桌機與 1024×768 平板實際截圖；角色圖填滿左側窗口，六格情報、兩段長說明與按鈕均在素材安全區，兩種尺寸都沒有元素 scroll overflow。另檢查事件 ID 與原處理函式仍相連，並執行 HTML inline script 語法檢查與 `git diff --check`。
 - 風險：本次只替換三種戰鬥前提示的圖片、文字排版及資料映射；不修改敵人島／海格強制戰鬥、海格共鬥略過、偵查解鎖、敵人生成、戰鬥建立、掉落、回合、CPU、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。`docs/GAME_RULES.md` 不需更新，因遊戲規則與數值未變。
 
 #### 戰鬥前遭遇標題置中微調
@@ -4591,8 +4062,7 @@ ode --check public/js/board_game.js` 通過；正式 `board_start.html`、`board
 - 日期：2026-07-21。
 - 範圍：普通敵人島、海格遭遇戰及敵人島／海格共鬥全部移除標題木牌內重複的「強制戰鬥／強制加入／可選擇加入或略過」小標，主標題改為單行並稍微下移至木牌中央；加入與略過方式直接由底部按鈕呈現。主頁快取版本更新為 `20260721-encounter-ui-v2`。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、HTML inline script 語法檢查、正式頁與新版 JS HTTP 200、桌機／平板實際瀏覽器版面檢查及 `git diff --check`。
+- 驗證：執行 `node --check public/js/board_game.js`、HTML inline script 語法檢查、正式頁與新版 JS HTTP 200、桌機／平板實際瀏覽器版面檢查及 `git diff --check`。
 - 風險：只調整普通敵人島、海格遭遇戰及共鬥畫面的標題文字與垂直位置；不修改強制戰鬥、共鬥加入／略過、敵人資料、偵查、戰鬥建立、存檔或多人同步規則。`docs/GAME_RULES.md` 不需更新，因規則未變。
 
 #### 地圖情報與顛倒山 UI 素材收件目錄建立
@@ -4608,8 +4078,7 @@ ode --check public/js/board_game.js`、HTML inline script 語法檢查、正式�
 - 日期：2026-07-21。
 - 範圍：檢查使用者放入的兩張 1672×941 RGBA WebP，統一命名歸檔為 `map_node_info_panel_frame.webp` 與 `inversion_mountain_overview_frame.webp`。正式 `inspectSeaTile()`／`inspectIsland()` 改用共用圖片式節點情報主框，依既有偵查狀態顯示或遮蔽敵人資料，保留海格／島嶼標記按鈕；正式 `openInversionMountainOverview()` 改為固定五列航線，顯示編號、航路、目的地、可選擇／已占用與占用者。所有文字逐區限制在素材安全框內，主頁快取版本更新為 `20260721-map-info-ui-v1`。
 - 檔案：`public/images/board/map_info_ui/map_node_info_panel_frame.webp`、`public/images/board/map_info_ui/inversion_mountain_overview_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 通過；使用正式 `board_game.html` 在 Chrome 1440×900 桌機與 1024×768 平板，分別實際點擊一般島嶼、海上格及顛倒山。兩種尺寸的節點情報皆完整顯示六格資料，顛倒山皆完整顯示五條航線；modal、主要內容區與文件均無溢出，圓形節點圖保持正圓，右側「可選擇／尚未被占用」沒有截字。另確認正式頁、JS 與兩張素材 HTTP 200，完成 HTML inline script、素材路徑及 `git diff --check`。
+- 驗證：`node --check public/js/board_game.js` 通過；使用正式 `board_game.html` 在 Chrome 1440×900 桌機與 1024×768 平板，分別實際點擊一般島嶼、海上格及顛倒山。兩種尺寸的節點情報皆完整顯示六格資料，顛倒山皆完整顯示五條航線；modal、主要內容區與文件均無溢出，圓形節點圖保持正圓，右側「可選擇／尚未被占用」沒有截字。另確認正式頁、JS 與兩張素材 HTTP 200，完成 HTML inline script、素材路徑及 `git diff --check`。
 - 風險：本次只替換三個既有查看流程的素材、資料排版與主頁快取版本；不修改偵查被動、海格／島嶼標記、航線數量、目的地、`claimedBranchRoutes`、回合、移動、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。`docs/GAME_RULES.md` 不需更新，因遊戲規則與數值未變。
 
 #### 地圖圓形島圖校正與敵島情報距離限制
@@ -4617,8 +4086,7 @@ ode --check public/js/board_game.js` 通過；使用正式 `board_game.html` 在
 - 日期：2026-07-21。
 - 範圍：依 `map_node_info_panel_frame.webp` 實際圓形內圈重新校正正式節點圖的左、上、直徑與圖片縮放，避免島嶼圖壓到金框，並把透明／留白區的黑底改為海洋藍漸層。重新核對既有偵查型 1～3 階與偵查台 Lv3 規則後，將普通敵人島的敵人身份／階級／等級／屬性／類型／HP 限制為「具備偵查台 Lv3，且目標是目前所在島或位於目前偵查範圍」才可顯示；曾探索但已離開偵查範圍的敵島只顯示敵影。戰鬥前敵島提示與地圖、航線、節點情報共用相同判定；主頁快取版本更新為 `20260721-map-info-visibility-v2`。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 通過，HTML inline script 數量為 0；正式 `board_start.html`、`board_game.html`、新版 JS 與節點主框素材均回應 HTTP 200。使用正式 `board_game.html` 在 Chrome 1440×900 桌機與 1024×768 平板實際點開羅格鎮節點情報，圓圖相對主框固定為左 9.82%、上 17.02%、直徑 26.02%，兩種尺寸都保持正圓、完整落在金框內並顯示海洋藍底，主框與頁面 X／Y 溢出皆為 0。另在正式 runtime 將同一普通敵島分別設為遠距已探索、目前所在及無偵查台 Lv3 三種情境：遠距不顯示敵名，目前所在且 Lv3 會顯示，無 Lv3 即使目前所在仍不顯示；最後執行 `git diff --check` 通過（僅出現既有其他檔案換行警告）。
+- 驗證：`node --check public/js/board_game.js` 通過，HTML inline script 數量為 0；正式 `board_start.html`、`board_game.html`、新版 JS 與節點主框素材均回應 HTTP 200。使用正式 `board_game.html` 在 Chrome 1440×900 桌機與 1024×768 平板實際點開羅格鎮節點情報，圓圖相對主框固定為左 9.82%、上 17.02%、直徑 26.02%，兩種尺寸都保持正圓、完整落在金框內並顯示海洋藍底，主框與頁面 X／Y 溢出皆為 0。另在正式 runtime 將同一普通敵島分別設為遠距已探索、目前所在及無偵查台 Lv3 三種情境：遠距不顯示敵名，目前所在且 Lv3 會顯示，無 Lv3 即使目前所在仍不顯示；最後執行 `git diff --check` 通過（僅出現既有其他檔案換行警告）。
 - 風險：本次只收緊既有敵島情報顯示範圍並校正圖片位置；不改偵查型被動距離、偵查台等級、敵人生成、戰鬥、回合、移動、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。
 
 #### 手動存檔／讀檔 UI 素材收件目錄建立
@@ -4634,8 +4102,7 @@ ode --check public/js/board_game.js` 通過，HTML inline script 數量為 0；�
 - 日期：2026-07-21。
 - 範圍：檢查使用者放入的五張 1536×1024 RGBA WebP，依用途統一命名為 `save_load_panel_frame.webp`、`save_record_card_frame.webp`、`save_load_primary_button_frame.webp`、`save_load_secondary_button_frame.webp` 與 `save_load_danger_button_frame.webp`，並移出 `incoming/` 收件區。正式存檔完成／失敗、讀檔搜尋／無存檔、單一存檔、本機與伺服器不同進度、讀檔失敗及刪除結果全部改用共用航海主框；標題、說明、存檔來源徽章、五列資料與底部按鈕文字皆依各自素材框置中。存檔卡顯示來源、時間、回合、目前玩家、目前階段與戰鬥狀態，雙進度時並列兩張卡，底部依原按鈕 ID 套用主要、次要與紅色刪除框。主頁快取版本更新為 `20260721-save-load-ui-v1`。
 - 檔案：`public/images/board/save_load_ui/save_load_panel_frame.webp`、`public/images/board/save_load_ui/save_record_card_frame.webp`、`public/images/board/save_load_ui/save_load_primary_button_frame.webp`、`public/images/board/save_load_ui/save_load_secondary_button_frame.webp`、`public/images/board/save_load_ui/save_load_danger_button_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 通過，HTML inline script 數量為 0；正式 `board_start.html`、`board_game.html`、新版 JS 與五張正式素材均回應 HTTP 200。以隔離的瀏覽器儲存空間及攔截的存檔 API，在正式 Chrome 1440×900 桌機與 1024×768 平板實際開啟存檔成功、存檔失敗、讀檔搜尋、無存檔、單一存檔、雙進度選擇、刪除結果；主框、存檔卡、按鈕與文件均無 X／Y 溢出。另實際點擊讀取伺服器與讀取本機按鈕，分別恢復測試存檔第 6 輪與第 1 輪，並執行素材路徑檢查及 `git diff --check`。測試未讀寫既有 localStorage 或伺服器存檔。
+- 驗證：`node --check public/js/board_game.js` 通過，HTML inline script 數量為 0；正式 `board_start.html`、`board_game.html`、新版 JS 與五張正式素材均回應 HTTP 200。以隔離的瀏覽器儲存空間及攔截的存檔 API，在正式 Chrome 1440×900 桌機與 1024×768 平板實際開啟存檔成功、存檔失敗、讀檔搜尋、無存檔、單一存檔、雙進度選擇、刪除結果；主框、存檔卡、按鈕與文件均無 X／Y 溢出。另實際點擊讀取伺服器與讀取本機按鈕，分別恢復測試存檔第 6 輪與第 1 輪，並執行素材路徑檢查及 `git diff --check`。測試未讀寫既有 localStorage 或伺服器存檔。
 - 風險：本次只替換手動存檔／讀檔各狀態的圖片、文字排版與主頁快取版本；保留原按鈕 ID、存檔內容、`gameState`／`battleState`、`RECOVERED`、localStorage key、伺服器存檔 API、刪除範圍、玩家身份重綁、Socket.IO event 與 `BOARD_GAME_STATE` 同步流程。`docs/GAME_RULES.md` 不需更新，因遊戲規則與數值未變。
 
 #### 手動存檔／讀檔按鈕文字置中校正
@@ -4651,8 +4118,7 @@ ode --check public/js/board_game.js` 通過，HTML inline script 數量為 0；�
 - 日期：2026-07-21。
 - 範圍：正式單一存檔與本機／伺服器雙進度畫面的「刪除全部存檔」不再直接執行刪除，先開啟共用航海主框的不可復原警告，沿用既有紅色危險按鈕與深色次要按鈕；只有按下 `confirmDeleteSaveBtn` 才呼叫原 `deleteManualSave()`，按下 `cancelDeleteSaveBtn` 僅關閉警告。主頁 JS 快取版本更新為 `20260721-save-load-ui-v2`。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：使用隔離的瀏覽器儲存空間及攔截的存檔 API，在正式 Chrome 1440×900 桌機與 1024×768 平板從讀檔畫面實際點擊「刪除全部存檔」；警告主框、紅色確認與深色取消按鈕完整顯示且文字位於素材框中心。取消後本機存檔仍存在且未送出 DELETE；再次開啟並確認後才移除本機存檔、送出原伺服器刪除請求並顯示刪除結果。另執行 
-ode --check`、HTML inline script、正式頁／新版 JS HTTP 200 與 `git diff --check`。
+- 驗證：使用隔離的瀏覽器儲存空間及攔截的存檔 API，在正式 Chrome 1440×900 桌機與 1024×768 平板從讀檔畫面實際點擊「刪除全部存檔」；警告主框、紅色確認與深色取消按鈕完整顯示且文字位於素材框中心。取消後本機存檔仍存在且未送出 DELETE；再次開啟並確認後才移除本機存檔、送出原伺服器刪除請求並顯示刪除結果。另執行 `node --check`、HTML inline script、正式頁／新版 JS HTTP 200 與 `git diff --check`。
 - 風險：只新增刪除前的確認門檻；不修改實際刪除範圍、localStorage key、伺服器 API、存檔內容、讀檔、玩家身份重綁、Socket.IO event 或 `BOARD_GAME_STATE` 同步流程。`docs/GAME_RULES.md` 與 `docs/FILE_MAP.md` 不需更新，因遊戲規則、檔案與素材職責未變。
 
 #### 初選階段關閉讀檔後恢復正式流程
@@ -4660,8 +4126,7 @@ ode --check`、HTML inline script、正式頁／新版 JS HTTP 200 與 `git diff
 - 日期：2026-07-21。
 - 範圍：修正 `setup-order`／`setup-draft` 的正式讀檔入口覆蓋強制初選 modal 後，取消讀檔只執行 `closeModal()` 而使畫面失去操作入口的問題。`openLoadGameModal()` 現在記錄是否由初選階段開啟；取消、無存檔、讀檔失敗、刪除取消／結果確認或點擊航海主框外側時，先結束讀檔 session，再以 `openSetupStep({ skipOpeningStory: true })` 依現有 phase、轉盤結果與選角進度重新開啟順位、階級轉盤或角色候選介面。搜尋中的非同步讀檔以 session id 防止關閉後舊回應再次覆蓋初選畫面；成功讀取則先清除回復旗標，再沿用原本存檔 phase 流程。主頁 JS 快取版本更新為 `20260721-setup-load-resume-v1`。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：使用隔離的瀏覽器 localStorage 與攔截的存檔 API，在正式 Chrome 1440×900 桌機與 1024×768 平板進入 `setup-draft` 階級轉盤。從畫面內「讀取存檔」開啟正式圖片式讀檔後，分別實際按「取消」與點擊主框外側；兩條路徑都重新出現同一位玩家、同一輪的 `recruitRollBtn` 階級轉盤，modal 恢復 `draft-recruitment-modal` 強制初選狀態，等待舊 GET 回應後也不會再次跳回讀檔。另在 `setup-order` 順位確認畫面驗證取消與點擊外側均恢復 `confirmDraftOrderBtn`；從階級轉盤真正讀取 `setup-order` 存檔後則依存檔階段回到順位確認，而不是回復舊轉盤。最後執行 
-ode --check`、HTML inline script、正式頁／新版 JS HTTP 200 與 `git diff --check`。
+- 驗證：使用隔離的瀏覽器 localStorage 與攔截的存檔 API，在正式 Chrome 1440×900 桌機與 1024×768 平板進入 `setup-draft` 階級轉盤。從畫面內「讀取存檔」開啟正式圖片式讀檔後，分別實際按「取消」與點擊主框外側；兩條路徑都重新出現同一位玩家、同一輪的 `recruitRollBtn` 階級轉盤，modal 恢復 `draft-recruitment-modal` 強制初選狀態，等待舊 GET 回應後也不會再次跳回讀檔。另在 `setup-order` 順位確認畫面驗證取消與點擊外側均恢復 `confirmDraftOrderBtn`；從階級轉盤真正讀取 `setup-order` 存檔後則依存檔階段回到順位確認，而不是回復舊轉盤。最後執行 `node --check`、HTML inline script、正式頁／新版 JS HTTP 200 與 `git diff --check`。
 - 風險：只補初選讀檔關閉後的 UI 回復與非同步 session 失效；不重擲階級、不重排順位、不改 `draftOrder`、`draftSequence`、`draftPickIndex`、`recruitRolls`、存檔內容、讀檔身份重綁、回合、CPU、Socket.IO event 或 `BOARD_GAME_STATE` 同步格式。`docs/GAME_RULES.md` 與 `docs/FILE_MAP.md` 不需更新，因規則、檔案與素材職責未變。
 
 #### 海格事件圖片式介面素材收件目錄建立
@@ -4677,10 +4142,7 @@ ode --check`、HTML inline script、正式頁／新版 JS HTTP 200 與 `git diff
 - 日期：2026-07-21。
 - 範圍：檢查使用者放入的兩張 1536×1024 RGBA WebP 主框與五張 1024×1536 RGBA WebP 直式事件卡，統一命名並移出 `incoming/` 收件區。正式 `openSeaEventChoice()` 改用雙卡主框、五種新版卡片及既有航海操作按鈕框；玩家可直接點卡或底部「選這張」，兩個入口仍保留相同 `data-sea-choice`／`data-sea-type`。一般金錢／天氣／藥物事件由單卡結果主框顯示類型、效果與航海結果；`spectatorSeaChoiceModal()` 與新的觀看方一般結果介面共用相同版型。`sea-result` 同步資料補上既有 `typeId` 對應的卡片顯示路徑，未新增同步狀態欄位。寶藏仍進既有四寶箱舞台，直接遭遇仍進既有遭遇提示。主頁快取版本更新為 `20260721-sea-event-ui-v1`。
 - 檔案：`public/images/board/sea_event_ui/sea_event_choice_panel_frame.webp`、`public/images/board/sea_event_ui/sea_event_result_panel_frame.webp`、`public/images/board/sea_event_ui/sea_event_card_money.webp`、`public/images/board/sea_event_ui/sea_event_card_weather.webp`、`public/images/board/sea_event_ui/sea_event_card_treasure.webp`、`public/images/board/sea_event_ui/sea_event_card_medicine.webp`、`public/images/board/sea_event_ui/sea_event_card_unknown.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 通過。使用正式 `board_game.html` 與隔離的 Chrome 測試資料，在 1440×900 桌機與 1024×768 平板實際令玩家落在主要類型為天氣的海格，開啟雙卡選擇、直接點擊天氣卡、查看單卡揭曉結果並按下 `confirmSeaEventBtn`；兩種尺寸的主框、卡片、說明與按鈕皆在素材安全區，按鈕文字位於圖片框中央，modal 與文件均無 X／Y 溢出，所有 WebP 
-aturalWidth`／
-aturalHeight` 正常且 runtime exception 為 0。確認後 `resolutionLock` 由 true 回到 false，原「前進 3 格」效果正常建立並繼續消耗 `pendingMove`。另完成 HTML inline script、七張新素材與共用按鈕路徑、正式頁／新版 JS HTTP 200 及 `git diff --check`。
+- 驗證：`node --check public/js/board_game.js` 通過。使用正式 `board_game.html` 與隔離的 Chrome 測試資料，在 1440×900 桌機與 1024×768 平板實際令玩家落在主要類型為天氣的海格，開啟雙卡選擇、直接點擊天氣卡、查看單卡揭曉結果並按下 `confirmSeaEventBtn`；兩種尺寸的主框、卡片、說明與按鈕皆在素材安全區，按鈕文字位於圖片框中央，modal 與文件均無 X／Y 溢出，所有 WebP `naturalWidth`／`naturalHeight` 正常且 runtime exception 為 0。確認後 `resolutionLock` 由 true 回到 false，原「前進 3 格」效果正常建立並繼續消耗 `pendingMove`。另完成 HTML inline script、七張新素材與共用按鈕路徑、正式頁／新版 JS HTTP 200 及 `git diff --check`。
 - 風險：本次只替換海格事件選擇與一般結果的圖片、文字排版、觀看方顯示資料及快取版本；不修改 `SEA_CARD_TYPE_POOLS`、預抽 `effectDef`、偵查揭露、事件效果、四寶箱獎勵、遭遇戰、共鬥、回合、CPU 評分、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。`docs/GAME_RULES.md` 不需更新，因規則與數值未變。
 
 #### 海格事件雙卡背景比例與卡片邊界校正
@@ -4752,8 +4214,7 @@ aturalHeight` 正常且 runtime exception 為 0。確認後 `resolutionLock` 由
 - 日期：2026-07-22。
 - 範圍：檢查使用者放入的四張 RGBA WebP，固定命名並移出 `incoming/` 收件區。正式 `openHospitalModal()` 改用 1672×941 醫療航海主框、最多六名船員共用的狀態卡、主要恢復按鈕與次要離開按鈕；左側顯示醫院島圖與既有免費整備說明，右側 3×2 六格顯示角色圖、名稱、等級、HP、PP 與瀕死／需要整備／狀態良好。主標、副標、醫院圖、船員圖、狀態文字及兩個按鈕文字均依素材可視框置中；按鈕保留原 `data-hospital-service="full_crew_restore"` 與 `leaveHospitalBtn`，CPU 仍使用相同 selector。觀看方新增既有 `spectator-modal` 的 `hospital` 分支，共用同一版型但只顯示「等待操作／關閉觀看」，不提供治療操作。主頁 JS 快取版本更新為 `20260722-hospital-ui-v1`。
 - 檔案：`public/images/board/hospital_ui/hospital_panel_frame.webp`、`public/images/board/hospital_ui/hospital_crew_status_card_frame.webp`、`public/images/board/hospital_ui/hospital_primary_button_frame.webp`、`public/images/board/hospital_ui/hospital_secondary_button_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 與 HTML inline script 語法檢查通過；四張正式 WebP 路徑存在且 16 個醫院畫面圖片節點均成功載入。正式 `board_game.html` 在隔離 Chrome 以 1440×900 桌機與 1024×768 平板實際開啟醫院，主框分別約為 1397×786 與 992×558，六格船員卡、角色圖、服務說明及兩個按鈕均在素材安全區，主標／副標水平置中，六張角色圖水平中心誤差不超過 0.01px，兩個按鈕文字水平中心誤差為 0、垂直中心依可視框校正為 -1px，頁面與 modal 無溢出。實際點擊「全隊恢復」後六名船員 HP／所有招式 PP 全滿、能力階級歸零、視窗關閉並進入下一回合；實際點擊「離開醫院」後船員 HP／PP／能力階級完全不變，只關閉視窗並進入下一回合。另以正式大廳建立兩人房，在第二個 Chrome 視窗確認觀看方收到六格唯讀醫院介面、九個醫院 UI 素材節點均載入、沒有 `data-hospital-service` 操作按鈕且可正常關閉，兩窗 runtime exception 均為 0；正式入口／新版 JS／四張素材 HTTP 200 與 `git diff --check` 亦通過。
+- 驗證：`node --check public/js/board_game.js` 與 HTML inline script 語法檢查通過；四張正式 WebP 路徑存在且 16 個醫院畫面圖片節點均成功載入。正式 `board_game.html` 在隔離 Chrome 以 1440×900 桌機與 1024×768 平板實際開啟醫院，主框分別約為 1397×786 與 992×558，六格船員卡、角色圖、服務說明及兩個按鈕均在素材安全區，主標／副標水平置中，六張角色圖水平中心誤差不超過 0.01px，兩個按鈕文字水平中心誤差為 0、垂直中心依可視框校正為 -1px，頁面與 modal 無溢出。實際點擊「全隊恢復」後六名船員 HP／所有招式 PP 全滿、能力階級歸零、視窗關閉並進入下一回合；實際點擊「離開醫院」後船員 HP／PP／能力階級完全不變，只關閉視窗並進入下一回合。另以正式大廳建立兩人房，在第二個 Chrome 視窗確認觀看方收到六格唯讀醫院介面、九個醫院 UI 素材節點均載入、沒有 `data-hospital-service` 操作按鈕且可正常關閉，兩窗 runtime exception 均為 0；正式入口／新版 JS／四張素材 HTTP 200 與 `git diff --check` 亦通過。
 - 風險：本次只替換醫院的圖片、排版及觀看方呈現；不修改 `HOSPITAL_SERVICES`、免費費用、HP／PP／能力階級恢復、任務事件、回合結束、CPU 判斷、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。`docs/GAME_RULES.md` 不需更新，因規則與數值未變。
 
 #### 司法島進入／參戰確認圖片式介面素材收件目錄建立
@@ -4769,8 +4230,7 @@ ode --check public/js/board_game.js` 與 HTML inline script 語法檢查通過�
 - 日期：2026-07-22。
 - 範圍：檢查使用者放入的 1672×941 主框與兩張 1536×512 共用框，確認 RGBA 透明邊界後固定命名並移出 `incoming/`。正式 `openJudicialRaidModal()` 的尚未開戰／失敗重置、進行中與已攻破三種分支改用同一司法要塞版型：左側放既有司法島圖或目前階段敵人正常圖及共享 HP，右上以 3×2 顯示斯潘達姆、布魯諾、卡莉法、加布拉、卡古、羅布・路基六階進度，右下以 2×2 顯示最多四名玩家的狀態、加入階段、傷害、承傷、治療與行動。階段框與玩家框保持原生 3:1 比例縮入主框既有槽位，人物圓孔不拉成橢圓；主標、副標、左側圖片、資訊與按鈕文字依各素材實際可視框置中。保留原 `startJudicialRaidBtn`、`joinJudicialRaidBtn`、`restartJudicialRaidBtn`、`skipJudicialRaidBtn`、`leaveJudicialRaidBtn` 及全隊瀕死 disabled。觀看方新增既有 `spectator-modal` 的 `judicial-raid` 唯讀分支，共用相同版型但只顯示等待與關閉觀看。主頁 JS 快取版本更新為 `20260722-judicial-raid-ui-v1`。
 - 檔案：`public/images/board/judicial_raid_ui/judicial_raid_panel_frame.webp`、`public/images/board/judicial_raid_ui/judicial_raid_phase_frame.webp`、`public/images/board/judicial_raid_ui/judicial_raid_participant_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 與 HTML inline script 語法檢查通過。正式 `board_game.html` 在隔離 Chrome 以 1440×900 桌機與 1024×768 平板實際開啟尚未開戰、討伐進行中及已攻破畫面；主框分別約為 1397×786 與 992×558，六階段、四名玩家、左側司法島／敵人、共享 HP 與兩個操作按鈕均在素材安全區，文件與 modal 無溢出。主標位於主木牌中心，副標位於獨立長框中心；六個敵人圖與四個玩家頭像相對各自卡框垂直中心誤差不超過 0.01px，兩個按鈕文字相對可視框水平中心誤差為 0、垂直中心誤差不超過 0.12px，三張正式司法島 UI 素材均成功載入。實際按下「暫不挑戰」與「離開」均只關閉視窗並進入下一回合；「發起討伐」、「加入討伐／繼續」與「再次發起討伐」均建立原 `isJudicialRaid` 戰鬥並保留共享進度，加入者寫入原參戰紀錄；全隊瀕死時「發起討伐」維持 disabled。另由正式大廳建立兩人房，第二個 Chrome 視窗收到六階段唯讀畫面、沒有發起／加入／再次討伐控制，關閉觀看正常，操作方發起後兩窗 `battleState.isJudicialRaid` 同步一致且 runtime exception 為 0。正式入口／新版 JS／三張素材 HTTP 200 與 `git diff --check` 亦通過。
+- 驗證：`node --check public/js/board_game.js` 與 HTML inline script 語法檢查通過。正式 `board_game.html` 在隔離 Chrome 以 1440×900 桌機與 1024×768 平板實際開啟尚未開戰、討伐進行中及已攻破畫面；主框分別約為 1397×786 與 992×558，六階段、四名玩家、左側司法島／敵人、共享 HP 與兩個操作按鈕均在素材安全區，文件與 modal 無溢出。主標位於主木牌中心，副標位於獨立長框中心；六個敵人圖與四個玩家頭像相對各自卡框垂直中心誤差不超過 0.01px，兩個按鈕文字相對可視框水平中心誤差為 0、垂直中心誤差不超過 0.12px，三張正式司法島 UI 素材均成功載入。實際按下「暫不挑戰」與「離開」均只關閉視窗並進入下一回合；「發起討伐」、「加入討伐／繼續」與「再次發起討伐」均建立原 `isJudicialRaid` 戰鬥並保留共享進度，加入者寫入原參戰紀錄；全隊瀕死時「發起討伐」維持 disabled。另由正式大廳建立兩人房，第二個 Chrome 視窗收到六階段唯讀畫面、沒有發起／加入／再次討伐控制，關閉觀看正常，操作方發起後兩窗 `battleState.isJudicialRaid` 同步一致且 runtime exception 為 0。正式入口／新版 JS／三張素材 HTTP 200 與 `git diff --check` 亦通過。
 - 風險：本次只替換司法島進入／參戰確認的圖片、排版及觀看方呈現；不修改 `JUDICIAL_RAID_PHASES`、敵人資料、共享 HP 人數倍率、階段進度、參戰重入、獎勵、任務、回合交棒、CPU 決策、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。`docs/GAME_RULES.md` 不需更新，因規則與數值未變。
 #### 正式島嶼縮圖海洋藍背景統一
 
@@ -4794,8 +4254,7 @@ ode --check public/js/board_game.js` 與 HTML inline script 語法檢查通過�
 - 日期：2026-07-22。
 - 範圍：檢查使用者放入的 1672×941 與 1536×512 RGBA WebP，依用途固定命名為 `sea_train_ticket_panel_frame.webp`、`sea_train_destination_card_frame.webp` 並移出 `incoming/`。正式 `openSeaTrainGoldenTicketModal()` 改用黃金票主框：左側沿用既有黃金票道具圖，中央顯示目前位置、標記終點與固定車站，右側依原狀態顯示一或兩張標記站／水之七島目的地卡；島圖使用與地圖情報一致的海洋藍漸層，保持正圓並對準卡框透明孔。底部沿用正式遭遇按鈕框，保留原 `seaTrainMarkBtn`、`seaTrainCancelBtn` 與 `data-sea-train-destination`。主標、副標、三列狀態、島圖、卡片文字及按鈕文字均依圖片內實際可見框置中。主頁快取版本更新為 `20260722-sea-train-ticket-ui-v1`。
 - 檔案：`public/images/board/sea_train_ticket_ui/sea_train_ticket_panel_frame.webp`、`public/images/board/sea_train_ticket_ui/sea_train_destination_card_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 與 HTML inline script 語法檢查通過。正式 `board_game.html` 在隔離 Chrome 以 1440×900 桌機及 1024×768 平板，分別實際開啟未標記與已將羅格鎮標記為目的地的畫面；四種畫面均無 modal／文件溢出，所有圖片成功載入，島圖為海洋藍正圓。按鈕文字相對可視框的桌機中心誤差為 0px，平板水平誤差不超過 0.01px、垂直誤差為 0px。實際按取消會回重要道具背包；標記後重新開啟會由一張目的地卡變成羅格鎮與水之七島兩張；點水之七島會播放既有海上列車動畫並抵達 `island-24`，runtime exception 為 0。
+- 驗證：`node --check public/js/board_game.js` 與 HTML inline script 語法檢查通過。正式 `board_game.html` 在隔離 Chrome 以 1440×900 桌機及 1024×768 平板，分別實際開啟未標記與已將羅格鎮標記為目的地的畫面；四種畫面均無 modal／文件溢出，所有圖片成功載入，島圖為海洋藍正圓。按鈕文字相對可視框的桌機中心誤差為 0px，平板水平誤差不超過 0.01px、垂直誤差為 0px。實際按取消會回重要道具背包；標記後重新開啟會由一張目的地卡變成羅格鎮與水之七島兩張；點水之七島會播放既有海上列車動畫並抵達 `island-24`，runtime exception 為 0。
 - 風險：本次只替換黃金票目的地選擇的圖片與排版；不修改 `sea_train_golden_ticket` id、取得或消耗、固定站、玩家標記欄位、目的地名稱、動畫、落點結算、回合、CPU、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。`docs/GAME_RULES.md` 不需更新，因規則與數值未變。
 
 #### 多人開局導頁本機身分保留
@@ -4822,8 +4281,7 @@ ode --check public/js/board_game.js` 與 HTML inline script 語法檢查通過�
 - 範圍：驗收使用者放入的三張 RGBA WebP，確認透明船隻舞台與透明人物孔後，固定命名為 `water_seven_shipyard_upgrade_panel_frame.webp`、`water_seven_ship_part_marker_frame.webp`、`water_seven_upgrade_effect_row_frame.webp` 並移出 `incoming/`。正式 `board_water_seven.html` 第一階段改為同一張 1672×941 船塢總覽主框：左側沿用保利人物圖與原說明，中央沿用目前玩家船型、五個升級部位與部位切換，右側顯示所選部位名稱、說明、Lv1～Lv3 效果、啟用狀態、下一級費用與原升級按鈕；底部顯示貝里、四種船材與目前全隊效果。五個部位使用共用 12:5 標記框，三級效果使用共用 3:1 列框，操作按鈕沿用正式航海按鈕框；標題、保利說明、部位名稱／標籤／等級、效果文字／狀態、資源數值與按鈕文字均依素材可視框置中。主頁與 iframe 快取版本更新為 `20260722-water-seven-upgrade-ui-v1`。
 - 定位保留：未修改六艘船的 `shipConfigs`、視角圖片、camera、focus、轉向動畫、SVG 船體錨點、四個 `slotTune` 孔位與 F4 校準輸出；五個部位標記中心仍為桅杆 `17%／18%`、偵查台 `82%／18%`、修行場 `17%／53%`、廚房 `30%／78%`、船尾 `75%／75%`。新增的圖片框只包住既有按鈕位置，沒有重算船隻或部位座標。
 - 檔案：`public/images/board/water_seven_ui/water_seven_shipyard_upgrade_panel_frame.webp`、`public/images/board/water_seven_ui/water_seven_ship_part_marker_frame.webp`、`public/images/board/water_seven_ui/water_seven_upgrade_effect_row_frame.webp`、`public/board_water_seven.html`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 與 `board_game.html`／`board_water_seven.html` inline script 語法檢查通過；正式入口、主遊戲、版本化 JS、Water Seven iframe 與三張新素材皆為 HTTP 200。隔離 Chrome 以 1440×900 桌機及 1024×768 平板實際顯示新船塢，三張效果列、五個部位框、五項改造資源、保利及船圖全部載入，文件水平／垂直溢出均為 0；點選船尾後正式焦點、選取框與右側標題同步變成 `rudder`／船尾，F4 校準面板仍可開啟。另逐艘載入 `ship_01`～`ship_06`，六艘船圖均成功且五個部位中心都維持上述百分比。由正式 `board_game.html` 將目前玩家置於 `island-24` 後呼叫原 `openWaterSevenWindow()`，確認 iframe URL 為 `board=1&ship=<目前船型>&lockShip=1`；實際將桅杆由 Lv0 升為 Lv1 後，原費用 8,000 貝里及 5 個船材木板正確扣除，iframe 顯示 `Lv 1 / 3`，關閉後 overlay 與 `resolutionLock` 正常解除；開孔、裝備 `ship_patch_canvas` 及再次按下卸裝亦分別正確寫入 1 個孔位、孔位 1 道具與空孔位。再由正式 `board_start.html` 建立兩人房、第二視窗加入並準備後開始遊戲；房主開啟船塢時觀看方沒有私人 overlay，房主升級並關閉後，兩窗的桅杆等級、貝里與木板一致為 Lv1／42,000／15，`BOARD_GAME_STATE` 版本及 server ack 正常且兩窗 runtime exception 均為 0。`git diff --check` 亦通過。
+- 驗證：`node --check public/js/board_game.js` 與 `board_game.html`／`board_water_seven.html` inline script 語法檢查通過；正式入口、主遊戲、版本化 JS、Water Seven iframe 與三張新素材皆為 HTTP 200。隔離 Chrome 以 1440×900 桌機及 1024×768 平板實際顯示新船塢，三張效果列、五個部位框、五項改造資源、保利及船圖全部載入，文件水平／垂直溢出均為 0；點選船尾後正式焦點、選取框與右側標題同步變成 `rudder`／船尾，F4 校準面板仍可開啟。另逐艘載入 `ship_01`～`ship_06`，六艘船圖均成功且五個部位中心都維持上述百分比。由正式 `board_game.html` 將目前玩家置於 `island-24` 後呼叫原 `openWaterSevenWindow()`，確認 iframe URL 為 `board=1&ship=<目前船型>&lockShip=1`；實際將桅杆由 Lv0 升為 Lv1 後，原費用 8,000 貝里及 5 個船材木板正確扣除，iframe 顯示 `Lv 1 / 3`，關閉後 overlay 與 `resolutionLock` 正常解除；開孔、裝備 `ship_patch_canvas` 及再次按下卸裝亦分別正確寫入 1 個孔位、孔位 1 道具與空孔位。再由正式 `board_start.html` 建立兩人房、第二視窗加入並準備後開始遊戲；房主開啟船塢時觀看方沒有私人 overlay，房主升級並關閉後，兩窗的桅杆等級、貝里與木板一致為 Lv1／42,000／15，`BOARD_GAME_STATE` 版本及 server ack 正常且兩窗 runtime exception 均為 0。`git diff --check` 亦通過。
 - 風險：本次只重整水之七島總覽與永久升級的圖片及排版；不修改五項永久升級效果／費用、開孔、船隻裝備、S 級限制、玩家船型、關閉後結束回合、`WATER_SEVEN_SNAPSHOT_KEY`、iframe command、localStorage key、Socket.IO event、`BOARD_GAME_STATE` 格式或存檔欄位。`docs/GAME_RULES.md` 不需更新，因規則與數值未變；船隻裝備與開孔頁籤仍保留原功能，後續再各自進行圖片式 UI 改版。
 
 #### 水之七島總覽可讀性、人物裁切與整體比例修正
@@ -4868,8 +4326,7 @@ ode --check public/js/board_game.js` 與 `board_game.html`／`board_water_seven.
 - 範圍：驗收使用者放入的兩張 RGBA WebP，固定命名為 `impel_down_prisoner_recruit_result_panel_frame.webp` 與 `impel_down_prisoner_replacement_card_frame.webp` 並移出 `incoming/`。素材尺寸分別為 1672×941、1024×640，alpha 內容範圍分別為 `(29, 22)～(1643, 919)`、`(26, 32)～(998, 608)`，四邊均保留透明區。正式 `openImpelDownRecruitResultModal()` 改用同一張主框顯示兩種結果：左側固定顯示新囚犯圖片、階級、姓名、職能、屬性、等級與 HP／PP／攻擊／防禦／速度；隊伍未滿六人時，右側顯示招募候選與被動能力，底部保留收下夥伴／放棄；隊伍已滿時，右側改為 3×2 六張現有船員替換卡，顯示人物、姓名、等級、HP／PP、屬性與職能。主框標題、說明、人物資料與所有操作文字均依素材安全框置中。人物圖另依主框左側實際拱形內孔重新定位為 `left:13.64%`、`top:14.35%`、`width:14.35%`、`height:40.91%`，使用同曲率裁切，並清除舊囚犯卡片繼承的 10px padding、145% 圖片尺寸、陰影與向上位移，避免人物壓到金框或在框內留下不等距底色。主頁 JS 快取版本更新為 `20260722-impel-prisoner-recruit-ui-v1`。
 - 正式功能保留：隊伍未滿仍使用 `acceptImpelRecruitBtn`／`rejectImpelRecruitBtn`，隊伍已滿仍使用六個 `data-impel-replace-crew` 與 `rejectFullImpelRecruitBtn`。收下、放棄、替換、原船員攜帶物歸還、船長索引調整、推進城抽池、CPU 自動決策、回合交棒及觀看方完整快照套用均沿用原流程；私人決策視窗只出現在目前操作方，觀看方不會取得可操作 modal。
 - 檔案：`public/images/board/impel_down_ui/impel_down_prisoner_recruit_result_panel_frame.webp`、`public/images/board/impel_down_ui/impel_down_prisoner_replacement_card_frame.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js`、`board_game.html` inline script 語法、兩張正式素材路徑、正式頁 HTTP 200 與 `git diff --check` 均通過。隔離 Chrome 以 1440×900 桌機及 1024×768 平板實際顯示隊伍未滿與隊伍已滿兩種介面，面板分別約為 1397×786、992×558，頁面與 modal 均無水平／垂直卷軸；標題、姓名與按鈕位於素材框中心，六張替換卡及角色圖片均載入。實際點擊收下、放棄、第四名替換與滿隊放棄四條流程，確認新囚犯加入／不加入、指定索引替換與 `pendingRecruitId` 清除皆正確。兩個正式房間視窗測試中，操作方顯示一個私人結果 modal、觀看方為零；收下後兩窗隊伍均為原船員加新囚犯，`BOARD_GAME_STATE` 版本由 2 更新為 3、目前玩家及 server ack 一致，兩窗 runtime exception 皆為 0。
+- 驗證：`node --check public/js/board_game.js`、`board_game.html` inline script 語法、兩張正式素材路徑、正式頁 HTTP 200 與 `git diff --check` 均通過。隔離 Chrome 以 1440×900 桌機及 1024×768 平板實際顯示隊伍未滿與隊伍已滿兩種介面，面板分別約為 1397×786、992×558，頁面與 modal 均無水平／垂直卷軸；標題、姓名與按鈕位於素材框中心，六張替換卡及角色圖片均載入。實際點擊收下、放棄、第四名替換與滿隊放棄四條流程，確認新囚犯加入／不加入、指定索引替換與 `pendingRecruitId` 清除皆正確。兩個正式房間視窗測試中，操作方顯示一個私人結果 modal、觀看方為零；收下後兩窗隊伍均為原船員加新囚犯，`BOARD_GAME_STATE` 版本由 2 更新為 3、目前玩家及 server ack 一致，兩窗 runtime exception 皆為 0。
 - 風險：本次只替換招募結果與滿隊替換的圖片、排版及人物裁切；不修改囚犯資料、名稱、台詞、能力、招募結果、隊伍上限、抽池、攜帶物、船長、CPU、回合規則、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。`docs/GAME_RULES.md` 不需更新，因規則與數值未變。
 
 #### 正式推進城進入／玩家救援與被關牢籠圖片式介面
@@ -4877,8 +4334,7 @@ ode --check public/js/board_game.js`、`board_game.html` inline script 語法、
 - 日期：2026-07-23。
 - 正式入口確認：主地圖 `resolveLanding()` 判定玩家落在 `island.kind === "impel_down"` 時呼叫 `openImpelDownModal()`；已是推進城囚犯的玩家仍直接開啟 `openImpelDownWindow()`，未被關的目前行動玩家才顯示進入／救援確認。救援列只收錄其他 `impelDown.active === true` 且 `status === "locked"` 的玩家，四人上限下最多三列；點擊仍由原 `data-impel-rescue` 呼叫 `startImpelDownBattle()`，不是另建展示入口或戰鬥頁 UI。
 - 素材：驗收使用者放入的三張 RGBA WebP，固定命名並移出 `incoming/`。`impel_down_entry_rescue_panel_frame.webp` 為 1672×941，alpha 內容範圍 `(34, 24)～(1637, 917)`；`impel_down_rescue_player_row_frame.webp` 為 1536×300，alpha 內容範圍 `(24, 42)～(1512, 257)`；`impel_down_captive_cage_overlay.webp` 為 1024×1280，alpha 內容範圍 `(58, 32)～(966, 1248)`。三張素材四角均透明，正式頁不引用 `incoming/`。
-- 進入／救援介面：`openImpelDownModal()` 非囚犯分支改為同一張 1672×941 主框；左側沿用 `impel_down_island.webp`，以海洋藍漸層填滿透明／留白區並精確裁入拱形孔，顯示島名、入口層級與副本行動。右側無囚犯時顯示空狀態；有囚犯時使用最多三張共用救援列框，左格顯示該玩家目前船長的 `weak`／
-ormal` 正式戰鬥圖，中間顯示玩家名、LEVEL、樓層、階級、被捕原因與原失敗警告，右格置中「救援」。底部「進入推進城／離開」與所有文字、圖片、點擊區均依素材內框置中；保留 `enterImpelIslandBtn`、`leaveImpelIslandBtn` 及 `data-impel-rescue`。
+- 進入／救援介面：`openImpelDownModal()` 非囚犯分支改為同一張 1672×941 主框；左側沿用 `impel_down_island.webp`，以海洋藍漸層填滿透明／留白區並精確裁入拱形孔，顯示島名、入口層級與副本行動。右側無囚犯時顯示空狀態；有囚犯時使用最多三張共用救援列框，左格顯示該玩家目前船長的 `weak`／`normal` 正式戰鬥圖，中間顯示玩家名、LEVEL、樓層、階級、被捕原因與原失敗警告，右格置中「救援」。底部「進入推進城／離開」與所有文字、圖片、點擊區均依素材內框置中；保留 `enterImpelIslandBtn`、`leaveImpelIslandBtn` 及 `data-impel-rescue`。
 - 被關牢籠：`board_impel_down.html` 的人物舞台改套 `impel_down_captive_cage_overlay.webp`；牢籠覆蓋圖 `inset: 0` 並以 `width/height: 100%` 與 `.cage` 完全重合，角色圖縮在鐵欄安全區，舊 CSS `.bars`／`.lock` 隱藏。既有 `.cage.free` 狀態只讓新牢籠圖淡出及微幅上移，`locked`、`free`、樓層切換、事件按鈕與副本快照邏輯均未更動。主遊戲腳本快取版本更新為 `20260723-impel-entry-rescue-ui-v1`，推進城 iframe 版本更新為 `20260723-entry-rescue-cage-ui-v1`。
 - 檔案：`public/images/board/impel_down_ui/impel_down_entry_rescue_panel_frame.webp`、`public/images/board/impel_down_ui/impel_down_rescue_player_row_frame.webp`、`public/images/board/impel_down_ui/impel_down_captive_cage_overlay.webp`、`public/board_game.html`、`public/js/board_game.js`、`public/board_impel_down.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 驗證：三張 WebP 尺寸、RGBA、alpha 範圍與透明四角均通過；正式 Chrome 以 1440×900 桌機及 1024×768 平板顯示無囚犯與三名囚犯兩種主框，主框分別約 1397×786 與 992×558，文件水平／垂直溢出為 0。三張救援列框與各自卡片 DOM 完全重合，島圖與拱形裁切區完全重合，標題、島嶼資料、三列玩家資料、救援按鈕及底部兩個按鈕的 DOM 溢出均為 0，所有正式素材與人物圖片成功載入且 runtime exception 為 0。副本頁桌機與平板鎖定狀態的牢籠圖均與 `.cage` 外框完全重合；解除狀態後牢籠 opacity 為 0，人物及原控制區保留。實際點擊「離開」後正常結束回合；點擊「進入推進城」後開啟帶新版號的正式 iframe；以一名被關玩家實際點擊「救援」後，原 `battleState.impelDown` 正確保留 `rescue: true`、`prisonerPlayerId`、樓層與 `eventId: "rescue"`。
@@ -4892,8 +4348,7 @@ ormal` 正式戰鬥圖，中間顯示玩家名、LEVEL、樓層、階級、被�
 - 排版：1672×941 副本主框依原圖比例置中，標題、玩家階級、四項資源、六層樓層列、中央人物／牢籠舞台、事件揭曉與底部行動區均依素材內框定位。六張既有 `level_1_red_hell.webp` 至 `level_6_infinite_hell.webp` 透過主框中央透明區顯示，父頁只在既有 view 的 `rule` 加入對應圖片路徑。4:1 樓層列與行動框、正方形事件框、1536×320 事件列、1672×941 抽池主框及 3:2 囚犯候選卡／輪盤都保持素材原比例，不以 CSS 拉成其他比例；候選卡依 3+2 槽位置中。新版覆寫不加入先前被移除的寬黃色背光，既有牢籠圖與線條仍保留。
 - 功能保留：六層名稱／階級／背景、五種推進城事件、五名隱藏囚犯、抽選權重、提高機率、貝里消耗、逃籠骰、移動／直接逃出、等待、往上、返回地圖及招募結果全部沿用原資料與按鈕。事件抽選、囚犯抽選、逃籠骰、靜態事件結果、移動結果與逃出結果改在新版事件框或輪盤顯示；原按鈕文字、command id、CPU、觀看方、回合、存檔與完整快照同步流程沒有改動。
 - 檔案：`public/images/board/impel_down_ui/` 上述八張素材、`public/board_impel_down.html`、`public/js/board_impel_down.js`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check`、`board_impel_down.html` inline script 語法、CSS 解析、八張正式素材路徑與 HTTP 200、正式頁 DOM／runtime 狀態模擬及 `git diff --check` 均通過。DOM 測試逐一顯示 `locked`、`free`、`event`、`move`、`recruit`、`escaped`，確認六列樓層、五張囚犯卡、原操作按鈕、事件輪盤、囚犯輪盤與逃籠骰均正常建立且 runtime exception 為 0。Codex Chrome 外掛在本次工作階段初始化時持續回報 `Cannot redefine property: process`；依瀏覽器驗證規範未改用其他自動化工具代替，因此 1440×900 與 1024×768 的正式 Chrome 畫面仍待外掛恢復後補驗，不能列為已通過。
+- 驗證：`node --check`、`board_impel_down.html` inline script 語法、CSS 解析、八張正式素材路徑與 HTTP 200、正式頁 DOM／runtime 狀態模擬及 `git diff --check` 均通過。DOM 測試逐一顯示 `locked`、`free`、`event`、`move`、`recruit`、`escaped`，確認六列樓層、五張囚犯卡、原操作按鈕、事件輪盤、囚犯輪盤與逃籠骰均正常建立且 runtime exception 為 0。Codex Chrome 外掛在本次工作階段初始化時持續回報 `Cannot redefine property: process`；依瀏覽器驗證規範未改用其他自動化工具代替，因此 1440×900 與 1024×768 的正式 Chrome 畫面仍待外掛恢復後補驗，不能列為已通過。
 - 風險：本次只替換推進城副本頁的圖片、排版、唯讀樓層背景路徑與快取版本；不修改樓層規則、事件／囚犯 JSON、名稱、台詞、數值、按鈕字串、戰鬥頁、進入／救援、招募結果、CPU、觀看方、回合、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 格式。`docs/GAME_RULES.md` 不需更新，因規則與數值未變。
 
 #### 正式推進城副本主畫面放大與重疊修正
@@ -4938,11 +4393,7 @@ ode --check`、`board_impel_down.html` inline script 語法、CSS 解析、八�
 - 排版保留：1672×941 主框仍使用原比例與原縮放方式，監獄金屬框、樓層列、標題、資源、人物牢籠、右側事件／狀態框、抽選輪盤及底部按鈕的百分比座標均未改；本次不放大事件圖，也不拉伸主框。
 - 快取：推進城 iframe／外部 JS 使用 `20260723-full-image-ui-layout-v11`，主頁 `board_game.js` 使用 `20260723-impel-full-ui-layout-v11`。
 - 檔案：`public/board_impel_down.html`、`public/js/board_impel_down.js`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_impel_down.js`、
-ode --check public/js/board_game.js`、`board_impel_down.html` inline script 編譯與 CSS 解析均通過。jsdom 依序切換 LEVEL 1～6，六種狀態都把正確的 `rule.image` 設到唯一 `.screen`，同時確認 `linear-gradient` 保留、`.frame` 背景為 
-one`、事件框與牢籠各維持一組；六張樓層圖片皆存在且正式 HTTP 200。`.screen` computed background 為 `cover`、置中、
-o-repeat`，因此 1440×900 與 1024×768 都會由目前樓層圖覆滿視窗而不留下純黑空白；主框尺寸公式與全部內部座標未改。固定入口、正式主頁、版本化推進城頁及兩支版本化腳本均 HTTP 200，`git diff --check` 通過。Codex Chrome 連線初始化仍回報 `Cannot redefine property: process`，依 Chrome 驗證規範未改用其他瀏覽器自動化冒充，因此本次實際 Chrome 桌機／平板畫面仍待外掛恢復或使用者提供正式截圖後補驗。
+- 驗證：`node --check public/js/board_impel_down.js`、`node --check public/js/board_game.js`、`board_impel_down.html` inline script 編譯與 CSS 解析均通過。jsdom 依序切換 LEVEL 1～6，六種狀態都把正確的 `rule.image` 設到唯一 `.screen`，同時確認 `linear-gradient` 保留、`.frame` 背景為 `none`、事件框與牢籠各維持一組；六張樓層圖片皆存在且正式 HTTP 200。`.screen` computed background 為 `cover`、置中、`no-repeat`，因此 1440×900 與 1024×768 都會由目前樓層圖覆滿視窗而不留下純黑空白；主框尺寸公式與全部內部座標未改。固定入口、正式主頁、版本化推進城頁及兩支版本化腳本均 HTTP 200，`git diff --check` 通過。Codex Chrome 連線初始化仍回報 `Cannot redefine property: process`，依 Chrome 驗證規範未改用其他瀏覽器自動化冒充，因此本次實際 Chrome 桌機／平板畫面仍待外掛恢復或使用者提供正式截圖後補驗。
 - 風險：本次只移動既有六張樓層背景的顯示層級；不修改樓層資料、背景路徑、事件圖、事件／囚犯抽選、牢籠、按鈕字串、command id、戰鬥、CPU、觀看方、回合、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。`docs/GAME_RULES.md` 與 `docs/FILE_MAP.md` 不需更新，因規則、數值、素材與檔案職責未變。
 
 #### 正式推進城入口島嶼縮圖原色修正
@@ -4952,8 +4403,7 @@ o-repeat`，因此 1440×900 與 1024×768 都會由目前樓層圖覆滿視窗�
 - 修正：`.impel-entry-island-art img` 改為 `mix-blend-mode:normal`、`filter:none`，讓島嶼素材使用原色顯示；外層海洋藍漸層、拱形裁切、`object-fit:contain`、尺寸與位置全部保留，因此透明區仍是海洋藍，但不再染到島圖本體。
 - 快取：正式 `board_game.js` 引用更新為 `20260723-impel-entry-island-color-v1`。
 - 檔案：`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js`、`board_game.html` inline script 編譯與 CSS 解析通過。jsdom 在正式樣式中建立 `.impel-entry-island-art > img`，computed style 為 `mix-blend-mode:normal`、`filter:none`、`object-fit:contain`、置中；外層仍保留海洋藍 `radial-gradient`、`overflow:hidden`，正式縮圖素材亦存在。固定入口、正式主頁、新版號腳本與 `impel_down_island.webp` 均 HTTP 200，`git diff --check` 通過。Codex Chrome 連線在同一工作階段仍受初始化錯誤阻擋，因此實際桌機／平板畫面待外掛恢復或使用者刷新正式頁確認後補驗。
+- 驗證：`node --check public/js/board_game.js`、`board_game.html` inline script 編譯與 CSS 解析通過。jsdom 在正式樣式中建立 `.impel-entry-island-art > img`，computed style 為 `mix-blend-mode:normal`、`filter:none`、`object-fit:contain`、置中；外層仍保留海洋藍 `radial-gradient`、`overflow:hidden`，正式縮圖素材亦存在。固定入口、正式主頁、新版號腳本與 `impel_down_island.webp` 均 HTTP 200，`git diff --check` 通過。Codex Chrome 連線在同一工作階段仍受初始化錯誤阻擋，因此實際桌機／平板畫面待外掛恢復或使用者刷新正式頁確認後補驗。
 - 風險：本次只移除推進城入口縮圖的濾色；不修改原素材、其他島嶼縮圖、推進城副本六層背景、入口／離開／救援按鈕、戰鬥、CPU、觀看方、回合、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。`docs/GAME_RULES.md` 與 `docs/FILE_MAP.md` 不需更新。
 
 #### 頂上戰爭正式主介面素材收件準備
@@ -4975,8 +4425,7 @@ ode --check public/js/board_game.js`、`board_game.html` inline script 編譯與
 - 動畫與功能保留：中央仍使用原 `execution_platform.webp`、`execution_guard_crossed_swords.png`、`execution_cut_video/**` 與 `props/haki/conqueror_intro.mp4`；舉刀、斬落、霸王色、守衛裂開、角色救出／處刑、成功／失敗動畫及原圖層順序全部保留。`executionZone`、`executionSlots`、`helperLineup`、`bossLineup`、`remainingTurnsText`、`rescueDiceBtn` 與原事件入口均未改名；正式四人快照可顯示 1 張自己的情報卡、3 張其他玩家情報卡、目前 Boss、最短處刑倒數與救援骰數量。
 - 快取：`MARINEFORD_PAGE_VERSION` 與正式 `board_game.js` script query 同步更新為 `20260723-marineford-image-ui-v1`，確保主頁載入新版 Marineford iframe 與樣式。
 - 檔案：`public/board_marineford.html`、`public/board_game.html`、`public/js/board_game.js`、`public/images/board/marineford_ui/*.webp`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 通過；`board_marineford.html` inline script 以 `vm.Script` 編譯、CSS 以 `css-tree` 解析均通過，`board_game.html` CSS 亦解析通過。jsdom 獨立模式確認新主框、原全螢幕 `.stage`、處刑台與既有守衛／斬落／霸王色素材都存在，沒有 runtime exception；正式 `board=1` 四人快照確認左側共 4 張處刑情報卡、3 個其他玩家切換入口、右側黃猿 Boss、最短 `19 回合`、`救援骰 x2` 與中央處刑角色均正常，沒有 runtime exception。固定入口、正式主頁、版本化 Marineford 頁、版本化主腳本、四張新圖與原處刑／動畫素材均回應 HTTP 200；`git diff --check` 通過（僅顯示專案既有 `public/start.html`、`server/db.js`、`server/index.js` 行尾轉換警告，沒有 whitespace error）。Codex Chrome 初始化仍回報 `Cannot redefine property: process`，依 Chrome 驗證規範未改用其他瀏覽器自動化冒充，實際 1440×900／1024×768 Chrome 畫面待外掛恢復或使用者刷新正式頁提供截圖後補驗。
+- 驗證：`node --check public/js/board_game.js` 通過；`board_marineford.html` inline script 以 `vm.Script` 編譯、CSS 以 `css-tree` 解析均通過，`board_game.html` CSS 亦解析通過。jsdom 獨立模式確認新主框、原全螢幕 `.stage`、處刑台與既有守衛／斬落／霸王色素材都存在，沒有 runtime exception；正式 `board=1` 四人快照確認左側共 4 張處刑情報卡、3 個其他玩家切換入口、右側黃猿 Boss、最短 `19 回合`、`救援骰 x2` 與中央處刑角色均正常，沒有 runtime exception。固定入口、正式主頁、版本化 Marineford 頁、版本化主腳本、四張新圖與原處刑／動畫素材均回應 HTTP 200；`git diff --check` 通過（僅顯示專案既有 `public/start.html`、`server/db.js`、`server/index.js` 行尾轉換警告，沒有 whitespace error）。Codex Chrome 初始化仍回報 `Cannot redefine property: process`，依 Chrome 驗證規範未改用其他瀏覽器自動化冒充，實際 1440×900／1024×768 Chrome 畫面待外掛恢復或使用者刷新正式頁提供截圖後補驗。
 - 風險：本次只替換頂上戰爭正式主畫面的外框與排版；不修改正式台詞、名稱、數值、Boss 順序、40 回合倒數規則、救援骰效果、點擊目前敵人接續流程、處刑 slot、CPU、多人觀看方、回合、戰鬥、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。規則未變，因此 `docs/GAME_RULES.md` 不需更新。
 
 #### 正式頂上戰爭 V2 圖框精確對齊
@@ -5009,8 +4458,7 @@ ode --check public/js/board_game.js` 通過；`board_marineford.html` inline scr
 - 保留：處刑台、囚犯圖、守衛交叉刀、舉刀、斬落、霸王色、守衛裂開、角色救出／處刑與成功／失敗動畫的 DOM、素材、尺寸、圖層及事件均未修改；原 Boss 點擊接續、處刑台切換、換隊長、倒數、救援骰、CPU、觀看方與 `BOARD_GAME_STATE` 流程不變。
 - 快取：`MARINEFORD_PAGE_VERSION` 與正式 `board_game.js` query 同步更新為 `20260723-marineford-image-ui-aligned-v4`。
 - 檔案：`public/board_marineford.html`、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 通過；`board_marineford.html` inline script 及 `board_marineford.html`／`board_game.html` CSS 解析通過；四張 Marineford 新 UI 圖、處刑台、守衛與霸王色素材均存在；固定入口、正式主頁、版本化 Marineford 頁與版本化主腳本均 HTTP 200。Chrome 模擬正式四人狀態在 1440×900 與 1024×768 皆顯示 4 張資料卡、4 張角色圖、黃猿、19 回合與救援骰 x2，`html`／`body` 均為 `overflow:hidden`，無捲軸；桌機與平板截圖已逐張目視確認文字、人物與圖框吻合，中央舞台保持原位置。`git diff --check` 通過，僅有專案既有 `public/start.html`、`server/db.js`、`server/index.js` 行尾轉換警告，沒有 whitespace error。
+- 驗證：`node --check public/js/board_game.js` 通過；`board_marineford.html` inline script 及 `board_marineford.html`／`board_game.html` CSS 解析通過；四張 Marineford 新 UI 圖、處刑台、守衛與霸王色素材均存在；固定入口、正式主頁、版本化 Marineford 頁與版本化主腳本均 HTTP 200。Chrome 模擬正式四人狀態在 1440×900 與 1024×768 皆顯示 4 張資料卡、4 張角色圖、黃猿、19 回合與救援骰 x2，`html`／`body` 均為 `overflow:hidden`，無捲軸；桌機與平板截圖已逐張目視確認文字、人物與圖框吻合，中央舞台保持原位置。`git diff --check` 通過，僅有專案既有 `public/start.html`、`server/db.js`、`server/index.js` 行尾轉換警告，沒有 whitespace error。
 - 風險：本次只修頂上戰爭正式頁的圖片、文字與既有角色 portrait 排版，不改台詞、名稱、數值、素材用途、字串 id、40 回合規則、救援骰效果、事件、CPU、戰鬥、回合、存檔欄位、localStorage key、Socket.IO event 或同步快照格式；未新增素材或改檔案職責，因此 `docs/GAME_RULES.md` 與 `docs/FILE_MAP.md` 不需更新。
 
 #### 頂上戰爭 V5 正式抽籤圖片式介面
@@ -5024,8 +4472,7 @@ ode --check public/js/board_game.js` 通過；`board_marineford.html` inline scr
 - 快取：`MARINEFORD_PAGE_VERSION` 與正式 `board_game.js` query 同步更新為 `20260723-marineford-lottery-image-ui-v5`。
 - 檔案：`public/board_marineford.html`、`public/js/board_game.js`、`public/board_game.html`、`public/images/board/marineford_ui/marineford_lottery_panel_frame.webp`、`marineford_lottery_player_info_frame.webp`、`marineford_player_lottery_reel_frame.webp`、`marineford_lottery_result_character_frame.webp`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - Chrome 正式流程驗證：以 Chrome 150 載入 `board_marineford.html?board=1` 四人快照，桌機 1440×900 實點目前敵人、繼續設定與開始抽籤，確認準備畫面 4 張資料框、轉動中 4 個 reel／88 個 token／4 個 `is-running` track，以及結果畫面 4 張角色卡均正常；桌機逐張目視確認中央金框／雙指針壓在角色卡上方、文字與圖片置中且 modal／body 無捲軸。平板 1024×768 實測白鬍子支援準備畫面能顯示 4 位玩家且開始按鈕可用，結果畫面 4 張角色卡與底部按鈕均完整顯示；另關閉抽籤後開啟賀爾蒙注射，modal class 已重設為原 `modal`，確認其他舊介面未被抽籤樣式污染。
-- 技術驗證：
-ode --check public/js/board_game.js`、`board_marineford.html` inline script 編譯與 CSS 解析通過；四張新圖及正式頁素材路徑存在，固定入口、正式主頁、版本化 Marineford 頁、版本化主腳本與四張新圖均 HTTP 200；`git diff --check` 通過時僅顯示專案既有行尾轉換警告，沒有 whitespace error。
+- 技術驗證：`node --check public/js/board_game.js`、`board_marineford.html` inline script 編譯與 CSS 解析通過；四張新圖及正式頁素材路徑存在，固定入口、正式主頁、版本化 Marineford 頁、版本化主腳本與四張新圖均 HTTP 200；`git diff --check` 通過時僅顯示專案既有行尾轉換警告，沒有 whitespace error。
 - 風險：本次不修改正式台詞、卡池、候選名單、亂數、抽籤結果、角色／道具 id、Boss、40 回合倒數、救援骰、CPU、觀看方、戰鬥、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`；規則未變，因此 `docs/GAME_RULES.md` 不需更新。
 
 #### 頂上戰爭 V6 抽籤尺寸、文字與按鈕重排
@@ -5061,8 +4508,7 @@ ode --check public/js/board_game.js`、`board_marineford.html` inline script 編
 - 快取：`MARINEFORD_PAGE_VERSION` 與正式 `board_game.js` query 更新為 `20260723-marineford-lottery-buttons-v8`。
 - 檔案：`public/board_marineford.html`、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
 - 畫面驗證：Chrome 150 正式 `board=1` 四人流程在 1440×900 擷取抽籤前、四個卡帶轉動中與四張結果卡三個狀態；抽籤前四個倒數文字皆為空，四個底部按鈕文字依各自圖框置中，結果卡與文字均未超出主框。1024×768 結果頁再次確認無捲軸、無文字 overflow，按鈕與四張角色卡完整顯示。
-- 技術驗證：
-ode --check public/js/board_game.js`、`board_marineford.html` inline script 編譯與 CSS 解析、正式頁 HTTP 200、素材路徑與 `git diff --check` 均通過。
+- 技術驗證：`node --check public/js/board_game.js`、`board_marineford.html` inline script 編譯與 CSS 解析、正式頁 HTTP 200、素材路徑與 `git diff --check` 均通過。
 - 風險：本次沒有改候選池、亂數、動畫時間、抽籤結果、40 回合規則、CPU、觀看方、回合、戰鬥、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`；未新增素材或改檔案職責，因此 `docs/GAME_RULES.md` 與 `docs/FILE_MAP.md` 不需更新。
 
 #### 頂上戰爭 V9 轉盤加高與按鈕四向置中
@@ -5135,8 +4581,7 @@ ode --check public/js/board_game.js`、`board_marineford.html` inline script 編
 - 同步：沿用 `drawCrew`、`drawSupport`、`startRaid`、`startBattle` 四個既有 `board-marineford-command`，父頁仍由 `processMarinefordPageCommand()` 驗證目前玩家控制權並建立正式戰鬥；沒有新增或改名同步事件、快照欄位、localStorage key 或 `BOARD_GAME_STATE` 欄位。
 - 快取：`MARINEFORD_PAGE_VERSION` 與正式 `board_game.js` query 更新為 `20260724-marineford-direct-flow-v15`。
 - 檔案：`public/board_marineford.html`、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js`、`board_marineford.html`／`board_game.html` inline script 語法檢查、三個正式頁 HTTP 200、`git diff --check` 全部通過；Chrome 1440×900 處刑台結果與 1024×768 支援結果實拍無捲軸或框外溢出。正式 `board=1` 從規則、兩段抽籤到「挑戰青雉」可在同頁連續完成，第二個同源視窗可收到 `startRaid`、`startBattle`，且操作方最後命令為 `startBattle`。
+- 驗證：`node --check public/js/board_game.js`、`board_marineford.html`／`board_game.html` inline script 語法檢查、三個正式頁 HTTP 200、`git diff --check` 全部通過；Chrome 1440×900 處刑台結果與 1024×768 支援結果實拍無捲軸或框外溢出。正式 `board=1` 從規則、兩段抽籤到「挑戰青雉」可在同頁連續完成，第二個同源視窗可收到 `startRaid`、`startBattle`，且操作方最後命令為 `startBattle`。
 - 風險：本次只縮短既有 UI 導頁與確認層，不改抽籤候選池／亂數結果、Boss 順序、處刑倒數、救援骰、戰鬥內容、失敗／勝利結算、CPU、觀看方權限、回合、存檔或規則；未新增素材或改檔案職責，因此 `docs/GAME_RULES.md` 與 `docs/FILE_MAP.md` 不需更新。
 
 #### 商店圖片式 UI 素材收件準備
@@ -5245,9 +4690,7 @@ ode --check public/js/board_game.js`、`board_marineford.html`／`board_game.htm
 - 正式顯示：`public/js/board_battle.js` 的 `renderPartners()` 改為在原左下 `infoPanel` 鋪設圖片主框，最多六名船員固定排成兩欄三列；每格把正式角色戰鬥圖放入圓形人物孔，姓名、等級／屬性、HP／PP 與狀態分別對進素材預留框位。桌機與平板都不需捲動，文字與角色圖均限制在對應內框。
 - 狀態與規則：目前上場顯示「上場中」、HP 0 顯示「瀕死」、黑鬍子拘束／最終門黑轉顯示「受拘束」，其餘才顯示「切換上場」並可點擊。點擊仍送出原本 `battleChooseSwitch`／`switch` 與 `{ nextIndex }`，沒有改換人算完整動作、回合、戰鬥動畫、瀕死替補、司法島連戰、CPU、共鬥、觀看方、存檔或同步規則。
 - 快取：`BATTLE_PAGE_VERSION`、正式 `board_battle.js` query 與 `board_game.js` query 統一為 `20260724-battle-switch-ui-v1`。
-- 驗證：
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js` 通過；固定入口、正式戰鬥頁、兩支 JS 與兩張正式 WebP 均 HTTP 200。Chrome 150 以正式 battle snapshot 在 1440×900、1024×768 實拍六名船員，並實測可選角色送出 `{ type: "switch", payload: { nextIndex: 1 } }`；拘束狀態全鎖、瀕死／目前上場不可點，觀看方隱藏操作盤且不能送出命令。
+- 驗證：`node --check public/js/board_battle.js`、`node --check public/js/board_game.js` 通過；固定入口、正式戰鬥頁、兩支 JS 與兩張正式 WebP 均 HTTP 200。Chrome 150 以正式 battle snapshot 在 1440×900、1024×768 實拍六名船員，並實測可選角色送出 `{ type: "switch", payload: { nextIndex: 1 } }`；拘束狀態全鎖、瀕死／目前上場不可點，觀看方隱藏操作盤且不能送出命令。
 
 #### 戰鬥操作盤統一圖片素材規劃
 
@@ -5282,9 +4725,7 @@ ode --check public/js/board_game.js` 通過；固定入口、正式戰鬥頁、�
 - 圖示準備：建立 `public/images/board/battle_command_ui/incoming/icons/`，接收攻擊、夥伴、道具、逃跑四張 1024×1024 透明無框圖示。正式頁目前先移除圓孔內的「拳／伴／袋／跑」字樣；使用者產圖、驗收及固定命名前不會從 `incoming/` 直接引用。
 - 保留範圍：V2 放大後的左右面板位置與尺寸、右側「攻擊／夥伴／道具／逃跑」文字、四個 `data-mode`、disabled／active／hover、觀看方隱藏及所有命令流程均不變。
 - 快取：`BATTLE_PAGE_VERSION`、正式 `board_battle.js` query 與 `board_game.js` query 更新為 `20260724-battle-command-ui-v3`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`、HTML inline script 語法檢查、素材路徑及正式頁 HTTP 200、`git diff --check`；Chrome 桌機與平板實拍確認主指令底圖維持 1536×424 比例、圓孔無非等比例變形、文字未溢出且按鈕仍可切換原本操作盤。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`、HTML inline script 語法檢查、素材路徑及正式頁 HTTP 200、`git diff --check`；Chrome 桌機與平板實拍確認主指令底圖維持 1536×424 比例、圓孔無非等比例變形、文字未溢出且按鈕仍可切換原本操作盤。
 - 風險：本次只修正主指令底圖顯示比例、移除臨時中文字圖示並新增尚未正式引用的圖示收件目錄；不改戰鬥規則、招式、道具、逃跑、回合、CPU、共鬥、觀看方、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`，因此 `docs/GAME_RULES.md` 不需更新。
 
 #### 戰鬥操作盤 V4 初始空盤改用正式圖片底圖
@@ -5293,9 +4734,7 @@ ode --check public/js/board_game.js`、HTML inline script 語法檢查、素材�
 - 正式修正：`renderClosedPanel()` 現在保留 `battle-command-mode`，並在左下放入只有 `battle_switch_panel_frame.webp` 的空白 `.battle-command-ui`；不放標題、說明、按鈕或臨時文字。選擇任一指令後仍由既有 `renderAttack()`、`renderPartners()`、`renderItems()`、`renderEscape()` 完整替換內容。
 - 圖示方向：四張圓孔圖示的生圖規格改為 1024×1024 透明背景、平面 2D RPG 指令圖示、粗黑鐵輪廓、簡化色塊與少量賽璐璐陰影；禁止寫實材質、3D 渲染、人物細節、外框、底板與文字。仍放入既有 `battle_command_ui/incoming/icons/`，本版尚未正式引用。
 - 快取：`BATTLE_PAGE_VERSION`、正式 `board_battle.js` query 與 `board_game.js` query 更新為 `20260724-battle-command-ui-v4`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`、HTML inline script 語法檢查、正式頁與素材 HTTP 200、`git diff --check`；Chrome 桌機與平板以正式 battle snapshot 實拍初始空盤，確認左下顯示完整新底圖、沒有舊版空方格、頁面無捲軸，並逐一點擊四顆主指令確認內容仍能切換。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`、HTML inline script 語法檢查、正式頁與素材 HTTP 200、`git diff --check`；Chrome 桌機與平板以正式 battle snapshot 實拍初始空盤，確認左下顯示完整新底圖、沒有舊版空方格、頁面無捲軸，並逐一點擊四顆主指令確認內容仍能切換。
 - 風險：只更換關閉狀態的左下視覺內容與快取版本，不改任何指令、招式、道具、逃跑、戰鬥數值、回合、CPU、共鬥、觀看方控制權、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`，因此 `docs/GAME_RULES.md` 與素材職責未變的 `docs/FILE_MAP.md` 不需更新。
 
 #### 戰鬥操作盤 V5 底邊延伸與格內最大化
@@ -5304,9 +4743,7 @@ ode --check public/js/board_game.js`、HTML inline script 語法檢查、正式�
 - 內容最大化：換人 grid、招式／道具／逃跑 body 與右側主指令 grid 的左右安全區由 4.15% 放寬至 3%，兩欄水平間距由 1.25% 收窄至 0.8%；左側內容下安全區由 8.5% 收至 6%，右側主指令由 4% 收至 2.5%。各按鈕因此在素材預留格內放到更大的安全尺寸。
 - 比例保護：右側四顆主指令仍固定 `1536 / 424` aspect ratio，圖片與按鈕容器同尺寸，因此左側圓孔不會再次拉成橢圓；按鈕本身保留 overflow 裁切與格內置中，不超出左右外框或中央分隔。
 - 快取：`BATTLE_PAGE_VERSION`、正式 `board_battle.js` query 與 `board_game.js` query 更新為 `20260724-battle-command-ui-v5`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`、HTML inline script 語法檢查、正式頁與素材 HTTP 200、`git diff --check`；Chrome 桌機與平板以正式 battle snapshot 實拍初始空盤、右側主指令及左側各內容，確認底邊安全距離、正圓徽章、文字與人物不溢出、頁面無捲軸，並逐一點擊四顆主指令。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`、HTML inline script 語法檢查、正式頁與素材 HTTP 200、`git diff --check`；Chrome 桌機與平板以正式 battle snapshot 實拍初始空盤、右側主指令及左側各內容，確認底邊安全距離、正圓徽章、文字與人物不溢出、頁面無捲軸，並逐一點擊四顆主指令。
 - 風險：只更改正式預設控制盤的底部顯示範圍、內容安全區與快取版本；非預設手動 layout 仍維持使用者自訂 `y/h`。不改指令、招式、道具、逃跑、戰鬥數值、回合、CPU、共鬥、觀看方、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`，因此 `docs/GAME_RULES.md` 與 `docs/FILE_MAP.md` 不需更新。
 
 #### 戰鬥操作盤 V6 平板主指令專用最大化
@@ -5315,9 +4752,7 @@ ode --check public/js/board_game.js`、HTML inline script 語法檢查、正式�
 - 平板覆寫：新增 `max-width: 1100px` 專用規則，僅把 `.battle-action-grid` 左右安全區從 3% 收至 0.8%、欄間距從 0.8% 收至 0.35%；1024×768 每顆主指令約為 242×67，900px 寬度亦會依同規則在兩欄格內放大。
 - 比例與文字：四顆 `.action-button` 仍使用 `1536 / 424` aspect ratio，正圓徽章不拉伸；平板 `.action-label` 使用 16～24px 自適應字級，攻擊／夥伴／道具／逃跑均保持上下左右置中且沒有溢出。1100px 以上桌機沿用 V5，不受此覆寫影響。
 - 快取：`BATTLE_PAGE_VERSION`、正式 `board_battle.js` query 與 `board_game.js` query 更新為 `20260724-battle-command-ui-v6`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`、HTML inline script 語法檢查、正式頁與素材 HTTP 200、`git diff --check`；Chrome 1024×768 與 900×768 實拍四顆主指令，量測按鈕、圓孔與文字均位於主底圖內，並逐一點擊確認四個內容盤仍正常切換；1440×900 尺寸與 V5 相同。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`、HTML inline script 語法檢查、正式頁與素材 HTTP 200、`git diff --check`；Chrome 1024×768 與 900×768 實拍四顆主指令，量測按鈕、圓孔與文字均位於主底圖內，並逐一點擊確認四個內容盤仍正常切換；1440×900 尺寸與 V5 相同。
 - 風險：只新增平板寬度下的右側主指令 grid 與文字視覺覆寫，不改左側內容、桌機版、指令事件、招式、道具、逃跑、戰鬥數值、回合、CPU、共鬥、觀看方、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`，因此 `docs/GAME_RULES.md` 與 `docs/FILE_MAP.md` 不需更新。
 
 #### 戰鬥操作盤 V7 四張正式圓孔圖示接入
@@ -5326,9 +4761,7 @@ ode --check public/js/board_game.js`、HTML inline script 語法檢查、正式�
 - 正式接入：四個既有 `data-mode` 按鈕各新增一張 `.action-symbol`；圖示安全區沿用原圓孔幾何位置 `left: 3.4% / top: 13% / width: 22.6% / height: 74%`，使用 `object-fit: contain` 與中央 object-position，讓四張不同比例的透明主體各自等比例置中。依各圖透明留白，攻擊／夥伴／道具／逃跑再分別使用 1.24／1.2／1.24／1.16 倍視覺縮放，填滿圓孔但不碰金框；只保留低強度深色 drop-shadow 增加深藍底辨識度。
 - 版面保護：V6 的 1024×768 約 241×67 平板按鈕、900×768 約 212×59 按鈕、1440×900 約 322×89 桌機按鈕均不改；底框仍維持 1536×424 比例與正圓徽章，圖示不參與按鈕事件、不遮擋文字或 hover／disabled 狀態。
 - 快取：`BATTLE_PAGE_VERSION`、正式 `board_battle.js` query 與 `board_game.js` query 更新為 `20260724-battle-command-ui-v7`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`、HTML inline script 語法檢查、四張正式 WebP 路徑與頁面 HTTP 200、`git diff --check`；Chrome 桌機 1440×900、平板 1024×768 實拍四張圖示，確認透明主體落在圓孔內、上下左右視覺置中、文字與底框無溢出，並逐一點擊四顆按鈕確認原內容盤正常切換。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`、HTML inline script 語法檢查、四張正式 WebP 路徑與頁面 HTTP 200、`git diff --check`；Chrome 桌機 1440×900、平板 1024×768 實拍四張圖示，確認透明主體落在圓孔內、上下左右視覺置中、文字與底框無溢出，並逐一點擊四顆按鈕確認原內容盤正常切換。
 - 風險：本次只新增四張正式圖片與圓孔圖示 DOM／CSS，不改攻擊、換人、道具、逃跑、戰鬥數值、回合、CPU、共鬥、觀看方、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`，因此 `docs/GAME_RULES.md` 不需更新。
 
 #### 戰鬥勝利／結算 V8 沿用現有圖片式 UI
@@ -5339,9 +4772,7 @@ ode --check public/js/board_game.js`、HTML inline script 語法檢查、四張�
 - 原流程保留：`戰鬥勝利！`、`全員瀕死`、`成功脫離戰鬥`、`夥伴瀕死，請選下一位上場`、`本輪結束` 與 `本輪處理完成` 判斷不變；返回地圖、多人換下一位、司法島中途「領取補給並換人」及單人「進入下一輪」仍送出原 `battleFinish`／`finish`。按下後依本次戰鬥／回合簽章維持兩秒 disabled 防止正式頁輪詢重畫造成連點，逾時仍可重試。
 - 共用樣式保護：新版獎勵明細改用獨立 `.battle-result-reward-detail`，四皇機制與司法島下一戰換人仍使用既有 `.battle-result-box`／`.battle-result-reward-line`；兩種舊提示已回歸確認，沒有被新版結算的文字截斷規則誤套。
 - 快取：`BATTLE_PAGE_VERSION`、正式 `board_battle.js` query 與 `board_game.js` query 更新為 `20260724-battle-command-ui-v8`。
-- 驗證：執行 
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`、HTML inline script 語法檢查、既有素材與正式頁 HTTP 200、`git diff --check`；Chrome 1440×900、1024×768 實拍單人勝利、四人共鬥勝利、失敗、逃跑、round-pause 與司法島中途勝利，檢查文字／框位與捲軸，並實測結算按鈕只送出一次原 finish 命令。
+- 驗證：執行 `node --check public/js/board_battle.js`、`node --check public/js/board_game.js`、HTML inline script 語法檢查、既有素材與正式頁 HTTP 200、`git diff --check`；Chrome 1440×900、1024×768 實拍單人勝利、四人共鬥勝利、失敗、逃跑、round-pause 與司法島中途勝利，檢查文字／框位與捲軸，並實測結算按鈕只送出一次原 finish 命令。
 - 風險：本次只重組正式戰鬥結果 DOM、圖片與結算時的面板可見性，不改獎勵計算、敵人掉落、EXP、貝里、懸賞金、司法島階段、CPU、共鬥資料、觀看方控制權、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`，因此 `docs/GAME_RULES.md` 與未新增素材職責的 `docs/FILE_MAP.md` 不需更新。
 
 #### 戰鬥勝利／結算 V9 結果標題與等寬放大
@@ -5384,8 +4815,7 @@ ode --check public/js/board_game.js`、HTML inline script 語法檢查、既有�
 - HUD：`public/board_battle.html` 的左右 `.hud-panel` 保留原定位、資料 DOM 與層級，只移除舊 CSS 藍框並在最底層鋪設我方深海藍／敵方暗紅圖片框。框圖向四周視覺放大為 103%×112%，HUD 內容使用至少水平 30px、垂直 9px 安全距離；姓名、HP、等級、屬性、攜帶物及原本疊層 Boss `X2` 都留在框內，`yonko-layered` 血條仍預留原 46px 徽章位置。
 - 對話：`ensurePrebattleIntroLayer()` 的我方、敵方與戰鬥開始提示分別套用三張正式框；`ensurePhase2DialogueLayer()` 沿用敵方暗紅對話框。姓名列依圖片左上姓名牌比例使用固定 grid 高度、寬度與邊距，桌機及平板都是真正上下左右置中；台詞仍在主內容框內垂直置中。既有角色／敵人名稱、台詞、播放時間、第二階段跳過與完成回報均未修改。
 - 快取：`BATTLE_PAGE_VERSION`、正式 `board_battle.js` query 與 `board_game.js` query 統一為 `20260724-battle-hud-dialogue-ui-v1`。
-- 驗證：Chrome 1440×900 與 1024×768 以正式 battle snapshot 實拍 HUD、我方／敵方進場台詞與戰鬥開始框；另外以 `yonko-layered has-layer-badge` 實測 `X2` 徽章位於敵方 HUD 及放大後圖片框內，血條不與徽章重疊。
-ode --check`、HTML inline script、五張素材路徑、正式頁 HTTP 200 與 `git diff --check` 均通過。
+- 驗證：Chrome 1440×900 與 1024×768 以正式 battle snapshot 實拍 HUD、我方／敵方進場台詞與戰鬥開始框；另外以 `yonko-layered has-layer-badge` 實測 `X2` 徽章位於敵方 HUD 及放大後圖片框內，血條不與徽章重疊。`node --check`、HTML inline script、五張素材路徑、正式頁 HTTP 200 與 `git diff --check` 均通過。
 - 風險：本次只更換正式戰鬥 HUD／對話圖片、DOM 圖層與置中 CSS；不改 HP 計算、疊層 Boss 規則、台詞內容、播放時序、指令、回合、CPU、共鬥、觀看方、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`，因此 `docs/GAME_RULES.md` 不需更新。
 
 #### 正式戰鬥 HUD／進場對話 V2 去背素材替換
@@ -5543,15 +4973,12 @@ ode --check`、HTML inline script、五張素材路徑、正式頁 HTTP 200 與 
 - 存檔與同步：`mainMission` 位於玩家完整狀態內，會自然進入手動存檔、讀檔與 `BOARD_GAME_STATE`。舊存檔沒有欄位時會從 `main_001` 建立；已有主線存檔會依 `claimedMissionIds` 恢復目前話數。正式雙視窗房間 `B2738` 實測：主視窗建立 `main_001` 完成快照後兩端版本同步到 2；領取第一話後兩端同步到版本 3，皆為 `main_002`、賞金 3,333,333、貝里 3,300。
 - 功能驗證：資料 VM 檢查得到 120 筆、120 個唯一 id、120 個唯一 order、0 筆缺欄；第一話實際領取後精確增加 3,333,333 賞金並解鎖第二話，第七話實際取得 `小塊帶骨肉 ×1`。舊存檔移除 `mainMission` 後正式 `loadManualGame()` 可載入並建立第一話；刻意保留的舊 `sharedMissions` 仍留在快照但日誌沒有共同任務列。
 - 畫面驗證：Chrome 正式 `board_game.html` 於 1440×900 與 1024×768 開啟主線日誌；兩尺寸都完整顯示主線列、章節、條件、進度、獎勵、領獎與不可放棄按鈕，文字與按鈕沒有 scroll overflow，頁面沒有水平／垂直捲軸或 JavaScript page error。1024×768 主框約 983.03×553.23。
-- 其他驗證：8787 原服務已在運行，沒有開第二個 server。`board_start.html`、`board_game.html`、兩支正式 JS 與任務日誌主框皆 HTTP 200；
-ode --check public/js/board_missions.js`、
-ode --check public/js/board_game.js`、HTML inline script 檢查、8 張任務日誌素材存在檢查及 `git diff --check` 通過。`git diff --check` 只顯示工作區原有 `public/start.html`、`server/db.js`、`server/index.js` 的 LF／CRLF 警告，沒有本次 whitespace error。
+- 其他驗證：8787 原服務已在運行，沒有開第二個 server。`board_start.html`、`board_game.html`、兩支正式 JS 與任務日誌主框皆 HTTP 200；`node --check public/js/board_missions.js`、`node --check public/js/board_game.js`、HTML inline script 檢查、8 張任務日誌素材存在檢查及 `git diff --check` 通過。`git diff --check` 只顯示工作區原有 `public/start.html`、`server/db.js`、`server/index.js` 的 LF／CRLF 警告，沒有本次 whitespace error。
 - 文件：同步更新 `docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md` 與本紀錄。未修改 server、Socket.IO event 名稱、localStorage key、一般任務 id／數值、舊卡牌遊戲或任何備份來源。
 
 #### 戰鬥逃跑成功誤送推進城修正
 
-- 原因：普通敵島與海格戰會由 
-ormalizeCoopBattleState()` 建立共鬥 runtime，即使當下只有一名參戰者。逃跑成功後該 runtime 先標記為 `escaped`，舊版 `resolveCoopSingleBattleAction()`／`resolveCoopPlannedBattleActions()` 隨後因 `coopBattleLivingParticipants()` 已為空而把整場改判成 `lose`；玩家在結算時因此被 `sendPlayerToImpelDown()` 誤送推進城。
+- 原因：普通敵島與海格戰會由 `normalizeCoopBattleState()` 建立共鬥 runtime，即使當下只有一名參戰者。逃跑成功後該 runtime 先標記為 `escaped`，舊版 `resolveCoopSingleBattleAction()`／`resolveCoopPlannedBattleActions()` 隨後因 `coopBattleLivingParticipants()` 已為空而把整場改判成 `lose`；玩家在結算時因此被 `sendPlayerToImpelDown()` 誤送推進城。
 - 修正：新增 `coopBattleEscapedParticipants()` 與 `coopBattleAllParticipantsEscaped()`。共鬥已無在場參與者時，只有「所有參與者均成功逃離」才結算為 `escape`，真正戰敗仍維持 `lose`；成功逃跑不再被後續空戰場判斷覆蓋。
 - 掉頭：`finishBattle()` 的 `escape` 分支在共鬥時會逐一處理所有 `escaped` 玩家。敵島逃離者留在原島，透過既有 `markForcedReturnRoute()` 記錄來時 route／方向，下一次航行只能原路返回；不設定 `impelDown.active`。海格戰仍只結束遭遇，不新增敵島 route 狀態。
 - 快取：正式 `board_game.js` query 更新為 `20260725-battle-escape-return-v1`。沒有新增 `gameState` 欄位、localStorage key、Socket.IO event 或素材；`forcedReturnRoute` 與 `BOARD_GAME_STATE` 仍沿用既有格式，因此 `docs/FILE_MAP.md` 不需更新。
@@ -5655,8 +5082,7 @@ ormalizeCoopBattleState()` 建立共鬥 runtime，即使當下只有一名參戰
 - 清除：輸入 `hidePostgameIslands()` 或按畫面內「關閉位置預覽」會移除全部預覽 DOM，並恢復開啟預覽前的鏡頭位置、縮放及自動跟隨狀態。
 - 安全界線：預覽只建立 `.postgame-*` DOM 與本機鏡頭狀態，不加入 `boardData.islands`、`routesBetweenIslands` 或 `seaTiles`，也不修改回合、移動、CPU、四皇、拉夫德魯候選、存檔、localStorage、server save、Socket.IO event 或 `BOARD_GAME_STATE`。因此 `docs/GAME_RULES.md` 與 `docs/FILE_MAP.md` 不需更新。
 - 快取：正式 `board_game.js` query 更新為 `20260725-postgame-island-layout-preview-v1`。
-- 驗證：
-ode --check public/js/board_game.js`、正式頁與兩張沿用島圖 HTTP 200、`git diff --check`。Chrome 正式 `board_game.html` 以 1440×900 與 1024×768 執行指令，兩種尺寸都顯示 23 座、37 段航線、185 個海格及 4 個四皇延伸標記；所有預覽島均位於 viewport 內。執行顯示、正式 `renderAll()` 重繪及清除前後，序列化 `gameState` 完全相同，瀏覽器沒有 page error 或失敗資源。
+- 驗證：`node --check public/js/board_game.js`、正式頁與兩張沿用島圖 HTTP 200、`git diff --check`。Chrome 正式 `board_game.html` 以 1440×900 與 1024×768 執行指令，兩種尺寸都顯示 23 座、37 段航線、185 個海格及 4 個四皇延伸標記；所有預覽島均位於 viewport 內。執行顯示、正式 `renderAll()` 重繪及清除前後，序列化 `gameState` 完全相同，瀏覽器沒有 page error 或失敗資源。
 
 #### 全破後血統因子企劃修訂 V13：右側七島逐島接回主地圖
 
@@ -5665,8 +5091,7 @@ ode --check public/js/board_game.js`、正式頁與兩張沿用島圖 HTTP 200�
 - 修正：右側七座的 Y 座標改與正式右緣 `island-7`、`island-14`、`island-21`、`island-28`、`island-35`、`island-42`、`island-49` 對齊；七座各自新增一段五海格橫向航線接回對應節點，原本右側縱向串聯及上／下最右轉接島仍保留。右上與右下四皇據點的橫向延伸也使用紅色四皇航線。
 - 安全界線：仍只修改純視覺預覽 DOM，不新增正式 island、route、sea tile、遊戲狀態、存檔欄位或同步事件。
 - 快取：正式 `board_game.js` query 更新為 `20260725-postgame-island-layout-preview-v2`。
-- 驗證：執行 
-ode --check public/js/board_game.js`、HTML inline script 檢查、正式頁／JS／沿用島圖 HTTP 200、素材存在、`git diff --check` 與尾端空白檢查。Chrome 正式 `board_game.html` 在 1440×900、1024×768 重新執行 `showPostgameIslands()`，兩種尺寸均顯示 23 座島、43 段航線及 215 個海格；右側七座全部與對應右緣節點橫向相連，所有預覽島位於 viewport 內，序列化 `gameState` 前後相同，重新載入後沒有 page error 或失敗資源。
+- 驗證：執行 `node --check public/js/board_game.js`、HTML inline script 檢查、正式頁／JS／沿用島圖 HTTP 200、素材存在、`git diff --check` 與尾端空白檢查。Chrome 正式 `board_game.html` 在 1440×900、1024×768 重新執行 `showPostgameIslands()`，兩種尺寸均顯示 23 座島、43 段航線及 215 個海格；右側七座全部與對應右緣節點橫向相連，所有預覽島位於 viewport 內，序列化 `gameState` 前後相同，重新載入後沒有 page error 或失敗資源。
 
 #### 全破後血統因子企劃修訂 V14：二十二座新島 Boss 候選池
 
@@ -5995,8 +5420,7 @@ ode --check public/js/board_game.js`、HTML inline script 檢查、正式頁／J
 - 結算：原本只顯示三階段評價的結算改為顯示提取成功／失敗、三段評價與最終成功率；成功提示取得一份完整血統因子，失敗提示抽取器仍消耗。示範頁提供「重播成功演出／重播失敗演出」供比較，但不實際扣道具或發放因子。
 - 桌機驗證：Chrome 1440×900 實跑 S 級三段全 Perfect，確認發射器展開、光束從左框針尖命中赤犬胸口、成功樣本回收、失敗崩解及兩種結算；頁面無捲軸、圖片無缺漏，console 與網路回應無錯誤。
 - 平板驗證：Chrome 1024×768 實測同一成功演出；抽取器框、光束、敵人框與胸口命中環均在單頁內，光束重新計算角度後仍正確連接，結算按鈕完整可見且無捲軸。
-- 程式驗證：HTML inline script 
-ode --check`、正式頁 HTTP 200、引用素材存在、尾端空白掃描與 `git diff --check` 均通過。
+- 程式驗證：HTML inline script `node --check`、正式頁 HTTP 200、引用素材存在、尾端空白掃描與 `git diff --check` 均通過。
 - 狀態隔離：本輪沒有修改正式 `board_battle.html`、`board_battle.js`、`board_game.js`、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 
 #### 血統因子八秒旋轉校準與三次封存脈衝 V45
@@ -6006,8 +5430,7 @@ ode --check`、正式頁 HTTP 200、引用素材存在、尾端空白掃描與 `
 - 起手演出：V44 一開始直接展開針管的流程改為抽取器先進入左框圓形校準槽，於約 1.4 秒內旋轉兩圈以上並充能；旋轉停止後才橫向鎖上導軌，避免道具一開始就已經是靜止發射姿勢。
 - 等待設計：光束命中敵人胸口後不立即抽選結果，封存環會壓縮／回彈三次，下方三顆菱形燈依序亮起。成功時第三次穩定後樣本沿光束返回抽取器；失敗時封存環破裂、敵人 portrait 向外震開並讓樣本逸散，提供類似捕捉遊戲的等待張力但不使用球體或搖晃。
 - 八秒節奏：旋轉校準 1.4 秒、導軌鎖定 0.8 秒、發射至封存環建立 0.9 秒、三次脈衝 2.7 秒、樣本回收／掙脫 1.1 秒、結果停留 1.1 秒，總計約 8 秒。
-- 驗證：Chrome 1440×900 實跑正式三階段後進入新版演出，成功與失敗分支從 `spin-up` 開始到最終結算分別為 8031／8038 ms；旋轉、導軌、光束、三顆菱形燈、成功回收與失敗掙脫均可見。Chrome 1024×768 另實測八秒成功演出，封存環與三顆菱形燈完整留在敵人框內；兩種尺寸皆無捲軸、缺圖、console 或網路錯誤。HTML inline script 
-ode --check` 通過。
+- 驗證：Chrome 1440×900 實跑正式三階段後進入新版演出，成功與失敗分支從 `spin-up` 開始到最終結算分別為 8031／8038 ms；旋轉、導軌、光束、三顆菱形燈、成功回收與失敗掙脫均可見。Chrome 1024×768 另實測八秒成功演出，封存環與三顆菱形燈完整留在敵人框內；兩種尺寸皆無捲軸、缺圖、console 或網路錯誤。HTML inline script `node --check` 通過。
 - 狀態隔離：只改隔離示範與企劃文件，不修改正式戰鬥、成功率數值、抽取器消耗、血統因子發放、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 
 #### 標準／速度抽取器與發射底框 V2 生圖規格 V46
@@ -6030,8 +5453,7 @@ ode --check` 通過。
 - 軸心校正：新增固定圓槽、旋轉層與圖像層三層結構。標準抽取器的圖形在透明 1024 畫布內偏上，因此只對該素材加入 12% 圖形位移，使朝上與朝右都繞圓槽中心旋轉，轉完後槍口與底圖導軌中心對齊；速度型素材本身置中，不套用位移。
 - 演出相容：既有約八秒節奏、三次封存脈衝、成功回收、失敗崩解與重播功能不變；光束仍依畫面尺寸即時計算，但起點改由新版底框右端發射口對位敵人角色框。
 - 畫面驗證：Chrome 1440×900 實際跑完三階段並檢查標準抽取器朝上、順時針 90 度朝右、軌道鎖定及光束發射；Chrome 1024×768 實測速度型相同兩個姿勢，頁面 `scrollWidth/scrollHeight` 等於 1024×768，無捲軸、缺圖或 console 錯誤。
-- 程式驗證：HTML inline script 
-ode --check` 通過；示範頁與三張素材皆由 8787 回應 HTTP 200；素材路徑存在；`git diff --check` 通過。
+- 程式驗證：HTML inline script `node --check` 通過；示範頁與三張素材皆由 8787 回應 HTTP 200；素材路徑存在；`git diff --check` 通過。
 - 狀態隔離：本輪未修改正式 `board_battle.html`、`board_battle.js`、`board_game.js`、抽取成功率、正式道具、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 
 #### 抽取光束改由抽取器尖端發射 V48
@@ -6041,8 +5463,7 @@ ode --check` 通過；示範頁與三張素材皆由 8787 回應 HTTP 200；素�
 - 問題：V47 的光束起點位於新版底框最右側發射口，視覺上像由底圖軌道自行發射，而不是圓槽內的抽取器發射。
 - 修正：底框軌道只保留機械導向用途；光束起點改由圓槽實際顯示區的右側 91%、垂直中央動態計算，對應朝右抽取器的採樣尖端。光束拆成視覺連續的兩段：第一段從尖端水平貼著底圖軌道抵達右端發射口，第二段才由發射口依敵人位置轉向命中點；沒有軌道自行發光、斜線穿框或第二條假導軌。
 - 響應式：起點改用 `.extractor-showcase-bay` 的即時 `getBoundingClientRect()`，不寫死桌機像素；視窗尺寸改變時仍與敵人命中點一起重新定位。
-- 驗證：HTML inline script 
-ode --check`、示範頁 HTTP 200、Chrome 1440×900 與 1024×768 發射畫面、console、頁面溢出及 `git diff --check` 均通過。
+- 驗證：HTML inline script `node --check`、示範頁 HTTP 200、Chrome 1440×900 與 1024×768 發射畫面、console、頁面溢出及 `git diff --check` 均通過。
 - 狀態隔離：只修改隔離示範與文件；正式戰鬥、抽取成功率、道具、存檔、`BOARD_GAME_STATE` 及 Socket.IO 均未改動。
 
 #### 七種抽取器發射光配色 V49
@@ -6052,8 +5473,7 @@ ode --check`、示範頁 HTTP 200、Chrome 1440×900 與 1024×768 發射畫面�
 - 配色來源：逐張檢查七種抽取器素材，不只依名稱推測。標準使用青綠、精密使用銀白冰青、力量使用赤紅、技巧使用晶藍、速度使用青藍帶洋紅、能力者使用紫羅蘭、皇級使用緋紅帶金色核心。
 - 動態套用：每個抽取器資料項目增加核心色、主光色、收束色與外暈 RGB；選定抽取器時寫入發射效果層的 CSS 變數。水平軌道段、轉向敵人的第二段、命中封存環、三顆穩定燈及成功回收樣本同步使用相同色系。
 - 結果辨識：正常發射與成功回收保留抽取器專屬色；失敗分支仍強制改成既有紅色光束崩解及紅色破裂環，不會因抽取器顏色掩蓋失敗訊號。
-- 驗證：HTML inline script 
-ode --check`、示範頁 HTTP 200、Chrome 1440×900 七種 CSS 配色值與分段路徑、1024×768 速度型發射畫面、console、頁面溢出及 `git diff --check` 均通過。
+- 驗證：HTML inline script `node --check`、示範頁 HTTP 200、Chrome 1440×900 七種 CSS 配色值與分段路徑、1024×768 速度型發射畫面、console、頁面溢出及 `git diff --check` 均通過。
 - 狀態隔離：只修改隔離示範與文件；未改正式戰鬥、抽取器數值、成功率、道具、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 
 #### 發射軌道局部挖空與後方光束 V50
@@ -6064,8 +5484,7 @@ ode --check`、示範頁 HTTP 200、Chrome 1440×900 七種 CSS 配色值與分�
 - 素材安全：曾以內建圖片編修嘗試局部去背，但輸出改變原比例、金屬細節或把棋盤格烙入 RGB，均未接入專案。最終保留原始 `lineage_extractor_launcher_frame_v2.webp`，以非破壞式雙軸 Alpha 遮罩只讓軌道內槽在示範畫面透明，避免覆蓋使用者原圖。
 - 圖層順序：軌道內的第一段光束移入 `.extractor-showcase`，層級依序為後方光束 `z=-2`、底框圖片 `z=-1`、中央細線 `z=1`、抽取器圓槽 `z=2`。光束只能從透明內槽透出，上下金屬軌道、支架及細線保持在光束前方。
 - 路徑銜接：軌道段仍從抽取器尖端水平抵達右端發射口；框外第二段沿用敵人位置即時計算。1440×900 交界差為 0 px，1024×768 約為 0.01 px，視覺連續且不斜穿金框。
-- 驗證：Chrome 1440×900 已檢查待機挖空、中央細線、抽取器轉向、軌道後方發光及轉向敵人的完整畫面；1024×768 同樣無接縫、捲軸、缺圖或 console 錯誤。HTML inline script 
-ode --check`、示範頁 HTTP 200、尾端空白與 `git diff --check` 均通過。
+- 驗證：Chrome 1440×900 已檢查待機挖空、中央細線、抽取器轉向、軌道後方發光及轉向敵人的完整畫面；1024×768 同樣無接縫、捲軸、缺圖或 console 錯誤。HTML inline script `node --check`、示範頁 HTTP 200、尾端空白與 `git diff --check` 均通過。
 - 狀態隔離：只修改隔離示範與文件；正式戰鬥、原始底框素材、抽取成功率、道具、存檔、`BOARD_GAME_STATE` 及 Socket.IO 均未改動。
 
 #### 發射口圖層與光束亮度修正 V51
@@ -6074,8 +5493,7 @@ ode --check`、示範頁 HTTP 200、尾端空白與 `git diff --check` 均通過
 - 檔案：`public/board_lineage_extraction_battle_demo.html`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 發射口遮擋：V50 的框外光束起點仍位於底框右緣內側 2.5%，導致一小段框外光壓在發射口圖片上。軌道後方光束現在延伸至底框圖片最右外緣，框外光束從外緣才開始轉向敵人；底框範圍內的光全部維持在圖片下方。
 - 亮度：`extractionBeamFire` 的中段與完成亮度均改為 100%，軌道段與框外段亮起後全程不再自動變暗；只有失敗分支進入既有紅色崩解動畫時才會收束消失。
-- 驗證：Chrome 1440×900 與 1024×768 均檢查發射口沒有被光束蓋住、兩段交界對齊、軌道光及框外光維持全亮，頁面無捲軸或 console 錯誤；HTML inline script 
-ode --check`、HTTP 200、尾端空白與 `git diff --check` 均通過。
+- 驗證：Chrome 1440×900 與 1024×768 均檢查發射口沒有被光束蓋住、兩段交界對齊、軌道光及框外光維持全亮，頁面無捲軸或 console 錯誤；HTML inline script `node --check`、HTTP 200、尾端空白與 `git diff --check` 均通過。
 - 狀態隔離：只修改隔離示範與文件；正式戰鬥、原始底框素材、抽取成功率、道具、存檔、`BOARD_GAME_STATE` 及 Socket.IO 均未改動。
 
 #### 軌道金屬前景覆蓋修正 V52
@@ -6084,8 +5502,7 @@ ode --check`、HTTP 200、尾端空白與 `git diff --check` 均通過。
 - 檔案：`public/board_lineage_extraction_battle_demo.html`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 原因：V50 的長方形軌道挖空雖讓光束位於主底框下方，但也會把透明區內的吊扣、發射口左緣與其他金屬零件一併挖掉；V51 的框外光束另有外發光向左溢回底框的可能，因此仍會產生光束壓過金屬的錯覺。
 - 修正：在軌道挖空區加上同一張正式底框的前景金屬覆蓋層，使用 `screen` 混合保留暗槽內光束，同時把原圖的金屬扣件與中央細線重新壓回光束上方；最終判定期間再把整個抽取器底框提高到框外光束特效之上，阻止框外光暈回滲到發射口。圖層順序固定為框內光束、挖空主底框、軌道金屬前景／細線、抽取器。
-- 驗證：Chrome 1440×900 與 1024×768 實際重播成功發射演出，確認框內光束只由深藍軌道槽透出，金屬扣件、上下軌與發射口保持在光束前方；兩段光束維持全亮，頁面無捲軸或 console 錯誤。HTML inline script 
-ode --check`、素材存在、HTTP 200、尾端空白與 `git diff --check` 均通過。
+- 驗證：Chrome 1440×900 與 1024×768 實際重播成功發射演出，確認框內光束只由深藍軌道槽透出，金屬扣件、上下軌與發射口保持在光束前方；兩段光束維持全亮，頁面無捲軸或 console 錯誤。HTML inline script `node --check`、素材存在、HTTP 200、尾端空白與 `git diff --check` 均通過。
 - 狀態隔離：只修改隔離示範與文件；不修改原始 WebP、正式戰鬥頁、抽取成功率、道具、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 
 #### 真透明發射底框素材替換 V53
@@ -6094,8 +5511,7 @@ ode --check`、素材存在、HTTP 200、尾端空白與 `git diff --check` 均�
 - 檔案：`public/images/board/lineage_extraction_ui/lineage_extractor_launcher_frame_v2.webp`（使用者替換）、`public/board_lineage_extraction_battle_demo.html`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 素材驗收：新版底框為 1672×941 RGBA WebP，Alpha 範圍 0～255；透明像素 471,459、半透明像素 29,002、實心像素 1,072,891。軌道檢查區內已有 37,666 個全透明像素，深藍軌道槽已真正挖空，同時保留上下金屬軌、吊扣、發射口與中央青線。
 - 程式清理：移除為舊版未去背素材加入的雙軸 CSS Alpha 遮罩、重複底框 `screen` 前景層及 CSS 假青線；正式候選底框現在只載入一次，框內光束固定在原圖下方並直接透過素材 Alpha 顯示。最終判定期間底框仍高於框外光束特效，避免框外光暈回滲。
-- 驗證：Chrome 1440×900 與 1024×768 實際重播成功發射演出，確認光束只穿過透明軌道槽，原圖金屬構件與中央青線完整位於光束上方；兩段光束維持全亮，頁面無捲軸、缺圖或 console 錯誤。HTML inline script 
-ode --check`、素材路徑、HTTP 200、尾端空白與 `git diff --check` 均通過。
+- 驗證：Chrome 1440×900 與 1024×768 實際重播成功發射演出，確認光束只穿過透明軌道槽，原圖金屬構件與中央青線完整位於光束上方；兩段光束維持全亮，頁面無捲軸、缺圖或 console 錯誤。HTML inline script `node --check`、素材路徑、HTTP 200、尾端空白與 `git diff --check` 均通過。
 - 狀態隔離：只替換隔離示範使用的候選底框素材並清理其顯示層；不修改正式戰鬥頁、抽取成功率、道具、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 
 #### 軌道光束加粗與七連彈巢素材收件準備 V54
@@ -6106,8 +5522,7 @@ ode --check`、素材路徑、HTTP 200、尾端空白與 `git diff --check` 均�
 - 流程定案：戰鬥結算區只保留「進行提取／不要提取」兩個決定。選擇進行後才切換全螢幕提取層；七種抽取器預計改為左側圓槽內的七連左輪彈巢，玩家可點擊孔位或左右轉動，把選定抽取器轉到發射底框右側既有青色寶石指針，再確認開始三階段小遊戲。抽取器名稱、加成、持有數量、消耗與成功率規則不變。
 - 素材規格：建立 `extractor_cylinder/incoming/` 收件區及完整提示詞。候選圖為 1536×1536 RGBA 真透明正圓彈巢，包含七個同尺寸等距空孔與中央航海機械軸心；不把抽取器、文字、箭頭或選取光畫死，七種既有抽取器會由程式動態放入孔位。
 - 接入狀態：示範頁先預留隱藏的彈巢結構與響應式版位，但目前仍沿用既有抽取器清單，避免在正式候選 WebP 收件前把臨時 CSS 圓盤當成定稿。收到並驗收素材後才會完成旋轉、孔位命中、確認／返回與桌機／平板排版。
-- 驗證：HTML inline script 
-ode --check`、示範頁 HTTP 200、現行詢問／清單／開始操作、素材提示詞存在、尾端空白與 `git diff --check` 均通過。
+- 驗證：HTML inline script `node --check`、示範頁 HTTP 200、現行詢問／清單／開始操作、素材提示詞存在、尾端空白與 `git diff --check` 均通過。
 - 狀態隔離：本階段只調整隔離示範的框內光束、預留未啟用的彈巢結構並新增收件說明；不修改正式戰鬥頁、抽取器數值、道具、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 
 #### 巨型後置七連彈巢構圖修正 V55
@@ -6119,8 +5534,7 @@ ode --check`、示範頁 HTTP 200、現行詢問／清單／開始操作、素�
 - 填入規則：七格是顯示排列，不複製實際庫存。只有一種可用抽取器時七格相同；兩種時交叉排列；三種以上依既有抽取器順序循環填滿。轉到右側視窗並確認後才決定本次消耗哪一種抽取器。
 - 素材提示詞：維持 1536×1536 RGBA 真透明、完整正圓與七個等距空孔，新增「素材不可先裁半圓／小選單」及巨型後置執行方式。抽取器圖片、文字、固定指針與選中光不畫入素材，由程式動態處理。
 - 草稿清理：移除 V54 尚未啟用、但構圖錯誤的前景小型 CSS 彈巢與隱藏 HTML；在正式巨型彈巢 WebP 收件前，示範仍使用原抽取器清單，避免錯誤草稿進入操作流程。V54 已完成的框內水平光束 52% 加粗保留。
-- 驗證：HTML inline script 
-ode --check`、示範頁 HTTP 200、錯誤草稿 selector／wheel／readout／controls 均不存在、提示詞與收件目錄存在、尾端空白及 `git diff --check` 均通過。
+- 驗證：HTML inline script `node --check`、示範頁 HTTP 200、錯誤草稿 selector／wheel／readout／controls 均不存在、提示詞與收件目錄存在、尾端空白及 `git diff --check` 均通過。
 - 狀態隔離：只修正隔離示範的未啟用草稿與候選素材規格；正式戰鬥頁、抽取器規則／數值、道具庫存、存檔、`BOARD_GAME_STATE` 與 Socket.IO 均未修改。
 
 #### 巨型後置七連彈巢正式候選接入 V56
@@ -6131,8 +5545,7 @@ ode --check`、示範頁 HTTP 200、錯誤草稿 selector／wheel／readout／co
 - 選擇流程：戰鬥結果仍只顯示「進行提取／不要提取」。選擇進行後才切換全螢幕七連彈巢選擇層，不再顯示舊抽取器直列清單；可返回戰鬥詢問，或確認目前圓槽內的抽取器並開始既有第一階段。
 - 圖層與對位：完整彈巢位在發射底框後方，依舞台高度放大至 130%，圓心移到左側畫面外；超出舞台的約半個圓盤由舞台裁掉，舞台內未被前景底框遮住的圓盤仍會顯示。底框左側大圓以非破壞式 CSS 遮罩挖除深色內底，讓目前對準的孔位透過金屬圓框顯示，原本真正透明的水平軌道也保留；彈巢尺寸與圓心依舞台及底框即時尺寸計算，桌機與平板不寫死像素座標。
 - 填入與操作：彈巢固定七格，只有一種可用抽取器時七格相同，兩種時交叉循環，三種以上依可用種類循環填滿；示範中的 `stock: 3` 僅供七格選擇畫面驗證，不代表正式庫存已接入。滑鼠滾輪、左右方向鍵或平板上下滑動會每次旋轉 `360 / 7`，孔位內抽取器同步反向旋轉保持直立。
-- 驗證：Chrome 1440×900 已確認戰鬥詢問只剩兩個決定、彈巢七孔、前後圖層、完整七種循環、確認後進入第一階段及無捲軸／缺圖／console 錯誤；1024×768 已確認上下滑動切換、圓槽對位、返回詢問及無溢出。HTML inline script 
-ode --check`、素材路徑、示範頁／素材 HTTP 200、尾端空白與 `git diff --check` 均通過。
+- 驗證：Chrome 1440×900 已確認戰鬥詢問只剩兩個決定、彈巢七孔、前後圖層、完整七種循環、確認後進入第一階段及無捲軸／缺圖／console 錯誤；1024×768 已確認上下滑動切換、圓槽對位、返回詢問及無溢出。HTML inline script `node --check`、素材路徑、示範頁／素材 HTTP 200、尾端空白與 `git diff --check` 均通過。
 - 狀態隔離：只接入隔離示範及候選素材；正式 `board_battle.html`／`board_battle.js`、抽取器正式庫存與消耗、血統因子發放、存檔、`BOARD_GAME_STATE` 及 Socket.IO 均未修改。
 
 #### 七孔抽取器朝向、青邊與正式敵人卡校正 V57
@@ -6169,8 +5582,7 @@ ode --check`、素材路徑、示範頁／素材 HTTP 200、尾端空白與 `git
 - 文字排版：抽取器名稱與成功率／持有數量改成同一橫列置中，加入響應式最小高度，避免平板文字上下被裁；選擇階段不再產生任何底部操作按鈕。
 - 桌機驗證：Chrome 1440×900 以大幅滾輪預定轉至「力量共鳴」，旋轉中於角度約 49.39° 點擊後實際鎖定當下圓框內的「精密抽取器」，證明沒有等待預定終點；360ms 後自動進入第一階段，彈巢保持顯示，待機時可點圓框返回，啟動第一個目標後再點不會換彈。頁面為 1440×900、無捲軸、無底部按鈕、console 無錯誤。
 - 平板驗證：Chrome 1024×768 模擬 530px／70ms 快速上滑，彈巢一次跨多格；旋轉途中角度約 -6.67° 單點後鎖定當下孔位「力量共鳴」，而非預定終點「速度共鳴」。第一階段前再點可返回選擇；頁面為 1024×768、無捲軸、彈巢未消失、console 無錯誤。
-- 程式驗證：HTML inline script 
-ode --check`、示範頁 HTTP 200、彈巢與七種抽取器素材路徑、尾端空白及 `git diff --check` 均通過。
+- 程式驗證：HTML inline script `node --check`、示範頁 HTTP 200、彈巢與七種抽取器素材路徑、尾端空白及 `git diff --check` 均通過。
 - 狀態隔離：只修改隔離示範與企劃文件；尚未接入正式 `board_battle.html`／`board_battle.js`，未改抽取器正式庫存／消耗、血統因子發放、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 
 #### 七連彈巢逐幀慣性減速 V60
@@ -6183,8 +5595,7 @@ ode --check`、示範頁 HTTP 200、彈巢與七種抽取器素材路徑、尾�
 - 效能：只有目前對準孔位改變時才重繪抽取器名稱、圖片及發射配色；每幀只更新彈巢旋轉、七顆抽取器反向角度與選取 class，避免高速旋轉時反覆重設圖片。
 - 桌機驗證：Chrome 1440×900 以 `deltaY: 680` 大幅滾輪測得每 100ms 旋轉量由約 96°、67°、55°逐步降為 17°、8°、2°、1°，約 2.8 秒後吸附停止；減速途中約 620ms 點擊，立即由旋轉中的「力量共鳴」停輪並鎖定相同孔位，隨後正常進入第一階段。
 - 平板驗證：Chrome 1024×768 模擬 530px／70ms 快速上滑，每 100ms 旋轉量由約 119°、114°逐步降為 80°、44°、2°、1°後停止；頁面維持 1024×768、無水平或垂直捲軸，console 無錯誤。
-- 程式驗證：HTML inline script 
-ode --check`、示範頁 HTTP 200、素材路徑、尾端空白及 `git diff --check` 均通過。
+- 程式驗證：HTML inline script `node --check`、示範頁 HTTP 200、素材路徑、尾端空白及 `git diff --check` 均通過。
 - 狀態隔離：只修改隔離示範與企劃文件；正式戰鬥頁、抽取器正式消耗、血統因子發放、存檔、`BOARD_GAME_STATE` 與 Socket.IO 均未改動。
 
 #### 第一階段狀態格與抽取器文字槽校正 V61
@@ -6196,8 +5607,7 @@ ode --check`、示範頁 HTTP 200、素材路徑、尾端空白及 `git diff --c
 - 文字槽對位：依 1672×941 發射底框素材的實際下方長框，把名稱與資料列由 `left: 72%; bottom: 16.4%; width: 48%` 改成 `left: 65.5%; top: 70.8%; width: 49.5%; height: 7.2%`。文字實際落在底框水平 40.7%～90.2%、垂直 70.8%～78% 範圍，抽取器名稱與階級／階段說明維持同列置中。
 - 桌機驗證：Chrome 1440×900 第一階段待機畫面實測文字槽為 `x 281.90～545.63 / y 428.17～449.73`，內容無水平或垂直裁切；狀態列為 `x 597.59～957.59`，右側距敵人卡 18.72px。頁面無捲軸，console 無錯誤。
 - 平板驗證：Chrome 1024×768 第一階段待機畫面實測文字槽同樣位於素材 40.8%～90.2%／70.8%～78%，內容無裁切；狀態列為 `x 440.31～675.83`，右側距敵人卡 18.44px。頁面無捲軸，console 無錯誤。
-- 程式驗證：HTML inline script 
-ode --check`、示範頁與素材 HTTP 200、尾端空白及 `git diff --check` 均通過。
+- 程式驗證：HTML inline script `node --check`、示範頁與素材 HTTP 200、尾端空白及 `git diff --check` 均通過。
 - 狀態隔離：只修改隔離示範排版與開場文字；未修改正式戰鬥頁、小遊戲判定、抽取器數值／消耗、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 
 #### 三階段操作說明統一置於狀態格下方 V62
@@ -6208,8 +5618,7 @@ ode --check`、示範頁與素材 HTTP 200、尾端空白及 `git diff --check` 
 - 平板覆寫：清除 media query 末端仍把說明送回 `left: 3.5%; width: 40%` 的舊規則，統一使用 `left: 43%; width: 23%`。選擇抽取器階段原本已在同一區域的慣性操作說明不變。
 - 桌機驗證：Chrome 1440×900 第一階段進行中，狀態列與說明皆為 `x 597.59～957.59`，左右差為 0；說明頂端位於狀態列下方 16.22px。頁面無捲軸，console 無錯誤。
 - 平板驗證：Chrome 1024×768 第一階段進行中，狀態列與說明皆為 `x 440.31～675.83`，左右差為 0；說明頂端位於狀態列下方 20.20px。頁面無捲軸，console 無錯誤。
-- 程式驗證：HTML inline script 
-ode --check`、示範頁 HTTP 200、尾端空白與 `git diff --check` 均通過。
+- 程式驗證：HTML inline script `node --check`、示範頁 HTTP 200、尾端空白與 `git diff --check` 均通過。
 - 狀態隔離：只修改隔離示範的說明文字版位；正式戰鬥頁、小遊戲流程與判定、抽取器數值／消耗、存檔、`BOARD_GAME_STATE` 及 Socket.IO 均未改動。
 
 #### 發射轉向殘影與抽取器專屬充能色 V63
@@ -6221,8 +5630,7 @@ ode --check`、示範頁 HTTP 200、尾端空白與 `git diff --check` 均通過
 - 專屬充能色：抽取器本體的待機外暈、轉向完成外暈及 `extractorCharge` 760ms 呼吸閃光，全部由固定青色改讀既有 `--beam-glow-rgb`。標準、精密、力量、技巧、速度、能力者、皇級的 90° 轉向閃光會與各自孔位背光及發射光束同色。
 - 桌機驗證：Chrome 1440×900 使用力量共鳴於 90° 旋轉中段檢查，彈巢選中孔位 opacity 為 0、transition 為 0s，其餘六顆仍顯示；充能 filter 實際為紅色 `rgba(255, 72, 68, 0.718)`，旋轉矩陣顯示本體正在轉向，無直立殘影。頁面無捲軸，console 無錯誤。
 - 平板驗證：Chrome 1024×768 使用精密抽取器檢查，選中孔位 opacity 為 0、其餘六顆仍顯示；充能 filter 實際為冰青色 `rgba(142, 242, 250, 0.733)`。頁面維持 1024×768、無捲軸，console 無錯誤。
-- 程式驗證：HTML inline script 
-ode --check`、示範頁與素材 HTTP 200、尾端空白及 `git diff --check` 均通過。
+- 程式驗證：HTML inline script `node --check`、示範頁與素材 HTTP 200、尾端空白及 `git diff --check` 均通過。
 - 狀態隔離：只修改隔離示範的最終演出顯示層與專屬色；正式戰鬥頁、抽取器數值／消耗、成功率、存檔、`BOARD_GAME_STATE` 及 Socket.IO 均未改動。
 
 #### 新聊天室全破後系統完整交接文件 V64
@@ -6254,15 +5662,13 @@ ode --check`、示範頁與素材 HTTP 200、尾端空白及 `git diff --check` 
 - 日期：2026-07-27。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`public/images/board/islands/postgame_calm_belt_island.webp`、`public/images/board/final_island/endings/backgrounds/postgame_world_calm_belt_before.webp`、`postgame_world_calm_belt_breaking.webp`、`postgame_world_calm_belt_revealed.webp`、`public/images/board/final_island/incoming/POSTGAME_BOSS_ISLAND_PROMPTS.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/DEV_WORKFLOW.md`。
 - 共用世界狀態：新增 `postgameWorld` schema／layout 第 1 版，保存全房 `unlocked`、解鎖玩家／結局／回合／時間、穩定 `layoutSeed`、十三 Boss `bossOrder` 與 `islandAssignments`。任一玩家在 `finishFinalIslandEnding()` 完成拉夫德魯結局後只解鎖一次；狀態直接隨既有手動存檔及 `BOARD_GAME_STATE` 完整快照同步，沒有新增 localStorage key、Socket.IO event 名稱或 server 欄位。
-- 舊存檔：
-ormalizeLoadedGameState()` 先整理 `finalEndingRecords`／`finalEndingCleared`／`finalEndingLast`；已有結局紀錄但沒有 `postgameWorld` 的舊存檔會以原遊戲 seed 穩定補建，並自動補開最終島。未完成結局的新局與舊存檔保持鎖定。`ensurePostgameWorldLayout()` 可重複呼叫，會保留同一 Boss 配置及既有新航線海格事件種類，不重複生成島或 route。
+- 舊存檔：`normalizeLoadedGameState()` 先整理 `finalEndingRecords`／`finalEndingCleared`／`finalEndingLast`；已有結局紀錄但沒有 `postgameWorld` 的舊存檔會以原遊戲 seed 穩定補建，並自動補開最終島。未完成結局的新局與舊存檔保持鎖定。`ensurePostgameWorldLayout()` 可重複呼叫，會保留同一 Boss 配置及既有新航線海格事件種類，不重複生成島或 route。
 - 正式地圖：上方 `island-1～7` 與下方 `island-43～49` 各向外對齊一個位置，共十四格；本局拉夫德魯占原候選格，其餘依位置生成 `calm-belt-island-01～13`。新增十三條主地圖向外航線及上下排十二條相鄰航線，共 25 段 `postgameRoute`；每段由 `buildDisplayRouteTiles()` 固定建立 5 個正式海格，共 125 格。拉夫德魯原 route 保留 5 格，四個四皇角落自然向外延伸，所有節點可使用既有分岔、移動、海格與回頭路流程。
 - 世界演出：結局首次解鎖發出既有 `boardUiEvent` 中的新 `postgame-world-unlock` type，同一份完整快照先帶到其他 client，再由三張 16:9 背景依「消失前／崩解／顯現」播放約 10.8 秒。演出結束後自動切到全圖，十三島、航線與海格依序亮起；可本機略過動畫，但不改共享回合結算時機。桌機、手機及 `prefers-reduced-motion` 均有對應版面。
 - 個人探索：十三座島未探索時一律顯示共用 `postgame_calm_belt_island.webp`，Boss 配置雖在全房快照中共享，但 UI 依每位玩家既有 `discoveredIslands` 決定是否揭露。第一次登島會記錄 Boss 名稱；之後只在該玩家海圖切到 Boss 專屬島圖，其他玩家仍保持未知。十三張專屬圖目前尚未收件，正式路徑與 fallback 已預留，完整提示詞與固定檔名存於 `POSTGAME_BOSS_ISLAND_PROMPTS.md`。
 - 階段邊界：目前孤島落點只完成偵查與個人情報揭露，真人確認、CPU 記錄後結束本回合；沒有提前接入第 2 階段研究所、第 3 階段競技場、第 5 階段抽取或第 9 階段 Boss 戰／線索。`showPostgameIslands()` 的二十三島舊案仍只保留為歷史視覺草圖，不作正式配置來源。
 - 快取：`public/board_game.html` 的正式 `board_game.js` query 更新為 `20260727-postgame-world-stage1-v1`。
-- 程式與素材驗證：8787 原服務已在運行，沒有啟動第二個 server；
-ode --check public/js/board_game.js` 通過，正式頁回傳 HTTP 200，四張新正式 WebP 路徑存在。固定 seed 測得 13 座孤島、25 段新 route、125 個新海格、每 route 皆 5 格、13 個不重複 Boss，連續重建兩次後配置與海格事件完全一致；模擬舊結局存檔可補回相同數量，未通關新局維持 0 座。
+- 程式與素材驗證：8787 原服務已在運行，沒有啟動第二個 server；`node --check public/js/board_game.js` 通過，正式頁回傳 HTTP 200，四張新正式 WebP 路徑存在。固定 seed 測得 13 座孤島、25 段新 route、125 個新海格、每 route 皆 5 格、13 個不重複 Boss，連續重建兩次後配置與海格事件完全一致；模擬舊結局存檔可補回相同數量，未通關新局維持 0 座。
 - 畫面驗證：Chrome 1440×900 實拍三段演出與全圖，十三島、外向／相鄰航線、拉夫德魯與主 7×7 地圖均可見；390×844 手機量測 `scrollWidth === innerWidth === 390`，標題與略過按鈕皆在可視區。正式地圖完成全圖縮放後無新增 overflow。
 - 多人驗證：兩個獨立 Chrome context 以不同 `userId`／`clientId` 建立並加入同一房間後開局；房主解鎖時觀看端收到 version 2 完整快照，雙方皆為 13 島、25 route 且 `islandAssignments` 完全相同。房主把第一座島加入自己的 `discoveredIslands` 後再次推送，房主看到綠牛專屬路徑，另一玩家仍看到共用未知島圖，確認共享配置與個人揭露沒有混用。
 
@@ -6284,8 +5690,7 @@ ode --check public/js/board_game.js` 通過，正式頁回傳 HTTP 200，四張�
 - 素材歸檔：使用者提供的十三張 `-Photoroom.webp` 去背版全部為 1024×1024 RGBA WebP，已逐張複製到 `public/images/board/islands/` 並移除檔名中的 `-Photoroom`，符合既有 `POSTGAME_BOSS_POOL` 預留的正式路徑。沒有修改 Boss key、名稱或圖片路徑設定。
 - 原圖保留：`public/images/board/final_island/incoming/` 內十三張完整背景原圖與十三張 `-Photoroom` 去背來源全部保留，沒有覆蓋、刪除或搬走；正式頁仍不直接引用收件區。
 - 視覺檢查：逐組並排檢查完整背景原圖與去背版；所有 Boss 主地標、外輪廓及配色均可辨認。部分去背版保留靠岸海水，延續現有未知島圖的透明島嶼做法；以深色海洋底模擬正式 148×108 節點後，十三張均可辨識，無整張透明、錯圖或不可見成品。
-- 檔案驗證：十三張正式圖均為 1024×1024、具有有效 0～255 alpha、固定檔名與 `board_game.js` 十三條 `islandImage` 路徑一一對應；正式檔與各自 `-Photoroom` 來源雜湊一致。啟動 
-pm start` 後確認 `board_game.html` 與十三張 `/images/board/islands/postgame_boss_*_island.webp` 均回應 HTTP 200／`image/webp`；既有共用 `postgame_calm_belt_island.webp` fallback 保留，`git diff --check` 通過。
+- 檔案驗證：十三張正式圖均為 1024×1024、具有有效 0～255 alpha、固定檔名與 `board_game.js` 十三條 `islandImage` 路徑一一對應；正式檔與各自 `-Photoroom` 來源雜湊一致。啟動 `npm start` 後確認 `board_game.html` 與十三張 `/images/board/islands/postgame_boss_*_island.webp` 均回應 HTTP 200／`image/webp`；既有共用 `postgame_calm_belt_island.webp` fallback 保留，`git diff --check` 通過。
 - 風險：本輪只新增正式圖片並更新文件，未修改程式、存檔、`BOARD_GAME_STATE`、localStorage key 或 Socket.IO；Zephyr 的火山煙柱以及少數島圖的岸邊海水接近畫布邊緣，但 148×108 contain 縮放未裁切主地標，若日後需要更寬安全邊界可從保留的來源圖重新去背。
 
 #### CPU 主線任務不回溯 V69
@@ -6296,8 +5701,7 @@ pm start` 後確認 `board_game.html` 與十三張 `/images/board/islands/postga
 - 規則：CPU 每次事件最多自動領取一話。解鎖下一話時，把該條件當下的絕對值保存為選配 `mainMission.goalBaseline`，之後只以「目前絕對值－啟用基準」計算新進度；真人仍依原規則使用累積統計與現況回溯。
 - 相容性：`mainMission` schema 由版本 1 升為 2，保留原 id、`claimedMissionIds` 與 `stats`。舊 CPU 快照沒有 `goalBaseline` 時允許目前話數依原規則結算一次，領取後的新話數才建立基準；舊真人快照完全沿用原判定。沒有新增 localStorage key、Socket.IO event 或 server 欄位，完整 `BOARD_GAME_STATE` 與手動存讀檔仍直接攜帶 `mainMission`。
 - 快取：`public/board_game.html` 的正式 `board_game.js` query 更新為 `20260728-cpu-main-mission-no-backfill-v1`。
-- 驗證：
-ode --check public/js/board_game.js` 與 `git diff --check` 通過。隔離 Chrome 情境以版本 1 CPU 主線與大量舊統計呼叫原本的 8 話領取入口，實際只領 1 話；下一話保持 0 並記下基準，無關事件不補進度，啟用後的新骰子事件可正常完成 1 話並進入下一話。相同舊統計套到真人時仍可回溯完成。版本 2 快照存讀後保留基準 7；移除基準並降成版本 1 的舊快照也可成功讀取、升為版本 2 且保留目前話數。另以正式海域二選一 modal 驗證 CPU 能從重複的 4 個操作節點去重並選中金錢卡，既有海域選擇處理未受影響。原 8787 服務正在使用，因此另以 `PORT=8788 npm start` 啟動同專案，`/health` 與 `/board_game.html?cpu4=1` 均回應 HTTP 200，HTML 已帶新 query；驗證後已停止臨時 8788 process，原 8787 房間未重啟。
+- 驗證：`node --check public/js/board_game.js` 與 `git diff --check` 通過。隔離 Chrome 情境以版本 1 CPU 主線與大量舊統計呼叫原本的 8 話領取入口，實際只領 1 話；下一話保持 0 並記下基準，無關事件不補進度，啟用後的新骰子事件可正常完成 1 話並進入下一話。相同舊統計套到真人時仍可回溯完成。版本 2 快照存讀後保留基準 7；移除基準並降成版本 1 的舊快照也可成功讀取、升為版本 2 且保留目前話數。另以正式海域二選一 modal 驗證 CPU 能從重複的 4 個操作節點去重並選中金錢卡，既有海域選擇處理未受影響。原 8787 服務正在使用，因此另以 `PORT=8788 npm start` 啟動同專案，`/health` 與 `/board_game.html?cpu4=1` 均回應 HTTP 200，HTML 已帶新 query；驗證後已停止臨時 8788 process，原 8787 房間未重啟。
 
 #### 全破後航線海格統一一般樣式 V70
 
@@ -6307,8 +5711,7 @@ ode --check public/js/board_game.js` 與 `git diff --check` 通過。隔離 Chro
 - 修正：移除 `.sea-tile.postgame-route-tile` 的永久尺寸與配色覆寫。`postgame-route-tile` class、`postgameTileReveal` 首次顯現動畫、postgame route 線條與生成資料全部保留；動畫結束後只繼承共用 `.sea-tile` 樣式。
 - 邊界：沒有修改 13 座島、25 段 route、125 個海格的數量、id、座標、zone、事件種類、移動、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 - 快取：`public/board_game.html` 的正式 `board_game.js` query 更新為 `20260728-postgame-sea-tile-style-v1`。
-- 驗證：隔離 Chrome 解鎖新世界後仍生成 13 島、25 route、125 個 postgame 海格；桌機與 390×844 手機 viewport 中，一般與 postgame 海格的 computed style 均為 16×16、1px 邊框、4px 圓角、相同藍色漸層與陰影，完整比較結果一致，手機頁面無額外水平溢出，首次顯現動畫規則仍存在。
-ode --check public/js/board_game.js` 與 `git diff --check` 通過；另以 `PORT=8788 npm start` 啟動同專案，`/health`、`/board_game.html?cpu4=1` 均回應 HTTP 200，HTML 已帶新 query，驗證後已停止臨時服務。
+- 驗證：隔離 Chrome 解鎖新世界後仍生成 13 島、25 route、125 個 postgame 海格；桌機與 390×844 手機 viewport 中，一般與 postgame 海格的 computed style 均為 16×16、1px 邊框、4px 圓角、相同藍色漸層與陰影，完整比較結果一致，手機頁面無額外水平溢出，首次顯現動畫規則仍存在。`node --check public/js/board_game.js` 與 `git diff --check` 通過；另以 `PORT=8788 npm start` 啟動同專案，`/health`、`/board_game.html?cpu4=1` 均回應 HTTP 200，HTML 已帶新 query，驗證後已停止臨時服務。
 
 #### 全破後航線底線與孤島光環統一 V71
 
@@ -6318,8 +5721,7 @@ ode --check public/js/board_game.js` 與 `git diff --check` 通過；另以 `POR
 - 修正：移除上述兩段永久專用樣式。postgame 航線底線現在繼承共用 `.board-edge`；未知孤島不再產生金色環形偽元素。`postgame-route-edge`、`postgame-island` class 與 `postgameRouteReveal`、`postgameIslandReveal` 首次顯現動畫全部保留。
 - 邊界：沒有修改 13 座島、25 段 route、125 個海格、島圖、Boss 洗牌、登島揭露、事件、座標、移動、存檔、`BOARD_GAME_STATE` 或 Socket.IO。
 - 快取：`public/board_game.html` 的正式 `board_game.js` query 更新為 `20260728-postgame-route-island-style-v2`。
-- 驗證：隔離 Chrome 解鎖新世界後，桌機 1440×900 與手機 390×844 均生成 13 個 postgame 島節點與 150 段 postgame edge；一般與 postgame edge 的 computed style 完全一致，均為 10px、相同淡藍漸層／陰影與 `.9` opacity。未知孤島 `::after` 為 `content:none`、`border-width:0`、`box-shadow:none`；航線與島嶼首次顯現動畫規則仍存在，兩種 viewport 均無頁面水平溢出。
-ode --check public/js/board_game.js` 與 `git diff --check` 通過；另以 `PORT=8788 npm start` 啟動同專案，`/health`、`/board_game.html?cpu4=1` 均回應 HTTP 200，HTML 已帶 v2 query，驗證後已停止臨時服務。
+- 驗證：隔離 Chrome 解鎖新世界後，桌機 1440×900 與手機 390×844 均生成 13 個 postgame 島節點與 150 段 postgame edge；一般與 postgame edge 的 computed style 完全一致，均為 10px、相同淡藍漸層／陰影與 `.9` opacity。未知孤島 `::after` 為 `content:none`、`border-width:0`、`box-shadow:none`；航線與島嶼首次顯現動畫規則仍存在，兩種 viewport 均無頁面水平溢出。`node --check public/js/board_game.js` 與 `git diff --check` 通過；另以 `PORT=8788 npm start` 啟動同專案，`/health`、`/board_game.html?cpu4=1` 均回應 HTTP 200，HTML 已帶 v2 query，驗證後已停止臨時服務。
 
 #### 全破後世界第 2 階段：約克後續與研究所正式接入 V72
 
@@ -6328,14 +5730,11 @@ ode --check public/js/board_game.js` 與 `git diff --check` 通過；另以 `POR
 - 素材歸檔：四張 1680×945 RGB 劇情背景與四張 RGBA UI 框由 `research_lab_ui/incoming/` 複製到正式目錄；研究所島 1024×1024 RGBA 去背圖由 `final_island/incoming/research_lab_island-Photoroom.webp` 複製為 `images/board/islands/research_lab_island.webp`。收件圖、原始來源及去背原檔全部保留，正式頁不引用 `incoming/`。透明素材已在深色中性底合成檢查，隱藏 RGB 色塊均位於 alpha 0 區域，瀏覽器顯示無紅／灰／藍方塊。
 - 七段世界演出：既有 `postgame-world-unlock` event 不改名，總時長延伸為約 25.8 秒，依序播放無風帶消失前、崩解、十三島顯現、約克早期部署、蛋頭島移動、莉莉絲緊急通訊與研究所啟動。新通關在同一次全房演出完成；已有第 1 階段 `postgameWorld.unlocked` 的舊存檔以 `researchStoryPlayed` 補播一次，不消耗當前回合。七張 1680×945 WebP 均可完整載入，也可本機略過。
 - 設施分流：`postgameWorld.researchLabsActive` 開啟後，只有原始 `island.kind === "hospital"` 的正式醫院在 `getEffectiveIslandKind()` 轉成 `research_lab`，因此保留 island id、座標、route 與存檔相容。敵人島暫時服務只接受原 `shop`／`hospital`／`tavern` 三種，臨時醫院仍使用舊醫院圖與舊醫療 modal，不會被誤判為研究所。醫療傳送道具會把正式研究所視為可用醫療設施。
-- 永久角色實例：新增 `RESEARCH_LAB_SCHEMA_VERSION = 1`。每玩家 `researchLab` 保存 
-extInstanceSequence` 與完整角色物件的 `collection`；既有船員或收藏若缺 `instanceId`，會以玩家、角色模板 id 與序號產生穩定不重複 id。`card.id` 不改名，現有招式、修行、被動、進化、攜帶物、外觀框、主動換人與戰鬥流程仍以原模板 id 運作。
+- 永久角色實例：新增 `RESEARCH_LAB_SCHEMA_VERSION = 1`。每玩家 `researchLab` 保存 `nextInstanceSequence` 與完整角色物件的 `collection`；既有船員或收藏若缺 `instanceId`，會以玩家、角色模板 id 與序號產生穩定不重複 id。`card.id` 不改名，現有招式、修行、被動、進化、攜帶物、外觀框、主動換人與戰鬥流程仍以原模板 id 運作。
 - 收藏與登船：研究所第一版正式 UI 包含免費全隊醫療、船上六人格與可捲動研究收藏。存入／取回以 `splice`／`push` 移動同一角色物件，不 clone 或重建；船上至少保留一人、最多六人，同一 `card.id` 不得同時重複登船。收藏角色不進入正式船員陣列，因此不參與戰鬥、替補或玩家物品交易。操作方可切頁、醫療、存入／取回與離開，觀看方收到既有 `spectator-modal` 唯讀 payload；CPU 需要恢復時自動醫療，狀態良好時自動離開。
 - 存檔與同步驗證：新格式先把娜美存入收藏，建立手動存檔 payload、破壞本機狀態後讀回，`card.id`、`instanceId`、等級與收藏位置完全相同；模擬刪除 `researchLab` 與全部 `instanceId` 的舊快照後讀檔，安全補成 schema 1 與兩個不重複 id。兩個獨立 Chrome context 建立／加入測試房 `B2115` 並開始遊戲；房主送出研究所解鎖及兩名角色完整快照後，觀看端收到 version 2，`researchLabsActive`、正式醫院 base kind、位置、兩個 instance id、next sequence 與收藏完全一致。房主開啟研究所時，觀看端顯示三個禁用頁籤與「關閉觀看」唯讀畫面。
 - 功能驗證：正式醫院的有效 kind 為 `research_lab`，同一測試中的敵人島臨時醫院仍為 `hospital`。角色存入／取回前後保持同一 JavaScript 物件與 `instanceId`；重複 `card.id` 登船會被拒絕且仍留在收藏。CPU 低 HP 進入研究所後由 1／118 自動恢復至 118／118，再正常關閉 modal。1440×900 桌機研究所畫面無 overflow，390×844 直向手機以 358×201.47 完整等比顯示且 `scrollWidth === clientWidth`。正式連線頁 `/board_game.html?room=B8675&online=1` 回應 HTTP 200，載入新 query、debug 入口與所有正式資源；應用程式頁面錯誤與正式素材 HTTP 錯誤皆為空，只保留專案既有、與本功能無關的根目錄 `favicon.ico` 404。
-- 快取與程式驗證：`public/board_game.html` 的正式 query 更新為 `20260728-postgame-research-lab-stage2-v1`；
-ode --check public/js/board_game.js` 通過，原 8787 服務以 
-pm start` 啟動後頁面可開。沒有新增 localStorage key、Socket.IO event 名稱或 server 欄位。
+- 快取與程式驗證：`public/board_game.html` 的正式 query 更新為 `20260728-postgame-research-lab-stage2-v1`；`node --check public/js/board_game.js` 通過，原 8787 服務以 `npm start` 啟動後頁面可開。沒有新增 localStorage key、Socket.IO event 名稱或 server 欄位。
 
 #### 研究所島移除方格與圖像置中 V73
 
@@ -6352,9 +5751,7 @@ pm start` 啟動後頁面可開。沒有新增 localStorage key、Socket.IO even
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`public/js/board_items.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/DEV_WORKFLOW.md`。
 - 圖片原因與修正：研究所角色卡框是 1024×1024，但原本醫療頁六欄與登船／收藏三欄格線直接把 `.research-lab-card-frame` 設為 `object-fit:fill`，造成明顯直向或橫向拉伸；醫療島圖的外框也因欄寬與列高不同而呈橢圓。角色卡、卡框、人物圓圖及醫療島圖全部改回 1:1，依實際素材的圓形人物窗與三段文字／操作槽重新對位；主面板 1672×941 與按鈕 3:1 原始比例保持不變。
 - 科研補給：研究所左側新增「科研補給」頁，永久販售正式道具 `lineage_extractor_standard`「標準血統因子抽取器」。單價 600 B、既有重要道具背包最多堆疊 99 個；購買會扣除玩家貝里、記錄 `obtain_item`／`shop_buy`／`island_service`、推送既有完整遊戲快照，並留在補給頁顯示最新貝里與持有量。此道具不加入一般 `item_shop`、海格事件池或敵人掉落池。
-- 驗證：
-ode --check public/js/board_items.js` 與 
-ode --check public/js/board_game.js` 通過。Chrome 1440×900 實測醫療島圖 202.9×202.9、六張醫療卡各 133.4×133.4、登船卡各 187.6×187.6；角色圖、姓名及按鈕均落在正式框槽內。補給頁以 3,000 B 購買後變為 2,400 B，持有量由 0 變 1；手機 390×844 的島圖、角色卡與抽取器圖仍保持 1:1，頁面無水平或垂直 overflow。正式 query 為 `board_items.js?v=20260728-research-lab-supply-v1` 與 `board_game.js?v=20260728-research-lab-supply-v3`。
+- 驗證：`node --check public/js/board_items.js` 與 `node --check public/js/board_game.js` 通過。Chrome 1440×900 實測醫療島圖 202.9×202.9、六張醫療卡各 133.4×133.4、登船卡各 187.6×187.6；角色圖、姓名及按鈕均落在正式框槽內。補給頁以 3,000 B 購買後變為 2,400 B，持有量由 0 變 1；手機 390×844 的島圖、角色卡與抽取器圖仍保持 1:1，頁面無水平或垂直 overflow。正式 query 為 `board_items.js?v=20260728-research-lab-supply-v1` 與 `board_game.js?v=20260728-research-lab-supply-v3`。
 - 邊界：本次只正式接入標準抽取器的資料、購買與既有背包保存；戰後抽取詢問、三階段小遊戲、正式消耗與血統因子發放仍屬下一階段。未新增 `gameState` 欄位、localStorage key 或 Socket.IO event，也未改島 id、路線、免費醫療或角色收藏規則。
 
 #### 研究所三框對位與複製人培育入口 V75
@@ -6381,8 +5778,7 @@ ode --check public/js/board_game.js` 通過。Chrome 1440×900 實測醫療島�
 - 檔案：`public/images/board/research_lab_ui/cultivation/incoming/research_lab_clone_cultivation_chamber_draft.webp`、`public/images/board/research_lab_ui/cultivation/research_lab_clone_cultivation_chamber.webp`、`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/DEV_WORKFLOW.md`。
 - 素材驗收：收件圖為 1536×1536 RGBA WebP，透明像素約 26.23%、完全不透明像素約 72.26%、半透明像素約 1.51%；沒有文字或人物，中央玻璃培育艙保留角色疊圖安全區。原始收件圖保留，另複製並固定命名為 `research_lab_clone_cultivation_chamber.webp`。
 - 正式接入：`RESEARCH_LAB_UI_ASSETS` 新增培育艙路徑；複製人培育空狀態頁以正式圖片取代 CSS 圓形 DNA 佔位圖。圖片容器固定 1:1、使用 `object-fit:contain`，不產生額外圓框、假 DNA 線或金色光環。
-- 驗證：
-ode --check public/js/board_game.js` 通過；正式 8787 頁面回應 HTTP 200 並載入 `20260728-research-lab-cultivation-art-v5`。隔離 Chrome 1440×900 實測圖片自然尺寸 1536×1536、顯示尺寸 285.83×285.83；390×844 顯示 72.17×72.17。兩種 viewport 的頁面與研究所主框 X／Y overflow 都是 0，圖片、說明與底部操作框沒有重疊。
+- 驗證：`node --check public/js/board_game.js` 通過；正式 8787 頁面回應 HTTP 200 並載入 `20260728-research-lab-cultivation-art-v5`。隔離 Chrome 1440×900 實測圖片自然尺寸 1536×1536、顯示尺寸 285.83×285.83；390×844 顯示 72.17×72.17。兩種 viewport 的頁面與研究所主框 X／Y overflow 都是 0，圖片、說明與底部操作框沒有重疊。
 - 邊界：只接入視覺素材；完整血統因子庫存、消耗、個體傾向、角色生成、CPU 培育、存檔 schema 與同步欄位仍未提前新增。
 
 #### 複製人培育頁視覺比例與生成演出規格 V78
@@ -6408,9 +5804,7 @@ ode --check public/js/board_game.js` 通過；正式 8787 頁面回應 HTTP 200 
 - 畫面驗證：1440×900 的正式主框實測 1408×792.41，51 名對手、6 名船員、1 名對手與 2 名船員預選完整，主框與頁面 X／Y overflow 都是 0；390×844 直向手機以 358×201.47 等比顯示，兩個按鈕各 55.14×14.14，頁面與 modal 均無水平／垂直 overflow。正式競技場島自然尺寸 1024×1024，地圖節點 `background-image:none`、無 box shadow，島圖中心相對節點中心 X／Y 差為 0／0；六座正式酒館均顯示為 `arena`，臨時酒館仍是 `tavern`。
 - 規則驗證：以兩名入場前 HP 1／2、首招 PP 0／1、上場索引 3 的船員挑戰 T1 魯夫；入場變為滿 HP 118／118、PP 25／25、對手 Lv.99 五檔圖與 374／374 HP。模擬勝利後 HP、PP、上場索引全部回到原值，研究點由 11 增至 36，貝里、懸賞與六名角色 EXP 完全不變。CPU 可自動建立競技場 battle；`round-pause` 產生可續戰 pending snapshot，續戰後模擬戰敗能回復三名原始 HP、不進推進城且不給點數。舊 schema 1 快照正規化為 schema 2／0 點；活動中的競技場手動存檔 payload 保留 `isArenaBattle`、兩名索引與回復快照。
 - 多人驗證：兩個獨立 Chrome context 建立／加入測試房 `B9836` 並開始遊戲。房主打開 88 點的競技場選擇畫面後，觀看端收到 version 2，完整快照中的個人研究點數為 88，唯讀畫面顯示 51 名對手、6 名船員、全部選擇按鈕禁用及關閉觀看按鈕。
-- 程式與服務驗證：
-ode --check public/js/board_game.js` 通過；原 8787 
-pm start` 服務的 `/board_game.html?cpu4=1`、競技場島及主框均 HTTP 200，HTML 載入 `20260728-arena-selection-v1`。正式素材／程式沒有頁面錯誤，只保留專案既有且與本功能無關的根目錄 favicon 404。第 3 階段不提前接入勝利後血統抽取；抽取器管理與戰後抽取仍依第 4～5 階段順序處理。
+- 程式與服務驗證：`node --check public/js/board_game.js` 通過；原 8787 `npm start` 服務的 `/board_game.html?cpu4=1`、競技場島及主框均 HTTP 200，HTML 載入 `20260728-arena-selection-v1`。正式素材／程式沒有頁面錯誤，只保留專案既有且與本功能無關的根目錄 favicon 404。第 3 階段不提前接入勝利後血統抽取；抽取器管理與戰後抽取仍依第 4～5 階段順序處理。
 
 #### 競技場字體框位與島嶼圖複查 V80
 
@@ -6418,8 +5812,7 @@ pm start` 服務的 `/board_game.html?cpu4=1`、競技場島及主框均 HTTP 20
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
 - 字體校正：實測發現左下規則框的百分比 padding 會以 1672×941 主框寬度計算，使 285.8px 面板左右各吃掉約 105px，完整最高型態名稱、研究點數與規則內文因此只剩約 75px 寬。內距改為 3.2%／2.5% 的主框縮放值後，桌機內容寬度提高到約 215px；標題行高改為 1.2，避免中文字形上下緣被 `overflow:hidden` 裁到。右側緊湊對手卡改顯示基礎角色姓名，選中後仍在左下詳情顯示完整最高型態名稱。
 - 島嶼複查：全破後六座正式酒館都正確顯示為競技場。正式圖自然尺寸 1024×1024，`object-fit:contain`，實際顯示維持 1:1；圖中心相對節點中心 X／Y 差 0／0。節點 `background-image:none`、透明 border、`box-shadow:none`，`::after` 為 `content:none`、0px border 且無 shadow，因此沒有方格底或專用金色圓環；保留的只有所有圖片島共用淡藍海面 radial glow。
-- 快取與驗證：正式 query 更新為 `20260728-arena-selection-v2`；重新檢查 1440×900 主框六個區塊均無 X／Y overflow，標題、完整選中對手、點數及規則均落在對應框內。
-ode --check public/js/board_game.js` 通過，8787 頁面與兩張正式圖片仍 HTTP 200。
+- 快取與驗證：正式 query 更新為 `20260728-arena-selection-v2`；重新檢查 1440×900 主框六個區塊均無 X／Y overflow，標題、完整選中對手、點數及規則均落在對應框內。`node --check public/js/board_game.js` 通過，8787 頁面與兩張正式圖片仍 HTTP 200。
 
 #### 競技場選中對手圖與六名船員槽位校正 V81
 
@@ -6427,8 +5820,7 @@ ode --check public/js/board_game.js` 通過，8787 頁面與兩張正式圖片�
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
 - 左上展示：移除固定 `arena_island.webp`，改用目前 `selectedOpponent.image`／`fallbackImage` 即時顯示點選對手的 Lv.99 最高型態正式角色圖；圖片使用 `object-fit:contain`、底部對齊，角色完整名稱及「Lv.99 最高型態」說明放在同一原生框下緣。點選右側另一名對手會隨原本重繪流程同步更新左上角色圖、左下完整詳情及研究點數。
 - 船員槽位：下方 `.arena-crew` 左右內距由主框寬度 2.1% 改為 0.6%，六欄 gap 由 1.7% 改為 1.2%；程式卡片移除額外 border、圓角與一般背景，只保留角色內容、選中能量底與順序徽章。1440×900 實測清單為 x 424.3、寬 678.7，每格 106.3×115.4，六格 x 位置依序為 424.3／538.8／653.2／767.7／882.2／996.6，與主框原生六個金框對齊。
-- 圖片驗證：左上魯夫最高型態圖自然尺寸 1086×1448，顯示 200.1×179.2 且未拉伸；六張船員角色圖、姓名與 1／2 選中順序都位於各自金框。頁面無 JavaScript 錯誤，
-ode --check public/js/board_game.js` 通過。
+- 圖片驗證：左上魯夫最高型態圖自然尺寸 1086×1448，顯示 200.1×179.2 且未拉伸；六張船員角色圖、姓名與 1／2 選中順序都位於各自金框。頁面無 JavaScript 錯誤，`node --check public/js/board_game.js` 通過。
 - 快取：正式 query 更新為 `20260728-arena-selection-v3`。
 
 #### 競技場左上角色圖滿框 V82
@@ -6436,8 +5828,7 @@ ode --check public/js/board_game.js` 通過。
 - 日期：2026-07-28。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/DEV_WORKFLOW.md`。
 - 修正：左下詳情框已顯示完整最高型態名稱、研究點數與戰鬥規則，左上不再重複名稱或「Lv.99 最高型態」文字；展示框 DOM 只保留目前選中對手圖片。圖片由 `object-fit:contain` 改為 `object-fit:cover`，寬高均為 100%，`object-position:center 18%` 優先保留臉部與上半身並鋪滿整格。
-- 驗證：1440×900 實測左上框 263.28×229.8，角色圖顯示尺寸完全相同，框內只有一個圖片子元素，X／Y overflow 都是 0；1086×1448 的五檔魯夫圖鋪滿後臉部、頭髮與上半身位於安全區。
-ode --check public/js/board_game.js` 通過，無頁面錯誤。
+- 驗證：1440×900 實測左上框 263.28×229.8，角色圖顯示尺寸完全相同，框內只有一個圖片子元素，X／Y overflow 都是 0；1086×1448 的五檔魯夫圖鋪滿後臉部、頭髮與上半身位於安全區。`node --check public/js/board_game.js` 通過，無頁面錯誤。
 - 快取：正式 query 更新為 `20260728-arena-selection-v4`。
 
 #### 全破後世界第 4 階段：七種抽取器取得、背包與交易 V83
@@ -6451,10 +5842,7 @@ ode --check public/js/board_game.js` 通過，無頁面錯誤。
 - CPU、觀看與同步：CPU 進研究所先醫療，再依等級與資金補到標準 3、精密 2、三種共鳴／能力者／皇級各 1，完成後離場。觀看方的研究所唯讀 payload 改帶七種數量、永久研究等級、貝里與研究點數。所有欄位仍包含於現有手動存檔和完整 `BOARD_GAME_STATE`，未新增 localStorage key、Socket.IO event、server 欄位或修改既有 item id。
 - 畫面驗證：Chrome 1440×900 實測七張圖自然尺寸均為 1024×1024、七卡與七按鈕全部位於研究所主框內，頁面 scrollWidth／Height 等於 viewport；844×390 橫向手機主框為 672.16×378.28，七卡同樣全在框內且頁面無 X／Y overflow。重要道具背包實際列出七種抽取器；研究 Lv.1 時只有標準型按鈕啟用，其餘正確顯示 Lv.2／3／4 門檻。
 - 規則驗證：精密與皇級各取得 1 個後，貝里由 100,000 降至 88,500；皇級另正確扣除 120 點。98 個精密一次取得 5 個只補到 99；收取方已有 99 個時交易被拒且賣方仍有 2、收取方仍為 99，降到 98 後交易成功成為 99。schema 2／300 點遷移為 schema 3／Lv.4，之後點數降到 180 仍保持 Lv.4。八次高懸賞全破任務島抽選都含一件研究委託；同一 T1 戰鬥研究點只發一次 10 點。CPU 實測補到 3／2／1／1／1／1／1 後扣至 24,800 B、380 點並繼續航行。
-- 程式與服務驗證：
-ode --check public/js/board_game.js`、
-ode --check public/js/board_items.js`、
-ode --check public/js/board_missions.js` 通過；`http://127.0.0.1:8787/board_game.html?cpu4=1` 回傳 200。正式 query 統一為 `20260728-extractor-economy-v1`。第 5 階段的戰後詢問、正式消耗、三階段小遊戲、完整血統因子與培育角色仍未提前接入。
+- 程式與服務驗證：`node --check public/js/board_game.js`、`node --check public/js/board_items.js`、`node --check public/js/board_missions.js` 通過；`http://127.0.0.1:8787/board_game.html?cpu4=1` 回傳 200。正式 query 統一為 `20260728-extractor-economy-v1`。第 5 階段的戰後詢問、正式消耗、三階段小遊戲、完整血統因子與培育角色仍未提前接入。
 
 #### 研究所七種抽取器圖片式商品卡底框 V84
 
@@ -6463,23 +5851,19 @@ ode --check public/js/board_missions.js` 通過；`http://127.0.0.1:8787/board_g
 - 素材產出：依使用者澄清，這批不是抽取器本體後方的研究艙場景，而是取代研究所補給 CSS 方格的完整商品卡底框。使用內建 ImageGen 產出七張同版型 4:3 原始圖，再轉為品質 88 的 1448×1086 RGB WebP；左側固定為抽取器圓槽、右側為資料框、底部為操作槽。標準、精密、力量、技巧、速度、能力者與皇級分別使用青綠、冰青、赤紅、晶藍、青藍帶洋紅、紫羅蘭、緋紅帶金配色，底圖不烙入抽取器、文字、價格或按鈕標籤。
 - 正式接入：七種 `RESEARCH_LAB_EXTRACTOR_DEFS` 各自記錄固定商品卡路徑；補給 DOM 新增純裝飾底框圖，原本透明抽取器、名稱、成功率加成、價格／持有量與 HTML 操作按鈕依素材三個安全槽絕對定位疊入。移除商品格原有 border、圓角、漸層背景與內陰影，鎖定狀態、購買／製作事件、價格、研究等級與庫存規則保持不變。
 - 畫面驗證：Chrome 1440×900 正式頁實測七張底框全部完成載入，natural size 均為 1448×1086；七張抽取器、右側文案及底部按鈕皆位於對應原生框內。844×390 橫向手機實測每張卡約 95.15×73.73，七張卡的文案與按鈕 bounding box 全部落在卡片內，研究所主框與頁面無 X／Y overflow。驗證截圖為 `_codex_artifacts/research-extractor-card-art-desktop.png` 與 `_codex_artifacts/research-extractor-card-art-mobile.png`。
-- 程式與服務驗證：
-ode --check public/js/board_game.js` 通過；既有 
-pm start` 服務的 `http://127.0.0.1:8787/board_game.html` 回應 HTTP 200，正式 query 更新為 `20260728-extractor-card-art-v1`。本次只改補給頁視覺與靜態素材，未改 item id、價格、成功率、研究點、庫存、交易、CPU、存檔、`BOARD_GAME_STATE`、localStorage key 或 Socket.IO event。
+- 程式與服務驗證：`node --check public/js/board_game.js` 通過；既有 `npm start` 服務的 `http://127.0.0.1:8787/board_game.html` 回應 HTTP 200，正式 query 更新為 `20260728-extractor-card-art-v1`。本次只改補給頁視覺與靜態素材，未改 item id、價格、成功率、研究點、庫存、交易、CPU、存檔、`BOARD_GAME_STATE`、localStorage key 或 Socket.IO event。
 
 #### 全破後世界第 5 階段：正式戰後血統因子抽取 V85
 
 - 日期：2026-07-28。
 - 檔案：`public/board_game.html`、`public/js/board_game.js`、`public/board_battle.html`、`public/js/board_battle.js`、`public/css/board_lineage_extraction.css`、`public/js/board_lineage_extraction.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/NEXT_CHAT_HANDOFF_20260728.md`、`docs/DEV_WORKFLOW.md`。
 - 正式狀態權威：`board_game.js` 新增每場勝利唯一抽取 scope、每位實際參戰者 entry、開始／完成／放棄命令、CPU 自動抽取及原結算門檻。只有 `postgameWorld.researchLabsActive` 後的新勝利建立機會；戰敗、逃跑、黑轉我方前哨戰不建立，也不追溯舊討伐。沒有抽取器時自動標記 unavailable；共鬥每位實際參戰者各用自己的庫存與結果，觀看方不可控制。
-- 庫存與因子：確認抽取器後立即正式扣除 1 個，成功或失敗均不返還；同一 attempt 重複開始或完成不會再次扣除／發放。`researchLab` schema 由 3 升為 4，新增 
-extFactorSequence` 與 `completeFactors`；成功只加入一份含敵人、階級、來源戰鬥、抽取器與判定資料的完整血統因子，不直接生成角色，也不進一般交易。資料沿用手動存檔和現有 `BOARD_GAME_STATE` 完整快照，沒有新增 localStorage key、Socket.IO event 或 server 欄位。
+- 庫存與因子：確認抽取器後立即正式扣除 1 個，成功或失敗均不返還；同一 attempt 重複開始或完成不會再次扣除／發放。`researchLab` schema 由 3 升為 4，新增 `nextFactorSequence` 與 `completeFactors`；成功只加入一份含敵人、階級、來源戰鬥、抽取器與判定資料的完整血統因子，不直接生成角色，也不進一般交易。資料沿用手動存檔和現有 `BOARD_GAME_STATE` 完整快照，沒有新增 localStorage key、Socket.IO event 或 server 欄位。
 - 機率與小遊戲：ED／CB／A／S／SS／SSS 基礎率為 55／40／28／18／10／5%，上限為 95／95／95／90／85／75%。第一階段依級別產生 8／9／10／12／14／15 個縮圈目標，累積 3 次 Miss 提早結束；第二、三階段沿用左右鎖針與封存雙環。三段各結算一次 Perfect／Good／Miss，分別加 7／3／0%，最高加 21%，沒有保底。
 - 半圓七連彈巢：依使用者指定重新實際打開 `board_lineage_extraction_battle_demo.html` 比對，正式版改用同一定位公式與圖層。完整正圓彈巢及七個抽取器孔位一起旋轉，直徑約舞台高度 130%、圓心移到畫面左外側，舞台只露右半圓；發射底框遮住圓盤，只有目前孔位從左側圓孔顯示。滾輪、方向鍵及上下拖曳都可操作，標準／速度型的旋轉、裁切與七種專屬光色沿用示範設定。
 - 原戰鬥頁整合：抽取層保留既有 `#enemyCard`、敵人 portrait、HUD 與外觀框，不重建敵方卡。詢問、彈巢、三階段與約八秒成功／失敗演出由新增的 `board_lineage_extraction.js`／`.css` 負責；抽取頁不能自行扣道具或發因子。`board_battle.js` 收到 iframe 通知時會優先重讀主遊戲最新 battle view，修正較舊快照在玩家剛打開彈巢時把畫面切回詢問頁的競態。
 - 研究所手機字體：七張圖片式商品卡的文案 flex 間距與標題下內距微調；844×390 實測七個名稱的 `clientHeight`／`scrollHeight` 都是 15／15，不再上下裁字。
-- 程式驗證：
-ode --check public/js/board_game.js`、`public/js/board_battle.js`、`public/js/board_lineage_extraction.js` 均通過；正式頁與新增 CSS／JS HTTP 200。正式 query 更新為 `20260728-formal-lineage-v5`。
+- 程式驗證：`node --check public/js/board_game.js`、`public/js/board_battle.js`、`public/js/board_lineage_extraction.js` 均通過；正式頁與新增 CSS／JS HTTP 200。正式 query 更新為 `20260728-formal-lineage-v5`。
 - 畫面驗證：Chromium 1440×900 實拍詢問、半圓彈巢、第一階段待機與結果演出；七個孔位／圖片全數載入，敵人卡仍是原 DOM。1024×768 頁面 X／Y overflow 為 0；844×390 保留正式 900×576 戰鬥舞台縮放且沒有新增垂直 overflow。
 - 規則驗證：鎖定皇級後數量 3→2，重複開始回傳 false 且維持 2；三次 Perfect 後因子 0→1，重複完成回傳 false 且仍為 1，手動存檔 payload 同為 1。放棄不扣抽取器、無抽取器可直接結算、CPU 會結束於成功／失敗、共鬥一人 offered／一人 unavailable 時會等待前者完成。原戰鬥結算測得貝里 3000→5940 且 battle 正常關閉。
 - 多人驗證：以獨立 8791 測試服務建立兩個 Socket.IO client，`BOARD_GAME_STATE` ack 成功；完整因子 id、抽取 success 與 scope 在接收端完整保留。全程瀏覽器 console 例外 0。
@@ -6507,8 +5891,7 @@ ode --check public/js/board_game.js`、`public/js/board_battle.js`、`public/js/
 - 版面：正式抽取舞台固定為 1024×576，依 `visualViewport` 在桌機、平板、橫向及直向手機等比置中縮放；844×390 實拍中敵人卡、HUD、底框、光束與彈巢均位於舞台可視範圍，頁面新增 overflow 為 0。快取版本統一更新為 `20260728-formal-lineage-v9`。
 - 畫面與流程驗證：Chrome 1440×900 實玩第一階段至正式成功，敵人卡 computed opacity／visibility 為 `1`／`visible` 且 `animation:none`；另強制測試失敗結果，確認紅色光束崩解、命中環與敵人掙脫均播放。成功測試確認框內／框外光束 opacity 皆為 1，測試階段三個封存指示依序鎖定，瀏覽器 console 例外為 0。1024×768 與 844×390 正式截圖均完成。
 - 規則與同步回歸：皇級抽取器 3→2，重複開始不再扣除；三次 Perfect 後完整因子 0→1，重複完成不再發放，手動存檔仍為 1。放棄、無庫存、CPU、自動結束、共鬥等待及原戰鬥結算均通過；兩個 Socket.IO client 的完整因子 id、結果與 scope 完整一致，`BOARD_GAME_STATE` ack 成功。
-- 程式與服務驗證：
-ode --check public/js/board_lineage_extraction.js`、`public/js/board_battle.js`、`public/js/board_game.js` 通過；完整 `.codex-runtime/lineage_formal_cdp_test.js` 回歸通過且 `consoleErrors: []`。另以 `PORT=8798 npm start` 啟動獨立服務，`/board_battle.html` 回傳 HTTP 200 且包含 V9 query；本機未設 `DATABASE_URL` 時只保留既有資料庫初始化略過警告，不影響靜態頁與 Board 測試。測試完成後已停止該 8798 Node 程序。
+- 程式與服務驗證：`node --check public/js/board_lineage_extraction.js`、`public/js/board_battle.js`、`public/js/board_game.js` 通過；完整 `.codex-runtime/lineage_formal_cdp_test.js` 回歸通過且 `consoleErrors: []`。另以 `PORT=8798 npm start` 啟動獨立服務，`/board_battle.html` 回傳 HTTP 200 且包含 V9 query；本機未設 `DATABASE_URL` 時只保留既有資料庫初始化略過警告，不影響靜態頁與 Board 測試。測試完成後已停止該 8798 Node 程序。
 - 邊界：本輪沒有修改 item id、成功率、因子資料結構、localStorage key、Socket.IO event 或 server；沒有把示範頁假庫存、假敵人、重播／重試入口接入正式狀態，也沒有提前進行第 6 階段的複製人生成。
 
 #### 正式戰鬥血統抽取示範頁版面完整對齊 V88
@@ -6521,8 +5904,7 @@ ode --check public/js/board_lineage_extraction.js`、`public/js/board_battle.js`
 - 正式權威邊界：保留 `board_game.js` 的 scope、正式庫存扣除、成功率上限、完整因子冪等發放、CPU、共鬥、觀看權限、手動存檔與 `BOARD_GAME_STATE`；本輪只修改顯示層與前端輸入統計，不新增或改名狀態欄位、item id、localStorage key、Socket.IO event 或 server 欄位，也沒有接入示範頁假庫存、假敵人、重播／重試入口。
 - 畫面驗證：Chrome 正式頁 1440×900 逐段實玩並截查詢問、彈巢、第一階段啟動、第二階段、框中央 MISS、第三階段及正式結果。詢問頁雙方卡／HUD與下方兩框完整；七孔無額外圓形光暈；第一階段圈在敵人卡內，第二／三階段滿框但未超出；結果頁返回原戰鬥背景。1024×768 與 844×390 實拍仍完整等比顯示，桌機／平板／手機頁面新增 overflow 均為 0。
 - 規則與同步回歸：正式 QA 再次確認皇級抽取器只扣一次、重複開始回傳 false、完整因子只發一次、重複完成不增加、放棄不扣、無庫存可結算、CPU 可完成、共鬥會等待未決參戰者，原戰鬥結算可關閉；兩個 Socket.IO client 的 factor id、success 與 scope 一致，`BOARD_GAME_STATE` ack 成功，瀏覽器 `consoleErrors: []`。
-- 程式與服務驗證：
-ode --check public/js/board_lineage_extraction.js`、`public/js/board_battle.js`、`public/js/board_game.js` 通過；HTML inline script 語法檢查、三張既有面板／按鈕素材路徑、正式頁 HTTP 200 與 `git diff --check` 通過。快取版本統一更新為 `20260729-formal-lineage-v10`。
+- 程式與服務驗證：`node --check public/js/board_lineage_extraction.js`、`public/js/board_battle.js`、`public/js/board_game.js` 通過；HTML inline script 語法檢查、三張既有面板／按鈕素材路徑、正式頁 HTTP 200 與 `git diff --check` 通過。快取版本統一更新為 `20260729-formal-lineage-v10`。
 
 #### 正式戰鬥血統抽取光束圖層與結果續行修正 V89
 
@@ -6552,8 +5934,7 @@ ode --check public/js/board_lineage_extraction.js`、`public/js/board_battle.js`
 - 修正：結果版保留原生框上方「血統因子提取成功／失敗」標題，隱藏框內重複大標題；四項判定格縮短上下內距、標籤與結果值使用緊湊行高，結果說明同步收窄行高，讓「繼續戰鬥結算」完整落在右下框內。抽取率、結果、因子與原結算事件沒有改動。
 - 失敗流程實測：Chrome 1280×600 正式頁使用標準抽取器強制得到成功率 35%、判定 97 的失敗結果。「繼續戰鬥結算」按鈕 top／bottom 為 539.61／575.61，右側面板 top／bottom 為 432／586.80，按鈕完整位於框內且可見；頁面 X／Y overflow 為 0，瀏覽器腳本例外為 0。
 - 返回地圖實測：點擊續行後抽取根層關閉，原戰鬥「戰鬥勝利！」獎勵面板與可操作的「返回地圖」出現；按鈕為 197.63×54.55、`visibility:visible`、`opacity:1` 且未停用。再點擊後 `battleState` 清空、戰鬥 overlay 移除 `open`，地圖重新顯示。
-- 程式與服務：CSS parser、
-ode --check public/js/board_lineage_extraction.js`、`public/js/board_battle.js`、`public/js/board_game.js` 及 `git diff --check` 通過；既有 8787 與獨立 `PORT=8798 npm start` 的正式戰鬥頁都回傳 HTTP 200 並載入 V13，測試後已停止 8798 服務。
+- 程式與服務：CSS parser、`node --check public/js/board_lineage_extraction.js`、`public/js/board_battle.js`、`public/js/board_game.js` 及 `git diff --check` 通過；既有 8787 與獨立 `PORT=8798 npm start` 的正式戰鬥頁都回傳 HTTP 200 並載入 V13，測試後已停止 8798 服務。
 - 快取與邊界：正式版本統一更新為 `20260729-formal-lineage-v13`。本輪沒有修改 item id、抽取器消耗、成功率、完整因子發放、戰鬥獎勵、CPU、共鬥、觀看權限、存檔、`BOARD_GAME_STATE`、localStorage key、Socket.IO event 或 server，也沒有提前接入第 6 階段培育。
 
 #### 全破後世界第 6 階段：研究所培育與永久個體 V92
@@ -6568,10 +5949,8 @@ ode --check public/js/board_lineage_extraction.js`、`public/js/board_battle.js`
 - 畫面驗證：隔離 Chrome 1440×900 實拍因子選擇、因子投入、能量溶解、圓泡顯影、結果、收藏六格分頁及角色詳情；角色圖、因子圖、標題、四列因子文案、能力列、同名比較及圖片按鈕均位於正式框內。1024×768 平板主框為 992×558.28，844×390 手機橫向主框為 672.16×378.28，頁面沒有新增水平或垂直 overflow；唯一量測到的文字內部行高差不造成可視裁切。
 - 規則驗證：力量共鳴型魯夫因子 1→0，正式生成 `level=1`、`totalExp=0`、`formId=base`、`lineageGrowthStage=S` 及固定傾向；同一因子再次提交被拒。隊伍有空位時角色由收藏移回船上，同名第二個體取回被「同一角色不能同時重複登船」拒絕且收藏數不變。舊角色遷移後六項 modifier 都是 `0.01`；未支援因子的主按鈕停用且原因文字正確。CPU 因子 1→0、生成 Lv.1 索隆並在空隊伍自動登船。
 - 存檔與多人驗證：手動存檔 payload 可完整 JSON 序列化，保存 schema 5、永久實例、Lv.1、基礎型態、成長階段與六項傾向。獨立 `PORT=8799 npm start` 服務以兩個 Socket.IO client 建立房間並推送 `research-lab-cultivation`；server ack `{ok:true, version:1}`，接收端完整取得相同 schema、因子數、`instanceId`、等級、傾向與成長階段，測試後已停止 8799 Node 程序。
-- 程式與服務：
-ode --check public/js/board_game.js` 通過；六張正式研究所／培育／因子框素材均存在，既有 8787 與獨立 8799 的 `board_game.html` 都回傳 HTTP 200。正式快取版本更新為 `20260729-research-cultivation-v1`。
-- 既有回歸腳本：
-ode scripts/board_game_smoke.js` 在 60 秒內沒有產生錯誤輸出但未自行結束，因此本輪記為逾時、沒有列入通過項目；逾時後已停止該 smoke Node 程序，41731 與 8799 均未留下測試 listener。
+- 程式與服務：`node --check public/js/board_game.js` 通過；六張正式研究所／培育／因子框素材均存在，既有 8787 與獨立 8799 的 `board_game.html` 都回傳 HTTP 200。正式快取版本更新為 `20260729-research-cultivation-v1`。
+- 既有回歸腳本：`node scripts/board_game_smoke.js` 在 60 秒內沒有產生錯誤輸出但未自行結束，因此本輪記為逾時、沒有列入通過項目；逾時後已停止該 smoke Node 程序，41731 與 8799 均未留下測試 listener。
 - 階段邊界：第 6 階段沒有為一般敵人假造玩家卡，也沒有接入 S→SS／SSS 突破、十三島 Boss、線索或圖鑑。下一階段是第 7 階段，逐批建立現有敵人的玩家培育模板。
 
 #### 研究物品背包可見性修正 V93
@@ -6613,8 +5992,7 @@ ode scripts/board_game_smoke.js` 在 60 秒內沒有產生錯誤輸出但未自�
 - 養成與戰鬥驗證：凱多培育後可登船、使用攻擊飲料、裝備光粉、累積 500000 EXP 升至 Lv.73，經 JSON 存讀檔後仍保留 4 招、修行攻擊 3、攜帶物、血統傾向及正式立繪；正式戰鬥可用凱多四招開戰並切換至赤犬，回合持續正常。CPU 培育及同名凱多不能同時登船的收藏限制亦通過。
 - 圖文驗證：Chrome 1440×900 與 844×390 的研究所培育、投入、結果及角色顯影皆使用正式圖片式框面；逐一切換 51 種姓名未發現文字溢出或圖片破損。51／51 普通立繪 URL 回傳 HTTP 200；桌機與手機頁面沒有新增 overflow，僅培育能量光暈依設計超出自身無文字節點。完整 4.3 秒培育演出以麒麟格姆實跑，角色圖、名稱、等級與泡泡破裂結果均位於正式框內。
 - 存檔與多人驗證：手動 payload 可完整序列化及正規化。獨立 `PORT=8806 npm start` 服務以兩個 Socket.IO 瀏覽器 client 推送帶有 Lv.73 凱多、永久 `instanceId`、四招、修行、攜帶物、傾向與敵人立繪的 `research-lab-cultivation` 快照；server ack `{ok:true, version:1}`，接收端角色物件逐字一致，測試後已停止 8806 Node 程序。
-- 程式與服務：
-ode --check public/js/board_game.js` 通過；既有 8787 與獨立 8806 的 `board_game.html` 回傳 HTTP 200，獨立服務載入 `20260729-lineage-enemy-templates-v1`。本輪沒有新增或改名 `gameState`／`researchLab` 欄位、localStorage key、Socket.IO event、server 欄位或敵人／道具字串 id。
+- 程式與服務：`node --check public/js/board_game.js` 通過；既有 8787 與獨立 8806 的 `board_game.html` 回傳 HTTP 200，獨立服務載入 `20260729-lineage-enemy-templates-v1`。本輪沒有新增或改名 `gameState`／`researchLab` 欄位、localStorage key、Socket.IO event、server 欄位或敵人／道具字串 id。
 - 階段邊界：第 7 階段完成現有正式敵人的玩家培育模板，但不提前製作十三島新 Boss、線索、圖鑑或 S→SS→SSS 原作血統突破。下一階段是第 8 階段，處理培育個體突破與重複完整因子的用途。
 
 #### 競技場兩人出戰名單鎖定修正 V97
@@ -6627,8 +6005,7 @@ ode --check public/js/board_game.js` 通過；既有 8787 與獨立 8806 的 `bo
 - 規則層防護：`queuePlayerBattleSwitch()`、`chooseBattleReplacement()`、指定戰鬥道具目標及實際套用換人動作都會再次檢查選定名單；未入選索引回傳 false、不建立 action，也不改變上場船員。舊 pending 競技場戰鬥只要已有 `arenaCrewIndices` 就套用相同限制，沒有新增或改名任何存檔欄位。
 - 規則實測：以六名船員建立競技場並指定原始索引 `[1,4]`。battle view 只傳 `[1,4]`、替補候選只傳 `[4]`；嘗試主動換入未選的索引 2 回傳 false、active index 與 action 均不變，換入索引 4 成功。模擬索引 1 瀕死後，未選索引 2 的替補回傳 false，索引 4 替補成功。暫時切回一般戰鬥 view 時仍傳完整 `[0,1,2,3,4,5]`。
 - 畫面實測：Chrome 1440×900 正式 iframe 的「夥伴」頁只出現原始索引 1、4 兩張圖片式船員卡，索引 1 標示上場中、索引 4 可切換，文件寬高等於 viewport；844×390 手機橫向實拍同樣只顯示兩人且兩張角色圖、名稱、HP／PP 與按鈕均位於既有圖片框內。從正式 iframe 點擊索引 4 後，主遊戲 active index 實際變為 4；瀏覽器腳本例外為 0。
-- 程式、快取與同步邊界：
-ode --check public/js/board_game.js`、`public/js/board_battle.js` 通過。正式主頁、戰鬥 iframe HTML 與兩支腳本 query 統一為 `20260729-arena-roster-lock-v1`；既有 `battle.arenaCrewIndices` 隨完整 `BOARD_GAME_STATE` 快照同步，沒有修改 localStorage key、Socket.IO event、server、競技場獎勵、入場／離場回復或兩人選擇規則。
+- 程式、快取與同步邊界：`node --check public/js/board_game.js`、`public/js/board_battle.js` 通過。正式主頁、戰鬥 iframe HTML 與兩支腳本 query 統一為 `20260729-arena-roster-lock-v1`；既有 `battle.arenaCrewIndices` 隨完整 `BOARD_GAME_STATE` 快照同步，沒有修改 localStorage key、Socket.IO event、server、競技場獎勵、入場／離場回復或兩人選擇規則。
 
 #### 全破後世界第 8 階段：S／SS／SSS 血統突破 V98
 
@@ -6640,13 +6017,8 @@ ode --check public/js/board_game.js`、`public/js/board_battle.js` 通過。正�
 - 新素材：使用內建 ImageGen 的 `stylized-concept` 模式生成單一「完美血統核心」，原始 PNG 位於 `C:\Users\王曜瑋\.codex\generated_images\019fa333-31ef-7e32-b226-023fffa4c411\call_V3rhqMursJKTs7GH1hWRCz6P.png`；驗收後以 Sharp 機械轉為 1024×1024、RGB、207,648 bytes 的正式 WebP。提示詞指定暗黑海洋海賊 RPG 重要道具、單一透明切面晶核、內部青紅雙螺旋能量、古銅鋼製拘束環、正中央約占 78%、均勻深黑海軍藍背景、無字無人物無卡框。正式圖同時用於 SSS 需求與重要道具背包；清單／預覽沿用既有 71／198 px 規格。
 - 規則實測：S→SS 七項需求全部成立後只扣 1 因子、20,000 B、200 點；SS→SSS 九項需求全部成立後只扣 2 因子、1 核心、50,000 B、500 點。無進化資料的亞爾麗塔以基礎型態通過；有正式進化資料的庫山保持基礎型態時正確顯示「基礎型態／10號船長庫山」並拒絕。SSS 重複提交回傳最高階段錯誤。六項純基礎能力測得每段皆在四捨五入誤差內約 +8%；CPU 自動完成 S→SS 後素材與點數同步扣除。
 - 因子與背包實測：六種解析依序得到 `[10,20,30,40,70,120]`，合計 290，因子剩 0；再次提交同 id 被拒絕。完美血統核心以 `重要道具・SSS` 顯示，1024×1024 natural size、預覽 198×198、清單 71×71，無破圖；因子背包說明同步標示培育／突破／解析三種用途。
-- 存檔與多人：手動 payload JSON 與 
-ormalizeLoadedGameState()` 往返後保留 SS、完整因子及核心庫存。8787 服務建立 `S8V98` 雙人房，主端以 `research-lab-breakthrough` 推送完整 `BOARD_GAME_STATE`，server ack `{ok:true, version:1}`；接收端收到相同 SS 階段、核心數與因子數。未新增或改名 `gameState`／`researchLab` 欄位、localStorage key、Socket.IO event 或 server 欄位。
-- 程式與服務：
-ode --check public/js/board_game.js`、
-ode --check public/js/board_items.js`、`git diff --check` 通過；
-pm start` 啟動 8787，`board_game.html` 與核心 WebP 均回傳 HTTP 200，頁面載入例外 0。既有 
-ode scripts/board_game_smoke.js` 在 124 秒工具上限內沒有輸出並被 timeout 終止，故不列為通過；本輪改以 Chrome 規則、畫面、存檔及雙端 Socket.IO 實測覆蓋。正式 query 為 `20260729-lineage-breakthrough-v1`。
+- 存檔與多人：手動 payload JSON 與 `normalizeLoadedGameState()` 往返後保留 SS、完整因子及核心庫存。8787 服務建立 `S8V98` 雙人房，主端以 `research-lab-breakthrough` 推送完整 `BOARD_GAME_STATE`，server ack `{ok:true, version:1}`；接收端收到相同 SS 階段、核心數與因子數。未新增或改名 `gameState`／`researchLab` 欄位、localStorage key、Socket.IO event 或 server 欄位。
+- 程式與服務：`node --check public/js/board_game.js`、`node --check public/js/board_items.js`、`git diff --check` 通過；`npm start` 啟動 8787，`board_game.html` 與核心 WebP 均回傳 HTTP 200，頁面載入例外 0。既有 `node scripts/board_game_smoke.js` 在 124 秒工具上限內沒有輸出並被 timeout 終止，故不列為通過；本輪改以 Chrome 規則、畫面、存檔及雙端 Socket.IO 實測覆蓋。正式 query 為 `20260729-lineage-breakthrough-v1`。
 - 階段邊界：完美血統核心的道具資料與消耗已完成，但正式取得仍依企劃留到第 10 階段洛克斯勝利；本輪不提前新增洛克斯、十三島 Boss 或線索牌。下一階段為第 9 階段。
 
 #### 血統培育角色正式資料與我方養成對齊修正 V99
@@ -6660,8 +6032,7 @@ ode scripts/board_game_smoke.js` 在 124 秒工具上限內沒有輸出並被 ti
 - 全名單規則實測：51 種來源仍為 45 種獨立模板＋6 種既有玩家模板。45／45 的顯示類別都等於正式 role 中文顯示，沒有自創角色被動或被動效果；每名 Lv.1 都有兩招，45／45 至少有一招升級後可學。赤犬由 Lv.1 累積 500000 EXP 到 Lv.73，自動學會「岩漿壓制」「流星火山」並保留四招；伊姆同樣學會第三、四招，第五招「Domi Reversi・黑轉支配」在 Lv.45 正確進入替換佇列。模板序列化未出現 `yonkoMove`、`finalGateMove`、`bossPhase`、`phaseState`、`recommendedPower` 或 `enemyCombatant`。
 - 記憶與職能實測：赤犬被動記憶 Lv.3 依力屬性得到 HP+9、攻擊+6。只把正式玩家模板放在研究收藏時，四職能計數全為 0；把獨立赤犬放上船仍不偽造四職能；把既有玩家模板庫山放上船則正常得到戰鬥型 1。這證明收藏與敵人資料不參與，而正式我方船員資料仍照原規則運作。
 - 圖文實測：Chrome 1440×900 與 844×390 橫向實際培育赤犬並開啟研究收藏詳情；正式敵人圖、名稱、`岩漿果實能力者`、六項能力、S→SS 條件及按鈕均落在圖片原生框內，圖片載入失敗 0，頁面 overflow 0。桌機主框 1408×792，手機主框約 672×378；手機未量到文字溢出，桌機標題只有既有 5 px 行高差、無可視裁切。
-- 相容性與快取：沒有新增或改名 `gameState`、`researchLab`、角色實例、localStorage key、Socket.IO event 或 server 欄位；舊 `lineage_*` card id、factor id、招式 id、`instanceId` 與完整快照格式保持不變。
-ode --check public/js/board_game.js`、頁面載入及 HTTP 200 通過；正式 query 更新為 `20260729-lineage-player-parity-v1`。
+- 相容性與快取：沒有新增或改名 `gameState`、`researchLab`、角色實例、localStorage key、Socket.IO event 或 server 欄位；舊 `lineage_*` card id、factor id、招式 id、`instanceId` 與完整快照格式保持不變。`node --check public/js/board_game.js`、頁面載入及 HTTP 200 通過；正式 query 更新為 `20260729-lineage-player-parity-v1`。
 
 #### 血統培育角色四職能澄清修正 V100
 
@@ -6672,8 +6043,7 @@ ode --check public/js/board_game.js`、頁面載入及 HTTP 200 通過；正式 
 - 玩家功能：獨立模板重新使用 `recruitStatsForTierRole()` 的職能 Lv.1 能力與個人移動值；被動記憶自然沿用四職能加值。角色專屬 `passive` 仍為「無」，沒有恢復 V96 的自創名稱或通用角色被動；升級學招、四招替換、修行、攜帶物、收藏、戰鬥與 S／SS／SSS 規則保持 V99 修正。
 - 被動邊界實測：研究收藏同時放入四職能角色時，戰鬥／偵查／移動／輔助計數皆為 0；四名分別登船後計數為 1／1／1／1；競技場只選偵查與輔助兩人時只計 0／1／0／1。另以完整因子培育赤犬做上下船循環：收藏時戰鬥型為 0，安排登船立即變 1，送回收藏立即回到 0。這證明職能被動會依目前實際上船名單即時重算，競技場再看入選兩人，不讀收藏或敵人 profile。
 - 養成回歸：舊 `lineage_akainu` 卡若保存 `岩漿果實能力者`，同步後會變成戰鬥型；四職能的被動記憶 Lv.3 分別得到既有戰鬥 HP+9／攻擊+6、偵查戰術+6／速度+3、移動速度+6／攻擊+3、輔助意志+6／防禦+3。赤犬累積 500000 EXP 仍升到 Lv.73 並學會「岩漿壓制」「流星火山」。
-- 程式與快取：51／51 角色稽核全部落在四職能內，沒有第五種或身分文字殘留；
-ode --check public/js/board_game.js` 與正式頁載入通過。沒有新增或改名存檔／同步欄位，正式 query 更新為 `20260729-lineage-four-roles-v2`。
+- 程式與快取：51／51 角色稽核全部落在四職能內，沒有第五種或身分文字殘留；`node --check public/js/board_game.js` 與正式頁載入通過。沒有新增或改名存檔／同步欄位，正式 query 更新為 `20260729-lineage-four-roles-v2`。
 
 #### 血統培育角色依實際表現重分職能 V101
 
@@ -6682,9 +6052,7 @@ ode --check public/js/board_game.js` 與正式頁載入通過。沒有新增或�
 - 根因與標準：V100 為了讓四職能都有一定人數，把技屬性、能力複雜或戰術型角色過度歸入偵查，造成黑鬍子等正面戰鬥角色的職能不符合表現。現改為不按屬性或人數平均：直接輸出／正面決戰歸戰鬥；只有明確感知／情報表現歸偵查；高速位移／運輸歸移動；控制／弱化／防禦／指揮／召喚歸輔助。
 - 重分結果：45 種獨立模板為戰鬥型 25、偵查型 1、移動型 8、輔助型 11；連同 6 種沿用既有玩家模板後，51 名合計戰鬥型 28、偵查型 2、移動型 9、輔助型 12。黑鬍子、大媽、紅髮香克斯、多佛朗明哥、伊姆、麥哲倫等正面主戰者改為戰鬥型；艾尼路因心綱與全國級感知保留偵查型；布魯諾因空氣門改為移動型；凱薩、弗克西、莫利亞、麒麟格姆、索瑪茲、卡莉法等控制／弱化／防禦角色歸輔助型。
 - 存檔與被動：沒有新增或改名 `gameState`、`researchLab`、角色實例、localStorage key、Socket.IO event 或 server 欄位。舊 `lineage_*` 卡會由既有 `syncCrewCardProgress()` 依 card id 套回新版職能；實測舊偵查型黑鬍子同步後變為戰鬥型。完整因子培育黑鬍子在收藏時戰鬥型計數為 0，安排登船立即變 1，送回收藏立即回到 0；競技場只選艾尼路與凱薩時只計偵查 1、輔助 1。
-- 驗證：51／51 模板皆落在四職能且人數為 28／2／9／12，黑鬍子模板為戰鬥型、Lv.1 仍保留「暗水」「闇穴」，其餘招式 Lv.15／30 解鎖規則未變。Chrome 1440×900 與 390×844 開啟黑鬍子研究所詳情，角色圖、名稱、`戰鬥型`、能力值、突破條件與按鈕均在框內，可見破圖 0、頁面寬度溢出 0、頁面例外 0；動態研究所資源重測 HTTP 4xx 0。
-ode --check public/js/board_game.js`、`git diff --check` 通過；
-pm start` 使用獨立 8813 測試埠啟動，正式頁 HTTP 200 且載入 query `20260729-lineage-performance-roles-v3`。
+- 驗證：51／51 模板皆落在四職能且人數為 28／2／9／12，黑鬍子模板為戰鬥型、Lv.1 仍保留「暗水」「闇穴」，其餘招式 Lv.15／30 解鎖規則未變。Chrome 1440×900 與 390×844 開啟黑鬍子研究所詳情，角色圖、名稱、`戰鬥型`、能力值、突破條件與按鈕均在框內，可見破圖 0、頁面寬度溢出 0、頁面例外 0；動態研究所資源重測 HTTP 4xx 0。`node --check public/js/board_game.js`、`git diff --check` 通過；`npm start` 使用獨立 8813 測試埠啟動，正式頁 HTTP 200 且載入 query `20260729-lineage-performance-roles-v3`。
 
 #### 競技場完成體、SSS 抽取與培育重置 V102
 
@@ -6695,9 +6063,7 @@ pm start` 使用獨立 8813 測試埠啟動，正式頁 HTTP 200 且載入 query
 - 培育邊界：競技場完成體的 Lv.99、滿修行、記憶 Lv.3、SSS 與最高型態只供敵方戰鬥。所有完整因子培育都明確寫入 Lv.1、總 EXP 0、六項修行 0、戰鬥記憶 0、S 階、基礎型態、未解鎖進化，避免來源模板或未來資料帶入完成度；血統傾向仍照正式培育規則生成。
 - 規則實測：51／51 競技場 profile 均為 Lv.99、六項 30、記憶 3、SSS、SSS 抽取階級，無缺漏；其中 25 名正確採用非 base 的最高正式型態。五檔魯夫樣本能力為 HP 625、攻擊 428、防禦 327、戰術 328、意志 321、速度 260，招式為黎明手槍／白色彈跳／巨人化／黎明火箭。
 - 抽取與培育實測：擊敗五檔魯夫後取得 SSS 抽取 view，enemy key 為 `arena_luffy`、`sourceCardId` 為 `luffy`、能力者判定為 true；皇級抽取器加三段 Perfect 的正式成功率為 75%，成功因子可解析回 `luffy`。結算給既有 25 研究點後，以該因子培育出蒙其·D·魯夫：Lv.1、總 EXP 0、base、進化階段 0、已解鎖型態空陣列、六項修行全 0、記憶 0、S 階。
-- 圖文與服務：Chrome 1440×900 與 390×844 開啟 1672×941 競技場選擇框，完成體說明、選中對手、51 名清單與兩名船員都在圖片框內；桌機與手機 body 寬度無溢出、可見破圖 0。
-ode --check public/js/board_game.js` 與 `git diff --check` 通過；
-pm start` 使用獨立 8814 測試埠啟動，正式頁 HTTP 200 並載入 query `20260729-arena-sss-extraction-v5`，驗證後已關閉測試服務。
+- 圖文與服務：Chrome 1440×900 與 390×844 開啟 1672×941 競技場選擇框，完成體說明、選中對手、51 名清單與兩名船員都在圖片框內；桌機與手機 body 寬度無溢出、可見破圖 0。`node --check public/js/board_game.js` 與 `git diff --check` 通過；`npm start` 使用獨立 8814 測試埠啟動，正式頁 HTTP 200 並載入 query `20260729-arena-sss-extraction-v5`，驗證後已關閉測試服務。
 
 #### 全破後世界第 9 階段：十三島 Boss、約克線索與新版洛基／Tot Musica V103
 
@@ -6712,8 +6078,7 @@ pm start` 使用獨立 8814 測試埠啟動，正式頁 HTTP 200 並載入 query
 - 規則驗證：13／13 島 state 都有 Lv.99、SSS 抽取、四招與正式模板；無抽取器時 SSS 抽取 entry 正確為 unavailable，有皇級抽取器時為 offered，基礎率 5%、皇級加成 50%。以完整因子實際培育洛基與覺醒路基，結果分別為洛基與基礎羅布・路基，兩者都是 Lv.1、EXP 0、base、進化階段 0、無已解鎖型態、六項修行 0、記憶 0、S 階，且只解鎖兩個 Lv.1 招式。
 - 獎勵與相容性驗證：模擬 Tot Musica 勝利後，`york_clue_04_tot_musica` 由 0 變 1；島嶼恢復完整 HP、`isDefeated=false`、不產生臨時服務。手動存檔 payload 仍可完整序列化且保存同一張線索；沒有新增或改名 `gameState`、`researchLab`、localStorage key、Socket.IO event 或 server 欄位。
 - 圖文驗證：13 個 Boss 目錄共 78 張必要狀態 WebP，缺檔 0。Tot Musica 桌機 1440×900 遭遇框載入 1024×1536 新圖，洛基手機 390×844 遭遇框同樣載入 1024×1536 新圖；兩畫面量測文字與圖片 overflow 皆 0。背包桌機／手機、線索取得演出亦完成實拍，Boss 島圖、牌框、A～K 與文字均在正式框內。
-- 程式與服務：
-ode --check public/js/board_items.js`、`public/js/board_game.js` 通過；另以獨立 `PORT=8815 npm start` 啟動正式 server，`board_game.html`、兩支新版 query 腳本、洛基與 Tot Musica WebP 均回傳 HTTP 200，驗證後已停止 8815 listener。測試環境未設定 `DATABASE_URL`，因此只出現既有的 DB 功能停用警告，靜態 Board 頁與本輪流程可正常執行。正式 query 更新為 `20260729-postgame-boss-clue-v1`，下一階段固定停在第 10 階段，未提前建立蛋頭島、約克終局或洛克斯。
+- 程式與服務：`node --check public/js/board_items.js`、`public/js/board_game.js` 通過；另以獨立 `PORT=8815 npm start` 啟動正式 server，`board_game.html`、兩支新版 query 腳本、洛基與 Tot Musica WebP 均回傳 HTTP 200，驗證後已停止 8815 listener。測試環境未設定 `DATABASE_URL`，因此只出現既有的 DB 功能停用警告，靜態 Board 頁與本輪流程可正常執行。正式 query 更新為 `20260729-postgame-boss-clue-v1`，下一階段固定停在第 10 階段，未提前建立蛋頭島、約克終局或洛克斯。
 
 #### 競技場勝利血統因子抽取續行修正 V104
 
@@ -6725,8 +6090,7 @@ ode --check public/js/board_items.js`、`public/js/board_game.js` 通過；另�
 - 四分支實測：皇級抽取器加三次 Perfect 得到 75% 成功率，判定 10 成功並建立 `lineage-factor-1350359-0001`；標準型加三次 Miss 得到 5%，判定 38 失敗且不建立因子；兩種情況抽取器都只扣 1 並顯示「繼續戰鬥結算」。無抽取器時即使模擬舊快照把研究所旗標設為 false，entry 仍為 `unavailable`，正式畫面會等待玩家按「繼續競技場結算」，不再靜默略過。
 - 圖文驗證：Chrome 1440×900 正式 iframe 中無抽取器標題、兩行原因與按鈕都位於右下原生圖片框，action copy 的 `scrollHeight === clientHeight`（157）且 `scrollWidth === clientWidth`（628）。390×844 手機 viewport 的 1024×576 戰鬥舞台依既有規則完整等比縮放，document 寬度等於 viewport，沒有水平 overflow。
 - 相容性與快取：沒有新增或改名 `gameState`、`battleState`、`researchLab`、inventory 欄位、localStorage key、Socket.IO event 或 server 欄位；抽取器消耗、成功率、完整因子、競技場獎勵及兩人出戰規則不變。正式主頁、battle iframe 與抽取控制器 query 統一為 `20260729-arena-lineage-extraction-v1`。
-- 程式與服務：
-ode --check public/js/board_game.js`、`public/js/board_lineage_extraction.js`、`public/js/board_battle.js` 及目標檔案 `git diff --check` 通過。另以 `PORT=8816 npm start` 啟動正式 server，`board_game.html` 回傳 HTTP 200、內容含新版 query，驗證後已停止 8816 listener；既有 8787 測試服務未中斷。
+- 程式與服務：`node --check public/js/board_game.js`、`public/js/board_lineage_extraction.js`、`public/js/board_battle.js` 及目標檔案 `git diff --check` 通過。另以 `PORT=8816 npm start` 啟動正式 server，`board_game.html` 回傳 HTTP 200、內容含新版 query，驗證後已停止 8816 listener；既有 8787 測試服務未中斷。
 
 #### 無抽取器共用戰鬥文字修正 V105
 
@@ -6734,8 +6098,7 @@ ode --check public/js/board_game.js`、`public/js/board_lineage_extraction.js`�
 - 檔案：`public/board_game.html`、`public/board_battle.html`、`public/js/board_game.js`、`public/js/board_lineage_extraction.js`、`docs/DEV_WORKFLOW.md`。
 - 修正：無抽取器結果頁不再把所有戰鬥寫成競技場；提示統一改為「戰鬥勝利後」、「下次戰鬥勝利時」與「繼續戰鬥結算」，適用一般敵島、海格遭遇、四皇、司法島、推進城、頂上戰爭、艾爾帕布、伊姆、十三島 Boss 與競技場。
 - 相容性：只調整顯示文字與前端快取版本，沒有更動抽取資格、成功率、道具消耗、完整因子、原戰鬥獎勵、`gameState`、`battleState`、localStorage key、Socket.IO event 或 server 欄位。
-- 驗證：正式頁建立一般敵島「皮卡勝利、研究所已解鎖、重要道具背包無抽取器」情境，entry 為 `unavailable`；桌機 1440×900 與手機 390×844 均顯示三處新版通用文字，舊競技場限定文字為 0。「繼續戰鬥結算」按鈕可關閉抽取層並回到仍為 `win` 的原結算；桌機文字框 `scrollWidth === clientWidth`、`scrollHeight === clientHeight`，手機 document 寬度等於 viewport，無水平溢出。正式頁與 battle iframe 使用 `20260729-lineage-unavailable-copy-v2`，動態資源 HTTP 4xx 為 0、頁面例外為 0；三支相關 JS 的 
-ode --check` 與目標檔案 `git diff --check` 通過。
+- 驗證：正式頁建立一般敵島「皮卡勝利、研究所已解鎖、重要道具背包無抽取器」情境，entry 為 `unavailable`；桌機 1440×900 與手機 390×844 均顯示三處新版通用文字，舊競技場限定文字為 0。「繼續戰鬥結算」按鈕可關閉抽取層並回到仍為 `win` 的原結算；桌機文字框 `scrollWidth === clientWidth`、`scrollHeight === clientHeight`，手機 document 寬度等於 viewport，無水平溢出。正式頁與 battle iframe 使用 `20260729-lineage-unavailable-copy-v2`，動態資源 HTTP 4xx 為 0、頁面例外為 0；三支相關 JS 的 `node --check` 與目標檔案 `git diff --check` 通過。
 
 #### 研究所培育四職能顯示校正 V106
 
@@ -6744,8 +6107,7 @@ ode --check` 與目標檔案 `git diff --check` 通過。
 - 根因：研究所培育結果與收藏卡把 `lineageTendency.name` 當成主狀態，因此顯示均衡型、堅韌型、強攻型等六項能力傾向，看起來像另外一套角色類型，蓋過角色真正的四職能。
 - 修正：研究所 view 依既有 `card.roleType` 產生純顯示欄位 `roleName`，內部戰鬥型／偵查型／移動型／輔助型分別顯示為攻擊型／偵查型／速度型／輔助型。培育完成、登船與收藏卡、角色詳情及同名比較全部改用四職能；原血統百分比只以「個體能力修正」顯示。
 - 相容性：沒有改名或遷移 `roleType`、`lineageTendency`、`gameState`、`researchLab`、localStorage key、Socket.IO event 或 server 欄位；四職能隊伍效果、角色分類、傾向能力計算、存檔與多人同步內容不變。
-- 驗證：正式頁把赤犬／囚服巴奇／亞爾麗塔／凱薩分別設為戰鬥／偵查／移動／輔助，並刻意寫入堅韌型／強攻型／均衡型／戰術型傾向；研究收藏卡只顯示攻擊型／偵查型／速度型／輔助型，四種培育完成頁及赤犬角色詳情同樣只以四職能作主類型，舊傾向名稱可見數為 0。個體能力修正仍正確顯示 HP／攻擊等百分比；64／64 正式敵人培育模板與 51／51 競技場來源角色的內部職能都只落在既有四類。Chrome 1440×900 詳情框 `scrollWidth === clientWidth`、`scrollHeight === clientHeight`；390×844 document 寬度等於 viewport，破圖 0、動態 HTTP 4xx 0、頁面例外 0。
-ode --check public/js/board_game.js` 與目標檔案 `git diff --check` 通過。
+- 驗證：正式頁把赤犬／囚服巴奇／亞爾麗塔／凱薩分別設為戰鬥／偵查／移動／輔助，並刻意寫入堅韌型／強攻型／均衡型／戰術型傾向；研究收藏卡只顯示攻擊型／偵查型／速度型／輔助型，四種培育完成頁及赤犬角色詳情同樣只以四職能作主類型，舊傾向名稱可見數為 0。個體能力修正仍正確顯示 HP／攻擊等百分比；64／64 正式敵人培育模板與 51／51 競技場來源角色的內部職能都只落在既有四類。Chrome 1440×900 詳情框 `scrollWidth === clientWidth`、`scrollHeight === clientHeight`；390×844 document 寬度等於 viewport，破圖 0、動態 HTTP 4xx 0、頁面例外 0。`node --check public/js/board_game.js` 與目標檔案 `git diff --check` 通過。
 
 #### CPU 司法島自動進關修正 V107
 
@@ -6754,8 +6116,7 @@ ode --check public/js/board_game.js` 與目標檔案 `git diff --check` 通過�
 - 根因：`resolveLanding()` 抵達司法島後不分真人／CPU 都呼叫 `openJudicialRaidModal()`；CPU 因此停在只綁定 DOM click 的「發起討伐／加入討伐」頁，必須依賴開發觀察器稍後代按，正式 CPU 回合本身沒有直接進關。
 - 修正：司法島 modal 完成失效 raid 清理後先判斷 CPU。有存活船員時，未啟動或已通關直接呼叫既有 `startJudicialRaid()`，進行中呼叫既有 `joinJudicialRaid()`；沒有存活船員則記錄原因並結束回合，避免產生無法操作的 modal。真人仍走原圖片式選擇頁。
 - 相容性：沿用既有司法島 `judicialRaid`、participant、共享 HP、battle snapshot、任務事件與多人交棒，沒有新增或改名 `gameState`、localStorage key、Socket.IO event 或 server 欄位。
-- 驗證：正式 `resolveLanding()` 實測三種 CPU 落點。全新司法島立即建立斯潘達姆第 1 戰、raid active 且 CPU participant active，沒有司法島 modal；進行中的司法島立即加入並建立目前階段 battle；已有 2 次通關紀錄的司法島保留 `clearCount=2` 與 `lastClearedAtRound=8`，清空舊 phase keys 後從斯潘達姆第 1 戰重開。相同落點改為真人時不建立 battle，仍顯示「發起討伐」按鈕。正式 query `20260729-cpu-judicial-auto-enter-v1`、主頁與腳本 HTTP 200、動態 HTTP 4xx 0、頁面例外 0；
-ode --check public/js/board_game.js` 與目標檔案 `git diff --check` 通過。
+- 驗證：正式 `resolveLanding()` 實測三種 CPU 落點。全新司法島立即建立斯潘達姆第 1 戰、raid active 且 CPU participant active，沒有司法島 modal；進行中的司法島立即加入並建立目前階段 battle；已有 2 次通關紀錄的司法島保留 `clearCount=2` 與 `lastClearedAtRound=8`，清空舊 phase keys 後從斯潘達姆第 1 戰重開。相同落點改為真人時不建立 battle，仍顯示「發起討伐」按鈕。正式 query `20260729-cpu-judicial-auto-enter-v1`、主頁與腳本 HTTP 200、動態 HTTP 4xx 0、頁面例外 0；`node --check public/js/board_game.js` 與目標檔案 `git diff --check` 通過。
 
 #### 血統因子抽取操作難度 S 封頂與示範同步 V108
 
@@ -6764,8 +6125,7 @@ ode --check public/js/board_game.js` 與目標檔案 `git diff --check` 通過�
 - 難度邊界：SS／SSS 敵人與完整因子的階級不變，基礎成功率／上限仍為 10／85% 與 5／75%；只把三階段玩家操作封頂為 S。正式版與示範頁的 SS／SSS 現在都使用 12 個目標、900ms 單點、22.5% 目標大小、Perfect 0.06／Good 0.17、2300ms 鎖針及 2400ms 雙環。
 - 示範對齊：正式版三段輸入由放開才觸發的 `click` 改為示範頁按下即取樣的 `pointerdown`；第一階段補回 30ms 結束緩衝、190ms 目標間隔與中央開始點後 180ms 預備，第一段到第二段使用 920ms，後續轉場使用 900ms。示範頁選 SS／SSS 時明示「S（操作上限）」，仍用所選階級計算 HP、基礎成功率及上限。
 - 相容性：未修改抽取器加成／消耗、三段 7／3／0% 加成、正式隨機判定、完整因子內容、培育／突破、`gameState`、`battleState`、localStorage key、Socket.IO event 或 server 欄位。正式快取 query 更新為 `20260729-lineage-minigame-s-cap-v1`。
-- 驗證：
-ode --check` 通過 `board_lineage_extraction.js`、`board_game.js`、`board_battle.js`；自動抽取兩頁 `DIFFICULTIES` 後確認正式版與示範頁的 S／SS／SSS 共 11 項操作參數全部一致，示範頁成功率仍為 S 18／90、SS 10／85、SSS 5／75。以獨立 `PORT=8817 npm start` 啟動正式服務，正式戰鬥頁與示範頁 HTTP 200、新版控制器及 query 正確載入。Chrome 1440×900 選 SSS 後顯示 12 點及「S（操作上限）」且破圖／例外為 0；844×390 手機橫向標題完整落在圖片框內、文件無水平 overflow、破圖／例外為 0。
+- 驗證：`node --check` 通過 `board_lineage_extraction.js`、`board_game.js`、`board_battle.js`；自動抽取兩頁 `DIFFICULTIES` 後確認正式版與示範頁的 S／SS／SSS 共 11 項操作參數全部一致，示範頁成功率仍為 S 18／90、SS 10／85、SSS 5／75。以獨立 `PORT=8817 npm start` 啟動正式服務，正式戰鬥頁與示範頁 HTTP 200、新版控制器及 query 正確載入。Chrome 1440×900 選 SSS 後顯示 12 點及「S（操作上限）」且破圖／例外為 0；844×390 手機橫向標題完整落在圖片框內、文件無水平 overflow、破圖／例外為 0。
 
 #### 約克線索撲克牌框 V2 V109
 
@@ -6774,9 +6134,7 @@ ode --check` 通過 `board_lineage_extraction.js`、`board_game.js`、`board_bat
 - 素材：使用內建 ImageGen 的 `precise-object-edit` 流程，以舊 `york_clue_card_frame.webp` 作編輯目標與風格參考，將正方形機械面板重構為正方形畫布中的完整直式 2:3 撲克牌。新版保留深海藍、古銅、青色研究電路與航海羅盤，加入米白紙牌邊、圓角、上下鏡像牌面及兩個空白角標；移除舊底部中央大圓章。原始 1254×1254 RGB PNG 完整保留，正式以 Sharp 轉為同尺寸、RGB、200,090 bytes 的 WebP；舊框不覆蓋也不刪除。
 - 動態疊圖：中央 Boss 島圖改入新版直式窗安全區；牌值由原底部中央單一圓章改為左上與右下兩份，右下旋轉 180 度，並各自以 CSS 加上青色菱形。RGB 圖左右的純黑安全區再依實際牌身用 `clip-path` 隱藏，因此取得演出只露完整圓角直式牌，不會看成黑色正方形。A、2～10、J、Q、K、十三張 item id、島圖、數量、交易規則及取得來源均未改。
 - 快取與相容性：`board_items.js` 的十三種線索正式圖片及 `board_game.js` fallback／取得演出統一改用 V2；主頁兩支 query 更新為 `20260729-york-clue-playing-card-v2`。沒有新增或改名 `gameState`、inventory、道具 id、localStorage key、Socket.IO event 或 server 欄位。
-- 驗證：
-ode --check public/js/board_items.js`、
-ode --check public/js/board_game.js` 通過。以獨立 `PORT=8818 npm start` 啟動正式服務，`board_game.html` 與新版 WebP 回傳 HTTP 200，新版 `board_game.js` query 正確載入，乾淨頁面 HTTP 4xx／request failure／console error 均為 0；13／13 正式線索 item 的 `image` 都指向 V2。Chrome 1440×900 以正式 debug queue 顯示 K 取得演出，並在實際航海背包顯示 10：預覽 185.74×185.74、清單 71.11×71.11，島圖、四個角標及菱形都在牌框安全區，modal／document 無 overflow、破圖 0。初次 844×390 正式取得演出量到 350px 容器頂端為 −55.86px，故補上線索牌專用橫向雙欄；修正後牌為 225.73×225.73、說明框 496.60×148.03，兩者皆完整位於 viewport 且文字框 overflow 為 0。手機正式背包再量得預覽 84.02×84.02、清單 30.81×30.81，島圖與雙角標全在框內、modal／document 無 overflow、破圖／HTTP 4xx／例外為 0。
+- 驗證：`node --check public/js/board_items.js`、`node --check public/js/board_game.js` 通過。以獨立 `PORT=8818 npm start` 啟動正式服務，`board_game.html` 與新版 WebP 回傳 HTTP 200，新版 `board_game.js` query 正確載入，乾淨頁面 HTTP 4xx／request failure／console error 均為 0；13／13 正式線索 item 的 `image` 都指向 V2。Chrome 1440×900 以正式 debug queue 顯示 K 取得演出，並在實際航海背包顯示 10：預覽 185.74×185.74、清單 71.11×71.11，島圖、四個角標及菱形都在牌框安全區，modal／document 無 overflow、破圖 0。初次 844×390 正式取得演出量到 350px 容器頂端為 −55.86px，故補上線索牌專用橫向雙欄；修正後牌為 225.73×225.73、說明框 496.60×148.03，兩者皆完整位於 viewport 且文字框 overflow 為 0。手機正式背包再量得預覽 84.02×84.02、清單 30.81×30.81，島圖與雙角標全在框內、modal／document 無 overflow、破圖／HTTP 4xx／例外為 0。
 
 #### 全破後世界第 10 階段：蛋頭島、洛克斯與神之谷霸王框 V110
 
@@ -6789,20 +6147,16 @@ ode --check public/js/board_game.js` 通過。以獨立 `PORT=8818 npm start` �
 - 桌機與手機：Chrome 1440×900 的追蹤背包、確認頁、蛋頭島地圖節點、洛克斯遭遇框及正式戰鬥 iframe 均無 document／modal 寬度溢出；洛克斯圖以原生 1024×1536 載入。390×844 手機的背包、確認頁與遭遇頁主框寬 358px，overflow 皆為 0；蛋頭島圖為 1024×1024，洛克斯圖為 1024×1536，文字均落在圖片框內。
 - 戰鬥與獎勵實測：正式 iframe 載入 `postgame_rocks`、`isRocksBattle=true`、六張狀態圖及霸王框均 HTTP 200。勝利後建立 SSS 抽取 view，基礎率 5%、標準抽取器可選；放棄不消耗抽取器。結算後研究點數 0→25、完美血統核心 0→1、討伐紀錄新增洛克斯、框永久持有並自動裝備，蛋頭島 HP 重置且戰鬥可正常清除回地圖。
 - 存讀檔與同步：用正式 `createManualSavePayload()`／`loadManualGame()` 刪除後重載，`eggheadUnlocked`、同一錨點、唯一蛋頭島、唯一五格航路、十三線索、霸王框與核心均完整恢復。另以正式大廳建立 B3484、第二瀏覽器加入、雙方準備並開始；主機啟動追蹤後兩個視窗都得到同一 `anchor=island-35`、13 座 Boss 島、1 座蛋頭島、5 格航路及 5692px 地圖寬，HTTP 4xx 與頁面例外皆為 0。
-- 程式與服務：既有 8787 正式服務的 `board_game.html`、`board_battle.html`、新版腳本與所有新 WebP 均可開啟。
-ode --check public/js/board_game.js`、`public/js/board_battle.js`、`public/js/board_cosmetic_frame_preview.js` 通過；正式 query 更新為 `20260729-postgame-egghead-rocks-v1`。
+- 程式與服務：既有 8787 正式服務的 `board_game.html`、`board_battle.html`、新版腳本與所有新 WebP 均可開啟。`node --check public/js/board_game.js`、`public/js/board_battle.js`、`public/js/board_cosmetic_frame_preview.js` 通過；正式 query 更新為 `20260729-postgame-egghead-rocks-v1`。
 
 #### 十三島 Boss 六狀態戰鬥圖分批補完與暫停交接 V113
 
 - 日期：2026-07-30。
 - 檔案：`public/images/board/battle/enemies/postgame_shiki/`、`postgame_gild_tesoro/`、`postgame_zephyr/`、`postgame_tot_musica/`、`postgame_douglas_bullet/`、`postgame_saga/`、`postgame_vinsmoke_judge/`、`postgame_rob_lucci_awakened/`、`docs/POSTGAME_BOSS_BATTLE_PORTRAIT_PROGRESS.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 根因：第 9 階段曾建立十三名 Boss 的六個固定檔名，但上述十三名中只有 
-ormal.webp` 是各自獨立成品，其餘狀態多為同圖複本；「78 張必要檔存在」只能證明不缺檔，不能證明六態真的不同。本輪依使用者要求參考既有完成敵人圖的規格與狀態語意，逐張生成真正的新姿勢與新表情。
-- 已完成：史基、泰佐洛、捷風、Tot Musica、巴雷特、薩卡、伽治、覺醒路基共 8 名，各自保留原 
-ormal.webp`，並補完 `angry`、`hit`、`morale`、`weak`、`dizzy` 五張獨立圖。正式 40 張新 WebP 全為 1024×1536；選用原始 PNG 以 `{state}_imagegen_v2.png` 保存在各自 `incoming/`。加上原本已完成的洛克斯，目前共有 9 名 Boss 的六態雜湊皆不同。
+- 根因：第 9 階段曾建立十三名 Boss 的六個固定檔名，但上述十三名中只有 `normal.webp` 是各自獨立成品，其餘狀態多為同圖複本；「78 張必要檔存在」只能證明不缺檔，不能證明六態真的不同。本輪依使用者要求參考既有完成敵人圖的規格與狀態語意，逐張生成真正的新姿勢與新表情。
+- 已完成：史基、泰佐洛、捷風、Tot Musica、巴雷特、薩卡、伽治、覺醒路基共 8 名，各自保留原 `normal.webp`，並補完 `angry`、`hit`、`morale`、`weak`、`dizzy` 五張獨立圖。正式 40 張新 WebP 全為 1024×1536；選用原始 PNG 以 `{state}_imagegen_v2.png` 保存在各自 `incoming/`。加上原本已完成的洛克斯，目前共有 9 名 Boss 的六態雜湊皆不同。
 - 人工修正：Tot Musica 首批憤怒／虛弱誤生成四顆頭，已淘汰並以「中央一頭＋左右各一頭、總共三頭；左右各一鍵盤翼臂」硬限制重畫。覺醒路基首批士氣圖出現雙尾疑慮，已淘汰並重畫成只有一條明確連接下背、向畫面右側彎曲的尾巴。正式目錄只採用修正版。
-- 暫停位置：依使用者指示，完成正在生成的覺醒路基後停止生圖。KING／燼、卡塔庫栗、萊德菲爾德、洛基與荒牧 5 名尚未生成，雖有六個固定檔名但各目錄 `UniqueHashes=1`，仍是 
-ormal.webp` 複本占位。下次必須從 KING／燼開始，順序與完整規格記於 `docs/POSTGAME_BOSS_BATTLE_PORTRAIT_PROGRESS.md`。
+- 暫停位置：依使用者指示，完成正在生成的覺醒路基後停止生圖。KING／燼、卡塔庫栗、萊德菲爾德、洛基與荒牧 5 名尚未生成，雖有六個固定檔名但各目錄 `UniqueHashes=1`，仍是 `normal.webp` 複本占位。下次必須從 KING／燼開始，順序與完整規格記於 `docs/POSTGAME_BOSS_BATTLE_PORTRAIT_PROGRESS.md`。
 - 邊界：本輪沒有修改任何 Boss key、角色／道具／任務 id、正式圖片路徑字串、戰鬥規則、`gameState`、localStorage key、Socket.IO event 或 server 欄位；正式頁會直接沿用既有六狀態路徑讀到替換後圖片。
 - 驗證：8 個本輪完成目錄均為 `Files=6`、`UniqueHashes=6`，`postgame_rocks` 同樣為 6／6；5 個待續作目錄均為 `Files=6`、`UniqueHashes=1`。本輪完成目錄的 40 張新狀態 WebP 均為 1024×1536，40 張選用原始 PNG 均存在。視覺逐張檢查人物辨識特徵、武器、肢體數量、背景與 angry／hit／morale／weak／dizzy 狀態語意；沒有以換色或濾鏡冒充新狀態。另以臨時 `PORT=8820 npm start` 啟動正式服務，`board_battle.html` 與 8 名完成組共 48 張六狀態 WebP 全部回應 HTTP 200／`image/webp`，驗證後已停止 8820 listener。
 
@@ -6810,8 +6164,7 @@ ormal.webp` 複本占位。下次必須從 KING／燼開始，順序與完整規
 
 - 日期：2026-07-30。
 - 檔案：`public/images/board/battle/enemies/postgame_king/`、`postgame_charlotte_katakuri/`、`postgame_patrick_redfield/`、`postgame_loki/`、`postgame_aramaki/`、`docs/POSTGAME_BOSS_BATTLE_PORTRAIT_PROGRESS.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 完成內容：依 V113 固定順序補完 KING／燼、卡塔庫栗、雷德菲爾德、洛基與荒牧。每名保留既有 
-ormal.webp`，新增真正不同姿勢與表情的 `angry`、`hit`、`morale`、`weak`、`dizzy` 五張正式圖；本輪 25 張 WebP 與十三名合計 65 張新狀態 WebP 全為 1024×1536，65 張選用原始 PNG 均以 `{state}_imagegen_v2.png` 保存在各自 `incoming/`。
+- 完成內容：依 V113 固定順序補完 KING／燼、卡塔庫栗、雷德菲爾德、洛基與荒牧。每名保留既有 `normal.webp`，新增真正不同姿勢與表情的 `angry`、`hit`、`morale`、`weak`、`dizzy` 五張正式圖；本輪 25 張 WebP 與十三名合計 65 張新狀態 WebP 全為 1024×1536，65 張選用原始 PNG 均以 `{state}_imagegen_v2.png` 保存在各自 `incoming/`。
 - 人物驗收：KING 固定白髮、左臉紋樣、雙黑翼、一把紅柄劍與背火；卡塔庫栗固定毛皮圍巾、粉紅年糕武裝手臂與單一三叉戟；雷德菲爾德固定羽飾寬帽、酒紅長衣、白皺領與單一蝙蝠傘杖；洛基固定粉紅辮髮、遮眼布、雙角盔、兩臂與單一冰雷巨鎚；荒牧固定黑綠髮、墨鏡、白外套、胸前刺青與兩臂木質化人形。卡塔庫栗首批暈眩圖因重複三叉戟頭淘汰並單獨重畫，正式目錄只採用單一三叉戟修正版。
 - 最終狀態：十三島 Boss 共 13 個正式目錄、78 張六狀態 WebP，逐目錄均為 `Files=6`、`UniqueHashes=6`、`webp 1024x1536`；不再有 `UniqueHashes=1` 的 normal 複本占位。`postgame_rocks` 另維持 `Files=6`、`UniqueHashes=6`、`webp 1024x1536`。
 - 邊界：本輪只替換圖片並同步文件，沒有修改 Boss key、角色／道具／任務 id、正式圖片路徑字串、戰鬥規則、`gameState`、localStorage key、Socket.IO event 或 server 欄位；正式頁沿用既有六狀態路徑直接讀取新圖。
@@ -6821,15 +6174,12 @@ ormal.webp`，新增真正不同姿勢與表情的 `angry`、`hit`、`morale`、
 
 - 日期：2026-07-31。
 - 檔案：`public/images/board/battle/enemies/postgame_shiki/`、`postgame_gild_tesoro/`、`postgame_douglas_bullet/`、`postgame_saga/`、`postgame_rob_lucci_awakened/`、`postgame_charlotte_katakuri/`、`postgame_patrick_redfield/`、`postgame_aramaki/`、`docs/POSTGAME_BOSS_BATTLE_PORTRAIT_PROGRESS.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 根因：V113／V114 雖已補齊獨立六狀態，但使用者指出部分人物與原作外型差距過大，並在上述 8 個 Boss 目錄放入角色參考圖。本輪先逐張查看參考圖，再以各角色已核准的新版 
-ormal`、使用者參考圖與既有戰鬥圖規格共同生成，不沿用錯誤人物特徵。
+- 根因：V113／V114 雖已補齊獨立六狀態，但使用者指出部分人物與原作外型差距過大，並在上述 8 個 Boss 目錄放入角色參考圖。本輪先逐張查看參考圖，再以各角色已核准的新版 `normal`、使用者參考圖與既有戰鬥圖規格共同生成，不沿用錯誤人物特徵。
 - 人物校正：史基改為禿頂殘破船舵、金鬃披風、橘紅和服及雙劍義肢；泰佐洛改為深綠髮、頭頂紫金眼鏡、星耳飾、桃紅西裝及白領；巴雷特改為金髮耳罩、淡金毛披風、白線黑軍裝與肩鏈；薩卡改為銀色短髮、酒紅袍、臂環、腰帶、珠鏈、單一七星劍與空劍鞘；覺醒路基固定黃豹、白胸腹與白褲、黑焰雲及單尾；卡塔庫栗固定洋紅短髮、嘴角縫線、條紋毛巾、紋身、黑衣、粉白護膝及單一三叉戟；雷德菲爾德固定瘦高蒼白、淡紫白髮與雙辮、紅眼尖耳、紅色大領結、藍玫瑰、菱格披風與單一傘杖，不戴帽或白皺領；荒牧固定青綠亂髮、圓墨鏡、香菸、披肩大將外套、四條胸紋、花紋黑褲、人類雙腿及單一腰刀，木化只作用於原本兩臂。
-- 圖片與來源：8 名各自重畫 
-ormal`、`angry`、`hit`、`hit_player`、`morale`、`weak`、`dizzy` 共 7 張，合計 56 張正式 1024×1536 WebP。選用 ImageGen 原始 PNG 以 `{state}_reference_redraw_v3.png` 保存在各自 `incoming/`；V2 舊版及使用者參考圖均保留。正式頁仍只引用原本穩定檔名。
+- 圖片與來源：8 名各自重畫 `normal`、`angry`、`hit`、`hit_player`、`morale`、`weak`、`dizzy` 共 7 張，合計 56 張正式 1024×1536 WebP。選用 ImageGen 原始 PNG 以 `{state}_reference_redraw_v3.png` 保存在各自 `incoming/`；V2 舊版及使用者參考圖均保留。正式頁仍只引用原本穩定檔名。
 - 人工驗收：56 張逐張檢查臉型、髮型、服裝、武器數量、肢體與狀態語意。所有卡塔庫栗圖都只有一把三叉戟；所有雷德菲爾德圖都只有一把傘杖且沒有帽子；所有覺醒路基圖都只有一條尾巴；所有荒牧圖都保留兩手、兩條人類腿及一把刀。兩張受擊圖保持不同姿勢，沒有以同圖複製或濾鏡代替。
 - 靜態驗證：8 個重畫目錄全部 `Files=7`、`UniqueHashes=7`、`v3_sources=7`；十三名原六狀態整體回歸仍為 78／78 張、每名 `UniqueHashes=6`、全部 `webp 1024x1536`，未重畫的捷風、Tot Musica、伽治、KING、洛基沒有受到影響。
-- 服務驗證：以臨時 `PORT=8820 npm start` 啟動正式服務，`board_battle.html` 回應 HTTP 200，8 名共 56 張七狀態 WebP 全部回應 HTTP 200／`image/webp`；驗證後確認 listener 為本輪 
-ode server/index.js` 再停止，`RemainingListeners=0`。
+- 服務驗證：以臨時 `PORT=8820 npm start` 啟動正式服務，`board_battle.html` 回應 HTTP 200，8 名共 56 張七狀態 WebP 全部回應 HTTP 200／`image/webp`；驗證後確認 listener 為本輪 `node server/index.js` 再停止，`RemainingListeners=0`。
 - 邊界：本輪只替換圖片並同步文件，沒有修改 Boss key、角色／道具／任務 id、正式圖片路徑字串、戰鬥／抽取／培育規則、`gameState`、localStorage key、Socket.IO event 或 server 欄位。
 
 #### 十三島 Boss 七狀態大半身戰鬥圖統一 V116
@@ -6837,14 +6187,11 @@ ode server/index.js` 再停止，`RemainingListeners=0`。
 - 日期：2026-07-31。
 - 檔案：十三個 `public/images/board/battle/enemies/postgame_*/` Boss 目錄、各自 `incoming/`、`docs/POSTGAME_BOSS_BATTLE_PORTRAIT_PROGRESS.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 根因：V113～V115 已補齊獨立狀態與人物參考，但十三島 Boss 圖多數仍接近完整站姿，人物頭胸明顯小於赤犬等已完成敵人圖；膝蓋、鞋、長武器與大面積下半身占去戰鬥卡視窗，未符合使用者指定的半身構圖。
-- 構圖統一：以既有赤犬及其他完成敵人圖作比例參考，十三名的 
-ormal`、`angry`、`hit`、`hit_player`、`morale`、`weak`、`dizzy` 全部重新生成為真正的大半身肖像。頭部貼近上緣、肩膀／披風撐滿左右，人物臉與胸腰占畫面約 75～90%，最下方固定在腰帶或上臀截斷；不再顯示大腿、膝蓋、鞋或完整站姿。武器與能力只作前景或背景敘事，不得把人物縮小。
+- 構圖統一：以既有赤犬及其他完成敵人圖作比例參考，十三名的 `normal`、`angry`、`hit`、`hit_player`、`morale`、`weak`、`dizzy` 全部重新生成為真正的大半身肖像。頭部貼近上緣、肩膀／披風撐滿左右，人物臉與胸腰占畫面約 75～90%，最下方固定在腰帶或上臀截斷；不再顯示大腿、膝蓋、鞋或完整站姿。武器與能力只作前景或背景敘事，不得把人物縮小。
 - 人物與狀態：保留 V115 已校正的人物辨識、服裝、武器與肢體限制；捷風、Tot Musica、伽治、KING、洛基也一併重畫為同一大半身規格。七張保持各自狀態語意與獨立構圖，`hit` 是敵方站位受擊，`hit_player` 是血統培育角色站在玩家側時使用的反方向受擊圖，不以同圖複製、主動攻擊姿勢或濾鏡代替。
 - 圖片與來源：十三名共 91 張正式圖全部為 1024×1536 WebP；選用的 ImageGen 原始 PNG 以 `incoming/{state}_halfbody_v4.png` 保存，V2、V3 舊來源與使用者參考圖都未刪除。正式檔名與既有引用路徑不變。
-- 人工驗收：逐名建立七狀態聯絡表檢查頭腰裁切、人物比例、表情、肢體與武器數量；另建立十三名 
-ormal` 及 `hit_player` 總覽確認整組比例與受擊方向一致。Tot Musica 維持三頭與兩鍵盤翼臂，覺醒路基維持單尾，KING 維持雙翼一劍，卡塔庫栗維持單一三叉戟，雷德菲爾德維持雙辮、無帽與單一傘杖，洛基維持蒙眼、雙角與單一巨槌，荒牧木化只沿原本兩臂。卡塔庫栗、雷德菲爾德、洛基、荒牧首批 `hit_player` 因誤成主動攻擊而淘汰，正式檔使用「衝擊由畫面右側打入、人物向左後方震退」的修正版。
-- 靜態與服務驗證：十三個目錄逐一為 `formal=7`、`UniqueHashes=7`、`incoming_v4=7`，總計 91／91 張均為 1024×1536 WebP。以臨時 `PORT=8820 npm start` 啟動正式服務，`board_game.html`、`board_battle.html` 及 91 張正式圖片全部回應 HTTP 200，圖片 Content-Type 為 `image/webp`；確認 listener 是本輪 
-ode server/index.js` 後停止，`RemainingListeners=0`。
+- 人工驗收：逐名建立七狀態聯絡表檢查頭腰裁切、人物比例、表情、肢體與武器數量；另建立十三名 `normal` 及 `hit_player` 總覽確認整組比例與受擊方向一致。Tot Musica 維持三頭與兩鍵盤翼臂，覺醒路基維持單尾，KING 維持雙翼一劍，卡塔庫栗維持單一三叉戟，雷德菲爾德維持雙辮、無帽與單一傘杖，洛基維持蒙眼、雙角與單一巨槌，荒牧木化只沿原本兩臂。卡塔庫栗、雷德菲爾德、洛基、荒牧首批 `hit_player` 因誤成主動攻擊而淘汰，正式檔使用「衝擊由畫面右側打入、人物向左後方震退」的修正版。
+- 靜態與服務驗證：十三個目錄逐一為 `formal=7`、`UniqueHashes=7`、`incoming_v4=7`，總計 91／91 張均為 1024×1536 WebP。以臨時 `PORT=8820 npm start` 啟動正式服務，`board_game.html`、`board_battle.html` 及 91 張正式圖片全部回應 HTTP 200，圖片 Content-Type 為 `image/webp`；確認 listener 是本輪 `node server/index.js` 後停止，`RemainingListeners=0`。
 - 邊界：本輪只替換十三名 Boss 圖片並同步文件，沒有修改 Boss key、角色／道具／任務 id、圖片路徑字串、戰鬥／抽取／培育規則、`gameState`、localStorage key、Socket.IO event 或 server 欄位。
 
 #### 卡塔庫栗玩家側受擊反邊與洛克斯參考圖大半身重畫 V117
@@ -6854,8 +6201,7 @@ ode server/index.js` 後停止，`RemainingListeners=0`。
 - 卡塔庫栗：使用者指定 `hit_player` 要改到目前反邊；因此以 Sharp 對已核准的 V4 原始 PNG 作精確水平反轉，不重新生成，不改人物、毛領、刺青、三叉戟、撞擊內容或尺寸。V4 保留，反邊來源另存 `hit_player_halfbody_v5.png`，正式 `hit_player.webp` 仍為 1024×1536。
 - 洛克斯參考：逐張查看目錄新增的 `images (4).jfif`、`b8bb65be1881884c3793f2b8a22b2b8c (1).jfif`、`images (5).jfif` 與 `42bd8956fa1a47a48b38b9063092a166.webp`，以半身、臉部、全身裝備與彎刀／氣氛四種用途共同約束人物，不再沿用舊提示詞的全身到靴子構圖。
 - 洛克斯重畫：七張正式圖固定白冰藍後掠爆髮、中央深色髮束、長尖鼻、角色左眼跨眼傷疤、細黑鬍與尖鬍、雙金耳環、裸胸傷痕、巨大黑毛披風、毛邊金釘腰封、黑金腕環及單一金護手彎刀。全圖為頭肩撐滿、腰封截斷的大半身，不顯示大腿、膝蓋、小腿或長靴；`hit` 與 `hit_player` 使用左右相反的受擊方向。
-- 圖片與來源：洛克斯 
-ormal`、`angry`、`hit`、`hit_player`、`morale`、`weak`、`dizzy` 共 7 張正式 WebP 均為 1024×1536、七張雜湊不同；選用 ImageGen PNG 保存為 `incoming/{state}_reference_halfbody_v2.png`。舊六張來源與新增參考圖不刪除；提示詞文件同步改成七張大半身規格。
+- 圖片與來源：洛克斯 `normal`、`angry`、`hit`、`hit_player`、`morale`、`weak`、`dizzy` 共 7 張正式 WebP 均為 1024×1536、七張雜湊不同；選用 ImageGen PNG 保存為 `incoming/{state}_reference_halfbody_v2.png`。舊六張來源與新增參考圖不刪除；提示詞文件同步改成七張大半身規格。
 - 驗證：逐張聯絡表確認洛克斯七張人物、武器數量、腰部裁切、狀態與受擊方向；靜態腳本確認 `states=7`、`UniqueHashes=7`、`sources_v2=7`，卡塔庫栗正式反邊圖與 V5 原始 PNG 均為 1024×1536。以臨時 `PORT=8820 npm start` 啟動正式服務，`board_game.html`、`board_battle.html`、卡塔庫栗 `hit_player.webp` 及洛克斯七張 WebP 全部 HTTP 200／`image/webp`；驗證後停止本輪 Node listener，`RemainingListeners=0`，文件無尾端空白且 `git diff --check` 通過。
 
 #### 洛克斯七狀態、手部與參考武器修正版 V118
@@ -6863,8 +6209,7 @@ ormal`、`angry`、`hit`、`hit_player`、`morale`、`weak`、`dizzy` 共 7 張�
 - 日期：2026-07-31。
 - 檔案：`public/images/board/battle/enemies/postgame_rocks/normal.webp`、`angry.webp`、`hit.webp`、`hit_player.webp`、`morale.webp`、`weak.webp`、`dizzy.webp`、`postgame_rocks/incoming/{state}_state_clear_weapon_v3.png`、`postgame_rocks/incoming/weapon_reference_zoom_v3.png`、`postgame_rocks/incoming/ROCKS_BATTLE_PORTRAITS_PROMPT.md`、`docs/POSTGAME_BOSS_BATTLE_PORTRAIT_PROGRESS.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 根因：使用者指出 V117 的狀態姿勢不夠明顯，虛弱圖的交疊手臂容易被看成多出一隻手；後續再要求武器依目錄參考圖重畫。逐張檢查後確認舊 `weak` 仍帶戰意笑容、`dizzy` 只靠螺旋眼區分，舊武器也誤成過度華麗的大型十字護手彎刀。
-- 七態重畫：
-ormal` 改為閉嘴冷笑低位持刀；`angry` 為舉刀怒吼與前伸拳；`hit` 為左入金白衝擊、`hit_player` 為右入藍白反向衝擊；`morale` 為挺胸拳壓胸口與日蝕光環；`weak` 明顯駝背喘息並只以雙手上下交疊握同一刀柄；`dizzy` 為螺旋眼、一手扶額、一手垂刀及三顆星。七張逐圖確認只有兩臂、兩手與一把刀。
+- 七態重畫：`normal` 改為閉嘴冷笑低位持刀；`angry` 為舉刀怒吼與前伸拳；`hit` 為左入金白衝擊、`hit_player` 為右入藍白反向衝擊；`morale` 為挺胸拳壓胸口與日蝕光環；`weak` 明顯駝背喘息並只以雙手上下交疊握同一刀柄；`dizzy` 為螺旋眼、一手扶額、一手垂刀及三顆星。七張逐圖確認只有兩臂、兩手與一把刀。
 - 參考武器：由 `images (5).jfif` 裁出並放大武器設計為 `weapon_reference_zoom_v3.png`，統一使用細長銀灰單刃、深色刀背、平順上彎刀尖、小型黃銅 D 形護手與護弓、短深紫握柄及圓形黃銅刀首；移除 V117 的巨大華麗十字護手與寬黑刀身。
 - 圖片與相容性：七張選用原始 PNG 保存為 `{state}_state_clear_weapon_v3.png`，正式 WebP 均轉為 1024×1536、品質 92；高窄原圖以暗化模糊背景延伸左右，不裁掉扶額手、星環或雙手同柄。正式穩定檔名、敵人 key、戰鬥狀態切換、受擊方向、能力、獎勵、抽取、`gameState`、localStorage key、Socket.IO event 與 server 欄位均未修改。
 - 驗證：七張聯絡表與 `weak`／`dizzy` 原圖逐張確認狀態、左右受擊方向、武器結構及兩臂兩手；靜態腳本確認 `Files=7`、`UniqueHashes=7`、`sources_v3=7`，正式圖全為 WebP 1024×1536。`git diff --check` 通過。另以臨時 `PORT=8820 npm start` 啟動正式服務，`board_game.html`、`board_battle.html` 與七張洛克斯 WebP 全部回應 HTTP 200，圖片 content-type 均為 `image/webp`；驗證後停止已確認的 launcher 與 Node listener，`RemainingListeners=0`。
@@ -6876,8 +6221,7 @@ ormal` 改為閉嘴冷笑低位持刀；`angry` 為舉刀怒吼與前伸拳；`h
 - 範圍：完成第 11 階段 CPU 全破後整合。CPU 可從十三島 Boss 與洛克斯圖片式遭遇頁直接開戰；競技場改為優先選擇尚未擁有角色並依強度／屬性選兩名船員；抽取器依階級、預期三段成績、成功率目標與成本選擇；研究所會比較船上隊伍與研究收藏，在隊伍明顯提升時交換角色。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 規則與相容性：隊伍維持六人上限與同模板唯一；被換下角色以同一物件及原 `instanceId` 放入研究收藏，等級、EXP、修行、招式、記憶、型態、外觀框、攜帶物及血統傾向不重生、不刪除。培育角色維持 Lv.1、零 EXP、零修行、記憶 0、S 階、基礎型態。沒有新增或改名 `gameState`、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 欄位。
-- 程式驗證：
-ode --check public/js/board_game.js` 通過。正式 CPU 抽取測試確認標準抽取器 1→0、三段成績寫入、失敗後 `allResolved=true`；CPU 競技場建立兩名限定名單，對手 profile 為 Lv.99、六項修行 30、記憶 3、SSS；CPU 培育索隆確認 Lv.1、總 EXP 0、六項修行 0、S 階、因子只消耗一次。
+- 程式驗證：`node --check public/js/board_game.js` 通過。正式 CPU 抽取測試確認標準抽取器 1→0、三段成績寫入、失敗後 `allResolved=true`；CPU 競技場建立兩名限定名單，對手 profile 為 Lv.99、六項修行 30、記憶 3、SSS；CPU 培育索隆確認 Lv.1、總 EXP 0、六項修行 0、S 階、因子只消耗一次。
 - 永久角色與存讀檔驗證：用六人滿隊加研究收藏執行交換，船員數保持 6、同模板重複 0、候選原 instance 登船、換下角色原 instance 進收藏；存檔、覆寫畫面狀態再讀檔後，換下角色的 instance、測試養成標記與收藏位置全部恢復，所有舊 instance 缺失數為 0。
 - CPU 流程驗證：乾淨 `cpu4=1` 開局自動完成三輪選角後連跑 60 秒，正常由羅格鎮航行、顛倒山選路、處理海格二選一、敵島戰鬥、勝利結算與酒館招募；回合由 1 推進至 6，戰鬥已清除、`pendingMove=false`、`resolutionLock=false`、CPU `lastError` 空白、船員無同模板重複。洛克斯圖片式遭遇頁另實測由 CPU 自動點擊挑戰並建立 `postgame_egghead` battle。
 - UI 與素材驗證：Chrome 1440×900 及 390×844 實際開啟競技場、研究所角色管理與洛克斯遭遇頁；三頁圖片均能解碼，破圖 0，文字可見 overflow 0，按鈕與角色圖留在圖片框內。此階段沒有新增圖片，沿用已核准的圖片式主框與角色／敵人素材。
@@ -6889,21 +6233,18 @@ ode --check public/js/board_game.js` 通過。正式 CPU 抽取測試確認標�
 - 範圍：把船團資訊內原本的圖片式「討伐紀錄」升級為正式「全圖鑑」。目錄由 51 名競技場玩家角色、51 種既有正式敵人模板、十三島 Boss、洛克斯及重疊角色依玩家模板 `card.id` 合併，最終為 109 種；同角色多個永久實例只收錄一種，另外統計船上與研究收藏的實際持有數。
 - 檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 狀態與舊存檔：`defeatedEnemies` 保持原欄位與敵人 key，向下相容增加 `sourceCardId`、`encounterCount`、首次／最後遇見時間與最後遇見地點；舊討伐 `count` 會安全視為至少同次數遭遇，遇見但未勝利可保存 `count: 0`，所有依討伐解鎖麥哲倫、神之騎士團及洛克斯的判斷都明確要求 `count > 0`。研究所 schema 由 5 升到 6，新增去重後的 `codexFactorCardIds` 與 `codexCultivatedCardIds`；現有完整因子及既有培育角色會自動回補歷史，因子被培育、解析或突破消耗後不會清除曾取得紀錄。沒有新增 localStorage key 或 Socket.IO event。
-- 戰鬥接線：一般敵島、四皇、推進城、Marineford、司法島、艾爾巴夫／伊姆、競技場、十三島 Boss 與洛克斯共用 `createBattleState()` 開戰時記錄遭遇；海格使用自己的 battle state 建立點補記。舊 pending 戰鬥由 
-ormalizeBattleState()` 以每玩家一次的 battle 內 id 防重補記；勝利仍沿用 `recordDefeatedEnemy()`，不改原獎勵與抽取結算。
+- 戰鬥接線：一般敵島、四皇、推進城、Marineford、司法島、艾爾巴夫／伊姆、競技場、十三島 Boss 與洛克斯共用 `createBattleState()` 開戰時記錄遭遇；海格使用自己的 battle state 建立點補記。舊 pending 戰鬥由 `normalizeBattleState()` 以每玩家一次的 battle 內 id 防重補記；勝利仍沿用 `recordDefeatedEnemy()`，不改原獎勵與抽取結算。
 - 圖片式 UI：沿用 `public/images/board/defeated_codex_ui/` 1672×941 主框、共用橫列框、正式角色／敵人 portrait 及既有 S～E 圓章，沒有新增圖片或用 CSS 方格取代圖片。頂部三個既有圖片框顯示遇見、擊敗、因子／培育四項進度；左側顯示角色、來源地點與持有／研究狀態，中間顯示已持有彩圖或可辨識暗色剪影，右側顯示四階段紀錄、現有因子、持有數、來源與最後遇見地點。主頁 query 更新為 `20260731-full-codex-stage12-v1`。
 - 資料與效能驗證：乾淨狀態建立 109 種圖鑑；測試資料確認 2 次遭遇、1 種擊敗、2 種因子、1 種培育與同角色 2 個永久實例正確分欄。schema 5 mock 存檔可遷移到 schema 6，既有討伐 3 次回補遭遇 3 次，現有因子及既有培育角色自動加入歷史。手動存檔、清空畫面狀態再讀檔後，遇見／擊敗／因子／培育／持有五項完全恢復。測試快照實際新增 467 bytes（0.1111%）；把 109 種兩份歷史 id 全填滿的最壞估算新增 3,642 bytes（0.887%）；圖鑑彙整連跑 50 次平均約 1.098 ms。
 - 圖片與版面驗證：109 種角色主圖加主框、橫列框及六張階級章共 117 條唯一圖片路徑全部 HTTP 200 且為 image content type。Chrome 1440×900、1024×768、844×390 與 390×844 實際開啟全圖鑑並選取已持有、因子已取得但未持有、只擊敗、只遇見及完全未遇見角色；圖片未拉伸，文字留在既有框內，頁面水平 overflow 為 0，平板來源／地點文字沒有超出框。直向手機維持專案既有 16:9 縮放，橫向手機為建議操作方向。
 - 多人驗證：兩個獨立瀏覽器 context 透過正式 `board_start.html` 建立線上房 `B7763`、第二人加入、雙方準備並開始；房主寫入白鬍子遇見與完整因子歷史後推送既有完整 `BOARD_GAME_STATE`，另一視窗收到 version 2，圖鑑顯示 `1/109` 遇見、`1` 種因子、最後遇見「競技場島」，Socket 均 connected 且未新增 server event。
-- 靜態與服務驗證：
-ode --check public/js/board_game.js`、`git diff --check` 通過；以臨時 `PORT=8820 npm start` 啟動正式服務，`board_game.html` 與 `board_game.js?v=20260731-full-codex-stage12-v1` 均 HTTP 200，驗證後停止本輪 Node listener，`RemainingListeners=0`。另在既有 8787 服務以 Chrome 乾淨載入，沒有 page error 或 4xx。第 12 階段沒有生圖需求，因為現有全圖鑑主框、橫列框、角色圖與階級章已完整覆蓋版面；下一步為第 13 階段全流程驗證與文件收尾。
+- 靜態與服務驗證：`node --check public/js/board_game.js`、`git diff --check` 通過；以臨時 `PORT=8820 npm start` 啟動正式服務，`board_game.html` 與 `board_game.js?v=20260731-full-codex-stage12-v1` 均 HTTP 200，驗證後停止本輪 Node listener，`RemainingListeners=0`。另在既有 8787 服務以 Chrome 乾淨載入，沒有 page error 或 4xx。第 12 階段沒有生圖需求，因為現有全圖鑑主框、橫列框、角色圖與階級章已完整覆蓋版面；下一步為第 13 階段全流程驗證與文件收尾。
 
 #### 全破後世界第 13 階段完整驗證與文件收尾 V121
 
 - 日期：2026-07-31。
 - 範圍：完成第 0～12 階段功能的全流程回歸、跨尺寸圖片／文字檢查與文件結案。本階段沒有發現需要修改的正式程式或新增圖片；只更新 `docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 靜態與 HTTP：17 份 Board／server JavaScript 全部通過 
-ode --check`；18 份 `public/board*.html` 共 14 段 inline script 通過語法檢查。34 份 Board HTML／JS／CSS 的 628 個字面素材引用缺檔 0；由正式頁展開的 646 個頁面／素材請求全部 HTTP 200。`git diff --check` 通過；正式 query 維持 `20260731-full-codex-stage12-v1`。
+- 靜態與 HTTP：17 份 Board／server JavaScript 全部通過 `node --check`；18 份 `public/board*.html` 共 14 段 inline script 通過語法檢查。34 份 Board HTML／JS／CSS 的 628 個字面素材引用缺檔 0；由正式頁展開的 646 個頁面／素材請求全部 HTTP 200。`git diff --check` 通過；正式 query 維持 `20260731-full-codex-stage12-v1`。
 - 舊存檔與手動存讀刪：缺少 `postgameWorld` 但已有結局紀錄的舊狀態會補建解鎖世界；研究所 schema 2 可升到 6；重複／缺失角色 `instanceId`、因子與培育圖鑑歷史、研究等級及舊討伐遭遇次數均安全補齊。獨立房 `STG13LOCAL` 實測本機加 server 存檔、覆寫狀態後讀回及刪除；刪除後房號專屬存檔確實移除，跨房 `RECOVERED` 後備仍依原設計保留。
 - 戰鬥與抽取：一般敵人、海格、司法島、推進城、Marineford、四皇、艾爾巴夫、伊姆、競技場、十三島、洛克斯與共鬥共 12 類正式來源均建立個人 `offered` 抽取狀態及穩定 `bgmScopeId`。全破前、黑轉回合、敗戰不誤開；成功與失敗三階段均可完成且只結算一次。另以正式敵島戰鬥實測失敗結果、四項判定與「繼續戰鬥結算」；按下後回原勝利面板，再由原「返回地圖」清除戰鬥，確認過去提取失敗後疑似卡住的流程已暢通。
 - 服務島與競技場限制：12 座正式醫院／酒館在全破前維持醫院／酒館，全破後切換研究所／競技場並使用正確島圖；敵人島暫時轉成的醫院／酒館不誤轉。免費醫療實測可完整恢復三名受傷船員的 HP、PP 與能力階段。競技場只選索引 1、4 後，畫面、換人、道具目標、瀕死替補與隊伍職能均只使用該兩人，未選索引 0 無法換上場。
@@ -6920,9 +6261,7 @@ ode --check`；18 份 `public/board*.html` 共 14 段 inline script 通過語法
 - 戰鬥 UI：`public/board_battle.html`、`public/js/board_battle.js` 新增頂部圖片式機制主框、Boss 島圖、動態標題／提示／數值、六孔、六式、血祭、浮空、熱量、冰雲、森林、隊伍生命與目標按鈕；另新增泰佐洛免費指定換人及 Tot Musica 圖片式雙世界分隊／雙行動操作。桌機 1600×900 與手機橫向 900×600 都保留完整主框。
 - 圖片：ImageGen 生成 `public/images/board/battle/postgame_mechanics/postgame_boss_mechanic_panel_v1.png`，以及薩卡 `fused_normal.webp`、捷風 `black_arm_normal.webp`、Tot Musica `movement_1_normal.webp`／`movement_2_normal.webp`、巴雷特 `fusion_normal.webp`、洛基 `dragon_normal.webp`；第三樂章由既有 Tot Musica 正式圖保存為 `movement_3_normal.webp`。巴雷特正式圖為 1:1 大半身，六個黑色金框孔位都在安全範圍。完整提示詞、原始 PNG 與正式路徑記於 `docs/POSTGAME_BOSS_IMAGE_PROMPTS_20260801.txt`。
 - 規則文件：把 `docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt` 由 7 名討論紀錄補齊為 13 名正式接入基準，並同步更新 `docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`。
-- 自動驗證：
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js` 通過。`scripts/postgame_boss_mechanics_qa.js` 使用 Codex bundled Playwright 在正式 8787 頁面建立 13 場戰鬥；13 個主框全部留在 viewport，桌機文字越框 0、破圖 0，手機主框越界 0、文字越框 0、破圖 0，7 張階段圖均 HTTP 200。
+- 自動驗證：`node --check public/js/board_game.js`、`node --check public/js/board_battle.js` 通過。`scripts/postgame_boss_mechanics_qa.js` 使用 Codex bundled Playwright 在正式 8787 頁面建立 13 場戰鬥；13 個主框全部留在 viewport，桌機文字越框 0、破圖 0，手機主框越界 0、文字越框 0、破圖 0，7 張階段圖均 HTTP 200。
 - 行為驗證：13/13 通過。史基浮空 3 經高骰命中降到 1；泰佐洛累積三層後可免費指定換人；捷風三甲全破切黑腕；Tot Musica 分成 3＋3；巴雷特骰 1 破壞 1 號孔；薩卡血祭 75 切融合；伽治人牆普通阻擋／高骰完整貫穿；路基六式全亮預告六王銃；King 熄火承受完整 100；卡塔庫栗改招高骰使冷靜降到 1；雷德菲爾德骰 6 吸全隊 6%；洛基三雲雷擊為 145%、剩 1 雲且凍結；荒牧四片森林復活為最大 HP 40%。最終 `errors=[]`、`failures=[]`。
 - 視覺人工檢查：檢查 `postgame_bullet_mechanic_desktop.png`，確認六孔完整、角色為大半身且沒有多肢；檢查 `postgame_tot_setup_desktop.png`，確認六張角色圖放大填滿圖片卡、標題與確認按鈕留在框內；檢查 `postgame_redfield_mechanic_mobile.png`，確認手機橫向主框與六名生命顯示沒有超界。
 - 服務驗證：以 `PORT=8824 npm start` 啟動正式 server，`board_game.html`、`board_battle.html`、`js/board_game.js` 與圖片式機制主框都回應 HTTP 200；驗證後停止本輪 Node listener，`RemainingListeners=0`。測試環境未設定 `DATABASE_URL`，DB-backed 功能依原設計停用，不影響 Board 靜態頁與本機戰鬥。
@@ -6947,8 +6286,7 @@ ode --check public/js/board_battle.js` 通過。`scripts/postgame_boss_mechanics
 - 產生器：新增 `public/js/board_york_clue_puzzle.js`。題目由 layoutSeed、player id、difficulty、`york-coordinate-v2` 組合成穩定識別，同局同玩家同難度重開一致；三難度答案以固定置換保證互異。每牌一條線索、兩端各一條 `at` 固定座標，其他牌直接連到錨點，最大深度 1；簡單／普通／困難固定為直接 9／5／2、關係 4／8／11，弱方向線索為 0。解題器節點上限 120,000。
 - 預覽頁：新增 `public/board_york_clue_puzzle_formal_demo.html`，實際使用本輪圖片與純產生器，完成三難度選擇、個人階級狀態、十三牌雙點／拖曳交換、各格鎖定、只洗未鎖定、全部解鎖、重設、無局部提示的通用錯誤、成功結果與第一次成功才揭露蛋頭島。頁面不提供答案按鈕或測試捷徑，不讀寫 localStorage、快照或 Socket.IO。
 - 驗證工具：新增 `scripts/york_clue_puzzle_qa.js` 與 `scripts/york_clue_puzzle_demo_capture.js`。前者以 1,000 組局種 × 3 難度共 3,000 題驗證穩定重產、唯一解、審計答案、三難度互異、兩錨點、弱方向上限、深度與線索比例，結果 `ok=true`，最大求解節點 14。後者透過 bundled Playwright 操作雙點交換、鎖位後洗牌、重設解鎖、錯誤提示及從 UI 完成正解，並輸出 1440×900、1024×768、390×844、844×390 與成功結果頁截圖。
-- 服務與文件：確認 8787 未被占用後執行 
-pm start`，server 成功監聽；環境沒有 `DATABASE_URL`，依原設計只停用 DB-backed 功能，靜態預覽正常。同步更新 `docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/POSTGAME_BOSS_RELICS.md` 與本紀錄。下一步只在使用者確認畫面後，才把素材移出 `incoming/` 並接入正式背包、玩家狀態、洛克斯個人掉落、CPU 與同步／存檔。
+- 服務與文件：確認 8787 未被占用後執行 `npm start`，server 成功監聽；環境沒有 `DATABASE_URL`，依原設計只停用 DB-backed 功能，靜態預覽正常。同步更新 `docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/POSTGAME_BOSS_RELICS.md` 與本紀錄。下一步只在使用者確認畫面後，才把素材移出 `incoming/` 並接入正式背包、玩家狀態、洛克斯個人掉落、CPU 與同步／存檔。
 
 #### 約克十三張線索 V2・上下放牌操作修正 V125
 
@@ -6993,9 +6331,7 @@ pm start`，server 成功監聽；環境沒有 `DATABASE_URL`，依原設計只�
 - 背包與權威驗證：同一玩家持有十三種線索後，可由重要道具背包開啟全螢幕同源 iframe，選簡單／普通／困難並完成十三牌排位。子頁以隨機 channel 回傳答案，父頁用相同 `layoutSeed + playerId + difficulty + york-coordinate-v2` 重建題目再驗證；只有目前本機控制的行動玩家可操作，觀看方不能代開。失敗不降階、不消耗線索，第一次可任選難度，之後只能挑戰更高階，三階不可重複。
 - 個人與共用狀態：新增 `players[].yorkDecoderTier`，並登錄 `york_coordinate_decoder_t1`、`york_coordinate_decoder_t2`、`york_coordinate_decoder_t3` 三件不可消耗／交易／販售／裝備、最高只保留一件的關鍵道具。舊存檔的重複、多階或舊欄位會正規化成最高階一件。第一位成功者只揭露一次全房 `postgameWorld.eggheadUnlocked`；其他玩家在世界已揭露後仍可自行升階。CPU 集滿十三種時不開 UI，只自動取得一次二階且不自動三階。完整狀態沿用既有手動存檔與 `BOARD_GAME_STATE` 快照。
 - Boss 攜帶物與日蝕：14 件 Boss 攜帶物均建立正式 S 階 item id、圖片及效果參數，並排除於一般戰鬥隨機掉落池；前十三件沒有自行設定尚未確認的掉落率。洛克斯的名刀「日蝕」依每位實際參戰者自己的解碼器階級採 0%／10%／20%／30% 獨立判定，觀看方無判定，同場以既有 `rocksRewardedPlayerIds` 防止重送與重抽，重複戰鬥可再掉落，且不可交易；原核心、25 研究點、私人抽取與外觀框流程不變。日蝕戰鬥掛點已實作每回合第一次骰 5～6 的直接攻擊增傷 25%、無視 20% 防禦，以及每場首次發動使敵方攻擊、特攻各 -1。
-- 純邏輯驗證：六支修改／新增 JS 均通過 
-ode --check`；
-ode scripts/york_clue_puzzle_qa.js 1000` 驗證 1,000 組種子 × 3 難度共 3,000 題，穩定重產、三難度答案互異、唯一解、答案審計、錨點、深度與日蝕嚴格小於掉落邊界全部通過，最大求解節點 14。
+- 純邏輯驗證：六支修改／新增 JS 均通過 `node --check`；`node scripts/york_clue_puzzle_qa.js 1000` 驗證 1,000 組種子 × 3 難度共 3,000 題，穩定重產、三難度答案互異、唯一解、答案審計、錨點、深度與日蝕嚴格小於掉落邊界全部通過，最大求解節點 14。
 - UI 驗證：bundled Playwright 於 1440×900、1024×768、390×844、844×390 操作三難度選擇、放牌、交換、鎖位洗牌、重設、錯誤與成功頁；所有畫面皆為 13 槽／13 牌／13 線索、`textOverflow=[]`、documentWidth 等於 viewport、console／4xx 0。1440×900 前五張實測最大中心誤差維持水平 0.496px、垂直 0.007px。
 - 正式整合驗證：`scripts/york_clue_puzzle_formal_integration_qa.js` 由正式 `board_game.html` 完成 UI 一階，再覆蓋 T1→T2→T3、T1→T3、困難先解、三階禁止重解、錯誤答案、CPU 二階、0%／10%／20%／30% 命中與未命中邊界、同戰防重、重戰再掉、不可交易、日蝕同回合只觸發一次／次回合可再觸發／首次降攻特攻、手動存讀刪、舊異常存檔只留三階，以及真實房間雙視窗快照收斂與觀看方不能開啟解碼；結果 `ok=true`。
 - 服務與路徑：沿用當時已在 8787 埠執行的正式 server，未啟動第二份程序；`board_game.html`、排牌頁、三支腳本及 13 個正式素材共 18 個 URL 全部 HTTP 200。兩個 HTML 的 inline script 可編譯，正式執行檔未發現任何 `postgame_clue_puzzle_ui/incoming` 引用。
@@ -7008,9 +6344,7 @@ ode scripts/york_clue_puzzle_qa.js 1000` 驗證 1,000 組種子 × 3 難度共 3
 - 效果掛點：黑焰羽衣的最大生命由 `cardMaxHp()` 套用 1.3 倍，速度由 `currentBattleStat()` 套用 1.3 倍；裝備、更換與卸下時按原 HP 比例換算，避免滿血角色裝上後變成表面受傷。日蝕只在戰鬥型被動已成功骰出第二顆時判定第三顆：原第一顆追加門檻為 6／5／4 時，第二顆需 5／3／1 以上；成功後第三顆與前兩顆相加，傷害預估上限同步由 12 擴至 18。
 - 戰鬥頁 UI：追加骰事件加入 `extraDiceOrdinal`、`secondDie`、`thirdDie`。第三顆擲骰中、落點及總和畫面分別明示「日蝕・第三顆戰鬥骰」、第二顆觸發門檻與三顆算式，不再誤顯示成兩顆相加。`board_game.html`、`board_battle.html` 及約克排牌頁的相關 script query 已更新為 `20260802-boss-relic-drop-v2`，避免舊快取遮蔽。
 - 修改檔案：`public/js/board_items.js`、`public/js/board_york_clue_puzzle.js`、`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`public/board_york_clue_puzzle_formal_demo.html`、`scripts/york_clue_puzzle_qa.js`、`scripts/york_clue_puzzle_formal_integration_qa.js`、`docs/POSTGAME_BOSS_RELICS.md`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：四支正式 JS 與兩支 QA 腳本通過 
-ode --check`；
-ode scripts/york_clue_puzzle_qa.js 1000` 通過 1,000 組種子 × 3 難度及 10%／20%／30%／40% 嚴格邊界。以 `PORT=8831 npm start` 啟動正式 server，環境未設定 `DATABASE_URL`，靜態 Board 頁正常。bundled Playwright 正式整合測試覆蓋十三件 10% 映射、命中／未中、同場防重、洛克斯四階邊界、重戰再掉、不可交易、黑焰羽衣 30% 生命／速度、日蝕 5／3／1 門檻、第三顆戰鬥頁標題／觸發文案／三骰算式、手動存讀刪與 Socket.IO 雙視窗快照收斂，結果 `ok=true`。
+- 驗證：四支正式 JS 與兩支 QA 腳本通過 `node --check`；`node scripts/york_clue_puzzle_qa.js 1000` 通過 1,000 組種子 × 3 難度及 10%／20%／30%／40% 嚴格邊界。以 `PORT=8831 npm start` 啟動正式 server，環境未設定 `DATABASE_URL`，靜態 Board 頁正常。bundled Playwright 正式整合測試覆蓋十三件 10% 映射、命中／未中、同場防重、洛克斯四階邊界、重戰再掉、不可交易、黑焰羽衣 30% 生命／速度、日蝕 5／3／1 門檻、第三顆戰鬥頁標題／觸發文案／三骰算式、手動存讀刪與 Socket.IO 雙視窗快照收斂，結果 `ok=true`。
 
 #### 約克線索示範頁敘述正式化 V131
 
@@ -7018,12 +6352,8 @@ ode scripts/york_clue_puzzle_qa.js 1000` 通過 1,000 組種子 × 3 難度及 1
 - 使用者回饋與原因：使用者指定 `public/board_york_clue_puzzle_demo.html` 的敘述方式。檢查發現正式 V2 雖然沿用部分句型，題目結構卻把其餘牌都直接連到兩個固定端點，因此容易反覆出現跨越大量牌的「從某號往左／右多格」；原示範頁則以附近已定位牌逐步建立關係，再混入相鄰、左右、間隔、端點與奇偶位置，閱讀較自然。
 - 正式修改：`public/js/board_york_clue_puzzle.js` 升為 `york-coordinate-v3-demo-relations`。每題先建立最大距離四格的鄰近關係樹，再逐條嘗試弱化並以回溯解題器確認仍為唯一解；簡單／普通／困難的弱化上限為 4／8／13，最低牌間關係數為 4／7／9。保留原三難度、同局同玩家穩定重開、難度間不同答案、解碼器升階、CPU 二階、蛋頭島顯現與所有掉落率。`public/board_game.html` 與 `public/board_york_clue_puzzle_formal_demo.html` query 更新為 `20260802-york-demo-relations-v3`；`scripts/york_clue_puzzle_qa.js` 改驗鄰近距離、廣義線索與各難度最低關係數。
 - 修改檔案：`public/js/board_york_clue_puzzle.js`、`public/board_york_clue_puzzle_formal_demo.html`、`public/board_game.html`、`scripts/york_clue_puzzle_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/DEV_WORKFLOW.md`。
-- 純邏輯驗證：
-ode --check public/js/board_york_clue_puzzle.js` 與 
-ode --check scripts/york_clue_puzzle_qa.js` 通過；
-ode scripts/york_clue_puzzle_qa.js 1000` 驗證 1,000 組局種 × 3 難度共 3,000 題，穩定重產、三難度互異、唯一解、最遠關係不超過四格、最低關係數及日蝕 10%／20%／30%／40% 邊界全部通過。簡單／普通／困難觀測最大求解節點分別為 23／167／5,316；現行房間種子建立三難度約耗時 17／49／78ms。
-- 正式與畫面驗證：沿用 8787 正式 server 執行 `scripts/york_clue_puzzle_formal_integration_qa.js`，完整 UI、升階、錯誤答案、CPU、十三 Boss／洛克斯掉落、路基／日蝕效果、存讀刪與多人收斂結果 `ok=true`。`scripts/york_clue_puzzle_demo_capture.js` 於 1440×900、1024×768、390×844、844×390 重跑三難度及完整互動，13 槽／13 牌／13 線索、documentWidth、文字 overflow、console／4xx 均通過；卡槽中心最大誤差仍為水平 0.496px、垂直 0.007px。最後重新執行 
-pm start`，8787 正常監聽；`board_game.html` 與正式排牌頁均回傳 HTTP 200，且兩頁實際載入 `20260802-york-demo-relations-v3`。未設定 `DATABASE_URL` 時只出現既有 DB 功能停用警告，不影響靜態 Board 頁。
+- 純邏輯驗證：`node --check public/js/board_york_clue_puzzle.js` 與 `node --check scripts/york_clue_puzzle_qa.js` 通過；`node scripts/york_clue_puzzle_qa.js 1000` 驗證 1,000 組局種 × 3 難度共 3,000 題，穩定重產、三難度互異、唯一解、最遠關係不超過四格、最低關係數及日蝕 10%／20%／30%／40% 邊界全部通過。簡單／普通／困難觀測最大求解節點分別為 23／167／5,316；現行房間種子建立三難度約耗時 17／49／78ms。
+- 正式與畫面驗證：沿用 8787 正式 server 執行 `scripts/york_clue_puzzle_formal_integration_qa.js`，完整 UI、升階、錯誤答案、CPU、十三 Boss／洛克斯掉落、路基／日蝕效果、存讀刪與多人收斂結果 `ok=true`。`scripts/york_clue_puzzle_demo_capture.js` 於 1440×900、1024×768、390×844、844×390 重跑三難度及完整互動，13 槽／13 牌／13 線索、documentWidth、文字 overflow、console／4xx 均通過；卡槽中心最大誤差仍為水平 0.496px、垂直 0.007px。最後重新執行 `npm start`，8787 正常監聽；`board_game.html` 與正式排牌頁均回傳 HTTP 200，且兩頁實際載入 `20260802-york-demo-relations-v3`。未設定 `DATABASE_URL` 時只出現既有 DB 功能停用警告，不影響靜態 Board 頁。
 
 #### 約克解碼成功頁圖文對位修正 V132
 
@@ -7038,8 +6368,7 @@ pm start`，8787 正常監聽；`board_game.html` 與正式排牌頁均回傳 HT
 - 日期：2026-08-02。
 - 使用者定案：「旁邊」與「緊鄰」在題目中代表相同規則，不應混用兩種詞。正式共用產生器與原始示範頁均統一使用「緊鄰」；無方向線索固定為「我和 X 號牌緊鄰，但線索沒有說左右」，有方向線索固定為「我緊鄰在 X 號牌的左／右側」。移除「就在我旁邊」與「是我的左／右鄰」，但保留原亂數消耗順序，因此同一 V3 種子的答案、線索類型及其他敘述不變。
 - 修改檔案：`public/js/board_york_clue_puzzle.js`、`public/board_york_clue_puzzle_demo.html`、`public/board_york_clue_puzzle_formal_demo.html`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。兩個正式引用 query 更新為 `20260802-york-adjacent-term-v4`；沒有修改解題規則、難度、唯一解、獎勵、存檔或多人同步。
-- 驗證：兩支共用／QA JS 通過 
-ode --check`；100 組種子 × 3 難度共 300 題的穩定重產、唯一解、難度互異、鄰近關係及日蝕掉落邊界結果 `ok=true`。正式產生器與原示範頁搜尋不到「旁邊」、「我的左鄰」或「我的右鄰」；8787 的主遊戲及正式解碼頁均回傳 HTTP 200 且載入新版 query。
+- 驗證：兩支共用／QA JS 通過 `node --check`；100 組種子 × 3 難度共 300 題的穩定重產、唯一解、難度互異、鄰近關係及日蝕掉落邊界結果 `ok=true`。正式產生器與原示範頁搜尋不到「旁邊」、「我的左鄰」或「我的右鄰」；8787 的主遊戲及正式解碼頁均回傳 HTTP 200 且載入新版 query。
 
 #### 約克普通難度座標錨點修正 V134
 
@@ -7048,8 +6377,7 @@ ode --check`；100 組種子 × 3 難度共 300 題的穩定重產、唯一解�
 - 分級修正：`public/js/board_york_clue_puzzle.js` 的簡單、普通新增 `minimumAnchors: 1`，不再弱化根座標；困難維持可用端點或奇偶位置取代座標。`validatePuzzle()` 與正式 QA 同步檢查最低錨點數。相同 V3 layoutSeed 的答案不變；B9406 普通題只把第 7 號由「偶數格」改為「我是整列由左數第 2 張」。
 - 敘述修正：相差兩格以上的精確方向一律改成「我在 X 號牌左／右邊，中間隔 N 張牌」，不再出現容易把牌數與格數混淆的「往左／右數 N 格」。保留原亂數消耗，因此其他同種題目的答案與線索結構不因文字統一而漂移。原始示範頁同步套用座標錨點與距離用詞規則。
 - 修改檔案：`public/js/board_york_clue_puzzle.js`、`public/board_york_clue_puzzle_demo.html`、`public/board_york_clue_puzzle_formal_demo.html`、`public/board_game.html`、`scripts/york_clue_puzzle_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/DEV_WORKFLOW.md`。兩個正式引用 query 更新為 `20260802-york-readable-anchor-v5`。
-- 純邏輯驗證：
-ode --check` 通過共用產生器與 QA；1,000 組種子 × 3 難度共 3,000 題的穩定重產、唯一解、難度互異、鄰近距離、最低關係數、最低錨點數、統一用詞及日蝕邊界全部 `ok=true`。簡單與普通 1,000 題的 `anchorCounts` 均固定為 `[1]`；困難為 `[0,1]`。普通最大求解節點由原 167 降至 33，困難仍可達 5,316。
+- 純邏輯驗證：`node --check` 通過共用產生器與 QA；1,000 組種子 × 3 難度共 3,000 題的穩定重產、唯一解、難度互異、鄰近距離、最低關係數、最低錨點數、統一用詞及日蝕邊界全部 `ok=true`。簡單與普通 1,000 題的 `anchorCounts` 均固定為 `[1]`；困難為 `[0,1]`。普通最大求解節點由原 167 降至 33，困難仍可達 5,316。
 - UI 與正式整合：Playwright 重跑 1440×900、1024×768、390×844、844×390 的三難度、完整放牌與成功結果，13 槽／13 牌／13 線索、文字 overflow、水平寬度、結果框位及手機捲動全部 `ok=true`。正式整合 QA 另重跑升階、錯誤答案、CPU 二階、十三 Boss／洛克斯掉落、路基／日蝕效果、手動存讀刪與雙視窗同步，結果 `ok=true`。
 
 #### 移動蛋頭島雙段顯現演出 V135
@@ -7060,9 +6388,7 @@ ode --check` 通過共用產生器與 QA；1,000 組種子 × 3 難度共 3,000 
 - 地圖段：`renderMap()` 只為 `route-postgame-egghead` 的六段連線、五個海格與 `postgame-egghead-island` 加入穩定識別 class；全螢幕段結束後依本局 `eggheadAnchorIslandId` 自動對準真實起點與蛋頭島，依序畫出連線、點亮海格、顯示座標光束與雷達、讓島圖掃描成形，最後以正式洛克斯圖顯示終戰警示。其他十三島與既有拉夫德魯後航線不會跟著重播。
 - 操作與相容性：全螢幕段及地圖段皆保留「略過動畫」。正常播放期間維持既有 `resolutionLock`，地圖演出結束或略過後解除；390×844 直向手機可暫時低於一般地圖手動縮放下限，以同時顯示起點、五格航路與終點，演出完成後自動回到一般縮放下限並聚焦蛋頭島。`postgameWorld` schema、`eggheadUnlocked`、錨點選擇、route／island id、存檔欄位、localStorage key、Socket.IO event 與 `BOARD_GAME_STATE` 均未修改。
 - 修改檔案：`public/board_game.html`、`public/js/board_game.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`；主頁 query 更新為 `20260802-egghead-reveal-cinematic-v1`。QA 輔助腳本與截圖放在 `.codex-runtime/`，不屬正式執行路徑。
-- 驗證：
-ode --check public/js/board_game.js` 通過；既有 8787 
-pm start` 服務的 `board_game.html` 回應 HTTP 200。Chrome 實際以 1440×900 及 390×844 跑完整兩段演出：十三張牌全部在 viewport、水平／垂直 document overflow 均為 0；正式地圖各找到 6 段連線、5 個海格、1 座蛋頭島、1 個地圖特效層與 1 個 HUD。手機終點雷達、島圖、洛克斯警示及兩行說明均留在畫面內；演出結束後全螢幕層、HUD、地圖特效皆為 0，`resolutionLock=false`，頁面例外與正式素材 4xx 為 0。
+- 驗證：`node --check public/js/board_game.js` 通過；既有 8787 `npm start` 服務的 `board_game.html` 回應 HTTP 200。Chrome 實際以 1440×900 及 390×844 跑完整兩段演出：十三張牌全部在 viewport、水平／垂直 document overflow 均為 0；正式地圖各找到 6 段連線、5 個海格、1 座蛋頭島、1 個地圖特效層與 1 個 HUD。手機終點雷達、島圖、洛克斯警示及兩行說明均留在畫面內；演出結束後全螢幕層、HUD、地圖特效皆為 0，`resolutionLock=false`，頁面例外與正式素材 4xx 為 0。
 
 #### CPU 進入戰鬥傷害預覽卡死修正 V136
 
@@ -7070,8 +6396,7 @@ pm start` 服務的 `board_game.html` 回應 HTTP 200。Chrome 實際以 1440×9
 - 根因：`computeMoveDamage()` 與 `computeComboHitDamages()` 各殘留一行舊版名刀「日蝕」增傷程式，兩處都直接讀取未宣告的 `eclipseEffect`。CPU 進戰鬥後會先呼叫 `getBattleView()` 評分所有招式，普通攻擊與連擊傷害預覽因此拋出 `ReferenceError`，CPU 自動流程在選招前中斷；玩家戰鬥頁建立招式預覽時也可能遇到同一錯誤。
 - 修正：移除兩處無效的舊版日蝕增傷引用；名刀「日蝕」仍完全依 V130 定案，只保留第二顆骰符合 5／3／1 門檻後追加第三顆戰鬥骰。`public/board_game.html` 的正式主程式 query 更新為 `20260803-cpu-battle-preview-fix-v1`，避免瀏覽器沿用舊快取。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/DEV_WORKFLOW.md`。沒有修改角色／道具 id、傷害公式的其他部分、日蝕正式效果、`gameState`、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
-- 驗證：
-ode --check public/js/board_game.js` 通過，正式執行檔已無 `eclipseEffect` 引用。bundled Playwright 跑完整 `scripts/postgame_boss_mechanics_qa.js`，13 名新 Boss 的戰鬥 view、普通／連擊預覽、機制 UI、正式圖片及桌機／手機版皆完成，結果 `errors=[]`、`failures=[]`。另以 1920×1080 背景 Chrome 建立 CPU 對巴雷特的正式戰鬥：進場時 `canRun=true`、`canAct=true`，四個招式及普通／連擊傷害範圍正常；CPU 隨後自行選擇「橡膠機關槍」，敵方完成擲骰並開始傷害結算，戰鬥紀錄由 5 筆推進至 10 筆，`cpuAuto.lastError` 與頁面例外均為空。
+- 驗證：`node --check public/js/board_game.js` 通過，正式執行檔已無 `eclipseEffect` 引用。bundled Playwright 跑完整 `scripts/postgame_boss_mechanics_qa.js`，13 名新 Boss 的戰鬥 view、普通／連擊預覽、機制 UI、正式圖片及桌機／手機版皆完成，結果 `errors=[]`、`failures=[]`。另以 1920×1080 背景 Chrome 建立 CPU 對巴雷特的正式戰鬥：進場時 `canRun=true`、`canAct=true`，四個招式及普通／連擊傷害範圍正常；CPU 隨後自行選擇「橡膠機關槍」，敵方完成擲骰並開始傷害結算，戰鬥紀錄由 5 筆推進至 10 筆，`cpuAuto.lastError` 與頁面例外均為空。
 
 #### 名刀「日蝕」第三骰・去背交接來源圖 V137
 
@@ -7082,9 +6407,7 @@ ode --check public/js/board_game.js` 通過，正式執行檔已無 `eclipseEffe
 - 正式接線：`public/board_battle.html` 新增第三骰專屬 DOM 外觀、定格閃光／舞台震動與三骰合計排列；`public/js/board_battle.js` 依 `extraDiceOrdinal=3` 套用日蝕骰，定格時只觸發一次爆發，總結事件則分別填入第一、第二、第三顆點數。另修正第三骰事件本來同時帶有 `firstDie`／`secondDie` 而被誤當成總結事件、導致第三顆實際點數遭前兩顆合計覆蓋的顯示問題。正式戰鬥腳本快取版本更新為 `20260803-eclipse-third-die-art-v1`。
 - 圖文對位（當時版本）：桌機 1600×900 曾把三骰總結做成同列顯示；此呈現已由 V163 依使用者定案取消，正式版改為三顆依序在同一中心取代，最後只顯示文字算式。
 - 修改檔案：`public/images/board/battle_dice_ui/battle_eclipse_third_dice.webp`、`public/images/board/battle_dice_ui/incoming/` 交接／候選素材、`public/board_battle.html`、`public/js/board_battle.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。沒有修改第三骰資格與門檻、角色／道具 id、傷害公式、`gameState`、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
-- 驗證：
-ode --check public/js/board_battle.js` 與 
-ode --check public/js/board_game.js` 通過；背景 Chrome 實播第三骰事件時實際定格點數為 4、`eclipse-impact` 與既有舞台震動只在定格加入，頁面例外為空。三骰總結事件實播為 6／5／4＝15，三張圖與三個數字皆在可視區內。完整 `scripts/postgame_boss_mechanics_qa.js` 亦再次通過 13 名新 Boss 桌機／手機、機制面板與圖片檢查，結果 `errors=[]`、`failures=[]`。
+- 驗證：`node --check public/js/board_battle.js` 與 `node --check public/js/board_game.js` 通過；背景 Chrome 實播第三骰事件時實際定格點數為 4、`eclipse-impact` 與既有舞台震動只在定格加入，頁面例外為空。三骰總結事件實播為 6／5／4＝15，三張圖與三個數字皆在可視區內。完整 `scripts/postgame_boss_mechanics_qa.js` 亦再次通過 13 名新 Boss 桌機／手機、機制面板與圖片檢查，結果 `errors=[]`、`failures=[]`。
 
 #### 十三島 Boss 專屬狀態圖示、巴雷特融合與登島掉落預覽 V138
 
@@ -7096,9 +6419,7 @@ ode --check public/js/board_game.js` 通過；背景 Chrome 實播第三骰事�
 - ImageGen：使用統一古銅金／黑鋼／青色寶石的海賊 RPG 狀態徽章規格，為史基至綠牛生成 13 張無文字、無人物全身的專屬圖。巴雷特正好六孔、路基正好六節點、洛基正好三朵冰雲；原始 1254×1254 PNG 經瀏覽器高品質縮放成正式 512×512 WebP，總體積約 1.1 MB。正式檔與生成規格位於 `public/images/board/battle/postgame_mechanic_icons/`，本目錄不保留約 35 MB 的原始 PNG。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/js/board_battle.js`、`public/board_battle.html`、`scripts/postgame_boss_mechanics_qa.js`、`public/images/board/battle/postgame_mechanic_icons/*.webp`、同目錄提示詞記錄、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 script query 更新為 `20260803-postgame-boss-icons-v2`。
 - 規則與同步邊界：沒有修改 Boss／道具 id、十三件 10% 掉落判定、傷害公式的其他部分、`gameState` 欄位、localStorage key、Socket.IO event、server 欄位或 `BOARD_GAME_STATE` 套用流程。新增內容只存在既有 battle state 機制 view 與開場視覺事件佇列，CPU 不需要操作新圖示。
-- 靜態與服務驗證：
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js` 通過。正式 8787 listener 已由 PID 9860 執行；另以 `PORT=8840 npm start` 啟動獨立驗證服務，`board_game.html`、`board_battle.html`、新版 `board_game.js` 與巴雷特 WebP 均 HTTP 200，圖片回應為 `image/webp`，驗證後停止 8840 listener。未設定 `DATABASE_URL` 時依既有設計只停用 DB-backed 功能，不影響 Board 靜態頁與本機遊戲。
+- 靜態與服務驗證：`node --check public/js/board_game.js`、`node --check public/js/board_battle.js` 通過。正式 8787 listener 已由 PID 9860 執行；另以 `PORT=8840 npm start` 啟動獨立驗證服務，`board_game.html`、`board_battle.html`、新版 `board_game.js` 與巴雷特 WebP 均 HTTP 200，圖片回應為 `image/webp`，驗證後停止 8840 listener。未設定 `DATABASE_URL` 時依既有設計只停用 DB-backed 功能，不影響 Board 靜態頁與本機遊戲。
 - 行為與圖片驗證：背景 Chrome 逐一套入 13 種機制 view，全部只有一枚 HUD 圖示、預設詳細框關閉、正式 WebP 解碼為 512×512 且無 runtime error。巴雷特正式建立六孔時確認九尾幻面 `effectKind=force_advantage_attribute`、六件道具與 5600ms 融合事件完整排入；動畫中六張船員卡、六件飛行道具、六孔填入與逐件效果正常。桌機 1600×900 的詳細框、六孔與文字沒有 overflow；手機 390×844 六孔全數顯示。
 - 登島版面驗證：以獨立離線 Chrome 解鎖十三島並實際呼叫 `resolveLanding()`，洛基情報頁顯示「鐵雷 Ragnir／掉落率 10%」，點擊後顯示完整冰雲效果；正式道具圖為 1254×1254 且可解碼。1600×900 與 390×844 的主框、道具按鈕、效果文字皆無水平或垂直 overflow。另逐一檢查十三件映射，13/13 道具資料、名稱、效果與圖片均存在並成功解碼；唯一 404 為專案既有 `/favicon.ico`。
 - 完整自動回歸：更新 `scripts/postgame_boss_mechanics_qa.js`，先驗證面板預設隱藏，再點擊每名 Boss 的專屬狀態圖示後檢查內容。以 Codex bundled Playwright 重跑 13 場正式戰鬥；13/13 圖示皆為 512×512、面板在 viewport、文字越框 0、破圖 0，史基至綠牛的 13 組既有行為與 7 張階段圖全部通過，桌機及手機結果為 `errors=[]`、`failures=[]`。
@@ -7112,10 +6433,7 @@ ode --check public/js/board_battle.js` 通過。正式 8787 listener 已由 PID 
 - 登島介紹：`renderEncounterNauticalPanel()` 新增可選 `mechanicPreview`，十三島 `openPostgameBossModal()` 直接帶入同一份機制名稱、觸發規則與反制。資訊區桌機採左右雙欄，窄版改為單欄可捲動；勝利線索／抽取／離島再戰濃縮到右側，原攜帶物圖、10% 與點擊效果保留在獨立掉落欄。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/js/board_battle.js`、`public/board_battle.html`、`scripts/postgame_boss_mechanics_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁與戰鬥頁 query 更新為 `20260803-postgame-boss-guide-v3`。
 - 相容邊界：沒有修改 Boss／道具 id、掉落率、戰鬥判定、傷害、battle state、`gameState` schema、localStorage key、Socket.IO event、server 欄位或 `BOARD_GAME_STATE` 同步流程；本次只有共用說明資料與顯示版面。
-- 驗證：
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js` 與 
-ode --check scripts/postgame_boss_mechanics_qa.js` 通過。以 Codex bundled Playwright 對正式 8787 頁面逐一打開 13 座登島情報及 13 場戰鬥；每名 Boss 的機制／反制文字都存在，登島訊息、掉落欄、按鈕重疊 0，戰鬥詳細框文字越框 0、破圖 0、桌機與 900×600 窄版均在 viewport；既有 13 組規則行為與 7 張階段圖亦全數通過，最終 `errors=[]`、`failures=[]`。另以 `PORT=8840 npm start` 啟動獨立驗證服務，兩個正式 HTML 與兩支新版 JS 均 HTTP 200；確認後停止臨時服務，8840 已釋放。
+- 驗證：`node --check public/js/board_game.js`、`node --check public/js/board_battle.js` 與 `node --check scripts/postgame_boss_mechanics_qa.js` 通過。以 Codex bundled Playwright 對正式 8787 頁面逐一打開 13 座登島情報及 13 場戰鬥；每名 Boss 的機制／反制文字都存在，登島訊息、掉落欄、按鈕重疊 0，戰鬥詳細框文字越框 0、破圖 0、桌機與 900×600 窄版均在 viewport；既有 13 組規則行為與 7 張階段圖亦全數通過，最終 `errors=[]`、`failures=[]`。另以 `PORT=8840 npm start` 啟動獨立驗證服務，兩個正式 HTML 與兩支新版 JS 均 HTTP 200；確認後停止臨時服務，8840 已釋放。
 
 #### 薩卡血祭值說明白話化 V140
 
@@ -7123,8 +6441,7 @@ ode --check scripts/postgame_boss_mechanics_qa.js` 通過。以 Codex bundled Pl
 - 使用者回饋：薩卡的登島／戰鬥機制說明看不懂，原文沒有先交代血祭值如何從我方失血換算。
 - 修正：`POSTGAME_BOSS_MECHANIC_META.postgame_saga` 改為直接顯示「我方每實際損失最大 HP 1%，血祭值 +1」，並明示流血跳傷也會增加；25／50／75 階段分別使直接攻擊增傷 15%／30%／50%，75 時融合。反制改為護盾擋傷、使攻擊落空、解除流血，並明說治療只能補 HP、不能降低已累積血祭值。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`docs/GAME_RULES.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260803-postgame-boss-guide-v4`；沒有修改血祭值公式、增傷、融合判定、Boss id、battle state、存檔或多人同步。
-- 驗證：
-ode --check public/js/board_game.js` 通過；完整十三島 Playwright 回歸再次通過。薩卡的登島規則與反制文字完整存在，`messageDetailOverlap=false`、`detailActionsOverlap=false`、`clippedText=[]`；戰鬥展開框 `textOverflow=[]`、圖片正常，原血祭值 75 融合行為仍通過，總結果 `errors=[]`、`failures=[]`。
+- 驗證：`node --check public/js/board_game.js` 通過；完整十三島 Playwright 回歸再次通過。薩卡的登島規則與反制文字完整存在，`messageDetailOverlap=false`、`detailActionsOverlap=false`、`clippedText=[]`；戰鬥展開框 `textOverflow=[]`、圖片正常，原血祭值 75 融合行為仍通過，總結果 `errors=[]`、`failures=[]`。
 
 #### 薩卡七星劍完全融合動畫 V141
 
@@ -7133,10 +6450,7 @@ ode --check public/js/board_game.js` 通過；完整十三島 Playwright 回歸�
 - 權威事件：`public/js/board_game.js` 在 `postgameBossMechanicGainSagaBlood()` 首次跨過 75 時，將 `postgame-saga-fusion` 事件排入既有 `openingPassiveVisualQueue`。事件帶入融合前战鬥圖、最終形態圖、正式七星劍道具圖、三階段文案與 6200ms 時長；直接攻擊觸發時在當次攻擊演出後立即播放，流血跳傷觸發則沿用原回合開始排程。
 - 正式戰鬥演出：`public/board_battle.html` 與 `public/js/board_battle.js` 新增紅月／綠色妖氣全屏層。演出先顯示「血祭值 75／75／七星劍吸滿鮮血」，再讓實際 `saga_seven_star_sword.webp` 飛入薩卡身體並縮小消失，最後以衝擊波切換 `fused_normal.webp`，明示「完全融合・最終形態／直接攻擊傷害 +50%」。窄畫面的演出層固定貼齊視窗，不再被戰鬥舞台 1024px 最小寬度拉出畫面。
 - 素材與邊界：重用 `images/board/battle/enemies/postgame_saga/normal.webp`、`fused_normal.webp` 及 `images/board/items/postgame_boss_relics/saga_seven_star_sword.webp`，沒有產生新圖或改動素材目錄。沒有改 Boss／道具 id、血祭公式、增傷、battle state，也沒有新增 `gameState` schema、localStorage key、Socket.IO event、server 欄位或 `BOARD_GAME_STATE` 套用邏輯。正式主頁與戰鬥頁 query 更新為 `20260804-saga-fusion-animation-v2`。
-- 自動驗證：
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js` 及 
-ode --check scripts/postgame_boss_mechanics_qa.js` 通過。`postgame_boss_mechanics_qa.js` 新增真正融合事件驗證，在 1600×900 與 900×600 觸發血祭 75／75；兩種畫面的七星劍吸收階段透明度均為 1、最終形態均顯現、三張圖均解碼，文字溢出 0、畫面越界 0、`errors=[]`、`failures=[]`，原 13 組 Boss 行為亦全數通過。另以 `PORT=8840 npm start` 啟動獨立驗證服務，兩個正式 HTML、兩支 JS、薩卡融合前／後圖與七星劍圖均 HTTP 200；確認後停止臨時服務，8840 已釋放。
+- 自動驗證：`node --check public/js/board_game.js`、`node --check public/js/board_battle.js` 及 `node --check scripts/postgame_boss_mechanics_qa.js` 通過。`postgame_boss_mechanics_qa.js` 新增真正融合事件驗證，在 1600×900 與 900×600 觸發血祭 75／75；兩種畫面的七星劍吸收階段透明度均為 1、最終形態均顯現、三張圖均解碼，文字溢出 0、畫面越界 0、`errors=[]`、`failures=[]`，原 13 組 Boss 行為亦全數通過。另以 `PORT=8840 npm start` 啟動獨立驗證服務，兩個正式 HTML、兩支 JS、薩卡融合前／後圖與七星劍圖均 HTTP 200；確認後停止臨時服務，8840 已釋放。
 
 #### 共鬥玩家戰鬥視角切換 V142
 
@@ -7147,8 +6461,7 @@ ode --check scripts/postgame_boss_mechanics_qa.js` 通過。`postgame_boss_mecha
 - 素材：使用 Codex 內建 ImageGen，參考正式 `battle_hud_player_frame.webp` 與 `battle_command_choice_button_frame.webp`，生成深藍黑鋼、古金細框、青色寶石與下掛缺口的透明分頁。正式檔為 `public/images/board/battle_coop_ui/coop_view_switch_tab_frame.webp`（1024×210 RGBA）；來源、去背中繼與完整提示詞保存在同目錄及 `incoming/`，執行期只引用正式 WebP。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`public/images/board/battle_coop_ui/**`、`scripts/coop_battle_view_switch_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 為 `20260804-coop-view-switch-v1`。
 - 同步邊界：沒有新增或改名 `gameState`／`battleState` 欄位、localStorage key、Socket.IO event 或 server 欄位；視角切換不送指令、不算換人或回合，也不變更真正操作玩家。明確要求指定參戰者 view 時，建立 view 過程中暫時套用的玩家 active index 會在返回前還原。
-- 驗證：
-ode --check` 通過 `board_game.js`、`board_battle.js` 與新 QA。`scripts/coop_battle_view_switch_qa.js` 於三人共鬥實測 1600×900／900×600：三名頭像與角色圖正常、操作方金框正確、點隊友後 HUD 切為其角色且 `canControl=false`、右側指令盤鎖定、點回操作方恢復、`battle.playerId` 讀取前後一致，文字溢出／破圖／頁面例外／4xx 均為空。另重跑 `scripts/postgame_boss_mechanics_qa.js`，13 名 Boss 登島、圖示、七張階段圖、機制行為及薩卡融合全部 `errors=[]`、`failures=[]`。最後以 `PORT=8840 npm start` 啟動獨立正式服務，兩個 HTML、兩支 JS 與新 WebP 均 HTTP 200；確認後停止服務並驗證 8840 已釋放。
+- 驗證：`node --check` 通過 `board_game.js`、`board_battle.js` 與新 QA。`scripts/coop_battle_view_switch_qa.js` 於三人共鬥實測 1600×900／900×600：三名頭像與角色圖正常、操作方金框正確、點隊友後 HUD 切為其角色且 `canControl=false`、右側指令盤鎖定、點回操作方恢復、`battle.playerId` 讀取前後一致，文字溢出／破圖／頁面例外／4xx 均為空。另重跑 `scripts/postgame_boss_mechanics_qa.js`，13 名 Boss 登島、圖示、七張階段圖、機制行為及薩卡融合全部 `errors=[]`、`failures=[]`。最後以 `PORT=8840 npm start` 啟動獨立正式服務，兩個 HTML、兩支 JS 與新 WebP 均 HTTP 200；確認後停止服務並驗證 8840 已釋放。
 
 #### 共鬥視角交棒自動跟隨與分頁避讓 V143
 
@@ -7169,9 +6482,7 @@ ode --check` 通過 `board_game.js`、`board_battle.js` 與新 QA。`scripts/coo
 - 戰鬥 UI：`board_battle.html`／`board_battle.js` 增加圖片式待救援面板、自救目標、等待按鈕、共鬥道具玩家／船員分組選擇與全隊治療玩家選擇；共鬥頭像會顯示剩餘待救援回合。一般共鬥與司法島結果都用同一種玩家卡列出傷害、承傷、治療、行動、道具、救援與個人獎勵；一般共鬥敵方 HUD 亦顯示參戰與待救援人數。
 - 血統抽取等待：完成、失敗或無抽取器後，若仍有共鬥玩家尚未結束抽取，按鈕改為「查看共鬥等待狀態」，並用現有抽取器圖片框逐一顯示玩家頭像、等待／抽取中／成功／失敗／放棄狀態；所有人完成後才恢復原結算按鈕。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`public/js/board_lineage_extraction.js`、`public/css/board_lineage_extraction.css`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260804-coop-rescue-support-v1`；未新增 localStorage key、Socket.IO event 或 server 欄位。
-- 驗證：三支 JS 均通過 
-ode --check`。正式 8787 服務已在執行，`board_battle.html` HTTP 200 且載入新版 query；另執行 
-pm start` 時正確回報 8787 已被現有服務占用。背景 Chrome 正式邏輯測試中，玩家一消耗自己的「奇蹟帶骨肉」救回玩家二，玩家二 HP 0→51、待救援 2→0，玩家一庫存 -1，貢獻為治療 51／道具 1／救援 1；兩次等待則實測 2→1→0，第二次後該 runtime `defeated=true` 而存活玩家仍可繼續。1920×1080 待救援、1180×820 共鬥道具與結算、1180×820 血統抽取等待均無頁面例外、水平溢出或卡片文字裁切。
+- 驗證：三支 JS 均通過 `node --check`。正式 8787 服務已在執行，`board_battle.html` HTTP 200 且載入新版 query；另執行 `npm start` 時正確回報 8787 已被現有服務占用。背景 Chrome 正式邏輯測試中，玩家一消耗自己的「奇蹟帶骨肉」救回玩家二，玩家二 HP 0→51、待救援 2→0，玩家一庫存 -1，貢獻為治療 51／道具 1／救援 1；兩次等待則實測 2→1→0，第二次後該 runtime `defeated=true` 而存活玩家仍可繼續。1920×1080 待救援、1180×820 共鬥道具與結算、1180×820 血統抽取等待均無頁面例外、水平溢出或卡片文字裁切。
 
 #### 共鬥戰鬥頁窄版置中與文字對齊 V145
 
@@ -7181,8 +6492,7 @@ pm start` 時正確回報 8787 已被現有服務占用。背景 Chrome 正式�
 - 血統等待：正式抽取控制器偵測戰鬥頁的新 viewport 後不再重複縮放舞台；平板直向等待名單改為兩欄、固定框內高度與內部捲動，四名參戰者仍可完整查看，返回按鈕不被卡片壓住。
 - 修改檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_lineage_extraction.js`、`public/css/board_lineage_extraction.css`、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260805-coop-responsive-fix-v1`。
 - 同步邊界：只改戰鬥 iframe 的前端縮放、排版與顯示字串；沒有新增或改名 `gameState`／`battleState` 欄位、localStorage key、Socket.IO event、server 欄位或 `BOARD_GAME_STATE` 套用流程。
-- 驗證：
-ode --check` 通過 `board_game.js`、`board_battle.js`、`board_lineage_extraction.js`。以獨立 8840 正式服務檢查桌機 1920×1080、平板橫向 1180×820、平板直向 820×1180、手機橫向 932×430、手機直向 430×932，共 20 組待救援、四人道具目標、四人戰績與四人血統等待畫面；圖片破損、圖文越框、頁面例外與水平溢出均為 0。最後再針對平板橫／直待救援、手機橫向待救援及平板直向血統等待複查，四組 `issues=[]`。
+- 驗證：`node --check` 通過 `board_game.js`、`board_battle.js`、`board_lineage_extraction.js`。以獨立 8840 正式服務檢查桌機 1920×1080、平板橫向 1180×820、平板直向 820×1180、手機橫向 932×430、手機直向 430×932，共 20 組待救援、四人道具目標、四人戰績與四人血統等待畫面；圖片破損、圖文越框、頁面例外與水平溢出均為 0。最後再針對平板橫／直待救援、手機橫向待救援及平板直向血統等待複查，四組 `issues=[]`。
 
 #### 十三座 Boss 島不鎖來路 V146
 
@@ -7191,8 +6501,7 @@ ode --check` 通過 `board_game.js`、`board_battle.js`、`board_lineage_extract
 - 實作：`getAvailableRoutes()` 在套用 `entryDirection` 的一般來路排除前，先判斷目前是否為 `postgame_boss` 島；Boss 島直接保留全部硬性可通行航線，仍會遵守最終島解鎖、顛倒山、唯一分支及強制撤退等既有硬限制。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。主頁 query 更新為 `20260805-postgame-boss-return-route-v1`。
 - 同步邊界：沒有新增或改名 `gameState`／玩家／航線欄位、localStorage key、Socket.IO event 或 server 欄位；只改現有地圖資料的可選航線計算，CPU 與真人共用同一結果。
-- 驗證：
-ode --check public/js/board_game.js` 通過。以獨立 8840 正式服務和 bundled Playwright 建立拉夫德魯後地圖，逐一對 13 座 Boss 島的每條相連航線模擬由該方向登島；13 座全部保留來路，且一般島 `island-1` 的既有來路排除仍成立，頁面例外為 0。
+- 驗證：`node --check public/js/board_game.js` 通過。以獨立 8840 正式服務和 bundled Playwright 建立拉夫德魯後地圖，逐一對 13 座 Boss 島的每條相連航線模擬由該方向登島；13 座全部保留來路，且一般島 `island-1` 的既有來路排除仍成立，頁面例外為 0。
 
 #### 無風帶開啟後四皇島不鎖來路 V147
 
@@ -7201,8 +6510,7 @@ ode --check public/js/board_game.js` 通過。以獨立 8840 正式服務和 bun
 - 實作：`getAvailableRoutes()` 的來路保留條件擴充為 `postgame_boss`，或 `postgameWorld.unlocked` 已成立且目前島種為 `yonko`。最終島解鎖、顛倒山、唯一分支及強制撤退等硬限制維持原判斷順序。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。主頁 query 更新為 `20260805-postgame-boss-yonko-return-route-v2`。
 - 同步邊界：沒有新增或改名狀態欄位、localStorage key、Socket.IO event、server 欄位或航線資料；只依既有 `postgameWorld.unlocked` 決定可選航線。
-- 驗證：
-ode --check public/js/board_game.js` 通過。獨立 8840 正式服務與 bundled Playwright 實測解鎖前仍有四皇島套用一般來路限制；解鎖後 4 座四皇島的所有相連航線都保留來路，13 座無風帶 Boss 島仍全部保留來路，普通島仍能排除剛才進島的航線，頁面例外為 0。
+- 驗證：`node --check public/js/board_game.js` 通過。獨立 8840 正式服務與 bundled Playwright 實測解鎖前仍有四皇島套用一般來路限制；解鎖後 4 座四皇島的所有相連航線都保留來路，13 座無風帶 Boss 島仍全部保留來路，普通島仍能排除剛才進島的航線，頁面例外為 0。
 
 #### 多人戰鬥結算五列專用卡 V148
 
@@ -7212,9 +6520,7 @@ ode --check public/js/board_game.js` 通過。獨立 8840 正式服務與 bundle
 - 顯示接入：`battleResultRewardEntries()` 只把一般共鬥與司法島參戰者標記為 performance card；`renderResult()` 對這些卡使用新底圖與 `is-performance`。CSS 依底圖內框切成五個等高 grid rows，名稱及四筆正式 battle view 文字逐列置中、禁止換行並在極端長字串時於格內省略。非共鬥單人獎勵仍使用原四張指令按鈕底圖。
 - 修改檔案：`public/js/board_battle.js`、`public/board_battle.html`、`public/js/board_game.js`、`public/board_game.html`、`public/images/board/battle_result_ui/**`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁與戰鬥頁 query 更新為 `20260805-battle-result-card-table-v1`。
 - 同步邊界：沒有修改傷害、獎勵、抽取、回合、`gameState`／`battleState` 欄位、localStorage key、Socket.IO event、server 欄位或 `BOARD_GAME_STATE`；本次只更換多人結算的前端底圖與文字定位。
-- 驗證：
-ode --check public/js/board_game.js` 與 
-ode --check public/js/board_battle.js` 通過。以獨立 8841 正式服務和 bundled Playwright 建立四人共鬥勝利，使用長玩家名稱、六位數傷害、八位數懸賞與長道具名稱檢查 1600×900、1180×820、932×430；四張卡都載入新 WebP，五列等高置中，文字／圖片越框、破圖、頁面例外均為 0。另確認 WebP 為 1536×1024 RGBA，沒有殘留可見洋紅色鍵像素。
+- 驗證：`node --check public/js/board_game.js` 與 `node --check public/js/board_battle.js` 通過。以獨立 8841 正式服務和 bundled Playwright 建立四人共鬥勝利，使用長玩家名稱、六位數傷害、八位數懸賞與長道具名稱檢查 1600×900、1180×820、932×430；四張卡都載入新 WebP，五列等高置中，文字／圖片越框、破圖、頁面例外均為 0。另確認 WebP 為 1536×1024 RGBA，沒有殘留可見洋紅色鍵像素。
 
 #### 十三名 Boss 專屬敵框與 CPU 四皇框修正 V149
 
@@ -7224,8 +6530,7 @@ ode --check public/js/board_battle.js` 通過。以獨立 8841 正式服務和 b
 - Boss 素材：使用 Codex 內建 ImageGen，以四皇 `frame.webp` 作風格／構圖參考，生成史基至綠牛十三張正面方形框；每張只在邊緣放入浮空劍氣、黃金賭場、黑腕機械、魔王樂譜、六孔合體、七星劍、傑爾馬科技、覺醒黑焰、露娜利亞火翼、糯糯未來視、赤色伯爵、冰雷巨人或森森根蔓等特徵，中央保留半身圖。原始色鍵 PNG 保存於各 `incoming/`，正式 1254×1254 RGBA WebP 經 `remove_chroma_key.py` 柔邊、去色溢處理；完整提示詞與工具模式保存於 `POSTGAME_BOSS_FRAME_PROMPTS.md`。
 - 正式接入：`board_game.js` 新增十三組 Boss key／中文名到 frame ID 映射；`board_battle.js` 新增十三個單層敵框設定，統一置中 113% 並隱藏普通紅框。沒有新增 `gameState`／`battleState` 欄位、localStorage key、Socket.IO event、server 欄位或玩家解鎖項目；正式 query 更新為 `20260805-postgame-boss-enemy-frames-v1`。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`public/images/board/battle/enemy_frames/postgame_*/**`、`public/images/board/battle/enemy_frames/POSTGAME_BOSS_FRAME_PROMPTS.md`、`scripts/boss_enemy_frames_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過 `board_game.js`、`board_battle.js` 與 `boss_enemy_frames_qa.js`。以獨立 8841 正式服務和 bundled Playwright 逐一開啟十三名 Boss；每場 expected／prepared／實際圖層 frame ID 一致、各一層、破圖 0、名稱越框 0，半身圖均以 `cover` 載入。四名四皇逐一把戰鬥玩家標記為 CPU 後，黑鬍子、紅髮、大媽、凱多各載入正確四層框，破圖與名稱越框均為 0。1600×900 與 932×430 卡塔庫栗窄版均通過，最終 `errors=[]`；十三框聯覽與 CPU 凱多完整畫面另存於本次 QA 輸出目錄。檢查完成後已停止臨時服務並釋放 8841。
+- 驗證：`node --check` 通過 `board_game.js`、`board_battle.js` 與 `boss_enemy_frames_qa.js`。以獨立 8841 正式服務和 bundled Playwright 逐一開啟十三名 Boss；每場 expected／prepared／實際圖層 frame ID 一致、各一層、破圖 0、名稱越框 0，半身圖均以 `cover` 載入。四名四皇逐一把戰鬥玩家標記為 CPU 後，黑鬍子、紅髮、大媽、凱多各載入正確四層框，破圖與名稱越框均為 0。1600×900 與 932×430 卡塔庫栗窄版均通過，最終 `errors=[]`；十三框聯覽與 CPU 凱多完整畫面另存於本次 QA 輸出目錄。檢查完成後已停止臨時服務並釋放 8841。
 
 #### 敵方凱多框中央雷雲遮擋修正 V150
 
@@ -7235,20 +6540,17 @@ ode --check` 通過 `board_game.js`、`board_battle.js` 與 `boss_enemy_frames_q
 - 回歸保護：`scripts/boss_enemy_frames_qa.js` 記錄每一層實際 opacity／blend，並要求 CPU 凱多 aura 不透明度不得高於 25%，避免日後再次把中央特效恢復成全濃度。
 - 修改檔案：`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_battle.html`、`public/board_game.html`、`scripts/boss_enemy_frames_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260805-kaido-enemy-frame-clear-center-v1`。
 - 同步邊界：只調整 battle view 既有 `cosmeticFrameId` 的顯示值與戰鬥頁圖層參數；沒有新增或改名 `gameState`／`battleState` 欄位、localStorage key、Socket.IO event、server 欄位，也不改 Boss 數值、回合、掉落或玩家外觀框解鎖。
-- 驗證：
-ode --check` 通過 `board_game.js`、`board_battle.js` 與 `boss_enemy_frames_qa.js`。以獨立 8841 正式服務和 bundled Playwright 重跑十三名 Boss、CPU 四皇與 932×430；凱多 expected／prepared／實際 ID 均為 `enemyYonkoKaido`、四層完整、破圖 0、名稱越框 0、aura opacity 0.2，整體 `errors=[]`。CPU 凱多 1600×900 完整畫面確認臉、胸腹與角均可清楚辨識。
+- 驗證：`node --check` 通過 `board_game.js`、`board_battle.js` 與 `boss_enemy_frames_qa.js`。以獨立 8841 正式服務和 bundled Playwright 重跑十三名 Boss、CPU 四皇與 932×430；凱多 expected／prepared／實際 ID 均為 `enemyYonkoKaido`、四層完整、破圖 0、名稱越框 0、aura opacity 0.2，整體 `errors=[]`。CPU 凱多 1600×900 完整畫面確認臉、胸腹與角均可清楚辨識。
 
 #### 巴雷特取消全身六孔人物圖 V151
 
 - 日期：2026-08-05。
 - 使用者定案：巴雷特不要再使用全身洞孔融合圖，正式戰鬥人物主卡改回一般巴雷特戰鬥圖；六孔吸收規則與狀態 UI 保留。
-- 實作：移除建立六孔時將 
-ormal`／`idle`／`morale` 改成 `fusion_normal.webp` 的覆寫。`applyPostgameBossMechanicPortrait()` 對巴雷特固定回填 `postgame_douglas_bullet/normal.webp` 與一般 morale，除了新戰鬥外，也會修正已保存舊融合路徑的戰鬥快照。開場六件道具飛入、逐件效果、專屬六孔圖示、展開資料與骰點破甲均未修改。
+- 實作：移除建立六孔時將 `normal`／`idle`／`morale` 改成 `fusion_normal.webp` 的覆寫。`applyPostgameBossMechanicPortrait()` 對巴雷特固定回填 `postgame_douglas_bullet/normal.webp` 與一般 morale，除了新戰鬥外，也會修正已保存舊融合路徑的戰鬥快照。開場六件道具飛入、逐件效果、專屬六孔圖示、展開資料與骰點破甲均未修改。
 - 回歸保護：`scripts/postgame_boss_mechanics_qa.js` 現在同時檢查正式敵卡實際圖片 URL、正規化後 portrait 與破壞一號孔位行為，禁止 `fusion_normal.webp` 再次成為巴雷特主卡；另輸出詳細框收起後的完整一般半身圖畫面。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/postgame_boss_mechanics_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260805-bullet-normal-battle-portrait-v1`。
 - 同步邊界：沒有新增或改名 `gameState`／`battleState` 欄位、localStorage key、Socket.IO event 或 server 欄位；只使用既有 `battlePortraits` 欄位回填正式一般圖，不改六孔狀態、攜帶物效果、回合、傷害或掉落。
-- 驗證：
-ode --check` 通過 `board_game.js`、`board_battle.js` 與 `postgame_boss_mechanics_qa.js`。以獨立 8841 正式服務和 bundled Playwright 重跑十三名 Boss 的登島介紹、正式戰鬥 UI、機制行為及 900×600；巴雷特正式敵卡與正規化 portrait 均為 `postgame_douglas_bullet/normal.webp`、`fusion_normal` 未出現在人物主卡，六孔骰 1 破壞仍通過，總結果 `errors=[]`、`failures=[]`。
+- 驗證：`node --check` 通過 `board_game.js`、`board_battle.js` 與 `postgame_boss_mechanics_qa.js`。以獨立 8841 正式服務和 bundled Playwright 重跑十三名 Boss 的登島介紹、正式戰鬥 UI、機制行為及 900×600；巴雷特正式敵卡與正規化 portrait 均為 `postgame_douglas_bullet/normal.webp`、`fusion_normal` 未出現在人物主卡，六孔骰 1 破壞仍通過，總結果 `errors=[]`、`failures=[]`。
 
 #### 巴雷特兔耳殘骸超級融合徽章與六孔明細 V152
 
@@ -7259,8 +6561,7 @@ ode --check` 通過 `board_game.js`、`board_battle.js` 與 `postgame_boss_mecha
 - 測試工具：`scripts/postgame_boss_mechanics_qa.js` 在巴雷特回歸時固定準備六名船員與六件不同攜帶物，將第三孔標為已破壞，檢查新圖 URL、六個小孔、六張明細、骰點順序、部位名稱、圖片、效果及破壞／接管狀態；另輸出桌機、窄版與一般人物主卡截圖。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/postgame_boss_mechanics_qa.js`、`public/images/board/battle/postgame_mechanic_icons/**`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260805-bullet-slot-details-super-fusion-v2`。
 - 同步邊界：沒有新增或改名 `gameState`／`battleState` 欄位、localStorage key、Socket.IO event、server 欄位或完整快照格式；只讀取既有 `postgameBossMechanic.slots` 並更新戰鬥頁呈現，攜帶物接管、破壞、歸還、回合、傷害與掉落規則未改。
-- 驗證：
-ode --check` 通過 `board_game.js`、`board_battle.js` 與 QA 腳本；`git diff --check` 通過。以獨立 8841 正式服務重跑 13 座登島情報、13 場戰鬥 UI／行為、薩卡融合與 900×600；巴雷特新版圖為 512×512、六件道具圖片完整、骰 1～6／六部位順序正確、第三孔明確顯示已破壞，其餘顯示接管中，桌機與窄版皆無文字溢出、破圖或面板越界，總結果 `errors=[]`、`failures=[]`。
+- 驗證：`node --check` 通過 `board_game.js`、`board_battle.js` 與 QA 腳本；`git diff --check` 通過。以獨立 8841 正式服務重跑 13 座登島情報、13 場戰鬥 UI／行為、薩卡融合與 900×600；巴雷特新版圖為 512×512、六件道具圖片完整、骰 1～6／六部位順序正確、第三孔明確顯示已破壞，其餘顯示接管中，桌機與窄版皆無文字溢出、破圖或面板越界，總結果 `errors=[]`、`failures=[]`。
 
 #### 巴雷特重複攜帶物完整接管與極限傷害 V153
 
@@ -7271,8 +6572,7 @@ ode --check` 通過 `board_game.js`、`board_battle.js` 與 QA 腳本；`git dif
 - 極限配裝：新增 `scripts/bullet_absorbed_items_qa.js`，同一 Lv.99 羅傑目標、`Ultimate Faust`、骰 6 下比較八種六件同名配裝。六件 Battle Smasher 全過熱以約 ×7.5295 增傷及 73.7856% 合併破防造成 3283，為本測試可重現條件峰值；六個瞄準鏡六次暴擊全中造成 3554，為機率 `0.1^6 = 0.000001` 的絕對理論峰值；六把三冰雲 Ragnir 造成 2900；六顆生命燃燒寶珠首擊造成 1506。正式截圖輸出為 `bullet_stable_max_damage.png` 與 `bullet_absolute_max_damage.png`，兩張都同時顯示傷害與六孔資料。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/bullet_absorbed_items_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 同步邊界：未新增或改名 `gameState`／`battleState` 欄位、localStorage key、Socket.IO event 或 server 欄位；沿用既有 `postgameBossMechanic.slots[].triggered` 物件保存分孔狀態，舊快照正規化時自動補空物件與動態資源。
-- 驗證：
-ode --check` 通過 `board_game.js`、`board_battle.js` 與新 QA。新 QA 的八組重複增傷倍率、六份黑泥治療、六個小型護盾池、六件黑焰最大 HP、六顆海樓石子彈及六份 Ragnir 獨立狀態全部通過；兩張 1600×900 截圖均為六槽、破圖 0、文字溢出 0。另重跑 `scripts/postgame_boss_mechanics_qa.js`，13 座登島、13 場戰鬥、七張階段圖、13 組行為與 900×600 全部通過，最終 `errors=[]`、`failures=[]`。使用 `PORT=8842 npm start` 確認正式啟動成功後停止臨時服務並釋放埠；8841 驗證服務上的兩個 HTML 與兩支新版 JS 均為 HTTP 200。
+- 驗證：`node --check` 通過 `board_game.js`、`board_battle.js` 與新 QA。新 QA 的八組重複增傷倍率、六份黑泥治療、六個小型護盾池、六件黑焰最大 HP、六顆海樓石子彈及六份 Ragnir 獨立狀態全部通過；兩張 1600×900 截圖均為六槽、破圖 0、文字溢出 0。另重跑 `scripts/postgame_boss_mechanics_qa.js`，13 座登島、13 場戰鬥、七張階段圖、13 組行為與 900×600 全部通過，最終 `errors=[]`、`failures=[]`。使用 `PORT=8842 npm start` 確認正式啟動成功後停止臨時服務並釋放埠；8841 驗證服務上的兩個 HTML 與兩支新版 JS 均為 HTTP 200。
 
 #### 伽治傑爾馬 66 複製兵圖片人牆 V154
 
@@ -7282,8 +6582,7 @@ ode --check` 通過 `board_game.js`、`board_battle.js` 與新 QA。新 QA 的�
 - 正式呈現：`board_battle.html` 在伽治敵方 portrait 內新增透明人牆層；`board_battle.js` 只讀既有 view 的 `state.clones`，依 3／2／1 排成三種置中防線。首次開戰與每三次行動補兵會由下方部署；人牆被指定消滅或高骰貫穿時，前一隊形的一名士兵會閃光、後退並破碎消失；0 名後整層隱藏。正式 query 更新為 `20260805-judge-clone-guard-v1`。
 - 規則與同步邊界：沒有修改 `board_game.js` 的複製兵阻擋、30% 傷害穿透、高骰完整貫穿、生產進度、CPU 目標或戰鬥紀錄；也沒有新增或改名 `gameState`／`battleState` 欄位、localStorage key、Socket.IO event、server 欄位或 `BOARD_GAME_STATE` 套用流程。
 - 修改檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/images/board/battle/postgame_mechanic_effects/judge_clone_guard/**`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_battle.js` 與指定檔案的 `git diff --check` 通過；透明圖為 1023×1537 RGBA，四角 alpha 均為 0。bundled Playwright 在正式 8787 頁面依序切換 3／2／1／0 名，數量、圖片解碼、框內邊界、啟用／隱藏 class 與一名破壞中的士兵均符合預期，`errors=[]`、`failures=[]`；1600×900 與 932×430 截圖確認三名士兵完整留在伽治敵卡及專屬外框內，沒有拉伸、越框或遮住戰鬥指令文字。另以 `PORT=8843 npm start` 啟動正式服務，戰鬥頁、JS 與新 WebP 均為 HTTP 200；驗證後停止測試 node 行程並確認 8843 已釋放。
+- 驗證：`node --check public/js/board_battle.js` 與指定檔案的 `git diff --check` 通過；透明圖為 1023×1537 RGBA，四角 alpha 均為 0。bundled Playwright 在正式 8787 頁面依序切換 3／2／1／0 名，數量、圖片解碼、框內邊界、啟用／隱藏 class 與一名破壞中的士兵均符合預期，`errors=[]`、`failures=[]`；1600×900 與 932×430 截圖確認三名士兵完整留在伽治敵卡及專屬外框內，沒有拉伸、越框或遮住戰鬥指令文字。另以 `PORT=8843 npm start` 啟動正式服務，戰鬥頁、JS 與新 WebP 均為 HTTP 200；驗證後停止測試 node 行程並確認 8843 已釋放。
 
 #### 新世界香吉士隱形黑戰鬥服變身 V155
 
@@ -7294,8 +6593,7 @@ ode --check public/js/board_battle.js` 與指定檔案的 `git diff --check` 通
 - 畫面：新增五秒全畫面戰鬥服變身層，先顯示原新世界香吉士與封存罐，再以環形掃描切換專屬 normal 圖；結束後玩家 HUD、外觀框內人物、狀態圖示與招式頁都使用同一 battle view。移除會蓋住變身標題的額外狀態橫幅，桌機及手機橫向均保持原戰鬥構圖。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/js/board_items.js`、`public/board_game.html`、`public/board_battle.html`、`public/images/board/battle/portraits/evolutions/sanji_stealth_black/**`、`docs/POSTGAME_BOSS_RELICS.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260805-sanji-raid-suit-v4`。
 - 同步邊界：沒有新增或改名 `gameState`、localStorage key、Socket.IO event 或 server 欄位；條件形態暫存在既有 `battleState` 完整快照內，沿用 `BOARD_GAME_STATE` 廣播。存檔中的角色 id、form id、攜帶物 id 與招式 id 均不改名，卸下戰鬥服後新戰鬥自然回到原新世界形態。
-- 驗證：
-ode --check` 通過兩支 JS；正式 8787 頁面以 Lv.99 新世界香吉士實際裝備戰鬥服開戰，確認 battle view 名稱、七圖路徑、被動、五項倍率、四個預設招式與光學迷彩說明。實際敵方直接攻擊被迷彩攔下且不扣 HP；首次致命直接傷害由戰鬥服完全擋下並得到防禦／速度各 +1。1920×1080 與 932×430 的變身演出標題、人物與說明均在 viewport 內，沒有額外提示重疊；新七圖皆可解碼，未裝戰鬥服的對照場維持原名稱、圖片、數值與招式。
+- 驗證：`node --check` 通過兩支 JS；正式 8787 頁面以 Lv.99 新世界香吉士實際裝備戰鬥服開戰，確認 battle view 名稱、七圖路徑、被動、五項倍率、四個預設招式與光學迷彩說明。實際敵方直接攻擊被迷彩攔下且不扣 HP；首次致命直接傷害由戰鬥服完全擋下並得到防禦／速度各 +1。1920×1080 與 932×430 的變身演出標題、人物與說明均在 viewport 內，沒有額外提示重疊；新七圖皆可解碼，未裝戰鬥服的對照場維持原名稱、圖片、數值與招式。
 
 #### 隱形黑迷彩圖、綠牛死後再生與瀕死圖時序 V156
 
@@ -7306,9 +6604,7 @@ ode --check` 通過兩支 JS；正式 8787 頁面以 Lv.99 新世界香吉士實
 - 瀕死圖時序：`board_battle.js` 的 normal 圖不再因快照 HP 0 自動降級成受擊／瀕死圖；攻擊事件仍在真實命中時顯示 hit，只有正式 `knockout` 或綠牛的 down 事件會啟動 dizzy。這保留原來的淡出與替補管線，不影響五檔尼卡覺醒等特殊瀕死分支。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`public/images/board/battle/portraits/evolutions/sanji_stealth_black/stealth.webp`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/POSTGAME_BOSS_RELICS.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260808-stealth-aramaki-ko-timing-v1`。
 - 同步邊界：沒有改名角色、Boss、攜帶物或招式 id，也沒有新增 localStorage key、Socket.IO event 或 server 欄位。短暫 `postgameBossMechanic.revivePending` 只存在現有 `battleState` 完整快照內，死亡後及發芽後都透過既有戰鬥視圖與 `BOARD_GAME_STATE` 流程展現。
-- 驗證：
-ode --check public/js/board_game.js` 與 
-ode --check public/js/board_battle.js` 通過。正式 8787 頁面的 1600×900 綠牛致命局實測為 `attack(HP 0, revived=false)`→`postgame-aramaki-down(HP 0)`→`postgame-aramaki-revive(HP 197/986, revived=true)`，倒下與發芽截圖無破圖或卡死。932×430 一般史基致命局於 attack 事件取樣 57 次，`dizzyDuringAttack=0`，正式 knockout 後才顯示 dizzy。隱形黑實測 stealth→normal→stealth 狀態路徑正確，圖片 natural size 1086×1448。另重跑 `scripts/postgame_boss_mechanics_qa.js`，13 座登島、13 場戰鬥、機制行為及 900×600 畫面均通過，結果 `errors=[]`、`failures=[]`。
+- 驗證：`node --check public/js/board_game.js` 與 `node --check public/js/board_battle.js` 通過。正式 8787 頁面的 1600×900 綠牛致命局實測為 `attack(HP 0, revived=false)`→`postgame-aramaki-down(HP 0)`→`postgame-aramaki-revive(HP 197/986, revived=true)`，倒下與發芽截圖無破圖或卡死。932×430 一般史基致命局於 attack 事件取樣 57 次，`dizzyDuringAttack=0`，正式 knockout 後才顯示 dizzy。隱形黑實測 stealth→normal→stealth 狀態路徑正確，圖片 natural size 1086×1448。另重跑 `scripts/postgame_boss_mechanics_qa.js`，13 座登島、13 場戰鬥、機制行為及 900×600 畫面均通過，結果 `errors=[]`、`failures=[]`。
 
 #### 最終之島通關後黎明紀錄殿 V157
 
@@ -7318,8 +6614,7 @@ ode --check public/js/board_battle.js` 通過。正式 8787 頁面的 1600×900 
 - 功能：紀錄殿沿用正式最終之島 1254×1254 圖與既有圖片式航海框，顯示完成結局、通關回合、十三種 Boss 線索／總張數、約克解碼器階段及蛋頭島定位狀態。免費「黎明宴會」沿用正式全隊整備服務，恢復所有船員 HP／PP、清除能力階段並結束回合；離開按鈕不整備。兩者都不重複發結局、任務或世界解鎖獎勵。CPU 重訪會自動宴會並離島，不開真人選擇 modal。
 - 同步與存檔：沒有新增或改名 `gameState`／`player` 欄位、localStorage key、Socket.IO event 或 server 欄位。紀錄殿只讀既有完整快照資料；宴會修改既有船員 HP／PP／能力階段並沿用 `endTurn()` 與 `BOARD_GAME_STATE` 推送。正式主頁 query 更新為 `20260808-final-island-revisit-v1`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 通過，正式 8787 頁面與新版 JS 皆為 HTTP 200。bundled Playwright 驗證個人 record-only 舊存檔重訪會進紀錄殿且無結局動畫；個人首次登島仍進完整 cinematic；宴會完整恢復六名船員 HP／PP 並將能力階段歸零；CPU 自動整備後不留 modal。1600×900 與 932×430 的圖片、兩按鈕及所有文字都在 viewport／框內，圖片 natural size 1254×1254，破圖與文字 overflow 為 0，頁面錯誤為 0。截圖為 `_codex_artifacts/qa_20260808_final_island_revisit_desktop.png` 與 `_codex_artifacts/qa_20260808_final_island_revisit_phone.png`。
+- 驗證：`node --check public/js/board_game.js` 通過，正式 8787 頁面與新版 JS 皆為 HTTP 200。bundled Playwright 驗證個人 record-only 舊存檔重訪會進紀錄殿且無結局動畫；個人首次登島仍進完整 cinematic；宴會完整恢復六名船員 HP／PP 並將能力階段歸零；CPU 自動整備後不留 modal。1600×900 與 932×430 的圖片、兩按鈕及所有文字都在 viewport／框內，圖片 natural size 1254×1254，破圖與文字 overflow 為 0，頁面錯誤為 0。截圖為 `_codex_artifacts/qa_20260808_final_island_revisit_desktop.png` 與 `_codex_artifacts/qa_20260808_final_island_revisit_phone.png`。
 
 #### 拉夫德魯無風帶航路盤與延遲抵達 V158
 
@@ -7331,9 +6626,7 @@ ode --check public/js/board_game.js` 通過，正式 8787 頁面與新版 JS 皆
 - CPU：只在已解鎖且本局有正式配置的 Boss 中選擇。先給「未持有該 Boss 專屬攜帶物」最高優先，再依目前船員屬性適性評分；全部專屬掉落都已有時才用適性決定。完全沒有已解鎖指針時沿用 V157 的免費宴會 fallback。
 - 同步與相容：新增欄位只存在既有玩家物件並跟隨完整 `BOARD_GAME_STATE`、手動存讀檔及玩家正規化；沒有新增 localStorage key、Socket.IO event 或 server 欄位，也沒有改名線索、Boss、孤島、道具或既有 route id。航路盤不建立永久 route，第二次快速航行仍要求玩家實際回到拉夫德魯。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁 query 更新為 `20260808-final-boss-voyage-v1`。
-- 驗證：
-ode --check public/js/board_game.js` 通過；
-pm start` 以獨立 8844 服務啟動，正式主頁回應 HTTP 200。舊存檔背包線索可回補永久座標，把實體數量移除後指針仍保持解鎖；pending 經正規化後保留。單人實測出航時仍在拉夫德魯且本回合交棒，round +1 的下一個人回合才抵達薩卡島，動畫結束後 pending 清除並顯示既有 Boss 登島框。另以兩個不同 userId／clientId 的真實 Chrome 頁面加入同一 Socket.IO 房間：房主出航後 current player 正確交給第二位玩家，房主仍停在 `final-island`、第二位仍停在 `island-1`；第二位玩家結束自己的回合後 round 7→8，房主才移到本局史基所在的 `calm-belt-island-06`，第二位位置不變、pending 清除、`lastError` 為空。CPU 在其餘十二件專屬掉落已持有、只缺七星劍時正確選擇薩卡並抵達開戰。1600×900 與 932×430 實測十三牌、Boss／島／掉落詳情、說明與按鈕均無破圖、越界或重疊；手機最大卡片底緣 384.27px、按鈕頂緣 396px。截圖為 `_codex_artifacts/qa_20260808_final_boss_voyage_compass_desktop.png`、`_codex_artifacts/qa_20260808_final_boss_voyage_compass_phone_final.png` 與 `_codex_artifacts/qa_20260808_final_boss_voyage_departure.png`。
+- 驗證：`node --check public/js/board_game.js` 通過；`npm start` 以獨立 8844 服務啟動，正式主頁回應 HTTP 200。舊存檔背包線索可回補永久座標，把實體數量移除後指針仍保持解鎖；pending 經正規化後保留。單人實測出航時仍在拉夫德魯且本回合交棒，round +1 的下一個人回合才抵達薩卡島，動畫結束後 pending 清除並顯示既有 Boss 登島框。另以兩個不同 userId／clientId 的真實 Chrome 頁面加入同一 Socket.IO 房間：房主出航後 current player 正確交給第二位玩家，房主仍停在 `final-island`、第二位仍停在 `island-1`；第二位玩家結束自己的回合後 round 7→8，房主才移到本局史基所在的 `calm-belt-island-06`，第二位位置不變、pending 清除、`lastError` 為空。CPU 在其餘十二件專屬掉落已持有、只缺七星劍時正確選擇薩卡並抵達開戰。1600×900 與 932×430 實測十三牌、Boss／島／掉落詳情、說明與按鈕均無破圖、越界或重疊；手機最大卡片底緣 384.27px、按鈕頂緣 396px。截圖為 `_codex_artifacts/qa_20260808_final_boss_voyage_compass_desktop.png`、`_codex_artifacts/qa_20260808_final_boss_voyage_compass_phone_final.png` 與 `_codex_artifacts/qa_20260808_final_boss_voyage_departure.png`。
 
 #### 物攻／特攻招式與防禦／特防標示 V159
 
@@ -7343,8 +6636,7 @@ pm start` 以獨立 8844 服務啟動，正式主頁回應 HTTP 200。舊存檔�
 - 防禦文字：能力階級顯示改為 `def=防禦`、`sdef=特防`、`satk=特攻`。招式效果會從 `selfStages`、`enemyStages` 與各種命中／高骰階段自動產生明確名稱；舊「戰術／意志」機械用語在招式效果顯示時正規化為「特攻／特防」。
 - 修改檔案：`public/js/board_cards.js`、`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260808-special-damage-class-v1`。
 - 同步邊界：沒有改名角色、招式、道具或敵人 id，沒有修改舊 move category、localStorage key、Socket.IO event、server 欄位、`gameState`／`battleState` 持久欄位或 `BOARD_GAME_STATE` 格式。舊存檔招式依既有 id／名稱即時計算分類。
-- 驗證：
-ode --check` 通過 `board_cards.js`、`board_game.js`、`board_battle.js`。bundled Playwright 確認鬼斬為 `physical→atk/def`、龍捲風為 `special→satk/sdef` 且顯示 `(特) 龍捲風`；防禦、特防、雙防測試分別輸出「自身防禦+1」、「自身特防+1」、「自身防禦+1、特防+1」。掃描基礎角色、進化型態與血統培育模板共 919 招、245 個特攻實例及 166 個含防禦階級變化的招式，缺少 `(特)`／防禦／特防標示的項目為 0。1600×900 與 932×430 戰鬥指令均無文字裁切或水平溢出，頁面錯誤為 0；獨立 8848 正式服務的 `board_game.html` 回應 HTTP 200。
+- 驗證：`node --check` 通過 `board_cards.js`、`board_game.js`、`board_battle.js`。bundled Playwright 確認鬼斬為 `physical→atk/def`、龍捲風為 `special→satk/sdef` 且顯示 `(特) 龍捲風`；防禦、特防、雙防測試分別輸出「自身防禦+1」、「自身特防+1」、「自身防禦+1、特防+1」。掃描基礎角色、進化型態與血統培育模板共 919 招、245 個特攻實例及 166 個含防禦階級變化的招式，缺少 `(特)`／防禦／特防標示的項目為 0。1600×900 與 932×430 戰鬥指令均無文字裁切或水平溢出，頁面錯誤為 0；獨立 8848 正式服務的 `board_game.html` 回應 HTTP 200。
 
 #### 血統培育四招起手與升級新招 V160
 
@@ -7354,8 +6646,7 @@ ode --check` 通過 `board_cards.js`、`board_game.js`、`board_battle.js`。bun
 - 舊存檔：`syncUnlockedMoveIds()` 會依新版模板替舊 Lv.1 培育角色安全補滿四招；`LATE_MOVE_BACKFILL_VERSION` 由 2 升為 3，已達後期解鎖等級的船上角色會把缺少招式送入既有 `pendingMoveLearnQueue`，研究收藏角色登船時也會執行同一補檢。未新增研究所或玩家欄位，既有 id、localStorage key、Socket.IO event 與完整 `BOARD_GAME_STATE` 格式不變。
 - 相容模板：青雉、巴其、克洛克達爾、Mr.1、Mr.2、Mr.3 六種沿用既有玩家模板，不覆寫其進化招式；六者皆四招起手且至少有一招後續可學。另補記「白鳥阿拉貝斯克」為正式特攻招式，保持學招與戰鬥頁 `(特)` 標示一致。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_cards.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260809-lineage-eight-moves-v1`。
-- 驗證：
-ode --check` 通過 `board_game.js` 與 `board_cards.js`。正式 8787 頁面掃描 65 種培育來源：59 種獨立模板均為 8 招、初始 4 招、後期 4 招、解鎖表固定 `1/1/1/1/15/25/35/45`；6 種沿用模板亦均為四招起手且有後續招式。以 65 份臨時完整因子逐一實際呼叫正式培育，再升至滿等，培育失敗、初始招式錯誤、待學數量錯誤與特攻標示錯誤皆為 0，頁面例外為 0。
+- 驗證：`node --check` 通過 `board_game.js` 與 `board_cards.js`。正式 8787 頁面掃描 65 種培育來源：59 種獨立模板均為 8 招、初始 4 招、後期 4 招、解鎖表固定 `1/1/1/1/15/25/35/45`；6 種沿用模板亦均為四招起手且有後續招式。以 65 份臨時完整因子逐一實際呼叫正式培育，再升至滿等，培育失敗、初始招式錯誤、待學數量錯誤與特攻標示錯誤皆為 0，頁面例外為 0。
 
 #### 終局 Boss 血統培育數據與招式威力 V161
 
@@ -7365,8 +6656,7 @@ ode --check` 通過 `board_game.js` 與 `board_cards.js`。正式 8787 頁面掃
 - 招式：十三名 Boss 的玩家版傷害招改用 `65／82／102／128`，洛克斯使用 `70／90／115／140`。若角色只有兩至三個傷害招，索引會平均拉開，使最後一個傷害招仍使用最高值；狀態技、PP、效果、解鎖等級與既有 move id 不變。
 - 存檔相容：新培育卡保存可選的 `cultivatedFromEnemyKey`，使覺醒路基回到共用基礎路基模板後仍可辨識 Boss 來源。既有獨立 `lineage_postgame_*`／洛克斯角色可直接由原穩定 card id 推回來源；同步角色資料時會套用新數據、招式並把增加的最大 HP 補入目前 HP，之後不會重複補血。欄位隨既有完整 `BOARD_GAME_STATE` 與手動存檔傳遞，沒有新增 localStorage key、Socket.IO event 或 server 欄位。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/POSTGAME_LINEAGE_RESEARCH_PLAN.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260809-lineage-endgame-power-v1`。
-- 驗證：
-ode --check public/js/board_game.js` 通過。bundled Playwright 在正式 8787 頁面逐一用完整因子培育十三名 Boss 與洛克斯共 14 名，來源 key、因子只消耗一次、研究收藏只新增一次、JSON 往返後數據／招式一致、舊獨立 id 回補及最高威力全部通過，`failures=[]`、頁面例外 0。普通赤犬對照仍為原 T1 數據與 `55／70／88／110` 曲線。Lv.99、滿修行、記憶 3、SSS 的固定防守者傷害對照：普通赤犬最高招骰 3／6 為 131／176，巴雷特為 169／228，洛克斯為 198／267。另以 `PORT=8791 npm start` 啟動正式服務後停止測試行程；現有 8787 正式頁面及新版 JS 回應正常。
+- 驗證：`node --check public/js/board_game.js` 通過。bundled Playwright 在正式 8787 頁面逐一用完整因子培育十三名 Boss 與洛克斯共 14 名，來源 key、因子只消耗一次、研究收藏只新增一次、JSON 往返後數據／招式一致、舊獨立 id 回補及最高威力全部通過，`failures=[]`、頁面例外 0。普通赤犬對照仍為原 T1 數據與 `55／70／88／110` 曲線。Lv.99、滿修行、記憶 3、SSS 的固定防守者傷害對照：普通赤犬最高招骰 3／6 為 131／176，巴雷特為 169／228，洛克斯為 198／267。另以 `PORT=8791 npm start` 啟動正式服務後停止測試行程；現有 8787 正式頁面及新版 JS 回應正常。
 
 #### 名刀「日蝕」雙攻與第三骰高點倍率 V162
 
@@ -7377,9 +6667,7 @@ ode --check public/js/board_game.js` 通過。bundled Playwright 在正式 8787 
 - 顯示：背包、船員攜帶物與 Boss 掉落情報共用的正式道具說明已同步標示雙攻與 12～18 點倍率；主頁的 `board_items.js`／`board_game.js` query 更新為 `20260809-eclipse-dual-attack-dice-v1`。
 - 修改檔案：`public/js/board_items.js`、`public/js/board_game.js`、`public/board_game.html`、`docs/POSTGAME_BOSS_RELICS.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
 - 同步邊界：沒有新增或改名道具、角色、Boss、招式、`gameState`／`battleState` 欄位、localStorage key、Socket.IO event 或 server 欄位；既有 `rocks_eclipse_sword` 與完整 `BOARD_GAME_STATE` 快照可直接沿用。
-- 驗證：
-ode --check public/js/board_items.js`、
-ode --check public/js/board_game.js` 與指定檔案 `git diff --check` 通過。正式 8787 頁以 bundled Playwright 建立日蝕裝備對照戰：攻擊 218→262、特攻 198→238，均等於未裝備數值 ×1.20 後四捨五入；第三骰門檻仍為 5／3／1，12～18 點實際倍率依序為 2.05／2.20／2.35／2.50／2.65／2.80／2.95。另讓巴雷特吸收六把日蝕，六孔全部有效時攻擊 451→1347、特攻 288→860，均符合 ×1.20 六次相乘後四捨五入；六孔破壞後恢復原數值。頁面例外與 console error 皆為 0。
+- 驗證：`node --check public/js/board_items.js`、`node --check public/js/board_game.js` 與指定檔案 `git diff --check` 通過。正式 8787 頁以 bundled Playwright 建立日蝕裝備對照戰：攻擊 218→262、特攻 198→238，均等於未裝備數值 ×1.20 後四捨五入；第三骰門檻仍為 5／3／1，12～18 點實際倍率依序為 2.05／2.20／2.35／2.50／2.65／2.80／2.95。另讓巴雷特吸收六把日蝕，六孔全部有效時攻擊 451→1347、特攻 288→860，均符合 ×1.20 六次相乘後四捨五入；六孔破壞後恢復原數值。頁面例外與 console error 皆為 0。
 
 #### 名刀「日蝕」追加骰置中與三骰結算 V163
 
@@ -7389,8 +6677,7 @@ ode --check public/js/board_game.js` 與指定檔案 `git diff --check` 通過�
 - 結算修正：戰鬥頁新增只讀的三骰重算，總結事件若帶第一／第二／第三顆骰面，會以實際骰面相加覆寫舊 `settle` 與總點數文字；第一、第二、第三顆仍依序在同一位置取代顯示，最後只以 cut-in 顯示 `A + B + C = 總點數` 與倍率，不同時排出三顆骰。主遊戲原本回傳三骰總和與 12～18 倍率的正式傷害管線不變。
 - 修改檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁與戰鬥頁 query 更新為 `20260809-eclipse-dice-result-v3`。
 - 同步邊界：沒有新增或改名 `gameState`／`battleState` 欄位、道具／角色／招式 id、localStorage key、Socket.IO event 或 server 欄位；只校正既有 visual event 的顯示結果，權威傷害仍使用 `board_game.js` 已計算的三骰總和。
-- 驗證：
-ode --check public/js/board_battle.js` 與 `public/js/board_game.js` 通過。正式 8787 頁面的日蝕第三骰中心與原骰容器中心差為 `0px / 0px`；注入帶有舊 `settle=12` 但骰面 `6／5／4` 的回歸事件後，結算文字重算為 `6 + 5 + 4 = 15`，骰子層維持關閉，沒有同時顯示三顆。桌機與手機窄版頁面例外及 console error 為 0。
+- 驗證：`node --check public/js/board_battle.js` 與 `public/js/board_game.js` 通過。正式 8787 頁面的日蝕第三骰中心與原骰容器中心差為 `0px / 0px`；注入帶有舊 `settle=12` 但骰面 `6／5／4` 的回歸事件後，結算文字重算為 `6 + 5 + 4 = 15`，骰子層維持關閉，沒有同時顯示三顆。桌機與手機窄版頁面例外及 console error 為 0。
 
 #### 凱多第二條血切換第二型態戰鬥圖 V164
 
@@ -7399,8 +6686,7 @@ ode --check public/js/board_battle.js` 與 `public/js/board_game.js` 通過。�
 - 原因：`activateYonkoSecondHpBar()` 正確寫入既有 `yonkoState.kaido.phase2` 與最後一條滿血，建立戰鬥時保存的 `enemyCombatant.battlePortraits` 卻沒有跟著更新，因此 `getBattleView()` 與戰鬥 iframe 一直收到 `yonko_kaido/` 第一型態路徑。
 - 修正：新增只處理凱多的 `syncYonkoPhaseBattlePortraits()`。切相當下立即把七狀態圖改為 `yonko_kaido_phase2/`；`getBattleView()` 與 `getBattleVisualSnapshot()` 也依既有 `phase2` 再同步，讓舊 pending 戰鬥、手動讀檔及多人完整快照即使保存了第一型態路徑，也會在送出畫面前修復。未新增狀態欄位，四皇 HP、龍鱗、覺醒、傷害封頂、對話、獎勵、localStorage key、Socket.IO event 與 `BOARD_GAME_STATE` 格式不變。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁、battle iframe 與戰鬥頁 query 更新為 `20260809-kaido-phase2-portrait-v1`。
-- 驗證：
-ode --check` 通過 `board_game.js` 與 `board_battle.js`。正式 8787 頁面把凱多設在半血門檻上方 1 HP，以正式玩家招式打穿上層血條後，`phase2=true`、最後一條為 493/493，第二階段對話實際顯示 `yonko_kaido_phase2/angry.webp`；battle view 的 normal／angry／hit／hit_player／morale／weak／dizzy 七條路徑全部切換，七張皆正常解碼為 1086×1448。另模擬舊快照 `phase2=true` 但 portraits 仍為第一型態，呼叫 view 後自動修正為第二型態 normal，七張載入成功、HTTP 失敗與頁面例外皆為 0。1600×900 與 932×430 正式戰鬥頁都實際載入第二型態圖，窄版沒有水平／垂直頁面 overflow；截圖為 `_codex_artifacts/qa_20260809_kaido_phase2_desktop.png`、`_codex_artifacts/qa_20260809_kaido_phase2_phone.png`。
+- 驗證：`node --check` 通過 `board_game.js` 與 `board_battle.js`。正式 8787 頁面把凱多設在半血門檻上方 1 HP，以正式玩家招式打穿上層血條後，`phase2=true`、最後一條為 493/493，第二階段對話實際顯示 `yonko_kaido_phase2/angry.webp`；battle view 的 normal／angry／hit／hit_player／morale／weak／dizzy 七條路徑全部切換，七張皆正常解碼為 1086×1448。另模擬舊快照 `phase2=true` 但 portraits 仍為第一型態，呼叫 view 後自動修正為第二型態 normal，七張載入成功、HTTP 失敗與頁面例外皆為 0。1600×900 與 932×430 正式戰鬥頁都實際載入第二型態圖，窄版沒有水平／垂直頁面 overflow；截圖為 `_codex_artifacts/qa_20260809_kaido_phase2_desktop.png`、`_codex_artifacts/qa_20260809_kaido_phase2_phone.png`。
 
 #### 隱形黑延後至可行動回合變身 V165
 
@@ -7410,9 +6696,7 @@ ode --check` 通過 `board_game.js` 與 `board_battle.js`。正式 8787 頁面�
 - 修正：移除建立戰鬥、戰鬥正規化與換人視覺事件的直接變身。正式觸發只保留在 `startBattleRound()` 與 `continueBattleRoundStartAfterPrompt()`：新戰鬥的第一個可行動回合會變身；一般換人／瀕死替補先使用新世界香吉士原圖，下一個可行動回合才播放五秒演出；回合開始的免費強制換人則於提示完成並恢復操作時進入同一排程。隱形黑的圖片、招式、被動、數值、光學迷彩及戰鬥服致命傷效果均未改。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁、battle iframe 與戰鬥頁 query 更新為 `20260809-sanji-raid-suit-action-turn-v1`。
 - 同步邊界：沒有新增或改名角色、形態、攜帶物、招式、`gameState`／`battleState` 欄位、localStorage key、Socket.IO event 或 server 欄位；沿用既有 `sanjiRaidSuitState` 與完整 `BOARD_GAME_STATE` 快照。
-- 驗證：
-ode --check public/js/board_game.js` 與 
-ode --check public/js/board_battle.js` 通過；另以 `PORT=8797 npm start` 啟動獨立正式服務，`board_game.html` 回應 HTTP 200 後停止測試行程。正式 8787 頁以魯夫上場、新世界香吉士攜帶戰鬥服在後排的實戰回歸：第 1 輪換上時視覺事件為 `switch`、`transformed=false`、名稱與圖片仍為新世界香吉士原版；雙方行動結束並以既有 pending 快照恢復第 2 輪後，事件才變為 `sanji-raid-suit-transform`、名稱切至隱形黑、圖片切至 `sanji_stealth_black/stealth.webp`。932×430 正式戰鬥頁另確認變身播放期間 `canAct=false`、播放結束才恢復操作，標題、人物與說明都在可視範圍，頁面 scroll width／height 等於 viewport；截圖為 `_codex_artifacts/qa_20260809_sanji_raid_suit_action_turn_phone.png`。過程頁面例外與 console error 均為 0。
+- 驗證：`node --check public/js/board_game.js` 與 `node --check public/js/board_battle.js` 通過；另以 `PORT=8797 npm start` 啟動獨立正式服務，`board_game.html` 回應 HTTP 200 後停止測試行程。正式 8787 頁以魯夫上場、新世界香吉士攜帶戰鬥服在後排的實戰回歸：第 1 輪換上時視覺事件為 `switch`、`transformed=false`、名稱與圖片仍為新世界香吉士原版；雙方行動結束並以既有 pending 快照恢復第 2 輪後，事件才變為 `sanji-raid-suit-transform`、名稱切至隱形黑、圖片切至 `sanji_stealth_black/stealth.webp`。932×430 正式戰鬥頁另確認變身播放期間 `canAct=false`、播放結束才恢復操作，標題、人物與說明都在可視範圍，頁面 scroll width／height 等於 viewport；截圖為 `_codex_artifacts/qa_20260809_sanji_raid_suit_action_turn_phone.png`。過程頁面例外與 console error 均為 0。
 
 #### Tot Musica 第一骰奇偶同步與選招顯示 V166
 
@@ -7422,9 +6706,7 @@ ode --check public/js/board_battle.js` 通過；另以 `PORT=8797 npm start` 啟
 - 修正：把 `.postgame-dual-world-grid` 固定在圖片框內的前景圖層，限制上下左右範圍；高度 520px 以下另提高底部保留空間、縮小世界頭像／間距／按鈕 padding。正式傷害先要求兩邊直接攻擊命中，再比較各自 `rollBattleActionDiceWithPassives()` 回傳總點數前捕捉的第一骰；同奇偶才合併傷害，奇偶不同則由次元屏障歸零。狀態 view、狀態圖示與戰鬥紀錄保存／顯示兩邊第一骰、奇偶及結果，追加骰不改第一骰判定。
 - 修改檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/DEV_WORKFLOW.md`。正式主頁、battle iframe 與戰鬥頁 query 更新為 `20260809-tot-musica-parity-ui-v1`。
 - 同步邊界：只在既有 `battle.postgameBossMechanic` 增加最近一次兩邊第一骰與判定結果，跟隨原完整 `BOARD_GAME_STATE`／pending battle 快照；沒有新增頂層 `gameState`／`battleState` 欄位、角色／招式／道具 id、localStorage key、Socket.IO event 或 server 欄位。
-- 驗證：
-ode --check public/js/board_game.js` 與 
-ode --check public/js/board_battle.js` 通過。以 `PORT=8798 npm start` 開啟正式頁；1600×900 與 932×430 均建立 12 個招式／換人按鈕，逐一以 `elementFromPoint()` 確認可點，手機版最後一列底部 394.94px、確認按鈕頂部 401.89px，無重疊，頁面 scroll 尺寸等於 viewport。純函式驗證 1／3、2／6 通過，1／2、4／5、0／2 不通過。正式實戰讓現實世界持有日蝕，兩邊第一骰皆為 5；追加後總點數分別為 15 與 10，仍依第一骰同為單數正確造成 64 傷害，Boss HP 986→922，狀態為 `success`。頁面例外為 0；截圖為 `_codex_artifacts/qa_20260809_tot_musica_parity_ui_desktop.png`、`_codex_artifacts/qa_20260809_tot_musica_parity_ui_phone.png`。
+- 驗證：`node --check public/js/board_game.js` 與 `node --check public/js/board_battle.js` 通過。以 `PORT=8798 npm start` 開啟正式頁；1600×900 與 932×430 均建立 12 個招式／換人按鈕，逐一以 `elementFromPoint()` 確認可點，手機版最後一列底部 394.94px、確認按鈕頂部 401.89px，無重疊，頁面 scroll 尺寸等於 viewport。純函式驗證 1／3、2／6 通過，1／2、4／5、0／2 不通過。正式實戰讓現實世界持有日蝕，兩邊第一骰皆為 5；追加後總點數分別為 15 與 10，仍依第一骰同為單數正確造成 64 傷害，Boss HP 986→922，狀態為 `success`。頁面例外為 0；截圖為 `_codex_artifacts/qa_20260809_tot_musica_parity_ui_desktop.png`、`_codex_artifacts/qa_20260809_tot_musica_parity_ui_phone.png`。
 
 #### 大熊肉球果實 Boss 島轉送 V167
 
@@ -7435,8 +6717,7 @@ ode --check public/js/board_battle.js` 通過。以 `PORT=8798 npm start` 開啟
 - 素材：新增 `public/images/board/final_island/kuma_paw_transfer/paw_pressure_burst.webp`，原始 PNG 與完整 ImageGen 提示詞保存在同目錄；大熊沿用 `public/images/board/story/speakers/kuma_memory_smile.webp`。正式頁只指向已歸檔素材，不使用 `.codex/generated_images` 或 incoming 路徑。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/images/board/final_island/kuma_paw_transfer/*`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁 query 更新為 `20260810-kuma-paw-coverflow-v1`。
 - 同步邊界：未新增或改名 `gameState`、玩家、地圖、Boss、道具、路線或 UI event 欄位；保留 `unlockedPostgameBossClueItemIds`、`pendingPostgameBossVoyage`、`final-boss-voyage`、localStorage key、Socket.IO event 與 server 快照格式。
-- 驗證：
-ode --check public/js/board_game.js` 通過，獨立 `PORT=8799` 的 `board_game.html` HTTP 200。1600×900 與 932×430 均沒有古代圓盤，顯示九張可視 Cover Flow 牌、兩個完整方向鍵與可用確認鈕；第 1 張向左循環至第 13 張，再按右鍵／鍵盤右鍵可回第 1 張。手機的舞台、兩箭頭與確認鈕全部在 viewport 內。出發六組圖片與抵達的肉球／船／島圖均載入，404 為 0。手動走完狀態後，出發為 `departing`，動畫結束進入 `awaiting_turn` 並讓 round 1→2；抵達為 `arriving`，完成後 pending 清空、`resolutionLock=false`，位置為正式 Boss 島並開啟既有 SSS Boss 登島頁。截圖為 `_codex_artifacts/qa_20260810_kuma_coverflow_desktop.png`、`qa_20260810_kuma_coverflow_phone.png`、`qa_20260810_kuma_departure_desktop.png`、`qa_20260810_kuma_arrival_desktop.png`、`qa_20260810_kuma_departure_phone.png`。
+- 驗證：`node --check public/js/board_game.js` 通過，獨立 `PORT=8799` 的 `board_game.html` HTTP 200。1600×900 與 932×430 均沒有古代圓盤，顯示九張可視 Cover Flow 牌、兩個完整方向鍵與可用確認鈕；第 1 張向左循環至第 13 張，再按右鍵／鍵盤右鍵可回第 1 張。手機的舞台、兩箭頭與確認鈕全部在 viewport 內。出發六組圖片與抵達的肉球／船／島圖均載入，404 為 0。手動走完狀態後，出發為 `departing`，動畫結束進入 `awaiting_turn` 並讓 round 1→2；抵達為 `arriving`，完成後 pending 清空、`resolutionLock=false`，位置為正式 Boss 島並開啟既有 SSS Boss 登島頁。截圖為 `_codex_artifacts/qa_20260810_kuma_coverflow_desktop.png`、`qa_20260810_kuma_coverflow_phone.png`、`qa_20260810_kuma_departure_desktop.png`、`qa_20260810_kuma_arrival_desktop.png`、`qa_20260810_kuma_departure_phone.png`。
 
 #### 大熊肉球地圖飛行與鏡頭追蹤 V168
 
@@ -7446,8 +6727,7 @@ ode --check public/js/board_game.js` 通過，獨立 `PORT=8799` 的 `board_game
 - 素材：ImageGen 新增 `paw_flight_bubble_source.png`，依正式 `paw_pressure_burst.webp` 的粉金色與品質生成 1536×1024 側向氣泡；再以內建 `remove_chroma_key.py` 對純黑背景作柔邊透明輸出為 `paw_flight_bubble.webp`。完整提示詞與正式檔案說明更新於同目錄 `PROMPT.md`，正式頁不引用生成暫存路徑。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/images/board/final_island/kuma_paw_transfer/paw_flight_bubble.webp`、`paw_flight_bubble_source.png`、`PROMPT.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁 query 更新為 `20260810-kuma-paw-map-flight-v1`。
 - 同步邊界：沒有新增或改名持久 `gameState`／玩家欄位、地圖節點、路線、Boss、道具、localStorage key、Socket.IO event 或 server 欄位；繼續使用既有 `pendingPostgameBossVoyage` 與 `final-boss-voyage` 完整快照事件。`state.kumaPawAnimation` 只保存目前頁面的暫時動畫 player/event/phase，不會進入存檔。
-- 驗證：
-ode --check public/js/board_game.js` 通過；既有 8799 正式服務的 `board_game.html` 與兩張肉球 WebP 回應 HTTP 200。Chrome／bundled Playwright 以 1600×900 與 932×430 實際從拉夫德魯選第一張線索、播放伸掌、地圖飛出、單人換回合、地圖飛入與 Boss 登島：兩段 token 座標均持續改變，原船在 pending 時隱藏，抵達後 `pending=null`、`mapLayers=0`、船 token class 恢復為 `ship-token current`，Boss 島位置正確；人物、氣泡與船無黑底／破圖，頁面水平／垂直 overflow 均為 0。桌機實測截圖保存在 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/qa_kuma_map_20260810/`。
+- 驗證：`node --check public/js/board_game.js` 通過；既有 8799 正式服務的 `board_game.html` 與兩張肉球 WebP 回應 HTTP 200。Chrome／bundled Playwright 以 1600×900 與 932×430 實際從拉夫德魯選第一張線索、播放伸掌、地圖飛出、單人換回合、地圖飛入與 Boss 登島：兩段 token 座標均持續改變，原船在 pending 時隱藏，抵達後 `pending=null`、`mapLayers=0`、船 token class 恢復為 `ship-token current`，Boss 島位置正確；人物、氣泡與船無黑底／破圖，頁面水平／垂直 overflow 均為 0。桌機實測截圖保存在 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/qa_kuma_map_20260810/`。
 
 #### 大熊次回合完整飛行、配色與落地撞擊坑 V169
 
@@ -7457,8 +6737,7 @@ ode --check public/js/board_game.js` 通過；既有 8799 正式服務的 `board
 - 素材：依使用者動畫截圖以 ImageGen 重畫 `paw_flight_bubble_source.png` 與 `paw_landing_impact_source.png`，再用內建 `remove_chroma_key.py` 對洋紅鍵柔邊去背成 RGBA WebP。飛行圖為淡冰藍壓力外殼、黃綠核心與四個淡藍肉球；落地圖為碗狀撞擊坑、放射裂槽、副坑、碎石與白色煙塵，均不含人物／字幕。正式頁不再引用粉金 `paw_pressure_burst.webp`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/images/board/final_island/kuma_paw_transfer/paw_flight_bubble.webp`、`paw_flight_bubble_source.png`、`paw_landing_impact.webp`、`paw_landing_impact_source.png`、`PROMPT.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260811-kuma-paw-flight-landing-v2`。
 - 同步邊界：未新增或改名持久欄位、地圖節點、路線、Boss、道具、localStorage key、Socket.IO event 或 server 欄位；沿用 `pendingPostgameBossVoyage`、`final-boss-voyage` 與 `BOARD_GAME_STATE` 完整快照，`state.kumaPawAnimation` 仍只存在目前頁面。
-- 驗證：
-ode --check public/js/board_game.js` 通過，正式 8787 頁與兩張新 WebP 均回應 HTTP 200；兩張正式 WebP 均為 RGBA、四角 alpha 0。Chrome／bundled Playwright 以 1600×900 與 932×430 各走一次雙玩家流程：選島 350ms 後 `phase=awaiting_turn`、位置仍為 `final-island`、目前玩家已交棒、全螢幕與地圖動畫層皆為 0、船 token 可見且座標未變；下次個人回合的飛行 token 起點與原船只差 0.67／0.78px，2.8 秒後已移動 2739.58／763.23px。落地撞擊坑在氣泡消失後 opacity 均為 1，完成後 `pending=null`、地圖動畫層 0、船 token 恢復、位置為正式 Boss 島；兩種 viewport 的頁面 scroll 尺寸等於 viewport，新素材請求沒有 HTTP 錯誤。截圖保存在 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/qa_kuma_v2_20260811/`。
+- 驗證：`node --check public/js/board_game.js` 通過，正式 8787 頁與兩張新 WebP 均回應 HTTP 200；兩張正式 WebP 均為 RGBA、四角 alpha 0。Chrome／bundled Playwright 以 1600×900 與 932×430 各走一次雙玩家流程：選島 350ms 後 `phase=awaiting_turn`、位置仍為 `final-island`、目前玩家已交棒、全螢幕與地圖動畫層皆為 0、船 token 可見且座標未變；下次個人回合的飛行 token 起點與原船只差 0.67／0.78px，2.8 秒後已移動 2739.58／763.23px。落地撞擊坑在氣泡消失後 opacity 均為 1，完成後 `pending=null`、地圖動畫層 0、船 token 恢復、位置為正式 Boss 島；兩種 viewport 的頁面 scroll 尺寸等於 viewport，新素材請求沒有 HTTP 錯誤。截圖保存在 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/qa_kuma_v2_20260811/`。
 
 #### Tot Musica 雙世界全螢幕同步攻擊 V170
 
@@ -7469,9 +6748,7 @@ ode --check public/js/board_game.js` 通過，正式 8787 頁與兩張新 WebP �
 - 素材：新增 `public/images/board/battle/tot_musica_dual/tot_musica_real_world_background.webp`、`tot_musica_song_world_background.webp`；ImageGen 原始 PNG 與未採用的合成斜切稿保存在同層 `incoming/`，正式頁不引用 `incoming/`。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`public/images/board/battle/tot_musica_dual/`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁、battle iframe 與戰鬥頁 query 更新為 `20260811-tot-musica-dual-cutin-v4`。
 - 同步邊界：沒有新增持久 `gameState`／`battleState` 欄位、角色／招式／Boss／道具 id、localStorage key、Socket.IO event 或 server 欄位；`tot-musica-dual-sync` 只存在既有完整戰鬥快照的 `visualEvent`，傷害與奇偶判定仍由主遊戲權威流程完成。
-- 驗證：
-ode --check public/js/board_game.js` 與 
-ode --check public/js/board_battle.js` 通過。Chrome／bundled Playwright 以 1920×1080、1366×768、932×430 實測成功，同時另測桌機奇偶不同與未形成雙直接攻擊；五種畫面均顯示完整斜線、兩邊第一骰、中央 Boss、原戰鬥主框與單列結果文字，沒有頁面例外。正式頁與兩張背景資源另以 HTTP 200 檢查。
+- 驗證：`node --check public/js/board_game.js` 與 `node --check public/js/board_battle.js` 通過。Chrome／bundled Playwright 以 1920×1080、1366×768、932×430 實測成功，同時另測桌機奇偶不同與未形成雙直接攻擊；五種畫面均顯示完整斜線、兩邊第一骰、中央 Boss、原戰鬥主框與單列結果文字，沒有頁面例外。正式頁與兩張背景資源另以 HTTP 200 檢查。
 
 #### Tot Musica 原戰鬥框、垂直雙世界與左右選招 V171
 
@@ -7481,10 +6758,7 @@ ode --check public/js/board_battle.js` 通過。Chrome／bundled Playwright 以 
 - 選招畫面：`infoPanel` 在 Tot Musica 已分隊且可行動時才套用專用全寬下方模式；現實世界與歌世界各佔一半並各自使用 `battle_switch_panel_frame.webp`，每半都可顯示四招與兩名換人選項。中央確認鈕移到兩張底框上方，不覆蓋任何選項；離開該模式即移除專用 class，不影響一般招式、道具、換人與結果面板。
 - 規則：`postgame_tot_musica.maxHp` 由 1720 調整為 5160，三個樂章、同奇偶與雙直接命中判定均不變。沿用原 `postgameBossMechanic`、`battle.visualEvent`、完整 `BOARD_GAME_STATE` 快照與命令橋接，沒有新增持久欄位、id、localStorage key、Socket.IO event 或 server 欄位。
 - 修改檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁、battle iframe 與戰鬥頁 query 為 `20260811-tot-musica-original-cards-v2`。
-- 驗證：
-ode --check public/js/board_battle.js` 與 
-ode --check public/js/board_game.js` 通過；8787 正式 
-pm start` 頁面回應 HTTP 200。Chrome／bundled Playwright 以 1920×1080、1366×768、932×430 實測選招：兩張底框各精準佔一半、共 12 個技能／換人按鈕、按鈕 overflow 0、viewport miss 0、確認鈕與兩邊 action grid 重疊皆為 false。同步演出另測桌機攻擊、桌機受擊及手機受擊，三張 portrait 均為 `object-fit: cover`，外觀框層數為 4／4／1，攻擊時存在 `portrait-attack`、成功時存在 `portrait-hit`，HTTP／page errors 為空。截圖與 `metrics.json` 保存在 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/qa_tot_musica_v171/`。
+- 驗證：`node --check public/js/board_battle.js` 與 `node --check public/js/board_game.js` 通過；8787 正式 `npm start` 頁面回應 HTTP 200。Chrome／bundled Playwright 以 1920×1080、1366×768、932×430 實測選招：兩張底框各精準佔一半、共 12 個技能／換人按鈕、按鈕 overflow 0、viewport miss 0、確認鈕與兩邊 action grid 重疊皆為 false。同步演出另測桌機攻擊、桌機受擊及手機受擊，三張 portrait 均為 `object-fit: cover`，外觀框層數為 4／4／1，攻擊時存在 `portrait-attack`、成功時存在 `portrait-hit`，HTTP／page errors 為空。截圖與 `metrics.json` 保存在 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/qa_tot_musica_v171/`。
 
 #### Tot Musica 左右皆為我方船員 V172
 
@@ -7493,9 +6767,7 @@ pm start` 頁面回應 HTTP 200。Chrome／bundled Playwright 以 1920×1080、1
 - 畫面：Tot Musica 可行動的選招階段新增雙世界主畫面預覽。左側使用現實世界目前船員的 `combat-card player`、右側使用歌世界目前船員的 `combat-card player`，兩邊標題與下方圖片面板均明寫「我方」並顯示各自 HP；中央 Tot Musica 保留 `combat-card enemy` 與敵方 HP 標籤。選招期間隱藏原屬性相剋小盤，避免和中央敵方標籤重疊；離開選招模式會移除暫時 preview class，不影響一般戰鬥。
 - 動畫：歌世界右側船員仍需向中央 Boss 攻擊，因此新增 `totMusicaRightAllyCardAttack`／`totMusicaRightAllyPortraitAttack`；方向由右往中，但 DOM、CSS class 與狀態全部維持我方語意，不再引用 `enemyCardAttackShake`／`enemyPortraitAttack`。
 - 同步與相容性：只新增戰鬥頁暫時顯示 class 與 DOM 標籤，未改 Tot Musica 分隊、技能、換人、奇偶、傷害、HP、戰鬥 state、角色／Boss id、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 完整快照格式。正式 query 更新為 `20260811-tot-musica-player-sides-v4`。
-- 驗證：
-ode --check public/js/board_battle.js` 與 
-ode --check public/js/board_game.js` 通過。Chrome／bundled Playwright 以 1920×1080、1366×768、932×430 實測，兩張 actor card class 均含 `combat-card player` 且 opacity 1，中央 card class 含 `combat-card enemy`；左右標籤為「我方・現實世界」／「我方・歌世界」，中央為「敵方・Tot Musica・HP 5160/5160」。桌機、平板及手機左右卡均位於下方面板上方，12 個按鈕 overflow 0、viewport miss 0、確認鈕不重疊 action grid；HTTP／page errors 為空。最終截圖與 `metrics.json` 位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/qa_tot_musica_v172_final/`。
+- 驗證：`node --check public/js/board_battle.js` 與 `node --check public/js/board_game.js` 通過。Chrome／bundled Playwright 以 1920×1080、1366×768、932×430 實測，兩張 actor card class 均含 `combat-card player` 且 opacity 1，中央 card class 含 `combat-card enemy`；左右標籤為「我方・現實世界」／「我方・歌世界」，中央為「敵方・Tot Musica・HP 5160/5160」。桌機、平板及手機左右卡均位於下方面板上方，12 個按鈕 overflow 0、viewport miss 0、確認鈕不重疊 action grid；HTTP／page errors 為空。最終截圖與 `metrics.json` 位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/qa_tot_musica_v172_final/`。
 
 #### Tot Musica 雙骰融合、向上衝擊波與延後登場 V173
 
@@ -7505,9 +6777,7 @@ ode --check public/js/board_game.js` 通過。Chrome／bundled Playwright 以 19
 - 防閃回：確認按鈕立即鎖定兩邊所有操作並保留雙世界預覽；`tot-musica-dual-sync` 事件抵達後沿用同一個 overlay，動畫期間 `renderPanel()` 不重建一般面板。成功總演出 9.8 秒、失敗 5.2 秒，結束後才恢復正式戰鬥介面。
 - 血量相容：Tot Musica 正式最大 HP 仍為 5160。舊存檔若保留舊滿血 1720／5160，載入十三島與首次開戰前會修正為 5160／5160；其他已實際受傷的血量依舊最大 HP 比例換算，不任意回滿。
 - 修改檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。沿用既有 `shockwave_ring.webp`，未新增素材 id、持久 state、localStorage key、Socket.IO event 或 server 欄位；正式 query 更新為 `20260811-tot-musica-sync-wave-v5`。
-- 驗證：
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js` 與 `git diff --check` 通過。Chrome／bundled Playwright 以 1920×1080、1366×768、932×430 驗證選招、碰撞、融合、衝擊波、Boss 受擊與失敗碎裂；選招 Boss 為 `display:none`／`visibility:hidden`／opacity 0，12 個選項 overflow 0、viewport miss 0。成功融合時兩張我方卡矩形不相交、中央文字為「雙骰融合」、Boss 仍隱藏；衝擊波階段選招 panel opacity 0 且 Boss 仍隱藏，最後 Boss 才 visible 並套用 `portrait-hit`。頁面例外與 HTTP 錯誤均為空；正式 HP 相容測試確認 1720／5160 變為 5160／5160，舊最大值 1720、現有 860 則按比例變為 2580／5160。最終截圖與 `metrics.json` 位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/qa_tot_musica_v173_final3/`。
+- 驗證：`node --check public/js/board_battle.js`、`node --check public/js/board_game.js` 與 `git diff --check` 通過。Chrome／bundled Playwright 以 1920×1080、1366×768、932×430 驗證選招、碰撞、融合、衝擊波、Boss 受擊與失敗碎裂；選招 Boss 為 `display:none`／`visibility:hidden`／opacity 0，12 個選項 overflow 0、viewport miss 0。成功融合時兩張我方卡矩形不相交、中央文字為「雙骰融合」、Boss 仍隱藏；衝擊波階段選招 panel opacity 0 且 Boss 仍隱藏，最後 Boss 才 visible 並套用 `portrait-hit`。頁面例外與 HTTP 錯誤均為空；正式 HP 相容測試確認 1720／5160 變為 5160／5160，舊最大值 1720、現有 860 則按比例變為 2580／5160。最終截圖與 `metrics.json` 位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/qa_tot_musica_v173_final3/`。
 
 #### Tot Musica 全程雙隊戰鬥、完整骰鏈與原版 HUD V174
 
@@ -7516,8 +6786,7 @@ ode --check public/js/board_game.js` 與 `git diff --check` 通過。Chrome／bu
 - 畫面與文案：分隊時先隱藏 Boss，確認後在同一舞台顯示中央 Tot Musica；玩家合擊向上、Boss 攻擊向下。頂部左／中／右三條血量直接沿用一般戰鬥的 `battle_hud_player_frame.webp`／`battle_hud_enemy_frame.webp`、`.hud-name`、`.hp-track`、`.hp-fill` 與 `.hud-meta .pill`，只保留名字和 HP。分隊與行動標題縮成「左隊／右隊」，不再重複顯示現實世界、歌世界等說明。
 - 權威規則：`board_game.js` 收集兩邊完整 `diceRolls` 後才建立 `tot-musica-dual-sync`；畫面仍只以第一顆骰判定奇偶，追加骰只影響各招總點數與傷害。Boss 雙擊由主遊戲分別套用兩名船員的防禦、攜帶物、被動復活與 HP，再以既有 visual event 傳給戰鬥頁，沒有由 UI 重算傷害。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/tot_musica_full_dual_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。未新增持久 `gameState` 欄位、角色／招式／道具 id、localStorage key、Socket.IO event 或 server 欄位；正式 query 為 `20260811-tot-musica-full-dual-battle-v7`。
-- 驗證：
-ode --check public/js/board_game.js`、`public/js/board_battle.js`、`scripts/tot_musica_full_dual_qa.js` 通過。專用 QA 以 1600×900、1024×576、932×430 各走完整流程；三種 viewport 均確認分隊前 Boss 隱藏、分隊後一般卡隱藏、左右與 Boss HP 存在、兩邊各顯示三顆追加骰、Boss 向下雙擊並將兩人 HP 分別由 5000 降為 4399／2597，`errors=[]`、`failures=[]`。截圖位於 `qa_tot_musica_v174_full_dual`、`qa_tot_musica_v174_tablet`、`qa_tot_musica_v174_phone`。
+- 驗證：`node --check public/js/board_game.js`、`public/js/board_battle.js`、`scripts/tot_musica_full_dual_qa.js` 通過。專用 QA 以 1600×900、1024×576、932×430 各走完整流程；三種 viewport 均確認分隊前 Boss 隱藏、分隊後一般卡隱藏、左右與 Boss HP 存在、兩邊各顯示三顆追加骰、Boss 向下雙擊並將兩人 HP 分別由 5000 降為 4399／2597，`errors=[]`、`failures=[]`。截圖位於 `qa_tot_musica_v174_full_dual`、`qa_tot_musica_v174_tablet`、`qa_tot_musica_v174_phone`。
 
 #### Tot Musica 六格拖曳編隊與三秒後 Boss 登場 V175
 
@@ -7537,8 +6806,7 @@ ode --check public/js/board_game.js`、`public/js/board_battle.js`、`scripts/to
 - 素材：新增 `public/images/board/battle/tot_musica_dual/tot_musica_sync_wave_up.webp`、`tot_musica_boss_wave_down.webp`、`ATTACK_VFX_PROMPT.md`；生成來源與透明候選稿保存在同層 `incoming/`，正式頁不引用 `incoming/`。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/tot_musica_full_dual_qa.js`、`public/images/board/battle/tot_musica_dual/*`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260812-tot-musica-camera-wave-art-v10`。
 - 同步邊界：沒有新增或改名持久 `gameState`／`battleState` 欄位、角色／招式／Boss／道具 id、localStorage key、Socket.IO event 或 server 欄位。仍由 `board_game.js` 權威計算骰鏈、奇偶、命中與傷害，只延長既有 `visualEvent.duration` 配合畫面演出。
-- 驗證：
-ode --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`；8787 正式 `board_game.html` 回應 HTTP 200。專用 QA 以 1600×900、1024×576、932×430 各完整走過六格編隊、選招、失敗碎裂、三骰、向上圖片／升鏡、Boss 落下、受擊、敵方三骰、向下圖片／降鏡與雙人受擊，三種 viewport 均為 `errors=[]`、`failures=[]`。三骰實測約 5.97～6.00 秒，左右可見骰均為 1、與角色框相交均為 false；上下正式 WebP 全數載入且各存在 3000ms 圖片動畫，兩半背景分別套用 `totMusicaCameraRise`／`totMusicaCameraDescend`。截圖位於 `tmp/tot-musica-camera-wave-qa/desktop-final`、`tablet`、`phone`。
+- 驗證：`node --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`；8787 正式 `board_game.html` 回應 HTTP 200。專用 QA 以 1600×900、1024×576、932×430 各完整走過六格編隊、選招、失敗碎裂、三骰、向上圖片／升鏡、Boss 落下、受擊、敵方三骰、向下圖片／降鏡與雙人受擊，三種 viewport 均為 `errors=[]`、`failures=[]`。三骰實測約 5.97～6.00 秒，左右可見骰均為 1、與角色框相交均為 false；上下正式 WebP 全數載入且各存在 3000ms 圖片動畫，兩半背景分別套用 `totMusicaCameraRise`／`totMusicaCameraDescend`。截圖位於 `tmp/tot-musica-camera-wave-qa/desktop-final`、`tablet`、`phone`。
 
 #### Tot Musica 垂直敵我反向鏡頭 V177
 
@@ -7546,8 +6814,7 @@ ode --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 
 - 使用者修正：Tot Musica 攻擊前必須先由我方位置把鏡頭往上拉，抵達高處才看見她出手，之後攻擊與鏡頭再往下打回兩名船員；不能讓 Boss 直接出現在我方中央。我方攻擊採完全相反的由下往上順序。
 - 實作：敵方回合新增 2.1 秒升鏡段，期間 Boss 與敵方 HUD 隱藏、兩名船員向下退出；抵達高處才顯示 Tot Musica 原框、HP 與單格骰鏈。Boss 出手後移出上緣，兩道正式紅紫攻擊圖向左右下方飛行三秒，背景同步下降並讓兩名船員由下方回到畫面，最後才切受擊圖與 HP。玩家同步成功則保留相反流程：船員共同出招、操作 UI 下沉、正式藍白金衝擊圖與背景向上三秒，抵達高處才顯示 Boss 受擊。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/tot_musica_full_dual_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。未新增圖片、持久 state、角色／招式／Boss／道具 id、localStorage key、Socket.IO event 或 server 欄位；正式 query 更新為 `20260812-tot-musica-vertical-camera-v11`。一般戰鬥與 CPU 自動行動程式未在本輪修改。
-- 驗證：
-ode --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`。專用 QA 以 1600×900、1024×576、932×430 各走完整編隊、選招、不同步碎裂、我方骰鏈、向上升鏡、Boss 高處受擊、敵方升鏡、Boss 高處骰鏈、三秒向下降鏡及兩名船員受擊；三種 viewport 均為 `errors=[]`、`failures=[]`。Boss 高處 top ratio 約 0.03～0.05、bottom ratio 約 0.29～0.39；敵方升鏡期間 Boss 隱藏，正式背景動畫為 `totMusicaCameraClimbToBoss`，向下追鏡為 `totMusicaCameraDescend`，兩名船員 HP 均由 5000 降為 4399。截圖位於 `tmp/tot-musica-vertical-camera-qa/desktop-final`、`tablet-final`、`phone-final`。
+- 驗證：`node --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`。專用 QA 以 1600×900、1024×576、932×430 各走完整編隊、選招、不同步碎裂、我方骰鏈、向上升鏡、Boss 高處受擊、敵方升鏡、Boss 高處骰鏈、三秒向下降鏡及兩名船員受擊；三種 viewport 均為 `errors=[]`、`failures=[]`。Boss 高處 top ratio 約 0.03～0.05、bottom ratio 約 0.29～0.39；敵方升鏡期間 Boss 隱藏，正式背景動畫為 `totMusicaCameraClimbToBoss`，向下追鏡為 `totMusicaCameraDescend`，兩名船員 HP 均由 5000 降為 4399。截圖位於 `tmp/tot-musica-vertical-camera-qa/desktop-final`、`tablet-final`、`phone-final`。
 
 #### 最終之島黎明宴會不消耗回合 V178
 
@@ -7556,8 +6823,7 @@ ode --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 
 - 實作：真人按下宴會後仍沿用 `applyFinalIslandDawnBanquet()` 恢復全員 HP、PP 與能力階段，但不再呼叫 `finishIslandServiceTurn()`；畫面重新停留在黎明紀錄殿，可接著開啟大熊肉球航路。整備服務重算衍生數值後會再依重算後最大 HP 對齊一次，避免首次宴會殘留 1 HP 缺口。只有確認轉送或按下「離開紀錄殿」才會結束目前停靠流程。全隊已完全整備時再次點擊只顯示最佳狀態，不會重複送出任務服務事件，避免免費操作反覆累積任務進度。CPU 沒有可用 Boss 指針時仍在自動整備後離島，避免自動回合反覆開啟紀錄殿。
 - 文案與快取：宴會按鈕及機制說明明示「不耗回合」；`public/board_game.html` 主程式 query 更新為 `20260812-final-island-banquet-free-v1`。沒有新增或改名 state 欄位、id、localStorage key、Socket.IO event 或 server 欄位，HP／PP 及能力階段仍透過既有完整 `BOARD_GAME_STATE` 同步。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 通過，8787 正式主頁與新版 JS 均回應 HTTP 200。Chrome／bundled Playwright 以 1600×900 與 932×430 實際把兩名船員設為低 HP、零 PP 及非零能力階段後點擊宴會；兩種 viewport 均完整恢復，round 與 `currentPlayerIndex` 保持不變，紀錄殿、宴會及大熊轉送按鈕仍存在。手機三個按鈕均在 viewport 且文字 overflow 為 0，頁面例外為 0；測試圖位於 `tmp/final-island-banquet-free-qa-desktop.png` 與 `tmp/final-island-banquet-free-qa-phone.png`。
+- 驗證：`node --check public/js/board_game.js` 通過，8787 正式主頁與新版 JS 均回應 HTTP 200。Chrome／bundled Playwright 以 1600×900 與 932×430 實際把兩名船員設為低 HP、零 PP 及非零能力階段後點擊宴會；兩種 viewport 均完整恢復，round 與 `currentPlayerIndex` 保持不變，紀錄殿、宴會及大熊轉送按鈕仍存在。手機三個按鈕均在 viewport 且文字 overflow 為 0，頁面例外為 0；測試圖位於 `tmp/final-island-banquet-free-qa-desktop.png` 與 `tmp/final-island-banquet-free-qa-phone.png`。
 
 #### Tot Musica 延後現身、專用舞台連續與滿血時序 V179
 
@@ -7565,8 +6831,7 @@ ode --check public/js/board_game.js` 通過，8787 正式主頁與新版 JS 均�
 - 使用者修正：Tot Musica 不可在鏡頭上移前出現，特殊戰鬥過程不可閃回舊的一般戰鬥場景，Boss 開場血條必須是滿的。
 - 實作：`syncTotMusicaPersistentStage()` 在等待敵方事件時只保留左右雙世界背景與我方位置，不再預先套用 `enemy-present`；只要仍是 Tot Musica battle，專用 `tot-musica-battle-mode` 會一路維持到結算，其他暫時 visual event 也不會清掉專用舞台。玩家同步成功時以 `startSnapshot.enemy` 顯示攻擊前血量，Boss 在高處以滿血狀態現身 1.5 秒，衝擊命中才切換 `targetCombatant` 的受傷後血量與受擊圖。新的 Tot Musica 挑戰在 `startBattle()` 建立前固定回滿 5160／5160；同一 `pendingBattle` 的續戰不重置。
 - 修改檔案：`public/js/board_battle.js`、`public/js/board_game.js`、`public/board_battle.html`、`public/board_game.html`、`scripts/tot_musica_full_dual_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁、battle iframe 與戰鬥頁 query 更新為 `20260812-tot-musica-hidden-reveal-v12`；沒有新增圖片、持久 state、角色／招式／Boss／道具 id、localStorage key、Socket.IO event 或 server 欄位，一般戰鬥流程未修改。
-- 驗證：
-ode --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`，8787 正式主頁回應 HTTP 200。專用 QA 不再把 Boss 改成測試 HP，先故意把島嶼狀態設為 37% 再經正式 `startBattle()`；1600×900、1280×800、932×430 三種 viewport 均在開戰取得 5160／5160。每輪約 1664～1701 個 16ms 連續取樣中，一般戰鬥卡露出、專用舞台消失與 Boss 提前現身全部為 0；Boss 現身時為 5160／5160、命中後為 5024／5160，三輪皆 `errors=[]`、`failures=[]`。截圖位於 `tmp/tot-musica-hidden-reveal-v12-desktop`、`-tablet`、`-phone`。
+- 驗證：`node --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`，8787 正式主頁回應 HTTP 200。專用 QA 不再把 Boss 改成測試 HP，先故意把島嶼狀態設為 37% 再經正式 `startBattle()`；1600×900、1280×800、932×430 三種 viewport 均在開戰取得 5160／5160。每輪約 1664～1701 個 16ms 連續取樣中，一般戰鬥卡露出、專用舞台消失與 Boss 提前現身全部為 0；Boss 現身時為 5160／5160、命中後為 5024／5160，三輪皆 `errors=[]`、`failures=[]`。截圖位於 `tmp/tot-musica-hidden-reveal-v12-desktop`、`-tablet`、`-phone`。
 
 #### Tot Musica 單一面板依序指令與控制技顯示修正 V180
 
@@ -7575,8 +6840,7 @@ ode --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 
 - 實作：戰鬥頁以左隊、右隊兩階段重用原 `actionPanel` 與原資訊面板；標題只切換目前隊伍與船員，面板座標、尺寸、四個按鈕及圖框不變。攻擊與同隊換人改為暫存該世界行動；戰鬥道具可指定該世界隊員，逃跑也可作為該世界完整行動。左隊送出後原位切右隊，右隊送出後才呼叫既有 `battleTotDualAction`。任一隊換人、使用道具、逃跑失敗或使用非直接招式都不參與本輪同步；逃跑成功則直接結束戰鬥。
 - 0 傷害原因與修正：`歌之魔王` 是 `control`／power 0，原權威計算正確不扣 HP，但舊 visual event 一律走 `enemy-striking`，因而錯誤演成向下攻擊並顯示合計 0 傷害。事件新增暫時的 `dealsDamage` 顯示旗標；直接攻擊維持向下圖與受擊動畫，控制技改為雙世界狀態場、顯示「效果命中／不造成直接傷害」，不播放向下攻擊圖、不切受擊圖、不寫 0 傷害。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/tot_musica_full_dual_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260812-tot-musica-sequential-command-v13`。沒有新增圖片、持久 state、角色／招式／Boss／道具 id、localStorage key、Socket.IO event 或 server 欄位；一般戰鬥行動入口未改。
-- 驗證：
-ode --check` 通過三個修改的 JS；正式 8787 主頁 HTTP 200。專用 QA 以 1600×900、1280×800、932×430 完整走過編隊、同一指令面板左→右選招、追加骰、同步攻擊、敵方直接攻擊與控制招式，三種 viewport 均 `errors=[]`、`failures=[]`。三種尺寸的左右隊面板 `left/top/width/height` 完全相同，皆有四個指令；實測左隊同隊三名夥伴、至少一個戰鬥道具及逃跑／投降入口正常呈現。直接攻擊各造成 601 傷害；`歌之魔王` 的向下攻擊圖數量為 0、兩隊文字皆為「效果命中」、結果不含 0 傷害。截圖位於 `tmp/tot-musica-sequential-v13-desktop-final`、`-tablet`、`-phone`。
+- 驗證：`node --check` 通過三個修改的 JS；正式 8787 主頁 HTTP 200。專用 QA 以 1600×900、1280×800、932×430 完整走過編隊、同一指令面板左→右選招、追加骰、同步攻擊、敵方直接攻擊與控制招式，三種 viewport 均 `errors=[]`、`failures=[]`。三種尺寸的左右隊面板 `left/top/width/height` 完全相同，皆有四個指令；實測左隊同隊三名夥伴、至少一個戰鬥道具及逃跑／投降入口正常呈現。直接攻擊各造成 601 傷害；`歌之魔王` 的向下攻擊圖數量為 0、兩隊文字皆為「效果命中」、結果不含 0 傷害。截圖位於 `tmp/tot-musica-sequential-v13-desktop-final`、`-tablet`、`-phone`。
 
 #### Tot Musica 左右獨立指令與完整 HUD V181
 
@@ -7585,8 +6849,7 @@ ode --check` 通過三個修改的 JS；正式 8787 主頁 HTTP 200。專用 QA 
 - 實作：`public/js/board_battle.js` 改以 `totMusicaWorldModes`／`totMusicaWorldItemIds` 保存兩側暫時選擇，分別渲染攻擊、同隊夥伴、戰鬥道具／同隊目標、逃跑／投降；已選的一側保留結果與重新選擇按鈕，另一側繼續操作。`public/board_battle.html` 使用既有一般戰鬥指令底框與圖示建立左右各自的四鍵網格；下一層受自己的 `.postgame-world-column` 限制，不跨到另一半。下方標題只留角色名與選擇階段，移除隊別字樣及頭像。
 - HUD：左右頂端原戰鬥 HUD 圖框加寬並顯示角色名、Lv、力／技／速屬性、HP、攜帶物與狀態圖示。攜帶物與狀態圖示沿用既有 popover，可點擊查看效果、結果及回合數；隱形黑型態徽章亦沿用原規則。沒有新增圖片，正式頁只重用 `battle_hud_player_frame.webp`、`battle_command_action_button_frame.webp` 與既有四枚指令圖。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/tot_musica_full_dual_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260812-tot-musica-dual-side-hud-v16`。沿用既有 battle snapshot、角色／招式／道具 id、localStorage key、Socket.IO event 與一般戰鬥入口；沒有新增持久 state 或 server 欄位。
-- 驗證：
-ode --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`。Chrome／bundled Playwright 以 1600×900、1280×800、932×430 完整走過編隊、雙面板四類入口、左側子選單、左右選定、追加骰、同步攻擊、敵方直接攻擊及控制技；三種 viewport 均 `errors=[]`、`failures=[]`。兩側初始各有四個指令；左側打開四招時仍完全位於左半框，右側四鍵維持可用；夥伴選項各限同隊兩人，道具與逃跑／投降入口可用。雙 HUD 實測攜帶物文字及狀態圖示存在且可渲染；直接攻擊各造成 601 傷害，控制技不顯示假 0 傷害。截圖位於 `tmp/tot-musica-dual-side-hud-v16-desktop`、`-tablet`、`-phone`。
+- 驗證：`node --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`。Chrome／bundled Playwright 以 1600×900、1280×800、932×430 完整走過編隊、雙面板四類入口、左側子選單、左右選定、追加骰、同步攻擊、敵方直接攻擊及控制技；三種 viewport 均 `errors=[]`、`failures=[]`。兩側初始各有四個指令；左側打開四招時仍完全位於左半框，右側四鍵維持可用；夥伴選項各限同隊兩人，道具與逃跑／投降入口可用。雙 HUD 實測攜帶物文字及狀態圖示存在且可渲染；直接攻擊各造成 601 傷害，控制技不顯示假 0 傷害。截圖位於 `tmp/tot-musica-dual-side-hud-v16-desktop`、`-tablet`、`-phone`。
 
 #### Tot Musica 完整 Boss 圖、順暢命中與攜帶物說明 V182
 
@@ -7594,8 +6857,7 @@ ode --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 
 - 使用者修正：點擊雙世界 HUD 攜帶物必須顯示完整敘述；我方衝擊波飛上去後不應停住等待 Boss；Tot Musica 要放大，但整張立繪與原敵方框不可被裁掉。
 - 實作：攜帶物 popover 改用獨立 380px 大框，明列「目前狀態」與「完整效果」，並在專用 HUD 明確恢復按鈕／狀態圖示的 pointer events。Tot Musica 的 1024×1536 正式圖由原本接近橫向的 350×360 `cover` 小卡，改成最大 430px 寬、2:3 大直式敵方卡與 `contain`；窄版上限 300px，三種尺寸都保持完整原圖與外觀框。向上衝擊波放在 Boss 後方，開始後 2.3 秒讓 Boss 以攻擊前 HP 落位，3 秒抵達即切受擊圖及受傷後 HP，移除舊版落位後再等 1.5 秒的空檔。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/tot_musica_full_dual_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260812-tot-musica-impact-boss-carry-v17`；沒有新增圖片、持久 state、角色／招式／Boss／道具 id、localStorage key、Socket.IO event 或 server 欄位，一般戰鬥流程未修改。
-- 驗證：
-ode --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`；正式 8787 戰鬥頁 HTTP 200。Chrome／bundled Playwright 以 1600×900、1280×800、932×430 完整走過編隊、攜帶物點擊、不同步碎裂、雙面板四類入口、追加骰、同步向上攻擊、Boss 高處受擊、敵方直接攻擊及控制技，三種 viewport 均 `errors=[]`、`failures=[]`。攜帶物框皆含正式道具名、目前狀態與完整效果且未超出 viewport；Boss 的 portrait natural ratio 為 2:3、`object-fit=contain`、clipped=false，實測約佔畫面高 70%～76%；事件取樣顯示現身約在衝擊波開始後 2.28 秒、命中約在 2.99 秒，現身 HP 5160／5160、命中後 5024／5160。截圖位於 `tmp/tot-musica-impact-boss-carry-v17-desktop-2`、`-tablet`、`-phone`。
+- 驗證：`node --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`；正式 8787 戰鬥頁 HTTP 200。Chrome／bundled Playwright 以 1600×900、1280×800、932×430 完整走過編隊、攜帶物點擊、不同步碎裂、雙面板四類入口、追加骰、同步向上攻擊、Boss 高處受擊、敵方直接攻擊及控制技，三種 viewport 均 `errors=[]`、`failures=[]`。攜帶物框皆含正式道具名、目前狀態與完整效果且未超出 viewport；Boss 的 portrait natural ratio 為 2:3、`object-fit=contain`、clipped=false，實測約佔畫面高 70%～76%；事件取樣顯示現身約在衝擊波開始後 2.28 秒、命中約在 2.99 秒，現身 HP 5160／5160、命中後 5024／5160。截圖位於 `tmp/tot-musica-impact-boss-carry-v17-desktop-2`、`-tablet`、`-phone`。
 
 #### Tot Musica 恢復原大型正方形 Boss 框 V183
 
@@ -7603,8 +6865,7 @@ ode --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 
 - 使用者修正：Boss 必須使用原本一般戰鬥的正方形比例，不採 V182 的 2:3 直式卡，並要在不超框的前提下盡量放大以保留 Boss 壓迫感。
 - 實作：Tot Musica 敵方主卡恢復 `aspect-ratio: 1 / 1`；桌機尺寸以 42vw／72vh 約束且最高 640px，窄版在 1024×576 邏輯戰鬥舞台固定 450px，再隨整個舞台等比縮放，避免 `vh` 在手機被二次縮小。正式敵方框素材本身為 1254×1254 正方形，現在不再被拉成直式；框內 1024×1536 立繪仍使用 `object-fit: contain`，因此完整顯示且不裁切。衝擊波時序、攜帶物說明、滿血與受擊切換不變。
 - 修改檔案：`public/board_battle.html`、`public/js/board_game.js`、`public/board_game.html`、`scripts/tot_musica_full_dual_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260812-tot-musica-large-square-boss-v19`；沒有修改戰鬥規則、傷害、狀態、持久 state 或多人同步格式。
-- 驗證：
-ode --check` 通過 `public/js/board_battle.js`、`public/js/board_game.js` 與專用 QA。1600×900、1280×800、932×430 三種 viewport 完整流程均為 `errors=[]`、`failures=[]`；Boss 框寬高比皆為 1.000、clipped=false、立繪 `object-fit=contain`。實際框高度約為桌機 71%、平板 67%、手機 78%，現身與命中 HP 仍為 5160／5160 → 5024／5160。截圖位於 `tmp/tot-musica-large-square-boss-v19-desktop`、`-tablet-final`、`-phone-final`。
+- 驗證：`node --check` 通過 `public/js/board_battle.js`、`public/js/board_game.js` 與專用 QA。1600×900、1280×800、932×430 三種 viewport 完整流程均為 `errors=[]`、`failures=[]`；Boss 框寬高比皆為 1.000、clipped=false、立繪 `object-fit=contain`。實際框高度約為桌機 71%、平板 67%、手機 78%，現身與命中 HP 仍為 5160／5160 → 5024／5160。截圖位於 `tmp/tot-musica-large-square-boss-v19-desktop`、`-tablet-final`、`-phone-final`。
 
 #### Tot Musica 分流直擊、可疊加加成與 Boss 預覽 V184
 
@@ -7613,9 +6874,7 @@ ode --check` 通過 `public/js/board_battle.js`、`public/js/board_game.js` 與�
 - UI／動畫：不同奇偶的骰子仍碰撞碎裂，但兩位角色接著各自出招；正式紅、藍直線透明 WebP 各沿自己的半邊向上飛三秒，鏡頭升到高處後 Boss 以原 1:1 框現身並切受擊圖與 HP。選招畫面中央新增 Tot Musica 圖示；點擊後隱藏兩位角色並顯示高處 Boss 原框、HP 及狀態圖示，再點一次或 Esc 返回，不送出行動。
 - 素材：使用 ImageGen 依既有紅／藍螺旋素材生成 `tot_musica_unsynced_red_up.webp` 與 `tot_musica_unsynced_blue_up.webp`。第一版藍稿有色帶殘影，未採用；第二版單張重生後完成鍵色去背與 alpha／尺寸檢查。來源、透明候選與提示詞保存在 `public/images/board/battle/tot_musica_dual/incoming/` 與 `ATTACK_VFX_PROMPT.md`，正式頁只引用上層固定檔名。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/tot_musica_full_dual_qa.js`、`public/images/board/battle/tot_musica_dual/*`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260812-tot-musica-split-bonus-preview-v22`；未新增或改名持久 `gameState`／`battleState` 欄位、角色／招式／Boss／道具 id、localStorage key、Socket.IO event 或 server 欄位。
-- 驗證：
-ode --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`；
-pm start` 後正式 8787 流程可開啟。Chrome／bundled Playwright 以 1600×900、1024×576、932×430 各完整走過編隊、中央 Boss 預覽開關、不同奇偶骰碎裂、兩道直線分流升鏡／命中、左右指令、三骰同步合流、Boss 受擊、敵方升鏡與向下攻擊；三種 viewport 均為 `errors=[]`、`failures=[]`。加成矩陣實測無加成 ×1.00、同屬性 ×1.50、同點 ×1.50、同攻擊類別 ×1.20、同步全疊 ×2.20；分流基礎率 5%、可成立的最高疊加率 8.5%。Boss 預覽三種尺寸均顯示 5160／5160、正方形比例 1.000 且未超出 viewport；分流兩圖均載入並有獨立三秒動畫。截圖位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/qa_tot_musica_split_bonus_preview_v22/`。
+- 驗證：`node --check` 通過 `public/js/board_game.js`、`public/js/board_battle.js` 與 `scripts/tot_musica_full_dual_qa.js`；`npm start` 後正式 8787 流程可開啟。Chrome／bundled Playwright 以 1600×900、1024×576、932×430 各完整走過編隊、中央 Boss 預覽開關、不同奇偶骰碎裂、兩道直線分流升鏡／命中、左右指令、三骰同步合流、Boss 受擊、敵方升鏡與向下攻擊；三種 viewport 均為 `errors=[]`、`failures=[]`。加成矩陣實測無加成 ×1.00、同屬性 ×1.50、同點 ×1.50、同攻擊類別 ×1.20、同步全疊 ×2.20；分流基礎率 5%、可成立的最高疊加率 8.5%。Boss 預覽三種尺寸均顯示 5160／5160、正方形比例 1.000 且未超出 viewport；分流兩圖均載入並有獨立三秒動畫。截圖位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/qa_tot_musica_split_bonus_preview_v22/`。
 
 #### Tot Musica 獨立 Boss 觀察、HUD 避讓與同步演出 V185
 
@@ -7623,8 +6882,7 @@ pm start` 後正式 8787 流程可開啟。Chrome／bundled Playwright 以 1600�
 - 使用者修正：升到 Boss 高處時不可殘留我方操作 UI；預覽要有明確「返回我方」；Boss 血條與敵方骰子都不能遮住 Boss；同步成功的呈現需要重新整理。
 - 實作：中央魔王圖示開啟 `tot-musica-boss-view`，戰鬥頁隱藏 `infoPanel`／`actionPanel`、左右角色、HUD、骰子與分隔線，只顯示 Boss 原正方形框、框外上方 HUD，以及右下角「返回我方」按鈕。Boss 正式高處位置由 6.5% 下移到 14%；Boss HUD 維持頂端框外，敵方骰位移到左側，手機邏輯尺寸也使用相同避讓。同步成功的新 `tot_musica_sync_wave_up_v2.webp` 由內建 ImageGen 生成鍵色稿並去背，單張圖完整呈現紅藍雙流從下方交纏、中央同步爆發、上方合成單一能量長槍；舊螺旋圖保留但 V185 不再同時顯示。
 - 修改檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/board_game.html`、`scripts/tot_musica_full_dual_qa.js`、`public/images/board/battle/tot_musica_dual/tot_musica_sync_wave_up_v2.webp`、`public/images/board/battle/tot_musica_dual/incoming/tot_musica_sync_wave_up_v2_*`、`public/images/board/battle/tot_musica_dual/ATTACK_VFX_PROMPT.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260812-tot-musica-boss-view-sync-v23`；未修改權威傷害、一般戰鬥、持久 state、id、localStorage key、Socket.IO event 或 server 格式。
-- 驗證：
-ode --check public/js/board_battle.js` 通過；Chrome／bundled Playwright 以 1600×900、1024×576、932×430 各走過完整編隊、Boss 預覽、不同步分流、雙骰鏈、同步升鏡、Boss 受擊、敵方升鏡、Boss 骰鏈、降鏡與雙人受擊，三種 viewport 均為 `errors=[]`、`failures=[]`。預覽實測操作面板隱藏、返回按鈕可見、Boss HUD 在框外上方、骰位不與 Boss 相交；新同步圖載入且只存在單一合流動畫。截圖位於 `qa_tot_musica_boss_view_sync_v24/desktop-long-bg`、`tablet-pass`、`phone-pass`。
+- 驗證：`node --check public/js/board_battle.js` 通過；Chrome／bundled Playwright 以 1600×900、1024×576、932×430 各走過完整編隊、Boss 預覽、不同步分流、雙骰鏈、同步升鏡、Boss 受擊、敵方升鏡、Boss 骰鏈、降鏡與雙人受擊，三種 viewport 均為 `errors=[]`、`failures=[]`。預覽實測操作面板隱藏、返回按鈕可見、Boss HUD 在框外上方、骰位不與 Boss 相交；新同步圖載入且只存在單一合流動畫。截圖位於 `qa_tot_musica_boss_view_sync_v24/desktop-long-bg`、`tablet-pass`、`phone-pass`。
 
 #### Tot Musica 連續垂直長背景 V186
 
@@ -7640,8 +6898,7 @@ ode --check public/js/board_battle.js` 通過；Chrome／bundled Playwright 以 
 - 問題：第二回合擊倒 Tot Musica、HP 歸零並進入勝利結算時，通用左右單挑 HUD／角色卡會重新套用一般戰鬥位置；原 QA 只驗證第一回合回到選招，沒有實際送出第二次行動與擊倒 Boss。
 - 實作：專用舞台顯示期間以 `display`、`visibility`、`opacity`、動畫與 transition 五層鎖定通用 HUD／角色卡，不讓通用受擊／擊倒動畫覆寫；勝負成立後加入 `battle-result-stage`，保留頂層長背景、原正方形 Boss 框與 HP 0 HUD，同時正常渲染既有勝利結算資料。Boss 觀察按鈕移除圓形魔王圖，改為中央小型 `↑ 查看 Boss`；高處返回改為底部中央 `↓ 返回我方`。
 - 修改檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/board_game.html`、`scripts/tot_musica_full_dual_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260812-tot-musica-result-continuity-v25`；未改一般戰鬥執行、權威傷害、持久 state、id、localStorage key、Socket.IO event 或 server 格式。
-- 驗證：
-ode --check` 通過兩個正式 JS 與 QA 腳本；8787 正式頁 HTTP 200。專用 Chrome／bundled Playwright 在 1600×900 與 932×430 都完整走過分隊、第一回合我方／敵方動畫、第二回合重新選招及直接擊倒；兩種尺寸均 `errors=[]`、`failures=[]`。第二回合兩側各重置為四個指令、殘留已選卡為 0；從送出第二次行動到 HP 0 結算共取樣 646／619 幀，通用卡可見與專用舞台缺失皆為 0 幀。結算時 Boss 為 `HP 0 / 5160`、專用 Boss 框可見，桌機與手機截圖為 `tmp/tot-musica-full-dual-qa/12-second-round-victory-result.png`、`tmp/tot-musica-full-dual-qa-phone/12-second-round-victory-result.png`。
+- 驗證：`node --check` 通過兩個正式 JS 與 QA 腳本；8787 正式頁 HTTP 200。專用 Chrome／bundled Playwright 在 1600×900 與 932×430 都完整走過分隊、第一回合我方／敵方動畫、第二回合重新選招及直接擊倒；兩種尺寸均 `errors=[]`、`failures=[]`。第二回合兩側各重置為四個指令、殘留已選卡為 0；從送出第二次行動到 HP 0 結算共取樣 646／619 幀，通用卡可見與專用舞台缺失皆為 0 幀。結算時 Boss 為 `HP 0 / 5160`、專用 Boss 框可見，桌機與手機截圖為 `tmp/tot-musica-full-dual-qa/12-second-round-victory-result.png`、`tmp/tot-musica-full-dual-qa-phone/12-second-round-victory-result.png`。
 
 #### Tot Musica 碰撞受擊與專用擊倒退場 V188
 
@@ -7649,8 +6906,7 @@ ode --check` 通過兩個正式 JS 與 QA 腳本；8787 正式頁 HTTP 200。專
 - 問題：V187 只保證擊倒時不會回到舊的一般敵人位置；專用舞台在 HP 歸零後仍會重新載入一般 Boss 圖，而且通用 `knockout` 事件作用的是已隱藏的 `enemyCard`，玩家看不到真正的擊倒動作。Boss 高處現身也較像原地淡入，沒有明確與向上衝擊波迎面交會。
 - 實作：我方合流／分流衝擊仍完整向上飛三秒，Tot Musica 改由高處向下壓到交會點；只有 `wave-impact` 成立的瞬間才切 `hit.webp`、更新 HP 與播放震動。致死時延後切換 `dizzy.webp`，依序播放失衡、向下墜出畫面及擊倒完成，之後才顯示既有勝利結算；勝利畫面保留頂層長背景且 Boss 不會以 HP 0 站立圖重新出現。Boss HUD 在下降落位期間先隱藏，抵達後再顯示，避免窄螢幕交疊。
 - 修改檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/board_game.html`、`scripts/tot_musica_full_dual_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260812-tot-musica-knockout-flow-v26`；沿用現有 `hit.webp`、`dizzy.webp`，沒有新增圖片、持久 state、角色／招式／Boss／道具 id、localStorage key、Socket.IO event 或 server 欄位，一般戰鬥流程未修改。
-- 驗證：
-ode --check` 通過 `public/js/board_battle.js`、`public/js/board_game.js` 與 QA 腳本，8787 正式主頁 HTTP 200。專用 Chrome／bundled Playwright 在 1600×900 與 932×430 均完整走到第二回合擊倒，兩種尺寸 `errors=[]`、`failures=[]`；逐幀順序為 `wave-impact` → 約 420ms 後 `boss-knockout-stagger` → 約 625ms 後 `boss-knockout-fall` → 約 1006ms 後 `boss-knockout-complete`，命中取到 `hit.webp`、失衡取到 `dizzy.webp`，通用卡露出與專用舞台缺失皆為 0 幀。桌機與手機勝利結算截圖位於 `tmp/tot-musica-knockout-v26-desktop/12-second-round-victory-result.png`、`tmp/tot-musica-knockout-v26-phone-final/12-second-round-victory-result.png`。
+- 驗證：`node --check` 通過 `public/js/board_battle.js`、`public/js/board_game.js` 與 QA 腳本，8787 正式主頁 HTTP 200。專用 Chrome／bundled Playwright 在 1600×900 與 932×430 均完整走到第二回合擊倒，兩種尺寸 `errors=[]`、`failures=[]`；逐幀順序為 `wave-impact` → 約 420ms 後 `boss-knockout-stagger` → 約 625ms 後 `boss-knockout-fall` → 約 1006ms 後 `boss-knockout-complete`，命中取到 `hit.webp`、失衡取到 `dizzy.webp`，通用卡露出與專用舞台缺失皆為 0 幀。桌機與手機勝利結算截圖位於 `tmp/tot-musica-knockout-v26-desktop/12-second-round-victory-result.png`、`tmp/tot-musica-knockout-v26-phone-final/12-second-round-victory-result.png`。
 
 #### Tot Musica 第一骰判定、戰後抽取與返回地圖 V189
 
@@ -7658,8 +6914,7 @@ ode --check` 通過 `public/js/board_battle.js`、`public/js/board_game.js` 與 
 - 問題：追加骰共用單一骰位後，畫面停在最後一顆追加骰，玩家無法確認實際採用的第一骰奇偶；Tot Musica 全螢幕層又蓋住勝利後的血統抽取決定。抽取尚未處理時既有結算會正確鎖住返回，但因決定框不可見，看起來像戰鬥卡死。按下返回後，Boss 線索的重要道具揭露也可能藏在 battle iframe 後方，使 `endTurn()` 等待揭露結束而無法清理戰鬥。
 - 修正：雙世界骰鏈播放完畢後會把左右單格骰面恢復成各自第一骰，再以這兩個可見數字重新防呆計算奇偶；即使舊 visual event 帶錯 `synchronized`，不同奇偶仍只能碎裂、同奇偶才融合。血統抽取 root 提升到 Tot Musica 專用層上方，保留頂層長背景與敵人卡，但隱藏其下方原勝利面板，完整顯示「進行提取／不要提取」。抽取完成或放棄後才恢復返回地圖；若 Boss 線索或其他重要掉落正等待揭露，返回會先關閉 battle iframe，讓玩家在地圖頁看見並關閉揭露，再沿用既有 `endTurn()` 清除戰鬥。
 - 修改檔案：`public/js/board_battle.js`、`public/css/board_lineage_extraction.css`、`public/js/board_game.js`、`public/board_battle.html`、`public/board_game.html`、`scripts/tot_musica_full_dual_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260813-tot-musica-parity-lineage-v30`；沒有新增圖片、持久 state、角色／招式／Boss／道具 id、localStorage key、Socket.IO event 或 server 欄位。
-- 驗證：
-ode --check` 通過三支修改的 JS，既有 8787 正式主頁 HTTP 200。Chrome／bundled Playwright 在 1600×900 與 932×430 皆完整跑過編隊、錯誤舊同步旗標的 6／5 第一骰防呆、三骰完整同步、HP 時序、第二回合擊倒、血統抽取詢問、放棄抽取、返回地圖、約克線索揭露與戰鬥清除；兩種 viewport 均 `errors=[]`、`failures=[]`。Boss 現身時固定 5160／5160，衝擊命中才切 4861／5160；擊倒後顯示「進行提取／不要提取」，敵卡在 viewport 內且不壓住下方框，文字無 overflow；放棄後顯示「返回地圖」，返回時 battle overlay 已關閉、揭露可見，關閉後 `battleState=null`。結果圖與報告位於 `tmp/tot-musica-v30-final-desktop-3` 與 `tmp/tot-musica-v30-final-phone-5`。
+- 驗證：`node --check` 通過三支修改的 JS，既有 8787 正式主頁 HTTP 200。Chrome／bundled Playwright 在 1600×900 與 932×430 皆完整跑過編隊、錯誤舊同步旗標的 6／5 第一骰防呆、三骰完整同步、HP 時序、第二回合擊倒、血統抽取詢問、放棄抽取、返回地圖、約克線索揭露與戰鬥清除；兩種 viewport 均 `errors=[]`、`failures=[]`。Boss 現身時固定 5160／5160，衝擊命中才切 4861／5160；擊倒後顯示「進行提取／不要提取」，敵卡在 viewport 內且不壓住下方框，文字無 overflow；放棄後顯示「返回地圖」，返回時 battle overlay 已關閉、揭露可見，關閉後 `battleState=null`。結果圖與報告位於 `tmp/tot-musica-v30-final-desktop-3` 與 `tmp/tot-musica-v30-final-phone-5`。
 
 #### 新聊天室完整交接文件 V190
 
@@ -7677,8 +6932,7 @@ ode --check` 通過三支修改的 JS，既有 8787 正式主頁 HTTP 200。Chro
 - 暴擊權威：`board_game.js` 只在既有狙擊瞄準鏡／巴雷特吸收瞄準鏡等已真正觸發暴擊的正式分支寫入短暫 visual metadata，通用攻擊與 Tot Musica 事件再把 `critical`／`criticalCount` 傳給 iframe。沒有新增暴擊骰、沒有重算或改傷害倍率，也沒有新增持久 state、localStorage key、Socket.IO event 或 server 欄位。
 - Tot Musica 節奏：每骰改為 1800ms 滾動、800ms 停留、90ms 換面；第一骰碰撞前停 700ms，碰撞 1100ms，融合停留 1300ms，垂直鏡頭 2900ms，上下衝擊 4200ms，Boss 在發射後約 3100ms／命中前約 1100ms 落位。一輪玩家／敵方攻擊最低約 13800／14000ms，追加骰每顆再加 2600ms。玩家命中在 Boss 上方跳合計傷害，Boss 命中則在兩名船員位置各跳一次；結果說明縮成「奇偶同步 ×倍率」、「奇偶不同・分流 N%」或「招式名・兩界各 N 傷害」，並限制於原框內。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_battle.html`、`public/board_game.html`、`scripts/bullet_absorbed_items_qa.js`、`scripts/tot_musica_full_dual_qa.js`、`scripts/battle_damage_numbers_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/NEXT_CHAT_HANDOFF_20260813.md`、`docs/DEV_WORKFLOW.md`。正式 query 更新為 `20260813-battle-damage-numbers-v31`；沒有新增圖片或改動既有資料 id、戰鬥順序、傷害公式與完整快照格式。
-- 驗證：
-ode --check` 通過兩支正式 JS 與三支相關 QA 腳本，8787 正式主頁回 HTTP 200。定向傷害 QA 在 1600×900 驗證普通 123、暴擊 456（含「暴擊」且字級更大）、三連擊 31／42／53 及 MISS 均為獨立節點，932×430 也無 viewport overflow；`errors=[]`、`failures=[]`。Tot Musica 完整 QA 走過分隊、左右選招、骰鏈、4.2 秒向上命中、敵方向下雙人受擊、第二回合擊倒、血統抽取、放棄與返回地圖，第一次因舊 3 秒門檻失敗後已按新時序更新，重跑為 `errors=[]`、`failures=[]`。舊 `bullet_absorbed_items_qa.js` 全批次在 180 秒與 420 秒兩次皆逾時且未輸出失敗，故本輪新增較小的定向 QA 驗證跳字；舊批次仍需另行維護，未被當成通過。傷害跳字截圖位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/battle_damage_numbers_20260813/`，Tot Musica 截圖與報告位於 `tmp/tot-musica-full-dual-qa/`。
+- 驗證：`node --check` 通過兩支正式 JS 與三支相關 QA 腳本，8787 正式主頁回 HTTP 200。定向傷害 QA 在 1600×900 驗證普通 123、暴擊 456（含「暴擊」且字級更大）、三連擊 31／42／53 及 MISS 均為獨立節點，932×430 也無 viewport overflow；`errors=[]`、`failures=[]`。Tot Musica 完整 QA 走過分隊、左右選招、骰鏈、4.2 秒向上命中、敵方向下雙人受擊、第二回合擊倒、血統抽取、放棄與返回地圖，第一次因舊 3 秒門檻失敗後已按新時序更新，重跑為 `errors=[]`、`failures=[]`。舊 `bullet_absorbed_items_qa.js` 全批次在 180 秒與 420 秒兩次皆逾時且未輸出失敗，故本輪新增較小的定向 QA 驗證跳字；舊批次仍需另行維護，未被當成通過。傷害跳字截圖位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/battle_damage_numbers_20260813/`，Tot Musica 截圖與報告位於 `tmp/tot-musica-full-dual-qa/`。
 
 #### 伽治複製兵反向逐段攔截 V192
 
@@ -7687,8 +6941,7 @@ ode --check` 通過兩支正式 JS 與三支相關 QA 腳本，8787 正式主頁
 - 權威規則：`applyPostgameBossDamageRules()` 對玩家命中改為逐段走訪 `hitDamages`。每個仍存活的複製兵把一段正傷害改為 0 並消耗一名；兵用完後剩餘段維持原傷害。因此三兵面對 `[100,110,120,130]` 會得到 `[0,0,0,130]`。指定 `judge_clone` 也逐段清兵，但整招仍不傷伽治。原本低骰整招穿透 30%、高骰完整貫穿並只扣一兵的規則移除；每三次伽治行動補一名、上限三名不變。
 - 顯示：權威傷害管線把每段是否被擋寫入短暫 `judgeCloneBlocks` visual metadata；不新增持久 state。戰鬥頁待機時不建立士兵 DOM、`judgeCloneGuardLayer` 完全隱藏，伽治原圖與框完整可見。被擋段開始時才建立一名 `scaleX(-1)` 反向士兵，由右側衝入真正命中點，承受既有命中特效、顯示藍白「擋下」並破碎退場；沒有被擋的剩餘段才讓伽治播放受擊圖及正式傷害跳字。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_battle.html`、`public/board_game.html`、`scripts/postgame_boss_mechanics_qa.js`、`scripts/judge_clone_intercept_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/FILE_MAP.md`、`docs/NEXT_CHAT_HANDOFF_20260813.md`、`docs/DEV_WORKFLOW.md`。正式 query 為 `20260813-judge-clone-intercept-v32`；沒有新增圖片、角色／招式／Boss／道具 id、localStorage key、Socket.IO event、server 欄位或持久快照欄位。
-- 驗證：
-ode --check` 通過兩支正式 JS 與兩支相關 QA。專用 Chrome／bundled Playwright 驗證待機圖層 `hidden=true`、士兵節點 0、伽治正常圖可見；權威四段結果 `[0,0,0,130]`、逐段旗標 `[true,true,true,false]`、剩餘兵 0，指定三段對兩兵為全 0 且只標前兩段；零兵 `[80,90]` 原樣命中。正式 iframe 實拍三名反向士兵逐段衝出，依序跳三次「擋下」與一次 `-130`，清理後攔截節點 0。932×430 橫向手機士兵與伽治都在 viewport、反向成立、頁面無 overflow；兩輪均 `errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/judge_clone_intercept_20260813_v2/`。被複製兵擋住的段數即使原攻擊為暴擊也只顯示「擋下」，不疊加暴擊標籤；未被擋住的後續段數仍依原規則顯示暴擊。
+- 驗證：`node --check` 通過兩支正式 JS 與兩支相關 QA。專用 Chrome／bundled Playwright 驗證待機圖層 `hidden=true`、士兵節點 0、伽治正常圖可見；權威四段結果 `[0,0,0,130]`、逐段旗標 `[true,true,true,false]`、剩餘兵 0，指定三段對兩兵為全 0 且只標前兩段；零兵 `[80,90]` 原樣命中。正式 iframe 實拍三名反向士兵逐段衝出，依序跳三次「擋下」與一次 `-130`，清理後攔截節點 0。932×430 橫向手機士兵與伽治都在 viewport、反向成立、頁面無 overflow；兩輪均 `errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/judge_clone_intercept_20260813_v2/`。被複製兵擋住的段數即使原攻擊為暴擊也只顯示「擋下」，不疊加暴擊標籤；未被擋住的後續段數仍依原規則顯示暴擊。
 
 #### 伽治複製兵正面護衛顯示 V193
 
@@ -7711,11 +6964,9 @@ ode --check` 通過兩支正式 JS 與兩支相關 QA。專用 Chrome／bundled 
 - 日期：2026-08-13。
 - 使用者需求：伽治目前有幾名複製兵，就應一次衝出幾名排成護衛線，受到連擊後才逐隻飛走；新世界香吉士裝備傑爾馬66戰鬥服時，進場先顯示原圖，完整變身後才換隱形黑圖。
 - 伽治顯示：戰鬥頁在攻擊事件開始時依 `judgeCloneCountBefore` 一次建立全部攔截兵，440ms 內由右側排成三兵或兩兵護衛線；真正接觸各段時再依 `judgeCloneBlocks` 將對應士兵切成 720ms 打飛動畫。隊形改為三兵 30%／50%／70% 與 0.72／0.82／0.72 倍、兩兵 32%／68% 與 0.78 倍，完整保留頭、腳與武器。正式 `[0,0,0,130]`、生產進度與同步 metadata 未改。
-- 香吉士顯示：新增只作用於 battle view 的 pending 判斷。`sanjiRaidSuitState` 仍在可行動回合建立，招式／數值權威不變；只要對應變身事件仍在 `openingPassiveVisualQueue` 或為目前 `visualEvent`，序列化主卡、短暫快照、Tot Musica 角色視圖及通用戰鬥人物圖都維持新世界原名稱／圖片。事件清除後下一次 
-otifyBattleWindow()` 才改送隱形黑名稱與 `stealth.webp`。未新增持久 state。
+- 香吉士顯示：新增只作用於 battle view 的 pending 判斷。`sanjiRaidSuitState` 仍在可行動回合建立，招式／數值權威不變；只要對應變身事件仍在 `openingPassiveVisualQueue` 或為目前 `visualEvent`，序列化主卡、短暫快照、Tot Musica 角色視圖及通用戰鬥人物圖都維持新世界原名稱／圖片。事件清除後下一次 `notifyBattleWindow()` 才改送隱形黑名稱與 `stealth.webp`。未新增持久 state。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/judge_clone_intercept_qa.js`、`scripts/sanji_raid_suit_display_timing_qa.js` 與相關專案文件；正式 query 與 `BATTLE_PAGE_VERSION` 統一為 `20260813-guard-squad-sanji-timing-v35`。沒有新增圖片、角色／招式／Boss／道具 id、localStorage key、Socket.IO event、server 欄位或完整快照欄位。
-- 驗證：
-ode --check` 通過兩支正式 JS 與兩支定向 QA。8787 正式主頁 HTTP 200。伽治 QA 在 1600×900 驗證三名士兵同時存在、全數反向且完整入框、整隊與伽治重疊總面積約 78%，再照 hit index 0／1／2 逐隻飛走；權威傷害 `[0,0,0,130]`、`GUARD` 三次與最後 `-130` 正確，清理後節點 0。932×430 兩兵同時出場仍在 viewport 且無 overflow；`errors=[]`、`failures=[]`。香吉士 QA 驗證正式邏輯已 transformed 且事件已排入時，battle view 與 DOM 仍為「新世界香吉士」及 `sanji_evolution_2/normal.webp`；動畫中相同，事件結束才同步切到「新世界香吉士・隱形黑」與 `sanji_stealth_black/stealth.webp`。932×430 圖片在 viewport 且無 overflow；`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/judge_clone_squad_20260813_v35b/` 與 `.../sanji_raid_suit_timing_20260813_v35b/`。
+- 驗證：`node --check` 通過兩支正式 JS 與兩支定向 QA。8787 正式主頁 HTTP 200。伽治 QA 在 1600×900 驗證三名士兵同時存在、全數反向且完整入框、整隊與伽治重疊總面積約 78%，再照 hit index 0／1／2 逐隻飛走；權威傷害 `[0,0,0,130]`、`GUARD` 三次與最後 `-130` 正確，清理後節點 0。932×430 兩兵同時出場仍在 viewport 且無 overflow；`errors=[]`、`failures=[]`。香吉士 QA 驗證正式邏輯已 transformed 且事件已排入時，battle view 與 DOM 仍為「新世界香吉士」及 `sanji_evolution_2/normal.webp`；動畫中相同，事件結束才同步切到「新世界香吉士・隱形黑」與 `sanji_stealth_black/stealth.webp`。932×430 圖片在 viewport 且無 overflow；`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/judge_clone_squad_20260813_v35b/` 與 `.../sanji_raid_suit_timing_20260813_v35b/`。
 
 #### 一般戰鬥單一動畫與受擊時序 V196
 
@@ -7723,8 +6974,7 @@ ode --check` 通過兩支正式 JS 與兩支定向 QA。8787 正式主頁 HTTP 2
 - 使用者回報：觀看 CPU 的羅傑戰鬥時，進場像先攻擊一次、擲骰後又攻擊一次；其他戰鬥也常在攻擊尚未接觸前先切出受擊或瀕死圖。
 - 根因與修正：羅傑的開場被動會降低敵方攻擊／防禦，戰鬥頁原用 `angry` 出招圖表現該 debuff；改為 `morale` 狀態發動圖，效果與數值不變。正式 iframe 開啟時，`playBattleActionAnimation()` 原本仍完整等待舊 modal 動畫後才送出正式 attack visual event；現在立即返回，正式畫面只跑 iframe 的準備、骰子、接觸與傷害時間線。`startHp`／`startSnapshot` 的既有顯示覆寫繼續把受擊圖與 HP 更新鎖在真正接觸點。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/battle_impact_order_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/NEXT_CHAT_HANDOFF_20260813.md`、`docs/DEV_WORKFLOW.md`。正式 query 與 `BATTLE_PAGE_VERSION` 統一為 `20260813-battle-impact-order-v36`；沒有修改傷害公式、CPU 選招、回合數、角色／招式／道具 id、持久 state、localStorage key、Socket.IO event 或 server 欄位。
-- 驗證：
-ode --check` 通過兩支正式 JS 與新定向 QA；8787 的 `board_game.html` 與 V196 `board_battle.html` 均 HTTP 200。Chrome／bundled Playwright 實測羅傑開場被動為 `roger/morale.webp`、沒有 `portrait-attack`；攻擊接觸前為 `roger/normal.webp`、顯示 HP 100%、沒有受擊 class，接觸後才切 `roger/hit.webp` 並降到約 20%。932×430 無 overflow，`errors=[]`、`failures=[]`。既有傷害跳字 QA 再驗證普通 123、暴擊 456、三段 31／42／53、MISS 與手機版，亦為 `errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/battle_impact_order_20260813_v36/` 與 `.../battle_damage_numbers_20260813/`。
+- 驗證：`node --check` 通過兩支正式 JS 與新定向 QA；8787 的 `board_game.html` 與 V196 `board_battle.html` 均 HTTP 200。Chrome／bundled Playwright 實測羅傑開場被動為 `roger/morale.webp`、沒有 `portrait-attack`；攻擊接觸前為 `roger/normal.webp`、顯示 HP 100%、沒有受擊 class，接觸後才切 `roger/hit.webp` 並降到約 20%。932×430 無 overflow，`errors=[]`、`failures=[]`。既有傷害跳字 QA 再驗證普通 123、暴擊 456、三段 31／42／53、MISS 與手機版，亦為 `errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/battle_impact_order_20260813_v36/` 與 `.../battle_damage_numbers_20260813/`。
 
 #### CPU 開場對話恢復與一般戰鬥時序 V197
 
@@ -7740,18 +6990,15 @@ ode --check` 通過兩支正式 JS 與新定向 QA；8787 的 `board_game.html` 
 - 使用者釐清：開場被動可以有出手／攻擊畫面，但不能因此直接命中敵方並扣血；正式傷害仍須等之後選招與擲骰。
 - 修正：`queueOpeningPassiveVisual()` 建立的 `passive-opening` 事件明記 `cosmeticOnly: true`、`damage: 0`、`hitDamages: []`。`playOpeningPassiveFx()` 對敵方 debuff 恢復使用發動者 `attack`／`angry` 姿勢，但處理器只播放出手、cut-in 與能力下降特效，沒有接觸、受擊、跳字或 HP 更新路徑。正式 iframe 仍跳過舊 modal 重複行動動畫。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/battle_opening_passive_hp_qa.js`、`scripts/battle_impact_order_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/NEXT_CHAT_HANDOFF_20260813.md`、`docs/DEV_WORKFLOW.md`。正式 query 與 `BATTLE_PAGE_VERSION` 為 `20260813-opening-passive-cosmetic-attack-v38`；沒有新增持久欄位，也沒有修改被動數值、傷害公式、CPU 戰術、回合、角色／招式／道具 id、localStorage key、Socket.IO event 或 server 格式。
-- 驗證：
-ode --check` 通過正式 JS 與定向 QA，8787 主頁 HTTP 200。正式 CPU／羅傑對捷風逐幀實戰中，開場被動顯示 `roger/angry.webp`，敵方權威與 iframe HP 全程維持 986／986，沒有敵方受擊圖或傷害節點；之後羅傑選「神避」、骰 4，正式 attack 事件才降至 890／986。獨立接觸時序 QA 亦確認被動出手時 enemy HP 986→986、無 hit class／跳字；正式攻擊接觸前我方 HP 100% 且正常圖，接觸後才切 hit 圖與約 20% HP。932×430 無 overflow，傷害跳字普通／暴擊／三段／MISS 回歸全通過，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/battle_opening_passive_hp_20260813_v38/`、`.../battle_impact_order_20260813_v38/` 與 `.../battle_damage_numbers_20260813/`。
+- 驗證：`node --check` 通過正式 JS 與定向 QA，8787 主頁 HTTP 200。正式 CPU／羅傑對捷風逐幀實戰中，開場被動顯示 `roger/angry.webp`，敵方權威與 iframe HP 全程維持 986／986，沒有敵方受擊圖或傷害節點；之後羅傑選「神避」、骰 4，正式 attack 事件才降至 890／986。獨立接觸時序 QA 亦確認被動出手時 enemy HP 986→986、無 hit class／跳字；正式攻擊接觸前我方 HP 100% 且正常圖，接觸後才切 hit 圖與約 20% HP。932×430 無 overflow，傷害跳字普通／暴擊／三段／MISS 回歸全通過，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/battle_opening_passive_hp_20260813_v38/`、`.../battle_impact_order_20260813_v38/` 與 `.../battle_damage_numbers_20260813/`。
 
 #### 血統抽取敵方卡恢復 V199
 
 - 日期：2026-08-13。
 - 使用者回報：擊倒文斯莫克・伽治後進入血統因子抽取，看不到伽治；並要求確認是否只有伽治或全部抽取來源都有相同問題。
-- 根因與修正：問題不是伽治專屬。通用 KO 動畫會把敵方卡加入 `portrait-ko`、啟用隱藏標記並留下退場計時器；抽取控制器雖保留原 `#enemyCard`，但沒有取消這些擊倒狀態，因此任何抽取來源都可能在較慢 callback 執行後消失。`refreshLineageExtraction()` 現在會先依正式 `scopeKey` 停止敵方 portrait／KO／fade／announce 計時器，清除隱藏標記與 attack／hit／KO class，恢復 
-ormal` 圖，再刷新抽取 UI。伽治複製兵護衛 timer、節點與 class 同時清空；CSS 另在抽取模式強制敵卡與 portrait 可見，防止舊 callback 再次淡出。
+- 根因與修正：問題不是伽治專屬。通用 KO 動畫會把敵方卡加入 `portrait-ko`、啟用隱藏標記並留下退場計時器；抽取控制器雖保留原 `#enemyCard`，但沒有取消這些擊倒狀態，因此任何抽取來源都可能在較慢 callback 執行後消失。`refreshLineageExtraction()` 現在會先依正式 `scopeKey` 停止敵方 portrait／KO／fade／announce 計時器，清除隱藏標記與 attack／hit／KO class，恢復 `normal` 圖，再刷新抽取 UI。伽治複製兵護衛 timer、節點與 class 同時清空；CSS 另在抽取模式強制敵卡與 portrait 可見，防止舊 callback 再次淡出。
 - 修改檔案：`public/js/board_battle.js`、`public/css/board_lineage_extraction.css`、`public/board_battle.html`、`public/board_game.html`、`public/js/board_game.js`、`scripts/lineage_extraction_enemy_visibility_qa.js` 與相關專案文件。正式 query 與 `BATTLE_PAGE_VERSION` 為 `20260813-lineage-enemy-restore-v39`；沒有修改抽取資格／機率、抽取器扣除、因子發放、傷害、CPU 戰術、回合、角色／敵人 id、持久 state、localStorage key、Socket.IO event 或 server 格式。
-- 驗證：
-ode --check` 與 `git diff --check` 通過；8787 的正式主頁、戰鬥頁及伽治 normal portrait 均 HTTP 200。Chrome 定向 QA 完成十三名新 Boss 13／13 與正式可抽取圖鑑 109／109 的敵卡／圖片可見性；伽治在 1600×900 與 932×430 都顯示原正式圖，複製兵層隱藏且數量 0、無 viewport overflow，`errors=[]`、`failures=[]`。證據與報告位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/lineage_extraction_all_20260813_v39/`。
+- 驗證：`node --check` 與 `git diff --check` 通過；8787 的正式主頁、戰鬥頁及伽治 normal portrait 均 HTTP 200。Chrome 定向 QA 完成十三名新 Boss 13／13 與正式可抽取圖鑑 109／109 的敵卡／圖片可見性；伽治在 1600×900 與 932×430 都顯示原正式圖，複製兵層隱藏且數量 0、無 viewport overflow，`errors=[]`、`failures=[]`。證據與報告位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/lineage_extraction_all_20260813_v39/`。
 
 #### 抽取器選擇頁敵方卡層級 V200
 
@@ -7777,8 +7024,7 @@ ode --check` 與 `git diff --check` 通過；8787 的正式主頁、戰鬥頁及
 - 使用者回報：文斯莫克・伽治進行血統因子抽取時，完成三階段後看不到抽取器射出的光束。
 - 根因與修正：V200 把操作模式敵卡提升到 160，研究艙背景為 140；`playOutcome()` 會把 `.lineage-target-beam` 直接移到 `#battleStage`，但其原層級仍為 110，所以光束雖正常進入 `is-firing` 並播放 `lineage-beam-fire`，卻被背景與人物卡蓋住。新增只命中 `#battleStage` 直屬終局光束的層級 170，不改小遊戲光束、正式抽取計算或結果。
 - 修改檔案：`public/css/board_lineage_extraction.css`、`public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/lineage_extraction_enemy_visibility_qa.js` 與相關文件。正式 query 與 `BATTLE_PAGE_VERSION` 為 `20260813-lineage-outcome-beam-layer-v42`；未修改抽取資格／機率、抽取器扣除、因子發放、角色／敵人 id、傷害、回合、持久 state、localStorage key、Socket.IO event 或 server 格式。
-- 驗證：
-ode --check` 通過，8787 正式主頁 HTTP 200。定向 QA 由伽治的「進行提取」實際進入抽取器選擇、開始小遊戲並提交三次 Perfect，等待終局光束射出後檢查：1600×900 為 686×65px、932×430 為 300×67px，兩者皆為光束 170／敵卡 160／研究艙 140、opacity 1、動畫 `lineage-beam-fire`、無 overflow，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/lineage_outcome_beam_20260813_v42/`。
+- 驗證：`node --check` 通過，8787 正式主頁 HTTP 200。定向 QA 由伽治的「進行提取」實際進入抽取器選擇、開始小遊戲並提交三次 Perfect，等待終局光束射出後檢查：1600×900 為 686×65px、932×430 為 300×67px，兩者皆為光束 170／敵卡 160／研究艙 140、opacity 1、動畫 `lineage-beam-fire`、無 overflow，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/lineage_outcome_beam_20260813_v42/`。
 
 #### 覺醒羅布・路基隨機六式 V203
 
@@ -7788,8 +7034,7 @@ ode --check` 通過，8787 正式主頁 HTTP 200。定向 QA 由伽治的「進�
 - 顯示：正式戰鬥 view 會傳送六式 id、能力、已使用、目前生效、剩餘數及六王銃待發；iframe 新增約 2.5 秒的水墨掃痕、巨大繁體字與「能力提高 80%」淡出演出。詳細狀態框用不同樣式標記本回合六式。正式頁尚未引用未確認圖，文字水墨為安全備援。
 - 素材與提示：建立 `public/images/board/battle/postgame_mechanics/lucci_six_powers/incoming/README.md`，約定 `soru.webp`、`tekkai.webp`、`kamie.webp`、`geppo.webp`、`shigan.webp`、`rankyaku.webp`；使用者完成去背後先放 `incoming/`，確認再正式歸檔與接入。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/js/board_battle.js`、`public/board_battle.html`、`scripts/postgame_boss_mechanics_qa.js`、`scripts/lucci_six_powers_qa.js`、六式素材 README 與相關專案文件。正式 query 與 `BATTLE_PAGE_VERSION` 為 `20260813-lucci-random-six-powers-v43`；未改敵人／招式 id、localStorage key、Socket.IO event、server 格式或一般戰鬥規則。
-- 驗證：
-ode --check` 通過。定向瀏覽器 QA 實際抽出六式為 6／6 不重複；五個直接數值由 100 變 180，紙繪使 100 命中率變 56，六王銃固定為 480／無視 0.5／`chance:100`／`guaranteed:true`，施放後節點 6→0。1600×900 與 932×430 的水墨文字／加成皆可見、置中、無 viewport 或 document overflow，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/lucci_six_powers_20260813_v43/`。既有十三 Boss 全套 QA 已啟動但因逐頁流程超過本輪 180 秒工具上限而被外部終止，未取得完整報告；本輪以更新過的路基定向 QA 作正式驗證。
+- 驗證：`node --check` 通過。定向瀏覽器 QA 實際抽出六式為 6／6 不重複；五個直接數值由 100 變 180，紙繪使 100 命中率變 56，六王銃固定為 480／無視 0.5／`chance:100`／`guaranteed:true`，施放後節點 6→0。1600×900 與 932×430 的水墨文字／加成皆可見、置中、無 viewport 或 document overflow，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/lucci_six_powers_20260813_v43/`。既有十三 Boss 全套 QA 已啟動但因逐頁流程超過本輪 180 秒工具上限而被外部終止，未取得完整報告；本輪以更新過的路基定向 QA 作正式驗證。
 
 #### 覺醒羅布・路基六式正式水墨圖 V204
 
@@ -7797,10 +7042,7 @@ ode --check` 通過。定向瀏覽器 QA 實際抽出六式為 6／6 不重複�
 - 素材：將使用者放入 `incoming/` 的六張去背 WebP 逐字辨識後正式歸檔為 `soru.webp`、`tekkai.webp`、`kamie.webp`、`geppo.webp`、`shigan.webp`、`rankyaku.webp`；人工複核時發現紙繪與嵐腳初始檔名互換並已更正。六張均為 1254×1254，正式頁只讀父目錄，不引用 `incoming/`。
 - 顯示：六式定義表新增正式圖片路徑，行動前 visual event 送出選中六式的圖片；iframe 圖片載入成功後隱藏 HTML 大字，載入失敗才保留文字備援。因戰鬥背景與字體同為深色，圖片模式改用不規則淡米白水墨暈染提亮，不增加矩形底框；圖片放大但仍以 `contain` 維持正方形比例。
 - 修改檔案：六張正式 WebP、`public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/lucci_six_powers_qa.js` 與相關專案文件。正式 query 與 `BATTLE_PAGE_VERSION` 為 `20260814-lucci-six-power-art-v44`；未修改六式／招式／Boss id、數值規則、battle state schema、localStorage key、Socket.IO event、server 格式或一般戰鬥。
-- 驗證：
-ode --check public/js/board_game.js`、
-ode --check public/js/board_battle.js`、
-ode --check scripts/lucci_six_powers_qa.js` 通過；`PORT=8794 npm start` 可啟動正式 server，`board_battle.html` HTTP 200，驗證後 listener 為 0。定向 QA 逐張解碼六張正式圖並檢查透明邊緣，全部為 1254×1254；同時再次通過六式 6／6、不重複、100→180、紙繪 100→56、六王銃 480／必中／無視 0.5／6→0。1600×900 與 932×430 的圖片、加成文字、機制框皆在 viewport，無 document overflow，`errors=[]`、`failures=[]`；人工檢查紙繪與指槍截圖確認字圖一致、置中、未擋住上下狀態列。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/lucci_six_powers_20260814_v44/`。
+- 驗證：`node --check public/js/board_game.js`、`node --check public/js/board_battle.js`、`node --check scripts/lucci_six_powers_qa.js` 通過；`PORT=8794 npm start` 可啟動正式 server，`board_battle.html` HTTP 200，驗證後 listener 為 0。定向 QA 逐張解碼六張正式圖並檢查透明邊緣，全部為 1254×1254；同時再次通過六式 6／6、不重複、100→180、紙繪 100→56、六王銃 480／必中／無視 0.5／6→0。1600×900 與 932×430 的圖片、加成文字、機制框皆在 viewport，無 document overflow，`errors=[]`、`failures=[]`；人工檢查紙繪與指槍截圖確認字圖一致、置中、未擋住上下狀態列。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/lucci_six_powers_20260814_v44/`。
 
 #### 覺醒羅布・路基六王銃素材收件區
 
@@ -7816,8 +7058,7 @@ ode --check scripts/lucci_six_powers_qa.js` 通過；`PORT=8794 npm start` 可�
 - 正式素材：使用者提供的 `rokuogan_cast.webp` 與 `rokuogan_impact.webp` 均為 1254×1254，已由 `incoming/` 移至 `public/images/board/battle/postgame_mechanics/lucci_rokuogan/`。發動圖為完整深黑背景 RGB，保留原黑焰與紅色閃電作全螢幕過場；命中圖為透明 RGBA，透明像素約 32%。
 - 顯示：只有正式六王銃 attack visual event 帶 `specialFx: "lucci-rokuogan"`。戰場與頁面留白先全黑，發動圖由 0.76 倍慢慢浮現，再回縮 0.92、前衝 1.36、回到 1.06；之後透明衝擊波爆向我方。接觸時才呼叫受擊圖、逐段畫面 HP、傷害數字與震動，不提前顯示瀕死；一般戰鬥沿用既有 `playImpactFx()`。
 - 修改檔案：兩張正式 WebP、`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/lucci_six_powers_qa.js` 與相關專案文件。正式 query 與 `BATTLE_PAGE_VERSION` 為 `20260814-lucci-rokuogan-art-v46`；未修改六王銃威力／必中／無視防禦、招式／Boss id、battle state schema、localStorage key、Socket.IO event、server 格式或一般戰鬥傷害管線。
-- 驗證：
-ode --check` 通過。定向 QA 驗證六式 6／6 不重複、六次抽式前後 HP 不變、前五次敵方招式不是六王銃、第六次才為六王銃、480／必中／無視 0.5 與施放後 6→0；兩張必殺圖均解碼為 1254×1254 且正式來源不含 `incoming/`。1600×900／932×430 均通過全黑蓄力、0.92→1.36 前衝關鍵影格、衝擊命中、完整 `-321` 傷害數字與無 document overflow，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/lucci_six_powers_20260814_v46/`。
+- 驗證：`node --check` 通過。定向 QA 驗證六式 6／6 不重複、六次抽式前後 HP 不變、前五次敵方招式不是六王銃、第六次才為六王銃、480／必中／無視 0.5 與施放後 6→0；兩張必殺圖均解碼為 1254×1254 且正式來源不含 `incoming/`。1600×900／932×430 均通過全黑蓄力、0.92→1.36 前衝關鍵影格、衝擊命中、完整 `-321` 傷害數字與無 document overflow，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/lucci_six_powers_20260814_v46/`。
 
 #### 覺醒羅布・路基六王銃語音與全黑靜音 V207
 
@@ -7826,8 +7067,7 @@ ode --check` 通過。定向 QA 驗證六式 6／6 不重複、六次抽式前�
 - 顯示與音效：正式 attack visual event 只對六王銃加入 `voiceSfx`／`hitVoiceSfx`。黑幕開始前立即鎖定並 0ms 淡出共用 BGM，停止現有一般施放／命中／狀態音效並在演出期間封鎖延遲音效；喊招語音在路基浮現時播放，命中語音與原命中衝擊音只在 3300ms 接觸點播放。演出清除或頁面離開時解除鎖定，原本有播放的 BGM 以 520ms 淡入。缺檔、解碼或 autoplay 失敗只略過語音，不阻塞戰鬥。
 - 修改檔案：兩段正式 MP3、音效收件 README、`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/lucci_six_powers_qa.js`、`scripts/inspect_lucci_rokuogan_audio.js` 與相關專案文件。正式 query 與 `BATTLE_PAGE_VERSION` 為 `20260814-lucci-rokuogan-audio-v48`；沒有修改六式／六王銃數值、招式／Boss id、傷害、回合、battle state schema、localStorage key、Socket.IO event、server 格式或一般戰鬥管線。
 - 音檔驗證：喊招 1.959 秒、命中 1.384 秒，兩者皆 48 kHz 雙聲道；開頭空白 0.009／0.003 秒、峰值 0.2907／0.2787、RMS 0.0463／0.0628，無爆音且正式 URL HTTP 200。
-- 回歸：
-ode --check` 通過。正式兩段 MP3、六張六式圖與兩張必殺圖均由瀏覽器載入；1600×900／932×430 皆驗證黑幕時 `effectAudioSilenced=true`、BGM `lock→fadeOut(0)`、喊招在 cast、命中語音在 impact，結束為 `unlock→fadeIn(520)`，並保留六式 6／6、抽式零傷害、六王銃 480／必中／無視 0.5、接觸傷害數字與無 overflow，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/lucci_six_powers_20260814_v48/`。
+- 回歸：`node --check` 通過。正式兩段 MP3、六張六式圖與兩張必殺圖均由瀏覽器載入；1600×900／932×430 皆驗證黑幕時 `effectAudioSilenced=true`、BGM `lock→fadeOut(0)`、喊招在 cast、命中語音在 impact，結束為 `unlock→fadeIn(520)`，並保留六式 6／6、抽式零傷害、六王銃 480／必中／無視 0.5、接觸傷害數字與無 overflow，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/lucci_six_powers_20260814_v48/`。
 
 #### 十三島 Boss 與洛克斯專屬戰鬥背景 V208
 
@@ -7835,10 +7075,7 @@ ode --check` 通過。正式兩段 MP3、六張六式圖與兩張必殺圖均由
 - 參考與素材：依電影、動畫、遊戲及原作場景資料，生成史基至綠牛十三名 Boss 與洛克斯共十四張環境專用背景；正式輸出統一為 1920×1080 RGB WebP，中央保留雙方角色卡空間，沒有角色、文字、UI 或浮水印。PNG 原圖保存在 `postgame_boss_backgrounds/incoming/`，正式頁只引用父目錄 WebP。
 - 接入：`BATTLE_BACKGROUND_BY_ENEMY_KEY` 新增十四個既有 `postgame_*` key；Tot Musica 只在通用戰鬥底層使用艾蕾吉亞背景，既有雙世界長背景與特殊鏡頭不變。未修改 Boss id、戰鬥數值、回合、掉落、血統抽取、battle state schema、localStorage key、Socket.IO event 或 server 格式。
 - 修改檔案：`public/board_battle.html`、`public/js/board_battle.js`、`public/board_game.html`、`public/js/board_game.js`、十四張正式背景及十四張 PNG 原圖、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式戰鬥載入版本為 `20260814-postgame-boss-backgrounds-v49`。
-- 驗證：十四張正式 WebP 全為 1920×1080 RGB 且 SHA-256 皆不重複；
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`、`git diff --check` 通過，
-pm start` 於獨立 8798 port 回傳 HTTP 200。Chrome 實際建立十三島戰鬥並另測洛克斯，逐張確認 `battleStage` 取得正確敵人 key、CSS 背景、HTTP 200 與 1920×1080 natural size，結果 14/14、`failures=[]`、`errors=[]`；另輸出十四張 1600×900 桌機戰鬥截圖與卡塔庫栗 932×430 橫向手機截圖，角色卡、HUD、指令與背景無裁字、重疊或破圖。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/postgame_boss_backgrounds_20260814_v49/`。
+- 驗證：十四張正式 WebP 全為 1920×1080 RGB 且 SHA-256 皆不重複；`node --check public/js/board_battle.js`、`node --check public/js/board_game.js`、`git diff --check` 通過，`npm start` 於獨立 8798 port 回傳 HTTP 200。Chrome 實際建立十三島戰鬥並另測洛克斯，逐張確認 `battleStage` 取得正確敵人 key、CSS 背景、HTTP 200 與 1920×1080 natural size，結果 14/14、`failures=[]`、`errors=[]`；另輸出十四張 1600×900 桌機戰鬥截圖與卡塔庫栗 932×430 橫向手機截圖，角色卡、HUD、指令與背景無裁字、重疊或破圖。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/postgame_boss_backgrounds_20260814_v49/`。
 
 #### 魔人歐斯取代洛基、影子彩券與參考圖重畫 V209
 
@@ -7848,9 +7085,7 @@ pm start` 於獨立 8798 port 回傳 HTTP 200。Chrome 實際建立十三島戰�
 - 掉落：新增「魔人歐斯的巨人腰帶」，固定 10% 掉落；最大 HP ×1.5、直接攻擊傷害 +20%、速度 ×0.7。
 - 圖像：依使用者提供的三張動畫設定圖重新生成歐斯七種正式戰鬥狀態，保留紅色縫合屍身、極圓巨腹、骷髏鼻、雙象牙角、黃褐長髮、胸口外露肋骨、藍腰帶與腰間三顆骷髏。七張統一 1024×1536 RGB WebP，使用半身／大腿以上 2:3 戰鬥構圖；正式頁只引用 `public/images/board/battle/enemies/postgame_oars/`，生成稿與版面候選保留在 `incoming/postgame_oars/`。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_items.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/oars_lottery_qa.js`、歐斯七張正式戰鬥圖與相關專案文件。正式戰鬥載入版本為 `20260814-oars-lottery-v51`；沒有改名既有 localStorage key、Socket.IO event 或 server 快照格式。
-- 驗證：
-ode --check` 通過；
-pm start` 的正式 8787 頁面 HTTP 200。Chrome 定向 QA 在 1920×1080 與 932×430 驗證歐斯 55,555／55,555、27 個依當前骰鏈建立的票種、下注鎖定、15 袋鹽立即淨化、HP 歸零、勝利與血統抽取等待；兩種 viewport 都無橫向 overflow、頁面錯誤或失敗。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/oars_lottery_20260814/`。
+- 驗證：`node --check` 通過；`npm start` 的正式 8787 頁面 HTTP 200。Chrome 定向 QA 在 1920×1080 與 932×430 驗證歐斯 55,555／55,555、27 個依當前骰鏈建立的票種、下注鎖定、15 袋鹽立即淨化、HP 歸零、勝利與血統抽取等待；兩種 viewport 都無橫向 overflow、頁面錯誤或失敗。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/oars_lottery_20260814/`。
 
 #### 魔人歐斯七態規格與雙方向受擊修正 V210
 
@@ -7868,37 +7103,29 @@ pm start` 的正式 8787 頁面 HTTP 200。Chrome 定向 QA 在 1920×1080 與 9
 - 鹽袋下注：新戰鬥開場共享 3 包；每個不同選項押 1 包，同回合可勾選多項後一次確認，猜錯失去該項押注，猜中依倍率回收。第 3、6、9……回合各補 1 包；鹽袋耗盡時不阻塞玩家行動。換人、道具或逃跑未產生正式骰鏈時退回該次押注。15 包淨化、勝利、掉落與血統抽取不變。
 - 同步與相容：沿用既有 `oars-prediction` 指令名稱，但 payload 可帶 `optionIds`；正式 battle snapshot 新增陣列型下注資料並相容舊 `lockedPrediction`。沒有新增 localStorage key、Socket.IO event 或 server 權威規則。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/oars_lottery_qa.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式載入版本為 `20260814-oars-salt-betting-v52`。
-- 驗證：
-ode --check` 三支 JS 通過，正式 8787 頁面 HTTP 200。Chrome 定向 QA 在 1920×1080 與 932×430 都驗證：歐斯 55,555／55,555、速度 18、三項舊開場降級為 0、四招首招實際命中 48%、我方 80% 招式因低閃避成為 96%；開場 3 包，分押「大」與「第一骰 6」後剩 1 包，以第一骰 5 結算為一中一失並回到 3 包，第 3 回合補到 4 包；0 包時不產生阻塞提示。15 包淨化、HP 歸零、勝利與血統抽取仍通過；多選在自動刷新後不會消失，桌機／手機無橫向 overflow、重疊、頁面錯誤。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/oars_salt_betting_20260814_v52/`。
+- 驗證：`node --check` 三支 JS 通過，正式 8787 頁面 HTTP 200。Chrome 定向 QA 在 1920×1080 與 932×430 都驗證：歐斯 55,555／55,555、速度 18、三項舊開場降級為 0、四招首招實際命中 48%、我方 80% 招式因低閃避成為 96%；開場 3 包，分押「大」與「第一骰 6」後剩 1 包，以第一骰 5 結算為一中一失並回到 3 包，第 3 回合補到 4 包；0 包時不產生阻塞提示。15 包淨化、HP 歸零、勝利與血統抽取仍通過；多選在自動刷新後不會消失，桌機／手機無橫向 overflow、重疊、頁面錯誤。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/oars_salt_betting_20260814_v52/`。
 
 #### 隱形黑速度增傷取最高值 V212
 
 - 日期：2026-08-14。
 - 平衡修正：隱形黑被動的「速度高於敵人時傷害 +15%」新增 `max-faster-bonus` 疊加規則；招式本身若另有同條件 +25%／+30%，正式傷害只採較高者，不再計算 `1.15 × 1.25` 或 `1.15 × 1.30`。沒有同條件增傷的招式仍取得完整被動 +15%。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁快取版本為 `20260814-sanji-max-faster-bonus-v53`；未修改屬性剋制、角色／招式 id、招式威力、骰子規則、battle state schema、localStorage key、Socket.IO event 或 server 格式。
-- 驗證：
-ode --check public/js/board_game.js` 通過；
-pm start` 以 8803 port 啟動，正式 `board_game.html` HTTP 200。Chrome 定向傷害比較確認魔神風腳在速度較高時只為 `1.30`、沒有招式速度增傷時仍為 `1.15`、地獄回憶仍為 `1.15`，`errors=[]`、`failures=[]`。既有 `sanji_raid_suit_display_timing_qa.js` 於 1600×900 與 932×430 再次通過原型態→變身演出→隱形黑換圖時序，手機無 overflow；證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/sanji_raid_suit_max_bonus_20260814_v212/`。
+- 驗證：`node --check public/js/board_game.js` 通過；`npm start` 以 8803 port 啟動，正式 `board_game.html` HTTP 200。Chrome 定向傷害比較確認魔神風腳在速度較高時只為 `1.30`、沒有招式速度增傷時仍為 `1.15`、地獄回憶仍為 `1.15`，`errors=[]`、`failures=[]`。既有 `sanji_raid_suit_display_timing_qa.js` 於 1600×900 與 932×430 再次通過原型態→變身演出→隱形黑換圖時序，手機無 overflow；證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/sanji_raid_suit_max_bonus_20260814_v212/`。
 
 #### 戰鬥招式只顯示威力 V213
 
 - 日期：2026-08-14。
 - 顯示修正：正式 iframe 與主頁備援戰鬥選單的傷害招式由「傷害 最低-最高」改為「威力 N」；零威力的強化、治療、護盾與控制招式維持效果技／效果內容。`damageRange` 仍作為非顯示的既有內部資料，避免改動 CPU 選招與測試工具。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁快取版本為 `20260814-battle-move-power-label-v54`；未修改招式威力、傷害公式、屬性剋制、骰子、角色／招式 id、battle state schema、localStorage key、Socket.IO event 或 server 格式。
-- 驗證：
-ode --check public/js/board_game.js`、`git diff --check` 通過；
-pm start` 以 8804 port 啟動，正式 `board_game.html` HTTP 200 且載入 v54。Chrome 正式 iframe 驗證傷害招 `damageText` 為「威力 45／42／60」、零威力護盾技為「效果技」，內部 `damageRange` 仍保留；1600×900 與 932×430 都沒有顯示最低／最高傷害、按鈕越框或 document overflow，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/battle_move_power_labels_20260814_v213/`。
+- 驗證：`node --check public/js/board_game.js`、`git diff --check` 通過；`npm start` 以 8804 port 啟動，正式 `board_game.html` HTTP 200 且載入 v54。Chrome 正式 iframe 驗證傷害招 `damageText` 為「威力 45／42／60」、零威力護盾技為「效果技」，內部 `damageRange` 仍保留；1600×900 與 932×430 都沒有顯示最低／最高傷害、按鈕越框或 document overflow，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/battle_move_power_labels_20260814_v213/`。
 
 #### 圖片式彈窗長清單卷軸穩定 V214
 
 - 日期：2026-08-14。
 - 根因：背包、任務簿、攜帶物、訓練素材、外觀框、競技場與酒館等畫面在選取／裝備後會以 `openModal()` 重建同一彈窗，原可捲動 DOM 被替換後瀏覽器會回到 `scrollTop = 0`；部分清單另使用 mandatory／proximity scroll snap，觸控放開時會再次自動吸附，使下方項目看似無法點選。
-- 修正：共用彈窗入口以去除行為 class 後的彈窗類型作識別，只在同類畫面重建前擷取實際可捲動元素，以 id／`data-scroll-key`／穩定 class 與同類序號對應；內容替換後立即及連續兩個 animation frame 恢復位置，資料變短時只限制到新底部。不同類彈窗不共用位置，`closeModal()` 會取消未完成的恢復。八組互動長清單的 CSS scroll snap 改為 
-one`。
+- 修正：共用彈窗入口以去除行為 class 後的彈窗類型作識別，只在同類畫面重建前擷取實際可捲動元素，以 id／`data-scroll-key`／穩定 class 與同類序號對應；內容替換後立即及連續兩個 animation frame 恢復位置，資料變短時只限制到新底部。不同類彈窗不共用位置，`closeModal()` 會取消未完成的恢復。八組互動長清單的 CSS scroll snap 改為 `none`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁快取版本為 `20260814-modal-scroll-stability-v55`；未修改資料 id、道具／任務／角色／戰鬥規則、game state schema、localStorage key、Socket.IO event 或 server 格式。
-- 驗證：
-ode --check public/js/board_game.js` 與 `git diff --check` 通過；`PORT=8805 npm start` 的 `/health` 與正式主頁 HTTP 200。Chrome 1600×900／932×430 分別驗證 15 筆背包同類重開 725→725／346→346、16 筆任務簿點選下方項目 958→958／545→545、203 筆攜帶物在下方實際裝備且資料少一筆後 9496→9496／5182→5182；三種清單 computed `scrollSnapType` 都是 
-one`，頁面錯誤皆為空。人工檢查桌機與手機橫向攜帶物畫面，圖片、文字、按鈕皆在原框內，卷軸停在中後段。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/modal_scroll_stability_20260814_v214/`。
+- 驗證：`node --check public/js/board_game.js` 與 `git diff --check` 通過；`PORT=8805 npm start` 的 `/health` 與正式主頁 HTTP 200。Chrome 1600×900／932×430 分別驗證 15 筆背包同類重開 725→725／346→346、16 筆任務簿點選下方項目 958→958／545→545、203 筆攜帶物在下方實際裝備且資料少一筆後 9496→9496／5182→5182；三種清單 computed `scrollSnapType` 都是 `none`，頁面錯誤皆為空。人工檢查桌機與手機橫向攜帶物畫面，圖片、文字、按鈕皆在原框內，卷軸停在中後段。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/modal_scroll_stability_20260814_v214/`。
 
 #### 魔人歐斯同選項多包鹽袋下注 V215
 
@@ -7907,44 +7134,32 @@ one`，頁面錯誤皆為空。人工檢查桌機與手機橫向攜帶物畫面�
 - UI：每個選項新增減號、目前包數與加號；底部即時顯示選中項目數、總下注及確認後餘額，總數用完時只停用加號。狀態圖示會列出每項實際押注包數。CPU 仍只讀公開機率，但可把多包分配到同一選項。
 - 同步與相容：沿用既有 `oars-prediction` 指令，新增 `bets: [{ optionId, stake }]` payload；舊 `optionIds` 與 V2 battle snapshot 仍可讀取，重複選項會合併包數。沒有新增 localStorage key、Socket.IO event 或 server 權威規則。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/oars_lottery_qa.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式載入版本為 `20260814-oars-variable-stake-v56`。
-- 驗證：三支 JS 
-ode --check` 通過；`PORT=8806 npm start` 的正式頁 HTTP 200。Chrome 1920×1080／932×430 都以「第一骰為大」押 2 包、「第一骰 6 點」押 1 包，確認後 3→0；正式以第一骰 5 結算為一中一失，×2 選項按 2 包回收 4 包，第三回合再補到 5 包。兩種 viewport 都無橫向 overflow、文字重疊或頁面錯誤；55,555 HP、15 包淨化、勝利與血統抽取仍通過。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/oars_variable_stake_20260814_v56/`。
+- 驗證：三支 JS `node --check` 通過；`PORT=8806 npm start` 的正式頁 HTTP 200。Chrome 1920×1080／932×430 都以「第一骰為大」押 2 包、「第一骰 6 點」押 1 包，確認後 3→0；正式以第一骰 5 結算為一中一失，×2 選項按 2 包回收 4 包，第三回合再補到 5 包。兩種 viewport 都無橫向 overflow、文字重疊或頁面錯誤；55,555 HP、15 包淨化、勝利與血統抽取仍通過。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/oars_variable_stake_20260814_v56/`。
 
 #### 隱形黑取消額外攻擊與特攻 V216
 
 - 日期：2026-08-14。
 - 平衡修正：傑爾馬66戰鬥服已經會替換為較高威力的隱形黑招式，因此移除隱形黑被動原本的攻擊 ×1.20 與特攻 ×1.10，避免能力值與招式威力雙重放大。保留防禦 ×1.30、特防 ×1.25、速度 ×1.35、速度較高增傷取最高值、光學迷彩、一次致命傷完全抵擋及完整變身演出。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`scripts/sanji_raid_suit_display_timing_qa.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁快取版本為 `20260814-sanji-raid-suit-offense-balance-v57`；未修改招式威力、屬性剋制、骰子、角色／道具／招式 id、battle state schema、localStorage key、Socket.IO event 或 server 格式。
-- 驗證：
-ode --check` 通過；`PORT=8807 npm start` 正式頁 HTTP 200。Chrome 實戰同一名新世界香吉士變身前後為攻擊 99→99、特攻 78→78、防禦 77→100、特防 79→99、速度 133→163；確認攻擊與特攻不再增加，而防禦與機動特色仍生效。原型態→五秒變身→隱形黑圖的時序、1600×900 與 932×430 圖片範圍、手機 overflow 均通過，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/sanji_raid_suit_offense_balance_20260814_v216/`。
+- 驗證：`node --check` 通過；`PORT=8807 npm start` 正式頁 HTTP 200。Chrome 實戰同一名新世界香吉士變身前後為攻擊 99→99、特攻 78→78、防禦 77→100、特防 79→99、速度 133→163；確認攻擊與特攻不再增加，而防禦與機動特色仍生效。原型態→五秒變身→隱形黑圖的時序、1600×900 與 932×430 圖片範圍、手機 overflow 均通過，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/sanji_raid_suit_offense_balance_20260814_v216/`。
 
 #### 隱形黑光學迷彩只在 MISS 時換圖 V217
 
 - 日期：2026-08-14。
-- 顯示修正：隱形黑變身完成後、迷彩待命與重新準備迷彩時，主戰鬥卡一律使用 
-ormal.webp`。只有敵方直接攻擊被 `battleMoveHits()` 的光學迷彩判定擋下時，該次 attack visual event 才帶非持久 `raidSuitStealth` 標記，戰鬥頁在 MISS 接觸點短暫切換 `stealth.webp`，演出後恢復 normal。Tot Musica 雙世界敵方攻擊的個別目標結果也沿用同一標記與換圖規則。
+- 顯示修正：隱形黑變身完成後、迷彩待命與重新準備迷彩時，主戰鬥卡一律使用 `normal.webp`。只有敵方直接攻擊被 `battleMoveHits()` 的光學迷彩判定擋下時，該次 attack visual event 才帶非持久 `raidSuitStealth` 標記，戰鬥頁在 MISS 接觸點短暫切換 `stealth.webp`，演出後恢復 normal。Tot Musica 雙世界敵方攻擊的個別目標結果也沿用同一標記與換圖規則。
 - 規則與同步：光學迷彩仍只擋下一次敵方直接攻擊，消耗後 `stealthReady=false`；未修改命中、HP、招式、能力、道具 id、battle state schema、localStorage key、Socket.IO event 或 server 狀態。變身演出完成圖同步改為 normal。正式主頁與 battle iframe query 為 `20260814-sanji-stealth-miss-portrait-v58`。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/sanji_raid_suit_display_timing_qa.js`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_BOSS_RELICS.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：三支 JS 
-ode --check` 通過；既有正式 
-pm start` 服務的 `board_game.html` HTTP 200。Chrome 1600×900 實戰確認五秒變身前／中仍為新世界香吉士原圖，完成後為 `sanji_stealth_black/normal.webp`；伽治以電磁裂踢攻擊時事件為 `miss=true`、`raidSuitStealth=true`，HP 108→108、迷彩消耗，MISS 當下 DOM 為 `stealth.webp`，隨後恢復 normal。932×430 圖片在 viewport、無 overflow，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/sanji_stealth_miss_portrait_20260814_v217/`。
+- 驗證：三支 JS `node --check` 通過；既有正式 `npm start` 服務的 `board_game.html` HTTP 200。Chrome 1600×900 實戰確認五秒變身前／中仍為新世界香吉士原圖，完成後為 `sanji_stealth_black/normal.webp`；伽治以電磁裂踢攻擊時事件為 `miss=true`、`raidSuitStealth=true`，HP 108→108、迷彩消耗，MISS 當下 DOM 為 `stealth.webp`，隨後恢復 normal。932×430 圖片在 viewport、無 overflow，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/sanji_stealth_miss_portrait_20260814_v217/`。
 
 #### 艾爾巴夫洛基改為高強度標準戰鬥 V218
 
 - 日期：2026-08-15。
 - 規則修正：洛基維持從十三座無風帶 Boss 移到艾爾巴夫王子試煉的配置；十三島第 12 位仍是魔人歐斯。艾爾巴夫洛基不再進入 `postgameBossMechanic` 管線，移除敵人端冰雲生成／消耗、可攻擊 Ragnir 目標、35% 雷神覺醒與龍人階段，戰鬥頁不再顯示洛基專屬狀態圖示或詳細框。Ragnir 作為玩家掉落攜帶物的冰雲效果保持不變。
 - 強度：洛基仍為 Lv.99／SSS，敵人種子調整為 HP 2300、攻擊 108、防禦 104、特攻 82、特防 100、速度 84，開場攻擊／防禦／特防／速度各 +1；鐵雷與巨人族王拳原始威力調為 310／342。既有 Lv.99 平衡器會限制招式威力與換算能力，艾爾巴夫試煉另在平衡後保證至少 1800 HP，因此比一般 986 HP 的十三島敵人更耐打，但仍使用標準傷害公式。
-- 相容：舊艾爾巴夫 pending battle 若帶 `postgameBossMechanic`、三朵冰雲、`dragon=true` 或 `dragon_normal.webp`，
-ormalizeBattleState()` 會清空機制、取消 `isPostgameBoss` 並恢復正式 
-ormal.webp`。不新增或改名 `gameState`／battle snapshot 欄位、localStorage key、Socket.IO event 或 server 欄位；10% Ragnir、SSS 血統抽取、專屬背景與敵框保持不變。
+- 相容：舊艾爾巴夫 pending battle 若帶 `postgameBossMechanic`、三朵冰雲、`dragon=true` 或 `dragon_normal.webp`，`normalizeBattleState()` 會清空機制、取消 `isPostgameBoss` 並恢復正式 `normal.webp`。不新增或改名 `gameState`／battle snapshot 欄位、localStorage key、Socket.IO event 或 server 欄位；10% Ragnir、SSS 血統抽取、專屬背景與敵框保持不變。
 - UI 與素材：情報頁明示「標準戰鬥規則」，移除機制預覽區；洛基全程使用既有巨人王子七態半身圖。`dragon_normal.webp` 與舊冰雲圖示只保留歷史來源，正式頁不引用。主頁與 battle iframe query 更新為 `20260815-loki-standard-trial-v60`。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/postgame_boss_mechanics_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/POSTGAME_BOSS_IMAGE_PROMPTS_20260801.txt`、`docs/DEV_WORKFLOW.md`。
-- 驗證：三支 JS 
-ode --check` 與指定檔案 `git diff --check` 通過，正式 
-pm start` 的 `board_game.html` 回應 HTTP 200。Chrome 1600×900 新戰確認 HP 1800、`isPostgameBoss=false`、機制物件／view 均為 
-ull`、專屬圖示 0、正式半身圖可解碼；注入舊三雲／龍人 pending battle 再續戰後仍為機制 
-ull` 與 
-ormal.webp`。932×430 敵卡在 viewport、無 document overflow，沒有頁面錯誤。十三島快速回歸確認 `count=13`、含歐斯、不含洛基且 13 個敵人 key 與機制 key 全部一致；完整長動畫批次在 300 秒工具上限前只完成登島截圖，因此不宣稱該批次最終通過。畫面證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/loki_standard_trial_20260815_v60/`。
+- 驗證：三支 JS `node --check` 與指定檔案 `git diff --check` 通過，正式 `npm start` 的 `board_game.html` 回應 HTTP 200。Chrome 1600×900 新戰確認 HP 1800、`isPostgameBoss=false`、機制物件／view 均為 `null`、專屬圖示 0、正式半身圖可解碼；注入舊三雲／龍人 pending battle 再續戰後仍為機制 `null` 與 `normal.webp`。932×430 敵卡在 viewport、無 document overflow，沒有頁面錯誤。十三島快速回歸確認 `count=13`、含歐斯、不含洛基且 13 個敵人 key 與機制 key 全部一致；完整長動畫批次在 300 秒工具上限前只完成登島截圖，因此不宣稱該批次最終通過。畫面證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/loki_standard_trial_20260815_v60/`。
 
 #### 金獅子史基漂浮群島攻城戰 V219
 
@@ -7954,8 +7169,7 @@ ormal.webp`。932×430 敵卡在 viewport、無 document overflow，沒有頁面
 - UI 與素材：以 Codex 內建 ImageGen 生成獸王島、岩獅島、空中艦隊與三張對應崩解版，共六張 1254×1254 RGBA WebP；正式頁只引用 `shiki_archipelago/` 根目錄 WebP，PNG 來源移入 `incoming/`。戰鬥卡右下顯示可點選的當前島圖、耐久與效果，破島切換崩解圖向下墜落；原專屬狀態圖示改顯示已破島數，詳細框列出三島圖片、HP、效果與島嶼／本體目標。完整提示詞保存於 `docs/SHIKI_ARCHIPELAGO_IMAGE_PROMPTS_20260815.md`。
 - 相容與同步：新狀態只放在既有 `battleState.postgameBossMechanic`，仍由完整 `BOARD_GAME_STATE` 快照同步；沒有新增 localStorage key、Socket.IO event、server 欄位或改名 Boss／招式／島嶼／掉落 id。舊進行中史基戰鬥若含浮空值欄位，正規化時會移除舊欄位並補建三島。正式主頁與 battle iframe query 更新為 `20260815-shiki-archipelago-v61`。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`public/images/board/battle/postgame_mechanics/shiki_archipelago/**`、`scripts/shiki_archipelago_qa.js`、`docs/SHIKI_ARCHIPELAGO_IMAGE_PROMPTS_20260815.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過 `board_game.js`、`board_battle.js` 與專屬 QA；`PORT=8810 npm start` 的正式 `board_game.html` 回應 HTTP 200。Chrome 定向 QA 驗證三島數量／輪替、CPU 攻島、本體 50%／岩獅 35% 減傷、獸王 +15%、攻島 25% 貫穿、連擊溢出、破島 +50% 破綻、艦隊後排損血、三島全毀決戰、四招切換、憤怒圖及舊浮空值快照遷移，結果 `errors=[]`、`failures=[]`。1600×900 與 932×430 的島圖均為 1254×1254、在敵卡範圍內、破圖 0，三島詳細框沒有文字 overflow；一般攻擊命中時序回歸 `battle_impact_order_qa.js` 也為 `errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/shiki_archipelago_20260815_v61/`。
+- 驗證：`node --check` 通過 `board_game.js`、`board_battle.js` 與專屬 QA；`PORT=8810 npm start` 的正式 `board_game.html` 回應 HTTP 200。Chrome 定向 QA 驗證三島數量／輪替、CPU 攻島、本體 50%／岩獅 35% 減傷、獸王 +15%、攻島 25% 貫穿、連擊溢出、破島 +50% 破綻、艦隊後排損血、三島全毀決戰、四招切換、憤怒圖及舊浮空值快照遷移，結果 `errors=[]`、`failures=[]`。1600×900 與 932×430 的島圖均為 1254×1254、在敵卡範圍內、破圖 0，三島詳細框沒有文字 overflow；一般攻擊命中時序回歸 `battle_impact_order_qa.js` 也為 `errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/shiki_archipelago_20260815_v61/`。
 
 #### 金獅子史基三島同場與完整墜落 V220
 
@@ -7964,8 +7178,7 @@ ode --check` 通過 `board_game.js`、`board_battle.js` 與專屬 QA；`PORT=881
 - 耐久與相容：每座島耐久由史基當場最大 HP 的 24%／最低 220 提高為 60%／最低 900。`archipelagoVersion` 提升至 2；舊進行中戰鬥依原本剩餘 HP 百分比換算到新耐久，已毀島維持已毀，不新增 localStorage key、Socket.IO event、server 欄位或獨立持久化資料。
 - UI：三座正式島圖同時沿敵方角色框左緣縱向排列，大部分可跨出框線但仍留在可視範圍；各島有自己的名稱、900/900 耐久、效果與點選光暈。破島只讓對應島切換崩解圖，以 1600ms 動畫一路向下移動 120vh、完全離開畫面並移除，其餘島不跳位。為避免定時 HUD 重畫造成島嶼按鈕難以點擊，戰鬥頁只在島嶼狀態或選取真正變化時重建這一區。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/shiki_archipelago_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/GAME_RULES.md`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁與 battle iframe query 為 `20260815-shiki-three-islands-v62`。
-- 驗證：
-ode --check` 通過三支 JS。`PORT=8811 npm start` 正常啟動，正式 `board_game.html` 回應 HTTP 200 並載入 v62。Chrome 定向 QA 驗證三個島嶼目標與 900 HP、三島同時生效、岩獅存活 35%／擊破後 50%、獸王 +15%、艦隊只在存活時波及後排、25% 貫穿、連擊溢出、破綻、三島全毀決戰、舊浮空快照遷移；1600×900／932×430 都是三島同時載入、向左跨出敵框但不超出 viewport、無文件 overflow、文字與詳細框無超框，破島使用正式崩解圖且動畫後 DOM 完全移除，`errors=[]`、`failures=[]`。一般戰鬥 `battle_impact_order_qa.js` 回歸亦為 `errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/shiki_archipelago_20260815_v62/`。
+- 驗證：`node --check` 通過三支 JS。`PORT=8811 npm start` 正常啟動，正式 `board_game.html` 回應 HTTP 200 並載入 v62。Chrome 定向 QA 驗證三個島嶼目標與 900 HP、三島同時生效、岩獅存活 35%／擊破後 50%、獸王 +15%、艦隊只在存活時波及後排、25% 貫穿、連擊溢出、破綻、三島全毀決戰、舊浮空快照遷移；1600×900／932×430 都是三島同時載入、向左跨出敵框但不超出 viewport、無文件 overflow、文字與詳細框無超框，破島使用正式崩解圖且動畫後 DOM 完全移除，`errors=[]`、`failures=[]`。一般戰鬥 `battle_impact_order_qa.js` 回歸亦為 `errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/shiki_archipelago_20260815_v62/`。
 
 #### 金獅子史基三島錯位與外框遮擋修正 V221
 
@@ -7973,8 +7186,7 @@ ode --check` 通過三支 JS。`PORT=8811 npm start` 正常啟動，正式 `boar
 - UI 修正：`shikiArchipelagoStage` 從敵方角色圖片內層移到敵方戰鬥卡的獨立直屬上層，固定層級 50，高於史基專屬外觀框層級 12；三座島改以三列網格及獨立水平錯位排列，彼此不再疊住。島群緊貼 Boss 圖框左側，能完整超出框外但仍留在 viewport；畫面上的島名／HP 縮為單行，完整機制文字仍保留在點擊狀態圖示後的詳細框。
 - 相容：只調整戰鬥頁 DOM、CSS、顯示檢查與快取 query；沒有改動史基三島 HP、效果、目標、傷害、CPU 策略、破島動畫、battle state、localStorage key、Socket.IO event 或 server 欄位。正式主頁與 battle iframe query 更新為 `20260815-shiki-frame-clear-v63`。
 - 修改檔案：`public/board_battle.html`、`public/board_game.html`、`public/js/board_game.js`、`scripts/shiki_archipelago_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過 `board_game.js`、`board_battle.js` 與專屬 QA；`PORT=8812 npm start` 正常啟動，正式 `board_game.html` 回應 HTTP 200 並載入 v63。Chrome 1600×900／932×430 定向 QA 確認三島 DOM 框不重疊、島群直屬 `enemyCard`、層級 50 高於外觀框 12、緊貼敵框左緣、沒有 viewport／document overflow、圖片皆為 1254×1254 且破圖 0；選島、破島崩解、完全向下消失、三島數值與舊快照遷移全數通過，`errors=[]`、`failures=[]`。一般戰鬥 `battle_impact_order_qa.js` 回歸亦為 `errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/shiki_archipelago_20260815_v63/`。
+- 驗證：`node --check` 通過 `board_game.js`、`board_battle.js` 與專屬 QA；`PORT=8812 npm start` 正常啟動，正式 `board_game.html` 回應 HTTP 200 並載入 v63。Chrome 1600×900／932×430 定向 QA 確認三島 DOM 框不重疊、島群直屬 `enemyCard`、層級 50 高於外觀框 12、緊貼敵框左緣、沒有 viewport／document overflow、圖片皆為 1254×1254 且破圖 0；選島、破島崩解、完全向下消失、三島數值與舊快照遷移全數通過，`errors=[]`、`failures=[]`。一般戰鬥 `battle_impact_order_qa.js` 回歸亦為 `errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/shiki_archipelago_20260815_v63/`。
 
 #### 大熊轉送船向與落地掌印船圖修正 V222
 
@@ -7982,8 +7194,7 @@ ode --check` 通過 `board_game.js`、`board_battle.js` 與專屬 QA；`PORT=881
 - 顯示修正：大熊肉球地圖轉送仍讓外層氣泡依貝茲曲線方向旋轉，但每幀同步把相反角度寫入船圖，因此船身世界角度固定為正向，不會在向左上或大角度路段上下顛倒。抵達 Boss 島時，碗狀肉球掌印新增同一玩家船圖並精確置中；飛行氣泡中的舊船在 `arrived` 當下隱藏，落地演出只顯示一艘船，最後再銜接既有地圖船 token。
 - 相容：沿用玩家當前 `shipSkin` 圖片、`pendingPostgameBossVoyage`、`final-boss-voyage`、`state.kumaPawAnimation` 與完整 `BOARD_GAME_STATE`；沒有新增或改名持久欄位、localStorage key、Socket.IO event、地圖節點、Boss 或道具 id。正式主頁與 battle iframe query 更新為 `20260815-kuma-upright-landing-ship-v64`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/kuma_paw_ship_orientation_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過正式 JS 與專屬 QA；`PORT=8813 npm start` 正常啟動。Chrome 1600×900 實測飛行路段角度達 -116.335° 時，船圖補償為 +116.335°，合成後世界角度約 0°；1600×900 與 932×430 抵達時掌印／船圖中心差皆小於 0.001px、可見船數固定 1、船圖 861×942、破圖 0，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/kuma_paw_ship_20260815_v64/`。
+- 驗證：`node --check` 通過正式 JS 與專屬 QA；`PORT=8813 npm start` 正常啟動。Chrome 1600×900 實測飛行路段角度達 -116.335° 時，船圖補償為 +116.335°，合成後世界角度約 0°；1600×900 與 932×430 抵達時掌印／船圖中心差皆小於 0.001px、可見船數固定 1、船圖 861×942、破圖 0，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/kuma_paw_ship_20260815_v64/`。
 
 #### 平板／手機固定桌機比例 V223
 
@@ -7991,8 +7202,7 @@ ode --check` 通過正式 JS 與專屬 QA；`PORT=8813 npm start` 正常啟動�
 - 顯示修正：觸控平板／手機載入 `board_game.html` 時，先轉入新的 `board_fixed_viewport.html`；外框以黑色背景承載固定 1600×900 同源遊戲 iframe，再依目前可視寬高取較小倍率等比例縮放與置中。所有地圖、HUD、彈窗、劇情與動態加入 body 的圖層因此都保持電腦版比例，不再由各自的窄版 media query 造成不同重排。桌機不轉址，戰鬥頁既有 1024×576 fitter 不變；`layout=responsive` 可停用、`layout=desktop` 可強制固定模式。
 - 導航與相容：外框把房號、`online`、其他 query 與 hash 原樣傳給內頁，只追加非持久 `desktop_frame=1` 防止遞迴；內頁「返回等待室」會導向最上層視窗。沒有新增或改名 `gameState`、battle snapshot、localStorage key、Socket.IO event、server 欄位、地圖節點或資料 id。正式主頁與 battle iframe query 更新為 `20260815-fixed-desktop-ratio-v65`。
 - 修改檔案：`public/board_fixed_viewport.html`、`public/board_game.html`、`public/js/board_game.js`、`public/board_battle.html`、`scripts/board_fixed_viewport_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過 `board_game.js`、`board_battle.js` 與專屬 QA；`PORT=8814 npm start` 正常啟動。Chrome 桌機 1600×900 確認不轉址；觸控平板 1024×768 的可視遊戲框為 1024×576、上下各 96px 黑邊，橫向手機 932×430 為 764.445×430、左右各約 83.78px 黑邊，直向手機 390×844 為 390×219.375 並垂直置中。三種觸控畫面的內部 viewport 都為 1600×900，房號／連線參數／hash 完整、縮放後真實點擊成功，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/board_fixed_viewport_20260815_v65/`。
+- 驗證：`node --check` 通過 `board_game.js`、`board_battle.js` 與專屬 QA；`PORT=8814 npm start` 正常啟動。Chrome 桌機 1600×900 確認不轉址；觸控平板 1024×768 的可視遊戲框為 1024×576、上下各 96px 黑邊，橫向手機 932×430 為 764.445×430、左右各約 83.78px 黑邊，直向手機 390×844 為 390×219.375 並垂直置中。三種觸控畫面的內部 viewport 都為 1600×900，房號／連線參數／hash 完整、縮放後真實點擊成功，`errors=[]`、`failures=[]`。證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/board_fixed_viewport_20260815_v65/`。
 
 #### 所有正式遊戲頁面精確沿用 1920×900 電腦比例 V224
 
@@ -8001,8 +7211,7 @@ ode --check` 通過 `board_game.js`、`board_battle.js` 與專屬 QA；`PORT=881
 - 戰鬥按鈕：Chrome 正式建立一般戰鬥，電腦與平板的攻擊／夥伴／道具／逃跑按鈕均為相同座標、429.688～429.703×118.609px、字級 27px；點擊攻擊後四個招式按鈕也逐項相同，為 429.688～429.703×128.25～128.266px、字級 15px。兩端的 battle viewport 都是 1920×900，`max-width:1100px=false`、`max-height:620px=false`、`battle-viewport-fitted=false`。
 - 相容：只修改固定外框尺寸、正式快取 query 與 QA；沒有修改地圖、戰鬥規則、按鈕功能、damage、game state／battle snapshot、localStorage key、Socket.IO event、server 欄位或資料 id。正式主頁與 battle iframe query 為 `20260815-exact-desktop-pages-v66`。
 - 修改檔案：`public/board_fixed_viewport.html`、`public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/board_fixed_viewport_qa.js`、`scripts/board_desktop_page_parity_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過兩支正式 JS 與兩支 QA；`PORT=8815 npm start` 正常啟動。1024×768 平板框為 1024×480、上下各 144px 黑邊；932×430 橫向手機框為 917.334×430、左右各約 7.33px 黑邊；390×844 直向手機框為 390×182.813 並垂直置中。三者內部皆為 1920×900、房號／連線參數／hash／真實點擊正常。戰鬥主指令與招式選擇的電腦／平板幾何比對完全一致；推進城、頂上戰爭、水之七島與約克解碼亦皆為 1920×900 且所有 1180／1120／980px 窄版查詢為 false。兩支報告皆為 `errors=[]`、`failures=[]`，證據位於 `board_fixed_viewport_20260815_v66/` 與 `board_desktop_page_parity_20260815_v66/`。
+- 驗證：`node --check` 通過兩支正式 JS 與兩支 QA；`PORT=8815 npm start` 正常啟動。1024×768 平板框為 1024×480、上下各 144px 黑邊；932×430 橫向手機框為 917.334×430、左右各約 7.33px 黑邊；390×844 直向手機框為 390×182.813 並垂直置中。三者內部皆為 1920×900、房號／連線參數／hash／真實點擊正常。戰鬥主指令與招式選擇的電腦／平板幾何比對完全一致；推進城、頂上戰爭、水之七島與約克解碼亦皆為 1920×900 且所有 1180／1120／980px 窄版查詢為 false。兩支報告皆為 `errors=[]`、`failures=[]`，證據位於 `board_fixed_viewport_20260815_v66/` 與 `board_desktop_page_parity_20260815_v66/`。
 
 #### 金獅子漂浮群島連擊轉火與本體防護 V225
 
@@ -8011,8 +7220,7 @@ ode --check` 通過兩支正式 JS 與兩支 QA；`PORT=8815 npm start` 正常�
 - 顯示：只讓敵方 `combat-card` 容許漂浮島超框，史基本人的 `card-inner` 與 `portrait-wrap` 恢復裁切，人物不再跑出框。三島卡常駐顯示完整量化效果；點島會顯示 HP、效果、貫穿與連擊規則；Boss 詳細框加高並把三島改成三列可讀說明。連擊視覺事件新增逐段島嶼目標、逐段破島及攻擊前島群快照，使打擊與傷害數字跟著正確島嶼，破島各自向下崩落。
 - 相容：沿用既有 `postgameBossMechanic.islands`、目標 id、完整 `BOARD_GAME_STATE` 快照與 battle iframe 指令，不新增頂層狀態、localStorage key、Socket.IO event 或 server 欄位。正式主頁與 battle iframe query 為 `20260815-shiki-archipelago-combo-v67`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`public/js/board_battle.js`、`scripts/shiki_archipelago_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過正式 JS 與 QA；`PORT=8815 npm start` 正常。規則實測本體 100 傷害在岩獅島存活時為 2、岩獅島擊破後為 5，破綻 150 傷害在群島護航下為 8；四段各 100 的連擊對三座各 60 HP 島嶼會依序命中獸王／岩獅／艦隊，Boss 傷害為 `[55,55,55,100]`，逐段破島旗標為 `[true,true,true,false]`。1920×900 與 932×430 皆確認史基本人框 `overflow:hidden`、敵卡 `overflow:visible`、三段島嶼效果可見、圖片完整、無頁面溢出；報告 `errors=[]`、`failures=[]` 位於 `shiki_archipelago_20260815_v67/`。
+- 驗證：`node --check` 通過正式 JS 與 QA；`PORT=8815 npm start` 正常。規則實測本體 100 傷害在岩獅島存活時為 2、岩獅島擊破後為 5，破綻 150 傷害在群島護航下為 8；四段各 100 的連擊對三座各 60 HP 島嶼會依序命中獸王／岩獅／艦隊，Boss 傷害為 `[55,55,55,100]`，逐段破島旗標為 `[true,true,true,false]`。1920×900 與 932×430 皆確認史基本人框 `overflow:hidden`、敵卡 `overflow:visible`、三段島嶼效果可見、圖片完整、無頁面溢出；報告 `errors=[]`、`failures=[]` 位於 `shiki_archipelago_20260815_v67/`。
 
 #### 推進城中央監獄門覆蓋外框 V226
 
@@ -8020,8 +7228,7 @@ ode --check` 通過正式 JS 與 QA；`PORT=8815 npm start` 正常。規則實�
 - 問題與修正：`impel_down_captive_cage_overlay.webp` 為 1024×1280，alpha 可見範圍只有 `(58,32)～(966,1248)`；100% 尺寸時可見鐵門只填滿中央內孔。依使用者確認改為讓門體覆蓋外框，正式 `.impel-image-ui .cage-overlay` 使用寬 137%、高 118.2% 並維持中心對齊，可見金屬邊緣剛好壓住中央外框。
 - 相容：只調整推進城副本的監獄門覆蓋圖，不改隊長人物大小、牢籠解鎖淡出、樓層、事件、招募、指令、戰鬥、CPU、觀看方、回合、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。推進城 iframe query 為 `20260815-impel-gate-cover-frame-v13`，主頁 query 為 `20260815-impel-gate-cover-frame-v69`。
 - 修改檔案：`public/board_impel_down.html`、`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。`docs/GAME_RULES.md` 不需更新，因規則未變。
-- 驗證：
-ode --check public/js/board_game.js`、正式頁 HTTP 200 與 `git diff --check` 通過。Chrome 1920×900 中央內孔為 297.438×380.688px，門圖元素放大為 407.484×449.969px；扣除透明邊界後可見門體約 361.3×427.5px，對齊並覆蓋外框且未碰左右相鄰介面。932×430 直接窄畫面亦無頁面 overflow、破圖或 runtime error；證據為 `impel_gate_cover_frame_v226.png` 與 `impel_gate_cover_frame_v226_phone_direct.png`。
+- 驗證：`node --check public/js/board_game.js`、正式頁 HTTP 200 與 `git diff --check` 通過。Chrome 1920×900 中央內孔為 297.438×380.688px，門圖元素放大為 407.484×449.969px；扣除透明邊界後可見門體約 361.3×427.5px，對齊並覆蓋外框且未碰左右相鄰介面。932×430 直接窄畫面亦無頁面 overflow、破圖或 runtime error；證據為 `impel_gate_cover_frame_v226.png` 與 `impel_gate_cover_frame_v226_phone_direct.png`。
 
 #### 移動蛋頭島登島對話劇情 V227
 
@@ -8029,8 +7236,7 @@ ode --check public/js/board_game.js`、正式頁 HTTP 200 與 `git diff --check`
 - 呈現：`openPostgameRocksModal` 在非續戰狀態先播放 `POSTGAME_EGGHEAD_ROCKS_STORY`，沿用既有 `startFinalEndingCinematicSession`、角色頭像、返回／繼續、自動、速度與略過操作。劇情分為抵達移動蛋頭島、約克公開最後部署、洛克斯甦醒三幕，最後銜接原有洛克斯情報面板。
 - 相容：續戰以既有 `pendingBattle.islandId` 判斷並略過劇情；CPU 仍由 `resolveLanding` 原路徑直接開戰。沒有新增或改名 `gameState` 欄位、localStorage key、Socket.IO event、地圖節點、路線、Boss、道具或素材 id，也沒有更動蛋頭島解碼與解鎖條件。正式 query 為 `20260815-egghead-dialogue-story-v70`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`scripts/egghead_dialogue_story_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。`docs/GAME_RULES.md` 不需更新，因遊戲規則未變。
-- 驗證：
-ode --check` 通過正式 JS 與專屬 QA，`PORT=8817 npm start` 正常啟動。Chrome 1920×900 逐幕驗證娜美、約克、洛克斯角色圖，三個對話框固定為 1828×270px、全部位於 viewport 內，圖片載入成功、無 document overflow、runtime error 或 HTTP 錯誤；最後正確關閉劇情並顯示「蛋頭島終戰・洛克斯」情報面板。另逐句等待轉場與人物圖穩定後輸出完整 13 張對話截圖，報告 `errors=[]`、`failures=[]`，證據位於 `egghead_dialogue_story_20260815_all_13/`。
+- 驗證：`node --check` 通過正式 JS 與專屬 QA，`PORT=8817 npm start` 正常啟動。Chrome 1920×900 逐幕驗證娜美、約克、洛克斯角色圖，三個對話框固定為 1828×270px、全部位於 viewport 內，圖片載入成功、無 document overflow、runtime error 或 HTTP 錯誤；最後正確關閉劇情並顯示「蛋頭島終戰・洛克斯」情報面板。另逐句等待轉場與人物圖穩定後輸出完整 13 張對話截圖，報告 `errors=[]`、`failures=[]`，證據位於 `egghead_dialogue_story_20260815_all_13/`。
 
 #### 拉夫德魯結局後新世界逐句對話 V228
 
@@ -8038,8 +7244,7 @@ ode --check` 通過正式 JS 與專屬 QA，`PORT=8817 npm start` 正常啟動�
 - 呈現：完成最終之島結局後，原本固定時間切換大標題的「無風帶消失→十三座孤島→約克部署→蛋頭島移動→研究所啟動」改為 `POSTGAME_WORLD_UNLOCK_STORY` 五幕、21 句全螢幕對話。沿用正式結局播放器的角色頭像、返回／繼續、自動、速度與跳過；既有無風帶、世界海圖、移動蛋頭島及研究設施場景圖直接作背景，沒有新增或替換正式圖片。
 - 回合與同步：世界解鎖、十三島／路線建立、研究所啟用及 `postgame-world-unlock` 完整快照時點不變。取消舊 25.8 秒固定結束回合計時；只有事件指定的當前回合控制者在看完最後一句或按跳過後才解除 `resolutionLock` 並 `endTurn()`，其他 client 不會重複推進。舊存檔的研究所後續補播不帶交棒旗標，只播放劇情並返回地圖。沒有新增 `gameState` 欄位、localStorage key、Socket.IO event、地圖節點、路線、Boss 或道具 id。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`scripts/postgame_world_unlock_dialogue_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式 query 為 `20260816-postgame-world-dialogue-v71`。
-- 驗證：
-ode --check` 通過正式 JS 與專屬 QA；`PORT=8818 npm start` 正常啟動，正式頁 HTTP 200。Chrome 1920×900 逐句輸出 21 張截圖，所有非旁白句皆有可解碼頭像，對話框／人物圖全在 viewport、無 document overflow；最後關閉 modal、`resolutionLock=false`、單人 round 3→4，地圖含 13 座 `calm-belt-island-*` 與 25 條既有 `route-postgame-*`。1180×820 平板首末幕亦無超框；報告 `errors=[]`、`failures=[]`，證據位於 `postgame_world_unlock_dialogue_20260816_v71_final/`。
+- 驗證：`node --check` 通過正式 JS 與專屬 QA；`PORT=8818 npm start` 正常啟動，正式頁 HTTP 200。Chrome 1920×900 逐句輸出 21 張截圖，所有非旁白句皆有可解碼頭像，對話框／人物圖全在 viewport、無 document overflow；最後關閉 modal、`resolutionLock=false`、單人 round 3→4，地圖含 13 座 `calm-belt-island-*` 與 25 條既有 `route-postgame-*`。1180×820 平板首末幕亦無超框；報告 `errors=[]`、`failures=[]`，證據位於 `postgame_world_unlock_dialogue_20260816_v71_final/`。
 
 #### 約克遠端得意獨白 V229
 
@@ -8047,9 +7252,7 @@ ode --check` 通過正式 JS 與專屬 QA；`PORT=8818 npm start` 正常啟動�
 - 劇情修正：約克不在拉夫德魯現場，因此第三幕改以旁白明示鏡頭位於「遠在蛋頭島的密室」，約克連續獨白並因計畫如預期展開而沾沾自喜；第四幕也只保留約克操作蛋頭島、取笑「那些人」與切斷訊號，不再讓魯夫、娜美、莉莉絲或佛朗基直接回應約克。第五幕仍由莉莉絲的獨立緊急通訊銜接研究所啟動。
 - 相容：只修改 `POSTGAME_WORLD_UNLOCK_STORY` 台詞與正式 query，沒有新增圖片，也沒有改 21 句總數、回合交棒、世界解鎖、十三島、路線、研究所、完整快照、`gameState` 欄位、localStorage key 或 Socket.IO event。正式 query 為 `20260816-york-smug-monologue-v72`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`；沿用 `scripts/postgame_world_unlock_dialogue_qa.js` 做完整回歸。
-- 驗證：
-ode --check public/js/board_game.js`、
-ode --check scripts/postgame_world_unlock_dialogue_qa.js`、正式頁 HTTP 200 與 `git diff --check` 通過。Chrome 1920×900 重新逐句輸出 21 張截圖，約克獨白與遠方場景全部在框內；1180×820 平板首末幕無超框。完成後 `resolutionLock=false`、單人 round 3→4，地圖仍含 13 座孤島與 25 條路線；報告 `errors=[]`、`failures=[]`，證據位於 `postgame_world_unlock_dialogue_20260816_v72_york_smug/`。
+- 驗證：`node --check public/js/board_game.js`、`node --check scripts/postgame_world_unlock_dialogue_qa.js`、正式頁 HTTP 200 與 `git diff --check` 通過。Chrome 1920×900 重新逐句輸出 21 張截圖，約克獨白與遠方場景全部在框內；1180×820 平板首末幕無超框。完成後 `resolutionLock=false`、單人 round 3→4，地圖仍含 13 座孤島與 25 條路線；報告 `errors=[]`、`failures=[]`，證據位於 `postgame_world_unlock_dialogue_20260816_v72_york_smug/`。
 
 #### 約克聖地逃亡與莉莉絲情報來源 V230
 
@@ -8058,8 +7261,7 @@ ode --check scripts/postgame_world_unlock_dialogue_qa.js`、正式頁 HTTP 200 �
 - 情報因果：第五幕先由旁白說明十三座培育槽啟動後向蛋頭島回傳確認碼，其中一段被莉莉絲保留的研究接收器截獲；莉莉絲讀到十三份完整血統因子培育紀錄後，才確認每座島正在製造複製人。喬巴再確認這是資料證據而非猜測，佛朗基才依資料反向改造醫院設備。
 - 相容：沿用既有 `mary_geoise_revolution_battle.webp`、正式人物圖及研究設施背景，沒有生成新圖。只修改 `POSTGAME_WORLD_CINEMATIC_ASSETS`、`POSTGAME_WORLD_UNLOCK_STORY`、QA 內容斷言與正式 query；21 句總數、世界解鎖、十三島、25 條路線、研究所狀態、回合交棒、完整快照、localStorage key 與 Socket.IO event 均未變。正式 query 為 `20260816-york-holy-land-escape-v73`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`scripts/postgame_world_unlock_dialogue_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過正式 JS 與專屬 QA，`PORT=8820 npm start` 正常啟動，正式頁 HTTP 200。Chrome 1920×900 重新逐句輸出 21 張截圖，新增斷言確認第 1 句同時包含聖地與約克、莉莉絲前一幕存在接收器截獲說明、莉莉絲本人明確引用培育紀錄；所有圖片、人物與文字皆在 viewport，1180×820 平板首末幕無超框。完成後 `resolutionLock=false`、單人 round 3→4，地圖仍含 13 座孤島與 25 條路線；報告 `errors=[]`、`failures=[]`，證據位於 `postgame_world_unlock_dialogue_20260816_v73_york_escape/`。
+- 驗證：`node --check` 通過正式 JS 與專屬 QA，`PORT=8820 npm start` 正常啟動，正式頁 HTTP 200。Chrome 1920×900 重新逐句輸出 21 張截圖，新增斷言確認第 1 句同時包含聖地與約克、莉莉絲前一幕存在接收器截獲說明、莉莉絲本人明確引用培育紀錄；所有圖片、人物與文字皆在 viewport，1180×820 平板首末幕無超框。完成後 `resolutionLock=false`、單人 round 3→4，地圖仍含 13 座孤島與 25 條路線；報告 `errors=[]`、`failures=[]`，證據位於 `postgame_world_unlock_dialogue_20260816_v73_york_escape/`。
 
 #### CPU 共鬥後進島選擇與強制視窗防卡 V231
 
@@ -8068,9 +7270,7 @@ ode --check` 通過正式 JS 與專屬 QA，`PORT=8820 npm start` 正常啟動�
 - 防呆：只允許 `turnStep` 對應「進島或出發」的鎖被此流程恢復；重整或 LAN 快照帶回該鎖時可重新開啟真人視窗，玩家已離島、功能已失效或島嶼不符時會清掉過期待選與自己的鎖，不會解除移動、戰鬥、交易或劇情鎖。掃描其餘強制視窗時另補上 CPU 對艾爾巴夫洛基王子試煉「挑戰／離開」按鈕的處理。
 - 同步與相容：保留既有 `pendingIslandServiceChoice` 內容、`post-battle-island-choice`／`enter`／`roll` 推送名稱、完整 `BOARD_GAME_STATE`、localStorage key、Socket.IO event、島嶼與資料 id；沒有新增持久欄位。正式 `board_game.js` query 為 `20260816-cpu-post-coop-choice-v74`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`scripts/cpu_post_coop_island_choice_qa.js`、`docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`。
-- 驗證：
-ode --check` 通過正式 JS 與專屬 QA；
-pm start` 正常在 8787 提供靜態頁。Chrome 實測受傷 CPU 進醫院、健康 CPU 擲骰、可招募 CPU 進酒館、沒錢 CPU 略過商店、線上房主代跑 CPU、重整後真人選擇恢復、已離島過期鎖清理，以及洛基王子試煉自動開戰；全部 `errors=[]`、`failures=[]`。
+- 驗證：`node --check` 通過正式 JS 與專屬 QA；`npm start` 正常在 8787 提供靜態頁。Chrome 實測受傷 CPU 進醫院、健康 CPU 擲骰、可招募 CPU 進酒館、沒錢 CPU 略過商店、線上房主代跑 CPU、重整後真人選擇恢復、已離島過期鎖清理，以及洛基王子試煉自動開戰；全部 `errors=[]`、`failures=[]`。
 
 #### 戰鬥進場對話完成訊號防卡 V232
 
@@ -8079,9 +7279,7 @@ pm start` 正常在 8787 提供靜態頁。Chrome 實測受傷 CPU 進醫院、�
 - 保險：主頁以同一開場對話 `id/key` 排定一次性逾時檢查；正常六秒對話仍完整播放，只有完成回報超過預期時間仍未抵達時才自動解除該對話鎖並銜接既有開場被動。戰鬥結束、切換戰鬥或正常確認後會清除計時器，不解除其他戰鬥動畫、選招、結算、交易或劇情鎖。
 - 相容：沒有新增 `gameState`／`battleState` 欄位、localStorage key、Socket.IO event 或 server 欄位；沿用既有 `prebattleIntro`、`board-battle-command`、完整 `BOARD_GAME_STATE` 與 battle iframe。正式主頁 query 為 `20260816-battle-entry-recovery-v75`，battle iframe 為 `20260816-battle-entry-recovery-v68`。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/battle_entry_recovery_qa.js`、`docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`。
-- 驗證：正式 JS 與專屬 QA 
-ode --check` 通過，
-pm start` 正常在 8787 提供頁面。Chrome 定向重現「iframe 已完成、主頁回復未完成」後可在 5 秒內重新確認並解鎖；刻意阻斷完成指令時主頁逾時保險仍能恢復；海格遭遇的 3.45 秒襲來演出後可正常進場與選招。一般 CPU 會等完整開場對話後出招、開場被動不改 HP、攻擊受擊時序與 1920×900 畫面均通過；報告皆為 `errors=[]`、`failures=[]`、無 document overflow，證據位於 `battle_entry_recovery_20260816_v75/`、`battle_prebattle_intro_20260816_v75/`、`battle_opening_passive_20260816_v75/` 與 `battle_impact_order_20260816_v75_retry/`。
+- 驗證：正式 JS 與專屬 QA `node --check` 通過，`npm start` 正常在 8787 提供頁面。Chrome 定向重現「iframe 已完成、主頁回復未完成」後可在 5 秒內重新確認並解鎖；刻意阻斷完成指令時主頁逾時保險仍能恢復；海格遭遇的 3.45 秒襲來演出後可正常進場與選招。一般 CPU 會等完整開場對話後出招、開場被動不改 HP、攻擊受擊時序與 1920×900 畫面均通過；報告皆為 `errors=[]`、`failures=[]`、無 document overflow，證據位於 `battle_entry_recovery_20260816_v75/`、`battle_prebattle_intro_20260816_v75/`、`battle_opening_passive_20260816_v75/` 與 `battle_impact_order_20260816_v75_retry/`。
 
 #### 電腦、平板與手機同時進遊戲同步防卡 V233
 
@@ -8090,9 +7288,7 @@ pm start` 正常在 8787 提供頁面。Chrome 定向重現「iframe 已完成�
 - 修正：遊戲開始後保留原房主 8 秒換頁重連寬限，重連即取消轉移；只有 server 認定的房主能建立第一份 `BOARD_GAME_STATE`。其他裝置維持等待並每 0.9 秒重試要求狀態，期間顯示明確同步提示；若房主確實離線超過寬限，server 才轉交在線玩家並要求新房主建立狀態。收到第一份快照前先解除 client 的等待旗標，再進入既有開場劇情／選角，避免同一快照在不同裝置走出不同 UI。
 - 身分與相容：沿用既有 `userId`、`clientId`、`BOARD_JOIN_GAME`、`BOARD_GAME_STATE`、`BOARD_STATE_REQUEST` 與完整快照；只在 `BOARD_JOIN_GAME` ack 增加非持久 `canSeedState`，沒有新增 `gameState` 欄位、localStorage key 或更名事件。正式主頁 query 為 `20260816-board-lan-multi-entry-v76`。
 - 修改檔案：`server/index.js`、`public/js/board_game.js`、`public/board_game.html`、`scripts/board_lan_multi_entry_qa.js`、`docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`。
-- 驗證：
-ode --check` 通過 server、正式主遊戲與專屬 QA；
-pm start` 正常在 8787 提供頁面。三個獨立瀏覽器身分以電腦 1600×900、平板 1024×768、手機 932×430 同房實測，另故意延遲房主 3.5 秒：平板與手機在 version 0 保持等待且無權建立快照，房主抵達後三端取得同一 seed、三個正確 `clientId`、各自唯一 `isMe`、原房主不變、開場一致。跳過劇情進入選角後，首位若為手機玩家，只有手機出現可操作轉盤，電腦與平板均無操作按鈕；深色高對比等待面板在平板與手機橫向均完整置中，`errors=[]`、`failures=[]`。證據位於 `board_lan_multi_entry_20260816_v76_final_contrast/`。
+- 驗證：`node --check` 通過 server、正式主遊戲與專屬 QA；`npm start` 正常在 8787 提供頁面。三個獨立瀏覽器身分以電腦 1600×900、平板 1024×768、手機 932×430 同房實測，另故意延遲房主 3.5 秒：平板與手機在 version 0 保持等待且無權建立快照，房主抵達後三端取得同一 seed、三個正確 `clientId`、各自唯一 `isMe`、原房主不變、開場一致。跳過劇情進入選角後，首位若為手機玩家，只有手機出現可操作轉盤，電腦與平板均無操作按鈕；深色高對比等待面板在平板與手機橫向均完整置中，`errors=[]`、`failures=[]`。證據位於 `board_lan_multi_entry_20260816_v76_final_contrast/`。
 
 #### 玩家交易只在同格停靠觸發 V234
 
@@ -8100,9 +7296,7 @@ pm start` 正常在 8787 提供頁面。三個獨立瀏覽器身分以電腦 160
 - 規則：玩家逐格航行時即使經過另一名真人所在海格，也不暫停、不開交易提示；只有本次移動剩餘步數為 0，且最後停靠位置與可交易真人位於同一路線、同一海格時才詢問是否交易。CPU、島嶼與戰鬥中玩家仍不能參與交易。
 - 流程與相容：保留既有 `pendingMove`、`tradePrompt`、`activeTrade`、`BOARD_GAME_STATE` 與交易 Socket 權限；只在既有海格交易入口檢查 `stepsRemaining`，沒有新增存檔欄位或事件。交易略過按鈕改為「進行停靠結算」，正式主頁 query 為 `20260816-player-trade-landing-v77`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`scripts/player_trade_landing_only_qa.js`、`docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`。
-- 驗證：
-ode --check` 通過正式主遊戲與專屬 QA；
-pm start` 正常在 8787 提供頁面。Chrome 定向測試「剩餘 2 格經過同格玩家」不產生 prompt、不建立 resolution lock 且移動狀態與步數不變；剩餘 0 格但不同格不觸發；剩餘 0 格且同格才建立 `sea_tile_landing` prompt、停止移動並顯示停靠交易說明。另以電腦、平板、手機三個獨立身分重跑進房、唯一初始快照與選角控制權，仍為單一 seed 且只有當事裝置可操作。兩份報告皆為 `errors=[]`、`failures=[]`，證據位於 `player_trade_landing_only_20260816_v77/` 與 `board_lan_multi_entry_20260816_v77_trade/`。
+- 驗證：`node --check` 通過正式主遊戲與專屬 QA；`npm start` 正常在 8787 提供頁面。Chrome 定向測試「剩餘 2 格經過同格玩家」不產生 prompt、不建立 resolution lock 且移動狀態與步數不變；剩餘 0 格但不同格不觸發；剩餘 0 格且同格才建立 `sea_tile_landing` prompt、停止移動並顯示停靠交易說明。另以電腦、平板、手機三個獨立身分重跑進房、唯一初始快照與選角控制權，仍為單一 seed 且只有當事裝置可操作。兩份報告皆為 `errors=[]`、`failures=[]`，證據位於 `player_trade_landing_only_20260816_v77/` 與 `board_lan_multi_entry_20260816_v77_trade/`。
 
 #### 玩家交易圖片式介面 V235
 
@@ -8111,9 +7305,7 @@ pm start` 正常在 8787 提供頁面。Chrome 定向測試「剩餘 2 格經過
 - UI：正式雙方報價保留兩名玩家、各自頭像、物品格、放入貝里、報價價值、確認按鈕、右側雙方確認狀態與取消交易；物品格沿用既有水之七島正方形圖片框，選物列與按鈕沿用正式背包／遭遇圖片框。提示與主畫面都以固定比例縮放，不再於平板改成單欄網頁方格。文字、玩家與道具仍由 HTML 疊入，圖片中沒有寫死文字。
 - 相容：只修改交易 markup class、標題與 CSS 圖片定位；沒有修改 `tradePrompt`、`activeTrade`、報價驗證、最低底價、道具／貝里轉移、雙方確認、`BOARD_GAME_STATE`、localStorage key、Socket.IO event 或 server 欄位。正式主頁 query 為 `20260816-player-trade-image-ui-v78`。
 - 修改檔案：`public/board_game.html`、`public/js/board_game.js`、`public/images/board/trade_ui/**`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。`docs/GAME_RULES.md` 不需更新，因交易規則未變。
-- 驗證：
-ode --check public/js/board_game.js` 通過；
-pm start` 正常在 8787 提供正式頁。Chrome 1920×1080 與 1024×768 實測，交易詢問、雙方主框、兩名玩家、八格報價區、貝里欄、確認／取消與右側訊息均在圖框內；主框與左右玩家面板皆無水平或垂直 overflow，所有按鈕位於 viewport。不能交易提示可正常開啟與關閉。畫面證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/trade_ui_20260816/`。
+- 驗證：`node --check public/js/board_game.js` 通過；`npm start` 正常在 8787 提供正式頁。Chrome 1920×1080 與 1024×768 實測，交易詢問、雙方主框、兩名玩家、八格報價區、貝里欄、確認／取消與右側訊息均在圖框內；主框與左右玩家面板皆無水平或垂直 overflow，所有按鈕位於 viewport。不能交易提示可正常開啟與關閉。畫面證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/trade_ui_20260816/`。
 
 #### 玩家交易透明框與頭像校正 V236
 
@@ -8157,8 +7349,7 @@ pm start` 正常在 8787 提供正式頁。Chrome 1920×1080 與 1024×768 實�
 - 響應：1920×1080、1024×768 與 932×430 的左／右 HUD 沒有重疊；完整 CPU 工具列寬度分別為 641.41、461.81、461.81px。390×844 直向版把 220px 狀態框放在上方、工具列以相同比例縮至 287.71px 並下移至 y=84，兩區無重疊且 document 無水平溢出。
 - 相容：只修改 `public/board_game.html` 樣式與圖片引用，沒有修改回合、移動、CPU 決策、任務完成、存讀檔、`BOARD_GAME_STATE`、localStorage key、Socket.IO event、資料 id 或 server 欄位。正式主頁 query 為 `20260816-map-hud-image-ui-v85`。`docs/GAME_RULES.md` 不需更新，因遊戲規則未變。
 - 修改檔案：`public/board_game.html`、`public/images/board/map_hud_ui/**`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-pm start` 正常在 8787 提供正式頁；Chrome 桌機、平板、手機橫向與直向均無 runtime error、document overflow 或 HUD 重疊。玩家頭像維持 1:1 圓形裁切，文字在底圖安全區內；任務提示停留後可讀，換回合框完整顯示。畫面證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/map_hud_ui_20260816/`。
+- 驗證：`npm start` 正常在 8787 提供正式頁；Chrome 桌機、平板、手機橫向與直向均無 runtime error、document overflow 或 HUD 重疊。玩家頭像維持 1:1 圓形裁切，文字在底圖安全區內；任務提示停留後可讀，換回合框完整顯示。畫面證據位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/map_hud_ui_20260816/`。
 
 #### 地圖 HUD 頭像圓槽精確校正 V241
 
@@ -8166,9 +7357,7 @@ pm start` 正常在 8787 提供正式頁；Chrome 桌機、平板、手機橫向
 - 問題與修正：V240 頭像以目測位置放在 `top:16%`，實際會偏上並壓入金框。以正式 1822×583 RGBA 素材的 alpha 區域量測，圓槽透明內孔為 x=153～534、y=119～510，中心 `(343.5,314.5)`；左上狀態框與中央換回合框現在共同使用 `left:8.4%`、`top:21.3%`、`width:20.9%`，頭像完整落在安全內徑並與底圖圓心重合。
 - 相容：只修改兩個頭像容器的 CSS 百分比與正式 query；沒有修改頭像來源、玩家資料、回合、動畫、多人快照或 Socket 流程。正式主頁 query 為 `20260816-map-hud-avatar-align-v86`。`docs/GAME_RULES.md` 不需更新。
 - 修改檔案：`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-pm start` 正常在 8787 提供正式頁，
-ode --check public/js/board_game.js`、HTTP 200 與 `git diff --check` 通過。Chrome 將 820px 換回合框獨立量測，頭像實際中心與素材圓槽中心的差值為 x=-0.031px、y=+0.024px；四邊皆留在金框內，無裁切、空隙或拉伸。近圖證據為 `map_hud_avatar_aligned_v86_closeup.png`。
+- 驗證：`npm start` 正常在 8787 提供正式頁，`node --check public/js/board_game.js`、HTTP 200 與 `git diff --check` 通過。Chrome 將 820px 換回合框獨立量測，頭像實際中心與素材圓槽中心的差值為 x=-0.031px、y=+0.024px；四邊皆留在金框內，無裁切、空隙或拉伸。近圖證據為 `map_hud_avatar_aligned_v86_closeup.png`。
 
 #### 地圖行動通知圖片式介面 V242
 
@@ -8178,8 +7367,7 @@ ode --check public/js/board_game.js`、HTTP 200 與 `git diff --check` 通過。
 - 響應：1920×1080 為 620×97.7px、y=86；1024×768 與 932×430 直接窄畫面下移到 y=138；390×844 直向為 374×58.94px、y=116。四種尺寸都不碰左上玩家框、右上工具列，文字 `scrollWidth/scrollHeight` 均未超過內容區，document 無水平溢出。
 - 相容：只修改 `public/board_game.html` 樣式與正式 query，沒有修改回合、擲骰、移動、事件結算、任務、CPU、`BOARD_GAME_STATE`、localStorage key、Socket.IO event 或資料 id。正式主頁 query 為 `20260816-action-notice-image-ui-v87`。`docs/GAME_RULES.md` 不需更新。
 - 修改檔案：`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-pm start` 正常在 8787 提供正式頁；Chrome 四尺寸皆為 `errors=0`，通知框與文字無重疊、裁切或 overflow。觀看／戰鬥／寶箱／最終島四種主題截圖位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/action_notice_ui_20260816/action_notice_themes_v87_desktop.png`。
+- 驗證：`npm start` 正常在 8787 提供正式頁；Chrome 四尺寸皆為 `errors=0`，通知框與文字無重疊、裁切或 overflow。觀看／戰鬥／寶箱／最終島四種主題截圖位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/action_notice_ui_20260816/action_notice_themes_v87_desktop.png`。
 
 #### 地圖行動通知物件圖示 V243
 
@@ -8189,10 +7377,7 @@ pm start` 正常在 8787 提供正式頁；Chrome 四尺寸皆為 `errors=0`，�
 - 響應：八張圖在 620px 通知框內統一使用約 62.61×64.47px 安全區；1920×1080、1024×768、932×430 與 390×844 的文字均沒有 overflow，通知框不碰左上玩家框或右上工具列，document 無水平溢出。
 - 相容：沒有修改事件觸發、回合、擲骰、移動、島嶼結算、任務、CPU、`BOARD_GAME_STATE`、localStorage key、Socket.IO event 或資料 id。正式主頁 query 為 `20260816-action-notice-icons-v88`。`docs/GAME_RULES.md` 不需更新。
 - 修改檔案：`public/board_game.html`、`public/js/board_game.js`、`public/images/board/map_hud_ui/action_icons/**`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-pm start` 正常在 8787 提供正式頁；
-ode --check public/js/board_game.js`、相關頁面／八張圖 HTTP 200 與 `git diff --check` 通過。Chrome 實測八圖 
-aturalWidth=512`、圖示與文字皆在框內；四種 viewport 均無通知重疊或 overflow。證據為 `action_notice_icons_v88_desktop.png`，透明圖總覽為 `action_icon_contact_sheet_v88.png`。
+- 驗證：`npm start` 正常在 8787 提供正式頁；`node --check public/js/board_game.js`、相關頁面／八張圖 HTTP 200 與 `git diff --check` 通過。Chrome 實測八圖 `naturalWidth=512`、圖示與文字皆在框內；四種 viewport 均無通知重疊或 overflow。證據為 `action_notice_icons_v88_desktop.png`，透明圖總覽為 `action_icon_contact_sheet_v88.png`。
 
 #### 重要道具／Boss 掉落圖片式揭露 V244
 
@@ -8202,8 +7387,7 @@ aturalWidth=512`、圖示與文字皆在框內；四種 viewport 均無通知重
 - 響應：桌機 1440×900 為 1416×796.9px，平板 1024×768 為 1000×562.8px，手機橫向 932×430 為 746.3×420px，手機直向 390×844 為 366×206px；四種尺寸都維持同一比例。一般道具、線索牌、文字牌與寶箱圖示均在底圖安全區內，document 無水平 overflow。
 - 相容：沒有修改掉落率、道具 id、背包數量、回合、戰鬥結算、CPU、`BOARD_GAME_STATE`、localStorage key、Socket.IO event 或 server 欄位。正式主頁 query 為 `20260817-item-reveal-image-ui-v89`。`docs/GAME_RULES.md` 不需更新，因遊戲規則未變。
 - 修改檔案：`public/board_game.html`、`public/images/board/item_reveal_ui/**`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-pm start` 正常在 8787 提供正式頁；Chrome 實測 `pierced_flag` 與 `york_clue_01_shiki`，圖片皆完整載入，揭露後點擊可關閉。五種畫面案例均無 page runtime error、文字框 overflow 或 document overflow；截圖位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/item_reveal_ui_20260817/`。
+- 驗證：`npm start` 正常在 8787 提供正式頁；Chrome 實測 `pierced_flag` 與 `york_clue_01_shiki`，圖片皆完整載入，揭露後點擊可關閉。五種畫面案例均無 page runtime error、文字框 overflow 或 document overflow；截圖位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/item_reveal_ui_20260817/`。
 
 #### 四寶箱洗牌圖片式舞台 V245
 
@@ -8213,9 +7397,7 @@ pm start` 正常在 8787 提供正式頁；Chrome 實測 `pierced_flag` 與 `yor
 - 響應：桌機 1440×900 為 1416×796.9px，平板 1024×768 為 1000×562.8px，手機橫向 932×430 為 746.3×420px，手機直向 390×844 為 366×206px；四種尺寸維持同一 16:9 桌機比例與四欄排列，窄畫面只保留黑邊，不改成兩欄或另一套介面。
 - 相容：沒有修改寶箱候選權重、獎勵池、木箱陷阱、穩定亂數、選擇結果、回合、CPU、任務、`BOARD_GAME_STATE`、localStorage key、Socket.IO event 或資料 id。正式主頁 query 為 `20260817-sea-chest-image-ui-v90`。`docs/GAME_RULES.md` 不需更新，因規則未變。
 - 修改檔案：`public/board_game.html`、`public/js/board_game.js`、`public/images/board/sea_chest_ui/**`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 通過，
-pm start` 正常在 8787 提供正式頁與兩張新 WebP。Chrome 實際播放揭露、翻面、交叉洗牌、可選狀態與開獎；桌機、平板、手機橫向及直向的四箱、文字與按鈕皆在圖片安全區內，沒有拉伸、裁切或 document overflow。截圖位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/sea_chest_ui_20260817/`。
+- 驗證：`node --check public/js/board_game.js` 通過，`npm start` 正常在 8787 提供正式頁與兩張新 WebP。Chrome 實際播放揭露、翻面、交叉洗牌、可選狀態與開獎；桌機、平板、手機橫向及直向的四箱、文字與按鈕皆在圖片安全區內，沒有拉伸、裁切或 document overflow。截圖位於 `C:/Users/王曜瑋/.codex/visualizations/2026/07/27/019fa333-31ef-7e32-b226-023fffa4c411/sea_chest_ui_20260817/`。
 
 #### 四寶箱四輪交叉洗牌 V246
 
@@ -8224,8 +7406,7 @@ pm start` 正常在 8787 提供正式頁與兩張新 WebP。Chrome 實際播放�
 - 排列：四箱最終位置改從 4 箱共 9 種無固定點排列中以原 seeded RNG 選取，因此每個寶箱都一定離開揭露時的原格；每個原格對其餘三個目的格仍維持等數量候選。寶箱種類抽取、候選權重、木箱陷阱、獎勵內容及點選結果都沒有改變。
 - 相容：沿用既有 `choice.slotId`、`finalIndex`、點選事件、回合、CPU、任務、`BOARD_GAME_STATE`、localStorage key 與 Socket.IO event；沒有新增存檔欄位。正式主頁 query 為 `20260817-sea-chest-multi-shuffle-v91`。`docs/GAME_RULES.md` 不需更新。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 通過。Chrome 對 12 組不同 `slotId` 建立正式四箱，12／12 都是四箱全換位，共取得 6 種不同排列；實播可依序看到第 1～4 輪、四箱同時移動與最後可選狀態，沒有 page error。畫面證據為 `sea_chest_v91_pass1_desktop.png`、`sea_chest_v91_pass2_desktop.png` 與 `sea_chest_v91_ready_desktop.png`。
+- 驗證：`node --check public/js/board_game.js` 通過。Chrome 對 12 組不同 `slotId` 建立正式四箱，12／12 都是四箱全換位，共取得 6 種不同排列；實播可依序看到第 1～4 輪、四箱同時移動與最後可選狀態，沒有 page error。畫面證據為 `sea_chest_v91_pass1_desktop.png`、`sea_chest_v91_pass2_desktop.png` 與 `sea_chest_v91_ready_desktop.png`。
 
 #### 海格遭遇情報防偷看 V247
 
@@ -8243,8 +7424,7 @@ ode --check public/js/board_game.js` 通過。Chrome 對 12 組不同 `slotId` �
 - 一致性：海格敵人的穩定亂數由遊戲種子、敵影刷新週期、海格 id 與玩家 id 組成，確保同一輪內點擊預覽與真正停靠選到同一名敵人；若敵人屆時在其他戰場，仍沿用既有敵人保留與替換規則。Lv2 實際停靠前的完整敵人基本資訊及 Lv3 敵人島情報保持不變。
 - 相容：沒有新增存檔欄位、localStorage key、Socket.IO event 或資料 id；仍使用完整 `BOARD_GAME_STATE` 內既有的船隻升級、海格類型與敵影刷新週期。正式主頁 query 為 `20260817-watchtower-black-encounter-v93`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/board_water_seven.html`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js`、正式主頁與水之七島 HTTP 200 通過。Chrome 定向測試以 3 名偵查型但偵查台 Lv0 驗證黑格 0 個、所有海格 title 皆空且點擊只顯示未知海格；同一玩家升到 Lv1 後，所在島的相連航路正確標出 5 個黑格，黑格本身只顯示通用「敵」，點擊後才顯示敵人姓名與正式戰鬥圖。相同黑格重複點擊兩次皆為同一名敵人。1600×900、1024×768 與 932×430 都沒有 page error、圖片載入失敗、可見文字重疊、modal／document overflow；畫面證據位於 `sea_tile_watchtower_20260817/`。
+- 驗證：`node --check public/js/board_game.js`、正式主頁與水之七島 HTTP 200 通過。Chrome 定向測試以 3 名偵查型但偵查台 Lv0 驗證黑格 0 個、所有海格 title 皆空且點擊只顯示未知海格；同一玩家升到 Lv1 後，所在島的相連航路正確標出 5 個黑格，黑格本身只顯示通用「敵」，點擊後才顯示敵人姓名與正式戰鬥圖。相同黑格重複點擊兩次皆為同一名敵人。1600×900、1024×768 與 932×430 都沒有 page error、圖片載入失敗、可見文字重疊、modal／document overflow；畫面證據位於 `sea_tile_watchtower_20260817/`。
 
 #### 偵查被動／偵查台雙重情報修正 V249
 
@@ -8261,9 +7441,7 @@ ode --check public/js/board_game.js`、正式主頁與水之七島 HTTP 200 通�
 - 例外：頂上戰爭救援沒有改動。首周目成功救出的艾斯視為存活，仍可依原處刑台／救援／登船流程加入；若艾斯已在任一玩家船上，終局酒館不會再出現第二個艾斯。舊存檔已持有四人時不移除角色；研究所與血統因子仍沿用原本終局世界開放條件。
 - 相容：只新增固定角色 id 集合與一般招募池判定，沿用既有 `finalEndingCleared`、`finalEndingRecords`、`postgameWorld.unlocked` 及完整 `BOARD_GAME_STATE`。沒有新增或改名存檔欄位、localStorage key、Socket.IO event、角色 id 或 Marineford 狀態。正式主頁 query 為 `20260817-postgame-legacy-recruits-v95`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`scripts/postgame_legacy_recruits_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過正式主程式與專屬 QA，
-pm start` 正常在 8787 提供正式頁。Chrome 正式頁定向測試確認通關前四人全數不在一般招募池；終局世界開啟後四人全數出現；艾斯已由頂上戰爭加入時不會再出現第二個；舊存檔已持有柯拉松仍保留；終局舊存檔若缺少羅傑候選，正規化後會安全回補。測試結果 `errors=[]`、`failures=[]`。
+- 驗證：`node --check` 通過正式主程式與專屬 QA，`npm start` 正常在 8787 提供正式頁。Chrome 正式頁定向測試確認通關前四人全數不在一般招募池；終局世界開啟後四人全數出現；艾斯已由頂上戰爭加入時不會再出現第二個；舊存檔已持有柯拉松仍保留；終局舊存檔若缺少羅傑候選，正規化後會安全回補。測試結果 `errors=[]`、`failures=[]`。
 
 #### 吉爾德・泰佐洛黃金支配戰線 V251
 
@@ -8274,10 +7452,7 @@ pm start` 正常在 8787 提供正式頁。Chrome 正式頁定向測試確認通
 - 視覺：淘汰會把角色背景一起染黃的原角色複製層，正式改用 `half_body_gold_doll.webp` 透明實心半身黃金偶。第一層封住可見軀幹、第二層延伸肩頸、第三層顯示完整金面；黃金偶以固定中心與半身比例限制在玩家角色框內容區，保留原 HUD、招式與敵方卡。
 - 相容：沿用既有 `postgameBossMechanic` 快照與完整 `BOARD_GAME_STATE`；機制版本 2 會把舊 `goldByCrew` 安全轉為 -3～+3 `controlByCrew`。沒有新增 localStorage key、Socket.IO event 或另一套傷害權威。主頁／戰鬥頁 query 分別更新為 `20260818-tesoro-gold-front-v118`／`20260818-tesoro-gold-front-v72`。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`public/images/board/battle/enemies/postgame_gild_tesoro_golden/`、`public/images/board/battle/postgame_mechanics/tesoro_gold_shell/half_body_gold_doll.webp`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_game.js` 與 
-ode --check public/js/board_battle.js` 通過；既有 8787 server 回傳正式戰鬥頁與黃金偶 HTTP 200。Chrome 定向流程確認泰佐洛先攻可取消已選招、免費替補不補打上一輪，Golden Tesoro 第二階段圖片／面板載入。黃金偶於 1600×900、1024×768、932×430 都維持中心對齊、透明背景與角色框裁切，沒有遮住 HUD／招式區；視覺證據位於 `tesoro_rework_20260818/`。
-pm start` 另啟時因既有 server 已占用 8787 回報 `EADDRINUSE`，本輪直接沿用該正式 server 驗證。
+- 驗證：`node --check public/js/board_game.js` 與 `node --check public/js/board_battle.js` 通過；既有 8787 server 回傳正式戰鬥頁與黃金偶 HTTP 200。Chrome 定向流程確認泰佐洛先攻可取消已選招、免費替補不補打上一輪，Golden Tesoro 第二階段圖片／面板載入。黃金偶於 1600×900、1024×768、932×430 都維持中心對齊、透明背景與角色框裁切，沒有遮住 HUD／招式區；視覺證據位於 `tesoro_rework_20260818/`。`npm start` 另啟時因既有 server 已占用 8787 回報 `EADDRINUSE`，本輪直接沿用該正式 server 驗證。
 
 #### 戰鬥角色圖屬性列與泰佐洛效果隔離 V252
 
@@ -8286,10 +7461,7 @@ pm start` 另啟時因既有 server 已占用 8787 回報 `EADDRINUSE`，本輪�
 - 修正：角色圖的 `#playerCardTier` 固定還原為隱藏的 `card-tier`；屬性仍只顯示在原本左上 HUD 資訊列。泰佐洛半身黃金偶另以 `postgameBossMechanic.key === "postgame_gild_tesoro"` 且第一階段為必要條件，其他一般戰鬥與特殊 Boss 會直接設為 `hidden`。
 - 相容：只修正戰鬥頁顯示與專用效果作用域；沒有修改任何攻擊、傷害、招式、屬性相剋、回合、CPU、Boss 規則、快照、localStorage key 或 Socket.IO event。主頁與戰鬥頁共用 query `20260818-tesoro-scope-card-tier-v73`。
 - 修改檔案：`public/js/board_battle.js`、`public/board_battle.html`、`public/js/board_game.js`、`scripts/battle_attribute_tesoro_scope_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check public/js/board_battle.js`、
-ode --check public/js/board_game.js`、
-pm start` 與正式戰鬥頁 HTTP 200 通過。Chrome 於 1600×900、932×430 分別載入非泰佐洛 Boss 與泰佐洛：四種畫面皆確認角色圖屬性列 `display:none`、HUD 屬性文字仍存在；非泰佐洛的黃金偶 `display:none`，泰佐洛第一階段 2 層黃金偶正常顯示。QA 結果 `ok=true`、`errors=[]`，截圖位於 `tesoro_rework_20260818/normal_battle_no_attribute_bar_*` 與 `tesoro_scoped_no_attribute_bar_*`。
+- 驗證：`node --check public/js/board_battle.js`、`node --check public/js/board_game.js`、`npm start` 與正式戰鬥頁 HTTP 200 通過。Chrome 於 1600×900、932×430 分別載入非泰佐洛 Boss 與泰佐洛：四種畫面皆確認角色圖屬性列 `display:none`、HUD 屬性文字仍存在；非泰佐洛的黃金偶 `display:none`，泰佐洛第一階段 2 層黃金偶正常顯示。QA 結果 `ok=true`、`errors=[]`，截圖位於 `tesoro_rework_20260818/normal_battle_no_attribute_bar_*` 與 `tesoro_scoped_no_attribute_bar_*`。
 
 #### 泰佐洛黃金偶與角色圖完全同步 V253
 
@@ -8306,8 +7478,7 @@ pm start` 與正式戰鬥頁 HTTP 200 通過。Chrome 於 1600×900、932×430 �
 - 視覺：移除需要配合不同角色頭身位置的半身黃金偶與共同動作容器。`#tesoroGoldCoating` 改為固定在 `#playerPortraitWrap` 的金色液面，依 1／3、2／3、3／3 從圖框底部升至全滿；角色攻擊／受擊時仍只移動原人物圖，金流留在圖框不偏移。機制詳細框同步顯示六名船員頭像、段數與三枚進度點。
 - 階段與相容：Golden Tesoro 第二階段仍使用全隊共用 -3～+3 戰線、兩層外殼及黃金神之怒；第三階段不變。`POSTGAME_TESORO_MECHANIC_VERSION` 升為 3，舊欄位就地正規化為 0～3 段，沒有新增 localStorage key、Socket.IO event 或第二套同步狀態。一般戰鬥、其他 Boss、傷害與回合權威未修改。正式主頁／戰鬥頁 query 為 `20260818-tesoro-gold-river-v119`／`v76`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`public/js/board_battle.js`、`scripts/battle_attribute_tesoro_scope_qa.js`、`scripts/postgame_boss_mechanics_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過三個修改的 JS。Chrome 1600×900 與 932×430 定向 QA 結果 `ok=true`、`failures=[]`、`errors=[]`：一般戰鬥金流保持隱藏；三段液面實測高度約 35%／67%／103%；增益招式與玩家攻擊都不誤加金流；第一、第二、第三次敵方命中依序得到 1、2、3 段，第三次建立替補；選擇第 2 名船員後舊角色兩個相容欄位歸零，`waitingResume=true` 且新角色不在本回合補打。三階段截圖為 `tesoro_rework_20260818/tesoro_gold_river_level_{1,2,3}_desktop.png`，手機橫向亦有同名證據。
+- 驗證：`node --check` 通過三個修改的 JS。Chrome 1600×900 與 932×430 定向 QA 結果 `ok=true`、`failures=[]`、`errors=[]`：一般戰鬥金流保持隱藏；三段液面實測高度約 35%／67%／103%；增益招式與玩家攻擊都不誤加金流；第一、第二、第三次敵方命中依序得到 1、2、3 段，第三次建立替補；選擇第 2 名船員後舊角色兩個相容欄位歸零，`waitingResume=true` 且新角色不在本回合補打。三階段截圖為 `tesoro_rework_20260818/tesoro_gold_river_level_{1,2,3}_desktop.png`，手機橫向亦有同名證據。
 
 #### 澤法炸藥岩爆炸五幕彩漫預覽（待確認）
 
@@ -8316,8 +7487,7 @@ ode --check` 通過三個修改的 JS。Chrome 1600×900 與 932×430 定向 QA 
 - 預覽：新增獨立 `public/board_zephyr_explosion_story_preview.html`，一次只顯示一幕，支援點擊左右區域與方向鍵逐幕切換；此頁只供素材確認，不是正式戰鬥流程。
 - 作用域：五張 PNG 僅保存於 `public/images/board/story/postgame_zephyr_explosion/incoming/`；尚未修改 `board_game.js`、`board_battle.js`、澤法倒數、戰鬥按鈕、快照或任何其他 Boss。確認後才轉正式 WebP 並接入澤法炸藥岩倒數歸零的戰敗分支，正式頁不得引用 `incoming/`。
 - 修改檔案：`public/board_zephyr_explosion_story_preview.html`、`public/images/board/story/postgame_zephyr_explosion/`、`docs/PROJECT_OVERVIEW.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。`docs/GAME_RULES.md` 不需更新，因本輪沒有改規則。
-- 驗證：五張來源 PNG 尺寸皆為 1672×941 並完成 SHA-256；現有 8787 服務回傳預覽頁 HTTP 200。Chrome 1600×900 與 932×430 逐幕檢查五張圖片自然尺寸、標題順序、單一進度點、頁面／字幕範圍與 console／HTTP 錯誤，兩種 viewport 均為 `valid=true`、`errors=[]`。
-pm start` 已執行，但既有正式服務占用 8787，第二個程序依預期回報 `EADDRINUSE`，本輪沿用既有服務驗證。
+- 驗證：五張來源 PNG 尺寸皆為 1672×941 並完成 SHA-256；現有 8787 服務回傳預覽頁 HTTP 200。Chrome 1600×900 與 932×430 逐幕檢查五張圖片自然尺寸、標題順序、單一進度點、頁面／字幕範圍與 console／HTTP 錯誤，兩種 viewport 均為 `valid=true`、`errors=[]`。`npm start` 已執行，但既有正式服務占用 8787，第二個程序依預期回報 `EADDRINUSE`，本輪沿用既有服務驗證。
 
 #### 澤法爆炸五幕劇情與全員瀕死結算 V287
 
@@ -8327,9 +7497,7 @@ pm start` 已執行，但既有正式服務占用 8787，第二個程序依預�
 - 同步：主遊戲建立 `postgame-zephyr-explosion-story` visual event 並等待控制玩家的完成命令；逾時會安全接續。若播放中重整、原本的本機等待器已消失，重新載入同一事件的完成命令會直接補做全員瀕死結算，避免 battle snapshot 卡在劇情末尾。沒有新增 gameState 欄位、localStorage key 或 Socket.IO event。
 - 作用域：只修改 `postgame_zephyr` 倒數歸零分支；澤法 2000 HP、4 次倒數、3 點解除、半血黑腕、左側場上炸藥岩、CPU 解除策略及其他十二 Boss 均未改。正式頁不引用 `incoming/`。
 - 修改檔案：`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_game.html`、`public/board_battle.html`、`public/images/board/story/postgame_zephyr_explosion/`、`scripts/postgame_zephyr_end_point_qa.js`、`docs/POSTGAME_BOSS_CONFIRMED_MECHANICS.txt`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁／戰鬥頁 query 為 `20260820-zephyr-explosion-story-wipeout-v134`／`v87`。
-- 驗證：
-ode --check` 通過主遊戲、戰鬥頁與澤法 QA 三個 JS；正式主頁、戰鬥頁及五張 WebP 全數 HTTP 200。澤法定向 QA 於 1600×900、932×430 逐幕確認 5 張圖皆為 1672×941、字幕／頁面無 overflow、播放期間 active crew HP 保持 118 且 `battle.result` 為空，完成後六名船員 HP 全為 0、`knockedOutCrew` 六名、結果顯示「全員瀕死」；按返回後 battle 清除、推進城 active 且依原規則恢復船員。重整後無等待器的完成路徑亦成功補做六人瀕死。十三 Boss 機制回歸 `errors=[]`、`failures=[]`。
-pm start` 因既有 8787 正式服務運行而回報 `EADDRINUSE`，本輪沿用該服務完成驗證。
+- 驗證：`node --check` 通過主遊戲、戰鬥頁與澤法 QA 三個 JS；正式主頁、戰鬥頁及五張 WebP 全數 HTTP 200。澤法定向 QA 於 1600×900、932×430 逐幕確認 5 張圖皆為 1672×941、字幕／頁面無 overflow、播放期間 active crew HP 保持 118 且 `battle.result` 為空，完成後六名船員 HP 全為 0、`knockedOutCrew` 六名、結果顯示「全員瀕死」；按返回後 battle 清除、推進城 active 且依原規則恢復船員。重整後無等待器的完成路徑亦成功補做六人瀕死。十三 Boss 機制回歸 `errors=[]`、`failures=[]`。`npm start` 因既有 8787 正式服務運行而回報 `EADDRINUSE`，本輪沿用該服務完成驗證。
 
 #### 二周目玩家切磋準備室互動提案 V337
 
@@ -8338,9 +7506,7 @@ pm start` 因既有 8787 正式服務運行而回報 `EADDRINUSE`，本輪沿用
 - 視覺：使用 Codex 內建 ImageGen 生成原創 16:9 海戰準備室框；正式候選 WebP 位於 `public/images/board/spar_ui/spar_selection_panel_frame_v1.webp`，PNG 原圖保留於 `incoming/`，完整提示詞寫在同目錄 `spar_selection_panel_frame_v1.prompt.md`。人物圖沿用現有角色戰鬥圖，沒有重製角色素材。
 - 邊界：本輪是可操作的 UI／流程提案頁，不讀寫正式 `gameState`、`battleState`、localStorage 或 Socket.IO，也未把 PK 接進正式地圖。現有正式戰鬥核心仍是玩家對 CPU 的不對稱結構；在雙方攜帶物能公平套用前，不使用它冒充玩家對戰。
 - 修改檔案：`public/board_spar_selection_demo.html`、`public/images/board/spar_ui/`、`scripts/spar_selection_demo_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check scripts/spar_selection_demo_qa.js` 通過；Playwright 於 1600×900 與 1024×768 實際操作 6+6 卡片、開啟詳情、確認不含攜帶物文字、左右各選三人、分別鎖定與同時揭曉，兩種尺寸均 `errors=[]`、`failures=[]` 且頁面無水平／垂直 overflow。
-pm start` 已執行，因 8787 已有正式服務而回報 `EADDRINUSE`，本輪沿用該服務完成瀏覽器驗證。
+- 驗證：`node --check scripts/spar_selection_demo_qa.js` 通過；Playwright 於 1600×900 與 1024×768 實際操作 6+6 卡片、開啟詳情、確認不含攜帶物文字、左右各選三人、分別鎖定與同時揭曉，兩種尺寸均 `errors=[]`、`failures=[]` 且頁面無水平／垂直 overflow。`npm start` 已執行，因 8787 已有正式服務而回報 `EADDRINUSE`，本輪沿用該服務完成瀏覽器驗證。
 
 #### 二周目切磋角色卡與詳情框 V338
 
@@ -8349,8 +7515,7 @@ pm start` 已執行，因 8787 已有正式服務而回報 `EADDRINUSE`，本輪
 - 詳情：點角色卡 `i` 會打開既有航海木框詳情底圖；左側放大角色圖與屬性盾牌，右側顯示角色名稱、六項能力、特性及招式，底部紅木按鈕返回。詳情仍不建立、不讀取也不顯示攜帶物欄位。
 - 素材：重用 `public/images/board/draft_recruitment/draft_character_card_frame.webp` 與 `draft_character_detail_frame.webp`，沒有生成或覆蓋角色圖，也沒有新增正式狀態欄位。
 - 修改檔案：`public/board_spar_selection_demo.html`、`scripts/spar_selection_demo_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：Playwright 於 1600×900、1024×768 重新完成 6+6 顯示、詳情開關、左右各選三人、雙鎖揭曉與截圖；新增詳情內容不得壓到返回鈕的幾何檢查，結果 `errors=[]`、`failures=[]`，頁面無 overflow。示範頁與兩張重用框圖 HTTP 均為 200。
-pm start` 已執行，既有 8787 服務占用連接埠而回報 `EADDRINUSE`，瀏覽器驗證沿用該服務完成。
+- 驗證：Playwright 於 1600×900、1024×768 重新完成 6+6 顯示、詳情開關、左右各選三人、雙鎖揭曉與截圖；新增詳情內容不得壓到返回鈕的幾何檢查，結果 `errors=[]`、`failures=[]`，頁面無 overflow。示範頁與兩張重用框圖 HTTP 均為 200。`npm start` 已執行，既有 8787 服務占用連接埠而回報 `EADDRINUSE`，瀏覽器驗證沿用該服務完成。
 
 #### 二周目切磋角色卡鏤空覆蓋框 V339
 
@@ -8359,8 +7524,7 @@ pm start` 已執行，既有 8787 服務占用連接埠而回報 `EADDRINUSE`，
 - 素材：使用 Codex 內建 ImageGen 參照原航海卡框製作 1086×1448 RGBA PNG，再轉成同尺寸 RGBA WebP；來源保留於 `public/images/board/spar_ui/incoming/spar_character_card_overlay_frame_v1_source.png`，完整成功提示詞保存於 `spar_character_card_overlay_frame_v1.prompt.md`。未修改任何角色圖片。
 - 失敗防線：第一張候選把透明棋盤格直接畫入 RGB，已檢查為 `hasAlpha=false`，沒有複製進專案或接入頁面；第二張才是 `hasAlpha=true` 的正式來源。
 - 修改檔案：`public/board_spar_selection_demo.html`、`public/images/board/spar_ui/`、`scripts/spar_selection_demo_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：正式 WebP 為 1086×1448、四通道且含 Alpha；Playwright 另以 Canvas 逐尺寸檢查人物窗中心 Alpha=0、框外 Alpha=0、姓名木牌 Alpha≥200。1600×900、1024×768 的 6+6 卡片、詳情、秘密選三人、鎖定／揭曉、內容邊界與頁面 overflow 回歸皆為 `errors=[]`、`failures=[]`；示範頁與正式鏤空 WebP HTTP 均為 200。
-pm start` 已執行，因既有 8787 服務占用連接埠而回報 `EADDRINUSE`，瀏覽器驗證沿用該服務完成。
+- 驗證：正式 WebP 為 1086×1448、四通道且含 Alpha；Playwright 另以 Canvas 逐尺寸檢查人物窗中心 Alpha=0、框外 Alpha=0、姓名木牌 Alpha≥200。1600×900、1024×768 的 6+6 卡片、詳情、秘密選三人、鎖定／揭曉、內容邊界與頁面 overflow 回歸皆為 `errors=[]`、`failures=[]`；示範頁與正式鏤空 WebP HTTP 均為 200。`npm start` 已執行，因既有 8787 服務占用連接埠而回報 `EADDRINUSE`，瀏覽器驗證沿用該服務完成。
 
 #### 二周目切磋角色框與名稱對位 V340
 
@@ -8368,8 +7532,7 @@ pm start` 已執行，因既有 8787 服務占用連接埠而回報 `EADDRINUSE`
 - 修正：角色卡原本沿用 grid 的狹長格比例，1086×1448 的 3:4 鏤空框被 `object-fit:fill` 橫向壓縮，姓名與資訊列也使用舊卡片比例。現改為每張卡固定 `aspect-ratio:3/4`、框圖 `object-fit:contain`；左右角色區各擴為 36%，兩排卡片以自然高度置中，不再拉伸素材。
 - 對位：姓名依框圖木牌實際像素落在卡高 67.8%～75.0%，中心 71.4%；階級／定位／等級列落在 83.3%～90.5%，中心 86.9%。移除與姓名木牌重疊的「已選入陣容」文字，只保留順位徽章與陣營發光表示入選。
 - 修改檔案：`public/board_spar_selection_demo.html`、`scripts/spar_selection_demo_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：先在服務停止時得到一次 `ERR_CONNECTION_REFUSED`，重新以 
-pm start` 啟動 8787 靜態服務後重跑；Playwright 在 1600×900、1024×768 新增卡片寬高比 0.75、框四邊與卡片誤差 ≤1px、姓名中心 0.714、資訊中心 0.869 的幾何斷言。完整互動、Alpha、詳情與 overflow 回歸為 `errors=[]`、`failures=[]`。
+- 驗證：先在服務停止時得到一次 `ERR_CONNECTION_REFUSED`，重新以 `npm start` 啟動 8787 靜態服務後重跑；Playwright 在 1600×900、1024×768 新增卡片寬高比 0.75、框四邊與卡片誤差 ≤1px、姓名中心 0.714、資訊中心 0.869 的幾何斷言。完整互動、Alpha、詳情與 overflow 回歸為 `errors=[]`、`failures=[]`。
 
 #### 二周目切磋角色圖內孔裁切 V341
 
@@ -8386,8 +7549,7 @@ pm start` 啟動 8787 靜態服務後重跑；Playwright 在 1600×900、1024×7
 - 詳情：新增 `spar_character_detail_overlay_frame_v1.webp`，以 1536×1024 海賊木框覆蓋角色圖和 HTML 欄位；框外、左側人物窗、右側名稱、六個能力欄及招式資訊窗皆是實際 Alpha=0，只有木框、金屬飾件與暗紅返回鈕實底保留。能力欄改為與圖框一致的兩欄三列，人物圖在框後裁切，不修改任何角色圖片。
 - 素材：使用 Codex 內建 ImageGen 參照 `draft_character_detail_frame.webp` 重製。首輪候選把白灰棋盤格畫入 RGB；第二輪去掉棋盤格但輸出黑色留空，最後由該生成圖的純黑留空區建立真 Alpha。ImageGen 原始檔、透明校正 PNG、正式 WebP 與完整提示詞分別保存在 `public/images/board/spar_ui/incoming/`、`public/images/board/spar_ui/`；既有原框未覆寫。
 - 修改檔案：`public/board_spar_selection_demo.html`、`public/images/board/spar_ui/`、`scripts/spar_selection_demo_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：Playwright 在 1600×900、1024×768 實際確認 6+6 卡片、12 個盾牌內屬性、舊徽章與情報鍵數量皆為 0、點對方整卡可開詳情；Canvas 驗證 1536×1024 詳情 WebP 的框外、人物窗、名稱窗、能力孔與資訊窗 Alpha=0，頂框與按鈕 Alpha≥200。小卡裁切、框／名稱對位、詳情不洩漏攜帶物、左右秘密選三人、雙鎖揭曉與頁面 overflow 回歸結果為 `errors=[]`、`failures=[]`；現有 8787 
-pm start` 服務持續運行並供本輪瀏覽器驗證使用。
+- 驗證：Playwright 在 1600×900、1024×768 實際確認 6+6 卡片、12 個盾牌內屬性、舊徽章與情報鍵數量皆為 0、點對方整卡可開詳情；Canvas 驗證 1536×1024 詳情 WebP 的框外、人物窗、名稱窗、能力孔與資訊窗 Alpha=0，頂框與按鈕 Alpha≥200。小卡裁切、框／名稱對位、詳情不洩漏攜帶物、左右秘密選三人、雙鎖揭曉與頁面 overflow 回歸結果為 `errors=[]`、`failures=[]`；現有 8787 `npm start` 服務持續運行並供本輪瀏覽器驗證使用。
 
 #### 二周目切磋全欄位中心對位 V343
 
@@ -8395,8 +7557,7 @@ pm start` 服務持續運行並供本輪瀏覽器驗證使用。
 - 量測：直接讀取 `spar_character_card_overlay_frame_v1.webp` 與 `spar_character_detail_overlay_frame_v1.webp` 的 Alpha 通道，找出各 Alpha=0 連通開孔的像素邊界與中心。小卡盾牌中心為約 `(23.7%, 15.8%)`、順位圓孔中心約 `(77.4%, 15.6%)`；詳情人物窗、名稱窗、六個能力孔及資訊窗也分別使用其實測中心，不再沿用估算百分比。
 - 修正：小卡人物／框／姓名／資料列維持共同水平中心，階級、定位、等級改為等寬三欄各自置中；屬性與順位依盾牌／圓孔完整寬高定位。詳情人物圖縮放到左側真開孔範圍，左上屬性、左下姓名、右上名稱、六項能力、資訊區及返回文字逐一置中；能力文字改為標籤與數值組合置中，資訊區使用 `box-sizing:border-box` 避免 padding 撐出框外。
 - 修改檔案：`public/board_spar_selection_demo.html`、`scripts/spar_selection_demo_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：Playwright 在 1600×900、1024×768 新增小卡框／人物／姓名／資料列共同水平中心、盾牌中心，以及詳情視窗中心與各開孔實測中心的座標斷言。兩種尺寸完整操作 6+6 卡片、點對方看詳情、秘密選三人、雙鎖揭曉、Alpha、攜帶物保密、內容不重疊與頁面 overflow，結果均為 `errors=[]`、`failures=[]`；並人工檢查三張桌機／平板截圖。
-pm start` 已在本輪啟動，靜態服務監聽 8787；未設定 `DATABASE_URL` 的既有資料庫警告不影響本隔離頁。
+- 驗證：Playwright 在 1600×900、1024×768 新增小卡框／人物／姓名／資料列共同水平中心、盾牌中心，以及詳情視窗中心與各開孔實測中心的座標斷言。兩種尺寸完整操作 6+6 卡片、點對方看詳情、秘密選三人、雙鎖揭曉、Alpha、攜帶物保密、內容不重疊與頁面 overflow，結果均為 `errors=[]`、`failures=[]`；並人工檢查三張桌機／平板截圖。`npm start` 已在本輪啟動，靜態服務監聽 8787；未設定 `DATABASE_URL` 的既有資料庫警告不影響本隔離頁。
 
 #### 二周目切磋詳情屬性盾牌置中放大 V344
 
@@ -8422,10 +7583,7 @@ pm start` 已在本輪啟動，靜態服務監聽 8787；未設定 `DATABASE_URL
 - 隔離與同步：PK runtime 不寫回主線船員 HP、PP、出戰位置或攜帶物，勝敗不發放貝里／經驗、不觸發瀕死或監獄流程。手動存檔排除 `activeSpar`／`isSparBattle`；LAN 使用原 `BOARD_GAME_STATE` 完整快照保存進行中 PK，server 允許兩名參戰者送出更新並拒絕非參戰者。沒有新增 localStorage key、Socket.IO event 或角色／道具字串 id。
 - UI：`board_spar_selection_demo.html?formal=1` 改由父頁送入即時名單並回傳選角／鎖定；獨立預覽模式仍保留。船長指令有可切磋對象時，底列使用五等欄，避免第五項換行壓縮面板。正式主頁 query 更新為 `20260827-formal-spar-pk-v346`。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/board_spar_selection_demo.html`、`server/index.js`、`scripts/spar_formal_battle_qa.js`、`scripts/spar_lan_sync_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
-- 驗證：
-ode --check` 通過 `public/js/board_game.js`、`server/index.js`、`scripts/spar_formal_battle_qa.js`、`scripts/spar_lan_sync_qa.js`。`spar_selection_demo_qa.js` 於 1600×900、1024×768 維持 `errors=[]`、`failures=[]`；`spar_formal_battle_qa.js` 驗證五欄船指令無 overflow、6+6 選角、滿狀態三對三、雙方裝備狀態、雙方行動、傷害／PP runtime 變化、替補及主線資料完全不變，結果 `failures=[]`；`spar_lan_sync_qa.js` 以三個瀏覽器 context 驗證邀請、接受、非當前回合參戰者行動版本 `1→2→3`，第三名更新回覆 
-ot_your_turn`，結果 `failures=[]`。一般戰鬥 `battle_parity_dice_relay_flag_qa.js` 與 `battle_critical_system_qa.js` 分別為 `failures=[]`、45/45 通過。額外重跑 `battle_entry_recovery_qa.js` 時，立即遺失確認的第一段仍記錄 `canAct=false`，其 watchdog 與海上戰鬥入口後續皆恢復 `canAct=true`；此項未在 PK 範圍改動。8787 
-pm start` 服務持續運行並供正式頁與 Socket.IO 驗證使用。
+- 驗證：`node --check` 通過 `public/js/board_game.js`、`server/index.js`、`scripts/spar_formal_battle_qa.js`、`scripts/spar_lan_sync_qa.js`。`spar_selection_demo_qa.js` 於 1600×900、1024×768 維持 `errors=[]`、`failures=[]`；`spar_formal_battle_qa.js` 驗證五欄船指令無 overflow、6+6 選角、滿狀態三對三、雙方裝備狀態、雙方行動、傷害／PP runtime 變化、替補及主線資料完全不變，結果 `failures=[]`；`spar_lan_sync_qa.js` 以三個瀏覽器 context 驗證邀請、接受、非當前回合參戰者行動版本 `1→2→3`，第三名更新回覆 `not_your_turn`，結果 `failures=[]`。一般戰鬥 `battle_parity_dice_relay_flag_qa.js` 與 `battle_critical_system_qa.js` 分別為 `failures=[]`、45/45 通過。額外重跑 `battle_entry_recovery_qa.js` 時，立即遺失確認的第一段仍記錄 `canAct=false`，其 watchdog 與海上戰鬥入口後續皆恢復 `canAct=true`；此項未在 PK 範圍改動。8787 `npm start` 服務持續運行並供正式頁與 Socket.IO 驗證使用。
 
 #### 二周目 PK 保留原玩家輪序 V347
 
@@ -8434,9 +7592,7 @@ pm start` 服務持續運行並供正式頁與 Socket.IO 驗證使用。
 - 狀態生命週期：一輪結束後把雙方 runtime 存入 `activeSpar.battleSnapshot`，清除全域 `battleState` 與 PK overlay，再走原 `endTurn()`。非參戰者的回合不受 `activeSpar` 鎖定，可正常擲骰、移動、抽事件、戰鬥與使用原介面；輪到下一名參戰者時才恢復 snapshot、開始下一個 PK 輪次並再次鎖住該回合。
 - 戰鬥邊界：三對三 HP、PP、能力狀態、裝備狀態與替補結果跨參戰者回合保留；主線船員資料仍完全隔離。倒下／交棒需要替補時先完成替補再離開該輪；分出勝負時由本回合參戰者確認結果，再清除切磋並照原順序換人。
 - 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`scripts/spar_formal_battle_qa.js`、`scripts/spar_lan_sync_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。正式主頁 query 更新為 `20260827-spar-turn-order-v347`。
-- 驗證：
-ode --check` 通過主程式與兩支 PK QA。`spar_formal_battle_qa.js` 以四名玩家實際完成 A→C 第一輪、確認 `battleState=null`／戰況已暫存／目前玩家=B／B 未被鎖，再完成 B→C 換手、恢復第二輪、C 先選／A 回應、替補與結算後目前玩家=D；兩輪皆保持主線 HP、PP、出戰位置與攜帶物不變，`errors=[]`、`failures=[]`。`spar_lan_sync_qa.js` 以三個瀏覽器 context 驗證同步版本 `1→2→3→4→5→6`，涵蓋 A/C 結算後換 B、B 普通換到 C、C 恢復 PK 與非參戰者改寫遭 
-ot_your_turn` 拒絕，結果 `failures=[]`。另重跑準備室 1600×900／1024×768、同格交易停靠及一般暴擊戰鬥回歸，分別為 `failures=[]`、`failures=[]`、45/45 通過。
+- 驗證：`node --check` 通過主程式與兩支 PK QA。`spar_formal_battle_qa.js` 以四名玩家實際完成 A→C 第一輪、確認 `battleState=null`／戰況已暫存／目前玩家=B／B 未被鎖，再完成 B→C 換手、恢復第二輪、C 先選／A 回應、替補與結算後目前玩家=D；兩輪皆保持主線 HP、PP、出戰位置與攜帶物不變，`errors=[]`、`failures=[]`。`spar_lan_sync_qa.js` 以三個瀏覽器 context 驗證同步版本 `1→2→3→4→5→6`，涵蓋 A/C 結算後換 B、B 普通換到 C、C 恢復 PK 與非參戰者改寫遭 `not_your_turn` 拒絕，結果 `failures=[]`。另重跑準備室 1600×900／1024×768、同格交易停靠及一般暴擊戰鬥回歸，分別為 `failures=[]`、`failures=[]`、45/45 通過。
 
 
 
@@ -8625,8 +7781,7 @@ Source npm start、封裝 Electron、installer SHA／签章、公開版本切換
 - New QA: `scripts/desktop_launcher_startup_qa.js`, `launcher_life_lazy_loading_qa.js`, `launcher_life_lazy_browser_qa.js`, `launcher_loading_webp_qa.js`. The original 1.2.8 validator passed at its released commit; the current package gate reads the SHA-pinned historical receipt instead of rerunning frozen 1.2.8 assertions on changed runtime.
 - The new 1.2.9 announcement is append-only in `config/launcher-announcements-v1.json`, gated by actual launcher version. Source/packaged Electron, signed installer and public endpoint require independent release checks; do not treat this source record as public deployment evidence. LATTICE runtime reported `CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`, and no LATTICE persistence is claimed.
 - Focused verification: startup verified/offline scenarios, room lazy-loading model and real Chromium first-use work, 20-image lossless WebP source comparison and browser review, 1.2.9 announcement visibility/read isolation, existing personal-page BGM 15 cases, and package source gate passed. The old 1.2.6 announcement QA fixture expects exactly two notices and is historical; the new release gate uses `scripts/launcher_129_announcement_qa.js` for the current catalog.
-- 
-pm start` source smoke and packaged Electron smoke each loaded 673 assets with HTTP Range checks and played BGM. The isolated x64 installer is 252,010,623 bytes, SHA-256 `fbdcee15c8ac3b59296facb1a835e034597ab8fbe9f3f5d0738b7b0e3b637182`, below the existing 256 MiB ceiling. This verifies a local candidate; public publication and canonical manifest activation remain separately verified.
+- `npm start` source smoke and packaged Electron smoke each loaded 673 assets with HTTP Range checks and played BGM. The isolated x64 installer is 252,010,623 bytes, SHA-256 `fbdcee15c8ac3b59296facb1a835e034597ab8fbe9f3f5d0738b7b0e3b637182`, below the existing 256 MiB ceiling. This verifies a local candidate; public publication and canonical manifest activation remain separately verified.
 
 ## 2026-09-28 Launcher 1.2.10 shop and room visual repair
 
@@ -8635,10 +7790,8 @@ pm start` source smoke and packaged Electron smoke each loaded 673 assets with H
 - `desktop/launcher-life-actions.js` selects 116 new 256px-per-frame `life_hd_v2` atlases for nine Straw Hat characters, generated by `tools/launcher-room/life-hd-v2/build_hd.py` from the reviewed original PNG crops. `tools/launcher-room/life-hd-v2/manifest.json` records source, plan and output hashes, dimensions and positions. Robin retains her existing 256px redraw; reserved characters retain their 256px art. The 128px historical atlases and manifests remain in source but are omitted from the new installer because no current room action reads them.
 - `desktop/launcher-life-room.js` and `launcher-room.css` correct only Franky's eating, Jinbe's north-facing helm and Sanji's training standing-action height, anchored at the feet. `desktop/main.js` and `desktop/package.json` allow and package the new explicit asset set; `desktop/package-lock.json` and the version-gated `config/launcher-announcements-v1.json` advance to 1.2.10. `scripts/desktop_launcher_package_qa.js` checks the new source-art digests and media budget without altering the frozen 1.2.8/1.2.9 evidence.
 - Local verification: all 134 catalog items passed the actual desktop purchase preflight; 8 added room products passed isolated server SQL purchases; buying the eleventh companion in a full room succeeded, charged once, survived reload and could be placed after a swap. New image rebuilding checked 116 outputs and 464 frame anchors; real Chromium room checks covered five life actions, first-use lazy loading and six desktop/mobile scale views. The 1.2.10 announcement release gate/read persistence and the desktop package source gate passed.
-- 
-pm.cmd --prefix desktop start` was attempted with isolated profiles. Electron 44.1.1 in the current restricted sandbox fails loading `launcher.html` with renderer/GPU child exit `-1073741515`; the unchanged 1.2.9 D source fails the same way in this environment. This is recorded as an environment-limited smoke, not as a passed source or packaged Electron test. Signed installer creation, formal D sync and public deployment remain separate pending gates.
-- Physical production staging and 
-pm list --include prod --omit dev` verified the exact ten locked runtime packages. Electron Builder produced a `win-unpacked` candidate; `scripts/desktop_launcher_package_qa.js --win-unpacked` passed with 762 launcher files, 257 ASAR entries, 155,691,455 launcher media bytes and exact source hashes. The NSIS installer build then failed while writing its output because the C sandbox build drive ran low on space; the partial `.exe` is invalid and must never be published. The first build log and incomplete files are retained under ignored `qa-1210/` for diagnosis.
+- `npm.cmd --prefix desktop start` was attempted with isolated profiles. Electron 44.1.1 in the current restricted sandbox fails loading `launcher.html` with renderer/GPU child exit `-1073741515`; the unchanged 1.2.9 D source fails the same way in this environment. This is recorded as an environment-limited smoke, not as a passed source or packaged Electron test. Signed installer creation, formal D sync and public deployment remain separate pending gates.
+- Physical production staging and `npm list --include prod --omit dev` verified the exact ten locked runtime packages. Electron Builder produced a `win-unpacked` candidate; `scripts/desktop_launcher_package_qa.js --win-unpacked` passed with 762 launcher files, 257 ASAR entries, 155,691,455 launcher media bytes and exact source hashes. The NSIS installer build then failed while writing its output because the C sandbox build drive ran low on space; the partial `.exe` is invalid and must never be published. The first build log and incomplete files are retained under ignored `qa-1210/` for diagnosis.
 - The current tool permission request returned no D-write or network grant, and a harmless new D QA-directory creation returned access denied even after the user switched the visible mode to Full access. Formal D synchronization, a complete installer, signed release manifest, public GET/Range/SHA and player delivery therefore have not been claimed.
 - The broad historical `launcher_profile_shop_browser_qa.js` reaches the BGM step after its shop checks, then fails because it still asserts music never auto-plays on profile open. The unchanged 1.2.9 source fails that same assertion; the current user requirement is to auto-play the chosen BGM for owners and visitors. This obsolete historical assertion is not counted as a 1.2.10 regression or a passing current BGM check.
 
@@ -8694,27 +7847,22 @@ pm list --include prod --omit dev` verified the exact ten locked runtime package
 - 範圍：`public/js/board_game.js` 的真人首次進入商店、醫院、酒館、任務、研究所、競技場、水之七島、司法島、推進城與海軍本部時，沿用顛倒山的全螢幕對話播放器。每位玩家按功能種類各播一次；完成或略過後直接開原功能面板。CPU、非本機控制者與已看過的種類不播放。落點任務事件只登記一次，原戰鬥、商店、招募、船塢和副本規則不變。
 - 存檔／同步：新增玩家陣列 `featureIslandIntroSeen` 與播放中的 `pendingFeatureIslandIntro`，舊存檔載入時正規化；劇情完成才加入種類鍵，仍沿用既有 `BOARD_GAME_STATE` 完整快照。中途重整可重播同一段，並沿用首次探訪結算與進島前的提示狀態，不重複記任務。後期醫院轉研究所、酒館轉競技場時各有自己的第一次介紹；水之七島獨立於一般商店島。
 - 素材：`public/images/board/story/backgrounds/island_intro/` 新增 10 張場景 WebP；`public/images/board/story/speakers/luffy_pre_timeskip_{enies,war}.webp` 分別對應司法島紅背心及推進城／頂上戰爭黃背心，兩者都沒有後期胸口傷疤。原始 PNG、生成提示與檢視紀錄保存在 `D:/Codex_QA/board-island-intros-20261004/generated/`，不覆寫既有角色圖。
-- 驗證與發行工具：`scripts/board_feature_island_intro_qa.js` 在實際 Chromium 的 16 個情境通過，涵蓋 10 種首訪、略過／完整播畢、重訪不重播、舊存檔、中途重整恢復、任務事件一次、1600×900／390×844 與圖片解碼；報告 `D:/Codex_QA/board-island-intros-20261004/browser-qa-interruption-final/report.json` 為 `errors=[]`、`failures=[]`。
-pm start` 在隔離工作樹借用原專案唯讀套件並補外部 `chess.js` 後於 18788 聆聽；未配置 `DATABASE_URL`，完整房間連線未驗。`scripts/build_board_island_intro_release.js` 只納入 Board 主程式與本次 12 張圖片，維持 Card、Chess 與既有 Board 素材記錄。公開部署須另依實際讀回記錄，不以本機 QA 代替。
+- 驗證與發行工具：`scripts/board_feature_island_intro_qa.js` 在實際 Chromium 的 16 個情境通過，涵蓋 10 種首訪、略過／完整播畢、重訪不重播、舊存檔、中途重整恢復、任務事件一次、1600×900／390×844 與圖片解碼；報告 `D:/Codex_QA/board-island-intros-20261004/browser-qa-interruption-final/report.json` 為 `errors=[]`、`failures=[]`。`npm start` 在隔離工作樹借用原專案唯讀套件並補外部 `chess.js` 後於 18788 聆聽；未配置 `DATABASE_URL`，完整房間連線未驗。`scripts/build_board_island_intro_release.js` 只納入 Board 主程式與本次 12 張圖片，維持 Card、Chess 與既有 Board 素材記錄。公開部署須另依實際讀回記錄，不以本機 QA 代替。
 - 發布準備：修復中途重整後，從最新 `origin/main` 的隔離工作樹建立 `D:/Codex_QA/board-island-intros-20261004/candidate-v3/`，已逐位元組核對暫存的 Board 程式及 12 張圖片，提升為 Board `package-01bba5eeafa3780b`，manifest SHA-256 `8be85b8440463dda2d04965499608274bdb59af53d1b2dea061966d16bbc03ac`；`candidate-v1`／`candidate-v2` 因程式換行位元組不符作廢，不可部署。功能程式、12 張圖、QA 腳本及四份文件已限定同步至 D 正式來源，保留當地酒館與其他未提交修改。此時尚未上傳 R2、推送 Git 或完成公開讀回。LATTICE 官方 Status 回傳 `BLOCKED/CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，本次沒有可用任務工具或 Graphify 成功紀錄。
 
 ## 2026-10-04 Board 功能島首訪劇情校正（已公開驗證）
 
 - 範圍與原因：比對全部首訪截圖、現行服務規則及人物時期後，修正商店台詞錯稱各港不同價格及象主背上市集誤用港口畫面、醫院台詞錯稱收費、司法島／推進城／海軍本部預設固定救援對象；酒館魯夫及水之七島佛朗基立繪改為相應時期。`public/js/board_game.js` 僅更動這些台詞、立繪／背景選擇與海軍本部入口面板 class；三張新圖為 `public/images/board/story/backgrounds/island_intro/shop_zou_market.webp`、`public/images/board/story/speakers/luffy_pre_timeskip_tavern_invite.webp`、`franky_pre_timeskip_shipwright.webp`，未覆寫原圖。
 - 畫面：`public/board_game.html` 對功能島立繪保留實色原圖、調整桌機及窄視窗位置避免遮住右上播放鍵；海軍本部入口以場景背景及深色面板承接首訪劇情。沒有改治療、價格、招募、救援對象判定、戰鬥、存檔欄位、localStorage key 或 Socket.IO event；原 `BOARD_GAME_STATE` 流程保留。
-- 工具與已完成的本機驗證：`scripts/board_feature_island_intro_qa.js` 增加象主市場及新角色立繪檢查，實際 Chromium 17／17 情境通過，包含 10 類首訪、象主特例、服務返回、完整播畢、窄視窗與中途重整；報告 `D:/Codex_QA/board-island-intros-20261004/corrections-browser-qa-v2/report.json` 記錄 `errors=[]`、`failures=[]`。
-ode --check` 通過主程式及 QA 腳本。`scripts/build_board_island_intro_corrections_release.js` 設計以既有 Board manifest 為基底產生只含修正差異的候選，保留 Card、Chess 及其他 Board 記錄；尚須候選清單、公開讀回及實際部署驗證。
-- 環境與邊界：本次隔離發行工作樹的 
-pm start` 因向上解析到 Express 5 而與現有路由不相容；改由同源 Express 4 啟動測試服務，主頁、程式及圖片 GET 為 HTTP 200。沒有資料庫連線，本機測試不代替真人或跨裝置房間驗收。LATTICE 官方 Status 為 `BLOCKED/CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未建立本次 LATTICE 任務或宣稱 Graphify 已完成。D 正式來源仍有其他未提交修改；隔離發行工作樹只提交經審查的劇情相關檔案，保留其餘變更。
+- 工具與已完成的本機驗證：`scripts/board_feature_island_intro_qa.js` 增加象主市場及新角色立繪檢查，實際 Chromium 17／17 情境通過，包含 10 類首訪、象主特例、服務返回、完整播畢、窄視窗與中途重整；報告 `D:/Codex_QA/board-island-intros-20261004/corrections-browser-qa-v2/report.json` 記錄 `errors=[]`、`failures=[]`。`node --check` 通過主程式及 QA 腳本。`scripts/build_board_island_intro_corrections_release.js` 設計以既有 Board manifest 為基底產生只含修正差異的候選，保留 Card、Chess 及其他 Board 記錄；尚須候選清單、公開讀回及實際部署驗證。
+- 環境與邊界：本次隔離發行工作樹的 `npm start` 因向上解析到 Express 5 而與現有路由不相容；改由同源 Express 4 啟動測試服務，主頁、程式及圖片 GET 為 HTTP 200。沒有資料庫連線，本機測試不代替真人或跨裝置房間驗收。LATTICE 官方 Status 為 `BLOCKED/CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未建立本次 LATTICE 任務或宣稱 Graphify 已完成。D 正式來源仍有其他未提交修改；隔離發行工作樹只提交經審查的劇情相關檔案，保留其餘變更。
 - 發布與公開驗證：限定候選 `package-464d59c2a2be9a32`（manifest SHA-256 `b3a386111c81aa4a8326eb0d49de3b28e79115c693f54213b0cf424c793dac02`）由 commit `615283a2fb8406f52804522af6437d88d6040c24` 非強制推送至 `main`；Git HEAD 發布乾跑驗證 6,085／6,085 唯一物件，R2 live 上傳 5 個、驗證沿用 6,080 個。公開 Board runtime 已切到該 package，catalog、三款 manifest、兩份程式與三張新圖的直連／R2 CAS 位元組及 SHA 共 98／98 檢查通過，Card／Chess 身分未變；報告 `D:/Codex_QA/board-island-intros-20261004/corrections-public-verify/public-verify.json`。正式站隔離訪客 Chromium 再跑 17／17 情境、39 張截圖，`errors=[]`、`failures=[]`；報告 `D:/Codex_QA/board-island-intros-20261004/corrections-public-browser/report.json`。另有 11 場景 44 張逐格圖於 `D:/Codex_QA/board-island-intros-20261004/corrections-gallery/index.html`。公開測試使用 QA 入口強制首訪，未宣稱真人擲骰抵達或跨裝置房間驗收。
 
 ## 2026-10-04 Board 功能島 NPC 對話立繪校正（已公開驗證）
 
 - 原因與範圍：既有首訪三句多由旁白或草帽團單向介紹，沒有用島上已配置的人物接待玩家。本次校正 `public/js/board_game.js` 的十種功能島對話與對應透明立繪：商店由店主、酒館由瑪姬、任務島由摩爾岡斯、水之七島由保利、司法島由斯潘達姆、推進城由麥哲倫、海軍本部由青雉與來訪船員往返；醫院由喬巴、研究所由莉莉絲接話。競技場沒有固定主持 NPC，保留索隆／娜美引導，不捏造接待者。象主背上市集仍沿用商店種類與其專屬背景。
 - 素材與工具：新增 `public/images/board/story/speakers/island_intro_{shopkeeper,spandam,magellan}.webp` 三張透明立繪，其餘角色沿用現有透明圖；不覆寫既有原圖。`public/board_game.html` 將十種功能島立繪避開播放控制並更新 JS 版本查詢。`scripts/board_feature_island_intro_qa.js` 核對每種島首尾 NPC、逐句說話者、圖片解碼與服務返回；`scripts/build_board_island_dialogue_release.js` 以公開 `package-464d59c2a2be9a32` 為基底，白名單只含兩個 Board 程式檔及三張新圖。
-- 本機驗證：
-ode --check` 通過主程式、QA 及發布工具；實際 Chromium 19／19 情境通過，涵蓋十種島逐句對話、象主市場、重名酒館／任務牆、完整播放／略過、重訪、中途重整、任務事件一次及 1600×900／390×844 畫面；報告 `D:/Codex_QA/board-island-intros-20261004/npc-dialogue-browser-local-final-v2/report.json` 為 `errors=[]`、`failures=[]`。隔離工作樹 
-pm start` 因依賴不齊及上層 Express 5 路由不相容而未直接啟動；本機改借原專案 Express 4、外部 chess.js，並只在測試程序設 `OP_DESKTOP_ONLY=0` 後於 18791 服務真正遊戲頁。未配置 `DATABASE_URL`，房間連線與真人遊玩未驗。
+- 本機驗證：`node --check` 通過主程式、QA 及發布工具；實際 Chromium 19／19 情境通過，涵蓋十種島逐句對話、象主市場、重名酒館／任務牆、完整播放／略過、重訪、中途重整、任務事件一次及 1600×900／390×844 畫面；報告 `D:/Codex_QA/board-island-intros-20261004/npc-dialogue-browser-local-final-v2/report.json` 為 `errors=[]`、`failures=[]`。隔離工作樹 `npm start` 因依賴不齊及上層 Express 5 路由不相容而未直接啟動；本機改借原專案 Express 4、外部 chess.js，並只在測試程序設 `OP_DESKTOP_ONLY=0` 後於 18791 服務真正遊戲頁。未配置 `DATABASE_URL`，房間連線與真人遊玩未驗。
 - 發布候選：初版 `package-ce0f8d7b8d2914c2` 只作中繼、未切換公開 runtime；其 6,411→6,414 筆清單新增兩個程式和三張新圖。最終候選 `D:/Codex_QA/board-island-intros-20261004/npc-dialogue-final-candidate/` 為 `package-35a6c13243b13079`，manifest SHA-256 `9c47fa79f2a04dac1a837f13f274ed0eeb3480597728ce9742001b63eeb2e7fa`，從中繼版本僅更新兩個 Board 程式，6,414 筆維持不變；Card／Chess catalog 身分未變。`scripts/build_board_island_dialogue_copy_release.js` 鎖定中繼 package 並驗證此白名單。
 - 正式發布：來源提交 `f4c0559b439272ebd85440d33145f60dfac03eda` 已非強制推送至 `origin/main`；Git HEAD 發布乾跑驗證 6,088／6,088 個不重複物件，R2 live 上傳 2 個、沿用 6,086 個。Render 公開 `/api/desktop-runtime-package/board` 已切換至最終 package 與上述 manifest SHA；公開 catalog、manifest、五個程式／立繪直連及 R2 CAS 位元組、大小與 SHA 共 99／99 通過，Card／Chess 身分未變，報告在 `D:/Codex_QA/board-island-intros-20261004/npc-dialogue-public-verify/public-verify.json`。正式網址以桌面啟動器 User-Agent 進行隔離訪客 Chromium 測試，19／19 情境、`errors=[]`、`failures=[]`；初輪服務截圖早於素材載入，QA 改等五秒並檢查可見圖片後重跑仍 19／19，最終報告與逐格截圖在 `D:/Codex_QA/board-island-intros-20261004/npc-dialogue-public-browser-settled/`。11 場景 44 張對話／服務圖集在 `D:/Codex_QA/board-island-intros-20261004/npc-dialogue-gallery/index.html`，44／44 張由最終公開截圖載入。這證明公開包與隔離劇情流程，不代表真人擲骰抵達、正式帳號或多人房間驗收。LATTICE 官方 Status 為 `BLOCKED/CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未宣稱任務或圖譜寫入成功。
 - 邊界：這次只更動首訪表現，不改功能島的實際服務、戰鬥、掉落、任務計數、招募抽選、價格、存檔欄位、localStorage key 或 Socket.IO event；原 `BOARD_GAME_STATE` 快照與首次播放／略過後接回服務的流程保持不變。
@@ -8724,9 +7872,7 @@ pm start` 因依賴不齊及上層 Express 5 路由不相容而未直接啟動�
 - 原因與範圍：前次醫院島首訪由草帽團船醫喬巴接待；本次依使用者要求改為非草帽夥伴的可樂克斯。`public/js/board_game.js` 的醫院三句改成可樂克斯、娜美、可樂克斯往返，首尾逐句指定新透明立繪 `public/images/board/story/speakers/island_intro_crocus.webp`。結尾說「這趟診療」而不套入隨機島名，避免誤寫成他常駐磁鼓島等其他地點。研究所首訪仍由莉莉絲與喬巴對話，不併入這項替換。
 - 呈現與音樂：`public/js/board_game.js` 的 `openHospitalModal()` 移除醫院音樂情境中原有的 `character: "chopper"` 標籤，保留醫療、島嶼與療癒情境；`public/board_game.html` 更新主程式快取查詢版本。`scripts/board_feature_island_intro_qa.js` 對醫院新增可樂克斯逐句說話者與立繪檢查，並修正隨機商店落在象主背上市集時的背景期望；原研究所說話者期望維持不變。
 - 發行檔案：新增 `scripts/build_board_hospital_crocus_release.js`，用於建立本次限定 Board 程式與可樂克斯立繪的候選；本節不代表候選已發布或公開驗證完成。醫院免費全隊 HP／PP 整備、服務按鈕與費用、落點、任務、戰鬥、存檔欄位、localStorage key、Socket.IO event 及 `BOARD_GAME_STATE` 流程均不改。
-- 本機驗證：
-ode --check` 通過主程式、QA 與發布工具；修正島名台詞後實際 Chromium 20／20 情境通過，包含醫院逐句、完整播畢、略過、重訪、舊存檔、研究所不變，以及 1600×900／390×844 畫面，`errors=[]`、`failures=[]`。報告與截圖在 `D:/Codex_QA/board-island-intros-20261004/hospital-crocus-local-browser-lore-final/`。
-pm start` 在隔離工作樹先因缺套件、再因上層 Express 5 與舊路由不相容而退出；以外部 Express 4 啟動相同 `server/index.js`，頁面及 JS HTTP 200。未設定 `DATABASE_URL`，未驗真人房間。
+- 本機驗證：`node --check` 通過主程式、QA 與發布工具；修正島名台詞後實際 Chromium 20／20 情境通過，包含醫院逐句、完整播畢、略過、重訪、舊存檔、研究所不變，以及 1600×900／390×844 畫面，`errors=[]`、`failures=[]`。報告與截圖在 `D:/Codex_QA/board-island-intros-20261004/hospital-crocus-local-browser-lore-final/`。`npm start` 在隔離工作樹先因缺套件、再因上層 Express 5 與舊路由不相容而退出；以外部 Express 4 啟動相同 `server/index.js`，頁面及 JS HTTP 200。未設定 `DATABASE_URL`，未驗真人房間。
 - 候選與來源：先前 `hospital-crocus-candidate/` 的 `package-5951ef21eaeff577` 因會把隨機島名寫進可樂克斯台詞而作廢，未公開發布。定稿受限候選 `D:/Codex_QA/board-island-intros-20261004/hospital-crocus-candidate-v2/` 已雙向讀回並提升為 Board `package-4f3c87d6ae495974`，manifest SHA-256 `2ddba755d4c8cd2503c2d9c723dc2e2eede61e775b467655ff0471136ba934ad`；只更動兩個 Board 程式並增加可樂克斯立繪，Board 6,414→6,415 筆，其餘與 Card／Chess 身分不變。D 正式來源僅定向同步劇情、HTML、QA、文件及新圖，保留既有未提交修改；圖與發行工具 SHA 對齊隔離工作樹。此時尚未完成公開讀回。LATTICE 官方 Status 為 `BLOCKED/CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未宣稱任務或圖譜寫入成功。
 - 正式發布與公開驗證：來源提交 `6f1acb9cbc13da50efcc8f2d4513b79834869ba5` 已非強制推送至 `origin/main`；Git HEAD 發布乾跑核對 6,089／6,089 個不重複物件，R2 live 上傳 3 個、沿用 6,086 個。公開 Board runtime 已切至 `package-4f3c87d6ae495974` 與上述 manifest SHA；公開 catalog、Board／Card／Chess manifest、兩個程式與可樂克斯新圖的直連／R2 CAS 位元組及 SHA 共 105／105 通過，Card／Chess 身分未變，報告為 `D:/Codex_QA/board-island-intros-20261004/hospital-crocus-public-verify/public-verify.json`。正式網址以桌面啟動器 User-Agent 跑 Chromium 20／20 情境，`errors=[]`、`failures=[]`，逐格截圖與報告在 `D:/Codex_QA/board-island-intros-20261004/hospital-crocus-public-browser/`。此驗證不等於真人擲骰抵達、正式帳號或跨裝置多人房間驗收。
 
