@@ -29,7 +29,7 @@ context.window.io=()=>{
   return socket;
 };
 try {
-  vm.runInContext(fs.readFileSync(new URL('./GameAssets/launcher/modules.js',import.meta.url),'utf8'),context);
+  vm.runInContext(fs.readFileSync(process.env.IOS_QA_MODULES || new URL('./GameAssets/launcher/modules.js',import.meta.url),'utf8'),context);
   vm.runInContext(fs.readFileSync(new URL('./bridge.js',import.meta.url),'utf8'),context);
   const api=context.window.onePieceDesktop;
   const preload=fs.readFileSync(new URL('../desktop/preload.js',import.meta.url),'utf8');
@@ -54,5 +54,7 @@ try {
   assert.equal(session.secret,'');
   assert.equal(session.state.account,null);
   assert.equal((await api.getState()).authenticated,false);
+  context.window.IOSModules.auth.AuthService.prototype.authenticate=async()=>{throw new Error('offline');};
+  assert.equal((await api.login({username:'TestUser',password:'qa-password-only'})).error,'offline');
   console.log(JSON.stringify({status:'PASS',contractMethods:expected.length,checks:['unauthenticated transaction blocked','password excluded from persistent session','server rejection preserved','game bootstrap matches account','logout clears native session','unfinished updater reported unavailable'],deviceAcceptance:'NOT_RUN'}));
 } finally { for(const id of intervals)clearInterval(id); }

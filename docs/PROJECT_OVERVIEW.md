@@ -2848,3 +2848,5 @@ r57公開發布完成：30張素材、321項大圖预覽、51項留言板/新頭
 
 
 2026-10-11 iOS 安裝修正候選 0.1.2 build 3：Sideloadly 已上傳 100%，實機安裝回報 IXErrorDomain Code 13 / Missing bundle ID。原 IPA 的 Info.plist 確有 tw.rihdi.tabletop.trial；參考 dotnet/macios#22852，同名 Resources 根目錄可造成相同錯誤。將 ios/prepare.mjs、project.yml、App.swift、bridge-qa.mjs、package-qa.mjs 與 ios-trial.yml 的資源根目錄改為 GameAssets，素材內容與遊戲身份不改。封裝 QA 拒絕 App 根目錄 Resources，CI 增加 simulator install 與小型 core artifact 供本機保留全部原素材組裝。實機原因與修復成功仍待驗證；LATTICE API 本階段未提供，沒有假稱持久登記。
+
+2026-10-11 iOS 0.1.2 已由使用者截圖確認 Sideloadly InstallComplete；登入失敗定位為 distribution compatibility routing：同 Origin 127.0.0.1:49152、TabletopIOS UA 對實際 /socket.io polling 得 403 desktop_required，加既有 Electron 相容標記得 200 Engine.IO open。0.1.3 build 4 對 launcher/game WKWebView applicationNameForUserAgent 加 TabletopIOS/0.1.3 Electron/33.0.0，只使用現有相容入口，不變更伺服器或帳號／房間授權。bridge.js 保留 offline/timeout 錯誤而非 generic exception；bridge-qa 增加離線登入失敗檢查，雲端 core artifact 新名 v013。手機登入與遊戲效能待驗證。

@@ -8323,3 +8323,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-11 修正版雲端 run 38078128767 / commit 198ee59b8：裝置編譯、橋接與原生簽章 QA、全部素材封裝 QA、simctl 真實安裝均成功。core artifact 11679464117 已下載，將與舊 IPA 全部資源逐 blob SHA 核對後組装新 IPA。npm start 仍缺 pg，未宣稱 server runtime 通過。ios/.gitignore 加入 GameAssets/，不提交生成素材。手機安裝與完整功能／效能驗收 NOT_RUN。
 
 2026-10-11 0.1.2 build 3 手機候選已組裝：D:/Codex_QA/ios-full-trial-20261011/TabletopIOS-full-assets-v012.ipa，2,785,318,954 bytes，SHA256 8c69a9debef6f1b8695b0994952d8004cfaa32aa6600a1579f00910496cc10a1。9564 清單引用、9659 素材檔及所有 blob SHA 核對成功；app core 取自雲端安裝成功的 build，所有完整素材保留並改在 GameAssets。Sideloadly 已透過 shell open 載入，新 GUI 顯示版本 0.1.2、Start enabled；GUI 殘留 Done/80% 是前次狀態，不作為新版安裝成功證據。等待使用者啟動簽署安裝，手機功能驗收 NOT_RUN。
+
+2026-10-11 iOS 0.1.2 已由使用者截圖確認 Sideloadly InstallComplete；登入失敗定位為 distribution compatibility routing：同 Origin 127.0.0.1:49152、TabletopIOS UA 對實際 /socket.io polling 得 403 desktop_required，加既有 Electron 相容標記得 200 Engine.IO open。0.1.3 build 4 對 launcher/game WKWebView applicationNameForUserAgent 加 TabletopIOS/0.1.3 Electron/33.0.0，只使用現有相容入口，不變更伺服器或帳號／房間授權。bridge.js 保留 offline/timeout 錯誤而非 generic exception；bridge-qa 增加離線登入失敗檢查，雲端 core artifact 新名 v013。手機登入與遊戲效能待驗證。

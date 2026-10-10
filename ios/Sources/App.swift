@@ -241,6 +241,8 @@ final class LauncherController: UIViewController, WKScriptMessageHandlerWithRepl
             store = try ResourceStore()
             updater=ContentUpdater(store:store)
             let configuration = WKWebViewConfiguration()
+        // Server compatibility routing; account and room authorization remain enforced.
+        configuration.applicationNameForUserAgent = "TabletopIOS/0.1.3 Electron/33.0.0"
             let handler = ResourceHandler(store)
             configuration.setURLSchemeHandler(handler, forURLScheme:"opui")
             configuration.setURLSchemeHandler(handler, forURLScheme:"opgame")
@@ -310,7 +312,9 @@ final class LauncherController: UIViewController, WKScriptMessageHandlerWithRepl
         }
     }
     func openGame(_ id:String,game:GameManifest,bootstrap:[String:String]) throws {
-        let configuration = WKWebViewConfiguration(); let handler = ResourceHandler(store)
+        let configuration = WKWebViewConfiguration()
+        // Server compatibility routing; account and room authorization remain enforced.
+        configuration.applicationNameForUserAgent = "TabletopIOS/0.1.3 Electron/33.0.0"; let handler = ResourceHandler(store)
         configuration.setURLSchemeHandler(handler,forURLScheme:"opgame")
         let data = try JSONSerialization.data(withJSONObject:bootstrap)
         let json = String(data:data,encoding:.utf8)!

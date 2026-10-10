@@ -57,7 +57,12 @@
   auth.on('kicked', value => { authenticated = false; emit('kicked', value); publish(); });
   async function authenticate(mode, credentials) {
     await ready;
-    const result = await auth.authenticate(mode, credentials);
+    let result;
+    try { result = await auth.authenticate(mode, credentials); }
+    catch (error) {
+      const code = String(error?.message || 'offline');
+      return { ok: false, error: ['offline', 'timeout'].includes(code) ? code : 'offline' };
+    }
     if (result.ok) { authenticated = true; await social.start(); await publish(); }
     return { ...result, ...(result.ok ? { state: await getState() } : {}) };
   }

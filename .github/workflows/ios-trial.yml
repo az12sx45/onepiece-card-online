@@ -55,7 +55,7 @@ jobs:
           zip -qr ../TabletopIOS-core.zip TabletopIOS.app -x 'TabletopIOS.app/GameAssets/*' 'TabletopIOS.app/GameAssets/'
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: tabletop-ios-core-v012
+          name: tabletop-ios-core-v013
           path: |
             ios/build/TabletopIOS-core.zip
             ios/build/simulator-install.txt
