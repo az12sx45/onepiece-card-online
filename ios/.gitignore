@@ -3,3 +3,4 @@ build/
 *.xcodeproj/
 *.ipa
 Info.plist
+GameAssets/
