@@ -1942,3 +1942,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - ios/package-qa.mjs：逐檔核對實際 app bundle 資源。
 
 - ios/Resources/blobs（生成且不提交）：啟動器及三遊戲全部素材 SHA256 去重存放。
+
+- .github/workflows/ios-full-transfer.yml：將已驗證全素材 IPA 分段傳輸，維持原檔案 bytes。
