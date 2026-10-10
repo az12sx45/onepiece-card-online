@@ -8256,3 +8256,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - 已實測：scripts/launcher_avatar_sync_server_qa.js於實際server與隔離PGlite通過23項，包含100商品購買裝備、雙Socket帳號三遊戲房間、好友/訪客一致、收藏防偽、舊存檔保護。guestbook SQL49項與social avatar QA通過。npm start於41959啟動，health與五個入口頁HTTP200；無正式DATABASE_URL，正式玩家資料未改。其後已完成521項商城預覽（330商品、14種類、1440/960/540寬度、零缺圖）、50項留言板回歸、82項公告，以及雙瀏覽器三遊戲/好友/重整/222選項捲動16項。Card頭像選單的套用/取消固定保留於可視範圍。套件與公開發布驗證仍待完成，不能視為已部署。
 
 - 頭像選單追加修正：保留未購買鎖頭及透明度、移除每張灰階filter，預設GPU路徑已目視完整顯示。瀏覽器QA在可視圖片decode完成後等待兩個frame。強制--disable-gpu的headless軟體raster仍可重現部分空圓，記為測試限制；正式main預設高效能GPU，此次不改核心或素材。
+
+- r58封裝驗證：source e1aae80ab8c7172e2f27a24ef6dfd1a5a8e40848；314檔簽章清單SHA256 57c25a8d7b4e7df82b9e457a22aed9d44041f1be69f07cb6b7071b0b261a5dd1。初次封裝攔截兩renderer工作檔CRLF與Git LF差異；只將三個核准變更renderer規整為Git精確bytes再簽，所有carry仍保留r57原SHA。104變更blob公開HEAD/GET/size/SHA通過；候選core1.2.23從57→58下載22,779,690 bytes、314檔驗證及二次0下載通過。三款新manifest的688條共用頭像route使用實際core快取類別，全部命中、網路fallback 0；175個遊戲CAS blob已不可覆寫上傳。正式公開切版與正式cache讀回仍待下一步。

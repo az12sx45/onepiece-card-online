@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 57,
-  "publishedAt": "2026-10-10T09:53:16.643Z",
+  "revision": 58,
+  "publishedAt": "2026-10-10T13:24:33.553Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -137,6 +137,506 @@
       "path": "images/board/avatars/122.webp",
       "bytes": 188742,
       "sha256": "5dffca5ed5534ff202066935b9d95d2e0e74bcab9566ac918eb7036621d50046"
+    },
+    {
+      "path": "images/board/avatars/123.webp",
+      "bytes": 149068,
+      "sha256": "74250e9ef1bd9200e2a0377c92b87cf9859454cb25d89c4e6b962e3d9390e950"
+    },
+    {
+      "path": "images/board/avatars/124.webp",
+      "bytes": 141916,
+      "sha256": "41f2792261927474cec0f712f47f9b5c684fd711c2fb420c28c40627faec196f"
+    },
+    {
+      "path": "images/board/avatars/125.webp",
+      "bytes": 158952,
+      "sha256": "365b517bd437e259397ce9efe50701310c4d35dfe80a50d11bfb57c4a54ebd4a"
+    },
+    {
+      "path": "images/board/avatars/126.webp",
+      "bytes": 136486,
+      "sha256": "5b77c76dea07553659208171cf41a20272231d3fa4ba422ab608db0d5e4b7b2d"
+    },
+    {
+      "path": "images/board/avatars/127.webp",
+      "bytes": 141216,
+      "sha256": "b6245e7e83419ae7d4e2ea9f3191259b6410dae2cf1763832dd520cae3c880e0"
+    },
+    {
+      "path": "images/board/avatars/128.webp",
+      "bytes": 226898,
+      "sha256": "2f85c87bf371319d576a44f3b56ed95b3dd6ab8d09267aaea71e66a8fabfe2a7"
+    },
+    {
+      "path": "images/board/avatars/129.webp",
+      "bytes": 207108,
+      "sha256": "70d78cad04b8db99be5134b72a540af0042bd029e0e6b76bca22cd0d2dd1a997"
+    },
+    {
+      "path": "images/board/avatars/130.webp",
+      "bytes": 231636,
+      "sha256": "1bc9f316bb6c8d6e6238e10f937fb80e6855371ced41fb0599295132d335217a"
+    },
+    {
+      "path": "images/board/avatars/131.webp",
+      "bytes": 226008,
+      "sha256": "44e812c641ec2dd463087c7e0a9cbff6e61ae2b4a3ad96a19a23ec3e6383dcaa"
+    },
+    {
+      "path": "images/board/avatars/132.webp",
+      "bytes": 244212,
+      "sha256": "ad3b74ce6d271b6795eec05661102db4f4e78065277747f1815f169cc2293d41"
+    },
+    {
+      "path": "images/board/avatars/133.webp",
+      "bytes": 223172,
+      "sha256": "156974f19305b2f574aa45de646a4b9097a1918d58fccd332867668bc3e4be45"
+    },
+    {
+      "path": "images/board/avatars/134.webp",
+      "bytes": 207040,
+      "sha256": "f8ddfcd54ec8c741c3796327fa269ac16d9b8140e63084bb3dd644c4e2c1a1dc"
+    },
+    {
+      "path": "images/board/avatars/135.webp",
+      "bytes": 205874,
+      "sha256": "340c3a919432cb1ab9a1ad7fe471775de5e81bb91c4c7c41036a3b9d76886473"
+    },
+    {
+      "path": "images/board/avatars/136.webp",
+      "bytes": 254546,
+      "sha256": "23c608f7ea6d49277eb30990fb3a7c42c3ab974a91ffa58707884a89bf34e6f4"
+    },
+    {
+      "path": "images/board/avatars/137.webp",
+      "bytes": 204152,
+      "sha256": "567c5edd128497c63248acd0d1cba6b36b44b9047a5e316e4617e62796e85435"
+    },
+    {
+      "path": "images/board/avatars/138.webp",
+      "bytes": 221416,
+      "sha256": "9f1cb32ad319a236f79f560821500e55f6789e6f77bb681267a2005060d3319b"
+    },
+    {
+      "path": "images/board/avatars/139.webp",
+      "bytes": 267610,
+      "sha256": "e8c2950b52cc77218d4c857d0a92f2b391302925f4c37fc43e4bb184bde2c7dd"
+    },
+    {
+      "path": "images/board/avatars/140.webp",
+      "bytes": 259942,
+      "sha256": "e8aa57d93201d801b232c1095037d0d8ba899ac47fd08b816c9bff2c994c8650"
+    },
+    {
+      "path": "images/board/avatars/141.webp",
+      "bytes": 279240,
+      "sha256": "a9a5c5a222ad7357eeab618745a702645f022a0f0df61b05b93c0eaa82f989a1"
+    },
+    {
+      "path": "images/board/avatars/142.webp",
+      "bytes": 271434,
+      "sha256": "232c521c39ccb23ce751d5c0e92e3f2e779a7cbf50287bb6d9f486178fa24fab"
+    },
+    {
+      "path": "images/board/avatars/143.webp",
+      "bytes": 225912,
+      "sha256": "eee045f0714b96f8bdae95c0aeb991804aae7b45c60f17d4b8382ce82ee2d42b"
+    },
+    {
+      "path": "images/board/avatars/144.webp",
+      "bytes": 203452,
+      "sha256": "b458d7de5988d06382ce1d96296bb29e390bcd98e3d0f8b8430d42c1cb033677"
+    },
+    {
+      "path": "images/board/avatars/145.webp",
+      "bytes": 166178,
+      "sha256": "8c52553bc4fce2e9219310c99d9f9d0a1b6899ffa07f47e56c617027fd0701f1"
+    },
+    {
+      "path": "images/board/avatars/146.webp",
+      "bytes": 216974,
+      "sha256": "aed34ed6ffd3adb81d7566071afe6c965bbb8002fba0627b1179b5cc1141fa9b"
+    },
+    {
+      "path": "images/board/avatars/147.webp",
+      "bytes": 240292,
+      "sha256": "ee1bb3c2c25f4418880acdbf75f19644d224a72ba801af35211bcd316fceef08"
+    },
+    {
+      "path": "images/board/avatars/148.webp",
+      "bytes": 252760,
+      "sha256": "eb0346d341d167341b7f8c913190f47778bbcabf0b5fbc2015c5c37a07503321"
+    },
+    {
+      "path": "images/board/avatars/149.webp",
+      "bytes": 210322,
+      "sha256": "455f72622c21b0ec39bba82c97593349cd628bc439af7b7a9ca1980887bb0c6a"
+    },
+    {
+      "path": "images/board/avatars/150.webp",
+      "bytes": 258112,
+      "sha256": "843032748ba9413f8661d6fb94e9f52ce3af9e23e3e2bff30e2cee2d92819461"
+    },
+    {
+      "path": "images/board/avatars/151.webp",
+      "bytes": 252742,
+      "sha256": "a8a497d47f4d5d09f8f84f012de15e62980fdca7a7a7ac8ea76924e5be374605"
+    },
+    {
+      "path": "images/board/avatars/152.webp",
+      "bytes": 219024,
+      "sha256": "4cb373a20712eaab4320c7d30a67e1c065f9f7cf8567811e5180651b29fcb4df"
+    },
+    {
+      "path": "images/board/avatars/153.webp",
+      "bytes": 282304,
+      "sha256": "d6be80cd63b9113851a1a6c8dd2d4b0b3d48f771bf09827e0af140e4a57d4808"
+    },
+    {
+      "path": "images/board/avatars/154.webp",
+      "bytes": 297746,
+      "sha256": "242484d1854013c54eb53238913d73266873dee749eb528420e6a15578c09901"
+    },
+    {
+      "path": "images/board/avatars/155.webp",
+      "bytes": 244990,
+      "sha256": "cd3a98a3638135a4757de94652b8d3423abaff9c71b718f9371da2cca4587f70"
+    },
+    {
+      "path": "images/board/avatars/156.webp",
+      "bytes": 267944,
+      "sha256": "0f2ea37d0bef3d7313c7775150a2e3ec4f6c4d57cab2cbbfc7bf6c1d9ad26941"
+    },
+    {
+      "path": "images/board/avatars/157.webp",
+      "bytes": 239196,
+      "sha256": "ee2cc14b4d2b85e71965b2cc06f63c2dc709a612a3e40919f69e024d46f96cc6"
+    },
+    {
+      "path": "images/board/avatars/158.webp",
+      "bytes": 165794,
+      "sha256": "edd40c156daa8479cb78386795f4a43534cd553593a7a017f8140553d45ce21c"
+    },
+    {
+      "path": "images/board/avatars/159.webp",
+      "bytes": 159200,
+      "sha256": "18874e7a9f7d1cdfbea3fec7cab9f96ec4a5ead331e7e6eec86dae1de127fbbf"
+    },
+    {
+      "path": "images/board/avatars/160.webp",
+      "bytes": 194588,
+      "sha256": "899f5486b2de11d3f512e8500535774d020c4c6f845127ad4e57156a78ea629f"
+    },
+    {
+      "path": "images/board/avatars/161.webp",
+      "bytes": 164042,
+      "sha256": "e9a0ca5c38e6758fcf3a82b056bab3cfa43805fe4f7f8e0a35fdb7beccbe1a99"
+    },
+    {
+      "path": "images/board/avatars/162.webp",
+      "bytes": 178994,
+      "sha256": "fe619681c111cc1218d423e0dc8c0b793d3508e9957a2ab86d2f3b939e6de55e"
+    },
+    {
+      "path": "images/board/avatars/163.webp",
+      "bytes": 121376,
+      "sha256": "f489c6a17196b37059708e1c0ccd143131fb6b3968cc89cd5f17dc96ce7d5849"
+    },
+    {
+      "path": "images/board/avatars/164.webp",
+      "bytes": 151012,
+      "sha256": "c2b81f4881972b636a7f0207d91d5611fe7b511294009b44811616aa0f7e3af8"
+    },
+    {
+      "path": "images/board/avatars/165.webp",
+      "bytes": 148276,
+      "sha256": "11f643a5e558e8949342df131045530ded3a4adc95a3eb6da94f95c007d87106"
+    },
+    {
+      "path": "images/board/avatars/166.webp",
+      "bytes": 138014,
+      "sha256": "4b1cfc9d1ede9dd568e937d6354457e583f55e00567875f6a7649733651c7c65"
+    },
+    {
+      "path": "images/board/avatars/167.webp",
+      "bytes": 142766,
+      "sha256": "c05d89e8f8bd072d175fb98e6302d9d543b766a5809c3327fae2390276ad0a16"
+    },
+    {
+      "path": "images/board/avatars/168.webp",
+      "bytes": 154812,
+      "sha256": "0e528adabd058db5ceac3b3dd6f4cd708e785b153119807bc116b777cc0622f7"
+    },
+    {
+      "path": "images/board/avatars/169.webp",
+      "bytes": 137460,
+      "sha256": "10d1ff4e1db65908ebe2a3050e138d7057c0375bc8f0e2f10b923556ac042f9d"
+    },
+    {
+      "path": "images/board/avatars/170.webp",
+      "bytes": 178376,
+      "sha256": "85fb16b0a29d3fa5659412d4d987387881e363e93ceb5fa95d09126b0fa37297"
+    },
+    {
+      "path": "images/board/avatars/171.webp",
+      "bytes": 155258,
+      "sha256": "6e145dd81a0baa7708956df6489766be10ac3608c15d088c2b3ba8c369f619c8"
+    },
+    {
+      "path": "images/board/avatars/172.webp",
+      "bytes": 163392,
+      "sha256": "ee62d737f158547cf71db658df13a9651faad1592e3cd9d02a9ad2eb7a509500"
+    },
+    {
+      "path": "images/board/avatars/173.webp",
+      "bytes": 282670,
+      "sha256": "a6b8581342abfe9778f09c5c562f6e274abe28d7d71c35894a87083b0daa4696"
+    },
+    {
+      "path": "images/board/avatars/174.webp",
+      "bytes": 287958,
+      "sha256": "1e33124fa30cc7c379decbd9383f10602154976f85d33910f5d2ce9eba0a5dae"
+    },
+    {
+      "path": "images/board/avatars/175.webp",
+      "bytes": 267148,
+      "sha256": "a84c0dcb58b19bc22ed37f7765461a21efb3d8940bbab3540daea1f34ebbeae0"
+    },
+    {
+      "path": "images/board/avatars/176.webp",
+      "bytes": 261008,
+      "sha256": "ff19a09f6728f65707036f008536443b8c98ca800d9f04f646bcb6994baa8c6c"
+    },
+    {
+      "path": "images/board/avatars/177.webp",
+      "bytes": 255890,
+      "sha256": "e674dd1a38a13a3e7007994125c18a109e4b0408db7574f56a72dfd7535f5953"
+    },
+    {
+      "path": "images/board/avatars/178.webp",
+      "bytes": 284736,
+      "sha256": "043eaa99cfe57bba22b97dcde6edf27c619afe01b2127b685275560fe8ba4208"
+    },
+    {
+      "path": "images/board/avatars/179.webp",
+      "bytes": 341526,
+      "sha256": "28954376da5df79dfa6870f588a8342507cc6f51fe1ce613bdc03656efb4839f"
+    },
+    {
+      "path": "images/board/avatars/180.webp",
+      "bytes": 320360,
+      "sha256": "3f3366015c8fb7c001fae47eb8b85a9c099273bc2b3f4fb57969a307923909a8"
+    },
+    {
+      "path": "images/board/avatars/181.webp",
+      "bytes": 336534,
+      "sha256": "35ff32fbf50cc0663990607ce7fed5df3770b3c5d10a939a5312fa2a0e58bbcf"
+    },
+    {
+      "path": "images/board/avatars/182.webp",
+      "bytes": 345580,
+      "sha256": "bf0b39e2a322bc5736719a58f539dbc4a67d62128261b487d419167ca0218e96"
+    },
+    {
+      "path": "images/board/avatars/183.webp",
+      "bytes": 269966,
+      "sha256": "047bb11bee8892cb66447fe7bbde053e1d0681e20a334bcc779fce1344faf35b"
+    },
+    {
+      "path": "images/board/avatars/184.webp",
+      "bytes": 225854,
+      "sha256": "d5b1d20863d77775f9ad4094fe1645d11fb7d7e5e89e6c5aa1b2c9679299e1c9"
+    },
+    {
+      "path": "images/board/avatars/185.webp",
+      "bytes": 255326,
+      "sha256": "763112205a4129f84a2d0d1f898b9254dd1b3da5ed040ef56d622000dddf7dd5"
+    },
+    {
+      "path": "images/board/avatars/186.webp",
+      "bytes": 236488,
+      "sha256": "dd80b8211872ca3147e3b343e620305dd4d5887c4404f8866582c2fef4ad3757"
+    },
+    {
+      "path": "images/board/avatars/187.webp",
+      "bytes": 204992,
+      "sha256": "0479b214293f0d3ad7e3f2427d629b8613ae0e24c873bd9c5bb6ac47a95f8658"
+    },
+    {
+      "path": "images/board/avatars/188.webp",
+      "bytes": 256174,
+      "sha256": "9472a4264134a27d2c89781207c0e42238be2f386d64586882195169d42ff33f"
+    },
+    {
+      "path": "images/board/avatars/189.webp",
+      "bytes": 227836,
+      "sha256": "cba116e0aa3dbb1087ffb2379fbebe398752d56c3852a18a3aa62580ed26716b"
+    },
+    {
+      "path": "images/board/avatars/190.webp",
+      "bytes": 214664,
+      "sha256": "e5bc644d716b53601185549cdd114760d989eeee04083b10ef2a8344afbb3275"
+    },
+    {
+      "path": "images/board/avatars/191.webp",
+      "bytes": 204826,
+      "sha256": "b4f887cb0f32a5b22f790d4356c638f9596ec6eb8781ca6da7cfd20a412fc8f1"
+    },
+    {
+      "path": "images/board/avatars/192.webp",
+      "bytes": 231724,
+      "sha256": "3a0eab6a2448402d6d7f4b3de60e9a970b15b59254dab8e0eb0279f21827e916"
+    },
+    {
+      "path": "images/board/avatars/193.webp",
+      "bytes": 291048,
+      "sha256": "77e2171c7250805a784a34fedd8ad75e29466d6f65b0c5355d149e8162146a72"
+    },
+    {
+      "path": "images/board/avatars/194.webp",
+      "bytes": 288320,
+      "sha256": "0de1ee97f3d30992b97b53c92d18fea7048ba805685cdd75896c194573c1176b"
+    },
+    {
+      "path": "images/board/avatars/195.webp",
+      "bytes": 283548,
+      "sha256": "a6862ef8912571802c7301271084eb61bd559c6bcbd28badea6ec0acbf40feea"
+    },
+    {
+      "path": "images/board/avatars/196.webp",
+      "bytes": 206084,
+      "sha256": "489aac6425e9421ba52695dc669622de32a0f5428b9a7d8e35fbdd9d73d0662c"
+    },
+    {
+      "path": "images/board/avatars/197.webp",
+      "bytes": 288578,
+      "sha256": "dd221956fb9c50cfdefdb18921825d81c14ba75142d5b22349adf926e635f89c"
+    },
+    {
+      "path": "images/board/avatars/198.webp",
+      "bytes": 255968,
+      "sha256": "2cf0312e43216bd500d1b8575d81487eaf8b7777ffa893ba1be446070c784a83"
+    },
+    {
+      "path": "images/board/avatars/199.webp",
+      "bytes": 315284,
+      "sha256": "85a07e97f8b720f82ab59f458f0034de7be11c0dd19cda1c4b812554b0db938f"
+    },
+    {
+      "path": "images/board/avatars/200.webp",
+      "bytes": 251664,
+      "sha256": "a974d42908f6bb18c76ec2aeb0590eba5144f3f3ed8965b1e27d2148876f7611"
+    },
+    {
+      "path": "images/board/avatars/201.webp",
+      "bytes": 302538,
+      "sha256": "68daf8ee549b5f7833b35fb227221cf45817572ab33a5c571bb762a7e468d136"
+    },
+    {
+      "path": "images/board/avatars/202.webp",
+      "bytes": 298756,
+      "sha256": "4a157421e5da554db13bfa62c428c4b9bcfe9823690f0348837b92f0f55da8c3"
+    },
+    {
+      "path": "images/board/avatars/203.webp",
+      "bytes": 173732,
+      "sha256": "fe5885bf8f2f16994a8e7afa1a2c70c7e43c5d0a670fa45eee9834dbd5af2401"
+    },
+    {
+      "path": "images/board/avatars/204.webp",
+      "bytes": 195294,
+      "sha256": "444f37d3c45ec63b426d535243d4b8c930875a6188f9d5c1ce938fd527112515"
+    },
+    {
+      "path": "images/board/avatars/205.webp",
+      "bytes": 212438,
+      "sha256": "1af37bdf1523073d9d2d6958a931f87ca9df8d91358f3834f416385108c28d8d"
+    },
+    {
+      "path": "images/board/avatars/206.webp",
+      "bytes": 138278,
+      "sha256": "ee76e2f47707889492f892b4f25159105c19e323ed26461675c998deaaf75395"
+    },
+    {
+      "path": "images/board/avatars/207.webp",
+      "bytes": 205462,
+      "sha256": "2888fb5dd0294159f6f92089a27429995be82056e973f2aed92432f07b1677fc"
+    },
+    {
+      "path": "images/board/avatars/208.webp",
+      "bytes": 227678,
+      "sha256": "8480feed3454ae31e47ab79a89cc3202a769c8d7f6ae1b381bc5b884044f4aa3"
+    },
+    {
+      "path": "images/board/avatars/209.webp",
+      "bytes": 244590,
+      "sha256": "74972b663763928ea901f2147742939246c82dcf56440eeddd79d56e5e087b33"
+    },
+    {
+      "path": "images/board/avatars/210.webp",
+      "bytes": 215958,
+      "sha256": "9ab24fff38e87385d952cbba094ddf08763ba443d8a66bb25fd7d3f5a29e1cd0"
+    },
+    {
+      "path": "images/board/avatars/211.webp",
+      "bytes": 254386,
+      "sha256": "9309d6d66ef873e9afd8484e3bcaffc8db442432518a4755db4ea64e0c323155"
+    },
+    {
+      "path": "images/board/avatars/212.webp",
+      "bytes": 195344,
+      "sha256": "c1e5a4e470114dc17a6de74a0e688b32e61bd13aa9b2f519bfe3a8757cddb3e9"
+    },
+    {
+      "path": "images/board/avatars/213.webp",
+      "bytes": 282466,
+      "sha256": "53ab4fd93421ce2ceaeff00a03d52b8114bd8bdf50f9ef673040f3bfb8d4ecc8"
+    },
+    {
+      "path": "images/board/avatars/214.webp",
+      "bytes": 231032,
+      "sha256": "de94bf91fe55ae58306a781acdb081a73ce2beaa78be3b8cb84c5eca0bed075f"
+    },
+    {
+      "path": "images/board/avatars/215.webp",
+      "bytes": 307564,
+      "sha256": "df72109358038bcd153d8c2ede29ba5375b72b0eb0361d436f24c9bf1bc51b4e"
+    },
+    {
+      "path": "images/board/avatars/216.webp",
+      "bytes": 270064,
+      "sha256": "278a483ecfc0788f6b36d9b391f2fd74c74e34ced707fce07701100722147ffe"
+    },
+    {
+      "path": "images/board/avatars/217.webp",
+      "bytes": 273952,
+      "sha256": "b00c14a8617c6d5a8e0b86b048dba0a90ce35c1c0ad58df371b7577b248acf83"
+    },
+    {
+      "path": "images/board/avatars/218.webp",
+      "bytes": 155382,
+      "sha256": "e56b2c8d58453d3e1c2e68b1aa038e0803638bb8f8748f4a9427bab097a51a34"
+    },
+    {
+      "path": "images/board/avatars/219.webp",
+      "bytes": 171376,
+      "sha256": "b776ab90062c24a07082d9538cf3d40ae3942ead778bc2cdb6361fe0537b3936"
+    },
+    {
+      "path": "images/board/avatars/220.webp",
+      "bytes": 154842,
+      "sha256": "a6b4025a22d0f1402bfe16b0567c46c16b269e114e28cacd0d3d0cf59a94e7ee"
+    },
+    {
+      "path": "images/board/avatars/221.webp",
+      "bytes": 159262,
+      "sha256": "aeb14269e41f0c39f62111e012f2d0d0dd281741c5be1d563af02e10a9e01b6b"
+    },
+    {
+      "path": "images/board/avatars/222.webp",
+      "bytes": 137658,
+      "sha256": "ac7a1201e43db1d75723ea2d3ee98be52de1b8c127b912fcf2bf1f68b8f3354b"
     },
     {
       "path": "images/board/avatars/63.webp",
@@ -322,6 +822,11 @@
       "path": "images/board/avatars/99.webp",
       "bytes": 312940,
       "sha256": "621b86d00963972bed427b36e1a41e017b3e564f1f3063279d17721b87b05a44"
+    },
+    {
+      "path": "images/launcher_announcements/launcher-avatar-r58.webp",
+      "bytes": 152164,
+      "sha256": "3b044cfdf924a8b7e00c3067c7820dd14fdb3a02532ff853ad8e087f1d373ffa"
     },
     {
       "path": "images/launcher_announcements/launcher-fish-detail-r31.webp",
@@ -1015,8 +1520,8 @@
     },
     {
       "path": "launcher-profile-shop.js",
-      "bytes": 75332,
-      "sha256": "17fc8715f5fed84b988f3014559c0191f13f4354bbc3dae0448600c168ac4e4c"
+      "bytes": 74266,
+      "sha256": "f34d76017326596cd6a21a57eba38cdf4ff4f72852dabf96d8925da8a6ca4356"
     },
     {
       "path": "launcher-room-aquarium.css",
@@ -1060,8 +1565,8 @@
     },
     {
       "path": "launcher-social.js",
-      "bytes": 13965,
-      "sha256": "94cf68b86ab3797e03b5300d6e61d7346419e2c5b073ba648e79c18c9382acd4"
+      "bytes": 13775,
+      "sha256": "48a89690cc49d468b7b44e3e72f4ba47d7368ddc0660798b89b8b1077760b582"
     },
     {
       "path": "launcher.html",
@@ -1070,13 +1575,13 @@
     },
     {
       "path": "launcher.js",
-      "bytes": 51580,
-      "sha256": "775c87336cd48b25c1c918f7f66b1c9a0a90361a771508f44fe2d981507dcf70"
+      "bytes": 50445,
+      "sha256": "604febf18e93e6ecc92ea69964a1e7248d971fc78a37942a857168eb85cedbbe"
     }
   ],
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "rTSPmapagMgkz4af8oqjaxNmOo1e3rOh6Rf6PrJzYZWtYd88SerD3FF4Z3bNfOYt93sAtZgCq2i2GHjpB8h/Cw=="
+    "value": "oQPzsbrug72urN4hclETWbuGqPrBcSguyAREnKMSMFWuLNcq3b8c9iRAnC3H7SNLlr4Epj7BqrhCA5nsO47UDg=="
   }
 }
