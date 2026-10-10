@@ -104,9 +104,9 @@ final class ResourceStore {
         guard safePath(asset.path), validHash(asset.sha256), asset.expectedSize >= 0 else { throw PortError.invalidFile }
         let bundled=resources.appendingPathComponent("blobs/\(asset.sha256)")
         if FileManager.default.fileExists(atPath:bundled.path) { return bundled }
-        if !allowNetwork { throw PortError.invalidFile }
         let target = cache.appendingPathComponent(asset.sha256)
         if FileManager.default.fileExists(atPath: target.path), (try? digest(target)) == asset.sha256 { return target }
+        if !allowNetwork { throw PortError.invalidFile }
         if !launcher {
             for id in games.keys {
                 let local = resources.appendingPathComponent("games/\(id)/\(asset.path)")
