@@ -52,10 +52,11 @@ for (const name of new Set(rendererNames)) {
     html = html.replace('<script src="launcher.js"', '<link rel="stylesheet" href="ios.css"><script src="socket.io.min.js"></script><script src="modules.js"></script><script src="bridge.js"></script><script src="launcher.js"');
     bytes = Buffer.from(html);
   }
+  bytes=Buffer.from(bytes.toString('utf8').replaceAll('opui://launcher/','http://127.0.0.1:49152/'));
   put(`launcher/${name}`, bytes);
 }
 put('launcher/bridge.js',fs.readFileSync(path.join(root,'ios/bridge.js')));
-put('launcher/ios.css',`html{height:100%;}body{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);} .window-titlebar{display:none!important;} @media(max-width:600px){.topnav{overflow-x:auto;flex-wrap:nowrap}.nav-button{flex-shrink:0}.launcher-app{min-width:0!important} .topbar{flex-wrap:wrap} .room-stage{max-width:100%} }`);
+put('launcher/ios.css',fs.readFileSync(path.join(root,'ios/launcher-mobile.css')));
 put('launcher/socket.io.min.js',fs.readFileSync(path.join(root,'public/vendor/socket.io-client/4.8.1/socket.io.min.js')));
 const shim = `window.IOSModules={};(()=>{class Events{constructor(){this.events=new Map()}on(k,f){if(!this.events.has(k))this.events.set(k,new Set());this.events.get(k).add(f);return this}off(k,f){this.events.get(k)?.delete(f);return this}emit(k,...a){for(const f of this.events.get(k)||[])f(...a)}}const stub=new Proxy({}, {get:(_,key)=>()=>{throw new Error('Desktop filesystem call blocked: '+String(key))}});const modules={'node:events':{EventEmitter:Events},'node:crypto':{randomBytes:n=>{const bytes=crypto.getRandomValues(new Uint8Array(n));return {toString:()=>Array.from(bytes,x=>x.toString(16).padStart(2,'0')).join('')}}},'node:fs':stub,'node:fs/promises':stub,'node:path':{join:(...p)=>p.join('/')},'socket.io-client':{io:window.io},electron:{app:{isPackaged:true},safeStorage:{isEncryptionAvailable:()=>false}}};const require=name=>{if(!modules[name])throw new Error('Unmapped desktop import: '+name);return modules[name]};`;
 let modules = shim;
