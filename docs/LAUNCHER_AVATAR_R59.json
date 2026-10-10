@@ -2,7 +2,7 @@
   "revision": 59,
   "coreVersion": "1.2.23",
   "generator": "builtin image_gen",
-  "status": "CANDIDATE_VERIFIED",
+  "status": "RELEASED",
   "avatars": [
     {
       "id": 53,
@@ -246,5 +246,6 @@
       "verifiedAt": "2026-10-10T15:49:32.930Z",
       "scope": "Read installed launcher overlay portraits 63-222 and verify SHA; disk only, no account access"
     }
-  }
+  },
+  "releaseEvidence": "docs/LAUNCHER_AVATAR_R59_RELEASE.json"
 }

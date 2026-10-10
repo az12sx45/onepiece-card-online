@@ -1,0 +1,181 @@
+{
+  "status": "PASS",
+  "coreVersion": "1.2.23",
+  "revision": 59,
+  "announcementRevision": 69,
+  "sourceCommit": "641275bff79f753d680c72f071581465767ebfe6",
+  "releaseCommit": "6a5e616c1cf15bbcc47f0bab4b99803dcaaeafe7",
+  "verifiedAt": "2026-10-10T16:13:28.007Z",
+  "manifestSha256": "ca80dabd0fadbc911453d3fb4afab8ae36d606c4eece6adfaef44809203bd33a",
+  "public": {
+    "status": "PASS",
+    "revision": 59,
+    "sha256": "ca80dabd0fadbc911453d3fb4afab8ae36d606c4eece6adfaef44809203bd33a",
+    "verifiedAt": "2026-10-10T16:12:07.821Z"
+  },
+  "games": {
+    "card": {
+      "releaseId": "package-a7d368a6e3feae01",
+      "manifestSha256": "5ec74d1890d06c58e1086ef6df646b247c3926a5a82a059d4abba4bcd0903bcd",
+      "runtimeProgramsVerified": true
+    },
+    "board": {
+      "releaseId": "package-5b099a798dac9202",
+      "manifestSha256": "1e64a775b1c2c12dba55ab34bdaa94827a8651cc70b30949315d448fe112efd2",
+      "runtimeProgramsVerified": true
+    },
+    "chess": {
+      "releaseId": "package-ee4627881596bdad",
+      "manifestSha256": "a456de14211bac9ab767ae2a7a56525cadb7a85516d3fb32f86ca1f6f4058ce5",
+      "runtimeProgramsVerified": true
+    }
+  },
+  "avatars": {
+    "corrected": [
+      53,
+      73,
+      85,
+      107,
+      148,
+      150,
+      152,
+      162,
+      182,
+      185,
+      202
+    ],
+    "size": [
+      735,
+      735
+    ],
+    "format": "RGBA WebP",
+    "shape": "circular with transparent exterior",
+    "generator": "builtin image_gen",
+    "visualReview": {
+      "status": "ACCEPTED",
+      "reviewer": "root",
+      "scope": "All 11 before/after portraits visually inspected; official Jinbe, Koby and Smoker references checked. 40 remains unchanged.",
+      "prompts": [
+        "tools/launcher-shop-r59/jinbe-art.json",
+        "tools/launcher-shop-r59/marines-art.json"
+      ]
+    }
+  },
+  "differential": {
+    "from": 58,
+    "to": 59,
+    "launcherBytes": 2488715,
+    "logicalFiles": 316,
+    "secondDownload": 0,
+    "preservedOldFiles": 314,
+    "gameUniqueChangedBytes": 2214810,
+    "sharedGameBlobs": 11
+  },
+  "shop": {
+    "localImages": true,
+    "localFirstPublicCatalog": true,
+    "serverAuthoritativeTransactions": true,
+    "metrics": {
+      "cold": {
+        "elapsed": 5.899999998509884,
+        "count": 192,
+        "wallet": "—",
+        "enabled": 0,
+        "calls": 1
+      },
+      "firstTwelveImagesReadyMs": 296.8999999985099,
+      "cloudWaitMs": 1216,
+      "reopen": {
+        "elapsed": 10,
+        "calls": 1,
+        "sameImage": true,
+        "count": 192,
+        "sameImageAfterReply": true
+      },
+      "categoryImagePreserved": true
+    }
+  },
+  "tests": {
+    "art": 11,
+    "localShop": 21,
+    "shopPreview": 521,
+    "guestbook": 50,
+    "announcements": 82,
+    "startup": 6,
+    "runtimeAvatarRoutes": 688,
+    "publicLauncherBlobs": 13,
+    "publicGameBlobs": 11
+  },
+  "scope": "Actual public signed manifest, catalog, runtime-package endpoint identities, aliases and immutable blob bytes verified. Actual installed launcher content cache updated from public r59 after SHA-verified manifest backup; all 314 old blobs preserved. Full runtime route evidence is the separate 688-route isolated core cache test. No formal player account transaction or manual logged-in acceptance claimed.",
+  "limitations": [
+    "Performance timings are observations on this machine with a 1500ms delayed API fixture, not universal latency guarantees.",
+    "Shop preview and guestbook UI suites ran before a final balance-status wording-only adjustment; the 21-case loading/account/race suite reran on the final renderer.",
+    "LATTICE APIs were not available; no persistent task or graph completion claimed."
+  ],
+  "evidence": {
+    "render": {
+      "path": "D:/Codex_QA/launcher-shop-r59/render-deploy-report.json",
+      "sha256": "f0c758e5f9fb84030723af186db729831d148f17654fb8eab735da85e6c8815f"
+    },
+    "publicManifest": {
+      "path": "D:/Codex_QA/launcher-shop-r59/public-manifest-report.json",
+      "sha256": "76874c99ade5b586762b27587f839902a3d3a04115a01a013b535f7c14d1e891"
+    },
+    "publicGames": {
+      "path": "D:/Codex_QA/launcher-shop-r59/public-games-report.json",
+      "sha256": "5ba31a164d1896cf820941ed5f8ef9ea6d67240e8a6373dc3ce49f7ea4f20f5e"
+    },
+    "publicShop": {
+      "path": "D:/Codex_QA/launcher-shop-r59/public-shop-report.json",
+      "sha256": "e908fa5a0e6b9c45ea6ca46212aebc0e83c431f7e3d54907d0f94610f3a3838a"
+    },
+    "actualCache": {
+      "path": "D:/Codex_QA/launcher-shop-r59/actual-delta-report.json",
+      "sha256": "94619c2c25c1c166d3dcb6225f4ce2b7e78fb3c95abd4938c4e0bcf3d0111824"
+    },
+    "backup": {
+      "path": "D:/Codex_QA/launcher-shop-r59/backup-report.json",
+      "sha256": "67238ee540f4c9a817f8a9087a39d37f659d3b6fe99f6f05b6d7cd0b362edcb1"
+    },
+    "candidate": {
+      "path": "D:/Codex_QA/launcher-shop-r59/candidate-delta-report.json",
+      "sha256": "a3fc32f10966fce2b410c2881f4cd053ffdfc5c636b8c74dfa9de7c1944a9a4e"
+    },
+    "publicBlobs": {
+      "path": "D:/Codex_QA/launcher-shop-r59/public-blobs-report.json",
+      "sha256": "8b34b0623942897272277f646bcaf1b14b4eac0c5e0f8956de7f6d37ae1b081c"
+    },
+    "art": {
+      "path": "D:/Codex_QA/launcher-shop-r59/art-report.json",
+      "sha256": "2474759999ab9b241a362b2018936db3fc342c093b2aa821b3d2cae5111b28b5"
+    },
+    "localLoading": {
+      "path": "D:/Codex_QA/launcher-shop-r59/local-loading/report.json",
+      "sha256": "3e9e1e2cdf6d1025bb5aff7daa6a424793399e98ac9852d3cfed9e744c011091"
+    },
+    "preview": {
+      "path": "D:/Codex_QA/launcher-shop-r59/preview/preview-report.json",
+      "sha256": "1d0aedc3b7dabb7107d9ea4b348eae519328314b4c95332d4e3748ad16f18162"
+    },
+    "guestbook": {
+      "path": "D:/Codex_QA/launcher-shop-r59/guestbook/report.json",
+      "sha256": "67ca75e7a4ecda4033b732a787f8e3170908767050763b6470cf1015fa49c5a9"
+    },
+    "announcements": {
+      "path": "D:/Codex_QA/launcher-shop-r59/announcement-service-report.json",
+      "sha256": "b60e7871f65d06c3a0ec1bd85398de7dbfc0b79bf8a7114d9e3d4aae2566b149"
+    },
+    "startup": {
+      "path": "D:/Codex_QA/launcher-shop-r59/npm-start-report.json",
+      "sha256": "6070ff63226559a3236af240554bb4203e4730d7149a08303fb0f5793391b9c7"
+    },
+    "runtime": {
+      "path": "D:/Codex_QA/launcher-shop-r59/package-runtime-report.json",
+      "sha256": "b7ee8dd7c7fd92a817b034d90db7d056ad78a88f00557678d60b2e62ba825486"
+    },
+    "helperReview": {
+      "path": "D:/Codex_QA/launcher-shop-r59/release-helper-review.json",
+      "sha256": "7cc3bd5fcbcd03797dc064325fafffe18de497233c1163c5ea51c19546549a59"
+    }
+  }
+}

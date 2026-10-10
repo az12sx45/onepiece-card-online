@@ -8262,7 +8262,7 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - r58公開驗證完成（2026-10-10T13:44:11.408Z）：簽章清單SHA256 57c25a8d7b4e7df82b9e457a22aed9d44041f1be69f07cb6b7071b0b261a5dd1 與候選逐byte一致；公開商城100新頭像、三遊戲catalog/manifest/runtime-package及175個CAS blob完整核對。正式啟動器cache從57→58，下載22779690 bytes、314檔校驗、二次0下載通過；沒有重新安裝核心或修改正式玩家交易。完整收據docs/LAUNCHER_AVATAR_R58_RELEASE.json。
 
 
-## 2026-10-10 r59 角色頭像修正與本機商店（候選驗證完成，待公開發布）
+## 2026-10-10 r59 角色頭像修正與本機商店（已公開發布）
 
 正式來源 D:/Codex_Release_Worktrees/launcher-flick-reward-r12，baseline 14b85203384077a1d2705aa278921b7d6d93b961；公開r58簽章和三遊戲catalog已逐byte對上。此階段LATTICE沒有可呼叫工具，未宣稱持久task或graph成功。
 
@@ -8276,3 +8276,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 
 - r59封裝驗證：source 641275bff79f753d680c72f071581465767ebfe6；316檔簽章清單SHA256 ca80dabd0fadbc911453d3fb4afab8ae36d606c4eece6adfaef44809203bd33a。13個變更blob已公開HEAD/GET/大小/SHA核對；候選58→59下載2,488,715 bytes、316檔校驗、314個舊blob保留與二次0下載通過。三款遊戲11個共用頭像blob共2,214,810 bytes已不可覆寫上傳；688條本機頭像route驗證成功、網路fallback 0。正式公開切版與正式cache仍待讀回。
+
+- 2026-10-11 r59公開交付：release 6a5e616c1cf15bbcc47f0bab4b99803dcaaeafe7，公開清單SHA256 ca80dabd0fadbc911453d3fb4afab8ae36d606c4eece6adfaef44809203bd33a 與候選逐byte相同。三遊戲公開catalog、manifest、runtime-package版本、11個素材blob及22條共用alias完成讀回；商城330項公開資料核對。正式啟動器cache 58→59下載2,488,715 bytes、316檔校驗、舊314檔不變與二次0下載通過。僅備份兩個manifest槽位，沒有重複複製整份素材。證據docs/LAUNCHER_AVATAR_R59_RELEASE.json；未使用正式玩家帳號進行交易。
