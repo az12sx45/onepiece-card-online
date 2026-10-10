@@ -25,7 +25,7 @@ async function exactBytes(local, record, launcher = false) {
   let bytes = fs.existsSync(local) ? fs.readFileSync(local) : Buffer.alloc(0);
   const size = record.bytes ?? record.size;
   try { return verified(bytes, record.sha256, size); } catch {}
-  for (const text of [bytes.toString('utf8').replace(/\r\n/g,'\n'), bytes.toString('utf8').replace(/\r?\n/g,'\r\n')]) {
+  for (const text of /\.(js|css|html|json|txt|svg)$/i.test(record.path) ? [bytes.toString('utf8').replace(/\r\n/g,'\n'), bytes.toString('utf8').replace(/\r?\n/g,'\r\n')] : []) {
     try { return verified(Buffer.from(text),record.sha256,size); } catch {}
   }
   const base = launcher ? content.baseUrl : catalog.assetBlobBaseUrl + '/';
@@ -61,16 +61,29 @@ put('launcher/modules.js', modules);
 put('launcher-content.json',contentBytes);
 put('catalog.json',JSON.stringify(catalog));
 let bundled = 0;
+const blobs = new Map();
+for (const file of content.files) blobs.set(file.sha256,{file,launcher:true,local:path.join(root,'desktop',file.path)});
 for (const [id,game] of Object.entries(catalog.games)) {
   const bytes = fs.readFileSync(path.join(root,'public',game.manifestPath));
   if (crypto.createHash('sha256').update(bytes).digest('hex') !== game.manifestSha256) throw new Error('manifest hash mismatch');
   const manifest = JSON.parse(bytes);
   if (manifest.gameId !== id || manifest.releaseId !== game.releaseId) throw new Error('manifest identity mismatch');
   put(`manifests/${id}.json`,bytes);
-  for (const file of manifest.assets.filter(f => !['image','audio','video','font'].includes(f.kind))) {
-    put(`games/${id}/${file.path}`,await exactBytes(path.join(root,'public',file.path),file));
-    bundled++;
+  for (const file of manifest.assets) {
+    if (!['image','audio','video','font'].includes(file.kind)) bundled++;
+    if(!blobs.has(file.sha256)) blobs.set(file.sha256,{file,launcher:false,local:path.join(root,'public',file.path)});
   }
 }
-put('build-evidence.json',JSON.stringify({sourceCommit:process.env.IOS_SOURCE_COMMIT||null,launcherVersion:'1.2.23',contentRevision:content.revision,bundledProgramFiles:bundled,deviceTests:'NOT_RUN',fullFeatureAcceptance:'NOT_RUN'},null,2));
+const tasks=[...blobs.values()];let next=0,completed=0,totalBytes=0;
+await Promise.all(Array.from({length:8},async()=>{
+  while(next<tasks.length){
+    const {file,launcher,local}=tasks[next++];let bytes;
+    for(let attempt=0;attempt<3;attempt++){
+      try{bytes=await exactBytes(local,file,launcher);break;}catch(error){if(attempt===2)throw error;}
+    }
+    put(`blobs/${file.sha256}`,bytes);totalBytes+=bytes.length;completed++;
+    if(completed%500===0)console.log(JSON.stringify({bundledAssets:completed,total:tasks.length}));
+  }
+}));
+put('build-evidence.json',JSON.stringify({sourceCommit:process.env.IOS_SOURCE_COMMIT||null,launcherVersion:'1.2.23',contentRevision:content.revision,bundledProgramFiles:bundled,bundledUniqueAssets:completed,bundledAssetBytes:totalBytes,assetMode:'fully-bundled',deviceTests:'NOT_RUN',fullFeatureAcceptance:'NOT_RUN'},null,2));
 console.log(JSON.stringify({contentRevision:content.revision,bundledProgramFiles:bundled,output}));

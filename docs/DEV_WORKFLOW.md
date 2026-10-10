@@ -8290,3 +8290,7 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-11 修正 iOS XcodeGen 資源封裝：Resources 改用 sources/buildPhase resources；新增 ios/package-qa.mjs 逐檔比對 app bundle 與準備資源 SHA256，workflow 在封裝前強制執行，缺檔即失敗。舊 121KB IPA 不交付。
 
 2026-10-11 iOS 候選交付證據：run 38069106966 成功編譯、原生簽章/橋接/144 檔封裝雜湊通過，11.5MB unsigned IPA 本機下載後再次核對 SHA256。手機未安裝、效能與完整功能 NOT_RUN；安裝環境阻塞見 IOS_TRIAL_20261011.md。
+
+2026-10-11 接續 AltSign.Error 2 診斷；新增 Downloads 下暫時單檔下載 helper，重新封裝相同 App 資料供相容性試裝，雜湊與逐檔內容一致檢查通過，實機待驗證，詳見 IOS_TRIAL_20261011.md。
+
+2026-10-11 使用者指定完整素材內附：ios/prepare.mjs 將三遊戲及啟動器 manifest 的全部資源按 SHA256 去重納入 Resources/blobs；App.swift 優先讀 bundle，遊戲缺檔不回退 CDN；workflow 時限 60 分鐘。預估 8,392 個唯一 blob / 2,501,813,945 bytes。語法與橋接 QA 通過，完整準備／編譯／封裝及實機待驗證。

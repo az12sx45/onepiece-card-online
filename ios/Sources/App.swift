@@ -87,7 +87,7 @@ final class ResourceStore {
         for id in ["card", "board", "chess"] {
             games[id] = try JSONDecoder().decode(GameManifest.self, from: Data(contentsOf: resources.appendingPathComponent("manifests/\(id).json")))
             states[id] = ["status": "installed", "hasInstalled": true, "installedVersion": games[id]!.releaseId,
-                "message": "遊戲程式已內附；素材按需下載，可下載完整素材供後續使用"]
+                "message": "遊戲程式與全部素材已內附"]
         }
     }
     func safePath(_ path: String) -> Bool {
@@ -102,6 +102,9 @@ final class ResourceStore {
     }
     func obtain(_ asset: Asset, launcher: Bool) async throws -> URL {
         guard safePath(asset.path), validHash(asset.sha256), asset.expectedSize >= 0 else { throw PortError.invalidFile }
+        let bundled=resources.appendingPathComponent("blobs/\(asset.sha256)")
+        if FileManager.default.fileExists(atPath:bundled.path) { return bundled }
+        if !launcher { throw PortError.invalidFile }
         let target = cache.appendingPathComponent(asset.sha256)
         if FileManager.default.fileExists(atPath: target.path), (try? digest(target)) == asset.sha256 { return target }
         if !launcher {
@@ -184,14 +187,14 @@ final class ResourceStore {
                 "completedFiles":index + 1, "totalFiles":manifest.assets.count]
             setState(id,state); progress(state.merging(["gameId":id]) { _,new in new })
         }
-        setState(id,["status":"installed", "hasInstalled":true, "installedVersion":manifest.releaseId,"message":"完整素材已下載並驗證"])
+        setState(id,["status":"installed", "hasInstalled":true, "installedVersion":manifest.releaseId,"message":"完整內附素材已確認"])
     }
     func uninstall(_ id: String) throws {
         guard let manifest = games[id] else { throw PortError.invalidRequest }
         cancel(id)
         // Only this app's managed hash cache; bundled programs and account data remain intact.
         for asset in manifest.assets { let url = cache.appendingPathComponent(asset.sha256); if validHash(asset.sha256) { try? FileManager.default.removeItem(at: url) } }
-        setState(id,["status":"installed","hasInstalled":true,"message":"素材快取已移除，遊戲程式仍內附"])
+        setState(id,["status":"installed","hasInstalled":true,"message":"更新快取已移除，完整遊戲與素材仍內附"])
     }
 }
 
