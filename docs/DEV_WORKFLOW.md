@@ -8288,3 +8288,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-11 iOS 試用身份相容：ios/Sources/App.swift 在載入遊戲前清除既有桌面登入快取鍵，再注入目前帳號；保留遊戲存檔鍵。驗證：橋接 QA 與後續雲端編譯，實機尚待。
 
 2026-10-11 修正 iOS XcodeGen 資源封裝：Resources 改用 sources/buildPhase resources；新增 ios/package-qa.mjs 逐檔比對 app bundle 與準備資源 SHA256，workflow 在封裝前強制執行，缺檔即失敗。舊 121KB IPA 不交付。
+
+2026-10-11 iOS 候選交付證據：run 38069106966 成功編譯、原生簽章/橋接/144 檔封裝雜湊通過，11.5MB unsigned IPA 本機下載後再次核對 SHA256。手機未安裝、效能與完整功能 NOT_RUN；安裝環境阻塞見 IOS_TRIAL_20261011.md。
