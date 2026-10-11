@@ -8335,3 +8335,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-11 iOS 遊戲庫按鈕排版修正：414x896 真實 DOM 預覽 primaryAction enabled 但 rect x=504.8/y=2738.8，超出畫面且原頁面 overflow hidden。launcher-mobile.css 增加 <=700px 單欄可捲動遊戲庫、橫向遊戲選單、可滑動導覽與全寬 48px 啟動按鈕；不改帳號、存檔、同步或遊戲規則。手機驗收待更新後確認。
 
 2026-10-11 手機遊戲庫確認：最終斷點 <=1024px 同時涵蓋 414x896 與 896x414。真實 launcher.js + 隔離假的登入／native API fixture 驗證 card、board、chess 點擊確實呼叫對應 launchGame；直向按鈕 x28.8/y739.1/w356.8/h48，elementFromPoint 命中；橫向可捲動後按鈕 x28.8/y264.3/w823.2/h48 且命中。這是瀏覽器排版及事件驗證，不宣稱 iPhone 原生遊戲已啟動。0.1.4 build 5 只改 Info.plist 版本和 ios.css，沿用已安装的 0.1.3 原生程式與素材；npm start 仍缺 pg。
+
+0.1.4 IPA 已輸出 D:/Codex_QA/ios-full-trial-20261011/TabletopIOS-full-assets-v014.ipa，2,787,792,726 bytes，SHA256 6c6b9da081912d57ab1e5870a76fb631f15f3abc92529e0d1e500adc9bcb94e9。9871 ZIP entry 路徑完全相同，除 Info.plist 與 ios.css 外 CRC/大小全部不變，未改原生 binary 或任何遊戲素材。Sideloadly 載入新版，手機更新／實機點擊待確認。
