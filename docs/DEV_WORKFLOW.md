@@ -8345,3 +8345,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 0.1.5 完整 IPA 組装與驗證完成：D:/Codex_QA/ios-full-trial-20261011/TabletopIOS-full-assets-v015.ipa，2,787,796,213 bytes，SHA256 5164ecc8b950c99ddae1f515b130fb68a300f0196326ae5df279c1680642f158。9871 entry 路徑保留，只有 Info.plist 與 ios.css 的CRC/大小變動，其餘 native binary 與完整素材保留。npm start 仍缺 pg，頁面排版以本機靜態預覽驗證；Sideloadly shell open 已執行，native activation 回報 foreground process id 不可讀，未把操作嘗試記為裝置安裝成功。
 
 2026-10-11 iOS 航海錄進地圖停住診斷：board_game.html 在觸控裝置跳轉 board_fixed_viewport.html，實際遊戲為同源 iframe；原 WKUserScript forMainFrameOnly=true 造成內層 window.io(options) 連至本機49154，該資源服務沒有 Socket.IO，無法取得房間初始快照。修正將帳號注入維持僅主框，連線/DPR/快取適配另以受限127.0.0.1及49153-49155的全框腳本注入。0.1.6 build7 不改遊戲規則或同步事件。frame-runtime-qa.mjs 驗證內層目的地/選項、外部與啟動器不注入、無帳號寫入 PASS；bridge QA 本機因 GameAssets/modules.js 尚未生成無法完成，交由CI prepare後執行。實機卡住原因尚待操作狀態及更新驗收；不能宣稱全畫面效能修復。LATTICE 工具目前不可用，未聲稱持久寫入。
+
+2026-10-11 補充驗證：以 IOS_QA_MODULES 指向已驗證 generated-Resources/launcher/modules.js 重跑 bridge-qa，46 個介面檢查 PASS。直接讀 v015 IPA 的 board manifest/blob，確認觸控重導 board_fixed_viewport、desktop_frame iframe 與 window.io(options) 與診斷吻合。npm start 缺 pg，未通過本機伺服器啟動；CI run38143555300 已開始正式 native rebuild，尚未完成實機验收。
