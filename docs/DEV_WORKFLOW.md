@@ -8341,3 +8341,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-11 iOS 商店與個人頁手機修正：launcher-mobile.css 改 voyage panel 為完整內容高度、由外層 launcher 垂直捲動，避免 flex shrink + height100% 裁切；商店錢包與標題換行、商品兩欄／窄屏單欄與44px按鈕；個人名片、編輯表單、遊戲紀錄、音樂／留言控制換行，房間 stage 取消480px最低寬度，彈窗限制視窗大小。保留服務、商品與存檔 id；未宣稱實機驗收。
 
 2026-10-11 商店／個人頁 QA：本機實際 HTML/CSS + 明確標示排版測試商品／紀錄的 fixture，414x896 商店 page width375.2/scrollWidth374，最後一項44px按鈕可捲到且elementFromPoint命中；個人頁名片、表單、房間、紀錄 width<=頁面，頁底閱讀控制可捲到。320x640 查出留言板 aspect-ratio + min-height190 產生超寬，改明確100% width/自適應height，profile width280.8/scrollWidth279通過；896x414頁面width856.8/scrollWidth855且可捲到控制。此為排版可見性驗證，沒有執行真實購買、存名片或留言。0.1.5 build6 只改 plist版本與ios.css，native core／全素材沿用，實機驗收待更新。
+
+0.1.5 完整 IPA 組装與驗證完成：D:/Codex_QA/ios-full-trial-20261011/TabletopIOS-full-assets-v015.ipa，2,787,796,213 bytes，SHA256 5164ecc8b950c99ddae1f515b130fb68a300f0196326ae5df279c1680642f158。9871 entry 路徑保留，只有 Info.plist 與 ios.css 的CRC/大小變動，其餘 native binary 與完整素材保留。npm start 仍缺 pg，頁面排版以本機靜態預覽驗證；Sideloadly shell open 已執行，native activation 回報 foreground process id 不可讀，未把操作嘗試記為裝置安裝成功。
