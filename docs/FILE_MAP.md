@@ -1955,3 +1955,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-11 登入頁真實本機預覽發現主 launcher.css 未封裝：prepare renderer regex 使用 + 排除 launcher.css / launcher.js，signed overlay 恰有 launcher.js 卻無 launcher.css。改 * 包含主檔，package QA 額外要求六個登入必要檔。此為素材／JS CSS 修正，不改本次已在編譯的 0.1.3 Swift core；本機最終組裝補相同來源 main CSS/JS，再以手機寬度畫面驗證。
 
 2026-10-11 iOS 遊戲庫按鈕排版修正：414x896 真實 DOM 預覽 primaryAction enabled 但 rect x=504.8/y=2738.8，超出畫面且原頁面 overflow hidden。launcher-mobile.css 增加 <=700px 單欄可捲動遊戲庫、橫向遊戲選單、可滑動導覽與全寬 48px 啟動按鈕；不改帳號、存檔、同步或遊戲規則。手機驗收待更新後確認。
+
+2026-10-11 iOS 商店與個人頁手機修正：launcher-mobile.css 改 voyage panel 為完整內容高度、由外層 launcher 垂直捲動，避免 flex shrink + height100% 裁切；商店錢包與標題換行、商品兩欄／窄屏單欄與44px按鈕；個人名片、編輯表單、遊戲紀錄、音樂／留言控制換行，房間 stage 取消480px最低寬度，彈窗限制視窗大小。保留服務、商品與存檔 id；未宣稱實機驗收。
