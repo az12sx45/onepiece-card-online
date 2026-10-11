@@ -24,7 +24,9 @@ jobs:
           brew install xcodegen
           xcodegen generate --spec ios/project.yml --project ios
       - name: Verify launcher bridge contracts
-        run: node ios/bridge-qa.mjs
+        run: |
+          node ios/bridge-qa.mjs
+          node ios/frame-runtime-qa.mjs
       - name: Verify native content signatures
         run: |
           mkdir -p ios/build
@@ -55,7 +57,7 @@ jobs:
           zip -qr ../TabletopIOS-core.zip TabletopIOS.app -x 'TabletopIOS.app/GameAssets/*' 'TabletopIOS.app/GameAssets/'
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: tabletop-ios-core-v013
+          name: tabletop-ios-core-v016
           path: |
             ios/build/TabletopIOS-core.zip
             ios/build/simulator-install.txt

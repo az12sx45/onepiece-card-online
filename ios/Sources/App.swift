@@ -323,6 +323,13 @@ final class LauncherController: UIViewController, WKScriptMessageHandlerWithRepl
         for(const key of ['opSecret','op_secret','op_user_id','op_board_user_id','op_name','op_player_name','op_avatar','op_player_avatar','op_board_title','op_board_coins','op_device_id','op_last_password'])localStorage.removeItem(key);
         for(const [key,value] of Object.entries(\(json)))localStorage.setItem(key,value);
         localStorage.setItem('op_desktop_launcher','1');
+        }
+        """
+        configuration.userContentController.addUserScript(WKUserScript(source:injection,injectionTime:.atDocumentStart,forMainFrameOnly:true))
+        // Board's portable desktop wrapper loads its runtime in a same-origin iframe.
+        // Apply compatibility to each local frame; account bootstrap remains main-frame only.
+        let frameRuntime = """
+        if(location.hostname==='127.0.0.1' && ['49153','49154','49155'].includes(location.port)){
         Object.defineProperty(window,'devicePixelRatio',{get:()=>1});
         let library;Object.defineProperty(window,'io',{configurable:true,get:()=>library,set:fn=>{
           library=(uri,options)=>fn(typeof uri==='string'&&/^https?:/.test(uri)&&!uri.includes('127.0.0.1')&&!uri.includes('localhost')?uri:'https://onepiece-card-online.onrender.com',typeof uri==='object'?uri:options);
@@ -331,7 +338,7 @@ final class LauncherController: UIViewController, WKScriptMessageHandlerWithRepl
         if(navigator.serviceWorker){try{Object.defineProperty(navigator.serviceWorker,'register',{value:()=>Promise.reject(new Error('iOS native cache owns resources'))});}catch{}}
         }
         """
-        configuration.userContentController.addUserScript(WKUserScript(source:injection,injectionTime:.atDocumentStart,forMainFrameOnly:true))
+        configuration.userContentController.addUserScript(WKUserScript(source:frameRuntime,injectionTime:.atDocumentStart,forMainFrameOnly:false))
         let gameView = WKWebView(frame:.zero,configuration:configuration)
         let controller = UIViewController(); controller.view = gameView
         let navigation = UINavigationController(rootViewController:controller)

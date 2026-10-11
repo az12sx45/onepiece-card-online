@@ -1957,3 +1957,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-11 iOS 遊戲庫按鈕排版修正：414x896 真實 DOM 預覽 primaryAction enabled 但 rect x=504.8/y=2738.8，超出畫面且原頁面 overflow hidden。launcher-mobile.css 增加 <=700px 單欄可捲動遊戲庫、橫向遊戲選單、可滑動導覽與全寬 48px 啟動按鈕；不改帳號、存檔、同步或遊戲規則。手機驗收待更新後確認。
 
 2026-10-11 iOS 商店與個人頁手機修正：launcher-mobile.css 改 voyage panel 為完整內容高度、由外層 launcher 垂直捲動，避免 flex shrink + height100% 裁切；商店錢包與標題換行、商品兩欄／窄屏單欄與44px按鈕；個人名片、編輯表單、遊戲紀錄、音樂／留言控制換行，房間 stage 取消480px最低寬度，彈窗限制視窗大小。保留服務、商品與存檔 id；未宣稱實機驗收。
+
+2026-10-11 iOS 航海錄進地圖停住診斷：board_game.html 在觸控裝置跳轉 board_fixed_viewport.html，實際遊戲為同源 iframe；原 WKUserScript forMainFrameOnly=true 造成內層 window.io(options) 連至本機49154，該資源服務沒有 Socket.IO，無法取得房間初始快照。修正將帳號注入維持僅主框，連線/DPR/快取適配另以受限127.0.0.1及49153-49155的全框腳本注入。0.1.6 build7 不改遊戲規則或同步事件。frame-runtime-qa.mjs 驗證內層目的地/選項、外部與啟動器不注入、無帳號寫入 PASS；bridge QA 本機因 GameAssets/modules.js 尚未生成無法完成，交由CI prepare後執行。實機卡住原因尚待操作狀態及更新驗收；不能宣稱全畫面效能修復。LATTICE 工具目前不可用，未聲稱持久寫入。
