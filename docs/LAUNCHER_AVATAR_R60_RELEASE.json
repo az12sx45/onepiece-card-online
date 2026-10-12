@@ -1,0 +1,607 @@
+{
+  "status": "PUBLIC_VERIFIED",
+  "verifiedAt": "2026-10-12T12:54:16.888Z",
+  "authority": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12",
+  "sourceCommit": "290f5d67859a5956519e54ecd2adb12b3b78b471",
+  "releaseCommit": "41b020c91d4b60fd5fea20b3fc5f641319d979e6",
+  "coreVersion": "1.2.23",
+  "revision": 60,
+  "manifestSha256": "c15a6947fcbae51c1e05b5ca4518731b0a978d8f186c8030c32d9b7c2b03575d",
+  "qaDirectory": "D:/Codex_QA/launcher-avatar-r60",
+  "qa": {
+    "picker": 80,
+    "guestbook": 50,
+    "localLoading": 21,
+    "liveSync": 35,
+    "announcements": 82,
+    "startupRoutes": 6,
+    "programRoutes": 112
+  },
+  "reports": {
+    "public-manifest-report.json": {
+      "status": "PASS",
+      "revision": 60,
+      "sha256": "c15a6947fcbae51c1e05b5ca4518731b0a978d8f186c8030c32d9b7c2b03575d",
+      "verifiedAt": "2026-10-12T12:49:03.460Z"
+    },
+    "public-games-report.json": {
+      "status": "PASS",
+      "verifiedAt": "2026-10-12T12:50:51.403Z",
+      "catalogSha256": "1834641b5755d7edf8fad13283087d31de07171595d481cc57eab3951f79a1e8",
+      "games": {
+        "card": {
+          "releaseId": "package-a7d368a6e3feae01",
+          "manifestSha256": "5ec74d1890d06c58e1086ef6df646b247c3926a5a82a059d4abba4bcd0903bcd",
+          "runtimeEndpointIdentityVerified": true
+        },
+        "board": {
+          "releaseId": "package-fe853a3b827173df",
+          "manifestSha256": "bc9d7bec975f85f82285abd1373ee1ef9823fa99136374dbc194222e86fbd149",
+          "runtimeEndpointIdentityVerified": true
+        },
+        "chess": {
+          "releaseId": "package-ee4627881596bdad",
+          "manifestSha256": "a456de14211bac9ab767ae2a7a56525cadb7a85516d3fb32f86ca1f6f4058ce5",
+          "runtimeEndpointIdentityVerified": true
+        }
+      },
+      "verifiedBlobs": [
+        {
+          "sha256": "d088bd1d106b469080339d89c2bb2191d930929cf292bf26a17cd8be0375eebe",
+          "bytes": 55160,
+          "sources": [
+            "js/board_shared.js"
+          ]
+        },
+        {
+          "sha256": "c1f3d1a7d632eafea6116664c7da03535fd3db1d2ebb1acfdc4d7198935fee8a",
+          "bytes": 83719,
+          "sources": [
+            "js/board_start.js"
+          ]
+        },
+        {
+          "sha256": "e6465018a74acbfb0a0e03ac8b04b8cfe4a6ac28dc61577ca6cb5539fe55be6c",
+          "bytes": 3474232,
+          "sources": [
+            "js/board_game.js"
+          ]
+        }
+      ]
+    },
+    "public-shop-report.json": {
+      "status": "PASS",
+      "verifiedAt": "2026-10-12T12:49:29.075Z",
+      "scope": "Anonymous catalog preview only; no account or wallet mutation",
+      "newAvatars": [
+        {
+          "id": "ava-123",
+          "name": "魯夫・懷舊動畫"
+        },
+        {
+          "id": "ava-124",
+          "name": "索隆・懷舊動畫"
+        },
+        {
+          "id": "ava-125",
+          "name": "娜美・懷舊動畫"
+        },
+        {
+          "id": "ava-126",
+          "name": "香吉士・懷舊動畫"
+        },
+        {
+          "id": "ava-127",
+          "name": "騙人布・懷舊動畫"
+        },
+        {
+          "id": "ava-128",
+          "name": "紅髮傑克・油彩典藏"
+        },
+        {
+          "id": "ava-129",
+          "name": "鷹眼・油彩典藏"
+        },
+        {
+          "id": "ava-130",
+          "name": "漢考克・油彩典藏"
+        },
+        {
+          "id": "ava-131",
+          "name": "克洛克達爾・油彩典藏"
+        },
+        {
+          "id": "ava-132",
+          "name": "雷利・油彩典藏"
+        },
+        {
+          "id": "ava-133",
+          "name": "艾斯・冒險厚塗"
+        },
+        {
+          "id": "ava-134",
+          "name": "薩波・冒險厚塗"
+        },
+        {
+          "id": "ava-135",
+          "name": "羅・冒險厚塗"
+        },
+        {
+          "id": "ava-136",
+          "name": "基德・冒險厚塗"
+        },
+        {
+          "id": "ava-137",
+          "name": "卡塔克利・冒險厚塗"
+        },
+        {
+          "id": "ava-138",
+          "name": "喬巴・彩鉛航記"
+        },
+        {
+          "id": "ava-139",
+          "name": "薇薇・彩鉛航記"
+        },
+        {
+          "id": "ava-140",
+          "name": "羅賓・彩鉛航記"
+        },
+        {
+          "id": "ava-141",
+          "name": "佛朗基・彩鉛航記"
+        },
+        {
+          "id": "ava-142",
+          "name": "布魯克・彩鉛航記"
+        },
+        {
+          "id": "ava-143",
+          "name": "培羅娜・柔彩海風"
+        },
+        {
+          "id": "ava-144",
+          "name": "凱洛特・柔彩海風"
+        },
+        {
+          "id": "ava-145",
+          "name": "白星・柔彩海風"
+        },
+        {
+          "id": "ava-146",
+          "name": "可亞拉・柔彩海風"
+        },
+        {
+          "id": "ava-147",
+          "name": "大和・柔彩海風"
+        },
+        {
+          "id": "ava-148",
+          "name": "吉貝爾・鋼筆航誌"
+        },
+        {
+          "id": "ava-149",
+          "name": "馬可・鋼筆航誌"
+        },
+        {
+          "id": "ava-150",
+          "name": "斯摩格・鋼筆航誌"
+        },
+        {
+          "id": "ava-151",
+          "name": "達絲琪・鋼筆航誌"
+        },
+        {
+          "id": "ava-152",
+          "name": "克比・鋼筆航誌"
+        },
+        {
+          "id": "ava-153",
+          "name": "白鬍子・黑金刻印"
+        },
+        {
+          "id": "ava-154",
+          "name": "羅傑・黑金刻印"
+        },
+        {
+          "id": "ava-155",
+          "name": "凱多・黑金刻印"
+        },
+        {
+          "id": "ava-156",
+          "name": "燼・黑金刻印"
+        },
+        {
+          "id": "ava-157",
+          "name": "多佛朗明哥・黑金刻印"
+        },
+        {
+          "id": "ava-158",
+          "name": "魯夫・疊紙航旅"
+        },
+        {
+          "id": "ava-159",
+          "name": "娜美・疊紙航旅"
+        },
+        {
+          "id": "ava-160",
+          "name": "羅賓・疊紙航旅"
+        },
+        {
+          "id": "ava-161",
+          "name": "騙人布・疊紙航旅"
+        },
+        {
+          "id": "ava-162",
+          "name": "吉貝爾・疊紙航旅"
+        },
+        {
+          "id": "ava-163",
+          "name": "香吉士・手塑物語"
+        },
+        {
+          "id": "ava-164",
+          "name": "艾斯・手塑物語"
+        },
+        {
+          "id": "ava-165",
+          "name": "薩波・手塑物語"
+        },
+        {
+          "id": "ava-166",
+          "name": "紅髮傑克・手塑物語"
+        },
+        {
+          "id": "ava-167",
+          "name": "培羅娜・手塑物語"
+        },
+        {
+          "id": "ava-168",
+          "name": "索隆・像素冒險"
+        },
+        {
+          "id": "ava-169",
+          "name": "羅・像素冒險"
+        },
+        {
+          "id": "ava-170",
+          "name": "佛朗基・像素冒險"
+        },
+        {
+          "id": "ava-171",
+          "name": "布魯克・像素冒險"
+        },
+        {
+          "id": "ava-172",
+          "name": "漢考克・像素冒險"
+        },
+        {
+          "id": "ava-173",
+          "name": "薇薇・琺瑯寶彩"
+        },
+        {
+          "id": "ava-174",
+          "name": "白星・琺瑯寶彩"
+        },
+        {
+          "id": "ava-175",
+          "name": "凱洛特・琺瑯寶彩"
+        },
+        {
+          "id": "ava-176",
+          "name": "大和・琺瑯寶彩"
+        },
+        {
+          "id": "ava-177",
+          "name": "鷹眼・琺瑯寶彩"
+        },
+        {
+          "id": "ava-178",
+          "name": "羅傑・海圖銅刻"
+        },
+        {
+          "id": "ava-179",
+          "name": "雷利・海圖銅刻"
+        },
+        {
+          "id": "ava-180",
+          "name": "白鬍子・海圖銅刻"
+        },
+        {
+          "id": "ava-181",
+          "name": "卡普・海圖銅刻"
+        },
+        {
+          "id": "ava-182",
+          "name": "斯摩格・海圖銅刻"
+        },
+        {
+          "id": "ava-183",
+          "name": "魯夫・木刻傳承"
+        },
+        {
+          "id": "ava-184",
+          "name": "索隆・木刻傳承"
+        },
+        {
+          "id": "ava-185",
+          "name": "吉貝爾・木刻傳承"
+        },
+        {
+          "id": "ava-186",
+          "name": "紅髮傑克・木刻傳承"
+        },
+        {
+          "id": "ava-187",
+          "name": "御田・木刻傳承"
+        },
+        {
+          "id": "ava-188",
+          "name": "艾斯・彩頁躍動"
+        },
+        {
+          "id": "ava-189",
+          "name": "香吉士・彩頁躍動"
+        },
+        {
+          "id": "ava-190",
+          "name": "娜美・彩頁躍動"
+        },
+        {
+          "id": "ava-191",
+          "name": "羅賓・彩頁躍動"
+        },
+        {
+          "id": "ava-192",
+          "name": "卡塔克利・彩頁躍動"
+        },
+        {
+          "id": "ava-193",
+          "name": "魯夫・夜光彩墨"
+        },
+        {
+          "id": "ava-194",
+          "name": "艾斯・夜光彩墨"
+        },
+        {
+          "id": "ava-195",
+          "name": "馬可・夜光彩墨"
+        },
+        {
+          "id": "ava-196",
+          "name": "羅・夜光彩墨"
+        },
+        {
+          "id": "ava-197",
+          "name": "布魯克・夜光彩墨"
+        },
+        {
+          "id": "ava-198",
+          "name": "娜美・織線航章"
+        },
+        {
+          "id": "ava-199",
+          "name": "羅賓・織線航章"
+        },
+        {
+          "id": "ava-200",
+          "name": "薇薇・織線航章"
+        },
+        {
+          "id": "ava-201",
+          "name": "香吉士・織線航章"
+        },
+        {
+          "id": "ava-202",
+          "name": "吉貝爾・織線航章"
+        },
+        {
+          "id": "ava-203",
+          "name": "漢考克・航海映金"
+        },
+        {
+          "id": "ava-204",
+          "name": "克洛克達爾・航海映金"
+        },
+        {
+          "id": "ava-205",
+          "name": "多佛朗明哥・航海映金"
+        },
+        {
+          "id": "ava-206",
+          "name": "羅布・路基・航海映金"
+        },
+        {
+          "id": "ava-207",
+          "name": "紅髮傑克・航海映金"
+        },
+        {
+          "id": "ava-208",
+          "name": "索隆・炭筆航誌"
+        },
+        {
+          "id": "ava-209",
+          "name": "雷利・炭筆航誌"
+        },
+        {
+          "id": "ava-210",
+          "name": "白鬍子・炭筆航誌"
+        },
+        {
+          "id": "ava-211",
+          "name": "薩波・炭筆航誌"
+        },
+        {
+          "id": "ava-212",
+          "name": "卡普・炭筆航誌"
+        },
+        {
+          "id": "ava-213",
+          "name": "羅傑・赤潮刻印"
+        },
+        {
+          "id": "ava-214",
+          "name": "魯夫・赤潮刻印"
+        },
+        {
+          "id": "ava-215",
+          "name": "卡塔克利・赤潮刻印"
+        },
+        {
+          "id": "ava-216",
+          "name": "基德・赤潮刻印"
+        },
+        {
+          "id": "ava-217",
+          "name": "香吉士・赤潮刻印"
+        },
+        {
+          "id": "ava-218",
+          "name": "娜美・粉彩航夢"
+        },
+        {
+          "id": "ava-219",
+          "name": "培羅娜・粉彩航夢"
+        },
+        {
+          "id": "ava-220",
+          "name": "羅賓・粉彩航夢"
+        },
+        {
+          "id": "ava-221",
+          "name": "艾斯・粉彩航夢"
+        },
+        {
+          "id": "ava-222",
+          "name": "喬巴・粉彩航夢"
+        }
+      ],
+      "totalItems": 330
+    },
+    "public-blobs-report.json": {
+      "status": "PASS",
+      "revision": 60,
+      "verifiedAt": "2026-10-12T09:59:48.960Z",
+      "verified": [
+        {
+          "path": "images/launcher_announcements/launcher-avatar-r60.webp",
+          "bytes": 104626,
+          "sha256": "411e0a90d1897246dcf3c9649300876f9fdc57a1b6e34130091a679cf837c775"
+        },
+        {
+          "path": "launcher-profile-shop.css",
+          "bytes": 45319,
+          "sha256": "f8e2940d6fa3d0e55fee09232558878e664612c5bce292e8dc29a5d155633525"
+        },
+        {
+          "path": "launcher-profile-shop.js",
+          "bytes": 141820,
+          "sha256": "6bbf97b4777b510de02971d866ef6376fe74ff44da22795ee5c71bb5d69ae3e1"
+        },
+        {
+          "path": "launcher.html",
+          "bytes": 43556,
+          "sha256": "24fdcc696be09511f6cb839a017a43921d661b46af79d4782727a6307cf3e077"
+        }
+      ]
+    },
+    "candidate-delta-report.json": {
+      "status": "PASS",
+      "source": "candidate",
+      "from": 59,
+      "to": 60,
+      "manifestSha256": "c15a6947fcbae51c1e05b5ca4518731b0a978d8f186c8030c32d9b7c2b03575d",
+      "changed": [
+        {
+          "path": "images/launcher_announcements/launcher-avatar-r60.webp",
+          "bytes": 104626,
+          "sha256": "411e0a90d1897246dcf3c9649300876f9fdc57a1b6e34130091a679cf837c775"
+        },
+        {
+          "path": "launcher-profile-shop.css",
+          "bytes": 45319,
+          "sha256": "f8e2940d6fa3d0e55fee09232558878e664612c5bce292e8dc29a5d155633525"
+        },
+        {
+          "path": "launcher-profile-shop.js",
+          "bytes": 141820,
+          "sha256": "6bbf97b4777b510de02971d866ef6376fe74ff44da22795ee5c71bb5d69ae3e1"
+        },
+        {
+          "path": "launcher.html",
+          "bytes": 43556,
+          "sha256": "24fdcc696be09511f6cb839a017a43921d661b46af79d4782727a6307cf3e077"
+        }
+      ],
+      "downloadedBytes": 335321,
+      "checked": 317,
+      "secondDownload": 0,
+      "preservedOldFiles": 316,
+      "userDataPath": "D:\\Codex_QA\\launcher-fishing-r45\\candidate"
+    },
+    "actual-delta-report.json": {
+      "status": "PASS",
+      "source": "public",
+      "from": 60,
+      "to": 60,
+      "alreadyInstalledBeforeVerification": true,
+      "manifestSha256": "c15a6947fcbae51c1e05b5ca4518731b0a978d8f186c8030c32d9b7c2b03575d",
+      "downloadedBytes": 0,
+      "checked": 317,
+      "secondDownload": 0,
+      "preservedOldFiles": 316,
+      "userDataPath": "C:\\Users\\王曜瑋\\AppData\\Roaming\\onepiece-tabletop-desktop",
+      "verifiedAt": "2026-10-12T12:52:03.582Z",
+      "limitations": [
+        "Actual cache was already r60 before this readback; its prior automatic download byte count was not observed.",
+        "Candidate r59-to-r60 download was independently measured as335321 bytes."
+      ]
+    },
+    "package-runtime-report.json": {
+      "status": "PASS",
+      "scope": "Actual core 1.2.23 RuntimeAssetCache and HttpsProgramRuntime; isolated source routes, no network or formal player cache writes",
+      "games": {
+        "card": {
+          "releaseId": "package-a7d368a6e3feae01",
+          "checked": 29,
+          "networkFallbacks": 0
+        },
+        "board": {
+          "releaseId": "package-fe853a3b827173df",
+          "checked": 57,
+          "networkFallbacks": 0
+        },
+        "chess": {
+          "releaseId": "package-ee4627881596bdad",
+          "checked": 26,
+          "networkFallbacks": 0
+        }
+      }
+    }
+  },
+  "reportSha256": {
+    "public-manifest-report.json": "35961b04a860253185adfe6b56c268acc5e3231a9a5c7b51c1af2d98dd29e012",
+    "public-games-report.json": "8eb86388409597ffaed0ae68da3693d22ea8bf121de90e9505a3fafc5adc011d",
+    "public-shop-report.json": "e3a336ef699b9c0fe0ca3bcacf959aebac52a82e8852c22f50c3fcdd1d8e7350",
+    "public-blobs-report.json": "4fdaad41c7d9797353328796b77a83d1b96cafdcb693f8f6b44953f45115acda",
+    "candidate-delta-report.json": "8f06783153b2c478e270ea7c516ec5009c234b5d83be708dd9914725fbe40726",
+    "actual-delta-report.json": "c0672dc6e3a1c7c1214f2f452e3beea231aac7321658dc56949c5bf566ba1fea",
+    "package-runtime-report.json": "e917b58246a7fcd6cfbd9e6ff4b4c118a67db0ac7c082cefb225221a020cd7ea"
+  },
+  "deploymentEvidence": {
+    "method": "Public signed manifest exact bytes plus all three production runtime-package identities and immutable blob SHA/size readback",
+    "renderDashboard": "NOT_OBSERVED_FINAL_STATUS_CDP_TIMEOUT",
+    "renderDeploymentUrl": "https://dashboard.render.com/web/srv-d4a3vfripnbc739dds90/deploys/dep-db6avjvavr4c73fs12kg",
+    "note": "Dashboard previously showed the expected release commit Building. Final browser readback timed out; no Deploy succeeded/Live UI claim. GitHub status/deployments returned empty arrays. Public service now serves exact reviewed r60 bytes."
+  },
+  "limitations": [
+    "No real player account purchase or mutation was performed.",
+    "Two-browser gameplay tests used synthetic isolated accounts and explicit round/crew fixtures.",
+    "The installed launcher/game windows must be restarted once to load the updated renderer/program.",
+    "Actual cache was already r60 when verification resumed; its earlier automatic download byte count was not observed."
+  ],
+  "verifierNotes": [
+    "Game CDN Brotli HEAD omitted Content-Length. Verifier now requests accept-encoding:identity for HEAD; exact GET size/SHA assertions remain unchanged.",
+    "Original actual-delta helper correctly rejected from60 instead of from59; no cache rollback. New installed-r60 verifier read 317 files, preserved316 old files and observed a zero-download repeat check."
+  ],
+  "preserved": "Unrelated iOS preflight docs, rank images, unshipped r54 art, signed r59 blobs, Card/Chess package identity, and latest Board smooth-sailing changes are preserved."
+}

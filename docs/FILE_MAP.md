@@ -1950,3 +1950,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - server/index.js、public/js/board_shared.js、board_start.js、board_game.js：共用帳號頭像事件、房間/遊戲/航海紀錄顯示投影；scripts/launcher_avatar_live_sync_qa.js 為隔離SQL及雙瀏覽器驗證。
 - tools/launcher-avatar-r60/release-spec.json、build-release.js、publish-game.js：r60定向差分封裝與不可覆寫CAS發布；scripts/launcher_avatar_identity_package_qa.js 用實際core路由驗證三款program。
 - public/images/launcher_announcements/launcher-avatar-r60.webp：本次介面實際截圖公告；D:/Codex_QA/launcher-avatar-r60 存放QA與公開讀回證據。
+
+- docs/LAUNCHER_AVATAR_R60_RELEASE.json：r60公開manifest/catalog/program、完整商城與正式cache驗收收據，含控制台讀回及原自動下載量未觀察的界線。
