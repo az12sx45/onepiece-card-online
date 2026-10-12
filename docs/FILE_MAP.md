@@ -1952,3 +1952,11 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - public/images/launcher_announcements/launcher-avatar-r60.webp：本次介面實際截圖公告；D:/Codex_QA/launcher-avatar-r60 存放QA與公開讀回證據。
 
 - docs/LAUNCHER_AVATAR_R60_RELEASE.json：r60公開manifest/catalog/program、完整商城與正式cache驗收收據，含控制台讀回及原自動下載量未觀察的界線。
+
+
+### r61 名片與紀錄回收
+
+- desktop/launcher-profile-shop.js/css、launcher.html、launcher.js：獨立名片編輯、穩定頭像選擇網格與帳號選單入口。
+- public/images/launcher_profile/captain-card-wide-r61.webp、docs/LAUNCHER_PROFILE_R61_ART.json：本次GPT預設名片背景與生成規格。
+- server/index.js：board_campaign_preferences及BOARD_CAMPAIGN_VISIBILITY；public/board_start.html、public/js/board_start.js提供確認、回收區和恢復。
+- scripts/launcher_profile_editor_r61_qa.js、board_voyage_record_delete_qa.js：隔離UI/持久化/權限驗證；tools/launcher-profile-r61與scripts/launcher_profile_r61_package_qa.js為差分封裝及core路由檢查。

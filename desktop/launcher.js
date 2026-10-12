@@ -1074,6 +1074,7 @@ $('#accountButton').addEventListener('click', () => {
 });
 $('#settingsButton').addEventListener('click', openSettingsDialog);
 $('#accountProfileButton').addEventListener('click', () => { closeAccountMenu(); window.LauncherProfileShop?.openProfile(0); });
+$('#accountAvatarButton').addEventListener('click', () => { closeAccountMenu(); window.LauncherProfileShop?.openAvatarSelection(); });
 $('#settingsClose').addEventListener('click', () => settingsDialog.close());
 $('#settingsCancel').addEventListener('click', () => settingsDialog.close());
 $('#settingsSave').addEventListener('click', saveSettings);

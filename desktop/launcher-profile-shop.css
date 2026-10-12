@@ -412,3 +412,132 @@
 .shop-unlock-sample .captain-guestbook-entry{cursor:default;max-width:100%}
 .shop-unlock-sample .captain-guestbook-entry:hover{filter:none;outline:none}
 @media(max-width:760px){#shopItemPreviewDialog{width:calc(100vw - 24px);max-width:calc(100vw - 24px);padding:12px;max-height:calc(100dvh - 24px)}.shop-large-preview-stage{height:58dvh}.shop-item-preview-header{gap:10px}.shop-item-preview-header button{min-width:58px;padding:8px 10px}}
+
+/* r61: a stable display card, with editing in its own modal. */
+#profileHero, .captain-card-preview { min-height:240px; aspect-ratio:3 / 1; background:#09202b; }
+#profileHero .captain-hero-art, .captain-card-preview .captain-hero-art { background-image:url('opui://launcher/images/launcher_profile/captain-card-wide-r61.webp'); background-size:contain; background-repeat:no-repeat; background-position:center; filter:none; }
+#profileHero.has-card-art .captain-hero-art, .captain-card-preview.has-card-art .captain-hero-art { inset:16px 16px 16px 48%; border-radius:11px; background-color:#03131a; background-size:contain; box-shadow:0 0 0 1px #aacebe22; }
+#profileHero::after, .captain-card-preview::after { background:linear-gradient(90deg,#05141e44,transparent 60%); }
+#profileHero .captain-hero-body, .captain-card-preview .captain-hero-body { display:flex; align-items:center; justify-content:flex-start; gap:20px; min-height:240px; height:100%; width:56%; padding:28px; padding-bottom:68px; border:0; flex-direction:row; text-align:left; }
+#profileHero.has-card-art .captain-hero-body, .captain-card-preview.has-card-art .captain-hero-body { width:48%; }
+#profileHero .captain-hero-avatar, .captain-card-preview .captain-hero-avatar { width:100px; height:100px; }
+#profileHero .captain-hero-avatar > img, .captain-card-preview .captain-hero-avatar > img { object-fit:contain; }
+#profileHero .captain-hero-copy, .captain-card-preview .captain-hero-copy { flex:1; padding:0; text-align:left; border:0; background:none; box-shadow:none; }
+#profileHero .captain-hero-copy h3, .captain-card-preview .captain-hero-copy h3 { font-size:27px; white-space:normal; overflow-wrap:anywhere; line-height:1.25; }
+#profileHero .captain-hero-copy p:not(.eyebrow), .captain-card-preview .captain-hero-copy p:not(.eyebrow) { font-size:12px; line-height:1.65; overflow-wrap:anywhere; max-height:5em; overflow:auto; scrollbar-width:thin; }
+#profileHero .captain-hero-flag, .captain-card-preview .captain-hero-flag { position:absolute; bottom:22px; left:28px; width:30px; height:30px; }
+#profileHero .captain-card-edit-button { position:absolute; left:28px; right:auto; bottom:21px; min-height:39px; }
+#profileHero:has(.captain-hero-flag:not([hidden])) .captain-card-edit-button { left:72px; }
+.captain-avatar-edit { align-items:center; padding:0; background:#05222a00; font-size:0; }
+.captain-avatar-edit span { position:absolute; bottom:8px; font-size:10px; line-height:1.5; color:#fff5d6; text-shadow:0 1px 5px #000; }
+.captain-avatar-edit:hover { background:#04191c55; }
+.captain-card-dialog { box-sizing:border-box; width:min(1180px,calc(100vw - 36px)); height:min(780px,calc(100dvh - 36px)); max-width:none; max-height:calc(100dvh - 36px); padding:0; border:1px solid #b9ac795e; border-radius:20px; overflow:hidden; color:#eff7ef; background:linear-gradient(130deg,#12343f,#071b26 65%); box-shadow:0 30px 110px #000b; }
+.captain-card-dialog::backdrop { background:#010910cf; backdrop-filter:blur(8px); }
+.captain-card-editor { display:grid; grid-template-columns:minmax(0,1fr); grid-template-rows:auto minmax(0,1fr) auto; align-items:stretch; gap:0; padding:0; height:100%; }
+.captain-card-heading { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:22px 26px; border-bottom:1px solid #aaccbe26; }
+.captain-card-heading .eyebrow { margin:0 0 7px; color:#d3b678; font-size:10px; letter-spacing:.18em; }
+.captain-card-heading h2 { margin:0; color:#f3e8ce; font-size:26px; }
+.captain-card-heading button { min-height:40px; }
+.captain-card-workspace { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr); min-height:0; overflow:hidden; }
+.captain-card-preview-panel { min-width:0; min-height:0; overflow:auto; padding:24px; background:linear-gradient(155deg,#21495533,#09202a); border-right:1px solid #a6c0b520; scrollbar-width:thin; }
+.captain-card-preview-label { display:flex; flex-wrap:wrap; justify-content:space-between; gap:7px; margin-bottom:16px; }
+.captain-card-preview-label strong { color:#e5cca0; font-size:12px; }
+.captain-card-preview-label span, .captain-card-preview-note { color:#8fadb3; font-size:11px; line-height:1.7; }
+#profileCardPreview { width:100%; }
+.captain-card-preview { width:100%; min-width:0; min-height:200px; aspect-ratio:3 / 1; border-radius:12px; }
+.captain-card-preview .captain-hero-body { min-height:200px; gap:11px; padding:18px; padding-bottom:44px; }
+.captain-card-preview .captain-hero-avatar { width:64px; height:64px; border-width:2px; box-shadow:0 5px 14px #0009,0 0 0 3px #e7bd6929; }
+.captain-card-preview .captain-hero-copy h3 { font-size:18px; }
+.captain-card-preview .captain-hero-copy p:not(.eyebrow) { font-size:10px; }
+.captain-card-preview .captain-hero-copy .eyebrow { font-size:8px; letter-spacing:.08em; }
+.captain-card-preview .captain-hero-copy small { font-size:9px; }
+.captain-card-preview.has-card-art .captain-hero-art { inset:10px 10px 10px 48%; }
+.captain-card-preview .captain-hero-flag { width:24px; height:24px; left:18px; bottom:12px; }
+.captain-card-preview-panel .captain-card-avatar-field { margin-top:25px; display:block; }
+.captain-card-avatar-choice { min-height:86px; padding:12px 16px; gap:17px; border-radius:13px; background:#0a2633; }
+.captain-card-avatar-choice img { width:66px; height:66px; }
+.captain-card-avatar-choice strong { font-size:14px; }
+.captain-card-avatar-choice small { margin-top:8px; font-size:12px; }
+.captain-card-fields { min-width:0; min-height:0; overflow:auto; padding:24px; scrollbar-width:thin; scrollbar-color:#47727a transparent; }
+.captain-card-fields > label { display:block; margin-bottom:23px; font-size:13px; }
+.captain-card-fields input, .captain-card-fields textarea { display:block; box-sizing:border-box; width:100%; margin-top:10px; padding:12px 13px; border:1px solid #8abca45c; border-radius:9px; font:inherit; font-size:14px; color:#f0f5e9; background:#041b26; }
+.captain-card-fields input { height:45px; }
+.captain-card-fields textarea { min-height:105px; resize:vertical; max-height:210px; line-height:1.7; }
+.captain-card-fields textarea:focus { outline:2px solid var(--sea); outline-offset:1px; }
+.captain-card-field-hint { display:block; margin-top:7px; color:#799ba5; font-size:10px; text-align:right; }
+.captain-card-fields .captain-card-decor { padding:0; background:none; border:0; }
+.captain-card-fields .captain-decor-controls { grid-template-columns:minmax(0,1fr); gap:12px; }
+.captain-card-fields .captain-decor-slot { padding:14px; }
+.captain-card-fields .captain-decor-slot > strong { font-size:12px; }
+.captain-card-fields .captain-decor-slot label { margin-top:12px; grid-template-columns:36px minmax(0,1fr) 40px; font-size:11px; }
+.captain-card-fields .captain-decor-slot button { min-height:38px; margin-top:13px; }
+.captain-card-footer { display:flex; align-items:center; justify-content:space-between; gap:15px; padding:17px 25px; border-top:1px solid #b1c1a62c; background:#09232d; }
+.captain-card-footer .voyage-status { line-height:1.6; max-width:65%; }
+.captain-card-editor-actions { margin-left:auto; flex:none; }
+.captain-card-editor-actions button { min-height:44px; padding:10px 23px; font-size:13px; }
+.captain-avatar-grid { grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:12px; }
+.captain-avatar-option img { max-width:112px; flex:none; }
+.captain-avatar-option { min-height:202px; padding:12px 8px; }
+.captain-avatar-option[aria-checked=true] { padding:11px 7px; }
+.captain-avatar-option:hover { transform:none; }
+.captain-avatar-option strong { font-size:12px; min-height:34px; flex:none; }
+.captain-avatar-option small { font-size:11px; flex:none; }
+.captain-hero-stickers { container-type:size; }
+.captain-hero-sticker { --sticker-size:clamp(24px,7cqw,83px); --sticker-edge:calc(var(--sticker-size) * var(--scale,1) * .5 + 5px); width:var(--sticker-size); height:var(--sticker-size); left:clamp(var(--sticker-edge),var(--x,50%),calc(100% - var(--sticker-edge))); top:clamp(var(--sticker-edge),var(--y,50%),calc(100% - var(--sticker-edge))); }
+.captain-avatar-footer button, .captain-card-footer button { touch-action:manipulation; }
+#profileHero[data-layout='layout-grand-line'] .captain-hero-body, .captain-card-preview[data-layout='layout-grand-line'] .captain-hero-body { border-left:6px solid #d9ad65; }
+#profileHero[data-layout='layout-bounty-board'] .captain-hero-body, .captain-card-preview[data-layout='layout-bounty-board'] .captain-hero-body { flex-direction:row-reverse; }
+#profileHero[data-layout='layout-bounty-board'] .captain-hero-copy, .captain-card-preview[data-layout='layout-bounty-board'] .captain-hero-copy { text-align:right; }
+#profileHero[data-layout='layout-captain-quarters'] .captain-hero-copy, .captain-card-preview[data-layout='layout-captain-quarters'] .captain-hero-copy { text-align:center; }
+#profileHero[data-layout='layout-sunny-deck'] .captain-hero-body, .captain-card-preview[data-layout='layout-sunny-deck'] .captain-hero-body { align-items:flex-end; }
+#profileHero[data-layout='layout-sunny-kitchen'] .captain-hero-copy, .captain-card-preview[data-layout='layout-sunny-kitchen'] .captain-hero-copy { padding:10px; border-left:3px solid #e4b879; border-radius:0 9px 9px 0; background:#3a2517b5; }
+#profileHero[data-layout='layout-sunny-library'] .captain-hero-copy, .captain-card-preview[data-layout='layout-sunny-library'] .captain-hero-copy { padding:10px; border:1px solid #d8bd895c; border-radius:9px; background:#092028c7; }
+@media(max-height:720px) and (min-width:761px) {
+  .captain-avatar-heading { padding:13px 22px; }
+  .captain-avatar-heading .eyebrow { margin-bottom:4px; }
+  .captain-avatar-heading h2 { margin:0; font-size:22px; }
+  .captain-avatar-heading p:last-child { display:none; }
+  .captain-avatar-toolbar { padding:11px 18px 8px; gap:6px; }
+  .captain-avatar-grid { padding:3px 18px 16px; grid-template-columns:repeat(auto-fill,minmax(106px,1fr)); gap:9px; }
+  .captain-avatar-option { min-height:177px; padding:8px 6px; gap:4px; }
+  .captain-avatar-option[aria-checked=true] { padding:7px 5px; }
+  .captain-avatar-option img { max-width:100px; }
+  .captain-avatar-option strong { font-size:11px; min-height:30px; }
+  .captain-avatar-footer { padding:12px 21px; }
+  .captain-card-heading { padding:15px 22px; }
+  .captain-card-heading h2 { font-size:23px; }
+}
+@media(max-width:1100px) {
+  #profileHero .captain-hero-body { padding:20px; padding-bottom:66px; gap:14px; }
+  #profileHero .captain-hero-avatar { width:80px; height:80px; }
+  #profileHero .captain-hero-copy h3 { font-size:23px; }
+  .captain-card-workspace { grid-template-columns:minmax(0,1fr) minmax(275px,.85fr); }
+  .captain-card-preview-panel,.captain-card-fields { padding:20px; }
+  .captain-card-preview .captain-hero-body { gap:8px; padding:13px; padding-bottom:40px; }
+  .captain-card-preview .captain-hero-avatar { width:48px; height:48px; }
+  .captain-card-preview .captain-hero-copy h3 { font-size:15px; }
+}
+@media(max-width:760px) {
+  #profileHero { min-height:230px; aspect-ratio:2 / 1; }
+  #profileHero .captain-hero-body { width:55%; padding:14px; padding-bottom:64px; display:flex; flex-wrap:wrap; align-content:center; gap:14px; }
+  #profileHero.has-card-art .captain-hero-body { width:48%; }
+  #profileHero .captain-hero-copy { flex-basis:100%; }
+  #profileHero .captain-hero-avatar { width:68px; height:68px; }
+  #profileHero .captain-hero-copy h3 { font-size:20px; }
+  #profileHero .captain-card-edit-button { left:14px; bottom:14px; }
+  .captain-card-dialog { width:calc(100vw - 20px); height:calc(100dvh - 24px); max-height:calc(100dvh - 24px); border-radius:15px; }
+  .captain-card-heading { padding:15px 18px; }.captain-card-heading h2 { font-size:22px; }
+  .captain-card-workspace { display:block; overflow:auto; }
+  .captain-card-preview-panel { overflow:visible; padding:18px; border-right:0; border-bottom:1px solid #adc9b826; }
+  .captain-card-preview-label span { display:none; }
+  .captain-card-preview-panel .captain-card-avatar-field { margin-top:16px; }
+  .captain-card-avatar-choice { min-height:71px; padding:9px 12px; }.captain-card-avatar-choice img { width:52px; height:52px; }
+  .captain-card-preview-note { margin-bottom:0; }
+  .captain-card-fields { overflow:visible; padding:18px; }
+  .captain-card-preview { min-height:180px; }.captain-card-preview .captain-hero-body { min-height:180px; }
+  .captain-card-footer { padding:12px 15px; flex-wrap:wrap; gap:8px; }
+  .captain-card-footer .voyage-status { max-width:100%; }.captain-card-footer .voyage-status:empty { display:none; }
+  .captain-card-editor-actions button { min-height:43px; padding:9px 20px; }
+  .captain-avatar-grid { grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); }
+  .captain-avatar-option { min-height:193px; }
+}

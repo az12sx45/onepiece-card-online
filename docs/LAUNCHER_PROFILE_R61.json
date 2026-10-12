@@ -1,0 +1,54 @@
+{
+  "status": "SOURCE_QA_PASS_NOT_PUBLISHED",
+  "createdAt": "2026-10-12T13:15:22.501Z",
+  "authority": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12",
+  "baseline": "bbcdeaf06188c0104f62eee754d678af0d2ce038",
+  "sourceSha256": {
+    "desktop/launcher.html": "df1e2faaefd7d213730183f08b4109f881ad97b44ec8c193b43edbca3f6a3e52",
+    "desktop/launcher.js": "ada405b7a72dc8cf315698d16ff34f767ab3ad73963ac22a8d19ae947f9518a7",
+    "desktop/launcher-profile-shop.js": "5263cc8f27f6e58ba199f5df7c116b01bcae50b6842b29d96315c0452694840f",
+    "desktop/launcher-profile-shop.css": "8e132efe90014dbdc1bae8f963cbd3acd2f2c70cfec71e297f19e365605854e5",
+    "server/index.js": "a1ba5a0040fd8589ddce9b29ee7161e5cd1cb52917b4cf0aa79aa6073743d6d8",
+    "public/board_start.html": "bce45a468b9b8bc997852ec503943e48be53a41ede0d67ea859e975fa5dbc9a3",
+    "public/js/board_start.js": "1f45818742fc8ae5200bbccd1e06dbef17d95d4b6b1cb5f61c5eb6931cbff313"
+  },
+  "reports": {
+    "editor/report.json": {
+      "status": "PASS",
+      "checks": 101,
+      "sha256": "9ab16345ed382a9f32a8b65896370b2b28c944e519c235710ea8bebcfbcbc361"
+    },
+    "records/report.json": {
+      "status": "PASS",
+      "checks": 48,
+      "sha256": "a262ee509339589ad7dc338bf61bd8f28ff43c7602a1e574fc28a52b241902e2"
+    },
+    "audit/final-report.json": {
+      "status": "PASS",
+      "sha256": "384e4ac8d68042428ed7b9cf26af83e3aa747986611fd7e6cc993fbdb8dbe51b",
+      "checks": 33
+    },
+    "startup-report.json": {
+      "status": "PASS",
+      "checks": 6,
+      "sha256": "7a68aa3ea6f0dd9865122e99bed21f8583a7c0331506b07f4ab5271a06e8932b"
+    },
+    "announcement-report.json": {
+      "status": "PASS",
+      "checks": 82,
+      "sha256": "27a454966e37a67cd609ef9cddb42ed4e7809b156ba944cdd76781b053197e6e"
+    },
+    "local-loading/report.json": {
+      "status": "PASS",
+      "checks": 21,
+      "sha256": "cd412b65ef663129d09556cabff9289d9ad3a5a702b21634f322d0f9bfa38771"
+    }
+  },
+  "qaScope": "Actual shipped renderer with isolated authenticated bridge; real production Socket.IO with two isolated Chromium accounts and PGlite. No formal player records or purchases changed.",
+  "lineEndingNote": "Modified board_start.html restored from checkout CRLF to its committed LF bytes after QA; semantic text unchanged. Server mixed endings preserved.",
+  "limitations": [
+    "Public deployment and cache verification pending.",
+    "No real player account save removal/purchase performed.",
+    "LATTICE callable tools unavailable; no task or graph success claimed."
+  ]
+}

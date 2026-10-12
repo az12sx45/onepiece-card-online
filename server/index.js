@@ -535,6 +535,7 @@ app.use("/api/board-save", (req, res, next) => {
 
 const BOARD_SAVE_DIR = path.join(__dirname, "data", "board_saves");
 const BOARD_CAMPAIGN_DIR = path.join(__dirname, "data", "board_campaigns");
+const BOARD_CAMPAIGN_PREFERENCES_DIR = path.join(__dirname, "data", "board_campaign_preferences");
 const BOARD_CAMPAIGN_SCHEMA_VERSION = 2;
 const BOARD_DB_PERSISTENCE_ENABLED = Boolean(process.env.DATABASE_URL);
 const boardCampaignWriteQueues = new Map();
@@ -564,6 +565,10 @@ async function ensureBoardPersistenceTables(){
     );
   `);
   await pool.query(`CREATE INDEX IF NOT EXISTS board_campaigns_updated_at_idx ON board_campaigns(updated_at DESC);`);
+  await pool.query(`CREATE TABLE IF NOT EXISTS board_campaign_preferences (
+    user_id BIGINT NOT NULL, campaign_id TEXT NOT NULL, removed_at BIGINT NOT NULL DEFAULT 0,
+    revision BIGINT NOT NULL DEFAULT 1, PRIMARY KEY(user_id, campaign_id)
+  );`);
 }
 
 let boardPersistenceInitError = null;
@@ -713,6 +718,58 @@ async function listBoardCampaigns(identityUserId = null){
     }
   }
   return campaigns;
+}
+
+// Personal recycle state is separate from shared snapshots: later saves cannot revive it.
+function boardCampaignPreferenceDirectory(identity){
+  const uid = Number(identity.userId);
+  if(!Number.isSafeInteger(uid) || uid <= 0) throw new Error("auth_required");
+  return path.join(BOARD_CAMPAIGN_PREFERENCES_DIR, String(uid));
+}
+
+async function boardCampaignPreferences(identity){
+  const directory = boardCampaignPreferenceDirectory(identity);
+  if(BOARD_DB_PERSISTENCE_ENABLED){
+    await waitForBoardPersistence();
+    const result = await pool.query("SELECT campaign_id, removed_at, revision FROM board_campaign_preferences WHERE user_id=$1", [identity.userId]);
+    return new Map(result.rows.map(row => [row.campaign_id, { removedAt:Number(row.removed_at), visibilityRevision:Number(row.revision) }]));
+  }
+  let names;
+  try { names = await fs.readdir(directory); } catch(error){ if(error.code === "ENOENT") return new Map(); throw error; }
+  const records = await Promise.all(names.filter(name => /^[A-Z0-9_-]+\.json$/.test(name)).map(async name => [name.slice(0,-5), JSON.parse(await fs.readFile(path.join(directory,name), "utf8"))]));
+  return new Map(records);
+}
+
+async function setBoardCampaignVisibility(campaign, identity, removed, expectedVisibilityRevision){
+  const removedAt = removed ? Date.now() : 0;
+  if(BOARD_DB_PERSISTENCE_ENABLED){
+    await waitForBoardPersistence();
+    const result = await pool.query(
+      `INSERT INTO board_campaign_preferences(user_id,campaign_id,removed_at,revision)
+       SELECT $1,$2,$3,1 FROM board_campaigns WHERE campaign_id=$2 AND COALESCE((payload->>'revision')::bigint,0)=$4
+       AND ($5::bigint=0 OR EXISTS(SELECT 1 FROM board_campaign_preferences WHERE user_id=$1 AND campaign_id=$2))
+       ON CONFLICT(user_id,campaign_id) DO UPDATE SET removed_at=EXCLUDED.removed_at,revision=board_campaign_preferences.revision+1
+       WHERE board_campaign_preferences.revision=$5 RETURNING revision`,
+      [identity.userId,campaign.campaignId,removedAt,Number(campaign.revision || 0),expectedVisibilityRevision]
+    );
+    if(!result.rows.length) throw new Error("revision_conflict");
+    return { removedAt, visibilityRevision:Number(result.rows[0].revision) };
+  }
+  const directory = boardCampaignPreferenceDirectory(identity);
+  const current = (await boardCampaignPreferences(identity)).get(campaign.campaignId);
+  if(Number(current?.visibilityRevision || 0) !== expectedVisibilityRevision) throw new Error("revision_conflict");
+  const preference = { removedAt, visibilityRevision:expectedVisibilityRevision + 1 };
+  await fs.mkdir(directory, { recursive:true });
+  const filename = path.join(directory, campaign.campaignId + ".json");
+  const temp = filename + "." + crypto.randomBytes(6).toString("hex") + ".tmp";
+  await fs.writeFile(temp, JSON.stringify(preference), "utf8");
+  try { await fs.rename(temp, filename); } catch(error){ await fs.unlink(temp).catch(() => {}); throw error; }
+  return preference;
+}
+
+function boardCampaignInUseByIdentity(campaignId, identity){
+  return Array.from(boardRooms.values()).some(room => room.campaignId === campaignId &&
+    Array.from(room.sockets.values()).some(member => Number(member.userId) === Number(identity.userId)));
 }
 
 async function withBoardCampaignWriteLock(campaignId, task){
@@ -1731,11 +1788,16 @@ function serializeBoardCampaign(campaign, identity = {}, avatars = null){
   };
 }
 
-async function boardCampaignsForIdentity(identity = {}){
+async function boardCampaignsForIdentity(identity = {}, includeRemoved = false){
   const campaigns = await listBoardCampaigns(identity.userId);
-  const avatars = await boardCampaignAvatarProjection(campaigns, identity);
-  return campaigns
-    .map((campaign) => serializeBoardCampaign(campaign, identity, avatars))
+  const preferences = await boardCampaignPreferences(identity);
+  const visible = campaigns.filter(campaign => includeRemoved || !preferences.get(campaign.campaignId)?.removedAt);
+  const avatars = await boardCampaignAvatarProjection(visible, identity);
+  return visible
+    .map((campaign) => {
+      const summary = serializeBoardCampaign(campaign, identity, avatars);
+      return summary && { ...summary, removedAt:0, visibilityRevision:0, ...preferences.get(campaign.campaignId) };
+    })
     .filter(Boolean)
     .sort((a, b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0));
 }
@@ -4133,18 +4195,45 @@ io.on("connection", (socket) => {
     try{
       const profile = authenticatedBoardProfile(socket, payload.profile);
       if(!profile) return cb?.({ ok:false, error:"auth_required" });
-      const campaigns = await boardCampaignsForIdentity(profile);
+      const campaigns = await boardCampaignsForIdentity(profile, payload.includeRemoved === true);
       socket.emit("BOARD_CAMPAIGN_LIST", { campaigns });
       return cb?.({ ok:true, campaigns });
     }catch(error){ return cb?.({ ok:false, error:String(error?.message || error) }); }
+  });
+
+  socket.on("BOARD_CAMPAIGN_VISIBILITY", async (message = {}, cb) => {
+    try{
+      const profile = authenticatedBoardProfile(socket, message.profile);
+      if(!profile) return cb?.({ ok:false, error:"auth_required" });
+      if(!["remove", "restore"].includes(message.action)) return cb?.({ ok:false, error:"invalid_action" });
+      const id = sanitizeBoardCampaignId(message.campaignId);
+      if(!id || String(message.campaignId) !== id) return cb?.({ ok:false, error:"campaign_not_found" });
+      const result = await withBoardCampaignWriteLock(id, async () => {
+        const campaign = await readBoardCampaign(id);
+        if(!boardCampaignFindMember(campaign, profile)) return { ok:false, error:"not_campaign_member" };
+        if(!Number.isSafeInteger(message.expectedRevision) || message.expectedRevision !== Number(campaign.revision || 0)) return { ok:false, error:"revision_conflict" };
+        if(!Number.isSafeInteger(message.expectedVisibilityRevision) || message.expectedVisibilityRevision < 0) return { ok:false, error:"revision_conflict" };
+        if(message.action === "remove" && boardCampaignInUseByIdentity(id, profile)) return { ok:false, error:"campaign_in_use" };
+        const preference = await setBoardCampaignVisibility(campaign, profile, message.action === "remove", message.expectedVisibilityRevision);
+        return { ok:true, campaignId:id, ...preference };
+      });
+      if(result.ok){
+        for(const peer of io.sockets.sockets.values()){
+          if(Number(peer.data.socialProfile?.userId ?? peer.data.boardProfile?.userId) === Number(profile.userId)) peer.emit("BOARD_CAMPAIGN_VISIBILITY_UPDATED", { campaignId:id });
+        }
+      }
+      return cb?.(result);
+    }catch(error){ return cb?.({ ok:false, error:error?.code === "ENOENT" ? "campaign_not_found" : String(error?.message || error) }); }
   });
 
   socket.on("BOARD_CAMPAIGN_OPEN", async (payload = {}, cb) => {
     try{
       const profile = authenticatedBoardProfile(socket, payload.profile);
       if(!profile) return cb?.({ ok:false, error:"auth_required" });
+      return await withBoardCampaignWriteLock(payload.campaignId, async () => {
       let campaign = await readBoardCampaign(sanitizeBoardCampaignId(payload.campaignId));
       if(!boardCampaignFindMember(campaign, profile)) return cb?.({ ok:false, error:"not_campaign_member" });
+      if((await boardCampaignPreferences(profile)).get(campaign.campaignId)?.removedAt) return cb?.({ ok:false, error:"campaign_removed" });
       let mode = ["solo", "copy"].includes(String(payload.mode)) ? String(payload.mode) : "gather";
       const needsCopy = mode === "copy" || payload.backupRevision != null || payload.legacyBranch === true || (mode === "solo" && campaign.members.length > 1);
       if(needsCopy){
@@ -4184,6 +4273,7 @@ io.on("connection", (socket) => {
       }
       emitBoardLobby(room);
       return cb?.({ ok:true, campaignId:campaign.campaignId, revision:campaign.revision, campaign:serializeBoardCampaign(campaign, profile), mode, navigate:mode === "solo", roomCode:room.roomCode, lobby:serializeBoardLobby(room), hasState:!!room.gamePayload });
+      });
     }catch(error){
       return cb?.({ ok:false, error:error?.code === "ENOENT" ? "campaign_not_found" : String(error?.message || error) });
     }

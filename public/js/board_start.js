@@ -811,6 +811,8 @@
       campaign_not_found: "找不到這份共有航海紀錄。",
       not_campaign_member: "你不是這份共有航海紀錄的成員。",
       campaign_missing_save: "這份共有航海紀錄沒有可載入的進度。",
+      campaign_in_use: "請先離開正在使用這份紀錄的房間，再移到回收區。",
+      campaign_removed: "這份紀錄已在回收區，請先恢復後再開啟。",
       campaign_locked: "這場遊戲已經開始，不能中途加入。請等大家存檔後重新集合。",
       campaign_already_connected: "這名玩家已經在目前的集合局中，不能重複連入。",
       campaign_fixed_roster: "共有航海紀錄的成員與 CPU 席位不能在等待室更動。",
@@ -1113,21 +1115,31 @@
     return date.toLocaleString("zh-TW", { hour12: false });
   }
 
+  let campaignListView = "active";
+  let pendingCampaignRemoval = null;
+
   function renderCampaignList() {
     if (!refs.boardCampaignList || !refs.boardCampaignEmpty) return;
     refs.boardCampaignList.innerHTML = "";
-    const campaigns = Array.isArray(state.campaigns) ? state.campaigns : [];
+    const allCampaigns = Array.isArray(state.campaigns) ? state.campaigns : [];
+    const activeCampaigns = allCampaigns.filter(campaign => !campaign.removedAt);
+    const campaigns = allCampaigns.filter(campaign => campaignListView === "removed" ? campaign.removedAt : !campaign.removedAt);
+    document.querySelectorAll("[data-campaign-view]").forEach(button => {
+      const removed = button.dataset.campaignView === "removed";
+      button.textContent = `${removed ? "回收區" : "我的紀錄"}（${removed ? allCampaigns.length - activeCampaigns.length : activeCampaigns.length}）`;
+      button.setAttribute("aria-pressed", String(button.dataset.campaignView === campaignListView));
+    });
     if (localPreviewMode && refs.openCampaignsBtn) {
       refs.openCampaignsBtn.hidden = false;
     }
     if (refs.campaignMenuHint) {
-      refs.campaignMenuHint.textContent = campaigns.length
-        ? `${campaigns.length} 份可使用的航海紀錄`
+      refs.campaignMenuHint.textContent = activeCampaigns.length
+        ? `${activeCampaigns.length} 份可使用的航海紀錄`
         : (onlineReady() ? "目前沒有可繼續的共有紀錄" : "讀取這個帳號的個人與集合紀錄");
     }
     refs.boardCampaignEmpty.style.display = campaigns.length ? "none" : "block";
     refs.boardCampaignEmpty.textContent = onlineReady()
-      ? (accountProfileLocked
+      ? (campaignListView === "removed" ? "回收區目前沒有紀錄。已移除的紀錄可以在這裡恢復。" : accountProfileLocked
         ? "尚未有航海紀錄。開始新航海後隨時存檔，一周目也會保存在這裡。"
         : "這個本機測試玩家尚未存檔。正式帳號的紀錄會在登入後顯示。")
       : "正在連接伺服器並讀取這個帳號的航海紀錄…";
@@ -1181,10 +1193,11 @@
           ${campaign.parentCampaignId ? `<p class="campaign-record-note">來源紀錄 ${escapeCampaignText(campaign.parentCampaignId)}；此副本獨立保存。</p>` : ""}
         </div>
         <div class="campaign-save-actions">
-          <button type="button" class="campaign-action" data-campaign-continue>${isSolo ? "繼續航海" : gatherLabel}</button>
+          ${campaign.removedAt ? `<button type="button" class="campaign-action" data-campaign-restore>恢復紀錄</button><span class="campaign-record-note">${escapeCampaignText(formatCampaignTime(campaign.removedAt))} 移除</span>` : `<button type="button" class="campaign-action" data-campaign-continue>${isSolo ? "繼續航海" : gatherLabel}</button>
           <button type="button" class="campaign-action secondary" data-campaign-copy>另存個人副本</button>
+          <button type="button" class="campaign-action danger" data-campaign-remove>${isSolo ? "刪除紀錄" : "從我的清單移除"}</button>`}
         </div>
-        <details class="campaign-manage">
+        <details class="campaign-manage" ${campaign.removedAt ? "hidden" : ""}>
           <summary>管理名稱與備份</summary>
           <form class="campaign-rename-form">
             <label>紀錄名稱<input data-campaign-name maxlength="60" required value="${escapeCampaignText(campaign.name || campaign.roomName || "航海紀錄")}"></label>
@@ -1195,8 +1208,10 @@
           ${campaign.legacyBranch ? '<button type="button" class="campaign-action secondary" data-legacy-branch>將舊個人分流另存副本</button>' : ""}
         </details>
       `;
-      card.querySelector("[data-campaign-continue]").addEventListener("click", () => openBoardCampaign(campaign.campaignId, isSolo ? "solo" : "gather"));
-      card.querySelector("[data-campaign-copy]").addEventListener("click", () => openBoardCampaign(campaign.campaignId, "copy"));
+      card.querySelector("[data-campaign-continue]")?.addEventListener("click", () => openBoardCampaign(campaign.campaignId, isSolo ? "solo" : "gather"));
+      card.querySelector("[data-campaign-copy]")?.addEventListener("click", () => openBoardCampaign(campaign.campaignId, "copy"));
+      card.querySelector("[data-campaign-remove]")?.addEventListener("click", () => confirmCampaignRemoval(campaign));
+      card.querySelector("[data-campaign-restore]")?.addEventListener("click", () => updateCampaignVisibility(campaign, "restore"));
       card.querySelectorAll("[data-backup-revision]").forEach((button) => button.addEventListener("click", () => openBoardCampaign(campaign.campaignId, "copy", { backupRevision: Number(button.dataset.backupRevision) })));
       card.querySelector("[data-legacy-branch]")?.addEventListener("click", () => openBoardCampaign(campaign.campaignId, "copy", { legacyBranch: true }));
       card.querySelector("form").addEventListener("submit", async (event) => {
@@ -1211,9 +1226,28 @@
     });
   }
 
+  function confirmCampaignRemoval(campaign) {
+    if (campaignOperationPending) return;
+    const dialog = document.getElementById("campaignRemoveDialog");
+    pendingCampaignRemoval = { ...campaign, accountUserId:Number(profile.userId) };
+    document.getElementById("campaignRemoveName").textContent = campaign.name || campaign.roomName || "航海紀錄";
+    document.getElementById("campaignRemoveScope").textContent = campaign.members.length > 1
+      ? "只會從你的清單移到回收區，同團玩家仍能繼續使用。你可以隨時恢復，進度與備份都會保留。"
+      : "這份紀錄會移到回收區，進度與備份都會保留。想繼續航海時，可從回收區恢復。";
+    dialog.showModal();
+    document.getElementById("campaignRemoveCancel").focus();
+  }
+
+  async function updateCampaignVisibility(campaign, action) {
+    if (campaign.accountUserId && Number(profile.userId) !== campaign.accountUserId) return;
+    const result = await campaignRequest("BOARD_CAMPAIGN_VISIBILITY", { action, campaignId:campaign.campaignId, expectedRevision:Number(campaign.revision || 0), expectedVisibilityRevision:Number(campaign.visibilityRevision || 0) });
+    if (result?.ok) shared.showToast(action === "restore" ? "航海紀錄已恢復。" : "已移到你的回收區，可隨時恢復。");
+    requestCampaignList();
+  }
+
   function requestCampaignList() {
     if (!onlineReady()) return false;
-    boardSocket.socket.emit("BOARD_CAMPAIGN_LIST", { profile: boardProfilePayload() }, (result = {}) => {
+    boardSocket.socket.emit("BOARD_CAMPAIGN_LIST", { profile: boardProfilePayload(), includeRemoved:true }, (result = {}) => {
       if (!result.ok) {
         if (refs.boardCampaignEmpty && !state.campaigns?.length) refs.boardCampaignEmpty.textContent = result.error === "auth_required" ? "正在驗證帳號，登入完成後會載入紀錄。" : "紀錄暫時讀取失敗，請按重新整理。";
         return;
@@ -1730,6 +1764,7 @@
       state.rooms = message.rooms;
       renderRoomList();
     });
+    boardSocket.socket.on("BOARD_CAMPAIGN_VISIBILITY_UPDATED", () => requestCampaignList());
     boardSocket.socket.on("BOARD_CAMPAIGN_LIST", (message = {}) => {
       if (!Array.isArray(message.campaigns)) return;
       state.campaigns = message.campaigns;
@@ -1812,6 +1847,17 @@
       renderSocialSummary(event.detail || {});
       if (event.detail?.ready && !campaignAccountReady) requestCampaignList();
       campaignAccountReady = Boolean(event.detail?.ready);
+    });
+    document.querySelectorAll("[data-campaign-view]").forEach(button => button.addEventListener("click", () => {
+      campaignListView = button.dataset.campaignView;
+      renderCampaignList();
+    }));
+    document.getElementById("campaignRemoveCancel")?.addEventListener("click", () => document.getElementById("campaignRemoveDialog").close());
+    document.getElementById("campaignRemoveDialog")?.addEventListener("close", () => { pendingCampaignRemoval = null; });
+    document.getElementById("campaignRemoveConfirm")?.addEventListener("click", () => {
+      const campaign = pendingCampaignRemoval;
+      document.getElementById("campaignRemoveDialog").close();
+      if (campaign) void updateCampaignVisibility(campaign, "remove");
     });
     document.getElementById("refreshCampaignsBtn")?.addEventListener("click", () => { requestCampaignList(); renderLocalCampaignSaves(); });
     document.getElementById("campaignImportPanel")?.addEventListener("toggle", (event) => { if (event.target.open) renderLocalCampaignSaves(); });

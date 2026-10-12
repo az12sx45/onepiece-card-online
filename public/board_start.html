@@ -1178,6 +1178,14 @@
       font-weight:900;color:#062435;background:linear-gradient(135deg,#f6c85f,#ffe8a3);
       box-shadow:0 8px 18px rgba(0,0,0,.18);
     }
+    .campaign-action.danger{background:#2b2430;color:#f5b9b0;border:1px solid #b5787266}
+    .campaign-view-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+    .campaign-view-tabs [aria-pressed="true"]{outline:2px solid #efc970;outline-offset:2px}
+    .campaign-remove-dialog{box-sizing:border-box;width:min(500px,calc(100vw - 36px));padding:26px;border:1px solid #b99654;border-radius:18px;background:#0b2435;color:#e8f5f3;box-shadow:0 20px 90px #0009}
+    .campaign-remove-dialog::backdrop{background:#020b16bb;backdrop-filter:blur(4px)}
+    .campaign-remove-dialog h3{margin:0 0 18px;color:#ffe2a0}
+    #campaignRemoveName{font-size:18px;font-weight:800;overflow-wrap:anywhere}
+    .campaign-remove-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:22px}
     .campaign-action.secondary{color:#eafaff;background:linear-gradient(135deg,#177d8d,#28a6ae)}
     .campaign-action:disabled{cursor:not-allowed;opacity:.55}
     .campaign-save-card > div{min-width:0}
@@ -2312,6 +2320,10 @@
           <button type="button" class="campaign-action secondary" id="refreshCampaignsBtn">重新整理</button>
         </div>
         <p class="campaign-record-note">一周目就能保存整場航海。原團成員共用同一份紀錄；想自己先玩，請另存個人副本。</p>
+        <div class="campaign-view-tabs" role="group" aria-label="航海紀錄分類">
+          <button type="button" class="campaign-action secondary" data-campaign-view="active" aria-pressed="true">我的紀錄</button>
+          <button type="button" class="campaign-action secondary" data-campaign-view="removed" aria-pressed="false">回收區</button>
+        </div>
         <div class="campaign-save-list" id="boardCampaignList"></div>
         <div class="campaign-save-empty" id="boardCampaignEmpty">正在讀取這個帳號的航海紀錄…</div>
         <details class="campaign-manage campaign-import" id="campaignImportPanel">
@@ -2441,6 +2453,16 @@
     </section>
 
   </main>
+
+  <dialog class="campaign-remove-dialog" id="campaignRemoveDialog" aria-labelledby="campaignRemoveTitle" aria-describedby="campaignRemoveName campaignRemoveScope">
+    <h3 id="campaignRemoveTitle">移到你的回收區？</h3>
+    <p id="campaignRemoveName"></p>
+    <p class="campaign-record-note" id="campaignRemoveScope"></p>
+    <div class="campaign-remove-actions">
+      <button type="button" class="campaign-action secondary" id="campaignRemoveCancel">取消</button>
+      <button type="button" class="campaign-action danger" id="campaignRemoveConfirm">確認移除</button>
+    </div>
+  </dialog>
 
   <div class="portable-asset-gate" id="portableAssetGate" role="status" aria-live="polite" hidden>
     <div class="portable-asset-gate-card">

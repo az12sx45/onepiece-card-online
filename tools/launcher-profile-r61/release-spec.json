@@ -1,0 +1,19 @@
+{
+  "baseline": "bbcdeaf06188c0104f62eee754d678af0d2ce038",
+  "revision": 61,
+  "coreVersion": "1.2.23",
+  "gamePrograms": [
+    "board_start.html",
+    "js/board_start.js"
+  ],
+  "rendererFiles": [
+    "launcher.html",
+    "launcher.js",
+    "launcher-profile-shop.js",
+    "launcher-profile-shop.css"
+  ],
+  "images": [
+    "images/launcher_profile/captain-card-wide-r61.webp",
+    "images/launcher_announcements/launcher-profile-r61.webp"
+  ]
+}

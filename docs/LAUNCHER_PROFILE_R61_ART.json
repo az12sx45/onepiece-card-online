@@ -1,0 +1,16 @@
+{
+  "tool": "built-in GPT image_gen",
+  "prompt": "Create a finished raster background asset for a ONE PIECE game launcher player identity card. A very wide panoramic 3:1 horizontal banner, target 1800x600 pixels. This is the background ONLY: no text, no typography, no interface, no portrait frames, no logos, no people, no characters. Premium crisp hand-painted anime adventure art, cohesive inked linework and detailed cel-shaded color. RIGHT 55 percent: recognizable Thousand Sunny ship deck details, rich warm timber, curved ivory railing, green lawn edge, mast rigging and brilliant turquoise ocean with distant islands under warm golden late afternoon light. Composition should feel like aboard the Thousand Sunny, not a generic pirate skull castle. LEFT 45 percent: very quiet deep navy and dark teal shaded deck area merging naturally with ocean atmosphere, deliberately low contrast with ample blank space to receive the user's circular avatar and readable name overlay. Keep objects restrained; wide depth and tasteful composition, no bulky furniture or close-up props blocking the content area. Slight antique brass and sunlit gold accents to match a dark ocean and gold game UI. Entire scene must fit within the panoramic 3:1 canvas, safe 24px margin on all sides, important scene detail fully inside right area and no decorative frame touching outer edge. Make the exact 3:1 panoramic card asset, not a mockup on a page.",
+  "source": "C:/Users/王曜瑋/.codex/generated_images/01a0d3fa-03ef-7ec1-8eff-2ae51b74567e/exec-02d361bc-630b-43a2-b072-99abcc2d7acb.png",
+  "sourceSize": [
+    2172,
+    724
+  ],
+  "output": "public/images/launcher_profile/captain-card-wide-r61.webp",
+  "size": [
+    1800,
+    600
+  ],
+  "method": "whole composition resized to delivery dimensions and encoded WebP",
+  "sha256": "4d3871d87088131703dafab27d1a28c9c3fdff0f136c943cc6ebb60e6e743cd5"
+}

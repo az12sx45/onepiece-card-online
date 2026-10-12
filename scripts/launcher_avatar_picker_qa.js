@@ -82,7 +82,7 @@ async function select(page, id) { await page.locator(`#avatarPickerGrid [data-av
       await page.locator('#profileCardAvatarChoose').click(); await select(page, 152); await page.locator('#avatarPickerApply').click();
       await page.waitForFunction(() => !document.getElementById('avatarPickerDialog').open);
       check(label + ' avatar save preserves unsaved name and tagline fields', await page.locator('#profileCardName').inputValue() === '尚未儲存的新名字' && await page.locator('#profileCardTagline').inputValue() === '還在編輯的宣言');
-      check(label + ' avatar-only command uses persisted text and updates actual hero', await page.evaluate(() => window.__guestbookQa.avatarSaves.length === 1 && window.__guestbookQa.avatarSaves[0].displayName === '測試船長' && window.__guestbookQa.avatarSaves[0].tagline !== '還在編輯的宣言' && window.__guestbookQa.avatarSaves[0].avatarId === 152 && document.getElementById('profileHeroAvatar').src.endsWith('/152.webp')));
+      check(label + ' editor selection stays in the draft until explicit card save', await page.evaluate(() => window.__guestbookQa.avatarSaves.length === 0 && document.getElementById('profileCardAvatar').value === '152' && document.querySelector('#profileCardPreview .captain-hero-avatar > img').src.endsWith('/152.webp') && document.getElementById('profileHeroAvatar').src.endsWith('/222.webp')));
       await page.locator('#profileCardSave').click();
       await page.waitForFunction(() => document.getElementById('profileCardEditor').hidden);
       check(label + ' explicit card save later preserves chosen avatar and commits draft text', await page.evaluate(() => window.__guestbookQa.profiles[42].card.avatarId === 152 && window.__guestbookQa.profiles[42].card.displayName === '尚未儲存的新名字'));

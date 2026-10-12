@@ -107,6 +107,7 @@
   let decorBusy = false;
   let cardMutation = 0;
   let avatarPicker = null;
+  let avatarPickerRequested = false;
   let bgmSource = '';
   let bgmPlaylist = [];
   let bgmIndex = 0;
@@ -159,9 +160,10 @@
     const layoutId = String(appearance.layoutId || 'layout-default');
     hero.dataset.layout = ['layout-grand-line', 'layout-bounty-board', 'layout-captain-quarters', 'layout-sunny-deck', 'layout-sunny-kitchen', 'layout-sunny-library'].includes(layoutId) ? layoutId : 'layout-default';
     const background = items.background?.id === appearance.backgroundId ? safeImageAsset(items.background?.asset) : '';
-    const wall = imageFor('wall', appearance.wallId);
+    const wall = number(appearance.wallId) > 1 ? imageFor('wall', appearance.wallId) : '';
     const cardArt = background || wall;
-    $('profileHeroArt').style.backgroundImage = cardArt ? `linear-gradient(90deg, #04141eee, #04141e99 68%, #04141e55), url("${cardArt}")` : '';
+    hero.classList.toggle('has-card-art', Boolean(cardArt));
+    $('profileHeroArt').style.backgroundImage = cardArt ? `url("${cardArt}")` : '';
     const frame = items.frame?.id === appearance.frameId ? safeImageAsset(items.frame?.asset) : '';
     $('profileHeroFrame').hidden = !frame;
     $('profileHeroFrame').style.backgroundImage = frame ? `url("${frame}")` : '';
@@ -176,12 +178,13 @@
       if (!source || item?.id !== appearance.decorations?.[slot]) continue;
       const position = slotPlacement(appearance.decorationPlacement, slot);
       const img = el('img', 'captain-hero-sticker'); img.alt = ''; img.src = source; img.dataset.slot = slot;
-      img.style.left = `${position.x}%`; img.style.top = `${position.y}%`; img.style.setProperty('--scale', String(position.scale));
+      img.style.setProperty('--x', `${position.x}%`); img.style.setProperty('--y', `${position.y}%`); img.style.setProperty('--scale', String(position.scale));
       stickers.append(img);
     }
     $('profileCardEdit').hidden = !own || !p.isSelf || !accountId || preview;
     $('profileAvatarEdit').hidden = !own || !p.isSelf || !accountId || preview;
-    if (!own || !p.isSelf || !accountId || preview) $('profileCardEditor').hidden = true;
+    if (!own || !p.isSelf || !accountId || preview) hideCardEditor();
+    else if (!$('profileCardEditor').hidden) renderCardPreview();
   }
   function publishAccountAvatar(p){
     if(!p?.isSelf||number(p.userId)!==accountId)return;
@@ -504,16 +507,17 @@
     $('profileCardAvatarImage').src = imageFor('avatar', id);
     avatarFallback($('profileCardAvatarImage'));
     $('profileCardAvatarName').textContent = avatarName(id);
+    if (!$('profileCardEditor').hidden) renderCardPreview();
   }
   function renderAvatarSelection() {
     if (!avatarPicker) return;
-    const { selected, busy } = avatarPicker, current = cardAvatarId(profile), usable = usableAvatarIds().has(selected);
+    const { selected, busy } = avatarPicker, current = avatarPicker.editing ? number($('profileCardAvatar').value) || cardAvatarId(profile) : cardAvatarId(profile), usable = usableAvatarIds().has(selected);
     $('avatarPickerCurrentImage').src = imageFor('avatar', current);
     $('avatarPickerCurrentName').textContent = avatarName(current);
     $('avatarPickerImage').src = imageFor('avatar', selected);
     $('avatarPickerName').textContent = avatarName(selected);
     $('avatarPickerLabel').textContent = selected === current ? '目前使用' : usable ? '待套用' : '尚未收藏 · 僅供預覽';
-    $('avatarPickerApply').textContent = busy ? '正在儲存…' : selected === current ? '目前使用中' : usable ? '使用這個頭像' : '尚未收藏';
+    $('avatarPickerApply').textContent = busy ? '正在儲存…' : selected === current ? '目前使用中' : usable ? avatarPicker.editing ? '選入名片' : '使用這個頭像' : '尚未收藏';
     $('avatarPickerApply').disabled = busy || !usable || selected === current;
     $('avatarPickerCancel').disabled = busy;
     $('avatarPickerClose').disabled = busy;
@@ -537,14 +541,21 @@
     const ids = Array.from({ length: MAX_AVATAR_ID }, (_, i) => i + 1).filter(id =>
       (avatarPicker.filter === 'all' || usable.has(id)) && (!query || `${avatarName(id)} ${id}`.toLocaleLowerCase('zh-TW').includes(query)));
     if (avatarPicker.filter === 'owned') ids.sort((a, b) => (a === current ? -1 : b === current ? 1 : a > 30 && b <= 30 ? -1 : b > 30 && a <= 30 ? 1 : a > 30 ? b - a : a - b));
-    const grid = $('avatarPickerGrid'); grid.replaceChildren();
+    const grid = $('avatarPickerGrid'), cards = [];
     for (const [index, id] of ids.entries()) {
-      const button = el('button', 'captain-avatar-option'); button.type = 'button'; button.dataset.avatarId = String(id);
+      let button = avatarPicker.cards.get(id);
+      if (!button) {
+        button = el('button', 'captain-avatar-option'); button.type = 'button'; button.dataset.avatarId = String(id);
+        const image = el('img'); image.alt = ''; image.src = imageFor('avatar', id); image.loading = index < 16 ? 'eager' : 'lazy'; image.decoding = 'async'; avatarFallback(image);
+        button.append(image, el('strong', '', avatarName(id)), el('small'));
+        button.onclick = () => chooseAvatar(id); avatarPicker.cards.set(id, button);
+      }
       button.setAttribute('role', 'radio'); button.setAttribute('aria-label', `${avatarName(id)}，${usable.has(id) ? id <= 30 ? '免費' : '已收藏' : '尚未收藏，僅供預覽'}`);
-      const image = el('img'); image.alt = ''; image.src = imageFor('avatar', id); image.loading = index < 12 ? 'eager' : 'lazy'; image.decoding = 'async'; avatarFallback(image);
-      button.append(image, el('strong', '', avatarName(id)), el('small', '', id === cardAvatarId(profile) ? '使用中' : usable.has(id) ? id <= 30 ? '免費' : '已收藏' : '未收藏'));
-      button.classList.toggle('is-locked', !usable.has(id)); button.onclick = () => chooseAvatar(id); grid.append(button);
+      button.querySelector('small').textContent = id === cardAvatarId(profile) ? '使用中' : usable.has(id) ? id <= 30 ? '免費' : '已收藏' : '未收藏';
+      button.classList.toggle('is-locked', !usable.has(id)); cards.push(button);
     }
+    // Wallet/profile refreshes must not replace a button while the player is clicking it.
+    if (grid.children.length !== cards.length || cards.some((card, index) => grid.children[index] !== card)) grid.replaceChildren(...cards);
     $('avatarPickerEmpty').hidden = ids.length > 0;
     $('avatarPickerCount').textContent = `${ids.length} 款頭像`;
     for (const button of $('avatarPickerFilters').children) button.setAttribute('aria-pressed', String(button.dataset.filter === avatarPicker.filter));
@@ -552,7 +563,8 @@
   }
   function openAvatarPicker() {
     if (!profile?.isSelf || !accountId || preview || viewUserId || cardBusy || decorBusy) return;
-    avatarPicker = { selected: cardAvatarId(profile), filter: 'owned', busy: false, opener: document.activeElement };
+    const editing = !$('profileCardEditor').hidden;
+    avatarPicker = { selected: editing ? number($('profileCardAvatar').value) || cardAvatarId(profile) : cardAvatarId(profile), filter: 'owned', busy: false, editing, cards: new Map(), opener: document.activeElement };
     $('avatarPickerSearch').value = ''; status('avatarPickerStatus', ''); renderAvatarGrid();
     $('avatarPickerDialog').showModal();
     const selected = $('avatarPickerGrid').querySelector('[aria-checked="true"]');
@@ -567,6 +579,10 @@
   async function saveAvatarSelection() {
     const picker = avatarPicker;
     if (!picker || picker.busy || cardBusy || decorBusy || !profile?.isSelf || !accountId || preview || viewUserId || !usableAvatarIds().has(picker.selected)) return;
+    if (picker.editing) {
+      $('profileCardAvatar').value = String(picker.selected); renderCardAvatarChoice(); closeAvatarPicker();
+      status('profileCardStatus', '頭像已選入預覽，按「儲存名片」一起套用。'); return;
+    }
     const owner = accountId, userId = number(profile.userId), mutation = ++cardMutation;
     const card = { displayName: cardDisplayName(profile), tagline: cardTagline(profile), avatarId: picker.selected };
     // Avatar-only save uses the persisted card text. Keep any unsaved editor text intact.
@@ -597,7 +613,7 @@
     const equipped = SLOTS.filter(([slot]) => items[slot]?.id && items[slot].id === profile?.appearance?.decorations?.[slot]);
     root.hidden = !equipped.length;
     if (!equipped.length) return;
-    root.append(el('strong', '', '名片貼紙位置'));
+    root.append(el('strong', '', '名片貼紙位置'), el('p', 'captain-card-preview-note', '貼紙位置使用各自的儲存按鈕，會立即套用；取消名片只會捨棄名稱、宣言與頭像的草稿。'));
     const group = el('div', 'captain-decor-controls');
     for (const [slot, label] of equipped) {
       const current = slotPlacement(profile?.appearance?.decorationPlacement, slot);
@@ -609,10 +625,10 @@
         const value = el('output', '', field === 'scale' ? `${Math.round(current[field] * 100)}%` : `${Math.round(current[field])}%`);
         input.oninput = () => {
           value.textContent = field === 'scale' ? `${Math.round(Number(input.value) * 100)}%` : `${Math.round(Number(input.value))}%`;
-          const sticker = $('profileHeroStickers').querySelector(`[data-slot="${slot}"]`);
+          const sticker = $('profileCardPreview').querySelector(`.captain-hero-sticker[data-slot="${slot}"]`);
           if (sticker) {
-            if (field === 'x') sticker.style.left = `${input.value}%`;
-            if (field === 'y') sticker.style.top = `${input.value}%`;
+            if (field === 'x') sticker.style.setProperty('--x', `${input.value}%`);
+            if (field === 'y') sticker.style.setProperty('--y', `${input.value}%`);
             if (field === 'scale') sticker.style.setProperty('--scale', input.value);
           }
         };
@@ -641,15 +657,41 @@
     } catch { if (current()) { renderHero(); status('profileCardStatus', errorText('offline'), true); } }
     finally { if (current()) { decorBusy = false; $('profileCardSave').disabled = false; $('profileCardCancel').disabled = false; renderCardDecorControls(); } }
   }
-  function closeCardEditor() {
+  function hideCardEditor() {
+    $('profileCardEditor').hidden = true;
+    if ($('profileCardDialog').open) $('profileCardDialog').close();
+  }
+  function renderCardPreview() {
+    if ($('profileCardEditor').hidden) return;
+    const copy = $('profileHero').cloneNode(true);
+    copy.removeAttribute('id'); copy.classList.add('captain-card-preview');
+    for (const node of copy.querySelectorAll('[id]')) node.removeAttribute('id');
+    for (const button of copy.querySelectorAll('button')) button.remove();
+    copy.querySelector('.captain-hero-copy h3').textContent = $('profileCardName').value.trim() || cardDisplayName(profile);
+    copy.querySelector('.captain-hero-copy p:not(.eyebrow)').textContent = $('profileCardTagline').value;
+    copy.querySelector('.captain-hero-avatar > img').src = imageFor('avatar', number($('profileCardAvatar').value) || cardAvatarId(profile));
+    for (const control of $('profileCardDecorControls').querySelectorAll('.captain-decor-slot')) {
+      const sticker = copy.querySelector(`.captain-hero-sticker[data-slot="${control.dataset.slot}"]`);
+      if (!sticker) continue;
+      for (const input of control.querySelectorAll('input[data-field]')) {
+        if (input.dataset.field === 'x') sticker.style.setProperty('--x', `${input.value}%`);
+        if (input.dataset.field === 'y') sticker.style.setProperty('--y', `${input.value}%`);
+        if (input.dataset.field === 'scale') sticker.style.setProperty('--scale', input.value);
+      }
+    }
+    $('profileCardPreview').replaceChildren(copy);
+  }
+  function closeCardEditor(force = false) {
+    if ((cardBusy || decorBusy) && !force) return;
     cardMutation++;
     cardBusy = false;
     decorBusy = false;
-    $('profileCardEditor').hidden = true;
+    hideCardEditor();
     $('profileCardSave').disabled = false;
     $('profileCardCancel').disabled = false;
     status('profileCardStatus', '');
     renderHero();
+    if (!force && !$('profileCardEdit').hidden) $('profileCardEdit').focus({ preventScroll: true });
   }
   function openCardEditor() {
     if (!profile?.isSelf || !accountId || preview) return;
@@ -659,6 +701,8 @@
     renderCardDecorControls();
     status('profileCardStatus', '');
     $('profileCardEditor').hidden = false;
+    renderCardPreview();
+    $('profileCardDialog').showModal();
     $('profileCardName').focus();
   }
   async function saveCard(event) {
@@ -687,7 +731,7 @@
       if (!result?.ok || !result.profile) { status('profileCardStatus', errorText(result?.error), true); return; }
       profile = result.profile;
       if (result.shop) acceptShopSnapshot(result.shop);
-      $('profileCardEditor').hidden = true;
+      hideCardEditor();
       renderProfile();
       status('profileStatus', '名片已儲存。');
     } catch { if (current()) status('profileCardStatus', errorText('offline'), true); }
@@ -709,6 +753,7 @@
       if (requestId !== profileRequest) return;
       if (!result?.ok || !result.profile) { profile = null; renderProfile(); status('profileStatus', errorText(result?.error), true); return; }
       profile = result.profile; renderProfile(); status('profileStatus', '');
+      if (avatarPickerRequested && profile.isSelf) { avatarPickerRequested = false; openAvatarPicker(); }
       if (roomEditorRequested && profile.isSelf) { roomEditorRequested = false; window.LauncherRoom?.openEditor(); }
       loadComments(); loadStationery();
     } catch {
@@ -1161,7 +1206,11 @@
     const next = event.key === 'Home' ? 0 : event.key === 'End' ? nodes.length - 1 : Math.max(0, Math.min(nodes.length - 1, index + ({ ArrowLeft: -1, ArrowRight: 1, ArrowUp: -columns, ArrowDown: columns })[event.key]));
     chooseAvatar(Number(nodes[next].dataset.avatarId)); nodes[next].focus(); nodes[next].scrollIntoView({ block: 'nearest' });
   });
-  $('profileCardCancel').onclick = closeCardEditor;
+  $('profileCardCancel').onclick = () => closeCardEditor();
+  $('profileCardClose').onclick = () => closeCardEditor();
+  $('profileCardDialog').addEventListener('cancel', event => { event.preventDefault(); closeCardEditor(); });
+  $('profileCardName').oninput = renderCardPreview;
+  $('profileCardTagline').oninput = renderCardPreview;
   $('profileCardEditor').onsubmit = saveCard;
   $('profileCardAvatar').onchange = () => {
     renderCardAvatarChoice();
@@ -1208,6 +1257,7 @@
       const isPreview = snapshot?.previewMode === true;
       if (id === accountId && isPreview === preview) return;
       closeAvatarPicker(true);
+      hideCardEditor(); avatarPickerRequested = false;
       closeItemPreview();
       stopShopPreview();
       clearBgm(); profileVisible = false;
@@ -1229,6 +1279,7 @@
     },
     openProfile(userId = 0) {
       closeAvatarPicker(true);
+      hideCardEditor(); avatarPickerRequested = false;
       closeItemPreview();
       const id = number(userId);
       clearBgm();
@@ -1242,7 +1293,7 @@
       else loadProfile();
     },
     onVisible(panel) {
-      if (panel !== 'profile') closeAvatarPicker(true);
+      if (panel !== 'profile') { closeAvatarPicker(true); closeCardEditor(true); avatarPickerRequested = false; }
       if (previewedItem && panel !== previewPanel) closeItemPreview();
       if (panel !== 'shop') stopShopPreview();
       if (panel !== 'profile') { profileVisible = false; stopBgm(); }
@@ -1260,6 +1311,11 @@
       shopTab = category;
       window.launcherSwitchPanel?.('shop');
       renderShopTabs(); renderShop();
+    },
+    openAvatarSelection() {
+      if (!accountId || preview) return;
+      if (profile?.isSelf && !viewUserId) { window.launcherSwitchPanel?.('profile'); openAvatarPicker(); }
+      else { this.openProfile(0); avatarPickerRequested = true; }
     },
     openShop(itemId) {
       if (typeof itemId !== 'string' || !/^[a-z0-9-]{1,100}$/.test(itemId)) return;

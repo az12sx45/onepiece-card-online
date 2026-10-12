@@ -8304,3 +8304,16 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - r60封裝完成：source 290f5d67859a5956519e54ecd2adb12b3b78b471；317檔簽章SHA256 c15a6947fcbae51c1e05b5ca4518731b0a978d8f186c8030c32d9b7c2b03575d。4個啟動器blob公開HEAD/GET/大小/SHA通過；候選59→60下載335321 bytes、317檔校驗、316個舊blob保留與二次0下載通過。Board只替換3個program blob共3613111 bytes，沿用平順航行基線；Card/Chess manifest不變。實際core三遊戲112個program route全部命中、網路fallback 0。公開切版及正式cache待讀回。
 
 - r60公開交付完成：release 41b020c91d4b60fd5fea20b3fc5f641319d979e6；公開317檔簽章清單SHA256 c15a6947fcbae51c1e05b5ca4518731b0a978d8f186c8030c32d9b7c2b03575d與候選逐byte相同，三款遊戲catalog/manifest/runtime-package、3個Board blob及4個launcher blob公開大小/SHA通過；商城330項逐record對上server權威目錄。正式cache在本次讀回前已是r60，317檔完整校驗、316個舊blob保留與再次檢查0下載通過；未觀察先前自動下載量，沒有倒退cache。335321 bytes僅為已實測候選59→60差分。CDN壓縮HEAD不提供大小，驗證改要求identity並保留精確GET大小/SHA檢查。Render最後控制台因CDP逾時未讀回，不宣稱其Live標籤；本次公開完成依精確manifest/production runtime讀回判定。完整收據docs/LAUNCHER_AVATAR_R60_RELEASE.json；正式玩家帳號未操作。
+
+
+## 2026-10-12 r61 名片編輯與航海紀錄回收
+
+正式來源 D:/Codex_Release_Worktrees/launcher-flick-reward-r12，基線 bbcdeaf06188c0104f62eee754d678af0d2ce038 已核對公開r60清單SHA與origin/main一致。保留原有iOS文件、rank圖與未发布r54圖。本階段沒有可呼叫LATTICE runtime/task API，未捏造任務或圖譜寫入。
+
+- desktop/launcher.html、launcher.js、launcher-profile-shop.js/css：名片編輯移到獨立視窗，展示名片尺寸穩定、完整圖像contain，編輯有即時預覽與固定儲存/取消；選頭像保留原按鈕節點避免資料刷新吞點擊，較小視窗增加可見項目。帳號選單新增更換頭像入口，編輯內選圖先存草稿，確認儲存才套用。
+- public/images/launcher_profile/captain-card-wide-r61.webp：GPT image_gen繪製3:1名片預設背景，1800×600，左側深青留白、右側千陽號甲板與海景。完整prompt及生成來源見docs/LAUNCHER_PROFILE_R61_ART.json。既有購買背景不改圖，以完整畫面呈現。
+- server/index.js、public/board_start.html、public/js/board_start.js：航海紀錄新增個人回收區與恢復。資料保存在獨立board_campaign_preferences表／開發本機偏好檔，伺服器驗證登入身分、成員資格、存檔revision和個人visibilityRevision；使用中紀錄先離開房間。共用進度、備份與gameState不刪除或改寫，其他成員自動存檔不使個人移除失效。
+- scripts/launcher_profile_editor_r61_qa.js、board_voyage_record_delete_qa.js與D:/Codex_QA/launcher-profile-r61/audit：實際renderer重現/操作、隔離SQL與雙帳號Chromium檢查；詳細通過項目待source收據定稿，尚未以本地QA冒充公開部署。
+- tools/launcher-profile-r61/*、scripts/launcher_profile_r61_package_qa.js：鎖定來源commit的差分建置，僅更新明列renderer/圖片與Board入口程式，完整保留其他兩款package與既有Board程式；續用core1.2.23，不重建安裝檔。
+
+- r61來源驗收完成：editor/report.json 101項PASS；records/report.json 48項PASS；audit/final-report.json 33項PASS；startup-report.json 6項PASS；announcement-report.json 82項PASS；local-loading/report.json 21項PASS。首次目視檢查另外攔下頭像卡狀態文字外溢與貼紙邊缘裁切，修正後重新檢查。完整source/report SHA見docs/LAUNCHER_PROFILE_R61.json，正式玩家資料未操作，公開差分尚待獨立讀回。

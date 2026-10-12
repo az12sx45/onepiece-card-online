@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 70,
+  "revision": 71,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r61-profile-records",
+      "status": "published",
+      "publishedAt": "2026-10-12T13:11:11.748Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r61",
+      "title": "名片重新設計，航海紀錄輕鬆整理",
+      "summary": "修正頭像按不到與名片裁圖，加入完整名片預覽；航海錄可移除不需要的存檔，並從回收區恢復。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-profile-r61.webp",
+        "alt": "新版名片編輯器實際畫面：千陽號海景名片、圓形頭像預覽與固定儲存按鈕"
+      },
+      "body": [
+        "名片編輯改為獨立視窗，完整預覽名稱、宣言與頭像；新繪製的千陽號海景背景符合名片比例，已收藏的背景完整呈現。",
+        "頭像網格修正資料刷新時吞掉點擊的問題，較小視窗也能看見更多圖片。點右上角帳號選單可直接更換頭像；在編輯名片裡選圖時，按「儲存名片」才一起套用，取消就保留原樣。",
+        "新世界航海錄的紀錄卡新增「刪除紀錄」，多人共用紀錄顯示「從我的清單移除」。確認後進入帳號自己的回收區，隨時可恢復；同團玩家仍可繼續使用，進度與備份都保留。",
+        "本次沿用差分更新，無須重新安裝。重新開啟啟動器與航海錄，即可載入新版介面。頭像仍共用於啟動器與三款遊戲。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r60-avatar-picker-sync",
       "status": "published",
