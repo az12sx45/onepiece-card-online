@@ -1960,3 +1960,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - public/images/launcher_profile/captain-card-wide-r61.webp、docs/LAUNCHER_PROFILE_R61_ART.json：本次GPT預設名片背景與生成規格。
 - server/index.js：board_campaign_preferences及BOARD_CAMPAIGN_VISIBILITY；public/board_start.html、public/js/board_start.js提供確認、回收區和恢復。
 - scripts/launcher_profile_editor_r61_qa.js、board_voyage_record_delete_qa.js：隔離UI/持久化/權限驗證；tools/launcher-profile-r61與scripts/launcher_profile_r61_package_qa.js為差分封裝及core路由檢查。
+
+- docs/LAUNCHER_PROFILE_R61_RELEASE.json：r61公開catalog/manifest/immutable blob、正式cache差分與新存檔回收API權限拒絕的驗收收據。

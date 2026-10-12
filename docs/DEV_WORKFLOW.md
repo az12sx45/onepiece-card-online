@@ -8317,3 +8317,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - tools/launcher-profile-r61/*、scripts/launcher_profile_r61_package_qa.js：鎖定來源commit的差分建置，僅更新明列renderer/圖片與Board入口程式，完整保留其他兩款package與既有Board程式；續用core1.2.23，不重建安裝檔。
 
 - r61來源驗收完成：editor/report.json 101項PASS；records/report.json 48項PASS；audit/final-report.json 33項PASS；startup-report.json 6項PASS；announcement-report.json 82項PASS；local-loading/report.json 21項PASS。首次目視檢查另外攔下頭像卡狀態文字外溢與貼紙邊缘裁切，修正後重新檢查。完整source/report SHA見docs/LAUNCHER_PROFILE_R61.json，正式玩家資料未操作，公開差分尚待獨立讀回。
+
+- r61公開交付完成：release a94cb872c5e92ddbcfb816a24bf8a6b6fc0a9779；公開簽章清單SHA256 4660dc45ef7a5848af03a6a2fc9cd9babb29e22774f98bf09efebefd35932aaa與候選逐byte一致，319檔正式cache讀回通過，317個r60舊檔保留，再次檢查0下載。候選60→61實測574581 bytes；正式cache本次差分下載574581 bytes。三款catalog/manifest/runtime-package、12項真正opui handler GET/HEAD本機路徑、新程式及圖片blob大小/SHA、完整330商品與新回收API未登入拒絕全部通過。詳細收據docs/LAUNCHER_PROFILE_R61_RELEASE.json；不需重裝，重啟已開視窗一次載入。
