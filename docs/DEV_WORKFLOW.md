@@ -1,10 +1,12 @@
 # Dev Workflow
 
-## 2026-10-12 Board 船隻連續航行與船尾水流（驗證中）
+## 2026-10-12 Board 船隻連續航行與船尾水流（已公開驗證）
 
 - 範圍：`public/js/board_game.js` 沿用原本逐格步速，在每個實際起終點間以逐影格插值移動整艘船，鏡頭跟隨顯示座標；船頭以該航段向量計算，含返航及斜向路段。`public/board_game.html` 只在移動時顯示淡色船尾水流，停止或偏好減少動態時不連續播放。
 - 規則與同步：每格落點、海格任務事件、抵島與分岔選擇仍依原流程結算；抵達提示等畫面航段結束後才出現。既有 `move-step` 暫時事件沿用原名稱與步速供觀看方顯示，不新增持久存檔欄位、localStorage key 或 Socket.IO 名稱。載入快照時清除暫時動畫。
-- 正式 D 樹有其他未提交修改；本次公開候選須由當前公開 `main` 的乾淨隔離工作樹只移植航行改動，並核對 Board 程式白名單。語法、多人、真實瀏覽器方向／水流與公開套件驗證結果待本次實測後補記；此節目前不代表已部署。
+- 正式 D 樹有其他未提交修改；隔離工作樹由當時公開 `main` 建立，只移植本次航行程式與文件。兩張既存階級圖片在新 checkout 即顯示修改，未暫存、提交或納入候選。候選 `changedPrograms` 精確只有 `board_game.html`、`js/board_game.js`；Card／Chess 不變。
+- 本機驗證：JS 語法及差異檢查通過；Chromium 逐幀、八方向船頭與水流、實際東西向航線、鏡頭、觀看端、重整及減少動態 55/55；真 Socket.IO 雙視窗建房／加入／開始、雙端中間影格與重整恢復 7/7；快速航行 20/20、遠端播放 13/13、狀態線 611/611、更新器 31/31。`npm start` 在隔離樹使用程序內相依路徑啟動，未設定 `DATABASE_URL`；既有 `board_game_smoke.js` 的 final-gate fixture 逾時，不能記為通過。報告與截圖在 `D:/Codex_QA/board-sailing-20261012/`。
+- 發布：來源提交 `52bec2c6c`，發布清單提交 `685f97608` 已非強制快轉至 `main`。R2 Board-only 全量核對 6,261 個不重複物件，新增 2、沿用 6,259。公開 runtime 為 `package-a7cafa24cfe4f2a7`，manifest SHA-256 `8f7e6cb67369623db4a767801815b4e79216da95e260ba2de015b174fca70283`；兩個新程式以 Electron User-Agent GET／SHA 相符，Card／Chess 身分不變，完整桌面分發驗證 148/148 通過。這是公開位元組與本機雙端自動驗收，不等於真人跨網路房間或長時間遊玩驗收。LATTICE 官方 Status 為 `BLOCKED/CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，本次未宣稱任務或圖譜寫入成功。
 
 ## 2026-10-05 海釣拋投透視、飛餌與預兆音（1.2.23 內容修訂 16，已部署）
 
