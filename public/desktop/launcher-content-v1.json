@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 60,
-  "publishedAt": "2026-10-12T09:54:33.951Z",
+  "revision": 61,
+  "publishedAt": "2026-10-12T13:15:54.747Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -934,6 +934,11 @@
       "sha256": "62761905d6af2cdfd2f5895ac4d253d23b045b1de4b58b2cf18fb401482e533b"
     },
     {
+      "path": "images/launcher_announcements/launcher-profile-r61.webp",
+      "bytes": 49926,
+      "sha256": "3a035ef8034f627be921e4babf27fda23a8f05fa7d96a0041ebd5134165162a3"
+    },
+    {
       "path": "images/launcher_announcements/launcher-pull-depth-r26.webp",
       "bytes": 150712,
       "sha256": "3292b6727c78c60b2a19beca26703e12105c4e153e00eca5cfb11a60139469f5"
@@ -1142,6 +1147,11 @@
       "path": "images/launcher_guestbook/notes/zoro-tag.webp",
       "bytes": 84458,
       "sha256": "179375b707b11bad92272255e000b3b7933f771318ffb0edbec0174e78ec2446"
+    },
+    {
+      "path": "images/launcher_profile/captain-card-wide-r61.webp",
+      "bytes": 225586,
+      "sha256": "4d3871d87088131703dafab27d1a28c9c3fdff0f136c943cc6ebb60e6e743cd5"
     },
     {
       "path": "images/launcher_room/fish_master/alligator-gar.webp",
@@ -1530,13 +1540,13 @@
     },
     {
       "path": "launcher-profile-shop.css",
-      "bytes": 45319,
-      "sha256": "f8e2940d6fa3d0e55fee09232558878e664612c5bce292e8dc29a5d155633525"
+      "bytes": 58091,
+      "sha256": "8e132efe90014dbdc1bae8f963cbd3acd2f2c70cfec71e297f19e365605854e5"
     },
     {
       "path": "launcher-profile-shop.js",
-      "bytes": 141820,
-      "sha256": "6bbf97b4777b510de02971d866ef6376fe74ff44da22795ee5c71bb5d69ae3e1"
+      "bytes": 145690,
+      "sha256": "5263cc8f27f6e58ba199f5df7c116b01bcae50b6842b29d96315c0452694840f"
     },
     {
       "path": "launcher-room-aquarium.css",
@@ -1585,18 +1595,18 @@
     },
     {
       "path": "launcher.html",
-      "bytes": 43556,
-      "sha256": "24fdcc696be09511f6cb839a017a43921d661b46af79d4782727a6307cf3e077"
+      "bytes": 44708,
+      "sha256": "df1e2faaefd7d213730183f08b4109f881ad97b44ec8c193b43edbca3f6a3e52"
     },
     {
       "path": "launcher.js",
-      "bytes": 50445,
-      "sha256": "604febf18e93e6ecc92ea69964a1e7248d971fc78a37942a857168eb85cedbbe"
+      "bytes": 50580,
+      "sha256": "ada405b7a72dc8cf315698d16ff34f767ab3ad73963ac22a8d19ae947f9518a7"
     }
   ],
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "3zEYqK90NrMKGHE9AOBmNbrwMwyvEe/Gj/Fi/BBIQUwCwn6Xf+bP4y3pacJOKYHE/azioovJIiR2Ss0FACffBQ=="
+    "value": "ty/KMmDFVxdrgesyZuChKVNJkq28uwYLqc1RI9+YLWZuKkk+VjBQePftwHbu1FwfvnrYkreer69vi3JLv9PSAQ=="
   }
 }
