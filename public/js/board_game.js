@@ -12789,6 +12789,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       && (payload.boardUiEvent?.id === remoteModalId || (!payload.boardUiEvent && sameRemoteTurn
         && !incomingGame.pendingMove && !incomingGame.movementAnimating && !incomingGame.diceRolling));
     const liveFlow = captureLiveFlowStateForLoad(payload.gameState, options);
+    resetShipSailingMotions();
     state.gameState = safeJsonClone(payload.gameState);
     if (payload.campaignContext?.campaignId) {
       applyBoardCampaignContext(payload.campaignContext);
@@ -13116,6 +13117,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function resetRemoteBoardPlayback() {
     remotePlayback.reset();
     battleVisualIngress.reset();
+    resetShipSailingMotions();
     window.clearTimeout(boardLan.deferredApplyTimer);
     boardLan.deferredApplyTimer = 0;
     boardLan.deferStateApplyUntil = 0;
@@ -13164,20 +13166,17 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const playerId = String(event.playerId || "");
     const player = (state.gameState?.players || []).find((entry) => String(entry.id || "") === playerId);
     if (!player || !event.location) return;
+    const from = shipDisplayPositionPx(remoteMovementVisualPlayer(player));
     const expiresAt = Math.max(Date.now() + 1200, Number(event.expiresAt || 0));
     boardLan.remoteMovementLocations.set(playerId, {
       location: safeJsonClone(event.location),
       expiresAt,
     });
     const visualPlayer = remoteMovementVisualPlayer(player);
-    const token = Array.from(refs.boardGameMap?.querySelectorAll(".ship-token[data-player-id]") || [])
-      .find((entry) => String(entry.dataset.playerId || "") === playerId);
-    if (!token) return;
-    const pos = playerShipTokenPositionPx(visualPlayer);
-    token.style.left = `${pos.x}px`;
-    token.style.top = `${pos.y}px`;
-    token.style.setProperty("--ship-rot", shipRotationForPlayer(visualPlayer));
-    token.style.setProperty("--ship-flip", shipFlipForPlayer(visualPlayer));
+    const duration = Math.max(140, Math.min(1000, Number(event.stepDurationMs) || mapMovementStepDelay(player)));
+    startShipSailingMotion(visualPlayer, from, playerShipTokenPositionPx(visualPlayer), duration);
+    if (!updateShipTokensOnMap()) renderMap();
+    shipSailingStopTimers.set(playerId, window.setTimeout(() => stopShipSailingMotion(playerId), duration + 48));
   }
 
   function clearRemoteBoardUiEvent(targetEventId = "") {
@@ -13415,6 +13414,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       return;
     }
     boardLan.remoteMovementLocations.clear();
+    resetShipSailingMotions();
     const previousMissionPlayer = !initialRestorePending && reason !== "load-save"
       ? safeJsonClone((state.gameState?.players || []).find(canReceiveMissionCompleteToast) || null)
       : null;
@@ -16335,12 +16335,123 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     };
   }
 
+  const shipSailingMotions = new Map();
+  const shipSailingHeadings = new Map();
+  const shipSailingActive = new Set();
+  const shipSailingStopTimers = new Map();
+  let shipSailingFrame = 0;
+
+  function shipVisualLocationKey(location) {
+    if (!location) return "";
+    return location.kind === "island"
+      ? `island:${location.islandId}`
+      : `route:${location.routeId}:${location.tileIndex}:${location.fromIslandId}`;
+  }
+
+  function shipSailingPosition(playerId, now = performance.now()) {
+    const motion = shipSailingMotions.get(String(playerId || ""));
+    if (!motion) return null;
+    const progress = Math.min(1, Math.max(0, (now - motion.startedAt) / motion.duration));
+    return {
+      x: motion.from.x + (motion.to.x - motion.from.x) * progress,
+      y: motion.from.y + (motion.to.y - motion.from.y) * progress,
+    };
+  }
+
+  function shipDisplayPositionPx(player) {
+    return shipSailingPosition(player?.id) || playerShipTokenPositionPx(player);
+  }
+
+  function findShipToken(playerId) {
+    return Array.from(refs.boardGameMap?.querySelectorAll(".ship-token[data-player-id]") || [])
+      .find((token) => String(token.dataset.playerId || "") === String(playerId || "")) || null;
+  }
+
+  function paintShipSailingMotion(playerId, motion, now) {
+    const progress = Math.min(1, Math.max(0, (now - motion.startedAt) / motion.duration));
+    const x = motion.from.x + (motion.to.x - motion.from.x) * progress;
+    const y = motion.from.y + (motion.to.y - motion.from.y) * progress;
+    const token = findShipToken(playerId);
+    if (token) {
+      token.style.left = `${x}px`;
+      token.style.top = `${y}px`;
+      token.style.setProperty("--ship-travel-angle", `${motion.angle}deg`);
+      token.classList.add("is-sailing");
+    }
+    const player = currentPlayer();
+    if (state.autoCenterEnabled && String(player?.id || "") === playerId) {
+      const offset = shipTokenOffset(playerShipIndex(player));
+      panToBoardPoint(x - offset.x, y - offset.y, { immediate: true, scale: Math.max(state.panZoom.scale, 0.88) });
+    }
+    return progress >= 1;
+  }
+
+  function tickShipSailingMotions(now) {
+    shipSailingFrame = 0;
+    shipSailingMotions.forEach((motion, playerId) => {
+      if (paintShipSailingMotion(playerId, motion, now)) shipSailingMotions.delete(playerId);
+    });
+    if (shipSailingMotions.size) shipSailingFrame = window.requestAnimationFrame(tickShipSailingMotions);
+  }
+
+  function startShipSailingMotion(player, from, to, durationMs) {
+    const playerId = String(player?.id || "");
+    if (!playerId || !from || !to || !Number.isFinite(from.x) || !Number.isFinite(to.x)) return;
+    const previousPosition = shipSailingPosition(playerId) || from;
+    const dx = to.x - previousPosition.x;
+    const dy = to.y - previousPosition.y;
+    if (Math.hypot(dx, dy) < 0.5) return;
+    const stopTimer = shipSailingStopTimers.get(playerId);
+    if (stopTimer) window.clearTimeout(stopTimer);
+    shipSailingStopTimers.delete(playerId);
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    shipSailingHeadings.set(playerId, { location: shipVisualLocationKey(player.location), angle });
+    shipSailingActive.add(playerId);
+    shipSailingMotions.set(playerId, {
+      from: previousPosition,
+      to,
+      angle,
+      duration: Math.max(80, Number(durationMs) || MAP_MOVEMENT_STEP_MS),
+      startedAt: performance.now(),
+    });
+    if (!shipSailingFrame) shipSailingFrame = window.requestAnimationFrame(tickShipSailingMotions);
+  }
+
+  function stopShipSailingMotion(playerId) {
+    const id = String(playerId || "");
+    const stopTimer = shipSailingStopTimers.get(id);
+    if (stopTimer) window.clearTimeout(stopTimer);
+    shipSailingStopTimers.delete(id);
+    const motion = shipSailingMotions.get(id);
+    if (motion) {
+      const token = findShipToken(id);
+      if (token) {
+        token.style.left = `${motion.to.x}px`;
+        token.style.top = `${motion.to.y}px`;
+      }
+    }
+    shipSailingMotions.delete(id);
+    shipSailingActive.delete(id);
+    findShipToken(id)?.classList.remove("is-sailing");
+  }
+
+  function resetShipSailingMotions() {
+    shipSailingStopTimers.forEach((timer) => window.clearTimeout(timer));
+    shipSailingStopTimers.clear();
+    shipSailingMotions.clear();
+    shipSailingActive.clear();
+    shipSailingHeadings.clear();
+    if (shipSailingFrame) window.cancelAnimationFrame(shipSailingFrame);
+    shipSailingFrame = 0;
+    refs.boardGameMap?.querySelectorAll(".ship-token.is-sailing").forEach((token) => token.classList.remove("is-sailing"));
+  }
+
   function mapMovementStepDelay(player) {
     // Fast-forward only compresses the visual wait; pendingMove still resolves one step at a time.
     return cpuTurnDelay(MAP_MOVEMENT_STEP_MS, player, MAP_MOVEMENT_FAST_STEP_MS);
   }
 
-  function emitBoardMovementStep(player, pending) {
+  function emitBoardMovementStep(player, pending, stepDurationMs = mapMovementStepDelay(player)) {
     if (!player?.location) return false;
     const createdAt = Date.now();
     return emitBoardLanGameEvent({
@@ -16352,7 +16463,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       playerId: player.id,
       location: safeJsonClone(player.location),
       stepsRemaining: Math.max(0, Number(pending?.stepsRemaining || 0)),
-      stepDurationMs: mapMovementStepDelay(player),
+      stepDurationMs,
     });
   }
 
@@ -21380,7 +21491,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
     state.gameState.players.forEach((player, index) => {
       const visualPlayer = remoteMovementVisualPlayer(player);
-      const pos = playerShipTokenPositionPx(visualPlayer);
+      const pos = shipDisplayPositionPx(visualPlayer);
       const isCurrentTurnShip = index === state.gameState.currentPlayerIndex;
       const canUseShipActions = isCurrentTurnShip && canOpenShipActionsFor(player);
       const canUseCpuControls = canOpenCpuShipControlFor(player);
@@ -21395,7 +21506,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       const hiddenBySeaTrain = state.seaTrainAnimation?.playerId === player.id;
       const hiddenByKumaPaw = state.kumaPawAnimation?.playerId === player.id
         || player.pendingPostgameBossVoyage?.phase === "arriving";
-      token.className = `ship-token${isCurrentTurnShip ? " current" : ""}${canInteractWithShip ? " actionable" : ""}${canLearnMoves ? " move-learn-ready" : ""}${playerInBattle ? " in-battle" : ""}${hiddenBySeaTrain ? " sea-train-hidden-source" : ""}${hiddenByKumaPaw ? " kuma-paw-hidden-source" : ""}`;
+      token.className = `ship-token${isCurrentTurnShip ? " current" : ""}${canInteractWithShip ? " actionable" : ""}${canLearnMoves ? " move-learn-ready" : ""}${playerInBattle ? " in-battle" : ""}${hiddenBySeaTrain ? " sea-train-hidden-source" : ""}${hiddenByKumaPaw ? " kuma-paw-hidden-source" : ""}${shipSailingActive.has(String(player.id)) ? " is-sailing" : ""}`;
       token.dataset.playerId = player.id;
       token.tabIndex = canInteractWithShip ? 0 : -1;
       token.setAttribute("aria-label", canUseCpuControls
@@ -21410,6 +21521,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       token.style.setProperty("--ship-color", ["#ff966f", "#5aa7ff", "#6fd3a8", "#f3c25a"][index % 4]);
       token.style.setProperty("--ship-rot", shipRotationForPlayer(visualPlayer));
       token.style.setProperty("--ship-flip", shipFlipForPlayer(visualPlayer));
+      token.style.setProperty("--ship-travel-angle", `${shipTravelAngleForPlayer(visualPlayer)}deg`);
       const shipSkin = shipSkinForPlayer(player, index);
       const shipImage = shipSkin?.image || "";
       const shipDisplayImage = mapDisplayAssetUrl(shipImage);
@@ -21479,7 +21591,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         return;
       }
       const visualPlayer = remoteMovementVisualPlayer(player);
-      const pos = playerShipTokenPositionPx(visualPlayer);
+      const pos = shipDisplayPositionPx(visualPlayer);
       const isCurrentTurnShip = index === state.gameState.currentPlayerIndex;
       const canUseShipActions = isCurrentTurnShip && canOpenShipActionsFor(player);
       const canUseCpuControls = canOpenCpuShipControlFor(player);
@@ -21495,12 +21607,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       token.style.setProperty("--ship-color", ["#ff966f", "#5aa7ff", "#6fd3a8", "#f3c25a"][index % 4]);
       token.style.setProperty("--ship-rot", shipRotationForPlayer(visualPlayer));
       token.style.setProperty("--ship-flip", shipFlipForPlayer(visualPlayer));
+      token.style.setProperty("--ship-travel-angle", `${shipTravelAngleForPlayer(visualPlayer)}deg`);
       token.classList.toggle("current", isCurrentTurnShip);
       token.classList.toggle("actionable", canInteractWithShip);
       token.classList.toggle("move-learn-ready", canLearnMoves);
       token.classList.toggle("in-battle", playerInBattle);
       token.classList.toggle("sea-train-hidden-source", hiddenBySeaTrain);
       token.classList.toggle("kuma-paw-hidden-source", hiddenByKumaPaw);
+      token.classList.toggle("is-sailing", shipSailingActive.has(String(player.id)));
       token.tabIndex = canInteractWithShip ? 0 : -1;
       token.title = canUseCpuControls ? "點擊調整 CPU 指令" : canUseShipActions ? "點擊開啟本回合操作" : canLearnMoves ? "點擊學習新技能" : "";
       token.setAttribute("aria-label", canUseCpuControls
@@ -21635,9 +21749,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function shipRotationForPlayer(player) {
     const angle = shipTravelAngleForPlayer(player);
     if (angle == null) return "0deg";
-    const readableAngle = angle > 90 || angle < -90
-      ? angle + (angle > 0 ? -180 : 180)
-      : angle;
+    // CSS applies rotate before scaleX, so westbound diagonals need the opposite signed rotation.
+    const readableAngle = angle > 90 ? 180 - angle : angle < -90 ? -180 - angle : angle;
     return `${readableAngle}deg`;
   }
 
@@ -21648,6 +21761,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function shipTravelAngleForPlayer(player) {
+    const heading = shipSailingHeadings.get(String(player?.id || ""));
+    if (heading && heading.location === shipVisualLocationKey(player?.location)) return heading.angle;
     if (player.location.kind !== "route") return 0;
     const routeItem = getRouteById(player.location.routeId);
     const travel = traversalFromIsland(routeItem, player.location.fromIslandId);
@@ -26406,6 +26521,11 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     autoCenterOnCurrentPlayer();
   }
 
+  function renderSailingStep(player, from, stepDurationMs) {
+    startShipSailingMotion(player, from, playerShipTokenPositionPx(player), stepDurationMs);
+    renderMovementFrame();
+  }
+
   function isPendingImpelDownBattle(battle) {
     return !!battle && (battle.isImpelDown || battle.islandKind === "impel_down");
   }
@@ -27100,8 +27220,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!state.autoCenterEnabled || !refs.boardViewport) return;
     const player = currentPlayer();
     if (!player) return;
-    const pos = playerPositionPx(player);
-    panToBoardPoint(pos.x, pos.y, { immediate: false, scale: Math.max(state.panZoom.scale, 0.88) });
+    const sailingPosition = shipSailingPosition(player.id);
+    const offset = shipTokenOffset(playerShipIndex(player));
+    const pos = sailingPosition
+      ? { x: sailingPosition.x - offset.x, y: sailingPosition.y - offset.y }
+      : playerPositionPx(player);
+    panToBoardPoint(pos.x, pos.y, { immediate: !!sailingPosition, scale: Math.max(state.panZoom.scale, 0.88) });
   }
 
   function pointerDistance(a, b) {
@@ -33635,8 +33759,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     setMapMovementStable(true);
     let stepsSinceFullSync = 0;
 
-    const syncMovementStep = () => {
-      emitBoardMovementStep(player, pending);
+    const syncMovementStep = (stepDurationMs) => {
+      emitBoardMovementStep(player, pending, stepDurationMs);
       stepsSinceFullSync += 1;
       if (stepsSinceFullSync < BOARD_MOVE_FULL_SYNC_INTERVAL) return;
       stepsSinceFullSync = 0;
@@ -33650,6 +33774,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           renderAll();
           return;
         }
+        const stepFrom = playerShipTokenPositionPx(player);
+        const stepDurationMs = mapMovementStepDelay(player);
 
         if (player.location.kind === "island") {
           if (tryTriggerFinalGateAtIsland(player, player.location.islandId, "departure")) return;
@@ -33681,7 +33807,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
             player.location = { kind: "island", islandId: travel.toIslandId, entryDirection: travel.entryDirectionAtDestination };
             pending.stepsRemaining -= 1;
             tickPlayerMapBuffSteps(player);
+            renderSailingStep(player, stepFrom, stepDurationMs);
+            syncMovementStep(stepDurationMs);
+            await wait(stepDurationMs);
+            stopShipSailingMotion(player.id);
             handleIslandArrival(player, getIslandById(player.location.islandId));
+            scheduleBoardLanStatePush("move-arrival", 0, { force: true });
             if (tryTriggerFinalGateAtIsland(player, player.location.islandId, "arrival")) return;
             continue;
           }
@@ -33701,10 +33832,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
             recordMainMissionEvent(player, { type: "final_route_step" });
           }
           addLog(`${player.name} 從 ${getIslandById(travel.fromIslandId).name} 往${directionLabel(travel.exitDirection)}方航行，朝 ${getIslandById(travel.toIslandId).name} 前進。`);
-          renderMovementFrame();
-          syncMovementStep();
+          renderSailingStep(player, stepFrom, stepDurationMs);
+          syncMovementStep(stepDurationMs);
           addLog(`${player.name} 逐格移動到海格 ${travel.tiles[0].col}, ${travel.tiles[0].row}。`);
-          await wait(mapMovementStepDelay(player));
+          await wait(stepDurationMs);
           if (maybeOpenSeaTileCoopPrompt(player)) return;
           if (maybeOpenSeaTileTradePrompt(player)) return;
           continue;
@@ -33722,10 +33853,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           if ([travel.fromIslandId, travel.toIslandId].includes(finalGateAnchorIslandId())) {
             recordMainMissionEvent(player, { type: "final_route_step" });
           }
-          renderMovementFrame();
-          syncMovementStep();
+          renderSailingStep(player, stepFrom, stepDurationMs);
+          syncMovementStep(stepDurationMs);
           addLog(`${player.name} 逐格移動到海格 ${nextTile.col}, ${nextTile.row}。`);
-          await wait(mapMovementStepDelay(player));
+          await wait(stepDurationMs);
           if (maybeOpenSeaTileCoopPrompt(player)) return;
           if (maybeOpenSeaTileTradePrompt(player)) return;
           continue;
@@ -33736,10 +33867,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         pending.stepsRemaining -= 1;
         tickPlayerMapBuffSteps(player);
         addLog(`${player.name} 抵達 ${getIslandById(player.location.islandId).name}。`);
+        renderSailingStep(player, stepFrom, stepDurationMs);
+        emitBoardMovementStep(player, pending, stepDurationMs);
+        await wait(stepDurationMs);
+        stopShipSailingMotion(player.id);
         handleIslandArrival(player, getIslandById(player.location.islandId));
-        renderMovementFrame();
         scheduleBoardLanStatePush("move-arrival", 0, { force: true });
-        await wait(mapMovementStepDelay(player));
         if (tryTriggerFinalGateAtIsland(player, player.location.islandId, "arrival")) return;
         if (player.location.islandId === INVERSION_MOUNTAIN_ID) {
           state.gameState.movementAnimating = false;
@@ -33773,6 +33906,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       renderAll();
       resolveLanding(player);
     } finally {
+      stopShipSailingMotion(player.id);
       if (!state.gameState.movementAnimating) setMapMovementStable(false);
     }
   }

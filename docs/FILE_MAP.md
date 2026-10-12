@@ -1,5 +1,11 @@
 # File Map
 
+## 2026-10-12 船隻連續航行
+
+- `public/js/board_game.js`：逐格航段插值、實際向量船頭方向、鏡頭跟隨與觀看端暫時移動；讀檔／同步快照清理中間影格。
+- `public/board_game.html`：移動時船尾淡色水流及減少動態處理；船隻素材與航線資料不改。
+- `docs/DEV_WORKFLOW.md`、`PROJECT_OVERVIEW.md`、`GAME_RULES.md`、`FILE_MAP.md`：記錄視覺範圍、規則界線及待驗證部署狀態。
+
 ## 2026-10-05 海釣拋竿透視與提示音（1.2.23 內容修訂 16，已部署）
 
 - `desktop/launcher-room-minigames.js/.css`：V5 落點透視、共用拋竿輸入、飛餌魚線、水花遮擋、同幀落水聲、清脆預兆及可見 fight 240ms heartbeat。
