@@ -1,0 +1,8 @@
+{
+  "baseline": "866589f2bd9d6f3f2f1c9ef2a9e594be5600f6c0",
+  "revision": 60,
+  "coreVersion": "1.2.23",
+  "gamePrograms": ["js/board_shared.js", "js/board_start.js", "js/board_game.js"],
+  "rendererFiles": ["launcher.html", "launcher-profile-shop.js", "launcher-profile-shop.css"],
+  "images": ["images/launcher_announcements/launcher-avatar-r60.webp"]
+}

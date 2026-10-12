@@ -156,7 +156,12 @@ async function main(){
       }
       check(label+' all 160 extended avatars appear in shop',await page.locator('#shopGrid .shop-item').evaluateAll(nodes=>nodes.filter(n=>Number(n.dataset.itemId.slice(4))>=63).length)===160);
       await page.evaluate(()=>window.LauncherProfileShop.openProfile(0));await page.waitForFunction(()=>!document.getElementById('profileCardEdit').hidden);
-      await page.locator('#profileCardEdit').click();await page.locator('#profileCardAvatar').selectOption('222');await page.locator('#profileCardName').fill('羅賓航海者');await page.locator('#profileCardSave').click();
+      await page.locator('#profileCardEdit').click();await page.locator('#profileCardAvatarChoose').click();
+      await page.locator('#avatarPickerGrid [data-avatar-id="221"]').click();await page.locator('#avatarPickerApply').click();
+      await page.waitForFunction(()=>!document.getElementById('avatarPickerDialog').open);
+      await page.locator('#profileCardAvatarChoose').click();await page.locator('#avatarPickerGrid [data-avatar-id="222"]').click();await page.locator('#avatarPickerApply').click();
+      await page.waitForFunction(()=>!document.getElementById('avatarPickerDialog').open);
+      await page.locator('#profileCardName').fill('羅賓航海者');await page.locator('#profileCardSave').click();
       await page.waitForFunction(()=>window.__guestbookQa.calls.some(x=>x[0]==='command'&&x[1].payload.operation==='card.set'));
       check(label+' avatar 222 card saves through compatibility bridge',await page.evaluate(()=>window.__guestbookQa.calls.some(x=>x[0]==='command'&&x[1].payload.operation==='card.set'&&x[1].payload.card.avatarId===222)));
       await page.emulateMedia({reducedMotion:'reduce'});

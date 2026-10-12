@@ -54,12 +54,85 @@
 .captain-card-edit-button[hidden] { display: none; }
 .captain-card-editor { position: relative; z-index: 3; display: grid; grid-template-columns: minmax(130px, 1fr) minmax(160px, 2fr) minmax(145px, 1fr) auto; align-items: end; gap: 10px; padding: 0 28px 22px; }
 .captain-card-editor[hidden] { display: none; }
+.captain-avatar-edit { position:absolute; z-index:3; inset:0; display:flex; align-items:flex-end; justify-content:center; width:100%; border:0; padding:0 0 9px; border-radius:50%; background:linear-gradient(transparent 60%,#03161ad9); color:#fff3d1; cursor:pointer; font:inherit; font-size:11px; }
+.captain-avatar-edit[hidden] { display:none; }
+.captain-avatar-edit:hover { background:linear-gradient(transparent 45%,#071f25ed); }
+.captain-avatar-edit:focus-visible { outline:3px solid var(--sea); outline-offset:-5px; }
+.captain-card-avatar-field { min-width:0; font-size:11px; color:#f2dda9; }
+.captain-card-avatar-choice { display:flex; align-items:center; gap:9px; width:100%; margin-top:5px; padding:7px 10px; border:1px solid #d3b47080; border-radius:10px; color:#e9f5ee; background:#0b2530; text-align:left; cursor:pointer; }
+.captain-card-avatar-choice img { flex:none; width:48px; height:48px; border-radius:50%; object-fit:contain; }
+.captain-card-avatar-choice span { min-width:0; }
+.captain-card-avatar-choice strong { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:12px; }
+.captain-card-avatar-choice small { display:block; margin-top:5px; color:var(--gold); font-size:11px; }
+.captain-card-avatar-choice:hover { border-color:var(--gold); background:#153843; }
+.captain-card-avatar-choice:focus-visible { outline:2px solid var(--sea); outline-offset:2px; }
+#profileCardAvatar[hidden] { display:none; }
 .captain-card-editor label { min-width: 0; color: #f2dda9; font-size: 11px; }
 .captain-card-editor input, .captain-card-editor select { display: block; width: 100%; height: 37px; margin-top: 5px; padding: 7px 9px; border: 1px solid #a4c9c277; border-radius: 7px; background: #09212b; color: #e9f5ee; font: inherit; font-size: 12px; }
 .captain-card-editor input:focus, .captain-card-editor select:focus { outline: 2px solid var(--sea); outline-offset: 1px; }
 .captain-card-editor-actions { display: flex; gap: 7px; }
 .captain-card-editor-actions button { min-height: 37px; padding: 7px 12px; white-space: nowrap; font-size: 11px; }
 .captain-card-editor .voyage-status { grid-column: 1 / -1; margin: 0; }
+.captain-avatar-dialog { box-sizing:border-box; width:min(1080px,calc(100vw - 40px)); height:min(800px,calc(100dvh - 40px)); max-height:calc(100dvh - 40px); padding:0; border:1px solid #c2aa7266; border-radius:22px; overflow:hidden; background:linear-gradient(140deg,#173c47,#071b27 62%); color:#eef4eb; box-shadow:0 30px 100px #000b; }
+.captain-avatar-dialog[open] { display:grid; grid-template-rows:auto minmax(0,1fr) auto; }
+.captain-avatar-dialog::backdrop { background:#01090fc9; backdrop-filter:blur(7px); }
+.captain-avatar-heading { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:24px 28px 20px; border-bottom:1px solid #acd0c722; }
+.captain-avatar-heading .eyebrow { margin:0 0 8px; font-size:10px; letter-spacing:.18em; color:#dabb79; }
+.captain-avatar-heading h2 { margin:0 0 8px; font-size:27px; }
+.captain-avatar-heading p:last-child { margin:0; color:#a6c2c5; font-size:12px; }
+.captain-avatar-heading button { flex:none; padding:10px 16px; }
+.captain-avatar-body { display:grid; grid-template-columns:minmax(0,1fr) 246px; min-height:0; overflow:hidden; }
+.captain-avatar-collection { position:relative; display:grid; grid-template-rows:auto minmax(0,1fr); min-width:0; min-height:0; }
+.captain-avatar-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:11px; padding:18px 22px 13px; }
+#avatarPickerFilters { display:flex; flex:none; gap:3px; padding:3px; border:1px solid #8abfb733; border-radius:9px; background:#051822; }
+#avatarPickerFilters button { border:0; padding:8px 12px; border-radius:6px; background:transparent; color:#93b1b7; cursor:pointer; font-size:12px; }
+#avatarPickerFilters button[aria-pressed=true] { color:#0d242c; background:#edca87; font-weight:700; }
+.captain-avatar-search { flex:1; min-width:145px; }
+.captain-avatar-search input { box-sizing:border-box; width:100%; min-height:39px; border:1px solid #8abfb73b; border-radius:8px; padding:8px 11px; color:#edf6ef; background:#061b26; font:inherit; font-size:12px; }
+#avatarPickerCount { width:100%; color:#86a8b0; font-size:11px; }
+.captain-avatar-grid { display:grid; min-height:0; align-content:start; grid-template-columns:repeat(auto-fill,minmax(102px,1fr)); gap:11px; overflow:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#5e8c92 transparent; padding:3px 22px 22px; scroll-padding:12px; }
+.captain-avatar-option { position:relative; display:flex; flex-direction:column; align-items:center; gap:6px; min-width:0; padding:10px 6px 9px; border:1px solid #9fc5c426; border-radius:13px; color:#d7e9e6; background:#0c2732; cursor:pointer; }
+.captain-avatar-option img { display:block; width:100%; max-width:116px; aspect-ratio:1; object-fit:contain; border-radius:50%; filter:drop-shadow(0 4px 7px #0005); }
+.captain-avatar-option strong { display:-webkit-box; width:100%; min-height:30px; overflow:hidden; -webkit-line-clamp:2; -webkit-box-orient:vertical; font-size:11px; line-height:1.4; font-weight:500; text-align:center; }
+.captain-avatar-option small { color:#88aea9; font-size:10px; }
+.captain-avatar-option:hover { background:#214550; border-color:#80c7ba88; }
+.captain-avatar-option[aria-checked=true] { border:2px solid #edcb81; padding:9px 5px 8px; background:#35504d; box-shadow:0 0 0 2px #e7bd6914; }
+.captain-avatar-option[aria-checked=true]::after { content:'✓'; position:absolute; top:6px; right:6px; display:grid; place-items:center; width:21px; height:21px; border-radius:50%; background:#f1cd83; color:#102e31; font-weight:800; }
+.captain-avatar-option.is-locked small { color:#c7a98c; }
+.captain-avatar-empty { grid-column:1; grid-row:2; padding:35px; color:#a5c2c5; font-size:13px; text-align:center; }
+.captain-avatar-empty[hidden] { display:none; }
+.captain-avatar-preview { display:flex; flex-direction:column; min-width:0; padding:22px; border-left:1px solid #c9c09326; background:linear-gradient(170deg,#d7b96e0b,#03151e66); }
+.captain-avatar-current { display:flex; align-items:center; gap:10px; padding-bottom:20px; border-bottom:1px solid #bad3c322; }
+.captain-avatar-current img { width:48px; height:48px; flex:none; border-radius:50%; object-fit:contain; }
+.captain-avatar-current div { min-width:0; }
+.captain-avatar-current small { display:block; margin-bottom:5px; color:#8facb2; font-size:10px; }
+.captain-avatar-current strong { display:block; color:#d0e3df; font-size:12px; line-height:1.5; }
+.captain-avatar-candidate { text-align:center; margin:auto 0; padding:25px 0; }
+.captain-avatar-candidate > span { display:block; margin-bottom:17px; color:#f0d399; font-size:12px; }
+.captain-avatar-candidate img { width:100%; max-width:202px; aspect-ratio:1; object-fit:contain; border-radius:50%; filter:drop-shadow(0 10px 15px #0006); }
+.captain-avatar-candidate h3 { margin:17px 0 0; font-size:17px; font-weight:600; line-height:1.6; overflow-wrap:anywhere; }
+.captain-avatar-sync { margin:0; color:#91b8b5; text-align:center; line-height:1.7; font-size:11px; }
+.captain-avatar-footer { display:flex; align-items:center; justify-content:space-between; gap:15px; padding:17px 26px; border-top:1px solid #b4c8b42c; background:#081f29; }
+.captain-avatar-footer .voyage-status { margin:0; max-width:55%; line-height:1.5; }
+.captain-avatar-footer > div { display:flex; flex:none; gap:10px; margin-left:auto; }
+.captain-avatar-footer button { min-height:43px; padding:10px 20px; font-size:13px; }
+.captain-avatar-dialog button:focus-visible,.captain-avatar-dialog input:focus-visible { outline:2px solid #6be0ca; outline-offset:2px; }
+@media(max-height:720px) and (min-width:761px) {
+  .captain-avatar-preview { padding:16px 22px; }.captain-avatar-current { padding-bottom:12px; }
+  .captain-avatar-candidate { padding:12px 0; }.captain-avatar-candidate > span { margin-bottom:10px; }.captain-avatar-candidate img { max-width:150px; }.captain-avatar-candidate h3 { margin-top:10px; font-size:15px; }
+}
+@media(max-width:760px) {
+  .captain-avatar-dialog { width:calc(100vw - 20px); height:calc(100dvh - 24px); max-height:calc(100dvh - 24px); border-radius:16px; }
+  .captain-avatar-heading { padding:16px 18px; }.captain-avatar-heading h2 { font-size:22px; }.captain-avatar-heading p:last-child { display:none; }
+  .captain-avatar-body { grid-template-columns:minmax(0,1fr); grid-template-rows:auto minmax(0,1fr); }
+  .captain-avatar-preview { grid-row:1; flex-direction:row; align-items:center; gap:14px; padding:12px 18px; border-left:0; border-bottom:1px solid #9bc9bd24; }
+  .captain-avatar-current { flex:1; border:0; padding:0; }.captain-avatar-current img { width:42px; height:42px; }.captain-avatar-current strong { font-size:10px; }
+  .captain-avatar-candidate { flex:1.4; display:grid; grid-template-columns:74px minmax(0,1fr); grid-template-rows:auto auto; column-gap:10px; text-align:left; padding:0; margin:0; }
+  .captain-avatar-candidate img { grid-column:1; grid-row:1 / 3; width:74px; }.captain-avatar-candidate > span { grid-column:2; margin:0; align-self:end; font-size:10px; }.captain-avatar-candidate h3 { grid-column:2; margin:4px 0 0; font-size:11px; }.captain-avatar-sync { display:none; }
+  .captain-avatar-toolbar { padding:11px 14px 9px; gap:8px; }.captain-avatar-search { min-width:120px; }#avatarPickerFilters button { padding:8px; }
+  .captain-avatar-grid { grid-template-columns:repeat(auto-fill,minmax(88px,1fr)); gap:8px; padding:3px 14px 14px; }
+  .captain-avatar-footer { padding:12px 15px; gap:10px; flex-wrap:wrap; }.captain-avatar-footer .voyage-status { max-width:100%; }.captain-avatar-footer .voyage-status:empty { display:none; }.captain-avatar-footer button { min-height:42px; padding:9px 17px; }
+}
 .captain-card-decor { grid-column: 1 / -1; padding: 14px; border: 1px solid #c8bb8b55; border-radius: 11px; background: #061d27cf; }
 .captain-card-decor[hidden] { display: none; }
 .captain-card-decor > strong { display: block; margin-bottom: 11px; color: #f6dfad; font-size: 12px; }

@@ -1,0 +1,53 @@
+{
+  "status": "SOURCE_QA_PASS_NOT_PUBLISHED",
+  "baseline": "866589f2bd9d6f3f2f1c9ef2a9e594be5600f6c0",
+  "authority": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12",
+  "createdAt": "2026-10-12T09:53:39.008Z",
+  "sourceSha256": {
+    "desktop/launcher.html": "24fdcc696be09511f6cb839a017a43921d661b46af79d4782727a6307cf3e077",
+    "desktop/launcher-profile-shop.js": "6bbf97b4777b510de02971d866ef6376fe74ff44da22795ee5c71bb5d69ae3e1",
+    "desktop/launcher-profile-shop.css": "f8e2940d6fa3d0e55fee09232558878e664612c5bce292e8dc29a5d155633525",
+    "server/index.js": "fae3d29995011b9b5282d30967b2b7e664b7bb0d876a33e5a3eb729ce8198d1f",
+    "public/js/board_shared.js": "d088bd1d106b469080339d89c2bb2191d930929cf292bf26a17cd8be0375eebe",
+    "public/js/board_start.js": "c1f3d1a7d632eafea6116664c7da03535fd3db1d2ebb1acfdc4d7198935fee8a",
+    "public/js/board_game.js": "e6465018a74acbfb0a0e03ac8b04b8cfe4a6ac28dc61577ca6cb5539fe55be6c"
+  },
+  "reports": {
+    "picker/report.json": {
+      "status": "PASS",
+      "checks": 80,
+      "sha256": "2c571d8843a02608c4de152ae77eb7c747397c3f3de51ba50a86e5614efa8623"
+    },
+    "guestbook/report.json": {
+      "status": "PASS",
+      "checks": 50,
+      "sha256": "811a7111acb5ad653ce5d33ed37030ae75c9ceb62d8aac169b47d6619252c684"
+    },
+    "local-loading/report.json": {
+      "status": "PASS",
+      "checks": 21,
+      "sha256": "26fae66a5189618ed6ae4062b4b5f09479ff34a6b2ee69c6dfbe2fafab9d6a24"
+    },
+    "avatar-live/report.json": {
+      "status": "PASS",
+      "checks": 35,
+      "sha256": "a2fd95f7d31cc72fd56bc1b86854272c410a215cfe2df52d174a2b7562c87988"
+    },
+    "announcement-report.json": {
+      "status": "PASS",
+      "checks": 82,
+      "sha256": "d1725dbf14f1c627d459a38c5e23a93d117da9e4f9b452d414a421867078e3a0"
+    },
+    "startup-report.json": {
+      "status": "PASS",
+      "checks": 6,
+      "sha256": "6dd44e17194d74aa2e215b9e92afe45dfe660cdf9cfe22f6ad102d1276634d5d"
+    }
+  },
+  "review": "Independent review: no blocking findings; avatar-only update avoids renderAll/save/push side effects.",
+  "limitations": [
+    "Synthetic PGlite and two Chromium contexts; no real player account transactions.",
+    "Package and public deployment remain pending.",
+    "LATTICE API unavailable in this session; no persistent task or graph success claimed."
+  ]
+}

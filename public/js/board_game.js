@@ -12817,6 +12817,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     restoreLiveFlowStateAfterLoad(liveFlow);
     syncBattleReplacementActiveCrewIndex();
     syncGamePlayerIdentitiesFromLobby();
+    syncGamePlayerAvatarsFromLobby();
     const shouldRecoverInterruptedBattle = options.source !== "lan" || options.initialLanRestore === true;
     const battleRefreshRecovery = state.battleState && shouldRecoverInterruptedBattle
       ? restoreBattleRefreshRecoveryCheckpoint()
@@ -13644,11 +13645,20 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       shared.saveLobby(state.lobby);
       const changedPlayers = syncSetupPlayersFromLobby();
       const changedIdentities = syncGamePlayerIdentitiesFromLobby();
+      const changedAvatars = syncGamePlayerAvatarsFromLobby();
       if (!campaignInitialLoadRequested || !boardLan.awaitingInitialState) {
         renderHeader();
         if (changedPlayers || changedIdentities) {
           renderAll();
           scheduleBoardLanStatePush("lobby-players", 180);
+        } else if (changedAvatars) {
+          // Cosmetic refresh must not enqueue state pushes, saves or recovery.
+          refs.gamePlayerStrip.querySelectorAll('.mini-ava img').forEach((image, index) => {
+            const player = state.gameState.players[index];
+            if (player) image.src = shared.avatarUrlById(player.avatar);
+          });
+          const currentImage = refs.currentPlayerCard.querySelector('.current-ava img');
+          if (currentImage && currentPlayer()) currentImage.src = shared.avatarUrlById(currentPlayer().avatar);
         }
       }
       if (boardLan.awaitingInitialState && !seedBoardLanInitialState("join")) {
@@ -13821,6 +13831,20 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     });
     addLog("連線房間玩家名單已同步，開局排序已重置。");
     return true;
+  }
+
+  function syncGamePlayerAvatarsFromLobby() {
+    let changed = false;
+    for (const player of state.gameState?.players || []) {
+      const userId = Number(player.userId ?? player.id);
+      if (userId <= 0) continue;
+      const lobbyPlayer = state.lobby?.players?.find(entry => Number(entry.userId) === userId);
+      const avatar = Number(lobbyPlayer?.avatar);
+      if (!Number.isSafeInteger(avatar) || avatar < 1 || avatar > 2000 || Number(player.avatar) === avatar) continue;
+      player.avatar = avatar;
+      changed = true;
+    }
+    return changed;
   }
 
   function syncGamePlayerIdentitiesFromLobby() {

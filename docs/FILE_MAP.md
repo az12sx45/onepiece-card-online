@@ -1942,3 +1942,11 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - docs/LAUNCHER_AVATAR_R59.json：11張素材格式/SHA與本機商店驗證；D:/Codex_QA/launcher-shop-r59為完整QA。
 
 - docs/LAUNCHER_AVATAR_R59_RELEASE.json：2026-10-11公開清單/遊戲alias/blob與正式cache差分驗收收據。
+
+
+### r60 圖片頭像與同步
+
+- desktop/launcher-profile-shop.js/css、launcher.html：圖片頭像選擇器；scripts/launcher_avatar_picker_qa.js 為操作/外觀/帳號競態驗證。
+- server/index.js、public/js/board_shared.js、board_start.js、board_game.js：共用帳號頭像事件、房間/遊戲/航海紀錄顯示投影；scripts/launcher_avatar_live_sync_qa.js 為隔離SQL及雙瀏覽器驗證。
+- tools/launcher-avatar-r60/release-spec.json、build-release.js、publish-game.js：r60定向差分封裝與不可覆寫CAS發布；scripts/launcher_avatar_identity_package_qa.js 用實際core路由驗證三款program。
+- public/images/launcher_announcements/launcher-avatar-r60.webp：本次介面實際截圖公告；D:/Codex_QA/launcher-avatar-r60 存放QA與公開讀回證據。

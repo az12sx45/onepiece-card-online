@@ -8286,3 +8286,17 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - r59封裝驗證：source 641275bff79f753d680c72f071581465767ebfe6；316檔簽章清單SHA256 ca80dabd0fadbc911453d3fb4afab8ae36d606c4eece6adfaef44809203bd33a。13個變更blob已公開HEAD/GET/大小/SHA核對；候選58→59下載2,488,715 bytes、316檔校驗、314個舊blob保留與二次0下載通過。三款遊戲11個共用頭像blob共2,214,810 bytes已不可覆寫上傳；688條本機頭像route驗證成功、網路fallback 0。正式公開切版與正式cache仍待讀回。
 
 - 2026-10-11 r59公開交付：release 6a5e616c1cf15bbcc47f0bab4b99803dcaaeafe7，公開清單SHA256 ca80dabd0fadbc911453d3fb4afab8ae36d606c4eece6adfaef44809203bd33a 與候選逐byte相同。三遊戲公開catalog、manifest、runtime-package版本、11個素材blob及22條共用alias完成讀回；商城330項公開資料核對。正式啟動器cache 58→59下載2,488,715 bytes、316檔校驗、舊314檔不變與二次0下載通過。僅備份兩個manifest槽位，沒有重複複製整份素材。證據docs/LAUNCHER_AVATAR_R59_RELEASE.json；未使用正式玩家帳號進行交易。
+
+
+## 2026-10-12 r60 圖片頭像選擇器與航海錄即時同步
+
+正式來源 D:/Codex_Release_Worktrees/launcher-flick-reward-r12；先核對並快轉到已公開的平順航行基線 866589f2bd9d6f3f2f1c9ef2a9e594be5600f6c0，保留未提交 iOS 文件、rank 圖與未發布 r54 圖。本階段無可呼叫 LATTICE API，未宣稱任務或圖譜寫入成功。
+
+- desktop/launcher.html、launcher-profile-shop.js/css：個人頁頭像直接開啟圖片網格；可搜尋、可使用/全部篩選、目前/待套用大圖、固定確認與取消。未收藏僅預覽；頭像單獨保存不提交未儲存名稱/簡介，保留 core 1.2.23 的 >62 profileCommand 相容橋。鍵盤、離線錯誤、重複點擊及跨帳號晚回應均受控。
+- server/index.js：經收藏驗證的頭像更新同帳號 socket、三遊戲房間外觀；Board 收到舊 gameState 或開啟航海紀錄時只投影目前頭像。航海紀錄列表在既有會員權限後批次讀取成員外觀，不寫回存檔/進度/revision。public/js/board_shared.js、board_start.js、board_game.js 同步登入快取、正在開啟的畫面與舊存檔，純外觀更新不產生 BOARD_GAME_STATE 版本推送。
+- scripts/launcher_avatar_picker_qa.js、launcher_avatar_live_sync_qa.js：實際 renderer/本機圖片與隔離 PGlite、production Socket.IO、雙 Chromium；原 launcher_guestbook_danmaku_qa.js 改用真正點擊圖片選擇器。QA 收據位於 D:/Codex_QA/launcher-avatar-r60，正式玩家帳號/交易未操作。
+- 已完成圖片選擇器80項、留言板/名片50項、本機商品載入21項、330筆目錄逐項一致、公告82項。npm start 無正式 DATABASE_URL，health 與 Card/Board/Chess 五個入口 HTTP200。同步最終檢查及封裝/公開讀回在後續 r60 收據記錄，未以測試成功冒充部署。
+- config/launcher-announcements-v1.json revision70，公告附真實新頭像選擇器截圖 launcher-avatar-r60.webp；不新增頭像商品、不變更持有權。
+- tools/launcher-avatar-r60/*、scripts/launcher_avatar_identity_package_qa.js：封裝鎖定已提交 source，僅3個 Board 程式與3個 renderer及公告圖片；其他遊戲program、舊素材record及既有平順航行版本逐項保護。續用 core1.2.23，不建立安裝檔。
+
+- r60 最終同步QA：35項PASS，包含雙瀏覽器及隔離SQL紀錄清單；純外觀只更新portrait DOM，避免renderAll排入自動存檔/回合推送。變更前後非avatar完整紀錄（revision/updatedAt/backups/progress）逐項相等。來源SHA與所有報告SHA見docs/LAUNCHER_AVATAR_R60.json；獨立複核無阻擋。

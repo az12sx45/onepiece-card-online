@@ -106,6 +106,7 @@
   let cardBusy = false;
   let decorBusy = false;
   let cardMutation = 0;
+  let avatarPicker = null;
   let bgmSource = '';
   let bgmPlaylist = [];
   let bgmIndex = 0;
@@ -179,6 +180,7 @@
       stickers.append(img);
     }
     $('profileCardEdit').hidden = !own || !p.isSelf || !accountId || preview;
+    $('profileAvatarEdit').hidden = !own || !p.isSelf || !accountId || preview;
     if (!own || !p.isSelf || !accountId || preview) $('profileCardEditor').hidden = true;
   }
   function publishAccountAvatar(p){
@@ -486,6 +488,108 @@
     }
     const selected = Number(profile?.card?.avatarId);
     select.value = Number.isInteger(selected) && selected >= 1 && selected <= MAX_AVATAR_ID && (selected <= 30 || ownedAvatars.has(selected)) ? String(selected) : '0';
+    renderCardAvatarChoice();
+  }
+  function avatarName(id) {
+    const item = LOCAL_SHOP_CATALOG.find(entry => entry.type === 'avatar' && Number(entry.key) === id);
+    return item?.name || `經典頭像 ${String(id).padStart(2, '0')}`;
+  }
+  function usableAvatarIds() {
+    return new Set([...Array.from({ length: 30 }, (_, i) => i + 1),
+      ...validIds(profile?.collection?.card?.avatars, MAX_AVATAR_ID),
+      ...validIds(shop?.owned?.avatars, MAX_AVATAR_ID)]);
+  }
+  function renderCardAvatarChoice() {
+    const id = number($('profileCardAvatar').value) || cardAvatarId(profile);
+    $('profileCardAvatarImage').src = imageFor('avatar', id);
+    avatarFallback($('profileCardAvatarImage'));
+    $('profileCardAvatarName').textContent = avatarName(id);
+  }
+  function renderAvatarSelection() {
+    if (!avatarPicker) return;
+    const { selected, busy } = avatarPicker, current = cardAvatarId(profile), usable = usableAvatarIds().has(selected);
+    $('avatarPickerCurrentImage').src = imageFor('avatar', current);
+    $('avatarPickerCurrentName').textContent = avatarName(current);
+    $('avatarPickerImage').src = imageFor('avatar', selected);
+    $('avatarPickerName').textContent = avatarName(selected);
+    $('avatarPickerLabel').textContent = selected === current ? '目前使用' : usable ? '待套用' : '尚未收藏 · 僅供預覽';
+    $('avatarPickerApply').textContent = busy ? '正在儲存…' : selected === current ? '目前使用中' : usable ? '使用這個頭像' : '尚未收藏';
+    $('avatarPickerApply').disabled = busy || !usable || selected === current;
+    $('avatarPickerCancel').disabled = busy;
+    $('avatarPickerClose').disabled = busy;
+    $('avatarPickerSearch').disabled = busy;
+    $('avatarPickerFilters').inert = busy;
+    $('avatarPickerGrid').inert = busy;
+    for (const node of $('avatarPickerGrid').children) {
+      const active = Number(node.dataset.avatarId) === selected;
+      node.setAttribute('aria-checked', String(active)); node.tabIndex = active ? 0 : -1;
+    }
+    if (!$('avatarPickerGrid').querySelector('[tabindex="0"]')) $('avatarPickerGrid').firstElementChild?.setAttribute('tabindex', '0');
+  }
+  function chooseAvatar(id) {
+    if (!avatarPicker || avatarPicker.busy) return;
+    avatarPicker.selected = id; status('avatarPickerStatus', ''); renderAvatarSelection();
+  }
+  function renderAvatarGrid() {
+    if (!avatarPicker) return;
+    const usable = usableAvatarIds(), query = $('avatarPickerSearch').value.trim().toLocaleLowerCase('zh-TW');
+    const current = cardAvatarId(profile);
+    const ids = Array.from({ length: MAX_AVATAR_ID }, (_, i) => i + 1).filter(id =>
+      (avatarPicker.filter === 'all' || usable.has(id)) && (!query || `${avatarName(id)} ${id}`.toLocaleLowerCase('zh-TW').includes(query)));
+    if (avatarPicker.filter === 'owned') ids.sort((a, b) => (a === current ? -1 : b === current ? 1 : a > 30 && b <= 30 ? -1 : b > 30 && a <= 30 ? 1 : a > 30 ? b - a : a - b));
+    const grid = $('avatarPickerGrid'); grid.replaceChildren();
+    for (const [index, id] of ids.entries()) {
+      const button = el('button', 'captain-avatar-option'); button.type = 'button'; button.dataset.avatarId = String(id);
+      button.setAttribute('role', 'radio'); button.setAttribute('aria-label', `${avatarName(id)}，${usable.has(id) ? id <= 30 ? '免費' : '已收藏' : '尚未收藏，僅供預覽'}`);
+      const image = el('img'); image.alt = ''; image.src = imageFor('avatar', id); image.loading = index < 12 ? 'eager' : 'lazy'; image.decoding = 'async'; avatarFallback(image);
+      button.append(image, el('strong', '', avatarName(id)), el('small', '', id === cardAvatarId(profile) ? '使用中' : usable.has(id) ? id <= 30 ? '免費' : '已收藏' : '未收藏'));
+      button.classList.toggle('is-locked', !usable.has(id)); button.onclick = () => chooseAvatar(id); grid.append(button);
+    }
+    $('avatarPickerEmpty').hidden = ids.length > 0;
+    $('avatarPickerCount').textContent = `${ids.length} 款頭像`;
+    for (const button of $('avatarPickerFilters').children) button.setAttribute('aria-pressed', String(button.dataset.filter === avatarPicker.filter));
+    renderAvatarSelection();
+  }
+  function openAvatarPicker() {
+    if (!profile?.isSelf || !accountId || preview || viewUserId || cardBusy || decorBusy) return;
+    avatarPicker = { selected: cardAvatarId(profile), filter: 'owned', busy: false, opener: document.activeElement };
+    $('avatarPickerSearch').value = ''; status('avatarPickerStatus', ''); renderAvatarGrid();
+    $('avatarPickerDialog').showModal();
+    const selected = $('avatarPickerGrid').querySelector('[aria-checked="true"]');
+    selected?.focus(); selected?.scrollIntoView({ block: 'nearest' });
+  }
+  function closeAvatarPicker(force = false) {
+    if (avatarPicker?.busy && !force) return;
+    const opener = avatarPicker?.opener; avatarPicker = null;
+    $('avatarPickerDialog').close();
+    if (!force && opener?.isConnected) opener.focus();
+  }
+  async function saveAvatarSelection() {
+    const picker = avatarPicker;
+    if (!picker || picker.busy || cardBusy || decorBusy || !profile?.isSelf || !accountId || preview || viewUserId || !usableAvatarIds().has(picker.selected)) return;
+    const owner = accountId, userId = number(profile.userId), mutation = ++cardMutation;
+    const card = { displayName: cardDisplayName(profile), tagline: cardTagline(profile), avatarId: picker.selected };
+    // Avatar-only save uses the persisted card text. Keep any unsaved editor text intact.
+    const current = () => avatarPicker === picker && mutation === cardMutation && accountId === owner && number(profile?.userId) === userId && profile?.isSelf === true && !viewUserId;
+    profileRequest++; picker.busy = true; cardBusy = true;
+    $('profileCardSave').disabled = true; $('profileCardCancel').disabled = true;
+    renderAvatarSelection(); status('avatarPickerStatus', '正在儲存頭像…');
+    try {
+      const result = await (card.avatarId > 62 ? profileCommand('card.set', { card }) : api.saveLauncherCard(card));
+      if (!current()) return;
+      if (!result?.ok || !result.profile) { status('avatarPickerStatus', errorText(result?.error), true); return; }
+      profile = result.profile; if (result.shop) acceptShopSnapshot(result.shop);
+      renderCardAvatarOptions(); renderProfile();
+      status('profileStatus', '頭像已更新。');
+      if (!$('profileCardEditor').hidden) status('profileCardStatus', '頭像已更新；名稱與簡介的修改請按「儲存名片」。');
+      picker.busy = false; closeAvatarPicker();
+    } catch { if (current()) status('avatarPickerStatus', errorText('offline'), true); }
+    finally {
+      if (mutation === cardMutation) {
+        cardBusy = false; picker.busy = false; $('profileCardSave').disabled = false; $('profileCardCancel').disabled = false;
+        renderAvatarSelection(); if (!$('profileCardEditor').hidden) renderCardDecorControls();
+      }
+    }
   }
   function renderCardDecorControls() {
     const root = $('profileCardDecorControls'); root.replaceChildren();
@@ -920,6 +1024,11 @@
   function localShop() { return {catalog:LOCAL_SHOP_CATALOG,preview:true,wallet:null,owned:{},equipped:{}}; }
   function acceptShopSnapshot(next) {
     shopRequest++; shop=next; shopFetchedAt=Date.now(); shopOnline=true;
+    if (avatarPicker) {
+      const grid = $('avatarPickerGrid'), scroll = grid.scrollTop, focused = document.activeElement?.dataset.avatarId;
+      renderAvatarGrid(); grid.scrollTop = scroll;
+      if (focused) grid.querySelector(`[data-avatar-id="${focused}"]`)?.focus({ preventScroll: true });
+    }
   }
   function showAnnouncementProduct() {
     if (!announcementShopItem) return;
@@ -1031,9 +1140,31 @@
   $('profileRefresh').onclick = loadProfile;
   $('profileBackToFriends').onclick = () => window.launcherSwitchPanel?.('social');
   $('profileCardEdit').onclick = openCardEditor;
+  $('profileAvatarEdit').onclick = openAvatarPicker;
+  $('profileCardAvatarChoose').onclick = openAvatarPicker;
+  $('avatarPickerCancel').onclick = () => closeAvatarPicker();
+  $('avatarPickerClose').onclick = () => closeAvatarPicker();
+  $('avatarPickerApply').onclick = saveAvatarSelection;
+  $('avatarPickerSearch').oninput = renderAvatarGrid;
+  $('avatarPickerFilters').onclick = event => {
+    const filter = event.target.closest('button')?.dataset.filter;
+    if (!avatarPicker || avatarPicker.busy || !['owned', 'all'].includes(filter)) return;
+    avatarPicker.filter = filter; renderAvatarGrid(); $('avatarPickerGrid').scrollTop = 0;
+  };
+  $('avatarPickerDialog').addEventListener('cancel', event => { event.preventDefault(); closeAvatarPicker(); });
+  $('avatarPickerGrid').addEventListener('keydown', event => {
+    if (!avatarPicker || avatarPicker.busy || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
+    const nodes = [...$('avatarPickerGrid').children], index = nodes.indexOf(document.activeElement);
+    if (index < 0) return;
+    event.preventDefault();
+    const top = nodes[0].getBoundingClientRect().top, columns = nodes.filter(n => Math.abs(n.getBoundingClientRect().top - top) < 2).length || 1;
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? nodes.length - 1 : Math.max(0, Math.min(nodes.length - 1, index + ({ ArrowLeft: -1, ArrowRight: 1, ArrowUp: -columns, ArrowDown: columns })[event.key]));
+    chooseAvatar(Number(nodes[next].dataset.avatarId)); nodes[next].focus(); nodes[next].scrollIntoView({ block: 'nearest' });
+  });
   $('profileCardCancel').onclick = closeCardEditor;
   $('profileCardEditor').onsubmit = saveCard;
   $('profileCardAvatar').onchange = () => {
+    renderCardAvatarChoice();
     const id = number($('profileCardAvatar').value) || number(profile?.avatar) || 8;
     $('profileHeroAvatar').src = imageFor('avatar', id) || imageFor('avatar', 8);
   };
@@ -1076,6 +1207,7 @@
       const id = snapshot?.authenticated && !snapshot.profile?.needsDisplayName ? number(snapshot.profile?.userId) : 0;
       const isPreview = snapshot?.previewMode === true;
       if (id === accountId && isPreview === preview) return;
+      closeAvatarPicker(true);
       closeItemPreview();
       stopShopPreview();
       clearBgm(); profileVisible = false;
@@ -1096,6 +1228,7 @@
       if(id||isPreview)void refreshShop();
     },
     openProfile(userId = 0) {
+      closeAvatarPicker(true);
       closeItemPreview();
       const id = number(userId);
       clearBgm();
@@ -1109,6 +1242,7 @@
       else loadProfile();
     },
     onVisible(panel) {
+      if (panel !== 'profile') closeAvatarPicker(true);
       if (previewedItem && panel !== previewPanel) closeItemPreview();
       if (panel !== 'shop') stopShopPreview();
       if (panel !== 'profile') { profileVisible = false; stopBgm(); }

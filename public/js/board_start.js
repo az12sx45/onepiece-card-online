@@ -1755,6 +1755,23 @@
   }
 
   function wireEvents() {
+    window.addEventListener('board:avatar-updated', (event) => {
+      if (Number(event.detail?.userId) !== Number(profile.userId)) return;
+      profile.avatar = event.detail.avatar;
+      profile.avatarUrl = shared.avatarUrlById(profile.avatar);
+      for (const campaign of state.campaigns || []) {
+        const member = campaign.members?.find(entry => Number(entry.userId) === Number(profile.userId));
+        if (member) member.avatar = profile.avatar;
+      }
+      syncLobbyProfile();
+      renderHome();
+      syncDockProfile();
+      if (state.lobby) renderLobby();
+      if (state.currentView === 'campaigns') renderCampaignList();
+    });
+    window.addEventListener('board:profile-avatar-dirty', () => {
+      if (state.currentView === 'campaigns') requestCampaignList();
+    });
     refs.openBoardFlowBtn.addEventListener("click", () => {
       commitPlayerName();
       setView("modeSelect");

@@ -1,0 +1,14 @@
+'use strict';
+// Execute installed core routing against candidate packages, with no player cache writes.
+const fs=require('fs'),path=require('path'),assert=require('assert/strict'),crypto=require('crypto'),cp=require('child_process');
+const C=require('./desktop_program_package_common'),{RuntimeAssetCache}=require('../desktop/runtime-asset-cache'),{HttpsProgramRuntime}=require('../desktop/program-runtime');
+const root=path.resolve(__dirname,'..'),qa='D:/Codex_QA/launcher-avatar-r60',out=qa+'/package-runtime-report.json',hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+(async()=>{const catalog=C.validateCatalog(JSON.parse(fs.readFileSync(root+'/public/desktop/catalog-v3.json'))),config=JSON.parse(fs.readFileSync(root+'/config/desktop-program-packages-v1.json')),report={status:'RUNNING',scope:'Actual core 1.2.23 RuntimeAssetCache and HttpsProgramRuntime; isolated source routes, no network or formal player cache writes',games:{}};
+fs.mkdirSync(qa+'/program-source-bytes',{recursive:true});
+for(const game of C.GAME_IDS){const meta=catalog.games[game],raw=fs.readFileSync(root+'/public/'+meta.manifestPath);assert.equal(hash(raw),meta.manifestSha256);const manifest=C.validateManifest(JSON.parse(raw),game),cache=new RuntimeAssetCache(),programPaths=new Map();let network=0;
+// Route exact committed bytes, as published, without changing unrelated Windows checkout line endings.
+for(const p of config.games[game].programFiles){const record=manifest.assets.find(a=>a.path===p);assert(record);const b=cp.execFileSync('git',['cat-file','blob','HEAD:public/'+p],{cwd:root,maxBuffer:128*1024*1024,windowsHide:true});assert.equal(hash(b),record.sha256,p);assert.equal(b.length,record.size,p);const file=qa+'/program-source-bytes/'+record.sha256;if(!fs.existsSync(file))fs.writeFileSync(file,b,{flag:'wx'});assert.equal(hash(fs.readFileSync(file)),record.sha256);programPaths.set(p,file);}
+cache.buildGame(game,manifest,{filePathForAsset:a=>programPaths.get(a.path)||path.join(root,'public',a.path)});const runtime=new HttpsProgramRuntime({gameId:game,origin:'https://r60-runtime.invalid',assetCache:cache,networkFetch:()=>{network++;throw Error('Unexpected network');}});runtime.authorize({enabled:true,gameId:game,...meta});let checked=0;
+for(const p of config.games[game].programFiles){const record=manifest.assets.find(a=>a.path===p);assert(record);const r=await runtime.handle(new Request('https://r60-runtime.invalid/'+p));assert.equal(r.status,200,p);assert.equal(r.headers.get('X-OnePiece-Desktop-Program'),'hit',p);const b=Buffer.from(await r.arrayBuffer());assert.equal(hash(b),record.sha256,p);assert.equal(b.length,record.size,p);checked++;}
+assert.equal(network,0);report.games[game]={releaseId:meta.releaseId,checked,networkFallbacks:0};}
+report.status='PASS';fs.writeFileSync(out,JSON.stringify(report,null,2));console.log(JSON.stringify(report));})().catch(e=>{console.error(e);process.exitCode=1});

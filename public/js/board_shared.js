@@ -537,6 +537,25 @@
     }));
   }
 
+  function applyAccountAvatar(account) {
+    const userId = Number(account?.user_id ?? account?.userId);
+    const avatar = Number(account?.avatar);
+    const currentUserId = Number(readLocalValue('op_user_id', '') || state.profile?.userId);
+    if (!state.profile || userId !== currentUserId || userId !== Number(state.profile.userId)
+      || !Number.isSafeInteger(avatar) || avatar < 1 || avatar > 2000) return;
+    const changed = Number(state.profile.avatar) !== avatar;
+    state.profile.avatar = avatar;
+    state.profile.avatarUrl = avatarUrlById(avatar);
+    if (state.socialMe && Number(state.socialMe.userId) === userId) state.socialMe.avatar = avatar;
+    writeLocalValue('op_avatar', avatar);
+    writeLocalValue('op_player_avatar', avatar);
+    const lobby = readJson(STORAGE_KEYS.boardLobby, null);
+    const ownPlayer = lobby?.players?.find(player => Number(player.userId) === userId);
+    if (ownPlayer) { ownPlayer.avatar = avatar; writeJson(STORAGE_KEYS.boardLobby, lobby); }
+    renderMe();
+    if (changed) window.dispatchEvent(new CustomEvent('board:avatar-updated', { detail: { userId, avatar } }));
+  }
+
   function translateSocialError(error, fallback = "好友服務暫時無法使用") {
     const code = String(error || "").trim();
     const map = {
@@ -638,6 +657,7 @@
     setHint("正在連接好友服務…");
     emitSocialUpdate();
     emitWithAck("SOCIAL_AUTH", { secret, deviceId: getDeviceId() }, (error, result = {}) => {
+      if (secret !== socialSecret()) return;
       if (error || !result?.ok) {
         state.socialLoading = false;
         state.socialReady = false;
@@ -648,6 +668,7 @@
         return;
       }
       state.socialMe = result.me || null;
+      applyAccountAvatar(result.me);
       state.socialReady = true;
       state.socialLoading = false;
       state.socialError = "";
@@ -707,7 +728,11 @@
       setHint(state.socialError);
       emitSocialUpdate();
     });
-    socket.on("FRIENDS_DIRTY", fetchFriends);
+    socket.on("FRIENDS_DIRTY", (message = {}) => {
+      fetchFriends();
+      if (message.by === 'profile') window.dispatchEvent(new CustomEvent('board:profile-avatar-dirty'));
+    });
+    socket.on('PROFILE_AVATAR_UPDATED', applyAccountAvatar);
     socket.on("DM_NEW", handleDirectMessage);
     socket.on("EMIT", handleSocialEmit);
     socket.on("SESSION_KICK", (info = {}) => {

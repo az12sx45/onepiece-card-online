@@ -1025,7 +1025,7 @@ setInterval(pruneLoginLocks, 15000).unref?.();
 async function getProfileBySecret(secret){
   if(!secret) return null;
   const r = await pool.query(
-    "SELECT user_id, name, avatar, stats FROM player_profiles WHERE secret=$1",
+    "SELECT user_id, name, avatar, stats, updated_at FROM player_profiles WHERE secret=$1",
     [secret]
   );
   return r.rows?.[0] ? launcherProfileShop.toGameProfile((await withDisplayNames(pool, [r.rows[0]]))[0]) : null;
@@ -1058,6 +1058,84 @@ const io = new Server(server, {
 const rooms = new Map();
 const boardRooms = new Map();
 const chessRooms = new Map();
+
+// Account appearance is independent of saved turns. Never let a client's old
+// world snapshot restore an avatar that the account has since changed.
+function boardPayloadWithCurrentAvatars(room, payload) {
+  if (!Array.isArray(payload?.gameState?.players)) return payload;
+  const avatars = new Map((room?.players || [])
+    .filter(player => Number(player.userId) > 0)
+    .map(player => [Number(player.userId), Number(player.avatar)]));
+  let changed = false;
+  const players = payload.gameState.players.map(player => {
+    const avatar = avatars.get(Number(player.userId ?? player.id));
+    if (!Number.isSafeInteger(avatar) || avatar < 1 || Number(player.avatar) === avatar) return player;
+    changed = true;
+    return { ...player, avatar };
+  });
+  return changed ? { ...payload, gameState: { ...payload.gameState, players } } : payload;
+}
+
+const liveAvatarVersions = new Map();
+function profileAvatarTimestamp(profile) {
+  return profile?.updated_at instanceof Date ? profile.updated_at.getTime() : Date.parse(profile?.updated_at || '') || 0;
+}
+function currentSharedAvatarProfile(profile) {
+  const previous = liveAvatarVersions.get(Number(profile?.user_id ?? profile?.userId));
+  const stamp = profileAvatarTimestamp(profile);
+  return previous && stamp && previous.stamp > stamp ? { ...profile, avatar: previous.avatar } : profile;
+}
+function publishSharedAvatar(profile, secret = '') {
+  const userId = Number(profile?.user_id ?? profile?.userId);
+  const avatar = Number(profile?.avatar);
+  if (!Number.isSafeInteger(userId) || userId <= 0 || !Number.isSafeInteger(avatar) || avatar < 1 || avatar > launcherProfileShop.LAUNCHER_AVATAR_MAX) return;
+  const stamp = profileAvatarTimestamp(profile);
+  const previous = liveAvatarVersions.get(userId);
+  if (previous && stamp && previous.stamp > stamp) return;
+  liveAvatarVersions.set(userId, { avatar, stamp });
+  for (const target of io.sockets.sockets.values()) {
+    if (Number(target.data.socialProfile?.userId) !== userId) continue;
+    target.data.socialProfile.avatar = avatar;
+    if (Number(target.data.boardProfile?.userId) === userId) target.data.boardProfile.avatar = avatar;
+    target.emit('PROFILE_AVATAR_UPDATED', { userId, avatar });
+  }
+  for (const room of boardRooms.values()) {
+    let changed = false;
+    for (const player of room.players) {
+      if (Number(player.userId) === userId && Number(player.avatar) !== avatar) { player.avatar = avatar; changed = true; }
+    }
+    room.gamePayload = boardPayloadWithCurrentAvatars(room, room.gamePayload);
+    if (changed) emitBoardLobby(room);
+  }
+  for (const room of chessRooms.values()) {
+    let changed = false;
+    for (const player of room.players) {
+      if (Number(player.userId) === userId && Number(player.avatar) !== avatar) { player.avatar = avatar; changed = true; }
+    }
+    if (changed) emitChessLobby(room);
+  }
+  if (secret) for (const [roomId, room] of rooms) {
+    let changed = false;
+    for (const meta of room.sockets.values()) {
+      if (meta.secret !== secret) continue;
+      const player = room.state?.players?.find(entry => entry.id === meta.playerId);
+      if (!player) continue;
+      if (Number(meta.avatar) !== avatar || Number(player.client?.avatar) !== avatar) changed = true;
+      meta.avatar = avatar;
+      if (player.client) player.client.avatar = avatar;
+      player.avatar = avatar;
+    }
+    if (changed) { broadcastLobby(roomId); broadcastState(room); }
+  }
+}
+
+async function refreshSharedAvatar(secret) {
+  const profile = await getProfileBySecret(secret);
+  if (!profile) return;
+  publishSharedAvatar(profile, secret);
+  const ids = profile.stats?.client?.social?.friends || [];
+  for (const id of [profile.user_id, ...ids]) emitToUser(Number(id), 'FRIENDS_DIRTY', { by: 'profile', userId: Number(profile.user_id) });
+}
 
 const MAX_ROOM_PLAYERS = 6;
 const BOARD_HOST_RECONNECT_GRACE_MS = 8000;
@@ -1611,7 +1689,29 @@ function boardCampaignActiveGatherRoom(campaignId){
   )) || null;
 }
 
-function serializeBoardCampaign(campaign, identity = {}){
+function boardCampaignDisplayAvatar(member, identity = {}, avatars = null) {
+  const userId = Number(member.userId);
+  const avatar = avatars?.get(userId) ?? liveAvatarVersions.get(userId)?.avatar
+    ?? (userId === Number(identity.userId) ? identity.avatar : null) ?? member.avatar;
+  return Number(avatar) || 1;
+}
+
+async function boardCampaignAvatarProjection(campaigns, identity) {
+  // Only members of records this account may already read; one batch per list
+  // or open, with no secrets returned and no saved record rewritten.
+  const ids = [...new Set(campaigns.filter(campaign => boardCampaignFindMember(campaign, identity))
+    .flatMap(campaign => campaign.members || []).map(member => Number(member.userId)).filter(id => Number.isSafeInteger(id) && id > 0))];
+  const avatars = new Map();
+  if (!BOARD_DB_PERSISTENCE_ENABLED || !ids.length) return avatars;
+  const result = await pool.query('SELECT user_id, avatar, stats, updated_at FROM player_profiles WHERE user_id = ANY($1::int[])', [ids]);
+  for (const row of result.rows) {
+    const current = currentSharedAvatarProfile(launcherProfileShop.toGameProfile(row));
+    avatars.set(Number(row.user_id), Number(current.avatar));
+  }
+  return avatars;
+}
+
+function serializeBoardCampaign(campaign, identity = {}, avatars = null){
   const member = boardCampaignFindMember(campaign, identity);
   if(!member) return null;
   const activeGather = boardCampaignActiveGatherRoom(campaign.campaignId);
@@ -1626,15 +1726,16 @@ function serializeBoardCampaign(campaign, identity = {}){
     progress:voyageRecords.progress(payload, campaign),
     backups:checkpoints.sort((a,b) => Number(b.revision)-Number(a.revision)).map((entry) => ({ revision:entry.revision, ...voyageRecords.progress(entry.payload, entry) })),
     legacyBranch:branch && voyageRecords.validPayload(branch.payload) ? { revision:Number(branch.revision || 0), ...voyageRecords.progress(branch.payload, branch) } : null,
-    members:campaign.members.map((entry) => ({ key:entry.key, userId:Number(entry.userId), name:String(entry.name || "玩家"), avatar:Number(entry.avatar || 1), title:String(entry.title || "航海士"), seatIndex:Number(entry.seatIndex || 0), latest:boardCampaignRecordSummary({ player:payload?.gameState?.players?.[entry.seatIndex], revision:campaign.revision, savedAt:campaign.savedAt }) })),
+    members:campaign.members.map((entry) => ({ key:entry.key, userId:Number(entry.userId), name:String(entry.name || "玩家"), avatar:boardCampaignDisplayAvatar(entry, identity, avatars), title:String(entry.title || "航海士"), seatIndex:Number(entry.seatIndex || 0), latest:boardCampaignRecordSummary({ player:payload?.gameState?.players?.[entry.seatIndex], revision:campaign.revision, savedAt:campaign.savedAt }) })),
     activeGatherRoom:activeGather ? { roomCode:activeGather.roomCode, hostName:activeGather.players.find((player) => Number(player.userId) === Number(activeGather.hostUserId))?.name || "房主", joinedHumans:activeGather.players.filter((player) => !boardPlayerIsCpu(player) && boardRoomPlayerOnline(activeGather, player)).length } : null,
   };
 }
 
 async function boardCampaignsForIdentity(identity = {}){
   const campaigns = await listBoardCampaigns(identity.userId);
+  const avatars = await boardCampaignAvatarProjection(campaigns, identity);
   return campaigns
-    .map((campaign) => serializeBoardCampaign(campaign, identity))
+    .map((campaign) => serializeBoardCampaign(campaign, identity, avatars))
     .filter(Boolean)
     .sort((a, b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0));
 }
@@ -1660,7 +1761,7 @@ function boardCampaignRoomPlayer(member, profile, campaignId, isActiveHuman){
   };
 }
 
-function createBoardCampaignRoom(campaign, profile, mode = "gather"){
+function createBoardCampaignRoom(campaign, profile, mode = "gather", avatars = null){
   const opener = boardCampaignFindMember(campaign, profile);
   if(!opener) return { ok:false, error:"not_campaign_member" };
   const roomCode = makeBoardRoomCode();
@@ -1671,7 +1772,7 @@ function createBoardCampaignRoom(campaign, profile, mode = "gather"){
   const playersBySeat = [];
   (campaign.members || []).forEach((member) => {
     playersBySeat[Number(member.seatIndex || 0)] = boardCampaignRoomPlayer(
-      member,
+      { ...member, avatar: boardCampaignDisplayAvatar(member, profile, avatars) },
       normalizedProfile,
       campaign.campaignId,
       member.key === opener.key
@@ -1778,7 +1879,7 @@ function assembleBoardCampaignPayload(campaign, room){
   payload.roomCode = room.roomCode;
   payload.schemaVersion = 2;
   payload.campaignContext = boardCampaignContextForRoom(room);
-  return payload;
+  return boardPayloadWithCurrentAvatars(room, payload);
 }
 
 async function saveBoardCampaignProgress(room, identity, message = {}){
@@ -4061,12 +4162,13 @@ io.on("connection", (socket) => {
         });
       }
       if(campaign.members.length === 1) mode = "solo";
+      const avatars = await boardCampaignAvatarProjection([campaign], profile);
       let room = mode === "gather" ? boardCampaignActiveGatherRoom(campaign.campaignId) : null;
       if(room){
         const joined = joinBoardCampaignRoom(room, profile, socket.id);
         if(!joined.ok) return cb?.(joined);
       }else{
-        const created = createBoardCampaignRoom(campaign, profile, mode);
+        const created = createBoardCampaignRoom(campaign, profile, mode, avatars);
         if(!created.ok) return cb?.(created);
         room = created.room;
         room.sockets.set(socket.id, { userId:profile.userId, clientId:profile.clientId, campaignNavigationPending:mode === "solo" });
@@ -4434,6 +4536,7 @@ io.on("connection", (socket) => {
       if(!socketMeta) return cb?.({ ok:false, error:"stale_socket", version:Number(room.gameVersion || 0) });
       let payload = message.payload;
       if(!isValidBoardSavePayload(payload)) return cb?.({ ok:false, error:"invalid_payload" });
+      payload = boardPayloadWithCurrentAvatars(room, payload);
       const sourceClientId = String(socketMeta.clientId || "");
       if(!canAcceptBoardGameStateUpdate(room, socket, sourceClientId, payload, message.reason || "")){
         return cb?.({ ok:false, error:"not_your_turn" });
@@ -4521,7 +4624,7 @@ io.on("connection", (socket) => {
 // ===== Social auth (for friend dock presence / DM routing) =====
 socket.on("SOCIAL_AUTH", async ({ secret, deviceId }, cb) => {
   try{
-    const prof = await getProfileBySecret(String(secret||"").trim());
+    const prof = currentSharedAvatarProfile(await getProfileBySecret(String(secret||"").trim()));
     if(!prof) return cb?.({ ok:false, error:"bad secret" });
 
     const uid = Number(prof.user_id);
@@ -4544,6 +4647,8 @@ lockTouch(uid, did, socket.id);
     socket.data.socialProfile = { userId:uid, name:String(prof.name || ""), avatar:Number(prof.avatar) || 1 };
     markOnline(uid, socket.id);
 
+    publishSharedAvatar(prof, String(secret || '').trim());
+
     return cb?.({ ok:true, me:{ userId: uid, name: prof.name || "", avatar: Number(prof.avatar)||1 } });
   }catch(e){
     console.error("[SOCIAL_AUTH] error:", e);
@@ -4555,7 +4660,7 @@ lockTouch(uid, did, socket.id);
 // Can be sent from any page (including game.html) to mark user online and set their current page.
 socket.on("PRESENCE_SET", async ({ secret, page, deviceId }, cb) => {
   try{
-    const prof = await getProfileBySecret(String(secret||"").trim());
+    const prof = currentSharedAvatarProfile(await getProfileBySecret(String(secret||"").trim()));
     if(!prof) return cb?.({ ok:false, error:"bad secret" });
 
     const uid = Number(prof.user_id);
@@ -5249,9 +5354,7 @@ for (const [eventName, action] of [['LAUNCHER_SHOP_BUY', 'buy'], ['LAUNCHER_SHOP
       cb?.(result);
       if (result.ok && action === 'equip' && /^ava-/.test(String(itemId))) {
         try {
-          const profile = await getProfileBySecret(normalizedSecret);
-          const ids = profile?.stats?.client?.social?.friends || [];
-          for (const id of [profile?.user_id, ...ids]) emitToUser(Number(id), 'FRIENDS_DIRTY', { by: 'profile', userId: Number(profile.user_id) });
+          await refreshSharedAvatar(normalizedSecret);
         } catch (error) { console.warn('[LAUNCHER_SHOP_EQUIP] friend refresh failed:', error); }
       }
     } catch (error) {
@@ -5294,9 +5397,7 @@ socket.on('LAUNCHER_LIFE_COMMAND', async ({ secret, requestId, expectedRevision,
       cb?.(result);
       if (result.ok && (payload.operation === 'card.set' || payload.operation === 'shop.equip' && /^ava-/.test(payload.itemId))) {
         try {
-          const profile = await getProfileBySecret(normalizedSecret);
-          const ids = profile?.stats?.client?.social?.friends || [];
-          for (const id of [profile?.user_id, ...ids]) emitToUser(Number(id), 'FRIENDS_DIRTY', { by: 'profile', userId: Number(profile.user_id) });
+          await refreshSharedAvatar(normalizedSecret);
         } catch (error) { console.warn('[LAUNCHER_PROFILE_COMMAND] friend refresh failed:', error); }
       }
       return;
@@ -5328,9 +5429,7 @@ socket.on('LAUNCHER_CARD_SET', async ({ secret, displayName, tagline, avatarId, 
     cb?.(result);
     if (result.ok) {
       try {
-        const profile = await getProfileBySecret(normalizedSecret);
-        const ids = profile?.stats?.client?.social?.friends || [];
-        for (const id of [profile?.user_id, ...ids]) emitToUser(Number(id), 'FRIENDS_DIRTY', { by: 'profile', userId: Number(profile.user_id) });
+        await refreshSharedAvatar(normalizedSecret);
       } catch (error) { console.warn('[LAUNCHER_CARD_SET] friend refresh failed:', error); }
     }
   } catch (error) {
@@ -5483,6 +5582,7 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
     );
 
     if ((nameParam !== null || patch.avatarSelection === true) && rows[0]?.user_id) {
+      publishSharedAvatar(launcherProfileShop.toGameProfile(rows[0]), secret);
       const uid = Number(rows[0].user_id);
       const friendIds = rows[0].stats?.client?.social?.friends || [];
       for (const id of [uid, ...friendIds]) emitToUser(Number(id), "FRIENDS_DIRTY", { by:"profile", userId:uid });

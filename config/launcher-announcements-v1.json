@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 69,
+  "revision": 70,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r60-avatar-picker-sync",
+      "status": "published",
+      "publishedAt": "2026-10-12T09:45:18.554Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r60",
+      "title": "看見你的頭像，航海錄同步換新",
+      "summary": "頭像更換改為圖片網格與大圖預覽，修正啟動器換好頭像後，航海錄仍顯示舊圖的問題。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-avatar-r60.webp",
+        "alt": "啟動器實際頭像選擇器，圓形圖片網格與目前、待套用預覽"
+      },
+      "body": [
+        "在個人頁直接點頭像即可更換。圖片網格可搜尋角色，切換已收藏與全部款式；目前頭像與待套用的大圖並排確認，套用和取消按鈕固定留在可見位置。",
+        "未收藏頭像可先看大圖，已收藏或免費頭像才可使用。更換頭像時，編輯中的名稱與簡介草稿會保留。",
+        "修正航海錄使用進房、登入快取或舊存檔頭像的問題。更換後同步到正在開啟的房間与遊戲畫面，後續回合推送與讀檔也會沿用帳號目前的頭像。",
+        "沿用差分更新，無須重新安裝。請重新開啟啟動器，關閉並重新進入航海錄，以載入本次介面與同步修正。現有收藏、遊戲進度與最近的航行動畫更新都保留。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r59-local-shop",
       "status": "published",
