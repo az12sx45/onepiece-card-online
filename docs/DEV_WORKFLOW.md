@@ -8300,3 +8300,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - tools/launcher-avatar-r60/*、scripts/launcher_avatar_identity_package_qa.js：封裝鎖定已提交 source，僅3個 Board 程式與3個 renderer及公告圖片；其他遊戲program、舊素材record及既有平順航行版本逐項保護。續用 core1.2.23，不建立安裝檔。
 
 - r60 最終同步QA：35項PASS，包含雙瀏覽器及隔離SQL紀錄清單；純外觀只更新portrait DOM，避免renderAll排入自動存檔/回合推送。變更前後非avatar完整紀錄（revision/updatedAt/backups/progress）逐項相等。來源SHA與所有報告SHA見docs/LAUNCHER_AVATAR_R60.json；獨立複核無阻擋。
+
+- r60封裝完成：source 290f5d67859a5956519e54ecd2adb12b3b78b471；317檔簽章SHA256 c15a6947fcbae51c1e05b5ca4518731b0a978d8f186c8030c32d9b7c2b03575d。4個啟動器blob公開HEAD/GET/大小/SHA通過；候選59→60下載335321 bytes、317檔校驗、316個舊blob保留與二次0下載通過。Board只替換3個program blob共3613111 bytes，沿用平順航行基線；Card/Chess manifest不變。實際core三遊戲112個program route全部命中、網路fallback 0。公開切版及正式cache待讀回。

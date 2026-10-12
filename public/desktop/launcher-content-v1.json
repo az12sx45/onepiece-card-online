@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 59,
-  "publishedAt": "2026-10-10T15:59:19.621Z",
+  "revision": 60,
+  "publishedAt": "2026-10-12T09:54:33.951Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -839,6 +839,11 @@
       "sha256": "01361c082b0b6256b6013e82934025971cafb5ac548cb4ebe0578d6509f4940e"
     },
     {
+      "path": "images/launcher_announcements/launcher-avatar-r60.webp",
+      "bytes": 104626,
+      "sha256": "411e0a90d1897246dcf3c9649300876f9fdc57a1b6e34130091a679cf837c775"
+    },
+    {
       "path": "images/launcher_announcements/launcher-fish-detail-r31.webp",
       "bytes": 110570,
       "sha256": "69d7122d5d85813f53c7dffa112719e039a7342e35ef71c952404a46d01bf477"
@@ -1525,13 +1530,13 @@
     },
     {
       "path": "launcher-profile-shop.css",
-      "bytes": 36528,
-      "sha256": "e301b7d8ffd86638df4ea941ea670e4df590359453741ffe9c081d0b41def68e"
+      "bytes": 45319,
+      "sha256": "f8e2940d6fa3d0e55fee09232558878e664612c5bce292e8dc29a5d155633525"
     },
     {
       "path": "launcher-profile-shop.js",
-      "bytes": 132685,
-      "sha256": "855947e33bdd30e4fc14176af225f3c2dbf5f72b40d00b5294d58a24d0327b40"
+      "bytes": 141820,
+      "sha256": "6bbf97b4777b510de02971d866ef6376fe74ff44da22795ee5c71bb5d69ae3e1"
     },
     {
       "path": "launcher-room-aquarium.css",
@@ -1580,8 +1585,8 @@
     },
     {
       "path": "launcher.html",
-      "bytes": 41273,
-      "sha256": "b90fa7dc0466fcec68313a2011b516067e3a23f38f675ee61ee42e29d78f3b92"
+      "bytes": 43556,
+      "sha256": "24fdcc696be09511f6cb839a017a43921d661b46af79d4782727a6307cf3e077"
     },
     {
       "path": "launcher.js",
@@ -1592,6 +1597,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "yeTB1f4A9kYG22U63AaaWvimXEdqF6pFhMSACh/NgFWy+z0Ix2Y0uOJ5MPuT+SThTSjdV6lV7tOxVsvVnUrgCQ=="
+    "value": "3zEYqK90NrMKGHE9AOBmNbrwMwyvEe/Gj/Fi/BBIQUwCwn6Xf+bP4y3pacJOKYHE/azioovJIiR2Ss0FACffBQ=="
   }
 }
