@@ -1970,3 +1970,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - scripts/launcher_profile_guestbook_r62_qa.js、launcher_guestbook_danmaku_qa.js：實際renderer隔離驗收與既有彈幕流程回歸。
 - tools/launcher-profile-r62/*：baseline保留、簽章差分建置、CAS發布、公開catalog/manifest及本機core/cache驗證。
 - docs/LAUNCHER_PROFILE_R62.json：來源UI驗證；公開完成狀態另見release收據。
+
+- docs/LAUNCHER_PROFILE_R62_RELEASE.json：公開r62簽章、CAS、完整catalog、core protocol、正式快取與資料保留收據。

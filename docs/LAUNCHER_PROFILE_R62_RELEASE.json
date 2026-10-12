@@ -1,0 +1,1585 @@
+{
+  "status": "PUBLIC_VERIFIED",
+  "verifiedAt": "2026-10-12T16:05:32.236Z",
+  "authority": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12",
+  "sourceCommit": "a91728677bd38ff56ad4a4a4bf47090361baebc0",
+  "releaseCommit": "ecd8cad4fe307db69cb844f3811f14a8f163b3c5",
+  "coreVersion": "1.2.23",
+  "revision": 62,
+  "manifestSha256": "265693bacb11f03690e72c9a142576c65ccc4cacb93c162a3bc99e6c15e49535",
+  "qaDirectory": "D:/Codex_QA/launcher-profile-r62",
+  "sourceProof": [
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/editor-final/report.json",
+      "sha256": "04306b59cd97e0d39a8912dfd2e8715c31d2f5bd9e597f2b7e47f4d0cc9cce23",
+      "checks": 101,
+      "scope": "Real renderer and local images; isolated authenticated bridge; no player data writes."
+    },
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/guestbook/report.json",
+      "sha256": "63ddb64b6f3ff48871bd8b55b1aec06e195d7f036c9470c64a90621d307b9282",
+      "checks": 51,
+      "scope": "Real launcher renderer in Chromium with mocked preload; no real account, server or currency mutation."
+    },
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/backend-report.json",
+      "sha256": "7b6341dcf1f018718f257ef9424304c93676c87315dc642f52bba3421ca7fcbc",
+      "checks": 49,
+      "scope": "Isolated PGlite SQL; existing AuthService method and index route exercised. No formal player account transactions."
+    },
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/renderer/report.json",
+      "sha256": "92944b9b8baa2f653fe153f70699691fe80e6c31899938116e138946f168c506",
+      "checks": 77,
+      "scope": "Actual launcher HTML/CSS/renderer with isolated mocked preload. No real player mutations."
+    },
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/audit/final/reader-and-clean-capture-report.json",
+      "sha256": "07ccdd8268da42dd461938fa0b94c536bd294b369e1b4b3629789d8ac53a5631",
+      "checks": 4
+    },
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/startup-report.json",
+      "sha256": "0ad32f2485820e9d0f315e16431da0cf0de490908b228b68dfdf60a9ef179a5f",
+      "checks": 6,
+      "scope": "Static HTTP gate only. No account login or save-record endpoints requested. Database fallback deliberately targets closed loopback port 1."
+    },
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/announcements-report.json",
+      "sha256": "1e16d958b6cf1ddb58a8035396eb647d7fb304a2d7a03e26ff851754dea768cc",
+      "checks": 82,
+      "scope": "isolated-in-memory-PGlite-announcement-service-QA"
+    }
+  ],
+  "reports": {
+    "renderer-inventory-report.json": {
+      "status": "PASS",
+      "sourceCommit": "a91728677bd38ff56ad4a4a4bf47090361baebc0",
+      "baseline": "ad9011407eb7c6ec33b2f9dd3e593e47ef16f4b6",
+      "revision": 62,
+      "coreVersion": "1.2.23",
+      "files": 320,
+      "changedPaths": [
+        "launcher.html",
+        "launcher-profile-shop.js",
+        "launcher-profile-shop.css",
+        "images/launcher_announcements/launcher-profile-r62.webp"
+      ],
+      "uniqueChangedBytes": 308479,
+      "catalogSha256": "a04fcd660c7f207363ce7fd41433cd86fd1e910b439011d7606c800991e84c6d",
+      "gameProgramsPreserved": [
+        {
+          "path": "public/desktop/catalog-v1.json",
+          "bytes": 1039,
+          "sha256": "e077aeefc0cd064526f36bf39d1664e063acd1b7a48909c0ad291ad10ca677b1",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/catalog-v2.json",
+          "bytes": 1286,
+          "sha256": "34f6641e13d34303bd4fad66374bbe6d8a89abcb309f0113c5aa355bf91ee345",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/catalog-v3.json",
+          "bytes": 1404,
+          "sha256": "a04fcd660c7f207363ce7fd41433cd86fd1e910b439011d7606c800991e84c6d",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/launcher-release-v1.json",
+          "bytes": 676,
+          "sha256": "0b8115ce7bb6d7160a981625cf7367cda565de2a4d34ea9c061a8f5e59672f97",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-assets-eb95373ee6ab1aa3.json",
+          "bytes": 842327,
+          "sha256": "c1d6736b6687d1146397607607c9e9fe63f93acf2f83aa5fe5fc68cd34f32c82",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-assets-ecd41e5ae3bcf045.json",
+          "bytes": 841598,
+          "sha256": "97908b785417c4944971d1d2d5b3cd3708778f2f894a2f028394fa29b450ad3f",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-01bba5eeafa3780b.json",
+          "bytes": 1637645,
+          "sha256": "8be85b8440463dda2d04965499608274bdb59af53d1b2dea061966d16bbc03ac",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-0f54c185d7d65dcb.json",
+          "bytes": 994284,
+          "sha256": "1184aca1248ce65074d3fb22b74ff2c0f03f57631e556aa028580dda872d7415",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-0f7755bca2f64ff4.json",
+          "bytes": 850414,
+          "sha256": "9ddb9b90c4e7ddbf3183cc25de503ecade57a0924c5125d079d4f3b473bf1149",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-1c453fcf83416d97.json",
+          "bytes": 1630156,
+          "sha256": "f83c26dfb1d9e2bc74b864ebfd6afb67b939e73ed6ac6790462af098134f141e",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-2fc489ad68999481.json",
+          "bytes": 994284,
+          "sha256": "db91ea269215c338bc69582a3e793d57b63f0ecec0c9f05aa93c932e5d90595e",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-3155f473aa76c19f.json",
+          "bytes": 1634718,
+          "sha256": "5d704e4b4e95cf11ca677480e9edabc9f4a8c3367345fd10f5b78f6782fd6c38",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-35a6c13243b13079.json",
+          "bytes": 1639124,
+          "sha256": "9c47fa79f2a04dac1a837f13f274ed0eeb3480597728ce9742001b63eeb2e7fa",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-40947c7bd7fe4b29.json",
+          "bytes": 850414,
+          "sha256": "c3a7b45fae657b8d911c41074808b8fb86f19fe8d5afdb75fafa142e2509cb91",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-41425d61d6f49184.json",
+          "bytes": 1012414,
+          "sha256": "eeb5e84246d69618029b6e89151ba93dab48777427dff9b947ec311cb2cd6089",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-44cba2090f7b33a2.json",
+          "bytes": 1626419,
+          "sha256": "24b2942d9acf6909f54a6f29c0a2446f70179ba26cfc1092c64ac8ce33b15bdc",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-464d59c2a2be9a32.json",
+          "bytes": 1638400,
+          "sha256": "b3a386111c81aa4a8326eb0d49de3b28e79115c693f54213b0cf424c793dac02",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-4f3c87d6ae495974.json",
+          "bytes": 1639363,
+          "sha256": "2ddba755d4c8cd2503c2d9c723dc2e2eede61e775b467655ff0471136ba934ad",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-4f719965bdc78c48.json",
+          "bytes": 1634718,
+          "sha256": "f28563970af3553be7dbe5a00b48a77297d93f30b1bc06de3668f6e6fae86093",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-510515ffd82e4151.json",
+          "bytes": 1626868,
+          "sha256": "8b85f286b6d59f5b539283f6aa07588acbb8c8de03ea034163160f30d4df235b",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-59115d76bca49c75.json",
+          "bytes": 1626419,
+          "sha256": "d4008360d0d6c3cba695a66c4c7915f47ad9b2c102f053bd3f3cebbf15f6a834",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-5919e6e159cb3bf1.json",
+          "bytes": 1676463,
+          "sha256": "a0061b7fb0b4c431a3d1952e2ad7da86a2328d12399c2411808223f363b95182",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-5b099a798dac9202.json",
+          "bytes": 1676463,
+          "sha256": "1e64a775b1c2c12dba55ab34bdaa94827a8651cc70b30949315d448fe112efd2",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-660f4c4369f9177b.json",
+          "bytes": 1634718,
+          "sha256": "0de8e2d5835f49e13d0063f997681c28a9a6d8af6541480bfb28f50d91143650",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-682d04d78ff3aeba.json",
+          "bytes": 850414,
+          "sha256": "c1f3910abfd961cbdf686005ac336425040a20eaf5858377d5120b22061c6017",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-68ec6b205918f818.json",
+          "bytes": 849984,
+          "sha256": "80c4c8135e9bea62bffef7936326289b31e2d6b2062bb4864c83ae4df6f0365b",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-7be289c0375a59c2.json",
+          "bytes": 850633,
+          "sha256": "9cbfec4e51a7e5aa14d15206b8c8eaa17fa66cfde1bbb05ce8c2383e13bf195a",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-83b5cb65d174761d.json",
+          "bytes": 1676463,
+          "sha256": "554dab56bf1300aa9ee49110883235d8b2a156d2393594ef96321cbc05c695d6",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-866f9d61a53eca35.json",
+          "bytes": 1012414,
+          "sha256": "e87d3e98fe27610f25d292fb3e595b6bfa8cefd44dff13d60c9e8bc644d67b75",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-8d97e397c7dcb7a6.json",
+          "bytes": 1639363,
+          "sha256": "58fcf19fa6d656f8b13384d08e24d279f44d9eaff5b71ff0a52d6d7de4aba9d4",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-9995344f7ee4324c.json",
+          "bytes": 1026408,
+          "sha256": "ff18528aaaa3586668c1bbcd29f4d5bcd27d5e96352ef8c4bc16025f2b9f8a61",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-a2d57271de06415c.json",
+          "bytes": 994284,
+          "sha256": "40c274ba7be567668a9332d2682cc5344a8c71998e05b2bb8b5120adb11640a3",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-a457977a2d6db004.json",
+          "bytes": 1634718,
+          "sha256": "bd3b8a6edda7d61d9dbc4fa58e831c52c6d03ecb5cbe941bccac585d018879b1",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-a7cafa24cfe4f2a7.json",
+          "bytes": 1676463,
+          "sha256": "8f7e6cb67369623db4a767801815b4e79216da95e260ba2de015b174fca70283",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-b3342dbd8b206231.json",
+          "bytes": 1011997,
+          "sha256": "b767e1c146e47ec6c29497c0fcfb59e096b6a0eac450a1d3fdbf0a45bdde877f",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-b42b02c7fb5e35d8.json",
+          "bytes": 1626419,
+          "sha256": "e1d22cd95f054d29900fd26c8e170cea702624d1ca731077fef6b3ce088a8bbc",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-b5eaebdecfaee7d6.json",
+          "bytes": 1628017,
+          "sha256": "0502fba41c3e97236d1ec832d7e1b36e58e3e323ba877f8211dc424c6bac4b82",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-b66ee43a49bf77d3.json",
+          "bytes": 1626868,
+          "sha256": "0f422f49ce1020cc9309f4174a5c82d82183bd63c54451a5c0e0455638991f5c",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-ba5b139c7f2fd8cf.json",
+          "bytes": 1025993,
+          "sha256": "ac05f7cdbf3d0b10110e68e7782b3071598857c7fd8ca2da27cf4b5d5ad29eaa",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-c84296185eafd825.json",
+          "bytes": 1626868,
+          "sha256": "7e682e1fe5874c22f90a2a2ab0ccadae84bd970d454f55698b74841bb325270c",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-ce0f8d7b8d2914c2.json",
+          "bytes": 1639124,
+          "sha256": "24d0ecdf62ce9c6e52ae550332cfa1fc0496a51ba9331789345f9b9215770e01",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-d5357a5866ea75d8.json",
+          "bytes": 850633,
+          "sha256": "c0640aa57e5f1fe7093ca1ead4d2362a34f4320e2bb41fb11ca4539431c08c80",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-e98ef3f16bf6e6e4.json",
+          "bytes": 1634718,
+          "sha256": "438d5e65fc477bcdd30e5c07fa71a5ef8faf15758b0cb9814e5201221b8b3d64",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/board-package-fe853a3b827173df.json",
+          "bytes": 1676463,
+          "sha256": "bc9d7bec975f85f82285abd1373ee1ef9823fa99136374dbc194222e86fbd149",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/card-assets-197d7c0144fe523a.json",
+          "bytes": 99421,
+          "sha256": "1c33fb0ea2d42ed11b868c861de9286af356f1717d5a81724cda285d3536c443",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/card-assets-440918e609684317.json",
+          "bytes": 154422,
+          "sha256": "46bc6d59f66c6ec5c26e2d7291c5b1ec65f466f6c2a70560c6a39ba11faed263",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/card-package-69fb97aaf9644cbb.json",
+          "bytes": 234104,
+          "sha256": "65d6dc1546051620564f08b5e82f2356c55067330ff1968275c854eed4988c44",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/card-package-a7d368a6e3feae01.json",
+          "bytes": 234104,
+          "sha256": "5ec74d1890d06c58e1086ef6df646b247c3926a5a82a059d4abba4bcd0903bcd",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/card-package-ca025698d8851a35.json",
+          "bytes": 160935,
+          "sha256": "3125752be04ab391150021a0a954fda6d08ff6a93c1b8b672e8633d3eeb9dd59",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/card-package-ca251af687e50daf.json",
+          "bytes": 160935,
+          "sha256": "a112d313b2ed51ef1b7e1362c15f26b3b6b6b64287d4516abf6870846954c5cc",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/chess-assets-4a14ed8c714c0b60.json",
+          "bytes": 403658,
+          "sha256": "ea710d9921d2826200dd41a808e222c7c337dd4a4f276e338eb4324f4a18adad",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/chess-package-cdab9e869c05f12d.json",
+          "bytes": 409785,
+          "sha256": "9eeda0136c2781bb29196f67ac97350a94dba0fa826b3af4f117b4f69cd49043",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/chess-package-d37cd9a585600687.json",
+          "bytes": 409785,
+          "sha256": "4cf972d317269a6b7804ed5554bb9c428018ba4d421fc046666d7953392b335e",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/chess-package-ee4627881596bdad.json",
+          "bytes": 446885,
+          "sha256": "a456de14211bac9ab767ae2a7a56525cadb7a85516d3fb32f86ca1f6f4058ce5",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/desktop/manifests/chess-package-f1dd1442ff4fce94.json",
+          "bytes": 446885,
+          "sha256": "b135981b1c88288ae7393caf7ae9dde56180b8b9c506ac2a276f218dc0660380",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "config/desktop-program-packages-v1.json",
+          "bytes": 5091,
+          "sha256": "590134781b0d5d757c8aea90f9c7a7abc1da894a44d62dcb3a464cc01a51fb39",
+          "workingByteIdentical": false,
+          "workingBytes": 5232,
+          "workingSha256": "9c8e14902e5897a2c52c36877a9b96a3e9cf804485f5cda3036d516cc5a5ff88",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/css/card-cursor-buggy-v3.css",
+          "bytes": 7070,
+          "sha256": "2c241921b3481febbb88bbf4d3eb5f2cd7615bc8218371e497b84e11c8aad6ef",
+          "workingByteIdentical": false,
+          "workingBytes": 7242,
+          "workingSha256": "99f4f622d141f5f68df5236e20e60d4fce9bf68cc48a4ccac9475be600c7f247",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/css/card-entry-tailwind-v1.min.css",
+          "bytes": 25461,
+          "sha256": "20fc04069e7113145fe3dcd61112672a9ac60c4cefdbc32e284396f6e1393d0f",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/css/card-finish-v1.css",
+          "bytes": 8730,
+          "sha256": "004bff52e33f50e08f1d21b9a04fa494a06bb2c93a799e2e3c033c1abd784d05",
+          "workingByteIdentical": false,
+          "workingBytes": 9038,
+          "workingSha256": "0a82437749e0507b127602596a3d063dc62330d676b53502055a0a1437632ba2",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/css/card-tailwind-v1.min.css",
+          "bytes": 20531,
+          "sha256": "c39f1fc5a6af282c047f6c0c27b2e83f9410901c15a50dd80877815208aab115",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/game.html",
+          "bytes": 230071,
+          "sha256": "6c738e823754f2f271cefd743e135d30000ba0c87636ce99464dea58a4f5217a",
+          "workingByteIdentical": false,
+          "workingBytes": 237307,
+          "workingSha256": "27abe19b354426132e98f487c50322d961dd9ed69669a5c5e6e816665cda87c5",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/i18n/en.js",
+          "bytes": 11383,
+          "sha256": "9c3bbbce8dc7cdcb0960bbfdcbdd6cb125f4f09a84cb7ba78e9dcf17d6471062",
+          "workingByteIdentical": false,
+          "workingBytes": 11668,
+          "workingSha256": "10fd37e476bdfeca1adfb015b0e2eb85556ec8793383590b4a3d150751781a08",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/i18n/i18n.js",
+          "bytes": 1556,
+          "sha256": "6fa9e39cb12407e1bc87447fad218f4b9aef110be9d9fdb8f3b4794470a3e5c8",
+          "workingByteIdentical": false,
+          "workingBytes": 1613,
+          "workingSha256": "aa705e51f00f82c36c9126c0ad10d7b543829ccc8be8f58331bbfa54e923655c",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/i18n/ja.js",
+          "bytes": 11146,
+          "sha256": "d2d024d95ac2f710a5d6aa6167e4a3de89f48671ed163c3a61782a6de5ffc229",
+          "workingByteIdentical": false,
+          "workingBytes": 11429,
+          "workingSha256": "1e19721d1fc46bb5dbe1c44a05086b74177c7c90cfce2e1727b56659483214f5",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/i18n/ko.js",
+          "bytes": 9670,
+          "sha256": "54384a8f7daa40d0108c4740a787b3317e6d302806075267ab92d78468431f71",
+          "workingByteIdentical": false,
+          "workingBytes": 9946,
+          "workingSha256": "d706f2cd7ab2acd066c6a6f44de7216d0a2d8e50387992659692d8330908782d",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/i18n/zh-Hant.js",
+          "bytes": 10528,
+          "sha256": "c1138ed08be687f54f632185b0c1845adf4e8227a6d4d54ddb9e592fae7cb760",
+          "workingByteIdentical": false,
+          "workingBytes": 10812,
+          "workingSha256": "c021474b039fffc8b705937d6999a6cd68c2a8bff72bcd25ca21ca8ecf9c3c77",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/card_finish_v1.js",
+          "bytes": 22135,
+          "sha256": "32951f56ea0deb1a3a9fb94ea5e1f731fe12e20fcebfbcd33b9524d09473493b",
+          "workingByteIdentical": false,
+          "workingBytes": 22634,
+          "workingSha256": "21649ea6b66271e832656f9908ffb5706949f854a3a9ffacc8a0ed5766289add",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/game_cursor_feedback_v1.js",
+          "bytes": 8717,
+          "sha256": "7b334d036a80a5fc7a2dd6255b3a4a158c17b5287bce014da5b00fe154bb1cf3",
+          "workingByteIdentical": false,
+          "workingBytes": 8954,
+          "workingSha256": "e4fd3057b698584ef41e704f751e98ff16d6e3279be87eccf49f9f3df2e22bb6",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/manifest.webmanifest",
+          "bytes": 373,
+          "sha256": "d28c4a6125f6a3a900312e03e9e2053eaf0d70533a5c0374acf7dae4ffe2dd6b",
+          "workingByteIdentical": false,
+          "workingBytes": 385,
+          "workingSha256": "d0a3774713a938e19805e74fb2123fda24c11d1b6fbbd6b713742aa46d6b6ae3",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/profile.html",
+          "bytes": 154626,
+          "sha256": "c247dcdcc309270af49b93657aea9622015051aab8da0699b35b666e889e7216",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/result.html",
+          "bytes": 133788,
+          "sha256": "b2a9f416908bec21ad03c40a1c90c2f7c0fb0b9b0257216c3c1c97c27971b4d0",
+          "workingByteIdentical": false,
+          "workingBytes": 137949,
+          "workingSha256": "d1f8de150fe8e7d1abf9037d01b8151600b48ebe41d16db99450d204ed58733a",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/shop.html",
+          "bytes": 83099,
+          "sha256": "1af418dcce32ada658d6849ec7971fc83aa2663b1ac6607da499c78c819f63e1",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/start.html",
+          "bytes": 157185,
+          "sha256": "730e97504c689b151bc8c5fb7c5656fab00e6e4061499b9db5591f6c39b3e863",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/sw.js",
+          "bytes": 5213,
+          "sha256": "e9014bf19c0167df455ca7e7a9a0dd6d92fda3533110fb0f091b5c04061a1a6d",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/tutorial.html",
+          "bytes": 229940,
+          "sha256": "89c8cb4ec0807eabe1fa3c2e7e05a34eb5c6d38d9a551df43e52cd314c068e25",
+          "workingByteIdentical": false,
+          "workingBytes": 236859,
+          "workingSha256": "35993f990a07b8832e725987af46ad4a9c0e7273daa7442243716f2ebd4efb78",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/vendor/README.md",
+          "bytes": 639,
+          "sha256": "4124b5b207a8b8e9c0001f6737672cf3507e03d999ebf9c24460bf9cf78674d2",
+          "workingByteIdentical": false,
+          "workingBytes": 654,
+          "workingSha256": "02e7ce1acd00b871a7091c5b0081d97a6c283775028d5c3bed7b440ff660e2f6",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/vendor/babel/7.24.7/babel.min.js",
+          "bytes": 2866178,
+          "sha256": "d9e33722fdfba37e4e428aa72cb58da65f18358bfb229e136dfc1285e76b03ff",
+          "workingByteIdentical": false,
+          "workingBytes": 2866180,
+          "workingSha256": "2af1b84912e488f03157c36275577e867b3923dc3bbab78b91f2259d14713689",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/vendor/licenses/Babel-7.24.7-LICENSE.txt",
+          "bytes": 1106,
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76",
+          "workingByteIdentical": false,
+          "workingBytes": 1128,
+          "workingSha256": "8103e28c0306648eb68f2b2701f5285316bf8f7646eafd3135fa7c0806c4c919",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/vendor/licenses/React-18.3.1-LICENSE.txt",
+          "bytes": 1086,
+          "sha256": "52412d7bc7ce4157ea628bbaacb8829e0a9cb3c58f57f99176126bc8cf2bfc85",
+          "workingByteIdentical": false,
+          "workingBytes": 1107,
+          "workingSha256": "f08a94bfb0bdc1d7f1cb59badaf0f8c551b10db871185622dbf1fd036affa9cb",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/vendor/licenses/ReactDOM-18.3.1-LICENSE.txt",
+          "bytes": 1086,
+          "sha256": "52412d7bc7ce4157ea628bbaacb8829e0a9cb3c58f57f99176126bc8cf2bfc85",
+          "workingByteIdentical": false,
+          "workingBytes": 1107,
+          "workingSha256": "f08a94bfb0bdc1d7f1cb59badaf0f8c551b10db871185622dbf1fd036affa9cb",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/vendor/licenses/Socket.IO-4.8.1-LICENSE.txt",
+          "bytes": 1113,
+          "sha256": "70aebb46c7195354683546b0ffebd5989cb18e726e715d9ba71d964f929f0075",
+          "workingByteIdentical": false,
+          "workingBytes": 1135,
+          "workingSha256": "462fa524c20e9be3bcd3e9c2ef8b005ce1e7959a1686e48a966c927bf9f8710e",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/vendor/licenses/TailwindCSS-3.4.17-LICENSE.txt",
+          "bytes": 1071,
+          "sha256": "60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985",
+          "workingByteIdentical": false,
+          "workingBytes": 1092,
+          "workingSha256": "2440b18973d1ea593550c160b89dafe3fa16fa801d77519aa6b7eb5a718be3e9",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/vendor/react-dom/18.3.1/react-dom.development.js",
+          "bytes": 1080227,
+          "sha256": "f9044a5e9c39db8bb1a204dff924e526ec0a621e695bb69de1035811be8709e4",
+          "workingByteIdentical": false,
+          "workingBytes": 1110151,
+          "workingSha256": "d48d2047db8accbee68d8710fe25904fb22da657c4d1a486fbc8e6a76043f639",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/vendor/react/18.3.1/react.development.js",
+          "bytes": 109931,
+          "sha256": "28348fef6cb0ed8b2ceeb22deaf824428fd13875d84c73d38f77dd216fc24e7f",
+          "workingByteIdentical": false,
+          "workingBytes": 113274,
+          "workingSha256": "e39fc2c020e3cec538be15db6c18abdf72418ec58cedf3b49e42e9c28836212f",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/vendor/socket.io-client/4.8.1/socket.io.min.js",
+          "bytes": 46831,
+          "sha256": "b0e735814f8dcfecd6cdb8a7ce95a297a7e1e5f2727a29e6f5901801d52fa0c5",
+          "workingByteIdentical": false,
+          "workingBytes": 46838,
+          "workingSha256": "e759359a3cd50622c15cd13fd19e90f80778c639c54086ca409629f62d5c0179",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/board_battle.html",
+          "bytes": 385486,
+          "sha256": "086d8ab8aba034b052e70d233efccab7e082fabd0efd8e6b1e80053ce7052593",
+          "workingByteIdentical": false,
+          "workingBytes": 396925,
+          "workingSha256": "0616e1cb52253f7def9c238b3ff27d09b0493a3956bfbf0663df6b72c68e4b42",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/board_fixed_viewport.html",
+          "bytes": 3339,
+          "sha256": "949885a7319ba70c69a84e38f6735f74abd4ec127c25ba958dd8be702a82d3d8",
+          "workingByteIdentical": false,
+          "workingBytes": 3425,
+          "workingSha256": "f052a48b0d324047f46604784eed791373df5abc12c21381cae155cc73743411",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/board_game.html",
+          "bytes": 951902,
+          "sha256": "bdd49d05069177140d97bbfc0a9ac47a305ce706b0ef1fa98dda05808c406bb0",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/board_impel_down.html",
+          "bytes": 139621,
+          "sha256": "68e9db8be7e56785ea66bfd3eaf6bdca865efa36a3730021ab24b7a161639cac",
+          "workingByteIdentical": false,
+          "workingBytes": 144075,
+          "workingSha256": "4b1f7f8d247d18c21af0c9e60b2fd7a0a66b5e843f17112842e6c1855413af13",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/board_lobby.html",
+          "bytes": 756,
+          "sha256": "7a291157a744e1b71174a81a005c6998a2243a50a0d8377fbce36fda5ecf1636",
+          "workingByteIdentical": false,
+          "workingBytes": 777,
+          "workingSha256": "9fbc2186b23e4d1903d9f195f91ebc1e9c8a90cbd5627da6ea74f799aef37255",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/board_manifest.webmanifest",
+          "bytes": 472,
+          "sha256": "73b58cb89d5d2bf0b31566d64f78715f03b93c84f1a2df889ca7f6a0a1f18f11",
+          "workingByteIdentical": false,
+          "workingBytes": 487,
+          "workingSha256": "4a35fefd86070021c3b6716ea563dee7d76e6e478d5a17a84beddf21db653d4a",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/board_marineford.html",
+          "bytes": 167443,
+          "sha256": "d10835ac79f9e9ea0ba4be6bbeb5b4d681d75b63386b8902d23b6def6ac738ac",
+          "workingByteIdentical": false,
+          "workingBytes": 172256,
+          "workingSha256": "00858e0ce1550879dadd020af6bed4d96ec330995ece255abff9fab8b2b35bfe",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/board_spar_selection_demo.html",
+          "bytes": 31451,
+          "sha256": "9317fb493d06268c0da298ffa49de2e7a09cc4eed41f7a1c2ed81cbd5e34218a",
+          "workingByteIdentical": false,
+          "workingBytes": 32343,
+          "workingSha256": "3f40c7ce95aa97acaa0d8359f3a07d9720964e0fbb366c46ef9488b5704a86ec",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/board_start.html",
+          "bytes": 80497,
+          "sha256": "bce45a468b9b8bc997852ec503943e48be53a41ede0d67ea859e975fa5dbc9a3",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/board_water_seven.html",
+          "bytes": 161348,
+          "sha256": "8e40856eb1c10b7ebe78998b08ff199808d33eaf9cdf371ed2a5eacac5c7e71c",
+          "workingByteIdentical": false,
+          "workingBytes": 166578,
+          "workingSha256": "4d6f81326c23e53a0173af4c8033c46da315e65c2710000291e1ecd355c330b0",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/board_york_clue_puzzle_formal_demo.html",
+          "bytes": 51054,
+          "sha256": "dd3d4c7e3e4c4c35c40b4075a9ca16ce88e633421b195e44358f9f9c4e673189",
+          "workingByteIdentical": false,
+          "workingBytes": 51984,
+          "workingSha256": "880a85fb0f28e18450278fd24d83e39904ea431b57d5c7da7154d15214153b7f",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/css/board-cursor-nami-v3.css",
+          "bytes": 9485,
+          "sha256": "854c782f9223f820ac7a67343efe4977a2c63d68545d611055d8c054c9e5c2b3",
+          "workingByteIdentical": false,
+          "workingBytes": 9722,
+          "workingSha256": "b13fbe5b0946b55cecf4184e4dd5016fb2b39e82dabbcae1a1d5a8358260ff70",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/css/board_adventure_art.css",
+          "bytes": 8144,
+          "sha256": "21319d5e5456cb7687c6b95737b4034d615b0ccbdc0db0aaa132958d53aec52e",
+          "workingByteIdentical": false,
+          "workingBytes": 8173,
+          "workingSha256": "060174f07d1d100d9f3b4a5b75e3eb73aa9b52ee0b80a9f10c071171b2ea80f6",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/css/board_audio_ui.css",
+          "bytes": 3826,
+          "sha256": "702bfc753dbd85ea2927dcba680c974574481f9321e2561c352ac6d4e6eddd27",
+          "workingByteIdentical": false,
+          "workingBytes": 3853,
+          "workingSha256": "09d8733ea2372cfbab4e31ed4a30edd08a25ea66b608d952446bd84e0a168b7b",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/css/board_character_depth.css",
+          "bytes": 12016,
+          "sha256": "6cd595733755240214aecc98e139df6f94ba4422be2834d9364f40c9f01f20db",
+          "workingByteIdentical": false,
+          "workingBytes": 12352,
+          "workingSha256": "05c666a06e12b18abe0f2a94ec35557285c978e4d881070f87c9e9fa92e1ae5b",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/css/board_hotkeys.css",
+          "bytes": 3862,
+          "sha256": "a79cf2273eb716108319c319912c13626659e3b2ab45e839c65c492d12dde2b0",
+          "workingByteIdentical": false,
+          "workingBytes": 3872,
+          "workingSha256": "c070c1ff0112e5003dabc4763739b4af295122cb7cfd9db0f7ad4bfd811f24c9",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/css/board_lineage_extraction.css",
+          "bytes": 41942,
+          "sha256": "f5fb9b9267682c5d42a0ef4a5920a53af4cf74ccfd2fd4645ad5e47a6ebcb4e5",
+          "workingByteIdentical": false,
+          "workingBytes": 43639,
+          "workingSha256": "fab2dfa38dbfc2216833f0e84c594924d9e90582683f2d937de74f9d7dd8f69f",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/css/board_sea_event_reveal.css",
+          "bytes": 7465,
+          "sha256": "a7c2401d4bc8cc14ed699e60a852d2d7ffce781533da08e58a380b1a2825f5dc",
+          "workingByteIdentical": false,
+          "workingBytes": 7520,
+          "workingSha256": "99e4977d2d60a34b5f917b4411008cdcb15b43fb910c47aeccf71a383e8d8434",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/css/board_tavern_reveal.css",
+          "bytes": 17496,
+          "sha256": "da76d955fd8bd7fc456624db9fc5d6c461e5147c770b7f93492fb78c2371ac97",
+          "workingByteIdentical": false,
+          "workingBytes": 17655,
+          "workingSha256": "fc7237151d39ff7c3825c81472fd610fec3ce9d2f708b48d42ec160fb0118bb8",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/images/board-depth/v1/manifest.json",
+          "bytes": 1094871,
+          "sha256": "f46aaf79999d8df7163d96549559bb9f18181049c2e49282cd0064472d9c25ba",
+          "workingByteIdentical": false,
+          "workingBytes": 1129218,
+          "workingSha256": "0e5e26dfec018f5bead34393cc4478f4646dfc86ecbe971a16ae4851968921c7",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/battle_hit_effect_settings.js",
+          "bytes": 29990,
+          "sha256": "7bbeef471114ea75b53fd41ff49477ec9bcb0139945fe3ae0f03bebb3f4d954c",
+          "workingByteIdentical": false,
+          "workingBytes": 30497,
+          "workingSha256": "eabd316a513e53da36da8114ab6cb84f0630d8687d029b85c0c00a979405410c",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/bgm_manager.js",
+          "bytes": 28128,
+          "sha256": "c9defcddef13c86e81bd454c5dcf123ad66329497683d5a5e10990a98585c4a7",
+          "workingByteIdentical": false,
+          "workingBytes": 28896,
+          "workingSha256": "094796dab678c48e927d54cd954d6baf8dc3b58d7780c91c2906568b9628dbcc",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/bgm_metadata.js",
+          "bytes": 26888,
+          "sha256": "803653a95da9e1200fc1a8b21862bf3e1339ef9e965386a83b23851ec85ca468",
+          "workingByteIdentical": false,
+          "workingBytes": 27664,
+          "workingSha256": "729915500a5cb11eebd3d2f4ed323481f5d86e87b157a75475066543dad68a89",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_adventure_art.js",
+          "bytes": 3948,
+          "sha256": "de37b2dd43ef07d1d07fbb09e16a81a1713a7230d4dc8396bf3c079a1f6f8161",
+          "workingByteIdentical": false,
+          "workingBytes": 3994,
+          "workingSha256": "eadd0ad143794bfd81217a0f248c32a288b60d09faeabdc34a5512992557fcc5",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_art_collection.js",
+          "bytes": 9022,
+          "sha256": "ae3fa3a08796b78180bc1d6241fdf661c9e6af47e5f7b66b8107d87fee739541",
+          "workingByteIdentical": false,
+          "workingBytes": 9123,
+          "workingSha256": "04490c31739725129c42c737ee406896cdc1017ba0d43aa5a35bbbe4b8621e89",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_audio_ui.js",
+          "bytes": 18911,
+          "sha256": "3f7465aa2133368ae2cfff3e8701df4d8db7fffb7faf9f1cc4379238d89a5c8d",
+          "workingByteIdentical": false,
+          "workingBytes": 19253,
+          "workingSha256": "601c4cafb8a024e263036b8452d517c4ab7283bbc45c421cb15c497716aeaadb",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_battle.js",
+          "bytes": 479855,
+          "sha256": "f9633f0a4cc5e26b0fe54a0dd108aaffbb6facced510245a0c94eb98ce112e81",
+          "workingByteIdentical": false,
+          "workingBytes": 488766,
+          "workingSha256": "daff65c7faff3e3073f8a6d79e2e57ea8b0c709e9210c96b4b8dc5e11e8778ee",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_cards.js",
+          "bytes": 182093,
+          "sha256": "534d667c5fea2da714649a2bbf50257af490a856309fb1dd6a3f1dffc0516f32",
+          "workingByteIdentical": false,
+          "workingBytes": 184501,
+          "workingSha256": "4f1a5c62e5704d8111d53bd1911f00f2d50877d9b0f7a3c1d52748264990a6d0",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_character_depth.js",
+          "bytes": 118300,
+          "sha256": "2fdf3b71e1c1003794a83634700d12c1323ef6de9782a03fab692ea721542e11",
+          "workingByteIdentical": false,
+          "workingBytes": 120481,
+          "workingSha256": "910f5732a52c6ed949d32e629f832358dbc94558e55aad8385ea0dfc26e07690",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_cosmetic_frame_preview.js",
+          "bytes": 15304,
+          "sha256": "e1ed8da32c0d60d20257a30b4a967179a5ff5ed47bd39efc877b7f4cd2d40149",
+          "workingByteIdentical": false,
+          "workingBytes": 15477,
+          "workingSha256": "f1f1d5e27814963527957aabfc570adbfae58f502d08fcf8c742d06154da68f0",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_enemy_spawn_regions.js",
+          "bytes": 3768,
+          "sha256": "310f042629e5fa3b284bf6f9c2445956999db3282a2106c72829ca4f29f373b5",
+          "workingByteIdentical": false,
+          "workingBytes": 3829,
+          "workingSha256": "48a5aff5f01059acefa9e9d66fc5a00f42731820a867c37afb0c73f3ba5c0a99",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_game.js",
+          "bytes": 3474232,
+          "sha256": "e6465018a74acbfb0a0e03ac8b04b8cfe4a6ac28dc61577ca6cb5539fe55be6c",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/js/board_hotkeys.js",
+          "bytes": 10978,
+          "sha256": "c3b4e514d926b1996bbc1134dd5f6bdb0dd0f8836d8c563dd56183a29444bcd5",
+          "workingByteIdentical": false,
+          "workingBytes": 11112,
+          "workingSha256": "02c6e7a082cc9267ba6c2d9e48af2c9220128426f68bce37b78ff904212b2c30",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_impel_down.js",
+          "bytes": 45916,
+          "sha256": "c7e35b188036ca5fb13c690ae4393f352a44736f69967ba9a524c83d87fcdec3",
+          "workingByteIdentical": false,
+          "workingBytes": 46928,
+          "workingSha256": "087263cfde5bb2b8e3e8b667fe2ebaccac7c99417fe2e7c8ef7d36b1647a40a6",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_items.js",
+          "bytes": 68908,
+          "sha256": "dad5aaa27f6f80d719616b577cf8b5290abfd4fd618d568315d1322490edce5d",
+          "workingByteIdentical": false,
+          "workingBytes": 69643,
+          "workingSha256": "7cfad5bd43bb14516f704b55def86372262d5a191a51fa859c1afb743428ae2a",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_lineage_extraction.js",
+          "bytes": 61976,
+          "sha256": "cf4142454500cdbc4334b4f5b5ac3e3fa98d0b39f64c05fd70757fa5255efcea",
+          "workingByteIdentical": false,
+          "workingBytes": 63419,
+          "workingSha256": "3dfa8d5bfc52ae3c702b37c25d7669e651531e5e824333ddbe12d0d6e488418d",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_map_layout_override.js",
+          "bytes": 65119,
+          "sha256": "42f8da2959e11c30a12df6bc1f900afa990b81deb53da9e31a8f191c29e89cc7",
+          "workingByteIdentical": false,
+          "workingBytes": 68384,
+          "workingSha256": "61acb7ee1c21c171f71dee563605da1628cd41a628dc6af3bfcb0bb89fc1902b",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_missions.js",
+          "bytes": 37849,
+          "sha256": "9cb3192d8423a1702d5ec15ce8fbbb3487b49197342c2a1580de6b23738bd313",
+          "workingByteIdentical": false,
+          "workingBytes": 38120,
+          "workingSha256": "ff5c61ffdfabb60f1ccd65b27e7644a3f32b0dc9d517f7007687f1efebae964f",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_move_fx.js",
+          "bytes": 17561,
+          "sha256": "e6332ccfac540d5c6d71398ddc7d811a47cd46b732a030b242fb972848f9370d",
+          "workingByteIdentical": false,
+          "workingBytes": 17898,
+          "workingSha256": "eb5a4e17005157d8439d78afc41b8b580870ebab5b07431e0f3704943cfee1f3",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_move_fx_catalog.js",
+          "bytes": 453631,
+          "sha256": "3101880be1fa1118658b5cd696e2a17ef2509add1b61bc29a8f8ad8b88a0d64c",
+          "workingByteIdentical": false,
+          "workingBytes": 453633,
+          "workingSha256": "3052b16e1d08dd8c9c193e06f8797e8faae59f869bc6b222145dee79d9933711",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_remote_playback.js",
+          "bytes": 13487,
+          "sha256": "1813c4bdfde968c963966eccad3947e8ad1171038ed8ef578f31082161ad075a",
+          "workingByteIdentical": false,
+          "workingBytes": 13790,
+          "workingSha256": "03c15384e280d2d771120e19b13f736963105b0c04ad41c1b965d9167eb32aa3",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_sea_event_visuals.js",
+          "bytes": 8146,
+          "sha256": "ba82768336b9d3470094c4e0ab6e1ad892c8282579d275aa6b35b685acbadbc6",
+          "workingByteIdentical": false,
+          "workingBytes": 8211,
+          "workingSha256": "44a5e2b5cfc24410259e271654b76304d24e4ee6b74f50deec05f033a8e54007",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_shared.js",
+          "bytes": 55160,
+          "sha256": "d088bd1d106b469080339d89c2bb2191d930929cf292bf26a17cd8be0375eebe",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/js/board_start.js",
+          "bytes": 87603,
+          "sha256": "1f45818742fc8ae5200bbccd1e06dbef17d95d4b6b1cb5f61c5eb6931cbff313",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/js/board_state_receiver.js",
+          "bytes": 2137,
+          "sha256": "29276bc5fc688578f24525d912b64c53f90bf9a4ba6326f41a20ce64578b6c2b",
+          "workingByteIdentical": false,
+          "workingBytes": 2193,
+          "workingSha256": "15ec991573361c49116c349476771b51c2cc3342f09ae2958cacbecc38c0b934",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_state_wire.js",
+          "bytes": 7431,
+          "sha256": "0fd5c36546e48ef137e0f6b21d290b7832b88a62472a147041160b8a40fe15d9",
+          "workingByteIdentical": false,
+          "workingBytes": 7604,
+          "workingSha256": "767bf65969d2a18db2b9310ce8a338f28c82a217541e2fb8e3dbfe065d471748",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_tavern_crew.js",
+          "bytes": 4299,
+          "sha256": "7310abc9915827fb2038f768618c7312c9cdf0973d29c1b199fae0237a4b7ff2",
+          "workingByteIdentical": false,
+          "workingBytes": 4376,
+          "workingSha256": "5bdb36143d41de706632b2f012d93b1d08f2c984c45f82ec995209fe3ae77a99",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_tavern_reveal.js",
+          "bytes": 14187,
+          "sha256": "09896adfc293690ff19ef13e7ca6807f0658165e9d87963e7b26a2d27600cc7b",
+          "workingByteIdentical": false,
+          "workingBytes": 14487,
+          "workingSha256": "0c4b78ca8b5037f8aff904cc30a4691d9c93d5ec4d71f454d3c6c117a538e5e8",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_tavern_vfx.bundle.js",
+          "bytes": 652956,
+          "sha256": "01b146b2f940571354ea54093595277bfe284ab6dcea17fee3202cf8a85e516b",
+          "workingByteIdentical": false,
+          "workingBytes": 654786,
+          "workingSha256": "1e757d627580227d3d646785821a5a6185ec52d45f3e7a43a35bc310e64c2bd2",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_water_seven_depth.js",
+          "bytes": 13580,
+          "sha256": "6e32e2ec5e6c7f24ec83ea0abe7a499997fffb13fde3c562a09a9d9976386649",
+          "workingByteIdentical": false,
+          "workingBytes": 13816,
+          "workingSha256": "88a9b41d0267045205dc941edbd6e920a032a138bd1e7617f7d24ef20396eb12",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_water_seven_depth_data.json",
+          "bytes": 666499,
+          "sha256": "9710eb8e3de6507cf25d19adb8da72ca4c0820c0f59ec67f8f4b50f6c0abfcd4",
+          "workingByteIdentical": false,
+          "workingBytes": 666943,
+          "workingSha256": "5247eafde7eeeba7ff67e14bac0ff2d11ad1fff8a202b77024c55a10ec892f5f",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/board_york_clue_puzzle.js",
+          "bytes": 20741,
+          "sha256": "d7a8b9abccb1055ada3f8e2188090363a9ea1da2ba8f061b0f6bac6c707b09d4",
+          "workingByteIdentical": false,
+          "workingBytes": 21260,
+          "workingSha256": "d394622387c70756727f3c13fa38c090131af9f0c125d6e369b90bb9acd09562",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/choose_bgm.js",
+          "bytes": 10848,
+          "sha256": "8822cb3fd6f9daadab761b67b2f1e554b3d7c4c80c1e3b1bcd9c545a13b792bb",
+          "workingByteIdentical": false,
+          "workingBytes": 11117,
+          "workingSha256": "2bb29f64153bae5e43268f93a6f99e4dd1c60f90ee1c642fb667929c8ed276d2",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/js/onepiece_prebattle_lines.js",
+          "bytes": 1658270,
+          "sha256": "416796519579a7c72b6ebb1c0ca1973b8bac342ff763e37e9fe5ea10b621df1e",
+          "workingByteIdentical": false,
+          "workingBytes": 1697363,
+          "workingSha256": "7d4768ebc8ce9b1be3f61b1540c8c7ebf02a0bd175eeaedb7fc952522a0ab3aa",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/assets/vendor/stockfish-18.0.0/COPYING.txt",
+          "bytes": 35147,
+          "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+          "workingByteIdentical": false,
+          "workingBytes": 35821,
+          "workingSha256": "0b383d5a63da644f628d99c33976ea6487ed89aaa59f0b3257992deac1171e6b",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/assets/vendor/stockfish-18.0.0/SOURCE.md",
+          "bytes": 981,
+          "sha256": "0a34f68df3f1e2b9a8bb42ad773a89963822d876b9f28cfffd8af9a5a6893b4d",
+          "workingByteIdentical": false,
+          "workingBytes": 1000,
+          "workingSha256": "d6d97d1f9cb9f816d0854a39db073242294201020e1be7fe6b81e6d4721cc042",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/assets/vendor/stockfish-18.0.0/stockfish-18-lite-single.js",
+          "bytes": 20670,
+          "sha256": "2278005057f381491f1c9bb3e44c9f5920b3a00bef9759e33cc6582769a1f1fe",
+          "workingByteIdentical": false,
+          "workingBytes": 20680,
+          "workingSha256": "2c02445abf3a13af1c5cb5a2be80ef0d62c3b3e1903823a10b7d6ddb87a94a15",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/assets/vendor/stockfish-18.0.0/stockfish-18-lite-single.wasm",
+          "bytes": 7295411,
+          "sha256": "a8fbc05ec6920b56d7485826dcb02c5ffd2826bcbf751cf973046f237a9096f1",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/chess/battle-chess.css",
+          "bytes": 131273,
+          "sha256": "6dc5b6a34c49cf23aa3afac44ddece791678fdfae69cd8726d7a355d4c1548fe",
+          "workingByteIdentical": false,
+          "workingBytes": 134016,
+          "workingSha256": "29ff20c461978e559f8a238e92d06fb8d38c8d1a89c124f9a548cbbf8c250b79",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/battle-chess.js",
+          "bytes": 1375668,
+          "sha256": "7b8603c4a3402a10d83b54e6ffdfb2f7fb24c6690bc87d34f745411087325754",
+          "workingByteIdentical": false,
+          "workingBytes": 1376567,
+          "workingSha256": "59ca48b67e6ddc02cadc419b49741cab4b74f6aca55ee148c17a3f01347aefaf",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/battle-click-priority-fix.js",
+          "bytes": 1152,
+          "sha256": "7cd63bd3f5bd7bc7d6054a0d5126051347c3b6bafb579042ac23c33d6a755c98",
+          "workingByteIdentical": false,
+          "workingBytes": 1183,
+          "workingSha256": "faa06cd24cffae8f2cb44c198b60939f1d94043e42430775f727aca3b4ac1f04",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/battle-game-loader-v1.js",
+          "bytes": 1480,
+          "sha256": "565bb278fdb183724f736dd58e957631e063dde0db8941942c821fd3812de6c2",
+          "workingByteIdentical": false,
+          "workingBytes": 1521,
+          "workingSha256": "22d37235d2974a5c5e09927c2585db7b7bd1ac3897ac30f9870dfbbd1a454833",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/battle-game-social-shell-v1.js",
+          "bytes": 3288,
+          "sha256": "e63de502cb595702182b7d7b2797e65ca1e709d94de0fb0d6b1ce6cf54be3f20",
+          "workingByteIdentical": false,
+          "workingBytes": 3352,
+          "workingSha256": "47e7e522ee97502505ba500b2fbe5fa66a0f29f970a3c7f4838a4d0bbf1b2aa8",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/battle-game.html",
+          "bytes": 26185,
+          "sha256": "7c4bedd7ac020db462f65ed01f1ab4578558a823a29a07c5a50f3c826da76a79",
+          "workingByteIdentical": false,
+          "workingBytes": 26406,
+          "workingSha256": "c796865b85ddaa509f0407bed7510be5d19c40a0ce4e95ab1f8a66dd3f90f00f",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/battle-room-runtime-v1.js",
+          "bytes": 22157,
+          "sha256": "4a139b2b9dbbe42d01bd2ed85524fd02579b400062752a079c3f07f977a65de4",
+          "workingByteIdentical": false,
+          "workingBytes": 22678,
+          "workingSha256": "0974cb63149f841040ed995a4d609e8c7e569fcc98366ace8ef3473c0d474429",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/battle-social-v1.css",
+          "bytes": 11506,
+          "sha256": "7063c9ff2c55af41cadf63d15d1273e20cf2c49ad716452c56c30fafb846d5e7",
+          "workingByteIdentical": false,
+          "workingBytes": 11679,
+          "workingSha256": "558ae4ac0ec180a2632e77038f039d15159f71bf3ef8935a28ad3a208edc1746",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/battle-social-v1.js",
+          "bytes": 31013,
+          "sha256": "1d17e267822d0d5226a6318d8212a23cd7e241b0bbca0bef084f0a01e9305bc1",
+          "workingByteIdentical": false,
+          "workingBytes": 31764,
+          "workingSha256": "842649a97c500ec7de24123a262301f78d0e00db0053f83e2e8fe1d7359de010",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/battle-start-v1.css",
+          "bytes": 42530,
+          "sha256": "b6ec7ff5c77ce35f3647f13c6732e15baf82c1d8ade765726e36d856f157ae15",
+          "workingByteIdentical": false,
+          "workingBytes": 43464,
+          "workingSha256": "b81f853e3df33b415a94c8f4dea78c4fd20347208c06c67e8dca7d9b6f4f4ee4",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/battle-start-v1.js",
+          "bytes": 29788,
+          "sha256": "1fc6ab57637863d890d55776127769b0137063638b9569bb8c1db8d284881c18",
+          "workingByteIdentical": false,
+          "workingBytes": 30449,
+          "workingSha256": "93930550ca8ff5abffc46f0e56d277eddc0e852bef97d42bee153d334560d388",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/battle-texture-load-guard-v1.js",
+          "bytes": 12151,
+          "sha256": "91b9509dafa20822c7e8c488b5e1990463204c482f4fda1a3f77e6429d536e25",
+          "workingByteIdentical": false,
+          "workingBytes": 12484,
+          "workingSha256": "c5e364717ef24c755c499539d0269da28173ff9a8580aadbcd9ab465e2dc5435",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/battlefield-profile-frame.js",
+          "bytes": 1323,
+          "sha256": "7508ffb06a8d9868e907d538ecb1b13885d50eb04dc45568437dd50906b0fa70",
+          "workingByteIdentical": false,
+          "workingBytes": 1373,
+          "workingSha256": "8df0351b8c8214b46bccc816541e5d2c99ea64c96720429fd7e5b0f1dd1f0fa6",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/favicon.svg",
+          "bytes": 331,
+          "sha256": "891b814df59acdd7142986b46a73ccb32509301f181bebe866387715c8c8a6c5",
+          "workingByteIdentical": false,
+          "workingBytes": 336,
+          "workingSha256": "41479b68e4e7edea5aaaf31f27ee0c16c13452cacec36af022bfecedab7e18e2",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/images/board/avatars/50.webp",
+          "bytes": 83690,
+          "sha256": "4c672f5c55114924eb4a5852e48e07ac8d2db0830efd9d4fcfad69b3d2dcfce8",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/chess/images/board/avatars/cpu2.webp",
+          "bytes": 20386,
+          "sha256": "6a0b8828602e3b76d376e2d2e4be0056cdbc7b09ac0644ccace2eed9a523f3c2",
+          "workingByteIdentical": true
+        },
+        {
+          "path": "public/chess/index.html",
+          "bytes": 11278,
+          "sha256": "1e31eac13afc39ed346617e302451a14579acde3629e563547e14c7b947eda59",
+          "workingByteIdentical": false,
+          "workingBytes": 11437,
+          "workingSha256": "56a79bc8908ea8ef4e5bc2dc9233322d2cf67bc8574b9dcfb89b30f9f51718cf",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/multiplayer-config.js",
+          "bytes": 282,
+          "sha256": "126fdf9fbbd4a8c16bec482719a76fb1c52bc82c4efb6a239716f27078589beb",
+          "workingByteIdentical": false,
+          "workingBytes": 291,
+          "workingSha256": "2082dc00ed6efdf300066282163ca5a8a0f12376fca07f29e064b09a6b2d4249",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/player-header-ui.js",
+          "bytes": 7906,
+          "sha256": "170c3ad30a008121d47d6b7cdc0e229e694195f76d579421e544d20111462811",
+          "workingByteIdentical": false,
+          "workingBytes": 8142,
+          "workingSha256": "29ef83f6614f1f092a0868e7516abbebd45d37da4c571e8d55894fd94025cfbf",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        },
+        {
+          "path": "public/chess/pre-match-lobby.js",
+          "bytes": 47175,
+          "sha256": "4a1b0cb1f8b57fdeb80cc09c299f7ff38911ddf4004f3313bdb8388141828664",
+          "workingByteIdentical": false,
+          "workingBytes": 48200,
+          "workingSha256": "0d561b5653550ff9b7dfb9364af7934e4b74f4fa3a8730d34b7b7a67fe599c81",
+          "workingDifference": "Existing Git checkout CRLF/LF normalization only; not rebuilt or uploaded."
+        }
+      ],
+      "carryPolicy": "Exact signed r61 entries preserved outside the listed renderer and announcement paths; game catalogs, manifests and program source bytes unchanged."
+    },
+    "publication-report.json": {
+      "ok": true,
+      "mode": "live",
+      "coreVersion": "1.2.23",
+      "revision": 62,
+      "manifestSha256": "265693bacb11f03690e72c9a142576c65ccc4cacb93c162a3bc99e6c15e49535",
+      "logicalFiles": 320,
+      "logicalBytes": 57715464,
+      "uniqueBlobs": 319,
+      "uniqueBytes": 57425560,
+      "verified": 0,
+      "uploaded": 4,
+      "reused": 315,
+      "reusedRace": 0,
+      "transferBytes": 308479,
+      "status": "PASS"
+    },
+    "public-manifest-report.json": {
+      "status": "PASS",
+      "revision": 62,
+      "sha256": "265693bacb11f03690e72c9a142576c65ccc4cacb93c162a3bc99e6c15e49535",
+      "verifiedAt": "2026-10-12T16:04:49.080Z"
+    },
+    "public-blobs-report.json": {
+      "status": "PASS",
+      "revision": 62,
+      "verifiedAt": "2026-10-12T16:04:52.464Z",
+      "verified": [
+        {
+          "path": "images/launcher_announcements/launcher-profile-r62.webp",
+          "bytes": 48140,
+          "sha256": "fb5a3b6eea5167f82ab3a27441428ee5d9e3e1afe7efc4058ca756adc1b62e37"
+        },
+        {
+          "path": "launcher-profile-shop.css",
+          "bytes": 66159,
+          "sha256": "b58199eb561d110f60b5ab160a31f6c6a97956180368b586c36008fe75330eb9"
+        },
+        {
+          "path": "launcher-profile-shop.js",
+          "bytes": 148323,
+          "sha256": "c06a7ca6b93fc575b829ce1c6a15586f5896599aa7e9a31352e9f8f66a367f0f"
+        },
+        {
+          "path": "launcher.html",
+          "bytes": 45857,
+          "sha256": "415cf590dddb0d236389a74ab67e8f51c99f48b9a35f2afad0d63213ff7ce67c"
+        }
+      ]
+    },
+    "public-games-report.json": {
+      "status": "PASS",
+      "verifiedAt": "2026-10-12T16:05:21.124Z",
+      "catalogSha256": "a04fcd660c7f207363ce7fd41433cd86fd1e910b439011d7606c800991e84c6d",
+      "games": {
+        "card": {
+          "releaseId": "package-a7d368a6e3feae01",
+          "manifestSha256": "5ec74d1890d06c58e1086ef6df646b247c3926a5a82a059d4abba4bcd0903bcd",
+          "runtimeEndpointIdentityVerified": true
+        },
+        "board": {
+          "releaseId": "package-83b5cb65d174761d",
+          "manifestSha256": "554dab56bf1300aa9ee49110883235d8b2a156d2393594ef96321cbc05c695d6",
+          "runtimeEndpointIdentityVerified": true
+        },
+        "chess": {
+          "releaseId": "package-ee4627881596bdad",
+          "manifestSha256": "a456de14211bac9ab767ae2a7a56525cadb7a85516d3fb32f86ca1f6f4058ce5",
+          "runtimeEndpointIdentityVerified": true
+        }
+      },
+      "byteIdenticalToR61": true,
+      "localProtectedFiles": 163
+    },
+    "public-shop-report.json": {
+      "status": "PASS",
+      "verifiedAt": "2026-10-12T16:05:22.520Z",
+      "scope": "Anonymous full catalog preview; no player, wallet or account mutation",
+      "totalItems": 330,
+      "counts": {
+        "avatar": 192,
+        "wall": 5,
+        "flag": 12,
+        "layout": 6,
+        "background": 6,
+        "frame": 4,
+        "decoration": 12,
+        "bgm": 23,
+        "guestbook": 1,
+        "guestbook_style": 10,
+        "comment_style": 20,
+        "room_scene": 5,
+        "room_furniture": 21,
+        "room_character": 13
+      },
+      "catalogSha256": "f775fe41d1378709adaa90616c7f3886672147d5b66e98a7f486e97189fa897b",
+      "exactAuthorityMatch": true
+    },
+    "candidate-delta-report.json": {
+      "status": "PASS",
+      "source": "candidate",
+      "from": 61,
+      "to": 62,
+      "verifiedAt": "2026-10-12T15:52:56.766Z",
+      "manifestSha256": "265693bacb11f03690e72c9a142576c65ccc4cacb93c162a3bc99e6c15e49535",
+      "changed": [
+        {
+          "path": "images/launcher_announcements/launcher-profile-r62.webp",
+          "bytes": 48140,
+          "sha256": "fb5a3b6eea5167f82ab3a27441428ee5d9e3e1afe7efc4058ca756adc1b62e37"
+        },
+        {
+          "path": "launcher-profile-shop.css",
+          "bytes": 66159,
+          "sha256": "b58199eb561d110f60b5ab160a31f6c6a97956180368b586c36008fe75330eb9"
+        },
+        {
+          "path": "launcher-profile-shop.js",
+          "bytes": 148323,
+          "sha256": "c06a7ca6b93fc575b829ce1c6a15586f5896599aa7e9a31352e9f8f66a367f0f"
+        },
+        {
+          "path": "launcher.html",
+          "bytes": 45857,
+          "sha256": "415cf590dddb0d236389a74ab67e8f51c99f48b9a35f2afad0d63213ff7ce67c"
+        }
+      ],
+      "uniqueChangedBytes": 308479,
+      "downloadedBytes": 308479,
+      "checked": 320,
+      "preservedOldFiles": 319,
+      "secondDownload": 0,
+      "secondBlobRequests": 0,
+      "userDataPath": "D:\\Codex_QA\\launcher-fishing-r45\\candidate",
+      "backup": [
+        {
+          "slot": 0,
+          "name": "candidate-manifest-before-02090d4b9859116bd9640cfbfac1a6a7d98c2453f87f3e36347757e7c9716f6e.json",
+          "sha256": "02090d4b9859116bd9640cfbfac1a6a7d98c2453f87f3e36347757e7c9716f6e"
+        },
+        {
+          "slot": 1,
+          "name": "candidate-manifest-before-4597004a75acecb65615a74f8949f7dc83444bbd243c65a64ed4055765e9034e.json",
+          "sha256": "4597004a75acecb65615a74f8949f7dc83444bbd243c65a64ed4055765e9034e"
+        }
+      ],
+      "alreadyInstalledBeforeVerification": false,
+      "limitations": []
+    },
+    "actual-delta-report.json": {
+      "status": "PASS",
+      "source": "actual",
+      "from": 61,
+      "to": 62,
+      "verifiedAt": "2026-10-12T16:04:53.067Z",
+      "manifestSha256": "265693bacb11f03690e72c9a142576c65ccc4cacb93c162a3bc99e6c15e49535",
+      "changed": [
+        {
+          "path": "images/launcher_announcements/launcher-profile-r62.webp",
+          "bytes": 48140,
+          "sha256": "fb5a3b6eea5167f82ab3a27441428ee5d9e3e1afe7efc4058ca756adc1b62e37"
+        },
+        {
+          "path": "launcher-profile-shop.css",
+          "bytes": 66159,
+          "sha256": "b58199eb561d110f60b5ab160a31f6c6a97956180368b586c36008fe75330eb9"
+        },
+        {
+          "path": "launcher-profile-shop.js",
+          "bytes": 148323,
+          "sha256": "c06a7ca6b93fc575b829ce1c6a15586f5896599aa7e9a31352e9f8f66a367f0f"
+        },
+        {
+          "path": "launcher.html",
+          "bytes": 45857,
+          "sha256": "415cf590dddb0d236389a74ab67e8f51c99f48b9a35f2afad0d63213ff7ce67c"
+        }
+      ],
+      "uniqueChangedBytes": 308479,
+      "downloadedBytes": 308479,
+      "checked": 320,
+      "preservedOldFiles": 319,
+      "secondDownload": 0,
+      "secondBlobRequests": 0,
+      "userDataPath": "C:\\Users\\王曜瑋\\AppData\\Roaming\\onepiece-tabletop-desktop",
+      "backup": [
+        {
+          "slot": 0,
+          "name": "actual-manifest-before-4597004a75acecb65615a74f8949f7dc83444bbd243c65a64ed4055765e9034e.json",
+          "sha256": "4597004a75acecb65615a74f8949f7dc83444bbd243c65a64ed4055765e9034e"
+        },
+        {
+          "slot": 1,
+          "name": "actual-manifest-before-02090d4b9859116bd9640cfbfac1a6a7d98c2453f87f3e36347757e7c9716f6e.json",
+          "sha256": "02090d4b9859116bd9640cfbfac1a6a7d98c2453f87f3e36347757e7c9716f6e"
+        }
+      ],
+      "alreadyInstalledBeforeVerification": false,
+      "limitations": []
+    },
+    "launcher-protocol-report.json": {
+      "status": "PASS",
+      "scope": "Actual core installLauncherProtocol and verifiedOverlayResponse with signed r62 candidate, exact bytes and zero network/bundle fallback.",
+      "coreSourceSha256": "37ab23e9f3bbd0132f0ba4e2759155099aff8911493d9b3171ae4ae467f04793",
+      "checks": [
+        "GET opui://launcher/images/launcher_announcements/launcher-profile-r62.webp",
+        "HEAD opui://launcher/images/launcher_announcements/launcher-profile-r62.webp",
+        "GET opui://launcher-ui/launcher-profile-shop.css",
+        "HEAD opui://launcher-ui/launcher-profile-shop.css",
+        "GET opui://launcher-ui/launcher-profile-shop.js",
+        "HEAD opui://launcher-ui/launcher-profile-shop.js",
+        "GET opui://launcher-ui/launcher.html",
+        "HEAD opui://launcher-ui/launcher.html"
+      ],
+      "fallbacks": 0
+    }
+  },
+  "reportSha256": {
+    "renderer-inventory-report.json": "9574524b509a172a4ed21db0e1367fe60e8a317e007b454073a1e02e47e2ba6e",
+    "publication-report.json": "5d51cf8a926effb1c0976028f79fc6845eee685694be726e8cf5dd4e6b315cc1",
+    "public-manifest-report.json": "e6c336253e0c83214ccf29ffb46b2b37fe8f815e45a677105e68dd8dc95a67f4",
+    "public-blobs-report.json": "12a22e7cfe83f7add1e63faafc576fe7745b3bba8d255c85966ec7c72e9a74f3",
+    "public-games-report.json": "f4be12e3910500fa4792d8810bbc97708e42416cfaa3b3ce3796ff3e9dcf0024",
+    "public-shop-report.json": "b4e31fd39b7f52437bec09ffddb0453df59ea1cfbf63472ab1317717d6ca5d61",
+    "candidate-delta-report.json": "701f9b10d72d8c44c0b4f91ab795dccdee66e54037c4edabc8834583d5e0dbbb",
+    "actual-delta-report.json": "874ac38b28e93477fdf4ec08d682a1ddf536ea947c8a3191682f421470f8bb25",
+    "launcher-protocol-report.json": "ba9d99b1c8aaacf7f88205baf8c4dc7d89dc7dd57caba67d60153a47478af66d"
+  },
+  "deploymentEvidence": {
+    "method": "Public signed manifest byte identity and all four immutable content blobs read back; production three-game runtime identities and all 330 shop records; actual installed-core opui routes and formal local cache verified.",
+    "renderDashboard": "No connected Render API was available; previous dashboard browser attempts timed out. No dashboard Live badge claim. Public production endpoint identity is the deployment evidence."
+  },
+  "limitations": [
+    "No real player edit, purchase, comment post/delete, or save mutation was performed by verification.",
+    "Actual Electron window/player acceptance is not claimed; already open launcher windows need one restart to load the updated renderer.",
+    "Source backend PGlite fixture emits its known missing external friend-avatar refresh stub warning; relevant SQL and unchanged-core comment transport checks pass."
+  ],
+  "preserved": {
+    "gameCatalog": "byte-identical r61 catalog; all three game packages and program source preserved",
+    "unrelated": {
+      "public/images/ranks/r5.PNG": "34d3f69ab42d9b7f16c0a830eb56f08a7bae49fd97eafcd6aac66dd479bac01d",
+      "public/images/ranks/r6.PNG": "6974ba07b7f59d1e39b0e4af01cbf01ac4fd5594d5ecf9979c937eb83d3434f9",
+      "docs/IOS_PORT_PREFLIGHT_20261011.json": "4e65a02d78f34221a7f730f31ecbaf7062bc66ada845e1cdab14642c380376a8",
+      "public/images/launcher_announcements/launcher-rod-names-r54.webp": "4f36bdde4cc4b1ec1cee5e7f9e3df1a5aa1f63deaea8f0640c8f2b72ae5ede7e"
+    },
+    "oldBlobs": 319
+  },
+  "art": {
+    "reused": "Existing GPT card, 10 guestbook illustrations and 20 stationery styles",
+    "announcement": "Real tested UI screenshot encoded to WebP; no new generated/rejected art"
+  }
+}

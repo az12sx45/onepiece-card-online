@@ -8330,3 +8330,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - scripts/launcher_profile_guestbook_r62_qa.js：可重跑的實際renderer隔離測試；scripts/launcher_guestbook_danmaku_qa.js更新為操作真正composer。editor原101項、guestbook51項、隔離SQL49項與獨立審查77項/窄窗4項通過；npm start六路由通過並關閉測試server。詳見docs/LAUNCHER_PROFILE_R62.json，未使用真實帳號發文、購物或刪存檔。
 - config/launcher-announcements-v1.json revision72＋images/launcher_announcements/launcher-profile-r62.webp：公告使用實際新版UI截圖，沿用既有GPT紙張/板面/名片素材，沒有新建失敗圖。
 - tools/launcher-profile-r62/*：renderer-only差分，baseline319項完整沿用，只換3個renderer與公告圖；三款program/catalog/manifest原樣核對。公開簽章、CAS、完整330商品、core opui與實際快取驗證完成後另寫release收據。保留未提交iOS文件與rank圖。
+
+- 2026-10-13 r62公開交付驗證完成：release ecd8cad4fe307db69cb844f3811f14a8f163b3c5，manifest SHA256 265693bacb11f03690e72c9a142576c65ccc4cacb93c162a3bc99e6c15e49535；4個差分檔案共308479 bytes，候選61→62成功。正式cache 61→62，320項讀回正確、319舊blob保留、第二次0下載。三款catalog/manifests/runtime完全保留r61，330商品逐筆一致，8項真實core opui GET/HEAD無fallback。實際名片與便條截圖/權限/長文驗收見source收據，完整公開收據docs/LAUNCHER_PROFILE_R62_RELEASE.json。需重啟已開啟的啟動器一次，無須重裝。
