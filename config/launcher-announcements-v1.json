@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 71,
+  "revision": 72,
   "announcements": [
+    {
+      "id": "launcher-1.2.23-r62-profile-guestbook",
+      "status": "published",
+      "publishedAt": "2026-10-12T15:49:49.976Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "1.2.23 r62",
+      "title": "一張航海名片，一封好友便條",
+      "summary": "名片回到適合的比例，留言板重新整理；挑一張喜歡的留言紙，直接寫下想說的話。",
+      "image": {
+        "asset": "images/launcher_announcements/launcher-profile-r62.webp",
+        "alt": "新版便條書寫視窗實際畫面：草帽便條與已收藏留言紙縮圖"
+      },
+      "body": [
+        "名片縮回緊湊比例，頭像、名字與編輯按鈕放在同一組；背景完整顯示，已收藏圖案保留，編輯預覽與展示使用相同構圖。",
+        "留言板保留流動彈幕與點開閱讀，板面完整顯示；暫停、閱讀模式與「留張便條」入口集中整理。",
+        "寫留言改為獨立視窗，可以看著已收藏紙張的縮圖選擇樣式，直接在紙上輸入。長留言能在紙內捲動閱讀；留言紙可重複使用，不額外收費。",
+        "沿用差分更新，重新開啟啟動器即可取得新版，無須重新安裝。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.23"
+      }
+    },
     {
       "id": "launcher-1.2.23-r61-profile-records",
       "status": "published",

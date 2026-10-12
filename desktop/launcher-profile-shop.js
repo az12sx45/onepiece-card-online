@@ -163,6 +163,7 @@
     const wall = number(appearance.wallId) > 1 ? imageFor('wall', appearance.wallId) : '';
     const cardArt = background || wall;
     hero.classList.toggle('has-card-art', Boolean(cardArt));
+    hero.style.setProperty('--card-art', cardArt ? `url("${cardArt}")` : 'none');
     $('profileHeroArt').style.backgroundImage = cardArt ? `url("${cardArt}")` : '';
     const frame = items.frame?.id === appearance.frameId ? safeImageAsset(items.frame?.asset) : '';
     $('profileHeroFrame').hidden = !frame;
@@ -401,7 +402,7 @@
   }
   function syncGuestbookMotion() {
     const stage = $('profileGuestbookStage');
-    stage.dataset.paused = String(guestbookPaused || document.hidden || !profileVisible || $('profileCommentReadDialog').open || $('shopItemPreviewDialog')?.open);
+    stage.dataset.paused = String(guestbookPaused || document.hidden || !profileVisible || $('profileCommentReadDialog').open || $('profileCommentComposeDialog').open || $('shopItemPreviewDialog')?.open);
     stage.dataset.reading = String(guestbookReading);
     $('profileGuestbookMotion').textContent = guestbookPaused ? '繼續彈幕' : '暫停彈幕';
     $('profileGuestbookMotion').setAttribute('aria-pressed', String(guestbookPaused));
@@ -431,17 +432,44 @@
     return card;
   }
   function renderStationery() {
-    const select=$('profileCommentStyle');select.replaceChildren();
-    const base=el('option','','航海素紙');base.value='comment-style-default';select.append(base);
-    for(const item of stationery){const option=el('option','',item.name);option.value=item.id;select.append(option);}
-    if(![...select.options].some(o=>o.value===selectedStationery))selectedStationery='comment-style-default';
-    select.value=selectedStationery;paintNote($('profileCommentPreview'),safeImageAsset(stationery.find(s=>s.id===selectedStationery)?.asset));
+    const select=$('profileCommentStyle'),grid=$('profileCommentPaperGrid');
+    const choices=[{id:'comment-style-default',name:'航海素紙',asset:''},...stationery];
+    if(!choices.some(item=>item.id===selectedStationery))selectedStationery='comment-style-default';
+    // Keep the focused paper button alive when a wallet/profile refresh arrives.
+    const signature=choices.map(item=>item.id+'|'+item.name+'|'+item.asset).join(';');
+    if(grid.dataset.catalog!==signature){
+      select.replaceChildren();grid.replaceChildren();grid.dataset.catalog=signature;
+      for(const item of choices){
+        const option=el('option','',item.name);option.value=item.id;select.append(option);
+        const button=el('button','captain-paper-choice');button.type='button';button.dataset.styleId=item.id;button.title=item.name;
+        const art=el('span','captain-paper-thumbnail');paintNote(art,safeImageAsset(item.asset));art.setAttribute('aria-hidden','true');
+        button.append(art,el('span','',item.name));
+        button.onclick=()=>{if(commentBusy)return;selectedStationery=item.id;postRequestId='';renderStationery();};grid.append(button);
+      }
+    }
+    select.value=selectedStationery;paintNote($('profileCommentPreview'),safeImageAsset(choices.find(s=>s.id===selectedStationery)?.asset));
+    for(const button of grid.children){button.setAttribute('aria-pressed',String(button.dataset.styleId===selectedStationery));button.disabled=commentBusy;}
+  }
+  function closeCommentComposer(force=false){
+    if(commentBusy&&!force)return;
+    $('profileCommentComposeDialog').close();
+    if(force){$('profileGuestbookInput').value='';$('profileGuestbookLength').textContent='0 / 240';postRequestId='';}
+    syncGuestbookMotion();
+  }
+  function openCommentComposer(){
+    if($('profileGuestbookCompose').hidden||commentBusy)return;
+    $('profileCommentRecipient').textContent=profile?.isSelf?'寫在自己的航海留言板':`給 ${cardDisplayName(profile)} 的航海留言`;
+    $('profileCommentComposeStatus').textContent='';renderStationery();
+    $('profileCommentComposeDialog').showModal();syncGuestbookMotion();$('profileGuestbookInput').focus();
+  }
+  function commentStatus(text,error=false){
+    status('profileGuestbookStatus',text,error);status('profileCommentComposeStatus',text,error);
   }
   async function loadStationery() {
     const request=++stationeryRequest,owner=accountId;if(!owner||preview)return;
     try{const result=await refreshShop();if(request!==stationeryRequest||owner!==accountId||!result?.ok)return;
       const owned=new Set(result.shop?.owned?.commentStyles||[]);stationery=(result.shop?.catalog||[]).filter(i=>i.type==='comment_style'&&owned.has(i.id)&&safeImageAsset(i.asset));
-      selectedStationery=result.shop?.equipped?.commentStyleId||'comment-style-default';renderStationery();
+      if(!$('profileCommentComposeDialog').open)selectedStationery=result.shop?.equipped?.commentStyleId||'comment-style-default';renderStationery();
     }catch{if(request===stationeryRequest)renderStationery();}
   }
   function renderGuestbook() {
@@ -449,6 +477,9 @@
     $('profileGuestbookCount').textContent = enabled ? `${fmt(profile?.guestbook?.commentCount ?? comments?.length ?? 0)} 則留言` : '';
     $('profileGuestbookLocked').hidden = !profile || enabled;
     $('profileGuestbookForm').hidden = !profile || !enabled || !accountId || preview;
+    $('profileGuestbookCompose').hidden = $('profileGuestbookForm').hidden;
+    if($('profileGuestbookForm').hidden)closeCommentComposer(true);
+    $('profileGuestbookStage').nextElementSibling.hidden=!profile||!enabled;
     $('profileGuestbookMore').hidden = !enabled || !commentHasMore;
     const list=$('profileGuestbookList');list.replaceChildren();guestbookObserver?.disconnect();
     const stage=$('profileGuestbookStage');stage.hidden=!profile||!enabled;
@@ -461,7 +492,7 @@
     syncGuestbookMotion();renderStationery();
     if(!profile||!enabled)return;
     if(!Array.isArray(comments)||!comments.length){list.append(el('p','captain-guestbook-empty',Array.isArray(comments)?'下一段航程，從一句問候開始。':'正在讀取好友留言…'));return;}
-    const laneCount=()=>Math.min(3,comments.length,Math.max(1,Math.floor(((stage.clientWidth||1200)*9/16-32)/178)));
+    const laneCount=()=>Math.min(2,comments.length,Math.max(1,Math.floor(((stage.clientHeight||450)-40)/166)));
     const rows=guestbookReading?1:laneCount();const lanes=[];
     for(let i=0;i<rows;i++){
       const lane=el('div','captain-danmaku-lane'),track=el('div','captain-danmaku-track'),sequence=el('div','captain-danmaku-sequence');
@@ -785,19 +816,21 @@
     event.preventDefault();
     const body = $('profileGuestbookInput').value.trim();
     if (commentBusy || !profile || !body || body.length > 240) return;
+    if($('profileGuestbookForm').hidden||!accountId||preview)return;
     const owner=accountId,target=viewUserId,mutation=++commentMutation;
-    commentBusy = true; $('profileGuestbookPost').disabled = true; $('profileGuestbookInput').disabled=true; $('profileCommentStyle').disabled=true; status('profileGuestbookStatus', '正在發表留言…');
+    commentBusy = true; $('profileGuestbookPost').disabled = true; $('profileGuestbookInput').disabled=true; $('profileCommentStyle').disabled=true; commentStatus('正在發表留言…');
+    renderStationery();
     try {
       if(!postRequestId)postRequestId=crypto.randomUUID();
       const result = await profileCommand('comment.post', {userId:viewUserId,body,styleId:selectedStationery},postRequestId);
       if(owner!==accountId||target!==viewUserId||mutation!==commentMutation)return;
-      if (!result?.ok) { status('profileGuestbookStatus', errorText(result?.error), true); return; }
-      postRequestId='';
+      if (!result?.ok) { commentStatus(errorText(result?.error), true); return; }
+      postRequestId='';closeCommentComposer(true);
       $('profileGuestbookInput').value = ''; $('profileGuestbookLength').textContent = '0 / 240';
       await loadProfile();
-      if(owner===accountId&&target===viewUserId&&mutation===commentMutation)status('profileGuestbookStatus', '留言已發表。');
-    } catch { if(owner===accountId&&target===viewUserId&&mutation===commentMutation)status('profileGuestbookStatus', errorText('offline'), true); }
-    finally { if(mutation===commentMutation){commentBusy = false; $('profileGuestbookPost').disabled = false; $('profileGuestbookInput').disabled=false; $('profileCommentStyle').disabled=false;} }
+      if(owner===accountId&&target===viewUserId&&mutation===commentMutation)commentStatus('留言已發表。');
+    } catch { if(owner===accountId&&target===viewUserId&&mutation===commentMutation)commentStatus(errorText('offline'), true); }
+    finally { if(mutation===commentMutation){commentBusy = false; $('profileGuestbookPost').disabled = false; $('profileGuestbookInput').disabled=false; $('profileCommentStyle').disabled=false;renderStationery();} }
   }
   async function deleteComment() {
     if (!pendingCommentDelete || commentBusy) return;
@@ -1231,6 +1264,10 @@
   $('profileBgmVolume').oninput = () => { bgmListener.volume = clamp(Number($('profileBgmVolume').value) / 100, 0, 1, .35); saveMusicListener(); };
   $('profileBgmAudio').onended = () => { if (bgmPlaylist.length > 1) nextBgm(true); else stopBgm(); };
   $('profileGuestbookForm').onsubmit = postComment;
+  $('profileGuestbookCompose').onclick=openCommentComposer;
+  $('profileCommentComposeClose').onclick=()=>closeCommentComposer();
+  $('profileCommentComposeDialog').addEventListener('cancel',event=>{if(commentBusy)event.preventDefault();});
+  $('profileCommentComposeDialog').addEventListener('close',syncGuestbookMotion);
   $('profileGuestbookInput').oninput = () => { postRequestId=''; $('profileGuestbookLength').textContent = `${$('profileGuestbookInput').value.length} / 240`; };
   $('profileCommentStyle').onchange=()=>{selectedStationery=$('profileCommentStyle').value;postRequestId='';renderStationery();};
   $('profileGuestbookMotion').onclick=()=>{guestbookPaused=!guestbookPaused;syncGuestbookMotion();};
@@ -1256,6 +1293,7 @@
       const id = snapshot?.authenticated && !snapshot.profile?.needsDisplayName ? number(snapshot.profile?.userId) : 0;
       const isPreview = snapshot?.previewMode === true;
       if (id === accountId && isPreview === preview) return;
+      closeCommentComposer(true);
       closeAvatarPicker(true);
       hideCardEditor(); avatarPickerRequested = false;
       closeItemPreview();
@@ -1278,6 +1316,7 @@
       if(id||isPreview)void refreshShop();
     },
     openProfile(userId = 0) {
+      closeCommentComposer(true);
       closeAvatarPicker(true);
       hideCardEditor(); avatarPickerRequested = false;
       closeItemPreview();
@@ -1293,7 +1332,7 @@
       else loadProfile();
     },
     onVisible(panel) {
-      if (panel !== 'profile') { closeAvatarPicker(true); closeCardEditor(true); avatarPickerRequested = false; }
+      if (panel !== 'profile') { closeCommentComposer(true); closeAvatarPicker(true); closeCardEditor(true); avatarPickerRequested = false; }
       if (previewedItem && panel !== previewPanel) closeItemPreview();
       if (panel !== 'shop') stopShopPreview();
       if (panel !== 'profile') { profileVisible = false; stopBgm(); }

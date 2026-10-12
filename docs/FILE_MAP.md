@@ -1962,3 +1962,11 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - scripts/launcher_profile_editor_r61_qa.js、board_voyage_record_delete_qa.js：隔離UI/持久化/權限驗證；tools/launcher-profile-r61與scripts/launcher_profile_r61_package_qa.js為差分封裝及core路由檢查。
 
 - docs/LAUNCHER_PROFILE_R61_RELEASE.json：r61公開catalog/manifest/immutable blob、正式cache差分與新存檔回收API權限拒絕的驗收收據。
+
+
+### r62 名片與便條介面
+
+- desktop/launcher-profile-shop.js/css、launcher.html：緊湊名片、留言board、紙上輸入dialog、可視化留言紙選擇。
+- scripts/launcher_profile_guestbook_r62_qa.js、launcher_guestbook_danmaku_qa.js：實際renderer隔離驗收與既有彈幕流程回歸。
+- tools/launcher-profile-r62/*：baseline保留、簽章差分建置、CAS發布、公開catalog/manifest及本機core/cache驗證。
+- docs/LAUNCHER_PROFILE_R62.json：來源UI驗證；公開完成狀態另見release收據。

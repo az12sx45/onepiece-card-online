@@ -1,0 +1,73 @@
+{
+  "status": "SOURCE_VERIFIED",
+  "baseline": "ad9011407eb7c6ec33b2f9dd3e593e47ef16f4b6",
+  "date": "2026-10-12T15:50:18.443Z",
+  "revision": 62,
+  "coreVersion": "1.2.23",
+  "authority": "D:/Codex_Release_Worktrees/launcher-flick-reward-r12",
+  "sourceHashes": {
+    "desktop/launcher.html": "415cf590dddb0d236389a74ab67e8f51c99f48b9a35f2afad0d63213ff7ce67c",
+    "desktop/launcher-profile-shop.js": "c06a7ca6b93fc575b829ce1c6a15586f5896599aa7e9a31352e9f8f66a367f0f",
+    "desktop/launcher-profile-shop.css": "b58199eb561d110f60b5ab160a31f6c6a97956180368b586c36008fe75330eb9"
+  },
+  "proof": [
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/editor-final/report.json",
+      "sha256": "04306b59cd97e0d39a8912dfd2e8715c31d2f5bd9e597f2b7e47f4d0cc9cce23",
+      "checks": 101,
+      "scope": "Real renderer and local images; isolated authenticated bridge; no player data writes."
+    },
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/guestbook/report.json",
+      "sha256": "63ddb64b6f3ff48871bd8b55b1aec06e195d7f036c9470c64a90621d307b9282",
+      "checks": 51,
+      "scope": "Real launcher renderer in Chromium with mocked preload; no real account, server or currency mutation."
+    },
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/backend-report.json",
+      "sha256": "7b6341dcf1f018718f257ef9424304c93676c87315dc642f52bba3421ca7fcbc",
+      "checks": 49,
+      "scope": "Isolated PGlite SQL; existing AuthService method and index route exercised. No formal player account transactions."
+    },
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/renderer/report.json",
+      "sha256": "92944b9b8baa2f653fe153f70699691fe80e6c31899938116e138946f168c506",
+      "checks": 77,
+      "scope": "Actual launcher HTML/CSS/renderer with isolated mocked preload. No real player mutations."
+    },
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/audit/final/reader-and-clean-capture-report.json",
+      "sha256": "07ccdd8268da42dd461938fa0b94c536bd294b369e1b4b3629789d8ac53a5631",
+      "checks": 4
+    },
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/startup-report.json",
+      "sha256": "0ad32f2485820e9d0f315e16431da0cf0de490908b228b68dfdf60a9ef179a5f",
+      "checks": 6,
+      "scope": "Static HTTP gate only. No account login or save-record endpoints requested. Database fallback deliberately targets closed loopback port 1."
+    },
+    {
+      "path": "D:/Codex_QA/launcher-profile-r62/announcements-report.json",
+      "sha256": "1e16d958b6cf1ddb58a8035396eb647d7fb304a2d7a03e26ff851754dea768cc",
+      "checks": 82,
+      "scope": "isolated-in-memory-PGlite-announcement-service-QA"
+    }
+  ],
+  "art": {
+    "source": "D:\\Codex_QA\\launcher-profile-r62\\audit\\final\\1440x900-clean-composer-dialog.png",
+    "sourceSha256": "3667c322f64e0b19cf82eea27e7aa0454759c6a943c446bb7855bb89f5ea4852",
+    "destination": "D:\\Codex_Release_Worktrees\\launcher-flick-reward-r12\\public\\images\\launcher_announcements\\launcher-profile-r62.webp",
+    "sha256": "fb5a3b6eea5167f82ab3a27441428ee5d9e3e1afe7efc4058ca756adc1b62e37",
+    "dimensions": [
+      1000,
+      670
+    ],
+    "method": "Real renderer screenshot encoded as WebP; no invented gameplay or generated replacement art."
+  },
+  "limitations": [
+    "Renderer uses isolated authenticated preload; no real player profile, wallet, comments or saves were changed by QA.",
+    "Backend isolated PGlite coverage excludes external friend-avatar notification; its old fixture logs a missing refreshSharedAvatar stub. Renderer and startup gates report no uncaught errors.",
+    "Public deployment not yet asserted by this source receipt. See the separate release receipt.",
+    "No callable LATTICE runtime/task API was available; no task or graph acceptance is asserted."
+  ]
+}

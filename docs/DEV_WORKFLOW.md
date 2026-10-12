@@ -8319,3 +8319,14 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - r61來源驗收完成：editor/report.json 101項PASS；records/report.json 48項PASS；audit/final-report.json 33項PASS；startup-report.json 6項PASS；announcement-report.json 82項PASS；local-loading/report.json 21項PASS。首次目視檢查另外攔下頭像卡狀態文字外溢與貼紙邊缘裁切，修正後重新檢查。完整source/report SHA見docs/LAUNCHER_PROFILE_R61.json，正式玩家資料未操作，公開差分尚待獨立讀回。
 
 - r61公開交付完成：release a94cb872c5e92ddbcfb816a24bf8a6b6fc0a9779；公開簽章清單SHA256 4660dc45ef7a5848af03a6a2fc9cd9babb29e22774f98bf09efebefd35932aaa與候選逐byte一致，319檔正式cache讀回通過，317個r60舊檔保留，再次檢查0下載。候選60→61實測574581 bytes；正式cache本次差分下載574581 bytes。三款catalog/manifest/runtime-package、12項真正opui handler GET/HEAD本機路徑、新程式及圖片blob大小/SHA、完整330商品與新回收API未登入拒絕全部通過。詳細收據docs/LAUNCHER_PROFILE_R61_RELEASE.json；不需重裝，重啟已開視窗一次載入。
+
+
+## 2026-10-12 r62 名片比例與留言書寫介面
+
+正式來源 D:/Codex_Release_Worktrees/launcher-flick-reward-r12，基線 ad9011407eb7c6ec33b2f9dd3e593e47ef16f4b6；公開r61簽章與三款catalog一致。LATTICE runtime/task API本階段未提供，未捏造登記或圖譜驗收。
+
+- desktop/launcher.html、launcher-profile-shop.js/css：名片最大1000×280，共用縮放構圖與窄窗比例；取消付費背景獨立相框，以contain完整呈現並柔化左緣。編輯按鈕與玩家身分同組，圓形頭像與r61穩定選圖機制保留。
+- 留言板限制整體寬度、保留完整板圖及最多兩行彈幕；新增獨立便條書寫dialog與21款（20已購＋免費素紙）縮圖選擇。直接在紙上輸入，投稿狀態留在dialog可讀，成功確認後關閉；navigation/account切換清除目標草稿。保留post requestId去重、好友權限、紙張snapshot與刪除權限。修正hidden被display覆蓋及小窗長文超出紙邊。
+- scripts/launcher_profile_guestbook_r62_qa.js：可重跑的實際renderer隔離測試；scripts/launcher_guestbook_danmaku_qa.js更新為操作真正composer。editor原101項、guestbook51項、隔離SQL49項與獨立審查77項/窄窗4項通過；npm start六路由通過並關閉測試server。詳見docs/LAUNCHER_PROFILE_R62.json，未使用真實帳號發文、購物或刪存檔。
+- config/launcher-announcements-v1.json revision72＋images/launcher_announcements/launcher-profile-r62.webp：公告使用實際新版UI截圖，沿用既有GPT紙張/板面/名片素材，沒有新建失敗圖。
+- tools/launcher-profile-r62/*：renderer-only差分，baseline319項完整沿用，只換3個renderer與公告圖；三款program/catalog/manifest原樣核對。公開簽章、CAS、完整330商品、core opui與實際快取驗證完成後另寫release收據。保留未提交iOS文件與rank圖。

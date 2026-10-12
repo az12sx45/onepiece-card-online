@@ -1,0 +1,15 @@
+{
+  "baseline": "ad9011407eb7c6ec33b2f9dd3e593e47ef16f4b6",
+  "previousRevision": 61,
+  "previousFiles": 319,
+  "revision": 62,
+  "coreVersion": "1.2.23",
+  "rendererFiles": [
+    "launcher.html",
+    "launcher-profile-shop.js",
+    "launcher-profile-shop.css"
+  ],
+  "images": [
+    "images/launcher_announcements/launcher-profile-r62.webp"
+  ]
+}

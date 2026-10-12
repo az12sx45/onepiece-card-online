@@ -135,6 +135,7 @@ async function main(){
       await page.locator('#profileCommentReadClose').click();await page.locator('[data-comment-id="99"]').first().click();
       check(label+' visitor may delete own note',await page.locator('#profileCommentReadBody button').count()===1);
       await page.locator('#profileCommentReadClose').click();
+      await page.locator('#profileGuestbookCompose').click();
       await page.locator('#profileCommentStyle').selectOption(notes[6].id);
       await page.locator('#profileGuestbookInput').fill('給好友的考古學家便條 🚢');
       await page.evaluate(()=>{window.__guestbookQa.deferPost=true;document.getElementById('profileGuestbookPost').click();document.getElementById('profileGuestbookPost').click();});
@@ -144,7 +145,9 @@ async function main(){
       check(label+' post captures target and selected owned stationery',post.payload.userId===44&&post.payload.styleId===notes[6].id&&post.expectedRevision===0&&/^[a-zA-Z0-9_-]{8,100}$/.test(post.requestId));
       await page.evaluate(()=>{window.__guestbookQa.deferPost=false;window.__guestbookQa.postResolvers.shift()();});
       await page.waitForFunction(()=>document.getElementById('profileGuestbookList').textContent.includes('給好友的考古學家便條'));
+      await page.locator('#profileGuestbookCompose').click();
       await page.locator('#profileCommentStyle').selectOption(notes[2].id);
+      await page.locator('#profileCommentComposeClose').click();
       check(label+' posted note keeps snapshot after composer style change',await page.locator('[data-comment-id="101"]').first().evaluate(n=>n.style.getPropertyValue('--note-art').includes('robin-rubbing.webp')));
       await page.locator('[data-comment-id="101"]').first().click();await page.locator('#profileCommentReadBody button').click();await page.locator('#profileCommentDeleteConfirm').click();
       await page.waitForFunction(()=>!document.querySelector('#profileGuestbookList [data-comment-id="101"]'));
