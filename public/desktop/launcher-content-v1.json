@@ -4,8 +4,8 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.23",
-  "revision": 61,
-  "publishedAt": "2026-10-12T13:15:54.747Z",
+  "revision": 62,
+  "publishedAt": "2026-10-12T15:51:00.283Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
     {
@@ -939,6 +939,11 @@
       "sha256": "3a035ef8034f627be921e4babf27fda23a8f05fa7d96a0041ebd5134165162a3"
     },
     {
+      "path": "images/launcher_announcements/launcher-profile-r62.webp",
+      "bytes": 48140,
+      "sha256": "fb5a3b6eea5167f82ab3a27441428ee5d9e3e1afe7efc4058ca756adc1b62e37"
+    },
+    {
       "path": "images/launcher_announcements/launcher-pull-depth-r26.webp",
       "bytes": 150712,
       "sha256": "3292b6727c78c60b2a19beca26703e12105c4e153e00eca5cfb11a60139469f5"
@@ -1540,13 +1545,13 @@
     },
     {
       "path": "launcher-profile-shop.css",
-      "bytes": 58091,
-      "sha256": "8e132efe90014dbdc1bae8f963cbd3acd2f2c70cfec71e297f19e365605854e5"
+      "bytes": 66159,
+      "sha256": "b58199eb561d110f60b5ab160a31f6c6a97956180368b586c36008fe75330eb9"
     },
     {
       "path": "launcher-profile-shop.js",
-      "bytes": 145690,
-      "sha256": "5263cc8f27f6e58ba199f5df7c116b01bcae50b6842b29d96315c0452694840f"
+      "bytes": 148323,
+      "sha256": "c06a7ca6b93fc575b829ce1c6a15586f5896599aa7e9a31352e9f8f66a367f0f"
     },
     {
       "path": "launcher-room-aquarium.css",
@@ -1595,8 +1600,8 @@
     },
     {
       "path": "launcher.html",
-      "bytes": 44708,
-      "sha256": "df1e2faaefd7d213730183f08b4109f881ad97b44ec8c193b43edbca3f6a3e52"
+      "bytes": 45857,
+      "sha256": "415cf590dddb0d236389a74ab67e8f51c99f48b9a35f2afad0d63213ff7ce67c"
     },
     {
       "path": "launcher.js",
@@ -1607,6 +1612,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "ty/KMmDFVxdrgesyZuChKVNJkq28uwYLqc1RI9+YLWZuKkk+VjBQePftwHbu1FwfvnrYkreer69vi3JLv9PSAQ=="
+    "value": "gL38tvACeNzzWKqNw0KeFped/VxndEVP8HSo0kyYXIwZSTvVc9Nl4VeGbSHBYTZSVYWkw9kr5gh/Sc9E2FrnCA=="
   }
 }
