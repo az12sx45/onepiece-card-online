@@ -1,5 +1,15 @@
 # Dev Workflow
 
+## 2026-10-19 下載網站新版備援入口
+
+public/desktop-download.html 的無 JS／通道失敗備援改為已上傳 Windows 1.2.24、已發布 Android v026，Android metadata 最低版本同步26；未改版面或自動下載行為。platform_download_qa.cjs 的未來版本 fixture 前移v027，離線與無JS另明確核對Windows1.2.24備援。隔離 npm start 19627（DATABASE_URL刻意空值）平台／離線／不可信網址／未來／無JS共10例通過，安裝檔請求全攔截；兩張截圖已檢視，程序已停止。Windows新檔HEAD200／322204608bytes，未傳輸安裝檔body。證據 D:/Codex_QA/download-speed-release-20261019/website-v24-v26/platform-report.json；正常Windows動態metadata仍依發布清單，最終公開新版由本輪root發布讀回核驗。
+
+## 2026-10-19 Windows 遊戲下載排程
+
+- `desktop/asset-store.js` 將原本一般檔案 4 路、32 MiB 以上檔案最後執行的兩段下載改為共用 12 個權重名額；小於等於 256 KiB／8 MiB／超過 8 MiB 分別耗用 1／3／6 個名額，最多同時 12／4／2 檔。第一個錯誤中止同批並等待全部進行中工作停止，取消亦排空；原有續傳、SHA、fsync、安全路徑、R2 備援與快取格式保留。
+- 新增 `scripts/desktop_download_scheduler_qa.js`、`docs/DOWNLOAD_SPEED_WINDOWS_20261019.md`。專項排程與既有 `desktop_asset_store_qa.js` 全部通過，語法與差異檢查通過。真實 Electron 44.1.1、相同空白 QA 快取的固定延遲比較改善 1.80–2.34 倍；公開同批小檔案先暖機後舊／新／新／舊測量，全部 HIT，合計 420,247→907,321 B/s（2.16 倍）。完整方法、候選 SHA、失敗診斷與限制見專項文件，原始結果在 `D:/Codex_QA/launcher-download-speed-20261019/agent-windows-speed-comparison.json`。此段不代表新安裝包已公開發布。
+
+
 ## 2026-10-18 Windows / Android 共用下載網站
 
 - 公開驗證完成：來源 `3f4bdb2341ead0ab88a7bce030f52029fe15dad1` 已在原網站生效；`/`、`/download`、`/desktop-download.html` SHA-256 與提交相同，公開平台測試 10/10、分發回歸 38/38。Windows launcher-release、三遊戲 catalog 與發布前逐位元相同；APK HEAD / 4-byte Range 檢查確認 MIME、354355190 bytes 與 ZIP 檔頭。證據 `public-readback.json`、`public-platform.json`、`public-distribution/browser-report.json`、`apk-range.json`。
@@ -8340,3 +8350,6 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - tools/launcher-profile-r62/*：renderer-only差分，baseline319項完整沿用，只換3個renderer與公告圖；三款program/catalog/manifest原樣核對。公開簽章、CAS、完整330商品、core opui與實際快取驗證完成後另寫release收據。保留未提交iOS文件與rank圖。
 
 - 2026-10-13 r62公開交付驗證完成：release ecd8cad4fe307db69cb844f3811f14a8f163b3c5，manifest SHA256 265693bacb11f03690e72c9a142576c65ccc4cacb93c162a3bc99e6c15e49535；4個差分檔案共308479 bytes，候選61→62成功。正式cache 61→62，320項讀回正確、319舊blob保留、第二次0下載。三款catalog/manifests/runtime完全保留r61，330商品逐筆一致，8項真實core opui GET/HEAD無fallback。實際名片與便條截圖/權限/長文驗收見source收據，完整公開收據docs/LAUNCHER_PROFILE_R62_RELEASE.json。需重啟已開啟的啟動器一次，無須重裝。
+
+
+2026-10-19 發布封裝接續：Windows 1.2.24 以獨立工作樹封裝，補齊簽署 r62 的 320 檔與精確媒體存取路徑，舊 1.2.23/r62 清單保留。跨核心清單完整驗簽後略過，新增 17 項回歸；overlay 62 項、R2 內容 49 項、來源與 305 路徑／6 拒絕案例通過。npm start 使用保留的 Express 4 依賴，Electron UA 三遊戲入口、版本目錄與下載頁 200。APK v026 已上線，v025 差量 266771 bytes，正式 Java HTTPS 更新 20/20、完整 APK 請求 0。Windows 的封裝、簽署及公開讀回接續紀錄見發布收據。

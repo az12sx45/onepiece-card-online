@@ -16,6 +16,7 @@ const MAX_TOTAL_BYTES = 256 * 1024 * 1024;
 const MANIFEST_TIMEOUT_MS = 12_000;
 const BLOB_TIMEOUT_MS = 5 * 60_000;
 const SHA256 = /^[a-f0-9]{64}$/;
+const CORE_VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$/;
 const RENDERER_FILES = new Set([
   'launcher.html', 'launcher.css', 'launcher.js',
   'launcher-social.js', 'launcher-social.css',
@@ -65,6 +66,7 @@ function validateManifest(document, coreVersion, trustedKeys = TRUSTED_RELEASE_K
     ['schema', 'channel', 'platform', 'arch', 'coreVersion', 'revision', 'publishedAt', 'baseUrl', 'files', 'signature'],
     'invalid_content_manifest');
   if (document.schema !== SCHEMA || document.channel !== 'stable' || document.platform !== 'win32' || document.arch !== 'x64' ||
+      typeof document.coreVersion !== 'string' || document.coreVersion.length > 128 || !CORE_VERSION.test(document.coreVersion) ||
       document.coreVersion !== coreVersion || !Number.isSafeInteger(document.revision) || document.revision < 1 ||
       typeof document.publishedAt !== 'string' || !Number.isFinite(Date.parse(document.publishedAt)) ||
       document.baseUrl !== BLOB_BASE || !Array.isArray(document.files) || document.files.length > MAX_FILES) {
@@ -293,7 +295,11 @@ class LauncherContentOverlay {
       let document;
       try { document = JSON.parse(bytes.toString('utf8')); }
       catch { fail('invalid_content_manifest', '內容更新清單不是有效 JSON。'); }
-      return validateManifest(document, this.coreVersion, this.trustedKeys);
+      // The shared pointer may still serve an older core's content channel.
+      // Authenticate every field before deciding that this signed release is
+      // inapplicable. Stored slots continue to use the strict current-core gate.
+      const verified = validateManifest(document, document?.coreVersion, this.trustedKeys);
+      return verified.coreVersion === this.coreVersion ? verified : null;
     }, this.manifestTimeoutMs);
   }
 

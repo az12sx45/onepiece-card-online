@@ -1,5 +1,16 @@
 # File Map
 
+## 2026-10-19 新版下載備援
+
+public/desktop-download.html：Windows1.2.24／Androidv026靜態備援與Android最低metadata版本26。scripts/platform_download_qa.cjs：v027未來版fixture、離線／無JS的雙平台備援核對；10例與截圖存於D:/Codex_QA/download-speed-release-20261019/website-v24-v26/，不下載安裝檔body。
+
+## 2026-10-19 Windows 下載排程
+
+- `desktop/asset-store.js`：小／中／大檔案共用 12 權重名額的下載佇列、錯誤與取消時排空；維持原 blob 驗證及續傳流程。
+- `scripts/desktop_download_scheduler_qa.js`：混合檔案併發上限、可執行小檔案、停止排空與進度回退測試。
+- `docs/DOWNLOAD_SPEED_WINDOWS_20261019.md`：問題證據、排程契約、實際 Electron 舊新版比較、QA 與適用限制。
+
+
 ## 2026-10-18 裝置下載入口
 
 - `public/desktop-download.html`：Windows / Android 選擇、裝置提示、各自的版本資訊及已驗證備援網址。
@@ -1978,3 +1989,6 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - docs/LAUNCHER_PROFILE_R62.json：來源UI驗證；公開完成狀態另見release收據。
 
 - docs/LAUNCHER_PROFILE_R62_RELEASE.json：公開r62簽章、CAS、完整catalog、core protocol、正式快取與資料保留收據。
+
+
+`tools/launcher-download-speed/package-release-qa.js`：釘住舊 r62 簽章／320 檔，核對新核心來源與 ASAR/resources、精確資源白名單與三款 fallback manifests。`scripts/desktop_launcher_content_overlay_qa.js`：包含異核心有效簽章安靜略過與拒絕偽造案例。`docs/LAUNCHER_DOWNLOAD_RELEASE_PACKAGING_20261019.md`：1.2.24 封裝連續性。`docs/DOWNLOAD_SPEED_RELEASE_20261019.json`：兩平台公開交付總收據。

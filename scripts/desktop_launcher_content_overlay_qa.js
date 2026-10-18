@@ -19,9 +19,9 @@ const manifestUrl = 'https://onepiece-card-online.onrender.com/desktop/launcher-
 let checks = 0;
 
 function sha(bytes) { return crypto.createHash('sha256').update(bytes).digest('hex'); }
-function sign(revision, entries) {
+function sign(revision, entries, version = coreVersion) {
   const document = {
-    schema: 1, channel: 'stable', platform: 'win32', arch: 'x64', coreVersion, revision,
+    schema: 1, channel: 'stable', platform: 'win32', arch: 'x64', coreVersion: version, revision,
     publishedAt: '2026-10-03T00:00:00.000Z', baseUrl: BLOB_BASE,
     files: entries.map(([name, bytes]) => ({ path: name, bytes: bytes.length, sha256: sha(bytes) })).sort((a, b) => a.path < b.path ? -1 : 1)
   };
@@ -145,6 +145,37 @@ async function main() {
     const unsorted = sign(3, [['launcher.html', html1], ['launcher.js', script1]]);
     unsorted.files.reverse();
     shouldThrow(() => validateManifest(unsorted, coreVersion, keys), 'invalid_content_manifest');
+
+    // A new core shares the old pointer while all prior renderer/media content
+    // is baked into its package. Cross-core releases must be authenticated and
+    // quietly ignored, without touching old slots or requesting any blob.
+    const newerCore = new LauncherContentOverlay({ coreVersion: '1.2.24', userDataPath: root,
+      origin: 'https://onepiece-card-online.onrender.com', fetchImpl, trustedKeys: keys });
+    assert.equal(await newerCore.load(), 0, 'old-core slots must never become active in a new core'); checks += 1;
+    remote = first;
+    const crossCoreCalls = calls.length;
+    const progress = [];
+    assert.deepEqual(await newerCore.stage(value => progress.push(value)),
+      { staged: false, revision: 0, downloadedBytes: 0 }); checks += 1;
+    assert.deepEqual(calls.slice(crossCoreCalls), [manifestUrl], 'a valid other-core release must not fetch blobs'); checks += 1;
+    assert.deepEqual(progress, [], 'an inapplicable release must not report download progress'); checks += 1;
+    assert.equal(newerCore.active, null); checks += 1;
+    assert.equal(await create().load(), 1, 'quietly ignoring another core must preserve its saved slots'); checks += 1;
+
+    remote = structuredClone(first);
+    remote.files[0].bytes += 1;
+    await assert.rejects(newerCore.stage(), error => error?.code === 'invalid_content_signature'); checks += 1;
+    remote = structuredClone(first);
+    delete remote.signature;
+    await assert.rejects(newerCore.stage(), error => error?.code === 'invalid_content_manifest'); checks += 1;
+    remote = structuredClone(first);
+    remote.baseUrl = 'https://untrusted.invalid/';
+    await assert.rejects(newerCore.stage(), error => error?.code === 'invalid_content_manifest'); checks += 1;
+    for (const malformed of [null, 25, {}, [], '1.2', '01.2.23', '1.2.3.4']) {
+      remote = sign(5, [['launcher.html', html1]], malformed);
+      await assert.rejects(newerCore.stage(), error => error?.code === 'invalid_content_manifest'); checks += 1;
+    }
+    assert(calls.slice(crossCoreCalls).every(url => url === manifestUrl), 'rejected cross-core releases must not fetch blobs'); checks += 1;
 
     remote = sign(3, [['launcher.html', html2], ['launcher.js', script2]]);
     corruptBlob = true;

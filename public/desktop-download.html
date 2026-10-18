@@ -111,8 +111,8 @@
             <span class="windows" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
             <div><h2 id="download-title">桌遊啟動器</h2><p>Windows 64 位元</p></div>
           </div>
-          <a id="download-link" class="download" href="https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.23/ONE-PIECE-Tabletop-Launcher-1.2.23-x64.exe" referrerpolicy="no-referrer"><span class="arrow" aria-hidden="true">↓</span>下載 Windows 桌面版</a>
-          <p id="release-info" class="release">v1.2.23 · Windows 64 位元</p>
+          <a id="download-link" class="download" href="https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.24/ONE-PIECE-Tabletop-Launcher-1.2.24-x64.exe" referrerpolicy="no-referrer"><span class="arrow" aria-hidden="true">↓</span>下載 Windows 桌面版</a>
+          <p id="release-info" class="release">v1.2.24 · Windows 64 位元</p>
           <ol class="steps">
             <li>下載並安裝啟動器。</li>
             <li>使用原本帳號登入啟動器。</li>
@@ -125,8 +125,8 @@
             <span class="phone" aria-hidden="true"><svg viewBox="0 0 30 36"><rect x="5" y="2" width="20" height="32" rx="4"/><path d="M11 6h8M13 29h4"/></svg></span>
             <div><h2 id="android-title">PIRATE ODYSSEY</h2><p>Android 8.0 以上 · 手機橫向版</p></div>
           </div>
-          <a id="android-download-link" class="download" href="https://game-assets.rihdi.tw/android/releases/25/PIRATE-ODYSSEY-v025-bc79dfce564b.apk" referrerpolicy="no-referrer"><span class="arrow" aria-hidden="true">↓</span>下載 Android APK</a>
-          <p id="android-release-info" class="release">v025 · 測試版 · 安裝檔約 355 MB</p>
+          <a id="android-download-link" class="download" href="https://game-assets.rihdi.tw/android/releases/26/PIRATE-ODYSSEY-v026-f63d2654a4db.apk" referrerpolicy="no-referrer"><span class="arrow" aria-hidden="true">↓</span>下載 Android APK</a>
+          <p id="android-release-info" class="release">v026 · 測試版 · 安裝檔約 355 MB</p>
           <ol class="steps">
             <li>下載 APK，開啟下載完成的檔案。</li>
             <li>若系統詢問，允許此瀏覽器安裝應用程式，再完成安裝。</li>
@@ -170,7 +170,7 @@
         .then(response => { if (!response.ok) throw new Error('release unavailable'); return response.json(); })
         .then(release => {
           if (release?.schema !== 1 || release.platform !== 'android' || release.package !== 'tw.rihdi.tabletop.android') return;
-          if (!Number.isSafeInteger(release.versionCode) || release.versionCode < 25) return;
+          if (!Number.isSafeInteger(release.versionCode) || release.versionCode < 26) return;
           const artifact = release.artifact;
           if (!artifact || !/^https:\/\/game-assets\.rihdi\.tw\/android\/releases\/[1-9][0-9]*\/[0-9A-Za-z][0-9A-Za-z._-]*\.apk$/.test(artifact.url || '')) return;
           if (!new URL(artifact.url).pathname.startsWith(`/android/releases/${release.versionCode}/`)) return;

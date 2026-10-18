@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "dateTaipei": "2026-10-19",
+  "complete": false,
+  "publicationState": "ANDROID_PUBLIC_WINDOWS_ARTIFACTS_VERIFIED_SITE_ACTIVATION_PENDING",
+  "sourceBaseCommit": "dca6367e9c95a9c86151f509d1fc00c0c0f44c4c",
+  "windowsReleaseCommit": null,
+  "downloadPage": "https://onepiece-card-online.onrender.com/download",
+  "windows": {
+    "version": "1.2.24",
+    "artifact": {
+      "fileName": "ONE-PIECE-Tabletop-Launcher-1.2.24-x64.exe",
+      "bytes": 322204608,
+      "sha256": "32c76608344540e47299bad2271a4e8b1e306df2c4fa67dcb2786a3c386715e9",
+      "url": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.24/ONE-PIECE-Tabletop-Launcher-1.2.24-x64.exe"
+    },
+    "manifestSha256": "20629241b16830f76624695f5617726fd10ea90694cc427ce659f3a4ca66816d",
+    "blockmap": {
+      "url": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.24/ONE-PIECE-Tabletop-Launcher-1.2.24-x64.exe.blockmap",
+      "status": 200,
+      "bytes": 336495,
+      "sha256": "250871ef849e10205f8d2ad60d5542ffbc50c3c7ea4bd04ea453fac3b084f4b1",
+      "bareUrlVerified": true,
+      "elapsedMs": 1081,
+      "cfCacheStatus": "DYNAMIC"
+    },
+    "gameDownloadConcurrency": {
+      "small": 12,
+      "medium": 4,
+      "large": 2
+    },
+    "smallFilePublicAbbaSpeedRatio": 2.16,
+    "actualPreviousVersionUpdate": {
+      "from": "1.2.23",
+      "downloadedPayloadBytes": 58518172,
+      "downloadedSidecarBytes": 615734,
+      "reusedPayloadBytes": 263686436,
+      "ranges": 61,
+      "all206": true,
+      "reconstructedFullSha256": "32c76608344540e47299bad2271a4e8b1e306df2c4fa67dcb2786a3c386715e9"
+    },
+    "packagedStartupPassed": true,
+    "productionDependencyFiles": 172,
+    "signedR62Files": 320,
+    "r62OldCorePointerPreserved": true,
+    "mediaResolverCases": 305,
+    "negativeResolverCases": 6
+  },
+  "android": {
+    "versionCode": 26,
+    "versionName": "0.1.25-mobile-trial",
+    "url": "https://game-assets.rihdi.tw/android/releases/26/PIRATE-ODYSSEY-v026-f63d2654a4db.apk",
+    "bytes": 354355190,
+    "sha256": "f63d2654a4dba9edcb26879a203b77b242ec27a4592e1049eaec429638444904",
+    "manifestSha256": "553b691502e8a5ce2816bb3eec44096b9b469b085ba5cd52dfd6156381bee881",
+    "deltas": [
+      {
+        "format": "po-apk-delta-v1",
+        "fromVersionCode": 25,
+        "baseBytes": 354355190,
+        "baseSha256": "bc79dfce564be2f5e1b10b1e6729d82b6988ba3fde4caa229aba7050921ffd7d",
+        "url": "https://game-assets.rihdi.tw/android/deltas/25-26/387ff6c6dc4aa808db5894517285c0b263335e3c1b6ac5de16668c7a05727be8.podiff.gz",
+        "bytes": 266771,
+        "sha256": "387ff6c6dc4aa808db5894517285c0b263335e3c1b6ac5de16668c7a05727be8"
+      },
+      {
+        "format": "po-apk-delta-v1",
+        "fromVersionCode": 24,
+        "baseBytes": 338163615,
+        "baseSha256": "1843f5048137536a0f33ff9d85b895626ac4a9377c4a4d052893d714f5f582a8",
+        "url": "https://game-assets.rihdi.tw/android/deltas/24-26/c9e7bebef8730abd5b5a969abd5f02abdfa594c964d874fa2f40732a7666d044.podiff.gz",
+        "bytes": 16531320,
+        "sha256": "c9e7bebef8730abd5b5a969abd5f02abdfa594c964d874fa2f40732a7666d044"
+      }
+    ],
+    "gameDownloadConcurrency": {
+      "small": 12,
+      "medium": 4,
+      "large": 2
+    },
+    "desktopJavaPublicSmallFileSpeedRatio": 1.59,
+    "realHttpsJavaUpdateChecks": 20,
+    "fullApkRequestsDuringDeltaTest": 0,
+    "webAssetsPreservedFromV025": 1549
+  },
+  "validation": {
+    "schedulerAndTransferRegression": true,
+    "resumeShaDedupCancelPreserved": true,
+    "desktopRealElectronAndAndroidJvmTested": true,
+    "browserPlatformCases": 10,
+    "physicalAndroidPhoneTested": false,
+    "friendNetworkSpeedVerified": false,
+    "windowsSmokeNote": "External isolated CDP harness loads hidden lazy avatar images; original built assertions and binary hashes are preserved."
+  },
+  "limits": [
+    "Speed ratios are matched small-file samples, not minimum speeds guaranteed on other networks.",
+    "Android HTTPS native updater uses explicit system stand-ins; no physical phone installation or speed acceptance."
+  ],
+  "lattice": {
+    "status": "BLOCKED",
+    "code": "CUSTOMER_DEPENDENCY_FILE_SET_CHANGED",
+    "taskWritesClaimed": false
+  },
+  "localEvidenceRoot": "D:/Codex_QA/download-speed-release-20261019",
+  "publicSiteVerification": null
+}

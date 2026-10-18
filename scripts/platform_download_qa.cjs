@@ -6,7 +6,8 @@ const { chromium } = require(process.env.BOARD_QA_PLAYWRIGHT);
 const base = process.argv[2] || 'http://127.0.0.1:18938';
 const out = process.argv[3];
 const channel = 'https://game-assets.rihdi.tw/android/launcher-release-v1.json';
-const fallback = 'https://game-assets.rihdi.tw/android/releases/25/PIRATE-ODYSSEY-v025-bc79dfce564b.apk';
+const fallback = 'https://game-assets.rihdi.tw/android/releases/26/PIRATE-ODYSSEY-v026-f63d2654a4db.apk';
+const windowsFallback = 'https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.24/ONE-PIECE-Tabletop-Launcher-1.2.24-x64.exe';
 const cases = [
   {name:'Windows',width:1366,height:900,ua:'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36',platform:'Win32',expected:'windows-card'},
   {name:'Android portrait',width:390,height:844,ua:'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/130.0.0.0 Mobile Safari/537.36',platform:'Linux armv8l',expected:'android-card'},
@@ -36,11 +37,11 @@ const cases = [
           clicks.push(url); return route.fulfill({status:204,body:''});
         }
         requests.push(url);
-        if(url===channel && c.mode==='offline') return route.abort();
+        if((url===channel || url===base+'/desktop/launcher-release-v1.json') && c.mode==='offline') return route.abort();
         if(url===channel && ['invalid','future'].includes(c.mode)) {
           const r=structuredClone(release);
           if(c.mode==='invalid') r.artifact.url='https://example.com/untrusted.apk';
-          else {r.versionCode=26;r.artifact.url='https://game-assets.rihdi.tw/android/releases/26/PIRATE-ODYSSEY-v026.apk';}
+          else {r.versionCode=27;r.version='0.1.26-mobile-trial';r.artifact.url='https://game-assets.rihdi.tw/android/releases/27/PIRATE-ODYSSEY-v027.apk';}
           return route.fulfill({json:r,headers:{'Access-Control-Allow-Origin':'*'}});
         }
         return route.continue();
@@ -63,9 +64,10 @@ const cases = [
       assert.equal(state.recommended,c.mode==='no-js'?null:c.expected);
       if(c.expected==='android-card'&&c.mode!=='no-js') assert.equal(state.first,'android-card');
       if(c.expected===null) assert.match(state.note,/沒有可安裝版本/);
-      assert.equal(state.android,c.mode==='future'?'https://game-assets.rihdi.tw/android/releases/26/PIRATE-ODYSSEY-v026.apk':fallback);
+      assert.equal(state.android,c.mode==='future'?'https://game-assets.rihdi.tw/android/releases/27/PIRATE-ODYSSEY-v027.apk':fallback);
       assert.match(state.windows,/^https:\/\/game-assets\.rihdi\.tw\/desktop\/launcher\/releases\/.*\.exe$/);
-      if(c.mode==='future') assert.match(state.version,/v026/);
+      if(['offline','no-js'].includes(c.mode)) assert.equal(state.windows,windowsFallback);
+      if(c.mode==='future') assert.match(state.version,/v027/);
       assert.equal(clicks.length,0);
       allowClick=true;
       await page.locator('#android-download-link').click();

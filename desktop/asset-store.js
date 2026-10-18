@@ -21,7 +21,9 @@ const GAME_ID_LIST = Object.freeze(['card', 'board', 'chess']);
 const GAME_IDS = new Set(GAME_ID_LIST);
 const RESERVED_SEGMENTS = new Set(['incoming', 'backup', 'backups', 'private', 'battle_chess']);
 const DOWNLOAD_RESERVE_BYTES = 512 * 1024 * 1024;
-const LARGE_FILE_BYTES = 32 * 1024 * 1024;
+const DOWNLOAD_MAX_SLOTS = 12;
+const SMALL_FILE_BYTES = 256 * 1024;
+const MEDIUM_FILE_BYTES = 8 * 1024 * 1024;
 const INTEGRITY_SCHEMA = 1;
 const INTEGRITY_MAX_ENTRIES = 20_000;
 const INTEGRITY_INDEX_MAX_BYTES = 12 * 1024 * 1024;
@@ -1496,10 +1498,7 @@ class AssetStore extends EventEmitter {
       currentFile: '準備下載…'
     }, true);
 
-    const normal = missing.filter((asset) => asset.size < LARGE_FILE_BYTES);
-    const large = missing.filter((asset) => asset.size >= LARGE_FILE_BYTES);
-    await this.downloadQueue(gameId, normal, 4, runtime, signal, assetBlobBaseUrl);
-    await this.downloadQueue(gameId, large, 2, runtime, signal, assetBlobBaseUrl);
+    await this.downloadQueue(gameId, missing, DOWNLOAD_MAX_SLOTS, runtime, signal, assetBlobBaseUrl);
     if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
 
     this.emitProgress(gameId, { ...runtime, status: 'verifying', message: '正在驗證遊戲檔案', currentFile: '' }, true);
@@ -1548,25 +1547,57 @@ class AssetStore extends EventEmitter {
   }
 
   async downloadQueue(gameId, assets, concurrency, runtime, signal, assetBlobBaseUrl = '') {
-    let cursor = 0;
-    const worker = async () => {
-      while (true) {
-        if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
-        const index = cursor++;
-        if (index >= assets.length) return;
-        const asset = assets[index];
-        let lastReported = 0;
-        await this.downloadBlob(asset, signal, (received) => {
-          const delta = received - lastReported;
-          lastReported = received;
-          runtime.downloadedBytes += delta;
-          this.emitProgress(gameId, { ...runtime, currentFile: path.posix.basename(asset.path) });
-        }, { assetBlobBaseUrl });
-        runtime.completedFiles += 1;
-        this.emitProgress(gameId, { ...runtime, currentFile: path.posix.basename(asset.path) }, true);
+    const slots = Math.max(1, Math.min(DOWNLOAD_MAX_SLOTS, Math.floor(Number(concurrency) || 1)));
+    const queue = assets.map((asset) => ({
+      asset,
+      slots: Math.min(slots, asset.size <= SMALL_FILE_BYTES ? 1 : (asset.size <= MEDIUM_FILE_BYTES ? 3 : 6))
+    }));
+    const active = new Set();
+    const controller = new AbortController();
+    const relayAbort = () => controller.abort();
+    if (signal.aborted) relayAbort();
+    else signal.addEventListener('abort', relayAbort, { once: true });
+    let available = slots;
+    let failure = null;
+    try {
+      while (queue.length || active.size) {
+        if (signal.aborted && !failure) failure = abortError();
+        while (!failure && !controller.signal.aborted) {
+          // A waiting large file must not occupy a worker needed by an eligible small file.
+          const index = queue.findIndex((entry) => entry.slots <= available);
+          if (index < 0) break;
+          const entry = queue.splice(index, 1)[0];
+          available -= entry.slots;
+          let job;
+          job = (async () => {
+            try {
+              let lastReported = 0;
+              await this.downloadBlob(entry.asset, controller.signal, (received) => {
+                const delta = received - lastReported;
+                lastReported = received;
+                runtime.downloadedBytes += delta;
+                this.emitProgress(gameId, { ...runtime, currentFile: path.posix.basename(entry.asset.path) });
+              }, { assetBlobBaseUrl });
+              runtime.completedFiles += 1;
+              this.emitProgress(gameId, { ...runtime, currentFile: path.posix.basename(entry.asset.path) }, true);
+            } catch (error) {
+              if (!failure) failure = error;
+              controller.abort();
+            } finally {
+              available += entry.slots;
+              active.delete(job);
+            }
+          })();
+          active.add(job);
+        }
+        if (!active.size) break;
+        await Promise.race(active);
       }
-    };
-    await Promise.all(Array.from({ length: Math.min(concurrency, Math.max(1, assets.length)) }, worker));
+      if (failure) throw failure;
+      if (controller.signal.aborted) throw abortError();
+    } finally {
+      signal.removeEventListener('abort', relayAbort);
+    }
   }
 
   async downloadBlob(asset, signal, onProgress, { assetBlobBaseUrl = '' } = {}) {

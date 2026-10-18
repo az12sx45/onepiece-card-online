@@ -33,6 +33,12 @@ const MAX_LOCKED_CREW_CANDIDATE_BYTES = 4 * 1024 * 1024;
 // The installer needs the current game manifests; historical manifests remain
 // in the source and in existing installs' caches.
 const MAX_CATALOG_BYTES = 5 * 1024 * 1024;
+const CURRENT_FALLBACK_CATALOG = Object.freeze([
+  { path: 'manifests/card-package-a7d368a6e3feae01.json', bytes: 234104, sha256: '5ec74d1890d06c58e1086ef6df646b247c3926a5a82a059d4abba4bcd0903bcd' },
+  { path: 'manifests/board-package-83b5cb65d174761d.json', bytes: 1676463, sha256: '554dab56bf1300aa9ee49110883235d8b2a156d2393594ef96321cbc05c695d6' },
+  { path: 'manifests/chess-package-ee4627881596bdad.json', bytes: 446885, sha256: 'a456de14211bac9ab767ae2a7a56525cadb7a85516d3fb32f86ca1f6f4058ce5' }
+]);
+const CURRENT_FALLBACK_CATALOG_BYTES = CURRENT_FALLBACK_CATALOG.reduce((sum, file) => sum + file.bytes, 0);
 const MAX_ASAR_BYTES = 32 * 1024 * 1024;
 const RETAINED_ROLLOUT_MANIFESTS = Object.freeze({
   'chess-package-cdab9e869c05f12d.json': '9eeda0136c2781bb29196f67ac97350a94dba0fa826b3af4f117b4f69cd49043',
@@ -184,13 +190,18 @@ const FISHING_V1218_FISH = Object.freeze([
   'pumpkin-octopus', 'striped-clam', 'treasure-pearl-clam'
 ].map(name => `fish_ua/${name}.webp`));
 const FISHING_V1218_ART_SET = new Set([...FISHING_V1218_SCENES, ...FISHING_V1218_FISH]);
+// The fixed signed r62 source also supersedes this one historical fish image.
+const FISHING_R62_PUMPKIN = Object.freeze({ asset: 'fish_ua/pumpkin-octopus.webp', bytes: 29862,
+  sha256: 'a3e55da2b26fef25c9fde283f9c463c3f2a0cdbe60e21aea1e5a11723c99f886' });
 const FISHING_GOLDEN_WHALE_V2 = Object.freeze({
-  asset: 'fish_ua/golden-whale-v2.webp', bytes: 45588,
-  sha256: 'a9a73c0bf70f309efc7dc2e1636769a456a5a151d2c17a9884ef87956dedc539'
+  // The signed r62 overlay supersedes the original 1.2.18 bytes at this path.
+  asset: 'fish_ua/golden-whale-v2.webp', bytes: 22008,
+  sha256: 'c23e90c575399656f4d2375528f9c607ffb61e079a66e2e0830d7b56d17f1d7c'
 });
 const FISHING_V1222_ROD = Object.freeze({
-  asset: 'fishing_v5/rod-no-line-v1.webp', bytes: 292484,
-  sha256: '76c7e1462ff41b0e10e39d175182edbe02ca4dfa3d5c06fce0ed6555780b0f28'
+  // The signed r62 overlay replaced the 292484-byte rod with its current atlas.
+  asset: 'fishing_v5/rod-no-line-v1.webp', bytes: 1329848,
+  sha256: 'f14b2a302fae4d05b772c1db5be3457b5dbec1da5c0fd9f35a24064ca4d492e4'
 });
 const FISHING_V1222_HUD_ART = Object.freeze([
   { asset: 'fishing_v5/hud-reel-v2.webp', bytes: 64396, sha256: '30a0ee6872ceccfa05e6841417fdebd09cbf1a5faec22b1c4450a7262b34bc93' },
@@ -433,6 +444,48 @@ const EXTRA_RESOURCES = [
     to: 'cursor-policy/js/game_cursor_feedback_v1.js'
   }
 ];
+
+// New core 1.2.24 bakes the signed 1.2.23/r62 overlay, whose old-core pointer
+// remains published unchanged. Derive additions from pinned signed evidence,
+// never from the package configuration under test.
+const R62_COVERAGE = require('../tools/launcher-download-speed/package-release-qa');
+const r62Bytes = fs.readFileSync(path.join(PUBLIC_ROOT, 'desktop/launcher-content-v1.json'));
+assert(crypto.createHash('sha256').update(r62Bytes).digest('hex') === R62_COVERAGE.OLD_CONTENT_SHA,
+  'The preserved 1.2.23/r62 content manifest changed.');
+const R62_CONTENT = JSON.parse(r62Bytes);
+require('../desktop/launcher-content-overlay').validateManifest(R62_CONTENT, '1.2.23');
+assert(R62_CONTENT.revision === 62 && R62_CONTENT.files.length === 320, 'Expected the complete reviewed r62 overlay.');
+const R62_ADDITIONAL_MEDIA = R62_CONTENT.files.filter(file => /^(?:images|audio|videos)\//.test(file.path)
+  && R62_COVERAGE.resourceCandidates({ build: { extraResources: EXTRA_RESOURCES } },
+    '../public/' + file.path, 'launcher-assets/' + file.path).length === 0);
+assert(R62_ADDITIONAL_MEDIA.length === 138, 'Unexpected r62 additional media set.');
+const R62_MEDIA = R62_CONTENT.files.filter(file => /^(?:images|audio|videos)\//.test(file.path));
+assert(R62_MEDIA.length === 305, 'Unexpected signed r62 media count.');
+const R62_MEDIA_BYTES = R62_MEDIA.reduce((sum, file) => sum + file.bytes, 0);
+// All signed media has one exact separate allowance, including avatars selected
+// by an older wildcard. Exclude intersections with the older separate artwork
+// budgets so the base remainder and combined limit never count a file twice.
+const legacySeparateMediaPaths = new Set([
+  ...[...ROOM_PORTRAIT_ASSETS, ...ROOM_HD_ASSETS, ...ROOM_LIFE_FURNITURE,
+    ...ROOM_LIFE_HD_ASSETS, ...ROOM_NEW_V128_ASSETS, ...ROOM_LOCKED_V1215_VIVI_ASSETS,
+    ...FISHING_V1218_ART_SET, FISHING_V1222_ROD.asset, FISHING_GOLDEN_WHALE_V2.asset,
+    FISHING_V1223_SPLASH.asset, ...FISHING_V1222_HUD_ART.map(item => item.asset)]
+    .map(asset => 'images/launcher_room/' + asset),
+  'images/launcher_announcements/' + FISHING_V1218_ANNOUNCEMENT.asset
+]);
+const R62_LEGACY_OVERLAP_BYTES = R62_MEDIA.filter(file => legacySeparateMediaPaths.has(file.path))
+  .reduce((sum, file) => sum + file.bytes, 0);
+const RETAINED_CORE_PROGRAM_MANIFESTS = [
+  'manifests/card-package-ca251af687e50daf.json',
+  'manifests/board-package-660f4c4369f9177b.json',
+  'manifests/chess-package-d37cd9a585600687.json'
+];
+EXTRA_RESOURCES.find(item => item.to === 'catalog').filter.push(
+  'manifests/card-package-a7d368a6e3feae01.json',
+  'manifests/board-package-83b5cb65d174761d.json',
+  'manifests/chess-package-ee4627881596bdad.json'
+);
+EXTRA_RESOURCES.push({ from: '../public', to: 'launcher-assets', filter: R62_ADDITIONAL_MEDIA.map(file => file.path) });
 
 const ICON_PATH = path.join(DESKTOP_ROOT, 'assets', 'one_piece_tabletop_launcher_icon_v1.ico');
 const SIDEBAR_PATH = path.join(DESKTOP_ROOT, 'assets', 'one_piece_tabletop_installer_sidebar_v1.bmp');
@@ -691,8 +744,8 @@ function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
   const luffyArtEnabled = require('../desktop/launcher-room-motion.js').LUFFY_ART_ENABLED === true;
-  assert(luffyArtEnabled && packageJson.version === '1.2.23',
-    'Luffy art gate must remain enabled in launcher 1.2.23.');
+  assert(luffyArtEnabled && packageJson.version === '1.2.24',
+    'Luffy art gate must remain enabled in launcher 1.2.24.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   const announcementConfig = readJson(path.join(ROOT, 'config/launcher-announcements-v1.json'), 'launcher announcements');
   require('../server/launcher-announcements').validateConfig(announcementConfig);
@@ -796,9 +849,9 @@ function validateSourcePackage() {
   const fishingHudAnnouncement = announcementConfig.announcements.find(item => item.id === 'launcher-1.2.23-fishing-hud-and-content-updates');
   assert(announcementConfig.revision >= 21 && fishingHudAnnouncement?.status === 'published' &&
     fishingHudAnnouncement.scope === 'launcher' &&
-    fishingHudAnnouncement.version === packageJson.version &&
+    fishingHudAnnouncement.version === '1.2.23' &&
     fishingHudAnnouncement.requiredRelease?.kind === 'launcher' &&
-    fishingHudAnnouncement.requiredRelease?.version === packageJson.version &&
+    fishingHudAnnouncement.requiredRelease?.version === '1.2.23' &&
     fishingHudAnnouncement.image?.asset === `images/launcher_announcements/${FISHING_V1218_ANNOUNCEMENT.asset}` &&
     /雙端手把.*順轉/.test(fishingHudAnnouncement.body.join('\n')) &&
     /放線時反轉/.test(fishingHudAnnouncement.body.join('\n')) &&
@@ -811,6 +864,7 @@ function validateSourcePackage() {
   assert(packageJson.build?.productName === 'ONE PIECE TABLETOP SERIES 啟動器', 'Desktop product name changed unexpectedly.');
   assertExactJson(packageJson.build?.files, APP_FILES, 'build.files');
   assertExactJson(packageJson.build?.extraResources, EXTRA_RESOURCES, 'build.extraResources');
+  R62_COVERAGE.main(['--repo-root', ROOT]);
   assertExactJson(packageJson.dependencies, { 'socket.io-client': '4.8.1' }, 'Runtime dependencies');
   assert(packageLock.packages?.['']?.dependencies?.['socket.io-client'] === '4.8.1', 'package-lock does not pin the approved socket.io-client dependency.');
   assert(packageLock.packages?.['node_modules/socket.io-client']?.version === '4.8.1', 'package-lock resolved socket.io-client to an unexpected version.');
@@ -913,9 +967,11 @@ function validateSourcePackage() {
   'Corrected Golden Whale differs from reviewed 256px transparent art.');
   assert(resolveScene(`opui://launcher/images/launcher_room/${FISHING_GOLDEN_WHALE_V2.asset}`) === goldenWhaleV2,
     'Corrected Golden Whale is blocked by packaged protocol.');
-  assert(fishingClient.includes("isV5?'fishing_v5/rod-no-line-v1.webp':'fishing_v2/rod.webp'"),
-    'Line-free rod must be used only by v5; historical v4 must retain its original rod.');
   const fishingStyles = fs.readFileSync(path.join(DESKTOP_ROOT, 'launcher-room-minigames.css'), 'utf8');
+  assert(fishingClient.includes("rod=node('img','room-fishing-v4-rod');rod.src=ASSET+'fishing_v2/rod.webp'") &&
+    fishingStyles.includes(".room-fishing-v5-rod-shaft,.room-fishing-v5-rod-grip{") &&
+    fishingStyles.includes("opui://launcher/images/launcher_room/fishing_v5/rod-no-line-v1.webp"),
+    'Signed r62 v5 rod atlas and historical v4 rod must retain their reviewed presentation.');
   for (const item of FISHING_V1222_HUD_ART) {
     assert(fishingStyles.includes(`opui://launcher/images/launcher_room/${item.asset}`),
       `Reviewed generated fishing HUD art is not used by the v5 stylesheet: ${item.asset}`);
@@ -966,7 +1022,8 @@ function validateSourcePackage() {
       item.sourceKind === 'gpt-redraw', `Launcher 1.2.18 art manifest entry is invalid: ${item.asset}`);
     const pathPart = `images/launcher_room/${item.asset}`;
     const source = path.join(PUBLIC_ROOT, pathPart);
-    assert(fs.statSync(source).size === item.bytes && sha256File(source) === item.sha256,
+    const reviewed = item.asset === FISHING_R62_PUMPKIN.asset ? FISHING_R62_PUMPKIN : item;
+    assert(fs.statSync(source).size === reviewed.bytes && sha256File(source) === reviewed.sha256,
       `Launcher 1.2.18 fishing art differs from reviewed GPT output: ${item.asset}`);
     assert(resolveScene(`opui://launcher/${pathPart}`) === source,
       `Launcher 1.2.18 fishing art is blocked by packaged protocol: ${item.asset}`);
@@ -1119,7 +1176,9 @@ function validateSourcePackage() {
     assert(item.sourcePng.startsWith('tools/launcher-profile/avatar-source-png/'), `Avatar PNG source path is unsafe: ${item.sourcePng}`);
     assert(item.asset === `public/images/board/avatars/${item.avatarId}.webp`, `Avatar output path differs: ${item.avatarId}`);
     assert(sha256File(path.join(ROOT, ...item.sourcePng.split('/'))) === item.sourceSha256, `Avatar PNG digest differs: ${item.avatarId}`);
-    assert(sha256File(path.join(ROOT, ...item.asset.split('/'))) === item.assetSha256, `Avatar WebP digest differs: ${item.avatarId}`);
+    const current = R62_CONTENT.files.find(file => 'public/' + file.path === item.asset);
+    assert(sha256File(path.join(ROOT, ...item.asset.split('/'))) === (current?.sha256 || item.assetSha256),
+      `Avatar WebP differs from the signed r62 replacement or preserved original: ${item.avatarId}`);
   }
   const roomManifest = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_ART_20260925.json'), 'launcher room art manifest');
   const roomResource = EXTRA_RESOURCES.find(resource => resource.to === 'launcher-assets/images/launcher_room');
@@ -1384,10 +1443,16 @@ function validateSourcePackage() {
     'catalog-v2.json',
     'catalog-v3.json',
     ...referencedManifests.map((name) => `manifests/${name}`),
-    ...referencedProgramManifests.map((name) => `manifests/${name}`)
+    ...referencedProgramManifests.map((name) => `manifests/${name}`),
+    ...RETAINED_CORE_PROGRAM_MANIFESTS
   ]);
   assertExactJson(sorted(catalogResource?.filter || []), expectedBundledCatalog,
     'Catalog package filter must match both published catalogs');
+  for (const file of CURRENT_FALLBACK_CATALOG) {
+    const source = path.join(PUBLIC_ROOT, 'desktop', file.path);
+    assert(fs.statSync(source).size === file.bytes && sha256File(source) === file.sha256,
+      `The separately budgeted current fallback manifest changed: ${file.path}`);
+  }
 
   const forbiddenText = JSON.stringify({ files: packageJson.build.files, extraResources: packageJson.build.extraResources }).toLowerCase();
   for (const forbidden of ['../public/images/**', '../public/audio/**', '../public/videos/**', '../public/fonts']) {
@@ -1440,6 +1505,7 @@ function collectExpectedLauncherAssets() {
   for (const fileName of videoResource.filter) {
     add(path.join(PUBLIC_ROOT, 'videos', 'game_launcher', fileName), `videos/game_launcher/${fileName}`);
   }
+  for (const file of R62_ADDITIONAL_MEDIA) add(path.join(PUBLIC_ROOT, file.path), file.path);
   return expected;
 }
 
@@ -1499,13 +1565,13 @@ function validateLauncherMediaBudgets(launcherBytes, roomMotionBytes, lifeBytes,
     'The corrected Golden Whale must use the reviewed byte budget.');
   assert(fishingV1223SplashBytes === FISHING_V1223_SPLASH.bytes,
     'Launcher 1.2.23 magma splash must use reviewed bytes.');
-  const launcherBaseBytes = launcherBytes - roomMotionBytes - lifeBytes - lifeHdBytes - expansionBytes - lockedCrewBytes - fishingV1218ArtBytes - fishingV1222RodBytes - fishingV1222HudBytes - goldenWhaleV2Bytes - fishingV1223SplashBytes;
+  const launcherBaseBytes = launcherBytes - R62_MEDIA_BYTES + R62_LEGACY_OVERLAP_BYTES - roomMotionBytes - lifeBytes - lifeHdBytes - expansionBytes - lockedCrewBytes - fishingV1218ArtBytes - fishingV1222RodBytes - fishingV1222HudBytes - goldenWhaleV2Bytes - fishingV1223SplashBytes;
   assert(launcherBaseBytes >= 0, 'Launcher media classifications cannot exceed the actual total.');
   assert(roomMotionBytes <= MAX_ROOM_MOTION_ASSET_BYTES, `Room motion and portraits exceed ${MAX_ROOM_MOTION_ASSET_BYTES} bytes.`);
   assert(lifeBytes <= MAX_ROOM_LIFE_FURNITURE_BYTES, 'Room life furniture exceeds its separate 1 MiB budget.');
   assert(lifeHdBytes <= MAX_ROOM_LIFE_HD_ASSET_BYTES, 'Reviewed HD life media exceeds its separate 16 MiB budget.');
   assert(launcherBaseBytes <= MAX_LAUNCHER_ASSET_BYTES, `Existing launcher media exceeds ${MAX_LAUNCHER_ASSET_BYTES} bytes.`);
-  assert(launcherBytes <= MAX_LAUNCHER_ASSET_BYTES + MAX_ROOM_MOTION_ASSET_BYTES + MAX_ROOM_LIFE_FURNITURE_BYTES + MAX_ROOM_LIFE_HD_ASSET_BYTES + MAX_LOCKED_CREW_CANDIDATE_BYTES + fishingV1218ArtBytes + fishingV1222RodBytes + fishingV1222HudBytes + goldenWhaleV2Bytes + fishingV1223SplashBytes,
+  assert(launcherBytes <= R62_MEDIA_BYTES - R62_LEGACY_OVERLAP_BYTES + MAX_LAUNCHER_ASSET_BYTES + MAX_ROOM_MOTION_ASSET_BYTES + MAX_ROOM_LIFE_FURNITURE_BYTES + MAX_ROOM_LIFE_HD_ASSET_BYTES + MAX_LOCKED_CREW_CANDIDATE_BYTES + fishingV1218ArtBytes + fishingV1222RodBytes + fishingV1222HudBytes + goldenWhaleV2Bytes + fishingV1223SplashBytes,
     'Combined launcher media budget exceeded.');
   return { launcherBaseBytes, expansionBytes, fishingV1218ArtBytes, fishingV1222RodBytes };
 }
@@ -1609,7 +1675,8 @@ function validateWinUnpacked(winUnpackedPath, source) {
     'Launcher 1.2.18 fishing art manifest');
   for (const item of fishingV1218Art.items) {
     const packagedPath = path.join(launcherAssetRoot, 'images', 'launcher_room', ...item.asset.split('/'));
-    assert(fs.statSync(packagedPath).size === item.bytes && sha256File(packagedPath) === item.sha256,
+    const reviewed = item.asset === FISHING_R62_PUMPKIN.asset ? FISHING_R62_PUMPKIN : item;
+    assert(fs.statSync(packagedPath).size === reviewed.bytes && sha256File(packagedPath) === reviewed.sha256,
       `Packaged Launcher 1.2.18 fishing art differs from reviewed output: ${item.asset}`);
   }
 
@@ -1620,12 +1687,15 @@ function validateWinUnpacked(winUnpackedPath, source) {
     'catalog-v2.json',
     'catalog-v3.json',
     ...['card', 'board', 'chess'].map((gameId) => source.catalog.games[gameId].manifestPath.replace(/^desktop\//, '')),
-    ...['card', 'board', 'chess'].map((gameId) => source.catalogV3.games[gameId].manifestPath.replace(/^desktop\//, ''))
+    ...['card', 'board', 'chess'].map((gameId) => source.catalogV3.games[gameId].manifestPath.replace(/^desktop\//, '')),
+    ...RETAINED_CORE_PROGRAM_MANIFESTS
   ]);
   const actualCatalogNames = sorted(catalogFiles.map((filePath) => relativePosix(catalogRoot, filePath)));
   assertExactJson(actualCatalogNames, expectedCatalogNames, 'win-unpacked catalog file set');
   const catalogBytes = sumFileBytes(catalogFiles);
-  assert(catalogBytes <= MAX_CATALOG_BYTES, `Bundled catalog exceeds ${MAX_CATALOG_BYTES} bytes.`);
+  const retainedCatalogBytes = catalogBytes - CURRENT_FALLBACK_CATALOG_BYTES;
+  assert(retainedCatalogBytes >= 0 && retainedCatalogBytes <= MAX_CATALOG_BYTES,
+    `Retained catalog exceeds ${MAX_CATALOG_BYTES} bytes after the three exact current manifests are budgeted separately.`);
   for (const relativeName of expectedCatalogNames) {
     assert(
       sha256File(path.join(catalogRoot, ...relativeName.split('/'))) === sha256File(path.join(sourceCatalogRoot, ...relativeName.split('/'))),
@@ -1637,7 +1707,8 @@ function validateWinUnpacked(winUnpackedPath, source) {
   assert(fs.statSync(packagedIcon, { throwIfNoEntry: false })?.isFile(), 'Packaged resources/launcher-icon.ico is missing.');
   assert(sha256File(packagedIcon) === sha256File(ICON_PATH), 'Packaged launcher icon differs from the approved ICO.');
 
-  return { asarEntries, launcherFiles: actualAssetFiles.length, launcherBytes, launcherBaseBytes, expansionBytes, roomMotionBytes, catalogFiles: catalogFiles.length, catalogBytes };
+  return { asarEntries, launcherFiles: actualAssetFiles.length, launcherBytes, launcherBaseBytes, expansionBytes, roomMotionBytes,
+    catalogFiles: catalogFiles.length, catalogBytes, retainedCatalogBytes, currentFallbackCatalogBytes: CURRENT_FALLBACK_CATALOG_BYTES };
 }
 
 function validatePortableExecutable(filePath, label) {
@@ -1688,6 +1759,9 @@ function main() {
     `cursors=${source.cursorDefault},${source.cursorPointer},${source.cursorPressed}`,
     'runtimeDeps=1',
     'games=card,board,chess',
+    `r62MediaFiles=${R62_MEDIA.length}`,
+    `r62MediaBytes=${R62_MEDIA_BYTES}`,
+    `r62LegacyBudgetOverlapBytes=${R62_LEGACY_OVERLAP_BYTES}`,
     `roomMotionAssets=${source.roomMotionStatus.assets}`,
     `roomPortraits=${source.roomMotionStatus.portraits}`,
     `roomArtReviewed=${source.roomMotionStatus.allSelectedArtReviewed}`,
@@ -1718,7 +1792,8 @@ function main() {
   ];
   if (options.winUnpacked) {
     const packaged = validateWinUnpacked(options.winUnpacked, source);
-    parts.push(`asarEntries=${packaged.asarEntries}`, `launcherFiles=${packaged.launcherFiles}`, `launcherBytes=${packaged.launcherBytes}`, `launcherBaseBytes=${packaged.launcherBaseBytes}`, `expansionBytes=${packaged.expansionBytes}`, `roomMotionBytes=${packaged.roomMotionBytes}`, `catalogFiles=${packaged.catalogFiles}`);
+    parts.push(`asarEntries=${packaged.asarEntries}`, `launcherFiles=${packaged.launcherFiles}`, `launcherBytes=${packaged.launcherBytes}`, `launcherBaseBytes=${packaged.launcherBaseBytes}`, `expansionBytes=${packaged.expansionBytes}`, `roomMotionBytes=${packaged.roomMotionBytes}`, `catalogFiles=${packaged.catalogFiles}`,
+      `retainedCatalogBytes=${packaged.retainedCatalogBytes}`, `currentFallbackCatalogBytes=${packaged.currentFallbackCatalogBytes}`);
   }
   if (options.installer) {
     const installer = validateInstaller(options.installer, source.packageJson);
