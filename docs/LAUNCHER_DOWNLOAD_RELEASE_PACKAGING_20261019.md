@@ -61,3 +61,8 @@ node tools/launcher-download-speed/packaged-smoke-qa.js --exe <win-unpacked內�
 來源受 Git CRLF checkout 影響時不能把不同 bytes 當成已驗證 r62。此次候選有 11 份 renderer 僅有換行差異，已從正式來源逐 byte / SHA 核對後保留正式 bytes；正式原稿未被改寫。
 
 實際發布仍使用既有 `publish-saved-launcher.ps1` 上傳 EXE 與 blockmap，`sign-launcher-release.ps1` 產生 Ed25519 候選。DPAPI 憑證保持在正式 wrapper 內，不讀出或複製憑證內容。公開 manifest / 下載頁、完整 EXE SHA、Range 206、舊版真實 updater、三款 runtime identity 及遊戲 catalog 保留情況須另行回讀；本文件不宣稱已完成這些發布驗收。
+
+
+## 公開驗證結果
+
+2026-10-19 發布驗收已完成：Windows 1.2.24 EXE／blockmap 不可覆寫上傳、完整公開 GET／SHA、Ed25519 清單、真實舊版 updater 61 次 Range 206 及完整還原通過；Render de00ef0 已 Live。公開下載頁 10 例、三款 catalog／manifest／runtime identity 與舊 r62 保留情況均通過。詳細數據、簽章與限制以 DOWNLOAD_SPEED_RELEASE_20261019.json 為準，前面的待驗證文字保留作為發布前門檻紀錄。

@@ -1992,3 +1992,6 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 
 `tools/launcher-download-speed/package-release-qa.js`：釘住舊 r62 簽章／320 檔，核對新核心來源與 ASAR/resources、精確資源白名單與三款 fallback manifests。`scripts/desktop_launcher_content_overlay_qa.js`：包含異核心有效簽章安靜略過與拒絕偽造案例。`docs/LAUNCHER_DOWNLOAD_RELEASE_PACKAGING_20261019.md`：1.2.24 封裝連續性。`docs/DOWNLOAD_SPEED_RELEASE_20261019.json`：兩平台公開交付總收據。
+
+
+2026-10-19 發布驗證工具：tools/launcher-download-speed/dependency-release-qa.js 比對封裝依賴與既有正式 ASAR 的逐檔 SHA；packaged-smoke-qa.js 使用獨立測試資料與 CDP 載入隱藏 lazy 圖片，保留建置內原始啟動／媒體斷言及 EXE／ASAR bytes。

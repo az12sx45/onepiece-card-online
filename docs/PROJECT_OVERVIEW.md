@@ -2872,3 +2872,6 @@ r57公開發布完成：30張素材、321項大圖预覽、51項留言板/新頭
 
 
 2026-10-19 下載改善：Windows 1.2.24 與 Android v026 使用大小分級的共用 12 點排程，小／中／大檔最多 12／4／2 路。公開小檔 A/B 在 Windows Electron 約 2.16 倍、Android 電腦端正式 Java 約 1.59 倍；不是手機實測保證。新 Windows 核心完整帶入現行 r62 內容，Android 1549 素材與 v025 完全相同。公開交付狀態與驗證限制見 DOWNLOAD_SPEED_RELEASE_20261019.json。
+
+
+2026-10-19：Windows 1.2.24 與 Android v026 已完成公開發布；Render de00ef0 顯示 Live，正式下載頁／簽署更新清單、安裝檔 SHA、兩平台差量還原與公開瀏覽器 10 例均通過。小檔比較為測試網路結果，未做實體手機／朋友網路速度驗收；完整證據見 DOWNLOAD_SPEED_RELEASE_20261019.json。

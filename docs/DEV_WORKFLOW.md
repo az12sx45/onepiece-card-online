@@ -8353,3 +8353,15 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 
 2026-10-19 發布封裝接續：Windows 1.2.24 以獨立工作樹封裝，補齊簽署 r62 的 320 檔與精確媒體存取路徑，舊 1.2.23/r62 清單保留。跨核心清單完整驗簽後略過，新增 17 項回歸；overlay 62 項、R2 內容 49 項、來源與 305 路徑／6 拒絕案例通過。npm start 使用保留的 Express 4 依賴，Electron UA 三遊戲入口、版本目錄與下載頁 200。APK v026 已上線，v025 差量 266771 bytes，正式 Java HTTPS 更新 20/20、完整 APK 請求 0。Windows 的封裝、簽署及公開讀回接續紀錄見發布收據。
+
+
+## 2026-10-19 Windows 1.2.24／Android v026 公開交付完成
+
+程式提交 de00ef00deb1147a01e8099548438b66b6f99f43 已推送 main；Render 自動部署 dep-dbahceivcj2c73a8c0rg 於台北時間 03:07:05 顯示 Deploy succeeded / Live，服務與 PostgreSQL 啟動正常。正式下載頁 https://onepiece-card-online.onrender.com/download 已指向 Windows 1.2.24 和 Android v026。LATTICE 仍為 CUSTOMER_DEPENDENCY_FILE_SET_CHANGED，未宣稱持久任務寫入成功。
+
+- 公開 Windows EXE 322204608 bytes、SHA-256 32c76608344540e47299bad2271a4e8b1e306df2c4fa67dcb2786a3c386715e9，EXE／blockmap 完整公開 GET／SHA 與 Ed25519 清單驗證通過。真實舊版 updater 使用 61 次 Range 206，下載 58518172 bytes payload＋615734 bytes sidecars，重用 263686436 bytes，完整還原 SHA 相同，舊版原檔不變。
+- Android v026 完整 APK 與原簽章／對齊核對，v025→26 差量 266771 bytes；正式 Java 真 HTTPS 更新 20/20、完整 APK 請求 0。1549 份 Web assets 與 v025 相同。
+- 正式網站 13 項公開位元組／簽章核對完成，三款 catalog／manifest／runtime 與舊 r62 清單保持原 SHA。HTML 以已提交 Git blob 的 LF bytes 精確比對（公開 SHA 0544fda9f32a2b14ec5798a935c1a4f1a89c9420ba65bbd4b4ac292dc5138b85），另確認本機 CRLF 工作稿逐行內容相同。公開平台／離線／不可信來源／未來版本／無 JS 共 10 例全部通過，安裝請求全攔截，無真實帳號操作。
+- 排程和續傳／取消回歸、封裝 production dependencies 172 檔、r62 320 檔／305 媒體路徑與原始 Electron 啟動斷言通過。公開小檔同條件測試 Windows Electron 約 2.16 倍；Android 電腦端正式 Java 約 1.59 倍。未完成朋友網路或實體 Android 手機速度驗收，不保證所有網路速度。
+
+正式總收據 docs/DOWNLOAD_SPEED_RELEASE_20261019.json（complete=true）。本機證據 D:/Codex_QA/download-speed-release-20261019/public-site-readback.json、render-deployment-readback.json、website-public-v24-v26/platform-report.json、windows-public-artifact-readback.json、windows-delta-qa/public-delta-receipt.json。

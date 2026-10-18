@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "dateTaipei": "2026-10-19",
-  "complete": false,
-  "publicationState": "ANDROID_PUBLIC_WINDOWS_ARTIFACTS_VERIFIED_SITE_ACTIVATION_PENDING",
+  "complete": true,
+  "publicationState": "BOTH_PUBLIC_RELEASES_VERIFIED",
   "sourceBaseCommit": "dca6367e9c95a9c86151f509d1fc00c0c0f44c4c",
-  "windowsReleaseCommit": null,
+  "windowsReleaseCommit": "de00ef00deb1147a01e8099548438b66b6f99f43",
   "downloadPage": "https://onepiece-card-online.onrender.com/download",
   "windows": {
     "version": "1.2.24",
@@ -88,6 +88,7 @@
     "resumeShaDedupCancelPreserved": true,
     "desktopRealElectronAndAndroidJvmTested": true,
     "browserPlatformCases": 10,
+    "publicBrowserPlatformCases": 10,
     "physicalAndroidPhoneTested": false,
     "friendNetworkSpeedVerified": false,
     "windowsSmokeNote": "External isolated CDP harness loads hidden lazy avatar images; original built assertions and binary hashes are preserved."
@@ -102,5 +103,123 @@
     "taskWritesClaimed": false
   },
   "localEvidenceRoot": "D:/Codex_QA/download-speed-release-20261019",
-  "publicSiteVerification": null
+  "renderDeployment": {
+    "checkedAt": "2026-10-18T19:08:28.031Z",
+    "status": "Deploy succeeded | Live",
+    "source": "Render dashboard visible UI",
+    "service": "onepiece-card-online",
+    "deploymentId": "dep-dbahceivcj2c73a8c0rg",
+    "sourceCommit": "de00ef00deb1147a01e8099548438b66b6f99f43",
+    "trigger": "Auto-Deploy",
+    "duration": "11m10s",
+    "liveAtTaipei": "2026-10-19T03:07:05+08:00",
+    "healthPath": "/health",
+    "port": 10000,
+    "postgresqlReadyObserved": true,
+    "screenshot": "render-deploy-succeeded.png",
+    "screenshotSha256": "a035fb11d23189f9c2f05430e2d94a42cbe6d5ea33158a9cfb8a65b69c689b60"
+  },
+  "publicSiteVerification": {
+    "complete": true,
+    "checkedAt": "2026-10-18T19:07:43.176Z",
+    "windowsVersion": "1.2.24",
+    "windowsManifestSha256": "20629241b16830f76624695f5617726fd10ea90694cc427ce659f3a4ca66816d",
+    "androidVersionCode": 26,
+    "downloadPageHtmlSha256": "0544fda9f32a2b14ec5798a935c1a4f1a89c9420ba65bbd4b4ac292dc5138b85",
+    "protectedGameCatalogAndRuntimesUnchanged": true,
+    "oldR62ContentUnchanged": true,
+    "manifest": {
+      "url": "https://onepiece-card-online.onrender.com/desktop/launcher-release-v1.json",
+      "path": "desktop/launcher-release-v1.json",
+      "status": 200,
+      "bytes": 676,
+      "sha256": "20629241b16830f76624695f5617726fd10ea90694cc427ce659f3a4ca66816d"
+    },
+    "rows": [
+      {
+        "url": "https://onepiece-card-online.onrender.com/",
+        "path": "",
+        "status": 200,
+        "bytes": 14978,
+        "sha256": "0544fda9f32a2b14ec5798a935c1a4f1a89c9420ba65bbd4b4ac292dc5138b85"
+      },
+      {
+        "url": "https://onepiece-card-online.onrender.com/download",
+        "path": "download",
+        "status": 200,
+        "bytes": 14978,
+        "sha256": "0544fda9f32a2b14ec5798a935c1a4f1a89c9420ba65bbd4b4ac292dc5138b85"
+      },
+      {
+        "url": "https://onepiece-card-online.onrender.com/desktop-download.html",
+        "path": "desktop-download.html",
+        "status": 200,
+        "bytes": 14978,
+        "sha256": "0544fda9f32a2b14ec5798a935c1a4f1a89c9420ba65bbd4b4ac292dc5138b85"
+      },
+      {
+        "url": "https://onepiece-card-online.onrender.com/desktop/catalog-v3.json",
+        "path": "desktop/catalog-v3.json",
+        "status": 200,
+        "bytes": 1404,
+        "sha256": "a04fcd660c7f207363ce7fd41433cd86fd1e910b439011d7606c800991e84c6d"
+      },
+      {
+        "url": "https://onepiece-card-online.onrender.com/desktop/launcher-content-v1.json",
+        "path": "desktop/launcher-content-v1.json",
+        "status": 200,
+        "bytes": 56797,
+        "sha256": "265693bacb11f03690e72c9a142576c65ccc4cacb93c162a3bc99e6c15e49535"
+      },
+      {
+        "url": "https://onepiece-card-online.onrender.com/desktop/manifests/card-package-a7d368a6e3feae01.json",
+        "path": "desktop/manifests/card-package-a7d368a6e3feae01.json",
+        "status": 200,
+        "bytes": 234104,
+        "sha256": "5ec74d1890d06c58e1086ef6df646b247c3926a5a82a059d4abba4bcd0903bcd"
+      },
+      {
+        "url": "https://onepiece-card-online.onrender.com/desktop/manifests/board-package-83b5cb65d174761d.json",
+        "path": "desktop/manifests/board-package-83b5cb65d174761d.json",
+        "status": 200,
+        "bytes": 1676463,
+        "sha256": "554dab56bf1300aa9ee49110883235d8b2a156d2393594ef96321cbc05c695d6"
+      },
+      {
+        "url": "https://onepiece-card-online.onrender.com/desktop/manifests/chess-package-ee4627881596bdad.json",
+        "path": "desktop/manifests/chess-package-ee4627881596bdad.json",
+        "status": 200,
+        "bytes": 446885,
+        "sha256": "a456de14211bac9ab767ae2a7a56525cadb7a85516d3fb32f86ca1f6f4058ce5"
+      },
+      {
+        "url": "https://onepiece-card-online.onrender.com/api/desktop-runtime-package/card",
+        "path": "api/desktop-runtime-package/card",
+        "status": 200,
+        "bytes": 186,
+        "sha256": "a095a6ef4bfb766cb268bcbbf93636f4d1c1f95d3b02f94feef761523ae189b3"
+      },
+      {
+        "url": "https://onepiece-card-online.onrender.com/api/desktop-runtime-package/board",
+        "path": "api/desktop-runtime-package/board",
+        "status": 200,
+        "bytes": 193,
+        "sha256": "f77237ed280311cd57330109df5e4d4d32dcc57c77698bea9c1e6244891a49b4"
+      },
+      {
+        "url": "https://onepiece-card-online.onrender.com/api/desktop-runtime-package/chess",
+        "path": "api/desktop-runtime-package/chess",
+        "status": 200,
+        "bytes": 193,
+        "sha256": "0170301e564e0c9bcfd4d23e8aa799023891431fdfec375517479875684f8220"
+      },
+      {
+        "url": "https://game-assets.rihdi.tw/android/launcher-release-v1.json",
+        "path": "https://game-assets.rihdi.tw/android/launcher-release-v1.json",
+        "status": 200,
+        "bytes": 1532,
+        "sha256": "553b691502e8a5ce2816bb3eec44096b9b469b085ba5cd52dfd6156381bee881"
+      }
+    ]
+  }
 }
