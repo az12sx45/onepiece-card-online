@@ -2,6 +2,7 @@
 
 ## 2026-10-18 Windows / Android 共用下載網站
 
+- 公開驗證完成：來源 `3f4bdb2341ead0ab88a7bce030f52029fe15dad1` 已在原網站生效；`/`、`/download`、`/desktop-download.html` SHA-256 與提交相同，公開平台測試 10/10、分發回歸 38/38。Windows launcher-release、三遊戲 catalog 與發布前逐位元相同；APK HEAD / 4-byte Range 檢查確認 MIME、354355190 bytes 與 ZIP 檔頭。證據 `public-readback.json`、`public-platform.json`、`public-distribution/browser-report.json`、`apk-range.json`。
 - `public/desktop-download.html` 增加 PIRATE ODYSSEY Android APK，Windows 下載入口保留。依裝置標示／排序，不自動下載；iOS、macOS 顯示目前無版本。
 - Android 從既有獨立通道讀取版本，驗證套件、版本、檔案來源與摘要格式，失敗保留已驗證 v025。Windows manifest 與遊戲 catalog 未修改。
 - 驗證：`npm start` 在 18938 啟動，資料庫刻意不連線；`platform_download_qa.cjs` 10/10（桌機、手機直橫向、iPhone/iPad/macOS、離線、不可信網址、未來版本與停用 JS）；分發瀏覽器 QA 38/38，無自動安裝檔下載，保留 worker 退役及舊資料行為。截圖已檢查。這不是實機 APK 安裝驗收。
