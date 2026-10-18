@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#071522">
-  <meta name="description" content="下載 ONE PIECE 桌遊啟動器，在 Windows 電腦遊玩新世界航海錄、偉大航道爭霸戰與航海王西洋棋。">
-  <title>桌面版下載｜ONE PIECE 桌遊系列</title>
+  <meta name="description" content="依裝置下載 ONE PIECE Windows 桌遊啟動器，或 PIRATE ODYSSEY Android 手機版 APK。">
+  <title>Windows／Android 下載｜ONE PIECE 桌遊系列</title>
   <link rel="icon" href="data:,">
   <style>
     :root { color-scheme: dark; --bg:#071522; --panel:#102535; --line:#294150; --text:#eff2ec; --muted:#b1c1c9; --gold:#efd49a; --teal:#8cd4ca; }
@@ -19,11 +19,18 @@
     .brand-name { font-size:13px; font-weight:700; letter-spacing:.17em; line-height:1.5; }
     .brand-name span { display:block; color:var(--muted); font-size:10px; font-weight:400; letter-spacing:.26em; }
     .edition { color:var(--teal); font-size:12px; letter-spacing:.12em; white-space:nowrap; }
-    .hero { display:grid; grid-template-columns:1.12fr 1fr; align-items:center; gap:70px; padding:83px 0 66px; }
+    .hero { padding:55px 0 38px; }
+    .downloads { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; padding-bottom:44px; }
+    .device-note { margin:18px 0 0; color:var(--teal); font-size:14px; }
+    .recommendation { display:none; margin:0 0 15px; color:var(--teal); font-size:12px; font-weight:700; }
+    .recommended { border-color:var(--teal); }
+    .recommended .recommendation { display:block; }
+    .phone { display:grid; place-items:center; width:56px; height:56px; background:#203d4c; border-radius:12px; }
+    .phone svg { width:30px; height:36px; stroke:var(--gold); fill:none; stroke-width:2; }
     .eyebrow { margin:0 0 20px; color:var(--gold); font-size:12px; font-weight:700; letter-spacing:.2em; }
     h1 { margin:0 0 24px; font-size:clamp(34px,4.1vw,51px); line-height:1.4; letter-spacing:.025em; font-weight:800; }
     h1 span { color:var(--gold); }
-    .intro { max-width:420px; margin:0; color:var(--muted); font-size:16px; }
+    .intro { max-width:720px; margin:0; color:var(--muted); font-size:16px; }
     .status { display:inline-flex; align-items:center; gap:9px; margin:26px 0 0; color:var(--teal); font-size:13px; }
     .status::before { content:""; width:6px; height:6px; border-radius:50%; background:var(--teal); }
     .download-card { padding:31px; background:linear-gradient(145deg,#163344,#0b1c2a); border:1px solid #49606a; border-radius:16px; box-shadow:0 18px 50px #0003; }
@@ -56,7 +63,8 @@
     @media (max-width:820px) {
       .wrap { width:min(620px,100% - 40px); }
       header { padding:23px 0; }
-      .hero { grid-template-columns:1fr; gap:34px; padding:46px 0 38px; }
+      .hero { padding:36px 0 28px; }
+      .downloads { grid-template-columns:1fr; gap:18px; padding-bottom:30px; }
       h1 { font-size:40px; }
       .intro { max-width:100%; }
       .game-grid { grid-template-columns:1fr; gap:10px; }
@@ -85,17 +93,20 @@
   <div class="wrap">
     <header>
       <div class="brand"><span class="brand-mark" aria-hidden="true">N</span><div class="brand-name">ONE PIECE<span>TABLETOP SERIES</span></div></div>
-      <span class="edition">桌面版・下載入口</span>
+      <span class="edition">電腦・手機下載</span>
     </header>
     <main>
       <section class="hero" aria-labelledby="page-title">
         <div>
           <p class="eyebrow">你的航程，繼續前進</p>
-          <h1 id="page-title">下一段冒險，<br><span>從桌面啟航。</span></h1>
-          <p class="intro">遊戲已改由桌面啟動器進入。下載後選擇你的遊戲，讓熟悉的夥伴與冒險，在電腦上繼續。</p>
-          <p class="status">原有帳號、雲端存檔與多人連線持續服務</p>
+          <h1 id="page-title">下一段冒險，<br><span>在你的裝置啟航。</span></h1>
+          <p class="intro">電腦下載 Windows 桌遊啟動器；Android 手機下載 PIRATE ODYSSEY，橫向遊玩航海錄。</p>
+          <p id="device-note" class="device-note">請依要安裝的裝置選擇版本。下載會在你點選按鈕後開始。</p>
         </div>
-        <section class="download-card" aria-labelledby="download-title">
+      </section>
+      <div class="downloads" id="downloads">
+        <section id="windows-card" class="download-card" aria-labelledby="download-title">
+          <p class="recommendation">適合目前的 Windows 裝置</p>
           <div class="card-heading">
             <span class="windows" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
             <div><h2 id="download-title">桌遊啟動器</h2><p>Windows 64 位元</p></div>
@@ -108,9 +119,23 @@
             <li>選擇遊戲，完成內容下載後開始遊玩。</li>
           </ol>
         </section>
-      </section>
+        <section id="android-card" class="download-card" aria-labelledby="android-title">
+          <p class="recommendation">適合目前的 Android 裝置</p>
+          <div class="card-heading">
+            <span class="phone" aria-hidden="true"><svg viewBox="0 0 30 36"><rect x="5" y="2" width="20" height="32" rx="4"/><path d="M11 6h8M13 29h4"/></svg></span>
+            <div><h2 id="android-title">PIRATE ODYSSEY</h2><p>Android 8.0 以上 · 手機橫向版</p></div>
+          </div>
+          <a id="android-download-link" class="download" href="https://game-assets.rihdi.tw/android/releases/25/PIRATE-ODYSSEY-v025-bc79dfce564b.apk" referrerpolicy="no-referrer"><span class="arrow" aria-hidden="true">↓</span>下載 Android APK</a>
+          <p id="android-release-info" class="release">v025 · 測試版 · 安裝檔約 355 MB</p>
+          <ol class="steps">
+            <li>下載 APK，開啟下載完成的檔案。</li>
+            <li>若系統詢問，允許此瀏覽器安裝應用程式，再完成安裝。</li>
+            <li>開啟 PIRATE ODYSSEY；後續可在 App 內檢查更新，有適用差量時只下載差量。</li>
+          </ol>
+        </section>
+      </div>
       <section class="games" aria-labelledby="games-title">
-        <h2 id="games-title" class="section-label">一個啟動器，三種冒險</h2>
+        <h2 id="games-title" class="section-label">Windows 桌遊系列 · 三種冒險</h2>
         <div class="game-grid">
           <article class="game"><span class="game-tag">航海・桌遊冒險</span><h3>新世界航海錄</h3><p>擲骰出航，招募夥伴，探索新世界。</p></article>
           <article class="game"><span class="game-tag">卡牌・策略對決</span><h3>偉大航道爭霸戰</h3><p>組織你的陣容，展開卡牌對戰。</p></article>
@@ -118,14 +143,43 @@
         </div>
       </section>
       <section class="notes" aria-label="下載與遊玩說明">
-        <div><h2>已經安裝過？</h2><p>直接開啟既有啟動器，在設定中更新啟動器；遊戲內容仍由下載管理逐檔更新。升至 1.2.23 後，啟動器介面與素材的小型更新也能直接下載套用。</p></div>
-        <div><h2>請使用 Windows 電腦</h2><p>目前提供 Windows 64 位元桌面版，手機與平板暫不支援。請在 Windows 電腦開啟此頁下載。</p><p class="mobile-note">登入、雲端存檔與多人對戰仍需網路連線。</p></div>
+        <div><h2>已經安裝過？</h2><p>Windows 請從既有啟動器更新；Android 請從 App 內檢查更新，下載後依系統提示安裝。兩個平台使用各自的更新通道。</p></div>
+        <div><h2>選擇適合的版本</h2><p>Windows 版本適用 64 位元電腦；Android APK 適用 Android 8.0 以上。手機版目前以航海錄測試為主。iPhone、iPad 與 macOS 暫無安裝版本。</p><p class="mobile-note">登入、雲端存檔與多人對戰仍需網路連線。</p></div>
       </section>
     </main>
-    <footer><p>ONE PIECE TABLETOP SERIES · 遊戲內容下載至電腦；登入、雲端存檔與多人連線持續服務。</p></footer>
+    <footer><p>ONE PIECE TABLETOP SERIES · Windows 桌遊啟動器 / PIRATE ODYSSEY Android</p></footer>
   </div>
   <script>
     (() => {
+      const ua = navigator.userAgent || '';
+      const platform = navigator.userAgentData?.platform || navigator.platform || '';
+      const isIOS = /iPad|iPhone|iPod/i.test(ua) || (/Mac/i.test(platform) && navigator.maxTouchPoints > 1);
+      const isAndroid = !isIOS && /Android/i.test(platform + ' ' + ua);
+      const isWindows = !isIOS && !isAndroid && /Win/i.test(platform + ' ' + ua);
+      const card = document.getElementById(isAndroid ? 'android-card' : 'windows-card');
+      if (isAndroid || isWindows) {
+        card.classList.add('recommended');
+        if (isAndroid) document.getElementById('downloads').prepend(card);
+        document.getElementById('device-note').textContent = `目前看起來是 ${isAndroid ? 'Android' : 'Windows'} 裝置，已標示適合的版本；也可以替其他裝置下載。`;
+      } else if (isIOS || /Mac/i.test(platform)) {
+        document.getElementById('device-note').textContent = '此裝置目前沒有可安裝版本。你仍可將本頁分享給 Windows 電腦或 Android 手機。';
+      }
+      const androidController = new AbortController();
+      const androidTimer = setTimeout(() => androidController.abort(), 5000);
+      fetch('https://game-assets.rihdi.tw/android/launcher-release-v1.json', { cache:'no-store', signal:androidController.signal, credentials:'omit' })
+        .then(response => { if (!response.ok) throw new Error('release unavailable'); return response.json(); })
+        .then(release => {
+          if (release?.schema !== 1 || release.platform !== 'android' || release.package !== 'tw.rihdi.tabletop.android') return;
+          if (!Number.isSafeInteger(release.versionCode) || release.versionCode < 25) return;
+          const artifact = release.artifact;
+          if (!artifact || !/^https:\/\/game-assets\.rihdi\.tw\/android\/releases\/[1-9][0-9]*\/[0-9A-Za-z][0-9A-Za-z._-]*\.apk$/.test(artifact.url || '')) return;
+          if (!new URL(artifact.url).pathname.startsWith(`/android/releases/${release.versionCode}/`)) return;
+          if (!Number.isSafeInteger(artifact.bytes) || artifact.bytes <= 0 || !/^[a-f0-9]{64}$/.test(artifact.sha256 || '')) return;
+          document.getElementById('android-download-link').href = artifact.url;
+          document.getElementById('android-release-info').textContent = `v${String(release.versionCode).padStart(3,'0')} · ${String(release.version || '').includes('trial') ? '測試版 · ' : ''}安裝檔約 ${Math.ceil(artifact.bytes / 1000000)} MB`;
+        })
+        .catch(() => { /* Retain the verified APK link if the update channel is unavailable. */ })
+        .finally(() => clearTimeout(androidTimer));
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 5000);
       fetch('/desktop/launcher-release-v1.json', { cache: 'no-store', signal: controller.signal, headers: { Accept: 'application/json' } })

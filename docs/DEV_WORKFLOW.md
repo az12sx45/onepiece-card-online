@@ -1,5 +1,12 @@
 # Dev Workflow
 
+## 2026-10-18 Windows / Android 共用下載網站
+
+- `public/desktop-download.html` 增加 PIRATE ODYSSEY Android APK，Windows 下載入口保留。依裝置標示／排序，不自動下載；iOS、macOS 顯示目前無版本。
+- Android 從既有獨立通道讀取版本，驗證套件、版本、檔案來源與摘要格式，失敗保留已驗證 v025。Windows manifest 與遊戲 catalog 未修改。
+- 驗證：`npm start` 在 18938 啟動，資料庫刻意不連線；`platform_download_qa.cjs` 10/10（桌機、手機直橫向、iPhone/iPad/macOS、離線、不可信網址、未來版本與停用 JS）；分發瀏覽器 QA 38/38，無自動安裝檔下載，保留 worker 退役及舊資料行為。截圖已檢查。這不是實機 APK 安裝驗收。
+- 公開發布讀回另存 `C:/Users/王曜瑋/Documents/Codex/Android_Releases/Website_Android_20261018/`。LATTICE API 本次未提供，未聲稱任務或圖譜寫入。
+
 ## 2026-10-12 Board 船隻連續航行與船尾水流（已公開驗證）
 
 - 範圍：`public/js/board_game.js` 沿用原本逐格步速，在每個實際起終點間以逐影格插值移動整艘船，鏡頭跟隨顯示座標；船頭以該航段向量計算，含返航及斜向路段。`public/board_game.html` 只在移動時顯示淡色船尾水流，停止或偏好減少動態時不連續播放。

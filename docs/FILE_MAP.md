@@ -1,5 +1,11 @@
 # File Map
 
+## 2026-10-18 裝置下載入口
+
+- `public/desktop-download.html`：Windows / Android 選擇、裝置提示、各自的版本資訊及已驗證備援網址。
+- `scripts/platform_download_qa.cjs`：平台排序、響應排版、版本通道故障／未來版本、無 JS 及攔截安裝檔下載測試。
+- `scripts/desktop_distribution_browser_qa.js`：下載頁允許第二個 Android metadata 請求，延續分發及 service worker 回歸驗收。
+
 ## 2026-10-12 船隻連續航行
 
 - `public/js/board_game.js`：逐格航段插值、實際向量船頭方向、鏡頭跟隨與觀看端暫時移動；讀檔／同步快照清理中間影格。

@@ -35,6 +35,7 @@ async function landing(browser) {
     try {
       await context.route('**/*', route => {
         const request = route.request();
+        if (request.url() === 'https://game-assets.rihdi.tw/android/launcher-release-v1.json' && request.method() === 'GET') return route.continue();
         if (new URL(request.url()).origin === BASE && ['GET', 'HEAD'].includes(request.method())) return route.continue();
         blocked.push({ url: request.url(), method: request.method() });
         return route.abort();
@@ -62,9 +63,9 @@ async function landing(browser) {
       check(`${width}px download page returns 200`, navigation.status() === 200);
       check(`${width}px no horizontal overflow`, !ui.overflow, ui);
       check(`${width}px usable download link`, /^https:\/\/game-assets\.rihdi\.tw\/desktop\/launcher\/releases\/[0-9A-Za-z][0-9A-Za-z._-]*\/[0-9A-Za-z][0-9A-Za-z._-]*\.exe$/.test(ui.href || '') && ui.buttonHeight >= 44);
-      check(`${width}px only landing and release metadata`, requests.length === 2 && requests.every(url => ['/download', '/desktop/launcher-release-v1.json'].includes(new URL(url).pathname)) && blocked.length === 0, record.requests);
+      check(`${width}px only landing and release metadata`, requests.length === 3 && requests.every(url => ['/download', '/desktop/launcher-release-v1.json', '/android/launcher-release-v1.json'].includes(new URL(url).pathname)) && blocked.length === 0, record.requests);
       check(`${width}px no game/media elements or errors`, ui.forbiddenElements === 0 && errors.length === 0 && ui.games.length === 3, { errors, forbiddenElements: ui.forbiddenElements });
-      check(`${width}px payload stays small`, responses.every(response => response.status === 200 && response.bodyBytes < 15000) && responses.reduce((sum, response) => sum + response.bodyBytes, 0) < 20000, responses);
+      check(`${width}px payload stays small`, responses.every(response => response.status === 200 && response.bodyBytes < 22000) && responses.reduce((sum, response) => sum + response.bodyBytes, 0) < 26000, responses);
       const screenshot = path.join(OUT, `download-${width}.png`);
       await page.screenshot({ path: screenshot, fullPage: true });
       report.screenshots.push(screenshot);

@@ -1,5 +1,9 @@
 # Project Overview
 
+## 2026-10-18 Windows 與 Android 下載
+
+原網站 `/`、`/download` 與 `/desktop-download.html` 共用裝置下載頁。Windows 保留桌遊啟動器，Android 提供 PIRATE ODYSSEY v025 測試 APK（Android 8.0 以上），後續由獨立 Android manifest 取得新版連結。裝置辨識僅影響提示與順序，使用者仍自行點選下載；不將 Android 安裝檔或差量加入 Windows 更新通道。遊戲規則、帳號、存檔與多人同步未改。
+
 ## 2026-10-12 船隻航行呈現
 
 Board 地圖的船沿既有逐格航線連續滑行，船頭朝向實際下一落點，船尾顯示輕量水流；鏡頭跟船移動，抵島與分岔介面在航段完成後顯示。地圖、骰子、落點與回合規則不變；多人觀看沿用既有移動事件，存檔仍只有權威位置，不保存動畫中間影格。公開 Board `package-a7cafa24cfe4f2a7` 已通過公開位元組與完整分發 148/148 核驗；本機雙視窗測試不代表真人跨網路遊玩。細節見 `docs/DEV_WORKFLOW.md`。
