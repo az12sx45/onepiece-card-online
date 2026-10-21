@@ -2875,3 +2875,5 @@ r57公開發布完成：30張素材、321項大圖预覽、51項留言板/新頭
 
 
 2026-10-19：Windows 1.2.24 與 Android v026 已完成公開發布；Render de00ef0 顯示 Live，正式下載頁／簽署更新清單、安裝檔 SHA、兩平台差量還原與公開瀏覽器 10 例均通過。小檔比較為測試網路結果，未做實體手機／朋友網路速度驗收；完整證據見 DOWNLOAD_SPEED_RELEASE_20261019.json。
+
+2026-10-22 跨端青雉劇情控制權修正：public/js/board_game.js 的 markAokijiCaptureModalIdentity / presentPendingAokijiCaptureStory 記錄暫時 modal 控制權，當快照套用由觀看轉回本人（或反向）時，只重建該段劇情的權限回呼。同權限不重建，不改 gameState、Socket.IO 名稱、角色 id、存檔、戰鬥或劇情規則。基線 origin/main 5f47a1c549c3465709e399f462513952d4f87476，其 board_game.js SHA e6465018a74acbfb0a0e03ac8b04b8cfe4a6ac28dc61577ca6cb5539fe55be6c 已對上公開 Board package-83b5cb65d174761d。此稀疏工作樹只取發布程式與文件，保留原 D 槽正式工作樹未提交變更。原程式契約重現 false→true 仍停在觀看，修正後渲染順序 false,true,false，同權限不重建通過；混合 Godot/公開桌機連線實測持續中。LATTICE API 本階段不可用，未宣稱登記/圖譜成功。測試細節與真機限制保留於 C:/Codex_QA/native-crossplay-r34-20261021。

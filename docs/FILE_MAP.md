@@ -1995,3 +1995,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 
 2026-10-19 發布驗證工具：tools/launcher-download-speed/dependency-release-qa.js 比對封裝依賴與既有正式 ASAR 的逐檔 SHA；packaged-smoke-qa.js 使用獨立測試資料與 CDP 載入隱藏 lazy 圖片，保留建置內原始啟動／媒體斷言及 EXE／ASAR bytes。
+
+2026-10-22 跨端青雉劇情控制權修正：public/js/board_game.js 的 markAokijiCaptureModalIdentity / presentPendingAokijiCaptureStory 記錄暫時 modal 控制權，當快照套用由觀看轉回本人（或反向）時，只重建該段劇情的權限回呼。同權限不重建，不改 gameState、Socket.IO 名稱、角色 id、存檔、戰鬥或劇情規則。基線 origin/main 5f47a1c549c3465709e399f462513952d4f87476，其 board_game.js SHA e6465018a74acbfb0a0e03ac8b04b8cfe4a6ac28dc61577ca6cb5539fe55be6c 已對上公開 Board package-83b5cb65d174761d。此稀疏工作樹只取發布程式與文件，保留原 D 槽正式工作樹未提交變更。原程式契約重現 false→true 仍停在觀看，修正後渲染順序 false,true,false，同權限不重建通過；混合 Godot/公開桌機連線實測持續中。LATTICE API 本階段不可用，未宣稱登記/圖譜成功。測試細節與真機限制保留於 C:/Codex_QA/native-crossplay-r34-20261021。

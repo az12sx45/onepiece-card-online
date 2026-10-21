@@ -8365,3 +8365,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 - 排程和續傳／取消回歸、封裝 production dependencies 172 檔、r62 320 檔／305 媒體路徑與原始 Electron 啟動斷言通過。公開小檔同條件測試 Windows Electron 約 2.16 倍；Android 電腦端正式 Java 約 1.59 倍。未完成朋友網路或實體 Android 手機速度驗收，不保證所有網路速度。
 
 正式總收據 docs/DOWNLOAD_SPEED_RELEASE_20261019.json（complete=true）。本機證據 D:/Codex_QA/download-speed-release-20261019/public-site-readback.json、render-deployment-readback.json、website-public-v24-v26/platform-report.json、windows-public-artifact-readback.json、windows-delta-qa/public-delta-receipt.json。
+
+2026-10-22 跨端青雉劇情控制權修正：public/js/board_game.js 的 markAokijiCaptureModalIdentity / presentPendingAokijiCaptureStory 記錄暫時 modal 控制權，當快照套用由觀看轉回本人（或反向）時，只重建該段劇情的權限回呼。同權限不重建，不改 gameState、Socket.IO 名稱、角色 id、存檔、戰鬥或劇情規則。基線 origin/main 5f47a1c549c3465709e399f462513952d4f87476，其 board_game.js SHA e6465018a74acbfb0a0e03ac8b04b8cfe4a6ac28dc61577ca6cb5539fe55be6c 已對上公開 Board package-83b5cb65d174761d。此稀疏工作樹只取發布程式與文件，保留原 D 槽正式工作樹未提交變更。原程式契約重現 false→true 仍停在觀看，修正後渲染順序 false,true,false，同權限不重建通過；混合 Godot/公開桌機連線實測持續中。LATTICE API 本階段不可用，未宣稱登記/圖譜成功。測試細節與真機限制保留於 C:/Codex_QA/native-crossplay-r34-20261021。

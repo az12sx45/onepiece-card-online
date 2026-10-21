@@ -31244,6 +31244,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!refs.modal || !pending) return;
     refs.modal.dataset.aokijiCaptureStoryId = String(pending.id || "");
     refs.modal.dataset.aokijiCapturePhase = String(phase || "");
+    refs.modal.dataset.aokijiCaptureControl = canBoardLanControlCurrentPlayer(aokijiCaptureStoryPlayer(pending)) ? "owner" : "watch";
   }
 
   function clearPendingAokijiCaptureStory(player, pending) {
@@ -31395,6 +31396,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const player = aokijiCaptureStoryPlayer(pending);
     if (!pending || !player || state.battleState || pending.phase === "battle") return false;
     const visibleId = String(refs.modal?.dataset?.aokijiCaptureStoryId || "");
+    if (visibleId === String(pending.id || "")) {
+      const control = canBoardLanControlCurrentPlayer(player) ? "owner" : "watch";
+      // A snapshot can first render while applying=true. Rebuild callbacks when
+      // that same session becomes locally controllable after snapshot apply.
+      if (refs.modal.dataset.aokijiCaptureControl !== control) delete refs.modal.dataset.aokijiCapturePhase;
+    }
     const visiblePhase = String(refs.modal?.dataset?.aokijiCapturePhase || "");
     if (refs.modalBack?.classList.contains("open") && !visibleId) return false;
     if (isCpuPlayer(player) && canLocalDriveCpuPlayer(player)) {

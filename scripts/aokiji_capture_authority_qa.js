@@ -1,0 +1,14 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const source=fs.readFileSync(path.join(__dirname,'../public/js/board_game.js'),'utf8');
+const code=['markAokijiCaptureModalIdentity','presentPendingAokijiCaptureStory'].map(name=>{const start=source.indexOf('  function '+name+'('),end=source.indexOf('\n  function ',start+1);assert(start>=0&&end>start);return source.slice(start,end);}).join('\n');
+let open=false,control=false;const renders=[],player={id:'qa-player'},pending={id:'qa-story',phase:'choice'};
+const context={state:{battleState:null},refs:{modal:{dataset:{}},modalBack:{classList:{contains:()=>open}}},pendingAokijiCaptureStory:()=>pending,aokijiCaptureStoryPlayer:()=>player,canBoardLanControlCurrentPlayer:()=>control,isCpuPlayer:()=>false,closeModal:()=>{open=false},openAokijiCaptureDialogueChoice:(p,s,options)=>{renders.push(!options.forceWatching);open=true;context.markAokijiCaptureModalIdentity(s,s.phase);}};
+vm.createContext(context);vm.runInContext(code,context);
+context.presentPendingAokijiCaptureStory();assert.deepEqual(renders,[false]);
+control=true;context.presentPendingAokijiCaptureStory();assert.deepEqual(renders,[false,true]);
+context.presentPendingAokijiCaptureStory();assert.equal(renders.length,2);
+control=false;context.presentPendingAokijiCaptureStory();assert.deepEqual(renders,[false,true,false]);
+context.presentPendingAokijiCaptureStory();assert.equal(renders.length,3);
+assert.deepEqual(pending,{id:'qa-story',phase:'choice'});
+console.log('PASS: restore spectator-to-owner, revoke owner-to-spectator, stable authority does not rebuild, story state unchanged');
