@@ -1,5 +1,9 @@
 # Project Overview
 
+## 2026-10-22 一般戰鬥角色圖殘留修正
+
+本機已修正角色圖立體層的非同步競態：舊載入無法清除新載入的等待標記，同一角色位置也不能重複附加模型／透明圖層。真圖完整戰鬥頁已重現原版跨角色、跨場殘留，修正版在桌機與手機橫向連續重用 20 場後無舊模型殘留；正式來源同項通過。僅修改 depth JS 的三處生命週期檢查，共鬥排版已還原，遊戲規則與觀戰動畫流程不變。尚未部署，詳見 `docs/DEV_WORKFLOW.md`。
+
 ## 2026-10-18 Windows 與 Android 下載
 
 原網站 `/`、`/download` 與 `/desktop-download.html` 共用裝置下載頁。Windows 保留桌遊啟動器，Android 提供 PIRATE ODYSSEY v025 測試 APK（Android 8.0 以上），後續由獨立 Android manifest 取得新版連結。裝置辨識僅影響提示與順序，使用者仍自行點選下載；不將 Android 安裝檔或差量加入 Windows 更新通道。遊戲規則、帳號、存檔與多人同步未改。

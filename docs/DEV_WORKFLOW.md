@@ -1,5 +1,15 @@
 # Dev Workflow
 
+## 2026-10-22 一般戰鬥跨角色／跨場圖片殘留（本機修正，未部署）
+
+- 使用者確認是新世界航海錄一般戰鬥，舊角色圖會混入其他場並留到下一場；此前共鬥排版嘗試已完整撤回，`public/board_battle.html` 與該嘗試前 SHA-256 一致。
+- 根因：`board_character_depth.js` 的 A 圖非同步載入未完成時切到 B 再回 A，舊 A 的 `finally` 僅比較 `pendingStamp`，會清掉新 A 的等待標記；一般戰鬥刷新隨後重複建立同代圖層。攻擊／受擊時原圖會顯示，原 visibility 檢查不足以防止重複 attach；`state.depth` 只追蹤最後一組，前一組成為孤兒，換角色及離戰都留在重用的 iframe 裡。
+- 正式來源只定點修改 `public/js/board_character_depth.js` 三處：載入結束還必須比對 `generation` 才清等待標記，model／alpha attach 都拒絕已有 depth 的重複結果。沒有修改角色資料、HTML 排版、傷害、回合、存檔、`BOARD_GAME_STATE` 或 Socket.IO；也沒有改動觀戰端刻意保留動畫快照的流程。
+- 依目前公開 Board `package-1e0e16365e08c407`、manifest SHA-256 `53c4187b6174226da6609606a426846cd436c5e771fd963c7165f7f7d0b4bf30` 的程式與真實 depth manifest 重現；九個角色圖／背景／mask 媒體核對 manifest SHA。原版在最小與完整戰鬥頁均重現：魯夫正常→受擊→正常，遲到載入後的一般 refresh 建出兩組圖層，換索隆仍疊著魯夫，關閉後剩一組魯夫圖。
+- 驗證：最小真圖競態候選 5/5；完整已發布程式加精確三處修正的桌機 1366×768、手機橫向 932×430，以及正式 JS 各 26/26（合計 78/78），各重用同一頁連續開關 20 場，當場只保留當前角色一組模型，離戰後零模型／背景層，無瀏覽器例外。既有觀戰播放 QA 41/41、JS 語法及相對本次原檔增量檢查通過。`npm start` 在 18942 埠啟動；未設定 `DATABASE_URL`，不代表真實帳號、真人多人或實體裝置驗收。
+- 額外以三張真實透明人物圖走 alpha-only 分支，測 A→B→A→C、每次五次一般刷新與關閉，6/6 通過；未出現重複 alpha 層或關閉殘留。報告為 `alpha-result.json`。
+- 原始／修正候選、延遲解碼重現腳本、真圖 manifest／SHA、前後截圖與各項報告在 `D:/Codex_QA/board-battle-stale-20261022/`。正式與公開 depth 其他版本差異保留；公開候選僅移植同三處修正，不把正式樹舊視覺程式整檔覆蓋公開版本。未提交、封裝或部署。目前對話無 LATTICE API，前已核對官方 Status 為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`；未宣稱持久任務或圖譜寫入成功。
+
 ## 2026-10-19 下載網站新版備援入口
 
 public/desktop-download.html 的無 JS／通道失敗備援改為已上傳 Windows 1.2.24、已發布 Android v026，Android metadata 最低版本同步26；未改版面或自動下載行為。platform_download_qa.cjs 的未來版本 fixture 前移v027，離線與無JS另明確核對Windows1.2.24備援。隔離 npm start 19627（DATABASE_URL刻意空值）平台／離線／不可信網址／未來／無JS共10例通過，安裝檔請求全攔截；兩張截圖已檢視，程序已停止。Windows新檔HEAD200／322204608bytes，未傳輸安裝檔body。證據 D:/Codex_QA/download-speed-release-20261019/website-v24-v26/platform-report.json；正常Windows動態metadata仍依發布清單，最終公開新版由本輪root發布讀回核驗。

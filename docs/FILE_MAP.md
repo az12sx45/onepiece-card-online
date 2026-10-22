@@ -1,5 +1,11 @@
 # File Map
 
+## 2026-10-22 一般戰鬥舊角色圖殘留
+
+- `public/js/board_character_depth.js`：`maybeDepth` 完成時核對 generation，`attachDepth`／`attachAlphaDepth` 拒絕已有 depth 的重複結果，防止 A→B→A 載入競態留下孤兒模型。
+- `D:/Codex_QA/board-battle-stale-20261022/`：原版與精確公開候選、真實 depth manifest、九張媒體 SHA 驗證、延遲解碼重現、連續 20 場／桌機／手機／正式來源報告及截圖；不是發布目錄。
+- `public/board_battle.html` 未保留共鬥排版變更；此輪不改戰鬥 JS、資料或發布清單。四份主文件同步記錄本機修正、根因及未部署界線。
+
 ## 2026-10-19 新版下載備援
 
 public/desktop-download.html：Windows1.2.24／Androidv026靜態備援與Android最低metadata版本26。scripts/platform_download_qa.cjs：v027未來版fixture、離線／無JS的雙平台備援核對；10例與截圖存於D:/Codex_QA/download-speed-release-20261019/website-v24-v26/，不下載安裝檔body。

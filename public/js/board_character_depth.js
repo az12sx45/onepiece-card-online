@@ -1572,7 +1572,7 @@
   }
 
   function attachDepth(state, entry, background, mask, subject, urls, stamp) {
-    if (state.generation !== entry.generation || sourceStamp(state.image) !== stamp ||
+    if (state.depth || state.generation !== entry.generation || sourceStamp(state.image) !== stamp ||
         !state.inViewport || !state.image.isConnected || document.hidden) return;
     const geometry = modelGeometry(state);
     if (!geometry) return;
@@ -1670,7 +1670,7 @@
 
   function attachAlphaDepth(state, key, stamp, generation) {
     const image = state.image;
-    if (state.generation !== generation || sourceStamp(image) !== stamp ||
+    if (state.depth || state.generation !== generation || sourceStamp(image) !== stamp ||
         !state.inViewport || !image.isConnected || document.hidden ||
         !imageHasAlpha(image, key)) return;
     const geometry = modelGeometry(state);
@@ -1774,7 +1774,8 @@
         state.failedSources.add(key);
       });
     }).finally(() => {
-      if (state.pendingStamp === stamp) state.pendingStamp = null;
+      // A stale A load must not unlock a newer A load after an A -> B -> A switch.
+      if (state.generation === generation && state.pendingStamp === stamp) state.pendingStamp = null;
     });
   }
 
