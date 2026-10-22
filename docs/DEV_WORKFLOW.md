@@ -1,14 +1,21 @@
 # Dev Workflow
 
-## 2026-10-22 一般戰鬥跨角色／跨場圖片殘留（本機修正，未部署）
+## 2026-10-22 一般戰鬥跨角色／跨場圖片殘留（已公開驗證）
 
 - 使用者確認是新世界航海錄一般戰鬥，舊角色圖會混入其他場並留到下一場；此前共鬥排版嘗試已完整撤回，`public/board_battle.html` 與該嘗試前 SHA-256 一致。
 - 根因：`board_character_depth.js` 的 A 圖非同步載入未完成時切到 B 再回 A，舊 A 的 `finally` 僅比較 `pendingStamp`，會清掉新 A 的等待標記；一般戰鬥刷新隨後重複建立同代圖層。攻擊／受擊時原圖會顯示，原 visibility 檢查不足以防止重複 attach；`state.depth` 只追蹤最後一組，前一組成為孤兒，換角色及離戰都留在重用的 iframe 裡。
 - 正式來源只定點修改 `public/js/board_character_depth.js` 三處：載入結束還必須比對 `generation` 才清等待標記，model／alpha attach 都拒絕已有 depth 的重複結果。沒有修改角色資料、HTML 排版、傷害、回合、存檔、`BOARD_GAME_STATE` 或 Socket.IO；也沒有改動觀戰端刻意保留動畫快照的流程。
-- 依目前公開 Board `package-1e0e16365e08c407`、manifest SHA-256 `53c4187b6174226da6609606a426846cd436c5e771fd963c7165f7f7d0b4bf30` 的程式與真實 depth manifest 重現；九個角色圖／背景／mask 媒體核對 manifest SHA。原版在最小與完整戰鬥頁均重現：魯夫正常→受擊→正常，遲到載入後的一般 refresh 建出兩組圖層，換索隆仍疊著魯夫，關閉後剩一組魯夫圖。
+- 依修正前公開 Board `package-1e0e16365e08c407`、manifest SHA-256 `53c4187b6174226da6609606a426846cd436c5e771fd963c7165f7f7d0b4bf30` 的程式與真實 depth manifest 重現；九個角色圖／背景／mask 媒體核對 manifest SHA。原版在最小與完整戰鬥頁均重現：魯夫正常→受擊→正常，遲到載入後的一般 refresh 建出兩組圖層，換索隆仍疊著魯夫，關閉後剩一組魯夫圖。
 - 驗證：最小真圖競態候選 5/5；完整已發布程式加精確三處修正的桌機 1366×768、手機橫向 932×430，以及正式 JS 各 26/26（合計 78/78），各重用同一頁連續開關 20 場，當場只保留當前角色一組模型，離戰後零模型／背景層，無瀏覽器例外。既有觀戰播放 QA 41/41、JS 語法及相對本次原檔增量檢查通過。`npm start` 在 18942 埠啟動；未設定 `DATABASE_URL`，不代表真實帳號、真人多人或實體裝置驗收。
 - 額外以三張真實透明人物圖走 alpha-only 分支，測 A→B→A→C、每次五次一般刷新與關閉，6/6 通過；未出現重複 alpha 層或關閉殘留。報告為 `alpha-result.json`。
-- 原始／修正候選、延遲解碼重現腳本、真圖 manifest／SHA、前後截圖與各項報告在 `D:/Codex_QA/board-battle-stale-20261022/`。正式與公開 depth 其他版本差異保留；公開候選僅移植同三處修正，不把正式樹舊視覺程式整檔覆蓋公開版本。未提交、封裝或部署。目前對話無 LATTICE API，前已核對官方 Status 為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`；未宣稱持久任務或圖譜寫入成功。
+- 原始／修正候選、延遲解碼重現腳本、真圖 manifest／SHA、前後截圖與各項報告在 `D:/Codex_QA/board-battle-stale-20261022/`。正式與公開 depth 其他版本差異保留；公開候選僅移植同三處修正，不把正式樹舊視覺程式整檔覆蓋公開版本。本輪已在隔離發布樹提交、封裝並完成公開讀回。目前對話無 LATTICE API，前已核對官方 Status 為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`；未宣稱持久任務或圖譜寫入成功。
+
+<!-- BOARD_BATTLE_DEPTH_RELEASE_20261022 -->
+- 發布：來源提交 `77e764b72`，公開 Board `package-c49b13ce2f9f287c`；manifest SHA-256 `bcd4a8d95bc3df4a837f1221d10d23cbfa97717cfb135f5b6de20bc5ee991a85`。6,587 個資產紀錄中只更動 `js/board_character_depth.js`，其餘 6,586 個紀錄、Card／Chess 身分與媒體來源保持一致。隔離發布樹更新 catalog／manifest；正式來源僅保留本輪三處生命週期修正，不整檔倒入公開版本。
+- R2 Board-only 成功重試盤點 6,587 個邏輯檔、6,261 個唯一物件；該次新增 0、沿用 6261。先前一次上傳因 DNS 中斷，未保存其成功上傳件數，不能回推合計新增數；新 CAS blob 已 GET／SHA 確認。公開專項 19/19、完整桌面分發 148/148 通過，包含三款 runtime／manifest 與所有程式 GET／大小／SHA；公開 depth JS 為 118,449 bytes、SHA-256 `2c0504e7e3dc025415386ef39c4169b5c3519e326c624bfde57340fedae07ade`。
+- 公開抓回的 JS 再放入完整一般戰鬥頁的本機 Chromium fixture，26/26 通過，連續重用同頁 20 場、離戰零舊層、瀏覽器例外 0；這是公開程式位元組搭配本機測試情境，非真人正式帳號對戰。
+- AssetStore 使用獨立快取及兩路徑 QA manifest（原 entry HTML 與 depth JS）跑真實 CAS blobs；候選首次更新只下載 118,449 bytes／1 請求，重啟後二次安裝 0 bytes／0 請求，21/21 通過。這是受限範圍更新與重用驗證，未下載完整 6,587 個資產套件；不代表真實帳號、真人多人、實體裝置或長時間遊玩驗收。
+- 已去除私密測試內容的發布證據為 `docs/BOARD_BATTLE_DEPTH_RELEASE_20261022.json`；原始公開核驗與 fixture 報告留在上述 QA 目錄。
 
 ## 2026-10-19 下載網站新版備援入口
 

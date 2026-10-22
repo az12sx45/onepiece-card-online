@@ -3,8 +3,11 @@
 ## 2026-10-22 一般戰鬥舊角色圖殘留
 
 - `public/js/board_character_depth.js`：`maybeDepth` 完成時核對 generation，`attachDepth`／`attachAlphaDepth` 拒絕已有 depth 的重複結果，防止 A→B→A 載入競態留下孤兒模型。
-- `D:/Codex_QA/board-battle-stale-20261022/`：原版與精確公開候選、真實 depth manifest、九張媒體 SHA 驗證、延遲解碼重現、連續 20 場／桌機／手機／正式來源報告及截圖；不是發布目錄。
-- `public/board_battle.html` 未保留共鬥排版變更；此輪不改戰鬥 JS、資料或發布清單。四份主文件同步記錄本機修正、根因及未部署界線。
+- `D:/Codex_QA/board-battle-stale-20261022/`：原版與精確公開候選、真實 depth manifest、九張媒體 SHA 驗證、延遲解碼重現、連續 20 場／桌機／手機／正式來源報告及截圖；保存候選與驗證證據，玩家發布來源仍是隔離發布樹。
+- `public/board_battle.html` 未保留共鬥排版變更；此輪不改戰鬥 JS 或角色資料；隔離發布樹已更新 `public/desktop/catalog-v3.json` 與 `public/desktop/manifests/board-package-c49b13ce2f9f287c.json`，公開套件為 `package-c49b13ce2f9f287c`。正式來源保留既有版本差異，未整份同步隔離樹的發布清單。四份主文件記錄實際公開驗證及適用界線。
+- `docs/BOARD_BATTLE_DEPTH_RELEASE_20261022.json`：經過實際報告 guard 後產出的公開身分、程式 SHA、R2、完整分發、本機公開 JS fixture 與兩路徑 AssetStore 更新／二次 0 bytes 證據摘要；不含憑證或私密測試資料。
+
+<!-- BOARD_BATTLE_DEPTH_RELEASE_20261022 -->
 
 ## 2026-10-19 新版下載備援
 

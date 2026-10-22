@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "date": "2026-10-22",
+  "game": "board",
+  "title": "一般戰鬥跨角色與跨場角色圖殘留修正",
+  "status": "PUBLIC_BYTES_VERIFIED",
+  "origin": "https://onepiece-card-online.onrender.com",
+  "sourceCommit": "77e764b72b2273259d340465e3215e6ceb41832c",
+  "release": {
+    "releaseId": "package-c49b13ce2f9f287c",
+    "manifestPath": "desktop/manifests/board-package-c49b13ce2f9f287c.json",
+    "manifestSha256": "bcd4a8d95bc3df4a837f1221d10d23cbfa97717cfb135f5b6de20bc5ee991a85",
+    "totalFiles": 6587,
+    "preservedAssetRecords": 6586
+  },
+  "changedPrograms": [
+    {
+      "path": "js/board_character_depth.js",
+      "bytes": 118449,
+      "sha256": "2c0504e7e3dc025415386ef39c4169b5c3519e326c624bfde57340fedae07ade"
+    }
+  ],
+  "otherGamesPreserved": true,
+  "publicVerification": {
+    "ok": true,
+    "checks": 19,
+    "finishedAt": "2026-10-22T08:56:49.728Z"
+  },
+  "r2": {
+    "ok": true,
+    "mode": "live",
+    "logicalFiles": 6587,
+    "uniqueFiles": 6261,
+    "uploaded": 0,
+    "skipped": 6261,
+    "skippedRace": 0
+  },
+  "desktopDistribution": {
+    "ok": true,
+    "checks": 148,
+    "at": "2026-10-22T08:57:28.850Z",
+    "localProgramByteHashCheckSkipped": false
+  },
+  "deployedByteBrowserFixture": {
+    "ok": true,
+    "checks": 26,
+    "browserErrors": 0,
+    "fullBattlePageFixture": true,
+    "source": "Publicly downloaded depth JS in local Chromium fixture"
+  },
+  "scopedAssetStore": {
+    "ok": true,
+    "checks": 21,
+    "fullPackageInstalled": false,
+    "fullPackageAssetCount": 6587,
+    "scopedAssetPaths": [
+      "board_start.html",
+      "js/board_character_depth.js"
+    ],
+    "firstCandidateUpdate": {
+      "networkBytes": 118449,
+      "requests": 1
+    },
+    "repeatAfterRestart": {
+      "networkBytes": 0,
+      "requests": 0
+    }
+  },
+  "evidenceFiles": [
+    "release-scope-review.json",
+    "r2-live-result.json",
+    "public-release-verification.json",
+    "desktop-distribution-release-report.json",
+    "deployed-full-fixed-race.json",
+    "asset-store-scoped-result.json"
+  ],
+  "boundaries": {
+    "complete6587AssetPackageDownloaded": false,
+    "productionAccountTested": false,
+    "humanMultiplayerAcceptance": false,
+    "physicalDeviceAcceptance": false,
+    "latticePersistenceVerified": false,
+    "latticeObservedStatus": "BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED"
+  }
+}
