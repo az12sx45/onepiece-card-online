@@ -1,0 +1,15 @@
+'use strict';
+const {parse}=require('./native-research-markup');
+class NativeArenaBridge{
+ constructor(bridge,html){
+  this.disposed=false;const root=parse(html),all=(n,s)=>{const out=[];function walk(n){for(const c of n?.children||[])if(typeof c!=='string'){if(s[0]==='.'?(c.attrs.class||'').split(/\s+/).includes(s.slice(1)):c.tag===s)out.push(c);walk(c);}}walk(n);return out;},one=(n,s)=>all(n,s)[0],raw=n=>!n?'':typeof n==='string'?n:(n.children||[]).map(raw).join(''),text=n=>raw(n).replace(/\s+/g,' ').trim(),value=(n,s)=>text(one(n,s)),image=n=>{const img=one(n,'img');return {image:img?.attrs.src?.split('?')[0]||'',fallback:img?.attrs['data-fallback-src']?.split('?')[0]||''};};
+  const panel=one(root,'.arena-ui');if(!panel)throw Error('Original arena missing');const opponents=one(panel,'.arena-opponents'),crew=one(panel,'.arena-crew'),rules=one(panel,'.arena-rules');
+  const entry=n=>({key:n.attrs.id||(n.attrs['data-arena-opponent-id']?'opponent:'+n.attrs['data-arena-opponent-id']:'crew:'+n.attrs['data-arena-crew-index']),name:value(n,'strong'),meta:value(n,'small'),...image(n),order:value(n,'.arena-card-check'),selected:(n.attrs.class||'').split(/\s+/).includes('selected'),disabled:Object.hasOwn(n.attrs,'disabled')});
+  this.model={kind:'arena',sourceText:text(root),frame:one(panel,'.arena-panel-frame').attrs.src,title:value(panel,'h3'),points:value(one(panel,'.arena-points'),'span')+' '+value(one(panel,'.arena-points'),'strong'),portrait:image(one(panel,'.arena-island')),opponentHeading:value(one(opponents,'.arena-section-heading'),'strong'),opponentCount:value(one(opponents,'.arena-section-heading'),'span'),crewHeading:value(one(crew,'.arena-section-heading'),'strong'),crewCount:value(one(crew,'.arena-section-heading'),'span'),opponents:all(opponents,'button').map(entry),crew:all(crew,'button').map(entry),rules:[value(rules,'strong'),value(rules,'span'),value(rules,'p')],actions:all(one(panel,'.arena-actions'),'button').map(n=>({key:n.attrs.id,label:text(n),disabled:Object.hasOwn(n.attrs,'disabled')}))};
+  this.nodes=all(panel,'button').map(n=>{const data=entry(n),node={id:data.key,dataset:n.attrs['data-arena-opponent-id']?{arenaOpponentId:n.attrs['data-arena-opponent-id']}:n.attrs['data-arena-crew-index']!==undefined?{arenaCrewIndex:n.attrs['data-arena-crew-index']}:{},textContent:text(n),disabled:data.disabled,selected:data.selected,addEventListener:(type,fn)=>{if(type!=='click')throw Error('Unbound arena event '+type);bridge.listeners.set(data.key,()=>{if(!this.disposed&&!node.disabled)fn({target:node,currentTarget:node});});}};bridge.controls.set(node.id,node);return node;});
+  bridge.application.get('arena_modal').call('apply_json',JSON.stringify(this.model));
+ }
+ query(selector){if(selector==='[data-arena-opponent-id]')return this.nodes.filter(n=>n.dataset.arenaOpponentId!==undefined);if(selector==='[data-arena-crew-index]')return this.nodes.filter(n=>n.dataset.arenaCrewIndex!==undefined);if(selector==='button')return this.nodes;throw Error('Unbound arena selector '+selector);}
+ dispose(){this.disposed=true;}
+}
+exports.NativeArenaBridge=NativeArenaBridge;

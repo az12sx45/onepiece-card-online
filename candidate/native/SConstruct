@@ -1,0 +1,14 @@
+import os
+from SCons.Script import ARGUMENTS, Default, SConscript
+
+cpp = os.environ.get('GODOT_CPP_DIR')
+if not cpp:
+    raise RuntimeError('Set GODOT_CPP_DIR to the pinned godot-cpp checkout')
+env = SConscript(os.path.join(cpp, 'SConstruct'))
+if env['platform'] != 'ios':
+    raise RuntimeError('This bridge requires the iOS SDK; no desktop stub build')
+env.Append(CXXFLAGS=['-fobjc-arc', '-fblocks'])
+env.Append(LINKFLAGS=['-framework', 'Foundation', '-framework', 'Security', '-framework', 'UIKit', '-framework', 'AVFoundation', '-framework', 'QuartzCore'])
+env.Append(CPPPATH=['.'])
+library=env.SharedLibrary('bin/po_ios_bridge'+env['suffix'], ['po_ios_bridge.mm'])
+Default(library)

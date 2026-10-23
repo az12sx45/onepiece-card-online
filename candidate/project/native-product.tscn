@@ -1,0 +1,25 @@
+[gd_scene load_steps=7 format=3]
+[ext_resource type="Script" path="res://ios_product_root.gd" id="1"]
+[ext_resource type="Script" path="res://native_websocket_pool.gd" id="2"]
+[ext_resource type="Script" path="res://native_runtime_http.gd" id="3"]
+[ext_resource type="Script" path="res://native_storage.gd" id="4"]
+[ext_resource type="Script" path="res://native_android_account.gd" id="5"]
+[ext_resource type="Script" path="res://native-product-entry.js" id="6"]
+[node name="PirateOdyssey" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+[node name="Pool" type="Node" parent="."]
+script = ExtResource("2")
+[node name="Http" type="Node" parent="."]
+script = ExtResource("3")
+[node name="Storage" type="Node" parent="."]
+script = ExtResource("4")
+[node name="Session" type="Node" parent="."]
+script = ExtResource("5")
+[node name="Entry" type="Node" parent="."]
+script = ExtResource("6")

@@ -1,0 +1,467 @@
+{
+  "source": "images/board/marineford/props/execution_cut_video/marine_execution_raise_then_cut_snap_footlock_24fps.webp",
+  "sourceSha256": "ddafe6de6f2417d90a1c3028ce48f89971754412dc88fec3639868f7e210ff5f",
+  "width": 1280,
+  "height": 1280,
+  "loop": 0,
+  "frames": [
+    {
+      "file": "guard-000.png",
+      "durationMs": 83,
+      "rgbaSha256": "be188516cf1dfab0f9b25ea893337d53b4d45bad2465fa6cebed903407bc69b0",
+      "sha256": "0669f4a38537699c94515455dc395d76bc408aa64afebc6a2d8d6c11129ac08f",
+      "bytes": 616376
+    },
+    {
+      "file": "guard-001.png",
+      "durationMs": 83,
+      "rgbaSha256": "826627953bf9087a2a29620ebf630f7b9cdd1683229a673f735cfeb79cc4699b",
+      "sha256": "223a15c66f205e259cfb4ce05fa074e22bf790ba0d9483594814c37f4015b617",
+      "bytes": 619752
+    },
+    {
+      "file": "guard-002.png",
+      "durationMs": 84,
+      "rgbaSha256": "5b806f718b0f733aa8eec5ed035683dac92dd59d074ddf0d036fe153d4fa0c45",
+      "sha256": "35d63bea35cfd129d8d2668922ae7a5eeabda5102b0819de7eb355efcda3a351",
+      "bytes": 625820
+    },
+    {
+      "file": "guard-003.png",
+      "durationMs": 83,
+      "rgbaSha256": "7e3ad59fe1170eabb3d564e5abd71bae721cf7f664cb4f478d30ead6e98c8616",
+      "sha256": "259d83a0ceb9b84b88b1278f6f8050e31ee99af372acabf7466700d7722186b1",
+      "bytes": 623120
+    },
+    {
+      "file": "guard-004.png",
+      "durationMs": 83,
+      "rgbaSha256": "0c08d59da4c86418188121138e6cd568241e91fa5c3c8d215925e385431197fc",
+      "sha256": "c70dca5e955f3730bf4ca03bad750c5aba8caa12e8a5c4524b038ba284f121b5",
+      "bytes": 619775
+    },
+    {
+      "file": "guard-005.png",
+      "durationMs": 84,
+      "rgbaSha256": "66098fc740f18fb1f481738b445887f2ccb5cdb5455c27ed7b646a52546697e9",
+      "sha256": "83a6716927cbaf5e440073eec38c261cbc728a13c1bab841b25e2249ce3dbf68",
+      "bytes": 628902
+    },
+    {
+      "file": "guard-006.png",
+      "durationMs": 83,
+      "rgbaSha256": "365857700926b13053101dde0dfce0d91add1c88678fba54b639026c2f38fd63",
+      "sha256": "44f3aa4bb8d102dade223a9930b84a9d2d0467e22bc9d5f8786b605e68f7fa1f",
+      "bytes": 631467
+    },
+    {
+      "file": "guard-007.png",
+      "durationMs": 83,
+      "rgbaSha256": "8e6ea5ab2aab9c7056cc9afeca0c5d086db9167b1eff31c3f6483cab735ff186",
+      "sha256": "3ae4d74d8d0df655af2a550cd291cdd8ac3e8c8df9c3da7e4ca9bd87efbe37c7",
+      "bytes": 631982
+    },
+    {
+      "file": "guard-008.png",
+      "durationMs": 84,
+      "rgbaSha256": "a52adbc1c5efbae739057670b3903f4a30101ae595b58a47f729dbd9834e9d37",
+      "sha256": "9d39740b9e0e5ecca4a0f04a715bdc41178187952de6ec8e7dd95d7b3e92d417",
+      "bytes": 617848
+    },
+    {
+      "file": "guard-009.png",
+      "durationMs": 83,
+      "rgbaSha256": "f3c66a4abb8f1c332d7175a5baeda5d5b1a2fa323a441e212033420cda4a7c32",
+      "sha256": "0bfb0f40e8cf56059eb0924b450f64b98295efe781bd08318601ae7ba0c843ef",
+      "bytes": 623768
+    },
+    {
+      "file": "guard-010.png",
+      "durationMs": 83,
+      "rgbaSha256": "f7d9228fd77a6dbe727efabc0e291f8655dcdc67e9650095c8773a7c97a9048e",
+      "sha256": "6aefb9bd7ba4e7a6b8565435720ea6c320a998536b1f1f32021b8d8677a02adb",
+      "bytes": 616515
+    },
+    {
+      "file": "guard-011.png",
+      "durationMs": 84,
+      "rgbaSha256": "0f49f8155211ac75c500f58727a48b90f9d4c54ae89897b3c6762297e27a7ca1",
+      "sha256": "fd45ec664db034769c096c2a277db7f029c26a17b0bd27e8084302d329bc6095",
+      "bytes": 610480
+    },
+    {
+      "file": "guard-012.png",
+      "durationMs": 83,
+      "rgbaSha256": "f1fe7c8c5e756b34961b742a57742e25d2f0f1e9486d48a96b4ca6452f8202ea",
+      "sha256": "99544e0fddfb5dd48dbe2981486c7632597cf29d9f72448b9b17f4ee47bc91de",
+      "bytes": 605699
+    },
+    {
+      "file": "guard-013.png",
+      "durationMs": 83,
+      "rgbaSha256": "f50a4f88f337b0c686a9ad7cb24207183ae484271315408c71cb3012f2605082",
+      "sha256": "93e761b12b0ae9fe4f56c1ff99358860bb4d786644f12ed53cdf0e8013d15e32",
+      "bytes": 618061
+    },
+    {
+      "file": "guard-014.png",
+      "durationMs": 84,
+      "rgbaSha256": "f38c34368ce0864fb41acf0d0c1b0b69625047087de806a9691ed73047ddbdf3",
+      "sha256": "a7f898a3f3b197016fce5ea1431161cef1ddb7763b36166c571a875d99473223",
+      "bytes": 622379
+    },
+    {
+      "file": "guard-015.png",
+      "durationMs": 83,
+      "rgbaSha256": "b40f49c3e0b0a912dee428309aa814662d59efc645461ea380846bf19aa293ee",
+      "sha256": "0357fba5ea94b29d64ced986af47e4159c2d3bf987a3b4db45d867143785a164",
+      "bytes": 607540
+    },
+    {
+      "file": "guard-016.png",
+      "durationMs": 83,
+      "rgbaSha256": "9e81d709d0a03e17d75a7a98d15781a72d5393e5294348ef400b18210516d6b0",
+      "sha256": "6dabb4ed79c8496a76367831cafb016a940142281ff8dd53d102d6eb26f145b1",
+      "bytes": 574399
+    },
+    {
+      "file": "guard-017.png",
+      "durationMs": 84,
+      "rgbaSha256": "3a540f7c9f13f1f3a2822331fb52f38c5cb13b62825f8ed3f7b82065f67cde62",
+      "sha256": "3e3d7002bd3c3c6e740c9b0f5bb5fbf690b39fc4bfb1a64fbb1664671e466b31",
+      "bytes": 572495
+    },
+    {
+      "file": "guard-018.png",
+      "durationMs": 83,
+      "rgbaSha256": "79e74c5528682fd63ad6d0105ac8233c07e086446107589c35bd66afdf2bc26c",
+      "sha256": "fadab8168b69d7be1701573cba8998a78c387f0a3e774a00762cd77f3b1ea92e",
+      "bytes": 581387
+    },
+    {
+      "file": "guard-019.png",
+      "durationMs": 83,
+      "rgbaSha256": "5852637c0ba54429ef943571dbe85dadc04fecd4b9fbd78efcdb05313f452003",
+      "sha256": "234fa73951075570615b9ef4e8ecd1882e0eb32ea4a18b5b3a0d4a6d36d5bf97",
+      "bytes": 599420
+    },
+    {
+      "file": "guard-020.png",
+      "durationMs": 84,
+      "rgbaSha256": "642a6a858656b548c6e90d52e6be602c40f1dcb5d1c379e41a1f799e421a0fb1",
+      "sha256": "78bdf92593ac3e37600b2e6872c3a06f8ac86c4b52e884ce4aae5a4912f7bd3e",
+      "bytes": 614800
+    },
+    {
+      "file": "guard-021.png",
+      "durationMs": 83,
+      "rgbaSha256": "55adee81669fa988cf344f1504fcd80aa6c7aa4cc9be8040773789ab9d66147a",
+      "sha256": "958b0f6e03abb6aa66a83151067382af058a521279d6ac0971de5b90bb835e3c",
+      "bytes": 619127
+    },
+    {
+      "file": "guard-022.png",
+      "durationMs": 83,
+      "rgbaSha256": "4807655dd0b40b0c5e5e1497005fa7692687d0a7d16fb2118cc882f68b932af6",
+      "sha256": "4ca6c77165450864995e0431af4a7f0539bef21ef0b4d53eebdf4e978191d143",
+      "bytes": 630374
+    },
+    {
+      "file": "guard-023.png",
+      "durationMs": 84,
+      "rgbaSha256": "81881685a69d18db9e431bc38d13c8fef2da1edb807397371070c8a2f8f5a106",
+      "sha256": "508caf8ba7be2e07d035f934e2dd8c91ede2fb56974b1393759c2209b0d15307",
+      "bytes": 636679
+    },
+    {
+      "file": "guard-024.png",
+      "durationMs": 83,
+      "rgbaSha256": "df706eb01b27c8975dcfc116024f3788fdce5d5853e101cca586089ffafcbcdc",
+      "sha256": "12d86ee651126448af721214414dcc4edaf3d39a677df73df74ecad85b3a9db2",
+      "bytes": 637624
+    },
+    {
+      "file": "guard-025.png",
+      "durationMs": 83,
+      "rgbaSha256": "a28be1c309400aec69250a6e999f0c68cf634bf46e557ba1f6e2994950691de6",
+      "sha256": "e4deaaab0d94df704e2c4e5cf1cffad393c44e2a9e7db779a4d01c8ed1a4fe86",
+      "bytes": 642104
+    },
+    {
+      "file": "guard-026.png",
+      "durationMs": 84,
+      "rgbaSha256": "43acd29797da66a9a49c6892027e59b43fc7aac14a7a567c6fe9e5bcf77b7022",
+      "sha256": "5b1614f15e47e47c935a1cd1bc405dda7689d84a31ec790ee9c42553a4fd43cc",
+      "bytes": 639211
+    },
+    {
+      "file": "guard-027.png",
+      "durationMs": 83,
+      "rgbaSha256": "d9be7698c68fb06daaac4dc722675626c621076914a7ab1aa4e84670416cc489",
+      "sha256": "bc602a1b760b7839e771bf961a6aebbc87bf4aa3213ed7d7cdd74a96d31d3ee5",
+      "bytes": 642618
+    },
+    {
+      "file": "guard-028.png",
+      "durationMs": 83,
+      "rgbaSha256": "90b96a0782bc330c6b1a080afca12856df653566b09492aee969bcd5b55e2702",
+      "sha256": "077f8d81b2eff10d552af0bcfcec8a7192a9351b26cb5b9c880f07d8132d8065",
+      "bytes": 639401
+    },
+    {
+      "file": "guard-029.png",
+      "durationMs": 84,
+      "rgbaSha256": "7270e2578fcd3630acd4c379e2ea2c3b848a9a22e2514c82c5d34e6d633f7f70",
+      "sha256": "3a7b326b4183e51edd84e757af858c775657ec0105c18fd0cf67a24d2a32df1a",
+      "bytes": 639519
+    },
+    {
+      "file": "guard-030.png",
+      "durationMs": 83,
+      "rgbaSha256": "273bef92caa937a5e723db993a75f7b0ce6131e610f68dd30ac9889800b78327",
+      "sha256": "ab46a3fcef9bf938681f473164b3dc51a61f27675915900f8609f6891fee98bd",
+      "bytes": 644417
+    },
+    {
+      "file": "guard-031.png",
+      "durationMs": 83,
+      "rgbaSha256": "e26268db9a81a112ca5c11a56e48844e16d65dd34d911d871e1b1d9c33eca42a",
+      "sha256": "44e894560705cfd42a311c591741d21c51f98cc88847e89796f9c2d6f013e0c5",
+      "bytes": 632176
+    },
+    {
+      "file": "guard-032.png",
+      "durationMs": 84,
+      "rgbaSha256": "0612854d7b318a79cf7977ae405b2eda269f7e68c30112d8edd37c3445e54b82",
+      "sha256": "48fd326cc7481deb87489050a46b4fe057fadf88441edc9e80ff12090ce5a64d",
+      "bytes": 630077
+    },
+    {
+      "file": "guard-033.png",
+      "durationMs": 83,
+      "rgbaSha256": "5db6b56a98d571f0d42f388571bf67c481421c81d33aeda84b09dcbf17b4bff4",
+      "sha256": "c551746df23a2591553537d6e80c08e11a6a02ed47f7a23288b1f2b41cd9f99e",
+      "bytes": 633712
+    },
+    {
+      "file": "guard-034.png",
+      "durationMs": 83,
+      "rgbaSha256": "f87c417ee83d6c1993031db069c51327ddc55b503876fc06f630e34d805557a7",
+      "sha256": "c39a064b8277ce69954e662c34a44ecdb03d498467af321891eaad0706fb38b7",
+      "bytes": 634772
+    },
+    {
+      "file": "guard-035.png",
+      "durationMs": 84,
+      "rgbaSha256": "75690b414d86d49791fceb779b855d0ee3dff2547bcdea8641ec1f779581a33e",
+      "sha256": "46d1ee53c1d745a0cfbd936565ed2d6e38aa5ee06d6b1c1bd3d360ce5f866d9b",
+      "bytes": 626340
+    },
+    {
+      "file": "guard-036.png",
+      "durationMs": 83,
+      "rgbaSha256": "57a96d454cda1d039dcfa1cef33eb78d11ea3b2972bb343bc6d3c28e1ba022ce",
+      "sha256": "e32cc0d8ff2f90c8e6391241838492db10c7b4440a99d67ebdcfdb610b3e8c73",
+      "bytes": 632393
+    },
+    {
+      "file": "guard-037.png",
+      "durationMs": 83,
+      "rgbaSha256": "e42384c240f6b3a9a64eee1c3cd2e8ff0a2f980e56135549a8d4379939fbf8ad",
+      "sha256": "87a312307a5172be26694b5e5b65038b57d21dca8f0b31aeccba9d8329063388",
+      "bytes": 625177
+    },
+    {
+      "file": "guard-038.png",
+      "durationMs": 84,
+      "rgbaSha256": "824cae8b76b4cbd0bbb38d756543d8d3643b42d0bd2f5b923cf8f8bece6524e2",
+      "sha256": "e61d111ef9231520459809404adbe4f6a2c252ef628b770fb1f110555294ebfd",
+      "bytes": 621418
+    },
+    {
+      "file": "guard-039.png",
+      "durationMs": 83,
+      "rgbaSha256": "d07eeb90390755e6c41887f3faeb3a01ff07f08d7854c145714f099514525245",
+      "sha256": "2101ce2752e49b9c61cd08a54b68e27fea8d72f8fcd8e80ec82fcf017534f7a5",
+      "bytes": 622255
+    },
+    {
+      "file": "guard-040.png",
+      "durationMs": 83,
+      "rgbaSha256": "d45b3575aa2313eaa18004c57e9629f833ba9f7d3074f46219e97510c85ff035",
+      "sha256": "837a43f53d7e6d656e7bdae5cf06675471437331b2af7dfef452717106ed302c",
+      "bytes": 610155
+    },
+    {
+      "file": "guard-041.png",
+      "durationMs": 84,
+      "rgbaSha256": "6c901182dc3cf2667437f068a004fdaa6c048c140b64d2e175712f47b5d2602c",
+      "sha256": "3fe806c786914ce98c3b67b542d0880efa95e80e06e9f2e47e7df1f01bf2fabb",
+      "bytes": 595816
+    },
+    {
+      "file": "guard-042.png",
+      "durationMs": 83,
+      "rgbaSha256": "96a7e7e971485b774877336d273eb03b98383d8513ed0b9bb26de57a64ed0003",
+      "sha256": "06c3731c060fd80918aa992e9dc6047e2126b47c1c6fd803333ca82066d4dd14",
+      "bytes": 603505
+    },
+    {
+      "file": "guard-043.png",
+      "durationMs": 83,
+      "rgbaSha256": "935aad0600559eea180e85bbb7c4d773f19086f5c8e3328f00901b5efa9f327b",
+      "sha256": "91a1ff3663b39dd4f1f63327bf40f146f8964d50fb5b1c5b1514cab46532bfa4",
+      "bytes": 569689
+    },
+    {
+      "file": "guard-044.png",
+      "durationMs": 84,
+      "rgbaSha256": "f3d2ad5053dda4084cb244d7c4d4f470d975060d1f96d02c4a0594861c50257b",
+      "sha256": "25237ae9dd84b6b75efd45325e1e458a03de075d9b083d1d76bb54c5cebe5cc3",
+      "bytes": 554074
+    },
+    {
+      "file": "guard-045.png",
+      "durationMs": 83,
+      "rgbaSha256": "0a640627959fbac034cc6655a015927b3a628f89934bd819dde6c62a031d1f65",
+      "sha256": "ef505b3ef6719ef558ad49d12872da883c80591cab645cc805e2f1a778c0d5c1",
+      "bytes": 541725
+    },
+    {
+      "file": "guard-046.png",
+      "durationMs": 83,
+      "rgbaSha256": "7787493e2890f780edd628de4c6d6f803a0f09b821c641b61709104518bf1dfb",
+      "sha256": "ff0570eb9df0d8f6873134e327311408db09cf55e2a8b7c3d228c65252d648ab",
+      "bytes": 540666
+    },
+    {
+      "file": "guard-047.png",
+      "durationMs": 84,
+      "rgbaSha256": "d299dfe0632868951d5deee595b443fd66683f63bf8551d547d54c47a75a0f41",
+      "sha256": "088fe0efcb336bcc46a1dd3ed422d518ba8520bcdab611421723761975c35a80",
+      "bytes": 535536
+    },
+    {
+      "file": "guard-048.png",
+      "durationMs": 83,
+      "rgbaSha256": "202b677cba0e640fec1514bf2cf8287cdd1bd3fe25e53724479077ef26c33124",
+      "sha256": "4472750f3f2031a72d099823f4a762e650eb79c984b25b7c66b76e68a7694e3d",
+      "bytes": 534847
+    },
+    {
+      "file": "guard-049.png",
+      "durationMs": 83,
+      "rgbaSha256": "9b27ed0a704dbe0c26fa8731e1b88d2de11e2b098007b974d8b6552715fd50ba",
+      "sha256": "9e46dcce5e31de984ff57654a041431a9a27f54f194c174ed2dcf6afb850ea96",
+      "bytes": 533519
+    },
+    {
+      "file": "guard-050.png",
+      "durationMs": 84,
+      "rgbaSha256": "8b8d364766b940abf8cd966e7240bf8783dd5e21459ebd23a2f0aad2b5e40e2c",
+      "sha256": "67082092aa4b83b2746a28e877d265507639b4d154deb4ff0ff1ab3c5222404e",
+      "bytes": 535615
+    },
+    {
+      "file": "guard-051.png",
+      "durationMs": 83,
+      "rgbaSha256": "ca9b2055db05054f7f8f028eb71e3612a0e115693f55a4c5312c7ebe23078b97",
+      "sha256": "6bdca480ac95f8ab7fc8103a4553b498de41832a5a326f14e4f20eaae5b9250f",
+      "bytes": 543099
+    },
+    {
+      "file": "guard-052.png",
+      "durationMs": 83,
+      "rgbaSha256": "ca4ec96bf54d699e8adf1708860ab983a57b7a4cc2aa4fe5738e5884b29ddcd3",
+      "sha256": "24100da5b7866158533ac243b27c957e86948f1bf30f53cc22a33cd52f38466a",
+      "bytes": 542609
+    },
+    {
+      "file": "guard-053.png",
+      "durationMs": 84,
+      "rgbaSha256": "eb5b8d7f18b90bac1bf2713bc44a6527c4323580393a5bb8f3a71a19f51b130f",
+      "sha256": "a103d2127556713d60843c729f9fbcdff1d93228953e0a3ccdecf6dc737bbf3b",
+      "bytes": 546289
+    },
+    {
+      "file": "guard-054.png",
+      "durationMs": 83,
+      "rgbaSha256": "eb4c449a851b86f8b3511bd22febea65fe9300ad25e325b4b8e48c635d9604f9",
+      "sha256": "9d215f84fa12410f83e60ac00f1e1061220c6f03f45ab177fc2fab06e27d712a",
+      "bytes": 539586
+    },
+    {
+      "file": "guard-055.png",
+      "durationMs": 83,
+      "rgbaSha256": "7d4084c50d2c4e0b2fa3c296c740b62c425aca7a3ec0ae044af7630ff22340ef",
+      "sha256": "dc5eabc5416453f8773661453ce5178339f8cfa8e47df7ab794a6fb55d841979",
+      "bytes": 541597
+    },
+    {
+      "file": "guard-056.png",
+      "durationMs": 84,
+      "rgbaSha256": "b252aa391918e557b8099211555b8e966ced7771ff9bf4e55bee7bf26ffde5b4",
+      "sha256": "8674dac699034cddb20171b7df4444a53ad1128ad43c26f9a36d8dbccc37a902",
+      "bytes": 532212
+    },
+    {
+      "file": "guard-057.png",
+      "durationMs": 83,
+      "rgbaSha256": "7afd39d66bff6e107586f6fac23371e6c738956ac81e13ffef062cea262612a0",
+      "sha256": "d3765752bbe0f2f873cffa153ced510c958592af155eb395ead74bea8776878a",
+      "bytes": 523320
+    },
+    {
+      "file": "guard-058.png",
+      "durationMs": 83,
+      "rgbaSha256": "9ee1e2cd8cbc297aaf336da97b73d83e24e1309705de4311e457da953f3f4327",
+      "sha256": "e83ba5f5e416cbf23e90a076793ab8d53cebbdae00d2bf20112adcc704d5da02",
+      "bytes": 526996
+    },
+    {
+      "file": "guard-059.png",
+      "durationMs": 84,
+      "rgbaSha256": "d3de8cccbd22fa3ef7ea21ceb7197bb662833f991494a8a7abb42d9080776a18",
+      "sha256": "121ed59d7ff78b0a6e4016e879b352560c01bdfb62a85523ca1601a4e7a87af1",
+      "bytes": 534883
+    },
+    {
+      "file": "guard-060.png",
+      "durationMs": 83,
+      "rgbaSha256": "c9ff92299456cda51946e13310f94b60da25bcb093e6f17f595c16903348f4a1",
+      "sha256": "778031bb3f947276320454140e4fb629f8fb2a3fd7221e32467ceafb2eb5db29",
+      "bytes": 545039
+    },
+    {
+      "file": "guard-061.png",
+      "durationMs": 42,
+      "rgbaSha256": "ca9b2055db05054f7f8f028eb71e3612a0e115693f55a4c5312c7ebe23078b97",
+      "sha256": "6bdca480ac95f8ab7fc8103a4553b498de41832a5a326f14e4f20eaae5b9250f",
+      "bytes": 543099
+    },
+    {
+      "file": "guard-062.png",
+      "durationMs": 41,
+      "rgbaSha256": "5db6b56a98d571f0d42f388571bf67c481421c81d33aeda84b09dcbf17b4bff4",
+      "sha256": "c551746df23a2591553537d6e80c08e11a6a02ed47f7a23288b1f2b41cd9f99e",
+      "bytes": 633712
+    },
+    {
+      "file": "guard-063.png",
+      "durationMs": 42,
+      "rgbaSha256": "b40f49c3e0b0a912dee428309aa814662d59efc645461ea380846bf19aa293ee",
+      "sha256": "0357fba5ea94b29d64ced986af47e4159c2d3bf987a3b4db45d867143785a164",
+      "bytes": 607540
+    },
+    {
+      "file": "guard-064.png",
+      "durationMs": 1291,
+      "rgbaSha256": "be188516cf1dfab0f9b25ea893337d53b4d45bad2465fa6cebed903407bc69b0",
+      "sha256": "0669f4a38537699c94515455dc395d76bc408aa64afebc6a2d8d6c11129ac08f",
+      "bytes": 616376
+    }
+  ],
+  "losslessPixels": true,
+  "nativeStreamingVerified": false,
+  "releaseAllowed": false
+}

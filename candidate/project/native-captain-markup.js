@@ -1,0 +1,10 @@
+'use strict';
+const {parse}=require('./native-research-markup');
+exports.project=function(html,bridge){
+ if(!html.includes('class="captain-selection-ui"'))return null;
+ const root=parse(html),all=(node,selector)=>{const result=[];function visit(n){for(const c of n?.children||[])if(typeof c!=='string'){if(selector[0]==='.'?(c.attrs.class||'').split(/\s+/).includes(selector.slice(1)):c.tag===selector)result.push(c);visit(c);}}visit(node);return result;},one=(n,s)=>all(n,s)[0],text=n=>!n?'':(typeof n==='string'?n:(n.children||[]).map(text).join('')).replace(/\s+/g,' ').trim(),value=(n,s)=>text(one(n,s)),image=n=>one(n,'img')?.attrs.src||'';
+ const panel=one(root,'.captain-selection-ui'),caption=one(panel,'.captain-selection-character-caption'),info=one(panel,'.captain-selection-character-info'),hint=one(panel,'.captain-selection-hint');
+ const entries=all(panel,'.captain-selection-row').map(n=>{const index=n.attrs['data-captain-preview'],key='captain:'+index,disabled=Object.hasOwn(n.attrs,'disabled'),core=one(n,'.captain-selection-row-core'),passive=one(n,'.captain-selection-row-passive');bridge.control(key,{captainPreview:index}).disabled=disabled;return {key,disabled,selected:n.attrs['aria-selected']==='true',image:image(one(n,'.captain-selection-row-portrait')),name:value(core,'strong'),meta:value(core,'small'),hp:value(core,'em'),passive:value(passive,'strong'),effect:value(passive,'small'),status:value(n,'.captain-selection-row-status')};});
+ const actions=all(panel,'button').filter(n=>n.attrs.id).map(n=>{const key=n.attrs.id,label=text(n),disabled=Object.hasOwn(n.attrs,'disabled');bridge.control(key,{},label).disabled=disabled;return {key,label,disabled};});
+ return {kind:'captain-selection',title:value(panel,'h3'),subtitle:value(one(panel,'.captain-selection-heading'),'p'),image:image(one(panel,'.captain-selection-portrait-stage')),name:value(caption,'strong'),meta:value(caption,'span'),passive:value(info,'strong'),effect:value(info,'span'),stats:value(info,'small'),listTitle:value(panel,'.captain-selection-list-title'),hint:[value(hint,'strong'),value(hint,'span')].join('\n'),entries,actions};
+};

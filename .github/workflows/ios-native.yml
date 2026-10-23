@@ -1,0 +1,50 @@
+name: PO iOS unsigned native build
+on:
+  push:
+    branches: [codex/ios-native-v038]
+    paths: [candidate/**, .github/workflows/ios-native.yml]
+permissions:
+  contents: read
+concurrency:
+  group: po-ios-native-build
+  cancel-in-progress: false
+jobs:
+  device:
+    if: github.repository == 'az12sx45/onepiece-card-online' && github.event.repository.private == false
+    runs-on: macos-15-intel
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Verify exact source and create isolated build environment
+        run: |
+          python3 -m venv "$RUNNER_TEMP/po-python"
+          "$RUNNER_TEMP/po-python/bin/python" -m pip install --disable-pip-version-check SCons==4.11.1
+          "$RUNNER_TEMP/po-python/bin/python" candidate/tools/setup_macos.py --root "$RUNNER_TEMP/po-godot"
+      - name: Compile arm64 device app without Apple credentials
+        run: |
+          "$RUNNER_TEMP/po-python/bin/python" candidate/tools/build_macos.py --candidate candidate --godot "$RUNNER_TEMP/po-godot/Godot.app/Contents/MacOS/Godot" --out "$RUNNER_TEMP/po-build"
+      - name: Collect bounded diagnostics
+        if: always()
+        run: |
+          mkdir -p ci-result
+          if [ -d "$RUNNER_TEMP/po-build/logs" ]; then cp "$RUNNER_TEMP/po-build/logs/"*.log ci-result/; fi
+          if [ -f "$RUNNER_TEMP/po-build/build-result.json" ]; then cp "$RUNNER_TEMP/po-build/build-result.json" ci-result/; fi
+          printf '%s\n' 'Unsigned development candidate only. No Apple credentials or iPhone acceptance.' > ci-result/NOTICE.txt
+      - name: Save diagnostics for one day
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: po-ios-build-report
+          path: ci-result/
+          retention-days: 1
+      - name: Save unsigned candidate for one day
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: PO-iOS-UNSIGNED
+          path: ${{ runner.temp }}/po-build/PO-iOS-UNSIGNED.ipa
+          retention-days: 1
+          compression-level: 0

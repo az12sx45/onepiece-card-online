@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "godot": "4.7.2-stable",
+  "productManifestSha256": "f3d3013e21f6143b90243f73ec97d6bbabab6ab3107cf5800bc854fb82b717ed",
+  "androidBaseline": 38,
+  "godotjs": {
+    "tag": "v1.0.2",
+    "commit": "5d7ed8708ee3816b599184a8b5680e186c826f38",
+    "engine": "QuickJS-NG",
+    "url": "https://github.com/Daylily-Zeleen/GodotJS-Ext/releases/download/v1.0.2/godotjs-ext-qjs-ng-windows-linux-macos-android-ios-web.zip",
+    "size": 189486113,
+    "sha256": "ee65147facffd9b9d7af4690b2255dbd249713064b93fe79d1485c309cce9f8e"
+  },
+  "godotCpp": {
+    "commit": "d7b6162249ed52796a8301d216c24ee71d68c2bf",
+    "url": "https://codeload.github.com/godotengine/godot-cpp/tar.gz/d7b6162249ed52796a8301d216c24ee71d68c2bf",
+    "sha256": "8b1f43c741e39b0ef5b845823c755e54eece442453e4278ce49ffe948838bbb9"
+  },
+  "media": {
+    "url": "https://onepiece-card-online.onrender.com/desktop/manifests/board-package-1e0e16365e08c407.json",
+    "sha256": "53c4187b6174226da6609606a426846cd436c5e771fd963c7165f7f7d0b4bf30",
+    "blobBase": "https://game-assets.rihdi.tw/desktop/blobs/sha256"
+  },
+  "billing": {
+    "allowPaidServices": false,
+    "cloudJobDispatched": false,
+    "repositoryVisibilityMustNotChange": true
+  }
+}

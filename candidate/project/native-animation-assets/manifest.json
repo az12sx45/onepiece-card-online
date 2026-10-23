@@ -1,0 +1,46 @@
+{
+  "images/board/water_seven/paulie.webp": {
+    "sourceSha256": "57c549817133abf305f8f7279c941083b442d91fd8b08fa24b8e67b93a4cf619",
+    "width": 900,
+    "height": 1200,
+    "loop": 0,
+    "frames": [
+      {
+        "file": "paulie-00.png",
+        "durationMs": 260,
+        "rgbaSha256": "001615eb3167b3c0a0ee04e099adcc49cf12aa26eb6500cc12e4b924b399ff44",
+        "sha256": "f9c4de70d37509a3b92780bfc4324b2622d170b56d904841abebabb19166d93c"
+      },
+      {
+        "file": "paulie-01.png",
+        "durationMs": 220,
+        "rgbaSha256": "3de3e2c90fc0a267d4e0a4735642b2c34bd6f42219e4f7e9958099652f10b5c5",
+        "sha256": "b203b21a460d7c736c64e3b88a7ef99374c9f415865182ebd7099222293eef30"
+      },
+      {
+        "file": "paulie-02.png",
+        "durationMs": 220,
+        "rgbaSha256": "9b6f78411508e0e99edd8af2b215050027bd65be38f0d5958890fc656cf0ea34",
+        "sha256": "2daa85bb590326773e5ce39509fec77a70a4cfb4e4d8ca8d6a7bf6cddd2966c8"
+      },
+      {
+        "file": "paulie-03.png",
+        "durationMs": 300,
+        "rgbaSha256": "36f271cfe02348058b8bd2b17e1c5e4d66570b9ae1e90256f57dcae8e0bf85cf",
+        "sha256": "73ec9ec8d35d75d5ac8ac8b4d030a71129119ec159497bc63ab4df537f556fcd"
+      },
+      {
+        "file": "paulie-04.png",
+        "durationMs": 220,
+        "rgbaSha256": "9b6f78411508e0e99edd8af2b215050027bd65be38f0d5958890fc656cf0ea34",
+        "sha256": "2daa85bb590326773e5ce39509fec77a70a4cfb4e4d8ca8d6a7bf6cddd2966c8"
+      },
+      {
+        "file": "paulie-05.png",
+        "durationMs": 220,
+        "rgbaSha256": "c67179e03f0ffc45166419da6dca7688c758865297c1a01305112fe93ce0c238",
+        "sha256": "d08061daa6bbe4b3af021ff6ef731f5a7a178f56234fcd3e675dd34867a7c262"
+      }
+    ]
+  }
+}

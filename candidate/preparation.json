@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "baselineNativeVersion": 38,
+  "baselineManifestSha256": "f3d3013e21f6143b90243f73ec97d6bbabab6ab3107cf5800bc854fb82b717ed",
+  "preservedFiles": 1886,
+  "platformAdaptations": [
+    {
+      "path": "native_android_account.gd",
+      "baselineSha256": "c92d24615e34b3e9210c5443e589f7910a2a4bb0556c935aaa740e88030a260e",
+      "iosSha256": "3d9b13c664f817b1a40bd73a5dd11208b6b69d5b86368209ade16091f500618a"
+    },
+    {
+      "path": "native_asset_cache.gd",
+      "baselineSha256": "1274859dedd7172f27a0dabfce406b6873ebffcdb94275b660e03b6e3f01e504",
+      "iosSha256": "f2e7c2450ef1f35bf1a35281a18c801780d07dc02dffc19430cf8fef977cf0ed"
+    },
+    {
+      "path": "native_audio_transport.gd",
+      "baselineSha256": "708dede66aa904e82e3eae0cd69e38dac84360ad0082c5b46ac8723b0a165e87",
+      "iosSha256": "1f3512ae6a5251b544733f52674c046933fc62291af3e37d2a724be80b4f99be"
+    },
+    {
+      "path": "native_battle_audio.gd",
+      "baselineSha256": "e76d32def6aac60a8057678913de4b9fa2f4c924c55af49cf6c767014a7df2d4",
+      "iosSha256": "37044fc55aa1fa8fabd2e54b2c118e6ffd229a434c5654d84e450e5055dc7be7"
+    },
+    {
+      "path": "native_katakuri_cinematic.gd",
+      "baselineSha256": "52cbec147606967b02ba99267d93c7feb27cbaee6ffe59d760fef525af34c925",
+      "iosSha256": "490d3e9c966dfae0b0b1ef22cadc8e75d6b6a61d274ea2ab5949a7b8aef4440d"
+    },
+    {
+      "path": "native_nika_video.gd",
+      "baselineSha256": "95b18963301e5b4300ed60ead32ed6180030cc298fd0caea4da28123b70a050b",
+      "iosSha256": "384108dcc922600258eb132c7fca980f49e4c4791d1c6e1f1e6634f218c0c5be"
+    },
+    {
+      "path": "native_screen_metrics.gd",
+      "baselineSha256": "bf50781c7f56169b32cee0d247822a74526959d14560cceab6b433366964fb8e",
+      "iosSha256": "32566192911f6f84bb5f5d2c7bd09914a1e4e69f691b0638493a0bb349b1063e"
+    },
+    {
+      "path": "native_websocket_pool.gd",
+      "baselineSha256": "5fac2f87a0bb466d0ac31d2cd4817657894d6b27e064a044a3b0c2ad2839ff41",
+      "iosSha256": "bdc7471ab93e20d965c8639a7ca2f1b06d45035a83666d02b89529749c002ee3"
+    },
+    {
+      "path": "native-account-service.js",
+      "baselineSha256": "9d7df3de8257c82da4c38c4c52df421eb2f6a9ea0134a535548141b894061c31",
+      "iosSha256": "4f1eadb96a15db448b642314416831c80cfa32f27e8d5193799333fdffc14aaa"
+    },
+    {
+      "path": "native-product-entry.js",
+      "baselineSha256": "4d9e0298295b15800e03bb55bbda953c4ab4cd47fafec294cfed34c860fb6b56",
+      "iosSha256": "ee05ac8898328ebe0a482ab64cc12ebdb8b14ab4acb377d0247e43b8b77c6a93"
+    },
+    {
+      "path": "native-product.tscn",
+      "baselineSha256": "4fd9cff12804b9a199453e7f65a9a7bfdbf69be5c234b5e8f38efafd948817ef",
+      "iosSha256": "7f91515532b7e85978500c59a7eaddbec76f4a78e8a66aa61734a27a0cba6235"
+    },
+    {
+      "path": "original-account.js",
+      "baselineSha256": "b2414bd1260e7a9df30918a21af20b02f12e08db6f38b051742502611b8fcb86",
+      "iosSha256": "e40fdcba31961edc4b2d37dea612c91a51fa2194baf5dae24f053abb3ca6fd29"
+    }
+  ],
+  "mediaFiles": 6530,
+  "mediaBytes": 1585946821,
+  "mediaDownloadedLocally": false,
+  "macCompiled": false,
+  "signed": false,
+  "iphoneTested": false,
+  "cloudJobDispatched": false,
+  "paidServicesAuthorized": false,
+  "androidSourceChanged": false,
+  "windowsCheckBinding": false
+}
