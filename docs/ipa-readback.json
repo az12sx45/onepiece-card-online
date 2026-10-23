@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "zipIntegrity": true,
+  "pckEntriesVerified": 1946,
+  "gameJavaScriptFilesByteIdentical": 174,
+  "physicalApiMetadataFiles": 1304,
+  "nativeFrameworks": [
+    "Payload/PO.app/Frameworks/libpo_ios_bridge.ios.template_release.arm64.framework/Info.plist",
+    "Payload/PO.app/Frameworks/godotjs-ext.ios.template_release.arm64.framework/Info.plist"
+  ],
+  "bundleIdentifier": "tw.rihdi.po.native.ios",
+  "orientations": [
+    "UIInterfaceOrientationLandscapeLeft"
+  ],
+  "sha256": "2eef25acf44300836898faf876e6179c29eeddf57e6cd69cda390d280e9966b2",
+  "bytes": 97419982,
+  "signed": false,
+  "iphoneTested": false,
+  "installableAsIs": false
+}
