@@ -56,6 +56,7 @@
     if(!window)return NO;
     if(!_web){
         WKWebViewConfiguration *config=[WKWebViewConfiguration new];
+        config.applicationNameForUserAgent=@"ONEPIECE_TABLETOP_IOS/0.1.0 (Electron/44.1.1 compatibility)";
         [config setURLSchemeHandler:self forURLScheme:@"poapp"];
         [config.userContentController addScriptMessageHandler:self name:@"tabletop"];
         config.allowsInlineMediaPlayback=YES;config.mediaTypesRequiringUserActionForPlayback=WKAudiovisualMediaTypeNone;
