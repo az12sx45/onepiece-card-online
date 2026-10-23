@@ -55,3 +55,6 @@ public to obtain free minutes. Paid service requires the owner's approval.
 ## v039 launcher and raw-resource correction
 
 The first signed v038 phone run exposed missing raw font/UI files: FileAccess and Image.load cannot read only an imported fontdata/ctex replacement. raw_resources.py marks bundled byte-loaded art as Keep File; final IPA verification checks their original bytes. prepare_launcher.py stages the existing APK launcher renderer/art under bundle-resources/launcher-web. WKWebView is restricted to local launcher navigation and its main-frame IPC; Godot starts only on explicit Board launch, and return preserves the account. Card/Chess remain visibly unavailable in this Board iOS candidate. No account secrets are part of the bundle. Windows checks do not prove WKWebView/iPhone acceptance.
+
+## v040 launcher path regression
+The v039 phone launcher was blank. The resource root and file must both use canonical paths: Foundation can remove /private while standardizing an existing path. po_launcher_assets.h shares the resolver with check_launcher_webkit.m, which reproduces the old alias rejection and loads the real renderer using Apple WebKit. Native navigation failure, process termination and a bounded load timeout display a retry action. The Mac WebKit gate is separate from iPhone acceptance.

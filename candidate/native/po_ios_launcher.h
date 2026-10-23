@@ -1,11 +1,15 @@
 #import <WebKit/WebKit.h>
+#include "po_launcher_assets.h"
 
 // Only bundled launcher pages may send native commands. Network pages never
 // receive the bridge or the secure session reply.
-@interface POLauncher : NSObject <WKURLSchemeHandler,WKScriptMessageHandler,WKNavigationDelegate,WKUIDelegate>
+@interface POLauncher : NSObject <WKScriptMessageHandler,WKNavigationDelegate,WKUIDelegate>
 @property(nonatomic,strong) WKWebView *web;
 @property(nonatomic,strong) NSMutableArray *requests;
 @property(nonatomic,copy) NSString *root;
+@property(nonatomic,strong) POAssetSchemeHandler *assets;
+@property(nonatomic,strong) UIButton *status;
+@property(nonatomic) NSUInteger loadGeneration;
 - (BOOL)show:(BOOL)reload;
 - (void)hide;
 - (void)close;
@@ -18,22 +22,24 @@
     if((self=[super init])){_requests=[NSMutableArray array];_root=[NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:@"launcher-web"];}
     return self;
 }
-- (void)webView:(WKWebView *)web startURLSchemeTask:(id<WKURLSchemeTask>)task {
-    NSURL *url=task.request.URL;
-    NSString *relative=[url.path stringByRemovingPercentEncoding];
-    if(![relative hasPrefix:@"/"]){[task didFailWithError:[NSError errorWithDomain:@"POAssets" code:403 userInfo:nil]];return;}
-    NSString *file=[[_root stringByAppendingPathComponent:[relative substringFromIndex:1]] stringByStandardizingPath];
-    if(![url.host isEqualToString:@"app"]||![file hasPrefix:[_root stringByAppendingString:@"/"]]||
-       !([relative hasPrefix:@"/launcher/"]||[relative hasPrefix:@"/launcher-assets/"]||[relative hasPrefix:@"/mobile/"])){
-        [task didFailWithError:[NSError errorWithDomain:@"POAssets" code:403 userInfo:nil]];return;
-    }
-    NSData *data=[NSData dataWithContentsOfFile:file options:NSDataReadingMappedIfSafe error:nil];
-    if(!data){[task didFailWithError:[NSError errorWithDomain:@"POAssets" code:404 userInfo:nil]];return;}
-    NSDictionary *types=@{@"html":@"text/html",@"js":@"application/javascript",@"css":@"text/css",@"json":@"application/json",@"png":@"image/png",@"webp":@"image/webp",@"svg":@"image/svg+xml",@"jpg":@"image/jpeg",@"jpeg":@"image/jpeg",@"gif":@"image/gif",@"mp3":@"audio/mpeg",@"ogg":@"audio/ogg",@"wav":@"audio/wav",@"mp4":@"video/mp4",@"webm":@"video/webm",@"ttf":@"font/ttf",@"otf":@"font/otf"};
-    NSURLResponse *response=[[NSURLResponse alloc] initWithURL:url MIMEType:types[file.pathExtension.lowercaseString]?:@"application/octet-stream" expectedContentLength:data.length textEncodingName:@"utf-8"];
-    [task didReceiveResponse:response];[task didReceiveData:data];[task didFinish];
+- (void)setStatus:(NSString *)message enabled:(BOOL)enabled {
+    [_status setTitle:message forState:UIControlStateNormal];_status.enabled=enabled;_status.hidden=NO;
 }
-- (void)webView:(WKWebView *)web stopURLSchemeTask:(id<WKURLSchemeTask>)task {}
+- (void)retry { [self show:YES]; }
+- (void)navigationFailed:(NSError *)error {
+    NSLog(@"PO_LAUNCHER navigation failure domain=%@ code=%ld",error.domain,(long)error.code);
+    [self setStatus:[NSString stringWithFormat:@"啟動器載入失敗（%ld）\n點此重新載入",(long)error.code] enabled:YES];
+}
+- (void)webView:(WKWebView *)web didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error { [self navigationFailed:error]; }
+- (void)webView:(WKWebView *)web didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error { [self navigationFailed:error]; }
+- (void)webViewWebContentProcessDidTerminate:(WKWebView *)web { [self navigationFailed:[NSError errorWithDomain:@"POWebContent" code:1 userInfo:nil]]; }
+- (void)webView:(WKWebView *)web didFinishNavigation:(WKNavigation *)navigation {
+    NSLog(@"PO_LAUNCHER document loaded");
+    [web evaluateJavaScript:@"!!document.getElementById('authScreen') && !!window.onePieceDesktop" completionHandler:^(id value,NSError *error){
+        if(!error&&[value boolValue]){self.status.hidden=YES;NSLog(@"PO_LAUNCHER renderer ready");}
+        else [self navigationFailed:error?:[NSError errorWithDomain:@"PORenderer" code:2 userInfo:nil]];
+    }];
+}
 - (void)userContentController:(WKUserContentController *)controller didReceiveScriptMessage:(WKScriptMessage *)message {
     NSURL *url=message.frameInfo.request.URL;
     if(!message.frameInfo.isMainFrame||![url.scheme isEqualToString:@"poapp"]||![url.host isEqualToString:@"app"]||![url.path hasPrefix:@"/launcher/"]||![message.body isKindOfClass:NSString.class])return;
@@ -57,21 +63,36 @@
     if(!_web){
         WKWebViewConfiguration *config=[WKWebViewConfiguration new];
         config.applicationNameForUserAgent=@"ONEPIECE_TABLETOP_IOS/0.1.0 (Electron/44.1.1 compatibility)";
-        [config setURLSchemeHandler:self forURLScheme:@"poapp"];
+        _assets=[POAssetSchemeHandler new];_assets.root=_root;
+        [config setURLSchemeHandler:_assets forURLScheme:@"poapp"];
         [config.userContentController addScriptMessageHandler:self name:@"tabletop"];
         config.allowsInlineMediaPlayback=YES;config.mediaTypesRequiringUserActionForPlayback=WKAudiovisualMediaTypeNone;
         _web=[[WKWebView alloc] initWithFrame:window.bounds configuration:config];
         _web.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-        _web.navigationDelegate=self;_web.UIDelegate=self;_web.opaque=YES;_web.backgroundColor=[UIColor colorWithRed:0.02 green:0.06 blue:0.09 alpha:1];
+        _web.navigationDelegate=self;_web.UIDelegate=self;_web.opaque=NO;_web.backgroundColor=[UIColor colorWithRed:0.02 green:0.06 blue:0.09 alpha:1];
+        _web.scrollView.backgroundColor=_web.backgroundColor;
         _web.scrollView.contentInsetAdjustmentBehavior=UIScrollViewContentInsetAdjustmentNever;
+        _status=[UIButton buttonWithType:UIButtonTypeSystem];_status.frame=window.bounds;
+        _status.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        _status.backgroundColor=_web.backgroundColor;[_status setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+        _status.titleLabel.numberOfLines=0;_status.titleLabel.textAlignment=NSTextAlignmentCenter;
+        [_status addTarget:self action:@selector(retry) forControlEvents:UIControlEventTouchUpInside];
+        [_web addSubview:_status];
         reload=YES;
     }
     [window addSubview:_web];_web.hidden=NO;
-    if(reload)[_web loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"poapp://app/launcher/index.html"]]];
+    if(reload){
+        [self setStatus:@"正在開啟啟動器…" enabled:NO];NSUInteger generation=++_loadGeneration;
+        [_web loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"poapp://app/launcher/index.html"]]];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,20*NSEC_PER_SEC),dispatch_get_main_queue(),^{
+            if(self.loadGeneration==generation&&!self.status.hidden&&!self.status.enabled)
+                [self navigationFailed:[NSError errorWithDomain:@"POLoadTimeout" code:3 userInfo:nil]];
+        });
+    }
     return YES;
 }
 - (void)hide {[_web evaluateJavaScript:@"window.__poLauncherPause&&window.__poLauncherPause()" completionHandler:nil];_web.hidden=YES;}
-- (void)close {[_web.configuration.userContentController removeScriptMessageHandlerForName:@"tabletop"];[_web removeFromSuperview];_web=nil;[_requests removeAllObjects];}
+- (void)close {++_loadGeneration;[_web.configuration.userContentController removeScriptMessageHandlerForName:@"tabletop"];[_web removeFromSuperview];_web=nil;_status=nil;_assets=nil;[_requests removeAllObjects];}
 - (NSArray *)takeRequests {NSArray *result=[_requests copy];[_requests removeAllObjects];return result;}
 - (void)reply:(NSString *)identifier result:(NSDictionary *)result {
     if(![_web.URL.scheme isEqualToString:@"poapp"]||![_web.URL.host isEqualToString:@"app"])return;

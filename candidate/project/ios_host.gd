@@ -29,7 +29,7 @@ func _request(method: String,args: Dictionary) -> Dictionary:
 		if not value is Dictionary:return {"ok":false,"error":"secure storage unavailable"}
 		if method=="getNativeState":
 			value.preferences=preferences;value.cacheRoot="iPhone App 儲存空間";value.freeBytes=null
-			value.games={"board":{"status":"installed","hasInstalled":true,"removable":false,"installedVersion":"iOS 39","remoteVersion":"iOS 39"},"card":{"status":"unavailable","hasInstalled":false,"removable":false,"error":"此 iOS 測試包目前提供航海錄。"},"chess":{"status":"unavailable","hasInstalled":false,"removable":false,"error":"此 iOS 測試包目前提供航海錄。"}}
+			value.games={"board":{"status":"installed","hasInstalled":true,"removable":false,"installedVersion":"iOS 40","remoteVersion":"iOS 40"},"card":{"status":"unavailable","hasInstalled":false,"removable":false,"error":"此 iOS 測試包目前提供航海錄。"},"chess":{"status":"unavailable","hasInstalled":false,"removable":false,"error":"此 iOS 測試包目前提供航海錄。"}}
 		return value
 	if method=="savePreferences":return {"ok":true,"preferences":preferences}
 	if method=="launchGame":
@@ -38,7 +38,7 @@ func _request(method: String,args: Dictionary) -> Dictionary:
 		if not session is Dictionary or str(session.get("secret","")).is_empty():return {"ok":false,"error":"請先登入"}
 		_start_game.call_deferred();return {"ok":true}
 	if method=="chooseCacheLocation":return {"ok":true,"cacheRoot":"iPhone App 儲存空間","managedSandbox":true}
-	if "Update" in method:return {"ok":true,"state":{"status":"unavailable","currentVersion":"iOS 39","message":"iOS 測試版請透過 iloader 安裝新版；遊戲圖片會按需下載。","error":"iOS 測試版請透過 iloader 安裝新版。"}}
+	if "Update" in method:return {"ok":true,"state":{"status":"unavailable","currentVersion":"iOS 40","message":"iOS 測試版請透過 iloader 安裝新版；遊戲圖片會按需下載。","error":"iOS 測試版請透過 iloader 安裝新版。"}}
 	return {"ok":false,"error":"此操作目前不適用於 iOS 航海錄測試版。"}
 
 func _start_game() -> void:

@@ -67,6 +67,8 @@ def main():
     out.mkdir(parents=True); logs=out/'logs';logs.mkdir()
     project=out/'project';shutil.copytree(candidate/'project',project)
     native=out/'native';shutil.copytree(candidate/'native',native)
+    run(['clang','-fobjc-arc','-framework','Cocoa','-framework','WebKit','-I',native,candidate/'tools/check_launcher_webkit.m','-o',out/'launcher-webkit-check'],out,logs/'launcher-check-compile.log')
+    run([out/'launcher-webkit-check',candidate/'bundle-resources/launcher-web'],out,logs/'launcher-webkit-check.log')
     vendor=out/'vendor';vendor.mkdir()
     js_zip=vendor/'godotjs.zip';fetch(lock['godotjs'],js_zip)
     addon=project/'addons/godotjs-ext.daylily-zeleen'
@@ -157,6 +159,7 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
         'architectures':arch,'package':package.name,'sha256':sha(package),'bytes':package.stat().st_size,
         'baselineVersion':38,'cloudCostVerified':False,'warning':'Owner signing and physical iPhone acceptance required'}
     report['rawRuntimeResourcesByteIdentical']=raw_verified
+    report['macWebKitLauncherChecked']=True
     (out/'build-result.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 
