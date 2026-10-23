@@ -504,7 +504,7 @@
   "project/tot-stage-classes.json": "70d10b9a564f0610dccd1e7a2c2c06315e40e797b121168cc8d6a2543e303d86",
   "project/tot-stage-refs.json": "5a1477d0662cb0532ea5e545eb8b5ac21a2853346726bb5179d7da2d4d527aca",
   "project/water-seven-controls.json": "c91b03e5007d7523a85f5ecf4f9640c0a3530be2de8f1b843da6a1abe91894c1",
-  "tools/build_macos.py": "fc9e852d3af0fcc506fc7bc7d29e5edbd5c05421e14e4a4d7d718a555c4a5136",
+  "tools/build_macos.py": "fdcab511f6c1d94927d37fd168c2db935f2bf159ff71da6ded1be1e2e156ffe4",
   "tools/check_login.cjs": "a2bfcae55e4bd053e8fa5ddafb2ba0c8fff6bb135a9ba708b1fbd18cd5e9adc0",
   "tools/check_media.gd": "71c7afc4f0bfd843bb29883f592448ce6a49b52a4c8c3d4c11e3e573d5733c13",
   "tools/check_windows.gd": "b678e41cfb3e8c5337897e09e90955f1a83045c69f7c25238fc5e8166e3b22fd",

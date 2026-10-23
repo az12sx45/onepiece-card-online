@@ -24,7 +24,9 @@ def sha(path):
 def run(command, cwd, log, env=None):
     with log.open('w') as handle:
         result=subprocess.run([str(x) for x in command],cwd=cwd,env=env,stdout=handle,stderr=subprocess.STDOUT,timeout=1800)
-    if result.returncode: raise RuntimeError('Build failed; inspect '+str(log))
+    if result.returncode:
+        print(log.read_text(errors='replace')[-18000:],flush=True)
+        raise RuntimeError('Build failed; inspect '+str(log))
 
 
 def fetch(dependency, target):
@@ -78,7 +80,9 @@ def main():
             if not file.is_relative_to(cpp): raise ValueError('Unsafe godot-cpp archive path')
             file.parent.mkdir(parents=True,exist_ok=True);file.write_bytes(archive.extractfile(entry).read())
     env={**os.environ,'GODOT_CPP_DIR':str(cpp)}
-    run([sys.executable,'-m','SCons','platform=ios','arch=arm64','target=template_release','ios_simulator=no','debug_symbols=no','-j2'],native,logs/'native-bridge.log',env)
+    profile=native/'bridge-api-profile.json'
+    profile.write_text(json.dumps({'enabled_classes':['RefCounted']}))
+    run([sys.executable,'-m','SCons','platform=ios','arch=arm64','api_version=4.7','build_profile='+str(profile),'target=template_release','ios_simulator=no','debug_symbols=no','-j3'],native,logs/'native-bridge.log',env)
     libraries=list((native/'bin').glob('*.dylib'))
     if len(libraries)!=1: raise ValueError('Expected one iOS bridge dylib')
     bridge=project/'addons/po-ios/po-ios.xcframework'
