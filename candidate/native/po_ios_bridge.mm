@@ -133,13 +133,13 @@ public:
         }
         return json(failure);
     }
-    double display_scale() { __block double value=1;ui([&]{value=UIScreen.mainScreen.scale;});return value; }
+    double display_scale() { double value=1;ui([&]{value=UIScreen.mainScreen.scale;});return value; }
     bool video_play(const String &configuration) {
         id config=[NSJSONSerialization JSONObjectWithData:[ns(configuration) dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
         if(![config isKindOfClass:NSDictionary.class]||![config[@"file"] isKindOfClass:NSString.class])return false;
         NSString *path=[config[@"file"] stringByStandardizingPath];
         if(![path hasPrefix:[NSHomeDirectory() stringByAppendingString:@"/"]]||![[NSFileManager defaultManager] fileExistsAtPath:path])return false;
-        __block bool success=false;
+        bool success=false;
         ui([&]{
             UIWindow *window=nil;
             for(UIScene *scene in UIApplication.sharedApplication.connectedScenes){
@@ -186,7 +186,7 @@ public:
     void video_opacity(double value){ui([&]{surface.alpha=MAX(0,MIN(1,value));});}
     void video_volume(double value){ui([&]{surface.player.volume=MAX(0,MIN(1,value));});}
     String video_state(){
-        __block NSDictionary *state=@{@"readyState":@0};
+        NSDictionary *state=@{@"readyState":@0};
         ui([&]{
             if(!surface)return;
             AVPlayer *player=surface.player;AVPlayerItem *item=player.currentItem;
