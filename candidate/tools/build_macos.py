@@ -22,11 +22,13 @@ def sha(path):
 
 
 def run(command, cwd, log, env=None):
+    print('START '+log.name,flush=True)
     with log.open('w') as handle:
         result=subprocess.run([str(x) for x in command],cwd=cwd,env=env,stdout=handle,stderr=subprocess.STDOUT,timeout=1800)
     if result.returncode:
         print(log.read_text(errors='replace')[-18000:],flush=True)
         raise RuntimeError('Build failed; inspect '+str(log))
+    print('PASS '+log.name,flush=True)
 
 
 def fetch(dependency, target):
@@ -56,6 +58,8 @@ def main():
     version=subprocess.check_output([str(args.godot),'--version'],text=True).strip()
     if not version.startswith('4.7.2.stable'): raise ValueError('Exact verified Godot 4.7.2 required')
     subprocess.run(['xcrun','--sdk','iphoneos','--show-sdk-path'],check=True,stdout=subprocess.DEVNULL)
+    sdk_version=subprocess.check_output(['xcrun','--sdk','iphoneos','--show-sdk-version'],text=True).strip()
+    if int(sdk_version.split('.')[0])<26:raise ValueError('Godot 4.7.2 template requires iOS SDK 26 or newer')
     scons_version=subprocess.check_output([sys.executable,'-m','SCons','--version'],text=True)
     if '4.11.1' not in scons_version: raise ValueError('Install SCons 4.11.1 in this build environment')
     out.mkdir(parents=True); logs=out/'logs';logs.mkdir()
@@ -123,12 +127,19 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
     executable=app/info['CFBundleExecutable']
     arch=subprocess.check_output(['lipo','-archs',str(executable)],text=True).strip()
     if arch!='arm64': raise ValueError('Unexpected device architectures')
+    symbol_targets=[executable,*app.rglob('*.dylib')]
+    for framework in app.rglob('*.framework'):
+        metadata=framework/'Info.plist'
+        if metadata.is_file():
+            binary=framework/plistlib.loads(metadata.read_bytes())['CFBundleExecutable']
+            if binary.is_file():symbol_targets.append(binary)
     for needle in ['jsb_gdextension_init','po_ios_bridge_init']:
         found=False
-        for file in app.rglob('*'):
-            if file.is_file() and (file.suffix=='.dylib' or file==executable):
-                symbols=subprocess.run(['nm','-gU',str(file)],capture_output=True,text=True)
-                if needle in symbols.stdout: found=True
+        for file in symbol_targets:
+            symbols=subprocess.run(['nm','-gU',str(file)],capture_output=True,text=True)
+            if needle in symbols.stdout:
+                if subprocess.check_output(['lipo','-archs',str(file)],text=True).strip()!='arm64':raise ValueError('Extension architecture mismatch')
+                found=True
         if not found: raise ValueError('Missing native entry symbol: '+needle)
     package=out/'PO-iOS-UNSIGNED.ipa'
     with zipfile.ZipFile(package,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=3) as archive:

@@ -11,7 +11,7 @@ concurrency:
 jobs:
   device:
     if: github.repository == 'az12sx45/onepiece-card-online' && github.event.repository.private == false
-    runs-on: macos-15-intel
+    runs-on: macos-26
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
