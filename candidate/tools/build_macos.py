@@ -15,6 +15,8 @@ import sys
 import tarfile
 import urllib.request
 import zipfile
+from raw_resources import verify_runtime_files
+from verify_ipa import read_pck
 
 
 def sha(path):
@@ -121,7 +123,13 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
     apps=list((out/'derived/Build/Products/Release-iphoneos').glob('*.app'))
     if len(apps)!=1: raise ValueError('Unsigned device app missing')
     app=apps[0]
-    shutil.copytree(candidate/'bundle-resources/.godot',app/'.godot',dirs_exist_ok=True)
+    packs=list(app.rglob('*.pck'))
+    if len(packs)!=1:raise ValueError('Expected one exported game pack')
+    raw_verified=verify_runtime_files(read_pck(packs[0].read_bytes()),candidate/'project')
+    shutil.copytree(candidate/'bundle-resources',app,dirs_exist_ok=True)
+    launcher=json.loads((candidate/'launcher-manifest.json').read_text())
+    for record in launcher['files']:
+        if sha(app/'launcher-web'/record['path'])!=record['sha256']:raise ValueError('Launcher bundle mismatch: '+record['path'])
     info=plistlib.loads((app/'Info.plist').read_bytes())
     if info['CFBundleIdentifier']!='tw.rihdi.po.native.ios': raise ValueError('Unexpected bundle identifier')
     executable=app/info['CFBundleExecutable']
@@ -148,6 +156,7 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
     report={'macCompiled':True,'signed':False,'iphoneTested':False,'installableAsIs':False,
         'architectures':arch,'package':package.name,'sha256':sha(package),'bytes':package.stat().st_size,
         'baselineVersion':38,'cloudCostVerified':False,'warning':'Owner signing and physical iPhone acceptance required'}
+    report['rawRuntimeResourcesByteIdentical']=raw_verified
     (out/'build-result.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

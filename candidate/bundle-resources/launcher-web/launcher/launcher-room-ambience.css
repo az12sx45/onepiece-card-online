@@ -1,0 +1,158 @@
+/* Sea and weather are animated behind real transparent ship cutouts. */
+.room-stage {
+  --room-scene-time: brightness(1);
+  --room-scene-weather: brightness(1);
+}
+.room-stage .room-scene {
+  z-index: 1;
+  filter: var(--room-scene-time) var(--room-scene-weather);
+  transition: filter .8s ease;
+}
+.room-stage[data-room-daypart='dawn'] {
+  --room-scene-time: brightness(.95) sepia(.04) saturate(1.02);
+}
+.room-stage[data-room-daypart='dusk'] {
+  --room-scene-time: brightness(.87) sepia(.07) saturate(.96);
+}
+.room-stage[data-room-daypart='night'] {
+  --room-scene-time: brightness(.68) saturate(.83);
+}
+.room-stage[data-room-weather='cloudy'] {
+  --room-scene-weather: brightness(.96) saturate(.94);
+}
+.room-stage[data-room-weather='rain'] {
+  --room-scene-weather: brightness(.91) saturate(.9);
+}
+.room-stage[data-room-weather='snow'] {
+  --room-scene-weather: brightness(.99) saturate(.9);
+}
+.room-stage[data-room-weather='storm'] {
+  --room-scene-weather: brightness(.82) saturate(.78);
+}
+.room-stage .room-floor-plane { z-index: 3; }
+.room-stage .room-floor-grid { z-index: 4; }
+.room-ambience-sea,
+.room-ambience,
+.room-ambience-light,
+.room-ambience-canvas,
+.room-ambience-lamps,
+.room-ambience-lightning {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.room-ambience-sea { z-index: 0; overflow: hidden; }
+.room-ambience { z-index: 2; overflow: hidden; }
+.room-ambience-light { z-index: 0; transition: background .8s ease; }
+.room-stage[data-room-daypart='dawn'] .room-ambience-light {
+  background: radial-gradient(ellipse 39% 43% at 46% 18%, #ffe5a51c, transparent);
+}
+.room-stage[data-room-daypart='dusk'] .room-ambience-light {
+  background: radial-gradient(ellipse 46% 38% at 34% 25%, #ec9c5727, transparent);
+}
+.room-stage[data-room-daypart='night'] .room-ambience-light {
+  background: radial-gradient(ellipse 38% 34% at 50% 63%, #f5ba7526, transparent 100%);
+}
+.room-ambience-canvas { z-index: 1; width: 100%; height: 100%; }
+.room-ambience-lamps { z-index: 2; opacity: .08; transition: opacity .8s ease; }
+.room-stage[data-room-daypart='dawn'] .room-ambience-lamps,
+.room-stage[data-room-daypart='dusk'] .room-ambience-lamps { opacity: .48; }
+.room-stage[data-room-daypart='night'] .room-ambience-lamps { opacity: .9; }
+.room-stage[data-room-scene='crew-cabin'] .room-ambience-lamps,
+.room-stage[data-room-scene='sunny-deck'] .room-ambience-lamps,
+.room-stage[data-room-scene='sunny-kitchen'] .room-ambience-lamps,
+.room-stage[data-room-scene='sunny-library'] .room-ambience-lamps {
+  background: radial-gradient(ellipse 26% 28% at 28% 53%, #ffcf8061, transparent),
+    radial-gradient(ellipse 30% 30% at 72% 51%, #ffca7961, transparent);
+}
+.room-stage[data-room-scene='sunny-workshop'] .room-ambience-lamps {
+  background: radial-gradient(ellipse 15% 24% at 19% 32%, #ffcd8a99, transparent),
+    radial-gradient(ellipse 15% 24% at 82% 32%, #ffcd8a99, transparent),
+    radial-gradient(ellipse 42% 37% at 50% 72%, #ffca7740, transparent);
+}
+.room-stage[data-room-scene='sunny-aquarium'] .room-ambience-lamps {
+  background: radial-gradient(ellipse 15% 24% at 19% 18%, #ffcf8eaa, transparent),
+    radial-gradient(ellipse 15% 24% at 82% 18%, #ffcf8eaa, transparent),
+    radial-gradient(ellipse 51% 26% at 50% 20%, #4abace42, transparent);
+}
+.room-aquarium-scene-window {
+  position: absolute;
+  z-index: 3;
+  left: 25%; top: 3.7%; width: 50%; height: 25.6%;
+  overflow: hidden;
+  border-radius: 18% / 32%;
+  /* The real glass extends below the old fish overlay. Leave the cabin door
+     in front of the lower middle instead of letting fish cross its frame. */
+  clip-path: polygon(8% 0, 92% 0, 100% 12%, 100% 88%, 95% 100%, 59% 100%, 59% 86%, 41% 86%, 41% 100%, 5% 100%, 0 88%, 0 12%);
+  pointer-events: none;
+  display: none;
+}
+.room-stage[data-room-scene='sunny-aquarium'] .room-aquarium-scene-window { display: block; }
+.room-aquarium-scene-window::before {
+  position: absolute;
+  inset: -30%;
+  content: '';
+  background: repeating-linear-gradient(105deg, #d6ffff00 0 12px, #d6ffff2d 15px 18px, #d6ffff00 23px 39px);
+  opacity: .3;
+  transform: translateX(-12%) skewX(-7deg);
+  animation: room-tank-caustic 8s ease-in-out infinite alternate;
+}
+@keyframes room-tank-caustic {
+  to { transform: translateX(12%) skewX(8deg); opacity: .48; }
+}
+.room-ambience-lightning { z-index: 3; opacity: 0; }
+.room-stage[data-room-weather='storm'] .room-ambience-lightning {
+  animation: room-lightning-flash 17s linear infinite;
+}
+.room-ambience-lightning::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #e8f7ff73, #a2c7ef13 40%, transparent 62%);
+}
+.room-ambience-lightning::after {
+  content: '';
+  position: absolute;
+  left: 73%; top: 1%; width: 3.6%; height: 17%;
+  clip-path: polygon(49% 0, 17% 44%, 48% 42%, 20% 100%, 88% 36%, 57% 40%, 82% 0);
+  background: #eafbff;
+  filter: drop-shadow(0 0 7px #d3eaff);
+}
+.room-stage[data-room-scene='sunny-aquarium'] .room-ambience-lightning::after { left: 7%; width: 2.7%; }
+.room-stage[data-room-scene='sunny-deck'] .room-ambience-lightning::after { left: 74%; width: 2.7%; }
+.room-ambience-badge {
+  position: absolute;
+  z-index: 950;
+  top: 9px;
+  right: 10px;
+  max-width: 37%;
+  padding: 4px 9px;
+  border: 1px solid #dfebde7a;
+  border-radius: 999px;
+  background: #0d2b3fac;
+  color: #f8eed7;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  backdrop-filter: blur(5px);
+}
+@keyframes room-lightning-flash {
+  0%, 73.9%, 74.7%, 75.1%, 100% { opacity: 0; }
+  74%, 74.25% { opacity: .48; }
+  74.4%, 74.55% { opacity: .13; }
+  74.8%, 75% { opacity: .3; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .room-ambience-lightning { animation: none !important; }
+  .room-ambience-lightning { display: none; }
+  .room-aquarium-scene-window::before { animation: none; }
+  .room-stage .room-scene,
+  .room-ambience-light,
+  .room-ambience-lamps { transition: none; }
+}

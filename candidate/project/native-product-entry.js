@@ -14,14 +14,13 @@ class NativeProductEntry extends Node{
    const hex=root.call('random_hex',array.byteLength),bytes=new Uint8Array(array.buffer,array.byteOffset,array.byteLength);
    if(hex.length!==bytes.length*2)throw Error('Native random source unavailable');for(let i=0;i<bytes.length;i++)bytes[i]=parseInt(hex.slice(i*2,i*2+2),16);return array;
   };
-  const lifecycle=require('./native-product-lifecycle').create({account,view:{loading:()=>root.call('show_loading'),failure:kind=>root.call('show_failure',kind),returnToLauncher:()=>root.get_tree().call_deferred('reload_current_scene')},openFriends:()=>social.show(),createSession:({openFriends})=>require('./native-product-session').create({root,account,http,randomValues,openFriends})});
-  const unbindLogin=require('./ios_login').bind(root,account,()=>lifecycle.retry());
+  const lifecycle=require('./native-product-lifecycle').create({account,view:{loading:()=>root.call('show_loading'),failure:kind=>root.call('show_failure',kind),returnToLauncher:()=>root.get_parent().call_deferred('return_to_launcher')},openFriends:()=>social.show(),createSession:({openFriends})=>require('./native-product-session').create({root,account,http,randomValues,openFriends})});
   let closing=false;
   this.release=async()=>{if(closing)return;closing=true;social.dispose();await lifecycle.dispose();http.dispose();};
   const retry=Callable.create(root,()=>{lifecycle.retry().catch(()=>root.call('show_failure','unavailable'));});
-  const leave=Callable.create(root,()=>{account.clear().then(()=>this.release()).then(()=>root.get_tree().call_deferred('reload_current_scene')).catch(()=>root.call('show_failure','unavailable'));});
+  const leave=Callable.create(root,()=>{this.release().then(()=>root.get_parent().call_deferred('return_to_launcher')).catch(()=>root.call('show_failure','unavailable'));});
   root.connect('retry_requested',retry);root.connect('return_requested',leave);
-  this.unbind=()=>{unbindLogin();root.disconnect('retry_requested',retry);root.disconnect('return_requested',leave);};
+  this.unbind=()=>{root.disconnect('retry_requested',retry);root.disconnect('return_requested',leave);};
   await lifecycle.start();
  }
  _exit_tree(){this.unbind?.();this.release?.().catch(()=>{});}

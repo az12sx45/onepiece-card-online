@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import shutil
 from prepare import IOS, adapt, sha
+from raw_resources import keep_runtime_files
 
 
 def main():
@@ -37,6 +38,8 @@ def main():
         preserved+=1
     for source in (IOS/'overlay').iterdir():
         if source.is_file():shutil.copyfile(source,project/source.name)
+    keep_runtime_files(project)
+    shutil.copyfile(IOS/'export_presets.cfg',project/'export_presets.cfg')
     for folder in ['tools','native']:
         shutil.copytree(IOS/folder,target/folder,dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__'))
     for name in ['dependencies.json','README.md']:shutil.copyfile(IOS/name,target/name)

@@ -10,5 +10,6 @@ if env['platform'] != 'ios':
 env.Append(CXXFLAGS=['-fobjc-arc', '-fblocks'])
 env.Append(LINKFLAGS=['-framework', 'Foundation', '-framework', 'Security', '-framework', 'UIKit', '-framework', 'AVFoundation', '-framework', 'QuartzCore', '-framework', 'CoreMedia', '-framework', 'CoreGraphics'])
 env.Append(CPPPATH=['.'])
+env.Append(LINKFLAGS=['-framework', 'WebKit'])
 library=env.SharedLibrary('bin/po_ios_bridge'+env['suffix']+env['SHLIBSUFFIX'], ['po_ios_bridge.mm'])
 Default(library)

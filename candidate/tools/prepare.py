@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 import shutil
 import urllib.request
+from raw_resources import keep_runtime_files
 
 IOS = Path(__file__).resolve().parents[1]
 ROOT = IOS.parent
@@ -42,10 +43,7 @@ def adapt(name, text):
     if name == 'native-account-service.js':
         text = replace_once(text, 'load:()=>account.load(),', 'authenticate:credentials=>account.authenticate(credentials),load:()=>account.load(),')
     if name == 'native-product-entry.js':
-        text = text.replace('root.get_tree().quit()', "root.get_tree().call_deferred('reload_current_scene')")
-        text = replace_once(text, '  let closing=false;', "  const unbindLogin=require('./ios_login').bind(root,account,()=>lifecycle.retry());\n  let closing=false;")
-        text = replace_once(text, 'this.release().then(', 'account.clear().then(()=>this.release()).then(')
-        text = replace_once(text, 'this.unbind=()=>{', 'this.unbind=()=>{unbindLogin();')
+        text = text.replace('root.get_tree().quit()', "root.get_parent().call_deferred('return_to_launcher')")
     if name == 'native_screen_metrics.gd':
         text = replace_once(text, '\treturn maxf(.01,', '\tif OS.get_name()=="iOS" and Engine.has_singleton("PoNativeSession"):\n\t\tvar bridge: Object=Engine.get_singleton("PoNativeSession").get("bridge")\n\t\tif bridge!=null:density=maxf(1.0,float(bridge.call("display_scale")))\n\treturn maxf(.01,')
     return text
@@ -116,6 +114,7 @@ def main():
         preserved.append(record)
     for source in (IOS/'overlay').iterdir():
         if source.is_file(): shutil.copyfile(source,project/source.name)
+    keep_runtime_files(project)
     (project/'ios-media.json').write_text(json.dumps(media,separators=(',',':'),ensure_ascii=False),encoding='utf8')
     # The extension uses globalize_path. A physical copy goes inside the final
     # .app before signing; it must not depend on metadata buried only in a PCK.

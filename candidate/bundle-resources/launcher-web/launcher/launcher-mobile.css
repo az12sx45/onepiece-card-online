@@ -1,0 +1,399 @@
+
+/* Android presentation module: launcher-mobile */
+/* Android layout only. The desktop renderer owns data and every action. */
+html[data-platform="android"] {
+  --titlebar-height: 0px;
+  --mobile-bar-height: 52px;
+  --mobile-safe-top: env(safe-area-inset-top, 0px);
+  --mobile-safe-right: env(safe-area-inset-right, 0px);
+  --mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --mobile-safe-left: env(safe-area-inset-left, 0px);
+  font-size: 14px;
+  -webkit-text-size-adjust: 100%;
+}
+html[data-platform="android"] body { overscroll-behavior: none; }
+html[data-platform="android"] [hidden] { display: none !important; }
+html[data-platform="android"] .window-titlebar { display: none; }
+html[data-platform="android"] .screen { inset: 0; }
+html[data-platform="android"] :is(button, select, input:not([type="checkbox"], [type="radio"], [type="range"]), textarea) { touch-action: manipulation; }
+html[data-platform="android"] button:not(.room-object-shell, .room-character-shell, .room-aquarium-scene-window) {
+  min-height: 44px !important;
+  min-width: 44px !important;
+}
+html[data-platform="android"] :is(input:not([type="checkbox"], [type="radio"], [type="range"]), select) { min-height: 44px; font-size: 16px; }
+html[data-platform="android"] input[type="range"] { min-height: 44px; }
+html[data-platform="android"] textarea { font-size: 16px; }
+html[data-platform="android"] :is(button, input, select, textarea):focus-visible { outline: 2px solid #6ae5d0; outline-offset: 2px; }
+html[data-platform="android"] :is(.app-panel, .voyage-scroll, .download-list-scroll, .social-messages, .social-friends-list) { overscroll-behavior: contain; }
+
+/* The first row stays small; the full navigation opens as a finger-sized drawer. */
+html[data-platform="android"] .launcher-app {
+  grid-template-rows: var(--mobile-bar-height) minmax(0, 1fr);
+  gap: 0;
+  padding: var(--mobile-safe-top) calc(10px + var(--mobile-safe-right)) calc(8px + var(--mobile-safe-bottom)) calc(10px + var(--mobile-safe-left));
+  min-width: 0;
+  min-height: 0;
+}
+html[data-platform="android"] .topbar { grid-template-columns: 44px minmax(0, 1fr) auto; gap: 10px; min-height: 0; padding: 0; }
+html[data-platform="android"] .topbar .series-logo { display: none; }
+html[data-platform="android"] .mobile-menu-toggle { position: relative; z-index: 1501; grid-column: 1; grid-row: 1; border: 1px solid #e7bd694d; border-radius: 10px; background: #0e2e3bea; color: #ffe1a0; font: 24px/1 inherit; }
+html[data-platform="android"] .mobile-panel-title { grid-column: 2; grid-row: 1; margin: 0; overflow: hidden; font-size: 17px; font-weight: 700; color: #ffedbf; text-overflow: ellipsis; white-space: nowrap; }
+html[data-platform="android"] .topbar .account-area { grid-column: 3; grid-row: 1; gap: 8px; }
+html[data-platform="android"] .storage-button { display: flex; min-width: 44px; padding: 8px; }
+html[data-platform="android"] .storage-button span:last-child { display: none; }
+html[data-platform="android"] .account-chip { min-width: 0; min-height: 44px; padding: 3px 8px 3px 4px; grid-template-columns: 32px minmax(0, 1fr) 10px; gap: 6px; }
+html[data-platform="android"] .account-chip img { width: 32px; height: 32px; }
+html[data-platform="android"] .account-chip strong { max-width: 105px; font-size: 12px; }
+html[data-platform="android"] .account-chip small { display: none; }
+html[data-platform="android"] .account-menu { position: fixed; z-index: 1510; top: calc(var(--mobile-safe-top) + var(--mobile-bar-height)); right: calc(10px + var(--mobile-safe-right)); width: min(240px, calc(100vw - 24px)); max-height: calc(100dvh - var(--mobile-bar-height) - 12px); overflow: auto; }
+html[data-platform="android"] .mobile-nav-scrim { position: fixed; z-index: 1490; inset: 0; width: 100%; border: 0; padding: 0; background: #010b13b8; backdrop-filter: blur(3px); }
+html[data-platform="android"] .topnav {
+  position: fixed;
+  z-index: 1500;
+  inset: calc(var(--mobile-safe-top) + var(--mobile-bar-height) + 6px) auto calc(8px + var(--mobile-safe-bottom)) calc(10px + var(--mobile-safe-left));
+  width: min(340px, calc(100vw - 32px));
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: auto;
+  gap: 5px;
+  padding: 10px;
+  overflow-y: auto;
+  border: 1px solid #e7bd696b;
+  border-radius: 14px;
+  background: linear-gradient(155deg, #143747, #051923);
+  box-shadow: 0 15px 50px #000b;
+  visibility: hidden;
+  pointer-events: none;
+}
+html[data-platform="android"] body.mobile-nav-open .topnav { visibility: visible; pointer-events: auto; }
+html[data-platform="android"] .topnav .nav-button { flex: 0 0 auto; min-height: 46px; width: 100%; display: flex; align-items: center; gap: 8px; padding: 10px 16px; text-align: left; font-size: 15px; border: 1px solid transparent; border-radius: 9px; }
+html[data-platform="android"] .topnav .nav-button.is-active { border-color: #e7bd6952; background: #e7bd6915; }
+html[data-platform="android"] .topnav .nav-button::after { display: none; }
+html[data-platform="android"] .mobile-nav-heading { padding: 6px 8px; margin: 0; color: #a4c9c7; font-size: 12px; }
+html[data-platform="android"] .mobile-nav-shortcut { display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px 16px; border: 1px solid #63c7b63b; border-radius: 9px; background: #154c4b55; color: #d8f6e9; text-align: left; font: inherit; }
+
+/* Game selection remains visible, with the game controls in their own scroll area. */
+html[data-platform="android"] .library-panel { min-width: 0; min-height: 0; grid-template-columns: 146px minmax(0, 1fr); gap: 10px; padding-top: 8px; }
+html[data-platform="android"] .game-rail { padding: 8px 6px; min-width: 0; overflow-y: auto; border-radius: 12px; }
+html[data-platform="android"] .rail-title { margin: 4px 7px 8px; font-size: 10px; }
+html[data-platform="android"] .game-rail-item { grid-template-columns: 34px minmax(0, 1fr); gap: 7px; min-height: 68px; margin-bottom: 5px; padding: 8px 4px; border-radius: 9px; }
+html[data-platform="android"] .rail-box-art { width: 34px; }
+html[data-platform="android"] .game-rail-item strong { font-size: 12px; white-space: normal; line-height: 1.45; }
+html[data-platform="android"] .game-rail-item small { font-size: 10px; line-height: 1.4; white-space: normal; }
+html[data-platform="android"] .game-feature { border-radius: 12px; overflow-y: auto; overflow-x: hidden; }
+html[data-platform="android"] .feature-content { grid-template-columns: minmax(80px, 24%) minmax(0, 1fr); gap: 14px; height: auto; min-height: 100%; padding: 14px; align-items: center; }
+html[data-platform="android"] .feature-cover-wrap { width: min(190px, 100%); align-self: start; margin-top: 12px; }
+html[data-platform="android"] .feature-copy { min-width: 0; max-width: none; }
+html[data-platform="android"] .feature-kicker-row { flex-wrap: wrap; gap: 6px; }
+html[data-platform="android"] .feature-copy h2 { margin: 10px 0 5px; font-size: 26px; line-height: 1.25; }
+html[data-platform="android"] .feature-tagline { margin-bottom: 9px; font-size: 14px; line-height: 1.45; }
+html[data-platform="android"] .feature-tags { gap: 5px; margin-bottom: 9px; }
+html[data-platform="android"] .feature-description { font-size: 13px; line-height: 1.6; }
+html[data-platform="android"] .feature-actions { gap: 7px; margin-top: 12px; }
+html[data-platform="android"] .feature-actions button { padding: 10px 13px; font-size: 13px; }
+html[data-platform="android"] .primary-action { min-width: 125px; }
+html[data-platform="android"] .install-progress { margin-top: 10px; padding: 10px; }
+
+html[data-platform="android"] .downloads-panel { padding-top: 8px; gap: 8px; }
+html[data-platform="android"] .downloads-header { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; padding: 10px 12px; border-radius: 12px; }
+html[data-platform="android"] .downloads-header .panel-heading { grid-column: 1; }
+html[data-platform="android"] .downloads-header .panel-heading h2 { margin: 2px 0 3px; font-size: 20px; }
+html[data-platform="android"] .downloads-header .panel-heading .eyebrow { margin: 0; font-size: 9px; }
+html[data-platform="android"] .downloads-header .downloads-storage { grid-column: 1; padding: 0; border: 0; }
+html[data-platform="android"] .downloads-storage span { display: inline; margin-right: 7px; }
+html[data-platform="android"] .downloads-storage strong { display: inline; overflow-wrap: anywhere; white-space: normal; }
+html[data-platform="android"] #changeLocationButton { grid-column: 2; grid-row: 1 / 3; padding-inline: 12px; }
+html[data-platform="android"] .download-row { min-height: 114px; grid-template-columns: 48px minmax(0, 1fr) minmax(150px, 32%); gap: 10px; padding: 10px; border-radius: 12px; }
+html[data-platform="android"] .download-box-art { width: 43px; }
+html[data-platform="android"] .download-row h3 { font-size: 16px; }
+html[data-platform="android"] .download-versions { gap: 5px; margin-top: 7px; overflow-wrap: anywhere; }
+html[data-platform="android"] .download-row-controls { gap: 6px; }
+html[data-platform="android"] .download-actions { gap: 5px; }
+html[data-platform="android"] .download-actions button { padding: 8px 11px; }
+
+/* Low-height chat keeps the message list and composer reachable. */
+html[data-platform="android"] .social-panel { min-height: 0; margin-top: 8px; grid-template-columns: minmax(190px, 29%) minmax(0, 1fr); border-radius: 12px; }
+html[data-platform="android"] .social-sidebar { padding: 10px 8px 6px; min-height: 0; }
+html[data-platform="android"] .social-sidebar h2 { font-size: 20px; }
+html[data-platform="android"] .social-connection { margin: 5px 0 8px; }
+html[data-platform="android"] .social-tabs { margin-top: 5px; gap: 12px; }
+html[data-platform="android"] .social-tabs button { padding-block: 8px; }
+html[data-platform="android"] .social-person { padding: 9px 8px; }
+html[data-platform="android"] .social-conversation { display: flex; min-height: 0; }
+html[data-platform="android"] .social-chat-header { flex-wrap: wrap; padding: 6px 9px; gap: 6px; }
+html[data-platform="android"] .social-chat-header img { width: 32px; height: 32px; }
+html[data-platform="android"] .social-chat-header h2 { font-size: 16px; }
+html[data-platform="android"] .social-chat-header :is(.social-visit, .social-remove) { font-size: 11px; padding: 7px; }
+html[data-platform="android"] .social-back { display: block; flex: none; border: 0; background: transparent; color: #a5dbd4; font-size: 27px; }
+html[data-platform="android"] .social-messages { min-height: 48px; padding: 8px 12px; }
+html[data-platform="android"] .social-composer { flex: none; margin: 0 8px 7px; padding: 6px; gap: 5px; }
+html[data-platform="android"] .social-composer textarea { min-height: 44px; max-height: 80px; padding: 6px; }
+html[data-platform="android"] .social-composer > div { gap: 5px; }
+html[data-platform="android"] .social-welcome { padding: 12px; overflow: auto; }
+html[data-platform="android"] .social-welcome-mark { width: 44px; height: 44px; font-size: 28px; margin-bottom: 8px; }
+html[data-platform="android"] .social-welcome h2 { font-size: 20px; margin: 8px 0; }
+html[data-platform="android"] .social-welcome p:not(.eyebrow) { margin: 8px 0; line-height: 1.6; }
+html[data-platform="android"] .social-welcome .ghost-button { margin-top: 4px; }
+
+/* Profile, room, shop and logbook share one scroll area without losing sections. */
+html[data-platform="android"] .voyage-panel { margin-top: 8px; border-radius: 12px; }
+html[data-platform="android"] .voyage-scroll { padding: 12px 14px 24px; scroll-padding-top: 10px; }
+html[data-platform="android"] .voyage-heading { gap: 12px; margin-bottom: 8px; }
+html[data-platform="android"] .voyage-heading h2 { font-size: 24px; margin: 4px 0; }
+html[data-platform="android"] .voyage-heading .eyebrow { margin: 0; }
+html[data-platform="android"] .voyage-heading-actions { gap: 5px; flex: none; }
+html[data-platform="android"] .voyage-heading-actions button { padding: 8px 10px; }
+html[data-platform="android"] .voyage-section-heading { gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+html[data-platform="android"] .captain-hero { min-height: 126px; }
+html[data-platform="android"] .captain-hero-body { min-height: 126px; gap: 14px; padding: 12px 16px; }
+html[data-platform="android"] .captain-hero-avatar { width: 80px; height: 80px; }
+html[data-platform="android"] .captain-hero-copy h3 { font-size: 23px; }
+html[data-platform="android"] .captain-hero-flag { max-width: 68px; max-height: 78px; }
+html[data-platform="android"] #profileHero { aspect-ratio: 25 / 7; min-height: 140px; }
+html[data-platform="android"] #profileHero .captain-hero-avatar { width: 80px; height: 80px; }
+html[data-platform="android"] #profileHero .captain-hero-copy h3 { font-size: 23px; }
+html[data-platform="android"] #profileHero .captain-hero-copy :is(p, small) { font-size: 12px; }
+html[data-platform="android"] .captain-hero-meta { flex-wrap: wrap; gap: 7px; }
+html[data-platform="android"] .voyage-game-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+html[data-platform="android"] :is(.voyage-collection-grid, .shop-grid) { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 10px; }
+html[data-platform="android"] .voyage-collection-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+html[data-platform="android"] .voyage-collection-tabs button { min-height: 44px; padding: 8px 12px; }
+html[data-platform="android"] .shop-feature { gap: 12px; padding: 14px; }
+html[data-platform="android"] .shop-feature h3 { font-size: 22px; }
+html[data-platform="android"] .shop-feature img { width: 95px; max-height: 115px; }
+html[data-platform="android"] .shop-wallet { padding: 10px 12px; flex: none; }
+html[data-platform="android"] .shop-item-actions { flex-wrap: wrap; gap: 6px; }
+html[data-platform="android"] .captain-guestbook-toolbar { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+html[data-platform="android"] .captain-guestbook-toolbar > div { display: flex; flex-wrap: wrap; gap: 5px; }
+html[data-platform="android"] .captain-cabin-music { flex-wrap: wrap; padding: 10px; gap: 8px; }
+html[data-platform="android"] .captain-music-controls { flex-wrap: wrap; justify-content: flex-start; max-width: 100%; gap: 6px; }
+html[data-platform="android"] .captain-music-volume { min-height: 44px; }
+html[data-platform="android"] .voyage-room { margin-top: 18px; scroll-margin-top: 10px; }
+html[data-platform="android"] .room-heading { gap: 10px; }
+html[data-platform="android"] .room-heading > div { min-width: 0; }
+html[data-platform="android"] .room-life-toolbar { flex-wrap: wrap; gap: 8px; padding: 8px 10px; }
+html[data-platform="android"] .room-stage { min-width: 0; border-radius: 12px; }
+html[data-platform="android"] .room-stage-scroll { overflow-x: hidden; }
+html[data-platform="android"] .room-scene-nav { min-width: 44px; width: 44px; height: 58px; font-size: 38px; }
+html[data-platform="android"] .room-canvas-controls button { width: 44px; height: 44px; font-size: 24px; }
+html[data-platform="android"] .room-editor { padding: 10px; }
+html[data-platform="android"] .room-editor-items { grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); max-height: 220px; overflow-y: auto; }
+html[data-platform="android"] :is(.room-editor-tabs, .room-editor-actions, .room-selection) { flex-wrap: wrap; gap: 8px; }
+html[data-platform="android"] .room-editor-actions > div { display: flex; gap: 8px; }
+
+/* The real companion buttons become a labeled sheet, preserving their listeners. */
+html[data-platform="android"] #roomCompanionPanel { inset: auto calc(10px + var(--mobile-safe-right)) calc(10px + var(--mobile-safe-bottom)) auto !important; width: min(570px, calc(100vw - 24px)) !important; height: auto !important; max-height: calc(100dvh - 70px); padding: 12px; overflow: auto; border: 1px solid #e7bd6973; border-radius: 14px; background: #082833f5; box-shadow: 0 12px 45px #000a; pointer-events: auto; z-index: 1520; }
+html[data-platform="android"] #roomCompanionPanel .room-companion-wheel { position: relative; width: auto; height: auto; transform: none !important; touch-action: auto; display: flex; flex-direction: column; gap: 10px; padding-top: 42px; }
+html[data-platform="android"] #roomCompanionPanel :is(.room-wheel-track, .room-wheel-hint) { display: none; }
+html[data-platform="android"] #roomCompanionPanel .room-companion-close { inset: 0 0 auto auto; width: 44px; height: 44px; }
+html[data-platform="android"] #roomCompanionPanel .room-companion-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(94px, 1fr)); gap: 8px; }
+html[data-platform="android"] #roomCompanionPanel :is(.room-companion-actions, .room-life-actions) > button { position: relative; inset: auto !important; transform: none !important; width: auto; min-height: 48px; height: auto; border-radius: 9px; padding: 9px; font-size: 13px; opacity: 1 !important; pointer-events: auto !important; }
+html[data-platform="android"] #roomCompanionPanel :is(.room-companion-actions, .room-life-actions) > button::before { display: none; }
+html[data-platform="android"] #roomCompanionPanel .room-wheel-caption { position: static; width: auto; padding: 0; text-align: left; }
+html[data-platform="android"] #roomCompanionPanel .room-companion-sheet { position: relative; inset: auto; width: auto; max-width: 100%; min-height: 0; padding: 8px; }
+html[data-platform="android"] #roomCompanionPanel .room-companion-portrait { max-height: 110px; width: 90px; object-fit: contain; }
+
+/* All dialogs fit the viewport; confirmation and save buttons remain scrollable. */
+html[data-platform="android"] dialog { width: min(800px, calc(100vw - 24px - var(--mobile-safe-left) - var(--mobile-safe-right))); max-width: calc(100vw - 24px); max-height: calc(100dvh - 20px - var(--mobile-safe-top) - var(--mobile-safe-bottom)); overflow: auto; margin: auto; padding: 18px; border-radius: 14px; scroll-padding-block: 12px; }
+html[data-platform="android"] dialog .dialog-close { width: 44px; height: 44px; top: 7px; right: 7px; }
+html[data-platform="android"] dialog :is(h1, h2) { margin: 8px 44px 10px 0; font-size: 23px; }
+html[data-platform="android"] :is(.social-dialog-actions, .settings-actions, .shop-item-preview-actions) { display: flex; flex-wrap: wrap; gap: 8px; }
+html[data-platform="android"] :is(.social-dialog-actions, .settings-actions) > button { flex: 1 1 auto; padding-inline: 12px; }
+html[data-platform="android"] .settings-dialog { padding: 18px; }
+html[data-platform="android"] .settings-group { margin-top: 14px; }
+html[data-platform="android"] .display-mode-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+html[data-platform="android"] .display-mode-option { min-height: 72px; padding: 10px; gap: 9px; }
+html[data-platform="android"] .settings-option { padding: 12px; }
+html[data-platform="android"] .settings-option:has(#minimizeToTrayToggle:disabled) { grid-template-columns: minmax(0, 1fr); cursor: default; }
+html[data-platform="android"] .settings-option:has(#minimizeToTrayToggle:disabled) .settings-toggle { display: none; }
+html[data-platform="android"] .launcher-update-card { grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 12px; }
+html[data-platform="android"] .launcher-update-action { grid-column: 2; grid-row: 1 / 3; width: auto; }
+html[data-platform="android"] #shopItemPreviewDialog { padding: 12px; width: min(800px, calc(100vw - 24px)); max-height: calc(100dvh - 20px); }
+html[data-platform="android"] .shop-large-preview-stage { height: clamp(130px, 48dvh, 340px); }
+html[data-platform="android"] :is(.captain-avatar-dialog, .captain-card-dialog, .captain-compose-dialog) { padding: 0; height: calc(100dvh - 20px); overflow: hidden; }
+html[data-platform="android"] .captain-avatar-dialog[open] { display: flex; flex-direction: column; }
+html[data-platform="android"] :is(.captain-avatar-heading, .captain-card-heading, .captain-compose-heading) { padding: 10px 14px; }
+html[data-platform="android"] :is(.captain-avatar-heading, .captain-card-heading, .captain-compose-heading) h2 { margin: 2px 0; font-size: 21px; }
+html[data-platform="android"] .captain-avatar-body { grid-template-columns: minmax(0, 1fr) 180px; grid-template-rows: minmax(0, 1fr); min-height: 0; }
+html[data-platform="android"] .captain-avatar-preview { grid-row: 1; grid-column: 2; flex-direction: column; align-items: stretch; gap: 8px; padding: 10px; overflow: auto; }
+html[data-platform="android"] .captain-avatar-candidate { display: block; padding: 4px; margin: 0; text-align: center; }
+html[data-platform="android"] .captain-avatar-candidate img { width: 84px; max-width: 100%; }
+html[data-platform="android"] .captain-avatar-candidate > span { margin-bottom: 5px; }
+html[data-platform="android"] .captain-avatar-candidate h3 { margin-top: 5px; font-size: 13px; }
+html[data-platform="android"] .captain-avatar-toolbar { flex-wrap: wrap; gap: 7px; padding: 8px 10px; }
+html[data-platform="android"] .captain-avatar-grid { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 7px; padding: 5px 10px 12px; }
+html[data-platform="android"] .captain-avatar-footer { padding: 7px 12px; gap: 6px; flex-wrap: wrap; flex: none; }
+html[data-platform="android"] :is(.captain-card-editor, .captain-guestbook-form) { height: 100%; min-height: 0; display: flex; flex-direction: column; }
+html[data-platform="android"] :is(.captain-card-workspace, .captain-compose-workspace) { display: grid; flex: 1; min-height: 0; overflow: auto; grid-template-columns: minmax(0, 1fr) minmax(150px, 35%); padding: 12px; gap: 12px; }
+html[data-platform="android"] :is(.captain-card-preview-panel, .captain-card-fields) { min-height: 0; padding: 10px; overflow: auto; }
+html[data-platform="android"] .captain-card-preview { aspect-ratio: 25 / 7; }
+html[data-platform="android"] :is(.captain-card-footer, .captain-compose-footer) { flex: none; padding: 8px 12px; gap: 8px; flex-wrap: wrap; }
+html[data-platform="android"] .captain-compose-writing { padding: 0; }
+html[data-platform="android"] .captain-note-preview { min-height: 150px; }
+
+/* Custom life dialogs use their existing close/confirmation handlers. */
+html[data-platform="android"] :is(.room-minigame-overlay, .room-aquarium-manager-overlay, .fishing-journal-overlay) { padding: 8px; }
+html[data-platform="android"] :is(.room-minigame-card, .room-aquarium-manager-card) { width: min(960px, 100%); height: auto !important; max-height: calc(100dvh - 16px - var(--mobile-safe-top) - var(--mobile-safe-bottom)) !important; border-radius: 14px; }
+html[data-platform="android"] .room-minigame-head { padding: 8px 12px 5px; gap: 8px; }
+html[data-platform="android"] .room-minigame-head h2 { font-size: 21px; margin: 3px 0; }
+html[data-platform="android"] .room-minigame-progress { padding: 0 12px 5px; }
+html[data-platform="android"] .room-minigame-body { min-height: 0; padding: 0 12px 12px; }
+html[data-platform="android"] .room-minigame-stage { min-height: 230px; padding: 10px; }
+html[data-platform="android"] .room-minigame-jobs { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+html[data-platform="android"] .room-minigame-job { min-height: 80px; padding: 8px; }
+html[data-platform="android"] .room-minigame-crew { padding: 8px 12px; gap: 10px; }
+html[data-platform="android"] .room-minigame-crew img { width: 44px; height: 44px; }
+html[data-platform="android"] .room-minigame-crew p { font-size: 13px; }
+html[data-platform="android"] :is(.room-fishing-v2-sea, .room-fishing-v4-sea) { height: clamp(190px, 64dvh, 360px); min-height: 190px; }
+html[data-platform="android"] .room-fishing-v2-panel { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; }
+html[data-platform="android"] .room-fishing-v2-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+html[data-platform="android"] .room-aquarium-manager-header { padding: 10px 14px; gap: 10px; }
+html[data-platform="android"] .room-aquarium-manager-header h2 { font-size: 21px; }
+html[data-platform="android"] .room-aquarium-manager-stats { padding: 0 14px 7px; }
+html[data-platform="android"] .room-aquarium-manager-status { margin: 0 14px 7px; }
+html[data-platform="android"] .room-aquarium-manager-body { grid-template-columns: minmax(155px, 31%) minmax(0, 1fr); min-height: 100px; overflow: auto; }
+html[data-platform="android"] .room-aquarium-manager-detail { padding: 10px 12px; }
+html[data-platform="android"] .room-aquarium-manager-hero { height: 90px; }
+html[data-platform="android"] .fishing-journal { width: min(1000px, 100%); height: calc(100dvh - 16px); padding: 10px 4% 16px; }
+html[data-platform="android"] .fishing-journal-header { min-height: 44px; }
+html[data-platform="android"] .fishing-journal-header h2 { margin: 0 0 0 24px; font-size: 23px; }
+html[data-platform="android"] .fishing-journal-tabs { margin: 4px 0; gap: 10px; }
+html[data-platform="android"] .fishing-journal-tabs button { min-height: 44px; width: 140px; font-size: 15px; }
+html[data-platform="android"] .fishing-journal-content { overflow-y: auto !important; overflow-x: hidden !important; padding: 4px 8px 12px; }
+html[data-platform="android"] .fishing-rod-overview { gap: 14px; min-height: 145px; }
+html[data-platform="android"] .fishing-journal-rod { width: 150px; height: 150px; }
+html[data-platform="android"] .fishing-rod-stats h3 { font-size: 21px; }
+html[data-platform="android"] .fishing-rod-stats p { font-size: 14px; }
+html[data-platform="android"] .fishing-dex-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+html[data-platform="android"] .fishing-dex-card { width: 100%; height: 170px; min-height: 170px; }
+html[data-platform="android"] .fishing-dex-records { padding: 14px 24px; margin: 8px 0; }
+html[data-platform="android"] .fishing-dex-records p { font-size: 14px; }
+html[data-platform="android"] .fishing-forge { min-height: 160px; padding: 15px 10px 15px 110px; gap: 10px; margin-top: 10px; }
+html[data-platform="android"] .fishing-forge-franky { width: 100px; height: 135px; }
+html[data-platform="android"] .fishing-rod-preview { inset: 8px; max-height: calc(100dvh - 16px); overflow: auto; }
+html[data-platform="android"] .fishing-rod-preview-header { position: sticky; top: 0; z-index: 1; background: #092733; }
+html[data-platform="android"] .fishing-rod-preview-image { max-height: calc(100dvh - 90px); width: 100%; object-fit: contain; }
+
+html[data-platform="android"] .announcements-panel { padding-top: 8px; gap: 8px; }
+html[data-platform="android"] .announcement-header { gap: 10px; }
+html[data-platform="android"] .announcement-heading { gap: 8px; }
+html[data-platform="android"] .announcement-heading h2 { font-size: 21px; margin: 2px 0; }
+html[data-platform="android"] .announcement-emblem { width: 38px; height: 38px; padding: 8px; }
+html[data-platform="android"] .announcement-header-actions { max-width: none; gap: 6px; }
+html[data-platform="android"] .announcement-header-actions button { min-height: 44px; padding: 7px 10px; }
+html[data-platform="android"] .announcement-toolbar { gap: 6px; }
+html[data-platform="android"] .announcement-scopes { gap: 5px; overflow-x: auto; }
+html[data-platform="android"] .announcement-scopes button { min-height: 44px; flex: none; padding: 8px 12px; }
+html[data-platform="android"] .announcement-filter-row { flex-wrap: wrap; gap: 6px 12px; }
+html[data-platform="android"] .announcement-status { max-width: none; }
+html[data-platform="android"] .announcement-columns { min-height: 0; grid-template-columns: minmax(210px, 34%) minmax(0, 1fr); }
+html[data-platform="android"] .announcement-detail { padding: 12px 16px; }
+html[data-platform="android"] .announcement-article h3 { margin: 12px 0 8px; font-size: 22px; }
+html[data-platform="android"] .announcement-back { min-height: 44px; }
+
+/* The life shortcut opens the actual room as a landscape workspace. Its original
+   tools stay in a scrollable side column; the room scene stays fully in view. */
+html[data-platform="android"] #profilePanel.mobile-room-focus { position: relative; }
+html[data-platform="android"] #profilePanel.mobile-room-focus #profileRoom { position: absolute; z-index: 3; inset: 0; margin: 0; padding: 8px 10px 20px calc(100% - 170px); overflow-y: auto; background: #08232e; }
+html[data-platform="android"] #profilePanel.mobile-room-focus .room-stage-shell { position: fixed; left: calc(11px + var(--mobile-safe-left)); top: calc(61px + var(--mobile-safe-top)); bottom: calc(9px + var(--mobile-safe-bottom)); width: calc(100vw - 202px - var(--mobile-safe-left) - var(--mobile-safe-right)); display: grid; align-items: center; }
+html[data-platform="android"] #profilePanel.mobile-room-focus .room-stage-scroll { display: grid; place-items: center; }
+html[data-platform="android"] #profilePanel.mobile-room-focus .room-stage { width: min(100%, calc((100dvh - 76px) * 16 / 9)); }
+html[data-platform="android"] #profilePanel.mobile-room-focus .room-heading { margin-top: 8px; flex-direction: column; align-items: stretch; gap: 8px; }
+html[data-platform="android"] #profilePanel.mobile-room-focus .room-heading h3 { font-size: 17px; }
+html[data-platform="android"] #profilePanel.mobile-room-focus .room-heading p { font-size: 11px; line-height: 1.5; }
+html[data-platform="android"] #profilePanel.mobile-room-focus .room-life-toolbar { margin-top: 8px; padding: 8px; }
+html[data-platform="android"] #profilePanel.mobile-room-focus .room-life-toolbar > div { min-width: 0; font-size: 11px; line-height: 1.6; }
+html[data-platform="android"] #profilePanel.mobile-room-focus .room-life-controls { width: 100%; }
+html[data-platform="android"] #profilePanel.mobile-room-focus .room-life-controls button { width: 100%; padding-inline: 7px; font-size: 12px; }
+html[data-platform="android"] #profilePanel.mobile-room-focus :is(.room-editor-top, .room-selection, .room-editor-actions) { flex-direction: column; }
+html[data-platform="android"] #profilePanel.mobile-room-focus .room-editor-items { grid-template-columns: minmax(0, 1fr); }
+html[data-platform="android"] #profilePanel.mobile-room-focus .room-editor-actions > div { flex-direction: column; width: 100%; }
+html[data-platform="android"] #profilePanel.mobile-room-focus .captain-music-controls { flex-direction: column; align-items: stretch; }
+html[data-platform="android"] #profilePanel.mobile-room-focus .captain-music-volume { width: 100%; }
+html[data-platform="android"] #profilePanel.mobile-room-focus .room-scene-current { max-width: calc(100% - 110px); }
+
+@media (max-width: 760px) {
+  html[data-platform="android"] .social-panel { grid-template-columns: minmax(0, 1fr); }
+  html[data-platform="android"] .social-conversation { display: none; }
+  html[data-platform="android"] .social-panel.has-peer .social-sidebar { display: none; }
+  html[data-platform="android"] .social-panel.has-peer .social-conversation { display: flex; }
+  html[data-platform="android"] .announcements-panel .announcement-columns { display: flex; }
+  html[data-platform="android"] .announcement-index { width: 100%; }
+  html[data-platform="android"] .announcement-detail { display: none; width: 100%; }
+  html[data-platform="android"] .announcements-panel.has-detail .announcement-index { display: none; }
+  html[data-platform="android"] .announcements-panel.has-detail .announcement-detail { display: block; }
+  html[data-platform="android"] .announcement-back { display: inline-flex; align-items: center; margin: 0 0 8px; }
+  html[data-platform="android"] .announcement-header-actions > span { flex-basis: 100%; }
+  html[data-platform="android"] .announcement-header-actions { max-width: 210px; }
+}
+@media (orientation: landscape) {
+  html[data-platform="android"] .auth-screen { padding: 10px; overflow-y: auto; }
+  html[data-platform="android"] .auth-card { width: min(720px, 100%); max-height: calc(100dvh - 20px); padding: 16px; overflow: auto; display: grid; grid-template-columns: minmax(145px, .75fr) minmax(230px, 1fr); gap: 8px 20px; align-items: center; }
+  html[data-platform="android"] .auth-logo { grid-column: 1; width: 200px; max-width: 100%; margin: 0; }
+  html[data-platform="android"] .auth-card > .eyebrow { grid-column: 1; margin: 0; }
+  html[data-platform="android"] .auth-card h1 { grid-column: 1; margin: 0; font-size: 24px; }
+  html[data-platform="android"] .auth-copy { grid-column: 1; margin: 0; line-height: 1.6; font-size: 13px; }
+  html[data-platform="android"] .auth-tabs { grid-column: 2; grid-row: 1; margin: 0; }
+  html[data-platform="android"] #authForm { grid-column: 2; grid-row: 2 / 6; align-self: start; }
+  html[data-platform="android"] .auth-card .field { margin-bottom: 8px; }
+  html[data-platform="android"] .form-message { margin: 4px 0; min-height: 16px; }
+  html[data-platform="android"] .preview-skip { grid-column: 1 / -1; margin: 0; }
+  html[data-platform="android"] .feature-content { grid-template-columns: minmax(80px, 22%) minmax(0, 1fr); }
+  html[data-platform="android"] .feature-copy h2 { font-size: 24px; }
+  html[data-platform="android"] .announcement-heading p:last-child { font-size: 11px; line-height: 1.45; }
+  html[data-platform="android"] .announcement-filter-row label { font-size: 11px; }
+  html[data-platform="android"] .announcement-filter-row select { min-height: 44px; padding: 4px 7px; }
+}
+@media (max-width: 680px) {
+  html[data-platform="android"] .library-panel { grid-template-columns: 120px minmax(0, 1fr); gap: 8px; }
+  html[data-platform="android"] .game-rail-item { grid-template-columns: 28px minmax(0, 1fr); gap: 5px; }
+  html[data-platform="android"] .rail-box-art { width: 28px; }
+  html[data-platform="android"] .feature-content { gap: 9px; padding: 10px; }
+  html[data-platform="android"] .download-row { grid-template-columns: 40px minmax(0, 1fr); }
+  html[data-platform="android"] .download-row-controls { grid-column: 2; justify-items: start; }
+  html[data-platform="android"] .download-actions { justify-content: flex-start; }
+  html[data-platform="android"] .captain-avatar-body { grid-template-columns: minmax(0, 1fr) 145px; }
+  html[data-platform="android"] .captain-avatar-current { gap: 5px; }
+  html[data-platform="android"] .captain-avatar-current img { width: 32px; height: 32px; }
+  html[data-platform="android"] .captain-hero-copy h3 { font-size: 20px; }
+  html[data-platform="android"] .shop-feature p { font-size: 12px; }
+  html[data-platform="android"] .room-minigame-jobs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (orientation: portrait) {
+  html[data-platform="android"] #profilePanel.mobile-room-focus #profileRoom { padding: 12px; }
+  html[data-platform="android"] #profilePanel.mobile-room-focus .room-stage-shell { position: relative; inset: auto; width: 100%; }
+  html[data-platform="android"] .library-panel { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+  html[data-platform="android"] .game-rail { padding: 5px; }
+  html[data-platform="android"] #gameRail { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+  html[data-platform="android"] .rail-title { margin: 3px 7px; }
+  html[data-platform="android"] .game-rail-item { margin: 0; }
+  html[data-platform="android"] .feature-content { grid-template-columns: minmax(0, 1fr); }
+  html[data-platform="android"] .feature-cover-wrap { width: 130px; justify-self: center; }
+  html[data-platform="android"] .voyage-game-stats { grid-template-columns: minmax(0, 1fr); }
+}
+
+
+/* Android presentation module: launcher-phone-panels */
+/* Landscape launcher follow-up: confirmations and companion controls share a
+   narrow scroll drawer. The desktop renderer still owns data and all actions. */
+html[data-platform="android"] button:not(.room-object-shell,.room-character-shell,.room-aquarium-scene-window,.mobile-nav-scrim) { min-width:48px!important; min-height:48px!important; }
+html[data-platform="android"] :is(select,input:not([type="range"],[type="checkbox"],[type="radio"])) { min-height:48px!important; font-size:16px!important; }
+html[data-platform="android"] dialog { width:min(490px,66vw)!important; max-width:66vw!important; margin:8px 8px 8px auto!important; max-height:calc(100dvh - 16px)!important; border:1px solid #d5b36c70!important; background:#071d2bed!important; }
+html[data-platform="android"] dialog::backdrop { background:#0003!important; backdrop-filter:none!important; }
+html[data-platform="android"] :is(.social-dialog-actions,.settings-actions,.shop-item-preview-actions,.captain-card-footer,.captain-compose-footer,.captain-avatar-footer) { position:sticky!important; bottom:0!important; background:#071d2bf5!important; z-index:8; }
+html[data-platform="android"] dialog .dialog-close { width:48px!important; height:48px!important; min-height:48px!important; }
+html[data-platform="android"] :is(.captain-avatar-dialog,.captain-card-dialog,.captain-compose-dialog) { height:calc(100dvh - 16px)!important; width:min(760px,80vw)!important; max-width:80vw!important; }
+html[data-platform="android"] .captain-avatar-body { grid-template-columns:minmax(0,1fr) minmax(120px,32%)!important; }
+html[data-platform="android"] #shopItemPreviewDialog { width:min(600px,74vw)!important; max-width:74vw!important; }
+html[data-platform="android"] #roomCompanionPanel { top:58px!important; right:8px!important; bottom:8px!important; left:auto!important; width:min(390px,58vw)!important; height:auto!important; max-height:none!important; padding:10px!important; background:#071d2bed!important; }
+html[data-platform="android"] #roomCompanionPanel .room-companion-actions { grid-template-columns:repeat(2,minmax(0,1fr))!important; }
+html[data-platform="android"] #roomCompanionPanel :is(.room-companion-actions,.room-life-actions) > button { font-size:15px!important; min-height:48px!important; }
+html[data-platform="android"] #roomCompanionPanel .room-companion-close { width:48px!important; height:48px!important; }
+html[data-platform="android"] #roomCompanionPanel .room-companion-wheel { padding-top:48px!important; }
+html[data-platform="android"] #roomCompanionPanel .room-companion-portrait { max-height:96px!important; }
+html[data-platform="android"] :is(.room-minigame-overlay,.room-aquarium-manager-overlay,.fishing-journal-overlay) { background:#0003!important; backdrop-filter:none!important; }
+html[data-platform="android"] .room-aquarium-manager-card { width:min(650px,76vw)!important; margin-left:auto!important; }
+html[data-platform="android"] .room-minigame-card { width:min(900px,90vw)!important; margin-left:auto!important; }
+html[data-platform="android"] #toast { pointer-events:none!important; }

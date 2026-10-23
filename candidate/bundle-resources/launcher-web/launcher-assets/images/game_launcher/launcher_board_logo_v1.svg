@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 260" role="img" aria-labelledby="title desc">
+  <title id="title">ONE PIECE 新世界航海錄</title>
+  <desc id="desc">青藍海圖與古金羅盤風格的封面標誌</desc>
+  <defs>
+    <linearGradient id="boardGold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff0a8"/>
+      <stop offset="0.45" stop-color="#e7bd55"/>
+      <stop offset="1" stop-color="#8f5919"/>
+    </linearGradient>
+    <linearGradient id="boardType" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffbea"/>
+      <stop offset="0.42" stop-color="#bffdf4"/>
+      <stop offset="1" stop-color="#40c8df"/>
+    </linearGradient>
+    <linearGradient id="boardWave" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d6a84b" stop-opacity="0"/>
+      <stop offset="0.18" stop-color="#d6a84b"/>
+      <stop offset="0.5" stop-color="#65e7e0"/>
+      <stop offset="0.82" stop-color="#d6a84b"/>
+      <stop offset="1" stop-color="#d6a84b" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="boardShadow" x="-15%" y="-30%" width="130%" height="170%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+      <feOffset dy="8" result="offset"/>
+      <feFlood flood-color="#020b17" flood-opacity="0.95"/>
+      <feComposite in2="offset" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <g opacity="0.92">
+    <path d="M58 194 C180 178 236 224 351 199 C446 179 544 179 650 199 C764 221 824 177 942 194" fill="none" stroke="#061524" stroke-width="15" stroke-linecap="round"/>
+    <path d="M58 194 C180 178 236 224 351 199 C446 179 544 179 650 199 C764 221 824 177 942 194" fill="none" stroke="url(#boardWave)" stroke-width="5" stroke-linecap="round"/>
+    <path d="M92 214 C206 195 267 236 368 217" fill="none" stroke="#48d6dd" stroke-width="3" stroke-linecap="round" opacity="0.78"/>
+    <path d="M632 217 C739 236 793 195 908 214" fill="none" stroke="#48d6dd" stroke-width="3" stroke-linecap="round" opacity="0.78"/>
+  </g>
+
+  <g transform="translate(500 202)" filter="url(#boardShadow)">
+    <circle r="31" fill="#071d30" stroke="url(#boardGold)" stroke-width="6"/>
+    <circle r="22" fill="none" stroke="#66e8e1" stroke-width="2" opacity="0.85"/>
+    <path d="M0-23 7-7 23 0 7 7 0 23-7 7-23 0-7-7Z" fill="url(#boardGold)"/>
+    <circle r="5" fill="#e9fbf6"/>
+  </g>
+
+  <g filter="url(#boardShadow)" text-anchor="middle">
+    <text x="500" y="49" fill="url(#boardGold)" stroke="#061321" stroke-width="7" paint-order="stroke fill" font-family="Georgia, 'Times New Roman', serif" font-size="34" font-weight="900" letter-spacing="13">ONE PIECE</text>
+    <text x="500" y="151" fill="none" stroke="#020811" stroke-width="30" stroke-linejoin="round" font-family="'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', sans-serif" font-size="112" font-weight="900" letter-spacing="9">新世界航海錄</text>
+    <text x="500" y="151" fill="url(#boardType)" stroke="url(#boardGold)" stroke-width="9" stroke-linejoin="round" paint-order="stroke fill" font-family="'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', sans-serif" font-size="112" font-weight="900" letter-spacing="9">新世界航海錄</text>
+    <path d="M111 75 210 75" stroke="url(#boardGold)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M790 75 889 75" stroke="url(#boardGold)" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="94" cy="75" r="7" fill="#5ce3df" stroke="#d9ab4d" stroke-width="3"/>
+    <circle cx="906" cy="75" r="7" fill="#5ce3df" stroke="#d9ab4d" stroke-width="3"/>
+  </g>
+</svg>

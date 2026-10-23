@@ -9,6 +9,7 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/string.hpp>
 #include "po_ios_download.h"
+#include "po_ios_launcher.h"
 
 using namespace godot;
 static NSString *ns(const String &value) { return [NSString stringWithUTF8String:value.utf8().get_data()]; }
@@ -85,6 +86,7 @@ class PoIOSBridge : public RefCounted {
     GDCLASS(PoIOSBridge,RefCounted);
     __strong POVideoSurface *surface=nil;
     __strong PODownloader *downloader=nil;
+    __strong POLauncher *launcher=nil;
 protected:
     static void _bind_methods() {
         ClassDB::bind_method(D_METHOD("session_request","method","arguments"),&PoIOSBridge::session_request);
@@ -98,9 +100,21 @@ protected:
         ClassDB::bind_method(D_METHOD("download_begin","identifier","digest","destination","size"),&PoIOSBridge::download_begin);
         ClassDB::bind_method(D_METHOD("download_poll","identifier"),&PoIOSBridge::download_poll);
         ClassDB::bind_method(D_METHOD("download_forget","identifier"),&PoIOSBridge::download_forget);
+        ClassDB::bind_method(D_METHOD("launcher_show","reload"),&PoIOSBridge::launcher_show);
+        ClassDB::bind_method(D_METHOD("launcher_hide"),&PoIOSBridge::launcher_hide);
+        ClassDB::bind_method(D_METHOD("launcher_requests"),&PoIOSBridge::launcher_requests);
+        ClassDB::bind_method(D_METHOD("launcher_reply","identifier","result"),&PoIOSBridge::launcher_reply);
     }
 public:
-    ~PoIOSBridge() override { [downloader close]; video_remove(); }
+    ~PoIOSBridge() override { [downloader close]; video_remove(); ui([&]{[launcher close];launcher=nil;}); }
+    bool launcher_show(bool reload){bool ok=false;ui([&]{if(!launcher)launcher=[POLauncher new];ok=[launcher show:reload];});return ok;}
+    void launcher_hide(){ui([&]{[launcher hide];});}
+    String launcher_requests(){String value;ui([&]{value=json([launcher takeRequests]?:@[]);});return value;}
+    void launcher_reply(const String &identifier,const String &result){
+        id parsed=[NSJSONSerialization JSONObjectWithData:[ns(result) dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+        if(![parsed isKindOfClass:NSDictionary.class])return;
+        ui([&]{[launcher reply:ns(identifier) result:parsed];});
+    }
     bool download_begin(const String &identifier,const String &digest,const String &destination,int64_t size){
         if(!downloader)downloader=[[PODownloader alloc] init];
         return [downloader begin:ns(identifier) digest:ns(digest) destination:ns(destination) size:size];

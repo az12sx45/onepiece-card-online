@@ -13,17 +13,23 @@ func _run() -> void:
 		var resource: Resource = load("res://"+filename)
 		check(resource != null and resource.can_instantiate(),"Script load: "+filename)
 	if not failures.is_empty(): _finish(); return
-	var login: Control = load("res://ios_product_root.gd").new()
-	root.add_child(login)
+	var screen: Control = load("res://ios_product_root.gd").new()
+	root.add_child(screen)
 	for dimensions in [Vector2(960,432),Vector2(740,360),Vector2(640,320)]:
-		login.size = dimensions
-		login.show_sign_in()
+		screen.size = dimensions
+		screen.show_failure("offline")
 		await process_frame
 		await process_frame
-		check(Rect2(Vector2.ZERO,dimensions).encloses(login.login_box.get_rect()),"Login bounds: "+str(dimensions)+" actual "+str(login.login_box.get_rect()))
-		check(login.password.secret,"Password input must be masked")
-		check(login.return_button.text=="回到登入畫面","No Android launcher label on iOS")
-	login.queue_free()
+		check(Rect2(Vector2.ZERO,dimensions).encloses(screen.return_button.get_rect()),"Return button bounds: "+str(dimensions))
+		check(screen.return_button.text=="返回啟動器","Return preserves launcher navigation")
+	var fonts=load("res://native_fonts.gd")
+	for glyph in "航海錄登入夥伴戰鬥PIRATE0123456789":
+		check(fonts.base().has_char(glyph.unicode_at(0)),"Font glyph: "+glyph)
+	check(fonts.battle_dice().has_char(49),"Original dice font")
+	for path in ["mobile/art-ui/icons-v006.png","mobile/art-ui/command-helm-v010.png","mobile/art-ui/mobile-panel-v013.png","mobile/art-ui/mobile-row-v013.png","mobile/art-ui/map-hud-compact-v009.png","mobile/art-ui/map-static-v025.webp"]:
+		var picture:=Image.new()
+		check(picture.load("res://"+path)==OK and not picture.is_empty(),"Raw UI image decodes: "+path)
+	screen.queue_free()
 	await process_frame
 	var assets: Node = load("res://ios_assets.gd").new()
 	root.add_child(assets)

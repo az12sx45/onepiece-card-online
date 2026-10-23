@@ -52,7 +52,7 @@
     {
       "path": "native-product-entry.js",
       "baselineSha256": "4d9e0298295b15800e03bb55bbda953c4ab4cd47fafec294cfed34c860fb6b56",
-      "iosSha256": "ee05ac8898328ebe0a482ab64cc12ebdb8b14ab4acb377d0247e43b8b77c6a93"
+      "iosSha256": "b88251b6619b136d4764e5c365fd21049c337ecf729833f5d5c2c23a9dea2884"
     },
     {
       "path": "native-product.tscn",
