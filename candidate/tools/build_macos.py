@@ -81,7 +81,8 @@ def main():
             file.parent.mkdir(parents=True,exist_ok=True);file.write_bytes(archive.extractfile(entry).read())
     env={**os.environ,'GODOT_CPP_DIR':str(cpp)}
     profile=native/'bridge-api-profile.json'
-    profile.write_text(json.dumps({'enabled_classes':['RefCounted']}))
+    # OS is required by godot-cpp's own print_string.cpp, not just our bridge.
+    profile.write_text(json.dumps({'enabled_classes':['RefCounted','OS']}))
     run([sys.executable,'-m','SCons','platform=ios','arch=arm64','api_version=4.7','build_profile='+str(profile),'target=template_release','ios_simulator=no','debug_symbols=no','-j3'],native,logs/'native-bridge.log',env)
     libraries=list((native/'bin').glob('*.dylib'))
     if len(libraries)!=1: raise ValueError('Expected one iOS bridge dylib')
