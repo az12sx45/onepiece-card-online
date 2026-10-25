@@ -149,7 +149,7 @@ pointing/emulate_mouse_from_touch=true
     if not icon.is_file(): raise ValueError('Original launcher icon unavailable')
     shutil.copyfile(icon,project/'ios-icon.png')
     (out/'media-manifest.json').write_bytes(raw)
-    report = {'schema':1,'baselineNativeVersion':38,'baselineManifestSha256':sha(manifest_path),
+    report = {'schema':1,'baselineNativeVersion':lock['androidBaseline'],'baselineManifestSha256':sha(manifest_path),
         'preservedFiles':len(preserved),'platformAdaptations':adapted,'mediaFiles':len(media),
         'mediaBytes':sum(x['size'] for x in media.values()),'mediaDownloadedLocally':False,
         'macCompiled':False,'signed':False,'iphoneTested':False,'cloudJobDispatched':False,

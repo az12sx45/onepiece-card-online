@@ -66,7 +66,8 @@ exports.create=function({context,application,search,fetch,navigate,controlsChang
  };
  host.shared={...context.shared,showToast:text=>application.get("shared_toasts").call("show_message",String(text||""))};
  core=original.create(host);modal.nativeRefs=host.refs;modal.tavernPresentation=new (require('./native-tavern-reveal').NativeTavernReveal)(modal,window);
- const reconcileTurnControls=require('./native-turn-control-sync').create(core);
+ const reconcileTurnControls=require('./native-turn-control-sync').create(core,host.refs);
+ const reconcileInteractions=require('./native-interaction-sync').create(core,host.refs);
  const reconcileBattleSurface=require('./native-battle-lifecycle').create(core,battle);
  draftAuthority=require('./native-draft-authority').create(core,modal);
  let lastCpuDiagnostic='',nextCpuDiagnostic=0;
@@ -75,7 +76,7 @@ exports.create=function({context,application,search,fetch,navigate,controlsChang
  const impel=require('./native-impel-down-platform').create({core,parentHost:host,registry:overlayRegistry,application});
  const spar=require('./native-spar-platform').create({core,parentHost:host,registry:overlayRegistry,application});
  function connect(node,name,fn){const callback=Callable.create(node,fn);node.connect(name,callback);connections.push({node,name,callback});}
- connect(application.get_tree(),'process_frame',()=>{if(disposed||!started)return;reconcileBattleSurface();if(reconcileTurnControls()){draftAuthority.reconcile();scheduleMapControls();}});
+ connect(application.get_tree(),'process_frame',()=>{if(disposed||!started)return;reconcileBattleSurface();reconcileInteractions();if(reconcileTurnControls()){draftAuthority.reconcile();scheduleMapControls();}});
  // Keep internal diagnostics independent of the JS timers being diagnosed.
  // GDScript print also remains observable in Android template_release.
  connect(application.get_tree(),'process_frame',()=>{const now=Time.get_ticks_msec();if(disposed||!started||now<nextCpuDiagnostic)return;nextCpuDiagnostic=now+2000;const flags=JSON.stringify({cpu:core.functions.isCpuPlayer(core.functions.currentPlayer()),...core.presentation.cpuAutomationStatus(),battle:!!core.state.battleState,battleAnimating:!!core.state.battleState?.animating,battleResult:core.state.battleState?.result||"",battleWindow:core.functions.battleWindowIsActive(),battleVisible:battle.isOpen(),battleClosing:battle.closing,battlePending:battle.hasPendingBattlePresentation(),remoteBattleViews:core.boardLan.pendingRemoteBattleViews.length,restoreAttempts:core.boardLan.initialStateRequestAttempts,joined:core.boardLan.joinedOnce,version:core.boardLan.version,pendingState:!!core.boardLan.pendingState,inFlightState:!!core.boardLan.inFlightState,lastError:core.boardLan.lastError});if(flags!==lastCpuDiagnostic){lastCpuDiagnostic=flags;application.call('report_cpu_diagnostic',flags);}});

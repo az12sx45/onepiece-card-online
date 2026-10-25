@@ -17,3 +17,8 @@ Run 39919875803 / build commit 35816e8 succeeded on standard macos-26. Download 
 2026-10-23 v039: iPhone v038 reported corrupt text/art and missing launcher entry. Final PCK was missing all 14 runtime raw font/UI/animation files due to import conversion. Add Keep File metadata and byte-readback gate (old IPA now rejected, real Godot export passes 14/14). Reuse 1532 existing APK launcher renderer/art files via local WKWebView with main-frame IPC, Keychain session and explicit Board launch/return; no auto-enter or logout on return. Card/Chess remain unavailable in this Board candidate. Windows51, router9, media12 and original login fixtures pass; npm start four pages HTTP200. New Mac compilation and phone acceptance pending. No Apple credentials or phone screenshots committed.
 
 2026-10-23 v040: v039 physical phone showed white launcher. Canonicalize both bundle root and target file with shared POAssetSchemeHandler; add native failure/timeout retry. New Mac Foundation /private regression plus actual WebKit renderer/login/logo gate runs before the device build. Gameplay/art preserved; iPhone acceptance pending.
+
+
+## 2026-10-25 v041 shared multiplayer recovery
+
+Pinned verified native v039 generation b35765cf821971ae7ae1450616c6d62c07d0b6b1fdafd3a503d811a14a8e861f. Restore participant prompts after remote playback and refresh CPU command authority on lock/snapshot changes. Godot fixture touch checks and desktop + two native clients + CPU network regression passed; desktop also requires its separately tested LAN-apply button refresh. iOS v040 launcher/native adapters retained. macOS compilation and physical iPhone acceptance remain pending for v041. No paid services or Apple signing material.
