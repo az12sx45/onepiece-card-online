@@ -2014,3 +2014,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 ## 2026-10-25 多人操作權
 
 public/js/board_game.js 的 applyBoardLanPayload 在非同步套用結束後呼叫 syncTurnActionButtons；不修改玩法或網路格式。
+
+- docs/BOARD_POSTGAME_SYNC_20261026.md：通關後同步、決鬥動畫鎖與幾何快取變更及驗證邊界。

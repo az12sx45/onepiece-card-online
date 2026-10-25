@@ -12427,7 +12427,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       }
     }
     if (state.battleState) {
-      state.battleState.animating = false;
+      // Live spar peers must retain the resolver's animation lock. Clearing it
+      // exposes replacement/actions before the final round snapshot arrives.
+      // Initial reconnects still use the existing interrupted-round recovery.
+      if (!state.battleState.isSparBattle || options.source !== "lan" || options.initialLanRestore) state.battleState.animating = false;
       normalizeBattleEntryTransition(state.battleState);
       if (options.source !== "lan") {
         state.battleState.visualEvent = null;
@@ -14673,16 +14676,25 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return 0;
   }
 
+  // The packaged layout is immutable during a voyage. LAN loads rebuild route
+  // objects, not this geometry; avoid scanning every sea tile for every step.
+  const customSeaTileMatches = new Map();
   function getCustomSeaTile(routeRef, step, totalSteps = 5) {
     if (!ACTIVE_MAP_LAYOUT.seaTiles) return null;
     const routeKeys = getCustomRouteLookupKeys(routeRef);
-    const matches = Object.entries(ACTIVE_MAP_LAYOUT.seaTiles)
+    const lookupKey = JSON.stringify(routeKeys);
+    let matches = customSeaTileMatches.get(lookupKey);
+    if (!matches) {
+      matches = Object.entries(ACTIVE_MAP_LAYOUT.seaTiles)
       .filter(([id, tile]) => {
         const tileRouteId = String(tile.routeId || "");
         return routeKeys.includes(tileRouteId) || routeKeys.some((routeId) => id.startsWith(`${routeId}-sea-`));
       })
       .map(([, tile]) => tile)
       .sort((a, b) => Number(a.step || 0) - Number(b.step || 0));
+      if (customSeaTileMatches.size >= 4096) customSeaTileMatches.delete(customSeaTileMatches.keys().next().value);
+      customSeaTileMatches.set(lookupKey, matches);
+    }
     if (!matches.length) return null;
     const direct = matches.find((tile) => Number(tile.step) === step);
     if (direct && matches.length === totalSteps) return direct;
@@ -46582,7 +46594,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const enemyCard = sparActiveCard(opponent);
     const ownCrew = own.crew.map((card, index) => serializeBattleCrewCard(card, index, context.battle));
     const activeView = ownCrew[own.activeCrewIndex];
-    const canControl = canBoardLanControlPlayerIdentity(sparPlayerById(viewerId));
+    const canControl = !battle.animating && canBoardLanControlPlayerIdentity(sparPlayerById(viewerId));
     const viewerResult = battle.result ? (String(battle.winnerId) === viewerId ? "win" : "lose") : "";
     const ownQueued = !!own.action;
     const expectedActionPlayerId = sparExpectedActionPlayerId(battle);
