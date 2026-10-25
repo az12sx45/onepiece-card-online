@@ -8387,3 +8387,8 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 
 2026-10-22 r34 發布前驗證：browser-host-1792604096132 使用此提交的 board_game.js 與最終原生產品，14項通過，包括原版建房/選角、雙端重連、桌機敗北青雉選擇與返回可操作海圖、完整快照一致；原生觀看佇列清空且無呈現錯誤，引擎正常退出。另最終原生 CPU 混合端17項通過；兩瀏覽器10項與 npm start/入口HTTP 200通過。情境使用隔離fixture帳號及明示戰鬥邊界，不代表使用者實機雙帳號驗收。桌機 package-1e0e16365e08c407 只替換1個程式，其餘6586檔保持原樣；R2 live上傳1/reuse6260，公開新blob SHA 53fa6955d30da249cc104aca946a2407f89cd7088628b9e769cfdffa8c6efed0完全讀回一致。目錄manifest SHA 53c4187b6174226da6609606a426846cd436c5e771fd963c7165f7f7d0b4bf30。Git推送與Render公開驗證另存QA收據，不將上傳當成部署完成。
+
+
+## 2026-10-25 跨裝置 CPU 回合交接恢復
+
+以公開 package-c49b13ce2f9f287c 為基準，僅修改 public/js/board_game.js：applyBoardLanPayload 解除 applying 後呼叫原 syncTurnActionButtons。隔離 Socket.IO 真實連線重現手機交棒後電腦房主 CPU 留有停用擲骰；候選已通過自動擲骰/交棒、雙原生客戶端交易報價與雙方確認/只結算一次、切磋接受進入選角，共25項。測試為二個 Godot 程序、桌機瀏覽器與 CPU，非三支真機。證據 D:/Codex_QA/native-multiplayer-authority-20261025/four-peer-1792938181320。Android/iOS 互動恢復在獨立手機工作樹；未改 server、玩法、存檔欄位或事件名稱。尚未公開發布。

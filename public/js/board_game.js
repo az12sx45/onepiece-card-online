@@ -13465,6 +13465,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           if (previousMissionSeed === state.gameState?.seed) remoteMissionCompletions.forEach((mission) => showMissionCompleteToast(mission, notificationPlayer));
           flushBoardLanPendingState();
           scheduleBoardCampaignAutoSave();
+          // Applying a remote CPU handoff rendered the die while authority was suspended.
+          syncTurnActionButtons();
         }
         if (applied && wasAwaitingInitialState && shouldRunCpuAutoStep()) {
           scheduleCpuAutoStep(180);

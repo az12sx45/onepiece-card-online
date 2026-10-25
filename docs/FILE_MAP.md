@@ -2009,3 +2009,8 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 
 2026-10-22 r34 發布證據：public/js/board_game.js 僅7行青雉modal權限修正；scripts/aokiji_capture_authority_qa.js 驗證同權限不重建、權限切換才重建。public/desktop/catalog-v3.json 與 manifests/board-package-1e0e16365e08c407.json 只更新Board程式一項。混合端/上傳/公開blob核驗收據位於 C:/Codex_QA/native-crossplay-r34-20261021；不含憑證、玩家存檔或正式帳號資料。
+
+
+## 2026-10-25 多人操作權
+
+public/js/board_game.js 的 applyBoardLanPayload 在非同步套用結束後呼叫 syncTurnActionButtons；不修改玩法或網路格式。
