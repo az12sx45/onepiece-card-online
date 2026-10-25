@@ -8396,3 +8396,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-25 發布準備核對：npm start 隔離18969/入口HTTP200通過並已停止；桌機候選 package-8d2db938db3d0419 僅更換 board_game.js，其餘6586檔完全保留。R2正式發布核對6261個唯一物件，上傳1/沿用6260通過。Android native v039及38→39差量567243 bytes已啟用並公開回讀，stable v026不變；iOS v041 Actions40202668350成功，本機IPA175 JS/14原始資源/1532啟動器素材回讀通過。公開桌機部署讀回另存 D:/Codex_QA/native-multiplayer-authority-20261025/public-release-verification.json；只有該收據ok=true才代表正式頁面與啟動器更新驗證完成。三端實機驗收仍待玩家測試。
 
 2026-10-26：Board 通關後連線修正，public/js/board_game.js 快取不可變海格幾何查詢，保留即時連線決鬥的動畫鎖並鎖定演出中的玩家操作。3,892 項原幾何對照、桌機/原生共用函式比對、雙瀏覽器建房/加入/交棒/重整恢復通過。完整連線回歸與發布尚待最終收據；詳見 docs/BOARD_POSTGAME_SYNC_20261026.md。
+
+2026-10-26 發布核對：新版決鬥連線換人/下一輪/投降回圖26項、最後擊倒回圖25項、原結局解鎖36項通過。新套件 package-1bd4a907624b682f 僅替換 board_game.js，保留其餘6586筆、card/chess與v3媒體樹；109個程式檔對Git HEAD雜湊一致。舊v2全量生成/QA不適用現有v3媒體擴充且未宣稱通過；使用已核對公開v3的精確單檔發布。公開發布只以 public-release-verification.json 的ok=true為準。
