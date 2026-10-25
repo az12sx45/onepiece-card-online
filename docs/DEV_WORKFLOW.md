@@ -8392,3 +8392,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 ## 2026-10-25 跨裝置 CPU 回合交接恢復
 
 以公開 package-c49b13ce2f9f287c 為基準，僅修改 public/js/board_game.js：applyBoardLanPayload 解除 applying 後呼叫原 syncTurnActionButtons。隔離 Socket.IO 真實連線重現手機交棒後電腦房主 CPU 留有停用擲骰；候選已通過自動擲骰/交棒、雙原生客戶端交易報價與雙方確認/只結算一次、切磋接受進入選角，共25項。測試為二個 Godot 程序、桌機瀏覽器與 CPU，非三支真機。證據 D:/Codex_QA/native-multiplayer-authority-20261025/four-peer-1792938181320。Android/iOS 互動恢復在獨立手機工作樹；未改 server、玩法、存檔欄位或事件名稱。尚未公開發布。
+
+2026-10-25 發布準備核對：npm start 隔離18969/入口HTTP200通過並已停止；桌機候選 package-8d2db938db3d0419 僅更換 board_game.js，其餘6586檔完全保留。R2正式發布核對6261個唯一物件，上傳1/沿用6260通過。Android native v039及38→39差量567243 bytes已啟用並公開回讀，stable v026不變；iOS v041 Actions40202668350成功，本機IPA175 JS/14原始資源/1532啟動器素材回讀通過。公開桌機部署讀回另存 D:/Codex_QA/native-multiplayer-authority-20261025/public-release-verification.json；只有該收據ok=true才代表正式頁面與啟動器更新驗證完成。三端實機驗收仍待玩家測試。
