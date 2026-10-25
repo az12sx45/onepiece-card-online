@@ -17,3 +17,5 @@ Scoped package `package-1bd4a907624b682f` changes only `js/board_game.js`, retai
 Publication results are recorded in `D:/Codex_QA/native-postgame-fix-20261026/public-release-verification.json`; only `ok:true` confirms the public runtime/catalog/CAS readback. Android v040 uses the same native product, with a 1,591,512-byte v039 delta; iOS v042 CI/build-resource checks passed but requires owner signing. No schema, event or server changes.
 
 LATTICE tools were not present in the available tool inventory. The existing Board task/project pointers were retained; no live task write or Graphify success is claimed.
+
+Final four-peer regression `four-peer-1792950665336`: 29 checks passed for autonomous CPU roll/turn completion, two native players trading and settling once, co-op invitation/join/permissions and spar invitation/selection. Co-op comparisons account for original client-local resolutionLock and skipNextBattleMapShake derivation while checking all remaining game state and separate battle permissions. R2 inventory verified 6,261 immutable objects, uploaded one new program blob and reused 6,260.
