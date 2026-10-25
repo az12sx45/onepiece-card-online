@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "godot": "4.7.2-stable",
-  "productManifestSha256": "b35765cf821971ae7ae1450616c6d62c07d0b6b1fdafd3a503d811a14a8e861f",
-  "androidBaseline": 39,
+  "productManifestSha256": "e0c2a57a6b945ce5290987efbd65c9750238b26a502f3e27ed92bbe273704235",
+  "androidBaseline": 40,
   "godotjs": {
     "tag": "v1.0.2",
     "commit": "5d7ed8708ee3816b599184a8b5680e186c826f38",

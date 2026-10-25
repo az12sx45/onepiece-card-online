@@ -61464,7 +61464,7 @@ function normalizeLoadedGameState(options = {}) {
       }
     }
     if (state.battleState) {
-      state.battleState.animating = false;
+      if (!state.battleState.isSparBattle || options.source !== "lan" || options.initialLanRestore) state.battleState.animating = false;
       normalizeBattleEntryTransition(state.battleState);
       if (options.source !== "lan") {
         state.battleState.visualEvent = null;
@@ -94072,7 +94072,7 @@ function getSparBattleView(battle = state.battleState) {
     const enemyCard = sparActiveCard(opponent);
     const ownCrew = own.crew.map((card, index) => serializeBattleCrewCard(card, index, context.battle));
     const activeView = ownCrew[own.activeCrewIndex];
-    const canControl = canBoardLanControlPlayerIdentity(sparPlayerById(viewerId));
+    const canControl = !battle.animating && canBoardLanControlPlayerIdentity(sparPlayerById(viewerId));
     const viewerResult = battle.result ? (String(battle.winnerId) === viewerId ? "win" : "lose") : "";
     const ownQueued = !!own.action;
     const expectedActionPlayerId = sparExpectedActionPlayerId(battle);
@@ -111633,12 +111633,18 @@ async function rewindCurrentPlayerBeforeFinalGate(options = {}) {
     if (opts.save !== false) await saveManualGame();
     return { ok: true, player: player.name, islandId: anchorId, saved: opts.save !== false };
   }
+const routeTileCache=require('./native-route-tile-cache').create(getCustomSeaTile,getCustomRouteLookupKeys,()=>ACTIVE_MAP_LAYOUT.seaTiles);getCustomSeaTile=routeTileCache.lookup;
 if(typeof host.measure==="function"){const original=createManualSavePayload;createManualSavePayload=function(...args){return host.measure("source:createManualSavePayload",()=>original.apply(this,args));};}
 if(typeof host.measure==="function"){const original=boardLanContentKey;boardLanContentKey=function(...args){return host.measure("source:boardLanContentKey",()=>original.apply(this,args));};}
 if(typeof host.measure==="function"){const original=flushBoardLanPendingState;flushBoardLanPendingState=function(...args){return host.measure("source:flushBoardLanPendingState",()=>original.apply(this,args));};}
 if(typeof host.measure==="function"){const original=getBattleView;getBattleView=function(...args){return host.measure("source:getBattleView",()=>original.apply(this,args));};}
 if(typeof host.measure==="function"){const original=writeBattleSnapshot;writeBattleSnapshot=function(...args){return host.measure("source:writeBattleSnapshot",()=>original.apply(this,args));};}
 if(typeof host.measure==="function"){const original=emitBattleVisualForSpectators;emitBattleVisualForSpectators=function(...args){return host.measure("source:emitBattleVisualForSpectators",()=>original.apply(this,args));};}
+if(typeof host.measure==="function"){const original=normalizeLoadedGameState;normalizeLoadedGameState=function(...args){return host.measure("source:normalizeLoadedGameState",()=>original.apply(this,args));};}
+if(typeof host.measure==="function"){const original=ensurePostgameWorldLayout;ensurePostgameWorldLayout=function(...args){return host.measure("source:ensurePostgameWorldLayout",()=>original.apply(this,args));};}
+if(typeof host.measure==="function"){const original=rebalanceIslandEnemyStatesByPosition;rebalanceIslandEnemyStatesByPosition=function(...args){return host.measure("source:rebalanceIslandEnemyStatesByPosition",()=>original.apply(this,args));};}
+if(typeof host.measure==="function"){const original=syncAvailableCardsWithCatalog;syncAvailableCardsWithCatalog=function(...args){return host.measure("source:syncAvailableCardsWithCatalog",()=>original.apply(this,args));};}
+if(typeof host.measure==="function"){const original=loadManualGame;loadManualGame=function(...args){return host.measure("source:loadManualGame",()=>original.apply(this,args));};}
 if(typeof host.captureJsonSnapshot==="function"){const original=createManualSavePayload;createManualSavePayload=function(...args){const snapshot=original.apply(this,args);host.captureJsonSnapshot(snapshot);return snapshot;};}
 const presentation={turnBanner(event){const player = turnTransitionPlayerFromEvent(event);
 const playerName = player?.name || event.playerName || "玩家";

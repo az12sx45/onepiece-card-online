@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "baselineNativeVersion": 39,
-  "baselineManifestSha256": "b35765cf821971ae7ae1450616c6d62c07d0b6b1fdafd3a503d811a14a8e861f",
-  "preservedFiles": 1887,
+  "baselineNativeVersion": 40,
+  "baselineManifestSha256": "e0c2a57a6b945ce5290987efbd65c9750238b26a502f3e27ed92bbe273704235",
+  "preservedFiles": 1888,
   "platformAdaptations": [
     {
       "path": "native_android_account.gd",
