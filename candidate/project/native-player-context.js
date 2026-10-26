@@ -3,7 +3,7 @@
 // the platform; no test player, room, saved game or response is created here.
 const source=require('./original-profile');
 class QueryParameters{
- constructor(text=''){this.entries=[];for(const part of String(text).replace(/^\?/,'').split('&')){if(!part)continue;const split=part.indexOf('='),decode=v=>decodeURIComponent(v.replace(/\+/g,' '));this.entries.push([decode(split<0?part:part.slice(0,split)),decode(split<0?'':part.slice(split+1))]);}}
+ constructor(text=''){this.entries=[];if(text&&typeof text==='object'){this.entries=Array.isArray(text)?text.map(([k,v])=>[String(k),String(v)]):Object.entries(text).map(([k,v])=>[k,String(v)]);return;}for(const part of String(text).replace(/^\?/,'').split('&')){if(!part)continue;const split=part.indexOf('='),decode=v=>decodeURIComponent(v.replace(/\+/g,' '));this.entries.push([decode(split<0?part:part.slice(0,split)),decode(split<0?'':part.slice(split+1))]);}}
  get(key){return this.entries.find(pair=>pair[0]===String(key))?.[1]??null;}
  has(key){return this.entries.some(pair=>pair[0]===String(key));}
  set(key,value){key=String(key);this.entries=this.entries.filter(pair=>pair[0]!==key);this.entries.push([key,String(value)]);}

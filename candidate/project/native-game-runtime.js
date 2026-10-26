@@ -53,6 +53,7 @@ exports.create=function({context,application,search,fetch,navigate,controlsChang
  const seaTrain=require('./native-sea-train-bridge').bind(host.refs,host.document,application.get('sea_train_layer'));host.document=seaTrain.document;
  const finalRoute=require('./native-final-route-bridge').bind(host,application,()=>core);
  const kuma=require('./native-kuma-bridge').bind(host,application,()=>core);
+ const york=require('./native-york-platform').bind(host,application,()=>core,overlayRegistry);const egghead=require('./native-egghead-bridge').bind(host,application,overlayRegistry);
  const nika=require('./native-nika-presentation').create(application,host.document);
  host.bindInputs=api=>api.bindNativeInputs();
  host.bindPresentation=api=>{
@@ -87,6 +88,9 @@ exports.create=function({context,application,search,fetch,navigate,controlsChang
  connect(application,'map_controls_visibility_changed',()=>{if(started&&!disposed)scheduleMapControls();});
  connect(application.get('game_tools'),'command_requested',(key,value)=>{key=String(key);map.camera.beforeTool(key);const result=controls.activate(key,String(value));if(result)map.camera.afterTool(key);});
  connect(waterNode,'command_requested',key=>water.activate(String(key)));
+ connect(application.get('york_page'),'command_requested',key=>{york.activate(String(key)).catch(e=>console.error('York command: '+e.stack));});
+ connect(application.get('york_page'),'drag_requested',(card,target)=>{york.drag(Number(card),Number(target)).catch(e=>console.error('York drag: '+e.stack));});
+ connect(application.get('egghead_effect'),'skip_requested',()=>{egghead.skip().catch(e=>console.error('Egghead skip: '+e.stack));});
  connect(waterNode,'resized',()=>water.resize());
  connect(application,'helm_command_json',json=>{const value=JSON.parse(json);controller.command(value.action,value.playerId);});
  connect(application,'map_command_json',json=>{const value=JSON.parse(json);controller.mapCommand(value.type,value.payload);});
@@ -115,7 +119,7 @@ exports.create=function({context,application,search,fetch,navigate,controlsChang
   battle.zephyr.close();
   sound.dispose();battleMusicHold?.restore();battleMusicHold=null;katakuriFocus?.release();katakuriFocus=null;music.stop({fadeMs:0});musicTransport.dispose();scope.dispose();for(const {node,name,callback}of connections)node.disconnect(name,callback);
   connections.length=0;
-  kuma.dispose();finalRoute.dispose();water.dispose();marineford.dispose();impel.dispose();spar.dispose();evolution.dispose();itemReveal.dispose();seaTrain.dispose();application.get("shared_toasts").call("clear");application.get('game_tools').call('close_surface');modal.dispose();await battle.waitIdle();battle.dispose();map.dispose();
+  egghead.dispose();york.dispose();kuma.dispose();finalRoute.dispose();water.dispose();marineford.dispose();impel.dispose();spar.dispose();evolution.dispose();itemReveal.dispose();seaTrain.dispose();application.get("shared_toasts").call("clear");application.get('game_tools').call('close_surface');modal.dispose();await battle.waitIdle();battle.dispose();map.dispose();
  }};
 };
 

@@ -3,7 +3,7 @@
 // selected values. Layout, media playback and hit testing belong to Godot.
 const {parse}=require('./native-research-markup');
 const camel=s=>s.replace(/-([a-z])/g,(_,c)=>c.toUpperCase());
-exports.create=function(catalog,{changed=()=>{},geometry,video,extraTags=[]}={}){
+exports.create=function(catalog,{changed=()=>{},geometry,video,extraTags=[],extraEvents=[]}={}){
  let serial=0;const ids=new Map(),nodes=new Map();
  const tags=new Set(['body','main','header','section','aside','footer','div','span','strong','small','h1','h2','h3','b','p','ul','li','br','img','button','article','video',...extraTags]);
  const matches=(n,selector)=>{
@@ -42,8 +42,9 @@ exports.create=function(catalog,{changed=()=>{},geometry,video,extraTags=[]}={})
   cloneNode(deep){const n=new Control(this.tag,this.attrs,this.text);n.styles={...this.styles};if(deep)for(const child of this.childNodes)n.appendChild(child.cloneNode(true));return n;}
   querySelectorAll(s){const result=[];const visit=n=>{for(const c of n.childNodes){if(selected(c,s))result.push(c);visit(c);}};visit(this);return result;}
   querySelector(s){return this.querySelectorAll(s)[0]||null;}
+  contains(child){for(let n=child;n;n=n.parent)if(n===this)return true;return false;}
   closest(s){for(let n=this;n;n=n.parent)if(selected(n,s))return n;return null;}
-  addEventListener(type,fn,opts={}){if(!['click','keydown','visibilitychange','error','ended','loadedmetadata','playing','canplay'].includes(type))throw Error('Unbound Marineford event '+type);const list=this.listeners.get(type)||[];list.push({fn,once:!!opts.once});this.listeners.set(type,list);}
+  addEventListener(type,fn,opts={}){if(!['click','keydown','visibilitychange','error','ended','loadedmetadata','playing','canplay',...extraEvents].includes(type))throw Error('Unbound Marineford event '+type);const list=this.listeners.get(type)||[];list.push({fn,once:!!opts.once});this.listeners.set(type,list);}
   removeEventListener(type,fn){this.listeners.set(type,(this.listeners.get(type)||[]).filter(x=>x.fn!==fn));}
   async dispatch(type,values={}){if(type==='click'&&(this.disabled||this.hidden))return false;const chain=[];for(let n=this;n;n=n.parent)chain.push(n);const pending=[];let stopped=false,immediate=false;const event={target:this,...values,preventDefault(){},stopPropagation(){stopped=true;},stopImmediatePropagation(){stopped=true;immediate=true;}};for(const n of chain){event.currentTarget=n;for(const item of [...n.listeners.get(type)||[]]){if(item.once)n.removeEventListener(type,item.fn);const result=item.fn(event);if(result?.then)pending.push(result);if(immediate)break;}if(stopped)break;}await Promise.all(pending);changed();return true;}
   click(){return this.dispatch('click');}

@@ -86,6 +86,8 @@ var final_route_effect: Control
 var kuma_effect: Control
 var compass_modal: Control
 var map_info_modal: Control
+var egghead_effect: Control
+var york_page: Control
 var spar_page: Control
 var judicial_entry_modal: Control
 var arena_modal: Control
@@ -209,6 +211,8 @@ func _ready() -> void:
 	marineford_page=preload("res://native_marineford_page.gd").new();marineford_page.cache=map_cache;marineford_page.size=size;marineford_page.z_index=120;add_child(marineford_page);marineford_page.visibility_changed.connect(func():map_controls_visibility_changed.emit());resized.connect(func():marineford_page.size=size)
 	impel_down_page=preload("res://native_impel_down_page.gd").new();impel_down_page.cache=map_cache;impel_down_page.size=size;impel_down_page.z_index=19;add_child(impel_down_page);impel_down_page.visibility_changed.connect(func():map_controls_visibility_changed.emit());resized.connect(func():impel_down_page.size=size)
 	spar_page=preload("res://native_spar_page.gd").new();spar_page.cache=map_cache;spar_page.size=size;spar_page.z_index=121;add_child(spar_page);spar_page.visibility_changed.connect(func():map_controls_visibility_changed.emit());resized.connect(func():spar_page.size=size)
+	york_page=preload("res://native_york_page.gd").new();york_page.cache=map_cache;york_page.size=size;york_page.z_index=122;add_child(york_page);york_page.visibility_changed.connect(func():map_controls_visibility_changed.emit());resized.connect(func():york_page.size=size)
+	egghead_effect=preload("res://native_egghead_effect.gd").new();egghead_effect.cache=map_cache;egghead_effect.map_view=map_view;egghead_effect.size=size;egghead_effect.z_index=123;add_child(egghead_effect);egghead_effect.visibility_changed.connect(func():map_controls_visibility_changed.emit());resized.connect(func():egghead_effect.size=size)
 	for surface in [choice_modal,shop_modal,story_modal,hospital_modal,tavern_modal,captain_modal,crew_modal,carry_modal,training_modal,move_learn_modal,cosmetic_modal,draft_modal,save_modal,trade_modal,final_imu_modal,yonko_modal,encounter_modal,compass_modal,map_info_modal,arena_modal,judicial_entry_modal,inversion_overview_modal,final_ritual_modal,cpu_strategy_modal,cpu_ship_menu,fleet_modal,ship_info_modal,codex_modal,mission_journal_modal,mission_board_modal,backpack_modal,backpack_target_modal,reward_choice_modal,sea_chest_modal,research_modal]:
 		surface.surface_ready.connect(func():_modal_ready(surface))
 	board_notice=BoardNotice.new();board_notice.cache=map_cache;board_notice.size=size;board_notice.z_index=15
@@ -233,7 +237,7 @@ func _modal_ready(current: Control) -> void:
 
 func can_show_commands() -> bool:
 	if sea_splash.visible:return false
-	if spar_page.visible or impel_down_page.visible:return false
+	if egghead_effect.visible or york_page.visible or spar_page.visible or impel_down_page.visible:return false
 	if marineford_page.visible:return false
 	if research_modal.visible or sea_chest_modal.visible or sea_train_layer.active or item_reveal_hud.visible or reward_choice_modal.visible or backpack_target_modal.visible or backpack_modal.visible or water_seven_page.visible or mission_journal_modal.visible or mission_board_modal.visible:return false
 	if draft_modal.visible or save_modal.visible or trade_modal.visible or final_imu_modal.visible or yonko_modal.visible or encounter_modal.visible or compass_modal.visible or map_info_modal.visible or judicial_entry_modal.visible or arena_modal.visible or inversion_overview_modal.visible or final_ritual_modal.visible or cpu_strategy_modal.visible or cpu_ship_menu.visible or fleet_modal.visible or ship_info_modal.visible or codex_modal.visible:return false

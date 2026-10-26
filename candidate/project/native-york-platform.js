@@ -1,0 +1,33 @@
+'use strict';
+const {URL,URLSearchParams}=require('./native-scene-url'),rules=require('./original-york-rules'),projection=require('./native-york-model');
+// Adapts only the original York section/iframe/message contract. The original
+// Board controller remains the sole authority for eligibility, awards and map changes.
+exports.bind=function(host,application,getCore,registry){
+ const surface=application.get('york_page'),previous=host.document,parent=host.window,add=parent.addEventListener,remove=parent.removeEventListener,parentMessages=new Set();
+ let active=null,disposed=false,pendingPublish=false;
+ parent.addEventListener=function(type,fn,...args){if(type==='message')parentMessages.add(fn);return add?.call(parent,type,fn,...args);};
+ parent.removeEventListener=function(type,fn,...args){if(type==='message')parentMessages.delete(fn);return remove?.call(parent,type,fn,...args);};
+ function publish(){if(disposed||pendingPublish)return;pendingPublish=true;Promise.resolve().then(()=>{pendingPublish=false;if(active?.page&&active.mounted)surface.call('apply_json',JSON.stringify(projection.project(active.page)));});}
+ function close(session){if(!session||session.closed)return;session.closed=true;session.ui?.dispose();session.listeners.clear();if(active===session){active=null;if(registry.get('yorkPuzzleOverlay')===session.overlay)registry.delete('yorkPuzzleOverlay');surface.call('close_surface');application.call_deferred('emit_signal','map_controls_visibility_changed');}}
+ function mount(session){if(disposed||active!==session||session.closed||session.page)return;const url=new URL(session.src,parent.location.href);if(url.origin!==parent.location.origin||url.pathname!=='/board_york_clue_puzzle_formal_demo.html'||url.searchParams.get('embed')!=='1')throw Error('Unsupported York page route');
+  session.ui=require('./native-marineford-controls').create(require('./york-controls.json'),{changed:publish,extraTags:['nav','details','summary'],extraEvents:['dragstart','dragend','dragover','dragleave','drop']});
+  const pageWindow={BoardYorkCluePuzzle:rules,location:{search:url.search,origin:url.origin},scrollTo(){},addEventListener(type,fn){if(type!=='message')throw Error('Unsupported York event');session.listeners.add(fn);},parent:{postMessage(data,origin){if(origin!==parent.location.origin||data.channel!==url.searchParams.get('channel'))throw Error('York message identity mismatch');Promise.resolve().then(()=>{if(active!==session||disposed||session.closed)return;for(const fn of [...parentMessages])fn({data,origin,source:session.channel});publish();});}}};
+  session.pageWindowParent=pageWindow.parent;
+  session.page=require('./original-york').create({window:pageWindow,document:session.ui.document,URLSearchParams});
+  // Preserve the source-authored island artwork without duplicating card rules.
+  const images=FileIslands();session.page.islands=images;publish();for(const fn of session.loads.splice(0))fn();
+ }
+ function FileIslands(){return ['shiki','gild_tesoro','zephyr','tot_musica','douglas_bullet','saga','vinsmoke_judge','rob_lucci_awakened','king','charlotte_katakuri','patrick_redfield','loki','aramaki'].map(k=>'images/board/islands/postgame_boss_'+k+'_island.webp');}
+ function section(){const session={closed:false,mounted:false,listeners:new Set(),loads:[],src:'',page:null,ui:null};
+  session.channel={postMessage(data,origin){if(origin!==parent.location.origin||session.closed)return;Promise.resolve().then(()=>{if(active!==session||disposed||session.closed)return;for(const fn of [...session.listeners])fn({data,origin,source:session.pageWindowParent});publish();});}};
+  // The exact identity used by the page's event.source check is assigned below.
+  const overlay={id:'',style:{},setAttribute(){},appendChild(frame){if(frame!==session.frame)throw Error('York unexpected frame');return frame;},remove:()=>close(session),classList:{contains:key=>key==='open'&&session.mounted&&!session.closed}};
+  session.overlay=overlay;const frame={title:'',style:{},contentWindow:session.channel,setAttribute(){},focus(){},addEventListener(type,fn){if(type!=='load')throw Error('York unsupported frame event');session.loads.push(fn);},get src(){return session.src;},set src(value){session.src=String(value);}};session.frame=frame;active=session;return overlay;
+ }
+ const body={appendChild(overlay){if(overlay!==active?.overlay||overlay.id!=='yorkPuzzleOverlay')return previous.body.appendChild(overlay);active.mounted=true;registry.set(overlay.id,overlay);const session=active;Promise.resolve().then(()=>mount(session));return overlay;}};
+ host.document=new Proxy(previous,{get(target,key){if(key==='createElement')return tag=>tag==='section'?section():tag==='iframe'&&active?active.frame:target.createElement(tag);if(key==='body')return body;return Reflect.get(target,key);}});
+ function element(key){const d=active?.ui?.document;if(!d)return null;const [type,value]=key.split(':');if(type==='id')return d.getElementById(value);const attr={difficulty:'difficulty',slot:'slot-index',bank:'bank-card',lock:'lock-index',clue:'clue-card',placed:'placed-card'}[type];return attr?d.querySelector(`[data-${attr}="${value}"]`):null;}
+ function allowed(key){if(!active?.page||!active.mounted||disposed)return false;const model=projection.project(active.page);if(model.mode==='result')return key==='id:resultClose';if(model.pending)return key==='id:exitButton';return model.mode==='difficulty'?key.startsWith('difficulty:')||key==='id:exitButton':!key.startsWith('difficulty:')&&key!=='id:resultClose';}
+ async function activate(key){if(!allowed(key))return false;if(key==='return-bank'){const s=active.page.functions.currentSession();if(s.selectedCard&&s.slots.includes(s.selectedCard)){active.page.functions.returnCardToBank(s.selectedCard);publish();return true;}return false;}const node=element(key);if(!node||node.disabled||node.hidden)return false;await node.dispatch('click');publish();return true;}
+ return {activate,model:()=>active?.page?projection.project(active.page):null,page:()=>active?.page,async drag(card,target){if(!active?.page||projection.project(active.page).mode!=='puzzle'||active.page.state.pendingSubmit)return false;const s=active.page.functions.currentSession();if(s.solved)return false;const from=element((s.bankOrder.includes(card)?'bank:':'placed:')+card),to=target<0?element('id:cardBankDrop'):element('slot:'+target);if(!from||!to)return false;await from.dispatch('dragstart',{dataTransfer:{setData(){}}});await to.dispatch('drop');active.page.state.dragCard=null;publish();return true;},dispose(){if(disposed)return;disposed=true;close(active);parent.addEventListener=add;parent.removeEventListener=remove;parentMessages.clear();}};
+};
