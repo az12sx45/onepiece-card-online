@@ -73,6 +73,17 @@
   text('label[for="minimizeToTrayToggle"] .settings-option-copy small', '返回即可繼續使用啟動器；手機自動保留此功能。');
   const retainedLauncher = document.getElementById('minimizeToTrayToggle');
   if (retainedLauncher) retainedLauncher.disabled = true;
+  if (document.documentElement.dataset.host === 'ios') {
+    text('.settings-display-group .settings-group-note', 'iPhone 使用系統管理的橫向全螢幕。');
+    const systemBars = document.getElementById('gameDisplayBorderless');
+    if (systemBars) systemBars.disabled = true;
+    text('label[for="gameDisplayBorderless"] .display-mode-copy small', '此選項僅適用於 Android。');
+    text('label[for="gameDisplayFullscreen"] .display-mode-copy small', '保留瀏海與底部手勢安全區。');
+    const notice = document.createElement('p');
+    notice.className = 'mobile-ios-games-note';
+    notice.textContent = '航海錄使用原生引擎；爭霸戰與霸海戰棋使用原版線上遊戲，需要網路連線。';
+    document.querySelector('.settings-display-group')?.append(notice);
+  }
   text('#locationDialog h2', '手機儲存管理');
   text('#locationDialog > p:not(.eyebrow)', '遊戲素材保存在應用程式專用空間；帳號與雲端存檔仍由伺服器保存。');
   text('#pickLocationButton', '開啟儲存管理');

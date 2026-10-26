@@ -10,6 +10,7 @@
 #include <godot_cpp/variant/string.hpp>
 #include "po_ios_download.h"
 #include "po_ios_launcher.h"
+#include "po_ios_web_game.h"
 
 using namespace godot;
 static NSString *ns(const String &value) { return [NSString stringWithUTF8String:value.utf8().get_data()]; }
@@ -87,6 +88,7 @@ class PoIOSBridge : public RefCounted {
     __strong POVideoSurface *surface=nil;
     __strong PODownloader *downloader=nil;
     __strong POLauncher *launcher=nil;
+    __strong POWebGame *webGame=nil;
 protected:
     static void _bind_methods() {
         ClassDB::bind_method(D_METHOD("session_request","method","arguments"),&PoIOSBridge::session_request);
@@ -104,9 +106,22 @@ protected:
         ClassDB::bind_method(D_METHOD("launcher_hide"),&PoIOSBridge::launcher_hide);
         ClassDB::bind_method(D_METHOD("launcher_requests"),&PoIOSBridge::launcher_requests);
         ClassDB::bind_method(D_METHOD("launcher_reply","identifier","result"),&PoIOSBridge::launcher_reply);
+        ClassDB::bind_method(D_METHOD("web_game_open","game_id"),&PoIOSBridge::web_game_open);
+        ClassDB::bind_method(D_METHOD("web_game_active"),&PoIOSBridge::web_game_active);
+        ClassDB::bind_method(D_METHOD("open_settings"),&PoIOSBridge::open_settings);
     }
 public:
-    ~PoIOSBridge() override { [downloader close]; video_remove(); ui([&]{[launcher close];launcher=nil;}); }
+    ~PoIOSBridge() override { [downloader close]; video_remove(); ui([&]{[webGame close];webGame=nil;[launcher close];launcher=nil;}); }
+    String web_game_active(){String value;ui([&]{value=gs(webGame.gameId);});return value;}
+    bool web_game_open(const String &game_id){
+        bool ok=false;NSDictionary *session=read_key(@"session",ok);if(!ok)return false;
+        NSDictionary *device=read_key(@"device",ok);if(!ok)return false;
+        bool opened=false;ui([&]{
+            if(!webGame){webGame=[POWebGame new];__weak POLauncher *retainedLauncher=launcher;webGame.returnToLauncher=^{[retainedLauncher show:NO];};}
+            opened=[webGame open:ns(game_id) session:session device:device[@"deviceId"]];if(opened)[launcher hide];
+        });return opened;
+    }
+    bool open_settings(){bool available=false;ui([&]{NSURL *url=[NSURL URLWithString:UIApplicationOpenSettingsURLString];available=[UIApplication.sharedApplication canOpenURL:url];if(available)[UIApplication.sharedApplication openURL:url options:@{} completionHandler:nil];});return available;}
     bool launcher_show(bool reload){bool ok=false;ui([&]{if(!launcher)launcher=[POLauncher new];ok=[launcher show:reload];});return ok;}
     void launcher_hide(){ui([&]{[launcher hide];});}
     String launcher_requests(){String value;ui([&]{value=json([launcher takeRequests]?:@[]);});return value;}
@@ -132,6 +147,7 @@ public:
             if(!device[@"deviceId"]){device=@{@"deviceId":[@"ios-" stringByAppendingString:NSUUID.UUID.UUIDString]};if(!save_key(@"device",device))return json(failure);}
             NSDictionary *session=read_key(@"session",ok);if(!ok)return json(failure);
             return json(@{@"ok":@YES,@"account":session[@"account"]?:NSNull.null,@"secret":session[@"secret"]?:@"",
+                @"appVersion":[@"iOS " stringByAppendingString:[NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleVersion"]?:@""],
                 @"deviceId":device[@"deviceId"],@"preferences":@{@"gameDisplayMode":@"fullscreen",@"minimizeToTrayOnGameLaunch":@NO}});
         }
         if(method=="saveSession") {
@@ -142,6 +158,7 @@ public:
             return json(save_key(@"session",@{@"account":clean,@"secret":secret})?@{@"ok":@YES}:failure);
         }
         if(method=="clearSession") {
+            ui([&]{[webGame close];});
             OSStatus result=SecItemDelete((__bridge CFDictionaryRef)key_query(@"session"));
             return json(result==errSecSuccess||result==errSecItemNotFound ? @{@"ok":@YES}:failure);
         }

@@ -58,15 +58,15 @@
     },
     {
       "path": "launcher/launcher-mobile-ui.js",
-      "sourceSha256": "51396a8125ae36eccf1658bab6a3193266ca7abad233d9ef3c4ace9eac961745",
-      "sha256": "51396a8125ae36eccf1658bab6a3193266ca7abad233d9ef3c4ace9eac961745",
-      "size": 16548
+      "sourceSha256": "b7808f1fd95a5c357b73d61a2d3746ed9e5f311bf5ab6ef927ac74aba6724390",
+      "sha256": "b7808f1fd95a5c357b73d61a2d3746ed9e5f311bf5ab6ef927ac74aba6724390",
+      "size": 17672
     },
     {
       "path": "launcher/launcher-mobile.css",
-      "sourceSha256": "ff438bb1678c4cb65b12fa98bf832371c770e80e4244da87e60e322c4e718fce",
-      "sha256": "ff438bb1678c4cb65b12fa98bf832371c770e80e4244da87e60e322c4e718fce",
-      "size": 38432
+      "sourceSha256": "9c307a129262f89493dfbd11933ccfaa6e6764cd8ba5bbdd9cbf58deb58b6036",
+      "sha256": "9c307a129262f89493dfbd11933ccfaa6e6764cd8ba5bbdd9cbf58deb58b6036",
+      "size": 51110
     },
     {
       "path": "launcher/launcher-profile-shop.css",
@@ -190,9 +190,9 @@
     },
     {
       "path": "launcher/mobile-bridge.js",
-      "sourceSha256": "77999b33f626d1f3816561fb989b210d4c306933713c69d814b9c9a514cbdb36",
-      "sha256": "cb08de19c1ac0fc976a3034a599bb24b3bb38ae99c4dc64cb25f2df959d53bf1",
-      "size": 37824
+      "sourceSha256": "7df50941a034cea5cfd1838e57e7a7458c7de2ce1f5421139e974368c3c195e1",
+      "sha256": "c0f0917ef6210634fd752ffa0ff429ec50ac916ad3ddbdf837459a7463fb3d86",
+      "size": 38583
     },
     {
       "path": "launcher/socket.io.min.js",
@@ -9189,10 +9189,27 @@
       "size": 1554991
     },
     {
+      "path": "mobile/game-mobile.css",
+      "sourceSha256": "d9bc3bdfdbbb14429f41e78cc51fe0f5ff6883b076b4e8f8eed6f6be1f5349df",
+      "sha256": "d9bc3bdfdbbb14429f41e78cc51fe0f5ff6883b076b4e8f8eed6f6be1f5349df",
+      "size": 1285581
+    },
+    {
+      "path": "mobile/game-mobile.js",
+      "sourceSha256": "756a0a1c0982e67156626e074a2b9e2e0edd29e6d093153ae9e065f47c772bfb",
+      "sha256": "fbc9c57522d8bbff80115344b7345559b3629013f14fccb8ff9921c9f6c3f432",
+      "size": 251587
+    },
+    {
+      "path": "mobile/session-bootstrap.js",
+      "sha256": "0b1948727e46467f431881e0a13788cb5bfaf581157ea380be837dd72d44700d",
+      "size": 2044
+    },
+    {
       "path": "launcher/ios-transport.js",
-      "sha256": "7e7f19a4ebdb08fffaab0462f926b41b7637ea7ae072eeca3148cc7af9f59517",
-      "size": 246
+      "sha256": "7903f63accf515cf2b15fe5f0f1cec8d24a8bfce64cf932d9458fa962cc2cebd",
+      "size": 292
     }
   ],
-  "bytes": 313175998
+  "bytes": 314729817
 }

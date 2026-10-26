@@ -12,6 +12,7 @@ html[data-platform="android"] {
   -webkit-text-size-adjust: 100%;
 }
 html[data-platform="android"] body { overscroll-behavior: none; }
+html[data-platform="android"] .mobile-ios-games-note {margin:8px 0;font-size:12px;color:#c4d3d9;}
 html[data-platform="android"] [hidden] { display: none !important; }
 html[data-platform="android"] .window-titlebar { display: none; }
 html[data-platform="android"] .screen { inset: 0; }
@@ -83,15 +84,15 @@ html[data-platform="android"] .rail-box-art { width: 34px; }
 html[data-platform="android"] .game-rail-item strong { font-size: 12px; white-space: normal; line-height: 1.45; }
 html[data-platform="android"] .game-rail-item small { font-size: 10px; line-height: 1.4; white-space: normal; }
 html[data-platform="android"] .game-feature { border-radius: 12px; overflow-y: auto; overflow-x: hidden; }
-html[data-platform="android"] .feature-content { grid-template-columns: minmax(80px, 24%) minmax(0, 1fr); gap: 14px; height: auto; min-height: 100%; padding: 14px; align-items: center; }
+html[data-platform="android"] .feature-content { grid-template-columns: minmax(80px, 24%) minmax(0, 1fr); gap: 12px; height: 100%; min-height: 0; padding: 8px 12px; align-items: center; }
 html[data-platform="android"] .feature-cover-wrap { width: min(190px, 100%); align-self: start; margin-top: 12px; }
-html[data-platform="android"] .feature-copy { min-width: 0; max-width: none; }
+html[data-platform="android"] .feature-copy { min-width: 0; max-width: none; min-height:0;height:100%;display:flex;flex-direction:column; }
 html[data-platform="android"] .feature-kicker-row { flex-wrap: wrap; gap: 6px; }
-html[data-platform="android"] .feature-copy h2 { margin: 10px 0 5px; font-size: 26px; line-height: 1.25; }
-html[data-platform="android"] .feature-tagline { margin-bottom: 9px; font-size: 14px; line-height: 1.45; }
-html[data-platform="android"] .feature-tags { gap: 5px; margin-bottom: 9px; }
-html[data-platform="android"] .feature-description { font-size: 13px; line-height: 1.6; }
-html[data-platform="android"] .feature-actions { gap: 7px; margin-top: 12px; }
+html[data-platform="android"] .feature-copy h2 { margin: 5px 0; font-size: 23px; line-height: 1.25; }
+html[data-platform="android"] .feature-tagline { margin:0 0 4px; font-size: 13px; line-height: 1.4; }
+html[data-platform="android"] .feature-tags { gap: 5px; margin-bottom: 4px; }
+html[data-platform="android"] .feature-description { font-size: 13px; line-height: 1.4; margin:4px 0;overflow:auto;min-height:0;flex:1; }
+html[data-platform="android"] .feature-actions { gap: 5px; margin-top:auto;padding-top:4px;flex-shrink:0;flex-wrap:wrap; }
 html[data-platform="android"] .feature-actions button { padding: 10px 13px; font-size: 13px; }
 html[data-platform="android"] .primary-action { min-width: 125px; }
 html[data-platform="android"] .install-progress { margin-top: 10px; padding: 10px; }
@@ -394,6 +395,111 @@ html[data-platform="android"] #roomCompanionPanel .room-companion-close { width:
 html[data-platform="android"] #roomCompanionPanel .room-companion-wheel { padding-top:48px!important; }
 html[data-platform="android"] #roomCompanionPanel .room-companion-portrait { max-height:96px!important; }
 html[data-platform="android"] :is(.room-minigame-overlay,.room-aquarium-manager-overlay,.fishing-journal-overlay) { background:#0003!important; backdrop-filter:none!important; }
-html[data-platform="android"] .room-aquarium-manager-card { width:min(650px,76vw)!important; margin-left:auto!important; }
+html[data-platform="android"] .room-aquarium-manager-card { width:100%!important; height:calc(100dvh - 16px)!important; margin:0!important; }
 html[data-platform="android"] .room-minigame-card { width:min(900px,90vw)!important; margin-left:auto!important; }
 html[data-platform="android"] #toast { pointer-events:none!important; }
+
+
+/* Android presentation module: launcher-activities */
+/* Mobile activities use the original art, controllers and authoritative rules.
+   One fixed rail + one bounded play area; only instructions/results scroll. */
+html[data-platform="android"] #roomMinigameOverlay {
+  padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)!important;
+  background:#071a23!important;
+}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-card {
+  box-sizing:border-box;width:100%!important;height:100%!important;max-height:100%!important;margin:0!important;
+  display:grid;grid-template-columns:clamp(128px,20vw,180px) minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);
+  overflow:hidden;border-radius:0;border:1px solid #c9af69;
+}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-head {grid-column:1;grid-row:1;display:block;padding:8px!important;position:relative;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-head>div {padding-top:40px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-head h2 {font-size:18px!important;line-height:1.3;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-eyebrow {font-size:9px;letter-spacing:.04em;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-close {position:absolute;top:2px;right:6px;width:44px!important;min-width:44px!important;min-height:44px!important;height:44px!important;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-progress {grid-column:1;grid-row:2;padding:4px 8px!important;min-height:0!important;font-size:12px;line-height:1.4;overflow-wrap:anywhere;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-crew {grid-column:1;grid-row:3;align-self:stretch;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:4px;padding:8px!important;min-height:0;overflow:auto;border-top:0;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-crew img {width:42px;height:42px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-crew p {font-size:12px;line-height:1.4;margin:2px 0;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-body {grid-column:2;grid-row:1/4;height:100%;min-height:0;padding:6px!important;overflow:auto;overscroll-behavior:contain;box-sizing:border-box;border-left:1px solid #c9af6940;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-intro {font-size:13px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-intro h3 {margin:6px 0;font-size:18px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-intro ol {margin:6px 0;line-height:1.5;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-jobs {grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin:0 0 6px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-job {min-height:68px!important;padding:6px;font-size:12px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-job strong {font-size:12px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-cost {padding:6px;margin:6px 0;line-height:1.4;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-stage {min-height:100%!important;padding:8px;box-sizing:border-box;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-order {gap:6px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-order strong {font-size:15px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-round-number {font-size:19px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-timer {margin:5px 0;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-hint {font-size:12px;line-height:1.35;margin:4px 0;min-height:0;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-belt {min-height:0;gap:6px;padding:4px 0;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-cargo {height:132px!important;padding:4px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-cargo img {width:82px;height:80px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-cargo strong {font-size:13px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-stage kbd {display:none;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-lanes {height:clamp(100px,34dvh,180px);}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-runner {transform:translateX(-50%);width:110px;height:110px;left:50%;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-steps {gap:5px;margin:6px 0;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-steps span {width:24px;height:24px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-directions {gap:12px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-direction {width:90px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-recipe {margin:4px 0;gap:4px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-recipe li {min-height:45px;padding:3px;gap:3px;font-size:11px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-food-art {width:28px!important;height:28px!important;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-prep {margin:4px 0;min-height:36px;gap:4px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-prep-slot {min-height:38px;padding:3px!important;gap:2px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-ingredients {gap:4px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-ingredient {min-height:58px!important;flex-direction:row;gap:4px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-ingredient strong {font-size:12px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-puzzle-actions {margin-top:6px;gap:4px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-puzzle-actions button {padding:5px 8px;font-size:12px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-stage.job-cooking {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);grid-template-rows:auto 5px auto auto auto auto;gap:4px 8px;align-content:start;}
+html[data-platform="android"] #roomMinigameOverlay .job-cooking>:is(.room-minigame-order,.room-minigame-timer,.room-minigame-hint,.room-minigame-puzzle-actions) {grid-column:1/-1;}
+html[data-platform="android"] #roomMinigameOverlay .job-cooking .room-minigame-recipe {grid-column:1;grid-row:4;}
+html[data-platform="android"] #roomMinigameOverlay .job-cooking .room-minigame-prep {grid-column:1;grid-row:5;}
+html[data-platform="android"] #roomMinigameOverlay .job-cooking .room-minigame-ingredients {grid-column:2;grid-row:4/6;grid-template-columns:repeat(3,minmax(0,1fr));align-self:center;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-stage:is(.job-repair,.job-navigation) {
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(204px,43%);grid-template-rows:auto 5px auto 1fr auto;gap:6px 10px;align-content:start;
+}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-stage:is(.job-repair,.job-navigation)>* {grid-column:1;min-width:0;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-stage :is(.room-minigame-pipe-board,.room-minigame-chart) {
+  grid-column:2;grid-row:1/6;width:100%;max-width:270px;align-self:center;justify-self:center;margin:0;gap:3px;
+}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-chart {max-width:240px!important;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-sea-cell {gap:0;padding:1px;min-height:48px!important;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-nav-art {width:23px!important;height:23px!important;position:absolute;opacity:.6;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-cell-label {font-size:10px;z-index:1;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-cell-order {font-size:15px;min-height:16px;z-index:1;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-stage:is(.job-repair,.job-navigation) .room-minigame-puzzle-actions {align-content:end;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-round-result {font-size:11px;margin-top:4px;grid-column:1/-1!important;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-confirm {position:fixed;inset:12px;z-index:5;overflow:auto;padding:18px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-result {padding:8px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-result h3 {font-size:24px;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v4-intro {gap:6px;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v4-intro-scene {min-height:80px;padding:10px;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v4-choice {min-height:48px!important;font-size:12px;padding:4px;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v4-choices {gap:4px;padding:5px;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v4-start {min-height:48px!important;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v4-intro-note {margin:4px 0;font-size:12px;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-stage.fishing-v4 {height:100%;padding:0;overflow:hidden;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-stage.fishing-v4>.room-minigame-order {display:none;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-stage.fishing-v4>.room-minigame-timer {display:none;}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-stage.fishing-v4>.room-minigame-hint {position:absolute;top:3px;left:6px;right:6px;z-index:30;pointer-events:none;text-shadow:0 1px 3px #000;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v4-sea,html[data-platform="android"] #roomMinigameOverlay .room-fishing-v4-sea[data-stage="fight"] {height:100%!important;min-height:0!important;}
+html[data-platform="android"] #roomMinigameOverlay .fishing-v5 .room-fishing-v5-hud {width:75%;left:2%;top:4%;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v4-fight-controls:not([hidden]) {display:grid;top:auto;bottom:6px!important;left:8px;right:auto!important;width:min(240px,46%)!important;transform:none;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v4-reel {position:static;transform:none;width:100%;min-height:56px!important;}
+html[data-platform="android"] #roomMinigameOverlay .fishing-v5 .room-fishing-power-panel {width:140px;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v4-reel strong {font-size:12px;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v4-primary {min-height:48px!important;font-size:16px!important;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v4-signal {font-size:clamp(16px,3vw,24px);}
+html[data-platform="android"] #roomMinigameOverlay .room-minigame-stage.fishing-v2 {display:grid;grid-template-columns:minmax(0,1fr) minmax(170px,42%);gap:4px 8px;align-content:start;height:100%;}
+html[data-platform="android"] #roomMinigameOverlay .fishing-v2>* {grid-column:2;min-width:0;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v2-sea {grid-column:1;grid-row:1/10;height:100%!important;min-height:0!important;margin:0;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v2-steps {display:none;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v2-panel {min-height:0;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v2-panel {padding:4px;gap:4px;}
+html[data-platform="android"] #roomMinigameOverlay .room-fishing-v2-actions {gap:4px;}

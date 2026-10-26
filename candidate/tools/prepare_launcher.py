@@ -11,14 +11,15 @@ def prepare_launcher(source, candidate):
     target=candidate/'bundle-resources/launcher-web'
     if target.exists():raise ValueError('Use a fresh launcher bundle directory')
     files=[]
-    for folder in ['launcher','launcher-assets']:
+    for folder in ['launcher','launcher-assets','mobile']:
         for file in sorted((source/folder).rglob('*')):
             if not file.is_file():continue
+            if folder=='mobile' and file.name not in ['game-mobile.js','game-mobile.css']:continue
             if file.is_symlink():raise ValueError('Do not copy resource symlinks')
             relative=file.relative_to(source)
             destination=target/relative;destination.parent.mkdir(parents=True,exist_ok=True)
             data=file.read_bytes();original=hashlib.sha256(data).hexdigest()
-            if folder=='launcher' and file.suffix in ['.html','.js','.css']:
+            if folder in ['launcher','mobile'] and file.suffix in ['.html','.js','.css']:
                 text=data.decode('utf8').replace('https://appassets.androidplatform.net','poapp://app')
                 text=text.replace('https:\\/\\/appassets\\.androidplatform\\.net','poapp:\\/\\/app')
                 text=text.replace('Android 啟動器','iOS 啟動器').replace('Android app storage','iPhone App 儲存空間')
@@ -28,9 +29,15 @@ def prepare_launcher(source, candidate):
                 data=text.encode('utf8')
             destination.write_bytes(data)
             files.append({'path':relative.as_posix(),'sourceSha256':original,'sha256':hashlib.sha256(data).hexdigest(),'size':len(data)})
+    session_source=Path(__file__).resolve().parents[2]/'android/native/session-bootstrap.js'
+    session_target=target/'mobile/session-bootstrap.js'
+    session_target.parent.mkdir(parents=True,exist_ok=True)
+    session_target.write_bytes(session_source.read_bytes())
+    files.append({'path':'mobile/session-bootstrap.js','sha256':hashlib.sha256(session_target.read_bytes()).hexdigest(),'size':session_target.stat().st_size})
     transport=target/'launcher/ios-transport.js'
     transport.write_text("""'use strict';
 window.TabletopAndroid=Object.freeze({postMessage:message=>window.webkit.messageHandlers.tabletop.postMessage(message)});
+document.documentElement.dataset.host='ios';
 window.__poLauncherPause=()=>{for(const media of document.querySelectorAll('audio,video'))media.pause();};
 """,encoding='utf8')
     files.append({'path':'launcher/ios-transport.js','sha256':hashlib.sha256(transport.read_bytes()).hexdigest(),'size':transport.stat().st_size})

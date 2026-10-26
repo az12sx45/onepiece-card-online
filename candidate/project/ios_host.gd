@@ -2,6 +2,7 @@ extends Control
 var game: Control
 var bridge: Object
 var preferences: Dictionary = {"gameDisplayMode":"fullscreen","minimizeToTrayOnGameLaunch":false}
+var installed_version: String = "iOS"
 
 func _ready() -> void:
 	var backdrop := ColorRect.new()
@@ -28,17 +29,26 @@ func _request(method: String,args: Dictionary) -> Dictionary:
 		var value: Variant=JSON.parse_string(bridge.call("session_request",method,JSON.stringify(args)))
 		if not value is Dictionary:return {"ok":false,"error":"secure storage unavailable"}
 		if method=="getNativeState":
+			installed_version=str(value.get("appVersion","iOS"))
 			value.preferences=preferences;value.cacheRoot="iPhone App 儲存空間";value.freeBytes=null
-			value.games={"board":{"status":"installed","hasInstalled":true,"removable":false,"installedVersion":"iOS 40","remoteVersion":"iOS 40"},"card":{"status":"unavailable","hasInstalled":false,"removable":false,"error":"此 iOS 測試包目前提供航海錄。"},"chess":{"status":"unavailable","hasInstalled":false,"removable":false,"error":"此 iOS 測試包目前提供航海錄。"}}
+			value.games={"board":{"status":"installed","hasInstalled":true,"removable":false,"installedVersion":installed_version,"remoteVersion":installed_version},"card":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"},"chess":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"}}
 		return value
-	if method=="savePreferences":return {"ok":true,"preferences":preferences}
+	if method=="savePreferences":
+		if args.get("gameDisplayMode","fullscreen")!="fullscreen":return {"ok":false,"error":"iPhone 使用系統管理的橫向全螢幕。"}
+		return {"ok":true,"preferences":preferences}
 	if method=="launchGame":
-		if args.get("gameId","")!="board":return {"ok":false,"error":"此 iOS 測試包目前提供航海錄。"}
+		var target:=str(args.get("gameId",""))
+		if not target in ["board","card","chess"]:return {"ok":false,"error":"無效的遊戲。"}
 		var session: Variant=JSON.parse_string(bridge.call("session_request","getNativeState","{}"))
 		if not session is Dictionary or str(session.get("secret","")).is_empty():return {"ok":false,"error":"請先登入"}
+		var active:=str(bridge.call("web_game_active"))
+		if not active.is_empty() and active!=target:return {"ok":false,"error":"請先回到原遊戲並按「結束遊戲」，再開另一款。"}
+		if target!="board":
+			if is_instance_valid(game):return {"ok":false,"error":"請先結束航海錄，再開另一款。"}
+			return {"ok":true} if bridge.call("web_game_open",target) else {"ok":false,"error":"遊戲無法開啟，請稍後再試。"}
 		_start_game.call_deferred();return {"ok":true}
-	if method=="chooseCacheLocation":return {"ok":true,"cacheRoot":"iPhone App 儲存空間","managedSandbox":true}
-	if "Update" in method:return {"ok":true,"state":{"status":"unavailable","currentVersion":"iOS 40","message":"iOS 測試版請透過 iloader 安裝新版；遊戲圖片會按需下載。","error":"iOS 測試版請透過 iloader 安裝新版。"}}
+	if method=="chooseCacheLocation":return {"ok":bool(bridge.call("open_settings")),"cacheRoot":"iPhone App 儲存空間","managedSandbox":true}
+	if "Update" in method:return {"ok":true,"state":{"status":"unavailable","currentVersion":installed_version,"message":"iOS 測試版請透過 iloader 安裝新版；遊戲圖片會按需下載。","error":"iOS 測試版請透過 iloader 安裝新版。"}}
 	return {"ok":false,"error":"此操作目前不適用於 iOS 航海錄測試版。"}
 
 func _start_game() -> void:
@@ -50,7 +60,7 @@ func _start_game() -> void:
 func return_to_launcher() -> void:
 	if is_instance_valid(game):game.queue_free()
 	game=null
-	if bridge!=null:bridge.call("launcher_show",true)
+	if bridge!=null:bridge.call("launcher_show",false)
 
 func _layout() -> void:
 	if not is_instance_valid(game): return

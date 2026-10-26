@@ -1,5 +1,6 @@
 #import <Cocoa/Cocoa.h>
 #include "po_launcher_assets.h"
+#include "po_web_game_policy.h"
 
 @interface Probe : NSObject <WKScriptMessageHandler,WKNavigationDelegate>
 @property(nonatomic,strong) WKWebView *web;
@@ -24,6 +25,10 @@
 
 int main(int argc,const char **argv){@autoreleasepool{
     if(argc!=2)return 2;
+    for(NSString *good in @[@"https://onepiece-card-online.onrender.com/start.html",@"https://onepiece-card-online.onrender.com:443/chess/index.html"])
+        if(!POOfficialGameURL([NSURL URLWithString:good]))return 8;
+    for(NSString *bad in @[@"http://onepiece-card-online.onrender.com/start.html",@"https://foreign.example/game.html",@"https://onepiece-card-online.onrender.com:8443/game.html",@"https://user@onepiece-card-online.onrender.com/game.html",@"https://onepiece-card-online.onrender.com@foreign.example/game.html"])
+        if(POOfficialGameURL([NSURL URLWithString:bad]))return 9;
     // Real Foundation /private alias regression, with the same production resolver.
     NSString *folder=[@"/private/tmp" stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
     NSFileManager *fm=NSFileManager.defaultManager;
@@ -51,7 +56,7 @@ int main(int argc,const char **argv){@autoreleasepool{
     NSDate *deadline=[NSDate dateWithTimeIntervalSinceNow:40];
     while(!probe.failed&&!probe.ready&&deadline.timeIntervalSinceNow>0){
         [NSRunLoop.currentRunLoop runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
-        if(probe.loaded)[probe.web evaluateJavaScript:@"document.body.dataset.stage==='auth' && document.getElementById('authTitle').textContent==='航海者登入' && document.querySelector('.auth-logo').naturalWidth>0 && !!window.onePieceDesktop" completionHandler:^(id value,NSError *error){if(error){NSLog(@"probe JS failure %@",error);probe.failed=YES;}else if([value boolValue])probe.ready=YES;}];
+        if(probe.loaded)[probe.web evaluateJavaScript:@"document.body.dataset.stage==='auth' && document.getElementById('authTitle').textContent==='航海者登入' && document.querySelector('.auth-logo').naturalWidth>0 && !!window.onePieceDesktop && typeof crypto.randomUUID==='function' && /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(crypto.randomUUID())" completionHandler:^(id value,NSError *error){if(error){NSLog(@"probe JS failure %@",error);probe.failed=YES;}else if([value boolValue])probe.ready=YES;}];
     }
     NSLog(@"WebKit auth document result loaded=%d ready=%d failed=%d",probe.loaded,probe.ready,probe.failed);
     [config.userContentController removeScriptMessageHandlerForName:@"tabletop"];
