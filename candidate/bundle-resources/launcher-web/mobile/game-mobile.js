@@ -80,6 +80,7 @@
   function adaptCardPanels() {
     if (!['card','card-tutorial'].includes(kind)) return;
     const main = document.querySelector('main');
+    if (main?.dataset.cardPhoneMounted) return;
     const aside = main?.querySelector(':scope > aside');
     const log = document.getElementById('logBox')?.closest('.card');
     // Move the original bound elements, never clone controls or game state.
@@ -3601,4 +3602,105 @@ window.TabletopPhoneStaticMapData={"width":5120,"height":3976,"pixels":[5120,397
   }
   function start(){window.TabletopBoardPhoneLayout?.subscribe('scene-visibility',sync,{gameUis:['board'],roots:['#boardModalBack','#battlePageOverlay']});sync();}
   if(document.body)start();else document.addEventListener('DOMContentLoaded',start,{once:true});
+})();
+
+
+/* Android presentation module: card-phone-table */
+/* Presentation adapter: move original controls once; never copy game state,
+   dispatch gameplay commands, replace handlers, or change disabled flags. */
+(() => {
+  'use strict';
+  const origin = window.__TABLETOP_ANDROID_TEST_ORIGIN || 'https://onepiece-card-online.onrender.com';
+  if (location.origin !== origin || !['/game.html','/tutorial.html'].includes(location.pathname)) return;
+  function mount() {
+    const root = document.documentElement, main = document.querySelector('main');
+    const hand = document.getElementById('myPlayZone'), players = document.getElementById('players');
+    const header = document.querySelector('header > div'), table = main?.querySelector(':scope > section');
+    if (!main || !hand || !players || !header || !table || main.dataset.cardPhoneMounted) return;
+    main.dataset.cardPhoneMounted = 'true'; root.dataset.cardPhone = 'table';
+    const node = (tag, cls, text) => { const n = document.createElement(tag); n.className = cls; if(text)n.textContent=text; return n; };
+    const button = (text, fn) => { const b=node('button','phone-card-control',text); b.type='button';b.onclick=fn;return b; };
+    const aside = main.querySelector(':scope > aside'), log = document.getElementById('logBox')?.closest('.card');
+    const discard = document.getElementById('discard')?.closest('.card');
+    const drawer=node('section','phone-card-sheet');drawer.id='phoneCardSheet';drawer.hidden=true;drawer.setAttribute('role','dialog');drawer.setAttribute('aria-modal','true');
+    const sheetHead=node('div','phone-card-sheet-head'),title=node('h2','','牌桌資料'),content=node('div','phone-card-sheet-body');
+    title.id='phoneCardSheetTitle';drawer.setAttribute('aria-labelledby',title.id);
+    let restore=[],opener=null;
+    function close() { for(const [n,marker] of restore){if(n.classList.contains('phone-card-preview')){n.remove();marker.remove();}else marker.replaceWith(n);}restore=[];drawer.hidden=true;root.removeAttribute('data-card-sheet');opener?.focus({preventScroll:true}); }
+    function open(name, nodes) { if(!drawer.hidden)close();opener=document.activeElement;title.textContent=name;content.replaceChildren();
+      for(const n of nodes.filter(Boolean)){const marker=document.createComment('phone-card-return');n.before(marker);restore.push([n,marker]);content.append(n);}
+      drawer.hidden=false;root.dataset.cardSheet=name;closeButton.focus({preventScroll:true});
+    }
+    const closeButton=button('返回牌桌',close);sheetHead.append(title,closeButton);drawer.append(sheetHead,content);document.body.append(drawer);
+    drawer.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();close();}if(e.key==='Tab'){const all=[...drawer.querySelectorAll('button,input,select,[tabindex="0"]')].filter(n=>!n.disabled&&n.getClientRects().length);const first=all[0],last=all.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}}});
+    const storage=node('div','phone-card-storage');storage.hidden=true;document.body.append(storage);
+    const actions=node('div','phone-card-round-actions');
+    for(const id of ['btnCpuSkip','btnNextRound']){const b=document.getElementById(id);if(b)actions.append(b);}
+    header.append(actions);
+    for(const n of [log,discard])if(n)storage.append(n);
+    const originalMusic=document.getElementById('bgmBar');if(originalMusic)storage.append(originalMusic);
+    const dex=document.getElementById('cardDexBtn');
+    const menu=node('div','phone-card-menu');
+    if(dex){menu.append(dex);dex.addEventListener('click',close);}
+    const roster=button('玩家詳情',()=>open('玩家詳情',[aside]));
+    const records=button('棄牌與紀錄',()=>open('棄牌與紀錄',[discard,log]));
+    const music=button('音效設定',()=>open('音效設定',[originalMusic]));
+    const venuePanel=document.getElementById('venues')?.closest('.card');
+    menu.append(roster,button('場地詳情',()=>open('場地詳情',[venuePanel])),records,music);storage.append(menu);
+    const menuButton=button('選單',()=>open('選單',[menu]));menuButton.id='phoneCardMenu';header.append(menuButton);
+    const turn=node('div','phone-card-turn');
+    for(const id of ['turnLbl','stepLbl']){const span=document.getElementById(id);if(span)turn.append(span);}
+    header.insertBefore(turn,actions);
+    const step=document.getElementById('stepLbl');
+    if(step){const translate=()=>{const label=({draw:'抽牌',choose:'選牌',ended:'本局結束'})[step.textContent.trim()]||step.textContent;step.dataset.phoneLabel=label;step.setAttribute('aria-label',label);};translate();new MutationObserver(translate).observe(step,{childList:true,subtree:true,characterData:true});}
+    aside.classList.add('phone-card-roster');main.prepend(aside);
+    const rosterHeading=players.previousElementSibling;
+    if(rosterHeading)rosterHeading.textContent='玩家';
+    table.classList.add('phone-card-battlefield');
+    const board=table.querySelector(':scope > .grid');if(board)board.classList.add('phone-card-surface');
+    hand.classList.add('phone-card-choice');
+    // The older tutorial owns the same controls directly; normalize only their container.
+    if(hand.querySelector(':scope > #playHand')){
+      const pair=node('div','grid'),hint=node('div','','請從兩張牌中選一張打出');hint.id='chooseHint';
+      pair.append(document.getElementById('playHand'),document.getElementById('playDrawn'));
+      hand.prepend(hint,pair);
+    }
+    const previewButtons=node('div','phone-card-previews');
+    for(const [id,label] of [['imgHand','查看手牌'],['imgDrawn','查看新牌']]){
+      previewButtons.append(button(label,()=>{const source=document.getElementById(id);if(!source?.getAttribute('src'))return;
+        const view=node('div','phone-card-preview'),img=node('img','');img.src=source.currentSrc||source.src;img.alt=label;view.append(img);storage.append(view);open(label,[view]);
+        // Read-only artwork preview; the original card remains the only play control.
+      }));
+    }
+    hand.append(previewButtons);
+    // Close a reading sheet when the original game opens a required choice.
+    const modal=document.getElementById('modal');if(modal)new MutationObserver(()=>{if(!modal.classList.contains('hidden')&&!drawer.hidden)close();}).observe(modal,{attributes:true,attributeFilter:['class']});
+    window.CardPhonePresentation={closeSheet:()=>{if(drawer.hidden)return false;close();return true;}};
+    const guide=document.getElementById('tutorialPanel'),guideStep=document.getElementById('tutorialStepLbl');
+    if(guide&&guideStep){
+      let lastStep=-1;
+      const focusGuide=()=>{const i=parseInt(guideStep.textContent,10)-1;
+        const targets=['#players','#venues','#players','#btnDraw','#myPlayZone','#players','#players','#discard','#logBox','#players','#cardDexBtn','#btnDraw'];
+        const target=document.querySelector(targets[i]),focus=document.getElementById('tutorialFocus');if(!target||!focus)return;
+        const r=target.getBoundingClientRect(),limit=main.getBoundingClientRect().right;
+        Object.assign(focus.style,{left:Math.max(2,r.left-2)+'px',top:Math.max(2,r.top-2)+'px',width:Math.max(0,Math.min(r.width+4,limit-r.left-2))+'px',height:Math.max(0,Math.min(r.height+4,innerHeight-r.top-4))+'px'});
+      };
+      const syncGuide=()=>{
+        if(guide.classList.contains('hidden')){root.removeAttribute('data-card-tutorial');if(lastStep>=0&&!drawer.hidden)close();lastStep=-1;return;}
+        const i=parseInt(guideStep.textContent,10)-1;root.dataset.cardTutorial=String(i);
+        if(i!==lastStep){lastStep=i;if(!drawer.hidden)close();
+          if([2,5,6,9].includes(i))open('玩家詳情',[aside]);
+          if([7,8].includes(i))open('棄牌與紀錄',[discard,log]);
+          if(i===10)open('選單',[menu]);
+        }
+        // Spatial wording only; the tutorial's original step/action engine remains intact.
+        for(const id of ['tutorialSub','tutorialTip']){const n=document.getElementById(id);if(n)n.textContent=n.textContent.replaceAll('右側','玩家區').replaceAll('右邊玩家框','玩家框').replaceAll('下方日誌','對局日誌');}
+        requestAnimationFrame(focusGuide);
+      };
+      new MutationObserver(syncGuide).observe(guideStep,{childList:true,subtree:true,characterData:true});
+      new MutationObserver(syncGuide).observe(guide,{attributes:true,attributeFilter:['class']});
+      window.addEventListener('resize',()=>requestAnimationFrame(focusGuide),{passive:true});syncGuide();
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
