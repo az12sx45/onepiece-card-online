@@ -2016,3 +2016,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 public/js/board_game.js 的 applyBoardLanPayload 在非同步套用結束後呼叫 syncTurnActionButtons；不修改玩法或網路格式。
 
 - docs/BOARD_POSTGAME_SYNC_20261026.md：通關後同步、決鬥動畫鎖與幾何快取變更及驗證邊界。
+
+2026-10-27：爭霸戰新增桌機共用牌桌、頭像選人及卡片飛行；規則/同步不變。詳見 DEV_WORKFLOW.md 本日記錄。

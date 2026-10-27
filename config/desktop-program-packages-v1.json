@@ -14,6 +14,7 @@
       "entryPath": "start.html",
       "programFiles": [
         "css/card-cursor-buggy-v3.css",
+        "css/card-desktop-table.css",
         "css/card-entry-tailwind-v1.min.css",
         "css/card-finish-v1.css",
         "css/card-tailwind-v1.min.css",
@@ -23,6 +24,7 @@
         "i18n/ja.js",
         "i18n/ko.js",
         "i18n/zh-Hant.js",
+        "js/card-desktop-table.js",
         "js/card_finish_v1.js",
         "js/game_cursor_feedback_v1.js",
         "manifest.webmanifest",

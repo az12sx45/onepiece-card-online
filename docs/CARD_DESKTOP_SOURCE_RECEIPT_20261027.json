@@ -1,0 +1,28 @@
+{
+  "sourceRoot": "C:\\Users\\\u738b\u66dc\u744b\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html",
+  "sourceFiles": {
+    "android\\build-card-desktop.mjs": "bd4c2c5eb9d478202f9c9a5ab69f571611acba0267e0022c2e07315fa3d4d243",
+    "android\\web\\card-desktop-layout.css": "761e07068791a9ff3bb0f102fc432c8ebf7902b2173cde67e3bf6c572412d5dc",
+    "android\\web\\card-phone-table.js": "b11d839aeff2c114b00fd41fa46e7e27d4fb61331ccd1cfb96bad2e0db08d69f",
+    "android\\web\\card-phone-table.css": "d70c671be310b3301039dbace7e705f558dc18d0e3bae7b5731ffac92909fc2f",
+    "android\\web\\card-phone-controls.js": "9406329ec5fc953d8d80cf64c0023782c379a172483301fe1e79fbbeb9c03701",
+    "android\\web\\card-phone-controls.css": "cc8be0dc2bad621ae593ef1857db453f09ba42aaa282c597651af2363a9bff6d",
+    "android\\web\\card-phone-fx.js": "d038a4f4486474171a8551d2312659d5a9d6df73b324eb3db775c60c3df7a915",
+    "android\\web\\card-phone-fx.css": "14343eed7b9b63887f2883f9c32ae12898ddd6c470ee1bd2756a39abc68067eb",
+    "android\\web\\card-phone-piles.js": "9528557bf29ff380b82e30143f759efcd57360b240a61c1f19e11e4878dbac44",
+    "android\\web\\card-phone-piles.css": "abdfd321ba96f73017569538d7eb58914725aaa3d7f65b9eeb4a8baac1acc51e",
+    "android\\web\\card-phone-flight.js": "f9c3b6e31a565dbd800a9bba7618888746e71012b4d3373a89888feb7b857b97",
+    "android\\web\\card-phone-flight.css": "fab32c62910f76b922481f97eff9035d4fa515600419183db79b1ee5ffa33ce4",
+    "android\\web\\card-phone-stage.js": "c1937231871d89f2e91e81a02c6fec378d5af83a80bb3de5d3f918c0be6feb3b",
+    "android\\web\\card-phone-stage.css": "9e13dc4a6b0a49a46ff999be8941a972b6b821c24004033b6916e62ec49b0dd8",
+    "android\\web\\card-phone-targets.js": "4d9525f4c2fbfbbf1671ba7e49c159b3e632d841bf6ff4afa4a048ad23af6057",
+    "android\\web\\card-phone-targets.css": "df503e4695a4280901efe1265f355712258296bc93b3f599d179fb0982e49687"
+  },
+  "tests": {
+    "portrait": 67,
+    "stage": 90,
+    "nativeCoexistence": 4
+  },
+  "physicalDeviceTested": false,
+  "published": false
+}
