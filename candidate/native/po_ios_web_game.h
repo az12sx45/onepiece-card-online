@@ -29,6 +29,16 @@
 - (void)home { [self hide];if(_returnToLauncher)_returnToLauncher(); }
 - (void)reload { [self confirm:@"重新連線？請先儲存目前進度。" action:^{[self.web reload];}]; }
 - (void)finish { [self confirm:@"結束遊戲？請先儲存進度或離開對戰房間。" action:^{[self close];if(self.returnToLauncher)self.returnToLauncher();}]; }
+- (void)options {
+    if([[self presenter] isKindOfClass:UIAlertController.class])return;
+    UIAlertController *d=[UIAlertController alertControllerWithTitle:@"遊戲選項" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    [d addAction:[UIAlertAction actionWithTitle:@"返回啟動器" style:UIAlertActionStyleDefault handler:^(UIAlertAction *a){[self home];}]];
+    [d addAction:[UIAlertAction actionWithTitle:@"重新連線" style:UIAlertActionStyleDefault handler:^(UIAlertAction *a){[self reload];}]];
+    [d addAction:[UIAlertAction actionWithTitle:@"結束遊戲" style:UIAlertActionStyleDefault handler:^(UIAlertAction *a){[self finish];}]];
+    [d addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    [[self presenter] presentViewController:d animated:YES completion:nil];
+}
+- (void)optionsGesture:(UILongPressGestureRecognizer *)gesture {if(gesture.state==UIGestureRecognizerStateBegan)[self options];}
 - (BOOL)open:(NSString *)gameId session:(NSDictionary *)session device:(NSString *)device {
     if(![@[@"card",@"chess"] containsObject:gameId]||![session[@"secret"] isKindOfClass:NSString.class]||![session[@"secret"] length])return NO;
     if(_web){if(![_gameId isEqualToString:gameId])return NO;_surface.hidden=NO;return YES;}
@@ -58,11 +68,13 @@
     _surface.backgroundColor=[UIColor colorWithRed:.02 green:.08 blue:.12 alpha:1];[window addSubview:_surface];
     _web=[[WKWebView alloc] initWithFrame:CGRectZero configuration:config];_web.navigationDelegate=self;_web.UIDelegate=self;_web.translatesAutoresizingMaskIntoConstraints=NO;
     _web.scrollView.contentInsetAdjustmentBehavior=UIScrollViewContentInsetAdjustmentNever;[_surface addSubview:_web];
+    BOOL fullscreenCard=[gameId isEqualToString:@"card"];
     UIStackView *bar=[UIStackView new];bar.translatesAutoresizingMaskIntoConstraints=NO;bar.spacing=10;bar.axis=UILayoutConstraintAxisHorizontal;bar.distribution=UIStackViewDistributionFillEqually;
     NSArray *titles=@[@"啟動器",@"重新連線",@"結束遊戲"];SEL actions[]={@selector(home),@selector(reload),@selector(finish)};
     for(NSUInteger i=0;i<titles.count;i++){UIButton *b=[UIButton buttonWithType:UIButtonTypeSystem];[b setTitle:titles[i] forState:UIControlStateNormal];[b setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];[b addTarget:self action:actions[i] forControlEvents:UIControlEventTouchUpInside];[bar addArrangedSubview:b];}
-    [_surface addSubview:bar];UILayoutGuide *safe=_surface.safeAreaLayoutGuide;
-    [NSLayoutConstraint activateConstraints:@[[bar.topAnchor constraintEqualToAnchor:safe.topAnchor],[bar.trailingAnchor constraintEqualToAnchor:safe.trailingAnchor constant:-8],[bar.widthAnchor constraintEqualToConstant:300],[bar.heightAnchor constraintEqualToConstant:44],[_web.topAnchor constraintEqualToAnchor:bar.bottomAnchor],[_web.leadingAnchor constraintEqualToAnchor:safe.leadingAnchor],[_web.trailingAnchor constraintEqualToAnchor:safe.trailingAnchor],[_web.bottomAnchor constraintEqualToAnchor:safe.bottomAnchor]]];
+    bar.hidden=fullscreenCard;[_surface addSubview:bar];UILayoutGuide *safe=_surface.safeAreaLayoutGuide;
+    [NSLayoutConstraint activateConstraints:@[[bar.topAnchor constraintEqualToAnchor:safe.topAnchor],[bar.trailingAnchor constraintEqualToAnchor:safe.trailingAnchor constant:-8],[bar.widthAnchor constraintEqualToConstant:300],[bar.heightAnchor constraintEqualToConstant:44],[_web.topAnchor constraintEqualToAnchor:fullscreenCard?_surface.topAnchor:bar.bottomAnchor],[_web.leadingAnchor constraintEqualToAnchor:fullscreenCard?_surface.leadingAnchor:safe.leadingAnchor],[_web.trailingAnchor constraintEqualToAnchor:fullscreenCard?_surface.trailingAnchor:safe.trailingAnchor],[_web.bottomAnchor constraintEqualToAnchor:fullscreenCard?_surface.bottomAnchor:safe.bottomAnchor]]];
+    if(fullscreenCard){UILongPressGestureRecognizer *gesture=[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(optionsGesture:)];gesture.numberOfTouchesRequired=2;gesture.minimumPressDuration=.8;gesture.cancelsTouchesInView=NO;[_surface addGestureRecognizer:gesture];}
     _status=[UILabel new];_status.text=@"正在開啟遊戲…";_status.textColor=UIColor.whiteColor;_status.backgroundColor=_surface.backgroundColor;_status.textAlignment=NSTextAlignmentCenter;_status.numberOfLines=0;_status.translatesAutoresizingMaskIntoConstraints=NO;[_surface addSubview:_status];
     [NSLayoutConstraint activateConstraints:@[[_status.centerXAnchor constraintEqualToAnchor:safe.centerXAnchor],[_status.centerYAnchor constraintEqualToAnchor:safe.centerYAnchor],[_status.widthAnchor constraintLessThanOrEqualToAnchor:safe.widthAnchor multiplier:.9]]];
     NSString *entry=[gameId isEqualToString:@"card"]?@"start.html":@"chess/index.html";
@@ -70,11 +82,11 @@
 }
 - (void)hide { _surface.hidden=YES;[_web evaluateJavaScript:@"document.querySelectorAll('audio,video').forEach(m=>m.pause())" completionHandler:nil]; }
 - (void)close { [_web stopLoading];[_web.configuration.userContentController removeAllUserScripts];[_surface removeFromSuperview];_surface=nil;_web=nil;_status=nil;_gameId=nil; }
-- (void)webView:(WKWebView *)web decidePolicyForNavigationAction:(WKNavigationAction *)action decisionHandler:(void (^)(WKNavigationActionPolicy))handler {handler(POOfficialGameURL(action.request.URL)?WKNavigationActionPolicyAllow:WKNavigationActionPolicyCancel);}
+- (void)webView:(WKWebView *)web decidePolicyForNavigationAction:(WKNavigationAction *)action decisionHandler:(void (^)(WKNavigationActionPolicy))handler {if(action.targetFrame.isMainFrame&&POOfficialGameURL(action.request.URL)&&[action.request.URL.path isEqualToString:@"/__mobile_game_options__"]){handler(WKNavigationActionPolicyCancel);[self options];return;}handler(POOfficialGameURL(action.request.URL)?WKNavigationActionPolicyAllow:WKNavigationActionPolicyCancel);}
 - (void)webView:(WKWebView *)web didFinishNavigation:(WKNavigation *)navigation {_status.hidden=YES;}
-- (void)webView:(WKWebView *)web didFailProvisionalNavigation:(WKNavigation *)nav withError:(NSError *)error {if(error.code==NSURLErrorCancelled)return;_status.hidden=NO;_status.text=@"網路連線失敗，請點右上「重新連線」。";}
+- (void)webView:(WKWebView *)web didFailProvisionalNavigation:(WKNavigation *)nav withError:(NSError *)error {if(error.code==NSURLErrorCancelled)return;_status.hidden=NO;_status.text=[_gameId isEqualToString:@"card"]?@"網路連線失敗，請用兩指長按畫面開啟遊戲選項，選擇重新連線。":@"網路連線失敗，請點右上「重新連線」。";}
 - (void)webView:(WKWebView *)web didFailNavigation:(WKNavigation *)nav withError:(NSError *)error {[self webView:web didFailProvisionalNavigation:nav withError:error];}
-- (void)webViewWebContentProcessDidTerminate:(WKWebView *)web {_status.hidden=NO;_status.text=@"遊戲頁面已暫停，請點右上「重新連線」。";}
+- (void)webViewWebContentProcessDidTerminate:(WKWebView *)web {_status.hidden=NO;_status.text=[_gameId isEqualToString:@"card"]?@"遊戲頁面已暫停，請用兩指長按畫面開啟遊戲選項，選擇重新連線。":@"遊戲頁面已暫停，請點右上「重新連線」。";}
 - (void)webView:(WKWebView *)web runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completion {
     UIAlertController *d=[UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];[d addAction:[UIAlertAction actionWithTitle:@"確定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *a){completion();}]];[[self presenter] presentViewController:d animated:YES completion:nil];
 }

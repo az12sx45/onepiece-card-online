@@ -3640,7 +3640,7 @@ window.TabletopPhoneStaticMapData={"width":5120,"height":3976,"pixels":[5120,397
     const actions=node('div','phone-card-round-actions');
     for(const id of ['btnCpuSkip','btnNextRound']){const b=document.getElementById(id);if(b)actions.append(b);}
     header.append(actions);
-    for(const n of [log,discard])if(n)storage.append(n);
+    const history=node('section','phone-card-history');history.setAttribute('aria-label','棄牌與對局紀錄');for(const n of [discard,log])if(n)history.append(n);main.append(history);
     const originalMusic=document.getElementById('bgmBar');if(originalMusic)storage.append(originalMusic);
     const dex=document.getElementById('cardDexBtn');
     const menu=node('div','phone-card-menu');
@@ -3649,17 +3649,21 @@ window.TabletopPhoneStaticMapData={"width":5120,"height":3976,"pixels":[5120,397
     const records=button('棄牌與紀錄',()=>open('棄牌與紀錄',[discard,log]));
     const music=button('音效設定',()=>open('音效設定',[originalMusic]));
     const venuePanel=document.getElementById('venues')?.closest('.card');
-    menu.append(roster,button('場地詳情',()=>open('場地詳情',[venuePanel])),records,music);storage.append(menu);
+    menu.append(roster,button('場地詳情',()=>open('場地詳情',[venuePanel])),records,music,button('遊戲選項',()=>{location.href=origin+'/__mobile_game_options__';}));storage.append(menu);
     const menuButton=button('選單',()=>open('選單',[menu]));menuButton.id='phoneCardMenu';header.append(menuButton);
     const turn=node('div','phone-card-turn');
     for(const id of ['turnLbl','stepLbl']){const span=document.getElementById(id);if(span)turn.append(span);}
-    header.insertBefore(turn,actions);
+    header.insertBefore(turn,actions);const staleTurn=log?.querySelector('.text-xs');if(staleTurn)staleTurn.hidden=true;
     const step=document.getElementById('stepLbl');
     if(step){const translate=()=>{const label=({draw:'抽牌',choose:'選牌',ended:'本局結束'})[step.textContent.trim()]||step.textContent;step.dataset.phoneLabel=label;step.setAttribute('aria-label',label);};translate();new MutationObserver(translate).observe(step,{childList:true,subtree:true,characterData:true});}
     aside.classList.add('phone-card-roster');main.prepend(aside);
     const rosterHeading=players.previousElementSibling;
     if(rosterHeading)rosterHeading.textContent='玩家';
     table.classList.add('phone-card-battlefield');
+    const held=node('div','phone-card-held');held.setAttribute('aria-label','目前手牌');table.append(held);let heldSignature='';
+    const syncHeld=()=>{const source=players.querySelector('.grow > .flex.items-start');const signature=source?.innerHTML||'';if(signature===heldSignature)return;heldSignature=signature;held.replaceChildren();if(source){const copy=source.cloneNode(true);copy.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));held.append(node('div','','目前手牌'),copy);}};
+    new MutationObserver(syncHeld).observe(players,{childList:true,subtree:true});syncHeld();
+
     const board=table.querySelector(':scope > .grid');if(board)board.classList.add('phone-card-surface');
     hand.classList.add('phone-card-choice');
     // The older tutorial owns the same controls directly; normalize only their container.
@@ -3676,6 +3680,9 @@ window.TabletopPhoneStaticMapData={"width":5120,"height":3976,"pixels":[5120,397
       }));
     }
     hand.append(previewButtons);
+    // The original renderer continues to own the discard pile, including order and backs.
+    if(discard){const pile=document.getElementById('discard');pile.addEventListener('click',e=>{const source=e.target.closest('img');if(!source)return;const view=node('div','phone-card-preview'),img=node('img','');img.src=source.currentSrc||source.src;img.alt='棄牌';view.append(img);storage.append(view);open('查看棄牌',[view]);});}
+
     // Close a reading sheet when the original game opens a required choice.
     const modal=document.getElementById('modal');if(modal)new MutationObserver(()=>{if(!modal.classList.contains('hidden')&&!drawer.hidden)close();}).observe(modal,{attributes:true,attributeFilter:['class']});
     window.CardPhonePresentation={closeSheet:()=>{if(drawer.hidden)return false;close();return true;}};
