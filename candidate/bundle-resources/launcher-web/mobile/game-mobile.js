@@ -3617,6 +3617,9 @@ window.TabletopPhoneStaticMapData={"width":5120,"height":3976,"pixels":[5120,397
     const hand = document.getElementById('myPlayZone'), players = document.getElementById('players');
     const header = document.querySelector('header > div'), table = main?.querySelector(':scope > section');
     if (!main || !hand || !players || !header || !table || main.dataset.cardPhoneMounted) return;
+    // Own these classes independently of the older adapter's animation-frame timing.
+    document.getElementById('venues')?.closest('.card')?.classList.add('android-card-venues');
+    document.getElementById('btnDraw')?.closest('.card')?.classList.add('android-card-deck');
     main.dataset.cardPhoneMounted = 'true'; root.dataset.cardPhone = 'table';
     const node = (tag, cls, text) => { const n = document.createElement(tag); n.className = cls; if(text)n.textContent=text; return n; };
     const button = (text, fn) => { const b=node('button','phone-card-control',text); b.type='button';b.onclick=fn;return b; };

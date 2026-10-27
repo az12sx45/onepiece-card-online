@@ -1,6 +1,6 @@
 {
   "dependencies.json": "bd28ab3e944a458518791bb98d53b87e5d0de139e0695beaaef8c76ac71c4866",
-  "launcher-manifest.json": "887bd11df7973d0be6e74bdfe5e02893a2dc0b6e671ca23bf291753523ba73d2",
+  "launcher-manifest.json": "140d7409446e82fc5eae4d22bb1a0573b55ac62f88775b147daaed035cdc6256",
   "media-manifest.json": "53c4187b6174226da6609606a426846cd436c5e771fd963c7165f7f7d0b4bf30",
   "preparation.json": "65fed500d362c8c42d8e3b0d933bcc41a5b3de673b8a09174201d6a02f25697f",
   "README.md": "ce4c7138739da8f490b23bd6bc1b2fe3b317b51f2ad17b7751584240486261d3",
@@ -1871,7 +1871,7 @@
   "bundle-resources/launcher-web/launcher/mobile-bridge.js": "c0f0917ef6210634fd752ffa0ff429ec50ac916ad3ddbdf837459a7463fb3d86",
   "bundle-resources/launcher-web/launcher/socket.io.min.js": "e759359a3cd50622c15cd13fd19e90f80778c639c54086ca409629f62d5c0179",
   "bundle-resources/launcher-web/mobile/game-mobile.css": "1e61856ad26e64dad518b3bd9b73d05517032b8f57a99bae4ac3f823698173c2",
-  "bundle-resources/launcher-web/mobile/game-mobile.js": "306b615e846fd827f5956f585695d810a7f8b1d6c59936a741db41f3f0821be6",
+  "bundle-resources/launcher-web/mobile/game-mobile.js": "06078d78f98a6f2cd19aa1bedf2771393476289c30312bc00fc18634b3c6474e",
   "bundle-resources/launcher-web/mobile/session-bootstrap.js": "0b1948727e46467f431881e0a13788cb5bfaf581157ea380be837dd72d44700d",
   "bundle-resources/launcher-web/launcher-assets/audio/bgm/track01.mp3": "50f89aa9c47d5dd00107ea0329ad02a773ab923d873dc1845f3df3fd573b7b06",
   "bundle-resources/launcher-web/launcher-assets/audio/bgm/track02.mp3": "2f452c0b699e2d639810697c36dded02c922d3b20c7a90b5de22df46c0b455f5",
