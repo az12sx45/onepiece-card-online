@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-27",
+  "android": {
+    "version": 47,
+    "activated": true,
+    "pointer": "https://game-assets.rihdi.tw/android/native/launcher-release-v1.json",
+    "apkSha256": "cc73e5da570c94c26e1f6a549d7c0f9139231881af7021b9b66b325f65a5d323",
+    "delta45Bytes": 4184577,
+    "verifiedDeltaBases": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45
+    ],
+    "evidence": "D:/Codex_QA/card-native-v047-20261027/publication-report.json"
+  },
+  "desktop": {
+    "release": "package-0f389482af7fd075",
+    "sourceCommit": "4e985dd20",
+    "r2BlobsVerified": 3,
+    "publicRuntimePending": false,
+    "publicReadback": "D:/Codex_QA/card-desktop-arena-20261027/public-release-readback.json",
+    "publicChecks": 35,
+    "deployment": {
+      "id": "dep-dbgbavss728c73f5vsd0",
+      "status": "Deploy succeeded | Live",
+      "commit": "4e985dd20a20ac2720a78b4d921d297003d7d393",
+      "liveAt": "2026-10-27T14:39:50Z"
+    }
+  },
+  "ios": {
+    "version": 48,
+    "sourceCommit": "1d584e918ef39d205b0f8bf80ab00d372a9e533f",
+    "run": 40521190241,
+    "cloudResult": "success",
+    "artifactDownloadPending": false,
+    "signed": false,
+    "iphoneTested": false,
+    "artifactReadback": "D:/Codex_QA/native-ios-v048-20261027/ipa-readback.json",
+    "installer": "C:\\Users\\王曜瑋\\Documents\\Codex\\iOS_Releases\\PO-iOS-v048-UNSIGNED.ipa",
+    "launcherFilesByteMatched": 1535,
+    "macWebKitLauncherChecked": true
+  },
+  "latticeAvailable": false,
+  "completed": true,
+  "actualCrossDeviceMatchTested": false
+}

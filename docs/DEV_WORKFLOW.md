@@ -8409,3 +8409,8 @@ LATTICE runtime/task API未出現在本階段工具清單；未聲稱持久任�
 2026-10-27 發布工具核對：Windows checkout JSON 只有 CRLF/LF 差異時接受，內容仍須逐字相等；候選一律使用 Git blob。
 2026-10-27 發布候選 package-0f389482af7fd075：31 program Git hash、1054媒體逐項保留、Board/Chess與公開v3 sourceTrees完全一致。舊 desktop_program_catalog_qa 使用v2 images tree，與更新前正式v3即有差異，未修改此舊測試/基線；改以scoped-release-qa.json核對本次實際基線。R2 publisher fixture通過。
 2026-10-27 Card範圍發布：完整publisher遇到歷史共享頭像alias不在HEAD，未重建或替換媒體。publish_card_program_blobs.js逐項核對公開基線，只上傳3個已提交presentation差分，使用原conditional immutable publisher與SHA公開讀回；publish-saved-card-program.ps1沿用既有DPAPI子程序憑證機制。
+
+2026-10-27 22:39 TST 發布驗證完成：Render dep-dbgbavss728c73f5vsd0 / commit4e985dd20 Live；Card package-0f389482af7fd075 三款catalog/runtime與31個Card公開program逐hash合計35項通過，Board/Chess保留。Android native v047指標與APK/8份差量公開SHA通過；iOS v048 CI成功且1535 launcher資源逐byte匹配，未簽章、未iPhone實測。交付細節見 CARD_ARENA_CROSS_PLATFORM_RELEASE_20261027.json。
+
+
+2026-10-28：爭霸戰猜號、交換及防禦結果清晰化。server/engine.js 只新增公開 EMIT；共用 FX JS/CSS、新護盾/閃避 GPT 圖及桌機產生器同步。引擎256、桌機/手機104、FX314、選人67、原生共存4、真正本機雙視窗同步7項通過；未宣稱真機驗收。發布工具允許既有31程式更新，仍保留媒體與其他遊戲。詳見 CARD_ACTION_CLARITY_20261028.md。

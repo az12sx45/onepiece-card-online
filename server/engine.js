@@ -495,11 +495,15 @@ function checkHot(st){
   }
 }
 
-function effectGuard(st, idx, {ignoreProtect=false, ignoreDodge=false}={}){
+// Presentation-only public outcome; never includes hidden card values.
+function emitCardDefense(st, idx, status, emits){
+  if(Array.isArray(emits)) emits.push({to:'all',type:'card_defense',casterId:st.turnIndex,targetId:idx,status});
+}
+function effectGuard(st, idx, {ignoreProtect=false, ignoreDodge=false}={}, emits){
   const t = st.players[idx];
   if(!t?.alive) return {blocked:true, reason:'dead'};
-  if(!ignoreProtect && t.protected) return {blocked:true, reason:'protected'};
-  if(!ignoreDodge && t.dodging){ t.dodging=false; return {blocked:true, reason:'dodged'}; }
+  if(!ignoreProtect && t.protected){ emitCardDefense(st,idx,'protect',emits); return {blocked:true, reason:'protected'}; }
+  if(!ignoreDodge && t.dodging){ t.dodging=false; emitCardDefense(st,idx,'dodge',emits); return {blocked:true, reason:'dodged'}; }
   return {blocked:false};
 }
 
@@ -1193,8 +1197,8 @@ case 0: { // 薩波
   const affected=[];
   st.players.forEach(p=>{
     if(!p.alive) return;
-    if(p.protected) return;
-    if(p.dodging){ p.dodging=false; return; }
+    if(p.protected){ emitCardDefense(st,p.id,'protect',emits); return; }
+    if(p.dodging){ p.dodging=false; emitCardDefense(st,p.id,'dodge',emits); return; }
     affected.push(p);
   });
   affected.forEach(p=>{
@@ -1227,11 +1231,13 @@ case 2: { // 羅賓
             const th = pp.hand;
 
             if(pp.protected){
+              emitCardDefense(st,i,'protect',emits);
               lines.push(`P${i+1}：保護中`);
               return;
             }
             if(pp.dodging){
               pp.dodging=false;
+              emitCardDefense(st,i,'dodge',emits);
               lines.push(`P${i+1}：閃避觸發（無法查看）`);
               return;
             }
@@ -1419,9 +1425,11 @@ case 9: { // 女帝
           const passIdxs = allAlive.filter(i => !st.players[i].protected && !st.players[i].dodging);
           const dodgedIdxs = allAlive.filter(i => st.players[i].dodging);
 
+          allAlive.filter(i=>st.players[i].protected).forEach(i=>emitCardDefense(st,i,'protect',emits));
           // 消耗掉所有閃避
           dodgedIdxs.forEach(i => {
             st.players[i].dodging = false;
+            emitCardDefense(st,i,'dodge',emits);
           });
 
           // 至少 2 人才有傳遞意義
@@ -1527,11 +1535,13 @@ case 16: { // 青雉
       if (!p.alive || i === st.turnIndex) return;
 
       if (p.protected) { // 保護免疫
+        emitCardDefense(st,i,'protect',emits);
         skippedProtect++;
         return;
       }
       if (p.dodging) {   // 閃避抵消並消耗閃避
         p.dodging = false;
+        emitCardDefense(st,i,'dodge',emits);
         dodged++;
         return;
       }
@@ -1650,7 +1660,7 @@ case 19: { // 羅傑
     }
 
     if(p.action==='robin'){
-      const g = effectGuard(st, idx, {});
+      const g = effectGuard(st, idx, {}, emits);
       if(!g.blocked){
         const th = st.players[idx].hand;
         const line = (th != null)
@@ -1696,7 +1706,7 @@ case 19: { // 羅傑
 
 
     if(p.action==='sanji'){
-      const g = effectGuard(st, idx, {});
+      const g = effectGuard(st, idx, {}, emits);
       if(!g.blocked){
         pushLog(st, `香吉士：向 ${pname(st, idx)} 發起比拚`, emits);
 
@@ -1758,7 +1768,7 @@ case 19: { // 羅傑
 
 
 if(p.action==='zoro'){
-  const g = effectGuard(st, idx, {});
+  const g = effectGuard(st, idx, {}, emits);
   if(!g.blocked){
     const t = st.players[idx];
     const thrown = t.hand;
@@ -1849,7 +1859,7 @@ if(p.action==='zoro'){
     if(p.action==='law'){
       if(p.extra.boost){
         // 強化版：先 ROOM・SCAN 查看，再選擇是否交換
-        const gView = effectGuard(st, idx, {});
+        const gView = effectGuard(st, idx, {}, emits);
         if(!gView.blocked){
           const th = st.players[idx].hand;
           if (th != null) scorePeek(st, action.playerId, th); // ★ 偵查分
@@ -1876,7 +1886,7 @@ if (th != null && Array.isArray(st.aiMemory)) {
 
         // 若前端要求交換（ROOM・SHAMBLES）
         if (action.payload?.swap === true) {
-          const gSwap = effectGuard(st, idx, {});
+          const gSwap = effectGuard(st, idx, {}, emits);
           if (!gSwap.blocked) {
             const t = st.players[idx];
             const tmp = t.hand;
@@ -1913,7 +1923,7 @@ if (th != null && Array.isArray(st.aiMemory)) {
         return { state: st, emits };
       } else {
         // 一般版：純交換
-        const gSwap = effectGuard(st, idx, {});
+        const gSwap = effectGuard(st, idx, {}, emits);
         if (!gSwap.blocked) {
           const t = st.players[idx];
           const tmp = t.hand;
@@ -1946,7 +1956,7 @@ if (th != null && Array.isArray(st.aiMemory)) {
 
 
     if (p.action === 'nami') {
-      const g = effectGuard(st, idx, {});
+      const g = effectGuard(st, idx, {}, emits);
       if (!g.blocked) {
         // 麻痺成功 → 目標下回合跳過
         st.players[idx].skipNext = true;
@@ -1979,7 +1989,7 @@ if (th != null && Array.isArray(st.aiMemory)) {
 
 
     if(p.action==='luffy'){
-      const g = effectGuard(st, idx, {});
+      const g = effectGuard(st, idx, {}, emits);
       if(!g.blocked){
         pushLog(st, `魯夫：向 ${pname(st, idx)} 發起決鬥`, emits);
         const my=tail(p.extra.keep);
@@ -2026,7 +2036,7 @@ if (th != null && Array.isArray(st.aiMemory)) {
     }
 
     if(p.action==='kaido'){
-      const g = effectGuard(st, idx, {ignoreProtect:true, ignoreDodge:true});
+      const g = effectGuard(st, idx, {ignoreProtect:true, ignoreDodge:true}, emits);
       if(!g.blocked){
         pushLog(st, `凱多：對 ${pname(st, idx)} 使出雷鳴八卦（無視防禦/閃避）`, emits);
         const my=tail(st.players[st.turnIndex].hand);
@@ -2126,7 +2136,7 @@ if (p.action === 'killer') {
 }
 
 if (p.action === 'aokiji') {
-  const g = effectGuard(st, idx, {});
+  const g = effectGuard(st, idx, {}, emits);
   if (!g.blocked) {
     st.players[idx].frozen = true;
 
@@ -2176,7 +2186,7 @@ if (p.action === 'aokiji') {
         return { state: st, emits };
       }
 
-      const g = effectGuard(st, idx, {});
+      const g = effectGuard(st, idx, {}, emits);
       if (g.blocked) {
         scoreDefense(st, idx, 14); // 大媽14強化被擋 → 防禦+4
         pushLog(st, `大媽（萬國強化）：對 ${pname(st, idx)} 的效果被保護/閃避抵銷`, emits);
@@ -2205,7 +2215,8 @@ if (p.action === 'aokiji') {
         return { state: st, emits };
       }
       const tgt = p.extra.target;
-      const g = effectGuard(st, tgt, {});
+      if(Number.isInteger(d)&&d>=0&&d<=9&&st.players[tgt]?.alive) emits.push({to:'all',type:'card_guess',casterId:st.turnIndex,targetId:tgt,digit:d});
+      const g = effectGuard(st, tgt, {}, emits);
 
       if(!g.blocked){
         const th = st.players[tgt].hand;
@@ -2279,7 +2290,7 @@ if (type === 'LUFFY_SECOND') {
   }
 
   const meIdx = st.turnIndex;
-  const g = effectGuard(st, idx, {});
+  const g = effectGuard(st, idx, {}, emits);
   if (!g.blocked) {
     pushLog(st, `魯夫：向 ${pname(st, idx)} 發起第二次決鬥`, emits);
 
@@ -2349,7 +2360,7 @@ if (type === 'LUFFY_SECOND') {
     st.players.forEach((pp, i) => {
       if (!pp.alive || i === meIdx) return;
 
-      const g = effectGuard(st, i, {});  // 正常保護 / 閃避
+      const g = effectGuard(st, i, {}, emits);  // 正常保護 / 閃避
       if (g.blocked) {
         // 被保護/閃避擋掉 → 加防禦分（以魯夫這張卡計）
         scoreDefense(st, i, keepId);
@@ -2406,7 +2417,7 @@ if (type === 'LUFFY_SECOND') {
       return { state: st, emits };
     }
 
-    const g = effectGuard(st, tgt, {});
+    const g = effectGuard(st, tgt, {}, emits);
     if (g.blocked) {
       scoreDefense(st, tgt, 12); // 奎因12被擋 → 防禦+2
       if (st.players[tgt].dodging) st.players[tgt].dodging = false;
@@ -2455,7 +2466,7 @@ if (type === 'LUFFY_SECOND') {
     const me = st.players[st.turnIndex];
 
     // 檢查是否被保護 / 閃避擋掉
-    const g = effectGuard(st, st.turnIndex, {});
+    const g = effectGuard(st, st.turnIndex, {}, emits);
     if (g.blocked) {
       scoreDefense(st, st.turnIndex, 14); // 大媽14擲幣被擋 → 防禦+4
       if (me.dodging) me.dodging = false;
@@ -2582,7 +2593,7 @@ if (type === 'LUFFY_SECOND') {
       if (!pl.alive) return;
       if (idx === meIdx) return; // 自己不會被這招淘汰
 
-      const g = effectGuard(st, idx, {}); // 正常吃保護/閃避
+      const g = effectGuard(st, idx, {}, emits); // 正常吃保護/閃避
       if (g.blocked) {
         if (g.reason === 'protected') skippedProtect++;
         if (g.reason === 'dodged')    dodged++;

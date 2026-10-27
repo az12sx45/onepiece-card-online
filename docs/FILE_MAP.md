@@ -2018,3 +2018,6 @@ public/js/board_game.js 的 applyBoardLanPayload 在非同步套用結束後呼�
 - docs/BOARD_POSTGAME_SYNC_20261026.md：通關後同步、決鬥動畫鎖與幾何快取變更及驗證邊界。
 
 2026-10-27：爭霸戰新增桌機共用牌桌、頭像選人及卡片飛行；規則/同步不變。詳見 DEV_WORKFLOW.md 本日記錄。
+
+
+2026-10-28：server/engine.js 公開互動 EMIT；scripts/card_action_presentation_qa.js 引擎差異驗證；scripts/card_action_sync_qa.mjs 本機雙瀏覽器；手機 android/web/card-phone-fx.* 與 art/card-status-{guard,dodge}.webp 透過產生器輸出桌機 public/{js,css}/card-desktop-table.*。詳見 CARD_ACTION_CLARITY_20261028.md。

@@ -294,7 +294,7 @@ window.POCardInteract=module.exports;
     const modal=$('modal'),layer=make('div','phone-interaction-fx');layer.id='phoneInteractionFx';layer.setAttribute('aria-live','polite');layer.setAttribute('aria-atomic','true');document.body.append(layer);
     const actions={usopp:[1,'狙擊瞄準','選擇對手，再猜手牌尾數'],robin:[2,'偵察手牌','只有偵察者能看見手牌內容'],sanji:[3,'決鬥','選擇要決鬥的對手'],zoro:[5,'斬擊棄牌','選擇技能目標'],law:[6,'ROOM・交換','選擇交換對象'],nami:[7,'雷電麻痺','選擇技能目標'],luffy:[8,'連續挑戰','依原規則選擇對手'],kaido:[10,'雷鳴八卦','選擇技能目標'],killer:[13,'解除防禦','選擇技能目標'],bigmom:[14,'靈魂威嚇','由對手選擇交幣或淘汰'],'bigmom-pay':[14,'靈魂抉擇','選擇交幣或淘汰'],'bigmom-coin':[14,'命運判定','依原規則擲硬幣'],queen:[12,'硬幣判定','依原規則決定結果'],'kata-order':[15,'預見未來','查看並安排原本的頂牌順序'],aokiji:[16,'冰凍時刻','選擇技能目標'],'teach-multipick':[17,'黑暗覆蓋','選擇原本允許覆蓋的牌'],roger:[19,'預測勝者','選擇你預測的玩家']};
     function avatar(id){const source=$('players')?.children[id]?.querySelector('img.rounded-full');const img=make('img','phone-fx-avatar');img.alt=name(id);if(source?.src)img.src=source.src;else img.src='images/cards/back.webp';return img;}
-    let fxTimer=null,queuedFx=[],activeFx=null,layoutFrame=0;
+    let fxTimer=null,queuedFx=[],activeFx=null,layoutFrame=0,lastGuess=null;
     const statusLayer=make('div','phone-interaction-fx');statusLayer.id='phonePlayerStatusFx';document.body.append(statusLayer);
     const videoOpen=()=>!$('enhOverlay')?.classList.contains('hidden');
     function enqueue(fx){if(queuedFx.length>=8)queuedFx.shift();queuedFx.push(fx);}
@@ -313,21 +313,34 @@ window.POCardInteract=module.exports;
       const self=row.id==='phoneSelfPlayer',clipped=!self&&(x<rail.left+24||x>rail.right-24);
       return {id,x:self?x:Math.max(rail.left+24,Math.min(rail.right-24,x)),y:r.top+r.height/2,clipped,self};
     }
-    function clearFx(){statusLayer.replaceChildren();clearTimeout(fxTimer);fxTimer=null;activeFx=null;queuedFx=[];layer.replaceChildren();}
-    function burst(kind,from,to,label){
+    function clearFx(){statusLayer.replaceChildren();clearTimeout(fxTimer);fxTimer=null;activeFx=null;queuedFx=[];lastGuess=null;layer.replaceChildren();}
+    function burst(kind,from,to,label,detail){
       if(kind==='notice')return; // Group prose stays in the original log, never a new central banner.
-      if(videoOpen()||window.CardPhonePresentation?.isCardEntering?.()||fxTimer&&!['aim','select','shot'].includes(kind)){enqueue([kind,from,to,label]);return;}
-      renderBurst(kind,from,to,label);
+      const outcome=['hit','miss','shield-block','dodge-block'].includes(kind);
+      if(outcome)queuedFx=queuedFx.filter(f=>!(f[0]==='shot'&&f[1]===from&&f[2]===to));
+      const replacesGuess=outcome&&activeFx?.[0]==='shot'&&activeFx[1]===from&&activeFx[2]===to;
+      if(videoOpen()||window.CardPhonePresentation?.isCardEntering?.()||fxTimer&&!replacesGuess&&!['aim','select','shot'].includes(kind)){enqueue([kind,from,to,label,detail]);return;}
+      renderBurst(kind,from,to,label,detail);
     }
-    function renderBurst(kind,from,to,label){
+    function renderBurst(kind,from,to,label,detail){
       const rail=railBounds();if(!rail||document.hidden||fast())return;
-      clearTimeout(fxTimer);fxTimer=null;activeFx=[kind,from,to,label];layer.replaceChildren();layer.dataset.kind=kind;
+      clearTimeout(fxTimer);fxTimer=null;activeFx=[kind,from,to,label,detail];layer.replaceChildren();layer.dataset.kind=kind;
       const scene=make('div','phone-hud-scene');scene.dataset.source=String(from);scene.dataset.target=String(to);
-      scene.style.clipPath=`inset(${Math.max(0,rail.top-14)}px ${Math.max(0,innerWidth-rail.right)}px ${Math.max(0,innerHeight-rail.bottom-48)}px ${Math.max(0,rail.left)}px)`;
+      scene.style.clipPath=detail?'none':`inset(${Math.max(0,rail.top-14)}px ${Math.max(0,innerWidth-rail.right)}px ${Math.max(0,innerHeight-rail.bottom-48)}px ${Math.max(0,rail.left)}px)`;
       if(window.CardPhonePresentation?.playerVisualElement&&[from,to].includes(viewer()))scene.style.clipPath='none';
       const accessible=make('span','phone-fx-accessible',`${name(from)} → ${name(to)}：${label}`);scene.append(accessible);layer.append(scene);
       let ids=Number.isInteger(to)&&to>=0?[to]:['guard','skill','discard'].includes(kind)?[from]:[...(current()?.players||[])].map((p,i)=>p.alive&&i!==from?i:null).filter(Number.isInteger);
-      const source=anchor(from,rail),duration=reduce()?1600:2600;
+      const source=anchor(from,rail),duration=detail?3600:(reduce()?1600:2600);
+      if(detail){
+        const notice=make('div','phone-action-notice');notice.dataset.action=kind;
+        const symbol=make('strong','phone-action-symbol',Number.isInteger(detail.digit)?String(detail.digit):kind==='swap'?'⇄':'');
+        if(detail.status&&!Number.isInteger(detail.digit))symbol.dataset.status=detail.status;
+        const copy=make('div','phone-action-copy');copy.append(make('strong','',detail.title),make('span','',detail.result||label));notice.append(symbol,copy);scene.append(notice);
+        notice.style.top=Math.min(innerHeight-100,rail.bottom+8)+'px';
+        const target=anchor(to,rail),width=Math.min(440,innerWidth-24),mid=source&&target?(source.x+target.x)/2:innerWidth/2;
+        notice.style.width=width+'px';notice.style.left=Math.max(width/2+12,Math.min(innerWidth-width/2-12,mid))+'px';
+        if(!reduce())notice.animate([{opacity:0,transform:'translateX(-50%) translateY(-6px)'},{opacity:1,transform:'translateX(-50%) translateY(0)'}],{duration:280,easing:'ease-out'});
+      }
       function mark(a,cls,text){const n=make('span',cls,text);n.dataset.player=String(a.id);n.style.left=a.x+'px';n.style.top=a.y+'px';scene.append(n);return n;}
       function travel(a,b,swap=false,reverse=false){
         if(!a||!b||a.id===b.id||reduce())return;
@@ -339,8 +352,11 @@ window.POCardInteract=module.exports;
       if(source)mark(source,'phone-hud-origin');
       for(const id of ids){const target=anchor(id,rail);if(!target)continue;
         const lock=mark(target,'phone-hud-lock');lock.dataset.kind=kind;
+        if(detail?.status){const status=mark(target,'phone-hud-defense');status.dataset.status=detail.status;
+          if(!reduce())status.animate(detail.status==='dodge'?[{transform:'translate(-75%,-50%)',opacity:0},{transform:'translate(-35%,-50%)',opacity:1,offset:.3},{transform:'translate(-50%,-50%)',opacity:1}]:[{transform:'translate(-50%,-50%) scale(.4)',opacity:0},{transform:'translate(-50%,-50%) scale(1.15)',opacity:1,offset:.3},{transform:'translate(-50%,-50%) scale(1)',opacity:1}],{duration:800,easing:'ease-out',fill:'forwards'});
+        }
         if(!reduce())lock.animate([{transform:'translate(-50%,-50%) scale(1.35)',opacity:0},{transform:'translate(-50%,-50%) scale(1)',opacity:1,offset:.25},{transform:'translate(-50%,-50%) scale(1)',opacity:1,offset:.8},{opacity:0}],{duration,fill:'forwards'});
-        const caption=mark(target,'phone-hud-caption',target.clipped?`${name(id)} · ${label}`:label);caption.style.top=(target.self?Math.min(innerHeight-22,target.y+30):rail.bottom+3)+'px';caption.style.left=(target.self?target.x:Math.max(rail.left+65,Math.min(rail.right-65,target.x)))+'px';
+        if(!detail){const caption=mark(target,'phone-hud-caption',target.clipped?`${name(id)} · ${label}`:label);caption.style.top=(target.self?Math.min(innerHeight-22,target.y+30):rail.bottom+3)+'px';caption.style.left=(target.self?target.x:Math.max(rail.left+65,Math.min(rail.right-65,target.x)))+'px';}
         if(['hit','slash','lightning','ice','break'].includes(kind)){const impact=mark(target,'phone-hud-impact');if(!reduce())impact.animate([{opacity:0,transform:'translate(-50%,-50%) scale(.2)'},{opacity:.9,transform:'translate(-50%,-50%) scale(1)',offset:.55},{opacity:0,transform:'translate(-50%,-50%) scale(1.3)'}],{duration:1150,delay:1050,fill:'both'});else impact.hidden=true;}
         if(kind==='swap'){if(!window.CardPhonePresentation?.flySwap?.(from,id)){travel(source,target,true);travel(target,source,true,true);}}
         else if(kind==='scan')travel(target,source,true);
@@ -348,13 +364,23 @@ window.POCardInteract=module.exports;
       }
       fxTimer=setTimeout(()=>{layer.replaceChildren();fxTimer=null;activeFx=null;resumeFx();},duration);
     }
+    // Persistent public defense icons are anchored to the original portraits.
+    const defenseLayer=make('div','phone-defense-badges');defenseLayer.id='phoneDefenseBadges';document.body.append(defenseLayer);let defenseSignature='';
+    function syncDefense(){
+      const rail=railBounds(),s=current();if(!rail||!s?.players){defenseLayer.replaceChildren();defenseSignature='';return;}
+      const items=[];s.players.forEach((p,id)=>{if(!p.alive)return;const a=anchor(id,rail);if(!a||a.clipped)return;let n=0;for(const [key,status]of [['protected','protect'],['dodging','dodge']])if(p[key])items.push({id,status,x:a.x+14+26*n++,y:a.y+13});});
+      const signature=JSON.stringify(items);if(signature===defenseSignature)return;defenseSignature=signature;defenseLayer.replaceChildren();
+      for(const item of items){const icon=make('span','phone-defense-badge');icon.dataset.player=String(item.id);icon.dataset.status=item.status;icon.style.left=item.x+'px';icon.style.top=item.y+'px';icon.title=icon.ariaLabel=`${name(item.id)}：${item.status==='protect'?'護盾保護中':'閃避待觸發'}`;icon.setAttribute('role','img');defenseLayer.append(icon);}
+    }
+    let defenseFrame=0;
+    new MutationObserver(()=>{if(!defenseFrame)defenseFrame=requestAnimationFrame(()=>{defenseFrame=0;syncDefense();});}).observe(players,{childList:true,subtree:true});
     function refreshAnchors(){if(layoutFrame)return;layoutFrame=requestAnimationFrame(()=>{layoutFrame=0;if(!railBounds()){clearFx();focusLayer.replaceChildren();return;}if(activeFx)renderBurst(...activeFx);decorate();});}
     players.addEventListener('scroll',refreshAnchors,{passive:true});window.addEventListener('resize',refreshAnchors,{passive:true});
     new ResizeObserver(refreshAnchors).observe(players);
     // Select through the actual upper player entry, forwarding to the original modal button.
     players.addEventListener('click',e=>{const row=e.target.closest('#players > div');if(!row||modal.classList.contains('hidden')||modal.dataset.interaction!=='target')return;const i=[...players.children].indexOf(row),button=modal.querySelector(`button[data-i="${i}"]`);if(!button)return;e.preventDefault();e.stopImmediatePropagation();if(!button.disabled)button.click();},true);
     function decorate(){
-      railBounds();
+      railBounds();syncDefense();
       for(const row of players.children)delete row.dataset.fxTarget;
       const box=modal?.querySelector('.card');if(!box||modal.classList.contains('hidden')){focusLayer.replaceChildren();delete modal.dataset.interaction;flushPrivate();return;}
       const pending=current()?.pending,info=actions[pending?.action];
@@ -377,7 +403,7 @@ window.POCardInteract=module.exports;
       if(!reduce())b.animate([{filter:'brightness(1.5)'},{filter:'brightness(1)'}],{duration:240});
       const p=current()?.pending;
       if(b.hasAttribute('data-i'))burst(p?.action==='usopp'?'aim':'select',viewer(),Number(b.dataset.i),p?.action==='usopp'?'鎖定目標':'選定對象');
-      if(b.hasAttribute('data-d')){const target=p?.extra?.target??(typeof localPending==='object'?localPending?.target:null);burst('shot',viewer(),target,`狙擊尾數 ${b.dataset.d} · 等待判定`);}
+      if(b.hasAttribute('data-d')){const target=p?.extra?.target??(typeof localPending==='object'?localPending?.target:null);burst('shot',viewer(),target,`狙擊尾數 ${b.dataset.d} · 等待判定`,{digit:Number(b.dataset.d),title:`${name(viewer())} 猜 ${name(target)}`,result:'選擇尾數 · 等待判定'});}
     },true);
     new MutationObserver(decorate).observe(modal,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
 
@@ -402,9 +428,15 @@ window.POCardInteract=module.exports;
     function onEvent(e){
       if(!e||typeof e!=='object')return;
       if(e.to!=null&&e.to!=='all'&&e.to!==viewer())return;
+      if(e.type==='card_guess'&&e.to==='all'&&Number.isInteger(e.digit)&&e.digit>=0&&e.digit<=9){lastGuess={from:e.casterId,to:e.targetId,digit:e.digit};burst('shot',e.casterId,e.targetId,'等待判定',{digit:e.digit,title:`${name(e.casterId)} 猜 ${name(e.targetId)}`,result:'選擇尾數 · 等待判定'});return;}
+      if(e.type==='card_defense'&&e.to==='all'&&['protect','dodge'].includes(e.status)){const guess=lastGuess?.from===e.casterId&&lastGuess?.to===e.targetId?lastGuess:null;burst(e.status==='protect'?'shield-block':'dodge-block',e.casterId,e.targetId,e.status==='protect'?'護盾擋下':'閃避成功',{status:e.status,digit:guess?.digit,title:`${name(e.casterId)} → ${name(e.targetId)}`,result:`${e.status==='protect'?'護盾擋下效果':'閃避成功 · 已消耗'}${guess?' · 未判定猜中／猜錯':''}`});lastGuess=null;return;}
       if(e.type==='log'&&e.to==='all'&&typeof e.text==='string'&&/^(薩波|基德|紅髮|香克斯|羅傑|奎因|大媽)/.test(e.text)){burst('notice',null,null,e.text);return;}
       const visual=eventFx[e.type];
-      if(visual){burst(visual[0],e.casterId,e.all||e.mode==='all'?null:e.targetId??e.casterId,visual[1]+(e.type.startsWith('usopp_')?` · 尾數 ${e.digit}`:''));return;}
+      if(visual){let detail;
+        if(e.type.startsWith('usopp_')){detail={digit:e.digit,title:`${name(e.casterId)} 猜 ${name(e.targetId)}`,result:e.type==='usopp_hit'?'猜中！狙擊命中':'猜錯 · 狙擊未命中'};lastGuess=null;}
+        else if(e.type==='law_swap')detail={title:`${name(e.casterId)} ⇄ ${name(e.targetId)}`,result:'兩人已交換手牌'};
+        else if(['chopper_status','bigmom_status'].includes(e.type)&&['protect','dodge'].includes(e.status))detail={status:e.status,title:name(e.casterId),result:e.status==='protect'?'獲得護盾 · 保護中':'獲得閃避 · 等待觸發'};
+        burst(visual[0],e.casterId,e.all||e.mode==='all'?null:e.targetId??e.casterId,visual[1]+(e.type.startsWith('usopp_')?` · 尾數 ${e.digit}`:''),detail);return;}
       if(e.type==='duel'){burst('duel',e.leftId,e.rightId,'決鬥開始');return;} // Original duel retains its full result animation.
       if(e.type==='silent_discard'){burst('discard',e.by,e.by,'棄牌');return;} // No card face: event can contain non-public IDs.
       if(e.type==='play_fx'){const label=validCard(e.cardId)&&typeof CARD_TEXT==='object'?CARD_TEXT[e.cardId]?.name:'技能';burst('skill',e.playerId,null,`${label}發動`);return;}
@@ -417,7 +449,7 @@ window.POCardInteract=module.exports;
     let lastPublic=null,lastRound=null,lastIdentity=null;
     function onState(s){
       if(!s?.players)return;
-      const identity=JSON.stringify([typeof me==='object'?me.roomId:null,viewer()]);if(lastIdentity!==null&&identity!==lastIdentity){clearPrivate();lastPublic=null;}lastIdentity=identity;
+      const identity=JSON.stringify([typeof me==='object'?me.roomId:null,viewer()]);if(lastIdentity!==null&&identity!==lastIdentity){clearPrivate();lastPublic=null;clearFx();}lastIdentity=identity;
       const round=s.roundNo;if(lastRound!=null&&round!==lastRound){clearPrivate();lastPublic=null;clearFx();}lastRound=round;
       const snapshot=s.players.map(p=>({alive:p.alive,protected:p.protected,dodging:p.dodging,frozen:p.frozen,skipNext:p.skipNext,iceArmed:p.iceArmed,iceInfected:p.iceInfected,gold:p.gold}));
       if(lastPublic&&lastPublic.length===snapshot.length){snapshot.forEach((p,i)=>{const before=lastPublic[i];const changes=[];for(const [key,label]of [['protected','保護'],['dodging','閃避'],['frozen','凍結'],['skipNext','麻痺'],['iceArmed','冰鬼檢查'],['iceInfected','冰鬼感染']])if(!!p[key]!==!!before[key])changes.push(p[key]?`${label}獲得`:`${label}解除`);if(before.alive&&!p.alive)changes.push('淘汰');if(Number.isFinite(p.gold)&&Number.isFinite(before.gold)&&p.gold!==before.gold)changes.push(`金幣 ${p.gold-before.gold>0?'+':''}${p.gold-before.gold}`);if(changes.length&&!fast()){const row=window.CardPhonePresentation?.playerVisualElement?.(i)||$('players')?.children[i];if(row){const r=row.getBoundingClientRect();if(r.right>0&&r.left<innerWidth){const badge=make('span','phone-player-change',changes.join(' · '));badge.style.left=Math.max(4,Math.min(innerWidth-155,r.left))+'px';badge.style.top=Math.min(innerHeight-32,r.bottom+4)+'px';statusLayer.append(badge);setTimeout(()=>badge.remove(),2600);}if(!reduce())row.animate([{filter:'brightness(1.4)'},{filter:'brightness(1)'}],{duration:1000});}}});}

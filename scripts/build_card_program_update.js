@@ -91,7 +91,8 @@ function collect(baselineRef, createdAt) {
   }
   const names = config.games.card.programFiles;
   const previousPrograms = previous.assets.filter(asset => !MEDIA.has(asset.kind)).map(asset => asset.path);
-  assert.deepEqual(names.filter(n=>!previousPrograms.includes(n)),['css/card-desktop-table.css','js/card-desktop-table.js'],'Only reviewed desktop presentation additions allowed');
+  const additions=names.filter(n=>!previousPrograms.includes(n));
+  assert.ok(additions.length===0 || JSON.stringify(additions)===JSON.stringify(['css/card-desktop-table.css','js/card-desktop-table.js']),'Only reviewed desktop presentation additions allowed');
   assert.ok(previousPrograms.every(n=>names.includes(n)),'Existing programs cannot be removed');
   // Git's diff accounts for checkout line-ending conversion; hashes below always
   // use the committed blob, so a Windows checkout cannot alter Linux delivery.
@@ -109,7 +110,7 @@ function collect(baselineRef, createdAt) {
   const manifest = validateManifest(buildManifest('card', previous.entryPath, createdAt, retained, programs), 'card');
   assert.ok(previous.assets.every(a=>manifest.assets.some(n=>n.path===a.path)),'Existing Card paths retained');
   assert.deepEqual(manifest.assets.filter(asset => MEDIA.has(asset.kind)), retained, 'Existing media changed.');
-  assert.equal(manifest.totalFiles, previous.totalFiles+2, 'Only two presentation programs added.');
+  assert.equal(manifest.totalFiles, previous.totalFiles+additions.length, 'Only two presentation programs added.');
   if (manifest.releaseId === previous.releaseId) manifest.createdAt = previous.createdAt;
   const nextManifestBytes = jsonBytes(manifest);
   const manifestPath = `desktop/manifests/card-${manifest.releaseId}.json`;
