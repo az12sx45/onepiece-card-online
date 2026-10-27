@@ -2024,3 +2024,6 @@ public/js/board_game.js 的 applyBoardLanPayload 在非同步套用結束後呼�
 
 
 Card cinema source: android/web/card-phone-cinema.css and card-phone-fx.js in the mobile authority; generated desktop bundle public/{js,css}/card-desktop-table.*. QA: android/card-cinema-qa.mjs. Details: CARD_CINEMA_20261028.md.
+
+
+Mobile shared hand controller/style: android/web/card-hand-dock.js/.css; desktop generation includes the same controller. QA: android/card-hand-duel-qa.mjs.

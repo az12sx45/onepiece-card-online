@@ -2012,3 +2012,6 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 
 2026-10-28 presentation-only update: rules and command handlers unchanged; private reveals and public losing-duel-card restrictions retained. Original server STATE has no phase field. See CARD_CINEMA_20261028.md.
+
+
+2026-10-28 Card duel UI preserves original outcome authority: only public duel_log losing card revealed; winner and tie faces stay concealed. UI never derives another face from viewer state.

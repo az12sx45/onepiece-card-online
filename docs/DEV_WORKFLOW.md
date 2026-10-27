@@ -8422,3 +8422,10 @@ LATTICE runtime/task API未出現在本階段工具清單；未聲稱持久任�
 ## 2026-10-28 Card cinema and discard interaction
 
 Shared desktop/mobile presentation: pointer-capture-safe discard entry; lower round controls; text bounds and tabletop reveal; narration before distinct GPT effects/fullscreen video; actual no-phase STATE support. Files, generated-art prompts and evidence: [CARD_CINEMA_20261028.md](CARD_CINEMA_20261028.md). Browser QA: 102+102 cinema, 67+67 targets, seven npm-start routes and seven stable-identity Socket.IO checks. Real-device acceptance pending.
+
+Release verified 2026-10-28: desktop aa09ba353 / package-fc35cb03ac796250 is public (35 catalog/runtime/program checks); Android native v049 pointer activated with 11 public objects verified and ten exact-reconstruction deltas (v048 patch 4,480,563 bytes); iOS unsigned v050 built by CI 40546782896, Mac WebKit checked, 1,535 launcher files matched. Physical devices not tested. Receipt: docs/CARD_CINEMA_RELEASE_20261028.json.
+
+
+## 2026-10-28 Tucked hand and loser-only duel presentation
+
+Reworked own hand as hover/touch fan, compact bottom corners and padded opponent HUD. Duel retains original public loser-only reveal and tie privacy. Source scope and QA: [CARD_HAND_DUEL_20261028.md](CARD_HAND_DUEL_20261028.md). Final verification and public release are recorded separately.

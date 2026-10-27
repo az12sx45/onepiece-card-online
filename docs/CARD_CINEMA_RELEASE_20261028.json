@@ -1,0 +1,195 @@
+{
+  "desktop": {
+    "status": "live",
+    "commit": "aa09ba35331c22dc683b65ca3bc1b9a13c502553",
+    "renderDeploy": "dep-dbgdi3ajnfac73fdu8pg",
+    "readback": {
+      "passed": true,
+      "sourceCommit": "aa09ba35331c22dc683b65ca3bc1b9a13c502553",
+      "release": "package-fc35cb03ac796250",
+      "checks": [
+        "All three catalog identities and source trees exact",
+        "card manifest/runtime exact",
+        "css/card-cursor-buggy-v3.css",
+        "css/card-desktop-table.css",
+        "css/card-entry-tailwind-v1.min.css",
+        "css/card-finish-v1.css",
+        "css/card-tailwind-v1.min.css",
+        "game.html",
+        "i18n/en.js",
+        "i18n/i18n.js",
+        "i18n/ja.js",
+        "i18n/ko.js",
+        "i18n/zh-Hant.js",
+        "js/card-desktop-table.js",
+        "js/card_finish_v1.js",
+        "js/game_cursor_feedback_v1.js",
+        "manifest.webmanifest",
+        "profile.html",
+        "result.html",
+        "shop.html",
+        "start.html",
+        "sw.js",
+        "tutorial.html",
+        "vendor/README.md",
+        "vendor/babel/7.24.7/babel.min.js",
+        "vendor/licenses/Babel-7.24.7-LICENSE.txt",
+        "vendor/licenses/React-18.3.1-LICENSE.txt",
+        "vendor/licenses/ReactDOM-18.3.1-LICENSE.txt",
+        "vendor/licenses/Socket.IO-4.8.1-LICENSE.txt",
+        "vendor/licenses/TailwindCSS-3.4.17-LICENSE.txt",
+        "vendor/react-dom/18.3.1/react-dom.development.js",
+        "vendor/react/18.3.1/react.development.js",
+        "vendor/socket.io-client/4.8.1/socket.io.min.js",
+        "board manifest/runtime exact",
+        "chess manifest/runtime exact"
+      ],
+      "at": "2026-10-27T17:13:13.480Z"
+    }
+  },
+  "android": {
+    "ok": true,
+    "mode": "live",
+    "activated": true,
+    "publishedAt": "2026-10-27T17:08:41.607Z",
+    "versionCode": 49,
+    "before": {
+      "exists": true,
+      "etag": "\"a1ac0d3fb8dc28da0ce1b391944d7b74\"",
+      "versionCode": 48,
+      "sha256": "abf33f0544e746d80b3ac9feeedbe37b5e545cad88e19215a69e7eb32b42cfef",
+      "bytes": 4545,
+      "cacheControl": "no-cache, no-store, max-age=0, must-revalidate, no-transform"
+    },
+    "after": {
+      "exists": true,
+      "etag": "\"f23d0c529c41526a0912c81145af39e9\"",
+      "versionCode": 49,
+      "sha256": "09ad6a1f4e68b2b0415fc4ba423a2fa2ff1f22b9f3bb07d7306dd9fd72991625",
+      "bytes": 5051,
+      "cacheControl": "no-cache, no-store, max-age=0, must-revalidate, no-transform"
+    },
+    "manifestSha256": "09ad6a1f4e68b2b0415fc4ba423a2fa2ff1f22b9f3bb07d7306dd9fd72991625",
+    "objects": [
+      {
+        "key": "android/releases/49/PIRATE-ODYSSEY-v049-0e8aea992420.apk",
+        "bytes": 441703073,
+        "sha256": "0e8aea992420842c65ec1fa217ad6281eb8a2ef0423bc366d0cd2bb65e070805",
+        "publicUrl": "https://game-assets.rihdi.tw/android/releases/49/PIRATE-ODYSSEY-v049-0e8aea992420.apk",
+        "ok": true,
+        "uploaded": true
+      },
+      {
+        "key": "android/deltas/38-49/cf3f5b7a025c3eedab3d08963830aaedb9a0a81b2896a9fd0851dff9d35ec1e0.podiff.gz",
+        "bytes": 7618213,
+        "sha256": "cf3f5b7a025c3eedab3d08963830aaedb9a0a81b2896a9fd0851dff9d35ec1e0",
+        "publicUrl": "https://game-assets.rihdi.tw/android/deltas/38-49/cf3f5b7a025c3eedab3d08963830aaedb9a0a81b2896a9fd0851dff9d35ec1e0.podiff.gz",
+        "ok": true,
+        "uploaded": true
+      },
+      {
+        "key": "android/deltas/39-49/3682b6308e60e32cc165a5ef4158c052db16ab0e93d5e339cd14c5e80a9abe34.podiff.gz",
+        "bytes": 7616887,
+        "sha256": "3682b6308e60e32cc165a5ef4158c052db16ab0e93d5e339cd14c5e80a9abe34",
+        "publicUrl": "https://game-assets.rihdi.tw/android/deltas/39-49/3682b6308e60e32cc165a5ef4158c052db16ab0e93d5e339cd14c5e80a9abe34.podiff.gz",
+        "ok": true,
+        "uploaded": true
+      },
+      {
+        "key": "android/deltas/40-49/02eb08fc2dd52320024a6aeb558057a46079606a57568a01e0e19cff288b3c46.podiff.gz",
+        "bytes": 6586320,
+        "sha256": "02eb08fc2dd52320024a6aeb558057a46079606a57568a01e0e19cff288b3c46",
+        "publicUrl": "https://game-assets.rihdi.tw/android/deltas/40-49/02eb08fc2dd52320024a6aeb558057a46079606a57568a01e0e19cff288b3c46.podiff.gz",
+        "ok": true,
+        "uploaded": true
+      },
+      {
+        "key": "android/deltas/41-49/5c6bbf3d9f038bb40db4570d9fd28a0e630942d4db8563eee14835e5c2c584a2.podiff.gz",
+        "bytes": 6586320,
+        "sha256": "5c6bbf3d9f038bb40db4570d9fd28a0e630942d4db8563eee14835e5c2c584a2",
+        "publicUrl": "https://game-assets.rihdi.tw/android/deltas/41-49/5c6bbf3d9f038bb40db4570d9fd28a0e630942d4db8563eee14835e5c2c584a2.podiff.gz",
+        "ok": true,
+        "uploaded": true
+      },
+      {
+        "key": "android/deltas/42-49/2a606adbd1588603d3016f18e8204cbb4b7228ad7ead61dae1024fef7377fc58.podiff.gz",
+        "bytes": 6447232,
+        "sha256": "2a606adbd1588603d3016f18e8204cbb4b7228ad7ead61dae1024fef7377fc58",
+        "publicUrl": "https://game-assets.rihdi.tw/android/deltas/42-49/2a606adbd1588603d3016f18e8204cbb4b7228ad7ead61dae1024fef7377fc58.podiff.gz",
+        "ok": true,
+        "uploaded": true
+      },
+      {
+        "key": "android/deltas/43-49/566420632e2d053dbe629c9205037958b0bff0676a5929da8eb8de68ded270f0.podiff.gz",
+        "bytes": 6423242,
+        "sha256": "566420632e2d053dbe629c9205037958b0bff0676a5929da8eb8de68ded270f0",
+        "publicUrl": "https://game-assets.rihdi.tw/android/deltas/43-49/566420632e2d053dbe629c9205037958b0bff0676a5929da8eb8de68ded270f0.podiff.gz",
+        "ok": true,
+        "uploaded": true
+      },
+      {
+        "key": "android/deltas/44-49/0c0b15b327921a33b04f6fca59b81a2d880bbc39989250ae7cc2452a8a7f810f.podiff.gz",
+        "bytes": 6423256,
+        "sha256": "0c0b15b327921a33b04f6fca59b81a2d880bbc39989250ae7cc2452a8a7f810f",
+        "publicUrl": "https://game-assets.rihdi.tw/android/deltas/44-49/0c0b15b327921a33b04f6fca59b81a2d880bbc39989250ae7cc2452a8a7f810f.podiff.gz",
+        "ok": true,
+        "uploaded": true
+      },
+      {
+        "key": "android/deltas/45-49/4a6f81686b22c77950dd639d062d3c8a22a60176ecca830d87d73015275c97ed.podiff.gz",
+        "bytes": 4480588,
+        "sha256": "4a6f81686b22c77950dd639d062d3c8a22a60176ecca830d87d73015275c97ed",
+        "publicUrl": "https://game-assets.rihdi.tw/android/deltas/45-49/4a6f81686b22c77950dd639d062d3c8a22a60176ecca830d87d73015275c97ed.podiff.gz",
+        "ok": true,
+        "uploaded": true
+      },
+      {
+        "key": "android/deltas/47-49/48318a9cd404f3d97b4ac594ddc66d79a7c744ded74a7ff99d0f7c24d96bb9cc.podiff.gz",
+        "bytes": 4480562,
+        "sha256": "48318a9cd404f3d97b4ac594ddc66d79a7c744ded74a7ff99d0f7c24d96bb9cc",
+        "publicUrl": "https://game-assets.rihdi.tw/android/deltas/47-49/48318a9cd404f3d97b4ac594ddc66d79a7c744ded74a7ff99d0f7c24d96bb9cc.podiff.gz",
+        "ok": true,
+        "uploaded": true
+      },
+      {
+        "key": "android/deltas/48-49/d72964b688a6b525a3dd6390cc5d6208841600921ff3c5c0be64bb8cda84ba00.podiff.gz",
+        "bytes": 4480563,
+        "sha256": "d72964b688a6b525a3dd6390cc5d6208841600921ff3c5c0be64bb8cda84ba00",
+        "publicUrl": "https://game-assets.rihdi.tw/android/deltas/48-49/d72964b688a6b525a3dd6390cc5d6208841600921ff3c5c0be64bb8cda84ba00.podiff.gz",
+        "ok": true,
+        "uploaded": true
+      }
+    ]
+  },
+  "ios": {
+    "passed": true,
+    "version": 50,
+    "output": "C:\\Users\\王曜瑋\\Documents\\Codex\\iOS_Releases\\PO-iOS-v050-UNSIGNED.ipa",
+    "bytes": 411153413,
+    "sha256": "4682befaff15930fab2f0e325bede4c3aecc3503dbf9ab36d90fd48324a2612c",
+    "ciRun": 40546782896,
+    "githubArtifactSha256": "sha256:7ee535ac8b22c3da954078d0862429a2297618c6bf8cc859d308325b4dd86574",
+    "launcherFilesByteMatched": 1535,
+    "macCompiled": true,
+    "signed": false,
+    "iphoneTested": false,
+    "macWebKitLauncherChecked": true
+  },
+  "qa": {
+    "presentationChecks": {
+      "desktop": 102,
+      "phone": 102,
+      "targets-desktop": 67,
+      "targets-phone": 67
+    },
+    "jsPageErrors": 0,
+    "npmStart": true,
+    "socketRooms": true,
+    "rulesChanged": false,
+    "physicalDevicesTested": false,
+    "review": "review.html",
+    "latticePersistence": "unavailable: no LATTICE API in current tool catalog; no new persistent task claim"
+  },
+  "ruleFilesUnchanged": true,
+  "deviceAcceptance": "not performed"
+}

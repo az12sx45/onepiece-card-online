@@ -2899,3 +2899,6 @@ r57公開發布完成：30張素材、321項大圖预覽、51項留言板/新頭
 
 
 Card desktop/mobile presentation now sequences narration before distinct action effects; inspection is laid out directly on the table. See CARD_CINEMA_20261028.md.
+
+
+Card presentation: own-hand hover/touch dock and staged duel with public losing-card reveal only; details in CARD_HAND_DUEL_20261028.md.

@@ -335,7 +335,7 @@ window.POCardInteract=module.exports;
       const copy=make('div','phone-action-copy');copy.append(make('strong','',title),make('span','',result));notice.append(symbol,copy);scene.append(notice);
       notice.style.top=Math.min(innerHeight-100,rail.bottom+10)+'px';notice.style.width=Math.min(640,innerWidth-32)+'px';notice.style.left='50%';
       const reading=['aim','select','shot'].includes(kind)?900:Math.min(3800,Math.max(2200,(title.length+result.length)*65));scene.dataset.readingMs=String(reading);
-      const duration=kind==='duel'?3000:kind==='notice'?400:1800;
+      const duration=kind==='duel'?5600:kind==='notice'?400:1800;
       function mark(a,cls){const n=make('span',cls);n.dataset.player=String(a.id);n.style.left=a.x+'px';n.style.top=a.y+'px';scene.append(n);return n;}
       function animate(n,frames,ms=1400,delay=0){if(reduce())return;n.animate(frames,{duration:ms,delay,easing:'cubic-bezier(.2,.7,.25,1)',fill:'both'});}
       function travel(a,b,reverse=false){if(!a||!b||a.id===b.id)return;const n=make('img','phone-hud-card');n.src='images/cards/back.webp';n.alt='';n.dataset.from=String(a.id);n.dataset.to=String(b.id);n.style.left=a.x+'px';n.style.top=a.y+'px';scene.append(n);const dx=b.x-a.x,dy=b.y-a.y;animate(n,[{transform:'translate(-50%,-50%) scale(.7)',opacity:0},{transform:'translate(-50%,-50%) scale(1)',opacity:1,offset:.1},{transform:`translate(calc(-50% + ${dx/2}px),calc(-50% + ${dy/2+(reverse?-35:35)}px)) rotate(${reverse?-15:15}deg)`,opacity:1,offset:.5},{transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(.6)`,opacity:0}],1600);}
@@ -346,14 +346,38 @@ window.POCardInteract=module.exports;
         if(kind==='notice')return;
         if(source){const origin=mark(source,'phone-hud-origin');animate(origin,[{transform:'translate(-50%,-50%) scale(.8)',opacity:0},{transform:'translate(-50%,-50%) scale(1.1)',opacity:1,offset:.3},{transform:'translate(-50%,-50%) scale(1.2)',opacity:0}],duration);}
         if(kind==='duel'&&detail.duel){
-          const d=detail.duel,center={x:innerWidth/2,y:Math.max(bounds.bottom+75,innerHeight*.48)};
+          const d=detail.duel,hasWinner=[from,to].includes(d.winnerId)&&Number.isInteger(d.winnerId)&&d.winnerId>=0;
+          const arena=make('section','phone-duel-arena'),result=make('div','phone-duel-result','決鬥'),versus=make('strong','phone-duel-versus','VS');
+          arena.setAttribute('aria-label',`${name(from)} 與 ${name(to)} 決鬥`);arena.append(result,versus);scene.append(arena);
+          const cards=[];
           for(const [i,id]of [from,to].entries()){
-            const a=anchor(id,bounds);if(!a)continue;const cardNode=make('img','phone-duel-card');cardNode.src='images/cards/back.webp';cardNode.alt=name(id)+' 的決鬥卡';cardNode.dataset.player=String(id);scene.append(cardNode);cardNode.style.left=center.x+(i?70:-70)+'px';cardNode.style.top=center.y+'px';
-            animate(cardNode,[{transform:`translate(calc(-50% + ${a.x-center.x-(i?70:-70)}px),calc(-50% + ${a.y-center.y}px)) scale(.25) rotate(${i?20:-20}deg)`,opacity:0},{transform:`translate(-50%,-50%) rotate(${i?8:-8}deg)`,opacity:1,offset:.5},{transform:`translate(calc(-50% + ${i?-25:25}px),-50%) rotate(0deg)`,opacity:1,offset:.65},{transform:'translate(-50%,-50%)',opacity:1}],1800);
-            const lost=(d.loserSide==='left'?i===0:d.loserSide==='right'?i===1:Number.isInteger(d.winnerId)&&d.winnerId!==id&&d.winnerId>=0);
-            if(lost&&validCard(d.loserCardId))later(()=>{cardNode.src=card(d.loserCardId);cardNode.dataset.revealed='public-loser';animate(cardNode,[{opacity:1,filter:'brightness(1)',transform:'translate(-50%,-50%)'},{opacity:0,filter:'brightness(1.6)',transform:'translate(-50%,-38%) scale(.7)'}],1100);},1800);
+            const a=anchor(id,bounds),slot=make('div','phone-duel-slot'),heading=make('h3','',name(id)),holder=make('div','phone-duel-card-wrap'),cardNode=make('img','phone-duel-card'),status=make('div','phone-duel-status','手牌保密');
+            slot.dataset.player=String(id);slot.dataset.side=i?'right':'left';cardNode.src='images/cards/back.webp';cardNode.alt=name(id)+' 的決鬥卡背';cardNode.dataset.player=String(id);holder.append(cardNode);slot.append(heading,holder,status);arena.append(slot);
+            const r=cardNode.getBoundingClientRect(),x=r.x+r.width/2,y=r.y+r.height/2;
+            if(a)animate(cardNode,[{transform:`translate(${a.x-x}px,${a.y-y}px) scale(.2) rotate(${i?18:-18}deg)`,opacity:0},{transform:`translate(0,0) rotate(${i?4:-4}deg)`,opacity:1,offset:.48},{transform:`translate(${i?-30:30}px,0) rotate(${i?-8:8}deg)`,opacity:1,offset:.7},{transform:'translate(0,0)',opacity:1}],1700);
+            cards.push({id,slot,cardNode,status,a});
           }
-          const hit=mark({id:-1,...center},'phone-hud-impact');animate(hit,[{opacity:0,transform:'translate(-50%,-50%) scale(.2)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)',offset:.45},{opacity:0,transform:'translate(-50%,-50%) scale(1.6)'}],900,1000);return;
+          const center=versus.getBoundingClientRect(),hit=mark({id:-1,x:center.x+center.width/2,y:center.y+center.height/2},'phone-hud-impact');
+          animate(hit,[{opacity:0,transform:'translate(-50%,-50%) scale(.1)'},{opacity:1,transform:'translate(-50%,-50%) scale(1.5)',offset:.45},{opacity:0,transform:'translate(-50%,-50%) scale(2)'}],850,1000);
+          later(()=>{
+            arena.dataset.resolved='true';result.textContent=hasWinner?`${name(d.winnerId)} 勝出`:'雙方平手';versus.textContent=hasWinner?'':'平手';
+            for(const c of cards){
+              const loser=hasWinner&&c.id!==d.winnerId&&(d.loserSide==null||d.loserSide===(c.id===from?'left':'right'));
+              c.slot.dataset.outcome=!hasWinner?'draw':loser?'lost':'won';c.status.textContent=!hasWinner?'平手 · 手牌不公開':loser?'落敗 · 公開手牌':'勝出 · 手牌保密';
+              // Only the original public duel_log's losing card may be turned over.
+              // Never infer a face from viewer state, even if the winner is this viewer.
+              if(loser&&validCard(d.loserCardId)){
+                animate(c.cardNode,[{transform:'scaleX(1)'},{transform:'scaleX(0)'}],180);
+                later(()=>{c.cardNode.src=card(d.loserCardId);c.cardNode.alt=name(c.id)+' 公開的敗方手牌';c.cardNode.dataset.revealed='public-loser';animate(c.cardNode,[{transform:'scaleX(0)'},{transform:'scaleX(1)'}],220);},180);
+              }
+            }
+          },1800);
+          later(()=>{
+            for(const c of cards){const r=c.cardNode.getBoundingClientRect(),target=c.slot.dataset.outcome==='lost'?document.querySelector('.phone-discard-stack')?.getBoundingClientRect():null;
+              const a=target?{x:target.x+target.width/2,y:target.y+target.height/2}:c.a;if(!a)continue;
+              animate(c.cardNode,[{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${a.x-r.x-r.width/2}px,${a.y-r.y-r.height/2}px) scale(.22)`,opacity:0}],1100);
+            }
+          },4300);return;
         }
         for(const id of ids){const target=anchor(id,bounds);if(!target)continue;
           if(kind==='swap'){travel(source,target);travel(target,source,true);continue;}
@@ -458,7 +482,7 @@ window.POCardInteract=module.exports;
       // law_view is owned by the original swap-confirm dialog; animate its image via CSS.
     }
     if(typeof playEnhFxFor==='function'){const originalVideo=playEnhFxFor;playEnhFxFor=function(id){if(fast())return;const title=validCard(id)&&typeof CARD_TEXT==='object'?CARD_TEXT[id]?.name:'強化招式';burst('video',null,null,'強化招式發動',{title:title||'強化招式',result:'強化效果發動',open:()=>originalVideo(id)});};}
-    if(typeof playDuel==='function')playDuel=function(opts){if(!opts)return;burst('duel',opts.leftId,opts.rightId,'決鬥開始',{duel:opts,title:`${name(opts.leftId)} 對決 ${name(opts.rightId)}`,result:Number.isInteger(opts.winnerId)&&opts.winnerId>=0?`${name(opts.winnerId)} 勝出`:'雙方平手'});};
+    if(typeof playDuel==='function')playDuel=function(opts){if(!opts)return;burst('duel',opts.leftId,opts.rightId,'決鬥開始',{duel:opts,title:`${name(opts.leftId)} 對決 ${name(opts.rightId)}`,result:'雙方卡牌進場，準備對決'});};
     if(typeof openLawSwap==='function'){const originalOpen=openLawSwap;openLawSwap=function(target,id){burst('scan',viewer(),target,'偵察手牌',{title:`${name(viewer())} 查看 ${name(target)}`,result:'偵察結果僅你可見',open:()=>originalOpen(target,id)});};}
     let lastPublic=null,lastRound=null,lastIdentity=null;
     function onState(s){
@@ -757,6 +781,32 @@ window.POCardInteract=module.exports;
     document.getElementById('phoneCardSheet')?.addEventListener('phone-card-sheet-close',schedule);
     if(typeof socket==='object'){socket.on?.('STATE',schedule);socket.on?.('disconnect',()=>{restore();hint.hidden=true;delete root.dataset.cardDirectTargets;});}
     sync();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
+/* Own-hand presentation only; original inspection/confirmation still sends actions. */
+(()=>{
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const root=document.documentElement,hand=document.getElementById('myPlayZone'),held=document.querySelector('.phone-card-held');
+    if(!root.dataset.cardPhone||!hand||!held||root.dataset.cardHandDock)return;
+    root.dataset.cardHandDock='1';let key=null;
+    const close=()=>{delete root.dataset.handOpen;for(const b of hand.querySelectorAll('.grid > button'))b.setAttribute('aria-expanded','false');held.setAttribute('aria-expanded','false');};
+    const open=()=>{root.dataset.handOpen='1';for(const b of hand.querySelectorAll('.grid > button'))b.setAttribute('aria-expanded','true');held.setAttribute('aria-expanded','true');};
+    for(const zone of [hand,held]){
+      zone.addEventListener('click',e=>{
+        // Touch first lifts the fan. A later tap uses the existing inspect path.
+        if(e.pointerType==='touch'&&!root.dataset.handOpen){e.preventDefault();e.stopImmediatePropagation();open();}
+      },true);
+      zone.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();close();}});
+    }
+    document.addEventListener('pointerdown',e=>{if(!hand.contains(e.target)&&!held.contains(e.target))close();},true);
+    function sync(s){const p=s?.players?.[typeof me==='object'?me.playerId:-1];const next=JSON.stringify([s?.roundNo,s?.turnIndex,s?.turnStep,p?.hand,p?.tempDraw]);if(next!==key){key=next;close();}}
+    if(typeof socket==='object'){socket.on?.('STATE',sync);socket.on?.('disconnect',close);socket.on?.('JOINED',close);}
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)close();});
+    sync(typeof state==='object'?state:null);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
