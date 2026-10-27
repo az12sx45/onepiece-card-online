@@ -2,7 +2,7 @@
   "schema": 1,
   "godot": "4.7.2-stable",
   "productManifestSha256": "58b98f540108c4c0ab8574577a4360b600779784efe8e9b00ac1cfb7fc581d69",
-  "androidBaseline": 46,
+  "androidBaseline": 47,
   "godotjs": {
     "tag": "v1.0.2",
     "commit": "5d7ed8708ee3816b599184a8b5680e186c826f38",
