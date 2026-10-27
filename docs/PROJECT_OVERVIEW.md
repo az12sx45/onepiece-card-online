@@ -2896,3 +2896,6 @@ r57公開發布完成：30張素材、321項大圖预覽、51項留言板/新頭
 
 
 2026-10-28：Card 桌機/手機共用公開互動結果面板，顯示猜測數字、雙方名稱與護盾/閃避結果。詳見 CARD_ACTION_CLARITY_20261028.md。
+
+
+Card desktop/mobile presentation now sequences narration before distinct action effects; inspection is laid out directly on the table. See CARD_CINEMA_20261028.md.

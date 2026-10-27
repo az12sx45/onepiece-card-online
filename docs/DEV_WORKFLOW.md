@@ -8415,3 +8415,10 @@ LATTICE runtime/task API未出現在本階段工具清單；未聲稱持久任�
 
 
 2026-10-28：爭霸戰猜號、交換及防禦結果清晰化。server/engine.js 只新增公開 EMIT；共用 FX JS/CSS、新護盾/閃避 GPT 圖及桌機產生器同步。引擎256、桌機/手機104、FX314、選人67、原生共存4、真正本機雙視窗同步7項通過；未宣稱真機驗收。發布工具允許既有31程式更新，仍保留媒體與其他遊戲。詳見 CARD_ACTION_CLARITY_20261028.md。
+
+2026-10-28 00:23 TST 發布完成：Render dep-dbgcrdrbc2fs73a6pblg / d181066d2 Live，Card package-c839da19360e32e7；公開catalog、三款manifest/runtime與31程式SHA共35項通過。Android native v048與9份差量（v047→v048 4,258,838 bytes）公開讀回一致；iOS v049 CI40538651569成功、1535 launcher資源逐byte核對，未簽章且未真機驗收。收據 CARD_ACTION_CLARITY_RELEASE_20261028.json。刪除本次失敗 launcher-stage 暫存被自動審查拒絕（blocked by policy），保留未刪。
+
+
+## 2026-10-28 Card cinema and discard interaction
+
+Shared desktop/mobile presentation: pointer-capture-safe discard entry; lower round controls; text bounds and tabletop reveal; narration before distinct GPT effects/fullscreen video; actual no-phase STATE support. Files, generated-art prompts and evidence: [CARD_CINEMA_20261028.md](CARD_CINEMA_20261028.md). Browser QA: 102+102 cinema, 67+67 targets, seven npm-start routes and seven stable-identity Socket.IO checks. Real-device acceptance pending.

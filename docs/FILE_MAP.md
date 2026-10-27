@@ -2021,3 +2021,6 @@ public/js/board_game.js 的 applyBoardLanPayload 在非同步套用結束後呼�
 
 
 2026-10-28：server/engine.js 公開互動 EMIT；scripts/card_action_presentation_qa.js 引擎差異驗證；scripts/card_action_sync_qa.mjs 本機雙瀏覽器；手機 android/web/card-phone-fx.* 與 art/card-status-{guard,dodge}.webp 透過產生器輸出桌機 public/{js,css}/card-desktop-table.*。詳見 CARD_ACTION_CLARITY_20261028.md。
+
+
+Card cinema source: android/web/card-phone-cinema.css and card-phone-fx.js in the mobile authority; generated desktop bundle public/{js,css}/card-desktop-table.*. QA: android/card-cinema-qa.mjs. Details: CARD_CINEMA_20261028.md.

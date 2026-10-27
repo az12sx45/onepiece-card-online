@@ -2,21 +2,21 @@ import fs from 'node:fs';
 import {spawn,spawnSync} from 'node:child_process';
 import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url),{chromium}=require('C:/Users/王曜瑋/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
-const root='D:/Codex_Release_Worktrees/board-multiplayer-authority-20261025',out='D:/Codex_QA/card-action-clarity-20261027/sync.json',port=30929,origin=`http://127.0.0.1:${port}`;
+const root='D:/Codex_Release_Worktrees/board-multiplayer-authority-20261025',out=process.env.CARD_QA_REPORT||'D:/Codex_QA/card-action-clarity-20261027/sync.json',port=30929,origin=`http://127.0.0.1:${port}`;
 const child=spawn('cmd.exe',['/d','/s','/c','npm.cmd start'],{cwd:root,windowsHide:true,env:{...process.env,DATABASE_URL:'',PORT:String(port)},stdio:['ignore','pipe','pipe']});
-let log='',browser;child.stdout.on('data',b=>log+=b);child.stderr.on('data',b=>log+=b);
-const report={scope:'Two isolated Chromium windows using the real local npm-start server and Socket.IO. Guest room, no production accounts or physical-device claim.',checks:[],passed:false};
+let log='',browser;const pages=[];child.stdout.on('data',b=>log+=b);child.stderr.on('data',b=>log+=b);
+const report={scope:'Two isolated Chromium windows using the real local npm-start server and Socket.IO. Guest room with stable isolated test identities, no production accounts or physical-device claim.',checks:[],passed:false};
 const check=(name,ok,detail)=>{report.checks.push({name,ok,detail});if(!ok)throw Error(name+': '+JSON.stringify(detail));};
 const action=(p,type,payload={})=>p.evaluate(({type,payload})=>socket.emit('ACTION',{...me,type,payload}),{type,payload});
 try{
  for(let i=0;i<100&&!log.includes('Server listening');i++){if(child.exitCode!==null)throw Error(log.slice(-2000));await new Promise(r=>setTimeout(r,150));}
  check('npm start listening',log.includes('Server listening'));
  browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
- const pages=[],room='QA-clarity-'+Date.now();
+ const room='QA-clarity-'+Date.now();
  for(let i=0;i<2;i++){
   const ctx=await browser.newContext({viewport:{width:1366,height:768},userAgent:'ONEPIECE_TABLETOP_ANDROID (Electron/44.1.1 compatibility)',serviceWorkers:'block'});
   await ctx.route('**/*',r=>new URL(r.request().url()).origin===origin?r.continue():r.abort());
-  await ctx.addInitScript(()=>{window.__TABLETOP_ANDROID_TEST_ORIGIN=location.origin;HTMLMediaElement.prototype.play=function(){return Promise.resolve()};});
+  await ctx.addInitScript(()=>{window.__TABLETOP_ANDROID_TEST_ORIGIN=location.origin;if(!localStorage.getItem('opSecret'))localStorage.setItem('opSecret','qa-cinema-'+crypto.randomUUID());HTMLMediaElement.prototype.play=function(){return Promise.resolve()};});
   const p=await ctx.newPage();p.setDefaultTimeout(12000);await p.goto(origin+'/game.html?room='+room+'&name=QA'+i,{waitUntil:'domcontentloaded'});await p.waitForFunction(()=>typeof me!=='undefined'&&me.playerId!==null&&state?.players?.length>0);
   await p.evaluate(()=>{window.__events=[];socket.on('EMIT',e=>window.__events.push(e));});pages.push(p);
  }
@@ -36,5 +36,5 @@ try{
  check('refresh restores same seat and turn',JSON.stringify(old)===JSON.stringify(fresh),{seat:fresh.id,turn:fresh.turn,step:fresh.step});
  check('private other hand stays hidden',await pages[1].evaluate(()=>state.players.filter(p=>p.id!==me.playerId).every(p=>p.hand==null||p.hand===-1)));
  report.passed=true;
-}catch(e){report.failure=e.stack;report.log=log.slice(-2500);process.exitCode=1;}
+}catch(e){report.clients=await Promise.all(pages.map(p=>p.evaluate(()=>({room:me.roomId,seat:me.playerId,players:state?.players?.map(p=>({id:p.id,name:p.displayName})),step:state?.turnStep})).catch(()=>null)));report.failure=e.stack;report.log=log.slice(-2500);process.exitCode=1;}
 finally{await browser?.close();spawnSync('taskkill',['/PID',String(child.pid),'/T','/F'],{windowsHide:true});fs.writeFileSync(out,JSON.stringify(report,null,2));console.log(JSON.stringify(report));}

@@ -2009,3 +2009,6 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 
 2026-10-28：Card 規則不變。card_guess/card_defense 只播報已選尾數與公開防禦結果，護盾/閃避抵銷不稱為猜錯；不揭露其他玩家手牌。256次對照狀態/原事件一致。
+
+
+2026-10-28 presentation-only update: rules and command handlers unchanged; private reveals and public losing-duel-card restrictions retained. Original server STATE has no phase field. See CARD_CINEMA_20261028.md.
