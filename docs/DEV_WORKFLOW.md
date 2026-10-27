@@ -8408,3 +8408,4 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 LATTICE runtime/task API未出現在本階段工具清單；未聲稱持久任務或圖譜成功。沿用已知 project/task 身分，發布收據另記。
 2026-10-27 發布工具核對：Windows checkout JSON 只有 CRLF/LF 差異時接受，內容仍須逐字相等；候選一律使用 Git blob。
 2026-10-27 發布候選 package-0f389482af7fd075：31 program Git hash、1054媒體逐項保留、Board/Chess與公開v3 sourceTrees完全一致。舊 desktop_program_catalog_qa 使用v2 images tree，與更新前正式v3即有差異，未修改此舊測試/基線；改以scoped-release-qa.json核對本次實際基線。R2 publisher fixture通過。
+2026-10-27 Card範圍發布：完整publisher遇到歷史共享頭像alias不在HEAD，未重建或替換媒體。publish_card_program_blobs.js逐項核對公開基線，只上傳3個已提交presentation差分，使用原conditional immutable publisher與SHA公開讀回；publish-saved-card-program.ps1沿用既有DPAPI子程序憑證機制。
