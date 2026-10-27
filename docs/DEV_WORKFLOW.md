@@ -8407,3 +8407,4 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 驗證：桌機原引擎 portrait 67、stage 90、原生共存 4 項通過，零 pageerror；圖片從正式程式配合同源本機既有媒體讀取。npm start 七入口 HTTP200，正式樹無 node_modules，僅子程序 NODE_PATH 指向既有依賴；測試結束關閉自身 server。未做真人跨裝置/真機驗收。證據 D:/Codex_QA/card-desktop-arena-20261027。
 LATTICE runtime/task API未出現在本階段工具清單；未聲稱持久任務或圖譜成功。沿用已知 project/task 身分，發布收據另記。
 2026-10-27 發布工具核對：Windows checkout JSON 只有 CRLF/LF 差異時接受，內容仍須逐字相等；候選一律使用 Git blob。
+2026-10-27 發布候選 package-0f389482af7fd075：31 program Git hash、1054媒體逐項保留、Board/Chess與公開v3 sourceTrees完全一致。舊 desktop_program_catalog_qa 使用v2 images tree，與更新前正式v3即有差異，未修改此舊測試/基線；改以scoped-release-qa.json核對本次實際基線。R2 publisher fixture通過。
