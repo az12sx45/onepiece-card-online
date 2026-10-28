@@ -6830,9 +6830,9 @@ html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-
 html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-library] .phone-toss-face{position:absolute;inset:0;backface-visibility:hidden;background:var(--coin-toss-art) 3.2% 43%/405% 135% no-repeat;}
 html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-library] .phone-toss-back{transform:rotateY(180deg);background-position:37.7% 43%;}
 html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-library] #modal[data-coin-action] .phone-skill-intro{display:none;}
-html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-library] #modal[data-coin-action] .card{width:min(70vw,500px)!important;max-width:none!important;height:auto!important;max-height:70dvh!important;min-height:0!important;padding:24px!important;align-items:center;text-align:center;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-library] #modal[data-coin-action] .card{width:min(70vw,500px)!important;max-width:none!important;height:230px!important;max-height:calc(100dvh - 36px)!important;min-height:0!important;flex:none!important;align-self:center!important;padding:24px!important;align-items:center;text-align:center;background:none!important;border:0!important;border-image:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;overflow:visible!important;}
 html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-library] #modal[data-coin-action] .card>.flex{justify-content:center!important;background:none!important;position:static!important;}
-html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-library] #modal[data-coin-action] .phone-toss-button{width:220px;height:82px;min-height:82px!important;border:0!important;border-image:none!important;background:var(--coin-toss-art) 100% 47%/240% 200% no-repeat!important;color:#ffe8ac!important;text-shadow:0 1px 2px #000;font-size:22px!important;font-weight:bold;padding:12px 35px!important;box-shadow:none!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-library] #modal[data-coin-action] .phone-toss-button{position:relative;width:126px!important;height:126px!important;min-height:126px!important;border-radius:50%!important;border:0!important;border-image:none!important;background:var(--coin-toss-art) 3.2% 43%/405% 135% no-repeat!important;color:#ffe8ac!important;text-shadow:0 1px 2px #000;font-size:22px!important;font-weight:bold;padding:0!important;box-shadow:none!important;}
 @media(min-width:1000px) and (min-height:600px){
 html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-library] .phone-avatar-wrap{width:64px;height:64px;flex-basis:64px;}
 html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-library] .phone-avatar-wrap::after{inset:-13px;}
@@ -6862,3 +6862,15 @@ html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-
 
 
 html:root[data-card-library][data-card-flow-busy=true] :is(#phoneTargetHint,#phoneTargetFocus,#finalOverlay){visibility:hidden!important;pointer-events:none!important;}
+
+/* Existing GPT coin/card art, positioned for direct physical interaction. */
+html:root[data-card-library] #modal[data-coin-action] .phone-toss-button{position:relative;width:126px!important;height:126px!important;min-height:126px!important;border:0!important;border-radius:50%!important;background:var(--coin-toss-art) 3.2% 43%/405% 135% no-repeat!important;padding:0!important;cursor:pointer;}
+html:root[data-card-library] #modal[data-coin-action] .card{background:none!important;border:0!important;border-image:none!important;box-shadow:none!important;overflow:visible!important;}
+.phone-coin-prompt{position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:18px;color:#ffe4a0;}
+#phonePileAction{position:fixed;inset:0;z-index:199;pointer-events:none;color:#ffe5aa;}
+#phonePileAction[hidden]{display:none!important;}
+#phonePileAction>strong{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);font-size:clamp(18px,3.3dvh,27px);text-shadow:0 2px 5px #000,0 0 8px #000;text-align:center;}
+#phonePileAction>img{position:fixed;object-fit:contain;filter:drop-shadow(0 3px 3px #0008);}
+[data-kid-draw=ready]{cursor:pointer;filter:drop-shadow(0 0 9px #ffd16b);animation:kidPilePrompt 1.3s ease-in-out infinite;}
+@keyframes kidPilePrompt{50%{filter:drop-shadow(0 0 17px #ffd16b);}}
+@media(prefers-reduced-motion:reduce){[data-kid-draw=ready]{animation:none;}}
