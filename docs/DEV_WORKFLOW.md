@@ -8446,3 +8446,16 @@ Release verified 2026-10-28: desktop 67226b4a / package-91f643ceaa0dead2 public 
 2026-10-28 Card action completion: Kid transaction acknowledgement and direct shuffled-pile draw; Sabo return/shuffle/deal; actual self-hand transfer origins; deferred visible results and clickable server-owned coin. Files/QA: docs/CARD_ACTION_SEQUENCE_20261028.md.
 
 2026-10-28 Card final visual correction: merged Kid discard-count/action hint and restored the normal pile caption after completion. Shared card-pile-actions.js and generated desktop JS; two viewport visual checks passed.
+
+2026-10-28 Card action sequence release: desktop package-883095d8ca087599 public manifest/runtime/program bytes verified; Android native v052 and 13 exact-reconstruction deltas activated/read back; iOS unsigned v053 Mac/WebKit and 1535 launcher files verified. Browser QA 177 checks; real local two-browser test included, no physical-device or real-account acceptance claim. See CARD_ACTION_SEQUENCE_RELEASE_20261028.json.
+
+
+## 2026-10-28 Card finisher sequencing (work in progress)
+Scope: defer discard/outcome narration, direct DRAW with the existing pending guard, clearer active-turn banner, 20 cosmetic GPT finisher assets and actual loser-card masks/fragments. Shared mobile modules card-duel-finishers, card-turn-draw, card-phone-fx/flow; desktop generated bundle. Engine, card IDs, rules and winner-card secrecy unchanged. Validation pending; this entry is not a release claim.
+
+
+## 2026-10-28 Card duel finishers and outcome gate
+Shared presentation adds 20 GPT-generated transparent special-move sprites, selected from a cosmetic shuffle bag without reading winning/hidden cards. Only the public duel_log loser face can be revealed at impact. Actual card texture is masked, split, shattered, melted or displaced; fragments move away before outcome text. silent_discard is no longer a preview narration. Guess/effect result notices wait until the complete transaction animation and pile travel finish. Rules and server packet formats remain unchanged.
+DRAW retains the original pending request guard and sends once immediately; the original draw movie is bypassed. A pending card flight waits for the actual hand layout instead of being consumed before its target becomes visible. Active turn is highlighted in the public HUD.
+Source modules: android/web/card-duel-finishers.js/.css, card-turn-draw.js, card-phone-fx.js, card-phone-flow.js, card-phone-flight.js, mobile-sources.mjs, build-card-desktop.mjs. Desktop delivery: public/js/card-desktop-table.js, public/css/card-desktop-table.css, public/game.html. GPT prompt provenance: android/web/art/card-finishers-v1-prompts.json.
+Validation records are stored under D:/Codex_QA/card-finishers-20261028. Browser checks and packaging are separate from real Android/iPhone acceptance. Release receipt will record published bytes.
