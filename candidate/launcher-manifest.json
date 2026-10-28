@@ -9190,15 +9190,15 @@
     },
     {
       "path": "mobile/game-mobile.css",
-      "sourceSha256": "d081a645bd52fecd7ee583487577f74f943162a7d379875752a8802a2bf1f27f",
-      "sha256": "d081a645bd52fecd7ee583487577f74f943162a7d379875752a8802a2bf1f27f",
-      "size": 6392091
+      "sourceSha256": "3aaa9a38ae7b1474084ea8d54d82c6c3d658a6dd1e96df6987fb1cdba21cc549",
+      "sha256": "3aaa9a38ae7b1474084ea8d54d82c6c3d658a6dd1e96df6987fb1cdba21cc549",
+      "size": 14603597
     },
     {
       "path": "mobile/game-mobile.js",
-      "sourceSha256": "bd2460b571515ea5d8aae6a5485b4ee8bd86dba07401992c60ad5785cb57b1a1",
-      "sha256": "1b7fa3b0f25358f164dd5cfa3254dfa912a9a2bc13e6f64d0905a3a378245789",
-      "size": 439106
+      "sourceSha256": "a83cb5528cf3eb3b41c1119235a61466f55a357dce430eca87a34049cd3670c9",
+      "sha256": "516daf0a36b7ea9cd247a027155a5c4d9f3c8ef2229235371dcecab0f70a88eb",
+      "size": 457672
     },
     {
       "path": "mobile/session-bootstrap.js",
@@ -9211,5 +9211,5 @@
       "size": 292
     }
   ],
-  "bytes": 320023846
+  "bytes": 328253918
 }

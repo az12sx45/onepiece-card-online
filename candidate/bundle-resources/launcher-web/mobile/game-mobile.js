@@ -3906,9 +3906,9 @@ window.POCardInteract=module.exports;
     function later(fn,ms){const epoch=fxEpoch,t=setTimeout(()=>{fxDelays.delete(t);if(epoch===fxEpoch)fn();},ms);fxDelays.add(t);return t;}
     function cancelDelays(){fxEpoch++;for(const t of fxDelays)clearTimeout(t);fxDelays.clear();}
     const statusLayer=make('div','phone-interaction-fx');statusLayer.id='phonePlayerStatusFx';document.body.append(statusLayer);
-    const videoOpen=()=>!$('enhOverlay')?.classList.contains('hidden');
-    function enqueue(fx){if(queuedFx.length>=8)queuedFx.shift();queuedFx.push(fx);}
-    function resumeFx(){if(!fxTimer&&!videoOpen()&&!window.CardPhonePresentation?.isCardEntering?.()){const next=queuedFx.shift();if(next)renderBurst(...next);else flushPrivate();}}
+    const videoOpen=()=>!$('enhOverlay')?.classList.contains('hidden')||!!window.CardPhonePresentation?.isCoinBusy?.();
+    function enqueue(fx){queuedFx.push(fx);}
+    function resumeFx(){if(!fxTimer&&!videoOpen()&&!window.CardPhonePresentation?.isCardEntering?.()){if(privateQueued){flushPrivate();return;}if(privateOpen)return;const next=queuedFx.shift();if(next)renderBurst(...next);}}
     document.addEventListener('phone-card-center-ready',resumeFx);
     const players=$('players'),focusLayer=make('div','phone-hud-focus');focusLayer.id='phoneHudFocus';focusLayer.setAttribute('aria-hidden','true');document.body.append(focusLayer);
     function railBounds(){
@@ -3929,7 +3929,7 @@ window.POCardInteract=module.exports;
       const outcome=['hit','miss','shield-block','dodge-block'].includes(kind);
       if(outcome)queuedFx=queuedFx.filter(f=>!(f[0]==='shot'&&f[1]===from&&f[2]===to));
       const replacesGuess=outcome&&activeFx?.[0]==='shot'&&activeFx[1]===from&&activeFx[2]===to;
-      if(videoOpen()||window.CardPhonePresentation?.isCardEntering?.()||fxTimer&&!replacesGuess&&!['aim','select','shot'].includes(kind)){enqueue([kind,from,to,label,detail]);return;}
+      if(videoOpen()||privateOpen||window.CardPhonePresentation?.isCardEntering?.()||fxTimer){enqueue([kind,from,to,label,detail]);return;}
       renderBurst(kind,from,to,label,detail);
     }
     function renderBurst(kind,from,to,label,detail={}){
@@ -4011,7 +4011,7 @@ window.POCardInteract=module.exports;
     const defenseLayer=make('div','phone-defense-badges');defenseLayer.id='phoneDefenseBadges';document.body.append(defenseLayer);let defenseSignature='';
     function syncDefense(){
       const rail=railBounds(),s=current();if(!rail||!s?.players){defenseLayer.replaceChildren();defenseSignature='';return;}
-      const items=[];s.players.forEach((p,id)=>{if(!p.alive)return;const a=anchor(id,rail);if(!a||a.clipped)return;let n=0;for(const [key,status]of [['protected','protect'],['dodging','dodge']])if(p[key])items.push({id,status,x:a.x+14+26*n++,y:a.y+13});});
+      const items=[];s.players.forEach((p,id)=>{if(!p.alive)return;const a=anchor(id,rail),row=window.CardPhonePresentation?.playerVisualElement?.(id)||players.children[id],box=row?.querySelector('.grow')?.getBoundingClientRect();if(!a||a.clipped||!box?.width)return;let n=0;for(const [key,status]of [['protected','protect'],['dodging','dodge']])if(p[key])items.push({id,status,x:box.right-26-24*n++,y:box.bottom-25});});
       const signature=JSON.stringify(items);if(signature===defenseSignature)return;defenseSignature=signature;defenseLayer.replaceChildren();
       for(const item of items){const icon=make('span','phone-defense-badge');icon.dataset.player=String(item.id);icon.dataset.status=item.status;icon.style.left=item.x+'px';icon.style.top=item.y+'px';icon.title=icon.ariaLabel=`${name(item.id)}：${item.status==='protect'?'護盾保護中':'閃避待觸發'}`;icon.setAttribute('role','img');defenseLayer.append(icon);}
     }
@@ -4053,9 +4053,11 @@ window.POCardInteract=module.exports;
     // Private reveals never use a public event's cardId or another player's hand.
     let privateItems=[],privateQueued=false,privateOpen=false;
     const reveal=make('section','phone-private-reveal');reveal.id='phonePrivateReveal';reveal.hidden=true;reveal.setAttribute('role','dialog');reveal.setAttribute('aria-modal','false');reveal.setAttribute('aria-label','只有你可見的偵察結果');document.body.append(reveal);
-    function clearPrivate(){window.CardPhonePresentation?.cancelCardFlights?.('peek');privateItems=[];privateQueued=false;privateOpen=false;reveal.hidden=true;reveal.replaceChildren();}
+    function clearPrivate(){window.CardPhonePresentation?.cancelCardFlights?.('peek');privateItems=[];privateQueued=false;privateOpen=false;reveal.hidden=true;reveal.replaceChildren();queueMicrotask(resumeFx);}
+    window.CardPhonePresentation.isEffectBusy=()=>!!fxTimer||queuedFx.length>0||privateQueued||privateOpen;
+    window.CardPhonePresentation.clearPrivateReveal=clearPrivate;
     function flushPrivate(){
-      if(fxTimer||queuedFx.length||window.CardPhonePresentation?.isCardEntering?.()||!privateQueued||!privateItems.length||!modal.classList.contains('hidden')||!$('enhOverlay')?.classList.contains('hidden'))return;
+      if(fxTimer||window.CardPhonePresentation?.isCardEntering?.()||!privateQueued||!privateItems.length||(!root.dataset.cardFlow&&!modal.classList.contains('hidden'))||videoOpen())return;
       window.CardPhonePresentation?.cancelCardFlights?.('peek');privateQueued=false;privateOpen=true;reveal.hidden=false;reveal.replaceChildren();
       const head=make('header',''),close=make('button','','收起');close.type='button';close.addEventListener('click',clearPrivate);head.append(make('strong','','偵察結果 · 僅你可見'),close);
       const body=make('div','phone-private-cards');
@@ -4147,7 +4149,7 @@ window.POCardInteract=module.exports;
     function closeIntro(){intro.hidden=true;activeKey=null;deck.focus({preventScroll:true});}
     enter.onclick=closeIntro;intro.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();closeIntro();}if(e.key==='Tab'){e.preventDefault();enter.focus();}});
     function showIntro(){
-      if(!pendingKey||!intro.hidden||!$('modal').classList.contains('hidden')||!$('enhOverlay').classList.contains('hidden')||!$('phoneCardSheet').hidden)return;
+      if(!pendingKey||!intro.hidden||!$('enhOverlay').classList.contains('hidden')||!$('phoneCardSheet').hidden||api.presentationEffectsBusy?.())return;
       const copies=[...venues.children].map(n=>{const copy=n.cloneNode(true);copy.removeAttribute('id');copy.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));return copy;});if(!copies.length)return;
       cards.replaceChildren(...copies);activeKey=pendingKey;pendingKey=null;seen.add(activeKey);seen=new Set([...seen].slice(-40));try{sessionStorage.setItem('po-card-venue-intro-v1',JSON.stringify([...seen]));}catch{}
       intro.hidden=false;enter.focus({preventScroll:true});
@@ -4316,6 +4318,7 @@ window.POCardInteract=module.exports;
     const originalFlash=typeof showPlayedFlash==='function'?showPlayedFlash:null;
     const busy=()=>!!current()?.pending||['modal','enhOverlay','lawSwapModal','luffyBoostModal','duelFx','kidConfirmModal'].some(id=>{const n=$(id);return n&&!n.classList.contains('hidden')&&n.getClientRects().length&&getComputedStyle(n).visibility!=='hidden'&&getComputedStyle(n).opacity!=='0';})||!!$('phoneInteractionFx')?.children.length||!!$('phoneCardFlights')?.querySelector('[data-kind="swap-in"],[data-kind="peek"],[data-kind="law-view"]');
     api.isCardEntering=()=>!!active&&active.phase==='enter';
+    api.isCardResolving=()=>!!active||queue.length>0;
     api.presentedDiscardCount=()=>{const s=current(),holds=[active,...queue].filter(Boolean).filter(x=>x.round===s?.roundNo).map(x=>x.index);return holds.length?Math.min(s?.discard?.length||0,...holds):s?.discard?.length||0;};
     function repaint(){api.syncCardPiles?.();}
     function callbacks(item){for(const fn of item.callbacks.splice(0)){try{fn();}catch{}}}
@@ -4425,6 +4428,190 @@ window.POCardInteract=module.exports;
     if(typeof socket==='object'){socket.on?.('STATE',sync);socket.on?.('disconnect',close);socket.on?.('JOINED',close);}
     document.addEventListener('visibilitychange',()=>{if(document.hidden)close();});
     sync(typeof state==='object'?state:null);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
+
+/* Android presentation module: card-phone-library */
+/* Viewer-visible libraries and venue selection; no hidden-hand reads or game commands. */
+(() => {
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation,root=document.documentElement,$=id=>document.getElementById(id);
+    if(!api||root.dataset.cardLibrary)return;root.dataset.cardLibrary='1';
+    const node=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text!=null)n.textContent=text;return n;};
+    const button=(text,fn)=>{const b=node('button','phone-card-control',text);b.type='button';b.onclick=fn;return b;};
+    const screen=node('section','phone-library');screen.id='phoneLibrary';screen.hidden=true;screen.setAttribute('role','dialog');screen.setAttribute('aria-modal','true');screen.setAttribute('aria-labelledby','phoneLibraryTitle');
+    const head=node('div','phone-library-head'),title=node('h2','','卡牌'),back=button('返回牌桌',()=>close()),body=node('div','phone-library-body'),foot=node('div','phone-library-footer');title.id='phoneLibraryTitle';head.append(title,back);screen.append(head,body,foot);document.body.append(screen);
+    let kind='',page=0,detail=null,opener=null,signature='';
+    const venueNames=['德雷斯羅薩鬥技場','艾尼艾斯大廳','阿拉巴斯坦','巴拉蒂','佐烏','和之國','龐克哈薩德','維薩利亞','魚人島','九蛇島','鬼島','夏波帝諸島','萬國','蜂巢島','奧羅傑克森號'];
+    const slugs=['dressrosa','enieslobby','alabasta','baratie','zou','wano','punkhazard','weatheria','fishmanisland','amazonlily','onigashima','sabaody','wholecake','hachinosu','oro-jackson'];
+    const valid=id=>Number.isInteger(id)&&id>=0&&id<=19;
+    function entries(){
+      if(kind==='dex')return Array.from({length:20},(_,id)=>({id,name:CARD_TEXT[id]?.name||'卡牌',src:CARD(id),count:CARD_COUNTS[id],enh:isEnhancedNow(id)}));
+      if(kind==='venues')return (state?.venues||[]).map(v=>({venue:v.name,name:v.name,src:VEN(v.name)}));
+      return (state?.discard||[]).slice(0,api.presentedDiscardCount?.()??Infinity).map((item,index)=>{const secret=!!(item&&typeof item==='object'&&item.back===true),id=typeof item==='number'?item:item?.id;return {id:secret?null:id,secret,index,name:secret?'未公開的棄牌':valid(id)?CARD_TEXT[id]?.name:'棄牌',src:secret||!valid(id)?CARD(null).replace('null.webp','back.webp'):CARD(id)};});
+    }
+    function close(){screen.hidden=true;kind='';detail=null;opener?.focus?.({preventScroll:true});}
+    api.closeLibrary=close;
+    function open(next){api.closeSheet();if(typeof closeCardDex==='function')closeCardDex();opener=document.activeElement;kind=next;page=0;detail=null;signature='';screen.hidden=false;paint();back.focus({preventScroll:true});}
+    api.openDiscard=()=>open('discard');api.openCardLibrary=()=>open('dex');api.openVenues=()=>open('venues');
+    const oldInspect=api.inspect;api.inspect=(k,slot)=>k==='discard'?open('discard'):oldInspect(k,slot);
+    api.setVenueBackground=name=>{
+      const i=venueNames.indexOf(name);if(i<0)return;
+      if(document.body.dataset.venue===name){delete document.body.dataset.venue;document.body.classList.remove('venue-on');root.style.removeProperty('--card-venue-art');return;}
+      document.body.dataset.venue=name;document.body.classList.add('venue-on');root.style.setProperty('--card-venue-art',`var(--venue-${slugs[i]})`);
+    };
+    if(typeof toggleVenueBackground==='function')toggleVenueBackground=api.setVenueBackground;
+    function image(e){const img=node('img','');img.src=e.src;img.alt=e.name;img.draggable=false;return img;}
+    function paint(){
+      if(screen.hidden)return;const list=entries();title.textContent=kind==='dex'?'卡片圖鑑':kind==='venues'?'本局場地':`棄牌堆 · 共 ${list.length} 張`;
+      body.replaceChildren();foot.replaceChildren();screen.dataset.kind=kind;screen.dataset.detail=String(detail!=null);
+      if(detail!=null){
+        const e=list[detail];if(!e){detail=null;paint();return;}
+        back.textContent='返回列表';back.onclick=()=>{detail=null;paint();};
+        const art=node('div','phone-library-art'),info=node('div','phone-library-copy');art.append(image(e));info.append(node('h3','',e.name));
+        if(e.secret)info.append(node('p','','這張牌尚未公開，只顯示卡背。'));
+        else if(e.venue){info.append(node('p','',venueDesc(e.venue)),button(document.body.dataset.venue===e.venue?'恢復牌桌背景':'套用此場地背景',()=>{api.setVenueBackground(e.venue);close();}));}
+        else if(valid(e.id)){
+          info.append(node('p','',cardLine(e.id)));
+          if(kind==='dex'){
+            info.append(node('p','',`牌組張數：${e.count}　${CARD_VENUE[e.id]?'強化場地：'+CARD_VENUE[e.id]:'無強化場地'}`));
+            const enhanced=button('查看強化牌面',()=>{const img=art.querySelector('img');const selected=img.dataset.enh==='true';img.dataset.enh=String(!selected);img.src=selected?CARD(e.id):CARD_ENH(e.id);enhanced.textContent=selected?'查看強化牌面':'查看普通牌面';});info.append(enhanced);
+          }
+        }
+        body.append(art,info);return;
+      }
+      back.textContent='返回牌桌';back.onclick=close;
+      // Paged rows fit low-height screens; no horizontal scrollbar, all entries reachable.
+      const capacity=innerWidth<1000?8:12,total=Math.max(1,Math.ceil(list.length/capacity));page=Math.min(page,total-1);
+      const grid=node('div','phone-library-grid');grid.style.setProperty('--library-cols',innerWidth<1000?'4':'6');
+      list.slice(page*capacity,(page+1)*capacity).forEach((e,j)=>{
+        const b=button('',()=>{detail=page*capacity+j;paint();});b.classList.add('phone-library-item');b.dataset.secret=String(!!e.secret);b.dataset.card=String(e.secret?'back':e.id??e.venue);b.append(image(e),node('span','',e.name));
+        if(kind==='dex')b.append(node('small','',`×${e.count}${e.enh?' · 本局強化':''}`));grid.append(b);
+      });
+      if(!list.length)grid.append(node('p','','目前沒有棄牌'));
+      body.append(grid);const prev=button('上一頁',()=>{page--;paint();}),next=button('下一頁',()=>{page++;paint();});prev.disabled=page===0;next.disabled=page===total-1;foot.append(prev,node('span','',`${page+1} / ${total}　點卡牌查看詳情`),next);
+    }
+    // Capture before old dex/discard handlers so one click opens one surface.
+    document.addEventListener('click',e=>{
+      if(e.target.closest('#cardDexBtn')){e.preventDefault();e.stopImmediatePropagation();open('dex');return;}
+      const venue=e.target.closest('#venues .venue-card');if(venue&&!$('phoneCardSheet')?.contains(venue)){const name=venue.querySelector('img')?.dataset.name;if(name){e.preventDefault();e.stopImmediatePropagation();api.setVenueBackground(name);}return;}
+    },true);
+    screen.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();if(detail!=null){detail=null;paint();}else close();}});
+    function sync(){
+      if(document.body.dataset.venue&&!state?.venues?.some(v=>v.name===document.body.dataset.venue)){delete document.body.dataset.venue;document.body.classList.remove('venue-on');root.style.removeProperty('--card-venue-art');}
+      if(!screen.hidden){const sig=JSON.stringify([state?.roundNo,kind==='discard'?state?.discard:state?.venues]);if(sig!==signature){signature=sig;paint();}}
+      alignAvatars();
+    }
+    function alignAvatars(){for(const img of document.querySelectorAll('main #players img.rounded-full,#phoneSelfPlayer img.rounded-full')){if(img.parentElement.classList.contains('phone-avatar-wrap'))continue;const wrap=node('span','phone-avatar-wrap');img.before(wrap);wrap.append(img);}}
+    let scheduled=false;const schedule=()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;sync();});};
+    new MutationObserver(schedule).observe($('players'),{childList:true,subtree:true});new MutationObserver(schedule).observe($('phoneSelfPlayer'),{childList:true,subtree:true});
+    socket.on('STATE',schedule);for(const e of ['disconnect','JOINED'])socket.on(e,close);window.addEventListener('resize',()=>{if(!screen.hidden)paint();});sync();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
+
+/* Android presentation module: card-phone-coin */
+/* Coin outcome comes only from the server's existing public log, never local RNG. */
+(() => {
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation,$=id=>document.getElementById(id),root=document.documentElement;
+    if(!api||$('phoneCoinToss'))return;
+    const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
+    const overlay=make('section','phone-coin-toss');overlay.id='phoneCoinToss';overlay.hidden=true;overlay.setAttribute('role','status');overlay.setAttribute('aria-live','polite');
+    const title=make('h2','','擲硬幣'),coin=make('div','phone-toss-coin'),front=make('div','phone-toss-face'),back=make('div','phone-toss-face phone-toss-back'),result=make('p','','');coin.append(front,back);overlay.append(title,coin,result);document.body.append(overlay);
+    let timer=null,resultTimer=null,batchOutcome=null;
+    api.prepareCoinBatch=events=>{const log=events?.find(e=>e?.type==='log'&&e.to==='all'&&/擲到\s*(正面|反面)/.test(e.text||''));batchOutcome=log?{face:/擲到\s*正面/.test(log.text)?'heads':'tails',text:typeof formatLogWithNames==='function'?formatLogWithNames(log.text):log.text}:null;};
+    function clear(){clearTimeout(timer);clearTimeout(resultTimer);timer=resultTimer=null;overlay.hidden=true;coin.getAnimations().forEach(a=>a.cancel());document.dispatchEvent(new Event('phone-card-center-ready'));}
+    api.cancelCoin=clear;api.isCoinBusy=()=>!overlay.hidden;
+    if(typeof playCoinFx==='function')playCoinFx=function(){
+      if(document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode()))return;
+      clear();overlay.hidden=false;result.textContent='硬幣判定中…';title.textContent='命運擲幣';
+      const outcome=batchOutcome;overlay.dataset.face=outcome?.face||'unknown';
+      const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,duration=reduce?700:2400,end=outcome?.face==='tails'?1980:1800;
+      if(!reduce)coin.animate([{transform:'translateY(40px) rotateY(0) scale(.6)'},{transform:'translateY(-28px) rotateY(900deg) scale(1.12)',offset:.5},{transform:`translateY(0) rotateY(${end}deg) scale(1)`}],{duration,easing:'cubic-bezier(.2,.65,.3,1)',fill:'forwards'});
+      else coin.style.transform=outcome?.face==='tails'?'rotateY(180deg)':'none';
+      resultTimer=setTimeout(()=>{result.textContent=outcome?.text||'判定完成，請查看對局紀錄';title.textContent=outcome?.face==='heads'?'正面':outcome?.face==='tails'?'反面':'判定完成';},duration);
+      timer=setTimeout(clear,duration+1700);
+    };
+    function decorate(){const modal=$('modal'),button=modal?.querySelector('#okBtn'),pending=typeof state==='object'?state?.pending:null;const isCoin=['queen','bigmom-coin'].includes(pending?.action)&&!!button;
+      if(!isCoin){if(modal?.dataset.coinAction)delete modal.dataset.coinAction;return;}
+      modal.dataset.coinAction=pending.action;if(button.dataset.coinAction)return;button.dataset.coinAction='true';button.classList.add('phone-toss-button');button.textContent='擲硬幣';button.setAttribute('aria-label','擲硬幣，依伺服器原規則判定');
+    }
+    new MutationObserver(decorate).observe($('modal'),{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+    for(const e of ['disconnect','JOINED'])socket.on(e,clear);document.addEventListener('visibilitychange',()=>{if(document.hidden)clear();});decorate();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
+
+/* Android presentation module: card-phone-flow */
+/* Queue complete EMIT/STATE transactions for presentation. Server rules and
+ * packet formats stay unchanged; stale displayed controls cannot send actions. */
+(() => {
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation,root=document.documentElement,$=id=>document.getElementById(id);
+    if(!api||root.dataset.cardFlow||typeof socket!=='object'||!socket.listeners||!socket.off)return;
+    root.dataset.cardFlow='1';
+    const listeners={EMIT:socket.listeners('EMIT').slice(),STATE:socket.listeners('STATE').slice()};
+    for(const type of ['EMIT','STATE'])for(const fn of listeners[type])socket.off(type,fn);
+    let batches=[],events=[],latest=null,timer=null,eventTimer=null,settling=false,epoch=0;
+    const visible=id=>{const n=$(id);return !!n&&!n.hidden&&!n.classList.contains('hidden')&&n.getClientRects().length>0;};
+    const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
+    const signature=s=>JSON.stringify(s&&[s.roundNo,s.turnIndex,s.turnStep,s.pending,s.players?.map(p=>[p.alive,p.hand,p.tempDraw,p.gold,p.protected,p.dodging,p.frozen,p.skipNext])]);
+    const effects=()=>!!api.isEffectBusy?.()||!!api.isCoinBusy?.()||['enhOverlay','drawOverlay','coinOverlay'].some(visible)||!!$('phoneCardFlights')?.children.length;
+    const reading=()=>visible('phoneCardSheet')||visible('phonePrivateReveal')||visible('phoneLibrary')||visible('cardDexOverlay')||visible('phoneVenueIntro');
+    const stage=()=>!!api.isCardResolving?.()&&!state?.pending;
+    const busy=()=>!fast()&&(effects()||reading()||stage());
+    function dispatch(type,value){for(const fn of listeners[type])fn.call(socket,value);}
+    function updateLock(){root.dataset.cardFlowBusy=String(!fast()&&(effects()||reading()||stage()||settling||batches.length>0));}
+    function schedule(){clearTimeout(timer);timer=setTimeout(pump,60);}
+    function pump(){
+      updateLock();if(settling)return;
+      if(!batches.length){delete root.dataset.cardFlowQueued;return;}
+      root.dataset.cardFlowQueued=String(batches.length);
+      if(busy()){schedule();return;}
+      const batch=batches.shift(),generation=epoch;settling=true;
+      api.prepareCoinBatch?.(batch.events);
+      for(const e of batch.events)dispatch('EMIT',e);
+      if(batch.state)dispatch('STATE',batch.state);
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{if(epoch!==generation)return;settling=false;updateLock();schedule();}));
+    }
+    function flushEvents(){clearTimeout(eventTimer);eventTimer=null;if(!events.length)return;batches.push({events:events.splice(0),state:null});pump();}
+    socket.on('EMIT',e=>{
+      if(['idle_warning','auto_control_changed','lobby','nav_game'].includes(e?.type)){dispatch('EMIT',e);return;}
+      events.push(e);clearTimeout(eventTimer);eventTimer=setTimeout(flushEvents,100);
+    });
+    socket.on('STATE',s=>{
+      latest=s;clearTimeout(eventTimer);eventTimer=null;batches.push({events:events.splice(0),state:s});
+      // Background/CPU-fast views never accumulate a replay backlog.
+      if(fast()){for(const b of batches.splice(0)){api.prepareCoinBatch?.(b.events);for(const e of b.events)dispatch('EMIT',e);if(b.state)dispatch('STATE',b.state);}updateLock();return;}
+      pump();
+    });
+    function reset(){epoch++;clearTimeout(timer);clearTimeout(eventTimer);batches=[];events=[];latest=null;settling=false;delete root.dataset.cardFlowQueued;root.dataset.cardFlowBusy='false';}
+    for(const e of ['disconnect','JOINED'])socket.on(e,reset);
+    const originalSend=typeof sendAction==='function'?sendAction:null;
+    api.canSendPresentedAction=target=>!effects()&&(!reading()||$('phoneCardSheet')?.dataset.inspectKind==='hand'&&!!target?.closest?.('#phoneCardConfirm,#playHand,#playDrawn'))&&!settling&&!batches.length&&(!latest||signature(latest)===signature(state));
+    if(originalSend)sendAction=function(type,payload){if(type!=='TAKE_BACK_CONTROL'&&!fast()&&(batches.length||latest&&signature(latest)!==signature(state)))return;return originalSend(type,payload);};
+    api.waitForPresentationIdle=()=>new Promise(resolve=>{const generation=epoch;function check(){if(epoch!==generation||fast()||!busy()&&!settling){resolve();return;}setTimeout(check,80);}setTimeout(check,80);});
+    const actionTarget=n=>n?.closest?.('#btnDraw,#playHand,#playDrawn,#phoneCardDraw,#phoneCardConfirm,#modal button,#lawSwapModal button,#luffyBoostModal button,#btnNextRound,main #players [data-fx-target="available"],[data-phone-aim="available"]');
+    // Window capture precedes the existing document-level portrait forwarding.
+    for(const type of ['click','pointerdown','pointerup','keydown'])window.addEventListener(type,e=>{
+      if(type==='keydown'&&!['Enter',' '].includes(e.key))return;
+      if(actionTarget(e.target)&&!fast()&&!api.canSendPresentedAction(e.target)){e.preventDefault();e.stopImmediatePropagation();}
+    },true);
+    new MutationObserver(()=>{updateLock();if(batches.length)schedule();}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','class','data-phase']});
+    document.addEventListener('visibilitychange',()=>{if(document.hidden){api.closeSheet?.();api.closeLibrary?.();api.clearPrivateReveal?.();api.cancelCoin?.();if(batches.length){const pending=batches.splice(0);reset();for(const b of pending){for(const e of b.events)dispatch('EMIT',e);if(b.state)dispatch('STATE',b.state);}}}else schedule();});
+    api.presentationQueueSize=()=>batches.length;api.presentationEffectsBusy=effects;
+    updateLock();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
