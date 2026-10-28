@@ -18,3 +18,5 @@ Shared modules: card-phone-flow, card-phone-stage, card-phone-fx, card-phone-fli
 Targeted QA: android/card-action-sequence-qa.mjs. Regression: android/card-flow-library-qa.mjs. Actual local server/two-browser room checks: scripts/card_flow_sync_qa.mjs. Final results and publication identities are recorded separately after successful execution. Browser emulation is not physical-device or real-account acceptance.
 
 Verified browser QA: {"phone": 32, "desktop": 32, "edge": 7, "regression-phone": 46, "regression-desktop": 46, "realLocalTwoBrowser": 8}; no page errors. Original server/engine.js SHA256 E50D2B5E4406CD9DE8EF38FFA681921E6C7AE36225C5ABA8BC96969FA98D69D1 matches both authority and mobile source. These checks do not claim physical-device acceptance.
+
+Final visual review: 6 additional phone/desktop checks passed. Kid discard count and draw instruction share one label; the ordinary pile label is restored after selection/cancellation. Coin has no rectangular backdrop or panel.

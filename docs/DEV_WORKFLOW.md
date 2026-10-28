@@ -8444,3 +8444,5 @@ Release verified 2026-10-28: desktop 67226b4a / package-91f643ceaa0dead2 public 
 2026-10-28 release verified: desktop 67c8c9cea / package-9c47048f9919c480 public, 35 catalog/runtime/program SHA checks passed. Android native v051 r2 activated; APK and 12 deltas public hashes passed; v050 delta 10,665,981 bytes. iOS unsigned v052 CI40632656733 passed with Mac WebKit and 1,535 launcher files byte-matched. Final flow/library 46+46, hand regression58, real local Socket.IO8. No physical-device acceptance. Receipt CARD_FLOW_LIBRARY_RELEASE_20261028.json.
 
 2026-10-28 Card action completion: Kid transaction acknowledgement and direct shuffled-pile draw; Sabo return/shuffle/deal; actual self-hand transfer origins; deferred visible results and clickable server-owned coin. Files/QA: docs/CARD_ACTION_SEQUENCE_20261028.md.
+
+2026-10-28 Card final visual correction: merged Kid discard-count/action hint and restored the normal pile caption after completion. Shared card-pile-actions.js and generated desktop JS; two viewport visual checks passed.
