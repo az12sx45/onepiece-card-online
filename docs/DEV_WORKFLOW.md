@@ -8438,3 +8438,5 @@ Release verified 2026-10-28: desktop 67226b4a / package-91f643ceaa0dead2 public 
 
 
 2026-10-28: Card ordered presentation, centered avatars/name-frame status, full-screen dex/discard library, generated coin control and 15 venue backgrounds. Scope and QA boundaries: [CARD_FLOW_LIBRARY_20261028.md](CARD_FLOW_LIBRARY_20261028.md). Browser checks and actual local two-client sync exercised; final release/readback recorded separately.
+
+2026-10-28 final interaction correction: hand-inspection confirmation is allowed after its entry animation finishes, while unrelated viewing and queued state still block actions. Added real confirm-click regression before publication. Initial candidate was not activated.

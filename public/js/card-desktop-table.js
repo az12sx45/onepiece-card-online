@@ -975,14 +975,14 @@ window.POCardInteract=module.exports;
     function reset(){epoch++;clearTimeout(timer);clearTimeout(eventTimer);batches=[];events=[];latest=null;settling=false;delete root.dataset.cardFlowQueued;root.dataset.cardFlowBusy='false';}
     for(const e of ['disconnect','JOINED'])socket.on(e,reset);
     const originalSend=typeof sendAction==='function'?sendAction:null;
-    api.canSendPresentedAction=()=>!effects()&&!reading()&&!settling&&!batches.length&&(!latest||signature(latest)===signature(state));
+    api.canSendPresentedAction=target=>!effects()&&(!reading()||$('phoneCardSheet')?.dataset.inspectKind==='hand'&&!!target?.closest?.('#phoneCardConfirm,#playHand,#playDrawn'))&&!settling&&!batches.length&&(!latest||signature(latest)===signature(state));
     if(originalSend)sendAction=function(type,payload){if(type!=='TAKE_BACK_CONTROL'&&!fast()&&(batches.length||latest&&signature(latest)!==signature(state)))return;return originalSend(type,payload);};
     api.waitForPresentationIdle=()=>new Promise(resolve=>{const generation=epoch;function check(){if(epoch!==generation||fast()||!busy()&&!settling){resolve();return;}setTimeout(check,80);}setTimeout(check,80);});
     const actionTarget=n=>n?.closest?.('#btnDraw,#playHand,#playDrawn,#phoneCardDraw,#phoneCardConfirm,#modal button,#lawSwapModal button,#luffyBoostModal button,#btnNextRound,main #players [data-fx-target="available"],[data-phone-aim="available"]');
     // Window capture precedes the existing document-level portrait forwarding.
     for(const type of ['click','pointerdown','pointerup','keydown'])window.addEventListener(type,e=>{
       if(type==='keydown'&&!['Enter',' '].includes(e.key))return;
-      if(actionTarget(e.target)&&!fast()&&!api.canSendPresentedAction()){e.preventDefault();e.stopImmediatePropagation();}
+      if(actionTarget(e.target)&&!fast()&&!api.canSendPresentedAction(e.target)){e.preventDefault();e.stopImmediatePropagation();}
     },true);
     new MutationObserver(()=>{updateLock();if(batches.length)schedule();}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','class','data-phase']});
     document.addEventListener('visibilitychange',()=>{if(document.hidden){api.closeSheet?.();api.closeLibrary?.();api.clearPrivateReveal?.();api.cancelCoin?.();if(batches.length){const pending=batches.splice(0);reset();for(const b of pending){for(const e of b.events)dispatch('EMIT',e);if(b.state)dispatch('STATE',b.state);}}}else schedule();});
