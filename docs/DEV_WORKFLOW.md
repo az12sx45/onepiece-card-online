@@ -8463,3 +8463,5 @@ Validation records are stored under D:/Codex_QA/card-finishers-20261028. Browser
 2026-10-28 Card finisher release verified: desktop package-529f099eda483081 public bytes; Android native v053 plus 14 exact-reconstruction deltas activated; iOS unsigned v054 Mac/WebKit and 1535 launcher files verified. 177 browser checks, no physical-device acceptance claim. See CARD_DUEL_FINISHERS_RELEASE_20261028.json.
 
 2026-10-28 — Card HUD combat: public loser number, readable guess/view controls, visible hand/piles, tabletop placement and GPT Usopp/HUD defense reactions. Source and browser/server validation details: CARD_HUD_COMBAT_20261028.md. Release/device acceptance tracked separately.
+
+2026-10-28 Card HUD combat verification: 72 phone + 72 desktop dedicated checks, 34 + 34 final layout checks, 32 original-engine sequence checks, 46 desktop library checks and 8 real-server two-browser checks passed. Final private controls and digit picker inset away from both piles; no physical-device acceptance. Publication receipt pending.
