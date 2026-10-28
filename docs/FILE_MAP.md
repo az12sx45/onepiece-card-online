@@ -2030,3 +2030,5 @@ Mobile shared hand controller/style: android/web/card-hand-dock.js/.css; desktop
 
 
 Card presentation additions: card-phone-flow.js queues original packets; card-phone-library.js/.css owns viewer-visible libraries and venue backgrounds; card-phone-coin.js displays original server coin outcomes. Source/art/QA: docs/CARD_FLOW_LIBRARY_20261028.md.
+
+Card animation sequencing: shared card-pile-actions.js and card-phone-flow.js generate desktop presentation; see CARD_ACTION_SEQUENCE_20261028.md.

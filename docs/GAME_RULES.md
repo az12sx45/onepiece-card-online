@@ -2018,3 +2018,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 
 2026-10-28 presentation only: original coin RNG, covered-discard privacy and loser-only public duel reveal retained. Libraries and animation gates do not change game rules.
+
+2026-10-28 Presentation only: Kid eligible-discard random draw, Sabo immunity/redeal, duel loser-only disclosure and server coin odds are unchanged. Animation completes before visible result/state commit.

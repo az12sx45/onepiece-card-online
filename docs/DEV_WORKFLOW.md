@@ -8440,3 +8440,7 @@ Release verified 2026-10-28: desktop 67226b4a / package-91f643ceaa0dead2 public 
 2026-10-28: Card ordered presentation, centered avatars/name-frame status, full-screen dex/discard library, generated coin control and 15 venue backgrounds. Scope and QA boundaries: [CARD_FLOW_LIBRARY_20261028.md](CARD_FLOW_LIBRARY_20261028.md). Browser checks and actual local two-client sync exercised; final release/readback recorded separately.
 
 2026-10-28 final interaction correction: hand-inspection confirmation is allowed after its entry animation finishes, while unrelated viewing and queued state still block actions. Added real confirm-click regression before publication. Initial candidate was not activated.
+
+2026-10-28 release verified: desktop 67c8c9cea / package-9c47048f9919c480 public, 35 catalog/runtime/program SHA checks passed. Android native v051 r2 activated; APK and 12 deltas public hashes passed; v050 delta 10,665,981 bytes. iOS unsigned v052 CI40632656733 passed with Mac WebKit and 1,535 launcher files byte-matched. Final flow/library 46+46, hand regression58, real local Socket.IO8. No physical-device acceptance. Receipt CARD_FLOW_LIBRARY_RELEASE_20261028.json.
+
+2026-10-28 Card action completion: Kid transaction acknowledgement and direct shuffled-pile draw; Sabo return/shuffle/deal; actual self-hand transfer origins; deferred visible results and clickable server-owned coin. Files/QA: docs/CARD_ACTION_SEQUENCE_20261028.md.
