@@ -8465,3 +8465,9 @@ Validation records are stored under D:/Codex_QA/card-finishers-20261028. Browser
 2026-10-28 — Card HUD combat: public loser number, readable guess/view controls, visible hand/piles, tabletop placement and GPT Usopp/HUD defense reactions. Source and browser/server validation details: CARD_HUD_COMBAT_20261028.md. Release/device acceptance tracked separately.
 
 2026-10-28 Card HUD combat verification: 72 phone + 72 desktop dedicated checks, 34 + 34 final layout checks, 32 original-engine sequence checks, 46 desktop library checks and 8 real-server two-browser checks passed. Final private controls and digit picker inset away from both piles; no physical-device acceptance. Publication receipt pending.
+
+2026-10-28 Card HUD combat release verified: desktop package-0fd47240dea7e2c1 public bytes; Android native v054 with 15 exact-reconstruction deltas activated; iOS unsigned v055 Mac/WebKit and 1535 launcher files verified. 330 browser/server checks; physical-device acceptance remains pending. See CARD_HUD_COMBAT_RELEASE_20261028.json.
+
+2026-10-28 Card visual handoff: paged private views and full-card Law layout, reference-counted source visibility for hand/pile travel, whole-surface masking removes orphan shadows, local scan out-and-return. Original rules unchanged; focused geometry/lifecycle QA pending.
+
+2026-10-28 — Card reveal clipping, source-card ownership, shuffle shadow and retained-card collection fixes. Sources and pending verification: CARD_VISUAL_HANDOFF_20261028.md.

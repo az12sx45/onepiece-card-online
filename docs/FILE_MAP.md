@@ -2041,3 +2041,5 @@ Source modules: android/web/card-duel-finishers.js/.css, card-turn-draw.js, card
 Validation records are stored under D:/Codex_QA/card-finishers-20261028. Browser checks and packaging are separate from real Android/iPhone acceptance. Release receipt will record published bytes.
 
 2026-10-28 — Card HUD combat presentation and new art/module map: CARD_HUD_COMBAT_20261028.md.
+
+2026-10-28 — Card visual handoff source/QA map: CARD_VISUAL_HANDOFF_20261028.md.
