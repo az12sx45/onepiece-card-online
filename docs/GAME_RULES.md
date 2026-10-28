@@ -2023,3 +2023,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 
 2026-10-28 Card presentation: random duel finishers are cosmetic only; they never identify the winning card. Only the original public losing card is shown. Outcomes and discard narration follow animations. Original rules unchanged.
+
+2026-10-28 — Card presentation only: original guess prohibition, hidden winner hand, resolution, discard and turn rules retained. Public loser number becomes visible at impact; effects and placement do not change authoritative outcomes.
