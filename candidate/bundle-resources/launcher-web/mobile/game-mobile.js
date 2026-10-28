@@ -3881,6 +3881,98 @@ window.POCardInteract=module.exports;
 })();
 
 
+/* Android presentation module: card-duel-finishers */
+/* Cosmetic selection never receives a card id. Only the public loser's face is used. */
+(() => {
+  function mount(){
+    const api=window.CardPhonePresentation;if(!api)return;
+    const catalog=[
+      ['fire-fist','火拳','burn'],['ice-sphere','冰球','ice'],['triple-slash','三刀斬','slash'],['thunderbolt','雷擊','bolt'],
+      ['magma-fist','熔岩拳','melt'],['sandstorm','沙嵐','sand'],['dark-vortex','暗穴','vortex'],['quake-ring','震空','quake'],
+      ['paw-cannon','熊掌衝擊','push'],['light-beam','光束','pierce'],['meteor','隕石','crush'],['dragon-breath','熱息','burn-wave'],
+      ['phoenix-flame','不死鳥炎','rise'],['poison-dragon','毒龍','poison'],['rubber-barrage','拳槍連打','barrage'],
+      ['flame-kick','炎腳','bisect'],['water-dragon','水龍','wash'],['mochi-drill','糯團鑽','drill'],['string-cage','線牢','grid'],['thunder-orb','雷球','orb']
+    ];
+    let bag=[];function pick(){if(!bag.length){bag=catalog.slice();for(let i=bag.length-1;i>0;i--){const b=new Uint32Array(1);crypto.getRandomValues(b);const j=Math.floor(b[0]/4294967296*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}}return bag.pop();}
+    api.duelFinisherCatalog=catalog.map(([id,label,damage])=>({id,label,damage}));
+    api.pickDuelFinisher=pick;
+    api.playDuelScene=function({scene,from,to,d,bounds,anchor,handAnchor,animate,later,make,name,card,validCard}){
+      const hasWinner=[from,to].includes(d.winnerId)&&Number.isInteger(d.winnerId)&&d.winnerId>=0;
+      const arena=make('section','phone-duel-arena'),result=make('div','phone-duel-result','決鬥'),versus=make('strong','phone-duel-versus','VS');
+      arena.setAttribute('aria-label',`${name(from)} 與 ${name(to)} 決鬥`);arena.dataset.phase='entry';arena.append(result,versus);scene.append(arena);
+      const cards=[];if([from,to].includes(typeof me==='object'?me.playerId:null))api.maskHandArt?.();
+      for(const [i,id]of [from,to].entries()){
+        const a=handAnchor(anchor(id,bounds)),slot=make('div','phone-duel-slot'),holder=make('div','phone-duel-card-wrap'),cardNode=make('img','phone-duel-card'),status=make('div','phone-duel-status','手牌保密');
+        slot.dataset.player=String(id);slot.dataset.side=i?'right':'left';cardNode.src='images/cards/back.webp';cardNode.alt=name(id)+' 的決鬥卡背';holder.append(cardNode);slot.append(make('h3','',name(id)),holder,status);arena.append(slot);
+        const r=cardNode.getBoundingClientRect();if(a)animate(cardNode,[{transform:`translate(${a.x-r.x-r.width/2}px,${a.y-r.y-r.height/2}px) scale(.25) rotate(${i?18:-18}deg)`,opacity:0},{transform:'translate(0,0) scale(1)',opacity:1}],1000);
+        cards.push({id,a,slot,holder,cardNode,status});
+      }
+      const loser=hasWinner?cards.find(c=>c.id!==d.winnerId):null,finish=hasWinner?api.pickDuelFinisher():null;
+      if(finish)arena.dataset.finisher=finish[0];
+      later(()=>{
+        arena.dataset.phase='attack';versus.textContent='';for(const c of cards)c.status.textContent='交鋒中';
+        if(!loser)return;
+        const [id,label,damage]=finish;result.textContent=label; // Random cosmetic move, never the winning card's identity.
+        const effect=make('div','duel-finisher-art');effect.dataset.finisher=id;effect.setAttribute('aria-hidden','true');loser.holder.append(effect);
+        const diagonal=['meteor','thunderbolt','light-beam'].includes(id),spiral=['sandstorm','dark-vortex','mochi-drill','water-dragon'].includes(id),up=['phoenix-flame','poison-dragon'].includes(id);
+        const facing=loser.slot.dataset.side==='left'?-1:1;
+        animate(effect,[{transform:`translate(${facing*(diagonal?-75:spiral?0:up?0:-60)}%,${diagonal?-90:up?65:0}%) scale(${spiral?.25:.65}) scaleX(${facing}) rotate(${spiral?-100:-12}deg)`,opacity:0},{transform:`translate(0,0) scale(1.05) scaleX(${facing})`,opacity:1,offset:.22},{transform:`translate(${facing*5}%,0) scale(1.18) scaleX(${facing}) rotate(${spiral?60:4}deg)`,opacity:1,offset:.75},{transform:`translate(${facing*(up?0:20)}%,${up?-55:15}%) scale(${spiral?1.7:1.3}) scaleX(${facing}) rotate(${spiral?140:10}deg)`,opacity:0}],3000);
+        later(()=>{
+          arena.dataset.phase='impact';loser.slot.dataset.damage=damage;
+          if(validCard(d.loserCardId)){loser.cardNode.src=card(d.loserCardId);loser.cardNode.alt='公開的敗方手牌';loser.cardNode.dataset.revealed='public-loser';}
+          damageCard(loser,damage,animate,later,make);
+        },650);
+      },1200);
+      later(()=>{
+        arena.dataset.phase='result';arena.dataset.resolved='true';result.textContent=hasWinner?`${name(d.winnerId)} 勝出`:'雙方平手';
+        for(const c of cards){c.slot.dataset.outcome=!hasWinner?'draw':c===loser?'lost':'won';c.status.textContent=!hasWinner?'平手 · 手牌不公開':c===loser?'落敗 · 公開手牌':'勝出 · 手牌保密';}
+      },7700);
+      later(()=>{
+        arena.dataset.phase='return';
+        for(const c of cards){
+          const r=c.cardNode.getBoundingClientRect(),target=c===loser?document.querySelector('.phone-discard-stack')?.getBoundingClientRect():null;
+          const a=target?{x:target.x+target.width/2,y:target.y+target.height/2}:c.a;if(!a)continue;
+          // A damaged public card returns to the pile; no hidden winner face is queried.
+          const fragments=[...c.holder.querySelectorAll('.duel-card-fragment')];
+          if(c===loser&&fragments.length){for(const piece of fragments)animate(piece,[{transform:getComputedStyle(piece).transform,opacity:.45},{transform:`translate(${a.x-r.x-r.width/2}px,${a.y-r.y-r.height/2}px) scale(.15)`,opacity:0}],1200);continue;}
+          if(c===loser){c.cardNode.getAnimations().forEach(n=>n.cancel());}
+          animate(c.cardNode,[{transform:'translate(0,0) scale(1)',opacity:c===loser?.6:1},{transform:`translate(${a.x-r.x-r.width/2}px,${a.y-r.y-r.height/2}px) scale(.2)`,opacity:0}],1200);
+        }
+      },6300);
+    };
+    function damageCard(c,kind,animate,later,make){
+      const img=c.cardNode;c.holder.dataset.damage=kind;
+      // Masks remove the actual card texture. Fragments clone only this publicly revealed loser.
+      const hole=['burn','pierce','drill','burn-wave','barrage'].includes(kind);
+      if(hole){
+        const x=kind==='burn-wave'?28:50,y=kind==='barrage'?40:50;
+        img.style.setProperty('--duel-hole-x',x+'%');img.style.setProperty('--duel-hole-y',y+'%');
+        const set=n=>{const mask=`radial-gradient(ellipse at ${x}% ${y}%,transparent 0 ${n}%,#000 ${n+2}%)`;img.style.maskImage=mask;img.style.webkitMaskImage=mask;};
+        // Timed steps share the scene epoch, so disconnect/background cancels every step.
+        for(let n=0;n<=48;n++)later(()=>set(n*(kind==='pierce'?.55:1.2)),n*42);
+        animate(img,[{transform:'translate(0,0)',filter:'brightness(1)'},{transform:'translate(7px,-3px)',filter:kind==='burn'?'sepia(1) saturate(2) brightness(.65)':'brightness(1.8)',offset:.2},{transform:kind==='drill'?'rotate(22deg) scale(.7)':'translate(0,0)',filter:'brightness(.5)',opacity:.8}],2400);
+        return;
+      }
+      if(['vortex','melt','poison','push','rise','wash'].includes(kind)){
+        const end={vortex:'rotate(300deg) scale(0)',melt:'translateY(80%) scale(1.15,.05)',poison:'translateY(35%) skewX(18deg) scale(.85,.15)',push:'translate(110%,-35%) rotate(35deg) scale(.1)',rise:'translateY(-90%) rotate(-10deg) scale(.6)',wash:'translate(90%,30%) rotate(25deg) scale(.3)'}[kind];
+        animate(img,[{transform:'none',opacity:1},{transform:end,filter:kind==='poison'?'hue-rotate(80deg) blur(5px)':kind==='wash'?'blur(8px)':'brightness(.6)',opacity:0}],2400);return;
+      }
+      const pieces=kind==='bisect'?['polygon(0 0,100% 0,0 100%)','polygon(100% 0,100% 100%,0 100%)']:kind==='slash'?['inset(0 50% 0 0)','inset(0 0 0 50%)']:null;
+      const clips=pieces||Array.from({length:kind==='sand'?36:kind==='grid'?16:12},(_,i)=>{const cols=kind==='sand'?6:4,rows=kind==='sand'?6:kind==='grid'?4:3,x=i%cols,y=Math.floor(i/cols);return `polygon(${x/cols*100}% ${y/rows*100}%,${(x+1)/cols*100}% ${y/rows*100}%,${(x+1)/cols*100}% ${(y+1)/rows*100}%,${x/cols*100}% ${(y+1)/rows*100}%)`;});
+      img.style.visibility='hidden';
+      clips.forEach((clip,i)=>{
+        const p=make('img','duel-card-fragment');p.src=img.src;p.alt='';p.setAttribute('aria-hidden','true');p.style.clipPath=clip;c.holder.append(p);
+        const sign=i%2?-1:1,angle=i*2.399,dx=pieces?sign*65:Math.cos(angle)*(kind==='sand'?130:70),dy=pieces?sign*28:Math.sin(angle)*65+35;
+        const freeze=kind==='ice',delay=freeze?700:kind==='sand'?i*18:0;
+        if(freeze)p.style.filter='grayscale(1) sepia(.7) hue-rotate(145deg) saturate(2) brightness(1.4)';
+        animate(p,[{transform:'translate(0,0) rotate(0)',opacity:1},{transform:`translate(${dx*.25}px,${dy*.25}px) rotate(${sign*8}deg)`,opacity:1,offset:.35},{transform:`translate(${dx}px,${dy}px) rotate(${sign*(kind==='crush'?85:30)}deg) scale(${kind==='sand'?.2:kind==='orb'?.5:.85})`,opacity:.45}],freeze?1700:2400,delay);
+      });
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
+
 /* Android presentation module: card-phone-fx */
 /* Presentation only. Original callbacks, routed EMITs and viewer-visible STATE
  * remain authoritative. No gameplay commands or hidden-state reads. */
@@ -3902,6 +3994,7 @@ window.POCardInteract=module.exports;
     const modal=$('modal'),layer=make('div','phone-interaction-fx');layer.id='phoneInteractionFx';layer.setAttribute('aria-live','polite');layer.setAttribute('aria-atomic','true');document.body.append(layer);
     const actions={usopp:[1,'狙擊瞄準','選擇對手，再猜手牌尾數'],robin:[2,'偵察手牌','只有偵察者能看見手牌內容'],sanji:[3,'決鬥','選擇要決鬥的對手'],zoro:[5,'斬擊棄牌','選擇技能目標'],law:[6,'ROOM・交換','選擇交換對象'],nami:[7,'雷電麻痺','選擇技能目標'],luffy:[8,'連續挑戰','依原規則選擇對手'],kaido:[10,'雷鳴八卦','選擇技能目標'],killer:[13,'解除防禦','選擇技能目標'],bigmom:[14,'靈魂威嚇','由對手選擇交幣或淘汰'],'bigmom-pay':[14,'靈魂抉擇','選擇交幣或淘汰'],'bigmom-coin':[14,'命運判定','依原規則擲硬幣'],queen:[12,'硬幣判定','依原規則決定結果'],'kata-order':[15,'預見未來','查看並安排原本的頂牌順序'],aokiji:[16,'冰凍時刻','選擇技能目標'],'teach-multipick':[17,'黑暗覆蓋','選擇原本允許覆蓋的牌'],roger:[19,'預測勝者','選擇你預測的玩家']};
     function avatar(id){const source=$('players')?.children[id]?.querySelector('img.rounded-full');const img=make('img','phone-fx-avatar');img.alt=name(id);if(source?.src)img.src=source.src;else img.src='images/cards/back.webp';return img;}
+    let deferredResults=[];window.CardPhonePresentation.flushDeferredResults=()=>{for(const text of deferredResults.splice(0))burst('notice',null,null,text);};
     let fxTimer=null,queuedFx=[],activeFx=null,layoutFrame=0,lastGuess=null,fxEpoch=0;const fxDelays=new Set();
     function later(fn,ms){const epoch=fxEpoch,t=setTimeout(()=>{fxDelays.delete(t);if(epoch===fxEpoch)fn();},ms);fxDelays.add(t);return t;}
     function cancelDelays(){fxEpoch++;for(const t of fxDelays)clearTimeout(t);fxDelays.clear();}
@@ -3923,7 +4016,7 @@ window.POCardInteract=module.exports;
       const self=row.id==='phoneSelfPlayer',clipped=!self&&(x<rail.left+24||x>rail.right-24);
       return {id,x:self?x:Math.max(rail.left+24,Math.min(rail.right-24,x)),y:r.top+r.height/2,clipped,self};
     }
-    function clearFx(){cancelDelays();delete root.dataset.cardFxPhase;statusLayer.replaceChildren();clearTimeout(fxTimer);fxTimer=null;activeFx=null;queuedFx=[];lastGuess=null;layer.replaceChildren();}
+    function clearFx(){deferredResults=[];cancelDelays();delete root.dataset.cardFxPhase;statusLayer.replaceChildren();clearTimeout(fxTimer);fxTimer=null;activeFx=null;queuedFx=[];lastGuess=null;layer.replaceChildren();}
     function burst(kind,from,to,label,detail){
       if(kind==='notice')detail={title:'戰況播報',result:label};
       const outcome=['hit','miss','shield-block','dodge-block'].includes(kind);
@@ -3944,7 +4037,7 @@ window.POCardInteract=module.exports;
       const copy=make('div','phone-action-copy');copy.append(make('strong','',title),make('span','',neutral[kind]||result));notice.append(symbol,copy);scene.append(notice);
       notice.style.top=Math.min(innerHeight-100,rail.bottom+10)+'px';notice.style.width=Math.min(640,innerWidth-32)+'px';notice.style.left='50%';
       const reading=['aim','select','shot'].includes(kind)?900:Math.min(3800,Math.max(2200,(title.length+result.length)*65));scene.dataset.readingMs=String(reading);
-      const duration=kind==='duel'?5600:kind==='notice'?400:1800;
+      const duration=kind==='duel'?9200:kind==='notice'?400:1800;
       function mark(a,cls){const n=make('span',cls);n.dataset.player=String(a.id);n.style.left=a.x+'px';n.style.top=a.y+'px';scene.append(n);return n;}
       function animate(n,frames,ms=1400,delay=0){if(reduce())return;n.animate(frames,{duration:ms,delay,easing:'cubic-bezier(.2,.7,.25,1)',fill:'both'});}
       function handAnchor(a){if(a?.id!==viewer())return a;const r=window.CardPhonePresentation?.cardPlayerRect?.(a.id);return r?{...a,x:r.left+r.width/2,y:r.top+r.height/2}:a;}
@@ -3955,40 +4048,7 @@ window.POCardInteract=module.exports;
         if(detail.open){if(kind==='video'){clearTimeout(fxTimer);fxTimer=null;activeFx=null;layer.replaceChildren();delete root.dataset.cardFxPhase;}detail.open();return;}
         if(kind==='notice')return;
         if(source){const origin=mark(source,'phone-hud-origin');animate(origin,[{transform:'translate(-50%,-50%) scale(.8)',opacity:0},{transform:'translate(-50%,-50%) scale(1.1)',opacity:1,offset:.3},{transform:'translate(-50%,-50%) scale(1.2)',opacity:0}],duration);}
-        if(kind==='duel'&&detail.duel){
-          const d=detail.duel,hasWinner=[from,to].includes(d.winnerId)&&Number.isInteger(d.winnerId)&&d.winnerId>=0;
-          const arena=make('section','phone-duel-arena'),result=make('div','phone-duel-result','決鬥'),versus=make('strong','phone-duel-versus','VS');
-          arena.setAttribute('aria-label',`${name(from)} 與 ${name(to)} 決鬥`);arena.append(result,versus);scene.append(arena);
-          const cards=[];if(from===viewer()||to===viewer())window.CardPhonePresentation?.maskHandArt?.();
-          for(const [i,id]of [from,to].entries()){
-            const a=handAnchor(anchor(id,bounds)),slot=make('div','phone-duel-slot'),heading=make('h3','',name(id)),holder=make('div','phone-duel-card-wrap'),cardNode=make('img','phone-duel-card'),status=make('div','phone-duel-status','手牌保密');
-            slot.dataset.player=String(id);slot.dataset.side=i?'right':'left';cardNode.src='images/cards/back.webp';cardNode.alt=name(id)+' 的決鬥卡背';cardNode.dataset.player=String(id);holder.append(cardNode);slot.append(heading,holder,status);arena.append(slot);
-            const r=cardNode.getBoundingClientRect(),x=r.x+r.width/2,y=r.y+r.height/2;
-            if(a)animate(cardNode,[{transform:`translate(${a.x-x}px,${a.y-y}px) scale(.2) rotate(${i?18:-18}deg)`,opacity:0},{transform:`translate(0,0) rotate(${i?4:-4}deg)`,opacity:1,offset:.48},{transform:`translate(${i?-30:30}px,0) rotate(${i?-8:8}deg)`,opacity:1,offset:.7},{transform:'translate(0,0)',opacity:1}],1700);
-            cards.push({id,slot,cardNode,status,a});
-          }
-          const center=versus.getBoundingClientRect(),hit=mark({id:-1,x:center.x+center.width/2,y:center.y+center.height/2},'phone-hud-impact');
-          animate(hit,[{opacity:0,transform:'translate(-50%,-50%) scale(.1)'},{opacity:1,transform:'translate(-50%,-50%) scale(1.5)',offset:.45},{opacity:0,transform:'translate(-50%,-50%) scale(2)'}],850,1000);
-          later(()=>{
-            arena.dataset.resolved='true';result.textContent=hasWinner?`${name(d.winnerId)} 勝出`:'雙方平手';versus.textContent=hasWinner?'':'平手';
-            for(const c of cards){
-              const loser=hasWinner&&c.id!==d.winnerId&&(d.loserSide==null||d.loserSide===(c.id===from?'left':'right'));
-              c.slot.dataset.outcome=!hasWinner?'draw':loser?'lost':'won';c.status.textContent=!hasWinner?'平手 · 手牌不公開':loser?'落敗 · 公開手牌':'勝出 · 手牌保密';
-              // Only the original public duel_log's losing card may be turned over.
-              // Never infer a face from viewer state, even if the winner is this viewer.
-              if(loser&&validCard(d.loserCardId)){
-                animate(c.cardNode,[{transform:'scaleX(1)'},{transform:'scaleX(0)'}],180);
-                later(()=>{c.cardNode.src=card(d.loserCardId);c.cardNode.alt=name(c.id)+' 公開的敗方手牌';c.cardNode.dataset.revealed='public-loser';animate(c.cardNode,[{transform:'scaleX(0)'},{transform:'scaleX(1)'}],220);},180);
-              }
-            }
-          },1800);
-          later(()=>{
-            for(const c of cards){const r=c.cardNode.getBoundingClientRect(),target=c.slot.dataset.outcome==='lost'?document.querySelector('.phone-discard-stack')?.getBoundingClientRect():null;
-              const a=target?{x:target.x+target.width/2,y:target.y+target.height/2}:c.a;if(!a)continue;
-              animate(c.cardNode,[{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${a.x-r.x-r.width/2}px,${a.y-r.y-r.height/2}px) scale(.22)`,opacity:0}],1100);
-            }
-          },4300);return;
-        }
+        if(kind==='duel'&&detail.duel){window.CardPhonePresentation.playDuelScene({scene,from,to,d:detail.duel,bounds,anchor,handAnchor,animate,later,make,name,card,validCard});return;}
         for(const id of ids){const target=['slash','discard'].includes(kind)?handAnchor(anchor(id,bounds)):anchor(id,bounds);if(!target)continue;
           if(kind==='swap'){if(from===viewer()||id===viewer())window.CardPhonePresentation?.maskHandArt?.();travel(source,target);travel(target,source,true);continue;}
           if(kind==='scan'){const scope=mark(target,'phone-hud-lock');animate(scope,[{transform:'translate(-50%,-50%) scale(1.4)',opacity:0},{transform:'translate(-50%,-50%) scale(.9)',opacity:1,offset:.5},{opacity:0}],1500);travel(target,source);continue;}
@@ -4007,8 +4067,9 @@ window.POCardInteract=module.exports;
           const pulse=mark(target,'phone-hud-origin');animate(pulse,[{transform:'translate(-50%,-50%) scale(.7)',opacity:0},{transform:'translate(-50%,-50%) scale(1.4)',opacity:1,offset:.4},{transform:'translate(-50%,-50%) scale(1.7)',opacity:0}],1500);
         }
       },reading);
-      if(neutral[kind])later(()=>{scene.dataset.phase='result';root.dataset.cardFxPhase='result';notice.hidden=false;copy.lastChild.textContent=result;},reading+duration);
-      fxTimer=setTimeout(()=>{layer.replaceChildren();delete root.dataset.cardFxPhase;fxTimer=null;activeFx=null;resumeFx();},reading+duration+(neutral[kind]?1300:0));
+      const deferResult=!!neutral[kind]&&window.CardPhonePresentation.deferResultText;if(deferResult)deferredResults.push(title+'：'+result);
+      if(neutral[kind]&&!deferResult)later(()=>{scene.dataset.phase='result';root.dataset.cardFxPhase='result';notice.hidden=false;copy.lastChild.textContent=result;},reading+duration);
+      fxTimer=setTimeout(()=>{layer.replaceChildren();delete root.dataset.cardFxPhase;fxTimer=null;activeFx=null;resumeFx();},reading+duration+(neutral[kind]&&!deferResult?1300:0));
     }
     // Persistent public defense icons are anchored to the original portraits.
     const defenseLayer=make('div','phone-defense-badges');defenseLayer.id='phoneDefenseBadges';document.body.append(defenseLayer);let defenseSignature='';
@@ -4087,7 +4148,7 @@ window.POCardInteract=module.exports;
         else if(['chopper_status','bigmom_status'].includes(e.type)&&['protect','dodge'].includes(e.status))detail={status:e.status,title:name(e.casterId),result:e.status==='protect'?'獲得護盾 · 保護中':'獲得閃避 · 等待觸發'};
         burst(visual[0],e.casterId,e.all||e.mode==='all'?null:e.targetId??e.casterId,visual[1]+(e.type.startsWith('usopp_')?` · 尾數 ${e.digit}`:''),detail);return;}
       if(e.type==='duel')return; // The original public duel_log invokes the sequenced wrapper.
-      if(e.type==='silent_discard'){burst('discard',e.by,e.by,'棄牌');return;} // No card face: event can contain non-public IDs.
+      if(e.type==='silent_discard')return; // No card face: event can contain non-public IDs.
       if(e.type==='play_fx'){const label=validCard(e.cardId)&&typeof CARD_TEXT==='object'?CARD_TEXT[e.cardId]?.name:'技能';burst('skill',e.playerId,null,`${label}發動`);return;}
       if(e.to!==viewer()||viewer()==null)return; // Private data requires explicit server recipient.
       if(e.type==='robin_view'&&validCard(e.cardId))addPrivate([{id:e.cardId,label:name(e.targetId),from:e.targetId}]);
@@ -4241,7 +4302,7 @@ window.POCardInteract=module.exports;
       const here=rect(local);api.flyCard({from:here,to:remote,src:back,kind:'swap-out',arc:-28,hideTarget:false});
       api.flyCard({from:remote,to:local,src:back,kind:'swap-in',arc:28});return true;
     };
-    let previous=null,pendingDraw=false,queued=false;
+    let previous=null,pendingDraw=false,queued=false,drawLayoutFrame=0,drawLayoutRetries=0;
     function sync(){
       if(typeof state!=='object'||!state||typeof me!=='object')return;
       const s=state,p=s.players?.[me.playerId],next={key:JSON.stringify([me.roomId,me.playerId,s.roundNo]),phase:s.phase,turn:s.turnIndex,step:s.turnStep,count:s.deck?.length,draw:p?.tempDraw};
@@ -4250,8 +4311,9 @@ window.POCardInteract=module.exports;
       if(next.phase==='lobby'||next.turn!==me.playerId||next.step!=='choose')pendingDraw=false;
       previous=next;
       if(pendingDraw&&!document.hidden&&!fast()&&$('enhOverlay')?.classList.contains('hidden')&&$('drawOverlay')?.classList.contains('hidden')&&$('phoneVenueIntro')?.hidden){
-        pendingDraw=false;const target=$('imgDrawn');if(visible(target)){const r=rect($('btnDraw')),w=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--pile-w'))||r.width;
-          api.flyCard({from:{left:r.left,top:r.top,width:Math.min(w,r.width),height:Math.min(w,r.width)*1.5},to:target,src:target.src,flip:true,kind:'draw'});}
+        const target=$('imgDrawn');if(visible(target)){pendingDraw=false;drawLayoutRetries=0;const r=rect($('btnDraw')),w=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--pile-w'))||r.width;
+          api.flyCard({from:{left:r.left,top:r.top,width:Math.min(w,r.width),height:Math.min(w,r.width)*1.5},to:target,src:target.src,flip:true,kind:'draw'});
+        }else if(!drawLayoutFrame&&drawLayoutRetries++<30){drawLayoutFrame=requestAnimationFrame(()=>{drawLayoutFrame=0;sync();});}
       }
     }
     const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;sync();});};
@@ -4261,7 +4323,7 @@ window.POCardInteract=module.exports;
     const law=$('lawSwapModal');if(law)new MutationObserver(()=>{if(law.classList.contains('hidden'))cancel('law-view');}).observe(law,{attributes:true,attributeFilter:['class']});
     if(typeof socket==='object'){
       socket.on?.('STATE',schedule);
-      for(const event of ['JOINED','disconnect'])socket.on?.(event,()=>{previous=null;pendingDraw=false;cancel();});
+      for(const event of ['JOINED','disconnect'])socket.on?.(event,()=>{previous=null;pendingDraw=false;cancelAnimationFrame(drawLayoutFrame);drawLayoutFrame=0;drawLayoutRetries=0;cancel();});
       socket.on?.('EMIT',e=>{if(!api.committingPresentation&&e?.type==='law_view'&&e.to===me.playerId&&Number.isInteger(e.cardId)&&e.cardId>=0&&e.cardId<20)queueMicrotask(()=>{const target=$('lawTargetImg');if(visible(target)&&!law.classList.contains('hidden'))api.flyCard({from:playerRect(e.targetId),to:target,src:target.src,flip:true,kind:'law-view'});});});
     }
     document.addEventListener('visibilitychange',()=>{if(document.hidden){cancel();pendingDraw=false;previous=null;}});
@@ -4644,6 +4706,36 @@ window.POCardInteract=module.exports;
 })();
 
 
+/* Android presentation module: card-turn-draw */
+/* Same DRAW command and pending guard, without the old draw cutscene. */
+(() => {
+ function mount(){
+  const api=window.CardPhonePresentation;if(!api||typeof state==='undefined')return;
+  if(location.pathname==='/game.html'&&typeof playDrawFxThenDraw==='function')playDrawFxThenDraw=function(){
+   const p=state?.players?.[me.playerId];
+   if(state?.turnStep!=='draw'||state.turnIndex!==me.playerId||p?.skipNext===true||_drawPlaying||_drawActionPending||api.canSendPresentedAction&&!api.canSendPresentedAction(document.getElementById('btnDraw')))return;
+   _drawActionPending={roundNo:state.roundNo??null,turnIndex:state.turnIndex??null,turnStep:state.turnStep??null,deckLength:state.deck?.length??null,sent:true};
+   sendAction('DRAW');
+  };
+  const tag=document.createElement('div');tag.id='cardActiveTurn';tag.setAttribute('role','status');tag.setAttribute('aria-live','polite');document.body.append(tag);let previous='';
+  function sync(){
+   if(!state?.players)return;const id=state.turnIndex,p=state.players[id],own=id===me.playerId,ended=state.turnStep==='ended';
+   const label=p?.client?.displayName||p?.displayName||p?.client?.name||`P${id+1}`;
+   const phase=ended?'本局結束':({draw:'抽牌',choose:'選牌'})[state.turnStep]||'等待行動';
+   const text=ended?phase:`${own?'你的回合':label+' 的回合'} · ${phase}`,key=JSON.stringify([state.roundNo,id,ended]);
+   if(tag.textContent!==text)tag.textContent=text;tag.dataset.own=String(own);tag.hidden=!p||state.phase==='lobby';
+   for(const [i,row]of [...document.querySelectorAll('#players > div')].entries())row.dataset.activeTurn=String(i===id&&!ended);
+   const self=document.getElementById('phoneSelfPlayer');if(self)self.dataset.activeTurn=String(own&&!ended);
+   if(previous!==key){previous=key;if(!matchMedia('(prefers-reduced-motion: reduce)').matches)tag.animate([{opacity:.4,transform:'translateX(-50%) scale(.95)'},{opacity:1,transform:'translateX(-50%) scale(1)'}],{duration:650});}
+  }
+  let queued=false;const schedule=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;sync();});};
+  new MutationObserver(schedule).observe(document.getElementById('players'),{childList:true,subtree:true});
+  if(typeof socket==='object')socket.on('STATE',schedule);sync();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
+
 /* Android presentation module: card-phone-flow */
 /* Queue complete EMIT/STATE transactions for presentation. Server rules and
  * packet formats stay unchanged; stale displayed controls cannot send actions. */
@@ -4681,7 +4773,7 @@ window.POCardInteract=module.exports;
       const batch=batches.shift(),generation=epoch;settling=true;activeBatch=batch;updateLock();
       const valid=()=>generation===epoch;
       if(!fast()){
-        api.prepareCoinBatch?.(batch.events);
+        api.deferResultText=true;api.prepareCoinBatch?.(batch.events);
         for(const e of batch.events)api.presentPlayEvent?.(e);
         // First the played card enters the center; results are not applied yet.
         while(valid()&&!fast()&&api.isCardEntering?.())await pause();
@@ -4702,6 +4794,8 @@ window.POCardInteract=module.exports;
         while(valid()&&!fast()&&effects())await pause();
         if(!valid())return;
       }
+      api.deferResultText=false;
+      if(!fast()){api.flushDeferredResults?.();while(valid()&&!fast()&&effects())await pause();if(!valid())return;}
       commit(batch,!fast());activeBatch=null;
       requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!valid())return;settling=false;updateLock();schedule();}));
     }
@@ -4716,7 +4810,7 @@ window.POCardInteract=module.exports;
       if(fast()&&!settling){for(const b of batches.splice(0))commit(b);updateLock();return;}
       pump();
     });
-    function reset(){epoch++;clearTimeout(timer);clearTimeout(eventTimer);batches=[];events=[];latest=null;settling=false;activeBatch=null;api.restoreHandArt?.();delete root.dataset.cardFlowQueued;root.dataset.cardFlowBusy='false';}
+    function reset(){api.deferResultText=false;epoch++;clearTimeout(timer);clearTimeout(eventTimer);batches=[];events=[];latest=null;settling=false;activeBatch=null;api.restoreHandArt?.();delete root.dataset.cardFlowQueued;root.dataset.cardFlowBusy='false';}
     for(const e of ['disconnect','JOINED'])socket.on(e,reset);
     const originalSend=typeof sendAction==='function'?sendAction:null;
     api.canSendPresentedAction=target=>!stage()&&!api.isKidAwaiting?.()&&!effects()&&(!reading()||$('phoneCardSheet')?.dataset.inspectKind==='hand'&&!!target?.closest?.('#phoneCardConfirm,#playHand,#playDrawn'))&&!settling&&!batches.length&&(!latest||signature(latest)===signature(state));
