@@ -1,6 +1,6 @@
 {
   "dependencies.json": "30810036a79643a1ee1bfbc356f2782dd647c05b9972655b1e140741a17a5664",
-  "launcher-manifest.json": "7b57f2c86885790968b17eacfe7f3070bcb784a85b2e61c693f098879171dbf6",
+  "launcher-manifest.json": "31e5a0dc0e476a791f08862629e232c6826ec79f69058476b3c02a9e40a8df6f",
   "media-manifest.json": "53c4187b6174226da6609606a426846cd436c5e771fd963c7165f7f7d0b4bf30",
   "preparation.json": "70e05a8716713b48c26bd22bd6ff7708a5b273ae058144f66ec365465e35dec6",
   "README.md": "ce4c7138739da8f490b23bd6bc1b2fe3b317b51f2ad17b7751584240486261d3",
@@ -1993,7 +1993,7 @@
   "bundle-resources/launcher-web/launcher/launcher.js": "6665ddbac5a8fe52e63b8fc90b5858486701d848ede54beb3f0bee471dfdbd64",
   "bundle-resources/launcher-web/launcher/mobile-bridge.js": "c0f0917ef6210634fd752ffa0ff429ec50ac916ad3ddbdf837459a7463fb3d86",
   "bundle-resources/launcher-web/launcher/socket.io.min.js": "e759359a3cd50622c15cd13fd19e90f80778c639c54086ca409629f62d5c0179",
-  "bundle-resources/launcher-web/mobile/game-mobile.css": "f04879a77e497171598efa1cbf2751a4c9b6daebaa46271a575aca78b342779a",
+  "bundle-resources/launcher-web/mobile/game-mobile.css": "9f63a20ad91378e4f6212b28e645e80018df02488eb51f05f46d240ec86b55f4",
   "bundle-resources/launcher-web/mobile/game-mobile.js": "483eab5fef4d5534e3ff4a37134df6696207e01b9bba9e25c1727ac68e585ba1",
   "bundle-resources/launcher-web/mobile/session-bootstrap.js": "0b1948727e46467f431881e0a13788cb5bfaf581157ea380be837dd72d44700d",
   "bundle-resources/launcher-web/launcher-assets/videos/game_launcher/board_battle_preview_v2.mp4": "8e9511275a0690b442cfdbd250c9169ff62e3988b3d677c36786c5d9a33f1798",

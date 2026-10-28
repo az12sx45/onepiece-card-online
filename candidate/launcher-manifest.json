@@ -9190,9 +9190,9 @@
     },
     {
       "path": "mobile/game-mobile.css",
-      "sourceSha256": "f04879a77e497171598efa1cbf2751a4c9b6daebaa46271a575aca78b342779a",
-      "sha256": "f04879a77e497171598efa1cbf2751a4c9b6daebaa46271a575aca78b342779a",
-      "size": 32907617
+      "sourceSha256": "9f63a20ad91378e4f6212b28e645e80018df02488eb51f05f46d240ec86b55f4",
+      "sha256": "9f63a20ad91378e4f6212b28e645e80018df02488eb51f05f46d240ec86b55f4",
+      "size": 32907637
     },
     {
       "path": "mobile/game-mobile.js",
@@ -9211,5 +9211,5 @@
       "size": 292
     }
   ],
-  "bytes": 346587545
+  "bytes": 346587565
 }
