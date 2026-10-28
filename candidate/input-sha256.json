@@ -1,6 +1,6 @@
 {
   "dependencies.json": "003a92929b16d282a3b5d4174116b165d175cc7b0ca4f2473882f656f1bf4566",
-  "launcher-manifest.json": "e9e98f2d24f9eac02485b31b5e3a88ff51652fcd2a81288781fdc422f775cdfc",
+  "launcher-manifest.json": "b3052cde417fbb78bdb067b2ad7dba93624c3d3f85b9032421557ac1fb6278a0",
   "media-manifest.json": "53c4187b6174226da6609606a426846cd436c5e771fd963c7165f7f7d0b4bf30",
   "preparation.json": "352a66c87f63e68ac9bf81b9f474fd9f899983be36a632f4b19625341f0089ae",
   "README.md": "ce4c7138739da8f490b23bd6bc1b2fe3b317b51f2ad17b7751584240486261d3",
@@ -1994,7 +1994,7 @@
   "bundle-resources/launcher-web/launcher/mobile-bridge.js": "c0f0917ef6210634fd752ffa0ff429ec50ac916ad3ddbdf837459a7463fb3d86",
   "bundle-resources/launcher-web/launcher/socket.io.min.js": "e759359a3cd50622c15cd13fd19e90f80778c639c54086ca409629f62d5c0179",
   "bundle-resources/launcher-web/mobile/game-mobile.css": "8a3c20b37da350117bbb58b5d7999809de438421e491ef8a6c2771f4cf989e29",
-  "bundle-resources/launcher-web/mobile/game-mobile.js": "153485e90e008020e701814259672a684011f9831ff4464d363e0bef8d88fe39",
+  "bundle-resources/launcher-web/mobile/game-mobile.js": "da5b4b1584cef632f11ed9035d42d16c7bd0908796c112a52e532c08163bac21",
   "bundle-resources/launcher-web/mobile/session-bootstrap.js": "0b1948727e46467f431881e0a13788cb5bfaf581157ea380be837dd72d44700d",
   "bundle-resources/launcher-web/launcher-assets/videos/game_launcher/board_battle_preview_v2.mp4": "8e9511275a0690b442cfdbd250c9169ff62e3988b3d677c36786c5d9a33f1798",
   "bundle-resources/launcher-web/launcher-assets/videos/game_launcher/card_sanji_duel_preview_v2.mp4": "eabf37eb247d6ea0e17af056558344d850c1a29de8e4d7d628f49fcf02bf8d08",

@@ -4582,10 +4582,12 @@ window.POCardInteract=module.exports;
   const discard=()=>document.querySelector('.phone-discard-stack');
   const pileRect=n=>{const r=n?.getBoundingClientRect();if(!r)return null;const w=Math.min(r.width,parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--pile-w'))||80);return {left:r.left,top:r.top,width:w,height:w*1.5};};
   function hintAt(n){const r=n?.getBoundingClientRect();if(r)Object.assign(label.style,{left:Math.max(85,Math.min(innerWidth-85,r.left+r.width/2))+'px',top:Math.min(innerHeight-38,r.bottom+28)+'px',width:'170px'});}
-  function clear(){generation++;waiting=null;prepared=false;layer.hidden=true;layer.querySelectorAll('img').forEach(n=>n.remove());discard()?.removeAttribute('data-kid-draw');api.suppressKidFlash=true;api.cancelLocalCardPreview?.();api.restoreHandArt?.();}
+  const pileLabel=()=>document.querySelector('.phone-pile-label[aria-label="查看棄牌堆"]');
+  function showPileLabel(){const n=pileLabel();if(n)n.style.visibility='';}
+  function clear(){generation++;waiting=null;prepared=false;layer.hidden=true;showPileLabel();layer.querySelectorAll('img').forEach(n=>n.remove());discard()?.removeAttribute('data-kid-draw');api.suppressKidFlash=true;api.cancelLocalCardPreview?.();api.restoreHandArt?.();}
   api.cancelPileAction=clear;
   async function shuffle(node,text,token){
-   if(fast())return;layer.hidden=false;label.textContent=text;layer.dataset.phase='shuffle';hintAt(node);
+   if(fast())return;layer.hidden=false;label.textContent=text;layer.dataset.phase='shuffle';hintAt(node);if(node===discard()&&pileLabel())pileLabel().style.visibility='hidden';
    const r=pileRect(node);if(!r)return;
    const cards=[];for(let i=0;i<6;i++){const n=document.createElement('img');n.src='images/cards/back.webp';n.alt='';Object.assign(n.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'});layer.append(n);cards.push(n);
     n.animate([{transform:`translate(${i*2}px,${-i*2}px) rotate(0)`},{transform:`translate(${(i%2?1:-1)*(r.width*.8)}px,${-22-i*3}px) rotate(${i%2?18:-18}deg)`,offset:.3},{transform:`translate(${i%2?-12:12}px,${-i*3}px) rotate(0)`,offset:.55},{transform:`translate(${i%2?r.width*.6:-r.width*.6}px,${-12-i*3}px) rotate(${i%2?-12:12}deg)`,offset:.78},{transform:`translate(0,${-i*2}px) rotate(0)`}],{duration:1800,delay:i*45,easing:'ease-in-out',fill:'both'});
@@ -4598,7 +4600,7 @@ window.POCardInteract=module.exports;
    if(waiting)return;const token=++generation;waiting={which,ready:false,round:state?.roundNo,turn:state?.turnIndex};api.closeSheet?.();hideModal();api.previewKid?.();
    while(token===generation&&api.isCardEntering?.())await delay(60);if(token!==generation)return;
    await shuffle(discard(),'基德 · 棄牌洗牌中',token);if(token!==generation||!waiting)return;
-   waiting.ready=true;layer.hidden=false;layer.dataset.phase='pick';label.textContent='點棄牌堆抽取';discard()?.setAttribute('data-kid-draw','ready');
+   waiting.ready=true;layer.hidden=false;layer.dataset.phase='pick';label.textContent=`棄牌 ${state?.discard?.length||0} 張 · 點擊抽取`;discard()?.setAttribute('data-kid-draw','ready');
   };
   api.isKidAwaiting=()=>!!waiting;
   window.addEventListener('click',e=>{
@@ -4606,7 +4608,7 @@ window.POCardInteract=module.exports;
    const hit=e.target.closest?.('.phone-discard-stack,.phone-pile-label[aria-label="查看棄牌堆"]');
    if(!hit&&!e.target.closest?.('#playHand,#playDrawn,#phoneCardConfirm,#btnDraw'))return;
    e.preventDefault();e.stopImmediatePropagation();if(!hit||prepared||!waiting?.ready)return;
-   const which=waiting.which;waiting=null;prepared=true;layer.hidden=true;discard()?.removeAttribute('data-kid-draw');sendAction('PLAY_CARD',{which});
+   const which=waiting.which;waiting=null;prepared=true;layer.hidden=true;showPileLabel();discard()?.removeAttribute('data-kid-draw');sendAction('PLAY_CARD',{which});
   },true);
   api.beforePileBatch=s=>{if(waiting&&s&&(s.roundNo!==waiting.round||s.turnIndex!==waiting.turn||s.turnStep!=='choose'))clear();};
   api.presentPileBatch=async (events,next)=>{
@@ -4633,7 +4635,7 @@ window.POCardInteract=module.exports;
     const out=events.some(e=>e.type==='silent_discard'&&e.by===viewer)||events.some(e=>e.type==='zoro_discard'&&(e.targetId===viewer||e.all));
     if(out&&!events.some(e=>e.type==='duel')){await fly(api.cardPlayerRect?.(viewer),pileRect(discard()),'hand-discard',true);if(next?.players?.[viewer]?.alive&&next.players[viewer].hand!=null)await fly(pileRect($('btnDraw')),api.cardPlayerRect?.(viewer),'hand-redraw');}
    }
-   if(token===generation){layer.hidden=true;prepared=false;}
+   if(token===generation){layer.hidden=true;prepared=false;showPileLabel();}
   };
   for(const type of ['disconnect','JOINED'])socket.on(type,()=>{clear();api.suppressKidFlash=true;});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){clear();api.suppressKidFlash=true;}});
