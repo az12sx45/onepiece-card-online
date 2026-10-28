@@ -2902,3 +2902,6 @@ Card desktop/mobile presentation now sequences narration before distinct action 
 
 
 Card presentation: own-hand hover/touch dock and staged duel with public losing-card reveal only; details in CARD_HAND_DUEL_20261028.md.
+
+
+2026-10-28 Card desktop/mobile presentation now shares ordered effects, paged card/discard libraries and 15 GPT venue backgrounds; see CARD_FLOW_LIBRARY_20261028.md for source and evidence boundaries.

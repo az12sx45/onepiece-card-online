@@ -2027,3 +2027,6 @@ Card cinema source: android/web/card-phone-cinema.css and card-phone-fx.js in th
 
 
 Mobile shared hand controller/style: android/web/card-hand-dock.js/.css; desktop generation includes the same controller. QA: android/card-hand-duel-qa.mjs.
+
+
+Card presentation additions: card-phone-flow.js queues original packets; card-phone-library.js/.css owns viewer-visible libraries and venue backgrounds; card-phone-coin.js displays original server coin outcomes. Source/art/QA: docs/CARD_FLOW_LIBRARY_20261028.md.

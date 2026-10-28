@@ -8429,3 +8429,12 @@ Release verified 2026-10-28: desktop aa09ba353 / package-fc35cb03ac796250 is pub
 ## 2026-10-28 Tucked hand and loser-only duel presentation
 
 Reworked own hand as hover/touch fan, compact bottom corners and padded opponent HUD. Duel retains original public loser-only reveal and tie privacy. Source scope and QA: [CARD_HAND_DUEL_20261028.md](CARD_HAND_DUEL_20261028.md). Final verification and public release are recorded separately.
+
+Final mobile screenshot rerun: the test's outside-tap coordinate initially hit the menu button. Corrected android/card-hand-duel-qa.mjs to tap the empty side of the board; 58 checks passed again with no page errors and refreshed screenshots. This changes only the QA harness, not release bytes.
+
+2026-10-28 Android publication recovery: android/publish-android.cjs now uses the existing replayable multipart uploader above 4 MiB and completes immutable uploads before public verification. Public 404/502/503 readback retries are bounded to seven attempts within the existing deadline; non-retryable status and SHA mismatch still fail, and activation remains gated by all hashes and the original pointer ETag. Added android/publish-android-readback-qa.cjs. Multipart retry/race/source-change fixture passed; final generator 12 and publisher 31 checks passed. Earlier attempts did not activate v050; exact v050 APK and plan bytes are unchanged. Evidence: D:/Codex_QA/card-native-v050-20261028/publisher-fixture-final/.
+
+Release verified 2026-10-28: desktop 67226b4a / package-91f643ceaa0dead2 public (35 catalog/runtime/program checks), Render dep-dbge84c9v7es73cmun60 succeeded. Android native v050 activated with APK and 11 deltas publicly hash-verified (v049 patch 4,483,119 bytes). iOS unsigned v051 CI 40554193326 passed, Mac WebKit checked, 1,535 launcher files byte-matched. Browser QA 58+58 and 102+102 passed; physical devices not tested. Receipt: CARD_HAND_DUEL_RELEASE_20261028.json.
+
+
+2026-10-28: Card ordered presentation, centered avatars/name-frame status, full-screen dex/discard library, generated coin control and 15 venue backgrounds. Scope and QA boundaries: [CARD_FLOW_LIBRARY_20261028.md](CARD_FLOW_LIBRARY_20261028.md). Browser checks and actual local two-client sync exercised; final release/readback recorded separately.

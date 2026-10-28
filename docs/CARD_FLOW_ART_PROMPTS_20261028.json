@@ -1,0 +1,197 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "slug": "dressrosa",
+      "name": "德雷斯羅薩鬥技場",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 德雷斯羅薩鬥技場. Paint one complete high-resolution raster background, not a UI mockup. Scene: sunlit ancient stone colosseum, weathered sandstone arena, distant arched stands and hanging red banners. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-885e8a52-69b1-495c-bf08-08fc95ebe454.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-dressrosa-v1.webp",
+      "bytes": 404512,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "enieslobby",
+      "name": "艾尼艾斯大廳",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 艾尼艾斯大廳. Paint one complete high-resolution raster background, not a UI mockup. Scene: grand white stone judicial fortress above the sea, pale monumental gate, blue ocean light. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-7f9a3f12-1a23-4b3f-84d7-e6d700b65bb0.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-enieslobby-v1.webp",
+      "bytes": 305920,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "alabasta",
+      "name": "阿拉巴斯坦",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 阿拉巴斯坦. Paint one complete high-resolution raster background, not a UI mockup. Scene: desert royal city, warm sandstone paving, dunes, domed palace at far edge, late afternoon. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-f14c4634-bd33-4f46-bffd-161e87829058.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-alabasta-v1.webp",
+      "bytes": 293154,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "baratie",
+      "name": "巴拉蒂",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 巴拉蒂. Paint one complete high-resolution raster background, not a UI mockup. Scene: floating ocean restaurant ship, dark polished wooden deck, brass rails, teal sea and warm restaurant lamps. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-fedf4025-c11b-4f11-9169-ceb2db42afef.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-baratie-v1.webp",
+      "bytes": 330872,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "zou",
+      "name": "佐烏",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 佐烏. Paint one complete high-resolution raster background, not a UI mockup. Scene: lush ancient forest city high above clouds, mossy stone plaza, enormous roots along edges. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-8dba2dd7-ef8c-46a9-b319-a0686321ca77.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-zou-v1.webp",
+      "bytes": 505162,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "wano",
+      "name": "和之國",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 和之國. Paint one complete high-resolution raster background, not a UI mockup. Scene: traditional samurai island garden courtyard, dark timber walkway, cherry blossom petals and paper lanterns around edges. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-f52ba379-ce41-4c4f-ba08-58c626b9910c.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-wano-v1.webp",
+      "bytes": 332212,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "punkhazard",
+      "name": "龐克哈薩德",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 龐克哈薩德. Paint one complete high-resolution raster background, not a UI mockup. Scene: abandoned island research yard with fire and ice split environment along outer edges, dark neutral central paving. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-9af0d172-a59a-4b40-b15b-3bc45e8cdf0e.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-punkhazard-v1.webp",
+      "bytes": 432222,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "weatheria",
+      "name": "維薩利亞",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 維薩利亞. Paint one complete high-resolution raster background, not a UI mockup. Scene: floating sky island with weather instruments, cloud sea, brass gauges and wind vanes at edges. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-faa7ef41-4a4c-4d2b-a2e6-3c5b3922c990.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-weatheria-v1.webp",
+      "bytes": 407244,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "fishmanisland",
+      "name": "魚人島",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 魚人島. Paint one complete high-resolution raster background, not a UI mockup. Scene: underwater coral kingdom inside a luminous bubble, dark aqua stone floor, corals and bubbles at edges. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-6205dc63-a1e3-4c84-837e-3effa58b484b.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-fishmanisland-v1.webp",
+      "bytes": 444554,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "amazonlily",
+      "name": "九蛇島",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 九蛇島. Paint one complete high-resolution raster background, not a UI mockup. Scene: tropical pirate empress island palace courtyard, carved serpent ornaments, dark jade paving, red architecture at far edges. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-96890cae-f2b0-4a20-bc1a-f26e7d294bc3.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-amazonlily-v1.webp",
+      "bytes": 413096,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "onigashima",
+      "name": "鬼島",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 鬼島. Paint one complete high-resolution raster background, not a UI mockup. Scene: ominous skull fortress island, volcanic rock arena, distant giant skull silhouette, purple storm sky. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-960bf8fd-e4d8-4630-a5ae-1968b9b9ab78.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-onigashima-v1.webp",
+      "bytes": 414316,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "sabaody",
+      "name": "夏波帝諸島",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 夏波帝諸島. Paint one complete high-resolution raster background, not a UI mockup. Scene: giant mangrove forest archipelago, amber resin bubbles, root-lined muted stone clearing. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-91add840-08b8-4d60-9c8e-7f7cf58db981.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-sabaody-v1.webp",
+      "bytes": 505970,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "wholecake",
+      "name": "萬國",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 萬國. Paint one complete high-resolution raster background, not a UI mockup. Scene: fantasy cake island palace garden, restrained pastel confection buildings on outer edge, dark plum tiled central plaza. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-33b0114c-4737-426e-ab42-c949153f87ed.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-wholecake-v1.webp",
+      "bytes": 289662,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "hachinosu",
+      "name": "蜂巢島",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 蜂巢島. Paint one complete high-resolution raster background, not a UI mockup. Scene: rugged outlaw pirate harbor town with skull-shaped rock in distance, weathered dark dock planks and taverns at edges. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-639dc2eb-d9c0-40f3-b8bc-d83ec48e9208.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-hachinosu-v1.webp",
+      "bytes": 417240,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "oro-jackson",
+      "name": "奧羅傑克森號",
+      "prompt": "Use case: stylized-concept. Asset type: final 16:9 landscape card-game battlefield background, named 奧羅傑克森號. Paint one complete high-resolution raster background, not a UI mockup. Scene: legendary red-sailed pirate ship open deck, dark rich wooden planks, gold rails and ocean horizon. Polished hand-painted anime pirate RPG art, rich but controlled detail and warm gold/teal lighting. Camera: elevated view looking down across a broad level play surface, not a steep perspective landscape. Composition: central 70 percent must be quiet and low contrast for playing cards and readable effects; decorative landmarks only around the upper and outer edges, foreground surface reaches all screen edges. No cards, people, avatars, UI frames, panels, buttons, icons, written text or watermark. No black vignette obscuring corners. Match a premium pirate card game, landscape 16:9.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-15de1dcb-005a-4480-91a4-3c2256796903.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-venue-oro-jackson-v1.webp",
+      "bytes": 367716,
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "slug": "coin-toss",
+      "name": "擲硬幣",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent PNG UI sprite sheet for a pirate card game. Three separate assets arranged horizontally with large transparent padding, not touching: left a perfectly round gold coin face with a raised pirate skull emblem; center the matching perfectly round gold coin reverse with a raised compass rose; right a horizontal ornate nautical gold button frame with dark navy enamel center, empty center wide enough for Traditional Chinese button text to be added in code. All straight-on, centered, same lighting, polished illustrated antique gold, premium hand-painted game UI. No words, letters, numbers, UI screen or background. Coin circles must be round and not tilted. Real alpha transparency around every asset.",
+      "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-fdbb6a9a-2218-4313-a902-69f40018b702.png",
+      "asset": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-coin-toss-v1.webp",
+      "bytes": 282352,
+      "size": [
+        2172,
+        724
+      ]
+    }
+  ]
+}

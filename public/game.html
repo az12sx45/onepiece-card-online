@@ -6,8 +6,8 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>偉大航道爭霸戰｜正式對戰</title>
-  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261028-hand-duel1">
-  <script defer src="js/card-desktop-table.js?v=20261028-hand-duel1"></script>
+  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261028-flow-library1">
+  <script defer src="js/card-desktop-table.js?v=20261028-flow-library1"></script>
   <link rel="stylesheet" href="css/card-finish-v1.css?v=20260907-depth-visible-v2">
   <script defer src="js/card_finish_v1.js?v=20260907-depth-visible-v2"></script>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
@@ -5217,7 +5217,7 @@ if (!myAuto) hideIdleWarning();
       ov.classList.remove('hidden');
 
       // 至少停留 7 秒顯示結算提示；同時把段位先寫入雲端（避免 result.html 重算）
-      const delayP = new Promise(r=>setTimeout(r, 7000));
+      const delayP = Promise.all([new Promise(r=>setTimeout(r, 7000)), window.CardPhonePresentation?.waitForPresentationIdle?.()]);
       const rankP = applyRankAtGameEnd(state.final);
 
       Promise.allSettled([delayP, rankP]).then(()=>{

@@ -2015,3 +2015,6 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 
 2026-10-28 Card duel UI preserves original outcome authority: only public duel_log losing card revealed; winner and tie faces stay concealed. UI never derives another face from viewer state.
+
+
+2026-10-28 presentation only: original coin RNG, covered-discard privacy and loser-only public duel reveal retained. Libraries and animation gates do not change game rules.
