@@ -109,8 +109,26 @@ protected:
         ClassDB::bind_method(D_METHOD("web_game_open","game_id"),&PoIOSBridge::web_game_open);
         ClassDB::bind_method(D_METHOD("web_game_active"),&PoIOSBridge::web_game_active);
         ClassDB::bind_method(D_METHOD("open_settings"),&PoIOSBridge::open_settings);
+        ClassDB::bind_method(D_METHOD("share_png","base64"),&PoIOSBridge::share_png);
     }
 public:
+    bool share_png(const String &base64) {
+        if(base64.length()>16*1024*1024)return false;
+        NSData *bytes=[[NSData alloc] initWithBase64EncodedString:ns(base64) options:0];
+        UIImage *image=bytes?[UIImage imageWithData:bytes]:nil;if(!image||image.size.width>4096||image.size.height>4096)return false;
+        bool opened=false;ui([&]{
+            UIViewController *controller=nil;
+            for(UIScene *scene in UIApplication.sharedApplication.connectedScenes)
+                if([scene isKindOfClass:UIWindowScene.class]&&scene.activationState==UISceneActivationStateForegroundActive)
+                    for(UIWindow *window in ((UIWindowScene *)scene).windows)if(window.isKeyWindow)controller=window.rootViewController;
+            while(controller.presentedViewController)controller=controller.presentedViewController;
+            if(!controller)return;
+            UIActivityViewController *share=[[UIActivityViewController alloc] initWithActivityItems:@[image] applicationActivities:nil];
+            share.popoverPresentationController.sourceView=controller.view;
+            share.popoverPresentationController.sourceRect=CGRectMake(CGRectGetMidX(controller.view.bounds),CGRectGetMidY(controller.view.bounds),1,1);
+            [controller presentViewController:share animated:YES completion:nil];opened=true;
+        });return opened;
+    }
     ~PoIOSBridge() override { [downloader close]; video_remove(); ui([&]{[webGame close];webGame=nil;[launcher close];launcher=nil;}); }
     String web_game_active(){String value;ui([&]{value=gs(webGame.gameId);});return value;}
     bool web_game_open(const String &game_id){

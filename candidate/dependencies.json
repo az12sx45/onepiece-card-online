@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "godot": "4.7.2-stable",
-  "productManifestSha256": "58b98f540108c4c0ab8574577a4360b600779784efe8e9b00ac1cfb7fc581d69",
+  "productManifestSha256": "8892d9ffcd83c377ccceaf66701968b4fc72f9397232ccfa6b1e36b517d08ebd",
   "androidBaseline": 55,
   "godotjs": {
     "tag": "v1.0.2",
@@ -19,6 +19,11 @@
   "media": {
     "url": "https://onepiece-card-online.onrender.com/desktop/manifests/board-package-1e0e16365e08c407.json",
     "sha256": "53c4187b6174226da6609606a426846cd436c5e771fd963c7165f7f7d0b4bf30",
+    "blobBase": "https://game-assets.rihdi.tw/desktop/blobs/sha256"
+  },
+  "cardMedia": {
+    "url": "https://onepiece-card-online.onrender.com/desktop/manifests/card-package-aa58109271022136.json",
+    "sha256": "75b6864b1ee361f320b5f4ca4a0629e448295c080ae6d143d9f430fb421a168f",
     "blobBase": "https://game-assets.rihdi.tw/desktop/blobs/sha256"
   },
   "billing": {

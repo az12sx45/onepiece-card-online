@@ -1,7 +1,7 @@
 """Resources read with FileAccess/Image.load must survive export unchanged."""
 from pathlib import Path
 
-ROOTS = ('assets', 'mobile', 'native-animation-assets')
+ROOTS = ('assets', 'mobile', 'native-animation-assets', 'card-assets')
 EXTENSIONS = {'.ttf', '.otf', '.png', '.webp', '.jpg', '.jpeg'}
 
 

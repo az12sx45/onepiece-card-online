@@ -58,3 +58,7 @@ The first signed v038 phone run exposed missing raw font/UI files: FileAccess an
 
 ## v040 launcher path regression
 The v039 phone launcher was blank. The resource root and file must both use canonical paths: Foundation can remove /private while standardizing an existing path. po_launcher_assets.h shares the resolver with check_launcher_webkit.m, which reproduces the old alias rejection and loads the real renderer using Apple WebKit. Native navigation failure, process termination and a bounded load timeout display a retry action. The Mac WebKit gate is separate from iPhone acceptance.
+
+## 2026-10-29 native Card candidate
+The current v057 candidate preserves the existing launcher and native Board game, and adds native Card scenes, original artwork/media, rule-compatible server actions, account results, poster export and platform adapters. Earlier v038-v040 sections document historical regressions and are not the current feature checklist. Windows preparation is complete; Mac compilation and physical iPhone acceptance must be recorded separately. This candidate is not a public player release.
+The existing public macos-26 workflow retains its 60-minute limit. Its storage guard may retire only artifact 12831102316 after checking the exact ZIP identity; the prior v056 IPA was independently rehashed and remains retained locally. Paid services, billing changes and repository visibility changes are not authorized.

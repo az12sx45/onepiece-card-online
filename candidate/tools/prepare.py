@@ -54,6 +54,7 @@ def main():
     parser.add_argument('--product', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--media-manifest', type=Path)
+    parser.add_argument('--card-media-manifest', type=Path)
     args = parser.parse_args()
     lock = json.loads((IOS/'dependencies.json').read_text())
     product = args.product.resolve()
@@ -79,15 +80,31 @@ def main():
     media_manifest = json.loads(raw)
     media = {}
     records = media_manifest.get('assets', media_manifest.get('files', []))
+    if any(record['path'] == 'native-card.tscn' for record in manifest['files']):
+        card_lock = lock.get('cardMedia')
+        if not card_lock or card_lock.get('blobBase') != lock['media']['blobBase']:
+            raise ValueError('Native Card requires a pinned compatible media catalog')
+        if args.card_media_manifest:
+            card_raw = args.card_media_manifest.read_bytes()
+        else:
+            with urllib.request.urlopen(card_lock['url'], timeout=40) as response:
+                card_raw = response.read(8*1024*1024+1)
+        if hashlib.sha256(card_raw).hexdigest() != card_lock['sha256']:
+            raise ValueError('Card media catalog differs from pinned release')
+        card_manifest = json.loads(card_raw)
+        records = list(records) + card_manifest.get('assets', card_manifest.get('files', []))
     for record in records:
         if record.get('kind') not in ['image','audio','video','font']:
             continue
         path = record['path']
-        if not path or path.startswith('/') or '\\' in path or ':' in path or '..' in path.split('/') or path in media:
+        if not path or path.startswith('/') or '\\' in path or ':' in path or '..' in path.split('/'):
             raise ValueError('Invalid or duplicate media path')
         if not re.fullmatch('[0-9a-f]{64}', record['sha256']) or type(record['size']) is not int or record['size'] <= 0:
             raise ValueError('Invalid media integrity record')
-        media[path] = {k:record[k] for k in ['kind','sha256','size']}
+        entry = {k:record[k] for k in ['kind','sha256','size']}
+        if path in media and media[path] != entry:
+            raise ValueError('Conflicting native Board/Card media: ' + path)
+        media[path] = entry
     if not media:
         raise ValueError('No media catalog entries')
     if shutil.disk_usage(out.parent).free < sum(x['size'] for x in manifest['files']) + 128*1024*1024:

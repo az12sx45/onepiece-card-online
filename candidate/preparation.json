@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "baselineNativeVersion": 55,
-  "baselineManifestSha256": "58b98f540108c4c0ab8574577a4360b600779784efe8e9b00ac1cfb7fc581d69",
-  "preservedFiles": 1896,
+  "baselineManifestSha256": "8892d9ffcd83c377ccceaf66701968b4fc72f9397232ccfa6b1e36b517d08ebd",
+  "preservedFiles": 2121,
   "platformAdaptations": [
     {
       "path": "native_android_account.gd",
-      "baselineSha256": "c92d24615e34b3e9210c5443e589f7910a2a4bb0556c935aaa740e88030a260e",
-      "iosSha256": "3d9b13c664f817b1a40bd73a5dd11208b6b69d5b86368209ade16091f500618a"
+      "baselineSha256": "33b8f22de66aa421daafbf34b25987e92cb1cfacbd90e8a46c0ee13544294c62",
+      "iosSha256": "21c1d9fdf3851c9f3b1d501c803669b55e0d41be219e97081a910de379660dd1"
     },
     {
       "path": "native_asset_cache.gd",
@@ -65,14 +65,13 @@
       "iosSha256": "e40fdcba31961edc4b2d37dea612c91a51fa2194baf5dae24f053abb3ca6fd29"
     }
   ],
-  "mediaFiles": 6530,
-  "mediaBytes": 1585946821,
+  "mediaFiles": 7399,
+  "mediaBytes": 2305386442,
   "mediaDownloadedLocally": false,
   "macCompiled": false,
   "signed": false,
   "iphoneTested": false,
   "cloudJobDispatched": false,
   "paidServicesAuthorized": false,
-  "androidSourceChanged": false,
-  "windowsCheckBinding": false
+  "androidSourceChanged": false
 }
