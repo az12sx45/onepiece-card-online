@@ -18,7 +18,7 @@ SUPERSEDED=[
  (12794836034,417512585,'sha256:866caa14c31f92c53723dafcdcdf50f1dbf2ad1a5dba72fcb5bf74b2accc5796','73d2797d3ec080ebd28302735645820a9994e444')]
 # The extracted IPA remains locally retained and was rehashed before dispatch.
 BACKUP_SHA256='ec5c850490597da773f3fcc2e2e150195455c0536f61e7b8e8b7154b21ca8d3a'
-LIMIT=500*1024*1024
+LIMIT=500000000
 
 def main():
  if os.environ.get('GITHUB_REPOSITORY')!=REPOSITORY:raise RuntimeError('Unexpected repository')
@@ -48,10 +48,11 @@ def main():
   if len(rows)<100:break
  else:raise RuntimeError('Artifact inventory exceeds bounded check')
  remaining=sum(x['size_in_bytes'] for x in artifacts if not x['expired'])
- # Reserve 480 MiB for the candidate and 4 MiB for diagnostics. Refuse before build otherwise.
- if remaining+484*1024*1024>LIMIT:raise RuntimeError('Insufficient free artifact capacity; no paid capacity allowed')
+ # Use the conservative decimal 500 MB cap, retaining 4 MB for diagnostics/ZIP overhead.
+ maximum=LIMIT-remaining-4000000
+ if maximum<480000000:raise RuntimeError('Insufficient free artifact capacity; no paid capacity allowed')
  result={'retiredExactArtifact':retired,'retainedLocalIpaSha256':BACKUP_SHA256,'otherArtifactBytes':remaining,
-         'maximumCandidateBytes':480*1024*1024,'publicRepository':True,'paidServicesAuthorized':False}
+         'maximumCandidateBytes':maximum,'publicRepository':True,'paidServicesAuthorized':False}
  Path(os.environ['RUNNER_TEMP'],'po-storage-guard.json').write_text(json.dumps(result))
  print(json.dumps(result))
 

@@ -143,6 +143,14 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
         if metadata.is_file():
             binary=framework/plistlib.loads(metadata.read_bytes())['CFBundleExecutable']
             if binary.is_file():symbol_targets.append(binary)
+    stripped=[]
+    for file in dict.fromkeys(symbol_targets):
+        if not file.resolve().is_relative_to(app.resolve()):raise ValueError('Native binary escaped unsigned app')
+        before=file.stat().st_size
+        # Keep external entry points and all code/data. Remove only local/debug symbols
+        # from the unsigned development payload before the owner signs it.
+        run(['xcrun','strip','-S','-x',file],out,logs/('strip-'+str(len(stripped))+'.log'))
+        stripped.append({'path':file.relative_to(app).as_posix(),'before':before,'after':file.stat().st_size})
     for needle in ['jsb_gdextension_init','po_ios_bridge_init']:
         found=False
         for file in symbol_targets:
@@ -152,7 +160,7 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
                 found=True
         if not found: raise ValueError('Missing native entry symbol: '+needle)
     package=out/'PO-iOS-UNSIGNED.ipa'
-    with zipfile.ZipFile(package,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=3) as archive:
+    with zipfile.ZipFile(package,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as archive:
         for file in app.rglob('*'):
             if file.is_file(): archive.write(file,'Payload/'+app.name+'/'+file.relative_to(app).as_posix())
     report={'macCompiled':True,'signed':False,'iphoneTested':False,'installableAsIs':False,
@@ -160,6 +168,9 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
         'baselineVersion':38,'cloudCostVerified':False,'warning':'Owner signing and physical iPhone acceptance required'}
     report['rawRuntimeResourcesByteIdentical']=raw_verified
     report['macWebKitLauncherChecked']=True
+    report['strippedLocalAndDebugSymbols']=stripped
+    with zipfile.ZipFile(package) as archive:
+        report['largestCompressedEntries']=[{'path':x.filename,'bytes':x.compress_size} for x in sorted(archive.infolist(),key=lambda x:x.compress_size,reverse=True)[:12]]
     (out/'build-result.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 
