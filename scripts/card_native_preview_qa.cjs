@@ -2,7 +2,7 @@
 const assert=require('assert/strict'),fs=require('fs'),path=require('path'),Module=require('module'),{execFileSync}=require('child_process');
 const engine=require('../server/engine'),root=path.resolve(__dirname,'..'),output=process.argv[2];
 if(!output)throw Error('QA output required');
-const original=execFileSync('git',['show','HEAD:server/engine.js'],{cwd:root,encoding:'utf8'}),baseline=new Module(path.join(root,'server/engine-qa-baseline.js'));
+const original=execFileSync('git',['show','16088aeebe05a99aea9cdc16337430b9a9abcd51:server/engine.js'],{cwd:root,encoding:'utf8'}),baseline=new Module(path.join(root,'server/engine-qa-baseline.js'));
 baseline.filename=path.join(root,'server/engine-qa-baseline.js');baseline.paths=module.paths;baseline._compile(original,baseline.filename);
 let count=0;const eq=(a,b,label)=>{assert.deepEqual(a,b,label);count++;};
 const oldRandom=Math.random;let seed=1;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
