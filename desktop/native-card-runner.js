@@ -56,7 +56,9 @@ function createNativeCardRunner({root,auth,assets,onExit=()=>{},onSessionInvalid
    if(bundle.project)args.unshift('--path',bundle.project);
    if(auth.getPreferences().gameDisplayMode==='fullscreen')args.push('--fullscreen');
    if(bundle.project)args.push('res://native-card.tscn');
-   const process=spawn(bundle.executable,args,{cwd:bundle.root,windowsHide:true,env:{...global.process.env,...connection.childEnvironment},stdio:'ignore'});child=process;
+   // This is the player's GUI game, not a background helper. SW_HIDE also hides
+   // Godot's main window on Windows, leaving a running game with no visible UI.
+   const process=spawn(bundle.executable,args,{cwd:bundle.root,windowsHide:false,env:{...global.process.env,...connection.childEnvironment},stdio:'ignore'});child=process;
    const done=()=>{connection.close();if(bridge===connection)bridge=null;if(child===process){child=null;onExit();}};
    process.once('exit',done);process.once('error',done);
    await new Promise((resolve,reject)=>{process.once('spawn',resolve);process.once('error',reject);});

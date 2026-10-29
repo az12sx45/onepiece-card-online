@@ -2048,3 +2048,5 @@ Validation records are stored under D:/Codex_QA/card-finishers-20261028. Browser
 2026-10-29: server/card-result-identity.js supplies visible Card protocol capability and stable final endedAt; scripts/card_result_identity_qa.cjs checks retransmission/new-match isolation. scripts/card_native_preview_qa.cjs compares original Card effects and the optional Law two-step flow.
 
 2026-10-29: build_native_card_launcher.cjs packages either isolated internal or explicit original-identity release from a verified native runtime; native-card-bridge/runner manage private account/media and native process lifecycle.
+
+- `scripts/native_card_visible_window_qa.cjs`: actual player-PCK GUI visibility regression under an isolated account/profile; detects running-but-hidden Windows games.
