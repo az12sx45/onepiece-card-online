@@ -45,7 +45,6 @@ const { RuntimeAssetCache } = require('./runtime-asset-cache');
 const { HttpsProgramRuntime } = require('./program-runtime');
 const { installGameCursorPolicy } = require('./game-cursor-policy');
 const { createNativeCardRunner } = require('./native-card-runner');
-const { createNativeCardHandoff } = require('./native-card-handoff');
 
 const REMOTE_ORIGIN = 'https://onepiece-card-online.onrender.com';
 const ASSET_ORIGIN = 'https://game-assets.rihdi.tw';
@@ -1372,33 +1371,8 @@ async function createGameWindow(gameId) {
   gameWindows.set(gameId, window);
   window.on('focus', () => { if (authenticated) authService.setPresence(`desktop-${gameId}`).catch(() => {}); });
   hardenGameWindow(window);
-  if (gameId === 'card') window.cardHandoff = createNativeCardHandoff({
-    window, origin: REMOTE_ORIGIN,
-    isCurrent: () => authenticated && gameWindows.get('card') === window,
-    prepareReturn: room => { window.cardMatchReturn = { room, until: Date.now() + 120000 }; },
-    createRunner: ({ onExit }) => {
-      nativeCardRunner = createNativeCardRunner({
-        root: app.isPackaged ? path.join(process.resourcesPath, 'native-card') : path.join(__dirname, 'native-card'),
-        auth: authService, assets: assetStore,
-        allowInternal: NATIVE_CARD_INTERNAL_BUILD || (!app.isPackaged && process.env.OP_NATIVE_CARD_INTERNAL === '1'),
-        onExit,
-        onSessionInvalid: async () => {
-          authenticated = false;
-          await closeGameWindows();
-          await authService.clearAccount();
-          await broadcastState();
-        }
-      });
-      return nativeCardRunner;
-    },
-    onError: async (error, retry) => {
-      if (window.isDestroyed() || !authenticated) return;
-      const result = await dialog.showMessageBox(window, { type: 'error', title: '爭霸戰',
-        message: '對局未能開啟，原本大廳已保留。', detail: String(error.message || error).slice(0, 200),
-        buttons: retry ? ['重試', '留在大廳'] : ['確定'], defaultId: 0, cancelId: retry ? 1 : 0 });
-      if (retry && result.response === 0 && !window.isDestroyed() && authenticated) retry();
-    }
-  });
+  // Card stays in the original browser for both lobby and match.
+  // Native match interception is disabled after player acceptance failed.
   window.on('closed', () => {
     window.cardHandoff?.dispose();
     if (gameWindows.get(gameId) !== window) return;
