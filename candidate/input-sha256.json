@@ -1,9 +1,9 @@
 {
   "dependencies.json": "f8d3ba27482ee0736ac8e90b527a07bda6fb68fa74f13c3177074e133374ee7c",
-  "launcher-manifest.json": "31e5a0dc0e476a791f08862629e232c6826ec79f69058476b3c02a9e40a8df6f",
+  "launcher-manifest.json": "af2fc6187336ac777805a63283ed9a4fea9d94fe7119a18acacae3702a74d6e9",
   "media-manifest.json": "53c4187b6174226da6609606a426846cd436c5e771fd963c7165f7f7d0b4bf30",
   "preparation.json": "01bef78af6b6d9ab06cb76e6bffdc15fe7409d8da0de91319b4e6e8d60929933",
-  "README.md": "218f13c14cc977b859183e1c20488065f5f3cb4f96e049d9322c048750d97fce",
+  "README.md": "5219052ad7592b28f7d2342cbd6a9f3a175f5a8fe51f405ae954ab3ed47e9237",
   "native/po_ios_bridge.mm": "3ee0be5dd57862b25b5b77603e058e0a398705b9afd8207eeb4a9ba9f2a40e4c",
   "native/po_ios_download.h": "12d4db661b3a9e52aab9d2346914a67b91fe7f27ed648dd907daa728b90eb10a",
   "native/po_ios_launcher.h": "195cc18b575e51ca6503930b44bc4e2fc6aa327a5b334555531eaa1b2df9e331",
@@ -544,7 +544,7 @@
   "tools/inspect_dependencies.py": "71f3863290932a5975c17d1c7f8357a8e20807a3ce86491baac5eda51f200d61",
   "tools/prepare.py": "78db4ebe4bf44d67d349aad1083128083a992350620ba7dfcdb846edfb7371c7",
   "tools/prepare_ci_storage.py": "cd2096fc004218bd20b35ac2faebb5050758466049921aec0fce5d098cb6d430",
-  "tools/prepare_launcher.py": "c3b51a0430de0eda00d42b09349087261d1ebfe7ae38bcb1eb6fb642554f6a3d",
+  "tools/prepare_launcher.py": "7c42cbcb26e2fd40ad96725c963aaec28c11fdfdb82293b79f520403e549b0ac",
   "tools/raw_resources.py": "b1411db3641a46862b662f2ce9de074c695135da2854966aa5ddf198981140af",
   "tools/seal.py": "4cd99a95e35016891ca43e96dbdfc0a0cbe9cd95dd2fe3e68abcb2eb260fad62",
   "tools/setup_macos.py": "f280607a713376252bf490d4d55941dca17fa10cc3cb3f297f50fc4a77d0a52d",
@@ -2427,8 +2427,8 @@
   "bundle-resources/launcher-web/launcher/launcher.js": "6665ddbac5a8fe52e63b8fc90b5858486701d848ede54beb3f0bee471dfdbd64",
   "bundle-resources/launcher-web/launcher/mobile-bridge.js": "c0f0917ef6210634fd752ffa0ff429ec50ac916ad3ddbdf837459a7463fb3d86",
   "bundle-resources/launcher-web/launcher/socket.io.min.js": "e759359a3cd50622c15cd13fd19e90f80778c639c54086ca409629f62d5c0179",
-  "bundle-resources/launcher-web/mobile/game-mobile.css": "9f63a20ad91378e4f6212b28e645e80018df02488eb51f05f46d240ec86b55f4",
-  "bundle-resources/launcher-web/mobile/game-mobile.js": "483eab5fef4d5534e3ff4a37134df6696207e01b9bba9e25c1727ac68e585ba1",
+  "bundle-resources/launcher-web/mobile/game-mobile.css": "ae16a0fa9d9935594e148e9e923421eed7122328312b4c8e7ed9aad7cde9d716",
+  "bundle-resources/launcher-web/mobile/game-mobile.js": "3a5265eaa3e53e8e499f909809c3c8d14c9f0ff5fdccab8b73cfaf531b5b4f61",
   "bundle-resources/launcher-web/mobile/session-bootstrap.js": "0b1948727e46467f431881e0a13788cb5bfaf581157ea380be837dd72d44700d",
   "bundle-resources/launcher-web/launcher-assets/videos/game_launcher/board_battle_preview_v2.mp4": "8e9511275a0690b442cfdbd250c9169ff62e3988b3d677c36786c5d9a33f1798",
   "bundle-resources/launcher-web/launcher-assets/videos/game_launcher/card_sanji_duel_preview_v2.mp4": "eabf37eb247d6ea0e17af056558344d850c1a29de8e4d7d628f49fcf02bf8d08",
@@ -5231,5 +5231,6 @@
   "bundle-resources/.godot/.api_dumping/global_enums/Variant.Type.capi": "e8e7833fe815b566d9703e836360e0e98a8aedd9d0a24d4448aa33c465155a30",
   "bundle-resources/.godot/.api_dumping/global_enums/VerticalAlignment.capi": "8515261253e99701d39f5339f04598498c4a8162d3bd114976702ab9ac7f5c44",
   "bundle-resources/.godot/.api_dumping/native_structures/native_structures.capi": "1248e5b7a7f6391247469d0fb073cd49d3952a6d962e154d920679384a709734",
-  "bundle-resources/.godot/.api_dumping/singletons/singletons.capi": "01e85c0c2479e88815fd30c6bdc2e40c7247b4b42cffcd0f879a93d84a9a9d43"
+  "bundle-resources/.godot/.api_dumping/singletons/singletons.capi": "01e85c0c2479e88815fd30c6bdc2e40c7247b4b42cffcd0f879a93d84a9a9d43",
+  "tools/native_launcher_resources.py": "71470da85f86a658b80f8f6c72c7a66767cea771214739942e4346f8b20e1c4f"
 }

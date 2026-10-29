@@ -4,6 +4,9 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'godot-pilot/tools'))
+from native_launcher_resources import native_card_web_bundle
 
 
 def prepare_launcher(source, candidate):
@@ -11,6 +14,8 @@ def prepare_launcher(source, candidate):
     target=candidate/'bundle-resources/launcher-web'
     if target.exists():raise ValueError('Use a fresh launcher bundle directory')
     files=[]
+    native_card=(candidate/'project/native-card.tscn').is_file()
+    omitted={}
     for folder in ['launcher','launcher-assets','mobile']:
         for file in sorted((source/folder).rglob('*')):
             if not file.is_file():continue
@@ -19,6 +24,8 @@ def prepare_launcher(source, candidate):
             relative=file.relative_to(source)
             destination=target/relative;destination.parent.mkdir(parents=True,exist_ok=True)
             data=file.read_bytes();original=hashlib.sha256(data).hexdigest()
+            if native_card and folder=='mobile' and file.name in ['game-mobile.css','game-mobile.js']:
+                data,omitted[file.name]=native_card_web_bundle(data)
             if folder in ['launcher','mobile'] and file.suffix in ['.html','.js','.css']:
                 text=data.decode('utf8').replace('https://appassets.androidplatform.net','poapp://app')
                 text=text.replace('https:\\/\\/appassets\\.androidplatform\\.net','poapp:\\/\\/app')
@@ -43,7 +50,7 @@ window.__poLauncherPause=()=>{for(const media of document.querySelectorAll('audi
     files.append({'path':'launcher/ios-transport.js','sha256':hashlib.sha256(transport.read_bytes()).hexdigest(),'size':transport.stat().st_size})
     index=(target/'launcher/index.html').read_text(encoding='utf8')
     if 'ios-transport.js' not in index:raise ValueError('Transport insertion failed')
-    manifest={'schema':1,'source':'verified APK launcher assets','files':files,'bytes':sum(f['size'] for f in files)}
+    manifest={'schema':1,'source':'verified APK launcher assets','files':files,'bytes':sum(f['size'] for f in files),'nativeCardBrowserModulesOmitted':omitted}
     (candidate/'launcher-manifest.json').write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+'\n',encoding='utf8')
     return manifest
 

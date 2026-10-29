@@ -9191,14 +9191,14 @@
     {
       "path": "mobile/game-mobile.css",
       "sourceSha256": "9f63a20ad91378e4f6212b28e645e80018df02488eb51f05f46d240ec86b55f4",
-      "sha256": "9f63a20ad91378e4f6212b28e645e80018df02488eb51f05f46d240ec86b55f4",
-      "size": 32907637
+      "sha256": "ae16a0fa9d9935594e148e9e923421eed7122328312b4c8e7ed9aad7cde9d716",
+      "size": 1279741
     },
     {
       "path": "mobile/game-mobile.js",
       "sourceSha256": "827fb9a2370ed282e675817db0df7cd62e0508714485e8e705da4c8753adf473",
-      "sha256": "483eab5fef4d5534e3ff4a37134df6696207e01b9bba9e25c1727ac68e585ba1",
-      "size": 487279
+      "sha256": "3a5265eaa3e53e8e499f909809c3c8d14c9f0ff5fdccab8b73cfaf531b5b4f61",
+      "size": 251637
     },
     {
       "path": "mobile/session-bootstrap.js",
@@ -9211,5 +9211,39 @@
       "size": 292
     }
   ],
-  "bytes": 346587565
+  "bytes": 314724027,
+  "nativeCardBrowserModulesOmitted": {
+    "game-mobile.js": [
+      "vendor/card-interact",
+      "card-phone-table",
+      "card-phone-controls",
+      "card-duel-finishers",
+      "card-hud-combat",
+      "card-phone-fx",
+      "card-phone-piles",
+      "card-phone-flight",
+      "card-phone-stage",
+      "card-phone-targets",
+      "card-hand-dock",
+      "card-phone-library",
+      "card-phone-coin",
+      "card-pile-actions",
+      "card-turn-draw",
+      "card-phone-flow"
+    ],
+    "game-mobile.css": [
+      "card-phone-table",
+      "card-phone-controls",
+      "card-duel-finishers",
+      "card-hud-combat",
+      "card-phone-fx",
+      "card-phone-piles",
+      "card-phone-flight",
+      "card-phone-stage",
+      "card-phone-targets",
+      "card-phone-cinema",
+      "card-hand-dock",
+      "card-phone-library"
+    ]
+  }
 }
