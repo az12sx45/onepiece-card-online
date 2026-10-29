@@ -44,6 +44,7 @@ const { CONTENT_UI_URL, isTrustedLauncherUrl } = require('./launcher-sender-poli
 const { RuntimeAssetCache } = require('./runtime-asset-cache');
 const { HttpsProgramRuntime } = require('./program-runtime');
 const { installGameCursorPolicy } = require('./game-cursor-policy');
+const { createNativeCardRunner } = require('./native-card-runner');
 
 const REMOTE_ORIGIN = 'https://onepiece-card-online.onrender.com';
 const ASSET_ORIGIN = 'https://game-assets.rihdi.tw';
@@ -58,6 +59,7 @@ const SCREENSHOT_VIEW = String(process.env.OP_DESKTOP_SCREENSHOT_VIEW || '').tri
 const TEST_USER_DATA_PATH = String(process.env.OP_DESKTOP_USER_DATA || '').trim();
 const TEST_VIEWPORT = String(process.env.OP_DESKTOP_VIEWPORT || '').trim();
 const EXPLICIT_CACHE_ROOT = String(process.env.OP_DESKTOP_CACHE_ROOT || '').trim();
+const NATIVE_CARD_INTERNAL_BUILD = require('./package.json').nativeCardChannel === 'internal';
 const ALLOWED_GAME_IDS = new Set(['card', 'board', 'chess']);
 const GAME_LAUNCH_PRESENTATION_MS = 1400;
 const AUTH_STORAGE_KEYS = [
@@ -73,6 +75,9 @@ const GAME_CONFIG = {
 
 if (TEST_USER_DATA_PATH && (SMOKE_MODE || !app.isPackaged)) {
   app.setPath('userData', path.resolve(TEST_USER_DATA_PATH));
+} else if (NATIVE_CARD_INTERNAL_BUILD) {
+  // A separately labelled internal build never changes the player's installed launcher profile.
+  app.setPath('userData', path.join(app.getPath('appData'), 'onepiece-tabletop-native-card-test'));
 }
 
 function persistedCacheRoot(userDataPath) {
@@ -145,6 +150,7 @@ async function checkRemoteUpdates() {
   await Promise.allSettled(checks);
 }
 let assetStore = null;
+let nativeCardRunner = null;
 let launcherUpdateService = null;
 let launcherContentOverlay = null;
 let launcherContentState = { status: 'idle', revision: 0, downloadedBytes: 0, totalBytes: 0, error: '' };
@@ -355,7 +361,7 @@ function hideLauncherToTray() {
 }
 
 function restoreLauncherAfterLastGame() {
-  if (gameWindows.size === 0 && launcherHiddenForGame) restoreLauncherFromTray();
+  if (gameWindows.size === 0 && !nativeCardRunner?.isRunning() && launcherHiddenForGame) restoreLauncherFromTray();
 }
 
 function resolveLauncherResource(requestUrl) {
@@ -1314,6 +1320,31 @@ function launchGame(gameId) {
 
 async function createGameWindow(gameId) {
   const launchStartedAt = Date.now();
+  if (gameId === 'card') {
+    if (!nativeCardRunner) nativeCardRunner = createNativeCardRunner({
+      root: app.isPackaged ? path.join(process.resourcesPath, 'native-card') : path.join(__dirname, 'native-card'),
+      auth: authService, assets: assetStore,
+      allowInternal: NATIVE_CARD_INTERNAL_BUILD || (!app.isPackaged && process.env.OP_NATIVE_CARD_INTERNAL === '1'),
+      onExit: () => {
+        if (authenticated) authService.setPresence(gameWindows.size ? `desktop-${[...gameWindows.keys()].at(-1)}` : 'desktop-launcher').catch(() => {});
+        restoreLauncherAfterLastGame();
+      },
+      onSessionInvalid: async () => {
+        authenticated = false;
+        await closeGameWindows();
+        await authService.clearAccount();
+        await broadcastState();
+      }
+    });
+    const native = await nativeCardRunner.launch();
+    if (native !== null) {
+      if (native.ok) {
+        authService.setPresence('desktop-card').catch(() => {});
+        if (authService.getPreferences().minimizeToTrayOnGameLaunch) hideLauncherToTray();
+      }
+      return native;
+    }
+  }
   const targetSession = await prepareGameSession(gameId);
   if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
   if (!assetStore.canLaunch(gameId)) return { ok: false, error: '遊戲檔案狀態已變更，請重新檢查或下載。' };
@@ -1434,6 +1465,7 @@ async function createGameWindow(gameId) {
 }
 
 async function closeGameWindows() {
+  nativeCardRunner?.close();
   const pending = [];
   for (const window of gameWindows.values()) {
     if (window.isDestroyed()) continue;
@@ -1446,6 +1478,7 @@ async function closeGameWindows() {
 }
 
 async function closeGameWindow(gameId) {
+  if (gameId === 'card') nativeCardRunner?.close();
   await gameSessionPromises.get(gameId)?.catch(() => {});
   await runtimeRepairChecks.get(gameId)?.catch(() => {});
   const target = gameWindows.get(gameId);
@@ -1612,6 +1645,7 @@ async function refreshLauncherMediaCache() {
 }
 
 async function runVisualOrSmokeCapture() {
+  if (!SMOKE_MODE && !SCREENSHOT_PATH) return;
   if (!mainWindow || mainWindow.isDestroyed()) return;
   try {
     await readyPromise;
@@ -1693,7 +1727,15 @@ async function runVisualOrSmokeCapture() {
     const captureDelay = boxMotionViews.has(SCREENSHOT_VIEW) ? 260 : SCREENSHOT_VIEW === 'cursor-click' ? 90 : 320;
     await new Promise((resolve) => setTimeout(resolve, captureDelay));
   }
-  await mainWindow.webContents.executeJavaScript(`Promise.all([...document.images].map((image) => image.complete ? Promise.resolve() : image.decode().catch(() => {}))).then(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))))`, true).catch(() => {});
+  // Hidden panels may contain lazy images that never begin decoding. Bound the
+  // capture wait; the assertions below still reject unfinished visible images.
+  await mainWindow.webContents.executeJavaScript(`Promise.race([
+    Promise.all([...document.images].map((image) => image.complete ? Promise.resolve() : image.decode().catch(() => {}))),
+    new Promise(resolve => setTimeout(resolve, 5000))
+  ]).then(() => Promise.race([
+    new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+    new Promise(resolve => setTimeout(resolve, 250))
+  ]))`, true).catch(() => {});
   if (SCREENSHOT_VIEW === 'cursor-click') {
     await mainWindow.webContents.executeJavaScript(`(() => {
       const rect = primaryAction.getBoundingClientRect();
@@ -1722,6 +1764,7 @@ async function runVisualOrSmokeCapture() {
     loadedBoxCovers: [...document.querySelectorAll('.game-box-cover')].filter((image) => image.getAttribute('src') && image.naturalWidth > 0).length,
     loadedBoxFrames: [...document.querySelectorAll('.game-box-frame')].filter((image) => image.getAttribute('src') && image.naturalWidth > 0).length,
     brokenImages: [...document.images].filter((image) => image.getAttribute('src') && image.complete && image.naturalWidth === 0).map((image) => image.getAttribute('src')),
+    visiblePendingImages: [...document.images].filter(image => image.getAttribute('src') && !image.complete && image.getClientRects().length && getComputedStyle(image).visibility !== 'hidden' && getComputedStyle(image).opacity !== '0').map(image => image.getAttribute('src')),
     downloadsVisible: !document.querySelector('#downloadsPanel')?.hidden,
     downloadRows: document.querySelectorAll('.download-row').length,
     uninstallOpen: Boolean(document.querySelector('#uninstallDialog')?.open),
@@ -2097,7 +2140,7 @@ async function runVisualOrSmokeCapture() {
   const mediaExclusive = dom.videoOpacity <= .001 || dom.artOpacity <= .001;
   const cursorHas = (value, fileName) => value.includes(fileName) && /\b3\s+3\b/.test(value);
   const cursorReady = cursorHas(dom.bodyCursor, 'launcher_cursor_logpose_default_v1.png') && cursorHas(dom.pointerCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.settingsOptionCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.checkboxCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.pressedCursor, 'launcher_cursor_logpose_pressed_v1.png') && cursorHas(dom.disabledCursor, 'launcher_cursor_logpose_default_v1.png') && dom.textCursor === 'text' && dom.pressedActiveRulePresent;
-  const visualReady = dom.stage === 'app' && dom.games === 3 && dom.loadedBoxCovers >= 7 && dom.loadedBoxFrames >= 7 && dom.brokenImages.length === 0 && mediaExclusive && cursorReady && viewReady;
+  const visualReady = dom.stage === 'app' && dom.games === 3 && dom.loadedBoxCovers >= 7 && dom.loadedBoxFrames >= 7 && dom.brokenImages.length === 0 && dom.visiblePendingImages.length === 0 && mediaExclusive && cursorReady && viewReady;
   if (SMOKE_MODE) finishSmoke(
     { stage: 'launcher-ready', dom, protocolSmoke, profileAssetsSmoke, installedMediaSmoke, traySmoke, gpu: await collectGpuDiagnostics(), sessionDataPath: app.getPath('sessionData'), state: await composeState() },
     dom.hasApi && visualReady && protocolSmoke?.ok === true && (!SMOKE_PROFILE_ASSETS || profileAssetsSmoke?.ok === true) && (!SMOKE_MEDIA_ASSETS || installedMediaSmoke?.ok === true) ? 0 : 1
@@ -2254,6 +2297,7 @@ if (!gotLock) {
 
 app.on('before-quit', () => {
   appQuitting = true;
+  nativeCardRunner?.close();
   destroyTray();
   runtimeAssetCache.clearAll();
   launcherUpdateService?.dispose();

@@ -2908,3 +2908,5 @@ Card presentation: own-hand hover/touch dock and staged duel with public losing-
 
 
 2026-10-29 Card native compatibility is an additive server presentation adapter: old browser actions remain valid, enhanced Law can preview then choose, and final result metadata provides a stable per-match identity. No Board/Chess rules, account store or game save fields were changed.
+
+2026-10-29: Windows 1.2.26 online update includes native Card runtime; launcher identity and existing account/cache are retained. Android native channel v057 supports v55/v56 deltas. Public acceptance is recorded separately from candidate build checks.
