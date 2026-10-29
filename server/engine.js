@@ -1859,11 +1859,18 @@ if(p.action==='zoro'){
     if(p.action==='law'){
       if(p.extra.boost){
         // 強化版：先 ROOM・SCAN 查看，再選擇是否交換
-        const gView = effectGuard(st, idx, {}, emits);
+        // Native two-step UI opts in. Legacy one-shot clients keep their
+        // existing result; a preview cannot be used to inspect extra players.
+        const previewOnly = action.payload?.preview === true && action.payload?.swap !== true;
+        const previewTarget = p.extra.previewTarget;
+        if ((previewOnly || Number.isInteger(previewTarget)) && (action.playerId !== meIdx || !st.players[idx]?.alive || idx === meIdx)) return { state: st, emits };
+        if (Number.isInteger(previewTarget) && idx !== previewTarget) return { state: st, emits };
+        const alreadyViewed = previewTarget === idx;
+        const gView = alreadyViewed ? { blocked:false } : effectGuard(st, idx, {}, emits);
         if(!gView.blocked){
           const th = st.players[idx].hand;
-          if (th != null) scorePeek(st, action.playerId, th); // ★ 偵查分
-          emits.push({ to: action.playerId, type:'peek', lines:[`ROOM・SCAN：${pname(st, idx)} → ${cardLabel(th)}`] });
+          if (th != null && !alreadyViewed) scorePeek(st, action.playerId, th); // ★ 偵查分只計一次
+          if (!alreadyViewed || previewOnly) emits.push({ to: action.playerId, type:'peek', lines:[`ROOM・SCAN：${pname(st, idx)} → ${cardLabel(th)}`] });
 
 // ★ AI 記憶：action.playerId 這個人，現在知道 idx 的手牌是 th
 if (th != null && Array.isArray(st.aiMemory)) {
@@ -1875,12 +1882,17 @@ if (th != null && Array.isArray(st.aiMemory)) {
   }
 }
 
-          emits.push({ to: action.playerId, type:'law_view', casterId: st.turnIndex, targetId: idx, cardId: th });
+          if (!alreadyViewed || previewOnly) emits.push({ to: action.playerId, type:'law_view', casterId: st.turnIndex, targetId: idx, cardId: th });
         } else {
           scoreDefense(st, idx, 6); // 羅6查看/交換被擋 → 防禦+6
           pushLog(st, `羅（強化）：對 ${pname(st, idx)} 的查看被保護/閃避抵銷`, emits);
           st.pending = null;
           endOrNext(st, emits);
+          return { state: st, emits };
+        }
+
+        if (previewOnly) {
+          p.extra.previewTarget = idx;
           return { state: st, emits };
         }
 
@@ -2667,6 +2679,7 @@ if (type === 'LUFFY_SECOND') {
   if (type === 'PICK_CANCEL') {
     const p = st.pending;
     if (p && p.action === 'law' && p.extra?.boost) {
+      if (Number.isInteger(p.extra.previewTarget) && action.playerId !== st.turnIndex) return { state: st, emits };
       st.pending = null;
       endOrNext(st, emits);
       return { state: st, emits };

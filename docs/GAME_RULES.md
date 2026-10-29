@@ -2027,3 +2027,6 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-28 — Card presentation only: original guess prohibition, hidden winner hand, resolution, discard and turn rules retained. Public loser number becomes visible at impact; effects and placement do not change authoritative outcomes.
 
 2026-10-28 — Card visual-only handoff: private faces remain recipient-only; inspection/paging/animation ownership never mutates authoritative hands, outcomes or discard. Original engine unchanged.
+
+
+2026-10-29 compatibility note: no Card rule change. Enhanced Law still views one target, then optionally swaps; the native presentation can now pause after viewing without awarding peek points twice. Browser one-shot view/swap remains supported. Result endedAt/nativeCardProtocol are transport metadata, not saved gameplay fields.

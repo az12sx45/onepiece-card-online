@@ -2043,3 +2043,6 @@ Validation records are stored under D:/Codex_QA/card-finishers-20261028. Browser
 2026-10-28 — Card HUD combat presentation and new art/module map: CARD_HUD_COMBAT_20261028.md.
 
 2026-10-28 — Card visual handoff source/QA map: CARD_VISUAL_HANDOFF_20261028.md.
+
+
+2026-10-29: server/card-result-identity.js supplies visible Card protocol capability and stable final endedAt; scripts/card_result_identity_qa.cjs checks retransmission/new-match isolation. scripts/card_native_preview_qa.cjs compares original Card effects and the optional Law two-step flow.

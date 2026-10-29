@@ -2905,3 +2905,6 @@ Card presentation: own-hand hover/touch dock and staged duel with public losing-
 
 
 2026-10-28 Card desktop/mobile presentation now shares ordered effects, paged card/discard libraries and 15 GPT venue backgrounds; see CARD_FLOW_LIBRARY_20261028.md for source and evidence boundaries.
+
+
+2026-10-29 Card native compatibility is an additive server presentation adapter: old browser actions remain valid, enhanced Law can preview then choose, and final result metadata provides a stable per-match identity. No Board/Chess rules, account store or game save fields were changed.

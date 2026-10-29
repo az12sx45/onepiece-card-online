@@ -6,6 +6,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const { pool } = require("./db");
 const { withDisplayNames } = require("./player-display");
+const { stampCardResult } = require('./card-result-identity');
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const { Chess } = require("chess.js");
@@ -2893,6 +2894,9 @@ vis.viewerCanNext =
 
 vis.viewerIsHost = (room.host === meta.playerId);
 vis.cpuSkipAvailable = canHostSkipCpu(room, meta.playerId);
+// One shared completion identity for native and browser result retries. This is
+// presentation metadata on the cloned visible state, never a rules/save field.
+stampCardResult(room, vis);
 io.to(sid).emit("STATE", vis);
   }
 }
