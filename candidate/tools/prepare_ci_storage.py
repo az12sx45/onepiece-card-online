@@ -9,6 +9,13 @@ from pathlib import Path
 REPOSITORY='az12sx45/onepiece-card-online'
 OLD_ID=12831102316
 OLD_DIGEST='sha256:3dfc1e1d4af9a2ab3ca32a30bf25a8c7cee750cee846d94d624d3c4cc2035689'
+SUPERSEDED=[
+ (OLD_ID,431643350,OLD_DIGEST,'cbd840eeab285a1e54dc503754fb77b4dcd3d317'),
+ (12831855587,431643341,'sha256:e630a758d21590f6b74222c2a2ff4bf3f741a196c85c83545fc94f5070657491','10bbc14d3b92eb7960268092b740cc484d5541eb'),
+ (12804157997,431641602,'sha256:12773b5389ff577266d0a4e3554b10c946157b939e7eac4b3c85368732c05378','ab8e25815ad743c5a45feb7b87dc6e2a890438c2'),
+ (12798424613,431370034,'sha256:49bcd16c8489727d3dd395f72e9176aee64894e5c4d348294949afe6b5591343','abd54dff5765bb6af9f85833e0a484110289f5c4'),
+ (12795225392,417512680,'sha256:62625d9489321f5c71511c8222e3d7734564c4a10a6e85015177b8c31be97798','e561570a6e77100de8eb56b869f49a8b53a26952'),
+ (12794836034,417512585,'sha256:866caa14c31f92c53723dafcdcdf50f1dbf2ad1a5dba72fcb5bf74b2accc5796','73d2797d3ec080ebd28302735645820a9994e444')]
 # The extracted IPA remains locally retained and was rehashed before dispatch.
 BACKUP_SHA256='ec5c850490597da773f3fcc2e2e150195455c0536f61e7b8e8b7154b21ca8d3a'
 LIMIT=500*1024*1024
@@ -22,14 +29,19 @@ def main():
   with urllib.request.urlopen(req,timeout=30) as response:
    data=response.read();return json.loads(data) if data else None
  if request('')['private']:raise RuntimeError('Free public runner guard failed')
- retired=False
- try:old=request('/actions/artifacts/'+str(OLD_ID))
- except urllib.error.HTTPError as error:
-  if error.code!=404:raise
-  old=None
- if old:
-  if old['name']!='PO-iOS-UNSIGNED' or old.get('digest')!=OLD_DIGEST or old['size_in_bytes']!=431643350:raise RuntimeError('Previous artifact identity changed')
-  request('/actions/artifacts/'+str(OLD_ID),'DELETE');retired=True
+ retired=[];verified=[]
+ for artifact_id,size,digest,commit in SUPERSEDED:
+  try:old=request('/actions/artifacts/'+str(artifact_id))
+  except urllib.error.HTTPError as error:
+   if error.code!=404:raise
+   continue
+  if (old['name']!='PO-iOS-UNSIGNED' or old.get('digest')!=digest or old['size_in_bytes']!=size
+      or old['workflow_run']['head_sha']!=commit or old['workflow_run']['head_branch']!='codex/ios-native-v038'):
+   raise RuntimeError('Previous artifact identity changed')
+  verified.append(artifact_id)
+ # All listed commits were verified ancestors of the retained v056 build before dispatch.
+ for artifact_id in verified:
+  request('/actions/artifacts/'+str(artifact_id),'DELETE');retired.append(artifact_id)
  artifacts=[]
  for page in range(1,11):
   rows=request('/actions/artifacts?per_page=100&page='+str(page))['artifacts'];artifacts.extend(rows)
