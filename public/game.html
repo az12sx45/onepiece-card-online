@@ -6,8 +6,8 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>偉大航道爭霸戰｜正式對戰</title>
-  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261028-visual-handoff1">
-  <script defer src="js/card-desktop-table.js?v=20261028-visual-handoff1"></script>
+  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261029-field-stage1">
+  <script defer src="js/card-desktop-table.js?v=20261029-field-stage1"></script>
   <link rel="stylesheet" href="css/card-finish-v1.css?v=20260907-depth-visible-v2">
   <script defer src="js/card_finish_v1.js?v=20260907-depth-visible-v2"></script>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
@@ -6799,53 +6799,23 @@ function renderPending(){
 if (srvP.action === 'law') {
   const boosted = !!(srvP.extra && srvP.extra.boost);
   if (boosted) {
-    // 第二階段：已選好對象 → 顯示對方手牌 + 是否交換
-    if (localPending && localPending.action === 'law' && localPending.stage === 'confirm' && Number.isInteger(localPending.target)) {
-      const tid = localPending.target;
-      const tp = state.players?.[tid];
-      const tcard = (tp && typeof tp.hand === 'number') ? tp.hand : null;
-      const img = tcard != null ? (isEnhancedNow(tcard) ? CARD_ENH(tcard) : CARD(tcard)) : 'images/cards/back.webp';
-      const html = `
-        <div class="text-lg font-semibold mb-3">你查看了 ${pname(tid)} 的手牌</div>
-        <div class="flex justify-center mb-4">
-          <img src="${img}" alt="hand" class="w-[min(40vw,260px)] rounded-lg border border-[#2a2f35] shadow-xl"/>
-        </div>
-        <div class="text-base mb-3">要與 ${pname(tid)} 交換手牌嗎？</div>
-        <div class="flex justify-end gap-2">
-          <button id="noBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">不交換</button>
-          <button id="yesBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">交換</button>
-        </div>`;
-      showModal(html);
-      const yesBtn = el.modal.querySelector('#yesBtn');
-      const noBtn  = el.modal.querySelector('#noBtn');
-      yesBtn.onclick = ()=>{ sendAction('PICK_TARGET', { target: tid, swap: true }); localPending = null; hideModal(); };
-      noBtn.onclick  = ()=>{ sendAction('PICK_CANCEL'); localPending = null; hideModal(); };
+    // Use the server's existing two-step preview contract; a first view must
+    // not finish the turn before the original swap/cancel buttons are pressed.
+    localPending = null;
+    const previewTarget = srvP.extra?.previewTarget;
+    if (Number.isInteger(previewTarget)) {
+      hideModal();
+      if (_lawTargetId === previewTarget && _lawTargetCard != null) return;
+      // After a reload, retrieve the same authorized target again. The server
+      // pins previewTarget, so this cannot reveal additional players.
+      showModal('<div class="text-lg font-semibold mb-3">繼續查看已選擇的玩家</div><button id="lawResumeView" class="px-4 py-2 rounded-lg border border-amber-400">查看手牌並選擇是否交換</button>');
+      el.modal.querySelector('#lawResumeView').onclick = ()=>{sendAction('PICK_TARGET',{target:previewTarget,preview:true});hideModal();};
       return;
     }
-
-    // 第一階段：選擇查看目標
-    return showTarget('選擇要查看/可選擇交換的對象', (i)=>{
-      sendAction('PICK_TARGET', { target: i });
-      localPending = { action:'law', stage:'confirm', target:i, at:Date.now() };
-      const tp = state.players?.[i];
-      const tcard = (tp && typeof tp.hand === 'number') ? tp.hand : null;
-      const img = tcard != null ? (isEnhancedNow(tcard) ? CARD_ENH(tcard) : CARD(tcard)) : 'images/cards/back.webp';
-      const html = `
-        <div class="text-lg font-semibold mb-3">你查看了 ${pname(i)} 的手牌</div>
-        <div class="flex justify-center mb-4">
-          <img src="${img}" alt="hand" class="w-[min(40vw,260px)] rounded-lg border border-[#2a2f35] shadow-xl"/>
-        </div>
-        <div class="text-base mb-3">要與 ${pname(i)} 交換手牌嗎？</div>
-        <div class="flex justify-end gap-2">
-          <button id="noBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">不交換</button>
-          <button id="yesBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">交換</button>
-        </div>`;
-      showModal(html);
-      const yesBtn = el.modal.querySelector('#yesBtn');
-      const noBtn  = el.modal.querySelector('#noBtn');
-      yesBtn.onclick = ()=>{ sendAction('PICK_TARGET', { target: i, swap: true }); localPending = null; hideModal(); };
-      noBtn.onclick  = ()=>{ sendAction('PICK_CANCEL'); localPending = null; hideModal(); };
-    }, { allowSelf:false });
+    return showTarget('選擇要查看／交換的對象', i=>{
+      sendAction('PICK_TARGET', {target:i,preview:true});
+      hideModal();
+    }, {allowSelf:false});
   }
 
   // 非強化羅（普通交換）

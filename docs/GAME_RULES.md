@@ -2030,3 +2030,5 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 
 2026-10-29 compatibility note: no Card rule change. Enhanced Law still views one target, then optionally swaps; the native presentation can now pause after viewing without awarding peek points twice. Browser one-shot view/swap remains supported. Result endedAt/nativeCardProtocol are transport metadata, not saved gameplay fields.
+
+2026-10-29 — Presentation only: show only viewer-authorized cards, original Law decisions and server coin result. Winner hand remains private; no rule/state/schema change.

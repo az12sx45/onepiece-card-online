@@ -2057,3 +2057,5 @@ Validation records are stored under D:/Codex_QA/card-finishers-20261028. Browser
 ## 2026-10-29 Windows 1.2.29 original Card restoration
 
 Player acceptance rejected the native Card match. desktop/main.js removes the native match handoff so the existing start.html lobby navigates directly to the original game.html in the same BrowserWindow. Original launcher UI, authentication, game rules, and mobile releases remain unchanged. scripts/build_web_card_launcher.cjs omits the unused native runtime; desktop package versions advance to 1.2.29 for a forward update. Candidate QA: exact packaged source parity (47 files; only main.js and package metadata changed), isolated packaged launcher smoke, immutable public EXE/blockmap SHA-256, real production delta reconstruction from 1.2.28 (1,661,799 bytes in 14 ranges). Original web-game integration and public manifest readback are tracked at D:/Codex_QA/card-web-restore-20261029.
+
+2026-10-29 — Card field/source/QA mapping: CARD_FIELD_STAGE_20261029.md. Generated desktop bundle consumes shared android/web presentation modules.

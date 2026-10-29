@@ -2912,3 +2912,5 @@ Card presentation: own-hand hover/touch dock and staged duel with public losing-
 2026-10-29: Windows 1.2.26 online update includes native Card runtime; launcher identity and existing account/cache are retained. Android native channel v057 supports v55/v56 deltas. Public acceptance is recorded separately from candidate build checks.
 
 2026-10-29 scope correction: preserve original Windows launcher and Card start.html/lobby/create/join/ready; only actual match uses Godot, then returns to original lobby. Candidate1.2.28 passed isolated native/server and Electron lifecycle QA; public1.2.27 not yet changed.
+
+2026-10-29 — Original web Card presentation continues after Windows1.2.29 restoration; scene-only update documented in CARD_FIELD_STAGE_20261029.md. Phone package publication is separate.

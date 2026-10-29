@@ -542,32 +542,29 @@ window.POCardInteract=module.exports;
     new MutationObserver(decorate).observe(modal,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
 
     // Private reveals never use a public event's cardId or another player's hand.
-    let privateItems=[],privateQueued=false,privateOpen=false,privateIndex=0,privateRelease=null;
-    const reveal=make('section','phone-private-reveal');reveal.id='phonePrivateReveal';reveal.hidden=true;reveal.setAttribute('role','dialog');reveal.setAttribute('aria-modal','false');reveal.setAttribute('aria-label','只有你可見的偵察結果');document.body.append(reveal);
+    let privateItems=[],privateQueued=false,privateOpen=false,privateReleases=[];
+    const reveal=make('section','phone-private-reveal');reveal.id='phonePrivateReveal';reveal.hidden=true;reveal.dataset.layout='grid';reveal.setAttribute('role','dialog');reveal.setAttribute('aria-modal','false');reveal.setAttribute('aria-label','只有你可見的偵察結果');document.body.append(reveal);
     function clearPrivate(animateReturn=false){
-      const api=window.CardPhonePresentation,img=reveal.querySelector('figure:not([hidden]) img'),item=reveal._items?.[privateIndex],from=img?.getBoundingClientRect(),release=privateRelease;privateRelease=null;
-      api.cancelCardFlights?.('peek');privateItems=[];privateIndex=0;privateQueued=false;privateOpen=false;reveal.hidden=true;reveal.replaceChildren();reveal._items=null;
-      const done=()=>{release?.();queueMicrotask(resumeFx);};
-      if(!animateReturn||!img||!api.flyCard?.({from,to:api.cardPlayerRect?.(item?.from)||$('btnDraw'),src:'images/cards/back.webp',kind:'peek-return',hideTarget:false,onFinish:done}))done();
+      const api=window.CardPhonePresentation,returns=[...reveal.querySelectorAll('figure')].map((n,i)=>({rect:n.querySelector('img')?.getBoundingClientRect(),item:reveal._items?.[i]})),releases=privateReleases.splice(0);
+      api.cancelCardFlights?.('peek');privateItems=[];privateQueued=false;privateOpen=false;reveal.hidden=true;reveal.replaceChildren();reveal._items=null;
+      let pending=1;const done=()=>{if(--pending===0){for(const release of releases)release?.();queueMicrotask(resumeFx);}};
+      if(animateReturn)for(const {rect,item} of returns){if(!rect||!validCard(item?.id))continue;pending++;if(!api.flyCard?.({from:rect,to:api.cardPlayerRect?.(item.from)||$('btnDraw'),src:'images/cards/back.webp',kind:'peek-return',hideTarget:false,onFinish:done}))done();}
+      done();
     }
     window.CardPhonePresentation.isEffectBusy=()=>!!fxTimer||queuedFx.length>0||privateQueued||privateOpen;
     window.CardPhonePresentation.clearPrivateReveal=clearPrivate;
     function flushPrivate(){
       if(fxTimer||window.CardPhonePresentation?.isCardEntering?.()||!privateQueued||!privateItems.length||(!root.dataset.cardFlow&&!modal.classList.contains('hidden'))||videoOpen())return;
-      window.CardPhonePresentation?.cancelCardFlights?.('peek');privateQueued=false;privateOpen=true;reveal.hidden=false;reveal.replaceChildren();
+      const api=window.CardPhonePresentation;api.cancelCardFlights?.('peek');for(const release of privateReleases.splice(0))release?.();privateQueued=false;privateOpen=true;reveal.hidden=false;reveal.replaceChildren();
       const head=make('header',''),close=make('button','phone-card-control','看完了・返回牌桌');close.id='phonePrivateDone';close.type='button';close.addEventListener('click',()=>clearPrivate(true));head.append(make('strong','','偵察結果 · 僅你可見'),close);
-      const body=make('div','phone-private-cards');
-      const items=[...privateItems].sort((a,b)=>Number(validCard(b.id))-Number(validCard(a.id)));reveal._items=items;
-      for(const item of items){const figure=make('figure','');figure.append(make('figcaption','',item.label));if(validCard(item.id)){const img=make('img','');img.src=card(item.id);img.alt=typeof CARD_TEXT==='object'?CARD_TEXT[item.id]?.name||'已揭曉的牌':'已揭曉的牌';figure.append(img);if(!reduce())img.animate([{transform:'rotateY(90deg)',opacity:0},{transform:'rotateY(0)',opacity:1}],{duration:680,easing:'ease-out'});}else figure.append(make('p','',item.text));body.append(figure);}
+      const body=make('div','phone-private-cards'),items=privateItems.slice();reveal._items=items;reveal.dataset.count=String(items.length);
+      const columns=Math.min(items.length,innerWidth<1000?4:6),rows=Math.ceil(items.length/columns);body.style.setProperty('--reveal-columns',columns);body.style.setProperty('--reveal-rows',rows);
+      for(const item of items){const figure=make('figure','');figure.dataset.owner=Number.isInteger(item.from)?String(item.from):'';figure.append(make('figcaption','',Number.isInteger(item.from)?name(item.from)+' 的手牌':item.label));if(validCard(item.id)){const img=make('img','');img.src=card(item.id);img.alt=(typeof CARD_TEXT==='object'?CARD_TEXT[item.id]?.name:'')||'已揭曉的牌';figure.append(img);const number=make('span','phone-reveal-number',String(item.id));number.setAttribute('aria-label','卡牌號碼 '+item.id);figure.append(number);}else figure.append(make('p','',item.text));body.append(figure);}
       reveal.append(head,body);
-      const api=window.CardPhonePresentation;
-      const nav=make('nav','phone-private-nav'),prev=make('button','','‹'),count=make('span',''),next=make('button','','›');prev.id='phonePrivatePrev';next.id='phonePrivateNext';count.id='phonePrivateCounter';prev.type=next.type='button';prev.ariaLabel='上一張偵察結果';next.ariaLabel='下一張偵察結果';nav.append(prev,count,next);head.insertBefore(nav,close);nav.hidden=items.length<2;
-      function page(index){api.cancelCardFlights?.('peek');privateRelease?.();privateRelease=null;privateIndex=Math.max(0,Math.min(items.length-1,index));[...body.children].forEach((n,i)=>n.hidden=i!==privateIndex);body.scrollLeft=0;count.textContent=`${privateIndex+1} / ${items.length}`;prev.disabled=privateIndex===0;next.disabled=privateIndex===items.length-1;
-        const item=items[privateIndex],img=body.children[privateIndex]?.querySelector('img');if(img){img.getAnimations().forEach(a=>a.cancel());const source=api.cardPlayerRect(item.from)||$('btnDraw');if(item.from===viewer())privateRelease=api.borrowCardVisual?.(api.ownHandElement?.());api.flyCard?.({from:source,to:img,src:img.src,flip:true,kind:'peek'});}
-      }
-      prev.onclick=()=>page(privateIndex-1);next.onclick=()=>page(privateIndex+1);let down=null;body.onpointerdown=e=>{down={x:e.clientX,y:e.clientY};};body.onpointercancel=()=>down=null;body.onpointerup=e=>{if(down&&Math.abs(e.clientX-down.x)>40&&Math.abs(e.clientY-down.y)<35)page(privateIndex+(e.clientX<down.x?1:-1));down=null;};page(privateIndex);
+      if(items.some(item=>item.from===viewer())){const release=api.borrowCardVisual?.(api.ownHandElement?.());if(release)privateReleases.push(release);}
+      requestAnimationFrame(()=>{if(!privateOpen||reveal._items!==items)return;for(let i=0;i<items.length;i++){const item=items[i],img=body.children[i]?.querySelector('img');if(img)api.flyCard?.({from:api.cardPlayerRect(item.from)||$('btnDraw'),to:img,src:img.src,flip:true,kind:'peek'});}});
     }
-    function addPrivate(items){if(!privateOpen&&!privateQueued){privateItems=[];privateIndex=0;}privateItems.push(...items);privateItems=privateItems.slice(-12);privateQueued=true;queueMicrotask(flushPrivate);}
+    function addPrivate(items){if(!privateOpen&&!privateQueued)privateItems=[];privateItems.push(...items);privateItems=privateItems.slice(-12);privateQueued=true;queueMicrotask(flushPrivate);}
     const eventFx={usopp_hit:['hit','狙擊命中'],usopp_miss:['miss','狙擊未命中'],robin_peek:['scan','偵察手牌'],law_swap:['swap','交換手牌'],zoro_discard:['slash','斬擊棄牌'],nami_paralyze:['lightning','麻痺生效'],aokiji_freeze:['ice','凍結生效'],killer_disarm:['break','解除防禦'],chopper_status:['guard','防禦狀態'],bigmom_status:['guard','防禦狀態']};
     function onEvent(e){
       if(window.CardPhonePresentation?.committingPresentation)return;
@@ -593,7 +590,17 @@ window.POCardInteract=module.exports;
     }
     if(typeof playEnhFxFor==='function'){const originalVideo=playEnhFxFor;playEnhFxFor=function(id){if(fast()||window.CardPhonePresentation?.committingPresentation)return;const title=validCard(id)&&typeof CARD_TEXT==='object'?CARD_TEXT[id]?.name:'強化招式';burst('video',null,null,'強化招式發動',{title:title||'強化招式',result:'強化效果發動',open:()=>originalVideo(id)});};}
     if(typeof playDuel==='function')playDuel=function(opts){if(!opts||window.CardPhonePresentation?.committingPresentation)return;burst('duel',opts.leftId,opts.rightId,'決鬥開始',{duel:opts,title:`${name(opts.leftId)} 對決 ${name(opts.rightId)}`,result:'雙方卡牌進場，準備對決'});};
-    if(typeof openLawSwap==='function'){const originalOpen=openLawSwap;openLawSwap=function(target,id){if(window.CardPhonePresentation?.committingPresentation)return;burst('scan',viewer(),target,'偵察手牌',{title:`${name(viewer())} 查看 ${name(target)}`,result:'偵察結果僅你可見',open:()=>originalOpen(target,id)});};}
+    function showLawComparison(target,id){
+      const host=$('lawSwapModal'),targetImg=$('lawTargetImg');if(!host||!targetImg)return;
+      let grid=host.querySelector('.phone-law-comparison');
+      if(!grid){grid=make('div','phone-law-comparison');const originalRow=targetImg.parentElement;originalRow.before(grid);originalRow.hidden=true;const own=make('figure',''),other=make('figure','');own.id='phoneLawOwnCard';other.id='phoneLawTargetCard';own.append(make('figcaption',''),make('img',''));other.append(make('figcaption',''));other.append(targetImg);grid.append(own,other);}
+      const p=current()?.players?.[viewer()],ownId=p?.hand??p?.tempDraw,own=grid.children[0],other=grid.children[1];
+      own.dataset.owner=String(viewer());other.dataset.owner=String(target);own.querySelector('figcaption').textContent=name(viewer())+' 的手牌';other.querySelector('figcaption').textContent=name(target)+' 的手牌';
+      own.querySelector('img').src=card(ownId);own.querySelector('img').alt=validCard(ownId)?'你保留的手牌 '+ownId:'你的未公開手牌';targetImg.src=card(id);targetImg.alt='已允許查看的手牌 '+id;
+      host.dataset.compareTarget=String(target);host.dataset.compareCard=String(id);
+    }
+    socket.on('STATE',()=>{const host=$('lawSwapModal');if(host&&!host.classList.contains('hidden')&&host.dataset.compareTarget!=null)queueMicrotask(()=>showLawComparison(Number(host.dataset.compareTarget),Number(host.dataset.compareCard)));});
+    if(typeof openLawSwap==='function'){const originalOpen=openLawSwap;openLawSwap=function(target,id){if(window.CardPhonePresentation?.committingPresentation)return;burst('scan',viewer(),target,'偵察手牌',{title:`${name(viewer())} 查看 ${name(target)}`,result:'偵察結果僅你可見',open:()=>{originalOpen(target,id);showLawComparison(target,id);}});};}
     window.CardPhonePresentation.presentEffectEvent=onEvent;
     let lastPublic=null,lastRound=null,lastIdentity=null;
     function onState(s){
@@ -645,7 +652,7 @@ window.POCardInteract=module.exports;
     intro.append(title,cards,enter);document.body.append(intro);
     let pendingKey=null,activeKey=null,seen=new Set();
     try{seen=new Set(JSON.parse(sessionStorage.getItem('po-card-venue-intro-v1')||'[]'));}catch{}
-    function closeIntro(){intro.hidden=true;activeKey=null;deck.focus({preventScroll:true});}
+    function closeIntro(){intro.hidden=true;activeKey=null;const first=model()?.venues?.[0]?.name;if(first)api.setVenueBackground?.(document.body.dataset.venue||first,{enter:true});deck.focus({preventScroll:true});}
     enter.onclick=closeIntro;intro.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();closeIntro();}if(e.key==='Tab'){e.preventDefault();enter.focus();}});
     function showIntro(){
       if(!pendingKey||!intro.hidden||!$('enhOverlay').classList.contains('hidden')||!$('phoneCardSheet').hidden||api.presentationEffectsBusy?.())return;
@@ -969,10 +976,24 @@ window.POCardInteract=module.exports;
     function open(next){api.closeSheet();if(typeof closeCardDex==='function')closeCardDex();opener=document.activeElement;kind=next;page=0;detail=null;signature='';screen.hidden=false;paint();back.focus({preventScroll:true});}
     api.openDiscard=()=>open('discard');api.openCardLibrary=()=>open('dex');api.openVenues=()=>open('venues');
     const oldInspect=api.inspect;api.inspect=(k,slot)=>k==='discard'?open('discard'):oldInspect(k,slot);
-    api.setVenueBackground=name=>{
-      const i=venueNames.indexOf(name);if(i<0)return;
-      if(document.body.dataset.venue===name){delete document.body.dataset.venue;document.body.classList.remove('venue-on');root.style.removeProperty('--card-venue-art');return;}
-      document.body.dataset.venue=name;document.body.classList.add('venue-on');root.style.setProperty('--card-venue-art',`var(--venue-${slugs[i]})`);
+    // One stable world behind the HUD; only the scenery crossfades when explicitly changed.
+    const world=node('div','phone-venue-world');world.id='phoneVenueWorld';world.setAttribute('aria-hidden','true');const planes=[node('div','phone-venue-plane'),node('div','phone-venue-plane')];world.append(...planes);document.body.prepend(world);root.dataset.cardWorld='1';planes[0].style.backgroundImage='var(--card-table-art)';planes[0].style.opacity='1';planes[1].style.opacity='0';
+    const arrival=node('div','phone-venue-arrival');arrival.id='phoneVenueArrival';arrival.hidden=true;arrival.setAttribute('role','status');document.body.append(arrival);
+    let worldGeneration=0,worldFront=0,desiredVenue='',arrivalTimer=null,worldAnimation=null;
+    const stopArrival=()=>{clearTimeout(arrivalTimer);arrival.hidden=true;worldAnimation?.cancel();worldAnimation=null;delete root.dataset.cardVenueEntering;};
+    api.isVenueEntering=()=>root.dataset.cardVenueEntering==='true';
+    function enterWorld(name){stopArrival();if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;root.dataset.cardVenueEntering='true';arrival.textContent='進入 '+name;arrival.hidden=false;worldAnimation=world.animate([{transform:'scale(1.045)',filter:'brightness(.65)'},{transform:'scale(1)',filter:'brightness(1)'}],{duration:1100,easing:'cubic-bezier(.2,.7,.25,1)'});arrivalTimer=setTimeout(stopArrival,1250);}
+    api.setVenueBackground=async(name,{enter=false}={})=>{
+      const i=venueNames.indexOf(name);if(i<0)return false;
+      if(desiredVenue===name){if(enter)enterWorld(name);return true;}
+      desiredVenue=name;const token=++worldGeneration,variable='--venue-'+slugs[i],art=getComputedStyle(root).getPropertyValue(variable).trim();
+      const url=/^url\(["']?(.*?)["']?\)$/.exec(art)?.[1];if(!url){desiredVenue=document.body.dataset.venue||'';return false;}
+      try{const image=new Image();image.src=url;await image.decode();}catch{if(token===worldGeneration)desiredVenue=document.body.dataset.venue||'';return false;}
+      if(token!==worldGeneration)return false;
+      const next=1-worldFront;planes[next].style.backgroundImage=art;planes[next].style.opacity='1';planes[worldFront].style.opacity='0';worldFront=next;
+      document.body.dataset.venue=name;document.body.classList.add('venue-on');root.style.setProperty('--card-venue-art',art);world.dataset.venue=name;
+      document.querySelectorAll('#venues img[data-name]').forEach(img=>img.closest('.venue-card')?.setAttribute('aria-pressed',String(img.dataset.name===name)));
+      if(enter)enterWorld(name);return true;
     };
     if(typeof toggleVenueBackground==='function')toggleVenueBackground=api.setVenueBackground;
     function image(e){const img=node('img','');img.src=e.src;img.alt=e.name;img.draggable=false;return img;}
@@ -984,7 +1005,7 @@ window.POCardInteract=module.exports;
         back.textContent='返回列表';back.onclick=()=>{detail=null;paint();};
         const art=node('div','phone-library-art'),info=node('div','phone-library-copy');art.append(image(e));info.append(node('h3','',e.name));
         if(e.secret)info.append(node('p','','這張牌尚未公開，只顯示卡背。'));
-        else if(e.venue){info.append(node('p','',venueDesc(e.venue)),button(document.body.dataset.venue===e.venue?'恢復牌桌背景':'套用此場地背景',()=>{api.setVenueBackground(e.venue);close();}));}
+        else if(e.venue){info.append(node('p','',venueDesc(e.venue)),button(document.body.dataset.venue===e.venue?'進入目前場地':'進入此場地',()=>{api.setVenueBackground(e.venue,{enter:true});close();}));}
         else if(valid(e.id)){
           info.append(node('p','',cardLine(e.id)));
           if(kind==='dex'){
@@ -1008,18 +1029,18 @@ window.POCardInteract=module.exports;
     // Capture before old dex/discard handlers so one click opens one surface.
     document.addEventListener('click',e=>{
       if(e.target.closest('#cardDexBtn')){e.preventDefault();e.stopImmediatePropagation();open('dex');return;}
-      const venue=e.target.closest('#venues .venue-card');if(venue&&!$('phoneCardSheet')?.contains(venue)){const name=venue.querySelector('img')?.dataset.name;if(name){e.preventDefault();e.stopImmediatePropagation();api.setVenueBackground(name);}return;}
+      const venue=e.target.closest('#venues .venue-card');if(venue&&!$('phoneCardSheet')?.contains(venue)){const name=venue.querySelector('img')?.dataset.name;if(name){e.preventDefault();e.stopImmediatePropagation();api.setVenueBackground(name,{enter:true});}return;}
     },true);
     screen.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();if(detail!=null){detail=null;paint();}else close();}});
     function sync(){
-      if(document.body.dataset.venue&&!state?.venues?.some(v=>v.name===document.body.dataset.venue)){delete document.body.dataset.venue;document.body.classList.remove('venue-on');root.style.removeProperty('--card-venue-art');}
+      const validVenues=state?.venues?.filter(v=>venueNames.includes(v.name))||[];if(validVenues.length&&!validVenues.some(v=>v.name===desiredVenue))api.setVenueBackground(validVenues[0].name);
       if(!screen.hidden){const sig=JSON.stringify([state?.roundNo,kind==='discard'?state?.discard:state?.venues]);if(sig!==signature){signature=sig;paint();}}
       alignAvatars();
     }
     function alignAvatars(){for(const img of document.querySelectorAll('main #players img.rounded-full,#phoneSelfPlayer img.rounded-full')){if(img.parentElement.classList.contains('phone-avatar-wrap'))continue;const wrap=node('span','phone-avatar-wrap');img.before(wrap);wrap.append(img);}}
     let scheduled=false;const schedule=()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;sync();});};
     new MutationObserver(schedule).observe($('players'),{childList:true,subtree:true});new MutationObserver(schedule).observe($('phoneSelfPlayer'),{childList:true,subtree:true});
-    socket.on('STATE',schedule);for(const e of ['disconnect','JOINED'])socket.on(e,close);window.addEventListener('resize',()=>{if(!screen.hidden)paint();});sync();
+    socket.on('STATE',schedule);for(const e of ['disconnect','JOINED'])socket.on(e,()=>{close();stopArrival();});window.addEventListener('resize',()=>{if(!screen.hidden)paint();});sync();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
@@ -1034,24 +1055,25 @@ window.POCardInteract=module.exports;
     const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
     const overlay=make('section','phone-coin-toss');overlay.id='phoneCoinToss';overlay.hidden=true;overlay.setAttribute('role','status');overlay.setAttribute('aria-live','polite');
     const title=make('h2','','擲硬幣'),coin=make('div','phone-toss-coin'),front=make('div','phone-toss-face'),back=make('div','phone-toss-face phone-toss-back'),result=make('p','','');coin.append(front,back);overlay.append(title,coin,result);document.body.append(overlay);
-    let timer=null,resultTimer=null,batchOutcome=null;
+    let timer=null,resultTimer=null,batchOutcome=null,launchPoint=null;
     api.prepareCoinBatch=events=>{const log=events?.find(e=>e?.type==='log'&&e.to==='all'&&/擲到\s*(正面|反面)/.test(e.text||''));batchOutcome=log?{face:/擲到\s*正面/.test(log.text)?'heads':'tails',text:typeof formatLogWithNames==='function'?formatLogWithNames(log.text):log.text}:null;};
     function clear(){clearTimeout(timer);clearTimeout(resultTimer);timer=resultTimer=null;overlay.hidden=true;coin.getAnimations().forEach(a=>a.cancel());document.dispatchEvent(new Event('phone-card-center-ready'));}
     api.cancelCoin=clear;api.isCoinBusy=()=>!overlay.hidden;
     if(typeof playCoinFx==='function')playCoinFx=function(){
       if(api.committingPresentation)return;
       if(document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode()))return;
-      clear();overlay.hidden=false;result.textContent='硬幣判定中…';title.textContent='命運擲幣';
+      clear();overlay.hidden=false;overlay.dataset.venue=document.body.dataset.venue||'';result.textContent='硬幣判定中…';title.textContent='命運擲幣';
       const outcome=batchOutcome;overlay.dataset.face=outcome?.face||'unknown';
+      const box=coin.getBoundingClientRect(),source=launchPoint&&Date.now()-launchPoint.at<8000?launchPoint:null,dx=source?source.x-(box.left+box.width/2):85,dy=source?source.y-(box.top+box.height/2):100;launchPoint=null;
       const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,duration=reduce?700:2400,end=outcome?.face==='tails'?1980:1800;
-      if(!reduce)coin.animate([{transform:'translate(90px,90px) rotateY(0) rotateZ(-25deg) scale(.7)'},{transform:'translate(-20px,-65px) rotateY(900deg) rotateZ(20deg) scale(1.12)',offset:.5},{transform:`translateY(0) rotateY(${end}deg) scale(1)`}],{duration,easing:'cubic-bezier(.2,.65,.3,1)',fill:'forwards'});
-      else coin.style.transform=outcome?.face==='tails'?'rotateY(180deg)':'none';
+      if(!reduce)coin.animate([{transform:`translate(${dx}px,${dy}px) rotateX(12deg) rotateY(0) rotateZ(-25deg) scale(.65)`},{transform:'translate(-15px,-85px) rotateX(10deg) rotateY(900deg) rotateZ(20deg) scale(1.08)',offset:.5},{transform:`translateY(24px) rotateX(48deg) rotateY(${end}deg) rotateZ(12deg) scale(.78)`}],{duration,easing:'cubic-bezier(.2,.65,.3,1)',fill:'forwards'});
+      else coin.style.transform=outcome?.face==='tails'?'rotateX(48deg) rotateY(180deg)':'rotateX(48deg)';
       resultTimer=setTimeout(()=>{result.textContent=outcome?.text||'判定完成，請查看對局紀錄';title.textContent=outcome?.face==='heads'?'正面':outcome?.face==='tails'?'反面':'判定完成';},duration);
       timer=setTimeout(clear,duration+1700);
     };
     function decorate(){const modal=$('modal'),button=modal?.querySelector('#okBtn'),pending=typeof state==='object'?state?.pending:null;const isCoin=['queen','bigmom-coin'].includes(pending?.action)&&!!button;
       if(!isCoin){if(modal?.dataset.coinAction)delete modal.dataset.coinAction;return;}
-      modal.dataset.coinAction=pending.action;if(button.dataset.coinAction)return;button.dataset.coinAction='true';button.classList.add('phone-toss-button');button.textContent='';button.title='點硬幣，拋向場中央';const hint=make('span','phone-coin-prompt','點硬幣拋擲');button.append(hint);button.setAttribute('aria-label','擲硬幣，依伺服器原規則判定');
+      modal.dataset.coinAction=pending.action;if(button.dataset.coinAction)return;button.dataset.coinAction='true';button.addEventListener('click',()=>{const b=button.getBoundingClientRect();launchPoint={x:b.left+b.width/2,y:b.top+b.height/2,at:Date.now()};},{capture:true});button.classList.add('phone-toss-button');button.textContent='';button.title='點硬幣，拋向場中央';const hint=make('span','phone-coin-prompt','點硬幣拋擲');button.append(hint);button.setAttribute('aria-label','擲硬幣，依伺服器原規則判定');
     }
     new MutationObserver(decorate).observe($('modal'),{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
     for(const e of ['disconnect','JOINED'])socket.on(e,clear);document.addEventListener('visibilitychange',()=>{if(document.hidden)clear();});decorate();
@@ -1178,7 +1200,7 @@ window.POCardInteract=module.exports;
     const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
     const signature=s=>JSON.stringify(s&&[s.roundNo,s.turnIndex,s.turnStep,s.pending,s.players?.map(p=>[p.alive,p.hand,p.tempDraw,p.gold,p.protected,p.dodging,p.frozen,p.skipNext])]);
     const effects=()=>!!api.isEffectBusy?.()||!!api.isCoinBusy?.()||['enhOverlay','drawOverlay','coinOverlay'].some(visible)||!!$('phoneCardFlights')?.children.length;
-    const reading=()=>visible('phoneCardSheet')||visible('phonePrivateReveal')||visible('phoneLibrary')||visible('cardDexOverlay')||visible('phoneVenueIntro');
+    const reading=()=>!!api.isVenueEntering?.()||visible('phoneCardSheet')||visible('phonePrivateReveal')||visible('phoneLibrary')||visible('cardDexOverlay')||visible('phoneVenueIntro');
     const stage=()=>!!api.isCardResolving?.()&&!api.isLocalCardPreview?.()&&!state?.pending;
     const busy=()=>!fast()&&(effects()||reading()||stage());
     function dispatch(type,value){for(const fn of listeners[type])fn.call(socket,value);}
@@ -1203,8 +1225,12 @@ window.POCardInteract=module.exports;
         // First the played card enters the center; results are not applied yet.
         while(valid()&&!fast()&&api.isCardEntering?.())await pause();
         if(!valid())return;
+        const lawScan=batch.events.some(e=>e.type==='law_view'&&e.to===me.playerId);
         for(const e of batch.events){
-          api.presentEffectEvent?.(e);
+          // Enhanced Law sends a textual peek and a card view for the same private result.
+          // The comparison already shows both cards; do not open a second reading gate.
+          const duplicateScan=lawScan&&e.type==='peek'&&e.to===me.playerId&&e.lines?.length&&e.lines.every(line=>typeof line==='string'&&line.startsWith('ROOM・SCAN：'));
+          if(!duplicateScan)api.presentEffectEvent?.(e);
           if(e.type==='coin_fx'&&typeof playCoinFx==='function')playCoinFx();
           if(e.type==='enh_fx'&&typeof playEnhFxFor==='function')playEnhFxFor(e.cardId);
           if(e.type==='law_view'&&e.to===me.playerId&&typeof openLawSwap==='function')openLawSwap(e.targetId,e.cardId);

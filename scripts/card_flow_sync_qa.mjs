@@ -1,8 +1,10 @@
 import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {spawn,spawnSync} from 'node:child_process';
 import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url),{chromium}=require('C:/Users/王曜瑋/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
-const root='D:/Codex_Release_Worktrees/board-multiplayer-authority-20261025',out=process.env.CARD_QA_REPORT||'D:/Codex_QA/card-action-clarity-20261027/sync.json',port=30929,origin=`http://127.0.0.1:${port}`;
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),out=process.env.CARD_QA_REPORT||'D:/Codex_QA/card-action-clarity-20261027/sync.json',port=30959,origin=`http://127.0.0.1:${port}`;
 const child=spawn('cmd.exe',['/d','/s','/c','npm.cmd start'],{cwd:root,windowsHide:true,env:{...process.env,DATABASE_URL:'',PORT:String(port)},stdio:['ignore','pipe','pipe']});
 let log='',browser;const pages=[];child.stdout.on('data',b=>log+=b);child.stderr.on('data',b=>log+=b);
 const report={scope:'Two isolated Chromium windows using the real local npm-start server and Socket.IO. Guest room with stable isolated test identities, no production accounts or physical-device claim.',checks:[],passed:false};
