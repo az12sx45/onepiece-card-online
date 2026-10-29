@@ -45,6 +45,7 @@ const { RuntimeAssetCache } = require('./runtime-asset-cache');
 const { HttpsProgramRuntime } = require('./program-runtime');
 const { installGameCursorPolicy } = require('./game-cursor-policy');
 const { createNativeCardRunner } = require('./native-card-runner');
+const { createNativeCardHandoff } = require('./native-card-handoff');
 
 const REMOTE_ORIGIN = 'https://onepiece-card-online.onrender.com';
 const ASSET_ORIGIN = 'https://game-assets.rihdi.tw';
@@ -1243,11 +1244,13 @@ function registerLauncherIpc() {
       return;
     }
     const matched = [...gameWindows.entries()].find(([, window]) => !window.isDestroyed() && window.webContents.id === event.sender.id);
-    if (!matched || !authenticated) {
+    if (!matched || !authenticated || !isAllowedGameNavigation(event.senderFrame.url)) {
       event.returnValue = { keys: {}, clearKeys: AUTH_STORAGE_KEYS };
       return;
     }
-    event.returnValue = { keys: authService.getGameBootstrap() || {}, clearKeys: AUTH_STORAGE_KEYS };
+    const cardMatchReturn = matched[0] === 'card' ? matched[1].cardMatchReturn : undefined;
+    if (cardMatchReturn) delete matched[1].cardMatchReturn;
+    event.returnValue = { keys: authService.getGameBootstrap() || {}, clearKeys: AUTH_STORAGE_KEYS, cardMatchReturn };
   });
 }
 
@@ -1292,6 +1295,7 @@ function hardenGameWindow(window) {
 }
 
 function focusGameWindow(window) {
+  if (window.cardHandoff && ['starting', 'playing', 'returning'].includes(window.cardHandoff.state())) return { ok: true, native: true, alreadyRunning: true };
   if (window.isMinimized()) window.restore();
   const shouldUseFullscreen = authService.getPreferences().gameDisplayMode === 'fullscreen';
   if (window.isFullScreen() !== shouldUseFullscreen) window.setFullScreen(shouldUseFullscreen);
@@ -1320,31 +1324,6 @@ function launchGame(gameId) {
 
 async function createGameWindow(gameId) {
   const launchStartedAt = Date.now();
-  if (gameId === 'card') {
-    if (!nativeCardRunner) nativeCardRunner = createNativeCardRunner({
-      root: app.isPackaged ? path.join(process.resourcesPath, 'native-card') : path.join(__dirname, 'native-card'),
-      auth: authService, assets: assetStore,
-      allowInternal: NATIVE_CARD_INTERNAL_BUILD || (!app.isPackaged && process.env.OP_NATIVE_CARD_INTERNAL === '1'),
-      onExit: () => {
-        if (authenticated) authService.setPresence(gameWindows.size ? `desktop-${[...gameWindows.keys()].at(-1)}` : 'desktop-launcher').catch(() => {});
-        restoreLauncherAfterLastGame();
-      },
-      onSessionInvalid: async () => {
-        authenticated = false;
-        await closeGameWindows();
-        await authService.clearAccount();
-        await broadcastState();
-      }
-    });
-    const native = await nativeCardRunner.launch();
-    if (native !== null) {
-      if (native.ok) {
-        authService.setPresence('desktop-card').catch(() => {});
-        if (authService.getPreferences().minimizeToTrayOnGameLaunch) hideLauncherToTray();
-      }
-      return native;
-    }
-  }
   const targetSession = await prepareGameSession(gameId);
   if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
   if (!assetStore.canLaunch(gameId)) return { ok: false, error: '遊戲檔案狀態已變更，請重新檢查或下載。' };
@@ -1393,7 +1372,35 @@ async function createGameWindow(gameId) {
   gameWindows.set(gameId, window);
   window.on('focus', () => { if (authenticated) authService.setPresence(`desktop-${gameId}`).catch(() => {}); });
   hardenGameWindow(window);
+  if (gameId === 'card') window.cardHandoff = createNativeCardHandoff({
+    window, origin: REMOTE_ORIGIN,
+    isCurrent: () => authenticated && gameWindows.get('card') === window,
+    prepareReturn: room => { window.cardMatchReturn = { room, until: Date.now() + 120000 }; },
+    createRunner: ({ onExit }) => {
+      nativeCardRunner = createNativeCardRunner({
+        root: app.isPackaged ? path.join(process.resourcesPath, 'native-card') : path.join(__dirname, 'native-card'),
+        auth: authService, assets: assetStore,
+        allowInternal: NATIVE_CARD_INTERNAL_BUILD || (!app.isPackaged && process.env.OP_NATIVE_CARD_INTERNAL === '1'),
+        onExit,
+        onSessionInvalid: async () => {
+          authenticated = false;
+          await closeGameWindows();
+          await authService.clearAccount();
+          await broadcastState();
+        }
+      });
+      return nativeCardRunner;
+    },
+    onError: async (error, retry) => {
+      if (window.isDestroyed() || !authenticated) return;
+      const result = await dialog.showMessageBox(window, { type: 'error', title: '爭霸戰',
+        message: '對局未能開啟，原本大廳已保留。', detail: String(error.message || error).slice(0, 200),
+        buttons: retry ? ['重試', '留在大廳'] : ['確定'], defaultId: 0, cancelId: retry ? 1 : 0 });
+      if (retry && result.response === 0 && !window.isDestroyed() && authenticated) retry();
+    }
+  });
   window.on('closed', () => {
+    window.cardHandoff?.dispose();
     if (gameWindows.get(gameId) !== window) return;
     gameWindows.delete(gameId);
     gameProgramRuntimes.get(gameId)?.disable('window-closed');
@@ -1402,6 +1409,7 @@ async function createGameWindow(gameId) {
     restoreLauncherAfterLastGame();
   });
   window.webContents.on('render-process-gone', () => {
+    window.cardHandoff?.dispose();
     if (gameWindows.get(gameId) !== window) return;
     gameWindows.delete(gameId);
     gameProgramRuntimes.get(gameId)?.disable('renderer-gone');

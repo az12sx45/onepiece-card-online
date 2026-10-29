@@ -2050,3 +2050,5 @@ Validation records are stored under D:/Codex_QA/card-finishers-20261028. Browser
 2026-10-29: build_native_card_launcher.cjs packages either isolated internal or explicit original-identity release from a verified native runtime; native-card-bridge/runner manage private account/media and native process lifecycle.
 
 - `scripts/native_card_visible_window_qa.cjs`: actual player-PCK GUI visibility regression under an isolated account/profile; detects running-but-hidden Windows games.
+
+2026-10-29 pending: desktop/native-card-handoff.js owns same-origin match navigation/ready/return lifecycle; scripts/native_card_handoff_qa.cjs verifies lifecycle and private readiness; scripts/build_native_card_match_runtime.cjs derives a sealed Windows PCK with two resource overrides. Publication gates pending.

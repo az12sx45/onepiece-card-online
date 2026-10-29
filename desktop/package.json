@@ -1,6 +1,6 @@
 {
   "name": "onepiece-tabletop-desktop",
-  "version": "1.2.27",
+  "version": "1.2.28",
   "private": true,
   "description": "Windows launcher for ONE PIECE tabletop games with account login, verified game downloads and incremental updates.",
   "main": "main.js",
@@ -30,6 +30,7 @@
       "game-cursor-policy.js",
       "native-card-bridge.js",
       "native-card-runner.js",
+      "native-card-handoff.js",
       "runtime-asset-cache.js",
       "program-runtime.js",
       "launcher-update-service.js",

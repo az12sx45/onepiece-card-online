@@ -4,12 +4,14 @@ const http = require('node:http');
 const crypto = require('node:crypto');
 const fs = require('node:fs/promises');
 
-async function createNativeCardBridge({ auth, assets, onSessionInvalid = () => {} }) {
+async function createNativeCardBridge({ auth, assets, matchRoom = null, onSessionInvalid = () => {} }) {
   const initialSecret = auth.getSecretForGame();
   const initialId = auth.accountSummary()?.userId;
   if (!initialSecret || !initialId || auth.previewMode) throw Error('Native Card requires an authenticated account');
   const token = crypto.randomBytes(32).toString('hex');
   let closed = false, requests = 0;
+  let ready;
+  const matchReady = new Promise(resolve => { ready = resolve; });
   const valid = () => !closed && auth.getSecretForGame() === initialSecret && auth.accountSummary()?.userId === initialId;
   const server = http.createServer(async (req, res) => {
     const finish = (status, data) => {
@@ -30,6 +32,9 @@ async function createNativeCardBridge({ auth, assets, onSessionInvalid = () => {
       if (method === 'getNativeState') {
         const bootstrap = auth.getGameBootstrap();
         finish(200, { ok: true, account: auth.accountSummary(), secret: initialSecret, deviceId: bootstrap.op_device_id, preferences: auth.getPreferences() });
+      } else if (method === 'cardMatchReady') {
+        if (!matchRoom || args.room !== matchRoom) { finish(400, { ok: false }); return; }
+        ready(); finish(200, { ok: true });
       } else if (method === 'saveSession') {
         // Native refresh may acknowledge the same session, never replace launcher credentials.
         finish(200, { ok: args.secret === initialSecret && args.account?.userId === initialId });
@@ -52,7 +57,8 @@ async function createNativeCardBridge({ auth, assets, onSessionInvalid = () => {
   await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
   const endpoint = `http://127.0.0.1:${server.address().port}/rpc`;
   return {
-    childEnvironment: { PO_NATIVE_DESKTOP_ENDPOINT: endpoint, PO_NATIVE_DESKTOP_TOKEN: token },
+    matchReady,
+    childEnvironment: { PO_NATIVE_DESKTOP_ENDPOINT: endpoint, PO_NATIVE_DESKTOP_TOKEN: token, PO_NATIVE_CARD_ROOM: matchRoom || '' },
     close() { if (closed) return; closed = true; server.closeAllConnections(); server.close(); }
   };
 }

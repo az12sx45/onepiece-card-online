@@ -42,14 +42,15 @@ async function validateNativeCardBundle(root, {allowInternal=false}={}) {
 function createNativeCardRunner({root,auth,assets,onExit=()=>{},onSessionInvalid=()=>{},allowInternal=false}){
  let child=null,bridge=null,pending=null,generation=0;
  function close(){generation++;bridge?.close();bridge=null;if(child){const previous=child;child=null;previous.kill();}}
- async function launch(){
+ async function launch({room=null}={}){
+  if(room!==null&&(typeof room!=='string'||!room||room!==room.trim()||room.length>80||/[\u0000-\u001f\u007f]/.test(room)))return {ok:false,error:'對局房號無效。'};
   if(child)return {ok:true,native:true,alreadyRunning:true};
   if(pending)return pending;
   const epoch=generation;
   pending=(async()=>{
    const bundle=await validateNativeCardBundle(root,{allowInternal});if(!bundle)return null;
    if(epoch!==generation)return {ok:false,error:'遊戲啟動已取消。'};
-   const connection=await createNativeCardBridge({auth,assets,onSessionInvalid});
+   const connection=await createNativeCardBridge({auth,assets,onSessionInvalid,matchRoom:room});
    if(epoch!==generation){connection.close();return {ok:false,error:'遊戲啟動已取消。'};}
    bridge=connection;
    const args=['--resolution','1440x900'];
@@ -62,7 +63,13 @@ function createNativeCardRunner({root,auth,assets,onExit=()=>{},onSessionInvalid
    const done=()=>{connection.close();if(bridge===connection)bridge=null;if(child===process){child=null;onExit();}};
    process.once('exit',done);process.once('error',done);
    await new Promise((resolve,reject)=>{process.once('spawn',resolve);process.once('error',reject);});
-   return {ok:true,native:true};
+   if(room){
+    let timer,earlyExit;
+    try{await Promise.race([connection.matchReady,new Promise((_,reject)=>{earlyExit=()=>reject(Error('Native match exited before ready'));process.once('exit',earlyExit);timer=setTimeout(()=>reject(Error('Native match readiness timeout')),45000);})]);}
+    finally{clearTimeout(timer);if(earlyExit)process.removeListener('exit',earlyExit);}
+    if(epoch!==generation||child!==process)throw Error('Native match cancelled');
+   }
+   return {ok:true,native:true,matchReady:!!room};
   })().catch(()=>({ok:false,error:'原生爭霸戰啟動失敗，請修復遊戲後重試。'})).finally(()=>{pending=null;});
   return pending;
  }
