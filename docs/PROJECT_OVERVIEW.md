@@ -2929,3 +2929,15 @@ Card presentation: own-hand hover/touch dock and staged duel with public losing-
 2026-10-30 — Resumed all19 desktop skill introductions: final406 checks passed; preview and scoped release candidate complete. Earlier paused status superseded. Original rules, launcher and lobby retained. Mobile packages are separate. See CARD_ANIME_SKILLS_20261030.md.
 
 2026-10-30 — Desktop Card anime presentation package-3df07c30b9c7bcee published and publicly verified. Original launcher/lobby/rules retained. See CARD_ANIME_SKILLS_RELEASE_20261030.json.
+
+2026-10-30 — Enhanced Zoro card projection desktop sample is local-only; current online release, launcher/lobby and gameplay rules remain unchanged. Full original movie retained. See CARD_ZORO_AWAKENING_PREVIEW_20261030.md.
+
+- 2026-10-30 local Card candidate: stationary landing cards plus enhanced Zoro perimeter-light/original-video projection prototype. Supersedes portrait projection sample; no publication, launcher/lobby or rules change. See CARD_VIDEO_PROJECTION_PREVIEW_20261030.md.
+
+- Local Card projection preview now keeps landed cards below the foreground hand and extends cyan/violet light around the screen before full-screen movie playback. See CARD_VIDEO_PROJECTION_PREVIEW_20261030.md; not released.
+
+- 2026-10-31 Card prototype: light sweeps around the screen while exposing the running movie; full-screen continues without replay. Local opt-in desktop sample only; launcher, rules and published release unchanged.
+
+- Latest Card preview correction: card perimeter, screen perimeter and live-video reveal start together and share one progress value (CARD_LIVE_REVEAL_PREVIEW_20261031.md).
+
+- 2026-10-31 stable Card release candidate: card positions/layers fixed and existing character cut-ins shared with mobile; experimental enhanced reveal paused/excluded.

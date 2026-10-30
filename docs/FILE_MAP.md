@@ -2076,3 +2076,13 @@ Player acceptance rejected the native Card match. desktop/main.js removes the na
 2026-10-30 — CARD_ANIME_SKILLS_SOURCE_RECEIPT_20261030.json identifies exact editable sources/art and six final QA reports. card-anime-handoff-qa.mjs covers cut-in-to-original-action completion; card-action-sequence-qa.mjs uses formal Card source.
 
 2026-10-30 — CARD_ANIME_SKILLS_RELEASE_20261030.json records immutable upload and live catalog/manifest/runtime/program/CORS verification.
+
+2026-10-30 — android/preview/card-zoro-awakening.js/css/prompts and android/card-zoro-awakening-qa.mjs own the opt-in Zoro projection sample. CARD_ZORO_AWAKENING_PREVIEW_20261030.md/json map editable source, generated art, original movie and validation.
+
+- Card perimeter/video prototype: android/preview/card-video-projection.js/css; beam prompt JSON and android/web/art/card-video-projector-beam-v1.png in shared Android source tree. Tests: card-video-projection-qa.mjs and card-stage-anchor-qa.mjs. Evidence: docs/CARD_VIDEO_PROJECTION_PREVIEW_20261030.md/json.
+
+- card-projection-layer-probe.mjs: temporary read-only browser stacking diagnostic; card-video-projection-qa.mjs verifies foreground overlap and ordered card/screen perimeter laps.
+
+- CARD_LIVE_REVEAL_PREVIEW_20261031.md/json: latest opt-in Zoro running-video sweep prototype and source/QA receipt, replacing the October 30 sequential reveal sample.
+
+- scripts/build_card_program_update.js: committed Card-only candidate builder/promoter preserving media, Board, Chess and v2. CARD_STABLE_RELEASE_20261031.md tracks desktop/mobile publication.

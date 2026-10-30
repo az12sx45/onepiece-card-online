@@ -13,7 +13,7 @@ async function main(){
  const response=await fetch('https://onepiece-card-online.onrender.com/desktop/catalog-v3.json');assert.equal(response.status,200);
  const base=await response.json();assert.deepEqual(next.sourceTrees,base.sourceTrees);
  for(const game of ['board','chess'])assert.deepEqual(next.games[game],base.games[game]);
- assert.equal(base.games.card.releaseId,'package-7daa8b67809be979','Expected reviewed public baseline');
+ assert.equal(base.games.card.releaseId,'package-3df07c30b9c7bcee','Expected reviewed public baseline');
  const oldResponse=await fetch('https://onepiece-card-online.onrender.com/'+base.games.card.manifestPath);assert.equal(oldResponse.status,200);
  const oldBytes=Buffer.from(await oldResponse.arrayBuffer());assert.equal(P.sha256Bytes(oldBytes),base.games.card.manifestSha256);
  const old=JSON.parse(oldBytes),current=JSON.parse(read('public/'+next.games.card.manifestPath));
@@ -33,3 +33,4 @@ async function main(){
  }finally{context?.client.destroy();}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});
+

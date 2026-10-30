@@ -8539,3 +8539,20 @@ Final 406 checks PASS: all-card252, desktop30, mobile60, Law16, sequence32, hand
 
 ### 2026-10-30 Desktop Card anime release published
 package-3df07c30b9c7bcee is public and read back at 2026-10-30T12:09:58.824Z. Three reviewed program blobs uploaded; full program/manifest/runtime/CORS checks passed. Launcher/lobby/other games retained; Android/iOS not repackaged. Publication receipt: CARD_ANIME_SKILLS_RELEASE_20261030.json. Final candidate pause/pending notes above are superseded.
+
+### 2026-10-30 Zoro enhanced projection sample
+Opt-in desktop preview with two GPT-generated transparent layers, card-anchored projection and untouched full12.245567s movie. Source files,15 prototype checks,8 base sync checks and review/audio evidence: CARD_ZORO_AWAKENING_PREVIEW_20261030.md. Not registered in release bundles; not published.
+
+## 2026-10-30 Card fixed landing and video projection preview
+Shared card-phone-stage.js/css, card-phone-targets.css, card-desktop-layout.css and card-phone-fx.js revised; generated desktop bundles rebuilt locally. Opt-in preview uses one complete card-edge light lap before actual original-video projection. 12 projection + 20 landing + 16 Law + 8 npm-start/local sync checks pass. See CARD_VIDEO_PROJECTION_PREVIEW_20261030.md/json. Not published.
+
+2026-10-30 follow-up: refined preview edge-charge pulse, perspective-to-fullscreen video expansion and duplicate-caption suppression; reran 12 projection checks successfully. Original 12.245567 s movie still plays once at rate 1. Updated local review and receipts.
+
+2026-10-30: fixed landed Card/hand stacking in shared card-phone-stage.css (60/65), isolated prototype edge glow at 61, added cyan/violet full-screen perimeter lap before existing projection. Files android/preview/card-video-projection.js/css, android/card-video-projection-qa.mjs and card-projection-layer-probe.mjs; generated desktop CSS rebuilt locally. 15 projection checks and 8 npm-start/local sync checks pass. See CARD_VIDEO_PROJECTION_PREVIEW_20261030.md/json; preview only, no release.
+
+## 2026-10-31 Card live movie reveal preview
+Reworked android/preview/card-video-projection.js/css and card-video-projection-qa.mjs: light sweep reveals an already-playing original video, replacing the sequential small projection. Single-play guard and original timer/skip cleanup retained. 16 focused checks and 8 npm-start/local sync checks pass; desktop/narrow screenshots inspected. No release or launcher/rule changes. See CARD_LIVE_REVEAL_PREVIEW_20261031.md/json.
+
+2026-10-31 follow-up: android/preview/card-video-projection.js now drives card edge and screen edge with the same progress; removed the sequential start delay from the active path. Updated card-video-projection-qa.mjs verifies synchronization twice during running-video reveal. 16 checks pass; review/receipt updated, not published.
+
+2026-10-31 stable Card publication: stationary landed cards, foreground hand layers, shared anime cut-in scope, preview projection/hook excluded. Prepared mobile all-card QA252 and desktop regression30 PASS. Files public/game.html, public/js/card-desktop-table.js, public/css/card-desktop-table.css; scoped build_card_program_update.js and baseline publisher. See CARD_STABLE_RELEASE_20261031.md; public verification pending.

@@ -638,6 +638,7 @@ window.POCardInteract=module.exports;
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
 
+
 /* Count-aware image stacks. Original deck button, discard order and callbacks stay authoritative. */
 (() => {
   const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
@@ -855,6 +856,11 @@ window.POCardInteract=module.exports;
     const stage=make('section','phone-played-stage');stage.id='phonePlayedStage';stage.hidden=true;stage.setAttribute('aria-live','polite');
     const stageName=make('div','phone-stage-name'),stageImg=make('img','phone-stage-card'),stageStatus=make('div','phone-stage-status');stageImg.alt='場中央打出的卡';stage.append(stageName,stageImg,stageStatus);document.body.append(stage);
     let queue=[],active=null,seen=new Set(),timer=null,stageKey=null;
+    // A played card belongs to its landing spot, not to whichever modal is open.
+    const anchorProps=['left','top','width','height'];
+    function releaseAnchor(){for(const key of anchorProps)stage.style.removeProperty(key);}
+    function anchorStage(){releaseAnchor();const r=stage.getBoundingClientRect();if(!r.width||!r.height)return;for(const [key,value] of Object.entries({left:r.left+r.width/2,top:r.top+r.height/2,width:r.width,height:r.height}))stage.style.setProperty(key,value+'px','important');}
+    let viewport=[innerWidth,innerHeight];window.addEventListener('resize',()=>{if(viewport[0]===innerWidth&&viewport[1]===innerHeight)return;viewport=[innerWidth,innerHeight];if(active)anchorStage();});
     const originalFlash=typeof showPlayedFlash==='function'?showPlayedFlash:null;
     const busy=()=>!!current()?.pending||['modal','enhOverlay','lawSwapModal','luffyBoostModal','duelFx','kidConfirmModal'].some(id=>{const n=$(id);return n&&!n.classList.contains('hidden')&&n.getClientRects().length&&getComputedStyle(n).visibility!=='hidden'&&getComputedStyle(n).opacity!=='0';})||!!$('phoneInteractionFx')?.children.length||!!$('phoneCardFlights')?.querySelector('[data-kind="swap-in"],[data-kind="peek"],[data-kind="law-view"]');
     api.isCardEntering=()=>!!active&&['enter','display','place'].includes(active.phase);
@@ -865,11 +871,12 @@ window.POCardInteract=module.exports;
     api.presentedDiscardCount=()=>{const s=current(),holds=[active,...queue].filter(Boolean).filter(x=>x.round===s?.roundNo).map(x=>x.index);return holds.length?Math.min(s?.discard?.length||0,...holds):s?.discard?.length||0;};
     function repaint(){api.syncCardPiles?.();}
     function callbacks(item){for(const fn of item.callbacks.splice(0)){try{fn();}catch{}}}
-    function clearStage(){clearTimeout(timer);timer=null;try{_flashBusy=false;_enhSignal=null;}catch{}queue=[];active=null;seen.clear();stage.hidden=true;stageImg.style.visibility='';root.removeAttribute('data-card-resolving');api.cancelCardFlights?.('play-enter');api.cancelCardFlights?.('play-exit');repaint();}
+    function clearStage(){clearTimeout(timer);timer=null;try{_flashBusy=false;_enhSignal=null;}catch{}queue=[];active=null;seen.clear();stage.hidden=true;releaseAnchor();stageImg.style.visibility='';root.removeAttribute('data-card-resolving');api.cancelCardFlights?.('play-enter');api.cancelCardFlights?.('play-exit');repaint();}
     function start(){
       if(active||!queue.length||fast())return;active=queue.shift();const x=active;stage.hidden=false;stageImg.style.visibility='';root.dataset.cardResolving='1';stage.dataset.player=String(x.by);stage.dataset.card=String(x.id);stage.dataset.phase='enter';x.phase='enter';
       stageName.textContent=(typeof pname==='function'?pname(x.by):`P${x.by+1}`)+' 打出';stageStatus.textContent='發動效果';
       stageImg.src=typeof isEnhancedNow==='function'&&isEnhancedNow(x.id)?CARD_ENH(x.id):CARD(x.id);
+      stageImg.style.transition='none';anchorStage();void stageImg.offsetWidth;requestAnimationFrame(()=>{if(active===x)stageImg.style.transition='';});
       const flies=api.flyCard?.({from:api.cardPlayerRect?.(x.by,x.id),to:stageImg,src:stageImg.src,kind:'play-enter'});
       if(x.by===viewer())api.maskHandArt?.(current()?.players?.[x.by]?.tempDraw===x.id?$('imgDrawn'):$('imgHand'));
       repaint();timer=setTimeout(()=>{if(active!==x)return;x.phase='display';stage.dataset.phase='display';stageStatus.textContent='展示卡牌';timer=setTimeout(()=>{if(active!==x)return;x.phase='place';stage.dataset.phase='place';stageStatus.textContent='放上場地';timer=setTimeout(()=>{if(active!==x)return;x.phase='resolve';x.readyAt=performance.now();stage.dataset.phase='resolve';stageStatus.textContent='發動效果';callbacks(x);document.dispatchEvent(new Event('phone-card-center-ready'));tick();},reduced()?50:650);},reduced()?100:700);},flies?1100:100);
@@ -1328,12 +1335,12 @@ window.POCardInteract=module.exports;
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
 
-/* Desktop presentation only. Only the public played-card log selects artwork.
+/* Shared Card match presentation only. Only the public played-card log selects artwork.
  * No private hand inspection, gameplay commands or outcome prediction. */
 (() => {
   function mount(){
     const api=window.CardPhonePresentation,root=document.documentElement;
-    if(!api||!root.dataset.cardDesktop)return;
+    if(!api||!root.dataset.cardPhone)return;
     const profiles={
       0:['flame','火焰捲回牌桌'],2:['petals','花瓣散開・偵察'],3:['kick','火焰踢擊'],
       4:['guard','皮毛展開'],5:['slash','刀光出鞘'],6:['room','ROOM 空間展開'],
@@ -1402,6 +1409,7 @@ window.POCardInteract=module.exports;
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
+
 
 /* Queue complete EMIT/STATE transactions for presentation. Server rules and
  * packet formats stay unchanged; stale displayed controls cannot send actions. */

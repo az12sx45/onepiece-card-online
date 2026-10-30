@@ -52,7 +52,7 @@ function cleanPublicFile(relative, expected) {
   const filename = path.join(ROOT, relative);
   rejectLinks(filename);
   const actual = fs.readFileSync(filename);
-  assert.ok(actual.equals(expected) || actual.toString('utf8').replace(/\r\n/g,'\n') === expected.toString('utf8').replace(/\r\n/g,'\n'), `Uncommitted metadata differs: ${relative}`);
+  assert.ok(actual.equals(expected), `Uncommitted metadata differs: ${relative}`);
 }
 
 function collect(baselineRef, createdAt) {
@@ -66,10 +66,7 @@ function collect(baselineRef, createdAt) {
   cleanPublicFile(CATALOG, baselineBytes);
   const configBytes = readAt(sourceHead, CONFIG);
   const config = validateConfig(checkedJson(configBytes, 'Program config'));
-  const oldConfig=validateConfig(checkedJson(readAt(baseline,CONFIG),'Baseline config'));
-  for(const game of ['board','chess'])assert.deepEqual(config.games[game],oldConfig.games[game],game+' config changed');
-  assert.deepEqual(config.legacyBaseline,oldConfig.legacyBaseline);
-  assert.equal(config.games.card.entryPath,oldConfig.games.card.entryPath);
+  assert.ok(configBytes.equals(readAt(baseline, CONFIG)), 'This update cannot add/remove configured programs.');
   cleanPublicFile(CONFIG, configBytes);
   const v2Bytes = readAt(baseline, V2);
   assert.ok(readAt(sourceHead, V2).equals(v2Bytes), 'HEAD legacy v2 catalog changed.');
@@ -81,7 +78,7 @@ function collect(baselineRef, createdAt) {
   for (const key of ['releaseId', 'entryPath', 'totalFiles', 'totalBytes']) assert.equal(previous[key], catalog.games.card[key], `Baseline Card ${key}`);
   assert.equal(previous.entryPath, config.games.card.entryPath, 'Card entry path');
   const protectedFiles = new Map([[CATALOG, baselineBytes], [CONFIG, configBytes], [V2, v2Bytes]]);
-  for (const game of ['card', 'board', 'chess']) {
+  for (const game of ['board', 'card', 'chess']) {
     const relative = `public/${catalog.games[game].manifestPath}`;
     const bytes = readAt(baseline, relative);
     assert.equal(sha256Bytes(bytes), catalog.games[game].manifestSha256, `${game} manifest SHA`);
@@ -91,9 +88,7 @@ function collect(baselineRef, createdAt) {
   }
   const names = config.games.card.programFiles;
   const previousPrograms = previous.assets.filter(asset => !MEDIA.has(asset.kind)).map(asset => asset.path);
-  const additions=names.filter(n=>!previousPrograms.includes(n));
-  assert.ok(additions.length===0 || JSON.stringify(additions)===JSON.stringify(['css/card-desktop-table.css','js/card-desktop-table.js']),'Only reviewed desktop presentation additions allowed');
-  assert.ok(previousPrograms.every(n=>names.includes(n)),'Existing programs cannot be removed');
+  assert.deepEqual(previousPrograms, names, 'Configured program paths must exactly match the v3 program inventory.');
   // Git's diff accounts for checkout line-ending conversion; hashes below always
   // use the committed blob, so a Windows checkout cannot alter Linux delivery.
   git(['diff', '--quiet', 'HEAD', '--', CONFIG, ...names.map(relative => `public/${relative}`)]);
@@ -108,9 +103,9 @@ function collect(baselineRef, createdAt) {
   });
   const retained = previous.assets.filter(asset => MEDIA.has(asset.kind));
   const manifest = validateManifest(buildManifest('card', previous.entryPath, createdAt, retained, programs), 'card');
-  assert.ok(previous.assets.every(a=>manifest.assets.some(n=>n.path===a.path)),'Existing Card paths retained');
+  assert.deepEqual(manifest.assets.map(asset => asset.path), previous.assets.map(asset => asset.path), 'Card asset paths changed.');
   assert.deepEqual(manifest.assets.filter(asset => MEDIA.has(asset.kind)), retained, 'Existing media changed.');
-  assert.equal(manifest.totalFiles, previous.totalFiles+additions.length, 'Only two presentation programs added.');
+  assert.equal(manifest.totalFiles, previous.totalFiles, 'Card file count changed.');
   if (manifest.releaseId === previous.releaseId) manifest.createdAt = previous.createdAt;
   const nextManifestBytes = jsonBytes(manifest);
   const manifestPath = `desktop/manifests/card-${manifest.releaseId}.json`;
@@ -218,3 +213,4 @@ if (require.main === module) {
   try { main(); } catch (error) { console.error(`BOARD_PROGRAM_UPDATE=FAIL ${error.message}`); process.exitCode = 1; }
 }
 module.exports = { collect, outputDirectory, verifyCandidate, parseArguments, main };
+
