@@ -8516,3 +8516,5 @@ Validation follow-up: isolated npm start and real Electron original game passed 
 2026-10-30 final candidate verification: desktop62 + phone62 + real local sync8 + original Law16 =148 checks passed. Final screenshots visually reviewed, source hashes and scope recorded in card-match-hud-20261030/verification-receipt.json. Status inspection is clickable without game actions, including own/targeting/offline/infected states; original held-card touch inspection retained. No online or physical-device release claim.
 
 2026-10-30 — Original Card next-round starter flag, larger/lower current turn, differentiated GPT sniper hit/miss/defense presentation. Normal Roger and enhanced prediction are distinct; rules unchanged. Sources and verification boundary: CARD_TURN_SNIPER_20261030.md.
+
+2026-10-30 verification: 232 checks passed (layout124, Roger/sniper84, Law16, real local npm-start two-client8). Corrected the Law harness to use the formal source for mobile fixtures too; initial old-source failure is not a runtime regression. Public deployment tracked separately.

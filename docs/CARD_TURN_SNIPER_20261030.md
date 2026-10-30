@@ -10,3 +10,5 @@ Scope: original Card match only, launcher and lobby unchanged. Includes the prec
 - Evidence: D:/Codex_QA/card-turn-sniper-20261030. Browser emulation and local server checks; not physical-device acceptance. Publication status is recorded separately after public readback. Shared phone sources updated but a desktop program release alone does not replace the Android/iOS embedded presentation.
 - LATTICE APIs absent. No persisted task, graph, or formal LATTICE acceptance claim.
 - Cleanup: hash-verified duplicate installer temporary copies identified; attempted deletion rejected by automatic review (blocked by policy), no files deleted and zero bytes reclaimed. Original/release backups untouched.
+
+2026-10-30 verification: 232 checks passed (layout124, Roger/sniper84, Law16, real local npm-start two-client8). Corrected the Law harness to use the formal source for mobile fixtures too; initial old-source failure is not a runtime regression. Public deployment tracked separately.
