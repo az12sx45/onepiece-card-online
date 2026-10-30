@@ -2920,3 +2920,10 @@ Card presentation: own-hand hover/touch dock and staged duel with public losing-
 2026-10-30 — Corrected six-player layout means five opponents above and self below-right. Unified chest/venue panel and interactive manga status symbols; candidate details in CARD_MATCH_HUD_20261030.md.
 
 2026-10-30 — Original Card next-round starter flag, larger/lower current turn, differentiated GPT sniper hit/miss/defense presentation. Normal Roger and enhanced prediction are distinct; rules unchanged. Sources and verification boundary: CARD_TURN_SNIPER_20261030.md.
+
+
+2026-10-30 — Card presentation candidate adds current-round reading gate and owner-only enhancement transformation, revises low-height landscape and sequential duel/sniper presentation. Launcher/lobby unchanged. Not published; see CARD_PRESENTATION_REPAIR_20261030.md.
+
+- 2026-10-30 candidate: desktop Card cut-ins expanded to the other19 characters, keyed only by public played cards. Awaiting final validation/publication after user-requested shutdown pause; mobile integration unchanged. See CARD_ANIME_SKILLS_20261030.md.
+
+2026-10-30 — Resumed all19 desktop skill introductions: final406 checks passed; preview and scoped release candidate complete. Earlier paused status superseded. Original rules, launcher and lobby retained. Mobile packages are separate. See CARD_ANIME_SKILLS_20261030.md.

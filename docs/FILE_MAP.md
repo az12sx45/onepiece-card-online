@@ -2065,3 +2065,12 @@ Player acceptance rejected the native Card match. desktop/main.js removes the na
 2026-10-30 — Shared card-seat-hud owns opponent/self plates and status details; stage/targets integrate original actions; hand-dock limits hitboxes. New art and QA mapping in CARD_MATCH_HUD_20261030.md.
 
 2026-10-30 — Original Card next-round starter flag, larger/lower current turn, differentiated GPT sniper hit/miss/defense presentation. Normal Roger and enhanced prediction are distinct; rules unchanged. Sources and verification boundary: CARD_TURN_SNIPER_20261030.md.
+
+
+2026-10-30 — card-private-enhance.js/css owns local hand transformation; card-phone-piles owns current STATE venue intro; card-hud-combat owns anime cut-in art/presentation. Source/tests/provenance: CARD_PRESENTATION_REPAIR_20261030.md.
+
+- Desktop review: android/web/card-desktop-layout.css owns desktop-only round intro and self/log spacing; android/card-anime-preview-qa.mjs records desktop 1366x768 fixtures. Preview output is C:/Codex_QA/card-desktop-preview-20261030/review.html.
+
+- Desktop skill intro module: shared android/web/card-anime-skills.js/css; art/card-anime-skill-{id}-v1.webp and card-anime-skills-v1-prompts.json; QA android/card-anime-skills-qa.mjs. Resume/evidence: docs/CARD_ANIME_SKILLS_20261030.md.
+
+2026-10-30 — CARD_ANIME_SKILLS_SOURCE_RECEIPT_20261030.json identifies exact editable sources/art and six final QA reports. card-anime-handoff-qa.mjs covers cut-in-to-original-action completion; card-action-sequence-qa.mjs uses formal Card source.

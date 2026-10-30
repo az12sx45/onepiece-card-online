@@ -8518,3 +8518,21 @@ Validation follow-up: isolated npm start and real Electron original game passed 
 2026-10-30 — Original Card next-round starter flag, larger/lower current turn, differentiated GPT sniper hit/miss/defense presentation. Normal Roger and enhanced prediction are distinct; rules unchanged. Sources and verification boundary: CARD_TURN_SNIPER_20261030.md.
 
 2026-10-30 verification: 232 checks passed (layout124, Roger/sniper84, Law16, real local npm-start two-client8). Corrected the Law harness to use the formal source for mobile fixtures too; initial old-source failure is not a runtime regression. Public deployment tracked separately.
+
+
+2026-10-30 — Card current-round venue gate, serialized narration, private enhancement transformation, retained-hand duel masking/timing, low-height layout, numeric order, and anime Usopp diagonal shouting cut-in. Shared mobile modules and generated desktop output; 114 browser/local sync checks passed, dedicated privacy evidence tracked separately. Candidate, not published. See CARD_PRESENTATION_REPAIR_20261030.md.
+
+Final candidate verification: 118 checks passed (phone60, desktop30, real local sync8, Law16, two-viewer privacy/stale callback4). Final cut-in seam blended and inspected in preview/anime-cutin-final.png; gameplay recording in preview/sniper-preview.webm. No public update or physical-device claim.
+
+### 2026-10-30 Desktop review follow-up
+- Scope: desktop Card presentation only; launcher, lobby, rules and server remain unchanged.
+- Files: shared android/web/card-desktop-layout.css and android/card-anime-preview-qa.mjs; regenerated desktop public/css/card-desktop-table.css and public/js/card-desktop-table.js.
+- Desktop venue introduction now displays full cards with readable text and an explicit continue action; self HUD reserves space for the log button and active-turn scaling.
+- Preview: C:/Codex_QA/card-desktop-preview-20261030/review.html. Six-player own/opponent turns, actual cut-in recording, current-round venue cards and private enhancement, captured at 1366x768 from original game.html with isolated state fixtures. No physical-device or live multiplayer claim. Not published.
+
+### 2026-10-30 Other Card anime skill cut-ins — PAUSED
+- Added desktop-only card-anime-skills.js/css, 19 GPT character portraits and exact prompt manifest; card-phone-flow.js waits for the public played-card intro before effects/state commit. Desktop generator registered new module and output rebuilt. Rules, launcher and lobby unchanged.
+- First QA pass:252 checks + local npm-start/two-client sync8 checks passed. Final cosmetic revision rerun interrupted at user's shutdown request. No publication. Full paths, limits and resume commands: docs/CARD_ANIME_SKILLS_20261030.md.
+
+### 2026-10-30 Resumed desktop Card anime release validation
+Final 406 checks PASS: all-card252, desktop30, mobile60, Law16, sequence32, handoff16. Added full handoff QA, corrected sequence QA formal root, inspected all19 final cut-ins, created review and source/evidence hashes. Prior pause is resolved. Cache token advanced; scoped publisher public baseline corrected. Scope and limits: CARD_ANIME_SKILLS_20261030.md. Publication readback remains a separate step.

@@ -1,0 +1,174 @@
+{
+  "scope": "Desktop Card presentation candidate; physical devices and production-account multiplayer not tested",
+  "baseline": "5505a7502aefcc2b370cbda65f0a317472681325",
+  "verifiedAt": "2026-10-30T11:54:53.499Z",
+  "evidence": [
+    {
+      "file": "report.json",
+      "checks": 252,
+      "sha256": "7e525c74475a64b87b57e8a1bbf4e0105630217d9293b397d55dc56eb27537fe"
+    },
+    {
+      "file": "desktop-regression/report.json",
+      "checks": 30,
+      "sha256": "48047bb339d10292fb0e00e482632ffc7b317cb56a0658427fe6293b069d8329"
+    },
+    {
+      "file": "mobile-regression/report.json",
+      "checks": 60,
+      "sha256": "4503d307da5d5277808c923b872f338d23c0030aed29b2a4a9b194e669d427dc"
+    },
+    {
+      "file": "law-regression/law-report.json",
+      "checks": 16,
+      "sha256": "c2d41d47504e126dae10186eb9e3c4adab3039ef9a095e478f51de435ca2acad"
+    },
+    {
+      "file": "sequence/report.json",
+      "checks": 32,
+      "sha256": "09aa3e9cc9abad26c369376f795a22c718cb4407cc288ab1d8d4604ea34eeb0c"
+    },
+    {
+      "file": "handoff/handoff.json",
+      "checks": 16,
+      "sha256": "458d28c7c5742176c83ec910dbdcd3924ef35efe531c5ed6a5b1fac2fe30f43e"
+    }
+  ],
+  "sources": [
+    {
+      "file": "android/web/card-anime-skills.js",
+      "bytes": 6109,
+      "sha256": "02f87d3ac26519c93c43dcdcf4c781ebd769268f438e3afe8988ad66a4ff0760"
+    },
+    {
+      "file": "android/web/card-anime-skills.css",
+      "bytes": 7632,
+      "sha256": "07c79fee9104d59aa4211420b54ed85756e4d8581e852ccbafcd48408919aa57"
+    },
+    {
+      "file": "android/web/card-phone-flow.js",
+      "bytes": 9172,
+      "sha256": "f3a2f94cf90205a7b4e3197751a0322c481bdae67cc6871931e50956be98e52d"
+    },
+    {
+      "file": "android/build-card-desktop.mjs",
+      "bytes": 3297,
+      "sha256": "0667cd01d5580bfb3bf4cda15c2499b687565cccd68a3e39f3e2edfc4e0ff918"
+    },
+    {
+      "file": "android/card-anime-skills-qa.mjs",
+      "bytes": 15467,
+      "sha256": "a6818a679b17144963206552c93fdb3f7c8d8c759cd655de6e66dc8cefa7a98b"
+    },
+    {
+      "file": "android/card-anime-handoff-qa.mjs",
+      "bytes": 14138,
+      "sha256": "6a12a9df1b86cac2add1d0ff2ed1d107f6e25323a92c13f9105d9e3a5ea48f51"
+    },
+    {
+      "file": "android/card-action-sequence-qa.mjs",
+      "bytes": 14955,
+      "sha256": "bbaac1d4b2915aa616a7391f220e5d479b09ce67c35ab52392c71b1750311b2b"
+    },
+    {
+      "file": "android/web/art/card-anime-skills-v1-prompts.json",
+      "bytes": 19491,
+      "sha256": "5fedf2863b2133593de163f42501cde12304a8c700ab81bb26150ba61c715e3b"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-0-v1.webp",
+      "bytes": 219064,
+      "sha256": "bcb3b7ca73b619b1acd2af4848ba40f42a5351a74b679a99f9818f37a2b46c73"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-2-v1.webp",
+      "bytes": 160794,
+      "sha256": "7f1c05ee7e7a694e7ec64874af4f7cad411538ce3f48e100f31787940500ed7a"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-3-v1.webp",
+      "bytes": 256594,
+      "sha256": "d30d68e8316fb0ca54a3b6532539cafb70c20721e270d2913b6c4c8da3b11066"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-4-v1.webp",
+      "bytes": 184920,
+      "sha256": "7caab5875af4946dbe7ab50e1d8ff64564647035309cd176137fc04db5373b5b"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-5-v1.webp",
+      "bytes": 175260,
+      "sha256": "af9696c02e29cfce2b75680fde831f29d2f26bba4208b565b9f603ac2941ef19"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-6-v1.webp",
+      "bytes": 172182,
+      "sha256": "43034b870780578f9028182d5a8b061edd7ffdbd305a6265bc57e3fd746934dc"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-7-v1.webp",
+      "bytes": 270548,
+      "sha256": "0f2854746f93427298efe13aa16faf144994bfbfc1754c72e48f1f77fe394f74"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-8-v1.webp",
+      "bytes": 221462,
+      "sha256": "36dad7e889fdd4d4e0e58478886c3abdd526977d95f7e78e2e313c429f71abb4"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-9-v1.webp",
+      "bytes": 178940,
+      "sha256": "92370e2e2d494af3eb171df0637bb9cea408a0a543262c6f5b65a32b0751554d"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-10-v1.webp",
+      "bytes": 167904,
+      "sha256": "4194f4db4ff0fcdcc119e76014f688a6c9acbc343e2406e215a1a30007dc72dd"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-11-v1.webp",
+      "bytes": 222630,
+      "sha256": "f39daf83d86f5f330fe769e3f7c81e7ad454cb76c31cee07938b847420ad2bdb"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-12-v1.webp",
+      "bytes": 221062,
+      "sha256": "0bfdd2bff4a47c276af768b10aaa364103b7f7e64e4030f7aece5ca706f67c41"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-13-v1.webp",
+      "bytes": 239908,
+      "sha256": "736c72096a24e0014feda03300baff29116ba8a8baa869c9c5d45cb286db9fc9"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-14-v1.webp",
+      "bytes": 228828,
+      "sha256": "537ec1b6e17aa29f27e35f688f4e7a2c7371731b0c184fa3824168d34c260681"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-15-v1.webp",
+      "bytes": 174140,
+      "sha256": "d2cff048dfe6afeed6d3655c4c1be746b29131347e9f7bebc73176134d9fd51e"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-16-v1.webp",
+      "bytes": 195164,
+      "sha256": "6194c7254fca3705d082e9b58f21a4f51d8e6e16a2ec20587d8662b21003ec26"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-17-v1.webp",
+      "bytes": 204634,
+      "sha256": "fe6ea804b1e39860c4ec3143babca224bd7a278f08bffdabcd5428eef08eed20"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-18-v1.webp",
+      "bytes": 245602,
+      "sha256": "74d77ed22fe1974a9eb5b86533f1514b240bdb2b2fad056a5fb3e676d15cca45"
+    },
+    {
+      "file": "android/web/art/card-anime-skill-19-v1.webp",
+      "bytes": 269206,
+      "sha256": "eaf56f87d5a23c7ff9edd246d0370190a034ffed6bd058f8b5e788e8801a3193"
+    }
+  ]
+}

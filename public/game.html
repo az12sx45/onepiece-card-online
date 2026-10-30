@@ -6,8 +6,8 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>偉大航道爭霸戰｜正式對戰</title>
-  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261030-turn-sniper1">
-  <script defer src="js/card-desktop-table.js?v=20261030-turn-sniper1"></script>
+  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261030-anime-skills1">
+  <script defer src="js/card-desktop-table.js?v=20261030-anime-skills1"></script>
   <link rel="stylesheet" href="css/card-finish-v1.css?v=20260907-depth-visible-v2">
   <script defer src="js/card_finish_v1.js?v=20260907-depth-visible-v2"></script>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
@@ -5590,6 +5590,7 @@ const isDraw = !hasWinner;
 
 // === 騙人布：猜數字提示框 ===
 function showUsoppToast(opts){
+  if (window.CardPhonePresentation?.committingPresentation) return;
   if(!opts) return;
   const layer = document.getElementById('usoppLayer');
   if(!layer) return;
@@ -5627,6 +5628,7 @@ function showUsoppToast(opts){
 
 // 羅賓小框：偵察手牌提示（6 號樣式，只有主文字）
 function showRobinToast({ caster, target, all }) {
+  if (window.CardPhonePresentation?.committingPresentation) return;
   const layer = document.getElementById('robinLayer');
   if (!layer) return;
 
@@ -5665,6 +5667,7 @@ function showRobinToast({ caster, target, all }) {
 
 // === 羅：交換手牌提示框（Style 5 藍光版） ===
 function showLawToast({ caster, target }) {
+  if (window.CardPhonePresentation?.committingPresentation) return;
   const layer = document.getElementById('lawLayer');
   if (!layer) return;
 
@@ -5704,6 +5707,7 @@ function showLawToast({ caster, target }) {
 
 // === 大媽：保護 / 閃避狀態提示框（demo-mom 3 號蛋糕樣式） ===
 function showBigMomToast({ caster, status }) {
+  if (window.CardPhonePresentation?.committingPresentation) return;
   const layer = document.getElementById('momLayer');
   if (!layer) return;
 
@@ -5745,6 +5749,7 @@ function showBigMomToast({ caster, status }) {
 
 // === 喬巴：保護 / 閃避狀態提示框（2 號樣式） ===
 function showChopperToast({ caster, status }) {
+  if (window.CardPhonePresentation?.committingPresentation) return;
   const layer = document.getElementById('chopperLayer');
   if (!layer) return;
 
@@ -5792,6 +5797,7 @@ function showChopperToast({ caster, status }) {
 
 // === 娜美：麻痺提示框（8 號 橘子＆金幣樣式） ===
 function showNamiToast({ caster, target }) {
+  if (window.CardPhonePresentation?.committingPresentation) return;
   const layer = document.getElementById('namiLayer');
   if (!layer) return;
 
@@ -5833,6 +5839,7 @@ function showNamiToast({ caster, target }) {
 
 // === 青雉：凍結手牌 播報（16 號卡，樣式 1-2） ===
 function showAokijiToast({ caster, target, all }) {
+  if (window.CardPhonePresentation?.committingPresentation) return;
   const layer = document.getElementById('aokijiLayer');
   if (!layer) return;
 
@@ -5882,6 +5889,7 @@ function showAokijiToast({ caster, target, all }) {
 const killerLayer = document.getElementById('killerLayer');
 
 function showKillerToast(casterName, targetName) {
+  if (window.CardPhonePresentation?.committingPresentation) return;
   if (!killerLayer) return;
 
   killerLayer.innerHTML = '';
@@ -5917,6 +5925,7 @@ function showKillerToast(casterName, targetName) {
 
 // === 索隆：棄牌提示框（使用 demo 樣式 3） ===
 function showZoroToast({ caster, target }) {
+  if (window.CardPhonePresentation?.committingPresentation) return;
   const layer = document.getElementById('zoroLayer');
   if (!layer) return;
 
