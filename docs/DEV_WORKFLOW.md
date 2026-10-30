@@ -8536,3 +8536,6 @@ Final candidate verification: 118 checks passed (phone60, desktop30, real local 
 
 ### 2026-10-30 Resumed desktop Card anime release validation
 Final 406 checks PASS: all-card252, desktop30, mobile60, Law16, sequence32, handoff16. Added full handoff QA, corrected sequence QA formal root, inspected all19 final cut-ins, created review and source/evidence hashes. Prior pause is resolved. Cache token advanced; scoped publisher public baseline corrected. Scope and limits: CARD_ANIME_SKILLS_20261030.md. Publication readback remains a separate step.
+
+### 2026-10-30 Desktop Card anime release published
+package-3df07c30b9c7bcee is public and read back at 2026-10-30T12:09:58.824Z. Three reviewed program blobs uploaded; full program/manifest/runtime/CORS checks passed. Launcher/lobby/other games retained; Android/iOS not repackaged. Publication receipt: CARD_ANIME_SKILLS_RELEASE_20261030.json. Final candidate pause/pending notes above are superseded.

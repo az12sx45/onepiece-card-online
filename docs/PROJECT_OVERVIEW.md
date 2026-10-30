@@ -2927,3 +2927,5 @@ Card presentation: own-hand hover/touch dock and staged duel with public losing-
 - 2026-10-30 candidate: desktop Card cut-ins expanded to the other19 characters, keyed only by public played cards. Awaiting final validation/publication after user-requested shutdown pause; mobile integration unchanged. See CARD_ANIME_SKILLS_20261030.md.
 
 2026-10-30 — Resumed all19 desktop skill introductions: final406 checks passed; preview and scoped release candidate complete. Earlier paused status superseded. Original rules, launcher and lobby retained. Mobile packages are separate. See CARD_ANIME_SKILLS_20261030.md.
+
+2026-10-30 — Desktop Card anime presentation package-3df07c30b9c7bcee published and publicly verified. Original launcher/lobby/rules retained. See CARD_ANIME_SKILLS_RELEASE_20261030.json.

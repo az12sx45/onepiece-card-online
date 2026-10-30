@@ -2074,3 +2074,5 @@ Player acceptance rejected the native Card match. desktop/main.js removes the na
 - Desktop skill intro module: shared android/web/card-anime-skills.js/css; art/card-anime-skill-{id}-v1.webp and card-anime-skills-v1-prompts.json; QA android/card-anime-skills-qa.mjs. Resume/evidence: docs/CARD_ANIME_SKILLS_20261030.md.
 
 2026-10-30 — CARD_ANIME_SKILLS_SOURCE_RECEIPT_20261030.json identifies exact editable sources/art and six final QA reports. card-anime-handoff-qa.mjs covers cut-in-to-original-action completion; card-action-sequence-qa.mjs uses formal Card source.
+
+2026-10-30 — CARD_ANIME_SKILLS_RELEASE_20261030.json records immutable upload and live catalog/manifest/runtime/program/CORS verification.

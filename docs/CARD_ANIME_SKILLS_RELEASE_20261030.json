@@ -1,0 +1,106 @@
+{
+  "scope": "Desktop Card program update only; launcher/lobby/rules/Board/Chess unchanged; mobile packages not published in this release",
+  "finalAutomatedChecks": 406,
+  "earlierLocalSyncChecks": 8,
+  "sourceCommit": "bc413bcc9f26b401bf288d276d6dc795ec502661",
+  "releaseCommit": "b8e914904e13c48ae9c086bb1a9ae7ecc77ad5dd",
+  "candidate": {
+    "releaseId": "package-3df07c30b9c7bcee",
+    "manifestPath": "desktop/manifests/card-package-3df07c30b9c7bcee.json",
+    "manifestSha256": "29bdf7650566a2e2b96b044044101f0f1a7742c52c1d91a43ba1c9d982eb21d3",
+    "entryPath": "start.html",
+    "totalFiles": 1085,
+    "totalBytes": 822323514
+  },
+  "changedPrograms": [
+    {
+      "path": "css/card-desktop-table.css",
+      "kind": "style",
+      "mime": "text/css",
+      "size": 41680008,
+      "sha256": "39bd0e5744cbf22591f142e6aa6ee95f59aed4248c9cd0db2650f6df7e023908"
+    },
+    {
+      "path": "game.html",
+      "kind": "document",
+      "mime": "text/html",
+      "size": 228982,
+      "sha256": "d919275f4910352398fda3e205ce8767dc432cfcc01b108f4d27a3c9023a2477"
+    },
+    {
+      "path": "js/card-desktop-table.js",
+      "kind": "script",
+      "mime": "text/javascript",
+      "size": 262614,
+      "sha256": "304bdde7f25c7512a81e39542768d71a84e05344b792811b103a6fcb37b2817e"
+    }
+  ],
+  "upload": {
+    "ok": true,
+    "mode": "live",
+    "logicalFiles": 3,
+    "logicalBytes": 42171604,
+    "uniqueFiles": 3,
+    "uniqueBytes": 42171604,
+    "verified": 0,
+    "uploaded": 3,
+    "skipped": 0,
+    "skippedRace": 0,
+    "release": "package-3df07c30b9c7bcee",
+    "publicReadback": true,
+    "retainedMediaFiles": 1054
+  },
+  "publicReadback": {
+    "passed": true,
+    "sourceCommit": "bc413bcc9f26b401bf288d276d6dc795ec502661",
+    "releaseCommit": "b8e914904e13c48ae9c086bb1a9ae7ecc77ad5dd",
+    "release": "package-3df07c30b9c7bcee",
+    "checks": [
+      "All catalog game identities and source trees exact",
+      "card manifest and runtime exact",
+      "Public program css/card-cursor-buggy-v3.css",
+      "Public program css/card-desktop-table.css",
+      "CAS hash size CORS css/card-desktop-table.css",
+      "Public program css/card-entry-tailwind-v1.min.css",
+      "Public program css/card-finish-v1.css",
+      "Public program css/card-tailwind-v1.min.css",
+      "Public program game.html",
+      "CAS hash size CORS game.html",
+      "Public program i18n/en.js",
+      "Public program i18n/i18n.js",
+      "Public program i18n/ja.js",
+      "Public program i18n/ko.js",
+      "Public program i18n/zh-Hant.js",
+      "Public program js/card-desktop-table.js",
+      "CAS hash size CORS js/card-desktop-table.js",
+      "Public program js/card_finish_v1.js",
+      "Public program js/game_cursor_feedback_v1.js",
+      "Public program manifest.webmanifest",
+      "Public program profile.html",
+      "Public program result.html",
+      "Public program shop.html",
+      "Public program start.html",
+      "Public program sw.js",
+      "Public program tutorial.html",
+      "Public program vendor/README.md",
+      "Public program vendor/babel/7.24.7/babel.min.js",
+      "Public program vendor/licenses/Babel-7.24.7-LICENSE.txt",
+      "Public program vendor/licenses/React-18.3.1-LICENSE.txt",
+      "Public program vendor/licenses/ReactDOM-18.3.1-LICENSE.txt",
+      "Public program vendor/licenses/Socket.IO-4.8.1-LICENSE.txt",
+      "Public program vendor/licenses/TailwindCSS-3.4.17-LICENSE.txt",
+      "Public program vendor/react-dom/18.3.1/react-dom.development.js",
+      "Public program vendor/react/18.3.1/react.development.js",
+      "Public program vendor/socket.io-client/4.8.1/socket.io.min.js",
+      "New game cache token live",
+      "board manifest and runtime exact",
+      "chess manifest and runtime exact"
+    ],
+    "at": "2026-10-30T12:09:58.824Z"
+  },
+  "limits": [
+    "No physical device or installed-launcher acceptance",
+    "No real-account production multiplayer match",
+    "All-card video is an introduction montage, not all-card full-flow acceptance"
+  ]
+}

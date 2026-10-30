@@ -1,6 +1,6 @@
-# Card anime skills — desktop release candidate, 2026-10-30
+# Card anime skills — desktop published release, 2026-10-30
 
-Resumed at user request. Final candidate validation and preview completed. Desktop publication is authorized; the public release readback will be recorded separately. Launcher and lobby remain unchanged.
+Resumed at user request. Final validation, preview and desktop public release completed. Launcher and lobby remain unchanged.
 
 ## Source and changes
 - Formal desktop tree D:/Codex_Release_Worktrees/card-native-server-adapter-20261029, branch codex/card-native-server-adapter-20261029, HEAD 5505a7502aefcc2b370cbda65f0a317472681325. Preserve existing dirty changes.
@@ -25,3 +25,10 @@ Resumed at user request. Final candidate validation and preview completed. Deskt
 - Existing scoped publisher expected baseline updated from stale package-e5993ea96ed10518 to verified public package-7daa8b67809be979. It rejects other catalog/media/program changes and reads back uploaded SHA-256 bytes.
 - Build from committed source, promote reviewed external candidate, upload immutable blobs, then publish catalog by normal Git push. Public runtime/catalog/manifest/blob readback is required before claiming release.
 - Mobile module registration/Android/iOS packaging not included. Mobile regression only validates compatibility of the shared optional flow hook.
+
+## Public release verified
+- package-3df07c30b9c7bcee; source bc413bcc9f26b401bf288d276d6dc795ec502661; release commit b8e914904e13c48ae9c086bb1a9ae7ecc77ad5dd.
+- Public readback 2026-10-30T12:09:58.824Z: catalog identities, Card/Board/Chess manifests and runtime API, all31 Card program bytes, three updated CAS hashes/sizes and game-origin CORS, new HTML cache token match. Details: CARD_ANIME_SKILLS_RELEASE_20261030.json.
+- Uploaded3 immutable blobs,42,171,604 bytes. Retained1,054 existing media records and all non-reviewed program records.
+- The publisher dependency was absent; installed the existing pinned package-lock in C:/Codex_QA/card-anime-publisher-deps-20261030 with npm ci --ignore-scripts, supplied only through child-process NODE_PATH. No global environment/dependency edits.
+- Documentation-only receipt commit uses [skip render] to avoid another service deploy, per https://render.com/docs/deploys#skipping-an-auto-deploy .
