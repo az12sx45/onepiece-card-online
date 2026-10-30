@@ -1,0 +1,174 @@
+{
+  "completed": true,
+  "versionCode": 59,
+  "desktop": {
+    "passed": true,
+    "sourceCommit": "864a241186384179618b7320403827ee2f3fb0d3",
+    "releaseCommit": "de85f7466f1b5f9db38afd857f18f882287dee08",
+    "release": "package-eb3502616db0e3d5",
+    "checks": [
+      "All catalog game identities and source trees exact",
+      "card manifest and runtime exact",
+      "Public program css/card-cursor-buggy-v3.css",
+      "Public program css/card-desktop-table.css",
+      "CAS hash size CORS css/card-desktop-table.css",
+      "Public program css/card-entry-tailwind-v1.min.css",
+      "Public program css/card-finish-v1.css",
+      "Public program css/card-tailwind-v1.min.css",
+      "Public program game.html",
+      "CAS hash size CORS game.html",
+      "Public program i18n/en.js",
+      "Public program i18n/i18n.js",
+      "Public program i18n/ja.js",
+      "Public program i18n/ko.js",
+      "Public program i18n/zh-Hant.js",
+      "Public program js/card-desktop-table.js",
+      "CAS hash size CORS js/card-desktop-table.js",
+      "Public program js/card_finish_v1.js",
+      "Public program js/game_cursor_feedback_v1.js",
+      "Public program manifest.webmanifest",
+      "Public program profile.html",
+      "Public program result.html",
+      "Public program shop.html",
+      "Public program start.html",
+      "Public program sw.js",
+      "Public program tutorial.html",
+      "Public program vendor/README.md",
+      "Public program vendor/babel/7.24.7/babel.min.js",
+      "Public program vendor/licenses/Babel-7.24.7-LICENSE.txt",
+      "Public program vendor/licenses/React-18.3.1-LICENSE.txt",
+      "Public program vendor/licenses/ReactDOM-18.3.1-LICENSE.txt",
+      "Public program vendor/licenses/Socket.IO-4.8.1-LICENSE.txt",
+      "Public program vendor/licenses/TailwindCSS-3.4.17-LICENSE.txt",
+      "Public program vendor/react-dom/18.3.1/react-dom.development.js",
+      "Public program vendor/react/18.3.1/react.development.js",
+      "Public program vendor/socket.io-client/4.8.1/socket.io.min.js",
+      "New game cache token live",
+      "board manifest and runtime exact",
+      "chess manifest and runtime exact"
+    ],
+    "at": "2026-10-30T17:46:57.241Z"
+  },
+  "publicPointers": {
+    "android": {
+      "url": "https://game-assets.rihdi.tw/android/native/launcher-release-v1.json",
+      "sha256": "965389399b4c395d80c3091c71a4a9d6a138e67fb05169b737f7255269d83cbe",
+      "release": {
+        "schema": 1,
+        "platform": "android",
+        "package": "tw.rihdi.tabletop.android",
+        "version": "0.1.59-card-animation",
+        "versionCode": 59,
+        "channel": "native",
+        "publishedAt": "2026-10-30T17:41:41.619Z",
+        "notes": "爭霸戰一般卡牌動畫、固定出牌位置與手牌層次修正；保留原啟動器、大廳與遊戲規則。暫不加入實驗中的強化投影動畫。v058 支援約 32 MB 差量更新。",
+        "artifact": {
+          "url": "https://game-assets.rihdi.tw/android/releases/59/PIRATE-ODYSSEY-v059-19b547e33970.apk",
+          "bytes": 469274455,
+          "sha256": "19b547e33970bf2017eaeee72aa3b04af47139443e12c123b9b6a33efbbec7a9"
+        },
+        "deltas": [
+          {
+            "format": "po-apk-delta-v1",
+            "fromVersionCode": 58,
+            "baseBytes": 465022802,
+            "baseSha256": "24cedbc7e3b962ef64f65e30df33f0c63acd0456b53fe11701e49bf508a2095f",
+            "url": "https://game-assets.rihdi.tw/android/deltas/58-59/cd258c55140b56954b7eb44890f32bcce6064b2aa9792a7ef750c08cd6c58570.podiff.gz",
+            "bytes": 31999897,
+            "sha256": "cd258c55140b56954b7eb44890f32bcce6064b2aa9792a7ef750c08cd6c58570"
+          }
+        ]
+      }
+    },
+    "ios": {
+      "url": "https://game-assets.rihdi.tw/ios/native/launcher-release-v1.json",
+      "sha256": "8fac00afc5b694ae0f765de69a01f6bbe2b2659e665574aa726e3a171a36ef09",
+      "release": {
+        "schema": 1,
+        "platform": "ios",
+        "bundleIdentifier": "tw.rihdi.po.native.ios",
+        "versionCode": 59,
+        "version": "0.1.59-card-animation",
+        "signed": false,
+        "requiresUserSigning": true,
+        "publishedAt": "2026-10-30T17:54:09.494Z",
+        "notes": "爭霸戰一般卡牌動畫、固定出牌位置與手牌層次修正，保留原啟動器及大廳；暫不加入實驗中的強化投影。請以原有 iloader 流程簽章安裝。",
+        "artifact": {
+          "url": "https://game-assets.rihdi.tw/ios/releases/59/PIRATE-ODYSSEY-v059-95c932613209-UNSIGNED.ipa",
+          "bytes": 432826208,
+          "sha256": "95c932613209d75b13a1601aa57c0a35bfeff9bea974bd5b5deb326bd73557dc"
+        }
+      }
+    }
+  },
+  "browserChecks": {
+    "androidAnime": 252,
+    "iosNarrow": 190,
+    "desktopPresentation": 30,
+    "localTwoBrowserSync": 8
+  },
+  "androidRealHttpsUpdaterChecks": 20,
+  "androidDeltaBytes": 31999897,
+  "androidFullApkRequests": 0,
+  "preservation": {
+    "android": {
+      "passed": true,
+      "originalLauncherAndLobbyUnchanged": true,
+      "baseline": "D:\\Codex_QA\\card-mobile-v058-20261030\\r2\\PO-v058.apk",
+      "artifact": "C:\\Codex_QA\\card-release-v059-20261031\\PO-v059.apk",
+      "bytes": 469274455,
+      "sha256": "19b547e33970bf2017eaeee72aa3b04af47139443e12c123b9b6a33efbbec7a9",
+      "changedEntries": [
+        "AndroidManifest.xml",
+        "META-INF/ANDROIDT.RSA",
+        "META-INF/ANDROIDT.SF",
+        "META-INF/MANIFEST.MF",
+        "assets/mobile/game-mobile.css",
+        "assets/mobile/game-mobile.js"
+      ],
+      "unchangedEntries": 3545,
+      "experimentalProjectionExcluded": true,
+      "physicalDeviceTested": false
+    },
+    "ios": {
+      "passed": true,
+      "unchangedLauncherFiles": 1533,
+      "changedOnly": [
+        "mobile/game-mobile.css",
+        "mobile/game-mobile.js"
+      ],
+      "originalLauncherAndLobbyUnchanged": true,
+      "baselineIpa": "D:\\Codex_QA\\card-mobile-v058-20261030\\ios-final\\PO-iOS-UNSIGNED.ipa",
+      "candidateIpa": "C:\\Codex_QA\\card-release-v059-20261031\\ios-final\\PO-iOS-UNSIGNED.ipa"
+    }
+  },
+  "iosVerification": {
+    "passed": true,
+    "zipIntegrity": true,
+    "pckEntriesVerified": 1955,
+    "gameJavaScriptFilesByteIdentical": 186,
+    "physicalApiMetadataFiles": 1304,
+    "nativeFrameworks": [
+      "Payload/PO.app/Frameworks/libpo_ios_bridge.ios.template_release.arm64.framework/Info.plist",
+      "Payload/PO.app/Frameworks/godotjs-ext.ios.template_release.arm64.framework/Info.plist"
+    ],
+    "bundleIdentifier": "tw.rihdi.po.native.ios",
+    "orientations": [
+      "UIInterfaceOrientationLandscapeLeft"
+    ],
+    "sha256": "95c932613209d75b13a1601aa57c0a35bfeff9bea974bd5b5deb326bd73557dc",
+    "bytes": 432826208,
+    "signed": false,
+    "iphoneTested": false,
+    "installableAsIs": false,
+    "rawRuntimeResourcesByteIdentical": 14,
+    "versionCode": 59,
+    "launcherResourcesVerified": 1535
+  },
+  "iosSourceCommit": "ff2d3492e3d6d4700db192946692b5013c97f4d3",
+  "iosRunId": 41100000091,
+  "enhancedProjectionExcluded": true,
+  "physicalDevicesTested": false,
+  "iosRequiresOwnerSigning": true,
+  "latticeToolsAvailable": false
+}

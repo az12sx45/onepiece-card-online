@@ -2086,3 +2086,12 @@ Player acceptance rejected the native Card match. desktop/main.js removes the na
 - CARD_LIVE_REVEAL_PREVIEW_20261031.md/json: latest opt-in Zoro running-video sweep prototype and source/QA receipt, replacing the October 30 sequential reveal sample.
 
 - scripts/build_card_program_update.js: committed Card-only candidate builder/promoter preserving media, Board, Chess and v2. CARD_STABLE_RELEASE_20261031.md tracks desktop/mobile publication.
+
+
+2026-10-31 PUBLICATION COMPLETE. Desktop package-eb3502616db0e3d5 / release commit de85f7466f1b5f9db38afd857f18f882287dee08: public catalog, Card/Board/Chess manifests and runtime identities, all 31 Card program bytes and three CAS objects verified. Only three Card presentation files changed; launcher/lobby/server/rules/media/Board/Chess preserved.
+
+Android v059 signed APK 469274455 bytes, SHA 19b547e33970bf2017eaeee72aa3b04af47139443e12c123b9b6a33efbbec7a9. Public pointer activated and exact bytes read back. v058->v059 patch 31999897 bytes (93.181 percent less download), exact signed APK reconstruction verified. Production Java updater passed 20 real HTTPS checks with explicit Android JVM stand-ins, zero full APK requests; actual APK signature/alignment/version independently checked. 3545 package entries unchanged. Only game-mobile.js/css, package version and signature entries differ.
+
+iOS v059 unsigned IPA 432826208 bytes, SHA 95c932613209d75b13a1601aa57c0a35bfeff9bea974bd5b5deb326bd73557dc; GitHub run 41100000091 produced the hash-verified arm64 build and reports. Local archive/PCK/runtime/framework/launcher readback passed; public object SHA/length and pointer verified. 1533 launcher files preserved; only two Card mobile bundles changed. Owner iloader signing/install remains required. Original native Board retained; native-card.tscn route remains disabled. Paused enhanced projection prototype and its raw movie hook are excluded; original enhanced playback is retained.
+
+Current browser checks: {"androidAnime": 252, "iosNarrow": 190, "desktopPresentation": 30, "localTwoBrowserSync": 8}. These isolated browser and packaging checks are not physical phone or real-account multiplayer acceptance. Evidence C:/Codex_QA/card-release-v059-20261031/release-final.json, source-receipt.json and platform publication receipts. LATTICE tools unavailable; no persistent task/graph claim. Existing scoped Card release builder checks were tightened and made Windows-newline compatible, not a new game engine or rule change.
