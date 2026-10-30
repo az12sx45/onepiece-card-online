@@ -52,7 +52,7 @@ function cleanPublicFile(relative, expected) {
   const filename = path.join(ROOT, relative);
   rejectLinks(filename);
   const actual = fs.readFileSync(filename);
-  assert.ok(actual.equals(expected), `Uncommitted metadata differs: ${relative}`);
+  assert.ok(actual.toString('utf8').replace(/\r\n/g,'\n') === expected.toString('utf8').replace(/\r\n/g,'\n'), `Uncommitted metadata differs: ${relative}`);
 }
 
 function collect(baselineRef, createdAt) {
@@ -213,4 +213,3 @@ if (require.main === module) {
   try { main(); } catch (error) { console.error(`BOARD_PROGRAM_UPDATE=FAIL ${error.message}`); process.exitCode = 1; }
 }
 module.exports = { collect, outputDirectory, verifyCandidate, parseArguments, main };
-

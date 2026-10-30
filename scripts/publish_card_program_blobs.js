@@ -33,4 +33,3 @@ async function main(){
  }finally{context?.client.destroy();}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});
-
