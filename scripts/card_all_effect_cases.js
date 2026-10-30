@@ -32,6 +32,9 @@ function buildCasesRaw(){
  }
  for(const choice of ['pay','die']){const room=run('bigmom-'+choice,fixture(14,true),[{type:'PLAY_CARD',playerId:0,payload:{which:'hand'}},{type:'PICK_TARGET',playerId:0,payload:{target:1}}]);run('bigmom-'+choice,room.state,[{type:'BIGMOM_CHOICE',playerId:1,payload:{choice}}],room);}
  for(const id of [3,8,10,13])for(const keep of [0,4]){const s=fixture(id,id===13);s.players[0].tempDraw=keep;run(`duel-${id}-keep-${keep}`,s,[{type:'PLAY_CARD',playerId:0,payload:{which:'hand'}},{type:'PICK_TARGET',playerId:0,payload:{target:1,duel:true}}]);}
+
+ for(const enhanced of [false,true]){const s=fixture(18,enhanced);s.deck=[2,3];run('shanks-showdown-'+enhanced,s,[{type:'PLAY_CARD',playerId:0,payload:{which:'hand'}}]);}
+ for(const id of [3,19]){const s=fixture(id,false);s.players.slice(2).forEach(p=>{p.alive=false;p.hand=null;});run('last-opponent-'+id,s,[{type:'PLAY_CARD',playerId:0,payload:{which:'hand'}},...(id===3?[{type:'PICK_TARGET',playerId:0,payload:{target:1}}]:[])]);}
  return cases;
 }
 function buildCases(){const old=Math.random;let seed=0x31ca4d;Math.random=()=>{seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;return (seed>>>0)/4294967296;};try{return buildCasesRaw();}finally{Math.random=old;}}

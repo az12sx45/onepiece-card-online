@@ -1,6 +1,6 @@
 {
-  "status": "VERIFIED_LOCAL_PENDING_PUBLICATION",
-  "cases": 137,
+  "status": "PUBLISHED_AND_VERIFIED",
+  "cases": 142,
   "cards": 20,
   "modes": [
     "normal",
@@ -10,8 +10,8 @@
   "reports": [
     {
       "path": "C:\\Codex_QA\\card-all-effects-audit-20261031\\matrix.json",
-      "sha256": "0fac37c8a57d7825d480bb2b997703a3db94b1b2df91321f8f6dd0ca06a92306",
-      "checks": 4243,
+      "sha256": "b9df29503667267566b7ee9fc8a4fc3138d9a0dbe6d06afd62fa581f4256bb46",
+      "checks": 4398,
       "passed": true
     },
     {
@@ -60,5 +60,227 @@
     "media",
     "Android v059 APK",
     "iOS v059 IPA"
-  ]
+  ],
+  "sourceCommit": "9cbc2ab9f339fff104b7bcbf13c03a08fc91b020",
+  "releaseCommit": "31fa96ea387e9832435393d9b17b217a66081bff",
+  "releaseId": "package-b79a005e238c7325",
+  "supplementalCoverage": [
+    "normal/enhanced Shanks showdown",
+    "last-opponent duel",
+    "last-opponent Roger exit"
+  ],
+  "publicReadback": {
+    "report": "C:\\Codex_QA\\card-all-effects-audit-20261031\\public-release-readback.json",
+    "sha256": "0ca3a1458fec384fdf5e34b7daeac72a5a23b66a9269808049743f7f6c348e00",
+    "result": {
+      "passed": true,
+      "sourceCommit": "9cbc2ab9f339fff104b7bcbf13c03a08fc91b020",
+      "releaseCommit": "31fa96ea387e9832435393d9b17b217a66081bff",
+      "release": "package-b79a005e238c7325",
+      "checks": [
+        "All catalog game identities and source trees exact",
+        "card manifest and runtime exact",
+        "Public program css/card-cursor-buggy-v3.css",
+        "Public program css/card-desktop-table.css",
+        "CAS hash size CORS css/card-desktop-table.css",
+        "Public program css/card-entry-tailwind-v1.min.css",
+        "Public program css/card-finish-v1.css",
+        "Public program css/card-tailwind-v1.min.css",
+        "Public program game.html",
+        "CAS hash size CORS game.html",
+        "Public program i18n/en.js",
+        "Public program i18n/i18n.js",
+        "Public program i18n/ja.js",
+        "Public program i18n/ko.js",
+        "Public program i18n/zh-Hant.js",
+        "Public program js/card-desktop-table.js",
+        "CAS hash size CORS js/card-desktop-table.js",
+        "Public program js/card_finish_v1.js",
+        "Public program js/game_cursor_feedback_v1.js",
+        "Public program manifest.webmanifest",
+        "Public program profile.html",
+        "Public program result.html",
+        "Public program shop.html",
+        "Public program start.html",
+        "Public program sw.js",
+        "Public program tutorial.html",
+        "Public program vendor/README.md",
+        "Public program vendor/babel/7.24.7/babel.min.js",
+        "Public program vendor/licenses/Babel-7.24.7-LICENSE.txt",
+        "Public program vendor/licenses/React-18.3.1-LICENSE.txt",
+        "Public program vendor/licenses/ReactDOM-18.3.1-LICENSE.txt",
+        "Public program vendor/licenses/Socket.IO-4.8.1-LICENSE.txt",
+        "Public program vendor/licenses/TailwindCSS-3.4.17-LICENSE.txt",
+        "Public program vendor/react-dom/18.3.1/react-dom.development.js",
+        "Public program vendor/react/18.3.1/react.development.js",
+        "Public program vendor/socket.io-client/4.8.1/socket.io.min.js",
+        "New game cache token live",
+        "board manifest and runtime exact",
+        "chess manifest and runtime exact"
+      ],
+      "at": "2026-10-30T19:32:11.795Z"
+    }
+  },
+  "publicRoom": {
+    "report": "C:\\Codex_QA\\card-all-effects-audit-20261031\\public-room\\browser.json",
+    "sha256": "4e624423990afef80fbdff1a2fb74dc34ebe92e24d2c069f904ac413ed9da5c5",
+    "result": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "public game available",
+          "pass": true
+        },
+        {
+          "name": "six seats wait for three humans only",
+          "pass": true
+        },
+        {
+          "name": "confirmation fits 0",
+          "pass": true
+        },
+        {
+          "name": "confirmation fits 1",
+          "pass": true
+        },
+        {
+          "name": "confirmation fits 2",
+          "pass": true
+        },
+        {
+          "name": "Escape does not confirm",
+          "pass": true
+        },
+        {
+          "name": "premature human or CPU draw cannot advance",
+          "pass": true
+        },
+        {
+          "name": "first reader stays in waiting panel",
+          "pass": true
+        },
+        {
+          "name": "last unread reader blocks round",
+          "pass": true
+        },
+        {
+          "name": "another socket cannot confirm for unread player",
+          "pass": true
+        },
+        {
+          "name": "unread reconnect retains two confirmations",
+          "pass": true
+        },
+        {
+          "name": "all three release together without animation-queue deadlock",
+          "pass": true
+        },
+        {
+          "name": "human or CPU can act after release",
+          "pass": true
+        },
+        {
+          "name": "no page errors",
+          "pass": true,
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "scope": "Public isolated guest room: desktop and exact released v059 Android/iOS bundles, three CPU seats; real production Socket.IO, no physical-device or real-account claim."
+    }
+  },
+  "publicRendered": {
+    "report": "C:\\Codex_QA\\card-all-effects-audit-20261031\\public-render\\report.json",
+    "sha256": "510f5b2c0641b1c96d83ffc4a51cdd6916ebe41e983ba929417be3e825db56b6",
+    "result": {
+      "scope": "Desktop public served browser with isolated engine fixtures: actual coin, duel and sniper animations; no live player or physical-device claim.",
+      "checks": [
+        {
+          "name": "coin network gap never starts partial animation",
+          "pass": true
+        },
+        {
+          "name": "coin network gap retains pre-result state",
+          "pass": true
+        },
+        {
+          "name": "coin status icon withheld while spinning",
+          "pass": true
+        },
+        {
+          "name": "coin outcome text withheld while spinning",
+          "pass": true
+        },
+        {
+          "name": "coin player status withheld",
+          "pass": true
+        },
+        {
+          "name": "coin status commits after animation",
+          "pass": true
+        },
+        {
+          "name": "duel network gap never starts partial animation",
+          "pass": true
+        },
+        {
+          "name": "duel network gap retains pre-result state",
+          "pass": true
+        },
+        {
+          "name": "duel entry does not announce winner",
+          "pass": true
+        },
+        {
+          "name": "duel entry keeps both faces secret",
+          "pass": true
+        },
+        {
+          "name": "duel attack keeps elimination state pending",
+          "pass": true
+        },
+        {
+          "name": "duel winner appears only at result phase",
+          "pass": true
+        },
+        {
+          "name": "duel only loser face revealed",
+          "pass": true
+        },
+        {
+          "name": "duel eliminated state commits after scene",
+          "pass": true
+        },
+        {
+          "name": "sniper network gap never starts partial animation",
+          "pass": true
+        },
+        {
+          "name": "sniper network gap retains pre-result state",
+          "pass": true
+        },
+        {
+          "name": "sniper declaration keeps target alive",
+          "pass": true
+        },
+        {
+          "name": "sniper has no result badge before impact",
+          "pass": true
+        },
+        {
+          "name": "sniper elimination follows effects",
+          "pass": true
+        },
+        {
+          "name": "no page errors",
+          "pass": true,
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "screenshots": [],
+      "passed": true
+    }
+  },
+  "supplementalTestSourceSha256": "01b5e9a1a29f4de760b2b910005dcf7b3b7d7c5bf87715a49d43079a4382b598"
 }
