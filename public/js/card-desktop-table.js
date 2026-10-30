@@ -218,7 +218,8 @@ window.POCardInteract=module.exports;
       function commit(){if(!canPlay()){refresh();return;}committed=true;confirm.disabled=true;const control=entries[index].control;api.closeSheet();forwarding=true;try{control.click();}finally{forwarding=false;}}
       api.openView(kind==='discard'?'查看棄牌':'選牌與效果',view);sheet.dataset.inspectKind=kind;sheet.setAttribute('aria-modal',kind==='hand'?'false':'true');
       inspector={refresh,key:validKey,commit,canPlay,kind};refresh();borrowSelection();updateAction();
-      api.flyCard?.({from:flightOrigin,to:img,src:entries[index].src,secret:entries[index].secret,kind:'inspect'});
+      // The card already arrived in the hand. Inspection expands in place, with no second flight.
+      if(!matchMedia('(prefers-reduced-motion: reduce)').matches)img.animate([{opacity:.3,transform:'scale(.97)'},{opacity:1,transform:'scale(1)'}],{duration:160});
       const gestureTarget=kind==='hand'?text:art;
       let dragX=0;const gesture=window.POCardInteract?.(gestureTarget).draggable({startAxis:'x',lockAxis:'x',inertia:false,listeners:{start(){dragX=0;},move(e){dragX+=e.dx;img.style.transform=`translateX(${Math.max(-70,Math.min(70,dragX))}px) rotate(${dragX/45}deg)`;},end(e){img.style.transform='';if(!String(e.originalEvent?.type||'').includes('cancel')&&Math.abs(dragX)>40)step(dragX<0?1:-1);dragX=0;}}});
       sheet.addEventListener('phone-card-sheet-close',()=>{handRelease?.();handRelease=null;gesture?.unset();inspector=null;delete sheet.dataset.inspectKind;sheet.setAttribute('aria-modal','true');for(const b of activeCardButtons())delete b.dataset.cardSelected;updateAction();},{once:true});
@@ -376,23 +377,28 @@ window.POCardInteract=module.exports;
    const sniper=kind==='hit'||kind==='miss'||Number.isInteger(detail.digit),evade=kind==='miss'||kind==='dodge-block',shield=kind==='shield-block';
    scene.dataset.attack=sniper?'usopp-green-star':'guarded-effect';scene.dataset.reaction=evade?'evade':shield?'shield':'hit';
    const row=api.playerVisualElement?.(target.id),sign=target.x>innerWidth*.55?-1:1;
-   const duration=2800,dx=target.x-source.x,dy=target.y-source.y,angle=Math.atan2(dy,dx)*180/Math.PI;
-   const projectile=mark(source,sniper?'phone-usopp-seed':'phone-hud-impact');projectile.dataset.flight='attack';
+   const duration=3600,impactAt=1450,dx=target.x-source.x,dy=target.y-source.y,angle=Math.atan2(dy,dx)*180/Math.PI;
+   const sprite=(point,part)=>{const n=mark(point,'phone-sniper-sprite');n.dataset.sprite=part;return n;};
+   if(sniper){const scope=sprite(target,'aim');animate(scope,[{transform:'translate(-50%,-50%) scale(1.5) rotate(-40deg)',opacity:0},{transform:'translate(-50%,-50%) scale(1)',opacity:1,offset:.45},{transform:'translate(-50%,-50%) scale(.85)',opacity:0}],1400);}
+   const projectile=sniper?sprite(source,'seed'):mark(source,'phone-hud-impact');projectile.dataset.flight='attack';
    const t=(x,y,rot=angle,scale=1)=>`translate(calc(-50% + ${x}px),calc(-50% + ${y}px)) rotate(${rot}deg) scale(${scale})`;
-   animate(projectile,[{transform:t(0,0,angle,.45),opacity:0},{transform:t(dx*.12,dy*.12+12),opacity:1,offset:.12},{transform:t(dx,dy),opacity:1,offset:.62},{transform:t(evade?dx+(dx<0?-100:100):shield?dx*.65:dx,evade?dy:shield?dy-80:dy,shield?angle+120:angle,shield?.45:evade?.7:1.6),opacity:0}],1800);
+   animate(projectile,[{transform:t(0,0,angle,.45),opacity:0},{transform:t(0,0),opacity:1,offset:.1},{transform:t(dx,dy),opacity:1,offset:.65},{transform:t(evade?dx+(dx<0?-130:130):shield?dx*.65:dx,evade?dy-15:shield?dy-80:dy,shield?angle+120:angle,shield?.45:evade?.7:1.2),opacity:0}],1500,500);
+   // Announce the public result only after the projectile has reached the target.
+   later(()=>{scene.dataset.outcome=kind;const badge=mark(target,'phone-sniper-result');badge.dataset.outcome=kind;badge.textContent=kind==='hit'?'命中！':kind==='miss'?'猜錯・未命中':shield?'護盾擋下':'閃避成功';badge.style.left=Math.max(85,Math.min(innerWidth-85,target.x))+'px';badge.style.top=Math.min(innerHeight-50,target.y+65)+'px';animate(badge,[{opacity:0,transform:'translate(-50%,12px) scale(.8)'},{opacity:1,transform:'translate(-50%,0) scale(1.1)',offset:.15},{opacity:1,transform:'translate(-50%,0)',offset:.85},{opacity:0,transform:'translate(-50%,-8px)'}],1800);},impactAt);
    if(row&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-    const frames=evade?[{transform:'translate(0,0)'},{transform:`translate(${sign*34}px,20px) rotate(${sign*5}deg)`,offset:.32},{transform:`translate(${sign*34}px,20px) rotate(${sign*5}deg)`,offset:.64},{transform:'translate(0,0)'}]:[{transform:'translate(0,0)'},{transform:'translate(-5px,3px)',offset:.25},{transform:'translate(5px,0)',offset:.42},{transform:'translate(-3px,0)',offset:.6},{transform:'translate(0,0)'}];
-    const a=row.animate(frames,{duration:evade?1900:900,delay:700,easing:'ease-in-out'});reactions.add(a);a.finished.then(()=>{a.cancel();reactions.delete(a);},()=>reactions.delete(a));
+    const frames=evade?[{transform:'translate(0,0)'},{transform:`translate(${sign*48}px,20px) rotate(${sign*5}deg)`,offset:.32},{transform:`translate(${sign*48}px,20px) rotate(${sign*5}deg)`,offset:.64},{transform:'translate(0,0)'}]:[{transform:'translate(0,0)'},{transform:'translate(-5px,3px)',offset:.25},{transform:'translate(5px,0)',offset:.42},{transform:'translate(-3px,0)',offset:.6},{transform:'translate(0,0)'}];
+    const a=row.animate(frames,{duration:evade?2200:1100,delay:evade?750:1450,easing:'ease-in-out'});reactions.add(a);a.finished.then(()=>{a.cancel();reactions.delete(a);},()=>reactions.delete(a));
    }
    if(shield){
     const guard=mark(target,'phone-hud-defense');guard.dataset.status='protect';guard.dataset.block='true';
     animate(guard,[{transform:'translate(-50%,-50%) scale(.4)',opacity:0},{transform:'translate(-50%,-50%) scale(1.15)',opacity:1,offset:.25},{transform:'translate(-50%,-50%) scale(1.28)',opacity:1,offset:.58},{transform:'translate(-50%,-50%) scale(1)',opacity:0}],duration);
-    later(()=>{const spark=mark(target,'phone-hud-impact');spark.dataset.impact='shield';animate(spark,[{transform:'translate(-50%,-50%) scale(.3)',opacity:0},{transform:'translate(-50%,-50%) scale(1.05)',opacity:1,offset:.3},{transform:'translate(-50%,-50%) scale(1.4)',opacity:0}],1000);},1000);
+    later(()=>{const spark=mark(target,'phone-hud-impact');spark.dataset.impact='shield';animate(spark,[{transform:'translate(-50%,-50%) scale(.3)',opacity:0},{transform:'translate(-50%,-50%) scale(1.05)',opacity:1,offset:.3},{transform:'translate(-50%,-50%) scale(1.4)',opacity:0}],1000);},1450);
    }else if(evade){
+    const swoosh=sprite(target,'evade');animate(swoosh,[{transform:'translate(-65%,-50%) scale(.4)',opacity:0},{transform:'translate(-40%,-50%) scale(1.1)',opacity:1,offset:.4},{transform:'translate(-10%,-50%) scale(1.4)',opacity:0}],1400,1100);
     const avatar=row?.querySelector('img.rounded-full');
     if(avatar)for(const [i,offset]of [0,20].entries()){const ghost=make('img','phone-evade-afterimage');ghost.src=avatar.src;ghost.alt='';ghost.style.left=target.x+'px';ghost.style.top=target.y+'px';scene.append(ghost);animate(ghost,[{transform:'translate(-50%,-50%)',opacity:0},{transform:`translate(calc(-50% + ${sign*offset}px),-35%)`,opacity:.4-i*.1,offset:.4},{transform:`translate(calc(-50% + ${sign*(offset+35)}px),-15%)`,opacity:0}],1800,550+i*90);}
     if(kind==='dodge-block'){const art=mark(target,'phone-hud-defense');art.dataset.status='dodge';animate(art,[{transform:'translate(-50%,-50%) scale(.6)',opacity:0},{transform:`translate(calc(-50% + ${sign*28}px),-35%) scale(1)`,opacity:1,offset:.5},{opacity:0}],2200);}
-   }else later(()=>{const hit=mark(target,'phone-usopp-seed');hit.dataset.flight='impact';animate(hit,[{transform:'translate(-50%,-50%) rotate(-30deg) scale(.3)',opacity:0},{transform:'translate(-50%,-50%) rotate(20deg) scale(1.25)',opacity:1,offset:.35},{transform:'translate(-50%,-50%) rotate(60deg) scale(1.5)',opacity:0}],1400);},1100);
+   }else later(()=>{const hit=sprite(target,'impact');animate(hit,[{transform:'translate(-50%,-50%) scale(.2)',opacity:0},{transform:'translate(-50%,-50%) scale(1.35)',opacity:1,offset:.16},{transform:'translate(-50%,-50%) scale(1.15)',opacity:1,offset:.65},{transform:'translate(-50%,-50%) scale(1.45)',opacity:0}],1700);const shards=sprite(target,'fragments');animate(shards,[{transform:'translate(-50%,-50%) scale(.3)',opacity:0},{transform:'translate(-50%,-50%) scale(1.3)',opacity:1,offset:.3},{transform:'translate(-50%,-30%) scale(1.8)',opacity:0}],1800);},impactAt);
    return true;
   };
  }
@@ -463,7 +469,7 @@ window.POCardInteract=module.exports;
       const copy=make('div','phone-action-copy');copy.append(make('strong','',title),make('span','',neutral[kind]||result));notice.append(symbol,copy);scene.append(notice);
       notice.style.top=Math.min(innerHeight-100,rail.bottom+10)+'px';notice.style.width=Math.min(640,innerWidth-32)+'px';notice.style.left='50%';
       const reading=['aim','select','shot'].includes(kind)?900:Math.min(3800,Math.max(2200,(title.length+result.length)*65));scene.dataset.readingMs=String(reading);
-      const duration=kind==='duel'?9200:kind==='notice'?400:kind==='scan'?2900:['hit','miss','shield-block','dodge-block'].includes(kind)?2800:1800;
+      const duration=kind==='duel'?9200:kind==='notice'?400:kind==='scan'?2900:['hit','miss','shield-block','dodge-block'].includes(kind)?3600:1800;
       function mark(a,cls){const n=make('span',cls);n.dataset.player=String(a.id);n.style.left=a.x+'px';n.style.top=a.y+'px';scene.append(n);return n;}
       function animate(n,frames,ms=1400,delay=0){if(reduce())return;n.animate(frames,{duration:ms,delay,easing:'cubic-bezier(.2,.7,.25,1)',fill:'both'});}
       function handAnchor(a){if(a?.id!==viewer())return a;const r=window.CardPhonePresentation?.cardPlayerRect?.(a.id);return r?{...a,x:r.left+r.width/2,y:r.top+r.height/2}:a;}
@@ -477,7 +483,7 @@ window.POCardInteract=module.exports;
         if(kind==='duel'&&detail.duel){window.CardPhonePresentation.playDuelScene({scene,from,to,d:detail.duel,bounds,anchor,handAnchor,animate,later,make,name,card,validCard});return;}
         for(const id of ids){const target=['slash','discard'].includes(kind)?handAnchor(anchor(id,bounds)):anchor(id,bounds);if(!target)continue;
           if(kind==='swap'){if(from===viewer()||id===viewer())window.CardPhonePresentation?.maskHandArt?.();travel(source,target);travel(target,source,true);continue;}
-          if(kind==='scan'){if(id===viewer()&&id!==from){const node=window.CardPhonePresentation.ownHandElement?.(),release=window.CardPhonePresentation.borrowCardVisual?.(node);if(release){effectBorrows.add(release);later(()=>{const a={left:source.x-24,top:source.y-36,width:48,height:72},done=()=>{release();effectBorrows.delete(release);};if(!window.CardPhonePresentation.flyCard?.({from:a,to:node,src:'images/cards/back.webp',kind:'scan-return',hideTarget:false,replace:false,onFinish:done}))done();},1600);}}const scope=mark(target,'phone-hud-lock');animate(scope,[{transform:'translate(-50%,-50%) scale(1.4)',opacity:0},{transform:'translate(-50%,-50%) scale(.9)',opacity:1,offset:.5},{opacity:0}],1500);travel(target,source);continue;}
+          if(kind==='scan'){if(id===viewer()&&id!==from){const node=window.CardPhonePresentation.ownHandElement?.(),release=window.CardPhonePresentation.borrowCardVisual?.(node);if(release){effectBorrows.add(release);later(()=>{const a={left:source.x-24,top:source.y-36,width:48,height:72},done=()=>{release();effectBorrows.delete(release);};if(!window.CardPhonePresentation.flyCard?.({from:a,to:node,src:'images/cards/back.webp',kind:'scan-return',hideTarget:false,replace:false,onFinish:done}))done();},1600);}}const scope=mark(target,'phone-hud-lock');animate(scope,[{transform:'translate(-50%,-50%) scale(1.4)',opacity:0},{transform:'translate(-50%,-50%) scale(.9)',opacity:1,offset:.5},{opacity:0}],1500);if(from!==viewer())travel(target,source);continue;}
           if(['slash','lightning','ice'].includes(kind)){
             const art=mark(target,'phone-effect-art');art.dataset.effect=kind;
             const frames=kind==='slash'?[{transform:'translate(-80%,-65%) scale(.5) rotate(-20deg)',opacity:0},{transform:'translate(-50%,-50%) scale(1.15) rotate(0)',opacity:1,offset:.35},{transform:'translate(-25%,-35%) scale(1.3) rotate(12deg)',opacity:0}]:kind==='lightning'?[{transform:'translate(-50%,-85%) scaleY(.2)',opacity:0},{transform:'translate(-50%,-65%) scaleY(1)',opacity:1,offset:.25},{transform:'translate(-50%,-65%) scale(1.04)',opacity:.8,offset:.75},{opacity:0}]:[{transform:'translate(-50%,-50%) scale(.35)',opacity:0},{transform:'translate(-50%,-50%) scale(1.1)',opacity:1,offset:.6},{transform:'translate(-50%,-50%) scale(1.15)',opacity:0}];animate(art,frames,1700);continue;
@@ -558,7 +564,7 @@ window.POCardInteract=module.exports;
       const api=window.CardPhonePresentation;api.cancelCardFlights?.('peek');for(const release of privateReleases.splice(0))release?.();privateQueued=false;privateOpen=true;reveal.hidden=false;reveal.replaceChildren();
       const head=make('header',''),close=make('button','phone-card-control','看完了・返回牌桌');close.id='phonePrivateDone';close.type='button';close.addEventListener('click',()=>clearPrivate(true));head.append(make('strong','','偵察結果 · 僅你可見'),close);
       const body=make('div','phone-private-cards'),items=privateItems.slice();reveal._items=items;reveal.dataset.count=String(items.length);
-      const columns=Math.min(items.length,innerWidth<1000?4:6),rows=Math.ceil(items.length/columns);body.style.setProperty('--reveal-columns',columns);body.style.setProperty('--reveal-rows',rows);
+      const columns=Math.min(items.length,6),rows=Math.ceil(items.length/columns);body.style.setProperty('--reveal-columns',columns);body.style.setProperty('--reveal-rows',rows);
       for(const item of items){const figure=make('figure','');figure.dataset.owner=Number.isInteger(item.from)?String(item.from):'';figure.append(make('figcaption','',Number.isInteger(item.from)?name(item.from)+' 的手牌':item.label));if(validCard(item.id)){const img=make('img','');img.src=card(item.id);img.alt=(typeof CARD_TEXT==='object'?CARD_TEXT[item.id]?.name:'')||'已揭曉的牌';figure.append(img);const number=make('span','phone-reveal-number',String(item.id));number.setAttribute('aria-label','卡牌號碼 '+item.id);figure.append(number);}else figure.append(make('p','',item.text));body.append(figure);}
       reveal.append(head,body);
       if(items.some(item=>item.from===viewer())){const release=api.borrowCardVisual?.(api.ownHandElement?.());if(release)privateReleases.push(release);}
@@ -808,7 +814,7 @@ window.POCardInteract=module.exports;
       const s=current();if(!s)return;
       const key=JSON.stringify([typeof me==='object'?me.roomId:null,viewer()]);if(identity!==key){identity=key;lastBalance=null;lastGold=null;clearCoins();selfSignature='';}
       [...players.children].forEach((row,i)=>row.dataset.phoneSelf=String(i===viewer()));
-      const row=players.children[viewer()];if(row){const sig=row.innerHTML+'|'+row.className;if(sig!==selfSignature){selfSignature=sig;const copy=row.cloneNode(true);copy.removeAttribute('data-phone-self');copy.removeAttribute('tabindex');copy.removeAttribute('role');copy.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));copy.querySelectorAll('.grow > .flex.items-start').forEach(n=>n.remove());self.replaceChildren(copy);self.setAttribute('aria-label','查看自己的完整狀態');}}
+      const row=players.children[viewer()];if(row&&!root.dataset.cardSeatHud){const sig=row.innerHTML+'|'+row.className;if(sig!==selfSignature){selfSignature=sig;const copy=row.cloneNode(true);copy.removeAttribute('data-phone-self');copy.removeAttribute('tabindex');copy.removeAttribute('role');copy.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));copy.querySelectorAll('.grow > .flex.items-start').forEach(n=>n.remove());self.replaceChildren(copy);self.setAttribute('aria-label','查看自己的完整狀態');}}
       const value=Number(number?.textContent),gold=(s.players||[]).map(p=>p.gold||0);
       chest.setAttribute('aria-label',Number.isFinite(value)?`公共寶箱剩餘 ${value} 枚金幣`:'公共寶箱');
       if(lastBalance!=null&&Number.isFinite(value)&&value!==lastBalance&&!fast()&&!reduced()){
@@ -911,7 +917,7 @@ window.POCardInteract=module.exports;
     }
     const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;sync();});};
     document.addEventListener('click',e=>{
-      if(!root.dataset.cardDirectTargets||modal.classList.contains('hidden'))return;
+      if(e.target.closest('.phone-seat-status-icon')||!root.dataset.cardDirectTargets||modal.classList.contains('hidden'))return;
       const row=e.target.closest('main #players > div,#phoneSelfPlayer');if(!row)return;
       const id=row.id==='phoneSelfPlayer'?(typeof me==='object'?me.playerId:null):[...players.children].indexOf(row),button=modal.querySelector(`button[data-i="${id}"]`);
       if(!button)return;e.preventDefault();e.stopImmediatePropagation();if(!button.disabled)button.click();schedule();
@@ -1037,7 +1043,7 @@ window.POCardInteract=module.exports;
       if(!screen.hidden){const sig=JSON.stringify([state?.roundNo,kind==='discard'?state?.discard:state?.venues]);if(sig!==signature){signature=sig;paint();}}
       alignAvatars();
     }
-    function alignAvatars(){for(const img of document.querySelectorAll('main #players img.rounded-full,#phoneSelfPlayer img.rounded-full')){if(img.parentElement.classList.contains('phone-avatar-wrap'))continue;const wrap=node('span','phone-avatar-wrap');img.before(wrap);wrap.append(img);}}
+    function alignAvatars(){for(const img of document.querySelectorAll('main #players img.rounded-full,#phoneSelfPlayer img.rounded-full')){if(img.classList.contains('phone-seat-avatar')||img.parentElement.classList.contains('phone-avatar-wrap'))continue;const wrap=node('span','phone-avatar-wrap');img.before(wrap);wrap.append(img);}}
     let scheduled=false;const schedule=()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;sync();});};
     new MutationObserver(schedule).observe($('players'),{childList:true,subtree:true});new MutationObserver(schedule).observe($('phoneSelfPlayer'),{childList:true,subtree:true});
     socket.on('STATE',schedule);for(const e of ['disconnect','JOINED'])socket.on(e,()=>{close();stopArrival();});window.addEventListener('resize',()=>{if(!screen.hidden)paint();});sync();
@@ -1055,7 +1061,7 @@ window.POCardInteract=module.exports;
     const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
     const overlay=make('section','phone-coin-toss');overlay.id='phoneCoinToss';overlay.hidden=true;overlay.setAttribute('role','status');overlay.setAttribute('aria-live','polite');
     const title=make('h2','','擲硬幣'),coin=make('div','phone-toss-coin'),front=make('div','phone-toss-face'),back=make('div','phone-toss-face phone-toss-back'),result=make('p','','');coin.append(front,back);overlay.append(title,coin,result);document.body.append(overlay);
-    let timer=null,resultTimer=null,batchOutcome=null,launchPoint=null;
+    let timer=null,resultTimer=null,batchOutcome=null;
     api.prepareCoinBatch=events=>{const log=events?.find(e=>e?.type==='log'&&e.to==='all'&&/擲到\s*(正面|反面)/.test(e.text||''));batchOutcome=log?{face:/擲到\s*正面/.test(log.text)?'heads':'tails',text:typeof formatLogWithNames==='function'?formatLogWithNames(log.text):log.text}:null;};
     function clear(){clearTimeout(timer);clearTimeout(resultTimer);timer=resultTimer=null;overlay.hidden=true;coin.getAnimations().forEach(a=>a.cancel());document.dispatchEvent(new Event('phone-card-center-ready'));}
     api.cancelCoin=clear;api.isCoinBusy=()=>!overlay.hidden;
@@ -1064,16 +1070,16 @@ window.POCardInteract=module.exports;
       if(document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode()))return;
       clear();overlay.hidden=false;overlay.dataset.venue=document.body.dataset.venue||'';result.textContent='硬幣判定中…';title.textContent='命運擲幣';
       const outcome=batchOutcome;overlay.dataset.face=outcome?.face||'unknown';
-      const box=coin.getBoundingClientRect(),source=launchPoint&&Date.now()-launchPoint.at<8000?launchPoint:null,dx=source?source.x-(box.left+box.width/2):85,dy=source?source.y-(box.top+box.height/2):100;launchPoint=null;
+      const box=coin.getBoundingClientRect(),source={x:innerWidth-Math.max(48,box.width/2+12),y:innerHeight-Math.max(48,box.height/2+12)},dx=source.x-(box.left+box.width/2),dy=source.y-(box.top+box.height/2);overlay.dataset.launchX=String(source.x);overlay.dataset.launchY=String(source.y);
       const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,duration=reduce?700:2400,end=outcome?.face==='tails'?1980:1800;
-      if(!reduce)coin.animate([{transform:`translate(${dx}px,${dy}px) rotateX(12deg) rotateY(0) rotateZ(-25deg) scale(.65)`},{transform:'translate(-15px,-85px) rotateX(10deg) rotateY(900deg) rotateZ(20deg) scale(1.08)',offset:.5},{transform:`translateY(24px) rotateX(48deg) rotateY(${end}deg) rotateZ(12deg) scale(.78)`}],{duration,easing:'cubic-bezier(.2,.65,.3,1)',fill:'forwards'});
+      if(!reduce)coin.animate([{transform:`translate(${dx}px,${dy}px) rotateX(12deg) rotateY(0) rotateZ(-25deg) scale(.65)`},{transform:`translate(${dx*.35}px,${dy*.1-80}px) rotateX(10deg) rotateY(900deg) rotateZ(20deg) scale(1.08)`,offset:.5},{transform:`translateY(24px) rotateX(48deg) rotateY(${end}deg) rotateZ(12deg) scale(.78)`}],{duration,easing:'cubic-bezier(.2,.65,.3,1)',fill:'forwards'});
       else coin.style.transform=outcome?.face==='tails'?'rotateX(48deg) rotateY(180deg)':'rotateX(48deg)';
       resultTimer=setTimeout(()=>{result.textContent=outcome?.text||'判定完成，請查看對局紀錄';title.textContent=outcome?.face==='heads'?'正面':outcome?.face==='tails'?'反面':'判定完成';},duration);
       timer=setTimeout(clear,duration+1700);
     };
     function decorate(){const modal=$('modal'),button=modal?.querySelector('#okBtn'),pending=typeof state==='object'?state?.pending:null;const isCoin=['queen','bigmom-coin'].includes(pending?.action)&&!!button;
       if(!isCoin){if(modal?.dataset.coinAction)delete modal.dataset.coinAction;return;}
-      modal.dataset.coinAction=pending.action;if(button.dataset.coinAction)return;button.dataset.coinAction='true';button.addEventListener('click',()=>{const b=button.getBoundingClientRect();launchPoint={x:b.left+b.width/2,y:b.top+b.height/2,at:Date.now()};},{capture:true});button.classList.add('phone-toss-button');button.textContent='';button.title='點硬幣，拋向場中央';const hint=make('span','phone-coin-prompt','點硬幣拋擲');button.append(hint);button.setAttribute('aria-label','擲硬幣，依伺服器原規則判定');
+      modal.dataset.coinAction=pending.action;if(button.dataset.coinAction)return;button.dataset.coinAction='true';button.classList.add('phone-toss-button');button.textContent='';button.title='點硬幣，拋向場中央';const hint=make('span','phone-coin-prompt','點硬幣拋擲');button.append(hint);button.setAttribute('aria-label','擲硬幣，依伺服器原規則判定');
     }
     new MutationObserver(decorate).observe($('modal'),{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
     for(const e of ['disconnect','JOINED'])socket.on(e,clear);document.addEventListener('visibilitychange',()=>{if(document.hidden)clear();});decorate();
@@ -1184,6 +1190,84 @@ window.POCardInteract=module.exports;
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
 
+/* Stable visual seats. Server player IDs/DOM indices stay untouched; CSS order
+ * follows this round's startSeat and the engine's increasing-seat traversal. */
+(() => {
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation,root=document.documentElement,players=document.getElementById('players');
+    if(!api||!players||root.dataset.cardSeatHud)return;
+    root.dataset.cardSeatHud='1';
+    // Keep the original live balance and venue nodes/listeners inside one art-backed dock.
+    const history=document.querySelector('.phone-card-history'),chest=document.getElementById('phoneTreasure'),venuePanel=document.getElementById('venues')?.closest('.card');
+    if(history&&chest&&venuePanel){
+      const resources=document.createElement('section');resources.id='phoneMatchResources';resources.setAttribute('aria-label','公共寶箱與本局場地');document.body.append(resources);resources.append(chest,venuePanel);
+      const caption=chest.querySelector('.phone-treasure-balance>span:first-child');if(caption)caption.textContent='寶箱剩餘';
+      const title=venuePanel.firstElementChild;if(title){title.setAttribute('role','button');title.tabIndex=0;title.setAttribute('aria-label','查看全部本局場地');title.onclick=()=>api.openVenues();title.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();api.openVenues();}};}
+    }
+    const self=document.getElementById('phoneSelfPlayer'),selfDock=document.getElementById('phoneSelfDock');if(selfDock)document.body.append(selfDock);
+    const cached=new Map();let queued=false,selfSignature='';
+    const make=(tag,cls)=>{const n=document.createElement(tag);n.className=cls;return n;};
+    const text=(node,value)=>{if(node.textContent!==value)node.textContent=value;};
+    function create(){
+      const card=make('div','phone-seat-card'),avatar=make('img','phone-seat-avatar rounded-full'),rank=make('b','phone-seat-rank'),copy=make('div','phone-seat-copy grow'),name=make('div','phone-seat-name font-semibold'),gold=make('div','phone-seat-gold'),icons=make('div','phone-seat-status'),phase=make('span','phone-seat-phase');
+      const next=make('span','phone-seat-next'),flag=make('i','phone-seat-next-flag'),nextText=make('span','');flag.setAttribute('aria-hidden','true');next.append(flag,nextText);
+      avatar.alt='';avatar.draggable=false;copy.append(name,gold);card.append(avatar,rank,copy,icons,phase,next);
+      return {card,avatar,rank,name,gold,icons,phase,next,nextText,statusKey:''};
+    }
+    const statuses=[['protected',0,'護盾'],['dodging',1,'閃避'],['frozen',2,'凍結'],['skipNext',3,'麻痺'],['iceArmed',4,'冰鬼檢查'],['iceInfected',4,'冰鬼感染']];
+    const explanations={protected:'抵擋一般受影響技能；到自己下次開始抽牌時解除。標示無視保護的招式仍可生效，也可能被技能解除。',dodging:'下一次受到可閃避的技能影響時，抵消該次效果並消耗閃避。標示無視閃避的招式仍可生效，也可能被技能解除。',frozen:'下一次出牌只能打剛抽到的牌，不能打原本手牌；合法出牌後解除凍結。',skipNext:'下次輪到自己時跳過該回合，並解除麻痺。',iceArmed:'本回合出牌會接受冰鬼檢查：打出奇數牌會被淘汰；打出偶數牌則解除冰鬼檢查。',iceInfected:'下次輪到自己時轉為冰鬼檢查；屆時打出奇數牌會被淘汰，打出偶數牌可解除。',offline:'此玩家目前斷線，並非戰鬥負面狀態。重新連線後會依遊戲同步狀態更新。'};
+    document.addEventListener('click',e=>{
+      const badge=e.target.closest('.phone-seat-status-icon');if(!badge)return;
+      e.preventDefault();e.stopImmediatePropagation();const key=badge.dataset.status,label=badge.getAttribute('aria-label'),view=make('article','phone-status-detail'),art=make('div','phone-status-detail-art');art.style.backgroundPosition=badge.style.backgroundPosition;art.setAttribute('aria-hidden','true');
+      const title=make('h3',''),copy=make('p','');title.textContent=label;copy.textContent=explanations[key]||'';view.append(art,title,copy);api.openView('狀態詳情',view);
+    },true);
+    function sync(){
+      const s=typeof state==='object'?state:null,viewer=typeof me==='object'?me.playerId:null;
+      if(!s?.players?.length)return;
+      const count=s.players.length,start=Number.isInteger(s.startSeat)?((s.startSeat%count)+count)%count:0;
+      // Same precedence as engine.nextRound, including an eliminated Roger holder.
+      const roger=Number.isInteger(s.nextRoundStart)&&s.nextRoundStart>=0&&s.nextRoundStart<count,next=roger?s.nextRoundStart:(start+1)%count;
+      const hasSelf=Number.isInteger(viewer)&&viewer>=0&&viewer<count;root.style.setProperty('--seat-count',String(Math.max(1,count-(hasSelf?1:0))));if(selfDock)selfDock.hidden=!hasSelf;
+      const liveIds=new Set();
+      s.players.forEach((p,i)=>{
+        const row=players.children[i];if(!row)return;liveIds.add(p.id??i);
+        let view=cached.get(p.id??i);if(!view){view=create();cached.set(p.id??i,view);}
+        const original=row.querySelector(':scope > .flex');
+        if(original)original.classList.add('phone-seat-original');
+        if(view.card.parentElement!==row)row.prepend(view.card);
+        const order=(i-start+count)%count,active=s.turnIndex===i&&p.alive&&s.turnStep!=='ended'&&s.phase!=='lobby';
+        row.style.order=String(order);row.dataset.seatOrder=String(order+1);row.dataset.seatId=String(i);row.dataset.seatActive=String(!!active);row.dataset.seatOut=String(!p.alive);row.dataset.seatSelf=String(i===viewer);
+        if(active)row.setAttribute('aria-current','step');else row.removeAttribute('aria-current');
+        const label=p.client?.displayName||p.displayName||p.client?.name||`P${i+1}`;
+        text(view.rank,String(order+1));view.rank.title=`本局第 ${order+1} 順位`;
+        text(view.name,(i===viewer?'你 · ':'')+label);view.name.title=label;
+        text(view.gold,`金幣 ${p.gold||0}${p.isCPU?' · CPU':''}`);
+        view.next.hidden=i!==next;view.next.dataset.reason=roger?'roger':'rotation';text(view.nextText,roger?'下局先手 · 羅傑':'下局先手');view.next.title=roger?'一般羅傑效果：持有者出局，但下局由持有者先手；強化預測勝者不影響這個標記':'依本局起始順位輪替，這位玩家下局先手';
+        const src=typeof AVA==='function'?AVA(p.client?.avatar??p.avatar):original?.querySelector('img.rounded-full')?.getAttribute('src');
+        if(src&&view.avatar.getAttribute('src')!==src)view.avatar.src=src;
+        const list=statuses.filter(([key])=>p[key]&&(key!=='iceInfected'||!p.iceArmed));if(p.client?.offline)list.push(['offline',5,'斷線']);
+        const key=JSON.stringify([!p.alive,list]);
+        if(view.statusKey!==key){view.statusKey=key;view.icons.replaceChildren();
+          if(!p.alive)text(view.icons,'已出局');
+          else if(!list.length)text(view.icons,`第 ${order+1} 順位`);
+          else for(const [key,index,label] of list){const badge=make('button','phone-seat-status-icon');badge.type='button';badge.dataset.status=key;badge.style.backgroundPosition=`${(index%3)*50}% ${Math.floor(index/3)*100}%`;badge.setAttribute('aria-label',label);view.icons.append(badge);}
+        }else if(p.alive&&!list.length)text(view.icons,`第 ${order+1} 順位`);
+        view.phase.hidden=!active;text(view.phase,'▼ '+(i===viewer?'你的回合':'正在行動')+' · '+(s.pending?'技能':s.turnStep==='draw'?'抽牌':'選牌'));
+        if(i===viewer&&self){const signature=view.card.outerHTML;if(signature!==selfSignature){selfSignature=signature;self.replaceChildren(view.card.cloneNode(true));}self.dataset.seatId=String(i);self.dataset.seatOrder=String(order+1);self.dataset.seatActive=String(!!active);self.dataset.seatOut=String(!p.alive);self.setAttribute('aria-label',`自己的資訊，第 ${order+1} 順位，${label}`);}
+      });
+      for(const id of cached.keys())if(!liveIds.has(id))cached.delete(id);
+      api.playerVisualElement=id=>id===viewer&&players.closest('main')?self:players.children[id];
+    }
+    const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;sync();});};
+    new MutationObserver(schedule).observe(players,{childList:true,subtree:true});
+    socket.on('STATE',schedule);socket.on('JOINED',()=>{cached.clear();schedule();});
+    sync();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
 /* Queue complete EMIT/STATE transactions for presentation. Server rules and
  * packet formats stay unchanged; stale displayed controls cannot send actions. */
 (() => {
@@ -1226,11 +1310,18 @@ window.POCardInteract=module.exports;
         while(valid()&&!fast()&&api.isCardEntering?.())await pause();
         if(!valid())return;
         const lawScan=batch.events.some(e=>e.type==='law_view'&&e.to===me.playerId);
+        const privateFaces=batch.events.some(e=>e.to===me.playerId&&['robin_view','kata_peek','teach_cover'].includes(e.type));
         for(const e of batch.events){
           // Enhanced Law sends a textual peek and a card view for the same private result.
           // The comparison already shows both cards; do not open a second reading gate.
           const duplicateScan=lawScan&&e.type==='peek'&&e.to===me.playerId&&e.lines?.length&&e.lines.every(line=>typeof line==='string'&&line.startsWith('ROOM・SCAN：'));
-          if(!duplicateScan)api.presentEffectEvent?.(e);
+          if(!duplicateScan){
+            if(privateFaces&&e.type==='peek'&&e.to===me.playerId){
+              // Card faces already carry the result; retain blocked/empty-target notices only.
+              const lines=(e.lines||[]).filter(line=>typeof line==='string'&&/(保護|閃避|無法|無牌)/.test(line));
+              if(lines.length)api.presentEffectEvent?.({...e,lines});
+            }else api.presentEffectEvent?.(e);
+          }
           if(e.type==='coin_fx'&&typeof playCoinFx==='function')playCoinFx();
           if(e.type==='enh_fx'&&typeof playEnhFxFor==='function')playEnhFxFor(e.cardId);
           if(e.type==='law_view'&&e.to===me.playerId&&typeof openLawSwap==='function')openLawSwap(e.targetId,e.cardId);

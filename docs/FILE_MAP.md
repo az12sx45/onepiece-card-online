@@ -2059,3 +2059,9 @@ Validation records are stored under D:/Codex_QA/card-finishers-20261028. Browser
 Player acceptance rejected the native Card match. desktop/main.js removes the native match handoff so the existing start.html lobby navigates directly to the original game.html in the same BrowserWindow. Original launcher UI, authentication, game rules, and mobile releases remain unchanged. scripts/build_web_card_launcher.cjs omits the unused native runtime; desktop package versions advance to 1.2.29 for a forward update. Candidate QA: exact packaged source parity (47 files; only main.js and package metadata changed), isolated packaged launcher smoke, immutable public EXE/blockmap SHA-256, real production delta reconstruction from 1.2.28 (1,661,799 bytes in 14 ranges). Original web-game integration and public manifest readback are tracked at D:/Codex_QA/card-web-restore-20261029.
 
 2026-10-29 — Card field/source/QA mapping: CARD_FIELD_STAGE_20261029.md. Generated desktop bundle consumes shared android/web presentation modules.
+
+2026-10-30 — android/web/card-seat-hud.js/css and art/card-seat-hud-v1.webp own the integrated ordered player rail. android/card-six-seat-qa.mjs checks original Card HTML/engine presentation. Generated desktop CSS/JS are built by android/build-card-desktop.mjs; see CARD_SIX_SEAT_HUD_20261030.md.
+
+2026-10-30 — Shared card-seat-hud owns opponent/self plates and status details; stage/targets integrate original actions; hand-dock limits hitboxes. New art and QA mapping in CARD_MATCH_HUD_20261030.md.
+
+2026-10-30 — Original Card next-round starter flag, larger/lower current turn, differentiated GPT sniper hit/miss/defense presentation. Normal Roger and enhanced prediction are distinct; rules unchanged. Sources and verification boundary: CARD_TURN_SNIPER_20261030.md.

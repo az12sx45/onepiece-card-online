@@ -2032,3 +2032,9 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-29 compatibility note: no Card rule change. Enhanced Law still views one target, then optionally swaps; the native presentation can now pause after viewing without awarding peek points twice. Browser one-shot view/swap remains supported. Result endedAt/nativeCardProtocol are transport metadata, not saved gameplay fields.
 
 2026-10-29 — Presentation only: show only viewer-authorized cards, original Law decisions and server coin result. Winner hand remains private; no rule/state/schema change.
+
+2026-10-30 — Visual ranks follow this round's startSeat and existing increasing-index traversal; defeated seats stay visible. UI sorting never changes player IDs or server rules. Coin result stays server-authoritative; private scouting faces remain recipient-only.
+
+2026-10-30 — Status explanations mirror existing engine expiry, consumed dodge, frozen drawn-card-only, paralysis skip and odd/even ice check. Visual rank includes self; no server rule or state schema change. See CARD_MATCH_HUD_20261030.md.
+
+2026-10-30 — Original Card next-round starter flag, larger/lower current turn, differentiated GPT sniper hit/miss/defense presentation. Normal Roger and enhanced prediction are distinct; rules unchanged. Sources and verification boundary: CARD_TURN_SNIPER_20261030.md.

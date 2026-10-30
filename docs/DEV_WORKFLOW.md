@@ -8508,3 +8508,11 @@ Validation follow-up: isolated npm start and real Electron original game passed 
 2026-10-29 follow-up: full Law integration exposed early turn completion and a duplicate private-reading gate. Original web UI now uses the existing server preview contract; both swap integration and 53 server contract checks passed. No engine/rules edits. Added android/card-field-law-qa.mjs.
 
 2026-10-29 field QA: 56 desktop + 56 landscape-browser assertions, 8 real local two-client sync checks and 53 existing server contract checks passed. Full Law flow additionally tested with original target and swap buttons; physical devices and accounts untested. Empty-hand-frame visual correction included in card-hand-dock.css.
+
+2026-10-30 — Six-seat original Card presentation candidate: integrated GPT player plates, stable startSeat order, active-turn emphasis, single-flight draw/scout, smaller bottom-right coin. Shared HUD/library/flow/fx/controls/coin modules, art, source assembly and generated desktop CSS/JS updated. Desktop/phone33+33, Law16 and real npm-start two-client8 checks passed; extra layout reports and precise scope in CARD_SIX_SEAT_HUD_20261030.md. Not published or physically tested.
+
+2026-10-30 — Card match HUD review: unify chest/venues in generated panel, correct5 opponents + self layout, manga status art and click-to-explain, normalized avatar/icon alignment, preserve original node IDs/actions, fix invisible held-card hitbox. Files, rule evidence, browser QA/publication boundary and effect-library research: CARD_MATCH_HUD_20261030.md. No public release/device acceptance claim.
+
+2026-10-30 final candidate verification: desktop62 + phone62 + real local sync8 + original Law16 =148 checks passed. Final screenshots visually reviewed, source hashes and scope recorded in card-match-hud-20261030/verification-receipt.json. Status inspection is clickable without game actions, including own/targeting/offline/infected states; original held-card touch inspection retained. No online or physical-device release claim.
+
+2026-10-30 — Original Card next-round starter flag, larger/lower current turn, differentiated GPT sniper hit/miss/defense presentation. Normal Roger and enhanced prediction are distinct; rules unchanged. Sources and verification boundary: CARD_TURN_SNIPER_20261030.md.

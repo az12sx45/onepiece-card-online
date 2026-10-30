@@ -2914,3 +2914,9 @@ Card presentation: own-hand hover/touch dock and staged duel with public losing-
 2026-10-29 scope correction: preserve original Windows launcher and Card start.html/lobby/create/join/ready; only actual match uses Godot, then returns to original lobby. Candidate1.2.28 passed isolated native/server and Electron lifecycle QA; public1.2.27 not yet changed.
 
 2026-10-29 — Original web Card presentation continues after Windows1.2.29 restoration; scene-only update documented in CARD_FIELD_STAGE_20261029.md. Phone package publication is separate.
+
+2026-10-30 — Original Card six-player HUD review candidate; shared mobile presentation, no launcher/lobby change. See CARD_SIX_SEAT_HUD_20261030.md.
+
+2026-10-30 — Corrected six-player layout means five opponents above and self below-right. Unified chest/venue panel and interactive manga status symbols; candidate details in CARD_MATCH_HUD_20261030.md.
+
+2026-10-30 — Original Card next-round starter flag, larger/lower current turn, differentiated GPT sniper hit/miss/defense presentation. Normal Roger and enhanced prediction are distinct; rules unchanged. Sources and verification boundary: CARD_TURN_SNIPER_20261030.md.
