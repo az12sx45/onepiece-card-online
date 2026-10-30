@@ -1335,12 +1335,13 @@ window.POCardInteract=module.exports;
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
 
-/* Shared Card match presentation only. Only the public played-card log selects artwork.
+/* Shared Card match presentation only. Only an accepted public operation declaration selects artwork.
  * No private hand inspection, gameplay commands or outcome prediction. */
 (() => {
   function mount(){
     const api=window.CardPhonePresentation,root=document.documentElement;
-    if(!api||!root.dataset.cardPhone)return;
+    if(!api||!root.dataset.cardPhone||api.cardSkillIntentVersion===1)return;
+    api.cardSkillIntentVersion=1;
     const profiles={
       0:['flame','火焰捲回牌桌'],2:['petals','花瓣散開・偵察'],3:['kick','火焰踢擊'],
       4:['guard','皮毛展開'],5:['slash','刀光出鞘'],6:['room','ROOM 空間展開'],
@@ -1359,24 +1360,27 @@ window.POCardInteract=module.exports;
     api.isCardSkillIntroBusy=()=>!!active;
     api.presentCardSkillBatch=async events=>{
       if(fast())return null;
-      const play=events.find(e=>e?.to==='all'&&e.type==='log'&&/ 打出 \d+｜/.test(e.text||''));
-      if(!play)return null;
-      const id=Number(play.text.match(/ 打出 (\d+)｜/)[1]);
-      if(!profiles[id])return null; // Usopp retains his target/digit-specific cut-in.
-      // A silenced card is still shown on the field, but must not call a disabled skill.
-      if(events.some(e=>e?.to==='all'&&e.type==='log'&&/【靜默】/.test(e.text||'')))return null;
+      const intent=events.find(e=>e?.to==='all'&&e.type==='card_skill_intent');
+      if(!intent)return null;
+      const id=intent.cardId;
+      if(!profiles[id])return null; // Usopp retains his number-specific cut-in.
       const text=typeof CARD_TEXT==='object'?CARD_TEXT[id]:null;
       if(!text)return null;
       finish();const token=++serial;
-      const enhanced=typeof isEnhancedNow==='function'&&isEnhancedNow(id);
-      const [theme]=profiles[id],actor=typeof state==='object'?state.turnIndex:null;
+      const enhanced=intent.enhanced===true;
+      const [theme]=profiles[id],actor=intent.casterId;
       const who=typeof pname==='function'?pname(actor):`P${Number(actor)+1}`;
       const title=(enhanced?text.enhTitle:text.baseTitle)||text.name;
+      const target=Number.isInteger(intent.targetId)?(typeof pname==='function'?pname(intent.targetId):`P${intent.targetId+1}`):null;
+      const targeted={view:`查看 ${target} 的手牌`,swap:`和 ${target} 交換手牌`,discard:`讓 ${target} 棄掉手牌`,duel:`向 ${target} 發起決鬥`,disarm:`解除 ${target} 的防禦`,freeze:`凍結 ${target}`,paralyze:`麻痺 ${target}`,predict:`預測 ${target} 贏得本局`,demand:`向 ${target} 索取保護費`};
+      const automatic={0:'讓手牌洗回牌堆，重新抽牌',2:'偵察其他玩家的手牌',4:enhanced?'準備閃避攻擊':'展開防禦',7:'天候變化',9:'戀愛風暴',10:'向其他玩家發起挑戰',11:enhanced?'讓手牌輪轉':'洗勻棄牌堆，準備抽取',12:'疫災擴散',15:'查看牌堆頂端',16:'冰霜展開',17:'覆蓋牌堆頂牌',18:'霸王色霸氣',19:'交接下局先手'};
+      const declaration=target&&targeted[intent.mode]||({coin:target?`請 ${target} 擲硬幣`:'擲硬幣決定防禦',order:'重新排列牌堆頂牌',cover:'覆蓋所選的頂牌','all-duel':'向其他玩家發起比拚'})[intent.mode]||automatic[id]||title;
+
       const layer=make('section','card-anime-skill'),strip=make('div','card-anime-strip'),portrait=make('div','card-anime-portrait'),copy=make('div','card-anime-copy');
       layer.dataset.card=String(id);layer.dataset.theme=theme;layer.dataset.phase='enter';layer.dataset.enhanced=String(!!enhanced);
-      layer.setAttribute('role','status');layer.setAttribute('aria-label',`${who}：${text.name}・${title}`);
+      layer.setAttribute('role','status');layer.setAttribute('aria-label',`${who}：${text.name}・${title}。${declaration}`);
       portrait.setAttribute('aria-hidden','true');portrait.style.backgroundImage=`var(--card-anime-${id})`;
-      copy.append(make('span','card-anime-caster',`${who} · ${text.name}`),make('strong','card-anime-title',title),make('small','card-anime-mode',enhanced?'強化技能':'技能發動'));
+      copy.append(make('span','card-anime-caster',`${who} · ${text.name}`),make('strong','card-anime-title',title),make('small','card-anime-mode',declaration));
       strip.append(portrait,copy);
       const motif=make('div','card-anime-motifs');motif.setAttribute('aria-hidden','true');
       for(let i=0;i<(['slash','scythe'].includes(theme)?2:1);i++){const n=make('i','card-anime-motif');n.style.setProperty('--i',i);motif.append(n);}
@@ -1407,7 +1411,7 @@ window.POCardInteract=module.exports;
     if(typeof socket==='object')for(const type of ['disconnect','JOINED'])socket.on(type,api.cancelCardSkillIntro);
     document.addEventListener('visibilitychange',()=>{if(document.hidden)api.cancelCardSkillIntro();});
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
 })();
 
 

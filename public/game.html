@@ -6,8 +6,8 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>偉大航道爭霸戰｜正式對戰</title>
-  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261031-card-stable1">
-  <script defer src="js/card-desktop-table.js?v=20261031-card-stable1"></script>
+  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261031-venue-ready1">
+  <script defer src="js/card-desktop-table.js?v=20261031-venue-ready1"></script>
   <link rel="stylesheet" href="css/card-finish-v1.css?v=20260907-depth-visible-v2">
   <script defer src="js/card_finish_v1.js?v=20260907-depth-visible-v2"></script>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
@@ -7209,6 +7209,163 @@ el.playHand.onclick  = ()=> handlePlayCard('hand');
 el.playDrawn.onclick = ()=> handlePlayCard('drawn');
 el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
 </script>
+
+<!-- CARD_VENUE_READY_BEGIN -->
+<script>
+/* Embedded into game.html, also used by already-installed mobile bundles.
+ * onAny reads barrier metadata outside the animation STATE queue; otherwise
+ * a visible venue panel would deadlock its own acknowledgement/release. */
+(() => {
+  let gate=null, sent=null, timer=null;
+  const $=id=>document.getElementById(id);
+  function schedule(){clearTimeout(timer);timer=setTimeout(sync,60);}
+  function sync(){
+    if(!gate || typeof state!=='object' || state?.roundNo!==gate.roundNo){if(gate?.waiting)schedule();return;}
+    const intro=$('phoneVenueIntro'),button=$('phoneVenueContinue');
+    if(!intro||!button){if(gate.waiting)schedule();return;}
+    // A reused room/round can match an old local 'seen' key. The server's new
+    // gate identity still requires a fresh explicit confirmation.
+    if(gate.waiting && intro.hidden && !window.CardPhonePresentation?.presentationEffectsBusy?.()){
+      const cards=intro.querySelector('.phone-venue-intro-cards');
+      if(!cards || !state.venues?.length){schedule();return;}
+      cards.replaceChildren(...state.venues.map(v=>{
+        const card=document.createElement('article'),img=document.createElement('img'),copy=document.createElement('div');
+        card.className='venue-card';img.src=VEN(v.name);img.alt=v.name;img.dataset.name=v.name;
+        for(const text of [v.name,venueDesc(v.name)]){const line=document.createElement('div');line.textContent=text;copy.append(line);}
+        card.append(img,copy);return card;
+      }));
+      intro.dataset.round=String(gate.roundNo);intro.hidden=false;button.disabled=true;
+      const id=gate.id;
+      Promise.all([...cards.querySelectorAll('img')].map(img=>img.decode().catch(()=>{}))).then(()=>setTimeout(()=>{
+        if(gate?.id===id && !gate.ready.includes(me.playerId) && sent!==id)button.disabled=false;
+      },900));
+    }
+    let status=$('phoneVenueReadyStatus');
+    if(!status){intro.style.gridTemplateRows='minmax(24px, auto) minmax(0,1fr) auto 44px';status=document.createElement('p');status.id='phoneVenueReadyStatus';status.setAttribute('role','status');status.style.cssText='margin:0;max-width:90vw;text-align:center;color:#ffe7a3;font-size:clamp(12px,2vh,17px);overflow-wrap:anywhere';button.before(status);}
+    if(!gate.waiting){
+      status.hidden=true;sent=null;
+      // Let the existing handler persist its seen key and enter the venue.
+      if(!intro.hidden){button.disabled=false;button.onclick?.();}
+      return;
+    }
+    status.hidden=false;
+    const names=gate.required.filter(id=>!gate.ready.includes(id)).map(id=>{
+      const p=state.players.find(p=>p.id===id);return p?.client?.displayName||p?.displayName||`P${id+1}`;
+    });
+    const text=`已確認 ${gate.ready.length}/${gate.required.length}　等待：${names.join('、')}`;
+    if(status.textContent!==text)status.textContent=text;
+    const done=gate.ready.includes(me.playerId)||sent===gate.id;
+    const label=done?'已看完，等待其他玩家':'我看完了';
+    if(button.textContent!==label)button.textContent=label;
+    if(done)button.disabled=true;
+    schedule();
+  }
+  socket.onAny?.((event,s)=>{
+    if(event!=='STATE')return;
+    gate=s?.venueReady||null;
+    if(sent!==gate?.id)sent=null;
+    schedule();
+  });
+  socket.on('disconnect',()=>{sent=null;clearTimeout(timer);});
+  window.addEventListener('click',event=>{
+    if(!gate?.waiting||!event.target.closest?.('#phoneVenueContinue'))return;
+    event.preventDefault();event.stopImmediatePropagation();
+    const button=$('phoneVenueContinue');
+    if(button.disabled||gate.ready.includes(me.playerId)||sent===gate.id||state?.roundNo!==gate.roundNo)return;
+    sent=gate.id;button.disabled=true;
+    socket.emit('ACTION',{type:'VENUE_READY',payload:{id:gate.id,roundNo:gate.roundNo},roomId:me.roomId,playerId:me.playerId,secret:me.secret});
+    sync();
+  },true);
+  window.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&gate?.waiting&&!$('phoneVenueIntro')?.hidden){event.preventDefault();event.stopImmediatePropagation();}
+  },true);
+})();
+</script>
+<!-- CARD_VENUE_READY_END -->
+
+<!-- CARD_SKILL_INTENT_COMPAT_BEGIN -->
+<script>
+/* Shared Card match presentation only. Only an accepted public operation declaration selects artwork.
+ * No private hand inspection, gameplay commands or outcome prediction. */
+(() => {
+  function mount(){
+    const api=window.CardPhonePresentation,root=document.documentElement;
+    if(!api||!root.dataset.cardPhone||api.cardSkillIntentVersion===1)return;
+    api.cardSkillIntentVersion=1;
+    const profiles={
+      0:['flame','火焰捲回牌桌'],2:['petals','花瓣散開・偵察'],3:['kick','火焰踢擊'],
+      4:['guard','皮毛展開'],5:['slash','刀光出鞘'],6:['room','ROOM 空間展開'],
+      7:['storm','天候變化'],8:['fist','橡膠重拳'],9:['heart','魅惑風暴'],
+      10:['thunder','雷鳴衝擊'],11:['magnet','磁力牽引'],12:['plague','疫災擴散'],
+      13:['scythe','旋刃交錯'],14:['soul','靈魂威壓'],15:['future','見聞色展開'],
+      16:['frost','冰霜凝結'],17:['dark','黑暗收束'],18:['haki','霸王色威壓'],
+      19:['king','海賊王登場']
+    };
+    const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text!=null)n.textContent=text;return n;};
+    let active=null,serial=0;
+    const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
+    function finish(){if(!active)return;const item=active;active=null;clearTimeout(item.timer);for(const a of item.animations)a.cancel();item.node.remove();item.resolve();}
+    api.cancelCardSkillIntro=()=>{serial++;finish();};
+    api.isCardSkillIntroBusy=()=>!!active;
+    api.presentCardSkillBatch=async events=>{
+      if(fast())return null;
+      const intent=events.find(e=>e?.to==='all'&&e.type==='card_skill_intent');
+      if(!intent)return null;
+      const id=intent.cardId;
+      if(!profiles[id])return null; // Usopp retains his number-specific cut-in.
+      const text=typeof CARD_TEXT==='object'?CARD_TEXT[id]:null;
+      if(!text)return null;
+      finish();const token=++serial;
+      const enhanced=intent.enhanced===true;
+      const [theme]=profiles[id],actor=intent.casterId;
+      const who=typeof pname==='function'?pname(actor):`P${Number(actor)+1}`;
+      const title=(enhanced?text.enhTitle:text.baseTitle)||text.name;
+      const target=Number.isInteger(intent.targetId)?(typeof pname==='function'?pname(intent.targetId):`P${intent.targetId+1}`):null;
+      const targeted={view:`查看 ${target} 的手牌`,swap:`和 ${target} 交換手牌`,discard:`讓 ${target} 棄掉手牌`,duel:`向 ${target} 發起決鬥`,disarm:`解除 ${target} 的防禦`,freeze:`凍結 ${target}`,paralyze:`麻痺 ${target}`,predict:`預測 ${target} 贏得本局`,demand:`向 ${target} 索取保護費`};
+      const automatic={0:'讓手牌洗回牌堆，重新抽牌',2:'偵察其他玩家的手牌',4:enhanced?'準備閃避攻擊':'展開防禦',7:'天候變化',9:'戀愛風暴',10:'向其他玩家發起挑戰',11:enhanced?'讓手牌輪轉':'洗勻棄牌堆，準備抽取',12:'疫災擴散',15:'查看牌堆頂端',16:'冰霜展開',17:'覆蓋牌堆頂牌',18:'霸王色霸氣',19:'交接下局先手'};
+      const declaration=target&&targeted[intent.mode]||({coin:target?`請 ${target} 擲硬幣`:'擲硬幣決定防禦',order:'重新排列牌堆頂牌',cover:'覆蓋所選的頂牌','all-duel':'向其他玩家發起比拚'})[intent.mode]||automatic[id]||title;
+
+      const layer=make('section','card-anime-skill'),strip=make('div','card-anime-strip'),portrait=make('div','card-anime-portrait'),copy=make('div','card-anime-copy');
+      layer.dataset.card=String(id);layer.dataset.theme=theme;layer.dataset.phase='enter';layer.dataset.enhanced=String(!!enhanced);
+      layer.setAttribute('role','status');layer.setAttribute('aria-label',`${who}：${text.name}・${title}。${declaration}`);
+      portrait.setAttribute('aria-hidden','true');portrait.style.backgroundImage=`var(--card-anime-${id})`;
+      copy.append(make('span','card-anime-caster',`${who} · ${text.name}`),make('strong','card-anime-title',title),make('small','card-anime-mode',declaration));
+      strip.append(portrait,copy);
+      const motif=make('div','card-anime-motifs');motif.setAttribute('aria-hidden','true');
+      for(let i=0;i<(['slash','scythe'].includes(theme)?2:1);i++){const n=make('i','card-anime-motif');n.style.setProperty('--i',i);motif.append(n);}
+      strip.append(motif);layer.append(strip);document.body.append(layer);
+      // Reuse already-loaded GPT effect textures; do not embed a second copy.
+      const finishers={flame:'flame-kick',kick:'flame-kick',slash:'triple-slash',scythe:'triple-slash',room:'quake-ring',storm:'thunderbolt',thunder:'thunderbolt',fist:'rubber-barrage',magnet:'quake-ring',plague:'poison-dragon',soul:'dark-vortex',future:'quake-ring',frost:'ice-sphere',dark:'dark-vortex'};
+      if(finishers[theme]){const probe=make('i','duel-finisher-art');probe.dataset.finisher=finishers[theme];probe.hidden=true;layer.append(probe);layer.style.setProperty('--skill-motif',getComputedStyle(probe).getPropertyValue('--duel-finisher-art'));probe.remove();}
+      else if(theme==='guard')layer.style.setProperty('--skill-motif','var(--phone-guard-art)');
+      const duration=Math.min(4200,Math.max(3000,2200+title.length*75)),animations=[];
+      layer.dataset.duration=String(duration);
+      const animate=(node,frames,timing)=>{if(reduced())return;animations.push(node.animate(frames,timing));};
+      const angle=['slash','scythe','kick'].includes(theme)?-7:['future','room'].includes(theme)?-3:-5;
+      layer.style.setProperty('--cut-angle',angle+'deg');
+      animate(strip,[{transform:`translateX(-110%) rotate(${angle}deg)`,opacity:.5},{transform:`translateX(0) rotate(${angle}deg)`,opacity:1}],{duration:360,easing:'cubic-bezier(.16,.8,.22,1)'});
+      animate(portrait,[{transform:'translateX(-18px) scale(1.08)'},{transform:'translateX(0) scale(1)'}],{duration:duration-300,easing:'ease-out'});
+      animate(copy,[{opacity:0,transform:'translateX(28px) rotate(5deg)'},{opacity:1,transform:'translateX(0) rotate(5deg)'}],{duration:320,delay:220,fill:'both'});
+      await new Promise(resolve=>{
+        const item={node:layer,timer:null,animations,resolve};active=item;
+        item.timer=setTimeout(()=>{
+          if(active!==item||serial!==token)return;
+          layer.dataset.phase='release';
+          animate(strip,[{opacity:1,transform:`rotate(${angle}deg)`},{opacity:0,transform:`translateX(28%) rotate(${angle}deg)`}],{duration:300,fill:'forwards'});
+          item.timer=setTimeout(finish,300);
+        },duration-300);
+      });
+      return {id,actor};
+    };
+    if(typeof socket==='object')for(const type of ['disconnect','JOINED'])socket.on(type,api.cancelCardSkillIntro);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)api.cancelCardSkillIntro();});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+
+</script>
+<!-- CARD_SKILL_INTENT_COMPAT_END -->
 
 <!-- 角色語音（只有本機播放） -->
 <audio id="voiceAudio" preload="auto"></audio>

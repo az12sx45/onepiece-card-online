@@ -2038,3 +2038,6 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 2026-10-30 — Status explanations mirror existing engine expiry, consumed dodge, frozen drawn-card-only, paralysis skip and odd/even ice check. Visual rank includes self; no server rule or state schema change. See CARD_MATCH_HUD_20261030.md.
 
 2026-10-30 — Original Card next-round starter flag, larger/lower current turn, differentiated GPT sniper hit/miss/defense presentation. Normal Roger and enhanced prediction are distinct; rules unchanged. Sources and verification boundary: CARD_TURN_SNIPER_20261030.md.
+
+
+Card round presentation waits for all human venue confirmations before actions; CPU seats are excluded. Skill presentation announces accepted target/operation before outcome reveal. This does not change card rules, hidden hands, Roger rules or engine save data.

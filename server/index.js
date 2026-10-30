@@ -7,6 +7,8 @@ const { Server } = require("socket.io");
 const { pool } = require("./db");
 const { withDisplayNames } = require("./player-display");
 const { stampCardResult } = require('./card-result-identity');
+const cardVenueReady = require('./card_venue_ready');
+const cardSkillIntent = require('./card_skill_intent');
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const { Chess } = require("chess.js");
@@ -2597,7 +2599,7 @@ room._turnTimer = null;
 room._pendingTimer = null;
 room._turnWarnTimer = null;
 room._pendingWarnTimer = null;
-  if(room.phase !== "playing") return;
+  if(room.phase !== "playing" || cardVenueReady.waiting(room)) return;
   const st = room.state;
   if(!st || !Array.isArray(st.players) || st.players.length===0) return;
 
@@ -2897,6 +2899,7 @@ vis.cpuSkipAvailable = canHostSkipCpu(room, meta.playerId);
 // One shared completion identity for native and browser result retries. This is
 // presentation metadata on the cloned visible state, never a rules/save field.
 stampCardResult(room, vis);
+vis.venueReady = cardVenueReady.view(room);
 io.to(sid).emit("STATE", vis);
   }
 }
@@ -2939,8 +2942,11 @@ players: st.players
 
 // ---------- 統一套用 applyAction + 廣播 EMIT / STATE ----------
 function applyAndBroadcast(room, action, io){
-  const res = applyAction(room.state, action);
+  if (cardVenueReady.waiting(room)) return;
+  const previousRound = room.state?.roundNo;
+  const res = cardSkillIntent.decorate(room, room.state, action, applyAction(room.state, action));
   room.state = res.state;
+  if (room.state.roundNo !== previousRound) cardVenueReady.begin(room);
 
   // 1) 先把 EMIT 事件照舊丟給前端
   for (const e of (res.emits || [])) {
@@ -2985,6 +2991,7 @@ function applyAndBroadcast(room, action, io){
 
             const ns = nextRound(st2);
             r2.state = ns;
+            cardVenueReady.begin(r2);
             r2._cpuFastForward = false;
             r2._autoNextTimer = null;
 
@@ -3187,7 +3194,7 @@ function runCpuLoop(roomId){
     if (Number(roomNow._cpuLoopToken || 0) !== loopToken) return;
 
     const st = roomNow.state;
-    if (!st) return;
+    if (!st || cardVenueReady.waiting(roomNow)) return;
 
     if (st.turnStep === 'ended' || st.turnStep === 'end' || st.turnStep === 'score') {
       roomNow._cpuFastForward = false;
@@ -6242,6 +6249,23 @@ socket.on("TAKE_BACK_CONTROL", ({ roomId, playerId, secret } = {}, cb) => {
     const ok = Array.from(room.sockets.values()).some(m => m.playerId === playerId && m.secret === secret);
     if (!ok) return socket.emit("ERROR", { message: "驗證失敗" });
 
+    if (type === 'VENUE_READY') {
+      const sender = room.sockets.get(socket.id);
+      if (!sender || sender.playerId !== playerId || sender.secret !== secret) return;
+      if (cardVenueReady.acknowledge(room, playerId, action.payload)) {
+        broadcastState(room);
+        if (!cardVenueReady.waiting(room)) {
+          runCpuLoop(roomId);
+          armRoomWatchdogs(roomId);
+        }
+      }
+      return;
+    }
+    if (cardVenueReady.waiting(room) && type !== 'TAKE_BACK_CONTROL') {
+      socket.emit('EMIT', {type:'toast', text:'等待所有玩家看完本局場地後開始'});
+      return;
+    }
+
 try{
   const p = room.state?.players?.[playerId];
   if(p && p.isCPU){
@@ -6561,6 +6585,7 @@ room.sockets = newSockets;
   room.lobbyReady = {};
   room.state = st;
   room.phase = 'playing';
+  cardVenueReady.begin(room);
   broadcastRoomList();
   broadcastState(room);
 
@@ -6616,6 +6641,7 @@ if (!can) {
       // 正式進入下一局
 const ns = nextRound(st);
 room.state = ns;
+cardVenueReady.begin(room);
 room._cpuFastForward = false;
 
 // 新一局開始時，把「自動進下一局」計時器清掉，避免重複觸發
