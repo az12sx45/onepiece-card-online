@@ -2098,3 +2098,6 @@ Current browser checks: {"androidAnime": 252, "iosNarrow": 190, "desktopPresenta
 
 
 Card venue/skill adapters: server/card_venue_ready.js and server/card_skill_intent.js; scripts/card_venue_ready_client.js is embedded in public/game.html. Shared anime module android/web/card-anime-skills.js is also embedded for existing v059 clients and compiled into desktop JS. Focused tests: scripts/card_venue_ready_qa.js, scripts/card_venue_ready_browser_qa.mjs, scripts/card_skill_intent_qa.js; mobile android/card-skill-intent-qa.mjs.
+
+
+Card outcome timing: scripts/card_outcome_guard.js embedded in public/game.html; server/card_skill_intent.js public declarations; scripts/card_all_effect_cases.js and card_all_effect_flow_qa.js audit all normal/enhanced effects with six viewers; shared android/card-all-effect-render-qa.mjs checks actual rendered animations.

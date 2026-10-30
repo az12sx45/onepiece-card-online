@@ -1340,8 +1340,8 @@ window.POCardInteract=module.exports;
 (() => {
   function mount(){
     const api=window.CardPhonePresentation,root=document.documentElement;
-    if(!api||!root.dataset.cardPhone||api.cardSkillIntentVersion===1)return;
-    api.cardSkillIntentVersion=1;
+    if(!api||!root.dataset.cardPhone||api.cardSkillIntentVersion>=2)return;
+    api.cardSkillIntentVersion=2;
     const profiles={
       0:['flame','火焰捲回牌桌'],2:['petals','花瓣散開・偵察'],3:['kick','火焰踢擊'],
       4:['guard','皮毛展開'],5:['slash','刀光出鞘'],6:['room','ROOM 空間展開'],
@@ -1372,7 +1372,7 @@ window.POCardInteract=module.exports;
       const who=typeof pname==='function'?pname(actor):`P${Number(actor)+1}`;
       const title=(enhanced?text.enhTitle:text.baseTitle)||text.name;
       const target=Number.isInteger(intent.targetId)?(typeof pname==='function'?pname(intent.targetId):`P${intent.targetId+1}`):null;
-      const targeted={view:`查看 ${target} 的手牌`,swap:`和 ${target} 交換手牌`,discard:`讓 ${target} 棄掉手牌`,duel:`向 ${target} 發起決鬥`,disarm:`解除 ${target} 的防禦`,freeze:`凍結 ${target}`,paralyze:`麻痺 ${target}`,predict:`預測 ${target} 贏得本局`,demand:`向 ${target} 索取保護費`};
+      const targeted={view:`查看 ${target} 的手牌`,swap:`和 ${target} 交換手牌`,discard:`讓 ${target} 棄掉手牌`,duel:`向 ${target} 發起決鬥`,disarm:`解除 ${target} 的防禦`,freeze:`凍結 ${target}`,paralyze:`麻痺 ${target}`,predict:`預測 ${target} 贏得本局`,demand:`向 ${target} 索取保護費`,pay:`選擇交付金幣給 ${target}`,decline:`拒絕 ${target} 的要求`};
       const automatic={0:'讓手牌洗回牌堆，重新抽牌',2:'偵察其他玩家的手牌',4:enhanced?'準備閃避攻擊':'展開防禦',7:'天候變化',9:'戀愛風暴',10:'向其他玩家發起挑戰',11:enhanced?'讓手牌輪轉':'洗勻棄牌堆，準備抽取',12:'疫災擴散',15:'查看牌堆頂端',16:'冰霜展開',17:'覆蓋牌堆頂牌',18:'霸王色霸氣',19:'交接下局先手'};
       const declaration=target&&targeted[intent.mode]||({coin:target?`請 ${target} 擲硬幣`:'擲硬幣決定防禦',order:'重新排列牌堆頂牌',cover:'覆蓋所選的頂牌','all-duel':'向其他玩家發起比拚'})[intent.mode]||automatic[id]||title;
 

@@ -1,10 +1,10 @@
 'use strict';
 const {_util:{cardById}}=require('./engine');
-const ids={robin:2,sanji:3,zoro:5,law:6,nami:7,luffy:8,'luffy-boost':8,kaido:10,queen:12,killer:13,bigmom:14,'bigmom-coin':14,'kata-order':15,aokiji:16,'teach-multipick':17,roger:19};
+const ids={robin:2,sanji:3,zoro:5,law:6,nami:7,luffy:8,'luffy-boost':8,kaido:10,queen:12,killer:13,bigmom:14,'bigmom-coin':14,'bigmom-pay':14,'kata-order':15,aokiji:16,'teach-multipick':17,roger:19};
 // Public declaration only: never include hand/peek data, winning cards or results.
 function intent(before,action,result){
  const events=result.emits||[],after=result.state,p=before.pending;
- if(events.some(e=>e.to==='all'&&e.type==='log'&&/【靜默】/.test(e.text||'')))return null;
+ if(action.type==='PLAY_CARD'&&events.some(e=>e.to==='all'&&e.type==='log'&&/【靜默】/.test(e.text||'')))return null;
  let cardId,casterId=before.turnIndex,targetId=null,mode='effect';
  if(action.type==='PLAY_CARD'){
   const play=events.find(e=>e.to==='all'&&e.type==='log'&&/ 打出 \d+｜/.test(e.text||''));
@@ -27,6 +27,7 @@ function intent(before,action,result){
    if(p.action==='killer'&&action.payload?.duel===true)mode='duel';
   }else if(action.type==='QUEEN_COIN'){targetId=p.target;mode='coin';}
   else if(action.type==='BIGMOM_COIN')mode='coin';
+  else if(action.type==='BIGMOM_CHOICE'){casterId=p.target;targetId=p.caster;mode=action.payload?.choice==='pay'&&before.players[p.target]?.gold>0?'pay':'decline';}
   else if(action.type==='ORDER_COMMIT')mode='order';
   else if(action.type==='MULTIPICK_COMMIT')mode='cover';
   else if(action.type==='LUFFY_BOOST_COMMIT')mode='all-duel';
@@ -37,7 +38,10 @@ function intent(before,action,result){
  return {to:'all',type:'card_skill_intent',cardId,casterId,targetId,mode,enhanced};
 }
 function decorate(room,before,action,result){
- const events=result.emits||[];
+ let events=result.emits||[];
+ if(action.type==='PLAY_CARD'&&events.some(e=>e.to==='all'&&e.type==='log'&&/【靜默】/.test(e.text||''))){
+  room._deferredSkillMovies=null;result.emits=events.filter(e=>!['enh_fx','play_fx'].includes(e.type));return result;
+ }
  const play=events.find(e=>e.to==='all'&&e.type==='log'&&/ 打出 \d+｜/.test(e.text||''));
  if(play){
   room._deferredSkillMovies=null;

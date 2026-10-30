@@ -2953,3 +2953,6 @@ Current browser checks: {"androidAnime": 252, "iosNarrow": 190, "desktopPresenta
 
 
 Card online presentation now supports a room-only all-human venue barrier and concrete post-choice skill declarations. Installed v059 mobile bundles use the compatibility controllers in online game.html. See CARD_VENUE_READY_SKILL_INTENT_20261031.md.
+
+
+Card online outcome guard now keeps each engine EMIT/STATE transaction together on desktop and existing v059 mobile clients; no host or lobby change. See CARD_ALL_EFFECT_OUTCOME_AUDIT_20261031.md.

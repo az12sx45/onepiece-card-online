@@ -2041,3 +2041,6 @@ r54候選被使用者否決，未發布。依使用者指定DAIWA商品命名格
 
 
 Card round presentation waits for all human venue confirmations before actions; CPU seats are excluded. Skill presentation announces accepted target/operation before outcome reveal. This does not change card rules, hidden hands, Roger rules or engine save data.
+
+
+Presentation only: never treat a network pause as the end of an action. Keep outcomes until action animations finish; coin-derived protect/dodge icons wait for the toss. Silenced skills have no activation movie. Big Mom payment/refusal is announced after the targeted player chooses. Card resolution, hidden hands and Roger rules unchanged.

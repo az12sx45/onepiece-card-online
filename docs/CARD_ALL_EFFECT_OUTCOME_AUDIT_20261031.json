@@ -1,0 +1,64 @@
+{
+  "status": "VERIFIED_LOCAL_PENDING_PUBLICATION",
+  "cases": 137,
+  "cards": 20,
+  "modes": [
+    "normal",
+    "enhanced"
+  ],
+  "viewers": 6,
+  "reports": [
+    {
+      "path": "C:\\Codex_QA\\card-all-effects-audit-20261031\\matrix.json",
+      "sha256": "0fac37c8a57d7825d480bb2b997703a3db94b1b2df91321f8f6dd0ca06a92306",
+      "checks": 4243,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-all-effects-audit-20261031\\desktop\\report.json",
+      "sha256": "3a927144f7e83f43e562535e81c2876e5f06497da49ab54fef551a3222be8b0b",
+      "checks": 20,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-all-effects-audit-20261031\\android-v059\\report.json",
+      "sha256": "782fa298b06a5eb6664538dcf0efe9ae99913342e12f341c4b99b603d5833904",
+      "checks": 20,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-all-effects-audit-20261031\\ios-v059\\report.json",
+      "sha256": "05f6e4ebc9b25ae7019a14bf5023eaf869aee639f6d85869a0f9487950002bc5",
+      "checks": 20,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-all-effects-audit-20261031\\flow-sync.json",
+      "sha256": "0aadabf2ec5ab9a1dc3ce84276301866bd5399f17715dc9750ed54498187582a",
+      "checks": 8,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-all-effects-audit-20261031\\venue-sync\\browser.json",
+      "sha256": "23825630a0f86b95dbf87b632abff2cefb1ad0d63d178c2498c86aec771a4ccd",
+      "checks": 14,
+      "passed": true
+    }
+  ],
+  "physicalDeviceTest": false,
+  "sharedSources": {
+    "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\card-anime-skills.js": "e12e87b4742c0ddb42bfad49be7d74c74c029ddc51c394ccc1a44c45089f8f27",
+    "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\card-all-effect-render-qa.mjs": "9d79acf2a7687c40e5d9b4087642a3afcc6f0d34ce647ab529c41c8dc9fba641",
+    "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\card-skill-intent-qa.mjs": "55df2eb8668a26224c13978caaffa06ce2a26a37b70aa92d2ac01eb100434eef"
+  },
+  "preserved": [
+    "launcher",
+    "lobby",
+    "rules",
+    "Board",
+    "Chess",
+    "media",
+    "Android v059 APK",
+    "iOS v059 IPA"
+  ]
+}
