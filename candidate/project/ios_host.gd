@@ -33,7 +33,6 @@ func _request(method: String,args: Dictionary) -> Dictionary:
 			installed_version=str(value.get("appVersion","iOS"))
 			value.preferences=preferences;value.cacheRoot="iPhone App 儲存空間";value.freeBytes=null
 			value.games={"board":{"status":"installed","hasInstalled":true,"removable":false,"installedVersion":installed_version,"remoteVersion":installed_version},"card":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"},"chess":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"}}
-			if FileAccess.file_exists('res://native-card.tscn'):value.games.card={"status":"installed","hasInstalled":true,"removable":false,"installedVersion":installed_version,"remoteVersion":installed_version}
 		return value
 	if method=="savePreferences":
 		if args.get("gameDisplayMode","fullscreen")!="fullscreen":return {"ok":false,"error":"iPhone 使用系統管理的橫向全螢幕。"}
@@ -46,7 +45,7 @@ func _request(method: String,args: Dictionary) -> Dictionary:
 		var active:=str(bridge.call("web_game_active"))
 		if not active.is_empty() and active!=target:return {"ok":false,"error":"請先回到原遊戲並按「結束遊戲」，再開另一款。"}
 		if is_instance_valid(game) and native_game_id!=target:return {"ok":false,"error":"請先結束目前遊戲，再開另一款。"}
-		if target!="board" and not (target=="card" and FileAccess.file_exists('res://native-card.tscn')):
+		if target!="board":
 			if is_instance_valid(game):return {"ok":false,"error":"請先結束航海錄，再開另一款。"}
 			return {"ok":true} if bridge.call("web_game_open",target) else {"ok":false,"error":"遊戲無法開啟，請稍後再試。"}
 		_start_game.call_deferred(target);return {"ok":true}

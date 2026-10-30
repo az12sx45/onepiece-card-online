@@ -73,5 +73,12 @@
   "iphoneTested": false,
   "cloudJobDispatched": false,
   "paidServicesAuthorized": false,
-  "androidSourceChanged": false
+  "androidSourceChanged": false,
+  "cardWebRevision": {
+    "version": 58,
+    "desktopRelease": "package-7daa8b67809be979",
+    "route": "original web lobby and match",
+    "launcherUiChanged": false,
+    "boardChanged": false
+  }
 }
