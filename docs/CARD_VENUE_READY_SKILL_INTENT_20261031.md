@@ -12,4 +12,9 @@ Files: server/card_venue_ready.js, server/card_skill_intent.js, server/index.js;
 
 Validation: 17 barrier checks; 170 original-engine normal/enhanced 20-card intent checks; 15 real npm-start/Socket.IO browser checks (three human clients + three CPU, exact v059 Android/iOS bundles, 32-second wait and reconnect); 8 existing two-browser flow regression checks; 13 frontend intent checks each on desktop/Android/iOS bundles. Total 249. Browser viewport/device emulation is not physical phone acceptance. No screenshots or videos retained. Exact embedded shared controller checked. Reports under C:/Codex_QA/card-venue-ready-20261031 and C:/Codex_QA/card-skill-intent-20261031.
 
-Publication pending. No LATTICE tools available in the current tool inventory, so no new task persistence or graph verification is claimed.
+Publication completed; see readback below. No LATTICE tools available in the current tool inventory, so no new task persistence or graph verification is claimed.
+
+
+Publication verified 2026-10-31: package-eabb0c15e9faf3f1, source 342c9d611582247e20cd3b66843935cd00ab2feb, release 6465ff7ef8a52121e2e1ee24a4edc3dc57d6aeab. Public catalog/three game identities, all 31 Card programs, three scoped CAS objects and cache token verified. Only game.html and Card desktop JS changed in player program inventory; 1054 media entries retained. Android/iOS v059 binaries unchanged.
+
+A production isolated guest room passed 14 further checks with desktop and exact v059 Android/iOS bundles plus three CPU seats: all-human acknowledgement, unread blocking, own-socket authentication, reconnect, simultaneous release and post-release action. No browser errors. This uses Chromium contexts and is not physical phone or real-account acceptance. Total local checks 249 plus public-room checks 14. Evidence: C:/Codex_QA/card-venue-ready-20261031/source-receipt.json, public-release-readback.json and public-room/browser.json.

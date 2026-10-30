@@ -8568,3 +8568,8 @@ Current browser checks: {"androidAnime": 252, "iosNarrow": 190, "desktopPresenta
 
 
 2026-10-31: Card all-human venue acknowledgement and chosen-operation skill declaration implemented; 249 targeted checks pass. Files and evidence in CARD_VENUE_READY_SKILL_INTENT_20261031.md. Publication pending.
+
+
+Publication verified 2026-10-31: package-eabb0c15e9faf3f1, source 342c9d611582247e20cd3b66843935cd00ab2feb, release 6465ff7ef8a52121e2e1ee24a4edc3dc57d6aeab. Public catalog/three game identities, all 31 Card programs, three scoped CAS objects and cache token verified. Only game.html and Card desktop JS changed in player program inventory; 1054 media entries retained. Android/iOS v059 binaries unchanged.
+
+A production isolated guest room passed 14 further checks with desktop and exact v059 Android/iOS bundles plus three CPU seats: all-human acknowledgement, unread blocking, own-socket authentication, reconnect, simultaneous release and post-release action. No browser errors. This uses Chromium contexts and is not physical phone or real-account acceptance. Total local checks 249 plus public-room checks 14. Evidence: C:/Codex_QA/card-venue-ready-20261031/source-receipt.json, public-release-readback.json and public-room/browser.json.

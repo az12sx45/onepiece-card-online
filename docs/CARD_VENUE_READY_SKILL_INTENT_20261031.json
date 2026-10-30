@@ -1,0 +1,168 @@
+{
+  "sourceCommit": "342c9d611582247e20cd3b66843935cd00ab2feb",
+  "releaseCommit": "6465ff7ef8a52121e2e1ee24a4edc3dc57d6aeab",
+  "releaseId": "package-eabb0c15e9faf3f1",
+  "reports": [
+    {
+      "path": "C:\\Codex_QA\\card-venue-ready-20261031\\final-r2\\browser.json",
+      "sha256": "6bd82d284ea7de7ee0894d5e553019180ecbcd8c64a5796a4dbf47a29e64092c",
+      "passed": true,
+      "checks": 15
+    },
+    {
+      "path": "C:\\Codex_QA\\card-venue-ready-20261031\\flow-sync.json",
+      "sha256": "a07c5b10da932389201fd2c28afaa79dbfaf0e0241cb9c74fff5fa86169acd60",
+      "passed": true,
+      "checks": 8
+    },
+    {
+      "path": "C:\\Codex_QA\\card-skill-intent-20261031\\desktop-r2\\report.json",
+      "sha256": "2df04acb9dcf8ff3db3e14370b69eff0f3027374ce031607ed6a54af40ff620b",
+      "passed": true,
+      "checks": 13
+    },
+    {
+      "path": "C:\\Codex_QA\\card-skill-intent-20261031\\android-v059\\report.json",
+      "sha256": "2df04acb9dcf8ff3db3e14370b69eff0f3027374ce031607ed6a54af40ff620b",
+      "passed": true,
+      "checks": 13
+    },
+    {
+      "path": "C:\\Codex_QA\\card-skill-intent-20261031\\ios-v059\\report.json",
+      "sha256": "2df04acb9dcf8ff3db3e14370b69eff0f3027374ce031607ed6a54af40ff620b",
+      "passed": true,
+      "checks": 13
+    }
+  ],
+  "mobileSource": {
+    "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\card-anime-skills.js": "fcb9500f41a2d8829ef17654b9bdd20762d8c72a33be8e0711e3591304128802",
+    "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\card-skill-intent-qa.mjs": "f703dff68a1cc953145a851fdc2ba02b7330744001509c3bd1586977aa2d7e0d"
+  },
+  "checks": 249,
+  "physicalDevicesTested": false,
+  "mobileBinariesChanged": false,
+  "currentPublicBaseline": "package-eb3502616db0e3d5",
+  "publicationStatus": "PUBLISHED_AND_PUBLIC_ROOM_VERIFIED",
+  "retainedMobileVersions": {
+    "android": 59,
+    "ios": 59
+  },
+  "retainedMediaFiles": 1054,
+  "onlyChangedPublicPrograms": [
+    "game.html",
+    "js/card-desktop-table.js"
+  ],
+  "publicReadback": {
+    "passed": true,
+    "sourceCommit": "342c9d611582247e20cd3b66843935cd00ab2feb",
+    "releaseCommit": "6465ff7ef8a52121e2e1ee24a4edc3dc57d6aeab",
+    "release": "package-eabb0c15e9faf3f1",
+    "checks": [
+      "All catalog game identities and source trees exact",
+      "card manifest and runtime exact",
+      "Public program css/card-cursor-buggy-v3.css",
+      "Public program css/card-desktop-table.css",
+      "CAS hash size CORS css/card-desktop-table.css",
+      "Public program css/card-entry-tailwind-v1.min.css",
+      "Public program css/card-finish-v1.css",
+      "Public program css/card-tailwind-v1.min.css",
+      "Public program game.html",
+      "CAS hash size CORS game.html",
+      "Public program i18n/en.js",
+      "Public program i18n/i18n.js",
+      "Public program i18n/ja.js",
+      "Public program i18n/ko.js",
+      "Public program i18n/zh-Hant.js",
+      "Public program js/card-desktop-table.js",
+      "CAS hash size CORS js/card-desktop-table.js",
+      "Public program js/card_finish_v1.js",
+      "Public program js/game_cursor_feedback_v1.js",
+      "Public program manifest.webmanifest",
+      "Public program profile.html",
+      "Public program result.html",
+      "Public program shop.html",
+      "Public program start.html",
+      "Public program sw.js",
+      "Public program tutorial.html",
+      "Public program vendor/README.md",
+      "Public program vendor/babel/7.24.7/babel.min.js",
+      "Public program vendor/licenses/Babel-7.24.7-LICENSE.txt",
+      "Public program vendor/licenses/React-18.3.1-LICENSE.txt",
+      "Public program vendor/licenses/ReactDOM-18.3.1-LICENSE.txt",
+      "Public program vendor/licenses/Socket.IO-4.8.1-LICENSE.txt",
+      "Public program vendor/licenses/TailwindCSS-3.4.17-LICENSE.txt",
+      "Public program vendor/react-dom/18.3.1/react-dom.development.js",
+      "Public program vendor/react/18.3.1/react.development.js",
+      "Public program vendor/socket.io-client/4.8.1/socket.io.min.js",
+      "New game cache token live",
+      "board manifest and runtime exact",
+      "chess manifest and runtime exact"
+    ],
+    "at": "2026-10-30T18:42:44.419Z"
+  },
+  "publicRoom": {
+    "passed": true,
+    "checks": [
+      {
+        "name": "public game available",
+        "pass": true
+      },
+      {
+        "name": "six seats wait for three humans only",
+        "pass": true
+      },
+      {
+        "name": "confirmation fits 0",
+        "pass": true
+      },
+      {
+        "name": "confirmation fits 1",
+        "pass": true
+      },
+      {
+        "name": "confirmation fits 2",
+        "pass": true
+      },
+      {
+        "name": "Escape does not confirm",
+        "pass": true
+      },
+      {
+        "name": "premature human or CPU draw cannot advance",
+        "pass": true
+      },
+      {
+        "name": "first reader stays in waiting panel",
+        "pass": true
+      },
+      {
+        "name": "last unread reader blocks round",
+        "pass": true
+      },
+      {
+        "name": "another socket cannot confirm for unread player",
+        "pass": true
+      },
+      {
+        "name": "unread reconnect retains two confirmations",
+        "pass": true
+      },
+      {
+        "name": "all three release together without animation-queue deadlock",
+        "pass": true
+      },
+      {
+        "name": "human or CPU can act after release",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "scope": "Public isolated guest room: desktop and exact released v059 Android/iOS bundles, three CPU seats; real production Socket.IO, no physical-device or real-account claim."
+  },
+  "publicRoomSha256": "4e624423990afef80fbdff1a2fb74dc34ebe92e24d2c069f904ac413ed9da5c5"
+}
