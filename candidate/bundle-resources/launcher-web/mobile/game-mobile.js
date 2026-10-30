@@ -3903,6 +3903,8 @@ window.POCardInteract=module.exports;
       const arena=make('section','phone-duel-arena'),result=make('div','phone-duel-result','決鬥'),versus=make('strong','phone-duel-versus','VS');
       arena.setAttribute('aria-label',`${name(from)} 與 ${name(to)} 決鬥`);arena.dataset.phase='entry';arena.append(result,versus);scene.append(arena);
       const cards=[];
+      // The retained hand participates in this duel; do not leave a second copy in hand.
+      if([from,to].includes(typeof me==='object'?me.playerId:null))for(const node of [api.ownHandElement?.(),document.getElementById('imgHand'),document.getElementById('imgDrawn')])if(node)api.maskHandArt?.(node);
       for(const [i,id]of [from,to].entries()){
         const a=handAnchor(anchor(id,bounds)),slot=make('div','phone-duel-slot'),holder=make('div','phone-duel-card-wrap'),cardNode=make('img','phone-duel-card'),status=make('div','phone-duel-status','手牌保密');
         slot.dataset.player=String(id);slot.dataset.side=i?'right':'left';cardNode.src='images/cards/back.webp';cardNode.alt=name(id)+' 的決鬥卡背';const number=make('strong','phone-duel-number');number.hidden=true;holder.append(cardNode,number);slot.append(make('h3','',name(id)),holder,status);arena.append(slot);
@@ -3924,11 +3926,11 @@ window.POCardInteract=module.exports;
           if(validCard(d.loserCardId)){loser.cardNode.src=card(d.loserCardId);loser.cardNode.alt='公開的敗方手牌';loser.cardNode.dataset.revealed='public-loser';loser.number.textContent=String(d.loserCardId);loser.number.setAttribute('aria-label',`敗方手牌 ${d.loserCardId} 號`);loser.number.hidden=false;}
           damageCard(loser,damage,animate,later,make);
         },650);
-      },1200);
+      },1800);
       later(()=>{
         arena.dataset.phase='result';arena.dataset.resolved='true';result.textContent=hasWinner?`${name(d.winnerId)} 勝出`:'雙方平手';
         for(const c of cards){c.slot.dataset.outcome=!hasWinner?'draw':c===loser?'lost':'won';c.status.textContent=!hasWinner?'平手 · 手牌不公開':c===loser?'落敗 · 公開手牌':'勝出 · 手牌保密';}
-      },7700);
+      },6500);
       later(()=>{
         arena.dataset.phase='return';
         for(const c of cards){
@@ -3940,7 +3942,7 @@ window.POCardInteract=module.exports;
           if(c===loser){c.cardNode.getAnimations().forEach(n=>n.cancel());}
           animate(c.cardNode,[{transform:'translate(0,0) scale(1)',opacity:c===loser?.6:1},{transform:`translate(${a.x-r.x-r.width/2}px,${a.y-r.y-r.height/2}px) scale(.2)`,opacity:0}],1200);
         }
-      },6300);
+      },8500);
     };
     function damageCard(c,kind,animate,later,make){
       const img=c.cardNode;c.holder.dataset.damage=kind;
@@ -3981,6 +3983,14 @@ window.POCardInteract=module.exports;
  function mount(){
   const api=window.CardPhonePresentation;if(!api)return;
   const reactions=new Set();
+  api.playSniperCutin=({scene,from,to,digit,name,make,later,duration})=>{
+   const cut=make('section','phone-sniper-cutin'),strip=make('div','phone-sniper-cut-strip'),art=make('div','phone-sniper-cut-art'),copy=make('div','phone-sniper-cut-copy');
+   cut.dataset.phase='call';cut.setAttribute('aria-label',`${name(from)} 狙擊 ${name(to)}，猜 ${digit} 號`);
+   art.setAttribute('aria-hidden','true');copy.append(make('strong','','必殺・綠星！'),make('span','',`${name(from)} → ${name(to)}`),make('b','',`狙擊 ${digit} 號`));strip.append(art,copy);cut.append(strip);scene.append(cut);
+   if(!matchMedia('(prefers-reduced-motion: reduce)').matches){strip.animate([{transform:'translateX(-105%) rotate(-5deg)'},{transform:'translateX(0) rotate(-5deg)'}],{duration:300,easing:'cubic-bezier(.15,.8,.2,1)'});art.animate([{transform:'translateX(-14px) scale(1.05)'},{transform:'translateX(0) scale(1)'}],{duration:duration-400,easing:'ease-out'});}
+   later(()=>{cut.dataset.phase='release';strip.animate([{opacity:1,transform:'rotate(-5deg)'},{opacity:0,transform:'translateX(30%) rotate(-5deg)'}],{duration:300,fill:'forwards'});},duration-300);
+   later(()=>cut.remove(),duration);
+  };
   api.cancelHudReactions=()=>{for(const a of reactions)a.cancel();reactions.clear();};
   api.playHudAttack=({kind,source,target,detail,scene,make,mark,animate,later})=>{
    if(!['hit','miss','shield-block','dodge-block'].includes(kind)||!source||!target)return false;
@@ -4080,8 +4090,10 @@ window.POCardInteract=module.exports;
       const neutral={hit:'騙人布・綠星狙擊',miss:'騙人布・綠星狙擊',swap:'準備交換手牌',slash:'斬擊手牌',lightning:'雷電攻擊',ice:'冰凍攻擊',break:'解除防禦',guard:'防禦技能發動','shield-block':'護盾展開','dodge-block':'閃避發動',discard:'手牌移入棄牌堆'};
       const copy=make('div','phone-action-copy');copy.append(make('strong','',title),make('span','',neutral[kind]||result));notice.append(symbol,copy);scene.append(notice);
       notice.style.top=Math.min(innerHeight-100,rail.bottom+10)+'px';notice.style.width=Math.min(640,innerWidth-32)+'px';notice.style.left='50%';
-      const reading=['aim','select','shot'].includes(kind)?900:Math.min(3800,Math.max(2200,(title.length+result.length)*65));scene.dataset.readingMs=String(reading);
-      const duration=kind==='duel'?9200:kind==='notice'?400:kind==='scan'?2900:['hit','miss','shield-block','dodge-block'].includes(kind)?3600:1800;
+      const sniper=['hit','miss','shield-block','dodge-block'].includes(kind)&&Number.isInteger(detail.digit);
+      const reading=sniper?3800:['aim','select','shot'].includes(kind)?900:Math.min(3800,Math.max(2200,(title.length+result.length)*65));scene.dataset.readingMs=String(reading);
+      if(sniper){notice.hidden=true;window.CardPhonePresentation.playSniperCutin?.({scene,from,to,digit:detail.digit,name,make,later,duration:reading});}
+      const duration=kind==='duel'?10400:kind==='notice'?400:kind==='scan'?2900:['hit','miss','shield-block','dodge-block'].includes(kind)?3600:1800;
       function mark(a,cls){const n=make('span',cls);n.dataset.player=String(a.id);n.style.left=a.x+'px';n.style.top=a.y+'px';scene.append(n);return n;}
       function animate(n,frames,ms=1400,delay=0){if(reduce())return;n.animate(frames,{duration:ms,delay,easing:'cubic-bezier(.2,.7,.25,1)',fill:'both'});}
       function handAnchor(a){if(a?.id!==viewer())return a;const r=window.CardPhonePresentation?.cardPlayerRect?.(a.id);return r?{...a,x:r.left+r.width/2,y:r.top+r.height/2}:a;}
@@ -4155,7 +4167,7 @@ window.POCardInteract=module.exports;
       if(!reduce())b.animate([{filter:'brightness(1.5)'},{filter:'brightness(1)'}],{duration:240});
       const p=current()?.pending;
       if(b.hasAttribute('data-i'))burst(p?.action==='usopp'?'aim':'select',viewer(),Number(b.dataset.i),p?.action==='usopp'?'鎖定目標':'選定對象');
-      if(b.hasAttribute('data-d')){const target=p?.extra?.target??(typeof localPending==='object'?localPending?.target:null);burst('shot',viewer(),target,`狙擊尾數 ${b.dataset.d} · 等待判定`,{digit:Number(b.dataset.d),title:`${name(viewer())} 猜 ${name(target)}`,result:'選擇尾數 · 等待判定'});}
+      if(!root.dataset.cardFlow&&b.hasAttribute('data-d')){const target=p?.extra?.target??(typeof localPending==='object'?localPending?.target:null);burst('shot',viewer(),target,`狙擊尾數 ${b.dataset.d} · 等待判定`,{digit:Number(b.dataset.d),title:`${name(viewer())} 猜 ${name(target)}`,result:'選擇尾數 · 等待判定'});}
     },true);
     new MutationObserver(decorate).observe(modal,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
 
@@ -4188,12 +4200,12 @@ window.POCardInteract=module.exports;
       if(window.CardPhonePresentation?.committingPresentation)return;
       if(!e||typeof e!=='object')return;
       if(e.to!=null&&e.to!=='all'&&e.to!==viewer())return;
-      if(e.type==='card_guess'&&e.to==='all'&&Number.isInteger(e.digit)&&e.digit>=0&&e.digit<=9){lastGuess={from:e.casterId,to:e.targetId,digit:e.digit};burst('shot',e.casterId,e.targetId,'等待判定',{digit:e.digit,title:`${name(e.casterId)} 猜 ${name(e.targetId)}`,result:'選擇尾數 · 等待判定'});return;}
-      if(e.type==='card_defense'&&e.to==='all'&&['protect','dodge'].includes(e.status)){const guess=lastGuess?.from===e.casterId&&lastGuess?.to===e.targetId?lastGuess:null;burst(e.status==='protect'?'shield-block':'dodge-block',e.casterId,e.targetId,e.status==='protect'?'護盾擋下':'閃避成功',{status:e.status,digit:guess?.digit,title:`${name(e.casterId)} → ${name(e.targetId)}`,result:`${e.status==='protect'?'護盾擋下效果':'閃避成功 · 已消耗'}${guess?' · 未判定猜中／猜錯':''}`});lastGuess=null;return;}
+      if(e.type==='card_guess'&&e.to==='all'&&Number.isInteger(e.digit)&&e.digit>=0&&e.digit<=9){lastGuess={from:e.casterId,to:e.targetId,digit:e.digit};return;}
+      if(e.type==='card_defense'&&e.to==='all'&&['protect','dodge'].includes(e.status)){const guess=lastGuess?.from===e.casterId&&lastGuess?.to===e.targetId?lastGuess:null;burst(e.status==='protect'?'shield-block':'dodge-block',e.casterId,e.targetId,e.status==='protect'?'護盾擋下':'閃避成功',{status:e.status,digit:guess?.digit,title:guess?`${name(e.casterId)} 猜 ${name(e.targetId)} ${guess.digit} 號`:`${name(e.casterId)} → ${name(e.targetId)}`,result:`${e.status==='protect'?'護盾擋下效果':'閃避成功 · 已消耗'}${guess?' · 未判定猜中／猜錯':''}`});lastGuess=null;return;}
       if(!root.dataset.cardFlow&&e.type==='log'&&e.to==='all'&&typeof e.text==='string'&&/^(薩波|基德|紅髮|香克斯|羅傑|奎因|大媽)/.test(e.text)){burst('notice',null,null,e.text);return;}
       const visual=eventFx[e.type];
       if(visual){let detail;
-        if(e.type.startsWith('usopp_')){detail={digit:e.digit,title:`${name(e.casterId)} 猜 ${name(e.targetId)}`,result:e.type==='usopp_hit'?'猜中！狙擊命中':'猜錯 · 狙擊未命中'};lastGuess=null;}
+        if(e.type.startsWith('usopp_')){detail={digit:e.digit??lastGuess?.digit,title:`${name(e.casterId)} 猜 ${name(e.targetId)} ${e.digit??lastGuess?.digit} 號`,result:e.type==='usopp_hit'?'猜中！狙擊命中':'猜錯 · 狙擊未命中'};lastGuess=null;}
         else if(e.type==='law_swap')detail={title:`${name(e.casterId)} ⇄ ${name(e.targetId)}`,result:'兩人已交換手牌'};
         else if(['chopper_status','bigmom_status'].includes(e.type)&&['protect','dodge'].includes(e.status))detail={status:e.status,title:name(e.casterId),result:e.status==='protect'?'獲得護盾 · 保護中':'獲得閃避 · 等待觸發'};
         burst(visual[0],e.casterId,e.all||e.mode==='all'?null:e.targetId??e.casterId,visual[1]+(e.type.startsWith('usopp_')?` · 尾數 ${e.digit}`:''),detail);return;}
@@ -4239,6 +4251,7 @@ window.POCardInteract=module.exports;
 })();
 
 
+
 /* Android presentation module: card-phone-piles */
 /* Count-aware image stacks. Original deck button, discard order and callbacks stay authoritative. */
 (() => {
@@ -4272,12 +4285,19 @@ window.POCardInteract=module.exports;
     intro.append(title,cards,enter);document.body.append(intro);
     let pendingKey=null,activeKey=null,seen=new Set();
     try{seen=new Set(JSON.parse(sessionStorage.getItem('po-card-venue-intro-v1')||'[]'));}catch{}
-    function closeIntro(){intro.hidden=true;activeKey=null;const first=model()?.venues?.[0]?.name;if(first)api.setVenueBackground?.(document.body.dataset.venue||first,{enter:true});deck.focus({preventScroll:true});}
+    function closeIntro(){
+      if(enter.disabled)return;
+      if(activeKey){seen.add(activeKey);seen=new Set([...seen].slice(-40));try{sessionStorage.setItem('po-card-venue-intro-v1',JSON.stringify([...seen]));}catch{}}
+      intro.hidden=true;activeKey=null;pendingKey=null;const first=model()?.venues?.[0]?.name;if(first)api.setVenueBackground?.(first,{enter:true});deck.focus({preventScroll:true});
+    }
+    api.isVenueIntroPending=()=>!!pendingKey||!intro.hidden;
     enter.onclick=closeIntro;intro.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();closeIntro();}if(e.key==='Tab'){e.preventDefault();enter.focus();}});
     function showIntro(){
       if(!pendingKey||!intro.hidden||!$('enhOverlay').classList.contains('hidden')||!$('phoneCardSheet').hidden||api.presentationEffectsBusy?.())return;
-      const copies=[...venues.children].map(n=>{const copy=n.cloneNode(true);copy.removeAttribute('id');copy.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));return copy;});if(!copies.length)return;
-      cards.replaceChildren(...copies);activeKey=pendingKey;pendingKey=null;seen.add(activeKey);seen=new Set([...seen].slice(-40));try{sessionStorage.setItem('po-card-venue-intro-v1',JSON.stringify([...seen]));}catch{}
+      // STATE renders on rAF: the old #venues DOM can still belong to last round.
+      const copies=(model()?.venues||[]).map(v=>{const copy=make('article','venue-card'),img=make('img',''),text=make('div','');img.src=VEN(v.name);img.alt=v.name;img.dataset.name=v.name;text.append(make('div','',v.name),make('div','',venueDesc(v.name)));copy.append(img,text);return copy;});if(!copies.length)return;
+      cards.replaceChildren(...copies);activeKey=pendingKey;pendingKey=null;intro.dataset.round=String(model()?.roundNo);enter.disabled=true;
+      const key=activeKey;Promise.all([...cards.querySelectorAll('img')].map(img=>img.decode().catch(()=>{}))).then(()=>setTimeout(()=>{if(activeKey===key)enter.disabled=false;},900));
       intro.hidden=false;enter.focus({preventScroll:true});
     }
     function sync(){
@@ -4290,9 +4310,9 @@ window.POCardInteract=module.exports;
       empty.hidden=presented>0;
       [...discard.querySelectorAll('img')].forEach((img,i)=>{const secret=!!(items[i]&&typeof items[i]==='object'&&items[i].back===true);img.dataset.phoneSecret=String(secret);const b=img.closest('button');if(b){b.dataset.pileTop=String(i===presented-1);b.tabIndex=$('phoneCardSheet').contains(discard)||i===presented-1?0:-1;}});
       const key=s.phase!=='lobby'&&s.turnStep&&s.venues?.length?JSON.stringify([typeof me==='object'?me.roomId:null,s.roundNo,s.venues.map(v=>v.name)]):null;
-      if(activeKey&&activeKey!==key)closeIntro();
+      if(activeKey&&activeKey!==key){intro.hidden=true;activeKey=null;}
       pendingKey=key&&!seen.has(key)?key:null;
-      showIntro();
+      showIntro();if(pendingKey&&intro.hidden)setTimeout(schedule,100);
     }
     let queued=false;const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;sync();});};
     api.syncCardPiles=schedule;
@@ -4454,6 +4474,11 @@ window.POCardInteract=module.exports;
     const stage=make('section','phone-played-stage');stage.id='phonePlayedStage';stage.hidden=true;stage.setAttribute('aria-live','polite');
     const stageName=make('div','phone-stage-name'),stageImg=make('img','phone-stage-card'),stageStatus=make('div','phone-stage-status');stageImg.alt='場中央打出的卡';stage.append(stageName,stageImg,stageStatus);document.body.append(stage);
     let queue=[],active=null,seen=new Set(),timer=null,stageKey=null;
+    // A played card belongs to its landing spot, not to whichever modal is open.
+    const anchorProps=['left','top','width','height'];
+    function releaseAnchor(){for(const key of anchorProps)stage.style.removeProperty(key);}
+    function anchorStage(){releaseAnchor();const r=stage.getBoundingClientRect();if(!r.width||!r.height)return;for(const [key,value] of Object.entries({left:r.left+r.width/2,top:r.top+r.height/2,width:r.width,height:r.height}))stage.style.setProperty(key,value+'px','important');}
+    let viewport=[innerWidth,innerHeight];window.addEventListener('resize',()=>{if(viewport[0]===innerWidth&&viewport[1]===innerHeight)return;viewport=[innerWidth,innerHeight];if(active)anchorStage();});
     const originalFlash=typeof showPlayedFlash==='function'?showPlayedFlash:null;
     const busy=()=>!!current()?.pending||['modal','enhOverlay','lawSwapModal','luffyBoostModal','duelFx','kidConfirmModal'].some(id=>{const n=$(id);return n&&!n.classList.contains('hidden')&&n.getClientRects().length&&getComputedStyle(n).visibility!=='hidden'&&getComputedStyle(n).opacity!=='0';})||!!$('phoneInteractionFx')?.children.length||!!$('phoneCardFlights')?.querySelector('[data-kind="swap-in"],[data-kind="peek"],[data-kind="law-view"]');
     api.isCardEntering=()=>!!active&&['enter','display','place'].includes(active.phase);
@@ -4464,11 +4489,12 @@ window.POCardInteract=module.exports;
     api.presentedDiscardCount=()=>{const s=current(),holds=[active,...queue].filter(Boolean).filter(x=>x.round===s?.roundNo).map(x=>x.index);return holds.length?Math.min(s?.discard?.length||0,...holds):s?.discard?.length||0;};
     function repaint(){api.syncCardPiles?.();}
     function callbacks(item){for(const fn of item.callbacks.splice(0)){try{fn();}catch{}}}
-    function clearStage(){clearTimeout(timer);timer=null;try{_flashBusy=false;_enhSignal=null;}catch{}queue=[];active=null;seen.clear();stage.hidden=true;stageImg.style.visibility='';root.removeAttribute('data-card-resolving');api.cancelCardFlights?.('play-enter');api.cancelCardFlights?.('play-exit');repaint();}
+    function clearStage(){clearTimeout(timer);timer=null;try{_flashBusy=false;_enhSignal=null;}catch{}queue=[];active=null;seen.clear();stage.hidden=true;releaseAnchor();stageImg.style.visibility='';root.removeAttribute('data-card-resolving');api.cancelCardFlights?.('play-enter');api.cancelCardFlights?.('play-exit');repaint();}
     function start(){
       if(active||!queue.length||fast())return;active=queue.shift();const x=active;stage.hidden=false;stageImg.style.visibility='';root.dataset.cardResolving='1';stage.dataset.player=String(x.by);stage.dataset.card=String(x.id);stage.dataset.phase='enter';x.phase='enter';
       stageName.textContent=(typeof pname==='function'?pname(x.by):`P${x.by+1}`)+' 打出';stageStatus.textContent='發動效果';
       stageImg.src=typeof isEnhancedNow==='function'&&isEnhancedNow(x.id)?CARD_ENH(x.id):CARD(x.id);
+      stageImg.style.transition='none';anchorStage();void stageImg.offsetWidth;requestAnimationFrame(()=>{if(active===x)stageImg.style.transition='';});
       const flies=api.flyCard?.({from:api.cardPlayerRect?.(x.by,x.id),to:stageImg,src:stageImg.src,kind:'play-enter'});
       if(x.by===viewer())api.maskHandArt?.(current()?.players?.[x.by]?.tempDraw===x.id?$('imgDrawn'):$('imgHand'));
       repaint();timer=setTimeout(()=>{if(active!==x)return;x.phase='display';stage.dataset.phase='display';stageStatus.textContent='展示卡牌';timer=setTimeout(()=>{if(active!==x)return;x.phase='place';stage.dataset.phase='place';stageStatus.textContent='放上場地';timer=setTimeout(()=>{if(active!==x)return;x.phase='resolve';x.readyAt=performance.now();stage.dataset.phase='resolve';stageStatus.textContent='發動效果';callbacks(x);document.dispatchEvent(new Event('phone-card-center-ready'));tick();},reduced()?50:650);},reduced()?100:700);},flies?1100:100);
@@ -4883,9 +4909,9 @@ window.POCardInteract=module.exports;
         const key=JSON.stringify([!p.alive,list]);
         if(view.statusKey!==key){view.statusKey=key;view.icons.replaceChildren();
           if(!p.alive)text(view.icons,'已出局');
-          else if(!list.length)text(view.icons,`第 ${order+1} 順位`);
+          else if(!list.length)text(view.icons,'');
           else for(const [key,index,label] of list){const badge=make('button','phone-seat-status-icon');badge.type='button';badge.dataset.status=key;badge.style.backgroundPosition=`${(index%3)*50}% ${Math.floor(index/3)*100}%`;badge.setAttribute('aria-label',label);view.icons.append(badge);}
-        }else if(p.alive&&!list.length)text(view.icons,`第 ${order+1} 順位`);
+        }else if(p.alive&&!list.length)text(view.icons,'');
         view.phase.hidden=!active;text(view.phase,'▼ '+(i===viewer?'你的回合':'正在行動')+' · '+(s.pending?'技能':s.turnStep==='draw'?'抽牌':'選牌'));
         if(i===viewer&&self){const signature=view.card.outerHTML;if(signature!==selfSignature){selfSignature=signature;self.replaceChildren(view.card.cloneNode(true));}self.dataset.seatId=String(i);self.dataset.seatOrder=String(order+1);self.dataset.seatActive=String(!!active);self.dataset.seatOut=String(!p.alive);self.setAttribute('aria-label',`自己的資訊，第 ${order+1} 順位，${label}`);}
       });
@@ -4899,6 +4925,127 @@ window.POCardInteract=module.exports;
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
+
+
+/* Android presentation module: card-private-enhance */
+/* Local visual transformation. Reads only the viewer's authorized hand. */
+(() => {
+ function mount(){
+  const api=window.CardPhonePresentation;if(!api||typeof playEnhanceFx!=='function')return;
+  let queue=[],active=null,generation=0,timer=null;const pending=new Set();
+  const valid=x=>typeof me==='object'&&state?.roundNo===x.round&&me.playerId===x.viewer&&state?.players?.[x.viewer]?.[x.slot]===x.id&&isEnhancedNow(x.id);
+  api.isEnhancementBusy=()=>!!active||queue.length>0&&!api.isVenueIntroPending?.();
+  function finish(x){x.release?.();x.art?.remove();x.animation?.cancel();pending.delete(x.key);if(active===x)active=null;}
+  api.cancelEnhancements=()=>{generation++;clearTimeout(timer);if(active)finish(active);queue=[];pending.clear();};
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  async function pump(){
+   clearTimeout(timer);if(active||!queue.length)return;
+   if(document.hidden){api.cancelEnhancements();return;}
+   if(api.isVenueIntroPending?.()||api.isVenueEntering?.()||api.isEffectBusy?.()||document.getElementById('phoneCardFlights')?.children.length){timer=setTimeout(pump,80);return;}
+   const x=queue.shift();if(!valid(x)){pending.delete(x.key);pump();return;}
+   active=x;const token=generation,box=x.target.getBoundingClientRect();
+   if(!box.width){finish(x);pump();return;}
+   const art=document.createElement('figure');art.className='phone-private-enhance';art.dataset.owner=String(x.viewer);art.dataset.card=String(x.id);art.setAttribute('aria-label','只有你可見的強化卡變身');
+   const img=document.createElement('img'),caption=document.createElement('figcaption');img.src=CARD(x.id);img.alt='原卡牌';caption.textContent='場地共鳴 · 強化';art.append(img,caption);document.body.append(art);x.art=art;x.release=api.borrowCardVisual?.(x.target);
+   const dest=img.getBoundingClientRect(),dx=box.x+box.width/2-dest.x-dest.width/2,dy=box.y+box.height/2-dest.y-dest.height/2;
+   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+   if(!reduced){x.animation=img.animate([{transform:`translate(${dx}px,${dy}px) scale(${box.width/dest.width})`},{transform:'none'}],{duration:550,easing:'ease-out'});await wait(550);}
+   if(token!==generation||!valid(x)){finish(x);pump();return;}
+   art.dataset.phase='transform';
+   if(!reduced)img.animate([{transform:'rotateY(0)',filter:'brightness(1)'},{transform:'rotateY(90deg)',filter:'brightness(1.6)'},{transform:'rotateY(0)',filter:'brightness(1)'}],{duration:850});
+   await wait(reduced?0:425);if(token!==generation||!valid(x)){finish(x);pump();return;}
+   img.src=CARD_ENH(x.id);img.alt='強化卡牌';await wait(reduced?700:1300);
+   if(token===generation&&valid(x)){_enhPlayed.add(x.key);x.target.src=CARD_ENH(x.id);if(!reduced){img.animate([{transform:'none'},{transform:`translate(${dx}px,${dy}px) scale(${box.width/dest.width})`}],{duration:550,easing:'ease-in',fill:'forwards'});await wait(550);}}
+   finish(x);pump();
+  }
+  playEnhanceFx=function(venue,target,id,key){
+   const viewer=typeof me==='object'?me.playerId:null,slot=target?.id==='imgDrawn'?'tempDraw':target?.id==='imgHand'?'hand':null;
+   if(!slot||viewer==null||key!==`${state?.roundNo}:${viewer}:${slot==='tempDraw'?'drawn':'hand'}:${id}`||!isEnhancedNow(id)||state?.players?.[viewer]?.[slot]!==id)return;
+   if(_enhPlayed.has(key)){target.src=CARD_ENH(id);return;}
+   if(pending.has(key))return;pending.add(key);queue.push({target,id,key,viewer,slot,round:state.roundNo});pump();
+  };
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)api.cancelEnhancements();});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
+
+/* Android presentation module: card-anime-skills */
+/* Shared Card match presentation only. Only the public played-card log selects artwork.
+ * No private hand inspection, gameplay commands or outcome prediction. */
+(() => {
+  function mount(){
+    const api=window.CardPhonePresentation,root=document.documentElement;
+    if(!api||!root.dataset.cardPhone)return;
+    const profiles={
+      0:['flame','火焰捲回牌桌'],2:['petals','花瓣散開・偵察'],3:['kick','火焰踢擊'],
+      4:['guard','皮毛展開'],5:['slash','刀光出鞘'],6:['room','ROOM 空間展開'],
+      7:['storm','天候變化'],8:['fist','橡膠重拳'],9:['heart','魅惑風暴'],
+      10:['thunder','雷鳴衝擊'],11:['magnet','磁力牽引'],12:['plague','疫災擴散'],
+      13:['scythe','旋刃交錯'],14:['soul','靈魂威壓'],15:['future','見聞色展開'],
+      16:['frost','冰霜凝結'],17:['dark','黑暗收束'],18:['haki','霸王色威壓'],
+      19:['king','海賊王登場']
+    };
+    const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text!=null)n.textContent=text;return n;};
+    let active=null,serial=0;
+    const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
+    function finish(){if(!active)return;const item=active;active=null;clearTimeout(item.timer);for(const a of item.animations)a.cancel();item.node.remove();item.resolve();}
+    api.cancelCardSkillIntro=()=>{serial++;finish();};
+    api.isCardSkillIntroBusy=()=>!!active;
+    api.presentCardSkillBatch=async events=>{
+      if(fast())return null;
+      const play=events.find(e=>e?.to==='all'&&e.type==='log'&&/ 打出 \d+｜/.test(e.text||''));
+      if(!play)return null;
+      const id=Number(play.text.match(/ 打出 (\d+)｜/)[1]);
+      if(!profiles[id])return null; // Usopp retains his target/digit-specific cut-in.
+      // A silenced card is still shown on the field, but must not call a disabled skill.
+      if(events.some(e=>e?.to==='all'&&e.type==='log'&&/【靜默】/.test(e.text||'')))return null;
+      const text=typeof CARD_TEXT==='object'?CARD_TEXT[id]:null;
+      if(!text)return null;
+      finish();const token=++serial;
+      const enhanced=typeof isEnhancedNow==='function'&&isEnhancedNow(id);
+      const [theme]=profiles[id],actor=typeof state==='object'?state.turnIndex:null;
+      const who=typeof pname==='function'?pname(actor):`P${Number(actor)+1}`;
+      const title=(enhanced?text.enhTitle:text.baseTitle)||text.name;
+      const layer=make('section','card-anime-skill'),strip=make('div','card-anime-strip'),portrait=make('div','card-anime-portrait'),copy=make('div','card-anime-copy');
+      layer.dataset.card=String(id);layer.dataset.theme=theme;layer.dataset.phase='enter';layer.dataset.enhanced=String(!!enhanced);
+      layer.setAttribute('role','status');layer.setAttribute('aria-label',`${who}：${text.name}・${title}`);
+      portrait.setAttribute('aria-hidden','true');portrait.style.backgroundImage=`var(--card-anime-${id})`;
+      copy.append(make('span','card-anime-caster',`${who} · ${text.name}`),make('strong','card-anime-title',title),make('small','card-anime-mode',enhanced?'強化技能':'技能發動'));
+      strip.append(portrait,copy);
+      const motif=make('div','card-anime-motifs');motif.setAttribute('aria-hidden','true');
+      for(let i=0;i<(['slash','scythe'].includes(theme)?2:1);i++){const n=make('i','card-anime-motif');n.style.setProperty('--i',i);motif.append(n);}
+      strip.append(motif);layer.append(strip);document.body.append(layer);
+      // Reuse already-loaded GPT effect textures; do not embed a second copy.
+      const finishers={flame:'flame-kick',kick:'flame-kick',slash:'triple-slash',scythe:'triple-slash',room:'quake-ring',storm:'thunderbolt',thunder:'thunderbolt',fist:'rubber-barrage',magnet:'quake-ring',plague:'poison-dragon',soul:'dark-vortex',future:'quake-ring',frost:'ice-sphere',dark:'dark-vortex'};
+      if(finishers[theme]){const probe=make('i','duel-finisher-art');probe.dataset.finisher=finishers[theme];probe.hidden=true;layer.append(probe);layer.style.setProperty('--skill-motif',getComputedStyle(probe).getPropertyValue('--duel-finisher-art'));probe.remove();}
+      else if(theme==='guard')layer.style.setProperty('--skill-motif','var(--phone-guard-art)');
+      const duration=Math.min(4200,Math.max(3000,2200+title.length*75)),animations=[];
+      layer.dataset.duration=String(duration);
+      const animate=(node,frames,timing)=>{if(reduced())return;animations.push(node.animate(frames,timing));};
+      const angle=['slash','scythe','kick'].includes(theme)?-7:['future','room'].includes(theme)?-3:-5;
+      layer.style.setProperty('--cut-angle',angle+'deg');
+      animate(strip,[{transform:`translateX(-110%) rotate(${angle}deg)`,opacity:.5},{transform:`translateX(0) rotate(${angle}deg)`,opacity:1}],{duration:360,easing:'cubic-bezier(.16,.8,.22,1)'});
+      animate(portrait,[{transform:'translateX(-18px) scale(1.08)'},{transform:'translateX(0) scale(1)'}],{duration:duration-300,easing:'ease-out'});
+      animate(copy,[{opacity:0,transform:'translateX(28px) rotate(5deg)'},{opacity:1,transform:'translateX(0) rotate(5deg)'}],{duration:320,delay:220,fill:'both'});
+      await new Promise(resolve=>{
+        const item={node:layer,timer:null,animations,resolve};active=item;
+        item.timer=setTimeout(()=>{
+          if(active!==item||serial!==token)return;
+          layer.dataset.phase='release';
+          animate(strip,[{opacity:1,transform:`rotate(${angle}deg)`},{opacity:0,transform:`translateX(28%) rotate(${angle}deg)`}],{duration:300,fill:'forwards'});
+          item.timer=setTimeout(finish,300);
+        },duration-300);
+      });
+      return {id,actor};
+    };
+    if(typeof socket==='object')for(const type of ['disconnect','JOINED'])socket.on(type,api.cancelCardSkillIntro);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)api.cancelCardSkillIntro();});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
 
 
 /* Android presentation module: card-phone-flow */
@@ -4917,8 +5064,8 @@ window.POCardInteract=module.exports;
     const visible=id=>{const n=$(id);return !!n&&!n.hidden&&!n.classList.contains('hidden')&&n.getClientRects().length>0;};
     const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
     const signature=s=>JSON.stringify(s&&[s.roundNo,s.turnIndex,s.turnStep,s.pending,s.players?.map(p=>[p.alive,p.hand,p.tempDraw,p.gold,p.protected,p.dodging,p.frozen,p.skipNext])]);
-    const effects=()=>!!api.isEffectBusy?.()||!!api.isCoinBusy?.()||['enhOverlay','drawOverlay','coinOverlay'].some(visible)||!!$('phoneCardFlights')?.children.length;
-    const reading=()=>!!api.isVenueEntering?.()||visible('phoneCardSheet')||visible('phonePrivateReveal')||visible('phoneLibrary')||visible('cardDexOverlay')||visible('phoneVenueIntro');
+    const effects=()=>!!api.isCardSkillIntroBusy?.()||!!api.isEffectBusy?.()||!!api.isEnhancementBusy?.()||!!api.isCoinBusy?.()||['enhOverlay','drawOverlay','coinOverlay'].some(visible)||!!$('phoneCardFlights')?.children.length;
+    const reading=()=>!!api.isVenueIntroPending?.()||!!api.isVenueEntering?.()||visible('phoneCardSheet')||visible('phonePrivateReveal')||visible('phoneLibrary')||visible('cardDexOverlay')||visible('phoneVenueIntro');
     const stage=()=>!!api.isCardResolving?.()&&!api.isLocalCardPreview?.()&&!state?.pending;
     const busy=()=>!fast()&&(effects()||reading()||stage());
     function dispatch(type,value){for(const fn of listeners[type])fn.call(socket,value);}
@@ -4943,9 +5090,12 @@ window.POCardInteract=module.exports;
         // First the played card enters the center; results are not applied yet.
         while(valid()&&!fast()&&api.isCardEntering?.())await pause();
         if(!valid())return;
+        const skillIntro=await api.presentCardSkillBatch?.(batch.events);
+        if(!valid())return;
         const lawScan=batch.events.some(e=>e.type==='law_view'&&e.to===me.playerId);
         const privateFaces=batch.events.some(e=>e.to===me.playerId&&['robin_view','kata_peek','teach_cover'].includes(e.type));
         for(const e of batch.events){
+          if(skillIntro&&e.type==='play_fx'&&e.cardId===skillIntro.id)continue;
           // Enhanced Law sends a textual peek and a card view for the same private result.
           // The comparison already shows both cards; do not open a second reading gate.
           const duplicateScan=lawScan&&e.type==='peek'&&e.to===me.playerId&&e.lines?.length&&e.lines.every(line=>typeof line==='string'&&line.startsWith('ROOM・SCAN：'));
@@ -4986,7 +5136,7 @@ window.POCardInteract=module.exports;
       if(fast()&&!settling){for(const b of batches.splice(0))commit(b);updateLock();return;}
       pump();
     });
-    function reset(){api.deferResultText=false;epoch++;clearTimeout(timer);clearTimeout(eventTimer);batches=[];events=[];latest=null;settling=false;activeBatch=null;api.restoreHandArt?.();delete root.dataset.cardFlowQueued;root.dataset.cardFlowBusy='false';}
+    function reset(){api.deferResultText=false;api.cancelCardSkillIntro?.();api.cancelEnhancements?.();epoch++;clearTimeout(timer);clearTimeout(eventTimer);batches=[];events=[];latest=null;settling=false;activeBatch=null;api.restoreHandArt?.();delete root.dataset.cardFlowQueued;root.dataset.cardFlowBusy='false';}
     for(const e of ['disconnect','JOINED'])socket.on(e,reset);
     const originalSend=typeof sendAction==='function'?sendAction:null;
     api.canSendPresentedAction=target=>!stage()&&!api.isKidAwaiting?.()&&!effects()&&(!reading()||$('phoneCardSheet')?.dataset.inspectKind==='hand'&&!!target?.closest?.('#phoneCardConfirm,#playHand,#playDrawn'))&&!settling&&!batches.length&&(!latest||signature(latest)===signature(state));

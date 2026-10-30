@@ -75,10 +75,11 @@
   "paidServicesAuthorized": false,
   "androidSourceChanged": false,
   "cardWebRevision": {
-    "version": 58,
-    "desktopRelease": "package-7daa8b67809be979",
+    "version": 59,
+    "desktopRelease": "package-eb3502616db0e3d5",
     "route": "original web lobby and match",
     "launcherUiChanged": false,
-    "boardChanged": false
+    "boardChanged": false,
+    "experimentalEnhancedProjection": false
   }
 }
