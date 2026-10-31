@@ -1,0 +1,55 @@
+{
+  "status": "PUBLISHED_PUBLIC_VERIFIED",
+  "previousPublic": "package-400b43fdc089a4ca",
+  "reports": [
+    {
+      "path": "C:\\Codex_QA\\card-other-cards-20261031\\standing-desktop-all\\report.json",
+      "passed": true,
+      "checks": 176,
+      "sha256": "e851fac09af15dce5001904ab86a14e02500768f7b1b1dc5584aef14fe7957f2"
+    },
+    {
+      "path": "C:\\Codex_QA\\card-other-cards-20261031\\standing-ios-all\\report.json",
+      "passed": true,
+      "checks": 176,
+      "sha256": "9e701c8a4f21c5b2d2b1f149e1b7e98c44577e82d2edc931e8e2ea93a7996d89"
+    },
+    {
+      "path": "C:\\Codex_QA\\card-other-cards-20261031\\standing-android-real\\report.json",
+      "passed": true,
+      "checks": 35,
+      "sha256": "3064545e80d24a4d6ef5a58edeb198731968e18f42aa6d1c4c2f46ffe0a9f01b"
+    },
+    {
+      "path": "C:\\Codex_QA\\card-other-cards-20261031\\standing-desktop-final\\report.json",
+      "passed": true,
+      "checks": 25,
+      "sha256": "f596fdeb671560c3956c865924c00b9b2f54a8de6f9af02b12e54ea88ea40300"
+    },
+    {
+      "path": "C:\\Codex_QA\\card-other-cards-20261031\\standing-cancel-final\\report.json",
+      "passed": true,
+      "checks": 4,
+      "sha256": "08ba971ac95a00bec2b831483d8a1f61a8d8cbaba721486855a1e8342d521fb7"
+    },
+    {
+      "path": "C:\\Codex_QA\\card-other-cards-20261031\\standing-public-readback.json",
+      "passed": true,
+      "checks": 39,
+      "sha256": "1d8d6271ce3118fc61eca924e7312053562bda8db63fcb0b94ac300fb8e898bc"
+    },
+    {
+      "path": "C:\\Codex_QA\\card-other-cards-20261031\\public-room-final\\browser.json",
+      "passed": true,
+      "checks": 17,
+      "sha256": "a44fb0a7bd0c68e0e77cb9b7ade7d7540cb38dbe320345951fd7fbf8b786e317"
+    }
+  ],
+  "sourceCommit": "7a0c14db2df4bee6720bfb93693528b202e7fd58",
+  "releaseCommit": "1ad95c710ae1178c9b9baaa4dc0a5188b0b56979",
+  "releaseId": "package-aba4af45c2fe5676",
+  "verifiedAt": "2026-10-31T15:58:09.748671+00:00",
+  "retainedMediaFiles": 1054,
+  "nativeBinaries": "Existing v059 Android/iOS unchanged; online Card update only",
+  "limits": "Chromium desktop/mobile-bundle and public guest-room validation, not physical-device or real-account acceptance."
+}
