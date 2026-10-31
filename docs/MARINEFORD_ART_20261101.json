@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-01",
+  "tool": "image_gen.imagegen",
+  "images": [
+    {
+      "mode": "generate",
+      "prompt": "Production game background for a One Piece Marineford themed strategic card battle, wide landscape 16:9, hand-painted 2D anime scene with crisp ink contours and warm parchment colors matching vintage pirate character cards. Camera looks across a broad flat stone naval plaza at a shallow elevated tabletop angle. Distant Marineford fortress and execution scaffold only across the upper 22 percent, small Whitebeard ships and ocean at far left, naval banners and cold stone at far right. Main central 70 percent is spacious uninterrupted slate-blue stone paving with subtle perspective seams and a few warm reflected highlights, intentionally low detail to place readable cards and UI over it. Bottom edge darker navy. Beautiful painted atmosphere, dramatic but clear daylight, soft smoke far behind. No foreground characters, no cards, no UI panels, no labels, no words, no numbers, no logo, no watermark. This is a usable full-screen card-game battlefield texture, not a poster.",
+      "output": "public/marineford/art/field-v1.webp",
+      "original": "C:/Users/王曜瑋/.codex/generated_images/01a13564-f60c-71b1-8178-336039a1904c/exec-fc0e9d3e-9ae3-4e08-8892-392cb2cdefc6.png"
+    },
+    {
+      "mode": "edit",
+      "prompt": "Edit the referenced existing game launcher box-cover artwork into a NEW fourth game cover. Preserve the exact canvas size, transparency, outer quadrilateral perspective, position and margins of the cover so it fits the same launcher box frame. Replace all characters and inside painting: One Piece Marineford war, heroic Whitebeard Edward Newgate with enormous crescent white moustache and bisento on left, stern Akainu marine admiral in white coat and cap on right, Ace with orange cowboy hat and fire in center lower area, Marineford fortress and naval warships behind. Hand-inked anime illustration, dark navy blue and warm ivory with restrained amber highlights, polished painted tabletop boardgame box. Main exact title at top: ONE PIECE. Below it the exact Traditional Chinese title: 頂上戰爭篇. Smaller subtitle: MARINEFORD. Keep all art inside the original perspective quadrilateral, no changes to silhouette or framing, no new physical box or shadow outside. Transparent background outside the cover.",
+      "reference": "launcher_card_cover_perspective_v2.webp",
+      "output": "public/images/game_launcher/launcher_marineford_cover_v1.webp",
+      "original": "C:/Users/王曜瑋/.codex/generated_images/01a13564-f60c-71b1-8178-336039a1904c/exec-079d7c28-96a2-4274-b667-468f2b874ade.png"
+    }
+  ],
+  "conversion": "Browser canvas same pixels/alpha to WebP; no crop or redraw. Existing new GPT nautical button reused unchanged."
+}

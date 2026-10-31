@@ -8625,3 +8625,6 @@ Published and publicly verified 2026-11-01: package-a75b6b650e743963; source 189
 
 
 2026-11-01: Online shared Usopp guess/cut-in/reaction queue and upper-left menu; generated proportion-preserving buttons. Files and validation: CARD_SNIPER_MENU_20261101.md.
+
+## 2026-11-01 頂上戰爭篇獨立遊戲
+新增 marineford 規則、房間、全螢幕 UI、29 張卡片與 GPT 場地/封面；原啟動器新增第四個線上入口，原三款 catalog-v3 保留。Android/iOS host 僅增加此入口；APK 打包工具支援指定工作目錄且讀取真實輸入收據。1,500 場 CPU 與六瀏覽器同步、十種選擇操作通過。原生打包/公開驗收仍進行中，詳見 MARINEFORD_20261101.md。爭霸戰既有修正 package-6bc0eec0e075b17d 已公開檔案驗證。

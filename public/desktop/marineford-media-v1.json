@@ -1,0 +1,258 @@
+{
+  "schema": 1,
+  "gameId": "marineford",
+  "assets": [
+    {
+      "path": "images/game_launcher/launcher_marineford_cover_v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 566812,
+      "sha256": "19adfe869ef81a206718fb9136ec625db6ba54a49b1caeb91b198b85e56b0bee"
+    },
+    {
+      "path": "marineford/art/button-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 326048,
+      "sha256": "1b85c243f5b8ee1144154945ce7df6d4b163227a4bfe85396585cdc533a402d2"
+    },
+    {
+      "path": "marineford/art/field-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 388610,
+      "sha256": "90c077c12381874df3d5f7c3881cfab959ddf1a90417352f1d21ed14a810280c"
+    },
+    {
+      "path": "marineford/art/justice-1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 380304,
+      "sha256": "c39775da5ff73d50769dcdf749abef5a297e2866de85eb88d7e1482abe2da63d"
+    },
+    {
+      "path": "marineford/art/justice-2.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 410208,
+      "sha256": "c14c7ca111cf7528afa44b983b5d074d3be160fee4e21a61ebe8b30e4e2bb740"
+    },
+    {
+      "path": "marineford/art/justice-3.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 279952,
+      "sha256": "f4a83b148bd6e0ccf35a800b4d151e3bac902aea4b2f465cafd193dc943aea4f"
+    },
+    {
+      "path": "marineford/art/justice-4.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 374710,
+      "sha256": "a1ee500fab3758ed8927de0d3b182c94aa136164bc2b541ecd7562ab31bde4dc"
+    },
+    {
+      "path": "marineford/art/justice-5.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 238648,
+      "sha256": "0e9b7629509c278de0ac79ce5bf996c456905cc667d8ecdc21b6ff96b68a70a8"
+    },
+    {
+      "path": "marineford/art/justice-6.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 378870,
+      "sha256": "bd2b475cd812bfc4a4d964988262f2dbf0dcf7f0f051be68f0331ef40e731c34"
+    },
+    {
+      "path": "marineford/art/navy-akainu.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 280134,
+      "sha256": "37cee523efacd529a7d61273b1e8395cf32f91092c6e5e421119779183edf0fa"
+    },
+    {
+      "path": "marineford/art/navy-aokiji.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 434420,
+      "sha256": "69c23d55c9c7b102808356130450ce36112bb464ab0f6ad53059fdd296f011ff"
+    },
+    {
+      "path": "marineford/art/navy-back.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 222630,
+      "sha256": "2dc1b2e8385399a7f4712da9fb47257268003cc89131698ce2e2a2fdae5a754f"
+    },
+    {
+      "path": "marineford/art/navy-garp.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 217204,
+      "sha256": "93058bbc29f9c1b4c7bf18bafa9fa1ad853f5b414bbd556bf2c3ec00f28342fe"
+    },
+    {
+      "path": "marineford/art/navy-helmeppo.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 225418,
+      "sha256": "4d216e1d472b9299658be4208a0c8e10828eedd8408a9fda36e9d94302c81da8"
+    },
+    {
+      "path": "marineford/art/navy-kizaru.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 352266,
+      "sha256": "6a853b1439c4c4fd8ce41fff372bb9b0694bdc15d9307d936cb2e575309ca442"
+    },
+    {
+      "path": "marineford/art/navy-koby.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 321868,
+      "sha256": "683755eaa01b813c66d4f1a00784f147b5e630f44a20b9dd8dc5d133b1041fa8"
+    },
+    {
+      "path": "marineford/art/navy-morale.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 428946,
+      "sha256": "c718907c0780a008044c99f3ab19f56471988b04e8bf3ebf457babe66b26267b"
+    },
+    {
+      "path": "marineford/art/navy-sengoku.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 402310,
+      "sha256": "4e407e217790ca598927cd7e750fa8c8ca8b9f5a9e281bf49f50e222a25011cb"
+    },
+    {
+      "path": "marineford/art/pirate-1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 388892,
+      "sha256": "f921cd1e2280df01d1e405df4824163e58009c8a5ab0ad7a105c1e655cc80ca8"
+    },
+    {
+      "path": "marineford/art/pirate-10.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 429122,
+      "sha256": "442d03a595a442633a31c611b821f1c5ccbc5f7fc71b92577f4b2bafa0825d1a"
+    },
+    {
+      "path": "marineford/art/pirate-11.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 353144,
+      "sha256": "c35b0f1f344de055121b85073bbdb30925eaa52a147ff3bb4a602cae842c9e88"
+    },
+    {
+      "path": "marineford/art/pirate-12.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 437616,
+      "sha256": "8804893ba69a90244c0e95f03c34906dd26195f8527e660c691d6c092abad860"
+    },
+    {
+      "path": "marineford/art/pirate-13.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 369064,
+      "sha256": "9f3f803b080aab5a5c453f7d6bb0d3cf9617550a4779124aad1e4c68dbbbd22f"
+    },
+    {
+      "path": "marineford/art/pirate-14.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 381610,
+      "sha256": "348d7c72c36dc3a8440c59195e23de28af9be32c59da19982adae7c174af5406"
+    },
+    {
+      "path": "marineford/art/pirate-15.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 488426,
+      "sha256": "cf2d2060db7507e6b74515d4d5252c36ad3dd3926a22b1d97268987ebf38f3b6"
+    },
+    {
+      "path": "marineford/art/pirate-16.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 468840,
+      "sha256": "e541a9dbea25efcd04fd858f07fef8c80e47cdcabdabaefb6e95810462bca303"
+    },
+    {
+      "path": "marineford/art/pirate-2.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 474406,
+      "sha256": "e0089ab6deb0898cf17e0a436ae027e9b9b49912347f26aa377a903eb1eb0a3a"
+    },
+    {
+      "path": "marineford/art/pirate-3.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 417000,
+      "sha256": "c8002f2e840f1337e00a15cf7842afb669e70deff59d3400d680ee92c97c84b2"
+    },
+    {
+      "path": "marineford/art/pirate-4.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 427144,
+      "sha256": "a6b125576afab7738f2dbd908f2c64a3cefcb56e532486c725a5e24b88cb32db"
+    },
+    {
+      "path": "marineford/art/pirate-5.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 410600,
+      "sha256": "76d3a3aff7f51600415c10dc2f6dc10249e9703500e5beb3485e0b3484cc8b70"
+    },
+    {
+      "path": "marineford/art/pirate-6.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 268860,
+      "sha256": "1059d0ed01dd24a233255129ce150372a6a6984a5180797304d03fddcc451c5f"
+    },
+    {
+      "path": "marineford/art/pirate-7.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 449778,
+      "sha256": "418bae2835a7734adbfffb601e3acc02a9e38711ce51b6d3ecd10f4ead811f28"
+    },
+    {
+      "path": "marineford/art/pirate-8.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 396082,
+      "sha256": "916672dcc1c75b4d529ca4af9bce422de47aeb86ce2cd26aacb4b3445eaa0357"
+    },
+    {
+      "path": "marineford/art/pirate-9.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 367586,
+      "sha256": "b9fd77a591ba7d94d38968adeb30295d1fe10ac877d282093e3374c2ab584ce1"
+    },
+    {
+      "path": "marineford/art/pirate-back.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 90800,
+      "sha256": "c8e2a80374a7bce11d7820f41c0ec619ab9522796b27d0508925454b2b93439c"
+    },
+    {
+      "path": "marineford/art/pirate-morale.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 511972,
+      "sha256": "6b5d65d0ca78f8d47e1adfa93275778de3df422d0759accbab0c064ceb859fb5"
+    }
+  ]
+}

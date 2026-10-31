@@ -83,6 +83,16 @@ const GAMES = [
   }
 ];
 
+// Independent online game; original three entries and their download contracts stay intact.
+GAMES.push({ ...GAMES[0], id: 'marineford', title: '頂上戰爭篇', english: 'MARINEFORD',
+  tagline: '一位海軍，迎戰整個白鬍子海賊團。',
+  description: '2–6 人非對稱合作對戰。海軍保留兩張手牌，海賊團各留一張；猜牌、看牌、士氣與決鬥，每一次選擇都牽動陣營戰力。',
+  detailDescription: '由一位玩家扮演海軍，對抗一至五位白鬍子海賊團隊長。依順位抽一張、打一張，善用公開情報和士氣。海軍集齊六種正義或擊潰海賊團獲勝；海賊團則要將海軍戰力歸零。支援 CPU 和跨裝置房間。',
+  tags: ['2–6 人', '海軍對海賊團', '線上與 CPU'],
+  features: ['海軍雙手牌、海賊單手牌的非對稱對戰', '29 張原創改編卡片與六種正義', '跨裝置房間、看牌保密與同步演出'],
+  cover: 'opui://launcher/images/game_launcher/launcher_marineford_cover_v1.webp',
+  lidFront: 'opui://launcher/images/game_launcher/launcher_marineford_cover_v1.webp',
+  preview: '', accent: '114, 193, 234' });
 const byId = Object.fromEntries(GAMES.map((game) => [game.id, game]));
 let selectedGameId = 'board';
 let snapshot = {

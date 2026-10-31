@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "checks": [
+    "29 unique cards; faction decks 13 and 16",
+    "2–6 player health, deal, clock order, illegal actions atomic",
+    "Private hands and pending cards never sent to other viewers",
+    "All 29 cards resolve under the server, rank 7 is unplayable",
+    "Six collected Justice cards across hand and public area win",
+    "Last pirate draw pauses for navy review before shuffling and play",
+    "Sengoku defeat draws before returning it to deck",
+    "1500 complete seeded games, conservation and no stuck pending action"
+  ],
+  "games": 1500,
+  "maxActions": 209
+}

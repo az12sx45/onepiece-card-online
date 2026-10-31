@@ -1116,6 +1116,7 @@ const io = new Server(server, {
 });
 
 // room = { state, sockets: Map<sid,{playerId,secret,displayName,avatar}>, host, lobbyReady }
+require('./marineford-rooms').attach(io);
 const rooms = new Map();
 const boardRooms = new Map();
 const chessRooms = new Map();

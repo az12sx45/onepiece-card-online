@@ -2073,3 +2073,5 @@ Enhanced Killer removes one selected opponent's defense once, then optionally du
 
 
 2026-11-01: No Card rule changes. Public guessed number precedes hit/miss reaction; result STATE commits after sequence. Private hands remain private.
+
+2026-11-01：新增頂上戰爭篇獨立規則，見 MARINEFORD_20261101.md。原 Card/Board/Chess 規則不改。海軍 1 人對海賊 1–5 人、海軍雙手牌、六種正義集齊（手中加場上）、陣營共用生命、士氣暫按使用者規則書採選擇使用。

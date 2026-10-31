@@ -1,0 +1,48 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
+const express=require('express'),{Server}=require('socket.io'),{attach}=require('../server/marineford-rooms'),engine=require('../server/marineford-engine');
+const {chromium,webkit}=require('C:/Users/王曜瑋/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const root=path.resolve(__dirname,'..'),out=process.env.MF_QA_DIR||'D:/Codex_QA/card-sniper-menu-20261101/marineford';fs.mkdirSync(out,{recursive:true});
+const report={passed:false,scope:'Isolated real Socket.IO, six browser seats, injected QA identities only; no production accounts or physical device claim.',checks:[]};
+const check=(name,ok)=>{assert.ok(ok,name);report.checks.push(name);};
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{let browser,ios;const app=express(),server=http.createServer(app),io=new Server(server),runtime=attach(io,{cpuDelay:15,gateTimeout:120000});app.use(express.static(path.join(root,'public')));
+ io.on('connection',s=>s.on('SOCIAL_AUTH',(p,cb)=>{const n=Number(String(p.secret).replace('qa-',''));if(!Number.isInteger(n)||n<1||n>9)return cb({ok:false});s.data.socialProfile={userId:n,name:'測試船長 '+n,avatar:n};cb({ok:true,me:s.data.socialProfile});}));
+ const pages=[],errors=[];try{await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port;
+  browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
+  for(let i=0;i<6;i++){const context=await browser.newContext({viewport:i===0?{width:1366,height:768}:{width:740,height:360}});await context.addInitScript(id=>{localStorage.setItem('opSecret','qa-'+id);const original=window.io;window.__mfPackets=[];Object.defineProperty(window,'io',{configurable:true,get(){return original||window.__io;},set(fn){window.__io=(...args)=>{const s=fn(...args);window.__mfSocket=s;for(const event of ['MF_STATE','MF_PRESENT','MF_RECOVER'])s.on(event,p=>window.__mfPackets.push({event,...p}));return s;};}});},i+1);const p=await context.newPage();p.on('pageerror',e=>errors.push(e.message));await p.goto(origin+'/marineford/index.html');await p.getByText('建立房間',{exact:true}).waitFor();pages.push(p);}
+  await pages[0].getByText('建立房間',{exact:true}).click();await pages[0].locator('.room-code').waitFor();const code=await pages[0].locator('.room-code').textContent();
+  for(let i=1;i<6;i++){await pages[i].getByRole('textbox',{name:'房間代碼'}).fill(code);await pages[i].getByRole('button',{name:'加入房間',exact:true}).click();await pages[i].getByRole('button',{name:'準備',exact:true}).click();}
+  await pages[0].getByText('開始對局',{exact:true}).click();await Promise.all(pages.map(p=>p.locator('#table:not([hidden])').waitFor()));const room=runtime.rooms.get(code);check('Six accounts joined and started',room.state.players.length===6);
+  await pages[0].waitForTimeout(100);await pages[0].screenshot({path:path.join(out,'desktop-six-seat.png')});await pages[1].screenshot({path:path.join(out,'phone-six-seat.png')});
+  check('Other private hands remain redacted on every socket',await pages.every((p,i)=>true));for(let i=0;i<6;i++){const packet=await pages[i].evaluate(()=>window.__mfPackets.at(-1));assert.ok(packet.view.players.filter(p=>p.id!==i).every(p=>p.hand.every(c=>c===null)));}
+  const req=async(p,event,payload={})=>{await delay(40);return p.evaluate(({event,payload})=>new Promise(r=>window.__mfSocket.emit(event,payload,r)),{event,payload});};
+  check('Out-of-turn spoof rejected',!(await req(pages[1],'MF_ACTION',{revision:room.state.revision,action:{type:'DRAW'}})).ok);
+  // Hold one participant's ACK: no actor, including CPU, can advance the game.
+  await pages[5].evaluate(()=>{const s=window.__mfSocket,emit=s.emit.bind(s);s.emit=(event,...args)=>event==='MF_ACK'?s:emit(event,...args);window.__originalEmit=emit;});
+  await pages[0].getByRole('button',{name:'抽牌',exact:true}).click();await delay(1400);check('Presentation gate waits for slowest player',room.gate?.size===1);check('Next action rejected while a viewer is still watching',!(await req(pages[0],'MF_ACTION',{revision:room.state.revision,action:engine.cpuAction(engine.visible(room.state,0),0)})).ok);
+  await pages[5].evaluate(sequence=>window.__originalEmit('MF_ACK',{sequence}),room.sequence);await delay(100);check('Last viewer ACK releases exactly one action',room.gate===null);await pages[5].evaluate(()=>window.__mfSocket.emit=window.__originalEmit);
+  // Target every pending UI with legal deterministic states, run its actual click controls.
+  for(const type of ['guess','read','review','return','arrange','order','battle-card','peek-slot','morale-use','fight-target']){
+   let s=engine.create(room.seats,0);const own=s.players[0].hand,other=s.players[1].hand;
+   const definitions={guess:{digits:[1,2,3,4,5,6],targets:[1]},read:{cards:other},review:{cards:engine.cards.filter(c=>c.team==='pirate').map(c=>c.id)},return:{cards:own,count:1},arrange:{cards:own,battle:{attacker:1,defender:0,remaining:1,used:[0],source:1}},order:{cards:s.decks.pirate.slice(0,3)},'battle-card':{cards:own,battle:{attacker:0,defender:1,remaining:1,used:[1],source:0}},'peek-slot':{slots:2,source:1},'morale-use':{battle:{attacker:0,defender:1,navyCard:own[0],pirate:1,remaining:1,used:[1],source:0,boost:{navy:0,pirate:0},waiting:[]}},'fight-target':{attacker:0,targets:[1,2,3,4,5],remaining:1,used:[]}};
+   s.pending={type,owner:0,...definitions[type]};s.step='effect';room.state=s;room.sequence++;for(const socket of io.sockets.sockets.values()){const id=socket.data.socialProfile.userId-1;socket.emit('MF_RECOVER',{sequence:room.sequence,view:engine.visible(s,id),you:id});}
+   const p=pages[0];await p.setViewportSize({width:740,height:360});await p.locator('#sheet:not([hidden])').waitFor();await delay(75);check(type+' mobile choice controls exist',await p.locator('#sheetBody button').count()>0);check(type+' no document overflow',await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));if(type==='review')await p.screenshot({path:path.join(out,'phone-review.png')});if(type==='guess')await p.screenshot({path:path.join(out,'phone-guess.png')});   if(['read','review'].includes(type)){const box=await p.getByRole('button',{name:'我看完了 · 繼續',exact:true}).boundingBox();check(type+' continue visible without scrolling',box&&box.y>=0&&box.y+box.height<=360);}
+   const revision=room.state.revision;
+   if(['read','review'].includes(type))await p.getByRole('button',{name:'我看完了 · 繼續',exact:true}).click();
+   else if(['arrange','order','return'].includes(type)){const picks=p.locator('.pick-card');for(let n=0;n<(type==='return'?1:await picks.count());n++)await picks.nth(n).click();await p.getByRole('button',{name:'確認順序',exact:true}).click();}
+   else await p.locator('#sheetBody button').first().click();
+   for(let n=0;room.state.revision===revision&&n<80;n++)await delay(50);
+   check(type+' actual touch choice accepted',room.state.revision>revision);
+   while(room.gate)await delay(40);
+  }
+  // Fresh full six-seat match: drive only legal server-filtered actions, wait for all animations.
+  room.state=engine.create(room.seats,0);room.sequence++;for(const socket of io.sockets.sockets.values()){const id=socket.data.socialProfile.userId-1;socket.emit('MF_RECOVER',{sequence:room.sequence,view:engine.visible(room.state,id),you:id});}
+  // Speed up visual durations for repeated protocol exercise; earlier screenshots/gate used real timing.
+  for(const p of pages)await p.evaluate(()=>{const original=Element.prototype.animate;Element.prototype.animate=function(frames,options){return original.call(this,frames,{...options,duration:Math.min(options.duration,25)});};});
+  let actions=0;for(;room.state.phase==='playing'&&actions<1200;actions++){while(room.gate)await delay(30);const id=room.state.pending?.owner??room.state.turn,a=engine.cpuAction(engine.visible(room.state,id),id);const result=await req(pages[id],'MF_ACTION',{revision:room.state.revision,action:a});assert.ok(result.ok,result.error);while(room.gate)await delay(30);}
+  check('Six browser clients complete an entire synchronized game',room.state.phase==='ended');report.actions=actions;check('No browser exceptions',errors.length===0);
+  ios=await webkit.launch({headless:true});const ctx=await ios.newContext({viewport:{width:844,height:390}});await ctx.addInitScript(()=>localStorage.setItem('opSecret','qa-8'));const p=await ctx.newPage();await p.goto(origin+'/marineford/index.html');await p.getByText('建立房間',{exact:true}).waitFor();await p.getByText('建立房間',{exact:true}).click();await p.getByText('加入 CPU',{exact:true}).click();await p.getByText('開始對局',{exact:true}).click();await p.locator('#table:not([hidden])').waitFor();await p.screenshot({path:path.join(out,'webkit-table.png')});check('WebKit lobby to table and generated art loaded',await p.locator('.hand-card img').evaluateAll(imgs=>imgs.length===2&&imgs.every(i=>i.complete&&i.naturalWidth>0)));
+  report.passed=true;
+ }catch(error){report.failure=error.stack;report.errors=errors;process.exitCode=1;}finally{await browser?.close();await ios?.close();runtime.close();io.close();server.close();fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report));}
+})();

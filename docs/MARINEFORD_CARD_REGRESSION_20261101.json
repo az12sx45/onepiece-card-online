@@ -1,0 +1,47 @@
+{
+  "scope": "Two isolated Chromium windows using the real local npm-start server and Socket.IO. Guest room with stable isolated test identities, no production accounts or physical-device claim.",
+  "checks": [
+    {
+      "name": "npm start listening",
+      "ok": true
+    },
+    {
+      "name": "both guests joined",
+      "ok": true
+    },
+    {
+      "name": "start synchronized",
+      "ok": true
+    },
+    {
+      "name": "one authoritative current player",
+      "ok": true,
+      "detail": {
+        "turn": 0,
+        "step": "draw"
+      }
+    },
+    {
+      "name": "real next state waits while viewer reads",
+      "ok": true
+    },
+    {
+      "name": "draw step broadcast to both",
+      "ok": true
+    },
+    {
+      "name": "refresh restores same seat and turn",
+      "ok": true,
+      "detail": {
+        "seat": 0,
+        "turn": 0,
+        "step": "choose"
+      }
+    },
+    {
+      "name": "private other hand stays hidden",
+      "ok": true
+    }
+  ],
+  "passed": true
+}

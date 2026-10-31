@@ -60,7 +60,7 @@ const TEST_USER_DATA_PATH = String(process.env.OP_DESKTOP_USER_DATA || '').trim(
 const TEST_VIEWPORT = String(process.env.OP_DESKTOP_VIEWPORT || '').trim();
 const EXPLICIT_CACHE_ROOT = String(process.env.OP_DESKTOP_CACHE_ROOT || '').trim();
 const NATIVE_CARD_INTERNAL_BUILD = require('./package.json').nativeCardChannel === 'internal';
-const ALLOWED_GAME_IDS = new Set(['card', 'board', 'chess']);
+const ALLOWED_GAME_IDS = new Set(['card', 'board', 'chess', 'marineford']);
 const GAME_LAUNCH_PRESENTATION_MS = 1400;
 const AUTH_STORAGE_KEYS = [
   'opSecret', 'op_secret', 'op_user_id', 'op_board_user_id', 'op_name',
@@ -70,7 +70,8 @@ const AUTH_STORAGE_KEYS = [
 const GAME_CONFIG = {
   card: { title: '偉大航道爭霸戰', entry: '/start.html', partition: 'onepiece-card-desktop-v1' },
   board: { title: '新世界航海錄', entry: '/board_start.html', partition: 'onepiece-board-desktop-v1' },
-  chess: { title: '霸海戰棋', entry: '/chess/index.html', partition: 'onepiece-chess-desktop-v1' }
+  chess: { title: '霸海戰棋', entry: '/chess/index.html', partition: 'onepiece-chess-desktop-v1' },
+  marineford: { title: '頂上戰爭篇', entry: '/marineford/index.html', partition: 'onepiece-marineford-desktop-v1', onlineOnly: true }
 };
 
 if (TEST_USER_DATA_PATH && (SMOKE_MODE || !app.isPackaged)) {
@@ -855,6 +856,15 @@ async function clearGameOriginStorage(targetSession) {
 async function prepareGameSession(gameId) {
   if (gameSessionPromises.has(gameId)) return gameSessionPromises.get(gameId);
   const pending = (async () => {
+    if (GAME_CONFIG[gameId]?.onlineOnly) {
+      const onlineSession = await storageSessionForGame(gameId);
+      if (!gameSessions.has(gameId)) {
+        hardenSession(onlineSession);
+        await resetDesktopGameWebCache(onlineSession, REMOTE_ORIGIN);
+        gameSessions.set(gameId, onlineSession);
+      }
+      return onlineSession;
+    }
     buildRuntimeAssetIndex(gameId);
     const targetSession = await storageSessionForGame(gameId);
     await resetDesktopGameWebCache(targetSession, REMOTE_ORIGIN);
@@ -970,6 +980,7 @@ async function composeState(assetSnapshot) {
         hasInstalled: false
       }]))
     };
+  assets.games.marineford = { status: 'installed', hasInstalled: true, removable: false, onlineOnly: true, installedVersion: '線上版', remoteVersion: '線上版' };
   const previewMode = authService?.previewMode === true || SMOKE_MODE;
   return {
     stateRevision: ++stateRevision,
@@ -1308,7 +1319,7 @@ function launchGame(gameId) {
   if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
   if (authService.accountSummary()?.needsDisplayName) return { ok: false, error: '請先設定玩家名稱。' };
   if (!ALLOWED_GAME_IDS.has(gameId)) return { ok: false, error: '此遊戲仍在製作中。' };
-  if (!assetStore.canLaunch(gameId)) return { ok: false, error: '請先完成遊戲下載或修復。' };
+  if (!GAME_CONFIG[gameId].onlineOnly && !assetStore.canLaunch(gameId)) return { ok: false, error: '請先完成遊戲下載或修復。' };
   const activeLaunch = gameLaunchPromises.get(gameId);
   if (activeLaunch) return activeLaunch;
   if (gameLaunchPromises.size > 0) return { ok: false, error: '另一款遊戲正在啟動，請稍候片刻。' };
@@ -1325,7 +1336,7 @@ async function createGameWindow(gameId) {
   const launchStartedAt = Date.now();
   const targetSession = await prepareGameSession(gameId);
   if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
-  if (!assetStore.canLaunch(gameId)) return { ok: false, error: '遊戲檔案狀態已變更，請重新檢查或下載。' };
+  if (!GAME_CONFIG[gameId].onlineOnly && !assetStore.canLaunch(gameId)) return { ok: false, error: '遊戲檔案狀態已變更，請重新檢查或下載。' };
   const existing = gameWindows.get(gameId);
   if (existing && !existing.isDestroyed()) return focusGameWindow(existing);
   const shouldUseFullscreen = authService.getPreferences().gameDisplayMode === 'fullscreen';
