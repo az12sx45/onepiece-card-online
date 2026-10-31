@@ -2127,3 +2127,6 @@ Card choice layout: shared android/web/card-phone-fx.js, card-match-polish.js/cs
 
 
 scripts/card_native_entry_qa.js tests real worker retirement routing; card_killer_stage_qa.js, card_killer_cpu_qa.js and card_killer_mobile_qa.mjs cover Killer confirmation and presentation gates.
+
+
+2026-11-01: card-sniper-sequence / card-menu-layout modules and card_sniper_menu_qa.mjs; formal public game.html and generated desktop JS/CSS. See CARD_SNIPER_MENU_20261101.md.

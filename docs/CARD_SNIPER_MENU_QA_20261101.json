@@ -1,0 +1,340 @@
+{
+  "ios": {
+    "scope": "Real engine public events; exact retained mobile bundle or desktop; isolated browser, not physical iPhone.",
+    "checks": [
+      {
+        "name": "cutin visible true",
+        "pass": true
+      },
+      {
+        "name": "guess and target printed true",
+        "pass": true
+      },
+      {
+        "name": "outcome state deferred true",
+        "pass": true
+      },
+      {
+        "name": "sniper character decoded true",
+        "pass": true
+      },
+      {
+        "name": "sequence removed true",
+        "pass": true
+      },
+      {
+        "name": "outcome state committed true",
+        "pass": true
+      },
+      {
+        "name": "cutin visible false",
+        "pass": true
+      },
+      {
+        "name": "guess and target printed false",
+        "pass": true
+      },
+      {
+        "name": "outcome state deferred false",
+        "pass": true
+      },
+      {
+        "name": "sniper character decoded false",
+        "pass": true
+      },
+      {
+        "name": "dodge before impact",
+        "pass": true
+      },
+      {
+        "name": "sequence removed false",
+        "pass": true
+      },
+      {
+        "name": "outcome state committed false",
+        "pass": true
+      },
+      {
+        "name": "menu upper-left 844",
+        "pass": true
+      },
+      {
+        "name": "menu button proportion 844",
+        "pass": true
+      },
+      {
+        "name": "close button painted 844",
+        "pass": true
+      },
+      {
+        "name": "menu upper-left 740",
+        "pass": true
+      },
+      {
+        "name": "menu button proportion 740",
+        "pass": true
+      },
+      {
+        "name": "close button painted 740",
+        "pass": true
+      },
+      {
+        "name": "menu upper-left 640",
+        "pass": true
+      },
+      {
+        "name": "menu button proportion 640",
+        "pass": true
+      },
+      {
+        "name": "close button painted 640",
+        "pass": true
+      },
+      {
+        "name": "cancel resolves active sequence and removes overlay",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [],
+    "passed": true
+  },
+  "android": {
+    "scope": "Real engine public events; exact retained mobile bundle or desktop; isolated browser, not physical iPhone.",
+    "checks": [
+      {
+        "name": "cutin visible true",
+        "pass": true
+      },
+      {
+        "name": "guess and target printed true",
+        "pass": true
+      },
+      {
+        "name": "outcome state deferred true",
+        "pass": true
+      },
+      {
+        "name": "sniper character decoded true",
+        "pass": true
+      },
+      {
+        "name": "sequence removed true",
+        "pass": true
+      },
+      {
+        "name": "outcome state committed true",
+        "pass": true
+      },
+      {
+        "name": "cutin visible false",
+        "pass": true
+      },
+      {
+        "name": "guess and target printed false",
+        "pass": true
+      },
+      {
+        "name": "outcome state deferred false",
+        "pass": true
+      },
+      {
+        "name": "sniper character decoded false",
+        "pass": true
+      },
+      {
+        "name": "dodge before impact",
+        "pass": true
+      },
+      {
+        "name": "sequence removed false",
+        "pass": true
+      },
+      {
+        "name": "outcome state committed false",
+        "pass": true
+      },
+      {
+        "name": "menu upper-left 844",
+        "pass": true
+      },
+      {
+        "name": "menu button proportion 844",
+        "pass": true
+      },
+      {
+        "name": "close button painted 844",
+        "pass": true
+      },
+      {
+        "name": "menu upper-left 740",
+        "pass": true
+      },
+      {
+        "name": "menu button proportion 740",
+        "pass": true
+      },
+      {
+        "name": "close button painted 740",
+        "pass": true
+      },
+      {
+        "name": "menu upper-left 640",
+        "pass": true
+      },
+      {
+        "name": "menu button proportion 640",
+        "pass": true
+      },
+      {
+        "name": "close button painted 640",
+        "pass": true
+      },
+      {
+        "name": "cancel resolves active sequence and removes overlay",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [],
+    "passed": true
+  },
+  "desktop": {
+    "scope": "Real engine public events; exact retained mobile bundle or desktop; isolated browser, not physical iPhone.",
+    "checks": [
+      {
+        "name": "cutin visible true",
+        "pass": true
+      },
+      {
+        "name": "guess and target printed true",
+        "pass": true
+      },
+      {
+        "name": "outcome state deferred true",
+        "pass": true
+      },
+      {
+        "name": "sniper character decoded true",
+        "pass": true
+      },
+      {
+        "name": "sequence removed true",
+        "pass": true
+      },
+      {
+        "name": "outcome state committed true",
+        "pass": true
+      },
+      {
+        "name": "cutin visible false",
+        "pass": true
+      },
+      {
+        "name": "guess and target printed false",
+        "pass": true
+      },
+      {
+        "name": "outcome state deferred false",
+        "pass": true
+      },
+      {
+        "name": "sniper character decoded false",
+        "pass": true
+      },
+      {
+        "name": "dodge before impact",
+        "pass": true
+      },
+      {
+        "name": "sequence removed false",
+        "pass": true
+      },
+      {
+        "name": "outcome state committed false",
+        "pass": true
+      },
+      {
+        "name": "menu upper-left 1366",
+        "pass": true
+      },
+      {
+        "name": "menu button proportion 1366",
+        "pass": true
+      },
+      {
+        "name": "close button painted 1366",
+        "pass": true
+      },
+      {
+        "name": "cancel resolves active sequence and removes overlay",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [],
+    "passed": true
+  },
+  "sync": {
+    "scope": "Two isolated Chromium windows using the real local npm-start server and Socket.IO. Guest room with stable isolated test identities, no production accounts or physical-device claim.",
+    "checks": [
+      {
+        "name": "npm start listening",
+        "ok": true
+      },
+      {
+        "name": "both guests joined",
+        "ok": true
+      },
+      {
+        "name": "start synchronized",
+        "ok": true
+      },
+      {
+        "name": "one authoritative current player",
+        "ok": true,
+        "detail": {
+          "turn": 0,
+          "step": "draw"
+        }
+      },
+      {
+        "name": "real next state waits while viewer reads",
+        "ok": true
+      },
+      {
+        "name": "draw step broadcast to both",
+        "ok": true
+      },
+      {
+        "name": "refresh restores same seat and turn",
+        "ok": true,
+        "detail": {
+          "seat": 0,
+          "turn": 0,
+          "step": "choose"
+        }
+      },
+      {
+        "name": "private other hand stays hidden",
+        "ok": true
+      }
+    ],
+    "passed": true
+  }
+}

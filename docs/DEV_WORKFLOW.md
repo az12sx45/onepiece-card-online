@@ -8622,3 +8622,6 @@ Published and publicly verified 2026-11-01: package-a75b6b650e743963; source 189
 
 
 2026-11-01: Android embedded Card worker retirement routing and enhanced Killer authoritative disarm confirmation/CPU continuation. Files, compatibility, test evidence and limits: CARD_ENTRY_KILLER_20261101.md.
+
+
+2026-11-01: Online shared Usopp guess/cut-in/reaction queue and upper-left menu; generated proportion-preserving buttons. Files and validation: CARD_SNIPER_MENU_20261101.md.

@@ -1,0 +1,9 @@
+{
+  "mode": "built-in image_gen",
+  "prompt": "Create one production-ready 2D raster UI button asset for an anime pirate card-battle game, to replace a stretched old button. A single horizontal rectangular button with exactly a 3:1 width-to-height silhouette, straight-on orthographic view, symmetrical, not tilted, no perspective. Deep midnight navy enamel center, richly illustrated but restrained warm antique gold bevel frame, small sculpted nautical rope and brass rivet details integrated only into left and right ends. Broad empty dark center for Traditional Chinese text added by the game; NO letters, NO numbers, NO symbols in the center. Crisp beautiful hand-painted anime game UI finish, legible at 120 by 40 pixels. Frame thickness consistent around the full perimeter, with softly chamfered corners. No outer rectangular panel or scene; only this isolated button, real transparent background. Keep silhouette close to the canvas edges with narrow transparent padding, use a wide horizontal canvas. No glow extending far outside, no character art, no watermark. Must remain attractive at native 3:1 aspect ratio without stretching.",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-61285fe4-4bf7-420d-b3fb-05b16bd3e1aa.png",
+  "projectPng": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-nautical-button-v1.png",
+  "runtimeWebp": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-nautical-button-v1.webp",
+  "export": "Same dimensions and alpha; Chromium canvas WebP quality 0.92. No crop or composition change. Large PNG data custom property was invalid in Chromium, compact WebP verified.",
+  "sha256": "1b85c243f5b8ee1144154945ce7df6d4b163227a4bfe85396585cdc533a402d2"
+}

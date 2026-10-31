@@ -2982,3 +2982,6 @@ Card mobile choices retain the original rule handlers, with separate title/list/
 
 
 Native Card lobby delegates verified download caching to the host; it does not register the browser offline worker. Enhanced Killer resumes its confirmation using server pending.extra.disarmedTarget.
+
+
+2026-11-01: Card online presentation owns Usopp timeline across retained native bundles. Original launcher/lobby and rules remain unchanged.

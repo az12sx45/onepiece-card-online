@@ -2070,3 +2070,6 @@ Presentation coordination: animations finish automatically; private card views a
 
 
 Enhanced Killer removes one selected opponent's defense once, then optionally duels that same opponent. Disarm presentation finishes before CPU duel/cancel; pending.extra.disarmedTarget records this phase and does not reveal a hand. Normal Killer remains disarm-only.
+
+
+2026-11-01: No Card rule changes. Public guessed number precedes hit/miss reaction; result STATE commits after sequence. Private hands remain private.

@@ -1,0 +1,11 @@
+# Card sniper timeline and upper-left menu — 2026-11-01
+
+Retained iOS v058 native FX did not call the current Usopp cut-in, despite loading updated art. The online flow now owns a single public guess/cut-in/HUD reaction sequence. Source, target and guessed number are announced before the authoritative hit/miss; outcome STATE/discard is held until presentation completes. The handled guess/result events skip the legacy duplicate FX. Existing protection/dodge target rules, private cards, engine rules, launcher/lobby and IDs remain unchanged. Cancellation resolves the waiting sequence and removes its layer.
+
+Desktop and native menu use the same upper-left original handler. Six seats retain five opponents above and self below. The upper row reserves menu space. Menu/return buttons use a new GPT-generated 3:1 transparent image with contain sizing and no stretched border. PNG original preserved; runtime WebP keeps browser CSS custom property below its size limit.
+
+Sources: mobile android/web/card-sniper-sequence.js, card-menu-layout.js/.css, card-phone-flow.js, art/card-nautical-button-v1.png/.webp; android/build-card-desktop.mjs, mobile-sources.mjs. Formal runtime: public/game.html, js/card-desktop-table.js, css/card-desktop-table.css. QA: scripts/card_sniper_menu_qa.mjs. Generation provenance: CARD_MENU_ART_20261101.json.
+
+Validation uses real engine-produced events and exact archived iOS v058 in Windows WebKit, installed Android v059 bundle in Chromium, and desktop Chromium. Covers decoded character art, source/target/digit, delayed state, hit/miss/dodge ordering, active cancellation, six-player 640x320/740x360/844x390 and 1366x768 menus and button proportions. Screenshots manually inspected. Physical iPhone rendering remains unverified. Two-window actual npm-start sync/refresh/privacy suite passes 8 checks. Detailed reports retained in CARD_SNIPER_MENU_QA_20261101.json. Publication evidence is appended only after public readback.
+
+Earlier package-49092958c0e47990 is public: all 31 program objects and CAS verified. Android V2105 v059 installed==latest, SHA256 validation complete; title/login entered without website redirect, and user confirmed login looks normal. This is physical entry proof, not proof of all Android battle effects. LATTICE APIs absent; no persistence claimed.

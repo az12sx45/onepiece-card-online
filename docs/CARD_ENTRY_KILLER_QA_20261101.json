@@ -105,5 +105,14 @@
       }
     ],
     "passed": true
+  },
+  "entry-worker-baseline.json": {
+    "passed": false,
+    "checks": [
+      "ordinary browser still routes through download gate",
+      "save preserved false"
+    ],
+    "scope": "Real Chromium Service Workers; installed app UA versus normal browser, old cached worker retirement, original native registration guard. No user profile or storage touched.",
+    "failure": "AssertionError [ERR_ASSERTION]: native app stays on game after worker retirement\n    at check (D:\\Codex_QA\\card-android-entry-20261101\\entry-baseline.js:4:247)\n    at D:\\Codex_QA\\card-android-entry-20261101\\entry-baseline.js:8:908"
   }
 }

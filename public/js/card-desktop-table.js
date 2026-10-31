@@ -1494,7 +1494,7 @@ window.POCardInteract=module.exports;
     const visible=id=>{const n=$(id);return !!n&&!n.hidden&&!n.classList.contains('hidden')&&n.getClientRects().length>0;};
     const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
     const signature=s=>JSON.stringify(s&&[s.roundNo,s.turnIndex,s.turnStep,s.pending,s.players?.map(p=>[p.alive,p.hand,p.tempDraw,p.gold,p.protected,p.dodging,p.frozen,p.skipNext])]);
-    const effects=()=>!!api.isCardSkillIntroBusy?.()||!!api.isEffectBusy?.()||!!api.isEnhancementBusy?.()||!!api.isCoinBusy?.()||['enhOverlay','drawOverlay','coinOverlay'].some(visible)||!!$('phoneCardFlights')?.children.length;
+    const effects=()=>!!api.isSniperSequenceBusy?.()||!!api.isCardSkillIntroBusy?.()||!!api.isEffectBusy?.()||!!api.isEnhancementBusy?.()||!!api.isCoinBusy?.()||['enhOverlay','drawOverlay','coinOverlay'].some(visible)||!!$('phoneCardFlights')?.children.length;
     const reading=()=>!!api.isVenueIntroPending?.()||!!api.isVenueEntering?.()||visible('phoneCardSheet')||visible('phonePrivateReveal')||visible('phoneLibrary')||visible('cardDexOverlay')||visible('phoneVenueIntro');
     const stage=()=>!!api.isCardResolving?.()&&!api.isLocalCardPreview?.()&&!state?.pending;
     const busy=()=>!fast()&&(effects()||reading()||stage());
@@ -1522,9 +1522,12 @@ window.POCardInteract=module.exports;
         if(!valid())return;
         const skillIntro=await api.presentCardSkillBatch?.(batch.events);
         if(!valid())return;
+        const sniperHandled=await api.presentSniperBatch?.(batch.events);
+        if(!valid())return;
         const lawScan=batch.events.some(e=>e.type==='law_view'&&e.to===me.playerId);
         const privateFaces=batch.events.some(e=>e.to===me.playerId&&['robin_view','kata_peek','teach_cover'].includes(e.type));
         for(const e of batch.events){
+          if(sniperHandled?.has(e))continue;
           if(skillIntro&&e.type==='play_fx'&&e.cardId===skillIntro.id)continue;
           // Enhanced Law sends a textual peek and a card view for the same private result.
           // The comparison already shows both cards; do not open a second reading gate.
@@ -1566,7 +1569,7 @@ window.POCardInteract=module.exports;
       if(fast()&&!settling){for(const b of batches.splice(0))commit(b);updateLock();return;}
       pump();
     });
-    function reset(){api.deferResultText=false;api.cancelCardSkillIntro?.();api.cancelEnhancements?.();epoch++;clearTimeout(timer);clearTimeout(eventTimer);batches=[];events=[];latest=null;settling=false;activeBatch=null;api.restoreHandArt?.();delete root.dataset.cardFlowQueued;root.dataset.cardFlowBusy='false';}
+    function reset(){api.cancelSniperSequence?.();api.deferResultText=false;api.cancelCardSkillIntro?.();api.cancelEnhancements?.();epoch++;clearTimeout(timer);clearTimeout(eventTimer);batches=[];events=[];latest=null;settling=false;activeBatch=null;api.restoreHandArt?.();delete root.dataset.cardFlowQueued;root.dataset.cardFlowBusy='false';}
     for(const e of ['disconnect','JOINED'])socket.on(e,reset);
     const originalSend=typeof sendAction==='function'?sendAction:null;
     api.canSendPresentedAction=target=>!stage()&&!api.isKidAwaiting?.()&&!effects()&&(!reading()||$('phoneCardSheet')?.dataset.inspectKind==='hand'&&!!target?.closest?.('#phoneCardConfirm,#playHand,#playDrawn'))&&!settling&&!batches.length&&(!latest||signature(latest)===signature(state));
@@ -1803,4 +1806,42 @@ window.POCardInteract=module.exports;
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
 })();
 
+/* One online Usopp timeline for desktop and retained native bundles. */
+(()=>{
+ function mount(){
+  const api=window.CardPhonePresentation;if(!api||api.sniperSequenceVersion)return;api.sniperSequenceVersion=1;
+  let active=null,epoch=0;
+  const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text!=null)n.textContent=text;return n;};
+  const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
+  function cancel(){epoch++;if(!active)return;const a=active;active=null;for(const t of a.timers)clearTimeout(t);for(const anim of a.animations)anim.cancel();api.cancelHudReactions?.();a.layer.remove();a.resolve?.();}
+  api.cancelSniperSequence=cancel;api.isSniperSequenceBusy=()=>!!active;
+  api.presentSniperBatch=async events=>{
+   const guess=events.find(e=>e.to==='all'&&e.type==='card_guess'&&Number.isInteger(e.digit));
+   const result=guess&&events.find(e=>['usopp_hit','usopp_miss','card_defense'].includes(e.type)&&e.casterId===guess.casterId&&e.targetId===guess.targetId);
+   if(!guess||!result||fast())return null;
+   cancel();const generation=epoch;await api.prepareSniperArt?.();if(generation!==epoch||fast())return null;
+   const layer=make('div','phone-sniper-sequence');layer.id='phoneSniperSequence';layer.dataset.phase='call';layer.setAttribute('aria-live','polite');document.body.append(layer);
+   const timers=new Set(),animations=new Set();active={layer,timers,animations,resolve:null};
+   const later=(fn,ms)=>{const t=setTimeout(()=>{timers.delete(t);if(epoch===generation)fn();},ms);timers.add(t);return t;};
+   const wait=ms=>new Promise(resolve=>{if(!active||epoch!==generation)return resolve();active.resolve=resolve;later(resolve,ms);});
+   const name=id=>typeof pname==='function'?pname(id):`P${id+1}`;
+   api.playSniperCutin({scene:layer,from:guess.casterId,to:guess.targetId,digit:guess.digit,name,make,later,duration:3800});
+   await wait(3800);if(generation!==epoch)return null;if(fast()){cancel();return null;}
+   layer.dataset.phase='attack';
+   const anchor=id=>{const row=api.playerVisualElement?.(id)||document.getElementById('players')?.children[id],img=row?.querySelector('img.rounded-full'),r=(img||row)?.getBoundingClientRect();return r?.width?{id,x:r.left+r.width/2,y:r.top+r.height/2}:null;};
+   const mark=(point,cls)=>{const n=make('span',cls);n.dataset.player=String(point.id);n.style.left=point.x+'px';n.style.top=point.y+'px';layer.append(n);return n;};
+   const animate=(n,frames,duration=1400,delay=0)=>{const a=n.animate(frames,{duration,delay,easing:'ease-out',fill:'both'});animations.add(a);return a;};
+   const kind=result.type==='usopp_hit'?'hit':result.type==='usopp_miss'?'miss':result.status==='protect'?'shield-block':'dodge-block';
+   const played=api.playHudAttack?.({kind,source:anchor(guess.casterId),target:anchor(guess.targetId),detail:{digit:guess.digit},scene:layer,make,mark,animate,later});
+   if(!played){const notice=make('p','phone-sniper-fallback',`${name(guess.casterId)} → ${name(guess.targetId)} · ${guess.digit} 號`);layer.append(notice);later(()=>{notice.textContent+=kind==='hit'?' · 命中！':kind==='miss'?' · 未命中':kind==='shield-block'?' · 護盾擋下':' · 閃避成功';},1450);}
+   await wait(3600);if(generation!==epoch)return null;
+   const handled=new Set(events.filter(e=>e===guess||e===result));cancel();return handled;
+  };
+  for(const type of ['disconnect','JOINED'])socket.on(type,cancel);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel();});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+/* Menu placement changes only presentation, retaining original handlers. */
+(()=>{function mount(){const root=document.documentElement,api=window.CardPhonePresentation;if(!api||root.dataset.cardMenuLayout)return;root.dataset.cardMenuLayout='v2';const header=document.querySelector('body>header'),menu=document.getElementById('phoneCardMenu');if(header)header.id='cardTopMenu';document.querySelector('.phone-card-menu')?.setAttribute('id','cardMenuChoices');if(menu){menu.setAttribute('aria-label','開啟遊戲選單');header?.querySelector('div')?.prepend(menu);}const sheet=document.getElementById('phoneCardSheet');sheet?.querySelector('.phone-card-sheet-head button')?.setAttribute('id','cardMenuReturn');const update=()=>{if(sheet)sheet.dataset.menuOpen=String(sheet.querySelector('#cardMenuChoices')!==null&&!sheet.hidden);};if(sheet)new MutationObserver(update).observe(sheet,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']});update();}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);})();
 })();
