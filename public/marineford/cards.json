@@ -1,0 +1,292 @@
+[
+  {
+    "id": "pirate-1",
+    "name": "馬可",
+    "rank": 1,
+    "team": "pirate",
+    "effect": "猜測一個數字，若海軍持有該數字的手牌，擊敗其中一張。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-1.webp"
+  },
+  {
+    "id": "pirate-2",
+    "name": "落葉",
+    "rank": 1,
+    "team": "pirate",
+    "effect": "猜測一個數字，若海軍持有該數字的手牌，擊敗其中一張。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-2.webp"
+  },
+  {
+    "id": "pirate-3",
+    "name": "雅托摩斯",
+    "rank": 1,
+    "team": "pirate",
+    "effect": "猜測一個數字，若海軍持有該數字的手牌，擊敗其中一張。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-3.webp"
+  },
+  {
+    "id": "pirate-4",
+    "name": "艾斯",
+    "rank": 2,
+    "team": "pirate",
+    "effect": "選擇一名隊友查看海軍的一張手牌。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-4.webp"
+  },
+  {
+    "id": "pirate-5",
+    "name": "奈米爾",
+    "rank": 2,
+    "team": "pirate",
+    "effect": "選擇一名隊友查看海軍的一張手牌。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-5.webp"
+  },
+  {
+    "id": "pirate-6",
+    "name": "史比托・吉爾",
+    "rank": 2,
+    "team": "pirate",
+    "effect": "選擇一名隊友查看海軍的一張手牌。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-6.webp"
+  },
+  {
+    "id": "pirate-7",
+    "name": "裘斯",
+    "rank": 3,
+    "team": "pirate",
+    "effect": "你可以和海軍戰鬥。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-7.webp"
+  },
+  {
+    "id": "pirate-8",
+    "name": "布雷海姆",
+    "rank": 3,
+    "team": "pirate",
+    "effect": "你可以和海軍戰鬥。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-8.webp"
+  },
+  {
+    "id": "pirate-9",
+    "name": "以藏",
+    "rank": 3,
+    "team": "pirate",
+    "effect": "你可以和海軍戰鬥。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-9.webp"
+  },
+  {
+    "id": "pirate-10",
+    "name": "艾德華・紐蓋特",
+    "rank": 4,
+    "team": "pirate",
+    "effect": "給予你或一名隊友 1 張士氣卡。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-10.webp"
+  },
+  {
+    "id": "pirate-11",
+    "name": "克利耶爾",
+    "rank": 4,
+    "team": "pirate",
+    "effect": "給予你或一名隊友 1 張士氣卡。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-11.webp"
+  },
+  {
+    "id": "pirate-12",
+    "name": "佛薩",
+    "rank": 4,
+    "team": "pirate",
+    "effect": "給予你或一名隊友 1 張士氣卡。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-12.webp"
+  },
+  {
+    "id": "pirate-13",
+    "name": "比斯塔",
+    "rank": 5,
+    "team": "pirate",
+    "effect": "查看海賊牌堆頂部三張卡，按任意順序放回。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-13.webp"
+  },
+  {
+    "id": "pirate-14",
+    "name": "金格杜",
+    "rank": 5,
+    "team": "pirate",
+    "effect": "查看海賊牌堆頂部三張卡，按任意順序放回。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-14.webp"
+  },
+  {
+    "id": "pirate-15",
+    "name": "布朗明哥",
+    "rank": 6,
+    "team": "pirate",
+    "effect": "你或一名隊友可以和海軍戰鬥。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-15.webp"
+  },
+  {
+    "id": "pirate-16",
+    "name": "哈爾達",
+    "rank": 6,
+    "team": "pirate",
+    "effect": "你或一名隊友可以和海軍戰鬥。",
+    "justice": false,
+    "amount": 1,
+    "image": "pirate-16.webp"
+  },
+  {
+    "id": "navy-helmeppo",
+    "name": "貝魯梅伯",
+    "rank": 1,
+    "team": "navy",
+    "effect": "指定一名對手猜測數字，猜中擊敗該卡。",
+    "justice": false,
+    "amount": 1,
+    "image": "navy-helmeppo.webp"
+  },
+  {
+    "id": "navy-koby",
+    "name": "克比",
+    "rank": 1,
+    "team": "navy",
+    "effect": "指定一名對手猜測數字，猜中擊敗該卡。",
+    "justice": false,
+    "amount": 1,
+    "image": "navy-koby.webp"
+  },
+  {
+    "id": "navy-garp",
+    "name": "卡普",
+    "rank": 2,
+    "team": "navy",
+    "effect": "指定一名對手，若其手牌數字 ≤3，擊敗該卡。",
+    "justice": false,
+    "amount": 1,
+    "image": "navy-garp.webp"
+  },
+  {
+    "id": "navy-aokiji",
+    "name": "青雉",
+    "rank": 3,
+    "team": "navy",
+    "effect": "你可以和一名對手戰鬥。",
+    "justice": false,
+    "amount": 1,
+    "image": "navy-aokiji.webp"
+  },
+  {
+    "id": "navy-kizaru",
+    "name": "黃猿",
+    "rank": 4,
+    "team": "navy",
+    "effect": "獲得 3 張士氣卡。",
+    "justice": false,
+    "amount": 3,
+    "image": "navy-kizaru.webp"
+  },
+  {
+    "id": "navy-akainu",
+    "name": "赤犬",
+    "rank": 5,
+    "team": "navy",
+    "effect": "抽 1 張牌，從手牌中將一張放回牌堆底部。",
+    "justice": false,
+    "amount": 1,
+    "image": "navy-akainu.webp"
+  },
+  {
+    "id": "navy-sengoku",
+    "name": "戰國元帥",
+    "rank": 7,
+    "team": "navy",
+    "effect": "無法打出；被擊敗時先補牌，再洗回牌堆。",
+    "justice": false,
+    "amount": 1,
+    "image": "navy-sengoku.webp"
+  },
+  {
+    "id": "justice-1",
+    "name": "初心の正義",
+    "rank": 1,
+    "team": "navy",
+    "effect": "猜測一個數字，所有持有此數字的對手各被擊敗一張卡。",
+    "justice": true,
+    "amount": 1,
+    "image": "justice-1.webp"
+  },
+  {
+    "id": "justice-2",
+    "name": "鐵拳の正義",
+    "rank": 2,
+    "team": "navy",
+    "effect": "指定一名對手，若其手牌數字 ≥3，擊敗該卡。",
+    "justice": true,
+    "amount": 1,
+    "image": "justice-2.webp"
+  },
+  {
+    "id": "justice-3",
+    "name": "從容不迫的正義",
+    "rank": 3,
+    "team": "navy",
+    "effect": "你可以依序和最多兩名不同對手戰鬥。",
+    "justice": true,
+    "amount": 1,
+    "image": "justice-3.webp"
+  },
+  {
+    "id": "justice-4",
+    "name": "模稜兩可的正義",
+    "rank": 4,
+    "team": "navy",
+    "effect": "獲得 3 張士氣卡。",
+    "justice": true,
+    "amount": 3,
+    "image": "justice-4.webp"
+  },
+  {
+    "id": "justice-5",
+    "name": "絕對的正義",
+    "rank": 5,
+    "team": "navy",
+    "effect": "抽 2 張牌，再將兩張手牌依序放回牌堆底部。",
+    "justice": true,
+    "amount": 1,
+    "image": "justice-5.webp"
+  },
+  {
+    "id": "justice-6",
+    "name": "君臨天下的正義",
+    "rank": 6,
+    "team": "navy",
+    "effect": "複製一張在你面前的卡片效果。",
+    "justice": true,
+    "amount": 1,
+    "image": "justice-6.webp"
+  }
+]
