@@ -81,5 +81,11 @@
     "launcherUiChanged": false,
     "boardChanged": false,
     "experimentalEnhancedProjection": false
+  },
+  "marineford": {
+    "version": 60,
+    "entry": "marineford/index.html",
+    "onlineOnly": true,
+    "originalGamesPreserved": true
   }
 }

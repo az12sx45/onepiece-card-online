@@ -185,14 +185,14 @@
     {
       "path": "launcher/launcher.js",
       "sourceSha256": "95708927809f8c9b42f4579c815bd813b5f49f385ac6b62dc574b7169f2bf3f2",
-      "sha256": "6665ddbac5a8fe52e63b8fc90b5858486701d848ede54beb3f0bee471dfdbd64",
-      "size": 51910
+      "sha256": "af404735db30b1e9c126bea5e70dc547681b8030ec8c944d0c037a6f466a3a34",
+      "size": 53091
     },
     {
       "path": "launcher/mobile-bridge.js",
       "sourceSha256": "7df50941a034cea5cfd1838e57e7a7458c7de2ce1f5421139e974368c3c195e1",
-      "sha256": "c0f0917ef6210634fd752ffa0ff429ec50ac916ad3ddbdf837459a7463fb3d86",
-      "size": 38583
+      "sha256": "8c1fc93703cfeb4dc832e43c0c657c173ae144064366048f278eb87ffde6874c",
+      "size": 38611
     },
     {
       "path": "launcher/socket.io.min.js",
@@ -9209,8 +9209,13 @@
       "path": "launcher/ios-transport.js",
       "sha256": "7903f63accf515cf2b15fe5f0f1cec8d24a8bfce64cf932d9458fa962cc2cebd",
       "size": 292
+    },
+    {
+      "path": "launcher-assets/images/game_launcher/launcher_marineford_cover_v1.webp",
+      "sha256": "19adfe869ef81a206718fb9136ec625db6ba54a49b1caeb91b198b85e56b0bee",
+      "size": 566812
     }
   ],
-  "bytes": 356658537,
+  "bytes": 357226558,
   "nativeCardBrowserModulesOmitted": {}
 }

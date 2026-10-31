@@ -32,14 +32,14 @@ func _request(method: String,args: Dictionary) -> Dictionary:
 		if method=="getNativeState":
 			installed_version=str(value.get("appVersion","iOS"))
 			value.preferences=preferences;value.cacheRoot="iPhone App 儲存空間";value.freeBytes=null
-			value.games={"board":{"status":"installed","hasInstalled":true,"removable":false,"installedVersion":installed_version,"remoteVersion":installed_version},"card":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"},"chess":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"}}
+			value.games={"marineford":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"},"board":{"status":"installed","hasInstalled":true,"removable":false,"installedVersion":installed_version,"remoteVersion":installed_version},"card":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"},"chess":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"}}
 		return value
 	if method=="savePreferences":
 		if args.get("gameDisplayMode","fullscreen")!="fullscreen":return {"ok":false,"error":"iPhone 使用系統管理的橫向全螢幕。"}
 		return {"ok":true,"preferences":preferences}
 	if method=="launchGame":
 		var target:=str(args.get("gameId",""))
-		if not target in ["board","card","chess"]:return {"ok":false,"error":"無效的遊戲。"}
+		if not target in ["board","card","chess","marineford"]:return {"ok":false,"error":"無效的遊戲。"}
 		var session: Variant=JSON.parse_string(bridge.call("session_request","getNativeState","{}"))
 		if not session is Dictionary or str(session.get("secret","")).is_empty():return {"ok":false,"error":"請先登入"}
 		var active:=str(bridge.call("web_game_active"))

@@ -555,7 +555,7 @@ class SocialService extends EventEmitter {
     return loading;
   }
   function compose() {
-    const games = Object.fromEntries(['card', 'board', 'chess'].map(id => [id, { status: 'missing', hasInstalled: false, removable: false, ...(nativeState.games?.[id] || {}) }]));
+    const games = Object.fromEntries(['card', 'board', 'chess', 'marineford'].map(id => [id, { status: 'missing', hasInstalled: false, removable: false, ...(nativeState.games?.[id] || {}) }]));
     return { stateRevision: ++stateRevision, authenticated, restoringSession: false, previewMode: false,
       profile: authenticated ? auth.accountSummary() : null, preferences: auth.state.preferences,
       cacheRoot: nativeState.cacheRoot || 'iPhone App 儲存空間', freeBytes: nativeState.freeBytes ?? null, catalogSource: 'remote', games };
@@ -587,7 +587,7 @@ class SocialService extends EventEmitter {
     return result;
   }
   async function gameAction(method, gameId) {
-    if (!['card', 'board', 'chess'].includes(gameId)) return { ok: false, error: 'invalid game' };
+    if (!['card', 'board', 'chess', 'marineford'].includes(gameId)) return { ok: false, error: 'invalid game' };
     await ensureLoaded();
     if (!authenticated) return { ok: false, error: 'not authenticated' };
     const result = await nativeCall(method, { gameId });

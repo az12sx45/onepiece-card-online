@@ -40,7 +40,7 @@
 }
 - (void)optionsGesture:(UILongPressGestureRecognizer *)gesture {if(gesture.state==UIGestureRecognizerStateBegan)[self options];}
 - (BOOL)open:(NSString *)gameId session:(NSDictionary *)session device:(NSString *)device {
-    if(![@[@"card",@"chess"] containsObject:gameId]||![session[@"secret"] isKindOfClass:NSString.class]||![session[@"secret"] length])return NO;
+    if(![@[@"card",@"chess",@"marineford"] containsObject:gameId]||![session[@"secret"] isKindOfClass:NSString.class]||![session[@"secret"] length])return NO;
     if(_web){if(![_gameId isEqualToString:gameId])return NO;_surface.hidden=NO;return YES;}
     UIWindow *window=nil;
     for(UIScene *scene in UIApplication.sharedApplication.connectedScenes)if([scene isKindOfClass:UIWindowScene.class]&&scene.activationState==UISceneActivationStateForegroundActive)
@@ -51,6 +51,7 @@
     NSString *mobile=[NSString stringWithContentsOfFile:[root stringByAppendingPathComponent:@"game-mobile.js"] encoding:NSUTF8StringEncoding error:nil];
     NSString *css=[NSString stringWithContentsOfFile:[root stringByAppendingPathComponent:@"game-mobile.css"] encoding:NSUTF8StringEncoding error:nil];
     if(!bootstrap.length||!mobile.length||!css.length)return NO;
+    if([gameId isEqualToString:@"marineford"]){mobile=@"";css=@"";}
     NSDictionary *account=session[@"account"]?:@{};
     NSDictionary *values=@{@"opSecret":session[@"secret"],@"op_secret":session[@"secret"],@"op_device_id":device?:@"",
         @"op_user_id":account[@"userId"]?:@"",@"op_board_user_id":account[@"userId"]?:@"",
@@ -68,7 +69,7 @@
     _surface.backgroundColor=[UIColor colorWithRed:.02 green:.08 blue:.12 alpha:1];[window addSubview:_surface];
     _web=[[WKWebView alloc] initWithFrame:CGRectZero configuration:config];_web.navigationDelegate=self;_web.UIDelegate=self;_web.translatesAutoresizingMaskIntoConstraints=NO;
     _web.scrollView.contentInsetAdjustmentBehavior=UIScrollViewContentInsetAdjustmentNever;[_surface addSubview:_web];
-    BOOL fullscreenCard=[gameId isEqualToString:@"card"];
+    BOOL fullscreenCard=[gameId isEqualToString:@"card"]||[gameId isEqualToString:@"marineford"];
     UIStackView *bar=[UIStackView new];bar.translatesAutoresizingMaskIntoConstraints=NO;bar.spacing=10;bar.axis=UILayoutConstraintAxisHorizontal;bar.distribution=UIStackViewDistributionFillEqually;
     NSArray *titles=@[@"啟動器",@"重新連線",@"結束遊戲"];SEL actions[]={@selector(home),@selector(reload),@selector(finish)};
     for(NSUInteger i=0;i<titles.count;i++){UIButton *b=[UIButton buttonWithType:UIButtonTypeSystem];[b setTitle:titles[i] forState:UIControlStateNormal];[b setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];[b addTarget:self action:actions[i] forControlEvents:UIControlEventTouchUpInside];[bar addArrangedSubview:b];}
@@ -77,7 +78,7 @@
     if(fullscreenCard){UILongPressGestureRecognizer *gesture=[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(optionsGesture:)];gesture.numberOfTouchesRequired=2;gesture.minimumPressDuration=.8;gesture.cancelsTouchesInView=NO;[_surface addGestureRecognizer:gesture];}
     _status=[UILabel new];_status.text=@"正在開啟遊戲…";_status.textColor=UIColor.whiteColor;_status.backgroundColor=_surface.backgroundColor;_status.textAlignment=NSTextAlignmentCenter;_status.numberOfLines=0;_status.translatesAutoresizingMaskIntoConstraints=NO;[_surface addSubview:_status];
     [NSLayoutConstraint activateConstraints:@[[_status.centerXAnchor constraintEqualToAnchor:safe.centerXAnchor],[_status.centerYAnchor constraintEqualToAnchor:safe.centerYAnchor],[_status.widthAnchor constraintLessThanOrEqualToAnchor:safe.widthAnchor multiplier:.9]]];
-    NSString *entry=[gameId isEqualToString:@"card"]?@"start.html":@"chess/index.html";
+    NSString *entry=[gameId isEqualToString:@"marineford"]?@"marineford/index.html":([gameId isEqualToString:@"card"]?@"start.html":@"chess/index.html");
     [_web loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[@"https://onepiece-card-online.onrender.com/" stringByAppendingFormat:@"%@?layout=responsive&tabletop_android=1",entry]]]];return YES;
 }
 - (void)hide { _surface.hidden=YES;[_web evaluateJavaScript:@"document.querySelectorAll('audio,video').forEach(m=>m.pause())" completionHandler:nil]; }
