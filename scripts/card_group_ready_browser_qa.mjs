@@ -8,8 +8,9 @@ const mobile='C:/Users/王曜瑋/.codex/worktrees/android-tabletop-landscape/202
 const ios='D:/Codex_QA/native-ios-cloud-20261023/candidate/bundle-resources/launcher-web/mobile';
 const out=process.env.CARD_QA_OUT||'C:/Codex_QA/card-venue-ready-20261031';fs.mkdirSync(out,{recursive:true});
 const port=30969,origin=`http://127.0.0.1:${port}`,report={passed:false,checks:[],errors:[],scope:'Three Chromium clients with exact desktop/v059 Android/iOS bundles plus three CPU; isolated server with test-process-only state seeds, original engine/actions/Socket.IO, private read, CPU duel, next-round gates; no physical-device claim.'};
-const check=(name,pass,detail)=>{report.checks.push({name,pass,detail});if(!pass)throw Error(name+': '+JSON.stringify(detail));};
+const check=(name,pass,detail)=>{report.checks.push({name,pass,detail});console.log(name+': '+pass);fs.writeFileSync(out+'/progress.json',JSON.stringify(report,null,2));if(!pass)throw Error(name+': '+JSON.stringify(detail));};
 const server=spawn(process.execPath,['scripts/card_group_server_fixture.js'],{cwd:root,windowsHide:true,env:{...process.env,DATABASE_URL:'',PORT:String(port)},stdio:['pipe','pipe','pipe']});let log='',browser;server.stdout.on('data',b=>log+=b);server.stderr.on('data',b=>log+=b);const pages=[];
+const heartbeat=setInterval(()=>{Promise.race([Promise.all(pages.map(p=>p.evaluate(()=>({seat:me.playerId,turn:state?.turnIndex,step:state?.turnStep,pending:state?.pending?.action,skip:state?.players?.map(p=>p.skipNext),raw:window.__raw?.presentationReady,queue:CardPhonePresentation.presentationQueueSize(),effects:CardPhonePresentation.presentationEffectsBusy(),intro:document.getElementById('phoneVenueIntro')?.hidden,venuePending:CardPhonePresentation.isVenueIntroPending?.(),venueEntering:CardPhonePresentation.isVenueEntering?.(),stage:CardPhonePresentation.isCardResolving?.(),preview:CardPhonePresentation.isLocalCardPreview?.(),probe:window.__probe,rawTurn:window.__raw?.turnIndex,rawStep:window.__raw?.turnStep,root:{...document.documentElement.dataset},visible:['phoneCardSheet','phonePrivateReveal','phoneLibrary','cardDexOverlay','phoneVenueIntro'].filter(id=>{const n=document.getElementById(id);return n&&!n.hidden&&!n.classList.contains('hidden')&&n.getClientRects().length;})})))),new Promise(r=>setTimeout(()=>r('diagnostic timeout'),4000))]).then(v=>fs.writeFileSync(out+'/live.json',JSON.stringify(v,null,2)));},15000);
 const action=(p,type,payload={})=>p.evaluate(({type,payload})=>socket.emit('ACTION',{...me,type,payload}),{type,payload});
 try{
  for(let i=0;i<100&&!log.includes('Server listening');i++){if(server.exitCode!==null)throw Error(log.slice(-1800));await new Promise(r=>setTimeout(r,150));}
@@ -26,16 +27,23 @@ try{
   // This suite tests room barriers, not media decoding. Complete mocked movies
   // explicitly; a resolved play() promise alone never supplies an ended event.
   await p.evaluate(()=>{HTMLMediaElement.prototype.play=function(){if(this.id==='enhVideo'){const video=this;setTimeout(()=>video.dispatchEvent(new Event('ended')),120);}return Promise.resolve();};});
+  await p.evaluate(()=>{window.__probe={};for(const key of ['presentCardSkillBatch','presentPileBatch']){const raw=CardPhonePresentation[key];if(raw)CardPhonePresentation[key]=async function(...args){window.__probe[key]={started:performance.now(),events:args[0]?.map(e=>e.type)};try{return await raw.apply(this,args)}finally{delete window.__probe[key];}}} });
   await p.evaluate(({room,index})=>{me.roomId=room;me.secret='qa-venue-'+index+'-'+room;socket.onAny((event,s)=>{if(event==='STATE')window.__raw=s});socket.emit('JOIN_ROOM',{roomId:room,displayName:'QA'+index,secret:me.secret,cpuCount:3});},{room,index});
   await p.waitForFunction(()=>me.playerId!==null&&state?.players?.length>0);await p.waitForTimeout(200);if(await p.locator('#phoneVenueIntro:not([hidden])').count())await p.locator('#phoneVenueContinue').click();pages.push(p);
  }
  await pages[0].waitForFunction(()=>state.players.length===3);
  for(const p of pages)await action(p,'LOBBY_READY');await pages[0].waitForTimeout(150);await action(pages[0],'START_GAME');
  for(const p of pages){await p.locator('#phoneVenueContinue').waitFor({state:'visible'});await p.waitForFunction(()=>!document.getElementById('phoneVenueContinue').disabled);await p.locator('#phoneVenueContinue').click();}
- for(const p of pages)await p.waitForFunction(()=>!window.__raw?.venueReady?.waiting&&!CardPhonePresentation.presentationQueueSize()&&!CardPhonePresentation.presentationEffectsBusy()&&!CardPhonePresentation.isVenueEntering());
+ for(const p of pages)await p.waitForFunction(()=>!window.__raw?.venueReady?.waiting&&!CardPhonePresentation.presentationQueueSize()&&!CardPhonePresentation.presentationEffectsBusy()&&!CardPhonePresentation.isVenueEntering(),{},{timeout:60000});
  async function seed(scenario){server.stdin.write(JSON.stringify({room,scenario})+'\n');await pages[0].waitForFunction(()=>window.__raw?.presentationReady?.waiting);}
  async function released(){for(const p of pages)await p.waitForFunction(()=>window.__raw?.presentationReady?.waiting===false,{},{timeout:60000});}
  const seats=await Promise.all(pages.map(p=>p.evaluate(()=>me.playerId)));const hostId=seats[0];const spectator=pages[2];
+ await spectator.evaluate(()=>CardPhonePresentation.openCardLibrary());await seed('paralysis');await pages[0].waitForTimeout(1500);
+ const paralysisDeck=await pages[0].evaluate(()=>window.__raw.deck.length);
+ check('paralysis respects slow reader before skipping',await pages[0].evaluate(()=>window.__raw.players.every(p=>p.skipNext)));
+ await spectator.locator('.phone-library-head button').click();
+ for(const p of pages)await p.waitForFunction(()=>window.__raw.players.length===6&&window.__raw.players.every(p=>!p.skipNext)&&!window.__raw.presentationReady.waiting,{},{timeout:60000});
+ check('six human and CPU paralysis turns automatically skipped without drawing',await pages[0].evaluate(({hostId,paralysisDeck})=>window.__raw.turnIndex===hostId&&window.__raw.turnStep==='draw'&&window.__raw.deck.length===paralysisDeck,{hostId,paralysisDeck}));
  await spectator.evaluate(()=>CardPhonePresentation.openCardLibrary());
  await seed('peek');
  await pages[0].waitForFunction(()=>window.__raw.presentationReady.waiting&&window.__raw.presentationReady.ready.length===2,{},{timeout:30000});
@@ -78,4 +86,4 @@ try{
  check('new round releases after all venue readers finish',true);
  check('no page errors',report.errors.length===0,report.errors);report.passed=true;
 }catch(e){report.failure=e.stack;report.log=log.slice(-1600);for(const p of pages)report.checks.push({diagnostic:await p.evaluate(()=>({seat:me.playerId,players:state?.players?.length,gate:window.__raw?.venueReady,presentation:window.__raw?.presentationReady,local:state?.presentationReady,queue:CardPhonePresentation.presentationQueueSize(),busy:CardPhonePresentation.presentationEffectsBusy(),intro:document.getElementById('phoneVenueIntro')?.hidden,button:document.getElementById('phoneVenueContinue')?.outerHTML})).catch(()=>null)});process.exitCode=1;}
-finally{await browser?.close();spawnSync('taskkill',['/PID',String(server.pid),'/T','/F'],{windowsHide:true});fs.writeFileSync(out+'/browser.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report));}
+finally{clearInterval(heartbeat);await browser?.close();spawnSync('taskkill',['/PID',String(server.pid),'/T','/F'],{windowsHide:true});fs.writeFileSync(out+'/browser.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report));}

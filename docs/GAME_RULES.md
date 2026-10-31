@@ -2058,3 +2058,6 @@ Presentation coordination: animations finish automatically; private card views a
 
 
 2026-10-31: Compact card-footprint projection, character-origin white transition and movie-end recall; choices wait until recall finishes. Header backdrop cleanup and verification: CARD_ENHANCED_PROJECTION_20261031.md. Rules unchanged.
+
+
+2026-11-01 user request: paralysis skips automatically when the prior room presentation finishes; an Usopp target with protection/dodge resolves the original defense immediately without requesting a guessed number. Guard precedence, one dodge consumption, defense score and unprotected guess rules preserved.

@@ -1,0 +1,455 @@
+{
+  "android": {
+    "scope": "Original engine scenarios rendered in Chromium with exact installed mobile bundle or desktop bundle; not a physical device test.",
+    "checks": [
+      {
+        "name": "Draw cue visible at pile, inside screen",
+        "pass": true
+      },
+      {
+        "name": "Target portraits clearly marked",
+        "pass": true
+      },
+      {
+        "name": "Target hint visible without clipping",
+        "pass": true
+      },
+      {
+        "name": "heads exactly correct visible coin face",
+        "pass": true,
+        "detail": [
+          {
+            "back": false,
+            "position": "3.2% 43%",
+            "transform": "none"
+          }
+        ]
+      },
+      {
+        "name": "tails exactly correct visible coin face",
+        "pass": true,
+        "detail": [
+          {
+            "back": true,
+            "position": "37.7% 43%",
+            "transform": "none"
+          }
+        ]
+      },
+      {
+        "name": "Coin faces have distinct atlas positions",
+        "pass": true,
+        "detail": [
+          "3.2% 43%",
+          "37.7% 43%"
+        ]
+      },
+      {
+        "name": "Target has dodged before impact, result not yet announced",
+        "pass": true,
+        "detail": {
+          "translate": "58px 24px",
+          "dodgeAt": 780,
+          "impactAt": 1450
+        }
+      },
+      {
+        "name": "Dodge leaves no rectangle or displaced portrait",
+        "pass": true,
+        "detail": {
+          "sprites": 0,
+          "translate": "0px 0.383913px",
+          "animations": [
+            {
+              "state": "running",
+              "frames": [
+                {
+                  "offset": 0,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "filter": "none",
+                  "computedOffset": 0
+                },
+                {
+                  "offset": 1,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "filter": "brightness(1.17) drop-shadow(rgb(255, 215, 122) 0px 0px 5px)",
+                  "computedOffset": 1
+                }
+              ]
+            },
+            {
+              "state": "running",
+              "frames": [
+                {
+                  "offset": 0,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "scale": "1",
+                  "computedOffset": 0
+                },
+                {
+                  "offset": 1,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "scale": "1.16",
+                  "computedOffset": 1
+                }
+              ]
+            },
+            {
+              "state": "running",
+              "frames": [
+                {
+                  "offset": 0,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "translate": "none",
+                  "computedOffset": 0
+                },
+                {
+                  "offset": 1,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "translate": "0px 9px",
+                  "computedOffset": 1
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "protected resolves without number picker",
+        "pass": true
+      },
+      {
+        "name": "dodging resolves without number picker",
+        "pass": true
+      },
+      {
+        "name": "Duel charge keeps both hands private",
+        "pass": true
+      },
+      {
+        "name": "Only defeated card revealed at impact",
+        "pass": true
+      },
+      {
+        "name": "Duel completes and releases animation queue",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [],
+    "passed": true
+  },
+  "desktop": {
+    "scope": "Original engine scenarios rendered in Chromium with exact installed mobile bundle or desktop bundle; not a physical device test.",
+    "checks": [
+      {
+        "name": "Draw cue visible at pile, inside screen",
+        "pass": true
+      },
+      {
+        "name": "Target portraits clearly marked",
+        "pass": true
+      },
+      {
+        "name": "Target hint visible without clipping",
+        "pass": true
+      },
+      {
+        "name": "heads exactly correct visible coin face",
+        "pass": true,
+        "detail": [
+          {
+            "back": false,
+            "position": "3.2% 43%",
+            "transform": "none"
+          }
+        ]
+      },
+      {
+        "name": "tails exactly correct visible coin face",
+        "pass": true,
+        "detail": [
+          {
+            "back": true,
+            "position": "37.7% 43%",
+            "transform": "none"
+          }
+        ]
+      },
+      {
+        "name": "Coin faces have distinct atlas positions",
+        "pass": true,
+        "detail": [
+          "3.2% 43%",
+          "37.7% 43%"
+        ]
+      },
+      {
+        "name": "Target has dodged before impact, result not yet announced",
+        "pass": true,
+        "detail": {
+          "translate": "58px 24px",
+          "dodgeAt": 780,
+          "impactAt": 1450
+        }
+      },
+      {
+        "name": "Dodge leaves no rectangle or displaced portrait",
+        "pass": true,
+        "detail": {
+          "sprites": 0,
+          "translate": "0px 0.771142px",
+          "animations": [
+            {
+              "state": "running",
+              "frames": [
+                {
+                  "offset": 0,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "filter": "none",
+                  "computedOffset": 0
+                },
+                {
+                  "offset": 1,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "filter": "brightness(1.17) drop-shadow(rgb(255, 215, 122) 0px 0px 5px)",
+                  "computedOffset": 1
+                }
+              ]
+            },
+            {
+              "state": "running",
+              "frames": [
+                {
+                  "offset": 0,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "scale": "1",
+                  "computedOffset": 0
+                },
+                {
+                  "offset": 1,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "scale": "1.22",
+                  "computedOffset": 1
+                }
+              ]
+            },
+            {
+              "state": "running",
+              "frames": [
+                {
+                  "offset": 0,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "translate": "none",
+                  "computedOffset": 0
+                },
+                {
+                  "offset": 1,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "translate": "0px 18px",
+                  "computedOffset": 1
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "protected resolves without number picker",
+        "pass": true
+      },
+      {
+        "name": "dodging resolves without number picker",
+        "pass": true
+      },
+      {
+        "name": "Duel charge keeps both hands private",
+        "pass": true
+      },
+      {
+        "name": "Only defeated card revealed at impact",
+        "pass": true
+      },
+      {
+        "name": "Duel completes and releases animation queue",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [],
+    "passed": true
+  },
+  "ios": {
+    "scope": "Original engine scenarios rendered in Chromium with exact installed mobile bundle or desktop bundle; not a physical device test.",
+    "checks": [
+      {
+        "name": "Draw cue visible at pile, inside screen",
+        "pass": true
+      },
+      {
+        "name": "Target portraits clearly marked",
+        "pass": true
+      },
+      {
+        "name": "Target hint visible without clipping",
+        "pass": true
+      },
+      {
+        "name": "heads exactly correct visible coin face",
+        "pass": true,
+        "detail": [
+          {
+            "back": false,
+            "position": "3.2% 43%",
+            "transform": "none"
+          }
+        ]
+      },
+      {
+        "name": "tails exactly correct visible coin face",
+        "pass": true,
+        "detail": [
+          {
+            "back": true,
+            "position": "37.7% 43%",
+            "transform": "none"
+          }
+        ]
+      },
+      {
+        "name": "Coin faces have distinct atlas positions",
+        "pass": true,
+        "detail": [
+          "3.2% 43%",
+          "37.7% 43%"
+        ]
+      },
+      {
+        "name": "Target has dodged before impact, result not yet announced",
+        "pass": true,
+        "detail": {
+          "translate": "58px 24px",
+          "dodgeAt": 780,
+          "impactAt": 1450
+        }
+      },
+      {
+        "name": "Dodge leaves no rectangle or displaced portrait",
+        "pass": true,
+        "detail": {
+          "sprites": 0,
+          "translate": "0px 0.380943px",
+          "animations": [
+            {
+              "state": "running",
+              "frames": [
+                {
+                  "offset": 0,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "filter": "none",
+                  "computedOffset": 0
+                },
+                {
+                  "offset": 1,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "filter": "brightness(1.17) drop-shadow(rgb(255, 215, 122) 0px 0px 5px)",
+                  "computedOffset": 1
+                }
+              ]
+            },
+            {
+              "state": "running",
+              "frames": [
+                {
+                  "offset": 0,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "scale": "1",
+                  "computedOffset": 0
+                },
+                {
+                  "offset": 1,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "scale": "1.16",
+                  "computedOffset": 1
+                }
+              ]
+            },
+            {
+              "state": "running",
+              "frames": [
+                {
+                  "offset": 0,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "translate": "none",
+                  "computedOffset": 0
+                },
+                {
+                  "offset": 1,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "translate": "0px 9px",
+                  "computedOffset": 1
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "protected resolves without number picker",
+        "pass": true
+      },
+      {
+        "name": "dodging resolves without number picker",
+        "pass": true
+      },
+      {
+        "name": "Duel charge keeps both hands private",
+        "pass": true
+      },
+      {
+        "name": "Only defeated card revealed at impact",
+        "pass": true
+      },
+      {
+        "name": "Duel completes and releases animation queue",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [],
+    "passed": true
+  }
+}

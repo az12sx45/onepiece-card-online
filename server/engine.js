@@ -1655,6 +1655,16 @@ case 19: { // 羅傑
     const meIdx = st.turnIndex;
 
     if(p.action==='usopp'){
+      if(!Number.isInteger(idx) || idx===meIdx || !st.players[idx]?.alive) return {state:st,emits};
+      // A visible defense already blocks this shot; no private-hand guess is
+      // needed. Preserve guard precedence, dodge consumption and defense score.
+      if(st.players[idx].protected || st.players[idx].dodging){
+        effectGuard(st,idx,{},emits);
+        scoreDefense(st,idx,1);
+        st.pending=null;
+        endOrNext(st,emits);
+        return {state:st,emits};
+      }
       st.pending = { ...p, extra:{ ...p.extra, target: idx } };
       return { state: st, emits };
     }

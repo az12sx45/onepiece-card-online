@@ -2115,3 +2115,6 @@ Card choice layout: shared android/web/card-phone-fx.js, card-match-polish.js/cs
 
 
 2026-10-31: Compact card-footprint projection, character-origin white transition and movie-end recall; choices wait until recall finishes. Header backdrop cleanup and verification: CARD_ENHANCED_PROJECTION_20261031.md. Rules unchanged.
+
+
+2026-11-01: android/web/card-action-cues.js/css provide target/draw cues; card-phone-coin, card-hud-combat and card-duel-finishers contain presentation fixes; server/index.js schedules mandatory paralysis via the original engine; scripts/card_status_interactions_qa.js validates it. Details in formal CARD_STATUS_INTERACTIONS_20261101.md.

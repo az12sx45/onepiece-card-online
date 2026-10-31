@@ -3207,6 +3207,16 @@ function runCpuLoop(roomId){
     const delay = (ms) => setTimeout(step, roomNow._cpuFastForward ? 0 : ms);
     const pending = st.pending || null;
 
+    // Paralysis is mandatory, not an optional human DRAW. Use the engine's
+    // original turn-start path, after the shared venue/presentation barriers.
+    // The next skip waits for this skip's presentation acknowledgement too.
+    const skipped = st.players?.[st.turnIndex];
+    if (!pending && st.turnStep === 'draw' && skipped?.alive && skipped.skipNext) {
+      applyAndBroadcast(roomNow, {type:'DRAW', playerId:st.turnIndex}, io);
+      delay(1200);
+      return;
+    }
+
   // ---------- 先處理「不是自己回合」但輪到 CPU 回應的互動 ----------
     if (pending) {
       // 奎因：輪到 target 擲硬幣（QUEEN_COIN）

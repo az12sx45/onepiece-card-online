@@ -8602,3 +8602,6 @@ Publication verified 2026-10-31: package-f2c9a0995503bf94 / source 8eefc23c9726c
 
 
 Publication verified: package-aba4af45c2fe5676; source 7a0c14db2df4bee6720bfb93693528b202e7fd58; release 1ad95c710ae1178c9b9baaa4dc0a5188b0b56979. All 31 Card program bytes, three scoped CAS objects with CORS, catalog and Card/Board/Chess runtime manifests match. Public isolated six-seat guest room: 17 checks PASS with desktop, exact v059 Android/iOS browser bundles and three CPU; no page errors. No native binary rebuild or launcher/lobby change. Compact standing projection, full original movie and recall-before-choice are published. Physical-device acceptance remains with the user. Evidence: CARD_ENHANCED_RELEASE_20261031.json and C:/Codex_QA/card-other-cards-20261031/standing-source-receipt.json.
+
+
+2026-11-01: Card paralysis auto-skip, guarded Usopp target shortcut, distinct coin faces, early dodge, action cues and duel impact polish. Files and validation: CARD_STATUS_INTERACTIONS_20261101.md (formal Card authority).

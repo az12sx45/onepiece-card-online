@@ -2970,3 +2970,6 @@ Card mobile choices retain the original rule handlers, with separate title/list/
 
 
 2026-10-31: Compact card-footprint projection, character-origin white transition and movie-end recall; choices wait until recall finishes. Header backdrop cleanup and verification: CARD_ENHANCED_PROJECTION_20261031.md. Rules unchanged.
+
+
+2026-11-01: Card match status fixes are compatible with existing v059 Android/iOS embedded clients via game.html. No launcher/lobby/native route change. See formal CARD_STATUS_INTERACTIONS_20261101.md.

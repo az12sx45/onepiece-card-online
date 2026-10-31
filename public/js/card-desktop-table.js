@@ -279,7 +279,7 @@ window.POCardInteract=module.exports;
 /* Cosmetic selection never receives a card id. Only the public loser's face is used. */
 (() => {
   function mount(){
-    const api=window.CardPhonePresentation;if(!api||api.duelSceneVersion>=2)return;api.duelSceneVersion=2;
+    const api=window.CardPhonePresentation;if(!api||api.duelSceneVersion>=3)return;api.duelSceneVersion=3;
     const catalog=[
       ['fire-fist','火拳','burn'],['ice-sphere','冰球','ice'],['triple-slash','三刀斬','slash'],['thunderbolt','雷擊','bolt'],
       ['magma-fist','熔岩拳','melt'],['sandstorm','沙嵐','sand'],['dark-vortex','暗穴','vortex'],['quake-ring','震空','quake'],
@@ -316,6 +316,10 @@ window.POCardInteract=module.exports;
         later(()=>{const spark=make('i','phone-duel-clash-art');spark.setAttribute('aria-hidden','true');arena.append(spark);animate(spark,[{opacity:0,transform:'translate(-50%,-50%) scale(.35)'},{opacity:1,transform:'translate(-50%,-50%) scale(1.15)',offset:.2},{opacity:0,transform:'translate(-50%,-50%) scale(1.6)'}],430);later(()=>spark.remove(),450);},340);
       },1150+beat*950);
       later(()=>{
+        arena.dataset.phase='charge';result.textContent='蓄勢・決勝一擊';
+        if(!matchMedia('(prefers-reduced-motion: reduce)').matches)for(const c of cards)c.holder.animate([{filter:'brightness(1)',scale:'1'},{filter:'brightness(1.5)',scale:'1.06'},{filter:'brightness(1)',scale:'1'}],{duration:430,easing:'ease-in'});
+      },3750);
+      later(()=>{
         arena.dataset.phase='attack';versus.textContent='';for(const c of cards)c.status.textContent='交鋒中';
         if(!loser)return;
         const [id,label,damage]=finish;result.textContent=label; // Random cosmetic move, never the winning card's identity.
@@ -325,6 +329,12 @@ window.POCardInteract=module.exports;
         animate(effect,[{transform:`translate(${facing*(diagonal?-75:spiral?0:up?0:-60)}%,${diagonal?-90:up?65:0}%) scale(${spiral?.25:.65}) scaleX(${facing}) rotate(${spiral?-100:-12}deg)`,opacity:0},{transform:`translate(0,0) scale(1.05) scaleX(${facing})`,opacity:1,offset:.22},{transform:`translate(${facing*5}%,0) scale(1.18) scaleX(${facing}) rotate(${spiral?60:4}deg)`,opacity:1,offset:.75},{transform:`translate(${facing*(up?0:20)}%,${up?-55:15}%) scale(${spiral?1.7:1.3}) scaleX(${facing}) rotate(${spiral?140:10}deg)`,opacity:0}],3000);
         later(()=>{
           arena.dataset.phase='impact';loser.slot.dataset.damage=damage;
+          if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+            arena.animate([{translate:'0 0'},{translate:'-6px 3px',offset:.18},{translate:'6px -3px',offset:.35},{translate:'-3px 1px',offset:.6},{translate:'0 0'}],{duration:340,easing:'linear'});
+            const hitstop=loser.holder.animate([{scale:'1.09'},{scale:'1.09',offset:.36},{scale:'1'}],{duration:350});
+            later(()=>hitstop.cancel(),360);
+          }
+          const flare=make('i','phone-duel-clash-art');flare.setAttribute('aria-hidden','true');loser.holder.append(flare);animate(flare,[{opacity:0,transform:'translate(-50%,-50%) scale(.5)'},{opacity:1,transform:'translate(-50%,-50%) scale(1.8)',offset:.15},{opacity:0,transform:'translate(-50%,-50%) scale(2.2)'}],650);later(()=>flare.remove(),680);
           if(validCard(d.loserCardId)){loser.cardNode.src=card(d.loserCardId);loser.cardNode.alt='公開的敗方手牌';loser.cardNode.dataset.revealed='public-loser';loser.number.textContent=String(d.loserCardId);loser.number.setAttribute('aria-label',`敗方手牌 ${d.loserCardId} 號`);loser.number.hidden=false;}
           damageCard(loser,damage,animate,later,make);
         },650);
@@ -381,7 +391,7 @@ window.POCardInteract=module.exports;
 /* Public HUD reactions only. Uses authoritative outcome kinds; never reveals cards. */
 (() => {
  function mount(){
-  const api=window.CardPhonePresentation;if(!api)return;
+  const api=window.CardPhonePresentation;if(!api||api.hudCombatVersion>=3)return;api.cancelHudReactions?.();api.hudCombatVersion=3;
   const reactions=new Set();
   api.playSniperCutin=({scene,from,to,digit,name,make,later,duration})=>{
    const cut=make('section','phone-sniper-cutin'),strip=make('div','phone-sniper-cut-strip'),art=make('div','phone-sniper-cut-art'),copy=make('div','phone-sniper-cut-copy');
@@ -406,15 +416,15 @@ window.POCardInteract=module.exports;
    // Announce the public result only after the projectile has reached the target.
    later(()=>{scene.dataset.outcome=kind;const badge=mark(target,'phone-sniper-result');badge.dataset.outcome=kind;badge.textContent=kind==='hit'?'命中！':kind==='miss'?'猜錯・未命中':shield?'護盾擋下':'閃避成功';badge.style.left=Math.max(85,Math.min(innerWidth-85,target.x))+'px';badge.style.top=Math.min(innerHeight-50,target.y+65)+'px';animate(badge,[{opacity:0,transform:'translate(-50%,12px) scale(.8)'},{opacity:1,transform:'translate(-50%,0) scale(1.1)',offset:.15},{opacity:1,transform:'translate(-50%,0)',offset:.85},{opacity:0,transform:'translate(-50%,-8px)'}],1800);},impactAt);
    if(row&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-    const frames=evade?[{transform:'translate(0,0)'},{transform:`translate(${sign*48}px,20px) rotate(${sign*5}deg)`,offset:.32},{transform:`translate(${sign*48}px,20px) rotate(${sign*5}deg)`,offset:.64},{transform:'translate(0,0)'}]:[{transform:'translate(0,0)'},{transform:'translate(-5px,3px)',offset:.25},{transform:'translate(5px,0)',offset:.42},{transform:'translate(-3px,0)',offset:.6},{transform:'translate(0,0)'}];
-    const a=row.animate(frames,{duration:evade?2200:1100,delay:evade?750:1450,easing:'ease-in-out'});reactions.add(a);a.finished.then(()=>{a.cancel();reactions.delete(a);},()=>reactions.delete(a));
+    const frames=evade?[{translate:'0px 0px'},{translate:`${sign*58}px 24px`,offset:.20},{translate:`${sign*58}px 24px`,offset:.75},{translate:'0px 0px'}]:[{transform:'translate(0,0)'},{transform:'translate(-5px,3px)',offset:.25},{transform:'translate(5px,0)',offset:.42},{transform:'translate(-3px,0)',offset:.6},{transform:'translate(0,0)'}];
+    const a=row.animate(frames,{duration:evade?2400:1100,delay:evade?300:1450,easing:'linear'});scene.dataset.dodgeAt=evade?'780':'';scene.dataset.impactAt=String(impactAt);reactions.add(a);a.finished.then(()=>{a.cancel();reactions.delete(a);},()=>reactions.delete(a));
    }
    if(shield){
     const guard=mark(target,'phone-hud-defense');guard.dataset.status='protect';guard.dataset.block='true';
     animate(guard,[{transform:'translate(-50%,-50%) scale(.4)',opacity:0},{transform:'translate(-50%,-50%) scale(1.15)',opacity:1,offset:.25},{transform:'translate(-50%,-50%) scale(1.28)',opacity:1,offset:.58},{transform:'translate(-50%,-50%) scale(1)',opacity:0}],duration);
     later(()=>{const spark=mark(target,'phone-hud-impact');spark.dataset.impact='shield';animate(spark,[{transform:'translate(-50%,-50%) scale(.3)',opacity:0},{transform:'translate(-50%,-50%) scale(1.05)',opacity:1,offset:.3},{transform:'translate(-50%,-50%) scale(1.4)',opacity:0}],1000);},1450);
    }else if(evade){
-    const swoosh=sprite(target,'evade');animate(swoosh,[{transform:'translate(-65%,-50%) scale(.4)',opacity:0},{transform:'translate(-40%,-50%) scale(1.1)',opacity:1,offset:.4},{transform:'translate(-10%,-50%) scale(1.4)',opacity:0}],1400,1100);
+    const swoosh=sprite(target,'evade');animate(swoosh,[{transform:'translate(-65%,-50%) scale(.4)',opacity:0},{transform:'translate(-40%,-50%) scale(1.1)',opacity:1,offset:.4},{transform:'translate(-10%,-50%) scale(1.4)',opacity:0}],1400,350);
     const avatar=row?.querySelector('img.rounded-full');
     if(avatar)for(const [i,offset]of [0,20].entries()){const ghost=make('img','phone-evade-afterimage');ghost.src=avatar.src;ghost.alt='';ghost.style.left=target.x+'px';ghost.style.top=target.y+'px';scene.append(ghost);animate(ghost,[{transform:'translate(-50%,-50%)',opacity:0},{transform:`translate(calc(-50% + ${sign*offset}px),-35%)`,opacity:.4-i*.1,offset:.4},{transform:`translate(calc(-50% + ${sign*(offset+35)}px),-15%)`,opacity:0}],1800,550+i*90);}
     if(kind==='dodge-block'){const art=mark(target,'phone-hud-defense');art.dataset.status='dodge';animate(art,[{transform:'translate(-50%,-50%) scale(.6)',opacity:0},{transform:`translate(calc(-50% + ${sign*28}px),-35%) scale(1)`,opacity:1,offset:.5},{opacity:0}],2200);}
@@ -1093,13 +1103,13 @@ window.POCardInteract=module.exports;
   if(location.origin!==origin||location.pathname!=='/game.html')return;
   function mount(){
     const api=window.CardPhonePresentation,$=id=>document.getElementById(id),root=document.documentElement;
-    if(!api||$('phoneCoinToss'))return;
+    if(!api||api.coinPresentationVersion>=2)return;api.cancelCoin?.();$('phoneCoinToss')?.remove();api.coinPresentationVersion=2;
     const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
     const overlay=make('section','phone-coin-toss');overlay.id='phoneCoinToss';overlay.hidden=true;overlay.setAttribute('role','status');overlay.setAttribute('aria-live','polite');
     const title=make('h2','','擲硬幣'),coin=make('div','phone-toss-coin'),front=make('div','phone-toss-face'),back=make('div','phone-toss-face phone-toss-back'),result=make('p','','');coin.append(front,back);overlay.append(title,coin,result);document.body.append(overlay);
     let timer=null,resultTimer=null,batchOutcome=null;
     api.prepareCoinBatch=events=>{const log=events?.find(e=>e?.type==='log'&&e.to==='all'&&/擲到\s*(正面|反面)/.test(e.text||''));batchOutcome=log?{face:/擲到\s*正面/.test(log.text)?'heads':'tails',text:typeof formatLogWithNames==='function'?formatLogWithNames(log.text):log.text}:null;};
-    function clear(){clearTimeout(timer);clearTimeout(resultTimer);timer=resultTimer=null;overlay.hidden=true;coin.getAnimations().forEach(a=>a.cancel());document.dispatchEvent(new Event('phone-card-center-ready'));}
+    function clear(){clearTimeout(timer);clearTimeout(resultTimer);timer=resultTimer=null;overlay.hidden=true;coin.getAnimations().forEach(a=>a.cancel());coin.style.transform='';delete overlay.dataset.settled;document.dispatchEvent(new Event('phone-card-center-ready'));}
     api.cancelCoin=clear;api.isCoinBusy=()=>!overlay.hidden;
     if(typeof playCoinFx==='function')playCoinFx=function(){
       if(api.committingPresentation)return;
@@ -1110,7 +1120,7 @@ window.POCardInteract=module.exports;
       const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,duration=reduce?700:2400,end=outcome?.face==='tails'?1980:1800;
       if(!reduce)coin.animate([{transform:`translate(${dx}px,${dy}px) rotateX(12deg) rotateY(0) rotateZ(-25deg) scale(.65)`},{transform:`translate(${dx*.35}px,${dy*.1-80}px) rotateX(10deg) rotateY(900deg) rotateZ(20deg) scale(1.08)`,offset:.5},{transform:`translateY(24px) rotateX(48deg) rotateY(${end}deg) rotateZ(12deg) scale(.78)`}],{duration,easing:'cubic-bezier(.2,.65,.3,1)',fill:'forwards'});
       else coin.style.transform=outcome?.face==='tails'?'rotateX(48deg) rotateY(180deg)':'rotateX(48deg)';
-      resultTimer=setTimeout(()=>{result.textContent=outcome?.text||'判定完成，請查看對局紀錄';title.textContent=outcome?.face==='heads'?'正面':outcome?.face==='tails'?'反面':'判定完成';},duration);
+      resultTimer=setTimeout(()=>{coin.getAnimations().forEach(a=>a.cancel());coin.style.transform='translateY(24px) rotateX(35deg) rotateZ(12deg) scale(.85)';overlay.dataset.settled=outcome?.face||'unknown';result.textContent=outcome?.text||'判定完成，請查看對局紀錄';title.textContent=outcome?.face==='heads'?'正面':outcome?.face==='tails'?'反面':'判定完成';},duration);
       timer=setTimeout(clear,duration+1700);
     };
     function decorate(){const modal=$('modal'),button=modal?.querySelector('#okBtn'),pending=typeof state==='object'?state?.pending:null;const isCoin=['queen','bigmom-coin'].includes(pending?.action)&&!!button;
@@ -1699,6 +1709,35 @@ window.POCardInteract=module.exports;
   document.addEventListener('visibilitychange',()=>{if(document.hidden){serial++;finish();}});
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+
+/* Action cues observe the presented state only; all commands stay on original controls. */
+(() => {
+ function mount(){
+  const api=window.CardPhonePresentation;if(!api||api.actionCuesVersion>=1)return;api.actionCuesVersion=1;
+  const root=document.documentElement,modal=document.getElementById('modal'),pile=document.getElementById('btnDraw');
+  const cue=document.createElement('div');cue.id='cardDrawCue';cue.hidden=true;cue.setAttribute('role','status');cue.textContent='點牌堆抽牌';document.body.append(cue);
+  let queued=false;
+  function sync(){
+   const s=typeof state==='object'?state:null,id=typeof me==='object'?me.playerId:null;
+   const waiting=root.dataset.cardFlowBusy==='true'||api.presentationEffectsBusy?.()||api.isCardEntering?.();
+   const selectable=!!root.dataset.cardDirectTargets&&!waiting&&!modal?.classList.contains('hidden');
+   if(root.dataset.cardActionTargets!==String(selectable))root.dataset.cardActionTargets=String(selectable);
+   const hint=document.getElementById('phoneTargetHint');
+   if(selectable&&hint){const text=modal.querySelector('#mtDone')?'點選亮起的玩家，選好後按「完成」':s?.pending?.action==='usopp'?'點選上方玩家狙擊 · 護盾／閃避直接抵擋，不需猜號碼':'點選亮起的玩家，決定技能目標';if(hint.textContent!==text)hint.textContent=text;}
+   for(const row of document.querySelectorAll('[data-phone-aim]')){const p=s?.players?.[row.id==='phoneSelfPlayer'?id:[...document.getElementById('players').children].indexOf(row)];const label=p?.protected?'護盾抵擋':p?.dodging?'閃避抵擋':'點選目標';if(row.dataset.actionLabel!==label)row.dataset.actionLabel=label;}
+   const ready=!!s&&id===s.turnIndex&&s.turnStep==='draw'&&!s.pending&&!s.players?.[id]?.skipNext&&!waiting&&!pile?.disabled&&!!pile?.getClientRects().length;
+   if(cue.hidden===ready)cue.hidden=!ready;if(pile&&pile.dataset.actionDraw!==String(ready))pile.dataset.actionDraw=String(ready);
+   if(ready){const r=pile.getBoundingClientRect();cue.style.left=Math.max(72,Math.min(innerWidth-72,r.left+r.width/2))+'px';cue.style.top=Math.max(40,Math.min(innerHeight-42,r.bottom+7))+'px';}
+  }
+  const schedule=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;sync();});};
+  new MutationObserver(schedule).observe(root,{attributes:true,attributeFilter:['data-card-flow-busy','data-card-direct-targets','data-card-fx-phase']});
+  if(modal)new MutationObserver(schedule).observe(modal,{childList:true,subtree:true,attributes:true,attributeFilter:['class','disabled']});
+  if(pile)new MutationObserver(schedule).observe(pile,{attributes:true,attributeFilter:['disabled']});
+  socket?.on('STATE',schedule);socket?.on('disconnect',()=>{cue.hidden=true;root.dataset.cardActionTargets='false';if(pile)pile.dataset.actionDraw='false';});
+  document.addEventListener('phone-card-center-ready',schedule);window.addEventListener('resize',schedule);sync();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
 
 })();
