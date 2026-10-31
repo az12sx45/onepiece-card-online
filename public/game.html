@@ -6,8 +6,8 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>偉大航道爭霸戰｜正式對戰</title>
-  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261031-match-polish1">
-  <script defer src="js/card-desktop-table.js?v=20261031-match-polish1"></script>
+  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261031-card-choice-fit1">
+  <script defer src="js/card-desktop-table.js?v=20261031-card-choice-fit1"></script>
   <link rel="stylesheet" href="css/card-finish-v1.css?v=20260907-depth-visible-v2">
   <script defer src="js/card_finish_v1.js?v=20260907-depth-visible-v2"></script>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
@@ -7486,6 +7486,26 @@ html:root[data-card-phone][data-card-polish] #phonePrivateReveal[data-layout="gr
 html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-info{background:none!important;border:0!important;border-image:none!important;box-shadow:none!important;padding:0!important;}
 @media(max-height:450px){html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-info{grid-template-columns:104px minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr) 48px!important;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-copy{grid-column:1/-1;grid-row:1;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-nav{grid-row:2;grid-column:1;grid-template-columns:32px minmax(0,1fr) 32px;align-self:center;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-nav span{font-size:11px;overflow:hidden;white-space:nowrap;width:28px;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-actions{grid-row:2;grid-column:2;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-copy h3{display:inline;font-size:19px!important;margin:0 8px!important;line-height:24px;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-tag{display:inline;font-size:11px!important;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-effect{margin:6px 0!important;font-size:13px!important;line-height:1.45!important;}}
 
+/* Each ordered item and the confirmation footer own separate layout rows. */
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #modal:has(#okOrder)>.card,html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #modal:has(#okM)>.card{display:grid!important;grid-template-rows:auto minmax(0,1fr) 46px!important;gap:8px!important;max-height:calc(100dvh - 24px)!important;padding:26px 16px 30px!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #modal:is(:has(#okOrder),:has(#okM)) .phone-skill-intro{display:none!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #modal:is(:has(#okOrder),:has(#okM))>.card>.text-lg{margin:0!important;font-size:18px!important;line-height:26px!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #modal:is(:has(#okOrder),:has(#okM))>.card>.flex:last-child{position:static!important;grid-row:3;min-height:0!important;height:46px!important;margin:0!important;padding:0!important;align-items:center;background:none!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #modal #list{display:grid;grid-auto-rows:minmax(44px,1fr);gap:6px;overflow:auto!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #modal #list>.flex{margin:0!important;min-height:44px;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #modal #list button{min-width:64px!important;min-height:44px!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #modal:has(#okM) .space-y-2{display:grid;grid-auto-rows:minmax(44px,1fr);gap:6px;overflow:auto!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #modal:has(#okM) label{margin:0!important;min-height:44px;padding:4px 8px!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #modal:has(#okM) input[type=checkbox]{width:22px;height:22px;flex:0 0 22px;accent-color:#e5b84b;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish][data-card-library] #modal[data-coin-action] #okBtn{width:152px!important;height:158px!important;min-height:158px!important;border-radius:0!important;background:none!important;overflow:visible;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish][data-card-library] #modal[data-coin-action] #okBtn::before{content:"";position:absolute;top:0;left:13px;width:126px;height:126px;background:var(--coin-toss-art) 3.2% 43%/405% 135% no-repeat;pointer-events:none;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish][data-card-library] #modal[data-coin-action] #okBtn .phone-coin-prompt{top:auto;bottom:0;left:0;right:0;transform:none;text-align:center;font-size:17px;line-height:28px;height:28px;}
+
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #modal:is(:has(#okOrder),:has(#okM)){inset:12px 0!important;width:100%!important;max-width:none!important;height:auto!important;align-items:stretch!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #modal:is(:has(#okOrder),:has(#okM))>.card{height:100%!important;grid-template-columns:minmax(0,1fr)!important;}
+
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-polish] #phoneTargetHint{top:calc(var(--phone-roster-bottom,90px) + 4px)!important;max-width:calc(100vw - 120px);white-space:normal;text-align:center;overflow-wrap:anywhere;}
+
 </style>
 <script>
 /* Cosmetic selection never receives a card id. Only the public loser's face is used. */
@@ -7609,6 +7629,12 @@ html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-
   if(players)new MutationObserver(cleanSeats).observe(players,{childList:true,subtree:true});
   if(reveal)new MutationObserver(readingAction).observe(reveal,{childList:true,subtree:true});
   cleanSeats();readingAction();
+  // Installed bundles used a broad [data-i] selector and mistook Teach's
+  // private card checkboxes for player-target buttons, collapsing the layout.
+  const modal=$('modal');
+  const classifyChoice=()=>{if(modal?.querySelector('input[type=checkbox][data-i]')&&!modal.querySelector('button[data-i]')&&modal.dataset.interaction==='target')modal.dataset.interaction='choice';};
+  if(modal)new MutationObserver(classifyChoice).observe(modal,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});classifyChoice();
+
   // The legacy flow calls enh_fx after the skill intro. Consume that one replay
   // while playing the same original movie before the intro on every platform.
   const intro=api.presentCardSkillBatch,video=typeof playEnhFxFor==='function'?playEnhFxFor:null;

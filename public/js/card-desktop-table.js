@@ -546,7 +546,7 @@ window.POCardInteract=module.exports;
       for(const row of players.children)delete row.dataset.fxTarget;
       const box=modal?.querySelector('.card');if(!box||modal.classList.contains('hidden')){focusLayer.replaceChildren();delete modal.dataset.interaction;flushPrivate();return;}
       const pending=current()?.pending,info=actions[pending?.action];
-      const stage=box.querySelector('[data-d]')?'guess':box.querySelector('[data-i]')?'target':'choice';
+      const stage=box.querySelector('[data-d]')?'guess':box.querySelector('button[data-i]')?'target':'choice';
       modal.dataset.interaction=info?stage:'choice';
       if(info&&stage==='target')for(const b of box.querySelectorAll('button[data-i]')){const row=players.children[Number(b.dataset.i)];if(row)row.dataset.fxTarget=b.disabled?'disabled':'available';}
       if(info&&stage==='guess'){let id=pending.extra?.target;if(id==null&&typeof localPending==='object')id=localPending?.target;const rail=railBounds(),a=rail&&anchor(id,rail);if(a){let lock=focusLayer.firstElementChild;if(!lock){lock=make('span','phone-hud-lock');focusLayer.append(lock);}lock.dataset.player=String(id);lock.style.left=a.x+'px';lock.style.top=a.y+'px';}else focusLayer.replaceChildren();}else focusLayer.replaceChildren();
@@ -1552,6 +1552,12 @@ window.POCardInteract=module.exports;
   if(players)new MutationObserver(cleanSeats).observe(players,{childList:true,subtree:true});
   if(reveal)new MutationObserver(readingAction).observe(reveal,{childList:true,subtree:true});
   cleanSeats();readingAction();
+  // Installed bundles used a broad [data-i] selector and mistook Teach's
+  // private card checkboxes for player-target buttons, collapsing the layout.
+  const modal=$('modal');
+  const classifyChoice=()=>{if(modal?.querySelector('input[type=checkbox][data-i]')&&!modal.querySelector('button[data-i]')&&modal.dataset.interaction==='target')modal.dataset.interaction='choice';};
+  if(modal)new MutationObserver(classifyChoice).observe(modal,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});classifyChoice();
+
   // The legacy flow calls enh_fx after the skill intro. Consume that one replay
   // while playing the same original movie before the intro on every platform.
   const intro=api.presentCardSkillBatch,video=typeof playEnhFxFor==='function'?playEnhFxFor:null;

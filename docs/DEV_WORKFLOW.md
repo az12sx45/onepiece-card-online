@@ -8590,3 +8590,6 @@ Publication verified 2026-10-31: package-f2c9a0995503bf94 / source 8eefc23c9726c
 2026-10-31: Card battle exchanges, duplicate seat cleanup, reading/play action layout and movie-before-cutin lifecycle. Files and actual validation scope: CARD_MATCH_POLISH_20261031.md.
 
 2026-10-31: Publication verified: package-1c4c7bf671f8df3d; source 1b42270f2a4117da10743790d104a9bbef9ecfe9; release a46a29618b28b2fc3a058bdcfd949684bed4c167. Public catalog, all three runtime/manifest identities, all 31 Card programs, three scoped CAS objects and cache token match. Final local UI/MP4/duel checks 13 per platform PASS, npm-start/two-window checks 8 PASS, public six-seat guest room 17 PASS with no page errors. Existing v059 Android/iOS binaries remain unchanged; restart launcher/App and enter Card to load. Evidence: C:/Codex_QA/card-match-polish-20261031/source-receipt.json and public-room/browser.json. Screenshot-only cleanup was blocked by policy; zero deletions, about 25 MB retained.
+
+
+2026-10-31: Audited other Card mobile choices/animations; fixed ordering footer overlap, checkbox/target misclassification, coin prompt hitbox, target hint placement and frame padding. Files, scope and verification: CARD_OTHER_CARDS_AUDIT_20261031.md.
