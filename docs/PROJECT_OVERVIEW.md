@@ -2976,3 +2976,6 @@ Card mobile choices retain the original rule handlers, with separate title/list/
 
 
 2026-11-01: Card existing mobile clients receive status-row starter icons and decoded-before-play artwork from the online match compatibility layer. Launcher/lobby unchanged; see CARD_MOBILE_EFFECTS_20261101.md.
+
+
+2026-11-01: Card online match owns the presentation queue across v058/v059 native clients; no launcher or lobby redesign. Verified document downloads use binary transport and no-transform.

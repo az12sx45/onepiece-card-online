@@ -1,0 +1,308 @@
+{
+  "androidTransport": [
+    {
+      "path": "result.html",
+      "status": 200,
+      "want": 133788,
+      "got": 134551,
+      "hashMatches": false,
+      "encoding": null,
+      "length": null,
+      "cf": [
+        "<script src=\"/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js\" data-cf-settings=\"e2893827d1aa77470701e733-|49\" defer></script></body>"
+      ]
+    },
+    {
+      "path": "shop.html",
+      "status": 200,
+      "want": 83099,
+      "got": 83481,
+      "hashMatches": false,
+      "encoding": null,
+      "length": null,
+      "cf": [
+        "<script src=\"/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js\" data-cf-settings=\"4e40d116f1042712f760b856-|49\" defer></script></body>"
+      ]
+    },
+    {
+      "path": "tutorial.html",
+      "status": 200,
+      "want": 229940,
+      "got": 230274,
+      "hashMatches": false,
+      "encoding": null,
+      "length": null,
+      "cf": [
+        "<script src=\"/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js\" data-cf-settings=\"26853a39586743aa955ce08a-|49\" defer></script></body>"
+      ]
+    },
+    {
+      "path": "images/card-depth/v1/lux/7/background.webp",
+      "status": 200,
+      "want": 55674,
+      "got": 55674,
+      "hashMatches": true,
+      "encoding": null,
+      "length": "55674"
+    }
+  ],
+  "legacyRegressionBefore": {
+    "scope": "Original engine; iOS UA and exact installed bundle with CSS appended at document end; 3500ms forced cold image decode; controlled movie playing/ended. Chromium, not physical device.",
+    "checks": [],
+    "errors": [],
+    "screenshots": [],
+    "passed": false,
+    "failure": "locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.card-enhancement-summon') to be visible\u001b[22m\n\n    at C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\card-mobile-effects-qa.mjs:45:46"
+  },
+  "legacyWebKitAfter": {
+    "scope": "Original engine; iOS UA and exact installed bundle with CSS appended at document end; 3500ms forced cold image decode; controlled movie playing/ended. WebKit, not physical device.",
+    "checks": [
+      {
+        "name": "Slow cold decode finishes before projection starts",
+        "pass": true
+      },
+      {
+        "name": "Original movie plays once before choice",
+        "pass": true
+      },
+      {
+        "name": "Selected-target diagonal portrait decoded and visible on mobile",
+        "pass": true,
+        "detail": {
+          "loaded": true,
+          "width": 363.1493225097656,
+          "height": 265.0019836425781,
+          "title": "讓 Audit1 棄掉手牌"
+        }
+      },
+      {
+        "name": "Selected operation finishes and queue resumes",
+        "pass": true
+      },
+      {
+        "name": "Usopp portrait decoded before its separate sniper timeline",
+        "pass": true
+      },
+      {
+        "name": "Bad cut-in asset falls back to the public played card",
+        "pass": true
+      },
+      {
+        "name": "Next starter icon in status row with all six statuses, no top label",
+        "pass": true,
+        "detail": {
+          "inStatus": true,
+          "image": true,
+          "labelHidden": true,
+          "icons": true
+        }
+      },
+      {
+        "name": "Starter icon opens explanation without gameplay action",
+        "pass": true
+      },
+      {
+        "name": "Eliminated normal Roger remains next starter in own status row",
+        "pass": true
+      },
+      {
+        "name": "Disconnect cancels pending image decode cleanly",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [],
+    "passed": true
+  },
+  "currentAfter": {
+    "scope": "Original engine; iOS UA and exact installed bundle with CSS appended at document end; 3500ms forced cold image decode; controlled movie playing/ended. Chromium, not physical device.",
+    "checks": [
+      {
+        "name": "Slow cold decode finishes before projection starts",
+        "pass": true
+      },
+      {
+        "name": "Original movie plays once before choice",
+        "pass": true
+      },
+      {
+        "name": "Selected-target diagonal portrait decoded and visible on mobile",
+        "pass": true,
+        "detail": {
+          "loaded": true,
+          "width": 366.1609802246094,
+          "height": 267.19964599609375,
+          "title": "讓 Audit1 棄掉手牌"
+        }
+      },
+      {
+        "name": "Selected operation finishes and queue resumes",
+        "pass": true
+      },
+      {
+        "name": "Usopp portrait decoded before its separate sniper timeline",
+        "pass": true
+      },
+      {
+        "name": "Bad cut-in asset falls back to the public played card",
+        "pass": true
+      },
+      {
+        "name": "Next starter icon in status row with all six statuses, no top label",
+        "pass": true,
+        "detail": {
+          "inStatus": true,
+          "image": true,
+          "labelHidden": true,
+          "icons": true
+        }
+      },
+      {
+        "name": "Starter icon opens explanation without gameplay action",
+        "pass": true
+      },
+      {
+        "name": "Eliminated normal Roger remains next starter in own status row",
+        "pass": true
+      },
+      {
+        "name": "Disconnect cancels pending image decode cleanly",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [],
+    "passed": true
+  },
+  "npmStart": {
+    "scope": "Two isolated Chromium windows using the real local npm-start server and Socket.IO. Guest room with stable isolated test identities, no production accounts or physical-device claim.",
+    "checks": [
+      {
+        "name": "npm start listening",
+        "ok": true
+      },
+      {
+        "name": "both guests joined",
+        "ok": true
+      },
+      {
+        "name": "start synchronized",
+        "ok": true
+      },
+      {
+        "name": "one authoritative current player",
+        "ok": true,
+        "detail": {
+          "turn": 0,
+          "step": "draw"
+        }
+      },
+      {
+        "name": "real next state waits while viewer reads",
+        "ok": true
+      },
+      {
+        "name": "draw step broadcast to both",
+        "ok": true
+      },
+      {
+        "name": "refresh restores same seat and turn",
+        "ok": true,
+        "detail": {
+          "seat": 0,
+          "turn": 0,
+          "step": "choose"
+        }
+      },
+      {
+        "name": "private other hand stays hidden",
+        "ok": true
+      }
+    ],
+    "passed": true
+  },
+  "legacyGroup": {
+    "passed": true,
+    "checks": [
+      {
+        "name": "isolated original server listening",
+        "pass": true
+      },
+      {
+        "name": "paralysis respects slow reader before skipping",
+        "pass": true
+      },
+      {
+        "name": "six human and CPU paralysis turns automatically skipped without drawing",
+        "pass": true
+      },
+      {
+        "name": "all-human barrier waits for slow reader",
+        "pass": true
+      },
+      {
+        "name": "waiting status fits viewport 0",
+        "pass": true
+      },
+      {
+        "name": "waiting status fits viewport 1",
+        "pass": true
+      },
+      {
+        "name": "playing cannot bypass another readers gate",
+        "pass": true
+      },
+      {
+        "name": "next turn waits until private reader closes card",
+        "pass": true
+      },
+      {
+        "name": "next turn draw resumes after everyone finishes",
+        "pass": true
+      },
+      {
+        "name": "CPU waits for all viewers before its first action",
+        "pass": true
+      },
+      {
+        "name": "auto next round waits beyond old three-second timeout",
+        "pass": true
+      },
+      {
+        "name": "host cannot force next round while viewer is still reading",
+        "pass": true
+      },
+      {
+        "name": "CPU round completes and next round gets fresh venue gate",
+        "pass": true
+      },
+      {
+        "name": "new round waits for last venue reader",
+        "pass": true
+      },
+      {
+        "name": "new round releases after all venue readers finish",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "scope": "Three Chromium clients with exact desktop/Android and selected iOS bundles plus three CPU; isolated server with test-process-only state seeds, original engine/actions/Socket.IO, private read, CPU duel, next-round gates; no physical-device claim.",
+    "iosBundle": "D:/Codex_QA/card-native-update-diagnosis-20261101/ios-v058",
+    "lightArtwork": true
+  }
+}

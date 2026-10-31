@@ -8613,3 +8613,6 @@ Published and publicly verified 2026-11-01: package-1e801282ab1d955a, source f1c
 
 
 Published and publicly verified 2026-11-01: package-1372e8179169b0a2; source 39b5781e168958439a3863ad5e60061cb83d7f55; release bb0927f724ea8752002182997dbfd0fb20c35398. 39 public byte/runtime/CAS checks PASS, all 31 programs match. Public six-seat browser room (desktop, exact v059 Android/iOS bundles and three CPU) passes 17 checks, no page errors. Existing native apps load the online Card update; no APK/IPA rebuild, launcher or lobby changes. Final next-starter art is straw hat/pennant v2. No physical-device claim. Evidence: CARD_MOBILE_EFFECTS_RELEASE_20261101.json. Temporary screenshot deletion was blocked by automatic policy review; 27 files / 15,118,793 bytes retained, zero deleted.
+
+
+2026-11-01: Diagnosed Android Card download failure on physical V2105 (CDN rewriting retained HTML) and legacy iOS flow missing cut-in hook. Scoped transport-key reissue and single online presentation flow; evidence and limitations: CARD_LEGACY_MOBILE_20261101.md.

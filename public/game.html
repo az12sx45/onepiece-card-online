@@ -6,8 +6,10 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>偉大航道爭霸戰｜正式對戰</title>
-  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261101-card-mobilefx1">
-  <script defer src="js/card-desktop-table.js?v=20261101-card-mobilefx1"></script>
+  <!-- Reserve the match flow before installed native bundles mount their older queue. -->
+  <script>document.documentElement.dataset.cardFlow="online-pending";</script>
+  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261101-card-legacyfix1">
+  <script defer src="js/card-desktop-table.js?v=20261101-card-legacyfix1"></script>
   <link rel="stylesheet" href="css/card-finish-v1.css?v=20260907-depth-visible-v2">
   <script defer src="js/card_finish_v1.js?v=20260907-depth-visible-v2"></script>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
@@ -7285,6 +7287,117 @@ el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
 </script>
 <!-- CARD_VENUE_READY_END -->
 
+<!-- CARD_ONLINE_FLOW_BEGIN -->
+<script>
+/* Queue complete EMIT/STATE transactions for presentation. Server rules and
+ * packet formats stay unchanged; stale displayed controls cannot send actions. */
+(() => {
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation,root=document.documentElement,$=id=>document.getElementById(id);
+    if(!api||(root.dataset.cardFlow&&root.dataset.cardFlow!=='online-pending')||typeof socket!=='object'||!socket.listeners||!socket.off)return;
+    root.dataset.cardFlow='1';api.presentationFlowVersion=2;
+    const listeners={EMIT:socket.listeners('EMIT').slice(),STATE:socket.listeners('STATE').slice()};
+    for(const type of ['EMIT','STATE'])for(const fn of listeners[type])socket.off(type,fn);
+    let batches=[],events=[],latest=null,timer=null,eventTimer=null,settling=false,epoch=0,activeBatch=null;
+    const visible=id=>{const n=$(id);return !!n&&!n.hidden&&!n.classList.contains('hidden')&&n.getClientRects().length>0;};
+    const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
+    const signature=s=>JSON.stringify(s&&[s.roundNo,s.turnIndex,s.turnStep,s.pending,s.players?.map(p=>[p.alive,p.hand,p.tempDraw,p.gold,p.protected,p.dodging,p.frozen,p.skipNext])]);
+    const effects=()=>!!api.isCardSkillIntroBusy?.()||!!api.isEffectBusy?.()||!!api.isEnhancementBusy?.()||!!api.isCoinBusy?.()||['enhOverlay','drawOverlay','coinOverlay'].some(visible)||!!$('phoneCardFlights')?.children.length;
+    const reading=()=>!!api.isVenueIntroPending?.()||!!api.isVenueEntering?.()||visible('phoneCardSheet')||visible('phonePrivateReveal')||visible('phoneLibrary')||visible('cardDexOverlay')||visible('phoneVenueIntro');
+    const stage=()=>!!api.isCardResolving?.()&&!api.isLocalCardPreview?.()&&!state?.pending;
+    const busy=()=>!fast()&&(effects()||reading()||stage());
+    function dispatch(type,value){for(const fn of listeners[type])fn.call(socket,value);}
+    function updateLock(){root.dataset.cardFlowBusy=String(!fast()&&(effects()||reading()||stage()||settling||batches.length>0));}
+    function schedule(){clearTimeout(timer);timer=setTimeout(pump,60);}
+    function commit(batch,previewed=false){
+      api.committingPresentation=previewed;
+      try{for(const e of batch.events){if(previewed&&e.type==='enh_fx')continue;dispatch('EMIT',e);}if(batch.state)dispatch('STATE',batch.state);}
+      finally{api.committingPresentation=false;requestAnimationFrame(()=>requestAnimationFrame(()=>api.restoreHandArt?.()));}
+    }
+    const pause=()=>new Promise(r=>setTimeout(r,60));
+    async function pump(){
+      updateLock();if(settling)return;
+      if(!batches.length){delete root.dataset.cardFlowQueued;return;}
+      root.dataset.cardFlowQueued=String(batches.length);
+      if(busy()){schedule();return;}
+      const batch=batches.shift(),generation=epoch;settling=true;activeBatch=batch;updateLock();
+      const valid=()=>generation===epoch;
+      if(!fast()){
+        api.deferResultText=true;api.prepareCoinBatch?.(batch.events);
+        for(const e of batch.events)api.presentPlayEvent?.(e);
+        // First the played card enters the center; results are not applied yet.
+        while(valid()&&!fast()&&api.isCardEntering?.())await pause();
+        if(!valid())return;
+        const skillIntro=await api.presentCardSkillBatch?.(batch.events);
+        if(!valid())return;
+        const lawScan=batch.events.some(e=>e.type==='law_view'&&e.to===me.playerId);
+        const privateFaces=batch.events.some(e=>e.to===me.playerId&&['robin_view','kata_peek','teach_cover'].includes(e.type));
+        for(const e of batch.events){
+          if(skillIntro&&e.type==='play_fx'&&e.cardId===skillIntro.id)continue;
+          // Enhanced Law sends a textual peek and a card view for the same private result.
+          // The comparison already shows both cards; do not open a second reading gate.
+          const duplicateScan=lawScan&&e.type==='peek'&&e.to===me.playerId&&e.lines?.length&&e.lines.every(line=>typeof line==='string'&&line.startsWith('ROOM・SCAN：'));
+          if(!duplicateScan){
+            if(privateFaces&&e.type==='peek'&&e.to===me.playerId){
+              // Card faces already carry the result; retain blocked/empty-target notices only.
+              const lines=(e.lines||[]).filter(line=>typeof line==='string'&&/(保護|閃避|無法|無牌)/.test(line));
+              if(lines.length)api.presentEffectEvent?.({...e,lines});
+            }else api.presentEffectEvent?.(e);
+          }
+          if(e.type==='coin_fx'&&typeof playCoinFx==='function')playCoinFx();
+          if(e.type==='enh_fx'&&typeof playEnhFxFor==='function')playEnhFxFor(e.cardId);
+          if(e.type==='law_view'&&e.to===me.playerId&&typeof openLawSwap==='function')openLawSwap(e.targetId,e.cardId);
+          if(e.type==='duel'&&typeof playDuel==='function'){
+            const log=batch.events.find(x=>x.type==='duel_log'&&(x.loserId===e.leftId||x.loserId===e.rightId));
+            playDuel({...e,loserSide:log?(log.loserId===e.leftId?'left':'right'):null,loserCardId:log?.cardId});
+          }
+        }
+        while(valid()&&!fast()&&effects())await pause();
+        if(!valid())return;
+        await api.presentPileBatch?.(batch.events,batch.state);
+        while(valid()&&!fast()&&effects())await pause();
+        if(!valid())return;
+      }
+      api.deferResultText=false;
+      if(!fast()){api.flushDeferredResults?.();while(valid()&&!fast()&&effects())await pause();if(!valid())return;}
+      commit(batch,!fast());activeBatch=null;
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!valid())return;settling=false;updateLock();schedule();}));
+    }
+    function flushEvents(){clearTimeout(eventTimer);eventTimer=null;if(!events.length)return;if(events.some(e=>e.type==='log'&&/ 打出 \d+｜/.test(e.text||'')))return;batches.push({events:events.splice(0),state:null});pump();}
+    socket.on('EMIT',e=>{
+      if(['idle_warning','auto_control_changed','lobby','nav_game'].includes(e?.type)){dispatch('EMIT',e);return;}
+      events.push(e);clearTimeout(eventTimer);eventTimer=setTimeout(flushEvents,100);
+    });
+    socket.on('STATE',s=>{
+      api.beforePileBatch?.(s);latest=s;clearTimeout(eventTimer);eventTimer=null;batches.push({events:events.splice(0),state:s});
+      // Background/CPU-fast views never accumulate a replay backlog.
+      if(fast()&&!settling){for(const b of batches.splice(0))commit(b);updateLock();return;}
+      pump();
+    });
+    function reset(){api.deferResultText=false;api.cancelCardSkillIntro?.();api.cancelEnhancements?.();epoch++;clearTimeout(timer);clearTimeout(eventTimer);batches=[];events=[];latest=null;settling=false;activeBatch=null;api.restoreHandArt?.();delete root.dataset.cardFlowQueued;root.dataset.cardFlowBusy='false';}
+    for(const e of ['disconnect','JOINED'])socket.on(e,reset);
+    const originalSend=typeof sendAction==='function'?sendAction:null;
+    api.canSendPresentedAction=target=>!stage()&&!api.isKidAwaiting?.()&&!effects()&&(!reading()||$('phoneCardSheet')?.dataset.inspectKind==='hand'&&!!target?.closest?.('#phoneCardConfirm,#playHand,#playDrawn'))&&!settling&&!batches.length&&(!latest||signature(latest)===signature(state));
+    if(originalSend)sendAction=function(type,payload){if(type!=='TAKE_BACK_CONTROL'&&!fast()&&(batches.length||latest&&signature(latest)!==signature(state)))return;return originalSend(type,payload);};
+    api.waitForPresentationIdle=()=>new Promise(resolve=>{const generation=epoch;function check(){if(epoch!==generation||fast()||!busy()&&!settling){resolve();return;}setTimeout(check,80);}setTimeout(check,80);});
+    const actionTarget=n=>n?.closest?.('#btnDraw,#playHand,#playDrawn,#phoneCardDraw,#phoneCardConfirm,#modal button,#lawSwapModal button,#luffyBoostModal button,#btnNextRound,main #players [data-fx-target="available"],[data-phone-aim="available"]');
+    // Window capture precedes the existing document-level portrait forwarding.
+    for(const type of ['click','pointerdown','pointerup','keydown'])window.addEventListener(type,e=>{
+      if(type==='keydown'&&!['Enter',' '].includes(e.key))return;
+      if(actionTarget(e.target)&&!fast()&&!api.canSendPresentedAction(e.target)){e.preventDefault();e.stopImmediatePropagation();}
+    },true);
+    new MutationObserver(()=>{updateLock();if(batches.length)schedule();}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','class','data-phase']});
+    document.addEventListener('visibilitychange',()=>{if(document.hidden){api.closeSheet?.();api.closeLibrary?.();api.clearPrivateReveal?.();api.cancelCoin?.();if(batches.length||activeBatch){const pending=[activeBatch,...batches].filter(Boolean);reset();for(const b of pending)commit(b);}}else schedule();});
+    api.presentationQueueSize=()=>batches.length+(settling?1:0);api.presentationEffectsBusy=effects;
+    updateLock();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
+</script>
+<!-- CARD_ONLINE_FLOW_END -->
 <!-- CARD_SKILL_INTENT_COMPAT_BEGIN -->
 <script>
 /* Decode public played-card artwork before starting its presentation clock. */

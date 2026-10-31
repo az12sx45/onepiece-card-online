@@ -2064,3 +2064,6 @@ Presentation coordination: animations finish automatically; private card views a
 
 
 2026-11-01: Presentation-only update: next-round starter is an icon in the status strip. Original normal Roger next-starter override (even after elimination) and enhanced Roger prediction remain distinct and unchanged. Artwork preparation does not reveal private hands or alter results.
+
+
+2026-11-01: Legacy mobile compatibility retains original rules and privacy; enhanced projection/movie precedes choices, selected-target cut-in precedes results. Download integrity and queue ownership changes add no gameplay state or Socket.IO events.

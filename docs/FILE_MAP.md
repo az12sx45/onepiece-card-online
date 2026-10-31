@@ -2121,3 +2121,6 @@ Card choice layout: shared android/web/card-phone-fx.js, card-match-polish.js/cs
 
 
 2026-11-01: Card source android/web/card-art-ready.js handles public artwork decode/cancellation; card-next-starter.js/css provides existing-marker status-row art/detail; card-next-starter-v2.webp is GPT artwork. Generated shared game.html/css/js deliver installed-v059 compatibility. See CARD_MOBILE_EFFECTS_20261101.md.
+
+
+2026-11-01: CARD_ONLINE_FLOW in game.html embeds android/web/card-phone-flow.js; early online-pending marker prevents the installed older queue from mounting twice. result/shop/tutorial transport comments rotate immutable download keys only. See CARD_LEGACY_MOBILE_20261101.md.

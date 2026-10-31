@@ -1486,8 +1486,8 @@ window.POCardInteract=module.exports;
   if(location.origin!==origin||location.pathname!=='/game.html')return;
   function mount(){
     const api=window.CardPhonePresentation,root=document.documentElement,$=id=>document.getElementById(id);
-    if(!api||root.dataset.cardFlow||typeof socket!=='object'||!socket.listeners||!socket.off)return;
-    root.dataset.cardFlow='1';
+    if(!api||(root.dataset.cardFlow&&root.dataset.cardFlow!=='online-pending')||typeof socket!=='object'||!socket.listeners||!socket.off)return;
+    root.dataset.cardFlow='1';api.presentationFlowVersion=2;
     const listeners={EMIT:socket.listeners('EMIT').slice(),STATE:socket.listeners('STATE').slice()};
     for(const type of ['EMIT','STATE'])for(const fn of listeners[type])socket.off(type,fn);
     let batches=[],events=[],latest=null,timer=null,eventTimer=null,settling=false,epoch=0,activeBatch=null;

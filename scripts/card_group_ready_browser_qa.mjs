@@ -5,9 +5,12 @@ import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url),{chromium}=require('C:/Users/王曜瑋/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
 const root=path.resolve(path.dirname(new URL(import.meta.url).pathname.slice(1)),'..');
 const mobile='C:/Users/王曜瑋/.codex/worktrees/android-tabletop-landscape/2026-04-20-1-2-start-html-game-html/android/app/src/main/assets/mobile';
-const ios='D:/Codex_QA/native-ios-cloud-20261023/candidate/bundle-resources/launcher-web/mobile';
+const ios=process.env.CARD_QA_IOS_BUNDLE||'D:/Codex_QA/native-ios-cloud-20261023/candidate/bundle-resources/launcher-web/mobile';
 const out=process.env.CARD_QA_OUT||'C:/Codex_QA/card-venue-ready-20261031';fs.mkdirSync(out,{recursive:true});
-const port=30969,origin=`http://127.0.0.1:${port}`,report={passed:false,checks:[],errors:[],scope:'Three Chromium clients with exact desktop/v059 Android/iOS bundles plus three CPU; isolated server with test-process-only state seeds, original engine/actions/Socket.IO, private read, CPU duel, next-round gates; no physical-device claim.'};
+const port=30969,origin=`http://127.0.0.1:${port}`,report={passed:false,checks:[],errors:[],scope:'Three Chromium clients with exact desktop/Android and selected iOS bundles plus three CPU; isolated server with test-process-only state seeds, original engine/actions/Socket.IO, private read, CPU duel, next-round gates; no physical-device claim.'};
+report.iosBundle=ios;report.lightArtwork=process.env.CARD_QA_LIGHT_ART==='1';
+const stripArtwork=s=>report.lightArtwork?s.replace(/url\("data:image\/[^"]+"\)/g,'none'):s;
+const sharedCss=report.lightArtwork?stripArtwork(fs.readFileSync(root+'/public/css/card-desktop-table.css','utf8')):null;
 const check=(name,pass,detail)=>{report.checks.push({name,pass,detail});console.log(name+': '+pass);fs.writeFileSync(out+'/progress.json',JSON.stringify(report,null,2));if(!pass)throw Error(name+': '+JSON.stringify(detail));};
 const server=spawn(process.execPath,['scripts/card_group_server_fixture.js'],{cwd:root,windowsHide:true,env:{...process.env,DATABASE_URL:'',PORT:String(port)},stdio:['pipe','pipe','pipe']});let log='',browser;server.stdout.on('data',b=>log+=b);server.stderr.on('data',b=>log+=b);const pages=[];
 const heartbeat=setInterval(()=>{Promise.race([Promise.all(pages.map(p=>p.evaluate(()=>({seat:me.playerId,turn:state?.turnIndex,step:state?.turnStep,pending:state?.pending?.action,skip:state?.players?.map(p=>p.skipNext),raw:window.__raw?.presentationReady,queue:CardPhonePresentation.presentationQueueSize(),effects:CardPhonePresentation.presentationEffectsBusy(),intro:document.getElementById('phoneVenueIntro')?.hidden,venuePending:CardPhonePresentation.isVenueIntroPending?.(),venueEntering:CardPhonePresentation.isVenueEntering?.(),stage:CardPhonePresentation.isCardResolving?.(),preview:CardPhonePresentation.isLocalCardPreview?.(),probe:window.__probe,rawTurn:window.__raw?.turnIndex,rawStep:window.__raw?.turnStep,root:{...document.documentElement.dataset},visible:['phoneCardSheet','phonePrivateReveal','phoneLibrary','cardDexOverlay','phoneVenueIntro'].filter(id=>{const n=document.getElementById(id);return n&&!n.hidden&&!n.classList.contains('hidden')&&n.getClientRects().length;})})))),new Promise(r=>setTimeout(()=>r('diagnostic timeout'),4000))]).then(v=>fs.writeFileSync(out+'/live.json',JSON.stringify(v,null,2)));},15000);
@@ -20,7 +23,8 @@ try{
  for(const [index,bundle,width,height] of [[0,null,1366,768],[1,mobile,844,390],[2,ios,740,360]]){
   const context=await browser.newContext({viewport:{width,height},hasTouch:!!bundle,serviceWorkers:'block',userAgent:'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/144.0.0.0 Safari/537.36 Electron/44.1.1'});
   await context.route('**/*',r=>new URL(r.request().url()).origin===origin?r.continue():r.abort());
-  const script=bundle?fs.readFileSync(bundle+'/game-mobile.js','utf8'):'',css=bundle?fs.readFileSync(bundle+'/game-mobile.css','utf8'):'';
+  if(sharedCss!==null)await context.route('**/css/card-desktop-table.css*',r=>r.fulfill({status:200,contentType:'text/css',body:sharedCss}));
+  const script=bundle?fs.readFileSync(bundle+'/game-mobile.js','utf8'):'',css=bundle?stripArtwork(fs.readFileSync(bundle+'/game-mobile.css','utf8')):'';
   await context.addInitScript({content:`window.__TABLETOP_ANDROID_TEST_ORIGIN=location.origin;HTMLMediaElement.prototype.play=function(){return Promise.resolve()};HTMLMediaElement.prototype.load=function(){};HTMLMediaElement.prototype.pause=function(){};${script}\n${bundle?`const st=document.createElement('style');st.textContent=${JSON.stringify(css)};new MutationObserver((_,o)=>{if(document.documentElement){document.documentElement.append(st);o.disconnect()}}).observe(document,{childList:true});`:''}`});
   const p=await context.newPage();p.setDefaultTimeout(15000);p.on('pageerror',e=>report.errors.push(e.message));
   await p.goto(origin+'/game.html',{waitUntil:'domcontentloaded'});await p.waitForFunction(()=>typeof me!=='undefined');
@@ -29,7 +33,7 @@ try{
   await p.evaluate(()=>{HTMLMediaElement.prototype.play=function(){if(this.id==='enhVideo'){const video=this;setTimeout(()=>video.dispatchEvent(new Event('ended')),120);}return Promise.resolve();};});
   await p.evaluate(()=>{window.__probe={};for(const key of ['presentCardSkillBatch','presentPileBatch']){const raw=CardPhonePresentation[key];if(raw)CardPhonePresentation[key]=async function(...args){window.__probe[key]={started:performance.now(),events:args[0]?.map(e=>e.type)};try{return await raw.apply(this,args)}finally{delete window.__probe[key];}}} });
   await p.evaluate(({room,index})=>{me.roomId=room;me.secret='qa-venue-'+index+'-'+room;socket.onAny((event,s)=>{if(event==='STATE')window.__raw=s});socket.emit('JOIN_ROOM',{roomId:room,displayName:'QA'+index,secret:me.secret,cpuCount:3});},{room,index});
-  await p.waitForFunction(()=>me.playerId!==null&&state?.players?.length>0);await p.waitForTimeout(200);if(await p.locator('#phoneVenueIntro:not([hidden])').count())await p.locator('#phoneVenueContinue').click();pages.push(p);
+  await p.waitForFunction(()=>me.playerId!==null&&state?.players?.length>0);await p.waitForTimeout(200);if(await p.locator('#phoneVenueIntro:not([hidden])').count())await p.locator('#phoneVenueContinue').click();pages.push(p);console.log('Client joined '+index);
  }
  await pages[0].waitForFunction(()=>state.players.length===3);
  for(const p of pages)await action(p,'LOBBY_READY');await pages[0].waitForTimeout(150);await action(pages[0],'START_GAME');
