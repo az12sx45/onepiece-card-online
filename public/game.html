@@ -6841,13 +6841,12 @@ if (srvP.action === 'law') {
     const boosted = !!(srvP.extra && srvP.extra.boost);
 
     if (boosted) {
-      if (
-        localPending &&
-        localPending.action === 'killer' &&
-        localPending.stage === 'confirm' &&
-        Number.isInteger(localPending.target)
-      ) {
-        const tid = localPending.target;
+      const confirmedTarget = srvP.extra?.disarmedTarget;
+      if (Number.isInteger(confirmedTarget) || (
+        localPending && localPending.action === 'killer' &&
+        localPending.stage === 'confirm' && Number.isInteger(localPending.target)
+      )) {
+        const tid = Number.isInteger(confirmedTarget) ? confirmedTarget : localPending.target;
         const tp = state.players?.[tid];
         const stillDef = !!(tp && (tp.protected || tp.dodging));
 

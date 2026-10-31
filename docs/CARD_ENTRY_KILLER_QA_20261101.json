@@ -1,0 +1,109 @@
+{
+  "entry-worker.json": {
+    "passed": true,
+    "checks": [
+      "ordinary browser still routes through download gate",
+      "save preserved false",
+      "native app stays on game after worker retirement",
+      "save preserved true",
+      "native lobby never re-registers legacy worker",
+      "native lobby remains on start"
+    ],
+    "scope": "Real Chromium Service Workers; installed app UA versus normal browser, old cached worker retirement, original native registration guard. No user profile or storage touched."
+  },
+  "killer-cpu.json": {
+    "passed": true,
+    "checks": [
+      "server listening",
+      "killer-low waits without replay before viewer acknowledgement",
+      "killer-low completes after acknowledgement",
+      "killer-low emits disarm once",
+      "killer-low duel decision matches retained hand",
+      "killer-high waits without replay before viewer acknowledgement",
+      "killer-high completes after acknowledgement",
+      "killer-high emits disarm once",
+      "killer-high duel decision matches retained hand"
+    ],
+    "scope": "Real isolated server and CPU loop; browser Socket.IO client with explicit simulated viewer acknowledgements. Not visual/device acceptance."
+  },
+  "ios-killer/report.json": {
+    "scope": "Exact archived iOS v058 bundle and WebKit; original target/confirmation callbacks, engine and presentation queue; selection stage seeded after movie. No physical iPhone claim.",
+    "checks": [
+      {
+        "name": "iOS original target button sends one disarm",
+        "pass": true
+      },
+      {
+        "name": "iOS confirmation remains after disarm animation",
+        "pass": true
+      },
+      {
+        "name": "confirmation restores from server state without local cache",
+        "pass": true
+      },
+      {
+        "name": "iOS cancel is clickable after animation",
+        "pass": true
+      },
+      {
+        "name": "cancel completes pending and returns next turn",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [],
+    "passed": true
+  },
+  "npm-sync.json": {
+    "scope": "Two isolated Chromium windows using the real local npm-start server and Socket.IO. Guest room with stable isolated test identities, no production accounts or physical-device claim.",
+    "checks": [
+      {
+        "name": "npm start listening",
+        "ok": true
+      },
+      {
+        "name": "both guests joined",
+        "ok": true
+      },
+      {
+        "name": "start synchronized",
+        "ok": true
+      },
+      {
+        "name": "one authoritative current player",
+        "ok": true,
+        "detail": {
+          "turn": 0,
+          "step": "draw"
+        }
+      },
+      {
+        "name": "real next state waits while viewer reads",
+        "ok": true
+      },
+      {
+        "name": "draw step broadcast to both",
+        "ok": true
+      },
+      {
+        "name": "refresh restores same seat and turn",
+        "ok": true,
+        "detail": {
+          "seat": 0,
+          "turn": 0,
+          "step": "choose"
+        }
+      },
+      {
+        "name": "private other hand stays hidden",
+        "ok": true
+      }
+    ],
+    "passed": true
+  }
+}

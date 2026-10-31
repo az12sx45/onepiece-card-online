@@ -2595,8 +2595,17 @@ useEffect(() => {
   </script>
 
   <script>
-    // === Service Worker 註冊（離線快取核心）===
-    if ("serviceWorker" in navigator) {
+    // Installed apps own verified downloads. A browser service worker must not
+    // compete with that cache or navigate the embedded game to /download.
+    // This is presentation/cache routing only; server authorization is unchanged.
+    const installedTabletopApp = /\bONEPIECE_TABLETOP_(?:ANDROID|IOS)\//i.test(navigator.userAgent);
+    if (installedTabletopApp && "serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(registrations =>
+        Promise.all(registrations.filter(registration =>
+          new URL(registration.scope).origin === location.origin
+        ).map(registration => registration.unregister()))
+      ).catch(error => console.warn("Legacy game worker retirement failed:", error));
+    } else if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
           .register("./sw.js")

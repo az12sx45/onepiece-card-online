@@ -2091,6 +2091,12 @@ if (th != null && Array.isArray(st.aiMemory)) {
     }
 
 if (p.action === 'killer') {
+  // One disarm per played card; the server retains the confirmation target
+  // across animation acknowledgements, reconnects and CPU takeover.
+  const disarmedTarget = p.extra?.disarmedTarget;
+  const alreadyDisarmed = p.extra?.boost && Number.isInteger(disarmedTarget);
+  if (alreadyDisarmed && (idx !== disarmedTarget || action.payload?.duel !== true)) return { state: st, emits };
+  if (!alreadyDisarmed) {
   // 先解除目標的保護 / 閃避
   st.players[idx].protected = false;
   st.players[idx].dodging   = false;
@@ -2110,6 +2116,8 @@ if (p.action === 'killer') {
     casterName,
     targetName
   });
+  if (p.extra?.boost) p.extra.disarmedTarget = idx;
+  }
 
   // 強化版：還可以進入決鬥流程
   if (p.extra.boost) {

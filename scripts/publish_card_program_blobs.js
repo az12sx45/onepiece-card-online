@@ -13,16 +13,16 @@ async function main(){
  const response=await fetch('https://onepiece-card-online.onrender.com/desktop/catalog-v3.json');assert.equal(response.status,200);
  const base=await response.json();assert.deepEqual(next.sourceTrees,base.sourceTrees);
  for(const game of ['board','chess'])assert.deepEqual(next.games[game],base.games[game]);
- assert.equal(base.games.card.releaseId,'package-1372e8179169b0a2','Expected reviewed public baseline');
+ assert.equal(base.games.card.releaseId,'package-a75b6b650e743963','Expected reviewed public baseline');
  const oldResponse=await fetch('https://onepiece-card-online.onrender.com/'+base.games.card.manifestPath);assert.equal(oldResponse.status,200);
  const oldBytes=Buffer.from(await oldResponse.arrayBuffer());assert.equal(P.sha256Bytes(oldBytes),base.games.card.manifestSha256);
  const old=JSON.parse(oldBytes),current=JSON.parse(read('public/'+next.games.card.manifestPath));
- const allow=['css/card-desktop-table.css','game.html','js/card-desktop-table.js','result.html','shop.html','tutorial.html'];
+ const allow=['start.html','game.html'];
  assert.deepEqual(current.assets.filter(a=>!allow.includes(a.path)),old.assets.filter(a=>!allow.includes(a.path)));
  const inventory=await P.loadPublishInventory({repoRoot:root,gameIds:['card'],catalogVersion:3});
  inventory.records=inventory.records.filter(r=>r.sources.some(s=>allow.includes(s)));
- assert.equal(inventory.records.length,6);assert.ok(inventory.records.every(r=>r.sources.every(s=>allow.includes(s))));
- inventory.uniqueFiles=inventory.logicalFiles=6;
+ assert.equal(inventory.records.length,2);assert.ok(inventory.records.every(r=>r.sources.every(s=>allow.includes(s))));
+ inventory.uniqueFiles=inventory.logicalFiles=2;
  inventory.uniqueBytes=inventory.logicalBytes=inventory.records.reduce((n,r)=>n+r.size,0);
  let context;
  try{

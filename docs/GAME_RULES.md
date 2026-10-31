@@ -2067,3 +2067,6 @@ Presentation coordination: animations finish automatically; private card views a
 
 
 2026-11-01: Legacy mobile compatibility retains original rules and privacy; enhanced projection/movie precedes choices, selected-target cut-in precedes results. Download integrity and queue ownership changes add no gameplay state or Socket.IO events.
+
+
+Enhanced Killer removes one selected opponent's defense once, then optionally duels that same opponent. Disarm presentation finishes before CPU duel/cancel; pending.extra.disarmedTarget records this phase and does not reveal a hand. Normal Killer remains disarm-only.

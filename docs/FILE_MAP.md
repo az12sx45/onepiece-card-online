@@ -2124,3 +2124,6 @@ Card choice layout: shared android/web/card-phone-fx.js, card-match-polish.js/cs
 
 
 2026-11-01: CARD_ONLINE_FLOW in game.html embeds android/web/card-phone-flow.js; early online-pending marker prevents the installed older queue from mounting twice. result/shop/tutorial transport comments rotate immutable download keys only. See CARD_LEGACY_MOBILE_20261101.md.
+
+
+scripts/card_native_entry_qa.js tests real worker retirement routing; card_killer_stage_qa.js, card_killer_cpu_qa.js and card_killer_mobile_qa.mjs cover Killer confirmation and presentation gates.

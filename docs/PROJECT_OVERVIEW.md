@@ -2979,3 +2979,6 @@ Card mobile choices retain the original rule handlers, with separate title/list/
 
 
 2026-11-01: Card online match owns the presentation queue across v058/v059 native clients; no launcher or lobby redesign. Verified document downloads use binary transport and no-transform.
+
+
+Native Card lobby delegates verified download caching to the host; it does not register the browser offline worker. Enhanced Killer resumes its confirmation using server pending.extra.disarmedTarget.

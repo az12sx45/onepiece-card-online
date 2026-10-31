@@ -216,7 +216,7 @@ function emitAck(socket, event) {
     });
   } finally { await new Promise(resolve => io.close(resolve)); if (server.listening) await new Promise(resolve => server.close(resolve)); }
 
-  await check('retired worker unregisters and redirects same-origin game clients without touching storage', async () => {
+  await check('retired worker unregisters and reloads same-origin game clients through normal routing without touching storage', async () => {
     const listeners = {}, calls = [], pending = [];
     const client = url => ({ url, navigate: target => { calls.push(['navigate', url, target]); return Promise.resolve(); } });
     const sandbox = { URL, Promise, self: {
@@ -229,7 +229,7 @@ function emitAck(socket, event) {
     vm.runInNewContext(RETIRED_WORKER, sandbox);
     listeners.install(); listeners.activate({ waitUntil: promise => pending.push(promise) }); await Promise.all(pending);
     assert.deepEqual(calls.map(row => row[0]), ['skipWaiting', 'claim', 'unregister', 'navigate']);
-    assert.deepEqual(calls.at(-1), ['navigate', 'https://game.example/board_game.html', '/download']);
+    assert.deepEqual(calls.at(-1), ['navigate', 'https://game.example/board_game.html', 'https://game.example/board_game.html']);
   });
   const invalidCases = [
     ['catalog schema', ({ catalog }) => { catalog.schema = 2; }],

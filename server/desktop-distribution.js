@@ -16,6 +16,9 @@ const LAUNCHER_EVENTS = new Set([
   'SOCIAL_AUTH', 'PRESENCE_SET', 'FRIENDS_GET', 'FRIEND_ADD_BY_NAME',
   'FRIEND_REQUEST_ACCEPT', 'FRIEND_REQUEST_DECLINE', 'FRIEND_REMOVE', 'DM_HISTORY', 'DM_SEND'
 ]);
+// Reload through normal routing: native WebViews keep their app User-Agent,
+// while ordinary browsers still reach /download through the HTTP gate.
+// The worker must not force every installed app into the download website.
 const RETIRED_WORKER = `self.addEventListener('install',()=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   await self.clients.claim();
@@ -24,7 +27,7 @@ self.addEventListener('activate',event=>event.waitUntil((async()=>{
   await Promise.all(windows.map(client=>{
     const url=new URL(client.url);
     return url.origin===self.location.origin&&!['/download','/desktop-download.html'].includes(url.pathname)
-      ?client.navigate('/download').catch(()=>{}):Promise.resolve();
+      ?client.navigate(url.href).catch(()=>{}):Promise.resolve();
   }));
 })()));
 `;

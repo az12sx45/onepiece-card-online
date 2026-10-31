@@ -18,6 +18,14 @@ readline.createInterface({input:process.stdin}).on('line',line=>{try{
   const old=room.state,s=engine.createInitialState(old.players.length);s.roundNo=old.roundNo;s.venues=old.venues;s.turnStep='choose';const host=room.host,cpu=old.players.findIndex(p=>p.isCPU);s.turnIndex=cmd.scenario==='peek'?host:cpu;s.discard=[4,6];
   s.players.forEach((p,i)=>Object.assign(p,{client:old.players[i].client,displayName:old.players[i].displayName,isCPU:old.players[i].isCPU,alive:cmd.scenario==='peek'?!old.players[i].isCPU:[host,cpu].includes(i),hand:i===s.turnIndex?(cmd.scenario==='peek'?2:3):4,tempDraw:i===s.turnIndex?8:null}));
   if(cmd.scenario==='game-final')s.chestLeft=1;room.state=s;room.phase='playing';room._venueReady=null;q.cardPresentationReady.begin(room);q.broadcastState(room);q.runCpuLoop(cmd.room);q.armRoomWatchdogs(cmd.room);
+ }else if (['killer-low','killer-high'].includes(cmd.scenario)) {
+  for(const key of ['_turnTimer','_pendingTimer','_turnWarnTimer','_pendingWarnTimer','_autoNextTimer']){clearTimeout(room[key]);room[key]=null;}
+  room._cpuLoopToken=(room._cpuLoopToken||0)+1;room._cpuFastForward=false;
+  const old=room.state,s=engine.createInitialState(old.players.length),cpu=old.players.findIndex(p=>p.isCPU);
+  s.roundNo=old.roundNo;s.venues=[{name:'夏波帝諸島'}];s.turnIndex=cpu;s.turnStep='pending';s.discard=[13];
+  s.players.forEach((p,i)=>Object.assign(p,{client:old.players[i].client,displayName:old.players[i].displayName,isCPU:old.players[i].isCPU,alive:true,hand:i===cpu?(cmd.scenario==='killer-high'?8:2):4,tempDraw:null,protected:i!==cpu}));
+  s.pending={action:'killer',extra:{boost:true,keep:s.players[cpu].hand}};
+  room.state=s;room.phase='playing';room._venueReady=null;room._presentationReady=null;q.broadcastState(room);q.runCpuLoop(cmd.room);
  }else throw Error('Unknown isolated scenario');
  console.log('QA_FIXTURE '+JSON.stringify({scenario:cmd.scenario,round:room.state.roundNo}));
  }catch(e){console.log('QA_FIXTURE_ERROR '+e.message);}});
