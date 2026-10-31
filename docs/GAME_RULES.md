@@ -2055,3 +2055,6 @@ Presentation coordination: animations finish automatically; private card views a
 
 
 2026-10-31: Card rules unchanged. Presentation waits for enhanced movie before choices, then announces the selected operation. Idle turn/choice takeover is now 90 seconds (warning at 80); offline grace and all-viewer readiness gates unchanged. See CARD_ENHANCED_PROJECTION_20261031.md.
+
+
+2026-10-31: Compact card-footprint projection, character-origin white transition and movie-end recall; choices wait until recall finishes. Header backdrop cleanup and verification: CARD_ENHANCED_PROJECTION_20261031.md. Rules unchanged.

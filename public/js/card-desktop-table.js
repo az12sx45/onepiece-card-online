@@ -1647,8 +1647,8 @@ window.POCardInteract=module.exports;
 /* Public enhanced-card projection. No hand inspection or gameplay decisions. */
 (() => {
  function mount(){
-  const api=window.CardPhonePresentation;if(!api||api.enhancementSummonVersion)return;
-  api.enhancementSummonVersion=1;
+  const api=window.CardPhonePresentation;if(!api||api.enhancementSummonVersion>=2)return;
+  api.enhancementSummonVersion=2;
   const root=document.documentElement,video=document.getElementById('enhVideo');
   const priorBusy=api.isEnhancementBusy,priorCancel=api.cancelEnhancements;
   let active=null,serial=0;
@@ -1669,25 +1669,32 @@ window.POCardInteract=module.exports;
    const world=document.createElement('div');world.className='card-summon-world';img.className='card-summon-hero';
    const pool=document.createElement('i');pool.className='card-summon-pool';world.append(pool,img);
    const flash=document.createElement('i');flash.className='card-summon-white';layer.append(world,flash);document.body.append(layer);
-   const item={layer,world,animations:[],raf:0,failsafe:null,resolve:null};active=item;root.dataset.cardSummon='rise';
-   const position=()=>{const r=stage.getBoundingClientRect(),foot=r.y+r.height*.62,height=Math.max(110,Math.min(innerHeight*.72,foot-12));world.style.left=(r.x+r.width/2)+'px';world.style.top=foot+'px';world.style.setProperty('--summon-height',height+'px');world.style.setProperty('--summon-footprint',r.width*.86+'px');layer.dataset.anchorX=String(r.x+r.width/2);layer.dataset.anchorY=String(foot);};
+   const item={layer,world,img,pool,flash,animations:[],raf:0,failsafe:null,resolve:null};active=item;root.dataset.cardSummon='rise';
+   const position=()=>{const r=stage.getBoundingClientRect(),foot=r.y+r.height*.62,aspect=img.naturalWidth/img.naturalHeight,height=Math.max(1,Math.min(innerHeight*.4,r.width*1.8,r.width*1.6/aspect,foot-12));world.style.left=(r.x+r.width/2)+'px';world.style.top=foot+'px';world.style.setProperty('--summon-height',height+'px');world.style.setProperty('--summon-footprint',r.width*.86+'px');layer.dataset.anchorX=String(r.x+r.width/2);layer.dataset.anchorY=String(foot);item.lightOrigin=(r.x+r.width/2)+'px '+(foot-height*.48)+'px';};
    function track(){if(active!==item)return;position();item.raf=requestAnimationFrame(track);}track();
-   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;item.reduced=reduced;
    const animate=(n,frames,opts)=>{if(!reduced)item.animations.push(n.animate(frames,{fill:'both',...opts}));};
    animate(pool,[{opacity:0,transform:'translate(-50%,-50%) scale(.25)'},{opacity:.8,transform:'translate(-50%,-50%) scale(1)'}],{duration:600,easing:'ease-out'});
    // The feet remain at the card anchor; never change the played card transform.
    animate(img,[{opacity:0,transform:'translate(-50%,-96%) scale(.22,.06)',clipPath:'inset(95% 0 0 0)'},{opacity:1,transform:'translate(-50%,-96%) scale(1)',clipPath:'inset(0 0 0 0)'}],{duration:1100,delay:180,easing:'cubic-bezier(.15,.75,.2,1)'});
    await wait(reduced?300:1900);if(active!==item||generation!==serial)return;
    layer.dataset.phase='white';root.dataset.cardSummon='white';
-   animate(flash,[{opacity:0},{opacity:1}],{duration:reduced?0:360,easing:'ease-in'});
-   await wait(reduced?0:360);if(active!==item||generation!==serial)return;
+   // Light starts on the standing character, then fills the screen once.
+   animate(img,[{filter:'brightness(1)'},{filter:'brightness(0) invert(1) drop-shadow(0 0 18px white)'}],{duration:300,easing:'ease-in'});
+   const circle=` at ${item.lightOrigin})`;
+   animate(flash,[{opacity:0,clipPath:'circle(0px'+circle},{opacity:1,clipPath:'circle('+Math.max(innerWidth,innerHeight)*1.5+'px'+circle}],{duration:600,delay:100,easing:'cubic-bezier(.4,0,.8,.4)'});
+   await wait(reduced?0:700);if(active!==item||generation!==serial)return;
    const overlay=document.getElementById('enhOverlay');
    if(overlay){item.observer=new MutationObserver(()=>{if(overlay.classList.contains('hidden'))finish(item);});item.observer.observe(overlay,{attributes:true,attributeFilter:['class']});}
    item.failsafe=setTimeout(()=>finish(item),32000);
   };
-  function revealMovie(){const item=active;if(!item||item.layer.dataset.phase!=='white')return;item.layer.dataset.phase='video';root.dataset.cardSummon='video';const a=item.layer.animate([{opacity:1},{opacity:0}],{duration:420,fill:'forwards'});item.animations.push(a);a.finished.then(()=>finish(item),()=>finish(item));}
+  function revealMovie(){const item=active;if(!item||item.layer.dataset.phase!=='white')return;clearTimeout(item.failsafe);item.layer.dataset.phase='video';root.dataset.cardSummon='video';const a=item.layer.animate([{opacity:1},{opacity:0}],{duration:420,fill:'forwards'});item.animations.push(a);a.finished.then(()=>{if(active===item&&item.layer.dataset.phase==='video')item.layer.style.visibility='hidden';},()=>{});}
+  function recall(){const item=active;if(!item)return;clearTimeout(item.failsafe);item.observer?.disconnect();for(const a of item.animations)a.cancel();item.animations=[];item.layer.dataset.phase='return';root.dataset.cardSummon='return';item.layer.style.visibility='visible';item.flash.style.opacity='0';item.img.style.filter='';
+   if(!item.reduced){item.animations.push(item.img.animate([{opacity:1,transform:'translate(-50%,-96%) scale(1)',clipPath:'inset(0 0 0 0)'},{opacity:0,transform:'translate(-50%,-96%) scale(.65,.02)',clipPath:'inset(98% 0 0 0)'}],{duration:850,delay:120,easing:'cubic-bezier(.5,0,.8,.35)',fill:'both'}));item.animations.push(item.pool.animate([{opacity:.8},{opacity:0}],{duration:1000,fill:'both'}));}
+   item.failsafe=setTimeout(()=>finish(item),item.reduced?100:1050);
+  }
   video?.addEventListener('playing',revealMovie);
-  for(const event of ['ended','error'])video?.addEventListener(event,()=>finish());
+  video?.addEventListener('ended',recall);video?.addEventListener('error',()=>finish());
   if(typeof socket==='object')for(const event of ['disconnect','JOINED'])socket.on(event,()=>{serial++;finish();});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){serial++;finish();}});
  }

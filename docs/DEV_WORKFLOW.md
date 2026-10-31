@@ -8596,3 +8596,6 @@ Publication verified 2026-10-31: package-f2c9a0995503bf94 / source 8eefc23c9726c
 
 
 2026-10-31: Implemented acquisition-only enhancement, card-anchored character projection/white/movie/choice/cut-in order and 90-second idle takeover. Scope, changed files, validation and limitations: CARD_ENHANCED_PROJECTION_20261031.md.
+
+
+2026-10-31: Compact card-footprint projection, character-origin white transition and movie-end recall; choices wait until recall finishes. Header backdrop cleanup and verification: CARD_ENHANCED_PROJECTION_20261031.md. Rules unchanged.

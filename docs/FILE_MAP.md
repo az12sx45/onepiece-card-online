@@ -2112,3 +2112,6 @@ Card choice layout: shared android/web/card-phone-fx.js, card-match-polish.js/cs
 
 
 2026-10-31: Card acquisition/projection modules and provenance: android/web/card-acquisition-charge.js, card-enhancement-summon.js/css, docs/CARD_SUMMON_ART_20261031.json; scoped public compatibility and generated desktop assets described in CARD_ENHANCED_PROJECTION_20261031.md.
+
+
+2026-10-31: Compact card-footprint projection, character-origin white transition and movie-end recall; choices wait until recall finishes. Header backdrop cleanup and verification: CARD_ENHANCED_PROJECTION_20261031.md. Rules unchanged.

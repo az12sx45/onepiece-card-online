@@ -2967,3 +2967,6 @@ Card mobile choices retain the original rule handlers, with separate title/list/
 
 
 2026-10-31: Card enhanced activation uses fixed card projection then full movie before selection; desktop and existing mobile bundles share the online compatibility layer. See CARD_ENHANCED_PROJECTION_20261031.md.
+
+
+2026-10-31: Compact card-footprint projection, character-origin white transition and movie-end recall; choices wait until recall finishes. Header backdrop cleanup and verification: CARD_ENHANCED_PROJECTION_20261031.md. Rules unchanged.
