@@ -2973,3 +2973,6 @@ Card mobile choices retain the original rule handlers, with separate title/list/
 
 
 2026-11-01: Card match status fixes are compatible with existing v059 Android/iOS embedded clients via game.html. No launcher/lobby/native route change. See formal CARD_STATUS_INTERACTIONS_20261101.md.
+
+
+2026-11-01: Card existing mobile clients receive status-row starter icons and decoded-before-play artwork from the online match compatibility layer. Launcher/lobby unchanged; see CARD_MOBILE_EFFECTS_20261101.md.

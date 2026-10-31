@@ -1,0 +1,1792 @@
+{
+  "final-android": {
+    "scope": "Original engine; Android UA and exact installed bundle; 3500ms forced cold image decode; controlled movie playing/ended. Chromium, not physical device.",
+    "checks": [
+      {
+        "name": "Slow cold decode finishes before projection starts",
+        "pass": true
+      },
+      {
+        "name": "Original movie plays once before choice",
+        "pass": true
+      },
+      {
+        "name": "Selected-target diagonal portrait decoded and visible on mobile",
+        "pass": true,
+        "detail": {
+          "loaded": true,
+          "width": 365.89776611328125,
+          "height": 267.00762939453125,
+          "title": "讓 Audit1 棄掉手牌"
+        }
+      },
+      {
+        "name": "Selected operation finishes and queue resumes",
+        "pass": true
+      },
+      {
+        "name": "Usopp portrait decoded before its separate sniper timeline",
+        "pass": true
+      },
+      {
+        "name": "Bad cut-in asset falls back to the public played card",
+        "pass": true
+      },
+      {
+        "name": "Next starter icon in status row with all six statuses, no top label",
+        "pass": true,
+        "detail": {
+          "inStatus": true,
+          "image": true,
+          "labelHidden": true,
+          "icons": true
+        }
+      },
+      {
+        "name": "Starter icon opens explanation without gameplay action",
+        "pass": true
+      },
+      {
+        "name": "Eliminated normal Roger remains next starter in own status row",
+        "pass": true
+      },
+      {
+        "name": "Disconnect cancels pending image decode cleanly",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [],
+    "passed": true
+  },
+  "final-ios": {
+    "scope": "Original engine; iOS UA and exact installed bundle with CSS appended at document end; 3500ms forced cold image decode; controlled movie playing/ended. Chromium, not physical device.",
+    "checks": [
+      {
+        "name": "Slow cold decode finishes before projection starts",
+        "pass": true
+      },
+      {
+        "name": "Original movie plays once before choice",
+        "pass": true
+      },
+      {
+        "name": "Selected-target diagonal portrait decoded and visible on mobile",
+        "pass": true,
+        "detail": {
+          "loaded": true,
+          "width": 366.1604309082031,
+          "height": 267.1993103027344,
+          "title": "讓 Audit1 棄掉手牌"
+        }
+      },
+      {
+        "name": "Selected operation finishes and queue resumes",
+        "pass": true
+      },
+      {
+        "name": "Usopp portrait decoded before its separate sniper timeline",
+        "pass": true
+      },
+      {
+        "name": "Bad cut-in asset falls back to the public played card",
+        "pass": true
+      },
+      {
+        "name": "Next starter icon in status row with all six statuses, no top label",
+        "pass": true,
+        "detail": {
+          "inStatus": true,
+          "image": true,
+          "labelHidden": true,
+          "icons": true
+        }
+      },
+      {
+        "name": "Starter icon opens explanation without gameplay action",
+        "pass": true
+      },
+      {
+        "name": "Eliminated normal Roger remains next starter in own status row",
+        "pass": true
+      },
+      {
+        "name": "Disconnect cancels pending image decode cleanly",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [],
+    "passed": true
+  },
+  "final-desktop": {
+    "scope": "Original engine; desktop; 3500ms forced cold image decode; controlled movie playing/ended. Chromium, not physical device.",
+    "checks": [
+      {
+        "name": "Slow cold decode finishes before projection starts",
+        "pass": true
+      },
+      {
+        "name": "Original movie plays once before choice",
+        "pass": true
+      },
+      {
+        "name": "Selected-target diagonal portrait decoded and visible on mobile",
+        "pass": true,
+        "detail": {
+          "loaded": true,
+          "width": 871.7738647460938,
+          "height": 636.1550903320312,
+          "title": "讓 Audit1 棄掉手牌"
+        }
+      },
+      {
+        "name": "Selected operation finishes and queue resumes",
+        "pass": true
+      },
+      {
+        "name": "Usopp portrait decoded before its separate sniper timeline",
+        "pass": true
+      },
+      {
+        "name": "Bad cut-in asset falls back to the public played card",
+        "pass": true
+      },
+      {
+        "name": "Next starter icon in status row with all six statuses, no top label",
+        "pass": true,
+        "detail": {
+          "inStatus": true,
+          "image": true,
+          "labelHidden": true,
+          "icons": true
+        }
+      },
+      {
+        "name": "Starter icon opens explanation without gameplay action",
+        "pass": true
+      },
+      {
+        "name": "Eliminated normal Roger remains next starter in own status row",
+        "pass": true
+      },
+      {
+        "name": "Disconnect cancels pending image decode cleanly",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [],
+    "passed": true
+  },
+  "baseline-slow": {
+    "scope": "Original engine, mobile UA and exact installed bundle; iOS CSS appended at document end; 3.5-second forced cold image decode; controlled movie playing/ended. Browser test, not physical device.",
+    "checks": [],
+    "errors": [],
+    "screenshots": [],
+    "passed": false,
+    "failure": "locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.card-enhancement-summon') to be visible\u001b[22m\n\n    at C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\card-mobile-effects-qa.mjs:45:46"
+  },
+  "reactions": {
+    "scope": "Original engine scenarios rendered in Chromium with exact installed mobile bundle or desktop bundle; not a physical device test.",
+    "checks": [
+      {
+        "name": "Draw cue visible at pile, inside screen",
+        "pass": true
+      },
+      {
+        "name": "Target portraits clearly marked",
+        "pass": true
+      },
+      {
+        "name": "Target hint visible without clipping",
+        "pass": true
+      },
+      {
+        "name": "heads exactly correct visible coin face",
+        "pass": true,
+        "detail": [
+          {
+            "back": false,
+            "position": "3.2% 43%",
+            "transform": "none"
+          }
+        ]
+      },
+      {
+        "name": "tails exactly correct visible coin face",
+        "pass": true,
+        "detail": [
+          {
+            "back": true,
+            "position": "37.7% 43%",
+            "transform": "none"
+          }
+        ]
+      },
+      {
+        "name": "Coin faces have distinct atlas positions",
+        "pass": true,
+        "detail": [
+          "3.2% 43%",
+          "37.7% 43%"
+        ]
+      },
+      {
+        "name": "Target has dodged before impact, result not yet announced",
+        "pass": true,
+        "detail": {
+          "translate": "58px 24px",
+          "dodgeAt": 780,
+          "impactAt": 1450
+        }
+      },
+      {
+        "name": "Dodge leaves no rectangle or displaced portrait",
+        "pass": true,
+        "detail": {
+          "sprites": 0,
+          "translate": "0px 0.381651px",
+          "animations": [
+            {
+              "state": "running",
+              "frames": [
+                {
+                  "offset": 0,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "filter": "none",
+                  "computedOffset": 0
+                },
+                {
+                  "offset": 1,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "filter": "brightness(1.17) drop-shadow(rgb(255, 215, 122) 0px 0px 5px)",
+                  "computedOffset": 1
+                }
+              ]
+            },
+            {
+              "state": "running",
+              "frames": [
+                {
+                  "offset": 0,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "scale": "1",
+                  "computedOffset": 0
+                },
+                {
+                  "offset": 1,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "scale": "1.16",
+                  "computedOffset": 1
+                }
+              ]
+            },
+            {
+              "state": "running",
+              "frames": [
+                {
+                  "offset": 0,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "translate": "none",
+                  "computedOffset": 0
+                },
+                {
+                  "offset": 1,
+                  "easing": "linear",
+                  "composite": "auto",
+                  "translate": "0px 9px",
+                  "computedOffset": 1
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "protected resolves without number picker",
+        "pass": true
+      },
+      {
+        "name": "dodging resolves without number picker",
+        "pass": true
+      },
+      {
+        "name": "Duel charge keeps both hands private",
+        "pass": true
+      },
+      {
+        "name": "Only defeated card revealed at impact",
+        "pass": true
+      },
+      {
+        "name": "Duel completes and releases animation queue",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [],
+    "passed": true
+  },
+  "all-enhanced": {
+    "scope": "Actual original engine enhanced plays and exact installed mobile/desktop presentation in Chromium. Movies held via controlled playing/ended events for timing assertions; no physical-device claim.",
+    "checks": [
+      {
+        "name": "0 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "0 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "0 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "0 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "0 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "0 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "0 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "0 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "0 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "1 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "1 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "1 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "1 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "1 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "1 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "1 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "1 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "1 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "1 choice revealed after movie",
+        "pass": true
+      },
+      {
+        "name": "2 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "2 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "2 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "2 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "2 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "2 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "2 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "2 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "2 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "3 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "3 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "3 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "3 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "3 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "3 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "3 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "3 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "3 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "3 choice revealed after movie",
+        "pass": true
+      },
+      {
+        "name": "4 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "4 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "4 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "4 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "4 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "4 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "4 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "4 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "4 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "5 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 287.4921875,
+          "y": 138.33937072753906,
+          "width": 66.046875,
+          "height": 44.03125
+        }
+      },
+      {
+        "name": "5 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "5 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 287.4921875,
+          "y": 138.33937072753906,
+          "width": 66.046875,
+          "height": 44.03125
+        }
+      },
+      {
+        "name": "5 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "5 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "5 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "5 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "5 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "5 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "5 choice revealed after movie",
+        "pass": true
+      },
+      {
+        "name": "6 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "6 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "6 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "6 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "6 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "6 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "6 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "6 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "6 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "6 choice revealed after movie",
+        "pass": true
+      },
+      {
+        "name": "7 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "7 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "7 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "7 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "7 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "7 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "7 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "7 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "7 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "7 choice revealed after movie",
+        "pass": true
+      },
+      {
+        "name": "8 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "8 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "8 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "8 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "8 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "8 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "8 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "8 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "8 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "8 choice revealed after movie",
+        "pass": true
+      },
+      {
+        "name": "9 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "9 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "9 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "9 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "9 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "9 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "9 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "9 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "9 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "10 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "10 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "10 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "10 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "10 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "10 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "10 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "10 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "10 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "11 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "11 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "11 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "11 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "11 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "11 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "11 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "11 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "11 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "12 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "12 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "12 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "12 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "12 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "12 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "12 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "12 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "12 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "13 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "13 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "13 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "13 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "13 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "13 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "13 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "13 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "13 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "13 choice revealed after movie",
+        "pass": true
+      },
+      {
+        "name": "14 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "14 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "14 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "14 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "14 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "14 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "14 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "14 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "14 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "14 choice revealed after movie",
+        "pass": true
+      },
+      {
+        "name": "15 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "15 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "15 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "15 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "15 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "15 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "15 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "15 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "15 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "15 choice revealed after movie",
+        "pass": true
+      },
+      {
+        "name": "16 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "16 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "16 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "16 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "16 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "16 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "16 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "16 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "16 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "17 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "17 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "17 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "17 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "17 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "17 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "17 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "17 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "17 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "17 choice revealed after movie",
+        "pass": true
+      },
+      {
+        "name": "19 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "19 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "19 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "19 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "19 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "19 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "19 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "19 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "19 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "19 choice revealed after movie",
+        "pass": true
+      },
+      {
+        "name": "18 projected sprite fully inside viewport",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "18 card stationary during projection",
+        "pass": true,
+        "detail": {
+          "before": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          },
+          "after": {
+            "x": 299.8849182128906,
+            "y": 157.13638305664062,
+            "width": 41.28155517578125,
+            "height": 37.86351013183594
+          }
+        }
+      },
+      {
+        "name": "18 compact character stands within card footprint",
+        "pass": true,
+        "detail": {
+          "x": 295.75,
+          "y": 109.28437805175781,
+          "width": 49.53125,
+          "height": 74.296875
+        }
+      },
+      {
+        "name": "18 anchored to card",
+        "pass": true
+      },
+      {
+        "name": "18 movie and choices not started during rise",
+        "pass": true
+      },
+      {
+        "name": "18 no empty header backdrop during effect",
+        "pass": true
+      },
+      {
+        "name": "18 original movie displayed before choice",
+        "pass": true
+      },
+      {
+        "name": "18 recalls before unlocking choice",
+        "pass": true
+      },
+      {
+        "name": "18 card stationary through return",
+        "pass": true
+      },
+      {
+        "name": "new draw turns enhanced in place, no enlarged copy",
+        "pass": true
+      },
+      {
+        "name": "retained enhanced card never repeats on slot move or redraw",
+        "pass": true
+      },
+      {
+        "name": "other player draw stays private",
+        "pass": true
+      },
+      {
+        "name": "new acquisition of same number may charge again",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "screenshots": [
+      "D:\\Codex_QA\\card-mobile-effects-20261101\\all-enhanced\\summon-1.png",
+      "D:\\Codex_QA\\card-mobile-effects-20261101\\all-enhanced\\summon-5.png",
+      "D:\\Codex_QA\\card-mobile-effects-20261101\\all-enhanced\\summon-6.png"
+    ],
+    "passed": true
+  },
+  "six-seat": {
+    "passed": true,
+    "checks": [
+      {
+        "name": "isolated original server listening",
+        "pass": true
+      },
+      {
+        "name": "paralysis respects slow reader before skipping",
+        "pass": true
+      },
+      {
+        "name": "six human and CPU paralysis turns automatically skipped without drawing",
+        "pass": true
+      },
+      {
+        "name": "all-human barrier waits for slow reader",
+        "pass": true
+      },
+      {
+        "name": "waiting status fits viewport 0",
+        "pass": true
+      },
+      {
+        "name": "waiting status fits viewport 1",
+        "pass": true
+      },
+      {
+        "name": "playing cannot bypass another readers gate",
+        "pass": true
+      },
+      {
+        "name": "next turn waits until private reader closes card",
+        "pass": true
+      },
+      {
+        "name": "next turn draw resumes after everyone finishes",
+        "pass": true
+      },
+      {
+        "name": "CPU waits for all viewers before its first action",
+        "pass": true
+      },
+      {
+        "name": "auto next round waits beyond old three-second timeout",
+        "pass": true
+      },
+      {
+        "name": "host cannot force next round while viewer is still reading",
+        "pass": true
+      },
+      {
+        "name": "CPU round completes and next round gets fresh venue gate",
+        "pass": true
+      },
+      {
+        "name": "new round waits for last venue reader",
+        "pass": true
+      },
+      {
+        "name": "new round releases after all venue readers finish",
+        "pass": true
+      },
+      {
+        "name": "no page errors",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "scope": "Three Chromium clients with exact desktop/v059 Android/iOS bundles plus three CPU; isolated server with test-process-only state seeds, original engine/actions/Socket.IO, private read, CPU duel, next-round gates; no physical-device claim."
+  },
+  "npm-start": {
+    "scope": "Two isolated Chromium windows using the real local npm-start server and Socket.IO. Guest room with stable isolated test identities, no production accounts or physical-device claim.",
+    "checks": [
+      {
+        "name": "npm start listening",
+        "ok": true
+      },
+      {
+        "name": "both guests joined",
+        "ok": true
+      },
+      {
+        "name": "start synchronized",
+        "ok": true
+      },
+      {
+        "name": "one authoritative current player",
+        "ok": true,
+        "detail": {
+          "turn": 0,
+          "step": "draw"
+        }
+      },
+      {
+        "name": "real next state waits while viewer reads",
+        "ok": true
+      },
+      {
+        "name": "draw step broadcast to both",
+        "ok": true
+      },
+      {
+        "name": "refresh restores same seat and turn",
+        "ok": true,
+        "detail": {
+          "seat": 0,
+          "turn": 0,
+          "step": "choose"
+        }
+      },
+      {
+        "name": "private other hand stays hidden",
+        "ok": true
+      }
+    ],
+    "passed": true
+  }
+}

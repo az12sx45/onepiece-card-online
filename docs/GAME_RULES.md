@@ -2061,3 +2061,6 @@ Presentation coordination: animations finish automatically; private card views a
 
 
 2026-11-01 user request: paralysis skips automatically when the prior room presentation finishes; an Usopp target with protection/dodge resolves the original defense immediately without requesting a guessed number. Guard precedence, one dodge consumption, defense score and unprotected guess rules preserved.
+
+
+2026-11-01: Presentation-only update: next-round starter is an icon in the status strip. Original normal Roger next-starter override (even after elimination) and enhanced Roger prediction remain distinct and unchanged. Artwork preparation does not reveal private hands or alter results.

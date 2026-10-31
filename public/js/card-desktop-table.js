@@ -391,12 +391,12 @@ window.POCardInteract=module.exports;
 /* Public HUD reactions only. Uses authoritative outcome kinds; never reveals cards. */
 (() => {
  function mount(){
-  const api=window.CardPhonePresentation;if(!api||api.hudCombatVersion>=3)return;api.cancelHudReactions?.();api.hudCombatVersion=3;
+  const api=window.CardPhonePresentation;if(!api||api.hudCombatVersion>=4)return;api.cancelHudReactions?.();api.hudCombatVersion=4;
   const reactions=new Set();
   api.playSniperCutin=({scene,from,to,digit,name,make,later,duration})=>{
    const cut=make('section','phone-sniper-cutin'),strip=make('div','phone-sniper-cut-strip'),art=make('div','phone-sniper-cut-art'),copy=make('div','phone-sniper-cut-copy');
    cut.dataset.phase='call';cut.setAttribute('aria-label',`${name(from)} 狙擊 ${name(to)}，猜 ${digit} 號`);
-   art.setAttribute('aria-hidden','true');copy.append(make('strong','','必殺・綠星！'),make('span','',`${name(from)} → ${name(to)}`),make('b','',`狙擊 ${digit} 號`));strip.append(art,copy);cut.append(strip);scene.append(cut);
+   art.setAttribute('aria-hidden','true');if(api.sniperArtUrl)art.style.backgroundImage=`url("${api.sniperArtUrl}")`;copy.append(make('strong','','必殺・綠星！'),make('span','',`${name(from)} → ${name(to)}`),make('b','',`狙擊 ${digit} 號`));strip.append(art,copy);cut.append(strip);scene.append(cut);
    if(!matchMedia('(prefers-reduced-motion: reduce)').matches){strip.animate([{transform:'translateX(-105%) rotate(-5deg)'},{transform:'translateX(0) rotate(-5deg)'}],{duration:300,easing:'cubic-bezier(.15,.8,.2,1)'});art.animate([{transform:'translateX(-14px) scale(1.05)'},{transform:'translateX(0) scale(1)'}],{duration:duration-400,easing:'ease-out'});}
    later(()=>{cut.dataset.phase='release';strip.animate([{opacity:1,transform:'rotate(-5deg)'},{opacity:0,transform:'translateX(30%) rotate(-5deg)'}],{duration:300,fill:'forwards'});},duration-300);
    later(()=>cut.remove(),duration);
@@ -1356,13 +1356,56 @@ window.POCardInteract=module.exports;
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
 
+/* Decode public played-card artwork before starting its presentation clock. */
+(() => {
+ function mount(){
+  const api=window.CardPhonePresentation;if(!api||api.artReadyVersion)return;api.artReadyVersion=1;
+  const decoded=new Map(),pending=new Set();let generation=0;
+  const label=document.createElement('div');label.id='cardArtLoading';label.hidden=true;label.textContent='準備演出…';label.setAttribute('role','status');document.body.append(label);
+  function decode(url){
+   if(decoded.has(url))return Promise.resolve(decoded.get(url));
+   return new Promise(resolve=>{
+    const image=new Image();let ended=false,timer;
+    const done=ok=>{if(ended)return;ended=true;clearTimeout(timer);pending.delete(cancel);image.onload=image.onerror=null;if(ok){decoded.set(url,image);if(decoded.size>4)decoded.delete(decoded.keys().next().value);}resolve(ok?image:null);};
+    const cancel=()=>done(false);pending.add(cancel);timer=setTimeout(cancel,12000);image.onerror=cancel;image.src=url;
+    if(image.decode)image.decode().then(()=>done(true),cancel);else image.onload=()=>done(true);
+   });
+  }
+  api.loadCardArt=async(kind,id)=>{
+   if(!['anime','summon'].includes(kind)||!Number.isInteger(id)||id<0||id>19)return null;
+   const epoch=generation;let waiting=false;
+   const notify=setTimeout(()=>{if(epoch===generation){waiting=true;label.hidden=false;}},350);
+   try{
+    const raw=getComputedStyle(document.documentElement).getPropertyValue('--card-'+kind+'-'+id).trim(),url=raw.match(/^url\(["']?(.*?)["']?\)$/)?.[1];
+    let image=url?await decode(url):null;if(epoch!==generation)return null;
+    // The fallback is the already-public played card, never another player's hand.
+    if(!image){const fallback=kind==='summon'&&typeof CARD_ENH==='function'?CARD_ENH(id):typeof CARD==='function'?CARD(id):`images/cards/${id}.webp`;image=await decode(fallback);}
+    if(epoch!==generation)return null;return image;
+   }finally{clearTimeout(notify);if(waiting&&!label.hidden)label.hidden=true;}
+  };
+  api.prepareSniperArt=async()=>{
+   const epoch=generation;
+   for(const cls of ['phone-sniper-cut-art','phone-sniper-sprite']){
+    const probe=document.createElement('i');probe.className=cls;probe.hidden=true;document.body.append(probe);
+    const source=getComputedStyle(probe).backgroundImage;probe.remove();const url=source.match(/^url\(["']?(.*?)["']?\)$/)?.[1];
+    const image=url?await decode(url):null;if(epoch!==generation)return;
+    if(cls==='phone-sniper-cut-art'&&image)api.sniperArtUrl=image.src;
+   }
+  };
+  const cancel=()=>{generation++;for(const stop of [...pending])stop();label.hidden=true;};
+  for(const event of ['disconnect','JOINED'])socket?.on(event,cancel);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel();});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+
 /* Shared Card match presentation only. Only an accepted public operation declaration selects artwork.
  * No private hand inspection, gameplay commands or outcome prediction. */
 (() => {
   function mount(){
     const api=window.CardPhonePresentation,root=document.documentElement;
-    if(!api||!root.dataset.cardPhone||api.cardSkillIntentVersion>=2)return;
-    api.cardSkillIntentVersion=2;
+    if(!api||!root.dataset.cardPhone||api.cardSkillIntentVersion>=3)return;
+    api.cardSkillIntentVersion=3;
     const profiles={
       0:['flame','火焰捲回牌桌'],2:['petals','花瓣散開・偵察'],3:['kick','火焰踢擊'],
       4:['guard','皮毛展開'],5:['slash','刀光出鞘'],6:['room','ROOM 空間展開'],
@@ -1387,7 +1430,7 @@ window.POCardInteract=module.exports;
       if(!profiles[id])return null; // Usopp retains his number-specific cut-in.
       const text=typeof CARD_TEXT==='object'?CARD_TEXT[id]:null;
       if(!text)return null;
-      finish();const token=++serial;
+      finish();const token=++serial;const ready=await api.loadCardArt?.('anime',id);if(token!==serial||fast())return null;
       const enhanced=intent.enhanced===true;
       const [theme]=profiles[id],actor=intent.casterId;
       const who=typeof pname==='function'?pname(actor):`P${Number(actor)+1}`;
@@ -1400,7 +1443,7 @@ window.POCardInteract=module.exports;
       const layer=make('section','card-anime-skill'),strip=make('div','card-anime-strip'),portrait=make('div','card-anime-portrait'),copy=make('div','card-anime-copy');
       layer.dataset.card=String(id);layer.dataset.theme=theme;layer.dataset.phase='enter';layer.dataset.enhanced=String(!!enhanced);
       layer.setAttribute('role','status');layer.setAttribute('aria-label',`${who}：${text.name}・${title}。${declaration}`);
-      portrait.setAttribute('aria-hidden','true');portrait.style.backgroundImage=`var(--card-anime-${id})`;
+      portrait.setAttribute('aria-hidden','true');portrait.style.backgroundImage=ready?`url("${ready.src}")`:`var(--card-anime-${id})`;
       copy.append(make('span','card-anime-caster',`${who} · ${text.name}`),make('strong','card-anime-title',title),make('small','card-anime-mode',declaration));
       strip.append(portrait,copy);
       const motif=make('div','card-anime-motifs');motif.setAttribute('aria-hidden','true');
@@ -1578,6 +1621,7 @@ window.POCardInteract=module.exports;
    const movieBusy=()=>!!api.isEffectBusy?.()||!!api.isEnhancementBusy?.()||!$('enhOverlay')?.classList.contains('hidden');
    api.presentCardSkillBatch=async events=>{
     const epoch=generation,shown=new Set();
+    if(events.some(e=>['card_guess','usopp_hit','usopp_miss'].includes(e.type))){await api.prepareSniperArt?.();if(epoch!==generation||fast())return null;}
     for(const e of events.filter(e=>e.type==='enh_fx')){
      if(epoch!==generation||fast())return null;
      consumed.set(e.cardId,(consumed.get(e.cardId)||0)+1);
@@ -1657,8 +1701,8 @@ window.POCardInteract=module.exports;
 /* Public enhanced-card projection. No hand inspection or gameplay decisions. */
 (() => {
  function mount(){
-  const api=window.CardPhonePresentation;if(!api||api.enhancementSummonVersion>=2)return;
-  api.enhancementSummonVersion=2;
+  const api=window.CardPhonePresentation;if(!api||api.enhancementSummonVersion>=3)return;
+  api.enhancementSummonVersion=3;
   const root=document.documentElement,video=document.getElementById('enhVideo');
   const priorBusy=api.isEnhancementBusy,priorCancel=api.cancelEnhancements;
   let active=null,serial=0;
@@ -1670,10 +1714,7 @@ window.POCardInteract=module.exports;
    if(document.hidden||!Number.isInteger(id)||id<0||id>19)return;
    finish();const generation=++serial,stage=document.querySelector('#phonePlayedStage .phone-stage-card');
    if(!stage||stage.closest('[hidden]'))return;
-   const source=getComputedStyle(root).getPropertyValue('--card-summon-'+id).trim();
-   const url=source.match(/^url\(["']?(.*?)["']?\)$/)?.[1];if(!url)return;
-   const img=new Image();img.src=url;img.alt='';img.draggable=false;
-   try{await Promise.race([img.decode(),new Promise((_,reject)=>setTimeout(()=>reject(Error('sprite timeout')),2500))]);}catch{return;}
+   const img=await api.loadCardArt?.('summon',id);if(!img)return;img.alt='';img.draggable=false;
    if(generation!==serial||document.hidden)return;
    const layer=document.createElement('section');layer.className='card-enhancement-summon';layer.dataset.card=String(id);layer.dataset.phase='rise';layer.setAttribute('aria-label','強化卡角色投影登場');
    const world=document.createElement('div');world.className='card-summon-world';img.className='card-summon-hero';
@@ -1738,6 +1779,28 @@ window.POCardInteract=module.exports;
   document.addEventListener('phone-card-center-ready',schedule);window.addEventListener('resize',schedule);sync();
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
+/* Reuse the engine-derived existing marker, including eliminated normal Roger. */
+(() => {
+ function mount(){
+  const api=window.CardPhonePresentation;if(!api||api.nextStarterIconVersion)return;api.nextStarterIconVersion=1;
+  function sync(){for(const marker of document.querySelectorAll('.phone-seat-next')){
+   if(marker.getAttribute('role')!=='button')marker.setAttribute('role','button');
+   const tabindex=marker.hidden?'-1':'0';if(marker.getAttribute('tabindex')!==tabindex)marker.setAttribute('tabindex',tabindex);
+   const label='下局起始玩家'+(marker.dataset.reason==='roger'?'（羅傑效果）':'');if(marker.getAttribute('aria-label')!==label)marker.setAttribute('aria-label',label);
+  }}
+  let scheduled=false;const schedule=()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;sync();});};
+  for(const id of ['players','phoneSelfPlayer']){const n=document.getElementById(id);if(n)new MutationObserver(schedule).observe(n,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','data-reason']});}
+  function open(e){const marker=e.target.closest?.('.phone-seat-next');if(!marker||marker.hidden||e.type==='keydown'&&!['Enter',' '].includes(e.key))return;
+   e.preventDefault();e.stopImmediatePropagation();const panel=document.createElement('article');panel.className='phone-status-detail';
+   const art=document.createElement('div');art.className='phone-status-detail-art phone-next-detail-art';art.setAttribute('aria-hidden','true');
+   const title=document.createElement('h3');title.textContent=marker.getAttribute('aria-label');const copy=document.createElement('p');copy.textContent=marker.title;
+   panel.append(art,title,copy);api.openView('下局起始玩家',panel);
+  }
+  window.addEventListener('click',open,true);window.addEventListener('keydown',open,true);sync();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
 })();
 
 })();

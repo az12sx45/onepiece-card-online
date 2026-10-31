@@ -2118,3 +2118,6 @@ Card choice layout: shared android/web/card-phone-fx.js, card-match-polish.js/cs
 
 
 2026-11-01: android/web/card-action-cues.js/css provide target/draw cues; card-phone-coin, card-hud-combat and card-duel-finishers contain presentation fixes; server/index.js schedules mandatory paralysis via the original engine; scripts/card_status_interactions_qa.js validates it. Details in formal CARD_STATUS_INTERACTIONS_20261101.md.
+
+
+2026-11-01: Card source android/web/card-art-ready.js handles public artwork decode/cancellation; card-next-starter.js/css provides existing-marker status-row art/detail; card-next-starter-v2.webp is GPT artwork. Generated shared game.html/css/js deliver installed-v059 compatibility. See CARD_MOBILE_EFFECTS_20261101.md.
