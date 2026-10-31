@@ -8593,3 +8593,6 @@ Publication verified 2026-10-31: package-f2c9a0995503bf94 / source 8eefc23c9726c
 
 
 2026-10-31: Audited other Card mobile choices/animations; fixed ordering footer overlap, checkbox/target misclassification, coin prompt hitbox, target hint placement and frame padding. Files, scope and verification: CARD_OTHER_CARDS_AUDIT_20261031.md.
+
+
+2026-10-31: Implemented acquisition-only enhancement, card-anchored character projection/white/movie/choice/cut-in order and 90-second idle takeover. Scope, changed files, validation and limitations: CARD_ENHANCED_PROJECTION_20261031.md.

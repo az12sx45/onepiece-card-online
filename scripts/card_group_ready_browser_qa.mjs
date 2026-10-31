@@ -23,6 +23,9 @@ try{
   await context.addInitScript({content:`window.__TABLETOP_ANDROID_TEST_ORIGIN=location.origin;HTMLMediaElement.prototype.play=function(){return Promise.resolve()};HTMLMediaElement.prototype.load=function(){};HTMLMediaElement.prototype.pause=function(){};${script}\n${bundle?`const st=document.createElement('style');st.textContent=${JSON.stringify(css)};new MutationObserver((_,o)=>{if(document.documentElement){document.documentElement.append(st);o.disconnect()}}).observe(document,{childList:true});`:''}`});
   const p=await context.newPage();p.setDefaultTimeout(15000);p.on('pageerror',e=>report.errors.push(e.message));
   await p.goto(origin+'/game.html',{waitUntil:'domcontentloaded'});await p.waitForFunction(()=>typeof me!=='undefined');
+  // This suite tests room barriers, not media decoding. Complete mocked movies
+  // explicitly; a resolved play() promise alone never supplies an ended event.
+  await p.evaluate(()=>{HTMLMediaElement.prototype.play=function(){if(this.id==='enhVideo'){const video=this;setTimeout(()=>video.dispatchEvent(new Event('ended')),120);}return Promise.resolve();};});
   await p.evaluate(({room,index})=>{me.roomId=room;me.secret='qa-venue-'+index+'-'+room;socket.onAny((event,s)=>{if(event==='STATE')window.__raw=s});socket.emit('JOIN_ROOM',{roomId:room,displayName:'QA'+index,secret:me.secret,cpuCount:3});},{room,index});
   await p.waitForFunction(()=>me.playerId!==null&&state?.players?.length>0);await p.waitForTimeout(200);if(await p.locator('#phoneVenueIntro:not([hidden])').count())await p.locator('#phoneVenueContinue').click();pages.push(p);
  }

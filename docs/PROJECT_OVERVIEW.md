@@ -2964,3 +2964,6 @@ Card match presentation now uses three card-back exchanges before finishing effe
 
 
 Card mobile choices retain the original rule handlers, with separate title/list/confirmation regions and target hints below the player roster. Exact v059 clients receive compatibility fixes from the online match page. See CARD_OTHER_CARDS_AUDIT_20261031.md.
+
+
+2026-10-31: Card enhanced activation uses fixed card projection then full movie before selection; desktop and existing mobile bundles share the online compatibility layer. See CARD_ENHANCED_PROJECTION_20261031.md.

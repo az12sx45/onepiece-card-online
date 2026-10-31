@@ -39,6 +39,9 @@ function intent(before,action,result){
 }
 function decorate(room,before,action,result){
  let events=result.emits||[];
+ // Some composite skills emit activation twice in one accepted transaction.
+ // Keep their gameplay events intact, but present the same movie only once.
+ const enhanced=new Set();events=events.filter(e=>{if(e.type!=='enh_fx')return true;const key=e.cardId;if(enhanced.has(key))return false;enhanced.add(key);return true;});result.emits=events;
  if(action.type==='PLAY_CARD'&&events.some(e=>e.to==='all'&&e.type==='log'&&/【靜默】/.test(e.text||''))){
   room._deferredSkillMovies=null;result.emits=events.filter(e=>!['enh_fx','play_fx'].includes(e.type));return result;
  }
@@ -46,9 +49,11 @@ function decorate(room,before,action,result){
  if(play){
   room._deferredSkillMovies=null;
   if(result.state.pending){
-   const movies=events.filter(e=>['enh_fx','play_fx'].includes(e.type));
+   // Enhanced activation belongs to the public play, before choices.
+   // Only the ordinary generic effect waits for the chosen operation.
+   const movies=events.filter(e=>e.type==='play_fx');
    room._deferredSkillMovies={round:before.roundNo,caster:before.turnIndex,events:movies};
-   result.emits=events.filter(e=>!['enh_fx','play_fx'].includes(e.type));
+   result.emits=events.filter(e=>e.type!=='play_fx');
   }
  }
  const declaration=intent(before,action,result);

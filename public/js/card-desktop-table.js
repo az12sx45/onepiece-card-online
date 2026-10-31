@@ -1560,17 +1560,19 @@ window.POCardInteract=module.exports;
 
   // The legacy flow calls enh_fx after the skill intro. Consume that one replay
   // while playing the same original movie before the intro on every platform.
-  const intro=api.presentCardSkillBatch,video=typeof playEnhFxFor==='function'?playEnhFxFor:null;
+  const intro=api.presentCardSkillBatch,video=window.__cardOriginalEnhVideo||(typeof playEnhFxFor==='function'?playEnhFxFor:null);
   let generation=0,consumed=new Map();
   if(video&&intro){
    playEnhFxFor=function(id){const count=consumed.get(id)||0;if(count){if(count===1)consumed.delete(id);else consumed.set(id,count-1);return;}return video(id);};
    const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
    const movieBusy=()=>!!api.isEffectBusy?.()||!!api.isEnhancementBusy?.()||!$('enhOverlay')?.classList.contains('hidden');
    api.presentCardSkillBatch=async events=>{
-    const epoch=generation;
+    const epoch=generation,shown=new Set();
     for(const e of events.filter(e=>e.type==='enh_fx')){
      if(epoch!==generation||fast())return null;
-     consumed.set(e.cardId,(consumed.get(e.cardId)||0)+1);video(e.cardId);
+     consumed.set(e.cardId,(consumed.get(e.cardId)||0)+1);
+     if(shown.has(e.cardId))continue;shown.add(e.cardId);
+     await api.presentEnhancementSummon?.(e.cardId);if(epoch!==generation||fast())return null;video(e.cardId);
      while(epoch===generation&&!fast()&&movieBusy())await new Promise(resolve=>setTimeout(resolve,60));
     }
     if(epoch!==generation||fast())return null;
@@ -1580,6 +1582,114 @@ window.POCardInteract=module.exports;
    for(const event of ['disconnect','JOINED'])socket.on(event,reset);
    document.addEventListener('visibilitychange',()=>{if(document.hidden)reset();});
   }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+
+/* Local acquisition animation: retained cards keep their identity across slots. */
+(() => {
+ function mount(){
+  const api=window.CardPhonePresentation;if(!api||api.privateEnhanceVersion>=2||typeof playEnhanceFx!=='function')return;
+  api.cancelEnhancements?.();api.privateEnhanceVersion=2;
+  let identity=null,round=null,slots={},serial=0,queue=[],active=null,generation=0,timer=null;
+  const pending=new Set(),wait=ms=>new Promise(r=>setTimeout(r,ms));
+  function observeHand(){
+   const viewer=typeof me==='object'?me.playerId:null,s=typeof state==='object'?state:null,p=s?.players?.[viewer];
+   if(viewer==null||!p)return;
+   const key=JSON.stringify([me.roomId,viewer]),first=identity!==key,newRound=round!==s.roundNo;
+   if(first||newRound){api.cancelEnhancements();slots={};identity=key;round=s.roundNo;}
+   const pool=Object.values(slots),next={};
+   for(const slot of ['hand','tempDraw']){const id=p[slot];if(!Number.isInteger(id))continue;
+    const old=pool.findIndex(x=>x.id===id);next[slot]=old>=0?pool.splice(old,1)[0]:{id,token:++serial,done:first};
+   }
+   slots=next;
+   if(_lastRoundNo!==round){_enhPlayed.clear();_lastRoundNo=round;}
+   for(const [slot,card] of Object.entries(slots)){const key=`${round}:${viewer}:${slot==='tempDraw'?'drawn':'hand'}:${card.id}`;if(card.done)_enhPlayed.add(key);else _enhPlayed.delete(key);}
+  }
+  const originalRender=render;render=function(...args){observeHand();return originalRender.apply(this,args);};
+  const valid=x=>identity===x.identity&&round===x.round&&Object.values(slots).includes(x.card)&&isEnhancedNow(x.card.id);
+  const targetFor=x=>document.getElementById(slots.tempDraw===x.card?'imgDrawn':'imgHand');
+  function finish(x){x.layer?.remove();for(const a of x.animations||[])a.cancel();pending.delete(x.card.token);if(active===x)active=null;}
+  api.cancelEnhancements=()=>{generation++;clearTimeout(timer);if(active)finish(active);queue=[];pending.clear();};
+  api.isEnhancementBusy=()=>!!active||queue.length>0&&!api.isVenueIntroPending?.();
+  async function pump(){
+   clearTimeout(timer);if(active||!queue.length)return;
+   if(document.hidden){api.cancelEnhancements();return;}
+   if(api.isVenueIntroPending?.()||api.isVenueEntering?.()||api.isEffectBusy?.()||document.getElementById('phoneCardFlights')?.children.length){timer=setTimeout(pump,80);return;}
+   const x=queue.shift();if(!valid(x)){pending.delete(x.card.token);pump();return;}active=x;
+   const epoch=generation,target=targetFor(x),source=[...document.querySelectorAll('#venues img')].find(n=>n.dataset.name===x.venue)||document.getElementById('phoneMatchResources');
+   const a=source?.getBoundingClientRect(),b=target?.getBoundingClientRect();
+   if(!b?.width){x.card.done=true;finish(x);pump();return;}
+   const layer=document.createElement('div');layer.className='card-venue-charge';layer.dataset.owner=String(me.playerId);layer.dataset.card=String(x.card.id);layer.dataset.token=String(x.card.token);layer.setAttribute('aria-label','場地照亮新取得的強化卡');x.layer=layer;x.animations=[];
+   const beam=document.createElement('i');beam.className='card-venue-beam';layer.append(beam);document.body.append(layer);
+   const sx=a?.width?a.x+a.width/2:innerWidth*.12,sy=a?.width?a.y+a.height/2:innerHeight*.55,tx=b.x+b.width/2,ty=b.y+b.height/2,dx=tx-sx,dy=ty-sy;
+   Object.assign(beam.style,{left:sx+'px',top:sy+'px',width:Math.hypot(dx,dy)+'px',transform:'rotate('+Math.atan2(dy,dx)*180/Math.PI+'deg)'});
+   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+   if(!reduced){if(source)x.animations.push(source.animate([{filter:'brightness(1)'},{filter:'brightness(2.2) drop-shadow(0 0 14px #b6f9ff)',offset:.4},{filter:'brightness(1)'}],{duration:1500}));x.animations.push(beam.animate([{opacity:0,clipPath:'inset(0 100% 0 0)'},{opacity:.85,clipPath:'inset(0 0 0 0)',offset:.65},{opacity:0,clipPath:'inset(0 0 0 0)'}],{duration:1250,fill:'both'}));}
+   await wait(reduced?0:700);if(epoch!==generation||!valid(x)){finish(x);pump();return;}
+   x.card.done=true;_enhPlayed.add(x.key);target.src=CARD_ENH(x.card.id);layer.dataset.phase='changed';
+   if(!reduced)x.animations.push(target.animate([{filter:'brightness(2.6) drop-shadow(0 0 18px #d7fcff)'},{filter:'brightness(1)'}],{duration:900}));
+   await wait(reduced?100:900);finish(x);pump();
+  }
+  playEnhanceFx=function(venue,target,id,key){
+   observeHand();const slot=target?.id==='imgDrawn'?'tempDraw':target?.id==='imgHand'?'hand':null,card=slots[slot];
+   if(!card||card.id!==id||!isEnhancedNow(id))return;
+   if(card.done||_enhPlayed.has(key)){card.done=true;_enhPlayed.add(key);target.src=CARD_ENH(id);return;}
+   if(pending.has(card.token))return;pending.add(card.token);queue.push({card,venue,key,identity,round});pump();
+  };
+  observeHand();
+  if(typeof socket==='object')for(const event of ['disconnect','JOINED'])socket.on(event,()=>{api.cancelEnhancements();identity=null;slots={};});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)api.cancelEnhancements();});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+
+/* Public enhanced-card projection. No hand inspection or gameplay decisions. */
+(() => {
+ function mount(){
+  const api=window.CardPhonePresentation;if(!api||api.enhancementSummonVersion)return;
+  api.enhancementSummonVersion=1;
+  const root=document.documentElement,video=document.getElementById('enhVideo');
+  const priorBusy=api.isEnhancementBusy,priorCancel=api.cancelEnhancements;
+  let active=null,serial=0;
+  function finish(item=active){if(!item||active!==item)return;active=null;clearTimeout(item.failsafe);item.observer?.disconnect();cancelAnimationFrame(item.raf);for(const a of item.animations)a.cancel();item.layer.remove();item.resolve?.();delete root.dataset.cardSummon;}
+  api.cancelEnhancements=()=>{serial++;finish();video?.__enhOnEnded?.();priorCancel?.();};
+  api.isEnhancementBusy=()=>!!active||!!priorBusy?.();
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  api.presentEnhancementSummon=async id=>{
+   if(document.hidden||!Number.isInteger(id)||id<0||id>19)return;
+   finish();const generation=++serial,stage=document.querySelector('#phonePlayedStage .phone-stage-card');
+   if(!stage||stage.closest('[hidden]'))return;
+   const source=getComputedStyle(root).getPropertyValue('--card-summon-'+id).trim();
+   const url=source.match(/^url\(["']?(.*?)["']?\)$/)?.[1];if(!url)return;
+   const img=new Image();img.src=url;img.alt='';img.draggable=false;
+   try{await Promise.race([img.decode(),new Promise((_,reject)=>setTimeout(()=>reject(Error('sprite timeout')),2500))]);}catch{return;}
+   if(generation!==serial||document.hidden)return;
+   const layer=document.createElement('section');layer.className='card-enhancement-summon';layer.dataset.card=String(id);layer.dataset.phase='rise';layer.setAttribute('aria-label','強化卡角色投影登場');
+   const world=document.createElement('div');world.className='card-summon-world';img.className='card-summon-hero';
+   const pool=document.createElement('i');pool.className='card-summon-pool';world.append(pool,img);
+   const flash=document.createElement('i');flash.className='card-summon-white';layer.append(world,flash);document.body.append(layer);
+   const item={layer,world,animations:[],raf:0,failsafe:null,resolve:null};active=item;root.dataset.cardSummon='rise';
+   const position=()=>{const r=stage.getBoundingClientRect(),foot=r.y+r.height*.62,height=Math.max(110,Math.min(innerHeight*.72,foot-12));world.style.left=(r.x+r.width/2)+'px';world.style.top=foot+'px';world.style.setProperty('--summon-height',height+'px');world.style.setProperty('--summon-footprint',r.width*.86+'px');layer.dataset.anchorX=String(r.x+r.width/2);layer.dataset.anchorY=String(foot);};
+   function track(){if(active!==item)return;position();item.raf=requestAnimationFrame(track);}track();
+   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+   const animate=(n,frames,opts)=>{if(!reduced)item.animations.push(n.animate(frames,{fill:'both',...opts}));};
+   animate(pool,[{opacity:0,transform:'translate(-50%,-50%) scale(.25)'},{opacity:.8,transform:'translate(-50%,-50%) scale(1)'}],{duration:600,easing:'ease-out'});
+   // The feet remain at the card anchor; never change the played card transform.
+   animate(img,[{opacity:0,transform:'translate(-50%,-96%) scale(.22,.06)',clipPath:'inset(95% 0 0 0)'},{opacity:1,transform:'translate(-50%,-96%) scale(1)',clipPath:'inset(0 0 0 0)'}],{duration:1100,delay:180,easing:'cubic-bezier(.15,.75,.2,1)'});
+   await wait(reduced?300:1900);if(active!==item||generation!==serial)return;
+   layer.dataset.phase='white';root.dataset.cardSummon='white';
+   animate(flash,[{opacity:0},{opacity:1}],{duration:reduced?0:360,easing:'ease-in'});
+   await wait(reduced?0:360);if(active!==item||generation!==serial)return;
+   const overlay=document.getElementById('enhOverlay');
+   if(overlay){item.observer=new MutationObserver(()=>{if(overlay.classList.contains('hidden'))finish(item);});item.observer.observe(overlay,{attributes:true,attributeFilter:['class']});}
+   item.failsafe=setTimeout(()=>finish(item),32000);
+  };
+  function revealMovie(){const item=active;if(!item||item.layer.dataset.phase!=='white')return;item.layer.dataset.phase='video';root.dataset.cardSummon='video';const a=item.layer.animate([{opacity:1},{opacity:0}],{duration:420,fill:'forwards'});item.animations.push(a);a.finished.then(()=>finish(item),()=>finish(item));}
+  video?.addEventListener('playing',revealMovie);
+  for(const event of ['ended','error'])video?.addEventListener(event,()=>finish());
+  if(typeof socket==='object')for(const event of ['disconnect','JOINED'])socket.on(event,()=>{serial++;finish();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){serial++;finish();}});
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
 })();

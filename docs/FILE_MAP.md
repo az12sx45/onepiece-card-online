@@ -2109,3 +2109,6 @@ Card match polish: shared android/web/card-match-polish.js/css plus card-duel-fi
 
 
 Card choice layout: shared android/web/card-phone-fx.js, card-match-polish.js/css; public/game.html compatibility block and generated desktop bundle. QA: android/card-other-cards-ui-qa.mjs, card-other-intros-qa.mjs, card-other-flow-qa.mjs.
+
+
+2026-10-31: Card acquisition/projection modules and provenance: android/web/card-acquisition-charge.js, card-enhancement-summon.js/css, docs/CARD_SUMMON_ART_20261031.json; scoped public compatibility and generated desktop assets described in CARD_ENHANCED_PROJECTION_20261031.md.

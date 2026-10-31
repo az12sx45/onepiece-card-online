@@ -2052,3 +2052,6 @@ Presentation coordination: animations finish automatically; private card views a
 
 
 2026-10-31 presentation audit: enhanced Katakuri directly orders the authorized top cards; enhanced Teach directly selects authorized covered cards. No redundant preliminary preview is required. Existing order/select rules, hidden hands and outcomes remain authoritative. No gameplay changes.
+
+
+2026-10-31: Card rules unchanged. Presentation waits for enhanced movie before choices, then announces the selected operation. Idle turn/choice takeover is now 90 seconds (warning at 80); offline grace and all-viewer readiness gates unchanged. See CARD_ENHANCED_PROJECTION_20261031.md.

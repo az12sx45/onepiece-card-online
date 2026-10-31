@@ -1,0 +1,242 @@
+[
+  {
+    "id": 0,
+    "prompt": "Sabo full-body transparent cutout from original enhanced card, remove frame, opponent and background; retain pipe and flame pose.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-42f7dbf1-4ba3-4f08-8856-79d9fc0b6a68.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-0-v1.webp",
+    "sha256": "4b954f00b378549fd8c83b8013ca24dbbdf2e250f7c1b1b1e8e8e92225a48259",
+    "size": 422004,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 1,
+    "prompt": "Use case: background-extraction / game character sprite. Reference is the ORIGINAL enhanced card; preserve its character design, costume and anime ink style. Subject: Usopp, long pointed nose, goggles on bandana, curly hair, sleeveless yellow costume, green slingshot drawn aiming at viewer, intense shouting expression. Create one full-body isolated character cutout with all limbs, props and compact attached technique effects inside the canvas; complete cropped extremities naturally. Remove the card frame, badge, numbers, text, scenery and other characters. Genuinely transparent RGBA background; transparent space between limbs; no colored rectangular backdrop, no floor, no lettering. Character is centered with breathing room, portrait 2:3. This sprite will rise out of its played card before a white-screen transition to a video.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-fb0e6bbd-0586-4ddd-a6e4-8838792e9d0e.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-1-v1.webp",
+    "sha256": "c5290e956d846b0a78af93d361e88fafe4c32001caa5960743d468e95dc58ae1",
+    "size": 464466,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 2,
+    "prompt": "Game sprite from reference card. Adult Nico Robin (age 30), long black hair, fully clothed in a high-neck blue sleeveless blouse and ankle-length red floral skirt with boots. Standing with arms crossed to activate her flower ability, a few pink petals. NO opponent, no duplicate body, no wrestling, no suggestive pose. Character projected out of a tilted tabletop card: use a subtle low-angle three-quarter view, body turned 20 degrees, feet located at bottom center on a single imaginary tiny footprint, all limbs fully visible. Complete cropped limbs. Maintain the recognizable anime design and costume from source. Isolate only the character and a few compact attached power effects. Transparent RGBA background with clear transparent gaps; NO scenery, opaque glow backdrop, card frame, text, badge, floor or other figures. Full body centered, portrait2:3, breathing room all around, sharp anime cel shading.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-fefbe5f6-f8eb-4c4c-ac3a-c19b6ac2dd5d.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-2-v1.webp",
+    "sha256": "7ddddd9bfb83d3037cb4fc7ce804163c83f4d8004a3ab916e6c41bc84dde3705",
+    "size": 272302,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 3,
+    "prompt": "Game sprite from reference card. Sanji wearing the reference red suit, black gloves and white tie, standing ready to kick, one shoe with blue-orange flame, recognizable blond fringe and curled eyebrow. Remove Queen and all opponents. Character projected out of a tilted tabletop card: use a subtle low-angle three-quarter view, body turned 20 degrees, feet located at bottom center on a single imaginary tiny footprint, all limbs fully visible. Complete cropped limbs. Maintain the recognizable anime design and costume from source. Isolate only the character and a few compact attached power effects. Transparent RGBA background with clear transparent gaps; NO scenery, opaque glow backdrop, card frame, text, badge, floor or other figures. Full body centered, portrait2:3, breathing room all around, sharp anime cel shading.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-110b9731-5abe-4089-a555-c7a82ca97b9c.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-3-v1.webp",
+    "sha256": "b442cbf5a6598309c477127e4c78612c857d09a5839188e8691f992309bc1ebc",
+    "size": 396752,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 4,
+    "prompt": "Game sprite from reference card. Tony Tony Chopper in round Kung Fu Point form from the card, blue/pink hat and yellow-white striped top, determined stance with feet visible; remove guards. Character projected out of a tilted tabletop card: use a subtle low-angle three-quarter view, body turned 20 degrees, feet located at bottom center on a single imaginary tiny footprint, all limbs fully visible. Complete cropped limbs. Maintain the recognizable anime design and costume from source. Isolate only the character and a few compact attached power effects. Transparent RGBA background with clear transparent gaps; NO scenery, opaque glow backdrop, card frame, text, badge, floor or other figures. Full body centered, portrait2:3, breathing room all around, sharp anime cel shading.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-114d925e-33b2-4dfb-881b-665a553e389f.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-4-v1.webp",
+    "sha256": "1d8a8cd3d67e2b71da768238717816e721aacbe130418bf38b476a75fe86268c",
+    "size": 297742,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 5,
+    "prompt": "Reuse existing GPT-generated transparent Zoro awakening sprite.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-zoro-awakening-v1.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-5-v1.webp",
+    "sha256": "a1486f71b5e2a11a968fd9d998a516367d9e383a84cb9011d8157f4fa0b6673c",
+    "size": 232270,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": 6,
+    "prompt": "Game animation sprite. Reference card provides recognizable character design and palette. Trafalgar Law in spotted white hat, black cloak, dark trousers, tattooed hands, sword held vertically with cyan ROOM energy. Preserve serious face and sword. One character. Low-angle three-quarter view, subtly turned 20 degrees, feet together near bottom center as if rising from a tilted tabletop card. Full body completely inside portrait2:3 canvas with margins, sharp original anime cel shading, no text or badge. Remove frame, all scenery and other figures; genuine transparent RGBA background, no colored rectangle, no floor. Only one character and compact attached effects, transparent gaps between limbs.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-1f0accfd-d75d-4c1a-ac37-8b2cf5621502.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-6-v1.webp",
+    "sha256": "9f0ddbd68d77e662c3d68fabe7c52ebce08b416a4f3074da2fd6f4f4833ed9d1",
+    "size": 321404,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 7,
+    "prompt": "Game animation sprite. Reference card provides recognizable character design and palette. Adult Nami age20, orange ponytail, green floral ninja-style coat over a fully covering black shirt and fitted dark trousers, holding her golden staff. Confident battle-ready stance with small yellow lightning wisps. No dragons or enemies. Fully clothed nonsexual action design. Low-angle three-quarter view, subtly turned 20 degrees, feet together near bottom center as if rising from a tilted tabletop card. Full body completely inside portrait2:3 canvas with margins, sharp original anime cel shading, no text or badge. Remove frame, all scenery and other figures; genuine transparent RGBA background, no colored rectangle, no floor. Only one character and compact attached effects, transparent gaps between limbs.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-1d70b452-ab13-4d45-8dea-359d69230b78.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-7-v1.webp",
+    "sha256": "420cab7c90027e9dbbf9c8e6fff62bfd8653b15d8b24a7a1beeb59fde059c3ef",
+    "size": 353576,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 8,
+    "prompt": "Game animation sprite. Reference card provides recognizable character design and palette. Monkey D Luffy in Gear Four form as in the card: giant red-black Haki fists, muscular inflated torso, black hair, red shorts, sandals, strawhat on his back, white steam curls. Both feet and both fists visible, dynamic planted stance. Low-angle three-quarter view, subtly turned 20 degrees, feet together near bottom center as if rising from a tilted tabletop card. Full body completely inside portrait2:3 canvas with margins, sharp original anime cel shading, no text or badge. Remove frame, all scenery and other figures; genuine transparent RGBA background, no colored rectangle, no floor. Only one character and compact attached effects, transparent gaps between limbs.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-6226130c-34fb-46ff-9be3-802382db2033.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-8-v1.webp",
+    "sha256": "1c592310f778a7c9295382bdcd0e4bd60869a63533b704c5f3783c2e918089a3",
+    "size": 346074,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 9,
+    "prompt": "Game animation sprite. Reference card provides recognizable character design and palette. Adult Boa Hancock age31, very long black hair, golden snake earrings, fully clothed in a high-neck long purple and gold dress with closed skirt to ankles and shoes. Hands form a small heart at chest height, calm confident face. A few pink heart sparks. Nonsexual regal battle pose. Low-angle three-quarter view, subtly turned 20 degrees, feet together near bottom center as if rising from a tilted tabletop card. Full body completely inside portrait2:3 canvas with margins, sharp original anime cel shading, no text or badge. Remove frame, all scenery and other figures; genuine transparent RGBA background, no colored rectangle, no floor. Only one character and compact attached effects, transparent gaps between limbs.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-d862e84c-26e2-4c21-a36a-71e38da73f38.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-9-v1.webp",
+    "sha256": "dd2a293c8088294c7c1f05cb5db898a8bd33db97c2b6f49e01dff2c9365edc01",
+    "size": 354552,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 10,
+    "prompt": "Game transparent character sprite based on the enhanced card. Kaido in blue-scaled hybrid dragon humanoid form with horns, purple feather cape, black spiked kanabo held over shoulder; this enhanced card's two-person attack includes Big Mom in pink kimono and dark cloak behind his left shoulder, flaming sword raised. Keep these two allied figures as ONE compact sprite, complete legs. No giant lettering. Subtle low-angle three-quarter perspective, turned about20 degrees, feet at bottom center, designed to stand up from a tilted card on a tabletop. Full body fully inside portrait2:3 frame with margins. Match anime ink/cel style and recognizable source designs. Remove original frame, text, badge, scenery. Genuinely transparent RGBA background and gaps; no colored rectangular backdrop or floor. Minimal attached energy only.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-0c73b8c2-4489-493b-90ab-c12ac3ed7a32.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-10-v1.webp",
+    "sha256": "fcba7840ecd7120281e2806a131c02c07377d9e2361fa1a48f58e4ee422c7da4",
+    "size": 534400,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 11,
+    "prompt": "Game transparent character sprite based on the enhanced card. Eustass Kid, spiky red hair and goggles, burgundy trousers, gray fur-collared dark cape, large magnetic mechanical left arm assembled from scrap metal, confident pose. No throne, other people, or floating spare weapons. Subtle low-angle three-quarter perspective, turned about20 degrees, feet at bottom center, designed to stand up from a tilted card on a tabletop. Full body fully inside portrait2:3 frame with margins. Match anime ink/cel style and recognizable source designs. Remove original frame, text, badge, scenery. Genuinely transparent RGBA background and gaps; no colored rectangular backdrop or floor. Minimal attached energy only.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-2b9ddd75-bab4-453e-af8c-3e5a701c7127.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-11-v1.webp",
+    "sha256": "a05d317da85b3147992535f6d41cf7080573120e647a53afa0ee94bef51deb81",
+    "size": 385846,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 12,
+    "prompt": "Game transparent character sprite based on the enhanced card. Queen, heavyset cyborg pirate, bald crown with blond braid and long moustache, small sunglasses, striped overalls and mechanical arm, cigar, holding a tiny purple plague pellet. Compact blue frost wisps, no victims or demons. Subtle low-angle three-quarter perspective, turned about20 degrees, feet at bottom center, designed to stand up from a tilted card on a tabletop. Full body fully inside portrait2:3 frame with margins. Match anime ink/cel style and recognizable source designs. Remove original frame, text, badge, scenery. Genuinely transparent RGBA background and gaps; no colored rectangular backdrop or floor. Minimal attached energy only.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-fd3a7aeb-f7fe-4adb-b24c-8e97cd7e5d5c.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-12-v1.webp",
+    "sha256": "3bc83eb7cb3864003dcc14aeb7717bf2912267e9c5abee70ed820c5e947034e5",
+    "size": 376246,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 13,
+    "prompt": "Game transparent character sprite based on the enhanced card. Killer, masked blond pirate in blue clothing, striped metallic full-face mask, long blond hair, twin curved spinning forearm blades. Confident crouched standing pose, both boots and complete blades visible. No giant dragon. Subtle low-angle three-quarter perspective, turned about20 degrees, feet at bottom center, designed to stand up from a tilted card on a tabletop. Full body fully inside portrait2:3 frame with margins. Match anime ink/cel style and recognizable source designs. Remove original frame, text, badge, scenery. Genuinely transparent RGBA background and gaps; no colored rectangular backdrop or floor. Minimal attached energy only.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-3c4b2b0b-8c92-4e8a-b6cc-0181c782515e.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-13-v1.webp",
+    "sha256": "e9a7803482c8db1aa279ef076f5e3ee6c06f72e74e801a3b3acf624eaa9a0f35",
+    "size": 380700,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 14,
+    "prompt": "Transparent game projection sprite based on the reference enhanced card. Big Mom, tall heavyset pirate empress with pink hair, pink polka-dot dress, pirate hat, arms spreading in a soul-commanding pose, small pink soul energy surrounding hands. Full clothed figure. Remove frightened other characters. One full-body figure, subtly low-angle three-quarter view turned about20 degrees, feet at bottom center on one small imaginary card footprint. All head, feet, hands and powers inside portrait2:3 composition with margins. Preserve recognizable anime design and cel shading. Isolate only character and compact attached energy, transparent gaps between limbs. Remove frame, writing, numbers, scenery, floor and other characters. Genuine transparent RGBA, NO colored background rectangle.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-05ad5a4e-6345-46fe-a35f-70ee906d1a86.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-14-v1.webp",
+    "sha256": "95c2963625db87833ac17835bed7b1cca491a41ac9341c73708019a4e9949c69",
+    "size": 282110,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 15,
+    "prompt": "Transparent game projection sprite based on the reference enhanced card. Charlotte Katakuri, spiky burgundy hair, white fur scarf over mouth, black sleeveless vest and gloves, dark trousers with heavy boots, red glowing observation-haki eyes, calm confident battle stance, tiny red sparks. Complete full body matching source head design. One full-body figure, subtly low-angle three-quarter view turned about20 degrees, feet at bottom center on one small imaginary card footprint. All head, feet, hands and powers inside portrait2:3 composition with margins. Preserve recognizable anime design and cel shading. Isolate only character and compact attached energy, transparent gaps between limbs. Remove frame, writing, numbers, scenery, floor and other characters. Genuine transparent RGBA, NO colored background rectangle.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-a244f58d-5eb1-4a9e-84bd-624c0872c23a.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-15-v1.webp",
+    "sha256": "c5f05c5c51b28c0a6845bae3282b4244dbe364c3a9b034f41e84ac16b9498fad",
+    "size": 444504,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 16,
+    "prompt": "Transparent game projection sprite based on the reference enhanced card. Kuzan Aokiji, curly black hair, pale blue bandana, goggles, dark long coat with purple fur collar, white shirt and trousers, dark boots, one arm coated in ice reaching forward with a compact ice wave. Preserve mature face. One full-body figure, subtly low-angle three-quarter view turned about20 degrees, feet at bottom center on one small imaginary card footprint. All head, feet, hands and powers inside portrait2:3 composition with margins. Preserve recognizable anime design and cel shading. Isolate only character and compact attached energy, transparent gaps between limbs. Remove frame, writing, numbers, scenery, floor and other characters. Genuine transparent RGBA, NO colored background rectangle.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-842d103c-e2fe-463a-9f11-29557794ff8b.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-16-v1.webp",
+    "sha256": "7476e270dd7097eec961a2973a2bda9e1e4bcf69185cca79d8e1db341ffbb4c7",
+    "size": 426816,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 17,
+    "prompt": "Using the provided original enhanced card as the character reference, create a single full body transparent game animation sprite. Marshall D Teach Blackbeard: recognizable missing teeth grin, black curly beard, blue bandana, black and red gold-shouldered captain coat, green patterned trousers, compact violet darkness around his hands. Preserve recognizable original anime design. Low-angle three-quarter perspective viewed slightly from below, body turned 20 degrees, both feet anchored near bottom center, as if projecting upward from a tilted tabletop card. All body, costume and weapon fit inside portrait 2:3 canvas with margins. Sharp anime cel shading. Remove all card borders, numbers, text, badges, scenery and other characters. Genuine transparent RGBA background, no opaque colored rectangle or floor. Only compact attached effects and transparent gaps.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-7cf90b71-b4f3-4bf1-b6f5-9a58b0922df8.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-17-v1.webp",
+    "sha256": "8847c9b12c6e0728cea43a660dd0b15bcbe2ad68bd54480f280046f4f77e1474",
+    "size": 393164,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 18,
+    "prompt": "Using the provided original enhanced card as the character reference, create a single full body transparent game animation sprite. Shanks: red hair, left eye scar, white shirt, black cloak, dark trousers, saber in right hand. He has ONLY ONE ARM, the left arm is missing. Compact red Haki. Preserve recognizable original anime design. Low-angle three-quarter perspective viewed slightly from below, body turned 20 degrees, both feet anchored near bottom center, as if projecting upward from a tilted tabletop card. All body, costume and weapon fit inside portrait 2:3 canvas with margins. Sharp anime cel shading. Remove all card borders, numbers, text, badges, scenery and other characters. Genuine transparent RGBA background, no opaque colored rectangle or floor. Only compact attached effects and transparent gaps.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-734203aa-4db5-4960-a6f2-b47ce89b0bfa.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-18-v1.webp",
+    "sha256": "aaf46b33c2ae544ea7f249aa1caf944ed6b110334aaca0a4e65ecd12aef079a1",
+    "size": 395692,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  {
+    "id": 19,
+    "prompt": "Using the provided original enhanced card as the character reference, create a single full body transparent game animation sprite. Gol D Roger: curled black mustache, laughing confidently, red captain hat with white plume, red gold captain coat, pink shirt and white scarf, sword in right hand. Preserve recognizable original anime design. Low-angle three-quarter perspective viewed slightly from below, body turned 20 degrees, both feet anchored near bottom center, as if projecting upward from a tilted tabletop card. All body, costume and weapon fit inside portrait 2:3 canvas with margins. Sharp anime cel shading. Remove all card borders, numbers, text, badges, scenery and other characters. Genuine transparent RGBA background, no opaque colored rectangle or floor. Only compact attached effects and transparent gaps.",
+    "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-b1173936-6da4-464f-927f-bb0fd561b3af.png",
+    "output": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html\\android\\web\\art\\card-summon-19-v1.webp",
+    "sha256": "e2cb4067cbb57390e8100e0c1727835a74ad56a37c3a0e1d5ec1c09a7fe015a9",
+    "size": 267272,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  }
+]

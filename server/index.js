@@ -2497,8 +2497,8 @@ function cleanupBoardRoom(roomCode){
 //  - If the human reconnects with same secret, they regain control immediately.
 // =========================
 const OFFLINE_GRACE_MS = 8000;      // 斷線保留時間：8 秒
-const TURN_IDLE_MS     = 30000;     // 回合掛機：30 秒自動接管
-const PENDING_IDLE_MS  = 30000;     // 互動流程掛機：30 秒自動接管
+const TURN_IDLE_MS     = 90000;     // 回合掛機：90 秒自動接管
+const PENDING_IDLE_MS  = 90000;     // 互動流程掛機：90 秒自動接管
 const IDLE_WARN_MS     = 10000;     // 接手前 10 秒先警告
 
 function ensureRoomResilience(room){
