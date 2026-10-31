@@ -1,5 +1,5 @@
 {
-  "status": "LOCAL_VERIFIED_PENDING_PUBLICATION",
+  "status": "PUBLISHED_PUBLIC_VERIFIED",
   "reports": [
     {
       "path": "C:\\Codex_QA\\card-group-ready-20261031\\sequence.json",
@@ -9,8 +9,8 @@
     },
     {
       "path": "C:\\Codex_QA\\card-group-ready-20261031\\client.json",
-      "sha256": "c14770bcceb40e52b90cc33d8ed875f322c8bb68a937302c183b204b374a8737",
-      "checks": 10,
+      "sha256": "40d7306f2d4f6f6799ce6cedc346837f2e780bb445e6b5fb8dc77542be379f88",
+      "checks": 11,
       "passed": true
     },
     {
@@ -36,10 +36,26 @@
       "sha256": "b982a6a29a8b9ed106734d50a182adbec76fdff17e662879c45c7be7b6cc2467",
       "checks": 2,
       "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-group-ready-20261031\\public-release-readback.json",
+      "sha256": "0b5efb13b966dbea468881f7f1a7a0250cccebc9704ef8160861b1189f2fb439",
+      "checks": 39,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-group-ready-20261031\\public-room\\browser.json",
+      "sha256": "a44fb0a7bd0c68e0e77cb9b7ade7d7540cb38dbe320345951fd7fbf8b786e317",
+      "checks": 17,
+      "passed": true
     }
   ],
   "scope": "Desktop and exact v059 Android/iOS Chromium views, original engine/actions with isolated test seeds, plus real npm-start two-window regression. No physical-device or real-account claim.",
   "engineChanged": false,
   "mobileBinaryChanged": false,
-  "baseline": "package-b79a005e238c7325"
+  "baseline": "package-b79a005e238c7325",
+  "sourceCommit": "8eefc23c9726ca2d86aab8992927afd04bca6686",
+  "releaseCommit": "5732596036e191c589bfb6b4db95f49654102aff",
+  "releaseId": "package-f2c9a0995503bf94",
+  "manifestSha256": "624dce8da8e5841846220be25991c3d7262cd7f125bcb731893d1763e6034f38"
 }
