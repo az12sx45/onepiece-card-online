@@ -8582,3 +8582,5 @@ A production isolated guest room passed 14 further checks with desktop and exact
 
 
 2026-10-31: Card group presentation/reading barrier, CPU/turn/next-round gating, eliminated-viewer offline recovery and final-settlement protection implemented and checked. Files, evidence and test scope in CARD_GROUP_PRESENTATION_READY_20261031.md.
+
+2026-10-31 follow-up: include reward coin flights in the group readiness check; client readiness QA now 11 checks PASS. Files scripts/card_group_ready_client.js, public/game.html and scripts/card_group_client_qa.js.

@@ -7418,7 +7418,7 @@ el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
   const api=window.CardPhonePresentation;if(!api||api.groupReadyVersion)return;api.groupReadyVersion=1;
   let gate=null,timer=null,sent=null,sentAt=0;
   const visible=id=>{const n=document.getElementById(id);return !!n&&!n.hidden&&!n.classList.contains('hidden')&&n.getClientRects().length>0;};
-  const localBusy=()=>document.hidden||api.presentationQueueSize?.()>0||api.presentationEffectsBusy?.()||api.isVenueIntroPending?.()||api.isVenueEntering?.()||(!state?.pending&&api.isCardResolving?.())||['phoneCardSheet','phonePrivateReveal','phoneLibrary','cardDexOverlay','phoneVenueIntro','rewardModal','rewardOverlay'].some(visible);
+  const localBusy=()=>document.hidden||!!document.getElementById('phoneCoinFlights')?.children.length||api.presentationQueueSize?.()>0||api.presentationEffectsBusy?.()||api.isVenueIntroPending?.()||api.isVenueEntering?.()||(!state?.pending&&api.isCardResolving?.())||['phoneCardSheet','phonePrivateReveal','phoneLibrary','cardDexOverlay','phoneVenueIntro','rewardModal','rewardOverlay'].some(visible);
   const current=()=>gate?.waiting&&typeof state==='object'&&state?.presentationReady?.id===gate.id;
   const canSend=api.canSendPresentedAction;api.canSendPresentedAction=target=>!gate?.waiting&&(!canSend||canSend(target));
   const originalSend=typeof sendAction==='function'?sendAction:null;
