@@ -7,6 +7,7 @@
     "Loaded fronts replace their private loading labels",
     "Other private hands remain redacted on every socket",
     "Out-of-turn spoof rejected",
+    "Guest cannot close host room",
     "Presentation gate waits for slowest player",
     "Next action rejected while a viewer is still watching",
     "Last viewer ACK releases exactly one action",
@@ -45,8 +46,11 @@
     "fight-target no document overflow",
     "fight-target actual touch choice accepted",
     "Six browser clients complete an entire synchronized game",
+    "Host close asks before changing shared room",
+    "Host close returns all six viewers to lobby and removes room",
+    "Old health and private hands are no longer visible after close",
     "No browser exceptions",
     "WebKit lobby to table and generated art loaded"
   ],
-  "actions": 172
+  "actions": 83
 }

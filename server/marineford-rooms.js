@@ -36,6 +36,7 @@ function attach(io,{identity=socket=>socket.data.socialProfile,clock=()=>Date.no
   on('MF_START',()=>{const r=roomOf(socket);if(profile(socket).userId!==r.host||r.state)throw Error('只有房主可以開始');if(r.seats.length<2||r.seats.some(p=>!p.ready))throw Error('等待至少兩位玩家準備');r.state=engine.create(r.seats,r.navyId,{morale:r.morale});broadcast(r);schedule(r);return {};});
   on('MF_ACTION',payload=>{const r=roomOf(socket),id=seat(r,socket);if(!r.state||payload.revision!==r.state.revision)throw Error('畫面已更新，請重新選擇');act(r,id,payload.action);return {};});
   on('MF_ACK',payload=>{const r=roomOf(socket);if(payload.sequence===r.sequence){r.gate?.delete(socket.id);if(r.gate&&!r.gate.size)release(r);}return {};});
+  on('MF_CLOSE',()=>{const r=roomOf(socket);if(profile(socket).userId!==r.host)throw Error('只有房主可以結束本場');for(const key of ['gateTimer','cpuTimer'])if(r[key]){clearTimeout(r[key]);timers.delete(r[key]);r[key]=null;}for(const peer of connections(r)){delete peer.data.marinefordRoom;peer.emit('MF_CLOSED',{code:r.code});}rooms.delete(r.code);return {};});
   on('MF_LEAVE',()=>{const r=roomOf(socket),id=seat(r,socket);if(r.state?.phase==='playing')throw Error('對局中離開可關閉畫面，重新進入會保留席位');detach(socket);if(!r.state){r.seats.splice(id,1);if(!r.seats.some(p=>!p.cpu))rooms.delete(r.code);else{if(!r.seats.some(p=>p.userId===r.host))r.host=r.seats.find(p=>!p.cpu).userId;r.navyId=Math.min(r.navyId,r.seats.length-1);broadcast(r);}}return {};});
   socket.on('disconnect',()=>detach(socket));
  });

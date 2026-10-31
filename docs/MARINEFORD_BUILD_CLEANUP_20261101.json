@@ -1,0 +1,17 @@
+[
+  {
+    "path": "D:\\Codex_QA\\marineford-launcher-20261101\\native-unsigned.apk",
+    "bytes": 477137622,
+    "reason": "Every unsigned APK payload entry matches retained signed APK"
+  },
+  {
+    "path": "D:\\Codex_QA\\marineford-launcher-20261101\\android-live-59-60\\private-app-files\\updates-v1\\update.apk",
+    "bytes": 477442003,
+    "reason": "Exact SHA256 duplicate reconstructed updater APK"
+  },
+  {
+    "path": "D:\\Codex_QA\\marineford-launcher-20261101\\ios-artifact.zip",
+    "bytes": 433391587,
+    "reason": "Only archive payload is exact retained verified IPA"
+  }
+]
