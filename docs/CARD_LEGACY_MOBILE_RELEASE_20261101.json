@@ -1,0 +1,284 @@
+{
+  "status": "PUBLISHED_PUBLIC_AND_ANDROID_DOWNLOAD_VERIFIED",
+  "at": "2026-10-31T19:52:23.297700+00:00",
+  "release": "package-a75b6b650e743963",
+  "sourceCommit": "189f1ab1f871933805fd5bd3828ffe3bb1de0d5e",
+  "releaseCommit": "c514ec92fce868517a565d0426fa121f7bf0581b",
+  "publicReadback": {
+    "passed": true,
+    "sourceCommit": "189f1ab1f871933805fd5bd3828ffe3bb1de0d5e",
+    "releaseCommit": "c514ec92fce868517a565d0426fa121f7bf0581b",
+    "release": "package-a75b6b650e743963",
+    "checks": [
+      "All catalog game identities and source trees exact",
+      "card manifest and runtime exact",
+      "Public program css/card-cursor-buggy-v3.css",
+      "CAS hash size CORS css/card-cursor-buggy-v3.css",
+      "Public program css/card-desktop-table.css",
+      "CAS hash size CORS css/card-desktop-table.css",
+      "Public program css/card-entry-tailwind-v1.min.css",
+      "CAS hash size CORS css/card-entry-tailwind-v1.min.css",
+      "Public program css/card-finish-v1.css",
+      "CAS hash size CORS css/card-finish-v1.css",
+      "Public program css/card-tailwind-v1.min.css",
+      "CAS hash size CORS css/card-tailwind-v1.min.css",
+      "Public program game.html",
+      "CAS hash size CORS game.html",
+      "Public program i18n/en.js",
+      "CAS hash size CORS i18n/en.js",
+      "Public program i18n/i18n.js",
+      "CAS hash size CORS i18n/i18n.js",
+      "Public program i18n/ja.js",
+      "CAS hash size CORS i18n/ja.js",
+      "Public program i18n/ko.js",
+      "CAS hash size CORS i18n/ko.js",
+      "Public program i18n/zh-Hant.js",
+      "CAS hash size CORS i18n/zh-Hant.js",
+      "Public program js/card-desktop-table.js",
+      "CAS hash size CORS js/card-desktop-table.js",
+      "Public program js/card_finish_v1.js",
+      "CAS hash size CORS js/card_finish_v1.js",
+      "Public program js/game_cursor_feedback_v1.js",
+      "CAS hash size CORS js/game_cursor_feedback_v1.js",
+      "Public program manifest.webmanifest",
+      "CAS hash size CORS manifest.webmanifest",
+      "Public program profile.html",
+      "CAS hash size CORS profile.html",
+      "Public program result.html",
+      "CAS hash size CORS result.html",
+      "Public program shop.html",
+      "CAS hash size CORS shop.html",
+      "Public program start.html",
+      "CAS hash size CORS start.html",
+      "Public program sw.js",
+      "CAS hash size CORS sw.js",
+      "Public program tutorial.html",
+      "CAS hash size CORS tutorial.html",
+      "Public program vendor/README.md",
+      "CAS hash size CORS vendor/README.md",
+      "Public program vendor/babel/7.24.7/babel.min.js",
+      "CAS hash size CORS vendor/babel/7.24.7/babel.min.js",
+      "Public program vendor/licenses/Babel-7.24.7-LICENSE.txt",
+      "CAS hash size CORS vendor/licenses/Babel-7.24.7-LICENSE.txt",
+      "Public program vendor/licenses/React-18.3.1-LICENSE.txt",
+      "CAS hash size CORS vendor/licenses/React-18.3.1-LICENSE.txt",
+      "Public program vendor/licenses/ReactDOM-18.3.1-LICENSE.txt",
+      "CAS hash size CORS vendor/licenses/ReactDOM-18.3.1-LICENSE.txt",
+      "Public program vendor/licenses/Socket.IO-4.8.1-LICENSE.txt",
+      "CAS hash size CORS vendor/licenses/Socket.IO-4.8.1-LICENSE.txt",
+      "Public program vendor/licenses/TailwindCSS-3.4.17-LICENSE.txt",
+      "CAS hash size CORS vendor/licenses/TailwindCSS-3.4.17-LICENSE.txt",
+      "Public program vendor/react-dom/18.3.1/react-dom.development.js",
+      "CAS hash size CORS vendor/react-dom/18.3.1/react-dom.development.js",
+      "Public program vendor/react/18.3.1/react.development.js",
+      "CAS hash size CORS vendor/react/18.3.1/react.development.js",
+      "Public program vendor/socket.io-client/4.8.1/socket.io.min.js",
+      "CAS hash size CORS vendor/socket.io-client/4.8.1/socket.io.min.js",
+      "New game cache token live",
+      "board manifest and runtime exact",
+      "chess manifest and runtime exact"
+    ],
+    "at": "2026-10-31T19:50:07.877Z"
+  },
+  "android": {
+    "model": "V2105",
+    "appVersionCode": 59,
+    "installedRelease": "package-a75b6b650e743963",
+    "downloadManager": "Complete game passed SHA256 and is playable; installed equals latest. Physical device, no reinstall or player-data deletion.",
+    "progress": [
+      {
+        "time": 1793476239.4223664,
+        "text": [
+          "偉大航道爭霸戰 下載中",
+          "新世界航海錄 可遊玩",
+          "偉大航道爭霸戰",
+          "約 4.1 MB/s",
+          "34%",
+          "256.9 MB / 756.0 MB · 已完成 958 / 1085 個檔案"
+        ]
+      },
+      {
+        "time": 1793476282.0071611,
+        "text": [
+          "偉大航道爭霸戰 可遊玩",
+          "新世界航海錄 可遊玩",
+          "可遊玩",
+          "偉大航道爭霸戰"
+        ]
+      }
+    ]
+  },
+  "ios": {
+    "physicalDeviceTested": false,
+    "archivedV058WebKit": {
+      "scope": "Original engine; iOS UA and exact installed bundle with CSS appended at document end; 3500ms forced cold image decode; controlled movie playing/ended. WebKit, not physical device.",
+      "checks": [
+        {
+          "name": "Slow cold decode finishes before projection starts",
+          "pass": true
+        },
+        {
+          "name": "Original movie plays once before choice",
+          "pass": true
+        },
+        {
+          "name": "Selected-target diagonal portrait decoded and visible on mobile",
+          "pass": true,
+          "detail": {
+            "loaded": true,
+            "width": 363.1493225097656,
+            "height": 265.0019836425781,
+            "title": "讓 Audit1 棄掉手牌"
+          }
+        },
+        {
+          "name": "Selected operation finishes and queue resumes",
+          "pass": true
+        },
+        {
+          "name": "Usopp portrait decoded before its separate sniper timeline",
+          "pass": true
+        },
+        {
+          "name": "Bad cut-in asset falls back to the public played card",
+          "pass": true
+        },
+        {
+          "name": "Next starter icon in status row with all six statuses, no top label",
+          "pass": true,
+          "detail": {
+            "inStatus": true,
+            "image": true,
+            "labelHidden": true,
+            "icons": true
+          }
+        },
+        {
+          "name": "Starter icon opens explanation without gameplay action",
+          "pass": true
+        },
+        {
+          "name": "Eliminated normal Roger remains next starter in own status row",
+          "pass": true
+        },
+        {
+          "name": "Disconnect cancels pending image decode cleanly",
+          "pass": true
+        },
+        {
+          "name": "no page errors",
+          "pass": true,
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "screenshots": [],
+      "passed": true
+    },
+    "currentBundleChromium": {
+      "scope": "Original engine; iOS UA and exact installed bundle with CSS appended at document end; 3500ms forced cold image decode; controlled movie playing/ended. Chromium, not physical device.",
+      "checks": [
+        {
+          "name": "Slow cold decode finishes before projection starts",
+          "pass": true
+        },
+        {
+          "name": "Original movie plays once before choice",
+          "pass": true
+        },
+        {
+          "name": "Selected-target diagonal portrait decoded and visible on mobile",
+          "pass": true,
+          "detail": {
+            "loaded": true,
+            "width": 366.1609802246094,
+            "height": 267.19964599609375,
+            "title": "讓 Audit1 棄掉手牌"
+          }
+        },
+        {
+          "name": "Selected operation finishes and queue resumes",
+          "pass": true
+        },
+        {
+          "name": "Usopp portrait decoded before its separate sniper timeline",
+          "pass": true
+        },
+        {
+          "name": "Bad cut-in asset falls back to the public played card",
+          "pass": true
+        },
+        {
+          "name": "Next starter icon in status row with all six statuses, no top label",
+          "pass": true,
+          "detail": {
+            "inStatus": true,
+            "image": true,
+            "labelHidden": true,
+            "icons": true
+          }
+        },
+        {
+          "name": "Starter icon opens explanation without gameplay action",
+          "pass": true
+        },
+        {
+          "name": "Eliminated normal Roger remains next starter in own status row",
+          "pass": true
+        },
+        {
+          "name": "Disconnect cancels pending image decode cleanly",
+          "pass": true
+        },
+        {
+          "name": "no page errors",
+          "pass": true,
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "screenshots": [],
+      "passed": true
+    },
+    "restartRequired": "Fully close from app switcher and reopen; no new IPA for this online fix."
+  },
+  "documentCAS": [
+    {
+      "path": "result.html",
+      "status": 200,
+      "want": 133887,
+      "got": 133887,
+      "hashMatches": true,
+      "encoding": null,
+      "length": "133887"
+    },
+    {
+      "path": "shop.html",
+      "status": 200,
+      "want": 83198,
+      "got": 83198,
+      "hashMatches": true,
+      "encoding": null,
+      "length": "83198"
+    },
+    {
+      "path": "tutorial.html",
+      "status": 200,
+      "want": 230039,
+      "got": 230039,
+      "hashMatches": true,
+      "encoding": null,
+      "length": "230039"
+    },
+    {
+      "path": "images/card-depth/v1/lux/7/background.webp",
+      "status": 200,
+      "want": 55674,
+      "got": 55674,
+      "hashMatches": true,
+      "encoding": null,
+      "length": "55674"
+    }
+  ],
+  "retention": "Launcher/lobby and Board/Chess releases unchanged. No cleanup attempted. Damaged local ref backed up and restored from verified reflog commit; work files preserved."
+}

@@ -8616,3 +8616,6 @@ Published and publicly verified 2026-11-01: package-1372e8179169b0a2; source 39b
 
 
 2026-11-01: Diagnosed Android Card download failure on physical V2105 (CDN rewriting retained HTML) and legacy iOS flow missing cut-in hook. Scoped transport-key reissue and single online presentation flow; evidence and limitations: CARD_LEGACY_MOBILE_20261101.md.
+
+
+Published and publicly verified 2026-11-01: package-a75b6b650e743963; source 189f1ab1f871933805fd5bd3828ffe3bb1de0d5e; release c514ec92fce868517a565d0426fa121f7bf0581b. All 31 public programs and all 31 program CAS objects match size/SHA256/CORS. Physical V2105 Android v059 completed download; Download Manager confirms installed == latest package-a75b6b650e743963 and full SHA256 validation, playable. Archived iOS v058 WebKit 11 checks and current bundle 11 checks passed; no physical iPhone claim. iOS must fully close/reopen the existing App to replace its retained WebView. No APK/IPA rebuild, launcher/lobby or Board/Chess changes. Evidence: CARD_LEGACY_MOBILE_RELEASE_20261101.json. Local branch ref contained NUL bytes after interrupted release; backed up and restored exact reflog commit after object/parent/index verification, without resetting work files.
