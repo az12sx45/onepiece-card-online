@@ -2959,3 +2959,5 @@ Card online outcome guard now keeps each engine EMIT/STATE transaction together 
 
 
 Card now waits for every human viewer to finish each action presentation before further play. Automatic client acknowledgement integrates with existing local queues and explicit private reading; fresh venues still require each reader to confirm. See CARD_GROUP_PRESENTATION_READY_20261031.md.
+
+Card match presentation now uses three card-back exchanges before finishing effects; enhanced movies finish before the diagonal intro. Original engine/launcher/lobby remain unchanged. See CARD_MATCH_POLISH_20261031.md.

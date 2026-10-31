@@ -2104,3 +2104,5 @@ Card outcome timing: scripts/card_outcome_guard.js embedded in public/game.html;
 
 
 Card readiness: server/card_presentation_ready.js and server/index.js; scripts/card_group_ready_client.js embedded in public/game.html. QA: card_presentation_ready_qa.js, card_group_client_qa.js, card_group_sequence_qa.js, card_group_ready_browser_qa.mjs, card_group_offline_qa.js. card_group_server_fixture.js compiles the original server inside a test process and accepts fixture seeds only on private stdin; no production route.
+
+Card match polish: shared android/web/card-match-polish.js/css plus card-duel-finishers.js/card-seat-hud.js; desktop generated bundle and game.html compatibility block. Validation: android/card-match-polish-qa.mjs and scripts/card_flow_sync_qa.mjs.

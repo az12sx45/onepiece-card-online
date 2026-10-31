@@ -6,8 +6,8 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>偉大航道爭霸戰｜正式對戰</title>
-  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261031-group-ready1">
-  <script defer src="js/card-desktop-table.js?v=20261031-group-ready1"></script>
+  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261031-match-polish1">
+  <script defer src="js/card-desktop-table.js?v=20261031-match-polish1"></script>
   <link rel="stylesheet" href="css/card-finish-v1.css?v=20260907-depth-visible-v2">
   <script defer src="js/card_finish_v1.js?v=20260907-depth-visible-v2"></script>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
@@ -3806,7 +3806,7 @@ function playEnhFxFor(cardId){
   }
 
   // 先移除舊的事件（用 stored handler，避免殘留）
-  if (vid.__enhOnEnded)  vid.removeEventListener('ended', vid.__enhOnEnded);
+  if (vid.__enhOnEnded) {vid.removeEventListener('ended', vid.__enhOnEnded);vid.removeEventListener('error',vid.__enhOnEnded);}
   if (ov.__enhOnClick)   ov.removeEventListener('click', ov.__enhOnClick);
 
   // 顯示 overlay
@@ -3817,14 +3817,14 @@ function playEnhFxFor(cardId){
   vid.muted  = false;
   vid.volume = 1.0;
 
-  let failTimer = null;
+  let failTimer = null, lastMovieTime = -1, lastMovieProgress = Date.now();
   function armFailsafe(){
     clearTimeout(failTimer);
-    const dur = (Number.isFinite(vid.duration) && vid.duration > 0)
-      ? vid.duration * 1000
-      : 8000; // 沒讀到長度就抓 8 秒當保險，但不會截斷真正影片（因為通常 duration <= 這個值）
-    failTimer = setTimeout(()=> cleanup(), dur + 800);
-    _enhFxForceTimer = failTimer;
+    if (ov.classList.contains('hidden')) return;
+    if (vid.currentTime > lastMovieTime + .05) {lastMovieTime=vid.currentTime;lastMovieProgress=Date.now();}
+    // A progressing movie always reaches ended. Only a genuinely stalled load/play exits.
+    if (Date.now()-lastMovieProgress > 30000) {cleanup();return;}
+    failTimer=setTimeout(armFailsafe,1000);_enhFxForceTimer=failTimer;
   }
 
   function cleanup(){
@@ -3850,7 +3850,7 @@ function playEnhFxFor(cardId){
 
 
     // 移除事件綁定
-    if (vid.__enhOnEnded)  vid.removeEventListener('ended', vid.__enhOnEnded);
+    if (vid.__enhOnEnded) {vid.removeEventListener('ended', vid.__enhOnEnded);vid.removeEventListener('error',vid.__enhOnEnded);}
     if (ov.__enhOnClick)   ov.removeEventListener('click', ov.__enhOnClick);
     vid.__enhOnEnded = null;
     ov.__enhOnClick  = null;
@@ -3858,9 +3858,9 @@ function playEnhFxFor(cardId){
 
   // 設定事件 handler 並記住參考，方便下次移除
   vid.__enhOnEnded = ()=> cleanup();
-  ov.__enhOnClick  = ()=> cleanup();
+  ov.__enhOnClick  = null;
   vid.addEventListener('ended', vid.__enhOnEnded);
-  ov.addEventListener('click', ov.__enhOnClick);
+  vid.addEventListener('error',vid.__enhOnEnded,{once:true});
 
 
   // 嘗試播放：如果有聲被擋就改靜音；再失敗就直接關掉，不卡流程
@@ -7453,5 +7453,189 @@ el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
 <!-- 角色語音（只有本機播放） -->
 <audio id="voiceAudio" preload="auto"></audio>
 
+<!-- CARD_MATCH_POLISH_BEGIN -->
+<style>
+/* Layout and existing generated art; no new CSS-drawn buttons or effects. */
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] .phone-duel-clash-art{position:absolute;left:50%;top:50%;width:clamp(90px,18vw,240px);height:clamp(90px,18vw,240px);background:var(--phone-impact) center/contain no-repeat;pointer-events:none;z-index:4;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phonePrivateReveal[data-layout="grid"]{inset:var(--polish-read-top,110px) 9vw 18px!important;grid-template-rows:28px minmax(0,1fr) 54px!important;gap:6px!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phonePrivateReveal[data-layout="grid"] header{height:28px!important;justify-content:center!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phonePrivateReveal .phone-reading-actions{grid-row:3;display:flex;justify-content:center;align-items:center;min-height:0;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] :is(#phonePrivateDone,#phoneCardConfirm,#lawSwapOk){display:block;min-width:210px!important;min-height:50px!important;height:50px!important;max-width:100%;padding:8px 24px!important;background:var(--phone-hud-button) center/100% 100% no-repeat!important;border:0!important;box-shadow:none!important;border-radius:0!important;color:#fff3b0!important;text-shadow:0 2px 3px #000;font-size:19px!important;font-weight:900;line-height:1.2;cursor:pointer;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] :is(#phonePrivateDone,#phoneCardConfirm,#lawSwapOk):focus-visible{outline:3px solid #ffeaaa;outline-offset:2px;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] :is(#phonePrivateDone,#phoneCardConfirm,#lawSwapOk):hover{filter:brightness(1.18);}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] :is(#phonePrivateDone,#phoneCardConfirm,#lawSwapOk):disabled{filter:grayscale(.8);opacity:.45;cursor:default;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"]{inset:var(--polish-read-top,110px) 13vw 72px!important;width:auto!important;max-width:none!important;min-width:0!important;padding:8px 14px!important;grid-template-rows:28px minmax(0,1fr)!important;gap:6px;background:var(--phone-hud-panel) center/100% 100% no-repeat!important;border:0!important;outline:0!important;box-shadow:none!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-sheet-head{height:28px!important;min-height:0!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-sheet-content{min-height:0;overflow:hidden!important;padding:0!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector{display:grid!important;grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr)!important;gap:16px!important;height:100%;min-height:0;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-art{display:flex!important;min-height:0;align-items:center;justify-content:center;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-art img{display:block!important;max-height:100%!important;max-width:100%!important;height:100%!important;width:100%!important;object-fit:contain!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-info{display:grid!important;grid-template-rows:minmax(0,1fr) 38px 54px!important;gap:6px!important;min-height:0;overflow:hidden;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-copy{min-height:0;overflow:auto!important;padding:4px 4px 0;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-effect{font-size:clamp(13px,2dvh,18px)!important;line-height:1.5!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-nav{display:grid;grid-template-columns:40px minmax(0,1fr) 40px;min-height:0;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-actions{display:flex!important;align-items:center;justify-content:center;padding:0!important;min-height:0;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-action-note{display:none!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardConfirm{width:100%!important;min-width:0!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-tag{font-weight:800;color:#ffdf8d;}
+@media(min-height:600px){html:root[data-card-polish]{--polish-read-top:190px;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phonePrivateReveal[data-layout="grid"]{bottom:40px!important;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"]{left:22vw!important;right:22vw!important;bottom:135px!important;}}
+@media(max-height:400px){html:root[data-card-polish]{--polish-read-top:90px;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"]{left:12vw!important;right:12vw!important;bottom:54px!important;padding:5px 12px!important;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phonePrivateReveal[data-layout="grid"]{bottom:10px!important;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-info{grid-template-rows:minmax(0,1fr) 32px 48px!important;gap:3px!important;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] :is(#phonePrivateDone,#phoneCardConfirm,#lawSwapOk){min-height:46px!important;height:46px!important;font-size:17px!important;}}
+
+html:root[data-card-phone][data-card-polish] #phonePrivateReveal[data-layout="grid"] figcaption{max-width:240px;}
+
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-info{background:none!important;border:0!important;border-image:none!important;box-shadow:none!important;padding:0!important;}
+@media(max-height:450px){html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-info{grid-template-columns:104px minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr) 48px!important;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-copy{grid-column:1/-1;grid-row:1;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-nav{grid-row:2;grid-column:1;grid-template-columns:32px minmax(0,1fr) 32px;align-self:center;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-nav span{font-size:11px;overflow:hidden;white-space:nowrap;width:28px;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-actions{grid-row:2;grid-column:2;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-copy h3{display:inline;font-size:19px!important;margin:0 8px!important;line-height:24px;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-inspector-tag{display:inline;font-size:11px!important;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-cinema][data-card-polish] #phoneCardSheet[data-inspect-kind="hand"] .phone-card-effect{margin:6px 0!important;font-size:13px!important;line-height:1.45!important;}}
+
+</style>
+<script>
+/* Cosmetic selection never receives a card id. Only the public loser's face is used. */
+(() => {
+  function mount(){
+    const api=window.CardPhonePresentation;if(!api||api.duelSceneVersion>=2)return;api.duelSceneVersion=2;
+    const catalog=[
+      ['fire-fist','火拳','burn'],['ice-sphere','冰球','ice'],['triple-slash','三刀斬','slash'],['thunderbolt','雷擊','bolt'],
+      ['magma-fist','熔岩拳','melt'],['sandstorm','沙嵐','sand'],['dark-vortex','暗穴','vortex'],['quake-ring','震空','quake'],
+      ['paw-cannon','熊掌衝擊','push'],['light-beam','光束','pierce'],['meteor','隕石','crush'],['dragon-breath','熱息','burn-wave'],
+      ['phoenix-flame','不死鳥炎','rise'],['poison-dragon','毒龍','poison'],['rubber-barrage','拳槍連打','barrage'],
+      ['flame-kick','炎腳','bisect'],['water-dragon','水龍','wash'],['mochi-drill','糯團鑽','drill'],['string-cage','線牢','grid'],['thunder-orb','雷球','orb']
+    ];
+    let bag=[];function pick(){if(!bag.length){bag=catalog.slice();for(let i=bag.length-1;i>0;i--){const b=new Uint32Array(1);crypto.getRandomValues(b);const j=Math.floor(b[0]/4294967296*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}}return bag.pop();}
+    api.duelFinisherCatalog=catalog.map(([id,label,damage])=>({id,label,damage}));
+    api.pickDuelFinisher=pick;
+    api.playDuelScene=function({scene,from,to,d,bounds,anchor,handAnchor,animate,later,make,name,card,validCard}){
+      const hasWinner=[from,to].includes(d.winnerId)&&Number.isInteger(d.winnerId)&&d.winnerId>=0;
+      const arena=make('section','phone-duel-arena'),result=make('div','phone-duel-result','決鬥'),versus=make('strong','phone-duel-versus','VS');
+      arena.setAttribute('aria-label',`${name(from)} 與 ${name(to)} 決鬥`);arena.dataset.phase='entry';arena.append(result,versus);scene.append(arena);
+      const cards=[];
+      // The retained hand participates in this duel; do not leave a second copy in hand.
+      if([from,to].includes(typeof me==='object'?me.playerId:null))for(const node of [api.ownHandElement?.(),document.getElementById('imgHand'),document.getElementById('imgDrawn')])if(node)api.maskHandArt?.(node);
+      for(const [i,id]of [from,to].entries()){
+        const a=handAnchor(anchor(id,bounds)),slot=make('div','phone-duel-slot'),holder=make('div','phone-duel-card-wrap'),cardNode=make('img','phone-duel-card'),status=make('div','phone-duel-status','手牌保密');
+        slot.dataset.player=String(id);slot.dataset.side=i?'right':'left';cardNode.src='images/cards/back.webp';cardNode.alt=name(id)+' 的決鬥卡背';const number=make('strong','phone-duel-number');number.hidden=true;holder.append(cardNode,number);slot.append(make('h3','',name(id)),holder,status);arena.append(slot);
+        const r=cardNode.getBoundingClientRect();if(a)animate(cardNode,[{transform:`translate(${a.x-r.x-r.width/2}px,${a.y-r.y-r.height/2}px) scale(.25) rotate(${i?18:-18}deg)`,opacity:0},{transform:'translate(0,0) scale(1)',opacity:1}],1000);
+        cards.push({id,a,slot,holder,cardNode,status,number});
+      }
+      const loser=hasWinner?cards.find(c=>c.id!==d.winnerId):null,finish=hasWinner?api.pickDuelFinisher():null;
+      if(finish)arena.dataset.finisher=finish[0];
+      // Three readable exchanges; both backs remain secret until the finisher lands.
+      for(let beat=0;beat<3;beat++)later(()=>{
+        arena.dataset.phase='clash';arena.dataset.exchange=String(beat+1);result.textContent=['試探交鋒','反擊交鋒','最後交鋒'][beat];versus.textContent='';
+        const rects=cards.map(c=>c.holder.getBoundingClientRect()),middle=(rects[0].left+rects[0].width/2+rects[1].left+rects[1].width/2)/2;
+        cards.forEach((c,i)=>{const sign=i?-1:1,r=rects[i],dx=middle-(r.left+r.width/2)-sign*r.width*.22,dy=(beat===1?-1:1)*(i?-10:10);
+          c.status.textContent='交鋒中 · 手牌保密';
+          if(!matchMedia('(prefers-reduced-motion: reduce)').matches)c.holder.animate([{transform:'translate(0,0) rotate(0deg)'},{transform:`translate(${-sign*14}px,${-dy}px) rotate(${-sign*8}deg)`,offset:.18},{transform:`translate(${dx}px,${dy}px) rotate(${sign*(beat===1?-13:13)}deg) scale(1.04)`,offset:.43},{transform:`translate(${dx}px,${dy}px) rotate(${sign*8}deg)`,offset:.55},{transform:`translate(${-sign*10}px,0) rotate(${-sign*6}deg)`,offset:.8},{transform:'translate(0,0) rotate(0deg)'}],{duration:800,easing:'linear',fill:'both'});
+        });
+        later(()=>{const spark=make('i','phone-duel-clash-art');spark.setAttribute('aria-hidden','true');arena.append(spark);animate(spark,[{opacity:0,transform:'translate(-50%,-50%) scale(.35)'},{opacity:1,transform:'translate(-50%,-50%) scale(1.15)',offset:.2},{opacity:0,transform:'translate(-50%,-50%) scale(1.6)'}],430);later(()=>spark.remove(),450);},340);
+      },1150+beat*950);
+      later(()=>{
+        arena.dataset.phase='attack';versus.textContent='';for(const c of cards)c.status.textContent='交鋒中';
+        if(!loser)return;
+        const [id,label,damage]=finish;result.textContent=label; // Random cosmetic move, never the winning card's identity.
+        const effect=make('div','duel-finisher-art');effect.dataset.finisher=id;effect.setAttribute('aria-hidden','true');loser.holder.append(effect);
+        const diagonal=['meteor','thunderbolt','light-beam'].includes(id),spiral=['sandstorm','dark-vortex','mochi-drill','water-dragon'].includes(id),up=['phoenix-flame','poison-dragon'].includes(id);
+        const facing=loser.slot.dataset.side==='left'?-1:1;
+        animate(effect,[{transform:`translate(${facing*(diagonal?-75:spiral?0:up?0:-60)}%,${diagonal?-90:up?65:0}%) scale(${spiral?.25:.65}) scaleX(${facing}) rotate(${spiral?-100:-12}deg)`,opacity:0},{transform:`translate(0,0) scale(1.05) scaleX(${facing})`,opacity:1,offset:.22},{transform:`translate(${facing*5}%,0) scale(1.18) scaleX(${facing}) rotate(${spiral?60:4}deg)`,opacity:1,offset:.75},{transform:`translate(${facing*(up?0:20)}%,${up?-55:15}%) scale(${spiral?1.7:1.3}) scaleX(${facing}) rotate(${spiral?140:10}deg)`,opacity:0}],3000);
+        later(()=>{
+          arena.dataset.phase='impact';loser.slot.dataset.damage=damage;
+          if(validCard(d.loserCardId)){loser.cardNode.src=card(d.loserCardId);loser.cardNode.alt='公開的敗方手牌';loser.cardNode.dataset.revealed='public-loser';loser.number.textContent=String(d.loserCardId);loser.number.setAttribute('aria-label',`敗方手牌 ${d.loserCardId} 號`);loser.number.hidden=false;}
+          damageCard(loser,damage,animate,later,make);
+        },650);
+      },4200);
+      later(()=>{
+        arena.dataset.phase='result';arena.dataset.resolved='true';result.textContent=hasWinner?`${name(d.winnerId)} 勝出`:'雙方平手';
+        for(const c of cards){c.slot.dataset.outcome=!hasWinner?'draw':c===loser?'lost':'won';c.status.textContent=!hasWinner?'平手 · 手牌不公開':c===loser?'落敗 · 公開手牌':'勝出 · 手牌保密';}
+      },8000);
+      later(()=>{
+        arena.dataset.phase='return';
+        for(const c of cards){
+          const r=c.cardNode.getBoundingClientRect(),target=c===loser?document.querySelector('.phone-discard-stack')?.getBoundingClientRect():null;
+          const a=target?{x:target.x+target.width/2,y:target.y+target.height/2}:c.a;if(!a)continue;
+          // A damaged public card returns to the pile; no hidden winner face is queried.
+          const fragments=[...c.holder.querySelectorAll('.duel-card-fragment')];
+          if(c===loser&&fragments.length){for(const piece of fragments)animate(piece,[{transform:getComputedStyle(piece).transform,opacity:.45},{transform:`translate(${a.x-r.x-r.width/2}px,${a.y-r.y-r.height/2}px) scale(.15)`,opacity:0}],1200);continue;}
+          if(c===loser){c.cardNode.getAnimations().forEach(n=>n.cancel());}
+          animate(c.cardNode,[{transform:'translate(0,0) scale(1)',opacity:c===loser?.6:1},{transform:`translate(${a.x-r.x-r.width/2}px,${a.y-r.y-r.height/2}px) scale(.2)`,opacity:0}],1200);
+        }
+      },9000);
+    };
+    function damageCard(c,kind,animate,later,make){
+      const img=c.cardNode;c.holder.dataset.damage=kind;
+      // Masks remove the actual card texture. Fragments clone only this publicly revealed loser.
+      const hole=['burn','pierce','drill','burn-wave','barrage'].includes(kind);
+      if(hole){
+        const x=kind==='burn-wave'?28:50,y=kind==='barrage'?40:50;
+        img.style.setProperty('--duel-hole-x',x+'%');img.style.setProperty('--duel-hole-y',y+'%');
+        const set=n=>{const mask=`radial-gradient(ellipse at ${x}% ${y}%,transparent 0 ${n}%,#000 ${n+2}%)`;img.style.maskImage=mask;img.style.webkitMaskImage=mask;};
+        // Timed steps share the scene epoch, so disconnect/background cancels every step.
+        for(let n=0;n<=48;n++)later(()=>set(n*(kind==='pierce'?.55:1.2)),n*42);
+        animate(img,[{transform:'translate(0,0)',filter:'brightness(1)'},{transform:'translate(7px,-3px)',filter:kind==='burn'?'sepia(1) saturate(2) brightness(.65)':'brightness(1.8)',offset:.2},{transform:kind==='drill'?'rotate(22deg) scale(.7)':'translate(0,0)',filter:'brightness(.5)',opacity:.8}],2400);
+        return;
+      }
+      if(['vortex','melt','poison','push','rise','wash'].includes(kind)){
+        const end={vortex:'rotate(300deg) scale(0)',melt:'translateY(80%) scale(1.15,.05)',poison:'translateY(35%) skewX(18deg) scale(.85,.15)',push:'translate(110%,-35%) rotate(35deg) scale(.1)',rise:'translateY(-90%) rotate(-10deg) scale(.6)',wash:'translate(90%,30%) rotate(25deg) scale(.3)'}[kind];
+        animate(img,[{transform:'none',opacity:1},{transform:end,filter:kind==='poison'?'hue-rotate(80deg) blur(5px)':kind==='wash'?'blur(8px)':'brightness(.6)',opacity:0}],2400);return;
+      }
+      const pieces=kind==='bisect'?['polygon(0 0,100% 0,0 100%)','polygon(100% 0,100% 100%,0 100%)']:kind==='slash'?['inset(0 50% 0 0)','inset(0 0 0 50%)']:null;
+      const clips=pieces||Array.from({length:kind==='sand'?36:kind==='grid'?16:12},(_,i)=>{const cols=kind==='sand'?6:4,rows=kind==='sand'?6:kind==='grid'?4:3,x=i%cols,y=Math.floor(i/cols);return `polygon(${x/cols*100}% ${y/rows*100}%,${(x+1)/cols*100}% ${y/rows*100}%,${(x+1)/cols*100}% ${(y+1)/rows*100}%,${x/cols*100}% ${(y+1)/rows*100}%)`;});
+      img.style.visibility='hidden';
+      clips.forEach((clip,i)=>{
+        const p=make('img','duel-card-fragment');p.src=img.src;p.alt='';p.setAttribute('aria-hidden','true');p.style.clipPath=clip;c.holder.append(p);
+        const sign=i%2?-1:1,angle=i*2.399,dx=pieces?sign*65:Math.cos(angle)*(kind==='sand'?130:70),dy=pieces?sign*28:Math.sin(angle)*65+35;
+        const freeze=kind==='ice',delay=freeze?700:kind==='sand'?i*18:0;
+        if(freeze)p.style.filter='grayscale(1) sepia(.7) hue-rotate(145deg) saturate(2) brightness(1.4)';
+        animate(p,[{transform:'translate(0,0) rotate(0)',opacity:1},{transform:`translate(${dx*.25}px,${dy*.25}px) rotate(${sign*8}deg)`,opacity:1,offset:.35},{transform:`translate(${dx}px,${dy}px) rotate(${sign*(kind==='crush'?85:30)}deg) scale(${kind==='sand'?.2:kind==='orb'?.5:.85})`,opacity:.45}],freeze?1700:2400,delay);
+      });
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
+/* Presentation-only compatibility for desktop and installed mobile clients. */
+(() => {
+ function mount(){
+  const api=window.CardPhonePresentation;
+  if(!api||api.matchPolishVersion)return;
+  api.matchPolishVersion=1;document.documentElement.dataset.cardPolish='1';
+  const $=id=>document.getElementById(id);
+  const players=$('players'),reveal=$('phonePrivateReveal');
+  function cleanSeats(){
+   // Old installed bundles clear their cache on JOINED but leave mounted cards.
+   for(const row of players?.children||[])for(const duplicate of [...row.querySelectorAll(':scope > .phone-seat-card')].slice(1))duplicate.remove();
+  }
+  function readingAction(){
+   const button=$('phonePrivateDone');if(!button||button.parentElement.classList.contains('phone-reading-actions'))return;
+   const footer=document.createElement('footer');footer.className='phone-reading-actions';button.textContent='看完了，返回牌桌';footer.append(button);reveal.append(footer);
+  }
+  if(players)new MutationObserver(cleanSeats).observe(players,{childList:true,subtree:true});
+  if(reveal)new MutationObserver(readingAction).observe(reveal,{childList:true,subtree:true});
+  cleanSeats();readingAction();
+  // The legacy flow calls enh_fx after the skill intro. Consume that one replay
+  // while playing the same original movie before the intro on every platform.
+  const intro=api.presentCardSkillBatch,video=typeof playEnhFxFor==='function'?playEnhFxFor:null;
+  let generation=0,consumed=new Map();
+  if(video&&intro){
+   playEnhFxFor=function(id){const count=consumed.get(id)||0;if(count){if(count===1)consumed.delete(id);else consumed.set(id,count-1);return;}return video(id);};
+   const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
+   const movieBusy=()=>!!api.isEffectBusy?.()||!!api.isEnhancementBusy?.()||!$('enhOverlay')?.classList.contains('hidden');
+   api.presentCardSkillBatch=async events=>{
+    const epoch=generation;
+    for(const e of events.filter(e=>e.type==='enh_fx')){
+     if(epoch!==generation||fast())return null;
+     consumed.set(e.cardId,(consumed.get(e.cardId)||0)+1);video(e.cardId);
+     while(epoch===generation&&!fast()&&movieBusy())await new Promise(resolve=>setTimeout(resolve,60));
+    }
+    if(epoch!==generation||fast())return null;
+    return intro(events);
+   };
+   const reset=()=>{generation++;consumed.clear();};
+   for(const event of ['disconnect','JOINED'])socket.on(event,reset);
+   document.addEventListener('visibilitychange',()=>{if(document.hidden)reset();});
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+
+</script>
+<!-- CARD_MATCH_POLISH_END -->
 </body>
 </html>

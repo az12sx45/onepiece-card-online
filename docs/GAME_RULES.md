@@ -2047,3 +2047,5 @@ Presentation only: never treat a network pause as the end of an action. Keep out
 
 
 Presentation coordination: animations finish automatically; private card views and rewards wait for dismissal. Human/CPU next actions and next round wait for all viewers, including eliminated humans. Disconnected viewers use the existing 8-second grace and CPU takeover; final game settlement cannot start another round. Engine rules, scoring and hidden cards remain unchanged.
+
+2026-10-31 presentation-only: battle remains the retained hand and only the losing card is public; added exchanges are cosmetic. Wait for movie/cutin/effect/reading completion before results and progression. No card rules changed.

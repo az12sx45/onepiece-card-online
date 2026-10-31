@@ -279,7 +279,7 @@ window.POCardInteract=module.exports;
 /* Cosmetic selection never receives a card id. Only the public loser's face is used. */
 (() => {
   function mount(){
-    const api=window.CardPhonePresentation;if(!api)return;
+    const api=window.CardPhonePresentation;if(!api||api.duelSceneVersion>=2)return;api.duelSceneVersion=2;
     const catalog=[
       ['fire-fist','火拳','burn'],['ice-sphere','冰球','ice'],['triple-slash','三刀斬','slash'],['thunderbolt','雷擊','bolt'],
       ['magma-fist','熔岩拳','melt'],['sandstorm','沙嵐','sand'],['dark-vortex','暗穴','vortex'],['quake-ring','震空','quake'],
@@ -305,6 +305,16 @@ window.POCardInteract=module.exports;
       }
       const loser=hasWinner?cards.find(c=>c.id!==d.winnerId):null,finish=hasWinner?api.pickDuelFinisher():null;
       if(finish)arena.dataset.finisher=finish[0];
+      // Three readable exchanges; both backs remain secret until the finisher lands.
+      for(let beat=0;beat<3;beat++)later(()=>{
+        arena.dataset.phase='clash';arena.dataset.exchange=String(beat+1);result.textContent=['試探交鋒','反擊交鋒','最後交鋒'][beat];versus.textContent='';
+        const rects=cards.map(c=>c.holder.getBoundingClientRect()),middle=(rects[0].left+rects[0].width/2+rects[1].left+rects[1].width/2)/2;
+        cards.forEach((c,i)=>{const sign=i?-1:1,r=rects[i],dx=middle-(r.left+r.width/2)-sign*r.width*.22,dy=(beat===1?-1:1)*(i?-10:10);
+          c.status.textContent='交鋒中 · 手牌保密';
+          if(!matchMedia('(prefers-reduced-motion: reduce)').matches)c.holder.animate([{transform:'translate(0,0) rotate(0deg)'},{transform:`translate(${-sign*14}px,${-dy}px) rotate(${-sign*8}deg)`,offset:.18},{transform:`translate(${dx}px,${dy}px) rotate(${sign*(beat===1?-13:13)}deg) scale(1.04)`,offset:.43},{transform:`translate(${dx}px,${dy}px) rotate(${sign*8}deg)`,offset:.55},{transform:`translate(${-sign*10}px,0) rotate(${-sign*6}deg)`,offset:.8},{transform:'translate(0,0) rotate(0deg)'}],{duration:800,easing:'linear',fill:'both'});
+        });
+        later(()=>{const spark=make('i','phone-duel-clash-art');spark.setAttribute('aria-hidden','true');arena.append(spark);animate(spark,[{opacity:0,transform:'translate(-50%,-50%) scale(.35)'},{opacity:1,transform:'translate(-50%,-50%) scale(1.15)',offset:.2},{opacity:0,transform:'translate(-50%,-50%) scale(1.6)'}],430);later(()=>spark.remove(),450);},340);
+      },1150+beat*950);
       later(()=>{
         arena.dataset.phase='attack';versus.textContent='';for(const c of cards)c.status.textContent='交鋒中';
         if(!loser)return;
@@ -318,11 +328,11 @@ window.POCardInteract=module.exports;
           if(validCard(d.loserCardId)){loser.cardNode.src=card(d.loserCardId);loser.cardNode.alt='公開的敗方手牌';loser.cardNode.dataset.revealed='public-loser';loser.number.textContent=String(d.loserCardId);loser.number.setAttribute('aria-label',`敗方手牌 ${d.loserCardId} 號`);loser.number.hidden=false;}
           damageCard(loser,damage,animate,later,make);
         },650);
-      },1800);
+      },4200);
       later(()=>{
         arena.dataset.phase='result';arena.dataset.resolved='true';result.textContent=hasWinner?`${name(d.winnerId)} 勝出`:'雙方平手';
         for(const c of cards){c.slot.dataset.outcome=!hasWinner?'draw':c===loser?'lost':'won';c.status.textContent=!hasWinner?'平手 · 手牌不公開':c===loser?'落敗 · 公開手牌':'勝出 · 手牌保密';}
-      },6500);
+      },8000);
       later(()=>{
         arena.dataset.phase='return';
         for(const c of cards){
@@ -334,7 +344,7 @@ window.POCardInteract=module.exports;
           if(c===loser){c.cardNode.getAnimations().forEach(n=>n.cancel());}
           animate(c.cardNode,[{transform:'translate(0,0) scale(1)',opacity:c===loser?.6:1},{transform:`translate(${a.x-r.x-r.width/2}px,${a.y-r.y-r.height/2}px) scale(.2)`,opacity:0}],1200);
         }
-      },8500);
+      },9000);
     };
     function damageCard(c,kind,animate,later,make){
       const img=c.cardNode;c.holder.dataset.damage=kind;
@@ -1262,6 +1272,7 @@ window.POCardInteract=module.exports;
         let view=cached.get(p.id??i);if(!view){view=create();cached.set(p.id??i,view);}
         const original=row.querySelector(':scope > .flex');
         if(original)original.classList.add('phone-seat-original');
+        for(const stale of row.querySelectorAll(':scope > .phone-seat-card'))if(stale!==view.card)stale.remove();
         if(view.card.parentElement!==row)row.prepend(view.card);
         const order=(i-start+count)%count,active=s.turnIndex===i&&p.alive&&s.turnStep!=='ended'&&s.phase!=='lobby';
         row.style.order=String(order);row.dataset.seatOrder=String(order+1);row.dataset.seatId=String(i);row.dataset.seatActive=String(!!active);row.dataset.seatOut=String(!p.alive);row.dataset.seatSelf=String(i===viewer);
@@ -1288,7 +1299,7 @@ window.POCardInteract=module.exports;
     }
     const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;sync();});};
     new MutationObserver(schedule).observe(players,{childList:true,subtree:true});
-    socket.on('STATE',schedule);socket.on('JOINED',()=>{cached.clear();schedule();});
+    socket.on('STATE',schedule);socket.on('JOINED',schedule);
     sync();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
@@ -1520,6 +1531,51 @@ window.POCardInteract=module.exports;
     updateLock();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
+/* Presentation-only compatibility for desktop and installed mobile clients. */
+(() => {
+ function mount(){
+  const api=window.CardPhonePresentation;
+  if(!api||api.matchPolishVersion)return;
+  api.matchPolishVersion=1;document.documentElement.dataset.cardPolish='1';
+  const $=id=>document.getElementById(id);
+  const players=$('players'),reveal=$('phonePrivateReveal');
+  function cleanSeats(){
+   // Old installed bundles clear their cache on JOINED but leave mounted cards.
+   for(const row of players?.children||[])for(const duplicate of [...row.querySelectorAll(':scope > .phone-seat-card')].slice(1))duplicate.remove();
+  }
+  function readingAction(){
+   const button=$('phonePrivateDone');if(!button||button.parentElement.classList.contains('phone-reading-actions'))return;
+   const footer=document.createElement('footer');footer.className='phone-reading-actions';button.textContent='看完了，返回牌桌';footer.append(button);reveal.append(footer);
+  }
+  if(players)new MutationObserver(cleanSeats).observe(players,{childList:true,subtree:true});
+  if(reveal)new MutationObserver(readingAction).observe(reveal,{childList:true,subtree:true});
+  cleanSeats();readingAction();
+  // The legacy flow calls enh_fx after the skill intro. Consume that one replay
+  // while playing the same original movie before the intro on every platform.
+  const intro=api.presentCardSkillBatch,video=typeof playEnhFxFor==='function'?playEnhFxFor:null;
+  let generation=0,consumed=new Map();
+  if(video&&intro){
+   playEnhFxFor=function(id){const count=consumed.get(id)||0;if(count){if(count===1)consumed.delete(id);else consumed.set(id,count-1);return;}return video(id);};
+   const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
+   const movieBusy=()=>!!api.isEffectBusy?.()||!!api.isEnhancementBusy?.()||!$('enhOverlay')?.classList.contains('hidden');
+   api.presentCardSkillBatch=async events=>{
+    const epoch=generation;
+    for(const e of events.filter(e=>e.type==='enh_fx')){
+     if(epoch!==generation||fast())return null;
+     consumed.set(e.cardId,(consumed.get(e.cardId)||0)+1);video(e.cardId);
+     while(epoch===generation&&!fast()&&movieBusy())await new Promise(resolve=>setTimeout(resolve,60));
+    }
+    if(epoch!==generation||fast())return null;
+    return intro(events);
+   };
+   const reset=()=>{generation++;consumed.clear();};
+   for(const event of ['disconnect','JOINED'])socket.on(event,reset);
+   document.addEventListener('visibilitychange',()=>{if(document.hidden)reset();});
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
 })();
 
 })();
