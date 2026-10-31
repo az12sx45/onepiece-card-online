@@ -3,6 +3,8 @@
   "scope": "Isolated real Socket.IO, six browser seats, injected QA identities only; no production accounts or physical device claim.",
   "checks": [
     "Six accounts joined and started",
+    "Cold hand keeps card-sized clickable area and private rank label",
+    "Loaded fronts replace their private loading labels",
     "Other private hands remain redacted on every socket",
     "Out-of-turn spoof rejected",
     "Presentation gate waits for slowest player",
@@ -44,5 +46,5 @@
     "No browser exceptions",
     "WebKit lobby to table and generated art loaded"
   ],
-  "actions": 69
+  "actions": 99
 }
