@@ -2044,3 +2044,6 @@ Card round presentation waits for all human venue confirmations before actions; 
 
 
 Presentation only: never treat a network pause as the end of an action. Keep outcomes until action animations finish; coin-derived protect/dodge icons wait for the toss. Silenced skills have no activation movie. Big Mom payment/refusal is announced after the targeted player chooses. Card resolution, hidden hands and Roger rules unchanged.
+
+
+Presentation coordination: animations finish automatically; private card views and rewards wait for dismissal. Human/CPU next actions and next round wait for all viewers, including eliminated humans. Disconnected viewers use the existing 8-second grace and CPU takeover; final game settlement cannot start another round. Engine rules, scoring and hidden cards remain unchanged.

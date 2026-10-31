@@ -8,6 +8,7 @@ const { pool } = require("./db");
 const { withDisplayNames } = require("./player-display");
 const { stampCardResult } = require('./card-result-identity');
 const cardVenueReady = require('./card_venue_ready');
+const cardPresentationReady = require('./card_presentation_ready');
 const cardSkillIntent = require('./card_skill_intent');
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
@@ -2599,7 +2600,7 @@ room._turnTimer = null;
 room._pendingTimer = null;
 room._turnWarnTimer = null;
 room._pendingWarnTimer = null;
-  if(room.phase !== "playing" || cardVenueReady.waiting(room)) return;
+  if(room.phase !== "playing" || (cardVenueReady.waiting(room) || cardPresentationReady.waiting(room))) return;
   const st = room.state;
   if(!st || !Array.isArray(st.players) || st.players.length===0) return;
 
@@ -2900,6 +2901,7 @@ vis.cpuSkipAvailable = canHostSkipCpu(room, meta.playerId);
 // presentation metadata on the cloned visible state, never a rules/save field.
 stampCardResult(room, vis);
 vis.venueReady = cardVenueReady.view(room);
+vis.presentationReady = cardPresentationReady.view(room);
 io.to(sid).emit("STATE", vis);
   }
 }
@@ -2942,10 +2944,11 @@ players: st.players
 
 // ---------- 統一套用 applyAction + 廣播 EMIT / STATE ----------
 function applyAndBroadcast(room, action, io){
-  if (cardVenueReady.waiting(room)) return;
+  if ((cardVenueReady.waiting(room) || cardPresentationReady.waiting(room))) return;
   const previousRound = room.state?.roundNo;
   const res = cardSkillIntent.decorate(room, room.state, action, applyAction(room.state, action));
   room.state = res.state;
+  if (res.emits?.length) cardPresentationReady.begin(room);
   if (room.state.roundNo !== previousRound) cardVenueReady.begin(room);
 
   // 1) 先把 EMIT 事件照舊丟給前端
@@ -2978,16 +2981,17 @@ function applyAndBroadcast(room, action, io){
       }
 
       // 只要本局結束後，存活者全是 CPU，就自動下一局
-      if (aliveHumans === 0) {
+      if (aliveHumans === 0 && !st.final) {
         const roomId = [...rooms.entries()].find(([_, r]) => r === room)?.[0];
         if (roomId) {
-          room._autoNextTimer = setTimeout(() => {
+          room._autoNextTimer = setTimeout(function tryAutoNext() {
             const r2 = rooms.get(roomId);
             if (!r2) return;
 
             const st2 = r2.state;
             const ended2 = (st2?.turnStep === "ended" || st2?.turnStep === "end" || st2?.turnStep === "score");
             if (!ended2) return;
+            if (cardPresentationReady.waiting(r2)) {r2._autoNextTimer=setTimeout(tryAutoNext,250);return;}
 
             const ns = nextRound(st2);
             r2.state = ns;
@@ -3194,7 +3198,7 @@ function runCpuLoop(roomId){
     if (Number(roomNow._cpuLoopToken || 0) !== loopToken) return;
 
     const st = roomNow.state;
-    if (!st || cardVenueReady.waiting(roomNow)) return;
+    if (!st || (cardVenueReady.waiting(roomNow) || cardPresentationReady.waiting(roomNow))) return;
 
     if (st.turnStep === 'ended' || st.turnStep === 'end' || st.turnStep === 'score') {
       roomNow._cpuFastForward = false;
@@ -6249,6 +6253,15 @@ socket.on("TAKE_BACK_CONTROL", ({ roomId, playerId, secret } = {}, cb) => {
     const ok = Array.from(room.sockets.values()).some(m => m.playerId === playerId && m.secret === secret);
     if (!ok) return socket.emit("ERROR", { message: "驗證失敗" });
 
+    if (type === 'PRESENTATION_READY') {
+      const sender = room.sockets.get(socket.id);
+      if (!sender || sender.playerId !== playerId || sender.secret !== secret) return;
+      if (cardPresentationReady.acknowledge(room, playerId, action.payload)) {
+        broadcastState(room);
+        if (!cardPresentationReady.waiting(room)) {runCpuLoop(roomId);armRoomWatchdogs(roomId);}
+      }
+      return;
+    }
     if (type === 'VENUE_READY') {
       const sender = room.sockets.get(socket.id);
       if (!sender || sender.playerId !== playerId || sender.secret !== secret) return;
@@ -6261,8 +6274,8 @@ socket.on("TAKE_BACK_CONTROL", ({ roomId, playerId, secret } = {}, cb) => {
       }
       return;
     }
-    if (cardVenueReady.waiting(room) && type !== 'TAKE_BACK_CONTROL') {
-      socket.emit('EMIT', {type:'toast', text:'等待所有玩家看完本局場地後開始'});
+    if ((cardVenueReady.waiting(room) || cardPresentationReady.waiting(room)) && !['TAKE_BACK_CONTROL','LOBBY_KICK'].includes(type)) {
+      socket.emit('EMIT', {type:'toast', text:cardVenueReady.waiting(room)?'等待所有玩家看完本局場地後開始':'等待所有玩家看完動畫或卡牌後繼續'});
       return;
     }
 
@@ -6608,6 +6621,7 @@ room.sockets = newSockets;
     // 遊戲中：下一局（只有房主或本局勝利玩家可以按）
      if (type === 'NEXT_ROUND') {
       const st = room.state;
+      if(st?.final) return socket.emit('EMIT', {type:'toast',text:'整場已經結束，請查看結算畫面'});
 
       // 先確認這一局真的結束了
       const ended = typeof isRoundEnded === "function"
@@ -6784,7 +6798,7 @@ broadcastState(room);
       if(room.phase === 'playing' && meta && meta.playerId != null){
         const pid2 = Number(meta.playerId);
         const p = room.state?.players?.[pid2];
-        if(p && p.alive){
+        if(p){
           emitRoomToast(room, `⚠ ${p.client?.displayName || p.displayName || '玩家'} 連線中斷，${Math.round(OFFLINE_GRACE_MS/1000)} 秒內未回來將由 CPU 接管`);
 
           // ✅ 斷線中標記（讓其他玩家 UI 立刻看到）
@@ -6802,7 +6816,7 @@ broadcastState(room);
             const r2 = rooms.get(joinedRoom);
             if(!r2 || r2.phase !== 'playing') return;
             const p2 = r2.state?.players?.[pid2];
-            if(!p2 || !p2.alive) return;
+            if(!p2) return;
 
             const sec2 = String(p2.secret || '').trim();
             if(sec2){

@@ -8579,3 +8579,6 @@ A production isolated guest room passed 14 further checks with desktop and exact
 
 
 2026-10-31 publication verified: package-b79a005e238c7325 / source 9cbc2ab9f339fff104b7bcbf13c03a08fc91b020 / release 31fa96ea387e9832435393d9b17b217a66081bff. Public catalog, runtime identities, all 31 Card programs and scoped CAS hashes match. Public served desktop animation fixture checks 20 PASS; production isolated guest room with desktop/v059 Android/v059 iOS bundles and three CPU seats 14 PASS. No page errors. Local six-viewer matrix 142 cases/4398 assertions PASS, three rendered platforms 20 checks each PASS, two-window real npm-start sync 8 PASS, venue sync 14 PASS, original intent/barrier regressions 170/17 PASS. No physical phone or real-account acceptance claimed. Only game.html and desktop Card JS changed in the public program manifest; 1054 media files and native v059 binaries retained. Restart launcher/App and re-enter Card to refresh loaded code. Receipts in C:/Codex_QA/card-all-effects-audit-20261031/release-receipt.json. No screenshots/videos retained.
+
+
+2026-10-31: Card group presentation/reading barrier, CPU/turn/next-round gating, eliminated-viewer offline recovery and final-settlement protection implemented and checked. Files, evidence and test scope in CARD_GROUP_PRESENTATION_READY_20261031.md.

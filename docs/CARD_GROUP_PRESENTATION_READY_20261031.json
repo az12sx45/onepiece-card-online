@@ -1,0 +1,45 @@
+{
+  "status": "LOCAL_VERIFIED_PENDING_PUBLICATION",
+  "reports": [
+    {
+      "path": "C:\\Codex_QA\\card-group-ready-20261031\\sequence.json",
+      "sha256": "ea2bfcafee9f1b81c08576ca192ddff00a05cc91bf527cc89eff07dd1ca47d8f",
+      "checks": 17,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-group-ready-20261031\\client.json",
+      "sha256": "c14770bcceb40e52b90cc33d8ed875f322c8bb68a937302c183b204b374a8737",
+      "checks": 10,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-group-ready-20261031\\browser-r4\\browser.json",
+      "sha256": "502bc576f6094391f826bd59b7697e928af302add1373f0e4912ca03a525d065",
+      "checks": 14,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-group-ready-20261031\\flow-sync.json",
+      "sha256": "a07c5b10da932389201fd2c28afaa79dbfaf0e0241cb9c74fff5fa86169acd60",
+      "checks": 8,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-group-ready-20261031\\offline-r3.json",
+      "sha256": "e89f653312a416f216f824c53f3c15820d3b412f02669d5eac83ece8842aeebb",
+      "checks": 4,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-group-ready-20261031\\final.json",
+      "sha256": "b982a6a29a8b9ed106734d50a182adbec76fdff17e662879c45c7be7b6cc2467",
+      "checks": 2,
+      "passed": true
+    }
+  ],
+  "scope": "Desktop and exact v059 Android/iOS Chromium views, original engine/actions with isolated test seeds, plus real npm-start two-window regression. No physical-device or real-account claim.",
+  "engineChanged": false,
+  "mobileBinaryChanged": false,
+  "baseline": "package-b79a005e238c7325"
+}

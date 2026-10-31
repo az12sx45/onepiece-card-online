@@ -14,7 +14,8 @@ function harness(initial,viewer,installGuard=true){
  async function advance(ms){const end=now+ms;for(let i=0;i<10000;i++){const next=[...jobs].filter(([,j])=>j.at<=end).sort((a,b)=>a[1].at-b[1].at)[0];if(!next)break;now=next[1].at;jobs.delete(next[0]);next[1].fn();for(let j=0;j<5;j++)await Promise.resolve();}now=end;for(let j=0;j<5;j++)await Promise.resolve();}
  return {api,ctx,committed,effects,deliver,advance,releaseIntro(){introResolve?.(null);},releasePile(){pileResolve?.();},fx(v){fx=v;},coin(v){coin=v;}};
 }
-(async()=>{
+module.exports={harness};
+if(require.main===module)(async()=>{
  const cases=buildCases();
  // Reproduce the previous 100ms packet split without the new transaction guard.
  const legacy=harness({},0,false);legacy.deliver('EMIT',{to:'all',type:'log',text:'勝者 Audit0'});await legacy.advance(200);legacy.releaseIntro();await legacy.advance(100);legacy.releasePile();await legacy.advance(100);legacy.fx(false);await legacy.advance(200);

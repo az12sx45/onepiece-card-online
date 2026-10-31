@@ -2101,3 +2101,6 @@ Card venue/skill adapters: server/card_venue_ready.js and server/card_skill_inte
 
 
 Card outcome timing: scripts/card_outcome_guard.js embedded in public/game.html; server/card_skill_intent.js public declarations; scripts/card_all_effect_cases.js and card_all_effect_flow_qa.js audit all normal/enhanced effects with six viewers; shared android/card-all-effect-render-qa.mjs checks actual rendered animations.
+
+
+Card readiness: server/card_presentation_ready.js and server/index.js; scripts/card_group_ready_client.js embedded in public/game.html. QA: card_presentation_ready_qa.js, card_group_client_qa.js, card_group_sequence_qa.js, card_group_ready_browser_qa.mjs, card_group_offline_qa.js. card_group_server_fixture.js compiles the original server inside a test process and accepts fixture seeds only on private stdin; no production route.

@@ -2956,3 +2956,6 @@ Card online presentation now supports a room-only all-human venue barrier and co
 
 
 Card online outcome guard now keeps each engine EMIT/STATE transaction together on desktop and existing v059 mobile clients; no host or lobby change. See CARD_ALL_EFFECT_OUTCOME_AUDIT_20261031.md.
+
+
+Card now waits for every human viewer to finish each action presentation before further play. Automatic client acknowledgement integrates with existing local queues and explicit private reading; fresh venues still require each reader to confirm. See CARD_GROUP_PRESENTATION_READY_20261031.md.
