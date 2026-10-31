@@ -1,0 +1,49 @@
+{
+  "sourceCommit": "f1caf654db33c86520c664a494aac44d93a9ede6",
+  "status": "CANDIDATE_VERIFIED_PENDING_PUBLIC",
+  "release": "package-1e801282ab1d955a",
+  "manifestSha256": "3ab96b1f75a8f4cb669472bdff3dd0dfb80ed8e3f772ab9318916fa4f9129be5",
+  "editableSourceRoot": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html",
+  "sources": [
+    {
+      "path": "android/web/card-phone-coin.js",
+      "sha256": "80d6ca83b141cab08020964ea656754923f71caf8cc10612afa0bbb0f7b20ecd"
+    },
+    {
+      "path": "android/web/card-hud-combat.js",
+      "sha256": "431c03cf4dee26bc8cdf26f93b8f42a5536e96abffee20cee3d0be0097ad539c"
+    },
+    {
+      "path": "android/web/card-hud-combat.css",
+      "sha256": "091395a273e8bb9306be93f0c5b747a6eadd30a21e1fd53ae12a4e84b6d1e2c4"
+    },
+    {
+      "path": "android/web/card-duel-finishers.js",
+      "sha256": "0330901b974de835b92042669822abe807d6ad17278b476fe5ea414410e5d665"
+    },
+    {
+      "path": "android/web/card-action-cues.js",
+      "sha256": "268ab89f2bf4f04a700c6478c180682de29b5b897625be2123405748d6e2bef3"
+    },
+    {
+      "path": "android/web/card-action-cues.css",
+      "sha256": "8856a2ccefccaad0637e2a91d204980c5cf4119e300ef6d430a603cd5b2075cb"
+    },
+    {
+      "path": "android/web/art/card-sniper-atlas-v3.webp",
+      "sha256": "b37863d95d256cca64dd7ddc4784a5f53025c33954974d5eff043b1824fcb0ad"
+    },
+    {
+      "path": "android/mobile-sources.mjs",
+      "sha256": "39569e1a910242bf689efeaaa3338e97999edbcb5e83fd1061c312259173b93a"
+    },
+    {
+      "path": "android/build-card-desktop.mjs",
+      "sha256": "3ea5e27c39b97cb1cbc01642aa5712e21592a338a661fadc05cceb2b842ce0f8"
+    },
+    {
+      "path": "android/card-status-interactions-qa.mjs",
+      "sha256": "0a3b106a1dbf2df8c6015496ff61ed3580f94f983bc5edbae7e154dc62ee404e"
+    }
+  ]
+}

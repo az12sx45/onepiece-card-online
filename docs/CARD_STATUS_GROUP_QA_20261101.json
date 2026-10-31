@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "isolated original server listening",
+      "pass": true
+    },
+    {
+      "name": "paralysis respects slow reader before skipping",
+      "pass": true
+    },
+    {
+      "name": "six human and CPU paralysis turns automatically skipped without drawing",
+      "pass": true
+    },
+    {
+      "name": "all-human barrier waits for slow reader",
+      "pass": true
+    },
+    {
+      "name": "waiting status fits viewport 0",
+      "pass": true
+    },
+    {
+      "name": "waiting status fits viewport 1",
+      "pass": true
+    },
+    {
+      "name": "playing cannot bypass another readers gate",
+      "pass": true
+    },
+    {
+      "name": "next turn waits until private reader closes card",
+      "pass": true
+    },
+    {
+      "name": "next turn draw resumes after everyone finishes",
+      "pass": true
+    },
+    {
+      "name": "CPU waits for all viewers before its first action",
+      "pass": true
+    },
+    {
+      "name": "auto next round waits beyond old three-second timeout",
+      "pass": true
+    },
+    {
+      "name": "host cannot force next round while viewer is still reading",
+      "pass": true
+    },
+    {
+      "name": "CPU round completes and next round gets fresh venue gate",
+      "pass": true
+    },
+    {
+      "name": "new round waits for last venue reader",
+      "pass": true
+    },
+    {
+      "name": "new round releases after all venue readers finish",
+      "pass": true
+    },
+    {
+      "name": "no page errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "scope": "Three Chromium clients with exact desktop/v059 Android/iOS bundles plus three CPU; isolated server with test-process-only state seeds, original engine/actions/Socket.IO, private read, CPU duel, next-round gates; no physical-device claim."
+}

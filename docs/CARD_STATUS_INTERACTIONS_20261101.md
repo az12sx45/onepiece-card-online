@@ -26,3 +26,6 @@ The inline compatibility block upgrades installed v059 Android/iOS bundles. Vers
 
 ## Art provenance
 Built-in image_gen, transparent_background=true. Generated seed atlas and a cleanup edit, then format conversion preserving alpha to android/web/art/card-sniper-atlas-v3.webp. CSS edge mask suppresses remaining diffuse sprite boundaries. Prompt: three-by-two pirate-anime atlas with vine reticle, green seed bullet, leaf impact, cyan sidestep swoosh, gold clash spark and leaf fragments; isolated transparent sprites with no frames, words or panels. Cleanup prompt removes diffuse haze while preserving the six shapes/positions. Original generated files remain in .codex/generated_images/01a13564-f60c-71b1-8178-336039a1904c (exec-b0fbc332… and exec-d527270e…). No source photo, additional game asset or paid external service used.
+
+## Six-seat integration result
+PASS: 16 assertions, three independent Chromium clients using desktop and exact v059 Android/iOS bundles plus three CPUs. All six mandatory paralysis skips complete without drawing. Slow readers still block CPU/action advancement; private reveal, CPU duel, next round and venue-ready complete without page errors. See CARD_STATUS_GROUP_QA_20261101.json.
