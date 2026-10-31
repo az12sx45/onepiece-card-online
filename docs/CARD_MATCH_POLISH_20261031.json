@@ -1,0 +1,53 @@
+{
+  "status": "PUBLISHED_PUBLIC_VERIFIED",
+  "sourceCommit": "1b42270f2a4117da10743790d104a9bbef9ecfe9",
+  "releaseCommit": "a46a29618b28b2fc3a058bdcfd949684bed4c167",
+  "releaseId": "package-1c4c7bf671f8df3d",
+  "reports": [
+    {
+      "path": "C:\\Codex_QA\\card-match-polish-20261031\\desktop-final-full\\report.json",
+      "sha256": "47b0cc0f307d43b87752d24509271082326d866fc4ead642a6d9db1a9c56090f",
+      "checks": 13,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-match-polish-20261031\\android-final-full\\report.json",
+      "sha256": "ac58a4def0e1d55bbcde175ff40b6122f7ed7c7d54a8444fb86fe8858ee7b8e5",
+      "checks": 13,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-match-polish-20261031\\ios-final-full\\report.json",
+      "sha256": "99e32f97835b1b947c7c769830517e67630aa3bdf804e82b275f163416728639",
+      "checks": 13,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-match-polish-20261031\\sync.json",
+      "sha256": "0aadabf2ec5ab9a1dc3ce84276301866bd5399f17715dc9750ed54498187582a",
+      "checks": 8,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-match-polish-20261031\\public-release-readback.json",
+      "sha256": "159806d6b4a9743bc24e66318e0accdb74608483db11b408135656dc3eecd637",
+      "checks": 39,
+      "passed": true
+    },
+    {
+      "path": "C:\\Codex_QA\\card-match-polish-20261031\\public-room\\browser.json",
+      "sha256": "a44fb0a7bd0c68e0e77cb9b7ade7d7540cb38dbe320345951fd7fbf8b786e317",
+      "checks": 17,
+      "passed": true
+    }
+  ],
+  "nativeBinaryChanged": false,
+  "gameRulesChanged": false,
+  "physicalDevicesTested": false,
+  "manifestSha256": "49d80d673a1efdd3b9af6ebb00f57406c6a7835b5c7192ba145776897de725ac",
+  "screenshotCleanup": {
+    "status": "BLOCKED_BY_POLICY",
+    "deleted": 0,
+    "retainedMB": 25.0
+  }
+}
