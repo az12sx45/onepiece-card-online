@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "desktop": {
+    "schema": 1,
+    "channel": "stable",
+    "platform": "win32",
+    "arch": "x64",
+    "version": "1.2.30",
+    "publishedAt": "2026-10-31T21:33:50.252Z",
+    "artifact": {
+      "fileName": "ONE-PIECE-Tabletop-Launcher-1.2.30-x64.exe",
+      "bytes": 322856913,
+      "sha256": "c732cfe5c88ca56d35b8fba6a8aaaab1c17ee740d60cb10ff225e141dc5dca20",
+      "url": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.30/ONE-PIECE-Tabletop-Launcher-1.2.30-x64.exe"
+    },
+    "signature": {
+      "algorithm": "Ed25519",
+      "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
+      "value": "bsrVfKyeAgF0GcK1YFmf1+ZSZx9vriwUdyQY/WTxPySK7Tn8olxcFDyWmubcXNGdDJLmCeVaIXx+ybOu8o33DA=="
+    }
+  },
+  "desktopArtifactFullHash": true,
+  "mobile": {
+    "android": {
+      "version": 60,
+      "sha256": "d407774d97102ae214afa50a2148a7c2c872e165f2fd81a6b7c8c760e9eb1893",
+      "artifact": {
+        "url": "https://game-assets.rihdi.tw/android/releases/60/PIRATE-ODYSSEY-v060-f4f44fbcec4d.apk",
+        "bytes": 477442003,
+        "sha256": "f4f44fbcec4d17f09baed30345a32ef285115486e72c7b452cc43c1628bac5a6"
+      }
+    },
+    "ios": {
+      "version": 60,
+      "sha256": "c7c0b4deb91871d238b36716a70be26ef28439c9bdda5e2afac9372de56a7cd6",
+      "artifact": {
+        "url": "https://game-assets.rihdi.tw/ios/releases/60/PIRATE-ODYSSEY-v060-3999b5d4b13a-UNSIGNED.ipa",
+        "bytes": 433391435,
+        "sha256": "3999b5d4b13ae4f254894bc5cf692e40f855106209678aea49bc4c45ff79e73b"
+      }
+    }
+  },
+  "at": "2026-10-31T21:50:36.694Z"
+}

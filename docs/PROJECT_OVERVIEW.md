@@ -2987,3 +2987,5 @@ Native Card lobby delegates verified download caching to the host; it does not r
 2026-11-01: Card online presentation owns Usopp timeline across retained native bundles. Original launcher/lobby and rules remain unchanged.
 
 2026-11-01：新增獨立 marineford（頂上戰爭篇），沿用帳號、不共用原三款遊戲狀態。詳見 MARINEFORD_20261101.md；第四遊戲原生入口尚在打包驗證。
+
+2026-11-01: Marineford release clients are Windows 1.2.30 / Android v060 / unsigned iOS v060. Public channels and packages verified; Android physical launch/CPU/private-read flow checked, 20 HTTPS delta checks and 45 isolated browser checks pass. Final online hand/read layout rollout is being byte-checked. See docs/MARINEFORD_20261101.md and MARINEFORD_*_20261101.json receipts.

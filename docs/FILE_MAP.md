@@ -2132,3 +2132,5 @@ scripts/card_native_entry_qa.js tests real worker retirement routing; card_kille
 2026-11-01: card-sniper-sequence / card-menu-layout modules and card_sniper_menu_qa.mjs; formal public game.html and generated desktop JS/CSS. See CARD_SNIPER_MENU_20261101.md.
 
 2026-11-01：server/marineford-engine.js 規則；server/marineford-rooms.js MF_* 同步；public/marineford/ UI/卡片；scripts/marineford_* 驗證及媒體發布；docs/MARINEFORD_20261101.md 規則來源/驗證邊界。
+
+2026-11-01: Marineford release clients are Windows 1.2.30 / Android v060 / unsigned iOS v060. Public channels and packages verified; Android physical launch/CPU/private-read flow checked, 20 HTTPS delta checks and 45 isolated browser checks pass. Final online hand/read layout rollout is being byte-checked. See docs/MARINEFORD_20261101.md and MARINEFORD_*_20261101.json receipts.

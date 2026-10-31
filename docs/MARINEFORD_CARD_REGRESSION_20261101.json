@@ -33,7 +33,7 @@
       "name": "refresh restores same seat and turn",
       "ok": true,
       "detail": {
-        "seat": 0,
+        "seat": 1,
         "turn": 0,
         "step": "choose"
       }

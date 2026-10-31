@@ -16,10 +16,12 @@
     "read mobile choice controls exist",
     "read no document overflow",
     "read continue visible without scrolling",
+    "read complete cards fit above confirmation",
     "read actual touch choice accepted",
     "review mobile choice controls exist",
     "review no document overflow",
     "review continue visible without scrolling",
+    "review complete cards fit above confirmation",
     "review actual touch choice accepted",
     "return mobile choice controls exist",
     "return no document overflow",
@@ -46,5 +48,5 @@
     "No browser exceptions",
     "WebKit lobby to table and generated art loaded"
   ],
-  "actions": 99
+  "actions": 172
 }

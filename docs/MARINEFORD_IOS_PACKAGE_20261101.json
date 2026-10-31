@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "versionCode": 60,
+  "signed": false,
+  "sha256": "3999b5d4b13ae4f254894bc5cf692e40f855106209678aea49bc4c45ff79e73b",
+  "bytes": 433391435,
+  "architecture": "arm64",
+  "unchangedLauncherFiles": 1533,
+  "changedLauncherFiles": [
+    "Payload/PO.app/launcher-web/launcher/mobile-bridge.js",
+    "Payload/PO.app/launcher-web/launcher/launcher.js"
+  ],
+  "addedFiles": [
+    "Payload/PO.app/launcher-web/launcher-assets/images/game_launcher/launcher_marineford_cover_v1.webp"
+  ],
+  "verifiedBundledFiles": 1536,
+  "nativeCardAndBoardSourcePreserved": true,
+  "cloudRunId": 41243640177,
+  "physicalIphoneTested": false,
+  "requiresOwnerSigning": true
+}
