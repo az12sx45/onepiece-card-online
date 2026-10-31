@@ -1,0 +1,26 @@
+{
+  "added": [
+    "assets/launcher-assets/images/game_launcher/launcher_marineford_cover_v1.webp"
+  ],
+  "removed": [],
+  "changed": [
+    "AndroidManifest.xml",
+    "META-INF/ANDROIDT.RSA",
+    "META-INF/ANDROIDT.SF",
+    "META-INF/MANIFEST.MF",
+    "assets/launcher/launcher.js",
+    "assets/launcher/mobile-bridge.js",
+    "assets/mobile/game-mobile.css",
+    "assets/mobile/game-mobile.js",
+    "assets/web-build-receipt.json",
+    "classes.dex"
+  ],
+  "unchanged": 3541,
+  "bytes": 477442003,
+  "sha256": "f4f44fbcec4d17f09baed30345a32ef285115486e72c7b452cc43c1628bac5a6",
+  "passed": true,
+  "nativeBoardUnchanged": true,
+  "originalAccountAndSaveDataPreservedOnDevice": true,
+  "launcherChange": "Only fourth game entry and online launch whitelist; original entries retained",
+  "cardBundles": "Current Android game-mobile CSS/JS from maintained source; public Card program remains separate"
+}

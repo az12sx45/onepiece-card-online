@@ -1,0 +1,18 @@
+{
+  "changed": [
+    "candidate/bundle-resources/launcher-web/launcher/launcher.js",
+    "candidate/bundle-resources/launcher-web/launcher/mobile-bridge.js",
+    "candidate/launcher-manifest.json",
+    "candidate/native/po_ios_web_game.h",
+    "candidate/preparation.json",
+    "candidate/project/export_presets.cfg",
+    "candidate/project/ios_host.gd"
+  ],
+  "added": [
+    "candidate/bundle-resources/launcher-web/launcher-assets/images/game_launcher/launcher_marineford_cover_v1.webp"
+  ],
+  "unchanged": 5227,
+  "nativeBoardUnchanged": true,
+  "cardBundlesUnchanged": true,
+  "compiled": false
+}

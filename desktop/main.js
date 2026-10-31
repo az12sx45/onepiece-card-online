@@ -1557,7 +1557,7 @@ async function loadContentOrBundled(window, bundledHtml) {
       const check = () => {
         const stage = document.body?.dataset?.stage;
         if (window.onePieceDesktop && (stage === 'auth' ||
-          (stage === 'app' && document.querySelectorAll('.game-rail-item').length === 3))) return resolve(true);
+          (stage === 'app' && document.querySelectorAll('.game-rail-item').length === ${ALLOWED_GAME_IDS.size}))) return resolve(true);
         if (Date.now() >= deadline) return resolve(false);
         setTimeout(check, 50);
       };
@@ -1650,7 +1650,7 @@ async function runVisualOrSmokeCapture() {
   await mainWindow.webContents.executeJavaScript(`new Promise((resolve) => {
     const deadline = Date.now() + 15000;
     const check = () => {
-      if (document.body.dataset.stage === 'app' && document.querySelectorAll('.game-rail-item').length === 3) return resolve();
+      if (document.body.dataset.stage === 'app' && document.querySelectorAll('.game-rail-item').length === ${ALLOWED_GAME_IDS.size}) return resolve();
       if (Date.now() >= deadline) return resolve();
       setTimeout(check, 50);
     };
@@ -2114,11 +2114,11 @@ async function runVisualOrSmokeCapture() {
     cursorPulseCleanupReady = await mainWindow.webContents.executeJavaScript(`document.querySelectorAll('.launcher-cursor-click-pulse').length === 0 && !document.body.classList.contains('is-cursor-pressed')`, true).catch(() => false);
   }
   const viewReady = SCREENSHOT_VIEW === 'downloads'
-    ? dom.downloadsVisible && dom.downloadRows === 3
+    ? dom.downloadsVisible && dom.downloadRows === ALLOWED_GAME_IDS.size
     : SCREENSHOT_VIEW === 'cursor-click'
       ? dom.cursorPulseCount === 1 && dom.cursorPulseAriaHidden === 'true' && dom.cursorPulsePointerEvents === 'none' && ['launcherCursorClickPulse', 'launcherCursorClickFade'].includes(dom.cursorPulseAnimationName) && ['0.32s', '0.12s'].includes(dom.cursorPulseAnimationDuration) && cursorPulseCleanupReady
     : SCREENSHOT_VIEW === 'uninstall'
-      ? dom.downloadsVisible && dom.downloadRows === 3 && dom.uninstallOpen
+      ? dom.downloadsVisible && dom.downloadRows === ALLOWED_GAME_IDS.size && dom.uninstallOpen
       : ['settings', 'settings-on', 'settings-update-current'].includes(SCREENSHOT_VIEW)
         ? dom.settingsOpen && dom.settingsDisplayModeValues.length === 2 && dom.settingsDisplayModeValues.includes('borderless') && dom.settingsDisplayModeValues.includes('fullscreen') && dom.settingsCheckedDisplayModes.length === 1 && !dom.settingsHorizontalOverflow && (SCREENSHOT_VIEW !== 'settings-on' || dom.minimizeToTrayChecked) && (SCREENSHOT_VIEW !== 'settings-update-current' || (dom.launcherUpdateStatus === 'current' && dom.launcherUpdateActionText === '再次檢查' && dom.launcherCurrentVersionText.includes(app.getVersion())))
         : SCREENSHOT_VIEW === 'box-crack'
@@ -2133,7 +2133,7 @@ async function runVisualOrSmokeCapture() {
   const mediaExclusive = dom.videoOpacity <= .001 || dom.artOpacity <= .001;
   const cursorHas = (value, fileName) => value.includes(fileName) && /\b3\s+3\b/.test(value);
   const cursorReady = cursorHas(dom.bodyCursor, 'launcher_cursor_logpose_default_v1.png') && cursorHas(dom.pointerCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.settingsOptionCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.checkboxCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.pressedCursor, 'launcher_cursor_logpose_pressed_v1.png') && cursorHas(dom.disabledCursor, 'launcher_cursor_logpose_default_v1.png') && dom.textCursor === 'text' && dom.pressedActiveRulePresent;
-  const visualReady = dom.stage === 'app' && dom.games === 3 && dom.loadedBoxCovers >= 7 && dom.loadedBoxFrames >= 7 && dom.brokenImages.length === 0 && dom.visiblePendingImages.length === 0 && mediaExclusive && cursorReady && viewReady;
+  const visualReady = dom.stage === 'app' && dom.games === ALLOWED_GAME_IDS.size && dom.loadedBoxCovers >= 7 && dom.loadedBoxFrames >= 7 && dom.brokenImages.length === 0 && dom.visiblePendingImages.length === 0 && mediaExclusive && cursorReady && viewReady;
   if (SMOKE_MODE) finishSmoke(
     { stage: 'launcher-ready', dom, protocolSmoke, profileAssetsSmoke, installedMediaSmoke, traySmoke, gpu: await collectGpuDiagnostics(), sessionDataPath: app.getPath('sessionData'), state: await composeState() },
     dom.hasApi && visualReady && protocolSmoke?.ok === true && (!SMOKE_PROFILE_ASSETS || profileAssetsSmoke?.ok === true) && (!SMOKE_MEDIA_ASSETS || installedMediaSmoke?.ok === true) ? 0 : 1
