@@ -8605,3 +8605,5 @@ Publication verified: package-aba4af45c2fe5676; source 7a0c14db2df4bee6720bfb936
 
 
 2026-11-01: Card paralysis auto-skip, guarded Usopp target shortcut, distinct coin faces, early dodge, action cues and duel impact polish. Files and validation: CARD_STATUS_INTERACTIONS_20261101.md (formal Card authority).
+
+Published and publicly verified 2026-11-01: package-1e801282ab1d955a, source f1caf654db33c86520c664a494aac44d93a9ede6, release 907c416e7aa1dea5edb3dde671d2f3fde03f9430. Public catalog/runtime, all 31 program files and three CAS objects with CORS match. Production isolated six-seat browser room: 17 checks PASS (desktop, exact v059 Android/iOS bundles and three CPUs). No physical-device claim. Evidence CARD_STATUS_RELEASE_20261101.json.

@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "public game available",
+      "pass": true
+    },
+    {
+      "name": "six seats wait for three humans only",
+      "pass": true
+    },
+    {
+      "name": "confirmation fits 0",
+      "pass": true
+    },
+    {
+      "name": "confirmation fits 1",
+      "pass": true
+    },
+    {
+      "name": "confirmation fits 2",
+      "pass": true
+    },
+    {
+      "name": "Escape does not confirm",
+      "pass": true
+    },
+    {
+      "name": "premature human or CPU draw cannot advance",
+      "pass": true
+    },
+    {
+      "name": "first reader stays in waiting panel",
+      "pass": true
+    },
+    {
+      "name": "last unread reader blocks round",
+      "pass": true
+    },
+    {
+      "name": "another socket cannot confirm for unread player",
+      "pass": true
+    },
+    {
+      "name": "unread reconnect retains two confirmations",
+      "pass": true
+    },
+    {
+      "name": "all three release together without animation-queue deadlock",
+      "pass": true
+    },
+    {
+      "name": "human or CPU can act after release",
+      "pass": true
+    },
+    {
+      "name": "public action waits for third reader",
+      "pass": true
+    },
+    {
+      "name": "public human and CPU actions cannot bypass reader",
+      "pass": true
+    },
+    {
+      "name": "public room resumes after final reader closes",
+      "pass": true
+    },
+    {
+      "name": "no page errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "scope": "Public isolated guest room: desktop and exact released v059 Android/iOS bundles, three CPU seats; real production Socket.IO, no physical-device or real-account claim."
+}

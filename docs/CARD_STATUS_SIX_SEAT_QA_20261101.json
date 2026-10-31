@@ -1,0 +1,60 @@
+{
+  "scope": "Six-seat 640x320 exact installed Android client layout with current shared online patch; Chromium only.",
+  "checks": [
+    {
+      "name": "Draw cue visible at pile, inside screen",
+      "pass": true
+    },
+    {
+      "name": "Target portraits clearly marked",
+      "pass": true
+    },
+    {
+      "name": "Target hint visible without clipping",
+      "pass": true
+    },
+    {
+      "name": "Five opponent targets fit six-seat layout",
+      "pass": true,
+      "detail": [
+        {
+          "left": 17,
+          "right": 127.953125,
+          "top": 19,
+          "bottom": 78.96875
+        },
+        {
+          "left": 140.75,
+          "right": 251.703125,
+          "top": 19,
+          "bottom": 78.96875
+        },
+        {
+          "left": 264.5,
+          "right": 375.46875,
+          "top": 19,
+          "bottom": 78.96875
+        },
+        {
+          "left": 388.265625,
+          "right": 499.234375,
+          "top": 19,
+          "bottom": 78.96875
+        },
+        {
+          "left": 512.03125,
+          "right": 623,
+          "top": 19,
+          "bottom": 78.96875
+        }
+      ]
+    },
+    {
+      "name": "Idle cue does not starve presentation timers",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "screenshots": [],
+  "passed": true
+}

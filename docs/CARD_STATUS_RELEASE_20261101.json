@@ -1,6 +1,6 @@
 {
   "sourceCommit": "f1caf654db33c86520c664a494aac44d93a9ede6",
-  "status": "CANDIDATE_VERIFIED_PENDING_PUBLIC",
+  "status": "PUBLISHED_PUBLIC_VERIFIED",
   "release": "package-1e801282ab1d955a",
   "manifestSha256": "3ab96b1f75a8f4cb669472bdff3dd0dfb80ed8e3f772ab9318916fa4f9129be5",
   "editableSourceRoot": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html",
@@ -45,5 +45,24 @@
       "path": "android/card-status-interactions-qa.mjs",
       "sha256": "0a3b106a1dbf2df8c6015496ff61ed3580f94f983bc5edbae7e154dc62ee404e"
     }
-  ]
+  ],
+  "releaseCommit": "907c416e7aa1dea5edb3dde671d2f3fde03f9430",
+  "publicReports": [
+    {
+      "label": "public-files",
+      "path": "D:\\Codex_QA\\card-status-release-20261101\\public-readback.json",
+      "sha256": "8977712137e1f9d1b1d38fb3af54717283685bd5ec718319393fede69984967a",
+      "checks": 39,
+      "passed": true
+    },
+    {
+      "label": "public-six-seat-room",
+      "path": "D:\\Codex_QA\\card-status-release-20261101\\public-room\\browser.json",
+      "sha256": "a44fb0a7bd0c68e0e77cb9b7ade7d7540cb38dbe320345951fd7fbf8b786e317",
+      "checks": 17,
+      "passed": true
+    }
+  ],
+  "physicalDeviceTested": false,
+  "publicVerifiedAt": "2026-10-31T16:59:00.990Z"
 }

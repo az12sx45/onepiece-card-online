@@ -29,3 +29,11 @@ Built-in image_gen, transparent_background=true. Generated seed atlas and a clea
 
 ## Six-seat integration result
 PASS: 16 assertions, three independent Chromium clients using desktop and exact v059 Android/iOS bundles plus three CPUs. All six mandatory paralysis skips complete without drawing. Slow readers still block CPU/action advancement; private reveal, CPU duel, next round and venue-ready complete without page errors. See CARD_STATUS_GROUP_QA_20261101.json.
+
+## Six-seat compact layout
+Additional current-source check: exact installed Android bundle at 640x320; five opponent targets, draw prompt and target banner fit; unchanged cue hidden state causes zero observer writes during an idle 500 ms window. All five checks pass. Evidence: CARD_STATUS_SIX_SEAT_QA_20261101.json.
+
+## Final art edit prompt (built-in image_gen)
+Edit this VFX atlas: preserve the six shapes, positions, 3x2 layout, outlines and colors, but REMOVE ALL diffuse glow, colored haze, green/gray/brown backgrounds, shadows, background lighting and gradients between the six sprites. All blank space INCLUDING the open center of the top-left vine ring MUST be 100% TRANSPARENT (alpha=0). Only keep actual inked leaves, actual seed and thin speed streaks, sharp white/yellow impact rays, actual cyan wind streaks, actual yellow spark, actual separate leaves. Crisp isolated hard-edged cel animation assets on TRANSPARENT background. No ambient bloom. No rectangular or circular filled area behind any sprite.
+
+Saved final asset: C:/Users/王曜瑋/.codex/worktrees/android-tabletop-landscape/2026-04-20-1-2-start-html-game-html/android/web/art/card-sniper-atlas-v3.webp. Generated alpha preserved during WebP conversion; runtime mask softens remaining haze at cell boundaries. The image generator did not completely remove all diffuse glow; no claim of perfect isolated alpha is made.
