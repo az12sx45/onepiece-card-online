@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "gameId": "marineford",
+  "sourceCommit": "ba2bdd408dd91258b6ce34be1b765e808439a3ba",
+  "releaseChannelsVerified": true,
+  "versions": {
+    "ios": 60,
+    "windows": "1.2.30",
+    "android": 60
+  },
+  "browserChecks": 49,
+  "browserActions": 83,
+  "engineMatches": 1500,
+  "androidDevice": {
+    "physicalAndroid": true,
+    "device": "V2105",
+    "versionCode": 60,
+    "install": "adb install -r success",
+    "accountRetained": true,
+    "steps": [
+      "original launcher fourth entry",
+      "authenticated Marineford lobby",
+      "create room",
+      "add CPU",
+      "assign Navy to CPU",
+      "CPU draw/play/battle and replacement hand",
+      "human draw",
+      "Ace card detail and play",
+      "ally target choice",
+      "blind Navy hand slot",
+      "private read confirmation",
+      "CPU next turn and return to human"
+    ],
+    "entirePhysicalMatchCompleted": false,
+    "physicalIphoneTested": false,
+    "savesGameplayRevalidated": false
+  },
+  "finalOnlineSourceReadback": "passed: 42 public program/media checks against ba2bdd408",
+  "limitations": [
+    "Physical iPhone not tested",
+    "Real Android/iPhone/desktop full multiplayer match not completed",
+    "Game rooms are server-memory state, not persistent match saves"
+  ]
+}

@@ -8642,3 +8642,7 @@ Published and publicly verified 2026-11-01: package-a75b6b650e743963; source 189
 
 2026-11-01: Added host-only confirmed close of a Marineford match (no winner/reward), clearing timers and returning all viewers to the lobby, so a test or interrupted match does not trap players. Guest rejection, confirmation before mutation, all-six-client closure and stale-health cleanup covered. Original game protocols unchanged.
 2026-11-01: Final 49 browser checks pass, including host-only confirmed room close. Deleted only three verified redundant current-build files (unsigned APK, exact reconstructed APK, extracted IPA ZIP), freeing 1.29 GiB; retained signed APK, NSIS, unsigned IPA, prior baseline packages and all reports.
+
+2026-11-01 final evidence: updated docs/MARINEFORD_20261101.md to the final 49-check suite and retained docs/MARINEFORD_ANDROID_DEVICE_20261101.json with the precise physical-device scope. Phone subsequently locked; no additional physical acceptance or iPhone test claimed.
+
+Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media checks against ba2bdd408dd91258b6ce34be1b765e808439a3ba pass, including cold-hand placeholder, full read/review image fit and confirmed host close. No further client binary rebuild required. Exact delivery scope in MARINEFORD_DELIVERY_20261101.json.
