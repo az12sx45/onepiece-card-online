@@ -82,7 +82,7 @@ function mediaIndex(publicDir) {
     const extra = JSON.parse(fs.readFileSync(extraPath, 'utf8'));
     if (extra.schema !== 1 || extra.gameId !== 'marineford' || !Array.isArray(extra.assets)) throw new Error('Invalid Marineford media inventory');
     for (const asset of extra.assets) {
-      if (!/^(?:marineford\/art\/[a-z0-9-]+|images\/game_launcher\/launcher_marineford_cover_v1)\.webp$/.test(asset.path)
+      if (!/^(?:marineford\/art\/(?:v2\/)?[a-z0-9_-]+|images\/game_launcher\/launcher_marineford_cover_v[12])\.webp$/.test(asset.path)
         || !/^[a-f0-9]{64}$/.test(asset.sha256) || !Number.isSafeInteger(asset.size) || asset.size < 1) throw new Error('Invalid Marineford media');
       index.set('/' + asset.path, `${ASSET_BASE}/${asset.sha256.slice(0, 2)}/${asset.sha256}`);
     }

@@ -1,0 +1,18 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {PGlite}=require(process.env.BOARD_QA_PGLITE||'D:/Codex_QA/draw-result-art-20260922/deps/node_modules/@electric-sql/pglite');
+const R=require('../server/marineford-records');
+const {sanitizeLauncherStatsPatch}=require('../server/launcher-profile-shop');
+(async()=>{const db=new PGlite();try{
+ await db.exec('CREATE TABLE player_profiles(user_id integer PRIMARY KEY,stats jsonb,updated_at timestamptz DEFAULT now()); INSERT INTO player_profiles VALUES(1,\'{"untouched":42}\'),(2,\'{}\'),(3,NULL)');
+ const store=R.createStore(db),match={id:R.newId(),code:'MQA',participants:[{user_id:1,team:'navy'},{user_id:2,team:'pirate'},{user_id:3,team:'pirate'}],winner:'pirate',cpu:true,endedAt:Date.now(),actions:31};
+ assert.equal((await store.record(match)).updated,3);assert.equal((await store.record(match)).recorded,0);
+ let a=await store.profile(1),b=await store.profile(2);assert.deepEqual([a.games,a.losses,a.navyGames,a.navyWins,a.cpuGames],[1,1,1,0,1]);assert.deepEqual([b.games,b.wins,b.pirateGames,b.pirateWins],[1,1,1,1]);
+ await store.record({...match,id:R.newId(),winner:'navy',cpu:false});a=await store.profile(1);assert.deepEqual([a.games,a.wins,a.losses,a.navyWins,a.cpuGames],[2,1,1,1,1]);
+ assert.equal((await db.query('SELECT stats FROM player_profiles WHERE user_id=1')).rows[0].stats.untouched,42);
+ await assert.rejects(store.record({...match,id:R.newId(),participants:[{user_id:999,team:'navy'}]}),/profile_missing/);
+ assert.equal((await db.query('SELECT count(*)::integer n FROM launcher_marineford_matches')).rows[0].n,2);
+ assert.equal(sanitizeLauncherStatsPatch({launcherMarinefordV1:{wins:999}}).launcherMarinefordV1,undefined);
+ assert.equal(R.completed({state:{phase:'playing'}}),null);
+ console.log(JSON.stringify({ok:true,postgres:true,checks:['all-team-scores','exactly-once','faction-counters','preserve-other-stats','missing-profile-no-false-success','client-forgery-rejected','abandoned-match-not-scored']}));
+ }finally{await db.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

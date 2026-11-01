@@ -1,0 +1,327 @@
+{
+  "status": "40-art-assets-complete-browser-and-audio-qa-passed",
+  "generator": "GPT imagegen",
+  "assets": [
+    {
+      "key": "new_cover",
+      "prompt": "Create a completely NEW premium illustrated key art cover for a One Piece Marineford strategic card game. Portrait 2:3, flat front cover, no physical box, no perspective mockup. Art direction: exceptionally polished 2D anime film poster, confident expressive ink drawing, beautiful painted cinematic depth, restrained ivory navy and vermilion palette, no generic gold RPG scrollwork. Whitebeard Edward Newgate dominates left foreground, anatomically powerful mature giant with iconic upward crescent WHITE moustache, black bandana, open white captain coat over scarred chest, gripping his bisento. Opposite him on right Admiral Akainu, stern angular older face, white MARINE cap, red suit and white epaulette coat, magma fist with molten veins. Small Portgas D Ace centered lower between them, black hair, freckles, bare chest, orange hat hanging behind neck, red bead necklace, a restrained swirl of fire. Clear recognizable canon faces, not generic pirates. Vast Marineford fortress and distant crescent harbor behind, cracking ice and rising sea creating one dramatic diagonal, flags and tiny ships for scale. Big clean EXACT Traditional Chinese title '頂上戰爭篇' at upper quarter in ivory hand-lettered monumental type. Small 'ONE PIECE' above, small 'MARINEFORD' below. Keep title unobscured, characters visible, no clutter, no extra logos, no watermark. Sophisticated finish, high visual hierarchy, designed for a game launcher thumbnail and full-page cover.",
+      "generatedFile": "exec-6d4d200b-b335-4f4f-b596-a8a06e76e326.png",
+      "destination": "public/marineford/art/v2/new_cover.webp",
+      "sha256": "8dc46d5f3737503388041228a85dc8d017f916f2879f84d510bf768e57136f0f",
+      "bytes": 662240
+    },
+    {
+      "key": "v2_field",
+      "prompt": "Production background for a completely new premium One Piece Marineford strategy card game. Wide 16:9 landscape, cinematic painted 2D anime, confident fine ink drawing, ivory stone, cold deep navy and restrained vermilion banners. We are looking down at a shallow 20 degree angle across the FROZEN CRESCENT HARBOR below Marineford, a beautiful polished opaque blue ice playing surface with concentric subtle frost arcs. Naval fortress and ramparts occupy the upper 16 percent at far distance; tiny Moby Dick bow far left, a distant scaffold far right. Broad middle 70 percent calm deep desaturated blue ice, deliberately empty and low contrast for readable playing cards, subtle controlled light shaft from upper right, stormy navy sky reflected at edges. Bottom corners have only a hint of cracked stone; no foreground character or objects. Not the previous stone plaza scene. No interface, text, logos, cards, lettering, watermark. Distinctive beautiful finished playable battlefield.",
+      "generatedFile": "exec-f5b2c27e-9514-46fd-925e-5beaf1d71144.png",
+      "destination": "public/marineford/art/v2/field.webp",
+      "sha256": "818a3145a122b9fa260132d37227e08db531642c73daecf43ea77630fe3a2e8e",
+      "bytes": 422876
+    },
+    {
+      "key": "v2_button",
+      "prompt": "One production game UI button asset, transparent background. A single horizontally elongated 4:1 shape, front-facing orthographic, edges sharp and beautifully inked. Marineford naval officer design: bevelled ivory enameled metal face, very dark navy inner face, fine silver inlay, subtle red stitched-canvas strip only along bottom edge, small restrained epaulette-like notches at left and right, no gold scrollwork and no pirate ship wheel. Quiet empty center for UI text. Sophisticated anime cel painting, premium tactile materials, readable compact mobile button. Whole button fills 90 percent width and 65 percent height of a wide canvas, isolated with transparent padding. No text, no letter, no icon, no mockup, no shadow beyond reasonable few pixels.",
+      "generatedFile": "exec-20675994-ff36-4e69-8027-d990731c78c0.png",
+      "destination": "public/marineford/art/v2/button.webp",
+      "sha256": "82bc48b80ce39b56b0552e9c9de90c6339e906756bcdcde80ab21bd40e2e3e14",
+      "bytes": 135986
+    },
+    {
+      "key": "v2_navy-frame",
+      "prompt": "One isolated vertical 2:3 portrait card FRAME UI asset for a new One Piece Marineford game. Real transparent center and outside background. Thin beautifully inked ivory enamel and brushed silver border, sharp beveled corners, understated deep navy details like a marine officer's coat, tiny brass rivets, NO baroque golden curls. Main transparent picture opening occupies central 82 percent width and top 80 percent height. Small empty dark navy round rank medallion overlaps top-left corner. Bottom 15 percent contains a single empty dark navy nameplate with ivory double rules, no letters. Crisp elegant anime game asset, orthographic front-facing, entire frame fits canvas, no perspective, no mockup, no text. Generous image area, no ornamental objects covering picture.",
+      "generatedFile": "exec-c78cc833-8420-4f45-9420-48e2f488807f.png",
+      "destination": "public/marineford/art/v2/navy-frame.webp",
+      "sha256": "dc2bde7d24ea67dbdec20114785a9c4a3149987e8b5d2c51d2534b3b7f2c8cc6",
+      "bytes": 103964
+    },
+    {
+      "key": "v2_pirate-frame",
+      "prompt": "One isolated vertical 2:3 portrait card FRAME UI asset for a new One Piece Whitebeard pirates Marineford game. Real transparent center and outside background. Thin beautifully inked aged ivory and oxidized dark metal border, sharp beveled corners, restrained vermilion leather details and tiny antique-brass rivets, NO baroque golden curls. Main transparent picture opening occupies central 82 percent width and top 80 percent height. Small empty dark red round rank medallion overlaps top-left corner. Bottom 15 percent contains a single empty dark burgundy nameplate with ivory double rules, no letters. Crisp elegant cinematic anime game asset, orthographic front-facing, entire frame fits canvas, no perspective, no mockup, no text. Generous image area, no ornamental objects covering picture.",
+      "generatedFile": "exec-d5c63a15-b53b-414f-ac12-b96856dd88e8.png",
+      "destination": "public/marineford/art/v2/pirate-frame.webp",
+      "sha256": "c8146fde87f7dd512b9be2ba980b071732e19456dc9b24e52285c2b28055ed02",
+      "bytes": 193540
+    },
+    {
+      "key": "v2_hud",
+      "prompt": "A single premium horizontal player HUD panel for a Marineford anime naval card game, 4:1 ratio, actual transparent background. One small empty circular portrait aperture at left joined neatly to a long dark navy enamel rectangular nameplate on right, slender ivory and silver frame, subtle red stitched detail beneath, elegant sharp chamfered right corners. Circular aperture and area outside panel genuinely transparent. Portrait circle fits entirely within the panel height; at right large clean EMPTY area, no subdivision bars so name, 2 tiny status icons and counts can be drawn by game. Anime film hand-painted finish, crisp bevels, restrained and readable on a phone. No gold filigree, no text, no sample avatar, no icons, no words, no mockup.",
+      "generatedFile": "exec-a4fc53dd-e0cc-448c-a246-df03da2c4c28.png",
+      "destination": "public/marineford/art/v2/hud.webp",
+      "sha256": "b47bb64b9de167eee6eb2b6498373b69deb8f20ede334ed5e8d7ce057a766fb3",
+      "bytes": 155824
+    },
+    {
+      "key": "pirate-1",
+      "prompt": "NEW original illustration for a premium One Piece Marineford game card. Subject: Marco the Phoenix, spiky blond hair, sleepy confident eyes, small beard, open purple jacket and blue chest tattoo, muscular chest, one arm becoming a brilliant azure phoenix wing with gold-blue flame tips, Marineford era. Portrait 2:3 full-bleed character art, head through hips, complete head with comfortable top margin. Strong confident manga ink lines and rich cinematic anime cel painting, beautiful faces and correct anatomy, recognizable CANON character, dynamic three-quarter pose turned slightly toward center, powerful but elegant. Distant Marineford ice harbor atmospheric background, controlled navy ivory and vermilion with the character's signature accent. Character occupies 75 percent of image. Keep bottom 12 percent lower contrast for a later nameplate. No card border, NO words, no letters, no numbers, no logos, no watermark. High quality distinct new painting, not old art composited.",
+      "generatedFile": "exec-05ef1f98-3fd3-41db-a5ba-47c09347d74a.png",
+      "destination": "public/marineford/art/v2/pirate-1.webp",
+      "sha256": "a60bfcdce07e3614071f823cff7fb532c363c05913b84d700b9c5111347801a1",
+      "bytes": 372526
+    },
+    {
+      "key": "pirate-4",
+      "prompt": "NEW original illustration for a premium One Piece Marineford game card. Subject: Portgas D. Ace, Marineford era, young adult black-haired freckled man, orange cowboy hat with two face badges hanging behind his neck, red bead necklace, shirtless, ASCE upper arm tattoo, a powerful fist wreathed in elegant curling fire. Portrait 2:3 full-bleed character art, head through hips, complete head with comfortable top margin. Strong confident manga ink lines and rich cinematic anime cel painting, beautiful faces and correct anatomy, recognizable CANON character, dynamic three-quarter pose turned slightly toward center, powerful but elegant. Distant Marineford ice harbor atmospheric background, controlled navy ivory and vermilion with the character's signature accent. Character occupies 75 percent of image. Keep bottom 12 percent lower contrast for a later nameplate. No card border, NO words, no letters, no numbers, no logos, no watermark. High quality distinct new painting, not old art composited.",
+      "generatedFile": "exec-c4f9fb9a-63f7-40bb-9696-e570a01ef772.png",
+      "destination": "public/marineford/art/v2/pirate-4.webp",
+      "sha256": "e55ed8cf67e612d54a767f3d5affcd900813e09f17cfbf043ae7ec9833b42e55",
+      "bytes": 383366
+    },
+    {
+      "key": "pirate-10",
+      "prompt": "NEW original illustration for a premium One Piece Marineford game card. Subject: Edward Newgate Whitebeard, Marineford era, enormous strong elderly man with iconic crescent white moustache, black bandana, scarred bare torso, white captain's coat with gold epaulettes and red lining, holding his towering bisento, white quake cracks in the air. Portrait 2:3 full-bleed character art, head through hips, complete head with comfortable top margin. Strong confident manga ink lines and rich cinematic anime cel painting, beautiful faces and correct anatomy, recognizable CANON character, dynamic three-quarter pose turned slightly toward center, powerful but elegant. Distant Marineford ice harbor atmospheric background, controlled navy ivory and vermilion with the character's signature accent. Character occupies 75 percent of image. Keep bottom 12 percent lower contrast for a later nameplate. No card border, NO words, no letters, no numbers, no logos, no watermark. High quality distinct new painting, not old art composited.",
+      "generatedFile": "exec-afbde232-8c9e-491f-9e09-6984e10aad60.png",
+      "destination": "public/marineford/art/v2/pirate-10.webp",
+      "sha256": "5aeed72ac268bd029d91ff507865792e4e65ae0432df65b490e5ea1ba40e44b3",
+      "bytes": 365032
+    },
+    {
+      "key": "navy-akainu",
+      "prompt": "NEW original illustration for a premium One Piece Marineford game card. Subject: Admiral Sakazuki Akainu, Marineford era, stern angular weathered face, white MARINE cap, red patterned suit with pink rose at chest, white Marine admiral coat with gold epaulettes, a single huge clenched magma fist and restrained glowing molten fragments. Portrait 2:3 full-bleed character art, head through hips, complete head with comfortable top margin. Strong confident manga ink lines and rich cinematic anime cel painting, beautiful faces and correct anatomy, recognizable CANON character, dynamic three-quarter pose turned slightly toward center, powerful but elegant. Distant Marineford ice harbor atmospheric background, controlled navy ivory and vermilion with the character's signature accent. Character occupies 75 percent of image. Keep bottom 12 percent lower contrast for a later nameplate. No card border, NO words, no letters, no numbers, no logos, no watermark. High quality distinct new painting, not old art composited.",
+      "generatedFile": "exec-44c9a1a5-33e3-43d3-9af2-649f6b12659f.png",
+      "destination": "public/marineford/art/v2/navy-akainu.webp",
+      "sha256": "4ce8324d6534b06c310c4b743e2eb26fe2803f24507b0f552436df326b2a8eee",
+      "bytes": 389098
+    },
+    {
+      "key": "pirate-2",
+      "prompt": "Generate an entirely NEW premium cinematic anime portrait of Rakuyo (落葉), veteran Whitebeard commander with blond dreadlocks, head bandana, pointed dark moustache, open pale captain coat, heavy chain morning-star weapon. The referenced old card is only a character identification reference; do not copy its old art, pose, flat sepia rendering, borders or lettering. New expressive three-quarter action pose, head to hips, confident accurate ink contours, rich dimensional cel painting, recognizable Marineford era One Piece character anatomy and costume, wind in garments, distant frozen Marineford harbor softly painted behind. Navy ivory and vermilion art direction with natural character colors. Portrait 2:3, full head visible with margin, character takes 75 percent of canvas, bottom 12 percent calm for later title. No words, no title, no number, no card frame, no watermark.",
+      "generatedFile": "exec-bb296d9c-be4f-4483-9ead-547bed5a2e02.png",
+      "destination": "public/marineford/art/v2/pirate-2.webp",
+      "sha256": "1d1a901954e03eddd0d54e546520724e66686b061986857683f4d1043f1c0440",
+      "bytes": 327662
+    },
+    {
+      "key": "pirate-3",
+      "prompt": "Generate an entirely NEW premium cinematic anime portrait of Atmos, huge broad Whitebeard commander with horned armored helmet, long dark hair and beard, heavy armored waist and twin curved swords. The referenced old card is only a character identification reference; do not copy its old art, pose, flat sepia rendering, borders or lettering. New expressive three-quarter action pose, head to hips, confident accurate ink contours, rich dimensional cel painting, recognizable Marineford era One Piece character anatomy and costume, wind in garments, distant frozen Marineford harbor softly painted behind. Navy ivory and vermilion art direction with natural character colors. Portrait 2:3, full head visible with margin, character takes 75 percent of canvas, bottom 12 percent calm for later title. No words, no title, no number, no card frame, no watermark.",
+      "generatedFile": "exec-64a64e90-e7f6-4f15-95cf-ac70c0f2e366.png",
+      "destination": "public/marineford/art/v2/pirate-3.webp",
+      "sha256": "6c9265adc7d27b38e83de85f2b48ddef7eb320d506464f01d6fc5ab1444ba6bf",
+      "bytes": 359456
+    },
+    {
+      "key": "pirate-5",
+      "prompt": "Generate an entirely NEW premium cinematic anime portrait of Namur, muscular shark fish-man Whitebeard commander, pale blue-gray skin, angular shark features, gills, sharp teeth and black spiky hair, blue-and-yellow sleeved shirt and strong fist. The referenced old card is only a character identification reference; do not copy its old art, pose, flat sepia rendering, borders or lettering. New expressive three-quarter action pose, head to hips, confident accurate ink contours, rich dimensional cel painting, recognizable Marineford era One Piece character anatomy and costume, wind in garments, distant frozen Marineford harbor softly painted behind. Navy ivory and vermilion art direction with natural character colors. Portrait 2:3, full head visible with margin, character takes 75 percent of canvas, bottom 12 percent calm for later title. No words, no title, no number, no card frame, no watermark.",
+      "generatedFile": "exec-a1fd3f82-3e01-4a13-94e8-07031b1838af.png",
+      "destination": "public/marineford/art/v2/pirate-5.webp",
+      "sha256": "281e71bd87cfd8e36fe2e3cb8046cfa6179c26d17a16e12ef32fb0b2ee3bb231",
+      "bytes": 336388
+    },
+    {
+      "key": "pirate-6",
+      "prompt": "Generate an entirely NEW premium cinematic anime portrait of Speed Jiru, broad smiling Whitebeard commander with red fez, white tabard bearing modern Whitebeard skull insignia, red sleeves, shield and long lance. The referenced old card is only a character identification reference; do not copy its old art, pose, flat sepia rendering, borders or lettering. New expressive three-quarter action pose, head to hips, confident accurate ink contours, rich dimensional cel painting, recognizable Marineford era One Piece character anatomy and costume, wind in garments, distant frozen Marineford harbor softly painted behind. Navy ivory and vermilion art direction with natural character colors. Portrait 2:3, full head visible with margin, character takes 75 percent of canvas, bottom 12 percent calm for later title. No words, no title, no number, no card frame, no watermark.",
+      "generatedFile": "exec-ca5af450-f751-42b8-ab69-d8e519a58276.png",
+      "destination": "public/marineford/art/v2/pirate-6.webp",
+      "sha256": "0428d7cc2dfe0a1d044016418549d1aead79e26874aa1410fa7f57f3ff818c73",
+      "bytes": 248054
+    },
+    {
+      "key": "pirate-8",
+      "prompt": "Entirely NEW original premium anime film illustration of One Piece Marineford Blenheim, huge stern muscular commander, swept black hair with long braid, gray beard, sleeveless open gray-green vest, shoulder tattoos, curved sword. Reference only for character identity. Redesign pose, lighting and background completely; no reuse of old image. Dramatic three-quarter action head through hips, entire head comfortably inside frame, expressive canonical face, crisp detailed manga ink, cinematic cel paint, natural colors against icy navy harbor with ivory fortress and vermilion flags. Character 75 percent of picture, quiet bottom 12 percent for later nameplate. Portrait 2:3. NO text, numbers, border, logos, watermark. Not sepia, not generic fantasy.",
+      "generatedFile": "exec-060af2e2-b00e-483b-9e23-1ec9981ffb47.png",
+      "destination": "public/marineford/art/v2/pirate-8.webp",
+      "sha256": "765527c4c368a44531ace1564ec8a02f33d15edb2def5e803a766557f472944c",
+      "bytes": 434228
+    },
+    {
+      "key": "pirate-11",
+      "prompt": "Entirely NEW original premium anime film illustration of One Piece Marineford Curiel, muscular Whitebeard commander with striped green cap, dark sunglasses, red vest, green coat, twin cannons on his back. Reference only for character identity. Redesign pose, lighting and background completely; no reuse of old image. Dramatic three-quarter action head through hips, entire head comfortably inside frame, expressive canonical face, crisp detailed manga ink, cinematic cel paint, natural colors against icy navy harbor with ivory fortress and vermilion flags. Character 75 percent of picture, quiet bottom 12 percent for later nameplate. Portrait 2:3. NO text, numbers, border, logos, watermark. Not sepia, not generic fantasy.",
+      "generatedFile": "exec-2ac43c15-c67f-41c9-845a-0c545033fe88.png",
+      "destination": "public/marineford/art/v2/pirate-11.webp",
+      "sha256": "608758c6f76d908700e6d67ef2f2e8427554563545a6019c554af9ca688bb8b2",
+      "bytes": 368072
+    },
+    {
+      "key": "pirate-12",
+      "prompt": "Entirely NEW original premium anime film illustration of One Piece Marineford Fossa, burly older bald commander with short dark hair spikes, black mustache, cigar, navy sleeveless open vest, curved flaming sword. Reference only for character identity. Redesign pose, lighting and background completely; no reuse of old image. Dramatic three-quarter action head through hips, entire head comfortably inside frame, expressive canonical face, crisp detailed manga ink, cinematic cel paint, natural colors against icy navy harbor with ivory fortress and vermilion flags. Character 75 percent of picture, quiet bottom 12 percent for later nameplate. Portrait 2:3. NO text, numbers, border, logos, watermark. Not sepia, not generic fantasy.",
+      "generatedFile": "exec-fe552ede-335e-4159-a611-2a60925d547e.png",
+      "destination": "public/marineford/art/v2/pirate-12.webp",
+      "sha256": "ed3a7ed452ec1de7f00e65d5009d4450bfc4493f7aa2e0917d4e019179453b6b",
+      "bytes": 349610
+    },
+    {
+      "key": "pirate-14",
+      "prompt": "Entirely NEW original premium anime film illustration of One Piece Marineford Kingdew, tall enormously muscular blond bowl cut commander, black cape, gold and black gauntlets and striped leggings. Reference only for character identity. Redesign pose, lighting and background completely; no reuse of old image. Dramatic three-quarter action head through hips, entire head comfortably inside frame, expressive canonical face, crisp detailed manga ink, cinematic cel paint, natural colors against icy navy harbor with ivory fortress and vermilion flags. Character 75 percent of picture, quiet bottom 12 percent for later nameplate. Portrait 2:3. NO text, numbers, border, logos, watermark. Not sepia, not generic fantasy.",
+      "generatedFile": "exec-158015d9-9c50-474e-82dd-9d8d89a032e2.png",
+      "destination": "public/marineford/art/v2/pirate-14.webp",
+      "sha256": "7e4808c57207e6a5a58aa4414fa3abc9920802c2ac584864e7ca9d4efd1cd7f7",
+      "bytes": 353488
+    },
+    {
+      "key": "pirate-15",
+      "prompt": "Entirely NEW original premium anime film illustration of One Piece Marineford Blamenco, round large cheerful commander, dark bicorn hat and sleeveless navy shirt, ivory collar and yellow sash, huge wooden mallet. New dynamic three-quarter head through hips portrait, expressive accurate canonical face, refined confident manga ink, cinematic cel painting, detailed natural colors against icy navy harbor ivory fortress vermilion flags. Entire head inside margin, character 75 percent, bottom 12 percent visually quiet for later nameplate. Portrait 2:3 full bleed. NO text, numbers, border, logo or watermark. Not generic fantasy or sepia.",
+      "generatedFile": "exec-d830b1c3-3617-4491-be7e-d9cea6f7006b.png",
+      "destination": "public/marineford/art/v2/pirate-15.webp",
+      "sha256": "4768860f5219f8db0034e23ffa3a6e2d79cc4abbfaad8b64429ca3125d6b3256",
+      "bytes": 333272
+    },
+    {
+      "key": "pirate-16",
+      "prompt": "Entirely NEW original premium anime film illustration of One Piece Marineford Haruta, youthful auburn short bob hair commander, green Renaissance tunic with cream ruff collar, slim sword, fierce confident expression. New dynamic three-quarter head through hips portrait, expressive accurate canonical face, refined confident manga ink, cinematic cel painting, detailed natural colors against icy navy harbor ivory fortress vermilion flags. Entire head inside margin, character 75 percent, bottom 12 percent visually quiet for later nameplate. Portrait 2:3 full bleed. NO text, numbers, border, logo or watermark. Not generic fantasy or sepia.",
+      "generatedFile": "exec-0788fb78-4ed8-49f8-a4ab-91e68ecacc24.png",
+      "destination": "public/marineford/art/v2/pirate-16.webp",
+      "sha256": "66669423629620676f68049b32ad5712b0cc591ad9864970e3e67d9cb153634e",
+      "bytes": 349874
+    },
+    {
+      "key": "pirate-7",
+      "prompt": "Entirely NEW original premium anime film illustration of One Piece Marineford Diamond Jozu, massive muscular dark-skinned Whitebeard commander, black short flat top hair and sideburns, diamond covering right arm and shoulder, maroon armored tunic. New dynamic three-quarter head through hips portrait, expressive accurate canonical face, refined confident manga ink, cinematic cel painting, detailed natural colors against icy navy harbor ivory fortress vermilion flags. Entire head inside margin, character 75 percent, bottom 12 percent visually quiet for later nameplate. Portrait 2:3 full bleed. NO text, numbers, border, logo or watermark. Not generic fantasy or sepia.",
+      "generatedFile": "exec-addec675-9adb-4a84-a8ae-a761012268a5.png",
+      "destination": "public/marineford/art/v2/pirate-7.webp",
+      "sha256": "18092d2b7bdea8540bcb6e1e1f29f287eafbe87ed580ca23f8ace743ed06b487",
+      "bytes": 296698
+    },
+    {
+      "key": "pirate-9",
+      "prompt": "Entirely NEW original premium anime film illustration of One Piece Marineford Izo, beautiful androgynous adult male Whitebeard commander in pink kimono with purple obi, white face makeup, red lips, swept black hair, dual flintlock pistols. New dynamic three-quarter head through hips portrait, expressive accurate canonical face, refined confident manga ink, cinematic cel painting, detailed natural colors against icy navy harbor ivory fortress vermilion flags. Entire head inside margin, character 75 percent, bottom 12 percent visually quiet for later nameplate. Portrait 2:3 full bleed. NO text, numbers, border, logo or watermark. Not generic fantasy or sepia.",
+      "generatedFile": "exec-afdca416-74ca-4f46-b537-efc33081e1cf.png",
+      "destination": "public/marineford/art/v2/pirate-9.webp",
+      "sha256": "f5b2247ad7d642f43b483a4cc6bce750e30dfd2247863712735c0bc66a1706b0",
+      "bytes": 252140
+    },
+    {
+      "key": "pirate-13",
+      "prompt": "NEW original premium anime film illustration of One Piece Marineford Vista of the Flower Swords, black top hat with blue band, large curled black mustache, curly dark hair, white gloves, blue open vest, dual curved swords and floating rose petals. Canonically recognizable face and clothes, expressive dramatic three-quarter action portrait head through hips, complete head and comfortable top margin. Refined confident manga ink, cinematic cel paint and natural colors, icy deep navy harbor, ivory naval fortress, distant vermilion banners. Character 75 percent, quiet bottom 12 percent for nameplate. Portrait 2:3 full bleed. No border, text, numbers, logos, watermark. Do not imitate generic fantasy rendering.",
+      "generatedFile": "exec-66683753-4062-4bbc-a872-cd0022cb1c17.png",
+      "destination": "public/marineford/art/v2/pirate-13.webp",
+      "sha256": "f54d5eefe79ba79249fd78b319a4f7986f106106664ee7460c8fd6b9b9cdbd01",
+      "bytes": 246616
+    },
+    {
+      "key": "navy-helmeppo",
+      "prompt": "NEW original premium anime film illustration of One Piece Marineford Helmeppo Marineford era, slim adult blond slicked hair, purple sunglasses, dark blue fitted navy uniform, paired kukri swords. Canonically recognizable face and clothes, expressive dramatic three-quarter action portrait head through hips, complete head and comfortable top margin. Refined confident manga ink, cinematic cel paint and natural colors, icy deep navy harbor, ivory naval fortress, distant vermilion banners. Character 75 percent, quiet bottom 12 percent for nameplate. Portrait 2:3 full bleed. No border, text, numbers, logos, watermark. Do not imitate generic fantasy rendering.",
+      "generatedFile": "exec-c2e7f885-3998-4ed6-b131-81ed77f3a5d1.png",
+      "destination": "public/marineford/art/v2/navy-helmeppo.webp",
+      "sha256": "43c690edc39856cf6f68f89e7105db22489a80b0d011af6bdba312178ceeffab",
+      "bytes": 244056
+    },
+    {
+      "key": "navy-koby",
+      "prompt": "NEW original premium anime film illustration of One Piece Marineford Koby Marineford era, young pink-haired marine with round spectacles on forehead, white and blue marine short sleeved uniform, green bandana, determined brave face. Canonically recognizable face and clothes, expressive dramatic three-quarter action portrait head through hips, complete head and comfortable top margin. Refined confident manga ink, cinematic cel paint and natural colors, icy deep navy harbor, ivory naval fortress, distant vermilion banners. Character 75 percent, quiet bottom 12 percent for nameplate. Portrait 2:3 full bleed. No border, text, numbers, logos, watermark. Do not imitate generic fantasy rendering.",
+      "generatedFile": "exec-902f1a91-840e-4b19-a3fb-998b1953403d.png",
+      "destination": "public/marineford/art/v2/navy-koby.webp",
+      "sha256": "2a3c786d435a2b9678d0ac7ee850ff59e03c80d622dadf3f8a37d44d0654fb00",
+      "bytes": 265468
+    },
+    {
+      "key": "navy-garp",
+      "prompt": "NEW original premium anime film illustration of One Piece Marineford Monkey D. Garp Marineford era, powerful older man short gray hair, square jaw and gray beard, scar at left eye, white navy coat with gold epaulettes over white suit, clenched formidable fist. Canonically recognizable face and clothes, expressive dramatic three-quarter action portrait head through hips, complete head and comfortable top margin. Refined confident manga ink, cinematic cel paint and natural colors, icy deep navy harbor, ivory naval fortress, distant vermilion banners. Character 75 percent, quiet bottom 12 percent for nameplate. Portrait 2:3 full bleed. No border, text, numbers, logos, watermark. Do not imitate generic fantasy rendering.",
+      "generatedFile": "exec-c4694d55-a71c-43ee-80a3-65f704613c88.png",
+      "destination": "public/marineford/art/v2/navy-garp.webp",
+      "sha256": "81d36b756cee59bcebc8b34a2922f794ea6b515b91620a61cdc3e6e8981a65c7",
+      "bytes": 262468
+    },
+    {
+      "key": "navy-aokiji",
+      "prompt": "Entirely NEW original premium anime illustration of One Piece Marineford Admiral Aokiji Kuzan, tall lean dark curly hair, green sleep mask above forehead, relaxed angular long face, white vest and navy shirt, white admiral coat, hand forming crystalline blue ice. Accurate recognizable canonical design, cinematic three-quarter action head through hips portrait with entire head and margins, confident manga ink and refined cel paint, navy ivory vermilion palette plus natural character colors. Frozen naval harbor and ivory fortress distant. Character 75 percent, bottom 12 percent calm for later nameplate. Portrait 2:3 full bleed. No border, text, numbers, logos, watermark.",
+      "generatedFile": "exec-146168fe-b725-4334-8a41-56ba2a936975.png",
+      "destination": "public/marineford/art/v2/navy-aokiji.webp",
+      "sha256": "15c759f4f6a2648fb0a2062867ccf5b2ad9f849bc00dc9d1213f3b7044581321",
+      "bytes": 409006
+    },
+    {
+      "key": "navy-kizaru",
+      "prompt": "Entirely NEW original premium anime illustration of One Piece Marineford Admiral Kizaru Borsalino, middle-aged short dark hair, thin beard, amber rectangular sunglasses, yellow pinstriped suit, white admiral coat, finger radiating a brilliant star-shaped light beam. Accurate recognizable canonical design, cinematic three-quarter action head through hips portrait with entire head and margins, confident manga ink and refined cel paint, navy ivory vermilion palette plus natural character colors. Frozen naval harbor and ivory fortress distant. Character 75 percent, bottom 12 percent calm for later nameplate. Portrait 2:3 full bleed. No border, text, numbers, logos, watermark.",
+      "generatedFile": "exec-a729d99c-814b-4393-81bb-17d8c5954e61.png",
+      "destination": "public/marineford/art/v2/navy-kizaru.webp",
+      "sha256": "8ec99e1f816736072dcaceefb305089e70410ee5b80c2629d31464f624f26d69",
+      "bytes": 359644
+    },
+    {
+      "key": "navy-sengoku",
+      "prompt": "Entirely NEW original premium anime illustration of One Piece Marineford Fleet Admiral Sengoku, black afro beneath white seagull cap, round glasses, long braided black beard, dignified stern face, white and gold Marine uniform coat, monumental glowing golden Buddha silhouette behind. Accurate recognizable canonical design, cinematic three-quarter action head through hips portrait with entire head and margins, confident manga ink and refined cel paint, navy ivory vermilion palette plus natural character colors. Frozen naval harbor and ivory fortress distant. Character 75 percent, bottom 12 percent calm for later nameplate. Portrait 2:3 full bleed. No border, text, numbers, logos, watermark.",
+      "generatedFile": "exec-cc039611-b3d2-4f96-abde-7376504d0325.png",
+      "destination": "public/marineford/art/v2/navy-sengoku.webp",
+      "sha256": "da162d484eeb7b777e2152501208606e4cb24f0bbba8b2537ae4847c3317c928",
+      "bytes": 323374
+    },
+    {
+      "key": "justice-1",
+      "prompt": "One entirely new premium illustrated symbolic Justice card art for One Piece Marineford naval faction: HOPE: a pristine flowing white young marine coat on a flagpole catching dawn light, small silver seagull emblem, sea breeze, rising ivory sun beyond frozen harbor. Beautiful cinematic anime manga ink and cel painting, refined dramatic composition, large central meaningful emblem, icy navy ivory restrained vermilion palette with subject accent. Portrait 2:3, full bleed, detailed sculptural focal object, background atmospheric navy harbor, ample margin. No text, numerals, card border, UI, watermark. This is not a character portrait.",
+      "generatedFile": "exec-9fd12396-f58c-4afa-8c0c-f2ec04953584.png",
+      "destination": "public/marineford/art/v2/justice-1.webp",
+      "sha256": "e9014ec45f912a95a09f59f6f37b9903d31e8b9a5da43a1d56960cc7611df638",
+      "bytes": 382244
+    },
+    {
+      "key": "justice-2",
+      "prompt": "One entirely new premium illustrated symbolic Justice card art for One Piece Marineford naval faction: IRON FIST: monumental clenched steel-blue fist coming forward surrounded by white shockwave fractures, navy marine coat cuff and seagull insignia, justice as unwavering resolve. Beautiful cinematic anime manga ink and cel painting, refined dramatic composition, large central meaningful emblem, icy navy ivory restrained vermilion palette with subject accent. Portrait 2:3, full bleed, detailed sculptural focal object, background atmospheric navy harbor, ample margin. No text, numerals, card border, UI, watermark. This is not a character portrait.",
+      "generatedFile": "exec-5d1dfb10-87a0-4d31-983d-6a4d5d5b6799.png",
+      "destination": "public/marineford/art/v2/justice-2.webp",
+      "sha256": "a3777885d8b4b96915b002f34ddfc8e0bcc70646eb006199331e53dcd559204c",
+      "bytes": 598778
+    },
+    {
+      "key": "justice-3",
+      "prompt": "One entirely new premium illustrated symbolic Justice card art for One Piece Marineford naval faction: COMPOSED JUSTICE: a magnificent intricate six-point ice crystal floating above frozen sea, pale blue ice plumes and a calm white marine coat flowing behind. Beautiful cinematic anime manga ink and cel painting, refined dramatic composition, large central meaningful emblem, icy navy ivory restrained vermilion palette with subject accent. Portrait 2:3, full bleed, detailed sculptural focal object, background atmospheric navy harbor, ample margin. No text, numerals, card border, UI, watermark. This is not a character portrait.",
+      "generatedFile": "exec-1bd4b1c1-00f4-40b0-bc1e-6e85d6e3a723.png",
+      "destination": "public/marineford/art/v2/justice-3.webp",
+      "sha256": "d276d024e46caddccf32375908bd3127648b914e84b9bfacf23909476f4ca1fe",
+      "bytes": 525038
+    },
+    {
+      "key": "justice-4",
+      "prompt": "One entirely new premium illustrated symbolic Justice card art for One Piece Marineford naval faction: AMBIGUOUS JUSTICE: a bright prismatic golden sunbeam splitting through a crystal above a balanced pair of ivory sails, warm light and cool shadow balanced. Beautiful cinematic anime manga ink and cel painting, refined dramatic composition, large central meaningful emblem, icy navy ivory restrained vermilion palette with subject accent. Portrait 2:3, full bleed, detailed sculptural focal object, background atmospheric navy harbor, ample margin. No text, numerals, card border, UI, watermark. This is not a character portrait.",
+      "generatedFile": "exec-d5f7353d-631b-493b-b434-508d35019938.png",
+      "destination": "public/marineford/art/v2/justice-4.webp",
+      "sha256": "6664cf51c1cb3864d18f228d67eb633e2d9b10aece1ad26a9b70a43f546cffed",
+      "bytes": 523914
+    },
+    {
+      "key": "justice-5",
+      "prompt": "Premium symbolic Absolute Justice card illustration for One Piece Marineford. A powerful magma fist breaks through black volcanic stone, molten vermilion veins, white navy coat with ivory epaulettes flowing above it, distant navy fortress on icy sea. Refined anime film cel painting, confident manga ink, deep navy ivory vermilion palette, imposing central sculpture, portrait 2:3 full bleed. No text, numbers, card frame, watermark.",
+      "generatedFile": "exec-3b5ce4cf-cddf-49bd-92fb-17d7b92dc859.png",
+      "destination": "public/marineford/art/v2/justice-5.webp",
+      "sha256": "fadaf668b3ef2ec56a0e016fec3048dd0b16021f6703b719d9f13cd124521847",
+      "bytes": 578242
+    },
+    {
+      "key": "justice-6",
+      "prompt": "Premium symbolic Supreme Justice card illustration for One Piece Marineford. Monumental golden Buddha palm raised above an ivory naval fortress and crescent harbor, serene commanding Buddha silhouette in cloud behind, elegant concentric white shockwaves, deep navy sky, restrained gold and ivory. Refined cinematic anime ink and cel painting. Portrait 2:3 full bleed. No text, numbers, card frame, watermark.",
+      "generatedFile": "exec-50710cdd-02fe-4c5e-b67e-77c59349b8f3.png",
+      "destination": "public/marineford/art/v2/justice-6.webp",
+      "sha256": "7faecd982f6e91676815f7adc01bdb3e01e98a6730db5eb9570ceb01b9b51ed9",
+      "bytes": 604520
+    },
+    {
+      "key": "navy-back",
+      "prompt": "Create a polished premium NAVY FACTION playing card BACK for One Piece Marineford game. Flat rectangular 2:3 portrait, full bleed. Symmetrical ivory naval seagull-and-anchor emblem centered on textured deep midnight navy enamel, beautiful thin double ivory/silver geometric perimeter with restrained vermilion inlays, tiny stylized frozen wave engraving. Clear recognizable naval emblem, bold at thumbnail size, balanced sparse elegant design. No characters, numbers, text, words, gold scrollwork, perspective mockup or watermark. Complete card with rounded corners and no external padding.",
+      "generatedFile": "exec-4a4d1b84-1310-438d-87ea-dbfdcb4e8b81.png",
+      "destination": "public/marineford/art/v2/navy-back.webp",
+      "sha256": "955a84cd6df0ec1873d8004039109b8bbf7776170979a2908c8a4efebdc1bb3e",
+      "bytes": 424312
+    },
+    {
+      "key": "pirate-back",
+      "prompt": "Create a polished premium WHITEBEARD PIRATE FACTION playing card BACK for One Piece Marineford game. Flat rectangular 2:3 portrait, full bleed. Symmetrical ivory pirate skull with Whitebeard upward crescent mustache and crossed bones centered on deep burgundy enamel, thin double ivory/silver geometric perimeter with restrained navy inlays, tiny stylized ocean-wave engraving. Bold clear emblem at thumbnail size, balanced sparse elegant design matching navy/ivory naval card art. No characters, numbers, words, gold scrollwork, perspective mockup or watermark. Complete card with rounded corners and no external padding.",
+      "generatedFile": "exec-67dd9a05-58c3-4244-bee1-82d11f9fe358.png",
+      "destination": "public/marineford/art/v2/pirate-back.webp",
+      "sha256": "5922f33761d5266f7afc015340213f9e5e43d35da0f7c26aa9a8c76eeeecf06c",
+      "bytes": 314490
+    },
+    {
+      "key": "fx-fire",
+      "prompt": "A single explosive circular FIRE IMPACT sprite, premium hand-drawn anime cel-animation effect for a One Piece Marineford card battle. Vermilion red outer flames, brilliant ivory hot center, curls of orange fire and sharp manga impact sparks; irregular energetic silhouette, radial expanding impact with readable layered contours. No character, hand, card, environment, words, border, black background. Isolated on genuine transparent alpha, square canvas, entire blast comfortably inside generous transparent margins.",
+      "generatedFile": "exec-7730f654-96d2-4247-99be-86d81ca4532a.png",
+      "destination": "public/marineford/art/v2/fx-fire.webp",
+      "sha256": "9462c4189520781949fc383cde68dfb374628a1b6a2d9c2d8744347be3954a67",
+      "bytes": 485812
+    },
+    {
+      "key": "fx-ice",
+      "prompt": "A single explosive ICE SHATTER impact sprite for a premium One Piece anime card battle. Brilliant cyan-white shattered ice crystal burst, jagged translucent diamond shards radiating outward, pale blue mist curls and fine drawn action streaks, delicate cel shaded layered silhouettes, center partially transparent to reveal struck card. No character, card, frame, environment, words or black background. Genuine transparent alpha, square canvas, full burst comfortably inside transparent margins.",
+      "generatedFile": "exec-a2c122e8-a6dc-4e1b-986c-85ba26321fa7.png",
+      "destination": "public/marineford/art/v2/fx-ice.webp",
+      "sha256": "41e1c49bc0637ff0813ec3583b236cb34a2bb359b06b0ac0bd8b87f4bb67a883",
+      "bytes": 802728
+    },
+    {
+      "key": "fx-quake",
+      "prompt": "A single powerful QUAKE SHOCKWAVE impact sprite for a premium One Piece Whitebeard anime card battle. Broken ivory-blue circular shockwave ring with branching glass-like spatial fractures, sharp manga speed accents, a few navy stone fragments, center mostly transparent so a card remains visible, refined hand-drawn layered anime cel paint. No character, fist, card, text, UI border, environment or solid background. Genuine transparent alpha, square canvas, full effect inside generous transparent margins.",
+      "generatedFile": "exec-e3a83f36-2b35-4a3c-863c-9ab8298fdbcd.png",
+      "destination": "public/marineford/art/v2/fx-quake.webp",
+      "sha256": "8b4db66d0ac49e4057f59bb1c56a751289174d68f4a8dbb72e22bb9e2f0a136c",
+      "bytes": 749378
+    }
+  ],
+  "originalsStorage": "D:/Codex_QA/marineford-art-v2-20261101/source-png"
+}

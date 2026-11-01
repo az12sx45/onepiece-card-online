@@ -2081,3 +2081,9 @@ Enhanced Killer removes one selected opponent's defense once, then optionally du
 - 檔案：server/marineford-engine.js、server/marineford-rooms.js、public/marineford/marineford.js；移除可保留士氣選擇與 CPU 額外選擇，房間忽略舊客戶端 optional 要求。保留 moraleRule / morale 欄位及既有通訊事件，原三款不變。
 - 驗證：1,500 場種子完整對局；18 組士氣數量／攻防方向組合、平手、連戰、非法重複選擇；六人 Socket.IO／Chromium／WebKit 50 項通過；npm start 遊戲頁 HTTP 200（本機沒有 DATABASE_URL，不宣稱帳號 DB 測試）。證據 D:/Codex_QA/marineford-morale-20261101。
 - 發布：遊戲線上程式與伺服器更新；既有 Windows 1.2.30 / Android v060 / iOS v060 不需重打。此紀錄提交時正式端讀回待完成。LATTICE API 本階段不可用，沒有持久任務或圖譜成功宣稱。
+
+## 2026-11-01 頂上戰爭篇戰績
+只在伺服器確認陣營勝利後，依 match UUID 記錄各真人玩家的對局、勝負、海軍／海賊出戰勝場與含 CPU 對局數；房主中途關閉不計戰績。客戶端不能提交分數或覆寫 launcherMarinefordV1。數值和 29 張牌效果不變，士氣有就自動消耗。此個人頁功能仍在候選版，尚未公開。
+
+### Marineford v2 presentation and records
+Artwork does not change any of the 29 card IDs or rules. Both combatants automatically spend one available morale for +2. Target/peek/challenge/order/return narration follows the accepted choice, before results; every connected viewer ACKs before the next action. Private views never expose another player's hidden card. Only completed matches write faction wins/losses, including a separate CPU count; a UUID ledger prevents duplicate credit and clients cannot override these counters.

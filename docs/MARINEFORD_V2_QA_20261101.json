@@ -1,0 +1,154 @@
+{
+  "date": "2026-11-01",
+  "browser": {
+    "passed": true,
+    "scope": "Isolated real Socket.IO, six browser seats, injected QA identities only; no production accounts or physical device claim.",
+    "checks": [
+      "Six accounts joined and started",
+      "Room and engine enforce automatic morale",
+      "Cold hand keeps card-sized clickable area and private rank label",
+      "Loaded new illustrations retain private rank and title",
+      "Other private hands remain redacted on every socket",
+      "Out-of-turn spoof rejected",
+      "Guest cannot close host room",
+      "Presentation gate waits for slowest player",
+      "Next action rejected while a viewer is still watching",
+      "Last viewer ACK releases exactly one action",
+      "guess mobile choice controls exist",
+      "guess no document overflow",
+      "guess actual touch choice accepted",
+      "read mobile choice controls exist",
+      "read no document overflow",
+      "read continue visible without scrolling",
+      "read complete cards fit above confirmation",
+      "read actual touch choice accepted",
+      "review mobile choice controls exist",
+      "review no document overflow",
+      "review continue visible without scrolling",
+      "review complete cards fit above confirmation",
+      "review actual touch choice accepted",
+      "return mobile choice controls exist",
+      "return no document overflow",
+      "return actual touch choice accepted",
+      "arrange mobile choice controls exist",
+      "arrange no document overflow",
+      "arrange actual touch choice accepted",
+      "order mobile choice controls exist",
+      "order no document overflow",
+      "order actual touch choice accepted",
+      "battle-card mobile choice controls exist",
+      "battle-card no document overflow",
+      "battle-card actual touch choice accepted",
+      "Both sides spend exactly one morale without another choice",
+      "Mobile has no optional morale buttons",
+      "peek-slot mobile choice controls exist",
+      "peek-slot no document overflow",
+      "peek-slot actual touch choice accepted",
+      "fight-target mobile choice controls exist",
+      "fight-target no document overflow",
+      "fight-target actual touch choice accepted",
+      "Six browser clients complete an entire synchronized game",
+      "Host close asks before changing shared room",
+      "Host close returns all six viewers to lobby and removes room",
+      "Old health and private hands are no longer visible after close",
+      "Client cannot opt out of mandatory morale",
+      "No browser exceptions",
+      "WebKit lobby to table and generated art loaded"
+    ],
+    "actions": 99
+  },
+  "layout": {
+    "passed": true,
+    "scope": "final art layout/profile subset; separate full match evidence included",
+    "checks": [
+      "desktop six seats and tappable hand fit",
+      "phone six seats and tappable hand fit",
+      "small-phone six seats and tappable hand fit",
+      "profile authenticated statistics render"
+    ],
+    "errors": []
+  },
+  "audio": {
+    "passed": true,
+    "checks": [
+      {
+        "kind": "click",
+        "peak": 0.03261655196547508,
+        "energy": 0.18164518357990994
+      },
+      {
+        "kind": "draw",
+        "peak": 0.050458189100027084,
+        "energy": 0.6826444676317196
+      },
+      {
+        "kind": "play",
+        "peak": 0.0948893204331398,
+        "energy": 2.6503498644012096
+      },
+      {
+        "kind": "shuffle",
+        "peak": 0.03261847794055939,
+        "energy": 0.8658282999507235
+      },
+      {
+        "kind": "ice",
+        "peak": 0.07479048520326614,
+        "energy": 5.27917616546302
+      },
+      {
+        "kind": "fire",
+        "peak": 0.10101725161075592,
+        "energy": 5.544059725493435
+      },
+      {
+        "kind": "slash",
+        "peak": 0.10443286597728729,
+        "energy": 3.3595423863382323
+      },
+      {
+        "kind": "quake",
+        "peak": 0.15695881843566895,
+        "energy": 27.13924814075221
+      },
+      {
+        "kind": "morale",
+        "peak": 0.05450945720076561,
+        "energy": 4.85339582650391
+      },
+      {
+        "kind": "miss",
+        "peak": 0.0533982589840889,
+        "energy": 0.9375011248192278
+      },
+      {
+        "kind": "victory",
+        "peak": 0.06087127700448036,
+        "energy": 9.309362712175467
+      },
+      {
+        "kind": "muted",
+        "peak": 0,
+        "energy": 0
+      }
+    ],
+    "scope": "Offline sample validation, not human listening or device audio acceptance"
+  },
+  "android": {
+    "passed": true,
+    "version": 61,
+    "baselineSha256": "f4f44fbcec4d17f09baed30345a32ef285115486e72c7b452cc43c1628bac5a6",
+    "sha256": "47c65ae00d0e53cdf1ffb152999a6ae531042ba1ad8216e16b9edf2810455089",
+    "bytes": 478105678,
+    "payloadEntriesVerified": 3550,
+    "changed": [
+      "AndroidManifest.xml",
+      "assets/launcher/launcher-profile-shop.js",
+      "assets/launcher/launcher.js",
+      "assets/launcher-assets/images/game_launcher/launcher_marineford_cover_v2.webp"
+    ],
+    "originalGamesUnchanged": true,
+    "signatureMatchesBaseline": true
+  },
+  "scope": "Local isolated QA. Physical iPhone, real-account multiplayer and public rollout are not claimed by this report."
+}

@@ -8656,3 +8656,21 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 2026-11-01 user scope confirmation: 頂上戰爭篇 is a separate fourth game in the original launcher, alongside Card/Board/Chess, never a mode nested under Card. Verified Windows GAME_CONFIG / GAMES entry, Android launch whitelist and /marineford/index.html routing, and iOS game whitelist and dedicated route. Windows 1.2.30 and mobile v060 package receipts retain the independent entry; no launcher binary change for the morale update.
 
 2026-11-01 morale rollout complete: public-byte/media readback 42/42 passed at 11/01/2026 01:10:56, matching source ba0b93d3e9acc3dfb7f26d322e67fa80219b6317. Public UI has mandatory morale and no retain-morale choice. Existing catalog's three entries unchanged. Entry architecture remains a separate fourth game across Windows/Android/iOS; existing v060 mobile binaries need only reopen the online game. Physical device replay of this specific rule change was not performed.
+
+## 2026-11-01 頂上戰爭篇全新美術與個人戰績（製作中，未發布）
+- 使用者要求全新封面、牌面、介面、特效與音效；第四款獨立入口維持不嵌入爭霸戰，原始素材與三款遊戲保留。
+- 修改 public/marineford、desktop/launcher-profile-shop.js、server/marineford-records.js、server/marineford-rooms.js、server/launcher-profile-shop.js、server/index.js。新戰績由伺服器結算，UUID 去重，保護其他遊戲 stats，拒絕客戶端覆寫。
+- scripts/marineford_records_qa.js 已以 PGlite 驗證結算、重送、陣營統計、缺少玩家與保護欄位；美術、瀏覽器及發布驗證尚未完成。詳細素材來源與提示在 D:/Codex_QA/marineford-art-v2-20261101/all-generated.json。
+- 目前未暴露 LATTICE API，無法寫入正式任務或圖譜；不宣稱已登記或驗收。
+
+
+- 本輪實際驗證：marineford_engine_qa.js 完成 1,500 場 seeded 對局；marineford_records_qa.js 通過 PGlite 實際 SQL；marineford_visual_qa.cjs 通過 1366x768／740x360／667x375 的六席與手牌區域及戰績頁子集檢查（不是完整視覺驗收）。npm start 在 18943 開啟，新頁 200；沒有本地 DATABASE_URL，所以不宣稱正式帳號 DB 驗收。
+- 生圖已完成 33 個資產：23 角色、4 正義、封面、場地、按鈕、兩陣營牌框、玩家資訊框。缺 justice-5、justice-6、navy-back、pirate-back、fx-fire、fx-ice、fx-quake。媒體發布器已實際拒絕這份缺圖候選版。
+- C 槽餘量約 10 MB。兩個 v059 暫存 APK 與五個已退出 Playwright 測試快取刪除均遭自動審查 blocked by policy，刪除數為零；使用者在外無法手動處理。後續生圖暫停，D 槽程式保存。未推送、未改公開指標、未打包 v061。正式玩家仍是先前 v060。
+- 待續：補七項美術、完整 UI／音效／逐事件同步檢查、Android/iOS/Windows 打包與差量、公開內容讀回；不要將現有部分截圖當作完整新版。
+
+## 2026-11-01 頂上戰爭篇 v2 完整候選版與三平台打包
+- 接續上方曾因 C 槽空間暫停的工作：40 份 GPT 原始圖已完整保存至 D:/Codex_QA/marineford-art-v2-20261101/source-png，沒有刪除被拒絕的 APK／快取。全部 29 張卡片、封面、場地、牌框、HUD、按鈕、牌背、火焰／冰／震波完成；舊素材僅保留舊版相容用途。
+- 本次檔案範圍：public/marineford、public/images/game_launcher/launcher_marineford_cover_v2.webp、媒體清單／發布白名單、desktop/launcher.js 與 launcher-profile-shop.js、server/marineford-records.js／rooms／launcher-profile-shop／index、專用 QA 與打包腳本。個人戰績只由伺服器結算；原本三遊戲及帳號契約保留。
+- 最終六瀏覽器完整一場 57 步、50 項同步／隱私／手機操作／WebKit 載圖檢查通過；三種尺寸及戰績頁通過；11 種原創合成音效樣本有限、無削波、靜音正確；7 項 PGlite SQL 檢查通過。1500 場引擎對局為本次未改規則之前的驗證。詳見 MARINEFORD_V2_QA_20261101.json。
+- Android v061 3550 個 payload 逐項核對，保留 v060 原遊戲內容及簽章。Windows 1.2.31 與 iOS v061 發布待實際建置及公開讀回；iOS 原生遊戲／帳號橋接保留，僅更新第四遊戲封面與戰績入口。不得將本段候選驗證宣稱實機或正式 DB 驗收。

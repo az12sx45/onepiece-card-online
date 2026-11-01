@@ -2991,3 +2991,9 @@ Native Card lobby delegates verified download caching to the host; it does not r
 2026-11-01: Marineford release clients are Windows 1.2.30 / Android v060 / unsigned iOS v060. Public channels and packages verified; Android physical launch/CPU/private-read flow checked, 20 HTTPS delta checks and 45 isolated browser checks pass. Final online hand/read layout rollout is being byte-checked. See docs/MARINEFORD_20261101.md and MARINEFORD_*_20261101.json receipts.
 
 2026-11-01：獨立頂上戰爭篇士氣改為戰鬥時自動消耗 1 個並 +2；marineford-engine.js / marineford-rooms.js 強制規則、marineford.js 移除是否使用選項。新測試與發布範圍詳見 DEV_WORKFLOW.md 最新紀錄。
+
+## 2026-11-01 頂上戰爭篇新美術候選版（未發布）
+第四款獨立線上遊戲延續既有 MARINEFORD／MF_* 同步契約與 mandatory 士氣規則。候選版新增 GPT 重繪素材、圓形玩家框、個人戰績頁與原創 Web Audio 音效；舊三款與原啟動器帳號不改。素材清單見 MARINEFORD_V2_ART_PROVENANCE_20261101.json。缺少兩張正義牌、兩款牌背與三款特效，禁止當成完整交付。
+
+### 2026-11-01 Marineford v2 candidate
+The independent fourth game now uses 40 new GPT art assets, original synthesized audio, ordered action presentation, and a faction-specific profile. Windows 1.2.31 / mobile v061 bundles only change its launcher presentation. Existing three-game download catalog and gameplay remain intact. Candidate QA is documented separately from deployment.

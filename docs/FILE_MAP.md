@@ -2136,3 +2136,18 @@ scripts/card_native_entry_qa.js tests real worker retirement routing; card_kille
 2026-11-01: Marineford release clients are Windows 1.2.30 / Android v060 / unsigned iOS v060. Public channels and packages verified; Android physical launch/CPU/private-read flow checked, 20 HTTPS delta checks and 45 isolated browser checks pass. Final online hand/read layout rollout is being byte-checked. See docs/MARINEFORD_20261101.md and MARINEFORD_*_20261101.json receipts.
 
 2026-11-01：獨立頂上戰爭篇士氣改為戰鬥時自動消耗 1 個並 +2；marineford-engine.js / marineford-rooms.js 強制規則、marineford.js 移除是否使用選項。新測試與發布範圍詳見 DEV_WORKFLOW.md 最新紀錄。
+
+## 2026-11-01 Marineford 新美術候選版
+- public/marineford/art/v2/：獨立新美術；封面另供 images/game_launcher/launcher_marineford_cover_v2.webp。
+- public/marineford/sound.js：原創程序合成音效、使用者互動解鎖、背景暫停。
+- server/marineford-records.js：伺服器勝負帳本、UUID 去重、保護 stats。
+- scripts/marineford_records_qa.js：真實 PostgreSQL 相容引擎驗證；marineford_visual_qa.cjs：隔離身份的部分排版檢查。
+- docs/MARINEFORD_V2_ART_PROVENANCE_20261101.json：GPT 生圖提示與素材目的地。
+- scripts/marineford_media.js：缺少新素材即拒絕生成發布清單；不能繞過檢查發布半成品。
+
+### Marineford v2 additions (2026-11-01)
+- public/marineford/art/v2/: 40 new illustrated assets; old root art is compatibility-only.
+- public/marineford/sound.js: original WebAudio cues, gesture unlock, mute/background controls.
+- server/marineford-records.js: idempotent server-owned match/faction records.
+- scripts/marineford_records_qa.js / marineford_visual_qa.cjs / marineford_browser_qa.cjs: SQL, layout, full multiplayer privacy/flow verification.
+- docs/MARINEFORD_V2_ART_PROVENANCE_20261101.json / MARINEFORD_V2_QA_20261101.json: art origins and actual candidate evidence.

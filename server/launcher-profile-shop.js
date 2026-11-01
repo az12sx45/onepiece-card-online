@@ -558,7 +558,7 @@ function sanitizeLauncherStatsPatch(stats) {
   if (!stats || typeof stats !== 'object' || Array.isArray(stats)) return {};
   const { launcherOwnedV1: _owned, launcherAppearanceV1: _appearance, launcherWalletV1: _wallet,
     launcherRoomV1: _room, launcherRoomsV2: _rooms, launcherCardV1: _card,
-    launcherCompanionsV1: _companions, launcherLifeV1: _life, ...safe } = stats;
+    launcherCompanionsV1: _companions, launcherLifeV1: _life, launcherMarinefordV1: _marineford, ...safe } = stats;
   return safe;
 }
 const validCardText = (value, min, max) => typeof value === 'string' && value.trim().length >= min &&
@@ -611,6 +611,7 @@ function toPublicProfile(row, isSelf = false, boardSummary = null) {
     userId: count(row.user_id), name: String(row.name || '').slice(0, 40) || '未命名玩家',
     avatar, card: launcherCard(row), title: String(object(client.titles).equipped || '').slice(0, 60), isSelf,
     games: {
+      marineford: require('./marineford-records').summary(stats),
       card: { available: Object.keys(totals).length > 0, games: count(totals.games), wins: count(totals.wins), source: 'card-profile' },
       board: boardSummary || { available: false, source: 'unavailable' },
       chess: { available: Object.keys(chess).length > 0, games: count(chess.games), wins: count(chess.wins), draws: count(chess.draws), losses: count(chess.losses), source: 'server-match-results' }

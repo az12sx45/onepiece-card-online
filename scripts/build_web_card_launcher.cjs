@@ -35,7 +35,7 @@ async function main(){
   electronDist:path.join(toolchain,'node_modules/electron/dist'),
   extraMetadata:releaseVersion?{version:releaseVersion}:{version:'1.2.25',nativeCardChannel:'internal'},
   extraResources:[...pkg.build.extraResources.map(x=>({...x,from:path.resolve(assetRootArg?path.join(path.resolve(assetRootArg),'desktop'):source,x.from)})),
-   {from:path.resolve(source,'../public/images/game_launcher/launcher_marineford_cover_v1.webp'),to:'launcher-assets/images/game_launcher/launcher_marineford_cover_v1.webp'}],
+   {from:path.resolve(source,'../public/images/game_launcher/launcher_marineford_cover_v2.webp'),to:'launcher-assets/images/game_launcher/launcher_marineford_cover_v2.webp'}],
   win:{...pkg.build.win,signAndEditExecutable:true,signExecutable:false}};
  const file=out+'-config.json';fs.writeFileSync(file,JSON.stringify(config,null,2));
  const result=spawnSync(process.execPath,[path.join(toolchain,'node_modules/electron-builder/out/cli/cli.js'),'--projectDir',stage,'--config',file,'--dir','--win','--x64','--publish','never'],

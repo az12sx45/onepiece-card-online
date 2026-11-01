@@ -90,8 +90,8 @@ GAMES.push({ ...GAMES[0], id: 'marineford', title: '頂上戰爭篇', english: '
   detailDescription: '由一位玩家扮演海軍，對抗一至五位白鬍子海賊團隊長。依順位抽一張、打一張，善用公開情報和士氣。海軍集齊六種正義或擊潰海賊團獲勝；海賊團則要將海軍戰力歸零。支援 CPU 和跨裝置房間。',
   tags: ['2–6 人', '海軍對海賊團', '線上與 CPU'],
   features: ['海軍雙手牌、海賊單手牌的非對稱對戰', '29 張原創改編卡片與六種正義', '跨裝置房間、看牌保密與同步演出'],
-  cover: 'opui://launcher/images/game_launcher/launcher_marineford_cover_v1.webp',
-  lidFront: 'opui://launcher/images/game_launcher/launcher_marineford_cover_v1.webp',
+  cover: 'opui://launcher/images/game_launcher/launcher_marineford_cover_v2.webp',
+  lidFront: 'opui://launcher/images/game_launcher/launcher_marineford_cover_v2.webp',
   preview: '', accent: '114, 193, 234' });
 const byId = Object.fromEntries(GAMES.map((game) => [game.id, game]));
 let selectedGameId = 'board';
@@ -610,6 +610,7 @@ function renderFeature() {
   const copy = statusCopy(state);
   const launching = launchingGameIds.has(game.id);
   const launchBlocked = launchingGameIds.size > 0;
+  featureBoxArt.classList.toggle('marineford-cover',game.id==='marineford');
   document.documentElement.style.setProperty('--active-accent-rgb', game.accent);
   featureBoxArt.style.setProperty('--lid-clip', game.lidClip);
   featureBoxArt.style.setProperty('--tray-clip', game.trayClip);
@@ -624,7 +625,7 @@ function renderFeature() {
   featureEdgeGlow.setAttribute('d', game.freeEdgePath);
   featureEdgeCore.setAttribute('d', game.freeEdgePath);
   featureCover.src = game.lidFront;
-  featureCover.alt = `${game.title}桌遊盒`;
+  featureCover.alt = game.id==='marineford' ? '頂上戰爭篇全新封面' : `${game.title}桌遊盒`;
   featureFrame.src = game.fixedShell;
   featureTitle.textContent = game.title;
   featureTagline.textContent = game.tagline;
@@ -1146,3 +1147,6 @@ window.addEventListener('DOMContentLoaded', initialize, { once: true });
 $('#accountAvatar').addEventListener('error', () => {
   $('#accountAvatar').src = 'opui://launcher/images/board/avatars/8.webp';
 }, { once: true });
+
+// Flat Marineford key art keeps its full composition; original three boxes retain their geometry.
+{const style=document.createElement('style');style.textContent='.marineford-cover .feature-box-lid{transform:none!important;animation:none!important}.marineford-cover .feature-box-lid-front{clip-path:none!important;transform:none!important}.marineford-cover .game-box-cover{object-fit:contain!important;clip-path:none!important}.marineford-cover .game-box-fixed-shell,.marineford-cover .feature-box-lid-back,.marineford-cover .feature-box-tray,.marineford-cover .feature-box-vfx{visibility:hidden!important}.voyage-game-card[data-game=marineford]>img{object-fit:contain}';document.head.append(style);}
