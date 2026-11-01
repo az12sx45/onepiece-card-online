@@ -8676,3 +8676,5 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 - Android v061 3550 個 payload 逐項核對，保留 v060 原遊戲內容及簽章。Windows 1.2.31 與 iOS v061 發布待實際建置及公開讀回；iOS 原生遊戲／帳號橋接保留，僅更新第四遊戲封面與戰績入口。不得將本段候選驗證宣稱實機或正式 DB 驗收。
 
 - 實際 Electron 封面檢查發現 CSP 拒絕 inline style，舊盒框裁切標題。改為正式 launcher.css 的 Marineford 專屬規則，同步 Android/iOS；不放寬 CSP、不改原三遊戲樣式。重新打包前再次視覺確認。
+
+- Windows 1.2.31 最終 EXE 與 blockmap 已上傳 R2 並核對 SHA256。Electron 實際四款入口、新封面完整標題與啟動按鈕通過；原卡牌兩瀏覽器 npm-start 同步／重整／隱私回歸通過。此提交啟用 Windows 簽章更新清單；Android/iOS 指標另行 CAS 發布。
