@@ -80,3 +80,8 @@
 - 新增 `scripts/marineford_factions_qa.cjs`，Chromium／WebKit 各 16 項檢查已通過；2／3／6 人、兩種角色視角、進度顯示與 740x320／740x360／844x390／1366x768。渲染覆蓋使用明示合成狀態，非冒稱真機連線。
 
 - 最終驗證：Chromium／WebKit 各 16 項陣營視角＋各 33 項完整排版與演出檢查通過；原卡圖下六瀏覽器整場 92 步、54 項檢查通過；1,500 局及同回合連戰斷言通過。公開部署待程式讀回，實機驗收未做。
+
+## 2026-11-01 規則與陣營視角正式發布完成
+- 公開來源 `da116cfaed94aff1a24e29338e38d1537afb8700` 已於 2026-11-01T07:04:32.877Z 核對：6 項正式程式／原三款目錄／素材清單與 Git 發布位元組一致，31 張原卡面／卡背 SHA256／大小通過，正式 Chrome／WebKit 未登入啟動與載圖通過。程式校驗使用 Git blob，避免 Windows CRLF 造成誤判。
+- 本機 21 項邊界規則、1,500 局、六瀏覽器 92 步／54 項檢查、Chromium／WebKit 各 16 項陣營＋33 項排版演出通過。沒有正式帳號／實體手機完整對局聲明。
+- 現有 Windows 1.2.31／Android/iOS v061 啟動器與套件不變；重進線上頂上戰爭即可載入。原 Card／Board／Chess 未更動。交付與預覽：D:/Codex_QA/marineford-rules-audit-20261101/delivery.json、review.html。
