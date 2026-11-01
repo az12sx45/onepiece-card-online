@@ -2157,3 +2157,7 @@ scripts/card_native_entry_qa.js tests real worker retirement routing; card_kille
 - public/marineford/marineford.js / marineford.css / index.html：穩定 HUD 節點、詳情與選人全頁、確認鈕、戰鬥舞台／姓名／字幕分區。
 - scripts/marineford_polish_qa.cjs：Chromium／WebKit 四種橫向尺寸，文字範圍、遮擋、長名稱、戰績、私密演出檢查。
 - docs/MARINEFORD_POLISH_QA_20261101.json / MARINEFORD_POLISH_ART_20261101.json：本輪實際驗證與美術來源。
+
+### 2026-11-01 Marineford 規則再核對
+- `docs/MARINEFORD_RULES_AUDIT_20261101.md`：使用者原卡／規則書、官方參考、29 牌映射與兩人差異。
+- `scripts/marineford_rules_edges_qa.js`：抽回牌不足、頂牌補牌排序、非零海軍席位、私下看牌與同點數隱私、門檻與複製技能精確回歸。

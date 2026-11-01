@@ -26,10 +26,11 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
   await pages[0].getByRole('button',{name:'抽牌',exact:true}).click();await delay(1400);check('Presentation gate waits for slowest player',room.gate?.size===1);check('Next action rejected while a viewer is still watching',!(await req(pages[0],'MF_ACTION',{revision:room.state.revision,action:engine.cpuAction(engine.visible(room.state,0),0)})).ok);
   await pages[5].evaluate(sequence=>window.__originalEmit('MF_ACK',{sequence}),room.sequence);await delay(100);check('Last viewer ACK releases exactly one action',room.gate===null);await pages[5].evaluate(()=>window.__mfSocket.emit=window.__originalEmit);
   // Target every pending UI with legal deterministic states, run its actual click controls.
-  for(const type of ['guess','read','review','return','arrange','order','battle-card','peek-slot','fight-target']){
+  for(const fixture of ['guess','read','review','return','arrange','arrange-peek','order','battle-card','peek-slot','fight-target']){
+   const type=fixture==='arrange-peek'?'arrange':fixture;
    let s=engine.create(room.seats,0);const own=s.players[0].hand,other=s.players[1].hand;
    const definitions={guess:{digits:[1,2,3,4,5,6],targets:[1]},read:{cards:other},review:{cards:engine.cards.filter(c=>c.team==='pirate').map(c=>c.id)},return:{cards:own,count:1},arrange:{cards:own,battle:{attacker:1,defender:0,remaining:1,used:[0],source:1}},order:{cards:s.decks.pirate.slice(0,3)},'battle-card':{cards:own,battle:{attacker:0,defender:1,remaining:1,used:[1],source:0}},'peek-slot':{slots:2,source:1},'fight-target':{attacker:0,targets:[1,2,3,4,5],remaining:1,used:[]}};
-   s.pending={type,owner:0,...definitions[type]};s.step='effect';room.state=s;room.sequence++;for(const socket of io.sockets.sockets.values()){const id=socket.data.socialProfile.userId-1;socket.emit('MF_RECOVER',{sequence:room.sequence,view:engine.visible(s,id),you:id});}
+   s.pending={type,owner:0,...definitions[type]};if(fixture==='arrange-peek'){delete s.pending.battle;s.pending.reader=2;s.pending.source=1;}s.step='effect';room.state=s;room.sequence++;for(const socket of io.sockets.sockets.values()){const id=socket.data.socialProfile.userId-1;socket.emit('MF_RECOVER',{sequence:room.sequence,view:engine.visible(s,id),you:id});}
    const p=pages[0];await p.setViewportSize({width:740,height:360});await p.locator('#sheet:not([hidden])').waitFor();await delay(75);check(type+' mobile choice controls exist',await p.locator('#sheetBody button').count()>0);check(type+' no document overflow',await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));if(type==='review')await p.screenshot({path:path.join(out,'phone-review.png')});if(type==='guess')await p.screenshot({path:path.join(out,'phone-guess.png')});   if(['read','review'].includes(type)){const box=await p.getByRole('button',{name:'我看完了 · 繼續',exact:true}).boundingBox();check(type+' continue visible without scrolling',box&&box.y>=0&&box.y+box.height<=360);check(type+' complete cards fit above confirmation',await p.locator('.pick-row').evaluate(row=>row.scrollHeight<=row.clientHeight+1&&[...row.querySelectorAll('img')].every(img=>{const b=img.getBoundingClientRect(),r=row.getBoundingClientRect();return b.height>40&&b.top>=r.top&&b.bottom<=r.bottom;})));}
    if(type==='battle-card'){room.state.players[0].morale=2;room.state.players[1].morale=1;}
    const revision=room.state.revision;
@@ -37,7 +38,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
    else if(['arrange','order','return'].includes(type)){const picks=p.locator('.pick-card');for(let n=0;n<(type==='return'?1:await picks.count());n++)await picks.nth(n).click();await p.getByRole('button',{name:'確認順序',exact:true}).click();}
    else await p.locator('#sheetBody button').first().click();
    for(let n=0;room.state.revision===revision&&n<80;n++)await delay(50);
-   check(type+' actual touch choice accepted',room.state.revision>revision);
+   check(fixture+' actual touch choice accepted',room.state.revision>revision);if(fixture==='arrange-peek')check('Peek rearrangement continues to selected ally hidden slot',room.state.pending?.type==='peek-slot'&&room.state.pending.owner===2);
    while(room.gate)await delay(40);
    if(type==='battle-card'){check('Both sides spend exactly one morale without another choice',room.state.players[0].morale===1&&room.state.players[1].morale===0&&room.state.pending?.type!=='morale-use');check('Mobile has no optional morale buttons',await p.getByRole('button',{name:'保留士氣',exact:true}).count()===0);}
   }

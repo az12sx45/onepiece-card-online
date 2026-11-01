@@ -44,15 +44,19 @@ function effect(s,actor,card,events){
  emit(events,'effect',{player:actor,card});
  if(c.rank===1){
   if(navy&&!c.justice)pending(s,'target-guess',actor,{targets:opponents(s,actor)});
-  else pending(s,'guess',actor,{targets:opponents(s,actor),digits:navy?[1,2,3,4,5,6]:[1,2,3,4,5,6,7]});
+  else pending(s,'guess',actor,{targets:opponents(s,actor).sort((a,b)=>(a-actor+s.players.length)%s.players.length-(b-actor+s.players.length)%s.players.length),digits:navy?[1,2,3,4,5,6]:[1,2,3,4,5,6,7]});
  }else if(c.rank===2){
   if(navy)pending(s,'threshold',actor,{targets:opponents(s,actor),high:c.justice});
   else{const allies=team(s,actor).filter(id=>id!==actor);pending(s,'peek-reader',actor,{targets:allies.length?allies:[actor]});}
  }else if(c.rank===3){pending(s,'fight-target',actor,{attacker:actor,targets:opponents(s,actor),remaining:c.justice?2:1,used:[]});
  }else if(c.rank===4){if(navy){s.players[actor].morale+=c.amount;emit(events,'morale',{player:actor,amount:c.amount});}else pending(s,'morale-target',actor,{targets:team(s,actor)});
  }else if(c.rank===5){
-  if(navy){const n=c.justice?2:1;prepend(s,...Array.from({length:n},()=>({type:'draw',id:actor})),{type:'return-choice',id:actor,count:n});}
-  else pending(s,'order',actor,{cards:s.decks.pirate.slice(0,3)});
+  if(navy){const n=Math.min(c.justice?2:1,s.decks.navy.length);if(n)prepend(s,...Array.from({length:n},()=>({type:'draw',id:actor})),{type:'return-choice',id:actor,count:n});}
+  else{
+   const available=s.players.filter(p=>p.team==='pirate').flatMap(p=>p.played);
+   if(s.decks.pirate.length<3&&available.length){prepend(s,{type:'order-ready',id:actor});pending(s,'review',s.navyId,{cards:available});emit(events,'review',{count:available.length});}
+   else pending(s,'order',actor,{cards:s.decks.pirate.slice(0,3)});
+  }
  }else if(c.rank===6){
   if(navy){const options=s.players[actor].played.filter(id=>id!==card&&byId[id].rank!==7&&id!=='justice-6');if(options.length)pending(s,'copy',actor,{cards:options});}
   else pending(s,'fight-ally',actor,{targets:team(s,actor)});
@@ -90,11 +94,13 @@ function drain(s,events,rng){
   if(job.type==='draw')draw(s,job.id,events,rng);
   else if(job.type==='recycle'){s.decks.navy.push(job.card);shuffle(s.decks.navy,rng);emit(events,'shuffle',{team:'navy'});}
   else if(job.type==='play-ready'){s.step='play';endCheck(s,events,true);}
+  else if(job.type==='order-ready')pending(s,'order',job.id,{cards:s.decks.pirate.slice(0,3)});
   else if(job.type==='effect')effect(s,job.id,job.card,events);
   else if(job.type==='turn-end'){if(endCheck(s,events,true))return;s.turn=(s.turn+1)%s.players.length;s.step='draw';emit(events,'turn',{player:s.turn});endCheck(s,events,true);}
   else if(job.type==='guess-player'){
    const p=s.players[job.id],hits=p.hand.filter(id=>byId[id].rank===job.digit);
-   if(hits.length>1)pending(s,'defeat-choice',p.id,{cards:hits});else if(hits.length)defeat(s,p.id,hits[0],events);else emit(events,'miss',{player:p.id,digit:job.digit});
+   // The same private confirmation for one or two Navy hits avoids disclosing duplicates.
+   if(hits.length&&p.team==='navy')pending(s,'defeat-choice',p.id,{cards:hits});else if(hits.length)defeat(s,p.id,hits[0],events);else emit(events,'miss',{player:p.id,digit:job.digit});
   }else if(job.type==='return-choice')pending(s,'return',job.id,{count:Math.min(job.count,s.players[job.id].hand.length),cards:s.players[job.id].hand.slice()});
   else if(job.type==='next-fight'){const targets=opponents(s,job.attacker).filter(id=>!job.used.includes(id));if(targets.length)pending(s,'fight-target',job.owner,{...job,targets,type:'fight-target'});}
  }
@@ -116,7 +122,7 @@ function apply(input,actor,action,{rng=Math.random}={}){
     case 'guess':requireRule(p.digits.includes(action.digit),'數字無效');emit(events,'guess',{player:actor,targets:p.targets,digit:action.digit});prepend(s,...p.targets.map(id=>({type:'guess-player',id,digit:action.digit})));break;
     case 'defeat-choice':requireRule(p.cards.includes(card),'選牌無效');defeat(s,actor,card,events);break;
     case 'threshold':{targetOK();const hand=s.players[target].hand[0];emit(events,'target',{player:actor,target});if(hand&&(p.high?byId[hand].rank>=3:byId[hand].rank<=3))defeat(s,target,hand,events);else emit(events,'resisted',{player:target});break;}
-    case 'peek-reader':targetOK();pending(s,'peek-slot',target,{slots:s.players[s.navyId].hand.length,source:actor});break;
+    case 'peek-reader':targetOK();pending(s,'arrange',s.navyId,{cards:s.players[s.navyId].hand.slice(),reader:target,source:actor});break;
     case 'peek-slot':requireRule(Number.isInteger(action.slot)&&action.slot>=0&&action.slot<p.slots,'牌位無效');pending(s,'read',actor,{cards:[s.players[s.navyId].hand[action.slot]]});emit(events,'peek',{player:actor,target:s.navyId});break;
     case 'read':requireRule(action.done===true,'請確認看完');break;
     case 'morale-target':targetOK();s.players[target].morale++;emit(events,'morale',{player:target,amount:1});break;
@@ -126,9 +132,9 @@ function apply(input,actor,action,{rng=Math.random}={}){
     case 'fight-ally':targetOK();pending(s,'fight-target',target,{attacker:target,targets:[s.navyId],remaining:1,used:[]});break;
     case 'fight-target':if(action.skip===true){emit(events,'decline',{player:actor});break;}targetOK();beginBattle(s,p,target,events);break;
     case 'battle-card':requireRule(p.cards.includes(card),'出戰牌無效');prepareMorale(s,p.battle,card,events);break;
-    case 'arrange':{const ids=action.cards;requireRule(Array.isArray(ids)&&ids.length===p.cards.length&&new Set(ids).size===ids.length&&ids.every(id=>p.cards.includes(id)),'牌位排序無效');s.players[s.navyId].hand=ids.slice();pending(s,'battle-slot',p.battle.attacker,{battle:p.battle,slots:ids.length});break;}
+    case 'arrange':{const ids=action.cards;requireRule(Array.isArray(ids)&&ids.length===p.cards.length&&new Set(ids).size===ids.length&&ids.every(id=>p.cards.includes(id)),'牌位排序無效');s.players[s.navyId].hand=ids.slice();if(p.reader!=null)pending(s,'peek-slot',p.reader,{slots:ids.length,source:p.source});else pending(s,'battle-slot',p.battle.attacker,{battle:p.battle,slots:ids.length});break;}
     case 'battle-slot':requireRule(Number.isInteger(action.slot)&&action.slot>=0&&action.slot<p.slots,'牌位無效');prepareMorale(s,p.battle,s.players[s.navyId].hand[action.slot],events);break;
-    case 'review':requireRule(action.done===true,'請確認看完');s.decks.pirate=shuffle(s.players.filter(x=>x.team==='pirate').flatMap(x=>x.played.splice(0)),rng);emit(events,'shuffle',{team:'pirate'});break;
+    case 'review':requireRule(action.done===true,'請確認看完');s.decks.pirate.push(...shuffle(s.players.filter(x=>x.team==='pirate').flatMap(x=>x.played.splice(0)),rng));emit(events,'shuffle',{team:'pirate'});break;
     default:throw Error('未知選擇');
    }
   }
@@ -137,7 +143,7 @@ function apply(input,actor,action,{rng=Math.random}={}){
 }
 function visible(s,viewer){
  const v={schema:s.schema,revision:s.revision,phase:s.phase,turn:s.turn,step:s.step,navyId:s.navyId,hp:clone(s.hp),winner:s.winner,moraleRule:s.moraleRule,deckCounts:{navy:s.decks.navy.length,pirate:s.decks.pirate.length},players:s.players.map(p=>({...p,hand:p.id===viewer?p.hand.slice():p.hand.map(()=>null),played:p.played.slice()})),pending:null};
- if(s.pending){const p=s.pending;v.pending={type:p.type,owner:p.owner};if(p.owner===viewer){for(const key of ['targets','digits','slots','remaining','used','count','high'])if(p[key]!=null)v.pending[key]=clone(p[key]);if(p.cards)v.pending.cards=p.cards.slice();}}
+ if(s.pending){const p=s.pending;v.pending={type:p.type==='defeat-choice'&&p.owner!==viewer?'effect':p.type,owner:p.owner};if(p.owner===viewer){for(const key of ['targets','digits','slots','remaining','used','count','high'])if(p[key]!=null)v.pending[key]=clone(p[key]);if(p.cards)v.pending.cards=p.cards.slice();}}
  return v;
 }
 function cpuAction(v,id,rng=Math.random){

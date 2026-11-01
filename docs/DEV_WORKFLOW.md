@@ -8700,3 +8700,8 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 - 程式來源 920a81dbe 已部署，公開程式、清單與 77 筆素材共 84 項 SHA256／大小／目錄比對通過；正式 Chrome／WebKit 未登入大廳開啟、載圖及無腳本例外通過。新 HUD 上傳 1 筆，其餘 76 筆重用。
 - 本輪最終 Chromium／WebKit 各 33 項排版檢查、六瀏覽器 154 步完整對局 50 項檢查與原 Card 回歸通過。沒有正式帳號或實體手機完整對局驗收宣稱。
 - Windows 1.2.31、Android/iOS v061 套件不變；重新進入獨立第四遊戲即可取得這次線上呈現更新。原三款規則／程式及啟動器保留。詳細公開證據及預覽位於 D:/Codex_QA/marineford-polish-20261101。
+
+## 2026-11-01 頂上戰爭規則邊界修正
+- `server/marineford-engine.js`：海軍 5／正義 5 僅回實抽數，海賊 5 頂牌不足三張先檢視補牌，正義 1 依海軍後的順位補抽；海賊看牌加入海軍調換牌位；海軍猜中單張／同點數雙張使用一致私下確認，隱藏多張命中資訊。
+- `public/marineford/marineford.js` 更新確認文案；`scripts/marineford_rules_edges_qa.js` 新增 21 項邊界驗證，舊引擎 9 項失敗、修正後全過；`marineford_engine_qa.js` 輪替海軍席位的 1,500 局通過；`marineford_browser_qa.cjs` 增加看牌重排實際選擇流程。完整核對與差異見 MARINEFORD_RULES_AUDIT_20261101.md。
+- 沒有更動原三款遊戲、啟動器、卡片 id 或原始素材；兩人特例待確認，維持自訂現況。六瀏覽器 92 步完整對局及 54 項檢查、WebKit 啟動與 npm start 通過；公開發布等待讀回確認。
