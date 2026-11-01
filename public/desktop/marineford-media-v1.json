@@ -540,6 +540,230 @@
       "mime": "image/webp",
       "size": 193540,
       "sha256": "c8146fde87f7dd512b9be2ba980b071732e19456dc9b24e52285c2b28055ed02"
+    },
+    {
+      "path": "marineford/art/v2/redraw-justice-1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 489132,
+      "sha256": "50631e32e1d0a269e0bab36c2386fc1fec0d91fd522bdafa29034becd6b4151f"
+    },
+    {
+      "path": "marineford/art/v2/redraw-justice-2.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 557974,
+      "sha256": "8071a182a9cabe1cdba548ac53d2d650868157f2cd8dec26fc313d4673116504"
+    },
+    {
+      "path": "marineford/art/v2/redraw-justice-3.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 559570,
+      "sha256": "32583dc935b9075963b957ca81654e0275b636113543febb52f9fce6893cdc40"
+    },
+    {
+      "path": "marineford/art/v2/redraw-justice-4.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 496654,
+      "sha256": "1edeea9532726921a7b1d6cb116d9b85b238e7f0b712da4860bdbd6bf2af7ccc"
+    },
+    {
+      "path": "marineford/art/v2/redraw-justice-5.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 575240,
+      "sha256": "40cb49e497d5d83aea20e3fa64eaca14e01d90b75203a86d994a95373f89a35a"
+    },
+    {
+      "path": "marineford/art/v2/redraw-justice-6.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 511824,
+      "sha256": "575c6be531f40769dec8fd8b3693fa09c3d19bac4b63fd9cb4a56492746e77b7"
+    },
+    {
+      "path": "marineford/art/v2/redraw-morale-navy.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 511840,
+      "sha256": "93ec581e5ee1e04d6d09a600c34db50063c8c0e96968800b95fa56a7a9ba88f9"
+    },
+    {
+      "path": "marineford/art/v2/redraw-morale-pirate.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 529276,
+      "sha256": "ba7259e4799c3a7989d6946e5a638a3be92dc128303ffad6efef9c7cf92f9b77"
+    },
+    {
+      "path": "marineford/art/v2/redraw-navy-akainu.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 476814,
+      "sha256": "9f74e2d5f033dc8df9e0c9aafc8bd8d6249397e0c79aebd5e97658772be7672d"
+    },
+    {
+      "path": "marineford/art/v2/redraw-navy-aokiji.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 411006,
+      "sha256": "3cb9ff2686b9317a5db5447fbccf68327c967344b101d5ce0e2ac0405cd5e693"
+    },
+    {
+      "path": "marineford/art/v2/redraw-navy-garp.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 389818,
+      "sha256": "210148a49909b4b3293724c159231d04be5087b8d4378856b03a1836af16e258"
+    },
+    {
+      "path": "marineford/art/v2/redraw-navy-helmeppo.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 436814,
+      "sha256": "c81e6caf7af9d77028a42181c9f7d3f11e3c91f7f08c9fad0ad2a5b980afa03b"
+    },
+    {
+      "path": "marineford/art/v2/redraw-navy-kizaru.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 404778,
+      "sha256": "2b15feec4e9ab2ffed08864addbd28d58ac6388ed0221c6167d87b8e1eb0b369"
+    },
+    {
+      "path": "marineford/art/v2/redraw-navy-koby.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 411076,
+      "sha256": "819eb24e8a60e8059c332e4773fac261525eb0a7db25fadd3d24b974e22965ad"
+    },
+    {
+      "path": "marineford/art/v2/redraw-navy-sengoku.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 412698,
+      "sha256": "a222af554b6508906c61530f43d7b57885e183e90eeed7b84d73b5aaba15d5e0"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 481218,
+      "sha256": "07b9c1789ea11a18ba74ef1044eb1e8009ec0cca04dbe4edfd0f823a318d3e4a"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-10.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 449546,
+      "sha256": "a2ccf814f1530a407be0eea6206ff7928eab536b4ad9fef56858bb60eec25933"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-11.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 404628,
+      "sha256": "5e348b27b501c9b85d5958143a5f47e463fdcc8d99e81f8597844fb898bf4bc8"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-12.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 377526,
+      "sha256": "097bc96cd059021952bd71eb61bdac31ae6ce3da22c274884fe7714cd2a57b57"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-13.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 377374,
+      "sha256": "a01e1eee2c4f79701d3045b9d15ccd1088a5e35cdf3890e575a8ceac75a965b8"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-14.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 381956,
+      "sha256": "fdf7a399e62fdf6199b1469ee509187ac8b719c92d3c4811a87f36cccf2d17f9"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-15.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 336728,
+      "sha256": "5c7447e791dad01d61950460b535fda6852fd97bcb833a73ef392db2ab8bffd7"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-16.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 430622,
+      "sha256": "3fd473fb56e77cf5513a7f404ab1192f079b3672ed76db68e9c7a52174b1cf90"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-2.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 404140,
+      "sha256": "59298be72f89da206fcd222687c8257fd385a80bde73eb4c1c828505c2d8abcb"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-3.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 408722,
+      "sha256": "a312398add944bfd6886d100d151f33cc739bb8380c8c0f0d6305a377bcf27fd"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-4.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 455256,
+      "sha256": "5a9b6a95685a0245c975b3ac5c0a5827e109048f1757149b71514baa1c056f5b"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-5.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 407312,
+      "sha256": "2cbb531f773c9e50edb392f0dc518767521922033398017695036ab4a5a4fe3a"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-6.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 379602,
+      "sha256": "f73b164927572b32cae42557ae6a36fc0321b54bddf5d888a9e409a7f6a0f63d"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-7.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 459296,
+      "sha256": "4f5ad65bb3b99a72dc989fda8bd7b3e7e993e97f1ffdc1c2fdef3a5894d30006"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-8.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 386828,
+      "sha256": "0b7fde6d08250bdf016d301391e2df8722ff55534c29b6592e1a710628665091"
+    },
+    {
+      "path": "marineford/art/v2/redraw-pirate-9.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 410970,
+      "sha256": "bb51c6f9f47034f4c62a8c155812c76ac9c0f9fb250cc7a38771c6044da790fa"
+    },
+    {
+      "path": "marineford/art/v2/redraw-scaffold.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 387936,
+      "sha256": "ec984285a1cac62fb26ea20db5e204c872e5deca85e985e7d7fd399aadde1fa1"
     }
   ]
 }

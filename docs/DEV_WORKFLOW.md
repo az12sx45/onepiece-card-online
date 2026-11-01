@@ -8732,3 +8732,14 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 ## 2026-11-01 盒圖發布邊界修正
 - 最後 npm start 發現遊戲素材索引不接受新的 launcher box 名稱；scripts/marineford_media.js 與 public/desktop/marineford-media-v1.json 回復為既有 77 項。新盒圖仍由 signed launcher content64 與手機封裝提供，保留嚴格白名單。
 - 修正後本機 health／遊戲頁與目前公開 health 均 HTTP 200。證據位於 D:/Codex_QA/marineford-box-20261101。
+
+
+## 2026-11-01 立體盒裝正式通道核驗完成
+- 正式程式 99c5e1a58d2baf46a56347f2619321dde5621e2d 與公開 7 項檔案讀回一致；原三款目錄、77 項遊戲素材清單保留。
+- Windows 1.2.31 signed content revision64 由公開端點實際下載並驗章，6 檔雜湊相符，沒有完整 EXE 請求。Android／iOS v063 公開更新指標與發布檔案相符；Android v061/v062 差量精確重建已驗證。
+- 盒圖保留原稿、完整內建 image_gen 提示與最終資產路徑已寫入 MARINEFORD_BOX_ART_20261101.json。發布證據：D:/Codex_QA/marineford-box-20261101/delivery.json。
+- 手機僅封裝與隔離瀏覽器排版核驗，未宣稱實體手機完整對局；iOS 仍需 iloader 簽署。
+
+
+## 2026-11-01 頂上戰爭卡面與助威
+日期：2026-11-01。範圍：Marineford 29 張卡面重畫、海軍左右牌位、處刑台與士氣軍勢 +2 演出。檔案：public/marineford/{index.html,marineford.js,marineford.css,sound.js,art/v2/redraw-*}、marineford-media-v1.json、scripts/marineford_media.js 與三個 UI QA。規則引擎未改。驗證與發布讀回見 MARINEFORD_CARDS_20261101.md / MARINEFORD_CARDS_QA_20261101.json。

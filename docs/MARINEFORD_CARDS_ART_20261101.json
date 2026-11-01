@@ -1,0 +1,567 @@
+{
+  "generator": "built-in image_gen; one call per asset; WebP encoding only via Pillow",
+  "sources": [
+    {
+      "url": "https://one-piece.com/character/marco/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/rakuyo/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/atmos/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/ace/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/namyul/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/speed_jill/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/jozu/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/brenheim/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/izo/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/edward_newgate/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/creele/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/fossa/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/bista/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/kingdew/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/bramenko/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/halta/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/Helmeppo/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/Coby/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/Monkey_D_Garp/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/Borsalino/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/Sakazuki/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://one-piece.com/character/Sengoku/index.html",
+      "role": "official character identity research; Marineford appearance checked separately"
+    },
+    {
+      "url": "https://www.pinterest.com/pin/one-piece--22869910603166016/",
+      "role": "16 commander anime identity grid; Thatch excluded from this deck"
+    },
+    {
+      "url": "https://onepiece.fandom.com/fr/wiki/Rakuyo",
+      "role": "Rakuyo dreadlocks and moustache visual reference"
+    },
+    {
+      "url": "https://duniagames.co.id/discover/article/fakta-blenheim-one-piece",
+      "role": "Blenheim anime still: short gray beard, open blue-gray vest"
+    },
+    {
+      "url": "https://duniaku.idntimes.com/anime-manga/one-piece/fakta-helmeppo-one-piece-1-00-rgfzd-jgd2c6",
+      "role": "Helmeppo anime still: green vest, forehead visor, blond tied hair"
+    },
+    {
+      "url": "https://tv.apple.com/gb/episode/marineford-keeping-the-promise-luffy-and-koby-clash/umc.cmc.3lot94wzqvqavbe110q4qdnux",
+      "role": "Official Marineford episode frame: Koby star scar, pink hair, high collar"
+    },
+    {
+      "url": "https://opflag.bn-ent.net/character/index.php?chara=chara20",
+      "role": "Official Aokiji game character reference"
+    }
+  ],
+  "assets": [
+    {
+      "key": "pirate-2",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-2.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is the exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending at y80%, blank ivory parchment panel at y81..96%, empty top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely with the character below. Reference 2 is the named anime identity grid; match corresponding character facial structure, hair, costume and weapons, not a generic pirate. Marineford era original colors, dramatic mid-action portrait large recognizable face, icy harbor background. Keep feet/body safely above text panel; NO writing, letters or digits anywhere; game typesets name, rank and effects. SUBJECT: Rakuyo, reference grid row2 col3: thick blond dreadlocks, yellow headband with skull mark, huge thin black crescent moustache (NOT beard), dangling earrings, cream white long coat green inside collar, open pale shirt, red sash. Swings living black spiked flail on chain with monstrous toothy mouth; stern older narrow eyes.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-2.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "59298be72f89da206fcd222687c8257fd385a80bde73eb4c1c828505c2d8abcb",
+      "bytes": 404140,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is the exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending at y80%, blank ivory parchment panel at y81..96%, empty top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely with the character below. Reference 2 is the named anime identity grid; match corresponding character facial structure, hair, costume and weapons, not a generic pirate. Marineford era original colors, dramatic mid-action portrait large recognizable face, icy harbor background. Keep feet/body safely above text panel; NO writing, letters or digits anywhere; game typesets name, rank and effects. SUBJECT: Rakuyo, reference grid row2 col3: thick blond dreadlocks, yellow headband with skull mark, huge thin black crescent moustache (NOT beard), dangling earrings, cream white long coat green inside collar, open pale shirt, red sash. Swings living black spiked flail on chain with monstrous toothy mouth; stern older narrow eyes.\n"
+    },
+    {
+      "key": "pirate-3",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-3.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is the exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending at y80%, blank ivory parchment panel at y81..96%, empty top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely with the character below. Reference 2 is the named anime identity grid; match corresponding character facial structure, hair, costume and weapons, not a generic pirate. Marineford era original colors, dramatic mid-action portrait large recognizable face, icy harbor background. Keep feet/body safely above text panel; NO writing, letters or digits anywhere; game typesets name, rank and effects. SUBJECT: Atmos, reference row4 col1: extremely massive broad bulky man, dark horned helmet with buffalo horns, thick long straight black beard split in long strands, serious teeth, yellow patterned breastplate and silver pauldrons, wielding two curved swords, imposing buffalo commander.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-3.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a312398add944bfd6886d100d151f33cc739bb8380c8c0f0d6305a377bcf27fd",
+      "bytes": 408722,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is the exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending at y80%, blank ivory parchment panel at y81..96%, empty top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely with the character below. Reference 2 is the named anime identity grid; match corresponding character facial structure, hair, costume and weapons, not a generic pirate. Marineford era original colors, dramatic mid-action portrait large recognizable face, icy harbor background. Keep feet/body safely above text panel; NO writing, letters or digits anywhere; game typesets name, rank and effects. SUBJECT: Atmos, reference row4 col1: extremely massive broad bulky man, dark horned helmet with buffalo horns, thick long straight black beard split in long strands, serious teeth, yellow patterned breastplate and silver pauldrons, wielding two curved swords, imposing buffalo commander.\n"
+    },
+    {
+      "key": "pirate-4",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-4.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is the exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending at y80%, blank ivory parchment panel at y81..96%, empty top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely with the character below. Reference 2 is the named anime identity grid; match corresponding character facial structure, hair, costume and weapons, not a generic pirate. Marineford era original colors, dramatic mid-action portrait large recognizable face, icy harbor background. Keep feet/body safely above text panel; NO writing, letters or digits anywhere; game typesets name, rank and effects. SUBJECT: Portgas D. Ace, reference row1 col2: young black tousled hair, freckles on both cheeks, orange hat with blue smiling/frowning badge pair, red bead necklace, bare chest, upper left arm ASCE tattoo with S crossed out, orange fire in fist, compassionate confident face, no beard.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-4.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5a9b6a95685a0245c975b3ac5c0a5827e109048f1757149b71514baa1c056f5b",
+      "bytes": 455256,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is the exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending at y80%, blank ivory parchment panel at y81..96%, empty top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely with the character below. Reference 2 is the named anime identity grid; match corresponding character facial structure, hair, costume and weapons, not a generic pirate. Marineford era original colors, dramatic mid-action portrait large recognizable face, icy harbor background. Keep feet/body safely above text panel; NO writing, letters or digits anywhere; game typesets name, rank and effects. SUBJECT: Portgas D. Ace, reference row1 col2: young black tousled hair, freckles on both cheeks, orange hat with blue smiling/frowning badge pair, red bead necklace, bare chest, upper left arm ASCE tattoo with S crossed out, orange fire in fist, compassionate confident face, no beard.\n"
+    },
+    {
+      "key": "pirate-5",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-5.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is the exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending at y80%, blank ivory parchment panel at y81..96%, empty top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely with the character below. Reference 2 is the named anime identity grid; match corresponding character facial structure, hair, costume and weapons, not a generic pirate. Marineford era original colors, dramatic mid-action portrait large recognizable face, icy harbor background. Keep feet/body safely above text panel; NO writing, letters or digits anywhere; game typesets name, rank and effects. SUBJECT: Namur, reference row2 col4: WHITE / pale blue shark fish-man skin, sharp triangular black swept-up dorsal-like hair, large protruding squared shark teeth, multiple neck gill slits, broad powerful face, big dark blue sleeveless open jacket, muscular white chest, not a human or blue humanoid samurai.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-5.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2cbb531f773c9e50edb392f0dc518767521922033398017695036ab4a5a4fe3a",
+      "bytes": 407312,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is the exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending at y80%, blank ivory parchment panel at y81..96%, empty top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely with the character below. Reference 2 is the named anime identity grid; match corresponding character facial structure, hair, costume and weapons, not a generic pirate. Marineford era original colors, dramatic mid-action portrait large recognizable face, icy harbor background. Keep feet/body safely above text panel; NO writing, letters or digits anywhere; game typesets name, rank and effects. SUBJECT: Namur, reference row2 col4: WHITE / pale blue shark fish-man skin, sharp triangular black swept-up dorsal-like hair, large protruding squared shark teeth, multiple neck gill slits, broad powerful face, big dark blue sleeveless open jacket, muscular white chest, not a human or blue humanoid samurai.\n"
+    },
+    {
+      "key": "pirate-6",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-6.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Speed Jiru, reference row4 col2: stocky broad muscular face, long protruding nose, red fezzed angular cap with white cross insignia and trailing red tassel, reddish brown sleeves under white vest with blue Whitebeard cross symbol, long lance held forward. Distinctive narrowed eyes and large jaw, not thin generic blond man.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-6.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f73b164927572b32cae42557ae6a36fc0321b54bddf5d888a9e409a7f6a0f63d",
+      "bytes": 379602,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Speed Jiru, reference row4 col2: stocky broad muscular face, long protruding nose, red fezzed angular cap with white cross insignia and trailing red tassel, reddish brown sleeves under white vest with blue Whitebeard cross symbol, long lance held forward. Distinctive narrowed eyes and large jaw, not thin generic blond man.\n"
+    },
+    {
+      "key": "pirate-7",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-7.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Diamond Jozu, reference row1 col3: hulking very wide dark-tan muscular shoulders, short black hair, small intense eyes, big angular jaw, dark maroon plated armor studded rectangular metal panels, one massive shoulder and arm become reflective faceted diamond. No helmet.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-7.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4f5ad65bb3b99a72dc989fda8bd7b3e7e993e97f1ffdc1c2fdef3a5894d30006",
+      "bytes": 459296,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Diamond Jozu, reference row1 col3: hulking very wide dark-tan muscular shoulders, short black hair, small intense eyes, big angular jaw, dark maroon plated armor studded rectangular metal panels, one massive shoulder and arm become reflective faceted diamond. No helmet.\n"
+    },
+    {
+      "key": "pirate-9",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-9.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Izo, reference row4 col4: slender adult male with pale skin, elegant feminine face, lipstick, defined eyes, jet black hair in traditional tied bun with face-framing strand, pink kimono, red patterned obi, two flintlock pistols held ready. NO later forehead scar (Marineford era).\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-9.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bb51c6f9f47034f4c62a8c155812c76ac9c0f9fb250cc7a38771c6044da790fa",
+      "bytes": 410970,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Izo, reference row4 col4: slender adult male with pale skin, elegant feminine face, lipstick, defined eyes, jet black hair in traditional tied bun with face-framing strand, pink kimono, red patterned obi, two flintlock pistols held ready. NO later forehead scar (Marineford era).\n"
+    },
+    {
+      "key": "pirate-10",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-10.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Edward Newgate WHITEBEARD Marineford: extremely tall massive elderly man, iconic crescent WHITE MOUSTACHE clean shaved chin (not beard), black bandana, bare scarred broad chest, white captain cloak red lining gold epaulettes, huge naginata polearm Murakumogiri. Grounded powerful compassionate older face. White quake halo around fist, not young blond version.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-10.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a2ccf814f1530a407be0eea6206ff7928eab536b4ad9fef56858bb60eec25933",
+      "bytes": 449546,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Edward Newgate WHITEBEARD Marineford: extremely tall massive elderly man, iconic crescent WHITE MOUSTACHE clean shaved chin (not beard), black bandana, bare scarred broad chest, white captain cloak red lining gold epaulettes, huge naginata polearm Murakumogiri. Grounded powerful compassionate older face. White quake halo around fist, not young blond version.\n"
+    },
+    {
+      "key": "pirate-11",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-11.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Curiel, reference row3 col2: sturdy broad man, green WATERMELON striped bucket helmet with huge rounded ear protectors, PURPLE square-rim tinted glasses, two bazookas strapped on back angled up, sleeveless green long coat over magenta pink shirt, camouflage pants, small purple Whitebeard mark tattoo on chin. Holds two pistols; no generic navy officer.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-11.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5e348b27b501c9b85d5958143a5f47e463fdcc8d99e81f8597844fb898bf4bc8",
+      "bytes": 404628,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Curiel, reference row3 col2: sturdy broad man, green WATERMELON striped bucket helmet with huge rounded ear protectors, PURPLE square-rim tinted glasses, two bazookas strapped on back angled up, sleeveless green long coat over magenta pink shirt, camouflage pants, small purple Whitebeard mark tattoo on chin. Holds two pistols; no generic navy officer.\n"
+    },
+    {
+      "key": "pirate-12",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-12.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Fossa, reference row4 col3: muscular balding older dark-haired man, large short thick dark moustache and sideburns, cigar clenched in teeth, bare chest, open dark blue/navy coat on shoulders, white trousers, right upperarm tattoo, brandishes a long flaming sword. Not redhaired or bearded.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-12.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "097bc96cd059021952bd71eb61bdac31ae6ce3da22c274884fe7714cd2a57b57",
+      "bytes": 377526,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Fossa, reference row4 col3: muscular balding older dark-haired man, large short thick dark moustache and sideburns, cigar clenched in teeth, bare chest, open dark blue/navy coat on shoulders, white trousers, right upperarm tattoo, brandishes a long flaming sword. Not redhaired or bearded.\n"
+    },
+    {
+      "key": "pirate-13",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-13.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Vista, reference row2 col1: broad muscular man, black curled handlebar moustache, black TOP HAT with blue band, curly black hair, dark blue open coat exposing chest, two elegant curved sabers crossing, rose petals in wind. No skullhat, not Mihawk.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-13.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a01e1eee2c4f79701d3045b9d15ccd1088a5e35cdf3890e575a8ceac75a965b8",
+      "bytes": 377374,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Vista, reference row2 col1: broad muscular man, black curled handlebar moustache, black TOP HAT with blue band, curly black hair, dark blue open coat exposing chest, two elegant curved sabers crossing, rose petals in wind. No skullhat, not Mihawk.\n"
+    },
+    {
+      "key": "pirate-14",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-14.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Kingdew, reference row3 col3: extremely muscular tanned man, straight short BLOND BOB haircut to jaw, prominent hollow cheeks and square jaw, bare chest dark tattoo upper right pectoral, black short cape, striped brass metal gauntlets, light blue sash, forceful twin-fist stance.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-14.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fdf7a399e62fdf6199b1469ee509187ac8b719c92d3c4811a87f36cccf2d17f9",
+      "bytes": 381956,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Kingdew, reference row3 col3: extremely muscular tanned man, straight short BLOND BOB haircut to jaw, prominent hollow cheeks and square jaw, bare chest dark tattoo upper right pectoral, black short cape, striped brass metal gauntlets, light blue sash, forceful twin-fist stance.\n"
+    },
+    {
+      "key": "pirate-15",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-15.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Blamenco, reference row2 col2: enormously stocky round man with huge wide face and triangular grin, tiny eyes, purple pointed tricorn-like pirate hat white skull, purple suspenders/overalls over striped shirt, two round flesh pocket openings at upper chest, pulls a GIANT WOODEN MALLET from chest pocket. Warm funny confident anime likeness, not skinny swordsman.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-15.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5c7447e791dad01d61950460b535fda6852fd97bcb833a73ef392db2ab8bffd7",
+      "bytes": 336728,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Blamenco, reference row2 col2: enormously stocky round man with huge wide face and triangular grin, tiny eyes, purple pointed tricorn-like pirate hat white skull, purple suspenders/overalls over striped shirt, two round flesh pocket openings at upper chest, pulls a GIANT WOODEN MALLET from chest pocket. Warm funny confident anime likeness, not skinny swordsman.\n"
+    },
+    {
+      "key": "pirate-16",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-16.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Haruta, reference row3 col4: small slim youthful adult male, reddish-brown short bob hair, large blue eyes, green and white Renaissance tunic with large white pleated ruff collar, puff sleeves, diagonal brown belt, white tights, slim saber. Cute sharp determined adult face, no pirate captain hat.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-16.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3fd473fb56e77cf5513a7f404ab1192f079b3672ed76db68e9c7a52174b1cf90",
+      "bytes": 430622,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Haruta, reference row3 col4: small slim youthful adult male, reddish-brown short bob hair, large blue eyes, green and white Renaissance tunic with large white pleated ruff collar, puff sleeves, diagonal brown belt, white tights, slim saber. Cute sharp determined adult face, no pirate captain hat.\n"
+    },
+    {
+      "key": "justice-2",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\justice-2.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Justice card symbol art: a powerful steel gauntlet fist over Marineford stone fortress, radiant shockwave, blue navy banners and ivory Marine seagull crest. Iron fist justice, no writing or calligraphy.\n",
+      "destination": "public/marineford/art/v2/redraw-justice-2.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8071a182a9cabe1cdba548ac53d2d650868157f2cd8dec26fc313d4673116504",
+      "bytes": 557974,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Justice card symbol art: a powerful steel gauntlet fist over Marineford stone fortress, radiant shockwave, blue navy banners and ivory Marine seagull crest. Iron fist justice, no writing or calligraphy.\n"
+    },
+    {
+      "key": "justice-3",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\justice-3.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Justice card symbol art: Aokiji's frozen sea in a graceful sweeping ice crescent, navy officers' cap laid on clean ice, pale blue Marine seagull crest. Calm lazy justice. No person needed, no writing or calligraphy.\n",
+      "destination": "public/marineford/art/v2/redraw-justice-3.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "32583dc935b9075963b957ca81654e0275b636113543febb52f9fce6893cdc40",
+      "bytes": 559570,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Justice card symbol art: Aokiji's frozen sea in a graceful sweeping ice crescent, navy officers' cap laid on clean ice, pale blue Marine seagull crest. Calm lazy justice. No person needed, no writing or calligraphy.\n"
+    },
+    {
+      "key": "justice-4",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\justice-4.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Justice card symbol art: golden prism light bisecting an ivory Marine seagull crest, sunlit gilded scales with equal pans over Marineford bay. Ambiguous justice, no writing or calligraphy.\n",
+      "destination": "public/marineford/art/v2/redraw-justice-4.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1edeea9532726921a7b1d6cb116d9b85b238e7f0b712da4860bdbd6bf2af7ccc",
+      "bytes": 496654,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Justice card symbol art: golden prism light bisecting an ivory Marine seagull crest, sunlit gilded scales with equal pans over Marineford bay. Ambiguous justice, no writing or calligraphy.\n"
+    },
+    {
+      "key": "justice-5",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\justice-5.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Justice card symbol art: white Marine seagull insignia carved into a massive navy steel shield, bright red lava cracks behind, uncompromising fortress geometry. Absolute justice, no writing or calligraphy.\n",
+      "destination": "public/marineford/art/v2/redraw-justice-5.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "40cb49e497d5d83aea20e3fa64eaca14e01d90b75203a86d994a95373f89a35a",
+      "bytes": 575240,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Justice card symbol art: white Marine seagull insignia carved into a massive navy steel shield, bright red lava cracks behind, uncompromising fortress geometry. Absolute justice, no writing or calligraphy.\n"
+    },
+    {
+      "key": "justice-6",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\justice-6.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Justice card symbol art: radiant golden Buddha palm above Marineford fortress and six subdued navy banner standards, central ivory seagull crest framed by disciplined gold sunrays. Reigning justice. No writing or calligraphy.\n",
+      "destination": "public/marineford/art/v2/redraw-justice-6.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "575c6be531f40769dec8fd8b3693fa09c3d19bac4b63fd9cb4a56492746e77b7",
+      "bytes": 511824,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Justice card symbol art: radiant golden Buddha palm above Marineford fortress and six subdued navy banner standards, central ivory seagull crest framed by disciplined gold sunrays. Reigning justice. No writing or calligraphy.\n"
+    },
+    {
+      "key": "pirate-8",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-8.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Blenheim, enormous Whitebeard commander. Reference2 is exact face/costume. Black hair swept into topknot, heavy long face and short GRAY U-shaped chin-and-side beard, gray side whiskers; NO long black mustache. Open light gray-blue sleeveless high-collar coat, bare hairy chest, giant sword. Match reference2 face. Retain copper frame from reference1.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-8.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0b7fde6d08250bdf016d301391e2df8722ff55534c29b6592e1a710628665091",
+      "bytes": 386828,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Blenheim, reference row3 col1: gigantic muscular long-faced man, long black braided ponytail rising from top head, long mustache with broad drooping ends, bare chest with dark skull-like Whitebeard tattoo on upper arm, pale blue short cloak over shoulders, brass bracers, heavy saber. Not blond.\n"
+    },
+    {
+      "key": "navy-helmeppo",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\navy-helmeppo.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Helmeppo at Marineford, exact face and costume from reference2: long slim face, swept-back blond hair tied behind head, long blond side locks, black narrow visor worn on forehead with small cross, arched blond eyebrows, tiny chin dark patch, GREEN VEST over white long sleeve shirt, purple trousers, two kukri swords. NOT purple suit or full black glasses on eyes. IMPORTANT replace copper frame with SILVER metal edges on DEEP COBALT BLUE, cool-white blank lower panel; frame coordinates unchanged.\n",
+      "destination": "public/marineford/art/v2/redraw-navy-helmeppo.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c81e6caf7af9d77028a42181c9f7d3f11e3c91f7f08c9fad0ad2a5b980afa03b",
+      "bytes": 436814,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Helmeppo at Marineford PRE TIMESKIP: slim young man with long blond hair parted into hanging side locks, long sharp nose, narrow chin, black wraparound narrow sunglasses, purple suit/dark shirt and pale lavender tie, twin inward-curved kukri blades. Do not depict initial bowl-hair child or modern shaved sides SWORD uniform.\n"
+    },
+    {
+      "key": "navy-koby",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\navy-koby.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Koby at Marineford from reference2: short tousled pink hair, yellow patterned bandana and round purple goggles on forehead, small four-point STAR SCAR centered on exposed forehead under bandana, youthful slim face, white high zip-neck uniform with blue trim and navy neckerchief. NO admiral coat, epaulettes or muscles. IMPORTANT replace copper frame with SILVER metal edges on DEEP COBALT BLUE, cool-white blank lower panel; frame coordinates unchanged.\n",
+      "destination": "public/marineford/art/v2/redraw-navy-koby.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "819eb24e8a60e8059c332e4773fac261525eb0a7db25fadd3d24b974e22965ad",
+      "bytes": 411076,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Koby at Marineford PRE TIMESKIP: slender young Marine boy with bright pink short hair, round black-rim glasses on forehead, headband, white short-sleeve Marine service shirt, dark blue neck scarf, blue trousers, earnest wide eyes, small face, no huge muscles, no adult coat or facial cross scar. Brave clenched fist. Use ivory / silver edging on deep navy for Marine faction, same panel and rank badge coordinates. Respect PRE TIMESKIP costume and correct facial likeness.\n"
+    },
+    {
+      "key": "justice-1",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\justice-1.png",
+      "prompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: PURE SYMBOLIC CARD, no human figure or person. Single brilliant white seagull rising above crossed unbloodied training swords and Marineford harbor at sunrise. Innocent justice, courage and fresh resolve. No words. Keep ornate gold border; illustration only symbols.\n",
+      "destination": "public/marineford/art/v2/redraw-justice-1.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "50631e32e1d0a269e0bab36c2386fc1fec0d91fd522bdafa29034becd6b4151f",
+      "bytes": 489132,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Justice card symbol art: a clean white Marine seagull insignia above an upright sword and young Koby silhouette, a bright rising sun over Marineford, blue and ivory banners. Allegory of initial justice, no writing or calligraphy.\n"
+    },
+    {
+      "key": "pirate-1",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\pirate-1.png",
+      "prompt": "Create one polished vertical 2:3 illustrated card for a One Piece Marineford board game. Character: MARCO THE PHOENIX at Marineford (reference 1 top-left panel labeled Marco). Preserve authentic distinctive pineapple-like short blond hair, narrow sleepy eyes, small chin stubble, open purple short-sleeve jacket, bare chest with blue Whitebeard cross tattoo, turquoise sash and cyan/gold phoenix flame wing. Dynamic confident waist-up pose, no glasses (pre-timeskip). Reference 2 is ONLY the desired warm inked anime printed-card art style and parchment/brass frame language, not character identity. More faithful anime face, crisp clean lineart, lively saturated colors, no murky brown wash. Complete front-facing rectangular flat card, flush to image boundaries, no 3D perspective or margin. Thin burnished copper/dark navy border, illustration occupies x=5..95%, y=4..71%; face large and unobscured near upper half. At y=72..95% draw one clean ivory parchment panel COMPLETELY BLANK for later typeset name and effect. Top-left small ivory inset round/square number badge x=4..20%,y=3..14% ALSO BLANK. NO WORDS, LETTERS, NUMBERS, watermarks anywhere; game renders verified text. Blue phoenix fire sweeps behind him over icy Marineford harbor. No other characters, no modern costumes.\n",
+      "destination": "public/marineford/art/v2/redraw-pirate-1.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "07b9c1789ea11a18ba74ef1044eb1e8009ec0cca04dbe4edfd0f823a318d3e4a",
+      "bytes": 481218,
+      "initialPrompt": "Create one polished vertical 2:3 illustrated card for a One Piece Marineford board game. Character: MARCO THE PHOENIX at Marineford (reference 1 top-left panel labeled Marco). Preserve authentic distinctive pineapple-like short blond hair, narrow sleepy eyes, small chin stubble, open purple short-sleeve jacket, bare chest with blue Whitebeard cross tattoo, turquoise sash and cyan/gold phoenix flame wing. Dynamic confident waist-up pose, no glasses (pre-timeskip). Reference 2 is ONLY the desired warm inked anime printed-card art style and parchment/brass frame language, not character identity. More faithful anime face, crisp clean lineart, lively saturated colors, no murky brown wash. Complete front-facing rectangular flat card, flush to image boundaries, no 3D perspective or margin. Thin burnished copper/dark navy border, illustration occupies x=5..95%, y=4..71%; face large and unobscured near upper half. At y=72..95% draw one clean ivory parchment panel COMPLETELY BLANK for later typeset name and effect. Top-left small ivory inset round/square number badge x=4..20%,y=3..14% ALSO BLANK. NO WORDS, LETTERS, NUMBERS, watermarks anywhere; game renders verified text. Blue phoenix fire sweeps behind him over icy Marineford harbor. No other characters, no modern costumes.\n"
+    },
+    {
+      "key": "navy-garp",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\navy-garp.png",
+      "prompt": "EDIT target reference1 only. Preserve character's EXACT identity, face, hair, costume colors, pose, all illustration and background and all composition coordinates. Replace ONLY the warm copper/gold CARD FRAME and amber blank panels with a distinct NAVY FACTION frame matching reference2: silver metal outlines against deep cobalt blue edging, cool WHITE blank lower panel and white blank top-left rank inset. Do not recolor character gold epaulettes or effects. DO NOT copy Helmeppo character from reference2. Preserve vertical 2:3 shape 1024x1536, illustration ends y80%, blank panel y81..96%, rank badge x4..20 y3..14. No letters or digits. New card should be clearly silver-blue Navy faction, not gold pirate faction.\n",
+      "destination": "public/marineford/art/v2/redraw-navy-garp.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "210148a49909b4b3293724c159231d04be5087b8d4378856b03a1836af16e258",
+      "bytes": 389818,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Monkey D. Garp at Marineford: huge muscular elderly man with cropped gray hair, square jaw, short gray beard/moustache, diagonal scar near LEFT eye, cheerful fierce toothy grin, white Marine coat gold epaulettes over white suit, dark shirt and blue tie, clenched giant fist. Not young or dog-mask face. Use ivory / silver edging on deep navy for Marine faction, same panel and rank badge coordinates. Respect PRE TIMESKIP costume and correct facial likeness.\n"
+    },
+    {
+      "key": "navy-aokiji",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\navy-aokiji.png",
+      "prompt": "EDIT target reference1 only. Preserve character's EXACT identity, face, hair, costume colors, pose, all illustration and background and all composition coordinates. Replace ONLY the warm copper/gold CARD FRAME and amber blank panels with a distinct NAVY FACTION frame matching reference2: silver metal outlines against deep cobalt blue edging, cool WHITE blank lower panel and white blank top-left rank inset. Do not recolor character gold epaulettes or effects. DO NOT copy Helmeppo character from reference2. Preserve vertical 2:3 shape 1024x1536, illustration ends y80%, blank panel y81..96%, rank badge x4..20 y3..14. No letters or digits. New card should be clearly silver-blue Navy faction, not gold pirate faction.\n",
+      "destination": "public/marineford/art/v2/redraw-navy-aokiji.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3cb9ff2686b9317a5db5447fbccf68327c967344b101d5ce0e2ac0405cd5e693",
+      "bytes": 411006,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Kuzan Aokiji at Marineford BEFORE TIMESKIP: tall slender dark tan man with black tightly curly hair, sleepy narrow eyes, green sleep mask on FOREHEAD, white vest and white pants over dark navy long-sleeve shirt, yellow tie, white Marine coat gold epaulettes draped on shoulders. Intact legs, no beard, no post-timeskip scars or blackbeard outfit. Raises ice-coated hand with frost. Use ivory / silver edging on deep navy for Marine faction, same panel and rank badge coordinates. Respect PRE TIMESKIP costume and correct facial likeness.\n"
+    },
+    {
+      "key": "navy-kizaru",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\navy-kizaru.png",
+      "prompt": "EDIT target reference1 only. Preserve character's EXACT identity, face, hair, costume colors, pose, all illustration and background and all composition coordinates. Replace ONLY the warm copper/gold CARD FRAME and amber blank panels with a distinct NAVY FACTION frame matching reference2: silver metal outlines against deep cobalt blue edging, cool WHITE blank lower panel and white blank top-left rank inset. Do not recolor character gold epaulettes or effects. DO NOT copy Helmeppo character from reference2. Preserve vertical 2:3 shape 1024x1536, illustration ends y80%, blank panel y81..96%, rank badge x4..20 y3..14. No letters or digits. New card should be clearly silver-blue Navy faction, not gold pirate faction.\n",
+      "destination": "public/marineford/art/v2/redraw-navy-kizaru.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2b15feec4e9ab2ffed08864addbd28d58ac6388ed0221c6167d87b8e1eb0b369",
+      "bytes": 404778,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Borsalino Kizaru at Marineford: middle-aged narrow tan face, short curled dark hair, small stubble, orange tinted rectangular glasses, gold-yellow PINSTRIPED suit and striped tie, white Marine coat gold epaulettes, calm crooked ironic smile. Gold light glows from one raised fingertip. Use ivory / silver edging on deep navy for Marine faction, same panel and rank badge coordinates. Respect PRE TIMESKIP costume and correct facial likeness.\n"
+    },
+    {
+      "key": "navy-akainu",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\navy-akainu.png",
+      "prompt": "EDIT target reference1 only. Preserve character's EXACT identity, face, hair, costume colors, pose, all illustration and background and all composition coordinates. Replace ONLY the warm copper/gold CARD FRAME and amber blank panels with a distinct NAVY FACTION frame matching reference2: silver metal outlines against deep cobalt blue edging, cool WHITE blank lower panel and white blank top-left rank inset. Do not recolor character gold epaulettes or effects. DO NOT copy Helmeppo character from reference2. Preserve vertical 2:3 shape 1024x1536, illustration ends y80%, blank panel y81..96%, rank badge x4..20 y3..14. No letters or digits. New card should be clearly silver-blue Navy faction, not gold pirate faction.\n",
+      "destination": "public/marineford/art/v2/redraw-navy-akainu.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9f74e2d5f033dc8df9e0c9aafc8bd8d6249397e0c79aebd5e97658772be7672d",
+      "bytes": 476814,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Sakazuki Akainu at Marineford PRE TIMESKIP: broad angular stern clean-shaven face, white baseball cap, red floral shirt and red suit, pink rose on lapel, white Marine coat gold epaulettes, muscular magma fist, no post-timeskip jaw beard/scar, no fleet-admiral long uniform. Cap lettering omitted.\n"
+    },
+    {
+      "key": "navy-sengoku",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\navy-sengoku.png",
+      "prompt": "EDIT target reference1 only. Preserve character's EXACT identity, face, hair, costume colors, pose, all illustration and background and all composition coordinates. Replace ONLY the warm copper/gold CARD FRAME and amber blank panels with a distinct NAVY FACTION frame matching reference2: silver metal outlines against deep cobalt blue edging, cool WHITE blank lower panel and white blank top-left rank inset. Do not recolor character gold epaulettes or effects. DO NOT copy Helmeppo character from reference2. Preserve vertical 2:3 shape 1024x1536, illustration ends y80%, blank panel y81..96%, rank badge x4..20 y3..14. No letters or digits. New card should be clearly silver-blue Navy faction, not gold pirate faction.\n",
+      "destination": "public/marineford/art/v2/redraw-navy-sengoku.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a222af554b6508906c61530f43d7b57885e183e90eeed7b84d73b5aaba15d5e0",
+      "bytes": 412698,
+      "initialPrompt": "Create ONE final vertical 2:3 Marineford illustrated card. Reference 1 is exact frame/composition/style template: crisp vibrant printed anime lineart, warm copper narrow border on deep navy, large illustration ending y80%, blank ivory parchment panel y81..96%, EMPTY top-left rank inset x4..20%,y3..14%. Match frame coordinates precisely, flat frontal card flush to edges. Replace Marco entirely. Reference 2 is anime identity grid; match corresponding face/hair/costume/weapons, not generic pirate. Marineford original colors, dramatic mid-action portrait with recognizable face and icy harbor background. NO words, letters or digits; game typesets verified text. SUBJECT: Sengoku Fleet Admiral at Marineford PRE TIMESKIP: round spectacles, black afro hair under white tall cap with seagull ornament, long thin braided black goatee, white gold-trimmed Marine uniform and white cape, stern commanding face. Golden Buddha aura behind but human face clearly visible. Not gray-haired retired version.\n"
+    },
+    {
+      "key": "scaffold",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\scaffold.png",
+      "prompt": "Transparent game scene sprite, square canvas. One Piece Marineford execution scaffold with Portgas D Ace kneeling at its center, wrists chained behind his back, black short wavy hair, freckles, shirtless torso, orange bead necklace, dark shorts. Entire raised wooden square platform visible with steel side railings and four supports; dignified restrained sorrowful expression, no injury or gore, no executioners. Frontal camera slightly above platform, Ace clearly visible and recognizable, platform supports are short so he remains large. Polished crisp anime ink and cel shadows consistent with premium illustrated board game, cold gray wood, no background, no border, no text. Leave only 4% transparent margin around compact sprite.\n",
+      "destination": "public/marineford/art/v2/redraw-scaffold.webp",
+      "size": [
+        1254,
+        1254
+      ],
+      "sha256": "ec984285a1cac62fb26ea20db5e204c872e5deca85e985e7d7fd399aadde1fa1",
+      "bytes": 387936,
+      "initialPrompt": "Transparent game scene sprite, square canvas. One Piece Marineford execution scaffold with Portgas D Ace kneeling at its center, wrists chained behind his back, black short wavy hair, freckles, shirtless torso, orange bead necklace, dark shorts. Entire raised wooden square platform visible with steel side railings and four supports; dignified restrained sorrowful expression, no injury or gore, no executioners. Frontal camera slightly above platform, Ace clearly visible and recognizable, platform supports are short so he remains large. Polished crisp anime ink and cel shadows consistent with premium illustrated board game, cold gray wood, no background, no border, no text. Leave only 4% transparent margin around compact sprite.\n"
+    },
+    {
+      "key": "morale-pirate",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\morale-pirate.png",
+      "prompt": "Transparent extra-wide horizontal 3:1 game sprite of a LARGE CROWD of 14 Whitebeard alliance pirate soldiers at Marineford cheering, excited OPEN SHOUTING MOUTHS, raised fists and cutlasses. Distinct varied human faces, bandanas, sleeveless colorful vests, pirate coats, burly and slim bodies; no named main characters, no marine uniforms. One curved row of front-facing waist-up figures with some shoulders behind, all clustered into a cheering chorus. Crisp richly colored anime cel illustration and clean ink, vivid scarlet/copper accents and warm rimlight. Full figures from head to waist, no rectangular background or frames, fully transparent around silhouettes, no text or particles obscuring faces. Designed behind two game cards, faces must sit in upper half.\n",
+      "destination": "public/marineford/art/v2/redraw-morale-pirate.webp",
+      "size": [
+        2172,
+        724
+      ],
+      "sha256": "ba7259e4799c3a7989d6946e5a638a3be92dc128303ffad6efef9c7cf92f9b77",
+      "bytes": 529276,
+      "initialPrompt": "Transparent extra-wide horizontal 3:1 game sprite of a LARGE CROWD of 14 Whitebeard alliance pirate soldiers at Marineford cheering, excited OPEN SHOUTING MOUTHS, raised fists and cutlasses. Distinct varied human faces, bandanas, sleeveless colorful vests, pirate coats, burly and slim bodies; no named main characters, no marine uniforms. One curved row of front-facing waist-up figures with some shoulders behind, all clustered into a cheering chorus. Crisp richly colored anime cel illustration and clean ink, vivid scarlet/copper accents and warm rimlight. Full figures from head to waist, no rectangular background or frames, fully transparent around silhouettes, no text or particles obscuring faces. Designed behind two game cards, faces must sit in upper half.\n"
+    },
+    {
+      "key": "morale-navy",
+      "mode": "built-in image_gen",
+      "source": "D:\\Codex_QA\\marineford-cards-morale-20261101\\source-png\\morale-navy.png",
+      "prompt": "Transparent extra-wide horizontal 3:1 game sprite of a LARGE CROWD of 14 Marine infantry at One Piece Marineford cheering, excited OPEN SHOUTING MOUTHS, raised fists and rifles held safely skyward. Distinct varied human faces, white sleeveless Marine uniforms, blue neckerchiefs, white caps with simple navy-blue seagull crest (no writing), navy trousers. NO pirate clothing or skull flags, no named admirals. One curved row of front-facing waist-up figures with shoulders behind, all clustered into a cheering chorus. Crisp richly colored anime cel illustration and clean ink, silver-blue accents and cool rimlight. Full figures from head to waist, no rectangular background or frames, transparent around silhouettes, no text or particles obscuring faces. Designed behind two game cards, faces in upper half.\n",
+      "destination": "public/marineford/art/v2/redraw-morale-navy.webp",
+      "size": [
+        2172,
+        724
+      ],
+      "sha256": "93ec581e5ee1e04d6d09a600c34db50063c8c0e96968800b95fa56a7a9ba88f9",
+      "bytes": 511840,
+      "initialPrompt": "Transparent extra-wide horizontal 3:1 game sprite of a LARGE CROWD of 14 Marine infantry at One Piece Marineford cheering, excited OPEN SHOUTING MOUTHS, raised fists and rifles held safely skyward. Distinct varied human faces, white sleeveless Marine uniforms, blue neckerchiefs, white caps with simple navy-blue seagull crest (no writing), navy trousers. NO pirate clothing or skull flags, no named admirals. One curved row of front-facing waist-up figures with shoulders behind, all clustered into a cheering chorus. Crisp richly colored anime cel illustration and clean ink, silver-blue accents and cool rimlight. Full figures from head to waist, no rectangular background or frames, transparent around silhouettes, no text or particles obscuring faces. Designed behind two game cards, faces in upper half.\n"
+    }
+  ]
+}

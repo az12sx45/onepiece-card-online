@@ -18,3 +18,10 @@
 
 ## 最終啟動修正
 新盒圖只列於 launcher-content-v1 簽章通道及手機封裝。遊戲 marineford-media-v1 保持 77 項既有允許素材，避免新啟動器圖名不符合遊戲索引白名單。沒有放寬伺服器白名單。修正後 npm start 的 health、遊戲頁都是 HTTP 200；目前公開 health 也是 200。
+
+
+## 2026-11-01 立體盒裝正式通道核驗完成
+- 正式程式 99c5e1a58d2baf46a56347f2619321dde5621e2d 與公開 7 項檔案讀回一致；原三款目錄、77 項遊戲素材清單保留。
+- Windows 1.2.31 signed content revision64 由公開端點實際下載並驗章，6 檔雜湊相符，沒有完整 EXE 請求。Android／iOS v063 公開更新指標與發布檔案相符；Android v061/v062 差量精確重建已驗證。
+- 盒圖保留原稿、完整內建 image_gen 提示與最終資產路徑已寫入 MARINEFORD_BOX_ART_20261101.json。發布證據：D:/Codex_QA/marineford-box-20261101/delivery.json。
+- 手機僅封裝與隔離瀏覽器排版核驗，未宣稱實體手機完整對局；iOS 仍需 iloader 簽署。

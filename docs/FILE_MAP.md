@@ -2175,3 +2175,7 @@ scripts/card_native_entry_qa.js tests real worker retirement routing; card_kille
 - public/images/game_launcher/launcher_marineford_box_v3.webp：GPT 生成立體盒圖。
 - launcher_marineford_box_interior_v1.webp：本作冰灣內盒圖。
 - docs/MARINEFORD_BOX_20261101.md / MARINEFORD_BOX_ART_20261101.json：範圍、驗證、素材來源與提示。
+
+
+## 2026-11-01 頂上戰爭卡面與助威
+public/marineford/art/v2/redraw-*.webp：29 張新卡、處刑台及兩陣營助威軍勢。docs/MARINEFORD_CARDS_ART_20261101.json：生圖提示與來源。scripts/marineford_cards_morale_qa.cjs：雙視角、全卡文字、實際左右選牌、士氣順序與重連取消檢查。

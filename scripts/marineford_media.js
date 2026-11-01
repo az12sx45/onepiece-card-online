@@ -5,6 +5,7 @@ const root=path.resolve(__dirname,'..'),manifestPath='public/desktop/marineford-
 function visualAssets(){
  const art=path.join(root,'public/marineford/art'),v2=path.join(art,'v2');
  const required=[...require('../public/marineford/cards.json').map(c=>c.id),'new_cover','field','button','hud','navy-frame','pirate-frame','navy-back','pirate-back','fx-fire','fx-ice','fx-quake'];
+ required.push(...require('../public/marineford/cards.json').map(c=>'redraw-'+c.id),'redraw-scaffold','redraw-morale-pirate','redraw-morale-navy');
  const missing=required.filter(name=>!fs.existsSync(path.join(v2,name+'.webp')));
  if(missing.length)throw Error('Release blocked: missing new Marineford art: '+missing.join(', '));
  return [...fs.readdirSync(art).filter(n=>n.endsWith('.webp')).map(n=>'marineford/art/'+n),...fs.readdirSync(v2).filter(n=>n.endsWith('.webp')).map(n=>'marineford/art/v2/'+n),'images/game_launcher/launcher_marineford_cover_v2.webp'];

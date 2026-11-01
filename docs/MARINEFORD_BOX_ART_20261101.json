@@ -1,7 +1,7 @@
 {
   "generator": "image_gen",
   "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-b9ef4d98-796a-4056-aedb-9ae37c439c71.png",
-  "prompt": "Create complete transparent three-dimensional Marineford game box from current cover with navy, ivory and silver materials, visible top/right side, matching launcher box perspective",
+  "prompt": "Use case: product-mockup / game launcher production sprite. Create ONE complete closed premium board-game BOX, isolated on genuine transparent background. Reference 1 is the exact NEW Marineford front artwork: preserve its faces, captive Ace on execution scaffold, title 頂上戰爭篇, ONE PIECE and MARINEFORD. Reference 2 is ONLY the perspective/box construction reference from the launcher's other game; replace its orange-gold pirate decorations completely. The result MUST be a thick 3D physical game box with visible top and right side, NOT a flat poster, NOT a thin book, NOT a framed picture. Premium deep navy-blue lacquered game box, ivory inset trim, brushed silver reinforced corners and modest pale antique-gold accents; tasteful Marine seagull and Whitebeard-flag motifs embossed on the narrow side panels. Match new art's cold navy/ivory palette, warm restrained magma confined to cover art. Slight top-down three-quarter camera, front faces nearly straight at viewer with right side visible, coherent parallel edges. Design as production sprite on a portrait 3:4 canvas, all box inside canvas with transparent margins. Geometric target normalized canvas coordinates: front cover face TL=(7%,11%), TR=(83%,13%), BR=(83%,93%), BL=(7%,89%); box upper back edge runs from (16%,6%) to (94%,8%); right back edge down to (94%,86%). Straight clean rectangular front panel, its left edge vertical for opening about a left hinge. Full color reference 1 artwork printed exactly on this front plane with correct perspective; do not separately draw another frame around image. Visible continuous beveled rim, real box thickness of about 10% canvas width on right, crisp soft lighting and edge highlights. No environment, no additional floating objects, no cast shadow outside box, no fake checkerboard, no label outside object, no crop, no other game artwork. Whole box closed. Beautiful premium physical tabletop game packaging.",
   "references": [
     "D:/Codex_QA/marineford-cinema-20261101/cover-source.png",
     "launcher_card_box_shell_fixed_v1.webp"
@@ -14,5 +14,9 @@
   "destinations": [
     "public/images/game_launcher/launcher_marineford_box_v3.webp"
   ],
-  "interior": "Existing GPT-generated Marineford v2 field, reused only within its own game box"
+  "interior": "Existing GPT-generated Marineford v2 field, reused only within its own game box",
+  "mode": "built-in image_gen; generate with references",
+  "retainedSource": "D:/Codex_QA/marineford-box-20261101/box-source.png",
+  "duplicateGeneratedCacheRemovedAfterHashVerification": true,
+  "finalAsset": "D:/Codex_Release_Worktrees/card-native-server-adapter-20261029/public/images/game_launcher/launcher_marineford_box_v3.webp"
 }

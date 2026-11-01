@@ -42,3 +42,48 @@
 .battle-versus{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:italic 900 clamp(22px,6vh,58px)/1 Georgia,serif;color:#ffe5a0;text-shadow:0 2px 10px #000,0 0 15px #bf762f;pointer-events:none}.battle-math{font-size:clamp(12px,2.5vh,20px);line-height:1.3;color:#f6e8bd;text-align:center;min-height:1.3em}.combatant{gap:6px}.combatant .effect-card{height:min(44dvh,375px);width:min(29.333dvh,250px)}.defeated-card{filter:brightness(.7) saturate(.7);transform:rotate(7deg) translateY(12px)}#effectLayer[data-phase="impact"] .battle-versus{opacity:0}#effectLayer[data-phase="result"] .battle-versus{opacity:.3}.victory-stage{flex-wrap:wrap;align-content:center;gap:12px}.victory-title{width:100%;text-align:center;color:#ffedbb;font-size:clamp(30px,7vh,72px);letter-spacing:.06em;margin:0 0 12px;text-shadow:0 4px 20px #000}.victory-seal{height:28vh;max-height:260px;aspect-ratio:2/3;object-fit:contain;filter:drop-shadow(0 0 20px #f5d99370)}#effectLayer[data-kind="victory"] .effect-card{max-width:9vw;max-height:22vh;width:auto;height:22vh}.victory-stage:has(.effect-card) .victory-seal{height:22vh}#effectLayer[data-kind="victory"]{background:linear-gradient(#041627d9,#041627eb),url("art/v2/new_cover.webp") center 55%/cover}
 #sheet[data-kind="result"]{background:linear-gradient(90deg,#071b2aee,#071b2ada),url("art/v2/new_cover.webp") center 55%/cover;box-shadow:none}#sheet[data-kind="result"] #sheetBody{display:grid;grid-template-columns:minmax(80px,28%) minmax(0,1fr);gap:6vw;padding:4vh 8vw;overflow:auto;align-items:center}.result-seal{height:min(55vh,420px);max-width:100%;object-fit:contain;justify-self:center;filter:drop-shadow(0 12px 25px #0008)}.result-copy{min-width:0}.result-copy>small{font-size:16px;color:#b4e7f0;letter-spacing:.15em}.result-copy h2{font-size:clamp(32px,6vh,64px)!important;color:#ffe7a4;margin:12px 0!important;padding:0!important}.result-copy p{font-size:clamp(13px,2.2vh,19px);line-height:1.6}.result-roster{color:#c7dbe4}.result-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.result-actions button{min-width:150px}
 @media(max-height:450px){.combatant .effect-card{height:40dvh;width:26.667dvh}.combatant-name{font-size:12px}.combatant-team{font-size:10px}.battle-math{font-size:12px}.effect-caption{font-size:15px}.result-actions{margin-top:10px;gap:8px}#sheet[data-kind="result"] #sheetBody{padding:10px 5vw;gap:5vw}.result-copy>small{font-size:12px}.result-copy p{margin:6px 0}.victory-title{margin-bottom:4px}}
+/* Versioned generated cards: text stays tied to the verified card rules. */
+.card-face[data-redraw="true"] .card-rank{display:grid;left:4%;top:3%;width:16%;height:11%;font-size:12cqw;color:#172836;text-shadow:none}
+.card-face[data-redraw="true"] .card-name{display:flex;left:8%;right:8%;top:81.1%;bottom:auto;height:5.4%;font-size:6.1cqw;line-height:1.15;color:#142a36;text-shadow:none;font-weight:900}
+.card-face[data-redraw="true"] .card-effect{position:absolute;left:8%;right:8%;top:86.4%;height:8.6%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:4.8cqw;line-height:1.26;color:#152b36;font-weight:650;overflow-wrap:anywhere;z-index:2}
+.card-face[data-redraw="true"]{border-radius:2%}.justice-slot .card-face .card-rank,.justice-slot .card-face .card-name,.justice-slot .card-face .card-effect{display:none}
+.execution-stage{position:absolute;left:27%;right:27%;top:28%;bottom:152px;z-index:2;pointer-events:none;min-height:100px}
+.execution-scaffold{position:absolute;left:24%;width:52%;top:0;height:95%;object-fit:contain;object-position:center;filter:drop-shadow(0 8px 7px #0009)}
+#navyHands{position:absolute;inset:0;pointer-events:none}
+#navyHands>button{position:absolute;bottom:12%;height:86%;max-height:300px;width:auto;aspect-ratio:2/3;pointer-events:auto;background:none;border:0;padding:0;overflow:visible;opacity:1;filter:drop-shadow(0 5px 5px #0008)}
+#navyHands>button[data-slot="0"]{left:0}#navyHands>button[data-slot="1"]{right:0}#navyHands>button[data-slot="2"]{left:50%;transform:translateX(-50%);bottom:0;height:60%;z-index:3}
+#navyHands>button>img{width:100%;height:100%;object-fit:contain;display:block;transform:perspective(700px) rotateY(7deg)}
+#navyHands>button[data-slot="1"]>img{transform:perspective(700px) rotateY(-7deg)}
+.navy-slot-label{position:absolute;top:calc(100% + 3px);left:50%;transform:translateX(-50%);font-size:clamp(10px,1.8vh,15px);line-height:1.25;color:#ffe9b3;white-space:nowrap;text-shadow:0 2px 3px #000;background:#061c2dd9;padding:2px 8px;border:1px solid #c7b67d}
+#navyHands>button[data-selectable="true"]{outline:3px solid #ffe49b;outline-offset:4px;border-radius:6px;filter:drop-shadow(0 0 10px #f3ce6c)}
+#navyHands>button[data-selectable="true"] .navy-slot-label:after{content:" · 點選"}
+#navyHands>button[data-selectable="true"]:hover{filter:brightness(1.15) drop-shadow(0 0 14px #f3ce6c)}
+#table[data-perspective="pirate"] #hand{left:2%;right:auto;width:23%;height:clamp(105px,23vh,190px);bottom:155px;gap:5px}
+#center{left:1%;right:auto;width:24%;top:28%;text-align:center}
+#justice{top:135px}#deckZone{top:28%;left:auto;right:1%;width:24%;justify-content:center;gap:24px}.deck img{height:clamp(55px,12vh,95px)}
+#actions{right:0;width:24%;bottom:155px}
+.morale-crowd{position:absolute;left:-8%;right:-8%;bottom:0;width:116%;height:90%;object-fit:contain;object-position:center bottom;pointer-events:none;z-index:0;filter:drop-shadow(0 0 14px #a8dff088)}
+.combatant{position:relative;z-index:1}.morale-plus{position:absolute;top:25%;right:-18%;font:bold clamp(34px,8vh,80px)/1 system-ui;color:#fff3a8;text-shadow:0 3px 0 #7a4d0b,0 0 15px #ffc82e;z-index:5}
+#effectLayer[data-phase="morale-cheer"] .combatant .effect-card{filter:brightness(.85)}
+#effectLayer[data-phase="morale-add"] .battle-math{color:#fff0a3;text-shadow:0 0 8px #bc8c42}
+.battle-math{padding:3px 9px;background:#06182de8;border-radius:3px;text-shadow:0 1px 2px #000}.combatant-name,.combatant-team{text-shadow:0 1px 3px #000,0 0 6px #001025}
+@media(max-height:450px){
+ .execution-stage{left:28%;right:28%;top:88px;bottom:91px;min-height:0}
+ .execution-scaffold{left:23%;width:54%;height:100%;top:0}
+ #navyHands>button{height:87%;bottom:12%}
+ #navyHands>button[data-slot="2"]{height:65%;min-height:66px;min-width:44px;bottom:0}
+ .navy-slot-label{font-size:9px;top:calc(100% + 2px);padding:1px 5px}
+ #table[data-perspective="pirate"] #hand{height:clamp(66px,calc(100dvh - 254px),100px);width:24%;left:1%;right:auto;bottom:91px;gap:4px}
+ #center{top:76px;left:1%;width:24%}#turnLabel{font-size:13px;line-height:16px}#status{font-size:10px;line-height:12px;margin:0}
+ #deckZone{top:76px;left:auto;right:1%;width:24%;justify-content:center;gap:15px}.deck img{height:38px}.deck b{font-size:9px}.deck{gap:3px}
+ #actions{bottom:91px;right:0;width:24%}#actions .choice-button{width:140px;min-height:40px}
+ #justice{top:58px;left:50%;right:auto;transform:translateX(-50%)}.justice-slot{height:18px;width:14px}#justice:before{font-size:8px;bottom:100%}
+ .morale-crowd{height:100%;bottom:0}.morale-plus{right:-13%;font-size:35px}
+}
+
+
+/* Public justice progress belongs to the top HUD, clear of player portraits. */
+#top #justice{position:relative;left:auto;right:auto;top:auto;bottom:auto;transform:none;flex-shrink:0;gap:4px;margin-top:10px}#top #justice:before{bottom:100%}#top .justice-slot{width:25px;height:34px}
+@media(max-height:450px){#top{gap:7px}#top #justice{gap:3px;margin-top:8px}#top .justice-slot{width:16px;height:22px;font-size:11px}#top #justice:before{font-size:8px}.health-box{padding-inline:8px}#health{gap:8px}}
+
+.public-thumbs{flex:0 1 auto}.public-thumb{position:relative;flex:0 1 24px;min-width:0}.public-thumb img{display:block;max-width:100%}.public-thumb>b{position:absolute;left:0;top:0;background:#f5edd6;color:#0e2536;font-size:9px;line-height:1;padding:1px 2px;border-radius:1px}
