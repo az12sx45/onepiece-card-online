@@ -8646,3 +8646,9 @@ Published and publicly verified 2026-11-01: package-a75b6b650e743963; source 189
 2026-11-01 final evidence: updated docs/MARINEFORD_20261101.md to the final 49-check suite and retained docs/MARINEFORD_ANDROID_DEVICE_20261101.json with the precise physical-device scope. Phone subsequently locked; no additional physical acceptance or iPhone test claimed.
 
 Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media checks against ba2bdd408dd91258b6ce34be1b765e808439a3ba pass, including cold-hand placeholder, full read/review image fit and confirmed host close. No further client binary rebuild required. Exact delivery scope in MARINEFORD_DELIVERY_20261101.json.
+
+## 2026-11-01 頂上戰爭篇：士氣依使用者確認改為自動消耗
+- 範圍：僅獨立 `marineford` 遊戲。戰鬥雙方各自有士氣時，自動消耗 1 個、戰力 +2；多個士氣不疊加，同點平手仍消耗，連戰逐場判定。猜牌、直接擊敗效果與放棄戰鬥不消耗。
+- 檔案：server/marineford-engine.js、server/marineford-rooms.js、public/marineford/marineford.js；移除可保留士氣選擇與 CPU 額外選擇，房間忽略舊客戶端 optional 要求。保留 moraleRule / morale 欄位及既有通訊事件，原三款不變。
+- 驗證：1,500 場種子完整對局；18 組士氣數量／攻防方向組合、平手、連戰、非法重複選擇；六人 Socket.IO／Chromium／WebKit 50 項通過；npm start 遊戲頁 HTTP 200（本機沒有 DATABASE_URL，不宣稱帳號 DB 測試）。證據 D:/Codex_QA/marineford-morale-20261101。
+- 發布：遊戲線上程式與伺服器更新；既有 Windows 1.2.30 / Android v060 / iOS v060 不需重打。此紀錄提交時正式端讀回待完成。LATTICE API 本階段不可用，沒有持久任務或圖譜成功宣稱。

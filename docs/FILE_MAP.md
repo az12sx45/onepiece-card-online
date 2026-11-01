@@ -2134,3 +2134,5 @@ scripts/card_native_entry_qa.js tests real worker retirement routing; card_kille
 2026-11-01：server/marineford-engine.js 規則；server/marineford-rooms.js MF_* 同步；public/marineford/ UI/卡片；scripts/marineford_* 驗證及媒體發布；docs/MARINEFORD_20261101.md 規則來源/驗證邊界。
 
 2026-11-01: Marineford release clients are Windows 1.2.30 / Android v060 / unsigned iOS v060. Public channels and packages verified; Android physical launch/CPU/private-read flow checked, 20 HTTPS delta checks and 45 isolated browser checks pass. Final online hand/read layout rollout is being byte-checked. See docs/MARINEFORD_20261101.md and MARINEFORD_*_20261101.json receipts.
+
+2026-11-01：獨立頂上戰爭篇士氣改為戰鬥時自動消耗 1 個並 +2；marineford-engine.js / marineford-rooms.js 強制規則、marineford.js 移除是否使用選項。新測試與發布範圍詳見 DEV_WORKFLOW.md 最新紀錄。

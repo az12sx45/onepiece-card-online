@@ -5,9 +5,9 @@ const byId=Object.fromEntries(cards.map(c=>[c.id,c]));
 const clone=value=>JSON.parse(JSON.stringify(value));
 const requireRule=(ok,message)=>{if(!ok)throw Error(message);};
 function shuffle(a,rng=Math.random){for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function create(players,navyId=0,{rng=Math.random,morale='optional'}={}){
+function create(players,navyId=0,{rng=Math.random}={}){
  requireRule(players.length>=2&&players.length<=6,'需要 2–6 位玩家');requireRule(Number.isInteger(navyId)&&navyId>=0&&navyId<players.length,'海軍席位無效');
- const s={schema:1,revision:0,phase:'playing',turn:navyId,step:'draw',navyId,hp:{navy:players.length<=3?4:players.length+1,pirate:6},moraleRule:morale,
+ const s={schema:1,revision:0,phase:'playing',turn:navyId,step:'draw',navyId,hp:{navy:players.length<=3?4:players.length+1,pirate:6},moraleRule:'mandatory',
   players:players.map((p,id)=>({id,name:String(p.name||`玩家${id+1}`).slice(0,24),avatar:Number(p.avatar)||1,team:id===navyId?'navy':'pirate',hand:[],played:[],morale:0})),
   decks:{navy:shuffle(cards.filter(c=>c.team==='navy').map(c=>c.id),rng),pirate:shuffle(cards.filter(c=>c.team==='pirate').map(c=>c.id),rng)},pending:null,jobs:[],winner:null};
  for(const p of s.players)for(let n=0;n<(p.team==='navy'?2:1);n++)p.hand.push(s.decks[p.team].shift());return s;
@@ -73,8 +73,7 @@ function prepareMorale(s,battle,navyCard,events){
 }
 function chooseMorale(s,battle,events){
  while(battle.waiting.length){const id=battle.waiting.shift(),p=s.players[id];if(!p.morale)continue;
-  if(s.moraleRule==='mandatory'){p.morale--;battle.boost[p.team]=2;emit(events,'morale-use',{player:id});}
-  else{pending(s,'morale-use',id,{battle});return;}
+  p.morale--;battle.boost[p.team]=2;emit(events,'morale-use',{player:id});
  }
  const navy=s.players[s.navyId],pirate=s.players[battle.pirate],pirateCard=pirate.hand[0];
  requireRule(byId[battle.navyCard]&&byId[pirateCard],'沒有可出戰的牌');
@@ -129,7 +128,6 @@ function apply(input,actor,action,{rng=Math.random}={}){
     case 'battle-card':requireRule(p.cards.includes(card),'出戰牌無效');prepareMorale(s,p.battle,card,events);break;
     case 'arrange':{const ids=action.cards;requireRule(Array.isArray(ids)&&ids.length===p.cards.length&&new Set(ids).size===ids.length&&ids.every(id=>p.cards.includes(id)),'牌位排序無效');s.players[s.navyId].hand=ids.slice();pending(s,'battle-slot',p.battle.attacker,{battle:p.battle,slots:ids.length});break;}
     case 'battle-slot':requireRule(Number.isInteger(action.slot)&&action.slot>=0&&action.slot<p.slots,'牌位無效');prepareMorale(s,p.battle,s.players[s.navyId].hand[action.slot],events);break;
-    case 'morale-use':requireRule(typeof action.use==='boolean','請選擇是否使用士氣');if(action.use){s.players[actor].morale--;p.battle.boost[s.players[actor].team]=2;emit(events,'morale-use',{player:actor});}chooseMorale(s,p.battle,events);break;
     case 'review':requireRule(action.done===true,'請確認看完');s.decks.pirate=shuffle(s.players.filter(x=>x.team==='pirate').flatMap(x=>x.played.splice(0)),rng);emit(events,'shuffle',{team:'pirate'});break;
     default:throw Error('未知選擇');
    }
@@ -149,7 +147,6 @@ function cpuAction(v,id,rng=Math.random){
  if(['read','review'].includes(p.type))return {...action,done:true};
  if(p.type==='guess')return {...action,digit:choose(p.digits)};
  if(['peek-slot','battle-slot'].includes(p.type))return {...action,slot:Math.floor(rng()*p.slots)};
- if(p.type==='morale-use')return {...action,use:true};
  if(['arrange','order'].includes(p.type))return {...action,cards:shuffle(p.cards.slice(),rng)};
  if(p.type==='return')return {...action,cards:p.cards.slice().sort((a,b)=>byId[a].rank-byId[b].rank).slice(0,p.count)};
  if(p.cards)return {...action,card:choose(p.cards)};
