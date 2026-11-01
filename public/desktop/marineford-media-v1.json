@@ -6,8 +6,8 @@
       "path": "images/game_launcher/launcher_marineford_cover_v2.webp",
       "kind": "image",
       "mime": "image/webp",
-      "size": 662240,
-      "sha256": "8dc46d5f3737503388041228a85dc8d017f916f2879f84d510bf768e57136f0f"
+      "size": 609430,
+      "sha256": "9b296450f26b2540b9e4385feca6e6265f2c86d7b2a7d7ea5208d2af1f1882bf"
     },
     {
       "path": "marineford/art/button-v1.webp",
@@ -412,8 +412,8 @@
       "path": "marineford/art/v2/new_cover.webp",
       "kind": "image",
       "mime": "image/webp",
-      "size": 662240,
-      "sha256": "8dc46d5f3737503388041228a85dc8d017f916f2879f84d510bf768e57136f0f"
+      "size": 609430,
+      "sha256": "9b296450f26b2540b9e4385feca6e6265f2c86d7b2a7d7ea5208d2af1f1882bf"
     },
     {
       "path": "marineford/art/v2/pirate-1.webp",

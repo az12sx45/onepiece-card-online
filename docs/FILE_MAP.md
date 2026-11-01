@@ -2163,3 +2163,9 @@ scripts/card_native_entry_qa.js tests real worker retirement routing; card_kille
 - `scripts/marineford_rules_edges_qa.js`：抽回牌不足、頂牌補牌排序、非零海軍席位、私下看牌與同點數隱私、門檻與複製技能精確回歸。
 
 - `scripts/marineford_factions_qa.cjs`：觀戰者陣營視角、六人上下兩列、原卡面／卡背完整顯示、處刑與本部進度、2／3 人生命上限的 Chromium／WebKit 檢查。
+
+
+## 2026-11-01 頂上戰爭演出
+- scripts/marineford_cinema_qa.cjs：真實速度階段／私牌隱私／明牌縮圖／三種勝負持續畫面測試。
+- docs/MARINEFORD_CINEMA_20261101.md：本次規則說明、素材與跨平台發布驗證。
+- public/desktop/launcher-content-v1.json：Windows 1.2.31 封面單檔簽章素材更新，revision 63。

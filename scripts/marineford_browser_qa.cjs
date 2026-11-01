@@ -25,6 +25,8 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
   await pages[5].evaluate(()=>{const s=window.__mfSocket,emit=s.emit.bind(s);s.emit=(event,...args)=>event==='MF_ACK'?s:emit(event,...args);window.__originalEmit=emit;});
   await pages[0].getByRole('button',{name:'抽牌',exact:true}).click();await delay(1400);check('Presentation gate waits for slowest player',room.gate?.size===1);check('Next action rejected while a viewer is still watching',!(await req(pages[0],'MF_ACTION',{revision:room.state.revision,action:engine.cpuAction(engine.visible(room.state,0),0)})).ok);
   await pages[5].evaluate(sequence=>window.__originalEmit('MF_ACK',{sequence}),room.sequence);await delay(100);check('Last viewer ACK releases exactly one action',room.gate===null);await pages[5].evaluate(()=>window.__mfSocket.emit=window.__originalEmit);
+  // Presentation readability is covered at real speed by marineford_cinema_qa.cjs. Accelerate only this protocol stress run.
+  for(const p of pages)await p.evaluate(()=>{const original=Element.prototype.animate;Element.prototype.animate=function(frames,options){return original.call(this,frames,{...options,duration:Math.min(options.duration,25)});};});
   // Target every pending UI with legal deterministic states, run its actual click controls.
   for(const fixture of ['guess','read','review','return','arrange','arrange-peek','order','battle-card','peek-slot','fight-target']){
    const type=fixture==='arrange-peek'?'arrange':fixture;

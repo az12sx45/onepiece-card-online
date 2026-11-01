@@ -8718,3 +8718,8 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 - 公開來源 `da116cfaed94aff1a24e29338e38d1537afb8700` 已於 2026-11-01T07:04:32.877Z 核對：6 項正式程式／原三款目錄／素材清單與 Git 發布位元組一致，31 張原卡面／卡背 SHA256／大小通過，正式 Chrome／WebKit 未登入啟動與載圖通過。程式校驗使用 Git blob，避免 Windows CRLF 造成誤判。
 - 本機 21 項邊界規則、1,500 局、六瀏覽器 92 步／54 項檢查、Chromium／WebKit 各 16 項陣營＋33 項排版演出通過。沒有正式帳號／實體手機完整對局聲明。
 - 現有 Windows 1.2.31／Android/iOS v061 啟動器與套件不變；重進線上頂上戰爭即可載入。原 Card／Board／Chess 未更動。交付與預覽：D:/Codex_QA/marineford-rules-audit-20261101/delivery.json、review.html。
+
+
+## 2026-11-01 明牌縮圖、可讀戰鬥與新版封面
+- 變更 public/marineford/marineford.js/.css、兩張 v2 封面、server/marineford-engine.js/rooms.js、media 與 Windows content manifest、desktop/package.json 封面清單。補上 scripts/marineford_cinema_qa.cjs、規則邊界及同步 QA。
+- 29 邊界／1500 局／六瀏覽器 148 步54項／Chrome與WebKit真實演出各7組／33項排版通過。Android v062 只有版本與封面、差量重建通過。細節見 MARINEFORD_CINEMA_20261101.md；公開發布讀回待完成。

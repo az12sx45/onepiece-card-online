@@ -92,7 +92,7 @@ function drain(s,events,rng){
  for(let guard=0;s.phase==='playing'&&!s.pending&&s.jobs.length;guard++){
   requireRule(guard<100,'效果流程過長');const job=s.jobs.shift();
   if(job.type==='draw')draw(s,job.id,events,rng);
-  else if(job.type==='recycle'){s.decks.navy.push(job.card);shuffle(s.decks.navy,rng);emit(events,'shuffle',{team:'navy'});}
+  else if(job.type==='recycle'){s.decks.navy.push(job.card);shuffle(s.decks.navy,rng);emit(events,'shuffle',{team:'navy',cards:[job.card],reason:'defeated-special'});}
   else if(job.type==='play-ready'){s.step='play';endCheck(s,events,true);}
   else if(job.type==='order-ready')pending(s,'order',job.id,{cards:s.decks.pirate.slice(0,3)});
   else if(job.type==='effect')effect(s,job.id,job.card,events);

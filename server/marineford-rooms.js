@@ -4,7 +4,7 @@ const engine=require('./marineford-engine');
 const records=require('./marineford-records');
 // The existing SOCIAL_AUTH establishes identity. New protocol never accepts a
 // client-supplied player index, hand, deck, winner or full-state replacement.
-function attach(io,{identity=socket=>socket.data.socialProfile,clock=()=>Date.now(),cpuDelay=1000,gateTimeout=45000,recordMatch=null,getProfile=null}={}){
+function attach(io,{identity=socket=>socket.data.socialProfile,clock=()=>Date.now(),cpuDelay=1000,gateTimeout=120000,recordMatch=null,getProfile=null}={}){
  const rooms=new Map(),timers=new Set();
  const later=(fn,ms)=>{const t=setTimeout(()=>{timers.delete(t);fn();},ms);t.unref?.();timers.add(t);return t;};
  const profile=socket=>{const p=identity(socket);if(!p||!Number.isSafeInteger(p.userId)||p.userId<=0)throw Error('請先從啟動器登入');return p;};
