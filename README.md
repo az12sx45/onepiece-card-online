@@ -11,3 +11,5 @@ Build commit: 35816e8ba7ed96877b66ccf5e37f6a8403170e13. See docs/IOS_TESTING.md 
 
 ## 2026-11-01 v061 Marineford art and profile
 Updates only the Marineford launcher cover and profile counters. Native gameplay, account bridge, original three game entries and signing flow remain unchanged. 5236 candidate input hashes were verified locally. Six-browser gameplay and WebKit image loading passed in the formal source. Cloud compilation and device installation are separate verification steps; no physical iPhone acceptance is claimed.
+
+The Electron visual inspection caught CSP blocking the injected cover layout. v061 now uses the existing external launcher.css on every platform; CSP stays strict. Rebuild supersedes the unshipped ff55c88 candidate.

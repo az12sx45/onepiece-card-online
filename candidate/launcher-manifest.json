@@ -179,14 +179,14 @@
     {
       "path": "launcher/launcher.css",
       "sourceSha256": "b26b846c57411448d2d5bf69a2c70a4eabf9a1d9ddde260dc68992b1a0c0b633",
-      "sha256": "0cce8f53c3527838669ee5ead4afad456db9c9299d79e50fb96f0831db4d935b",
-      "size": 50219
+      "sha256": "9c3cabedc455177da81e45ecdcb7968ba9246aa3c64d736d5c965b786337e8cb",
+      "size": 50858
     },
     {
       "path": "launcher/launcher.js",
       "sourceSha256": "95708927809f8c9b42f4579c815bd813b5f49f385ac6b62dc574b7169f2bf3f2",
-      "sha256": "306dfd3887b23ed3715041d447fee2e7a682c21fcdb81cbf278cea0ab2c2dd33",
-      "size": 53931
+      "sha256": "bb04eafa155052e9141df7b3980830fbdb6a75b7c51165a9b6a8ba305ec133ce",
+      "size": 53225
     },
     {
       "path": "launcher/mobile-bridge.js",
@@ -9221,6 +9221,6 @@
       "size": 662240
     }
   ],
-  "bytes": 357890090,
+  "bytes": 357890023,
   "nativeCardBrowserModulesOmitted": {}
 }

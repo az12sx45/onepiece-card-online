@@ -611,3 +611,6 @@ textarea,
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* New Marineford key art; other game boxes retain the original layout. */
+.marineford-cover .feature-box-lid{transform:none!important;animation:none!important}.marineford-cover .feature-box-lid-front{clip-path:none!important;transform:none!important}.marineford-cover .game-box-cover{object-fit:contain!important;clip-path:none!important}.marineford-cover .game-box-fixed-shell,.marineford-cover .feature-box-lid-back,.marineford-cover .feature-box-tray,.marineford-cover .feature-box-reveal,.marineford-cover svg,.marineford-cover .cover-glint{visibility:hidden!important}.voyage-game-card[data-game=marineford]>img{object-fit:contain}
