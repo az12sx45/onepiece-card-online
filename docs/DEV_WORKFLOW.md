@@ -8704,4 +8704,12 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 ## 2026-11-01 頂上戰爭規則邊界修正
 - `server/marineford-engine.js`：海軍 5／正義 5 僅回實抽數，海賊 5 頂牌不足三張先檢視補牌，正義 1 依海軍後的順位補抽；海賊看牌加入海軍調換牌位；海軍猜中單張／同點數雙張使用一致私下確認，隱藏多張命中資訊。
 - `public/marineford/marineford.js` 更新確認文案；`scripts/marineford_rules_edges_qa.js` 新增 21 項邊界驗證，舊引擎 9 項失敗、修正後全過；`marineford_engine_qa.js` 輪替海軍席位的 1,500 局通過；`marineford_browser_qa.cjs` 增加看牌重排實際選擇流程。完整核對與差異見 MARINEFORD_RULES_AUDIT_20261101.md。
-- 沒有更動原三款遊戲、啟動器、卡片 id 或原始素材；兩人特例待確認，維持自訂現況。六瀏覽器 92 步完整對局及 54 項檢查、WebKit 啟動與 npm start 通過；公開發布等待讀回確認。
+- 沒有更動原三款遊戲、啟動器、卡片 id 或原始素材；使用者已確認各一回合、卡片連戰在同回合結算，維持自訂規則。六瀏覽器 92 步完整對局及 54 項檢查、WebKit 啟動與 npm start 通過；公開發布等待讀回確認。
+
+## 2026-11-01 原卡圖、陣營視角與處刑進度
+- 使用者確認每人各一回合，兩次戰鬥屬於同一回合的卡片效果，無額外回合。追加連戰測試的回合斷言。
+- 讀取原始「戰況指示版.PNG」：用原本 hp 顯示本部損壞與艾斯處刑倒數，不新增現實時間倒數。進度可點開說明；生命上限隨人數正確重建，平常更新沿用 DOM。
+- `public/marineford/marineford.js/.css` 改為依觀戰者陣營分上下兩列，海賊同側；所有牌面／牌背恢復原圖，取消裁切與二次覆框。原規則／id／回合狀態不變。
+- `scripts/marineford_factions_qa.cjs` Chromium／WebKit 各 16 項通過；`marineford_polish_qa.cjs` 更新為實際矩形交疊檢查；`marineford_browser_qa.cjs` 冷載圖測試改為原圖路徑。完整核對見 MARINEFORD_RULES_AUDIT_20261101.md。
+
+- 最終驗證：Chromium／WebKit 各 16 項陣營視角＋各 33 項完整排版與演出檢查通過；原卡圖下六瀏覽器整場 92 步、54 項檢查通過；1,500 局及同回合連戰斷言通過。公開部署待程式讀回，實機驗收未做。

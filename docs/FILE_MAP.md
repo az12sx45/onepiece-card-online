@@ -2161,3 +2161,5 @@ scripts/card_native_entry_qa.js tests real worker retirement routing; card_kille
 ### 2026-11-01 Marineford 規則再核對
 - `docs/MARINEFORD_RULES_AUDIT_20261101.md`：使用者原卡／規則書、官方參考、29 牌映射與兩人差異。
 - `scripts/marineford_rules_edges_qa.js`：抽回牌不足、頂牌補牌排序、非零海軍席位、私下看牌與同點數隱私、門檻與複製技能精確回歸。
+
+- `scripts/marineford_factions_qa.cjs`：觀戰者陣營視角、六人上下兩列、原卡面／卡背完整顯示、處刑與本部進度、2／3 人生命上限的 Chromium／WebKit 檢查。
