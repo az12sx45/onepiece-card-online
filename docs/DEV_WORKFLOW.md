@@ -8674,3 +8674,5 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 - 本次檔案範圍：public/marineford、public/images/game_launcher/launcher_marineford_cover_v2.webp、媒體清單／發布白名單、desktop/launcher.js 與 launcher-profile-shop.js、server/marineford-records.js／rooms／launcher-profile-shop／index、專用 QA 與打包腳本。個人戰績只由伺服器結算；原本三遊戲及帳號契約保留。
 - 最終六瀏覽器完整一場 57 步、50 項同步／隱私／手機操作／WebKit 載圖檢查通過；三種尺寸及戰績頁通過；11 種原創合成音效樣本有限、無削波、靜音正確；7 項 PGlite SQL 檢查通過。1500 場引擎對局為本次未改規則之前的驗證。詳見 MARINEFORD_V2_QA_20261101.json。
 - Android v061 3550 個 payload 逐項核對，保留 v060 原遊戲內容及簽章。Windows 1.2.31 與 iOS v061 發布待實際建置及公開讀回；iOS 原生遊戲／帳號橋接保留，僅更新第四遊戲封面與戰績入口。不得將本段候選驗證宣稱實機或正式 DB 驗收。
+
+- 實際 Electron 封面檢查發現 CSP 拒絕 inline style，舊盒框裁切標題。改為正式 launcher.css 的 Marineford 專屬規則，同步 Android/iOS；不放寬 CSP、不改原三遊戲樣式。重新打包前再次視覺確認。

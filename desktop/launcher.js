@@ -1147,6 +1147,3 @@ window.addEventListener('DOMContentLoaded', initialize, { once: true });
 $('#accountAvatar').addEventListener('error', () => {
   $('#accountAvatar').src = 'opui://launcher/images/board/avatars/8.webp';
 }, { once: true });
-
-// Flat Marineford key art keeps its full composition; original three boxes retain their geometry.
-{const style=document.createElement('style');style.textContent='.marineford-cover .feature-box-lid{transform:none!important;animation:none!important}.marineford-cover .feature-box-lid-front{clip-path:none!important;transform:none!important}.marineford-cover .game-box-cover{object-fit:contain!important;clip-path:none!important}.marineford-cover .game-box-fixed-shell,.marineford-cover .feature-box-lid-back,.marineford-cover .feature-box-tray,.marineford-cover .feature-box-vfx{visibility:hidden!important}.voyage-game-card[data-game=marineford]>img{object-fit:contain}';document.head.append(style);}
