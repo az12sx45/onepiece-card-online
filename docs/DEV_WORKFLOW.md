@@ -8728,3 +8728,7 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 ## 2026-11-01 第四款恢復立體盒裝
 - desktop/launcher.js/.css/launcher-profile-shop.js 與 package.json、新生成 box_v3＋本作內盒圖、簽章內容 revision64、Marineford media manifest 更新。取消只有 Marineford 的平面海報樣式，原三款不變。
 - 實際 Electron 與 Android Chromium／iOS WebKit 封裝排版和啟動掀蓋檢查通過。WebKit Windows 的 PNG 畫質雜點不作為 iPhone 畫質驗收；詳見 MARINEFORD_BOX_20261101.md。
+
+## 2026-11-01 盒圖發布邊界修正
+- 最後 npm start 發現遊戲素材索引不接受新的 launcher box 名稱；scripts/marineford_media.js 與 public/desktop/marineford-media-v1.json 回復為既有 77 項。新盒圖仍由 signed launcher content64 與手機封裝提供，保留嚴格白名單。
+- 修正後本機 health／遊戲頁與目前公開 health 均 HTTP 200。證據位於 D:/Codex_QA/marineford-box-20261101。

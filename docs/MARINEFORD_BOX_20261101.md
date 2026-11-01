@@ -15,3 +15,6 @@
 - 手機排版測試以假的原生帳號橋接提供隔離預覽資料，不等於實體手機完整驗收。Windows WebKit 截圖連獨立 PNG 都有量化雜點，已用無 UI 的 PNG 對照定位到此測試環境；不將其當成 iPhone 畫質通過證據。
 - 此次只有啟動器盒圖呈現。上一批明牌與戰鬥修正已在 ed2c61b53 公開讀回通過，1,500 局／六瀏覽器 148 步與真實速度 Chrome／WebKit 演出測試結果沿用。
 - 素材來源與提示見 MARINEFORD_BOX_ART_20261101.json。證據／預覽／包：D:/Codex_QA/marineford-box-20261101。公開更新指標最終讀回另記。
+
+## 最終啟動修正
+新盒圖只列於 launcher-content-v1 簽章通道及手機封裝。遊戲 marineford-media-v1 保持 77 項既有允許素材，避免新啟動器圖名不符合遊戲索引白名單。沒有放寬伺服器白名單。修正後 npm start 的 health、遊戲頁都是 HTTP 200；目前公開 health 也是 200。
