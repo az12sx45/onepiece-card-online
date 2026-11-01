@@ -77,8 +77,8 @@
     {
       "path": "launcher/launcher-profile-shop.js",
       "sourceSha256": "cc2c82434e784069ef508d459878a2c47b2c971b4fe393db055131352e01fac1",
-      "sha256": "b0bcbc6ecd4235db81d3456657b6a7e5b97c3d7d787042a33375f23e1e7f25b6",
-      "size": 154156
+      "sha256": "6c090ae402661858f74a655a2082b2bd81219b0de7ad3295c3d173ed97cd19fa",
+      "size": 154154
     },
     {
       "path": "launcher/launcher-reserved-crew.js",
@@ -179,14 +179,14 @@
     {
       "path": "launcher/launcher.css",
       "sourceSha256": "b26b846c57411448d2d5bf69a2c70a4eabf9a1d9ddde260dc68992b1a0c0b633",
-      "sha256": "9c3cabedc455177da81e45ecdcb7968ba9246aa3c64d736d5c965b786337e8cb",
-      "size": 50858
+      "sha256": "7922fdd768a1cc94d4f8349d22508987a4f66c0aa5578da215d9dc47afecec06",
+      "size": 51091
     },
     {
       "path": "launcher/launcher.js",
       "sourceSha256": "95708927809f8c9b42f4579c815bd813b5f49f385ac6b62dc574b7169f2bf3f2",
-      "sha256": "bb04eafa155052e9141df7b3980830fbdb6a75b7c51165a9b6a8ba305ec133ce",
-      "size": 53225
+      "sha256": "31df3d11cb45399e114451951093c83587900eac20051ff83e89a981bb6fa02e",
+      "size": 53937
     },
     {
       "path": "launcher/mobile-bridge.js",
@@ -9219,8 +9219,18 @@
       "path": "launcher-assets/images/game_launcher/launcher_marineford_cover_v2.webp",
       "sha256": "9b296450f26b2540b9e4385feca6e6265f2c86d7b2a7d7ea5208d2af1f1882bf",
       "size": 609430
+    },
+    {
+      "path": "launcher-assets/images/game_launcher/launcher_marineford_box_v3.webp",
+      "sha256": "86ab958bb0386c0ab65a198666fe5d98f4b65fac2c0dbdfe61a742cc9f1930c0",
+      "size": 618766
+    },
+    {
+      "path": "launcher-assets/images/game_launcher/launcher_marineford_box_interior_v1.webp",
+      "sha256": "818a3145a122b9fa260132d37227e08db531642c73daecf43ea77630fe3a2e8e",
+      "size": 422876
     }
   ],
-  "bytes": 357837213,
+  "bytes": 358879798,
   "nativeCardBrowserModulesOmitted": {}
 }

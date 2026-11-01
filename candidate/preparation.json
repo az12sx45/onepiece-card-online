@@ -83,8 +83,8 @@
     "experimentalEnhancedProjection": false
   },
   "marineford": {
-    "version": 62,
-    "art": "v2-cover-perspective",
+    "version": 63,
+    "art": "v3-dimensional-box",
     "entry": "marineford/index.html",
     "onlineOnly": true,
     "originalGamesPreserved": true

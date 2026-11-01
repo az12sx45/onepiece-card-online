@@ -90,8 +90,16 @@ GAMES.push({ ...GAMES[0], id: 'marineford', title: '頂上戰爭篇', english: '
   detailDescription: '由一位玩家扮演海軍，對抗一至五位白鬍子海賊團隊長。依順位抽一張、打一張，善用公開情報和士氣。海軍集齊六種正義或擊潰海賊團獲勝；海賊團則要將海軍戰力歸零。支援 CPU 和跨裝置房間。',
   tags: ['2–6 人', '海軍對海賊團', '線上與 CPU'],
   features: ['海軍雙手牌、海賊單手牌的非對稱對戰', '29 張原創改編卡片與六種正義', '跨裝置房間、看牌保密與同步演出'],
-  cover: 'poapp://app/launcher-assets/images/game_launcher/launcher_marineford_cover_v2.webp',
-  lidFront: 'poapp://app/launcher-assets/images/game_launcher/launcher_marineford_cover_v2.webp',
+  cover: 'poapp://app/launcher-assets/images/game_launcher/launcher_marineford_box_v3.webp',
+  frame: 'poapp://app/launcher-assets/images/game_launcher/launcher_marineford_box_v3.webp',
+  lidFront: 'poapp://app/launcher-assets/images/game_launcher/launcher_marineford_box_v3.webp',
+  fixedShell: 'poapp://app/launcher-assets/images/game_launcher/launcher_marineford_box_v3.webp',
+  interior: 'poapp://app/launcher-assets/images/game_launcher/launcher_marineford_box_interior_v1.webp',
+  lidClip: 'polygon(3.3% 8%, 87.3% 12.1%, 87.3% 98%, 3.3% 84.3%)',
+  trayClip: 'polygon(3.3% 8%, 87.3% 12.1%, 87.3% 98%, 3.3% 84.3%)',
+  lidOrigin: '3.3% 46.15%', lightSourceX: '45.3%', lightSourceY: '53%',
+  vfxShiftX: '0%', vfxShiftY: '0%', lightCx: 492, lightCy: 767,
+  freeEdgePath: 'M 36 116 L 948 175 L 948 1419 L 36 1221',
   preview: '', accent: '114, 193, 234' });
 const byId = Object.fromEntries(GAMES.map((game) => [game.id, game]));
 let selectedGameId = 'board';
@@ -610,7 +618,8 @@ function renderFeature() {
   const copy = statusCopy(state);
   const launching = launchingGameIds.has(game.id);
   const launchBlocked = launchingGameIds.size > 0;
-  featureBoxArt.classList.toggle('marineford-cover',game.id==='marineford');
+  featureBoxArt.classList.toggle('marineford-box',game.id==='marineford');
+  $('.feature-box-tray-image').src=game.interior||'poapp://app/launcher-assets/images/desktop_launcher/launcher_box_core_frame_01_v1.webp';
   document.documentElement.style.setProperty('--active-accent-rgb', game.accent);
   featureBoxArt.style.setProperty('--lid-clip', game.lidClip);
   featureBoxArt.style.setProperty('--tray-clip', game.trayClip);
@@ -625,7 +634,7 @@ function renderFeature() {
   featureEdgeGlow.setAttribute('d', game.freeEdgePath);
   featureEdgeCore.setAttribute('d', game.freeEdgePath);
   featureCover.src = game.lidFront;
-  featureCover.alt = game.id==='marineford' ? '頂上戰爭篇全新封面' : `${game.title}桌遊盒`;
+  featureCover.alt = `${game.title}桌遊盒`;
   featureFrame.src = game.fixedShell;
   featureTitle.textContent = game.title;
   featureTagline.textContent = game.tagline;
