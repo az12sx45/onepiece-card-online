@@ -8723,3 +8723,8 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 ## 2026-11-01 明牌縮圖、可讀戰鬥與新版封面
 - 變更 public/marineford/marineford.js/.css、兩張 v2 封面、server/marineford-engine.js/rooms.js、media 與 Windows content manifest、desktop/package.json 封面清單。補上 scripts/marineford_cinema_qa.cjs、規則邊界及同步 QA。
 - 29 邊界／1500 局／六瀏覽器 148 步54項／Chrome與WebKit真實演出各7組／33項排版通過。Android v062 只有版本與封面、差量重建通過。細節見 MARINEFORD_CINEMA_20261101.md；公開發布讀回待完成。
+
+
+## 2026-11-01 第四款恢復立體盒裝
+- desktop/launcher.js/.css/launcher-profile-shop.js 與 package.json、新生成 box_v3＋本作內盒圖、簽章內容 revision64、Marineford media manifest 更新。取消只有 Marineford 的平面海報樣式，原三款不變。
+- 實際 Electron 與 Android Chromium／iOS WebKit 封裝排版和啟動掀蓋檢查通過。WebKit Windows 的 PNG 畫質雜點不作為 iPhone 畫質驗收；詳見 MARINEFORD_BOX_20261101.md。

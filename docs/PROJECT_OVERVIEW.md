@@ -3012,3 +3012,7 @@ The independent fourth game now uses 40 new GPT art assets, original synthesized
 ## 頂上戰爭演出更新（2026-11-01）
 - 明牌縮圖＋全部檢視、分階段戰鬥與三種保留戰果頁；沿用原牌面、牌背及陣營視角。
 - 啟動器第四款封面重新構圖配色，Windows 使用只含圖片的簽章素材覆蓋更新；Android/iOS v062 為封面版本，原啟動器及遊戲二進位不改。詳見 MARINEFORD_CINEMA_20261101.md。
+
+
+## 2026-11-01 頂上戰爭盒裝外觀
+- 第四款使用全新深藍／象牙白／銀色包角立體盒圖，與原三款相同開盒操作。Windows 1.2.31 內容 revision64；手機 v063 純呈現更新。

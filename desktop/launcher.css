@@ -613,4 +613,9 @@ textarea,
 }
 
 /* New Marineford key art; other game boxes retain the original layout. */
-.marineford-cover .feature-box-lid{transform:none!important;animation:none!important}.marineford-cover .feature-box-lid-front{clip-path:none!important;transform:none!important}.marineford-cover .game-box-cover{object-fit:contain!important;clip-path:none!important}.marineford-cover .game-box-fixed-shell,.marineford-cover .feature-box-lid-back,.marineford-cover .feature-box-tray,.marineford-cover .feature-box-reveal,.marineford-cover svg,.marineford-cover .cover-glint{visibility:hidden!important}.voyage-game-card[data-game=marineford]>img{object-fit:contain}
+/* Marineford uses one generated box image split into moving lid and fixed shell.
+   The complement mask keeps both layers pixel-aligned; it does not draw the box. */
+.marineford-box .game-box-fixed-shell{clip-path:polygon(evenodd,0% 0%,100% 0%,100% 100%,0% 100%,0% 0%,3.3% 8%,3.3% 84.3%,87.3% 98%,87.3% 12.1%,3.3% 8%)}
+.marineford-box .feature-box-lid-back::before{background:radial-gradient(ellipse at 45% 53%,#8db9c766,#16455944 25%,transparent 55%),linear-gradient(135deg,#436479,#132c40 35%,#06111b 78%);box-shadow:inset 0 0 0 2px #c9d3c7aa,inset 0 0 40px #0009}
+.marineford-box .feature-box-reveal,.marineford-box .feature-box-inner-core-svg,.marineford-box .feature-box-free-edge-svg{filter:hue-rotate(150deg) saturate(.65)}
+.voyage-game-card[data-game=marineford]>img{object-fit:contain}

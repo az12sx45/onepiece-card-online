@@ -2169,3 +2169,9 @@ scripts/card_native_entry_qa.js tests real worker retirement routing; card_kille
 - scripts/marineford_cinema_qa.cjs：真實速度階段／私牌隱私／明牌縮圖／三種勝負持續畫面測試。
 - docs/MARINEFORD_CINEMA_20261101.md：本次規則說明、素材與跨平台發布驗證。
 - public/desktop/launcher-content-v1.json：Windows 1.2.31 封面單檔簽章素材更新，revision 63。
+
+
+## 2026-11-01 Marineford 遊戲盒
+- public/images/game_launcher/launcher_marineford_box_v3.webp：GPT 生成立體盒圖。
+- launcher_marineford_box_interior_v1.webp：本作冰灣內盒圖。
+- docs/MARINEFORD_BOX_20261101.md / MARINEFORD_BOX_ART_20261101.json：範圍、驗證、素材來源與提示。

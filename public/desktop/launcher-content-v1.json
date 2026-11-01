@@ -4,19 +4,44 @@
   "platform": "win32",
   "arch": "x64",
   "coreVersion": "1.2.31",
-  "revision": 63,
-  "publishedAt": "2026-11-01T07:41:49.666Z",
+  "revision": 64,
+  "publishedAt": "2026-11-01T07:58:35.501Z",
   "baseUrl": "https://game-assets.rihdi.tw/desktop/launcher/content/blobs/sha256/",
   "files": [
+    {
+      "path": "images/game_launcher/launcher_marineford_box_interior_v1.webp",
+      "bytes": 422876,
+      "sha256": "818a3145a122b9fa260132d37227e08db531642c73daecf43ea77630fe3a2e8e"
+    },
+    {
+      "path": "images/game_launcher/launcher_marineford_box_v3.webp",
+      "bytes": 618766,
+      "sha256": "86ab958bb0386c0ab65a198666fe5d98f4b65fac2c0dbdfe61a742cc9f1930c0"
+    },
     {
       "path": "images/game_launcher/launcher_marineford_cover_v2.webp",
       "bytes": 609430,
       "sha256": "9b296450f26b2540b9e4385feca6e6265f2c86d7b2a7d7ea5208d2af1f1882bf"
+    },
+    {
+      "path": "launcher-profile-shop.js",
+      "bytes": 148771,
+      "sha256": "b250b7b7219b24ddbe32666f1bdb45552cfaeb789e30eb4238cc7fb4c8e1aa5e"
+    },
+    {
+      "path": "launcher.css",
+      "bytes": 50418,
+      "sha256": "965aaf6e507c18f88228c43a0408c0378869ac7205cd64c7ab11ba45dd0168d3"
+    },
+    {
+      "path": "launcher.js",
+      "bytes": 52516,
+      "sha256": "82424f740696ea36c5b29784cabbd299ef3d523da479c463da337eaf62a4383a"
     }
   ],
   "signature": {
     "algorithm": "Ed25519",
     "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
-    "value": "oUzc5WnzhBIMZsdQmMlA0S9P1F+5pGB34rueizQiMnS9jRUxt/7NPN09dQoRqiM4rxlrleGNgHsh7Gnyv6EeDQ=="
+    "value": "vXjyTTZf5qPjICqUTkuOcfKjh9gYUl+USM5PSIDCqrXmIZqM/EhPxYpEOo3qdd8ggTy3yLnES5f+a+eKwRNICw=="
   }
 }

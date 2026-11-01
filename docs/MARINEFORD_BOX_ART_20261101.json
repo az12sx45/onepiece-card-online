@@ -1,0 +1,18 @@
+{
+  "generator": "image_gen",
+  "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-b9ef4d98-796a-4056-aedb-9ae37c439c71.png",
+  "prompt": "Create complete transparent three-dimensional Marineford game box from current cover with navy, ivory and silver materials, visible top/right side, matching launcher box perspective",
+  "references": [
+    "D:/Codex_QA/marineford-cinema-20261101/cover-source.png",
+    "launcher_card_box_shell_fixed_v1.webp"
+  ],
+  "size": [
+    1086,
+    1448
+  ],
+  "background": "transparent",
+  "destinations": [
+    "public/images/game_launcher/launcher_marineford_box_v3.webp"
+  ],
+  "interior": "Existing GPT-generated Marineford v2 field, reused only within its own game box"
+}

@@ -3,6 +3,20 @@
   "gameId": "marineford",
   "assets": [
     {
+      "path": "images/game_launcher/launcher_marineford_box_interior_v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 422876,
+      "sha256": "818a3145a122b9fa260132d37227e08db531642c73daecf43ea77630fe3a2e8e"
+    },
+    {
+      "path": "images/game_launcher/launcher_marineford_box_v3.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 618766,
+      "sha256": "86ab958bb0386c0ab65a198666fe5d98f4b65fac2c0dbdfe61a742cc9f1930c0"
+    },
+    {
       "path": "images/game_launcher/launcher_marineford_cover_v2.webp",
       "kind": "image",
       "mime": "image/webp",
