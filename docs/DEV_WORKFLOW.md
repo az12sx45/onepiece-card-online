@@ -8690,6 +8690,13 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 - 範圍：public/marineford/index.html、marineford.css、marineford.js、art/v2/hud-readable.webp 與 public/desktop/marineford-media-v1.json；新增 scripts/marineford_polish_qa.cjs 與本輪 QA／美術來源文件。
 - 重畫圓形頭像資訊框，調整六席、自己的資訊、牌堆餘數及操作區；卡片數字／姓名對齊真實牌框，限制立繪出血；全螢幕詳情與選人分區，排序／看牌確認鈕固定在可見區。
 - 戰鬥兩位實際參戰者的名稱／卡牌／播報各自分區，修復 flex 卡牌寬度歸零；旁觀者只看牌背。戰鬥中的自己手牌按穩定 card id 隱藏。一般更新保留頭像、血量及牌堆節點，避免不必要的重建。
-- 實際驗證：六瀏覽器真 Socket.IO 完整 154 步對局與 50 項同步／隱私檢查通過；Chromium 和 WebKit 各 32 項排版檢查通過（667x375、740x320、844x390、1366x768；29 張圖鑑、長玩家名、四位數戰績、旁觀者）。演出壓力檢查採明示合成事件，不代稱真實遊戲規則驗收。原 Card 兩視窗 npm start／回合／重整／隱私回歸通過。
+- 實際驗證：六瀏覽器真 Socket.IO 完整 154 步對局與 50 項同步／隱私檢查通過；Chromium 和 WebKit 各 33 項排版檢查通過（667x375、740x320、844x390、1366x768；29 張圖鑑、長玩家名、四位數戰績、旁觀者）。演出壓力檢查採明示合成事件，不代稱真實遊戲規則驗收。原 Card 兩視窗 npm start／回合／重整／隱私回歸通過。
 - server 引擎、牌效果與協定不變；未操作實體手機，沒有正式帳號多人實機驗收聲明。LATTICE API 未提供，沒有捏造持久任務或圖譜。
 - 本次為線上遊戲內容更新，Windows 1.2.31／Android/iOS v061 套件及啟動器保持不變。待素材上傳、main 部署與正式端逐項讀回後才宣稱公開完成。證據 D:/Codex_QA/marineford-polish-20261101。
+
+- 追加逐張開啟 29 張卡片詳情，在 740x320 核對完整效果說明與操作按鈕皆留在可見區；Chrome／WebKit 均通過。美術來源補記原始生成檔名與初始提示。
+
+## 2026-11-01 精緻化正式發布完成
+- 程式來源 920a81dbe 已部署，公開程式、清單與 77 筆素材共 84 項 SHA256／大小／目錄比對通過；正式 Chrome／WebKit 未登入大廳開啟、載圖及無腳本例外通過。新 HUD 上傳 1 筆，其餘 76 筆重用。
+- 本輪最終 Chromium／WebKit 各 33 項排版檢查、六瀏覽器 154 步完整對局 50 項檢查與原 Card 回歸通過。沒有正式帳號或實體手機完整對局驗收宣稱。
+- Windows 1.2.31、Android/iOS v061 套件不變；重新進入獨立第四遊戲即可取得這次線上呈現更新。原三款規則／程式及啟動器保留。詳細公開證據及預覽位於 D:/Codex_QA/marineford-polish-20261101。

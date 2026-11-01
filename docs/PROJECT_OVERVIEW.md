@@ -3000,3 +3000,5 @@ The independent fourth game now uses 40 new GPT art assets, original synthesized
 
 ## 2026-11-01 頂上戰爭篇介面精緻化
 前一輪 v2 已正式發布（詳 DEV_WORKFLOW 最終紀錄）；本輪僅更新獨立第四遊戲線上呈現。新圓形 HUD、手機橫向固定操作區、兩欄詳情、命名選人及分區戰鬥演出，保留原啟動器、其他三款遊戲、規則與同步契約。候選驗證及上線狀態以 MARINEFORD_POLISH_QA_20261101.json 和部署讀回為準。
+
+本輪精緻化已公開：來源 920a81dbe，84 項正式讀回與 Chrome／WebKit 公開啟動通過，原生套件版本不變。
