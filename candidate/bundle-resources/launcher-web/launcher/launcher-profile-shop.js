@@ -3,6 +3,7 @@
   const api = window.onePieceDesktop;
   const $ = id => document.getElementById(id);
   const GAME_META = [
+    { id: 'marineford', title: '頂上戰爭篇', english: 'MARINEFORD', cover: 'launcher_marineford_cover_v2.webp' },
     { id: 'card', title: '偉大航道爭霸戰', english: 'GRAND LINE RIVALRY', cover: 'launcher_card_cover_perspective_v2.webp' },
     { id: 'board', title: '新世界航海錄', english: 'NEW WORLD VOYAGE', cover: 'launcher_board_cover_logo_perspective_v5.webp' },
     { id: 'chess', title: '霸海戰棋', english: 'PIRATE WAR CHESS', cover: 'launcher_chess_cover_logo_perspective_v5.webp' }
@@ -195,6 +196,7 @@
   }
   function metric(label, value) { const wrap = el('div'); wrap.append(el('dt', '', label), el('dd', '', value)); return wrap; }
   function gameMetrics(id, data) {
+    if(id==='marineford')return [metric('對局',fmt(data.games)),metric('勝場',fmt(data.wins)),metric('海軍勝場',fmt(data.navyWins)),metric('海賊勝場',fmt(data.pirateWins)),metric('含 CPU 對局',fmt(data.cpuGames))];
     if (id === 'card') return [metric('對局', fmt(data.games)), metric('勝場', fmt(data.wins)), metric('勝率', number(data.games) ? `${Math.round(number(data.wins) / number(data.games) * 100)}%` : '—')];
     if (id === 'board') {
       const values = [];
@@ -216,7 +218,7 @@
       const heading = el('div', 'voyage-game-card-header'); heading.append(el('h4', '', game.title), el('p', '', game.english));
       card.append(image, heading);
       if (!profile || data.available !== true) {
-        const copy = game.id === 'card' ? '尚無雲端對局紀錄。' : game.id === 'board' ? '尚無可讀取的雲端航海存檔。' : '尚無已驗證的戰棋對局紀錄。';
+        const copy = game.id === 'marineford' ? '完成頂上戰爭對局後，這裡會顯示海軍與海賊戰績。' : game.id === 'card' ? '尚無雲端對局紀錄。' : game.id === 'board' ? '尚無可讀取的雲端航海存檔。' : '尚無已驗證的戰棋對局紀錄。';
         card.append(el('p', 'voyage-no-data', copy));
       } else {
         const dl = el('dl'); for (const item of gameMetrics(game.id, data)) dl.append(item);
