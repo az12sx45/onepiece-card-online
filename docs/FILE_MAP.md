@@ -2151,3 +2151,9 @@ scripts/card_native_entry_qa.js tests real worker retirement routing; card_kille
 - server/marineford-records.js: idempotent server-owned match/faction records.
 - scripts/marineford_records_qa.js / marineford_visual_qa.cjs / marineford_browser_qa.cjs: SQL, layout, full multiplayer privacy/flow verification.
 - docs/MARINEFORD_V2_ART_PROVENANCE_20261101.json / MARINEFORD_V2_QA_20261101.json: art origins and actual candidate evidence.
+
+## 2026-11-01 Marineford polish
+- public/marineford/art/v2/hud-readable.webp：新增 GPT 圓形玩家資訊框；舊素材保留相容。
+- public/marineford/marineford.js / marineford.css / index.html：穩定 HUD 節點、詳情與選人全頁、確認鈕、戰鬥舞台／姓名／字幕分區。
+- scripts/marineford_polish_qa.cjs：Chromium／WebKit 四種橫向尺寸，文字範圍、遮擋、長名稱、戰績、私密演出檢查。
+- docs/MARINEFORD_POLISH_QA_20261101.json / MARINEFORD_POLISH_ART_20261101.json：本輪實際驗證與美術來源。

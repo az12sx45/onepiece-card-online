@@ -1,0 +1,11 @@
+{
+  "generator": "GPT imagegen",
+  "source": "D:\\Codex_QA\\marineford-polish-20261101\\source-png\\hud-readable.png",
+  "sourceSha256": "da59155accbe7d0883baaed7f715569f0b744a343d0936e157c6b39b89234e8d",
+  "destination": "public\\marineford\\art\\v2\\hud-readable.webp",
+  "sha256": "e8b46b139625e2d990466b788c3bea4a586333ad1c538bbc2d7804411b4efaef",
+  "bytes": 246130,
+  "design": "Transparent 3:1 Marineford player HUD; round portrait socket, navy enamel, thin ivory/silver edges, crimson accent; empty large two-line text area. No generated text. Refined from an initial generated draft to enlarge interior from y16% to y82%, x36% to x94%.",
+  "conversion": "RGBA WebP quality 95 method 6; 2172x724; no CSS replacement illustration",
+  "draftsRetainedOnD": true
+}

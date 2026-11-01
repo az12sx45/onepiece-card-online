@@ -8685,3 +8685,11 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 - iOS 雲端 run41266777684／來源7d45230176d666b50200459aa2bb079a6dbecd03 編譯成功，1537 個封裝檔案讀回一致；IPA e93ee2115108b091aae3ec92aa3408787fa85db5f036b6e9ff8c1e31222bf655，434054537 bytes，未簽章、仍需所有人以 iloader 簽章安裝，沒有 iPhone 實測聲明。
 - 原三遊戲程式與帳號橋接保留。七項實際 PGlite 結算檢查、六瀏覽器完整對局、50 項同步／手機／隱私檢查、11 音效樣本及原 Card 兩視窗回歸通過；不將這些代稱正式帳號多實機驗收。
 - D:/Codex_QA/marineford-art-v2-20261101 保留正式套件、原稿、review.html 與 delivery.json。五個已核對中間檔約1954266611 bytes刪除遭自動審查 blocked by policy，實際刪除零；未繞過限制。
+
+## 2026-11-01 頂上戰爭篇精緻化（候選驗證完成）
+- 範圍：public/marineford/index.html、marineford.css、marineford.js、art/v2/hud-readable.webp 與 public/desktop/marineford-media-v1.json；新增 scripts/marineford_polish_qa.cjs 與本輪 QA／美術來源文件。
+- 重畫圓形頭像資訊框，調整六席、自己的資訊、牌堆餘數及操作區；卡片數字／姓名對齊真實牌框，限制立繪出血；全螢幕詳情與選人分區，排序／看牌確認鈕固定在可見區。
+- 戰鬥兩位實際參戰者的名稱／卡牌／播報各自分區，修復 flex 卡牌寬度歸零；旁觀者只看牌背。戰鬥中的自己手牌按穩定 card id 隱藏。一般更新保留頭像、血量及牌堆節點，避免不必要的重建。
+- 實際驗證：六瀏覽器真 Socket.IO 完整 154 步對局與 50 項同步／隱私檢查通過；Chromium 和 WebKit 各 32 項排版檢查通過（667x375、740x320、844x390、1366x768；29 張圖鑑、長玩家名、四位數戰績、旁觀者）。演出壓力檢查採明示合成事件，不代稱真實遊戲規則驗收。原 Card 兩視窗 npm start／回合／重整／隱私回歸通過。
+- server 引擎、牌效果與協定不變；未操作實體手機，沒有正式帳號多人實機驗收聲明。LATTICE API 未提供，沒有捏造持久任務或圖譜。
+- 本次為線上遊戲內容更新，Windows 1.2.31／Android/iOS v061 套件及啟動器保持不變。待素材上傳、main 部署與正式端逐項讀回後才宣稱公開完成。證據 D:/Codex_QA/marineford-polish-20261101。

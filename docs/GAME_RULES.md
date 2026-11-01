@@ -2087,3 +2087,6 @@ Enhanced Killer removes one selected opponent's defense once, then optionally du
 
 ### Marineford v2 presentation and records
 Artwork does not change any of the 29 card IDs or rules. Both combatants automatically spend one available morale for +2. Target/peek/challenge/order/return narration follows the accepted choice, before results; every connected viewer ACKs before the next action. Private views never expose another player's hidden card. Only completed matches write faction wins/losses, including a separate CPU count; a UUID ledger prevents duplicate credit and clients cannot override these counters.
+
+## 2026-11-01 精緻化邊界
+本輪不修改 Marineford 引擎、29 張牌效果、士氣自動消耗或回合規則。戰鬥畫面必須使用事件中的實際攻防玩家；僅授權參戰者取得私密牌面，旁觀者保留牌背。選人顯示姓名及陣營，演出完成後沿用原 MF_ACK 閘門；不因介面調整提前公開結果或允許提前操作。

@@ -290,6 +290,13 @@
       "sha256": "8b4db66d0ac49e4057f59bb1c56a751289174d68f4a8dbb72e22bb9e2f0a136c"
     },
     {
+      "path": "marineford/art/v2/hud-readable.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 246130,
+      "sha256": "e8b46b139625e2d990466b788c3bea4a586333ad1c538bbc2d7804411b4efaef"
+    },
+    {
       "path": "marineford/art/v2/hud.webp",
       "kind": "image",
       "mime": "image/webp",

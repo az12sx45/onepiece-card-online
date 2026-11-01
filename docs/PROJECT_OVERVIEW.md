@@ -2997,3 +2997,6 @@ Native Card lobby delegates verified download caching to the host; it does not r
 
 ### 2026-11-01 Marineford v2 candidate
 The independent fourth game now uses 40 new GPT art assets, original synthesized audio, ordered action presentation, and a faction-specific profile. Windows 1.2.31 / mobile v061 bundles only change its launcher presentation. Existing three-game download catalog and gameplay remain intact. Candidate QA is documented separately from deployment.
+
+## 2026-11-01 頂上戰爭篇介面精緻化
+前一輪 v2 已正式發布（詳 DEV_WORKFLOW 最終紀錄）；本輪僅更新獨立第四遊戲線上呈現。新圓形 HUD、手機橫向固定操作區、兩欄詳情、命名選人及分區戰鬥演出，保留原啟動器、其他三款遊戲、規則與同步契約。候選驗證及上線狀態以 MARINEFORD_POLISH_QA_20261101.json 和部署讀回為準。

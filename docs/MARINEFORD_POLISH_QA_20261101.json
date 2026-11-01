@@ -1,0 +1,197 @@
+{
+  "date": "2026-11-01",
+  "status": "candidate-tested-not-yet-published",
+  "scope": "Standalone Marineford presentation only; original launcher, lobby contracts, three games and engine preserved",
+  "reports": {
+    "chromium": {
+      "passed": true,
+      "scope": "Local rendering stress tests with explicit synthetic presentation packets; real legal six-browser match separately verified",
+      "checks": [
+        "desktop six seats and tappable hand fit",
+        "phone six seats and tappable hand fit",
+        "small-phone six seats and tappable hand fit",
+        "667 circular avatars",
+        "667 pile counts, own HUD, action button do not overlap",
+        "667 all 29 card ranks/names fit their art",
+        "667 detail action visible",
+        "667 four-digit profile counts fit",
+        "667 named target choices and skip visible",
+        "667 combat names and caption separate, held card hidden, avatar retained",
+        "740 circular avatars",
+        "740 pile counts, own HUD, action button do not overlap",
+        "740 all 29 card ranks/names fit their art",
+        "740 detail action visible",
+        "740 four-digit profile counts fit",
+        "740 named target choices and skip visible",
+        "740 combat names and caption separate, held card hidden, avatar retained",
+        "844 circular avatars",
+        "844 pile counts, own HUD, action button do not overlap",
+        "844 all 29 card ranks/names fit their art",
+        "844 detail action visible",
+        "844 four-digit profile counts fit",
+        "844 named target choices and skip visible",
+        "844 combat names and caption separate, held card hidden, avatar retained",
+        "1366 circular avatars",
+        "1366 pile counts, own HUD, action button do not overlap",
+        "1366 all 29 card ranks/names fit their art",
+        "1366 detail action visible",
+        "1366 four-digit profile counts fit",
+        "1366 named target choices and skip visible",
+        "1366 combat names and caption separate, held card hidden, avatar retained",
+        "observer sees actual combatants and only hidden card backs"
+      ],
+      "errors": []
+    },
+    "webkit": {
+      "passed": true,
+      "scope": "Local rendering stress tests with explicit synthetic presentation packets; real legal six-browser match separately verified",
+      "checks": [
+        "desktop six seats and tappable hand fit",
+        "phone six seats and tappable hand fit",
+        "small-phone six seats and tappable hand fit",
+        "667 circular avatars",
+        "667 pile counts, own HUD, action button do not overlap",
+        "667 all 29 card ranks/names fit their art",
+        "667 detail action visible",
+        "667 four-digit profile counts fit",
+        "667 named target choices and skip visible",
+        "667 combat names and caption separate, held card hidden, avatar retained",
+        "740 circular avatars",
+        "740 pile counts, own HUD, action button do not overlap",
+        "740 all 29 card ranks/names fit their art",
+        "740 detail action visible",
+        "740 four-digit profile counts fit",
+        "740 named target choices and skip visible",
+        "740 combat names and caption separate, held card hidden, avatar retained",
+        "844 circular avatars",
+        "844 pile counts, own HUD, action button do not overlap",
+        "844 all 29 card ranks/names fit their art",
+        "844 detail action visible",
+        "844 four-digit profile counts fit",
+        "844 named target choices and skip visible",
+        "844 combat names and caption separate, held card hidden, avatar retained",
+        "1366 circular avatars",
+        "1366 pile counts, own HUD, action button do not overlap",
+        "1366 all 29 card ranks/names fit their art",
+        "1366 detail action visible",
+        "1366 four-digit profile counts fit",
+        "1366 named target choices and skip visible",
+        "1366 combat names and caption separate, held card hidden, avatar retained",
+        "observer sees actual combatants and only hidden card backs"
+      ],
+      "errors": []
+    },
+    "multiplayer": {
+      "passed": true,
+      "scope": "Isolated real Socket.IO, six browser seats, injected QA identities only; no production accounts or physical device claim.",
+      "checks": [
+        "Six accounts joined and started",
+        "Room and engine enforce automatic morale",
+        "Cold hand keeps card-sized clickable area and private rank label",
+        "Loaded new illustrations retain private rank and title",
+        "Other private hands remain redacted on every socket",
+        "Out-of-turn spoof rejected",
+        "Guest cannot close host room",
+        "Presentation gate waits for slowest player",
+        "Next action rejected while a viewer is still watching",
+        "Last viewer ACK releases exactly one action",
+        "guess mobile choice controls exist",
+        "guess no document overflow",
+        "guess actual touch choice accepted",
+        "read mobile choice controls exist",
+        "read no document overflow",
+        "read continue visible without scrolling",
+        "read complete cards fit above confirmation",
+        "read actual touch choice accepted",
+        "review mobile choice controls exist",
+        "review no document overflow",
+        "review continue visible without scrolling",
+        "review complete cards fit above confirmation",
+        "review actual touch choice accepted",
+        "return mobile choice controls exist",
+        "return no document overflow",
+        "return actual touch choice accepted",
+        "arrange mobile choice controls exist",
+        "arrange no document overflow",
+        "arrange actual touch choice accepted",
+        "order mobile choice controls exist",
+        "order no document overflow",
+        "order actual touch choice accepted",
+        "battle-card mobile choice controls exist",
+        "battle-card no document overflow",
+        "battle-card actual touch choice accepted",
+        "Both sides spend exactly one morale without another choice",
+        "Mobile has no optional morale buttons",
+        "peek-slot mobile choice controls exist",
+        "peek-slot no document overflow",
+        "peek-slot actual touch choice accepted",
+        "fight-target mobile choice controls exist",
+        "fight-target no document overflow",
+        "fight-target actual touch choice accepted",
+        "Six browser clients complete an entire synchronized game",
+        "Host close asks before changing shared room",
+        "Host close returns all six viewers to lobby and removes room",
+        "Old health and private hands are no longer visible after close",
+        "Client cannot opt out of mandatory morale",
+        "No browser exceptions",
+        "WebKit lobby to table and generated art loaded"
+      ],
+      "actions": 154
+    },
+    "originalCard": {
+      "scope": "Two isolated Chromium windows using the real local npm-start server and Socket.IO. Guest room with stable isolated test identities, no production accounts or physical-device claim.",
+      "checks": [
+        {
+          "name": "npm start listening",
+          "ok": true
+        },
+        {
+          "name": "both guests joined",
+          "ok": true
+        },
+        {
+          "name": "start synchronized",
+          "ok": true
+        },
+        {
+          "name": "one authoritative current player",
+          "ok": true,
+          "detail": {
+            "turn": 0,
+            "step": "draw"
+          }
+        },
+        {
+          "name": "real next state waits while viewer reads",
+          "ok": true
+        },
+        {
+          "name": "draw step broadcast to both",
+          "ok": true
+        },
+        {
+          "name": "refresh restores same seat and turn",
+          "ok": true,
+          "detail": {
+            "seat": 0,
+            "turn": 0,
+            "step": "choose"
+          }
+        },
+        {
+          "name": "private other hand stays hidden",
+          "ok": true
+        }
+      ],
+      "passed": true
+    }
+  },
+  "rulesUnchanged": true,
+  "physicalDeviceTested": false,
+  "lattice": "API unavailable; no task or graph claims",
+  "media": {
+    "entries": 77,
+    "newAsset": "marineford/art/v2/hud-readable.webp"
+  },
+  "sourceBase": "c6cedee3e9665169df3ecf63abee3b48a2f57030"
+}
