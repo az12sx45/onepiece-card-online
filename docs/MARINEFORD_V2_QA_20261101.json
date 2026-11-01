@@ -138,17 +138,243 @@
     "passed": true,
     "version": 61,
     "baselineSha256": "f4f44fbcec4d17f09baed30345a32ef285115486e72c7b452cc43c1628bac5a6",
-    "sha256": "47c65ae00d0e53cdf1ffb152999a6ae531042ba1ad8216e16b9edf2810455089",
+    "sha256": "f6aa7a2b6943636967e52f31b215f514a20cdd5fcdc62be9d4bd5f7e282d06e5",
     "bytes": 478105678,
     "payloadEntriesVerified": 3550,
     "changed": [
       "AndroidManifest.xml",
       "assets/launcher/launcher-profile-shop.js",
+      "assets/launcher/launcher.css",
       "assets/launcher/launcher.js",
       "assets/launcher-assets/images/game_launcher/launcher_marineford_cover_v2.webp"
     ],
     "originalGamesUnchanged": true,
     "signatureMatchesBaseline": true
   },
-  "scope": "Local isolated QA. Physical iPhone, real-account multiplayer and public rollout are not claimed by this report."
+  "scope": "Automated isolated gameplay plus public byte/media/browser startup verification. Android installation verified; physical full-match and real-account multi-device acceptance are not claimed.",
+  "ios": {
+    "passed": true,
+    "versionCode": 61,
+    "signed": false,
+    "sha256": "e93ee2115108b091aae3ec92aa3408787fa85db5f036b6e9ff8c1e31222bf655",
+    "bytes": 434054537,
+    "architecture": "arm64",
+    "unchangedLauncherFiles": 1533,
+    "changedLauncherFiles": [
+      "Payload/PO.app/launcher-web/launcher/launcher.css",
+      "Payload/PO.app/launcher-web/launcher/launcher-profile-shop.js",
+      "Payload/PO.app/launcher-web/launcher/launcher.js"
+    ],
+    "addedFiles": [
+      "Payload/PO.app/launcher-web/launcher-assets/images/game_launcher/launcher_marineford_cover_v2.webp"
+    ],
+    "verifiedBundledFiles": 1537,
+    "nativeCardAndBoardSourcePreserved": true,
+    "cloudRunId": 41266777684,
+    "physicalIphoneTested": false,
+    "requiresOwnerSigning": true
+  },
+  "publicGame": {
+    "passed": true,
+    "at": "2026-11-01T03:03:15.456Z",
+    "checks": [
+      "marineford/index.html",
+      "marineford/marineford.js",
+      "marineford/marineford.css",
+      "marineford/cards.json",
+      "marineford/sound.js",
+      "desktop/marineford-media-v1.json",
+      "Existing three catalog entries preserved",
+      "images/game_launcher/launcher_marineford_cover_v2.webp",
+      "marineford/art/button-v1.webp",
+      "marineford/art/field-v1.webp",
+      "marineford/art/justice-1.webp",
+      "marineford/art/justice-2.webp",
+      "marineford/art/justice-3.webp",
+      "marineford/art/justice-4.webp",
+      "marineford/art/justice-5.webp",
+      "marineford/art/justice-6.webp",
+      "marineford/art/navy-akainu.webp",
+      "marineford/art/navy-aokiji.webp",
+      "marineford/art/navy-back.webp",
+      "marineford/art/navy-garp.webp",
+      "marineford/art/navy-helmeppo.webp",
+      "marineford/art/navy-kizaru.webp",
+      "marineford/art/navy-koby.webp",
+      "marineford/art/navy-morale.webp",
+      "marineford/art/navy-sengoku.webp",
+      "marineford/art/pirate-1.webp",
+      "marineford/art/pirate-10.webp",
+      "marineford/art/pirate-11.webp",
+      "marineford/art/pirate-12.webp",
+      "marineford/art/pirate-13.webp",
+      "marineford/art/pirate-14.webp",
+      "marineford/art/pirate-15.webp",
+      "marineford/art/pirate-16.webp",
+      "marineford/art/pirate-2.webp",
+      "marineford/art/pirate-3.webp",
+      "marineford/art/pirate-4.webp",
+      "marineford/art/pirate-5.webp",
+      "marineford/art/pirate-6.webp",
+      "marineford/art/pirate-7.webp",
+      "marineford/art/pirate-8.webp",
+      "marineford/art/pirate-9.webp",
+      "marineford/art/pirate-back.webp",
+      "marineford/art/pirate-morale.webp",
+      "marineford/art/v2/button.webp",
+      "marineford/art/v2/field.webp",
+      "marineford/art/v2/fx-fire.webp",
+      "marineford/art/v2/fx-ice.webp",
+      "marineford/art/v2/fx-quake.webp",
+      "marineford/art/v2/hud.webp",
+      "marineford/art/v2/justice-1.webp",
+      "marineford/art/v2/justice-2.webp",
+      "marineford/art/v2/justice-3.webp",
+      "marineford/art/v2/justice-4.webp",
+      "marineford/art/v2/justice-5.webp",
+      "marineford/art/v2/justice-6.webp",
+      "marineford/art/v2/navy-akainu.webp",
+      "marineford/art/v2/navy-aokiji.webp",
+      "marineford/art/v2/navy-back.webp",
+      "marineford/art/v2/navy-frame.webp",
+      "marineford/art/v2/navy-garp.webp",
+      "marineford/art/v2/navy-helmeppo.webp",
+      "marineford/art/v2/navy-kizaru.webp",
+      "marineford/art/v2/navy-koby.webp",
+      "marineford/art/v2/navy-sengoku.webp",
+      "marineford/art/v2/new_cover.webp",
+      "marineford/art/v2/pirate-1.webp",
+      "marineford/art/v2/pirate-10.webp",
+      "marineford/art/v2/pirate-11.webp",
+      "marineford/art/v2/pirate-12.webp",
+      "marineford/art/v2/pirate-13.webp",
+      "marineford/art/v2/pirate-14.webp",
+      "marineford/art/v2/pirate-15.webp",
+      "marineford/art/v2/pirate-16.webp",
+      "marineford/art/v2/pirate-2.webp",
+      "marineford/art/v2/pirate-3.webp",
+      "marineford/art/v2/pirate-4.webp",
+      "marineford/art/v2/pirate-5.webp",
+      "marineford/art/v2/pirate-6.webp",
+      "marineford/art/v2/pirate-7.webp",
+      "marineford/art/v2/pirate-8.webp",
+      "marineford/art/v2/pirate-9.webp",
+      "marineford/art/v2/pirate-back.webp",
+      "marineford/art/v2/pirate-frame.webp"
+    ]
+  },
+  "publicBrowser": {
+    "checks": [
+      {
+        "name": "chromium",
+        "passed": true,
+        "authenticated": false,
+        "portraitAssetsLoaded": true
+      },
+      {
+        "name": "webkit",
+        "passed": true,
+        "authenticated": false,
+        "portraitAssetsLoaded": true
+      }
+    ],
+    "passed": true,
+    "scope": "Public unauthenticated lobby startup only; isolated full-match QA is separate"
+  },
+  "originalCardRegression": {
+    "scope": "Two isolated Chromium windows using the real local npm-start server and Socket.IO. Guest room with stable isolated test identities, no production accounts or physical-device claim.",
+    "checks": [
+      {
+        "name": "npm start listening",
+        "ok": true
+      },
+      {
+        "name": "both guests joined",
+        "ok": true
+      },
+      {
+        "name": "start synchronized",
+        "ok": true
+      },
+      {
+        "name": "one authoritative current player",
+        "ok": true,
+        "detail": {
+          "turn": 0,
+          "step": "draw"
+        }
+      },
+      {
+        "name": "real next state waits while viewer reads",
+        "ok": true
+      },
+      {
+        "name": "draw step broadcast to both",
+        "ok": true
+      },
+      {
+        "name": "refresh restores same seat and turn",
+        "ok": true,
+        "detail": {
+          "seat": 0,
+          "turn": 0,
+          "step": "choose"
+        }
+      },
+      {
+        "name": "private other hand stays hidden",
+        "ok": true
+      }
+    ],
+    "passed": true
+  },
+  "androidDevice": {
+    "installedVersion": 61,
+    "locked": true,
+    "fullMatchPlayed": false
+  },
+  "release": {
+    "passed": true,
+    "desktop": {
+      "schema": 1,
+      "channel": "stable",
+      "platform": "win32",
+      "arch": "x64",
+      "version": "1.2.31",
+      "publishedAt": "2026-11-01T02:54:37.853Z",
+      "artifact": {
+        "fileName": "ONE-PIECE-Tabletop-Launcher-1.2.31-x64.exe",
+        "bytes": 322956093,
+        "sha256": "abc93e975a58dd326eb58b110663b06642dd1f84e172ca5696daea084abefddf",
+        "url": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.31/ONE-PIECE-Tabletop-Launcher-1.2.31-x64.exe"
+      },
+      "signature": {
+        "algorithm": "Ed25519",
+        "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
+        "value": "LjDOj4CteRmtDYRMyYAljIkAio0VjtHCwGIq7L1MPylzBRzvs95pqIVMD5Tc2Lrrrz3Ij7AG+P3X+xLpLuAIDg=="
+      }
+    },
+    "desktopArtifactFullHash": true,
+    "mobile": {
+      "android": {
+        "version": 61,
+        "sha256": "50c2c805e7faca251101d699d48caa96764110e5f31358a2fc0f9e847e97bdb7",
+        "artifact": {
+          "url": "https://game-assets.rihdi.tw/android/releases/61/PIRATE-ODYSSEY-v061-f6aa7a2b6943.apk",
+          "bytes": 478105678,
+          "sha256": "f6aa7a2b6943636967e52f31b215f514a20cdd5fcdc62be9d4bd5f7e282d06e5"
+        }
+      },
+      "ios": {
+        "version": 61,
+        "sha256": "3e3dd53d531748a193b971a72ff8dee83948973e14a68b5b2546c6f42d57c8e3",
+        "artifact": {
+          "url": "https://game-assets.rihdi.tw/ios/releases/61/PIRATE-ODYSSEY-v061-e93ee2115108-UNSIGNED.ipa",
+          "bytes": 434054537,
+          "sha256": "e93ee2115108b091aae3ec92aa3408787fa85db5f036b6e9ff8c1e31222bf655"
+        }
+      }
+    },
+    "at": "2026-11-01T03:12:01.370Z"
+  }
 }

@@ -8678,3 +8678,10 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 - 實際 Electron 封面檢查發現 CSP 拒絕 inline style，舊盒框裁切標題。改為正式 launcher.css 的 Marineford 專屬規則，同步 Android/iOS；不放寬 CSP、不改原三遊戲樣式。重新打包前再次視覺確認。
 
 - Windows 1.2.31 最終 EXE 與 blockmap 已上傳 R2 並核對 SHA256。Electron 實際四款入口、新封面完整標題與啟動按鈕通過；原卡牌兩瀏覽器 npm-start 同步／重整／隱私回歸通過。此提交啟用 Windows 簽章更新清單；Android/iOS 指標另行 CAS 發布。
+
+## 2026-11-01 頂上戰爭篇 v2 三平台正式發布完成
+- 公開程式與 76 筆素材共 83 項讀回通過；Chrome／WebKit 公開大廳無載圖及腳本例外。Windows 1.2.31 簽章更新清單、完整 EXE 雜湊及 Android／iOS v061 指標讀回一致。發布原始碼 58e366ab48a3473833339cbd4df34b8e8e474af0；本段僅補驗證文件。
+- Android 最終 f6aa7a2b6943636967e52f31b215f514a20cdd5fcdc62be9d4bd5f7e282d06e5，478105678 bytes；v060 差量 1191906 bytes，重建與簽署 APK 完全一致。接線手機實際已安裝 v061；鎖定，未宣稱整場實機驗收。
+- iOS 雲端 run41266777684／來源7d45230176d666b50200459aa2bb079a6dbecd03 編譯成功，1537 個封裝檔案讀回一致；IPA e93ee2115108b091aae3ec92aa3408787fa85db5f036b6e9ff8c1e31222bf655，434054537 bytes，未簽章、仍需所有人以 iloader 簽章安裝，沒有 iPhone 實測聲明。
+- 原三遊戲程式與帳號橋接保留。七項實際 PGlite 結算檢查、六瀏覽器完整對局、50 項同步／手機／隱私檢查、11 音效樣本及原 Card 兩視窗回歸通過；不將這些代稱正式帳號多實機驗收。
+- D:/Codex_QA/marineford-art-v2-20261101 保留正式套件、原稿、review.html 與 delivery.json。五個已核對中間檔約1954266611 bytes刪除遭自動審查 blocked by policy，實際刪除零；未繞過限制。
