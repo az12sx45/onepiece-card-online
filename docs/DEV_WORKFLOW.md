@@ -8652,3 +8652,7 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 - 檔案：server/marineford-engine.js、server/marineford-rooms.js、public/marineford/marineford.js；移除可保留士氣選擇與 CPU 額外選擇，房間忽略舊客戶端 optional 要求。保留 moraleRule / morale 欄位及既有通訊事件，原三款不變。
 - 驗證：1,500 場種子完整對局；18 組士氣數量／攻防方向組合、平手、連戰、非法重複選擇；六人 Socket.IO／Chromium／WebKit 50 項通過；npm start 遊戲頁 HTTP 200（本機沒有 DATABASE_URL，不宣稱帳號 DB 測試）。證據 D:/Codex_QA/marineford-morale-20261101。
 - 發布：遊戲線上程式與伺服器更新；既有 Windows 1.2.30 / Android v060 / iOS v060 不需重打。此紀錄提交時正式端讀回待完成。LATTICE API 本階段不可用，沒有持久任務或圖譜成功宣稱。
+
+2026-11-01 user scope confirmation: 頂上戰爭篇 is a separate fourth game in the original launcher, alongside Card/Board/Chess, never a mode nested under Card. Verified Windows GAME_CONFIG / GAMES entry, Android launch whitelist and /marineford/index.html routing, and iOS game whitelist and dedicated route. Windows 1.2.30 and mobile v060 package receipts retain the independent entry; no launcher binary change for the morale update.
+
+2026-11-01 morale rollout complete: public-byte/media readback 42/42 passed at 11/01/2026 01:10:56, matching source ba0b93d3e9acc3dfb7f26d322e67fa80219b6317. Public UI has mandatory morale and no retain-morale choice. Existing catalog's three entries unchanged. Entry architecture remains a separate fourth game across Windows/Android/iOS; existing v060 mobile binaries need only reopen the online game. Physical device replay of this specific rule change was not performed.
