@@ -2840,7 +2840,7 @@
   "bundle-resources/launcher-web/mobile/game-mobile.js": "15567712b4b30f5587bc44ea6c9fcec3932cd5dabe19be7f4c295ce46d051b2b",
   "bundle-resources/launcher-web/mobile/session-bootstrap.js": "0b1948727e46467f431881e0a13788cb5bfaf581157ea380be837dd72d44700d",
   "dependencies.json": "f8d3ba27482ee0736ac8e90b527a07bda6fb68fa74f13c3177074e133374ee7c",
-  "launcher-manifest.json": "7199d8bc5326315a76fd8ddf41a9403c6b44c2d344b2eae1503a00a1190e85ee",
+  "launcher-manifest.json": "71e7a577a20db640ff14d3ef4c081feb6b1c139de343a50c5964504da03747ec",
   "media-manifest.json": "53c4187b6174226da6609606a426846cd436c5e771fd963c7165f7f7d0b4bf30",
   "native/SConstruct": "13f6a62c02aa38731422cf2ff45c06fba8e96bef64354fa47332c2a19e0c4b1d",
   "native/po_ios_bridge.mm": "3ee0be5dd57862b25b5b77603e058e0a398705b9afd8207eeb4a9ba9f2a40e4c",
@@ -2849,7 +2849,7 @@
   "native/po_ios_web_game.h": "fe731d8b2bcf3372306d3b20ccae594d04a3fc0a5b3534598cc1f88033f176a2",
   "native/po_launcher_assets.h": "819bb38a7d3c742cf11ea653561ce4ffa10295947f5c77a8cabf65d7c87dadd4",
   "native/po_web_game_policy.h": "90e6ec2416c8f8cff54796dfe1c9cb1ad02b6553d32b6e1663dfd65be4384dde",
-  "preparation.json": "f5c9f750fc3015a32fdfc4d6124f4860857e39c9c936c189b9e5851c611968df",
+  "preparation.json": "a6f4270c601dffe05b8105119458d4b4a4603f2b2e6394b5917fdd8c66980155",
   "project/.godot/.api_dumping/builtin_classes/AABB.capi": "db362b0c0e79b5e7aabd287a8e01abe64cc06f8b0b0ad5752fa89392353452ac",
   "project/.godot/.api_dumping/builtin_classes/Array.capi": "925be4e37dd2635ff59d4467c1d17963d7b3c2fe646154d1b300a3a932d95cf3",
   "project/.godot/.api_dumping/builtin_classes/Basis.capi": "f8a4fa2b6b5a32552e154e9ae7e6b3a65b786e205b98f6b18f39e82bed1a444f",
@@ -4608,7 +4608,7 @@
   "project/enma-progress-active.png": "6107f77747930b86d92775562be5cfe4b78f0b09e398526dc8349100b7d6b60f",
   "project/enma-progress-idle.png": "8b2020d72279aa56c144c1e8d5bdb8da048489d9018782232371ebc187bcf89f",
   "project/evolution-motion.json": "3a106898d60cb39c8cbb5019495f0862e0c7c66674803769b07d80964b65cb13",
-  "project/export_presets.cfg": "04c43b58498650fdb1b634945918a1d9e892c1ff84677d8eef77940211110147",
+  "project/export_presets.cfg": "4afe8a315b568dbc703cebc543a96567c2bbfc6971a279d4bb0dfbd4959603cf",
   "project/final-imu-motion.json": "febb224917c7bb6c5a6ef5498948680cf8f2cb6665ea5e350569e91387d17039",
   "project/final-ritual-motion.json": "84b686fd0ade4cd3e2a45763a2bff26c31e25708b67f1ff66fd644ffa2864dc7",
   "project/game-controls.json": "1cd8f35f03eaef3b3b78b921cdb72240b8e6057eddb22a9227aa4948c6885137",
@@ -5234,5 +5234,5 @@
   "tools/setup_macos.py": "f280607a713376252bf490d4d55941dca17fa10cc3cb3f297f50fc4a77d0a52d",
   "tools/verify_ipa.py": "fc7674f375e833db7df8a2071d8e659fc4e1c469fbc58c150a3e3df69bea0d07",
   "bundle-resources/launcher-web/launcher-assets/images/game_launcher/launcher_marineford_cover_v1.webp": "19adfe869ef81a206718fb9136ec625db6ba54a49b1caeb91b198b85e56b0bee",
-  "bundle-resources/launcher-web/launcher-assets/images/game_launcher/launcher_marineford_cover_v2.webp": "8dc46d5f3737503388041228a85dc8d017f916f2879f84d510bf768e57136f0f"
+  "bundle-resources/launcher-web/launcher-assets/images/game_launcher/launcher_marineford_cover_v2.webp": "9b296450f26b2540b9e4385feca6e6265f2c86d7b2a7d7ea5208d2af1f1882bf"
 }
