@@ -8811,3 +8811,4 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 - 使用者 V2105 v063 已接上；正式 App 啟動與帳號仍在，沒有上次卡住那場的可用錯誤，不能宣稱已重現「只剩一人」。現有伺服器斷線接管保留座位；未在沒有證據下更改玩家清除或規則。LATTICE API 不可用，未宣稱任務／圖譜持久驗收。
 發布器本輪白名單限 game.html 與 js/card-desktop-table.js 兩個變更；未變動的 51MB CSS 以原 manifest 完整比對保留，不重新上傳或下載驗證。既有憑證僅由正式 DPAPI 發布器在子程序使用。
 接續發現並重現獨立房間問題：JOIN_ROOM 在對局房間已失效時會重新建立單人 lobby。game.html 的既有房間／重連請求新增 resumeOnly；server/index.js 只對明確 resumeOnly 的不存在房回 ROOM_UNAVAILABLE，不重建。既有建房不變。原房仍在可恢復同座位／五位玩家；房失效清楚顯示返回大廳，沒有假稱恢復已遺失對局。scripts/card_room_resume_qa.js 四項真 Socket.IO 通過；card_group_server_fixture.js 僅增加測試程序內 expire-room 情境，正式伺服器無測試入口。此修正不做跨伺服器重啟的存檔持久化。
+保持未變更之 card-desktop-table.css 的舊 URL cache token，只更新 JS token，避免瀏覽器為此次小修正重新下載 51MB 的內嵌美術樣式；CSS bytes 與 manifest 均未改。

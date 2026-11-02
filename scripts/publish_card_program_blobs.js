@@ -13,7 +13,7 @@ async function main(){
  const response=await fetch('https://onepiece-card-online.onrender.com/desktop/catalog-v3.json');assert.equal(response.status,200);
  const base=await response.json();assert.deepEqual(next.sourceTrees,base.sourceTrees);
  for(const game of ['board','chess'])assert.deepEqual(next.games[game],base.games[game]);
- assert.ok(['package-6bc0eec0e075b17d','package-f2a32f3d4d6f8ab3'].includes(base.games.card.releaseId),'Expected reviewed public baseline');
+ assert.ok(['package-6bc0eec0e075b17d','package-f2a32f3d4d6f8ab3','package-f0bdf4daddba555f'].includes(base.games.card.releaseId),'Expected reviewed public baseline');
  const oldResponse=await fetch('https://onepiece-card-online.onrender.com/'+base.games.card.manifestPath);assert.equal(oldResponse.status,200);
  const oldBytes=Buffer.from(await oldResponse.arrayBuffer());assert.equal(P.sha256Bytes(oldBytes),base.games.card.manifestSha256);
  const old=JSON.parse(oldBytes),current=JSON.parse(read('public/'+next.games.card.manifestPath));
