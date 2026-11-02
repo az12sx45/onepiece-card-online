@@ -146,7 +146,8 @@ body[data-screen="lobby"]{background-image:url("art/v2/lobby-panorama.webp")}
 #sheet[data-kind="player"] #sheetBody>.avatar{width:70px;height:70px;border-radius:50%;object-fit:cover}
 #sheet[data-kind="player"] #sheetBody>.gallery{flex-basis:100%}
 .fortress-impact{position:absolute;left:35%;top:15%;width:38%;height:70%;object-fit:contain;pointer-events:none;z-index:6}
-.justice-aura{position:absolute;inset:0;pointer-events:none;background-position:center;background-size:contain;background-repeat:no-repeat;opacity:.5;z-index:-1}
+.justice-aura{position:absolute;inset:0;pointer-events:none;background-position:center 40%;background-size:cover;background-repeat:no-repeat;mask-image:radial-gradient(ellipse at center,#000 15%,transparent 67%);-webkit-mask-image:radial-gradient(ellipse at center,#000 15%,transparent 67%);opacity:.5;z-index:-1}
+.health-box:disabled{opacity:1}
 #effectLayer[data-kind="justice"] .effect-stage{isolation:isolate}
 #effectLayer[data-kind="justice"] .effect-card{filter:drop-shadow(0 0 16px #b7e4ff)}
 @media(max-height:450px){
