@@ -62,6 +62,20 @@
   }
   for(const team of ['navy','pirate']){const h=health.querySelector('.health-box[data-team="'+team+'"]'),max=team==='navy'?navyMax:6,spent=max-hp[team],marker=health.querySelector('.route-marker[data-team="'+team+'"]');updateText(h.querySelector('strong'),spent+'/'+max);h.setAttribute('aria-label',(team==='navy'?'海賊救援':'海軍登台')+' '+spent+' / '+max+'，點擊查看規則');marker.style.setProperty('--advance',String(spent/max));marker.dataset.step=String(spent);h.disabled=busy;}
  }
+ // Map both deck surfaces onto the same camera/floor, rather than tilting each pile independently.
+ function placeGroundDecks(){
+  if(!view||$('table').hidden)return;const W=$('table').clientWidth,H=$('table').clientHeight,sceneH=Math.max(H,W*941/1672),crop=(sceneH-H)*.4,navy=view.players[you]?.team==='navy';
+  if(W<=0||H<=0)return;
+  const horizon=sceneH*.42-crop,floor=sceneH*(navy?.77:.65)-crop,front=H*.945,back=Math.min(front-18,Math.max(H*.815,floor+5)),ratio=(back-horizon)/(front-horizon),fw=Math.max(54,Math.min(118,W*.08));
+  for(const pile of $('deckZone').children){const cx=W*(pile.dataset.team==='navy'?.34:.66),rear=W*.5+(cx-W*.5)*ratio,tw=fw*ratio;
+   const world=[[rear-tw/2,back],[rear+tw/2,back],[cx+fw/2,front],[cx-fw/2,front]],left=Math.min(...world.map(p=>p[0]))-6,top=back-14,width=Math.max(...world.map(p=>p[0]))-left+6;
+   pile.style.left=left+'px';pile.style.top=top+'px';pile.style.width=width+'px';pile.style.height=(front-top+16)+'px';
+   const q=world.map(([x,y])=>[x-left,y-top]),[[x0,y0],[x1,y1],[x2,y2],[x3,y3]]=q,dx1=x1-x2,dx2=x3-x2,dx3=x0-x1+x2-x3,dy1=y1-y2,dy2=y3-y2,dy3=y0-y1+y2-y3,den=dx1*dy2-dx2*dy1,g=(dx3*dy2-dx2*dy3)/den,j=(dx1*dy3-dx3*dy1)/den;
+   const w=fw,h=fw*1.5,m=[(x1-x0+g*x1)/w,(y1-y0+g*y1)/w,0,g/w,(x3-x0+j*x3)/h,(y3-y0+j*y3)/h,0,j/h,0,-1,1,0,x0,y0,0,1],plane=pile.querySelector('.deck-plane');
+   plane.style.width=w+'px';plane.style.height=h+'px';plane.style.transform='matrix3d('+m.join(',')+')';pile.style.setProperty('--floor-shadow','polygon('+q.map(([x,y])=>x+'px '+(y+2)+'px').join(',')+')');pile.dataset.floor=JSON.stringify({corners:world,horizon,floor,front,back});
+  }
+ }
+ window.addEventListener('resize',placeGroundDecks);
  function render(){if(!Object.keys(cards).length)return;if(!view){renderLobby();return;}document.body.dataset.screen='table';$('lobby').hidden=true;$('table').hidden=false;renderProgress();
   const actor=view.pending?.owner??view.turn;renderPlayers(actor);renderNavyStage();
   if(!$('justice').children.length){for(let i=1;i<=6;i++){const id='justice-'+i,b=button(String(i),()=>detail(id),'justice-slot');b.dataset.card=id;b.setAttribute('aria-label','正義 '+i);$('justice').append(b);}}for(const b of $('justice').children){const collected=String(view.players[view.navyId].played.includes(b.dataset.card));if(b.dataset.collected!==collected){b.dataset.collected=collected;b.replaceChildren(collected==='true'?cardImage(b.dataset.card):document.createTextNode(b.dataset.card.split('-')[1]));}b.disabled=busy;}
@@ -72,6 +86,7 @@
   for(const b of $('deckZone').children){const team=b.dataset.team,count=view.deckCounts[team],layers=Math.min(6,Math.max(0,count-1));b.dataset.active=String(canDraw()&&view.players[you].team===team);b.dataset.empty=String(count===0);b.disabled=busy;b.dataset.count=String(count);
    for(const img of b.querySelectorAll('img')){const i=Number(img.dataset.layer),top=img.classList.contains('deck-top');img.hidden=!top&&i>=layers;img.style.setProperty('--layer-z',(top?layers:i)*1.2+'px');}updateText(b.querySelector('b'),teamName(team)+'牌堆 · '+count);b.setAttribute('aria-label',teamName(team)+'牌堆，剩 '+count+' 張'+(b.dataset.active==='true'?'，點擊抽牌':'，點擊查看公開牌'));
   }
+  placeGroundDecks();
   const hand=ownHand(),ids=(view.players[you]?.hand||[]).filter(Boolean),handKey=ids.join('|');if(hand.dataset.cards!==handKey){hand.dataset.cards=handKey;hand.replaceChildren();for(const [slot,id] of ids.entries()){const b=button('',()=>detail(id,!view.pending&&view.turn===you&&view.step==='play'&&!busy),'hand-card');b.dataset.card=id;b.dataset.slot=slot;b.append(cardImage(id));if(view.players[you].team==='navy')b.append(node('span',slotName(slot),'navy-slot-label'));hand.append(b);}}
   for(const held of hand.children){held.style.visibility='';held.disabled=busy;}hand.dataset.playable=String(!busy&&!view.pending&&view.turn===you&&view.step==='play');
   $('turnLabel').textContent=view.phase==='ended'?teamName(view.winner)+'獲勝':busy?'演出中':actor===you?'輪到你了':name(actor)+'的行動';
@@ -163,8 +178,10 @@
    else if(e.type==='draw'){
     window.MFSound?.play('draw');const deck=$('deckZone').querySelector('[data-team="'+(view?.players[e.player]?.team||'pirate')+'"] .deck-top');let dest=e.player===you?ownHand():$('players').querySelector('[data-player="'+e.player+'"]'),landing=null;
     if(e.player===you&&view.players[you].team==='navy'){landing=node('button');landing.dataset.slot='2';landing.className='draw-landing';landing.style.visibility='hidden';landing.disabled=true;ownHand().append(landing);dest=landing;}
-    if(deck&&dest){const a=deck.getBoundingClientRect(),b=dest.getBoundingClientRect(),img=deck.cloneNode(),pile=deck.closest('.deck'),w=deck.offsetWidth,h=deck.offsetHeight;img.removeAttribute('class');img.style.cssText=`position:fixed;left:${a.x+a.width/2-w/2}px;top:${a.y+a.height/2-h/2}px;width:${w}px;height:${h}px;object-fit:contain`;$('effectLayer').dataset.kind='draw';$('effectLayer').append(img);pile.dataset.drawing='true';const angle=pile.dataset.team==='navy'?-12:12;
-     await animate(img,[{transform:`perspective(600px) rotateX(60deg) rotateZ(${angle}deg)`},{transform:`translate(${b.x+b.width/2-a.x-a.width/2}px,${b.y+b.height/2-a.y-a.height/2}px) scale(.8)`}],{duration:750,easing:'cubic-bezier(.2,.65,.3,1)'});img.remove();delete pile.dataset.drawing;
+    if(deck&&dest){const b=dest.getBoundingClientRect(),img=deck.cloneNode(),pile=deck.closest('.deck'),plane=pile.querySelector('.deck-plane'),r=pile.getBoundingClientRect(),w=plane.offsetWidth,h=plane.offsetHeight,flight=node('div',null,'draw-flight');
+     // Preserve the nested plane/face transform: flattening this into one matrix jumps in WebKit.
+     flight.style.cssText=`position:fixed;left:${r.x}px;top:${r.y}px;width:${w}px;height:${h}px;transform-origin:0 0;transform-style:preserve-3d`;img.removeAttribute('class');img.style.cssText=`position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:${getComputedStyle(deck).transform}`;flight.append(img);$('effectLayer').dataset.kind='draw';$('effectLayer').append(flight);pile.dataset.drawing='true';
+     await animate(flight,[{transform:getComputedStyle(plane).transform},{transform:`translate(${b.x+b.width/2-r.x-w*.4}px,${b.y+b.height/2-r.y-h*.4}px) scale(.8)`}],{duration:750,easing:'cubic-bezier(.2,.65,.3,1)'});flight.remove();delete pile.dataset.drawing;
     }landing?.remove();
    }
    else if(e.type==='guess')await scene(p+'猜 '+e.targets.map(name).join('、')+' 的 '+e.digit+' 號牌',[],'miss',token);

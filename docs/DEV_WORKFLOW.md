@@ -8770,3 +8770,8 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 ## 2026-11-02 地面牌堆、側邊勝利表與移除常駐選單
 依使用者要求移除對局左上選單按鈕，其他玩家頭像回頂端（桌機20px／手機12px）。原有圖鑑、規則、音效、檔案與房主結束功能仍可由自己頭像→對局功能進入。GPT 新繪 victory-ace-route.webp，左側單一進度表；中央艾斯與處刑台保留完整。牌堆在地面透視斜放、數量驅動堆疊，實際地面抽牌與原地洗牌；演出結束後才繼續，重連取消舊圖層。手機兩張手牌／側表／牌堆不重疊。
 檔案：public/marineford/{marineford.js,marineford.css,art/v2/victory-ace-route.webp}、public/desktop/marineford-media-v1.json、scripts/marineford_media.js、marineford_ground_qa.cjs 及既有 browser/cards_morale/polish/visual QA 的新頭像功能入口。原始啟動器、遊戲規則、角色資料、Socket事件不改。驗證：Chrome/WebKit各21項，六人真實隔離連線54項、98次動作完成全局，既有版面33項與 npm start HTTP200。未做實體手機驗收。工作與生成輸出存D槽；本輪沒有刪檔。證據 D:/Codex_QA/marineford-ground-piles-20261102。
+
+
+## 2026-11-02 牌堆地面透視複查與右側正義收集
+依複查調整背景裁切（center 40%），露出手機前方地面；兩個牌堆使用場景共同消失點、各視角地面邊界與四角投影，不再各自固定傾斜。陰影、牌厚、洗牌共用同一平面；抽牌保留巢狀投影結構，排除 WebKit 攤平矩陣導致的 23px 起手跳動。公開正義改右側 2×3，不壓頭像／海軍手牌。檔案：public/marineford/{marineford.js,marineford.css}、scripts/marineford_ground_qa.cjs。圖表沿用本輪新生圖 victory-ace-route.webp；選單移除、頭像回頂端、原功能從自己頭像進入均保留。
+驗證：Chrome/WebKit各21項含4尺寸×2視角、2/3/6人進度終點、正義側欄、實際地面四角、抽牌初始像素誤差<1、洗牌／重連清理。六瀏覽器54項、154次合法動作完成整場。npm start HTTP200；原啟動器、規則引擎、卡片資料未變。素材124項公開雜湊核對通過。本輪未做實體手機驗收，未刪檔。證據 D:/Codex_QA/marineford-floor-alignment-20261102。

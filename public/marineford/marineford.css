@@ -287,7 +287,7 @@ body[data-screen="table"] #menuButton{display:none}
 body[data-screen="table"] #connection{margin-left:auto;font-size:9px;text-shadow:0 1px 4px #000}
 #table{position:relative;width:100%;height:100%;--scene-h:max(100dvh,56.28vw)}
 .execution-stage{position:absolute;inset:0;z-index:0;pointer-events:none}
-.execution-scaffold{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top}
+.execution-scaffold{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%}
 #players{position:absolute;inset:0;z-index:4;pointer-events:none}
 .fleet-row{position:absolute;display:grid;grid-template-columns:repeat(var(--count),minmax(0,235px));justify-content:center;gap:14px;pointer-events:none}
 .fleet-row[data-side="enemy"]{top:20px;left:5%;right:5%}
@@ -319,15 +319,14 @@ body[data-screen="table"] #connection{margin-left:auto;font-size:9px;text-shadow
 .hand-card>.card-face{width:100%;height:100%}.hand-card:disabled{opacity:1}
 .hand-card:hover,.hand-card:focus-visible{translate:0 -5px}
 #hand[data-playable="true"] .hand-card{filter:drop-shadow(0 0 5px #b9edff)}
-#deckZone{position:absolute;inset:auto 30% 2%;height:20vh;display:flex;justify-content:space-between;pointer-events:none;z-index:3}
-.deck{position:relative;pointer-events:auto;border:0;padding:0;background:none;width:clamp(70px,10vw,150px);height:100%;text-shadow:0 1px 5px #000;perspective:600px}
-.deck:before{content:'';position:absolute;left:4%;right:4%;top:34%;height:26%;border-radius:50%;background:#00111d88;filter:blur(5px);transform:rotate(-12deg)}
-.deck-plane{position:absolute;left:50%;top:32%;height:clamp(78px,19vh,152px);aspect-ratio:2/3;transform:translate(-50%,-50%) rotateX(60deg) rotateZ(-12deg);transform-style:preserve-3d}
-.deck[data-team="pirate"] .deck-plane{transform:translate(-50%,-50%) rotateX(60deg) rotateZ(12deg)}
+#deckZone{position:absolute;inset:0;pointer-events:none;z-index:3}
+.deck{position:absolute;pointer-events:auto;border:0;padding:0;background:none;text-shadow:0 1px 5px #000}
+.deck:before{content:'';position:absolute;inset:0;clip-path:var(--floor-shadow);background:#001019b8;filter:blur(1px);pointer-events:none}
+.deck-plane{position:absolute;left:0;top:0;aspect-ratio:2/3;transform-origin:0 0;transform-style:preserve-3d}
 .deck-plane img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:4px;border-bottom:1px solid #ddd5b9;transform:translateZ(var(--layer-z));box-shadow:0 1px 1px #001927}
 .deck b{position:absolute;bottom:0;left:-15%;right:-15%;text-align:center;font-size:12px;line-height:1.5;white-space:nowrap}
 .deck:disabled{opacity:1}.deck[data-active="true"] .deck-plane{filter:drop-shadow(0 0 7px #a9e9ff)}
-.deck[data-active="true"] b:after{content:'點擊抽牌';display:block;color:#fff0a7}
+.deck[data-active="true"]:after{content:'點擊抽牌';position:absolute;left:-15%;right:-15%;top:-5px;text-align:center;font-size:11px;color:#fff0a7;text-shadow:0 1px 4px #00111e}
 .deck[data-drawing="true"] .deck-top{visibility:hidden}.deck[data-empty="true"] .deck-top{opacity:.25}
 #center{position:absolute;left:40%;right:40%;bottom:0;text-align:center;pointer-events:none;z-index:3;text-shadow:0 1px 4px #00111e,0 0 8px #000}
 #turnLabel{font-size:clamp(14px,2vh,21px);font-weight:850;margin:0;color:#fff3ca}#status{font-size:12px;margin:3px 0 7px;line-height:1.4;color:#dcf2f5}
@@ -335,9 +334,9 @@ body[data-screen="table"] #connection{margin-left:auto;font-size:9px;text-shadow
 .action-hint,.waiting{font-size:11px;color:#e5eef1;text-align:center;margin:0;text-shadow:0 1px 4px #000}
 #actions .choice-button{width:135px;min-height:38px;font-size:11px}
 #table[data-perspective="pirate"] #actions{left:9%;width:24%;bottom:0}
-#justice{position:absolute;right:2%;bottom:14px;display:flex;gap:5px;align-items:center;justify-content:center;width:235px;z-index:3}
+#justice{position:absolute;right:3%;top:32%;display:grid;grid-template-columns:repeat(2,34px);gap:7px;align-items:center;justify-content:center;width:82px;z-index:3}
 #justice:before{content:'公開正義';position:absolute;bottom:calc(100% + 3px);font-size:10px;text-shadow:0 1px 4px #000;color:#d5eaf2}
-.justice-slot{width:23px;height:32px;padding:0;border:1px solid #a8c6d4;border-radius:3px;background:#092334bf;color:#d6e9ea;display:grid;place-items:center;font-size:14px}
+.justice-slot{width:34px;height:48px;padding:0;border:1px solid #a8c6d4;border-radius:3px;background:#092334bf;color:#d6e9ea;display:grid;place-items:center;font-size:14px}
 .justice-slot .card-face{width:100%;height:100%}.justice-slot .card-face .card-rank,.justice-slot .card-face .card-name,.justice-slot .card-face .card-effect{display:none}
 /* One illustrated side instrument; both progress markers retain their independent rules. */
 #health{position:absolute;left:1%;top:23%;height:62vh;aspect-ratio:1/3;background:url("art/v2/victory-ace-route.webp") center/contain no-repeat;pointer-events:none}
@@ -357,11 +356,11 @@ body[data-screen="table"] #connection{margin-left:auto;font-size:9px;text-shadow
  .seat-info{column-gap:2px}.seat-info strong{font-size:clamp(9px,6.3cqw,11px)}.seat-info small{line-height:1.4;font-size:clamp(8px,5.6cqw,9px)}
  .seat[data-current="true"]{transform:translateY(3px) scale(1.04)}.seat[data-current="true"]:after{font-size:8px;top:-7px;padding:1px 5px}
  #navyHands>button{top:32%;height:29vh}.navy-slot-label{font-size:9px;padding:1px 5px}#navyHands>button[data-slot="2"]{height:24vh;bottom:9%;left:14%}
- #hand{height:21vh;gap:5px;left:9%;width:24%;bottom:7%}
- .deck b{font-size:9px}.deck{min-width:70px}.deck-plane{height:78px}
+ #hand{height:20vh;gap:5px;left:9%;width:24%;bottom:7%}
+ .deck b{font-size:9px}.deck[data-active="true"]:after{font-size:9px;top:-2px}
  #health{top:26%;height:62vh}.health-box{gap:3px}.health-box span{font-size:8px}.health-box strong{font-size:10px}.route-marker b{min-width:13px;line-height:13px;font-size:8px}
  #center{left:40%;right:40%;bottom:1px}#turnLabel{font-size:12px}#status{font-size:9px;margin:1px 0;line-height:1.3}
- #justice{right:1%;bottom:2px;width:165px;gap:3px}.justice-slot{width:16px;height:22px;font-size:10px}#justice:before{font-size:8px;bottom:100%}
+ #justice{right:3%;top:29%;width:54px;grid-template-columns:repeat(2,24px);gap:4px}.justice-slot{width:24px;height:34px;font-size:12px}#justice:before{font-size:8px;bottom:100%}
  .action-hint,.waiting{font-size:9px}#actions .choice-button{width:105px;min-height:30px;font-size:10px}
 }
 

@@ -2197,3 +2197,5 @@ public/marineford/art/v2/refined-justice-*.webp、scaffold-rear.webp、lobby-pan
 - public/marineford/art/v2/victory-ace-route.webp：GPT透明直式側表，比例1:3；完整提示與雜湊在 docs/MARINEFORD_GROUND_ART_20261102.json。
 - public/marineford/marineford.js：openMatchMenu 由自己頭像詳情進入；deck-plane 的數量圖層、地面抽牌與洗牌演出。
 - scripts/marineford_ground_qa.cjs：四尺寸雙視角、兩張手牌、側表遮擋、無常駐選單、0/1/12張堆疊、地面抽牌／洗牌／重連取消與完整文字檢查。
+
+2026-11-02：marineford.js/placeGroundDecks 使用共用場景消失點、前景地面四角計算投影；resize 自動重排。draw-flight 保留平面／牌面父子結構以符合 WebKit。marineford.css 的 #justice 是右側兩欄收集區。
