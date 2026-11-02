@@ -289,14 +289,14 @@ body[data-screen="table"] #connection{margin-left:auto;font-size:9px;text-shadow
 .execution-scaffold{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top}
 #players{position:absolute;inset:0;z-index:4;pointer-events:none}
 .fleet-row{position:absolute;display:grid;grid-template-columns:repeat(var(--count),minmax(0,235px));justify-content:center;gap:14px;pointer-events:none}
-.fleet-row[data-side="enemy"]{top:48px;left:5%;right:5%}
+.fleet-row[data-side="enemy"]{top:78px;left:5%;right:5%}
 .fleet-row[data-side="ally"]{bottom:40px;right:2%;width:235px;display:block}
 .seat{position:relative;aspect-ratio:3;min-width:0;background:url("art/v2/hud-readable.webp") center/contain no-repeat;pointer-events:auto;container-type:inline-size;transition:transform .28s,filter .28s;transform-origin:top center}
 .portrait-button{position:absolute;left:7%;top:15%;width:23%;height:69%;padding:0;border:0;border-radius:50%;background:none}
 .seat .avatar{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:center 30%}
-.seat-info{position:absolute;left:35%;right:7%;top:25%;height:48%;display:grid;grid-template-columns:1fr auto;gap:2px 4px;align-content:center;line-height:1.15;min-width:0}
+.seat-info{position:absolute;left:35%;right:7%;top:23%;height:54%;display:grid;grid-template-columns:1fr auto;gap:0 4px;align-content:center;line-height:1.15;min-width:0}
 .seat-info strong{grid-column:1/-1;min-width:0;display:block;font-size:clamp(10px,6.6cqw,15px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.seat-info small{font-size:clamp(8px,5cqw,11px);white-space:nowrap;color:#cce7ee}
+.seat-info small{line-height:1.4;font-size:clamp(8px,5cqw,11px);white-space:nowrap;color:#cce7ee}
 .seat-info .morale{color:#ffe3a3}
 .seat-number{position:absolute;bottom:0;left:9%;width:19%;text-align:center;line-height:1;font-size:clamp(9px,5cqw,12px);font-weight:900;text-shadow:0 1px 3px #00101a;color:#fff0bc}
 .seat .public-cards{position:absolute;left:8%;right:6%;bottom:-24px;min-height:25px;display:flex;align-items:center;justify-content:center;gap:5px;padding:2px 4px;background:#071b2bd6;border:0;border-bottom:1px solid #a7c5d06b;border-radius:0 0 4px 4px}
@@ -347,10 +347,10 @@ body[data-screen="table"] #connection{margin-left:auto;font-size:9px;text-shadow
 .health-box{position:absolute;bottom:-16px;left:0;width:80px;min-height:38px;border:0;background:#071b2bb8;border-radius:4px;padding:3px;display:flex;flex-direction:column;gap:1px;text-align:center;pointer-events:auto}
 .health-box[data-team="pirate"]{left:auto;right:0}.health-box span{font-size:11px;color:#fff1cd}.health-box strong{font-size:15px;color:#ffdf9c;line-height:1.2}.health-box[data-team="pirate"] strong{color:#b2efff}.health-box:disabled{opacity:1}
 @media(max-height:450px){
- .fleet-row[data-side="enemy"]{top:34px;left:3%;right:3%;gap:7px;grid-template-columns:repeat(var(--count),minmax(0,156px))}
+ .fleet-row[data-side="enemy"]{top:44px;left:3%;right:3%;gap:7px;grid-template-columns:repeat(var(--count),minmax(0,156px))}
  .fleet-row[data-side="ally"]{right:1%;bottom:27px;width:165px}
  .seat .public-cards{bottom:-20px;min-height:22px;gap:3px;padding:1px 3px}.public-count{font-size:8px}.public-thumbs img{height:18px}.public-thumb{width:12px}
- .seat-info{column-gap:2px}.seat-info strong{font-size:clamp(9px,6.3cqw,11px)}.seat-info small{font-size:clamp(8px,5.6cqw,9px)}
+ .seat-info{column-gap:2px}.seat-info strong{font-size:clamp(9px,6.3cqw,11px)}.seat-info small{line-height:1.4;font-size:clamp(8px,5.6cqw,9px)}
  .seat[data-current="true"]{transform:translateY(3px) scale(1.04)}.seat[data-current="true"]:after{font-size:8px;top:-7px;padding:1px 5px}
  #navyHands>button{top:38%;height:31vh}.navy-slot-label{font-size:9px;padding:1px 5px}#navyHands>button[data-slot="2"]{height:24vh;bottom:9%;left:7%}
  #hand{height:24vh;gap:5px;left:1%;width:25%;bottom:7%}

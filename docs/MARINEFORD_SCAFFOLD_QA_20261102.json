@@ -156,5 +156,51 @@
       "observer sees actual combatants and only hidden card backs"
     ],
     "errors": []
+  },
+  "endpoints": {
+    "passed": true,
+    "checks": [
+      "New panoramic start page: desktop/mobile controls fit",
+      "740x320 view 0: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "740x320 view 1: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "667x375 view 0: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "667x375 view 1: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "844x390 view 0: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "844x390 view 1: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "1366x768 view 0: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "1366x768 view 1: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "Avatar opens player information and public cards",
+      "2 seats view 0: max progress, six public cards, 12 morale and text fit",
+      "2 seats view 1: max progress, six public cards, 12 morale and text fit",
+      "3 seats view 0: max progress, six public cards, 12 morale and text fit",
+      "3 seats view 1: max progress, six public cards, 12 morale and text fit",
+      "6 seats view 0: max progress, six public cards, 12 morale and text fit",
+      "6 seats view 1: max progress, six public cards, 12 morale and text fit"
+    ],
+    "errors": [],
+    "scope": "Real browser isolated Socket.IO room plus explicit synthetic visual events; no physical-device claim"
+  },
+  "webkit-final": {
+    "passed": true,
+    "checks": [
+      "New panoramic start page: desktop/mobile controls fit",
+      "740x320 view 0: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "740x320 view 1: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "667x375 view 0: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "667x375 view 1: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "844x390 view 0: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "844x390 view 1: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "1366x768 view 0: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "1366x768 view 1: five detailed others, one self, paired scene, single route, private cards and decks clear of Ace/stairs",
+      "Avatar opens player information and public cards",
+      "2 seats view 0: max progress, six public cards, 12 morale and text fit",
+      "2 seats view 1: max progress, six public cards, 12 morale and text fit",
+      "3 seats view 0: max progress, six public cards, 12 morale and text fit",
+      "3 seats view 1: max progress, six public cards, 12 morale and text fit",
+      "6 seats view 0: max progress, six public cards, 12 morale and text fit",
+      "6 seats view 1: max progress, six public cards, 12 morale and text fit"
+    ],
+    "errors": [],
+    "scope": "Real browser isolated Socket.IO room plus explicit synthetic visual events; no physical-device claim"
   }
 }
