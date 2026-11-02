@@ -1,5 +1,7 @@
 # File Map
 
+2026-11-02 Marineford 牌堆精修：marineford.js 的 placeGroundDecks 將獨立 deck-contact 陰影與 deck-plane 投影至同一地面；marineford.css 不對父平面套 filter，牌層間距 .65px。marineford_rules_edges_qa.js 補雙牌位戰鬥鎖定、偷看鎖定及私密讀牌測試。
+
 ## 2026-10-22 一般戰鬥舊角色圖殘留
 
 - `public/js/board_character_depth.js`：`maybeDepth` 完成時核對 generation，`attachDepth`／`attachAlphaDepth` 拒絕已有 depth 的重複結果，防止 A→B→A 載入競態留下孤兒模型。

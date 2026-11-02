@@ -30,6 +30,31 @@ check('Peek gives Navy a private rearrangement, then only selected ally sees sel
  let s=play(fresh(),1,'pirate-4').state;s=choose(s,{target:2}).state;assert.equal(s.pending.type,'arrange');assert.equal(s.pending.owner,0);assert.equal(e.visible(s,2).pending.cards,undefined);
  const order=s.players[0].hand.slice().reverse();s=choose(s,{cards:order}).state;assert.equal(s.pending.type,'peek-slot');assert.equal(s.pending.owner,2);s=choose(s,{slot:0}).state;assert.deepEqual(e.visible(s,2).pending.cards,[order[0]]);for(const id of [0,1,3])assert.equal(e.visible(s,id).pending.cards,undefined);s=choose(s,{done:true}).state;assert.equal(s.turn,2);conserve(s);
 });
+for(const slot of [0,1])check('Hero battle selects locked slot '+slot+' only after Navy rearranges',()=>{
+ let s=play(fresh(),1,'pirate-7').state;s=choose(s,{target:0}).state;
+ assert.equal(s.pending.type,'arrange');assert.equal(s.pending.owner,0);
+ assert.equal(e.apply(s,1,{type:'CHOOSE',slot},{rng}).ok,false);
+ const order=s.players[0].hand.slice().reverse();s=choose(s,{cards:order}).state;
+ assert.equal(s.pending.type,'battle-slot');assert.equal(s.pending.owner,1);
+ for(const viewer of [1,2,3])assert.equal(e.visible(s,viewer).pending.cards,undefined);
+ const snapshot=JSON.stringify(s),late=e.apply(s,0,{type:'CHOOSE',cards:order.slice().reverse()},{rng});
+ assert.equal(late.ok,false);assert.equal(JSON.stringify(late.state),snapshot);
+ const r=choose(s,{slot}),duel=r.events.find(x=>x.type==='battle-private');
+ assert.equal(duel.cards.find(x=>x.player===0).card,order[slot]);
+ assert.deepEqual(duel.to,[0,1]);conserve(r.state);
+});
+check('Peek slot cannot be reordered by Navy while reader chooses or reads',()=>{
+ let s=play(fresh(),1,'pirate-4').state;s=choose(s,{target:2}).state;
+ const order=s.players[0].hand.slice().reverse();s=choose(s,{cards:order}).state;
+ for(const stage of ['peek-slot','read']){
+  assert.equal(s.pending.type,stage);const snapshot=JSON.stringify(s);
+  const denied=e.apply(s,0,{type:'CHOOSE',cards:order.slice().reverse()},{rng});
+  assert.equal(denied.ok,false);assert.equal(JSON.stringify(denied.state),snapshot);
+  if(stage==='peek-slot')s=choose(s,{slot:1}).state;
+ }
+ assert.deepEqual(e.visible(s,2).pending.cards,[order[1]]);
+ for(const viewer of [0,1,3])assert.equal(e.visible(s,viewer).pending.cards,undefined);
+});
 check('Matching duplicate Navy ranks do not expose duplicate choice to other seats',()=>{
  let s=fresh();for(const id of [...s.players[0].hand])move(s,id,()=>s.decks.navy);held(s,0,'navy-helmeppo');held(s,0,'navy-koby');s=play(s,1,'pirate-1').state;s=choose(s,{digit:1}).state;assert.equal(s.pending.type,'defeat-choice');assert.equal(e.visible(s,0).pending.cards.length,2);assert.notEqual(e.visible(s,1).pending.type,'defeat-choice');const r=choose(s,{card:'navy-koby'});assert.equal(r.events.filter(x=>x.type==='defeat').length,1);assert.equal(r.state.hp.navy,4);conserve(r.state);
 });

@@ -8775,3 +8775,11 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 ## 2026-11-02 牌堆地面透視複查與右側正義收集
 依複查調整背景裁切（center 40%），露出手機前方地面；兩個牌堆使用場景共同消失點、各視角地面邊界與四角投影，不再各自固定傾斜。陰影、牌厚、洗牌共用同一平面；抽牌保留巢狀投影結構，排除 WebKit 攤平矩陣導致的 23px 起手跳動。公開正義改右側 2×3，不壓頭像／海軍手牌。檔案：public/marineford/{marineford.js,marineford.css}、scripts/marineford_ground_qa.cjs。圖表沿用本輪新生圖 victory-ace-route.webp；選單移除、頭像回頂端、原功能從自己頭像進入均保留。
 驗證：Chrome/WebKit各21項含4尺寸×2視角、2/3/6人進度終點、正義側欄、實際地面四角、抽牌初始像素誤差<1、洗牌／重連清理。六瀏覽器54項、154次合法動作完成整場。npm start HTTP200；原啟動器、規則引擎、卡片資料未變。素材124項公開雜湊核對通過。本輪未做實體手機驗收，未刪檔。證據 D:/Codex_QA/marineford-floor-alignment-20261102。
+
+2026-11-02 地面牌堆與右側正義收集已正式發布讀回：29fafc20b72f65123be46001ec250bf5fc73915a。124 項媒體公開雜湊核對、9 項正式程式／設定／側表素材核對一致。Chrome/WebKit 公開入口啟動與素材解碼通過；補充 WebKit 兩尺寸×雙陣營逐一點擊全部六張右側正義卡，24 次皆開啟對應詳情。收據 D:/Codex_QA/marineford-floor-alignment-20261102/delivery.json。未進行實體手機驗收。
+
+## 2026-11-02 牌堆接地陰影精修與官方盲選規則核對
+範圍：public/marineford/marineford.js、marineford.css；scripts/marineford_rules_edges_qa.js；本紀錄與 GAME_RULES、FILE_MAP。
+移除硬邊深色陰影，改與牌堆共享投影的獨立柔和接觸陰影；牌層縮至 .65px，發光只放在頂牌，避免父層 filter 壓平立體堆疊。沿用生成牌背，不新增大型素材。抽牌、洗牌、全員 ACK 與重連清理保留。
+官方 Infinity Gauntlet 規則書第 6、7、12 頁：先混洗再盲選，選定後不能換牌；海軍主動攻擊自己選牌，猜數字不是指定牌位。現版為手動確認調位，不冒稱伺服器強制隨機洗牌；本輪不修改引擎。
+驗證：Chrome/WebKit 各 21 項、規則邊界 32 項、六人 Socket.IO 54 項與 146 次動作完成全局；npm start 成功監聽 18974（本機無 DATABASE_URL，非帳號資料庫驗收）。未做實體手機驗收，公開讀回待確認。證據 D:/Codex_QA/marineford-deck-finish-20261102。無可用 LATTICE API，未宣稱持久登記或圖譜成功。
