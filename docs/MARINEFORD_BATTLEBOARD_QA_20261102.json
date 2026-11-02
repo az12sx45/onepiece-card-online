@@ -161,6 +161,60 @@
         "observer sees actual combatants and only hidden card backs"
       ],
       "errors": []
+    },
+    "battleboard-final": {
+      "passed": true,
+      "checks": [
+        "New panoramic start page: desktop/mobile controls fit",
+        "740x320 view 0: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "740x320 view 1: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "667x375 view 0: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "667x375 view 1: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "844x390 view 0: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "844x390 view 1: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "1366x768 view 0: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "1366x768 view 1: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "Avatar opens player information and public cards",
+        "All six symbolic justice cards have awaited awaken/release sequence and settle",
+        "Navy defeat finishes, fortress cracks, only then meter advances",
+        "Recovery during breach cancels stale art and meter update"
+      ],
+      "errors": [],
+      "scope": "Real browser isolated Socket.IO room plus explicit synthetic visual events; no physical-device claim"
+    },
+    "layout-chrome": {
+      "passed": true,
+      "checks": [
+        "New panoramic start page: desktop/mobile controls fit",
+        "740x320 view 0: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "740x320 view 1: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "667x375 view 0: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "667x375 view 1: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "844x390 view 0: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "844x390 view 1: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "1366x768 view 0: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "1366x768 view 1: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "Avatar opens player information and public cards"
+      ],
+      "errors": [],
+      "scope": "Real browser isolated Socket.IO room plus explicit synthetic visual events; no physical-device claim"
+    },
+    "layout-webkit": {
+      "passed": true,
+      "checks": [
+        "New panoramic start page: desktop/mobile controls fit",
+        "740x320 view 0: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "740x320 view 1: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "667x375 view 0: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "667x375 view 1: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "844x390 view 0: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "844x390 view 1: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "1366x768 view 0: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "1366x768 view 1: five others, one self, perspective, vertical meters, text, private cards/decks fit",
+        "Avatar opens player information and public cards"
+      ],
+      "errors": [],
+      "scope": "Real browser isolated Socket.IO room plus explicit synthetic visual events; no physical-device claim"
     }
   },
   "engine": {
@@ -176,5 +230,13 @@
       "desktop/marineford-media-v1.json": 200
     },
     "database": "Intentionally disabled for isolated smoke check, no account-service claim"
+  },
+  "publicRelease": {
+    "passed": true,
+    "commit": "9fa584d32b0e6191c5904cc22c6f012a9fc48b65",
+    "programAndNewAssetChecks": 20,
+    "allMediaHashesVerified": 121,
+    "publicChromeAndWebKit": true,
+    "receipt": "D:\\Codex_QA\\marineford-battleboard-20261102\\delivery.json"
   }
 }

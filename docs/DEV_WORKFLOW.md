@@ -8748,6 +8748,9 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 
 
 ## 2026-11-02 頂上戰爭直式戰況板
+使用者複查修正：public/marineford/marineford.css 移除 execution-stage 的 command-panel border-image 與 fill，卡牌、艾斯、計量表直接呈現在戰場。透明排版間距保持原位置，未改遊戲規則或卡框。Chrome／WebKit 4 尺寸雙視角排版各 10 項通過；新預覽與報告 D:/Codex_QA/marineford-open-field-20261102。
 視覺複查：正義展開背景只延伸卡片內畫，不顯示第二張卡框；計量表暫停操作時維持正常亮度，演出中仍可讀取。
 上方僅保留其他玩家頭像列；公開正義收集欄移至下方中央，與自己的資訊及右下操作分開。
 日期：2026-11-02。範圍：Marineford 起始頁／右側戰況板／正義卡無人物海軍框／海軍背面艾斯／直式勝利表／頭像列／正義與本部受損動畫。檔案：public/marineford/{index.html,marineford.js,marineford.css,art/v2}、public/desktop/marineford-media-v1.json、scripts/marineford_media.js、marineford_battleboard_qa.cjs、marineford_polish_qa.cjs。規則與啟動器零修改。驗證：見 MARINEFORD_BATTLEBOARD_20261102.md 及同名 QA JSON。
+
+正式發布讀回完成：2026-11-02，9fa584d32。12 個新素材上傳、109 個沿用，121 項媒體公開雜湊相符；20 項正式程式／新素材讀回一致。正式 Chrome／WebKit 大廳啟動及圖片解碼通過；額外最終雙瀏覽器排版各 10 項通過。主站約 18 分鐘後切換，首次等待逾時不能視為發布成功，已以最後實際讀回驗收。收據：D:/Codex_QA/marineford-battleboard-20261102/delivery.json。未作實體手機驗收。

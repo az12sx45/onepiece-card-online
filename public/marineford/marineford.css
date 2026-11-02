@@ -123,7 +123,7 @@ body[data-screen="lobby"]{background-image:url("art/v2/lobby-panorama.webp")}
 .fleet-row[data-side="ally"]{left:1%;right:auto;width:240px;bottom:34px;display:block}
 .fleet-row[data-side="ally"] .portrait-button{position:absolute;left:7%;top:15%;width:23%;height:69%}
 .fleet-row[data-side="ally"] .portrait-button .avatar{position:static;width:100%;height:100%;border-radius:50%;object-fit:cover}
-.execution-stage{left:33%;right:1%;top:125px;bottom:95px;min-height:0;border:14px solid transparent;border-image:url("art/v2/command-panel.webp") 8% fill stretch}
+.execution-stage{left:33%;right:1%;top:125px;bottom:95px;min-height:0;border:14px solid transparent}
 .execution-scaffold{left:18%;width:28%;top:4%;height:90%;object-fit:contain}
 #navyHands{inset:7% 34% 8% 1%}
 #navyHands>button{height:85%;max-height:280px;bottom:10%}
