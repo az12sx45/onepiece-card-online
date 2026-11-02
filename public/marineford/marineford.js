@@ -125,8 +125,9 @@
   await animate(panel,[{filter:'brightness(1)'},{filter:'brightness(1.7)',offset:.3},{filter:'brightness(1)'}],{duration:reduced()?120:650});if(token!==epoch)return;await beat(800,token);if(token===epoch)delete board.dataset.phase;
  }
  async function scene(text,ids=[],kind='card',token=epoch,source=null,participants=[],options={}){
-  const layer=$('effectLayer');layer.replaceChildren();layer.dataset.kind=kind;layer.dataset.phase='announce';const stage=node('div',null,'effect-stage'),caption=node('p',text,'effect-caption');layer.append(stage,caption);
+  const layer=$('effectLayer'),noticeOnly=!ids.length&&!['battle','victory','shuffle'].includes(kind);layer.replaceChildren();layer.dataset.kind=noticeOnly?'notice':kind;layer.dataset.phase='announce';const stage=node('div',null,'effect-stage'),caption=node('p',text,'effect-caption');if(!noticeOnly)layer.append(stage);layer.append(caption);if(noticeOnly)window.MFSound?.play(kind==='morale'?'morale':kind==='miss'?'miss':'play');
   await animate(caption,[{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'translateY(0)'}],{duration:reduced()?80:320});await beat(readingTime(text,1300),token);if(token!==epoch)return;
+  if(noticeOnly){await animate(caption,[{opacity:1},{opacity:0}],{duration:220});if(token===epoch)layer.replaceChildren();return;}
   const faces=ids.map(id=>{const face=cardImage(id);face.classList.add('effect-card');stage.append(face);return face;});await Promise.all([...stage.querySelectorAll('img')].map(i=>i.decode().catch(()=>{})));if(token!==epoch)return;
   const duration=reduced()?140:800;
   if(kind==='battle'){

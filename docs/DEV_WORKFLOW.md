@@ -8795,3 +8795,9 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 海軍兩種選擇皆由引擎送相同 hand-shuffle 公開事件，只含玩家 id；各端同樣雙牌背整理動畫，不洩漏選擇／實際順序。實際手牌仍依海軍選擇保存，不新增隨機改牌。沿用多人 ACK 閘門，所有玩家看完才可盲選；重連取消動畫並恢復牌位。
 檔案：public/marineford/{marineford.js,marineford.css}、server/marineford-engine.js、scripts/marineford_{navy_choice_qa.cjs,browser_qa.cjs,rules_edges_qa.js}，同步 GAME_RULES／FILE_MAP。原啟動器、大廳、卡片資料、保存結構與 Socket.IO 事件名稱不改。
 驗證：Chrome/WebKit 四尺寸各檢查全部 13 張海軍牌，包含原畫面兩個選項、出戰選牌、同序與換序、恢復清理；六瀏覽器 74 項、125 次動作完成對局，所有五名觀眾在兩種選擇均見同牌背且不能提前選牌；規則邊界 34 項、1,500 場種子完整對局通過；npm start HTTP200。本機無帳號 DB，未做實體手機驗收。測試最初合成恢復事件未同步房間 sequence，已修正測試工具後重跑；以 chrome-release／webkit-release 結果為準。證據 D:/Codex_QA/marineford-navy-choice-20261103。無可用 LATTICE API，未宣稱持久登記或圖譜成功；正式發布另讀回。
+正式發布完成：9072fe8832c05286f04ccb95c2d54ea2757d8002，六項公開程式／設定雜湊一致；Chrome/WebKit 公開入口啟動及素材解碼通過。見 public-readback.json、public-browser.json。此行為部署後本機收據；未宣稱已用實體手機或正式帳號完成多人驗收。
+
+## 2026-11-03 取消每個動作的全畫面播報
+原因：所有 scene 共用深色全畫面背景，即使只有選人／看牌等文字，也建立空白演出 stage 並重複停留。改為 notice 小提示，依文字寬度排版，保留原牌桌；一般演出移除背景遮罩。出牌、戰鬥與正義卡保留特效，直接覆於現有場地；戰鬥卡縮至中間，名字讓出上方玩家資訊，底部字幕隨文字縮窄。勝負結算保留原版配置，事件順序、結果揭露及全員 ACK 不變。
+檔案：public/marineford/{marineford.js,marineford.css}、scripts/marineford_notices_qa.cjs、scripts/marineford_browser_qa.cjs、docs/{DEV_WORKFLOW,FILE_MAP,GAME_RULES}.md。引擎與素材未改。
+驗證：Chrome/WebKit 各 8 組（13 類文字事件×手機／桌機，連播、恢復、出牌／戰鬥／正義、名字避開 HUD）；士氣與卡面 13 項；六瀏覽器 74 項、69 次動作完成整場；npm start HTTP200。多人測試最初依序查五個觀眾，末位錯過短動畫，已改為同時觀測後通過，未為測試延長遊戲動畫。證據 D:/Codex_QA/marineford-table-notices-20261103，以 chrome-release／webkit-release／multiplayer-final 為準。未做實體手機或正式帳號驗收；本機無 DATABASE_URL；無可用 LATTICE API，不宣稱持久登記或圖譜成功。正式發布另讀回。

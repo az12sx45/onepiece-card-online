@@ -77,11 +77,13 @@ input{user-select:text;-webkit-user-select:text;background:#10283c;border:1px so
 .profile-metrics>div{container-type:inline-size;position:relative;text-align:center;aspect-ratio:3;background:url(art/v2/hud-readable.webp) center/contain no-repeat}
 .profile-metrics strong{position:absolute;left:7%;top:15%;width:23%;height:69%;display:grid;place-items:center;font-size:clamp(9px,calc(36cqw / var(--digits,2)),28px);line-height:1;color:#fff1bc}
 .profile-metrics span{position:absolute;left:35%;right:7%;top:27%;height:45%;display:grid;place-items:center;font-size:clamp(10px,1.2vw,15px);color:#d9e9eb}
-#effectLayer{position:fixed;inset:0;z-index:60;pointer-events:none;display:grid;grid-template-rows:minmax(0,1fr) auto;align-items:center;justify-items:stretch;gap:14px;padding:max(28px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(22px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left))}
+#effectLayer{position:fixed;inset:0;z-index:60;pointer-events:none;display:grid;grid-template-rows:minmax(0,1fr) auto;align-items:center;justify-items:stretch;gap:14px;padding:max(120px,17vh,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(22px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left))}
 #effectLayer:empty{display:none}
-#effectLayer:not(:empty){background:linear-gradient(#041627d9,#041627f5),url("art/v2/field.webp") center/cover}
+#effectLayer:not(:empty){background:none}
+#effectLayer[data-kind="notice"]{display:block;padding:0}
+#effectLayer[data-kind="notice"] .effect-caption{position:absolute;top:clamp(72px,17vh,150px);left:50%;translate:-50% 0;width:max-content;max-width:min(760px,90vw);padding:6px 12px;font-size:clamp(13px,1.2vw,16px);line-height:1.4;background:#0b2031d9;border-radius:4px;box-shadow:0 2px 8px #0003}
 .effect-card{height:min(53dvh,450px);width:min(35.333dvh,300px);aspect-ratio:2/3;max-width:29vw;object-fit:contain;min-width:0;filter:drop-shadow(0 10px 18px #0009)}
-.effect-caption{text-align:center;font-size:clamp(16px,2.2vw,28px);line-height:1.5;font-weight:800;text-shadow:0 2px 4px #000;margin:0 auto;color:#f7edda;background:#0b2031ed;border-block:1px solid #9dbdc3;padding:10px 24px;width:min(100%,1000px);overflow-wrap:anywhere}
+.effect-caption{text-align:center;font-size:clamp(14px,1.6vw,20px);line-height:1.5;font-weight:800;text-shadow:0 2px 4px #000;margin:0 auto;color:#f7edda;background:#0b2031ed;border-block:1px solid #9dbdc3;padding:7px 14px;width:max-content;max-width:min(90vw,1000px);overflow-wrap:anywhere}
 .effect-burst{position:absolute;left:50%;top:50%;margin:-30vh 0 0 -30vh;width:60vh;height:60vh;object-fit:contain;z-index:3}
 .shuffle-card{position:absolute;width:13vh;height:20vh;object-fit:contain}
 #effectLayer[data-kind="victory"] .effect-card{max-width:11vw;height:auto;width:min(11vw,23.333vh)}
@@ -118,7 +120,7 @@ input{user-select:text;-webkit-user-select:text;background:#10283c;border:1px so
 .profile-metrics>div{padding:0}
 .profile-metrics strong{font-size:clamp(9px,calc(36cqw / var(--digits,2)),19px)}
 .profile-metrics span{font-size:10px}
-#effectLayer{padding:14px 18px 16px;gap:8px}
+#effectLayer{padding:100px 18px 16px;gap:8px}
 .effect-card{height:49dvh;width:32.667dvh}
 .combatant .effect-card{height:48dvh;width:32dvh}
 .effect-caption{font-size:16px;padding:7px 14px}
@@ -187,7 +189,8 @@ input{user-select:text;-webkit-user-select:text;background:#10283c;border:1px so
 .victory-seal{height:28vh;max-height:260px;aspect-ratio:2/3;object-fit:contain;filter:drop-shadow(0 0 20px #f5d99370)}
 #effectLayer[data-kind="victory"] .effect-card{max-width:9vw;max-height:22vh;width:auto;height:22vh}
 .victory-stage:has(.effect-card) .victory-seal{height:22vh}
-#effectLayer[data-kind="victory"]{background:linear-gradient(#041627d9,#041627eb),url("art/v2/new_cover.webp") center 55%/cover}
+#effectLayer[data-kind="victory"]{background:linear-gradient(#041627d9,#041627eb),url("art/v2/new_cover.webp") center 55%/cover;padding:max(28px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(22px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left))}
+@media(max-height:450px){#effectLayer[data-kind="victory"]{padding:14px 18px 16px}}
 #sheet[data-kind="result"]{background:linear-gradient(90deg,#071b2aee,#071b2ada),url("art/v2/new_cover.webp") center 55%/cover;box-shadow:none}
 #sheet[data-kind="result"] #sheetBody{display:grid;grid-template-columns:minmax(80px,28%) minmax(0,1fr);gap:6vw;padding:4vh 8vw;overflow:auto;align-items:center}
 .result-seal{height:min(55vh,420px);max-width:100%;object-fit:contain;justify-self:center;filter:drop-shadow(0 12px 25px #0008)}
@@ -220,6 +223,7 @@ input{user-select:text;-webkit-user-select:text;background:#10283c;border:1px so
 #effectLayer[data-phase="morale-add"] .battle-math{color:#fff0a3;text-shadow:0 0 8px #bc8c42}
 .battle-math{padding:3px 9px;background:#06182de8;border-radius:3px;text-shadow:0 1px 2px #000}
 .combatant-name,.combatant-team{text-shadow:0 1px 3px #000,0 0 6px #001025}
+#effectLayer[data-kind="battle"] .combatant .effect-card{height:min(34dvh,300px);width:min(22.667dvh,200px)}
 @media(max-height:450px){
 .morale-crowd{height:100%;bottom:0}
 .morale-plus{right:-13%;font-size:35px}
