@@ -8782,4 +8782,9 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 範圍：public/marineford/marineford.js、marineford.css；scripts/marineford_rules_edges_qa.js；本紀錄與 GAME_RULES、FILE_MAP。
 移除硬邊深色陰影，改與牌堆共享投影的獨立柔和接觸陰影；牌層縮至 .65px，發光只放在頂牌，避免父層 filter 壓平立體堆疊。沿用生成牌背，不新增大型素材。抽牌、洗牌、全員 ACK 與重連清理保留。
 官方 Infinity Gauntlet 規則書第 6、7、12 頁：先混洗再盲選，選定後不能換牌；海軍主動攻擊自己選牌，猜數字不是指定牌位。現版為手動確認調位，不冒稱伺服器強制隨機洗牌；本輪不修改引擎。
-驗證：Chrome/WebKit 各 21 項、規則邊界 32 項、六人 Socket.IO 54 項與 146 次動作完成全局；npm start 成功監聽 18974（本機無 DATABASE_URL，非帳號資料庫驗收）。未做實體手機驗收，公開讀回待確認。證據 D:/Codex_QA/marineford-deck-finish-20261102。無可用 LATTICE API，未宣稱持久登記或圖譜成功。
+驗證：Chrome/WebKit 各 21 項、規則邊界 32 項、六人 Socket.IO 54 項與 146 次動作完成全局；npm start 成功監聽 18974（本機無 DATABASE_URL，非帳號資料庫驗收）。未做實體手機驗收。證據 D:/Codex_QA/marineford-deck-finish-20261102。無可用 LATTICE API，未宣稱持久登記或圖譜成功。
+公開讀回完成：39c298a734b3c9c5d8777fcd529972670a1c9ce4，六項公開程式／設定雜湊一致，Chrome/WebKit 正式未登入入口啟動與圖片解碼通過。見上述證據資料夾 public-readback.json、public-browser.json。此行為部署後本機收據，不另推送造成重複部署。
+
+## 2026-11-02 整齊厚牌堆
+依使用者要求保留厚度並避免散落：public/marineford/marineford.js 的牌層間距由 .65px 調為 1px，所有層對齊同一投影，仍依 deckCounts 顯示 0–6 層。洗牌改成兩個整齊小牌包，左右只交錯 3–4px、抬高 2–3px，不再大幅扇形散開。沿用淡接觸陰影與原牌背，未變更規則、同步或素材。
+驗證：Chrome/WebKit 各 21 項，四尺寸雙視角、張數厚度、抽牌起點誤差小於 1px、洗牌結束與重連清理通過；npm start HTTP200，沒有本機帳號 DB 或實體手機驗收。證據 D:/Codex_QA/marineford-neat-decks-20261102。公開部署另讀回確認。
