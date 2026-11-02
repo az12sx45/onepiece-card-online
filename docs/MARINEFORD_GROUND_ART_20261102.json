@@ -1,0 +1,12 @@
+{
+  "name": "victory-ace-route",
+  "prompt": "Generate ONE transparent-background vertical game UI asset, 1:3 portrait aspect ratio, for a polished One Piece Marineford battle game: a slim sculpted victory-progress instrument, NOT a giant surrounding frame, not a screenshot. Subtle silver marine metal on right, aged warm gold and ship rope on left, deep blue enamel recessed middle. Top 0..18% is an iconic small orange Ace hat with blue smile/frown badges and red beads, joined by broken chains and a restrained blue-white glow, no character faces. The top emblem is the destination of rescue/execution. Slim nautical sculpted edges follow left x10..22% and right x78..90%, open cutout silhouette on actual transparency outside. Middle x27..73%, y22..71% is a very clean blank dark navy vertical recessed channel with subtle cyan reflection, NO ticks, numbers or symbols; it will hold a program-drawn progress rail and moving markers. Bottom y76..96% contains TWO clean blank broad dark inset label plaques stacked vertically, at x15..85%, each about9% height, small gold separator. No text, no letters, no numbers anywhere. A small marine seagull engraving and pirate rope knots can sit along the outer edges without intruding into the empty central track or two label plaques. Refined anime-painted game UI with tactile metal, sharp edges, restrained highlights, not photorealistic, no huge wings, no panels outside the slim object. Preserve substantial usable empty track and label space; fit entire object with small transparent margins.",
+  "tool": "built-in image_gen",
+  "dimensions": [
+    724,
+    2172
+  ],
+  "source": "D:\\Codex_QA\\marineford-ground-piles-20261102\\victory-ace-route.png",
+  "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\victory-ace-route.webp",
+  "sha256": "5f86e9b4a31e6f70a0377d93ca1c7cdae2bba0b1e90b2964d68facd7587b715a"
+}

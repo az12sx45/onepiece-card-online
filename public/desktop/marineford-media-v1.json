@@ -862,6 +862,13 @@
       "mime": "image/webp",
       "size": 334562,
       "sha256": "778fc1a48ad63662c1bfc2ddbe92294b0d2fa1710e928f22a129545b915ed7ce"
+    },
+    {
+      "path": "marineford/art/v2/victory-ace-route.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 445722,
+      "sha256": "5f86e9b4a31e6f70a0377d93ca1c7cdae2bba0b1e90b2964d68facd7587b715a"
     }
   ]
 }

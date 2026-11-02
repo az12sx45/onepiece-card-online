@@ -2191,3 +2191,9 @@ public/marineford/art/v2/refined-justice-*.webp、scaffold-rear.webp、lobby-pan
 - public/marineford/marineford.css：單一新版戰場佈局段，保留大廳／卡片／全螢幕詳情／特效樣式。
 - docs/MARINEFORD_SCAFFOLD_ART_20261102.json：生成工具、完整提示、來源、尺寸與 SHA256。
 - scripts/marineford_battleboard_qa.cjs：共享路線、完整資訊、Ace 中央保護範圍、牌堆／HUD／公開正義不遮牌、演出順序及恢復取消。
+
+
+### 2026-11-02 地面牌堆
+- public/marineford/art/v2/victory-ace-route.webp：GPT透明直式側表，比例1:3；完整提示與雜湊在 docs/MARINEFORD_GROUND_ART_20261102.json。
+- public/marineford/marineford.js：openMatchMenu 由自己頭像詳情進入；deck-plane 的數量圖層、地面抽牌與洗牌演出。
+- scripts/marineford_ground_qa.cjs：四尺寸雙視角、兩張手牌、側表遮擋、無常駐選單、0/1/12張堆疊、地面抽牌／洗牌／重連取消與完整文字檢查。

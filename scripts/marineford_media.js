@@ -6,7 +6,7 @@ function visualAssets(){
  const art=path.join(root,'public/marineford/art'),v2=path.join(art,'v2');
  const required=[...require('../public/marineford/cards.json').map(c=>c.id),'new_cover','field','button','hud','navy-frame','pirate-frame','navy-back','pirate-back','fx-fire','fx-ice','fx-quake'];
  required.push(...require('../public/marineford/cards.json').map(c=>'redraw-'+c.id),'redraw-scaffold','redraw-morale-pirate','redraw-morale-navy');
- required.push('scaffold-field-navy','scaffold-field-pirate');
+ required.push('victory-ace-route','scaffold-field-navy','scaffold-field-pirate');
  required.push(...Array.from({length:6},(_,i)=>'refined-justice-'+(i+1)),'scaffold-rear','lobby-panorama','command-panel','meter-fortress-vertical','meter-execution-vertical','fx-fortress-break');
  const missing=required.filter(name=>!fs.existsSync(path.join(v2,name+'.webp')));
  if(missing.length)throw Error('Release blocked: missing new Marineford art: '+missing.join(', '));

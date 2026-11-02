@@ -8763,3 +8763,10 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 驗證：Chrome/WebKit 四尺寸雙視角；29 卡詳情與左右實際點選／士氣演出 13 項；六瀏覽器 54 項、完整對局 86 次合法動作；規則 1500 局與 29 邊界；npm start 使用 D 槽 cache，頁面 HTTP 200。詳細範圍與限制見 MARINEFORD_SCAFFOLD_20261102.md。沒有實體手機驗收。C 槽舊生圖重複副本已核對，但刪除被政策阻擋，未刪除。
 
 追加複查：頭像列下移至桌機 78px／手機 44px；資訊列增加字型行高並配置實際字形高度。兩人／三人／六人、雙視角、12 士氣與 6 公開牌、兩隊進度終點的文字邊界驗證通過。原有手機公開正義與右手牌重疊已排除。Chrome/WebKit 最終各 16 項（含四尺寸雙視角）。Git 發布暫存／物件改用既有 D 槽位置，index 使用 Git v4 無損壓縮，原索引副本保存於 QA 目錄；沒有刪除被政策阻擋的 PNG。
+
+2026-11-02 登台路線正式發布讀回完成：6ca6c7103d8bf607a76a534340fdd59191fff633。新場景 2 項上傳、121 項沿用，123 項媒體公開雜湊檢查通過；10 項正式程式／設定／新圖讀回相符。Chrome/WebKit 公開入口啟動與四張場景／大廳圖片解碼通過。最終部署約 16 分鐘後讀回；未把中途仍回傳 d5dc49c8a 視為最終版。收據 D:/Codex_QA/marineford-scaffold-route-20261102/delivery.json，未做實體手機驗收。
+
+
+## 2026-11-02 地面牌堆、側邊勝利表與移除常駐選單
+依使用者要求移除對局左上選單按鈕，其他玩家頭像回頂端（桌機20px／手機12px）。原有圖鑑、規則、音效、檔案與房主結束功能仍可由自己頭像→對局功能進入。GPT 新繪 victory-ace-route.webp，左側單一進度表；中央艾斯與處刑台保留完整。牌堆在地面透視斜放、數量驅動堆疊，實際地面抽牌與原地洗牌；演出結束後才繼續，重連取消舊圖層。手機兩張手牌／側表／牌堆不重疊。
+檔案：public/marineford/{marineford.js,marineford.css,art/v2/victory-ace-route.webp}、public/desktop/marineford-media-v1.json、scripts/marineford_media.js、marineford_ground_qa.cjs 及既有 browser/cards_morale/polish/visual QA 的新頭像功能入口。原始啟動器、遊戲規則、角色資料、Socket事件不改。驗證：Chrome/WebKit各21項，六人真實隔離連線54項、98次動作完成全局，既有版面33項與 npm start HTTP200。未做實體手機驗收。工作與生成輸出存D槽；本輪沒有刪檔。證據 D:/Codex_QA/marineford-ground-piles-20261102。

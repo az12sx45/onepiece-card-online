@@ -3028,3 +3028,7 @@ The independent fourth game now uses 40 new GPT art assets, original synthesized
 
 ### 2026-11-02 Marineford 中央登台戰場
 Marineford 前端使用 scaffold-field-navy.webp / scaffold-field-pirate.webp 完整背景；五位其他玩家詳細 HUD、自身右下資訊、兩側直接抽牌。共享視覺路線保留兩隊獨立勝利進度，非互相抵銷的拔河條。所有支援客戶端沿用線上 Marineford 路徑，未變更原啟動器、大廳與其他遊戲。
+
+
+### 2026-11-02 地面牌堆與側表
+Marineford對局移除常駐選單、頭像回上緣，原對局功能從自己頭像詳情開啟。左右抽牌堆位於下方地面，使用同一卡背繪製數量對應的立體堆疊；勝利表使用左側新繪艾斯帽子／鎖鏈素材，雙陣營進度仍各自結算。
