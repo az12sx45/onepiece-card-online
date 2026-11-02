@@ -8749,4 +8749,5 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 
 ## 2026-11-02 頂上戰爭直式戰況板
 視覺複查：正義展開背景只延伸卡片內畫，不顯示第二張卡框；計量表暫停操作時維持正常亮度，演出中仍可讀取。
+上方僅保留其他玩家頭像列；公開正義收集欄移至下方中央，與自己的資訊及右下操作分開。
 日期：2026-11-02。範圍：Marineford 起始頁／右側戰況板／正義卡無人物海軍框／海軍背面艾斯／直式勝利表／頭像列／正義與本部受損動畫。檔案：public/marineford/{index.html,marineford.js,marineford.css,art/v2}、public/desktop/marineford-media-v1.json、scripts/marineford_media.js、marineford_battleboard_qa.cjs、marineford_polish_qa.cjs。規則與啟動器零修改。驗證：見 MARINEFORD_BATTLEBOARD_20261102.md 及同名 QA JSON。

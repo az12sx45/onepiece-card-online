@@ -92,6 +92,9 @@
 body[data-screen="lobby"]{background-image:url("art/v2/lobby-panorama.webp")}
 #top{justify-content:space-between}
 #top #justice{margin-left:auto;margin-right:20px}
+#table>#justice{position:absolute;top:auto;bottom:18px;left:45%;right:auto;transform:translateX(-50%);margin:0;gap:5px;z-index:5}
+#table>#justice .justice-slot{width:25px;height:34px}
+#table>#justice:before{text-shadow:0 1px 4px #000,0 0 5px #000;color:#e2edf1}
 #lobby{max-width:1500px;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:5vw;padding:2vh 3vw}
 .lobby-title{height:100%;align-items:flex-end;justify-content:flex-start;padding-bottom:7vh}
 .lobby-title>div{display:block;text-shadow:0 3px 10px #000,0 0 24px #000}
@@ -152,6 +155,7 @@ body[data-screen="lobby"]{background-image:url("art/v2/lobby-panorama.webp")}
 #effectLayer[data-kind="justice"] .effect-card{filter:drop-shadow(0 0 16px #b7e4ff)}
 @media(max-height:450px){
  #app{padding-inline:max(8px,env(safe-area-inset-left))}#top{height:38px}#table,#lobby{height:calc(100% - 38px)}#top #justice{margin-right:10px}
+ #table>#justice{bottom:12px;gap:3px}#table>#justice .justice-slot{width:16px;height:22px;font-size:11px}#table>#justice:before{font-size:8px}
  #lobby{gap:3vw;padding:0 2vw;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}.lobby-title{padding-bottom:3vh}.lobby-title small{font-size:9px}.lobby-title h1{font-size:31px;margin:6px 0}.lobby-title p{font-size:11px;line-height:1.5}.lobby-tagline{font-size:8px}
  #lobbyBody{border-width:12px;padding:8px;max-height:100%}.lobby-identity{gap:7px;font-size:12px}.lobby-identity .avatar{width:30px;height:30px}.lobby-heading{font-size:17px;margin:10px 0}.lobby-entry{gap:6px}.lobby-entry button{width:125px;min-height:36px;padding:6px 20px;font-size:11px}.lobby-host small{font-size:11px}.lobby-join input{padding:6px;font-size:11px}.lobby-note{font-size:10px;margin:7px 0;line-height:1.4}.lobby-links{padding-top:6px;gap:8px}.lobby-links button{min-height:30px;font-size:10px}.room-seat{min-height:27px;grid-template-columns:18px minmax(0,1fr) 30px 44px 58px;gap:4px;font-size:11px}.room-seat .small-button{width:58px;min-height:25px;font-size:9px;padding:3px 10px}.room-code{margin:0}.lobby-actions{gap:3px;margin:3px 0}.lobby-actions button{width:120px;min-height:32px;padding:5px 18px;font-size:10px}
  .fleet-row[data-side="enemy"]{top:0;left:15%;right:15%;gap:14px;grid-template-columns:repeat(var(--count),minmax(0,70px))}
