@@ -4708,6 +4708,7 @@ function doJoin(displayNameOverride){
     displayName,
     avatar: presetAvatar,
     secret: me.secret,
+    resumeOnly: !!presetRoom,
     pid: me.playerId   // 多帶一個 pid 給後端記錄（結果頁也會用到）
   });
 
@@ -4745,11 +4746,21 @@ socket.on('connect', ()=>{
       displayName,
       avatar: presetAvatar,
       secret: me.secret,   // ★ 關鍵：帶同一組 secret，後端會視為「同一個位置重連」
+      resumeOnly: true,
       pid: me.playerId
     });
   }
 });
 
+socket.on('ROOM_UNAVAILABLE', ({roomId}={})=>{
+  if(roomId!==me.roomId||document.getElementById('cardRoomUnavailable'))return;
+  window.CardPhonePresentation?.cancelEnhancements?.();
+  const dialog=document.createElement('section');dialog.id='cardRoomUnavailable';dialog.setAttribute('role','alertdialog');dialog.setAttribute('aria-label','對局已失效');
+  dialog.style.cssText='position:fixed;inset:0;z-index:500;display:grid;place-content:center;gap:18px;padding:24px;background:#071b2bf2;color:#fff3ce;text-align:center;font:600 18px/1.6 system-ui';
+  const text=document.createElement('p');text.textContent='原本的對局已失效，無法繼續。請返回大廳重新開局。';
+  const back=document.createElement('button');back.textContent='返回大廳';back.style.cssText='padding:12px 24px;color:#132231;background:#f8d68a;border:0;border-radius:6px;font:inherit';
+  back.onclick=()=>{try{sessionStorage.removeItem('op_room');}catch{}location.href='start.html';};dialog.append(text,back);document.body.append(dialog);
+});
 socket.on('disconnect', ()=>{
   console.log('[socket] disconnected');
   try {

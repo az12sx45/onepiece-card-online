@@ -6,7 +6,10 @@ m._compile(fs.readFileSync(filename,'utf8')+'\nmodule.exports.__qa={rooms,broadc
 const q=m.exports.__qa,engine=require('../server/engine');
 readline.createInterface({input:process.stdin}).on('line',line=>{try{
  const cmd=JSON.parse(line),room=q.rooms.get(cmd.room);if(!room)throw Error('Test room missing');
- if(cmd.scenario==='paralysis'){
+ if(cmd.scenario==='expire-room'){
+  for(const key of ['_turnTimer','_pendingTimer','_turnWarnTimer','_pendingWarnTimer','_autoNextTimer','_emptyTimer'])clearTimeout(room[key]);
+  room._cpuLoopToken=(room._cpuLoopToken||0)+1;q.rooms.delete(cmd.room);
+ }else if(cmd.scenario==='paralysis'){
   for(const key of ['_turnTimer','_pendingTimer','_turnWarnTimer','_pendingWarnTimer','_autoNextTimer']){clearTimeout(room[key]);room[key]=null;}
   room._cpuLoopToken=(room._cpuLoopToken||0)+1;room._cpuFastForward=false;
   const old=room.state,s=engine.createInitialState(old.players.length);s.roundNo=old.roundNo;s.venues=old.venues;s.turnIndex=room.host;s.turnStep='draw';

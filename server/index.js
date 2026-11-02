@@ -5990,6 +5990,10 @@ socket.on("JOIN_ROOM", async (payload = {}) => {
 
 // 建房：暫給 1 位座位（真正開始時會重建）
 let room = rooms.get(roomId);
+if (!room && payload.resumeOnly === true) {
+  socket.emit('ROOM_UNAVAILABLE', { roomId, reason: 'expired' });
+  return;
+}
 if (!room) {
   const safeCpu = typeof cpuCount === "number"
     ? Math.max(0, Math.min(3, cpuCount))  // 限制在 0~5
