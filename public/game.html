@@ -8,8 +8,8 @@
   <title>偉大航道爭霸戰｜正式對戰</title>
   <!-- Reserve the match flow before installed native bundles mount their older queue. -->
   <script>document.documentElement.dataset.cardFlow="online-pending";</script>
-  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261101-card-sniper-menu1">
-  <script defer src="js/card-desktop-table.js?v=20261101-card-sniper-menu1"></script>
+  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261103-card-video-watch1">
+  <script defer src="js/card-desktop-table.js?v=20261103-card-video-watch1"></script>
   <link rel="stylesheet" href="css/card-finish-v1.css?v=20260907-depth-visible-v2">
   <script defer src="js/card_finish_v1.js?v=20260907-depth-visible-v2"></script>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
@@ -2507,6 +2507,11 @@ body::before{
 }
 
 </style>
+<style>
+html:root[data-card-phone] body #enhOverlay[data-enh-state="loading"],#enhOverlay[data-enh-state="loading"]{background:transparent!important;pointer-events:none}
+html:root[data-card-phone] body #enhOverlay[data-enh-state="loading"] #enhVideo,#enhOverlay[data-enh-state="loading"] #enhVideo,#enhOverlay[data-enh-state="loading"] .phone-enh-skip{visibility:hidden!important}
+.enh-load-status{position:fixed;left:50%;top:22%;transform:translateX(-50%);max-width:88vw;padding:8px 14px;border-radius:5px;background:#102331ed;color:#fff2c9;font:600 14px/1.5 system-ui;text-align:center;z-index:180;pointer-events:none}
+</style>
 </head>
 <body>
 <div id="usoppLayer"></div>
@@ -3391,7 +3396,11 @@ function primeIOSMediaOnce(){
   _iosPrimed = true;
 
   const enh = document.getElementById('enhVideo');
-  if (!enh) return;
+  const overlay = document.getElementById('enhOverlay');
+  const primeSource = enh?.getAttribute('src');
+  // A play() without a source can resolve only when a later skill starts.
+  // Its delayed pause must never stop that skill 200 ms into playback.
+  if (!enh || !primeSource || enh.__enhOnEnded || !overlay?.classList.contains('hidden')) return;
 
   try{
     // 播一小段有聲影片，讓 Safari 覺得這支影片是「使用者同意過」的
@@ -3399,6 +3408,7 @@ function primeIOSMediaOnce(){
     enh.volume = 0.1;          // 很小聲，幾乎不會察覺
     enh.play().then(()=>{
       setTimeout(()=>{
+        if (enh.__enhOnEnded || enh.getAttribute('src') !== primeSource || !overlay.classList.contains('hidden')) return;
         try{
           enh.pause();
           enh.currentTime = 0;
@@ -3791,92 +3801,42 @@ const ENH_VID = Array.from({length:20}, (_,i)=> `videos/enh/${i}.mp4`);
 // 播放指定卡的強化影片（全體）
 function playEnhFxFor(cardId){
   if (isCpuSkipFastMode()) return;
-  const ov  = document.getElementById('enhOverlay');
-  const vid = document.getElementById('enhVideo');
-  if (!ov || !vid) return;
-
-  const src = ENH_VID[cardId] || ENH_VID[0];
-  if (vid.getAttribute('src') !== src) {
-    vid.setAttribute('src', src);
-    try { vid.load(); } catch(e){}
-  }
-
-  // 清掉上一輪的計時器
-  if (_enhFxForceTimer) {
-    clearTimeout(_enhFxForceTimer);
-    _enhFxForceTimer = null;
-  }
-
-  // 先移除舊的事件（用 stored handler，避免殘留）
-  if (vid.__enhOnEnded) {vid.removeEventListener('ended', vid.__enhOnEnded);vid.removeEventListener('error',vid.__enhOnEnded);}
-  if (ov.__enhOnClick)   ov.removeEventListener('click', ov.__enhOnClick);
-
-  // 顯示 overlay
-  ov.classList.remove('hidden');
-
-  // 從頭開始
-  try { vid.currentTime = 0; } catch(e){}
-  vid.muted  = false;
-  vid.volume = 1.0;
-
-  let failTimer = null, lastMovieTime = -1, lastMovieProgress = Date.now();
-  function armFailsafe(){
-    clearTimeout(failTimer);
-    if (ov.classList.contains('hidden')) return;
-    if (vid.currentTime > lastMovieTime + .05) {lastMovieTime=vid.currentTime;lastMovieProgress=Date.now();}
-    // A progressing movie always reaches ended. Only a genuinely stalled load/play exits.
-    if (Date.now()-lastMovieProgress > 30000) {cleanup();return;}
-    failTimer=setTimeout(armFailsafe,1000);_enhFxForceTimer=failTimer;
-  }
-
-  function cleanup(){
-    if (!ov || ov.classList.contains('hidden')) return;
-
-    clearTimeout(failTimer);
-    if (_enhFxForceTimer) {
-      clearTimeout(_enhFxForceTimer);
-      _enhFxForceTimer = null;
+  const ov=document.getElementById('enhOverlay'),vid=document.getElementById('enhVideo');
+  if(!ov||!vid)return;
+  vid.__enhOnEnded?.();
+  let closed=false,timer=null,lastTime=0,lastProgress=performance.now(),started=false;
+  const status=document.createElement('span');status.className='enh-load-status';status.setAttribute('role','status');status.textContent='強化影片載入中…';
+  const current=()=>!closed&&vid.__enhOnEnded===cleanup;
+  function cleanup(reason){
+    if(!current())return;closed=true;clearTimeout(timer);_enhFxForceTimer=null;
+    vid.removeEventListener('ended',cleanup);vid.removeEventListener('error',failed);vid.removeEventListener('playing',playing);
+    ov.classList.add('hidden');delete ov.dataset.enhState;status.remove();
+    vid.__enhOnEnded=null;vid.__enhOnClick=null;
+    try{vid.pause();vid.removeAttribute('src');vid.load();}catch{}
+    if(wasPlayingBeforeDuck&&typeof bgmAudio!=='undefined'&&bgmAudio){requestBgmResume();wasPlayingBeforeDuck=false;}
+    // Presentation failures never send gameplay, leave-room or CPU commands.
+    if(reason==='timeout'||reason==='error'){
+      console.warn('[enh-video] '+reason+' card='+cardId);
+      const note=document.createElement('span');note.className='enh-load-status enh-load-failed';note.setAttribute('role','status');note.textContent='影片暫時無法播放，繼續招式演出';document.body.append(note);setTimeout(()=>note.remove(),3200);
     }
-
-    ov.classList.add('hidden');
-    try {
-      vid.pause();
-      vid.currentTime = 0;
-    } catch(e){}
-
-  // 若強化影片播放前有 BGM，在這裡請求續播
-  if (wasPlayingBeforeDuck && typeof bgmAudio !== 'undefined' && bgmAudio) {
-    requestBgmResume();
-    wasPlayingBeforeDuck = false;
   }
-
-
-    // 移除事件綁定
-    if (vid.__enhOnEnded) {vid.removeEventListener('ended', vid.__enhOnEnded);vid.removeEventListener('error',vid.__enhOnEnded);}
-    if (ov.__enhOnClick)   ov.removeEventListener('click', ov.__enhOnClick);
-    vid.__enhOnEnded = null;
-    ov.__enhOnClick  = null;
+  function failed(){cleanup('error');}
+  function playing(){if(!current())return;started=true;lastProgress=performance.now();ov.dataset.enhState='playing';status.hidden=true;}
+  function watch(){
+    if(!current())return;
+    if(vid.currentTime>lastTime+.05){lastTime=vid.currentTime;lastProgress=performance.now();}
+    if(performance.now()-lastProgress>(started?10000:8000)){cleanup('timeout');return;}
+    timer=setTimeout(watch,250);_enhFxForceTimer=timer;
   }
-
-  // 設定事件 handler 並記住參考，方便下次移除
-  vid.__enhOnEnded = ()=> cleanup();
-  ov.__enhOnClick  = null;
-  vid.addEventListener('ended', vid.__enhOnEnded);
-  vid.addEventListener('error',vid.__enhOnEnded,{once:true});
-
-
-  // 嘗試播放：如果有聲被擋就改靜音；再失敗就直接關掉，不卡流程
-  vid.play().then(()=>{
-    armFailsafe();
-  }).catch(()=>{
-    vid.muted = true;
-    vid.play().then(()=>{
-      armFailsafe();
-    }).catch(()=>{
-      // 什麼都播不了 → 直接關掉 overlay，避免整場卡死
-      cleanup();
-    });
-  });
+  vid.__enhOnEnded=cleanup;
+  vid.addEventListener('ended',cleanup);vid.addEventListener('error',failed);vid.addEventListener('playing',playing);
+  ov.dataset.enhState='loading';ov.append(status);ov.classList.remove('hidden');
+  vid.muted=false;vid.volume=1;vid.setAttribute('playsinline','');vid.setAttribute('src',ENH_VID[cardId]||ENH_VID[0]);
+  // Arm BEFORE load/play: Android can leave play() pending forever, not reject it.
+  watch();
+  try{vid.load();vid.currentTime=0;}catch{}
+  const play=()=>{try{return Promise.resolve(vid.play());}catch(e){return Promise.reject(e);}};
+  play().catch(()=>{if(!current())return;vid.muted=true;return play().catch(()=>{if(current())failed();});});
 }
 
 window.__cardOriginalEnhVideo = playEnhFxFor;
@@ -8023,8 +7983,8 @@ html:root[data-card-phone] #cardArtLoading[hidden]{display:none!important;}
 /* Public enhanced-card projection. No hand inspection or gameplay decisions. */
 (() => {
  function mount(){
-  const api=window.CardPhonePresentation;if(!api||api.enhancementSummonVersion>=3)return;
-  api.enhancementSummonVersion=3;
+  const api=window.CardPhonePresentation;if(!api||api.enhancementSummonVersion>=4)return;
+  api.enhancementSummonVersion=4;
   const root=document.documentElement,video=document.getElementById('enhVideo');
   const priorBusy=api.isEnhancementBusy,priorCancel=api.cancelEnhancements;
   let active=null,serial=0;
@@ -8059,7 +8019,7 @@ html:root[data-card-phone] #cardArtLoading[hidden]{display:none!important;}
    await wait(reduced?0:700);if(active!==item||generation!==serial)return;
    const overlay=document.getElementById('enhOverlay');
    if(overlay){item.observer=new MutationObserver(()=>{if(overlay.classList.contains('hidden'))finish(item);});item.observer.observe(overlay,{attributes:true,attributeFilter:['class']});}
-   item.failsafe=setTimeout(()=>finish(item),32000);
+   item.failsafe=setTimeout(()=>finish(item),900);
   };
   function revealMovie(){const item=active;if(!item||item.layer.dataset.phase!=='white')return;clearTimeout(item.failsafe);item.layer.dataset.phase='video';root.dataset.cardSummon='video';const a=item.layer.animate([{opacity:1},{opacity:0}],{duration:420,fill:'forwards'});item.animations.push(a);a.finished.then(()=>{if(active===item&&item.layer.dataset.phase==='video')item.layer.style.visibility='hidden';},()=>{});}
   function recall(){const item=active;if(!item)return;clearTimeout(item.failsafe);item.observer?.disconnect();for(const a of item.animations)a.cancel();item.animations=[];item.layer.dataset.phase='return';root.dataset.cardSummon='return';item.layer.style.visibility='visible';item.flash.style.opacity='0';item.img.style.filter='';

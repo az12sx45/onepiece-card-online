@@ -174,6 +174,26 @@
   if(token===epoch){layer.dataset.phase='settle';await animate(caption,[{opacity:1},{opacity:0}],{duration:280});layer.replaceChildren();}
  }
 
+ // Only the public played card supplies the cut-in; never inspect hidden hands.
+ async function skillCutin(id,text,token){
+  const c=cards[id];if(!c){await scene(text,[],'card',token);return;}
+  const layer=$('effectLayer');layer.replaceChildren();layer.dataset.kind='cutin';layer.dataset.phase='enter';
+  const strip=node('section',null,'mf-cutin'),art=node('div',null,'mf-cutin-art'),copy=node('div',null,'mf-cutin-copy'),image=node('img');
+  strip.dataset.team=c.team;strip.dataset.justice=String(!!c.justice);strip.dataset.card=id;strip.setAttribute('role','status');
+  image.src=cardArt(id);image.alt='';image.draggable=false;art.append(image);copy.append(node('strong',c.name),node('p',text));strip.append(art,copy);layer.append(strip);
+  // Bound cold image decode too; a missing illustration must not block the room ACK.
+  await Promise.race([image.decode().catch(()=>{art.hidden=true;}),new Promise(r=>setTimeout(r,1200))]);if(token!==epoch)return;
+  window.MFSound?.play(c.justice?'morale':'slash');
+  await animate(strip,[{opacity:0,transform:'translateX(-12%) skewY(-4deg)'},{opacity:1,transform:'translateX(0) skewY(-4deg)'}],{duration:reduced()?100:480});if(token!==epoch)return;
+  layer.dataset.phase='hold';await beat(Math.max(1700,readingTime(text,1400)),token);if(token!==epoch)return;
+  await animate(strip,[{opacity:1,transform:'translateX(0) skewY(-4deg)'},{opacity:0,transform:'translateX(9%) skewY(-4deg)'}],{duration:reduced()?100:350});if(token===epoch)layer.replaceChildren();
+ }
+ async function playedFlight(id,source,player,token){
+  const layer=$('effectLayer');layer.replaceChildren();layer.dataset.kind='draw';
+  const face=cardImage(id);face.classList.add('mf-play-flight');layer.append(face);const from=source?.getBoundingClientRect(),dest=$('players').querySelector('[data-player="'+player+'"]')?.getBoundingClientRect();
+  const x=from?from.x+from.width/2:innerWidth*.5,y=from?from.y+from.height/2:innerHeight*.6,tx=dest?dest.x+dest.width*.5:innerWidth*.5,ty=dest?dest.bottom:innerHeight*.25;
+  face.style.left=x+'px';face.style.top=y+'px';await animate(face,[{transform:'translate(-50%,-50%) scale(1)',opacity:1},{transform:`translate(calc(-50% + ${tx-x}px),calc(-50% + ${ty-y}px)) scale(.35)`,opacity:.3}],{duration:reduced()?150:650,easing:'ease-in-out'});face.remove();
+ }
  async function navyHandShuffle(token){
   if(token!==epoch)return;const layer=$('effectLayer'),held=[...$('navyHands').children].slice(0,2),rects=held.map(e=>e.getBoundingClientRect());layer.replaceChildren();layer.dataset.kind='hand-shuffle';layer.dataset.phase='conceal';
   const caption=node('p','海軍手牌重新整理中','effect-caption');layer.append(caption);window.MFSound?.play('shuffle');
@@ -183,7 +203,7 @@
   }finally{for(const img of flights)img.remove();if(token===epoch){for(const e of held)e.style.visibility='';caption.remove();}}
  }
  async function present(packet,token){if(token!==epoch)return;busy=true;closeSheet();render();const events=packet.events||[],presentationHP={...view.hp};let victory=false;for(let i=0;i<events.length;i++){if(token!==epoch)return;const e=events[i],p=name(e.player),target=name(e.target);
-   if(e.type==='play'){const origin=e.player===you?ownHand().querySelector('[data-card="'+e.card+'"]'):$('players').querySelector('[data-player="'+e.player+'"]');if(e.player===you&&origin)origin.style.visibility='hidden';await scene(p+'打出 '+cards[e.card].name,[e.card],cards[e.card].justice?'justice':'card',token,origin);}
+   if(e.type==='play'){const origin=e.player===you?ownHand().querySelector('[data-card="'+e.card+'"]'):$('players').querySelector('[data-player="'+e.player+'"]');if(e.player===you&&origin)origin.style.visibility='hidden';await playedFlight(e.card,origin,e.player,token);const declared=events.some(a=>['guess','target','peek','challenge'].includes(a.type)&&a.player===e.player);if(!packet.view.pending&&!declared)await skillCutin(e.card,p+' · '+cards[e.card].effect,token);if(cards[e.card].justice)await scene(p+'打出 '+cards[e.card].name,[e.card],'justice',token);}
    else if(e.type==='draw'){
     window.MFSound?.play('draw');const deck=$('deckZone').querySelector('[data-team="'+(view?.players[e.player]?.team||'pirate')+'"] .deck-top');let dest=e.player===you?ownHand():$('players').querySelector('[data-player="'+e.player+'"]'),landing=null;
     if(e.player===you&&view.players[you].team==='navy'){landing=node('button');landing.dataset.slot='2';landing.className='draw-landing';landing.style.visibility='hidden';landing.disabled=true;ownHand().append(landing);dest=landing;}
@@ -194,16 +214,16 @@
     }landing?.remove();
    }
    else if(e.type==='hand-shuffle')await navyHandShuffle(token);
-   else if(e.type==='guess')await scene(p+'猜 '+e.targets.map(name).join('、')+' 的 '+e.digit+' 號牌',[],'miss',token);
+   else if(e.type==='guess')await skillCutin(packet.view.players[view.turn]?.played.at(-1),p+'猜 '+e.targets.map(name).join('、')+' 的 '+e.digit+' 號牌',token);
    else if(e.type==='battle'){const secret=events[i+1]?.type==='battle-private'?events[++i]:null;const mine=secret?.cards.find(x=>x.player===you);const held=[...ownHand().children].find(b=>b.dataset.card===mine?.card);if(held)held.style.visibility='hidden';const outcome=['defeat','tie'].includes(events[i+1]?.type)?events[++i]:null;const publicCard=view.players[view.turn]?.played.at(-1)||'';await scene(name(e.attacker)+' 對戰 '+name(e.defender),secret?secret.cards.map(x=>x.card):[],'battle',token,null,secret?secret.cards.map(x=>x.player):[e.attacker,e.defender],{values:secret?.values,boost:e.boost||{},outcome,fx:publicCard.startsWith('pirate')?'fire':publicCard.startsWith('justice')?'ice':'quake'});if(outcome?.type==='defeat')await progressBeat(outcome,presentationHP,token);}
    else if(e.type==='defeat'){await scene(p+'的 '+cards[e.card].rank+' 號 '+cards[e.card].name+' 被擊敗',[e.card],'defeat',token);await progressBeat(e,presentationHP,token);}
    else if(e.type==='miss')await scene(p+'沒有 '+e.digit+' 號牌',[],'miss',token);
    else if(e.type==='tie')await scene('平手 · 雙方保留手牌',[],'card',token);
    else if(e.type==='resisted')await scene(p+'未被擊敗',[],'card',token);
    else if(e.type==='shuffle')await scene(e.reason==='defeated-special'?e.cards.map(id=>cards[id].name).join('、')+' 洗回海軍牌堆；其他場上明牌保留':e.team==='navy'?'被擊敗的特殊牌洗回海軍牌堆':'海賊場上明牌洗回牌堆',e.cards||[],'shuffle',token,e.team);
-   else if(e.type==='target')await scene(p+'對 '+target+' 使用卡片效果',[],'card',token);
-   else if(e.type==='peek')await scene(p+'查看 '+target+' 的一張手牌',[],'card',token);
-   else if(e.type==='challenge')await scene(p+'挑戰 '+target,[],'card',token);
+   else if(e.type==='target')await skillCutin(packet.view.players[view.turn]?.played.at(-1),p+'對 '+target+' 使用卡片效果',token);
+   else if(e.type==='peek')await skillCutin(packet.view.players[view.turn]?.played.at(-1),p+'查看 '+target+' 的一張手牌',token);
+   else if(e.type==='challenge')await skillCutin(packet.view.players[view.turn]?.played.at(-1),p+'挑戰 '+target,token);
    else if(e.type==='decline')await scene(p+'選擇不發起戰鬥',[],'card',token);
    else if(e.type==='order')await scene(p+'完成 '+e.count+' 張牌的排序',[],'card',token);
    else if(e.type==='return')await scene(p+'將 '+e.count+' 張手牌放回海軍牌堆底',[],'card',token);

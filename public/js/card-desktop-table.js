@@ -1704,8 +1704,8 @@ window.POCardInteract=module.exports;
 /* Public enhanced-card projection. No hand inspection or gameplay decisions. */
 (() => {
  function mount(){
-  const api=window.CardPhonePresentation;if(!api||api.enhancementSummonVersion>=3)return;
-  api.enhancementSummonVersion=3;
+  const api=window.CardPhonePresentation;if(!api||api.enhancementSummonVersion>=4)return;
+  api.enhancementSummonVersion=4;
   const root=document.documentElement,video=document.getElementById('enhVideo');
   const priorBusy=api.isEnhancementBusy,priorCancel=api.cancelEnhancements;
   let active=null,serial=0;
@@ -1740,7 +1740,7 @@ window.POCardInteract=module.exports;
    await wait(reduced?0:700);if(active!==item||generation!==serial)return;
    const overlay=document.getElementById('enhOverlay');
    if(overlay){item.observer=new MutationObserver(()=>{if(overlay.classList.contains('hidden'))finish(item);});item.observer.observe(overlay,{attributes:true,attributeFilter:['class']});}
-   item.failsafe=setTimeout(()=>finish(item),32000);
+   item.failsafe=setTimeout(()=>finish(item),900);
   };
   function revealMovie(){const item=active;if(!item||item.layer.dataset.phase!=='white')return;clearTimeout(item.failsafe);item.layer.dataset.phase='video';root.dataset.cardSummon='video';const a=item.layer.animate([{opacity:1},{opacity:0}],{duration:420,fill:'forwards'});item.animations.push(a);a.finished.then(()=>{if(active===item&&item.layer.dataset.phase==='video')item.layer.style.visibility='hidden';},()=>{});}
   function recall(){const item=active;if(!item)return;clearTimeout(item.failsafe);item.observer?.disconnect();for(const a of item.animations)a.cancel();item.animations=[];item.layer.dataset.phase='return';root.dataset.cardSummon='return';item.layer.style.visibility='visible';item.flash.style.opacity='0';item.img.style.filter='';

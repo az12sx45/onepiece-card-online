@@ -2205,3 +2205,6 @@ public/marineford/art/v2/refined-justice-*.webp、scaffold-rear.webp、lobby-pan
 - scripts/marineford_ground_qa.cjs：四尺寸雙視角、兩張手牌、側表遮擋、無常駐選單、0/1/12張堆疊、地面抽牌／洗牌／重連取消與完整文字檢查。
 
 2026-11-02：marineford.js/placeGroundDecks 使用共用場景消失點、前景地面四角計算投影；resize 自動重排。draw-flight 保留平面／牌面父子結構以符合 WebKit。marineford.css 的 #justice 是右側兩欄收集區。
+
+### 2026-11-03 演出故障與斜線
+public/game.html 的 playEnhFxFor 擁有影片世代、載入／停滯 watchdog 與清理；primeIOSMediaOnce 不可碰觸正式播放。public/js/card-desktop-table.js 與 HTML 相同的投影版本 4 對已裝手機提供線上修正。marineford.js 的 skillCutin 僅使用公開牌，playedFlight 保留牌桌。card_video_recovery_qa.mjs 包含永不 settle 的 play Promise、warmup 延遲、真 MP4 與 ACK；marineford_cutins_qa.cjs 包含雙陣營／正義及中斷。

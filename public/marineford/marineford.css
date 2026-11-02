@@ -393,3 +393,16 @@ body[data-screen="table"] #connection{margin-left:auto;font-size:9px;text-shadow
 #effectLayer[data-kind="ground-shuffle"] .effect-caption{align-self:start;position:absolute;top:23%;left:10%;right:10%;width:auto;font-size:clamp(12px,2vh,18px)}
 .deck[data-shuffling="true"] .deck-top,.deck[data-shuffling="true"] .deck-layer{visibility:hidden}
 .deck-shuffle-card{opacity:1!important}
+
+/* Public action declaration: two diagonal edges, with the table still visible. */
+#effectLayer[data-kind="cutin"]{display:block;padding:0;background:transparent}
+.mf-cutin{position:absolute;left:0;right:0;top:36%;height:clamp(100px,33vh,260px);transform:skewY(-4deg);display:flex;align-items:center;overflow:hidden;isolation:isolate;border-block:3px solid #9eeaff;background:#081b2de8;box-shadow:0 -3px 12px #73d4ff75,0 3px 12px #73d4ff75}
+.mf-cutin[data-team="pirate"]{border-color:#ffe2a2;box-shadow:0 -3px 12px #ffd67575,0 3px 12px #ffd67575}
+.mf-cutin-art{position:absolute;left:0;top:-18%;width:48%;height:140%;overflow:hidden;transform:skewY(4deg);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 72%,transparent)}
+.mf-cutin-art img{position:absolute;width:120%;height:auto;left:-5%;top:-38%;max-width:none}
+.mf-cutin[data-justice="true"] .mf-cutin-art img{top:-65%}
+.mf-cutin-copy{position:relative;margin-left:45%;width:50%;transform:skewY(4deg);padding:8px 0;color:#fff;text-shadow:0 2px 3px #000;overflow-wrap:anywhere}
+.mf-cutin-copy strong{display:block;color:#ffe4a3;font-size:clamp(19px,3.4vw,36px);line-height:1.2}
+.mf-cutin-copy p{font-size:clamp(12px,1.7vw,20px);line-height:1.45;margin:5px 0 0}
+.mf-play-flight{position:fixed;width:clamp(55px,12vh,110px);height:clamp(82.5px,18vh,165px);pointer-events:none}
+@media(max-height:450px){.mf-cutin{top:36%;height:32vh}.mf-cutin-copy strong{font-size:22px}.mf-cutin-copy p{font-size:13px;line-height:1.3}.mf-cutin-copy{width:52%;margin-left:44%}}

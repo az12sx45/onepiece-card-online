@@ -8801,3 +8801,11 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 原因：所有 scene 共用深色全畫面背景，即使只有選人／看牌等文字，也建立空白演出 stage 並重複停留。改為 notice 小提示，依文字寬度排版，保留原牌桌；一般演出移除背景遮罩。出牌、戰鬥與正義卡保留特效，直接覆於現有場地；戰鬥卡縮至中間，名字讓出上方玩家資訊，底部字幕隨文字縮窄。勝負結算保留原版配置，事件順序、結果揭露及全員 ACK 不變。
 檔案：public/marineford/{marineford.js,marineford.css}、scripts/marineford_notices_qa.cjs、scripts/marineford_browser_qa.cjs、docs/{DEV_WORKFLOW,FILE_MAP,GAME_RULES}.md。引擎與素材未改。
 驗證：Chrome/WebKit 各 8 組（13 類文字事件×手機／桌機，連播、恢復、出牌／戰鬥／正義、名字避開 HUD）；士氣與卡面 13 項；六瀏覽器 74 項、69 次動作完成整場；npm start HTTP200。多人測試最初依序查五個觀眾，末位錯過短動畫，已改為同時觀測後通過，未為測試延長遊戲動畫。證據 D:/Codex_QA/marineford-table-notices-20261103，以 chrome-release／webkit-release／multiplayer-final 為準。未做實體手機或正式帳號驗收；本機無 DATABASE_URL；無可用 LATTICE API，不宣稱持久登記或圖譜成功。正式發布另讀回。
+正式發布完成：748589278115f6f03f7fc97937539a10df0f96e2，六項公開程式／設定雜湊一致；Chrome/WebKit 公開未登入入口啟動與素材解碼通過。證據 public-readback.json、public-browser.json。此行為部署後本機收據，未宣稱實體手機或正式帳號多人驗收。
+
+## 2026-11-03 頂上戰爭斜線演出與爭霸戰影片恢復
+- 頂上戰爭：公開出招改用雙斜線角色／正義象徵圖，牌桌背景與上下 HUD 保留。普通出牌先從原位置飛到公開牌列；需要選人／猜數字時，等接受選擇後才播斜線宣告。圖取自當前行動玩家已公開的出牌，未讀取隱藏手牌。正義沿用既有無角色畫，不改規則、同步事件或素材。
+- 爭霸戰：媒體預熱不得對空來源呼叫 play，也不得於後續正式影片中執行延遲 pause。原版在回歸測試確實失敗；修正版通過。影片 watchdog 在 load/play 之前啟動，8 秒無法開始或 10 秒沒有進度即收尾，清除來源、事件、投影，保留原房間。舊 Promise 完成／拒絕不得影響下一支影片。白光在未開播時最多另留 900ms；載入期間顯示小提示而非全黑。正常有進度影片仍播到 ended。線上投影版本升至 4，覆蓋已安裝 v3 實作。
+- 檔案：public/game.html、public/js/card-desktop-table.js、public/marineford/marineford.js/.css、scripts/card_video_recovery_qa.mjs、marineford_cutins_qa.cjs、marineford_notices_qa.cjs、publish_card_program_blobs.js。同步 FILE_MAP/GAME_RULES。原啟動器、大廳、卡片規則與兩款以外遊戲保留。
+- QA：Chrome/WebKit 影片失敗注入與真實 MP4、斜線三尺寸兩引擎、六人 Marineford 整場與 Card 三人三 CPU 閘門、斷線寬限與下一局驗證。具體最終報告放 D:/Codex_QA/card-video-marineford-cutins-20261103；發布與真機收據另記。二十支公開影片 HEAD 均200 video/mp4，這不等於每支真機解碼通過。
+- 使用者 V2105 v063 已接上；正式 App 啟動與帳號仍在，沒有上次卡住那場的可用錯誤，不能宣稱已重現「只剩一人」。現有伺服器斷線接管保留座位；未在沒有證據下更改玩家清除或規則。LATTICE API 不可用，未宣稱任務／圖譜持久驗收。
