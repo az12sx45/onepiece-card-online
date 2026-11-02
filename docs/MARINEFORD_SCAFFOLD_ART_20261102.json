@@ -1,0 +1,29 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "name": "scaffold-field-pirate",
+      "prompt": "Create a finished 16:9 landscape anime game battlefield background for ONE PIECE Marineford. Reference is the existing game's cool blue painted anime environment style, NOT its old layout. New camera: rescue pirates looking FORWARD directly at Portgas D Ace on his execution scaffold, his FRONT face and bare chest visible, black hair, red bead necklace, wrists chained behind him, kneeling. The scaffold must be a believable part of the scene, built into Marineford plaza, never a separate floating cutout. COMPOSITION for UI: exact central axis x50%. Ace is small but recognizable, head at y35%, knees at y47%. Stone and timber platform spans x40..60%, y44..55%. A single narrow stairway runs from x43..57% y55% down toward x40..60% at y92%. All of the scaffold and Ace fit inside central x38..62%. Huge Marineford fortress behind, frozen bay edges and flags, dramatic restrained cool blue daylight, detailed One Piece anime cinematic illustration. Keep left x5..35% and right x65..95% fairly low contrast and visually uncluttered to place cards, top20% subdued sky/architecture for player HUD. No foreground characters, no extra people, no UI borders, no labels, no text, no cards, no meters. One cohesive immersive environment with correct perspective and lighting. Wide landscape 16:9.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-c9af9edb-7bcc-4936-af4a-918298c54511.png",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\scaffold-field-pirate.webp",
+      "sha256": "42bb72051e87785913aaf16a0b36b35e5dbfcbac9129607634b392b68fe08e13",
+      "size": 667532
+    },
+    {
+      "name": "scaffold-field-navy",
+      "prompt": "Edit the supplied Marineford game battlefield into the reverse NAVY viewpoint. This is the paired background to the original pirate viewpoint: keep the exact same 16:9 dimensions, scaffold geometry, center axis, stairway position, Ace size and center coordinates. Ace must now be seen from BEHIND: kneeling, bare back with the recognizable Whitebeard pirates skull-and-crescent-moustache tattoo, black hair, hands chained behind his back, no visible face. The camera is behind Ace looking outward from the Marineford side toward the frozen bay with distant pirate ships and dark blue storm clouds, rather than the fortress. Replace the distant fortress with frozen bay and approaching ships. Retain the SAME broad lower foreground stone approach and central staircase leading upward to the scaffold; no floating cutout, physically integrated with the environment. Keep Ace at x50%, head near y30%, body to y41%, the platform centered around y42..57%, central stairs down to y65%. Keep top20% quiet low-contrast sky for HUD; no other foreground characters, no UI, no borders, no writing, no cards, no meters. Detailed high-quality One Piece anime environment, same blue daylight, perspective, scale, visual polish as the reference.",
+      "source": "D:/Codex_QA/marineford-scaffold-route-20261102/navy-output.png",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\scaffold-field-navy.webp",
+      "sha256": "cdb6ab62ef6d4f0767ec6a72cdb2020b2cbc61c816ab3bb013c955d2be933f53",
+      "size": 663136
+    }
+  ]
+}

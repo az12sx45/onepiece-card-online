@@ -843,6 +843,20 @@
       "sha256": "7c8e0e5f9f50fa552558151eb4ba48aff03d77ba6e91c0bf8fbdbb4e359cbd8e"
     },
     {
+      "path": "marineford/art/v2/scaffold-field-navy.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 663136,
+      "sha256": "cdb6ab62ef6d4f0767ec6a72cdb2020b2cbc61c816ab3bb013c955d2be933f53"
+    },
+    {
+      "path": "marineford/art/v2/scaffold-field-pirate.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 667532,
+      "sha256": "42bb72051e87785913aaf16a0b36b35e5dbfcbac9129607634b392b68fe08e13"
+    },
+    {
       "path": "marineford/art/v2/scaffold-rear.webp",
       "kind": "image",
       "mime": "image/webp",

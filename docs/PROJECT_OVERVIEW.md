@@ -3024,3 +3024,7 @@ The independent fourth game now uses 40 new GPT art assets, original synthesized
 
 ## 2026-11-02 頂上戰爭直式戰況板
 頂上戰爭使用獨立全幅起始頁。六張正義為無人物海軍銀藍卡；雙視角艾斯與兩條航海王題材直式勝利表整合右側，上方五名其他玩家頭像，自己資訊在下方。詳細見 MARINEFORD_BATTLEBOARD_20261102.md。
+
+
+### 2026-11-02 Marineford 中央登台戰場
+Marineford 前端使用 scaffold-field-navy.webp / scaffold-field-pirate.webp 完整背景；五位其他玩家詳細 HUD、自身右下資訊、兩側直接抽牌。共享視覺路線保留兩隊獨立勝利進度，非互相抵銷的拔河條。所有支援客戶端沿用線上 Marineford 路徑，未變更原啟動器、大廳與其他遊戲。

@@ -8754,3 +8754,10 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 日期：2026-11-02。範圍：Marineford 起始頁／右側戰況板／正義卡無人物海軍框／海軍背面艾斯／直式勝利表／頭像列／正義與本部受損動畫。檔案：public/marineford/{index.html,marineford.js,marineford.css,art/v2}、public/desktop/marineford-media-v1.json、scripts/marineford_media.js、marineford_battleboard_qa.cjs、marineford_polish_qa.cjs。規則與啟動器零修改。驗證：見 MARINEFORD_BATTLEBOARD_20261102.md 及同名 QA JSON。
 
 正式發布讀回完成：2026-11-02，9fa584d32。12 個新素材上傳、109 個沿用，121 項媒體公開雜湊相符；20 項正式程式／新素材讀回一致。正式 Chrome／WebKit 大廳啟動及圖片解碼通過；額外最終雙瀏覽器排版各 10 項通過。主站約 18 分鐘後切換，首次等待逾時不能視為發布成功，已以最後實際讀回驗收。收據：D:/Codex_QA/marineford-battleboard-20261102/delivery.json。未作實體手機驗收。
+
+2026-11-02 移除大框修正已正式讀回：9423f0c4686e0c39bf5b5111de477f63379bee85，公開 marineford.css 雜湊與 Git 提交一致。Chrome/WebKit 排版各 10 項與 npm start HTTP 200 通過，未做實機驗收。收據 D:/Codex_QA/marineford-open-field-20261102/delivery.json。
+
+
+## 2026-11-02 頂上戰爭共同登台路線
+依使用者複查重排整個戰場，移除兩座獨立計量表，改為中央一條路線與海賊救援／海軍登台兩個獨立進度標記。GPT 生成雙視角完整場景：海賊看艾斯正面、海軍看背面；處刑台與環境一體。恢復五位其他玩家詳細 HUD，下移頂列，小型三線選單，左右牌堆直接抽牌，海軍左右手牌避開中央，抽牌飛向新抽位置。替換舊戰場 CSS 宣告而非追加舊版框架。檔案：public/marineford/{index.html,marineford.js,marineford.css,art/v2/scaffold-field-*.webp}、public/desktop/marineford-media-v1.json、scripts/marineford_{media.js,battleboard_qa.cjs,browser_qa.cjs,cards_morale_qa.cjs}。規則引擎、卡片資料、原啟動器與大廳流程未改。
+驗證：Chrome/WebKit 四尺寸雙視角；29 卡詳情與左右實際點選／士氣演出 13 項；六瀏覽器 54 項、完整對局 86 次合法動作；規則 1500 局與 29 邊界；npm start 使用 D 槽 cache，頁面 HTTP 200。詳細範圍與限制見 MARINEFORD_SCAFFOLD_20261102.md。沒有實體手機驗收。C 槽舊生圖重複副本已核對，但刪除被政策阻擋，未刪除。

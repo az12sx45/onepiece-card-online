@@ -2183,3 +2183,11 @@ public/marineford/art/v2/redraw-*.webp：29 張新卡、處刑台及兩陣營助
 
 ## 2026-11-02 頂上戰爭直式戰況板
 public/marineford/art/v2/refined-justice-*.webp、scaffold-rear.webp、lobby-panorama.webp、command-panel.webp、meter-*-vertical.webp、fx-fortress-break.webp：本輪選用 GPT 素材。scripts/marineford_battleboard_qa.cjs：起始頁、頭像、直式表、演出順序與取消測試。docs/MARINEFORD_BATTLEBOARD_{ART,QA}_20261102.json：提示與實測證據。
+
+
+### 2026-11-02 Marineford 同一登台路線
+- public/marineford/art/v2/scaffold-field-{navy,pirate}.webp：GPT 生成艾斯與處刑台整合場景，背／正視角。
+- public/marineford/marineford.js：renderNavyStage、renderProgress、progressBeat、兩側牌堆抽牌與新手牌落點。
+- public/marineford/marineford.css：單一新版戰場佈局段，保留大廳／卡片／全螢幕詳情／特效樣式。
+- docs/MARINEFORD_SCAFFOLD_ART_20261102.json：生成工具、完整提示、來源、尺寸與 SHA256。
+- scripts/marineford_battleboard_qa.cjs：共享路線、完整資訊、Ace 中央保護範圍、牌堆／HUD／公開正義不遮牌、演出順序及恢復取消。
