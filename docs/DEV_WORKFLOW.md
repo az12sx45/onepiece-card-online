@@ -8809,3 +8809,4 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 - 檔案：public/game.html、public/js/card-desktop-table.js、public/marineford/marineford.js/.css、scripts/card_video_recovery_qa.mjs、marineford_cutins_qa.cjs、marineford_notices_qa.cjs、publish_card_program_blobs.js。同步 FILE_MAP/GAME_RULES。原啟動器、大廳、卡片規則與兩款以外遊戲保留。
 - QA：Chrome/WebKit 影片失敗注入與真實 MP4、斜線三尺寸兩引擎、六人 Marineford 整場與 Card 三人三 CPU 閘門、斷線寬限與下一局驗證。具體最終報告放 D:/Codex_QA/card-video-marineford-cutins-20261103；發布與真機收據另記。二十支公開影片 HEAD 均200 video/mp4，這不等於每支真機解碼通過。
 - 使用者 V2105 v063 已接上；正式 App 啟動與帳號仍在，沒有上次卡住那場的可用錯誤，不能宣稱已重現「只剩一人」。現有伺服器斷線接管保留座位；未在沒有證據下更改玩家清除或規則。LATTICE API 不可用，未宣稱任務／圖譜持久驗收。
+發布器本輪白名單限 game.html 與 js/card-desktop-table.js 兩個變更；未變動的 51MB CSS 以原 manifest 完整比對保留，不重新上傳或下載驗證。既有憑證僅由正式 DPAPI 發布器在子程序使用。

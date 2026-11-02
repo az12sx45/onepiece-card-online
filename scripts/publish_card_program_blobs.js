@@ -17,12 +17,12 @@ async function main(){
  const oldResponse=await fetch('https://onepiece-card-online.onrender.com/'+base.games.card.manifestPath);assert.equal(oldResponse.status,200);
  const oldBytes=Buffer.from(await oldResponse.arrayBuffer());assert.equal(P.sha256Bytes(oldBytes),base.games.card.manifestSha256);
  const old=JSON.parse(oldBytes),current=JSON.parse(read('public/'+next.games.card.manifestPath));
- const allow=['game.html','css/card-desktop-table.css','js/card-desktop-table.js'];
+ const allow=['game.html','js/card-desktop-table.js'];
  assert.deepEqual(current.assets.filter(a=>!allow.includes(a.path)),old.assets.filter(a=>!allow.includes(a.path)));
  const inventory=await P.loadPublishInventory({repoRoot:root,gameIds:['card'],catalogVersion:3});
  inventory.records=inventory.records.filter(r=>r.sources.some(s=>allow.includes(s)));
- assert.equal(inventory.records.length,3);assert.ok(inventory.records.every(r=>r.sources.every(s=>allow.includes(s))));
- inventory.uniqueFiles=inventory.logicalFiles=3;
+ assert.equal(inventory.records.length,2);assert.ok(inventory.records.every(r=>r.sources.every(s=>allow.includes(s))));
+ inventory.uniqueFiles=inventory.logicalFiles=2;
  inventory.uniqueBytes=inventory.logicalBytes=inventory.records.reduce((n,r)=>n+r.size,0);
  let context;
  try{
