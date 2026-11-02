@@ -1,0 +1,188 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "name": "refined-justice-3",
+      "prompt": "Redesign this 2:3 portrait JUSTICE card. Keep the exact silver/navy frame geometry and blank pale silver plaques of the reference: upper-left rank box x4..20% y3..13%, bottom text panel x4..96% y81..97%. No letters or numerals. This is a SYMBOLIC non-character card: no recognizable people anywhere. Preserve clean illustrated anime style, SILVER frame and deep COBALT blue inset, not gold border. New main scene: A massive translucent BLUE ICE PHEASANT with spread frozen wings sweeping over the frozen Marineford bay, two separate icy wave arcs. A small recognizable green diamond-quilted sleep mask with navy trim rests on a foreground ice crystal, evoking Kuzan/Aokiji without depicting him. The ice pheasant is the grand central motif, not a cap. No people, no faces, no human silhouettes.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-ad10ec0c-c37a-4656-be5f-ccf30b9b6000.png",
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\refined-justice-3.webp",
+      "size": 653696,
+      "sha256": "530e9ca71a1f1227de1154bfbae051a5b99b4d141227f32a3cbd1fbb798c2fb4",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "selected": true
+    },
+    {
+      "name": "refined-justice-4",
+      "prompt": "Redesign this 2:3 portrait JUSTICE card. Keep the exact silver/navy frame geometry and blank pale silver plaques of the reference: upper-left rank box x4..20% y3..13%, bottom text panel x4..96% y81..97%. No letters or numerals. This is a SYMBOLIC non-character card: no recognizable people anywhere. Preserve clean illustrated anime style, SILVER frame and deep COBALT blue inset, not gold border. New main scene: A huge circular radiant GOLDEN LIGHT MIRROR formed by a ring of photon particles hovering over Marineford, a brilliant gold laser zigzags between THREE smaller mirrors in the distance, cross-shaped star flare like Kizaru's light ability. A small pair of rectangular amber glasses lies on foreground stone. Evoke ambiguous light justice and three morale through beams and three mirrors. No scales, no seagull as main subject, no humans, no faces, no silhouettes.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-4a12bb74-7c3e-4c57-a5f2-3b7173255ed2.png",
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\refined-justice-4.webp",
+      "size": 540798,
+      "sha256": "048aa69515991bd34d68052e82135a48909d6fb2fb237b0c1e0cbf0ae4aeb2ef",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "selected": true
+    },
+    {
+      "name": "refined-justice-1",
+      "prompt": "Edit the FIRST supplied card image, changing ONLY its frame, top-left blank rank plaque and bottom blank text panel. Preserve central scene and characters exactly. Replace every copper/gold outer border edge with SILVER steel, replace tan parchment plaques with pale silver-white frost-paper, use dark COBALT blue insets, exactly match the SECOND reference card's navy frame. Preserve pixel layout and 2:3 aspect ratio, blank text areas, no text, no digits. Do not recolor warm colors inside the central artwork. This is a NAVY faction justice card, must visibly share the second card's silver-blue border and white panels.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-64c02a0d-ea2c-4873-8106-49ca563873c8.png",
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\refined-justice-1.webp",
+      "size": 459488,
+      "sha256": "bdc551ad91a77d55167420fba4741417d209ac7dd0364468a67ba2374e46f790",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "selected": true
+    },
+    {
+      "name": "refined-justice-2",
+      "prompt": "Redesign this 2:3 portrait JUSTICE card. Keep the exact silver/navy frame geometry and blank pale silver plaques of the reference: upper-left rank box x4..20% y3..13%, bottom text panel x4..96% y81..97%. No letters or numerals. This is a SYMBOLIC non-character card: no recognizable people anywhere. Preserve clean illustrated anime style, SILVER frame and deep COBALT blue inset, not gold border. New main scene: A symbolic giant forged SILVER IRON FIST emblem smashing through a stone fortress barricade, blue impact rings and broken stone suspended, navy flags in Marineford behind. No flesh, no human arm, no Garp, no people. Convey Iron Fist Justice using an emblem/object.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-1ecc1565-4d06-437b-b78a-eeb42e3e06e6.png",
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\refined-justice-2.webp",
+      "size": 575010,
+      "sha256": "11c60d4354a3afe31bbc05dc7814f6a637ec5f3f2ad9b93e1407f23a1909d295",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "selected": true
+    },
+    {
+      "name": "refined-justice-5",
+      "prompt": "Edit the FIRST supplied card image, changing ONLY its frame, top-left blank rank plaque and bottom blank text panel. Preserve central scene and characters exactly. Replace every copper/gold outer border edge with SILVER steel, replace tan parchment plaques with pale silver-white frost-paper, use dark COBALT blue insets, exactly match the SECOND reference card's navy frame. Preserve pixel layout and 2:3 aspect ratio, blank text areas, no text, no digits. Do not recolor warm colors inside the central artwork. This is a NAVY faction justice card, must visibly share the second card's silver-blue border and white panels.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-5e50a505-4dd4-4cae-9e13-84b57d3fe451.png",
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\refined-justice-5.webp",
+      "size": 480136,
+      "sha256": "27d636bac29e4ca539509e99340c870608b0b6864a0ffa06ef1d12aecfc3ba9c",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "selected": true
+    },
+    {
+      "name": "refined-justice-6",
+      "prompt": "Redesign this 2:3 portrait JUSTICE card. Keep the exact silver/navy frame geometry and blank pale silver plaques of the reference: upper-left rank box x4..20% y3..13%, bottom text panel x4..96% y81..97%. No letters or numerals. This is a SYMBOLIC non-character card: no recognizable people anywhere. Preserve clean illustrated anime style, SILVER frame and deep COBALT blue inset, not gold border. New main scene: Marineford's imposing white naval fortress seen majestically from low angle, SIX white navy seagull emblem banners flutter in symmetry, a huge abstract GOLDEN circular shockwave halo radiates over the fortress, symbol of supreme command. No Buddha, no statues, no people, no faces, no character silhouettes. Grand naval order and commanding justice symbolism.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-85826a05-f2b0-4ae2-9532-8bc0c07f9f12.png",
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\refined-justice-6.webp",
+      "size": 498374,
+      "sha256": "7c8e0e5f9f50fa552558151eb4ba48aff03d77ba6e91c0bf8fbdbb4e359cbd8e",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "selected": true
+    },
+    {
+      "name": "scaffold-rear",
+      "prompt": "Create the reverse-camera view of this EXACT Ace execution scaffold sprite from One Piece Marineford. Camera moved 180 degrees around to directly behind Ace, same slightly elevated viewing angle, same square 1:1 crop and full platform scale. Ace is kneeling shirtless with his BACK to us, head bowed away, black wavy hair, orange bead necklace around neck, black shorts, wrists chained behind him. Clearly visible large Whitebeard crew tattoo on his back: purple crossbones with white skull and crescent white mustache. No face and no chest visible. Same steel handrails and wooden platform, same clean anime illustration, entire platform fits canvas with narrow transparent margin. Genuinely transparent background, no text and no border. Correct back anatomy, arms cuffed behind lower back, two feet and kneeling legs facing away.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-69beb1fd-f782-4925-b85a-ac37d75d7ca7.png",
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\scaffold-rear.webp",
+      "size": 334562,
+      "sha256": "778fc1a48ad63662c1bfc2ddbe92294b0d2fa1710e928f22a129545b915ed7ce",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "selected": true
+    },
+    {
+      "name": "lobby-panorama",
+      "prompt": "Create a premium widescreen 16:9 anime game title-screen BACKGROUND for One Piece Marineford, hand-drawn clean anime cel shading, dramatic but elegant, not photorealistic. Composition: left 57% features imposing Whitebeard with distinctive giant white crescent mustache and black bandana, open white captain coat and muscular scarred chest, holding his polearm; behind him tiny Moby Dick whale-prow ship in the frozen bay, above mid-left distant Ace kneeling on the execution platform before Marineford headquarters. The right 43% deliberately calm deep navy blue sea haze and dark stone battlement, clear of faces, weapons and bright objects to hold interactive lobby controls. Dark slate blue and cool silver palette, restrained warm sunset rim light. Atmospheric naval battle with distant white sails, ocean spray, floating ice, grandeur. NO lettering, no title, no buttons, no card frames, no UI baked in. Full bleed landscape environment, crisp illustration, dark enough foreground to typeset title in lower-left. Camera is a cinematic sweeping low angle towards the fortress.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-3dcf99ac-8bb6-4b7f-8d17-07d27da63941.png",
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\lobby-panorama.webp",
+      "size": 447130,
+      "sha256": "5b9db40bc4770163a1041d4af6ca4b7d0fdc9862769eabd9673a8021b53a2f90",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "selected": true
+    },
+    {
+      "name": "command-panel",
+      "prompt": "Production game UI asset: one EMPTY rectangular Marineford naval command panel, landscape 3:2. Finely drawn slim brushed SILVER steel outer border with deep cobalt blue enamel inner trim, chamfered corner plates, tiny rivets in corners, understated maritime engraving ONLY inside border. Central 90% of panel is completely uniform opaque deep midnight navy (#091d2b), suitable for readable content overlay. No symbols protruding into center, no title, no letters, no characters, no controls, no gradient lighting over the content area. Straight front orthographic view, no perspective. Crisp detailed anime game interface art, premium clean design. All ornament confined to outermost 5% so the border can be nine-sliced by the UI engine without distorting corners. Whole frame inside canvas, no outer margin, full bleed.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-58060fe7-8029-40ca-a110-08050fb78474.png",
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\command-panel.webp",
+      "size": 105406,
+      "sha256": "50726a8013be92899e4a37f362f26c2d27eca9afd5dfe64a2fe51a28fe4dab66",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "selected": true
+    },
+    {
+      "name": "meter-fortress",
+      "prompt": "Single wide 4:1 horizontal game victory progress plaque for One Piece Marineford. Silver steel/cobalt navy frame with tasteful engraved corner filigree, round leftmost 18% icon of cracked white Marineford fortress with tiny orange embers, right 75% completely blank deep midnight navy content area to overlay a two-line label/value and segmented progress track. No words, no numbers, no segments painted, no faces, no characters. Premium hand-painted anime game HUD, orthographic front, no perspective. Frame fits whole canvas without margin; slim border to maximize readable content.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-74f62154-9b5f-420f-a397-eb99494cb5df.png",
+      "output": "D:\\Codex_QA\\marineford-battleboard-20261102\\unused-horizontal-meters\\meter-fortress.webp",
+      "size": 273450,
+      "sha256": "2f6daadfd925cc732bca31667f2f64f04b1243a87aa0d75aaf803ce33e2f4162",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "selected": false
+    },
+    {
+      "name": "meter-execution",
+      "prompt": "Single wide 4:1 horizontal game victory progress plaque for One Piece Marineford. Silver steel/dark wine red frame with tasteful engraved corner filigree, round leftmost 18% icon of iron shackles around an amber hourglass with fine chain, right 75% completely blank deep midnight navy content area to overlay a two-line label/value and segmented progress track. No words, no numbers, no segments painted, no faces, no characters. Premium hand-painted anime game HUD, orthographic front, no perspective. Frame fits whole canvas without margin; slim border to maximize readable content.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-19ef1c7e-9122-4f16-bd1d-7f0b06fa6436.png",
+      "output": "D:\\Codex_QA\\marineford-battleboard-20261102\\unused-horizontal-meters\\meter-execution.webp",
+      "size": 260278,
+      "sha256": "3b5b1f658524d2b8418251314d803d3572b77c717382ce0f175433f0c04ca81c",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "selected": false
+    },
+    {
+      "name": "fx-fortress-break",
+      "prompt": "Transparent-background 1:1 anime game effect sprite for naval headquarters taking damage in One Piece Marineford. Compact white Japanese-style naval fortress turret with blue tiled roof being ruptured by a spreading seismic shockwave, chunks of white masonry flung outward, crisp blue-white jagged impact ring, restrained orange sparks, dust trails, exquisite clean hand-drawn anime linework. No people, no text, no UI frame. Intact recognizable central fortress upper part with a large crack splitting front stonework and flying debris surrounding. All effects fit canvas with transparent empty corners. Designed for a 1-second impact scale/rotation animation and then drifting debris fade.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-d002203e-c8ff-4ce6-849a-318279074865.png",
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\fx-fortress-break.webp",
+      "size": 696354,
+      "sha256": "2d4834a063f9f7d9088669148fa118028e6fcf6d42dd4248e175038618603d6d",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "selected": true
+    },
+    {
+      "name": "meter-fortress-vertical",
+      "prompt": "Create a VERTICAL game progress gauge illustration, portrait 1:3 proportion, for One Piece Marineford. A tall elegant WHITE MARINEFORD FORTRESS TOWER forms the gauge's outer shape, blue Japanese tiled roofs at very top with tiny navy seagull pennant, carved white stone sides, tiny cannons, sea spray and rubble only around bottom pedestal. Center from x28% to72%, y28% to76% is a LONG EMPTY VERTICAL dark blue recessed channel for dynamic progress blocks, straight and clear; NO painted blocks or progress fill. Top y18..27% and bottom y80..94% reserve clean deep navy blank plaques for game text/value. Ornate thin silver/cobalt edges, hand-painted crisp anime mobile game HUD. The structure instantly evokes Marineford headquarters. NO letters, NO digits, NO human characters. Whole silhouette inside canvas, truly transparent background outside tower. Preserve open central channel and plaques; asset will be displayed only 75 pixels wide by 210 pixels high, avoid tiny clutter.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-46f81d2c-95e5-4b22-bc46-8c595ed32328.png",
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\meter-fortress-vertical.webp",
+      "size": 427484,
+      "sha256": "f9c83210775816503e10bc3a7024fa513482ab060cffcd418a4fc9511ce75b00",
+      "dimensions": [
+        724,
+        2172
+      ],
+      "selected": true
+    },
+    {
+      "name": "meter-execution-vertical",
+      "prompt": "Create a VERTICAL game countdown gauge illustration, portrait 1:3 proportion, for One Piece Marineford. A tall execution scaffold and hanging IRON CHAINS form the gauge's sides, top icon iron handcuffs around Ace's recognizable ORANGE BEAD NECKLACE, dark wood crossbeam, navy steel and restrained dark crimson trim. Center from x28% to72%, y28% to76% is a LONG EMPTY VERTICAL deep midnight recessed channel for dynamic countdown blocks, straight and clear; NO painted blocks or fill. Top y18..27% and bottom y80..94% reserve clean deep navy blank plaques for game text/value. Bottom wooden scaffold planks and a tiny amber hourglass. Crisp hand-painted anime mobile game HUD, Marineford and Ace narrative recognizable through chains, orange beads, scaffold. NO letters, NO digits, NO human characters. Whole silhouette inside canvas, truly transparent background outside. Asset displayed 75 pixels wide by 210 pixels high; strong simple readable silhouette.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a13564-f60c-71b1-8178-336039a1904c\\exec-40bd8e81-f4e8-4297-b2c0-bd583b27bd5d.png",
+      "output": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\public\\marineford\\art\\v2\\meter-execution-vertical.webp",
+      "size": 443956,
+      "sha256": "b1917a0f43f84d9ac326f4e7f717fa2f712ba9d7e410a5e6e3ad6011b1ad3085",
+      "dimensions": [
+        750,
+        2098
+      ],
+      "selected": true
+    }
+  ],
+  "user_direction": "Justice cards are symbolic, no characters. All Justice cards are Navy. Vertical Marineford fortress and Ace chain meters. Earlier character concepts were rejected and are not served."
+}

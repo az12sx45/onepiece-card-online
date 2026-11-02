@@ -8743,3 +8743,9 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 
 ## 2026-11-01 頂上戰爭卡面與助威
 日期：2026-11-01。範圍：Marineford 29 張卡面重畫、海軍左右牌位、處刑台與士氣軍勢 +2 演出。檔案：public/marineford/{index.html,marineford.js,marineford.css,sound.js,art/v2/redraw-*}、marineford-media-v1.json、scripts/marineford_media.js 與三個 UI QA。規則引擎未改。驗證與發布讀回見 MARINEFORD_CARDS_20261101.md / MARINEFORD_CARDS_QA_20261101.json。
+
+正式發布完成：2026-11-01，來源 5b4fc1a1b。32 個新素材上傳、77 個既有素材跳過，109 項公開雜湊確認；正式程式＋32 個新資產共 40 項讀回一致，Chrome／WebKit 正式大廳啟動通過。Windows／Android／iOS 原生包不變，線上第四遊戲重新進入即可載入。六人隔離連線／合成演出與實體裝置驗收明確區分；本輪無實機測試。證據 D:/Codex_QA/marineford-cards-morale-20261101/delivery.json。
+
+
+## 2026-11-02 頂上戰爭直式戰況板
+日期：2026-11-02。範圍：Marineford 起始頁／右側戰況板／正義卡無人物海軍框／海軍背面艾斯／直式勝利表／頭像列／正義與本部受損動畫。檔案：public/marineford/{index.html,marineford.js,marineford.css,art/v2}、public/desktop/marineford-media-v1.json、scripts/marineford_media.js、marineford_battleboard_qa.cjs、marineford_polish_qa.cjs。規則與啟動器零修改。驗證：見 MARINEFORD_BATTLEBOARD_20261102.md 及同名 QA JSON。

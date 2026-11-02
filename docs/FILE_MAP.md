@@ -2179,3 +2179,7 @@ scripts/card_native_entry_qa.js tests real worker retirement routing; card_kille
 
 ## 2026-11-01 頂上戰爭卡面與助威
 public/marineford/art/v2/redraw-*.webp：29 張新卡、處刑台及兩陣營助威軍勢。docs/MARINEFORD_CARDS_ART_20261101.json：生圖提示與來源。scripts/marineford_cards_morale_qa.cjs：雙視角、全卡文字、實際左右選牌、士氣順序與重連取消檢查。
+
+
+## 2026-11-02 頂上戰爭直式戰況板
+public/marineford/art/v2/refined-justice-*.webp、scaffold-rear.webp、lobby-panorama.webp、command-panel.webp、meter-*-vertical.webp、fx-fortress-break.webp：本輪選用 GPT 素材。scripts/marineford_battleboard_qa.cjs：起始頁、頭像、直式表、演出順序與取消測試。docs/MARINEFORD_BATTLEBOARD_{ART,QA}_20261102.json：提示與實測證據。

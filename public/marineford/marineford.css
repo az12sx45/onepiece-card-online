@@ -87,3 +87,84 @@
 @media(max-height:450px){#top{gap:7px}#top #justice{gap:3px;margin-top:8px}#top .justice-slot{width:16px;height:22px;font-size:11px}#top #justice:before{font-size:8px}.health-box{padding-inline:8px}#health{gap:8px}}
 
 .public-thumbs{flex:0 1 auto}.public-thumb{position:relative;flex:0 1 24px;min-width:0}.public-thumb img{display:block;max-width:100%}.public-thumb>b{position:absolute;left:0;top:0;background:#f5edd6;color:#0e2536;font-size:9px;line-height:1;padding:1px 2px;border-radius:1px}
+
+/* 2026-11-02: one battleboard, five compact remote portraits, own seat below. */
+body[data-screen="lobby"]{background-image:url("art/v2/lobby-panorama.webp")}
+#top{justify-content:space-between}
+#top #justice{margin-left:auto;margin-right:20px}
+#lobby{max-width:1500px;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:5vw;padding:2vh 3vw}
+.lobby-title{height:100%;align-items:flex-end;justify-content:flex-start;padding-bottom:7vh}
+.lobby-title>div{display:block;text-shadow:0 3px 10px #000,0 0 24px #000}
+.lobby-title small{color:#bedde7;letter-spacing:.25em;font-size:14px}
+.lobby-title h1{font-size:clamp(32px,4.7vw,72px);letter-spacing:.07em;margin:12px 0;color:#f6ecd3}
+.lobby-title p{font-size:clamp(13px,1.4vw,20px);line-height:1.8;color:#d4e7ed}
+.lobby-tagline{font-size:12px;letter-spacing:.14em;color:#c0dce6}
+#lobbyBody{border:22px solid transparent;border-image:url("art/v2/command-panel.webp") 8% fill stretch;background:none;border-radius:0;box-shadow:0 18px 50px #0005;padding:20px;max-height:100%;scrollbar-width:thin}
+.lobby-identity{display:flex;align-items:center;gap:12px;min-width:0}.lobby-identity .avatar{width:46px;height:46px;border-radius:50%;object-fit:cover}.lobby-identity strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.lobby-identity>span{font-size:11px;color:#afcad7}
+.lobby-heading{font-size:24px;color:#deedf2;margin:22px 0 14px}
+.lobby-entry{display:grid;gap:16px}.lobby-host,.lobby-join{display:flex;align-items:center;gap:12px;justify-content:space-between}.lobby-host small{color:#bbd4df;font-size:14px}.lobby-join input{width:100%;min-width:0}.lobby-entry button{flex-shrink:0}.lobby-links{display:flex;gap:14px;border-top:1px solid #a4c7d333;padding-top:15px;justify-content:center}
+#lobby[data-waiting="true"] .lobby-title{align-items:flex-start;padding-top:5vh}
+.room-seat{display:grid;grid-template-columns:24px minmax(0,1fr) 40px 60px 70px;gap:8px;min-height:42px}.room-seat strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.room-seat .small-button{width:70px;min-height:34px;padding:5px 14px}.room-seat>small{white-space:nowrap}
+.fleet-row[data-side="enemy"]{top:4px;left:12%;right:12%;grid-template-columns:repeat(var(--count),minmax(0,100px));gap:26px;align-items:start}
+.fleet-row[data-side="enemy"] .seat{background:none;border:0;box-shadow:none;min-height:0;height:96px;padding:0;display:flex;align-items:center;flex-direction:column;overflow:visible}
+.portrait-button{border:0;padding:0;background:none;display:block;flex-shrink:0}
+.fleet-row[data-side="enemy"] .portrait-button{width:64px;height:64px;position:relative}
+.fleet-row[data-side="enemy"] .avatar{position:static;width:100%;height:100%;border:3px solid #b8dae4;object-fit:cover;border-radius:50%}
+.fleet-row[data-side="enemy"] [data-team="pirate"] .avatar{border-color:#d8b786}
+.fleet-row[data-side="enemy"] .seat-info{position:static;display:block;text-align:center;width:100%;padding:5px 0 0;max-width:100%}
+.fleet-row[data-side="enemy"] .seat-info strong{font-size:12px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fleet-row[data-side="enemy"] .seat-meta,.fleet-row[data-side="enemy"] .morale,.fleet-row[data-side="enemy"] .public-cards{display:none}
+.fleet-row[data-side="enemy"] .seat-number{left:calc(50% - 34px);top:45px;bottom:auto;font-size:10px;background:#071e2b;border:1px solid #a6cad6;padding:1px 4px;border-radius:20px}
+.fleet-row[data-side="enemy"] .seat[data-current="true"]{transform:translateY(5px) scale(1.12);filter:drop-shadow(0 0 8px #c9effa)}
+.fleet-row[data-side="enemy"] .seat[data-current="true"]:after{top:-8px;font-size:10px}
+.fleet-row[data-side="ally"]{left:1%;right:auto;width:240px;bottom:34px;display:block}
+.fleet-row[data-side="ally"] .portrait-button{position:absolute;left:7%;top:15%;width:23%;height:69%}
+.fleet-row[data-side="ally"] .portrait-button .avatar{position:static;width:100%;height:100%;border-radius:50%;object-fit:cover}
+.execution-stage{left:33%;right:1%;top:125px;bottom:95px;min-height:0;border:14px solid transparent;border-image:url("art/v2/command-panel.webp") 8% fill stretch}
+.execution-scaffold{left:18%;width:28%;top:4%;height:90%;object-fit:contain}
+#navyHands{inset:7% 34% 8% 1%}
+#navyHands>button{height:85%;max-height:280px;bottom:10%}
+#navyHands>button[data-slot="2"]{height:65%;min-height:66px;bottom:-4%}
+#health{position:absolute;right:1.5%;top:50%;transform:translateY(-50%);width:31%;display:flex;flex-direction:column;gap:10px;pointer-events:auto}
+#health{height:88%;flex-direction:row;align-items:center;justify-content:center;gap:14px}
+.health-box{position:relative;width:auto;height:100%;max-height:360px;aspect-ratio:1/3;min-height:0;display:block;border:0;border-radius:0;background:url("art/v2/meter-fortress-vertical.webp") center/100% 100% no-repeat;padding:0;container-type:inline-size;flex:0 0 auto}
+.health-box[data-team="pirate"]{background-image:url("art/v2/meter-execution-vertical.webp");aspect-ratio:750/2098}
+.health-box:before{content:'海賊勝利';position:absolute;left:-15%;right:-15%;top:-15px;text-align:center;font-size:11px;color:#c4eafd}
+.health-box[data-team="pirate"]:before{content:'海軍勝利';color:#ffcfac}
+.health-box>span:first-child{position:absolute;left:22%;right:22%;top:17%;font-size:clamp(9px,13cqw,16px);text-align:center;line-height:1.5}
+.health-box[data-team="pirate"]>span:first-child{top:13%}
+.health-box strong{position:absolute;left:20%;right:20%;top:83%;font-size:clamp(10px,17cqw,22px);line-height:1.5;text-align:center}
+.health-box[data-team="pirate"] strong{top:82%}
+.health-box .progress-track{position:absolute;left:36%;top:27%;width:28%;height:50%;gap:4px;flex-direction:column-reverse}
+.health-box[data-team="pirate"] .progress-track{left:40%;width:20%;top:21%;height:57%}
+.progress-track i{border:1px solid #a7c3ce75;background:#273c4e;border-radius:1px}
+.progress-track i[data-filled="true"]{box-shadow:0 0 5px #8fd4ec}
+#center{left:0;right:auto;width:30%;top:125px}
+#deckZone{left:0;right:auto;width:30%;top:200px;gap:30px}
+#table[data-perspective="pirate"] #hand{left:0;width:30%;bottom:150px;height:clamp(90px,19vh,165px)}
+#actions{right:2%;width:30%;bottom:22px}
+#sheet[data-kind="player"] #sheetBody>.avatar{width:70px;height:70px;border-radius:50%;object-fit:cover}
+#sheet[data-kind="player"] #sheetBody>.gallery{flex-basis:100%}
+.fortress-impact{position:absolute;left:35%;top:15%;width:38%;height:70%;object-fit:contain;pointer-events:none;z-index:6}
+.justice-aura{position:absolute;inset:0;pointer-events:none;background-position:center;background-size:contain;background-repeat:no-repeat;opacity:.5;z-index:-1}
+#effectLayer[data-kind="justice"] .effect-stage{isolation:isolate}
+#effectLayer[data-kind="justice"] .effect-card{filter:drop-shadow(0 0 16px #b7e4ff)}
+@media(max-height:450px){
+ #app{padding-inline:max(8px,env(safe-area-inset-left))}#top{height:38px}#table,#lobby{height:calc(100% - 38px)}#top #justice{margin-right:10px}
+ #lobby{gap:3vw;padding:0 2vw;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}.lobby-title{padding-bottom:3vh}.lobby-title small{font-size:9px}.lobby-title h1{font-size:31px;margin:6px 0}.lobby-title p{font-size:11px;line-height:1.5}.lobby-tagline{font-size:8px}
+ #lobbyBody{border-width:12px;padding:8px;max-height:100%}.lobby-identity{gap:7px;font-size:12px}.lobby-identity .avatar{width:30px;height:30px}.lobby-heading{font-size:17px;margin:10px 0}.lobby-entry{gap:6px}.lobby-entry button{width:125px;min-height:36px;padding:6px 20px;font-size:11px}.lobby-host small{font-size:11px}.lobby-join input{padding:6px;font-size:11px}.lobby-note{font-size:10px;margin:7px 0;line-height:1.4}.lobby-links{padding-top:6px;gap:8px}.lobby-links button{min-height:30px;font-size:10px}.room-seat{min-height:27px;grid-template-columns:18px minmax(0,1fr) 30px 44px 58px;gap:4px;font-size:11px}.room-seat .small-button{width:58px;min-height:25px;font-size:9px;padding:3px 10px}.room-code{margin:0}.lobby-actions{gap:3px;margin:3px 0}.lobby-actions button{width:120px;min-height:32px;padding:5px 18px;font-size:10px}
+ .fleet-row[data-side="enemy"]{top:0;left:15%;right:15%;gap:14px;grid-template-columns:repeat(var(--count),minmax(0,70px))}
+ .fleet-row[data-side="enemy"] .seat{height:63px}.fleet-row[data-side="enemy"] .portrait-button{width:43px;height:43px}.fleet-row[data-side="enemy"] .seat-info{padding-top:2px}.fleet-row[data-side="enemy"] .seat-info strong{font-size:9px}.fleet-row[data-side="enemy"] .seat-number{top:29px;left:calc(50% - 25px);font-size:8px}.fleet-row[data-side="enemy"] .seat[data-current="true"]:after{font-size:8px;top:-4px}
+ .fleet-row[data-side="ally"]{left:1%;width:155px;bottom:25px}.fleet-row[data-side="ally"] .seat-info strong{font-size:10px}
+ .execution-stage{top:70px;bottom:57px;left:32%;right:0;border-width:9px}
+ #navyHands{inset:5% 35% 9% 0}#navyHands>button{height:85%;min-height:66px}#navyHands>button[data-slot="2"]{height:65%;min-height:66px;bottom:-3%}
+ .navy-slot-label{font-size:9px;padding:1px 5px;top:calc(100% + 1px)}
+ .execution-stage{bottom:48px}
+ #health{width:33%;right:0;gap:12px;height:94%}.health-box{min-height:0;min-width:38px}.health-box:before{font-size:8px;top:-10px}.health-box>span:first-child{font-size:8px;top:17%}.health-box strong{font-size:10px;top:83%}.health-box .progress-track{gap:2px}
+ #center{top:67px;left:0;width:30%}#turnLabel{font-size:13px}#status{font-size:10px}
+ #deckZone{top:107px;left:0;right:auto;width:30%;gap:18px}.deck img{height:38px}.deck b{font-size:8px}
+ #table[data-perspective="pirate"] #hand{left:0;width:22%;top:110px;bottom:auto;height:clamp(84px,calc(100dvh - 230px),120px)}
+ #table[data-perspective="pirate"] #deckZone{left:23%;width:9%;top:108px;gap:6px;flex-direction:column;align-items:center}
+ #table[data-perspective="pirate"] .deck img{height:28px}
+ #actions{bottom:7px;right:1%;width:34%}#actions .choice-button{width:150px;min-height:38px}
+}

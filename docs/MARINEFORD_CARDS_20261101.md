@@ -24,3 +24,5 @@ C 槽生圖副本已與 D 槽原稿逐一 SHA-256 相同核對。刪除 41 個�
 已通過：Chrome 13 項、WebKit 13 項、排版壓力 33 項、六瀏覽器連線 54 項／89 次動作完整一場，規則邊界 29 項與 1,500 局引擎測試。
 
 C 槽 Git 索引約 2.2 MB，新增素材物件放 D:/Codex_Git_Objects/tabletop-release-overflow，原 Git 物件未移動或刪除；原倉庫 alternates 已連到 D 槽，該資料夾是必要程式歷史，不是快取。
+
+正式發布完成：2026-11-01，來源 5b4fc1a1b。32 個新素材上傳、77 個既有素材跳過，109 項公開雜湊確認；正式程式＋32 個新資產共 40 項讀回一致，Chrome／WebKit 正式大廳啟動通過。Windows／Android／iOS 原生包不變，線上第四遊戲重新進入即可載入。六人隔離連線／合成演出與實體裝置驗收明確區分；本輪無實機測試。證據 D:/Codex_QA/marineford-cards-morale-20261101/delivery.json。
