@@ -1,0 +1,45 @@
+'use strict';
+const fs=require('fs'),path=require('path'),http=require('http'),assert=require('assert/strict'),express=require('express'),{Server}=require('socket.io'),{attach}=require('../server/marineford-rooms'),engine=require('../server/marineford-engine');
+const {chromium,webkit}=require('C:/Users/王曜瑋/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const root=path.resolve(__dirname,'..'),out=process.env.MF_QA_DIR;fs.mkdirSync(out,{recursive:true});
+(async()=>{const app=express(),server=http.createServer(app),io=new Server(server),runtime=attach(io,{cpuDelay:1000000}),checks=[],errors=[];let browser,p,room,seq=200;
+app.use(express.static(root+'/public'));app.use('/images/board/avatars',express.static('D:/Codex_Release_Worktrees/launcher-flick-reward-r12/public/images/board/avatars'));
+io.on('connection',s=>s.on('SOCIAL_AUTH',(_,cb)=>{s.data.socialProfile={userId:1,name:'海軍元帥測試船長',avatar:8};cb({ok:true,me:s.data.socialProfile});}));
+try{
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));browser=await(process.env.MF_BROWSER==='webkit'?webkit.launch():chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true}));
+ const ctx=await browser.newContext({viewport:{width:740,height:320}});await ctx.addInitScript(()=>localStorage.setItem('opSecret','qa'));p=await ctx.newPage();p.on('pageerror',e=>errors.push(e.message));await p.goto('http://127.0.0.1:'+server.address().port+'/marineford/index.html');
+ for(const [width,height]of [[740,320],[1366,768]]){await p.setViewportSize({width,height});await p.getByRole('button',{name:'建立房間',exact:true}).waitFor();await p.waitForTimeout(250);assert(await p.locator('#lobbyBody').evaluate(e=>e.scrollHeight<=e.clientHeight+1),'Start controls must fit without scrolling');await p.screenshot({path:out+'/lobby-'+width+'.png'});}checks.push('New panoramic start page: desktop/mobile controls fit');
+ await p.getByRole('button',{name:'建立房間',exact:true}).click();for(let i=0;i<5;i++)await p.getByRole('button',{name:'加入 CPU',exact:true}).click();await p.screenshot({path:out+'/room-six.png'});await p.getByRole('button',{name:'開始對局',exact:true}).click();await p.locator('#table:not([hidden])').waitFor();room=[...runtime.rooms.values()][0];const socket=[...io.sockets.sockets.values()][0];
+ const recover=async(s,viewer=0)=>{room.state=s;seq=Math.max(seq,room.sequence)+1;room.sequence=seq;socket.emit('MF_RECOVER',{sequence:seq,view:engine.visible(s,viewer),you:viewer});await p.waitForTimeout(200);await p.locator('.execution-scaffold').evaluate(i=>i.decode());};
+
+ const navy=engine.cards.filter(c=>c.team==='navy');
+ for(const [width,height]of [[740,320],[667,375],[844,390],[1366,768]]){
+  await p.setViewportSize({width,height});
+  for(const type of ['battle-card'])for(let n=0;n<navy.length;n++){
+   const s=engine.create(room.seats,0),ids=[navy[n].id,navy[(n+1)%navy.length].id];s.players[0].hand=ids;s.step='effect';s.pending={type,owner:0,cards:ids,battle:{attacker:type==='arrange'?1:0,defender:type==='arrange'?0:1,remaining:1,used:[1],source:0}};await recover(s);
+   await p.locator('#sheet[data-kind="choice"]:not([hidden])').waitFor();await p.locator('.pick-readable img').evaluateAll(images=>Promise.all(images.map(i=>i.decode())));
+   const facts=await p.locator('.pick-readable').evaluateAll(items=>items.map(e=>{const rect=e.getBoundingClientRect();return{id:e.dataset.card,visible:rect.left>=0&&rect.right<=innerWidth&&rect.top>=0&&rect.bottom<=innerHeight,texts:[...e.querySelectorAll('.pick-rank,.pick-name,.pick-effect,.pick-label')].map(t=>{const b=t.getBoundingClientRect(),r=document.createRange();r.selectNodeContents(t);const box=r.getBoundingClientRect();return{class:t.className,text:t.textContent,font:parseFloat(getComputedStyle(t).fontSize),fit:box.left>=rect.left-1&&box.right<=rect.right+1&&box.top>=rect.top-1&&box.bottom<=rect.bottom+1&&box.left>=b.left-1&&box.right<=b.right+1,box:box.toJSON(),parent:rect.toJSON()}})}}));
+   assert.equal(facts.length,2);for(const f of facts){assert(f.visible,JSON.stringify({width,height,type,f}));const card=engine.cards.find(c=>c.id===f.id);assert.deepEqual(f.texts.slice(0,3).map(t=>t.text),['階級 '+card.rank,card.name,card.effect]);assert(f.texts.every(t=>t.fit),JSON.stringify({width,height,type,f}));assert(f.texts.slice(0,3).every(t=>t.font>=13));}
+   if(n===0)await p.screenshot({path:out+'/'+type+'-'+width+'.png'});
+  }
+  for(let n=0;n<navy.length;n++){
+   const s=engine.create(room.seats,0),ids=[navy[n].id,navy[(n+1)%navy.length].id];s.players[0].hand=ids;s.pending={type:'arrange',owner:0,cards:ids,reader:1,source:2};await recover(s);assert(await p.locator('#sheet').isHidden());
+   assert.deepEqual(await p.locator('.navy-arrange-tag').allTextContents(),ids.map(id=>{const c=engine.cards.find(c=>c.id===id);return '階級 '+c.rank+' · '+c.name}));
+   for(const label of ['維持原位','交換左右']){const b=await p.getByRole('button',{name:label,exact:true}).boundingBox();assert(b&&b.x>=0&&b.y>=0&&b.x+b.width<=width&&b.y+b.height<=height);}
+   const fit=await p.locator('.navy-arrange-tag').evaluateAll(es=>es.every(e=>{const b=e.getBoundingClientRect();return b.x>=0&&b.right<=innerWidth&&b.top>=0&&b.bottom<=innerHeight&&parseFloat(getComputedStyle(e).fontSize)>=13;}));assert(fit);if(n===0)await p.screenshot({path:out+'/arrange-'+width+'.png'});
+  }
+  checks.push(width+'x'+height+': all 13 navy cards readable; in-place arrangement keeps rank/name and both decision buttons visible');
+ }
+ // Exercise actual socket actions, not just appearance. No third party sees private choices.
+ await p.setViewportSize({width:740,height:320});let s=engine.create(room.seats,0);const original=s.players[0].hand.slice();s.pending={type:'arrange',owner:0,cards:original,reader:1,source:2};s.step='effect';await recover(s);
+ for(const viewer of [1,2,3,4,5])assert.equal(engine.visible(s,viewer).pending.cards,undefined);
+ await p.getByRole('button',{name:'交換左右',exact:true}).click();for(let i=0;i<80&&room.state.pending?.type==='arrange';i++)await p.waitForTimeout(50);await p.waitForFunction(()=>document.querySelectorAll('.hand-shuffle-back').length===2&&[...document.querySelectorAll('.hand-shuffle-back')].every(e=>e.getAnimations().length));const startError=await p.evaluate(async()=>{const imgs=[...document.querySelectorAll('.hand-shuffle-back')],as=imgs.map(e=>e.getAnimations()[0]);for(const a of as){a.pause();a.currentTime=0;}await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));const error=Math.max(...imgs.map((e,i)=>{const a=e.getBoundingClientRect(),b=document.querySelectorAll('#navyHands>button')[i].getBoundingClientRect();return Math.max(...['x','y','width','height'].map(k=>Math.abs(a[k]-b[k])))}));for(const a of as)a.play();return error;});assert(startError<1,'Shuffle starts at actual hand slots: '+startError);await p.waitForTimeout(650);await p.screenshot({path:out+'/hand-shuffle.png'});while(room.gate)await p.waitForTimeout(50);assert.deepEqual(room.state.players[0].hand,original.slice().reverse());assert.equal(room.state.pending.type,'peek-slot');assert.equal(room.state.pending.owner,1);checks.push('Actual swap accepted by server and passed to designated blind reader without revealing cards');
+ for(const viewer of [0,1]){
+  const state=engine.create(room.seats,0);await recover(state,viewer);socket.emit('MF_PRESENT',{sequence:++seq,you:viewer,view:engine.visible(state,viewer),events:[{type:'hand-shuffle',player:0}]});await p.waitForFunction(()=>document.querySelectorAll('.hand-shuffle-back').length===2);
+  await recover(state,viewer);await p.waitForTimeout(400);assert.equal(await p.locator('.hand-shuffle-back').count(),0);assert.equal(await p.locator('#effectLayer>*').count(),0);assert(await p.locator('#navyHands>button').evaluateAll(es=>es.every(e=>e.style.visibility!=='hidden')));
+ }
+ checks.push('Recovery cancels hand shuffle and restores both private and hidden hand slots');
+ s=engine.create(room.seats,0);s.pending={type:'battle-card',owner:0,cards:s.players[0].hand.slice(),battle:{attacker:0,defender:1,remaining:1,used:[1],source:0}};s.step='effect';await recover(s);const revision=s.revision,wanted=s.players[0].hand[1];await p.locator('.pick-readable').nth(1).click();for(let i=0;i<80&&room.state.revision===revision;i++)await p.waitForTimeout(50);assert(await p.locator('#sheet').isHidden());assert(room.state.revision>revision);checks.push('Actual second battle card can be selected by touch; server accepts and closes chooser');
+ assert.deepEqual(errors,[]);fs.writeFileSync(out+'/report.json',JSON.stringify({passed:true,checks,errors,scope:'Chrome or WebKit isolated room, all navy cards at four viewports and actual choice actions; no physical-device claim'},null,2));console.log(JSON.stringify({passed:true,checks:checks.length}));
+}catch(e){await p?.screenshot({path:out+'/failure.png'}).catch(()=>{});fs.writeFileSync(out+'/failure.json',JSON.stringify({error:e.stack,checks,errors},null,2));throw e;}finally{await browser?.close();runtime.close();io.close();server.close();}
+})().catch(e=>{console.error(e);process.exitCode=1});

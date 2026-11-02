@@ -132,7 +132,7 @@ function apply(input,actor,action,{rng=Math.random}={}){
     case 'fight-ally':targetOK();pending(s,'fight-target',target,{attacker:target,targets:[s.navyId],remaining:1,used:[]});break;
     case 'fight-target':if(action.skip===true){emit(events,'decline',{player:actor});break;}targetOK();beginBattle(s,p,target,events);break;
     case 'battle-card':requireRule(p.cards.includes(card),'出戰牌無效');prepareMorale(s,p.battle,card,events);break;
-    case 'arrange':{const ids=action.cards;requireRule(Array.isArray(ids)&&ids.length===p.cards.length&&new Set(ids).size===ids.length&&ids.every(id=>p.cards.includes(id)),'牌位排序無效');s.players[s.navyId].hand=ids.slice();if(p.reader!=null)pending(s,'peek-slot',p.reader,{slots:ids.length,source:p.source});else pending(s,'battle-slot',p.battle.attacker,{battle:p.battle,slots:ids.length});break;}
+    case 'arrange':{const ids=action.cards;requireRule(Array.isArray(ids)&&ids.length===p.cards.length&&new Set(ids).size===ids.length&&ids.every(id=>p.cards.includes(id)),'牌位排序無效');s.players[s.navyId].hand=ids.slice();emit(events,'hand-shuffle',{player:s.navyId});if(p.reader!=null)pending(s,'peek-slot',p.reader,{slots:ids.length,source:p.source});else pending(s,'battle-slot',p.battle.attacker,{battle:p.battle,slots:ids.length});break;}
     case 'battle-slot':requireRule(Number.isInteger(action.slot)&&action.slot>=0&&action.slot<p.slots,'牌位無效');prepareMorale(s,p.battle,s.players[s.navyId].hand[action.slot],events);break;
     case 'review':requireRule(action.done===true,'請確認看完');s.decks.pirate.push(...shuffle(s.players.filter(x=>x.team==='pirate').flatMap(x=>x.played.splice(0)),rng));emit(events,'shuffle',{team:'pirate'});break;
     default:throw Error('未知選擇');

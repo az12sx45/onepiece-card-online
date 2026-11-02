@@ -55,6 +55,14 @@ check('Peek slot cannot be reordered by Navy while reader chooses or reads',()=>
  assert.deepEqual(e.visible(s,2).pending.cards,[order[1]]);
  for(const viewer of [0,1,3])assert.equal(e.visible(s,viewer).pending.cards,undefined);
 });
+for(const mode of ['peek','battle'])check(mode+' keep/swap emits identical public concealment event',()=>{
+ let s=play(fresh(),1,mode==='peek'?'pirate-4':'pirate-7').state;s=choose(s,{target:mode==='peek'?2:0}).state;
+ const before=s.players[0].hand.slice(),keep=e.apply(s,0,{type:'CHOOSE',cards:before},{rng}),swap=e.apply(s,0,{type:'CHOOSE',cards:before.slice().reverse()},{rng});
+ assert(keep.ok&&swap.ok);assert.deepEqual(keep.events,swap.events);
+ assert.deepEqual(keep.events,[{type:'hand-shuffle',player:0,to:'all'}]);
+ assert.deepEqual(keep.state.players[0].hand,before);assert.deepEqual(swap.state.players[0].hand,before.slice().reverse());
+ for(const viewer of [1,2,3])assert.deepEqual(e.visible(keep.state,viewer),e.visible(swap.state,viewer));
+});
 check('Matching duplicate Navy ranks do not expose duplicate choice to other seats',()=>{
  let s=fresh();for(const id of [...s.players[0].hand])move(s,id,()=>s.decks.navy);held(s,0,'navy-helmeppo');held(s,0,'navy-koby');s=play(s,1,'pirate-1').state;s=choose(s,{digit:1}).state;assert.equal(s.pending.type,'defeat-choice');assert.equal(e.visible(s,0).pending.cards.length,2);assert.notEqual(e.visible(s,1).pending.type,'defeat-choice');const r=choose(s,{card:'navy-koby'});assert.equal(r.events.filter(x=>x.type==='defeat').length,1);assert.equal(r.state.hp.navy,4);conserve(r.state);
 });
