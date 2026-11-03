@@ -9006,3 +9006,11 @@ Android/iOS v063各自API通道核對，14請求／4新API contexts／6檢查通
 
 補充窄實機觀察：Card來源在V2105 Android v063透過原UI看到新入場遮罩、本人確認後才離開場地介紹，及原下載管理顯示installed/latest均6fd與核驗完成；root核對指定截圖SHA並目視場地/更新畫面。證據D:/Codex_QA/card-entry-video-release-20261103/supplemental-android-observation-r2.json。這不代表強化影片播放、私有快取逐檔SHA、實測流量/速度或iPhone驗收；凍結正式收據的原驗證界線維持。
 <!-- CARD_ENTRY_VIDEO_RELEASE_20261103_END -->
+
+
+## 2026-11-04 頂上戰爭陣營介面與手機牌面
+- 海軍資訊框採冷藍鋼板切角，海賊採深紅銅邊旗形。公開牌保持不透明，依資訊列實際在上／下方，放在朝牌桌中央的一側。
+- 手機牌堆向兩側移動，沿用卡片2:3平面與地面投影矩陣。海賊兩張待打牌放大到樓梯兩側，卡名移入可見區，詳細效果使用可讀文字面板。
+- 觀看飛牌在到達後只向授權查看者翻面。猜中後公開的牌及出戰牌從持牌位置或玩家資訊區移動到演出區，沿用原本公開時機。
+- 海軍卡背採新版藍銀海圖底紋與邊框，保留雙弧圓環徽記及 MARINE。正式圖為 640 × 960 WebP，素材清單與新圖同步。
+- 檔案 public/marineford/marineford.js/.css、art/v2/navy-back.webp、public/desktop/marineford-media-v1.json、scripts/marineford_peek_laser_qa.cjs。Chrome定向8項及流程15項通過，WebKit定向8項通過。證據 D:/Codex_QA/marineford-faction-ui-20261104。

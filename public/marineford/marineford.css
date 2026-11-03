@@ -483,8 +483,34 @@ body:not([data-screen="table"]) #health{display:none!important}
 
 /* Public cards stay unframed; the pirate perspective reads upward toward opponents. */
 #table[data-perspective="pirate"] #health{top:13%}
-#table[data-perspective="pirate"] .seat .public-cards{bottom:auto;top:-24px;min-height:20px}
-#table[data-perspective="pirate"] .fleet-row[data-side="enemy"]{top:max(34px,6vh)}
+.seat[data-side="ally"] .public-cards{bottom:auto;top:-25px;min-height:20px}
+.seat .public-cards:disabled{opacity:1}
+#table[data-perspective="pirate"] .fleet-row[data-side="enemy"]{top:4%}
 #table[data-perspective="pirate"] .seat[data-current="true"]:after{top:auto;bottom:-11px}
 
 #actions{pointer-events:none} #actions button{pointer-events:auto} #table[data-perspective="pirate"] #actions .action-hint,#table[data-perspective="pirate"] #actions .waiting{display:none}
+
+/* Faction seats use separate silhouettes and materials, with clear card faces. */
+.seat[data-team]{background:none;isolation:isolate}
+.seat[data-team]::before{content:'';position:absolute;inset:9% 0 9% 10%;z-index:-1;pointer-events:none}
+.seat[data-team="navy"]::before{background:linear-gradient(155deg,#e3edf2,#7799ad 7%,#18354e 11%,#0c1c31 87%,#7aabc2 93%,#d9e9ee);clip-path:polygon(0 0,92% 0,100% 23%,100% 77%,92% 100%,0 100%)}
+.seat[data-team="pirate"]::before{background:linear-gradient(155deg,#d5ac63,#6d4322 9%,#3c1720 13%,#200d15 87%,#9d5930 94%,#f2cb83);clip-path:polygon(0 6%,85% 6%,91% 0,100% 50%,91% 100%,85% 94%,0 94%)}
+.seat[data-team="navy"] .portrait-button{outline:2px solid #bad5df;outline-offset:1px;background:#132a44}
+.seat[data-team="pirate"] .portrait-button{outline:2px solid #e0b05b;outline-offset:1px;background:#431b20}
+.seat[data-team="navy"] .seat-info strong{color:#e2f7ff}
+.seat[data-team="pirate"] .seat-info strong{color:#ffe1a6}
+.seat[data-side="ally"][data-current="true"]:after{top:auto;bottom:-11px}
+.seat .public-thumbs img{opacity:1;background:#e8dfc5}
+@media(max-height:450px){
+ #table[data-perspective="pirate"] #hand[data-picking="true"]{inset:40% 0 auto;width:100%;height:34vh;display:block;pointer-events:none;z-index:4}
+ #table[data-perspective="pirate"] #hand[data-picking="true"] .hand-card{position:absolute;left:25%;transform:translateX(-50%);pointer-events:auto}
+ #table[data-perspective="pirate"] #hand[data-picking="true"] .hand-card:nth-child(2){left:75%}
+ #hand .card-face .card-effect,#navyHands .card-face .card-effect{display:none}
+ #hand[data-picking="true"] .card-face .card-name{font-size:clamp(11px,3.7vh,15px);top:auto;bottom:0;height:auto;background:#152738;color:#fff4ce;padding:3px 2px}
+ .detail-copy{font-size:15px;line-height:1.6}
+}
+@media(max-height:450px){
+ #table[data-perspective="pirate"] #hand{left:22%}
+ #table[data-perspective="pirate"] #hand[data-picking="true"] .hand-card{left:30%}
+ #table[data-perspective="pirate"] #hand[data-picking="true"] .hand-card:nth-child(2){left:70%}
+}

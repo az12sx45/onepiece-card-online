@@ -2314,3 +2314,6 @@ public/game.html與generated js/card-desktop-table.js、css/card-desktop-table.c
 - D:/Codex_QA/card-entry-video-release-20261103：候選r2、兩份來源/QA獨立審核、限定44物件publisher、Render截圖、公告82與來源保護15、finalizer交易。歷史候選及HTTP400失敗紀錄各自保留。
 - D:/Codex_QA/card-entry-video-release-20261103/supplemental-android-observation-r2.json：獨立Android v063原入場/確認/下載完成UI窄觀察及截圖指紋；非影片、私有快取/流量/速度或iPhone驗收。
 <!-- CARD_ENTRY_VIDEO_RELEASE_20261103_END -->
+
+
+2026-11-04 Marineford 兩方座位外觀、內向公開牌、手機樓梯兩側手牌與飛牌在 marineford.js/.css。navy-back.webp 採新版藍銀海圖，保留雙弧圓環徽記與 MARINE。
