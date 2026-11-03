@@ -8839,3 +8839,8 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 
 
 2026-11-03 爭霸戰正式候選：由提交06491ed24569ee12e0735e6dd22660d184a1b013與公開package-854bbf29a3a708f1產生package-3987dc38668831bc；manifest SHA-256 84d351272029addced0acc42785a09f94a6129e1189608772b8c1c3abf4f65aa。official builder核對31程式，僅HTML／JS／CSS三檔變更，1054既有media、Board／Chess與sourceTrees逐項保留。外部candidate完整驗證後promote，未使用舊eda68草稿；CAS／Render公開驗證完成後另寫交接收據。
+
+
+## 2026-11-03 兩款遊戲公開驗證後啟用更新情報
+Marineford e678a9e3fb590e409400b6f578943a010a38ae33 已於 Render Live，公開JS／CSS／129項媒體清單與5張新CAS SHA通過；舊124項及各入口保留。Card 0806af5bca486064d2222d6cd05538b62ffb51cc／package-3987dc38668831bc 已 Live，公開catalog、三款manifest/runtime與3份程式SHA通過；1054媒體、Board／Chess與Marineford均保留。production AssetStore只下載3份變更程式54123211bytes，重建實例後重用驗證索引，第二次0requests／0bytes；不是834MB完整遊戲重安裝驗收。
+config/launcher-announcements-v1.json 修訂72→73，僅新增爭霸戰及頂上戰爭2則，69則舊內容／順序完全保留。Card資訊鎖package-3987dc38668831bc；現行協定不接受marineford scope，頂上戰爭資訊使用一般launcher更新，僅在公開版本確認後啟用。公告隔離PGlite／實際handler QA82項與無DB npm start五路由通過，未操作正式帳號，未做實體Android/iPhone驗收，未重包APK／IPA。資訊對外部署與最後讀回另見交接收據。

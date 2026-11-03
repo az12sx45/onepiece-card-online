@@ -1,7 +1,51 @@
 {
   "schemaVersion": 1,
-  "revision": 72,
+  "revision": 73,
   "announcements": [
+    {
+      "id": "card-20261103-captain-collection",
+      "status": "published",
+      "publishedAt": "2026-11-03T05:23:26.320Z",
+      "scope": "card",
+      "category": "update",
+      "version": "2026.11.03",
+      "title": "爭霸戰：全新船長面板與豪華卡收藏",
+      "summary": "我方面板重新設計，可點擊查看豪華卡收藏；選單與日誌移至寶箱上方，強化棄牌保留強化圖。",
+      "body": [
+        "我方採用全新船長面板，整合頭像、名字、金幣、順位與狀態；點擊我方或使用鍵盤，即可查看自己的豪華卡收藏。",
+        "選單與對局日誌縮小移至寶箱上方，其他玩家資訊往上調整，保留原操作方式。",
+        "強化卡進入棄牌堆後，縮圖、列表與放大查看都會保留強化卡圖。",
+        "電腦與既有手機版透過線上程式取得本次調整，無須重新安裝。請先關閉對局，至下載管理更新爭霸戰後重新進入。"
+      ],
+      "requiredRelease": {
+        "kind": "card",
+        "releaseId": "package-3987dc38668831bc"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "card"
+      }
+    },
+    {
+      "id": "marineford-20261103-peek-kizaru",
+      "status": "published",
+      "publishedAt": "2026-11-03T05:23:26.320Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "頂上戰爭篇 2026.11.03",
+      "title": "頂上戰爭篇：取牌閱讀與黃猿雷射演出",
+      "summary": "改善公開牌與看牌資訊，加入取牌、閱讀及歸還流程，更新黃猿正背面與猜牌演出。",
+      "body": [
+        "公開牌及檢視選單補上數字、名稱與效果文字，手機文字與確認按鈕一併整理。",
+        "查看海軍指定手牌時，先取出指定卡，讀完後再歸還；原牌位保持空白至歸還，牌面只提供給允許查看的玩家。",
+        "更新黃猿正背面、猜牌雷射、命中燒洞與閃避演出，並以原始卡背整理海軍及白鬍子陣營標誌。",
+        "遊戲規則維持原設定。請關閉頂上戰爭篇視窗後重新進入，載入本次線上程式及素材，無須重新安裝。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.31"
+      }
+    },
     {
       "id": "launcher-1.2.23-r62-profile-guestbook",
       "status": "published",
