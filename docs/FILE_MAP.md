@@ -2286,3 +2286,12 @@ public/game.html與generated js/card-desktop-table.js、css/card-desktop-table.c
 ## 2026-11-03 Card結果與狀態時序
 `CARD_RESULT_STATUS_20261103.md`記追加行為與證據。共享`android/web/card-result-cutins.js` v2處理公開結果分類與去重，新`card-status-reveal.js` v1必須最後註冊以延後取得防禦FX；build_card_media_flow與match_entry_client同步inline與版本閘門。新增`card_result_repetition_qa.mjs`、`card_status_timing_qa.mjs`，既有result_cutins_qa保留真enginefixtures並調整後續判定預期。
 <!-- CARD_RESULT_STATUS_20261103_END -->
+
+
+<!-- CARD_ENTRY_VIDEO_METADATA_20261103_BEGIN -->
+## 2026-11-03 Card 入場與影片更新發布索引
+
+- public/desktop/catalog-v3.json：僅Card切換package-6fd7444442d60fe6，Board/Chess及原生安裝指標維持。
+- public/desktop/manifests/card-package-6fd7444442d60fe6.json：32個program與1095個media；新44物件的清單、canonical SHA及保留資產對照見D:/Codex_QA/card-entry-video-release-20261103/candidate-r2/release-inputs.json。
+- D:/Codex_QA/card-entry-video-release-20261103/pipeline-r2：本輪限縮候選、CAS、公開驗證工具；不複製舊53MB CSS或整包媒體。
+<!-- CARD_ENTRY_VIDEO_METADATA_20261103_END -->

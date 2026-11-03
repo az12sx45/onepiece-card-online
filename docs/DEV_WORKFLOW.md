@@ -8977,3 +8977,12 @@ Android/iOS v063各自API通道核對，14請求／4新API contexts／6檢查通
 大媽／喬巴取得保護閃避先判定→結果斜圖→原頭像取得FX→原STATEcommit徽章；真擋招FX保留。取消後續交幣／死亡、純保護閃避擋招、Queen同次連續擲幣麻痺、已麻痺Nami及重送的重複斜圖，保留新施放及Luffy不同目標真決鬥。canonical resultv2→statusv1最後註冊，inline與generated一致，entry guard同步，無engine/index/素材/原生包變更。
 三端actual result各386、四端status111、四端cold66、真npm/Socket.IO雙視窗8與起訖SHA通過；完整證據與來源界線見CARD_RESULT_STATUS_20261103.md及D:/Codex_QA/card-result-status-20261103。既有entry/video第一波QA保留原綁定；此delta基底456022340，READY交啟動器同波發布，未當成公開或真機驗收。
 <!-- CARD_RESULT_STATUS_20261103_END -->
+
+
+<!-- CARD_ENTRY_VIDEO_METADATA_20261103_BEGIN -->
+## 2026-11-03 Card 入場、影片與結果時序整合發布清單
+
+來源82560b99d1dec6fdaa827342d41ce079b6b39f8c；候選package-6fd7444442d60fe6，manifest SHA-256 7d6a63bc6ceba78db3096d01b0c7e967f87c1fa93628f53f65387de894e5787a。精確更新2個既有program、加入1個native CSS及41張原WebP；保留29個其他program與1054個原媒體。catalog-v3及新manifest共1127檔，差量44個物件13,972,724B；舊53MB desktop CSS不重建。iOS v058/v063均支援本輪線上內容，不需新IPA/APK。
+
+整合QA、來源審查及候選證據位於D:/Codex_QA/card-entry-video-release-20261103；此提交僅準備metadata，公開CAS、Render Live、實際AssetStore差量與公告讀回須另留真實證據，未以此文件宣稱已發布或實機通過。
+<!-- CARD_ENTRY_VIDEO_METADATA_20261103_END -->
