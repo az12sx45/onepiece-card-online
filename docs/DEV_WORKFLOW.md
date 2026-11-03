@@ -8880,3 +8880,9 @@ config/launcher-announcements-v1.json 修訂72→73，僅新增爭霸戰及頂�
 ## 2026-11-03 第二波公開核驗與更新情報74
 Card source2595359921bf63b0957c2be04e6a5b4109549669、Marineford sourced34d74a092c252eaceff8168f3ca24a87bfd4c5d與package-da2d1f412f0db8a8共同隨3e0ac19631a356ac1e4810a331c32b3389e537d1在Render實際Live。公開catalog、三款manifest/runtime、Card三程式、MF JS/CSS/131項manifest及2新CAS的10組核對通過；舊1054 Card媒體／28其他程式／Board／Chess與129 MF素材記錄保留。production AssetStore取得3程式55268837 bytes，重建實例讀回持久索引後0requests／0bytes；不是完整遊戲重安裝或真實玩家快取驗收。
 公開確認後config/launcher-announcements-v1.json由73升74，只新增2則published，71舊則內容順序保留；Card gate鎖package-da2d1f412f0db8a8，MF依現行協定使用launcher1.2.31一般更新。新一輪隔離PGlite實際公告handler QA82項與無DB npm start五路由通過；source綁定engine五例及真Socket.IO public wire16項通過。更新情報的實際Live與最後連續性讀回另存本波release收據。未操作正式帳號／房間，未做實體手機驗收或重包APK／IPA。
+
+
+## 2026-11-03 第二波正式發布完成
+選牌／猜號新框、索隆公開砍牌號碼與Marineford頭像選人／雷射／13格猜號已正式公開；payload3e0ac19631a356ac1e4810a331c32b3389e537d1、最終更新情報0dcb563d9314ef4657050866dc5d13f95c50d88b均由Render實際Live來源核對。公告修訂74新增2則、舊71則保留；公開連續性16個讀回與三款runtime核驗通過，沒有重下載53MB CSS或既有媒體。公告配置透過實際部署commit核驗，未用正式帳號讀取或寫publication ledger。
+source-protection-final 46項通過：9原檔、9Android共用來源、11交接產品、23提交白名單、1054 Card媒體／28其他程式／Board／Chess及129舊MF記錄保留。本輪新增2MF素材104334bytes、Card3程式55268837bytes；新AssetStore實例重用持久索引後0下載，非完整遊戲或真實玩家快取／速度驗收。UI863、Zoro104、雙視窗8、MF Chrome11/WebKit11及六人74項78動作的原報告限制、fresh引擎5與wire16等來源綁定詳見收據；未做真機／正式帳號驗收，未重包App。
+正式收據docs/CARD_PICKER_RELEASE_20261103.json及協調handoffs/20261103-card-picker-panels-release.json、marineford-target-hud-20261103-release.json；各交接與marineford-status保留原文並追加RELEASED。QA腳本修正只在外部QA，失敗證據保留；MF僅兩個檔案移除多餘EOF空行，raw/canonical SHA均記錄。LATTICE未提供API，未宣稱持久寫入。

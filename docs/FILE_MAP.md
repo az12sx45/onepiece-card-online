@@ -2242,3 +2242,6 @@ marineford.js/.css處理lobby進度隱藏、六類server targets頭像選人、�
 
 
 2026-11-03第二波公開驗證：package-da2d1f412f0db8a8／manifest c25862cd957aec95d244cedb7e9b96e7f35b2f63614de575ed95dd9e3f38c39d在3e0ac19631a356ac1e4810a331c32b3389e537d1 Render Live後完成10組public readback與3程式AssetStore／重建0下載核驗。MF131邏輯媒體保留舊129，只新增2CAS；config/launcher-announcements-v1.json修訂74新增Card選牌／索隆與Marineford頭像／猜號2則，舊71不變。QA在D:/Codex_QA/card-picker-release-20261103，正式發布收據為CARD_PICKER_RELEASE_20261103.json及協調handoffs的兩份本波release JSON；公告實際Live另核對。
+
+
+2026-11-03第二波發布完成：CARD_PICKER_RELEASE_20261103.json彙整package-da2d1f412f0db8a8、25953599/d34d74a/3e0ac196來源、最終Render情報提交0dcb563d9314ef4657050866dc5d13f95c50d88b與修訂74的兩則更新；對應協調handoffs兩份release收據含來源SHA、CAS、公開程式／後端commit證明與未驗收平台。外部QA的verify-public-card.cjs負責10組公開／差量快取核驗，verify-after-announcements.cjs負責公告Live後16公開讀回，source-protection-check.cjs確認46項來源保護；finalize-receipts.cjs先驗證各收據後保留原文更新協調狀態。

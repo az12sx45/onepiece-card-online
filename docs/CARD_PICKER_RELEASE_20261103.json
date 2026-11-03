@@ -1,0 +1,152 @@
+{
+  "schema": "card-picker-marineford-release-summary-v1",
+  "status": "RELEASED",
+  "releaseComplete": true,
+  "releasedAt": "2026-11-03T08:05:42.308Z",
+  "baselineCommit": "983a32b91dba8ccfa1ad39a9150f995bb501eeb2",
+  "cardSourceCommit": "2595359921bf63b0957c2be04e6a5b4109549669",
+  "marinefordSourceCommit": "d34d74a092c252eaceff8168f3ca24a87bfd4c5d",
+  "payloadCommit": "3e0ac19631a356ac1e4810a331c32b3389e537d1",
+  "finalNoticeCommit": "0dcb563d9314ef4657050866dc5d13f95c50d88b",
+  "cardReleaseId": "package-da2d1f412f0db8a8",
+  "cardManifestSha256": "c25862cd957aec95d244cedb7e9b96e7f35b2f63614de575ed95dd9e3f38c39d",
+  "announcementRevision": 74,
+  "newNotices": [
+    "card-20261103-picker-usopp-zoro",
+    "marineford-20261103-targets-hud"
+  ],
+  "preservedOldNotices": 71,
+  "officialReceipts": [
+    {
+      "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\20261103-card-picker-panels-release.json",
+      "game": "card"
+    },
+    {
+      "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\marineford-target-hud-20261103-release.json",
+      "game": "marineford"
+    }
+  ],
+  "releaseEvidence": {
+    "payloadCommit": "3e0ac19631a356ac1e4810a331c32b3389e537d1",
+    "finalNoticeCommit": "0dcb563d9314ef4657050866dc5d13f95c50d88b",
+    "publicPayload": {
+      "path": "D:\\Codex_QA\\card-picker-release-20261103\\public-readback.json",
+      "bytes": 16381,
+      "sha256": "2bb49ec1682e4bbe08b1ed18b22ec99626c16b4da06a594e56ccb80bc93dea03",
+      "passed": true,
+      "releaseId": "package-da2d1f412f0db8a8",
+      "checks": 10,
+      "programFirstPass": {
+        "networkRequests": 3,
+        "downloadedBytes": 55268837,
+        "allThreeShaVerified": true
+      },
+      "programSecondPass": {
+        "newAssetStoreInstance": true,
+        "persistedIntegrityLoaded": true,
+        "checkedPrograms": 3,
+        "missingPrograms": 0,
+        "networkRequests": 0,
+        "downloadedBytes": 0,
+        "scope": "Changed-program-only verified cache selection and empty production queue after downloader restart, not full runInstall or full-game cache acceptance"
+      }
+    },
+    "marinefordPublic": {
+      "path": "D:\\Codex_QA\\card-picker-release-20261103\\marineford-public-receipt.json",
+      "bytes": 3187,
+      "sha256": "3d41e920494210d8b6f7fb5e911986e94b1663e91d737473823c5cdf3f0017e3",
+      "passed": true,
+      "newAssets": 2,
+      "retainedAssets": 129
+    },
+    "announcementApplication": {
+      "path": "D:\\Codex_QA\\card-picker-release-20261103\\announcement-apply-report.json",
+      "bytes": 948,
+      "sha256": "f4ef0ab9a0cd9749bc1183c6d857825d553bf89608c193d9cfc5ff17630b50fd",
+      "revision": 74,
+      "sourceWritten": true,
+      "preservedOld": 71
+    },
+    "announcementServerQa": {
+      "path": "D:\\Codex_QA\\card-picker-release-20261103\\announcement-server-qa.json",
+      "bytes": 10049,
+      "sha256": "d077d26ae2eee82c874e5a76ac85f1595b91a37cb3586d87439315f62264437f",
+      "status": "PASS",
+      "checks": 82,
+      "sourceStable": true,
+      "boundToNoticeGit": "0dcb563d9314ef4657050866dc5d13f95c50d88b",
+      "scope": "Isolated in-memory PGlite and handler QA; no public account acceptance."
+    },
+    "finalRender": {
+      "status": "Deploy succeeded|Live",
+      "commit": "0dcb563d9314ef4657050866dc5d13f95c50d88b",
+      "sourceUrl": "https://github.com/az12sx45/onepiece-card-online/commit/0dcb563d9314ef4657050866dc5d13f95c50d88b",
+      "evidence": {
+        "path": "D:\\Codex_QA\\card-picker-release-20261103\\render-final-notices.json",
+        "bytes": 433,
+        "sha256": "0944a850d32a25e3f1723d5f8075aabb1feaa038a1a4f0dda5b69241f8aa2c14"
+      }
+    },
+    "postNoticePublic": {
+      "path": "D:\\Codex_QA\\card-picker-release-20261103\\post-announcement-public.json",
+      "bytes": 13910,
+      "sha256": "fb900213f5d9eef384f210e30615146e4a380041ff8921055f5bc2d37ecc307e",
+      "complete": true,
+      "servingCommit": "0dcb563d9314ef4657050866dc5d13f95c50d88b",
+      "publicReadbacks": 16,
+      "runtimeIdentities": 3,
+      "announcementSourceHostingVerified": true,
+      "realAccountVisibilityVerified": false
+    },
+    "sourceProtection": {
+      "path": "D:\\Codex_QA\\card-picker-release-20261103\\source-protection-final.json",
+      "bytes": 19450,
+      "sha256": "484c4bbe687e7235cdf4bf28f02bcb76bc696a30990e4e9ce71563a2b8fb8df0",
+      "passed": true,
+      "observedHead": "0dcb563d9314ef4657050866dc5d13f95c50d88b",
+      "checks": 46,
+      "summary": {
+        "unrelatedOriginalFiles": 9,
+        "androidSharedFiles": 9,
+        "committedReviewedSourceFiles": 11,
+        "payloadChangedFiles": 23,
+        "retainedCardMedia": 1054,
+        "retainedOtherCardPrograms": 28,
+        "retainedMarinefordMedia": 129,
+        "newMarinefordMedia": 2
+      }
+    },
+    "backendIdentity": {
+      "boundToActualLiveCommit": true,
+      "publicBackendSourceHashVerified": false,
+      "cardEngineGitSha256": "6a255115fb5009de62152a16e781d81627021677c7c0a0413befab5eb54ce356",
+      "marinefordEngineGitSha256": "f1b0c23cfa940c30a435ae97a938cf4121f8edaf5ecc485e97da4697101849cb"
+    },
+    "finalizer": {
+      "path": "D:\\Codex_QA\\card-picker-release-20261103\\finalize-receipts.cjs",
+      "bytes": 25359,
+      "sha256": "4d04b080227df06375b461080bc0fc94eaac4df468a30b62ba626bb3804b7128"
+    }
+  },
+  "limits": {
+    "physicalAndroid": false,
+    "physicalIphone": false,
+    "realAccounts": false,
+    "newApk": false,
+    "newIpa": false,
+    "fullGameInstall": false,
+    "latticePersistenceClaimed": false
+  },
+  "normalizationAndQaBoundaries": {
+    "marinefordEofBlankLines": [
+      "public/marineford/marineford.js",
+      "scripts/marineford_peek_laser_qa.cjs"
+    ],
+    "rawAndCommittedHashesPreserved": true,
+    "legacyZoro104AndSync8NotSourceHashBound": true,
+    "marinefordBrowserQaNotSourceHashBound": true,
+    "wireR1WasTestOnlyDisplayNameExpectedFormat": true,
+    "realAccountAnnouncementVisibilityVerified": false
+  },
+  "scope": "Only this new source summary file is created by finalizer. DEV_WORKFLOW/FILE_MAP/PROJECT_OVERVIEW are unchanged by this script."
+}
