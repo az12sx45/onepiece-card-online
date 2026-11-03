@@ -2251,3 +2251,6 @@ marineford.js/.css處理lobby進度隱藏、六類server targets頭像選人、�
 
 
 2026-11-03：Marineford public-cards只留縮圖和階級／可及性標籤；CSS區分pirate上方及navy下方；MF_PUBLIC_ONLY驗證雙方實際公開牌點擊。
+
+
+2026-11-03：server/marineford-rooms.js lifecycle/online/cpuControls管理離線接管與空房60秒；scripts/marineford_reconnect_qa.cjs為真Socket.IO重連／接管／關房回歸。

@@ -8911,3 +8911,16 @@ source-protection-final 46項通過：9原檔、9Android共用來源、11交接�
 ## 2026-11-03 Marineford公開牌列整合候選
 依READY三檔白名單保存原始JS／CSS／QA全文與SHA後，只修正CSS檔尾diff --check空行，沒有變更樣式宣告；原檔與before／after SHA在D:/Codex_QA/marineford-public-row-release-20261103/approved-raw及eof-normalization.json。相關DEV／FILE／GAME_RULES僅選取本輪段落，其餘Card或歷史未提交文件保留。來源階段2c9f163bf0681dee302a5f6b50cae731281f68b2已Live且13項公開回應核對通過；本輪公開牌調整另外提交、核驗與發布。兩波公告待全部公開核驗完成後一併啟用，原草稿及證據保留。
 交接Chrome／WebKit各7項報告不含來源SHA；三尺寸兩視角的實際詳情點擊是每個狀態一個玩家，不宣稱36個玩家逐一點擊。新source commit綁定的定向UI重跑、公開SHA與最終公告證據另存發布收據；未做真機／正式帳號／全規則重測。引擎、素材清單、其他遊戲和原生包不變，未交接Card工作不在本輪白名單。
+
+
+## 2026-11-03 頂上戰爭離線接管與空房60秒
+- 使用者指定：無任何在線真人才開始60秒關房；期限內連回可續局；有人在線則保留房間，其他離線玩家可回原座位；離線由CPU暫接。
+- server/marineford-rooms.js：以已認證userId及實際房間連線判斷控制者，不把真人seat.cpu改成true、不改玩家ID／手牌／規則。斷線移除其ACK等待並排CPU接管；重連取消待執行CPU，排程執行前再檢查連線、revision、owner、gate及room存在。多裝置同帳號仍有一條連線就不視為離線。
+- 沒在線真人才排emptyTimer，預設60000ms；有人回來立即取消；逾時及房主關閉清除CPU／gate／empty計時器。空房倒數不因CPU動作重設，有真人在線不因離線時間淘汰其座位。等待室同樣提供指定60秒緩衝；主動離開等待室仍移除自己的座位，若保留CPU房間有新真人加入則修正房主。
+- 新 scripts/marineford_reconnect_qa.cjs 使用隔離真Socket.IO身份驗證測9項，包含正式預設真等60秒後移除、ACK解除與接管、期限內重連、另一真人在線超過原期限仍可回、私牌隔離、待執行CPU取消、同帳號多連線、過期房不重建、房主立即關閉。加速expiry分支和真正60秒預設分開記錄。
+- QA：D:/Codex_QA/marineford-reconnect-20261103/real-grace/report.json passed=true 9項；six-player/report.json passed=true 52動作完整對局與原閘門／手機選擇／WebKit進桌回歸。沿用既有記憶體房間，不新增跨伺服器重啟保存，不宣稱正式帳號或真機驗收。LATTICE API未提供。
+
+
+## 2026-11-03 Marineford重連後端整合候選
+依READY白名單核對server/marineford-rooms.js與新scripts/marineford_reconnect_qa.cjs兩檔，原始body及SHA存D:/Codex_QA/marineford-reconnect-release-20261103/approved-raw；沒有額外換行整理。只有房間生命週期／CPU控制權排程變更，兩遊戲引擎與原席位身份／私牌結構不變，不新增DB房間保存。已公開的team2c9f與public-row98884cd各有RenderLive及13項公開核驗；後端另提交並以實際部署commit綁定來源，不宣稱可由HTTP取得後端source hash。
+原交接Socket.IO9項含真等正式60秒、六瀏覽器52動作收據均沒有來源SHA，保留其證據界線；新提交的不可變來源重跑結果、實際動作數、公開與最終合併情報另記發布收據。無實體手機／正式帳號DB驗收。未交接Card工作及其文件保留，不混入本輪；三波更新情報待全部公開驗證完成後一次啟用。

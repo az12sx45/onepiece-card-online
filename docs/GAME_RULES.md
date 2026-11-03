@@ -2139,3 +2139,6 @@ Artwork does not change any of the 29 card IDs or rules. Both combatants automat
 
 
 2026-11-03 公開牌規則不變：縮圖仍僅使用已公開played清單，查看入口維持；移除列外框與額外數量說明屬純UI調整。
+
+
+2026-11-03 頂上戰爭房間：所有真人離線才倒數60秒關閉；有真人在線時，離線玩家保留座位可重連。離線由CPU暫接，回來恢復人控；不改卡片或回合規則。主動結束房間仍立即關閉。
