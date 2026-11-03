@@ -321,7 +321,7 @@ body[data-screen="table"] #connection{margin-left:auto;font-size:9px;text-shadow
 .seat-info small{line-height:1.4;font-size:clamp(8px,5cqw,11px);white-space:nowrap;color:#cce7ee}
 .seat-info .morale{color:#ffe3a3}
 .seat-number{position:absolute;bottom:0;left:9%;width:19%;text-align:center;line-height:1;font-size:clamp(9px,5cqw,12px);font-weight:900;text-shadow:0 1px 3px #00101a;color:#fff0bc}
-.seat .public-cards{position:absolute;left:8%;right:6%;bottom:-24px;min-height:25px;display:flex;align-items:center;justify-content:center;gap:5px;padding:2px 4px;background:#071b2bd6;border:0;border-bottom:1px solid #a7c5d06b;border-radius:0 0 4px 4px}
+.seat .public-cards{position:absolute;left:8%;right:6%;bottom:-27px;min-height:25px;display:flex;align-items:center;justify-content:center;gap:5px;padding:0;background:none;border:0;border-radius:0}
 .public-thumbs{display:flex;gap:3px;min-width:0}.public-thumb{width:14px}.public-thumbs img{display:block;height:21px;max-width:100%;object-fit:contain}.public-count{font-size:10px;white-space:nowrap}
 .seat[data-current="true"]{transform:translateY(6px) scale(1.06);filter:drop-shadow(0 0 7px #c4efff);z-index:2}
 .seat[data-current="true"]:after{content:'行動中';position:absolute;left:38%;top:-9px;padding:2px 7px;color:#0d2b3a;background:#d5f2f6;font-size:10px;border-radius:3px}
@@ -385,7 +385,7 @@ body[data-screen="table"] #connection{margin-left:auto;font-size:9px;text-shadow
 @media(max-height:450px){
  .fleet-row[data-side="enemy"]{top:12px;left:3%;right:3%;gap:7px;grid-template-columns:repeat(var(--count),minmax(0,156px))}
  .fleet-row[data-side="ally"]{right:1%;bottom:52px;width:165px}
- .seat .public-cards{bottom:-20px;min-height:22px;gap:3px;padding:1px 3px}.public-count{font-size:8px}.public-thumbs img{height:18px}.public-thumb{width:12px}
+ .seat .public-cards{bottom:-24px;min-height:22px;gap:3px;padding:0}.public-count{font-size:8px}.public-thumbs img{height:18px}.public-thumb{width:12px}
  .seat-info{column-gap:2px}.seat-info strong{font-size:clamp(9px,6.3cqw,11px)}.seat-info small{line-height:1.4;font-size:clamp(8px,5.6cqw,9px)}
  .seat[data-current="true"]{transform:translateY(3px) scale(1.04)}.seat[data-current="true"]:after{font-size:8px;top:-7px;padding:1px 5px}
  #navyHands>button{top:32%;height:29vh}.navy-slot-label{font-size:9px;padding:1px 5px}#navyHands>button[data-slot="2"]{height:24vh;bottom:9%;left:14%}
@@ -480,3 +480,11 @@ body:not([data-screen="table"]) #health{display:none!important}
 .guess-seat-ghost .public-cards{pointer-events:none}
 @media(max-height:450px){#table[data-perspective="pirate"] .fleet-row[data-side="ally"]{gap:5px;bottom:22px}#table[data-perspective="pirate"] #hand{bottom:72px;height:16vh}#table[data-perspective="pirate"] #center{bottom:74px}#table[data-perspective="pirate"] #actions{bottom:56px}#table[data-perspective="pirate"] .fleet-row[data-side="ally"] .seat-info strong{font-size:clamp(9px,6.6cqw,13px)}#table[data-perspective="pirate"] .fleet-row[data-side="ally"] .seat-info small{font-size:clamp(8px,5cqw,10px)}}
 #table[data-perspective="pirate"] #hand{left:9%;bottom:calc(var(--ally-height,55px) + 55px)} #table[data-perspective="pirate"] #center{bottom:calc(var(--ally-height,55px) + 38px)} #table[data-perspective="pirate"] #actions{left:9%;width:24%;bottom:calc(var(--ally-height,55px) + 27px)} #table[data-perspective="pirate"][data-targeting="true"] #actions{left:34%;width:32%;bottom:calc(var(--ally-height,55px) + 68px)}
+
+/* Public cards stay unframed; the pirate perspective reads upward toward opponents. */
+#table[data-perspective="pirate"] #health{top:13%}
+#table[data-perspective="pirate"] .seat .public-cards{bottom:auto;top:-24px;min-height:20px}
+#table[data-perspective="pirate"] .fleet-row[data-side="enemy"]{top:max(34px,6vh)}
+#table[data-perspective="pirate"] .seat[data-current="true"]:after{top:auto;bottom:-11px}
+
+#actions{pointer-events:none} #actions button{pointer-events:auto} #table[data-perspective="pirate"] #actions .action-hint,#table[data-perspective="pirate"] #actions .waiting{display:none}

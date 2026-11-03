@@ -8899,3 +8899,15 @@ source-protection-final 46項通過：9原檔、9Android共用來源、11交接�
 
 ## 2026-11-03 Marineford陣營視角整合候選
 依READY白名單核對JS／CSS與QA三檔，產品raw SHA符合交接。QA檔僅移除diff --check指出的檔尾多餘空行，原始與整理後SHA保存在D:/Codex_QA/marineford-team-release-20261103/qa-eof-normalization.json，沒有變更斷言或產品邏輯。Chrome／WebKit各15項與六人115動作的既有收據沒有來源雜湊；最後牌堆位移後的兩引擎各4項layout另列，不能稱為全套末次bytes綁定。引擎、素材manifest、Card／Board／Chess和原生安裝包不變。公開讀回及更新情報完成前仍為整合候選；正式結果以MARINEFORD_TEAM_RELEASE_20261103.json及交接release收據為準。
+
+
+## 2026-11-03 公開牌列精簡與海賊進度上移
+- 使用者要求海賊進度條上移、兩方公開牌不加框或文字，海賊公開牌在頭像上方。海賊health top改13%；移除公開牌列背景／底線和明牌數量／尚無明牌DOM，空列隱藏。保留卡片階級與aria說明、點擊查看全部。海賊視角雙方縮圖均置於各頭像框上方，海軍區略下移確保上沿卡片可見；海軍視角仍於各框下方。
+- 修正等待文字攔截縮圖點擊：actions文字不攔截指標，操作按鈕仍可點；海賊重複等待提示隱藏。行動中小標放於框下，避免與上方公開牌重疊。
+- 檔案：public/marineford/marineford.js/.css、scripts/marineford_peek_laser_qa.cjs（MF_PUBLIC_ONLY定向畫面驗證）；不改引擎、遊戲規則或素材。
+- Chrome/WebKit各7項通過，三尺寸640x320／740x360／1366x768、兩視角、六人每人四張公開牌，驗證無背景框／數量文字、卡片完整在畫面、海賊置上方、海軍置下方、逐次實際點擊開圖鑑；證據 D:/Codex_QA/marineford-public-row-20261103/chrome-verified/report.json、webkit-verified/report.json。npm start31696與HTTP200另行讀回，不宣稱實體手機驗收或重新測試規則。
+
+
+## 2026-11-03 Marineford公開牌列整合候選
+依READY三檔白名單保存原始JS／CSS／QA全文與SHA後，只修正CSS檔尾diff --check空行，沒有變更樣式宣告；原檔與before／after SHA在D:/Codex_QA/marineford-public-row-release-20261103/approved-raw及eof-normalization.json。相關DEV／FILE／GAME_RULES僅選取本輪段落，其餘Card或歷史未提交文件保留。來源階段2c9f163bf0681dee302a5f6b50cae731281f68b2已Live且13項公開回應核對通過；本輪公開牌調整另外提交、核驗與發布。兩波公告待全部公開核驗完成後一併啟用，原草稿及證據保留。
+交接Chrome／WebKit各7項報告不含來源SHA；三尺寸兩視角的實際詳情點擊是每個狀態一個玩家，不宣稱36個玩家逐一點擊。新source commit綁定的定向UI重跑、公開SHA與最終公告證據另存發布收據；未做真機／正式帳號／全規則重測。引擎、素材清單、其他遊戲和原生包不變，未交接Card工作不在本輪白名單。

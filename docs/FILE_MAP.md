@@ -2248,3 +2248,6 @@ marineford.js/.css處理lobby進度隱藏、六類server targets頭像選人、�
 
 
 2026-11-03：Marineford renderPlayers 依team分列；renderProgress/progressBeat採固定七格救援座標；guessSeat複製完整seat呈現閃避；pirateGuess僅文字及結果。QA涵蓋2–6人與兩方視角。
+
+
+2026-11-03：Marineford public-cards只留縮圖和階級／可及性標籤；CSS區分pirate上方及navy下方；MF_PUBLIC_ONLY驗證雙方實際公開牌點擊。
