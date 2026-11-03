@@ -8861,3 +8861,14 @@ config/launcher-announcements-v1.json 修訂72→73，僅新增爭霸戰及頂�
 
 
 發布工具接續：基線固定package-3987dc38668831bc，僅HTML／JS／CSS三程式上傳，1054舊media與其他遊戲保留；server/engine.js必須隨Render同commit部署，前端套件本身不代表後端cardId已上線。
+
+
+## 2026-11-03 頂上戰爭頭像選人／猜號介面
+- 修正尚未建房就露出勝利進度圖：body 非 table 模式時，health 容器完全不顯示，涵蓋初次載入和回大廳。
+- target-guess、threshold、peek-reader、morale-target、fight-ally、fight-target 改直接點牌桌玩家頭像區；只將伺服器允許的 targets 標亮，其他頭像不能誤送目標。戰鬥仍可放棄，無規則／事件ID變動。
+- 雷射依實際目標頭像 rect 定位，命中閃光與未中閃避在頭像呈現；原頭像只在演出時隱藏，收尾／重連取消必定還原。敗牌仍僅於命中後公開燒穿。
+- 新增 imagegen 黃猿專用對話胸像 kizaru-dialogue.webp，不用射擊立繪作斜切；新增 guess-number-tile.webp 方形海軍金屬底圖，猜號介面含目標姓名頭像、44px以上觸控數字及提示，三尺寸13號均不溢出。sheet() 清除舊 choice 標記，避免猜號樣式殘留其他檢視。
+- 檔案：public/marineford/marineford.js/.css、art/v2/kizaru-dialogue.webp、guess-number-tile.webp、public/desktop/marineford-media-v1.json（131項）；scripts/marineford_peek_laser_qa.cjs、marineford_browser_qa.cjs 更新真實頭像操作驗證。圖片只等比例轉WebP，提示與來源原檔見QA交接。
+- QA：Chrome與WebKit各11項通過，六瀏覽器完整78動作對局通過（含手機頭像點擊），新版加入大廳進度隱藏、六類目標選擇、實際target-guess請求、三尺寸13號觸控範圍、雷射與頭像座標一致及獨立斜切素材。npm start 31694與頁面HTTP200；未設DATABASE_URL，不宣稱正式帳號DB／真機測試。最終收據 D:/Codex_QA/marineford-target-hud-20261103。
+
+發布前僅移除Marineford JS與定向QA檔末多餘空行，功能／斷言不變；原交接SHA與canonical提交SHA另列收據。

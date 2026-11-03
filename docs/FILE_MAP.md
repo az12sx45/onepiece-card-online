@@ -2232,3 +2232,7 @@ config/launcher-announcements-v1.json 修訂72→73，僅新增爭霸戰及頂�
 
 ### 2026-11-03第二波Card選牌與索隆維護
 card-picker-panels.js/.css、card-zoro-result.js、card-phone-fx.js在既有Android共用來源維護；build_card_picker_panels.mjs將相容段內嵌game.html，另生成desktop CSS／JS。card_picker_panels_qa.mjs及card_zoro_number_qa.mjs驗證介面與公開結果；server/engine.js新增zoro_discard.cardId，無state變更。CARD_PICKER_PANELS_20261103.md、CARD_PICKER_ART_20261103.json記錄三張圖與prompt；publish_card_program_blobs.js本輪釘package-3987dc38668831bc，只允許3program新CAS。
+
+
+### 2026-11-03第二波Marineford頭像選人
+marineford.js/.css處理lobby進度隱藏、六類server targets頭像選人、實際portrait rect雷射及13格猜號；kizaru-dialogue.webp與guess-number-tile.webp為兩張新內建imagegen素材，提示／原檔見D:/Codex_QA/marineford-target-hud-20261103/art-provenance.txt。marineford-media-v1.json 131邏輯項，舊129項保留；marineford_peek_laser_qa.cjs、marineford_browser_qa.cjs改用真實頭像互動。

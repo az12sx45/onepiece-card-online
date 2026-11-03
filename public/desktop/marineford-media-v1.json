@@ -325,6 +325,13 @@
       "sha256": "8b4db66d0ac49e4057f59bb1c56a751289174d68f4a8dbb72e22bb9e2f0a136c"
     },
     {
+      "path": "marineford/art/v2/guess-number-tile.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 14480,
+      "sha256": "f88f0db60aa807f192a469fe8a22fae06f32ada2ee0e43f55734328ba87be451"
+    },
+    {
       "path": "marineford/art/v2/hud-readable.webp",
       "kind": "image",
       "mime": "image/webp",
@@ -379,6 +386,13 @@
       "mime": "image/webp",
       "size": 604520,
       "sha256": "7faecd982f6e91676815f7adc01bdb3e01e98a6730db5eb9570ceb01b9b51ed9"
+    },
+    {
+      "path": "marineford/art/v2/kizaru-dialogue.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 89854,
+      "sha256": "ab9e807c8c58f70b190274c9f2c44080a1cc558594d4d62377213194a136614b"
     },
     {
       "path": "marineford/art/v2/kizaru-stage-back.webp",
