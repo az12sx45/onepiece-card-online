@@ -8970,3 +8970,10 @@ Android/iOS v063各自API通道核對，14請求／4新API contexts／6檢查通
 - 最終entry103、影片37+資源27、雙視窗8通過；venue四平台211核心收據及相同client SHA、41圖/AST/樣式比較與失敗歷程詳見CARD_ANDROID_VIDEO_STARTUP_20261103.md、CARD_NATIVE_STYLES_20261103.json。測試以桌機/Android63/iOS63/iOS58瀏覽器及本機Socket.IO為界；V2105原App觀察沒捕獲可判定強化播放trace，不列修正版真機成功。LATTICE API未提供，未假稱持久寫入。
 - 精確來源/3runtime/41media/7維護/4共享來源SHA及tracked patch在D:/Codex_QA/card-entry-video-20261103。READY_FOR_INTEGRATION交啟動器統一驗證發布；只取此marker段與新文件，保留其他dirty草稿/舊預覽/eda manifest/MF field-v1。
 <!-- CARD_ENTRY_VIDEO_20261103_END -->
+
+
+<!-- CARD_RESULT_STATUS_20261103_BEGIN -->
+## 2026-11-03 爭霸戰結果斜圖與頭像狀態
+大媽／喬巴取得保護閃避先判定→結果斜圖→原頭像取得FX→原STATEcommit徽章；真擋招FX保留。取消後續交幣／死亡、純保護閃避擋招、Queen同次連續擲幣麻痺、已麻痺Nami及重送的重複斜圖，保留新施放及Luffy不同目標真決鬥。canonical resultv2→statusv1最後註冊，inline與generated一致，entry guard同步，無engine/index/素材/原生包變更。
+三端actual result各386、四端status111、四端cold66、真npm/Socket.IO雙視窗8與起訖SHA通過；完整證據與來源界線見CARD_RESULT_STATUS_20261103.md及D:/Codex_QA/card-result-status-20261103。既有entry/video第一波QA保留原綁定；此delta基底456022340，READY交啟動器同波發布，未當成公開或真機驗收。
+<!-- CARD_RESULT_STATUS_20261103_END -->

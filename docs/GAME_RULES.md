@@ -2147,3 +2147,9 @@ Artwork does not change any of the 29 card IDs or rules. Both combatants automat
 <!-- CARD_ENTRY_VIDEO_20261103_BEGIN -->
 2026-11-03 Card表現層補充：開始時等目前介面/玩家狀態完成才顯示牌桌；場地介紹必須真正可見後由本人按「我看完了」，背景、載入或CPU接手不算本人已讀。原VENUE_READY全員等待規則保留，重連確認遺失可再手動按一次。強化影片啟動無回應會做一次同片靜音重試，仍失敗則續原招式，不送出離房/CPU/額外遊戲指令。對局技能、牌堆、金幣、存檔與伺服器規則不變。完整證據CARD_ANDROID_VIDEO_STARTUP_20261103.md。
 <!-- CARD_ENTRY_VIDEO_20261103_END -->
+
+
+<!-- CARD_RESULT_STATUS_20261103_BEGIN -->
+## 2026-11-03 結果呈現時序（不改規則）
+保護／閃避取得仍依原判定；斜圖播報完成才顯示頭像取得動畫與持續徽章。真正擋招照舊顯示，僅取消純防禦擋下、BigMom交幣／拒絕死亡後續、Queen同次連續擲幣麻痺與既有麻痺的重複斜圖。公開日誌與權威狀態仍保留所有實際判定，新施放可正常播報；無新增私人資料揭露。
+<!-- CARD_RESULT_STATUS_20261103_END -->

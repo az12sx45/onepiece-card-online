@@ -64,3 +64,6 @@ D:/Codex_QA/card-android-playback-20261103/startup-baseline/report.json與baseli
 語法、限定runtime/scoped scripts的git diff --check、native style builder --check通過。最後QA完成後不再改產品；公佈版本／下載通道／原生重開與更新情報由啟動器依既有直接發布授權讀回。新CSS需加入正式program清單及新41media的manifest/CAS，不能沿用只准舊3program零media的舊發布腳本。
 
 正式交接已送達啟動器thread01a15034-5637-7ed3-87c3-d500c621a5ab（send_message_to_thread成功）；收據D:/Codex_QA/card-entry-video-20261103/handoff-delivery.json。這只代表交接，正式新package／公告以發布者後續公開讀回為準。
+
+
+本波發布前追加已完成：結果斜圖結束後才顯示取得防禦的頭像動畫／徽章，後續擋招／交幣死亡／連續麻痺不重播。最終runtime SHA與delta QA已另列CARD_RESULT_STATUS_20261103.md及最新artifact-inventory；本文件原三項QA保留原來源綁定，不改稱本次完整重跑。

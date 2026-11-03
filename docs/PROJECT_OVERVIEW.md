@@ -3081,3 +3081,9 @@ Marineford對局移除常駐選單、頭像回上緣，原對局功能從自己�
 <!-- CARD_ENTRY_VIDEO_20261103_BEGIN -->
 2026-11-03 Card候選：Android影片啟動卡住時同片重試；新對局介面準備好才揭開；場地介紹需本地明確讀完，支援v058/v063與重連。手機以18.8KB必要CSS/按需原圖取代重複53MB桌機樣式，原桌機CSS及三款其他遊戲/原生包維持。來源與發布白名單見CARD_ANDROID_VIDEO_STARTUP_20261103.md、CARD_NATIVE_STYLES_20261103.json；本地完成不代表公開發布或實機驗收。
 <!-- CARD_ENTRY_VIDEO_20261103_END -->
+
+
+<!-- CARD_RESULT_STATUS_20261103_BEGIN -->
+## 2026-11-03 Card播報順序追加
+公開判定完成後才播結果斜圖，取得保護／閃避的頭像動畫及徽章接在斜圖後。純擋招、交幣／死亡後續、同次連續麻痺與重送不重播斜圖，新的真實施放／不同目標決鬥仍保留。presentation層更新，原規則／帳號／下載通道不變；與影片、入場、場地介紹同波交啟動器。來源／QA／實機界線見CARD_RESULT_STATUS_20261103.md。
+<!-- CARD_RESULT_STATUS_20261103_END -->

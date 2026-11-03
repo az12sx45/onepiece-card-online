@@ -40,5 +40,11 @@ if(html.includes(entryA)){
   const x=html.indexOf(entryA),y=html.indexOf(entryB,x);if(y<0)throw Error('Incomplete match entry marker');
   html=html.slice(0,x)+entryBlock+html.slice(y+entryB.length);
 }else html=html.replace('</body>',entryBlock+'\n</body>');
-html=html.replace(/(css\/card-(?:desktop-table|native-online)\.css|js\/card-desktop-table\.js)\?v=[^"'\s]+/g,'$1?v=20261103-entry-startup2');
+const statusA='<!-- CARD_STATUS_REVEAL_BEGIN -->',statusB='<!-- CARD_STATUS_REVEAL_END -->';
+const statusBlock=statusA+'\n<script>\n'+read('card-status-reveal.js')+'\n</script>\n'+statusB;
+if(html.includes(statusA)){
+  const x=html.indexOf(statusA),y=html.indexOf(statusB,x);if(y<0)throw Error('Incomplete avatar status reveal marker');
+  html=html.slice(0,x)+statusBlock+html.slice(y+statusB.length);
+}else html=html.replace(entryA,statusBlock+'\n'+entryA);
+html=html.replace(/(css\/card-(?:desktop-table|native-online)\.css|js\/card-desktop-table\.js)\?v=[^"'\s]+/g,'$1?v=20261103-entry-startup3');
 fs.writeFileSync(file,html);console.log(JSON.stringify({file,bytes:Buffer.byteLength(html)}));

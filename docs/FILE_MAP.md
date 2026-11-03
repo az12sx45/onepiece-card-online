@@ -2280,3 +2280,9 @@ public/game.html與generated js/card-desktop-table.js、css/card-desktop-table.c
 <!-- CARD_ENTRY_VIDEO_20261103_BEGIN -->
 2026-11-03 Card入場/影片：public/game.html內head boot/樣式選擇、CARD_MATCH_ENTRY、CARD_VENUE_READY與pending播放fallback；generated card-desktop-table.js含新版venueclient。新css/card-native-online.css與images/card-presentation/41張既有原WebP供native按需取得，desktop大CSS不改。scripts/build_card_native_styles.mjs以canonical共享CSS/原圖產生，--check及CARD_NATIVE_STYLES_20261103.json釘來源和releaseWhitelist。scripts/build_card_media_flow.mjs同步entry/venue等markers；card_match_entry_client.js為boot canonical，card_venue_ready_client.js為shared venue鏡像；card_enhancement_startup_qa.mjs、card_match_entry_qa.mjs、card_venue_entry_qa.mjs保留最終測試。共享web/card-phone-piles.js、card-venue-ready.js及兩個registry/builder同步。CARD_ANDROID_VIDEO_STARTUP_20261103.md記錄完整收據、失敗與真機界線。
 <!-- CARD_ENTRY_VIDEO_20261103_END -->
+
+
+<!-- CARD_RESULT_STATUS_20261103_BEGIN -->
+## 2026-11-03 Card結果與狀態時序
+`CARD_RESULT_STATUS_20261103.md`記追加行為與證據。共享`android/web/card-result-cutins.js` v2處理公開結果分類與去重，新`card-status-reveal.js` v1必須最後註冊以延後取得防禦FX；build_card_media_flow與match_entry_client同步inline與版本閘門。新增`card_result_repetition_qa.mjs`、`card_status_timing_qa.mjs`，既有result_cutins_qa保留真enginefixtures並調整後續判定預期。
+<!-- CARD_RESULT_STATUS_20261103_END -->

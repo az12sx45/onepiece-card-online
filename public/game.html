@@ -21,11 +21,11 @@
     (()=>{
       const bundled=window.__TABLETOP_ANDROID_GAME_UI__===true&&/ONEPIECE_TABLETOP_(?:ANDROID|IOS)/i.test(navigator.userAgent);
       if(bundled)document.documentElement.dataset.cardBundledStyles='1';
-      const href=bundled?'css/card-native-online.css?v=20261103-entry-startup2':'css/card-desktop-table.css?v=20261103-entry-startup2';
+      const href=bundled?'css/card-native-online.css?v=20261103-entry-startup3':'css/card-desktop-table.css?v=20261103-entry-startup3';
       document.write('<link id="cardMatchPresentationStyle" rel="stylesheet" href="'+href+'">');
     })();
   </script>
-  <script defer src="js/card-desktop-table.js?v=20261103-entry-startup2"></script>
+  <script defer src="js/card-desktop-table.js?v=20261103-entry-startup3"></script>
   <link rel="stylesheet" href="css/card-finish-v1.css?v=20260907-depth-visible-v2">
   <script defer src="js/card_finish_v1.js?v=20260907-depth-visible-v2"></script>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
@@ -8738,7 +8738,7 @@ html[data-card-pickers="v1"] #modal[data-picker-design="usopp"] button[data-d]:n
   if(location.origin!==origin||location.pathname!=='/game.html')return;
   function mount(){
     const api=window.CardPhonePresentation;
-    if(!api||api.resultCutinVersion)return;api.resultCutinVersion=1;
+    if(!api||api.resultCutinVersion>=2)return;api.resultCutinVersion=2;
     const themes={0:'flame',2:'petals',3:'kick',4:'guard',5:'slash',6:'room',7:'storm',8:'fist',9:'heart',10:'thunder',11:'magnet',12:'plague',13:'scythe',14:'soul',15:'future',16:'frost',17:'dark',18:'haki',19:'king'};
     const valid=id=>Number.isInteger(id)&&id>=0&&id<20;
     const name=id=>typeof pname==='function'?pname(id):'P'+(Number(id)+1);
@@ -8748,6 +8748,8 @@ html[data-card-pickers="v1"] #modal[data-picker-design="usopp"] button[data-d]:n
     function summary(events,next){
       const intent=declaration(events);if(!intent)return null;
       const publicEvents=events.filter(e=>e?.to==='all'),id=intent.cardId;
+      // Paying/refusing is the target's continuation, not another card cast.
+      if(id===14&&['pay','decline'].includes(intent.mode))return null;
       // A demand and an enhanced Law preview still await another real decision.
       if(intent.mode==='demand'&&next?.pending?.action==='bigmom-pay')return null;
       if(id===6&&intent.mode==='view'&&next?.pending?.action==='law')return null;
@@ -8755,7 +8757,12 @@ html[data-card-pickers="v1"] #modal[data-picker-design="usopp"] button[data-d]:n
       for(const e of of('zoro_discard'))if(valid(e.cardId))sentences.push(name(e.casterId)+' 砍掉 '+name(e.targetId)+' 的 '+e.cardId+' 號卡');
       for(const e of publicEvents.filter(e=>['bigmom_status','chopper_status'].includes(e.type)&&['protect','dodge'].includes(e.status)))sentences.push(name(e.casterId)+(e.status==='protect'?' 獲得護盾保護':' 獲得閃避'));
       for(const e of of('law_swap'))sentences.push(name(e.casterId)+' 與 '+name(e.targetId)+' 已交換手牌');
-      for(const e of of('nami_paralyze'))sentences.push(name(e.targetId)+' 下回合跳過');
+      const paralyzes=of('nami_paralyze'),alreadyParalyzed=e=>{
+        const before=typeof state==='object'?state?.players?.find(p=>p.id===e.targetId):null;
+        const after=next?.players?.find(p=>p.id===e.targetId);
+        return before?.skipNext===true&&after?.skipNext===true;
+      };
+      for(const e of paralyzes)if(!alreadyParalyzed(e))sentences.push(name(e.targetId)+' 下回合跳過');
       for(const e of of('aokiji_freeze')){
         const targets=e.mode==='all'?e.frozenIdxs:[e.targetId];
         if(Array.isArray(targets)&&targets.length)sentences.push(targets.filter(Number.isInteger).map(name).join('、')+' 已凍結');
@@ -8763,15 +8770,18 @@ html[data-card-pickers="v1"] #modal[data-picker-design="usopp"] button[data-d]:n
       for(const e of of('killer_disarm'))sentences.push('已解除 '+name(e.targetId)+' 的保護／閃避');
       for(const e of of('duel_log'))if(Number.isInteger(e.loserId))sentences.push(name(e.loserId)+' 輸掉對決'+(valid(e.cardId)?' · '+e.cardId+' 號卡':''));
       for(const e of of('robin_peek'))sentences.push('已完成對 '+(e.all?'全體玩家':name(e.targetId))+' 的偵察');
-      for(const e of of('card_defense'))if(['protect','dodge'].includes(e.status))sentences.push(name(e.targetId)+(e.status==='protect'?' 的護盾擋下效果':' 閃避成功，已消耗閃避'));
+      // Keep the original block/evade effects. A defense or an unchanged status
+      // alone must not turn fallback logs into another diagonal announcement.
+      if(!sentences.length&&paralyzes.length&&paralyzes.every(alreadyParalyzed))return null;
       const previousLog=typeof state==='object'?state?.log:null;
       const stateLog=Array.isArray(previousLog)&&Array.isArray(next?.log)&&previousLog.every((line,i)=>line===next.log[i])?next.log.slice(previousLog.length):[];
       const logs=[...new Set([...of('log').map(e=>e.text),...stateLog])].filter(text=>typeof text==='string'&&!/ 打出 \d+｜|^→|^⚠|^已洗回所有牌/.test(text));
-      // Public outcome logs carry Queen's actual face, payments, ordering/cover
-      // completion and automatic card effects. Private peek/order data never enters.
+      // Public outcome logs carry Queen's actual face and completed public
+      // operations. Private peek/order data never enters.
       const relevant=logs.filter(text=>!/^★|^🎁|開啟獎勵寶箱/.test(text));
       const format=text=>typeof formatLogWithNames==='function'?formatLogWithNames(text):text;
       const eliminated=relevant.filter(text=>/ 出局（/.test(text));
+      if(!sentences.length&&of('card_defense').length&&!eliminated.length)return null;
       if(!sentences.length&&eliminated.length)sentences.push(eliminated.length===1?format(eliminated[0]):eliminated.map(line=>format(line).split(' 出局（')[0]).join('、')+' 出局');
       if(!sentences.length&&relevant.length)sentences.push(...relevant.slice(-2).map(format));
       if(!sentences.length){
@@ -8789,13 +8799,31 @@ html[data-card-pickers="v1"] #modal[data-picker-design="usopp"] button[data-d]:n
       const intent=declaration(events);
       return intent?{id:intent.cardId,actor:intent.casterId}:result;
     };
+    const consumed=new Set();
+    function resultKey(events,next,data){
+      const intent=declaration(events),logs=Array.isArray(next?.log)?next.log:[],round=next?.roundNo??(typeof state==='object'?state?.roundNo:null);
+      let cast=-1;
+      for(let i=logs.length-1;i>=0;i--){const actor=String(logs[i]).match(/^P(\d+)/);if(actor&&Number(actor[1])===data.actor+1&&logs[i].includes(' 打出 '+data.id+'｜')){cast=i;break;}}
+      const room=typeof me==='object'?me?.roomId:null;
+      const key=[room,round,cast,cast<0?null:logs[cast],data.actor,data.id];
+      // Queen's chain is one accepted cast, although each coin decision emits
+      // a new intent. Other cards retain distinct real follow-up operations.
+      if(data.id!==12||intent.mode!=='coin'||cast<0)key.push(intent.mode,intent.targetId,data.result);
+      if(cast<0)key.push(logs.length);
+      return JSON.stringify(key);
+    }
     let active=null,serial=0,waiters=new Set();
     function finish(){if(!active)return;const item=active;active=null;clearTimeout(item.timer);for(const animation of item.animations)animation.cancel();item.node.remove();item.resolve();}
     const oldCancel=api.cancelCardSkillIntro,oldBusy=api.isCardSkillIntroBusy;
     const cancel=()=>{serial++;finish();for(const done of waiters)done();waiters.clear();oldCancel?.();};
     api.cancelCardSkillIntro=cancel;api.isCardSkillIntroBusy=()=>!!active||!!oldBusy?.();
     api.presentCardResultBatch=async(events,next)=>{
-      const data=summary(events,next);if(!data||fast())return false;
+      const data=summary(events,next);if(!data)return false;
+      const key=resultKey(events,next,data);if(consumed.has(key))return false;
+      // Reserve before image loading or animation. Cancellation must not let a
+      // late image or a retransmitted batch reopen the already consumed result.
+      consumed.add(key);if(consumed.size>128)consumed.delete(consumed.values().next().value);
+      if(fast())return false;
       finish();const token=++serial,ready=await api.loadCardArt?.('anime',data.id);
       if(token!==serial||fast())return false;
       const text=typeof CARD_TEXT==='object'?CARD_TEXT[data.id]:null;if(!text)return false;
@@ -8927,6 +8955,65 @@ html[data-card-phone] .card-summon-loading{position:absolute;left:50%;top:68%;tr
 
 </script>
 <!-- CARD_MEDIA_FLOW_END -->
+<!-- CARD_STATUS_REVEAL_BEGIN -->
+<script>
+/* Acquired avatar defenses appear after their accepted result cut-in.
+ * Real shield/dodge blocks, attacks and authoritative state are unchanged. */
+(() => {
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation;
+    if(!api||typeof api.presentCardSkillBatch!=='function'||typeof api.presentEffectEvent!=='function'||typeof api.presentPileBatch!=='function'||api.avatarStatusRevealVersion>=1)return;
+    api.avatarStatusRevealVersion=1;
+    const skill=api.presentCardSkillBatch,effect=api.presentEffectEvent,pile=api.presentPileBatch,cancel=api.cancelCardSkillIntro;
+    let generation=0,accepted=null;
+    const acquisition=e=>e?.to==='all'&&['bigmom_status','chopper_status'].includes(e.type)&&['protect','dodge'].includes(e.status)&&Number.isInteger(e.casterId)&&e.casterId>=0;
+    const identity=()=>JSON.stringify([typeof me==='object'?me.roomId:null,typeof me==='object'?me.playerId:null,typeof state==='object'?state?.roundNo:null]);
+    const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
+    function reset(){generation++;accepted=null;}
+    // Retain the original event objects only for this accepted transaction.
+    // Held acquisitions are deliberately not part of isEffectBusy: the real
+    // effects must drain before the result wrapper can show its cut-in.
+    api.presentCardSkillBatch=async function(events){
+      const eventsToHold=Array.isArray(events)?events.filter(acquisition):[];
+      const batch=eventsToHold.length?{generation,identity:identity(),events:new Set(eventsToHold),held:[],seen:new Set()}:null;
+      accepted=batch;
+      try{return await skill.call(this,events);}
+      catch(error){if(accepted===batch)accepted=null;throw error;}
+    };
+    api.presentEffectEvent=function(event){
+      const batch=accepted;
+      if(!api.committingPresentation&&batch&&batch.generation===generation&&batch.identity===identity()&&!fast()&&batch.events.has(event)){
+        const key=JSON.stringify([event.type,event.casterId,event.targetId??event.casterId,event.status]);
+        if(!batch.seen.has(key)){batch.seen.add(key);batch.held.push(event);}
+        return;
+      }
+      return effect.call(this,event);
+    };
+    api.presentPileBatch=async function(events,next){
+      const batch=accepted;
+      let result;
+      try{result=await pile.call(this,events,next);}
+      catch(error){if(accepted===batch)accepted=null;throw error;}
+      const sameBatch=batch&&Array.isArray(events)&&events.some(e=>batch.events.has(e));
+      const reveal=sameBatch&&accepted===batch&&batch.generation===generation&&batch.identity===identity()&&!fast();
+      if(accepted===batch)accepted=null;
+      if(reveal)for(const event of batch.held)effect.call(this,event);
+      // The existing flow now waits for these original acquisition effects,
+      // then commits STATE; persistent portrait badges follow that commit.
+      return result;
+    };
+    api.cancelCardSkillIntro=function(...args){reset();return cancel?.apply(this,args);};
+    api.avatarStatusRevealPending=()=>accepted?.held.length||0;
+    if(typeof socket==='object')for(const event of ['JOINED','disconnect'])socket.on(event,reset);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)reset();});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+
+</script>
+<!-- CARD_STATUS_REVEAL_END -->
 <!-- CARD_MATCH_ENTRY_BEGIN -->
 <script>
 /* Keep the first match frame covered until its current interface is ready. */
@@ -8955,7 +9042,7 @@ html[data-card-phone] .card-summon-loading{position:absolute;left:50%;top:68%;tr
   function view(){
     const api=window.CardPhonePresentation;
     if(root.dataset.cardPhone!=='table'||root.dataset.cardSeatHud!=='1'||root.dataset.cardMenuLayout!=='v3'||root.dataset.cardFlow!=='1')return null;
-    if(api?.presentationFlowVersion!==2||api.ownCollectionVersion!=='2'||api.enhancementVideoOrderVersion!==2||api.resultCutinVersion!==1||api.venueReadVersion!==2)return null;
+    if(api?.presentationFlowVersion!==2||api.ownCollectionVersion!=='2'||api.enhancementVideoOrderVersion!==2||!(api.resultCutinVersion>=2)||!(api.avatarStatusRevealVersion>=1)||api.venueReadVersion!==2)return null;
     if(typeof state!=='object'||!state?.players?.length||typeof me!=='object'||!Number.isInteger(me.playerId)||!state.players[me.playerId])return null;
     const rows=[...document.querySelectorAll('#players > [data-seat-id]')];
     const self=document.querySelector('#phoneSelfPlayer[data-self-design="captain-v1"] .phone-self-captain');
