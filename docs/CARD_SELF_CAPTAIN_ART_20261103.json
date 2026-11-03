@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-03",
+  "tool": "built-in image_gen.imagegen",
+  "mode": "generate",
+  "prompt": "Use case: ui-mockup. Asset type: final production game HUD frame PNG with transparent outside background, NOT a screenshot or a mockup. Generate one NEW standalone local-player captain panel for a polished One Piece-inspired pirate card tabletop game. This is a deliberate complete redesign, not a generic repeated opponent plaque.\nComposition: one coherent wide horizontal panel, overall aspect ratio approximately 2.35:1, orthographic front view. Full artwork tightly fills canvas with 3 percent transparent outer safety margin. Big integrated circular portrait socket on upper left, centered about x20 percent,y39 percent, inner opening about 29 percent canvas width (roughly 68 percent canvas height), blank dark navy opaque interior for live portrait overlay. Rich but restrained antique-gold sculpted compass/brass ring around this socket. To its right a handsome asymmetrical captain's deep navy leather nameplate, clean blank live-text area from x40 to94 percent, y16 to53 percent (room for name then gold count). Bottom 28 percent is one integrated continuous navy status/collection toolbar: broad quiet blank status icon channel from x10 to62 percent,y71 to90 percent, and a distinct small recessed premium card-collection button from x66 to94 percent,y65 to92 percent, decorated with a subtle tiny stack of golden playing cards at the far right with empty label area to its left. Every part connected as a single designed piece; no dangling extra panel, no detached add-on strip. Fine gold contour, small rope and compass accents, cinematic anime pirate-RPG UI craftsmanship, extremely crisp edges at small size. A small jewel/compass accent only, no large crown or skull.\nNo words, no letters, no numbers, no watermark, no character portrait, no scenery, no UI mockup background, no white rectangular background. Genuine RGBA transparency outside silhouette; keep internal reading regions solid dark navy. Single finished production asset, not multiple options.",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a19fa7-c2d9-7643-86e3-c5e0d9a510dd/exec-ab242a5d-3852-4150-886d-e0508caf888c.png",
+  "asset": "C:/Users/王曜瑋/.codex/worktrees/android-tabletop-landscape/2026-04-20-1-2-start-html-game-html/android/web/art/card-self-captain-v1.webp",
+  "width": 1900,
+  "height": 828,
+  "alpha": "RGBA 0..255",
+  "conversion": "Pillow WebP quality94 method6; unchanged dimensions and alpha; no painting or compositing",
+  "scope": "New independent self captain frame; opponent frame unchanged; names/gold/status/rank/collection are live DOM."
+}

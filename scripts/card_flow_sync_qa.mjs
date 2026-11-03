@@ -19,7 +19,10 @@ try{
   const ctx=await browser.newContext({viewport:{width:1366,height:768},userAgent:'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/144.0.0.0 Safari/537.36 Electron/44.1.1',serviceWorkers:'block'});
   await ctx.route('**/*',r=>new URL(r.request().url()).origin===origin?r.continue():r.abort());
   await ctx.addInitScript(()=>{window.__TABLETOP_ANDROID_TEST_ORIGIN=location.origin;if(!localStorage.getItem('opSecret'))localStorage.setItem('opSecret','qa-cinema-'+crypto.randomUUID());HTMLMediaElement.prototype.play=function(){return Promise.resolve()};});
-  const p=await ctx.newPage();p.setDefaultTimeout(12000);await p.goto(origin+'/game.html?room='+room+'&name=QA'+i,{waitUntil:'domcontentloaded'});await p.waitForFunction(()=>typeof me!=='undefined'&&me.playerId!==null&&state?.players?.length>0);
+  // Create through the original join handler first. A preset room URL is now
+  // resume-only and correctly refuses to create an expired/missing room.
+  const p=await ctx.newPage();p.setDefaultTimeout(12000);await p.goto(origin+'/game.html?name=QA'+i,{waitUntil:'domcontentloaded'});await p.waitForFunction(()=>typeof socket==='object'&&socket.connected&&typeof doJoin==='function');
+  await p.evaluate(({room,i})=>{el.room.value=room;doJoin('QA'+i);history.replaceState(null,'','/game.html?room='+encodeURIComponent(room)+'&name=QA'+i);},{room,i});await p.waitForFunction(()=>typeof me!=='undefined'&&me.playerId!==null&&state?.players?.length>0);
   await p.waitForTimeout(250);if(await p.locator('#phoneVenueIntro:not([hidden])').count())await p.locator('#phoneVenueContinue').click();await p.evaluate(()=>{window.__events=[];socket.on('EMIT',e=>window.__events.push(e));});pages.push(p);
  }
  await pages[0].waitForFunction(()=>state.players.length===2);check('both guests joined',await pages[1].evaluate(()=>state.players.length===2));

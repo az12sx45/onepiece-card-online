@@ -8826,3 +8826,13 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 最終候選驗證完成：獨立船長底板與命中區修正後，final-captain-r2 桌機2＋Android6尺寸共555項，final-captain-r2-ios iOS2尺寸139項，合計694項通過，零page errors；測試前後3個正式程式SHA256一致。原本失敗／作廢稿保留且不列通過。棄牌72項與npm start雙視窗8項另有收據。狀態 READY_FOR_INTEGRATION，未公開發布；交接收據另存協調目錄。
 
 發布整合僅移除 marineford.js 空白行尾空白及 QA 檔末多餘空行；產品邏輯與測試內容不變，原交接 SHA 與提交 SHA 另存發布收據。
+
+
+## 2026-11-03 爭霸戰選單、獨立船長面板與強化棄牌（待整合）
+- 選單／對局日誌縮小移至寶箱上方，其他玩家列往上；我方依使用者追加要求以新生成 card-self-captain-v1.webp 重設計，大頭像、金幣、狀態與豪華卡入口整合，第一輪沿用舊底板稿已作廢。
+- 點自己查看已授權 state.myDeluxe，保留狀態解說與自身選人；強化棄牌縮圖／列表／放大圖保留強化卡圖及 Teach 隱私。正式程式僅 public/game.html、js/card-desktop-table.js、css/card-desktop-table.css，沒有規則／引擎／啟動器／其他遊戲改動。
+- 共用來源和舊 v063 Android／iOS 線上相容層同時處理，不須本輪重包。新素材、prompt、精確來源、建置／測試命令、失敗原因與驗收界線詳見 CARD_HUD_COLLECTION_20261103.md、CARD_SELF_CAPTAIN_ART_20261103.json。最終尺寸證據 final-captain；棄牌四類來源各18項、npm start真實雙視窗8項通過；非實體手機驗收，正式發布由啟動器聊天室交接處理。
+
+
+### 2026-11-03 爭霸戰發布器精確範圍
+發布器依本輪交接釘住現行 package-854bbf29a3a708f1，白名單為 game.html、js/card-desktop-table.js、css/card-desktop-table.css 三檔；新CSS包含船長底板，必須上傳新CAS一次。1054既有媒體與其餘程式、Board／Chess、舊清單保留；以既有build_card_program_update.js從提交建立候選、核對後promote，不重建全庫。694＋72＋8既有真實測試與source SHA已核對；正式公開讀回另存交接收據。

@@ -1021,7 +1021,7 @@ window.POCardInteract=module.exports;
     function entries(){
       if(kind==='dex')return Array.from({length:20},(_,id)=>({id,name:CARD_TEXT[id]?.name||'卡牌',src:CARD(id),count:CARD_COUNTS[id],enh:isEnhancedNow(id)}));
       if(kind==='venues')return (state?.venues||[]).map(v=>({venue:v.name,name:v.name,src:VEN(v.name)}));
-      return (state?.discard||[]).slice(0,api.presentedDiscardCount?.()??Infinity).map((item,index)=>{const secret=!!(item&&typeof item==='object'&&item.back===true),id=typeof item==='number'?item:item?.id;return {id:secret?null:id,secret,index,name:secret?'未公開的棄牌':valid(id)?CARD_TEXT[id]?.name:'棄牌',src:secret||!valid(id)?CARD(null).replace('null.webp','back.webp'):CARD(id)};});
+      return (state?.discard||[]).slice(0,api.presentedDiscardCount?.()??Infinity).map((item,index)=>{const secret=!!(item&&typeof item==='object'&&item.back===true),id=typeof item==='number'?item:item?.id;return {id:secret?null:id,secret,index,name:secret?'未公開的棄牌':valid(id)?CARD_TEXT[id]?.name:'棄牌',src:secret||!valid(id)?CARD(null).replace('null.webp','back.webp'):isEnhancedNow(id)?CARD_ENH(id):CARD(id)};});
     }
     function close(){screen.hidden=true;kind='';detail=null;opener?.focus?.({preventScroll:true});}
     api.closeLibrary=close;
@@ -1086,7 +1086,7 @@ window.POCardInteract=module.exports;
     screen.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();if(detail!=null){detail=null;paint();}else close();}});
     function sync(){
       const validVenues=state?.venues?.filter(v=>venueNames.includes(v.name))||[];if(validVenues.length&&!validVenues.some(v=>v.name===desiredVenue))api.setVenueBackground(validVenues[0].name);
-      if(!screen.hidden){const sig=JSON.stringify([state?.roundNo,kind==='discard'?state?.discard:state?.venues]);if(sig!==signature){signature=sig;paint();}}
+      if(!screen.hidden){const sig=JSON.stringify([state?.roundNo,kind==='discard'?[state?.discard,state?.venues,state?.myDeluxe]:state?.venues]);if(sig!==signature){signature=sig;paint();}}
       alignAvatars();
     }
     function alignAvatars(){for(const img of document.querySelectorAll('main #players img.rounded-full,#phoneSelfPlayer img.rounded-full')){if(img.classList.contains('phone-seat-avatar')||img.parentElement.classList.contains('phone-avatar-wrap'))continue;const wrap=node('span','phone-avatar-wrap');img.before(wrap);wrap.append(img);}}
@@ -1313,6 +1313,74 @@ window.POCardInteract=module.exports;
     sync();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+
+/* Online-compatible own collection */
+(() => {
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation,root=document.documentElement,self=document.getElementById('phoneSelfPlayer');
+    if(!api||!self||api.ownCollectionVersion==='2')return;api.ownCollectionVersion='2';
+    const make=(tag,cls)=>{const n=document.createElement(tag);n.className=cls;return n;};
+    const current=()=>typeof state==='object'?state:null,viewer=()=>typeof me==='object'?me.playerId:null;
+    const identity=()=>JSON.stringify([typeof me==='object'?me.roomId:null,viewer()]);
+    // Only getVisibleState's authorized unlocks; never inspect another seat's
+    // hand or the server-only deluxeUnlocks map.
+    const deluxeIds=()=>[...new Set((Array.isArray(current()?.myDeluxe)?current().myDeluxe:[]).filter(id=>Number.isInteger(id)&&id>=0&&id<20))].sort((a,b)=>a-b);
+    let collectionView=null,collectionSignature='',collectionViewer=null,queued=false;
+    const collectionOpen=()=>collectionView&&document.getElementById('phoneCardSheet')?.contains(collectionView);
+    function paintCollection(){
+      if(!collectionView)return;
+      const ids=deluxeIds(),signature=JSON.stringify(ids);if(signature===collectionSignature)return;collectionSignature=signature;
+      collectionView.replaceChildren();
+      const heading=make('h3','phone-deluxe-heading'),progress=make('p','phone-deluxe-progress');
+      heading.textContent='我的豪華卡收藏';progress.textContent=`已解鎖 ${ids.length} / 20 張 · 只有你可見`;collectionView.append(heading,progress);
+      if(!ids.length){const empty=make('p','phone-deluxe-empty');empty.textContent='目前還沒有豪華卡。贏得本局後，開啟獎勵寶箱就有機會解鎖。';collectionView.append(empty);return;}
+      const grid=make('div','phone-deluxe-grid');
+      for(const id of ids){
+        const card=make('figure','phone-deluxe-card'),image=make('img',''),caption=make('figcaption',''),name=typeof CARD_TEXT==='object'?CARD_TEXT[id]?.name:null;
+        // CARD shows the collected luxury edition independently of venue buffs.
+        image.src=CARD(id);image.alt=`${id}｜${name||'角色卡'}・豪華卡`;image.loading='lazy';image.draggable=false;
+        caption.textContent=`${id}｜${name||'角色卡'}`;card.dataset.card=String(id);card.dataset.cardId=String(id);card.append(image,caption);grid.append(card);
+      }
+      collectionView.append(grid);
+    }
+    const originalClick=self.onclick;
+    self.onclick=e=>{
+      if(e.target.closest('.phone-seat-status-icon'))return;
+      // Existing direct-target capture retains its authoritative button route.
+      if(root.dataset.cardDirectTargets){originalClick?.call(self,e);return;}
+      const id=viewer();if(!Number.isInteger(id)||!current()?.players?.[id])return;
+      e.preventDefault();collectionView=make('article','phone-deluxe-collection');collectionSignature='';collectionViewer=identity();paintCollection();api.openView('我的豪華卡',collectionView);
+    };
+    self.onkeydown=e=>{if(e.target===self&&(e.key==='Enter'||e.key===' ')){e.preventDefault();self.click();}};
+    function sync(){
+      const id=viewer(),valid=Number.isInteger(id)&&!!current()?.players?.[id];
+      if(collectionOpen()){
+        if(!valid||collectionViewer!==identity()){api.closeSheet();collectionView=null;}
+        else paintCollection();
+      }
+      const card=self.querySelector('.phone-seat-card');if(!card||!valid)return;
+      card.classList.add('phone-self-captain');self.dataset.selfDesign='captain-v1';
+      let label=card.querySelector(':scope > .phone-self-collection-label');
+      if(!label){label=make('span','phone-self-collection-label');card.append(label);}
+      let caption=label.querySelector(':scope > span'),amount=label.querySelector(':scope > b');
+      if(!caption||!amount){caption=make('span','');amount=make('b','');label.replaceChildren(caption,amount);}
+      const count=deluxeIds().length,text=`${count}/20`;if(caption.textContent!=='豪華卡')caption.textContent='豪華卡';if(amount.textContent!==text)amount.textContent=text;
+      if(!root.dataset.cardDirectTargets)self.setAttribute('aria-label',`查看我的豪華卡，已解鎖 ${count} 張，第 ${self.dataset.seatOrder||''} 順位`);
+    }
+    const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;sync();});};
+    // Retained hosts may replace their own portrait HTML. Reattach the label
+    // idempotently; observing child text does not create a mutation loop.
+    new MutationObserver(schedule).observe(self,{childList:true,subtree:true,characterData:true});
+    if(typeof socket==='object'){
+      socket.on('STATE',schedule);socket.on('JOINED',schedule);
+      socket.on('disconnect',()=>{if(collectionOpen())api.closeSheet();collectionView=null;});
+    }
+    sync();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
 })();
 
 /* Local visual transformation. Reads only the viewer's authorized hand. */
@@ -1704,8 +1772,8 @@ window.POCardInteract=module.exports;
 /* Public enhanced-card projection. No hand inspection or gameplay decisions. */
 (() => {
  function mount(){
-  const api=window.CardPhonePresentation;if(!api||api.enhancementSummonVersion>=4)return;
-  api.enhancementSummonVersion=4;
+  const api=window.CardPhonePresentation;if(!api||api.enhancementSummonVersion>=3)return;
+  api.enhancementSummonVersion=3;
   const root=document.documentElement,video=document.getElementById('enhVideo');
   const priorBusy=api.isEnhancementBusy,priorCancel=api.cancelEnhancements;
   let active=null,serial=0;
@@ -1740,7 +1808,7 @@ window.POCardInteract=module.exports;
    await wait(reduced?0:700);if(active!==item||generation!==serial)return;
    const overlay=document.getElementById('enhOverlay');
    if(overlay){item.observer=new MutationObserver(()=>{if(overlay.classList.contains('hidden'))finish(item);});item.observer.observe(overlay,{attributes:true,attributeFilter:['class']});}
-   item.failsafe=setTimeout(()=>finish(item),900);
+   item.failsafe=setTimeout(()=>finish(item),32000);
   };
   function revealMovie(){const item=active;if(!item||item.layer.dataset.phase!=='white')return;clearTimeout(item.failsafe);item.layer.dataset.phase='video';root.dataset.cardSummon='video';const a=item.layer.animate([{opacity:1},{opacity:0}],{duration:420,fill:'forwards'});item.animations.push(a);a.finished.then(()=>{if(active===item&&item.layer.dataset.phase==='video')item.layer.style.visibility='hidden';},()=>{});}
   function recall(){const item=active;if(!item)return;clearTimeout(item.failsafe);item.observer?.disconnect();for(const a of item.animations)a.cancel();item.animations=[];item.layer.dataset.phase='return';root.dataset.cardSummon='return';item.layer.style.visibility='visible';item.flash.style.opacity='0';item.img.style.filter='';
@@ -1842,6 +1910,34 @@ window.POCardInteract=module.exports;
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
 })();
-/* Menu placement changes only presentation, retaining original handlers. */
-(()=>{function mount(){const root=document.documentElement,api=window.CardPhonePresentation;if(!api||root.dataset.cardMenuLayout)return;root.dataset.cardMenuLayout='v2';const header=document.querySelector('body>header'),menu=document.getElementById('phoneCardMenu');if(header)header.id='cardTopMenu';document.querySelector('.phone-card-menu')?.setAttribute('id','cardMenuChoices');if(menu){menu.setAttribute('aria-label','開啟遊戲選單');header?.querySelector('div')?.prepend(menu);}const sheet=document.getElementById('phoneCardSheet');sheet?.querySelector('.phone-card-sheet-head button')?.setAttribute('id','cardMenuReturn');const update=()=>{if(sheet)sheet.dataset.menuOpen=String(sheet.querySelector('#cardMenuChoices')!==null&&!sheet.hidden);};if(sheet)new MutationObserver(update).observe(sheet,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']});update();}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);})();
+/* Move the existing controls above the chest; retain their original handlers. */
+(() => {
+  function mount() {
+    const root = document.documentElement, api = window.CardPhonePresentation;
+    const resources = document.getElementById('phoneMatchResources');
+    if (!api || !resources || root.dataset.cardMenuLayout === 'v3') return;
+    root.dataset.cardMenuLayout = 'v3';
+    const header = document.querySelector('body > header');
+    if (header) header.id = 'cardTopMenu';
+    document.querySelector('.phone-card-menu')?.setAttribute('id', 'cardMenuChoices');
+    const actions = document.createElement('nav');
+    actions.id = 'cardMatchActions';
+    actions.setAttribute('aria-label', '牌桌選單與對局日誌');
+    for (const id of ['phoneCardMenu', 'phoneCompactLog']) {
+      const button = document.getElementById(id);
+      if (button) actions.append(button);
+    }
+    resources.append(actions);
+    const sheet = document.getElementById('phoneCardSheet');
+    sheet?.querySelector('.phone-card-sheet-head button')?.setAttribute('id', 'cardMenuReturn');
+    const update = () => {
+      if (sheet) sheet.dataset.menuOpen = String(!!sheet.querySelector('#cardMenuChoices') && !sheet.hidden);
+    };
+    if (sheet) new MutationObserver(update).observe(sheet, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });
+    update();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(mount, 0), { once: true });
+  else setTimeout(mount, 0);
+})();
+
 })();

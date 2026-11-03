@@ -2213,3 +2213,7 @@ public/game.html 的 playEnhFxFor 擁有影片世代、載入／停滯 watchdog 
 
 ### 2026-11-03 頂上戰爭看牌與雷射
 scripts/marineford_peek_laser_qa.cjs 驗證公開牌文字、三尺寸、私有取牌／閱讀／歸還、雷射與結果時序及同步 ACK。public/marineford/marineford.js/.css、server/marineford-engine.js 為本輪程式；marineford-media-v1.json 納入 art/v2 的 kizaru-stage-front/back、emblem-marine-source、emblem-whitebeard-source、fx-laser-burn-rim，合計129張，5張新增，既有124項不變。
+
+
+### 2026-11-03 爭霸戰發布來源
+public/game.html、js/card-desktop-table.js、css/card-desktop-table.css 為三份正式runtime；scripts/build_card_hud_collection.mjs 由既有Android共用來源同步線上相容段。card_hud_collection_qa.mjs、card_discard_face_qa.mjs 與 card_flow_sync_qa.mjs 保留最終測試。scripts/publish_card_program_blobs.js 釘住 package-854bbf29a3a708f1，只允許三份新程式，1054個舊media與Board／Chess原樣保留。CARD_HUD_COLLECTION_20261103.md、CARD_SELF_CAPTAIN_ART_20261103.json 記錄重建與新圖原稿／prompt。
