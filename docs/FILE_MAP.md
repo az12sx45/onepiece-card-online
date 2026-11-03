@@ -2228,3 +2228,7 @@ config/launcher-announcements-v1.json 修訂72→73，僅新增爭霸戰及頂�
 
 
 2026-11-03發布收據：docs/TABLETOP_RELEASE_20261103.json記錄兩款正式提交、Card package-3987dc38668831bc、更新情報修訂73／2則與驗收界線。D:/Codex_Project_Coordination/tabletop-series/handoffs/marineford-20261103-release.json、20261103-card-hud-collection-release.json保存原交接、canonical／raw SHA、公開驗證、更新情報位置與未測平台；不是LATTICE資料庫記錄。
+
+
+### 2026-11-03第二波Card選牌與索隆維護
+card-picker-panels.js/.css、card-zoro-result.js、card-phone-fx.js在既有Android共用來源維護；build_card_picker_panels.mjs將相容段內嵌game.html，另生成desktop CSS／JS。card_picker_panels_qa.mjs及card_zoro_number_qa.mjs驗證介面與公開結果；server/engine.js新增zoro_discard.cardId，無state變更。CARD_PICKER_PANELS_20261103.md、CARD_PICKER_ART_20261103.json記錄三張圖與prompt；publish_card_program_blobs.js本輪釘package-3987dc38668831bc，只允許3program新CAS。

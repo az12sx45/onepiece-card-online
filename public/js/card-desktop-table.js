@@ -603,6 +603,7 @@ window.POCardInteract=module.exports;
       requestAnimationFrame(()=>{if(!privateOpen||reveal._items!==items)return;for(let i=0;i<items.length;i++){const item=items[i],img=body.children[i]?.querySelector('img');if(img)api.flyCard?.({from:api.cardPlayerRect(item.from)||$('btnDraw'),to:img,src:img.src,flip:true,kind:'peek'});}});
     }
     function addPrivate(items){if(!privateOpen&&!privateQueued)privateItems=[];privateItems.push(...items);privateItems=privateItems.slice(-12);privateQueued=true;queueMicrotask(flushPrivate);}
+    window.CardPhonePresentation.zoroNumberedFxVersion=1;
     const eventFx={usopp_hit:['hit','狙擊命中'],usopp_miss:['miss','狙擊未命中'],robin_peek:['scan','偵察手牌'],law_swap:['swap','交換手牌'],zoro_discard:['slash','斬擊棄牌'],nami_paralyze:['lightning','麻痺生效'],aokiji_freeze:['ice','凍結生效'],killer_disarm:['break','解除防禦'],chopper_status:['guard','防禦狀態'],bigmom_status:['guard','防禦狀態']};
     function onEvent(e){
       if(window.CardPhonePresentation?.committingPresentation)return;
@@ -614,6 +615,10 @@ window.POCardInteract=module.exports;
       const visual=eventFx[e.type];
       if(visual){let detail;
         if(e.type.startsWith('usopp_')){detail={digit:e.digit??lastGuess?.digit,title:`${name(e.casterId)} 猜 ${name(e.targetId)} ${e.digit??lastGuess?.digit} 號`,result:e.type==='usopp_hit'?'猜中！狙擊命中':'猜錯 · 狙擊未命中'};lastGuess=null;}
+        else if(e.type==='zoro_discard'){
+          const cards=window.CardPhonePresentation.zoroDiscardCards?.(e)||[];
+          if(cards.length)detail={title:name(e.casterId)+(e.targetId!==e.casterId?' → '+name(e.targetId):''),result:'砍掉 '+cards.map(id=>`${id} 號卡`).join('、')};
+        }
         else if(e.type==='law_swap')detail={title:`${name(e.casterId)} ⇄ ${name(e.targetId)}`,result:'兩人已交換手牌'};
         else if(['chopper_status','bigmom_status'].includes(e.type)&&['protect','dodge'].includes(e.status))detail={status:e.status,title:name(e.casterId),result:e.status==='protect'?'獲得護盾 · 保護中':'獲得閃避 · 等待觸發'};
         burst(visual[0],e.casterId,e.all||e.mode==='all'?null:e.targetId??e.casterId,visual[1]+(e.type.startsWith('usopp_')?` · 尾數 ${e.digit}`:''),detail);return;}
@@ -1938,6 +1943,130 @@ window.POCardInteract=module.exports;
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(mount, 0), { once: true });
   else setTimeout(mount, 0);
+})();
+
+/* Show only the backend's explicit public Zoro result; never infer a card. */
+(() => {
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation,layer=document.getElementById('phoneInteractionFx');
+    if(!api||!layer||api.zoroDiscardResultVersion)return;api.zoroDiscardResultVersion=1;
+    const valid=e=>e?.type==='zoro_discard'&&e.to==='all'&&Number.isInteger(e.cardId)&&e.cardId>=0&&e.cardId<20;
+    let legacy=[],handled=new WeakSet();
+    const name=id=>state?.players?.[id]?.client?.displayName||state?.players?.[id]?.displayName||(Number.isInteger(id)&&id>=0?'P'+(id+1):'全體玩家');
+    api.zoroDiscardCards=e=>valid(e)?[e.cardId]:[];
+    const effect=api.presentEffectEvent;
+    api.presentEffectEvent=e=>{
+      checkContext();
+      if(e?.type==='zoro_discard'&&e.to==='all'&&!api.zoroNumberedFxVersion){
+        const title=name(e.casterId)+(e.targetId!==e.casterId?' → '+name(e.targetId):'');
+        legacy.push({before:title+'：斬擊棄牌',after:valid(e)?title+'：砍掉 '+e.cardId+' 號卡':null});
+      }
+      return effect?.(e);
+    };
+    // Retained hosts keep their original slash animation and neutral narration.
+    // Rewrite the explicit result only when its deferred result actually appears.
+    function sync(){
+      checkContext();
+      for(const line of layer.querySelectorAll('.phone-action-copy>span')){
+        if(handled.has(line))continue;
+        const index=legacy.findIndex(item=>line.textContent===item.before);
+        if(index<0)continue;const result=legacy.splice(index,1)[0];handled.add(line);if(result.after!==null)line.textContent=result.after;
+      }
+    }
+    new MutationObserver(sync).observe(layer,{childList:true,subtree:true,characterData:true});
+    const clear=()=>{legacy=[];handled=new WeakSet();};
+    // These are the retained FX's real clearFx boundaries, including opening
+    // player details (the portrait rail leaves main). Do not expire by a timer:
+    // a normal slash still needs its queued, deferred result after the effect.
+    let context=JSON.stringify([typeof me==='object'?me.roomId:null,typeof me==='object'?me.playerId:null,state?.roundNo]);
+    function checkContext(){
+      const next=JSON.stringify([typeof me==='object'?me.roomId:null,typeof me==='object'?me.playerId:null,state?.roundNo]);
+      if(next!==context)clear();context=next;
+    }
+    socket.on('STATE',checkContext);
+    const players=document.getElementById('players');
+    function checkRail(){
+      const box=players?.getBoundingClientRect();
+      if(!players?.closest('main')||!box?.width||!box.height)clear();
+    }
+    if(players&&typeof ResizeObserver==='function')new ResizeObserver(checkRail).observe(players);
+    window.addEventListener('resize',()=>requestAnimationFrame(checkRail),{passive:true});
+    for(const event of ['JOINED','disconnect'])socket.on(event,clear);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)clear();});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+
+/* New selection surfaces; original cards, enabled flags and handlers remain authoritative. */
+(() => {
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation,root=document.documentElement;
+    const sheet=document.getElementById('phoneCardSheet'),modal=document.getElementById('modal');
+    if(!api||!sheet||!modal||api.pickerPanelsVersion===1)return;
+    api.pickerPanelsVersion=1;root.dataset.cardPickers='v1';
+    // A retained WebKit host may retarget its compatibility mouse click after
+    // the touch pointerup has already confirmed and removed this sheet. Match
+    // that one gesture, including hosts whose click has a different pointer ID.
+    // A fresh pointerdown always starts a new gesture; keyboard and forwarded
+    // control.click() calls must remain untouched.
+    let confirmTouch=null,confirmClick=null;
+    document.addEventListener('pointerdown',e=>{
+      confirmClick=null;confirmTouch=null;
+      const button=e.target.closest?.('#phoneCardConfirm');
+      if(e.pointerType==='touch'&&button&&!button.disabled&&sheet.contains(button)&&sheet.dataset.inspectKind==='hand')confirmTouch={id:e.pointerId,x:e.clientX,y:e.clientY,button,cancelled:false};
+    },true);
+    document.addEventListener('pointermove',e=>{if(confirmTouch?.id===e.pointerId&&Math.hypot(e.clientX-confirmTouch.x,e.clientY-confirmTouch.y)>10)confirmTouch.cancelled=true;},true);
+    document.addEventListener('pointercancel',()=>{confirmTouch=null;confirmClick=null;},true);
+    document.addEventListener('pointerup',e=>{
+      const touch=confirmTouch;confirmTouch=null;
+      if(!touch||touch.id!==e.pointerId||touch.cancelled||touch.button.disabled||Math.hypot(e.clientX-touch.x,e.clientY-touch.y)>10)return;
+      confirmClick={x:e.clientX,y:e.clientY,time:performance.now()};
+    },true);
+    document.addEventListener('click',e=>{
+      if(!confirmClick||!e.isTrusted||e.detail===0)return;
+      const click=confirmClick;confirmClick=null;
+      if(performance.now()-click.time<=600&&Math.hypot(e.clientX-click.x,e.clientY-click.y)<=12){e.preventDefault();e.stopImmediatePropagation();}
+    },true);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden){confirmTouch=null;confirmClick=null;}});
+    const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;n.textContent=text;return n;};
+    let queued=false;
+    function decorate(){
+      if(sheet.dataset.inspectKind==='hand'&&!sheet.hidden){
+        sheet.dataset.pickerDesign='v1';sheet.dataset.pickerArt='play-frame';
+        const title=sheet.querySelector('.phone-card-sheet-head h2');
+        if(title&&title.textContent!=='選擇出牌')title.textContent='選擇出牌';
+        const count=sheet.querySelector('.phone-card-inspector-nav>span');
+        const numbers=count?.textContent.match(/^\s*(\d+)\s*\/\s*(\d+)/);
+        if(numbers){const short=`${numbers[1]} / ${numbers[2]}`;if(count.textContent!==short)count.textContent=short;count.title='左右滑動或使用方向鍵切換卡牌';}
+        const confirm=sheet.querySelector('#phoneCardConfirm');
+        if(confirm&&confirm.textContent!=='確認出牌')confirm.textContent='確認出牌';
+      }else{delete sheet.dataset.pickerDesign;delete sheet.dataset.pickerArt;}
+      const digits=modal.querySelector('button[data-d]'),box=digits?.closest('#modal>.card');
+      if(modal.classList.contains('hidden')||!box){delete modal.dataset.pickerDesign;return;}
+      modal.dataset.pickerDesign='usopp';box.dataset.pickerArt='usopp-frame';
+      const grid=box.querySelector('.grid-cols-10');
+      if(grid&&!grid.classList.contains('phone-sniper-number-grid'))grid.classList.add('phone-sniper-number-grid');
+      if(!box.querySelector('.phone-sniper-picker-head')){
+        const head=make('header','phone-sniper-picker-head','');
+        head.append(make('strong','phone-sniper-panel-title','騙人布・狙擊瞄準'));
+        const original=box.querySelector('.text-lg');if(original)head.append(original);
+        box.prepend(head);
+      }
+      for(const button of box.querySelectorAll('button[data-d]')){
+        button.dataset.pickerArt='usopp-number';
+        button.setAttribute('aria-label',button.dataset.d==='1'?'1 號，無法狙擊':`狙擊 ${button.dataset.d} 號`);
+      }
+    }
+    function schedule(){if(queued)return;queued=true;queueMicrotask(()=>{queued=false;decorate();});}
+    new MutationObserver(schedule).observe(sheet,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','data-inspect-kind']});
+    new MutationObserver(schedule).observe(modal,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+    decorate();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
 })();
 
 })();

@@ -8850,3 +8850,14 @@ config/launcher-announcements-v1.json 修訂72→73，僅新增爭霸戰及頂�
 最終Render fa2f6674b6fdd80e33cc12f69679b1c53496845a顯示Live；更新情報修訂73的兩則新增已部署，69則舊內容保留。最後16項公開讀回通過，MF與Card公開程式、各遊戲catalog／manifest／runtime與既有啟動器清單保持已驗證版本。公告82項隔離服務QA與五路由無DB npm start通過，測試server已停止。Card三程式真實AssetStore下載54123211 bytes，重建實例後第二次0請求／0bytes；不宣稱834MB完整遊戲重裝或真實玩家快取驗收。
 未交接9個原檔與7份Android共用來源最後SHA核對相同；預覽／舊eda manifest／field-v1.png均未提交。既有1250ms非互動場地提示可短暫覆蓋收藏窗，此行為與基線相同，694項測試不涵蓋所有入場時序；不是本次新回歸。實體Android／iPhone與正式帳號可見性尚未驗收，沒有新APK／IPA。完整收據docs/TABLETOP_RELEASE_20261103.json及D:/Codex_Project_Coordination/tabletop-series/handoffs兩份release JSON；協調文件狀態已更新RELEASED並保留歷程。LATTICE API本輪未提供，未宣稱持久寫入。
 發布工具／公開檢查的本機證據位於D:/Codex_QA/marineford-release-20261103與card-release-20261103，包括verify-public.cjs、public-verification/verify-public-card.cjs、verify-post-announcements.cjs、兩份Render來源讀回與最後公告來源讀回。
+
+
+## 2026-11-03 爭霸戰選牌、騙人布猜號與索隆卡號（本輪候選）
+- 新 card-picker-panels.js/.css 與三張內建imagegen圖稿，重做選牌／確認與猜號介面。1942:809畫框contain、256正方形準星數字、卡面object-fit:contain；保留原處理器、1禁用、確認／猜號防重送、frozen與reading gate。手機／桌機與舊v063線上相容段共用來源。
+- server/engine.js 只在既有公開zoro_discard新增optional cardId，FX在斬擊完成後播報真正砍牌號碼。舊bundle的card-zoro-result處理缺欄位中性、0號、取消／回合／身份與rail邊界，不讀未公開牌；state與舊引擎等價。
+- 獨立review修正class observer自循環；exact iOS640另重現confirm touch後mouse相容click穿透至captain，已加只針對同一confirm touch的保護，原programmatic／鍵盤與下一個新手勢保留。失敗與event trace均保留，未把失敗列通過。
+- 來源、prompt、建置／測試命令及最終報告詳見 CARD_PICKER_PANELS_20261103.md、CARD_PICKER_ART_20261103.json。沒有重包、沒有修改啟動器／大廳／其他遊戲；未做實體手機／真實帳號驗收，正式發布交由啟動器聊天室。
+最終 READY_FOR_INTEGRATION：選牌／猜號 final-r2 桌機2＋exact Android6尺寸689項、final-ios-r2 iOS2尺寸174項，合計863項通過，零page errors，4個目前runtime／engine SHA前後與現況一致。確認後無誤開收藏、下一真手勢正常、Enter與原一次PLAY_CARD均通過。索隆最終desktop／iOS各52項共104通過；此後只補選牌confirm相容click guard，索隆與後端未再修改。npm start雙視窗8通過、舊引擎5個state／其他emits等價。最終檔案大小／SHA清單與精確4檔patch位於 D:/Codex_QA/card-picker-panels-20261103/artifact-inventory.json、formal-scoped.patch。未公開發布、未做真機驗收；交給啟動器整合。
+
+
+發布工具接續：基線固定package-3987dc38668831bc，僅HTML／JS／CSS三程式上傳，1054舊media與其他遊戲保留；server/engine.js必須隨Render同commit部署，前端套件本身不代表後端cardId已上線。

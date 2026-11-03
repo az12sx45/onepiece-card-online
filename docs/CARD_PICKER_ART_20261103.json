@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-03",
+  "mode": "built-in image_gen.imagegen",
+  "art": [
+    {
+      "key": "play-frame",
+      "prompt": "Use case: ui-mockup. Final production transparent game UI frame asset, not a screenshot. One brand NEW large landscape 2.4:1 card selection reading panel for a polished One Piece inspired pirate card game. Dark deep navy leather and aged brass, crisp anime RPG craftsmanship. A single harmonious slim gilded frame around an almost entirely blank solid navy reading window. Small sculpted compass and rope accents confined to outer corners, tiny crossed cutlass motif on upper-left edge, restrained gold light. Keep top 12 percent mostly clear for a live title and return button. Inside left 34 percent is a clean card display bay with no painted card and no inner ornamental socket; inside right 58 percent is quiet flat navy with no baked divisions so live card name, multiline skill text, two small navigation controls and a wide confirmation button can be freely laid out. Main reading window from x5 to95 percent,y10 to90 percent must stay unornamented and dark for legibility. Orthographic front view, not perspective. Tightly fill canvas with a 3 percent transparent safety margin. Do not draw text, letters, numbers, people, card faces, button labels, drop shadows outside silhouette, or scenery. RGBA transparent outside, opaque navy inside. Preserve a clean consistent physical frame thickness; this image will be contained at its exact natural aspect ratio in desktop and landscape phone UI, never stretched.",
+      "source": "C:/Users/王曜瑋/.codex/generated_images/01a19fa7-c2d9-7643-86e3-c5e0d9a510dd/exec-563a43c5-aad0-4411-8842-772e806eff78.png",
+      "asset": "C:/Users/王曜瑋/.codex/worktrees/android-tabletop-landscape/2026-04-20-1-2-start-html-game-html/android/web/art/card-play-picker-frame-v1.webp",
+      "runtimeSize": [
+        1942,
+        809
+      ],
+      "conversion": "Original dimensions unchanged, format-only WebP quality94 method6; RGBA retained"
+    },
+    {
+      "key": "usopp-frame",
+      "prompt": "Use case: ui-mockup. Final production transparent game UI frame asset, not a screenshot. A brand NEW wide landscape panel approximately 2.4:1 for USOPP SNIPER POP GREEN ability number selection in a One Piece-inspired pirate card game. Build one coherent handcrafted slingshot and botanical sniper instrument frame: warm wood slingshot fork accents at the two top corners, small green pop-green seed pods and curling leaves along the outer side edges only, subtle brass scope and goggle motifs, taut thin elastic lines as edging, deep forest-green and midnight navy opaque interior, golden brass outline. Crisp anime RPG game illustration, highly polished, readable at phone size. Almost entire center is a blank clean dark reading window x6..94 percent,y12..89 percent for dynamic heading and a 5-column by 4-row grid of live round number buttons. Tiny target reticle emblem in top border center; no large leaves, no objects extending into grid. All decoration restrained to border, slim coherent proportions. Orthographic front view, no perspective and no tilt. Tight canvas framing with 3 percent transparent safety margin. NO words, NO letters, NO numbers, NO person, NO baked buttons or card faces, NO scene, NO watermark. True RGBA transparent outside silhouette; interior solid dark forest/navy. Image used at natural fixed ratio with contain, not stretching.",
+      "source": "C:/Users/王曜瑋/.codex/generated_images/01a19fa7-c2d9-7643-86e3-c5e0d9a510dd/exec-3de2d4b6-d20f-4931-805a-ffa2562129fc.png",
+      "asset": "C:/Users/王曜瑋/.codex/worktrees/android-tabletop-landscape/2026-04-20-1-2-start-html-game-html/android/web/art/card-usopp-picker-frame-v1.webp",
+      "runtimeSize": [
+        1942,
+        809
+      ],
+      "conversion": "Original dimensions unchanged, format-only WebP quality94 method6; RGBA retained"
+    },
+    {
+      "key": "usopp-number",
+      "prompt": "Use case: ui-mockup. One single final production game button asset with true transparent background: a perfectly circular Usopp sniper Pop Green target token, front-on orthographic, centered and tightly framed with 5 percent transparent safety margin. Slim golden brass scope ring around dark forest-green enamel center; four tiny calibrated crosshair ticks at cardinal directions, small leaf tips at outer lower edges, subtle handcrafted slingshot wood accent around outside ring. Center 65 percent of diameter is quiet dark green empty area for a large live white number (do NOT draw any number). Crisp polished anime pirate RPG UI icon readable when 42 pixels diameter. Round outline must remain a true geometric circle, no perspective, no ellipse. No words, no letters, no numerals, no text, no face, no environment, no multiple versions, no shadows outside silhouette. RGBA transparency outside token. A single circular button, not a sprite sheet.",
+      "source": "C:/Users/王曜瑋/.codex/generated_images/01a19fa7-c2d9-7643-86e3-c5e0d9a510dd/exec-4aeb84a6-1343-4914-8405-451503297dd8.png",
+      "asset": "C:/Users/王曜瑋/.codex/worktrees/android-tabletop-landscape/2026-04-20-1-2-start-html-game-html/android/web/art/card-usopp-number-v1.webp",
+      "runtimeSize": [
+        256,
+        256
+      ],
+      "conversion": "Uniform 1254-square to 256-square LANCZOS, then WebP quality94 method6; RGBA retained"
+    }
+  ],
+  "constraints": "Frames use aspect-ratio 1942/809 with contain; tokens are square contain; card faces object-fit contain. Live DOM labels, no painted numbers."
+}

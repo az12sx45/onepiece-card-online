@@ -1788,12 +1788,13 @@ if(p.action==='zoro'){
     }
     t.hand=null;
 
-    // ★ 新增：索隆 5 號棄牌播報（不帶任何卡號資訊）
+    // 索隆棄牌結果：此張牌已在同一結算中公開移入棄牌堆。
     const casterName = pname(st, st.turnIndex);
     const targetName = pname(st, idx);
     emits.push({
       to: 'all',
       type: 'zoro_discard',
+      cardId: thrown,
       casterId: st.turnIndex,
       targetId: idx,
       casterName,
