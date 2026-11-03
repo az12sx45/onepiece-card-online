@@ -9014,3 +9014,4 @@ Android/iOS v063各自API通道核對，14請求／4新API contexts／6檢查通
 - 觀看飛牌在到達後只向授權查看者翻面。猜中後公開的牌及出戰牌從持牌位置或玩家資訊區移動到演出區，沿用原本公開時機。
 - 海軍卡背採新版藍銀海圖底紋與邊框，保留雙弧圓環徽記及 MARINE。正式圖為 640 × 960 WebP，素材清單與新圖同步。
 - 檔案 public/marineford/marineford.js/.css、art/v2/navy-back.webp、public/desktop/marineford-media-v1.json、scripts/marineford_peek_laser_qa.cjs。Chrome定向8項及流程15項通過，WebKit定向8項通過。證據 D:/Codex_QA/marineford-faction-ui-20261104。
+- 正義卡只顯示在正義區，玩家公開牌縮圖、詳情與牌堆公開牌檢視只列一般公開牌。海賊與海軍卡背使用相同海圖雙線框，海賊保留白鬍子徽記。最新 Chrome 定向 8 項通過，含正義卡分區。

@@ -2316,4 +2316,4 @@ public/game.html與generated js/card-desktop-table.js、css/card-desktop-table.c
 <!-- CARD_ENTRY_VIDEO_RELEASE_20261103_END -->
 
 
-2026-11-04 Marineford 兩方座位外觀、內向公開牌、手機樓梯兩側手牌與飛牌在 marineford.js/.css。navy-back.webp 採新版藍銀海圖，保留雙弧圓環徽記與 MARINE。
+2026-11-04 Marineford 兩方座位外觀、內向公開牌、手機樓梯兩側手牌與飛牌在 marineford.js/.css。navy-back.webp 和 pirate-back.webp 使用同款海圖雙線框，保留各陣營徽記。marineford.js 將正義卡留在正義區。
