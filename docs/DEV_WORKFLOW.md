@@ -8872,3 +8872,6 @@ config/launcher-announcements-v1.json 修訂72→73，僅新增爭霸戰及頂�
 - QA：Chrome與WebKit各11項通過，六瀏覽器完整78動作對局通過（含手機頭像點擊），新版加入大廳進度隱藏、六類目標選擇、實際target-guess請求、三尺寸13號觸控範圍、雷射與頭像座標一致及獨立斜切素材。npm start 31694與頁面HTTP200；未設DATABASE_URL，不宣稱正式帳號DB／真機測試。最終收據 D:/Codex_QA/marineford-target-hud-20261103。
 
 發布前僅移除Marineford JS與定向QA檔末多餘空行，功能／斷言不變；原交接SHA與canonical提交SHA另列收據。
+
+
+2026-11-03第二波發布候選：Card source2595359921bf63b0957c2be04e6a5b4109549669、MF sourced34d74a092c252eaceff8168f3ca24a87bfd4c5d，共同候選package-da2d1f412f0db8a8；manifest SHAc25862cd957aec95d244cedb7e9b96e7f35b2f63614de575ed95dd9e3f38c39d。official builder及獨立重算31程式／1085項均通過，只改3public program共55268837bytes，1054media與Board／Chess保留。MF131邏輯項僅新增2CAS共104334bytes，舊129項不變。已核對公開Zoro cardId的後端來源依賴，發布時必須隨同Render新engine；公告於公開驗證後再啟用。

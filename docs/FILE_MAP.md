@@ -2236,3 +2236,6 @@ card-picker-panels.js/.css、card-zoro-result.js、card-phone-fx.js在既有Andr
 
 ### 2026-11-03第二波Marineford頭像選人
 marineford.js/.css處理lobby進度隱藏、六類server targets頭像選人、實際portrait rect雷射及13格猜號；kizaru-dialogue.webp與guess-number-tile.webp為兩張新內建imagegen素材，提示／原檔見D:/Codex_QA/marineford-target-hud-20261103/art-provenance.txt。marineford-media-v1.json 131邏輯項，舊129項保留；marineford_peek_laser_qa.cjs、marineford_browser_qa.cjs改用真實頭像互動。
+
+
+2026-11-03第二波發布候選：Card source2595359921bf63b0957c2be04e6a5b4109549669、MF sourced34d74a092c252eaceff8168f3ca24a87bfd4c5d，共同候選package-da2d1f412f0db8a8；manifest SHAc25862cd957aec95d244cedb7e9b96e7f35b2f63614de575ed95dd9e3f38c39d。official builder及獨立重算31程式／1085項均通過，只改3public program共55268837bytes，1054media與Board／Chess保留。MF131邏輯項僅新增2CAS共104334bytes，舊129項不變。已核對公開Zoro cardId的後端來源依賴，發布時必須隨同Render新engine；公告於公開驗證後再啟用。
