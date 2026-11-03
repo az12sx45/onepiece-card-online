@@ -2304,3 +2304,13 @@ public/game.html與generated js/card-desktop-table.js、css/card-desktop-table.c
 - D:/Codex_QA/card-entry-video-release-20261103/announcement-apply-report.json：正式payload及公開110次讀回通過後才套用一則公告的guard證據。
 - D:/Codex_QA/card-entry-video-release-20261103/announcement-server-qa.json：隔離82項handler檢查，保護9個既有來源前後raw/LF SHA，不使用正式DB或玩家帳號。
 <!-- CARD_ENTRY_VIDEO_NOTICE_20261103_END -->
+
+
+<!-- CARD_ENTRY_VIDEO_RELEASE_20261103_BEGIN -->
+## 2026-11-03 爭霸戰本輪發布證據索引
+
+- docs/CARD_ENTRY_VIDEO_RELEASE_20261103.json：本輪來源825、package6fd/manifest7d6、兩次實際Live、110與19次公開讀回、44完整物件雜湊、差量快取重用及真實驗證限制。
+- D:/Codex_Project_Coordination/tabletop-series/handoffs/20261103-card-entry-video-release.json：正式RELEASED交接；原MD完整保留為備份與發布前原文suffix。
+- D:/Codex_QA/card-entry-video-release-20261103：候選r2、兩份來源/QA獨立審核、限定44物件publisher、Render截圖、公告82與來源保護15、finalizer交易。歷史候選及HTTP400失敗紀錄各自保留。
+- D:/Codex_QA/card-entry-video-release-20261103/supplemental-android-observation-r2.json：獨立Android v063原入場/確認/下載完成UI窄觀察及截圖指紋；非影片、私有快取/流量/速度或iPhone驗收。
+<!-- CARD_ENTRY_VIDEO_RELEASE_20261103_END -->

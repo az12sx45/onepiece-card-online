@@ -8995,3 +8995,14 @@ Android/iOS v063各自API通道核對，14請求／4新API contexts／6檢查通
 
 新增後以隔離PGlite/原handler完成82項檢查及9檔raw/LF起訖保護；證據D:/Codex_QA/card-entry-video-release-20261103/announcement-server-qa.json。公開讀回、隔離服務測試不等於正式帳號看見公告、手機重開或實體Android影片播放驗收，實機仍待玩家確認。
 <!-- CARD_ENTRY_VIDEO_NOTICE_20261103_END -->
+
+
+<!-- CARD_ENTRY_VIDEO_RELEASE_20261103_BEGIN -->
+## 2026-11-03 爭霸戰入場、影片與結果演出正式交付
+
+來源82560b99d1dec6fdaa827342d41ce079b6b39f8c；metadata f77ca4800582d836857c19d25726462785dc8dc7與更新情報fad44515b38c3d0bf6e5411d60fcac287911851c分別完成實際Render Live。Card為package-6fd7444442d60fe6，manifest SHA 7d6a63bc6ceba78db3096d01b0c7e967f87c1fa93628f53f65387de894e5787a。新版頁面、JS、native CSS經三平台UA讀回正確；44個差量物件共13,972,724B逐一完整SHA核對，正式AssetStore隔離差量快取於新instance重用0次下載。初次110次公開請求與公告後19次小型讀回皆通過；公告revision77/78則、隔離handler82項與最終15組來源保護通過。
+
+正式證據docs/CARD_ENTRY_VIDEO_RELEASE_20261103.json及D:/Codex_Project_Coordination/tabletop-series/handoffs/20261103-card-entry-video-release.json。歷史與最新QA分列，不重複累加366個共用分類斷言；新同步8項為兩個desktop Chromium視窗的真npm/Socket.IO驗證。iOS058/063支援本輪線上內容，結束遊戲、完整關App重開，無需新IPA。Android影片實作修正已發布，FIX_PUBLISHED_DEVICE_RETEST_PENDING；實體Android/iPhone播放、正式帳號可見性、新APK/IPA及完整847MB安裝均未宣稱通過。LATTICE API本階段未提供，收據為本機交付紀錄。
+
+補充窄實機觀察：Card來源在V2105 Android v063透過原UI看到新入場遮罩、本人確認後才離開場地介紹，及原下載管理顯示installed/latest均6fd與核驗完成；root核對指定截圖SHA並目視場地/更新畫面。證據D:/Codex_QA/card-entry-video-release-20261103/supplemental-android-observation-r2.json。這不代表強化影片播放、私有快取逐檔SHA、實測流量/速度或iPhone驗收；凍結正式收據的原驗證界線維持。
+<!-- CARD_ENTRY_VIDEO_RELEASE_20261103_END -->

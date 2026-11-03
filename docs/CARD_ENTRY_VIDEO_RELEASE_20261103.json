@@ -1,0 +1,569 @@
+{
+  "schema": "card-entry-video-source-release-summary-v1",
+  "status": "RELEASED",
+  "releaseComplete": true,
+  "releasedAt": "2026-11-03T15:48:51.880Z",
+  "game": "card",
+  "sourceRoot": "D:/Codex_Release_Worktrees/card-native-server-adapter-20261029",
+  "baselineCommit": "674751fa8c6734a95b8de897605ac0a4f20dee10",
+  "firstSourceCommit": "45602234069809a36c17fca0cc971144919df425",
+  "sourceCommit": "82560b99d1dec6fdaa827342d41ce079b6b39f8c",
+  "payloadCommit": "f77ca4800582d836857c19d25726462785dc8dc7",
+  "effectiveLatestServingCommit": "fad44515b38c3d0bf6e5411d60fcac287911851c",
+  "cardReleaseId": "package-6fd7444442d60fe6",
+  "cardManifestSha256": "7d6a63bc6ceba78db3096d01b0c7e967f87c1fa93628f53f65387de894e5787a",
+  "package": {
+    "totalFiles": 1127,
+    "totalBytes": 847109929
+  },
+  "programs": [
+    {
+      "path": "public/game.html",
+      "rawBytes": 2025807,
+      "rawSha256": "68b72572444c3087a619423702acfbba37ea9a546487e31f1a7f89971a3147f4",
+      "canonicalBytes": 2017402,
+      "canonicalSha256": "32decc4cc829d9f1f8980282bbbda995cb8fd00489bdd2a141d8e2168f2f870f"
+    },
+    {
+      "path": "public/js/card-desktop-table.js",
+      "rawBytes": 343586,
+      "rawSha256": "3957a4feb1071086f4a7a8e5bbeea8fce84d7b6c8d19d21799a29d8e17db6dc4",
+      "canonicalBytes": 341985,
+      "canonicalSha256": "e49f1a43fa635cd0d918ec492a032ee76e288f8389f1a58ecb79091164e85b86"
+    },
+    {
+      "path": "public/css/card-native-online.css",
+      "rawBytes": 18778,
+      "rawSha256": "2c3dc0e4506f798209be369541785dd3812b61660fcc1bdffd9f8224ce0c5ba7",
+      "canonicalBytes": 18669,
+      "canonicalSha256": "8ec12bab00757b71b5df41cea46fcf67cee376a8234676313796663187581b90"
+    }
+  ],
+  "delta": {
+    "logicalAssets": 44,
+    "uniqueObjects": 44,
+    "canonicalBytes": 13972724,
+    "programs": 3,
+    "newMedia": 41,
+    "newMediaBytes": 11594668
+  },
+  "preserved": {
+    "oldMedia": 1054,
+    "otherPrograms": 29,
+    "board": {
+      "releaseId": "package-1bd4a907624b682f",
+      "manifestPath": "desktop/manifests/board-package-1bd4a907624b682f.json",
+      "manifestSha256": "a4aee9a905a919ee96d542466ce25d002cb7e9010df6416ab2b4f6f1226d08c6",
+      "entryPath": "board_start.html",
+      "totalFiles": 6587,
+      "totalBytes": 1597545360
+    },
+    "chess": {
+      "releaseId": "package-ee4627881596bdad",
+      "manifestPath": "desktop/manifests/chess-package-ee4627881596bdad.json",
+      "manifestSha256": "a456de14211bac9ab767ae2a7a56525cadb7a85516d3fb32f86ca1f6f4058ce5",
+      "entryPath": "chess/index.html",
+      "totalFiles": 1578,
+      "totalBytes": 374810279
+    },
+    "desktopCss": {
+      "path": "css/card-desktop-table.css",
+      "kind": "style",
+      "mime": "text/css",
+      "size": 52984313,
+      "sha256": "7a9acbba73c951a7fb367eccee137a9945c9676a671dc1816f06337471f59de7"
+    },
+    "nativeV063Pointers": [
+      {
+        "platform": "android",
+        "url": "https://game-assets.rihdi.tw/android/native/launcher-release-v1.json",
+        "bytes": 1491,
+        "sha256": "04fafe2e6fd46de73f32d9850ac051821e0ddea835748d78e35aac127161b14e",
+        "artifact": {
+          "url": "https://game-assets.rihdi.tw/android/releases/63/PIRATE-ODYSSEY-v063-3efec641eb19.apk",
+          "bytes": 479097162,
+          "sha256": "3efec641eb198385463524093ee319862f833a25399c0235c12a42be03a70e50"
+        },
+        "unchanged": true
+      },
+      {
+        "platform": "ios",
+        "url": "https://game-assets.rihdi.tw/ios/native/launcher-release-v1.json",
+        "bytes": 648,
+        "sha256": "dd63ce817258d09f0c199694d61f9d7ff6340f7256479bad739c767a841b9288",
+        "artifact": {
+          "url": "https://game-assets.rihdi.tw/ios/releases/63/PIRATE-ODYSSEY-v063-be79ccb5d92e-UNSIGNED.ipa",
+          "bytes": 435045301,
+          "sha256": "be79ccb5d92eda3de5d19a0e02f6348a2cdef568246e18ba7ae9073e98236444"
+        },
+        "unchanged": true
+      }
+    ]
+  },
+  "androidVideoIssue": {
+    "status": "FIX_PUBLISHED_DEVICE_RETEST_PENDING",
+    "implementationFixPublished": true,
+    "issueResolved": false,
+    "physicalAndroidPatchedVideoVerified": false,
+    "physicalIphoneVerified": false,
+    "physicalDeviceRetestPending": true
+  },
+  "qa": {
+    "audit": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\delta-qa-audit\\report-r2.json",
+      "bytes": 52476,
+      "sha256": "c93c19862134633e4da9f977cd0bf1b7e1ba6835039c588a38a47249a839e7af"
+    },
+    "producerReports": [
+      {
+        "path": "D:\\Codex_QA\\card-match-entry-20261103\\final-style-r2\\report.json",
+        "bytes": 154583,
+        "sha256": "ebda8549c604d0f2183077073da801000c398e735dea2c33a95795015b2023a1",
+        "name": "entry-latest",
+        "checks": 103
+      },
+      {
+        "path": "D:\\Codex_QA\\card-android-playback-20261103\\native-style-video-final\\report.json",
+        "bytes": 81464,
+        "sha256": "857ffd6e91df7ac39879d352fea9e4daa44fd0133ba0ed2ba426afbd948f7156",
+        "name": "video-latest",
+        "checks": 37
+      },
+      {
+        "path": "D:\\Codex_QA\\card-android-playback-20261103\\native-style-video-resource-bind\\report.json",
+        "bytes": 66570,
+        "sha256": "d24edd9e647ced91562d2eda163b2b31cd20c55e662843889193e81a4f103036",
+        "name": "video-resource-binding",
+        "checks": 27
+      },
+      {
+        "path": "D:\\Codex_QA\\card-venue-entry-20261103\\final-all-platforms\\report.json",
+        "bytes": 101581,
+        "sha256": "522bcd07e6613416f7b7d83d58ffe250d50f61f86df876ce20dd8bfbf191298e",
+        "name": "venue-core",
+        "checks": 211
+      },
+      {
+        "path": "D:\\Codex_QA\\card-android-playback-20261103\\sync-combined-final.json",
+        "bytes": 996,
+        "sha256": "0aadabf2ec5ab9a1dc3ce84276301866bd5399f17715dc9750ed54498187582a",
+        "name": "real-socket-sync",
+        "checks": 8
+      },
+      {
+        "path": "D:\\Codex_QA\\card-result-repetition-20261103\\classifier-v2-final\\report.json",
+        "bytes": 59810,
+        "sha256": "ee4f179dcfdd24d6efa2d6bcb724cca7a49275aca28069577b74d1e0692f41ba",
+        "name": "result-classifier",
+        "checks": 366
+      },
+      {
+        "path": "D:\\Codex_QA\\card-result-repetition-20261103\\fix-final\\report.json",
+        "bytes": 15466,
+        "sha256": "ce67e2efd8a4e3b71045769f782bcdd107d6f1c226633c0758741843a9608c32",
+        "name": "result-repeat",
+        "checks": 71
+      },
+      {
+        "path": "D:\\Codex_QA\\card-result-repetition-20261103\\actual-android\\report.json",
+        "bytes": 67447,
+        "sha256": "662be1ed2b4932ee9939737aa53c3b264d7ea645a21d891f5b67a5405bcc7bac",
+        "name": "result-runtime-android",
+        "checks": 386
+      },
+      {
+        "path": "D:\\Codex_QA\\card-result-repetition-20261103\\actual-ios\\report.json",
+        "bytes": 67295,
+        "sha256": "f562b98578fec783620985df33b9cd9c58c5ffa3bbffe2adafd560a1c4c5ea4e",
+        "name": "result-runtime-ios",
+        "checks": 386
+      },
+      {
+        "path": "D:\\Codex_QA\\card-result-repetition-20261103\\actual-desktop\\report.json",
+        "bytes": 67397,
+        "sha256": "1ef11578470e8adc27df884ea5ae5cbb6883980b7851e941e8d467d20db3eaeb",
+        "name": "result-runtime-desktop",
+        "checks": 386
+      },
+      {
+        "path": "D:\\Codex_QA\\card-status-timing-20261103\\final\\report.json",
+        "bytes": 71913,
+        "sha256": "ea2c1f1193b8ba1012a241640466645a8d9198b98d9c90f20a78173edb71e7fe",
+        "name": "avatar-status",
+        "checks": 111
+      },
+      {
+        "path": "D:\\Codex_QA\\card-match-entry-20261103\\result-status-delta-cold\\report.json",
+        "bytes": 65287,
+        "sha256": "a36dabea2e09997d2c960b805551920a12e23f0f0a9087e5df9ec9a049061d35",
+        "name": "entry-delta-cold",
+        "checks": 66
+      },
+      {
+        "path": "D:\\Codex_QA\\card-result-status-20261103\\sync-final.json",
+        "bytes": 996,
+        "sha256": "a07c5b10da932389201fd2c28afaa79dbfaf0e0241cb9c74fff5fa86169acd60",
+        "name": "sync-delta",
+        "checks": 8
+      }
+    ],
+    "priorFirstQa": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\qa-audit\\report.json",
+      "bytes": 49690,
+      "sha256": "554b092c676005135ca03db203bdcd5fd985d747532a11a9c607236e7fae2a6a"
+    },
+    "history": {
+      "preSupplementRuntimeAssertions": 167,
+      "earlierHtmlUnchangedVenueAssertions": 211,
+      "oldUnboundSyncAssertions": 8,
+      "notCountedAsFreshFinalRuntime": true,
+      "failedRootDriver400Preserved": true
+    },
+    "current": {
+      "sourceBoundActualRuntimeChecksPerPlatform": 386,
+      "platforms": [
+        "android63",
+        "ios63",
+        "desktop"
+      ],
+      "sharedClassifierPrefixChecks": 366,
+      "uniqueEngineFixtures": 140,
+      "extraChecksPerRuntime": 20,
+      "classifierAndTargeted71NotAddedAsUniqueCoverage": true,
+      "statusTimelineChecks": 111,
+      "coldEntryChecks": 66,
+      "ios58FullRepeatedQueenSuite": false,
+      "ios58Scope": "Current exact retained iOS58 cold66 and BigMom status timelines exercise installed result/status wrappers; full repeated Queen runtime suite uses Android63/iOS63/desktop. Shared classifier/targeted unit logic is platform-independent.",
+      "localDesktopChromiumSyncChecks": 8,
+      "syncMediaPlayStubbed": true,
+      "syncProducerProvenanceLimit": "Producer-recorded receipt and companion were audited; this audit did not independently rerun the process. Companion contains exit0 and source hashes but no timestamp/PID/command/served-response-body hash. Script identification is supported by exact scope and check-name match, not a recorded invocation."
+    },
+    "limits": {
+      "physicalAndroidPatchedEnhancementVerified": false,
+      "physicalIPhoneVerified": false,
+      "productionAccountAcceptance": false,
+      "publicReleaseConfirmed": false,
+      "v2105ConclusiveFailureTraceCaptured": false,
+      "v2105PatchedPlaybackSuccessVerified": false,
+      "css503RecoveryWasProvenOnFinalSupplementRuntime": false,
+      "zero53MbRequestClaimAppliesToNativePathsOnly": true,
+      "all41ImagesDynamicallyExercisedByResource27": false,
+      "fullNativeInstallOrGameCacheVerified": false
+    }
+  },
+  "publication": {
+    "dry": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\publish-dry-r2.json",
+      "bytes": 13972724,
+      "sha256": "d6454d9d592cd4fc7482db481d7526c0ca221aedc4022c4af0db748a5f2a028f",
+      "result": {
+        "ok": true,
+        "mode": "dry-run",
+        "logicalFiles": 44,
+        "logicalBytes": 13972724,
+        "uniqueFiles": 44,
+        "uniqueBytes": 13972724,
+        "verified": 44,
+        "uploaded": 0,
+        "skipped": 0,
+        "skippedRace": 0
+      },
+      "actualUploadedProgramObjects": 0,
+      "actualUploadedMediaObjects": 0,
+      "logicalAssets": 44
+    },
+    "live": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\publish-live-r2.json",
+      "bytes": 13972724,
+      "sha256": "a042e953c4ab8c1143f0e7d4398e349424ed8efb6be0b379929bc8ae93e313f4",
+      "result": {
+        "ok": true,
+        "mode": "live",
+        "logicalFiles": 44,
+        "logicalBytes": 13972724,
+        "uniqueFiles": 44,
+        "uniqueBytes": 13972724,
+        "verified": 0,
+        "uploaded": 44,
+        "skipped": 0,
+        "skippedRace": 0
+      },
+      "actualUploadedProgramObjects": 3,
+      "actualUploadedMediaObjects": 41,
+      "logicalAssets": 44
+    }
+  },
+  "public": {
+    "first": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\public-readback-r2.json",
+      "bytes": 155122,
+      "sha256": "6a24812b91d5aa9ee53392c0a0ec09ac5bcf48b418144db35439f470c7b3a2a6",
+      "checks": 9,
+      "requests": 110,
+      "fullBodyLogicalAssets": 44,
+      "assetStoreFirstBytes": 13972724,
+      "newAssetStoreRepeatedBytes": 0,
+      "render": {
+        "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\render-live-r2.json",
+        "bytes": 458,
+        "sha256": "ea9269423b76764d34a0dfd52bd532bb229ced5c1bbee7133e53b6dae8133ddf",
+        "commit": "f77ca4800582d836857c19d25726462785dc8dc7",
+        "status": "Deploy succeeded|Live",
+        "deploymentId": "dep-dbkvngqvcj2c73a1es20",
+        "screenshot": {
+          "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\render-live-r2.png",
+          "bytes": 30840,
+          "sha256": "46ff2f08a1ca64b820c7cfd903ae055465c746d6e45952445e7d959061e5c670"
+        }
+      }
+    },
+    "final": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\post-announcement-public-r2.json",
+      "bytes": 33303,
+      "sha256": "74682b1b1d76b1b72e1867ad6470a66b22f72d72bcaa0ffbe126224956dff23f",
+      "checks": 5,
+      "requests": 19,
+      "render": {
+        "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\render-final-notices-r2.json",
+        "bytes": 476,
+        "sha256": "28781d6cbd8a1ec0f722913561ee3e00b7314329448049898ef3f495c925ce19",
+        "commit": "fad44515b38c3d0bf6e5411d60fcac287911851c",
+        "status": "Deploy succeeded|Live",
+        "deploymentId": "dep-dbkvtm0ae00c7383tgeg",
+        "screenshot": {
+          "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\render-final-notices-r2.png",
+          "bytes": 30146,
+          "sha256": "fe28e64f827d6518fcac454a1ec99d1f143aaac40bdce66689a44e3ddf60af84"
+        }
+      },
+      "all44BodyProofsReused": true
+    },
+    "nativeBaseline": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\native-pointers-before.json",
+      "bytes": 6081,
+      "sha256": "ec359f4a136704616e2a528057f5a3fb1522f08bc44dae9d496d360d61c58dca"
+    },
+    "nativePointers": [
+      {
+        "platform": "android",
+        "url": "https://game-assets.rihdi.tw/android/native/launcher-release-v1.json",
+        "bytes": 1491,
+        "sha256": "04fafe2e6fd46de73f32d9850ac051821e0ddea835748d78e35aac127161b14e",
+        "artifact": {
+          "url": "https://game-assets.rihdi.tw/android/releases/63/PIRATE-ODYSSEY-v063-3efec641eb19.apk",
+          "bytes": 479097162,
+          "sha256": "3efec641eb198385463524093ee319862f833a25399c0235c12a42be03a70e50"
+        },
+        "unchanged": true
+      },
+      {
+        "platform": "ios",
+        "url": "https://game-assets.rihdi.tw/ios/native/launcher-release-v1.json",
+        "bytes": 648,
+        "sha256": "dd63ce817258d09f0c199694d61f9d7ff6340f7256479bad739c767a841b9288",
+        "artifact": {
+          "url": "https://game-assets.rihdi.tw/ios/releases/63/PIRATE-ODYSSEY-v063-be79ccb5d92e-UNSIGNED.ipa",
+          "bytes": 435045301,
+          "sha256": "be79ccb5d92eda3de5d19a0e02f6348a2cdef568246e18ba7ae9073e98236444"
+        },
+        "unchanged": true
+      }
+    ],
+    "announcement": {
+      "revision": 77,
+      "count": 78,
+      "newIds": [
+        "card-20261103-entry-video"
+      ],
+      "preservedOldNotices": 77,
+      "configSha256": "f43541ffe670340cf3a745c6ecc3f9cc274d3ca23362800ce4a3edc83df10a95",
+      "newReleaseGate": {
+        "kind": "card",
+        "releaseId": "package-6fd7444442d60fe6"
+      },
+      "validator": {
+        "path": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\server\\launcher-announcements.js",
+        "bytes": 11260,
+        "sha256": "e1bd737d381c97bc532ad5a50ac29d400afced22cee547846aa57033173aea18"
+      },
+      "privateConfigNotFetchedOverHttp": true,
+      "realAccountVisibilityVerified": false
+    }
+  },
+  "announcement": {
+    "application": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\announcement-apply-report.json",
+      "bytes": 4519,
+      "sha256": "4d7d2d33f7c8daaa86d5b4a33c1c941d68c718b4c6b5048275fe65f1ede22f4b"
+    },
+    "plan": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\announcement-r2\\announcement-plan.json",
+      "bytes": 3513,
+      "sha256": "6abed13f928933dcc66c09bb07e38c9cd2d13066d9f1aff1403828c2b4f04d79"
+    },
+    "draft": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\announcement-r2\\announcements-draft.json",
+      "bytes": 105294,
+      "sha256": "f43541ffe670340cf3a745c6ecc3f9cc274d3ca23362800ce4a3edc83df10a95"
+    },
+    "originalConfig": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\announcement-r2\\announcement-before.json",
+      "bytes": 103466,
+      "sha256": "dad05c184aa5b9f2caee60a0ec1e33a61c5eee296d066546265a48dfec98b9ea"
+    },
+    "handlerQa": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\announcement-server-qa.json",
+      "bytes": 17734,
+      "sha256": "bf0527600f1f8ebc88cbcda3ad5123f29dfd75a30b49b95e3846320691560a9c",
+      "checks": 82,
+      "scope": "Isolated in-memory PGlite plus exact9-file raw/canonical source binding; no production account visibility"
+    },
+    "revision": 77,
+    "count": 78,
+    "preservedOld": 77,
+    "newId": "card-20261103-entry-video",
+    "requiredRelease": {
+      "kind": "card",
+      "releaseId": "package-6fd7444442d60fe6"
+    },
+    "sourceHostingVerified": true,
+    "realAccountVisibilityVerified": false
+  },
+  "sourceProtection": {
+    "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\source-protection-final-r2.json",
+    "bytes": 85460,
+    "sha256": "89431ec5fbf8cc2d524983960da2b7f000f3667f76faeba7de67cdfcb637c867",
+    "passed": true,
+    "checks": 15,
+    "tool": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\delta-source-audit\\verify-protected.cjs",
+      "bytes": 32200,
+      "sha256": "5d039d35e2b9df83f10f31bec7bec1b9efb1b23772195469c799ff83b77a7b9a"
+    },
+    "summary": {
+      "firstSourcePaths": 58,
+      "deltaSourcePaths": 13,
+      "approvedSourcePaths": 62,
+      "formalFiles": 54,
+      "rawInventoryFiles": 60,
+      "runtimePrograms": 3,
+      "newMedia": 41,
+      "maintenanceFiles": 10,
+      "sharedSources": 6,
+      "protectedOriginals": 9,
+      "originalWorkingDocumentPrefixes": 4,
+      "protectedGitObjects": 19,
+      "retainedProgramObjects": 29,
+      "retainedOldMedia": 1054,
+      "retainedOtherPrograms": 29,
+      "oldDesktopCssBodyReads": 0
+    },
+    "nativePointerScope": "Recorded prepublication baseline joined to actual live-publisher GET rows; final native continuity is independently covered by post19",
+    "pipelineToolReview": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\delta-source-audit\\pipeline-r2-review.json",
+      "bytes": 4474,
+      "sha256": "661a784eae489338c507ddae06321d9501a42020bed40710b82bf75a72ca7074"
+    }
+  },
+  "evidence": {
+    "sourceAudit": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\delta-source-audit\\report.json",
+      "bytes": 41670,
+      "sha256": "9eb359be3fa7fe19b26573f1f58f731e7f0ba6d82ec52e8d38cd5d77c51ab39c"
+    },
+    "historicalSourceAudit": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\source-audit\\report.json",
+      "bytes": 73728,
+      "sha256": "2f90a386d1bbb9bbfd5a6db9c2180e80b77356e01100285235b7b7ff1362c2a5"
+    },
+    "historicalInventoryArchive": {
+      "path": "D:\\Codex_QA\\card-entry-video-20261103\\artifact-inventory.pre-result-status.json",
+      "bytes": 20822,
+      "sha256": "019c5b0f39d5026774eb308be4dd7d0f15f5190a96ef7438e4754a63690449ee"
+    },
+    "historicalHandoff": {
+      "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\20261103-card-entry-video.md",
+      "bytes": 8779,
+      "sha256": "ff58ca09ee87c12dba619de89358c283682e00216618227337f80debd97834b1",
+      "currentFileComparisonPerformed": false,
+      "reason": "Producer replaced the handoff. Its old fingerprint remains historical; no unknown old text reconstructed."
+    },
+    "currentHandoff": {
+      "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\20261103-card-entry-video.md",
+      "bytes": 11179,
+      "sha256": "ff8c6a5c63c5d6ad0fd7c5e0de288b579d44e095fd779f665ba7c2daace23ae6"
+    },
+    "sourceBefore": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\source-before.json",
+      "bytes": 62462,
+      "sha256": "d1fc9e5a272d6115927326b63712965c79f3e6abbd473db63f0563511647f914"
+    },
+    "stagedFirstSource": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\staged-source.json",
+      "bytes": 45997,
+      "sha256": "f94634728e9c8915ea6f5b3a58283a8b38e6984d440130171ef820023ef5e71d"
+    },
+    "firstSourceCommit": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\source-commit.json",
+      "bytes": 24338,
+      "sha256": "db49327078e3499f6ca5ecb64b55a2e0e611cf1f178b579904b46e8091358290"
+    },
+    "deltaSourceBefore": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\delta-source-before.json",
+      "bytes": 31890,
+      "sha256": "d57f11aa19022068237450adb1cb54923f55ab0ae900cd1f6800b24302675dcd"
+    },
+    "deltaStagedSource": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\delta-staged-source.json",
+      "bytes": 2969,
+      "sha256": "174000af1dceb89b5eac35e7f0bcef60f960205ef27d205eb19fa1b50f31e33d"
+    },
+    "combinedSourceCommit": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\combined-source-commit.json",
+      "bytes": 8602,
+      "sha256": "54ef25bc0b487ac0ab1fff04eb20a8574ec8563d4699c6380f0df0e7c75852dc"
+    },
+    "inventory": {
+      "path": "D:\\Codex_QA\\card-entry-video-20261103\\artifact-inventory.json",
+      "bytes": 22915,
+      "sha256": "40d5bc6ca6e9bbceebd854f9b5d7787a3b8eb17e667c72728d67963cc55815f0"
+    },
+    "candidateInputs": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\candidate-r2\\release-inputs.json",
+      "bytes": 43304,
+      "sha256": "462d117291c25ffa883a087dad79ea5291350fb5648efcdac88cb6a7d8eafe11"
+    },
+    "candidateBuild": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\candidate-build-r2.json",
+      "bytes": 2627,
+      "sha256": "4344aecc09bf3202c6434f90f58fa69d9a1b6d623297cb9d23e61d51c3d71369"
+    },
+    "finalizer": {
+      "path": "D:\\Codex_QA\\card-entry-video-release-20261103\\pipeline-r2\\finalize-release.cjs",
+      "bytes": 48481,
+      "sha256": "d6e2880bf6e13e66503c36e423b1ace6fcb22565527ac761d9b536be51849947"
+    }
+  },
+  "limits": {
+    "physicalAndroidPatchedVideoVerified": false,
+    "physicalIphoneVerified": false,
+    "realAccountAcceptanceVerified": false,
+    "realAccountAnnouncementVisibilityVerified": false,
+    "productionDatabaseAcceptanceVerified": false,
+    "latticePersistenceClaimed": false,
+    "newApkBuilt": false,
+    "newIpaBuilt": false,
+    "full847MbInstallVerified": false,
+    "fullGameCacheVerified": false,
+    "nativeAppRelaunchExecuted": false,
+    "publicBackendSourceHashVerified": false,
+    "backendIdentityMethod": "Immutable Git objects plus actual exact Render Live commits",
+    "nativeSmallCssScope": "Injected native UI flag===true AND official Android/iOS UA marker; desktop and ordinary Safari retain desktop CSS",
+    "ios58Scope": "Source-owner retained-bundle cold66 and status111 bridges; no physical iPhone or full repeated-Queen iOS58 suite",
+    "syncScope": "Producer source-bound two desktop Chromium contexts, real npm-start/Socket.IO/noDB; media play stubbed; not native crossplay",
+    "oldCssScope": "Retained53MB body not read by finalizer or new public verifier; prior full-body SHA plus immutable Git identity reused",
+    "scope": "Only44logical-asset delta delivery and isolated cache reuse; no full launcher/game/native cache acceptance"
+  },
+  "officialReceipt": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\20261103-card-entry-video-release.json",
+  "scope": "New small source evidence receipt. Root owns Git,progress,OPEN record and other documentation closeout."
+}

@@ -3087,3 +3087,10 @@ Marineford對局移除常駐選單、頭像回上緣，原對局功能從自己�
 ## 2026-11-03 Card播報順序追加
 公開判定完成後才播結果斜圖，取得保護／閃避的頭像動畫及徽章接在斜圖後。純擋招、交幣／死亡後續、同次連續麻痺與重送不重播斜圖，新的真實施放／不同目標決鬥仍保留。presentation層更新，原規則／帳號／下載通道不變；與影片、入場、場地介紹同波交啟動器。來源／QA／實機界線見CARD_RESULT_STATUS_20261103.md。
 <!-- CARD_RESULT_STATUS_20261103_END -->
+
+
+<!-- CARD_ENTRY_VIDEO_RELEASE_20261103_BEGIN -->
+## 2026-11-03 爭霸戰手機入場與演出更新
+
+Card package-6fd7444442d60fe6已完成Windows/Android/iOS既有發布通道的內容整合：原生手機用必要小型CSS與原圖、進場準備遮罩、本人場地介紹確認、影片啟動一次靜音重試、結果演出後才顯示取得狀態及同次後續去重。iOS v058/v063沿用現有App取得線上內容。兩次Render Live及公開檔案驗證詳docs/CARD_ENTRY_VIDEO_RELEASE_20261103.json；修正版真機影片與正式帳號仍待驗收。
+<!-- CARD_ENTRY_VIDEO_RELEASE_20261103_END -->
