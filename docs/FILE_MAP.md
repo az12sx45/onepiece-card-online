@@ -2266,3 +2266,6 @@ marineford.js/.css處理lobby進度隱藏、六類server targets頭像選人、�
 ## 2026-11-03 Card媒體流程
 public/game.html與generated js/card-desktop-table.js、css/card-desktop-table.css為本輪3份runtime。scripts/build_card_media_flow.mjs同步Summon與CARD_MEDIA_FLOW／CARD_RESULT_CUTINS線上相容段；card_enhancement_ready_qa.mjs、card_result_cutins_qa.mjs、card_return_hand_qa.mjs分開驗真影片準備、公開結果斜圖及還牌／兩手牌操作。共享android/web新增card-enhancement-ready.js、card-result-cutins.js、card-return-hand.js/.css，修改card-enhancement-summon.js/.css與mobile-sources.mjs、build-card-desktop.mjs。無新媒體／引擎／規則。CARD_MEDIA_FLOW_20261103.md與D:/Codex_QA/card-media-flow-20261103/artifact-inventory.json、formal-scoped.patch提供精確交接來源；發布以後續release收據為準。
 <!-- CARD_MEDIA_FLOW_20261103_END -->
+
+
+2026-11-03 Card媒體流程候選manifest：public/desktop/manifests/card-package-1c838d6bf03ea7a3.json，由scripts/build_card_program_update.js以外部candidate產生並驗證後promote；public/desktop/catalog-v3.json只切換Card，其他遊戲與媒體記錄保留。外部QA在D:/Codex_QA/card-media-flow-release-20261103，僅3program CAS發布，無媒體或原生安裝包上傳。

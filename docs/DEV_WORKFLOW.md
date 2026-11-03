@@ -8946,3 +8946,7 @@ Fresh固定提交驗證為team8、public-row14、backend9真60秒＋six-browser7
 - 完整需求／重建／source SHA／失敗歷程／真機界線見docs/CARD_MEDIA_FLOW_20261103.md；精確3檔patch與8共享來源inventory在D:/Codex_QA/card-media-flow-20261103。既有其他聊天室dirty與舊預覽不納入。無新素材／APK／IPA，LATTICE API未提供，未假稱持久登記。READY_FOR_INTEGRATION交啟動器統一發布；本段不代表公開或實機驗收。
 最終來源綁定：D:/Codex_QA/card-return-hand-20261103/integrated-final/report.json 108 PASS、零錯誤，integrated:true，未額外注入module/CSS；目前generated桌機1366×768與exact retained Android/iOS各844×390、640×320共五尺寸，五動畫時點皆非等比誤差0，原卡背／私人牌保護／取消／hidden／兩張手牌原點按／提示／frozen均通過。report起始HTML、JS、CSS、engine SHA與交接檔案一致；原QA沒有內建結尾重雜湊斷言，發布者另做來源穩定核對。各最終報告路徑／檢查數／SHA彙整在D:/Codex_QA/card-media-flow-20261103/verification-summary.json。
 <!-- CARD_MEDIA_FLOW_20261103_END -->
+
+
+## 2026-11-03 Card媒體流程程式包整合
+以db60e9ea正式基線及已提交來源2ae415935產生package-1c838d6bf03ea7a3，manifest SHA47f28970c2639bdae654f018a0a1b1156b3f6322a6693d488dc43852caf3855a。只變更game.html、js/card-desktop-table.js、css/card-desktop-table.css共55305632 bytes；完整31程式中其餘28及1054素材記錄完全保留，Board／Chess、Marineford新版、引擎、原生包與啟動器通道不變。config程式清單不變。raw handoff→Git LF→候選bytes映射與獨立來源審查在D:/Codex_QA/card-media-flow-release-20261103；實際上傳、Render Live和公開更新通道仍以後續收據驗證為準。
