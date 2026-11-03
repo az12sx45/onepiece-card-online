@@ -2371,6 +2371,7 @@ if (type === 'LUFFY_SECOND') {
       emits.push({ to: action.playerId, type:'toast', text:'不是你在發動魯夫強化' });
       return { state: st, emits };
     }
+    if (action.payload?.go !== true) return { state: st, emits };
 
     const meIdx = st.turnIndex;
     const me = st.players[meIdx];
@@ -2402,8 +2403,8 @@ if (type === 'LUFFY_SECOND') {
       if (oppId == null) return;
       const oppTail = tail(oppId);
 
-      // 尾數低於 threshold 的玩家被淘汰
-      if (oppTail < threshold) {
+      // 尾數低於或等於門檻的玩家被淘汰。
+      if (oppTail <= threshold) {
         victims++;
         doEliminate(st, i, '魯夫（魚人島）：尾數比武失敗', meIdx, emits);
       }
@@ -2423,13 +2424,15 @@ if (type === 'LUFFY_SECOND') {
       emits.push({ to:'all', type:'silent_discard', by: meIdx, cards:[keepId] });
     }
 
-    // 補抽一張牌
-    if (st.deck.length > 0) {
-      me.hand = st.deck.pop() ?? null;
-      checkHot(st);
-      pushLog(st, '魯夫（魚人島）：比完尾數後補 1 張牌', emits);
-    } else {
-      pushLog(st, '魯夫（魚人島）：牌堆已空，無法補牌', emits);
+    // 仍有其他存活玩家才補牌。全滅時直接沿用原本的本局結算。
+    if (st.players.some((pp, i) => i !== meIdx && pp.alive)) {
+      if (st.deck.length > 0) {
+        me.hand = st.deck.pop() ?? null;
+        checkHot(st);
+        pushLog(st, '魯夫（魚人島）：比完尾數後補 1 張牌', emits);
+      } else {
+        pushLog(st, '魯夫（魚人島）：牌堆已空，無法補牌', emits);
+      }
     }
 
     st.pending = null;

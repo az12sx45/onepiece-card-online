@@ -46,5 +46,16 @@ if(html.includes(statusA)){
   const x=html.indexOf(statusA),y=html.indexOf(statusB,x);if(y<0)throw Error('Incomplete avatar status reveal marker');
   html=html.slice(0,x)+statusBlock+html.slice(y+statusB.length);
 }else html=html.replace(entryA,statusBlock+'\n'+entryA);
-html=html.replace(/(css\/card-(?:desktop-table|native-online)\.css|js\/card-desktop-table\.js)\?v=[^"'\s]+/g,'$1?v=20261103-entry-startup3');
+for(const [name,marker] of [['card-pile-clarity','CARD_PILE_CLARITY'],['card-roger-prediction','CARD_ROGER_PREDICTION']]){
+  const begin=`<!-- ${marker}_BEGIN -->`,end=`<!-- ${marker}_END -->`;
+  const compat=`${begin}\n<style>\n${read(name+'.css')}\n</style>\n<script>\n${read(name+'.js')}\n</script>\n${end}`;
+  if(html.includes(begin)){
+    const x=html.indexOf(begin),y=html.indexOf(end,x);if(y<0)throw Error('Incomplete '+marker);
+    html=html.slice(0,x)+compat+html.slice(y+end.length);
+  }else html=html.replace(entryA,compat+'\n'+entryA);
+}
+// The two art stylesheets are unchanged. Keep their existing cache key and
+// invalidate only the generated script that actually changed this release.
+html=html.replace(/(css\/card-(?:desktop-table|native-online)\.css)\?v=[^"'\s]+/g,'$1?v=20261103-entry-startup3');
+html=html.replace(/(js\/card-desktop-table\.js)\?v=[^"'\s]+/g,'$1?v=20261104-card-timing1');
 fs.writeFileSync(file,html);console.log(JSON.stringify({file,bytes:Buffer.byteLength(html)}));

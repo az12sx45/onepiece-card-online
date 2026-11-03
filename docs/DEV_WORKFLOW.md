@@ -9018,3 +9018,10 @@ Android/iOS v063各自API通道核對，14請求／4新API contexts／6檢查通
 
 
 2026-11-04 頂上戰爭篇更新情報新增 marineford-20261104-faction-ui。發布以遊戲程式與兩張卡背的公開核對為條件，公告沿用既有啟動器版本條件。
+
+
+<!-- CARD_TIMING_VIDEO_20261104_BEGIN -->
+## 2026-11-04 Card影片、逐卡斜圖、卡背及CPU節奏
+本輪以415fe9d3f／公開6fd為基底，使用者逐卡指定0–19斜圖位置及影片→斜圖→原效果，含6強化只查看一次、13解除後才詢問決鬥、14普通coin後播、19預測徽章commit後亮；同時調整不透明等比例卡背與Kid洗後背面待抽。Android受限preload會在未play前timeout，加入同node/src靜音prime回0及有界真點按備援，非真機根因確證。
+CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、等拒絕ACK再一次替代、Kata原卡ID及真人Roger回應主權。User明示8強化門檻包含等值、兩牌棄置且全滅不補，active engine分支定向修正；其他規則/遊戲/native包不改。新增presentation模組及QA；實際驗證狀態、前後source binding與發布交接見CARD_TIMING_VIDEO_20261104.md、D:/Codex_QA/card-timing-video-20261104。只有此marker可納入，保護其他dirty；本段本身不是公開/真機驗收。
+<!-- CARD_TIMING_VIDEO_20261104_END -->

@@ -16,13 +16,21 @@ const cases=require(root+'/scripts/card_all_effect_cases.js').buildCases();
 const movie=path.join(mobileRoot,'public/videos/enh/1.mp4'),movieBytes=fs.statSync(movie).size;
 const out=process.env.STARTUP_QA_OUT||'D:/Codex_QA/card-android-playback-20261103/startup-'+Date.now();
 const modes=(process.env.STARTUP_QA_MODES||'android').split(',');
-const report={passed:false,scope:'Exact retained bundles and current HTML with real MP4/native media API and original EMIT STATE queue. Only first unmuted enhVideo play is fault-injected as a permanently pending promise; later calls use the untouched original native method. Browser/fault evidence only, not physical Android root-cause proof.',checks:[],errors:[],requests:[],traces:{},screenshots:[],bundles:{}};
+const report={passed:false,scope:'Exact retained bundles and current HTML with real MP4/native media API and original EMIT STATE queue. Fault scenarios either hold the first unmuted play promise or limit real range sample delivery until the first native play invocation. Browser/fault evidence only, not physical Android root-cause proof.',checks:[],errors:[],requests:[],traces:{},screenshots:[],bundles:{}};
 fs.mkdirSync(out,{recursive:true});
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const save=()=>fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
 function check(name,pass,detail){report.checks.push({name,pass,detail});if(!pass||report.checks.length%5===0)save();if(!pass)throw Error(name+': '+JSON.stringify(detail));}
-const sourceFiles=['public/game.html','public/js/card-desktop-table.js','public/css/card-desktop-table.css','server/engine.js'];
+const sourceFiles=['public/game.html','public/js/card-desktop-table.js','public/css/card-desktop-table.css','public/css/card-native-online.css','server/engine.js','server/card_skill_intent.js','server/card_presentation_ready.js'];
 report.source=sourceFiles.map(file=>({file,sha256:sha(fs.readFileSync(path.join(root,file)))}));
+const mediaMarker='window.__cardOriginalEnhVideo = playEnhFxFor;';
+const htmlSource=fs.readFileSync(path.join(root,'public/game.html'),'utf8');
+const mediaStart=htmlSource.indexOf('const ENH_VID ='),mediaEnd=htmlSource.indexOf(mediaMarker,mediaStart)+mediaMarker.length;
+report.mediaFunctionSHA256=sha(htmlSource.slice(mediaStart,mediaEnd));
+if(process.env.STARTUP_QA_MEDIA_SHA)check('final page retains verified media function bytes',
+  mediaStart>=0&&mediaEnd>mediaStart&&report.mediaFunctionSHA256===process.env.STARTUP_QA_MEDIA_SHA,report.mediaFunctionSHA256);
+if(process.env.STARTUP_QA_HTML_SHA)check('expected frozen game HTML identity',
+  report.source[0].sha256===process.env.STARTUP_QA_HTML_SHA,report.source[0]);
 report.movie={path:movie,bytes:movieBytes,sha256:sha(fs.readFileSync(movie)),durationSecondsFromMvhd:5.106,moovOffset:5211600};
 const bundles={
   android:{root:mobileRoot+'/android/app/src/main/assets/mobile',hash:{js:'583b21edddae3e0ebc2ec464282e96cd680196215d2758546d3ac99fc6bfb5a5',css:'8348d1e9c0b0a27ca2e3e06457b3a883e17159b7796b2334041c446aa96cf3b2'}},
@@ -31,10 +39,15 @@ const bundles={
 for(const mode of new Set(modes.map(x=>x==='faults'?'android':x))){const b=bundles[mode];if(!b)throw Error('Unknown mode '+mode);b.js=fs.readFileSync(path.join(b.root,'game-mobile.js'));b.css=fs.readFileSync(path.join(b.root,'game-mobile.css'));report.bundles[mode]={root:b.root,js:sha(b.js),css:sha(b.css)};check(mode+' exact v063 JS identity',sha(b.js)===b.hash.js);check(mode+' exact v063 CSS identity',sha(b.css)===b.hash.css);}
 const mime={'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json','.webp':'image/webp','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml','.woff2':'font/woff2'};
 const stub=`window.__sent=[];window.__handlers={};window.__any=[];window.__deliver=(name,data)=>{for(const cb of window.__any)cb(name,data);for(const cb of [...(window.__handlers[name]||[])])cb(data)};window.io=()=>({connected:true,id:'enh-ready-qa',onAny(cb){window.__any.push(cb);return this},on(name,cb){(window.__handlers[name]??=[]).push(cb);return this},once(){return this},listeners(name){return [...(window.__handlers[name]||[])]},off(name,fn){window.__handlers[name]=(window.__handlers[name]||[]).filter(x=>x!==fn);return this},emit(...args){window.__sent.push(args);return this},disconnect(){},connect(){}});`;
-const sockets=new Set();
+const sockets=new Set(),primeReleased=new Map();
 const server=http.createServer((req,res)=>{
   const u=new URL(req.url,'http://localhost'),b=u.pathname.match(/^\/__qa_bundle\/(android|ios)\.(js|css)$/);
   if(b){res.writeHead(200,{'content-type':mime['.'+b[2]]}).end(bundles[b[1]][b[2]]);return;}
+  if(u.pathname==='/__qa_prime_start'){
+    const id=u.searchParams.get('id');
+    if(!primeReleased.has(id))primeReleased.set(id,Date.now());
+    return res.writeHead(204).end();
+  }
   if(u.pathname.startsWith('/__qa_video/')){
     const kind=u.searchParams.get('kind')||'fast',id=u.searchParams.get('id')||'',entry={at:Date.now(),kind,id,range:req.headers.range||null};report.requests.push(entry);
     req.on('aborted',()=>entry.abortedAt=Date.now());res.on('close',()=>entry.closedAt=Date.now());
@@ -51,6 +64,28 @@ const server=http.createServer((req,res)=>{
       if(req.headers.range){const m=req.headers.range.match(/^bytes=(\d*)-(\d*)$/);if(!m){res.writeHead(416,{'content-range':'bytes */'+movieBytes}).end();return;}if(!m[1]){start=Math.max(0,movieBytes-Number(m[2]));}else{start=Number(m[1]);if(m[2])end=Math.min(end,Number(m[2]));}if(start>end||start>=movieBytes){res.writeHead(416,{'content-range':'bytes */'+movieBytes}).end();return;}status=206;}
       entry.status=status;entry.start=start;entry.end=end;
       res.writeHead(status,{'content-type':'video/mp4','content-length':end-start+1,'accept-ranges':'bytes','cache-control':'no-store',...(status===206?{'content-range':`bytes ${start}-${end}/${movieBytes}`}:{})});
+      if(kind==='prime-limited'){
+        // Keep real MP4 ranges intact while simulating a host that does not
+        // deliver enough initial sample data until its first native play.
+        res.flushHeaders();
+        const fd=fs.openSync(movie,'r'),chunk=Buffer.alloc(32768);
+        let pos=start,timer;
+        res.on('close',()=>{clearTimeout(timer);fs.closeSync(fd);});
+        const deliver=()=>{
+          if(res.destroyed)return;
+          if(pos>end){res.end();return;}
+          const cap=primeReleased.has(id)||start>movieBytes-32768?end+1:Math.min(65536,end+1);
+          const length=Math.max(0,Math.min(chunk.length,cap-pos));
+          if(length){
+            const read=fs.readSync(fd,chunk,0,length,pos);
+            pos+=read;entry.streamedBytes=(entry.streamedBytes||0)+read;
+            res.write(Buffer.from(chunk.subarray(0,read)));
+          }
+          timer=setTimeout(deliver,length?8:25);timer.unref();
+        };
+        deliver();
+        return;
+      }
       const stream=fs.createReadStream(movie,{start,end});stream.on('data',c=>entry.streamedBytes=(entry.streamedBytes||0)+c.length);res.on('close',()=>stream.destroy());stream.on('error',()=>res.destroy());stream.pipe(res);
     },delay);timer.unref();return;
   }
@@ -75,10 +110,15 @@ async function setup(p){
   await p.evaluate(()=>{
     window.__enhTrace=[];window.__enhJobDone=false;window.__enhJobError=null;
     const video=document.getElementById('enhVideo');
-    const snapshot=()=>{let buffer=0;try{for(let i=0;i<video.buffered.length;i++)if(video.buffered.start(i)<=.05)buffer=video.buffered.end(i);}catch{}return {at:Date.now(),readyState:video.readyState,width:video.videoWidth,height:video.videoHeight,duration:Number.isFinite(video.duration)?video.duration:null,buffer,src:video.getAttribute('src'),time:video.currentTime};};
+    const snapshot=()=>{let buffer=0;try{for(let i=0;i<video.buffered.length;i++)if(video.buffered.start(i)<=.05)buffer=video.buffered.end(i);}catch{}return {at:Date.now(),readyState:video.readyState,width:video.videoWidth,height:video.videoHeight,duration:Number.isFinite(video.duration)?video.duration:null,buffer,src:video.getAttribute('src'),time:video.currentTime,overlayHidden:document.getElementById('enhOverlay').classList.contains('hidden')};};
     window.__enhSnapshot=snapshot;
     for(const type of ['loadstart','loadedmetadata','loadeddata','canplay','canplaythrough','playing','waiting','stalled','ended','error'])video.addEventListener(type,()=>window.__enhTrace.push({type,...snapshot()}));
     for(const name of ['load','play','pause']){const original=HTMLMediaElement.prototype[name];HTMLMediaElement.prototype[name]=function(...args){if(this===video)window.__enhTrace.push({type:'native-'+name,...snapshot()});return Reflect.apply(original,this,args);};}
+    const originalEmit=socket.emit;
+    socket.emit=function(...args){
+      if(args[0]==='ACTION'&&args[1]?.type==='PRESENTATION_READY')window.__enhTrace.push({type:'ack',id:args[1].payload?.id,...snapshot()});
+      return Reflect.apply(originalEmit,this,args);
+    };
     let signature='';new MutationObserver(()=>{const layer=document.querySelector('.card-enhancement-summon'),next=layer?layer.dataset.card+':'+layer.dataset.phase:'none';if(next!==signature){signature=next;window.__enhTrace.push({type:'phase',phase:layer?.dataset.phase||'none',card:layer?.dataset.card||null,...snapshot()});}}).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['data-phase']});
     let skillBusy=null;setInterval(()=>{const busy=!!CardPhonePresentation.isCardSkillIntroBusy?.();if(busy!==skillBusy){skillBusy=busy;window.__enhTrace.push({type:'skill-busy',busy,...snapshot()});}},40);
   });
@@ -103,15 +143,15 @@ async function installFault(p,mode='pending-first'){
     };
   },{mode,forceAny:process.env.STARTUP_QA_FORCE_FIRST==='1'});
 }
-async function acceptedCard(p,id,room={},tag='startup-pending'){
+async function acceptedCard(p,id,room={},tag='startup-pending',kind='fast'){
   const sample=cases.find(c=>c.label==='card-'+id+'-enhanced/PLAY_CARD'),before=structuredClone(sample.before);before.phase='playing';before.players.forEach((p,i)=>p.isCPU=i!==0);await model(p,before);
   room.state=before;const result=intent.decorate(room,before,{type:'PLAY_CARD',playerId:0,payload:{which:'hand'}},engine.applyAction(before,{type:'PLAY_CARD',playerId:0,payload:{which:'hand'}}));room.state=result.state;
-  const after=engine.getVisibleState(room.state,0);after.presentationReady=barrier.begin(room);const url=await source(p,id,'fast',tag);
+  const after=engine.getVisibleState(room.state,0);after.presentationReady=barrier.begin(room);const url=await source(p,id,kind,tag);
   await p.evaluate(({events,s})=>{window.__sent=[];for(const e of events)window.__deliver('EMIT',e);window.__deliver('STATE',s);},{events:result.emits.filter(e=>e.to==='all'||e.to===0),s:after});return {room,after,url};
 }
 async function releaseAck(p,{room,after},label){
   await idle(p);await p.waitForFunction(id=>window.__sent.some(x=>x[0]==='ACTION'&&x[1].type==='PRESENTATION_READY'&&x[1].payload?.id===id),after.presentationReady.id,{timeout:5000});
-  const ack=(await actions(p)).find(x=>x.type==='PRESENTATION_READY'&&x.payload?.id===after.presentationReady.id);check(label+' original barrier receives sole human ACK',!!ack&&barrier.acknowledge(room,0,ack.payload));const released=barrier.view(room);
+  const acks=(await actions(p)).filter(x=>x.type==='PRESENTATION_READY'&&x.payload?.id===after.presentationReady.id);check(label+' original barrier receives sole human ACK',acks.length===1&&barrier.acknowledge(room,0,acks[0].payload));const released=barrier.view(room);
   await p.evaluate(s=>window.__deliver('STATE',s),{...after,presentationReady:released});await idle(p);
 }
 async function followTarget(p,label){await p.evaluate(()=>window.__sent=[]);await p.locator('main #players>[data-seat-id="1"]').tap();const selected=await actions(p);check(label+' original follow-up target remains playable',selected.length===1&&selected[0].type==='PICK_TARGET'&&selected[0].payload.target===1,selected);}
@@ -164,6 +204,97 @@ async function bothPending(p){
   check('both pending yields no false playing/ended and releases video source',!t.some(x=>x.type==='playing'||x.type==='ended')&&await p.locator('#enhVideo').getAttribute('src')===null,t);
   await settleFirst(p,'reject');await p.waitForTimeout(1400);check('late rejected first call cannot revive timed-out movie',(await p.evaluate(()=>window.__startupFault.attempts.length))===2);await followTarget(p,'both pending');
 }
+async function metadataPrime(p,mode){
+  if(mode!=='android')throw Error('metadata-prime must use the retained Android bundle and Android UA');
+  await p.evaluate(()=>{
+    const v=document.getElementById('enhVideo'),prior=HTMLMediaElement.prototype.play;
+    HTMLMediaElement.prototype.play=function(...args){
+      const pending=Reflect.apply(prior,this,args);
+      if(this===v&&this.getAttribute('src')?.includes('kind=prime-limited')){
+        const id=new URL(this.src).searchParams.get('id');
+        void fetch('/__qa_prime_start?id='+encodeURIComponent(id));
+      }
+      return pending;
+    };
+  });
+  const tag='metadata-prime-actual-queue';
+  const accepted=await acceptedCard(p,1,{},tag,'prime-limited');
+  await p.waitForFunction(()=>window.__enhTrace.some(row=>row.type==='playing'&&!row.overlayHidden),{},{timeout:22000});
+  let t=await trace(p,'visible-playing');
+  const diag=await p.evaluate(()=>window.__readCardEnhVideoTrace());
+  const start=diag.find(row=>row.type==='prime-start'),ready=diag.find(row=>row.type==='prepare-ready');
+  const before=t.find(row=>row.type==='native-play'&&row.overlayHidden);
+  const visible=t.find(row=>row.type==='playing'&&!row.overlayHidden);
+  const ranges=report.requests.filter(row=>row.id===tag);
+  check('limited original MP4 requires real first play before readiness',
+    !!before&&before.readyState<3&&primeReleased.has(tag)&&!!start&&start.muted&&
+    !!ready&&['prime-frame','buffer-after-prime'].includes(ready.detail)&&ready.width>0&&ready.time<20,
+    {start,ready,before});
+  check('exact movie range fetched real tail metadata under restricted preload',
+    ranges.some(row=>row.status===206&&row.start>movieBytes-32768&&row.streamedBytes>0));
+  const white=t.filter(row=>row.type==='phase'&&row.phase==='white');
+  check('white phase waits for decoded same-source opening frame',
+    white.length===1&&white[0].width>0&&white[0].readyState>=2&&white[0].time<.03&&
+    white[0].src===accepted.url&&white[0].at>=before.at&&visible.at>=white[0].at&&visible.time<.12,
+    {white,visible});
+  check('room does not acknowledge while visible video still plays',
+    !(await actions(p)).some(x=>x.type==='PRESENTATION_READY'&&x.payload?.id===accepted.after.presentationReady.id));
+  await p.waitForFunction(()=>window.__enhTrace.some(row=>row.type==='ended'&&!row.overlayHidden),{},{timeout:11000});
+  await releaseAck(p,accepted,'metadata prime');
+  t=await trace(p,'accepted-complete');
+  const ended=t.filter(row=>row.type==='ended'),acks=t.filter(row=>row.type==='ack'&&row.id===accepted.after.presentationReady.id);
+  check('one movie completes and original room ACK comes after it',
+    ended.length===1&&ended[0].src===accepted.url&&ended[0].time>=5&&acks.length===1&&acks[0].at>=ended[0].at,
+    {ended,acks});
+  check('original video source reused without a reload or visible replay',
+    t.filter(row=>row.type==='native-load'&&row.src).length===1&&t.filter(row=>row.type==='playing'&&!row.overlayHidden).length===1,
+    t.filter(row=>['native-load','playing'].includes(row.type)));
+  await followTarget(p,'metadata prime');
+}
+
+async function manualMainTap(p,mode){
+  if(mode!=='android')throw Error('manual-main-tap must use the retained Android bundle and Android UA');
+  await p.evaluate(()=>{
+    const video=document.getElementById('enhVideo'),overlay=document.getElementById('enhOverlay');
+    const original=HTMLMediaElement.prototype.play;
+    window.__manualMain=[];
+    HTMLMediaElement.prototype.play=function(...args){
+      if(this!==video||overlay.classList.contains('hidden'))return Reflect.apply(original,this,args);
+      const call={muted:this.muted,time:this.currentTime,src:this.getAttribute('src'),at:Date.now()};
+      window.__manualMain.push(call);
+      if(window.__manualMain.length<=2){call.fault='pending';return new Promise(()=>{});}
+      return Reflect.apply(original,this,args);
+    };
+  });
+  const accepted=await acceptedCard(p,1,{},'manual-main-tap');
+  const button=p.getByRole('button',{name:'點一下播放強化影片',exact:true});
+  await button.waitFor({state:'visible',timeout:22000});
+  const hit=await button.evaluate(button=>{
+    const r=button.getBoundingClientRect(),style=getComputedStyle(button),overlay=document.getElementById('enhOverlay');
+    const o=getComputedStyle(overlay),summon=document.querySelector('.card-enhancement-summon');
+    const target=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
+    return {hit:target===button||button.contains(target),target:{id:target?.id,tag:target?.tagName,className:target?.className},
+      width:r.width,height:r.height,display:style.display,visibility:style.visibility,buttonZ:style.zIndex,
+      overlayState:overlay.dataset.enhState,overlayZ:o.zIndex,overlayBackground:o.backgroundColor,
+      overlayPointerEvents:o.pointerEvents,summonPhase:summon?.dataset.phase||null,
+      nativeStyle:document.documentElement.dataset.cardBundledStyles,calls:window.__manualMain.slice()};
+  });
+  check('two actual main-phase attempts leave one local tap under native layout',
+    hit.nativeStyle==='1'&&hit.overlayState==='loading'&&hit.calls.length===2&&
+    hit.calls.every(row=>row.fault==='pending'&&row.src===accepted.url)&&!hit.calls[0].muted&&hit.calls[1].muted,hit);
+  let clickError=null;
+  try{await button.click({timeout:2000});}catch(error){clickError=error.message;}
+  check('native CSS leaves the real manual control at the hit point and normal click succeeds',
+    hit.hit&&!clickError,{hit,clickError});
+  await p.waitForFunction(()=>window.__enhTrace.some(row=>row.type==='ended'&&!row.overlayHidden),{},{timeout:11000});
+  await releaseAck(p,accepted,'manual main tap');
+  const t=await trace(p,'manual-main-complete'),calls=await p.evaluate(()=>window.__manualMain);
+  const visible=t.filter(row=>row.type==='playing'&&!row.overlayHidden),ended=t.filter(row=>row.type==='ended');
+  check('real click gives one same-source native replay from the opening frames through completion',
+    calls.length===3&&calls[2].src===accepted.url&&calls[2].muted&&visible.length===1&&visible[0].time<.1&&
+    ended.length===1&&ended[0].time>=5&&t.filter(row=>row.type==='native-load'&&row.src).length===1,{calls,visible,ended});
+}
+
 async function normalStartup(p){
   // An actual user touch allows native unmuted autoplay in desktop Chromium;
   // the Android host separately sets mediaPlaybackRequiresUserGesture(false).
@@ -182,7 +313,7 @@ try{
       const ctx=await browser.newContext({viewport:{width:740,height:360},hasTouch:true,isMobile:true,userAgent:uas[bundleMode],serviceWorkers:'block'});await ctx.route('**/*',r=>new URL(r.request().url()).origin===origin?r.continue():r.abort());await ctx.addInitScript(()=>window.__TABLETOP_ANDROID_TEST_ORIGIN=location.origin);
       if(bundleMode==='ios')await ctx.addInitScript({content:bundles.ios.js.toString()+`\ndocument.addEventListener('DOMContentLoaded',()=>{const l=document.createElement('link');l.rel='stylesheet';l.href='/__qa_bundle/ios.css';document.head.append(l);},{once:true});`});
       page=await ctx.newPage();page.setDefaultTimeout(12000);page.on('pageerror',e=>report.errors.push({mode,scenario,message:e.message}));await page.goto(origin+'/game.html?qaBundle='+bundleMode,{waitUntil:'load'});await setup(page);
-      if(scenario==='recovery')await queueStartup(page,mode);else if(scenario==='cancel-reject'||scenario==='cancel-resolve')await cancelAndReplace(page,scenario.split('-')[1]);else if(scenario==='both-pending')await bothPending(page);else if(scenario==='normal')await normalStartup(page);else throw Error('Unknown scenario '+scenario);
+      if(scenario==='recovery')await queueStartup(page,mode);else if(scenario==='cancel-reject'||scenario==='cancel-resolve')await cancelAndReplace(page,scenario.split('-')[1]);else if(scenario==='both-pending')await bothPending(page);else if(scenario==='normal')await normalStartup(page);else if(scenario==='metadata-prime')await metadataPrime(page,mode);else if(scenario==='manual-main-tap')await manualMainTap(page,mode);else throw Error('Unknown scenario '+scenario);
       check(mode+' '+scenario+' no page exceptions',!report.errors.some(x=>x.mode===mode&&x.scenario===scenario),report.errors);save();await ctx.close();page=null;
     }
     await browser.close();browser=null;

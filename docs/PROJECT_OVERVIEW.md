@@ -3094,3 +3094,10 @@ Marineford對局移除常駐選單、頭像回上緣，原對局功能從自己�
 
 Card package-6fd7444442d60fe6已完成Windows/Android/iOS既有發布通道的內容整合：原生手機用必要小型CSS與原圖、進場準備遮罩、本人場地介紹確認、影片啟動一次靜音重試、結果演出後才顯示取得狀態及同次後續去重。iOS v058/v063沿用現有App取得線上內容。兩次Render Live及公開檔案驗證詳docs/CARD_ENTRY_VIDEO_RELEASE_20261103.json；修正版真機影片與正式帳號仍待驗收。
 <!-- CARD_ENTRY_VIDEO_RELEASE_20261103_END -->
+
+
+<!-- CARD_TIMING_VIDEO_20261104_BEGIN -->
+## 2026-11-04 Card對局呈現更新
+逐卡斜圖依玩家選人/coin/私人讀牌等真正階段呈現，強化影片先播；卡背等比例且不透明，基德洗好先以背面待抽，羅傑公開預測對象在commit後標記。CPU等所有必要玩家完成呈現再接續，移除重複固定延遲。Android新增解碼prime與有界點按播放備援；8強化含等門檻與全滅不補依用戶規則修正。
+保留原啟動器/大廳/帳號/native包/素材及其他遊戲；詳細source/QA/實機界線/發布狀態見CARD_TIMING_VIDEO_20261104.md及協調handoff。
+<!-- CARD_TIMING_VIDEO_20261104_END -->

@@ -25,7 +25,7 @@
       document.write('<link id="cardMatchPresentationStyle" rel="stylesheet" href="'+href+'">');
     })();
   </script>
-  <script defer src="js/card-desktop-table.js?v=20261103-entry-startup3"></script>
+  <script defer src="js/card-desktop-table.js?v=20261104-card-timing1"></script>
   <link rel="stylesheet" href="css/card-finish-v1.css?v=20260907-depth-visible-v2">
   <script defer src="js/card_finish_v1.js?v=20260907-depth-visible-v2"></script>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
@@ -2941,7 +2941,7 @@ html:root[data-card-phone] body #enhOverlay[data-enh-state="loading"] #enhVideo,
   <div id="luffyBoostModal" class="hidden fixed inset-0 z-[90] flex items-center justify-center bg-black/70">
     <div class="w-[min(520px,92vw)] rounded-2xl border border-neutral-700/70 bg-neutral-900/80 backdrop-blur p-5">
       <div class="text-lg font-extrabold mb-3">發動</div>
-      <div class="text-sm opacity-80 mb-4">魯夫強化：是否發動？</div>
+      <div class="text-sm opacity-80 mb-4">以保留牌尾數減 3 為門檻，一次淘汰尾數不大於門檻的對手。8 號與保留牌都棄掉；仍有對手才補 1 張，保護／閃避照常生效。</div>
       <div class="flex justify-end">
         <button id="luffyBoostGo" class="px-4 py-2 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">
           猿王群鴉炮
@@ -3816,10 +3816,28 @@ function playDrawFxThenDraw(){
 
 /* === 強化影片（全體同步播放） === */
 // 20 張卡的強化影片路徑（0.mp4 ~ 19.mp4；若你有自訂，改這裡即可）
-const ENH_VID = Array.from({length:20}, (_,i)=> `videos/enh/${i}.mp4`);
+const ENH_VID = Array.from({length:20}, (_,i)=> "videos/enh/"+i+".mp4");
 
-// Request the accepted public card's movie while its projection is rising.
-// The projection must not turn white until a decoded frame and buffer exist.
+const _enhVideoTrace=[];
+function traceEnhVideo(type,card,vid,detail){
+  _enhVideoTrace.push({type,card,ms:Math.round(performance.now()),ready:vid.readyState,width:vid.videoWidth,
+    time:Math.round(1000*vid.currentTime),muted:vid.muted,...(detail===undefined?{}:{detail})});
+  if(_enhVideoTrace.length>48)_enhVideoTrace.shift();
+}
+window.__readCardEnhVideoTrace=()=>_enhVideoTrace.map(row=>({...row}));
+const useAndroidEnhPrime=()=>window.__TABLETOP_ANDROID_GAME_UI__===true&&/\bONEPIECE_TABLETOP_ANDROID\b/i.test(navigator.userAgent);
+const enhPlayDenied=error=>error?.name==='NotAllowedError'||error?.name==='SecurityError';
+function makeEnhVideoTap(onTap){
+  const button=document.createElement('button');
+  button.type='button';button.className='enh-load-status';button.textContent='點一下播放強化影片';
+  button.style.pointerEvents='auto';button.style.cursor='pointer';
+  button.addEventListener('click',onTap,{once:true});
+  document.body.append(button);
+  return button;
+}
+
+// Begin loading as the card rises. Android may keep preload below a playable
+// state until the same element receives its first real play() call.
 let _enhVideoPreparation=null;
 function cancelPreparedEnhVideo(){
   const item=_enhVideoPreparation;if(!item)return;
@@ -3832,31 +3850,88 @@ function prepareEnhFxFor(cardId){
   const src=ENH_VID[cardId];
   if(_enhVideoPreparation?.id===cardId&&vid.getAttribute('src')===src)return _enhVideoPreparation.promise;
   cancelPreparedEnhVideo();
-  const item={id:cardId,src,ready:false,done:false,timer:null,poll:null,resolve:null,promise:null,cancel:null};
+  const android=useAndroidEnhPrime();
+  const item={id:cardId,src,ready:false,done:false,timer:null,poll:null,primeTimer:null,primeTapTimer:null,attempt:0,
+    priming:false,primePlaying:false,rewinding:null,tap:null,tapUsed:false,resolve:null,promise:null,cancel:null};
   item.promise=new Promise(resolve=>item.resolve=resolve);_enhVideoPreparation=item;
-  const current=()=>_enhVideoPreparation===item&&vid.getAttribute('src')===src;
-  function detach(){clearTimeout(item.timer);clearInterval(item.poll);for(const type of ['loadeddata','canplay','canplaythrough','progress','loadedmetadata'])vid.removeEventListener(type,check);vid.removeEventListener('error',failed);}
-  function settle(ready){
+  const current=()=>_enhVideoPreparation===item&&!item.done&&vid.getAttribute('src')===src;
+  const events=['loadeddata','canplay','canplaythrough','progress','loadedmetadata','seeked'];
+  const removeTap=()=>{item.tap?.remove();item.tap=null;};
+  function detach(){
+    clearTimeout(item.timer);clearTimeout(item.primeTimer);clearTimeout(item.primeTapTimer);
+    clearInterval(item.poll);removeTap();
+    for(const type of events)vid.removeEventListener(type,check);
+    vid.removeEventListener('playing',playing);vid.removeEventListener('error',failed);
+  }
+  function settle(ready,reason){
     if(item.done)return;item.done=true;item.ready=ready;detach();
+    traceEnhVideo(ready?'prepare-ready':'prepare-failed',cardId,vid,reason);
     if(!ready&&_enhVideoPreparation===item){_enhVideoPreparation=null;delete vid.__enhPreparedFor;try{vid.pause();vid.removeAttribute('src');vid.load();}catch{}}
     item.resolve(ready);
+  }
+  function rewind(reason){
+    item.rewinding=reason;
+    try{vid.pause();if(vid.currentTime>0)vid.currentTime=0;}catch{settle(false,'prime-rewind');return;}
+    check();
   }
   function check(){
     if(!current())return;
     if(document.hidden||isCpuSkipFastMode()){cancelPreparedEnhVideo();return;}
+    const hasFrame=vid.videoWidth>0&&vid.videoHeight>0&&vid.readyState>=2;
+    if(item.rewinding){
+      if(hasFrame&&!vid.seeking&&vid.currentTime<.02)settle(true,item.rewinding);
+      return;
+    }
+    if(item.primePlaying&&hasFrame){rewind('prime-frame');return;}
     let buffered=0;try{for(let i=0;i<vid.buffered.length;i++)if(vid.buffered.start(i)<=.05){buffered=vid.buffered.end(i);break;}}catch{}
     const needed=Number.isFinite(vid.duration)&&vid.duration>0?Math.min(2,vid.duration):2;
-    if(vid.videoWidth>0&&vid.videoHeight>0&&vid.readyState>=3&&(vid.readyState>=4||buffered>=needed))settle(true);
+    if(hasFrame&&vid.readyState>=3&&(vid.readyState>=4||buffered>=needed)){
+      if(item.priming)rewind('buffer-after-prime');else settle(true,'buffer');
+    }
   }
-  function failed(){if(current())settle(false);}
+  function playing(){
+    if(!current()||!item.priming||item.rewinding||vid.paused)return;
+    item.primePlaying=true;traceEnhVideo('prime-playing',cardId,vid);check();
+  }
+  function offerPrimeTap(reason){
+    if(!current()||document.hidden||item.primePlaying||item.rewinding||item.tapUsed||item.tap)return;
+    traceEnhVideo('prime-tap-offered',cardId,vid,reason);
+    item.tap=makeEnhVideoTap(()=>{
+      item.tapUsed=true;removeTap();prime(true);
+    });
+  }
+  function prime(fromTap=false){
+    if(!current()||document.hidden||isCpuSkipFastMode())return;
+    const attempt=++item.attempt;
+    clearTimeout(item.primeTapTimer);
+    item.priming=true;item.primePlaying=false;
+    vid.muted=true;
+    if(fromTap){
+      // Abort a pending request without replacing the source or losing its buffer.
+      try{vid.pause();}catch{}
+    }else item.primeTapTimer=setTimeout(()=>offerPrimeTap('pending'),1500);
+    traceEnhVideo(fromTap?'prime-tap':'prime-start',cardId,vid);
+    let pending;try{pending=vid.play();}catch(error){pending=Promise.reject(error);}
+    Promise.resolve(pending).catch(error=>{
+      if(!current()||attempt!==item.attempt||item.primePlaying||item.rewinding)return;
+      item.priming=false;clearTimeout(item.primeTapTimer);
+      const denied=enhPlayDenied(error);
+      traceEnhVideo('prime-rejected',cardId,vid,denied?'gesture':'play');
+      if(denied)offerPrimeTap('gesture');
+    });
+  }
+  function failed(){if(current())settle(false,vid.error?.code||'media-error');}
   item.cancel=()=>{
     detach();if(!item.done){item.done=true;item.resolve(false);}
+    traceEnhVideo('prepare-cancel',cardId,vid);
     if(vid.getAttribute('src')===src&&!vid.__enhOnEnded){delete vid.__enhPreparedFor;try{vid.pause();vid.removeAttribute('src');vid.load();}catch{}}
   };
-  for(const type of ['loadeddata','canplay','canplaythrough','progress','loadedmetadata'])vid.addEventListener(type,check);
-  vid.addEventListener('error',failed);vid.__enhPreparedFor=cardId;vid.preload='auto';vid.setAttribute('playsinline','');
-  item.timer=setTimeout(()=>settle(false),15000);item.poll=setInterval(check,150);
-  try{vid.setAttribute('src',src);vid.load();check();}catch{settle(false);}
+  for(const type of events)vid.addEventListener(type,check);
+  vid.addEventListener('playing',playing);vid.addEventListener('error',failed);
+  vid.__enhPreparedFor=cardId;vid.preload='auto';vid.setAttribute('playsinline','');
+  item.timer=setTimeout(()=>settle(false,'prepare-timeout'),15000);item.poll=setInterval(check,150);
+  if(android)item.primeTimer=setTimeout(()=>prime(),600);
+  try{vid.setAttribute('src',src);traceEnhVideo('prepare-start',cardId,vid);vid.load();check();}catch{settle(false,'load');}
   return item.promise;
 }
 window.__prepareCardEnhVideo=prepareEnhFxFor;
@@ -3870,19 +3945,21 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{
 
 // 播放指定卡的強化影片（全體）
 function playEnhFxFor(cardId){
-  if (isCpuSkipFastMode()) return;
+  if (document.hidden||isCpuSkipFastMode()) return;
   const ov=document.getElementById('enhOverlay'),vid=document.getElementById('enhVideo');
   if(!ov||!vid)return;
   const prepared=_enhVideoPreparation?.id===cardId&&_enhVideoPreparation.ready&&vid.getAttribute('src')===ENH_VID[cardId];
   if(prepared){_enhVideoPreparation=null;delete vid.__enhPreparedFor;}else cancelPreparedEnhVideo();
   vid.__enhOnEnded?.();
-  let closed=false,timer=null,lastTime=0,lastProgress=performance.now(),started=false,mutedRetried=false,playAttempt=0;
+  let closed=false,timer=null,lastTime=0,lastProgress=performance.now(),started=false,mutedRetried=false,mutedRetryAt=0,playAttempt=0,tap=null,tapUsed=false;
   const status=document.createElement('span');status.className='enh-load-status';status.setAttribute('role','status');status.textContent='強化影片載入中…';
   const current=()=>!closed&&vid.__enhOnEnded===cleanup;
+  const removeTap=()=>{tap?.remove();tap=null;};
   function cleanup(reason){
     if(!current())return;closed=true;clearTimeout(timer);_enhFxForceTimer=null;
+    traceEnhVideo('play-close',cardId,vid,reason==='timeout'||reason==='error'?reason:reason?.type==='ended'?'ended':'cancel');
     vid.removeEventListener('ended',cleanup);vid.removeEventListener('error',failed);vid.removeEventListener('playing',playing);
-    ov.classList.add('hidden');delete ov.dataset.enhState;status.remove();
+    ov.classList.add('hidden');delete ov.dataset.enhState;status.remove();removeTap();
     vid.__enhOnEnded=null;vid.__enhOnClick=null;
     try{vid.pause();vid.removeAttribute('src');vid.load();}catch{}
     if(wasPlayingBeforeDuck&&typeof bgmAudio!=='undefined'&&bgmAudio){requestBgmResume();wasPlayingBeforeDuck=false;}
@@ -3893,29 +3970,47 @@ function playEnhFxFor(cardId){
     }
   }
   function failed(){cleanup('error');}
-  function playing(){if(!current())return;started=true;lastProgress=performance.now();ov.dataset.enhState='playing';status.hidden=true;}
-  function attemptPlayback(muted=false){
+  function playing(){
+    if(!current())return;
+    started=true;lastProgress=performance.now();ov.dataset.enhState='playing';status.hidden=true;removeTap();
+    traceEnhVideo('playing',cardId,vid);
+  }
+  function offerPlaybackTap(reason){
+    if(!current()||document.hidden||!useAndroidEnhPrime()||tapUsed||tap)return false;
+    status.hidden=true;traceEnhVideo('play-tap-offered',cardId,vid,reason);
+    tap=makeEnhVideoTap(()=>{
+      tapUsed=true;removeTap();status.hidden=false;attemptPlayback(true,true);
+    });
+    return true;
+  }
+  function attemptPlayback(muted=false,fromTap=false){
     if(!current())return;
     const attempt=++playAttempt;
     if(muted){
       mutedRetried=true;vid.muted=true;
-      // Abort a hung play request without discarding the decoded frame/buffer.
-      // Its late rejection belongs to the previous attempt and must be ignored.
+      if(!fromTap)mutedRetryAt=performance.now();
+      // Abort a hung request without discarding the decoded frame or buffer.
       try{vid.pause();}catch{}
     }
+    traceEnhVideo(fromTap?'play-tap':muted?'play-muted':'play-start',cardId,vid);
     let pending;try{pending=vid.play();}catch(e){pending=Promise.reject(e);}
-    Promise.resolve(pending).catch(()=>{
+    Promise.resolve(pending).catch(error=>{
       if(!current()||attempt!==playAttempt||started)return;
-      if(!mutedRetried)attemptPlayback(true);else failed();
+      const denied=enhPlayDenied(error);
+      traceEnhVideo('play-rejected',cardId,vid,denied?'gesture':'play');
+      if(!mutedRetried){attemptPlayback(true);return;}
+      if(tap||denied&&offerPlaybackTap('gesture'))return;
+      failed();
     });
   }
   function watch(){
     if(!current())return;
-    if(vid.currentTime>lastTime+.05){lastTime=vid.currentTime;lastProgress=performance.now();}
-    // Android may leave play() pending instead of rejecting. Retrying only in
-    // catch() would wait eight seconds and skip an otherwise ready movie.
-    if(!started&&!mutedRetried&&performance.now()-lastProgress>=1200)attemptPlayback(true);
-    if(performance.now()-lastProgress>(started?10000:8000)){cleanup('timeout');return;}
+    const now=performance.now();
+    if(vid.currentTime>lastTime+.05){lastTime=vid.currentTime;lastProgress=now;}
+    // Android may leave either play() attempt pending instead of rejecting.
+    if(now-lastProgress>(started?10000:8000)){cleanup('timeout');return;}
+    if(!started&&!mutedRetried&&now-lastProgress>=1200)attemptPlayback(true);
+    if(!started&&mutedRetryAt&&now-Math.max(mutedRetryAt,lastProgress)>=2000)offerPlaybackTap('pending');
     timer=setTimeout(watch,250);_enhFxForceTimer=timer;
   }
   vid.__enhOnEnded=cleanup;
@@ -3923,9 +4018,9 @@ function playEnhFxFor(cardId){
   ov.dataset.enhState='loading';ov.append(status);ov.classList.remove('hidden');
   vid.muted=false;vid.volume=1;vid.setAttribute('playsinline','');
   if(!prepared)vid.setAttribute('src',ENH_VID[cardId]||ENH_VID[0]);
-  // Arm BEFORE load/play: Android can leave play() pending forever, not reject it.
+  // Arm before load/play; neither a pending request nor a gesture can stall
+  // the room indefinitely. Reuse the prepared first frame and range buffer.
   watch();
-  // Reusing the warm element preserves its decoded first frame and buffer.
   try{if(!prepared)vid.load();if(vid.currentTime>.01)vid.currentTime=0;}catch{}
   attemptPlayback();
 }
@@ -4235,7 +4330,7 @@ const CARD_TEXT = {
     baseTitle: "橡膠橡膠象槍",
     base: "可挑戰1～2位玩家比大小，輸了會被淘汰。",
     enhTitle: "四檔 猿王群鴉砲",
-    enh: "跟每位玩家比大小，攻擊力-3，自身輸了也不會被淘汰。"
+    enh: "以保留牌尾數減3為門檻，一次淘汰尾數不大於門檻的對手。8號與保留牌都棄掉；仍有對手才補1張，保護／閃避照常生效。"
   },
   9: {
     name: "女帝漢考克",
@@ -6905,11 +7000,8 @@ if (srvP.action === 'law') {
 
     if (boosted) {
       const confirmedTarget = srvP.extra?.disarmedTarget;
-      if (Number.isInteger(confirmedTarget) || (
-        localPending && localPending.action === 'killer' &&
-        localPending.stage === 'confirm' && Number.isInteger(localPending.target)
-      )) {
-        const tid = Number.isInteger(confirmedTarget) ? confirmedTarget : localPending.target;
+      if (Number.isInteger(confirmedTarget)) {
+        const tid = confirmedTarget;
         const tp = state.players?.[tid];
         const stillDef = !!(tp && (tp.protected || tp.dodging));
 
@@ -6936,28 +7028,10 @@ if (srvP.action === 'law') {
         '選擇對象（將先解除其保護/閃避，然後可選擇是否決鬥）',
         (i)=>{
           sendAction('PICK_TARGET', { target: i });
-          localPending = { action:'killer', stage:'confirm', target:i, at:Date.now() };
-
-          const tp = state.players?.[i];
-          const stillDef = !!(tp && (tp.protected || tp.dodging));
-
-          showYesNo(
-            stillDef
-              ? `要與 ${pname(i)} 決鬥嗎？（他原本有防禦，已嘗試解除）`
-              : `要與 ${pname(i)} 決鬥嗎？（目前看不到保護/閃避）`,
-            '決鬥',
-            '不決鬥',
-            ()=>{
-              sendAction('PICK_TARGET', { target: i, duel: true });
-              localPending = null;
-              hideModal();
-            },
-            ()=>{
-              sendAction('PICK_CANCEL');
-              localPending = null;
-              hideModal();
-            }
-          );
+          // The accepted disarm batch owns its cut-in and effects. Open the
+          // duel decision only after its authoritative STATE is presented.
+          localPending = null;
+          hideModal();
         },
         { allowSelf:false }
       );
@@ -7515,7 +7589,7 @@ el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
         // First the played card enters the center; results are not applied yet.
         while(valid()&&!fast()&&api.isCardEntering?.())await pause();
         if(!valid())return;
-        const skillIntro=await api.presentCardSkillBatch?.(batch.events);
+        const skillIntro=await api.presentCardSkillBatch?.(batch.events,batch.state);
         if(!valid())return;
         const sniperHandled=await api.presentSniperBatch?.(batch.events);
         if(!valid())return;
@@ -7764,7 +7838,7 @@ el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
   const api=window.CardPhonePresentation;if(!api||api.groupReadyVersion)return;api.groupReadyVersion=1;
   let gate=null,timer=null,sent=null,sentAt=0;
   const visible=id=>{const n=document.getElementById(id);return !!n&&!n.hidden&&!n.classList.contains('hidden')&&n.getClientRects().length>0;};
-  const localBusy=()=>document.hidden||!!document.getElementById('phoneCoinFlights')?.children.length||api.presentationQueueSize?.()>0||api.presentationEffectsBusy?.()||api.isVenueIntroPending?.()||api.isVenueEntering?.()||(!state?.pending&&api.isCardResolving?.())||['phoneCardSheet','phonePrivateReveal','phoneLibrary','cardDexOverlay','phoneVenueIntro','rewardModal','rewardOverlay'].some(visible);
+  const localBusy=()=>['loading','failed'].includes(document.documentElement.dataset.cardBoot)||document.hidden||!!document.getElementById('phoneCoinFlights')?.children.length||api.presentationQueueSize?.()>0||api.presentationEffectsBusy?.()||api.isVenueIntroPending?.()||api.isVenueEntering?.()||(!state?.pending&&api.isCardResolving?.())||['phoneCardSheet','phonePrivateReveal','phoneLibrary','cardDexOverlay','phoneVenueIntro','rewardModal','rewardOverlay'].some(visible);
   const current=()=>gate?.waiting&&typeof state==='object'&&state?.presentationReady?.id===gate.id;
   const canSend=api.canSendPresentedAction;api.canSendPresentedAction=target=>!gate?.waiting&&(!canSend||canSend(target));
   const originalSend=typeof sendAction==='function'?sendAction:null;
@@ -8732,25 +8806,43 @@ html[data-card-pickers="v1"] #modal[data-picker-design="usopp"] button[data-d]:n
 <!-- CARD_PICKER_PANELS_END -->
 <!-- CARD_RESULT_CUTINS_BEGIN -->
 <script>
-/* Accepted operations keep their real effects; diagonal artwork reports results afterwards. */
+/* Accepted public operations choose their cut-in phase; real effects and rules stay intact. */
 (() => {
   const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
   if(location.origin!==origin||location.pathname!=='/game.html')return;
   function mount(){
     const api=window.CardPhonePresentation;
-    if(!api||api.resultCutinVersion>=2)return;api.resultCutinVersion=2;
+    if(!api||api.resultCutinVersion>=3)return;api.resultCutinVersion=3;
     const themes={0:'flame',2:'petals',3:'kick',4:'guard',5:'slash',6:'room',7:'storm',8:'fist',9:'heart',10:'thunder',11:'magnet',12:'plague',13:'scythe',14:'soul',15:'future',16:'frost',17:'dark',18:'haki',19:'king'};
+    const beforeCards=new Set([0,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19]);
+    const beforePhase=intent=>!!intent&&(beforeCards.has(intent.cardId)||intent.cardId===14&&intent.mode==='demand');
     const valid=id=>Number.isInteger(id)&&id>=0&&id<20;
     const name=id=>typeof pname==='function'?pname(id):'P'+(Number(id)+1);
     const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text!=null)n.textContent=text;return n;};
     const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
     const declaration=events=>events?.find(e=>e?.to==='all'&&e.type==='card_skill_intent'&&valid(e.cardId)&&themes[e.cardId]);
+    function presentationIntent(events,next){
+      const declared=declaration(events);if(declared)return declared;
+      // Some accepted initial casts have no intent yet because they await
+      // a later coin or sorting decision. Use actual public play evidence.
+      const pub=events?.filter(e=>e?.to==='all')||[];
+      if(pub.some(e=>e.type==='log'&&/【靜默】/.test(e.text||'')))return null;
+      const play=pub.filter(e=>e.type==='log').map(e=>String(e.text||'').match(/^P(\d+)(?:（.*）)? 打出 (7|12|15|17)｜/)).find(Boolean);
+      const fx=pub.find(e=>e.type==='play_fx'&&[7,12,15,17].includes(e.cardId)&&Number.isInteger(e.playerId));
+      const cardId=play?Number(play[2]):fx?.cardId,actor=play?Number(play[1])-1:fx?.playerId;
+      if(!Number.isInteger(actor)||actor<0)return null;
+      if(cardId===7&&(next?.pending?.action==='nami'||pub.some(e=>e.type==='enh_fx'&&e.cardId===7)||typeof isEnhancedNow==='function'&&isEnhancedNow(7)))return null;
+      if(cardId===12&&next?.pending?.action!=='queen')return null;
+      if(cardId===15&&next?.pending?.action!=='kata-order')return null;
+      if(cardId===17&&next?.pending?.action!=='teach-multipick')return null;
+      return {cardId,casterId:actor,targetId:null,mode:'effect',enhanced:cardId===15||cardId===17};
+    }
     function summary(events,next){
       const intent=declaration(events);if(!intent)return null;
       const publicEvents=events.filter(e=>e?.to==='all'),id=intent.cardId;
       // Paying/refusing is the target's continuation, not another card cast.
       if(id===14&&['pay','decline'].includes(intent.mode))return null;
-      // A demand and an enhanced Law preview still await another real decision.
+      // A demand and an enhanced Law preview have no completed outcome yet.
       if(intent.mode==='demand'&&next?.pending?.action==='bigmom-pay')return null;
       if(id===6&&intent.mode==='view'&&next?.pending?.action==='law')return null;
       const of=type=>publicEvents.filter(e=>e.type===type),sentences=[];
@@ -8791,53 +8883,174 @@ html[data-card-pickers="v1"] #modal[data-picker-design="usopp"] button[data-d]:n
       return {id,actor:intent.casterId,enhanced:intent.enhanced===true,result:[...new Set(sentences)].join('；')};
     }
     api.cardResultSummary=summary;
+    function beforeSummary(events,next){
+      const intent=presentationIntent(events,next);if(!beforePhase(intent))return null;
+      const id=intent.cardId,publicEvents=events.filter(e=>e?.to==='all'),outcome=summary(events,next);
+      if(id===6&&intent.enhanced===true&&intent.mode==='swap')return null;
+      if(id===12&&intent.mode==='coin')return null;
+      const future=id===15&&intent.mode==='effect'&&(intent.enhanced!==true||next?.pending?.action==='kata-order');
+      if(id===15&&!future)return null;
+      const coverIntro=id===17&&intent.mode==='effect'&&(intent.enhanced!==true||next?.pending?.action==='teach-multipick');
+      if(id===17&&!coverIntro)return null;
+      const rogerExit=id===19&&intent.enhanced!==true&&next?.nextRoundStart===intent.casterId&&next?.players?.find(p=>p.id===intent.casterId)?.alive===false;
+      const prediction=id===19&&intent.mode==='predict'&&next?.rogerPred?.by===intent.casterId&&next?.rogerPred?.pick===intent.targetId;
+      // Enhanced ROOM has a real preview decision before its later swap.
+      // The accepted public intent names the target; private card fields are
+      // neither needed nor read by this presentation plan.
+      const preview=id===6&&intent.mode==='view'&&!publicEvents.some(e=>e.type==='card_defense');
+      const demand=id===14&&intent.mode==='demand'&&next?.pending?.action==='bigmom-pay'&&!publicEvents.some(e=>e.type==='card_defense');
+      const reshuffle=id===0?publicEvents.filter(e=>e.type==='log').map(e=>String(e.text||'').match(/^薩波：影響 (\d+) 人/)).find(Boolean):null;
+      const normalNami=id===7&&intent.enhanced!==true&&intent.mode==='effect';
+      const normalQueen=id===12&&intent.enhanced!==true&&next?.pending?.action==='queen';
+      const rotation=id===11&&intent.enhanced&&publicEvents.some(e=>e.type==='log'&&/^基德（強化）：已逆時針傳遞/.test(e.text||''));
+      if(rotation){
+        const blocked=new Set(publicEvents.filter(e=>e.type==='card_defense').map(e=>e.targetId)),players=typeof state==='object'?state?.players:null;
+        if(Array.isArray(players)&&players.filter(p=>p.alive&&!blocked.has(p.id)).length<2)return null;
+      }
+      if(!outcome&&!preview&&!demand&&!reshuffle&&!normalNami&&!normalQueen&&!rotation&&!future&&!coverIntro&&!rogerExit&&!prediction)return null;
+      const target=Number.isInteger(intent.targetId)&&intent.targetId>=0?name(intent.targetId):null;
+      let result;
+      if(id===0)result=reshuffle?.[1]==='0'?'重新洗牌':'收回手牌、洗牌後重新發牌';
+      else if(id===2){
+        const all=publicEvents.some(e=>e.type==='robin_peek'&&e.all===true);
+        if(all){
+          const blocked=new Set(publicEvents.filter(e=>e.type==='card_defense').map(e=>e.targetId));
+          const players=typeof state==='object'?state?.players:null;
+          const others=players?.filter(p=>p.alive&&p.id!==intent.casterId);
+          if(others?.length&&others.every(p=>blocked.has(p.id)))return null;
+          result='查看全體玩家的手牌';
+        }else if(target)result='查看 '+target+' 的手牌';
+      }else if(id===3||id===8){
+        if(intent.mode==='all-duel')result='對全體玩家發起比拚';
+        else if(target)result='向 '+target+' 發起決鬥';
+      }else if(id===4)result='展開防禦招式';
+      else if(id===5&&publicEvents.some(e=>e.type==='zoro_discard'&&valid(e.cardId)))result=outcome?.result;
+      else if(id===6&&target)result=(intent.mode==='view'?'查看 '+target+' 的手牌':'與 '+target+' 交換手牌');
+      else if(id===7)result=normalNami?'娜美登場':target?'麻痺 '+target:null;
+      else if(id===9)result='女帝招式發動';
+      else if(id===10){
+        if(intent.enhanced&&intent.mode==='effect'){
+          const failed=publicEvents.some(e=>e.type==='log'&&/^凱多（鬼島）：.*(?:無效果|施放失敗)/.test(e.text||''));
+          if(failed)result='施放失敗';
+          else if(publicEvents.some(e=>e.type==='enh_fx'&&e.cardId===10))result='向全體玩家發動霸海';
+        }else if(target&&intent.mode==='duel')result='向 '+target+' 發起比大小';
+      }
+      else if(id===11)result=rotation?'逆時針傳遞手牌':publicEvents.some(e=>e.type==='log'&&/^基德：棄牌堆洗牌抽/.test(e.text||''))?'洗棄牌後從背面抽取一張':outcome?.result;
+      else if(id===12)result=normalQueen?'開始硬幣判定':'開啟冰鬼判定';
+      else if(id===13&&target){
+        const disarm=publicEvents.some(e=>e.type==='killer_disarm'),duel=publicEvents.some(e=>e.type==='duel');
+        if(disarm)result='解除 '+target+' 的保護／閃避'+(duel?'後決鬥':'');
+        else if(duel)result='向 '+target+' 發起決鬥';
+      }
+      else if(id===14&&demand&&target)result='威嚇 '+target+'，索取保護費';
+      else if(id===15)result='查看未來';
+      else if(id===16){
+        const freezes=publicEvents.filter(e=>e.type==='aokiji_freeze');
+        const targets=[...new Set(freezes.flatMap(e=>e.mode==='all'&&Array.isArray(e.frozenIdxs)?e.frozenIdxs:[e.targetId]).filter(id=>Number.isInteger(id)&&id>=0))];
+        if(targets.length)result=(freezes.some(e=>e.mode==='all')?'施放全場凍結；實際凍結 ':'凍結 ')+targets.map(name).join('、');
+      }
+      else if(id===17)result='準備覆蓋牌堆頂牌';
+      else if(id===18){
+        const logs=publicEvents.filter(e=>e.type==='log').map(e=>String(e.text||''));
+        if(logs.some(text=>/^紅髮：牌堆 ≤ \d+ → 直接比牌/.test(text)))result='全場比牌';
+        else if(logs.some(text=>/^紅髮：目前牌堆 \d+，尚未 ≤ \d+/.test(text)))result='施放失敗';
+      }
+      else if(id===19){
+        if(rogerExit)result='退出本局，成為下局先手';
+        else if(prediction&&target)result='預測 '+target+' 贏得本局';
+      }
+      return result?{id,actor:intent.casterId,enhanced:intent.enhanced===true,result,phase:'before'}:null;
+    }
+    api.cardBeforeSummary=beforeSummary;
     const early=api.presentCardSkillBatch;
-    api.presentCardSkillBatch=async events=>{
+    api.presentCardSkillBatch=async(events,next)=>{
       // The original wrapper still receives enh_fx/play_fx and owns real movies.
-      // Only its early diagonal declaration is withheld, on retained hosts too.
-      const result=await early?.(events.filter(e=>e?.type!=='card_skill_intent'));
-      const intent=declaration(events);
+      // Only its old diagonal declaration is withheld, on retained hosts too.
+      const epoch=cancelEpoch,data=beforeSummary(events,next);
+      if(epoch!==cancelEpoch||fast())return null;
+      const result=await early?.(events.filter(e=>e?.type!=='card_skill_intent'),next);
+      if(epoch!==cancelEpoch||fast())return null;
+      if(!consumeLocalKid(data,events,next))await presentData(data,events,next);
+      if(epoch!==cancelEpoch||fast())return null;
+      const intent=presentationIntent(events,next);
       return intent?{id:intent.cardId,actor:intent.casterId}:result;
     };
     const consumed=new Set();
+    function reserve(key){
+      if(consumed.has(key))return false;
+      consumed.add(key);if(consumed.size>128)consumed.delete(consumed.values().next().value);
+      return true;
+    }
     function resultKey(events,next,data){
-      const intent=declaration(events),logs=Array.isArray(next?.log)?next.log:[],round=next?.roundNo??(typeof state==='object'?state?.roundNo:null);
+      const intent=presentationIntent(events,next),logs=Array.isArray(next?.log)?next.log:[],round=next?.roundNo??(typeof state==='object'?state?.roundNo:null);
       let cast=-1;
       for(let i=logs.length-1;i>=0;i--){const actor=String(logs[i]).match(/^P(\d+)/);if(actor&&Number(actor[1])===data.actor+1&&logs[i].includes(' 打出 '+data.id+'｜')){cast=i;break;}}
       const room=typeof me==='object'?me?.roomId:null;
-      const key=[room,round,cast,cast<0?null:logs[cast],data.actor,data.id];
-      // Queen's chain is one accepted cast, although each coin decision emits
-      // a new intent. Other cards retain distinct real follow-up operations.
-      if(data.id!==12||intent.mode!=='coin'||cast<0)key.push(intent.mode,intent.targetId,data.result);
+      const key=[room,round,cast,cast<0?null:logs[cast],data.actor,data.id,data.phase||'result'];
+      key.push(intent.mode,intent.targetId,data.result);
+      if(data.phase==='before'&&data.id===8&&intent.mode==='duel'){
+        // Two genuine Luffy decisions may choose the same target. The public
+        // presentation barrier is transaction-specific; legacy fixtures can
+        // distinguish the first pending decision from the completed second.
+        const gate=next?.presentationReady?.id;
+        key.push(gate|| (next?.pending?.action==='luffy'&&next.pending.extra?.firstDone===true?'first-duel':'final-duel'));
+      }
       if(cast<0)key.push(logs.length);
       return JSON.stringify(key);
     }
-    let active=null,serial=0,waiters=new Set();
+    let active=null,serial=0,cancelEpoch=0,kidEpoch=0,kidPreview=null,waiters=new Set();
     function finish(){if(!active)return;const item=active;active=null;clearTimeout(item.timer);for(const animation of item.animations)animation.cancel();item.node.remove();item.resolve();}
     const oldCancel=api.cancelCardSkillIntro,oldBusy=api.isCardSkillIntroBusy;
-    const cancel=()=>{serial++;finish();for(const done of waiters)done();waiters.clear();oldCancel?.();};
+    const cancel=()=>{serial++;cancelEpoch++;kidEpoch++;kidPreview=null;finish();for(const done of waiters)done();waiters.clear();oldCancel?.();};
     api.cancelCardSkillIntro=cancel;api.isCardSkillIntroBusy=()=>!!active||!!oldBusy?.();
-    api.presentCardResultBatch=async(events,next)=>{
-      const data=summary(events,next);if(!data)return false;
-      const key=resultKey(events,next,data);if(consumed.has(key))return false;
+    function localKidIdentity(){
+      const s=typeof state==='object'?state:null,viewer=typeof me==='object'?me?.playerId:null;
+      if(!s||!Number.isInteger(viewer)||s.turnIndex!==viewer||s.turnStep!=='choose'||s.pending||s.players?.find(p=>p.id===viewer)?.isCPU===true||typeof isEnhancedNow==='function'&&isEnhancedNow(11))return null;
+      return JSON.stringify([me.roomId,s.roundNo,viewer,s.log?.length??null,s.log?.at(-1)??null]);
+    }
+    // Normal Kid previews locally before the player submits the existing
+    // action by clicking the discard. No event is sent by these hooks.
+    api.presentLocalKidCutin=async()=>{
+      const identity=localKidIdentity();if(!identity||fast())return false;
+      const token=++kidEpoch;kidPreview=null;
+      const valid=()=>token===kidEpoch&&identity===localKidIdentity();
+      const shown=await presentData({id:11,actor:me.playerId,enhanced:false,result:'洗棄牌後從背面抽取一張',phase:'before'},null,null,valid);
+      if(!shown||!valid())return false;
+      kidPreview={identity,submitted:false};return true;
+    };
+    api.markLocalKidCutinSubmitted=()=>{
+      if(kidPreview?.identity===localKidIdentity())kidPreview.submitted=true;
+    };
+    api.cancelLocalKidCutin=()=>{kidEpoch++;kidPreview=null;if(active?.local){serial++;finish();}};
+    function consumeLocalKid(data,events,next){
+      if(data?.id!==11||data.enhanced||!kidPreview?.submitted||kidPreview.identity!==localKidIdentity()||data.actor!==me.playerId)return false;
+      if(!events.some(e=>e.to==='all'&&e.type==='log'&&Number(String(e.text||'').match(/^P(\d+)(?:（.*）)? 打出 11｜/)?.[1])===data.actor+1))return false;
+      kidEpoch++;kidPreview=null;reserve(resultKey(events,next,data));return true;
+    }
+    async function presentData(data,events,next,localGuard=null){
+      if(!data)return false;
       // Reserve before image loading or animation. Cancellation must not let a
       // late image or a retransmitted batch reopen the already consumed result.
-      consumed.add(key);if(consumed.size>128)consumed.delete(consumed.values().next().value);
-      if(fast())return false;
+      if(!localGuard&&!reserve(resultKey(events,next,data)))return false;
+      if(fast()||localGuard&&!localGuard())return false;
       finish();const token=++serial,ready=await api.loadCardArt?.('anime',data.id);
-      if(token!==serial||fast())return false;
+      if(token!==serial||fast()||localGuard&&!localGuard())return false;
       const text=typeof CARD_TEXT==='object'?CARD_TEXT[data.id]:null;if(!text)return false;
       const title=(data.enhanced?text.enhTitle:text.baseTitle)||text.name;
       const layer=make('section','card-anime-skill'),strip=make('div','card-anime-strip'),portrait=make('div','card-anime-portrait'),copy=make('div','card-anime-copy');
-      layer.dataset.card=String(data.id);layer.dataset.theme=themes[data.id];layer.dataset.phase='result';layer.dataset.enhanced=String(data.enhanced);layer.dataset.resultCutin='true';
+      layer.dataset.card=String(data.id);layer.dataset.theme=themes[data.id];layer.dataset.phase=data.phase||'result';layer.dataset.cutinPhase=data.phase==='before'?'before':'after';layer.dataset.enhanced=String(data.enhanced);layer.dataset.resultCutin='true';
       layer.setAttribute('role','status');layer.setAttribute('aria-label',name(data.actor)+'：'+text.name+'。'+data.result);
       portrait.setAttribute('aria-hidden','true');portrait.style.backgroundImage=ready?'url("'+ready.src+'")':'var(--card-anime-'+data.id+')';
       copy.append(make('span','card-anime-caster',name(data.actor)+' · '+text.name),make('strong','card-anime-title',title),make('small','card-anime-mode',data.result));strip.append(portrait,copy);layer.append(strip);document.body.append(layer);
       const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,duration=Math.min(4200,Math.max(2800,1900+data.result.length*45)),animations=[];
       layer.dataset.duration=String(duration);layer.style.setProperty('--cut-angle',['slash','scythe','kick'].includes(themes[data.id])?'-7deg':'-5deg');
       if(!reduced){animations.push(strip.animate([{transform:'translateX(-110%) rotate(var(--cut-angle))',opacity:.5},{transform:'translateX(0) rotate(var(--cut-angle))',opacity:1}],{duration:360,easing:'cubic-bezier(.16,.8,.22,1)'}));animations.push(portrait.animate([{transform:'translateX(-18px) scale(1.08)'},{transform:'translateX(0) scale(1)'}],{duration:duration-300,easing:'ease-out'}));}
-      await new Promise(resolve=>{const item={node:layer,timer:null,animations,resolve};active=item;item.timer=setTimeout(finish,duration);});
-      return token===serial;
+      await new Promise(resolve=>{const item={node:layer,timer:null,animations,resolve,local:!!localGuard};active=item;item.timer=setTimeout(finish,duration);});
+      return token===serial&&(!localGuard||localGuard());
+    }
+    api.presentCardResultBatch=(events,next)=>{
+      const intent=presentationIntent(events,next);
+      return beforePhase(intent)?Promise.resolve(false):presentData(summary(events,next),events,next);
     };
     const originalPile=api.presentPileBatch;
     const visible=id=>{const n=document.getElementById(id);return !!n&&!n.hidden&&!n.classList.contains('hidden')&&n.getClientRects().length>0;};
@@ -8925,7 +9138,7 @@ html[data-card-phone] .card-summon-loading{position:absolute;left:50%;top:68%;tr
     const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
     const busy=()=>!!api.isEffectBusy?.()||!!api.isEnhancementBusy?.()||!document.getElementById('enhOverlay')?.classList.contains('hidden');
     playEnhFxFor=function(id){const count=consumed.get(id)||0;if(count){if(count===1)consumed.delete(id);else consumed.set(id,count-1);return;}return video(id);};
-    api.presentCardSkillBatch=async events=>{
+    api.presentCardSkillBatch=async(events,next)=>{
       const epoch=generation,shown=new Set();
       for(const e of events.filter(e=>e.type==='enh_fx')){
         if(epoch!==generation||fast())return null;
@@ -8934,7 +9147,9 @@ html[data-card-phone] .card-summon-loading{position:absolute;left:50%;top:68%;tr
         const ready=window.__prepareCardEnhVideo?.(e.cardId)||Promise.resolve(false);
         await api.presentEnhancementSummon?.(e.cardId,{ready});
         if(epoch!==generation||fast())return null;
-        if(!await ready){
+        const prepared=await ready;
+        if(epoch!==generation||fast())return null;
+        if(!prepared){
           const note=document.createElement('span');note.className='enh-load-status enh-load-failed';note.setAttribute('role','status');note.textContent='影片暫時無法播放，繼續招式演出';document.body.append(note);setTimeout(()=>note.remove(),3200);
           continue;
         }
@@ -8944,7 +9159,7 @@ html[data-card-phone] .card-summon-loading{position:absolute;left:50%;top:68%;tr
       if(epoch!==generation||fast())return null;
       // Earlier hosts also wrap this API. Never hand a consumed movie to them
       // again; keep their other presentation and authoritative event handling.
-      return previous(events.filter(e=>e.type!=='enh_fx'));
+      return previous(events.filter(e=>e.type!=='enh_fx'),next);
     };
     function reset(){generation++;consumed.clear();window.__cancelPreparedEnhVideo?.();document.getElementById('enhVideo')?.__enhOnEnded?.();}
     for(const event of ['JOINED','disconnect'])socket.on(event,reset);
@@ -8964,8 +9179,8 @@ html[data-card-phone] .card-summon-loading{position:absolute;left:50%;top:68%;tr
   if(location.origin!==origin||location.pathname!=='/game.html')return;
   function mount(){
     const api=window.CardPhonePresentation;
-    if(!api||typeof api.presentCardSkillBatch!=='function'||typeof api.presentEffectEvent!=='function'||typeof api.presentPileBatch!=='function'||api.avatarStatusRevealVersion>=1)return;
-    api.avatarStatusRevealVersion=1;
+    if(!api||typeof api.presentCardSkillBatch!=='function'||typeof api.presentEffectEvent!=='function'||typeof api.presentPileBatch!=='function'||api.avatarStatusRevealVersion>=2)return;
+    api.avatarStatusRevealVersion=2;
     const skill=api.presentCardSkillBatch,effect=api.presentEffectEvent,pile=api.presentPileBatch,cancel=api.cancelCardSkillIntro;
     let generation=0,accepted=null;
     const acquisition=e=>e?.to==='all'&&['bigmom_status','chopper_status'].includes(e.type)&&['protect','dodge'].includes(e.status)&&Number.isInteger(e.casterId)&&e.casterId>=0;
@@ -8975,11 +9190,11 @@ html[data-card-phone] .card-summon-loading{position:absolute;left:50%;top:68%;tr
     // Retain the original event objects only for this accepted transaction.
     // Held acquisitions are deliberately not part of isEffectBusy: the real
     // effects must drain before the result wrapper can show its cut-in.
-    api.presentCardSkillBatch=async function(events){
+    api.presentCardSkillBatch=async function(events,next){
       const eventsToHold=Array.isArray(events)?events.filter(acquisition):[];
       const batch=eventsToHold.length?{generation,identity:identity(),events:new Set(eventsToHold),held:[],seen:new Set()}:null;
       accepted=batch;
-      try{return await skill.call(this,events);}
+      try{return await skill.call(this,events,next);}
       catch(error){if(accepted===batch)accepted=null;throw error;}
     };
     api.presentEffectEvent=function(event){
@@ -9014,6 +9229,279 @@ html[data-card-phone] .card-summon-loading{position:absolute;left:50%;top:68%;tr
 
 </script>
 <!-- CARD_STATUS_REVEAL_END -->
+<!-- CARD_PILE_CLARITY_BEGIN -->
+<style>
+/* Physical piles and moving backs use the existing fully opaque 2:3 back art. */
+html[data-card-pile-clarity="1"] .phone-card-flight[data-card-back="true"] img,
+html[data-card-pile-clarity="1"] #discard img[data-phone-secret="true"]{filter:none!important;opacity:1!important;}
+html[data-card-pile-clarity="1"] .card-pile-draw-hit{position:absolute;left:0;top:0;width:var(--pile-w);height:calc(var(--pile-w)*1.5);display:block;z-index:4;appearance:none;margin:0;padding:0;border:0;background:none;box-shadow:none;border-radius:0;min-width:0;opacity:1!important;filter:none;pointer-events:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+html[data-card-pile-clarity="1"] .card-pile-draw-hit[hidden]{display:none!important;}
+html[data-card-pile-clarity="1"] .phone-discard-stack[data-card-pile-covered="true"][data-kid-draw="ready"] .card-pile-draw-hit:enabled{pointer-events:auto;cursor:pointer;}
+html[data-card-pile-clarity="1"] .card-pile-draw-back{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;opacity:1;filter:none;}
+html[data-card-pile-clarity="1"] .phone-discard-stack[data-card-pile-covered="true"] #discard{visibility:hidden!important;}
+html[data-card-pile-clarity="1"] .phone-discard-stack[data-card-pile-covered="true"] .phone-pile-layers{opacity:1!important;}
+
+/* Outrank retained pile rules even when a native host injects its stylesheet later. */
+html:root[data-card-phone][data-card-piles][data-card-stage][data-card-pile-clarity="1"] #btnDraw:disabled{opacity:1!important;}
+html[data-card-pile-clarity="1"] .phone-pile-card{opacity:1!important;}
+
+</style>
+<script>
+/* Clear opaque card backs for existing flights and shuffled discard draws.
+ * Authority, private faces, animation ownership and all card commands stay original. */
+(() => {
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation,root=document.documentElement;
+    if(!api||typeof api.flyCard!=='function'||api.pileClarityVersion>=1)return;
+    api.pileClarityVersion=1;root.dataset.cardPileClarity='1';
+    const back=new URL('images/cards/back.webp',location.href).href;
+    root.style.setProperty('--phone-pile-single',`url("${back}")`);
+    let ratio=2/3;
+    const image=new Image();image.onload=()=>{if(image.naturalWidth&&image.naturalHeight)ratio=image.naturalWidth/image.naturalHeight;};image.src=back;
+    const rect=n=>n?.getBoundingClientRect?n.getBoundingClientRect():n;
+    const isBack=options=>{
+      if(options?.flip)return options.secret!==true&&['peek','law-view','draw'].includes(options.kind);
+      try{return !options?.src||new URL(options.src,location.href).pathname===new URL(back).pathname;}catch{return false;}
+    };
+    function fit(anchor){
+      const r=rect(anchor);if(!r?.width||!r?.height)return null;
+      const minimum=Math.min(96,Math.max(68,innerHeight*.2));
+      const width=Math.max(minimum,Math.min(r.width,r.height*ratio)),height=width/ratio;
+      return {left:(r.left??r.x)+(r.width-width)/2,top:(r.top??r.y)+(r.height-height)/2,width,height};
+    }
+    const fly=api.flyCard;
+    api.flyCard=function(options){
+      if(!isBack(options))return fly.call(this,options);
+      const layer=document.getElementById('phoneCardFlights'),before=new Set(layer?.children||[]);
+      const from=fit(options?.from),to=fit(options?.to),result=fly.call(this,options);
+      if(!result||!layer)return result;
+      for(const ghost of layer.children){
+        if(before.has(ghost)||!ghost.classList.contains('phone-card-flight'))continue;
+        ghost.dataset.cardBack='true';
+        const animation=ghost.getAnimations().find(a=>a.effect?.target===ghost),effect=animation?.effect;
+        // Keep the original flight's Set, callbacks, target hiding and cancellation.
+        // Only replace geometry/keyframes when its real animation supports that.
+        if(!from||!to||typeof effect?.setKeyframes!=='function')continue;
+        const oldFrames=effect.getKeyframes(),last=oldFrames[oldFrames.length-1];
+        const dx=from.left+from.width/2-to.left-to.width/2,dy=from.top+from.height/2-to.top-to.height/2;
+        const scale=from.width/to.width,arc=Number(options.arc)||0;
+        Object.assign(ghost.style,{left:to.left+'px',top:to.top+'px',width:to.width+'px',height:to.height+'px'});
+        effect.setKeyframes([
+          {transform:`translate(${dx}px,${dy}px) scale(${scale}) rotate(-7deg)`,opacity:1},
+          {transform:`translate(${dx*.42}px,${dy*.42-28+arc}px) scale(${.65+.35*scale}) rotate(6deg)`,opacity:1,offset:.55},
+          {transform:last?.transform||'translate(0,0) scale(1)',opacity:1}
+        ]);
+      }
+      return result;
+    };
+    const model=()=>typeof state==='object'?state:null;
+    let coveredState=null,coveredRoom=null,kidGeneration=0,kidPreparing=false,kidLocal=null;
+    const kidIdentity=which=>JSON.stringify([typeof me==='object'?me.roomId:null,typeof me==='object'?me.playerId:null,model()?.roundNo,model()?.turnIndex,model()?.turnStep,model()?.log?.length,which]);
+    const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
+    const pause=()=>new Promise(resolve=>setTimeout(resolve,60));
+    const stack=()=>document.querySelector('.phone-discard-stack');
+    function showCover(on){
+      const node=stack();
+      if(!node)return;
+      let hit=node.querySelector(':scope>.card-pile-draw-hit');
+      if(!hit){
+        // A native control turns a WebKit touch into the click expected by
+        // the original pile capture handler. This control sends no action.
+        hit=document.createElement('button');
+        hit.type='button';
+        hit.className='card-pile-draw-hit';
+        hit.setAttribute('aria-label','從棄牌堆抽一張');
+        const cover=document.createElement('img');
+        cover.className='card-pile-draw-back';
+        cover.src=back;
+        cover.alt='';
+        cover.draggable=false;
+        hit.append(cover);
+        node.append(hit);
+      }
+      if(on&&node.dataset.cardPileCovered!=='true')node.dataset.cardPileCovered='true';
+      if(!on&&node.hasAttribute('data-card-pile-covered'))node.removeAttribute('data-card-pile-covered');
+      const ready=on&&node.dataset.kidDraw==='ready',tabIndex=ready?0:-1;
+      if(hit.hidden===on)hit.hidden=!on;
+      if(hit.disabled===ready)hit.disabled=!ready;
+      if(hit.tabIndex!==tabIndex)hit.tabIndex=tabIndex;
+      if(ready&&hit.hasAttribute('aria-hidden'))hit.removeAttribute('aria-hidden');
+      if(!ready&&hit.getAttribute('aria-hidden')!=='true')hit.setAttribute('aria-hidden','true');
+    }
+    function clearCover(){coveredState=null;coveredRoom=null;showCover(false);}
+    function clearLocal(cancel=true){kidGeneration++;kidPreparing=false;kidLocal=null;clearCover();if(cancel)api.cancelLocalKidCutin?.();}
+    function sync(){
+      for(const img of document.querySelectorAll('#phonePileAction>img')){
+        if(img.dataset.cardBackClear||new URL(img.src,location.href).pathname!==new URL(back).pathname)continue;
+        const fitted=fit({left:parseFloat(img.style.left),top:parseFloat(img.style.top),width:parseFloat(img.style.width),height:parseFloat(img.style.height)});
+        if(!fitted)continue;img.dataset.cardBackClear='true';
+        Object.assign(img.style,{left:fitted.left+'px',top:fitted.top+'px',width:fitted.width+'px',height:fitted.height+'px'});
+      }
+      // Raw STATE may arrive while its presentation is queued. Keep backs until
+      // the original flow actually assigns a new displayed state and renders.
+      const identityChanged=kidLocal&&kidIdentity(kidLocal.which)!==kidLocal.identity;
+      if(coveredState&&(model()!==coveredState||(typeof me==='object'?me.roomId:null)!==coveredRoom||identityChanged))clearLocal(false);
+      else showCover(!!coveredState);
+    }
+    const awaiting=api.isKidAwaiting;
+    api.isKidAwaiting=function(...args){return kidPreparing||!!awaiting?.apply(this,args);};
+    if(typeof showKidConfirm==='function'){
+      const confirm=showKidConfirm;
+      showKidConfirm=async function(...args){
+        if(kidPreparing||awaiting?.())return;
+        const current=model(),which=args[0];
+        if(!Array.isArray(current?.discard)||!current.discard.length)return confirm.apply(this,args);
+        const token=++kidGeneration,identity=kidIdentity(which);
+        kidLocal={state:current,identity,which,ready:false,submitted:false};
+        coveredState=current;coveredRoom=typeof me==='object'?me.roomId:null;showCover(true);kidPreparing=true;
+        const valid=()=>token===kidGeneration&&model()===current&&identity===kidIdentity(which);
+        let continued=false;
+        try{
+          // Retained clients begin the shuffle inside confirm(). Preview once
+          // here so the local cut-in can finish before entering that function.
+          api.closeSheet?.();if(typeof hideModal==='function')hideModal();api.previewKid?.();
+          while(valid()&&!fast()&&api.isCardEntering?.())await pause();
+          if(!valid()||fast())return;
+          const finished=typeof api.presentLocalKidCutin==='function'?await api.presentLocalKidCutin():true;
+          if(finished!==true||!valid()||fast())return;
+          kidPreparing=false;kidLocal.ready=true;continued=true;
+          return await confirm.apply(this,args);
+        }finally{
+          if(token===kidGeneration){kidPreparing=false;if(!continued){kidLocal=null;clearCover();api.cancelLocalCardPreview?.();}}
+        }
+      };
+    }
+    if(typeof sendAction==='function'){
+      const send=sendAction;
+      sendAction=function(type,payload,...rest){
+        const local=kidLocal,eligible=type==='PLAY_CARD'&&local?.ready&&!local.submitted&&payload?.which===local.which&&model()===local.state&&kidIdentity(local.which)===local.identity;
+        if(!eligible||typeof socket!=='object'||typeof socket.emit!=='function')return send.call(this,type,payload,...rest);
+        const emit=socket.emit;let emitted=false;
+        const observe=function(name,data,...args){
+          if(name==='ACTION'&&data?.type==='PLAY_CARD'&&data.payload?.which===local.which&&data.roomId===me.roomId&&data.playerId===me.playerId)emitted=true;
+          return emit.call(this,name,data,...args);
+        };
+        socket.emit=observe;
+        try{
+          const result=send.call(this,type,payload,...rest);
+          if(emitted&&kidLocal===local&&model()===local.state&&kidIdentity(local.which)===local.identity){local.submitted=true;api.markLocalKidCutinSubmitted?.();}
+          return result;
+        }finally{if(socket.emit===observe)socket.emit=emit;}
+      };
+    }
+    const cancel=api.cancelPileAction;
+    api.cancelPileAction=function(...args){clearLocal();return cancel?.apply(this,args);};
+    api.isDiscardBackCovered=()=>!!coveredState;
+    api.syncPileClarity=sync;
+    new MutationObserver(sync).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['data-kid-draw']});
+    if(typeof socket==='object')for(const name of ['JOINED','disconnect'])socket.on(name,()=>clearLocal());
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)clearLocal();});
+    sync();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+
+</script>
+<!-- CARD_PILE_CLARITY_END -->
+<!-- CARD_ROGER_PREDICTION_BEGIN -->
+<style>
+html[data-card-seat-hud] .phone-seat-card > .phone-roger-prediction {
+  position: absolute;
+  top: 0;
+  right: 6%;
+  padding: 0 3px;
+  border: 1px solid #c79649;
+  border-radius: 3px;
+  background: #302316;
+  color: #ffe3a1;
+  font: 800 clamp(9px, 1vw, 11px)/1.15 system-ui, sans-serif;
+  white-space: nowrap;
+  pointer-events: none;
+  filter: none !important;
+}
+
+html[data-card-seat-hud] #phoneSelfPlayer > .phone-seat-card > .phone-roger-prediction {
+  top: 6%;
+}
+
+</style>
+<script>
+/* The enhanced Roger prediction is a public result of the committed round. */
+(() => {
+  const origin = window.__TABLETOP_ANDROID_TEST_ORIGIN || 'https://onepiece-card-online.onrender.com';
+  if (location.origin !== origin || location.pathname !== '/game.html') return;
+
+  function mount() {
+    const api = window.CardPhonePresentation;
+    const players = document.getElementById('players');
+    const self = document.getElementById('phoneSelfPlayer');
+    if (!api || api.rogerPredictionVersion || !players || typeof render !== 'function') return;
+    api.rogerPredictionVersion = 1;
+
+    const badge = document.createElement('span');
+    badge.className = 'phone-roger-prediction';
+    badge.textContent = '羅傑預測';
+    badge.title = '羅傑預測這位玩家會贏得本局';
+
+    function sync() {
+      const current = typeof state === 'object' ? state : null;
+      const prediction = current?.rogerPred;
+      const roster = current?.players;
+      const valid = current?.phase !== 'lobby' && Number.isInteger(prediction?.by) &&
+        Number.isInteger(prediction.pick) && Array.isArray(roster) &&
+        roster.some(player => player?.id === prediction.by) &&
+        roster.some(player => player?.id === prediction.pick);
+      const card = valid
+        ? api.playerVisualElement?.(prediction.pick)?.querySelector(':scope > .phone-seat-card')
+        : null;
+
+      // Portraits can be replaced with a clone when the captain view updates.
+      for (const container of [players, self]) {
+        for (const clone of container?.querySelectorAll('.phone-roger-prediction') || []) {
+          if (clone !== badge) clone.remove();
+        }
+      }
+      if (!card) {
+        badge.remove();
+        return;
+      }
+      badge.dataset.playerId = String(prediction.pick);
+      if (badge.parentElement !== card) card.append(badge);
+    }
+
+    let queued = false;
+    function schedule() {
+      if (queued) return;
+      queued = true;
+      queueMicrotask(() => {
+        queued = false;
+        sync();
+      });
+    }
+
+    // The presentation queue commits state only after the result cut-in.
+    // Render covers prediction-only state changes that leave seat DOM intact.
+    const renderSeats = render;
+    render = function (...args) {
+      const result = renderSeats.apply(this, args);
+      schedule();
+      return result;
+    };
+
+    const observer = new MutationObserver(schedule);
+    observer.observe(players, {childList:true, subtree:true});
+    if (self) observer.observe(self, {childList:true, subtree:true});
+    schedule();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount, {once:true});
+  else mount();
+})();
+
+</script>
+<!-- CARD_ROGER_PREDICTION_END -->
 <!-- CARD_MATCH_ENTRY_BEGIN -->
 <script>
 /* Keep the first match frame covered until its current interface is ready. */
@@ -9042,7 +9530,7 @@ html[data-card-phone] .card-summon-loading{position:absolute;left:50%;top:68%;tr
   function view(){
     const api=window.CardPhonePresentation;
     if(root.dataset.cardPhone!=='table'||root.dataset.cardSeatHud!=='1'||root.dataset.cardMenuLayout!=='v3'||root.dataset.cardFlow!=='1')return null;
-    if(api?.presentationFlowVersion!==2||api.ownCollectionVersion!=='2'||api.enhancementVideoOrderVersion!==2||!(api.resultCutinVersion>=2)||!(api.avatarStatusRevealVersion>=1)||api.venueReadVersion!==2)return null;
+    if(api?.presentationFlowVersion!==2||api.ownCollectionVersion!=='2'||api.enhancementVideoOrderVersion!==2||!(api.resultCutinVersion>=3)||!(api.avatarStatusRevealVersion>=2)||!(api.pileClarityVersion>=1)||!(api.rogerPredictionVersion>=1)||api.venueReadVersion!==2)return null;
     if(typeof state!=='object'||!state?.players?.length||typeof me!=='object'||!Number.isInteger(me.playerId)||!state.players[me.playerId])return null;
     const rows=[...document.querySelectorAll('#players > [data-seat-id]')];
     const self=document.querySelector('#phoneSelfPlayer[data-self-design="captain-v1"] .phone-self-captain');

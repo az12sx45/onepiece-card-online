@@ -3030,183 +3030,38 @@ function isCpuTurn(room){
   return !!(p && p.isCPU && p.alive);
 }
 
-// ================= CPU 抽牌延遲設定（依上一張牌，一般 / 強化） =================
+const CARD_CPU_STEP_BEAT_MS = 250;
 
-// 你給的表格（我已經幫你換算成毫秒）
-//
-// 一般：
-// 0-4秒,1-4秒,2-4秒,3-8秒,4-4秒,5-4秒,6-4秒,7-4秒,
-// 8-8秒,9-4秒,10-8秒,11-4秒,12-8秒,13-4秒,14-8秒,
-// 15-4秒,16-4秒,17-4秒,18-4秒,19-4秒
-//
-// 強化：
-// 0-10秒,1-4秒,2-10秒,3-8秒,4-10秒,5-4秒,6-4秒,7-4秒,
-// 8-8秒,9-14秒,10-8秒,11-13秒,12-13秒,13-4秒,14-8秒,
-// 15-4秒,16-15秒,17-4秒,18-4秒,19-4秒
-
-const PREV_CARD_DELAY = {
-  0:  { normal: 4000,  enhanced: 10000 },
-  1:  { normal: 4000,  enhanced: 4000  },
-  2:  { normal: 4000,  enhanced: 10000 },
-  3:  { normal: 13000,  enhanced: 13000  },
-  4:  { normal: 4000,  enhanced: 10000 },
-  5:  { normal: 4000,  enhanced: 4000  },
-  6:  { normal: 4000,  enhanced: 4000  },
-  7:  { normal: 4000,  enhanced: 4000  },
-  8:  { normal: 13000,  enhanced: 12000  },
-  9:  { normal: 4000,  enhanced: 17000 },
-  10: { normal: 13000,  enhanced: 8000  },
-  11: { normal: 4000,  enhanced: 18000 },
-  12: { normal: 8000,  enhanced: 16000 },
-  13: { normal: 4000,  enhanced: 13000  },
-  14: { normal: 8000,  enhanced: 8000  },
-  15: { normal: 4000,  enhanced: 4000  },
-  16: { normal: 4000,  enhanced: 15000 },
-  17: { normal: 4000,  enhanced: 4000  },
-  18: { normal: 4000,  enhanced: 4000  },
-  19: { normal: 4000,  enhanced: 4000  },
-};
-
-// ================= CPU「打出牌後」延遲設定（依這張牌，一般 / 強化） =================
-// 單位：毫秒
-const PLAY_CARD_DECISION_DELAY = {
-  0:  { normal: 4000,  enhanced: 6000  },  // 薩波
-  1:  { normal: 4000,  enhanced: 10000  },  // 騙人布
-  2:  { normal: 4000,  enhanced: 10000  },  // 羅賓
-  3:  { normal: 4000,  enhanced: 9000  },  // 香吉士
-  4:  { normal: 4000,  enhanced: 6000  },  // 喬巴
-  5:  { normal: 4000,  enhanced: 17000  },  // 索隆
-  6:  { normal: 4000,  enhanced: 12000  },  // 羅
-  7:  { normal: 4000,  enhanced: 10000  },  // 娜美
-  8:  { normal: 4000,  enhanced: 13000  },  // 魯夫
-  9:  { normal: 4000,  enhanced: 14000  },  // 女帝
-  10: { normal: 4000,  enhanced: 8000  },  // 凱多
-  11: { normal: 4000,  enhanced: 9000  },  // 基德
-  12: { normal: 4000,  enhanced: 9000  },  // 奎因
-  13: { normal: 4000,  enhanced: 20000  },  // 基拉
-  14: { normal: 4000,  enhanced: 12000  },  // 大媽
-  15: { normal: 4000,  enhanced: 19000  },  // 卡塔庫栗
-  16: { normal: 4000,  enhanced: 9000  },  // 青雉
-  17: { normal: 4000,  enhanced: 16000  },  // 黑鬍子
-  18: { normal: 4000,  enhanced: 14000  },  // 紅髮
-  19: { normal: 4000,  enhanced: 21000 },  // 羅傑
-};
-
-// ================= 魯夫第一次決鬥 → 第二次決鬥 中間的延遲 =================
-// 單位：毫秒
-// normal ＝ 一般魯夫；enhanced 這裡其實用不到，先留欄位給你之後調整
-const LUFFY_SECOND_GAP = {
-  normal: 10000,   // 一般魯夫：1.5 秒（你可以自己改）
-  enhanced: 1500, // 先隨便設，實際只會用在一般魯夫
-};
-
-
-// 判斷一張卡現在是不是在自己的強化場地上
-function isEnhancedNowServer(st, cardId) {
-  if (cardId == null) return false;
-  const card = cardById(cardId);
-  if (!card || !card.venue) return false;
-  if (!Array.isArray(st.venues)) return false;
-  return st.venues.some(v => v && v.name === card.venue);
-}
-
-// 從棄牌堆拿到「最後一張被打出去的卡 id」
-function getLastPlayedCardId(st) {
-  const disc = st.discard;
-  if (!Array.isArray(disc) || disc.length === 0) return null;
-
-  // 從後面往前找第一筆有 id 的
-  for (let i = disc.length - 1; i >= 0; i--) {
-    const d = disc[i];
-    if (typeof d === "number") return d;
-    if (d && typeof d.id === "number") return d.id;
-  }
-  return null;
-}
-
-// 根據上一張牌，算出 CPU 抽牌前要延遲多久（毫秒）
-// 沒有設定的卡 → 回傳 0
-function getDelayForPrevCard(st) {
-  const lastId = getLastPlayedCardId(st);
-  if (lastId == null) return 0;
-
-  const cfg = PREV_CARD_DELAY[lastId];
-  if (!cfg) return 0;
-
-  const enhanced = isEnhancedNowServer(st, lastId);
-  if (enhanced && typeof cfg.enhanced === "number") {
-    return cfg.enhanced;
-  }
-  if (!enhanced && typeof cfg.normal === "number") {
-    return cfg.normal;
-  }
-  return 0;
-}
-
-// 根據「最後一張打出的牌」，決定 CPU 出牌後要延遲多久（毫秒）
-// 會依照 PLAY_CARD_DECISION_DELAY + 是否強化 來決定
-function getDelayAfterPlay(st) {
-  const lastId = getLastPlayedCardId(st);
-  if (lastId == null) return 4000;   // 找不到就給一個預設值（例如 4 秒）
-
-  const cfg = PLAY_CARD_DECISION_DELAY[lastId];
-  if (!cfg) return 4000;
-
-  const enhanced = isEnhancedNowServer(st, lastId);
-
-  // 強化版 → 用 enhanced
-  if (enhanced && typeof cfg.enhanced === "number") {
-    return cfg.enhanced;
-  }
-
-  // 一般版 → 用 normal
-  if (!enhanced && typeof cfg.normal === "number") {
-    return cfg.normal;
-  }
-
-  return 4000;
-}
-
-// 根據現在狀態，決定「魯夫第一次決鬥 → 第二次決鬥」中間要等多久
-function getLuffySecondGap(st) {
-  const lastId = getLastPlayedCardId(st);
-  const enhanced = isEnhancedNowServer(st, 8);
-
-  // 理論上 pending.action === 'luffy' 時，最後一張就是 8 號
-  if (lastId !== 8) {
-    return LUFFY_SECOND_GAP.normal;
-  }
-
-  // 如果你未來有要分「魯夫在魚人島但沒開強化招式」也可用這個欄位
-  return enhanced ? LUFFY_SECOND_GAP.enhanced : LUFFY_SECOND_GAP.normal;
-}
-
-
-// 讓 CPU 自動行動：
-// - 抽牌 → 等 2 秒
-// - 出牌 → 等 4 秒
-// - 如果卡在 pending（騙人布/羅賓/索隆/羅/娜美/魯夫/凱多/青雉/基拉/大媽/羅傑…）
-//   就自動送 PICK_TARGET / PICK_DIGIT / LUFFY_SECOND / BIGMOM_COIN 等
+// Pace CPU actions after the actual venue and presentation acknowledgements.
 function runCpuLoop(roomId){
   const room = rooms.get(roomId);
   if (!room) return;
 
+  clearTimeout(room._cpuLoopTimer);
+  room._cpuLoopTimer = null;
   room._cpuLoopToken = Number(room._cpuLoopToken || 0) + 1;
   const loopToken = room._cpuLoopToken;
+  const isCurrent = () => rooms.get(roomId) === room && room._cpuLoopToken === loopToken;
+  const isWaiting = () => cardVenueReady.waiting(room) || cardPresentationReady.waiting(room);
+
+  const resume = () => {
+    if (!isCurrent() || !room.state || isWaiting() || room._cpuLoopTimer) return;
+    room._cpuLoopTimer = setTimeout(step, room._cpuFastForward ? 0 : CARD_CPU_STEP_BEAT_MS);
+  };
 
   const step = () => {
-    const roomNow = rooms.get(roomId);
-    if (!roomNow) return;
-    if (Number(roomNow._cpuLoopToken || 0) !== loopToken) return;
+    if (!isCurrent()) return;
+    const roomNow = room;
+    roomNow._cpuLoopTimer = null;
 
     const st = roomNow.state;
-    if (!st || (cardVenueReady.waiting(roomNow) || cardPresentationReady.waiting(roomNow))) return;
+    if (!st || isWaiting()) return;
+    if (roomNow._cpuChooseRetry?.state !== st) roomNow._cpuChooseRetry = null;
 
     if (st.turnStep === 'ended' || st.turnStep === 'end' || st.turnStep === 'score') {
       roomNow._cpuFastForward = false;
     }
 
-    const delay = (ms) => setTimeout(step, roomNow._cpuFastForward ? 0 : ms);
     const pending = st.pending || null;
 
     // Paralysis is mandatory, not an optional human DRAW. Use the engine's
@@ -3215,7 +3070,7 @@ function runCpuLoop(roomId){
     const skipped = st.players?.[st.turnIndex];
     if (!pending && st.turnStep === 'draw' && skipped?.alive && skipped.skipNext) {
       applyAndBroadcast(roomNow, {type:'DRAW', playerId:st.turnIndex}, io);
-      delay(1200);
+      resume();
       return;
     }
 
@@ -3231,7 +3086,7 @@ function runCpuLoop(roomId){
             playerId: tgt,
           }, io);
 
-          delay(1500);  // 硬幣動畫 & 文字稍微停一下
+          resume();
           return;
         }
       }
@@ -3248,7 +3103,7 @@ function runCpuLoop(roomId){
             payload: { choice: willPay ? 'pay' : 'die' },
           }, io);
 
-          delay(1500);
+          resume();
           return;
         }
       }
@@ -3270,10 +3125,12 @@ function runCpuLoop(roomId){
               payload: { target: targetIdx },
             }, io);
 
-            delay(1500);
+            resume();
             return;
           }
         }
+        // A discarded Roger belongs to its holder, not the current turn player.
+        return;
       }
     }
 
@@ -3304,7 +3161,7 @@ function runCpuLoop(roomId){
             payload: { target: targetIdx },
           }, io);
 
-          delay(1500);
+          resume();
           return;
         }
 
@@ -3315,7 +3172,7 @@ function runCpuLoop(roomId){
           payload: { digit: d },
         }, io);
 
-        delay(1500);
+        resume();
         return;
       }
 
@@ -3334,7 +3191,7 @@ function runCpuLoop(roomId){
           payload: { target: targetIdx },
         }, io);
 
-        delay(1500);
+        resume();
         return;
       }
 
@@ -3353,7 +3210,7 @@ function runCpuLoop(roomId){
           payload: { target: targetIdx },
         }, io);
 
-        delay(1500);
+        resume();
         return;
       }
 
@@ -3372,7 +3229,7 @@ function runCpuLoop(roomId){
           payload: { target: targetIdx },
         }, io);
 
-        delay(1500);
+        resume();
         return;
       }
 
@@ -3391,7 +3248,7 @@ function runCpuLoop(roomId){
           payload: { target: targetIdx },
         }, io);
 
-        delay(1500);
+        resume();
         return;
       }
 
@@ -3410,7 +3267,7 @@ function runCpuLoop(roomId){
           payload: { target: targetIdx },
         }, io);
 
-        delay(1500);
+        resume();
         return;
       }
 
@@ -3429,7 +3286,7 @@ function runCpuLoop(roomId){
           payload: { target: targetIdx },
         }, io);
 
-        delay(1500);
+        resume();
         return;
       }
 
@@ -3448,7 +3305,7 @@ function runCpuLoop(roomId){
           payload: { target: targetIdx },
         }, io);
 
-        delay(1500);
+        resume();
         return;
       }
 
@@ -3461,7 +3318,7 @@ function runCpuLoop(roomId){
         if (targetIdx == null) return;
         if (!pending.extra?.boost || !Number.isInteger(confirmed)) {
           applyAndBroadcast(roomNow, { type:'PICK_TARGET', playerId:meIdx, payload:{target:targetIdx} }, io);
-          delay(1500);
+          resume();
           return; // Wait for all viewers before choosing duel/cancel.
         }
         const keepId = typeof pending.extra.keep === 'number' ? pending.extra.keep : st.players[meIdx]?.hand;
@@ -3469,7 +3326,7 @@ function runCpuLoop(roomId){
         applyAndBroadcast(roomNow, willDuel
           ? {type:'PICK_TARGET',playerId:meIdx,payload:{target:targetIdx,duel:true}}
           : {type:'PICK_CANCEL',playerId:meIdx}, io);
-        delay(1500);
+        resume();
         return;
       }
 
@@ -3488,7 +3345,7 @@ function runCpuLoop(roomId){
           payload: { target: targetIdx },
         }, io);
 
-        delay(1500);
+        resume();
         return;
       }
 
@@ -3499,7 +3356,7 @@ function runCpuLoop(roomId){
           playerId: meIdx,
         }, io);
 
-        delay(1500);
+        resume();
         return;
       }
 
@@ -3520,24 +3377,9 @@ function runCpuLoop(roomId){
             payload: { target: targetIdx },
           }, io);
 
-          // 第一次決鬥前的思考時間（維持你原本 1.5 秒）
-          delay(1500);
+          resume();
           return;
         }
-
-        // ★ 走到這裡代表：第一次決鬥已經做完（firstDone = true）
-
-        // 第一次 → 第二次中間：先停頓一次（只停一次）
-        if (!st._cpuWaitedLuffySecond) {
-          st._cpuWaitedLuffySecond = true;
-
-          const gapMs = getLuffySecondGap(st);  // 通常是 LUFFY_SECOND_GAP.normal
-          delay(gapMs);
-          return;
-        }
-
-        // 第二次進來：等完了，就真正選第二個對象
-        st._cpuWaitedLuffySecond = false;
 
         // 已做過第一次 → 第二次決鬥（沒有合適對象就傳 -1）
         const targetIdx = pickCpuTargetSmart(st, meIdx, {
@@ -3554,7 +3396,7 @@ function runCpuLoop(roomId){
         }, io);
 
         // 第二次決鬥送出後，也可以留一點動畫時間
-        delay(1500);
+        resume();
         return;
       }
 
@@ -3567,7 +3409,7 @@ function runCpuLoop(roomId){
           payload: { go: true },   // CPU 一律選發動
         }, io);
 
-        delay(800);
+        resume();
         return;
       }
 
@@ -3586,7 +3428,7 @@ function runCpuLoop(roomId){
           payload: { target: targetIdx },
         }, io);
 
-        delay(1500);
+        resume();
         return;
       }
 
@@ -3614,17 +3456,14 @@ function runCpuLoop(roomId){
           payload: { pickedIndices },
         }, io);
 
-        delay(1500);
+        resume();
         return;
       }
 
       // --- 15 卡塔庫栗強化：頂牌排序 kata-order ---
       if (act === 'kata-order') {
-        const n = pending.n || 0;
-
-        // 簡單做法：直接維持原順序
-        const order = [];
-        for (let i = 0; i < n; i++) order.push(i);
+        // ORDER_COMMIT takes card IDs, in top-first order.
+        const order = Array.isArray(pending.cards) ? pending.cards.slice() : [];
 
         applyAndBroadcast(roomNow, {
           type: 'ORDER_COMMIT',
@@ -3632,114 +3471,65 @@ function runCpuLoop(roomId){
           payload: { order },
         }, io);
 
-        delay(1500);
+        resume();
         return;
       }
 
 
-      // 其他暫時沒處理的 pending（例如卡塔庫栗頂牌排序）先不動
+      // 其他暫時沒處理的 pending 先不動
       return;
     }
 
     // ========= ② 沒有 pending：正常「抽牌 → 出牌」 =========
     if (st.turnStep === 'draw') {
-      // 這個延遲是「從輪到他、進到這個分支開始算」
-      // 會依照上一張打出的牌 + 是否強化，從 PREV_CARD_DELAY 取出毫秒數
-      const delayMs = getDelayForPrevCard(st);
-
-      // 為了「抽牌前等」，我們用 state 上的一個旗標來避免重複等
-      if (!st._cpuWaitedBeforeDraw) {
-        st._cpuWaitedBeforeDraw = true;
-        // 第一次進來：只等，不抽牌
-        delay(delayMs || 0);
-        return;
-      }
-
-      // 第二次進來：已經等過了，真正執行抽牌
-      st._cpuWaitedBeforeDraw = false;
-
       applyAndBroadcast(roomNow, {
         type: 'DRAW',
         playerId: meIdx,
       }, io);
-
-      // 抽牌後不再額外等（要等的時間都已經「抽牌前」用掉了）
-      // 如果你想抽完牌停 0.5 秒再出牌，可以改成 delay(500);
-      delay(0);
+      resume();
       return;
     }
 
-
-
     if (st.turnStep === 'choose') {
-      // 抽完牌 → 先等 4 秒，再真正出牌
-      // 用一個旗標避免每次進來都在等
-      if (!st._cpuWaitedAfterDraw) {
-        st._cpuWaitedAfterDraw = true;
-        // 第一次進到 choose：只等 4 秒，不出牌
-        delay(4000);
-        return;
-      }
+      const retry = roomNow._cpuChooseRetry;
+      const retryHere = retry?.state === st && retry.playerId === meIdx;
+      if (retryHere && !retry.which) return;
+      roomNow._cpuChooseRetry = null;
 
-      // 第二次進到 choose：已經等過，再真正出牌
-      st._cpuWaitedAfterDraw = false;
-
-      const beforeTurnIndex = st.turnIndex;
-      const firstWhich = pickCpuCardSmart(st, meIdx); // 'hand' 或 'drawn'
+      const which = me.frozen
+        ? (me.tempDraw != null ? 'drawn' : null)
+        : (retryHere ? retry.which : pickCpuCardSmart(st, meIdx));
+      if (which !== 'hand' && which !== 'drawn') return;
 
       applyAndBroadcast(roomNow, {
         type: 'PLAY_CARD',
         playerId: meIdx,
-        payload: { which: firstWhich },
+        payload: { which },
       }, io);
 
-      // ===== 保底：如果這次出牌被規則擋下，立刻改打另一張 =====
-      const stAfterFirst = roomNow.state;
-      const meAfterFirst = stAfterFirst?.players?.[meIdx];
-      const stillSameCpuChoose = (
-        stAfterFirst &&
-        stAfterFirst.turnIndex === beforeTurnIndex &&
-        stAfterFirst.turnStep === 'choose' &&
-        !stAfterFirst.pending &&
-        meAfterFirst &&
-        meAfterFirst.alive &&
-        meAfterFirst.isCPU
-      );
-
-      if (stillSameCpuChoose) {
-        let fallbackWhich = null;
-
-        // 青雉凍結：只能打剛抽那張
-        if (meAfterFirst.frozen && meAfterFirst.tempDraw != null) {
-          fallbackWhich = 'drawn';
-        } else if (firstWhich !== 'drawn' && meAfterFirst.tempDraw != null) {
-          fallbackWhich = 'drawn';
-        } else if (firstWhich !== 'hand' && meAfterFirst.hand != null) {
-          fallbackWhich = 'hand';
-        }
-
-        if (fallbackWhich) {
-          applyAndBroadcast(roomNow, {
-            type: 'PLAY_CARD',
-            playerId: meIdx,
-            payload: { which: fallbackWhich },
-          }, io);
-        }
+      const after = roomNow.state;
+      const player = after?.players?.[meIdx];
+      const rejected = after?.turnIndex === meIdx && after.turnStep === 'choose' &&
+        !after.pending && player?.alive && player.isCPU &&
+        player.hand === me.hand && player.tempDraw === me.tempDraw &&
+        after.discard?.length === st.discard?.length;
+      if (rejected) {
+        // A rule rejection can itself open a presentation gate. Try the
+        // alternate once, after that gate releases, using this exact state.
+        const alternative = retryHere || player.frozen ? null
+          : (which === 'hand' && player.tempDraw != null ? 'drawn'
+            : (which === 'drawn' && player.hand != null ? 'hand' : null));
+        roomNow._cpuChooseRetry = { state: after, playerId: meIdx, which: alternative };
+        if (!alternative) return;
       }
-
-      // ★ 出牌後：依「最後成功打出的牌」決定要等多久
-      const stAfter = roomNow.state;          // 套用 PLAY_CARD 後的最新 state
-      const waitMs = getDelayAfterPlay(stAfter);
-
-      delay(waitMs);
+      resume();
       return;
     }
 
     // 其他 turnStep（例如結算中 / 換人中） → 不再自動動作
   };
 
-  // 啟動第一次檢查
-  step();
+  resume();
 }
 
 

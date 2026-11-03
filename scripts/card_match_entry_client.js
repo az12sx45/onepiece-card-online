@@ -24,7 +24,7 @@
   function view(){
     const api=window.CardPhonePresentation;
     if(root.dataset.cardPhone!=='table'||root.dataset.cardSeatHud!=='1'||root.dataset.cardMenuLayout!=='v3'||root.dataset.cardFlow!=='1')return null;
-    if(api?.presentationFlowVersion!==2||api.ownCollectionVersion!=='2'||api.enhancementVideoOrderVersion!==2||!(api.resultCutinVersion>=2)||!(api.avatarStatusRevealVersion>=1)||api.venueReadVersion!==2)return null;
+    if(api?.presentationFlowVersion!==2||api.ownCollectionVersion!=='2'||api.enhancementVideoOrderVersion!==2||!(api.resultCutinVersion>=3)||!(api.avatarStatusRevealVersion>=2)||!(api.pileClarityVersion>=1)||!(api.rogerPredictionVersion>=1)||api.venueReadVersion!==2)return null;
     if(typeof state!=='object'||!state?.players?.length||typeof me!=='object'||!Number.isInteger(me.playerId)||!state.players[me.playerId])return null;
     const rows=[...document.querySelectorAll('#players > [data-seat-id]')];
     const self=document.querySelector('#phoneSelfPlayer[data-self-design="captain-v1"] .phone-self-captain');
