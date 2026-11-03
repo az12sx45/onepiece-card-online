@@ -8924,3 +8924,9 @@ source-protection-final 46項通過：9原檔、9Android共用來源、11交接�
 ## 2026-11-03 Marineford重連後端整合候選
 依READY白名單核對server/marineford-rooms.js與新scripts/marineford_reconnect_qa.cjs兩檔，原始body及SHA存D:/Codex_QA/marineford-reconnect-release-20261103/approved-raw；沒有額外換行整理。只有房間生命週期／CPU控制權排程變更，兩遊戲引擎與原席位身份／私牌結構不變，不新增DB房間保存。已公開的team2c9f與public-row98884cd各有RenderLive及13項公開核驗；後端另提交並以實際部署commit綁定來源，不宣稱可由HTTP取得後端source hash。
 原交接Socket.IO9項含真等正式60秒、六瀏覽器52動作收據均沒有來源SHA，保留其證據界線；新提交的不可變來源重跑結果、實際動作數、公開與最終合併情報另記發布收據。無實體手機／正式帳號DB驗收。未交接Card工作及其文件保留，不混入本輪；三波更新情報待全部公開驗證完成後一次啟用。
+
+
+## 2026-11-03 Marineford三波公開核驗與更新情報75
+陣營視角2c9f163bf0681dee302a5f6b50cae731281f68b2、公開牌列98884cd91ae8cf851ee56a9cd8629bc8d05541e4、重連後端01d55e41820d8ae432e23174a35746e0cd4142f1先後以實際Render Live來源核對，各有13個小型公開GET通過。前兩波更新JS／CSS，第三波保持最新前端與metadata，只有rooms與新QA後端範圍變更；兩遊戲引擎、131項媒體、其他遊戲及啟動器清單均保持既有版本。後端rooms使用Git來源SHA綁實際部署commit，不宣稱HTTP後端source hash。沒有素材上傳、舊媒體／Card大CSS／安裝包公開下載或原生包更新。
+Fresh immutable驗證：team2c9 Chrome4＋WebKit4；public-row98884cd Chrome7＋WebKit7；backend01d55e418 的9項真Socket.IO含未加速的正式60秒預設，另六瀏覽器74項、實際185動作完整對局。前後Git snapshot指紋穩定、實際localhost HTML／JS／CSS body逐byte核對；不硬套舊producer52動作。舊15／15、115動作及原重連等收據的未綁來源和未覆蓋分支限制詳列各receipt。兩次純EOF整理均保留原始檔、before／after SHA及無邏輯改動證明。
+全部公開確認後config/launcher-announcements-v1.json修訂74→75，一次新增陣營視角、公開牌列、重連CPU接手3則，舊73則內容順序完全保留，總76則。3則依現行協定皆用launcher1.2.31一般gate，無MF scope／CTA；重連資訊明列記憶體房間不跨服務重啟保存。新一輪隔離PGlite公告handler82項及無DB npm start五路由通過；工作樹靜態啟動不替代不可變提交的行為驗收，未操作正式帳號／DB或實體手機。Card與其他未交接工作保留、未納入發布。公告實際Live與最後連續性／正式收據另記完成段。
