@@ -8812,3 +8812,17 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 發布器本輪白名單限 game.html 與 js/card-desktop-table.js 兩個變更；未變動的 51MB CSS 以原 manifest 完整比對保留，不重新上傳或下載驗證。既有憑證僅由正式 DPAPI 發布器在子程序使用。
 接續發現並重現獨立房間問題：JOIN_ROOM 在對局房間已失效時會重新建立單人 lobby。game.html 的既有房間／重連請求新增 resumeOnly；server/index.js 只對明確 resumeOnly 的不存在房回 ROOM_UNAVAILABLE，不重建。既有建房不變。原房仍在可恢復同座位／五位玩家；房失效清楚顯示返回大廳，沒有假稱恢復已遺失對局。scripts/card_room_resume_qa.js 四項真 Socket.IO 通過；card_group_server_fixture.js 僅增加測試程序內 expire-room 情境，正式伺服器無測試入口。此修正不做跨伺服器重啟的存檔持久化。
 保持未變更之 card-desktop-table.css 的舊 URL cache token，只更新 JS token，避免瀏覽器為此次小修正重新下載 51MB 的內嵌美術樣式；CSS bytes 與 manifest 均未改。
+
+
+## 2026-11-03 頂上戰爭看牌與黃猿雷射交接
+- server/marineford-engine.js：猜牌結果增加公開命中事件，私有查看的 target/slot 僅給查看者與海軍；看完產生僅兩端收到的 peek-return，保留手牌與規則。
+- marineford.js/.css：公開牌、檢視與選牌均補階級名稱；指定海軍牌移出後保持空牌位直到看完才歸還，其他座位收不到牌面或牌位。全員演出閘門保留。黃猿正背面採使用者 images.jfif 貼頭短髮參照；猜中卡片中心燒洞，未中先避開再射，結果於射擊後出現。
+- 進度陣營標誌從原卡背抽取，不採被否決的自創標誌；拒用圖移到 QA rejected-unused，重新生成129張素材清單（50,777,534 bytes）。
+- 檔案：server/marineford-engine.js、public/marineford/marineford.js/.css、public/desktop/marineford-media-v1.json、5張新 art/v2 素材、scripts/marineford_peek_laser_qa.cjs。本輪不包含其他聊天室的 Card 變更。
+- 驗證：npm start 在31693啟動、/marineford/index.html HTTP200；本機無DATABASE_URL，帳號DB不列實測。引擎1500場／12項與邊界34項通過；Chrome定向8項通過；六瀏覽器完整101個動作、全員ACK、看牌隱私、手機選擇與WebKit大廳進桌全部通過。精確收據 D:/Codex_QA/marineford-peek-laser-20261103。WebKit定向另列最終結果；沒有實體Android/iPhone測試宣稱。
+
+最終收據：final-chrome/report.json 8項、final-webkit/report.json 8項均 passed=true；六人報告 passed=true / actions=101。已建立白名單交接，請啟動器發布者按 handoffs/marineford-20261103.md 發布與讀回。
+
+最終候選驗證完成：獨立船長底板與命中區修正後，final-captain-r2 桌機2＋Android6尺寸共555項，final-captain-r2-ios iOS2尺寸139項，合計694項通過，零page errors；測試前後3個正式程式SHA256一致。原本失敗／作廢稿保留且不列通過。棄牌72項與npm start雙視窗8項另有收據。狀態 READY_FOR_INTEGRATION，未公開發布；交接收據另存協調目錄。
+
+發布整合僅移除 marineford.js 空白行尾空白及 QA 檔末多餘空行；產品邏輯與測試內容不變，原交接 SHA 與提交 SHA 另存發布收據。

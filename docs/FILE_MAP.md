@@ -2209,3 +2209,7 @@ public/marineford/art/v2/refined-justice-*.webp、scaffold-rear.webp、lobby-pan
 ### 2026-11-03 演出故障與斜線
 public/game.html 的 playEnhFxFor 擁有影片世代、載入／停滯 watchdog 與清理；primeIOSMediaOnce 不可碰觸正式播放。public/js/card-desktop-table.js 與 HTML 相同的投影版本 4 對已裝手機提供線上修正。marineford.js 的 skillCutin 僅使用公開牌，playedFlight 保留牌桌。card_video_recovery_qa.mjs 包含永不 settle 的 play Promise、warmup 延遲、真 MP4 與 ACK；marineford_cutins_qa.cjs 包含雙陣營／正義及中斷。
 原房間限定重連：game.html resumeOnly / ROOM_UNAVAILABLE ↔ server/index.js JOIN_ROOM；scripts/card_room_resume_qa.js 驗證正常建房、保留原五席及過期房不重建。
+
+
+### 2026-11-03 頂上戰爭看牌與雷射
+scripts/marineford_peek_laser_qa.cjs 驗證公開牌文字、三尺寸、私有取牌／閱讀／歸還、雷射與結果時序及同步 ACK。public/marineford/marineford.js/.css、server/marineford-engine.js 為本輪程式；marineford-media-v1.json 納入 art/v2 的 kizaru-stage-front/back、emblem-marine-source、emblem-whitebeard-source、fx-laser-burn-rim，合計129張，5張新增，既有124項不變。

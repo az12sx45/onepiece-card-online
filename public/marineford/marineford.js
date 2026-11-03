@@ -28,8 +28,9 @@
  function request(event,payload={}) {return new Promise(resolve=>socket.timeout(12000).emit(event,payload,(err,result)=>{if(err){notify('連線逾時，請稍後再試');resolve({ok:false});}else{if(!result?.ok)notify(result?.error||'操作未完成');resolve(result||{ok:false});}}));}
  function closeSheet(){ $('sheet').hidden=true; }
  function sheet(title,kind='general'){$('sheet').dataset.kind=kind;$('sheetTitle').textContent=title;$('sheetBody').replaceChildren();$('sheet').hidden=false;return $('sheetBody');}
- function detail(id,play=false){const c=cards[id],body=sheet(c.name,'detail'),img=cardImage(id);img.classList.add('detail-card');const text=node('div',null,'detail-copy');text.append(node('small',teamName(c.team)+' · '+(c.justice?'正義卡':'角色卡'),'detail-kicker'),node('h3',c.name),node('p',c.effect));const footer=node('div',null,'detail-actions');if(play){const b=button(c.rank===7?'不能主動打出':'打出這張牌',()=>action({type:'PLAY',card:id}));b.disabled=c.rank===7||busy;footer.append(b);}else footer.append(button('返回牌桌',closeSheet));text.append(footer);body.append(img,text);}
- function gallery(title,ids,explain=false){const body=sheet(title,'gallery'),grid=node('div',null,'gallery');if(explain)body.append(node('p','這裡是已打出的牌及一般敗牌。正義卡正常打出會保留；被擊敗則先補抽，再只把該張正義卡洗回。','sheet-hint'));if(!ids.length)body.append(node('p','目前沒有公開牌'));for(const id of ids){const b=button('',()=>detail(id),'');b.append(cardImage(id));grid.append(b);}body.append(grid);}
+ function detail(id,play=false){const c=cards[id],body=sheet(c.rank+' 號 · '+c.name,'detail'),img=cardImage(id);img.classList.add('detail-card');const text=node('div',null,'detail-copy');text.append(node('small',teamName(c.team)+' · '+(c.justice?'正義卡':'角色卡'),'detail-kicker'),node('h3',c.rank+' 號 · '+c.name),node('p',c.effect));const footer=node('div',null,'detail-actions');if(play){const b=button(c.rank===7?'不能主動打出':'打出這張牌',()=>action({type:'PLAY',card:id}));b.disabled=c.rank===7||busy;footer.append(b);}else footer.append(button('返回牌桌',closeSheet));text.append(footer);body.append(img,text);}
+ function publicCardTile(id){const c=cards[id],b=button('',()=>detail(id),'public-card-tile'),label=node('span',null,'public-card-label');label.append(node('b',String(c.rank)),node('strong',c.name));b.append(cardImage(id),label);b.setAttribute('aria-label',c.rank+' 號 · '+c.name+'，查看詳情');return b;}
+ function gallery(title,ids,explain=false){const body=sheet(title,'gallery'),grid=node('div',null,'gallery');if(explain)body.append(node('p','這裡是已打出的牌及一般敗牌。正義卡正常打出會保留；被擊敗則先補抽，再只把該張正義卡洗回。','sheet-hint'));if(!ids.length)body.append(node('p','目前沒有公開牌'));for(const id of ids){grid.append(publicCardTile(id));}body.append(grid);}
  async function action(a){if(busy||!view)return;busy=true;closeSheet();render();const result=await request('MF_ACTION',{revision:view.revision,action:a});if(!result.ok){busy=false;render();}}
  function renderLobby(){if(view)return;document.body.dataset.screen='lobby';$('justice').hidden=true;$('health').replaceChildren();$('lobby').hidden=false;$('table').hidden=true;const body=$('lobbyBody');body.replaceChildren();$('lobby').dataset.waiting=String(!!room);if(!authenticated){body.append(node('p','請從啟動器登入帳號後進入頂上戰爭篇。'));return;}
   if(!room){const identity=node('div',null,'lobby-identity');identity.append(avatar(you),node('strong',me.name),node('span','出航準備'));body.append(identity,node('h2','加入頂上之戰','lobby-heading'));
@@ -44,7 +45,7 @@
   $('table').dataset.perspective=ownTeam;
   if(root.dataset.seats!==key){root.dataset.seats=key;root.replaceChildren();for(const side of ['enemy','ally']){
    const row=node('div',null,'fleet-row');row.dataset.side=side;const members=view.players.filter(p=>(p.id===you)===(side==='ally'));row.style.setProperty('--count',members.length);row.setAttribute('aria-label',side==='ally'?'我的資訊':'其他玩家');root.append(row);
-   for(const p of members){const seat=node('div',null,'seat');seat.dataset.player=p.id;const info=node('div',null,'seat-info'),title=node('strong'),meta=node('small',null,'seat-meta'),morale=node('small',null,'morale');info.append(title,meta,morale);const publicButton=button('',()=>{const now=view.players[p.id];gallery(now.name+'的場上明牌',now.played,true);},'public-cards');const portrait=button('',()=>{const now=view.players[p.id],body=sheet(now.name+' · '+teamName(now.team),'player');body.append(avatar(p.id),node('h3',now.name),node('p','順位 '+(p.id+1)+' · 手牌 '+now.hand.length+' 張 · 士氣 '+now.morale));const grid=node('div',null,'gallery');for(const id of now.played){const b=button('',()=>detail(id),'');b.append(cardImage(id));grid.append(b);}body.append(node('p','場上明牌 '+now.played.length+' 張','sheet-hint'),grid);if(p.id===you)body.append(button('對局功能',()=>openMatchMenu()));body.append(button('返回牌桌',closeSheet));},'portrait-button');portrait.setAttribute('aria-label',p.name+'的玩家資訊與公開牌');portrait.append(avatar(p.id));seat.append(portrait,node('span',String(p.id+1).padStart(2,'0'),'seat-number'),info,publicButton);row.append(seat);}
+   for(const p of members){const seat=node('div',null,'seat');seat.dataset.player=p.id;const info=node('div',null,'seat-info'),title=node('strong'),meta=node('small',null,'seat-meta'),morale=node('small',null,'morale');info.append(title,meta,morale);const publicButton=button('',()=>{const now=view.players[p.id];gallery(now.name+'的場上明牌',now.played,true);},'public-cards');const portrait=button('',()=>{const now=view.players[p.id],body=sheet(now.name+' · '+teamName(now.team),'player');body.append(avatar(p.id),node('h3',now.name),node('p','順位 '+(p.id+1)+' · 手牌 '+now.hand.length+' 張 · 士氣 '+now.morale));const grid=node('div',null,'gallery');for(const id of now.played){grid.append(publicCardTile(id));}body.append(node('p','場上明牌 '+now.played.length+' 張','sheet-hint'),grid);if(p.id===you)body.append(button('對局功能',()=>openMatchMenu()));body.append(button('返回牌桌',closeSheet));},'portrait-button');portrait.setAttribute('aria-label',p.name+'的玩家資訊與公開牌');portrait.append(avatar(p.id));seat.append(portrait,node('span',String(p.id+1).padStart(2,'0'),'seat-number'),info,publicButton);row.append(seat);}
   }}
   for(const p of view.players){const seat=root.querySelector('[data-player="'+p.id+'"]');seat.dataset.current=String(p.id===actor&&view.phase==='playing');seat.dataset.self=String(p.id===you);seat.dataset.team=p.team;const info=seat.querySelector('.seat-info');updateText(info.querySelector('strong'),p.name+(p.id===you?' · 我':''));info.querySelector('strong').title=p.name;updateText(info.querySelector('.seat-meta'),teamName(p.team)+' '+p.hand.length+' 張');updateText(info.querySelector('.morale'),'士氣'+p.morale);const b=seat.querySelector('.public-cards');const stamp=p.played.join('|');if(b.dataset.cards!==stamp){b.dataset.cards=stamp;b.replaceChildren();const strip=node('span',null,'public-thumbs');for(const id of p.played.slice(-4)){const img=node('img');img.src=cardArt(id);img.alt=cards[id].rank+' · '+cards[id].name;const thumb=node('span',null,'public-thumb');thumb.append(img,node('b',String(cards[id].rank)));strip.append(thumb);}b.append(strip,node('span',p.played.length?'明牌 '+p.played.length:'尚無明牌','public-count'));}b.setAttribute('aria-label',p.name+'的場上明牌 '+p.played.length+' 張，點擊查看全部');b.disabled=busy;}
  }
@@ -53,12 +54,13 @@
   const max=team==='navy'?(view.players.length<=3?4:view.players.length+1):6,rescue=team==='navy',body=sheet(rescue?'海賊救援路線':'海軍登台進度'),text=node('div',null,'detail-copy');
   text.append(node('h3',(rescue?'救援':'登台')+' '+(max-view.hp[team])+' / '+max),node('p',rescue?'海軍每被擊敗一張手牌，海賊救援隊前進一步。走完救援路線，登上處刑台救出艾斯，海賊獲勝。':'海賊每被擊敗一張手牌，海軍向處刑台前進一步。走完六步，執行處刑，海軍獲勝。進度只隨卡牌結算推進，不會隨現實時間自動增加。'),node('p','海軍也能在自己的回合完成效果後，以手中與場上集齊六種正義獲勝。未公開的正義手牌不會顯示給其他玩家。'),button('返回牌桌',closeSheet));body.append(text);
  }
+ function factionEmblem(damagedTeam){const img=node('img',null,'faction-emblem');img.src='art/v2/emblem-'+(damagedTeam==='navy'?'whitebeard':'marine')+'-source.webp';img.alt=damagedTeam==='navy'?'白鬍子海賊團':'海軍';return img;}
  function renderProgress(hp=view.hp){
   $('justice').hidden=false;const health=$('health'),navyMax=view.players.length<=3?4:view.players.length+1;
   if(health.dataset.limit!==String(navyMax)||!health.querySelector('.advance-route')){
    health.dataset.limit=String(navyMax);health.replaceChildren();health.setAttribute('aria-label','通往艾斯的共同登台路線');
    const route=node('div',null,'advance-route');route.setAttribute('aria-hidden','true');for(let i=0;i<8;i++)route.append(node('i'));health.append(route,node('span','艾斯','route-goal'));
-   for(const team of ['navy','pirate']){const h=button('',()=>progressDetail(team),'health-box');h.dataset.team=team;h.append(node('span',team==='navy'?'救援':'登台'),node('strong'));const marker=node('span',null,'route-marker');marker.dataset.team=team;marker.append(node('b',team==='navy'?'救':'刑'));route.append(marker);health.append(h);}
+   for(const team of ['navy','pirate']){const h=button('',()=>progressDetail(team),'health-box');h.dataset.team=team;h.append(factionEmblem(team),node('span',team==='navy'?'救援':'登台'),node('strong'));const marker=node('span',null,'route-marker');marker.dataset.team=team;marker.append(factionEmblem(team));route.append(marker);health.append(h);}
   }
   for(const team of ['navy','pirate']){const h=health.querySelector('.health-box[data-team="'+team+'"]'),max=team==='navy'?navyMax:6,spent=max-hp[team],marker=health.querySelector('.route-marker[data-team="'+team+'"]');updateText(h.querySelector('strong'),spent+'/'+max);h.setAttribute('aria-label',(team==='navy'?'海賊救援':'海軍登台')+' '+spent+' / '+max+'，點擊查看規則');marker.style.setProperty('--advance',String(spent/max));marker.dataset.step=String(spent);h.disabled=busy;}
  }
@@ -88,7 +90,11 @@
   }
   placeGroundDecks();
   const hand=ownHand(),ids=(view.players[you]?.hand||[]).filter(Boolean),handKey=ids.join('|');if(hand.dataset.cards!==handKey){hand.dataset.cards=handKey;hand.replaceChildren();for(const [slot,id] of ids.entries()){const b=button('',()=>detail(id,!view.pending&&view.turn===you&&view.step==='play'&&!busy),'hand-card');b.dataset.card=id;b.dataset.slot=slot;b.append(cardImage(id));if(view.players[you].team==='navy')b.append(node('span',slotName(slot),'navy-slot-label'));hand.append(b);}}
-  for(const held of hand.children){held.style.visibility='';held.disabled=busy;}hand.dataset.playable=String(!busy&&!view.pending&&view.turn===you&&view.step==='play');
+  for(const held of hand.children){held.style.visibility='';held.disabled=busy;delete held.dataset.peeked;held.querySelector('.peek-owner-tag')?.remove();}
+  if(view.pending?.type==='read'&&view.pending.target===you&&Number.isInteger(view.pending.slot)){const held=hand.querySelector('[data-slot="'+view.pending.slot+'"]');if(held){held.dataset.peeked='true';held.append(node('span',name(view.pending.owner)+'正在查看 · '+slotName(view.pending.slot),'peek-owner-tag'));}}
+  for(const b of $('navyHands').children){delete b.dataset.peeked;b.querySelector('.peek-owner-tag')?.remove();}
+  if(view.pending?.type==='read'&&[view.pending.owner,view.pending.target].includes(you)&&Number.isInteger(view.pending.slot)){const b=$('navyHands').querySelector('[data-slot="'+view.pending.slot+'"]');if(b){b.dataset.peeked='true';b.append(node('span',name(view.pending.owner)+'正在查看','peek-owner-tag'));}}
+  hand.dataset.playable=String(!busy&&!view.pending&&view.turn===you&&view.step==='play');
   $('turnLabel').textContent=view.phase==='ended'?teamName(view.winner)+'獲勝':busy?'演出中':actor===you?'輪到你了':name(actor)+'的行動';
   $('status').textContent=view.phase==='ended'?'本場對局結束':busy?'等所有玩家看完後繼續':view.pending?pendingDescription(view.pending):view.step==='draw'?'點兩側發光牌堆抽牌':'選擇要打出的牌';
   const arranging=!busy&&view.pending?.type==='arrange'&&view.pending.owner===you;$('table').dataset.arranging=String(arranging);document.querySelectorAll('.navy-arrange-tag').forEach(e=>e.remove());if(arranging)for(const held of hand.children){const c=cards[held.dataset.card];if(c)held.append(node('span','階級 '+c.rank+' · '+c.name,'navy-arrange-tag'));}const actions=$('actions');actions.replaceChildren();if(view.phase==='ended'){actions.append(button('查看戰果',()=>showResult()),button('返回大廳',leave));return;}if(busy){actions.append(node('p','演出完成後繼續','waiting'));return;}if(canDraw())actions.append(node('p','點擊發光的'+teamName(view.players[you].team)+'牌堆抽牌','action-hint'));else if(arranging){actions.append(node('p','是否交換左右手牌？','arrange-question'),button('維持原位',()=>action({type:'CHOOSE',cards:view.pending.cards.slice()})));if(view.pending.cards.length>1)actions.append(button('交換左右',()=>action({type:'CHOOSE',cards:view.pending.cards.slice().reverse()})));}else if(view.pending?.owner===you)actions.append(button('進行選擇',showPending));else if(view.turn===you&&!view.pending)actions.append(node('p','點手牌查看與打出','action-hint'));else actions.append(node('p','等待 '+name(actor),'action-hint'));
@@ -101,11 +107,11 @@
   if(p.targets&&p.type!=='guess'){const grid=node('div',null,'target-grid');for(const id of p.targets){const player=view.players[id],b=button('',()=>choose({target:id}),'target-choice');b.setAttribute('aria-label',name(id));const copy=node('span',null,'target-copy');copy.append(node('strong',name(id)),node('small',teamName(player.team)+' · 手牌 '+player.hand.length+' · 士氣 '+player.morale));b.append(avatar(id),copy);grid.append(b);}body.append(node('p','點選要使用效果的玩家','sheet-hint'),grid);if(p.type==='fight-target')body.append(button('放棄這次戰鬥',()=>choose({skip:true})));}
   if(p.digits){body.append(node('p','猜 '+p.targets.map(name).join('、')+' 的手牌','sheet-hint'));const digits=node('div',null,'digits');for(const digit of p.digits)digits.append(button(String(digit),()=>choose({digit}),'small-button'));body.append(digits);}
   if(p.slots){for(let slot=0;slot<p.slots;slot++){const b=button('',()=>choose({slot}),'pick-card'),img=node('img');img.src='art/v2/navy-back.webp';img.alt='未知的海軍手牌';b.append(img,node('span',slotName(slot)+'手牌'));body.append(b);}}
-  if(p.cards){const row=node('div',null,'pick-row'),multi=['return','order'].includes(p.type),read=['read','review'].includes(p.type),readable=['battle-card','defeat-choice','return'].includes(p.type);body.append(row);let confirm;if(readable)row.dataset.readable='true';
+  if(p.cards){const row=node('div',null,'pick-row'),multi=['return','order'].includes(p.type),read=['read','review'].includes(p.type),readable=!!p.cards;body.append(row);let confirm;if(readable)row.dataset.readable='true';
    const refresh=()=>{for(const b of row.children){const index=selected.indexOf(b.dataset.card);b.classList.toggle('selected',index>=0);b.setAttribute('aria-pressed',String(index>=0));b.querySelector('.pick-label').textContent=index>=0?'第 '+(index+1)+' 張':readable?(p.type==='battle-card'?'點選這張出戰':'點選這張牌'):cards[b.dataset.card].name;}if(confirm)confirm.disabled=selected.length!==(p.type==='return'?p.count:p.cards.length);};
    for(const id of p.cards){const b=button('',()=>{if(read){b.classList.toggle('expanded');return;}if(multi){const index=selected.indexOf(id);if(index>=0)selected.splice(index,1);else if(p.type!=='return'||selected.length<p.count)selected.push(id);refresh();}else choose({card:id});},'pick-card');b.dataset.card=id;const label=node('span',cards[id].name,'pick-label');b.append(cardImage(id));if(readable){b.classList.add('pick-readable');const c=cards[id],info=node('span',null,'pick-info');info.append(node('b','階級 '+c.rank,'pick-rank'),node('strong',c.name,'pick-name'),node('span',c.effect,'pick-effect'),label);b.append(info);b.setAttribute('aria-label','階級 '+c.rank+' · '+c.name+'：'+c.effect);}else b.append(label);row.append(b);}
    if(multi){const footer=node('div',null,'sheet-actions');footer.append(node('p',p.type==='return'?'選 '+p.count+' 張，依序放入牌堆底':'依序點牌；第一張是最左／牌堆最上方','sheet-hint'));confirm=button('確認順序',()=>choose({cards:selected.slice()}));footer.append(confirm);body.append(footer);}refresh();
-   if(read){const footer=node('div',null,'sheet-actions');footer.append(node('p',p.type==='read'?'只有你能看到這張手牌。':'看完後，公開牌才會洗回海賊牌堆。','sheet-hint'),button('我看完了 · 繼續',()=>choose({done:true})));body.append(footer);}
+   if(read){const footer=node('div',null,'sheet-actions');footer.append(node('p',p.type==='read'?'只有你能查看牌面；海軍會看到哪張牌正在被查看。':'看完後，公開牌才會洗回海賊牌堆。','sheet-hint'),button('我看完了 · 繼續',()=>choose({done:true})));body.append(footer);}
   }
  }
  function animate(element,frames,options){const a=element.animate(frames,options);activeAnimations.add(a);return a.finished.catch(()=>{}).finally(()=>activeAnimations.delete(a));}
@@ -175,12 +181,12 @@
  }
 
  // Only the public played card supplies the cut-in; never inspect hidden hands.
- async function skillCutin(id,text,token){
+ async function skillCutin(id,text,token,laser=false){
   const c=cards[id];if(!c){await scene(text,[],'card',token);return;}
   const layer=$('effectLayer');layer.replaceChildren();layer.dataset.kind='cutin';layer.dataset.phase='enter';
   const strip=node('section',null,'mf-cutin'),art=node('div',null,'mf-cutin-art'),copy=node('div',null,'mf-cutin-copy'),image=node('img');
   strip.dataset.team=c.team;strip.dataset.justice=String(!!c.justice);strip.dataset.card=id;strip.setAttribute('role','status');
-  image.src=cardArt(id);image.alt='';image.draggable=false;art.append(image);copy.append(node('strong',c.name),node('p',text));strip.append(art,copy);layer.append(strip);
+  strip.dataset.laser=String(laser);image.src=laser?'art/v2/kizaru-stage-front.webp':cardArt(id);image.alt='';image.draggable=false;art.append(image);copy.append(node('strong',laser?'黃猿 · 指尖雷射':c.name),node('p',text));strip.append(art,copy);layer.append(strip);
   // Bound cold image decode too; a missing illustration must not block the room ACK.
   await Promise.race([image.decode().catch(()=>{art.hidden=true;}),new Promise(r=>setTimeout(r,1200))]);if(token!==epoch)return;
   window.MFSound?.play(c.justice?'morale':'slash');
@@ -194,6 +200,46 @@
   const x=from?from.x+from.width/2:innerWidth*.5,y=from?from.y+from.height/2:innerHeight*.6,tx=dest?dest.x+dest.width*.5:innerWidth*.5,ty=dest?dest.bottom:innerHeight*.25;
   face.style.left=x+'px';face.style.top=y+'px';await animate(face,[{transform:'translate(-50%,-50%) scale(1)',opacity:1},{transform:`translate(calc(-50% + ${tx-x}px),calc(-50% + ${ty-y}px)) scale(.35)`,opacity:.3}],{duration:reduced()?150:650,easing:'ease-in-out'});face.remove();
  }
+
+ async function peekFlight(e,token,returning=false){
+  if(token!==epoch||![e.player,e.target].includes(you))return;
+  const layer=$('effectLayer'),held=$('navyHands').querySelector('[data-slot="'+e.slot+'"]');if(!held)return;
+  layer.replaceChildren();layer.dataset.kind='peek-flight';layer.dataset.phase='lift';
+  const r=held.getBoundingClientRect(),dest=$('players').querySelector('[data-player="'+e.player+'"]')?.getBoundingClientRect();
+  const id=you===e.target?view.players[e.target].hand[e.slot]:null,flight=id?cardImage(id):node('img');
+  if(!id){flight.src='art/v2/navy-back.webp';flight.alt='被查看的海軍手牌';}
+  flight.classList.add('peek-flight');flight.style.cssText=`left:${r.x}px;top:${r.y}px;width:${r.width}px;height:${r.height}px`;
+  const caption=node('p',name(e.player)+'查看海軍'+slotName(e.slot)+'手牌'+(id?' · '+cards[id].rank+' 號 '+cards[id].name:''),'effect-caption');layer.append(flight,caption);
+  const x=you===e.player?innerWidth/2-r.x-r.width/2:dest?dest.x+dest.width/2-r.x-r.width/2:0,y=you===e.player?innerHeight*.46-r.y-r.height/2:dest?dest.y-r.y:0;held.style.visibility='hidden';
+  const away=`translate(${x}px,${y}px) scale(1.12)`;
+  try{await animate(flight,returning?[{transform:away},{transform:'translate(0,0)'}]:[{transform:'translate(0,0)'},{transform:away}],{duration:reduced()?150:700,fill:'forwards'});await beat(returning?100:300,token);}
+  finally{flight.remove();caption.remove();if(token===epoch)held.style.visibility='';}
+ }
+ async function guessLaser(e,token,revealedCard=null){
+  if(token!==epoch)return;const layer=$('effectLayer');layer.replaceChildren();layer.dataset.kind='guess-laser';layer.dataset.phase='charge';
+  const allied=view.players[e.attacker??view.turn]?.team===view.players[you]?.team;layer.dataset.facing=allied?'back':'front';
+  const actor=node('img',null,'laser-kizaru');actor.src='art/v2/kizaru-stage-'+(allied?'back':'front')+'.webp';actor.alt=allied?'黃猿背面朝對手出招':'黃猿正面朝我方出招';
+  const shadow=node('i',null,'laser-ground-contact'),target=node('div',null,'laser-target'),surface=node('div',null,'laser-card-surface'),back=node('img');back.src='art/v2/'+view.players[e.player].team+'-back.webp';back.alt='尚未公開的目標手牌';
+  surface.append(back);target.append(surface,node('strong',name(e.player)),node('span',e.digit+' 號？'));layer.append(shadow,actor,target);
+  await Promise.race([Promise.all([actor.decode(),back.decode()]).catch(()=>{}),new Promise(r=>setTimeout(r,1200))]);if(token!==epoch)return;
+  const r=actor.getBoundingClientRect(),t=surface.getBoundingClientRect(),sx=r.x+r.width*(allied?.61:.457),sy=r.y+r.height*(allied?.067:.253),tx=t.x+t.width/2,ty=t.y+t.height/2;
+  shadow.style.cssText=`left:${r.x+r.width*.43}px;top:${r.bottom-r.height*.035}px;width:${r.width*.64}px;height:${r.height*.025}px`;
+  const spark=node('i',null,'laser-charge');spark.style.left=sx+'px';spark.style.top=sy+'px';layer.append(spark);
+  await animate(actor,[{opacity:0,transform:'translateX(-35px)'},{opacity:1,transform:'translateX(0)'}],{duration:reduced()?100:450});
+  await animate(spark,[{transform:'translate(-50%,-50%) scale(.2)',opacity:.3},{transform:'translate(-50%,-50%) scale(1)',opacity:1}],{duration:reduced()?100:800,fill:'forwards'});if(token!==epoch)return;
+  layer.dataset.phase='fire';window.MFSound?.play('slash');
+  const beam=node('i',null,'laser-beam');beam.style.cssText=`left:${sx}px;top:${sy}px;width:${Math.hypot(tx-sx,ty-sy)}px;rotate:${Math.atan2(ty-sy,tx-sx)}rad`;layer.append(beam);
+  const dodge=!e.hit?animate(target,[{transform:'translateX(0)'},{transform:'translateX(75px)',offset:.35},{transform:'translateX(75px)'}],{duration:reduced()?150:650,fill:'forwards'}):Promise.resolve();
+  // A miss starts moving before the ray arrives. Never reveal a losing card before impact.
+  await Promise.all([dodge,animate(beam,[{transform:'scaleX(0)',opacity:0},{transform:'scaleX(.1)',opacity:1,offset:.22},{transform:'scaleX(1)',opacity:1,offset:.8},{transform:'scaleX(1)',opacity:0}],{duration:reduced()?150:650})]);if(token!==epoch)return;
+  beam.remove();spark.remove();layer.dataset.phase=e.hit?'hit':'miss';target.dataset.result=e.hit?'hit':'miss';
+  if(e.hit){window.MFSound?.play('fire');if(revealedCard){surface.replaceChildren(cardImage(revealedCard));target.querySelector('span').textContent=cards[revealedCard].rank+' 號 · '+cards[revealedCard].name;}
+   const rim=node('img',null,'laser-burn-rim');rim.src='art/v2/fx-laser-burn-rim.webp';rim.alt='牌心被雷射燒穿';target.append(rim);surface.dataset.burned='true';
+   await Promise.all([animate(surface,[{'--burn-radius':'0px',filter:'brightness(2)'},{'--burn-radius':(t.width*.27)+'px',filter:'brightness(.9)'}],{duration:reduced()?150:1100,fill:'forwards'}),animate(rim,[{transform:'translate(-50%,-50%) scale(.05)',opacity:0},{transform:'translate(-50%,-50%) scale(1)',opacity:1}],{duration:reduced()?150:1100,fill:'forwards'})]);
+  }
+  const result=node('p',e.hit?name(e.player)+' · 猜中 '+e.digit+' 號':name(e.player)+' · 未猜中 '+e.digit+' 號','laser-result');layer.append(result);window.MFSound?.play(e.hit?'play':'miss');await beat(1700,token);if(token===epoch)layer.replaceChildren();
+ }
+
  async function navyHandShuffle(token){
   if(token!==epoch)return;const layer=$('effectLayer'),held=[...$('navyHands').children].slice(0,2),rects=held.map(e=>e.getBoundingClientRect());layer.replaceChildren();layer.dataset.kind='hand-shuffle';layer.dataset.phase='conceal';
   const caption=node('p','海軍手牌重新整理中','effect-caption');layer.append(caption);window.MFSound?.play('shuffle');
@@ -214,15 +260,18 @@
     }landing?.remove();
    }
    else if(e.type==='hand-shuffle')await navyHandShuffle(token);
-   else if(e.type==='guess')await skillCutin(packet.view.players[view.turn]?.played.at(-1),p+'猜 '+e.targets.map(name).join('、')+' 的 '+e.digit+' 號牌',token);
+   else if(e.type==='guess')await skillCutin(packet.view.players[view.turn]?.played.at(-1),p+'猜 '+e.targets.map(name).join('、')+' 的 '+e.digit+' 號牌',token,true);
+   else if(e.type==='guess-result'){const outcome=events[i+1]?.type==='defeat'&&events[i+1].player===e.player?events[++i]:null;await guessLaser(e,token,outcome?.card);if(outcome)await progressBeat(outcome,presentationHP,token);}
    else if(e.type==='battle'){const secret=events[i+1]?.type==='battle-private'?events[++i]:null;const mine=secret?.cards.find(x=>x.player===you);const held=[...ownHand().children].find(b=>b.dataset.card===mine?.card);if(held)held.style.visibility='hidden';const outcome=['defeat','tie'].includes(events[i+1]?.type)?events[++i]:null;const publicCard=view.players[view.turn]?.played.at(-1)||'';await scene(name(e.attacker)+' 對戰 '+name(e.defender),secret?secret.cards.map(x=>x.card):[],'battle',token,null,secret?secret.cards.map(x=>x.player):[e.attacker,e.defender],{values:secret?.values,boost:e.boost||{},outcome,fx:publicCard.startsWith('pirate')?'fire':publicCard.startsWith('justice')?'ice':'quake'});if(outcome?.type==='defeat')await progressBeat(outcome,presentationHP,token);}
    else if(e.type==='defeat'){await scene(p+'的 '+cards[e.card].rank+' 號 '+cards[e.card].name+' 被擊敗',[e.card],'defeat',token);await progressBeat(e,presentationHP,token);}
-   else if(e.type==='miss')await scene(p+'沒有 '+e.digit+' 號牌',[],'miss',token);
+   else if(e.type==='miss'){if(events[i-1]?.type!=='guess-result')await scene(p+'沒有 '+e.digit+' 號牌',[],'miss',token);}
    else if(e.type==='tie')await scene('平手 · 雙方保留手牌',[],'card',token);
    else if(e.type==='resisted')await scene(p+'未被擊敗',[],'card',token);
    else if(e.type==='shuffle')await scene(e.reason==='defeated-special'?e.cards.map(id=>cards[id].name).join('、')+' 洗回海軍牌堆；其他場上明牌保留':e.team==='navy'?'被擊敗的特殊牌洗回海軍牌堆':'海賊場上明牌洗回牌堆',e.cards||[],'shuffle',token,e.team);
    else if(e.type==='target')await skillCutin(packet.view.players[view.turn]?.played.at(-1),p+'對 '+target+' 使用卡片效果',token);
    else if(e.type==='peek')await skillCutin(packet.view.players[view.turn]?.played.at(-1),p+'查看 '+target+' 的一張手牌',token);
+   else if(e.type==='peek-slot')await peekFlight(e,token);
+   else if(e.type==='peek-return')await peekFlight(e,token,true);
    else if(e.type==='challenge')await skillCutin(packet.view.players[view.turn]?.played.at(-1),p+'挑戰 '+target,token);
    else if(e.type==='decline')await scene(p+'選擇不發起戰鬥',[],'card',token);
    else if(e.type==='order')await scene(p+'完成 '+e.count+' 張牌的排序',[],'card',token);

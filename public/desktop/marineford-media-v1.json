@@ -269,6 +269,20 @@
       "sha256": "50726a8013be92899e4a37f362f26c2d27eca9afd5dfe64a2fe51a28fe4dab66"
     },
     {
+      "path": "marineford/art/v2/emblem-marine-source.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 29618,
+      "sha256": "7e953911cfc65d1782e0de5aef1a767b48529d6c9b279f95f7c638b4f279a7aa"
+    },
+    {
+      "path": "marineford/art/v2/emblem-whitebeard-source.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 35270,
+      "sha256": "7b07cb308f66e7fb527b506741feea2b20b69aeddbcdd21ea289bbeafc202489"
+    },
+    {
       "path": "marineford/art/v2/field.webp",
       "kind": "image",
       "mime": "image/webp",
@@ -295,6 +309,13 @@
       "mime": "image/webp",
       "size": 802728,
       "sha256": "41e1c49bc0637ff0813ec3583b236cb34a2bb359b06b0ac0bd8b87f4bb67a883"
+    },
+    {
+      "path": "marineford/art/v2/fx-laser-burn-rim.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 51386,
+      "sha256": "686ec6f7392be424ab92f7b2d53d34d8f0734c2c985e20ab4e3dcd74482f1086"
     },
     {
       "path": "marineford/art/v2/fx-quake.webp",
@@ -358,6 +379,20 @@
       "mime": "image/webp",
       "size": 604520,
       "sha256": "7faecd982f6e91676815f7adc01bdb3e01e98a6730db5eb9570ceb01b9b51ed9"
+    },
+    {
+      "path": "marineford/art/v2/kizaru-stage-back.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 96026,
+      "sha256": "d4088b70a609555e9df09c10a152a7557bbd16306231119767a7d1e45be9604c"
+    },
+    {
+      "path": "marineford/art/v2/kizaru-stage-front.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 122556,
+      "sha256": "904eb2baab434b7512a9eaf2213bff894a7a89aa9b6903c6aeffd276c47e6db2"
     },
     {
       "path": "marineford/art/v2/lobby-panorama.webp",
