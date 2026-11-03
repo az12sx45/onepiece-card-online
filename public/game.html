@@ -2941,7 +2941,7 @@ html:root[data-card-phone] body #enhOverlay[data-enh-state="loading"] #enhVideo,
   <div id="luffyBoostModal" class="hidden fixed inset-0 z-[90] flex items-center justify-center bg-black/70">
     <div class="w-[min(520px,92vw)] rounded-2xl border border-neutral-700/70 bg-neutral-900/80 backdrop-blur p-5">
       <div class="text-lg font-extrabold mb-3">發動</div>
-      <div class="text-sm opacity-80 mb-4">以保留牌尾數減 3 為門檻，一次淘汰尾數不大於門檻的對手。8 號與保留牌都棄掉；仍有對手才補 1 張，保護／閃避照常生效。</div>
+      <div class="text-sm opacity-80 mb-4">以保留牌尾數減 3 為門檻，只淘汰尾數小於門檻的對手，等於門檻則留下。8 號與保留牌都棄掉；仍有對手才補 1 張，保護／閃避照常生效。</div>
       <div class="flex justify-end">
         <button id="luffyBoostGo" class="px-4 py-2 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">
           猿王群鴉炮
@@ -4330,7 +4330,7 @@ const CARD_TEXT = {
     baseTitle: "橡膠橡膠象槍",
     base: "可挑戰1～2位玩家比大小，輸了會被淘汰。",
     enhTitle: "四檔 猿王群鴉砲",
-    enh: "以保留牌尾數減3為門檻，一次淘汰尾數不大於門檻的對手。8號與保留牌都棄掉；仍有對手才補1張，保護／閃避照常生效。"
+    enh: "以保留牌尾數減3為門檻，只淘汰尾數小於門檻的對手，等於門檻則留下。8號與保留牌都棄掉；仍有對手才補1張，保護／閃避照常生效。"
   },
   9: {
     name: "女帝漢考克",

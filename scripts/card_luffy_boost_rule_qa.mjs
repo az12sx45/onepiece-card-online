@@ -27,31 +27,31 @@ const hasRedraw=result=>result.emits.some(e=>e.to==='all'&&e.type==='log'&&e.tex
 const publicOwnDiscards=result=>result.state.players.every(({id})=>{const cards=engine.getVisibleState(result.state,id).discard;return cards.filter(card=>card===8).length===1&&cards.filter(card=>card===9).length===1;});
 
 try{
- const split=prepare([{card:6},{card:16},{card:7}]),splitResult=commit(split);describe('threshold 9−3=6 includes both 6 and 16; leaves 7',split,splitResult);
- check('inclusive threshold eliminates card 6 and tail 6 but leaves tail 7',same(splitResult.state.players.map(p=>p.alive),[true,false,false,true]));
+ const split=prepare([{card:5},{card:15},{card:6},{card:16},{card:7}]),splitResult=commit(split);describe('threshold 9−3=6 eliminates tails below 6 and keeps 6 or higher',split,splitResult);
+ check('strict threshold eliminates 5 and 15 while 6, 16 and 7 survive',same(splitResult.state.players.map(p=>p.alive),[true,false,false,true,true,true]));
  check('remaining opponent permits exactly one genuine replacement draw',same(splitResult.state.deck,split.state.deck.slice(0,-1))&&splitResult.state.players[0].hand===split.state.deck.at(-1)&&hasRedraw(splitResult));
  check('original attack score remains threshold times actual victims',splitResult.state.stats?.[0]?.atkScore===12);
  check('played 8 and retained 9 both become exactly one public discard',publicOwnDiscards(splitResult));
  check('retained 9 uses the existing silent discard and does not trigger Empress elimination',splitResult.state.players[0].alive&&splitResult.emits.some(e=>e.type==='silent_discard'&&e.by===0&&same(e.cards,[9])));
  check('enhanced Luffy is one global result and emits no fake individual duel',splitResult.emits.filter(e=>e.type==='card_skill_intent'&&e.cardId===8&&e.mode==='all-duel').length===1&&!splitResult.emits.some(e=>e.type==='duel'));
 
- const all=prepare([{card:6},{card:16}]),allResult=commit(all);describe('all other players eliminated, no replacement',all,allResult);
+ const all=prepare([{card:5},{card:15}]),allResult=commit(all);describe('all other players eliminated, no replacement',all,allResult);
  check('all eliminated directly finishes original round',same(allResult.state.players.map(p=>p.alive),[true,false,false])&&allResult.state.turnStep==='ended'&&allResult.state.pending===null);
  check('all eliminated does not draw or consume the deck even when cards remain',same(allResult.state.deck,all.state.deck)&&allResult.state.players[0].hand===null&&!hasRedraw(allResult));
  check('both public 8 and 9 remain discarded on all-out finish',publicOwnDiscards(allResult));
 
  for(const status of ['protected','dodging']){
-  const defended=prepare([{card:6,[status]:true},{card:16}]),result=commit(defended);describe(status+' leaves one opponent',defended,result);
-  check(status+' still blocks an exactly-threshold target and other tail-6 target dies',same(result.state.players.map(p=>p.alive),[true,true,false])&&result.emits.some(e=>e.type==='card_defense'&&e.targetId===1&&e.status===(status==='protected'?'protect':'dodge')));
+  const defended=prepare([{card:5,[status]:true},{card:15}]),result=commit(defended);describe(status+' leaves one opponent',defended,result);
+  check(status+' still blocks a below-threshold target while the other tail-5 target dies',same(result.state.players.map(p=>p.alive),[true,true,false])&&result.emits.some(e=>e.type==='card_defense'&&e.targetId===1&&e.status===(status==='protected'?'protect':'dodge')));
   check(status+' original defensive effect and score remain',result.state.players[1][status]===(status==='protected')&&result.state.stats?.[1]?.defScore===9&&result.state.stats?.[0]?.atkScore===6);
   check(status+' surviving opponent still gives exactly one replacement',result.state.players[0].hand===defended.state.deck.at(-1)&&same(result.state.deck,defended.state.deck.slice(0,-1))&&hasRedraw(result));
  }
 
- const empty=prepare([{card:6},{card:16},{card:7}],[]),emptyResult=commit(empty);describe('empty deck with surviving opponent reaches existing showdown',empty,emptyResult);
+ const empty=prepare([{card:5},{card:15},{card:6}],[]),emptyResult=commit(empty);describe('empty deck with surviving opponent reaches existing showdown',empty,emptyResult);
  check('empty deck keeps original no-draw log and completes normal round settlement',emptyResult.state.deck.length===0&&!hasRedraw(emptyResult)&&emptyResult.emits.some(e=>e.type==='log'&&e.text.includes('牌堆已空，無法補牌'))&&emptyResult.state.turnStep==='ended'&&emptyResult.state.pending===null);
  check('empty-deck resolution still records the two actual public own discards',publicOwnDiscards(emptyResult));
 
- const invalid=prepare([{card:6},{card:16}]);
+ const invalid=prepare([{card:5},{card:15}]);
  const unauthorized=commit(invalid,1,{go:true});check('another player cannot commit the active Luffy effect',same(unauthorized.state,invalid.state)&&unauthorized.emits.some(e=>e.type==='toast'&&e.to===1)&&!unauthorized.emits.some(e=>e.to==='all'));
  for(const payload of [null,{}, {go:false},{go:'true'},{go:1},{go:[]}]){
   const result=commit(invalid,0,payload);check('invalid confirmation is a no-op: '+JSON.stringify(payload),same(result.state,invalid.state)&&result.emits.length===0);

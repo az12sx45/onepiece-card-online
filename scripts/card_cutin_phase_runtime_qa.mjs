@@ -149,7 +149,7 @@ const scenarios={
  async 'luffy-boost'(mode){
   // The ordinary STATE snapshot does not send the private confirmation prompt.
   // Start one action earlier and let the actual PLAY_CARD transaction deliver it.
-  const initial=fixture('card-8-enhanced/PLAY_CARD');initial.players[0].tempDraw=9;initial.players[1].hand=6;initial.players[2].hand=16;initial.players[3].hand=7;initial.players.slice(4).forEach(p=>{p.alive=false;});
+  const initial=fixture('card-8-enhanced/PLAY_CARD');initial.players[0].tempDraw=9;initial.players[1].hand=5;initial.players[2].hand=15;initial.players[3].hand=6;initial.players[4].hand=16;initial.players[5].hand=7;
   const h=await begin(mode,initial);
   await chooseOwnHand(h);
   const play=await h.act('PLAY_CARD',()=>h.click(h.p.locator('#phoneCardConfirm')));
@@ -159,14 +159,14 @@ const scenarios={
   await prompt.waitFor({state:'visible'});
   check('real accepted enhanced play sends private confirmation only to its caster and no diagonal yet',opening.result.state.pending?.extra?.keep===9&&opening.events.some(e=>e.type==='luffy_boost_prompt'&&e.to===h.viewer)&&!opens(await h.trace()).length,opening.events.filter(e=>e.type==='luffy_boost_prompt'));
   const copy=await prompt.textContent();
-  check('boost confirmation explains that the threshold is inclusive',/(不大於門檻|門檻以下.{0,5}含|≤)/.test(copy),copy);
+  check('boost confirmation explains that only tails strictly below the threshold are eliminated',/尾數(?:嚴格)?(?:小於|低於)門檻/.test(copy)&&/等於門檻則留下/.test(copy),copy);
   const action=await h.act('LUFFY_BOOST_COMMIT',()=>h.click(h.p.locator('#luffyBoostGo')));
   check('actual enhanced confirmation sends literal go:true',action.payload.go===true,action.payload);
   const step=await h.feed(action);
   await h.finish(step);
   const rows=await h.trace();
   requireBefore(rows,8,'全體玩家',commit(step.gate.id));
-  check('one real global presentation keeps 6/16 out, 7 alive and draws once without fake duels',!rows.some(fx('duel'))&&!h.room.state.players[1].alive&&!h.room.state.players[2].alive&&h.room.state.players[3].alive&&h.room.state.discard.includes(8)&&h.room.state.discard.includes(9)&&h.room.state.deck.length===step.before.deck.length-1,rows);
+  check('one real global presentation eliminates 5/15, keeps 6/16/7 and draws once without fake duels',!rows.some(fx('duel'))&&!h.room.state.players[1].alive&&!h.room.state.players[2].alive&&h.room.state.players.slice(3).every(p=>p.alive)&&h.room.state.discard.includes(8)&&h.room.state.discard.includes(9)&&h.room.state.deck.length===step.before.deck.length-1,rows);
   return h;
  },
  async kid(mode){const h=await begin(mode,fixture('card-11-normal/PLAY_CARD'));await chooseOwnHand(h);await h.click(h.p.locator('#phoneCardConfirm'));

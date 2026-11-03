@@ -106,9 +106,9 @@ try{
  await phaseCase('card-7-normal/PLAY_CARD',{text:'娜美登場',effect:'pile'});
  await phaseCase('card-7-enhanced/PLAY_CARD',{none:true});
  await phaseCase('card-7-enhanced/PICK_TARGET',{text:'麻痺 Audit1',effect:'effect:nami_paralyze'});
- const luffyBoostBase=sample('card-8-enhanced/LUFFY_BOOST_COMMIT').before;luffyBoostBase.pending.extra.keep=9;luffyBoostBase.players[0].hand=9;luffyBoostBase.players[1].hand=6;luffyBoostBase.players[2].hand=16;luffyBoostBase.players[3].hand=7;
- const luffyBoost=accepted({state:luffyBoostBase},{type:'LUFFY_BOOST_COMMIT',playerId:0,payload:{go:true}},'Luffy enhanced inclusive real threshold'),luffyBoostView=await phaseCase(luffyBoost,{text:'對全體玩家發起比拚',effect:'pile'});
- check('one enhanced Luffy global cue preserves the exact new real results without fake duels',index(luffyBoostView.trace,'duel')<0&&!luffyBoostView.context.state.players[1].alive&&!luffyBoostView.context.state.players[2].alive&&luffyBoostView.context.state.players[3].alive&&luffyBoost.state.discard.includes(8)&&luffyBoost.state.discard.includes(9),luffyBoostView.trace);
+ const luffyBoostBase=sample('card-8-enhanced/LUFFY_BOOST_COMMIT').before;luffyBoostBase.pending.extra.keep=9;luffyBoostBase.players[0].hand=9;luffyBoostBase.players[1].hand=5;luffyBoostBase.players[2].hand=15;luffyBoostBase.players[3].hand=6;luffyBoostBase.players[4].hand=16;luffyBoostBase.players[5].hand=7;
+ const luffyBoost=accepted({state:luffyBoostBase},{type:'LUFFY_BOOST_COMMIT',playerId:0,payload:{go:true}},'Luffy enhanced strict real threshold'),luffyBoostView=await phaseCase(luffyBoost,{text:'對全體玩家發起比拚',effect:'pile'});
+ check('one enhanced Luffy global cue preserves the exact new real results without fake duels',index(luffyBoostView.trace,'duel')<0&&!luffyBoostView.context.state.players[1].alive&&!luffyBoostView.context.state.players[2].alive&&luffyBoostView.context.state.players.slice(3).every(p=>p.alive)&&luffyBoost.state.discard.includes(8)&&luffyBoost.state.discard.includes(9),luffyBoostView.trace);
  await phaseCase('card-9-normal/PLAY_CARD',{text:'女帝招式發動',effect:'pile'});
  await phaseCase('card-9-enhanced/PLAY_CARD',{text:'女帝招式發動',effect:'pile',movie:true});
  await phaseCase('card-10-normal/PLAY_CARD',{none:true});

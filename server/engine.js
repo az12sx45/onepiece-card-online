@@ -2403,8 +2403,8 @@ if (type === 'LUFFY_SECOND') {
       if (oppId == null) return;
       const oppTail = tail(oppId);
 
-      // 尾數低於或等於門檻的玩家被淘汰。
-      if (oppTail <= threshold) {
+      // 尾數低於門檻的玩家被淘汰。
+      if (oppTail < threshold) {
         victims++;
         doEliminate(st, i, '魯夫（魚人島）：尾數比武失敗', meIdx, emits);
       }
