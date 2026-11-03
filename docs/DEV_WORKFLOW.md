@@ -9015,3 +9015,6 @@ Android/iOS v063各自API通道核對，14請求／4新API contexts／6檢查通
 - 海軍卡背採新版藍銀海圖底紋與邊框，保留雙弧圓環徽記及 MARINE。正式圖為 640 × 960 WebP，素材清單與新圖同步。
 - 檔案 public/marineford/marineford.js/.css、art/v2/navy-back.webp、public/desktop/marineford-media-v1.json、scripts/marineford_peek_laser_qa.cjs。Chrome定向8項及流程15項通過，WebKit定向8項通過。證據 D:/Codex_QA/marineford-faction-ui-20261104。
 - 正義卡只顯示在正義區，玩家公開牌縮圖、詳情與牌堆公開牌檢視只列一般公開牌。海賊與海軍卡背使用相同海圖雙線框，海賊保留白鬍子徽記。最新 Chrome 定向 8 項通過，含正義卡分區。
+
+
+2026-11-04 頂上戰爭篇更新情報新增 marineford-20261104-faction-ui。發布以遊戲程式與兩張卡背的公開核對為條件，公告沿用既有啟動器版本條件。
