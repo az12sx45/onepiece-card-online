@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "status": "RELEASED",
+  "complete": true,
+  "releasedAt": "2026-11-03T05:35:22.470Z",
+  "sourceRoot": "D:/Codex_Release_Worktrees/card-native-server-adapter-20261029",
+  "branch": "codex/card-native-server-adapter-20261029",
+  "baselineCommit": "5d050d5bb99a419150f8dc66631b5e1cb1ca8452",
+  "finalServingCommit": "fa2f6674b6fdd80e33cc12f69679b1c53496845a",
+  "announcementRevision": 73,
+  "announcementConfigSha256": "221c7ba2ee96e258c54b3428334212d38723cb503c45bb73990b998846b6ab89",
+  "announcementHostingVerified": true,
+  "realAccountAnnouncementVisibilityVerified": false,
+  "physicalAndroidTested": false,
+  "physicalIPhoneTested": false,
+  "apkRepackaged": false,
+  "ipaRepackaged": false,
+  "lattice": {
+    "apiAvailable": false,
+    "taskWritesClaimed": false
+  },
+  "originalWipFilesPreserved": 9,
+  "sourceSharedFilesPreserved": 7,
+  "games": {
+    "marineford": {
+      "sourceCommit": "e678a9e3fb590e409400b6f578943a010a38ae33",
+      "newMedia": 5,
+      "publicVerified": true,
+      "receipt": "D:/Codex_Project_Coordination/tabletop-series/handoffs/marineford-20261103-release.json"
+    },
+    "card": {
+      "sourceCommit": "06491ed24569ee12e0735e6dd22660d184a1b013",
+      "metadataCommit": "0806af5bca486064d2222d6cd05538b62ffb51cc",
+      "releaseId": "package-3987dc38668831bc",
+      "manifestSha256": "84d351272029addced0acc42785a09f94a6129e1189608772b8c1c3abf4f65aa",
+      "programBytes": 54123211,
+      "repeatProgramBytes": 0,
+      "retainedMedia": 1054,
+      "receipt": "D:/Codex_Project_Coordination/tabletop-series/handoffs/20261103-card-hud-collection-release.json"
+    }
+  },
+  "announcementIds": [
+    "card-20261103-captain-collection",
+    "marineford-20261103-peek-kizaru"
+  ],
+  "announcementServerChecks": 82
+}

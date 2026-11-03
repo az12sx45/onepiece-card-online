@@ -2225,3 +2225,6 @@ public/game.html、js/card-desktop-table.js、css/card-desktop-table.css 為三�
 ## 2026-11-03 兩款遊戲公開驗證後啟用更新情報
 Marineford e678a9e3fb590e409400b6f578943a010a38ae33 已於 Render Live，公開JS／CSS／129項媒體清單與5張新CAS SHA通過；舊124項及各入口保留。Card 0806af5bca486064d2222d6cd05538b62ffb51cc／package-3987dc38668831bc 已 Live，公開catalog、三款manifest/runtime與3份程式SHA通過；1054媒體、Board／Chess與Marineford均保留。production AssetStore只下載3份變更程式54123211bytes，重建實例後重用驗證索引，第二次0requests／0bytes；不是834MB完整遊戲重安裝驗收。
 config/launcher-announcements-v1.json 修訂72→73，僅新增爭霸戰及頂上戰爭2則，69則舊內容／順序完全保留。Card資訊鎖package-3987dc38668831bc；現行協定不接受marineford scope，頂上戰爭資訊使用一般launcher更新，僅在公開版本確認後啟用。公告隔離PGlite／實際handler QA82項與無DB npm start五路由通過，未操作正式帳號，未做實體Android/iPhone驗收，未重包APK／IPA。資訊對外部署與最後讀回另見交接收據。
+
+
+2026-11-03發布收據：docs/TABLETOP_RELEASE_20261103.json記錄兩款正式提交、Card package-3987dc38668831bc、更新情報修訂73／2則與驗收界線。D:/Codex_Project_Coordination/tabletop-series/handoffs/marineford-20261103-release.json、20261103-card-hud-collection-release.json保存原交接、canonical／raw SHA、公開驗證、更新情報位置與未測平台；不是LATTICE資料庫記錄。

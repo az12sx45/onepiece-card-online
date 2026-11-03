@@ -8844,3 +8844,9 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 ## 2026-11-03 兩款遊戲公開驗證後啟用更新情報
 Marineford e678a9e3fb590e409400b6f578943a010a38ae33 已於 Render Live，公開JS／CSS／129項媒體清單與5張新CAS SHA通過；舊124項及各入口保留。Card 0806af5bca486064d2222d6cd05538b62ffb51cc／package-3987dc38668831bc 已 Live，公開catalog、三款manifest/runtime與3份程式SHA通過；1054媒體、Board／Chess與Marineford均保留。production AssetStore只下載3份變更程式54123211bytes，重建實例後重用驗證索引，第二次0requests／0bytes；不是834MB完整遊戲重安裝驗收。
 config/launcher-announcements-v1.json 修訂72→73，僅新增爭霸戰及頂上戰爭2則，69則舊內容／順序完全保留。Card資訊鎖package-3987dc38668831bc；現行協定不接受marineford scope，頂上戰爭資訊使用一般launcher更新，僅在公開版本確認後啟用。公告隔離PGlite／實際handler QA82項與無DB npm start五路由通過，未操作正式帳號，未做實體Android/iPhone驗收，未重包APK／IPA。資訊對外部署與最後讀回另見交接收據。
+
+
+## 2026-11-03 兩款遊戲與更新情報發布完成
+最終Render fa2f6674b6fdd80e33cc12f69679b1c53496845a顯示Live；更新情報修訂73的兩則新增已部署，69則舊內容保留。最後16項公開讀回通過，MF與Card公開程式、各遊戲catalog／manifest／runtime與既有啟動器清單保持已驗證版本。公告82項隔離服務QA與五路由無DB npm start通過，測試server已停止。Card三程式真實AssetStore下載54123211 bytes，重建實例後第二次0請求／0bytes；不宣稱834MB完整遊戲重裝或真實玩家快取驗收。
+未交接9個原檔與7份Android共用來源最後SHA核對相同；預覽／舊eda manifest／field-v1.png均未提交。既有1250ms非互動場地提示可短暫覆蓋收藏窗，此行為與基線相同，694項測試不涵蓋所有入場時序；不是本次新回歸。實體Android／iPhone與正式帳號可見性尚未驗收，沒有新APK／IPA。完整收據docs/TABLETOP_RELEASE_20261103.json及D:/Codex_Project_Coordination/tabletop-series/handoffs兩份release JSON；協調文件狀態已更新RELEASED並保留歷程。LATTICE API本輪未提供，未宣稱持久寫入。
+發布工具／公開檢查的本機證據位於D:/Codex_QA/marineford-release-20261103與card-release-20261103，包括verify-public.cjs、public-verification/verify-public-card.cjs、verify-post-announcements.cjs、兩份Render來源讀回與最後公告來源讀回。
