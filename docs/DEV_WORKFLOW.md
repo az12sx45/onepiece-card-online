@@ -8836,3 +8836,6 @@ Final public rollout verified at 10/31/2026 22:10:10: 42 public program/media ch
 
 ### 2026-11-03 爭霸戰發布器精確範圍
 發布器依本輪交接釘住現行 package-854bbf29a3a708f1，白名單為 game.html、js/card-desktop-table.js、css/card-desktop-table.css 三檔；新CSS包含船長底板，必須上傳新CAS一次。1054既有媒體與其餘程式、Board／Chess、舊清單保留；以既有build_card_program_update.js從提交建立候選、核對後promote，不重建全庫。694＋72＋8既有真實測試與source SHA已核對；正式公開讀回另存交接收據。
+
+
+2026-11-03 爭霸戰正式候選：由提交06491ed24569ee12e0735e6dd22660d184a1b013與公開package-854bbf29a3a708f1產生package-3987dc38668831bc；manifest SHA-256 84d351272029addced0acc42785a09f94a6129e1189608772b8c1c3abf4f65aa。official builder核對31程式，僅HTML／JS／CSS三檔變更，1054既有media、Board／Chess與sourceTrees逐項保留。外部candidate完整驗證後promote，未使用舊eda68草稿；CAS／Render公開驗證完成後另寫交接收據。

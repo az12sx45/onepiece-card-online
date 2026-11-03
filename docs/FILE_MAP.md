@@ -2217,3 +2217,6 @@ scripts/marineford_peek_laser_qa.cjs 驗證公開牌文字、三尺寸、私有�
 
 ### 2026-11-03 爭霸戰發布來源
 public/game.html、js/card-desktop-table.js、css/card-desktop-table.css 為三份正式runtime；scripts/build_card_hud_collection.mjs 由既有Android共用來源同步線上相容段。card_hud_collection_qa.mjs、card_discard_face_qa.mjs 與 card_flow_sync_qa.mjs 保留最終測試。scripts/publish_card_program_blobs.js 釘住 package-854bbf29a3a708f1，只允許三份新程式，1054個舊media與Board／Chess原樣保留。CARD_HUD_COLLECTION_20261103.md、CARD_SELF_CAPTAIN_ART_20261103.json 記錄重建與新圖原稿／prompt。
+
+
+2026-11-03 爭霸戰正式候選：由提交06491ed24569ee12e0735e6dd22660d184a1b013與公開package-854bbf29a3a708f1產生package-3987dc38668831bc；manifest SHA-256 84d351272029addced0acc42785a09f94a6129e1189608772b8c1c3abf4f65aa。official builder核對31程式，僅HTML／JS／CSS三檔變更，1054既有media、Board／Chess與sourceTrees逐項保留。外部candidate完整驗證後promote，未使用舊eda68草稿；CAS／Render公開驗證完成後另寫交接收據。
