@@ -656,6 +656,8 @@ html:root[data-card-phone]{
 
 html[data-card-phone][data-card-summon] #phonePlayedStage .phone-stage-name{opacity:0;}
 
+html[data-card-phone] .card-summon-loading{position:absolute;left:50%;top:68%;transform:translateX(-50%);padding:5px 14px;border-radius:5px;background:#0a1d2de8;color:#ffe3a1;font:700 14px/1.4 system-ui;}
+
 /* Keep 3D coin faces independent: a filter on the 3D parent flattens them. */
 html[data-card-phone] #phoneCoinToss .phone-toss-coin{filter:none!important;overflow:visible!important;transform-style:preserve-3d!important;}
 html[data-card-phone] #phoneCoinToss .phone-toss-face{backface-visibility:hidden!important;-webkit-backface-visibility:hidden!important;}
@@ -1250,3 +1252,15 @@ html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-
 html[data-card-pickers="v1"] #modal[data-picker-design="usopp"] button[data-d]:focus-visible{outline:2px solid #eeffb2!important;outline-offset:3px!important;}
 html[data-card-pickers="v1"] #modal[data-picker-design="usopp"] button[data-d]:not(:disabled):hover{filter:brightness(1.22);}
 @media(min-height:600px){html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-cinema][data-card-polish][data-card-pickers="v1"] #phoneCardSheet[data-picker-design="v1"] .phone-card-inspector-info{grid-template-rows:minmax(0,1fr) 40px 54px!important;gap:10px!important;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-cinema][data-card-polish][data-card-pickers="v1"] #phoneCardSheet[data-picker-design="v1"] .phone-card-inspector-nav button{height:40px!important;min-height:40px!important;}html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-cinema][data-card-polish][data-card-pickers="v1"] #phoneCardSheet[data-picker-design="v1"] .phone-card-inspector-actions,html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-cinema][data-card-polish][data-card-pickers="v1"] #phoneCardConfirm{height:54px!important;min-height:54px!important;}}
+
+/* Remove only extra frames around the original held artwork. Controls, layout,
+   selection lift, frozen/disabled appearance and all original handlers remain. */
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-return-hand="1"] :is(#myPlayZone,.phone-card-held),
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-return-hand="1"] #myPlayZone>.grid>button,
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-return-hand="1"] :is(#myPlayZone,.phone-card-held) :is([data-card-finish],.card-finish-face){border:0!important;border-image:none!important;box-shadow:none!important;background:none!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-return-hand="1"] #myPlayZone>.grid>button{border-radius:0!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-return-hand="1"] :is(#myPlayZone,.phone-card-held) img{border:0!important;border-image:none!important;box-shadow:none!important;}
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-return-hand="1"] .phone-card-held img:not(.card-frozen){filter:none!important;}
+/* Keyboard/selection indicators stay inside the real card, never around it. */
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-return-hand="1"] #myPlayZone>.grid>button[data-card-selected="true"],
+html:root[data-card-phone][data-card-fx][data-card-piles][data-card-stage][data-card-hand-dock][data-card-return-hand="1"] #myPlayZone>.grid>button:focus-visible{outline:2px solid #b6ecff!important;outline-offset:-3px!important;}

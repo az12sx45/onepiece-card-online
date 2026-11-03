@@ -8936,3 +8936,13 @@ Fresh immutable驗證：team2c9 Chrome4＋WebKit4；public-row98884cd Chrome7＋
 陣營視角2c9f163bf0681dee302a5f6b50cae731281f68b2、公開牌列98884cd91ae8cf851ee56a9cd8629bc8d05541e4、重連後端01d55e41820d8ae432e23174a35746e0cd4142f1與最終公告1ef8a2d9f15decaa30fe33a7810d6b8afe56e191皆由實際Render Live來源核對。三波各13小型公開GET與最終16公開連續性讀回通過；最新前端維持row98884cd、rooms維持backend01d55e，兩引擎及15共享Git物件保持保護範圍。source receipts分清首次發布與最終服務提交，後端SHA只綁Git與實際部署來源，不稱HTTP後端檔案讀回。
 更新情報修訂75一次新增3則，舊73則完整保留、總76則；隔離公告handler82項與來源穩定檢查通過，未操作正式帳號或publication ledger。38項source/index保護通過，原9非本波檔案保留；所有Card／其他尚未交接工作留在原處，從未整包stage或覆寫。兩次純EOF整理與原件、Git source對應、失敗QA環境診斷完整保留。
 Fresh固定提交驗證為team8、public-row14、backend9真60秒＋six-browser74與實際185動作；原舊15／15、115／52動作等未綁來源收據保留其界線，沒有全規則重跑或實體手機／正式帳號DB驗收。無新素材上傳、無APK／IPA重包，記憶體房間不跨服務重啟保存。三份MARINEFORD_*_RELEASE_20261103.json與協調handoffs對應release JSON記錄精確來源／公開／公告證據，三交接與marineford-status保留歷程並標RELEASED。LATTICE API未提供，沒有持久寫入宣稱。
+
+
+<!-- CARD_MEDIA_FLOW_20261103_BEGIN -->
+## 2026-11-03 爭霸戰強化影片預備、結果斜圖與還牌比例
+- 正式本輪產品只更新 game.html、generated card-desktop-table.js/.css。共享 Summon v5 在公開 enh_fx 時先載入同一影片，decoded frame／buffer ready 才進白光；獨立 card-enhancement-ready v2 相容 retained v063，避免舊wrapper重播。15秒錯誤fallback、已ready整批取消、prime遲到callback與legacy replay皆有驗證。原MP4位元組、引擎與server/index無變更。
+- 新card-result-cutins等硬幣、招式、私人閱讀與牌堆動畫真正結束才播報公開結果，大媽護盾／閃避、索隆對象與卡號均在決定後出現；只讀既有公開資料。card-return-hand只修peek-return起終點同卡背比例，移除兩張手牌的額外外框並保留原點按／選牌／frozen。
+- 最終video slow-final29涵蓋exact Android/Chromium與iOS/WebKit v063、現行HTML及原生MP4／Range206延遲；faults-final28為Android/Chromium故障矩陣，iOS prime只在該環境呼叫測試，不是WebKit完整故障矩陣。兩報告零頁面例外且前後產品SHA相同；斜圖retained Android/iOS各399與現行generated desktop392通過。還牌四尺寸88、generated desktop20先前測試通過，最終整合來源綁定另見CARD_MEDIA_FLOW_20261103.md。npm start真雙視窗8通過，包含閱讀閘門、重整與他人手牌隱私；語法與限定runtime diff --check通過。
+- 完整需求／重建／source SHA／失敗歷程／真機界線見docs/CARD_MEDIA_FLOW_20261103.md；精確3檔patch與8共享來源inventory在D:/Codex_QA/card-media-flow-20261103。既有其他聊天室dirty與舊預覽不納入。無新素材／APK／IPA，LATTICE API未提供，未假稱持久登記。READY_FOR_INTEGRATION交啟動器統一發布；本段不代表公開或實機驗收。
+最終來源綁定：D:/Codex_QA/card-return-hand-20261103/integrated-final/report.json 108 PASS、零錯誤，integrated:true，未額外注入module/CSS；目前generated桌機1366×768與exact retained Android/iOS各844×390、640×320共五尺寸，五動畫時點皆非等比誤差0，原卡背／私人牌保護／取消／hidden／兩張手牌原點按／提示／frozen均通過。report起始HTML、JS、CSS、engine SHA與交接檔案一致；原QA沒有內建結尾重雜湊斷言，發布者另做來源穩定核對。各最終報告路徑／檢查數／SHA彙整在D:/Codex_QA/card-media-flow-20261103/verification-summary.json。
+<!-- CARD_MEDIA_FLOW_20261103_END -->

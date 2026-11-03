@@ -1777,17 +1777,18 @@ window.POCardInteract=module.exports;
 /* Public enhanced-card projection. No hand inspection or gameplay decisions. */
 (() => {
  function mount(){
-  const api=window.CardPhonePresentation;if(!api||api.enhancementSummonVersion>=3)return;
-  api.enhancementSummonVersion=3;
+  const api=window.CardPhonePresentation;if(!api||api.enhancementSummonVersion>=5)return;
+  api.enhancementSummonVersion=5;
   const root=document.documentElement,video=document.getElementById('enhVideo');
   const priorBusy=api.isEnhancementBusy,priorCancel=api.cancelEnhancements;
   let active=null,serial=0;
   function finish(item=active){if(!item||active!==item)return;active=null;clearTimeout(item.failsafe);item.observer?.disconnect();cancelAnimationFrame(item.raf);for(const a of item.animations)a.cancel();item.layer.remove();item.resolve?.();delete root.dataset.cardSummon;}
-  api.cancelEnhancements=()=>{serial++;finish();video?.__enhOnEnded?.();priorCancel?.();};
+  api.cancelEnhancements=()=>{serial++;finish();window.__cancelPreparedEnhVideo?.();video?.__enhOnEnded?.();priorCancel?.();};
   api.isEnhancementBusy=()=>!!active||!!priorBusy?.();
   const wait=ms=>new Promise(r=>setTimeout(r,ms));
-  api.presentEnhancementSummon=async id=>{
+  api.presentEnhancementSummon=async (id,{ready}={})=>{
    if(document.hidden||!Number.isInteger(id)||id<0||id>19)return;
+   ready??=window.__prepareCardEnhVideo?.(id);
    finish();const generation=++serial,stage=document.querySelector('#phonePlayedStage .phone-stage-card');
    if(!stage||stage.closest('[hidden]'))return;
    const img=await api.loadCardArt?.('summon',id);if(!img)return;img.alt='';img.draggable=false;
@@ -1805,6 +1806,13 @@ window.POCardInteract=module.exports;
    // The feet remain at the card anchor; never change the played card transform.
    animate(img,[{opacity:0,transform:'translate(-50%,-96%) scale(.22,.06)',clipPath:'inset(95% 0 0 0)'},{opacity:1,transform:'translate(-50%,-96%) scale(1)',clipPath:'inset(0 0 0 0)'}],{duration:1100,delay:180,easing:'cubic-bezier(.15,.75,.2,1)'});
    await wait(reduced?300:1900);if(active!==item||generation!==serial)return;
+   if(ready){
+    layer.dataset.phase='buffering';root.dataset.cardSummon='buffering';
+    const loading=document.createElement('span');loading.className='card-summon-loading';loading.setAttribute('role','status');loading.textContent='準備強化演出…';layer.append(loading);
+    const available=await ready;loading.remove();
+    if(active!==item||generation!==serial)return false;
+    if(!available){finish(item);return false;}
+   }
    layer.dataset.phase='white';root.dataset.cardSummon='white';
    // Light starts on the standing character, then fills the screen once.
    animate(img,[{filter:'brightness(1)'},{filter:'brightness(0) invert(1) drop-shadow(0 0 18px white)'}],{duration:300,easing:'ease-in'});
@@ -1813,7 +1821,7 @@ window.POCardInteract=module.exports;
    await wait(reduced?0:700);if(active!==item||generation!==serial)return;
    const overlay=document.getElementById('enhOverlay');
    if(overlay){item.observer=new MutationObserver(()=>{if(overlay.classList.contains('hidden'))finish(item);});item.observer.observe(overlay,{attributes:true,attributeFilter:['class']});}
-   item.failsafe=setTimeout(()=>finish(item),32000);
+   item.failsafe=setTimeout(()=>finish(item),900);
   };
   function revealMovie(){const item=active;if(!item||item.layer.dataset.phase!=='white')return;clearTimeout(item.failsafe);item.layer.dataset.phase='video';root.dataset.cardSummon='video';const a=item.layer.animate([{opacity:1},{opacity:0}],{duration:420,fill:'forwards'});item.animations.push(a);a.finished.then(()=>{if(active===item&&item.layer.dataset.phase==='video')item.layer.style.visibility='hidden';},()=>{});}
   function recall(){const item=active;if(!item)return;clearTimeout(item.failsafe);item.observer?.disconnect();for(const a of item.animations)a.cancel();item.animations=[];item.layer.dataset.phase='return';root.dataset.cardSummon='return';item.layer.style.visibility='visible';item.flash.style.opacity='0';item.img.style.filter='';
@@ -2065,6 +2073,180 @@ window.POCardInteract=module.exports;
     new MutationObserver(schedule).observe(sheet,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','data-inspect-kind']});
     new MutationObserver(schedule).observe(modal,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
     decorate();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+
+/* Online-compatible private-card return proportions and clean held-card art. */
+(() => {
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation;
+    if(!api||typeof api.flyCard!=='function'||api.returnHandVersion===1)return;
+    api.returnHandVersion=1;document.documentElement.dataset.cardReturnHand='1';
+    const originalFly=api.flyCard;
+    // The shipped card back is 2:3. Prefer its decoded natural size when cached.
+    // No hand/state lookup is needed to move the already-authorized card back.
+    let ratio=2/3;const back=new Image();
+    back.onload=()=>{if(back.naturalWidth>0&&back.naturalHeight>0)ratio=back.naturalWidth/back.naturalHeight;};
+    back.src='images/cards/back.webp';
+    const rect=node=>node?.getBoundingClientRect?node.getBoundingClientRect():node;
+    function fit(node){
+      const box=rect(node);if(!box?.width||!box?.height)return null;
+      const width=Math.min(box.width,box.height*ratio),height=width/ratio;
+      return {left:(box.left??box.x)+(box.width-width)/2,top:(box.top??box.y)+(box.height-height)/2,width,height};
+    }
+    api.flyCard=options=>{
+      if(options?.kind!=='peek-return')return originalFly(options);
+      const from=fit(options.from),to=fit(options.to);
+      // Equal source/destination ratios keep the original flight's X/Y scale
+      // identical at every keyframe, including the interpolated middle frame.
+      // Its cancellation, hidden/reduced guards, src, callbacks and borrow
+      // release ownership remain in the original flight implementation.
+      return originalFly(from&&to?{...options,from,to}:options);
+    };
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+
+/* Own enhanced movies once, including retained hosts with an older wrapper. */
+(() => {
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation,video=window.__cardOriginalEnhVideo;
+    if(!api||!video||!api.presentCardSkillBatch||api.enhancementVideoOrderVersion>=2)return;
+    api.enhancementVideoOrderVersion=2;
+    const previous=api.presentCardSkillBatch,consumed=new Map();let generation=0;
+    const cancel=api.cancelEnhancements;
+    // Invalidate even an already-resolved warm promise. Keep the consumed
+    // counters: this accepted batch's later legacy dispatch must still skip.
+    api.cancelEnhancements=()=>{generation++;return cancel?.();};
+    const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
+    const busy=()=>!!api.isEffectBusy?.()||!!api.isEnhancementBusy?.()||!document.getElementById('enhOverlay')?.classList.contains('hidden');
+    playEnhFxFor=function(id){const count=consumed.get(id)||0;if(count){if(count===1)consumed.delete(id);else consumed.set(id,count-1);return;}return video(id);};
+    api.presentCardSkillBatch=async events=>{
+      const epoch=generation,shown=new Set();
+      for(const e of events.filter(e=>e.type==='enh_fx')){
+        if(epoch!==generation||fast())return null;
+        consumed.set(e.cardId,(consumed.get(e.cardId)||0)+1);
+        if(shown.has(e.cardId))continue;shown.add(e.cardId);
+        const ready=window.__prepareCardEnhVideo?.(e.cardId)||Promise.resolve(false);
+        await api.presentEnhancementSummon?.(e.cardId,{ready});
+        if(epoch!==generation||fast())return null;
+        if(!await ready){
+          const note=document.createElement('span');note.className='enh-load-status enh-load-failed';note.setAttribute('role','status');note.textContent='影片暫時無法播放，繼續招式演出';document.body.append(note);setTimeout(()=>note.remove(),3200);
+          continue;
+        }
+        video(e.cardId);
+        while(epoch===generation&&!fast()&&busy())await new Promise(resolve=>setTimeout(resolve,60));
+      }
+      if(epoch!==generation||fast())return null;
+      // Earlier hosts also wrap this API. Never hand a consumed movie to them
+      // again; keep their other presentation and authoritative event handling.
+      return previous(events.filter(e=>e.type!=='enh_fx'));
+    };
+    function reset(){generation++;consumed.clear();window.__cancelPreparedEnhVideo?.();document.getElementById('enhVideo')?.__enhOnEnded?.();}
+    for(const event of ['JOINED','disconnect'])socket.on(event,reset);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)reset();});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+
+/* Accepted operations keep their real effects; diagonal artwork reports results afterwards. */
+(() => {
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation;
+    if(!api||api.resultCutinVersion)return;api.resultCutinVersion=1;
+    const themes={0:'flame',2:'petals',3:'kick',4:'guard',5:'slash',6:'room',7:'storm',8:'fist',9:'heart',10:'thunder',11:'magnet',12:'plague',13:'scythe',14:'soul',15:'future',16:'frost',17:'dark',18:'haki',19:'king'};
+    const valid=id=>Number.isInteger(id)&&id>=0&&id<20;
+    const name=id=>typeof pname==='function'?pname(id):'P'+(Number(id)+1);
+    const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text!=null)n.textContent=text;return n;};
+    const fast=()=>document.hidden||(typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode());
+    const declaration=events=>events?.find(e=>e?.to==='all'&&e.type==='card_skill_intent'&&valid(e.cardId)&&themes[e.cardId]);
+    function summary(events,next){
+      const intent=declaration(events);if(!intent)return null;
+      const publicEvents=events.filter(e=>e?.to==='all'),id=intent.cardId;
+      // A demand and an enhanced Law preview still await another real decision.
+      if(intent.mode==='demand'&&next?.pending?.action==='bigmom-pay')return null;
+      if(id===6&&intent.mode==='view'&&next?.pending?.action==='law')return null;
+      const of=type=>publicEvents.filter(e=>e.type===type),sentences=[];
+      for(const e of of('zoro_discard'))if(valid(e.cardId))sentences.push(name(e.casterId)+' 砍掉 '+name(e.targetId)+' 的 '+e.cardId+' 號卡');
+      for(const e of publicEvents.filter(e=>['bigmom_status','chopper_status'].includes(e.type)&&['protect','dodge'].includes(e.status)))sentences.push(name(e.casterId)+(e.status==='protect'?' 獲得護盾保護':' 獲得閃避'));
+      for(const e of of('law_swap'))sentences.push(name(e.casterId)+' 與 '+name(e.targetId)+' 已交換手牌');
+      for(const e of of('nami_paralyze'))sentences.push(name(e.targetId)+' 下回合跳過');
+      for(const e of of('aokiji_freeze')){
+        const targets=e.mode==='all'?e.frozenIdxs:[e.targetId];
+        if(Array.isArray(targets)&&targets.length)sentences.push(targets.filter(Number.isInteger).map(name).join('、')+' 已凍結');
+      }
+      for(const e of of('killer_disarm'))sentences.push('已解除 '+name(e.targetId)+' 的保護／閃避');
+      for(const e of of('duel_log'))if(Number.isInteger(e.loserId))sentences.push(name(e.loserId)+' 輸掉對決'+(valid(e.cardId)?' · '+e.cardId+' 號卡':''));
+      for(const e of of('robin_peek'))sentences.push('已完成對 '+(e.all?'全體玩家':name(e.targetId))+' 的偵察');
+      for(const e of of('card_defense'))if(['protect','dodge'].includes(e.status))sentences.push(name(e.targetId)+(e.status==='protect'?' 的護盾擋下效果':' 閃避成功，已消耗閃避'));
+      const previousLog=typeof state==='object'?state?.log:null;
+      const stateLog=Array.isArray(previousLog)&&Array.isArray(next?.log)&&previousLog.every((line,i)=>line===next.log[i])?next.log.slice(previousLog.length):[];
+      const logs=[...new Set([...of('log').map(e=>e.text),...stateLog])].filter(text=>typeof text==='string'&&!/ 打出 \d+｜|^→|^⚠|^已洗回所有牌/.test(text));
+      // Public outcome logs carry Queen's actual face, payments, ordering/cover
+      // completion and automatic card effects. Private peek/order data never enters.
+      const relevant=logs.filter(text=>!/^★|^🎁|開啟獎勵寶箱/.test(text));
+      const format=text=>typeof formatLogWithNames==='function'?formatLogWithNames(text):text;
+      const eliminated=relevant.filter(text=>/ 出局（/.test(text));
+      if(!sentences.length&&eliminated.length)sentences.push(eliminated.length===1?format(eliminated[0]):eliminated.map(line=>format(line).split(' 出局（')[0]).join('、')+' 出局');
+      if(!sentences.length&&relevant.length)sentences.push(...relevant.slice(-2).map(format));
+      if(!sentences.length){
+        if(id===15&&publicEvents.some(e=>e.type==='card_skill_intent'))sentences.push('頂牌查看結束');
+        else return null;
+      }
+      return {id,actor:intent.casterId,enhanced:intent.enhanced===true,result:[...new Set(sentences)].join('；')};
+    }
+    api.cardResultSummary=summary;
+    const early=api.presentCardSkillBatch;
+    api.presentCardSkillBatch=async events=>{
+      // The original wrapper still receives enh_fx/play_fx and owns real movies.
+      // Only its early diagonal declaration is withheld, on retained hosts too.
+      const result=await early?.(events.filter(e=>e?.type!=='card_skill_intent'));
+      const intent=declaration(events);
+      return intent?{id:intent.cardId,actor:intent.casterId}:result;
+    };
+    let active=null,serial=0,waiters=new Set();
+    function finish(){if(!active)return;const item=active;active=null;clearTimeout(item.timer);for(const animation of item.animations)animation.cancel();item.node.remove();item.resolve();}
+    const oldCancel=api.cancelCardSkillIntro,oldBusy=api.isCardSkillIntroBusy;
+    const cancel=()=>{serial++;finish();for(const done of waiters)done();waiters.clear();oldCancel?.();};
+    api.cancelCardSkillIntro=cancel;api.isCardSkillIntroBusy=()=>!!active||!!oldBusy?.();
+    api.presentCardResultBatch=async(events,next)=>{
+      const data=summary(events,next);if(!data||fast())return false;
+      finish();const token=++serial,ready=await api.loadCardArt?.('anime',data.id);
+      if(token!==serial||fast())return false;
+      const text=typeof CARD_TEXT==='object'?CARD_TEXT[data.id]:null;if(!text)return false;
+      const title=(data.enhanced?text.enhTitle:text.baseTitle)||text.name;
+      const layer=make('section','card-anime-skill'),strip=make('div','card-anime-strip'),portrait=make('div','card-anime-portrait'),copy=make('div','card-anime-copy');
+      layer.dataset.card=String(data.id);layer.dataset.theme=themes[data.id];layer.dataset.phase='result';layer.dataset.enhanced=String(data.enhanced);layer.dataset.resultCutin='true';
+      layer.setAttribute('role','status');layer.setAttribute('aria-label',name(data.actor)+'：'+text.name+'。'+data.result);
+      portrait.setAttribute('aria-hidden','true');portrait.style.backgroundImage=ready?'url("'+ready.src+'")':'var(--card-anime-'+data.id+')';
+      copy.append(make('span','card-anime-caster',name(data.actor)+' · '+text.name),make('strong','card-anime-title',title),make('small','card-anime-mode',data.result));strip.append(portrait,copy);layer.append(strip);document.body.append(layer);
+      const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,duration=Math.min(4200,Math.max(2800,1900+data.result.length*45)),animations=[];
+      layer.dataset.duration=String(duration);layer.style.setProperty('--cut-angle',['slash','scythe','kick'].includes(themes[data.id])?'-7deg':'-5deg');
+      if(!reduced){animations.push(strip.animate([{transform:'translateX(-110%) rotate(var(--cut-angle))',opacity:.5},{transform:'translateX(0) rotate(var(--cut-angle))',opacity:1}],{duration:360,easing:'cubic-bezier(.16,.8,.22,1)'}));animations.push(portrait.animate([{transform:'translateX(-18px) scale(1.08)'},{transform:'translateX(0) scale(1)'}],{duration:duration-300,easing:'ease-out'}));}
+      await new Promise(resolve=>{const item={node:layer,timer:null,animations,resolve};active=item;item.timer=setTimeout(finish,duration);});
+      return token===serial;
+    };
+    const originalPile=api.presentPileBatch;
+    const visible=id=>{const n=document.getElementById(id);return !!n&&!n.hidden&&!n.classList.contains('hidden')&&n.getClientRects().length>0;};
+    const reading=()=>!!api.isVenueIntroPending?.()||!!api.isVenueEntering?.()||['phoneCardSheet','phonePrivateReveal','phoneLibrary','cardDexOverlay','phoneVenueIntro'].some(visible);
+    const pause=()=>new Promise(resolve=>{let timer;const done=()=>{clearTimeout(timer);waiters.delete(done);resolve();};waiters.add(done);timer=setTimeout(done,60);});
+    // Both installed v063 and the current online flow await this existing hook.
+    // Keep their own transaction queues and every real pile/flight effect intact.
+    api.presentPileBatch=async(events,next)=>{
+      const token=serial,result=await originalPile?.(events,next);
+      while(token===serial&&!fast()&&(api.presentationEffectsBusy?.()||reading()))await pause();
+      if(token!==serial||fast())return result;
+      await api.presentCardResultBatch(events,next);return result;
+    };
+    for(const event of ['JOINED','disconnect'])socket.on(event,cancel);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel();});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
 })();

@@ -2260,3 +2260,9 @@ marineford.js/.css處理lobby進度隱藏、六類server targets頭像選人、�
 
 
 2026-11-03 Marineford三波發布收據：MARINEFORD_TEAM_RELEASE_20261103.json、MARINEFORD_PUBLIC_ROW_RELEASE_20261103.json、MARINEFORD_RECONNECT_RELEASE_20261103.json對應協調handoffs的team-perspective/public-row/reconnect-release JSON。qreconnect/finalize-three-phase-release.cjs嚴格讀三段來源／public13、三套immutableQA、75公告82QA、最後Render/16連續性與38source保護後才寫收據及備份4MD。最終服務來源1ef8a2d9f15decaa30fe33a7810d6b8afe56e191；後續僅本輪文件提交使用skip render，未交接程式仍保留。
+
+
+<!-- CARD_MEDIA_FLOW_20261103_BEGIN -->
+## 2026-11-03 Card媒體流程
+public/game.html與generated js/card-desktop-table.js、css/card-desktop-table.css為本輪3份runtime。scripts/build_card_media_flow.mjs同步Summon與CARD_MEDIA_FLOW／CARD_RESULT_CUTINS線上相容段；card_enhancement_ready_qa.mjs、card_result_cutins_qa.mjs、card_return_hand_qa.mjs分開驗真影片準備、公開結果斜圖及還牌／兩手牌操作。共享android/web新增card-enhancement-ready.js、card-result-cutins.js、card-return-hand.js/.css，修改card-enhancement-summon.js/.css與mobile-sources.mjs、build-card-desktop.mjs。無新媒體／引擎／規則。CARD_MEDIA_FLOW_20261103.md與D:/Codex_QA/card-media-flow-20261103/artifact-inventory.json、formal-scoped.patch提供精確交接來源；發布以後續release收據為準。
+<!-- CARD_MEDIA_FLOW_20261103_END -->
