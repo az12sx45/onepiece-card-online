@@ -1,0 +1,859 @@
+{
+  "schema": "card-media-flow-source-release-summary-v1",
+  "status": "RELEASED",
+  "releaseComplete": true,
+  "releasedAt": "2026-11-03T12:32:15.047Z",
+  "game": "card",
+  "sourceRoot": "D:/Codex_Release_Worktrees/card-native-server-adapter-20261029",
+  "baselineCommit": "db60e9ea1855ca92cda867d58e97255085da526f",
+  "sourceCommit": "2ae4159353f25417305d96484aab4e0db9642303",
+  "payloadCommit": "985cb262268c42327d0390f83917767f1a278658",
+  "effectiveLatestServingCommit": "69deed56b2206057d41f1b5bb2217cef6ee4172a",
+  "cardReleaseId": "package-1c838d6bf03ea7a3",
+  "cardManifestSha256": "47f28970c2639bdae654f018a0a1b1156b3f6322a6693d488dc43852caf3855a",
+  "programs": [
+    {
+      "path": "public/game.html",
+      "rawBytes": 2005372,
+      "rawSha256": "681a19ccf1661cf166990e674b347f83320e0bcdfefab8162d959167af581b89",
+      "canonicalBytes": 1996834,
+      "canonicalSha256": "ad171069f500c8779364671d62c8c9e417d63f2c6f4e8eb82f60448aacb4e141",
+      "normalization": "CRLF to LF only; source body unchanged"
+    },
+    {
+      "path": "public/js/card-desktop-table.js",
+      "rawBytes": 326083,
+      "rawSha256": "dcd0ac12fd621bb4fb0c655503ae298cdd457f44119160a497de3a119f77a971",
+      "canonicalBytes": 324485,
+      "canonicalSha256": "d65bf22c2313eb7203fa84aaafd3a6ed832a529a9badecabbc23c0da6dbc7901",
+      "normalization": "CRLF to LF only; source body unchanged"
+    },
+    {
+      "path": "public/css/card-desktop-table.css",
+      "rawBytes": 52985418,
+      "rawSha256": "01a7ff90b2b749a9b01bb471289fab5ea26e6b10ee4944dd28dbb8d6d7b0af1f",
+      "canonicalBytes": 52984313,
+      "canonicalSha256": "7a9acbba73c951a7fb367eccee137a9945c9676a671dc1816f06337471f59de7",
+      "normalization": "CRLF to LF only; source body unchanged"
+    }
+  ],
+  "unchangedReferenceIdentity": [
+    {
+      "path": "server/engine.js",
+      "rawBytes": 95653,
+      "rawSha256": "b68f0086035e7a72a08983bb009316ed6e1dc42a5331e838bbb87f58efba32f8",
+      "normalizedLfBytes": 92928,
+      "normalizedLfSha256": "6a255115fb5009de62152a16e781d81627021677c7c0a0413befab5eb54ce356",
+      "gitBytes": 92928,
+      "gitSha256": "6a255115fb5009de62152a16e781d81627021677c7c0a0413befab5eb54ce356",
+      "workingToGitIdentity": "CRLF-to-LF-only",
+      "normalizedLfIsGitIdentity": true
+    },
+    {
+      "path": "server/index.js",
+      "rawBytes": 290594,
+      "rawSha256": "55ad26a516222187e184a6757c6e557d7bab0d581f786af6569d5ffe7c237112",
+      "normalizedLfBytes": 285406,
+      "normalizedLfSha256": "23b0180b40cf2149f1437504219ca6457a6de9f0bc264e05d2c13566bc3af3b8",
+      "gitBytes": 290594,
+      "gitSha256": "55ad26a516222187e184a6757c6e557d7bab0d581f786af6569d5ffe7c237112",
+      "workingToGitIdentity": "raw-exact",
+      "normalizedLfIsGitIdentity": false
+    }
+  ],
+  "changedProgramBytes": 55305632,
+  "preserved": {
+    "cardMediaRecords": 1054,
+    "otherCardPrograms": 28,
+    "totalCardAssets": 1085,
+    "board": {
+      "releaseId": "package-1bd4a907624b682f",
+      "manifestPath": "desktop/manifests/board-package-1bd4a907624b682f.json",
+      "manifestSha256": "a4aee9a905a919ee96d542466ce25d002cb7e9010df6416ab2b4f6f1226d08c6",
+      "entryPath": "board_start.html",
+      "totalFiles": 6587,
+      "totalBytes": 1597545360
+    },
+    "chess": {
+      "releaseId": "package-ee4627881596bdad",
+      "manifestPath": "desktop/manifests/chess-package-ee4627881596bdad.json",
+      "manifestSha256": "a456de14211bac9ab767ae2a7a56525cadb7a85516d3fb32f86ca1f6f4058ce5",
+      "entryPath": "chess/index.html",
+      "totalFiles": 1578,
+      "totalBytes": 374810279
+    },
+    "marinefordMediaRecords": 131,
+    "marinefordBackendRoomGitSha256": "8f50cd14a47dcb8b32f88ad4b5ac2ac405110e778ae266add49b042be7884d6a",
+    "desktopLauncherChannels": 2,
+    "nativeV063Pointers": [
+      {
+        "platform": "android",
+        "url": "https://game-assets.rihdi.tw/android/native/launcher-release-v1.json",
+        "bytes": 1491,
+        "sha256": "04fafe2e6fd46de73f32d9850ac051821e0ddea835748d78e35aac127161b14e",
+        "versionCode": 63,
+        "unchanged": true
+      },
+      {
+        "platform": "ios",
+        "url": "https://game-assets.rihdi.tw/ios/native/launcher-release-v1.json",
+        "bytes": 648,
+        "sha256": "dd63ce817258d09f0c199694d61f9d7ff6340f7256479bad739c767a841b9288",
+        "versionCode": 63,
+        "unchanged": true
+      }
+    ],
+    "oldAnnouncements": 76
+  },
+  "announcement": {
+    "draft": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\announcements-draft.json",
+      "bytes": 103462,
+      "sha256": "bf66b0c37ce4c95e05f0c44ad9d88adbadaccf3ec56d27ef6db6dc6f210f075c"
+    },
+    "draftReview": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\announcements-draft-review.json",
+      "bytes": 541,
+      "sha256": "1ee5ae20a351e34ead6340a6bbe7e18f409099098801931b9ec653e06e4ce273"
+    },
+    "application": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\announcement-apply-report.json",
+      "bytes": 909,
+      "sha256": "3e95e9f800965159688281c5c72184a16e1d40dbea948578d477e0d0cd4a15b6"
+    },
+    "serverQa": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\announcement-server-qa.json",
+      "bytes": 10049,
+      "sha256": "bcfaff7f8c68087b398584fa285aeb1ead95ed795eb9da9f5a3612f0523d5f8d",
+      "checks": 82,
+      "scope": "Isolated in-memory PGlite; not production account/ledger visibility"
+    },
+    "additionalSourceBinding": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\qa-audit\\announcement-source-binding.json",
+      "bytes": 5097,
+      "sha256": "a76db1060feb5325a2165262f4089c7fa3cb99cb4ef89cac350071d8e2521c1f"
+    },
+    "revision": 76,
+    "count": 77,
+    "preservedOld": 76,
+    "newId": "card-20261103-media-flow",
+    "requiredRelease": {
+      "kind": "card",
+      "releaseId": "package-1c838d6bf03ea7a3"
+    },
+    "sourceHostingVerified": true,
+    "realAccountVisibilityVerified": false
+  },
+  "qa": {
+    "audit": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\qa-audit\\report.json",
+      "bytes": 9689,
+      "sha256": "ce86fedf07ae3c498cdd06471af70d6ae01b7363f6352a1c14eea6f4f445c5d5"
+    },
+    "producerAudit": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\qa-audit\\producer-evidence-audit.json",
+      "bytes": 9331,
+      "sha256": "7daadedcb28e775a692709b0b8a37e001cf4ce9e91c3d713937874f5fb409dfc"
+    },
+    "producerRecordedAssertions": 1363,
+    "producerReports": [
+      {
+        "path": "D:\\Codex_QA\\card-enhancement-ready-20261103\\slow-final\\report.json",
+        "bytes": 33833,
+        "sha256": "2bd75984ee970b6a1ca8d09e4ac48d63d8d0a9f5178daacefdf086237a47ffae",
+        "kind": "slow-native-media",
+        "checks": 29,
+        "sourceBinding": "Reported start and end hashes of current 3 raw runtime files and engine; retained JS/CSS identities; local native media/Range206 browser test.",
+        "bound4": true,
+        "errorTelemetryPresent": true
+      },
+      {
+        "path": "D:\\Codex_QA\\card-enhancement-ready-20261103\\faults-final\\report.json",
+        "bytes": 17883,
+        "sha256": "9e9866078c18d9d004393942ded831df92e8bf8253592cd2cf9fd2c5768e83f3",
+        "kind": "fault-readiness-and-queue",
+        "checks": 28,
+        "sourceBinding": "Reported start and end hashes of current 3 raw runtime files and engine; Chromium Android retained bundle only.",
+        "bound4": true,
+        "errorTelemetryPresent": true
+      },
+      {
+        "path": "D:\\Codex_QA\\card-result-cutins-20261103\\android-full\\report.json",
+        "bytes": 76806,
+        "sha256": "7c726109715bef4b8e72b01035712c15708656b5a828e0a9b310bd34fb4ef713",
+        "kind": "historical-result-android",
+        "checks": 399,
+        "sourceBinding": "No source/bundle hashes in this historical report; do not treat these399 as independently bound current-source acceptance.",
+        "bound4": false,
+        "errorTelemetryPresent": true
+      },
+      {
+        "path": "D:\\Codex_QA\\card-result-cutins-20261103\\ios-full\\report.json",
+        "bytes": 75646,
+        "sha256": "23a92db49cc00dc5b4605fc7c3a5c6362aaf49148d887bc634aba73165c38e4d",
+        "kind": "historical-result-ios",
+        "checks": 399,
+        "sourceBinding": "No source/bundle hashes in this historical report; do not treat these399 as independently bound current-source acceptance.",
+        "bound4": false,
+        "errorTelemetryPresent": true
+      },
+      {
+        "path": "D:\\Codex_QA\\card-result-cutins-20261103\\desktop-final-cancel-hook\\report.json",
+        "bytes": 71677,
+        "sha256": "f836e8d941b8bd7973eb9207e8d05c437acc42a763afe1386c598f9b95463b8e",
+        "kind": "desktop-result",
+        "checks": 392,
+        "sourceBinding": "Current raw desktop JS/CSS/HTML start hashes and ending stability assertion; shared unit module/engine hashes absent from report.",
+        "bound4": false,
+        "errorTelemetryPresent": true
+      },
+      {
+        "path": "D:\\Codex_QA\\card-return-hand-20261103\\integrated-final\\report.json",
+        "bytes": 32864,
+        "sha256": "a9e59d9d16bab982408aaf49027e12fa5a2e232b119c0798f227f58fc614c290",
+        "kind": "integrated-return-and-hand",
+        "checks": 108,
+        "sourceBinding": "Current raw3 runtime plus engine start hashes, shared return JS/CSS hashes, integrated=true; no ending source-rehash assertion in this report.",
+        "bound4": false,
+        "errorTelemetryPresent": true
+      },
+      {
+        "path": "D:\\Codex_QA\\card-enhancement-ready-20261103\\sync-final.json",
+        "bytes": 996,
+        "sha256": "0aadabf2ec5ab9a1dc3ce84276301866bd5399f17715dc9750ed54498187582a",
+        "kind": "local-two-window-sync",
+        "checks": 8,
+        "sourceBinding": "No source hashes or pageerror telemetry field;8 pass checks describe real local server/Socket.IO with isolated identities.",
+        "bound4": false,
+        "errorTelemetryPresent": false
+      }
+    ],
+    "historicalResultAssertionsWithoutSourceBinding": 798,
+    "historicalSyncAssertionsWithoutSourceBinding": 8,
+    "freshResult": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\qa-audit\\fresh-result-source-bound-r2-report.json",
+      "bytes": 18356,
+      "sha256": "2d869368abe23522f61446cfcb08f0ed0ff36162275ea75721ee0d46c64ecde4"
+    },
+    "freshResultAssertions": 798,
+    "freshRuns": [
+      {
+        "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\qa-audit\\fresh-result-android\\report.json",
+        "bytes": 77037,
+        "sha256": "a76ea60fad7e42bc270399d1811823af82e4156dcee4f4bf786b68430d77ea8f",
+        "mode": "android",
+        "passed": true,
+        "checks": 399,
+        "engineFixtures": 140,
+        "bundle": {
+          "kind": "android",
+          "source": "C:/Users/王曜瑋/.codex/worktrees/android-tabletop-landscape/2026-04-20-1-2-start-html-game-html/android/app/src/main/assets/mobile",
+          "jsBytes": 550078,
+          "cssBytes": 53065998,
+          "jsSha256": "583b21edddae3e0ebc2ec464282e96cd680196215d2758546d3ac99fc6bfb5a5",
+          "cssSha256": "8348d1e9c0b0a27ca2e3e06457b3a883e17159b7796b2334041c446aa96cf3b2",
+          "htmlSha256": "681a19ccf1661cf166990e674b347f83320e0bcdfefab8162d959167af581b89"
+        }
+      },
+      {
+        "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\qa-audit\\fresh-result-ios-r2\\report.json",
+        "bytes": 76113,
+        "sha256": "429d281efa1223fb68540afb2cb7c106e3546ce132004691d5de714ba516498b",
+        "mode": "ios",
+        "passed": true,
+        "checks": 399,
+        "engineFixtures": 140,
+        "bundle": {
+          "kind": "ios",
+          "source": "D:/Codex_QA/native-ios-cloud-20261023/candidate/bundle-resources/launcher-web/mobile",
+          "jsBytes": 514335,
+          "cssBytes": 42951553,
+          "jsSha256": "15567712b4b30f5587bc44ea6c9fcec3932cd5dabe19be7f4c295ce46d051b2b",
+          "cssSha256": "a21a4361ee5cd306c6c97f9b3e62266b9d902d466ab7e3137e874b7e2948acf0",
+          "htmlSha256": "681a19ccf1661cf166990e674b347f83320e0bcdfefab8162d959167af581b89"
+        }
+      }
+    ],
+    "localStaticStart": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\source-audit\\local-start-qa-r3.json",
+      "bytes": 16409,
+      "sha256": "ac94031a80c991630aeae50340fa4697d081ab38fbf05578a2bdc1cff7c6b932",
+      "routes": 7,
+      "noDatabase": true,
+      "workingTreeStaticOnly": true
+    },
+    "limits": [
+      "Integrated108 has start/current hashes but no recorded after-run source hash assertion; do not claim both ends were proven by that receipt.",
+      "Sync8 report has no source fingerprints and no error telemetry field.",
+      "Fault28 executes Chromium/Android retained presentation; do not claim WebKit fault coverage from its iOS-style priming checks.",
+      "iOS slow white observation has readyState4 and buffer0; product allows readyState4, so do not claim all platforms had a measurable2s buffer.",
+      "No physical device, production account/database, actual deployed-source or full native package installation acceptance.",
+      "Historical Android/iOS399 report fingerprints remain unbound; this audit accepts fresh Android399/iOS399 as separate raw-source-bound evidence.",
+      "Fresh QA source binding is raw before/after files and declared localhost file routes, not immutable Git or captured deployed HTTP source bytes; release publisher must separately verify canonical Git-to-package-to-public bytes.",
+      "Six historical reports contain empty errors arrays; the isolated sync8 receipt does not itself record pageerror telemetry.",
+      "No source or QA changes were needed; the existing official D: WebKit was reused without installing/updating packages."
+    ]
+  },
+  "publication": {
+    "dry": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\publish-dry.json",
+      "bytes": 5715,
+      "sha256": "770db9c09414ee7fb304cea278cb1150547131f2910be3e0599f567f9c227098",
+      "mode": "dry-run",
+      "result": {
+        "ok": true,
+        "mode": "dry-run",
+        "logicalFiles": 3,
+        "logicalBytes": 55305632,
+        "uniqueFiles": 3,
+        "uniqueBytes": 55305632,
+        "verified": 3,
+        "uploaded": 0,
+        "skipped": 0,
+        "skippedRace": 0
+      },
+      "publicReadback": false
+    },
+    "live": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\publish-card-r2.json",
+      "bytes": 9129,
+      "sha256": "2ffd54e74df5fb3cbfd59334bbe0210b9254c217a6780dcca99f6b8e45417d1b",
+      "mode": "live",
+      "result": {
+        "ok": true,
+        "mode": "live",
+        "logicalFiles": 3,
+        "logicalBytes": 55305632,
+        "uniqueFiles": 3,
+        "uniqueBytes": 55305632,
+        "verified": 0,
+        "uploaded": 3,
+        "skipped": 0,
+        "skippedRace": 0
+      },
+      "publicReadback": true
+    },
+    "priorFailure": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\publish-card.json",
+      "bytes": 7223,
+      "sha256": "b29f36846dece43768232df8ab0d51ee077211942512804c56546a84f21ac691",
+      "acceptedAsPass": false,
+      "reason": "Cannot find module '@aws-sdk/client-s3'\nRequire stack:\n- D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\tools\\desktop-r2-publisher\\publish.js"
+    }
+  },
+  "public": {
+    "first": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\public-readback.json",
+      "bytes": 21602,
+      "sha256": "cf06526e951966d3d00d791bc689a99df8043b8690ba12032a66157fc1abba4f",
+      "passed": true,
+      "checks": 10,
+      "requests": 20,
+      "programBodies": [
+        {
+          "path": "css/card-desktop-table.css",
+          "url": "https://onepiece-card-online.onrender.com/css/card-desktop-table.css",
+          "status": 200,
+          "headers": {
+            "content-type": "text/css; charset=UTF-8",
+            "content-length": null,
+            "cache-control": "public, max-age=0",
+            "content-range": null,
+            "access-control-allow-origin": null,
+            "location": null
+          },
+          "bytes": 52984313,
+          "sha256": "7a9acbba73c951a7fb367eccee137a9945c9676a671dc1816f06337471f59de7"
+        },
+        {
+          "path": "game.html",
+          "url": "https://onepiece-card-online.onrender.com/game.html",
+          "status": 200,
+          "headers": {
+            "content-type": "text/html; charset=UTF-8",
+            "content-length": null,
+            "cache-control": "public, max-age=0",
+            "content-range": null,
+            "access-control-allow-origin": null,
+            "location": null
+          },
+          "bytes": 1996834,
+          "sha256": "ad171069f500c8779364671d62c8c9e417d63f2c6f4e8eb82f60448aacb4e141"
+        },
+        {
+          "path": "js/card-desktop-table.js",
+          "url": "https://onepiece-card-online.onrender.com/js/card-desktop-table.js",
+          "status": 200,
+          "headers": {
+            "content-type": "application/javascript; charset=UTF-8",
+            "content-length": null,
+            "cache-control": "public, max-age=0",
+            "content-range": null,
+            "access-control-allow-origin": null,
+            "location": null
+          },
+          "bytes": 324485,
+          "sha256": "d65bf22c2313eb7203fa84aaafd3a6ed832a529a9badecabbc23c0da6dbc7901"
+        }
+      ],
+      "programCache": {
+        "cacheRoot": "D:\\Codex_QA\\card-media-flow-release-20261103\\program-cache-1793707918969",
+        "source": {
+          "path": "D:\\Codex_Release_Worktrees\\card-native-server-adapter-20261029\\desktop\\asset-store.js",
+          "bytes": 92846,
+          "sha256": "19a5280021858f79c325a200539b6dbb58cd392749ed18717bf60284e1ba83ad"
+        },
+        "firstPass": {
+          "networkRequests": 3,
+          "downloadedBytes": 55305632,
+          "allThreeShaVerified": true
+        },
+        "fullGameReceiptCreated": false,
+        "secondPass": {
+          "newAssetStoreInstance": true,
+          "persistedIntegrityLoaded": true,
+          "checkedPrograms": 3,
+          "missingPrograms": 0,
+          "networkRequests": 0,
+          "downloadedBytes": 0,
+          "scope": "Changed-program-only cache proof; not full runInstall/full-game acceptance"
+        }
+      }
+    },
+    "final": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\post-announcement-public.json",
+      "bytes": 22458,
+      "sha256": "5cce8389f4d0531881b65a349cceda92d9ee9c768f439ab066a500a52008fc51",
+      "complete": true,
+      "requests": 17,
+      "render": {
+        "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\render-final-notices.json",
+        "bytes": 507,
+        "sha256": "c665e1d121ab2de2d4c40465763fa5557d0fc0b4e54df3e336b37865a99d37d6",
+        "status": "Deploy succeeded|Live",
+        "commit": "69deed56b2206057d41f1b5bb2217cef6ee4172a",
+        "deploymentId": "dep-dbkt2koae00c73fv6gtg",
+        "screenshot": {
+          "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\render-final-notices.png",
+          "bytes": 29726,
+          "sha256": "a601bf7c7dc5d730bafa539a0137e17f3e9a2ebcb04a8a81fdb81263c0abb6b3"
+        }
+      },
+      "announcements": {
+        "revision": 76,
+        "count": 77,
+        "newIds": [
+          "card-20261103-media-flow"
+        ],
+        "preservedOldNotices": 76,
+        "configSha256": "dad05c184aa5b9f2caee60a0ec1e33a61c5eee296d066546265a48dfec98b9ea",
+        "newReleaseGate": {
+          "kind": "card",
+          "releaseId": "package-1c838d6bf03ea7a3"
+        },
+        "sourceHostingVerified": true,
+        "privateConfigNotFetchedOverHTTP": true,
+        "realAccountVisibilityVerified": false
+      },
+      "cssProofReused": true,
+      "backendIdentity": {
+        "sources": [
+          {
+            "path": "server/engine.js",
+            "bytes": 92928,
+            "sha256": "6a255115fb5009de62152a16e781d81627021677c7c0a0413befab5eb54ce356",
+            "unchangedFromBaseline": true
+          },
+          {
+            "path": "server/index.js",
+            "bytes": 290594,
+            "sha256": "55ad26a516222187e184a6757c6e557d7bab0d581f786af6569d5ffe7c237112",
+            "unchangedFromBaseline": true
+          },
+          {
+            "path": "server/marineford-engine.js",
+            "bytes": 15445,
+            "sha256": "f1b0c23cfa940c30a435ae97a938cf4121f8edaf5ecc485e97da4697101849cb",
+            "unchangedFromBaseline": true
+          },
+          {
+            "path": "server/marineford-rooms.js",
+            "bytes": 9302,
+            "sha256": "8f50cd14a47dcb8b32f88ad4b5ac2ac405110e778ae266add49b042be7884d6a",
+            "unchangedFromBaseline": true
+          },
+          {
+            "path": "server/marineford-records.js",
+            "bytes": 3992,
+            "sha256": "0bd8c0fd921ce6890ea5df894ec70a76f2dcfb2003cedaa7d7693f97ec7cc082",
+            "unchangedFromBaseline": true
+          }
+        ],
+        "boundToExactHostingLiveCommit": true,
+        "publicSourceHashVerified": false
+      }
+    },
+    "nativeBaseline": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\native-v063-pointers-before.json",
+      "bytes": 7125,
+      "sha256": "6ad7c8100baa5dc5e3b2a9266162a2d1fa36152752fb1f24a301b97b5ea447c9"
+    },
+    "nativePointers": [
+      {
+        "platform": "android",
+        "url": "https://game-assets.rihdi.tw/android/native/launcher-release-v1.json",
+        "bytes": 1491,
+        "sha256": "04fafe2e6fd46de73f32d9850ac051821e0ddea835748d78e35aac127161b14e",
+        "versionCode": 63,
+        "unchanged": true
+      },
+      {
+        "platform": "ios",
+        "url": "https://game-assets.rihdi.tw/ios/native/launcher-release-v1.json",
+        "bytes": 648,
+        "sha256": "dd63ce817258d09f0c199694d61f9d7ff6340f7256479bad739c767a841b9288",
+        "versionCode": 63,
+        "unchanged": true
+      }
+    ],
+    "producerPublicPlatformReadback": {
+      "path": "D:\\Codex_QA\\card-media-flow-20261103\\public-platform-readback.json",
+      "bytes": 1608,
+      "sha256": "e8eb63b0577dfb209a69f4e64a48aeea9f3522ac0fe675d9060b0296417f8b81",
+      "passed": true,
+      "platforms": [
+        {
+          "platform": "Windows",
+          "bytes": 1996834,
+          "sha256": "ad171069f500c8779364671d62c8c9e417d63f2c6f4e8eb82f60448aacb4e141",
+          "matchesApprovedCanonicalSource": true
+        },
+        {
+          "platform": "Android",
+          "bytes": 1996834,
+          "sha256": "ad171069f500c8779364671d62c8c9e417d63f2c6f4e8eb82f60448aacb4e141",
+          "matchesApprovedCanonicalSource": true
+        },
+        {
+          "platform": "iOS",
+          "bytes": 1996834,
+          "sha256": "ad171069f500c8779364671d62c8c9e417d63f2c6f4e8eb82f60448aacb4e141",
+          "matchesApprovedCanonicalSource": true
+        }
+      ],
+      "scope": "Read-only public catalog/runtime and game HTML for Windows/Android/iOS User-Agents; not physical devices or real account acceptance."
+    },
+    "sameReleaseAuthorizationRecord": {
+      "path": "D:\\Codex_QA\\card-media-flow-20261103\\publish-authorization.json",
+      "bytes": 707,
+      "sha256": "e3a5f5a76b5ec4a8b646e6aae2942bfea4b2552c516ff5dab2236ae1ed8bbf5a"
+    }
+  },
+  "nativeChannels": {
+    "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\native-channel-proof-r2.json",
+    "bytes": 48784,
+    "sha256": "0f145571b63291ea1c4dc1cf5fbf78066c93dfe45c2657f482d899433901427a",
+    "passed": true,
+    "payloadCommit": "985cb262268c42327d0390f83917767f1a278658",
+    "contextType": "playwright-api-request-context",
+    "contextsCreated": 4,
+    "requests": 14,
+    "checks": 6,
+    "platforms": {
+      "android": {
+        "userAgent": "ONEPIECE_TABLETOP_ANDROID/0.1.0 (Electron/44.1.1 compatibility)",
+        "exactSourceCompatibilitySuffixVerified": true,
+        "completeDeviceUserAgentObserved": false,
+        "entryContract": {
+          "entryPath": "start.html",
+          "entryUrl": "https://onepiece-card-online.onrender.com/start.html?layout=responsive&tabletop_android=1",
+          "gameUrl": "https://onepiece-card-online.onrender.com/game.html?layout=responsive&tabletop_android=1",
+          "query": "layout=responsive&tabletop_android=1",
+          "cardUsesOnlineWebView": true,
+          "returnToLauncherReloads": false,
+          "finishAndReopenCreatesNewSurface": true,
+          "nativeCardOverride": false,
+          "newSurfaceClearsWebViewCache": true
+        },
+        "firstGameHtml": {
+          "index": 2,
+          "platform": "android",
+          "contextId": "android-first",
+          "method": "GET",
+          "url": "https://onepiece-card-online.onrender.com/game.html?layout=responsive&tabletop_android=1",
+          "status": 200,
+          "userAgent": "ONEPIECE_TABLETOP_ANDROID/0.1.0 (Electron/44.1.1 compatibility)",
+          "requestHeaders": {
+            "Cache-Control": "no-cache, no-store, max-age=0",
+            "Pragma": "no-cache",
+            "Accept-Encoding": "identity",
+            "User-Agent": "ONEPIECE_TABLETOP_ANDROID/0.1.0 (Electron/44.1.1 compatibility)"
+          },
+          "headers": {
+            "content-type": "text/html; charset=UTF-8",
+            "content-length": null,
+            "content-range": null,
+            "content-encoding": null,
+            "cache-control": "public, max-age=0",
+            "etag": "W/\"1e7822-1a1a14c2f18\"",
+            "location": null
+          },
+          "bytes": 1996834,
+          "sha256": "ad171069f500c8779364671d62c8c9e417d63f2c6f4e8eb82f60448aacb4e141",
+          "transport": "playwright-api-request-context"
+        },
+        "reopenedGameHtml": {
+          "index": 6,
+          "platform": "android",
+          "contextId": "android-reopened",
+          "method": "GET",
+          "url": "https://onepiece-card-online.onrender.com/game.html?layout=responsive&tabletop_android=1",
+          "status": 200,
+          "userAgent": "ONEPIECE_TABLETOP_ANDROID/0.1.0 (Electron/44.1.1 compatibility)",
+          "requestHeaders": {
+            "Cache-Control": "no-cache, no-store, max-age=0",
+            "Pragma": "no-cache",
+            "Accept-Encoding": "identity",
+            "User-Agent": "ONEPIECE_TABLETOP_ANDROID/0.1.0 (Electron/44.1.1 compatibility)"
+          },
+          "headers": {
+            "content-type": "text/html; charset=UTF-8",
+            "content-length": null,
+            "content-range": null,
+            "content-encoding": null,
+            "cache-control": "public, max-age=0",
+            "etag": "W/\"1e7822-1a1a14c2f18\"",
+            "location": null
+          },
+          "bytes": 1996834,
+          "sha256": "ad171069f500c8779364671d62c8c9e417d63f2c6f4e8eb82f60448aacb4e141",
+          "transport": "playwright-api-request-context"
+        },
+        "apiContextRecreationVerified": true,
+        "cssHeadAnd64ByteRangeVerified": true,
+        "fullCssProofReused": true,
+        "pointerSha256": "04fafe2e6fd46de73f32d9850ac051821e0ddea835748d78e35aac127161b14e",
+        "passed": true
+      },
+      "ios": {
+        "userAgent": "ONEPIECE_TABLETOP_IOS/0.1.0 (Electron/44.1.1 compatibility)",
+        "exactSourceCompatibilitySuffixVerified": true,
+        "completeDeviceUserAgentObserved": false,
+        "entryContract": {
+          "entryPath": "start.html",
+          "entryUrl": "https://onepiece-card-online.onrender.com/start.html?layout=responsive&tabletop_android=1",
+          "gameUrl": "https://onepiece-card-online.onrender.com/game.html?layout=responsive&tabletop_android=1",
+          "query": "layout=responsive&tabletop_android=1",
+          "cardUsesOnlineWebView": true,
+          "returnToLauncherReloads": false,
+          "finishAndReopenCreatesNewSurface": true,
+          "homeOnlyHides": true,
+          "closeReleasesWebView": true
+        },
+        "firstGameHtml": {
+          "index": 9,
+          "platform": "ios",
+          "contextId": "ios-first",
+          "method": "GET",
+          "url": "https://onepiece-card-online.onrender.com/game.html?layout=responsive&tabletop_android=1",
+          "status": 200,
+          "userAgent": "ONEPIECE_TABLETOP_IOS/0.1.0 (Electron/44.1.1 compatibility)",
+          "requestHeaders": {
+            "Cache-Control": "no-cache, no-store, max-age=0",
+            "Pragma": "no-cache",
+            "Accept-Encoding": "identity",
+            "User-Agent": "ONEPIECE_TABLETOP_IOS/0.1.0 (Electron/44.1.1 compatibility)"
+          },
+          "headers": {
+            "content-type": "text/html; charset=UTF-8",
+            "content-length": null,
+            "content-range": null,
+            "content-encoding": null,
+            "cache-control": "public, max-age=0",
+            "etag": "W/\"1e7822-1a1a14c2f18\"",
+            "location": null
+          },
+          "bytes": 1996834,
+          "sha256": "ad171069f500c8779364671d62c8c9e417d63f2c6f4e8eb82f60448aacb4e141",
+          "transport": "playwright-api-request-context"
+        },
+        "reopenedGameHtml": {
+          "index": 13,
+          "platform": "ios",
+          "contextId": "ios-reopened",
+          "method": "GET",
+          "url": "https://onepiece-card-online.onrender.com/game.html?layout=responsive&tabletop_android=1",
+          "status": 200,
+          "userAgent": "ONEPIECE_TABLETOP_IOS/0.1.0 (Electron/44.1.1 compatibility)",
+          "requestHeaders": {
+            "Cache-Control": "no-cache, no-store, max-age=0",
+            "Pragma": "no-cache",
+            "Accept-Encoding": "identity",
+            "User-Agent": "ONEPIECE_TABLETOP_IOS/0.1.0 (Electron/44.1.1 compatibility)"
+          },
+          "headers": {
+            "content-type": "text/html; charset=UTF-8",
+            "content-length": null,
+            "content-range": null,
+            "content-encoding": null,
+            "cache-control": "public, max-age=0",
+            "etag": "W/\"1e7822-1a1a14c2f18\"",
+            "location": null
+          },
+          "bytes": 1996834,
+          "sha256": "ad171069f500c8779364671d62c8c9e417d63f2c6f4e8eb82f60448aacb4e141",
+          "transport": "playwright-api-request-context"
+        },
+        "apiContextRecreationVerified": true,
+        "cssHeadAnd64ByteRangeVerified": true,
+        "fullCssProofReused": true,
+        "pointerSha256": "dd63ce817258d09f0c199694d61f9d7ff6340f7256479bad739c767a841b9288",
+        "passed": true
+      }
+    },
+    "scope": [
+      "Exact source compatibility/application suffixes are sent as User-Agent; no complete physical-device WebView prefix was captured.",
+      "Fresh APIRequestContext disposal/recreation and no-cache requests are HTTP reopen evidence, not actual native app lifecycle or installed package cache acceptance.",
+      "Host contract is statically checked source plus retained63 publication metadata; this tool does not disassemble APK Dex/MachO or hash full installer bodies.",
+      "Both CSS probes are bounded HEAD/64byteRange206; complete body SHA was verified once by firstPublic and bound to immutable Git/static gate.",
+      "No browser pages or scripts execute, so no guest joins, rooms, account, socket, media or production database operations occur."
+    ],
+    "physicalDeviceVerified": false,
+    "nativeAppRelaunchExecuted": false,
+    "priorFailure": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\native-channel-proof.json",
+      "bytes": 15414,
+      "sha256": "08d869de2646cd3cd47d8342f04fc9ec8624c236e79c3ee763e1a91737ed6741",
+      "acceptedAsPass": false,
+      "reason": "Expected values to be strictly equal:\n\nNaN !== 52984313\n"
+    }
+  },
+  "sourceProtection": {
+    "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\source-protection-final.json",
+    "bytes": 32982,
+    "sha256": "21507a0c3f045938ec62df53f4ddfb561a645290328790385d03a3ddec3cfc63",
+    "passed": true,
+    "checks": 55,
+    "summary": {
+      "approvedSourcePaths": 11,
+      "approvedMetadataPaths": 4,
+      "reviewedRuntimePrograms": 3,
+      "maintenanceFiles": 4,
+      "sharedSources": 8,
+      "unchangedRawReferences": 2,
+      "protectedOriginalFiles": 9,
+      "preservedWorkingDocumentPrefixes": 3,
+      "protectedGitObjects": 17,
+      "retainedMediaRecords": 1054,
+      "retainedOtherProgramRecords": 28
+    },
+    "unrelatedOriginalsPreserved": 9,
+    "documentPrefixesPreserved": 3,
+    "sharedWorkingTreeCommitted": false
+  },
+  "evidence": {
+    "sourceBefore": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\source-before.json",
+      "bytes": 24740,
+      "sha256": "df1044ba9c8b345236f43d17ab98ef0e1112e5a4458d3461bb0dfa8c61a429c0"
+    },
+    "stagedSource": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\staged-source.json",
+      "bytes": 2997,
+      "sha256": "df40d2653b1c8a667747b24cb611739f5e4fbfacf9fdd6d09bdb569e4f6ea18d"
+    },
+    "sourceCommit": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\source-commit.json",
+      "bytes": 1998,
+      "sha256": "d3a349bdc323691cc0fb4d2da2db04b6f8922f182d26e740485d6aa82789454a"
+    },
+    "inventory": {
+      "path": "D:\\Codex_QA\\card-media-flow-20261103\\artifact-inventory.json",
+      "bytes": 6137,
+      "sha256": "24658cecfcfb4103874370981c792f4535790aa9d7248e69dbc58c347ed2c918"
+    },
+    "sourceAudit": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\source-audit\\report.json",
+      "bytes": 14817,
+      "sha256": "e15e062936e8cb8eb030e1c3fdf8a8089eea972dfb4f038a707b9204f0ca48dc"
+    },
+    "historicalSourceAuditedHandoffPrefix": {
+      "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\20261103-card-media-flow.md",
+      "bytes": 8218,
+      "sha256": "d421091b96bb8db512d6e2490650af1f3c4fa7964526f8ad17010bb893ab2459",
+      "verifiedAsExactCurrentPrefix": true
+    },
+    "approvedSameReleaseHandoffAddendum": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\source-audit\\handoff-addendum-review.json",
+      "bytes": 2127,
+      "sha256": "9fc7283681c520f67a1271b2b418a430d193ba377f5ee7c31f41d22556193d7d"
+    },
+    "originalHandoff": {
+      "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\20261103-card-media-flow.md",
+      "bytes": 8682,
+      "sha256": "001a6b11e04b9672c2aeab61e207cd0fe53035678d66f5c689cb1c3c89ab3b18",
+      "fingerprintScope": "Full8682byte current handoff including the exact reviewed464byte addendum; exact bytes backed up and retained as suffix"
+    },
+    "firstPublic": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\public-readback.json",
+      "bytes": 21602,
+      "sha256": "cf06526e951966d3d00d791bc689a99df8043b8690ba12032a66157fc1abba4f"
+    },
+    "finalPublic": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\post-announcement-public.json",
+      "bytes": 22458,
+      "sha256": "5cce8389f4d0531881b65a349cceda92d9ee9c768f439ab066a500a52008fc51"
+    },
+    "finalHosting": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\render-final-notices.json",
+      "bytes": 507,
+      "sha256": "c665e1d121ab2de2d4c40465763fa5557d0fc0b4e54df3e336b37865a99d37d6"
+    },
+    "nativeChannels": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\native-channel-proof-r2.json",
+      "bytes": 48784,
+      "sha256": "0f145571b63291ea1c4dc1cf5fbf78066c93dfe45c2657f482d899433901427a"
+    },
+    "finalizer": {
+      "path": "D:\\Codex_QA\\card-media-flow-release-20261103\\pipeline-audit\\finalize-release.cjs",
+      "bytes": 50182,
+      "sha256": "6a9354dd1fa8f0844654b41b14b8bf0bc6a053b34972a0266161fa3a5a102f39"
+    }
+  },
+  "limits": {
+    "physicalAndroidVerified": false,
+    "physicalIphoneVerified": false,
+    "realAccountVerified": false,
+    "realAccountAnnouncementVisibilityVerified": false,
+    "productionDatabaseAcceptanceVerified": false,
+    "latticePersistenceClaimed": false,
+    "newApkBuilt": false,
+    "newIpaBuilt": false,
+    "fullGameInstallVerified": false,
+    "fullGameCacheVerified": false,
+    "nativeAppRelaunchExecuted": false,
+    "nativeChannelReopenScope": "Fresh Playwright API request contexts and static native host contract only; no browser pages/scripts or installed app/device relaunch",
+    "publicBackendSourceHashVerified": false,
+    "backendIdentityMethod": "Immutable Git source plus exact actual Render Live commit",
+    "producerHistoricalResultAssertionsWithoutSourceBinding": 798,
+    "producerSyncAssertionsWithoutSourceBinding": 8,
+    "freshResultSourceBinding": "Raw before/after files and retained-v063 bundles; canonical Git/package/public binding is separately proven",
+    "producerQaLimits": [
+      "Integrated108 has start/current hashes but no recorded after-run source hash assertion; do not claim both ends were proven by that receipt.",
+      "Sync8 report has no source fingerprints and no error telemetry field.",
+      "Fault28 executes Chromium/Android retained presentation; do not claim WebKit fault coverage from its iOS-style priming checks.",
+      "iOS slow white observation has readyState4 and buffer0; product allows readyState4, so do not claim all platforms had a measurable2s buffer.",
+      "No physical device, production account/database, actual deployed-source or full native package installation acceptance.",
+      "Historical Android/iOS399 report fingerprints remain unbound; this audit accepts fresh Android399/iOS399 as separate raw-source-bound evidence.",
+      "Fresh QA source binding is raw before/after files and declared localhost file routes, not immutable Git or captured deployed HTTP source bytes; release publisher must separately verify canonical Git-to-package-to-public bytes.",
+      "Six historical reports contain empty errors arrays; the isolated sync8 receipt does not itself record pageerror telemetry.",
+      "No source or QA changes were needed; the existing official D: WebKit was reused without installing/updating packages."
+    ],
+    "cssFullPublicBodyVerification": "First public verifier only; final continuity reuses that SHA and immutable source identity",
+    "mediaUploads": 0,
+    "nativeBuilds": 0,
+    "unhandedWorkingSourcesAccepted": false
+  },
+  "officialReceipt": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\20261103-card-media-flow-release.json",
+  "scope": "New source evidence summary only; root owns DEV/FILE/OVERVIEW, Git and progress closeout."
+}

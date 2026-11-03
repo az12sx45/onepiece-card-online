@@ -1,3 +1,12 @@
+<!-- CARD_MEDIA_FLOW_FINAL_RELEASE_HEADER -->
+# 最新發布｜2026-11-03 爭霸戰影片與卡牌演出
+
+**RELEASED**。正式Card程式包 package-1c838d6bf03ea7a3；最終Render Live與更新情報提交 69deed56b2206057d41f1b5bb2217cef6ee4172a。三份程式與CAS完整SHA、限定程式快取重啟0下載、Android/iOS v063 API通道與最後公開連續性均已核對。
+
+收據：[CARD_MEDIA_FLOW_RELEASE_20261103.json](CARD_MEDIA_FLOW_RELEASE_20261103.json)。協調收據：D:\Codex_Project_Coordination\tabletop-series\handoffs\20261103-card-media-flow-release.json。原生包與媒體未重包；實體手機、原生App真正重新啟動、完整遊戲快取及正式帳號DB未宣稱驗收。
+
+## 原開發與交接紀錄（全文保留）
+
 # 爭霸戰手機強化影片、結果斜圖與還牌比例 — 2026-11-03
 
 狀態：READY_FOR_INTEGRATION。正式發布由啟動器聊天室處理；本文件不代表公開／真機驗收。
