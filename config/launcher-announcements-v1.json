@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 75,
+  "revision": 76,
   "announcements": [
+    {
+      "id": "card-20261103-media-flow",
+      "status": "published",
+      "publishedAt": "2026-11-03T12:12:24.672Z",
+      "scope": "card",
+      "category": "update",
+      "version": "2026.11.03",
+      "title": "爭霸戰：強化演出與卡牌動畫修正",
+      "summary": "強化影片準備好才進白光，角色斜圖在招式結束後顯示實際結果；整理手牌外框與卡背歸還動畫。",
+      "body": [
+        "強化影片準備好才進入白光，載入失敗時也能繼續對局。",
+        "角色斜圖會等選擇、硬幣、招式與查看卡片結束後，顯示實際公開結果；大媽保護／閃避與索隆砍牌號碼更清楚。",
+        "兩張手牌移除多餘外框；查看其他玩家卡片後，卡背維持正常比例返回。",
+        "電腦請先關閉對局並更新爭霸戰；既有v063手機版結束遊戲後重新進入，載入這次線上更新。"
+      ],
+      "requiredRelease": {
+        "kind": "card",
+        "releaseId": "package-1c838d6bf03ea7a3"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "card"
+      }
+    },
     {
       "id": "marineford-20261103-team-perspective",
       "status": "published",

@@ -8950,3 +8950,8 @@ Fresh固定提交驗證為team8、public-row14、backend9真60秒＋six-browser7
 
 ## 2026-11-03 Card媒體流程程式包整合
 以db60e9ea正式基線及已提交來源2ae415935產生package-1c838d6bf03ea7a3，manifest SHA47f28970c2639bdae654f018a0a1b1156b3f6322a6693d488dc43852caf3855a。只變更game.html、js/card-desktop-table.js、css/card-desktop-table.css共55305632 bytes；完整31程式中其餘28及1054素材記錄完全保留，Board／Chess、Marineford新版、引擎、原生包與啟動器通道不變。config程式清單不變。raw handoff→Git LF→候選bytes映射與獨立來源審查在D:/Codex_QA/card-media-flow-release-20261103；實際上傳、Render Live和公開更新通道仍以後續收據驗證為準。
+
+
+## 2026-11-03 Card媒體流程公開核對與更新情報
+程式包package-1c838d6bf03ea7a3已由實際Render Live來源985cb262268c42327d0390f83917767f1a278658核對，10項公開／下載通道檢查、20請求通過；三份Render程式與3CAS精確SHA一致。Production AssetStore於隔離QA快取下載55305632 bytes，重新建立下載器並載入持久完整性索引後，3份程式缺漏0、下載0bytes；這是限定程式快取驗證，未宣稱完整835MB遊戲安裝。既有Android/iOS native v063指標已讀回且無重包，exact v063結果補驗各399，原失敗環境收據保留。手機需結束遊戲／重新載入後取得線上程式，僅回啟動器不保證更新。
+更新情報修訂76新增card-20261103-media-flow，精確gate本次Card程式包，舊76則內容／順序保留、總77。套用前已確認首次正式公開證據，隔離公告handler82項通過，9份公告相關來源raw與LF起訖穩定。實際公告部署、最終通道連續性及真機／帳號界線以後續CARD_MEDIA_FLOW_RELEASE_20261103.json與協調release收據為準。

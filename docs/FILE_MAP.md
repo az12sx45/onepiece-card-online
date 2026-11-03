@@ -2269,3 +2269,6 @@ public/game.html與generated js/card-desktop-table.js、css/card-desktop-table.c
 
 
 2026-11-03 Card媒體流程候選manifest：public/desktop/manifests/card-package-1c838d6bf03ea7a3.json，由scripts/build_card_program_update.js以外部candidate產生並驗證後promote；public/desktop/catalog-v3.json只切換Card，其他遊戲與媒體記錄保留。外部QA在D:/Codex_QA/card-media-flow-release-20261103，僅3program CAS發布，無媒體或原生安裝包上傳。
+
+
+2026-11-03 Card媒體流程公告：config/launcher-announcements-v1.json修訂76，新增1則card-20261103-media-flow，依賴package-1c838d6bf03ea7a3，保留76舊則。D:/Codex_QA/card-media-flow-release-20261103保存三程式CAS、公開20請求、程式快取首輪下載／重啟0下載、公告82及後續最終連續性證據；沒有更改既有原生63安裝包。
