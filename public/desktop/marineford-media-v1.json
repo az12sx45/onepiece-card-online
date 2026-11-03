@@ -332,6 +332,20 @@
       "sha256": "f88f0db60aa807f192a469fe8a22fae06f32ada2ee0e43f55734328ba87be451"
     },
     {
+      "path": "marineford/art/v2/hud-navy.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 98566,
+      "sha256": "a88fd15b56be593ffbdd248450933b53990d977a4c5518aef9920a04ef561290"
+    },
+    {
+      "path": "marineford/art/v2/hud-pirate.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 110390,
+      "sha256": "809964c6c65b1096e5afb4a2e49e996675d52d199ad95e701929cc4b3b4ebf17"
+    },
+    {
       "path": "marineford/art/v2/hud-readable.webp",
       "kind": "image",
       "mime": "image/webp",

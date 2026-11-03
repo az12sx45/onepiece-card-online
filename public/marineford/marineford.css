@@ -491,12 +491,6 @@ body:not([data-screen="table"]) #health{display:none!important}
 #actions{pointer-events:none} #actions button{pointer-events:auto} #table[data-perspective="pirate"] #actions .action-hint,#table[data-perspective="pirate"] #actions .waiting{display:none}
 
 /* Faction seats use separate silhouettes and materials, with clear card faces. */
-.seat[data-team]{background:none;isolation:isolate}
-.seat[data-team]::before{content:'';position:absolute;inset:9% 0 9% 10%;z-index:-1;pointer-events:none}
-.seat[data-team="navy"]::before{background:linear-gradient(155deg,#e3edf2,#7799ad 7%,#18354e 11%,#0c1c31 87%,#7aabc2 93%,#d9e9ee);clip-path:polygon(0 0,92% 0,100% 23%,100% 77%,92% 100%,0 100%)}
-.seat[data-team="pirate"]::before{background:linear-gradient(155deg,#d5ac63,#6d4322 9%,#3c1720 13%,#200d15 87%,#9d5930 94%,#f2cb83);clip-path:polygon(0 6%,85% 6%,91% 0,100% 50%,91% 100%,85% 94%,0 94%)}
-.seat[data-team="navy"] .portrait-button{outline:2px solid #bad5df;outline-offset:1px;background:#132a44}
-.seat[data-team="pirate"] .portrait-button{outline:2px solid #e0b05b;outline-offset:1px;background:#431b20}
 .seat[data-team="navy"] .seat-info strong{color:#e2f7ff}
 .seat[data-team="pirate"] .seat-info strong{color:#ffe1a6}
 .seat[data-side="ally"][data-current="true"]:after{top:auto;bottom:-11px}
@@ -514,3 +508,15 @@ body:not([data-screen="table"]) #health{display:none!important}
  #table[data-perspective="pirate"] #hand[data-picking="true"] .hand-card{left:30%}
  #table[data-perspective="pirate"] #hand[data-picking="true"] .hand-card:nth-child(2){left:70%}
 }
+
+.seat[data-team="navy"]{background-image:url("art/v2/hud-navy.webp")}
+.seat[data-team="pirate"]{background-image:url("art/v2/hud-pirate.webp")}
+.lobby-menu{grid-template-columns:repeat(2,minmax(0,1fr));justify-items:center}
+.lobby-links{flex-wrap:wrap}
+.room-code-form,.room-browser-tools,.room-browser-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.room-browser-list{display:grid;gap:8px;width:min(100%,560px)}
+.room-browser-row{padding:6px 10px;border-bottom:1px solid #a4c7d355}
+#sheet[data-kind="room-browser"] #sheetBody{display:flex;flex-direction:column;align-items:center;gap:12px;overflow:auto}
+.seat[data-team="navy"] .portrait-button{left:6.4%;top:16%;width:23.8%;height:71.4%}
+.seat[data-team="pirate"] .portrait-button{left:8.8%;top:21%;width:19.3%;height:57.9%}
+.seat[data-team] .seat-info{left:36%;right:8%;top:34%;height:42%}

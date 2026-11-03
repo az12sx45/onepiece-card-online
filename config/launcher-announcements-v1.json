@@ -1,7 +1,26 @@
 {
   "schemaVersion": 1,
-  "revision": 79,
+  "revision": 80,
   "announcements": [
+    {
+      "id": "marineford-20261104-hud-lobby",
+      "status": "published",
+      "publishedAt": "2026-11-03T18:27:00.756Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "頂上戰爭篇 2026.11.04",
+      "title": "頂上戰爭篇：大廳與陣營介面更新",
+      "summary": "大廳和公開房間清單分開，海軍與海賊各有新的玩家資訊框。",
+      "body": [
+        "首頁集中建立房間、加入房間、遊戲規則、航海者檔案和卡片圖鑑。",
+        "加入房間可瀏覽並更新公開房間清單，也可輸入房間代碼。",
+        "海軍和海賊各使用新的玩家資訊框。請結束頂上戰爭篇後重新進入，載入這次更新。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.31"
+      }
+    },
     {
       "id": "card-20261104-timing-video",
       "status": "published",

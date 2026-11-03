@@ -2324,3 +2324,5 @@ public/game.html與generated js/card-desktop-table.js、css/card-desktop-table.c
 CARD_TIMING_VIDEO_20261104.md列使用者逐卡決策與來源界線。正式game.html影片prepare/play及13/8說明、generated desktop JS；server/index.js只Card CPU排程，engine.js只active8強化。Shared result-cutins v3、flow next、status v2、enhancement-ready及新pile-clarity/roger-prediction由build_card_media_flow與兩registry整合；小compat CSS inline供retained主機，舊大/小CSS不變。
 新增scripts/card_cutin_phase_qa.mjs、card_cutin_phase_runtime_qa.mjs、card_luffy_boost_rule_qa.mjs、card_cpu_pacing_qa.mjs、card_pile_clarity_qa.mjs、card_enhancement_metadata_qa.mjs、card_roger_prediction_qa.mjs；既有card_enhancement_startup_qa擴新wholepage情境，card_match_entry_client等版本閘門同步。QA只供開發，不加入玩家manifest。
 <!-- CARD_TIMING_VIDEO_20261104_END -->
+
+2026-11-04 Marineford 首頁 renderLobby、加入頁 openRoomBrowser、共用 showRules 位於 marineford.js。兩張 HUD 生圖是 art/v2/hud-navy.webp 與 hud-pirate.webp。
