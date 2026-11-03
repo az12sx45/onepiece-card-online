@@ -2295,3 +2295,12 @@ public/game.html與generated js/card-desktop-table.js、css/card-desktop-table.c
 - public/desktop/manifests/card-package-6fd7444442d60fe6.json：32個program與1095個media；新44物件的清單、canonical SHA及保留資產對照見D:/Codex_QA/card-entry-video-release-20261103/candidate-r2/release-inputs.json。
 - D:/Codex_QA/card-entry-video-release-20261103/pipeline-r2：本輪限縮候選、CAS、公開驗證工具；不複製舊53MB CSS或整包媒體。
 <!-- CARD_ENTRY_VIDEO_METADATA_20261103_END -->
+
+
+<!-- CARD_ENTRY_VIDEO_NOTICE_20261103_BEGIN -->
+## 2026-11-03 爭霸戰更新情報與證據
+
+- config/launcher-announcements-v1.json：revision77、78則，僅新增card-20261103-entry-video，以package-6fd7444442d60fe6為Card發布閘門。
+- D:/Codex_QA/card-entry-video-release-20261103/announcement-apply-report.json：正式payload及公開110次讀回通過後才套用一則公告的guard證據。
+- D:/Codex_QA/card-entry-video-release-20261103/announcement-server-qa.json：隔離82項handler檢查，保護9個既有來源前後raw/LF SHA，不使用正式DB或玩家帳號。
+<!-- CARD_ENTRY_VIDEO_NOTICE_20261103_END -->

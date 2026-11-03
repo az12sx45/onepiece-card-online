@@ -8986,3 +8986,12 @@ Android/iOS v063各自API通道核對，14請求／4新API contexts／6檢查通
 
 整合QA、來源審查及候選證據位於D:/Codex_QA/card-entry-video-release-20261103；此提交僅準備metadata，公開CAS、Render Live、實際AssetStore差量與公告讀回須另留真實證據，未以此文件宣稱已發布或實機通過。
 <!-- CARD_ENTRY_VIDEO_METADATA_20261103_END -->
+
+
+<!-- CARD_ENTRY_VIDEO_NOTICE_20261103_BEGIN -->
+## 2026-11-03 爭霸戰入場與影片更新情報
+
+先完成package-6fd7444442d60fe6的Render Live及公開110次讀回，再加入card-20261103-entry-video：公告revision76→77、總數77→78，舊77則完整保留，新公告以Card releaseId閘門與遊戲CTA對應。公告合併入場遮罩、手機小樣式、本人場地確認、影片啟動重試、結果與頭像狀態時序及重複演出處理。iOS v058/v063沿用現有App，結束遊戲後完整關閉App重開即可取得線上內容。
+
+新增後以隔離PGlite/原handler完成82項檢查及9檔raw/LF起訖保護；證據D:/Codex_QA/card-entry-video-release-20261103/announcement-server-qa.json。公開讀回、隔離服務測試不等於正式帳號看見公告、手機重開或實體Android影片播放驗收，實機仍待玩家確認。
+<!-- CARD_ENTRY_VIDEO_NOTICE_20261103_END -->
