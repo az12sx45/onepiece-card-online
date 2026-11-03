@@ -1,0 +1,752 @@
+{
+  "status": "RELEASED",
+  "releaseComplete": true,
+  "releasedAt": "2026-11-03T11:46:40.685Z",
+  "sourceRoot": "D:/Codex_Release_Worktrees/card-native-server-adapter-20261029",
+  "baselineCommit": "0689b9d71e901c538ba075d3e2a09db1413cad86",
+  "teamPayloadCommit": "2c9f163bf0681dee302a5f6b50cae731281f68b2",
+  "rowPayloadCommit": "98884cd91ae8cf851ee56a9cd8629bc8d05541e4",
+  "reconnectPayloadCommit": "01d55e41820d8ae432e23174a35746e0cd4142f1",
+  "effectiveLatestServingCommit": "1ef8a2d9f15decaa30fe33a7810d6b8afe56e191",
+  "latestFrontendPayloadCommit": "98884cd91ae8cf851ee56a9cd8629bc8d05541e4",
+  "latestBackendRoomPayloadCommit": "01d55e41820d8ae432e23174a35746e0cd4142f1",
+  "latestFrontendPrograms": [
+    {
+      "path": "public/marineford/marineford.js",
+      "handoffSha256": "5a4945a4188167d5cd57b574fcb147864f5b4718e93f36b5dc6acb7af3982e89",
+      "rawSha256": "5a4945a4188167d5cd57b574fcb147864f5b4718e93f36b5dc6acb7af3982e89",
+      "rawBytes": 64794,
+      "canonicalSha256": "5adbd32976d472f0ef27c7d73c9250434a5ccfe6aecd9acc0c99d817ffe650c6",
+      "canonicalBytes": 64482,
+      "eofNormalized": false,
+      "approvedRawBackup": "D:\\Codex_QA\\marineford-public-row-release-20261103/approved-raw/marineford.js",
+      "rawProvenance": "Retained original approved raw body plus exact CSS EOF proof"
+    },
+    {
+      "path": "public/marineford/marineford.css",
+      "handoffSha256": "04cae252fbecfd16d4f401d7467d900f0528c868a764a63606d767beb6d257ef",
+      "rawSha256": "a42a8ef09d0287c945b6686b6d15bd983c1fcf953548c3a68b2a25b0782796ce",
+      "rawBytes": 48454,
+      "canonicalSha256": "c4a99af425690f3569c6e30e44af869fb3b0626f6729083e7817837de630f8e3",
+      "canonicalBytes": 47964,
+      "eofNormalized": true,
+      "approvedRawBackup": "D:\\Codex_QA\\marineford-public-row-release-20261103/approved-raw/marineford.css",
+      "rawProvenance": "Retained original approved raw body plus exact CSS EOF proof"
+    },
+    {
+      "path": "scripts/marineford_peek_laser_qa.cjs",
+      "handoffSha256": "a460641bc41ce9189a4338472008ecdfaf10b81756ebb5e65fc5d033254518fd",
+      "rawSha256": "a460641bc41ce9189a4338472008ecdfaf10b81756ebb5e65fc5d033254518fd",
+      "rawBytes": 17626,
+      "canonicalSha256": "b8b488b0f4e337accec65f0d412c2ef7aaee3e7af89017c3f4128b5c2095fb37",
+      "canonicalBytes": 17568,
+      "eofNormalized": false,
+      "approvedRawBackup": "D:\\Codex_QA\\marineford-public-row-release-20261103/approved-raw/marineford_peek_laser_qa.cjs",
+      "rawProvenance": "Retained original approved raw body plus exact CSS EOF proof"
+    }
+  ],
+  "latestBackendSources": [
+    {
+      "path": "server/marineford-rooms.js",
+      "handoffSha256": "ac6fae8eba172ad01c12e1e4d253f295006d04e5f266a0263ca26344a2262570",
+      "rawSha256": "ac6fae8eba172ad01c12e1e4d253f295006d04e5f266a0263ca26344a2262570",
+      "rawBytes": 9356,
+      "canonicalSha256": "8f50cd14a47dcb8b32f88ad4b5ac2ac405110e778ae266add49b042be7884d6a",
+      "canonicalBytes": 9302,
+      "eofNormalized": false,
+      "approvedRawBackup": "D:\\Codex_QA\\marineford-reconnect-release-20261103/approved-raw/marineford-rooms.js",
+      "approvedRaw": {
+        "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\approved-raw\\marineford-rooms.js",
+        "bytes": 9356,
+        "sha256": "ac6fae8eba172ad01c12e1e4d253f295006d04e5f266a0263ca26344a2262570"
+      }
+    },
+    {
+      "path": "scripts/marineford_reconnect_qa.cjs",
+      "handoffSha256": "81a9dce4eb6a40d23eeb8aa1b749e74bb024195a99f6df987b83be80058d6c88",
+      "rawSha256": "81a9dce4eb6a40d23eeb8aa1b749e74bb024195a99f6df987b83be80058d6c88",
+      "rawBytes": 7688,
+      "canonicalSha256": "dc3acc04235f266e705b6bbbb3feb294193cc41babe830c0dd20efad893292e2",
+      "canonicalBytes": 7654,
+      "eofNormalized": false,
+      "approvedRawBackup": "D:\\Codex_QA\\marineford-reconnect-release-20261103/approved-raw/marineford_reconnect_qa.cjs",
+      "approvedRaw": {
+        "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\approved-raw\\marineford_reconnect_qa.cjs",
+        "bytes": 7688,
+        "sha256": "81a9dce4eb6a40d23eeb8aa1b749e74bb024195a99f6df987b83be80058d6c88"
+      }
+    }
+  ],
+  "notices": {
+    "revision": 75,
+    "count": 76,
+    "ids": [
+      "marineford-20261103-team-perspective",
+      "marineford-20261103-public-row",
+      "marineford-20261103-reconnect"
+    ],
+    "preservedOldNotices": 73,
+    "sourceHostingVerified": true,
+    "realAccountVisibilityVerified": false,
+    "launcherGate": {
+      "kind": "launcher",
+      "version": "1.2.31"
+    },
+    "launcherGateProvesProtocolCompatibilityOnly": true
+  },
+  "preserved": {
+    "marinefordMediaRecords": 131,
+    "cardReleaseId": "package-da2d1f412f0db8a8",
+    "cardMediaRecords": 1054,
+    "allThreePackageManifests": true,
+    "launcherChannels": 2,
+    "twoRuleEnginesUnchanged": true
+  },
+  "approvedBackendRoom": {
+    "payloadCommit": "01d55e41820d8ae432e23174a35746e0cd4142f1",
+    "gitSha256": "8f50cd14a47dcb8b32f88ad4b5ac2ac405110e778ae266add49b042be7884d6a",
+    "changedFromRowBaseline": true,
+    "boundToExactHostingCommit": "1ef8a2d9f15decaa30fe33a7810d6b8afe56e191",
+    "publicSourceHashVerified": false
+  },
+  "mediaUploads": 0,
+  "nativeBuilds": 0,
+  "evidence": {
+    "teamPhase": {
+      "commit": "2c9f163bf0681dee302a5f6b50cae731281f68b2",
+      "source": {
+        "handoff": {
+          "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\marineford-team-perspective-20261103.md",
+          "bytes": 3569,
+          "sha256": "298ae6b4d533a9417a514a0eecc77c1993654ea6da142230f648ec97efda2077",
+          "fingerprintScope": "Pre-finalization original bytes; backed up and retained as exact suffix"
+        },
+        "inventory": {
+          "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\marineford-team-perspective-20261103-files.json",
+          "bytes": 607,
+          "sha256": "6efbc24a8cb0b8904e11f9b420b6a1285ca84ec728016c84bb7a95d394c8e971"
+        },
+        "sourceBefore": {
+          "path": "D:\\Codex_QA\\marineford-team-release-20261103\\source-before.json",
+          "bytes": 3652,
+          "sha256": "9a0b64147b1cce09ea74fa0f4b7d2f6dfe86dde16a5a663daccd04a9c2908884"
+        },
+        "stagedSource": {
+          "path": "D:\\Codex_QA\\marineford-team-release-20261103\\staged-source.json",
+          "bytes": 1630,
+          "sha256": "a0904aec9c660835cc488ad14d960d6c5ce7588d4fb2c9c996310cbaa3e0811b"
+        },
+        "payloadSource": {
+          "path": "D:\\Codex_QA\\marineford-team-release-20261103\\payload-commit.json",
+          "bytes": 1731,
+          "sha256": "7ea094145a374a3cb361182892f0adc3bb8494cfd40c78ee9e4c433dff34c69a"
+        },
+        "stagingProducer": {
+          "path": "D:\\Codex_QA\\marineford-team-release-20261103\\stage-source.cjs",
+          "bytes": 5522,
+          "sha256": "dd01ed20a5bd8a7c1fd54aedb60652dc78f27739ee8c914d520f8eaf9260249a"
+        },
+        "normalization": {
+          "path": "D:\\Codex_QA\\marineford-team-release-20261103\\qa-eof-normalization.json",
+          "bytes": 418,
+          "sha256": "a1a16b67b94c5a6e678ef3d09efe38f80835f4d2744974c1ae15f412f4d2719b"
+        },
+        "independentAudit": {
+          "path": "D:\\Codex_QA\\marineford-team-release-20261103\\audit\\report.json",
+          "bytes": 11056,
+          "sha256": "408f726865ebe97c9533ff61a7a8d261e8836049b232fc941c6aefc7b62caaee",
+          "auditOk": true
+        },
+        "historicalProducerQa": [
+          {
+            "path": "D:\\Codex_QA\\marineford-team-perspective-20261103\\chrome-final\\report.json",
+            "bytes": 1933,
+            "sha256": "e7f9c16e705b245531b8bc48fa8db714b65846914a3948f29b7385bb57fd78c5",
+            "passed": true,
+            "checks": 15,
+            "sourceHashBound": false
+          },
+          {
+            "path": "D:\\Codex_QA\\marineford-team-perspective-20261103\\webkit-final\\report.json",
+            "bytes": 1933,
+            "sha256": "e7f9c16e705b245531b8bc48fa8db714b65846914a3948f29b7385bb57fd78c5",
+            "passed": true,
+            "checks": 15,
+            "sourceHashBound": false
+          },
+          {
+            "path": "D:\\Codex_QA\\marineford-team-perspective-20261103\\six-player\\report.json",
+            "bytes": 3854,
+            "sha256": "ae3d0be40fc2120683579335bd58f59b136ea0e6bcde571c02ef234b3fd8344a",
+            "passed": true,
+            "checks": 74,
+            "actions": 115,
+            "sourceHashBound": false
+          },
+          {
+            "path": "D:\\Codex_QA\\marineford-team-perspective-20261103\\layout-chrome\\report.json",
+            "bytes": 596,
+            "sha256": "ef349485b2f80453c8034de07ee9eb6c180f7e5068fbee8411ed945e70a2897a",
+            "passed": true,
+            "checks": 4,
+            "sourceHashBound": false
+          },
+          {
+            "path": "D:\\Codex_QA\\marineford-team-perspective-20261103\\layout-webkit\\report.json",
+            "bytes": 596,
+            "sha256": "ef349485b2f80453c8034de07ee9eb6c180f7e5068fbee8411ed945e70a2897a",
+            "passed": true,
+            "checks": 4,
+            "sourceHashBound": false
+          }
+        ]
+      },
+      "public": {
+        "path": "D:\\Codex_QA\\marineford-team-release-20261103\\public-readback.json",
+        "bytes": 11847,
+        "sha256": "559193eb93065763f0286812709fadc14c3044991b052e6f52aba9e70bce0f2f",
+        "passed": true,
+        "checks": 6,
+        "requests": 13,
+        "actualServingCommit": "2c9f163bf0681dee302a5f6b50cae731281f68b2",
+        "programs": [
+          {
+            "path": "marineford/marineford.js",
+            "bytes": 64541,
+            "sha256": "2b3d5344f4794f45a10c4b6f10e881ade7d062764fb7c1fc421f3a5ab7d58351"
+          },
+          {
+            "path": "marineford/marineford.css",
+            "bytes": 47429,
+            "sha256": "4b2f658ff3cf0e1d2676ded58ba5552218a6fcead171f88bf193c637d0d11eee"
+          }
+        ],
+        "render": {
+          "path": "D:\\Codex_QA\\marineford-team-release-20261103\\render-live.json",
+          "bytes": 433,
+          "sha256": "82b038b66163f80c98c45d71d6cb5d9c5ad400ce2500de9128c6ada488e3cee2",
+          "status": "Deploy succeeded|Live",
+          "commit": "2c9f163bf0681dee302a5f6b50cae731281f68b2",
+          "deploymentId": "dep-dbkqd0d9el5s73eragn0",
+          "sourceUrl": "https://github.com/az12sx45/onepiece-card-online/commit/2c9f163bf0681dee302a5f6b50cae731281f68b2",
+          "checkedAt": "2026-11-03T09:28:23.959Z",
+          "screenshot": {
+            "path": "D:\\Codex_QA\\marineford-team-release-20261103\\render-live.png",
+            "bytes": 85619,
+            "sha256": "27804cfd63a1cd131f163ef8b05e8b43bf7d627b0bf11d87e228f90a06cff575"
+          }
+        }
+      },
+      "fresh": {
+        "path": "D:\\Codex_QA\\marineford-team-release-20261103\\fresh-layout-final\\source-bound-report.json",
+        "bytes": 10461,
+        "sha256": "6b5c158bacb3ce6fbbdcadf42be34a10f9b45a718a804fb09cf56404e5d17f93",
+        "passed": true,
+        "immutableCommit": "2c9f163bf0681dee302a5f6b50cae731281f68b2",
+        "browsers": 2,
+        "checks": 8,
+        "servedSourceHashesVerified": true,
+        "priorFailedAttempt": {
+          "path": "D:\\Codex_QA\\marineford-team-release-20261103\\fresh-layout\\source-bound-report.json",
+          "bytes": 7077,
+          "sha256": "50857e73f9c91fe6c0f353214aaea70beb13df8850ccadb80faa1e78a00419af",
+          "passed": false,
+          "reason": "Initial Chrome4 passed; initial WebKit could not launch missing official executable. Failure is retained and is not a final pass."
+        }
+      },
+      "localStaticStart": {
+        "path": "D:\\Codex_QA\\marineford-team-release-20261103\\local-start-qa.json",
+        "bytes": 4092,
+        "sha256": "e340ed5071713008d9c213efb7978125e86ddd2983974256ce61c435b1204eac",
+        "passed": true,
+        "routes": 5,
+        "noDatabase": true,
+        "currentWorkingTreeStaticOnly": true,
+        "immutableReleaseAcceptanceIsSeparate": true
+      }
+    },
+    "rowPhase": {
+      "baselineCommit": "2c9f163bf0681dee302a5f6b50cae731281f68b2",
+      "commit": "98884cd91ae8cf851ee56a9cd8629bc8d05541e4",
+      "source": {
+        "handoff": {
+          "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\marineford-public-row-20261103.md",
+          "bytes": 1876,
+          "sha256": "3584e034b46b943dc9e71f1f19af70ef32bfc566a70c99efcae12034b9ce0855",
+          "fingerprintScope": "Pre-finalization original bytes; backed up and retained as exact suffix"
+        },
+        "inventory": {
+          "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\marineford-public-row-20261103-files.json",
+          "bytes": 607,
+          "sha256": "a5543f5f9f185180fe3af39301949642be03f3c4260a79c15da2d7d97e4a96fc"
+        },
+        "sourceBefore": {
+          "path": "D:\\Codex_QA\\marineford-public-row-release-20261103\\source-before.json",
+          "bytes": 4301,
+          "sha256": "f7e86657e5ad6a1f2b13cae0b65f4da8fe45f21f8666176d00bf3f9db416f64e"
+        },
+        "stagedSource": {
+          "path": "D:\\Codex_QA\\marineford-public-row-release-20261103\\staged-source.json",
+          "bytes": 2025,
+          "sha256": "b954fc67bdf946997541fa228ffb8335135d7f88001a114493d76c83e453d4fa"
+        },
+        "payloadSource": {
+          "path": "D:\\Codex_QA\\marineford-public-row-release-20261103\\payload-commit.json",
+          "bytes": 2126,
+          "sha256": "b1a3dd50db5d7a16ed2510d92abc76218b18c67659f7389ddfa6bc5826528f87"
+        },
+        "stagingProducer": {
+          "path": "D:\\Codex_QA\\marineford-public-row-release-20261103\\stage-source.cjs",
+          "bytes": 5494,
+          "sha256": "fccd40442dcbb6916182d7f5e6bac26ee41d1f7836d1c78fa1bd324a509c7f1e"
+        },
+        "normalization": {
+          "path": "D:\\Codex_QA\\marineford-public-row-release-20261103\\eof-normalization.json",
+          "bytes": 607,
+          "sha256": "0ee32f88c2161a3293ed6794853d7d815ceec3c162d91a6b438aa1dd3afe79b3"
+        },
+        "independentAudit": {
+          "path": "D:\\Codex_QA\\marineford-public-row-release-20261103\\audit\\report.json",
+          "bytes": 9694,
+          "sha256": "dd6b6df04c90cad61400e9e23425130a1a3ea104800635bc013591bb6b1481d6",
+          "auditOk": true
+        },
+        "historicalProducerQa": [
+          {
+            "path": "D:\\Codex_QA\\marineford-public-row-20261103\\chrome-verified\\report.json",
+            "bytes": 648,
+            "sha256": "bfdd0b16254df98d7c32b910e574c8de6f80bb9d4c813c06c52646e0070b57d5",
+            "passed": true,
+            "checks": 7,
+            "sourceHashBound": false
+          },
+          {
+            "path": "D:\\Codex_QA\\marineford-public-row-20261103\\webkit-verified\\report.json",
+            "bytes": 648,
+            "sha256": "bfdd0b16254df98d7c32b910e574c8de6f80bb9d4c813c06c52646e0070b57d5",
+            "passed": true,
+            "checks": 7,
+            "sourceHashBound": false
+          }
+        ]
+      },
+      "public": {
+        "path": "D:\\Codex_QA\\marineford-public-row-release-20261103\\public-readback.json",
+        "bytes": 12340,
+        "sha256": "31cfea2fcde9090051272086db1d9015e0b6b39314bbbfc98d97d02b2aaa218b",
+        "passed": true,
+        "checks": 6,
+        "requests": 13,
+        "actualServingCommit": "98884cd91ae8cf851ee56a9cd8629bc8d05541e4",
+        "programs": [
+          {
+            "path": "marineford/marineford.js",
+            "bytes": 64482,
+            "sha256": "5adbd32976d472f0ef27c7d73c9250434a5ccfe6aecd9acc0c99d817ffe650c6"
+          },
+          {
+            "path": "marineford/marineford.css",
+            "bytes": 47964,
+            "sha256": "c4a99af425690f3569c6e30e44af869fb3b0626f6729083e7817837de630f8e3"
+          }
+        ],
+        "render": {
+          "path": "D:\\Codex_QA\\marineford-public-row-release-20261103\\render-live.json",
+          "bytes": 416,
+          "sha256": "62a7202f8740cff4fbf8edc0826db2c638dc151abf8d2b51ff29c0d70a24bef1",
+          "status": "Deploy succeeded|Live",
+          "commit": "98884cd91ae8cf851ee56a9cd8629bc8d05541e4",
+          "deploymentId": "dep-dbkqkgd9el5s73erj9bg",
+          "sourceUrl": "https://github.com/az12sx45/onepiece-card-online/commit/98884cd91ae8cf851ee56a9cd8629bc8d05541e4",
+          "checkedAt": "2026-11-03T09:44:26.582Z",
+          "screenshot": {
+            "path": "D:\\Codex_QA\\marineford-public-row-release-20261103\\render-live.png",
+            "bytes": 84190,
+            "sha256": "189cc83ff85f930e5d844edde8a9526e2d844155defa49775aa48c499aaac5f5"
+          }
+        }
+      },
+      "fresh": {
+        "path": "D:\\Codex_QA\\marineford-public-row-release-20261103\\fresh-public-final\\source-bound-report.json",
+        "bytes": 8883,
+        "sha256": "bba7e89d859b37edca3906319d7f033549a4a040304ec2dd28cf5f8d0512dc44",
+        "passed": true,
+        "immutableCommit": "98884cd91ae8cf851ee56a9cd8629bc8d05541e4",
+        "browsers": 2,
+        "checks": 14,
+        "servedSourceHashesVerified": true,
+        "priorFailedAttempt": null
+      },
+      "localStaticStart": {
+        "path": "D:\\Codex_QA\\marineford-public-row-release-20261103\\local-start-qa.json",
+        "bytes": 4135,
+        "sha256": "fcc57a5dc0ca0a17cb2737caf95056785003a7ed84bf72112799136824c1080c",
+        "passed": true,
+        "routes": 5,
+        "noDatabase": true,
+        "currentWorkingTreeStaticOnly": true,
+        "immutableReleaseAcceptanceIsSeparate": true
+      }
+    },
+    "reconnectPhase": {
+      "baselineCommit": "98884cd91ae8cf851ee56a9cd8629bc8d05541e4",
+      "commit": "01d55e41820d8ae432e23174a35746e0cd4142f1",
+      "source": {
+        "handoff": {
+          "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\marineford-reconnect-20261103.md",
+          "bytes": 2895,
+          "sha256": "4e31726a42149791d5fc50c95faf9feb495e248932189928386ffa74329e86cf",
+          "fingerprintScope": "Pre-finalization original; retained in backup and exact suffix"
+        },
+        "inventory": {
+          "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\marineford-reconnect-20261103-files.json",
+          "bytes": 426,
+          "sha256": "008684677a94cab89957bb8891c1ff1ceb5eeeda335cd55a58beaecbe5db06dc"
+        },
+        "sourceBefore": {
+          "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\source-before.json",
+          "bytes": 4868,
+          "sha256": "15b9e906e14eb041db6c62e10dc5fa72695cc98b7edf1d646bc436f5eb5995fc"
+        },
+        "stagedSource": {
+          "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\staged-source.json",
+          "bytes": 1443,
+          "sha256": "9c51f0b9659b9f3b5da6e9ebc4c663c781841fd3330da426b2f596030b999efb"
+        },
+        "payloadSource": {
+          "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\payload-commit.json",
+          "bytes": 1544,
+          "sha256": "10a2d2c054da19aa1d5a3a3a18a9c6ae6e1b7ccc1fe6f7de32c5f90ea045b1da"
+        },
+        "independentAudit": {
+          "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\audit\\report.json",
+          "bytes": 7240,
+          "sha256": "aaa2c082065ecd8bfe07ceb868972fb5db2cf5d49d7a01c31208b1fd627f57ec",
+          "auditOk": true
+        },
+        "historicalProducerQa": [
+          {
+            "path": "D:\\Codex_QA\\marineford-reconnect-20261103\\real-grace\\report.json",
+            "bytes": 1111,
+            "sha256": "555362234026bf19951ff919b380cba532650bf4122f87cd60ed0d5718e5322e",
+            "passed": true,
+            "checks": 9,
+            "sourceHashBound": false,
+            "scope": "Historical producer test report; fresh immutable backend acceptance is recorded separately."
+          },
+          {
+            "path": "D:\\Codex_QA\\marineford-reconnect-20261103\\six-player\\report.json",
+            "bytes": 3853,
+            "sha256": "4a4016b6c9a15ecbf62ec7e2b9d6207467b93cdb051241c472f7c38a9c250165",
+            "passed": true,
+            "checks": 74,
+            "actions": 52,
+            "sourceHashBound": false,
+            "scope": "Historical producer test report; fresh immutable backend acceptance is recorded separately."
+          }
+        ]
+      },
+      "public": {
+        "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\public-readback.json",
+        "bytes": 14062,
+        "sha256": "fa362ff22721d93468e7e484b85d913549d398e8890c0ead8ec47a301fb0b832",
+        "passed": true,
+        "checks": 7,
+        "requests": 13,
+        "actualServingCommit": "01d55e41820d8ae432e23174a35746e0cd4142f1",
+        "programs": [
+          {
+            "path": "marineford/marineford.js",
+            "bytes": 64482,
+            "sha256": "5adbd32976d472f0ef27c7d73c9250434a5ccfe6aecd9acc0c99d817ffe650c6"
+          },
+          {
+            "path": "marineford/marineford.css",
+            "bytes": 47964,
+            "sha256": "c4a99af425690f3569c6e30e44af869fb3b0626f6729083e7817837de630f8e3"
+          }
+        ],
+        "render": {
+          "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\render-live.json",
+          "bytes": 458,
+          "sha256": "261c665c752d2a1679a3b9b29b30de946e1234f04501374db2e15f8d8a38ef06",
+          "status": "Deploy succeeded|Live",
+          "commit": "01d55e41820d8ae432e23174a35746e0cd4142f1",
+          "deploymentId": "dep-dbkqqlu7bikc7399qh3g",
+          "sourceUrl": "https://github.com/az12sx45/onepiece-card-online/commit/01d55e41820d8ae432e23174a35746e0cd4142f1",
+          "checkedAt": "2026-11-03T09:56:10.508Z",
+          "screenshot": {
+            "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\render-live.png",
+            "bytes": 85032,
+            "sha256": "59a57c121ef1ec0bed251098516cc07fffb4dd733682c88cdf0a29ef9dda9abf"
+          }
+        },
+        "backendRoomGitSha256": "8f50cd14a47dcb8b32f88ad4b5ac2ac405110e778ae266add49b042be7884d6a",
+        "publicBackendSourceHashVerified": false,
+        "frontendPayloadCommit": "98884cd91ae8cf851ee56a9cd8629bc8d05541e4"
+      },
+      "fresh": {
+        "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\fresh-backend-final\\source-bound-report.json",
+        "bytes": 13574,
+        "sha256": "1abe11afc8913e37e255d9d42a3602fbda4e2a0c15dca0381c850c05841e3588",
+        "passed": true,
+        "immutableCommit": "01d55e41820d8ae432e23174a35746e0cd4142f1",
+        "realGraceChecks": 9,
+        "realDefaultGraceTested": true,
+        "realGraceWallDurationMs": 63973,
+        "sixPlayerChecks": 74,
+        "freshObservedActions": 185,
+        "fullMatchCompleted": true,
+        "frontendPayloadCommit": "98884cd91ae8cf851ee56a9cd8629bc8d05541e4",
+        "publicBackendSourceHashVerified": false
+      },
+      "localStaticStart": {
+        "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\local-start-qa.json",
+        "bytes": 3952,
+        "sha256": "e838fc6ea0f2da365a632be65b435cd2d8606cf0518323959986015bdc729f3b",
+        "passed": true,
+        "routes": 5,
+        "noDatabase": true,
+        "currentWorkingTreeStaticOnly": true,
+        "immutableReleaseAcceptanceIsSeparate": true
+      }
+    },
+    "finalNotices": {
+      "notices": {
+        "revision": 75,
+        "count": 76,
+        "ids": [
+          "marineford-20261103-team-perspective",
+          "marineford-20261103-public-row",
+          "marineford-20261103-reconnect"
+        ],
+        "preservedOldNotices": 73,
+        "sourceHostingVerified": true,
+        "realAccountVisibilityVerified": false,
+        "launcherGate": {
+          "kind": "launcher",
+          "version": "1.2.31"
+        },
+        "launcherGateProvesProtocolCompatibilityOnly": true
+      },
+      "draft": {
+        "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\announcements-draft.json",
+        "bytes": 102333,
+        "sha256": "41d0b3c64b496e30a912e97e79a09e0a6daea258de74e027079f12ff2fc23d6b",
+        "review": {
+          "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\announcements-draft-review.json",
+          "bytes": 957,
+          "sha256": "40f51c416a9bac64eacd20fcac7f09539d4d8a2769716690020dc3d4c75c5e9c"
+        }
+      },
+      "application": {
+        "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\announcement-apply-report.json",
+        "bytes": 1073,
+        "sha256": "4709d7e3a1a1e5db8d5371de411bfd2a9ae14ad3fa72c3db3158435d6ccb84bf",
+        "sourceWritten": true
+      },
+      "serverQa": {
+        "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\announcement-server-qa.json",
+        "bytes": 10049,
+        "sha256": "a0c79fdec72f951ee141fb68e8eb7ffc5baeee49a5082ae7a81fc5cafbefc59d",
+        "checks": 82,
+        "sourceBoundToNoticeCommit": "1ef8a2d9f15decaa30fe33a7810d6b8afe56e191",
+        "scope": "Isolated in-memory PGlite; no production DB or real-account visibility acceptance"
+      },
+      "render": {
+        "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\render-final-notices.json",
+        "bytes": 525,
+        "sha256": "a306bf6d67a883d96d84086f38f3460db257dac7e6bf99870607983700264adc",
+        "status": "Deploy succeeded|Live",
+        "commit": "1ef8a2d9f15decaa30fe33a7810d6b8afe56e191",
+        "deploymentId": "dep-dbkr0dcs728c7390pa60",
+        "sourceUrl": "https://github.com/az12sx45/onepiece-card-online/commit/1ef8a2d9f15decaa30fe33a7810d6b8afe56e191",
+        "checkedAt": "2026-11-03T11:44:32.576Z",
+        "screenshot": {
+          "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\render-final-notices.png",
+          "bytes": 33136,
+          "sha256": "7d6c196c114dd2773ea5c2b1f4d756b3a20d3cb07ae3092fb7b432c54a75e79f"
+        }
+      },
+      "public": {
+        "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\post-announcement-public.json",
+        "bytes": 20188,
+        "sha256": "c50bc72cec902df078a9e41c33a32c7584302feb3131ab69659fb4199aadf84b",
+        "complete": true,
+        "actualServingCommit": "1ef8a2d9f15decaa30fe33a7810d6b8afe56e191",
+        "publicReadbacks": 16,
+        "runtimeIdentities": 3,
+        "approvedBackendRoomGitSha256": "8f50cd14a47dcb8b32f88ad4b5ac2ac405110e778ae266add49b042be7884d6a",
+        "revision": 75,
+        "count": 76,
+        "realAccountVisibilityVerified": false
+      }
+    },
+    "sourceProtection": {
+      "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\final-protection.json",
+      "bytes": 39952,
+      "sha256": "11e1c3b3a2a8afc34d2dd449dacd658d8c3a6c648397c37e2e19f5bfdf446ff9",
+      "passed": true,
+      "observedHead": "1ef8a2d9f15decaa30fe33a7810d6b8afe56e191",
+      "checks": 38,
+      "summary": {
+        "unrelatedOriginalFiles": 9,
+        "approvedPhases": 3,
+        "reviewedImmutableMarinefordPhaseFiles": 8,
+        "protectedSharedGitObjects": 15,
+        "approvedBackendRoomFiles": 1,
+        "uiPhasePaths": 7,
+        "reconnectPhasePaths": 6,
+        "originalUnhandedCardFiles": 3,
+        "unhandedWipFiles": 11,
+        "marinefordMediaRecords": 131,
+        "cardProgramObjects": 3,
+        "sharedAndroidFilesChecked": 0
+      },
+      "approvedBackendRoom": {
+        "path": "server/marineford-rooms.js",
+        "baselineCommit": "98884cd91ae8cf851ee56a9cd8629bc8d05541e4",
+        "payloadCommit": "01d55e41820d8ae432e23174a35746e0cd4142f1",
+        "targetCommit": "1ef8a2d9f15decaa30fe33a7810d6b8afe56e191",
+        "previousSha256": "9d6cc91ac1d232da876c2d78eed284c86ae439e099ceefd52349d86d60823c14",
+        "approvedSha256": "8f50cd14a47dcb8b32f88ad4b5ac2ac405110e778ae266add49b042be7884d6a",
+        "targetSha256": "8f50cd14a47dcb8b32f88ad4b5ac2ac405110e778ae266add49b042be7884d6a",
+        "changedOnlyInApprovedReconnectPhase": true,
+        "currentWorkingSourceAccepted": false,
+        "passed": true
+      },
+      "unhandedWipAccepted": false
+    },
+    "finalizer": {
+      "path": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\finalize-three-phase-release.cjs",
+      "bytes": 52203,
+      "sha256": "4db923862ce1ece212b5f4099df2717e4fe93037dfb3ac7733c23a6823857a27"
+    },
+    "coordinationTextPreservation": [
+      {
+        "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\marineford-team-perspective-20261103.md",
+        "originalBytes": 3569,
+        "originalSha256": "298ae6b4d533a9417a514a0eecc77c1993654ea6da142230f648ec97efda2077",
+        "finalizedBytes": 4353,
+        "finalizedSha256": "e0790f77152cf7b9d828863366f66c34cab3fbbd4527131128c7daded1f80601",
+        "prefixBytes": 784,
+        "originalBackup": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\three-phase-receipt-finalization-backups\\0-marineford-team-perspective-20261103.md",
+        "originalRetainedAsExactSuffix": true
+      },
+      {
+        "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\marineford-public-row-20261103.md",
+        "originalBytes": 1876,
+        "originalSha256": "3584e034b46b943dc9e71f1f19af70ef32bfc566a70c99efcae12034b9ce0855",
+        "finalizedBytes": 2654,
+        "finalizedSha256": "cfd3d7d69551a881397064a2bed7d12b8313dadebb2dd3cda6a4ac4c5483d6ac",
+        "prefixBytes": 778,
+        "originalBackup": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\three-phase-receipt-finalization-backups\\1-marineford-public-row-20261103.md",
+        "originalRetainedAsExactSuffix": true
+      },
+      {
+        "path": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\marineford-reconnect-20261103.md",
+        "originalBytes": 2895,
+        "originalSha256": "4e31726a42149791d5fc50c95faf9feb495e248932189928386ffa74329e86cf",
+        "finalizedBytes": 3681,
+        "finalizedSha256": "689e585e2b6fec8fc7f01e08bed0b0ae9355d5bc164a63fd8c0b12dbf1e65850",
+        "prefixBytes": 786,
+        "originalBackup": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\three-phase-receipt-finalization-backups\\2-marineford-reconnect-20261103.md",
+        "originalRetainedAsExactSuffix": true
+      },
+      {
+        "path": "D:\\Codex_Project_Coordination\\tabletop-series\\marineford-status.md",
+        "originalBytes": 6604,
+        "originalSha256": "896aaf2c1d6a1a5e5abd0d3dd090997080a1928db05c5c001f22fe6873104e27",
+        "finalizedBytes": 7702,
+        "finalizedSha256": "9f7e53a5673ce1a51f7ef5e828fe9ec524b7634ac5a9bf250b5e2cc6b54a9aff",
+        "prefixBytes": 1098,
+        "originalBackup": "D:\\Codex_QA\\marineford-reconnect-release-20261103\\three-phase-receipt-finalization-backups\\3-marineford-status.md",
+        "originalRetainedAsExactSuffix": true
+      }
+    ]
+  },
+  "limits": {
+    "physicalDeviceVerified": false,
+    "realAccountVerified": false,
+    "productionDatabaseAcceptanceVerified": false,
+    "realAccountAnnouncementVisibilityVerified": false,
+    "publicBackendSourceHashVerified": false,
+    "backendIdentityMethod": "Actual exact Render Live commit plus immutable Git source hashes; never an HTTP backend-source hash",
+    "historicalProducerQaSourceBound": false,
+    "teamProducerLimits": [
+      "All five producer receipts omit source hash/commit, actual browser executable/version, and internal start/finish timestamps. Their browser labels are directory/invocation claims.",
+      "Only layout4+4 followed final deck movement. Do not call older15+15/full115-action gameplay passes current-byte/hash-bound.",
+      "Layout groups30 initial recover states across2–6 seats/3 sizes/Navy and last-pirate viewer; not every gameplay/progress-event/all pirate identities or physical device.",
+      "No production DB, real account, physical Android/iPhone, public Render or player-cache acceptance implied."
+    ],
+    "rowProducerLimits": [
+      "Only passed/checks/errors in producer reports: no hash/commit/browser executable/version/internal time. Filesystem times later than final CSS are not source bindings.",
+      "Seven checks=one lobby plus3sizes×2views, six seats each with4cards. Geometry checks36seat rows; real gallery clicks target onlyplayer1 perstate (6 clicks).",
+      "No empty→full→empty transition, all individual galleries, action-button regression, broad six-player rules or physical-device verification. Empty state and retainedbutton routing were inspected statically."
+    ],
+    "reconnectProducerLimits": [
+      "Producer real-grace JSON has passed/checks/scope only; six-player has passed/checks/actions/scope. Neither binds source commit/hash or internal start/end/elapsed/browser version. Filesystem mtimes follow source updates but are not bindings.",
+      "Nine case script includes real default60000 branch only whenMF_REAL_GRACE=1; other lifecycle branches use400ms grace/100ms CPU delay. Producer true60 claim lacks recorded wall duration; fresh immutable rerun must bind source and elapsed.",
+      "Nine tests cover one active room default deadline, same-seat return, private-hand redaction, pendingCPU cancel, duplicate sockets, timer cleanup and expiredJOIN/hostclose. It does not separately execute waiting-lobby all-offline default60/onlyCPU host reassignment or every scheduling interleaving.",
+      "Producer six-player74checks/actions52 is one random full match. Fresh actions must be recorded as observed, not forced to52. Visual animation duration reduction in the existing broad fixture does not shorten the separate room default60 test.",
+      "No real accounts, production DB, physical phones, live Render backend identity or cross-restart persistence acceptance claimed."
+    ],
+    "freshTeamScope": "Immutable team layout8 only",
+    "freshRowScope": "Immutable row public-card14 only",
+    "freshBackendScope": "Immutable B true-default60s lifecycle9 and six-player74; actions observed dynamically",
+    "historicalReconnectActions": 52,
+    "freshReconnectActions": 185,
+    "roomsStoredInMemory": true,
+    "crossServerRestartRoomPersistenceClaimed": false,
+    "mediaBodiesDownloaded": 0,
+    "mediaUploads": 0,
+    "nativeBuilds": 0,
+    "currentUnhandedWorkingFilesAccepted": false,
+    "latticePersistenceClaimed": false
+  },
+  "coordinationHold": {
+    "updateOwner": "root launcher integration",
+    "modifiedByFinalizer": false
+  },
+  "schema": "marineford-team-perspective-20261103-source-summary-v1",
+  "game": "marineford",
+  "phase": "team-perspective",
+  "firstPublishedPayloadCommit": "2c9f163bf0681dee302a5f6b50cae731281f68b2",
+  "firstPublishedPrograms": [
+    {
+      "path": "public/marineford/marineford.js",
+      "handoffSha256": "85d04e00364d8952bc3290a676d9d6faf29b56ba02f90a350c2f6ec95eab697f",
+      "rawSha256": "85d04e00364d8952bc3290a676d9d6faf29b56ba02f90a350c2f6ec95eab697f",
+      "rawBytes": 64853,
+      "canonicalSha256": "2b3d5344f4794f45a10c4b6f10e881ade7d062764fb7c1fc421f3a5ab7d58351",
+      "canonicalBytes": 64541,
+      "eofNormalized": false,
+      "rawProvenance": "Initial handoff/source-before and verified staging mapping; original QA body retained for EOF proof"
+    },
+    {
+      "path": "public/marineford/marineford.css",
+      "handoffSha256": "488f27fa869544cfe09595b79bb5c3bc57b205ef7ec8454be43481c081973284",
+      "rawSha256": "488f27fa869544cfe09595b79bb5c3bc57b205ef7ec8454be43481c081973284",
+      "rawBytes": 47879,
+      "canonicalSha256": "4b2f658ff3cf0e1d2676ded58ba5552218a6fcead171f88bf193c637d0d11eee",
+      "canonicalBytes": 47429,
+      "eofNormalized": false,
+      "rawProvenance": "Initial handoff/source-before and verified staging mapping; original QA body retained for EOF proof"
+    },
+    {
+      "path": "scripts/marineford_peek_laser_qa.cjs",
+      "handoffSha256": "60092425d0d900e4c8be9436fa2de044ddd8da21f568af94c70db1d7b2dfae0d",
+      "rawSha256": "a6528c745c4eb386c3cb77e84492b6b854aa3bd029ec43b9f44428595e2ea812",
+      "rawBytes": 15835,
+      "canonicalSha256": "722150000f7168002bc0a883225996b30a6ae8d30c811860767b1959dc473704",
+      "canonicalBytes": 15778,
+      "eofNormalized": true,
+      "rawProvenance": "Initial handoff/source-before and verified staging mapping; original QA body retained for EOF proof"
+    }
+  ],
+  "firstPublishedRoomGitSha256": "9d6cc91ac1d232da876c2d78eed284c86ae439e099ceefd52349d86d60823c14",
+  "sameJsCssAsFirstPublication": false,
+  "sameRoomsAsFirstPublication": false,
+  "officialReceipt": "D:\\Codex_Project_Coordination\\tabletop-series\\handoffs\\marineford-team-perspective-20261103-release.json",
+  "scope": "Small evidence summary; no DEV/FILE/OVERVIEW/Git/account/DB changes by this finalizer."
+}

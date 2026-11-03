@@ -2257,3 +2257,6 @@ marineford.js/.css處理lobby進度隱藏、六類server targets頭像選人、�
 
 
 2026-11-03 Marineford三波整合：team2c9f163、public-row98884cd、rooms01d55e418各source/public-readback與fresh immutable證據分存D:/Codex_QA/marineford-team-release-20261103、marineford-public-row-release-20261103、marineford-reconnect-release-20261103。三則資訊一次進config/launcher-announcements-v1.json修訂75，舊73則保留。rooms新生命週期只以實際Render commit與Git blob證明來源；post-announcement-public.json核對最終提交與最新前端、共享metadata及後端身份。正式source摘要MARINEFORD_TEAM_RELEASE_20261103.json、MARINEFORD_PUBLIC_ROW_RELEASE_20261103.json、MARINEFORD_RECONNECT_RELEASE_20261103.json各對應協調handoff release收據，分清首次發布與最終服務提交，不把其他工作樹WIP當本波程式。
+
+
+2026-11-03 Marineford三波發布收據：MARINEFORD_TEAM_RELEASE_20261103.json、MARINEFORD_PUBLIC_ROW_RELEASE_20261103.json、MARINEFORD_RECONNECT_RELEASE_20261103.json對應協調handoffs的team-perspective/public-row/reconnect-release JSON。qreconnect/finalize-three-phase-release.cjs嚴格讀三段來源／public13、三套immutableQA、75公告82QA、最後Render/16連續性與38source保護後才寫收據及備份4MD。最終服務來源1ef8a2d9f15decaa30fe33a7810d6b8afe56e191；後續僅本輪文件提交使用skip render，未交接程式仍保留。
