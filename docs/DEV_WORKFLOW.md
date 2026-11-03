@@ -8886,3 +8886,16 @@ Card source2595359921bf63b0957c2be04e6a5b4109549669、Marineford sourced34d74a09
 選牌／猜號新框、索隆公開砍牌號碼與Marineford頭像選人／雷射／13格猜號已正式公開；payload3e0ac19631a356ac1e4810a331c32b3389e537d1、最終更新情報0dcb563d9314ef4657050866dc5d13f95c50d88b均由Render實際Live來源核對。公告修訂74新增2則、舊71則保留；公開連續性16個讀回與三款runtime核驗通過，沒有重下載53MB CSS或既有媒體。公告配置透過實際部署commit核驗，未用正式帳號讀取或寫publication ledger。
 source-protection-final 46項通過：9原檔、9Android共用來源、11交接產品、23提交白名單、1054 Card媒體／28其他程式／Board／Chess及129舊MF記錄保留。本輪新增2MF素材104334bytes、Card3程式55268837bytes；新AssetStore實例重用持久索引後0下載，非完整遊戲或真實玩家快取／速度驗收。UI863、Zoro104、雙視窗8、MF Chrome11/WebKit11及六人74項78動作的原報告限制、fresh引擎5與wire16等來源綁定詳見收據；未做真機／正式帳號驗收，未重包App。
 正式收據docs/CARD_PICKER_RELEASE_20261103.json及協調handoffs/20261103-card-picker-panels-release.json、marineford-target-hud-20261103-release.json；各交接與marineford-status保留原文並追加RELEASED。QA腳本修正只在外部QA，失敗證據保留；MF僅兩個檔案移除多餘EOF空行，raw/canonical SHA均記錄。LATTICE未提供API，未宣稱持久寫入。
+
+
+## 2026-11-03 頂上戰爭陣營視角、起始格及海賊猜牌
+- 直接核對使用者原始規則書「生命值設定」：2–3人海軍4格、4人5格、5人6格、6人7格，白鬍子方固定6格。引擎原已正確，不改血量或規則；renderProgress／progressBeat 改用固定海軍七格座標，少人局救援標記初始提高，傷害後每步一致。
+- 依 team 分配玩家資訊列：海賊視角上方僅海軍頭像資訊區＋左右兩張手牌，下方全體海賊（含自己）；海軍視角仍是上方海賊、下方自己。手牌、提示與地面牌堆避開下方隊友列；維持原牌堆透視角度，以整組上移處理遮擋。
+- 黃猿命中／閃避改複製並移動完整 seat 頭像資訊框，原整框於演出期間隱藏，收尾或恢復取消還原。射擊仍瞄準框內頭像中心。
+- 使用者最新決策：「海賊猜牌先不用做特效，我在想想要用誰」。海賊猜牌僅文字播報與正常公開結果，不用黃猿、不加海賊角色或招式；海軍維持既有演出。
+- 修改 public/marineford/marineford.js/.css、scripts/marineford_peek_laser_qa.cjs，未改引擎、ID、素材清單或新增圖。
+- QA：Chrome-final與WebKit-final各15項；六真Socket.IO瀏覽器完整115動作對局通過。最終牌堆整組移位後，另跑 Chrome/WebKit layout各4項，核對2–6人、三尺寸、兩方視角、七格起點、上方兩手牌、下方隊友列及手牌／牌堆不被遮擋。證據 D:/Codex_QA/marineford-team-perspective-20261103，無實體手機驗收宣稱。npm start 31695及頁面HTTP200（本機無DATABASE_URL，帳號DB不列驗證）。
+
+
+## 2026-11-03 Marineford陣營視角整合候選
+依READY白名單核對JS／CSS與QA三檔，產品raw SHA符合交接。QA檔僅移除diff --check指出的檔尾多餘空行，原始與整理後SHA保存在D:/Codex_QA/marineford-team-release-20261103/qa-eof-normalization.json，沒有變更斷言或產品邏輯。Chrome／WebKit各15項與六人115動作的既有收據沒有來源雜湊；最後牌堆位移後的兩引擎各4項layout另列，不能稱為全套末次bytes綁定。引擎、素材manifest、Card／Board／Chess和原生安裝包不變。公開讀回及更新情報完成前仍為整合候選；正式結果以MARINEFORD_TEAM_RELEASE_20261103.json及交接release收據為準。

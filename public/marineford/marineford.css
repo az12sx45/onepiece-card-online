@@ -466,3 +466,17 @@ body:not([data-screen="table"]) #health{display:none!important}
 #table[data-targeting="true"] #actions{left:34%;width:32%;bottom:12%;display:flex;flex-direction:column;align-items:center;gap:5px}
 #table[data-targeting="true"] .target-action-hint{margin:0;padding:6px 10px;background:#071827ed;border:1px solid #ab945f;border-radius:4px;font-size:clamp(11px,2vh,16px);line-height:1.4;text-align:center}
 #table[data-targeting="true"] #status{visibility:hidden}
+/* Teams share a side of the battlefield; the Navy faces the whole pirate crew. */
+#table[data-perspective="pirate"] .fleet-row[data-side="enemy"]{left:50%;right:auto;top:4%;width:clamp(150px,23vw,235px);transform:translateX(-50%);display:block}
+#table[data-perspective="pirate"] .fleet-row[data-side="ally"]{left:5%;right:5%;width:auto;bottom:25px;display:grid;grid-template-columns:repeat(var(--count),minmax(0,235px));gap:8px}
+#table[data-perspective="pirate"] .fleet-row[data-side="ally"] .seat[data-current="true"]{transform:translateY(-5px) scale(1.04)}
+#table[data-perspective="pirate"] #navyHands>button[data-slot="0"]{left:calc(50% - clamp(155px,22vw,245px));right:auto;top:3%;height:22vh;max-height:180px}
+#table[data-perspective="pirate"] #navyHands>button[data-slot="1"]{right:calc(50% - clamp(155px,22vw,245px));left:auto;top:3%;height:22vh;max-height:180px}
+#table[data-perspective="pirate"] #hand{left:calc(var(--self-position,20%) - 8%);bottom:84px;width:16%;height:17vh;max-height:130px}
+#table[data-perspective="pirate"] #center{left:33%;right:33%;bottom:84px}
+#table[data-perspective="pirate"] #actions{left:33%;width:34%;bottom:61px}
+#table[data-perspective="pirate"][data-targeting="true"] #actions{bottom:28%;left:34%;width:32%}
+.guess-seat-ghost>.seat{position:relative;aspect-ratio:auto;transform:none!important;pointer-events:none!important}
+.guess-seat-ghost .public-cards{pointer-events:none}
+@media(max-height:450px){#table[data-perspective="pirate"] .fleet-row[data-side="ally"]{gap:5px;bottom:22px}#table[data-perspective="pirate"] #hand{bottom:72px;height:16vh}#table[data-perspective="pirate"] #center{bottom:74px}#table[data-perspective="pirate"] #actions{bottom:56px}#table[data-perspective="pirate"] .fleet-row[data-side="ally"] .seat-info strong{font-size:clamp(9px,6.6cqw,13px)}#table[data-perspective="pirate"] .fleet-row[data-side="ally"] .seat-info small{font-size:clamp(8px,5cqw,10px)}}
+#table[data-perspective="pirate"] #hand{left:9%;bottom:calc(var(--ally-height,55px) + 55px)} #table[data-perspective="pirate"] #center{bottom:calc(var(--ally-height,55px) + 38px)} #table[data-perspective="pirate"] #actions{left:9%;width:24%;bottom:calc(var(--ally-height,55px) + 27px)} #table[data-perspective="pirate"][data-targeting="true"] #actions{left:34%;width:32%;bottom:calc(var(--ally-height,55px) + 68px)}

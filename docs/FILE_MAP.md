@@ -2245,3 +2245,6 @@ marineford.js/.css處理lobby進度隱藏、六類server targets頭像選人、�
 
 
 2026-11-03第二波發布完成：CARD_PICKER_RELEASE_20261103.json彙整package-da2d1f412f0db8a8、25953599/d34d74a/3e0ac196來源、最終Render情報提交0dcb563d9314ef4657050866dc5d13f95c50d88b與修訂74的兩則更新；對應協調handoffs兩份release收據含來源SHA、CAS、公開程式／後端commit證明與未驗收平台。外部QA的verify-public-card.cjs負責10組公開／差量快取核驗，verify-after-announcements.cjs負責公告Live後16公開讀回，source-protection-check.cjs確認46項來源保護；finalize-receipts.cjs先驗證各收據後保留原文更新協調狀態。
+
+
+2026-11-03：Marineford renderPlayers 依team分列；renderProgress/progressBeat採固定七格救援座標；guessSeat複製完整seat呈現閃避；pirateGuess僅文字及結果。QA涵蓋2–6人與兩方視角。
