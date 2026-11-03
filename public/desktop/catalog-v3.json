@@ -1,6 +1,6 @@
 {
   "schema": 3,
-  "createdAt": "2026-11-03T17:40:06.342Z",
+  "createdAt": "2026-11-03T18:05:00.211Z",
   "assetBlobBaseUrl": "https://game-assets.rihdi.tw/desktop/blobs/sha256",
   "sourceTrees": {
     "images": "74fa0c9a822f0098f115f7e2313b31836298c58e",
@@ -10,12 +10,12 @@
   },
   "games": {
     "card": {
-      "releaseId": "package-6e5e472414e97fe1",
-      "manifestPath": "desktop/manifests/card-package-6e5e472414e97fe1.json",
-      "manifestSha256": "175bb3146c11b6d33a8552c86ebf5b8d8afb0cc56ddfb85cf5aee75023611547",
+      "releaseId": "package-91a1e057201afdd4",
+      "manifestPath": "desktop/manifests/card-package-91a1e057201afdd4.json",
+      "manifestSha256": "6823d894619d81bc4294b83b4d95adae158364b52d14ca8613ab49e7b07dae18",
       "entryPath": "start.html",
       "totalFiles": 1127,
-      "totalBytes": 847162227
+      "totalBytes": 847162263
     },
     "board": {
       "releaseId": "package-1bd4a907624b682f",
