@@ -1,7 +1,32 @@
 {
   "schemaVersion": 1,
-  "revision": 78,
+  "revision": 79,
   "announcements": [
+    {
+      "id": "card-20261104-timing-video",
+      "status": "published",
+      "publishedAt": "2026-11-03T18:05:59.650Z",
+      "scope": "card",
+      "category": "update",
+      "version": "2026.11.04",
+      "title": "爭霸戰：逐卡演出、CPU 節奏與強化魯夫更新",
+      "summary": "調整強化影片、斜圖和技能的先後順序。基德可點卡背抽牌，CPU 等玩家看完演出再接續。",
+      "body": [
+        "逐張調整強化影片、角色斜圖與技能的播放順序。牌堆和卡背更清楚，基德洗牌完成後可直接點背面抽牌。",
+        "CPU 會等真人玩家看完演出及需要閱讀的播報，再接續行動。",
+        "強化魯夫以一次全場判定計算。保留 9 時，尾數低於 6 才淘汰，尾數 6 會留下。8 與保留牌棄置，仍有對手且牌堆有牌才補 1 張。",
+        "Android 強化影片加入解碼預備與點按播放備援。",
+        "Windows 和 Android 請先結束遊戲，再到下載管理更新爭霸戰。iOS v058／v063 請結束遊戲、完整關閉 App 後重開。"
+      ],
+      "requiredRelease": {
+        "kind": "card",
+        "releaseId": "package-91a1e057201afdd4"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "card"
+      }
+    },
     {
       "id": "marineford-20261104-faction-ui",
       "status": "published",
