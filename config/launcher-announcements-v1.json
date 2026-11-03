@@ -1,7 +1,52 @@
 {
   "schemaVersion": 1,
-  "revision": 73,
+  "revision": 74,
   "announcements": [
+    {
+      "id": "card-20261103-picker-usopp-zoro",
+      "status": "published",
+      "publishedAt": "2026-11-03T07:53:54.878Z",
+      "scope": "card",
+      "category": "update",
+      "version": "2026.11.03",
+      "title": "爭霸戰：全新選牌與狙擊猜號介面",
+      "summary": "重新設計選牌畫框與操作按鈕、騙人布猜號介面；索隆斬擊結束後會顯示砍掉的卡片號碼。",
+      "body": [
+        "選牌畫框與確認、前後切牌、返回按鈕全面更新，卡面與畫框保持原比例顯示。",
+        "騙人布的狙擊猜號改用彈弓、護目鏡、Pop Green 與準星風格，數字以五欄兩列排列，原本的猜號規則保留。",
+        "索隆斬擊完成後，會直接顯示砍掉的卡片號碼。",
+        "電腦與現行手機版共用本次線上對局介面更新。請先關閉對局，在啟動器更新爭霸戰後重新進入。"
+      ],
+      "requiredRelease": {
+        "kind": "card",
+        "releaseId": "package-da2d1f412f0db8a8"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "card"
+      }
+    },
+    {
+      "id": "marineford-20261103-targets-hud",
+      "status": "published",
+      "publishedAt": "2026-11-03T07:53:54.878Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "頂上戰爭篇 2026.11.03",
+      "title": "頂上戰爭篇：頭像選人與猜號介面",
+      "summary": "選人直接點發光頭像，黃猿雷射對準目標；更新對話胸像與數字按鈕，整理手機猜號資訊。",
+      "body": [
+        "大廳不再顯示勝利進度條，進入對局後才顯示本場進度。",
+        "攻擊、猜牌等需要選人的效果，可直接點選發光的玩家頭像區；可用目標依原規則判定。",
+        "黃猿雷射對準實際玩家頭像；對話斜切使用獨立胸像，場上射擊保留原正背面演出。",
+        "猜號畫面顯示目標頭像與姓名，數字改用方形底圖，改善手機點選與畫面邊界。",
+        "請關閉頂上戰爭篇視窗後重新進入，載入本次線上程式與素材。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.31"
+      }
+    },
     {
       "id": "card-20261103-captain-collection",
       "status": "published",
