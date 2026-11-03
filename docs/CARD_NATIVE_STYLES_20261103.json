@@ -1,0 +1,433 @@
+{
+  "format": "card-native-online-styles-v1",
+  "selectorScope": "html[data-card-bundled-styles=\"1\"]",
+  "generatedRules": [
+    {
+      "position": "end",
+      "selector": "html[data-card-bundled-styles=\"1\"]",
+      "declaration": {
+        "property": "--card-native-style-ready",
+        "value": "1"
+      },
+      "purpose": "Native boot requires a successfully loaded complete online stylesheet, beyond sheet presence."
+    }
+  ],
+  "sourceRoot": "C:\\Users\\王曜瑋\\.codex\\worktrees\\android-tabletop-landscape\\2026-04-20-1-2-start-html-game-html",
+  "sourceFiles": [
+    {
+      "file": "android/web/card-anime-skills.css",
+      "bytes": 7554,
+      "sha256": "aca74e658e9ed386dbe83fcdea64debe8bd92cae8daa24143ab765e172430ce8"
+    },
+    {
+      "file": "android/web/card-enhancement-summon.css",
+      "bytes": 2942,
+      "sha256": "ffd82aaa52ad9ea3c5c6f2bf516f3d37b872e7c5561393d245117ae126cd02be"
+    },
+    {
+      "file": "android/web/card-next-starter.css",
+      "bytes": 1921,
+      "sha256": "694077bfd84b9aa790b3083eca2add0f698213291502ccf3ffdbe939eb09ce6b"
+    },
+    {
+      "file": "android/web/card-private-enhance.css",
+      "bytes": 813,
+      "sha256": "4caa79d442a6f73036c1bab6d16681b9c7691d89ff65bc4937ba9ce82b7d07d9"
+    },
+    {
+      "file": "android/web/card-hud-combat.css",
+      "bytes": 7990,
+      "sha256": "091395a273e8bb9306be93f0c5b747a6eadd30a21e1fd53ae12a4e84b6d1e2c4"
+    },
+    {
+      "file": "android/web/card-seat-hud.css",
+      "bytes": 22091,
+      "sha256": "6040dda3e8d5f533440d9729c026484c71ef0c47e3fda01592428c1af4c83319"
+    }
+  ],
+  "selections": [
+    {
+      "file": "android/web/card-anime-skills.css",
+      "selection": "full",
+      "bytes": 7554,
+      "sha256": "aca74e658e9ed386dbe83fcdea64debe8bd92cae8daa24143ab765e172430ce8"
+    },
+    {
+      "file": "android/web/card-enhancement-summon.css",
+      "selection": "full",
+      "bytes": 2942,
+      "sha256": "ffd82aaa52ad9ea3c5c6f2bf516f3d37b872e7c5561393d245117ae126cd02be"
+    },
+    {
+      "file": "android/web/card-next-starter.css",
+      "selection": "full",
+      "bytes": 1921,
+      "sha256": "694077bfd84b9aa790b3083eca2add0f698213291502ccf3ffdbe939eb09ce6b"
+    },
+    {
+      "file": "android/web/card-private-enhance.css",
+      "selection": "full",
+      "bytes": 813,
+      "sha256": "4caa79d442a6f73036c1bab6d16681b9c7691d89ff65bc4937ba9ce82b7d07d9"
+    },
+    {
+      "file": "android/web/card-hud-combat.css",
+      "selection": "sniper cut-in container and children",
+      "bytes": 1386,
+      "sha256": "15b094fb5cab72890f14565b6a36df0a956f06bc040752375dffe0d4388b9ae3"
+    },
+    {
+      "file": "android/web/card-seat-hud.css",
+      "selection": "397-byte retained low-height compatibility",
+      "bytes": 397,
+      "sha256": "4c9b00813ad4b39fb11cd98e4823dd3c867beaad4794babb6f43c05e38f7e13c"
+    }
+  ],
+  "stylesheet": {
+    "file": "public/css/card-native-online.css",
+    "url": "/css/card-native-online.css",
+    "bytes": 18778,
+    "sha256": "2c3dc0e4506f798209be369541785dd3812b61660fcc1bdffd9f8224ce0c5ba7"
+  },
+  "media": {
+    "count": 41,
+    "bytes": 11594668,
+    "files": [
+      {
+        "source": "android/web/art/card-anime-skill-0-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-0-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-0-v1.webp",
+        "bytes": 219064,
+        "sha256": "bcb3b7ca73b619b1acd2af4848ba40f42a5351a74b679a99f9818f37a2b46c73"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-10-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-10-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-10-v1.webp",
+        "bytes": 167904,
+        "sha256": "4194f4db4ff0fcdcc119e76014f688a6c9acbc343e2406e215a1a30007dc72dd"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-11-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-11-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-11-v1.webp",
+        "bytes": 222630,
+        "sha256": "f39daf83d86f5f330fe769e3f7c81e7ad454cb76c31cee07938b847420ad2bdb"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-12-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-12-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-12-v1.webp",
+        "bytes": 221062,
+        "sha256": "0bfdd2bff4a47c276af768b10aaa364103b7f7e64e4030f7aece5ca706f67c41"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-13-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-13-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-13-v1.webp",
+        "bytes": 239908,
+        "sha256": "736c72096a24e0014feda03300baff29116ba8a8baa869c9c5d45cb286db9fc9"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-14-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-14-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-14-v1.webp",
+        "bytes": 228828,
+        "sha256": "537ec1b6e17aa29f27e35f688f4e7a2c7371731b0c184fa3824168d34c260681"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-15-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-15-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-15-v1.webp",
+        "bytes": 174140,
+        "sha256": "d2cff048dfe6afeed6d3655c4c1be746b29131347e9f7bebc73176134d9fd51e"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-16-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-16-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-16-v1.webp",
+        "bytes": 195164,
+        "sha256": "6194c7254fca3705d082e9b58f21a4f51d8e6e16a2ec20587d8662b21003ec26"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-17-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-17-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-17-v1.webp",
+        "bytes": 204634,
+        "sha256": "fe6ea804b1e39860c4ec3143babca224bd7a278f08bffdabcd5428eef08eed20"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-18-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-18-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-18-v1.webp",
+        "bytes": 245602,
+        "sha256": "74d77ed22fe1974a9eb5b86533f1514b240bdb2b2fad056a5fb3e676d15cca45"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-19-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-19-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-19-v1.webp",
+        "bytes": 269206,
+        "sha256": "eaf56f87d5a23c7ff9edd246d0370190a034ffed6bd058f8b5e788e8801a3193"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-2-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-2-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-2-v1.webp",
+        "bytes": 160794,
+        "sha256": "7f1c05ee7e7a694e7ec64874af4f7cad411538ce3f48e100f31787940500ed7a"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-3-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-3-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-3-v1.webp",
+        "bytes": 256594,
+        "sha256": "d30d68e8316fb0ca54a3b6532539cafb70c20721e270d2913b6c4c8da3b11066"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-4-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-4-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-4-v1.webp",
+        "bytes": 184920,
+        "sha256": "7caab5875af4946dbe7ab50e1d8ff64564647035309cd176137fc04db5373b5b"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-5-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-5-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-5-v1.webp",
+        "bytes": 175260,
+        "sha256": "af9696c02e29cfce2b75680fde831f29d2f26bba4208b565b9f603ac2941ef19"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-6-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-6-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-6-v1.webp",
+        "bytes": 172182,
+        "sha256": "43034b870780578f9028182d5a8b061edd7ffdbd305a6265bc57e3fd746934dc"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-7-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-7-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-7-v1.webp",
+        "bytes": 270548,
+        "sha256": "0f2854746f93427298efe13aa16faf144994bfbfc1754c72e48f1f77fe394f74"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-8-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-8-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-8-v1.webp",
+        "bytes": 221462,
+        "sha256": "36dad7e889fdd4d4e0e58478886c3abdd526977d95f7e78e2e313c429f71abb4"
+      },
+      {
+        "source": "android/web/art/card-anime-skill-9-v1.webp",
+        "file": "public/images/card-presentation/card-anime-skill-9-v1.webp",
+        "url": "/images/card-presentation/card-anime-skill-9-v1.webp",
+        "bytes": 178940,
+        "sha256": "92370e2e2d494af3eb171df0637bb9cea408a0a543262c6f5b65a32b0751554d"
+      },
+      {
+        "source": "android/web/art/card-next-starter-v2.webp",
+        "file": "public/images/card-presentation/card-next-starter-v2.webp",
+        "url": "/images/card-presentation/card-next-starter-v2.webp",
+        "bytes": 20584,
+        "sha256": "3b86fd4ad877529f5707fa89a4326eff57d6157a431f88934172d6cfca5bb2ae"
+      },
+      {
+        "source": "android/web/art/card-summon-0-v1.webp",
+        "file": "public/images/card-presentation/card-summon-0-v1.webp",
+        "url": "/images/card-presentation/card-summon-0-v1.webp",
+        "bytes": 422004,
+        "sha256": "4b954f00b378549fd8c83b8013ca24dbbdf2e250f7c1b1b1e8e8e92225a48259"
+      },
+      {
+        "source": "android/web/art/card-summon-1-v1.webp",
+        "file": "public/images/card-presentation/card-summon-1-v1.webp",
+        "url": "/images/card-presentation/card-summon-1-v1.webp",
+        "bytes": 464466,
+        "sha256": "c5290e956d846b0a78af93d361e88fafe4c32001caa5960743d468e95dc58ae1"
+      },
+      {
+        "source": "android/web/art/card-summon-10-v1.webp",
+        "file": "public/images/card-presentation/card-summon-10-v1.webp",
+        "url": "/images/card-presentation/card-summon-10-v1.webp",
+        "bytes": 534400,
+        "sha256": "fcba7840ecd7120281e2806a131c02c07377d9e2361fa1a48f58e4ee422c7da4"
+      },
+      {
+        "source": "android/web/art/card-summon-11-v1.webp",
+        "file": "public/images/card-presentation/card-summon-11-v1.webp",
+        "url": "/images/card-presentation/card-summon-11-v1.webp",
+        "bytes": 385846,
+        "sha256": "a05d317da85b3147992535f6d41cf7080573120e647a53afa0ee94bef51deb81"
+      },
+      {
+        "source": "android/web/art/card-summon-12-v1.webp",
+        "file": "public/images/card-presentation/card-summon-12-v1.webp",
+        "url": "/images/card-presentation/card-summon-12-v1.webp",
+        "bytes": 376246,
+        "sha256": "3bc83eb7cb3864003dcc14aeb7717bf2912267e9c5abee70ed820c5e947034e5"
+      },
+      {
+        "source": "android/web/art/card-summon-13-v1.webp",
+        "file": "public/images/card-presentation/card-summon-13-v1.webp",
+        "url": "/images/card-presentation/card-summon-13-v1.webp",
+        "bytes": 380700,
+        "sha256": "e9a7803482c8db1aa279ef076f5e3ee6c06f72e74e801a3b3acf624eaa9a0f35"
+      },
+      {
+        "source": "android/web/art/card-summon-14-v1.webp",
+        "file": "public/images/card-presentation/card-summon-14-v1.webp",
+        "url": "/images/card-presentation/card-summon-14-v1.webp",
+        "bytes": 282110,
+        "sha256": "95c2963625db87833ac17835bed7b1cca491a41ac9341c73708019a4e9949c69"
+      },
+      {
+        "source": "android/web/art/card-summon-15-v1.webp",
+        "file": "public/images/card-presentation/card-summon-15-v1.webp",
+        "url": "/images/card-presentation/card-summon-15-v1.webp",
+        "bytes": 444504,
+        "sha256": "c5f05c5c51b28c0a6845bae3282b4244dbe364c3a9b034f41e84ac16b9498fad"
+      },
+      {
+        "source": "android/web/art/card-summon-16-v1.webp",
+        "file": "public/images/card-presentation/card-summon-16-v1.webp",
+        "url": "/images/card-presentation/card-summon-16-v1.webp",
+        "bytes": 426816,
+        "sha256": "7476e270dd7097eec961a2973a2bda9e1e4bcf69185cca79d8e1db341ffbb4c7"
+      },
+      {
+        "source": "android/web/art/card-summon-17-v1.webp",
+        "file": "public/images/card-presentation/card-summon-17-v1.webp",
+        "url": "/images/card-presentation/card-summon-17-v1.webp",
+        "bytes": 393164,
+        "sha256": "8847c9b12c6e0728cea43a660dd0b15bcbe2ad68bd54480f280046f4f77e1474"
+      },
+      {
+        "source": "android/web/art/card-summon-18-v1.webp",
+        "file": "public/images/card-presentation/card-summon-18-v1.webp",
+        "url": "/images/card-presentation/card-summon-18-v1.webp",
+        "bytes": 395692,
+        "sha256": "aaf46b33c2ae544ea7f249aa1caf944ed6b110334aaca0a4e65ecd12aef079a1"
+      },
+      {
+        "source": "android/web/art/card-summon-19-v1.webp",
+        "file": "public/images/card-presentation/card-summon-19-v1.webp",
+        "url": "/images/card-presentation/card-summon-19-v1.webp",
+        "bytes": 267272,
+        "sha256": "e2cb4067cbb57390e8100e0c1727835a74ad56a37c3a0e1d5ec1c09a7fe015a9"
+      },
+      {
+        "source": "android/web/art/card-summon-2-v1.webp",
+        "file": "public/images/card-presentation/card-summon-2-v1.webp",
+        "url": "/images/card-presentation/card-summon-2-v1.webp",
+        "bytes": 272302,
+        "sha256": "7ddddd9bfb83d3037cb4fc7ce804163c83f4d8004a3ab916e6c41bc84dde3705"
+      },
+      {
+        "source": "android/web/art/card-summon-3-v1.webp",
+        "file": "public/images/card-presentation/card-summon-3-v1.webp",
+        "url": "/images/card-presentation/card-summon-3-v1.webp",
+        "bytes": 396752,
+        "sha256": "b442cbf5a6598309c477127e4c78612c857d09a5839188e8691f992309bc1ebc"
+      },
+      {
+        "source": "android/web/art/card-summon-4-v1.webp",
+        "file": "public/images/card-presentation/card-summon-4-v1.webp",
+        "url": "/images/card-presentation/card-summon-4-v1.webp",
+        "bytes": 297742,
+        "sha256": "1d8a8cd3d67e2b71da768238717816e721aacbe130418bf38b476a75fe86268c"
+      },
+      {
+        "source": "android/web/art/card-summon-5-v1.webp",
+        "file": "public/images/card-presentation/card-summon-5-v1.webp",
+        "url": "/images/card-presentation/card-summon-5-v1.webp",
+        "bytes": 232270,
+        "sha256": "a1486f71b5e2a11a968fd9d998a516367d9e383a84cb9011d8157f4fa0b6673c"
+      },
+      {
+        "source": "android/web/art/card-summon-6-v1.webp",
+        "file": "public/images/card-presentation/card-summon-6-v1.webp",
+        "url": "/images/card-presentation/card-summon-6-v1.webp",
+        "bytes": 321404,
+        "sha256": "9f0ddbd68d77e662c3d68fabe7c52ebce08b416a4f3074da2fd6f4f4833ed9d1"
+      },
+      {
+        "source": "android/web/art/card-summon-7-v1.webp",
+        "file": "public/images/card-presentation/card-summon-7-v1.webp",
+        "url": "/images/card-presentation/card-summon-7-v1.webp",
+        "bytes": 353576,
+        "sha256": "420cab7c90027e9dbbf9c8e6fff62bfd8653b15d8b24a7a1beeb59fde059c3ef"
+      },
+      {
+        "source": "android/web/art/card-summon-8-v1.webp",
+        "file": "public/images/card-presentation/card-summon-8-v1.webp",
+        "url": "/images/card-presentation/card-summon-8-v1.webp",
+        "bytes": 346074,
+        "sha256": "1c592310f778a7c9295382bdcd0e4bd60869a63533b704c5f3783c2e918089a3"
+      },
+      {
+        "source": "android/web/art/card-summon-9-v1.webp",
+        "file": "public/images/card-presentation/card-summon-9-v1.webp",
+        "url": "/images/card-presentation/card-summon-9-v1.webp",
+        "bytes": 354552,
+        "sha256": "dd2a293c8088294c7c1f05cb5db898a8bd33db97c2b6f49e01dff2c9365edc01"
+      },
+      {
+        "source": "android/web/art/card-usopp-anime-shout-v1.webp",
+        "file": "public/images/card-presentation/card-usopp-anime-shout-v1.webp",
+        "url": "/images/card-presentation/card-usopp-anime-shout-v1.webp",
+        "bytes": 217350,
+        "sha256": "3e14100e3c1e08616b5f97791fc59e6d3e9907088958617ef2b8b73e295dc458"
+      }
+    ]
+  },
+  "releaseWhitelist": {
+    "program": [
+      "public/css/card-native-online.css"
+    ],
+    "media": [
+      "public/images/card-presentation/card-anime-skill-0-v1.webp",
+      "public/images/card-presentation/card-anime-skill-10-v1.webp",
+      "public/images/card-presentation/card-anime-skill-11-v1.webp",
+      "public/images/card-presentation/card-anime-skill-12-v1.webp",
+      "public/images/card-presentation/card-anime-skill-13-v1.webp",
+      "public/images/card-presentation/card-anime-skill-14-v1.webp",
+      "public/images/card-presentation/card-anime-skill-15-v1.webp",
+      "public/images/card-presentation/card-anime-skill-16-v1.webp",
+      "public/images/card-presentation/card-anime-skill-17-v1.webp",
+      "public/images/card-presentation/card-anime-skill-18-v1.webp",
+      "public/images/card-presentation/card-anime-skill-19-v1.webp",
+      "public/images/card-presentation/card-anime-skill-2-v1.webp",
+      "public/images/card-presentation/card-anime-skill-3-v1.webp",
+      "public/images/card-presentation/card-anime-skill-4-v1.webp",
+      "public/images/card-presentation/card-anime-skill-5-v1.webp",
+      "public/images/card-presentation/card-anime-skill-6-v1.webp",
+      "public/images/card-presentation/card-anime-skill-7-v1.webp",
+      "public/images/card-presentation/card-anime-skill-8-v1.webp",
+      "public/images/card-presentation/card-anime-skill-9-v1.webp",
+      "public/images/card-presentation/card-next-starter-v2.webp",
+      "public/images/card-presentation/card-summon-0-v1.webp",
+      "public/images/card-presentation/card-summon-1-v1.webp",
+      "public/images/card-presentation/card-summon-10-v1.webp",
+      "public/images/card-presentation/card-summon-11-v1.webp",
+      "public/images/card-presentation/card-summon-12-v1.webp",
+      "public/images/card-presentation/card-summon-13-v1.webp",
+      "public/images/card-presentation/card-summon-14-v1.webp",
+      "public/images/card-presentation/card-summon-15-v1.webp",
+      "public/images/card-presentation/card-summon-16-v1.webp",
+      "public/images/card-presentation/card-summon-17-v1.webp",
+      "public/images/card-presentation/card-summon-18-v1.webp",
+      "public/images/card-presentation/card-summon-19-v1.webp",
+      "public/images/card-presentation/card-summon-2-v1.webp",
+      "public/images/card-presentation/card-summon-3-v1.webp",
+      "public/images/card-presentation/card-summon-4-v1.webp",
+      "public/images/card-presentation/card-summon-5-v1.webp",
+      "public/images/card-presentation/card-summon-6-v1.webp",
+      "public/images/card-presentation/card-summon-7-v1.webp",
+      "public/images/card-presentation/card-summon-8-v1.webp",
+      "public/images/card-presentation/card-summon-9-v1.webp",
+      "public/images/card-presentation/card-usopp-anime-shout-v1.webp"
+    ]
+  }
+}

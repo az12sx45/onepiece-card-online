@@ -17,6 +17,12 @@ const css=read('card-return-hand.css')+'\n'+loading+'\n';
 const block=`${a}\n<style>\n${css}\n</style>\n<script>\n${read('card-return-hand.js')}\n${read('card-enhancement-ready.js')}\n</script>\n${b}`;
 if(html.includes(a)){const x=html.indexOf(a),y=html.indexOf(b,x);if(y<0)throw Error('Incomplete media marker');html=html.slice(0,x)+block+html.slice(y+b.length);}
 else html=html.replace('</body>',block+'\n</body>');
+const venueA='<!-- CARD_VENUE_READY_BEGIN -->',venueB='<!-- CARD_VENUE_READY_END -->';
+const venueSource=read('card-venue-ready.js');
+const venueX=html.indexOf(venueA),venueY=html.indexOf(venueB,venueX);
+if(venueX<0||venueY<0)throw Error('Existing venue ready marker not found');
+html=html.slice(0,venueX)+venueA+'\n<script>\n'+venueSource+'\n</script>\n'+venueB+html.slice(venueY+venueB.length);
+fs.writeFileSync(path.join(root,'scripts/card_venue_ready_client.js'),venueSource);
 const resultA='<!-- CARD_RESULT_CUTINS_BEGIN -->',resultB='<!-- CARD_RESULT_CUTINS_END -->';
 const resultSource=read('card-result-cutins.js').trimEnd();
 const resultBlock=`${resultA}\n<script>\n${resultSource}\n</script>\n${resultB}`;
@@ -27,5 +33,12 @@ if(html.includes(resultA)){
   // Preserve existing line endings when this independent online module is equal.
   if(current?.replace(/\r\n/g,'\n').trim()!==resultSource.replace(/\r\n/g,'\n').trim())html=html.slice(0,x)+resultBlock+html.slice(y+resultB.length);
 }else html=html.replace(a,resultBlock+'\n'+a);
-html=html.replace(/(css\/card-desktop-table\.css|js\/card-desktop-table\.js)\?v=[^"\s]+/g,'$1?v=20261103-media-flow1');
+const entryA='<!-- CARD_MATCH_ENTRY_BEGIN -->',entryB='<!-- CARD_MATCH_ENTRY_END -->';
+const entrySource=fs.readFileSync(path.join(root,'scripts/card_match_entry_client.js'),'utf8');
+const entryBlock=entryA+'\n<script>\n'+entrySource+'\n</script>\n'+entryB;
+if(html.includes(entryA)){
+  const x=html.indexOf(entryA),y=html.indexOf(entryB,x);if(y<0)throw Error('Incomplete match entry marker');
+  html=html.slice(0,x)+entryBlock+html.slice(y+entryB.length);
+}else html=html.replace('</body>',entryBlock+'\n</body>');
+html=html.replace(/(css\/card-(?:desktop-table|native-online)\.css|js\/card-desktop-table\.js)\?v=[^"'\s]+/g,'$1?v=20261103-entry-startup2');
 fs.writeFileSync(file,html);console.log(JSON.stringify({file,bytes:Buffer.byteLength(html)}));

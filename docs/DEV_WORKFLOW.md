@@ -8961,3 +8961,12 @@ Fresh固定提交驗證為team8、public-row14、backend9真60秒＋six-browser7
 正式來源2ae4159353f25417305d96484aab4e0db9642303、程式包啟用985cb262268c42327d0390f83917767f1a278658、最終更新情報69deed56b2206057d41f1b5bb2217cef6ee4172a均有精確來源與公開證據。Card為package-1c838d6bf03ea7a3／manifest47f28970c2639bdae654f018a0a1b1156b3f6322a6693d488dc43852caf3855a；只有3程式55305632 bytes，1054素材及28其他程式保留，Board/Chess/MF、引擎與原生通道保留。首次公開10項／20請求含三Render與CAS SHA、正式AssetStore限定程式快取首輪下載與新下載器0bytes；最終公告17個小型GET通過，CSS全body SHA沿用首次證據與不變Git，不重抓大CSS。
 交接原7份1363斷言與來源界線保留；原結果798及sync8未自行綁完整來源，發布者另做Android399＋WebKit iOS399與23來源起訖穩定。真影片slow29涵蓋兩端；fault28為Android/Chromium，iOS prime不冒充WebKit完整故障矩陣；本機npm start靜態7路由不冒充正式帳號或完整行為驗收。公告82隔離測試、9來源穩定、55來源保護通過。原raw／Git換行映射、缺依賴／瀏覽器／UA／HEAD長度欄位等失敗收據均保留；SDK只依正式鎖檔裝在QA隔離資料夾，正式來源依賴不變。
 Android/iOS v063各自API通道核對，14請求／4新API contexts／6檢查通過，同原URL重開HTML正確；CSS HEAD未提供長度，206 Content-Range總長及實64bytes核對，完整CSS SHA來自首次公開證據。這不是原生App重啟、實體手機或完整遊戲快取驗收。iOS返回啟動器只hide，需結束遊戲／重載後再進；未宣稱硬清iOS HTTP快取。無新APK/IPA、無新媒體、無正式帳號DB驗收、無LATTICE持久寫入。CARD_MEDIA_FLOW_RELEASE_20261103.json與協調20261103-card-media-flow-release.json保存收據；本次最後提交只更新五份文件並skip render，其他未交接WIP保留。
+
+
+<!-- CARD_ENTRY_VIDEO_20261103_BEGIN -->
+## 2026-11-03 爭霸戰影片啟動與手機入場修正
+- 使用者回報Android白光後影片載入再略過、剛進對局閃舊UI、iOS等待後場地介紹直接跳過。已重現pending play只在reject才fallback的缺口與未看介紹自動seen；1200ms同warm video一次靜音重試、舊Promise隔離；新UI/第一份model/美術完成才揭開；visible900ms+明確我看完了，不以CPU放行代表已讀，含v058 on-show seen及遺失ACK重連相容。
+- 正式3個runtime為game.html、generated card-desktop-table.js、新card-native-online.css。原53MBdesktop CSS不改，手機已注入bundle+官方UA才選18,778B小CSS，必要角色圖按需載入；41張原WebP共11,594,668B逐張與原CSS/canonical SHA相同，無新畫圖/改圖。新增1 program+41 media需發布者依白名單整合，其他1054媒體/其他遊戲保留。無APK/IPA或server/engine/index變更。
+- 最終entry103、影片37+資源27、雙視窗8通過；venue四平台211核心收據及相同client SHA、41圖/AST/樣式比較與失敗歷程詳見CARD_ANDROID_VIDEO_STARTUP_20261103.md、CARD_NATIVE_STYLES_20261103.json。測試以桌機/Android63/iOS63/iOS58瀏覽器及本機Socket.IO為界；V2105原App觀察沒捕獲可判定強化播放trace，不列修正版真機成功。LATTICE API未提供，未假稱持久寫入。
+- 精確來源/3runtime/41media/7維護/4共享來源SHA及tracked patch在D:/Codex_QA/card-entry-video-20261103。READY_FOR_INTEGRATION交啟動器統一驗證發布；只取此marker段與新文件，保留其他dirty草稿/舊預覽/eda manifest/MF field-v1。
+<!-- CARD_ENTRY_VIDEO_20261103_END -->

@@ -2142,3 +2142,8 @@ Artwork does not change any of the 29 card IDs or rules. Both combatants automat
 
 
 2026-11-03 頂上戰爭房間：所有真人離線才倒數60秒關閉；有真人在線時，離線玩家保留座位可重連。離線由CPU暫接，回來恢復人控；不改卡片或回合規則。主動結束房間仍立即關閉。
+
+
+<!-- CARD_ENTRY_VIDEO_20261103_BEGIN -->
+2026-11-03 Card表現層補充：開始時等目前介面/玩家狀態完成才顯示牌桌；場地介紹必須真正可見後由本人按「我看完了」，背景、載入或CPU接手不算本人已讀。原VENUE_READY全員等待規則保留，重連確認遺失可再手動按一次。強化影片啟動無回應會做一次同片靜音重試，仍失敗則續原招式，不送出離房/CPU/額外遊戲指令。對局技能、牌堆、金幣、存檔與伺服器規則不變。完整證據CARD_ANDROID_VIDEO_STARTUP_20261103.md。
+<!-- CARD_ENTRY_VIDEO_20261103_END -->

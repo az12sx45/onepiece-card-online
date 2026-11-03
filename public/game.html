@@ -7,9 +7,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>偉大航道爭霸戰｜正式對戰</title>
   <!-- Reserve the match flow before installed native bundles mount their older queue. -->
-  <script>document.documentElement.dataset.cardFlow="online-pending";</script>
-  <link rel="stylesheet" href="css/card-desktop-table.css?v=20261103-media-flow1">
-  <script defer src="js/card-desktop-table.js?v=20261103-media-flow1"></script>
+  <script>document.documentElement.dataset.cardFlow="online-pending";if(new URLSearchParams(location.search).get('room'))document.documentElement.dataset.cardBoot='loading';</script>
+  <style id="cardMatchEntryStyle">
+    html[data-card-boot]:not([data-card-boot="ready"]) body>:not(#cardMatchBoot):not(#cardRoomUnavailable){opacity:0!important;pointer-events:none!important}
+    #cardMatchBoot{position:fixed;inset:0;z-index:2147483646;display:grid;place-content:center;justify-items:center;gap:18px;padding:24px;background:#071823;color:#ffe6a1;text-align:center;font:600 18px/1.6 system-ui}
+    #cardMatchBoot::before{content:"";width:54px;height:2px;background:#e9be61;box-shadow:0 0 16px #e9be6170}
+    #cardMatchBootActions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+    #cardMatchBootActions button{padding:10px 20px;border:1px solid #bc9653;border-radius:6px;background:#132b3b;color:#ffe6a1;font:inherit;cursor:pointer}
+    #cardMatchBoot[hidden],#cardMatchBootActions[hidden],html:not([data-card-boot]) #cardMatchBoot,html[data-card-boot="ready"] #cardMatchBoot{display:none}
+    #cardRoomUnavailable{opacity:1!important;pointer-events:auto!important;z-index:2147483647!important}
+  </style>
+  <script>
+    (()=>{
+      const bundled=window.__TABLETOP_ANDROID_GAME_UI__===true&&/ONEPIECE_TABLETOP_(?:ANDROID|IOS)/i.test(navigator.userAgent);
+      if(bundled)document.documentElement.dataset.cardBundledStyles='1';
+      const href=bundled?'css/card-native-online.css?v=20261103-entry-startup2':'css/card-desktop-table.css?v=20261103-entry-startup2';
+      document.write('<link id="cardMatchPresentationStyle" rel="stylesheet" href="'+href+'">');
+    })();
+  </script>
+  <script defer src="js/card-desktop-table.js?v=20261103-entry-startup2"></script>
   <link rel="stylesheet" href="css/card-finish-v1.css?v=20260907-depth-visible-v2">
   <script defer src="js/card_finish_v1.js?v=20260907-depth-visible-v2"></script>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
@@ -2514,6 +2530,10 @@ html:root[data-card-phone] body #enhOverlay[data-enh-state="loading"] #enhVideo,
 </style>
 </head>
 <body>
+  <section id="cardMatchBoot" role="status" aria-live="polite" aria-label="正在準備牌桌">
+    <p id="cardMatchBootMessage">正在準備牌桌…</p>
+    <div id="cardMatchBootActions" hidden><button id="cardMatchBootRetry" type="button">重新載入</button><button id="cardMatchBootBack" type="button">返回大廳</button></div>
+  </section>
 <div id="usoppLayer"></div>
 <div id="robinLayer"></div>
 <div id="zoroLayer"></div>
@@ -3856,7 +3876,7 @@ function playEnhFxFor(cardId){
   const prepared=_enhVideoPreparation?.id===cardId&&_enhVideoPreparation.ready&&vid.getAttribute('src')===ENH_VID[cardId];
   if(prepared){_enhVideoPreparation=null;delete vid.__enhPreparedFor;}else cancelPreparedEnhVideo();
   vid.__enhOnEnded?.();
-  let closed=false,timer=null,lastTime=0,lastProgress=performance.now(),started=false;
+  let closed=false,timer=null,lastTime=0,lastProgress=performance.now(),started=false,mutedRetried=false,playAttempt=0;
   const status=document.createElement('span');status.className='enh-load-status';status.setAttribute('role','status');status.textContent='強化影片載入中…';
   const current=()=>!closed&&vid.__enhOnEnded===cleanup;
   function cleanup(reason){
@@ -3874,9 +3894,27 @@ function playEnhFxFor(cardId){
   }
   function failed(){cleanup('error');}
   function playing(){if(!current())return;started=true;lastProgress=performance.now();ov.dataset.enhState='playing';status.hidden=true;}
+  function attemptPlayback(muted=false){
+    if(!current())return;
+    const attempt=++playAttempt;
+    if(muted){
+      mutedRetried=true;vid.muted=true;
+      // Abort a hung play request without discarding the decoded frame/buffer.
+      // Its late rejection belongs to the previous attempt and must be ignored.
+      try{vid.pause();}catch{}
+    }
+    let pending;try{pending=vid.play();}catch(e){pending=Promise.reject(e);}
+    Promise.resolve(pending).catch(()=>{
+      if(!current()||attempt!==playAttempt||started)return;
+      if(!mutedRetried)attemptPlayback(true);else failed();
+    });
+  }
   function watch(){
     if(!current())return;
     if(vid.currentTime>lastTime+.05){lastTime=vid.currentTime;lastProgress=performance.now();}
+    // Android may leave play() pending instead of rejecting. Retrying only in
+    // catch() would wait eight seconds and skip an otherwise ready movie.
+    if(!started&&!mutedRetried&&performance.now()-lastProgress>=1200)attemptPlayback(true);
     if(performance.now()-lastProgress>(started?10000:8000)){cleanup('timeout');return;}
     timer=setTimeout(watch,250);_enhFxForceTimer=timer;
   }
@@ -3889,8 +3927,7 @@ function playEnhFxFor(cardId){
   watch();
   // Reusing the warm element preserves its decoded first frame and buffer.
   try{if(!prepared)vid.load();if(vid.currentTime>.01)vid.currentTime=0;}catch{}
-  const play=()=>{try{return Promise.resolve(vid.play());}catch(e){return Promise.reject(e);}};
-  play().catch(()=>{if(!current())return;vid.muted=true;return play().catch(()=>{if(current())failed();});});
+  attemptPlayback();
 }
 
 window.__cardOriginalEnhVideo = playEnhFxFor;
@@ -7241,74 +7278,197 @@ el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
 
 <!-- CARD_VENUE_READY_BEGIN -->
 <script>
-/* Embedded into game.html, also used by already-installed mobile bundles.
- * onAny reads barrier metadata outside the animation STATE queue; otherwise
- * a visible venue panel would deadlock its own acknowledgement/release. */
+/* Keep local venue reading explicit, including retained clients and boot covers.
+ * Server acknowledgement identities and CPU/connection rules remain unchanged. */
 (() => {
-  let gate=null, sent=null, timer=null;
-  const $=id=>document.getElementById(id);
-  function schedule(){clearTimeout(timer);timer=setTimeout(sync,60);}
-  function sync(){
-    if(!gate || typeof state!=='object' || state?.roundNo!==gate.roundNo){if(gate?.waiting)schedule();return;}
-    const intro=$('phoneVenueIntro'),button=$('phoneVenueContinue');
-    if(!intro||!button){if(gate.waiting)schedule();return;}
-    // A reused room/round can match an old local 'seen' key. The server's new
-    // gate identity still requires a fresh explicit confirmation.
-    if(gate.waiting && intro.hidden && !window.CardPhonePresentation?.presentationEffectsBusy?.()){
+  const origin=window.__TABLETOP_ANDROID_TEST_ORIGIN||'https://onepiece-card-online.onrender.com';
+  if(location.origin!==origin||location.pathname!=='/game.html')return;
+  function mount(){
+    const api=window.CardPhonePresentation,root=document.documentElement,$=id=>document.getElementById(id);
+    if(!api||typeof socket!=='object'||api.venueReadVersion>=2)return;
+    api.venueReadVersion=2;
+    let gate=null,sent=null,localRead=null,closedId=null,shownId=null,imagesId=null,imagesReady=false;
+    let timer=null,generation=0,paintEpoch=0,painting=false,visibleSince=null,connected=socket.connected!==false,receivedMetadata=false;
+    let legacyClose=null,controlledButton=null,allowLegacyClose=false,identity='';
+    const unconfirmedSeen=new Set();
+    const oldPending=api.isVenueIntroPending;
+    const model=()=>typeof state==='object'?state:null;
+    const bootReady=()=>!root.dataset.cardBoot||root.dataset.cardBoot==='ready';
+    const relevant=()=>!!gate&&model()?.phase!=='lobby'&&model()?.roundNo===gate.roundNo&&!!model()?.venues?.length&&Number.isInteger(me?.playerId);
+    const needsRetry=()=>localRead===gate?.id&&gate.waiting&&gate.required.includes(me.playerId)&&!gate.ready.includes(me.playerId)&&sent!==gate.id;
+    const schedule=()=>{clearTimeout(timer);timer=setTimeout(sync,60);};
+    function useGate(next){
+      if(next?.id!==gate?.id){generation++;localRead=null;closedId=null;sent=null;imagesId=null;shownId=null;resetClock();}
+      gate=next;
+    }
+    function seenKey(){
+      const s=model();return s?JSON.stringify([me.roomId,s.roundNo,s.venues.map(v=>v.name)]):null;
+    }
+    function removePrematureSeen(){
+      if(relevant()&&localRead!==gate.id)unconfirmedSeen.add(seenKey());
+      if(!unconfirmedSeen.size)return;
+      // v058 stored this key when it merely showed the panel, including under
+      // a loading cover. Its closure can reintroduce an earlier unread key when
+      // it next writes the list. Remove only views observed unread in this page.
+      try{const previous=JSON.parse(sessionStorage.getItem('po-card-venue-intro-v1')||'[]');if(Array.isArray(previous)&&previous.some(key=>unconfirmedSeen.has(key)))sessionStorage.setItem('po-card-venue-intro-v1',JSON.stringify(previous.filter(key=>!unconfirmedSeen.has(key))));}catch{}
+    }
+    function resetClock(){paintEpoch++;painting=false;visibleSince=null;}
+    function disable(button,value){if(button&&button.disabled!==value)button.disabled=value;}
+    function hideForPreparation(){
+      removePrematureSeen();
+      const intro=$('phoneVenueIntro');
+      if(intro&&!intro.hidden)intro.hidden=true;
+      disable($('phoneVenueContinue'),true);resetClock();
+    }
+    // Raw STATE metadata arrives before the animation queue applies its model.
+    // Do not let an unseen legacy intro block the first model/rows needed by boot.
+    api.isVenueIntroPending=()=>{
+      if(!bootReady()||document.hidden||gate&&!relevant())return false;
+      return !!(relevant()&&localRead!==gate.id)||!!oldPending?.();
+    };
+    function visible(intro){
+      if(!bootReady()||document.hidden||!connected||intro.hidden||!intro.getClientRects().length)return false;
+      const style=getComputedStyle(intro);
+      return style.display!=='none'&&style.visibility!=='hidden'&&Number(style.opacity)!==0;
+    }
+    function rememberSeen(){
+      const s=model();if(!s||localRead!==gate?.id)return;
+      const key=seenKey();
+      unconfirmedSeen.delete(key);
+      try{const previous=JSON.parse(sessionStorage.getItem('po-card-venue-intro-v1')||'[]');const seen=new Set(Array.isArray(previous)?previous:[]);seen.add(key);sessionStorage.setItem('po-card-venue-intro-v1',JSON.stringify([...seen].slice(-40)));}catch{}
+    }
+    function control(button){
+      if(controlledButton===button)return;
+      controlledButton=button;legacyClose=button.onclick;
+      // A script invoking onclick is not evidence that this reader saw the UI.
+      button.onclick=function(event){if(allowLegacyClose)return legacyClose?.call(button,event);return false;};
+      new MutationObserver(()=>{
+        // Retained bundles have their own decode+900 ms enabling timer. Clamp
+        // it in this microtask so an enabled button never precedes our painted
+        // reading interval (and a quick real tap cannot be silently discarded).
+        const intro=$('phoneVenueIntro');
+        if(gate&&intro&&(!canRead(intro)||(localRead===gate.id&&!needsRetry())))disable(button,true);
+        schedule();
+      }).observe(button,{attributes:true,attributeFilter:['disabled']});
+    }
+    function closeReadIntro(intro,button){
+      if(localRead!==gate?.id||!bootReady()||document.hidden)return;
+      if(closedId===gate.id&&intro.hidden)return;
+      closedId=gate.id;
+      rememberSeen();disable(button,false);allowLegacyClose=true;
+      try{button.onclick?.();}finally{allowLegacyClose=false;}
+      if(!intro.hidden)intro.hidden=true;
+      shownId=null;resetClock();
+    }
+    function ensureCards(intro,button){
       const cards=intro.querySelector('.phone-venue-intro-cards');
-      if(!cards || !state.venues?.length){schedule();return;}
-      cards.replaceChildren(...state.venues.map(v=>{
-        const card=document.createElement('article'),img=document.createElement('img'),copy=document.createElement('div');
-        card.className='venue-card';img.src=VEN(v.name);img.alt=v.name;img.dataset.name=v.name;
-        for(const text of [v.name,venueDesc(v.name)]){const line=document.createElement('div');line.textContent=text;copy.append(line);}
-        card.append(img,copy);return card;
+      if(!cards)return false;
+      if(imagesId!==gate.id){
+        imagesId=gate.id;imagesReady=false;resetClock();
+        const id=gate.id,epoch=generation;
+        cards.replaceChildren(...model().venues.map(v=>{
+          const card=document.createElement('article'),img=document.createElement('img'),copy=document.createElement('div');
+          card.className='venue-card';img.src=VEN(v.name);img.alt=v.name;img.dataset.name=v.name;
+          for(const text of [v.name,venueDesc(v.name)]){const line=document.createElement('div');line.textContent=text;copy.append(line);}
+          card.append(img,copy);return card;
+        }));
+        const decoded=Promise.all([...cards.querySelectorAll('img')].map(img=>img.decode().catch(()=>{})));
+        // A broken image must not trap the reader; the venue text remains usable.
+        Promise.race([decoded,new Promise(resolve=>setTimeout(resolve,8000))]).then(()=>{
+          if(generation!==epoch||gate?.id!==id)return;imagesReady=true;schedule();
+        });
+      }
+      intro.dataset.round=String(gate.roundNo);intro.dataset.venueReadyId=gate.id;control(button);
+      return true;
+    }
+    function startVisibleClock(intro){
+      if(!imagesReady||visibleSince!==null||painting)return;
+      const epoch=paintEpoch,id=gate.id;painting=true;
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        if(epoch!==paintEpoch)return;painting=false;
+        if(gate?.id===id&&visible(intro)){visibleSince=performance.now();schedule();}
       }));
-      intro.dataset.round=String(gate.roundNo);intro.hidden=false;button.disabled=true;
-      const id=gate.id;
-      Promise.all([...cards.querySelectorAll('img')].map(img=>img.decode().catch(()=>{}))).then(()=>setTimeout(()=>{
-        if(gate?.id===id && !gate.ready.includes(me.playerId) && sent!==id)button.disabled=false;
-      },900));
     }
-    let status=$('phoneVenueReadyStatus');
-    if(!status){intro.style.gridTemplateRows='minmax(24px, auto) minmax(0,1fr) auto 44px';status=document.createElement('p');status.id='phoneVenueReadyStatus';status.setAttribute('role','status');status.style.cssText='margin:0;max-width:90vw;text-align:center;color:#ffe7a3;font-size:clamp(12px,2vh,17px);overflow-wrap:anywhere';button.before(status);}
-    if(!gate.waiting){
-      status.hidden=true;sent=null;
-      // Let the existing handler persist its seen key and enter the venue.
-      if(!intro.hidden){button.disabled=false;button.onclick?.();}
-      return;
+    function canRead(intro){return relevant()&&shownId===gate.id&&imagesReady&&visibleSince!==null&&performance.now()-visibleSince>=900&&visible(intro);}
+    function statusNode(intro,button){
+      let status=$('phoneVenueReadyStatus');
+      if(!status){intro.style.gridTemplateRows='minmax(24px, auto) minmax(0,1fr) auto 44px';status=document.createElement('p');status.id='phoneVenueReadyStatus';status.setAttribute('role','status');status.style.cssText='margin:0;max-width:90vw;text-align:center;color:#ffe7a3;font-size:clamp(12px,2vh,17px);overflow-wrap:anywhere';button.before(status);}
+      return status;
     }
-    status.hidden=false;
-    const names=gate.required.filter(id=>!gate.ready.includes(id)).map(id=>{
-      const p=state.players.find(p=>p.id===id);return p?.client?.displayName||p?.displayName||`P${id+1}`;
+    function sync(){
+      // A fast initial STATE can precede this deferred mount. Its applied model
+      // retains the real server gate; never invent an acknowledgement for it.
+      if(!receivedMetadata&&model()?.venueReady)useGate(model().venueReady);
+      removePrematureSeen();
+      const intro=$('phoneVenueIntro'),button=$('phoneVenueContinue');
+      if(!intro||!button){if(gate)schedule();return;}
+      if(!bootReady()||document.hidden){hideForPreparation();if(gate)schedule();return;}
+      if(!gate)return;
+      if(!relevant()){if(!intro.hidden)intro.hidden=true;resetClock();schedule();return;}
+      const nextIdentity=String(me.roomId)+'|'+me.playerId;
+      if(identity!==nextIdentity){identity=nextIdentity;localRead=null;closedId=null;sent=null;generation++;imagesId=null;shownId=null;resetClock();}
+      if(localRead===gate.id&&!gate.waiting){closeReadIntro(intro,button);return;}
+      if(intro.hidden&&(api.presentationEffectsBusy?.()||api.isVenueEntering?.())){disable(button,true);schedule();return;}
+      if(!ensureCards(intro,button)){schedule();return;}
+      const wasHidden=intro.hidden;
+      if(wasHidden)intro.hidden=false;
+      shownId=gate.id;
+      if(wasHidden){intro.tabIndex=-1;intro.focus({preventScroll:true});}
+      if(!visible(intro))resetClock();else startVisibleClock(intro);
+      const status=statusNode(intro,button),done=localRead===gate.id&&!needsRetry();
+      let text;
+      if(!connected)text='重新連線後即可確認場地';
+      else if(!gate.waiting&&!done)text='閱讀場地介紹後，再進入對局';
+      else {
+        const names=gate.required.filter(id=>!gate.ready.includes(id)).map(id=>{
+          const p=model().players.find(p=>p.id===id);return p?.client?.displayName||p?.displayName||'P'+(id+1);
+        });
+        text='已確認 '+gate.ready.length+'/'+gate.required.length+'　等待：'+names.join('、');
+      }
+      status.hidden=false;if(status.textContent!==text)status.textContent=text;
+      const label=done?'已看完，等待其他玩家':'我看完了';
+      if(button.textContent!==label)button.textContent=label;
+      disable(button,done||!canRead(intro));intro.setAttribute('aria-busy',String(!imagesReady));
+      if(gate.waiting||!done)schedule();
+    }
+    socket.onAny?.((event,s)=>{
+      if(event!=='STATE')return;
+      const next=s?.venueReady||null;
+      receivedMetadata=true;useGate(next);
+      if(!bootReady())hideForPreparation();
+      schedule();
     });
-    const text=`已確認 ${gate.ready.length}/${gate.required.length}　等待：${names.join('、')}`;
-    if(status.textContent!==text)status.textContent=text;
-    const done=gate.ready.includes(me.playerId)||sent===gate.id;
-    const label=done?'已看完，等待其他玩家':'我看完了';
-    if(button.textContent!==label)button.textContent=label;
-    if(done)button.disabled=true;
-    schedule();
-  }
-  socket.onAny?.((event,s)=>{
-    if(event!=='STATE')return;
-    gate=s?.venueReady||null;
-    if(sent!==gate?.id)sent=null;
-    schedule();
-  });
-  socket.on('disconnect',()=>{sent=null;clearTimeout(timer);});
-  window.addEventListener('click',event=>{
-    if(!gate?.waiting||!event.target.closest?.('#phoneVenueContinue'))return;
-    event.preventDefault();event.stopImmediatePropagation();
-    const button=$('phoneVenueContinue');
-    if(button.disabled||gate.ready.includes(me.playerId)||sent===gate.id||state?.roundNo!==gate.roundNo)return;
-    sent=gate.id;button.disabled=true;
-    socket.emit('ACTION',{type:'VENUE_READY',payload:{id:gate.id,roundNo:gate.roundNo},roomId:me.roomId,playerId:me.playerId,secret:me.secret});
+    socket.on('disconnect',()=>{connected=false;sent=null;resetClock();disable($('phoneVenueContinue'),true);clearTimeout(timer);});
+    for(const event of ['connect','JOINED'])socket.on(event,()=>{connected=true;resetClock();schedule();});
+    window.addEventListener('click',event=>{
+      if(!event.target.closest?.('#phoneVenueContinue')||!gate)return;
+      event.preventDefault();event.stopImmediatePropagation();
+      const intro=$('phoneVenueIntro'),button=$('phoneVenueContinue');
+      if(!intro||!button||button.disabled||!canRead(intro)||(localRead===gate.id&&!needsRetry()))return;
+      localRead=gate.id;unconfirmedSeen.delete(seenKey());disable(button,true);
+      if(gate.waiting&&gate.required.includes(me.playerId)&&!gate.ready.includes(me.playerId)&&sent!==gate.id){
+        sent=gate.id;
+        socket.emit('ACTION',{type:'VENUE_READY',payload:{id:gate.id,roundNo:gate.roundNo},roomId:me.roomId,playerId:me.playerId,secret:me.secret});
+      }
+      sync();
+    },true);
+    window.addEventListener('keydown',event=>{
+      if(event.key==='Escape'&&gate&&!$('phoneVenueIntro')?.hidden){event.preventDefault();event.stopImmediatePropagation();}
+    },true);
+    document.addEventListener('visibilitychange',()=>{resetClock();if(document.hidden)hideForPreparation();schedule();});
+    document.addEventListener('card:interface-ready',()=>{resetClock();schedule();});
+    new MutationObserver(()=>{
+      if(!bootReady()||document.hidden)hideForPreparation();else schedule();
+    }).observe(root,{attributes:true,attributeFilter:['data-card-boot']});
+    const intro=$('phoneVenueIntro');
+    if(intro)new MutationObserver(()=>{
+      removePrematureSeen();if(!bootReady()||document.hidden)hideForPreparation();else schedule();
+    }).observe(intro,{attributes:true,attributeFilter:['hidden','class']});
     sync();
-  },true);
-  window.addEventListener('keydown',event=>{
-    if(event.key==='Escape'&&gate?.waiting&&!$('phoneVenueIntro')?.hidden){event.preventDefault();event.stopImmediatePropagation();}
-  },true);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
 })();
+
 </script>
 <!-- CARD_VENUE_READY_END -->
 
@@ -8767,5 +8927,82 @@ html[data-card-phone] .card-summon-loading{position:absolute;left:50%;top:68%;tr
 
 </script>
 <!-- CARD_MEDIA_FLOW_END -->
+<!-- CARD_MATCH_ENTRY_BEGIN -->
+<script>
+/* Keep the first match frame covered until its current interface is ready. */
+(() => {
+  const root=document.documentElement;
+  if(root.dataset.cardBoot!=='loading'||window.__cardMatchEntryMounted)return;
+  window.__cardMatchEntryMounted=true;
+  const $=id=>document.getElementById(id),frames=()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  let timer=null,deadline=null,observer=null,working=false,done=false;
+  const images=new Map();
+  function imageReady(src){
+    if(!src)return Promise.resolve(false);
+    if(images.has(src))return images.get(src);
+    const promise=new Promise(resolve=>{
+      const image=new Image();let settled=false;
+      const finish=ok=>{if(settled)return;settled=true;clearTimeout(timeout);image.onload=image.onerror=null;resolve(ok);};
+      const timeout=setTimeout(()=>finish(false),12000);
+      const loaded=()=>{if(!image.naturalWidth){finish(false);return;}if(image.decode)image.decode().then(()=>finish(true),()=>finish(image.naturalWidth>0));else finish(true);};
+      image.onload=loaded;
+      image.onerror=()=>finish(false);image.src=src;
+      if(image.complete)loaded();
+    });
+    images.set(src,promise);return promise;
+  }
+  const url=value=>value.match(/url\(["']?([^"')]+)["']?\)/)?.[1];
+  function view(){
+    const api=window.CardPhonePresentation;
+    if(root.dataset.cardPhone!=='table'||root.dataset.cardSeatHud!=='1'||root.dataset.cardMenuLayout!=='v3'||root.dataset.cardFlow!=='1')return null;
+    if(api?.presentationFlowVersion!==2||api.ownCollectionVersion!=='2'||api.enhancementVideoOrderVersion!==2||api.resultCutinVersion!==1||api.venueReadVersion!==2)return null;
+    if(typeof state!=='object'||!state?.players?.length||typeof me!=='object'||!Number.isInteger(me.playerId)||!state.players[me.playerId])return null;
+    const rows=[...document.querySelectorAll('#players > [data-seat-id]')];
+    const self=document.querySelector('#phoneSelfPlayer[data-self-design="captain-v1"] .phone-self-captain');
+    if(rows.length!==state.players.length||!self)return null;
+    const style=$('cardMatchPresentationStyle')||document.querySelector('link[href*="css/card-desktop-table.css"]');
+    if(!style?.sheet)return null;
+    const css=getComputedStyle(root),captain=getComputedStyle(self);
+    if(root.dataset.cardBundledStyles==='1'&&css.getPropertyValue('--card-native-style-ready').trim()!=='1')return null;
+    const art=[url(css.getPropertyValue('--card-table-art')),url(css.getPropertyValue('--seat-hud-art')),url(captain.getPropertyValue('--self-captain-art'))];
+    if(art.some(src=>!src))return null;
+    const avatars=[self,...rows].map(node=>node.matches('img')?node:node.querySelector('img.phone-seat-avatar,.phone-seat-avatar img,img')).filter(Boolean);
+    if(!avatars.length)return null;
+    return {signature:JSON.stringify([me.roomId,me.playerId,state.roundNo,state.players.map(p=>p.id)]),art:[...new Set([...art,...avatars.map(img=>img.currentSrc||img.src)])]};
+  }
+  function failed(){
+    if(done||$('cardRoomUnavailable'))return;
+    root.dataset.cardBoot='failed';
+    $('cardMatchBootMessage').textContent='牌桌還沒準備完成，請稍候或重新載入。';
+    $('cardMatchBootActions').hidden=false;
+  }
+  function stop(){clearInterval(timer);clearTimeout(deadline);observer?.disconnect();}
+  async function check(){
+    if(done||working)return;
+    if($('cardRoomUnavailable')){done=true;stop();root.dataset.cardBoot='failed';$('cardMatchBoot').hidden=true;return;}
+    const current=view();if(!current)return;
+    working=true;
+    try{
+      const ready=await Promise.all(current.art.map(imageReady));
+      if(ready.some(ok=>!ok)){failed();return;}
+      await frames();
+      if(done||document.hidden||view()?.signature!==current.signature)return;
+      done=true;stop();root.dataset.cardBoot='ready';$('cardMatchBoot')?.remove();
+      document.dispatchEvent(new Event('card:interface-ready'));
+    }finally{working=false;}
+  }
+  function mount(){
+    $('cardMatchBootRetry').onclick=()=>location.reload();
+    $('cardMatchBootBack').onclick=()=>location.assign('start.html');
+    timer=setInterval(check,125);deadline=setTimeout(failed,20000);
+    observer=new MutationObserver(()=>{if($('cardRoomUnavailable'))check();});observer.observe(document.body,{childList:true});
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)check();});
+    check();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(mount,0),{once:true});else setTimeout(mount,0);
+})();
+
+</script>
+<!-- CARD_MATCH_ENTRY_END -->
 </body>
 </html>
