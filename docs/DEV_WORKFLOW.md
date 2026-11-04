@@ -1,5 +1,11 @@
 # Dev Workflow
 
+## 2026-11-04 馬林福特之戰本機素材入口
+
+- 原生 iOS WebView 提供本機素材標記時，馬林福特的背景、卡圖與特效會改用應用程式提供的 poasset URL。一般瀏覽器、Windows 及 Android 保留原本的 HTTPS 素材路徑。遊戲頁、帳號與 Socket.IO 仍從正式服務載入。
+- 變更位於 public/marineford 的 index.html、marineford.css、marineford.js。沿用公開的 marineford-media-v1.json 與相同的內容雜湊。
+- Chromium 與 WebKit 的隔離帳號測過進入大廳、建立房間、開始對局、黃猿雷射與結算。WebKit 另驗證 iOS 標記下的本機 URL 和零 HTTP 遊戲素材請求。此網頁測試未啟用原生素材處理器。隔離 npm start 已驗證入口，公開 134 筆素材皆比對大小與 SHA-256。
+
 ## 2026-10-22 一般戰鬥跨角色／跨場圖片殘留（已公開驗證）
 
 - 使用者確認是新世界航海錄一般戰鬥，舊角色圖會混入其他場並留到下一場；此前共鬥排版嘗試已完整撤回，`public/board_battle.html` 與該嘗試前 SHA-256 一致。
