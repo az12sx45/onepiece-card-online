@@ -1117,7 +1117,7 @@ const io = new Server(server, {
 
 // room = { state, sockets: Map<sid,{playerId,secret,displayName,avatar}>, host, lobbyReady }
 const marinefordRecords=require('./marineford-records').createStore(pool);
-const marinefordRuntime = require('./marineford-rooms').attach(io,{recordMatch:match=>marinefordRecords.record(match),getProfile:id=>marinefordRecords.profile(id),shop:(...args)=>marinefordRecords.shop(...args)});
+const marinefordRuntime = require('./marineford-rooms').attach(io,{recordMatch:match=>marinefordRecords.record(match),getProfile:id=>marinefordRecords.profile(id)});
 const rooms = new Map();
 const boardRooms = new Map();
 const chessRooms = new Map();

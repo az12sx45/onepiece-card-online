@@ -65,33 +65,6 @@ function createStore(pool) {
         ORDER BY ended_at DESC, match_id DESC LIMIT 10`,[userId]);
       return {...summary(r.rows[0].stats),collection:collection(r.rows[0].stats),recent:recent.rows};
     },
-    async shop(userId,action,itemId){
-      if(!action){
-        const r=await pool.query('SELECT stats FROM player_profiles WHERE user_id=$1',[userId]);
-        if(!r.rows[0])throw Error('找不到玩家檔案');
-        return collection(r.rows[0].stats);
-      }
-      const item=CATALOG.find(entry=>entry.id===itemId);
-      if(!['buy','equip','clear'].includes(action)||(!item&&action!=='clear'))throw Error('商品不存在');
-      const db=await pool.connect();
-      try{
-        await db.query('BEGIN');
-        const r=await db.query('SELECT stats FROM player_profiles WHERE user_id=$1 FOR UPDATE',[userId]);
-        if(!r.rows[0])throw Error('找不到玩家檔案');
-        const stats=r.rows[0].stats||{}, current=collection(stats);
-        if(action==='buy'&&!current.owned.includes(item.id)){
-          if(current.balance<item.price)throw Error('戰役勳章不足');
-          current.owned.push(item.id);
-        }
-        if(action==='equip'&&!current.owned.includes(item.id))throw Error('請先兌換商品');
-        if(action==='equip')current.equipped=item.id;
-        if(action==='clear')current.equipped=null;
-        stats[SHOP_FIELD]={owned:current.owned,equipped:current.equipped};
-        await db.query('UPDATE player_profiles SET stats=$2::jsonb,updated_at=now() WHERE user_id=$1',[userId,JSON.stringify(stats)]);
-        await db.query('COMMIT');
-        return collection(stats);
-      }catch(error){await db.query('ROLLBACK');throw error;}finally{db.release();}
-    }
 
   };
 }

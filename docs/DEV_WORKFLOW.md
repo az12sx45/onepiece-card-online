@@ -9053,3 +9053,9 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - Marineford profile, settlement and supply shop use the match ledger and an account-scoped collection. Award 20 medals for a recorded completion plus 10 for a win. Existing completed matches count. The shop uses an atomic row lock and keeps purchases outside client stats patches.
 - Sources: Marineford client CSS/JS, marineford-records.js, marineford-rooms.js, the Marineford adapter in server/index.js, and the protected stats fields in launcher-profile-shop.js.
 - Verified with marineford_records_qa.js and the targeted mobile browser flow in marineford_peek_laser_qa.cjs.
+
+### 2026-11-04 · Marineford waiting room revision
+- Removed the campaign shop UI and purchase endpoint. Existing profiles and settlement still read historical campaign records.
+- The friend list opens as a dock, while waiting rooms group human and CPU seats, expose host controls and include inline room chat. Chat history is sent only to room members. A six-seat room can start with one human and five CPUs.
+- Verification: marineford_peek_laser_qa.cjs mobile layout and waiting-room flow, and marineford_records_qa.js for retained campaign records.
+- Integration retains prior account balances, acquired collectibles and equipped badges, and guards room history and kick targets with current authenticated membership and a host-only seat token.

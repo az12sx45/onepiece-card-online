@@ -58,14 +58,12 @@
   }
   body.append(history.children.length?history:node('p','完成第一場對局後，戰績就會出現在這裡。'));
   if(result.pending)body.append(node('p','本場戰績正在儲存。'));
-  body.append(button('前往戰役補給所',openShop));
  }
 
  const notify=text=>{clearTimeout(toastTimer);$('toast').textContent=text;$('toast').hidden=false;toastTimer=setTimeout(()=>$('toast').hidden=true,4000);};
  function request(event,payload={}) {return new Promise(resolve=>socket.timeout(12000).emit(event,payload,(err,result)=>{if(err){notify('連線逾時，請稍後再試');resolve({ok:false});}else{if(!result?.ok)notify(result?.error||'操作未完成');resolve(result||{ok:false});}}));}
- let socialRefresh=null;
- function closeSheet(){socialRefresh=null; $('sheet').hidden=true; }
- function sheet(title,kind='general'){socialRefresh=null;$('sheetClose').textContent=view?'返回牌桌':'關閉';delete $('sheet').dataset.choice;$('sheet').dataset.kind=kind;$('sheetTitle').textContent=title;$('sheetBody').replaceChildren();$('sheet').hidden=false;return $('sheetBody');}
+ function closeSheet(){$('sheet').hidden=true; }
+ function sheet(title,kind='general'){document.querySelector('.mf-friends')?.remove();refreshFriends=null;$('sheetClose').textContent=view?'返回牌桌':'關閉';delete $('sheet').dataset.choice;$('sheet').dataset.kind=kind;$('sheetTitle').textContent=title;$('sheetBody').replaceChildren();$('sheet').hidden=false;return $('sheetBody');}
  function detail(id,play=false){const c=cards[id],body=sheet(c.rank+' 號 · '+c.name,'detail'),img=cardImage(id);img.classList.add('detail-card');const text=node('div',null,'detail-copy');text.append(node('small',teamName(c.team)+' · '+(c.justice?'正義卡':'角色卡'),'detail-kicker'),node('h3',c.rank+' 號 · '+c.name),node('p',c.effect));const footer=node('div',null,'detail-actions');if(play){const b=button(c.rank===7?'不能主動打出':'打出這張牌',()=>action({type:'PLAY',card:id}));b.disabled=c.rank===7||busy;footer.append(b);}else footer.append(button('返回牌桌',closeSheet));text.append(footer);body.append(img,text);}
  function publicCardTile(id){const c=cards[id],b=button('',()=>detail(id),'public-card-tile'),label=node('span',null,'public-card-label');label.append(node('b',String(c.rank)),node('strong',c.name));b.append(cardImage(id),label);b.setAttribute('aria-label',c.rank+' 號 · '+c.name+'，查看詳情');return b;}
  function gallery(title,ids,explain=false){const body=sheet(title,'gallery'),grid=node('div',null,'gallery');if(explain)body.append(node('p','這裡是已打出的牌及一般敗牌。正義卡正常打出會保留；被擊敗則先補抽，再只把該張正義卡洗回。','sheet-hint'));if(!ids.length)body.append(node('p','目前沒有公開牌'));for(const id of ids){grid.append(publicCardTile(id));}body.append(grid);}
@@ -75,7 +73,7 @@
   const body=sheet('房間模式','room-browser');
   const layout=node('div',null,'room-choice-grid'),host=node('section'),guest=node('section');
   const counts=node('div',null,'room-cpu-options');let cpuCount=0;
-  for(let count=0;count<=3;count++){
+  for(let count=0;count<=5;count++){
    const option=button(count+' 人',()=>{cpuCount=count;for(const item of counts.children)item.setAttribute('aria-pressed',String(item===option));},'small-button');
    option.setAttribute('aria-pressed',String(count===0));counts.append(option);
   }
@@ -104,38 +102,44 @@
   const secret=localStorage.getItem('opSecret')||localStorage.getItem('op_secret')||'';
   return request(event,{...data,secret});
  }
+ let refreshFriends=null;
  async function openFriends(){
-  const body=sheet('好友','room-browser');
+  const existing=document.querySelector('.mf-friends');
+  if(existing){existing.remove();refreshFriends=null;return;}
+  const body=node('aside',null,'mf-friends');body.setAttribute('aria-label','好友');
+  const heading=node('header');heading.append(avatar(you),node('strong',me.name+' · 我的好友'),button('縮小',()=>{body.remove();refreshFriends=null;},'small-button'));
+  body.append(heading);document.body.append(body);
   const form=node('form',null,'room-code-form'),input=node('input');
   input.placeholder='輸入玩家名稱';input.setAttribute('aria-label','玩家名稱');input.required=true;
   const submit=node('button','送出好友邀請','small-button');submit.type='submit';form.append(input,submit);
   const list=node('div',null,'room-browser-list');body.append(form,button('重新整理',()=>refresh(),'small-button'),list);
   async function refresh(){
    const result=await friendRequest('FRIENDS_GET');
-   if(!body.contains(list))return;
+   if(!body.isConnected)return;
    list.replaceChildren();
    if(!result.ok){list.append(node('p','好友清單讀取失敗'));return;}
+   list.append(node('small','好友邀請','mf-friends-label'));
    for(const f of result.requestsIn||[]){const row=node('div',null,'room-browser-row');row.append(node('strong',f.name),button('接受',async()=>{await friendRequest('FRIEND_REQUEST_ACCEPT',{userId:f.userId});refresh();},'small-button'),button('拒絕',async()=>{await friendRequest('FRIEND_REQUEST_DECLINE',{userId:f.userId});refresh();},'small-button'));list.append(row);}
-   for(const f of result.friends||[]){const row=node('div',null,'room-browser-row');row.append(node('strong',f.name),node('span',f.online?'在線':'離線'),button('聊天',()=>openFriendChat(f),'small-button'));if(room&&!view&&f.online)row.append(button('邀請入房',async event=>{const b=event.currentTarget;b.disabled=true;const result=await friendRequest('LOBBY_INVITE_SEND',{mode:'marineford',roomId:room.code,toUserId:f.userId});if(result.ok)notify('已送出房間邀請');else b.disabled=false;},'small-button'));list.append(row);}
+   list.append(node('small','好友清單','mf-friends-label'));
+   for(const f of [...(result.friends||[])].sort((a,b)=>Number(b.online)-Number(a.online))){const row=node('div',null,'room-browser-row');row.append(node('strong',f.name),node('span',f.online?'在線':'離線'),button('聊天',()=>openFriendChat(f),'small-button'));if(room&&!view&&f.online)row.append(button('邀請入房',async event=>{const b=event.currentTarget;b.disabled=true;const result=await friendRequest('LOBBY_INVITE_SEND',{mode:'marineford',roomId:room.code,toUserId:f.userId});if(result.ok)notify('已送出房間邀請');else b.disabled=false;},'small-button'));list.append(row);}
    for(const f of result.requestsOut||[])list.append(node('p',f.name+' · 等待確認'));
-   if(!list.children.length)list.append(node('p','目前沒有好友或邀請'));
+   if(list.children.length===2)list.append(node('p','目前沒有好友或邀請'));
   }
   form.onsubmit=async event=>{event.preventDefault();const name=input.value.trim();if(!name)return;const result=await friendRequest('FRIEND_ADD_BY_NAME',{name});if(result.ok){input.value='';refresh();}};
-  socialRefresh={event:'FRIENDS_DIRTY',run:refresh};await refresh();
+  refreshFriends=refresh;await refresh();
  }
  let chatRefresh=null;
- function openChat(title,sendMessage,maxLength=500){
-  document.querySelector('.mf-chat')?.remove();chatRefresh=null;
-  const panel=node('aside',null,'mf-chat'),header=node('header'),list=node('div',null,'mf-chat-log'),form=node('form',null,'room-code-form'),input=node('input');
-  panel.setAttribute('aria-label',title);list.setAttribute('role','log');header.append(node('strong',title),button('關閉',()=>{panel.remove();chatRefresh=null;},'small-button'));
-  input.required=true;input.maxLength=maxLength;input.placeholder='輸入訊息';input.setAttribute('aria-label','聊天訊息');
+ function openChat(title,sendMessage,inline=false){
+  if(!inline){document.querySelector('.mf-chat')?.remove();chatRefresh=null;}
+  const panel=node('aside',null,inline?'mf-room-chat':'mf-chat'),header=node('header'),list=node('div',null,'mf-chat-log'),form=node('form',null,'room-code-form'),input=node('input');
+  panel.setAttribute('aria-label',title);list.setAttribute('role','log');header.append(node('strong',title));if(!inline)header.append(button('關閉',()=>{panel.remove();chatRefresh=null;},'small-button'));
+  input.required=true;input.maxLength=inline?500:400;input.placeholder='輸入訊息';input.setAttribute('aria-label','聊天訊息');
   const send=node('button','傳送','small-button');send.type='submit';form.append(input,send);
   form.onsubmit=async event=>{event.preventDefault();const message=input.value.trim();if(!message||send.disabled)return;send.disabled=true;try{if((await sendMessage(message)).ok)input.value='';}finally{send.disabled=false;}};
-  panel.append(header,list,form);document.body.append(panel);return {panel,list};
+  panel.append(header,list,form);if(!inline)document.body.append(panel);return {panel,list};
  }
  async function openFriendChat(friend){
-  closeSheet();
-  const {panel,list}=openChat(friend.name+' · 私訊',async message=>{const result=await friendRequest('DM_SEND',{toUserId:friend.userId,body:message});if(result.ok)await refresh();return result;},400);
+  const {panel,list}=openChat(friend.name+' · 私訊',async message=>{const result=await friendRequest('DM_SEND',{toUserId:friend.userId,body:message});if(result.ok)await refresh();return result;});
   const refresh=async()=>{const result=await friendRequest('DM_HISTORY',{withUserId:friend.userId,limit:30});if(panel.isConnected&&result.ok){list.replaceChildren(...(result.messages||[]).map(m=>node('p',(Number(m.from)===Number(me.userId)?'我':friend.name)+'：'+m.body)));list.scrollTop=list.scrollHeight;}};
   chatRefresh=refresh;await refresh();
  }
@@ -143,12 +147,12 @@
  let roomChat=null;
  function openRoomChat(){
   const code=room?.code;if(!code||view)return;
-  const {panel,list}=openChat('房間 '+code+' · 聊天',body=>request('MF_CHAT',{body}));
-  roomChat={code,panel,list};renderRoomChat();
+  if(roomChat?.code!==code){const {panel,list}=openChat('等待室聊天',body=>request('MF_CHAT',{body}),true);roomChat={code,panel,list};}
+  return roomChat.panel;
  }
  function renderRoomChat(){if(!roomChat?.panel.isConnected)return;const {code,list}=roomChat;list.replaceChildren(...(roomMessages.get(code)||[]).map(m=>node('p',m.name+'：'+m.body)));list.scrollTop=list.scrollHeight;}
  socket.on('MF_CHAT',m=>{if(m.code!==room?.code)return;roomMessages.set(m.code,[...(roomMessages.get(m.code)||[]),m].slice(-40));renderRoomChat();});
- for(const event of ['FRIENDS_DIRTY','DM_NEW'])socket.on(event,()=>{if(socialRefresh?.event===event&&!$('sheet').hidden)socialRefresh.run();if(event==='DM_NEW')chatRefresh?.();});
+ for(const event of ['FRIENDS_DIRTY','DM_NEW'])socket.on(event,()=>{if(event==='DM_NEW')chatRefresh?.();else refreshFriends?.();});
  socket.on('EMIT',payload=>{
   if(payload?.type==='toast'&&payload.text){notify(payload.text);return;}
   const inv=payload?.invite;if(payload?.type!=='marineford_lobby_invite'||!inv||view)return;
@@ -156,43 +160,57 @@
   for(const [label,action] of [['加入','accept'],['拒絕','reject']])panel.append(button(label,async()=>{panel.remove();if(action==='accept'&&(room||view)){notify('請先離開目前房間');return;}const result=await friendRequest('LOBBY_INVITE_RESPOND',{inviteId:inv.inviteId,action});if(result.ok&&action==='accept'){enteredLobby=true;await request('MF_JOIN',{code:result.roomId});}},'small-button'));
   document.body.append(panel);setTimeout(()=>panel.remove(),Math.max(0,inv.expiresAt-Date.now()));
  });
- async function openShop(){
-  const body=sheet('馬林福特戰役補給所','campaign-shop'),content=node('div');
-  body.append(content);
-  function paint(shop){
-   if(!content.isConnected||$('sheet').hidden)return;
-   readBadge(shop);
-   const banner=node('div',null,'campaign-banner'),grid=node('div',null,'campaign-products');
-   banner.append(node('h3','戰役勳章 '+shop.balance),node('p','每完成一場獲得 20 枚，勝利再加 10 枚。可兌換本篇專屬裝飾。'));
-   content.replaceChildren(banner,grid);
-   for(const item of shop.catalog){
-    const product=node('article'),owned=shop.owned.includes(item.id),equipped=shop.equipped===item.id;
-    product.append(badgeImage(item),node('h3',item.name),node('p',item.description));
-    const buy=button(equipped?'卸下':owned?'佩戴':shop.balance<item.price?'尚缺 '+(item.price-shop.balance)+' 枚':'兌換 · '+item.price+' 枚',async()=>{
-     for(const control of grid.querySelectorAll('button'))control.disabled=true;
-     const result=await request('MF_SHOP',{action:equipped?'clear':owned?'equip':'buy',itemId:item.id});
-     paint(result.ok?result.shop:shop);
-    },'small-button');
-    buy.disabled=!owned&&shop.balance<item.price;
-    if(equipped)product.append(node('strong','佩戴中','campaign-tag'));
-    product.append(buy);grid.append(product);
-   }
-  }
-  content.textContent='讀取補給品…';
-  const result=await request('MF_SHOP');
-  if(result.ok)paint(result.shop);else if(content.isConnected)content.textContent='補給所暫時無法讀取';
- }
  function renderLobby(){if(view)return;$('menuButton').hidden=!enteredLobby&&!room;document.body.dataset.screen='lobby';$('justice').hidden=true;$('health').replaceChildren();$('lobby').hidden=false;$('table').hidden=true;const body=$('lobbyBody');body.replaceChildren();$('lobby').dataset.waiting=String(!!room);$('lobby').dataset.splash=String(authenticated&&!room&&!enteredLobby);$('lobby').dataset.mode=!room&&enteredLobby&&authenticated?'main':'entry';if(!authenticated){body.append(node('p','請從啟動器登入帳號後進入頂上戰爭篇。'));return;}
   if(!room&&!enteredLobby){const enter=button('',()=>{enteredLobby=true;renderLobby();},'mf-splash');enter.setAttribute('aria-label','點擊進入');enter.append(node('span','MARINEFORD','mf-splash-kicker'),node('strong','頂上戰爭篇','mf-splash-title'),node('span','點擊進入','mf-splash-prompt'));body.append(enter);return;}
   if(!room){const identity=node('div',null,'lobby-identity');identity.append(avatar(you),node('strong',me.name),node('span','已登入'));body.append(identity);
    const row=node('div',null,'lobby-entry lobby-menu');
-   row.append(button('開始遊戲',openRoomChoice),button('個人頁面',profile),button('商店',openShop),button('遊戲規則',showRules));
+   row.append(button('開始遊戲',openRoomChoice),button('個人頁面',profile),button('遊戲規則',showRules));
    body.append(row);
    const links=node('div',null,'lobby-links');
    links.append(button('好友',openFriends,'small-button'),button('卡片圖鑑',()=>gallery('頂上戰爭 · 卡片圖鑑',Object.keys(cards)),'small-button'));
    body.append(links);return;}
-  body.append(node('h2',room.code,'room-code'));for(const p of room.seats){const row=node('div',null,'room-seat');row.append(node('span',String(p.id+1).padStart(2,'0')),node('strong',p.name),node('span',p.id===room.navyId?'海軍':'海賊'),node('small',p.ready?'已準備':'準備中'));if(me.userId===room.host&&p.id!==room.navyId)row.append(button('海軍',()=>request('MF_CONFIG',{navyId:p.id}),'small-button'));body.append(row);}
-  const row=node('div',null,'lobby-actions');if(me.userId===room.host){if(room.seats.length<6)row.append(button('加入 CPU',()=>request('MF_CONFIG',{addCpu:true})));if(room.seats.some(p=>p.cpu))row.append(button('移除 CPU',()=>request('MF_CONFIG',{removeCpu:true})));row.append(button('開始對局',()=>request('MF_START')));}else{const p=room.seats[you];row.append(button(p?.ready?'取消準備':'準備',()=>request('MF_READY',{ready:!p?.ready})));}row.append(button('好友邀請',openFriends,'small-button'),button('房間聊天',openRoomChat,'small-button'),button('離開房間',leave,'small-button'));body.append(row,node('p','海軍先行，依順位輪流。戰鬥時有士氣就自動消耗 1 個，戰力 +2。','lobby-note'));
+  const waiting=node('section',null,'mf-waiting');
+  const header=node('header'),title=node('div'),controls=node('div',null,'lobby-actions');
+  title.append(node('small','頂上戰爭篇 · 等待室'),node('h2',room.code,'room-code'));
+  controls.append(button('複製房號',async()=>{try{await navigator.clipboard.writeText(room.code);notify('房號已複製');}catch{notify('房號 '+room.code);}},'small-button'),button('好友邀請',openFriends,'small-button'),button('離開房間',leave,'small-button'));
+  header.append(title,controls);waiting.append(header);
+  const host=Number(me.userId)===Number(room.host),people=room.seats.filter(p=>!p.cpu),cpus=room.seats.filter(p=>p.cpu);
+  for(const [label,group] of [['真人玩家',people],['CPU',cpus]]){
+   const section=node('section'),grid=node('div',null,'mf-waiting-grid');
+   section.append(node('h3',label+' · '+group.length),grid);
+   for(const p of group){
+    const row=node('article',null,'mf-waiting-seat'),details=node('div');
+    const own=p.id===you,isNavy=p.id===room.navyId;
+    details.append(node('strong',p.name+(own?' · 我':'')),node('small',(p.host?'房主 · ':'')+(isNavy?'海軍':'海賊')+' · '+(p.ready?'已準備':'未準備')));
+    const portrait=avatar(p.id);
+    if(!own&&!p.cpu){
+     const contact=button('',()=>{
+      const menu=sheet(p.name+' · 玩家操作','room-browser');
+      menu.append(button('加好友',async()=>{const result=await friendRequest('FRIEND_ADD_BY_NAME',{name:p.name});if(result.ok){notify('已送出好友邀請');closeSheet();}},'small-button'));
+      if(host&&p.kickToken)menu.append(button('移出等待室',async()=>{const result=await request('MF_KICK',{slot:p.id,kickToken:p.kickToken});if(result.ok)closeSheet();},'small-button'));
+     },'mf-waiting-avatar');
+     contact.setAttribute('aria-label',p.name+'的玩家操作');contact.append(portrait);row.append(contact);
+    }else row.append(portrait);
+    row.append(details);
+    if(host&&!isNavy)row.append(button('設為海軍',()=>request('MF_CONFIG',{navyId:p.id}),'small-button'));
+    if(own&&!host)row.append(button(p.ready?'取消準備':'準備',()=>request('MF_READY',{ready:!p.ready}),'small-button'));
+    grid.append(row);
+   }
+   if(label==='CPU'&&host){
+    const cpuControls=node('div',null,'lobby-actions');
+    const add=button('加入 CPU',()=>request('MF_CONFIG',{addCpu:true}),'small-button');
+    const remove=button('移除 CPU',()=>request('MF_CONFIG',{removeCpu:true}),'small-button');
+    add.disabled=room.seats.length>=6;remove.disabled=!cpus.length;cpuControls.append(add,remove);section.append(cpuControls);
+   }
+   waiting.append(section);
+  }
+  if(host){
+   const start=button('開始對局',()=>request('MF_START'));
+   start.disabled=room.seats.length<2||room.seats.some(p=>!p.ready);
+   waiting.append(start);
+  }
+  waiting.append(openRoomChat());body.append(waiting);renderRoomChat();
+
  }
  async function leave(){const r=await request('MF_LEAVE');if(r.ok){reset();roomChat?.panel.remove();roomMessages.clear();room=null;view=null;you=-1;sessionStorage.removeItem('marineford.room');closeSheet();render();}}
  function updateText(el,text){if(el.textContent!==text)el.textContent=text;}
@@ -539,9 +557,9 @@
   }if(token!==epoch)return;view=packet.view;you=packet.you;lastSequence=packet.sequence;busy=true;render();if(victory)showResult();await request('MF_ACK',{sequence:packet.sequence});
  }
  function reset(){epoch++;document.querySelectorAll('.fortress-impact').forEach(e=>e.remove());if($('executionStage'))delete $('executionStage').dataset.phase;$('players').replaceChildren();$('players').dataset.seats='';$('justice').replaceChildren();$('deckZone').replaceChildren();for(const a of activeAnimations)a.cancel();activeAnimations.clear();$('effectLayer').replaceChildren();queue=Promise.resolve();busy=false;pendingKey='';lastSequence=-1;queuedSequence=-1;}
- socket.on('MF_CLOSED',()=>{reset();roomChat?.panel.remove();roomMessages.clear();room=null;view=null;you=-1;sessionStorage.removeItem('marineford.room');closeSheet();render();notify('本場已結束，回到大廳');});
- socket.on('MF_LOBBY',r=>{room=r;sessionStorage.setItem('marineford.room',r.code);you=r.you;renderLobby();});
- socket.on('MF_STATE',packet=>{roomChat?.panel.remove();reset();view=packet.view;you=packet.you;lastSequence=packet.sequence;render();});
+ socket.on('MF_CLOSED',packet=>{reset();roomChat?.panel.remove();roomMessages.clear();room=null;view=null;you=-1;sessionStorage.removeItem('marineford.room');closeSheet();render();notify(packet?.reason||'本場已結束，回到大廳');});
+ socket.on('MF_LOBBY',r=>{room=r;if(Array.isArray(r.chat))roomMessages.set(r.code,r.chat);refreshFriends?.();sessionStorage.setItem('marineford.room',r.code);you=r.you;renderLobby();});
+ socket.on('MF_STATE',packet=>{document.querySelector('.mf-friends')?.remove();refreshFriends=null;roomChat?.panel.remove();reset();view=packet.view;you=packet.you;lastSequence=packet.sequence;render();});
  socket.on('MF_PRESENT',packet=>{if(packet.sequence<=Math.max(lastSequence,queuedSequence))return;queuedSequence=packet.sequence;const token=epoch;queue=queue.then(()=>present(packet,token)).catch(()=>{if(token===epoch){notify('演出已恢復，正在同步牌桌');request('MF_JOIN',{code:room.code});}});});
  socket.on('MF_CAN_ACT',packet=>{if(packet.sequence===lastSequence){busy=false;render();}});
  socket.on('MF_RECOVER',packet=>{reset();view=packet.view;you=packet.you;lastSequence=packet.sequence;closeSheet();render();});
