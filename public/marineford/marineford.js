@@ -504,39 +504,55 @@
   try{await animate(flight,returning?[{transform:away},{transform:'translate(0,0)'}]:[{transform:'translate(0,0)'},{transform:away}],{duration:reduced()?150:700,fill:'forwards'});if(!returning&&readCard&&you===e.player&&token===epoch){const face=cardImage(readCard);face.classList.add('peek-flight');face.style.cssText=flight.style.cssText;face.style.transform=away;flight.replaceWith(face);try{await animate(face,[{transform:away+' rotateY(85deg)'},{transform:away+' rotateY(0deg)'}],{duration:reduced()?90:320,fill:'forwards'});}finally{face.remove();}}else await beat(returning?100:300,token);}
   finally{flight.remove();caption.remove();if(token===epoch)held.style.visibility='';}
  }
- function guessSeat(player){
-  const original=$('players').querySelector('[data-player="'+player+'"]'),rect=original.getBoundingClientRect(),aim=original.querySelector('.portrait-button').getBoundingClientRect(),target=node('div',null,'laser-target guess-seat-ghost'),clone=original.cloneNode(true);
-  target.dataset.player=player;target.dataset.avatar='true';target.style.cssText=`position:fixed;left:${rect.x}px;top:${rect.y}px;width:${rect.width}px;height:${rect.height}px`;clone.style.cssText='width:100%;height:100%;transform:none;visibility:visible;pointer-events:none';clone.dataset.current='false';delete clone.dataset.targetable;clone.querySelector('.target-prompt')?.remove();target.append(clone);return {original,target,aim};
- }
  async function pirateGuess(e,token,revealedCard=null){
   const attacker=e.attacker??view.turn;await scene(name(attacker)+'猜 '+name(e.player)+' 的 '+e.digit+' 號：'+(e.hit?'猜中':'未猜中'),[],'card',token);
   if(revealedCard&&token===epoch)await scene(name(e.player)+'的 '+cards[revealedCard].rank+' 號 '+cards[revealedCard].name+' 已公開',[revealedCard],'card',token,cardOrigin(e.player,revealedCard));
  }
  async function guessLaser(e,token,revealedCard=null){
-  if(token!==epoch)return;const layer=$('effectLayer');layer.replaceChildren();layer.dataset.kind='guess-laser';layer.dataset.phase='charge';
-  const allied=view.players[e.attacker??view.turn]?.team===view.players[you]?.team;layer.dataset.facing=allied?'back':'front';
-  const actor=node('img',null,'laser-kizaru');actor.src='art/v2/kizaru-stage-'+(allied?'back':'front')+'.webp';actor.alt=allied?'黃猿背面朝對手出招':'黃猿正面朝我方出招';
-  const ghost=guessSeat(e.player),portrait=ghost.original,shadow=node('i',null,'laser-ground-contact'),target=ghost.target;layer.append(shadow,actor,target);
-  await Promise.race([actor.decode().catch(()=>{}),new Promise(r=>setTimeout(r,1200))]);if(token!==epoch)return;
-  const r=actor.getBoundingClientRect(),t=ghost.aim,sx=r.x+r.width*(allied?.61:.457),sy=r.y+r.height*(allied?.067:.253),tx=t.x+t.width/2,ty=t.y+t.height/2;
-  if(portrait)portrait.style.visibility='hidden';
-  try{
+  if(token!==epoch)return;
+  const layer=$('effectLayer');layer.replaceChildren();layer.dataset.kind='guess-laser';layer.dataset.phase='charge';
+  const allied=view.players[e.attacker??view.turn]?.team===view.players[you]?.team;
+  layer.dataset.facing=allied?'back':'front';
+  const actor=node('img',null,'laser-kizaru'),shadow=node('i',null,'laser-ground-contact');
+  actor.src='art/v2/kizaru-stage-'+(allied?'back':'front')+'.webp';actor.alt='黃猿';
+  const target=node('div',null,'laser-target laser-hand-target'),surface=node('div',null,'laser-card-surface'),back=node('img');
+  target.dataset.player=e.player;back.src='art/v2/pirate-back.webp';back.alt='海賊手牌';
+  const ownCard=you===e.player?view.players[you].hand[0]:null;
+  surface.append(ownCard?cardImage(ownCard):back);target.append(surface);
+  layer.append(shadow,actor,target);
+  await Promise.race([actor.decode().catch(()=>{}),new Promise(resolve=>setTimeout(resolve,1200))]);
+  if(token!==epoch)return;
+  const r=actor.getBoundingClientRect(),t=surface.getBoundingClientRect();
+  const sx=r.x+r.width*(allied?.61:.457),sy=r.y+r.height*(allied?.067:.253),tx=t.x+t.width/2,ty=t.y+t.height/2;
   shadow.style.cssText=`left:${r.x+r.width*.43}px;top:${r.bottom-r.height*.035}px;width:${r.width*.64}px;height:${r.height*.025}px`;
   const spark=node('i',null,'laser-charge');spark.style.left=sx+'px';spark.style.top=sy+'px';layer.append(spark);
-  await animate(actor,[{opacity:0,transform:'translateX(-35px)'},{opacity:1,transform:'translateX(0)'}],{duration:reduced()?100:450});
-  await animate(spark,[{transform:'translate(-50%,-50%) scale(.2)',opacity:.3},{transform:'translate(-50%,-50%) scale(1)',opacity:1}],{duration:reduced()?100:800,fill:'forwards'});if(token!==epoch)return;
-  layer.dataset.phase='fire';window.MFSound?.play('slash');
-  const beam=node('i',null,'laser-beam');beam.style.cssText=`left:${sx}px;top:${sy}px;width:${Math.hypot(tx-sx,ty-sy)}px;rotate:${Math.atan2(ty-sy,tx-sx)}rad`;layer.append(beam);
-  const dodge=!e.hit?animate(target,[{transform:'translateX(0)'},{transform:'translateX(75px)',offset:.35},{transform:'translateX(75px)'}],{duration:reduced()?150:650,fill:'forwards'}):Promise.resolve();
-  // A miss starts moving before the ray arrives. Never reveal a losing card before impact.
-  await Promise.all([dodge,animate(beam,[{transform:'scaleX(0)',opacity:0},{transform:'scaleX(.1)',opacity:1,offset:.22},{transform:'scaleX(1)',opacity:1,offset:.8},{transform:'scaleX(1)',opacity:0}],{duration:reduced()?150:650})]);if(token!==epoch)return;
-  beam.remove();spark.remove();layer.dataset.phase=e.hit?'hit':'miss';target.dataset.result=e.hit?'hit':'miss';
-  if(e.hit){window.MFSound?.play('fire');await animate(target,[{filter:'brightness(3)',transform:'translateX(-5px)'},{filter:'brightness(1)',transform:'translateX(5px)'},{filter:'brightness(1)',transform:'translateX(0)'}],{duration:reduced()?100:450});if(revealedCard){
-   const defeated=node('div',null,'laser-defeated'),face=cardImage(revealedCard),rim=node('img',null,'laser-burn-rim');face.classList.add('laser-card-surface');rim.src='art/v2/fx-laser-burn-rim.webp';rim.alt='牌心被雷射燒穿';defeated.append(face,rim,node('strong',cards[revealedCard].rank+' 號 · '+cards[revealedCard].name));layer.append(defeated);await travelFrom(defeated,cardOrigin(e.player,revealedCard),550);if(token!==epoch)return;face.dataset.burned='true';
-   await Promise.all([animate(face,[{'--burn-radius':'0px',filter:'brightness(2)'},{'--burn-radius':'26px',filter:'brightness(.9)'}],{duration:reduced()?150:1100,fill:'forwards'}),animate(rim,[{transform:'translate(-50%,-50%) scale(.05)',opacity:0},{transform:'translate(-50%,-50%) scale(1)',opacity:1}],{duration:reduced()?150:1100,fill:'forwards'})]);}
-  }
-  const result=node('p',e.hit?name(e.player)+' · 猜中 '+e.digit+' 號':name(e.player)+' · 未猜中 '+e.digit+' 號','laser-result');layer.append(result);window.MFSound?.play(e.hit?'play':'miss');await beat(1700,token);if(token===epoch)layer.replaceChildren();
-  }finally{if(portrait)portrait.style.visibility='';}
+  const source=ownCard?cardOrigin(e.player,ownCard):null;
+  const originalVisibility=source?.style.visibility;
+  if(source)source.style.visibility='hidden';
+  try{
+   await Promise.all([animate(actor,[{opacity:0,transform:'translateX(-35px)'},{opacity:1,transform:'translateX(0)'}],{duration:reduced()?100:450}),travelFrom(target,source,450)]);
+   if(token!==epoch)return;
+   await animate(spark,[{transform:'translate(-50%,-50%) scale(.2)',opacity:.3},{transform:'translate(-50%,-50%) scale(1)',opacity:1}],{duration:reduced()?100:800,fill:'forwards'});
+   if(token!==epoch)return;
+   layer.dataset.phase='fire';window.MFSound?.play('slash');
+   const beam=node('i',null,'laser-beam');
+   beam.style.cssText=`left:${sx}px;top:${sy}px;width:${Math.hypot(tx-sx,ty-sy)}px;rotate:${Math.atan2(ty-sy,tx-sx)}rad`;layer.append(beam);
+   const dodge=e.hit?Promise.resolve():animate(target,[{transform:'translateX(0)'},{transform:'translateX(60px)',offset:.35},{transform:'translateX(60px)'}],{duration:reduced()?150:650,fill:'forwards'});
+   await Promise.all([dodge,animate(beam,[{transform:'scaleX(0)',opacity:0},{transform:'scaleX(.1)',opacity:1,offset:.22},{transform:'scaleX(1)',opacity:1,offset:.8},{transform:'scaleX(1)',opacity:0}],{duration:reduced()?150:650})]);
+   if(token!==epoch)return;
+   beam.remove();spark.remove();layer.dataset.phase=e.hit?'hit':'miss';
+   if(e.hit){
+    window.MFSound?.play('fire');
+    if(revealedCard&&revealedCard!==ownCard)surface.replaceChildren(cardImage(revealedCard));
+    surface.dataset.burned='true';
+    const rim=node('img',null,'laser-burn-rim');rim.src='art/v2/fx-laser-burn-rim.webp';rim.alt='牌心被雷射燒穿';target.append(rim);
+    await Promise.all([animate(surface,[{'--burn-radius':'0px',filter:'brightness(2)'},{'--burn-radius':'26px',filter:'brightness(.9)'}],{duration:reduced()?150:1100,fill:'forwards'}),animate(rim,[{transform:'translate(-50%,-50%) scale(.05)',opacity:0},{transform:'translate(-50%,-50%) scale(1)',opacity:1}],{duration:reduced()?150:1100,fill:'forwards'})]);
+   }
+   if(token!==epoch)return;
+   layer.append(node('p',name(e.player)+(e.hit?' · 猜中 ':' · 未猜中 ')+e.digit+' 號','laser-result'));
+   window.MFSound?.play(e.hit?'play':'miss');await beat(1700,token);
+   if(token===epoch)layer.replaceChildren();
+  }finally{if(source&&token===epoch)source.style.visibility=originalVisibility;}
  }
 
  async function navyHandShuffle(token){

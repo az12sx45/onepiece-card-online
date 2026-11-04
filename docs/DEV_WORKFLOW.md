@@ -9069,3 +9069,9 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - Grouped turn labels and actions into one flow. Removed duplicate hints and checked arrangement, targeting and settlement at compact mobile, wider mobile and desktop dimensions.
 - Adjusted dialog header wrapping and prevented floating chat from covering modal controls.
 - Hide a floating room invitation while a dialog is open. An unexpired invitation returns when the dialog closes.
+
+### 2026-11-04 · Marineford Kizaru hand target
+- The beam aims at the displayed hand card. The owner sees their own face and observers see the back until a public defeat. Impact burns the same card in place. A miss moves the card aside.
+- Eligible teammates and enemies glow without an outline. The authoritative target selection remains unchanged.
+- Targeted checks: MF_LASER_ONLY=1 in marineford_peek_laser_qa.cjs on Chrome and WebKit.
+- The laser card is sized and positioned within portrait viewports, with clearance for the miss movement and the burn ring centered.
