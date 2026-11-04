@@ -9,7 +9,7 @@
 @property(nonatomic,strong) UILabel *status;
 @property(nonatomic,copy) NSString *gameId;
 @property(nonatomic,copy) void (^returnToLauncher)(void);
-- (BOOL)open:(NSString *)gameId session:(NSDictionary *)session device:(NSString *)device;
+- (BOOL)open:(NSString *)gameId session:(NSDictionary *)session device:(NSString *)device marinefordAssets:(POMarinefordScheme *)assets;
 - (void)hide;
 - (void)close;
 @end
@@ -39,9 +39,10 @@
     [[self presenter] presentViewController:d animated:YES completion:nil];
 }
 - (void)optionsGesture:(UILongPressGestureRecognizer *)gesture {if(gesture.state==UIGestureRecognizerStateBegan)[self options];}
-- (BOOL)open:(NSString *)gameId session:(NSDictionary *)session device:(NSString *)device {
+- (BOOL)open:(NSString *)gameId session:(NSDictionary *)session device:(NSString *)device marinefordAssets:(POMarinefordScheme *)assets {
     if(![@[@"card",@"chess",@"marineford"] containsObject:gameId]||![session[@"secret"] isKindOfClass:NSString.class]||![session[@"secret"] length])return NO;
     if(_web){if(![_gameId isEqualToString:gameId])return NO;_surface.hidden=NO;return YES;}
+    if([gameId isEqual:@"marineford"]&&!assets)return NO;
     UIWindow *window=nil;
     for(UIScene *scene in UIApplication.sharedApplication.connectedScenes)if([scene isKindOfClass:UIWindowScene.class]&&scene.activationState==UISceneActivationStateForegroundActive)
         for(UIWindow *candidate in ((UIWindowScene *)scene).windows)if(candidate.isKeyWindow)window=candidate;
@@ -60,6 +61,12 @@
     NSString *style=[[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@[css] options:0 error:nil] encoding:NSUTF8StringEncoding];
     WKWebViewConfiguration *config=[WKWebViewConfiguration new];
     config.applicationNameForUserAgent=@"ONEPIECE_TABLETOP_IOS/0.1.0 (Electron/44.1.1 compatibility)";
+    if(assets){
+        [config setURLSchemeHandler:assets forURLScheme:@"poasset"];
+        NSString *localMedia=@"if(location.origin==='https://onepiece-card-online.onrender.com'&&location.pathname==='/marineford/index.html'){Object.defineProperty(window,'__PO_MARINEFORD_LOCAL_MEDIA__',{value:true});}";
+        [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:localMedia
+            injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES]];
+    }
     config.allowsInlineMediaPlayback=YES;config.mediaTypesRequiringUserActionForPlayback=WKAudiovisualMediaTypeNone;
     NSString *start=[NSString stringWithFormat:@"%@\nif(location.origin==='https://onepiece-card-online.onrender.com'){window.__tabletopSeedPrivateSession(%@);}\n%@",bootstrap,seed,mobile];
     [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:start injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:NO]];
@@ -85,9 +92,9 @@
 - (void)close { [_web stopLoading];[_web.configuration.userContentController removeAllUserScripts];[_surface removeFromSuperview];_surface=nil;_web=nil;_status=nil;_gameId=nil; }
 - (void)webView:(WKWebView *)web decidePolicyForNavigationAction:(WKNavigationAction *)action decisionHandler:(void (^)(WKNavigationActionPolicy))handler {if(action.targetFrame.isMainFrame&&POOfficialGameURL(action.request.URL)&&[action.request.URL.path isEqualToString:@"/__mobile_game_options__"]){handler(WKNavigationActionPolicyCancel);[self options];return;}handler(POOfficialGameURL(action.request.URL)?WKNavigationActionPolicyAllow:WKNavigationActionPolicyCancel);}
 - (void)webView:(WKWebView *)web didFinishNavigation:(WKNavigation *)navigation {_status.hidden=YES;}
-- (void)webView:(WKWebView *)web didFailProvisionalNavigation:(WKNavigation *)nav withError:(NSError *)error {if(error.code==NSURLErrorCancelled)return;_status.hidden=NO;_status.text=[_gameId isEqualToString:@"card"]?@"網路連線失敗，請用兩指長按畫面開啟遊戲選項，選擇重新連線。":@"網路連線失敗，請點右上「重新連線」。";}
+- (void)webView:(WKWebView *)web didFailProvisionalNavigation:(WKNavigation *)nav withError:(NSError *)error {if(error.code==NSURLErrorCancelled)return;_status.hidden=NO;_status.text=([_gameId isEqualToString:@"card"]||[_gameId isEqualToString:@"marineford"])?@"網路連線失敗，請用兩指長按畫面開啟遊戲選項，選擇重新連線。":@"網路連線失敗，請點右上「重新連線」。";}
 - (void)webView:(WKWebView *)web didFailNavigation:(WKNavigation *)nav withError:(NSError *)error {[self webView:web didFailProvisionalNavigation:nav withError:error];}
-- (void)webViewWebContentProcessDidTerminate:(WKWebView *)web {_status.hidden=NO;_status.text=[_gameId isEqualToString:@"card"]?@"遊戲頁面已暫停，請用兩指長按畫面開啟遊戲選項，選擇重新連線。":@"遊戲頁面已暫停，請點右上「重新連線」。";}
+- (void)webViewWebContentProcessDidTerminate:(WKWebView *)web {_status.hidden=NO;_status.text=([_gameId isEqualToString:@"card"]||[_gameId isEqualToString:@"marineford"])?@"遊戲頁面已暫停，請用兩指長按畫面開啟遊戲選項，選擇重新連線。":@"遊戲頁面已暫停，請點右上「重新連線」。";}
 - (void)webView:(WKWebView *)web runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completion {
     UIAlertController *d=[UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];[d addAction:[UIAlertAction actionWithTitle:@"確定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *a){completion();}]];[[self presenter] presentViewController:d animated:YES completion:nil];
 }

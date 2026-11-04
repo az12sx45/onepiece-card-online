@@ -13,6 +13,8 @@
 - (BOOL)show:(BOOL)reload;
 - (void)hide;
 - (void)close;
+- (void)notifyGameState;
+- (void)notifyGameLaunchFailed;
 - (NSArray *)takeRequests;
 - (void)reply:(NSString *)identifier result:(NSDictionary *)result;
 @end
@@ -94,6 +96,14 @@
 - (void)hide {[_web evaluateJavaScript:@"window.__poLauncherPause&&window.__poLauncherPause()" completionHandler:nil];_web.hidden=YES;}
 - (void)close {++_loadGeneration;[_web.configuration.userContentController removeScriptMessageHandlerForName:@"tabletop"];[_web removeFromSuperview];_web=nil;_status=nil;_assets=nil;[_requests removeAllObjects];}
 - (NSArray *)takeRequests {NSArray *result=[_requests copy];[_requests removeAllObjects];return result;}
+- (void)notifyGameState {
+    if(![_web.URL.scheme isEqual:@"poapp"]||![_web.URL.host isEqual:@"app"])return;
+    [_web evaluateJavaScript:@"window.__tabletopNativeEvent?.('gameStateChanged',null)" completionHandler:nil];
+}
+- (void)notifyGameLaunchFailed {
+    if(![_web.URL.scheme isEqual:@"poapp"]||![_web.URL.host isEqual:@"app"])return;
+    [_web evaluateJavaScript:@"window.__tabletopNativeEvent?.('gameLaunchFailed',null)" completionHandler:nil];
+}
 - (void)reply:(NSString *)identifier result:(NSDictionary *)result {
     if(![_web.URL.scheme isEqualToString:@"poapp"]||![_web.URL.host isEqualToString:@"app"])return;
     NSData *data=[NSJSONSerialization dataWithJSONObject:@[identifier,result] options:0 error:nil];

@@ -69,6 +69,8 @@ def main():
     native=out/'native';shutil.copytree(candidate/'native',native)
     run(['clang','-fobjc-arc','-framework','Cocoa','-framework','WebKit','-I',native,candidate/'tools/check_launcher_webkit.m','-o',out/'launcher-webkit-check'],out,logs/'launcher-check-compile.log')
     run([out/'launcher-webkit-check',candidate/'bundle-resources/launcher-web'],out,logs/'launcher-webkit-check.log')
+    run(['clang++','-fobjc-arc','-framework','Cocoa','-framework','WebKit','-I',native,candidate/'tools/check_marineford_webkit.mm','-o',out/'marineford-webkit-check'],out,logs/'marineford-check-compile.log')
+    run([out/'marineford-webkit-check',candidate/'bundle-resources/launcher-web'],out,logs/'marineford-webkit-check.log')
     vendor=out/'vendor';vendor.mkdir()
     js_zip=vendor/'godotjs.zip';fetch(lock['godotjs'],js_zip)
     addon=project/'addons/godotjs-ext.daylily-zeleen'

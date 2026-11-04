@@ -568,6 +568,7 @@ class SocialService extends EventEmitter {
   }
   window.__tabletopNativeEvent = (name, value) => {
     if (name === 'gameStateChanged' || name === 'gamesState' || name === 'state') nativeStateRefresh().catch(() => {});
+    else if (name === 'gameLaunchFailed') publish('game-launch-failed');
     else publish(name, (name === 'update-state' || name === 'content-update-state') ? normalizeUpdate(value, name === 'content-update-state') : value);
   };
   function normalizeUpdate(value, content) {
@@ -608,6 +609,7 @@ class SocialService extends EventEmitter {
     },
     chooseCacheLocation: async () => { const result = await nativeCall('chooseCacheLocation'); return { ...result, state: await nativeStateRefresh() }; },
     onState: fn => subscribe('state', fn), onProgress: fn => subscribe('progress', fn),
+    onGameLaunchFailed: fn => subscribe('game-launch-failed', fn),
     onSocialState: fn => subscribe('social-state', fn), onSessionKicked: fn => subscribe('session-kicked', fn),
     onLauncherUpdate: fn => subscribe('update-state', fn), onLauncherContentUpdate: fn => subscribe('content-update-state', fn)
   };

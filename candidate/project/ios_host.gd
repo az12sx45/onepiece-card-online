@@ -32,11 +32,13 @@ func _request(method: String,args: Dictionary) -> Dictionary:
 		if method=="getNativeState":
 			installed_version=str(value.get("appVersion","iOS"))
 			value.preferences=preferences;value.cacheRoot="iPhone App 儲存空間";value.freeBytes=null
-			value.games={"marineford":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"},"board":{"status":"installed","hasInstalled":true,"removable":false,"installedVersion":installed_version,"remoteVersion":installed_version},"card":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"},"chess":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"}}
+			value.games={"marineford":_marineford_request("state"),"board":{"status":"installed","hasInstalled":true,"removable":false,"installedVersion":installed_version,"remoteVersion":installed_version},"card":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"},"chess":{"status":"installed","hasInstalled":true,"removable":false,"onlineOnly":true,"installedVersion":"線上版","remoteVersion":"線上版"}}
 		return value
 	if method=="savePreferences":
 		if args.get("gameDisplayMode","fullscreen")!="fullscreen":return {"ok":false,"error":"iPhone 使用系統管理的橫向全螢幕。"}
 		return {"ok":true,"preferences":preferences}
+	if method in ["installGame","cancelInstall","uninstallGame"] and args.get("gameId")=="marineford":
+		return _marineford_request(method)
 	if method=="launchGame":
 		var target:=str(args.get("gameId",""))
 		if not target in ["board","card","chess","marineford"]:return {"ok":false,"error":"無效的遊戲。"}
@@ -52,6 +54,10 @@ func _request(method: String,args: Dictionary) -> Dictionary:
 	if method=="chooseCacheLocation":return {"ok":bool(bridge.call("open_settings")),"cacheRoot":"iPhone App 儲存空間","managedSandbox":true}
 	if "Update" in method:return {"ok":true,"state":{"status":"unavailable","currentVersion":installed_version,"message":"iOS 測試版請透過 iloader 安裝新版；遊戲圖片會按需下載。","error":"iOS 測試版請透過 iloader 安裝新版。"}}
 	return {"ok":false,"error":"此操作目前不適用於 iOS 航海錄測試版。"}
+
+func _marineford_request(method: String) -> Dictionary:
+	var result: Variant=JSON.parse_string(bridge.call("marineford_request",method))
+	return result if result is Dictionary else {"ok":false,"status":"error","error":"素材儲存空間無法使用。"}
 
 func _start_game(target: String="board") -> void:
 	if is_instance_valid(game):return

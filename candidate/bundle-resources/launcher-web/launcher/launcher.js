@@ -84,7 +84,7 @@ const GAMES = [
 ];
 
 // Independent online game; original three entries and their download contracts stay intact.
-GAMES.push({ ...GAMES[0], id: 'marineford', title: '頂上戰爭篇', english: 'MARINEFORD',
+GAMES.push({ ...GAMES[0], id: 'marineford', title: '馬林福特之戰', english: 'MARINEFORD',
   tagline: '一位海軍，迎戰整個白鬍子海賊團。',
   description: '2–6 人非對稱合作對戰。海軍保留兩張手牌，海賊團各留一張；猜牌、看牌、士氣與決鬥，每一次選擇都牽動陣營戰力。',
   detailDescription: '由一位玩家扮演海軍，對抗一至五位白鬍子海賊團隊長。依順位抽一張、打一張，善用公開情報和士氣。海軍集齊六種正義或擊潰海賊團獲勝；海賊團則要將海軍戰力歸零。支援 CPU 和跨裝置房間。',
@@ -1116,6 +1116,7 @@ document.addEventListener('click', (event) => {
 
 api?.onState(applyLauncherState);
 
+api?.onGameLaunchFailed?.(() => showToast('遊戲無法開啟，請稍後再試。'));
 api?.onProgress((progress) => {
   if (!progress?.gameId || !byId[progress.gameId]) return;
   snapshot.games = { ...snapshot.games, [progress.gameId]: { ...(snapshot.games[progress.gameId] || {}), ...progress } };
