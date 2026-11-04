@@ -170,6 +170,9 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
         'baselineVersion':38,'cloudCostVerified':False,'warning':'Owner signing and physical iPhone acceptance required'}
     report['rawRuntimeResourcesByteIdentical']=raw_verified
     report['macWebKitLauncherChecked']=True
+    report['macWebKitMarinefordChecked']=True
+    report['versionCode']=int(info['CFBundleVersion'])
+    report['minimumOS']=info['MinimumOSVersion']
     report['strippedLocalAndDebugSymbols']=stripped
     with zipfile.ZipFile(package) as archive:
         report['largestCompressedEntries']=[{'path':x.filename,'bytes':x.compress_size} for x in sorted(archive.infolist(),key=lambda x:x.compress_size,reverse=True)[:12]]

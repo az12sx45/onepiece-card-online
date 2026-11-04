@@ -77,8 +77,8 @@
     {
       "path": "launcher/launcher-profile-shop.js",
       "sourceSha256": "cc2c82434e784069ef508d459878a2c47b2c971b4fe393db055131352e01fac1",
-      "sha256": "6c090ae402661858f74a655a2082b2bd81219b0de7ad3295c3d173ed97cd19fa",
-      "size": 154154
+      "sha256": "dd92562fddda93677896665f7b660236b92ff732f04f3880815be1faa4f966b6",
+      "size": 154157
     },
     {
       "path": "launcher/launcher-reserved-crew.js",
@@ -185,14 +185,14 @@
     {
       "path": "launcher/launcher.js",
       "sourceSha256": "95708927809f8c9b42f4579c815bd813b5f49f385ac6b62dc574b7169f2bf3f2",
-      "sha256": "31df3d11cb45399e114451951093c83587900eac20051ff83e89a981bb6fa02e",
-      "size": 53937
+      "sha256": "9a542a32db0f312ebd8aea72d77ab1f8fa52e13c5fa567e481bbf00d47235907",
+      "size": 54027
     },
     {
       "path": "launcher/mobile-bridge.js",
       "sourceSha256": "7df50941a034cea5cfd1838e57e7a7458c7de2ce1f5421139e974368c3c195e1",
-      "sha256": "8c1fc93703cfeb4dc832e43c0c657c173ae144064366048f278eb87ffde6874c",
-      "size": 38611
+      "sha256": "cfcaaaf956e7b01d1745790cdc0c07a76f6022de7c8d06817fb10f0156b05dbc",
+      "size": 38751
     },
     {
       "path": "launcher/socket.io.min.js",
@@ -9217,13 +9217,13 @@
     },
     {
       "path": "launcher-assets/images/game_launcher/launcher_marineford_cover_v2.webp",
-      "sha256": "9b296450f26b2540b9e4385feca6e6265f2c86d7b2a7d7ea5208d2af1f1882bf",
-      "size": 609430
+      "sha256": "8cc824b24e3a415a9f988fe071535e787b169682ada7c9d56731c27b23ac8bc4",
+      "size": 685324
     },
     {
       "path": "launcher-assets/images/game_launcher/launcher_marineford_box_v3.webp",
-      "sha256": "86ab958bb0386c0ab65a198666fe5d98f4b65fac2c0dbdfe61a742cc9f1930c0",
-      "size": 618766
+      "sha256": "c3fd8f9c09fed77d331da6a53a77c5111b6bcc5f62014c35cbc376b43b7672a8",
+      "size": 627490
     },
     {
       "path": "launcher-assets/images/game_launcher/launcher_marineford_box_interior_v1.webp",
@@ -9231,6 +9231,6 @@
       "size": 422876
     }
   ],
-  "bytes": 358879798,
+  "bytes": 358964649,
   "nativeCardBrowserModulesOmitted": {}
 }
