@@ -618,3 +618,29 @@ body:not([data-screen="table"]) #health{display:none!important}
 .mf-room-chat{margin-top:8px;padding:8px;background:#172e40;border:1px solid #a98b58}
 .mf-room-chat .mf-chat-log{min-height:35px;max-height:92px}
 .mf-room-chat input,.mf-friends input{min-width:0}
+
+/* Keep the turn label and its controls in one flow on both sides of the board. */
+#table .table-controls{position:absolute;left:50%;bottom:max(5px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(32%,390px);display:grid;gap:3px;z-index:5;pointer-events:none}
+#table[data-perspective="pirate"] .table-controls{bottom:calc(var(--ally-height,55px) + 32px)}
+#table .table-controls #center,#table .table-controls #actions{position:static;inset:auto;transform:none;width:auto;min-width:0}
+#table .table-controls #actions{display:flex;flex-flow:row wrap;align-items:center;justify-content:center;gap:4px}
+#table .table-controls #actions:empty,#table .table-controls #status:empty,#table[data-targeting="true"] .table-controls #status,#table[data-arranging="true"] .table-controls #status{display:none}
+#table .table-controls #status,#table .table-controls #turnLabel{margin:0;overflow-wrap:anywhere}
+#table .table-controls #actions .choice-button{width:auto;max-width:100%;min-width:min(84px,100%);white-space:normal;overflow-wrap:anywhere}
+#table .table-controls .arrange-question,#table .table-controls .target-action-hint{width:100%;margin:0;overflow-wrap:anywhere}
+#sheet>header{min-width:0}
+#sheet>header h2{min-width:0;margin-block:0;line-height:1.15;font-size:clamp(14px,3.3vw,24px);overflow-wrap:anywhere}
+#sheetClose{flex:none}
+.room-code-form{min-width:0}
+.room-code-form input{min-width:0;flex:1 1 90px}
+.room-code-form button{flex-shrink:0}
+.mf-waiting-seat>div,.campaign-player>span{min-width:0;overflow-wrap:anywhere}
+@media(max-height:450px){
+ .mf-chat{max-height:calc(100dvh - 24px);width:min(300px,48vw)}
+ #table .table-controls #actions .choice-button{padding-inline:9px}
+}
+
+#table[data-perspective] .table-controls #actions{position:static;inset:auto;transform:none;width:100%;flex-direction:row}
+#table[data-perspective] .table-controls #actions .choice-button{width:auto;min-width:min(84px,100%);max-width:100%;min-height:30px;aspect-ratio:auto;padding:4px 9px}
+#table[data-targeting="true"] .table-controls #actions .choice-button{min-width:min(126px,100%)}
+body:has(#sheet:not([hidden])) > .mf-invite{visibility:hidden}

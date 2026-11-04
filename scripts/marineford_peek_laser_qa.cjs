@@ -54,6 +54,27 @@ try{
   }
  }
  checks.push('Both faction views on seven viewport sizes keep deck footprints on the painted foreground and card text inside its frame');
+ for(const [width,height] of [[568,320],[740,360],[1366,768]]){
+  await p.setViewportSize({width,height});
+  for(const [viewer,mode] of [[0,'arrange'],[1,'fight-target'],[1,'ended']]){
+   const state=engine.create(room.seats,0);
+   if(mode==='ended'){state.phase='ended';state.winner='pirate';}
+   else state.pending=mode==='arrange'?{type:mode,owner:0,cards:state.players[0].hand.slice()}:{type:mode,owner:1,targets:[0]};
+   await recover(state,viewer);
+   const collisions=await p.locator('.table-controls').evaluate(dock=>{
+    const items=[...dock.querySelectorAll('#turnLabel,#status,#actions p,#actions button')].filter(el=>el.getClientRects().length);
+    const rects=items.map(el=>el.getBoundingClientRect());
+    return items.flatMap((el,i)=>{
+     const a=rects[i],x=a.x+a.width/2,y=a.y+a.height/2;
+     const covered=el.matches('button')&&!el.contains(document.elementFromPoint(x,y));
+     return covered||a.top<0||a.bottom>innerHeight||a.left<0||a.right>innerWidth||rects.slice(i+1).some(b=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top)?[el.textContent]:[];
+    });
+   });
+   assert.deepEqual(collisions,[],JSON.stringify({width,height,mode}));
+   if(width===740)await p.screenshot({path:out+'/controls-'+mode+'.png'});
+  }
+ }
+ checks.push('Arrange, target and settlement controls fit without overlap or blocked buttons at three widths');
  if(process.env.MF_LAYOUT_ONLY){fs.writeFileSync(out+'/report.json',JSON.stringify({passed:true,checks,errors,scope:'2–6 seat faction layout and health starts, static browser checks'},null,2));console.log(JSON.stringify({passed:true,checks:checks.length}));return;}
  let s=engine.create(room.seats,0);s.turn=1;s.players[0].hand=['navy-garp','navy-kizaru'];s.players[1].played=['pirate-4'];s.pending={type:'peek-slot',owner:2,slots:2,source:1};s.step='effect';
  const peek=engine.apply(s,2,{type:'CHOOSE',slot:1});assert(peek.ok);

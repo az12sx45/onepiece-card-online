@@ -1,7 +1,26 @@
 {
   "schemaVersion": 1,
-  "revision": 87,
+  "revision": 88,
   "announcements": [
+    {
+      "id": "marineford-20261104-overlap",
+      "status": "published",
+      "publishedAt": "2026-11-04T08:33:52.227Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "頂上戰爭篇 2026.11.04",
+      "title": "頂上戰爭篇：回合提示與操作排版",
+      "summary": "把回合提示與操作按鈕集中排列，減少文字與彈窗重疊。",
+      "body": [
+        "回合提示和可用操作會一起顯示，移除重複提示。",
+        "調整手機與桌機的選擇按鈕及彈窗標題。開啟彈窗時會收起浮動私訊，關閉彈窗後可查看仍有效的邀請。",
+        "請先結束頂上戰爭篇，再重新進入以載入這次更新。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.31"
+      }
+    },
     {
       "id": "marineford-20261104-ground-type",
       "status": "published",

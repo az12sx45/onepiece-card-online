@@ -9064,3 +9064,8 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - Marineford card captions share one inset layout. Compact cards show the rank and name, with the full effect in the detail screen.
 - Both battlefield backgrounds share a rigid deck transform tied to the actual cover crop and each painting’s ice floor. The Navy deck placement accounts for the player HUD.
 - The mobile browser QA checks both factions across seven viewport sizes and measures the card caption text bounds and deck footprints.
+
+### 2026-11-04 · Marineford text and button spacing
+- Grouped turn labels and actions into one flow. Removed duplicate hints and checked arrangement, targeting and settlement at compact mobile, wider mobile and desktop dimensions.
+- Adjusted dialog header wrapping and prevented floating chat from covering modal controls.
+- Hide a floating room invitation while a dialog is open. An unexpired invitation returns when the dialog closes.
