@@ -71,7 +71,7 @@ const GAME_CONFIG = {
   card: { title: '偉大航道爭霸戰', entry: '/start.html', partition: 'onepiece-card-desktop-v1' },
   board: { title: '新世界航海錄', entry: '/board_start.html', partition: 'onepiece-board-desktop-v1' },
   chess: { title: '霸海戰棋', entry: '/chess/index.html', partition: 'onepiece-chess-desktop-v1' },
-  marineford: { title: '頂上戰爭篇', entry: '/marineford/index.html', partition: 'onepiece-marineford-desktop-v1', onlineOnly: true }
+  marineford: { title: '馬林福特之戰', entry: '/marineford/index.html', partition: 'onepiece-marineford-desktop-v1', onlineOnly: true }
 };
 
 if (TEST_USER_DATA_PATH && (SMOKE_MODE || !app.isPackaged)) {

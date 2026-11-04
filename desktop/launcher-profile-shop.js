@@ -3,7 +3,7 @@
   const api = window.onePieceDesktop;
   const $ = id => document.getElementById(id);
   const GAME_META = [
-    { id: 'marineford', title: '頂上戰爭篇', english: 'MARINEFORD', cover: 'launcher_marineford_box_v3.webp' },
+    { id: 'marineford', title: '馬林福特之戰', english: 'MARINEFORD', cover: 'launcher_marineford_box_v3.webp' },
     { id: 'card', title: '偉大航道爭霸戰', english: 'GRAND LINE RIVALRY', cover: 'launcher_card_cover_perspective_v2.webp' },
     { id: 'board', title: '新世界航海錄', english: 'NEW WORLD VOYAGE', cover: 'launcher_board_cover_logo_perspective_v5.webp' },
     { id: 'chess', title: '霸海戰棋', english: 'PIRATE WAR CHESS', cover: 'launcher_chess_cover_logo_perspective_v5.webp' }

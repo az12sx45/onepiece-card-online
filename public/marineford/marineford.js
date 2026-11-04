@@ -156,22 +156,22 @@
  socket.on('EMIT',payload=>{
   if(payload?.type==='toast'&&payload.text){notify(payload.text);return;}
   const inv=payload?.invite;if(payload?.type!=='marineford_lobby_invite'||!inv||view)return;
-  document.querySelector('.mf-invite')?.remove();const panel=node('aside',null,'mf-invite');panel.append(node('strong',inv.fromName+' 邀請你加入頂上戰爭篇'),node('p','房間 '+inv.roomId));
+  document.querySelector('.mf-invite')?.remove();const panel=node('aside',null,'mf-invite');panel.append(node('strong',inv.fromName+' 邀請你加入馬林福特之戰'),node('p','房間 '+inv.roomId));
   for(const [label,action] of [['加入','accept'],['拒絕','reject']])panel.append(button(label,async()=>{panel.remove();if(action==='accept'&&(room||view)){notify('請先離開目前房間');return;}const result=await friendRequest('LOBBY_INVITE_RESPOND',{inviteId:inv.inviteId,action});if(result.ok&&action==='accept'){enteredLobby=true;await request('MF_JOIN',{code:result.roomId});}},'small-button'));
   document.body.append(panel);setTimeout(()=>panel.remove(),Math.max(0,inv.expiresAt-Date.now()));
  });
- function renderLobby(){if(view)return;$('menuButton').hidden=!enteredLobby&&!room;document.body.dataset.screen='lobby';$('justice').hidden=true;$('health').replaceChildren();$('lobby').hidden=false;$('table').hidden=true;const body=$('lobbyBody');body.replaceChildren();$('lobby').dataset.waiting=String(!!room);$('lobby').dataset.splash=String(authenticated&&!room&&!enteredLobby);$('lobby').dataset.mode=!room&&enteredLobby&&authenticated?'main':'entry';if(!authenticated){body.append(node('p','請從啟動器登入帳號後進入頂上戰爭篇。'));return;}
-  if(!room&&!enteredLobby){const enter=button('',()=>{enteredLobby=true;renderLobby();},'mf-splash');enter.setAttribute('aria-label','點擊進入');enter.append(node('span','MARINEFORD','mf-splash-kicker'),node('strong','頂上戰爭篇','mf-splash-title'),node('span','點擊進入','mf-splash-prompt'));body.append(enter);return;}
+ function renderLobby(){if(view)return;$('menuButton').hidden=!enteredLobby&&!room;document.body.dataset.screen='lobby';$('justice').hidden=true;$('health').replaceChildren();$('lobby').hidden=false;$('table').hidden=true;const body=$('lobbyBody');body.replaceChildren();$('lobby').dataset.waiting=String(!!room);$('lobby').dataset.splash=String(authenticated&&!room&&!enteredLobby);$('lobby').dataset.mode=!room&&enteredLobby&&authenticated?'main':'entry';if(!authenticated){body.append(node('p','請從啟動器登入帳號後進入馬林福特之戰。'));return;}
+  if(!room&&!enteredLobby){const enter=button('',()=>{enteredLobby=true;renderLobby();},'mf-splash');enter.setAttribute('aria-label','點擊進入');enter.append(node('span','MARINEFORD','mf-splash-kicker'),node('strong','馬林福特之戰','mf-splash-title'),node('span','點擊進入','mf-splash-prompt'));body.append(enter);return;}
   if(!room){const identity=node('div',null,'lobby-identity');identity.append(avatar(you),node('strong',me.name),node('span','已登入'));body.append(identity);
    const row=node('div',null,'lobby-entry lobby-menu');
    row.append(button('開始遊戲',openRoomChoice),button('個人頁面',profile),button('遊戲規則',showRules));
    body.append(row);
    const links=node('div',null,'lobby-links');
-   links.append(button('好友',openFriends,'small-button'),button('卡片圖鑑',()=>gallery('頂上戰爭 · 卡片圖鑑',Object.keys(cards)),'small-button'));
+   links.append(button('好友',openFriends,'small-button'),button('卡片圖鑑',()=>gallery('馬林福特之戰 · 卡片圖鑑',Object.keys(cards)),'small-button'));
    body.append(links);return;}
   const waiting=node('section',null,'mf-waiting');
   const header=node('header'),title=node('div'),controls=node('div',null,'lobby-actions');
-  title.append(node('small','頂上戰爭篇 · 等待室'),node('h2',room.code,'room-code'));
+  title.append(node('small','馬林福特之戰 · 等待室'),node('h2',room.code,'room-code'));
   controls.append(button('複製房號',async()=>{try{await navigator.clipboard.writeText(room.code);notify('房號已複製');}catch{notify('房號 '+room.code);}},'small-button'),button('好友邀請',openFriends,'small-button'),button('離開房間',leave,'small-button'));
   header.append(title,controls);waiting.append(header);
   const host=Number(me.userId)===Number(room.host),people=room.seats.filter(p=>!p.cpu),cpus=room.seats.filter(p=>p.cpu);
@@ -339,7 +339,7 @@
  function showResult(){
   if(view?.phase!=='ended')return;
   const match=view,team=match.players[you].team,won=team===match.winner;
-  const result=resultText(match),body=sheet('頂上戰爭 · 戰役結算','campaign-result');
+  const result=resultText(match),body=sheet('馬林福特之戰 · 戰役結算','campaign-result');
   const banner=node('div',null,'campaign-banner'),verdict=node('div');
   banner.dataset.team=match.winner;
   verdict.append(node('small',teamName(team)+'視角 · '+(won?'勝利':'落敗')),node('h3',result.title),node('p',result.reason));
@@ -608,7 +608,7 @@
  socket.on('disconnect',()=>{authenticated=false;reset();$('connection').textContent='重新連線中…';closeSheet();});
  socket.on('connect',async()=>{let secret='',deviceId='';try{secret=localStorage.getItem('opSecret')||localStorage.getItem('op_secret')||'';deviceId=localStorage.getItem('op_device_id')||'';}catch{}if(!secret){$('connection').textContent='尚未登入';renderLobby();return;}const result=await request('SOCIAL_AUTH',{secret,deviceId});if(!result.ok)return;me=result.me;authenticated=true;$('connection').textContent='已連線';const saved=sessionStorage.getItem('marineford.room');if(saved){const joined=await request('MF_JOIN',{code:saved});if(!joined.ok){sessionStorage.removeItem('marineford.room');room=null;view=null;}}render();});
  $('sheetClose').onclick=closeSheet;
- function openMatchMenu(){const body=sheet('頂上戰爭篇');body.append(button('返回牌桌',closeSheet),button('我的航海者檔案',profile),button(window.MFSound?.muted?'音效：關閉':'音效：開啟',event=>{const muted=window.MFSound.toggle();event.currentTarget.textContent=muted?'音效：關閉':'音效：開啟';}),button('卡片圖鑑',()=>gallery('卡片圖鑑',Object.keys(cards))),button('遊戲規則',showRules),button(view?.phase==='playing'?'繼續對局':'離開房間',view?.phase==='playing'?closeSheet:leave));if(view&&me?.userId===room?.host)body.append(button('結束本場並回大廳',()=>{const b=sheet('結束本場對局？');b.append(node('p','所有玩家會回到大廳，本場不計結果。'),button('確認結束',()=>request('MF_CLOSE')),button('繼續對局',closeSheet));}));};
+ function openMatchMenu(){const body=sheet('馬林福特之戰');body.append(button('返回牌桌',closeSheet),button('我的航海者檔案',profile),button(window.MFSound?.muted?'音效：關閉':'音效：開啟',event=>{const muted=window.MFSound.toggle();event.currentTarget.textContent=muted?'音效：關閉':'音效：開啟';}),button('卡片圖鑑',()=>gallery('卡片圖鑑',Object.keys(cards))),button('遊戲規則',showRules),button(view?.phase==='playing'?'繼續對局':'離開房間',view?.phase==='playing'?closeSheet:leave));if(view&&me?.userId===room?.host)body.append(button('結束本場並回大廳',()=>{const b=sheet('結束本場對局？');b.append(node('p','所有玩家會回到大廳，本場不計結果。'),button('確認結束',()=>request('MF_CLOSE')),button('繼續對局',closeSheet));}));};
  $('menuButton').onclick=openMatchMenu;
  fetch('cards.json').then(r=>{if(!r.ok)throw Error();return r.json();}).then(list=>{cards=Object.fromEntries(list.map(c=>[c.id,c]));render();}).catch(()=>notify('卡片資料載入失敗，請重新進入遊戲'));
 })();
