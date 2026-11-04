@@ -35,7 +35,7 @@ function draw(s,id,events,rng){
 function defeat(s,id,card,events){
  const p=s.players[id],index=p.hand.indexOf(card);requireRule(index>=0,'被擊敗的牌已不在手中');p.hand.splice(index,1);s.hp[p.team]=Math.max(0,s.hp[p.team]-1);
  const recycle=byId[card].justice||card==='navy-sengoku';if(!recycle)p.played.push(card);
- emit(events,'defeat',{player:id,card,team:p.team,hp:s.hp[p.team]});
+ emit(events,'defeat',{player:id,card,slot:index,recycle,team:p.team,hp:s.hp[p.team]});
  if(endCheck(s,events))return;
  prepend(s,{type:'draw',id},...(recycle?[{type:'recycle',card}]:[]));
 }
@@ -82,7 +82,7 @@ function chooseMorale(s,battle,events){
  const navy=s.players[s.navyId],pirate=s.players[battle.pirate],pirateCard=pirate.hand[0];
  requireRule(byId[battle.navyCard]&&byId[pirateCard],'沒有可出戰的牌');
  const nv=byId[battle.navyCard].rank+battle.boost.navy,pv=byId[pirateCard].rank+battle.boost.pirate;
- emit(events,'battle',{attacker:battle.attacker,defender:battle.defender,boost:battle.boost});
+ emit(events,'battle',{attacker:battle.attacker,defender:battle.defender,navySlot:navy.hand.indexOf(battle.navyCard),boost:battle.boost});
  emit(events,'battle-private',{cards:[{player:navy.id,card:battle.navyCard},{player:pirate.id,card:pirateCard}],values:[nv,pv]},[navy.id,pirate.id]);
  const next=battle.remaining>1?{type:'next-fight',owner:battle.source,attacker:battle.attacker,remaining:battle.remaining-1,used:battle.used}:null;
  if(next)prepend(s,next);
@@ -124,8 +124,8 @@ function apply(input,actor,action,{rng=Math.random}={}){
     case 'defeat-choice':requireRule(p.cards.includes(card),'選牌無效');defeat(s,actor,card,events);break;
     case 'threshold':{targetOK();const hand=s.players[target].hand[0];emit(events,'target',{player:actor,target});if(hand&&(p.high?byId[hand].rank>=3:byId[hand].rank<=3))defeat(s,target,hand,events);else emit(events,'resisted',{player:target});break;}
     case 'peek-reader':targetOK();pending(s,'arrange',s.navyId,{cards:s.players[s.navyId].hand.slice(),reader:target,source:actor});break;
-    case 'peek-slot':requireRule(Number.isInteger(action.slot)&&action.slot>=0&&action.slot<p.slots,'牌位無效');pending(s,'read',actor,{cards:[s.players[s.navyId].hand[action.slot]],target:s.navyId,slot:action.slot});emit(events,'peek',{player:actor,target:s.navyId});emit(events,'peek-slot',{player:actor,target:s.navyId,slot:action.slot},[actor,s.navyId]);break;
-    case 'read':requireRule(action.done===true,'請確認看完');if(Number.isInteger(p.slot)&&p.target!=null)emit(events,'peek-return',{player:actor,target:p.target,slot:p.slot},[actor,p.target]);break;
+    case 'peek-slot':requireRule(Number.isInteger(action.slot)&&action.slot>=0&&action.slot<p.slots,'牌位無效');pending(s,'read',actor,{cards:[s.players[s.navyId].hand[action.slot]],target:s.navyId,slot:action.slot});emit(events,'peek',{player:actor,target:s.navyId});emit(events,'peek-slot',{player:actor,target:s.navyId,slot:action.slot});break;
+    case 'read':requireRule(action.done===true,'請確認看完');if(Number.isInteger(p.slot)&&p.target!=null)emit(events,'peek-return',{player:actor,target:p.target,slot:p.slot});break;
     case 'morale-target':targetOK();s.players[target].morale++;emit(events,'morale',{player:target,amount:1});break;
     case 'order':{const order=action.cards;requireRule(Array.isArray(order)&&order.length===p.cards.length&&new Set(order).size===order.length&&order.every(id=>p.cards.includes(id)),'排序無效');s.decks.pirate.splice(0,order.length,...order);emit(events,'order',{player:actor,count:order.length});break;}
     case 'return':{const ids=action.cards;requireRule(Array.isArray(ids)&&ids.length===p.count&&new Set(ids).size===ids.length&&ids.every(id=>p.cards.includes(id)),'回牌無效');for(const id of ids){s.players[actor].hand.splice(s.players[actor].hand.indexOf(id),1);s.decks.navy.push(id);}emit(events,'return',{player:actor,count:ids.length});break;}
@@ -144,7 +144,7 @@ function apply(input,actor,action,{rng=Math.random}={}){
 }
 function visible(s,viewer){
  const v={schema:s.schema,revision:s.revision,phase:s.phase,turn:s.turn,step:s.step,navyId:s.navyId,hp:clone(s.hp),winner:s.winner,moraleRule:s.moraleRule,deckCounts:{navy:s.decks.navy.length,pirate:s.decks.pirate.length},players:s.players.map(p=>({...p,hand:p.id===viewer?p.hand.slice():p.hand.map(()=>null),played:p.played.slice()})),pending:null};
- if(s.pending){const p=s.pending;v.pending={type:p.type==='defeat-choice'&&p.owner!==viewer?'effect':p.type,owner:p.owner};if(p.owner===viewer){for(const key of ['targets','digits','slots','remaining','used','count','high'])if(p[key]!=null)v.pending[key]=clone(p[key]);if(p.cards)v.pending.cards=p.cards.slice();}if(p.type==='read'&&(p.owner===viewer||p.target===viewer)){v.pending.target=p.target;v.pending.slot=p.slot;}}
+ if(s.pending){const p=s.pending;v.pending={type:p.type==='defeat-choice'&&p.owner!==viewer?'effect':p.type,owner:p.owner};if(p.owner===viewer){for(const key of ['targets','digits','slots','remaining','used','count','high'])if(p[key]!=null)v.pending[key]=clone(p[key]);if(p.cards)v.pending.cards=p.cards.slice();}if(p.type==='read'){v.pending.target=p.target;v.pending.slot=p.slot;}}
  return v;
 }
 function cpuAction(v,id,rng=Math.random){

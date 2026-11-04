@@ -520,3 +520,7 @@ body:not([data-screen="table"]) #health{display:none!important}
 .seat[data-team="navy"] .portrait-button{left:6.4%;top:16%;width:23.8%;height:71.4%}
 .seat[data-team="pirate"] .portrait-button{left:8.8%;top:21%;width:19.3%;height:57.9%}
 .seat[data-team] .seat-info{left:36%;right:8%;top:34%;height:42%}
+.peek-parked{position:absolute;left:34%;width:clamp(23px,4.5vh,38px);aspect-ratio:2/3;object-fit:contain;pointer-events:none;z-index:4}
+.seat[data-side="ally"] .peek-parked{bottom:calc(100% + 5px)}
+.seat[data-side="enemy"] .peek-parked{top:calc(100% + 5px)}
+@media(max-height:450px){#table[data-perspective="pirate"] #hand:not([data-picking="true"]){left:24%}}

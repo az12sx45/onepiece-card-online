@@ -1,7 +1,26 @@
 {
   "schemaVersion": 1,
-  "revision": 81,
+  "revision": 82,
   "announcements": [
+    {
+      "id": "marineford-20261104-seat-motion",
+      "status": "published",
+      "publishedAt": "2026-11-04T03:37:42.900Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "頂上戰爭篇 2026.11.04",
+      "title": "頂上戰爭篇：進場與牌桌演出更新",
+      "summary": "大廳增加點擊進入與好友入口，手機牌堆和指定座位的牌張移動更清楚。",
+      "body": [
+        "入口點擊後進入大廳，主選單可開啟好友、邀請和私訊功能。",
+        "調整手機牌堆和海軍手牌位置。查看、出戰、公開和回收時，牌張會從實際座位或牌位移動。",
+        "全桌可看到牌張移動，私有牌面仍只對有權查看的玩家顯示。請先結束頂上戰爭篇，再重新進入。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.31"
+      }
+    },
     {
       "id": "card-20261104-android-autoplay",
       "status": "published",
