@@ -325,6 +325,13 @@
       "sha256": "41e1c49bc0637ff0813ec3583b236cb34a2bb359b06b0ac0bd8b87f4bb67a883"
     },
     {
+      "path": "marineford/art/v2/fx-kizaru-light-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 51796,
+      "sha256": "415be8393f048de8966cacbdebc7321abf4c6aa02473042d2ea9c82dfad4043f"
+    },
+    {
       "path": "marineford/art/v2/fx-laser-burn-rim.webp",
       "kind": "image",
       "mime": "image/webp",

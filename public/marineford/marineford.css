@@ -333,7 +333,7 @@ body[data-screen="table"] #connection{margin-left:auto;font-size:9px;text-shadow
 .fleet-row{position:absolute;display:grid;grid-template-columns:repeat(var(--count),minmax(0,235px));justify-content:center;gap:14px;pointer-events:none}
 .fleet-row[data-side="enemy"]{top:20px;left:5%;right:5%}
 .fleet-row[data-side="ally"]{bottom:90px;right:2%;width:235px;display:block}
-.seat{position:relative;aspect-ratio:3;min-width:0;background:var(--mf-hud-readable,url("art/v2/hud-readable.webp")) center/contain no-repeat;pointer-events:auto;container-type:inline-size;transition:transform .28s,filter .28s;transform-origin:top center}
+.seat{position:relative;aspect-ratio:3;min-width:0;background:var(--mf-hud-readable,url("art/v2/hud-readable.webp")) center/contain no-repeat;pointer-events:auto;container-type:inline-size;transition:filter .28s}
 .portrait-button{position:absolute;left:7%;top:15%;width:23%;height:69%;padding:0;border:0;border-radius:50%;background:none}
 .seat .avatar{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:center 30%}
 .seat-info{position:absolute;left:35%;right:7%;top:23%;height:54%;display:grid;grid-template-columns:1fr auto;gap:0 4px;align-content:center;line-height:1.15;min-width:0}
@@ -343,9 +343,8 @@ body[data-screen="table"] #connection{margin-left:auto;font-size:9px;text-shadow
 .seat-number{position:absolute;bottom:0;left:9%;width:19%;text-align:center;line-height:1;font-size:clamp(9px,5cqw,12px);font-weight:900;text-shadow:0 1px 3px #00101a;color:#fff0bc}
 .seat .public-cards{position:absolute;left:8%;right:6%;bottom:-27px;min-height:25px;display:flex;align-items:center;justify-content:center;gap:5px;padding:0;background:none;border:0;border-radius:0}
 .public-thumbs{display:flex;gap:3px;min-width:0}.public-thumb{width:14px}.public-thumbs img{display:block;height:21px;max-width:100%;object-fit:contain}.public-count{font-size:10px;white-space:nowrap}
-.seat[data-current="true"]{transform:translateY(6px) scale(1.06);filter:drop-shadow(0 0 7px #c4efff);z-index:2}
+.seat[data-current="true"]{filter:drop-shadow(0 0 7px #c4efff);z-index:2}
 .seat[data-current="true"]:after{content:'行動中';position:absolute;left:38%;top:-9px;padding:2px 7px;color:#0d2b3a;background:#d5f2f6;font-size:10px;border-radius:3px}
-.fleet-row[data-side="ally"] .seat[data-current="true"]{transform:translateY(-4px) scale(1.04)}
 #navyHands{position:absolute;inset:0;pointer-events:none}
 #navyHands>button{position:absolute;top:31%;height:30vh;max-height:270px;aspect-ratio:2/3;width:auto;padding:0;border:0;background:none;pointer-events:auto;opacity:1;filter:drop-shadow(0 8px 9px #0008)}
 #navyHands>button[data-slot="0"]{left:18%}#navyHands>button[data-slot="1"]{right:18%}
@@ -407,7 +406,7 @@ body[data-screen="table"] #connection{margin-left:auto;font-size:9px;text-shadow
  .fleet-row[data-side="ally"]{right:1%;bottom:52px;width:165px}
  .seat .public-cards{bottom:-24px;min-height:22px;gap:3px;padding:0}.public-count{font-size:8px}.public-thumbs img{height:18px}.public-thumb{width:12px}
  .seat-info{column-gap:2px}.seat-info strong{font-size:clamp(9px,6.3cqw,11px)}.seat-info small{line-height:1.4;font-size:clamp(8px,5.6cqw,9px)}
- .seat[data-current="true"]{transform:translateY(3px) scale(1.04)}.seat[data-current="true"]:after{font-size:8px;top:-7px;padding:1px 5px}
+ .seat[data-current="true"]:after{font-size:8px;top:-7px;padding:1px 5px}
  #navyHands>button{top:32%;height:29vh}.navy-slot-label{font-size:9px;padding:1px 5px}
  #hand{height:20vh;gap:5px;left:9%;width:24%;bottom:7%}
  .deck b{font-size:9px}.deck[data-active="true"]:after{font-size:9px;top:-2px}
@@ -483,7 +482,6 @@ body:not([data-screen="table"]) #health{display:none!important}
 /* Teams share a side of the battlefield; the Navy faces the whole pirate crew. */
 #table[data-perspective="pirate"] .fleet-row[data-side="enemy"]{left:50%;right:auto;top:4%;width:clamp(150px,23vw,235px);transform:translateX(-50%);display:block}
 #table[data-perspective="pirate"] .fleet-row[data-side="ally"]{left:5%;right:5%;width:auto;bottom:25px;display:grid;grid-template-columns:repeat(var(--count),minmax(0,235px));gap:8px}
-#table[data-perspective="pirate"] .fleet-row[data-side="ally"] .seat[data-current="true"]{transform:translateY(-5px) scale(1.04)}
 #table[data-perspective="pirate"] #navyHands>button[data-slot="0"]{left:calc(50% - clamp(155px,22vw,245px));right:auto;top:3%;height:22vh;max-height:180px}
 #table[data-perspective="pirate"] #navyHands>button[data-slot="1"]{right:calc(50% - clamp(155px,22vw,245px));left:auto;top:3%;height:22vh;max-height:180px}
 #table[data-perspective="pirate"] #hand{left:calc(var(--self-position,20%) - 8%);bottom:84px;width:16%;height:17vh;max-height:130px}
@@ -654,7 +652,7 @@ body:has(#sheet:not([hidden])) > .mf-invite{visibility:hidden}
 
 #effectLayer .laser-hand-target{--laser-card-width:min(20vh,24vw);width:var(--laser-card-width);left:min(58%,calc(100% - var(--laser-card-width) - 68px));top:40%}
 #effectLayer[data-facing="back"] .laser-hand-target{top:19%}
-#effectLayer .laser-hand-target>.laser-burn-rim{top:50%}
+#effectLayer .laser-hand-target>.laser-burn-rim{top:0;margin-top:75%;width:100%}
 
 #sheet[data-kind="campaign-profile"]{background:#0a1725;border-color:#706048}
 #sheet[data-kind="campaign-profile"] #sheetBody{max-width:1260px;overflow:auto}
@@ -690,3 +688,10 @@ body:has(#sheet:not([hidden])) > .mf-invite{visibility:hidden}
 .mf-dossier-medal[data-medal="1"]{background-position:100% 0}
 .mf-dossier-medal[data-medal="2"]{background-position:0 100%}
 .mf-dossier-medal[data-medal="3"]{background-position:100% 100%}
+
+#effectLayer .laser-hand-target{z-index:2}
+.mf-light-bullet{position:fixed;width:clamp(34px,9vh,76px);height:auto;pointer-events:none;z-index:3}
+.mf-light-arrival{left:42%;top:40%;width:clamp(100px,30vh,220px)}
+.mf-light-verdict{display:block;font-size:clamp(9px,1.8vh,14px);line-height:1.2;text-align:center;color:#fff2ba;text-shadow:0 1px 3px #000}
+#effectLayer[data-phase="barrage-result"] .laser-result{top:18%;bottom:auto;z-index:4}
+#effectLayer[data-facing="back"][data-phase="barrage-result"] .laser-result{top:38%}
