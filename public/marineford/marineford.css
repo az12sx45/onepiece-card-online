@@ -524,3 +524,23 @@ body:not([data-screen="table"]) #health{display:none!important}
 .seat[data-side="ally"] .peek-parked{bottom:calc(100% + 5px)}
 .seat[data-side="enemy"] .peek-parked{top:calc(100% + 5px)}
 @media(max-height:450px){#table[data-perspective="pirate"] #hand:not([data-picking="true"]){left:24%}}
+.lobby-menu{grid-template-columns:minmax(0,1fr);gap:3px}
+.lobby-menu .choice-button{width:min(100%,230px);min-height:35px;color:#eaf4ff}
+.lobby-menu .choice-button:first-child{color:#fff0b7;filter:drop-shadow(0 0 5px #478cbf)}
+.lobby-menu .small-button{width:180px}
+.room-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(100%,820px)}
+.room-choice-grid section{display:grid;align-content:start;justify-items:center;gap:6px;padding:8px;background:#071b2cdf;border:1px solid #647e95;border-radius:7px}
+.room-choice-grid h3,.room-choice-grid p{margin:0}
+.room-cpu-options{display:flex;flex-wrap:wrap;justify-content:center;gap:4px}
+.room-cpu-options .small-button{width:56px;padding:3px;min-height:30px}
+.room-cpu-options [aria-pressed="true"]{color:#ffeb9e;filter:drop-shadow(0 0 4px #b3daff)}
+.room-choice-grid .room-code-form{justify-content:center}
+@media(max-width:520px){.room-choice-grid{grid-template-columns:1fr}}
+@media(max-height:450px){.lobby-menu .choice-button{min-height:31px;height:31px;padding-block:4px}.lobby-menu .small-button{min-height:28px}.lobby-links{margin-top:4px}}
+#lobby[data-mode="main"]{display:flex;justify-content:center;align-items:center}
+#lobby[data-mode="main"] .lobby-title{display:none}
+#lobby[data-mode="main"] #lobbyBody{width:min(520px,92vw);height:auto;text-align:center}
+#lobby[data-mode="main"] .lobby-identity{justify-content:center}
+.lobby-menu .choice-button,.room-choice-grid .choice-button{background-image:url("art/v2/main-menu-button.webp");background-size:100% 100%;aspect-ratio:4.2}
+@media(max-height:450px){.lobby-menu .choice-button{width:176px;height:35px}}
+#lobby[data-mode="main"] .lobby-identity>*{margin-inline:0} .room-cpu-options .small-button{background-size:100% 100%}

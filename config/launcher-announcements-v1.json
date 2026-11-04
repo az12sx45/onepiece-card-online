@@ -1,7 +1,26 @@
 {
   "schemaVersion": 1,
-  "revision": 82,
+  "revision": 83,
   "announcements": [
+    {
+      "id": "marineford-20261104-card-menu",
+      "status": "published",
+      "publishedAt": "2026-11-04T04:45:36.920Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "頂上戰爭篇 2026.11.04",
+      "title": "頂上戰爭篇：主選單與建房流程更新",
+      "summary": "主選單改成置中排列，開始遊戲後再選擇房間模式，可在建房前先選 CPU 人數。",
+      "body": [
+        "主選單集中開始遊戲、好友、規則、檔案和卡片圖鑑。",
+        "點開始遊戲後，再選擇建立房間或加入房間。建立房間前可選擇 0 至 3 名 CPU。",
+        "請先結束頂上戰爭篇，再重新進入以載入這次更新。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.31"
+      }
+    },
     {
       "id": "marineford-20261104-seat-motion",
       "status": "published",

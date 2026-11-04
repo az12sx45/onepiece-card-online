@@ -37,7 +37,10 @@ function attach(io,{identity=socket=>socket.data.socialProfile,clock=()=>Date.no
    const p=profile(socket),existing=[...rooms.values()].find(r=>r.seats.some(s=>s.userId===p.userId)&&r.state?.phase==='playing');if(existing)throw Error('請先完成或返回既有對局 '+existing.code);
    for(const r of rooms.values())if(clock()-r.touched>2*60*60*1000&&!connections(r).length)closeRoom(r);
    if(rooms.size>=100)throw Error('目前房間已滿');detach(socket);let code;do{code='M'+crypto.randomBytes(3).toString('hex').toUpperCase();}while(rooms.has(code));
-   const r={code,host:p.userId,navyId:0,seats:[{userId:p.userId,name:String(p.name||'船長').slice(0,24),avatar:p.avatar,ready:true,cpu:false}],morale:'mandatory',state:null,sequence:0,touched:clock()};rooms.set(code,r);socket.data.marinefordRoom=code;broadcast(r);return {code,you:0};
+   const r={code,host:p.userId,navyId:0,seats:[{userId:p.userId,name:String(p.name||'船長').slice(0,24),avatar:p.avatar,ready:true,cpu:false}],morale:'mandatory',state:null,sequence:0,touched:clock()};
+   const cpuCount=Number.isInteger(payload?.cpuCount)?Math.max(0,Math.min(3,payload.cpuCount)):0;
+   for(let i=1;i<=cpuCount;i++)r.seats.push({userId:-(i+1),name:'CPU '+i,avatar:i+1,ready:true,cpu:true});
+   rooms.set(code,r);socket.data.marinefordRoom=code;broadcast(r);return {code,you:0};
   });
   on('MF_JOIN',payload=>{const code=String(payload.code||'').toUpperCase(),r=rooms.get(code);if(!r)throw Error('找不到房間');const p=profile(socket);let id=r.seats.findIndex(s=>s.userId===p.userId);if(id<0){if(r.state||r.seats.length>=6)throw Error('房間已開始或已滿');id=r.seats.length;r.seats.push({userId:p.userId,name:String(p.name||'船員').slice(0,24),avatar:p.avatar,ready:false,cpu:false});}if(!r.seats.some(s=>s.userId===r.host)){r.host=p.userId;r.seats[id].ready=true;}detach(socket);socket.data.marinefordRoom=code;r.touched=clock();cancel(r,'cpuTimer');lifecycle(r);broadcast(r,socket);return {code,you:id};});
   on('MF_READY',payload=>{const r=roomOf(socket),id=seat(r,socket);if(r.state)throw Error('對局已開始');r.seats[id].ready=payload.ready===true;broadcast(r);return {};});

@@ -29,26 +29,39 @@
  function request(event,payload={}) {return new Promise(resolve=>socket.timeout(12000).emit(event,payload,(err,result)=>{if(err){notify('連線逾時，請稍後再試');resolve({ok:false});}else{if(!result?.ok)notify(result?.error||'操作未完成');resolve(result||{ok:false});}}));}
  let socialRefresh=null;
  function closeSheet(){socialRefresh=null; $('sheet').hidden=true; }
- function sheet(title,kind='general'){socialRefresh=null;delete $('sheet').dataset.choice;$('sheet').dataset.kind=kind;$('sheetTitle').textContent=title;$('sheetBody').replaceChildren();$('sheet').hidden=false;return $('sheetBody');}
+ function sheet(title,kind='general'){socialRefresh=null;$('sheetClose').textContent=view?'返回牌桌':'關閉';delete $('sheet').dataset.choice;$('sheet').dataset.kind=kind;$('sheetTitle').textContent=title;$('sheetBody').replaceChildren();$('sheet').hidden=false;return $('sheetBody');}
  function detail(id,play=false){const c=cards[id],body=sheet(c.rank+' 號 · '+c.name,'detail'),img=cardImage(id);img.classList.add('detail-card');const text=node('div',null,'detail-copy');text.append(node('small',teamName(c.team)+' · '+(c.justice?'正義卡':'角色卡'),'detail-kicker'),node('h3',c.rank+' 號 · '+c.name),node('p',c.effect));const footer=node('div',null,'detail-actions');if(play){const b=button(c.rank===7?'不能主動打出':'打出這張牌',()=>action({type:'PLAY',card:id}));b.disabled=c.rank===7||busy;footer.append(b);}else footer.append(button('返回牌桌',closeSheet));text.append(footer);body.append(img,text);}
  function publicCardTile(id){const c=cards[id],b=button('',()=>detail(id),'public-card-tile'),label=node('span',null,'public-card-label');label.append(node('b',String(c.rank)),node('strong',c.name));b.append(cardImage(id),label);b.setAttribute('aria-label',c.rank+' 號 · '+c.name+'，查看詳情');return b;}
  function gallery(title,ids,explain=false){const body=sheet(title,'gallery'),grid=node('div',null,'gallery');if(explain)body.append(node('p','這裡是已打出的牌及一般敗牌。正義卡正常打出會保留；被擊敗則先補抽，再只把該張正義卡洗回。','sheet-hint'));if(!ids.length)body.append(node('p','目前沒有公開牌'));for(const id of ids){grid.append(publicCardTile(id));}body.append(grid);}
  async function action(a){if(busy||!view)return;busy=true;closeSheet();render();const result=await request('MF_ACTION',{revision:view.revision,action:a});if(!result.ok){busy=false;render();}}
  function showRules(){const b=sheet('遊戲規則');const text=node('div',null,'detail-copy');text.append(node('p','2–6 人，一位海軍對抗海賊團。海軍先行，依順位輪流；每人每輪只進行一回合，抽一張再打一張。連續戰鬥是同一張牌在同一回合內的效果，不會增加回合。海軍保留兩張手牌，海賊保留一張。'),node('p','戰鬥比較手牌數字，敗者公開棄牌、陣營生命減 1，再補抽；平手雙方保留手牌。參戰雙方各自有士氣時，自動消耗 1 個，使這次戰鬥 +2；每場戰鬥最多消耗 1 個。'),node('p','海軍在自己的回合集齊手中與場上全部六張不同正義卡，或登台進度走完六步即獲勝；海賊救援路線走完則救出艾斯並獲勝。戰國元帥不能打出；戰國或正義卡被擊敗，先補牌，再洗回海軍牌堆。'),node('p','海賊牌堆用完，海軍檢視所有海賊公開牌後，將它們洗回牌堆。看牌資訊僅傳給有權查看的人。'),node('p','海軍五號牌抽到幾張就放回幾張；海賊五號牌不足三張時先補牌，再私下排序。海軍被猜中同點數牌只擊敗一張；其餘手牌不公開。場上明牌包含已打出的牌與一般敗牌；正義卡正常打出後保留，被擊敗則只洗回該張牌。'));b.append(text);}
+ function openRoomChoice(){
+  const body=sheet('房間模式','room-browser');
+  const layout=node('div',null,'room-choice-grid'),host=node('section'),guest=node('section');
+  const counts=node('div',null,'room-cpu-options');let cpuCount=0;
+  for(let count=0;count<=3;count++){
+   const option=button(count+' 人',()=>{cpuCount=count;for(const item of counts.children)item.setAttribute('aria-pressed',String(item===option));},'small-button');
+   option.setAttribute('aria-pressed',String(count===0));counts.append(option);
+  }
+  const create=button('建立房間',async()=>{create.disabled=true;try{const result=await request('MF_CREATE',{cpuCount});if(result.ok)closeSheet();}finally{create.disabled=false;}});
+  host.append(node('h3','建立房間'),node('p','CPU 人數'),counts,create,button('查看房間清單',openRoomBrowser));
+  const form=node('form',null,'room-code-form'),input=node('input');
+  input.placeholder='輸入房間代碼';input.maxLength=7;input.required=true;input.autocomplete='off';input.setAttribute('aria-label','房間代碼');
+  const submit=node('button','依代碼加入','choice-button');submit.type='submit';form.append(input,submit);
+  form.onsubmit=async event=>{event.preventDefault();const code=input.value.trim();if(!code)return;submit.disabled=true;try{const result=await request('MF_JOIN',{code});if(result.ok)closeSheet();}finally{submit.disabled=false;}};
+  guest.append(node('h3','加入好友房間'),form);layout.append(host,guest);
+  $('sheetClose').textContent='返回主畫面';body.append(layout);
+ }
  async function openRoomBrowser(){
   const body=sheet('加入房間','room-browser');
-  const form=node('form',null,'room-code-form'),input=node('input');
-  input.placeholder='輸入房間代碼';input.maxLength=7;input.autocomplete='off';input.required=true;input.setAttribute('aria-label','房間代碼');
-  const join=async code=>{if(!code)return;const result=await request('MF_JOIN',{code});if(result.ok)closeSheet();};
-  const submit=node('button','依代碼加入','small-button');submit.type='submit';
-  form.append(input,submit);form.onsubmit=event=>{event.preventDefault();join(input.value.trim());};
+  const join=async code=>{const result=await request('MF_JOIN',{code});if(result.ok)closeSheet();};
   const list=node('div',null,'room-browser-list'),tools=node('div',null,'room-browser-tools');
   const refresh=async()=>{list.replaceChildren(node('p','讀取房間中…'));const result=await request('MF_LIST');if(!body.contains(list))return;const rooms=result.rooms||[];
    list.replaceChildren();if(!rooms.length)list.append(node('p',result.ok?'目前沒有可加入的房間':'房間清單讀取失敗'));
    for(const entry of rooms){const row=node('div',null,'room-browser-row');row.append(node('strong',entry.code),node('span',entry.seats.length+' / 6 人'),button('加入',()=>join(entry.code),'small-button'));list.append(row);}
   };
   tools.append(node('strong','公開房間'),button('重新整理',refresh,'small-button'));
-  body.append(form,tools,list);await refresh();
+  body.append(button('返回房間模式',openRoomChoice,'small-button'),tools,list);await refresh();
  }
  let enteredLobby=false;
  function friendRequest(event,data={}){
@@ -82,14 +95,15 @@
   body.append(button('返回好友',openFriends,'small-button'),form,button('更新訊息',refresh,'small-button'),list);socialRefresh={event:'DM_NEW',run:refresh};await refresh();
  }
  for(const event of ['FRIENDS_DIRTY','DM_NEW'])socket.on(event,()=>{if(socialRefresh?.event===event&&!$('sheet').hidden)socialRefresh.run();});
- function renderLobby(){if(view)return;$('menuButton').hidden=!enteredLobby&&!room;document.body.dataset.screen='lobby';$('justice').hidden=true;$('health').replaceChildren();$('lobby').hidden=false;$('table').hidden=true;const body=$('lobbyBody');body.replaceChildren();$('lobby').dataset.waiting=String(!!room);if(!authenticated){body.append(node('p','請從啟動器登入帳號後進入頂上戰爭篇。'));return;}
+ function renderLobby(){if(view)return;$('menuButton').hidden=!enteredLobby&&!room;document.body.dataset.screen='lobby';$('justice').hidden=true;$('health').replaceChildren();$('lobby').hidden=false;$('table').hidden=true;const body=$('lobbyBody');body.replaceChildren();$('lobby').dataset.waiting=String(!!room);$('lobby').dataset.mode=!room&&enteredLobby&&authenticated?'main':'entry';if(!authenticated){body.append(node('p','請從啟動器登入帳號後進入頂上戰爭篇。'));return;}
   if(!room&&!enteredLobby){const enter=button('點擊進入',()=>{enteredLobby=true;renderLobby();},'choice-button');body.append(node('h2','頂上戰爭篇','lobby-heading'),enter);return;}
-  if(!room){const identity=node('div',null,'lobby-identity');identity.append(avatar(you),node('strong',me.name),node('span','出航準備'));body.append(identity,node('h2','加入頂上之戰','lobby-heading'));
+  if(!room){const identity=node('div',null,'lobby-identity');identity.append(avatar(you),node('strong',me.name),node('span','已登入'));body.append(identity);
    const row=node('div',null,'lobby-entry lobby-menu');
-   row.append(button('建立房間',()=>request('MF_CREATE')),button('加入房間',openRoomBrowser));
-   body.append(row,node('p','2–6 人 · 一位海軍對抗海賊團 · 可加入 CPU','lobby-note'));
+   const sync=button('重新同步雲端資料',async()=>{sync.disabled=true;try{const result=await friendRequest('SOCIAL_AUTH',{deviceId:localStorage.getItem('op_device_id')||''});if(result.ok&&result.me){me=result.me;renderLobby();}}finally{sync.disabled=false;}},'small-button');
+   row.append(button('開始遊戲',openRoomChoice),button('個人頁面',()=>{location.href='../profile.html';}),button('商店',()=>{location.href='../shop.html';}),button('遊戲規則',showRules),sync);
+   body.append(row);
    const links=node('div',null,'lobby-links');
-   links.append(button('好友',openFriends,'small-button'),button('遊戲規則',showRules,'small-button'),button('航海者檔案',profile,'small-button'),button('卡片圖鑑',()=>gallery('頂上戰爭 · 卡片圖鑑',Object.keys(cards)),'small-button'));
+   links.append(button('好友',openFriends,'small-button'),button('卡片圖鑑',()=>gallery('頂上戰爭 · 卡片圖鑑',Object.keys(cards)),'small-button'));
    body.append(links);return;}
   body.append(node('h2',room.code,'room-code'));for(const p of room.seats){const row=node('div',null,'room-seat');row.append(node('span',String(p.id+1).padStart(2,'0')),node('strong',p.name),node('span',p.id===room.navyId?'海軍':'海賊'),node('small',p.ready?'已準備':'準備中'));if(me.userId===room.host&&p.id!==room.navyId)row.append(button('海軍',()=>request('MF_CONFIG',{navyId:p.id}),'small-button'));body.append(row);}
   const row=node('div',null,'lobby-actions');if(me.userId===room.host){if(room.seats.length<6)row.append(button('加入 CPU',()=>request('MF_CONFIG',{addCpu:true})));if(room.seats.some(p=>p.cpu))row.append(button('移除 CPU',()=>request('MF_CONFIG',{removeCpu:true})));row.append(button('開始對局',()=>request('MF_START')));}else{const p=room.seats[you];row.append(button(p?.ready?'取消準備':'準備',()=>request('MF_READY',{ready:!p?.ready})));}row.append(button('離開房間',leave,'small-button'));body.append(row,node('p','海軍先行，依順位輪流。戰鬥時有士氣就自動消耗 1 個，戰力 +2。','lobby-note'));

@@ -430,6 +430,13 @@
       "sha256": "5b9db40bc4770163a1041d4af6ca4b7d0fdc9862769eabd9673a8021b53a2f90"
     },
     {
+      "path": "marineford/art/v2/main-menu-button.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 27350,
+      "sha256": "10aaa58a2f5f07641a77677d118150fdbd0957b48021b911d41de01ec5873dd2"
+    },
+    {
       "path": "marineford/art/v2/meter-execution-vertical.webp",
       "kind": "image",
       "mime": "image/webp",
