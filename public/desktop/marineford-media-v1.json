@@ -269,6 +269,20 @@
       "sha256": "50726a8013be92899e4a37f362f26c2d27eca9afd5dfe64a2fe51a28fe4dab66"
     },
     {
+      "path": "marineford/art/v2/dossier-archive-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 348834,
+      "sha256": "8728fbd5d58f3f5f55765c83cfde75bd22117a018437b8755f5f3a00dbaab341"
+    },
+    {
+      "path": "marineford/art/v2/dossier-medals-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 334998,
+      "sha256": "54cc0effe52f66f4cc8a99f66ace071865c21b84c4bdd7e931f3dfe55dce8bc0"
+    },
+    {
       "path": "marineford/art/v2/emblem-marine-source.webp",
       "kind": "image",
       "mime": "image/webp",

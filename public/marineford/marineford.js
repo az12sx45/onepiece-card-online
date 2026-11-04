@@ -50,10 +50,10 @@
   nav.setAttribute('aria-label','戰役檔案分頁');main.append(nav,panel);shell.append(cover,main);body.replaceChildren(shell);
   const factions=[['navy','海軍'],['pirate','海賊']];
   const honors=[
-   ['初登戰場','完成第一場對局',stats.games,1,'navy'],
-   ['正義戰功','以海軍身分取得 3 場勝利',stats.navyWins,3,'navy'],
-   ['救援戰功','以海賊身分取得 3 場勝利',stats.pirateWins,3,'pirate'],
-   ['頂上老兵','完成 10 場對局',stats.games,10,'pirate']
+   ['初登戰場','完成第一場對局',stats.games,1],
+   ['正義戰功','以海軍身分取得 3 場勝利',stats.navyWins,3],
+   ['救援戰功','以海賊身分取得 3 場勝利',stats.pirateWins,3],
+   ['頂上老兵','完成 10 場對局',stats.games,10]
   ];
   function metrics(entries){
    const grid=node('dl',null,'mf-dossier-metrics');
@@ -96,10 +96,11 @@
    if(equippedBadge)medals.append(badgeImage(equippedBadge));
    medals.append(node('p','戰役勳章 '+(stats.collection?.balance??0)));panel.append(medals);
    const grid=node('div',null,'mf-dossier-honors');
-   for(const [label,condition,value,goal,team] of honors){
-    const tile=node('article'),progress=node('progress');
+   for(const [index,[label,condition,value,goal]] of honors.entries()){
+    const tile=node('article'),progress=node('progress'),medal=node('span',null,'mf-dossier-medal');
+    medal.dataset.medal=String(index);medal.setAttribute('aria-hidden','true');
     tile.dataset.unlocked=String(value>=goal);progress.max=goal;progress.value=Math.min(goal,value);progress.setAttribute('aria-label',label);
-    tile.append(badgeImage({art:team+'-back.webp',name:''}),node('h4',label),node('p',condition),progress,node('small',value>=goal?'已達成':value+' / '+goal));
+    tile.append(medal,node('h4',label),node('p',condition),progress,node('small',value>=goal?'已達成':value+' / '+goal));
     grid.append(tile);
    }
    panel.append(grid);
@@ -108,6 +109,14 @@
   function openPage(index){
    for(const [i,control] of [...nav.children].entries())control.setAttribute('aria-pressed',String(i===index));
    panel.replaceChildren();pages[index][1]();
+   if(!reduced()){
+    for(const [order,item] of [...panel.children].entries()){
+     item.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'none'}],{duration:230,delay:order*35,easing:'ease-out',fill:'backwards'});
+    }
+    for(const [order,medal] of [...panel.querySelectorAll('[data-unlocked="true"] .mf-dossier-medal')].entries()){
+     medal.animate([{opacity:0,transform:'scale(.72)'},{opacity:1,transform:'scale(1.1)',offset:.7},{opacity:1,transform:'scale(1)'}],{duration:430,delay:100+order*65,easing:'ease-out',fill:'backwards'});
+    }
+   }
   }
   for(const [i,[label]] of pages.entries())nav.append(button(label,()=>openPage(i),'mf-dossier-tab'));
   openPage(0);

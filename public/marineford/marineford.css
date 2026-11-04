@@ -10,6 +10,8 @@
   --mf-lobby-panorama:url("poasset://marineford/marineford/art/v2/lobby-panorama.webp");
   --mf-main-menu-button:url("poasset://marineford/marineford/art/v2/main-menu-button.webp");
   --mf-new_cover:url("poasset://marineford/marineford/art/v2/new_cover.webp");
+  --mf-dossier-archive:url("poasset://marineford/marineford/art/v2/dossier-archive-v1.webp"),var(--mf-new_cover);
+  --mf-dossier-medals:url("poasset://marineford/marineford/art/v2/dossier-medals-v1.webp");
   --mf-victory-ace-route:url("poasset://marineford/marineford/art/v2/victory-ace-route.webp");
 }
 :root{color-scheme:dark;font-family:system-ui,"Microsoft JhengHei",sans-serif;color:#f7f1e2;--button:var(--mf-button,url("art/v2/button.webp"));--ivory:#e5e0ce;--red:#d54d49;--blue:#9bdde9}
@@ -657,7 +659,7 @@ body:has(#sheet:not([hidden])) > .mf-invite{visibility:hidden}
 #sheet[data-kind="campaign-profile"]{background:#0a1725;border-color:#706048}
 #sheet[data-kind="campaign-profile"] #sheetBody{max-width:1260px;overflow:auto}
 .mf-dossier{display:grid;grid-template-columns:minmax(150px,32%) minmax(0,1fr);gap:clamp(8px,2vw,22px);min-height:100%;color:#eddfc5}
-.mf-dossier-cover{display:flex;align-items:flex-end;min-height:245px;background:linear-gradient(0deg,#0a1524 3%,#0a152433 78%),var(--mf-new_cover,url("art/v2/new_cover.webp")) center 44%/cover;border:1px solid #a38352}
+.mf-dossier-cover{display:flex;align-items:flex-end;min-height:245px;background:#0a1524;background-image:var(--mf-dossier-archive,url("art/v2/dossier-archive-v1.webp"));background-position:center;background-size:cover;border:1px solid #a38352}
 .mf-dossier-identity{display:grid;gap:5px;width:100%;padding:clamp(10px,3vw,26px);overflow-wrap:anywhere}
 .mf-dossier-identity .avatar{width:clamp(45px,8vw,85px);height:auto;aspect-ratio:1;object-fit:cover;border:2px solid #dfb97b;border-radius:50%}
 .mf-dossier h3,.mf-dossier h4,.mf-dossier p,.mf-dossier dl,.mf-dossier dd{margin:0}
@@ -679,7 +681,12 @@ body:has(#sheet:not([hidden])) > .mf-invite{visibility:hidden}
 .mf-dossier-panel :is(p,small,dt,.campaign-history){font-size:clamp(11px,1.65vw,15px)}
 .mf-dossier-honors article{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 8px}
 .mf-dossier-honors progress{width:100%;accent-color:#e5b76e}
-.mf-dossier-honors [data-unlocked="false"] img{filter:grayscale(1);opacity:.55}
+.mf-dossier-honors [data-unlocked="false"] .mf-dossier-medal{filter:grayscale(1);opacity:.55}
 .mf-dossier .campaign-history{margin:0}
 .mf-dossier [data-won="true"] strong{color:#f8d891}
 @media(max-width:520px){.mf-dossier{grid-template-columns:1fr}.mf-dossier-cover{min-height:155px}}
+
+.mf-dossier-medal{width:clamp(36px,7vw,70px);aspect-ratio:1;grid-row:span 4;background:var(--mf-dossier-medals,url("art/v2/dossier-medals-v1.webp")) 0 0/200% 200% no-repeat}
+.mf-dossier-medal[data-medal="1"]{background-position:100% 0}
+.mf-dossier-medal[data-medal="2"]{background-position:0 100%}
+.mf-dossier-medal[data-medal="3"]{background-position:100% 100%}
