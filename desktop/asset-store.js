@@ -36,6 +36,9 @@ const CACHE_OWNER_MAX_BYTES = 4 * 1024;
 const RECEIPT_MAX_BYTES = 64 * 1024;
 const MANIFEST_MAX_BYTES = 8 * 1024 * 1024;
 const PRODUCTION_ASSET_BLOB_BASE_URL = 'https://game-assets.rihdi.tw/desktop/blobs/sha256';
+const MARINEFORD_MEDIA_FILE = 'marineford-media-v1.json';
+const MARINEFORD_ART_PATH = /^marineford\/art\/(?:v2\/)?[a-z0-9_-]+\.webp$/;
+const MARINEFORD_COVER_PATH = /^images\/game_launcher\/launcher_marineford_cover_v[12]\.webp$/;
 const MANAGED_CACHE_TOP_LEVEL = new Set(['blobs', 'partial', 'receipts', 'manifests', 'state']);
 
 const EXTENSIONS = new Map([
@@ -296,6 +299,36 @@ function validateManifest(document, expectedGameId) {
     byKind,
     assets
   };
+}
+
+function validateMarinefordMediaManifest(document) {
+  if (document?.schema !== 1 || document.gameId !== 'marineford' ||
+    !Array.isArray(document.assets) || document.assets.length > 20_000) {
+    throw new Error('馬林福特之戰素材清單格式不正確。');
+  }
+  const assets = [];
+  const paths = new Set();
+  const sizesByHash = new Map();
+  let totalBytes = 0;
+  for (const asset of document.assets) {
+    const assetPath = asset?.path;
+    const art = typeof assetPath === 'string' && MARINEFORD_ART_PATH.test(assetPath);
+    const cover = typeof assetPath === 'string' && MARINEFORD_COVER_PATH.test(assetPath);
+    if ((!art && !cover) || asset.kind !== 'image' || asset.mime !== 'image/webp' ||
+      !Number.isSafeInteger(asset.size) || asset.size < 1 || typeof asset.sha256 !== 'string' ||
+      !HASH_PATTERN.test(asset.sha256) || paths.has(assetPath) ||
+      (sizesByHash.has(asset.sha256) && sizesByHash.get(asset.sha256) !== asset.size)) {
+      throw new Error('馬林福特之戰素材清單含有無效檔案。');
+    }
+    paths.add(assetPath);
+    sizesByHash.set(asset.sha256, asset.size);
+    if (art) {
+      assets.push({ path: assetPath, kind: asset.kind, mime: asset.mime, size: asset.size, sha256: asset.sha256 });
+      totalBytes += asset.size;
+    }
+  }
+  if (!assets.length || !Number.isSafeInteger(totalBytes)) throw new Error('馬林福特之戰素材清單沒有有效的遊戲素材。');
+  return { assets };
 }
 
 function encodeAssetUrl(origin, assetPath) {
@@ -643,6 +676,7 @@ class AssetStore extends EventEmitter {
     this.backgroundAuditPromise = Promise.resolve({ files: 0, bytes: 0, invalid: 0 });
     this.stateRefreshPromise = Promise.resolve();
     this.cachedManifests = new Map();
+    this.marinefordMedia = null;
     this.progressLastSentAt = 0;
   }
 
@@ -651,6 +685,7 @@ class AssetStore extends EventEmitter {
     await this.ensureCacheOwnership(this.cacheRoot);
     await this.loadIntegrityIndex();
     await this.loadBundledCatalog();
+    await this.loadMarinefordMediaState();
     await Promise.all(GAME_ID_LIST.map((gameId) => this.loadReceipt(gameId)));
     await this.loadLastKnownGoodCatalog();
     await this.refreshStates();
@@ -1117,8 +1152,10 @@ class AssetStore extends EventEmitter {
     this.cacheRoot = resolved;
     this.receipts.clear();
     this.cachedManifests.clear();
+    this.gameStates.delete('marineford');
     await this.loadIntegrityIndex();
     await this.loadBundledCatalog();
+    await this.loadMarinefordMediaState();
     await Promise.all(GAME_ID_LIST.map((gameId) => this.loadReceipt(gameId)));
     await this.loadLastKnownGoodCatalog();
     await this.refreshStates();
@@ -1358,6 +1395,7 @@ class AssetStore extends EventEmitter {
     for (const asset of latestCached?.assets || []) candidates.add(asset.sha256);
 
     const protectedHashes = new Set();
+    for (const asset of this.marinefordMedia?.manifest.assets || []) protectedHashes.add(asset.sha256);
     for (const otherGameId of GAME_IDS) {
       if (otherGameId === gameId) continue;
       const otherReceipt = this.receipts.get(otherGameId);
@@ -1458,62 +1496,10 @@ class AssetStore extends EventEmitter {
     await this.validateCacheOwnership(this.cacheRoot);
     const { bytes: manifestBytes, manifest, fileName } = await this.getManifest(gameId, { signal });
     if (this.activeInstall?.gameId === gameId) this.activeInstall.manifest = manifest;
-    throwIfAborted(signal);
-    const unique = new Map();
-    for (const asset of manifest.assets) if (!unique.has(asset.sha256)) unique.set(asset.sha256, asset);
-    const assets = [...unique.values()];
-    let cachedBytes = 0;
-    let cachedFiles = 0;
-    const missing = [];
-    for (const asset of assets) {
-      throwIfAborted(signal);
-      if (await this.verifyBlob(asset, { signal })) {
-        cachedBytes += asset.size;
-        cachedFiles += 1;
-        continue;
-      }
-      await removeSafeManagedPath(this.cacheRoot, blobPath(this.cacheRoot, asset.sha256), { force: true, leafKind: 'file' });
-      this.forgetVerifiedBlob(asset.sha256);
-      missing.push(asset);
-    }
-    const totalBytes = assets.reduce((sum, asset) => sum + asset.size, 0);
-    const missingBytes = missing.reduce((sum, asset) => sum + asset.size, 0);
-    const freeBytes = await availableBytes(this.cacheRoot);
-    const reserve = Math.max(DOWNLOAD_RESERVE_BYTES, Math.ceil(missingBytes * 0.1));
-    if (freeBytes < missingBytes + reserve) {
-      throw new Error(`空間不足：至少還需要 ${Math.ceil((missingBytes + reserve - freeBytes) / 1024 / 1024)} MB。`);
-    }
-
-    const runtime = {
-      downloadedBytes: cachedBytes,
-      completedFiles: cachedFiles,
-      totalBytes,
-      totalFiles: assets.length
-    };
-    this.emitProgress(gameId, {
-      ...runtime,
-      status: 'downloading',
+    const runtime = await this.ensureManifestBlobs(gameId, manifest, signal, assetBlobBaseUrl, {
       message: repairing ? '正在修復遊戲素材' : (priorReceipt ? '正在下載更新' : '正在下載遊戲素材'),
-      hasInstalled: repairing ? false : Boolean(startingState.hasInstalled),
-      currentFile: '準備下載…'
-    }, true);
-
-    await this.downloadQueue(gameId, missing, DOWNLOAD_MAX_SLOTS, runtime, signal, assetBlobBaseUrl);
-    if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
-
-    this.emitProgress(gameId, { ...runtime, status: 'verifying', message: '正在驗證遊戲檔案', currentFile: '' }, true);
-    let verified = 0;
-    for (const asset of assets) {
-      if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
-      const valid = await this.verifyBlob(asset, { signal });
-      if (!valid) throw new Error(`素材驗證失敗：${asset.path}`);
-      verified += 1;
-      if (verified % 32 === 0 || verified === assets.length) {
-        this.emitProgress(gameId, { ...runtime, status: 'verifying', completedFiles: verified, totalFiles: assets.length }, verified === assets.length);
-      }
-    }
-
-    await this.flushIntegrityIndex();
+      hasInstalled: repairing ? false : Boolean(startingState.hasInstalled)
+    });
     throwIfAborted(signal);
     const manifestTarget = path.join(this.cacheRoot, 'manifests', gameId, fileName);
     await ensureSafeManagedDirectory(this.cacheRoot, path.dirname(manifestTarget));
@@ -1540,10 +1526,136 @@ class AssetStore extends EventEmitter {
     await this.cleanupUnusedCache({ completedGameId: gameId });
     await this.refreshStates({ includeActiveGameId: gameId });
     const finalState = this.gameStates.get(gameId) || {};
+    this.emitProgress(gameId, { ...finalState, ...runtime }, true);
+  }
+
+  marinefordMediaStatePath() {
+    return path.join(this.cacheRoot, 'state', MARINEFORD_MEDIA_FILE);
+  }
+
+  async loadMarinefordMediaState() {
+    const target = this.marinefordMediaStatePath();
+    try {
+      await assertSafeManagedPath(this.cacheRoot, target, { allowMissing: false, leafKind: 'file' });
+      const bytes = await readRegularFile(target, MANIFEST_MAX_BYTES, '馬林福特之戰素材清單');
+      this.marinefordMedia = {
+        manifest: validateMarinefordMediaManifest(JSON.parse(bytes.toString('utf8'))),
+        sha256: sha256Bytes(bytes)
+      };
+    } catch {
+      this.marinefordMedia = null;
+    }
+  }
+
+  async prepareMarinefordMedia() {
+    const gameId = 'marineford';
+    if (this.activeRemoval || this.activeInstall) throw new Error('已有遊戲正在下載或移除，請完成後再啟動。');
+    const controller = new AbortController();
+    const { signal } = controller;
+    this.activeInstall = { gameId, controller };
+    const idleState = { status: 'installed', hasInstalled: true, removable: false, onlineOnly: true };
     this.emitProgress(gameId, {
-      ...finalState,
-      downloadedBytes: totalBytes, completedFiles: assets.length, totalFiles: assets.length, totalBytes
+      ...idleState, status: 'preparing', currentFile: '正在核對馬林福特之戰素材…',
+      downloadedBytes: 0, completedFiles: 0, totalBytes: 0, totalFiles: 0
     }, true);
+    try {
+      await this.validateCacheOwnership(this.cacheRoot);
+      let bytes;
+      try {
+        const response = await this.fetchImpl(`${this.origin}/desktop/${MARINEFORD_MEDIA_FILE}`, {
+          cache: 'no-store',
+          redirect: 'error',
+          headers: { Accept: 'application/json', 'Accept-Encoding': 'identity' },
+          signal: AbortSignal.any([signal, AbortSignal.timeout(this.manifestTimeoutMs)])
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        bytes = Buffer.from(await response.arrayBuffer());
+      } catch {
+        throwIfAborted(signal);
+        throw new Error('暫時無法取得馬林福特之戰素材清單，請稍後再試。');
+      }
+      if (!bytes.length || bytes.length > MANIFEST_MAX_BYTES) throw new Error('馬林福特之戰素材清單大小不正確。');
+      let document;
+      try { document = JSON.parse(bytes.toString('utf8')); }
+      catch { throw new Error('馬林福特之戰素材清單格式不正確。'); }
+      const manifest = validateMarinefordMediaManifest(document);
+      this.activeInstall.manifest = manifest;
+      const runtime = await this.ensureManifestBlobs(gameId, manifest, signal, PRODUCTION_ASSET_BLOB_BASE_URL, {
+        message: '正在下載馬林福特之戰素材', hasInstalled: true
+      });
+      throwIfAborted(signal);
+      const sha256 = sha256Bytes(bytes);
+      if (this.marinefordMedia?.sha256 !== sha256) {
+        await atomicWriteBuffer(this.cacheRoot, this.marinefordMediaStatePath(), bytes);
+        this.marinefordMedia = { manifest, sha256 };
+      }
+      throwIfAborted(signal);
+      this.emitProgress(gameId, { ...idleState, ...runtime, message: '素材驗證完成', currentFile: '' }, true);
+      return manifest;
+    } catch (error) {
+      this.emitProgress(gameId, { ...idleState, message: '', currentFile: '' }, true);
+      if (signal.aborted) throw new Error('素材下載已暫停，再次啟動遊戲即可續傳。');
+      throw error;
+    } finally {
+      this.activeInstall = null;
+    }
+  }
+
+  async ensureManifestBlobs(gameId, manifest, signal, assetBlobBaseUrl, downloadState) {
+    throwIfAborted(signal);
+    const unique = new Map();
+    for (const asset of manifest.assets) if (!unique.has(asset.sha256)) unique.set(asset.sha256, asset);
+    const assets = [...unique.values()];
+    let cachedBytes = 0;
+    let cachedFiles = 0;
+    const missing = [];
+    for (const asset of assets) {
+      throwIfAborted(signal);
+      if (await this.verifyBlob(asset, { signal })) {
+        cachedBytes += asset.size;
+        cachedFiles += 1;
+        continue;
+      }
+      await removeSafeManagedPath(this.cacheRoot, blobPath(this.cacheRoot, asset.sha256), { force: true, leafKind: 'file' });
+      this.forgetVerifiedBlob(asset.sha256);
+      missing.push(asset);
+    }
+    const totalBytes = assets.reduce((sum, asset) => sum + asset.size, 0);
+    const missingBytes = missing.reduce((sum, asset) => sum + asset.size, 0);
+    if (missingBytes || gameId !== 'marineford') {
+      const freeBytes = await availableBytes(this.cacheRoot);
+      const reserve = Math.max(DOWNLOAD_RESERVE_BYTES, Math.ceil(missingBytes * 0.1));
+      if (freeBytes < missingBytes + reserve) {
+        throw new Error(`空間不足：至少還需要 ${Math.ceil((missingBytes + reserve - freeBytes) / 1024 / 1024)} MB。`);
+      }
+    }
+
+    const runtime = {
+      downloadedBytes: cachedBytes,
+      completedFiles: cachedFiles,
+      totalBytes,
+      totalFiles: assets.length
+    };
+    if (missing.length || gameId !== 'marineford') {
+      this.emitProgress(gameId, { ...runtime, ...downloadState, status: 'downloading', currentFile: '準備下載…' }, true);
+      await this.downloadQueue(gameId, missing, DOWNLOAD_MAX_SLOTS, runtime, signal, assetBlobBaseUrl);
+    }
+    if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
+
+    this.emitProgress(gameId, { ...runtime, status: 'verifying', message: '正在驗證遊戲檔案', currentFile: '' }, true);
+    let verified = 0;
+    for (const asset of assets) {
+      if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
+      const valid = await this.verifyBlob(asset, { signal });
+      if (!valid) throw new Error(`素材驗證失敗：${asset.path}`);
+      verified += 1;
+      if (verified % 32 === 0 || verified === assets.length) {
+        this.emitProgress(gameId, { ...runtime, status: 'verifying', completedFiles: verified, totalFiles: assets.length }, verified === assets.length);
+      }
+    }
+
+    await this.flushIntegrityIndex();
+    return runtime;
   }
 
   async downloadQueue(gameId, assets, concurrency, runtime, signal, assetBlobBaseUrl = '') {
@@ -1828,6 +1940,10 @@ class AssetStore extends EventEmitter {
     const protectedPartialSizes = new Map();
     for (const receipt of this.receipts.values()) {
       for (const asset of receipt.manifest.assets) keepBlobHashes.add(asset.sha256);
+    }
+    for (const asset of this.marinefordMedia?.manifest.assets || []) {
+      keepBlobHashes.add(asset.sha256);
+      protectedPartialSizes.set(asset.sha256, asset.size);
     }
     if (this.activeInstall?.manifest) {
       for (const asset of this.activeInstall.manifest.assets) {

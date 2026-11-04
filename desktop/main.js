@@ -42,7 +42,7 @@ const { LauncherContentOverlay, RENDERER_FILES } = require('./launcher-content-o
 const { applySnapshotScript, legacySnapshotScript, sanitizeSnapshot } = require('./launcher-storage-migration');
 const { CONTENT_UI_URL, isTrustedLauncherUrl } = require('./launcher-sender-policy');
 const { RuntimeAssetCache } = require('./runtime-asset-cache');
-const { HttpsProgramRuntime } = require('./program-runtime');
+const { HttpsProgramRuntime, requestPathForOrigin } = require('./program-runtime');
 const { installGameCursorPolicy } = require('./game-cursor-policy');
 const { createNativeCardRunner } = require('./native-card-runner');
 
@@ -815,8 +815,7 @@ function gameSessionPaths(gameId) {
   };
 }
 
-function buildRuntimeAssetIndex(gameId) {
-  const manifest = assetStore.getInstalledManifest(gameId);
+function buildRuntimeAssetIndex(gameId, manifest = assetStore.getInstalledManifest(gameId)) {
   if (!manifest) throw new Error('找不到已安裝的遊戲素材清單。');
   return runtimeAssetCache.buildGame(gameId, manifest, {
     filePathForAsset: (asset) => blobPath(assetStore.cacheRoot, asset.sha256)
@@ -826,6 +825,7 @@ function buildRuntimeAssetIndex(gameId) {
 function queueRuntimeAssetRepair(entry, error) {
   if (!entry || error?.code === 'ERR_RUNTIME_ASSET_STALE') return;
   runtimeAssetCache.clearGame(entry.gameId);
+  if (GAME_CONFIG[entry.gameId]?.onlineOnly) return;
   const key = entry.gameId;
   if (runtimeRepairChecks.has(key)) return;
   const check = assetStore.resolveAsset(entry.gameId, entry.path).then((asset) => {
@@ -856,18 +856,11 @@ async function clearGameOriginStorage(targetSession) {
 async function prepareGameSession(gameId) {
   if (gameSessionPromises.has(gameId)) return gameSessionPromises.get(gameId);
   const pending = (async () => {
-    if (GAME_CONFIG[gameId]?.onlineOnly) {
-      const onlineSession = await storageSessionForGame(gameId);
-      if (!gameSessions.has(gameId)) {
-        hardenSession(onlineSession);
-        await resetDesktopGameWebCache(onlineSession, REMOTE_ORIGIN);
-        gameSessions.set(gameId, onlineSession);
-      }
-      return onlineSession;
-    }
-    buildRuntimeAssetIndex(gameId);
+    const onlineOnly = GAME_CONFIG[gameId]?.onlineOnly;
+    if (onlineOnly) buildRuntimeAssetIndex(gameId, await assetStore.prepareMarinefordMedia());
+    else buildRuntimeAssetIndex(gameId);
     const targetSession = await storageSessionForGame(gameId);
-    await resetDesktopGameWebCache(targetSession, REMOTE_ORIGIN);
+    if (!onlineOnly || !gameSessions.has(gameId)) await resetDesktopGameWebCache(targetSession, REMOTE_ORIGIN);
     if (gameSessions.has(gameId)) return gameSessions.get(gameId);
     hardenSession(targetSession);
     await targetSession.protocol.handle(CACHE_SCHEME, async (request) => {
@@ -885,28 +878,35 @@ async function prepareGameSession(gameId) {
         return new Response('Not found', { status: 404 });
       }
     });
-    try {
-      const programRuntime = new HttpsProgramRuntime({
-        gameId,
-        origin: REMOTE_ORIGIN,
-        assetCache: runtimeAssetCache,
-        networkFetch: (request) => targetSession.fetch(request, { bypassCustomProtocolHandlers: true }),
-        onFailure: queueRuntimeAssetRepair
-      });
-      await targetSession.protocol.handle('https', (request) => programRuntime.handle(request));
-      gameProgramRuntimes.set(gameId, programRuntime);
-    } catch (error) {
-      gameProgramRuntimes.delete(gameId);
-      console.warn(`[program-runtime] ${gameId} HTTPS interception unavailable; using Render.`, error?.message || error);
+    if (!onlineOnly) {
+      try {
+        const programRuntime = new HttpsProgramRuntime({
+          gameId,
+          origin: REMOTE_ORIGIN,
+          assetCache: runtimeAssetCache,
+          networkFetch: (request) => targetSession.fetch(request, { bypassCustomProtocolHandlers: true }),
+          onFailure: queueRuntimeAssetRepair
+        });
+        await targetSession.protocol.handle('https', (request) => programRuntime.handle(request));
+        gameProgramRuntimes.set(gameId, programRuntime);
+      } catch (error) {
+        gameProgramRuntimes.delete(gameId);
+        console.warn(`[program-runtime] ${gameId} HTTPS interception unavailable; using Render.`, error?.message || error);
+      }
     }
+    const urls = onlineOnly
+      ? [`${REMOTE_ORIGIN}/marineford/art/*`]
+      : [`${REMOTE_ORIGIN}/sw.js*`, `${REMOTE_ORIGIN}/images/*`, `${REMOTE_ORIGIN}/audio/*`, `${REMOTE_ORIGIN}/videos/*`, `${REMOTE_ORIGIN}/fonts/*`];
     targetSession.webRequest.onBeforeRequest(
-      { urls: [`${REMOTE_ORIGIN}/sw.js*`, `${REMOTE_ORIGIN}/images/*`, `${REMOTE_ORIGIN}/audio/*`, `${REMOTE_ORIGIN}/videos/*`, `${REMOTE_ORIGIN}/fonts/*`] },
+      { urls },
       (details, callback) => {
+        if (onlineOnly && details.method !== 'GET' && details.method !== 'HEAD') return callback({});
         if (shouldBlockServiceWorkerRequest(details, REMOTE_ORIGIN)) return callback({ cancel: true });
-        const assetPath = requestAssetPath(details.url);
+        const assetPath = onlineOnly ? requestPathForOrigin(details.url, REMOTE_ORIGIN) : requestAssetPath(details.url);
         if (!assetPath) return callback({});
         const entry = runtimeAssetCache.lookupPath(gameId, assetPath);
-        return callback(entry ? { redirectURL: `${CACHE_SCHEME}://asset/${entry.token}` } : {});
+        const redirect = entry && (!onlineOnly || entry.path === assetPath);
+        return callback(redirect ? { redirectURL: `${CACHE_SCHEME}://asset/${entry.token}` } : {});
       }
     );
     gameSessions.set(gameId, targetSession);
@@ -980,7 +980,12 @@ async function composeState(assetSnapshot) {
         hasInstalled: false
       }]))
     };
-  assets.games.marineford = { status: 'installed', hasInstalled: true, removable: false, onlineOnly: true, installedVersion: '線上版', remoteVersion: '線上版' };
+  if (assetReady) {
+    assets.games.marineford = {
+      status: 'installed', hasInstalled: true, removable: false, onlineOnly: true,
+      installedVersion: '線上版', remoteVersion: '線上版', ...assets.games.marineford
+    };
+  }
   const previewMode = authService?.previewMode === true || SMOKE_MODE;
   return {
     stateRevision: ++stateRevision,
@@ -2056,10 +2061,11 @@ async function runVisualOrSmokeCapture() {
         const results = [];
         for (const source of requested) {
           const gameId = String(source?.gameId || '');
-          const assetPath = safeAssetPath(String(source?.path || ''))?.path;
+          const assetPath = gameId === 'marineford' ? String(source?.path || '') : safeAssetPath(String(source?.path || ''))?.path;
           const expectedSha256 = String(source?.sha256 || '').toLowerCase();
           if (!ALLOWED_GAME_IDS.has(gameId) || !assetPath || !/^[a-f0-9]{64}$/.test(expectedSha256)) throw new Error('Invalid media smoke asset.');
           const targetSession = await prepareGameSession(gameId);
+          if (gameId === 'marineford' && !runtimeAssetCache.lookupPath(gameId, assetPath)) throw new Error('Unknown Marineford smoke asset.');
           const assetUrl = remoteAssetUrl(assetPath);
           const head = await targetSession.fetch(assetUrl, { method: 'HEAD', cache: 'no-store' });
           const rangeResponse = await targetSession.fetch(assetUrl, { cache: 'no-store', headers: { Range: 'bytes=0-1023' } });
