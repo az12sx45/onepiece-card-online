@@ -653,3 +653,33 @@ body:has(#sheet:not([hidden])) > .mf-invite{visibility:hidden}
 #effectLayer .laser-hand-target{--laser-card-width:min(20vh,24vw);width:var(--laser-card-width);left:min(58%,calc(100% - var(--laser-card-width) - 68px));top:40%}
 #effectLayer[data-facing="back"] .laser-hand-target{top:19%}
 #effectLayer .laser-hand-target>.laser-burn-rim{top:50%}
+
+#sheet[data-kind="campaign-profile"]{background:#0a1725;border-color:#706048}
+#sheet[data-kind="campaign-profile"] #sheetBody{max-width:1260px;overflow:auto}
+.mf-dossier{display:grid;grid-template-columns:minmax(150px,32%) minmax(0,1fr);gap:clamp(8px,2vw,22px);min-height:100%;color:#eddfc5}
+.mf-dossier-cover{display:flex;align-items:flex-end;min-height:245px;background:linear-gradient(0deg,#0a1524 3%,#0a152433 78%),var(--mf-new_cover,url("art/v2/new_cover.webp")) center 44%/cover;border:1px solid #a38352}
+.mf-dossier-identity{display:grid;gap:5px;width:100%;padding:clamp(10px,3vw,26px);overflow-wrap:anywhere}
+.mf-dossier-identity .avatar{width:clamp(45px,8vw,85px);height:auto;aspect-ratio:1;object-fit:cover;border:2px solid #dfb97b;border-radius:50%}
+.mf-dossier h3,.mf-dossier h4,.mf-dossier p,.mf-dossier dl,.mf-dossier dd{margin:0}
+.mf-dossier-identity small,.mf-dossier-note{color:#ddbd87}
+.mf-dossier-main{min-width:0;display:flex;flex-direction:column;gap:8px}
+.mf-dossier-nav,.mf-dossier-filters{display:flex;flex-wrap:wrap;gap:6px}
+.mf-dossier-tab{flex:1 1 70px;min-height:38px;padding:5px;background:#1d2d40;border:1px solid #776648;color:#eddfc5}
+.mf-dossier :is(.mf-dossier-tab,.small-button)[aria-pressed="true"]{color:#fff2bd;background:#51402f;border-color:#dcb67d}
+.mf-dossier-panel{display:grid;align-content:start;gap:10px;padding:clamp(8px,2vw,20px);background:#122031;border:1px solid #6e604b}
+.mf-dossier-panel>h3{color:#ffdc9c}
+.mf-dossier-metrics,.mf-dossier-factions,.mf-dossier-honors{display:grid;gap:6px}
+.mf-dossier-metrics{grid-template-columns:repeat(auto-fit,minmax(min(70px,100%),1fr))}
+.mf-dossier-factions,.mf-dossier-honors{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mf-dossier-metrics>div,.mf-dossier-panel article{min-width:0;padding:8px;background:#1b3046;border:1px solid #7e6e55;overflow-wrap:anywhere}
+.mf-dossier-metrics dd{font-size:clamp(16px,3vw,28px);color:#ffe6ae;font-weight:800}
+.mf-dossier-factions article{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 8px;align-content:center}
+.mf-dossier-factions article[data-team="pirate"]{background:#39262b}
+.mf-dossier-panel .campaign-badge{width:clamp(25px,5vw,52px);height:auto;aspect-ratio:2/3;grid-row:span 3}
+.mf-dossier-panel :is(p,small,dt,.campaign-history){font-size:clamp(11px,1.65vw,15px)}
+.mf-dossier-honors article{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 8px}
+.mf-dossier-honors progress{width:100%;accent-color:#e5b76e}
+.mf-dossier-honors [data-unlocked="false"] img{filter:grayscale(1);opacity:.55}
+.mf-dossier .campaign-history{margin:0}
+.mf-dossier [data-won="true"] strong{color:#f8d891}
+@media(max-width:520px){.mf-dossier{grid-template-columns:1fr}.mf-dossier-cover{min-height:155px}}

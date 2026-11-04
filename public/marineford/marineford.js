@@ -38,28 +38,80 @@
   body.append(loading);
   const result=await request('MF_PROFILE');
   if(!body.contains(loading)||$('sheet').hidden)return;
-  const hero=node('div',null,'campaign-banner'),identity=node('div');
-  identity.append(node('small','MARINEFORD · 戰役檔案'),node('h3',me?.name||'航海者'));
-  hero.append(avatar(you),identity);body.replaceChildren(hero);
-  if(!result.ok){body.append(node('p','戰績暫時無法讀取，請稍後重試。'));return;}
-  const stats=result.stats;readBadge(stats.collection);
-  if(equippedBadge)hero.append(badgeImage(equippedBadge));
-  identity.append(node('p','戰役勳章 '+(stats.collection?.balance??0)));
-  const metrics=node('div',null,'campaign-metrics');
-  const percent=stats.games?Math.round(stats.wins/stats.games*100)+'%':'—';
-  for(const [label,value] of [['完成對局',stats.games],['勝／敗',stats.wins+'／'+stats.losses],['勝率',percent],['海軍勝／戰',stats.navyWins+'／'+stats.navyGames],['海賊勝／戰',stats.pirateWins+'／'+stats.pirateGames]]){
-   const metric=node('div');metric.append(node('strong',String(value)),node('span',label));metrics.append(metric);
+  if(!result.ok){loading.textContent='戰績暫時無法讀取，請稍後重試。';return;}
+  const stats=result.stats;
+  readBadge(stats.collection);
+  const rate=(wins,games)=>games?Math.round(wins/games*100)+'%':'—';
+  const shell=node('div',null,'mf-dossier'),cover=node('aside',null,'mf-dossier-cover');
+  const identity=node('div',null,'mf-dossier-identity');
+  identity.append(avatar(you),node('small','MARINEFORD / 人物檔案'),node('h3',me?.name||'航海者'),node('p',stats.games?'馬林福特參戰者':'初登馬林福特'));
+  cover.append(identity);
+  const main=node('div',null,'mf-dossier-main'),nav=node('nav',null,'mf-dossier-nav'),panel=node('section',null,'mf-dossier-panel');
+  nav.setAttribute('aria-label','戰役檔案分頁');main.append(nav,panel);shell.append(cover,main);body.replaceChildren(shell);
+  const factions=[['navy','海軍'],['pirate','海賊']];
+  const honors=[
+   ['初登戰場','完成第一場對局',stats.games,1,'navy'],
+   ['正義戰功','以海軍身分取得 3 場勝利',stats.navyWins,3,'navy'],
+   ['救援戰功','以海賊身分取得 3 場勝利',stats.pirateWins,3,'pirate'],
+   ['頂上老兵','完成 10 場對局',stats.games,10,'pirate']
+  ];
+  function metrics(entries){
+   const grid=node('dl',null,'mf-dossier-metrics');
+   for(const [label,value] of entries){const cell=node('div');cell.append(node('dt',label),node('dd',String(value)));grid.append(cell);}
+   return grid;
   }
-  body.append(metrics,node('h3','近期戰役'));
-  const history=node('ul',null,'campaign-history');
-  for(const match of stats.recent||[]){
-   const date=new Date(Number(match.ended_at));
-   const entry=node('li');
-   entry.append(node('strong',match.winner===match.team?'勝利':'落敗'),node('span',teamName(match.team)+' · '+(match.has_cpu?'含 CPU':'真人對局')),node('time',date.toLocaleDateString('zh-TW')));
-   history.append(entry);
+  function overview(){
+   panel.append(node('h3','戰役總覽'),metrics([['出戰',stats.games],['勝場',stats.wins],['敗場',stats.losses],['勝率',rate(stats.wins,stats.games)]]));
+   const grid=node('div',null,'mf-dossier-factions');
+   for(const [team,label] of factions){
+    const tile=node('article'),games=stats[team+'Games'],wins=stats[team+'Wins'];
+    tile.dataset.team=team;
+    tile.append(badgeImage({art:team+'-back.webp',name:label}),node('h4',label),node('p',games?'出戰 '+games+' 場 · '+wins+' 勝':'尚未以此陣營出戰'),node('strong',rate(wins,games)));
+    grid.append(tile);
+   }
+   panel.append(grid,node('p','含 CPU 對局 '+(stats.cpuGames??0)+' 場','mf-dossier-note'));
+   if(result.pending)panel.append(node('p','本場戰績正在儲存。','mf-dossier-note'));
   }
-  body.append(history.children.length?history:node('p','完成第一場對局後，戰績就會出現在這裡。'));
-  if(result.pending)body.append(node('p','本場戰績正在儲存。'));
+  function history(){
+   panel.append(node('h3','近期戰役'));
+   const filters=node('div',null,'mf-dossier-filters'),list=node('ul',null,'campaign-history');
+   panel.append(filters,list);
+   function filter(team){
+    for(const control of filters.children)control.setAttribute('aria-pressed',String(control.dataset.team===team));
+    list.replaceChildren();
+    for(const match of (stats.recent||[]).filter(item=>!team||item.team===team)){
+     const entry=node('li'),won=match.winner===match.team,date=new Date(Number(match.ended_at));
+     entry.dataset.won=String(won);
+     entry.append(node('strong',won?'勝利':'落敗'),node('span',teamName(match.team)+' · '+(match.has_cpu?'含 CPU':'真人對局')),node('time',date.toLocaleDateString('zh-TW')));
+     list.append(entry);
+    }
+    if(!list.children.length)list.append(node('li',team?'近期沒有此陣營的戰績。':'完成第一場對局後，戰績會出現在這裡。'));
+   }
+   for(const [team,label] of [['','全部'],...factions]){const control=button(label,()=>filter(team),'small-button');control.dataset.team=team;filters.append(control);}
+   filter('');
+  }
+  function achievements(){
+   panel.append(node('h3','榮譽陳列'));
+   const medals=node('article');
+   if(equippedBadge)medals.append(badgeImage(equippedBadge));
+   medals.append(node('p','戰役勳章 '+(stats.collection?.balance??0)));panel.append(medals);
+   const grid=node('div',null,'mf-dossier-honors');
+   for(const [label,condition,value,goal,team] of honors){
+    const tile=node('article'),progress=node('progress');
+    tile.dataset.unlocked=String(value>=goal);progress.max=goal;progress.value=Math.min(goal,value);progress.setAttribute('aria-label',label);
+    tile.append(badgeImage({art:team+'-back.webp',name:''}),node('h4',label),node('p',condition),progress,node('small',value>=goal?'已達成':value+' / '+goal));
+    grid.append(tile);
+   }
+   panel.append(grid);
+  }
+  const pages=[['總覽',overview],['戰績',history],['榮譽',achievements]];
+  function openPage(index){
+   for(const [i,control] of [...nav.children].entries())control.setAttribute('aria-pressed',String(i===index));
+   panel.replaceChildren();pages[index][1]();
+  }
+  for(const [i,[label]] of pages.entries())nav.append(button(label,()=>openPage(i),'mf-dossier-tab'));
+  openPage(0);
+
  }
 
  const notify=text=>{clearTimeout(toastTimer);$('toast').textContent=text;$('toast').hidden=false;toastTimer=setTimeout(()=>$('toast').hidden=true,4000);};

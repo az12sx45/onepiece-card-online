@@ -1,5 +1,11 @@
 # Dev Workflow
 
+## 2026-11-04 馬林福特之戰個人頁
+
+- 在正式基底整合個人頁的總覽、戰績及榮譽分頁，沿用 MF_PROFILE 的讀取資料。勳章餘額與已裝備徽章在榮譽分頁顯示。
+- 變更範圍為 public/marineford 的 marineford.js 個人頁函式及 marineford.css 個人頁樣式。封面與徽章沿用本機素材路徑，普通瀏覽器使用既有 HTTPS 素材路徑。
+- 驗證範圍涵蓋 Chromium 和 WebKit 的隔離測試資料、三個分頁、手機版排版，以及 iOS 素材標記與正式入口的公開檔案讀回。
+
 ## 2026-11-04 馬林福特之戰本機素材入口
 
 - 原生 iOS WebView 提供本機素材標記時，馬林福特的背景、卡圖與特效會改用應用程式提供的 poasset URL。一般瀏覽器、Windows 及 Android 保留原本的 HTTPS 素材路徑。遊戲頁、帳號與 Socket.IO 仍從正式服務載入。
