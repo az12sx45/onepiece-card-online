@@ -1117,7 +1117,7 @@ const io = new Server(server, {
 
 // room = { state, sockets: Map<sid,{playerId,secret,displayName,avatar}>, host, lobbyReady }
 const marinefordRecords=require('./marineford-records').createStore(pool);
-require('./marineford-rooms').attach(io,{recordMatch:match=>marinefordRecords.record(match),getProfile:id=>marinefordRecords.profile(id)});
+const marinefordRuntime = require('./marineford-rooms').attach(io,{recordMatch:match=>marinefordRecords.record(match),getProfile:id=>marinefordRecords.profile(id)});
 const rooms = new Map();
 const boardRooms = new Map();
 const chessRooms = new Map();
@@ -4647,6 +4647,15 @@ socket.on("FRIENDS_GET", async ({ secret, launcher } = {}, cb) => {
 //  - LOBBY_INVITE_SEND: sender invites friend to roomId
 //  - LOBBY_INVITE_RESPOND: receiver accept / reject / mute5
 // =========================
+function marinefordInviteSockets(userId){
+  return [...(onlineUsers.get(userId) || [])]
+    .map(sid=>io.sockets.sockets.get(sid))
+    .filter(peer=>peer?.connected && Number(peer.data.socialProfile?.userId)===userId);
+}
+function emitMarinefordInvite(userId,event,payload){
+  for(const peer of marinefordInviteSockets(userId)) peer.emit(event,payload);
+}
+
 socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId, mode }, cb) => {
   try{
     pruneLobbyInvites();
@@ -4658,7 +4667,7 @@ socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId, mode }, cb) =>
     const toId = Number(toUserId);
     const rid = String(roomId||"").trim().toUpperCase();
     const requestedMode = String(mode||"card").trim().toLowerCase();
-    const inviteMode = requestedMode === "board" ? "board" : (requestedMode === "chess" ? "chess" : "card");
+    const inviteMode = requestedMode === "marineford" ? "marineford" : requestedMode === "board" ? "board" : (requestedMode === "chess" ? "chess" : "card");
 
     if(!(fromId>0)) return cb?.({ ok:false, error:"bad from" });
     if(!(toId>0)) return cb?.({ ok:false, error:"bad to" });
@@ -4666,9 +4675,12 @@ socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId, mode }, cb) =>
     if(toId === fromId) return cb?.({ ok:false, error:"cannot invite self" });
 
     // verify the matching game room exists and is still waiting
-    const room = inviteMode === "board" ? boardRooms.get(rid) : (inviteMode === "chess" ? chessRooms.get(rid) : rooms.get(rid));
+    const room = inviteMode === "marineford" ? marinefordRuntime.rooms.get(rid) : inviteMode === "board" ? boardRooms.get(rid) : (inviteMode === "chess" ? chessRooms.get(rid) : rooms.get(rid));
     if(!room) return cb?.({ ok:false, error:"room not found" });
-    if(inviteMode === "board"){
+    if(inviteMode === "marineford"){
+      if(room.state || room.seats.length>=6) return cb?.({ok:false,error:"房間已開始或已滿"});
+      if(!room.seats.some(p=>!p.cpu&&Number(p.userId)===fromId)) return cb?.({ok:false,error:"不在此房間"});
+    }else if(inviteMode === "board"){
       if(room.status !== "waiting") return cb?.({ ok:false, error:"room already started" });
       const senderInRoom = (room.players || []).some(player => Number(player?.userId) === fromId && !boardPlayerIsCpu(player));
       if(!senderInRoom) return cb?.({ ok:false, error:"not room member" });
@@ -4688,7 +4700,8 @@ socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId, mode }, cb) =>
     if(!friends.has(toId)) return cb?.({ ok:false, error:"not friends" });
 
     // receiver online?
-    if(!isOnline(toId)) return cb?.({ ok:false, error:"offline" });
+    const inviteOnline = inviteMode === "marineford" ? marinefordInviteSockets(toId).length>0 : isOnline(toId);
+    if(!inviteOnline) return cb?.({ ok:false, error:"offline" });
 
     // receiver muted?
     const rem = lobbyInviteMuteRemainingMs(toId);
@@ -4710,8 +4723,9 @@ socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId, mode }, cb) =>
     };
     lobbyInvites.set(inviteId, inv);
 
-    emitToUser(toId, "EMIT", {
-      type: inviteMode === "board" ? "board_lobby_invite" : (inviteMode === "chess" ? "chess_lobby_invite" : "lobby_invite"),
+    const emitInvite = inviteMode === "marineford" ? emitMarinefordInvite : emitToUser;
+    emitInvite(toId, "EMIT", {
+      type: inviteMode === "marineford" ? "marineford_lobby_invite" : inviteMode === "board" ? "board_lobby_invite" : (inviteMode === "chess" ? "chess_lobby_invite" : "lobby_invite"),
       invite: {
         inviteId,
         fromId,
@@ -4745,17 +4759,19 @@ socket.on("LOBBY_INVITE_RESPOND", async ({ secret, inviteId, action }, cb) => {
     if(!inv) return cb?.({ ok:false, error:"invite not found" });
     if(Number(inv.toId)!==myId) return cb?.({ ok:false, error:"not receiver" });
 
+    const emitReply = inv.mode === "marineford" ? emitMarinefordInvite : emitToUser;
+
     if(act === 'mute5'){
       lobbyInvites.delete(id);
       const until = Date.now() + 5*60*1000;
       lobbyInviteMuteUntil.set(myId, until);
-      emitToUser(Number(inv.fromId), "EMIT", { type:"toast", text:`${String(prof.name||'對方')} 已暫停接收遊戲邀請 5 分鐘` });
+      emitReply(Number(inv.fromId), "EMIT", { type:"toast", text:`${String(prof.name||'對方')} 已暫停接收遊戲邀請 5 分鐘` });
       return cb?.({ ok:true, mutedUntil: until });
     }
 
     if(act === 'reject'){
       lobbyInvites.delete(id);
-      emitToUser(Number(inv.fromId), "EMIT", { type:"toast", text:`${String(prof.name||'對方')} 已拒絕遊戲邀請` });
+      emitReply(Number(inv.fromId), "EMIT", { type:"toast", text:`${String(prof.name||'對方')} 已拒絕遊戲邀請` });
       return cb?.({ ok:true });
     }
 
@@ -4763,10 +4779,13 @@ socket.on("LOBBY_INVITE_RESPOND", async ({ secret, inviteId, action }, cb) => {
 
     // verify the corresponding card/Board room still exists and is waiting
     const storedMode = String(inv.mode||"card");
-    const inviteMode = storedMode === "board" ? "board" : (storedMode === "chess" ? "chess" : "card");
-    const room = inviteMode === "board" ? boardRooms.get(String(inv.roomId)) : (inviteMode === "chess" ? chessRooms.get(String(inv.roomId)) : rooms.get(String(inv.roomId)));
+    const inviteMode = storedMode === "marineford" ? "marineford" : storedMode === "board" ? "board" : (storedMode === "chess" ? "chess" : "card");
+    const room = inviteMode === "marineford" ? marinefordRuntime.rooms.get(inv.roomId) : inviteMode === "board" ? boardRooms.get(String(inv.roomId)) : (inviteMode === "chess" ? chessRooms.get(String(inv.roomId)) : rooms.get(String(inv.roomId)));
     if(!room) return cb?.({ ok:false, error:"room not found" });
-    if(inviteMode === "board"){
+    if(inviteMode === "marineford"){
+      if(room.state || room.seats.length>=6) return cb?.({ok:false,error:"房間已開始或已滿"});
+      if(!room.seats.some(p=>!p.cpu&&Number(p.userId)===inv.fromId)) return cb?.({ok:false,error:"邀請者已離開房間"});
+    }else if(inviteMode === "board"){
       if(room.status !== "waiting") return cb?.({ ok:false, error:"room already started" });
     }else if(inviteMode === "chess"){
       if(room.status !== "waiting") return cb?.({ ok:false, error:"room already started" });
@@ -4775,7 +4794,7 @@ socket.on("LOBBY_INVITE_RESPOND", async ({ secret, inviteId, action }, cb) => {
     }
 
     lobbyInvites.delete(id);
-    emitToUser(Number(inv.fromId), "EMIT", { type:"toast", text:`${String(prof.name||'好友')} 已接受邀請` });
+    emitReply(Number(inv.fromId), "EMIT", { type:"toast", text:`${String(prof.name||'好友')} 已接受邀請` });
     return cb?.({ ok:true, roomId: String(inv.roomId), mode: inviteMode });
   }catch(e){
     console.error("[LOBBY_INVITE_RESPOND] error:", e);

@@ -9041,3 +9041,10 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 2026-11-04 頂上戰爭入口加點擊進入，主選單接共用好友、邀請與私訊事件。手機牌堆依實際落點投影，對手只保留兩個海軍牌位。全桌可看指定牌位飛到查看者、出戰及回手，私有牌面只交付授權方。敗牌飛往公開牌列，應回收的牌飛往海軍牌堆。Chrome/WebKit 定向各9項、牌桌流程15項、規則邊界及1500場種子測試通過，六瀏覽器68動作通過。好友使用隔離回應驗證。QA D:/Codex_QA/marineford-seat-motion-20261104。 發布整合時將頂上戰爭私訊欄位上限對齊既有伺服器的 400 字元。
 
 2026-11-04 依 public/start.html 的 MainMenu／RoomChoice 分層，頂上戰爭主選單置中直排，開始遊戲再顯示雙欄房間模式，CPU 可在建立前選定。銀藍要塞按鈕為生圖 exec-ec9f4234-580a-4a90-a5f6-d22a26e5a6d7.png，裁透明邊並轉 WebP。Chrome、WebKit 定向10項，六瀏覽器96動作通過。QA D:/Codex_QA/marineford-card-menu-20261104。 發布整合沿用私訊 400 字元上限，並保留舊用戶端送 null 建立無 CPU 房間的行為。
+
+### 2026-11-04 · Marineford harbor and card placement
+- Marineford owns its splash, profile and shop views; the shop shares authenticated inventory/wallet APIs. Manual cloud sync entry removed.
+- Waiting-room chat is scoped to current room members and lobby state. Friend invites use the existing authenticated invite contract with a Marineford mode. Integrate only the Marineford registration and invite branches in shared server/index.js.
+- Mobile decks use a rigid orthographic transform, Navy draw slot 2 is centered, and pirate public thumbnails fly back before the pile shuffle. Rules and private-hand visibility remain server authoritative.
+- Browser QA is separate from real-account, Android/iOS hardware and public deployment verification.
+- Release preparation preserves 400-character private messages and 500-character room messages, keeps null room creation compatible, sends shop crew capability, and validates current authenticated recipients for room chat and Marineford invites.
