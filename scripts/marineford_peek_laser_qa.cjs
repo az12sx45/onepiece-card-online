@@ -32,6 +32,28 @@ try{
  assert.equal(await p.locator('.campaign-sides .campaign-player').count(),6);
  await p.getByRole('button',{name:'查看戰績',exact:true}).click();await p.getByText('近期戰役',{exact:true}).waitFor();
  await p.locator('#sheetClose').click();checks.push('Campaign settlement and profile expose factions, recent record and no shop link');}
+ for(const [width,height] of [[568,320],[740,360],[932,430],[1024,768],[1366,768],[1920,800],[390,844]]){
+  await p.setViewportSize({width,height});
+  for(const viewer of [0,1]){
+   const state=engine.create(room.seats,0);
+   state.players[viewer].hand=viewer===0?['justice-3','justice-4','justice-6']:['pirate-6','pirate-10'];state.turn=viewer;state.step='play';
+   await recover(state,viewer);
+   const piles=await p.locator('.deck').evaluateAll(es=>es.map(e=>JSON.parse(e.dataset.floor)));
+   assert(piles.every(({floor,corners})=>corners.every(([x,y])=>x>=0&&x<=width&&y>=floor-1&&y<=height)),JSON.stringify({width,height,viewer,piles}));
+   const overflow=await p.locator('.card-caption').evaluateAll(captions=>captions.flatMap(caption=>{
+    if(!caption.getClientRects().length)return [];
+    const frame=caption.getBoundingClientRect();
+    return [...caption.children].flatMap(el=>{
+     if(getComputedStyle(el).display==='none'||!el.getClientRects().length)return [];
+     const range=document.createRange();range.selectNodeContents(el);const text=range.getBoundingClientRect();
+     return text.left<frame.left-1||text.right>frame.right+1||text.top<frame.top-2||text.bottom>frame.bottom+2?[el.textContent]:[];
+    });
+   }));
+   assert.deepEqual(overflow,[],JSON.stringify({width,height,viewer}));
+   if(width===740||width===1366)await p.screenshot({path:out+'/ground-'+width+'-'+viewer+'.png'});
+  }
+ }
+ checks.push('Both faction views on seven viewport sizes keep deck footprints on the painted foreground and card text inside its frame');
  if(process.env.MF_LAYOUT_ONLY){fs.writeFileSync(out+'/report.json',JSON.stringify({passed:true,checks,errors,scope:'2–6 seat faction layout and health starts, static browser checks'},null,2));console.log(JSON.stringify({passed:true,checks:checks.length}));return;}
  let s=engine.create(room.seats,0);s.turn=1;s.players[0].hand=['navy-garp','navy-kizaru'];s.players[1].played=['pirate-4'];s.pending={type:'peek-slot',owner:2,slots:2,source:1};s.step='effect';
  const peek=engine.apply(s,2,{type:'CHOOSE',slot:1});assert(peek.ok);

@@ -12,7 +12,7 @@
  const ownHand=()=>view?.players[you]?.team==='navy'?$('navyHands'):$('hand');
  const slotName=i=>i===0?'左邊':i===1?'右邊':'新抽';
  const cardArt=id=>'art/v2/'+(cards[id]?.justice?'refined-':'redraw-')+id+'.webp';
- const cardImage=id=>{const c=cards[id],face=node('div',null,'card-face'),img=node('img');face.dataset.card=id;face.dataset.team=c.team;face.dataset.redraw='true';face.title=c.rank+' · '+c.name+'：'+c.effect;img.onload=()=>{face.dataset.loaded='true';};img.src=cardArt(id);img.alt=c.name;img.width=1024;img.height=1536;img.draggable=false;const rank=node('b',String(c.rank),'card-rank'),title=node('strong',c.name,'card-name'),effect=node('span',c.effect,'card-effect');face.append(img,rank,title,effect);return face;};
+ const cardImage=id=>{const c=cards[id],face=node('div',null,'card-face'),img=node('img');face.dataset.card=id;face.dataset.team=c.team;face.dataset.redraw='true';face.title=c.rank+' · '+c.name+'：'+c.effect;img.onload=()=>{face.dataset.loaded='true';};img.src=cardArt(id);img.alt=c.name;img.width=1024;img.height=1536;img.draggable=false;const rank=node('b',String(c.rank),'card-rank'),title=node('strong',c.name,'card-name'),effect=node('span',c.effect,'card-effect');const caption=node('div',null,'card-caption');caption.append(title,effect);face.append(img,rank,caption);return face;};
  function renderNavyStage(){
   let stage=$('executionStage');if(!stage){stage=node('div',null,'execution-stage');stage.id='executionStage';const scaffold=node('img',null,'execution-scaffold');scaffold.src='art/v2/scaffold-field-pirate.webp';scaffold.alt='艾斯跪在處刑台';const hands=node('div');hands.id='navyHands';hands.setAttribute('aria-label','海軍左右手牌');stage.append(scaffold,hands,$('health'));$('table').prepend(stage);}
   const own=view.players[you]?.team==='navy',hands=$('navyHands'),navy=view.players[view.navyId];stage.dataset.own=String(own);$('hand').hidden=own;
@@ -243,22 +243,48 @@
  }
  // Map both deck surfaces onto the same camera/floor, rather than tilting each pile independently.
  function placeGroundDecks(){
-  if(!view||$('table').hidden)return;const W=$('table').clientWidth,H=$('table').clientHeight,sceneH=Math.max(H,W*941/1672),crop=(sceneH-H)*.4,navy=view.players[you]?.team==='navy';
-  if(W<=0||H<=0)return;
-  const horizon=sceneH*.42-crop,floor=sceneH*(navy?.77:.65)-crop,front=navy?H*.945:Math.min(H*.86,H-(parseFloat($('table').style.getPropertyValue('--ally-height'))||55)-48),back=Math.min(front-20,Math.max(horizon+20,front-H*.135)),ratio=(back-horizon)/(front-horizon),fw=Math.max(54,Math.min(118,W*.08));
-  for(const pile of $('deckZone').children){const navyX=H<=450?.19:navy?.34:.28;const cx=W*(pile.dataset.team==='navy'?navyX:1-navyX),rear=W*.5+(cx-W*.5)*ratio,tw=fw*ratio;
-   if(matchMedia('(max-height:450px), (max-width:850px)').matches){
-    const angle=(pile.dataset.team==='navy'?1:-1)*.12,k=Math.cos(angle),z=Math.sin(angle),w=fw,h=fw*1.5,tilt=.49,left=cx-w*.65,top=front-h*tilt-12,x=w*.15,y=12,plane=pile.querySelector('.deck-plane'),contact=pile.querySelector('.deck-contact i');
-    const depth=Math.sqrt(1-tilt*tilt),m=[k,z,0,0,-z*tilt,k*tilt,depth,0,z*depth,-k*depth,tilt,0,x,y,0,1];
-    Object.assign(pile.style,{translate:'',left:left+'px',top:top+'px',width:w*1.3+'px',height:(front-top+16)+'px'});
-    for(const part of [plane,contact])Object.assign(part.style,{width:w+'px',height:h+'px',transform:'matrix3d('+m.join(',')+')'});
-    const corners=[[0,0],[w,0],[w,h],[0,h]].map(([u,v])=>[left+x+k*u-z*tilt*v,top+y+z*u+k*tilt*v]);pile.dataset.floor=JSON.stringify({corners,horizon,floor,front,back:top});continue;
+  const table=$('table'),background=table.querySelector('.execution-scaffold');
+  if(!view||table.hidden||!background)return;
+  const width=table.clientWidth,height=table.clientHeight;
+  if(!width||!height)return;
+  const navy=view.players[you]?.team==='navy';
+  const artHeight=Math.max(height,width*941/1672);
+  const overflow=artHeight-height;
+  const ally=$('players').querySelector('[data-side="ally"]')?.getBoundingClientRect();
+  const bottomLimit=navy?height-20:Math.min(height-22,(ally?.top??height)-table.getBoundingClientRect().top-19);
+  // These are the start of the clear ice in each illustration, below the steps.
+  const groundRatio=navy?.785:.66;
+  const camera=overflow?Math.max(.4,Math.min(1,(artHeight*groundRatio-bottomLimit+42)/overflow)):.4;
+  background.style.objectPosition='50% '+camera*100+'%';
+  const floor=artHeight*groundRatio-overflow*camera;
+  const front=Math.min(bottomLimit,artHeight*.91-overflow*camera);
+  const available=Math.max(12,front-floor);
+  const tilt=Math.max(.27,Math.min(.41,available/(Math.max(32,width*.065)*1.65)));
+  const cardWidth=Math.max(25,Math.min(106,width*.072,height*.16,available/(tilt*1.55+.13)));
+  const cardHeight=cardWidth*1.5;
+  const depth=Math.sqrt(1-tilt*tilt);
+  for(const pile of $('deckZone').children){
+   const leftSide=pile.dataset.team==='navy';
+   const angle=leftSide?-.085:.085;
+   const c=Math.cos(angle),sin=Math.sin(angle);
+   const points=[[0,0],[cardWidth,0],[cardWidth,cardHeight],[0,cardHeight]]
+    .map(([x,y])=>[c*x-sin*tilt*y,sin*x+c*tilt*y]);
+   const xs=points.map(point=>point[0]),ys=points.map(point=>point[1]);
+   const minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
+   let center=width*(leftSide?.20:.80);
+   if(navy&&!leftSide&&ally){
+    const allyLeft=ally.left-table.getBoundingClientRect().left;
+    center=Math.max(width*.32,Math.min(center,allyLeft-(maxX-minX)/2-14));
    }
-   const world=[[rear-tw/2,back],[rear+tw/2,back],[cx+fw/2,front],[cx-fw/2,front]],left=Math.min(...world.map(p=>p[0]))-6,top=back-14,width=Math.max(...world.map(p=>p[0]))-left+6;
-   pile.style.translate='';pile.style.left=left+'px';pile.style.top=top+'px';pile.style.width=width+'px';pile.style.height=(front-top+16)+'px';
-   const q=world.map(([x,y])=>[x-left,y-top]),[[x0,y0],[x1,y1],[x2,y2],[x3,y3]]=q,dx1=x1-x2,dx2=x3-x2,dx3=x0-x1+x2-x3,dy1=y1-y2,dy2=y3-y2,dy3=y0-y1+y2-y3,den=dx1*dy2-dx2*dy1,g=(dx3*dy2-dx2*dy3)/den,j=(dx1*dy3-dx3*dy1)/den;
-   const w=fw,h=fw*1.5,m=[(x1-x0+g*x1)/w,(y1-y0+g*y1)/w,0,g/w,(x3-x0+j*x3)/h,(y3-y0+j*y3)/h,0,j/h,0,-1,1,0,x0,y0,0,1],plane=pile.querySelector('.deck-plane');
-   plane.style.width=w+'px';plane.style.height=h+'px';plane.style.transform='matrix3d('+m.join(',')+')';const contact=pile.querySelector('.deck-contact i');contact.style.width=w+'px';contact.style.height=h+'px';contact.style.transform=plane.style.transform;pile.dataset.floor=JSON.stringify({corners:world,horizon,floor,front,back});
+   const originX=center-(minX+maxX)/2,originY=front-maxY;
+   const left=originX+minX-7,top=originY+minY-8;
+   const plane=pile.querySelector('.deck-plane'),contact=pile.querySelector('.deck-contact i');
+   const matrix=[c,sin,0,0,-sin*tilt,c*tilt,depth,0,sin*depth,-c*depth,tilt,0,originX-left,originY-top,0,1];
+   Object.assign(pile.style,{left:left+'px',top:top+'px',width:(maxX-minX+14)+'px',height:(front-top+16)+'px'});
+   for(const part of [plane,contact]){
+    Object.assign(part.style,{width:cardWidth+'px',height:cardHeight+'px',transform:'matrix3d('+matrix.join(',')+')'});
+   }
+   pile.dataset.floor=JSON.stringify({floor,front,back:originY+minY,corners:points.map(([x,y])=>[x+originX,y+originY])});
   }
  }
  window.addEventListener('resize',placeGroundDecks);

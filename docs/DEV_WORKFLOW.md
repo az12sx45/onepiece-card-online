@@ -9059,3 +9059,8 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - The friend list opens as a dock, while waiting rooms group human and CPU seats, expose host controls and include inline room chat. Chat history is sent only to room members. A six-seat room can start with one human and five CPUs.
 - Verification: marineford_peek_laser_qa.cjs mobile layout and waiting-room flow, and marineford_records_qa.js for retained campaign records.
 - Integration retains prior account balances, acquired collectibles and equipped badges, and guards room history and kick targets with current authenticated membership and a host-only seat token.
+
+### 2026-11-04 · Marineford card typography and ice-floor placement
+- Marineford card captions share one inset layout. Compact cards show the rank and name, with the full effect in the detail screen.
+- Both battlefield backgrounds share a rigid deck transform tied to the actual cover crop and each painting’s ice floor. The Navy deck placement accounts for the player HUD.
+- The mobile browser QA checks both factions across seven viewport sizes and measures the card caption text bounds and deck footprints.
