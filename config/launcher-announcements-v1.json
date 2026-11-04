@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 80,
+  "revision": 81,
   "announcements": [
+    {
+      "id": "card-20261104-android-autoplay",
+      "status": "published",
+      "publishedAt": "2026-11-04T03:10:48.761Z",
+      "scope": "card",
+      "category": "update",
+      "version": "2026.11.04",
+      "title": "爭霸戰：Android v063 強化影片自動播放",
+      "summary": "修正 Android v063 的影片快取讀取，符合演出條件時會自動播放。",
+      "body": [
+        "修正 Android v063 讀取快取時強化影片無法播放的問題。影片會隨對局自動播放。",
+        "本次已移除前一則公告提到的點按播放備援。請先結束對局，從下載管理更新爭霸戰，再重新進入。",
+        "Windows 可從下載管理更新爭霸戰。iOS v058／v063 請先結束遊戲，完整關閉 App 再重開。這次更新沿用現有 App。"
+      ],
+      "requiredRelease": {
+        "kind": "card",
+        "releaseId": "package-d03b7cd0cf734d69"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "card"
+      }
+    },
     {
       "id": "marineford-20261104-hud-lobby",
       "status": "published",

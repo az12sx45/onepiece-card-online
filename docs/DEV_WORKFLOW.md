@@ -9030,3 +9030,10 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 2026-11-04 爭霸戰更新情報 card-20261104-timing-video 對應 package-91a1e057201afdd4。公開驗證通過後發布，兩個程式差量沿用原影片和手機安裝通道。公告測試使用隔離 PGlite。
 
 2026-11-04 頂上戰爭大廳採爭霸戰主畫面與房間清單分層。首頁保留建房、加入、規則、檔案、圖鑑。加入頁使用 MF_LIST 顯示公開房間，支援更新清單與依代碼加入。兩陣營以獨立生圖 HUD 背景替換 CSS 畫框，素材原檔 exec-e77e84dd-089d-4ebb-8b8a-fe028ca1661c.png、exec-e0caba08-c99e-44c4-97e4-fc341a36aec7.png，轉 960x320 WebP 並核對頭像落點。Chrome 8 項版面與觸控定向測試通過。QA 在 D:/Codex_QA/marineford-hud-lobby-20261104。
+
+<!-- CARD_ANDROID_AUTOPLAY_20261104_BEGIN -->
+### 2026-11-04 爭霸戰 Android v063 強化影片自動播放
+官方 v063 APK 與 WebView 156.0.8078.47 的實作顯示快取命中時 App 先按 Range 移位，WebView 接手輸入串流後再移一次。以三支雜湊相符的原片在 Java 重現錯誤位移及片尾索引讀取失敗。
+`public/game.html` 的官方 Android 路徑先以不帶 Range 的 GET 讀一支影片，以 Blob URL 播放，讀取中斷、取消或播放完會釋放請求或網址。快取未命中沿用媒體網址串流。移除手動點按；保留自動靜音重試與有界失敗處理。其他平台仍使用原本的媒體網址。未改伺服器、APK 或 MP4。
+已核對變更只在影片模組。證據與正式交接見 D:/Codex_QA/card-android-native-range-20261104 與 D:/Codex_QA/card-android-autoplay-20261104。正式發行與實機驗收另有收據。
+<!-- CARD_ANDROID_AUTOPLAY_20261104_END -->

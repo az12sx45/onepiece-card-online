@@ -3825,19 +3825,28 @@ function traceEnhVideo(type,card,vid,detail){
   if(_enhVideoTrace.length>48)_enhVideoTrace.shift();
 }
 window.__readCardEnhVideoTrace=()=>_enhVideoTrace.map(row=>({...row}));
-const useAndroidEnhPrime=()=>window.__TABLETOP_ANDROID_GAME_UI__===true&&/\bONEPIECE_TABLETOP_ANDROID\b/i.test(navigator.userAgent);
+const usesAndroidMovieCache=()=>window.__TABLETOP_ANDROID_GAME_UI__===true&&/\bONEPIECE_TABLETOP_ANDROID\b/i.test(navigator.userAgent);
 const enhPlayDenied=error=>error?.name==='NotAllowedError'||error?.name==='SecurityError';
-function makeEnhVideoTap(onTap){
-  const button=document.createElement('button');
-  button.type='button';button.className='enh-load-status';button.textContent='點一下播放強化影片';
-  button.style.pointerEvents='auto';button.style.cursor='pointer';
-  button.addEventListener('click',onTap,{once:true});
-  document.body.append(button);
-  return button;
+const MAX_CACHED_ENH_VIDEO_BYTES=32*1024*1024;
+async function fetchAndroidEnhMovie(path,signal){
+  // WebView seeks a custom InputStream for Range requests. Launcher v063
+  // already seeks that stream, so use one ordinary GET and let blob: handle seeks.
+  const response=await fetch(path,{cache:'no-store',redirect:'manual',signal});
+  if(response.type==='opaqueredirect')return null; // Cache miss: let the media URL stream from the CDN.
+  const length=Number(response.headers.get('Content-Length'));
+  if(response.status!==200||length>MAX_CACHED_ENH_VIDEO_BYTES||
+      response.headers.get('Content-Type')?.split(';')[0].trim()!=='video/mp4'){
+    await response.body?.cancel();
+    throw new Error('invalid-movie-response');
+  }
+  const movie=await response.blob();
+  if(!movie.size||movie.size>MAX_CACHED_ENH_VIDEO_BYTES||(length&&movie.size!==length)){
+    throw new Error('incomplete-movie');
+  }
+  return movie;
 }
 
-// Begin loading as the card rises. Android may keep preload below a playable
-// state until the same element receives its first real play() call.
+// Begin loading while the character rises. Keep the source through playback.
 let _enhVideoPreparation=null;
 function cancelPreparedEnhVideo(){
   const item=_enhVideoPreparation;if(!item)return;
@@ -3847,26 +3856,34 @@ function prepareEnhFxFor(cardId){
   const vid=document.getElementById('enhVideo');
   if(!vid||document.hidden||isCpuSkipFastMode()||!Number.isInteger(cardId)||cardId<0||cardId>=ENH_VID.length)return Promise.resolve(false);
   if(vid.__enhOnEnded)return Promise.resolve(false);
-  const src=ENH_VID[cardId];
-  if(_enhVideoPreparation?.id===cardId&&vid.getAttribute('src')===src)return _enhVideoPreparation.promise;
+  const path=ENH_VID[cardId];
+  if(_enhVideoPreparation?.id===cardId)return _enhVideoPreparation.promise;
   cancelPreparedEnhVideo();
-  const android=useAndroidEnhPrime();
-  const item={id:cardId,src,ready:false,done:false,timer:null,poll:null,primeTimer:null,primeTapTimer:null,attempt:0,
-    priming:false,primePlaying:false,rewinding:null,tap:null,tapUsed:false,resolve:null,promise:null,cancel:null};
+  const android=usesAndroidMovieCache();
+  const item={id:cardId,source:null,blobUrl:null,request:android?new AbortController():null,
+    ready:false,done:false,timer:null,poll:null,primeTimer:null,
+    priming:false,primePlaying:false,rewinding:null,resolve:null,promise:null,cancel:null};
   item.promise=new Promise(resolve=>item.resolve=resolve);_enhVideoPreparation=item;
-  const current=()=>_enhVideoPreparation===item&&!item.done&&vid.getAttribute('src')===src;
+  const current=()=>_enhVideoPreparation===item&&!item.done;
+  const sourceCurrent=()=>current()&&!!item.source&&vid.getAttribute('src')===item.source;
   const events=['loadeddata','canplay','canplaythrough','progress','loadedmetadata','seeked'];
-  const removeTap=()=>{item.tap?.remove();item.tap=null;};
   function detach(){
-    clearTimeout(item.timer);clearTimeout(item.primeTimer);clearTimeout(item.primeTapTimer);
-    clearInterval(item.poll);removeTap();
+    clearTimeout(item.timer);clearTimeout(item.primeTimer);clearInterval(item.poll);
     for(const type of events)vid.removeEventListener(type,check);
     vid.removeEventListener('playing',playing);vid.removeEventListener('error',failed);
+  }
+  function discardSource(){
+    item.request?.abort();
+    if(vid.__enhPreparedFor===cardId&&!vid.__enhOnEnded)delete vid.__enhPreparedFor;
+    if(item.source&&vid.getAttribute('src')===item.source&&!vid.__enhOnEnded){
+      try{vid.pause();vid.removeAttribute('src');vid.load();}catch{}
+    }
+    if(item.blobUrl)URL.revokeObjectURL(item.blobUrl);
   }
   function settle(ready,reason){
     if(item.done)return;item.done=true;item.ready=ready;detach();
     traceEnhVideo(ready?'prepare-ready':'prepare-failed',cardId,vid,reason);
-    if(!ready&&_enhVideoPreparation===item){_enhVideoPreparation=null;delete vid.__enhPreparedFor;try{vid.pause();vid.removeAttribute('src');vid.load();}catch{}}
+    if(!ready&&_enhVideoPreparation===item){_enhVideoPreparation=null;discardSource();}
     item.resolve(ready);
   }
   function rewind(reason){
@@ -3875,7 +3892,7 @@ function prepareEnhFxFor(cardId){
     check();
   }
   function check(){
-    if(!current())return;
+    if(!sourceCurrent())return;
     if(document.hidden||isCpuSkipFastMode()){cancelPreparedEnhVideo();return;}
     const hasFrame=vid.videoWidth>0&&vid.videoHeight>0&&vid.readyState>=2;
     if(item.rewinding){
@@ -3890,48 +3907,49 @@ function prepareEnhFxFor(cardId){
     }
   }
   function playing(){
-    if(!current()||!item.priming||item.rewinding||vid.paused)return;
+    if(!sourceCurrent()||!item.priming||item.rewinding||vid.paused)return;
     item.primePlaying=true;traceEnhVideo('prime-playing',cardId,vid);check();
   }
-  function offerPrimeTap(reason){
-    if(!current()||document.hidden||item.primePlaying||item.rewinding||item.tapUsed||item.tap)return;
-    traceEnhVideo('prime-tap-offered',cardId,vid,reason);
-    item.tap=makeEnhVideoTap(()=>{
-      item.tapUsed=true;removeTap();prime(true);
-    });
-  }
-  function prime(fromTap=false){
-    if(!current()||document.hidden||isCpuSkipFastMode())return;
-    const attempt=++item.attempt;
-    clearTimeout(item.primeTapTimer);
-    item.priming=true;item.primePlaying=false;
-    vid.muted=true;
-    if(fromTap){
-      // Abort a pending request without replacing the source or losing its buffer.
-      try{vid.pause();}catch{}
-    }else item.primeTapTimer=setTimeout(()=>offerPrimeTap('pending'),1500);
-    traceEnhVideo(fromTap?'prime-tap':'prime-start',cardId,vid);
+  function prime(){
+    if(!sourceCurrent()||document.hidden||isCpuSkipFastMode())return;
+    item.priming=true;vid.muted=true;
+    traceEnhVideo('prime-start',cardId,vid);
     let pending;try{pending=vid.play();}catch(error){pending=Promise.reject(error);}
     Promise.resolve(pending).catch(error=>{
-      if(!current()||attempt!==item.attempt||item.primePlaying||item.rewinding)return;
-      item.priming=false;clearTimeout(item.primeTapTimer);
-      const denied=enhPlayDenied(error);
-      traceEnhVideo('prime-rejected',cardId,vid,denied?'gesture':'play');
-      if(denied)offerPrimeTap('gesture');
+      if(!sourceCurrent()||item.primePlaying||item.rewinding)return;
+      item.priming=false;
+      traceEnhVideo('prime-rejected',cardId,vid,enhPlayDenied(error)?'gesture':'play');
     });
   }
-  function failed(){if(current())settle(false,vid.error?.code||'media-error');}
+  function failed(){if(sourceCurrent())settle(false,vid.error?.code||'media-error');}
   item.cancel=()=>{
     detach();if(!item.done){item.done=true;item.resolve(false);}
     traceEnhVideo('prepare-cancel',cardId,vid);
-    if(vid.getAttribute('src')===src&&!vid.__enhOnEnded){delete vid.__enhPreparedFor;try{vid.pause();vid.removeAttribute('src');vid.load();}catch{}}
+    discardSource();
   };
   for(const type of events)vid.addEventListener(type,check);
   vid.addEventListener('playing',playing);vid.addEventListener('error',failed);
   vid.__enhPreparedFor=cardId;vid.preload='auto';vid.setAttribute('playsinline','');
   item.timer=setTimeout(()=>settle(false,'prepare-timeout'),15000);item.poll=setInterval(check,150);
-  if(android)item.primeTimer=setTimeout(()=>prime(),600);
-  try{vid.setAttribute('src',src);traceEnhVideo('prepare-start',cardId,vid);vid.load();check();}catch{settle(false,'load');}
+  function loadSource(movie){
+    if(!current())return;
+    if(document.hidden||isCpuSkipFastMode()){cancelPreparedEnhVideo();return;}
+    try{
+      if(movie)item.blobUrl=URL.createObjectURL(movie);
+      item.source=item.blobUrl||path;
+      vid.setAttribute('src',item.source);
+      traceEnhVideo('prepare-start',cardId,vid,item.blobUrl?'local-bytes':'stream');
+      if(android)item.primeTimer=setTimeout(prime,600);
+      vid.load();check();
+    }catch{settle(false,'load');}
+  }
+  if(android){
+    fetchAndroidEnhMovie(path,item.request.signal).then(loadSource,()=>{
+      if(!current())return;
+      traceEnhVideo('cache-read-failed',cardId,vid);
+      loadSource(null);
+    });
+  }else loadSource(null);
   return item.promise;
 }
 window.__prepareCardEnhVideo=prepareEnhFxFor;
@@ -3948,20 +3966,26 @@ function playEnhFxFor(cardId){
   if (document.hidden||isCpuSkipFastMode()) return;
   const ov=document.getElementById('enhOverlay'),vid=document.getElementById('enhVideo');
   if(!ov||!vid)return;
-  const prepared=_enhVideoPreparation?.id===cardId&&_enhVideoPreparation.ready&&vid.getAttribute('src')===ENH_VID[cardId];
+  const item=_enhVideoPreparation;
+  const prepared=item?.id===cardId&&item.ready&&vid.getAttribute('src')===item.source?item:null;
+  if(!prepared&&usesAndroidMovieCache()){
+    return prepareEnhFxFor(cardId).then(ready=>{
+      if(ready&&_enhVideoPreparation?.id===cardId)playEnhFxFor(cardId);
+    });
+  }
   if(prepared){_enhVideoPreparation=null;delete vid.__enhPreparedFor;}else cancelPreparedEnhVideo();
   vid.__enhOnEnded?.();
-  let closed=false,timer=null,lastTime=0,lastProgress=performance.now(),started=false,mutedRetried=false,mutedRetryAt=0,playAttempt=0,tap=null,tapUsed=false;
+  let closed=false,timer=null,lastTime=0,lastProgress=performance.now(),started=false,mutedRetried=false,playAttempt=0;
   const status=document.createElement('span');status.className='enh-load-status';status.setAttribute('role','status');status.textContent='強化影片載入中…';
   const current=()=>!closed&&vid.__enhOnEnded===cleanup;
-  const removeTap=()=>{tap?.remove();tap=null;};
   function cleanup(reason){
     if(!current())return;closed=true;clearTimeout(timer);_enhFxForceTimer=null;
     traceEnhVideo('play-close',cardId,vid,reason==='timeout'||reason==='error'?reason:reason?.type==='ended'?'ended':'cancel');
     vid.removeEventListener('ended',cleanup);vid.removeEventListener('error',failed);vid.removeEventListener('playing',playing);
-    ov.classList.add('hidden');delete ov.dataset.enhState;status.remove();removeTap();
+    ov.classList.add('hidden');delete ov.dataset.enhState;status.remove();
     vid.__enhOnEnded=null;vid.__enhOnClick=null;
     try{vid.pause();vid.removeAttribute('src');vid.load();}catch{}
+    if(prepared?.blobUrl)URL.revokeObjectURL(prepared.blobUrl);
     if(wasPlayingBeforeDuck&&typeof bgmAudio!=='undefined'&&bgmAudio){requestBgmResume();wasPlayingBeforeDuck=false;}
     // Presentation failures never send gameplay, leave-room or CPU commands.
     if(reason==='timeout'||reason==='error'){
@@ -3972,34 +3996,24 @@ function playEnhFxFor(cardId){
   function failed(){cleanup('error');}
   function playing(){
     if(!current())return;
-    started=true;lastProgress=performance.now();ov.dataset.enhState='playing';status.hidden=true;removeTap();
+    started=true;lastProgress=performance.now();ov.dataset.enhState='playing';status.hidden=true;
     traceEnhVideo('playing',cardId,vid);
   }
-  function offerPlaybackTap(reason){
-    if(!current()||document.hidden||!useAndroidEnhPrime()||tapUsed||tap)return false;
-    status.hidden=true;traceEnhVideo('play-tap-offered',cardId,vid,reason);
-    tap=makeEnhVideoTap(()=>{
-      tapUsed=true;removeTap();status.hidden=false;attemptPlayback(true,true);
-    });
-    return true;
-  }
-  function attemptPlayback(muted=false,fromTap=false){
+  function attemptPlayback(muted=false){
     if(!current())return;
     const attempt=++playAttempt;
     if(muted){
       mutedRetried=true;vid.muted=true;
-      if(!fromTap)mutedRetryAt=performance.now();
       // Abort a hung request without discarding the decoded frame or buffer.
       try{vid.pause();}catch{}
     }
-    traceEnhVideo(fromTap?'play-tap':muted?'play-muted':'play-start',cardId,vid);
+    traceEnhVideo(muted?'play-muted':'play-start',cardId,vid);
     let pending;try{pending=vid.play();}catch(e){pending=Promise.reject(e);}
     Promise.resolve(pending).catch(error=>{
       if(!current()||attempt!==playAttempt||started)return;
       const denied=enhPlayDenied(error);
       traceEnhVideo('play-rejected',cardId,vid,denied?'gesture':'play');
       if(!mutedRetried){attemptPlayback(true);return;}
-      if(tap||denied&&offerPlaybackTap('gesture'))return;
       failed();
     });
   }
@@ -4010,7 +4024,6 @@ function playEnhFxFor(cardId){
     // Android may leave either play() attempt pending instead of rejecting.
     if(now-lastProgress>(started?10000:8000)){cleanup('timeout');return;}
     if(!started&&!mutedRetried&&now-lastProgress>=1200)attemptPlayback(true);
-    if(!started&&mutedRetryAt&&now-Math.max(mutedRetryAt,lastProgress)>=2000)offerPlaybackTap('pending');
     timer=setTimeout(watch,250);_enhFxForceTimer=timer;
   }
   vid.__enhOnEnded=cleanup;
@@ -4018,8 +4031,8 @@ function playEnhFxFor(cardId){
   ov.dataset.enhState='loading';ov.append(status);ov.classList.remove('hidden');
   vid.muted=false;vid.volume=1;vid.setAttribute('playsinline','');
   if(!prepared)vid.setAttribute('src',ENH_VID[cardId]||ENH_VID[0]);
-  // Arm before load/play; neither a pending request nor a gesture can stall
-  // the room indefinitely. Reuse the prepared first frame and range buffer.
+  // Arm before load/play so a pending request cannot stall the room.
+  // Reuse the prepared first frame and the same source.
   watch();
   try{if(!prepared)vid.load();if(vid.currentTime>.01)vid.currentTime=0;}catch{}
   attemptPlayback();
