@@ -23,7 +23,43 @@
  }
 
  const avatar=id=>{const p=room?.seats[id]||(id===you?me:null),img=node('img');const a=Number(p?.avatar);img.className='avatar';img.src=p?.cpu?'art/v2/'+(view?.players[id]?.team||'pirate')+'-back.webp':'/images/board/avatars/'+(Number.isSafeInteger(a)&&a>=1&&a<=222?a:8)+'.webp';img.alt='';img.setAttribute('aria-label',p?.name||'玩家');img.draggable=false;return img;};
- async function profile(){const body=sheet('航海者檔案','profile'),loading=node('p','讀取戰績中…');body.append(loading);const result=await request('MF_PROFILE');if(!body.contains(loading)||$('sheet').hidden)return;body.replaceChildren();const hero=node('div',null,'profile-hero');hero.append(avatar(you),node('h2',me?.name||'航海者'),node('p','MARINEFORD · 頂上戰爭篇'));body.append(hero);if(!result.ok){body.append(node('p','戰績暫時無法讀取，請稍後重試。'));return;}const grid=node('div',null,'profile-metrics');for(const [key,label]of [['games','完成對局'],['wins','勝場'],['navyGames','海軍出戰'],['navyWins','海軍勝場'],['pirateGames','海賊出戰'],['pirateWins','海賊勝場']]){const box=node('div');box.style.setProperty('--digits',String(String(result.stats[key]||0).length));box.append(node('strong',String(result.stats[key]||0)),node('span',label));grid.append(box);}body.append(grid,node('p',result.pending?'本場戰績同步中，請稍後重新開啟。':'含 CPU 的完成對局也計入；中途結束不計戰績。','sheet-hint'));}
+ let equippedBadge=null;
+ function badgeImage(item){
+  const img=node('img',null,'campaign-badge');
+  img.src='art/v2/'+item.art;img.alt=item.name;return img;
+ }
+ function readBadge(shop){
+  equippedBadge=shop?.catalog?.find(item=>item.id===shop.equipped)||null;
+ }
+ async function profile(){
+  const body=sheet('馬林福特戰績檔案','campaign-profile'),loading=node('p','讀取戰績中…');
+  body.append(loading);
+  const result=await request('MF_PROFILE');
+  if(!body.contains(loading)||$('sheet').hidden)return;
+  const hero=node('div',null,'campaign-banner'),identity=node('div');
+  identity.append(node('small','MARINEFORD · 戰役檔案'),node('h3',me?.name||'航海者'));
+  hero.append(avatar(you),identity);body.replaceChildren(hero);
+  if(!result.ok){body.append(node('p','戰績暫時無法讀取，請稍後重試。'));return;}
+  const stats=result.stats;readBadge(stats.collection);
+  if(equippedBadge)hero.append(badgeImage(equippedBadge));
+  identity.append(node('p','戰役勳章 '+(stats.collection?.balance??0)));
+  const metrics=node('div',null,'campaign-metrics');
+  const percent=stats.games?Math.round(stats.wins/stats.games*100)+'%':'—';
+  for(const [label,value] of [['完成對局',stats.games],['勝／敗',stats.wins+'／'+stats.losses],['勝率',percent],['海軍勝／戰',stats.navyWins+'／'+stats.navyGames],['海賊勝／戰',stats.pirateWins+'／'+stats.pirateGames]]){
+   const metric=node('div');metric.append(node('strong',String(value)),node('span',label));metrics.append(metric);
+  }
+  body.append(metrics,node('h3','近期戰役'));
+  const history=node('ul',null,'campaign-history');
+  for(const match of stats.recent||[]){
+   const date=new Date(Number(match.ended_at));
+   const entry=node('li');
+   entry.append(node('strong',match.winner===match.team?'勝利':'落敗'),node('span',teamName(match.team)+' · '+(match.has_cpu?'含 CPU':'真人對局')),node('time',date.toLocaleDateString('zh-TW')));
+   history.append(entry);
+  }
+  body.append(history.children.length?history:node('p','完成第一場對局後，戰績就會出現在這裡。'));
+  if(result.pending)body.append(node('p','本場戰績正在儲存。'));
+  body.append(button('前往戰役補給所',openShop));
+ }
 
  const notify=text=>{clearTimeout(toastTimer);$('toast').textContent=text;$('toast').hidden=false;toastTimer=setTimeout(()=>$('toast').hidden=true,4000);};
  function request(event,payload={}) {return new Promise(resolve=>socket.timeout(12000).emit(event,payload,(err,result)=>{if(err){notify('連線逾時，請稍後再試');resolve({ok:false});}else{if(!result?.ok)notify(result?.error||'操作未完成');resolve(result||{ok:false});}}));}
@@ -121,19 +157,30 @@
   document.body.append(panel);setTimeout(()=>panel.remove(),Math.max(0,inv.expiresAt-Date.now()));
  });
  async function openShop(){
-  const body=sheet('馬林福特補給所','mf-shop'),content=node('div');body.append(content);
-  const cats={avatar:['頭像','avatars'],wall:['牆面','walls'],flag:['旗幟','flags'],layout:['版面','layouts'],background:['背景','backgrounds'],frame:['相框','frames'],decoration:['裝飾','decorations'],bgm:['音樂','bgms'],guestbook_style:['留言簿樣式','guestbookStyles'],comment_style:['留言樣式','commentStyles'],room_scene:['房間場景','roomScenes'],room_furniture:['傢俱','roomFurniture'],room_character:['房間角色','roomCharacters']};
-  let category='avatar';
-  function paint(shop){if(!content.isConnected)return;const tools=node('nav',null,'mf-shop-tabs'),grid=node('div',null,'mf-shop-grid');content.replaceChildren(node('h3','港口補給 · 帳號收藏'),node('p','金幣 '+(shop.wallet?.coins??'—')),tools,grid);
-   for(const [key,[label]] of Object.entries(cats))if(shop.catalog?.some(item=>item.type===key)){const tab=button(label,()=>{category=key;paint(shop);},'small-button');tab.setAttribute('aria-pressed',String(key===category));tools.append(tab);}
-   for(const item of (shop.catalog||[]).filter(i=>i.type===category)){const row=node('article'),owned=(shop.owned?.[cats[category][1]]||[]).some(id=>String(id)===String(item.id)||String(id)===String(item.key));row.append(node('strong',item.name||item.title||item.id));
-    const asset=typeof item.asset==='string'&&/^opui:\/\/launcher\/images\/[a-z0-9_./-]+\.(webp|png|jpg)$/i.test(item.asset)&&!item.asset.includes('..')?item.asset.replace('opui://launcher',''):null;
-    if(asset||item.type==='avatar'){const image=node('img');image.src=asset||'/images/board/avatars/'+Number(item.key)+'.webp';image.alt='';image.loading='lazy';image.dataset.type=item.type;image.onerror=()=>image.remove();row.prepend(image);}
-    if(item.description)row.append(node('p',item.description));const collectionOnly=['room_scene','room_furniture','room_character'].includes(item.type),equip=owned&&!collectionOnly;
-    const buy=button(equip?'裝備':owned?'已收藏':'購買 · '+(item.price??0),async event=>{const b=event.currentTarget;b.disabled=true;try{const result=await friendRequest(equip?'LAUNCHER_SHOP_EQUIP':'LAUNCHER_SHOP_BUY',{itemId:item.id,crewContentRevision:1});if(result.ok&&result.shop)paint(result.shop);}finally{b.disabled=owned&&collectionOnly;}},'small-button');buy.disabled=owned&&collectionOnly;row.append(buy);grid.append(row);
+  const body=sheet('馬林福特戰役補給所','campaign-shop'),content=node('div');
+  body.append(content);
+  function paint(shop){
+   if(!content.isConnected||$('sheet').hidden)return;
+   readBadge(shop);
+   const banner=node('div',null,'campaign-banner'),grid=node('div',null,'campaign-products');
+   banner.append(node('h3','戰役勳章 '+shop.balance),node('p','每完成一場獲得 20 枚，勝利再加 10 枚。可兌換本篇專屬裝飾。'));
+   content.replaceChildren(banner,grid);
+   for(const item of shop.catalog){
+    const product=node('article'),owned=shop.owned.includes(item.id),equipped=shop.equipped===item.id;
+    product.append(badgeImage(item),node('h3',item.name),node('p',item.description));
+    const buy=button(equipped?'卸下':owned?'佩戴':shop.balance<item.price?'尚缺 '+(item.price-shop.balance)+' 枚':'兌換 · '+item.price+' 枚',async()=>{
+     for(const control of grid.querySelectorAll('button'))control.disabled=true;
+     const result=await request('MF_SHOP',{action:equipped?'clear':owned?'equip':'buy',itemId:item.id});
+     paint(result.ok?result.shop:shop);
+    },'small-button');
+    buy.disabled=!owned&&shop.balance<item.price;
+    if(equipped)product.append(node('strong','佩戴中','campaign-tag'));
+    product.append(buy);grid.append(product);
    }
   }
-  content.textContent='讀取補給品…';const result=await friendRequest('LAUNCHER_SHOP_GET',{crewContentRevision:1});if(result.ok&&result.shop)paint(result.shop);else if(content.isConnected)content.textContent='補給所暫時無法讀取';
+  content.textContent='讀取補給品…';
+  const result=await request('MF_SHOP');
+  if(result.ok)paint(result.shop);else if(content.isConnected)content.textContent='補給所暫時無法讀取';
  }
  function renderLobby(){if(view)return;$('menuButton').hidden=!enteredLobby&&!room;document.body.dataset.screen='lobby';$('justice').hidden=true;$('health').replaceChildren();$('lobby').hidden=false;$('table').hidden=true;const body=$('lobbyBody');body.replaceChildren();$('lobby').dataset.waiting=String(!!room);$('lobby').dataset.splash=String(authenticated&&!room&&!enteredLobby);$('lobby').dataset.mode=!room&&enteredLobby&&authenticated?'main':'entry';if(!authenticated){body.append(node('p','請從啟動器登入帳號後進入頂上戰爭篇。'));return;}
   if(!room&&!enteredLobby){const enter=button('',()=>{enteredLobby=true;renderLobby();},'mf-splash');enter.setAttribute('aria-label','點擊進入');enter.append(node('span','MARINEFORD','mf-splash-kicker'),node('strong','頂上戰爭篇','mf-splash-title'),node('span','點擊進入','mf-splash-prompt'));body.append(enter);return;}
@@ -245,7 +292,45 @@
  async function burst(kind,token){if(token!==epoch)return;const fx=node('img',null,'effect-burst');fx.src='art/v2/fx-'+kind+'.webp';fx.alt='';$('effectLayer').append(fx);window.MFSound?.play(kind);await animate(fx,[{transform:'scale(.15) rotate(-12deg)',opacity:0},{transform:'scale(.85)',opacity:1,offset:.35},{transform:'scale(1.1) rotate(6deg)',opacity:0}],{duration:reduced()?180:850,easing:'ease-out'});fx.remove();}
  const readingTime=(text,minimum=1600)=>Math.max(minimum,Math.min(3200,600+Array.from(text).length*75));
  function resultText(state=view){return state.winner==='pirate'?{title:'艾斯獲救',reason:'海賊登上處刑台，成功救出艾斯。'}:state.hp.pirate===0?{title:'處刑執行',reason:'海軍登上處刑台，執行處刑。'}:{title:'正義集結',reason:'六種正義集齊，海軍獲勝。'};}
- function showResult(){if(view?.phase!=='ended')return;const result=resultText(),body=sheet('頂上戰爭 · 戰果','result'),seal=node('img',null,'result-seal');seal.src='art/v2/'+view.winner+'-back.webp';seal.alt=teamName(view.winner);const text=node('div',null,'result-copy');text.append(node('small',teamName(view.winner)+'方勝利'),node('h2',result.title),node('p',result.reason),node('p',view.players.filter(p=>p.team===view.winner).map(p=>p.name).join('、'),'result-roster'));const actions=node('div',null,'result-actions');actions.append(button('返回牌桌查看',closeSheet),button('返回大廳',leave));text.append(actions);body.append(seal,text);}
+ function showResult(){
+  if(view?.phase!=='ended')return;
+  const match=view,team=match.players[you].team,won=team===match.winner;
+  const result=resultText(match),body=sheet('頂上戰爭 · 戰役結算','campaign-result');
+  const banner=node('div',null,'campaign-banner'),verdict=node('div');
+  banner.dataset.team=match.winner;
+  verdict.append(node('small',teamName(team)+'視角 · '+(won?'勝利':'落敗')),node('h3',result.title),node('p',result.reason));
+  banner.append(badgeImage({art:match.winner+'-back.webp',name:teamName(match.winner)}),verdict);body.append(banner);
+  const sides=node('div',null,'campaign-sides');
+  for(const faction of ['navy','pirate']){
+   const group=node('section');group.dataset.team=faction;
+   group.append(node('h3',teamName(faction)+' · '+(match.winner===faction?'勝利':'落敗')),node('p','剩餘陣營生命 '+match.hp[faction]));
+   for(const player of match.players.filter(p=>p.team===faction)){
+    const row=node('div',null,'campaign-player');
+    row.append(avatar(player.id),node('span',player.name+(player.id===you?' · 我':'')));
+    if(player.id===you){
+     if(equippedBadge)row.append(badgeImage(equippedBadge));
+     else row.dataset.badgePending='true';
+    }
+    group.append(row);
+   }
+   sides.append(group);
+  }
+  const reward=node('p','正在確認本場勳章…','campaign-reward'),actions=node('div',null,'result-actions');
+  actions.append(button('回到牌桌',closeSheet),button('查看戰績',profile),button('返回大廳',leave));
+  body.append(sides,reward,actions);
+  async function refresh(){
+   const data=await request('MF_PROFILE');
+   if(!reward.isConnected||view!==match)return;
+   reward.textContent=!data.ok||data.pending?'戰績與勳章尚待同步。':'本場獲得 '+(won?30:20)+' 枚戰役勳章';
+   if(data.ok){
+    readBadge(data.stats.collection);
+    const own=body.querySelector('[data-badge-pending]');
+    if(own&&equippedBadge){own.append(badgeImage(equippedBadge));delete own.dataset.badgePending;}
+   }
+  }
+  refresh();
+ }
+
  async function progressBeat(e,hp,token){
   if(token!==epoch)return;const board=$('executionStage'),panel=$('health').querySelector('.health-box[data-team="'+e.team+'"]'),marker=$('health').querySelector('.route-marker[data-team="'+e.team+'"]'),max=e.team==='navy'?(view.players.length<=3?4:view.players.length+1):6;
   board.dataset.phase='advance';const routeMax=e.team==='navy'?7:6,from=(routeMax-hp[e.team])/routeMax,to=(routeMax-e.hp)/routeMax;

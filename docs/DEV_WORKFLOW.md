@@ -9048,3 +9048,8 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - Mobile decks use a rigid orthographic transform, Navy draw slot 2 is centered, and pirate public thumbnails fly back before the pile shuffle. Rules and private-hand visibility remain server authoritative.
 - Browser QA is separate from real-account, Android/iOS hardware and public deployment verification.
 - Release preparation preserves 400-character private messages and 500-character room messages, keeps null room creation compatible, sends shop crew capability, and validates current authenticated recipients for room chat and Marineford invites.
+
+### 2026-11-04 · Marineford campaign screens
+- Marineford profile, settlement and supply shop use the match ledger and an account-scoped collection. Award 20 medals for a recorded completion plus 10 for a win. Existing completed matches count. The shop uses an atomic row lock and keeps purchases outside client stats patches.
+- Sources: Marineford client CSS/JS, marineford-records.js, marineford-rooms.js, the Marineford adapter in server/index.js, and the protected stats fields in launcher-profile-shop.js.
+- Verified with marineford_records_qa.js and the targeted mobile browser flow in marineford_peek_laser_qa.cjs.

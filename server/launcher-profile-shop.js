@@ -558,7 +558,7 @@ function sanitizeLauncherStatsPatch(stats) {
   if (!stats || typeof stats !== 'object' || Array.isArray(stats)) return {};
   const { launcherOwnedV1: _owned, launcherAppearanceV1: _appearance, launcherWalletV1: _wallet,
     launcherRoomV1: _room, launcherRoomsV2: _rooms, launcherCardV1: _card,
-    launcherCompanionsV1: _companions, launcherLifeV1: _life, launcherMarinefordV1: _marineford, ...safe } = stats;
+    launcherCompanionsV1: _companions, launcherLifeV1: _life, launcherMarinefordV1: _marineford, marinefordCollectionV1: _marinefordCollection, ...safe } = stats;
   return safe;
 }
 const validCardText = (value, min, max) => typeof value === 'string' && value.trim().length >= min &&

@@ -33,12 +33,66 @@ const RECORD = `WITH recorded AS (
  '{${FIELD}}',jsonb_build_object(${KEYS.map(k=>`'${k}',${count(k)}+(${increment(k)})`).join(',')}),true), updated_at=now()
  FROM verdicts v WHERE p.user_id=v.user_id RETURNING p.user_id)
  SELECT (SELECT count(*) FROM recorded)::integer recorded,(SELECT count(*) FROM updated)::integer updated`;
+const SHOP_FIELD = 'marinefordCollectionV1';
+const CATALOG = [
+  {id:'justice',name:'海軍正義旗',description:'以海軍卡背裝飾你的戰績檔案與結算名牌。',price:30,art:'navy-back.webp'},
+  {id:'rescue',name:'白鬍子救援旗',description:'以海賊卡背裝飾你的戰績檔案與結算名牌。',price:30,art:'pirate-back.webp'},
+  {id:'scaffold',name:'處刑台戰役紀念章',description:'以馬林福特處刑台紀念這場決戰。',price:65,art:'redraw-scaffold.webp'}
+];
+function collection(stats) {
+  const saved = stats?.[SHOP_FIELD] || {};
+  const owned = CATALOG.filter(item => Array.isArray(saved.owned) && saved.owned.includes(item.id));
+  const equipped = owned.find(item => item.id === saved.equipped)?.id || null;
+  const record = summary(stats);
+  return {
+    balance:Math.max(0,record.games*20+record.wins*10-owned.reduce((sum,item)=>sum+item.price,0)),
+    owned:owned.map(item=>item.id),equipped,catalog:CATALOG
+  };
+}
 function createStore(pool) {
   let init;
   async function ready(){if(!init)init=pool.query(TABLE).catch(e=>{init=null;throw e;});await init;}
   return {
     async record(match){if(!match)throw Error('marineford_invalid_result');await ready();const r=await pool.query(RECORD,[match.id,match.code,JSON.stringify(match.participants),match.winner,match.cpu,match.endedAt,match.actions]);const row=r.rows[0];if(row.recorded&&row.updated!==match.participants.length)throw Error('marineford_profile_count_mismatch');if(!row.recorded){const previous=await pool.query('SELECT match_id FROM launcher_marineford_matches WHERE match_id=$1',[match.id]);if(!previous.rows.length)throw Error('marineford_profile_missing');}return row;},
-    async profile(userId){const r=await pool.query('SELECT stats FROM player_profiles WHERE user_id=$1 LIMIT 1',[userId]);if(!r.rows[0])throw Error('profile_missing');return summary(r.rows[0].stats);}
+    async profile(userId){
+      await ready();
+      const r=await pool.query('SELECT stats FROM player_profiles WHERE user_id=$1 LIMIT 1',[userId]);
+      if(!r.rows[0])throw Error('profile_missing');
+      const recent=await pool.query(`SELECT winner,has_cpu,ended_at,actions,member->>'team' AS team
+        FROM launcher_marineford_matches
+        CROSS JOIN LATERAL jsonb_array_elements(participants) AS members(member)
+        WHERE member @> jsonb_build_object('user_id',$1::integer)
+        ORDER BY ended_at DESC, match_id DESC LIMIT 10`,[userId]);
+      return {...summary(r.rows[0].stats),collection:collection(r.rows[0].stats),recent:recent.rows};
+    },
+    async shop(userId,action,itemId){
+      if(!action){
+        const r=await pool.query('SELECT stats FROM player_profiles WHERE user_id=$1',[userId]);
+        if(!r.rows[0])throw Error('找不到玩家檔案');
+        return collection(r.rows[0].stats);
+      }
+      const item=CATALOG.find(entry=>entry.id===itemId);
+      if(!['buy','equip','clear'].includes(action)||(!item&&action!=='clear'))throw Error('商品不存在');
+      const db=await pool.connect();
+      try{
+        await db.query('BEGIN');
+        const r=await db.query('SELECT stats FROM player_profiles WHERE user_id=$1 FOR UPDATE',[userId]);
+        if(!r.rows[0])throw Error('找不到玩家檔案');
+        const stats=r.rows[0].stats||{}, current=collection(stats);
+        if(action==='buy'&&!current.owned.includes(item.id)){
+          if(current.balance<item.price)throw Error('戰役勳章不足');
+          current.owned.push(item.id);
+        }
+        if(action==='equip'&&!current.owned.includes(item.id))throw Error('請先兌換商品');
+        if(action==='equip')current.equipped=item.id;
+        if(action==='clear')current.equipped=null;
+        stats[SHOP_FIELD]={owned:current.owned,equipped:current.equipped};
+        await db.query('UPDATE player_profiles SET stats=$2::jsonb,updated_at=now() WHERE user_id=$1',[userId,JSON.stringify(stats)]);
+        await db.query('COMMIT');
+        return collection(stats);
+      }catch(error){await db.query('ROLLBACK');throw error;}finally{db.release();}
+    }
+
   };
 }
 module.exports={FIELD,KEYS,summary,completed,createStore,newId:()=>crypto.randomUUID()};

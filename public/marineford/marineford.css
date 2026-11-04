@@ -570,3 +570,29 @@ body:not([data-screen="table"]) #health{display:none!important}
 #lobby[data-splash="true"] #lobbyBody{display:contents}
 
 .mf-shop-grid img:not([data-type="avatar"]){width:100%;height:65px;object-fit:contain;border-radius:3px}
+
+/* Marineford campaign screens */
+#sheet:is([data-kind="campaign-profile"],[data-kind="campaign-shop"],[data-kind="campaign-result"]){background:linear-gradient(#102437ef,#101e2bf7),url("art/v2/lobby-panorama.webp") center/cover}
+#sheet:is([data-kind="campaign-profile"],[data-kind="campaign-shop"],[data-kind="campaign-result"]) #sheetBody{display:block;max-width:1000px;width:100%;margin-inline:auto}
+.campaign-banner{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:clamp(10px,2vw,24px);background:linear-gradient(100deg,#243e55,#142433);border-block:1px solid #b69a63}
+.campaign-banner[data-team="pirate"]{background:linear-gradient(100deg,#674035,#28212b)}
+.campaign-banner h3,.campaign-banner p,.campaign-products h3,.campaign-products p,.campaign-sides h3,.campaign-sides p{margin:0;overflow-wrap:anywhere}
+.campaign-banner h3{font-size:clamp(20px,4vw,36px);color:#ffdfa1}
+.campaign-banner .avatar{width:56px;height:56px}
+.campaign-banner .campaign-badge{width:52px;height:68px}
+.campaign-badge{object-fit:contain}
+.campaign-metrics,.campaign-products,.campaign-sides{display:grid;gap:8px;margin:12px 0}
+.campaign-metrics{grid-template-columns:repeat(auto-fit,minmax(min(112px,100%),1fr))}
+.campaign-products{grid-template-columns:repeat(auto-fit,minmax(min(160px,100%),1fr))}
+.campaign-sides{grid-template-columns:repeat(2,minmax(0,1fr))}
+.campaign-metrics>div,.campaign-products>article,.campaign-sides>section{display:grid;align-content:start;gap:6px;padding:10px;background:#172e40;border:1px solid #a98b58;min-width:0;overflow-wrap:anywhere}
+.campaign-metrics strong{color:#ffdfa1;font-size:1.25rem}
+.campaign-products .campaign-badge{width:100%;height:clamp(72px,20vh,150px)}
+.campaign-products p,.campaign-history,.campaign-player{font-size:clamp(12px,2vw,16px)}
+.campaign-tag,.campaign-reward{color:#ffdfa1}
+.campaign-history{padding:0;list-style:none}
+.campaign-history li,.campaign-player{display:flex;align-items:center;gap:8px;padding:6px;border-bottom:1px solid #ffffff23}
+.campaign-history time{margin-inline-start:auto}
+.campaign-player .avatar{width:25px;height:25px;flex:none}
+.campaign-player .campaign-badge{width:24px;height:32px;margin-inline-start:auto}
+.campaign-sides [data-team="pirate"]{background:#3e2829}
