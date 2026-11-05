@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#071522">
-  <meta name="description" content="依裝置下載 ONE PIECE Windows 桌遊啟動器，或 PIRATE ODYSSEY Android 手機版 APK。">
-  <title>Windows／Android 下載｜ONE PIECE 桌遊系列</title>
+  <meta name="description" content="下載 ONE PIECE Windows 桌遊啟動器、PIRATE ODYSSEY Android APK 或 iPhone／iPad IPA。">
+  <title>Windows／Android／iOS 下載｜ONE PIECE 桌遊系列</title>
   <link rel="icon" href="data:,">
   <style>
     :root { color-scheme: dark; --bg:#071522; --panel:#102535; --line:#294150; --text:#eff2ec; --muted:#b1c1c9; --gold:#efd49a; --teal:#8cd4ca; }
@@ -23,7 +23,7 @@
     .downloads { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; padding-bottom:44px; }
     .device-note { margin:18px 0 0; color:var(--teal); font-size:14px; }
     .recommendation { display:none; margin:0 0 15px; color:var(--teal); font-size:12px; font-weight:700; }
-    .recommended { border-color:var(--teal); }
+    .download-card.recommended { border-color:var(--teal); }
     .recommended .recommendation { display:block; }
     .phone { display:grid; place-items:center; width:56px; height:56px; background:#203d4c; border-radius:12px; }
     .phone svg { width:30px; height:36px; stroke:var(--gold); fill:none; stroke-width:2; }
@@ -60,6 +60,9 @@
     .mobile-note { padding-top:10px; }
     footer { padding:22px 0 30px; border-top:1px solid var(--line); color:#93a9b5; font-size:11px; }
     footer p { margin:0; }
+    @media (min-width:1021px) {
+      .downloads { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    }
     @media (max-width:820px) {
       .wrap { width:min(620px,100% - 40px); }
       header { padding:23px 0; }
@@ -100,7 +103,7 @@
         <div>
           <p class="eyebrow">你的航程，繼續前進</p>
           <h1 id="page-title">下一段冒險，<br><span>在你的裝置啟航。</span></h1>
-          <p class="intro">電腦下載 Windows 桌遊啟動器；Android 手機下載 PIRATE ODYSSEY，橫向遊玩航海錄。</p>
+          <p class="intro">電腦可下載 Windows 桌遊啟動器。Android 手機、iPhone 與 iPad 可下載 PIRATE ODYSSEY。</p>
           <p id="device-note" class="device-note">請依要安裝的裝置選擇版本。下載會在你點選按鈕後開始。</p>
         </div>
       </section>
@@ -111,8 +114,8 @@
             <span class="windows" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
             <div><h2 id="download-title">桌遊啟動器</h2><p>Windows 64 位元</p></div>
           </div>
-          <a id="download-link" class="download" href="https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.29/ONE-PIECE-Tabletop-Launcher-1.2.29-x64.exe" referrerpolicy="no-referrer"><span class="arrow" aria-hidden="true">↓</span>下載 Windows 桌面版</a>
-          <p id="release-info" class="release">v1.2.29 · Windows 64 位元</p>
+          <a id="download-link" class="download" data-version="1.2.32" href="https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.32/ONE-PIECE-Tabletop-Launcher-1.2.32-x64.exe" referrerpolicy="no-referrer"><span class="arrow" aria-hidden="true">↓</span>下載 Windows 桌面版</a>
+          <p id="release-info" class="release">v1.2.32 · 安裝檔約 325 MB</p>
           <ol class="steps">
             <li>下載並安裝啟動器。</li>
             <li>使用原本帳號登入啟動器。</li>
@@ -123,14 +126,28 @@
           <p class="recommendation">適合目前的 Android 裝置</p>
           <div class="card-heading">
             <span class="phone" aria-hidden="true"><svg viewBox="0 0 30 36"><rect x="5" y="2" width="20" height="32" rx="4"/><path d="M11 6h8M13 29h4"/></svg></span>
-            <div><h2 id="android-title">PIRATE ODYSSEY</h2><p>Android 8.0 以上 · 手機橫向版</p></div>
+            <div><h2 id="android-title">PIRATE ODYSSEY</h2><p>Android · 手機橫向版</p></div>
           </div>
-          <a id="android-download-link" class="download" href="https://game-assets.rihdi.tw/android/releases/26/PIRATE-ODYSSEY-v026-f63d2654a4db.apk" referrerpolicy="no-referrer"><span class="arrow" aria-hidden="true">↓</span>下載 Android APK</a>
-          <p id="android-release-info" class="release">v026 · 測試版 · 安裝檔約 355 MB</p>
+          <a id="android-download-link" class="download" data-version="65" href="https://game-assets.rihdi.tw/android/releases/65/PIRATE-ODYSSEY-v065-635495f6280c.apk" referrerpolicy="no-referrer"><span class="arrow" aria-hidden="true">↓</span>下載 Android APK</a>
+          <p id="android-release-info" class="release">v065 · 安裝檔約 480 MB</p>
           <ol class="steps">
             <li>下載 APK，開啟下載完成的檔案。</li>
             <li>若系統詢問，允許此瀏覽器安裝應用程式，再完成安裝。</li>
             <li>開啟 PIRATE ODYSSEY；後續可在 App 內檢查更新，有適用差量時只下載差量。</li>
+          </ol>
+        </section>
+        <section id="ios-card" class="download-card" aria-labelledby="ios-title">
+          <p class="recommendation">適合目前的 iPhone 或 iPad</p>
+          <div class="card-heading">
+            <span class="phone" aria-hidden="true"><svg viewBox="0 0 30 36"><rect x="5" y="2" width="20" height="32" rx="4"/><path d="M11 6h8M13 29h4"/></svg></span>
+            <div><h2 id="ios-title">PIRATE ODYSSEY</h2><p>iPhone／iPad · iOS／iPadOS 16 以上</p></div>
+          </div>
+          <a id="ios-download-link" class="download" data-version="65" href="https://game-assets.rihdi.tw/ios/releases/65/PIRATE-ODYSSEY-v065-7fa1adddd958-UNSIGNED.ipa" referrerpolicy="no-referrer"><span class="arrow" aria-hidden="true">↓</span>下載 iOS IPA</a>
+          <p id="ios-release-info" class="release">v065 · 需自行簽署 · 安裝檔約 436 MB</p>
+          <ol class="steps">
+            <li>在電腦下載 IPA，使用 USB 接上 iPhone 或 iPad。</li>
+            <li><span>使用 <a href="https://iloader.app/" rel="noreferrer">iLoader</a> 簽署並安裝 IPA。</span></li>
+            <li>到「設定 → 隱私權與安全性 → 開發者模式」啟用，重新啟動後確認。</li>
           </ol>
         </section>
       </div>
@@ -143,11 +160,11 @@
         </div>
       </section>
       <section class="notes" aria-label="下載與遊玩說明">
-        <div><h2>已經安裝過？</h2><p>Windows 請從既有啟動器更新；Android 請從 App 內檢查更新，下載後依系統提示安裝。兩個平台使用各自的更新通道。</p></div>
-        <div><h2>選擇適合的版本</h2><p>Windows 版本適用 64 位元電腦；Android APK 適用 Android 8.0 以上。手機版目前以航海錄測試為主。iPhone、iPad 與 macOS 暫無安裝版本。</p><p class="mobile-note">登入、雲端存檔與多人對戰仍需網路連線。</p></div>
+        <div><h2>已經安裝過？</h2><p>Windows 可從啟動器更新，Android 可在 App 內檢查更新。iPhone 與 iPad 更新 App 本身時，請下載新版 IPA 並重新簽署安裝。</p></div>
+        <div><h2>連線遊玩</h2><p>登入、雲端存檔與多人對戰需要網路連線。</p></div>
       </section>
     </main>
-    <footer><p>ONE PIECE TABLETOP SERIES · Windows 桌遊啟動器 / PIRATE ODYSSEY Android</p></footer>
+    <footer><p>ONE PIECE TABLETOP SERIES · Windows 桌遊啟動器 / PIRATE ODYSSEY Android、iOS</p></footer>
   </div>
   <script>
     (() => {
@@ -156,45 +173,74 @@
       const isIOS = /iPad|iPhone|iPod/i.test(ua) || (/Mac/i.test(platform) && navigator.maxTouchPoints > 1);
       const isAndroid = !isIOS && /Android/i.test(platform + ' ' + ua);
       const isWindows = !isIOS && !isAndroid && /Win/i.test(platform + ' ' + ua);
-      const card = document.getElementById(isAndroid ? 'android-card' : 'windows-card');
-      if (isAndroid || isWindows) {
+      const device = isIOS ? 'ios' : isAndroid ? 'android' : isWindows ? 'windows' : null;
+      if (device) {
+        const card = document.getElementById(device + '-card');
         card.classList.add('recommended');
-        if (isAndroid) document.getElementById('downloads').prepend(card);
-        document.getElementById('device-note').textContent = `目前看起來是 ${isAndroid ? 'Android' : 'Windows'} 裝置，已標示適合的版本；也可以替其他裝置下載。`;
-      } else if (isIOS || /Mac/i.test(platform)) {
-        document.getElementById('device-note').textContent = '此裝置目前沒有可安裝版本。你仍可將本頁分享給 Windows 電腦或 Android 手機。';
+        document.getElementById('downloads').prepend(card);
+        const label = { ios: 'iPhone 或 iPad', android: 'Android', windows: 'Windows' }[device];
+        document.getElementById('device-note').textContent = '已將適合 ' + label + ' 的版本排在最前面。';
+      } else if (/Mac/i.test(platform)) {
+        document.getElementById('device-note').textContent = '目前沒有 macOS 版。你可以在這台電腦下載 IPA，再為 iPhone 或 iPad 安裝。';
       }
-      const androidController = new AbortController();
-      const androidTimer = setTimeout(() => androidController.abort(), 5000);
-      fetch('https://game-assets.rihdi.tw/android/launcher-release-v1.json', { cache:'no-store', signal:androidController.signal, credentials:'omit' })
-        .then(response => { if (!response.ok) throw new Error('release unavailable'); return response.json(); })
-        .then(release => {
-          if (release?.schema !== 1 || release.platform !== 'android' || release.package !== 'tw.rihdi.tabletop.android') return;
-          if (!Number.isSafeInteger(release.versionCode) || release.versionCode < 26) return;
-          const artifact = release.artifact;
-          if (!artifact || !/^https:\/\/game-assets\.rihdi\.tw\/android\/releases\/[1-9][0-9]*\/[0-9A-Za-z][0-9A-Za-z._-]*\.apk$/.test(artifact.url || '')) return;
-          if (!new URL(artifact.url).pathname.startsWith(`/android/releases/${release.versionCode}/`)) return;
-          if (!Number.isSafeInteger(artifact.bytes) || artifact.bytes <= 0 || !/^[a-f0-9]{64}$/.test(artifact.sha256 || '')) return;
-          document.getElementById('android-download-link').href = artifact.url;
-          document.getElementById('android-release-info').textContent = `v${String(release.versionCode).padStart(3,'0')} · ${String(release.version || '').includes('trial') ? '測試版 · ' : ''}安裝檔約 ${Math.ceil(artifact.bytes / 1000000)} MB`;
-        })
-        .catch(() => { /* Retain the verified APK link if the update channel is unavailable. */ })
-        .finally(() => clearTimeout(androidTimer));
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 5000);
-      fetch('/desktop/launcher-release-v1.json', { cache: 'no-store', signal: controller.signal, headers: { Accept: 'application/json' } })
-        .then(response => { if (!response.ok) throw new Error('release unavailable'); return response.json(); })
-        .then(release => {
-          if (release?.schema !== 1 || release.channel !== 'stable' || release.platform !== 'win32' || release.arch !== 'x64') return;
-          if (!/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(release.version || '')) return;
-          const artifact = release.artifact;
-          if (!artifact || !/^https:\/\/game-assets\.rihdi\.tw\/desktop\/launcher\/releases\/[0-9A-Za-z][0-9A-Za-z._-]*\/[0-9A-Za-z][0-9A-Za-z._-]*\.exe$/.test(artifact.url || '')) return;
-          if (!Number.isSafeInteger(artifact.bytes) || artifact.bytes <= 0) return;
-          document.getElementById('download-link').href = artifact.url;
-          document.getElementById('release-info').textContent = `v${release.version} · 安裝檔約 ${Math.ceil(artifact.bytes / 1000000)} MB`;
-        })
-        .catch(() => { /* Keep the verified release link when metadata is unavailable. */ })
-        .finally(() => clearTimeout(timer));
+
+      async function refreshRelease(channel, linkId, infoId, getLabel) {
+        const link = document.getElementById(linkId);
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 5000);
+        try {
+          const response = await fetch(channel, { cache: 'no-store', signal: controller.signal, credentials: 'omit' });
+          if (!response.ok) return;
+          const release = await response.json();
+          const artifact = release?.artifact;
+          if (release?.schema !== 1 || !artifact || typeof artifact.url !== 'string' ||
+              !Number.isSafeInteger(artifact.bytes) || artifact.bytes <= 0 ||
+              typeof artifact.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(artifact.sha256)) return;
+          const label = getLabel(release, link.dataset.version);
+          if (!label) return;
+          link.href = artifact.url;
+          document.getElementById(infoId).textContent = label + ' · 安裝檔約 ' + Math.ceil(artifact.bytes / 1000000) + ' MB';
+        } catch {
+          // Keep the published link when the release metadata is unavailable.
+        } finally {
+          clearTimeout(timer);
+        }
+      }
+
+      refreshRelease('/desktop/launcher-release-v1.json', 'download-link', 'release-info', (release, fallback) => {
+        if (release.channel !== 'stable' || release.platform !== 'win32' || release.arch !== 'x64') return;
+        const version = release.version;
+        if (typeof version !== 'string' || !/^\d{1,9}\.\d{1,9}\.\d{1,9}$/.test(version)) return;
+        const baseline = fallback.split('.').map(Number);
+        const differences = version.split('.').map((part, index) => Number(part) - baseline[index]);
+        const firstDifference = differences.find(delta => delta !== 0) ?? 0;
+        if (firstDifference < 0) return;
+        const url = release.artifact.url;
+        if (!/^https:\/\/game-assets\.rihdi\.tw\/desktop\/launcher\/releases\/[0-9.]+\/[0-9A-Za-z][0-9A-Za-z._-]*\.exe$/.test(url) ||
+            !new URL(url).pathname.startsWith('/desktop/launcher/releases/' + version + '/')) return;
+        return 'v' + version;
+      });
+
+      const mobileVersionLabel = (release, fallback) => {
+        if (!Number.isSafeInteger(release.versionCode) || release.versionCode < Number(fallback)) return;
+        return 'v' + String(release.versionCode).padStart(3, '0');
+      };
+      refreshRelease('https://game-assets.rihdi.tw/android/native/launcher-release-v1.json', 'android-download-link', 'android-release-info', (release, fallback) => {
+        if (release.platform !== 'android' || release.channel !== 'native' || release.package !== 'tw.rihdi.tabletop.android') return;
+        const url = release.artifact.url;
+        if (!/^https:\/\/game-assets\.rihdi\.tw\/android\/releases\/[1-9][0-9]*\/[0-9A-Za-z][0-9A-Za-z._-]*\.apk$/.test(url) ||
+            !new URL(url).pathname.startsWith('/android/releases/' + release.versionCode + '/')) return;
+        return mobileVersionLabel(release, fallback);
+      });
+      refreshRelease('https://game-assets.rihdi.tw/ios/native/launcher-release-v1.json', 'ios-download-link', 'ios-release-info', (release, fallback) => {
+        if (release.platform !== 'ios' || release.bundleIdentifier !== 'tw.rihdi.po.native.ios' ||
+            release.signed !== false || release.requiresUserSigning !== true) return;
+        const url = release.artifact.url;
+        if (!/^https:\/\/game-assets\.rihdi\.tw\/ios\/releases\/[1-9][0-9]*\/[0-9A-Za-z][0-9A-Za-z._-]*\.ipa$/.test(url) ||
+            !new URL(url).pathname.startsWith('/ios/releases/' + release.versionCode + '/')) return;
+        const label = mobileVersionLabel(release, fallback);
+        if (label) return label + ' · 需自行簽署';
+      });
     })();
   </script>
 </body>

@@ -1,86 +1,185 @@
 'use strict';
-// Read-only browser acceptance. Installer clicks are intercepted before any bytes download.
+
+// Installer clicks are intercepted before any payload bytes download.
 const fs = require('node:fs');
 const assert = require('node:assert/strict');
 const { chromium } = require(process.env.BOARD_QA_PLAYWRIGHT);
-const base = process.argv[2] || 'http://127.0.0.1:18938';
+const base = (process.argv[2] || 'http://127.0.0.1:18938').replace(/\/$/, '');
 const out = process.argv[3];
-const channel = 'https://game-assets.rihdi.tw/android/launcher-release-v1.json';
-const fallback = 'https://game-assets.rihdi.tw/android/releases/26/PIRATE-ODYSSEY-v026-f63d2654a4db.apk';
-const windowsFallback = 'https://game-assets.rihdi.tw/desktop/launcher/releases/1.2.24/ONE-PIECE-Tabletop-Launcher-1.2.24-x64.exe';
-const cases = [
-  {name:'Windows',width:1366,height:900,ua:'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36',platform:'Win32',expected:'windows-card'},
-  {name:'Android portrait',width:390,height:844,ua:'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/130.0.0.0 Mobile Safari/537.36',platform:'Linux armv8l',expected:'android-card'},
-  {name:'Android landscape',width:844,height:390,ua:'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/130.0.0.0 Mobile Safari/537.36',platform:'Linux armv8l',expected:'android-card'},
-  {name:'iPhone',width:320,height:740,ua:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 Safari/604.1',platform:'iPhone',expected:null},
-  {name:'iPad desktop UA',width:1024,height:768,ua:'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 Version/18.0 Safari/605.1.15',platform:'MacIntel',touch:5,expected:null},
-  {name:'macOS',width:1440,height:900,ua:'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 Safari/605.1.15',platform:'MacIntel',expected:null},
+const cdn = 'https://game-assets.rihdi.tw';
+const windowsArtifact = version => `ONE-PIECE-Tabletop-Launcher-${version}-x64.exe`;
+const platforms = [
+  {
+    id: 'windows', link: '#download-link', info: '#release-info',
+    channel: base + '/desktop/launcher-release-v1.json',
+    artifact: `${cdn}/desktop/launcher/releases/1.2.32/${windowsArtifact('1.2.32')}`,
+    version: '1.2.32', stale: '1.2.31', future: '1.2.33'
+  },
+  {
+    id: 'android', link: '#android-download-link', info: '#android-release-info',
+    channel: cdn + '/android/native/launcher-release-v1.json',
+    artifact: cdn + '/android/releases/65/PIRATE-ODYSSEY-v065-635495f6280c.apk',
+    version: 65, stale: 64, future: 66
+  },
+  {
+    id: 'ios', link: '#ios-download-link', info: '#ios-release-info',
+    channel: cdn + '/ios/native/launcher-release-v1.json',
+    artifact: cdn + '/ios/releases/65/PIRATE-ODYSSEY-v065-7fa1adddd958-UNSIGNED.ipa',
+    version: 65, stale: 64, future: 66
+  }
 ];
-(async () => {
-  const browser = await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
-  const results=[];
+const desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36';
+const androidUA = 'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/130.0.0.0 Mobile Safari/537.36';
+const macUA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 Version/18.0 Safari/605.1.15';
+const cases = [
+  { name: 'Windows homepage', width: 1366, height: 900, ua: desktopUA, platform: 'Win32', expected: 'windows-card', path: '/' },
+  { name: 'Windows intermediate', width: 980, height: 768, ua: desktopUA, platform: 'Win32', expected: 'windows-card' },
+  { name: 'Android portrait', width: 390, height: 844, ua: androidUA, platform: 'Linux armv8l', expected: 'android-card' },
+  { name: 'Android landscape', width: 844, height: 390, ua: androidUA, platform: 'Linux armv8l', expected: 'android-card' },
+  { name: 'iPhone', width: 320, height: 740, ua: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 Safari/604.1', platform: 'iPhone', expected: 'ios-card' },
+  { name: 'iPad desktop UA', width: 1024, height: 768, ua: macUA, platform: 'MacIntel', touch: 5, expected: 'ios-card' },
+  { name: 'macOS', width: 1440, height: 900, ua: macUA, platform: 'MacIntel', expected: null }
+];
+const modes = ['offline', 'future', 'stale', 'invalid-identity', 'invalid-sha', 'invalid-bytes', 'invalid-origin',
+  'invalid-version-url', 'invalid-extension', 'no-js'];
+
+function channelFixture(platform, stable, mode) {
+  const fixture = structuredClone(stable);
+  const version = mode === 'stale' ? platform.stale : platform.future;
+  fixture.artifact.sha256 = 'a'.repeat(64);
+  if (platform.id === 'windows') {
+    fixture.version = version;
+    fixture.artifact.fileName = windowsArtifact(version);
+    fixture.artifact.url = `${cdn}/desktop/launcher/releases/${version}/${fixture.artifact.fileName}`;
+  } else {
+    const short = String(version).padStart(3, '0');
+    fixture.version = `0.1.0-native-v${short}`;
+    fixture.versionCode = version;
+    const extension = platform.id === 'android' ? '.apk' : '-UNSIGNED.ipa';
+    fixture.artifact.url = `${cdn}/${platform.id}/releases/${version}/PIRATE-ODYSSEY-v${short}${extension}`;
+  }
+  if (mode === 'invalid-identity') {
+    if (platform.id === 'windows') fixture.arch = 'arm64';
+    else if (platform.id === 'android') fixture.package = 'invalid.apk.package';
+    else fixture.bundleIdentifier = 'invalid.ipa.bundle';
+  } else if (mode === 'invalid-sha') {
+    fixture.artifact.sha256 = 'g'.repeat(64);
+  } else if (mode === 'invalid-bytes') {
+    fixture.artifact.bytes = 0;
+  } else if (mode === 'invalid-origin') {
+    fixture.artifact.url = fixture.artifact.url.replace(cdn, 'https://example.com');
+  } else if (mode === 'invalid-version-url') {
+    fixture.artifact.url = fixture.artifact.url.replace('/' + platform.future + '/',
+      platform.id === 'windows' ? '/1.2.99/' : '/99/');
+  } else if (mode === 'invalid-extension') {
+    fixture.artifact.url = fixture.artifact.url.replace(/\.[a-z]+$/i, '.zip');
+  }
+  return fixture;
+}
+
+async function currentReleases() {
+  return Object.fromEntries(await Promise.all(platforms.map(async platform => {
+    const response = await fetch(platform.channel, { cache: 'no-store', signal: AbortSignal.timeout(15_000) });
+    assert.equal(response.status, 200, platform.channel);
+    const release = await response.json();
+    assert.equal(release[platform.id === 'windows' ? 'version' : 'versionCode'], platform.version);
+    assert.equal(release.artifact.url, platform.artifact);
+    assert.match(release.artifact.sha256, /^[a-f0-9]{64}$/);
+    return [platform.id, release];
+  })));
+}
+
+async function run(browser, stable, config) {
+  const context = await browser.newContext({ viewport: { width: config.width, height: config.height },
+    userAgent: config.ua, javaScriptEnabled: config.mode !== 'no-js', serviceWorkers: 'block' });
   try {
-    const release=await (await fetch(channel)).json();
-    for (const c of [...cases,...['offline','invalid','future','no-js'].map(mode=>({...cases[1],name:mode,mode}))]) {
-      const context=await browser.newContext({viewport:{width:c.width,height:c.height},userAgent:c.ua,javaScriptEnabled:c.mode!=='no-js',serviceWorkers:'block'});
-      await context.addInitScript(({platform,touch})=>{
-        Object.defineProperty(navigator,'platform',{get:()=>platform});
-        Object.defineProperty(navigator,'userAgentData',{get:()=>undefined});
-        Object.defineProperty(navigator,'maxTouchPoints',{get:()=>touch||0});
-      },c);
-      const requests=[],errors=[],clicks=[];
-      let allowClick=false;
-      await context.route('**/*', route=>{
-        const url=route.request().url();
-        if (/\.(apk|exe)(?:\?|$)/.test(url)) {
-          if(!allowClick) errors.push('Automatic installer download');
-          clicks.push(url); return route.fulfill({status:204,body:''});
-        }
-        requests.push(url);
-        if((url===channel || url===base+'/desktop/launcher-release-v1.json') && c.mode==='offline') return route.abort();
-        if(url===channel && ['invalid','future'].includes(c.mode)) {
-          const r=structuredClone(release);
-          if(c.mode==='invalid') r.artifact.url='https://example.com/untrusted.apk';
-          else {r.versionCode=27;r.version='0.1.26-mobile-trial';r.artifact.url='https://game-assets.rihdi.tw/android/releases/27/PIRATE-ODYSSEY-v027.apk';}
-          return route.fulfill({json:r,headers:{'Access-Control-Allow-Origin':'*'}});
-        }
-        return route.continue();
-      });
-      const page=await context.newPage();
-      page.on('pageerror',e=>errors.push(e.message));
-      await page.goto(base+'/download',{waitUntil:'networkidle'});
-      const state=await page.evaluate(()=>({
-        overflow:document.documentElement.scrollWidth>innerWidth,
-        recommended:document.querySelector('.recommended')?.id||null,
-        first:document.querySelector('.downloads > section')?.id,
-        android:document.querySelector('#android-download-link').href,
-        windows:document.querySelector('#download-link').href,
-        height:[...document.querySelectorAll('.download')].map(e=>e.getBoundingClientRect().height),
-        note:document.querySelector('#device-note').textContent,
-        version:document.querySelector('#android-release-info').textContent,
-      }));
-      assert(!state.overflow,c.name+' overflow');
-      assert(state.height.every(h=>h>=44));
-      assert.equal(state.recommended,c.mode==='no-js'?null:c.expected);
-      if(c.expected==='android-card'&&c.mode!=='no-js') assert.equal(state.first,'android-card');
-      if(c.expected===null) assert.match(state.note,/沒有可安裝版本/);
-      assert.equal(state.android,c.mode==='future'?'https://game-assets.rihdi.tw/android/releases/27/PIRATE-ODYSSEY-v027.apk':fallback);
-      assert.match(state.windows,/^https:\/\/game-assets\.rihdi\.tw\/desktop\/launcher\/releases\/.*\.exe$/);
-      if(['offline','no-js'].includes(c.mode)) assert.equal(state.windows,windowsFallback);
-      if(c.mode==='future') assert.match(state.version,/v027/);
-      assert.equal(clicks.length,0);
-      allowClick=true;
-      await page.locator('#android-download-link').click();
-      await page.waitForTimeout(100);
-      await page.locator('#download-link').click();
-      await page.waitForTimeout(100);
-      assert.deepEqual(clicks,[state.android,state.windows]);
-      assert.deepEqual(errors,[]);
-      results.push({name:c.name,state,requests,clicks,errors,ok:true});
-      if(out&&['Windows','Android portrait'].includes(c.name)) await page.screenshot({path:out.replace(/\.json$/,`-${c.name.split(' ')[0]}.png`),fullPage:true});
-      await context.close();
+    await context.addInitScript(({ platform, touch }) => {
+      Object.defineProperty(navigator, 'platform', { get: () => platform });
+      Object.defineProperty(navigator, 'userAgentData', { get: () => undefined });
+      Object.defineProperty(navigator, 'maxTouchPoints', { get: () => touch || 0 });
+    }, config);
+    const requests = [];
+    const responses = new Map();
+    const errors = [];
+    const clicks = [];
+    let allowClick = false;
+    await context.route('**/*', route => {
+      const url = route.request().url();
+      if (/\.(apk|exe|ipa)(?:\?|$)/i.test(url)) {
+        if (!allowClick) errors.push('Automatic installer download: ' + url);
+        clicks.push(url);
+        return route.fulfill({ status: 204, body: '' });
+      }
+      requests.push(url);
+      const platform = platforms.find(entry => entry.channel === url);
+      if (platform && config.mode === 'offline') return route.abort();
+      if (platform && config.mode && config.mode !== 'no-js') {
+        return route.fulfill({ json: channelFixture(platform, stable[platform.id], config.mode),
+          headers: { 'Access-Control-Allow-Origin': '*' } });
+      }
+      return route.continue();
+    });
+    const page = await context.newPage();
+    page.on('pageerror', error => errors.push(error.message));
+    page.on('response', response => responses.set(response.url(), response.status()));
+    const response = await page.goto(base + (config.path || '/download'), { waitUntil: 'networkidle' });
+    assert.equal(response.status(), 200);
+    const state = await page.evaluate(selectors => ({
+      overflow: document.documentElement.scrollWidth > innerWidth,
+      recommended: document.querySelector('.recommended')?.id || null,
+      first: document.querySelector('.downloads > section')?.id,
+      note: document.querySelector('#device-note').textContent,
+      platforms: Object.fromEntries(selectors.map(({ id, link, info }) => {
+        const anchor = document.querySelector(link);
+        return [id, { href: anchor.href, height: anchor.getBoundingClientRect().height,
+          release: document.querySelector(info).textContent }];
+      }))
+    }), platforms);
+    assert(!state.overflow, config.name + ' overflow');
+    assert.equal(state.recommended, config.mode === 'no-js' ? null : config.expected);
+    if (['android-card', 'ios-card'].includes(config.expected) && config.mode !== 'no-js') {
+      assert.equal(state.first, config.expected);
     }
-    if(out) fs.writeFileSync(out,JSON.stringify({base,ok:true,cases:results},null,2));
-    console.log(JSON.stringify({ok:true,base,cases:results.length,out}));
-  } finally {await browser.close();}
-})().catch(e=>{console.error(e);process.exitCode=1;});
+    if (config.expected === null) assert.match(state.note, /目前沒有 macOS 版/);
+    assert(!requests.includes(cdn + '/android/launcher-release-v1.json'), 'Legacy trial channel was queried');
+    for (const platform of platforms) {
+      const current = state.platforms[platform.id];
+      const future = config.mode === 'future';
+      assert(current.height >= 44, config.name + ' ' + platform.id + ' touch target');
+      assert.equal(requests.includes(platform.channel), config.mode !== 'no-js', platform.channel);
+      if (!config.mode) assert.equal(responses.get(platform.channel), 200, platform.channel);
+      assert.equal(current.href, future ? channelFixture(platform, stable[platform.id], 'future').artifact.url : platform.artifact,
+        config.name + ' ' + platform.id + ' installer');
+      const expected = String(future ? platform.future : platform.version);
+      assert(current.release.includes(platform.id === 'windows' ? expected : 'v' + expected.padStart(3, '0')),
+        config.name + ' ' + platform.id + ' release label: ' + current.release);
+    }
+    assert.match(state.platforms.ios.release, /需自行簽署/);
+    assert.deepEqual(clicks, []);
+    allowClick = true;
+    for (const platform of platforms) await page.locator(platform.link).click();
+    assert.deepEqual(clicks, platforms.map(({ id }) => state.platforms[id].href));
+    assert.deepEqual(errors, []);
+    if (out && ['Windows homepage', 'Android portrait', 'iPhone'].includes(config.name)) {
+      await page.screenshot({ path: out.replace(/\.json$/, '-' + config.name.split(' ')[0] + '.png'), fullPage: true });
+    }
+    return { name: config.name, state, requests, clicks, errors, ok: true };
+  } finally {
+    await context.close();
+  }
+}
+
+(async () => {
+  const stable = await currentReleases();
+  const browser = await chromium.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true });
+  try {
+    const results = [];
+    for (const config of [...cases, ...modes.map(mode => ({ ...cases[2], name: mode, mode }))]) {
+      results.push(await run(browser, stable, config));
+    }
+    if (out) fs.writeFileSync(out, JSON.stringify({ base, ok: true, cases: results }, null, 2) + '\n');
+    console.log(JSON.stringify({ ok: true, base, cases: results.length, out }));
+  } finally {
+    await browser.close();
+  }
+})().catch(error => { console.error(error); process.exitCode = 1; });
