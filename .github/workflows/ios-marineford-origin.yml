@@ -1,0 +1,27 @@
+name: Marineford iOS origin feasibility
+on:
+  push:
+    branches: [codex/ios-marineford-origin-v066]
+permissions:
+  contents: read
+jobs:
+  origin:
+    if: github.repository == 'az12sx45/onepiece-card-online' && github.event.repository.private == false
+    runs-on: macos-26
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Compile and observe native WebKit origin
+        run: |
+          clang++ -fobjc-arc -framework Cocoa -framework WebKit candidate/tools/probe_marineford_origin.mm -o "$RUNNER_TEMP/probe-marineford-origin"
+          "$RUNNER_TEMP/probe-marineford-origin" candidate/bundle-resources/launcher-web "$RUNNER_TEMP/marineford-origin.json"
+      - name: Save bounded origin evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: marineford-ios-origin
+          path: ${{ runner.temp }}/marineford-origin.json
+          retention-days: 1
