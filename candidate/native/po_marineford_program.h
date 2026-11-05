@@ -47,13 +47,14 @@ static NSArray *POMarinefordResourceType(NSString *path) {
         ([type[0] isEqual:@"font"]&&[folder isEqual:@"fonts"]);
     return scoped?type:nil;
 }
-static BOOL POMarinefordTimestamp(id value) {
-    if(![value isKindOfClass:NSString.class])return NO;
+static NSDate *POMarinefordDate(id value) {
+    if(![value isKindOfClass:NSString.class])return nil;
     NSISO8601DateFormatter *time=[NSISO8601DateFormatter new];
     time.formatOptions=NSISO8601DateFormatWithInternetDateTime|NSISO8601DateFormatWithFractionalSeconds;
-    if([time dateFromString:value])return YES;
+    NSDate *date=[time dateFromString:value];
+    if(date)return date;
     time.formatOptions=NSISO8601DateFormatWithInternetDateTime;
-    return [time dateFromString:value]!=nil;
+    return [time dateFromString:value];
 }
 static NSDictionary *POMarinefordRelease(NSData *data) {
     if(!data.length||data.length>65536)return nil;
@@ -67,8 +68,27 @@ static NSDictionary *POMarinefordRelease(NSData *data) {
         ![pointer[@"manifestPath"] isEqual:[NSString stringWithFormat:@"desktop/manifests/marineford-%@.json",release]]||
         !POMarinefordHash(pointer[@"manifestSha256"])||![pointer[@"entryPath"] isEqual:@"marineford/index.html"]||
         !POMarinefordInteger(pointer[@"totalFiles"],6,20000)||!POMarinefordInteger(pointer[@"totalBytes"],1,512LL*1024*1024)||
-        !POMarinefordTimestamp(pointer[@"createdAt"]))return nil;
+        !POMarinefordDate(pointer[@"createdAt"]))return nil;
     return pointer;
+}
+static NSDictionary *POMarinefordLatestReference(NSString *file) {
+    NSDictionary *info=[NSFileManager.defaultManager attributesOfItemAtPath:file error:nil];
+    if(![info[NSFileType] isEqual:NSFileTypeRegular]||[info[NSFileSize] longLongValue]<=0||[info[NSFileSize] longLongValue]>65536)return nil;
+    return POMarinefordRelease([NSData dataWithContentsOfFile:file options:NSDataReadingMappedIfSafe error:nil]);
+}
+static BOOL POMarinefordRememberLatest(NSDictionary *package,NSString *file) {
+    NSDictionary *next=package[@"reference"];
+    if(!next||!package[@"pointer"]||![package[@"program"] boolValue])return NO;
+    BOOL exists=[NSFileManager.defaultManager fileExistsAtPath:file];
+    NSDictionary *prior=exists?POMarinefordLatestReference(file):nil;
+    if(exists&&!prior)return NO;
+    if(prior) {
+        NSComparisonResult order=[POMarinefordDate(next[@"createdAt"]) compare:POMarinefordDate(prior[@"createdAt"])];
+        if(order==NSOrderedAscending)return NO;
+        if(order==NSOrderedSame)return [next[@"releaseId"] isEqual:prior[@"releaseId"]]&&
+            [next[@"manifestSha256"] isEqual:prior[@"manifestSha256"]];
+    }
+    return [package[@"pointer"] writeToFile:file options:NSDataWritingAtomic error:nil];
 }
 static NSDictionary *POMarinefordProgramPackage(NSData *data, NSData *reference) {
     NSDictionary *pointer=POMarinefordRelease(reference);

@@ -40,6 +40,7 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
 @property(nonatomic,strong) POMarinefordJob *job;
 @property(nonatomic,strong) NSDictionary *installed;
 @property(nonatomic,strong) NSDictionary *remote;
+@property(nonatomic,strong) NSDictionary *latestReference;
 @property(nonatomic,strong) NSDate *lastCheck;
 @property(nonatomic,strong) NSDictionary *activity;
 @property(nonatomic) BOOL healthy;
@@ -47,6 +48,7 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
 @property(nonatomic,copy) NSString *failure;
 - (instancetype)initWithRoot:(NSString *)root transport:(PODownloader *)transport;
 - (NSDictionary *)state;
+- (NSString *)latestFile;
 - (void)refresh;
 - (void)start:(BOOL)installing;
 - (BOOL)install;
@@ -70,6 +72,7 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
 - (NSString *)manifestFile {
     return [self.root stringByAppendingPathComponent:@"manifest.json"];
 }
+- (NSString *)latestFile {return [self.root stringByAppendingPathComponent:@"latest-reference.json"];}
 
 - (void)emit {
     if (self.changed) self.changed();
@@ -77,7 +80,8 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
 
 - (NSDictionary *)state {
     BOOL program=[self.installed[@"program"] boolValue];
-    BOOL update=self.installed&&(!program||(self.remote&&![self.installed[@"revision"] isEqual:self.remote[@"revision"]]));
+    NSString *latest=self.remote[@"revision"]?:self.latestReference[@"releaseId"];
+    BOOL update=self.installed&&(!program||(latest&&![self.installed[@"revision"] isEqual:latest]));
     NSString *status = @"missing";
     if (self.installed) status = !self.healthy ? @"repair" : (update ? @"update" : @"installed");
     else if (!self.lastCheck) status = @"checking";
@@ -86,7 +90,7 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
     // Its launch still needs an online proof explicitly accepting that identity.
     NSMutableDictionary *value = [@{@"status":status, @"hasInstalled":@(program && self.healthy),
         @"removable":@(self.installed != nil || self.failure.length || [self.activity[@"status"] isEqual:@"paused"]),
-        @"installedVersion":POMarinefordVersion(self.installed), @"remoteVersion":POMarinefordVersion(self.remote),
+        @"installedVersion":POMarinefordVersion(self.installed), @"remoteVersion":self.remote?POMarinefordVersion(self.remote):(self.latestReference[@"releaseId"]?:@""),
         @"totalBytes":self.remote[@"bytes"] ?: self.installed[@"bytes"] ?: @0} mutableCopy];
     if (self.failure.length) value[@"message"] = self.failure;
     if (self.activity) [value addEntriesFromDictionary:self.activity];
@@ -224,7 +228,15 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
         NSDictionary *installed = POMarinefordStoredPackage(installedData);
         NSArray *installedMissing = installed ? POMarinefordMissing(self.root, installed, self.sharedRoot) : nil;
         BOOL healthy = installed && installedMissing.count == 0;
+        BOOL seeded=YES;
+        if([installed[@"program"] boolValue]&&![fm fileExistsAtPath:[self latestFile]])
+            seeded=POMarinefordRememberLatest(installed,[self latestFile]);
         NSDictionary *remote = ready ? [self fetchProgram:job] : nil;
+        NSString *metadataFailure=nil;
+        if(!seeded||(remote&&!POMarinefordRememberLatest(remote,[self latestFile]))) {
+            remote=nil;metadataFailure=@"無法驗證最新遊戲版本，已保留現有版本，請重試。";
+        }
+        NSDictionary *latestReference=POMarinefordLatestReference([self latestFile]);
         BOOL success = NO;
         if (remote && installing && !job.cancelled) {
             NSArray *missing = [installed[@"revision"] isEqual:remote[@"revision"]] ?
@@ -247,9 +259,11 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
             self.job = nil;
             self.installed = success ? remote : installed;
             self.healthy = success || healthy;
+            self.latestReference=latestReference;
             if (remote) self.remote = remote;
             self.activity = nil;
             if (!success && job.cancelled) self.activity = @{@"status":@"paused"};
+            else if(metadataFailure)self.failure=metadataFailure;
             else if (installing && !success) self.failure = @"遊戲下載或驗證失敗，請重試。";
             else if (!remote && !self.healthy) self.failure = @"無法讀取遊戲版本，請重試。";
             [self emit];
@@ -297,7 +311,9 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
     [self emit];
     dispatch_async(self.io, ^{
         NSFileManager *fm = NSFileManager.defaultManager;
-        BOOL removed = ![fm fileExistsAtPath:self.root] || [fm removeItemAtPath:self.root error:nil];
+        BOOL removed=YES;
+        for(NSString *file in @[[self.root stringByAppendingPathComponent:@"blobs"],[self manifestFile]])
+            if([fm fileExistsAtPath:file]&&![fm removeItemAtPath:file error:nil])removed=NO;
         dispatch_async(dispatch_get_main_queue(), ^{
             if (self.job != job) return;
             self.job = nil;

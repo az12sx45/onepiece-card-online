@@ -65,6 +65,17 @@ def main():
       await context.close();
       const socket=io({autoConnect:false,reconnection:false});
       const uri=socket.io.uri;socket.disconnect();
+      let network=true;
+      if(window.__PO_FIXTURE_NETWORK_PROBE__){
+        const proof=await fetch('/api/desktop-runtime-package/marineford');
+        if(!proof.ok||(await proof.json()).gameId!=='marineford')throw Error('official API blocked');
+        network=await new Promise((resolve,reject)=>{
+          const websocket=new WebSocket('wss://onepiece-card-online.onrender.com/socket.io/?EIO=4&transport=websocket');
+          const timeout=setTimeout(()=>{websocket.close();reject(Error('official socket timeout'));},8000);
+          websocket.onmessage=event=>{if(String(event.data).startsWith('0{')){clearTimeout(timeout);websocket.close();resolve(true);}};
+          websocket.onerror=()=>{clearTimeout(timeout);reject(Error('official socket blocked'));};
+        });
+      }
       const previous=Number(localStorage.getItem('__po_program_test')||0);
       localStorage.setItem('__po_program_test',String(previous+1));
       webkit.messageHandlers.result.postMessage({origin:location.origin,version:cards[0].version,
@@ -77,7 +88,7 @@ def main():
         unknownProgramBlocked,missingImageBlocked,
         renderStatic:performance.getEntriesByType('resource').filter(e=>e.name.startsWith(location.origin)&&
           /\\/(marineford\\/(art|audio|video|videos|fonts)\\/|marineford\\/(index.html|marineford.js|marineford.css|sound.js|cards.json)|vendor\\/socket.io-client\\/)/.test(new URL(e.name).pathname)).length,
-        marker:window.__PO_MARINEFORD_LOCAL_PROGRAM__===true,sound:window.fixtureSound===true});
+        marker:window.__PO_MARINEFORD_LOCAL_PROGRAM__===true,sound:window.fixtureSound===true,network});
     })().catch(e=>webkit.messageHandlers.result.postMessage({error:e.name+':'+e.message}));"""
     values = {
         'marineford/index.html': html,
@@ -93,7 +104,7 @@ def main():
                       ('marineford/videos/native-blue.mp4','blue.mp4'),
                       ('marineford/fonts/native-fixture.woff','fixture.woff')]:
         values[path]=(fixtures/name).read_bytes()
-    for version in (1,2):
+    for version in (1,2,3):
         values['marineford/cards.json'] = encode([{'id':'native-fixture','version':version}])
         rows=[]
         totals={kind:{'files':0,'bytes':0} for kind in ('document','style','script','data','wasm','image','audio','video','font')}
@@ -106,7 +117,7 @@ def main():
             totals[kind]['bytes']+=len(data)
         identity=digest(encode(rows))
         release='package-'+identity[:16]
-        created='2026-11-05T05:00:00.000Z'
+        created='2026-11-05T05:00:00.000Z' if version==1 else '2026-11-05T05:01:00.000Z'
         manifest=dict(schema=3,gameId='marineford',releaseId=release,createdAt=created,
                       entryPath='marineford/index.html',assetSetSha256=identity,totalFiles=len(rows),
                       totalBytes=sum(r['size'] for r in rows),byKind=totals,assets=rows)

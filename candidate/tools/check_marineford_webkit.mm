@@ -13,6 +13,7 @@ static NSData *Read(NSString *root,NSString *name) {
 @interface FixtureTransport : PODownloader
 @property(nonatomic,copy) NSString *fixtures;
 @property(nonatomic) NSUInteger version;
+@property(nonatomic) NSUInteger proofVersion;
 @property(nonatomic) BOOL rejectProof;
 @property(nonatomic) BOOL allowPrevious;
 @property(nonatomic) BOOL corruptDownloads;
@@ -32,8 +33,9 @@ static NSData *Read(NSString *root,NSString *name) {
 }
 - (BOOL)beginMarinefordProof:(NSString *)identifier release:(NSString *)release digest:(NSString *)digest destination:(NSString *)destination {
     if(self.rejectProof||!POMarinefordProofAddress(release,digest))return NO;
-    for(NSUInteger version=1;version<=self.version;++version) {
-        if(version!=self.version&&!self.allowPrevious)continue;
+    NSUInteger current=self.proofVersion?:self.version;
+    for(NSUInteger version=1;version<=current;++version) {
+        if(version!=current&&!self.allowPrevious)continue;
         NSString *file=[NSString stringWithFormat:@"proof-%lu.json",(unsigned long)version];
         NSDictionary *proof=[NSJSONSerialization JSONObjectWithData:Read(self.fixtures,file) options:0 error:nil];
         if([proof[@"releaseId"] isEqual:release]&&[proof[@"manifestSha256"] isEqual:digest])
@@ -70,6 +72,7 @@ static NSData *Read(NSString *root,NSString *name) {
 @end
 
 static BOOL ProbeProgram(POMarinefordScheme *scheme,NSString *assets,NSUInteger version) {
+    static BOOL checkedNetwork=NO;
     NSString *templateSource=[[NSString alloc] initWithData:Read(assets,@"mobile/marineford-program.js") encoding:NSUTF8StringEncoding];
     NSString *bootstrap=[scheme programBootstrapSource:templateSource],*html=[scheme programHTML];
     NSArray *scripts=[scheme programScripts];
@@ -82,6 +85,7 @@ static BOOL ProbeProgram(POMarinefordScheme *scheme,NSString *assets,NSUInteger 
     ProgramProbe *probe=[ProgramProbe new];probe.results=[NSMutableArray array];
     [config.userContentController addScriptMessageHandler:probe name:@"result"];
     [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:bootstrap injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES]];
+    [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:checkedNetwork?@"window.__PO_FIXTURE_NETWORK_PROBE__=false":@"window.__PO_FIXTURE_NETWORK_PROBE__=true" injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES]];
     NSString *session=[[NSString alloc] initWithData:Read(assets,@"mobile/session-bootstrap.js") encoding:NSUTF8StringEncoding];
     session=[session stringByAppendingString:@"\nif(location.origin==='https://onepiece-card-online.onrender.com'){window.__tabletopSeedPrivateSession({opSecret:'fixture-secret'});}"];
     [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:session injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES]];
@@ -104,8 +108,9 @@ static BOOL ProbeProgram(POMarinefordScheme *scheme,NSString *assets,NSUInteger 
             ![value[@"audio"] boolValue]||![value[@"video"] boolValue]||![value[@"audioDecoded"] boolValue]||
             ![value[@"videoDecoded"] boolValue]||![value[@"font"] boolValue]||![value[@"range"] boolValue]||
             ![value[@"invalidRange"] boolValue]||![value[@"missing"] boolValue]||![value[@"unknownProgramBlocked"] boolValue]||
-            ![value[@"missingImageBlocked"] boolValue]||[value[@"renderStatic"] unsignedIntegerValue]!=0){NSLog(@"Program fixture result %@",value);return NO;}
+            ![value[@"missingImageBlocked"] boolValue]||![value[@"network"] boolValue]||[value[@"renderStatic"] unsignedIntegerValue]!=0){NSLog(@"Program fixture result %@",value);return NO;}
     }
+    checkedNetwork=YES;
     [config.userContentController removeScriptMessageHandlerForName:@"result"];
     return YES;
 }
@@ -126,8 +131,8 @@ static int Run(NSString *assets,NSString *fixtures,NSString *canonical,NSString 
     CHECK(!POMarinefordProgramPackage(bad,reference),"manifest digest mismatch");
     CHECK(!POMarinefordRelease([@"{}" dataUsingEncoding:NSUTF8StringEncoding]),"invalid release rejected");
     CHECK(!POMarinefordRuntimeProof(Read(fixtures,@"proof-2.json"),package),"wrong server proof rejected");
-    CHECK([POMarinefordProofAddress(package[@"reference"][@"releaseId"],package[@"reference"][@"manifestSha256"])
-        containsString:[NSString stringWithFormat:@"?releaseId=%@&manifestSha256=%@",package[@"reference"][@"releaseId"],package[@"reference"][@"manifestSha256"]]],"proof URL pins installed release and manifest hash");
+    NSString *expectedQuery=[NSString stringWithFormat:@"?releaseId=%@&manifestSha256=%@",package[@"reference"][@"releaseId"],package[@"reference"][@"manifestSha256"]];
+    CHECK([POMarinefordProofAddress(package[@"reference"][@"releaseId"],package[@"reference"][@"manifestSha256"]) containsString:expectedQuery],"proof URL pins installed release and manifest hash");
     CHECK(!POMarinefordProofAddress(@"package-unsafe?x=1",package[@"reference"][@"manifestSha256"]),"invalid proof identity rejected");
     FixtureTransport *transport=[FixtureTransport new];
     transport.fixtures=fixtures;transport.version=1;transport.requests=[NSMutableArray array];
@@ -166,13 +171,30 @@ static int Run(NSString *assets,NSString *fixtures,NSString *canonical,NSString 
     transport.hold=NO;
     finished=NO;scheme=nil;
     CHECK([[store state][@"hasInstalled"] boolValue]&&[store prepareLaunch:^(POMarinefordScheme *s){scheme=s;finished=YES;}]&&Await(^BOOL{return finished;})&&scheme&&ProbeProgram(scheme,assets,1),"A native WebKit launch after cancelled B with compatible A proof");
+    NSData *latest=Read(store.root,@"latest-reference.json");
+    CHECK(latest&&[POMarinefordLatestReference([store latestFile])[@"releaseId"] isEqual:store.remote[@"revision"]],"fresh valid B metadata persists independently of installed A");
+    transport.version=1;transport.proofVersion=2;store.lastCheck=nil;[store refresh];
+    CHECK(Await(^BOOL{return !store.job;})&&store.failure.length&&store.healthy&&[[store state][@"hasInstalled"] boolValue]&&
+        [latest isEqual:Read(store.root,@"latest-reference.json")]&&[saved isEqual:Read(store.root,@"manifest.json")],"older A metadata cannot lower B floor or replace installed A");
+    transport.version=3;store.lastCheck=nil;[store refresh];
+    CHECK(Await(^BOOL{return !store.job;})&&store.failure.length&&[latest isEqual:Read(store.root,@"latest-reference.json")],"same timestamp conflicting identity rejected");
+    FixtureTransport *floorTransport=[FixtureTransport new];floorTransport.fixtures=fixtures;floorTransport.version=1;
+    floorTransport.proofVersion=2;floorTransport.allowPrevious=YES;floorTransport.requests=[NSMutableArray array];
+    POMarinefordStore *reopened=[[POMarinefordStore alloc] initWithRoot:store.root transport:floorTransport];
+    [reopened refresh];
+    CHECK(Await(^BOOL{return !reopened.job;})&&reopened.failure.length&&reopened.healthy&&[[reopened state][@"hasInstalled"] boolValue],"restart preserves latest B floor while loading healthy installed A");
+    finished=NO;scheme=nil;
+    CHECK([reopened prepareLaunch:^(POMarinefordScheme *s){scheme=s;finished=YES;}]&&Await(^BOOL{return finished;})&&scheme&&ProbeProgram(scheme,assets,1)&&
+        [latest isEqual:Read(store.root,@"latest-reference.json")],"explicit compatible A proof permits native launch without lowering persisted B floor");
+    [reopened close];transport.version=2;transport.proofVersion=0;
     NSUInteger beforeUpgrade=transport.requests.count;
     CHECK([store install]&&Await(^BOOL{return !store.job;})&&transport.requests.count==beforeUpgrade+1,"B upgrade transfers only one changed cards blob");
     finished=NO;scheme=nil;
     CHECK([store prepareLaunch:^(POMarinefordScheme *s){scheme=s;finished=YES;}]&&Await(^BOOL{return finished;})&&scheme&&ProbeProgram(scheme,assets,2),"promoted B executes its verified local cards payload");
     transport.rejectProof=YES;finished=NO;scheme=nil;
     CHECK([store prepareLaunch:^(POMarinefordScheme *s){scheme=s;finished=YES;}]&&Await(^BOOL{return finished;})&&!scheme,"unavailable server proof blocks execution");
-    CHECK([store uninstall]&&Await(^BOOL{return !store.job;})&&[[store state][@"status"] isEqual:@"missing"],"remove game content");
+    CHECK([store uninstall]&&Await(^BOOL{return !store.job;})&&[[store state][@"status"] isEqual:@"missing"]&&
+        [latest isEqual:Read(store.root,@"latest-reference.json")],"remove game content while retaining bounded latest-reference floor");
     [store close];
 
     FixtureTransport *migration=[FixtureTransport new];migration.fixtures=fixtures;migration.version=1;migration.requests=[NSMutableArray array];
@@ -195,6 +217,7 @@ static int Run(NSString *assets,NSString *fixtures,NSString *canonical,NSString 
     puts("PASS Marineford iOS program cold warm repair delta migration cancellation proof and native WKWebView execution");
     puts("PASS compatible installed A remains playable after B metadata corruption and cancellation then one-blob B upgrade");
     puts("PASS actual local audio video font decoding range and zero Render static resource requests");
+    puts("PASS persisted latest-reference floor rejects older and equal-date conflicting metadata while compatible A remains playable");
     return 0;
 }
 int main(int argc,char **argv) {
