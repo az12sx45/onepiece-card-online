@@ -339,6 +339,13 @@
       "sha256": "686ec6f7392be424ab92f7b2d53d34d8f0734c2c985e20ab4e3dcd74482f1086"
     },
     {
+      "path": "marineford/art/v2/fx-marco-phoenix-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 141570,
+      "sha256": "1c1c4ec135912bc69108c2ed1b809ccf3f2eb6298f04f43e971163beadb8e703"
+    },
+    {
       "path": "marineford/art/v2/fx-quake.webp",
       "kind": "image",
       "mime": "image/webp",
@@ -428,6 +435,20 @@
       "mime": "image/webp",
       "size": 89854,
       "sha256": "ab9e807c8c58f70b190274c9f2c44080a1cc558594d4d62377213194a136614b"
+    },
+    {
+      "path": "marineford/art/v2/kizaru-magatama-back.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 107916,
+      "sha256": "174bfd9c817a8731994f081010332a2ef206d5a3dc2c5d2002a73aca2ab25448"
+    },
+    {
+      "path": "marineford/art/v2/kizaru-magatama-front.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 127232,
+      "sha256": "3c30c251f55815e4ba0cdc4b1932cd3a8f369823f81f3adf96017c790447ccd7"
     },
     {
       "path": "marineford/art/v2/kizaru-stage-back.webp",
@@ -953,6 +974,55 @@
       "mime": "image/webp",
       "size": 334562,
       "sha256": "778fc1a48ad63662c1bfc2ddbe92294b0d2fa1710e928f22a129545b915ed7ce"
+    },
+    {
+      "path": "marineford/art/v2/ui-departure-active-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 12028,
+      "sha256": "9f45ecf0883fd4ae00d140fe1bff1009822c108783d29d275e3f8ab658da352f"
+    },
+    {
+      "path": "marineford/art/v2/ui-departure-frame-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 58828,
+      "sha256": "3448f625648fe22c3de0e12627ce21717ce17137793d9090dada1fb145acfa2c"
+    },
+    {
+      "path": "marineford/art/v2/ui-departure-idle-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 9536,
+      "sha256": "e1d008f2cfc88d73660ee78aae73dbb8e1e2bc067a320e33ad531e0b39661bda"
+    },
+    {
+      "path": "marineford/art/v2/ui-marineford-idle.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 23388,
+      "sha256": "667972d5afd9d71908ba41ad1aa858a8ce5b9dbe5743653c1be38c5858fd33b7"
+    },
+    {
+      "path": "marineford/art/v2/ui-marineford-navy.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 26418,
+      "sha256": "071855ca77000ef0e13a59c23fd5ddb43bee737e110fb5f4510936fe36db5d78"
+    },
+    {
+      "path": "marineford/art/v2/ui-marineford-pirate.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 31616,
+      "sha256": "bd3c910ed3c99b5fd3c1affc5b3988f7838ad695602d451d6af54ca8296ea8d9"
+    },
+    {
+      "path": "marineford/art/v2/ui-marineford-selected.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 26830,
+      "sha256": "c87bc850adcb2c9056d97e7e59a5272be537bb0b499f049e328f9719f3577b4c"
     },
     {
       "path": "marineford/art/v2/victory-ace-route.webp",

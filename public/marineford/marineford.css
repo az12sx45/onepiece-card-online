@@ -12,6 +12,13 @@
   --mf-new_cover:url("poasset://marineford/marineford/art/v2/new_cover.webp");
   --mf-dossier-archive:url("poasset://marineford/marineford/art/v2/dossier-archive-v1.webp"),var(--mf-new_cover);
   --mf-dossier-medals:url("poasset://marineford/marineford/art/v2/dossier-medals-v1.webp");
+  --mf-departure-frame:url("poasset://marineford/marineford/art/v2/ui-departure-frame-v1.webp");
+  --mf-departure-active:url("poasset://marineford/marineford/art/v2/ui-departure-active-v1.webp");
+  --mf-departure-idle:url("poasset://marineford/marineford/art/v2/ui-departure-idle-v1.webp");
+  --mf-ui-idle:url("poasset://marineford/marineford/art/v2/ui-marineford-idle.webp");
+  --mf-ui-selected:url("poasset://marineford/marineford/art/v2/ui-marineford-selected.webp");
+  --mf-ui-navy:url("poasset://marineford/marineford/art/v2/ui-marineford-navy.webp");
+  --mf-ui-pirate:url("poasset://marineford/marineford/art/v2/ui-marineford-pirate.webp");
   --mf-victory-ace-route:url("poasset://marineford/marineford/art/v2/victory-ace-route.webp");
 }
 :root{color-scheme:dark;font-family:system-ui,"Microsoft JhengHei",sans-serif;color:#f7f1e2;--button:var(--mf-button,url("art/v2/button.webp"));--ivory:#e5e0ce;--red:#d54d49;--blue:#9bdde9}
@@ -695,3 +702,51 @@ body:has(#sheet:not([hidden])) > .mf-invite{visibility:hidden}
 .mf-light-verdict{display:block;font-size:clamp(9px,1.8vh,14px);line-height:1.2;text-align:center;color:#fff2ba;text-shadow:0 1px 3px #000}
 #effectLayer[data-phase="barrage-result"] .laser-result{top:18%;bottom:auto;z-index:4}
 #effectLayer[data-facing="back"][data-phase="barrage-result"] .laser-result{top:38%}
+
+.mf-dossier-pinned{display:flex;gap:6px;align-items:center;min-height:34px}
+.mf-dossier-pinned .mf-dossier-medal{width:42px;flex:none}
+.mf-showcase{display:grid;grid-template-columns:minmax(72px,30%) minmax(0,1fr);gap:12px}
+.mf-showcase-card{min-width:0;display:grid;place-items:center}
+.mf-showcase-card .card-face{width:min(100%,130px);height:auto}
+.mf-showcase-options{min-width:0;display:grid;align-content:start;gap:8px}
+.mf-showcase-options select{width:100%;min-width:0;padding:8px;color:#fff0c6;background:#172c42;border:1px solid #a18961}
+
+/* Departure calling card: use separate art for the broad frame and small controls. */
+.mf-dossier[data-page="departure"]{min-height:0;grid-template-columns:minmax(126px,24%) minmax(0,1fr)}
+.mf-dossier[data-page="departure"] .mf-dossier-cover{min-height:0;align-items:center;background-position:35% center}
+.mf-dossier[data-page="departure"] .mf-dossier-panel{padding:0;border:0;background:none}
+.mf-dossier[data-page="departure"] .mf-dossier-identity{padding:clamp(8px,2vw,22px);background:#081322ce}
+.mf-dossier-panel .mf-departure{position:relative;isolation:isolate;overflow:hidden;min-height:clamp(175px,61vh,420px);display:flex;align-items:flex-end;padding:0;border:10px solid transparent;border-image:var(--mf-departure-frame,url("art/v2/ui-departure-frame-v1.webp")) 42 stretch;background-color:#071525;background-image:var(--mf-dossier-archive,url("art/v2/dossier-archive-v1.webp"));background-position:50% 31%;background-size:cover}
+.mf-departure-art{position:absolute;inset:0;overflow:hidden;z-index:-1}
+.mf-departure-art img{position:absolute;right:0;top:0;height:100%;width:min(68%,680px);object-fit:cover;object-position:50% 33%;mask-image:linear-gradient(90deg,transparent,#000 23%)}
+.mf-departure-caption{display:grid;justify-items:start;gap:5px;padding:clamp(10px,3vw,30px);width:100%;background:linear-gradient(90deg,#061122fa,#0611229e 48%,transparent 75%)}
+.mf-departure-caption h3{font-size:clamp(23px,5vw,54px);line-height:1.05;color:#ffe4ab}
+.mf-departure-caption p{max-width:53%;font-size:clamp(11px,1.6vw,16px);overflow-wrap:anywhere}
+.mf-dossier .mf-dossier-tab{border:6px solid transparent;border-image:var(--mf-departure-idle,url("art/v2/ui-departure-idle-v1.webp")) 24 fill stretch}
+.mf-dossier .mf-dossier-tab[aria-pressed="true"],.mf-departure-caption .mf-dossier-tab{border-image-source:var(--mf-departure-active,url("art/v2/ui-departure-active-v1.webp"))}
+.mf-departure-caption .mf-dossier-tab{min-width:92px;flex:none}
+@media(max-width:520px) and (orientation:portrait){.mf-dossier[data-page="departure"]{grid-template-columns:1fr}.mf-dossier[data-page="departure"] .mf-dossier-identity{display:flex;flex-wrap:wrap;align-items:center}}
+#effectLayer[data-kind="marco-guess"]{display:block;padding:0;background:transparent;pointer-events:none}
+.mf-marco-flight,.mf-marco-half{position:fixed;object-fit:contain;pointer-events:none}
+.mf-marco-flight{left:-20vw;width:clamp(155px,44vw,540px);filter:drop-shadow(0 0 12px #22cfff);opacity:0}
+.mf-marco-half[data-half="left"]{clip-path:polygon(0 0,74% 0,34% 100%,0 100%)}
+.mf-marco-half[data-half="right"]{clip-path:polygon(74% 0,100% 0,100% 100%,34% 100%)}
+#effectLayer[data-kind="marco-guess"] .effect-caption{position:absolute;left:50%;top:58%;width:max-content;max-width:85vw;transform:translateX(-50%);color:#e2faff;text-shadow:0 2px 3px #071018}
+
+/* Painted panels use the small frames; the departure card keeps its own broad frame. */
+:is(.mf-dossier-panel,.mf-dossier-metrics>div,.mf-dossier-panel article:not(.mf-departure),.mf-showcase-options,.mf-waiting-seat,.room-choice-grid section,.detail-copy),
+#table[data-targeting="true"] .target-action-hint{
+  border:7px solid transparent;
+  border-image:var(--mf-ui-navy,url("art/v2/ui-marineford-navy.webp")) 29 fill stretch;
+}
+.mf-dossier-cover{border:9px solid transparent;border-image:var(--mf-ui-selected,url("art/v2/ui-marineford-selected.webp")) 30 stretch}
+.mf-dossier-factions article[data-team="pirate"],
+#table[data-perspective="pirate"][data-targeting="true"] .target-action-hint{
+  border-image-source:var(--mf-ui-pirate,url("art/v2/ui-marineford-pirate.webp"));
+}
+.mf-showcase-options select{
+  border:6px solid transparent;
+  border-image:var(--mf-ui-idle,url("art/v2/ui-marineford-idle.webp")) 30 fill stretch;
+}
+.mf-showcase-options{padding:6px}
+#effectLayer[data-phase="charging"] .laser-charge{z-index:3}
