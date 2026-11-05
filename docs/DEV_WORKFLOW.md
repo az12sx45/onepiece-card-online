@@ -9151,3 +9151,10 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - 抽牌演出顯示公開的玩家姓名與陣營，單張卡背飛行 1100 ms，落點短停後完成既有 ACK。持牌權限、行動資料與規則沿用既有契約。
 - 正式基底為 `ebddd0ca0a66028b7fec4698af3d12612ea3872a`，六個精確 JS 操作及 CSS append 來自已核對 SHA 的交接。Chrome 與 WebKit 各通過三尺寸、雙方與雙視角的真 engine DRAW 封包檢查。影像沿用原套件資料，六個固定程式路徑產生獨立遊戲套件 C。
 - protocol 1 明確核准既有 A 與 B，讓已安裝版本在較新下載失敗或中斷時繼續使用。候選、實測按鈕尺寸及媒體 SHA 證據位於 `D:/Codex_QA/marineford-draw-arrange-release-20261105`。公開部署與實體手機驗收由整合發布者另行記錄。
+
+### 2026-11-05 Android v067 下載校驗修正與遊戲套件 C 整合
+
+- 已使用 v066 APK 的原始啟動器資源、實際 MainActivity Bridge 與 GameCache，以及官方 AOSP 8/15 的 org.json 重現下載與重試失敗。Android 將摘要字串中的斜線轉義，與套件產生器的固定 JSON 序列化不同，因而在下載資源前拒絕清單。先前桌機 org.json 測試沒有呈現這項差異。
+- v067 來源 `64abaa368aa569f163ebb5e7f63babb7ae5cf8ff` 僅在已驗證的 ASCII 摘要欄位採固定序列化，並驗證 SHA-256 格式。原簽章身分、下載排程、其他遊戲與帳號流程保留。下一次 App 更新的公告導言決策於這次 Android 功能修正一併落實；Windows 與 iOS 導言留待各自下次 App 更新。
+- 官網 Android 靜態連結及驗證下限改至 v067；Windows 維持 1.2.33，iOS 維持 v066。公告 revision 92 新增下載修正及遊戲套件 C 的抽牌／換位提示。原 91 則公告逐值保留。
+- 發布前後的實際 APK、兩條差量重建、官方 AOSP 正常入口／重試、公開通道及 Render 讀回證據另存 `D:/Codex_QA/marineford-android-download-failure-20261105` 與 `D:/Codex_QA/marineford-draw-arrange-release-20261105`，完成項目以各收據為準。實體 Android／iOS 手機和正式玩家帳號由使用者驗收。

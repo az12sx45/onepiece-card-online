@@ -19,8 +19,8 @@ const platforms = [
   {
     id: 'android', link: '#android-download-link', info: '#android-release-info',
     channel: cdn + '/android/native/launcher-release-v1.json',
-    artifact: cdn + '/android/releases/66/PIRATE-ODYSSEY-v066-6c2d69b5d2a3.apk',
-    version: 66, stale: 65, future: 67
+    artifact: cdn + '/android/releases/67/PIRATE-ODYSSEY-v067-7f81a035aa68.apk',
+    version: 67, stale: 66, future: 68
   },
   {
     id: 'ios', link: '#ios-download-link', info: '#ios-release-info',

@@ -3109,3 +3109,5 @@ Marineford uses a separate programme-and-media package in Windows 1.2.33 and mob
 The current package has six programme files and 369 image records. Sound effects use local WebAudio synthesis and fonts use the system. File-based audio, video and font support is covered by separate decoding and Range fixtures. Source, public release and physical-device evidence are listed separately in the release handoff and `docs/DEV_WORKFLOW.md`.
 
 官網的遊戲介紹列出《新世界航海錄》《偉大航道爭霸戰》《霸海戰棋》《馬林福特之戰》四款遊戲。Marineford 的啟動器公告以《馬林福特之戰》作為正式顯示名稱。
+
+Android v067 修正手機 JSON 斜線轉義造成的 Marineford 清單摘要不符；正常下載與重試的證據使用官方 AOSP org.json 及實際 APK 入口。Windows 1.2.33、iOS v066 沿用核心；遊戲套件 C 更新雙方抽牌提示與海軍左右手牌交換標示。公開發布與手機驗收以整合收據分別記錄。

@@ -1,7 +1,28 @@
 {
   "schemaVersion": 1,
-  "revision": 91,
+  "revision": 92,
   "announcements": [
+    {
+      "id": "marineford-20261105-android067-draw",
+      "status": "published",
+      "publishedAt": "2026-11-05T09:42:53.290Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "Android v067／馬林福特之戰 2026.11.05",
+      "title": "馬林福特之戰：Android 下載修正與抽牌提示",
+      "summary": "Android v067 修正遊戲下載失敗與反覆重試；加強雙方抽牌、回合提示及海軍左右手牌交換標示。",
+      "body": [
+        "Android v067 修正《馬林福特之戰》下載失敗並反覆要求重試的問題。Android 玩家請先安裝 v067，再於啟動器內更新遊戲。",
+        "已使用 Windows 啟動器 1.2.33 或 iOS v066 的玩家，這次不需要另外重裝啟動器或 App。",
+        "加強海軍與海賊的抽牌演出，顯示抽牌玩家與陣營；輪到自己抽牌時，牌堆與文字提示更清楚。",
+        "海軍準備階段會標示左右手牌的牌位、階級與卡名，並清楚顯示是否交換左右手牌的選項。",
+        "請在對局結束後關閉並重新開啟啟動器，再更新《馬林福特之戰》遊戲內容。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.33"
+      }
+    },
     {
       "id": "marineford-20261105-game-package",
       "status": "published",
