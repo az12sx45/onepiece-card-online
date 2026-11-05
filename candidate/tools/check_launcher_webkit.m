@@ -59,6 +59,15 @@ int main(int argc,const char **argv){@autoreleasepool{
         if(probe.loaded)[probe.web evaluateJavaScript:@"document.body.dataset.stage==='auth' && document.getElementById('authTitle').textContent==='航海者登入' && document.querySelector('.auth-logo').naturalWidth>0 && !!window.onePieceDesktop && typeof crypto.randomUUID==='function' && /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(crypto.randomUUID())" completionHandler:^(id value,NSError *error){if(error){NSLog(@"probe JS failure %@",error);probe.failed=YES;}else if([value boolValue])probe.ready=YES;}];
     }
     NSLog(@"WebKit auth document result loaded=%d ready=%d failed=%d",probe.loaded,probe.ready,probe.failed);
+    if(probe.ready&&!probe.failed){
+        __block BOOL completed=NO,valid=NO;
+        NSString *check=@"(()=>{selectedGameId='marineford';for(const status of ['update','error','paused']){snapshot.games.marineford={status,hasInstalled:true,installedVersion:'package-A',remoteVersion:'package-B'};renderFeature();renderDownloads();const row=Array.from(document.querySelectorAll('.download-row')).find(row=>row.querySelector('h3').textContent==='馬林福特之戰');if(existingLaunchAction.hidden||existingLaunchAction.disabled||!row||!Array.from(row.querySelectorAll('button')).some(button=>button.textContent==='啟動現有版本'&&!button.disabled))return false;}snapshot.games.marineford={status:'repair',hasInstalled:false};renderFeature();return existingLaunchAction.hidden;})()";
+        [probe.web evaluateJavaScript:check completionHandler:^(id value,NSError *error){valid=!error&&[value boolValue];completed=YES;}];
+        NSDate *uiDeadline=[NSDate dateWithTimeIntervalSinceNow:5];
+        while(!completed&&uiDeadline.timeIntervalSinceNow>0)[NSRunLoop.currentRunLoop runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.05]];
+        if(!completed||!valid)probe.failed=YES;
+        else puts("PASS launcher existing-version action remains available for pending failed and cancelled Marineford updates");
+    }
     [config.userContentController removeScriptMessageHandlerForName:@"tabletop"];
     [fm removeItemAtPath:root error:nil];[fm removeItemAtPath:folder error:nil];
     if(!probe.ready||probe.failed)return 7;

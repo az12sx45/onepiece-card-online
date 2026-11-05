@@ -23,6 +23,10 @@ jobs:
           python3 -B candidate/tools/prepare_marineford_fixture.py --assets candidate/bundle-resources/launcher-web --out "$RUNNER_TEMP/marineford-fixtures"
           clang++ -fobjc-arc -framework Cocoa -framework WebKit -I candidate/native candidate/tools/check_marineford_webkit.mm -o "$RUNNER_TEMP/check-marineford-program"
           "$RUNNER_TEMP/check-marineford-program" candidate/bundle-resources/launcher-web "$RUNNER_TEMP/marineford-fixtures" candidate/tools/fixtures
+      - name: Verify existing-version launcher controls
+        run: |
+          clang -fobjc-arc -framework Cocoa -framework WebKit -I candidate/native candidate/tools/check_launcher_webkit.m -o "$RUNNER_TEMP/check-marineford-launcher"
+          "$RUNNER_TEMP/check-marineford-launcher" candidate/bundle-resources/launcher-web
       - name: Save bounded origin evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

@@ -189,8 +189,9 @@ public:
                     view.gameId=nil;
                     if(scheme&&[view open:game session:retainedSession device:deviceId marinefordAssets:scheme]){
                         __weak POMarinefordStore *store=programStore;
+                        NSDictionary *runningPackage=scheme.package;
                         view.revalidateProgram=^(void (^completion)(BOOL)){
-                            BOOL began=[store prepareLaunch:^(POMarinefordScheme *verified){completion(verified!=nil);}];
+                            BOOL began=[store prepareLaunchPackage:runningPackage completion:^(POMarinefordScheme *verified){completion(verified!=nil);}];
                             if(!began)completion(NO);
                         };
                         [source hide];

@@ -1,5 +1,11 @@
 // Included only from the Objective-C++ bridge. NSURLSession keeps standard ATS
 // and system certificate validation; no trust-challenge override is installed.
+static NSString *POMarinefordProofAddress(NSString *release, NSString *digest) {
+    if(![release isKindOfClass:NSString.class]||![digest isKindOfClass:NSString.class]||
+        [release rangeOfString:@"^package-[0-9a-f]{16}\\z" options:NSRegularExpressionSearch].location==NSNotFound||
+        [digest rangeOfString:@"^[0-9a-f]{64}\\z" options:NSRegularExpressionSearch].location==NSNotFound)return nil;
+    return [NSString stringWithFormat:@"https://onepiece-card-online.onrender.com/api/desktop-runtime-package/marineford?releaseId=%@&manifestSha256=%@",release,digest];
+}
 @interface PODownloader : NSObject <NSURLSessionDownloadDelegate>
 @property(nonatomic,strong) NSURLSession *session;
 @property(nonatomic,strong) NSMutableDictionary *jobs;
@@ -8,7 +14,7 @@
 - (BOOL)beginMarinefordManifest:(NSString *)identifier destination:(NSString *)destination;
 - (BOOL)beginMarinefordRelease:(NSString *)identifier destination:(NSString *)destination;
 - (BOOL)beginMarinefordProgramManifest:(NSString *)path identifier:(NSString *)identifier destination:(NSString *)destination;
-- (BOOL)beginMarinefordProof:(NSString *)identifier destination:(NSString *)destination;
+- (BOOL)beginMarinefordProof:(NSString *)identifier release:(NSString *)release digest:(NSString *)digest destination:(NSString *)destination;
 - (NSDictionary *)poll:(NSString *)identifier;
 - (void)forget:(NSString *)identifier;
 - (void)close;
@@ -45,8 +51,10 @@
     return [self beginURL:[@"https://onepiece-card-online.onrender.com/" stringByAppendingString:path]
         identifier:identifier destination:destination limit:8*1024*1024 exact:NO];
 }
-- (BOOL)beginMarinefordProof:(NSString *)identifier destination:(NSString *)destination {
-    return [self beginURL:@"https://onepiece-card-online.onrender.com/api/desktop-runtime-package/marineford"
+- (BOOL)beginMarinefordProof:(NSString *)identifier release:(NSString *)release digest:(NSString *)digest destination:(NSString *)destination {
+    NSString *address=POMarinefordProofAddress(release,digest);
+    if(!address)return NO;
+    return [self beginURL:address
         identifier:identifier destination:destination limit:65536 exact:NO];
 }
 - (BOOL)beginURL:(NSString *)address identifier:(NSString *)identifier destination:(NSString *)destination limit:(long long)limit exact:(BOOL)exact {

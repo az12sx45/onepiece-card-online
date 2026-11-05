@@ -21,10 +21,31 @@ static NSDictionary *POMarinefordProgramTypes(void) {
         @"vendor/socket.io-client/4.8.1/socket.io.min.js":@[@"script",@"text/javascript"]};
 }
 static BOOL POMarinefordImagePath(NSString *path) {
-    if(POMarinefordMediaPath(path)||[path isEqual:POMarinefordCover])return YES;
+    if(POMarinefordMediaPath(path)||[path isEqual:POMarinefordCover]||[path isEqual:@"images/game_launcher/launcher_marineford_cover_v1.webp"])return YES;
     NSRegularExpression *pattern=[NSRegularExpression regularExpressionWithPattern:@"^images/board/avatars/([1-9][0-9]{0,2})\\.webp\\z" options:0 error:nil];
     NSTextCheckingResult *match=[pattern firstMatchInString:path options:0 range:NSMakeRange(0,path.length)];
     return match && [[path substringWithRange:[match rangeAtIndex:1]] integerValue]<=222;
+}
+static NSArray *POMarinefordResourceType(NSString *path) {
+    if(POMarinefordImagePath(path))return @[@"image",@"image/webp"];
+    if(![path isKindOfClass:NSString.class]||path.length>256||
+        [path rangeOfString:@"^marineford/(art|audio|video|videos|fonts)/([a-z0-9_-]+/)*[a-z0-9][a-z0-9._-]*\\.[a-z0-9]+\\z"
+            options:NSRegularExpressionSearch].location==NSNotFound)return nil;
+    NSDictionary *types=@{@"png":@[@"image",@"image/png"],@"jpg":@[@"image",@"image/jpeg"],
+        @"jpeg":@[@"image",@"image/jpeg"],@"jfif":@[@"image",@"image/jpeg"],@"webp":@[@"image",@"image/webp"],@"gif":@[@"image",@"image/gif"],
+        @"avif":@[@"image",@"image/avif"],@"svg":@[@"image",@"image/svg+xml"],
+        @"mp3":@[@"audio",@"audio/mpeg"],@"m4a":@[@"audio",@"audio/mp4"],@"aac":@[@"audio",@"audio/aac"],
+        @"wav":@[@"audio",@"audio/wav"],@"ogg":@[@"audio",@"audio/ogg"],@"flac":@[@"audio",@"audio/flac"],
+        @"mp4":@[@"video",@"video/mp4"],@"webm":@[@"video",@"video/webm"],@"mov":@[@"video",@"video/quicktime"],@"m4v":@[@"video",@"video/x-m4v"],
+        @"woff":@[@"font",@"font/woff"],@"woff2":@[@"font",@"font/woff2"],
+        @"ttf":@[@"font",@"font/ttf"],@"otf":@[@"font",@"font/otf"]};
+    NSArray *type=types[path.pathExtension];
+    NSString *folder=[path componentsSeparatedByString:@"/"][1];
+    BOOL scoped=([type[0] isEqual:@"image"]&&[folder isEqual:@"art"])||
+        ([type[0] isEqual:@"audio"]&&[folder isEqual:@"audio"])||
+        ([type[0] isEqual:@"video"]&&[@[@"video",@"videos"] containsObject:folder])||
+        ([type[0] isEqual:@"font"]&&[folder isEqual:@"fonts"]);
+    return scoped?type:nil;
 }
 static BOOL POMarinefordTimestamp(id value) {
     if(![value isKindOfClass:NSString.class])return NO;
@@ -65,7 +86,7 @@ static NSDictionary *POMarinefordProgramPackage(NSData *data, NSData *reference)
     for(NSString *kind in kinds)totals[kind]=[@{@"files":@0,@"bytes":@0} mutableCopy];
     NSMutableArray *canonical=[NSMutableArray array];
     NSString *previous=@"";
-    long long bytes=0,unique=0;
+    long long bytes=0,unique=0,inlineMediaBytes=0;
     for(id row in json[@"assets"]) {
         if(![row isKindOfClass:NSDictionary.class]||[row count]!=5)return nil;
         NSString *path=row[@"path"],*kind=row[@"kind"],*mime=row[@"mime"],*digest=row[@"sha256"];
@@ -75,7 +96,12 @@ static NSDictionary *POMarinefordProgramPackage(NSData *data, NSData *reference)
         NSArray *type=programs[path];
         if(type) {
             if(![kind isEqual:type[0]]||![mime isEqual:type[1]])return nil;
-        } else if(!POMarinefordImagePath(path)||![kind isEqual:@"image"]||![mime isEqual:@"image/webp"])return nil;
+        } else {
+            type=POMarinefordResourceType(path);
+            if(!type||![kind isEqual:type[0]]||![mime isEqual:type[1]])return nil;
+            if(![kind isEqual:@"image"])inlineMediaBytes+=size.longLongValue;
+            if(inlineMediaBytes>64LL*1024*1024)return nil;
+        }
         if(files[path]||!totals[kind]||(blobs[digest]&&![blobs[digest][@"size"] isEqual:size]))return nil;
         files[path]=row;
         if(!blobs[digest]){blobs[digest]=row;unique+=size.longLongValue;}
@@ -117,28 +143,43 @@ static BOOL POMarinefordRuntimeProof(NSData *data, NSDictionary *package) {
 }
 
 @interface POMarinefordScheme (Program)
+- (NSDictionary *)programMediaURLs;
 - (NSString *)programHTML;
 - (NSString *)programBootstrapSource:(NSString *)templateSource;
 - (NSArray *)programScripts;
 @end
 @implementation POMarinefordScheme (Program)
+- (NSDictionary *)programMediaURLs {
+    NSMutableDictionary *urls=[NSMutableDictionary dictionary];
+    for(NSString *path in self.files) {
+        NSDictionary *row=self.files[path];
+        if(!POMarinefordResourceType(path))continue;
+        if([row[@"kind"] isEqual:@"image"])urls[path]=[NSString stringWithFormat:@"poasset://marineford/%@",path];
+        else {
+            NSData *bytes=[self dataForPath:path];
+            if(!bytes.length)return nil;
+            urls[path]=[NSString stringWithFormat:@"data:%@;base64,%@",row[@"mime"],[bytes base64EncodedStringWithOptions:0]];
+        }
+    }
+    return urls;
+}
 - (NSString *)programHTML {
     if(![self.package[@"program"] boolValue])return nil;
     NSString *html=POMarinefordText([self dataForPath:@"marineford/index.html"]);
     NSString *css=POMarinefordText([self dataForPath:@"marineford/marineford.css"]);
     if(!html.length||!css.length||[css rangeOfString:@"</style" options:NSCaseInsensitiveSearch].location!=NSNotFound)return nil;
-    for(NSString *path in self.files) {
-        if(![self.files[path][@"kind"] isEqual:@"image"])continue;
-        NSMutableArray *sources=[NSMutableArray arrayWithObjects:[@"/" stringByAppendingString:path],
-            [@"https://onepiece-card-online.onrender.com/" stringByAppendingString:path],nil];
-        if([path hasPrefix:@"marineford/"])[sources addObject:[path substringFromIndex:11]];
-        NSString *local=[NSString stringWithFormat:@"url(\"poasset://marineford/%@\")",path];
-        for(NSString *source in sources)for(NSString *quote in @[@"",@"'",@"\""]) {
-            NSString *pattern=[NSString stringWithFormat:@"url(%@%@%@)",quote,source,quote];
-            css=[css stringByReplacingOccurrencesOfString:pattern withString:local];
-        }
-    }
+    NSDictionary *urls=[self programMediaURLs];
+    if(!urls)return nil;
     NSURL *base=[NSURL URLWithString:@"https://onepiece-card-online.onrender.com/marineford/index.html"];
+    NSRegularExpression *cssURLs=[NSRegularExpression regularExpressionWithPattern:@"url\\(\\s*(['\"]?)([^)'\"\\s]+)\\1\\s*\\)" options:NSRegularExpressionCaseInsensitive error:nil];
+    for(NSTextCheckingResult *match in [cssURLs matchesInString:css options:0 range:NSMakeRange(0,css.length)].reverseObjectEnumerator) {
+        NSURL *url=[NSURL URLWithString:[css substringWithRange:[match rangeAtIndex:2]] relativeToURL:base].absoluteURL;
+        NSString *path=[url.path hasPrefix:@"/"]?[url.path substringFromIndex:1]:@"";
+        NSString *local=(POOfficialGameURL(url)||([url.scheme isEqual:@"poasset"]&&[url.host isEqual:@"marineford"]))?urls[path]:nil;
+        if(!local&&POOfficialGameURL(url)&&[path rangeOfString:@"^marineford/(art|audio|video|videos|fonts)/" options:NSRegularExpressionSearch].location!=NSNotFound)
+            local=[@"poasset://marineford/" stringByAppendingString:path];
+        if(local)css=[css stringByReplacingCharactersInRange:match.range withString:[NSString stringWithFormat:@"url(\"%@\")",local]];
+    }
     NSRegularExpression *scripts=[NSRegularExpression regularExpressionWithPattern:@"<script\\b[^>]*\\bsrc\\s*=\\s*(['\"])([^'\"]+)\\1[^>]*>\\s*</script\\s*>"
         options:NSRegularExpressionCaseInsensitive error:nil];
     NSArray *matches=[scripts matchesInString:html options:0 range:NSMakeRange(0,html.length)];
@@ -159,8 +200,22 @@ static BOOL POMarinefordRuntimeProof(NSData *data, NSDictionary *package) {
     NSTextCheckingResult *match=matches[0];
     NSURL *url=[NSURL URLWithString:[html substringWithRange:[match rangeAtIndex:2]] relativeToURL:base].absoluteURL;
     if(!POOfficialGameURL(url)||![url.path isEqual:@"/marineford/marineford.css"])return nil;
-    return [html stringByReplacingCharactersInRange:match.range withString:
+    html=[html stringByReplacingCharactersInRange:match.range withString:
         [NSString stringWithFormat:@"<style id=\"po-marineford-program-style\">%@</style>",css]];
+    NSRegularExpression *attributes=[NSRegularExpression regularExpressionWithPattern:@"\\b(?:src|poster)\\s*=\\s*(['\"])([^'\"]+)\\1" options:NSRegularExpressionCaseInsensitive error:nil];
+    for(NSTextCheckingResult *attribute in [attributes matchesInString:html options:0 range:NSMakeRange(0,html.length)].reverseObjectEnumerator) {
+        NSURL *target=[NSURL URLWithString:[html substringWithRange:[attribute rangeAtIndex:2]] relativeToURL:base].absoluteURL;
+        NSString *path=[target.path hasPrefix:@"/"]?[target.path substringFromIndex:1]:@"";
+        if(POOfficialGameURL(target)&&urls[path])html=[html stringByReplacingCharactersInRange:[attribute rangeAtIndex:2] withString:urls[path]];
+    }
+    // The verified HTML executes its installed program only. API and room
+    // traffic remains online, while absent assets cannot fall back to Render.
+    NSRegularExpression *head=[NSRegularExpression regularExpressionWithPattern:@"<head\\b[^>]*>" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSArray *heads=[head matchesInString:html options:0 range:NSMakeRange(0,html.length)];
+    if(heads.count!=1)return nil;
+    NSString *policy=@"<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src poasset: data: blob:; media-src data: blob:; font-src data: blob:; connect-src https://onepiece-card-online.onrender.com/api/ https://onepiece-card-online.onrender.com/socket.io/ wss://onepiece-card-online.onrender.com/socket.io/; worker-src blob:; object-src 'none'; frame-src 'none'; base-uri https://onepiece-card-online.onrender.com\">";
+    html=[html stringByReplacingCharactersInRange:NSMakeRange(NSMaxRange([heads[0] range]),0) withString:policy];
+    return html;
 }
 - (NSString *)programBootstrapSource:(NSString *)templateSource {
     NSData *data=[self dataForPath:@"marineford/cards.json"];
@@ -168,9 +223,15 @@ static BOOL POMarinefordRuntimeProof(NSData *data, NSDictionary *package) {
     NSString *marker=@"__PO_NATIVE_PROGRAM_DATA__";
     if(!cards.length||!templateSource.length||[templateSource componentsSeparatedByString:marker].count!=2)return nil;
     NSMutableArray *images=[NSMutableArray array];
-    for(NSString *path in self.files)if([self.files[path][@"kind"] isEqual:@"image"])[images addObject:path];
+    NSMutableDictionary *media=[NSMutableDictionary dictionary];
+    NSDictionary *urls=[self programMediaURLs];
+    if(!urls)return nil;
+    for(NSString *path in urls) {
+        if([self.files[path][@"kind"] isEqual:@"image"])[images addObject:path];
+        else media[path]=@{@"mime":self.files[path][@"mime"],@"url":urls[path]};
+    }
     [images sortUsingSelector:@selector(compare:)];
-    NSData *json=[NSJSONSerialization dataWithJSONObject:@{@"cards":cards,@"images":images}
+    NSData *json=[NSJSONSerialization dataWithJSONObject:@{@"cards":cards,@"images":images,@"media":media}
         options:NSJSONWritingSortedKeys error:nil];
     NSString *payload=[[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
     return payload?[templateSource stringByReplacingOccurrencesOfString:marker withString:payload]:nil;

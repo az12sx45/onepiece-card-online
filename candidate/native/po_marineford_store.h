@@ -53,6 +53,7 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
 - (BOOL)cancel;
 - (BOOL)uninstall;
 - (BOOL)prepareLaunch:(void (^)(POMarinefordScheme *))completion;
+- (BOOL)prepareLaunchPackage:(NSDictionary *)package completion:(void (^)(POMarinefordScheme *))completion;
 - (void)close;
 @end
 
@@ -81,9 +82,9 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
     if (self.installed) status = !self.healthy ? @"repair" : (update ? @"update" : @"installed");
     else if (!self.lastCheck) status = @"checking";
     if (self.failure.length) status = self.healthy ? @"error" : (self.installed ? @"repair" : @"error");
-    // The shared launcher uses hasInstalled to offer an alternate launch action.
-    // Current HTTPS game code needs its matching local media revision.
-    NSMutableDictionary *value = [@{@"status":status, @"hasInstalled":@(program && self.healthy && !update),
+    // A pending or failed update never replaces a verified installed receipt.
+    // Its launch still needs an online proof explicitly accepting that identity.
+    NSMutableDictionary *value = [@{@"status":status, @"hasInstalled":@(program && self.healthy),
         @"removable":@(self.installed != nil || self.failure.length || [self.activity[@"status"] isEqual:@"paused"]),
         @"installedVersion":POMarinefordVersion(self.installed), @"remoteVersion":POMarinefordVersion(self.remote),
         @"totalBytes":self.remote[@"bytes"] ?: self.installed[@"bytes"] ?: @0} mutableCopy];
@@ -117,7 +118,7 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
     return YES;
 }
 
-- (NSData *)fetchMetadata:(NSString *)kind path:(NSString *)path job:(POMarinefordJob *)job {
+- (NSData *)fetchMetadata:(NSString *)kind path:(NSString *)path package:(NSDictionary *)package job:(POMarinefordJob *)job {
     NSString *key=NSUUID.UUID.UUIDString;
     NSString *temporary=[self.root stringByAppendingPathComponent:@"metadata.part"];
     NSFileManager *fm=NSFileManager.defaultManager;
@@ -126,7 +127,8 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
     if(!job.cancelled) {
         if([kind isEqual:@"release"])began=[self.transport beginMarinefordRelease:key destination:temporary];
         else if([kind isEqual:@"manifest"])began=[self.transport beginMarinefordProgramManifest:path identifier:key destination:temporary];
-        else if([kind isEqual:@"proof"])began=[self.transport beginMarinefordProof:key destination:temporary];
+        else if([kind isEqual:@"proof"])began=[self.transport beginMarinefordProof:key
+            release:package[@"reference"][@"releaseId"] digest:package[@"reference"][@"manifestSha256"] destination:temporary];
     }
     NSData *data=nil;
     if(began) {
@@ -142,10 +144,10 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
     return data;
 }
 - (NSDictionary *)fetchProgram:(POMarinefordJob *)job {
-    NSData *reference=[self fetchMetadata:@"release" path:nil job:job];
+    NSData *reference=[self fetchMetadata:@"release" path:nil package:nil job:job];
     NSDictionary *pointer=POMarinefordRelease(reference);
     if(!pointer)return nil;
-    NSData *manifest=[self fetchMetadata:@"manifest" path:pointer[@"manifestPath"] job:job];
+    NSData *manifest=[self fetchMetadata:@"manifest" path:pointer[@"manifestPath"] package:nil job:job];
     return POMarinefordProgramPackage(manifest,reference);
 }
 - (BOOL)download:(NSArray *)missing package:(NSDictionary *)package job:(POMarinefordJob *)job {
@@ -256,14 +258,16 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
 }
 
 - (BOOL)prepareLaunch:(void (^)(POMarinefordScheme *))completion {
-    if (self.job || self.preparingLaunch || !self.healthy || ![self.installed[@"program"] boolValue] ||
-        (self.remote && ![self.remote[@"revision"] isEqual:self.installed[@"revision"]])) return NO;
+    return [self prepareLaunchPackage:self.installed completion:completion];
+}
+- (BOOL)prepareLaunchPackage:(NSDictionary *)package completion:(void (^)(POMarinefordScheme *))completion {
+    if (self.job || self.preparingLaunch || !self.healthy || ![package[@"program"] boolValue] ||
+        ![package[@"revision"] isEqual:self.installed[@"revision"]]) return NO;
     self.preparingLaunch = YES;
-    NSDictionary *package = self.installed;
     dispatch_async(self.io, ^{
         BOOL valid=POMarinefordMissing(self.root,package,self.sharedRoot).count==0;
         POMarinefordJob *proofJob=[POMarinefordJob new];
-        BOOL proved=valid&&POMarinefordRuntimeProof([self fetchMetadata:@"proof" path:nil job:proofJob],package);
+        BOOL proved=valid&&POMarinefordRuntimeProof([self fetchMetadata:@"proof" path:nil package:package job:proofJob],package);
         dispatch_async(dispatch_get_main_queue(), ^{
             self.preparingLaunch = NO;
             self.healthy = valid;
