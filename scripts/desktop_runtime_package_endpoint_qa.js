@@ -9,6 +9,7 @@ const realFs = require('node:fs');
 const fsp = require('node:fs/promises');
 const http = require('node:http');
 const path = require('node:path');
+const { RELEASE_PATH, PROGRAM_FILES } = require('../desktop/marineford-release');
 
 const ROOT = path.resolve(__dirname, '..');
 const PUBLIC_ROOT = path.join(ROOT, 'public');
@@ -120,7 +121,69 @@ function createFixture() {
   };
   put(CONFIG_PATH, canonicalJson(config));
   put(CATALOG_PATH, canonicalJson(catalog));
-  return { records, touch, entryByGame, manifests };
+  const marinefordPath = path.join(PUBLIC_ROOT, RELEASE_PATH);
+  const marinefordBytes = realFs.readFileSync(marinefordPath);
+  const marineford = JSON.parse(marinefordBytes);
+  put(marinefordPath, marinefordBytes);
+  const manifestPath = path.join(PUBLIC_ROOT, marineford.manifestPath);
+  put(manifestPath, realFs.readFileSync(manifestPath));
+  for (const assetPath of PROGRAM_FILES) {
+    const programPath = path.join(PUBLIC_ROOT, assetPath);
+    put(programPath, realFs.readFileSync(programPath));
+  }
+  return { records, touch, entryByGame, manifests, marineford, marinefordPath, manifestPath };
+}
+
+async function verifyMarineford(origin, fixture, reads) {
+  const endpoint = origin + '/api/desktop-runtime-package/marineford';
+  const success = await fetch(endpoint);
+  assert.equal(success.status, 200);
+  assert.equal(success.headers.get('cache-control'), 'no-store');
+  assert.deepEqual(await success.json(), {
+    ok: true, schema: 1, gameId: 'marineford',
+    releaseId: fixture.marineford.releaseId,
+    manifestSha256: fixture.marineford.manifestSha256,
+    entryPath: 'marineford/index.html'
+  });
+  const programPath = path.join(PUBLIC_ROOT, 'marineford/marineford.js');
+  const record = fixture.records.get(fixtureKey(programPath));
+  const original = Buffer.from(record.bytes);
+  const readCount = reads.get(fixtureKey(programPath));
+  assert.equal((await fetch(endpoint)).status, 200);
+  assert.equal(reads.get(fixtureKey(programPath)), readCount, 'Marineford should reuse the verified program cache');
+
+  record.bytes[0] ^= 1;
+  fixture.touch(programPath);
+  const corrupted = await fetch(endpoint);
+  assert.equal(corrupted.status, 503, 'Marineford must reject same-size program corruption');
+  assert.deepEqual(await corrupted.json(), { ok: false, error: 'desktop_runtime_package_unavailable' });
+  record.bytes = original;
+  fixture.touch(programPath);
+  assert.equal((await fetch(endpoint)).status, 200, 'Marineford should recover after program repair');
+
+  const pointer = fixture.records.get(fixtureKey(fixture.marinefordPath));
+  const pointerBytes = Buffer.from(pointer.bytes);
+  pointer.bytes = canonicalJson({ ...fixture.marineford, assetBlobBaseUrl: 'https://example.com/blobs' });
+  fixture.touch(fixture.marinefordPath);
+  assert.equal((await fetch(endpoint)).status, 503, 'Marineford must reject an untrusted content source');
+  assert.equal((await fetch(origin + '/api/desktop-runtime-package/card')).status, 200, 'Marineford reference failures must remain independent');
+  pointer.bytes = pointerBytes;
+  fixture.touch(fixture.marinefordPath);
+  assert.equal((await fetch(endpoint)).status, 200);
+
+  const manifest = fixture.records.get(fixtureKey(fixture.manifestPath));
+  const manifestBytes = Buffer.from(manifest.bytes);
+  manifest.bytes = Buffer.concat([manifestBytes, Buffer.from(' ')]);
+  fixture.touch(fixture.manifestPath);
+  assert.equal((await fetch(endpoint)).status, 503, 'Marineford manifest changes must invalidate cached proof');
+  manifest.bytes = manifestBytes;
+  fixture.touch(fixture.manifestPath);
+  assert.equal((await fetch(endpoint)).status, 200);
+
+  const publicPointer = await fetch(origin + '/' + RELEASE_PATH);
+  assert.equal(publicPointer.status, 200);
+  assert.equal(publicPointer.headers.get('cache-control'), 'no-store');
+  assert.equal((await publicPointer.json()).releaseId, fixture.marineford.releaseId);
 }
 
 async function main() {
@@ -201,6 +264,7 @@ async function main() {
         entryPath: fixture.entryByGame[gameId],
       });
     }
+    await verifyMarineford(origin, fixture, reads);
 
     const cardProgramPath = path.join(PUBLIC_ROOT, fixture.entryByGame.card);
     const cardProgramKey = fixtureKey(cardProgramPath);
@@ -273,7 +337,7 @@ async function main() {
     process.stdout.write(
       `DESKTOP_RUNTIME_PACKAGE_ENDPOINT_QA=PASS games=${GAME_IDS.length} success=3 unknown=404 ` +
       'cacheHit=PASS mtimeInvalidation=PASS sizeInvalidation=PASS manifestSha=PASS ' +
-      'catalogStat=PASS manifestTotals=PASS failClosed=503 filesUntouched=PASS\n'
+      'catalogStat=PASS manifestTotals=PASS failClosed=503 filesUntouched=PASS marinefordIndependent=PASS\n'
     );
   } finally {
     http.createServer = originalCreateServer;

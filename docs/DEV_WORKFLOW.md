@@ -1,5 +1,11 @@
 # Dev Workflow
 
+## 2026-11-05 馬林福特獨立遊戲套件
+
+- 新增 desktop/marineford-release-v1.json，引用既有 schema 3 格式的不可變遊戲清單與 SHA-256 CAS。套件包含六個程式檔、馬林福特媒體與 222 個帳號頭像，由同一份資產集合導出 releaseId。
+- build_marineford_program_package.js 核對 Git 程式來源、正式 Board 頭像清單與馬林福特媒體清單，再產生獨立版本引用。marineford-program.js 沿用既有 CAS 發布器核對來源及物件中繼資料。
+- /api/desktop-runtime-package/marineford 驗證獨立版本引用、清單與六個正式程式的大小和雜湊。驗證端點測試涵蓋程式、清單與來源錯誤、修復、快取失效及原三款遊戲。
+
 ## 2026-11-05 馬林福特青焰、出征名片與八尺瓊勾玉
 
 - 馬可青焰先掠過兩張牌背，等海軍選定受擊牌後切開該牌，演出結束才顯示結果。隊友看牌依收牌者、原持牌者與旁觀者分別顯示，出征名片可選擇代表卡與已達成成就。

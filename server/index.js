@@ -15,6 +15,12 @@ const bcrypt = require("bcryptjs");
 const { Chess } = require("chess.js");
 const { createBoardStateSender } = require("./board-state-wire");
 const { createDesktopDistribution } = require("./desktop-distribution");
+const {
+  RELEASE_PATH: MARINEFORD_RELEASE_PATH,
+  ENTRY_PATH: MARINEFORD_ENTRY_PATH,
+  PROGRAM_FILES: MARINEFORD_PROGRAM_FILES,
+  validateMarinefordRelease
+} = require("../desktop/marineford-release");
 const { sanitizeProfileStats, PROFILE_STATS_SQL } = require("./board-art-collection");
 const { updateProfileSocial } = require("./profile-social-stats");
 const launcherProfileShop = require("./launcher-profile-shop");
@@ -75,6 +81,7 @@ app.get("/api/desktop-runtime-package/:gameId", desktopRuntimePackageEndpoint);
 app.use(express.static(publicDir, {
   setHeaders(res, filePath) {
     const relativePath = path.relative(publicDir, filePath).replace(/\\/g, "/");
+    if (relativePath === MARINEFORD_RELEASE_PATH) res.setHeader("Cache-Control", "no-store");
     const requestUrl = new URL(res.req.originalUrl || "/", "http://board.local");
     const isVersionedAsset = requestUrl.searchParams.get("v") === portableAssetVersion;
     const isPortableAsset = relativePath.startsWith("images/board/mobile/");
@@ -93,7 +100,7 @@ app.use(express.static(publicDir, {
  *    executable/document portion of the package before the launcher uses it.
  * ========================= */
 const DESKTOP_RUNTIME_PACKAGE_GAME_IDS = Object.freeze(["card", "board", "chess"]);
-const DESKTOP_RUNTIME_PACKAGE_GAME_ID_SET = new Set(DESKTOP_RUNTIME_PACKAGE_GAME_IDS);
+const DESKTOP_RUNTIME_PACKAGE_GAME_ID_SET = new Set([...DESKTOP_RUNTIME_PACKAGE_GAME_IDS, "marineford"]);
 const DESKTOP_RUNTIME_PACKAGE_KINDS = Object.freeze([
   "document", "style", "script", "data", "wasm",
   "image", "audio", "video", "font",
@@ -345,7 +352,18 @@ function validateDesktopRuntimePackageManifest(manifest, gameId, catalogRecord, 
   return assets;
 }
 
-async function prepareDesktopRuntimePackageVerification(gameId){
+async function desktopRuntimePackageMetadata(gameId){
+  if (gameId === "marineford") {
+    const pointerPath = path.join(publicDir, MARINEFORD_RELEASE_PATH);
+    const pointerStat = await desktopRuntimePackageFileStat(pointerPath, DESKTOP_RUNTIME_PACKAGE_CONFIG_LIMIT);
+    const pointerBytes = await desktopRuntimePackageStableRead(pointerPath, pointerStat, DESKTOP_RUNTIME_PACKAGE_CONFIG_LIMIT);
+    const pointer = desktopRuntimePackageJson(pointerBytes, "marineford_release_invalid");
+    return {
+      catalogRecord: validateMarinefordRelease(pointer),
+      gameConfig: { entryPath: MARINEFORD_ENTRY_PATH, programFiles: MARINEFORD_PROGRAM_FILES },
+      metadata: { marineford: [desktopRuntimePackageSha256(pointerBytes), desktopRuntimePackageStatKey(pointerStat)] }
+    };
+  }
   const catalogStat = await desktopRuntimePackageFileStat(DESKTOP_RUNTIME_PACKAGE_CATALOG_PATH, DESKTOP_RUNTIME_PACKAGE_METADATA_LIMIT);
   const configStat = await desktopRuntimePackageFileStat(DESKTOP_RUNTIME_PACKAGE_CONFIG_PATH, DESKTOP_RUNTIME_PACKAGE_CONFIG_LIMIT);
   const [catalogBytes, configBytes] = await Promise.all([
@@ -354,8 +372,18 @@ async function prepareDesktopRuntimePackageVerification(gameId){
   ]);
   const catalog = validateDesktopRuntimePackageCatalog(desktopRuntimePackageJson(catalogBytes, "desktop_runtime_catalog_invalid"));
   const config = validateDesktopRuntimePackageConfig(desktopRuntimePackageJson(configBytes, "desktop_runtime_config_invalid"));
-  const catalogRecord = catalog[gameId];
-  const gameConfig = config[gameId];
+  return {
+    catalogRecord: catalog[gameId],
+    gameConfig: config[gameId],
+    metadata: {
+      catalog: [desktopRuntimePackageSha256(catalogBytes), desktopRuntimePackageStatKey(catalogStat)],
+      config: [desktopRuntimePackageSha256(configBytes), desktopRuntimePackageStatKey(configStat)]
+    }
+  };
+}
+
+async function prepareDesktopRuntimePackageVerification(gameId){
+  const { catalogRecord, gameConfig, metadata } = await desktopRuntimePackageMetadata(gameId);
   const manifestFile = desktopRuntimePackagePublicFile(catalogRecord.manifestPath);
   const manifestStat = await desktopRuntimePackageFileStat(manifestFile.absolutePath, DESKTOP_RUNTIME_PACKAGE_METADATA_LIMIT);
   const programFiles = [];
@@ -370,8 +398,7 @@ async function prepareDesktopRuntimePackageVerification(gameId){
     programFiles.push({ ...file, stat });
   }
   const key = desktopRuntimePackageSha256(JSON.stringify({
-    catalog:[desktopRuntimePackageSha256(catalogBytes), desktopRuntimePackageStatKey(catalogStat)],
-    config:[desktopRuntimePackageSha256(configBytes), desktopRuntimePackageStatKey(configStat)],
+    ...metadata,
     manifest:[catalogRecord.manifestPath, desktopRuntimePackageStatKey(manifestStat)],
     programs:programFiles.map((file) => [file.path, desktopRuntimePackageStatKey(file.stat)]),
   }));

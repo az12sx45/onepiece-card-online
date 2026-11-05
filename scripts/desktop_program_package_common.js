@@ -141,7 +141,7 @@ function validateManifest(document, expectedGameId) {
   }
   if (
     document.schema !== MANIFEST_SCHEMA || document.gameId !== expectedGameId ||
-    !GAME_IDS.includes(expectedGameId) || !RELEASE_PATTERN.test(String(document.releaseId || '')) ||
+    (!GAME_IDS.includes(expectedGameId) && expectedGameId !== 'marineford') || !RELEASE_PATTERN.test(String(document.releaseId || '')) ||
     typeof document.createdAt !== 'string' || Number.isNaN(Date.parse(document.createdAt)) ||
     !Array.isArray(document.assets) || document.assets.length < 1 || document.assets.length > 20_000
   ) fail(`${expectedGameId} package manifest identity is invalid.`);
