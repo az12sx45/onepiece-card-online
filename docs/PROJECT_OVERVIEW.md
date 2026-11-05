@@ -3101,3 +3101,9 @@ Card package-6fd7444442d60fe6已完成Windows/Android/iOS既有發布通道的�
 逐卡斜圖依玩家選人/coin/私人讀牌等真正階段呈現，強化影片先播；卡背等比例且不透明，基德洗好先以背面待抽，羅傑公開預測對象在commit後標記。CPU等所有必要玩家完成呈現再接續，移除重複固定延遲。Android新增解碼prime與有界點按播放備援；8強化嚴格小於門檻與全滅不補依用戶規則修正。
 保留原啟動器/大廳/帳號/native包/素材及其他遊戲；詳細source/QA/實機界線/發布狀態見CARD_TIMING_VIDEO_20261104.md及協調handoff。
 <!-- CARD_TIMING_VIDEO_20261104_END -->
+
+## 2026-11-05 Marineford native game updates
+
+Marineford uses a separate programme-and-media package in Windows 1.2.33 and mobile v066. An approved installed version can launch during a newer failed or interrupted download. Updates reuse verified content hashes and switch the installed receipt after all required files pass verification. The native game supplies programme files and images locally while account and live-room data use the official service.
+
+The current package has six programme files and 369 image records. Sound effects use local WebAudio synthesis and fonts use the system. File-based audio, video and font support is covered by separate decoding and Range fixtures. Source, public release and physical-device evidence are listed separately in the release handoff and `docs/DEV_WORKFLOW.md`.

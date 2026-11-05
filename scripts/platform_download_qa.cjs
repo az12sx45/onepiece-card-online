@@ -12,20 +12,20 @@ const platforms = [
   {
     id: 'windows', link: '#download-link', info: '#release-info',
     channel: base + '/desktop/launcher-release-v1.json',
-    artifact: `${cdn}/desktop/launcher/releases/1.2.32/${windowsArtifact('1.2.32')}`,
-    version: '1.2.32', stale: '1.2.31', future: '1.2.33'
+    artifact: `${cdn}/desktop/launcher/releases/1.2.33/${windowsArtifact('1.2.33')}`,
+    version: '1.2.33', stale: '1.2.32', future: '1.2.34'
   },
   {
     id: 'android', link: '#android-download-link', info: '#android-release-info',
     channel: cdn + '/android/native/launcher-release-v1.json',
-    artifact: cdn + '/android/releases/65/PIRATE-ODYSSEY-v065-635495f6280c.apk',
-    version: 65, stale: 64, future: 66
+    artifact: cdn + '/android/releases/66/PIRATE-ODYSSEY-v066-6c2d69b5d2a3.apk',
+    version: 66, stale: 65, future: 67
   },
   {
     id: 'ios', link: '#ios-download-link', info: '#ios-release-info',
     channel: cdn + '/ios/native/launcher-release-v1.json',
-    artifact: cdn + '/ios/releases/65/PIRATE-ODYSSEY-v065-7fa1adddd958-UNSIGNED.ipa',
-    version: 65, stale: 64, future: 66
+    artifact: cdn + '/ios/releases/66/PIRATE-ODYSSEY-v066-8912dd8370ba-UNSIGNED.ipa',
+    version: 66, stale: 65, future: 67
   }
 ];
 const desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36';

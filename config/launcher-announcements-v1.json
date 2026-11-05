@@ -1,7 +1,29 @@
 {
   "schemaVersion": 1,
-  "revision": 89,
+  "revision": 90,
   "announcements": [
+    {
+      "id": "marineford-20261105-game-package",
+      "status": "published",
+      "publishedAt": "2026-11-05T07:35:58.873Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "馬林福特之戰 2026.11.05",
+      "title": "馬林福特之戰遊戲套件與演出更新",
+      "summary": "加入獨立遊戲更新，重製黃猿與馬可演出，新增出征名片和隊友看牌。",
+      "body": [
+        "八尺瓊勾玉使用新的雙向姿勢，雙手蓄光後交替射擊。頭像和名牌在演出期間保持固定。",
+        "馬可青焰先掠過兩張牌，等海軍選定受擊牌後切牌，演出結束才公布結果。",
+        "出征名片可選代表卡與已達成的榮譽。隊友看牌會移到查看者附近，依各自權限顯示。",
+        "馬林福特可獨立安裝、更新及修復，沿用已下載且符合新版的檔案。",
+        "Windows 請先更新啟動器至 1.2.33，Android 與 iOS 請先更新 App 至 v066。之後的一般遊戲內容更新可在啟動器內完成。",
+        "iOS 的新版 IPA 請使用 iLoader 簽署安裝。對局結束後再關閉並重新開啟遊戲。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.33"
+      }
+    },
     {
       "id": "marineford-20261104-card-laser",
       "status": "published",

@@ -2326,3 +2326,11 @@ CARD_TIMING_VIDEO_20261104.md列使用者逐卡決策與來源界線。正式gam
 <!-- CARD_TIMING_VIDEO_20261104_END -->
 
 2026-11-04 Marineford 首頁 renderLobby、加入頁 openRoomBrowser、共用 showRules 位於 marineford.js。兩張 HUD 生圖是 art/v2/hud-navy.webp 與 hud-pirate.webp。
+
+## 2026-11-05 Marineford independent package delivery
+
+- `desktop/marineford-release.js` defines the release reference, six programme paths and scoped media limits shared by the package publisher and Windows client.
+- `public/desktop/marineford-release-v1.json` selects the immutable schema-3 Marineford manifest. `config/marineford-compatible-packages-v1.json` explicitly approves previous identities for the current server protocol.
+- `scripts/build_marineford_program_package.js` enumerates committed programme and media bytes. `tools/desktop-r2-publisher/marineford-program.js` verifies and publishes missing CAS objects.
+- `desktop/asset-store.js`, `desktop/main.js` and `desktop/program-runtime.js` implement Windows installation, retained-version launch and verified local responses. `scripts/desktop_marineford_local_media_qa.js` and `scripts/desktop_marineford_media_qa.js` cover package and media regressions.
+- `docs/WINDOWS_MARINEFORD_PACKAGE_20261105.md` records the Windows contract and evidence. `public/desktop-download.html` and `scripts/platform_download_qa.cjs` maintain the three native download cards and version floors.

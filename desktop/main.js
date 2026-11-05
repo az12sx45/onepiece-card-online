@@ -42,7 +42,7 @@ const { LauncherContentOverlay, RENDERER_FILES } = require('./launcher-content-o
 const { applySnapshotScript, legacySnapshotScript, sanitizeSnapshot } = require('./launcher-storage-migration');
 const { CONTENT_UI_URL, isTrustedLauncherUrl } = require('./launcher-sender-policy');
 const { RuntimeAssetCache } = require('./runtime-asset-cache');
-const { HttpsProgramRuntime, requestPathForOrigin } = require('./program-runtime');
+const { HttpsProgramRuntime } = require('./program-runtime');
 const { installGameCursorPolicy } = require('./game-cursor-policy');
 const { createNativeCardRunner } = require('./native-card-runner');
 
@@ -71,7 +71,7 @@ const GAME_CONFIG = {
   card: { title: '偉大航道爭霸戰', entry: '/start.html', partition: 'onepiece-card-desktop-v1' },
   board: { title: '新世界航海錄', entry: '/board_start.html', partition: 'onepiece-board-desktop-v1' },
   chess: { title: '霸海戰棋', entry: '/chess/index.html', partition: 'onepiece-chess-desktop-v1' },
-  marineford: { title: '馬林福特之戰', entry: '/marineford/index.html', partition: 'onepiece-marineford-desktop-v1', onlineOnly: true }
+  marineford: { title: '馬林福特之戰', entry: '/marineford/index.html', partition: 'onepiece-marineford-desktop-v1' }
 };
 
 if (TEST_USER_DATA_PATH && (SMOKE_MODE || !app.isPackaged)) {
@@ -142,7 +142,7 @@ let updateCheckAt = 0;
 async function checkRemoteUpdates() {
   if (!assetReady || !assetStore || !launcherUpdateService || Date.now() - updateCheckAt < 60000) return;
   updateCheckAt = Date.now();
-  const checks = [assetStore.refreshRemoteCatalog(), launcherUpdateService.checkForUpdates()];
+  const checks = [assetStore.refreshRemoteCatalog(), assetStore.refreshMarinefordRelease(), launcherUpdateService.checkForUpdates()];
   if (launcherContentOverlay && !gameWindows.size && !gameLaunchPromises.size &&
       !assetStore.activeInstall && !assetStore.activeRemoval &&
       !['ready', 'applying', 'checking', 'downloading'].includes(launcherContentState.status)) {
@@ -825,7 +825,6 @@ function buildRuntimeAssetIndex(gameId, manifest = assetStore.getInstalledManife
 function queueRuntimeAssetRepair(entry, error) {
   if (!entry || error?.code === 'ERR_RUNTIME_ASSET_STALE') return;
   runtimeAssetCache.clearGame(entry.gameId);
-  if (GAME_CONFIG[entry.gameId]?.onlineOnly) return;
   const key = entry.gameId;
   if (runtimeRepairChecks.has(key)) return;
   const check = assetStore.resolveAsset(entry.gameId, entry.path).then((asset) => {
@@ -834,6 +833,11 @@ function queueRuntimeAssetRepair(entry, error) {
     if (gameWindow && !gameWindow.isDestroyed()) buildRuntimeAssetIndex(entry.gameId);
   }).catch(() => {}).finally(() => runtimeRepairChecks.delete(key));
   runtimeRepairChecks.set(key, check);
+}
+
+async function verifyMarinefordRuntimeAsset(entry) {
+  const asset = await assetStore.resolveAsset('marineford', entry.path);
+  return Boolean(asset && asset.sha256 === entry.sha256 && asset.filePath === entry.filePath);
 }
 
 async function storageSessionForGame(gameId) {
@@ -856,11 +860,9 @@ async function clearGameOriginStorage(targetSession) {
 async function prepareGameSession(gameId) {
   if (gameSessionPromises.has(gameId)) return gameSessionPromises.get(gameId);
   const pending = (async () => {
-    const onlineOnly = GAME_CONFIG[gameId]?.onlineOnly;
-    if (onlineOnly) buildRuntimeAssetIndex(gameId, await assetStore.prepareMarinefordMedia());
-    else buildRuntimeAssetIndex(gameId);
+    buildRuntimeAssetIndex(gameId);
     const targetSession = await storageSessionForGame(gameId);
-    if (!onlineOnly || !gameSessions.has(gameId)) await resetDesktopGameWebCache(targetSession, REMOTE_ORIGIN);
+    await resetDesktopGameWebCache(targetSession, REMOTE_ORIGIN);
     if (gameSessions.has(gameId)) return gameSessions.get(gameId);
     hardenSession(targetSession);
     await targetSession.protocol.handle(CACHE_SCHEME, async (request) => {
@@ -870,6 +872,10 @@ async function prepareGameSession(gameId) {
         const token = parsed.pathname.replace(/^\/+/, '');
         const entry = runtimeAssetCache.lookupToken(gameId, token);
         if (!entry) return new Response('Not found', { status: 404 });
+        if (gameId === 'marineford' && !(await verifyMarinefordRuntimeAsset(entry))) {
+          queueRuntimeAssetRepair(entry, new Error('Installed Marineford media integrity check failed.'));
+          return new Response('Installed game asset unavailable', { status: 503, headers: { 'Cache-Control': 'no-store' } });
+        }
         return runtimeAssetCache.createResponse(request, entry, {
           allowedOrigin: REMOTE_ORIGIN,
           onFailure: queueRuntimeAssetRepair
@@ -878,35 +884,35 @@ async function prepareGameSession(gameId) {
         return new Response('Not found', { status: 404 });
       }
     });
-    if (!onlineOnly) {
-      try {
-        const programRuntime = new HttpsProgramRuntime({
-          gameId,
-          origin: REMOTE_ORIGIN,
-          assetCache: runtimeAssetCache,
-          networkFetch: (request) => targetSession.fetch(request, { bypassCustomProtocolHandlers: true }),
-          onFailure: queueRuntimeAssetRepair
-        });
-        await targetSession.protocol.handle('https', (request) => programRuntime.handle(request));
-        gameProgramRuntimes.set(gameId, programRuntime);
-      } catch (error) {
-        gameProgramRuntimes.delete(gameId);
-        console.warn(`[program-runtime] ${gameId} HTTPS interception unavailable; using Render.`, error?.message || error);
+    try {
+      const programRuntime = new HttpsProgramRuntime({
+        gameId,
+        origin: REMOTE_ORIGIN,
+        assetCache: runtimeAssetCache,
+        networkFetch: (request) => targetSession.fetch(request, { bypassCustomProtocolHandlers: true }),
+        verifyAsset: gameId === 'marineford' ? verifyMarinefordRuntimeAsset : undefined,
+        onFailure: queueRuntimeAssetRepair
+      });
+      await targetSession.protocol.handle('https', (request) => programRuntime.handle(request));
+      if (gameId === 'marineford') await targetSession.protocol.handle('http', (request) => programRuntime.handle(request));
+      gameProgramRuntimes.set(gameId, programRuntime);
+    } catch (error) {
+      gameProgramRuntimes.delete(gameId);
+      if (gameId === 'marineford') {
+        await Promise.allSettled(['http', 'https', CACHE_SCHEME].map((scheme) =>
+          Promise.resolve().then(() => targetSession.protocol.unhandle(scheme))));
+        throw new Error('無法啟動本機遊戲程式，請重新啟動啟動器。');
       }
+      console.warn(`[program-runtime] ${gameId} HTTPS interception unavailable; using Render.`, error?.message || error);
     }
-    const urls = onlineOnly
-      ? [`${REMOTE_ORIGIN}/marineford/art/*`]
-      : [`${REMOTE_ORIGIN}/sw.js*`, `${REMOTE_ORIGIN}/images/*`, `${REMOTE_ORIGIN}/audio/*`, `${REMOTE_ORIGIN}/videos/*`, `${REMOTE_ORIGIN}/fonts/*`];
     targetSession.webRequest.onBeforeRequest(
-      { urls },
+      { urls: [`${REMOTE_ORIGIN}/sw.js*`, `${REMOTE_ORIGIN}/images/*`, `${REMOTE_ORIGIN}/audio/*`, `${REMOTE_ORIGIN}/videos/*`, `${REMOTE_ORIGIN}/fonts/*`] },
       (details, callback) => {
-        if (onlineOnly && details.method !== 'GET' && details.method !== 'HEAD') return callback({});
         if (shouldBlockServiceWorkerRequest(details, REMOTE_ORIGIN)) return callback({ cancel: true });
-        const assetPath = onlineOnly ? requestPathForOrigin(details.url, REMOTE_ORIGIN) : requestAssetPath(details.url);
+        const assetPath = requestAssetPath(details.url);
         if (!assetPath) return callback({});
         const entry = runtimeAssetCache.lookupPath(gameId, assetPath);
-        const redirect = entry && (!onlineOnly || entry.path === assetPath);
-        return callback(redirect ? { redirectURL: `${CACHE_SCHEME}://asset/${entry.token}` } : {});
+        return callback(entry ? { redirectURL: `${CACHE_SCHEME}://asset/${entry.token}` } : {});
       }
     );
     gameSessions.set(gameId, targetSession);
@@ -936,6 +942,7 @@ function disposeGameSessions() {
     try {
       if (gameProgramRuntimes.has(gameId)) {
         Promise.resolve(targetSession.protocol.unhandle('https')).catch(() => {});
+        if (gameId === 'marineford') Promise.resolve(targetSession.protocol.unhandle('http')).catch(() => {});
       }
     } catch {
       // The session may already be shutting down.
@@ -980,12 +987,6 @@ async function composeState(assetSnapshot) {
         hasInstalled: false
       }]))
     };
-  if (assetReady) {
-    assets.games.marineford = {
-      status: 'installed', hasInstalled: true, removable: false, onlineOnly: true,
-      installedVersion: '線上版', remoteVersion: '線上版', ...assets.games.marineford
-    };
-  }
   const previewMode = authService?.previewMode === true || SMOKE_MODE;
   return {
     stateRevision: ++stateRevision,
@@ -1285,6 +1286,7 @@ async function authenticate(mode, credentials) {
   authenticated = true;
   socialService.start().catch(() => {});
   assetReadyPromise.then(() => assetStore.refreshRemoteCatalog()).catch(() => {});
+  assetReadyPromise.then(() => assetStore.refreshMarinefordRelease()).catch(() => {});
   const state = await composeState();
   await broadcastState();
   return { ok: true, state };
@@ -1324,7 +1326,7 @@ function launchGame(gameId) {
   if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
   if (authService.accountSummary()?.needsDisplayName) return { ok: false, error: '請先設定玩家名稱。' };
   if (!ALLOWED_GAME_IDS.has(gameId)) return { ok: false, error: '此遊戲仍在製作中。' };
-  if (!GAME_CONFIG[gameId].onlineOnly && !assetStore.canLaunch(gameId)) return { ok: false, error: '請先完成遊戲下載或修復。' };
+  if (!assetStore.canLaunch(gameId)) return { ok: false, error: '請先完成遊戲下載或修復。' };
   const activeLaunch = gameLaunchPromises.get(gameId);
   if (activeLaunch) return activeLaunch;
   if (gameLaunchPromises.size > 0) return { ok: false, error: '另一款遊戲正在啟動，請稍候片刻。' };
@@ -1341,7 +1343,7 @@ async function createGameWindow(gameId) {
   const launchStartedAt = Date.now();
   const targetSession = await prepareGameSession(gameId);
   if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
-  if (!GAME_CONFIG[gameId].onlineOnly && !assetStore.canLaunch(gameId)) return { ok: false, error: '遊戲檔案狀態已變更，請重新檢查或下載。' };
+  if (!assetStore.canLaunch(gameId)) return { ok: false, error: '遊戲檔案狀態已變更，請重新檢查或下載。' };
   const existing = gameWindows.get(gameId);
   if (existing && !existing.isDestroyed()) return focusGameWindow(existing);
   const shouldUseFullscreen = authService.getPreferences().gameDisplayMode === 'fullscreen';
@@ -1421,6 +1423,10 @@ async function createGameWindow(gameId) {
       });
       if (authorization.enabled) programRuntime.authorize(authorization);
       else programRuntime.disable(authorization.reason);
+      if (gameId === 'marineford' && !authorization.enabled) {
+        assetStore.refreshMarinefordRelease().catch(() => {});
+        throw new Error('無法確認遊戲版本，請檢查更新後重試。');
+      }
       console.info(
         `[program-runtime] ${gameId} ${authorization.enabled ? 'local-program-enabled' : 'render-fallback'} ` +
         `reason=${authorization.reason || 'remote-match'} release=${authorization.releaseId || 'none'}`
@@ -2212,6 +2218,7 @@ async function initializeServices() {
     origin: REMOTE_ORIGIN,
     bundledCatalogRoot: catalogResourceRoot(),
     cacheRoot,
+    isGameRunning: (gameId) => gameLaunchPromises.has(gameId) || Boolean(gameWindows.get(gameId) && !gameWindows.get(gameId).isDestroyed()),
     fetchImpl: (url, options) => session.fromPartition('onepiece-downloads-v1').fetch(url, options)
   });
   hardenSession(session.fromPartition('onepiece-downloads-v1'));

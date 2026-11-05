@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const fsp = require('node:fs/promises');
 const path = require('node:path');
 const { EventEmitter } = require('node:events');
+const { ASSET_BLOB_BASE_URL, RELEASE_PATH, ENTRY_PATH, validateMarinefordRelease, validateMarinefordAssets } = require('./marineford-release');
 
 const CATALOG_SCHEMA = 3;
 const CATALOG_FILE = 'catalog-v3.json';
@@ -17,7 +18,8 @@ const HASH_PATTERN = /^[a-f0-9]{64}$/;
 const RELEASE_PATTERN = /^[a-z0-9][a-z0-9._-]{0,95}$/;
 const MANIFEST_PATH_PATTERN = /^desktop\/manifests\/[a-z0-9._-]+\.json$/;
 const ASSET_ROOTS = new Set(['images', 'audio', 'videos', 'fonts']);
-const GAME_ID_LIST = Object.freeze(['card', 'board', 'chess']);
+const CATALOG_GAME_ID_LIST = Object.freeze(['card', 'board', 'chess']);
+const GAME_ID_LIST = Object.freeze([...CATALOG_GAME_ID_LIST, 'marineford']);
 const GAME_IDS = new Set(GAME_ID_LIST);
 const RESERVED_SEGMENTS = new Set(['incoming', 'backup', 'backups', 'private', 'battle_chess']);
 const DOWNLOAD_RESERVE_BYTES = 512 * 1024 * 1024;
@@ -187,7 +189,7 @@ function validateCatalog(document, options = {}) {
   if (!isPlainObject(document) || ![2, CATALOG_SCHEMA].includes(schema) || !isPlainObject(document.games)) {
     throw new Error('版本目錄格式不正確。');
   }
-  if (Object.keys(document.games).join(',') !== GAME_ID_LIST.join(',')) {
+  if (Object.keys(document.games).join(',') !== CATALOG_GAME_ID_LIST.join(',')) {
     throw new Error('版本目錄的遊戲邊界不正確。');
   }
   if (!isPlainObject(document.sourceTrees) || Object.keys(document.sourceTrees).join(',') !== 'images,audio,videos,fonts') {
@@ -201,7 +203,7 @@ function validateCatalog(document, options = {}) {
   }
   const assetBlobBaseUrl = validateAssetBlobBaseUrl(document.assetBlobBaseUrl, options);
   const games = {};
-  for (const gameId of GAME_ID_LIST) {
+  for (const gameId of CATALOG_GAME_ID_LIST) {
     const source = document.games[gameId];
     if (!isPlainObject(source) || source.available === false) throw new Error(`版本目錄缺少 ${gameId}。`);
     const releaseId = String(source.releaseId || '');
@@ -286,6 +288,10 @@ function validateManifest(document, expectedGameId) {
     document.totalFiles !== assets.length || document.totalBytes !== totalBytes || JSON.stringify(document.byKind) !== JSON.stringify(byKind)
   ) {
     throw new Error(`${expectedGameId} 遊戲清單合計不符。`);
+  }
+  if (expectedGameId === 'marineford') {
+    if (schema !== MANIFEST_SCHEMA || entryPath !== ENTRY_PATH) throw new Error('馬林福特之戰程式套件格式不正確。');
+    validateMarinefordAssets(assets);
   }
   return {
     schema,
@@ -640,7 +646,8 @@ class AssetStore extends EventEmitter {
     downloadIdleTimeoutMs = 20_000,
     downloadRetryBaseMs = 300,
     downloadMaxAttempts = 3,
-    testAssetBlobBaseUrls
+    testAssetBlobBaseUrls,
+    isGameRunning = () => false
   }) {
     super();
     this.origin = String(origin || '').replace(/\/+$/, '');
@@ -648,6 +655,7 @@ class AssetStore extends EventEmitter {
     this.cacheRoot = validateCacheRootPath(cacheRoot);
     this.fetchImpl = fetchImpl || globalThis.fetch;
     this.hashFileImpl = typeof hashFileImpl === 'function' ? hashFileImpl : sha256File;
+    this.isGameRunning = typeof isGameRunning === 'function' ? isGameRunning : () => false;
     this.integrityAuditMaxFiles = Math.max(0, Math.min(64, Number(integrityAuditMaxFiles) || 0));
     this.integrityAuditMaxBytes = Math.max(0, Number(integrityAuditMaxBytes) || 0);
     this.manifestTimeoutMs = Math.max(100, Number(manifestTimeoutMs) || 8_000);
@@ -677,6 +685,9 @@ class AssetStore extends EventEmitter {
     this.stateRefreshPromise = Promise.resolve();
     this.cachedManifests = new Map();
     this.marinefordMedia = null;
+    this.marinefordRelease = null;
+    this.marinefordReleaseSource = 'unavailable';
+    this.marinefordRefreshPromise = null;
     this.progressLastSentAt = 0;
   }
 
@@ -688,6 +699,7 @@ class AssetStore extends EventEmitter {
     await this.loadMarinefordMediaState();
     await Promise.all(GAME_ID_LIST.map((gameId) => this.loadReceipt(gameId)));
     await this.loadLastKnownGoodCatalog();
+    await this.loadMarinefordRelease();
     await this.refreshStates();
     const state = await this.getState();
     this.startBackgroundIntegrityAudit();
@@ -811,7 +823,7 @@ class AssetStore extends EventEmitter {
     if (receiptsInfo) {
       const entries = await fsp.readdir(receiptsRoot, { withFileTypes: true });
       for (const entry of entries) {
-        const match = /^(card|board|chess)\.json$/.exec(entry.name);
+        const match = /^(card|board|chess|marineford)\.json$/.exec(entry.name);
         if (!match || !entry.isFile() || entry.isSymbolicLink()) {
           throw new Error('下載位置已有可疑的清單或收據衝突，無法接管。');
         }
@@ -1004,7 +1016,7 @@ class AssetStore extends EventEmitter {
         const catalog = validateCatalog(document, this.catalogValidationOptions);
         const expectedSchema = fileName === CATALOG_FILE ? CATALOG_SCHEMA : 2;
         if (catalog.schema !== expectedSchema) throw new Error('版本目錄檔名與格式不一致。');
-        this.catalog = catalog;
+        this.catalog = this.attachMarinefordRelease(catalog);
         this.catalogFile = fileName;
         this.catalogSource = 'bundled';
         return;
@@ -1018,6 +1030,93 @@ class AssetStore extends EventEmitter {
 
   lastKnownGoodRoot() {
     return path.join(this.cacheRoot, 'state', 'last-known-good-v1');
+  }
+
+  attachMarinefordRelease(catalog) {
+    if (!this.marinefordRelease) return catalog;
+    return { ...catalog, games: { ...catalog.games, marineford: { available: true, ...this.marinefordRelease.entry } } };
+  }
+
+  async loadMarinefordRelease() {
+    const installed = this.receipts.get('marineford');
+    if (installed) {
+      try {
+        const manifest = installed.manifest;
+        const document = {
+          schema: 1, gameId: 'marineford', createdAt: manifest.createdAt, assetBlobBaseUrl: ASSET_BLOB_BASE_URL,
+          releaseId: installed.releaseId, manifestPath: 'desktop/manifests/' + installed.manifestFile,
+          manifestSha256: installed.manifestSha256, entryPath: manifest.entryPath,
+          totalFiles: manifest.totalFiles, totalBytes: manifest.totalBytes
+        };
+        this.marinefordRelease = { document, entry: validateMarinefordRelease(document), createdAt: manifest.createdAt };
+        this.marinefordReleaseSource = 'installed';
+      } catch { /* A receipt cannot create a reference with an invalid identity. */ }
+    }
+    for (const [source, root] of [['bundled', this.bundledCatalogRoot], ['cached', this.lastKnownGoodRoot()]]) {
+      try {
+        const referencePath = path.join(root, path.posix.basename(RELEASE_PATH));
+        if (source === 'cached') await assertSafeManagedPath(this.cacheRoot, referencePath, { allowMissing: false, leafKind: 'file' });
+        const bytes = await readRegularFile(referencePath, 64 * 1024, '馬林福特之戰版本資料');
+        const document = JSON.parse(bytes.toString('utf8'));
+        const entry = validateMarinefordRelease(document);
+        const manifestPath = path.join(root, 'manifests', path.posix.basename(entry.manifestPath));
+        if (source === 'cached') await assertSafeManagedPath(this.cacheRoot, manifestPath, { allowMissing: false, leafKind: 'file' });
+        const manifestBytes = await readRegularFile(manifestPath, MANIFEST_MAX_BYTES, '馬林福特之戰程式清單');
+        const result = this.validateManifestResult(manifestBytes, entry, 'marineford');
+        this.assertNotDowngrade('marineford', result, entry.manifestSha256);
+        if (this.marinefordRelease && entry.manifestSha256 !== this.marinefordRelease.entry.manifestSha256 &&
+          Date.parse(result.manifest.createdAt) <= Date.parse(this.marinefordRelease.createdAt)) continue;
+        this.marinefordRelease = { document, entry, createdAt: result.manifest.createdAt };
+        this.marinefordReleaseSource = source;
+        this.cachedManifests.set('marineford:' + entry.manifestSha256, result);
+      } catch { /* Keep an installed or previously validated reference when a source is unavailable. */ }
+    }
+    this.catalog = this.attachMarinefordRelease(this.catalog);
+  }
+
+  refreshMarinefordRelease() {
+    if (this.marinefordRefreshPromise) return this.marinefordRefreshPromise;
+    this.marinefordRefreshPromise = this.fetchMarinefordRelease().finally(() => {
+      this.marinefordRefreshPromise = null;
+    });
+    return this.marinefordRefreshPromise;
+  }
+
+  async fetchMarinefordRelease() {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), this.manifestTimeoutMs);
+    try {
+      const response = await this.fetchImpl(this.origin + '/' + RELEASE_PATH, {
+        cache: 'no-store', redirect: 'error',
+        headers: { Accept: 'application/json', 'Accept-Encoding': 'identity' },
+        signal: controller.signal
+      });
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const bytes = Buffer.from(await response.arrayBuffer());
+      if (!bytes.length || bytes.length > 64 * 1024) throw new Error('版本資料大小不正確。');
+      const document = JSON.parse(bytes.toString('utf8'));
+      const entry = validateMarinefordRelease(document);
+      const result = await this.fetchRemoteManifest({ games: { marineford: entry } }, 'marineford', controller.signal);
+      if (this.marinefordRelease && entry.manifestSha256 !== this.marinefordRelease.entry.manifestSha256 &&
+        Date.parse(result.manifest.createdAt) <= Date.parse(this.marinefordRelease.createdAt)) {
+        throw new Error('偵測到較舊的馬林福特之戰版本，已阻止降版。');
+      }
+      await this.validateCacheOwnership(this.cacheRoot);
+      const root = this.lastKnownGoodRoot();
+      await atomicWriteBuffer(this.cacheRoot, path.join(root, 'manifests', result.fileName), result.bytes);
+      await atomicWriteBuffer(this.cacheRoot, path.join(root, path.posix.basename(RELEASE_PATH)), bytes);
+      this.marinefordRelease = { document, entry, createdAt: result.manifest.createdAt };
+      this.marinefordReleaseSource = 'remote';
+      this.catalog = this.attachMarinefordRelease(this.catalog);
+      this.cachedManifests.set('marineford:' + entry.manifestSha256, result);
+      await this.refreshStates();
+      this.getState().then((state) => this.emit('state', state)).catch(() => {});
+      return { ok: true };
+    } catch {
+      return { ok: false, error: '暫時無法取得馬林福特之戰版本，已保留本機資料。' };
+    } finally {
+      clearTimeout(timer);
+    }
   }
 
   validateManifestResult(bytes, entry, gameId) {
@@ -1057,7 +1156,7 @@ class AssetStore extends EventEmitter {
       const catalog = validateCatalog(JSON.parse(await fsp.readFile(catalogPath, 'utf8')), this.catalogValidationOptions);
       if (catalog.schema !== this.catalog.schema) throw new Error('cached catalog schema');
       const results = new Map();
-      for (const gameId of GAME_ID_LIST) {
+      for (const gameId of CATALOG_GAME_ID_LIST) {
         const entry = catalog.games[gameId];
         const manifestPath = path.join(root, 'manifests', path.posix.basename(entry.manifestPath));
         await assertSafeManagedPath(this.cacheRoot, manifestPath, { allowMissing: false, leafKind: 'file' });
@@ -1068,11 +1167,11 @@ class AssetStore extends EventEmitter {
       }
       const bundledCreatedAt = Date.parse(this.catalog.createdAt);
       const cachedCreatedAt = Date.parse(catalog.createdAt);
-      const matchesInstalled = GAME_ID_LIST.some((gameId) => (
+      const matchesInstalled = CATALOG_GAME_ID_LIST.some((gameId) => (
         this.receipts.get(gameId)?.manifestSha256 === catalog.games[gameId].manifestSha256
       ));
       if (cachedCreatedAt < bundledCreatedAt && !matchesInstalled) return false;
-      this.catalog = catalog;
+      this.catalog = this.attachMarinefordRelease(catalog);
       this.catalogSource = 'cached';
       this.cachedManifests = results;
       return true;
@@ -1098,7 +1197,7 @@ class AssetStore extends EventEmitter {
 
   async persistLastKnownGoodCatalog(catalog, results) {
     const root = this.lastKnownGoodRoot();
-    for (const gameId of GAME_ID_LIST) {
+    for (const gameId of CATALOG_GAME_ID_LIST) {
       const result = results.get(`${gameId}:${catalog.games[gameId].manifestSha256}`);
       await atomicWriteBuffer(this.cacheRoot, path.join(root, 'manifests', result.fileName), result.bytes);
     }
@@ -1121,12 +1220,12 @@ class AssetStore extends EventEmitter {
       const catalog = validateCatalog(JSON.parse(bytes.toString('utf8')), this.catalogValidationOptions);
       if (catalog.schema !== this.catalog.schema) throw new Error('線上版本目錄格式與啟動器不一致。');
       const results = new Map();
-      for (const gameId of GAME_ID_LIST) {
+      for (const gameId of CATALOG_GAME_ID_LIST) {
         const result = await this.fetchRemoteManifest(catalog, gameId, controller.signal);
         results.set(`${gameId}:${catalog.games[gameId].manifestSha256}`, result);
       }
       await this.persistLastKnownGoodCatalog(catalog, results);
-      this.catalog = catalog;
+      this.catalog = this.attachMarinefordRelease(catalog);
       this.catalogSource = 'remote';
       this.cachedManifests = results;
       await this.refreshStates();
@@ -1145,7 +1244,7 @@ class AssetStore extends EventEmitter {
   }
 
   async setCacheRoot(nextRoot) {
-    if (this.activeInstall || this.activeRemoval) throw new Error('下載或移除進行中，請稍後再變更位置。');
+    if (this.activeInstall || this.activeRemoval || this.marinefordRefreshPromise) throw new Error('下載、移除或版本檢查進行中，請稍後再變更位置。');
     const resolved = validateCacheRootPath(nextRoot);
     await fsp.mkdir(resolved, { recursive: true });
     await this.ensureCacheOwnership(resolved);
@@ -1153,11 +1252,14 @@ class AssetStore extends EventEmitter {
     this.receipts.clear();
     this.cachedManifests.clear();
     this.gameStates.delete('marineford');
+    this.marinefordRelease = null;
+    this.marinefordReleaseSource = 'unavailable';
     await this.loadIntegrityIndex();
     await this.loadBundledCatalog();
     await this.loadMarinefordMediaState();
     await Promise.all(GAME_ID_LIST.map((gameId) => this.loadReceipt(gameId)));
     await this.loadLastKnownGoodCatalog();
+    await this.loadMarinefordRelease();
     await this.refreshStates();
     this.startBackgroundIntegrityAudit();
     this.getState().then((state) => this.emit('state', state)).catch(() => {});
@@ -1201,8 +1303,16 @@ class AssetStore extends EventEmitter {
       if (this.activeInstall?.gameId === gameId && includeActiveGameId !== gameId) continue;
       const latest = this.catalog.games[gameId];
       const receipt = this.receipts.get(gameId);
-      let status = 'not-installed';
-      let message = '尚未安裝';
+      if (!latest) {
+        this.gameStates.set(gameId, {
+          status: 'error', hasInstalled: false, removable: false,
+          message: '請連線檢查馬林福特之戰程式版本', installedVersion: '', remoteVersion: '',
+          totalFiles: 0, totalBytes: 0, downloadedBytes: 0, completedFiles: 0
+        });
+        continue;
+      }
+      let status = gameId === 'marineford' && this.marinefordMedia ? 'update' : 'not-installed';
+      let message = gameId === 'marineford' && this.marinefordMedia ? '已有素材快取，請下載完整遊戲套件' : '尚未安裝';
       let hasInstalled = false;
       let installedVersion = '';
       if (receipt) {
@@ -1214,7 +1324,7 @@ class AssetStore extends EventEmitter {
         } else if (receipt.releaseId === latest.releaseId && receipt.manifestSha256 === latest.manifestSha256) {
           status = 'installed';
           message = '已安裝，可以遊玩';
-        } else if (Date.parse(this.catalog.createdAt) <= Date.parse(receipt.manifest.createdAt)) {
+        } else if (Date.parse(gameId === 'marineford' ? this.marinefordRelease.createdAt : this.catalog.createdAt) <= Date.parse(receipt.manifest.createdAt)) {
           status = 'installed';
           message = '已安裝，可以遊玩（等待線上版本確認）';
         } else {
@@ -1278,7 +1388,9 @@ class AssetStore extends EventEmitter {
   async getManifest(gameId, { signal } = {}) {
     if (!GAME_IDS.has(gameId)) throw new Error('此遊戲尚未開放下載。');
     throwIfAborted(signal);
+    if (gameId === 'marineford' && !this.marinefordRelease) await this.refreshMarinefordRelease();
     const entry = this.catalog.games[gameId];
+    if (!entry) throw new Error('暫時無法取得遊戲版本，請檢查連線後重試。');
     const key = `${gameId}:${entry.manifestSha256}`;
     if (this.cachedManifests.has(key)) {
       const cached = this.cachedManifests.get(key);
@@ -1286,7 +1398,19 @@ class AssetStore extends EventEmitter {
       return cached;
     }
     let result;
-    if (this.catalogSource === 'remote') {
+    if (gameId === 'marineford') {
+      const source = this.marinefordReleaseSource;
+      if (source === 'remote') result = await this.fetchRemoteManifest(this.catalog, gameId, signal);
+      else if (source === 'cached') result = await this.readLastKnownGoodManifest(entry, gameId, signal);
+      else if (source === 'bundled') result = await this.readBundledManifest(entry, gameId, signal);
+      else {
+        const receipt = this.receipts.get(gameId);
+        if (!receipt || receipt.manifestSha256 !== entry.manifestSha256) throw new Error('找不到已驗證的遊戲版本。');
+        await assertSafeManagedPath(this.cacheRoot, receipt.manifestPath, { allowMissing: false, leafKind: 'file' });
+        const bytes = await readRegularFile(receipt.manifestPath, MANIFEST_MAX_BYTES, '已安裝程式清單');
+        result = this.validateManifestResult(bytes, entry, gameId);
+      }
+    } else if (this.catalogSource === 'remote') {
       const controller = new AbortController();
       let timedOut = false;
       const timer = setTimeout(() => {
@@ -1323,6 +1447,7 @@ class AssetStore extends EventEmitter {
 
   installGame(gameId) {
     if (!GAME_IDS.has(gameId)) return { ok: false, error: '此遊戲仍在製作中。' };
+    if (gameId === 'marineford' && this.isGameRunning(gameId)) return { ok: false, error: '請先關閉馬林福特之戰，再下載或修復遊戲。' };
     if (this.activeRemoval) return { ok: false, error: '正在移除遊戲，完成後才能開始下載。' };
     if (this.activeInstall) {
       if (this.activeInstall.gameId === gameId) return { ok: true, alreadyRunning: true };
@@ -1362,6 +1487,7 @@ class AssetStore extends EventEmitter {
 
   async uninstallGame(gameId) {
     if (!GAME_IDS.has(gameId)) return { ok: false, error: '遊戲代號不正確。' };
+    if (gameId === 'marineford' && this.isGameRunning(gameId)) return { ok: false, error: '請先關閉馬林福特之戰，再移除遊戲。' };
     if (this.activeInstall) return { ok: false, error: '請先暫停目前下載，再解除安裝。' };
     if (this.activeRemoval) return { ok: false, error: '已有遊戲正在移除，請稍候。' };
 
@@ -1391,7 +1517,7 @@ class AssetStore extends EventEmitter {
 
     const candidates = new Set(receipt.manifest.assets.map((asset) => asset.sha256));
     const latestEntry = this.catalog.games[gameId];
-    const latestCached = this.cachedManifests.get(`${gameId}:${latestEntry.manifestSha256}`)?.manifest;
+    const latestCached = this.cachedManifests.get(`${gameId}:${latestEntry?.manifestSha256}`)?.manifest;
     for (const asset of latestCached?.assets || []) candidates.add(asset.sha256);
 
     const protectedHashes = new Set();
@@ -1401,7 +1527,7 @@ class AssetStore extends EventEmitter {
       const otherReceipt = this.receipts.get(otherGameId);
       for (const asset of otherReceipt?.manifest.assets || []) protectedHashes.add(asset.sha256);
       const otherEntry = this.catalog.games[otherGameId];
-      const otherCached = this.cachedManifests.get(`${otherGameId}:${otherEntry.manifestSha256}`)?.manifest;
+      const otherCached = this.cachedManifests.get(`${otherGameId}:${otherEntry?.manifestSha256}`)?.manifest;
       const otherStatus = this.gameStates.get(otherGameId)?.status;
       const hasIncompleteDownload = ['paused', 'error', 'preparing', 'downloading', 'verifying'].includes(otherStatus);
       if (otherReceipt || hasIncompleteDownload) {
@@ -1484,7 +1610,7 @@ class AssetStore extends EventEmitter {
   async runInstall(gameId, signal) {
     const priorReceipt = this.receipts.get(gameId);
     const startingState = this.gameStates.get(gameId) || {};
-    const assetBlobBaseUrl = this.catalog.assetBlobBaseUrl || '';
+    const assetBlobBaseUrl = gameId === 'marineford' ? ASSET_BLOB_BASE_URL : this.catalog.assetBlobBaseUrl || '';
     const repairing = startingState.status === 'repair';
     this.emitProgress(gameId, {
       status: 'preparing',
@@ -1523,6 +1649,12 @@ class AssetStore extends EventEmitter {
       manifest,
       assetIndex: new Map(manifest.assets.map((asset) => [asset.path.normalize('NFC').toLowerCase(), asset]))
     });
+    if (gameId === 'marineford' && this.marinefordMedia) {
+      try {
+        await removeSafeManagedPath(this.cacheRoot, this.marinefordMediaStatePath(), { force: true, leafKind: 'file' });
+        this.marinefordMedia = null;
+      } catch { /* The verified package receipt remains authoritative if legacy metadata cannot be removed. */ }
+    }
     await this.cleanupUnusedCache({ completedGameId: gameId });
     await this.refreshStates({ includeActiveGameId: gameId });
     const finalState = this.gameStates.get(gameId) || {};
@@ -1544,60 +1676,6 @@ class AssetStore extends EventEmitter {
       };
     } catch {
       this.marinefordMedia = null;
-    }
-  }
-
-  async prepareMarinefordMedia() {
-    const gameId = 'marineford';
-    if (this.activeRemoval || this.activeInstall) throw new Error('已有遊戲正在下載或移除，請完成後再啟動。');
-    const controller = new AbortController();
-    const { signal } = controller;
-    this.activeInstall = { gameId, controller };
-    const idleState = { status: 'installed', hasInstalled: true, removable: false, onlineOnly: true };
-    this.emitProgress(gameId, {
-      ...idleState, status: 'preparing', currentFile: '正在核對馬林福特之戰素材…',
-      downloadedBytes: 0, completedFiles: 0, totalBytes: 0, totalFiles: 0
-    }, true);
-    try {
-      await this.validateCacheOwnership(this.cacheRoot);
-      let bytes;
-      try {
-        const response = await this.fetchImpl(`${this.origin}/desktop/${MARINEFORD_MEDIA_FILE}`, {
-          cache: 'no-store',
-          redirect: 'error',
-          headers: { Accept: 'application/json', 'Accept-Encoding': 'identity' },
-          signal: AbortSignal.any([signal, AbortSignal.timeout(this.manifestTimeoutMs)])
-        });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        bytes = Buffer.from(await response.arrayBuffer());
-      } catch {
-        throwIfAborted(signal);
-        throw new Error('暫時無法取得馬林福特之戰素材清單，請稍後再試。');
-      }
-      if (!bytes.length || bytes.length > MANIFEST_MAX_BYTES) throw new Error('馬林福特之戰素材清單大小不正確。');
-      let document;
-      try { document = JSON.parse(bytes.toString('utf8')); }
-      catch { throw new Error('馬林福特之戰素材清單格式不正確。'); }
-      const manifest = validateMarinefordMediaManifest(document);
-      this.activeInstall.manifest = manifest;
-      const runtime = await this.ensureManifestBlobs(gameId, manifest, signal, PRODUCTION_ASSET_BLOB_BASE_URL, {
-        message: '正在下載馬林福特之戰素材', hasInstalled: true
-      });
-      throwIfAborted(signal);
-      const sha256 = sha256Bytes(bytes);
-      if (this.marinefordMedia?.sha256 !== sha256) {
-        await atomicWriteBuffer(this.cacheRoot, this.marinefordMediaStatePath(), bytes);
-        this.marinefordMedia = { manifest, sha256 };
-      }
-      throwIfAborted(signal);
-      this.emitProgress(gameId, { ...idleState, ...runtime, message: '素材驗證完成', currentFile: '' }, true);
-      return manifest;
-    } catch (error) {
-      this.emitProgress(gameId, { ...idleState, message: '', currentFile: '' }, true);
-      if (signal.aborted) throw new Error('素材下載已暫停，再次啟動遊戲即可續傳。');
-      throw error;
-    } finally {
-      this.activeInstall = null;
     }
   }
 
@@ -1954,6 +2032,7 @@ class AssetStore extends EventEmitter {
     for (const gameId of GAME_IDS) {
       if (gameId === completedGameId) continue;
       const entry = this.catalog.games[gameId];
+      if (!entry) continue;
       const cached = this.cachedManifests.get(`${gameId}:${entry.manifestSha256}`);
       let manifest = cached?.manifest || null;
       if (!manifest) {
@@ -2065,8 +2144,11 @@ class AssetStore extends EventEmitter {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), Math.max(250, Math.min(10_000, Number(timeoutMs) || 3_000)));
     try {
+      const requestedIdentity = gameId === 'marineford'
+        ? `&releaseId=${encodeURIComponent(installed.releaseId)}&manifestSha256=${encodeURIComponent(installed.manifestSha256)}`
+        : '';
       const response = await fetchRuntime(
-        `${this.origin}/api/desktop-runtime-package/${encodeURIComponent(gameId)}?launcher=${encodeURIComponent(process.versions.electron || 'desktop')}`,
+        `${this.origin}/api/desktop-runtime-package/${encodeURIComponent(gameId)}?launcher=${encodeURIComponent(process.versions.electron || 'desktop')}${requestedIdentity}`,
         {
           cache: 'no-store',
           redirect: 'error',

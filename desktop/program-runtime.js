@@ -44,8 +44,23 @@ function normalizeAuthorization(value, gameId) {
   return Object.freeze({ enabled: true, gameId, releaseId, manifestSha256, entryPath, reason: 'remote-match' });
 }
 
+function isMarinefordStaticPath(assetPath) {
+  if (!assetPath || /^(?:api|socket\.io|auth)\//.test(assetPath)) return false;
+  return /^(?:marineford|vendor|images|audio|video|videos|fonts)\//.test(assetPath) ||
+    /\.(?:html?|css|js|mjs|json|wasm|png|jpe?g|jfif|webp|gif|svg|avif|mp3|wav|ogg|m4a|aac|flac|mp4|webm|mov|m4v|woff2?|ttf|otf)$/i.test(assetPath);
+}
+
+function unavailableLocalAsset(request, status) {
+  return new Response(String(request?.method || 'GET').toUpperCase() === 'HEAD' ? null : 'Installed game asset unavailable', {
+    status,
+    headers: { 'Cache-Control': 'no-store', 'Content-Type': 'text/plain; charset=utf-8',
+      'X-Content-Type-Options': 'nosniff', 'X-OnePiece-Desktop-Program': 'unavailable',
+      'X-OnePiece-Desktop-Cache': 'invalid', ...(status === 405 ? { Allow: 'GET, HEAD' } : {}) }
+  });
+}
+
 class HttpsProgramRuntime {
-  constructor({ gameId, origin, assetCache, networkFetch, onFailure } = {}) {
+  constructor({ gameId, origin, assetCache, networkFetch, onFailure, verifyAsset } = {}) {
     this.gameId = String(gameId || '');
     if (!this.gameId) throw new TypeError('Program runtime gameId is required.');
     this.origin = normalizeOrigin(origin);
@@ -56,6 +71,7 @@ class HttpsProgramRuntime {
     this.assetCache = assetCache;
     this.networkFetch = networkFetch;
     this.onFailure = typeof onFailure === 'function' ? onFailure : null;
+    this.verifyAsset = typeof verifyAsset === 'function' ? verifyAsset : null;
     this.authorization = Object.freeze({ enabled: false, reason: 'not-confirmed' });
   }
 
@@ -80,19 +96,42 @@ class HttpsProgramRuntime {
   async handle(request) {
     const method = String(request?.method || 'GET').toUpperCase();
     const assetPath = requestPathForOrigin(request?.url, this.origin);
+    let sameOrigin = false;
+    let dataRequest = false;
+    let httpRequest = false;
+    try {
+      const url = new URL(request?.url);
+      httpRequest = url.protocol === 'https:' || url.protocol === 'http:';
+      sameOrigin = url.origin === this.origin;
+      dataRequest = /^\/(?:api|socket\.io|auth)(?:\/|$)/.test(url.pathname);
+    } catch { /* Invalid origins are never local routes. */ }
+    if (this.gameId === 'marineford' && httpRequest && !sameOrigin) return unavailableLocalAsset(request, 403);
+    const strictLocal = this.gameId === 'marineford' && !dataRequest &&
+      (isMarinefordStaticPath(assetPath) || (sameOrigin && !assetPath));
     if (!this.authorization.enabled || !assetPath || (method !== 'GET' && method !== 'HEAD')) {
+      if (strictLocal) return unavailableLocalAsset(request, method === 'GET' || method === 'HEAD' ? 503 : 405);
       return this.fetchNetwork(request);
     }
     const entry = this.assetCache.lookupPath(this.gameId, assetPath);
-    if (!entry || !STATIC_KINDS.has(entry.kind)) return this.fetchNetwork(request);
+    if (!entry || !STATIC_KINDS.has(entry.kind)) {
+      if (strictLocal) return unavailableLocalAsset(request, 404);
+      return this.fetchNetwork(request);
+    }
     try {
+      if (strictLocal && this.verifyAsset && !(await this.verifyAsset(entry))) {
+        this.onFailure?.(entry, new Error('Installed Marineford asset integrity check failed.'));
+        return unavailableLocalAsset(request, 503);
+      }
       const local = await this.assetCache.createResponse(request, entry, {
         allowedOrigin: this.origin,
         onFailure: this.onFailure
       });
-      if (!local.ok && local.status !== 206) return this.fetchNetwork(request);
+      if (!local.ok && local.status !== 206 && !strictLocal) return this.fetchNetwork(request);
+      if (strictLocal && !local.ok && local.status !== 206 && local.status !== 416) {
+        return unavailableLocalAsset(request, local.status === 404 ? 404 : 503);
+      }
       const headers = new Headers(local.headers);
-      headers.set('X-OnePiece-Desktop-Program', 'hit');
+      headers.set('X-OnePiece-Desktop-Program', local.ok || local.status === 206 ? 'hit' : 'unavailable');
       headers.set('Access-Control-Expose-Headers', [
         headers.get('Access-Control-Expose-Headers'),
         'X-OnePiece-Desktop-Program'
@@ -104,6 +143,7 @@ class HttpsProgramRuntime {
       });
     } catch (error) {
       this.onFailure?.(entry, error);
+      if (strictLocal) return unavailableLocalAsset(request, 503);
       return this.fetchNetwork(request);
     }
   }
