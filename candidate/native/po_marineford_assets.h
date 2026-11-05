@@ -77,27 +77,34 @@ static NSData *POReadMarinefordBlob(NSString *file, NSDictionary *record) {
 @interface POMarinefordScheme : NSObject <WKURLSchemeHandler>
 @property(nonatomic,copy) NSString *root;
 @property(nonatomic,copy) NSDictionary *files;
+@property(nonatomic,copy) NSString *sharedRoot;
+@property(nonatomic,copy) NSDictionary *package;
+- (NSData *)dataForPath:(NSString *)path;
 @end
 
 @implementation POMarinefordScheme
+- (NSData *)dataForPath:(NSString *)path {
+    NSDictionary *record=self.files[path];
+    if(!record)return nil;
+    NSData *data=POReadMarinefordBlob(POMarinefordBlobFile(self.root,record[@"sha256"]),record);
+    if(!data&&self.sharedRoot.length)data=POReadMarinefordBlob(POMarinefordBlobFile(self.sharedRoot,record[@"sha256"]),record);
+    return data;
+}
 - (void)webView:(WKWebView *)web startURLSchemeTask:(id<WKURLSchemeTask>)task {
-    NSURLRequest *request = task.request;
-    NSURL *url = request.URL;
-    NSString *path = url.path;
-    if ([path hasPrefix:@"/"]) path = [path substringFromIndex:1];
-    NSDictionary *record = [request.HTTPMethod isEqual:@"GET"] && [url.scheme isEqual:@"poasset"] &&
-        [url.host isEqual:@"marineford"] && !url.port && !url.user && !url.password && !url.query &&
-        !url.fragment && POMarinefordMediaPath(path) ? self.files[path] : nil;
-    NSData *bytes = record ? POReadMarinefordBlob(POMarinefordBlobFile(self.root, record[@"sha256"]), record) : nil;
-    if (!bytes) {
+    NSURLRequest *request=task.request;NSURL *url=request.URL;
+    NSString *path=url.path;
+    if([path hasPrefix:@"/"])path=[path substringFromIndex:1];
+    NSDictionary *record=[request.HTTPMethod isEqual:@"GET"]&&[url.scheme isEqual:@"poasset"]&&
+        [url.host isEqual:@"marineford"]&&!url.port&&!url.user&&!url.password&&!url.query&&!url.fragment?self.files[path]:nil;
+    NSData *bytes=record?[self dataForPath:path]:nil;
+    if(!bytes){
         [task didFailWithError:[NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorResourceUnavailable userInfo:nil]];
         return;
     }
-    NSURLResponse *response = [[NSURLResponse alloc] initWithURL:url MIMEType:@"image/webp"
-                                         expectedContentLength:bytes.length textEncodingName:nil];
-    [task didReceiveResponse:response];
-    [task didReceiveData:bytes];
-    [task didFinish];
+    NSString *mime=record[@"mime"]?:@"image/webp";
+    NSURLResponse *response=[[NSURLResponse alloc] initWithURL:url MIMEType:mime expectedContentLength:bytes.length
+        textEncodingName:[mime hasPrefix:@"text/"]||[mime isEqual:@"application/json"]?@"utf-8":nil];
+    [task didReceiveResponse:response];[task didReceiveData:bytes];[task didFinish];
 }
 - (void)webView:(WKWebView *)web stopURLSchemeTask:(id<WKURLSchemeTask>)task {}
 @end

@@ -18,6 +18,11 @@ jobs:
         run: |
           clang++ -fobjc-arc -framework Cocoa -framework WebKit candidate/tools/probe_marineford_origin.mm -o "$RUNNER_TEMP/probe-marineford-origin"
           "$RUNNER_TEMP/probe-marineford-origin" candidate/bundle-resources/launcher-web "$RUNNER_TEMP/marineford-origin.json"
+      - name: Compile and verify installed Marineford programs
+        run: |
+          python3 -B candidate/tools/prepare_marineford_fixture.py --assets candidate/bundle-resources/launcher-web --out "$RUNNER_TEMP/marineford-fixtures"
+          clang++ -fobjc-arc -framework Cocoa -framework WebKit -I candidate/native candidate/tools/check_marineford_webkit.mm -o "$RUNNER_TEMP/check-marineford-program"
+          "$RUNNER_TEMP/check-marineford-program" candidate/bundle-resources/launcher-web "$RUNNER_TEMP/marineford-fixtures" candidate/tools/fixtures
       - name: Save bounded origin evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

@@ -6,6 +6,9 @@
 - (BOOL)beginURL:(NSString *)address identifier:(NSString *)identifier destination:(NSString *)destination limit:(long long)limit exact:(BOOL)exact;
 - (BOOL)begin:(NSString *)identifier digest:(NSString *)digest destination:(NSString *)destination size:(long long)size;
 - (BOOL)beginMarinefordManifest:(NSString *)identifier destination:(NSString *)destination;
+- (BOOL)beginMarinefordRelease:(NSString *)identifier destination:(NSString *)destination;
+- (BOOL)beginMarinefordProgramManifest:(NSString *)path identifier:(NSString *)identifier destination:(NSString *)destination;
+- (BOOL)beginMarinefordProof:(NSString *)identifier destination:(NSString *)destination;
 - (NSDictionary *)poll:(NSString *)identifier;
 - (void)forget:(NSString *)identifier;
 - (void)close;
@@ -31,6 +34,20 @@
 - (BOOL)beginMarinefordManifest:(NSString *)identifier destination:(NSString *)destination {
     return [self beginURL:@"https://onepiece-card-online.onrender.com/desktop/marineford-media-v1.json"
         identifier:identifier destination:destination limit:512*1024 exact:NO];
+}
+- (BOOL)beginMarinefordRelease:(NSString *)identifier destination:(NSString *)destination {
+    return [self beginURL:@"https://onepiece-card-online.onrender.com/desktop/marineford-release-v1.json"
+        identifier:identifier destination:destination limit:65536 exact:NO];
+}
+- (BOOL)beginMarinefordProgramManifest:(NSString *)path identifier:(NSString *)identifier destination:(NSString *)destination {
+    if([path rangeOfString:@"^desktop/manifests/marineford-package-[0-9a-f]{16}\\.json\\z"
+        options:NSRegularExpressionSearch].location==NSNotFound)return NO;
+    return [self beginURL:[@"https://onepiece-card-online.onrender.com/" stringByAppendingString:path]
+        identifier:identifier destination:destination limit:8*1024*1024 exact:NO];
+}
+- (BOOL)beginMarinefordProof:(NSString *)identifier destination:(NSString *)destination {
+    return [self beginURL:@"https://onepiece-card-online.onrender.com/api/desktop-runtime-package/marineford"
+        identifier:identifier destination:destination limit:65536 exact:NO];
 }
 - (BOOL)beginURL:(NSString *)address identifier:(NSString *)identifier destination:(NSString *)destination limit:(long long)limit exact:(BOOL)exact {
     NSString *clean=[destination stringByStandardizingPath];

@@ -8,7 +8,11 @@
 @property(nonatomic,strong) WKWebView *web;
 @property(nonatomic,strong) UILabel *status;
 @property(nonatomic,copy) NSString *gameId;
+@property(nonatomic,copy) NSString *programHTML;
+@property(nonatomic) BOOL programLoadPending;
+- (void)loadProgram;
 @property(nonatomic,copy) void (^returnToLauncher)(void);
+@property(nonatomic,copy) void (^revalidateProgram)(void (^completion)(BOOL));
 - (BOOL)open:(NSString *)gameId session:(NSDictionary *)session device:(NSString *)device marinefordAssets:(POMarinefordScheme *)assets;
 - (void)hide;
 - (void)close;
@@ -27,7 +31,25 @@
     [[self presenter] presentViewController:dialog animated:YES completion:nil];
 }
 - (void)home { [self hide];if(_returnToLauncher)_returnToLauncher(); }
-- (void)reload { [self confirm:@"重新連線？請先儲存目前進度。" action:^{[self.web reload];}]; }
+- (void)loadProgram {
+    self.programLoadPending=YES;
+    NSURL *base=[NSURL URLWithString:@"https://onepiece-card-online.onrender.com/marineford/index.html?layout=responsive&tabletop_android=1"];
+    [_web loadHTMLString:self.programHTML baseURL:base];
+}
+- (void)reload {
+    [self confirm:@"重新連線？請先儲存目前進度。" action:^{
+        if(!self.programHTML){[self.web reload];return;}
+        if(!self.revalidateProgram)return;
+        self.status.hidden=NO;self.status.text=@"正在核對遊戲版本…";
+        __weak POWebGame *weakSelf=self;
+        self.revalidateProgram(^(BOOL valid){
+            POWebGame *view=weakSelf;
+            if(!view.web)return;
+            if(valid)[view loadProgram];
+            else view.status.text=@"無法核對遊戲版本，請結束遊戲並回到啟動器更新後再試。";
+        });
+    }];
+}
 - (void)finish { [self confirm:@"結束遊戲？請先儲存進度或離開對戰房間。" action:^{[self close];if(self.returnToLauncher)self.returnToLauncher();}]; }
 - (void)options {
     if([[self presenter] isKindOfClass:UIAlertController.class])return;
@@ -53,6 +75,13 @@
     NSString *css=[NSString stringWithContentsOfFile:[root stringByAppendingPathComponent:@"game-mobile.css"] encoding:NSUTF8StringEncoding error:nil];
     if(!bootstrap.length||!mobile.length||!css.length)return NO;
     if([gameId isEqualToString:@"marineford"]){mobile=@"";css=@"";}
+    NSString *programHTML=nil,*programBootstrap=nil;
+    NSArray *programScripts=nil;
+    if(assets){
+        NSString *templateSource=[NSString stringWithContentsOfFile:[root stringByAppendingPathComponent:@"marineford-program.js"] encoding:NSUTF8StringEncoding error:nil];
+        programHTML=[assets programHTML];programBootstrap=[assets programBootstrapSource:templateSource];programScripts=[assets programScripts];
+        if(!programHTML.length||!programBootstrap.length||programScripts.count!=3)return NO;
+    }
     NSDictionary *account=session[@"account"]?:@{};
     NSDictionary *values=@{@"opSecret":session[@"secret"],@"op_secret":session[@"secret"],@"op_device_id":device?:@"",
         @"op_user_id":account[@"userId"]?:@"",@"op_board_user_id":account[@"userId"]?:@"",
@@ -63,8 +92,7 @@
     config.applicationNameForUserAgent=@"ONEPIECE_TABLETOP_IOS/0.1.0 (Electron/44.1.1 compatibility)";
     if(assets){
         [config setURLSchemeHandler:assets forURLScheme:@"poasset"];
-        NSString *localMedia=@"if(location.origin==='https://onepiece-card-online.onrender.com'&&location.pathname==='/marineford/index.html'){Object.defineProperty(window,'__PO_MARINEFORD_LOCAL_MEDIA__',{value:true});}";
-        [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:localMedia
+        [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:programBootstrap
             injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES]];
     }
     config.allowsInlineMediaPlayback=YES;config.mediaTypesRequiringUserActionForPlayback=WKAudiovisualMediaTypeNone;
@@ -72,6 +100,10 @@
     [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:start injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:NO]];
     NSString *end=[NSString stringWithFormat:@"if(location.origin==='https://onepiece-card-online.onrender.com'){let s=document.createElement('style');s.textContent=(%@)[0];document.head.append(s);}",style];
     [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:end injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:NO]];
+    for(NSString *script in programScripts)
+        [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:script
+            injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES]];
+    _programHTML=programHTML;
     _gameId=gameId;_surface=[[UIView alloc] initWithFrame:window.bounds];_surface.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     _surface.backgroundColor=[UIColor colorWithRed:.02 green:.08 blue:.12 alpha:1];[window addSubview:_surface];
     _web=[[WKWebView alloc] initWithFrame:CGRectZero configuration:config];_web.navigationDelegate=self;_web.UIDelegate=self;_web.translatesAutoresizingMaskIntoConstraints=NO;
@@ -86,12 +118,18 @@
     _status=[UILabel new];_status.text=@"正在開啟遊戲…";_status.textColor=UIColor.whiteColor;_status.backgroundColor=_surface.backgroundColor;_status.textAlignment=NSTextAlignmentCenter;_status.numberOfLines=0;_status.translatesAutoresizingMaskIntoConstraints=NO;[_surface addSubview:_status];
     [NSLayoutConstraint activateConstraints:@[[_status.centerXAnchor constraintEqualToAnchor:safe.centerXAnchor],[_status.centerYAnchor constraintEqualToAnchor:safe.centerYAnchor],[_status.widthAnchor constraintLessThanOrEqualToAnchor:safe.widthAnchor multiplier:.9]]];
     NSString *entry=[gameId isEqualToString:@"marineford"]?@"marineford/index.html":([gameId isEqualToString:@"card"]?@"start.html":@"chess/index.html");
-    [_web loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[@"https://onepiece-card-online.onrender.com/" stringByAppendingFormat:@"%@?layout=responsive&tabletop_android=1",entry]]]];return YES;
+    if(_programHTML)[self loadProgram];
+    else [_web loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[@"https://onepiece-card-online.onrender.com/" stringByAppendingFormat:@"%@?layout=responsive&tabletop_android=1",entry]]]];
+    return YES;
 }
 - (void)hide { _surface.hidden=YES;[_web evaluateJavaScript:@"document.querySelectorAll('audio,video').forEach(m=>m.pause())" completionHandler:nil]; }
-- (void)close { [_web stopLoading];[_web.configuration.userContentController removeAllUserScripts];[_surface removeFromSuperview];_surface=nil;_web=nil;_status=nil;_gameId=nil; }
-- (void)webView:(WKWebView *)web decidePolicyForNavigationAction:(WKNavigationAction *)action decisionHandler:(void (^)(WKNavigationActionPolicy))handler {if(action.targetFrame.isMainFrame&&POOfficialGameURL(action.request.URL)&&[action.request.URL.path isEqualToString:@"/__mobile_game_options__"]){handler(WKNavigationActionPolicyCancel);[self options];return;}handler(POOfficialGameURL(action.request.URL)?WKNavigationActionPolicyAllow:WKNavigationActionPolicyCancel);}
-- (void)webView:(WKWebView *)web didFinishNavigation:(WKNavigation *)navigation {_status.hidden=YES;}
+- (void)close { [_web stopLoading];[_web.configuration.userContentController removeAllUserScripts];[_surface removeFromSuperview];_surface=nil;_web=nil;_status=nil;_gameId=nil;_programHTML=nil;_programLoadPending=NO;_revalidateProgram=nil; }
+- (void)webView:(WKWebView *)web decidePolicyForNavigationAction:(WKNavigationAction *)action decisionHandler:(void (^)(WKNavigationActionPolicy))handler {if(action.targetFrame.isMainFrame&&POOfficialGameURL(action.request.URL)&&[action.request.URL.path isEqualToString:@"/__mobile_game_options__"]){handler(WKNavigationActionPolicyCancel);[self options];return;}BOOL allowed=POOfficialGameURL(action.request.URL);
+    if(_programHTML)allowed=action.targetFrame.isMainFrame&&
+        ((allowed&&[action.request.URL.path isEqual:@"/marineford/index.html"])||
+         (_programLoadPending&&[action.request.URL.absoluteString isEqual:@"about:blank"]));
+    handler(allowed?WKNavigationActionPolicyAllow:WKNavigationActionPolicyCancel);}
+- (void)webView:(WKWebView *)web didFinishNavigation:(WKNavigation *)navigation {_programLoadPending=NO;_status.hidden=YES;}
 - (void)webView:(WKWebView *)web didFailProvisionalNavigation:(WKNavigation *)nav withError:(NSError *)error {if(error.code==NSURLErrorCancelled)return;_status.hidden=NO;_status.text=([_gameId isEqualToString:@"card"]||[_gameId isEqualToString:@"marineford"])?@"網路連線失敗，請用兩指長按畫面開啟遊戲選項，選擇重新連線。":@"網路連線失敗，請點右上「重新連線」。";}
 - (void)webView:(WKWebView *)web didFailNavigation:(WKNavigation *)nav withError:(NSError *)error {[self webView:web didFailProvisionalNavigation:nav withError:error];}
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)web {_status.hidden=NO;_status.text=([_gameId isEqualToString:@"card"]||[_gameId isEqualToString:@"marineford"])?@"遊戲頁面已暫停，請用兩指長按畫面開啟遊戲選項，選擇重新連線。":@"遊戲頁面已暫停，請點右上「重新連線」。";}

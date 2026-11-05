@@ -1,5 +1,6 @@
 #include "po_ios_download.h"
 #include "po_marineford_assets.h"
+#include "po_marineford_program.h"
 #include <stdio.h>
 
 @interface POMarinefordJob : NSObject
@@ -11,15 +12,18 @@
 
 static NSString *POMarinefordVersion(NSDictionary *package) {
     NSString *revision = package[@"revision"];
+    if([package[@"program"] boolValue])return revision?:@"";
     return revision.length ? [@"素材 " stringByAppendingString:[revision substringToIndex:8]] : @"";
 }
 
-static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package) {
+static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSString *sharedRoot = nil) {
     NSDictionary *blobs = package[@"blobs"];
     NSMutableArray *missing = [NSMutableArray array];
     for (NSString *digest in blobs) {
         @autoreleasepool {
-            if (!POReadMarinefordBlob(POMarinefordBlobFile(root, digest), blobs[digest])) [missing addObject:blobs[digest]];
+            BOOL present=POReadMarinefordBlob(POMarinefordBlobFile(root,digest),blobs[digest])!=nil;
+            if(!present&&sharedRoot.length)present=POReadMarinefordBlob(POMarinefordBlobFile(sharedRoot,digest),blobs[digest])!=nil;
+            if(!present)[missing addObject:blobs[digest]];
         }
     }
     return missing;
@@ -29,6 +33,7 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package) {
 // only verified CAS blobs and an atomically published manifest survive a retry.
 @interface POMarinefordStore : NSObject
 @property(nonatomic,copy) NSString *root;
+@property(nonatomic,copy) NSString *sharedRoot;
 @property(nonatomic,copy) void (^changed)(void);
 @property(nonatomic,strong) PODownloader *transport;
 @property(nonatomic,strong) dispatch_queue_t io;
@@ -70,14 +75,15 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package) {
 }
 
 - (NSDictionary *)state {
-    BOOL update = self.installed && self.remote && ![self.installed[@"revision"] isEqual:self.remote[@"revision"]];
+    BOOL program=[self.installed[@"program"] boolValue];
+    BOOL update=self.installed&&(!program||(self.remote&&![self.installed[@"revision"] isEqual:self.remote[@"revision"]]));
     NSString *status = @"missing";
     if (self.installed) status = !self.healthy ? @"repair" : (update ? @"update" : @"installed");
     else if (!self.lastCheck) status = @"checking";
     if (self.failure.length) status = self.healthy ? @"error" : (self.installed ? @"repair" : @"error");
     // The shared launcher uses hasInstalled to offer an alternate launch action.
     // Current HTTPS game code needs its matching local media revision.
-    NSMutableDictionary *value = [@{@"status":status, @"hasInstalled":@(self.healthy && !update),
+    NSMutableDictionary *value = [@{@"status":status, @"hasInstalled":@(program && self.healthy && !update),
         @"removable":@(self.installed != nil || self.failure.length || [self.activity[@"status"] isEqual:@"paused"]),
         @"installedVersion":POMarinefordVersion(self.installed), @"remoteVersion":POMarinefordVersion(self.remote),
         @"totalBytes":self.remote[@"bytes"] ?: self.installed[@"bytes"] ?: @0} mutableCopy];
@@ -111,20 +117,23 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package) {
     return YES;
 }
 
-- (NSData *)fetchManifest:(POMarinefordJob *)job {
-    NSString *key = NSUUID.UUID.UUIDString;
-    NSString *temporary = [self.root stringByAppendingPathComponent:@"manifest.part"];
-    NSFileManager *fm = NSFileManager.defaultManager;
+- (NSData *)fetchMetadata:(NSString *)kind path:(NSString *)path job:(POMarinefordJob *)job {
+    NSString *key=NSUUID.UUID.UUIDString;
+    NSString *temporary=[self.root stringByAppendingPathComponent:@"metadata.part"];
+    NSFileManager *fm=NSFileManager.defaultManager;
     [fm removeItemAtPath:temporary error:nil];
-    NSData *data = nil;
-    if (!job.cancelled && [self.transport beginMarinefordManifest:key destination:temporary]) {
-        while (!job.cancelled) {
-            NSString *state = [self.transport poll:key][@"state"];
-            if ([state isEqual:@"complete"]) {
-                data = [NSData dataWithContentsOfFile:temporary options:NSDataReadingMappedIfSafe error:nil];
-                break;
-            }
-            if (![state isEqual:@"pending"]) break;
+    BOOL began=NO;
+    if(!job.cancelled) {
+        if([kind isEqual:@"release"])began=[self.transport beginMarinefordRelease:key destination:temporary];
+        else if([kind isEqual:@"manifest"])began=[self.transport beginMarinefordProgramManifest:path identifier:key destination:temporary];
+        else if([kind isEqual:@"proof"])began=[self.transport beginMarinefordProof:key destination:temporary];
+    }
+    NSData *data=nil;
+    if(began) {
+        while(!job.cancelled) {
+            NSString *state=[self.transport poll:key][@"state"];
+            if([state isEqual:@"complete"]){data=[NSData dataWithContentsOfFile:temporary options:NSDataReadingMappedIfSafe error:nil];break;}
+            if(![state isEqual:@"pending"])break;
             [NSThread sleepForTimeInterval:.1];
         }
         [self.transport forget:key];
@@ -132,7 +141,13 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package) {
     [fm removeItemAtPath:temporary error:nil];
     return data;
 }
-
+- (NSDictionary *)fetchProgram:(POMarinefordJob *)job {
+    NSData *reference=[self fetchMetadata:@"release" path:nil job:job];
+    NSDictionary *pointer=POMarinefordRelease(reference);
+    if(!pointer)return nil;
+    NSData *manifest=[self fetchMetadata:@"manifest" path:pointer[@"manifestPath"] job:job];
+    return POMarinefordProgramPackage(manifest,reference);
+}
 - (BOOL)download:(NSArray *)missing package:(NSDictionary *)package job:(POMarinefordJob *)job {
     NSFileManager *fm = NSFileManager.defaultManager;
     NSDictionary *blobs = package[@"blobs"];
@@ -204,17 +219,17 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package) {
         BOOL ready = self.root.length && [fm createDirectoryAtPath:blobs withIntermediateDirectories:YES attributes:nil error:nil];
         if (ready) [[NSURL fileURLWithPath:self.root isDirectory:YES] setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:nil];
         NSData *installedData = [NSData dataWithContentsOfFile:[self manifestFile] options:NSDataReadingMappedIfSafe error:nil];
-        NSDictionary *installed = POMarinefordPackage(installedData);
-        NSArray *installedMissing = installed ? POMarinefordMissing(self.root, installed) : nil;
+        NSDictionary *installed = POMarinefordStoredPackage(installedData);
+        NSArray *installedMissing = installed ? POMarinefordMissing(self.root, installed, self.sharedRoot) : nil;
         BOOL healthy = installed && installedMissing.count == 0;
-        NSDictionary *remote = ready ? POMarinefordPackage([self fetchManifest:job]) : nil;
+        NSDictionary *remote = ready ? [self fetchProgram:job] : nil;
         BOOL success = NO;
         if (remote && installing && !job.cancelled) {
             NSArray *missing = [installed[@"revision"] isEqual:remote[@"revision"]] ?
-                installedMissing : POMarinefordMissing(self.root, remote);
+                installedMissing : POMarinefordMissing(self.root, remote, self.sharedRoot);
             if ([self download:missing package:remote job:job]) {
                 [self postActivity:@{@"status":@"verifying"} forJob:job];
-                success = !job.cancelled && [remote[@"manifest"] writeToFile:[self manifestFile] options:NSDataWritingAtomic error:nil];
+                success = !job.cancelled && [POMarinefordReceipt(remote) writeToFile:[self manifestFile] options:NSDataWritingAtomic error:nil];
                 if (success) {
                     // After promotion, discard old/unreferenced CAS files. Partial
                     // verified downloads are retained until a successful install.
@@ -233,29 +248,35 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package) {
             if (remote) self.remote = remote;
             self.activity = nil;
             if (!success && job.cancelled) self.activity = @{@"status":@"paused"};
-            else if (installing && !success) self.failure = @"素材下載或驗證失敗，請重試。";
-            else if (!remote && !self.healthy) self.failure = @"無法讀取遊戲素材版本，請重試。";
+            else if (installing && !success) self.failure = @"遊戲下載或驗證失敗，請重試。";
+            else if (!remote && !self.healthy) self.failure = @"無法讀取遊戲版本，請重試。";
             [self emit];
         });
     });
 }
 
 - (BOOL)prepareLaunch:(void (^)(POMarinefordScheme *))completion {
-    if (self.job || self.preparingLaunch || !self.healthy || !self.installed ||
+    if (self.job || self.preparingLaunch || !self.healthy || ![self.installed[@"program"] boolValue] ||
         (self.remote && ![self.remote[@"revision"] isEqual:self.installed[@"revision"]])) return NO;
     self.preparingLaunch = YES;
     NSDictionary *package = self.installed;
     dispatch_async(self.io, ^{
-        BOOL valid = POMarinefordMissing(self.root, package).count == 0;
+        BOOL valid=POMarinefordMissing(self.root,package,self.sharedRoot).count==0;
+        POMarinefordJob *proofJob=[POMarinefordJob new];
+        BOOL proved=valid&&POMarinefordRuntimeProof([self fetchMetadata:@"proof" path:nil job:proofJob],package);
         dispatch_async(dispatch_get_main_queue(), ^{
             self.preparingLaunch = NO;
             self.healthy = valid;
-            if (!valid) self.failure = @"素材檔案受損，請先修復遊戲。";
+            if(!valid)self.failure=@"遊戲檔案受損，請先修復遊戲。";
+            else if(!proved)self.failure=@"無法核對伺服器的遊戲版本，請確認連線並更新遊戲。";
+            else self.failure=nil;
             POMarinefordScheme *scheme = nil;
-            if (valid) {
+            if (proved) {
                 scheme = [POMarinefordScheme new];
                 scheme.root = self.root;
+                scheme.sharedRoot=self.sharedRoot;
                 scheme.files = package[@"files"];
+                scheme.package=package;
             }
             [self emit];
             completion(scheme);

@@ -90,6 +90,7 @@ class PoIOSBridge : public RefCounted {
     __strong POLauncher *launcher=nil;
     __strong POWebGame *webGame=nil;
     __strong POMarinefordStore *marineford=nil;
+    __strong NSString *marinefordSharedRoot=nil;
 protected:
     static void _bind_methods() {
         ClassDB::bind_method(D_METHOD("session_request","method","arguments"),&PoIOSBridge::session_request);
@@ -110,6 +111,7 @@ protected:
         ClassDB::bind_method(D_METHOD("web_game_open","game_id"),&PoIOSBridge::web_game_open);
         ClassDB::bind_method(D_METHOD("web_game_active"),&PoIOSBridge::web_game_active);
         ClassDB::bind_method(D_METHOD("marineford_request","method"),&PoIOSBridge::marineford_request);
+        ClassDB::bind_method(D_METHOD("marineford_shared_media","root"),&PoIOSBridge::marineford_shared_media);
         ClassDB::bind_method(D_METHOD("open_settings"),&PoIOSBridge::open_settings);
         ClassDB::bind_method(D_METHOD("share_png","base64"),&PoIOSBridge::share_png);
     }
@@ -133,6 +135,11 @@ public:
     }
     ~PoIOSBridge() override { [downloader close]; video_remove(); ui([&]{[marineford close];marineford=nil;[webGame close];webGame=nil;[launcher close];launcher=nil;}); }
     String web_game_active(){String value;ui([&]{value=gs(webGame.gameId);});return value;}
+    void marineford_shared_media(const String &root) {
+        NSString *path=ns(root).stringByStandardizingPath;
+        if([path hasPrefix:[NSHomeDirectory().stringByStandardizingPath stringByAppendingString:@"/"]])
+            ui([&]{if(!marineford)marinefordSharedRoot=path;});
+    }
     POMarinefordStore *marineford_store() {
         if(!marineford){
             NSURL *support=[NSFileManager.defaultManager URLsForDirectory:NSApplicationSupportDirectory
@@ -140,6 +147,7 @@ public:
             NSString *root=[support URLByAppendingPathComponent:@"po-marineford-media-v1" isDirectory:YES].path;
             if(!root.length)return nil;
             marineford=[[POMarinefordStore alloc] initWithRoot:root transport:[PODownloader new]];
+            marineford.sharedRoot=marinefordSharedRoot;
             __weak POLauncher *retainedLauncher=launcher;
             marineford.changed=^{[retainedLauncher notifyGameState];};
         }
@@ -174,13 +182,19 @@ public:
                 __weak POLauncher *source=launcher;
                 NSDictionary *retainedSession=session;
                 NSString *deviceId=device[@"deviceId"];
-                opened=[marineford_store() prepareLaunch:^(POMarinefordScheme *scheme){
+                POMarinefordStore *programStore=marineford_store();
+                opened=[programStore prepareLaunch:^(POMarinefordScheme *scheme){
                     POWebGame *view=target;
                     if(![view.gameId isEqual:@"marineford"]||view.web)return;
                     view.gameId=nil;
-                    if(scheme&&[view open:game session:retainedSession device:deviceId marinefordAssets:scheme])
+                    if(scheme&&[view open:game session:retainedSession device:deviceId marinefordAssets:scheme]){
+                        __weak POMarinefordStore *store=programStore;
+                        view.revalidateProgram=^(void (^completion)(BOOL)){
+                            BOOL began=[store prepareLaunch:^(POMarinefordScheme *verified){completion(verified!=nil);}];
+                            if(!began)completion(NO);
+                        };
                         [source hide];
-                    else if(scheme)
+                    }else if(scheme)
                         [source notifyGameLaunchFailed];
                 }];
                 if(opened)webGame.gameId=game;
