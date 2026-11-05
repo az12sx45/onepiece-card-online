@@ -56,7 +56,19 @@ def main():
       const invalid=await fetch('videos/native-blue.mp4',{headers:{Range:'bytes=999999-'}});
       const missing=await fetch('audio/not-in-manifest.wav');
       let unknownProgramBlocked=false;
-      try{await fetch('/marineford/not-in-manifest.js');}catch(_){unknownProgramBlocked=true;}
+      let unknownProgramStatus=0;
+      try{const unknown=await fetch('/marineford/not-in-manifest.js');unknownProgramStatus=unknown.status;
+        unknownProgramBlocked=unknown.status===404&&unknown.headers.get('X-PO-Local')==='missing';
+      }catch(_){unknownProgramBlocked=true;}
+      const xhrMissing=await new Promise(resolve=>{
+        try{const xhr=new XMLHttpRequest();xhr.open('GET','not-in-manifest.js');xhr.timeout=2000;
+          xhr.onload=()=>resolve(xhr.status===0&&!xhr.responseText);xhr.onerror=()=>resolve(true);xhr.ontimeout=()=>resolve(false);xhr.send();
+        }catch(_){resolve(true);}
+      });
+      const xhrAudio=await new Promise((resolve,reject)=>{
+        const xhr=new XMLHttpRequest();xhr.open('GET','audio/native-tone.wav');xhr.responseType='arraybuffer';xhr.timeout=2000;
+        xhr.onload=()=>resolve(xhr.status===200&&xhr.response.byteLength>0);xhr.onerror=()=>reject(Error('local audio XHR failed'));xhr.ontimeout=()=>reject(Error('local audio XHR timeout'));xhr.send();
+      });
       const missingImage=new Image();
       const missingImageBlocked=await new Promise(resolve=>{
         missingImage.onload=()=>resolve(false);missingImage.onerror=()=>resolve(true);
@@ -86,7 +98,8 @@ def main():
         audioDecoded:decoded.duration>0,videoDecoded:video.videoWidth===16&&video.duration>0,
         font:font.length>0&&dynamicFont.status==='loaded',range:range.status===206&&rangeBytes.byteLength===8,
         invalidRange:invalid.status===416,missing:missing.status===404,
-        unknownProgramBlocked,missingImageBlocked,
+        unknownProgramBlocked,unknownProgramStatus,missingImageBlocked,xhrMissing,xhrAudio,
+        httpStaticRequests:window.__fixtureHTTPStaticRequests,
         renderStatic:performance.getEntriesByType('resource').filter(e=>e.name.startsWith(location.origin)&&
           /\\/(marineford\\/(art|audio|video|videos|fonts)\\/|marineford\\/(index.html|marineford.js|marineford.css|sound.js|cards.json)|vendor\\/socket.io-client\\/)/.test(new URL(e.name).pathname)).length,
         marker:window.__PO_MARINEFORD_LOCAL_PROGRAM__===true,sound:window.fixtureSound===true,network});

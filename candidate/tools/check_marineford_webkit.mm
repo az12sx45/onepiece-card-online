@@ -58,17 +58,22 @@ static NSData *Read(NSString *root,NSString *name) {
 @interface ProgramProbe : NSObject <WKScriptMessageHandler,WKNavigationDelegate>
 @property(nonatomic,strong) NSMutableArray *results;
 @property(nonatomic) BOOL failed;
+@property(nonatomic) BOOL nativeLoadPending;
+@property(nonatomic) BOOL expectBlockedNavigation;
+@property(nonatomic) BOOL blockedNavigation;
+@property(nonatomic) NSUInteger allowedLoads;
 @end
 @implementation ProgramProbe
 - (void)userContentController:(WKUserContentController *)controller didReceiveScriptMessage:(WKScriptMessage *)message {
     if([message.body isKindOfClass:NSDictionary.class])[self.results addObject:message.body];
 }
 - (void)webView:(WKWebView *)web decidePolicyForNavigationAction:(WKNavigationAction *)action decisionHandler:(void (^)(WKNavigationActionPolicy))handler {
-    BOOL good=POOfficialGameURL(action.request.URL)&&[action.request.URL.path isEqual:@"/marineford/index.html"];
+    BOOL good=POAllowMarinefordProgramNavigation(action.request.URL,action.targetFrame.isMainFrame,self.nativeLoadPending);
+    if(good){self.nativeLoadPending=NO;self.allowedLoads++;}
     handler(good?WKNavigationActionPolicyAllow:WKNavigationActionPolicyCancel);
-    if(!good)self.failed=YES;
+    if(!good){if(self.expectBlockedNavigation)self.blockedNavigation=YES;else self.failed=YES;}
 }
-- (void)webView:(WKWebView *)web didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {self.failed=YES;}
+- (void)webView:(WKWebView *)web didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {if(error.code!=NSURLErrorCancelled)self.failed=YES;}
 @end
 
 static BOOL ProbeProgram(POMarinefordScheme *scheme,NSString *assets,NSUInteger version) {
@@ -85,6 +90,8 @@ static BOOL ProbeProgram(POMarinefordScheme *scheme,NSString *assets,NSUInteger 
     [config setURLSchemeHandler:scheme forURLScheme:@"poasset"];
     ProgramProbe *probe=[ProgramProbe new];probe.results=[NSMutableArray array];
     [config.userContentController addScriptMessageHandler:probe name:@"result"];
+    NSString *monitor=@"window.__fixtureHTTPStaticRequests=0;const countStatic=value=>{try{const u=new URL(String(value),document.baseURI);if(['http:','https:'].includes(u.protocol)&&!(u.origin==='https://onepiece-card-online.onrender.com'&&(u.pathname.startsWith('/api/')||u.pathname.startsWith('/socket.io/'))))window.__fixtureHTTPStaticRequests++;}catch(_){}};const platformFetch=window.fetch.bind(window);window.fetch=(input,...args)=>{countStatic(input instanceof Request?input.url:input);return platformFetch(input,...args);};const platformOpen=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(method,url,...args){countStatic(url);return platformOpen.call(this,method,url,...args);};for(const [proto,key] of [[HTMLImageElement.prototype,'src'],[HTMLMediaElement.prototype,'src'],[HTMLSourceElement.prototype,'src'],[HTMLScriptElement.prototype,'src'],[HTMLLinkElement.prototype,'href']]){const d=Object.getOwnPropertyDescriptor(proto,key);Object.defineProperty(proto,key,{...d,set(value){countStatic(value);d.set.call(this,value);}});}";
+    [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:monitor injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES]];
     [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:bootstrap injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES]];
     [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:checkedNetwork?@"window.__PO_FIXTURE_NETWORK_PROBE__=false":@"window.__PO_FIXTURE_NETWORK_PROBE__=true" injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES]];
     NSString *session=[[NSString alloc] initWithData:Read(assets,@"mobile/session-bootstrap.js") encoding:NSUTF8StringEncoding];
@@ -96,6 +103,7 @@ static BOOL ProbeProgram(POMarinefordScheme *scheme,NSString *assets,NSUInteger 
     window.contentView=web;[window orderFront:nil];
     NSURL *entry=[NSURL URLWithString:@"https://onepiece-card-online.onrender.com/marineford/index.html?layout=responsive&tabletop_android=1"];
     for(NSUInteger pass=0;pass<2;++pass) {
+        probe.nativeLoadPending=YES;
         [web loadHTMLString:html baseURL:entry];
         if(!Await(^BOOL{return probe.results.count>pass||probe.failed;}))return NO;
         if(probe.failed||probe.results.count<=pass)return NO;
@@ -109,8 +117,15 @@ static BOOL ProbeProgram(POMarinefordScheme *scheme,NSString *assets,NSUInteger 
             ![value[@"audio"] boolValue]||![value[@"video"] boolValue]||![value[@"audioDecoded"] boolValue]||
             ![value[@"videoDecoded"] boolValue]||![value[@"font"] boolValue]||![value[@"range"] boolValue]||
             ![value[@"invalidRange"] boolValue]||![value[@"missing"] boolValue]||![value[@"unknownProgramBlocked"] boolValue]||
-            ![value[@"missingImageBlocked"] boolValue]||![value[@"network"] boolValue]||[value[@"renderStatic"] unsignedIntegerValue]!=0){NSLog(@"Program fixture result %@",value);return NO;}
+            ![value[@"missingImageBlocked"] boolValue]||![value[@"xhrMissing"] boolValue]||![value[@"xhrAudio"] boolValue]||
+            ![value[@"network"] boolValue]||[value[@"httpStaticRequests"] unsignedIntegerValue]!=0||[value[@"renderStatic"] unsignedIntegerValue]!=0){NSLog(@"Program fixture result %@",value);return NO;}
     }
+    probe.expectBlockedNavigation=YES;
+    [web evaluateJavaScript:@"location.href='https://onepiece-card-online.onrender.com/marineford/index.html?unverified-remote-reload=1'" completionHandler:nil];
+    if(!Await(^BOOL{return probe.blockedNavigation;})||probe.allowedLoads!=2)return NO;
+    __block BOOL checked=NO,retained=NO;
+    [web evaluateJavaScript:@"window.__PO_MARINEFORD_LOCAL_PROGRAM__===true&&!!document.getElementById('po-marineford-program-style')" completionHandler:^(id value,NSError *error){retained=!error&&[value boolValue];checked=YES;}];
+    if(!Await(^BOOL{return checked;})||!retained)return NO;
     checkedNetwork=YES;
     [config.userContentController removeScriptMessageHandlerForName:@"result"];
     return YES;
@@ -219,6 +234,7 @@ static int Run(NSString *assets,NSString *fixtures,NSString *canonical,NSString 
     puts("PASS compatible installed A remains playable after B metadata corruption and cancellation then one-blob B upgrade");
     puts("PASS actual local audio video font decoding range and zero Render static resource requests");
     puts("PASS persisted latest-reference floor rejects older and equal-date conflicting metadata while compatible A remains playable");
+    puts("PASS unknown static fetch XHR DOM and page navigation never delegate to Render HTTP");
     return 0;
 }
 int main(int argc,char **argv) {

@@ -10,7 +10,9 @@
 @property(nonatomic,copy) NSString *gameId;
 @property(nonatomic,copy) NSString *programHTML;
 @property(nonatomic) BOOL programLoadPending;
+@property(nonatomic) BOOL programRevalidating;
 - (void)loadProgram;
+- (void)reconnectProgram;
 @property(nonatomic,copy) void (^returnToLauncher)(void);
 @property(nonatomic,copy) void (^revalidateProgram)(void (^completion)(BOOL));
 - (BOOL)open:(NSString *)gameId session:(NSDictionary *)session device:(NSString *)device marinefordAssets:(POMarinefordScheme *)assets;
@@ -36,19 +38,23 @@
     NSURL *base=[NSURL URLWithString:@"https://onepiece-card-online.onrender.com/marineford/index.html?layout=responsive&tabletop_android=1"];
     [_web loadHTMLString:self.programHTML baseURL:base];
 }
-- (void)reload {
-    [self confirm:@"重新連線？請先儲存目前進度。" action:^{
-        if(!self.programHTML){[self.web reload];return;}
-        if(!self.revalidateProgram)return;
+- (void)reconnectProgram {
+        if(!self.programHTML||!self.revalidateProgram||self.programRevalidating)return;
+        self.programRevalidating=YES;
         self.status.hidden=NO;self.status.text=@"正在核對遊戲版本…";
         __weak POWebGame *weakSelf=self;
         __weak WKWebView *targetWeb=self.web;
         self.revalidateProgram(^(BOOL valid){
             POWebGame *view=weakSelf;
             if(!view.web||view.web!=targetWeb||![view.gameId isEqual:@"marineford"]||!view.programHTML)return;
+            view.programRevalidating=NO;
             if(valid)[view loadProgram];
             else view.status.text=@"無法核對遊戲版本，請結束遊戲並回到啟動器更新後再試。";
         });
+}
+- (void)reload {
+    [self confirm:@"重新連線？請先儲存目前進度。" action:^{
+        if(self.programHTML)[self reconnectProgram];else [self.web reload];
     }];
 }
 - (void)finish { [self confirm:@"結束遊戲？請先儲存進度或離開對戰房間。" action:^{[self close];if(self.returnToLauncher)self.returnToLauncher();}]; }
@@ -124,12 +130,15 @@
     return YES;
 }
 - (void)hide { _surface.hidden=YES;[_web evaluateJavaScript:@"document.querySelectorAll('audio,video').forEach(m=>m.pause())" completionHandler:nil]; }
-- (void)close { [_web stopLoading];[_web.configuration.userContentController removeAllUserScripts];[_surface removeFromSuperview];_surface=nil;_web=nil;_status=nil;_gameId=nil;_programHTML=nil;_programLoadPending=NO;_revalidateProgram=nil; }
+- (void)close { [_web stopLoading];[_web.configuration.userContentController removeAllUserScripts];[_surface removeFromSuperview];_surface=nil;_web=nil;_status=nil;_gameId=nil;_programHTML=nil;_programLoadPending=NO;_programRevalidating=NO;_revalidateProgram=nil; }
 - (void)webView:(WKWebView *)web decidePolicyForNavigationAction:(WKNavigationAction *)action decisionHandler:(void (^)(WKNavigationActionPolicy))handler {if(action.targetFrame.isMainFrame&&POOfficialGameURL(action.request.URL)&&[action.request.URL.path isEqualToString:@"/__mobile_game_options__"]){handler(WKNavigationActionPolicyCancel);[self options];return;}BOOL allowed=POOfficialGameURL(action.request.URL);
-    if(_programHTML)allowed=action.targetFrame.isMainFrame&&
-        ((allowed&&[action.request.URL.path isEqual:@"/marineford/index.html"])||
-         (_programLoadPending&&[action.request.URL.absoluteString isEqual:@"about:blank"]));
-    handler(allowed?WKNavigationActionPolicyAllow:WKNavigationActionPolicyCancel);}
+    if(_programHTML){
+        allowed=POAllowMarinefordProgramNavigation(action.request.URL,action.targetFrame.isMainFrame,_programLoadPending);
+        if(allowed)_programLoadPending=NO;
+    }
+    BOOL reconnect=_programHTML&&!allowed&&action.targetFrame.isMainFrame&&POOfficialGameURL(action.request.URL)&&[action.request.URL.path isEqual:@"/marineford/index.html"];
+    handler(allowed?WKNavigationActionPolicyAllow:WKNavigationActionPolicyCancel);
+    if(reconnect)dispatch_async(dispatch_get_main_queue(),^{if(self.web==web)[self reconnectProgram];});}
 - (void)webView:(WKWebView *)web didFinishNavigation:(WKNavigation *)navigation {_programLoadPending=NO;_status.hidden=YES;}
 - (void)webView:(WKWebView *)web didFailProvisionalNavigation:(WKNavigation *)nav withError:(NSError *)error {if(error.code==NSURLErrorCancelled)return;_status.hidden=NO;_status.text=([_gameId isEqualToString:@"card"]||[_gameId isEqualToString:@"marineford"])?@"網路連線失敗，請用兩指長按畫面開啟遊戲選項，選擇重新連線。":@"網路連線失敗，請點右上「重新連線」。";}
 - (void)webView:(WKWebView *)web didFailNavigation:(WKNavigation *)nav withError:(NSError *)error {[self webView:web didFailProvisionalNavigation:nav withError:error];}

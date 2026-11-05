@@ -276,7 +276,8 @@ static NSArray *POMarinefordMissing(NSString *root, NSDictionary *package, NSStr
 }
 - (BOOL)prepareLaunchPackage:(NSDictionary *)package completion:(void (^)(POMarinefordScheme *))completion {
     if (self.job || self.preparingLaunch || !self.healthy || ![package[@"program"] boolValue] ||
-        ![package[@"revision"] isEqual:self.installed[@"revision"]]) return NO;
+        ![package[@"revision"] isEqual:self.installed[@"revision"]]||
+        ![package[@"reference"][@"manifestSha256"] isEqual:self.installed[@"reference"][@"manifestSha256"]]) return NO;
     self.preparingLaunch = YES;
     dispatch_async(self.io, ^{
         BOOL valid=POMarinefordMissing(self.root,package,self.sharedRoot).count==0;

@@ -9,6 +9,7 @@
   const originalFetch = window.fetch.bind(window);
   const imageSource = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src');
   const originalSetAttribute = Element.prototype.setAttribute;
+  const originalXHROpen = XMLHttpRequest.prototype.open;
   Object.defineProperty(window, '__PO_MARINEFORD_LOCAL_PROGRAM__', { value: true });
   Object.defineProperty(window, '__PO_MARINEFORD_LOCAL_MEDIA__', { value: true });
 
@@ -20,9 +21,8 @@
         return 'poasset://marineford/' + path;
       }
       if (url.origin === origin && Object.hasOwn(media, path)) return media[path].url;
-      if (url.origin === origin && /^marineford\/(art|audio|video|videos|fonts)\//.test(path)) {
-        return 'poasset://marineford/' + path;
-      }
+      if (url.origin === origin) return 'poasset://marineford/' + path;
+      if (['http:', 'https:'].includes(url.protocol)) return 'poasset://marineford/__unmapped__';
     } catch (_) {}
     return value;
   }
@@ -32,7 +32,8 @@
     set(value) { imageSource.set.call(this, localMedia(value)); }
   });
   for (const [prototype, property] of [[HTMLMediaElement.prototype, 'src'],
-    [HTMLSourceElement.prototype, 'src'], [HTMLVideoElement.prototype, 'poster']]) {
+    [HTMLSourceElement.prototype, 'src'], [HTMLVideoElement.prototype, 'poster'],
+    [HTMLScriptElement.prototype, 'src'], [HTMLLinkElement.prototype, 'href']]) {
     const descriptor = Object.getOwnPropertyDescriptor(prototype, property);
     Object.defineProperty(prototype, property, {
       ...descriptor, set(value) { descriptor.set.call(this, localMedia(value)); }
@@ -54,10 +55,21 @@
   Element.prototype.setAttribute = function setAttribute(name, value) {
     const property = String(name).toLowerCase();
     const mapped = property === 'src' && (this instanceof HTMLImageElement ||
-      this instanceof HTMLMediaElement || this instanceof HTMLSourceElement) ||
-      property === 'poster' && this instanceof HTMLVideoElement;
+      this instanceof HTMLMediaElement || this instanceof HTMLSourceElement || this instanceof HTMLScriptElement) ||
+      property === 'poster' && this instanceof HTMLVideoElement || property === 'href' && this instanceof HTMLLinkElement;
     return originalSetAttribute.call(this, name,
       mapped ? localMedia(value) : value);
+  };
+  function onlineRequest(url) {
+    return url.origin === origin && (url.pathname.startsWith('/api/') || url.pathname.startsWith('/socket.io/'));
+  }
+  XMLHttpRequest.prototype.open = function open(method, input, ...options) {
+    let address = input;
+    try {
+      const url = new URL(String(input), document.baseURI);
+      if (['http:', 'https:'].includes(url.protocol) && !onlineRequest(url)) address = localMedia(url.href);
+    } catch (_) {}
+    return originalXHROpen.call(this, method, address, ...options);
   };
 
   window.fetch = function fetch(input, options) {
@@ -73,7 +85,7 @@
       }
       if (url.origin === origin && /^marineford\/(art|audio|video|videos|fonts)\//.test(url.pathname.slice(1))) {
         const entry = media[url.pathname.slice(1)];
-        if (!entry || !['GET', 'HEAD'].includes(method)) return Promise.resolve(new Response('', { status: 404 }));
+        if (!entry || !['GET', 'HEAD'].includes(method)) return Promise.resolve(new Response('', { status: 404, headers: { 'X-PO-Local': 'missing' } }));
         const signal = options?.signal || (input instanceof Request ? input.signal : null);
         if (signal?.aborted) return Promise.reject(new DOMException('Aborted', 'AbortError'));
         const binary = atob(entry.url.slice(entry.url.indexOf(',') + 1));
@@ -95,6 +107,9 @@
           headers['Content-Length'] = String(body.length);
         }
         return Promise.resolve(new Response(method === 'HEAD' ? null : body, { status, headers }));
+      }
+      if (['http:', 'https:'].includes(url.protocol) && !onlineRequest(url)) {
+        return Promise.resolve(new Response('', { status: 404, headers: { 'X-PO-Local': 'missing' } }));
       }
     } catch (_) {}
     return originalFetch(input, options);

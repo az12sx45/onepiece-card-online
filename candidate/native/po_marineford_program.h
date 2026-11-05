@@ -196,8 +196,8 @@ static BOOL POMarinefordRuntimeProof(NSData *data, NSDictionary *package) {
         NSURL *url=[NSURL URLWithString:[css substringWithRange:[match rangeAtIndex:2]] relativeToURL:base].absoluteURL;
         NSString *path=[url.path hasPrefix:@"/"]?[url.path substringFromIndex:1]:@"";
         NSString *local=(POOfficialGameURL(url)||([url.scheme isEqual:@"poasset"]&&[url.host isEqual:@"marineford"]))?urls[path]:nil;
-        if(!local&&POOfficialGameURL(url)&&[path rangeOfString:@"^marineford/(art|audio|video|videos|fonts)/" options:NSRegularExpressionSearch].location!=NSNotFound)
-            local=[@"poasset://marineford/" stringByAppendingString:path];
+        if(!local&&[@[@"http",@"https"] containsObject:url.scheme])
+            local=POOfficialGameURL(url)?[@"poasset://marineford/" stringByAppendingString:path]:@"poasset://marineford/__unmapped__";
         if(local)css=[css stringByReplacingCharactersInRange:match.range withString:[NSString stringWithFormat:@"url(\"%@\")",local]];
     }
     NSRegularExpression *scripts=[NSRegularExpression regularExpressionWithPattern:@"<script\\b[^>]*\\bsrc\\s*=\\s*(['\"])([^'\"]+)\\1[^>]*>\\s*</script\\s*>"
@@ -226,14 +226,17 @@ static BOOL POMarinefordRuntimeProof(NSData *data, NSDictionary *package) {
     for(NSTextCheckingResult *attribute in [attributes matchesInString:html options:0 range:NSMakeRange(0,html.length)].reverseObjectEnumerator) {
         NSURL *target=[NSURL URLWithString:[html substringWithRange:[attribute rangeAtIndex:2]] relativeToURL:base].absoluteURL;
         NSString *path=[target.path hasPrefix:@"/"]?[target.path substringFromIndex:1]:@"";
-        if(POOfficialGameURL(target)&&urls[path])html=[html stringByReplacingCharactersInRange:[attribute rangeAtIndex:2] withString:urls[path]];
+        NSString *local=POOfficialGameURL(target)?urls[path]:nil;
+        if(!local&&[@[@"http",@"https"] containsObject:target.scheme])
+            local=POOfficialGameURL(target)?[@"poasset://marineford/" stringByAppendingString:path]:@"poasset://marineford/__unmapped__";
+        if(local)html=[html stringByReplacingCharactersInRange:[attribute rangeAtIndex:2] withString:local];
     }
     // The verified HTML executes its installed program only. API and room
     // traffic remains online, while absent assets cannot fall back to Render.
     NSRegularExpression *head=[NSRegularExpression regularExpressionWithPattern:@"<head\\b[^>]*>" options:NSRegularExpressionCaseInsensitive error:nil];
     NSArray *heads=[head matchesInString:html options:0 range:NSMakeRange(0,html.length)];
     if(heads.count!=1)return nil;
-    NSString *policy=@"<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src poasset: data: blob:; media-src data: blob:; font-src data: blob:; connect-src https://onepiece-card-online.onrender.com/api/ https://onepiece-card-online.onrender.com/socket.io/ wss://onepiece-card-online.onrender.com; worker-src blob:; object-src 'none'; frame-src 'none'; base-uri https://onepiece-card-online.onrender.com\">";
+    NSString *policy=@"<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src poasset: data: blob:; media-src data: blob:; font-src data: blob:; connect-src data: blob: https://onepiece-card-online.onrender.com/api/ https://onepiece-card-online.onrender.com/socket.io/ wss://onepiece-card-online.onrender.com; worker-src blob:; object-src 'none'; frame-src 'none'; base-uri https://onepiece-card-online.onrender.com\">";
     html=[html stringByReplacingCharactersInRange:NSMakeRange(NSMaxRange([heads[0] range]),0) withString:policy];
     return html;
 }
