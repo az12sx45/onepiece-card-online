@@ -42,9 +42,10 @@
         if(!self.revalidateProgram)return;
         self.status.hidden=NO;self.status.text=@"正在核對遊戲版本…";
         __weak POWebGame *weakSelf=self;
+        __weak WKWebView *targetWeb=self.web;
         self.revalidateProgram(^(BOOL valid){
             POWebGame *view=weakSelf;
-            if(!view.web)return;
+            if(!view.web||view.web!=targetWeb||![view.gameId isEqual:@"marineford"]||!view.programHTML)return;
             if(valid)[view loadProgram];
             else view.status.text=@"無法核對遊戲版本，請結束遊戲並回到啟動器更新後再試。";
         });

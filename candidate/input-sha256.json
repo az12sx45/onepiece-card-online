@@ -2846,7 +2846,7 @@
   "native/po_ios_bridge.mm": "c7183beebee95149241ef9269abadc00419ed411bea92b14cbe03ecdee79015f",
   "native/po_ios_download.h": "7f533cde59c2d34516314dfe8843a2b2428bf708b26e5dee8ba9a487127e5e7d",
   "native/po_ios_launcher.h": "db05a5fad1565edb86380ad6fb3b07c5b74c5f2f06c730a125fc544e009ca300",
-  "native/po_ios_web_game.h": "a5120c21cd821183e7b748f46db29cb088aacd3d64cc31919174e401d4ee3710",
+  "native/po_ios_web_game.h": "180d11d821288411e79f7a08a43f291cccd1f573ee9c58598d508f2989da45fb",
   "native/po_launcher_assets.h": "819bb38a7d3c742cf11ea653561ce4ffa10295947f5c77a8cabf65d7c87dadd4",
   "native/po_web_game_policy.h": "654c8e3dee3396ef7a732deb738a0d03013a808bfb3e4b7f293bdf162fd38999",
   "preparation.json": "a898b2344d40853c7fa158e4f8966051bed88aa0163004aeae1079af70fb6aa8",
