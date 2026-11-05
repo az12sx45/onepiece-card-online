@@ -26,7 +26,7 @@ jobs:
       - name: Verify existing-version launcher controls
         run: |
           clang -fobjc-arc -framework Cocoa -framework WebKit -I candidate/native candidate/tools/check_launcher_webkit.m -o "$RUNNER_TEMP/check-marineford-launcher"
-          "$RUNNER_TEMP/check-marineford-launcher" candidate/bundle-resources/launcher-web
+          "$RUNNER_TEMP/check-marineford-launcher" "$GITHUB_WORKSPACE/candidate/bundle-resources/launcher-web"
       - name: Save bounded origin evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

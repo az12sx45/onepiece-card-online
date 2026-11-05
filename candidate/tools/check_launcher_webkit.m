@@ -62,7 +62,7 @@ int main(int argc,const char **argv){@autoreleasepool{
     if(probe.ready&&!probe.failed){
         __block BOOL completed=NO,valid=NO;
         NSString *check=@"(()=>{selectedGameId='marineford';for(const status of ['update','error','paused']){snapshot.games.marineford={status,hasInstalled:true,installedVersion:'package-A',remoteVersion:'package-B'};renderFeature();renderDownloads();const row=Array.from(document.querySelectorAll('.download-row')).find(row=>row.querySelector('h3').textContent==='馬林福特之戰');if(existingLaunchAction.hidden||existingLaunchAction.disabled||!row||!Array.from(row.querySelectorAll('button')).some(button=>button.textContent==='啟動現有版本'&&!button.disabled))return false;}snapshot.games.marineford={status:'repair',hasInstalled:false};renderFeature();return existingLaunchAction.hidden;})()";
-        [probe.web evaluateJavaScript:check completionHandler:^(id value,NSError *error){valid=!error&&[value boolValue];completed=YES;}];
+        [probe.web evaluateJavaScript:check completionHandler:^(id value,NSError *error){valid=!error&&[value boolValue];if(!valid)NSLog(@"Existing-version UI result %@ error %@",value,error);completed=YES;}];
         NSDate *uiDeadline=[NSDate dateWithTimeIntervalSinceNow:5];
         while(!completed&&uiDeadline.timeIntervalSinceNow>0)[NSRunLoop.currentRunLoop runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.05]];
         if(!completed||!valid)probe.failed=YES;

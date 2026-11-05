@@ -5220,7 +5220,7 @@
   "project/york-controls.json": "0586c5c822b6b14761ad51cb5b436f0f540bf9de269241527510e0b4a88af42b",
   "tools/build_macos.py": "ec5f8a5a0756ba49decd77a5320e5757338897393dfbac00d59c93cf95f9a1f0",
   "tools/check_launcher.gd": "e6db843cb72e841f74235f07cd8b0a1a9f4bef4e44a17705e8079a4f3e3732a7",
-  "tools/check_launcher_webkit.m": "a2c99cfe0c79b0cdd68bec03a20b66ba972805d018cdd582b3812f3610f5228d",
+  "tools/check_launcher_webkit.m": "2f9039e10593f4b5de90c90eec20215ad080610a810f437c42be4c207deea462",
   "tools/check_login.cjs": "a2bfcae55e4bd053e8fa5ddafb2ba0c8fff6bb135a9ba708b1fbd18cd5e9adc0",
   "tools/check_media.gd": "71c7afc4f0bfd843bb29883f592448ce6a49b52a4c8c3d4c11e3e573d5733c13",
   "tools/check_windows.gd": "26e1de607a27fdb465402720cca874e415b79c98a5581d58003665af3ada3b79",
@@ -5239,7 +5239,7 @@
   "bundle-resources/launcher-web/launcher-assets/images/game_launcher/launcher_marineford_box_interior_v1.webp": "818a3145a122b9fa260132d37227e08db531642c73daecf43ea77630fe3a2e8e",
   "native/po_marineford_assets.h": "077bb958d1ed296a85ab01224019d3495e6a462760a999a45f1a9975685a5f47",
   "native/po_marineford_store.h": "368c4c6c7c48e4a7c475fff32ec75e9ac6c6824cda299e07e8bb6d1c69a8ea9a",
-  "tools/check_marineford_webkit.mm": "de8cbcd51dd8a005e96f7fa960788ca8720bbf14289361e0e1be453ca6a5c5f4",
+  "tools/check_marineford_webkit.mm": "53208a75ac92cc6886f88efdd7aa8f05ed35915277350c7a344c5a59267f00d8",
   "bundle-resources/launcher-web/mobile/marineford-program.js": "310059440d7d8b6c9ec1f081c24f4b3a33072d9581caf414695c21c30eebc63a",
   "native/po_marineford_program.h": "bfa58bc6d7c69148aa1a11ad4e21e64bcf9e0b9423a893c19838b29c584dd102",
   "tools/fixtures/marineford-package-v1.json": "daa7ae76d2eb150ecd127a603bd2e7f402133f2d47ccef23d9b819f8d8417182",
@@ -5248,5 +5248,7 @@
   "tools/save_ci_release.py": "22e0d085a05e656865816da6b6adf2939c4f07889a757a4fc2f2dff3b63a5bc8",
   "tools/fixtures/tone.wav": "27c7fd3bd832d3dc77221975b305034933548904b1d24f7b7917b6c89a82892b",
   "tools/fixtures/blue.mp4": "a7ddaf598f13879f0e9a6a4a531588ab281b85f2bd38b97704de66ec4cce3e57",
-  "tools/fixtures/fixture.woff": "25b998fa0cdc1498b3e29b063d2996d5cd4faff0beb6068149bc6357c9fd10dd"
+  "tools/fixtures/fixture.woff": "25b998fa0cdc1498b3e29b063d2996d5cd4faff0beb6068149bc6357c9fd10dd",
+  "tools/fixtures/marineford-package-v2.json": "ec02bb57e9e6f7d8058a9d863223fa5c9e415bf11116be29d38efead880fd536",
+  "tools/fixtures/marineford-release-v2.json": "3639217126c4550200d4a296e995d14eaa7abe224a666715fdbdc9a3f6dae2d5"
 }

@@ -135,6 +135,9 @@ static BOOL ProbeProgram(POMarinefordScheme *scheme,NSString *assets,NSUInteger 
 static int Run(NSString *assets,NSString *fixtures,NSString *canonical,NSString *root) {
     NSDictionary *golden=POMarinefordProgramPackage(Read(canonical,@"marineford-package-v1.json"),Read(canonical,@"marineford-release-v1.json"));
     CHECK(golden&&[golden[@"files"] count]==375,"independent canonical 375-row manifest");
+    NSDictionary *published=POMarinefordProgramPackage(Read(canonical,@"marineford-package-v2.json"),Read(canonical,@"marineford-release-v2.json"));
+    CHECK(published&&[published[@"files"] count]==375&&[published[@"revision"] isEqual:@"package-17e7105b7f5b5c55"]&&
+        [published[@"reference"][@"manifestSha256"] isEqual:@"ec02bb57e9e6f7d8058a9d863223fa5c9e415bf11116be29d38efead880fd536"],"exact current public B and retained A native metadata compatibility");
     NSData *reference=Read(fixtures,@"pointer-1.json"),*manifest=Read(fixtures,@"manifest-1.json");
     NSDictionary *package=POMarinefordProgramPackage(manifest,reference);
     CHECK(package&&[package[@"files"] count]==11,"independent program plus actual image audio video font manifest");
