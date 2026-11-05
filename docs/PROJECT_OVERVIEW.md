@@ -3107,3 +3107,5 @@ Card package-6fd7444442d60fe6已完成Windows/Android/iOS既有發布通道的�
 Marineford uses a separate programme-and-media package in Windows 1.2.33 and mobile v066. An approved installed version can launch during a newer failed or interrupted download. Updates reuse verified content hashes and switch the installed receipt after all required files pass verification. The native game supplies programme files and images locally while account and live-room data use the official service.
 
 The current package has six programme files and 369 image records. Sound effects use local WebAudio synthesis and fonts use the system. File-based audio, video and font support is covered by separate decoding and Range fixtures. Source, public release and physical-device evidence are listed separately in the release handoff and `docs/DEV_WORKFLOW.md`.
+
+官網的遊戲介紹列出《新世界航海錄》《偉大航道爭霸戰》《霸海戰棋》《馬林福特之戰》四款遊戲。Marineford 的啟動器公告以《馬林福特之戰》作為正式顯示名稱。

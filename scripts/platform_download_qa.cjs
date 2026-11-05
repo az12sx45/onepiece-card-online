@@ -8,6 +8,7 @@ const base = (process.argv[2] || 'http://127.0.0.1:18938').replace(/\/$/, '');
 const out = process.argv[3];
 const cdn = 'https://game-assets.rihdi.tw';
 const windowsArtifact = version => `ONE-PIECE-Tabletop-Launcher-${version}-x64.exe`;
+const gameTitles = ['新世界航海錄', '偉大航道爭霸戰', '霸海戰棋', '馬林福特之戰'];
 const platforms = [
   {
     id: 'windows', link: '#download-link', info: '#release-info',
@@ -129,6 +130,8 @@ async function run(browser, stable, config) {
       recommended: document.querySelector('.recommended')?.id || null,
       first: document.querySelector('.downloads > section')?.id,
       note: document.querySelector('#device-note').textContent,
+      gamesTitle: document.querySelector('#games-title').textContent,
+      games: [...document.querySelectorAll('.game-grid .game h3')].map(element => element.textContent),
       platforms: Object.fromEntries(selectors.map(({ id, link, info }) => {
         const anchor = document.querySelector(link);
         return [id, { href: anchor.href, height: anchor.getBoundingClientRect().height,
@@ -136,6 +139,8 @@ async function run(browser, stable, config) {
       }))
     }), platforms);
     assert(!state.overflow, config.name + ' overflow');
+    assert.equal(state.gamesTitle, '桌遊系列 · 四款遊戲');
+    assert.deepEqual(state.games, gameTitles, config.name + ' four official game titles');
     assert.equal(state.recommended, config.mode === 'no-js' ? null : config.expected);
     if (['android-card', 'ios-card'].includes(config.expected) && config.mode !== 'no-js') {
       assert.equal(state.first, config.expected);

@@ -9137,3 +9137,10 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - The current game package contains 369 image records and six programme files, with zero audio, video or font files. Its existing `sound.js` synthesizes sounds locally with WebAudio oscillators and noise buffers. A trusted normal entry and the existing click, draw and rally cues were exercised through the native cache with a running AudioContext and zero static HTTP fallback. Font rendering uses system fonts. Separate tiny WAV, MP4 and WOFF fixtures verify the native file-media routes and decoding capabilities. Windows also tests WebM.
 - The download page and its browser QA move the static fallback versions and validation floors to Windows 1.2.33, Android v066 and iOS v066. Existing download cards use their platform-specific official channels. Release records separately bind public artifact hashes, channel activation, browser checks and the final deployed HTML.
 - The legacy catalog suite stops at its existing v2/v3 image-tree assertion. The compared catalogs, config and current manifests match the pre-change bytes, recorded in `D:/Codex_QA/marineford-native-package-release-20261105/retained-baseline.json`. Targeted runtime-endpoint and native package regressions pass.
+
+### 2026-11-05 官網四款遊戲與公告正式名稱
+
+- 官網遊戲區補上《馬林福特之戰》，與《新世界航海錄》《偉大航道爭霸戰》《霸海戰棋》並列。桌面使用兩欄，手機採直排。
+- 公告 revision 91 統一 16 則 Marineford 記錄的可見名稱。91 則記錄的 ID、日期、排序與發布閘門沿用既有資料，campaign 與 harbor 兩則維持草稿狀態。
+- 平台瀏覽器 QA 新增四款正式名稱檢查，17 個本機情境通過。既有公告 server QA 82 項及獨立 PGlite 改名回歸通過，驗證已讀時間、未讀數、發布見證與帳號資料。
+- 名稱差異、瀏覽器及正式部署讀回證據存於 `D:/Codex_QA/homepage-four-games-names-20261105`。

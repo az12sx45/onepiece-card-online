@@ -49,7 +49,7 @@
     .steps li::before { counter-increment:step; content:counter(step); flex:0 0 21px; height:21px; margin-top:1px; border:1px solid #49606a; border-radius:50%; text-align:center; color:var(--gold); font-size:11px; line-height:19px; }
     .games { padding:0 0 43px; }
     .section-label { margin:0 0 16px; color:var(--muted); font-size:12px; font-weight:400; letter-spacing:.16em; }
-    .game-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .game-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
     .game { position:relative; padding:23px 24px; border:1px solid var(--line); border-radius:10px; background:#0c1e2bc9; }
     .game-tag { color:var(--teal); font-size:11px; letter-spacing:.13em; }
     .game h3 { margin:8px 0 6px; font-size:20px; letter-spacing:.025em; }
@@ -152,11 +152,12 @@
         </section>
       </div>
       <section class="games" aria-labelledby="games-title">
-        <h2 id="games-title" class="section-label">Windows 桌遊系列 · 三種冒險</h2>
+        <h2 id="games-title" class="section-label">桌遊系列 · 四款遊戲</h2>
         <div class="game-grid">
           <article class="game"><span class="game-tag">航海・桌遊冒險</span><h3>新世界航海錄</h3><p>擲骰出航，招募夥伴，探索新世界。</p></article>
           <article class="game"><span class="game-tag">卡牌・策略對決</span><h3>偉大航道爭霸戰</h3><p>組織你的陣容，展開卡牌對戰。</p></article>
           <article class="game"><span class="game-tag">棋盤・戰術交鋒</span><h3>霸海戰棋</h3><p>在棋盤上佈局，走出致勝的一步。</p></article>
+          <article class="game"><span class="game-tag">陣營・卡牌交鋒</span><h3>馬林福特之戰</h3><p>海軍與海賊正面交鋒，運用角色能力扭轉戰局。</p></article>
         </div>
       </section>
       <section class="notes" aria-label="下載與遊玩說明">
