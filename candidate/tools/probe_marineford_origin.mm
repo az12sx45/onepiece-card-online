@@ -58,18 +58,23 @@ int main(int argc,char **argv) {
         config.applicationNameForUserAgent=@"ONEPIECE_TABLETOP_IOS/0.1.0 (Electron/44.1.1 compatibility)";
         [config setURLSchemeHandler:scheme forURLScheme:@"poasset"];
         [config.userContentController addScriptMessageHandler:probe name:@"probe"];
+        NSString *vendor=[[NSString alloc] initWithData:scheme.socketScript encoding:NSUTF8StringEncoding];
+        [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:vendor injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES]];
+        NSString *dataBridge=@"const originalFetch=window.fetch.bind(window);window.fetch=(input,options)=>input==='cards.json'?Promise.resolve(new Response('[{\"id\":\"native-fixture\"}]',{status:200,headers:{'Content-Type':'application/json'}})):originalFetch(input,options);";
+        [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:dataBridge injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES]];
         NSString *seed=@"if(location.origin==='https://onepiece-card-online.onrender.com'){window.__poSeedOrigin=true;}";
         [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:seed injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES]];
         WKWebView *web=[[WKWebView alloc] initWithFrame:NSMakeRect(0,0,740,360) configuration:config];web.navigationDelegate=probe;
         NSWindow *window=[[NSWindow alloc] initWithContentRect:NSMakeRect(0,0,740,360) styleMask:NSWindowStyleMaskBorderless backing:NSBackingStoreBuffered defer:NO];
         window.contentView=web;[window orderFront:nil];
         NSURL *entry=[NSURL URLWithString:@"https://onepiece-card-online.onrender.com/marineford/index.html?layout=responsive&tabletop_android=1"];
-        NSString *html=@"<!doctype html><script src='poasset://marineford/vendor/socket.io.min.js'></script><script>"
+        NSString *html=@"<!doctype html><script>"
             @"(async()=>{const r={stage:1,origin:location.origin,href:location.href,base:document.baseURI,seed:window.__poSeedOrigin===true};"
             @"try{localStorage.setItem('__po_origin_probe','one');r.localStorage=localStorage.getItem('__po_origin_probe')==='one';}catch(e){r.localStorageError=e.name;}"
             @"try{sessionStorage.setItem('__po_origin_probe','one');r.sessionStorage=sessionStorage.getItem('__po_origin_probe')==='one';}catch(e){r.sessionStorageError=e.name;}"
             @"try{document.cookie='__po_origin_probe=one; path=/; Secure; SameSite=Strict';r.cookie=document.cookie.includes('__po_origin_probe=one');}catch(e){r.cookieError=e.name;}"
-            @"try{const x=await fetch('cards.json',{cache:'no-store'});r.relativeStatus=x.status;r.relativeFetch=x.ok&&Array.isArray(await x.json());}catch(e){r.relativeFetchError=e.name;}"
+            @"try{const x=await fetch('cards.json?origin-probe=1',{cache:'no-store'});r.relativeStatus=x.status;r.relativeFetch=x.ok&&Array.isArray(await x.json());}catch(e){r.relativeFetchError=e.name;}"
+            @"try{const x=await fetch('cards.json');r.localDataResponse=x.ok&&(await x.json())[0].id==='native-fixture';}catch(e){r.localDataError=e.name;}"
             @"try{const x=await fetch('poasset://marineford/marineford/cards.json');r.nativeStatus=x.status;r.nativeFetch=x.ok&&(await x.json())[0].id==='native-fixture';}catch(e){r.nativeFetchError=e.name;}"
             @"try{const s=io({autoConnect:false,reconnection:false});r.defaultSocketURI=s.io.uri;s.disconnect();}catch(e){r.defaultSocketError=e.name;}"
             @"try{r.explicitSocket=await new Promise(resolve=>{const s=io('https://onepiece-card-online.onrender.com',{transports:['websocket'],timeout:12000,reconnection:false});s.on('connect',()=>{s.disconnect();resolve(true)});s.on('connect_error',()=>{s.disconnect();resolve(false)});});}catch(e){r.explicitSocketError=e.name;}"
