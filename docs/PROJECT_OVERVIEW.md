@@ -3111,3 +3111,9 @@ The current package has six programme files and 369 image records. Sound effects
 官網的遊戲介紹列出《新世界航海錄》《偉大航道爭霸戰》《霸海戰棋》《馬林福特之戰》四款遊戲。Marineford 的啟動器公告以《馬林福特之戰》作為正式顯示名稱。
 
 Android v067 修正手機 JSON 斜線轉義造成的 Marineford 清單摘要不符；正常下載與重試的證據使用官方 AOSP org.json 及實際 APK 入口。Windows 1.2.33、iOS v066 沿用核心；遊戲套件 C 更新雙方抽牌提示與海軍左右手牌交換標示。公開發布與手機驗收以整合收據分別記錄。
+
+## 2026-11-06 Marineford Kizaru rule snapshot
+
+黃猿改為 1 張士氣，猜數字雷射及八尺瓊勾玉延長蓄光並放慢射擊。Windows 1.2.33、Android v067 與 iOS v066 共用新版獨立遊戲包，不重發核心。
+
+遊戲頁與 server 使用規則標記 20261106-kizaru-one。SOCIAL_AUTH 後先確認唯讀 MF_RULES，通過才自動加入原房間；舊頁面的 MF 指令會收到更新提示。這也避免切換期間新頁面進入舊規則 server。服務重啟仍依既有設計清空未完成的記憶體房間，已結算的持久戰績不變。

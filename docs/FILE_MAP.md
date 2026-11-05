@@ -2336,3 +2336,5 @@ CARD_TIMING_VIDEO_20261104.md列使用者逐卡決策與來源界線。正式gam
 - `docs/WINDOWS_MARINEFORD_PACKAGE_20261105.md` records the Windows contract and evidence. `public/desktop-download.html` and `scripts/platform_download_qa.cjs` maintain the three native download cards and version floors.
 
 2026-11-05 的抽牌及交換提示位於 `public/marineford/marineford.js` 的 render 與 present DRAW 分支，以及 `marineford.css` 的 draw-ready、draw-flight 和 arranging 樣式。來源操作白名單及 Chrome/WebKit 候選證據存於 `D:/Codex_QA/marineford-draw-arrange-release-20261105`。
+
+2026-11-06 黃猿士氣資料位於 public/marineford/cards.json；雷射蓄光與雙向規則握手位於 marineford.js。server/marineford-rooms.js 統一檢查 MF 規則標記並回覆 MF_RULES；scripts/marineford_ruleset_qa.js 與 marineford_reconnect_qa.cjs 涵蓋舊頁拒絕、新規則連線、ACK 和重連。發行端清空 config/marineford-compatible-packages-v1.json 舊包核准，並同步 server 資料、獨立套件及公告；證據另存 D:/Codex_QA/marineford-kizaru-release-20261106。

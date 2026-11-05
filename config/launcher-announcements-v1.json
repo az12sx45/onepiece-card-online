@@ -1,7 +1,27 @@
 {
   "schemaVersion": 1,
-  "revision": 92,
+  "revision": 93,
   "announcements": [
+    {
+      "id": "marineford-20261106-kizaru-morale-charge",
+      "status": "published",
+      "publishedAt": "2026-11-05T17:10:16.714Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "馬林福特之戰 2026.11.06",
+      "title": "馬林福特之戰：黃猿士氣與蓄光演出修正",
+      "summary": "黃猿改為獲得1張士氣，猜數字雷射延長蓄光、放慢發射。",
+      "body": [
+        "黃猿卡改為獲得 1 張士氣卡，卡面說明與伺服器判定同步修正。",
+        "延長猜數字雷射與八尺瓊勾玉的蓄光及停留時間，再放慢光束與交替射擊，讓發射過程更清楚。",
+        "請先更新《馬林福特之戰》遊戲內容，再重新進入。舊版遊戲會提示先更新，以保持卡面說明與實際規則一致。",
+        "Windows 1.2.33、Android v067 及 iOS v066 沿用現有啟動器與 App，在啟動器內更新遊戲即可。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.33"
+      }
+    },
     {
       "id": "marineford-20261105-android067-draw",
       "status": "published",

@@ -9168,3 +9168,11 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - 另以 Chrome／WebKit 在 charging 階段取消後觀測 5200 ms，超過未取消單發後續約 4550 ms 的時間窗，確認無晚到 ACK、結果或殘留圖層；不以縮短等待代替新演出的取消驗證。
 - Chrome／WebKit 各另通過 3 種實際前端握手失敗情境：server 無 MF_RULES（實際逾時）、錯版、缺值均不送 MF_JOIN／MF_CREATE，保留原帳號與待恢復房號。npm start 與三個正式程式 HTTP 讀回通過；本地 DB 未啟用。
 - 差異、來源雜湊與證據位於 D:/Codex_QA/marineford-kizaru-morale-charge-integration-20261106。規則包相容清單、發布 metadata、公告與正式公開驗證由整合發布者接續；本次未測實體手機或正式玩家帳號。
+
+### 2026-11-06 黃猿規則版整合發布
+
+- 從 e00d 正式基底整合單卡士氣與三個雷射操作，來源凍結 54b0de84492716b6e747dd25b0b2fb45b6fe0a4b；server 規則標記閘門為其父提交 0c2c9a4。新包 package-7a8da6342deb7fc9 只替換 cards.json 與 marineford.js，369 張圖片及其他四個固定程式保留。
+- 舊 A/B/C 說明為 3 張，與本次 server 1 張不相容。protocol 1 保留但清空舊包核准。已開舊頁不能跳過 MF 指令規則標記；新頁須在社交登入後確認 MF_RULES 才加入房間，避免更新期間反向連到舊 server。MF_RULES 和 ACK 不消耗行動節流。
+- Engine 13 項／1500 局、Chrome／WebKit 各 9 項通過；各引擎另驗 3 種握手失敗與 5200 ms 取消觀測。server guard 9 項、真 Socket.IO 重連 8 項及兩個實際 Chrome 視窗建房／加入／開始／抽牌 ACK／重整恢復 5 項通過。身份和圖片 fixture 與正式帳號／真機驗收分開。
+- 公告 revision 93 新增本波內容，舊 92 則逐值保留。Windows 1.2.33、Android v067、iOS v066 核心沿用，原生導言延期決策不變。服務重啟不還原記憶體中的未完成房間，既有已結算戰績仍沿原持久儲存。
+- 發布前後的 package、CAS、實際 HTTP／WebSocket、舊包撤銷與 Android C→新版正常 UI 更新證據另存 D:/Codex_QA/marineford-kizaru-release-20261106；公開與實體裝置狀態以該次最終收據為準。
