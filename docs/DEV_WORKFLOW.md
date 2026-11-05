@@ -9176,3 +9176,9 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - Engine 13 項／1500 局、Chrome／WebKit 各 9 項通過；各引擎另驗 3 種握手失敗與 5200 ms 取消觀測。server guard 9 項、真 Socket.IO 重連 8 項及兩個實際 Chrome 視窗建房／加入／開始／抽牌 ACK／重整恢復 5 項通過。身份和圖片 fixture 與正式帳號／真機驗收分開。
 - 公告 revision 93 新增本波內容，舊 92 則逐值保留。Windows 1.2.33、Android v067、iOS v066 核心沿用，原生導言延期決策不變。服務重啟不還原記憶體中的未完成房間，既有已結算戰績仍沿原持久儲存。
 - 發布前後的 package、CAS、實際 HTTP／WebSocket、舊包撤銷與 Android C→新版正常 UI 更新證據另存 D:/Codex_QA/marineford-kizaru-release-20261106；公開與實體裝置狀態以該次最終收據為準。
+
+<!-- CARD_PROFILE_MOBILE_20261106_BEGIN -->
+### 2026-11-06 爭霸戰個人頁面手機排版
+`public/profile.html` 以頁面內手機樣式整合段位、海賊旗、懸賞令、戰績與豪華卡收藏。修正固定桌機座標及已裝 Android/iOS 兩欄、160px 牆高覆蓋造成的裁切。稱號依 tier 重排以保留原分類和點選佩戴，頁底留好友入口的空間，裝飾不攔截頭像點擊。新增 profilePage 錨點，程式、PROFILE 事件和參觀權限未改。
+本機來源與公開基線逐 byte 核對，精確手機套件使用 Android v067、iOS v066 實際封裝內容。檢查涵蓋窄直向、短橫向、桌機對照、原彈窗及合成帳號互動。測試和未測範圍見 D:/Codex_QA/card-profile-mobile-20261106，正式發布由啟動器交接收據核對。LATTICE 工具本階段未提供，沒有持久登記宣稱。
+<!-- CARD_PROFILE_MOBILE_20261106_END -->

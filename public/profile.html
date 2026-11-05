@@ -1015,10 +1015,194 @@
 
   <!-- Socket.IO -->
   <script src="vendor/socket.io-client/4.8.1/socket.io.min.js?v=20260907-local-runtime-v1"></script>
+<!-- CARD_PROFILE_MOBILE_20261106_BEGIN -->
+<style id="cardProfileMobileLayout">
+  @media (max-width: 980px), (hover: none) and (pointer: coarse) {
+    html:root body #profilePage {
+      width: 100%;
+      max-width: 1100px;
+      padding: 10px 10px calc(84px + env(safe-area-inset-bottom)) !important;
+      overflow-wrap: anywhere;
+    }
+    html:root body .wrap > .grid {
+      grid-template-columns: minmax(0, 1fr) !important;
+      gap: 12px !important;
+    }
+    html:root body .wrap :is(.card, .brand, .title, .grid > *, .card .hd > *) {
+      min-width: 0;
+    }
+    html:root body .wrap .topbar {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    html:root body .wrap .brand {
+      flex: 1 1 100%;
+    }
+    html:root body .wrap .title {
+      flex: 1;
+    }
+    html:root body .wrap .nameBtn {
+      max-width: 100%;
+    }
+    html:root body .wrap .actions {
+      width: 100%;
+    }
+    html:root body .wrap .actions .btn {
+      flex: 1 1 140px;
+      min-height: 44px;
+    }
+    html:root body .wrap .card .hd {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    html:root body .wrap .wallTools {
+      flex-wrap: wrap;
+    }
+    html:root body .modalBack > .modal {
+      max-height: calc(100vh - 36px);
+      max-height: calc(100dvh - 36px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    html:root body .wrap #wallStage {
+      display: grid;
+      grid-template-areas: "rank flag poster";
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) minmax(0, 1fr);
+      align-items: center;
+      justify-items: center;
+      gap: 16px;
+      height: auto !important;
+      min-height: 0 !important;
+      padding: 18px;
+    }
+    html:root body #wallStage :is(.rankLayer, .flagLayer, .poster) {
+      position: relative !important;
+      inset: auto !important;
+      transform: none !important;
+      width: 100% !important;
+      min-width: 0;
+      height: auto !important;
+      margin: 0;
+    }
+    html:root body #wallStage .rankLayer {
+      grid-area: rank;
+      max-width: 150px;
+    }
+    html:root body #wallStage .rankLayer img {
+      width: 100%;
+      height: auto;
+    }
+    html:root body #wallStage .flagLayer {
+      grid-area: flag;
+      max-width: 320px;
+      object-fit: contain;
+    }
+    html:root body #wallStage .poster {
+      grid-area: poster;
+      max-width: 150px;
+      aspect-ratio: 2 / 3;
+    }
+    html:root body #wallStage .poster img {
+      object-fit: contain;
+    }
+    html:root body #wallEmpty {
+      position: static;
+      grid-column: 1 / -1;
+      padding: 8px;
+    }
+    html:root body .wrap .gallery {
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 10px !important;
+    }
+    html:root body .wrap .gallery img {
+      object-fit: contain;
+    }
+    html:root body .wrap :is(.titleCatalogTop, .tcMeta) {
+      flex-wrap: wrap;
+    }
+    html:root body .wrap .titleCatalogTop .right {
+      flex: 1 1 100%;
+    }
+    html:root body .wrap .tcSearch {
+      flex: 1;
+      width: auto;
+      min-width: 100px;
+      max-width: 100%;
+    }
+    html:root body .titleMatrix,
+    html:root body .titleMatrix tbody {
+      display: block;
+    }
+    html:root body .titleMatrix thead {
+      display: none;
+    }
+    html:root body .titleMatrix tbody > tr {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px;
+    }
+    html:root body .titleMatrix td {
+      display: block;
+      min-width: 0;
+      padding: 10px 8px;
+    }
+    html:root body .titleMatrix .tierCol {
+      grid-column: 1 / -1;
+      width: auto;
+      border-right: 0;
+    }
+    html:root body .wrap .player-title-badge {
+      max-width: 100%;
+      white-space: normal;
+    }
+    html:root body .wrap .player-title-badge.compact {
+      padding: 7px 12px;
+    }
+    html:root body .wrap .player-title-badge .text {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    html:root body .wrap .player-title-badge :is(.glow, .text),
+    html:root body .wrap .player-title-badge::before,
+    html:root body .wrap .player-title-badge::after {
+      pointer-events: none;
+    }
+    html:root body #friendDock {
+      top: auto;
+      right: max(10px, env(safe-area-inset-right));
+      bottom: max(10px, env(safe-area-inset-bottom));
+      max-width: calc(100vw - 20px);
+      max-height: calc(100dvh - 20px) !important;
+    }
+    html:root body #friendDock.collapsed {
+      width: 170px;
+      height: 48px;
+    }
+    html:root body #friendDock.collapsed .fd-me-top {
+      display: none;
+    }
+  }
+  @media (max-width: 560px) {
+    html:root body .wrap #wallStage {
+      grid-template-areas: "rank flag" "poster poster";
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+      padding: 14px;
+      gap: 14px;
+    }
+    html:root body .wrap .gallery {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+    html:root body .titleMatrix tbody > tr {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
+<!-- CARD_PROFILE_MOBILE_20261106_END -->
 </head>
 
 <body>
-  <div class="wrap">
+  <div class="wrap" id="profilePage">
     <div class="topbar">
       <div class="brand">
         <div class="avatarBox" id="avatarBox" title="點擊更換頭貼（使用開始頁頭像）">
