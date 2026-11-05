@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "gameId": "marineford",
+  "protocol": 1,
+  "updatedAt": "2026-11-05T06:34:28.924Z",
+  "packages": [
+    {
+      "releaseId": "package-31f58689df2388e0",
+      "manifestPath": "desktop/manifests/marineford-package-31f58689df2388e0.json",
+      "manifestSha256": "daa7ae76d2eb150ecd127a603bd2e7f402133f2d47ccef23d9b819f8d8417182",
+      "entryPath": "marineford/index.html",
+      "totalFiles": 375,
+      "totalBytes": 90518959
+    }
+  ]
+}

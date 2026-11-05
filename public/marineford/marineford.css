@@ -750,3 +750,5 @@ body:has(#sheet:not([hidden])) > .mf-invite{visibility:hidden}
 }
 .mf-showcase-options{padding:6px}
 #effectLayer[data-phase="charging"] .laser-charge{z-index:3}
+
+/* Marineford local package delivery revision B. */

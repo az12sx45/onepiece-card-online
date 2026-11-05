@@ -9122,3 +9122,10 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 
 - Windows checks the current Marineford art inventory before opening the normal online game. AssetStore reuses verified CAS blobs and fetches only missing, damaged or changed hashes. The download progress and pause controls use the existing launcher flow.
 - The Marineford game session serves verified art from its cache. The game page, account and live room traffic continue to use the online service. The existing three-game desktop catalog stays compatible.
+
+### 2026-11-05 · Marineford independent game delivery
+
+- Marineford has its own schema-3 manifest and release reference. The six fixed programme files, scoped art, audio, video and fonts share the verified local CAS. Package builds enumerate committed media under the Marineford directories and reuse existing avatar hashes. The original three-game catalog remains byte-identical.
+- The package contract supports the existing 22 media extensions. Each asset is limited to 32 MiB and combined audio, video and fonts to 64 MiB. The native game session serves verified local files and rejects missing, corrupt, unknown and cross-origin static resources. Account and live-room data use the official service.
+- Runtime proof accepts an exact installed identity only when it is current or explicitly approved in the private protocol-1 compatibility list. Previous manifests are checked against their approved immutable SHA. Unknown identities, changed digests, removed approval and protocol mismatch fail closed. This keeps an approved installed game available during a failed or interrupted newer download.
+- Revision B adds one CSS comment to exercise game-only delivery after revision A. It preserves the game presentation and rules. Native acceptance covers the normal installed-game action, failed and interrupted updates, local media decoding and a successful one-blob upgrade with the same core. Public and native-device acceptance are recorded separately in the release handoff.

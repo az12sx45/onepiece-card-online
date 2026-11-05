@@ -9,7 +9,8 @@ const {
   validateAssetRecord, validateManifest, validateCatalog
 } = require('./desktop_program_package_common');
 const {
-  ASSET_BLOB_BASE_URL, RELEASE_PATH, ENTRY_PATH, PROGRAM_FILES, validateMarinefordRelease
+  ASSET_BLOB_BASE_URL, RELEASE_PATH, ENTRY_PATH, PROGRAM_FILES,
+  validateMarinefordRelease, validateMarinefordAssets
 } = require('../desktop/marineford-release');
 
 const root = path.resolve(__dirname, '..');
@@ -35,10 +36,25 @@ function build() {
     assert(!assets.has(asset.path), 'Duplicate Marineford package path ' + asset.path);
     assets.set(asset.path, asset);
   }
-  for (const asset of media.assets) {
+  for (const asset of media.assets.filter(asset => !asset.path.startsWith('marineford/'))) {
     assert.equal(asset.kind, 'image');
     assert.match(asset.path, /^(marineford\/art\/(v2\/)?[a-z0-9_-]+|images\/game_launcher\/launcher_marineford_cover_v[12])\.webp$/);
     add(asset);
+  }
+  const mediaPaths = execFileSync('git', [
+    'ls-tree', '-r', '-z', '--name-only', 'HEAD', '--',
+    'public/marineford/art', 'public/marineford/audio',
+    'public/marineford/video', 'public/marineford/videos', 'public/marineford/fonts'
+  ], { cwd: root, windowsHide: true }).toString('utf8').split('\0').filter(Boolean);
+  for (const trackedPath of mediaPaths) {
+    const assetPath = trackedPath.slice('public/'.length);
+    const type = classifyPath(assetPath);
+    assert(type, 'Unsupported Marineford media path ' + assetPath);
+    const bytes = readGit(assetPath);
+    add({ ...type, size: bytes.length, sha256: sha256Bytes(bytes) });
+  }
+  for (const asset of media.assets) {
+    assert(assets.has(asset.path), 'Missing legacy Marineford media path ' + asset.path);
   }
   for (let avatar = 1; avatar <= 222; avatar++) {
     const assetPath = 'images/board/avatars/' + avatar + '.webp';
@@ -52,6 +68,7 @@ function build() {
     add({ ...classifyPath(assetPath), size: bytes.length, sha256: sha256Bytes(bytes) });
   }
   const ordered = [...assets.values()].sort((a, b) => comparePaths(a.path, b.path));
+  validateMarinefordAssets(ordered);
   const createdAt = new Date().toISOString();
   const assetSetSha256 = sha256Bytes(JSON.stringify(ordered));
   const manifest = {

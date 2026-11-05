@@ -131,7 +131,85 @@ function createFixture() {
     const programPath = path.join(PUBLIC_ROOT, assetPath);
     put(programPath, realFs.readFileSync(programPath));
   }
-  return { records, touch, entryByGame, manifests, marineford, marinefordPath, manifestPath };
+  return { records, put, touch, entryByGame, manifests, marineford, marinefordPath, manifestPath };
+}
+
+async function verifyMarinefordCompatibility(origin, fixture) {
+  const endpoint = origin + '/api/desktop-runtime-package/marineford';
+  const a = fixture.marineford;
+  const queryA = endpoint + '?releaseId=' + a.releaseId + '&manifestSha256=' + a.manifestSha256;
+  const pointerRecord = fixture.records.get(fixtureKey(fixture.marinefordPath));
+  const pointerA = Buffer.from(pointerRecord.bytes);
+  const stylePath = path.join(PUBLIC_ROOT, 'marineford/marineford.css');
+  const styleRecord = fixture.records.get(fixtureKey(stylePath));
+  const styleA = Buffer.from(styleRecord.bytes);
+  const styleB = Buffer.concat([styleA, Buffer.from('\n/* compatible game-only update */\n')]);
+  const configPath = path.join(ROOT, 'config', 'marineford-compatible-packages-v1.json');
+  const compatibility = {
+    schema: 1, gameId: 'marineford', protocol: 1, updatedAt: new Date().toISOString(),
+    packages: [{
+      releaseId: a.releaseId, manifestPath: a.manifestPath, manifestSha256: a.manifestSha256,
+      entryPath: a.entryPath, totalFiles: a.totalFiles, totalBytes: a.totalBytes
+    }]
+  };
+  fixture.put(configPath, canonicalJson(compatibility));
+  const b = JSON.parse(fixture.records.get(fixtureKey(fixture.manifestPath)).bytes);
+  const style = b.assets.find(asset => asset.path === 'marineford/marineford.css');
+  const difference = styleB.length - style.size;
+  style.size = styleB.length;
+  style.sha256 = sha256(styleB);
+  b.totalBytes += difference;
+  b.byKind.style.bytes += difference;
+  b.assetSetSha256 = sha256(JSON.stringify(b.assets));
+  b.releaseId = 'package-' + b.assetSetSha256.slice(0, 16);
+  b.createdAt = new Date().toISOString();
+  const manifestB = canonicalJson(b);
+  const referenceB = {
+    ...a, releaseId: b.releaseId,
+    manifestPath: 'desktop/manifests/marineford-' + b.releaseId + '.json',
+    manifestSha256: sha256(manifestB), totalBytes: b.totalBytes, createdAt: b.createdAt
+  };
+  fixture.put(path.join(PUBLIC_ROOT, referenceB.manifestPath), manifestB);
+  pointerRecord.bytes = canonicalJson(referenceB);
+  fixture.touch(fixture.marinefordPath);
+  styleRecord.bytes = styleB;
+  fixture.touch(stylePath);
+  try {
+    assert.equal((await fetch(endpoint)).status, 200, 'New current B must validate its actual program bytes');
+    const old = await fetch(queryA);
+    assert.equal(old.status, 200, 'Approved A must remain launchable after B is current');
+    const result = await old.json();
+    assert.equal(result.releaseId, a.releaseId);
+    assert.equal(result.manifestSha256, a.manifestSha256);
+    const wrong = await fetch(endpoint + '?releaseId=' + a.releaseId + '&manifestSha256=' + '0'.repeat(64));
+    assert.equal(wrong.status, 503, 'Wrong previous digest must not receive current proof');
+    assert.equal((await fetch(endpoint + '?releaseId=' + a.releaseId)).status, 503, 'Partial query must fail');
+    assert.equal((await fetch(endpoint + '?releaseId=package-0000000000000000&manifestSha256=' + '0'.repeat(64))).status, 503);
+    const configRecord = fixture.records.get(fixtureKey(configPath));
+    configRecord.bytes = canonicalJson({ ...compatibility, packages: [] });
+    fixture.touch(configPath);
+    assert.equal((await fetch(queryA)).status, 503, 'Removing compatibility must revoke A proof immediately');
+    assert.equal((await fetch(endpoint)).status, 200, 'Revoking A must retain B');
+    configRecord.bytes = canonicalJson({ ...compatibility, protocol: 2 });
+    fixture.touch(configPath);
+    assert.equal((await fetch(queryA)).status, 503, 'Another wire protocol cannot authorize old A');
+    configRecord.bytes = canonicalJson(compatibility);
+    fixture.touch(configPath);
+    const oldManifest = fixture.records.get(fixtureKey(fixture.manifestPath));
+    const oldBytes = Buffer.from(oldManifest.bytes);
+    oldManifest.bytes = Buffer.concat([oldBytes, Buffer.from(' ')]);
+    fixture.touch(fixture.manifestPath);
+    assert.equal((await fetch(queryA)).status, 503, 'Approved history must still verify its immutable manifest digest');
+    oldManifest.bytes = oldBytes;
+    fixture.touch(fixture.manifestPath);
+    assert.equal((await fetch(queryA)).status, 200, 'Repairing approved metadata should recover A');
+    assert.equal((await fetch(origin + '/api/desktop-runtime-package/card')).status, 200);
+  } finally {
+    pointerRecord.bytes = pointerA;
+    fixture.touch(fixture.marinefordPath);
+    styleRecord.bytes = styleA;
+    fixture.touch(stylePath);
+  }
 }
 
 async function verifyMarineford(origin, fixture, reads) {
@@ -265,6 +343,7 @@ async function main() {
       });
     }
     await verifyMarineford(origin, fixture, reads);
+    await verifyMarinefordCompatibility(origin, fixture);
 
     const cardProgramPath = path.join(PUBLIC_ROOT, fixture.entryByGame.card);
     const cardProgramKey = fixtureKey(cardProgramPath);
@@ -337,7 +416,7 @@ async function main() {
     process.stdout.write(
       `DESKTOP_RUNTIME_PACKAGE_ENDPOINT_QA=PASS games=${GAME_IDS.length} success=3 unknown=404 ` +
       'cacheHit=PASS mtimeInvalidation=PASS sizeInvalidation=PASS manifestSha=PASS ' +
-      'catalogStat=PASS manifestTotals=PASS failClosed=503 filesUntouched=PASS marinefordIndependent=PASS\n'
+      'catalogStat=PASS manifestTotals=PASS failClosed=503 filesUntouched=PASS marinefordIndependent=PASS compatiblePrevious=PASS\n'
     );
   } finally {
     http.createServer = originalCreateServer;

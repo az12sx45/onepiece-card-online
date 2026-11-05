@@ -19,7 +19,9 @@ const {
   RELEASE_PATH: MARINEFORD_RELEASE_PATH,
   ENTRY_PATH: MARINEFORD_ENTRY_PATH,
   PROGRAM_FILES: MARINEFORD_PROGRAM_FILES,
-  validateMarinefordRelease
+  ASSET_BLOB_BASE_URL: MARINEFORD_BLOB_BASE,
+  validateMarinefordRelease,
+  validateMarinefordAssets
 } = require("../desktop/marineford-release");
 const { sanitizeProfileStats, PROFILE_STATS_SQL } = require("./board-art-collection");
 const { updateProfileSocial } = require("./profile-social-stats");
@@ -349,6 +351,7 @@ function validateDesktopRuntimePackageManifest(manifest, gameId, catalogRecord, 
   for(const logicalPath of gameConfig.programFiles){
     if(!assets.has(logicalPath)) throw desktopRuntimePackageError("desktop_runtime_manifest_program_missing");
   }
+  if (gameId === "marineford") validateMarinefordAssets([...assets.values()]);
   return assets;
 }
 
@@ -450,6 +453,60 @@ async function verifyDesktopRuntimePackage(gameId){
   }
 }
 
+async function verifyRequestedMarinefordPackage(query) {
+  const releaseId = query.releaseId;
+  const manifestSha256 = query.manifestSha256;
+  if (typeof releaseId !== "string" || !DESKTOP_RUNTIME_PACKAGE_RELEASE.test(releaseId) ||
+      typeof manifestSha256 !== "string" || !DESKTOP_RUNTIME_PACKAGE_HASH.test(manifestSha256)) {
+    throw desktopRuntimePackageError("marineford_requested_package_invalid");
+  }
+  const { catalogRecord: current, gameConfig } = await desktopRuntimePackageMetadata("marineford");
+  if (releaseId === current.releaseId) {
+    if (manifestSha256 !== current.manifestSha256) {
+      throw desktopRuntimePackageError("marineford_requested_digest_mismatch");
+    }
+    return verifyDesktopRuntimePackage("marineford");
+  }
+
+  // Previous program bytes require explicit approval for this server protocol.
+  const configPath = path.join(__dirname, "..", "config", "marineford-compatible-packages-v1.json");
+  const configStat = await desktopRuntimePackageFileStat(configPath, DESKTOP_RUNTIME_PACKAGE_CONFIG_LIMIT);
+  const configBytes = await desktopRuntimePackageStableRead(configPath, configStat, DESKTOP_RUNTIME_PACKAGE_CONFIG_LIMIT);
+  const config = desktopRuntimePackageJson(configBytes, "marineford_compatibility_invalid");
+  if (!desktopRuntimePackagePlainObject(config) || config.schema !== 1 ||
+      config.gameId !== "marineford" || config.protocol !== 1 ||
+      typeof config.updatedAt !== "string" || Number.isNaN(Date.parse(config.updatedAt)) ||
+      !Array.isArray(config.packages) || config.packages.length > 4) {
+    throw desktopRuntimePackageError("marineford_compatibility_invalid");
+  }
+  const seen = new Set();
+  const approved = config.packages.map(record => {
+    const entry = validateMarinefordRelease({
+      ...record, schema: 1, gameId: "marineford",
+      createdAt: config.updatedAt, assetBlobBaseUrl: MARINEFORD_BLOB_BASE
+    });
+    if (seen.has(entry.releaseId)) throw desktopRuntimePackageError("marineford_compatibility_invalid");
+    seen.add(entry.releaseId);
+    return entry;
+  }).find(record => record.releaseId === releaseId && record.manifestSha256 === manifestSha256);
+  if (!approved) throw desktopRuntimePackageError("marineford_package_incompatible");
+  const manifestFile = desktopRuntimePackagePublicFile(approved.manifestPath);
+  const manifestStat = await desktopRuntimePackageFileStat(manifestFile.absolutePath, DESKTOP_RUNTIME_PACKAGE_METADATA_LIMIT);
+  const bytes = await desktopRuntimePackageStableRead(manifestFile.absolutePath, manifestStat, DESKTOP_RUNTIME_PACKAGE_METADATA_LIMIT);
+  if (desktopRuntimePackageSha256(bytes) !== approved.manifestSha256) {
+    throw desktopRuntimePackageError("desktop_runtime_manifest_digest_mismatch");
+  }
+  validateDesktopRuntimePackageManifest(
+    desktopRuntimePackageJson(bytes, "desktop_runtime_manifest_invalid"),
+    "marineford", approved, gameConfig
+  );
+  return Object.freeze({
+    ok: true, schema: 1, gameId: "marineford",
+    releaseId: approved.releaseId, manifestSha256: approved.manifestSha256,
+    entryPath: approved.entryPath
+  });
+}
+
 async function desktopRuntimePackageEndpoint(req, res){
   res.setHeader("Cache-Control", "no-store");
   const gameId = String(req.params.gameId || "");
@@ -457,6 +514,10 @@ async function desktopRuntimePackageEndpoint(req, res){
     return res.status(404).json({ ok:false, error:"unknown_game" });
   }
   try {
+    if (gameId === "marineford" &&
+        (req.query.releaseId !== undefined || req.query.manifestSha256 !== undefined)) {
+      return res.json(await verifyRequestedMarinefordPackage(req.query));
+    }
     return res.json(await verifyDesktopRuntimePackage(gameId));
   } catch (error) {
     console.warn(`[desktop-runtime-package] ${gameId} ${String(error?.code || "verification_failed")}`);

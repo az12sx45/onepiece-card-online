@@ -7,7 +7,9 @@ const { execFileSync } = require('node:child_process');
 const { createRequire } = require('node:module');
 const P = require('./publish');
 const { validateManifest } = require('../../scripts/desktop_program_package_common');
-const { RELEASE_PATH, PROGRAM_FILES, validateMarinefordRelease } = require('../../desktop/marineford-release');
+const {
+  RELEASE_PATH, validateMarinefordRelease, validateMarinefordAssets
+} = require('../../desktop/marineford-release');
 
 const args = process.argv.slice(2);
 const live = args.includes('--live');
@@ -26,7 +28,7 @@ assert.equal(manifest.releaseId, reference.releaseId);
 assert.equal(manifest.entryPath, reference.entryPath);
 assert.equal(manifest.totalFiles, reference.totalFiles);
 assert.equal(manifest.totalBytes, reference.totalBytes);
-assert.deepEqual(manifest.assets.filter(asset => asset.kind !== 'image').map(asset => asset.path), PROGRAM_FILES);
+validateMarinefordAssets(manifest.assets);
 const records = new Map();
 for (const asset of manifest.assets) {
   let record = records.get(asset.sha256);
