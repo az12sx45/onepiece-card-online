@@ -172,6 +172,7 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
     report['rawRuntimeResourcesByteIdentical']=raw_verified
     report['macWebKitLauncherChecked']=True
     report['macWebKitMarinefordChecked']=True
+    report['macWebKitMarinefordProgramChecked']=True
     report['versionCode']=int(info['CFBundleVersion'])
     report['minimumOS']=info['MinimumOSVersion']
     report['strippedLocalAndDebugSymbols']=stripped

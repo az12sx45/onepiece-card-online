@@ -12,7 +12,7 @@ jobs:
   device:
     if: github.repository == 'az12sx45/onepiece-card-online' && github.event.repository.private == false
     permissions:
-      contents: read
+      contents: write
       actions: read
     runs-on: macos-26
     timeout-minutes: 60
@@ -22,6 +22,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 1
       - name: Check remaining free artifact capacity
+        id: storage
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python3 candidate/tools/prepare_ci_storage.py
@@ -41,7 +42,7 @@ jobs:
           if [ -f "$RUNNER_TEMP/po-build/build-result.json" ]; then cp "$RUNNER_TEMP/po-build/build-result.json" ci-result/; fi
           if [ -f "$RUNNER_TEMP/po-storage-guard.json" ]; then cp "$RUNNER_TEMP/po-storage-guard.json" ci-result/; fi
           printf '%s\n' 'Unsigned development candidate only. No Apple credentials or iPhone acceptance.' > ci-result/NOTICE.txt
-      - name: Refuse artifacts outside the reserved free capacity
+      - name: Verify bounded unsigned candidate size
         if: success()
         run: |
           python3 - <<'PY'
@@ -53,6 +54,8 @@ jobs:
           if ipa.stat().st_size>guard['maximumCandidateBytes']:raise SystemExit('Candidate exceeds reserved free storage; upload stopped')
           PY
       - name: Save diagnostics for one day
+        id: diagnostics
+        continue-on-error: true
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -60,10 +63,17 @@ jobs:
           path: ci-result/
           retention-days: 1
       - name: Save unsigned candidate for one day
-        if: success()
+        id: candidate
+        continue-on-error: true
+        if: success() && steps.storage.outputs.artifact-upload-allowed == 'true'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: PO-iOS-UNSIGNED
           path: ${{ runner.temp }}/po-build/PO-iOS-UNSIGNED.ipa
           retention-days: 1
           compression-level: 0
+      - name: Retain verified candidate in dedicated draft release
+        if: success() && (steps.storage.outputs.artifact-upload-allowed != 'true' || steps.candidate.outcome == 'failure' || steps.diagnostics.outcome == 'failure')
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -B candidate/tools/save_ci_release.py

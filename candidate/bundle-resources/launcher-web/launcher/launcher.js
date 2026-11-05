@@ -83,7 +83,7 @@ const GAMES = [
   }
 ];
 
-// Independent online game; original three entries and their download contracts stay intact.
+// Marineford uses independent verified game packages in the shared launcher.
 GAMES.push({ ...GAMES[0], id: 'marineford', title: '馬林福特之戰', english: 'MARINEFORD',
   tagline: '一位海軍，迎戰整個白鬍子海賊團。',
   description: '2–6 人非對稱合作對戰。海軍保留兩張手牌，海賊團各留一張；猜牌、看牌、士氣與決鬥，每一次選擇都牽動陣營戰力。',
@@ -606,7 +606,7 @@ function renderProgress(gameState) {
     ? (gameState.currentFile || '正在檢查版本與已安裝檔案…')
     : gameState.status === 'verifying'
       ? '正在驗證遊戲檔案…'
-      : (gameState.currentFile || '正在下載遊戲素材…');
+      : (gameState.currentFile || '正在下載遊戲檔案…');
   progressPercent.textContent = `${percent.toFixed(percent >= 10 ? 0 : 1)}%`;
   progressBar.style.width = `${percent}%`;
   progressDetail.textContent = total > 0 ? `${formatBytes(downloaded)} / ${formatBytes(total)} · 已完成 ${gameState.completedFiles || 0} / ${gameState.totalFiles || 0} 個檔案` : '正在取得版本資料…';
@@ -899,7 +899,7 @@ function openUninstallDialog(gameId) {
   if (!game || !state.removable) return;
   uninstallGameId = gameId;
   $('#uninstallTitle').textContent = `解除安裝「${game.title}」？`;
-  $('#uninstallDescription').textContent = `將移除這款遊戲下載到電腦的圖片、音樂與影片。之後仍可隨時重新下載。`;
+  $('#uninstallDescription').textContent = gameId === 'marineford' ? '將移除馬林福特的本機程式與素材，之後可重新下載。' : `將移除這款遊戲下載到電腦的圖片、音樂與影片。之後仍可隨時重新下載。`;
   $('#uninstallConfirm').disabled = false;
   $('#uninstallConfirm').textContent = '解除安裝';
   uninstallDialog.showModal();

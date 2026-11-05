@@ -185,8 +185,8 @@
     {
       "path": "launcher/launcher.js",
       "sourceSha256": "95708927809f8c9b42f4579c815bd813b5f49f385ac6b62dc574b7169f2bf3f2",
-      "sha256": "9a542a32db0f312ebd8aea72d77ab1f8fa52e13c5fa567e481bbf00d47235907",
-      "size": 54027
+      "sha256": "31899a17d1b87f9175082b0523aac3684c2fc5351da93cabed88fae05ec15ab1",
+      "size": 54115
     },
     {
       "path": "launcher/mobile-bridge.js",
@@ -9236,6 +9236,6 @@
       "size": 2092
     }
   ],
-  "bytes": 358966741,
+  "bytes": 358966829,
   "nativeCardBrowserModulesOmitted": {}
 }

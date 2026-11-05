@@ -22,10 +22,12 @@ def main():
  remaining=sum(x['size_in_bytes'] for x in artifacts if not x['expired'])
  # Use the conservative decimal 500 MB cap, retaining 4 MB for diagnostics/ZIP overhead.
  maximum=LIMIT-remaining-4000000
- if maximum<480000000:raise RuntimeError('Insufficient free artifact capacity; no paid capacity allowed')
+ upload_allowed=maximum>=480000000
  result={'otherArtifactBytes':remaining,
-         'maximumCandidateBytes':maximum,'publicRepository':True,'paidServicesAuthorized':False}
+         'maximumCandidateBytes':maximum if upload_allowed else LIMIT-4000000,'artifactUploadAllowed':upload_allowed,'publicRepository':True,'paidServicesAuthorized':False}
  Path(os.environ['RUNNER_TEMP'],'po-storage-guard.json').write_text(json.dumps(result))
+ if os.environ.get('GITHUB_OUTPUT'):
+  with open(os.environ['GITHUB_OUTPUT'],'a') as output:output.write('artifact-upload-allowed='+str(upload_allowed).lower()+'\n')
  print(json.dumps(result))
 
 if __name__=='__main__':main()
