@@ -2,6 +2,8 @@
 const crypto=require('node:crypto');
 const engine=require('./marineford-engine');
 const records=require('./marineford-records');
+const RULESET='20261106-kizaru-one';
+const RULESET_UPDATE_ERROR='遊戲規則已更新，請返回啟動器更新《馬林福特之戰》後再進入。';
 // The existing SOCIAL_AUTH establishes identity. New protocol never accepts a
 // client-supplied player index, hand, deck, winner or full-state replacement.
 function attach(io,{identity=socket=>socket.data.socialProfile,clock=()=>Date.now(),cpuDelay=1000,gateTimeout=120000,emptyRoomGraceMs=60000,recordMatch=null,getProfile=null}={}){
@@ -34,7 +36,8 @@ function attach(io,{identity=socket=>socket.data.socialProfile,clock=()=>Date.no
  }
  function detach(socket){const r=rooms.get(socket.data.marinefordRoom);delete socket.data.marinefordRoom;if(!r)return;r.gate?.delete(socket.id);if(r.gate&&!r.gate.size)release(r);lifecycle(r);}
  io.on('connection',socket=>{
-  const on=(name,handler)=>socket.on(name,async(payload={},reply)=>{try{profile(socket);const now=clock();if(now-(socket.data.mfLastAction||0)<30&&name!=='MF_ACK')throw Error('請稍候再操作');if(name!=='MF_ACK')socket.data.mfLastAction=now;const result=await handler(payload);reply?.({ok:true,...result});}catch(e){reply?.({ok:false,error:e.message});}});
+  const on=(name,handler)=>socket.on(name,async(payload={},reply)=>{try{profile(socket);if(socket.handshake?.auth?.marinefordRuleset!==RULESET)throw Error(RULESET_UPDATE_ERROR);const now=clock(),unthrottled=name==='MF_ACK'||name==='MF_RULES';if(now-(socket.data.mfLastAction||0)<30&&!unthrottled)throw Error('請稍候再操作');if(!unthrottled)socket.data.mfLastAction=now;const result=await handler(payload);reply?.({ok:true,...result});}catch(e){reply?.({ok:false,error:e.message});}});
+  on('MF_RULES',()=>({ruleset:RULESET}));
   on('MF_PROFILE',async()=>{if(!getProfile)throw Error('戰績服務暫時無法使用');const r=rooms.get(socket.data.marinefordRoom);if(r?.recording)await r.recording;return {stats:await getProfile(profile(socket).userId),pending:!!r&&r.state?.phase==='ended'&&!r.recorded};});
   on('MF_LIST',()=>({rooms:[...rooms.values()].filter(r=>!r.state&&r.seats.length<6).map(lobby)}));
   on('MF_CREATE',payload=>{
@@ -87,4 +90,4 @@ function attach(io,{identity=socket=>socket.data.socialProfile,clock=()=>Date.no
  });
  return {rooms,close(){for(const t of timers)clearTimeout(t);timers.clear();rooms.clear();}};
 }
-module.exports={attach};
+module.exports={attach,RULESET};
