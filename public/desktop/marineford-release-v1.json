@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "gameId": "marineford",
-  "createdAt": "2026-11-05T06:34:40.498Z",
+  "createdAt": "2026-11-05T09:32:08.813Z",
   "assetBlobBaseUrl": "https://game-assets.rihdi.tw/desktop/blobs/sha256",
-  "releaseId": "package-17e7105b7f5b5c55",
-  "manifestPath": "desktop/manifests/marineford-package-17e7105b7f5b5c55.json",
-  "manifestSha256": "ec02bb57e9e6f7d8058a9d863223fa5c9e415bf11116be29d38efead880fd536",
+  "releaseId": "package-1e764c264df8d2a6",
+  "manifestPath": "desktop/manifests/marineford-package-1e764c264df8d2a6.json",
+  "manifestSha256": "fab9511c170b93e683200a3327b82750d4f31a5df9c3d898fe18bc9e5cb169b0",
   "entryPath": "marineford/index.html",
   "totalFiles": 375,
-  "totalBytes": 90519012
+  "totalBytes": 90521148
 }

@@ -2334,3 +2334,5 @@ CARD_TIMING_VIDEO_20261104.md列使用者逐卡決策與來源界線。正式gam
 - `scripts/build_marineford_program_package.js` enumerates committed programme and media bytes. `tools/desktop-r2-publisher/marineford-program.js` verifies and publishes missing CAS objects.
 - `desktop/asset-store.js`, `desktop/main.js` and `desktop/program-runtime.js` implement Windows installation, retained-version launch and verified local responses. `scripts/desktop_marineford_local_media_qa.js` and `scripts/desktop_marineford_media_qa.js` cover package and media regressions.
 - `docs/WINDOWS_MARINEFORD_PACKAGE_20261105.md` records the Windows contract and evidence. `public/desktop-download.html` and `scripts/platform_download_qa.cjs` maintain the three native download cards and version floors.
+
+2026-11-05 的抽牌及交換提示位於 `public/marineford/marineford.js` 的 render 與 present DRAW 分支，以及 `marineford.css` 的 draw-ready、draw-flight 和 arranging 樣式。來源操作白名單及 Chrome/WebKit 候選證據存於 `D:/Codex_QA/marineford-draw-arrange-release-20261105`。
