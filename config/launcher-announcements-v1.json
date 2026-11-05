@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 93,
+  "revision": 94,
   "announcements": [
+    {
+      "id": "card-20261106-profile-mobile",
+      "status": "published",
+      "publishedAt": "2026-11-05T19:16:08.539Z",
+      "scope": "card",
+      "category": "update",
+      "version": "爭霸戰 2026.11.06",
+      "title": "偉大航道爭霸戰：手機個人頁排版更新",
+      "summary": "改善手機個人頁裁切，完整瀏覽段位、海賊旗、懸賞令、豪華卡與稱號。",
+      "body": [
+        "手機牆面重新排列段位、海賊旗與懸賞令，總覽及收藏採單欄，卡圖維持原比例。",
+        "稱號依級別排列，改善頭像點選及橫向彈窗的捲動，讓關閉與套用按鈕更容易操作。",
+        "請在下載管理更新《偉大航道爭霸戰》，再重新進入個人頁面。Windows 1.2.33、Android v067、iOS v066 沿用現有啟動器與 App。"
+      ],
+      "requiredRelease": {
+        "kind": "card",
+        "releaseId": "package-eed7b1a166daf2ea"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "card"
+      }
+    },
     {
       "id": "marineford-20261106-kizaru-morale-charge",
       "status": "published",

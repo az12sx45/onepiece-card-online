@@ -9182,3 +9182,10 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 `public/profile.html` 以頁面內手機樣式整合段位、海賊旗、懸賞令、戰績與豪華卡收藏。修正固定桌機座標及已裝 Android/iOS 兩欄、160px 牆高覆蓋造成的裁切。稱號依 tier 重排以保留原分類和點選佩戴，頁底留好友入口的空間，裝飾不攔截頭像點擊。新增 profilePage 錨點，程式、PROFILE 事件和參觀權限未改。
 本機來源與公開基線逐 byte 核對，精確手機套件使用 Android v067、iOS v066 實際封裝內容。檢查涵蓋窄直向、短橫向、桌機對照、原彈窗及合成帳號互動。測試和未測範圍見 D:/Codex_QA/card-profile-mobile-20261106，正式發布由啟動器交接收據核對。LATTICE 工具本階段未提供，沒有持久登記宣稱。
 <!-- CARD_PROFILE_MOBILE_20261106_END -->
+
+### 2026-11-06 Card 手機個人頁整合發布
+
+- 正式 af6ef125 基底只取 profile.html RAW159887B／819101d794dd4afee965bbf02c21defa490a7c7866e6c5f0a1fc30b7bd5c12e6 與上方指定 producer 文件 marker，未取其他 dirty 內容。source commit f0bb36916e4f6ed0bc443adb4bf5f90b8d0979b5 已核對 committed blob 位元組，CRLF 和原 bare-LF 原位保留。
+- 原七個 script 區塊逐位元組相同，其中四個 inline 與三個外部 src。僅手機 CSS／profilePage 錨點改動；原角色、個人資料與裝備事件權限不變。原作者最終135項／0issues/errors，以實際出貨Android67與iOS66 bundle＋Chromium／WebKit及合成帳號驗證，整合端另做RAW/EOL與scope獨立核驗；不等同實體裝置或正式帳號驗收。
+- 用 build_card_program_update.js 先建外部候選、同HEAD verify，再promote；只更新Card manifest/catalog，changedPrograms精確只有profile.html。31個其他程式與1095個media記錄、Board/Chess描述、Marineford規則包及三端核心沿用。新版package-eed7b1a166daf2ea／manifest e284e46f196a31e8525c6486057141e80b7bf59167e2c1d2716b9f09839eba1e；唯一新CAS159887B。
+- 公告revision94用Card releaseId閘門，舊93則保留。發布與公開三端／單檔差量讀回收據另存D:/Codex_QA/card-profile-mobile-release-20261106；無全量800MB安裝或真機驗收宣稱。
