@@ -81,6 +81,7 @@ static BOOL ProbeProgram(POMarinefordScheme *scheme,NSString *assets,NSUInteger 
     [NSApplication sharedApplication];[NSApp setActivationPolicy:NSApplicationActivationPolicyAccessory];
     WKWebViewConfiguration *config=[WKWebViewConfiguration new];
     config.websiteDataStore=WKWebsiteDataStore.nonPersistentDataStore;
+    config.applicationNameForUserAgent=@"ONEPIECE_TABLETOP_IOS/0.1.0 (Electron/44.1.1 compatibility)";
     [config setURLSchemeHandler:scheme forURLScheme:@"poasset"];
     ProgramProbe *probe=[ProgramProbe new];probe.results=[NSMutableArray array];
     [config.userContentController addScriptMessageHandler:probe name:@"result"];

@@ -233,7 +233,7 @@ static BOOL POMarinefordRuntimeProof(NSData *data, NSDictionary *package) {
     NSRegularExpression *head=[NSRegularExpression regularExpressionWithPattern:@"<head\\b[^>]*>" options:NSRegularExpressionCaseInsensitive error:nil];
     NSArray *heads=[head matchesInString:html options:0 range:NSMakeRange(0,html.length)];
     if(heads.count!=1)return nil;
-    NSString *policy=@"<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src poasset: data: blob:; media-src data: blob:; font-src data: blob:; connect-src https://onepiece-card-online.onrender.com/api/ https://onepiece-card-online.onrender.com/socket.io/ wss://onepiece-card-online.onrender.com/socket.io/; worker-src blob:; object-src 'none'; frame-src 'none'; base-uri https://onepiece-card-online.onrender.com\">";
+    NSString *policy=@"<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src poasset: data: blob:; media-src data: blob:; font-src data: blob:; connect-src https://onepiece-card-online.onrender.com/api/ https://onepiece-card-online.onrender.com/socket.io/ wss://onepiece-card-online.onrender.com; worker-src blob:; object-src 'none'; frame-src 'none'; base-uri https://onepiece-card-online.onrender.com\">";
     html=[html stringByReplacingCharactersInRange:NSMakeRange(NSMaxRange([heads[0] range]),0) withString:policy];
     return html;
 }

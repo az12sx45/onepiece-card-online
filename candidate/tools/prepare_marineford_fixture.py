@@ -33,6 +33,8 @@ def main():
                   'marineford/fonts/native-fixture.woff':('font','font/woff')})
     html = b"""<!doctype html><html><head><link rel="stylesheet" href="marineford.css?fixture=1"></head><body><script src="/vendor/socket.io-client/4.8.1/socket.io.min.js"></script><script src="sound.js"></script><script src="marineford.js?fixture=1"></script></body></html>"""
     main_script = b"""(async()=>{
+      window.__fixtureViolations=[];
+      document.addEventListener('securitypolicyviolation',event=>window.__fixtureViolations.push({directive:event.effectiveDirective,blocked:event.blockedURI}));
       const cards=await (await fetch('cards.json')).json();
       const avatar=new Image();avatar.src='/images/board/avatars/8.webp';document.body.append(avatar);
       const art=new Image();art.src='art/v2/test-a.webp';document.body.append(art);
@@ -70,10 +72,9 @@ def main():
         const proof=await fetch('/api/desktop-runtime-package/marineford');
         if(!proof.ok||(await proof.json()).gameId!=='marineford')throw Error('official API blocked');
         network=await new Promise((resolve,reject)=>{
-          const websocket=new WebSocket('wss://onepiece-card-online.onrender.com/socket.io/?EIO=4&transport=websocket');
-          const timeout=setTimeout(()=>{websocket.close();reject(Error('official socket timeout'));},8000);
-          websocket.onmessage=event=>{if(String(event.data).startsWith('0{')){clearTimeout(timeout);websocket.close();resolve(true);}};
-          websocket.onerror=()=>{clearTimeout(timeout);reject(Error('official socket blocked'));};
+          const live=io({transports:['websocket'],timeout:8000,reconnection:false});
+          live.on('connect',()=>{live.disconnect();resolve(true);});
+          live.on('connect_error',error=>{live.disconnect();reject(Error('official socket '+error.message));});
         });
       }
       const previous=Number(localStorage.getItem('__po_program_test')||0);
@@ -89,7 +90,7 @@ def main():
         renderStatic:performance.getEntriesByType('resource').filter(e=>e.name.startsWith(location.origin)&&
           /\\/(marineford\\/(art|audio|video|videos|fonts)\\/|marineford\\/(index.html|marineford.js|marineford.css|sound.js|cards.json)|vendor\\/socket.io-client\\/)/.test(new URL(e.name).pathname)).length,
         marker:window.__PO_MARINEFORD_LOCAL_PROGRAM__===true,sound:window.fixtureSound===true,network});
-    })().catch(e=>webkit.messageHandlers.result.postMessage({error:e.name+':'+e.message}));"""
+    })().catch(e=>webkit.messageHandlers.result.postMessage({error:e.name+':'+e.message,violations:window.__fixtureViolations||[]}));"""
     values = {
         'marineford/index.html': html,
         'marineford/marineford.css': b'@font-face{font-family:"PO Media Fixture";src:url("fonts/native-fixture.woff") format("woff")}body{background-image:url("art/v2/test-a.webp");font-family:"PO Media Fixture"}',
