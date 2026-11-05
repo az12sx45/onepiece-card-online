@@ -9158,3 +9158,13 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - v067 來源 `64abaa368aa569f163ebb5e7f63babb7ae5cf8ff` 僅在已驗證的 ASCII 摘要欄位採固定序列化，並驗證 SHA-256 格式。原簽章身分、下載排程、其他遊戲與帳號流程保留。下一次 App 更新的公告導言決策於這次 Android 功能修正一併落實；Windows 與 iOS 導言留待各自下次 App 更新。
 - 官網 Android 靜態連結及驗證下限改至 v067；Windows 維持 1.2.33，iOS 維持 v066。公告 revision 92 新增下載修正及遊戲套件 C 的抽牌／換位提示。原 91 則公告逐值保留。
 - 發布前後的實際 APK、兩條差量重建、官方 AOSP 正常入口／重試、公開通道及 Render 讀回證據另存 `D:/Codex_QA/marineford-android-download-failure-20261105` 與 `D:/Codex_QA/marineford-draw-arrange-release-20261105`，完成項目以各收據為準。實體 Android／iOS 手機和正式玩家帳號由使用者驗收。
+
+### 2026-11-06 馬林福特黃猿士氣、蓄光與規則版本握手
+
+- 以正式 e00d608c 基底的精確 operations.formal 三項操作整合黃猿演出；單發蓄光 1450 ms、停留 350 ms、光束 900 ms，八尺蓄光 1800 ms、停留 550 ms、彈道 500 ms／55 ms 間隔。既有減少動態分支保留。
+- cards.json 僅將 navy-kizaru 的 amount 與效果文字由 3 改為 1；justice-4 及其他 28 張卡資料完整保留。Server engine 仍讀取同一 cards.json，需由整合發布者同步部署 server 資料與遊戲包。
+- 遊戲 Socket 使用 20261106-kizaru-one 規則標記，SOCIAL_AUTH 成功後先驗 MF_RULES，再認證遊戲與恢復房間；缺值、錯版或逾時保留未認證，顯示更新提示，避免新遊戲連上仍使用舊規則的 server。伺服器對應閘門由獨立 server commit 整合。
+- 原 engine QA 只加入單一黃猿 1／Justice-4 3 回歸，13 項及 1500 局通過。外部載入器以已提交 QA 為底、僅加入有界黃猿測試與既有影像 Git 物件，不複製 producer 的其他 dirty QA；Chrome／WebKit 各 9 項通過，包含蓄光期間不提前發射、視角私密、演出後 ACK、取消無 stale ACK 及減少動態。
+- 另以 Chrome／WebKit 在 charging 階段取消後觀測 5200 ms，超過未取消單發後續約 4550 ms 的時間窗，確認無晚到 ACK、結果或殘留圖層；不以縮短等待代替新演出的取消驗證。
+- Chrome／WebKit 各另通過 3 種實際前端握手失敗情境：server 無 MF_RULES（實際逾時）、錯版、缺值均不送 MF_JOIN／MF_CREATE，保留原帳號與待恢復房號。npm start 與三個正式程式 HTTP 讀回通過；本地 DB 未啟用。
+- 差異、來源雜湊與證據位於 D:/Codex_QA/marineford-kizaru-morale-charge-integration-20261106。規則包相容清單、發布 metadata、公告與正式公開驗證由整合發布者接續；本次未測實體手機或正式玩家帳號。

@@ -204,9 +204,9 @@
     "name": "黃猿",
     "rank": 4,
     "team": "navy",
-    "effect": "獲得 3 張士氣卡。",
+    "effect": "獲得 1 張士氣卡。",
     "justice": false,
-    "amount": 3,
+    "amount": 1,
     "image": "navy-kizaru.webp"
   },
   {

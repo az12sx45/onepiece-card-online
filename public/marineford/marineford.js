@@ -1,7 +1,9 @@
 /* Marineford: server-authoritative rules; only this viewer's private cards arrive here. */
 (() => {
  'use strict';
- const $=id=>document.getElementById(id), socket=io({transports:['websocket','polling']});
+ const MARINEFORD_RULESET='20261106-kizaru-one';
+ const RULESET_UPDATING='遊戲正在更新，請稍後重新進入《馬林福特之戰》。';
+ const $=id=>document.getElementById(id), socket=io({transports:['websocket','polling'],auth:{marinefordRuleset:MARINEFORD_RULESET}});
  let cards={},room=null,view=null,you=-1,me=null,busy=false,queue=Promise.resolve(),epoch=0,lastSequence=-1,queuedSequence=-1,toastTimer,selected=[],pendingKey='',authenticated=false;
  const activeAnimations=new Set();
  const teamName=t=>t==='navy'?'海軍':'海賊';
@@ -727,17 +729,14 @@
    ]);
    if(token!==epoch)return;
    streak.remove();
-   if(barrage){
-    layer.dataset.phase='charging';
-    await Promise.all(sparks.map((spark,index)=>animate(spark,[
-     {transform:'translate(-50%,-50%) scale(.1)',opacity:0},
-     {transform:'translate(-50%,-50%) scale(.45)',opacity:.7,offset:.45},
-     {transform:'translate(-50%,-50%) scale(1.15)',opacity:1}
-    ],{delay:reduced()?0:index*90,duration:reduced()?100:880,fill:'forwards'})));
-    await beat(260,token);
-   }else{
-    await animate(sparks[0],[{transform:'translate(-50%,-50%) scale(.2)',opacity:.3},{transform:'translate(-50%,-50%) scale(1)',opacity:1}],{duration:reduced()?100:620,fill:'forwards'});
-   }
+   layer.dataset.phase='charging';
+   await Promise.all(sparks.map((spark,index)=>animate(spark,[
+    {transform:'translate(-50%,-50%) scale(.1)',opacity:0},
+    {transform:'translate(-50%,-50%) scale(.4)',opacity:.65,offset:.35},
+    {transform:'translate(-50%,-50%) scale(.7)',opacity:.85,offset:.67},
+    {transform:'translate(-50%,-50%) scale(1.15)',opacity:1}
+   ],{delay:reduced()?0:index*150,duration:reduced()?100:barrage?1800:1450,fill:'forwards'})));
+   await beat(reduced()?60:barrage?550:350,token);
    if(token!==epoch)return;
    layer.dataset.phase='fire';window.MFSound?.play('slash');
    const holes=[[.3,.26],[.66,.29],[.5,.48],[.28,.64],[.69,.69],[.48,.82]];
@@ -749,11 +748,11 @@
      bullet.src=streak.src;bullet.alt='';bullet.style.left=originX+'px';bullet.style.top=originY+'px';
      const dx=t.x+t.width*x-originX,dy=t.y+t.height*y-originY,angle=Math.atan2(dy,dx);
      layer.append(bullet);
-     return animate(bullet,[{opacity:0,transform:`translate(-50%,-50%) rotate(${angle}rad)`},{opacity:1,offset:.15},{opacity:0,transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) rotate(${angle}rad)`}],{delay:reduced()?0:i*30,duration:reduced()?120:330,fill:'backwards'}).finally(()=>bullet.remove());
+     return animate(bullet,[{opacity:0,transform:`translate(-50%,-50%) rotate(${angle}rad)`},{opacity:1,offset:.15},{opacity:0,transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) rotate(${angle}rad)`}],{delay:reduced()?0:i*55,duration:reduced()?120:500,fill:'backwards'}).finally(()=>bullet.remove());
     });
     const dx=t.x+t.width/2-sx,dy=t.y+t.height/2-sy,beam=node('i',null,'laser-beam');
     beam.style.cssText=`left:${sx}px;top:${sy}px;width:${Math.hypot(dx,dy)}px;rotate:${Math.atan2(dy,dx)}rad`;layer.append(beam);
-    return [animate(beam,[{transform:'scaleX(0)',opacity:0},{transform:'scaleX(1)',opacity:1,offset:.8},{transform:'scaleX(1)',opacity:0}],{duration:reduced()?150:650}).finally(()=>beam.remove())];
+    return [animate(beam,[{transform:'scaleX(0)',opacity:0},{transform:'scaleX(1)',opacity:1,offset:.8},{transform:'scaleX(1)',opacity:0}],{duration:reduced()?150:900}).finally(()=>beam.remove())];
    }));
    if(token!==epoch)return;
    sparks.forEach(spark=>spark.remove());layer.dataset.phase=barrage?'barrage-result':e.hit?'hit':'miss';
@@ -869,7 +868,7 @@
  socket.on('MF_CAN_ACT',packet=>{if(packet.sequence===lastSequence){busy=false;render();}});
  socket.on('MF_RECOVER',packet=>{reset();view=packet.view;you=packet.you;lastSequence=packet.sequence;closeSheet();render();});
  socket.on('disconnect',()=>{authenticated=false;reset();$('connection').textContent='重新連線中…';closeSheet();});
- socket.on('connect',async()=>{let secret='',deviceId='';try{secret=localStorage.getItem('opSecret')||localStorage.getItem('op_secret')||'';deviceId=localStorage.getItem('op_device_id')||'';}catch{}if(!secret){$('connection').textContent='尚未登入';renderLobby();return;}const result=await request('SOCIAL_AUTH',{secret,deviceId});if(!result.ok)return;me=result.me;authenticated=true;$('connection').textContent='已連線';const saved=sessionStorage.getItem('marineford.room');if(saved){const joined=await request('MF_JOIN',{code:saved});if(!joined.ok){sessionStorage.removeItem('marineford.room');room=null;view=null;}}render();});
+ socket.on('connect',async()=>{let secret='',deviceId='';try{secret=localStorage.getItem('opSecret')||localStorage.getItem('op_secret')||'';deviceId=localStorage.getItem('op_device_id')||'';}catch{}if(!secret){$('connection').textContent='尚未登入';renderLobby();return;}const result=await request('SOCIAL_AUTH',{secret,deviceId});if(!result.ok)return;const rules=await request('MF_RULES');if(!rules.ok||rules.ruleset!==MARINEFORD_RULESET){authenticated=false;reset();room=null;view=null;you=-1;$('connection').textContent=RULESET_UPDATING;closeSheet();renderLobby();notify(RULESET_UPDATING);return;}me=result.me;authenticated=true;$('connection').textContent='已連線';const saved=sessionStorage.getItem('marineford.room');if(saved){const joined=await request('MF_JOIN',{code:saved});if(!joined.ok){sessionStorage.removeItem('marineford.room');room=null;view=null;}}render();});
  $('sheetClose').onclick=closeSheet;
  function openMatchMenu(){const body=sheet('馬林福特之戰');body.append(button('返回牌桌',closeSheet),button('我的航海者檔案',profile),button(window.MFSound?.muted?'音效：關閉':'音效：開啟',event=>{const muted=window.MFSound.toggle();event.currentTarget.textContent=muted?'音效：關閉':'音效：開啟';}),button('卡片圖鑑',()=>gallery('卡片圖鑑',Object.keys(cards))),button('遊戲規則',showRules),button(view?.phase==='playing'?'繼續對局':'離開房間',view?.phase==='playing'?closeSheet:leave));if(view&&me?.userId===room?.host)body.append(button('結束本場並回大廳',()=>{const b=sheet('結束本場對局？');b.append(node('p','所有玩家會回到大廳，本場不計結果。'),button('確認結束',()=>request('MF_CLOSE')),button('繼續對局',closeSheet));}));};
  $('menuButton').onclick=openMatchMenu;
