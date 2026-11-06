@@ -9243,3 +9243,15 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - 新增公告98（card-20261107-collision-swap-visibility），以Card release gate對應新包並完整保留既有97則。只更新catalog／新immutable manifest／公告與本紀錄，不改allowlist、其他遊戲、v2、核心安裝包或53MB既有CSS。
 - 本輪候選QA保留owner accepted494功能項的qualified兩個假venue圖排除界線，另有官方完整venue63與retained iOS145；自然普通6修前兩端各28項未重現當次事故，不宣稱已定位根因或修復當次實例。更新文案使用單次卡背碰撞與交換動畫結束／中斷顯示復原。
 - Publisher外部候選36programme及全部1098media record已驗證；實際npm應用與公開／原生正常更新的最終結果，以D:/Codex_QA/card-collision-release-20261107及正式發布收據為準。真機、正式帳號、OS WebView／WK與Electron視窗驗收不在本地證據範圍。
+
+
+## 2026-11-07 Card：修正靜默棄牌漏補及 6 號傳遞空手牌
+
+- 從已部署 9f0b629／client package-1b7337cdeb75bb0b 隔離候選，只修改 server/engine.js 並新增 scripts/card_empty_hand_qa.js。前端三個碰撞／復原程式、所有素材、manifest、catalog、啟動器核心與 server/index.js 不變。
+- 真引擎合法動作重現：強化薩波0產生靜默，索隆5丟棄9／19時，原程式先清 hand 卻在被動效果受抑制分支漏補牌；普通6又可把這個 null 交換給其他存活玩家。seed50705 的合法15動作能讓原有保留8的6號施放者交換到 null，下一次 DRAW 只有 tempDraw。此為資料缺陷，與前輪受控 late-mask 排序分開，不將兩者混為同一因果。
+- 靜默仍抑制被棄9／19的淘汰／預測／免疫能力，但索隆自身棄牌重抽照常執行；補牌使用既有 deck.pop() ?? null 與 checkHot，空堆按原 endOrNext 結算，不造牌。
+- 普通與強化羅在任何一方缺少手牌時取消本次交換／空臉預覽，清 pending 並正常結束，不移轉 null、不消耗對方保護／閃避；null 檢查保留合法0號，現有非空 self、legacy one-shot、two-step、actor／鎖定目標語意維持。
+- 不擴大 DRAW 自動補兩張或改變 state 欄位／封包。Card房間為本程序 rooms Map，沒有Card DB snapshot載回；後端新程序不載入舊壞局。
+- 新回歸179 checks／63 cases及既有34場對決／隱私662 checks通過，literal npm start與4路HTTP RAW共5項通過；真server／三guest／原UI普通6與不重載次回合DRAW的修前／修後結果，以本輪 D:/Codex_QA/card-empty-hand-engine-20261107 最終摘要為準。source保留原CRLF與小diff，文件保留9f完整前綴。
+- 額外圖片檢查在前輪獨立supplement：20牌跨槽60次STATE投影與80圖解碼／本機雜湊正常，未重現間歇舊圖；不將圖片通過或此資料fix宣稱為全部視覺問題已證同因。未操作實機或正式帳號。
+- 依持續授權交啟動器統一公告與後端部署；client1b／manifestbd6e保留，不重發相同包／CAS／安裝器。發布前不宣稱RELEASED。LATTICE API未提供，僅本機證據紀錄。

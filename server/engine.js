@@ -1826,6 +1826,9 @@ if(p.action==='zoro'){
     if (thrown === 9 || thrown === 19) {
       if (st.saboSilenceOn && isHighTail(thrown)) {
         pushLog(st,'【靜默】薩波：丟出尾數≥7 → 該牌效果不發動',emits);
+        t.hand = st.deck.pop() ?? null;
+        checkHot(st);
+        pushLog(st, `索隆：${pname(st, t.id)} 棄牌重抽`, emits);
       } else {
         if (thrown === 19) {
           // 羅傑：若有「奧羅傑克森號」→ 免死並可發動強化（預測）
@@ -1899,6 +1902,14 @@ if(p.action==='zoro'){
         if ((previewOnly || Number.isInteger(previewTarget)) && (action.playerId !== meIdx || !st.players[idx]?.alive || idx === meIdx)) return { state: st, emits };
         if (Number.isInteger(previewTarget) && idx !== previewTarget) return { state: st, emits };
         const alreadyViewed = previewTarget === idx;
+        if (me.hand == null || st.players[idx]?.hand == null) {
+          if (action.playerId !== meIdx || !Number.isInteger(idx) ||
+              !st.players[idx]?.alive) return { state: st, emits };
+          pushLog(st, '羅（強化）：缺少可交換的手牌，交換取消', emits);
+          st.pending = null;
+          endOrNext(st, emits);
+          return { state: st, emits };
+        }
         const gView = alreadyViewed ? { blocked:false } : effectGuard(st, idx, {}, emits);
         if(!gView.blocked){
           const th = st.players[idx].hand;
@@ -1968,6 +1979,14 @@ if (th != null && Array.isArray(st.aiMemory)) {
         return { state: st, emits };
       } else {
         // 一般版：純交換
+        if (me.hand == null || st.players[idx]?.hand == null) {
+          if (action.playerId !== meIdx || !Number.isInteger(idx) ||
+              !st.players[idx]?.alive) return { state: st, emits };
+          pushLog(st, '羅：缺少可交換的手牌，交換取消', emits);
+          st.pending = null;
+          endOrNext(st, emits);
+          return { state: st, emits };
+        }
         const gSwap = effectGuard(st, idx, {}, emits);
         if (!gSwap.blocked) {
           const t = st.players[idx];

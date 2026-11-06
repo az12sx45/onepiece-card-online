@@ -2364,3 +2364,11 @@ CARD_TIMING_VIDEO_20261104.md列使用者逐卡決策與來源界線。正式gam
 - scripts/card_swap_visibility_qa.cjs：本機真 server、多 guest、普通 6 號兩個出牌欄位、對決隱私／busy／取消／retained 版面回歸。
 - scripts/card_duel_boot_qa.js：DCL／interface-ready／晚 API／缺失 API 的有限重試與安裝唯一性。
 - D:/Codex_QA/card-swap-collision-20261107：本輪 RAW baseline、機制／瀏覽器／HTTP／公開讀回與來源位置修正收據；保留修前／fixture 失敗，最終摘要只納入明確的通過證據。
+
+
+## 2026-11-07 Card 空手牌資料修正
+
+- server/engine.js：靜默索隆棄9／19的補牌；普通／強化羅的null雙向防護與空預覽防護。原DRAW、封包與state欄位保留。
+- scripts/card_empty_hand_qa.js：exact9f before／after對照、合法8與15動作資料再現、各Law邊界、靜默／免疫／空堆／0號／牌數守恆。
+- D:/Codex_QA/card-empty-hand-engine-20261107：本輪source baseline、engine unit／privacy、真server原UI資料失敗與修正、HTTP與最終發布綁定。
+- D:/Codex_QA/card-swap-collision-20261107：前端client1b已部署交付證據，另有不重載nextDRAW、像素與80圖matrix診斷；原18份凍結交接與前輪26正式證據不覆寫。
