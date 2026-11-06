@@ -9255,3 +9255,11 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - 新回歸179 checks／63 cases及既有34場對決／隱私662 checks通過，literal npm start與4路HTTP RAW共5項通過；真server／三guest／原UI普通6與不重載次回合DRAW的修前／修後結果，以本輪 D:/Codex_QA/card-empty-hand-engine-20261107 最終摘要為準。source保留原CRLF與小diff，文件保留9f完整前綴。
 - 額外圖片檢查在前輪獨立supplement：20牌跨槽60次STATE投影與80圖解碼／本機雜湊正常，未重現間歇舊圖；不將圖片通過或此資料fix宣稱為全部視覺問題已證同因。未操作實機或正式帳號。
 - 依持續授權交啟動器統一公告與後端部署；client1b／manifestbd6e保留，不重發相同包／CAS／安裝器。發布前不宣稱RELEASED。LATTICE API未提供，僅本機證據紀錄。
+
+
+## 2026-11-07 Card 後端空手修正發布整合
+
+- 依a95c3a50／engine98450 bytes SHA d06833a1da2e25e446e73f8f3236d0560d3fcc916d996a431b92b60e6928d16d 接收後端修正；新增公告99（card-20261107-empty-hand-engine），沿用Card package-1b7337cdeb75bb0b／manifest bd6e46114cca89ba0857b2d99f801ebc7ea7265829b822172a26090a4519b6de gate，原98則公告object完整保留。
+- client public／config／desktop於feature與9f0基底tree相同。本輪不跑builder、不改catalog／manifest／programme／媒體，不新增CAS、不重發Windows1.2.33／Android67／iOS66安裝包；publisher僅公告與本紀錄。
+- 公告採用已證明的靜默棄牌漏補與空手交換修正，指引重開啟動器後開始新對局；不宣稱自動修復既有壞局，或將所有舊牌圖殘留歸為同一根因。
+- Owner證據包含63 cases／179 checks、duel privacy662；before24為產品失敗證據，after23與terminal oracle41有重疊，不加總成唯一64。原6個feature RAW及13+8份交接證據保留，DEV只append。Publisher實際npm／36proof、公開Render後端與不變client讀回結果，以D:/Codex_QA/card-empty-hand-release-20261107及正式收據為準；本地QA不代替真機、正式帳號或OS原生視窗驗收。

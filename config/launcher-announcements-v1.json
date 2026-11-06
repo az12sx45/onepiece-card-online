@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 98,
+  "revision": 99,
   "announcements": [
+    {
+      "id": "card-20261107-empty-hand-engine",
+      "status": "published",
+      "publishedAt": "2026-11-06T19:22:23.807Z",
+      "scope": "card",
+      "category": "update",
+      "version": "爭霸戰 2026.11.07",
+      "title": "修正交換後空手與靜默補牌",
+      "summary": "修正靜默狀態下棄牌漏補，避免6號交換得到空手、下一回合只看到新抽牌。空手狀態不再執行交換。對決維持單次卡背碰撞與牌號保密。",
+      "body": [
+        "修正靜默狀態下棄牌漏補，避免6號交換得到空手、下一回合只看到新抽牌。空手狀態不再執行交換。對決維持單次卡背碰撞與牌號保密。",
+        "請重新開啟啟動器並開始新對局；此更新不會自動補回既有異常牌局中的手牌。",
+        "Windows 1.2.33、Android v067、iOS v066 沿用現有啟動器與 App。"
+      ],
+      "requiredRelease": {
+        "kind": "card",
+        "releaseId": "package-1b7337cdeb75bb0b"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "card"
+      }
+    },
     {
       "id": "card-20261107-collision-swap-visibility",
       "status": "published",
