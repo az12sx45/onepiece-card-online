@@ -9206,3 +9206,5 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - 新包package-ba4f40d2ebced9ba／manifest c0cefb943a870aa40beeb77a06a92eb5db8d0798686cf36f8b2ff2712dcf93b3，376logical、375unique。只新JS100263B與rear108334B，CAS payload208597B；369既有image和5programme保留。僅核准同規則D7a8da/1502為fallback，A/B/C舊3張士氣資料繼續撤銷。
 - 正常規則QA9與engine13/1500、runtime endpoint、公告82通過。繼承的QA literal-regex不支援既有共用常數，改為在VM擷取實際io options後驗marker，沒有改runtime。native frozen-source與6個CSP/browser raster fixture確認data SVG及rear policy，iOS poasset handler在Windows用同byte測試adapter，與真正native/device證據分開。
 - 公告revision95保留舊94逐值，三核心Windows1.2.33/Android67/iOS66沿用。發布前後HTTP、D fallback、原生D→E／本機rear回應證據另存C:/Codex_BuildCache/marineford-marco-release-20261106；實體裝置與正式帳號未測，公開狀態以最終收據為準。
+
+2026-11-06 純卡片對戰舞台：新增battleCinema（兩卡交鋒、陣營招式、七種受擊、士氣與平手），卡面只按既有battle-private權限。參戰雙方見兩卡，旁觀直到KO只開敗牌。依公開sequence/attacker/defender穩定選FX，避免private事件列表不同造成各端不同。新生圖只有stage及phoenix/diamond/rose三VFX，不含角色sprite。QA：scripts/marineford_battle_cinema_qa.cjs；參考／圖源證據D:/Codex_QA/marineford-battle-cinema-20261106。既有牌堆、猜牌、全場蜂窩、士氣1/3與更新核心不改。

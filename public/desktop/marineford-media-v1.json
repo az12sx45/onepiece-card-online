@@ -255,6 +255,34 @@
       "sha256": "6b5d65d0ca78f8d47e1adfa93275778de3df422d0759accbab0c064ceb859fb5"
     },
     {
+      "path": "marineford/art/v2/battle-fx-diamond-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 123204,
+      "sha256": "747a53bb9bbb7af00678f77ae3db1ca082bb2b53b1c5b523a84c601a9f76dad2"
+    },
+    {
+      "path": "marineford/art/v2/battle-fx-phoenix-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 120772,
+      "sha256": "cc1a049a68655d3bd7c3046b37ea46519822600bf0528e1adccd131ac227b253"
+    },
+    {
+      "path": "marineford/art/v2/battle-fx-rose-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 155754,
+      "sha256": "588d5e5c819cd004e33d2bb03718706a6d4f2cfe13d2b28eab28f92ef6e593d3"
+    },
+    {
+      "path": "marineford/art/v2/battle-stage-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 189278,
+      "sha256": "4f94c4aeba23b61a6e46fb0e10c52dae9a9731a7c64b7299335caa6d7835b6aa"
+    },
+    {
       "path": "marineford/art/v2/button.webp",
       "kind": "image",
       "mime": "image/webp",

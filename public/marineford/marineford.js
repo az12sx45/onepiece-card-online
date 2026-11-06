@@ -529,9 +529,9 @@
   const held=cardOrigin(event.player,event.card,event.slot);if(event.player===view.navyId&&held)held.style.visibility='hidden';
   if(!rect?.width)return;
   const layer=$('effectLayer'),face=cardImage(event.card);
-  face.classList.add('peek-flight');face.style.cssText='left:'+((event.mfFrom?.x??innerWidth/2)-28)+'px;top:'+((event.mfFrom?.y??innerHeight/2)-42)+'px;width:56px;height:84px';
+  const width=event.mfFrom?.width||56,height=event.mfFrom?.height||84;face.classList.add('peek-flight');face.style.cssText='left:'+((event.mfFrom?.x??innerWidth/2)-width/2)+'px;top:'+((event.mfFrom?.y??innerHeight/2)-height/2)+'px;width:'+width+'px;height:'+height+'px';
   layer.append(face);const from=face.getBoundingClientRect();
-  await animate(face,[{transform:'translate(0,0) scale(1)'},{transform:`translate(${rect.x+rect.width/2-from.x-28}px,${rect.y+rect.height/2+offset-from.y-42}px) scale(.32)`}],{duration:reduced()?120:620,fill:'forwards'});
+  await animate(face,[{transform:'translate(0,0) scale(1)'},{transform:`translate(${rect.x+rect.width/2-from.x-width/2}px,${rect.y+rect.height/2+offset-from.y-height/2}px) scale(${event.mfFrom?.width?Math.min(.5,Math.min(36,innerHeight*.065)/width):.32})`}],{duration:reduced()?120:620,fill:'forwards'});
   face.remove();
  }
  function travelFrom(element,source,duration){
@@ -541,6 +541,108 @@
   const scale=Math.max(.22,Math.min(.85,from.width/to.width));
   return animate(element,[{transform:`translate(${x}px,${y}px) scale(${scale})`,opacity:1},{transform:'translate(0,0) scale(1)',opacity:1}],{duration:reduced()?120:duration,easing:'cubic-bezier(.16,.7,.28,1)'});
  }
+ const CINEMA_SKILLS={
+  navy:[
+   {id:'kizaru',name:'光速踢',art:'fx-kizaru-light-v1.webp',damage:'light',sound:'slash'},
+   {id:'aokiji',name:'冰河時代',art:'fx-ice.webp',damage:'ice',sound:'ice'},
+   {id:'akainu',name:'大噴火',art:'fx-fire.webp',damage:'magma',sound:'fire'}],
+  pirate:[
+   {id:'whitebeard',name:'震震拳',art:'fx-quake.webp',damage:'quake',sound:'quake'},
+   {id:'marco',name:'鳳凰印',art:'battle-fx-phoenix-v1.webp',damage:'phoenix',sound:'fire'},
+   {id:'jozu',name:'鑽石衝撞',art:'battle-fx-diamond-v1.webp',damage:'diamond',sound:'quake'},
+   {id:'vista',name:'雙刀斬擊',art:'battle-fx-rose-v1.webp',damage:'rose',sound:'slash'}]
+ };
+ function cinemaSkill(team,seed){
+  let hash=team==='navy'?17:43;for(const char of String(seed))hash=(Math.imul(hash,31)+char.charCodeAt(0))>>>0;
+  return CINEMA_SKILLS[team][hash%CINEMA_SKILLS[team].length];
+ }
+ async function battleCinema(event,secret,outcome,token,seed){
+  if(token!==epoch)return;
+  const layer=$('effectLayer'),stage=node('div',null,'cinema-stage'),background=node('img',null,'cinema-background'),title=node('h2','出戰','cinema-title'),caption=node('p','雙方出戰牌進場','cinema-caption'),sources=[];
+  layer.replaceChildren();layer.dataset.kind='battle-cinema';layer.dataset.phase='entry';background.src=artUrl('battle-stage-v1.webp');background.alt='';stage.append(background,title);layer.append(stage,caption);
+  const partyIds=[event.attacker,event.defender],leftTeam=view.players[you]?.team||'pirate',roles=partyIds.map(id=>{
+   const team=view.players[id].team,known=secret?.cards.find(c=>c.player===id),scoreIndex=secret?.cards.findIndex(c=>c.player===id),skill=cinemaSkill(team,seed);
+   const pane=node('section',null,'cinema-party'),header=node('h3',name(id)+' · '+teamName(team),'cinema-party-name'),card=node('div',null,'cinema-card'),math=node('p',known?'牌號 '+cards[known.card].rank:'手牌未公開','cinema-math'),skillName=node('p',skill.name,'cinema-skill');
+   pane.dataset.player=id;pane.dataset.team=team;pane.dataset.side=team===leftTeam?'left':'right';pane.dataset.skill=skill.id;header.title=name(id);
+   let face;if(known)face=cardImage(known.card);else{face=node('img',null,'cinema-back');face.src=artUrl(team+'-back.webp');face.alt=teamName(team)+'未公開手牌';}
+   card.append(face);pane.append(header,card,math,skillName);stage.append(pane);
+   const source=cardOrigin(id,known?.card,team==='navy'?event.navySlot:undefined);
+   if(source?.matches('[data-slot],.hand-card')){sources.push({id,element:source,visibility:source.style.visibility});source.style.visibility='hidden';}
+   return {id,team,known,score:scoreIndex>=0?secret.values?.[scoreIndex]:null,skill,pane,card,math,source};
+  });
+  const beatFor=ms=>beat(reduced()?Math.min(ms,120):ms,token);
+  const valid=()=>token===epoch;
+  const center=element=>{const r=element.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2,width:r.width,height:r.height};};
+  const power=(role,point)=>{const image=node('div',null,'cinema-power'),art=node('img');art.src=artUrl(role.skill.art);art.alt='';if(role.pane.dataset.side==='right')art.style.transform='scaleX(-1)';image.append(art);image.dataset.skill=role.skill.id;image.style.left=point.x+'px';image.style.top=point.y+'px';stage.append(image);return image;};
+  let departure;
+  try{
+   const preloads=roles.map(role=>{const img=new Image();img.src=artUrl(role.skill.art);return img;});
+   await Promise.race([Promise.all([...stage.querySelectorAll('img'),...preloads].map(img=>img.decode().catch(()=>{}))),new Promise(resolve=>setTimeout(resolve,1500))]);if(!valid())return;
+   await Promise.all(roles.map(role=>travelFrom(role.card,role.source,500)));if(!valid())return;await beatFor(450);
+   const boosted=roles.filter(role=>Number(event.boost?.[role.team])>0);
+   if(boosted.length){
+    layer.dataset.phase='morale';caption.textContent='士氣助威 · 有士氣的一方消耗 1 張，戰鬥力 ＋2';window.MFSound?.play('rally');
+    await Promise.all(boosted.map(async role=>{
+     const crowd=node('img',null,'cinema-crowd'),plus=node('b','＋2','cinema-plus');crowd.src=artUrl('redraw-morale-'+role.team+'.webp');crowd.alt=teamName(role.team)+'士兵助威';role.pane.prepend(crowd);role.pane.append(plus);
+     role.math.textContent=role.known?'牌號 '+cards[role.known.card].rank+' ＋ 士氣 2 ＝ '+role.score:'士氣 ＋2 · 牌號未公開';
+     await animate(crowd,[{opacity:0,transform:'translateY(20px)'},{opacity:.8,offset:.35},{opacity:0,transform:'translateY(-8px)'}],{duration:reduced()?150:1000});
+     crowd.remove();plus.remove();
+    }));if(!valid())return;
+   }
+   layer.dataset.phase='charge';caption.textContent='蓄勢 · '+roles.map(r=>name(r.id)+'「'+r.skill.name+'」').join('　對　');
+   const energies=roles.map(role=>({role,point:center(role.card)})).map(({role,point})=>({role,point,image:power(role,point)}));
+   await Promise.all(energies.map(({image,role})=>animate(image,[{transform:'translate(-50%,-50%) scale(.1)',opacity:0},{transform:'translate(-50%,-50%) scale(.6)',opacity:.65,offset:.7},{transform:'translate(-50%,-50%) scale(.85)',opacity:.9}],{duration:reduced()?160:1050,fill:'forwards'})));if(!valid())return;
+   layer.dataset.phase='clash';caption.textContent='交鋒';window.MFSound?.play('slash');
+   const middle={x:innerWidth/2,y:roles.reduce((n,r)=>n+center(r.card).y,0)/2},flights=[];
+   for(const {role,point,image} of energies){
+    const dx=middle.x-point.x,dy=middle.y-point.y,step=dx*.72;
+    flights.push(animate(role.card,[{transform:'translateX(0)'},{transform:'translateX('+step+'px) rotate('+(dx>0?9:-9)+'deg)',offset:.32},{transform:'translateX(0)',offset:.62},{transform:'translateX('+(step*.55)+'px)',offset:.8},{transform:'translateX(0)'}],{duration:reduced()?180:650,easing:'ease-in-out'}));
+    flights.push(animate(image,[{transform:'translate(-50%,-50%) scale(.85)',opacity:.9},{transform:'translate(calc(-50% + '+dx+'px),calc(-50% + '+dy+'px)) scale(.7)',opacity:1,offset:.5},{transform:'translate(calc(-50% + '+dx+'px),calc(-50% + '+dy+'px)) scale(1.1)',opacity:0}],{duration:reduced()?180:650,fill:'forwards'}));
+   }
+   await Promise.all(flights);energies.forEach(e=>e.image.remove());if(!valid())return;
+   const defeated=outcome?.type==='defeat'?roles.find(r=>r.id===outcome.player):null;
+   if(defeated){
+    const winning=roles.find(r=>r!==defeated),from=center(winning.card),to=center(defeated.card),shot=power(winning,from),dx=to.x-from.x,dy=to.y-from.y;
+    layer.dataset.phase='strike';caption.textContent=winning.skill.name;window.MFSound?.play(winning.skill.sound);
+    await animate(shot,[{opacity:0,transform:'translate(-50%,-50%) scale(.25)'},{opacity:1,offset:.2},{opacity:1,transform:'translate(calc(-50% + '+dx+'px),calc(-50% + '+dy+'px)) scale(1.05)'}],{duration:reduced()?180:650,fill:'forwards'});if(!valid())return;
+    layer.dataset.phase='impact';defeated.card.dataset.damage=winning.skill.damage;
+    const pieces=[],kind=winning.skill.damage;
+    if(['quake','diamond','rose','phoenix','ice'].includes(kind)){
+     const count=['rose','phoenix'].includes(kind)?2:6;
+     for(let i=0;i<count;i++){
+      const piece=defeated.card.firstElementChild.cloneNode(true);piece.classList.add('cinema-fragment');
+      piece.style.clipPath=count===2?(i?'polygon(70% 0,100% 0,100% 100%,30% 100%)':'polygon(0 0,70% 0,30% 100%,0 100%)'):'inset('+(Math.floor(i/2)*33.333)+'% '+(i%2?0:50)+'% '+(66.667-Math.floor(i/2)*33.333)+'% '+(i%2?50:0)+'%)';
+      defeated.card.append(piece);pieces.push(piece);
+     }
+     defeated.card.firstElementChild.style.opacity='0';
+     await Promise.all(pieces.map((piece,i)=>animate(piece,[{opacity:1,transform:'none'},{opacity:0,transform:'translate('+((i%2?1:-1)*(28+i*5))+'px,'+((i%3-1)*24+18)+'px) rotate('+((i%2?1:-1)*22)+'deg)'}],{duration:reduced()?150:kind==='ice'?950:700,delay:reduced()?0:kind==='ice'?160:0,fill:'forwards'})));
+     pieces.forEach(piece=>piece.remove());defeated.card.firstElementChild.style.opacity='';
+    }else{
+     await animate(defeated.card,[{filter:'brightness(2)',transform:'translateX(0)'},{filter:kind==='magma'?'brightness(.7) sepia(.4)':'brightness(1)',transform:'translateX('+(dx>0?36:-36)+'px) rotate('+(dx>0?12:-12)+'deg)',offset:.5},{transform:'none',filter:'none'}],{duration:reduced()?150:850,fill:'forwards'});
+    }
+    shot.remove();if(!valid())return;
+    layer.dataset.phase='reveal';const face=cardImage(outcome.card);
+    await animate(defeated.card,[{transform:'rotateY(0deg)'},{transform:'rotateY(85deg)'}],{duration:reduced()?80:180,fill:'forwards'});if(!valid())return;
+    defeated.card.replaceChildren(face);
+    await animate(defeated.card,[{transform:'rotateY(85deg)'},{transform:'rotateY(0deg)'}],{duration:reduced()?80:230,fill:'forwards'});if(!valid())return;
+    layer.dataset.phase='result';caption.textContent=name(winning.id)+'以「'+winning.skill.name+'」擊敗 '+name(defeated.id)+' · 輸牌 '+cards[outcome.card].rank+' 號「'+cards[outcome.card].name+'」';
+    defeated.math.textContent='輸牌 '+cards[outcome.card].rank+' 號';await beatFor(1500);if(!valid())return;
+    departure=center(defeated.card);
+   }else{
+    layer.dataset.phase='result';caption.textContent=outcome?.type==='tie'?'平手 · 雙方保留手牌':'雙方保留手牌';await beatFor(1200);if(!valid())return;
+   }
+   layer.dataset.phase='return';
+   await Promise.all(roles.filter(role=>!outcome||outcome.player!==role.id).map(role=>{
+    if(!role.source)return Promise.resolve();const a=center(role.card),b=center(role.source),scale=Math.min(1,b.width/a.width);
+    return animate(role.card,[{opacity:1,transform:'none'},{opacity:0,transform:'translate('+(b.x-a.x)+'px,'+(b.y-a.y)+'px) scale('+scale+')'}],{duration:reduced()?120:450,fill:'forwards'});
+   }));
+   return departure;
+  }finally{
+   for(const hold of sources)if(token!==epoch||outcome?.player!==hold.id)hold.element.style.visibility=hold.visibility;
+   if(token===epoch){layer.replaceChildren();layer.dataset.kind='peek-flight';delete layer.dataset.phase;}
+  }
+ }
+
  async function scene(text,ids=[],kind='card',token=epoch,source=null,participants=[],options={}){
   const layer=$('effectLayer'),noticeOnly=!ids.length&&!['battle','victory','shuffle'].includes(kind);layer.replaceChildren();layer.dataset.kind=noticeOnly?'notice':kind;layer.dataset.phase='announce';const stage=node('div',null,'effect-stage'),caption=node('p',text,'effect-caption');if(!noticeOnly)layer.append(stage);layer.append(caption);if(noticeOnly)window.MFSound?.play(kind==='morale'?'morale':kind==='miss'?'miss':'play');
   await animate(caption,[{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'translateY(0)'}],{duration:reduced()?80:320});await beat(readingTime(text,1300),token);if(token!==epoch)return;
@@ -839,7 +941,7 @@
     }
     if(outcome){const r=cardOrigin(outcome.player,outcome.card,outcome.slot)?.getBoundingClientRect();await settleDefeat(r?{...outcome,mfFrom:{x:r.x+r.width/2,y:r.y+r.height/2}}:outcome,token);await progressBeat(outcome,presentationHP,token);}
    }
-   else if(e.type==='battle'){const secret=events[i+1]?.type==='battle-private'?events[++i]:null;const mine=secret?.cards.find(x=>x.player===you);const held=[...ownHand().children].find(b=>b.dataset.card===mine?.card);if(held)held.style.visibility='hidden';const outcome=['defeat','tie'].includes(events[i+1]?.type)?events[++i]:null;const publicCard=view.players[view.turn]?.played.at(-1)||'';await scene(name(e.attacker)+' 對戰 '+name(e.defender),secret?secret.cards.map(x=>x.card):[],'battle',token,null,secret?secret.cards.map(x=>x.player):[e.attacker,e.defender],{navySlot:e.navySlot,values:secret?.values,boost:e.boost||{},outcome,fx:publicCard.startsWith('pirate')?'fire':publicCard.startsWith('justice')?'ice':'quake'});if(outcome?.type==='defeat'){await settleDefeat(outcome,token);await progressBeat(outcome,presentationHP,token);}}
+   else if(e.type==='battle'){const secret=events[i+1]?.type==='battle-private'?events[++i]:null;const outcome=['defeat','tie'].includes(events[i+1]?.type)?events[++i]:null;const from=await battleCinema(e,secret,outcome,token,packet.sequence+':'+e.attacker+':'+e.defender);if(outcome?.type==='defeat'){await settleDefeat({...outcome,mfFrom:from},token);await progressBeat(outcome,presentationHP,token);}}
    else if(e.type==='defeat'&&e.player===view.navyId&&view.players[view.turn]?.team==='pirate'&&cards[view.players[view.turn].played.at(-1)]?.rank===1&&['defeat-choice','effect'].includes(view.pending?.type)){
     const origin=cardOrigin(e.player,e.card,e.slot)?.getBoundingClientRect();
     await marcoGuess({attacker:view.turn,player:e.player,hit:true,digit:cards[e.card].rank},token,e,true);

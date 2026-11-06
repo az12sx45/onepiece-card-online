@@ -2342,3 +2342,5 @@ CARD_TIMING_VIDEO_20261104.md列使用者逐卡決策與來源界線。正式gam
 2026-11-06 Card手機個人頁樣式集中在public/profile.html的CARD_PROFILE_MOBILE新增CSS與profilePage錨點。原腳本保留。build_card_program_update.js建置／核對／promote單Card manifest與catalog；QA及公開差量證據存D:/Codex_QA/card-profile-mobile-release-20261106，原作者測試存card-profile-mobile-20261106。
 
 2026-11-06 馬可雙視角及12透明孔由public/marineford/marineford.js的marcoGuess／guessLaser與present分支處理。新增public/marineford/art/v2/fx-marco-phoenix-back-v2.webp及marineford-media-v1.json一筆；scripts/marineford_dual_fx_qa.cjs涵蓋三個rank1海賊、雙方視角、私有選牌、三viewer像素及取消。正式整合QA以外部loader供應4b08036 committed靜態素材，結果存C:/Codex_BuildCache/marineford-marco-release-20261106。
+
+2026-11-06 battleCinema位於public/marineford/marineford.js；public/marineford/marineford.css末段cinema-*是乾淨對局版面。public/desktop/marineford-media-v1.json新增battle-stage-v1與battle-fx-phoenix/diamond/rose-v1，共4張WebP。private資料繼續由原server提供，沒有新增HTTP script或原生套件白名單需求。
