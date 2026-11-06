@@ -9218,3 +9218,8 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 ## 2026-11-06 Card 經典對打舞台與私密牌號
 
 從正式 dbc45faa 建立獨立候選，新增三經典背景、雙卡背與公開頭像對打、對決雙方私密牌號，確定敗方後才公開。server/engine.js 以定向 duel_private 和 UUID 關聯實作權限，並遮蔽非 actor 的 pending.extra.keep；共用 server/index.js 不動。新增四個 client 模組／樣式，game.html 和 desktop queue 精確配對；取消、圖片預載與忙碌狀態仍配合原真人 ACK／CPU gate，沒有介面介紹段落。完整範圍、素材 SHA、測試與發布界線見 docs/CARD_DUEL_STAGE_20261106.md。Engine 662、client VM 57、native boot 16、素材契約各 4 與終態幾何 58 通過；最終桌面／Android-iOS retained／舊頁真 Socket.IO 瀏覽器整合 301 項通過，另 npm start／HTTP 六項通過。主要證據 D:/Codex_QA/card-duel-stage-20261106/accepted-summary.json；原生入口／實機／正式帳號不在此本機驗收範圍，正式發布仍看啟動器收據。
+
+
+## 2026-11-06 爭霸戰卡背對決：統一發布整合
+
+接管已凍結 feature f79ae328300747d41e32de3d6c574cdb16c48b5b，保留經測試三個修改既有 runtime/server 檔案的 CRLF RAW，不另做文字正規化。scoped mixed 更新僅加入四個 programme 與三張 arena 圖，36 programme／1098 media、1134 logical／930 unique；新 package-7726f0ba0848f03d，manifest SHA 92240d2c7e1ce11ecbb5cdff5c4171e7f843d7e68dfb512fc1e55ef4d7a09d61。九個新 CAS payload 共3129994B，原1095媒體與30個未改 programme record 原樣，既有53MB內嵌特效 CSS 不重傳。後端 engine 隨同部署，沒有放入client package；未改server/index、profile、start、其他遊戲與三端core。公告96全保留並新增97。放行需以真正Card入口、完整既有cache過渡／normal update及正式公開讀回佐證；owner301瀏覽器與publisher代表重跑皆是隔離fixture，不當作實機／正式帳號驗收。Card runtime只核current，不將EED誤稱MF式核准fallback。

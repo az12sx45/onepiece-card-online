@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 96,
+  "revision": 97,
   "announcements": [
+    {
+      "id": "card-20261106-duel-stage",
+      "status": "published",
+      "publishedAt": "2026-11-06T14:03:31.562Z",
+      "scope": "card",
+      "category": "update",
+      "version": "爭霸戰 2026.11.06",
+      "title": "偉大航道爭霸戰：三大經典舞台與卡背對決",
+      "summary": "加入馬林福特、鬼島屋頂與德雷斯羅薩背景，雙卡互攻，牌號僅對決雙方可見。",
+      "body": [
+        "對決加入馬林福特、鬼島屋頂與德雷斯羅薩三種經典背景，演出以卡背互攻與 KO 為主。",
+        "畫面保留卡牌、頭像、玩家名稱及簡短勝負提示，移除場地、技能與步驟介紹文字。",
+        "牌號僅對決雙方可見；其他玩家先看卡背，判定敗方後才公開敗牌，平手維持牌背。",
+        "手機與電腦共用新版演出，既有規則及對局流程維持。請結束對局後更新《偉大航道爭霸戰》，再重新進入。Windows 1.2.33、Android v067、iOS v066 沿用現有啟動器與 App。"
+      ],
+      "requiredRelease": {
+        "kind": "card",
+        "releaseId": "package-7726f0ba0848f03d"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "card"
+      }
+    },
     {
       "id": "marineford-20261106-card-battle-cinema",
       "status": "published",

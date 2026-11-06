@@ -15,6 +15,7 @@
       "programFiles": [
         "css/card-cursor-buggy-v3.css",
         "css/card-desktop-table.css",
+        "css/card-duel-stage.css",
         "css/card-entry-tailwind-v1.min.css",
         "css/card-finish-v1.css",
         "css/card-native-online.css",
@@ -26,6 +27,9 @@
         "i18n/ko.js",
         "i18n/zh-Hant.js",
         "js/card-desktop-table.js",
+        "js/card-duel-private.js",
+        "js/card-duel-runtime.js",
+        "js/card-duel-stage.js",
         "js/card_finish_v1.js",
         "js/game_cursor_feedback_v1.js",
         "manifest.webmanifest",
