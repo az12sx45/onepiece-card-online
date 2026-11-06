@@ -1,0 +1,42 @@
+{
+  "generator": "built-in imagegen; originals and final prompts retained in design assets",
+  "promptFile": "C:\\Users\\王曜瑋\\.codex\\visualizations\\2026\\11\\03\\01a19fa7-c2d9-7643-86e3-c5e0d9a510dd\\classic-card-duel-assets\\backgrounds.md",
+  "assets": [
+    {
+      "arena": "marineford",
+      "source": "C:\\Users\\王曜瑋\\.codex\\visualizations\\2026\\11\\03\\01a19fa7-c2d9-7643-86e3-c5e0d9a510dd\\classic-card-duel-assets\\marineford-plaza-v1.png",
+      "sourceSha256": "604e6fbd765faa5ac8ca8e6042a69a72fff6c5a877b83a0433d80e35184f8a85",
+      "path": "images/card-duel/arena-marineford-v1.webp",
+      "bytes": 219524,
+      "sha256": "ec6cc1ccd39230b3f3918613f9319b726002405f1f988ba8583f4b5ffc42c093",
+      "kind": "image",
+      "mime": "image/webp",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "arena": "onigashima",
+      "source": "C:\\Users\\王曜瑋\\.codex\\visualizations\\2026\\11\\03\\01a19fa7-c2d9-7643-86e3-c5e0d9a510dd\\classic-card-duel-assets\\onigashima-rooftop-v1.png",
+      "sourceSha256": "c6ba51488ee866b489e8f125bbb68c216bcf3581f0138c0abd1b9fcd9bf0b032",
+      "path": "images/card-duel/arena-onigashima-v1.webp",
+      "bytes": 155552,
+      "sha256": "a612a0be09dd73d3f0aa56bc50e767199af5d5b50e572db8a5af0fc296cd66b4",
+      "kind": "image",
+      "mime": "image/webp",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "arena": "dressrosa",
+      "source": "C:\\Users\\王曜瑋\\.codex\\visualizations\\2026\\11\\03\\01a19fa7-c2d9-7643-86e3-c5e0d9a510dd\\classic-card-duel-assets\\dressrosa-colosseum-v1.png",
+      "sourceSha256": "c8f2b395a12979fccfcb93c692e3379411f83bc601beaa7385251dca0e0b7792",
+      "path": "images/card-duel/arena-dressrosa-v1.webp",
+      "bytes": 297542,
+      "sha256": "eccd2032ad160f283229f00796935d1c12f00351598a9012418e3a5a960217af",
+      "kind": "image",
+      "mime": "image/webp",
+      "width": 1600,
+      "height": 900
+    }
+  ]
+}

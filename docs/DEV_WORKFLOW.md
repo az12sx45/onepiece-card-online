@@ -9213,3 +9213,8 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 ## 2026-11-06 馬林福特卡牌戰鬥舞台：統一發布整合
 
 以 311a042fea84eb5020cc012bc773fc0fe4f5ec43 為基底，採用正式 READY 的 12 檔白名單與 accepted-chrome/accepted-webkit 最終來源雜湊。七種招式為卡牌特效，四張新圖不含角色立繪。新增遊戲套件 package-2d387ebddf94ff4a（manifest 23ffa58f7bfd92af320694496df2edccadb8f056c8bcd242dfc2559a4d6bc845），共380 logical/379 unique，僅六個新 CAS payload 合計774178 bytes。保留 D、E 同規則套件核准，ABC 不恢復；公告95原樣保留並新增96。server、MF_RULES、cards、三款其他遊戲、啟動器／大廳與三端 core 未變。完成相關來源、同步、瀏覽器與原生提供者驗證，待正式公開讀回及E→新包正常更新通過後才記錄 RELEASED；真機與正式帳號仍待玩家驗收。
+
+
+## 2026-11-06 Card 經典對打舞台與私密牌號
+
+從正式 dbc45faa 建立獨立候選，新增三經典背景、雙卡背與公開頭像對打、對決雙方私密牌號，確定敗方後才公開。server/engine.js 以定向 duel_private 和 UUID 關聯實作權限，並遮蔽非 actor 的 pending.extra.keep；共用 server/index.js 不動。新增四個 client 模組／樣式，game.html 和 desktop queue 精確配對；取消、圖片預載與忙碌狀態仍配合原真人 ACK／CPU gate，沒有介面介紹段落。完整範圍、素材 SHA、測試與發布界線見 docs/CARD_DUEL_STAGE_20261106.md。Engine 662、client VM 57、native boot 16、素材契約各 4 與終態幾何 58 通過；最終桌面／Android-iOS retained／舊頁真 Socket.IO 瀏覽器整合 301 項通過，另 npm start／HTTP 六項通過。主要證據 D:/Codex_QA/card-duel-stage-20261106/accepted-summary.json；原生入口／實機／正式帳號不在此本機驗收範圍，正式發布仍看啟動器收據。

@@ -27,11 +27,14 @@
 //     - { to: 'all',   type:'log', text:string }
 //     - { to: number,  type:'peek', lines:string[] }   // 僅該玩家可見
 //     - { to: number,  type:'toast', cardId:number }   // 前端可做飛牌動畫
-//     - { to: 'all',   type:'duel_log', loserId:number, cardId:number } // 決鬥特效
+//     - { to: number, type:'duel_private', duelId:string, leftId:number, rightId:number, leftCardId:number, rightCardId:number } // 僅對決雙方
+//     - { to: 'all',   type:'duel_log', duelId:string, loserId:number, cardId:number } // 決鬥特效
 //     - { to: number,  type:'coin_fx' } // 全畫面 coin.mp4 只播給這個人
 //
 // ---------------------------------------------------------------
 // 資料定義
+const { randomUUID } = require('node:crypto');
+
 const CARDS = [
   { id:0,  name:"薩波", venue:"德雷斯羅薩鬥技場" },
   { id:1,  name:"騙人布", venue:"艾尼艾斯大廳" },
@@ -358,9 +361,19 @@ function guessLoserCardId(st, loserId){
   return null;
 }
 
+// Capture before elimination clears either hand. This projection is event-only:
+// no private duel cards or replay payloads are retained in visible/save STATE.
+function captureDuel(st, leftId, rightId, leftCardId = st.players[leftId]?.hand){
+  return { duelId: randomUUID(), leftId, rightId, leftCardId, rightCardId: st.players[rightId]?.hand };
+}
+function pushDuelPrivate(emits, duel){
+  for(const to of new Set([duel.leftId, duel.rightId])) emits.push({to, type:'duel_private', ...duel});
+}
+
 // 決鬥日誌 + 決鬥特效
-function pushDuelLog(emits, st, challengerId, loserId, opponentId){
-  const cardId = guessLoserCardId(st, loserId);
+function pushDuelLog(emits, st, challengerId, loserId, opponentId, duel){
+  pushDuelPrivate(emits, duel);
+  const cardId = loserId === duel.leftId ? duel.leftCardId : duel.rightCardId;
 
   const chIdx = challengerId;
   const opIdx = (typeof opponentId === 'number')
@@ -391,6 +404,7 @@ function pushDuelLog(emits, st, challengerId, loserId, opponentId){
     emits.push({
       to: 'all',
       type: 'duel',
+      duelId: duel.duelId,
       leftId: chIdx,
       rightId: opIdx,
       winnerId
@@ -398,14 +412,15 @@ function pushDuelLog(emits, st, challengerId, loserId, opponentId){
   }
 
   // 目前你已經有在用的簡短行：擊敗誰的哪張卡
-  emits.push({ to:'all', type:'duel_log', loserId, cardId });
+  emits.push({ to:'all', type:'duel_log', duelId:duel.duelId, loserId, cardId });
 }
 
 /** ✨ 決鬥平手：只播動畫，不燒牌、不傳 duel_log */
-function pushDuelDraw(emits, st, challengerId, opponentId){
+function pushDuelDraw(emits, st, challengerId, opponentId, duel){
   const chIdx = challengerId;
   const opIdx = opponentId;
   if (chIdx == null || opIdx == null) return;
+  pushDuelPrivate(emits, duel);
 
   const challenger = st.players[chIdx];
   const opponent   = st.players[opIdx];
@@ -420,6 +435,7 @@ function pushDuelDraw(emits, st, challengerId, opponentId){
   emits.push({
     to: 'all',
     type: 'duel',
+    duelId: duel.duelId,
     leftId: chIdx,
     rightId: opIdx,
     winnerId: null
@@ -875,6 +891,11 @@ function getVisibleState(state, viewerId){
   delete vis.rewardPending;
   delete vis.rewardLoggedRounds;
   delete vis.lastRoundAward;
+
+  // Only the pending skill's actor needs its retained hand to render controls.
+  // Opponents/reconnecting spectators must not infer it from shared pending data.
+  const pendingActor = vis.pending?.caster ?? vis.turnIndex;
+  if(vis.pending?.extra && viewerId !== pendingActor) delete vis.pending.extra.keep;
 
   // 遮蔽他人手牌/暫抽
   vis.players.forEach((p)=>{
@@ -1718,6 +1739,7 @@ case 19: { // 羅傑
     if(p.action==='sanji'){
       const g = effectGuard(st, idx, {}, emits);
       if(!g.blocked){
+        const duel = captureDuel(st, meIdx, idx, p.extra.keep);
         pushLog(st, `香吉士：向 ${pname(st, idx)} 發起比拚`, emits);
 
         const base = tail(p.extra.keep);                  // 香吉士手上的那張（決鬥用的那張）的尾數
@@ -1729,7 +1751,7 @@ case 19: { // 羅傑
           // 香吉士這邊贏
           scoreDuelAttack(st, meIdx, p.extra.keep, st.players[idx].hand, { sanjiBoost: !!p.extra.boost }); // ★
           doEliminate(st, idx, '惡魔風腳', meIdx, emits);
-          pushDuelLog(emits, st, meIdx, idx, idx);
+          pushDuelLog(emits, st, meIdx, idx, idx, duel);
 
           // ★ Usopp 推理：贏家是 meIdx
           // 一般版：winnerTail > opp → floor = opp
@@ -1748,7 +1770,7 @@ case 19: { // 羅傑
           // 香吉士這邊輸，被反殺
           scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, { sanjiBoost: !!p.extra.boost });
           doEliminate(st, st.turnIndex, '惡魔風腳反噬', meIdx, emits);
-          pushDuelLog(emits, st, meIdx, meIdx, idx);
+          pushDuelLog(emits, st, meIdx, meIdx, idx, duel);
 
           // ★ Usopp 推理：贏家是 idx
           // base 是「香吉士那張」的尾數
@@ -1765,7 +1787,7 @@ case 19: { // 羅傑
         } else {
           // 平手：什麼都推不出來
           pushLog(st,'平手',emits);
-          pushDuelDraw(emits, st, meIdx, idx);
+          pushDuelDraw(emits, st, meIdx, idx, duel);
         }
       } else {
         // ★ 防禦分：對手擋下攻擊（決鬥沒有觸發）
@@ -2014,13 +2036,14 @@ if (th != null && Array.isArray(st.aiMemory)) {
     if(p.action==='luffy'){
       const g = effectGuard(st, idx, {}, emits);
       if(!g.blocked){
+        const duel = captureDuel(st, meIdx, idx, p.extra.keep);
         pushLog(st, `魯夫：向 ${pname(st, idx)} 發起決鬥`, emits);
         const my=tail(p.extra.keep);
         const opp=tail(st.players[idx].hand);
         if(my>opp){
           scoreDuelAttack(st, st.turnIndex, p.extra.keep, st.players[idx].hand, {}); // ★
           doEliminate(st, idx, '魯夫擊倒', meIdx, emits);
-                pushDuelLog(emits, st, meIdx, idx, idx);
+                pushDuelLog(emits, st, meIdx, idx, idx, duel);
 
 
 
@@ -2030,7 +2053,7 @@ if (th != null && Array.isArray(st.aiMemory)) {
         } else if(my<opp){
           scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, {});
           doEliminate(st, st.turnIndex, '魯夫失敗', meIdx, emits);
-      pushDuelLog(emits, st, meIdx, meIdx, idx);
+      pushDuelLog(emits, st, meIdx, meIdx, idx, duel);
 
       // ★ 贏家是 idx，輸家的尾數是 my
       updateUsoppDuelFloor(st, idx, my);
@@ -2038,7 +2061,7 @@ if (th != null && Array.isArray(st.aiMemory)) {
 
         } else {
           pushLog(st,'平手',emits);
-          pushDuelDraw(emits, st, meIdx, idx);
+          pushDuelDraw(emits, st, meIdx, idx, duel);
         }
       } else {
         scoreDefense(st, idx, p.extra.keep); // ★ 被擋
@@ -2061,13 +2084,14 @@ if (th != null && Array.isArray(st.aiMemory)) {
     if(p.action==='kaido'){
       const g = effectGuard(st, idx, {ignoreProtect:true, ignoreDodge:true}, emits);
       if(!g.blocked){
+        const duel = captureDuel(st, meIdx, idx, st.players[meIdx].hand);
         pushLog(st, `凱多：對 ${pname(st, idx)} 使出雷鳴八卦（無視防禦/閃避）`, emits);
         const my=tail(st.players[st.turnIndex].hand);
         const opp=tail(st.players[idx].hand);
         if(my>opp){
           scoreDuelAttack(st, meIdx, st.players[st.turnIndex].hand, st.players[idx].hand, { ignoreDefOrDodge: true }); // ★
           doEliminate(st, idx, '雷鳴八卦', meIdx, emits);
-                pushDuelLog(emits, st, meIdx, idx, idx);
+                pushDuelLog(emits, st, meIdx, idx, idx, duel);
 
       // ★ 贏家 meIdx，輸家尾數 opp
       updateUsoppDuelFloor(st, meIdx, opp);
@@ -2076,14 +2100,14 @@ if (th != null && Array.isArray(st.aiMemory)) {
         } else if(my<opp){
           scoreDefenseReversal(st, idx, st.players[idx].hand, st.players[st.turnIndex].hand, { ignoreDefOrDodge:true });
           doEliminate(st, st.turnIndex, '被反殺', meIdx, emits);
-          pushDuelLog(emits, st, meIdx, meIdx, idx);
+          pushDuelLog(emits, st, meIdx, meIdx, idx, duel);
 
   // ★ 贏家 idx，輸家尾數 my
       updateUsoppDuelFloor(st, idx, my);
 
         } else {
           pushLog(st,'平手',emits);
-          pushDuelDraw(emits, st, meIdx, idx);
+          pushDuelDraw(emits, st, meIdx, idx, duel);
         }
       }
       st.pending=null;
@@ -2123,6 +2147,7 @@ if (p.action === 'killer') {
   // 強化版：還可以進入決鬥流程
   if (p.extra.boost) {
     if (action.payload?.duel === true) {
+      const duel = captureDuel(st, meIdx, idx, p.extra.keep);
       pushLog(st, `基拉：向 ${pname(st, idx)} 發起決鬥`, emits);
 
       const myId  = p.extra.keep;
@@ -2132,7 +2157,7 @@ if (p.action === 'killer') {
 
       if (my > opp) {
         // 挑戰者勝
-        pushDuelLog(emits, st, meIdx, idx, idx);
+        pushDuelLog(emits, st, meIdx, idx, idx, duel);
         doEliminate(st, idx, `基拉決鬥：挑戰者勝，尾數 ${my} > ${opp}`, meIdx, emits);
 
   // ★ 贏家 meIdx
@@ -2140,7 +2165,7 @@ if (p.action === 'killer') {
 
       } else if (my < opp) {
         // 挑戰者敗
-        pushDuelLog(emits, st, meIdx, meIdx, idx);
+        pushDuelLog(emits, st, meIdx, meIdx, idx, duel);
         doEliminate(st, meIdx, `基拉決鬥：防守方勝，尾數 ${my} < ${opp}`, meIdx, emits);
 
       // ★ 贏家 idx
@@ -2148,7 +2173,7 @@ if (p.action === 'killer') {
 
       } else {
         pushLog(st, '平手', emits);
-        pushDuelDraw(emits, st, meIdx, idx);
+        pushDuelDraw(emits, st, meIdx, idx, duel);
       }
 
       st.pending = null;
@@ -2323,6 +2348,7 @@ if (type === 'LUFFY_SECOND') {
   const meIdx = st.turnIndex;
   const g = effectGuard(st, idx, {}, emits);
   if (!g.blocked) {
+    const duel = captureDuel(st, meIdx, idx, p.extra.keep);
     pushLog(st, `魯夫：向 ${pname(st, idx)} 發起第二次決鬥`, emits);
 
     const myId  = p.extra.keep;
@@ -2333,7 +2359,7 @@ if (type === 'LUFFY_SECOND') {
     if (my > opp) {
       scoreDuelAttack(st, meIdx, myId, oppId, {});
       doEliminate(st, idx, '魯夫擊倒', meIdx, emits);
-      pushDuelLog(emits, st, meIdx, idx, idx);
+      pushDuelLog(emits, st, meIdx, idx, idx, duel);
 
       // ★ 贏家 meIdx
       updateUsoppDuelFloor(st, meIdx, opp);
@@ -2341,14 +2367,14 @@ if (type === 'LUFFY_SECOND') {
     } else if (my < opp) {
       scoreDefenseReversal(st, idx, oppId, myId, {});
       doEliminate(st, meIdx, '魯夫失敗', meIdx, emits);
-      pushDuelLog(emits, st, meIdx, meIdx, idx);
+      pushDuelLog(emits, st, meIdx, meIdx, idx, duel);
 
       // ★ 贏家 idx
       updateUsoppDuelFloor(st, idx, my);
 
     } else {
       pushLog(st, '平手', emits);
-      pushDuelDraw(emits, st, meIdx, idx);
+      pushDuelDraw(emits, st, meIdx, idx, duel);
     }
   } else {
     scoreDefense(st, idx, p.extra.keep);

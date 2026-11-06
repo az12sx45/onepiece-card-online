@@ -1619,8 +1619,8 @@ window.POCardInteract=module.exports;
           if(e.type==='enh_fx'&&typeof playEnhFxFor==='function')playEnhFxFor(e.cardId);
           if(e.type==='law_view'&&e.to===me.playerId&&typeof openLawSwap==='function')openLawSwap(e.targetId,e.cardId);
           if(e.type==='duel'&&typeof playDuel==='function'){
-            const log=batch.events.find(x=>x.type==='duel_log'&&(x.loserId===e.leftId||x.loserId===e.rightId));
-            playDuel({...e,loserSide:log?(log.loserId===e.leftId?'left':'right'):null,loserCardId:log?.cardId});
+            const log=batch.events.find(x=>x.type==='duel_log'&&(e.duelId?x.duelId===e.duelId:!x.duelId&&(x.loserId===e.leftId||x.loserId===e.rightId)));
+            playDuel(api.prepareDuelDetails?api.prepareDuelDetails(e,log):{...e,loserSide:log?(log.loserId===e.leftId?'left':'right'):null,loserCardId:log?.cardId});
           }
         }
         while(valid()&&!fast()&&effects())await pause();

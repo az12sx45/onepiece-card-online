@@ -25,7 +25,11 @@
       document.write('<link id="cardMatchPresentationStyle" rel="stylesheet" href="'+href+'">');
     })();
   </script>
-  <script defer src="js/card-desktop-table.js?v=20261104-card-timing1"></script>
+  <script defer src="js/card-desktop-table.js?v=20261106-duel-stage1"></script>
+  <link rel="stylesheet" href="css/card-duel-stage.css?v=20261106-duel-stage1">
+  <script defer src="js/card-duel-private.js?v=20261106-duel-stage1"></script>
+  <script defer src="js/card-duel-stage.js?v=20261106-duel-stage1"></script>
+  <script defer src="js/card-duel-runtime.js?v=20261106-duel-stage1"></script>
   <link rel="stylesheet" href="css/card-finish-v1.css?v=20260907-depth-visible-v2">
   <script defer src="js/card_finish_v1.js?v=20260907-depth-visible-v2"></script>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
@@ -6169,11 +6173,7 @@ if (e.type === 'duel') {
 
   // ⭐ 沒有正常 winner → 當成平手，直接播一個「沒有燒牌」的決鬥動畫
   if (!hasWinner) {
-    playDuel({
-      leftId:  e.leftId,
-      rightId: e.rightId,
-      winnerId: null   // 用 null 讓 playDuel 判斷是平手
-    });
+    playDuel(window.CardPhonePresentation?.prepareDuelDetails?window.CardPhonePresentation.prepareDuelDetails(e):{...e,winnerId:null});
     _pendingDuel = null;
   }
 }
@@ -6182,7 +6182,7 @@ if (e.type === 'duel') {
 
 // duel_log：除了寫日誌，也觸發決鬥動畫（帶輸家卡片）
 if (e.type === 'duel_log') {
-  if (_pendingDuel && typeof e.loserId === 'number' && typeof e.cardId === 'number') {
+  if (_pendingDuel && (!_pendingDuel.duelId || _pendingDuel.duelId === e.duelId) && typeof e.loserId === 'number' && typeof e.cardId === 'number') {
     const d = _pendingDuel;
     const loserSide =
       (e.loserId === d.leftId)  ? 'left' :
@@ -6207,13 +6207,7 @@ function cardImageURL(id){
   return `images/cards/${id}.webp`;
 }
 
-    playDuel({
-      leftId: d.leftId,
-      rightId: d.rightId,
-      winnerId: d.winnerId,
-      loserSide,
-      loserCardId: e.cardId
-    });
+    playDuel(window.CardPhonePresentation?.prepareDuelDetails?window.CardPhonePresentation.prepareDuelDetails(d,e):{...d,loserSide,loserCardId:e.cardId});
 
     _pendingDuel = null;
   }
@@ -7625,8 +7619,8 @@ el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
           if(e.type==='enh_fx'&&typeof playEnhFxFor==='function')playEnhFxFor(e.cardId);
           if(e.type==='law_view'&&e.to===me.playerId&&typeof openLawSwap==='function')openLawSwap(e.targetId,e.cardId);
           if(e.type==='duel'&&typeof playDuel==='function'){
-            const log=batch.events.find(x=>x.type==='duel_log'&&(x.loserId===e.leftId||x.loserId===e.rightId));
-            playDuel({...e,loserSide:log?(log.loserId===e.leftId?'left':'right'):null,loserCardId:log?.cardId});
+            const log=batch.events.find(x=>x.type==='duel_log'&&(e.duelId?x.duelId===e.duelId:!x.duelId&&(x.loserId===e.leftId||x.loserId===e.rightId)));
+            playDuel(api.prepareDuelDetails?api.prepareDuelDetails(e,log):{...e,loserSide:log?(log.loserId===e.leftId?'left':'right'):null,loserCardId:log?.cardId});
           }
         }
         while(valid()&&!fast()&&effects())await pause();

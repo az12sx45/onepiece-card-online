@@ -2344,3 +2344,12 @@ CARD_TIMING_VIDEO_20261104.md列使用者逐卡決策與來源界線。正式gam
 2026-11-06 馬可雙視角及12透明孔由public/marineford/marineford.js的marcoGuess／guessLaser與present分支處理。新增public/marineford/art/v2/fx-marco-phoenix-back-v2.webp及marineford-media-v1.json一筆；scripts/marineford_dual_fx_qa.cjs涵蓋三個rank1海賊、雙方視角、私有選牌、三viewer像素及取消。正式整合QA以外部loader供應4b08036 committed靜態素材，結果存C:/Codex_BuildCache/marineford-marco-release-20261106。
 
 2026-11-06 battleCinema位於public/marineford/marineford.js；public/marineford/marineford.css末段cinema-*是乾淨對局版面。public/desktop/marineford-media-v1.json新增battle-stage-v1與battle-fx-phoenix/diamond/rose-v1，共4張WebP。private資料繼續由原server提供，沒有新增HTTP script或原生套件白名單需求。
+
+
+## 2026-11-06 Card 對打舞台
+
+- public/js/card-duel-private.js：只接對決雙方的私密牌號，以 duelId 結合公開事件與防重播。
+- public/js/card-duel-stage.js、public/css/card-duel-stage.css：三背景、卡背對打、頭像／名稱與敗方公開。
+- public/js/card-duel-runtime.js：零文字前奏的決鬥排隊、預載、busy 與取消生命週期。
+- public/images/card-duel/arena-*-v1.webp：三張背景；來源與 SHA 見 CARD_DUEL_STAGE_ASSETS_20261106.json。
+- scripts/card_duel_*_qa.*：真 engine／私密 client／舞台與真 Socket.IO 瀏覽器 QA；詳見 CARD_DUEL_STAGE_20261106.md。
