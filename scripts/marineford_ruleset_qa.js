@@ -5,6 +5,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 const { attach, RULESET } = require('../server/marineford-rooms');
 const updateMessage = '遊戲規則已更新，請返回啟動器更新《馬林福特之戰》後再進入。';
 const checks = [];
@@ -51,7 +52,14 @@ function roomSnapshot(room) {
 async function main() {
   assert.equal(RULESET, '20261106-kizaru-one');
   const client = fs.readFileSync(path.join(__dirname, '../public/marineford/marineford.js'), 'utf8');
-  assert.equal(client.match(/marinefordRuleset\s*:\s*['"]([^'"]+)['"]/)?.[1], RULESET,
+  let clientOptions;
+  const captured = new Error('Client socket options captured');
+  try {
+    vm.runInNewContext(client, { document: {}, io(options) { clientOptions = options; throw captured; } });
+  } catch (error) {
+    if (error !== captured) throw error;
+  }
+  assert.equal(clientOptions?.auth?.marinefordRuleset, RULESET,
     'The delivered client and server must use the same rule marker');
   checks.push('Client and server use the same current ruleset marker');
 

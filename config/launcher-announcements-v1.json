@@ -1,7 +1,27 @@
 {
   "schemaVersion": 1,
-  "revision": 94,
+  "revision": 95,
   "announcements": [
+    {
+      "id": "marineford-20261106-marco-facing-honeycomb",
+      "status": "published",
+      "publishedAt": "2026-11-06T04:44:33.227Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "馬林福特之戰 2026.11.06",
+      "title": "馬林福特之戰：馬可雙方視角與命中穿透效果",
+      "summary": "補齊三張海賊猜牌卡的馬可演出，兩方正背視角不同，命中卡呈現12個透明穿透孔。",
+      "body": [
+        "三張海賊猜牌卡都使用馬可青焰演出。海軍與海賊視角分別顯示正面、背面及不同掃射方向，所有玩家都能看見演出。",
+        "命中海軍時，仍等海軍完成自己的受擊牌選擇後才接續切牌與結果，保留未公開手牌的可見權限。",
+        "全場猜牌只在命中卡顯示12個穿透孔，修正WebKit遮罩未真正透明的情形。",
+        "請結束對局後更新《馬林福特之戰》並重新進入。Windows 1.2.33、Android v067、iOS v066 沿用現有啟動器與 App。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.33"
+      }
+    },
     {
       "id": "card-20261106-profile-mobile",
       "status": "published",

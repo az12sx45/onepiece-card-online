@@ -9198,3 +9198,11 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - 來源／精確scope、Chrome及WebKit三同步viewers真engine封包、像素孔心與邊緣、取消後無stale ACK及可繼續猜牌等結果位於同QA目錄。這些是本機Socket.IO／瀏覽器與合成身份驗證，非實體手機、正式帳號或公開發布驗收；套件與公開讀回由launcher另行記錄。
 
 - 本次整合實測 accepted Chrome／WebKit 各14項、取消各2項通過，兩引擎各6組raster的12孔心最大RGB差0，牌邊緣最小差Chrome55／WebKit81；所有報告errors=[]且綁同一JS987daefa與rear e5eab1ac SHA。
+
+### 2026-11-06 馬可雙視角與穿透孔整合發布
+
+- 從最新4b08036d隔離整合，source凍結d3b2454ee519e54313c97dc7b8e4197709403d05。程式JS987daefa及rear e5eab1ac與指定交接一致；CSS ada5984d、cards af4f0e53、server、規則標記及Card eed7 profile8191均保留。
+- 只採accepted-Chrome/WebKit各14及cancel各2；兩引擎各6個真raster、12孔心差0、邊緣仍有牌，取消後無stale ACK且可完成下一次猜牌。舊final/verified/allguess不作本波依據。新真DOM Navy選牌補驗pirate2/3各一次PLAY→猜號→私有選牌→下一回合DRAW，private-redaction、單次MF_ACTION、兩ACK與MF_CAN_ACT均通過。
+- 新包package-ba4f40d2ebced9ba／manifest c0cefb943a870aa40beeb77a06a92eb5db8d0798686cf36f8b2ff2712dcf93b3，376logical、375unique。只新JS100263B與rear108334B，CAS payload208597B；369既有image和5programme保留。僅核准同規則D7a8da/1502為fallback，A/B/C舊3張士氣資料繼續撤銷。
+- 正常規則QA9與engine13/1500、runtime endpoint、公告82通過。繼承的QA literal-regex不支援既有共用常數，改為在VM擷取實際io options後驗marker，沒有改runtime。native frozen-source與6個CSP/browser raster fixture確認data SVG及rear policy，iOS poasset handler在Windows用同byte測試adapter，與真正native/device證據分開。
+- 公告revision95保留舊94逐值，三核心Windows1.2.33/Android67/iOS66沿用。發布前後HTTP、D fallback、原生D→E／本機rear回應證據另存C:/Codex_BuildCache/marineford-marco-release-20261106；實體裝置與正式帳號未測，公開狀態以最終收據為準。
