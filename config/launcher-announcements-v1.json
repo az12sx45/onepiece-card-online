@@ -1,7 +1,27 @@
 {
   "schemaVersion": 1,
-  "revision": 95,
+  "revision": 96,
   "announcements": [
+    {
+      "id": "marineford-20261106-card-battle-cinema",
+      "status": "published",
+      "publishedAt": "2026-11-06T09:04:52.484Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "馬林福特之戰 2026.11.06",
+      "title": "馬林福特之戰：卡牌對戰舞台與七種招式特效",
+      "summary": "兩張卡互攻，參戰雙方可見兩卡與點數，其他玩家於命中後僅見敗牌。",
+      "body": [
+        "戰鬥切換為乾淨的卡牌對戰舞台，呈現海軍黃猿、青雉、赤犬三種招式，以及白鬍子團白鬍子、馬可、喬茲、比斯塔四種招式特效。",
+        "參戰雙方可看到兩張真牌與點數。其他玩家與觀戰者先看到兩張牌背，命中後僅揭露敗牌，贏牌保持隱藏。",
+        "士氣加成與勝負規則維持不變；補齊士氣反超、平手、取消恢復與回場續局的演出流程。",
+        "請結束對局後更新《馬林福特之戰》並重新進入。Windows 1.2.33、Android v067、iOS v066 沿用現有啟動器與 App。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.33"
+      }
+    },
     {
       "id": "marineford-20261106-marco-facing-honeycomb",
       "status": "published",

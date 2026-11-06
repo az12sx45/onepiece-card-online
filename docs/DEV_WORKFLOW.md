@@ -9208,3 +9208,8 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - 公告revision95保留舊94逐值，三核心Windows1.2.33/Android67/iOS66沿用。發布前後HTTP、D fallback、原生D→E／本機rear回應證據另存C:/Codex_BuildCache/marineford-marco-release-20261106；實體裝置與正式帳號未測，公開狀態以最終收據為準。
 
 2026-11-06 純卡片對戰舞台：新增battleCinema（兩卡交鋒、陣營招式、七種受擊、士氣與平手），卡面只按既有battle-private權限。參戰雙方見兩卡，旁觀直到KO只開敗牌。依公開sequence/attacker/defender穩定選FX，避免private事件列表不同造成各端不同。新生圖只有stage及phoenix/diamond/rose三VFX，不含角色sprite。QA：scripts/marineford_battle_cinema_qa.cjs；參考／圖源證據D:/Codex_QA/marineford-battle-cinema-20261106。既有牌堆、猜牌、全場蜂窩、士氣1/3與更新核心不改。
+
+
+## 2026-11-06 馬林福特卡牌戰鬥舞台：統一發布整合
+
+以 311a042fea84eb5020cc012bc773fc0fe4f5ec43 為基底，採用正式 READY 的 12 檔白名單與 accepted-chrome/accepted-webkit 最終來源雜湊。七種招式為卡牌特效，四張新圖不含角色立繪。新增遊戲套件 package-2d387ebddf94ff4a（manifest 23ffa58f7bfd92af320694496df2edccadb8f056c8bcd242dfc2559a4d6bc845），共380 logical/379 unique，僅六個新 CAS payload 合計774178 bytes。保留 D、E 同規則套件核准，ABC 不恢復；公告95原樣保留並新增96。server、MF_RULES、cards、三款其他遊戲、啟動器／大廳與三端 core 未變。完成相關來源、同步、瀏覽器與原生提供者驗證，待正式公開讀回及E→新包正常更新通過後才記錄 RELEASED；真機與正式帳號仍待玩家驗收。
