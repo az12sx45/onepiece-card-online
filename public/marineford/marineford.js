@@ -647,7 +647,9 @@
   if(token!==epoch)return;
   const text=e.hit?'猜中 '+e.digit+' 號':'未猜中 '+e.digit+' 號';
   const layer=$('effectLayer');layer.replaceChildren();layer.dataset.kind='marco-guess';layer.dataset.phase=splitOnly?'split':'flight';
-  const actor=node('img',null,'mf-marco-flight');actor.src=artUrl('fx-marco-phoenix-v1.webp');actor.alt='馬可展翼';
+  const allied=view.players[e.attacker??view.turn]?.team===view.players[you]?.team;
+  layer.dataset.facing=allied?'back':'front';
+  const actor=node('img',null,'mf-marco-flight');actor.src=artUrl(allied?'fx-marco-phoenix-back-v2.webp':'fx-marco-phoenix-v1.webp');actor.alt=allied?'馬可背面展翼':'馬可正面展翼';
   const hands=[...$('navyHands').querySelectorAll('[data-slot]')].filter(el=>el.getBoundingClientRect().width).sort((a,b)=>a.getBoundingClientRect().x-b.getBoundingClientRect().x);
   const left=hands[0]?.getBoundingClientRect(),right=hands.at(-1)?.getBoundingClientRect();
   const y=left?left.y+left.height*.54:innerHeight*.3;
@@ -657,7 +659,9 @@
    if(!splitOnly){
    await Promise.race([actor.decode().catch(()=>{}),new Promise(resolve=>setTimeout(resolve,1200))]);
    if(token!==epoch)return;
-   await animate(actor,[{left:'-20vw',opacity:0,transform:'translate(-50%,-58%) scale(.5)'},{left:(left?left.x+left.width/2:innerWidth*.3)+'px',opacity:1,transform:'translate(-50%,-54%) scale(1)',offset:.35},{left:(right?right.x+right.width/2:innerWidth*.7)+'px',opacity:1,transform:'translate(-50%,-50%) scale(1.05)',offset:.72},{left:'120vw',opacity:0,transform:'translate(-50%,-65%) scale(.86)'}],{duration:reduced()?190:1080,easing:'ease-in-out',fill:'forwards'});
+   const height=actor.getBoundingClientRect().height;actor.style.top=Math.max(height*.65+8,Math.min(innerHeight-height*.4-8,y))+'px';
+   const first=allied?left:right,last=allied?right:left,flip=allied?'':' scaleX(-1)';
+   await animate(actor,[{left:allied?'-20vw':'120vw',opacity:0,transform:'translate(-50%,-58%) scale(.5)'+flip},{left:(first?first.x+first.width/2:innerWidth*.3)+'px',opacity:1,transform:'translate(-50%,-54%) scale(1)'+flip,offset:.35},{left:(last?last.x+last.width/2:innerWidth*.7)+'px',opacity:1,transform:'translate(-50%,-50%) scale(1.05)'+flip,offset:.72},{left:allied?'120vw':'-20vw',opacity:0,transform:'translate(-50%,-65%) scale(.86)'+flip}],{duration:reduced()?190:1080,easing:'ease-in-out',fill:'forwards'});
    if(token!==epoch)return;
    actor.remove();
    }
@@ -739,7 +743,7 @@
    await beat(reduced()?60:barrage?550:350,token);
    if(token!==epoch)return;
    layer.dataset.phase='fire';window.MFSound?.play('slash');
-   const holes=[[.3,.26],[.66,.29],[.5,.48],[.28,.64],[.69,.69],[.48,.82]];
+   const holes=Array.from({length:12},(_,i)=>[.22+(i%3)*.28+(Math.floor(i/3)%2?.04:0),.18+Math.floor(i/3)*.21]);
    await Promise.all(targets.flatMap(({surface})=>{
     const t=surface.getBoundingClientRect();
     if(barrage)return holes.map(([x,y],i)=>{
@@ -766,13 +770,15 @@
     }
     if(card&&card!==ownCard)surface.replaceChildren(cardImage(card));
     if(barrage){
-     const id='mf-burn-'+target.dataset.player;
-     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-     svg.setAttribute('width','0');svg.setAttribute('height','0');svg.style.position='absolute';
-     const mask=document.createElementNS(svg.namespaceURI,'mask');mask.id=id;mask.setAttribute('maskContentUnits','objectBoundingBox');
-     const rect=document.createElementNS(svg.namespaceURI,'rect');rect.setAttribute('width','1');rect.setAttribute('height','1');rect.setAttribute('fill','white');mask.append(rect);
-     for(const [x,y] of holes){const hole=document.createElementNS(svg.namespaceURI,'circle');hole.setAttribute('cx',x);hole.setAttribute('cy',y);hole.setAttribute('r','.086');mask.append(hole);}
-     svg.append(mask);target.append(svg);surface.style.maskImage='url(#'+id+')';surface.dataset.barrageBurned='true';
+     // An alpha cut-out avoids WebKit's unresolved fragment-mask behavior.
+     const path='M0 0H100V150H0Z '+holes.map(([x,y])=>{
+      const cx=x*100,cy=y*150,rx=9,ry=13.5;
+      return `M${cx-rx} ${cy}a${rx} ${ry} 0 1 0 18 0a${rx} ${ry} 0 1 0 -18 0Z`;
+     }).join(' ');
+     const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 150"><path fill="white" fill-rule="evenodd" d="${path}"/></svg>`;
+     const image='url("data:image/svg+xml,'+encodeURIComponent(svg)+'")';
+     surface.style.maskImage=image;surface.style.webkitMaskImage=image;surface.style.maskSize='100% 100%';surface.style.webkitMaskSize='100% 100%';
+     surface.dataset.barrageBurned='true';surface.dataset.barrageHoles=String(holes.length);
      await animate(surface,[{filter:'brightness(2.5)'},{filter:'brightness(.84)'}],{duration:reduced()?120:420});return;
     }
     surface.dataset.burned='true';
@@ -827,15 +833,14 @@
     if(!presentedGuesses.has(e)){
      const attacker=packet.view.players[e.attacker??view.turn];
      if(attacker.team==='pirate'){
-      if(attacker.played.at(-1)==='pirate-1')await marcoGuess(e,token,outcome);
-      else await pirateGuess(e,token,outcome?.card);
+      await marcoGuess(e,token,outcome);
      }
      else await guessLaser(e,token,outcome?.card);
     }
     if(outcome){const r=cardOrigin(outcome.player,outcome.card,outcome.slot)?.getBoundingClientRect();await settleDefeat(r?{...outcome,mfFrom:{x:r.x+r.width/2,y:r.y+r.height/2}}:outcome,token);await progressBeat(outcome,presentationHP,token);}
    }
    else if(e.type==='battle'){const secret=events[i+1]?.type==='battle-private'?events[++i]:null;const mine=secret?.cards.find(x=>x.player===you);const held=[...ownHand().children].find(b=>b.dataset.card===mine?.card);if(held)held.style.visibility='hidden';const outcome=['defeat','tie'].includes(events[i+1]?.type)?events[++i]:null;const publicCard=view.players[view.turn]?.played.at(-1)||'';await scene(name(e.attacker)+' 對戰 '+name(e.defender),secret?secret.cards.map(x=>x.card):[],'battle',token,null,secret?secret.cards.map(x=>x.player):[e.attacker,e.defender],{navySlot:e.navySlot,values:secret?.values,boost:e.boost||{},outcome,fx:publicCard.startsWith('pirate')?'fire':publicCard.startsWith('justice')?'ice':'quake'});if(outcome?.type==='defeat'){await settleDefeat(outcome,token);await progressBeat(outcome,presentationHP,token);}}
-   else if(e.type==='defeat'&&e.player===view.navyId&&view.players[view.turn]?.played.at(-1)==='pirate-1'&&['defeat-choice','effect'].includes(view.pending?.type)){
+   else if(e.type==='defeat'&&e.player===view.navyId&&view.players[view.turn]?.team==='pirate'&&cards[view.players[view.turn].played.at(-1)]?.rank===1&&['defeat-choice','effect'].includes(view.pending?.type)){
     const origin=cardOrigin(e.player,e.card,e.slot)?.getBoundingClientRect();
     await marcoGuess({attacker:view.turn,player:e.player,hit:true,digit:cards[e.card].rank},token,e,true);
     await settleDefeat(origin?{...e,mfFrom:{x:origin.x+origin.width/2,y:origin.y+origin.height/2}}:e,token);await progressBeat(e,presentationHP,token);

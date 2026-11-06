@@ -2340,3 +2340,5 @@ CARD_TIMING_VIDEO_20261104.md列使用者逐卡決策與來源界線。正式gam
 2026-11-06 黃猿士氣資料位於 public/marineford/cards.json；雷射蓄光與雙向規則握手位於 marineford.js。server/marineford-rooms.js 統一檢查 MF 規則標記並回覆 MF_RULES；scripts/marineford_ruleset_qa.js 與 marineford_reconnect_qa.cjs 涵蓋舊頁拒絕、新規則連線、ACK 和重連。發行端清空 config/marineford-compatible-packages-v1.json 舊包核准，並同步 server 資料、獨立套件及公告；證據另存 D:/Codex_QA/marineford-kizaru-release-20261106。
 
 2026-11-06 Card手機個人頁樣式集中在public/profile.html的CARD_PROFILE_MOBILE新增CSS與profilePage錨點。原腳本保留。build_card_program_update.js建置／核對／promote單Card manifest與catalog；QA及公開差量證據存D:/Codex_QA/card-profile-mobile-release-20261106，原作者測試存card-profile-mobile-20261106。
+
+2026-11-06 馬可雙視角及12透明孔由public/marineford/marineford.js的marcoGuess／guessLaser與present分支處理。新增public/marineford/art/v2/fx-marco-phoenix-back-v2.webp及marineford-media-v1.json一筆；scripts/marineford_dual_fx_qa.cjs涵蓋三個rank1海賊、雙方視角、私有選牌、三viewer像素及取消。正式整合QA以外部loader供應4b08036 committed靜態素材，結果存C:/Codex_BuildCache/marineford-marco-release-20261106。

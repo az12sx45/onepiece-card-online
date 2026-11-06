@@ -9189,3 +9189,12 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - 原七個 script 區塊逐位元組相同，其中四個 inline 與三個外部 src。僅手機 CSS／profilePage 錨點改動；原角色、個人資料與裝備事件權限不變。原作者最終135項／0issues/errors，以實際出貨Android67與iOS66 bundle＋Chromium／WebKit及合成帳號驗證，整合端另做RAW/EOL與scope獨立核驗；不等同實體裝置或正式帳號驗收。
 - 用 build_card_program_update.js 先建外部候選、同HEAD verify，再promote；只更新Card manifest/catalog，changedPrograms精確只有profile.html。31個其他程式與1095個media記錄、Board/Chess描述、Marineford規則包及三端核心沿用。新版package-eed7b1a166daf2ea／manifest e284e46f196a31e8525c6486057141e80b7bf59167e2c1d2716b9f09839eba1e；唯一新CAS159887B。
 - 公告revision94用Card releaseId閘門，舊93則保留。發布與公開三端／單檔差量讀回收據另存D:/Codex_QA/card-profile-mobile-release-20261106；無全量800MB安裝或真機驗收宣稱。
+
+### 2026-11-06 馬可雙方視角與蜂窩透明孔（正式整合）
+
+- 從正式 main 4b08036db2a8655e748b86a9077182d50f5859ef 隔離套用本波10個精確JS操作，保留最新Card手機個人頁、公告94及其他遊戲資料。只新增後方馬可WebP與media-v1一筆，CSS維持ada5984d原始SHA；三張海賊rank1猜牌皆使用馬可，海軍看正面、海賊看背面並反向掃牌。
+- 全場命中卡以內嵌evenodd SVG alpha形成12個真正透明孔；未命中不公開手牌、HUD固定、海軍仍自行選受擊牌後才切半。黃猿士氣1、justice-4士氣3與20261106-kizaru-one雙向規則握手皆保留，無server/core修改。
+- 本波放行只採accepted-chrome／accepted-webkit與cancel-chrome／cancel-webkit的最終報告；原final-*、verified-*、allguess-*均為被取代診斷。整合重跑以C:/Codex_BuildCache/marineford-marco-release-20261106/run-integrated-qa.cjs把專用QA的dirty producer fallback替換為4b08036 Git objects，實際靜態素材SHA另存static-proof.json，未複製圖庫。
+- 來源／精確scope、Chrome及WebKit三同步viewers真engine封包、像素孔心與邊緣、取消後無stale ACK及可繼續猜牌等結果位於同QA目錄。這些是本機Socket.IO／瀏覽器與合成身份驗證，非實體手機、正式帳號或公開發布驗收；套件與公開讀回由launcher另行記錄。
+
+- 本次整合實測 accepted Chrome／WebKit 各14項、取消各2項通過，兩引擎各6組raster的12孔心最大RGB差0，牌邊緣最小差Chrome55／WebKit81；所有報告errors=[]且綁同一JS987daefa與rear e5eab1ac SHA。

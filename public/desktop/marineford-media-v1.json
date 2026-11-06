@@ -339,6 +339,13 @@
       "sha256": "686ec6f7392be424ab92f7b2d53d34d8f0734c2c985e20ab4e3dcd74482f1086"
     },
     {
+      "path": "marineford/art/v2/fx-marco-phoenix-back-v2.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 108334,
+      "sha256": "e5eab1acb1dee123c574a8c44a293042ad8f1a073c5036ad8a715fa1f348ae35"
+    },
+    {
       "path": "marineford/art/v2/fx-marco-phoenix-v1.webp",
       "kind": "image",
       "mime": "image/webp",
