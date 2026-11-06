@@ -1,7 +1,29 @@
 {
   "schemaVersion": 1,
-  "revision": 97,
+  "revision": 98,
   "announcements": [
+    {
+      "id": "card-20261107-collision-swap-visibility",
+      "status": "published",
+      "publishedAt": "2026-11-06T18:28:44.878Z",
+      "scope": "card",
+      "category": "update",
+      "version": "爭霸戰 2026.11.07",
+      "title": "卡背碰撞與換牌顯示復原",
+      "summary": "對決改成一次卡背碰撞並縮短演出，保留三背景、雙方頭像與牌號保密，敗方才翻牌。補強交換手牌動畫結束、中斷與切換畫面時的手牌顯示復原。",
+      "body": [
+        "對決改成一次卡背碰撞並縮短演出，保留三背景、雙方頭像與牌號保密，敗方才翻牌。補強交換手牌動畫結束、中斷與切換畫面時的手牌顯示復原。",
+        "請結束對局後更新《偉大航道爭霸戰》，再重新進入。Windows 1.2.33、Android v067、iOS v066 沿用現有啟動器與 App。"
+      ],
+      "requiredRelease": {
+        "kind": "card",
+        "releaseId": "package-1b7337cdeb75bb0b"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "card"
+      }
+    },
     {
       "id": "card-20261106-duel-stage",
       "status": "published",

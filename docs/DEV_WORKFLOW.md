@@ -9235,3 +9235,11 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - 編修曾誤置前輪保留樹的兩個自有檔，已按 HEAD/prefix/hash 安全遷回本輪候選並使保留樹乾淨；原始位元組及修正收據保留。舊 boot 報告輸出也已依正式 SHA 精確恢復，本輪失敗 fixture 報告另存，不列入通過。
 - 僅交啟動器聊天室整合 catalog／manifest／更新情報，完成前不宣稱 RELEASED。LATTICE API 本輪未提供，未聲稱資料庫持久寫入。
 - 因果界線：自然普通 6 號修前真 server/UI 的桌機與 retained Android 各 28 項通過，尚未自然重現使用者當次問題。hidden 場景 guard 與取消 timer 使單純背景假說不足成立；受控機制 FAIL 不是已證實可達的真對局路徑，不據此宣稱已定位或修復當次實例。
+
+
+## 2026-11-07 Card 發布整合：單次卡背碰撞與交換顯示復原
+
+- 依705548c7精確RAW使用build_card_program_update.js外部候選、候選再驗證與promote流程，Card更新為package-1b7337cdeb75bb0b，manifest SHA bd6e46114cca89ba0857b2d99f801ebc7ea7265829b822172a26090a4519b6de。三個programme共28522 bytes；1134 logical／847886504 bytes、36 programme、1098 media、930 unique／808528446 bytes，其他1131筆asset record保持。
+- 新增公告98（card-20261107-collision-swap-visibility），以Card release gate對應新包並完整保留既有97則。只更新catalog／新immutable manifest／公告與本紀錄，不改allowlist、其他遊戲、v2、核心安裝包或53MB既有CSS。
+- 本輪候選QA保留owner accepted494功能項的qualified兩個假venue圖排除界線，另有官方完整venue63與retained iOS145；自然普通6修前兩端各28項未重現當次事故，不宣稱已定位根因或修復當次實例。更新文案使用單次卡背碰撞與交換動畫結束／中斷顯示復原。
+- Publisher外部候選36programme及全部1098media record已驗證；實際npm應用與公開／原生正常更新的最終結果，以D:/Codex_QA/card-collision-release-20261107及正式發布收據為準。真機、正式帳號、OS WebView／WK與Electron視窗驗收不在本地證據範圍。
