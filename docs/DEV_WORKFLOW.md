@@ -9223,3 +9223,15 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 ## 2026-11-06 爭霸戰卡背對決：統一發布整合
 
 接管已凍結 feature f79ae328300747d41e32de3d6c574cdb16c48b5b，保留經測試三個修改既有 runtime/server 檔案的 CRLF RAW，不另做文字正規化。scoped mixed 更新僅加入四個 programme 與三張 arena 圖，36 programme／1098 media、1134 logical／930 unique；新 package-7726f0ba0848f03d，manifest SHA 92240d2c7e1ce11ecbb5cdff5c4171e7f843d7e68dfb512fc1e55ef4d7a09d61。九個新 CAS payload 共3129994B，原1095媒體與30個未改 programme record 原樣，既有53MB內嵌特效 CSS 不重傳。後端 engine 隨同部署，沒有放入client package；未改server/index、profile、start、其他遊戲與三端core。公告96全保留並新增97。放行需以真正Card入口、完整既有cache過渡／normal update及正式公開讀回佐證；owner301瀏覽器與publisher代表重跑皆是隔離fixture，不當作實機／正式帳號驗收。Card runtime只核current，不將EED誤稱MF式核准fallback。
+
+
+## 2026-11-07 Card：單次卡背碰撞與 6 號換牌視覺復原
+
+- 以已發布 07a1947 為基底窄修三個產品檔：public/js/card-duel-stage.js、public/css/card-duel-stage.css、public/js/card-duel-runtime.js。保留三張舞台背景、雙方私密牌號及敗方公開規則；取消飛彈、蓄力和多輪遠距攻擊，改成一次實際中央碰撞，4200 ms 結束。
+- 普通 6 號伺服器仍依原規則交換雙方手牌；為保留版手機 FX 補上場景自身的引用釋放；受控測試刻意把全域復原排在 swap mask 之前，證明原場景在這種排序下會殘留。新增獨立相容 hook，只接管目前 swap 場景、零參數且本人參與的 mask 呼叫；每場景自行借用／釋放手牌視覺，取消、換場、房間／玩家／回合變更及背景／快速播放均釋放自身引用，保留其他檢視或對決引用。
+- 未變更 engine、server/index.js、遊戲封包、帳號、卡牌規則或原生安裝包。既有 runtime 原 6667 bytes 前綴完整保留，僅追加獨立 hook；不修改安裝包內 retained game-mobile.js。
+- 新增 scripts/card_swap_hand_visibility_qa.cjs、scripts/card_swap_visibility_qa.cjs，並更新 scripts/card_duel_boot_qa.js 的新 stage version、獨立 hook API fixture 與四個 bounded boot 的上界。
+- 已實行的受控機制 76 項、late-boot 16 項、真 WAAPI 取樣 32 項、literal npm start 與 4 路 HTTP RAW 共 5 項通過。多人三端最終結果、來源 RAW／證據 SHA 與公開更新讀回以 D:/Codex_QA/card-swap-collision-20261107 的最終驗收／發布收據為準。受控晚 mask 重現與真對局自然時序分開記錄；不宣稱真機、正式帳號或 OS 原生 UI 驗收。
+- 編修曾誤置前輪保留樹的兩個自有檔，已按 HEAD/prefix/hash 安全遷回本輪候選並使保留樹乾淨；原始位元組及修正收據保留。舊 boot 報告輸出也已依正式 SHA 精確恢復，本輪失敗 fixture 報告另存，不列入通過。
+- 僅交啟動器聊天室整合 catalog／manifest／更新情報，完成前不宣稱 RELEASED。LATTICE API 本輪未提供，未聲稱資料庫持久寫入。
+- 因果界線：自然普通 6 號修前真 server/UI 的桌機與 retained Android 各 28 項通過，尚未自然重現使用者當次問題。hidden 場景 guard 與取消 timer 使單純背景假說不足成立；受控機制 FAIL 不是已證實可達的真對局路徑，不據此宣稱已定位或修復當次實例。

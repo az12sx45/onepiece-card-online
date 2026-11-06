@@ -113,3 +113,75 @@
   document.addEventListener('card:interface-ready',()=>{clearTimeout(bootTimer);bootTimer=setTimeout(boot,0);});
   bootTimer=setTimeout(boot,0);
 })();
+
+/* Old native swap callbacks can run after the flow's global hand restore.
+ * Own only the active swap scene's visual borrow; all other mask owners stay intact. */
+(() => {
+  'use strict';
+  function mount(){
+    const api=window.CardPhonePresentation,layer=document.getElementById('phoneInteractionFx');
+    if(api?.swapHandVisibilityVersion)return true;
+    if(!api||typeof api.maskHandArt!=='function'||typeof api.borrowCardVisual!=='function'||typeof api.ownHandElement!=='function'||!layer?.isConnected)return false;
+    const originalMask=api.maskHandArt,owners=new Map(),cancelledScenes=new WeakSet();
+    let poll=null,round=typeof state==='object'?state?.roundNo:null;
+    const identity=()=>JSON.stringify([typeof me==='object'?me?.roomId:null,typeof me==='object'?me?.playerId:null,round]);
+    let lastIdentity=identity();
+    const fast=()=>typeof isCpuSkipFastMode==='function'&&isCpuSkipFastMode();
+    const current=()=>layer.isConnected&&layer.dataset.kind==='swap'?[...layer.children].find(n=>n.classList.contains('phone-hud-scene')&&n.isConnected&&n.parentElement===layer):null;
+    function release(scene,invalid=false){
+      if(invalid)cancelledScenes.add(scene);
+      const owner=owners.get(scene);if(!owner)return;
+      owners.delete(scene);for(const done of owner.leases.values())done();owner.leases.clear();
+    }
+    function cancel(){
+      clearTimeout(poll);poll=null;
+      for(const scene of [...owners.keys()])release(scene,true);
+      const scene=current();if(scene)cancelledScenes.add(scene);
+    }
+    function sweep(){
+      clearTimeout(poll);poll=null;
+      if(document.hidden||fast()){cancel();return;}
+      const scene=current(),key=identity();
+      if(key!==lastIdentity){cancel();lastIdentity=key;return;}
+      for(const [owned,owner]of [...owners])if(owned!==scene||owner.identity!==key)release(owned,true);
+      if(owners.size)poll=setTimeout(sweep,50);
+    }
+    api.maskHandArt=function(node){
+      sweep();
+      const scene=current();
+      const viewer=typeof me==='object'?me?.playerId:null;
+      if(arguments.length!==0||!scene||!Number.isInteger(viewer)||![scene.dataset.source,scene.dataset.target].includes(String(viewer)))return originalMask.apply(this,arguments);
+      if(cancelledScenes.has(scene)||document.hidden||fast()){release(scene,true);return;}
+      // Native maskHandArt returns void. Do not create a phantom lease when no
+      // hand surface exists at this instant; resolve the live API on each call.
+      const source=node||api.ownHandElement();
+      const target=source?.closest?.('#playHand,#playDrawn')||source;
+      if(!target||target.isConnected===false)return;
+      let owner=owners.get(scene);
+      if(!owner){owner={identity:identity(),leases:new Map()};owners.set(scene,owner);}
+      if(!owner.leases.has(target)){
+        const done=api.borrowCardVisual(target);
+        if(typeof done==='function')owner.leases.set(target,done);
+      }
+      sweep();
+    };
+    new MutationObserver(sweep).observe(layer,{childList:true,attributes:true,attributeFilter:['data-kind']});
+    new MutationObserver(sweep).observe(document.body,{childList:true});
+    if(typeof socket==='object'&&socket?.on){
+      for(const event of ['JOINED','disconnect'])socket.on(event,()=>{cancel();round=null;lastIdentity=identity();});
+      socket.on('STATE',s=>{
+        if(s?.roundNo!=null)round=s.roundNo;
+        const next=identity();if(next!==lastIdentity)cancel();lastIdentity=next;sweep();
+      });
+    }
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel();});
+    window.addEventListener('pagehide',cancel);
+    api.clearSwapHandVisibility=cancel;api.swapHandVisibilityVersion=1;
+    return true;
+  }
+  let timer=null,attempts=0;
+  function boot(){clearTimeout(timer);if(mount())return;if(++attempts<200)timer=setTimeout(boot,50);}
+  document.addEventListener('DOMContentLoaded',()=>{clearTimeout(timer);timer=setTimeout(boot,0);},{once:true});
+  document.addEventListener('card:interface-ready',()=>{clearTimeout(timer);timer=setTimeout(boot,0);});
+  timer=setTimeout(boot,0);
+})();

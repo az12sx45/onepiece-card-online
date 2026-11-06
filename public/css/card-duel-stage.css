@@ -1,4 +1,4 @@
-/* Shared full-screen duel surface. All card/effect textures preserve their ratio. */
+/* Shared full-screen card collision. Card textures preserve their ratio. */
 html[data-card-phone] .card-duel-layer{position:fixed;inset:0;z-index:190;pointer-events:none;}
 html[data-card-phone] .card-duel-layer[hidden]{display:none;}
 html[data-card-phone] .card-duel-scene{position:absolute;inset:0;}
@@ -18,12 +18,7 @@ html[data-card-phone] .card-duel-stage .cduel-portrait{position:absolute;inset:0
 html[data-card-phone] .card-duel-stage .cduel-name{min-width:0;max-width:min(180px,25vw);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:clamp(13px,2.7dvh,21px);font-weight:800;line-height:1.3;}
 html[data-card-phone] .card-duel-stage .cduel-versus{position:absolute;left:50%;top:43%;transform:translate(-50%,-50%);margin:0;font-size:clamp(26px,7dvh,52px);font-weight:900;font-style:italic;line-height:1;color:#ffe0a0;text-shadow:0 3px 2px #654a31,0 5px 12px #000;}
 html[data-card-phone] .card-duel-stage .cduel-versus[hidden],html[data-card-phone] .card-duel-stage .cduel-verdict[hidden]{display:none;}
-html[data-card-phone] .card-duel-stage .cduel-charge{position:absolute;z-index:3;inset:-15% -25%;width:150%;height:130%;object-fit:contain;opacity:0;pointer-events:none;filter:drop-shadow(0 0 10px #fff7bb55);}
-html[data-card-phone] .card-duel-stage .cduel-shot{position:absolute;z-index:4;top:18%;width:46%;height:57%;object-fit:contain;opacity:0;pointer-events:none;}
-html[data-card-phone] .card-duel-stage .cduel-shot[data-side="left"]{left:7%;}
-html[data-card-phone] .card-duel-stage .cduel-shot[data-side="right"]{right:7%;transform:scaleX(-1);}
-html[data-card-phone] .card-duel-stage .cduel-impact{position:absolute;z-index:5;left:50%;top:44%;width:min(42vw,64dvh);aspect-ratio:1;border-radius:50%;opacity:0;pointer-events:none;background:radial-gradient(circle,#fff2cc 0 6%,#ffe0a78c 14%,#ffbc3c30 30%,transparent 66%);}
-html[data-card-phone] .card-duel-stage .cduel-crack{position:absolute;inset:0;opacity:0;pointer-events:none;z-index:4;border-radius:6px;background:linear-gradient(132deg,transparent 48%,#fff8da 49%,#342b26 50%,transparent 51%),linear-gradient(49deg,transparent 55%,#fff8da 56%,#342b26 57%,transparent 58%);}
+html[data-card-phone] .card-duel-stage .cduel-impact{position:absolute;z-index:5;left:50%;top:44%;width:min(25vw,40dvh);aspect-ratio:1;border-radius:50%;opacity:0;pointer-events:none;background:radial-gradient(circle,#fff2cc 0 6%,#ffe0a78c 14%,#ffbc3c30 30%,transparent 66%);}
 html[data-card-phone] .card-duel-stage .cduel-ko{position:absolute;z-index:7;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-10deg);opacity:0;color:#fff1be;font-family:Impact,system-ui,sans-serif;font-size:clamp(34px,8dvh,74px);font-weight:900;font-style:italic;line-height:1;text-shadow:3px 4px 0 #a92e27,0 0 16px #ac251b;-webkit-text-stroke:1px #87231c;}
 html[data-card-phone] .card-duel-stage .cduel-verdict{position:absolute;z-index:8;bottom:7%;left:8%;right:8%;padding:10px 16px;text-align:center;border-block:1px solid #efd18188;background:linear-gradient(90deg,transparent,#091a2bdc 15%,#091a2bdc 85%,transparent);font-size:clamp(19px,4dvh,32px);font-weight:800;line-height:1.35;text-shadow:0 2px 4px #000;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 html[data-card-phone]:has(.card-duel-stage) #cardActiveTurn{visibility:hidden;}
@@ -36,7 +31,6 @@ html[data-card-phone] .phone-hud-scene:has(.card-duel-stage)>.phone-hud-origin{d
  html[data-card-phone] .card-duel-stage .cduel-name{font-size:13px;max-width:24vw;}
  html[data-card-phone] .card-duel-stage .cduel-identity{gap:5px;}
  html[data-card-phone] .card-duel-stage .cduel-versus{top:43%;font-size:30px;}
- html[data-card-phone] .card-duel-stage .cduel-shot{top:23%;height:47%;}
  html[data-card-phone] .card-duel-stage .cduel-verdict{bottom:18%;font-size:21px;}
 }
 @media(max-height:400px){

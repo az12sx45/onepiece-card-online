@@ -40,7 +40,7 @@ function harness({ nativeOnDcl = false, existingApi = false, runtimeOnly = false
     now = end;
   }
   class Node {
-    constructor() { this.id = ''; this.className = ''; this.children = []; this.dataset = {}; this.hidden = false; }
+    constructor() { this.id = ''; this.className = ''; this.children = []; this.dataset = {}; this.hidden = false; this.isConnected = true; }
     append(...nodes) { this.children.push(...nodes); }
     replaceChildren(...nodes) { this.children = nodes; }
     get classList() { return { contains: value => this.className.split(/\s+/).includes(value) }; }
@@ -63,10 +63,11 @@ function harness({ nativeOnDcl = false, existingApi = false, runtimeOnly = false
       onAny: fn => any.push(fn), on: (name, fn) => on(socketEvents, name, fn)
     }, me: { roomId: 'boot-room', playerId: 0 }, state: { players: [] },
     playDuel() { trace.oldPlay++; }, setTimeout: timeout, clearTimeout: clear, URL, Image,
-    innerWidth: 740, innerHeight: 360, matchMedia: () => ({ matches: false })
+    MutationObserver: class { observe() {} disconnect() {} }, innerWidth: 740, innerHeight: 360, matchMedia: () => ({ matches: false })
   };
   const installApi = withGetter => {
-    ctx.window.CardPhonePresentation = { duelSceneVersion: 3, restoreHandArt: () => trace.restores++ };
+    if (!document.getElementById('phoneInteractionFx')) { const fx = new Node(); fx.id = 'phoneInteractionFx'; body.append(fx); }
+    ctx.window.CardPhonePresentation = { duelSceneVersion: 3, restoreHandArt: () => trace.restores++, maskHandArt() {}, borrowCardVisual: () => () => {}, ownHandElement: () => null };
     if (withGetter) installGetter();
   };
   const installGetter = () => {
@@ -95,13 +96,13 @@ let failure = null;
       assert.equal(h.api, undefined); assert.equal(h.any.length, 0); assert.equal(h.layers(), 0);
     });
     h.document.readyState = 'interactive'; h.fire('DOMContentLoaded'); await h.tick(0);
-    check('native API created at DCL installs all three modules', () => {
-      assert.equal(h.api.duelPrivateVersion, 1); assert.equal(h.api.duelStageVersion, 1); assert.equal(h.api.duelRuntimeVersion, 1);
-      assert.equal(typeof h.api.attachDuelDetails, 'function');
+    check('native API created at DCL installs duel modules and independent swap hook', () => {
+      assert.equal(h.api.duelPrivateVersion, 1); assert.equal(h.api.duelStageVersion, 2); assert.equal(h.api.duelRuntimeVersion, 1);
+      assert.equal(typeof h.api.attachDuelDetails, 'function'); assert.equal(h.api.swapHandVisibilityVersion, 1);
     });
     check('initial mount creates one private receiver and one runtime layer', () => {
       assert.equal(h.any.length, 1); assert.equal(h.layers(), 1);
-      assert.deepEqual(h.socketCounts(), { disconnect: 2, JOINED: 2, STATE: 1 });
+      assert.deepEqual(h.socketCounts(), { disconnect: 3, JOINED: 3, STATE: 2 });
     });
     const refs = { prepare: h.api.prepareDuelDetails, attach: h.api.attachDuelDetails, stage: h.api.playDuelScene, play: h.ctx.playDuel, busy: h.api.isEffectBusy };
     for (let i = 0; i < 3; i++) { h.fire('DOMContentLoaded'); h.fire('card:interface-ready'); await h.tick(0); }
@@ -113,7 +114,7 @@ let failure = null;
     });
     check('repeated readiness never duplicates socket handlers, layer or retry timer', () => {
       assert.equal(h.any.length, 1); assert.equal(h.layers(), 1);
-      assert.deepEqual(h.socketCounts(), { disconnect: 2, JOINED: 2, STATE: 1 }); assert.equal(h.jobs.size, 0);
+      assert.deepEqual(h.socketCounts(), { disconnect: 3, JOINED: 3, STATE: 2 }); assert.equal(h.jobs.size, 0);
     });
     h.api.duelStageDuration = 100; h.api.duelStageAssetsFor = () => [];
     h.api.playDuelScene = () => h.trace.scene++;
@@ -130,7 +131,7 @@ let failure = null;
     });
     const delayed = harness({ existingApi: true }); await delayed.tick(0);
     check('runtime does not mount against an API missing its FX getter', () => {
-      assert.equal(delayed.api.duelPrivateVersion, 1); assert.equal(delayed.api.duelStageVersion, 1);
+      assert.equal(delayed.api.duelPrivateVersion, 1); assert.equal(delayed.api.duelStageVersion, 2);
       assert.equal(delayed.api.duelRuntimeVersion, undefined); assert.equal(delayed.layers(), 0);
     });
     await delayed.tick(150); delayed.installGetter(); delayed.fire('card:interface-ready'); await delayed.tick(0);
@@ -148,12 +149,12 @@ let failure = null;
     });
     const retry = harness(); await retry.tick(75); retry.installApi(true); await retry.tick(25);
     check('bounded retry recovers an API arriving without DCL or interface-ready signal', () => {
-      assert.equal(retry.api.duelPrivateVersion, 1); assert.equal(retry.api.duelStageVersion, 1);
+      assert.equal(retry.api.duelPrivateVersion, 1); assert.equal(retry.api.duelStageVersion, 2);
       assert.equal(retry.api.duelRuntimeVersion, 1); assert.equal(retry.layers(), 1);
     });
     const absent = harness(); await absent.tick(20000);
     check('missing API exhausts all retries with no listeners or layers installed', () => {
-      assert.equal(absent.jobs.size, 0); assert(absent.ran <= 600); assert.equal(absent.any.length, 0); assert.equal(absent.layers(), 0);
+      assert.equal(absent.jobs.size, 0); assert(absent.ran <= 800); assert.equal(absent.any.length, 0); assert.equal(absent.layers(), 0);
     });
     const ran = absent.ran; await absent.tick(60000);
     check('missing API leaves no endless polling after retry bound', () => assert.equal(absent.ran, ran));
@@ -166,7 +167,7 @@ let failure = null;
     sourceFiles: Object.fromEntries(files.map(file => [file, { bytes: bytes[file].length, sha256: sha(bytes[file]) }])),
     limitations: ['Node VM boot-order regression with deterministic timers and Image/DOM stubs; not browser scheduling, native installation, account or physical-device acceptance.']
   };
-  const output = process.env.CARD_DUEL_BOOT_REPORT || 'D:/Codex_QA/card-duel-stage-20261106/client-boot-report.json';
+  const output = process.env.CARD_DUEL_BOOT_REPORT || 'D:/Codex_QA/card-swap-collision-20261107/client-boot-report.json';
   fs.mkdirSync(path.dirname(output), { recursive: true }); fs.writeFileSync(output, JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify({ passed: report.passed, checks: report.checks, report: output, failure }));
   if (failure) process.exitCode = 1;

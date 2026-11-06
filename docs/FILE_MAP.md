@@ -2353,3 +2353,14 @@ CARD_TIMING_VIDEO_20261104.md列使用者逐卡決策與來源界線。正式gam
 - public/js/card-duel-runtime.js：零文字前奏的決鬥排隊、預載、busy 與取消生命週期。
 - public/images/card-duel/arena-*-v1.webp：三張背景；來源與 SHA 見 CARD_DUEL_STAGE_ASSETS_20261106.json。
 - scripts/card_duel_*_qa.*：真 engine／私密 client／舞台與真 Socket.IO 瀏覽器 QA；詳見 CARD_DUEL_STAGE_20261106.md。
+
+
+## 2026-11-07 Card 單次碰撞／換牌視覺復原
+
+- public/js/card-duel-stage.js：三背景的單次實際中心碰撞、私密牌號、敗方揭牌及 4200 ms 共用時程。
+- public/css/card-duel-stage.css：雙卡背／身份／結果版面，保留卡圖比例；移除招式／飛彈／蓄力樣式。
+- public/js/card-duel-runtime.js：原對決 queue/ACK busy 前綴保留；追加 scoped swap hand borrow/release 相容 hook。
+- scripts/card_swap_hand_visibility_qa.cjs：精確 desktop/retained Android/iOS 舊函數的受控晚 mask 失敗與場景引用修正回歸。
+- scripts/card_swap_visibility_qa.cjs：本機真 server、多 guest、普通 6 號兩個出牌欄位、對決隱私／busy／取消／retained 版面回歸。
+- scripts/card_duel_boot_qa.js：DCL／interface-ready／晚 API／缺失 API 的有限重試與安裝唯一性。
+- D:/Codex_QA/card-swap-collision-20261107：本輪 RAW baseline、機制／瀏覽器／HTTP／公開讀回與來源位置修正收據；保留修前／fixture 失敗，最終摘要只納入明確的通過證據。
