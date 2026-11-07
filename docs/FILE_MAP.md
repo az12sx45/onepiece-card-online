@@ -2375,3 +2375,6 @@ CARD_TIMING_VIDEO_20261104.md列使用者逐卡決策與來源界線。正式gam
 
 
 2026-11-07 public/marineford/marineford.js: private-compare -> card backs entry/charge/clash/strike/impact -> loser reveal -> KO -> result/return. scripts/marineford_battle_cinema_qa.cjs verifies these phases using three clients and real engine packets; MF_MEDIA_ROOT can supply pre-existing published art without duplicating assets.
+
+
+2026-11-07 馬林福特之戰：public/marineford/marineford.js 的 finale 與 showResult 負責結局演出與戰果，版面在 marineford.css。

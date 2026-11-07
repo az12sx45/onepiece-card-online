@@ -9271,3 +9271,6 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 ## 2026-11-07 馬林福特卡背交鋒與敗牌翻面：統一發布整合
 
 以 main 7fbf9d1ed0805e946d01838a7164cfd6f48ee737 為基底，六檔 READY 白名單逐檔 RAW／SHA256 核對，保留四份文件原始前綴。產品僅 marineford.js 演出順序變更；新增套件 package-ff94cda40da35890（manifest c4f0a30cd7b171c3995ecaf38d70eae732b5c949439919f222c575499d408d5d），380 logical／379 unique，只新增該程式一個 CAS、110889 bytes，其餘379筆資產記錄保留，沒有新增素材。公告 revision100 保留原99則，沿用既有 launcher1.2.33 支援範圍；不更改server公告schema或MF_RULES。Windows1.2.33／Android67／iOS66核心、啟動器與大廳、其他遊戲、catalog與D/E核准回退均保留。來源、隱私、三平台更新、公開讀回及正常更新證據集中 D:/Codex_QA/marineford-cardback-release-20261107；全部必要檢查完成後才保存 RELEASED 收據。瀏覽器／host原生提供者證據與真機、正式帳號驗收分開陳述。
+
+
+2026-11-07 馬林福特之戰：新增處刑台結局動畫與全螢幕結算視覺，使用既有本地素材。驗證腳本 scripts/marineford_finale_qa.cjs 涵蓋三個勝因、三種視窗尺寸及重開結算。

@@ -2190,3 +2190,6 @@ Artwork does not change any of the 29 card IDs or rules. Both combatants automat
 
 
 2026-11-07 Presentation clarification only: combatants privately see both battle cards, including morale scores. Other players never receive battle-private events. Battle visuals conceal both faces until impact; only defeated card becomes public, before its KO animation. Ties reveal neither card publicly. No combat, morale, health or turn rule changes.
+
+
+2026-11-07 馬林福特之戰：結局演出使用伺服器既有的勝方、陣營生命與正義集結資料，勝負判定維持原規則。

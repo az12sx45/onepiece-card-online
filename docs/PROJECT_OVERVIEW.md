@@ -3145,3 +3145,6 @@ card-duel-runtime.js 另以獨立 bounded boot 掛接 6 號交換的手牌視覺
 
 
 2026-11-07 Marineford battle presentation preserves private two-combatant comparison. All fight motion uses card backs; only the losing card turns face-up after impact and before KO. Shared game program serves desktop, Android and iOS; native-device acceptance remains separate.
+
+
+2026-11-07 馬林福特之戰：馬林福特戰役結算依海賊救援、海軍處刑、六種正義集結顯示對應演出。

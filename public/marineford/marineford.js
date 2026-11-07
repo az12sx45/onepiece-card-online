@@ -467,6 +467,55 @@
  async function burst(kind,token){if(token!==epoch)return;const fx=node('img',null,'effect-burst');fx.src=artUrl('fx-'+kind+'.webp');fx.alt='';$('effectLayer').append(fx);window.MFSound?.play(kind);await animate(fx,[{transform:'scale(.15) rotate(-12deg)',opacity:0},{transform:'scale(.85)',opacity:1,offset:.35},{transform:'scale(1.1) rotate(6deg)',opacity:0}],{duration:reduced()?180:850,easing:'ease-out'});fx.remove();}
  const readingTime=(text,minimum=1600)=>Math.max(minimum,Math.min(3200,600+Array.from(text).length*75));
  function resultText(state=view){return state.winner==='pirate'?{title:'艾斯獲救',reason:'海賊登上處刑台，成功救出艾斯。'}:state.hp.pirate===0?{title:'處刑執行',reason:'海軍登上處刑台，執行處刑。'}:{title:'正義集結',reason:'六種正義集齊，海軍獲勝。'};}
+ function finaleArt(state){
+  return state.winner==='pirate'?'scaffold-field-pirate.webp':'scaffold-field-navy.webp';
+ }
+ async function finale(state,justice,token){
+  const layer=$('effectLayer'),stage=node('section',null,'mf-finale'),art=node('img',null,'mf-finale-art');
+  const rescue=state.winner==='pirate',assembly=!rescue&&state.hp.pirate>0&&justice.length===6,result=resultText(state);
+  stage.dataset.route=rescue?'rescue':assembly?'justice':'execution';
+  layer.dataset.kind='finale';
+  art.src=artUrl(finaleArt(state));art.alt='';
+  const copy=node('div',null,'mf-finale-copy'),label=node('small','馬林福特 · 最終章');
+  const title=node('h2',rescue?'處刑台突破':assembly?'正義之旗集結':'處刑命令下達');
+  copy.append(label,title);stage.append(art,copy);layer.replaceChildren(stage);
+  const motion=(element,frames,duration)=>animate(element,frames,{duration:reduced()?100:duration,easing:'ease-out',fill:'both'});
+  const pause=ms=>beat(reduced()?240:ms,token);
+  try{
+   await Promise.race([art.decode().catch(()=>{}),pause(900)]);
+   if(token!==epoch)return;
+   await motion(art,[{transform:'scale(1.16)',opacity:.25},{transform:'scale(1)',opacity:1}],1050);
+   if(token!==epoch)return;
+   if(assembly){
+    const seals=node('div',null,'mf-finale-justice');
+    stage.append(seals);
+    for(const [index,id] of justice.entries()){
+     const card=cardImage(id);
+     card.style.animationDelay=(index*110)+'ms';
+     seals.append(card);
+    }
+    window.MFSound?.play('rally');
+    await pause(1400);
+   }else{
+    const fx=node('img',null,'mf-finale-fx');
+    fx.alt='';fx.src=artUrl(rescue?'fx-fire.webp':'fx-kizaru-light-v1.webp');
+    stage.append(fx);
+    window.MFSound?.play(rescue?'fire':'slash');
+    await motion(fx,[{opacity:0,transform:'scale(.45)'},{opacity:.95,transform:'scale(1)',offset:.58},{opacity:0,transform:'scale(1.26)'}],1350);
+    fx.remove();
+   }
+   if(token!==epoch)return;
+   stage.dataset.phase='verdict';
+   label.textContent=teamName(state.winner)+'勝利';
+   title.textContent=result.title;
+   copy.append(node('p',result.reason));
+   window.MFSound?.play('victory');
+   await motion(copy,[{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],500);
+   await pause(1650);
+  }finally{
+   if(token===epoch)layer.replaceChildren();
+  }
+ }
  function showResult(){
   if(view?.phase!=='ended')return;
   const match=view,team=match.players[you].team,won=team===match.winner;
@@ -474,7 +523,10 @@
   const banner=node('div',null,'campaign-banner'),verdict=node('div');
   banner.dataset.team=match.winner;
   verdict.append(node('small',teamName(team)+'視角 · '+(won?'勝利':'落敗')),node('h3',result.title),node('p',result.reason));
-  banner.append(badgeImage({art:match.winner+'-back.webp',name:teamName(match.winner)}),verdict);body.append(banner);
+  const artwork=node('img',null,'mf-result-art');
+  artwork.src=artUrl(finaleArt(match));artwork.alt='';
+  banner.append(artwork,badgeImage({art:match.winner+'-back.webp',name:teamName(match.winner)}),verdict);
+  body.append(banner);
   const sides=node('div',null,'campaign-sides');
   for(const faction of ['navy','pirate']){
    const group=node('section');group.dataset.team=faction;
@@ -698,8 +750,7 @@
    for(let i=0;i<5;i++){const back=node('img',null,'deck-shuffle-card');back.src=artUrl((source==='navy'?'navy':'pirate')+'-back.webp');back.alt='';back.setAttribute('aria-hidden','true');back.style.setProperty('--layer-z',(i*1.0)+'px');plane.append(back);backs.push(back);}
    await Promise.all(backs.map((face,i)=>animate(face,[{transform:`translateZ(${i*1.0}px)`},{transform:`translateX(${i<3?-4:4}px) translateZ(${i+3}px)`,offset:.3},{transform:`translateX(${i<3?3:-3}px) translateZ(${i+2}px)`,offset:.65},{transform:`translateZ(${i*1.0}px)`}],{duration:reduced()?180:1600,easing:'ease-in-out'})));for(const back of backs)back.remove();delete pile.dataset.shuffling;if(token!==epoch)return;await beat(650,token);
 
-  }else if(kind==='victory'){
-   layer.dataset.phase='victory';stage.classList.add('victory-stage');const winner=options.state.winner,result=resultText(options.state),seal=node('img',null,'victory-seal'),title=node('h2',result.title,'victory-title');seal.src=artUrl(winner+'-back.webp');seal.alt=teamName(winner);stage.prepend(seal,title);caption.textContent=teamName(winner)+'方勝利 · '+result.reason;window.MFSound?.play('victory');await animate(seal,[{transform:'scale(.5) rotate(-12deg)',opacity:0},{transform:'scale(1.07) rotate(2deg)',opacity:1,offset:.7},{transform:'scale(1) rotate(0)'}],{duration:reduced()?150:1600});await animate(title,[{opacity:0,transform:'translateY(25px)',letterSpacing:'.3em'},{opacity:1,transform:'translateY(0)',letterSpacing:'.06em'}],{duration:reduced()?120:950});await beat(3400,token);
+
   }else{
    layer.dataset.phase='reveal';window.MFSound?.play(kind==='morale'?'morale':kind==='miss'?'miss':'play');await Promise.all(faces.map(face=>{const r=face.getBoundingClientRect(),a=source?.getBoundingClientRect();return animate(face,[{transform:a?`translate(${a.x+a.width/2-r.x-r.width/2}px,${a.y+a.height/2-r.y-r.height/2}px) scale(.45)`:'translateY(30px) scale(.8)',opacity:.2},{transform:'translate(0,0) scale(1)',opacity:1}],{duration,easing:'cubic-bezier(.16,.7,.28,1)'});}));await beat(ids.length?2400:1600,token);
   }
@@ -969,7 +1020,7 @@
    else if(e.type==='empty-deck')await scene(teamName(e.team)+'牌堆已空，繼續本回合',[],'card',token);
    else if(e.type==='morale')await scene(p+'獲得 '+e.amount+' 士氣',[],'morale',token);
    else if(e.type==='morale-use'){/* Render the existing public boost beside the actual battle card after allies cheer. */}
-   else if(e.type==='victory'){victory=true;await scene('本場戰果揭曉',e.justice||[],'victory',token,null,[],{state:packet.view});}
+   else if(e.type==='victory'){victory=true;await finale(packet.view,e.justice||[],token);}
   }if(token!==epoch)return;view=packet.view;you=packet.you;lastSequence=packet.sequence;busy=true;render();if(victory)showResult();await request('MF_ACK',{sequence:packet.sequence});
  }
  function reset(){epoch++;document.querySelectorAll('.fortress-impact').forEach(e=>e.remove());if($('executionStage'))delete $('executionStage').dataset.phase;$('players').replaceChildren();$('players').dataset.seats='';$('justice').replaceChildren();$('deckZone').replaceChildren();for(const a of activeAnimations)a.cancel();activeAnimations.clear();$('effectLayer').replaceChildren();queue=Promise.resolve();busy=false;pendingKey='';lastSequence=-1;queuedSequence=-1;}
