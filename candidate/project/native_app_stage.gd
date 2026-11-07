@@ -96,6 +96,7 @@ var encounter_modal: Control
 var yonko_modal: Control
 var game_tools: Control
 var shared_toasts: Control
+var crew_level_up_hud: Control
 var music_audio: Node
 var ui_sound: Node
 var frame_watch: Dictionary={}
@@ -219,6 +220,11 @@ func _ready() -> void:
 	add_child(board_notice)
 	var battle: Control=get_node("Battle")
 	battle.z_index=20
+	crew_level_up_hud=preload("res://native_crew_level_up_hud.gd").new()
+	crew_level_up_hud.cache=map_cache
+	crew_level_up_hud.mission_notice=battle.timeline.notices
+	crew_level_up_hud.size=size;crew_level_up_hud.z_index=341;add_child(crew_level_up_hud)
+	resized.connect(func():crew_level_up_hud.size=size)
 	battle.visibility_changed.connect(func():map_controls_visibility_changed.emit())
 	# Loading a save also closes an already hidden battle. Its transition still
 	# locks commands for 260 ms; the battle itself emits no visibility change

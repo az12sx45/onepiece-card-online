@@ -42,6 +42,9 @@ exports.create=function({context,application,search,fetch,navigate,controlsChang
  const presentationStorage=require('./native-presentation-storage').create(context.host.localStorage);
  window.localStorage=presentationStorage.storage;
  const host={...context.host,localStorage:presentationStorage.storage,window,fetch,measure:scope.measure,captureJsonSnapshot:snapshotWire.capture,initData:{profile:context.profile,lobby:context.shared.getLobby(room)}};
+ const crewLevelUpHud=application.get('crew_level_up_hud');
+ host.showCrewLevelUps=entries=>{if(!disposed)crewLevelUpHud.call('enqueue_json',JSON.stringify(entries));};
+ host.clearCrewLevelUps=()=>crewLevelUpHud.call('clear');
  host.refs=refs.create({extraControls:controls.nodes,clearModal:()=>modal.clear(),controlsChanged:publishControls,renderModalMarkup:(name,html)=>{modal.render(name,html);draftAuthority?.capture();},queryModalControls:selector=>modal.query(selector)});
  const remoteControl=require('./native-remote-ui-control');
  host.refs.turnTransitionBanner=remoteControl.create(battleNode.get('timeline').get('turn_banner'));
@@ -82,6 +85,7 @@ exports.create=function({context,application,search,fetch,navigate,controlsChang
  // GDScript print also remains observable in Android template_release.
  connect(application.get_tree(),'process_frame',()=>{const now=Time.get_ticks_msec();if(disposed||!started||now<nextCpuDiagnostic)return;nextCpuDiagnostic=now+2000;const flags=JSON.stringify({cpu:core.functions.isCpuPlayer(core.functions.currentPlayer()),...core.presentation.cpuAutomationStatus(),battle:!!core.state.battleState,battleAnimating:!!core.state.battleState?.animating,battleResult:core.state.battleState?.result||"",battleWindow:core.functions.battleWindowIsActive(),battleVisible:battle.isOpen(),battleClosing:battle.closing,battlePending:battle.hasPendingBattlePresentation(),remoteBattleViews:core.boardLan.pendingRemoteBattleViews.length,restoreAttempts:core.boardLan.initialStateRequestAttempts,joined:core.boardLan.joinedOnce,version:core.boardLan.version,pendingState:!!core.boardLan.pendingState,inFlightState:!!core.boardLan.inFlightState,lastError:core.boardLan.lastError});if(flags!==lastCpuDiagnostic){lastCpuDiagnostic=flags;application.call('report_cpu_diagnostic',flags);}});
  connect(application,'audio_unlock_requested',()=>{music.unlock();sound.api.unlock();});
+ connect(crewLevelUpHud,'cue_requested',()=>{if(!disposed)sound.api.playCue('levelUp');});
  connect(application,'ui_control_activated',json=>sound.control(JSON.parse(json)));
  connect(battleNode,'cinematic_music_hold',held=>{if(held){battleMusicHold?.restore();battleMusicHold=require('./original-battle-bgm').hold(window);}else{battleMusicHold?.restore();battleMusicHold=null;}});
  connect(battleNode,'katakuri_music_focus',held=>{katakuriFocus?.release();katakuriFocus=held?music.acquireAudioFocus('katakuri-future-sight',{volumeRatio:.08,fadeOutMs:280,fadeInMs:720}):null;});
@@ -107,6 +111,7 @@ exports.create=function({context,application,search,fetch,navigate,controlsChang
   if(disposed)throw Error('Native entry cancelled');started=true;core.startNative();publishControls();
  },async dispose(){
   if(disposed)return;disposed=true;joinRecovery.dispose();for(const item of listeners)realSocket.off(item.event,item.wrapped);listeners.length=0;
+  crewLevelUpHud.call('clear');
   // This core is being unmounted. Invalidate its transient battle identity
   // before releasing UI waits so the original stale-battle guards terminate
   // continuations. Retain gameState, paid rewards and persisted saves unchanged.

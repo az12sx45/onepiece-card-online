@@ -60740,6 +60740,7 @@ function sanitizeRoomCode(value) {
     return String(value || "").replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 12);
   }
 function initGameState() {
+    clearCrewLevelUpPresentation();
     const seedParam = query.get("seed");
     const forcedSeed = seedParam !== null && seedParam.trim() !== "" ? Number(seedParam) : NaN;
     const seed = Number.isFinite(forcedSeed)
@@ -61809,6 +61810,8 @@ function loadManualGame(payload = readManualSavePayload(), options = {}) {
       && (payload.boardUiEvent?.id === remoteModalId || (!payload.boardUiEvent && sameRemoteTurn
         && !incomingGame.pendingMove && !incomingGame.movementAnimating && !incomingGame.diceRolling));
     const liveFlow = captureLiveFlowStateForLoad(payload.gameState, options);
+    if (options.source !== "lan" || options.initialLanRestore || options.lanReason === "load-save"
+      || incomingGame.seed !== state.gameState?.seed) clearCrewLevelUpPresentation();
     resetShipSailingMotions();
     state.gameState = safeJsonClone(payload.gameState);
     if (payload.campaignContext?.campaignId) {
@@ -62406,7 +62409,9 @@ function applyBoardLanPayload(message = {}) {
       ? safeJsonClone((state.gameState?.players || []).find(canReceiveMissionCompleteToast) || null)
       : null;
     const previousMissionSeed = state.gameState?.seed;
+    const levelUpNoticeEpoch = crewLevelUpPresentationEpoch;
     let remoteMissionCompletions = [];
+    let remoteLevelUps = [];
     boardLan.version = Math.max(boardLan.version, version);
     boardLan.applying = true;
     let applied = false;
@@ -62423,6 +62428,7 @@ function applyBoardLanPayload(message = {}) {
         const restoredMissionPlayer = (state.gameState?.players || []).find((player) => String(player.id) === String(previousMissionPlayer?.id));
         if (previousMissionSeed === state.gameState?.seed) {
           remoteMissionCompletions = newlyCompletedMissions(previousMissionPlayer, restoredMissionPlayer);
+          if (host.showCrewLevelUps) remoteLevelUps = newlyLeveledCrew(previousMissionPlayer, restoredMissionPlayer);
         }
         boardLan.joinedOnce = true;
         boardLan.awaitingInitialState = false;
@@ -62448,7 +62454,10 @@ function applyBoardLanPayload(message = {}) {
         boardLan.applying = false;
         if (applied) {
           const notificationPlayer = (state.gameState?.players || []).find((player) => String(player.id) === String(previousMissionPlayer?.id));
-          if (previousMissionSeed === state.gameState?.seed) remoteMissionCompletions.forEach((mission) => showMissionCompleteToast(mission, notificationPlayer));
+          if (previousMissionSeed === state.gameState?.seed) {
+            remoteMissionCompletions.forEach((mission) => showMissionCompleteToast(mission, notificationPlayer));
+            if (levelUpNoticeEpoch === crewLevelUpPresentationEpoch) presentCrewLevelUps(notificationPlayer, remoteLevelUps);
+          }
           flushBoardLanPendingState();
           scheduleBoardCampaignAutoSave();
         }
@@ -67142,6 +67151,37 @@ function canReceiveMissionCompleteToast(player) {
     if (!boardLan.enabled) return true;
     return boardPlayerMatchesLocalUser(player)
       || Boolean(boardLan.clientId && String(player.clientId || "") === String(boardLan.clientId));
+  }
+// Presentation-only bridge. Neither notice batches nor their lifetime are saved or sent.
+let crewLevelUpPresentationEpoch = 0;
+function clearCrewLevelUpPresentation() {
+    crewLevelUpPresentationEpoch += 1;
+    try { host.clearCrewLevelUps?.(); } catch (_) { /* Presentation never affects rewards or restore. */ }
+  }
+function newlyLeveledCrew(previousPlayer, player) {
+    if (!previousPlayer || !player || String(previousPlayer.id) !== String(player.id)) return [];
+    return (player.crew || []).flatMap((card, index) => {
+      if (!card?.id) return [];
+      const matches = (previousPlayer.crew || []).filter((previous) => previous?.id === card.id
+        && String(previous.instanceId || "") === String(card.instanceId || ""));
+      const previous = matches.length === 1 ? matches[0] : null;
+      const fromLevel = Number(previous?.level);
+      const toLevel = Number(card.level);
+      if (!(fromLevel > 0 && toLevel > fromLevel && Number(card.totalExp) > Number(previous?.totalExp))) return [];
+      return [{ card, result: { fromLevel, toLevel }, isActive: index === player.activeCrewIndex }];
+    });
+  }
+function presentCrewLevelUps(player, entries) {
+    if (!host.showCrewLevelUps || !entries.length || boardLan.applying || !canReceiveMissionCompleteToast(player)) return;
+    try {
+      const raised = entries.filter(({ result }) => result.toLevel > result.fromLevel)
+        .sort((a, b) => Number(b.isActive) - Number(a.isActive));
+      if (raised.length) host.showCrewLevelUps(raised.map(({ card, result }, index) => {
+        const portraits = cardPortraitsForDisplay(card);
+        return { name: cardDisplayName(card), portrait: portraits.normal || portraits.idle,
+          fromLevel: result.fromLevel, toLevel: result.toLevel, playCue: index === 0 };
+      }));
+    } catch (_) { /* Presentation never affects rewards or restore. */ }
   }
 function newlyCompletedMissions(previousPlayer, player) {
     if (!previousPlayer || !player || String(previousPlayer.id) !== String(player.id)) return [];
@@ -104075,6 +104115,7 @@ function grantExpToLivingCrew(player, activeIndex, exp, sourceLabel = "") {
         queueMoveLearnChoice(player, card, choice.moveId);
       });
     });
+    presentCrewLevelUps(player, expResults);
     if (expResults.length) {
       recordMissionEvent(player, { type: "crew_exp", amount: 1 });
       if (expResults.some(({ result }) => Number(result.levelsGained || 0) > 0)) {

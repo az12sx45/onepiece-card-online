@@ -1,5 +1,12 @@
 # Development record
 
+## 2026-11-07 新世界航海錄：Android／iOS 船員升等提示
+
+- 以正式 iOS v066 的 `1786e1595` 為隔離來源。四個要替換的既有 Godot 程式檔均與正式 Android v067 APK 內容逐位元相同；各平台啟動器、宿主與素材載入維持各自既有版本。
+- `candidate/project/original-core.js` 從既有發放經驗和接受的即時狀態取出實際升等結果。`native-game-runtime.js` 把短暫通知送給 `native_app_stage.gd` 的 `native_crew_level_up_hud.gd`，並從 `original-board-audio.js` 播放與電腦版同一段四音。用既有船員肖像，先顯示金色箭頭，圖片載妥才更新；每張 2.4 秒、同批依序顯示，出戰船員優先。不佔用戰鬥演出佇列，也不攔觸控。
+- 僅通知本機玩家真正跨級的船員；不因新招募、重複狀態、初次恢復、重連或讀檔播放。未新增可呼叫的測試發獎入口，沒有修改經驗值、獎勵、存檔或多人協定。沒有新增媒體檔。
+- Node 與實際 GodotJS 4.7.2 的隔離 host 各 23/23，涵蓋原始 `finishBattle()`、主線領獎、多人接受快照及讀檔競態。Godot HUD 在 headless／Windows OpenGL 各 22/22，含多張依序、過期肖像、觸控穿透與低高度；場景檢查／啟動成功。音效比對 7/7（同 PCM、尊重原音量及靜音）。證據在 `D:/Codex_QA/board-mobile-level-up-20261107/`。未用手機或正式帳號遊玩；正式打包、版號和更新通道由啟動器聊天室整合。此工作階段沒有 LATTICE API，未寫入持久任務或圖譜。
+
 2026-10-23: Owner authorized public independent iOS branch. Added sealed v038 platform candidate and SHA-pinned, public-standard-runner Mac CI. Windows preparation: 22 checks and 12 media checks passed; Apple SDK compilation and device testing pending. No production updater or gameplay rules changed.
 
 First Mac run 39917269336: setup passed, native compile stopped because godot-cpp requires api_version. Added exact 4.7 API selection and a RefCounted-only binding profile; errors now print bounded diagnostics. Rebuild pending.

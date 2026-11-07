@@ -1,5 +1,5 @@
 'use strict';
-const CUES = new Set(["tap", "select", "confirm", "cancel", "draw", "reward", "heal", "danger", "victory", "defeat"]);
+const CUES = new Set(["tap", "select", "confirm", "cancel", "draw", "reward", "heal", "danger", "victory", "defeat", "levelUp"]);
 exports.cueFor=function cueFor(control) {
     const explicit = control.closest("[data-board-sfx]")?.getAttribute("data-board-sfx");
     if (explicit === "off") return null;
@@ -15,7 +15,7 @@ exports.install=function(window,nativePreload){const globalThis=window;
   "use strict";
   if (global.BoardAudio) return;
 
-  const CUES = new Set(["tap", "select", "confirm", "cancel", "draw", "reward", "heal", "danger", "victory", "defeat"]);
+  const CUES = new Set(["tap", "select", "confirm", "cancel", "draw", "reward", "heal", "danger", "victory", "defeat", "levelUp"]);
   const installed = new WeakMap();
   const CONTROL_SELECTOR = 'button,[role="button"],a[href],summary,input[type="button"],input[type="submit"],input[type="reset"],input[type="checkbox"],input[type="radio"],[data-board-sfx]';
   const clamp = (value, fallback = 0) => Number.isFinite(Number(value)) ? Math.max(0, Math.min(1, Number(value))) : fallback;
@@ -118,6 +118,7 @@ exports.install=function(window,nativePreload){const globalThis=window;
     heal: { duration: 0.70, notes: [[0, 392, 0.40, "mallet", 0.5], [0.12, 523.25, 0.45, "mallet", 0.55], [0.23, 659.25, 0.43, "bell", 0.4]] },
     danger: { duration: 0.43, notes: [[0, 146.83, 0.18, "wood", 0.8], [0.16, 155.56, 0.23, "wood", 0.65]] },
     victory: { duration: 0.94, notes: [[0, 261.63, 0.22, "mallet", 0.65], [0.12, 329.63, 0.22, "mallet", 0.6], [0.24, 392, 0.23, "bell", 0.65], [0.40, 523.25, 0.49, "bell", 0.75]] },
+    levelUp: { duration: 0.59, notes: [[0, 392, 0.15, "mallet", 0.6], [0.085, 493.88, 0.15, "mallet", 0.55], [0.17, 587.33, 0.19, "bell", 0.5], [0.28, 783.99, 0.31, "bell", 0.62]] },
     defeat: { duration: 0.67, notes: [[0, 261.63, 0.24, "mallet", 0.55], [0.16, 196, 0.27, "wood", 0.55], [0.32, 130.81, 0.30, "wood", 0.6]] },
   };
 
@@ -190,7 +191,7 @@ exports.install=function(window,nativePreload){const globalThis=window;
   function playCue(kind = "tap", options = {}) {
     if (!CUES.has(kind) || !state.enabled || !state.volume || !state.unlocked || !state.context || state.context.state === "closed") return false;
     const now = global.performance?.now?.() ?? Date.now();
-    const priority = ["draw", "reward", "heal", "danger", "victory", "defeat"].includes(kind) ? 2 : 1;
+    const priority = kind === "levelUp" ? 3 : ["draw", "reward", "heal", "danger", "victory", "defeat"].includes(kind) ? 2 : 1;
     if (now - (state.lastCue.get(kind) ?? -Infinity) < 80 || (now - state.lastStart < 45 && priority <= state.lastPriority)) return false;
     if (state.voices.size >= 4) {
       if (priority < 2) return false;
