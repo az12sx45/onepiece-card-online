@@ -9263,3 +9263,6 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - client public／config／desktop於feature與9f0基底tree相同。本輪不跑builder、不改catalog／manifest／programme／媒體，不新增CAS、不重發Windows1.2.33／Android67／iOS66安裝包；publisher僅公告與本紀錄。
 - 公告採用已證明的靜默棄牌漏補與空手交換修正，指引重開啟動器後開始新對局；不宣稱自動修復既有壞局，或將所有舊牌圖殘留歸為同一根因。
 - Owner證據包含63 cases／179 checks、duel privacy662；before24為產品失敗證據，after23與terminal oracle41有重疊，不加總成唯一64。原6個feature RAW及13+8份交接證據保留，DEV只append。Publisher實際npm／36proof、公開Render後端與不變client讀回結果，以D:/Codex_QA/card-empty-hand-release-20261107及正式收據為準；本地QA不代替真機、正式帳號或OS原生視窗驗收。
+
+
+2026-11-07 Marineford card-back combat: marineford.js now privately compares the two combatants cards, conceals both before movement, then reveals only the struck loser before KO. QA asserts privacy, backs during attack, impact/reveal/KO ordering, tie, recovery and continuation. LATTICE API unavailable; local QA/handoff evidence only.

@@ -2187,3 +2187,6 @@ Artwork does not change any of the 29 card IDs or rules. Both combatants automat
 索隆5的棄牌重抽是索隆自身的效果。薩波靜默抑制被丟9／19的特殊被動後，目標仍須照索隆規則補一張；不額外觸發該9／19的淘汰、保護或預測。空牌堆沿原本回合／本局結算，不產生額外牌。
 
 羅6普通與強化交換都要求雙方實際持有手牌。若任何一方為null，交換取消並正常結束該次行動，不傳空牌、不消耗目標保護／閃避。0號是合法手牌，不得以falsey判成空手。有效非空交換、現有self／預覽鎖定及一般9／19被丟的既有規則維持。
+
+
+2026-11-07 Presentation clarification only: combatants privately see both battle cards, including morale scores. Other players never receive battle-private events. Battle visuals conceal both faces until impact; only defeated card becomes public, before its KO animation. Ties reveal neither card publicly. No combat, morale, health or turn rule changes.

@@ -573,11 +573,14 @@
   const beatFor=ms=>beat(reduced()?Math.min(ms,120):ms,token);
   const valid=()=>token===epoch;
   const center=element=>{const r=element.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2,width:r.width,height:r.height};};
+  const conceal=role=>{const back=node('img',null,'cinema-back');back.src=artUrl(role.team+'-back.webp');back.alt=teamName(role.team)+'出戰卡背';role.card.replaceChildren(back);};
   const power=(role,point)=>{const image=node('div',null,'cinema-power'),art=node('img');art.src=artUrl(role.skill.art);art.alt='';if(role.pane.dataset.side==='right')art.style.transform='scaleX(-1)';image.append(art);image.dataset.skill=role.skill.id;image.style.left=point.x+'px';image.style.top=point.y+'px';stage.append(image);return image;};
   let departure;
   try{
    const preloads=roles.map(role=>{const img=new Image();img.src=artUrl(role.skill.art);return img;});
    await Promise.race([Promise.all([...stage.querySelectorAll('img'),...preloads].map(img=>img.decode().catch(()=>{}))),new Promise(resolve=>setTimeout(resolve,1500))]);if(!valid())return;
+   layer.dataset.phase='private-compare';caption.textContent=secret?'參戰雙方確認出戰牌 · 僅你們可見':'參戰雙方正在確認出戰牌';await beatFor(1600);if(!valid())return;
+   roles.forEach(conceal);layer.dataset.phase='entry';caption.textContent='出戰牌進場';
    await Promise.all(roles.map(role=>travelFrom(role.card,role.source,500)));if(!valid())return;await beatFor(450);
    const boosted=roles.filter(role=>Number(event.boost?.[role.team])>0);
    if(boosted.length){
@@ -605,7 +608,13 @@
     const winning=roles.find(r=>r!==defeated),from=center(winning.card),to=center(defeated.card),shot=power(winning,from),dx=to.x-from.x,dy=to.y-from.y;
     layer.dataset.phase='strike';caption.textContent=winning.skill.name;window.MFSound?.play(winning.skill.sound);
     await animate(shot,[{opacity:0,transform:'translate(-50%,-50%) scale(.25)'},{opacity:1,offset:.2},{opacity:1,transform:'translate(calc(-50% + '+dx+'px),calc(-50% + '+dy+'px)) scale(1.05)'}],{duration:reduced()?180:650,fill:'forwards'});if(!valid())return;
-    layer.dataset.phase='impact';defeated.card.dataset.damage=winning.skill.damage;
+    layer.dataset.phase='impact';caption.textContent='命中';await animate(defeated.card,[{transform:'translateX(0)',filter:'brightness(2)'},{transform:'translateX('+(dx>0?18:-18)+'px)',filter:'brightness(1)'}],{duration:reduced()?100:350});shot.remove();if(!valid())return;
+    layer.dataset.phase='reveal';const face=cardImage(outcome.card);
+    await animate(defeated.card,[{transform:'rotateY(0deg)'},{transform:'rotateY(85deg)'}],{duration:reduced()?80:180,fill:'forwards'});if(!valid())return;
+    defeated.card.replaceChildren(face);
+    await animate(defeated.card,[{transform:'rotateY(85deg)'},{transform:'rotateY(0deg)'}],{duration:reduced()?80:230,fill:'forwards'});if(!valid())return;
+    caption.textContent='受擊牌翻面';await beatFor(600);if(!valid())return;
+    layer.dataset.phase='ko';defeated.card.dataset.damage=winning.skill.damage;
     const pieces=[],kind=winning.skill.damage;
     if(['quake','diamond','rose','phoenix','ice'].includes(kind)){
      const count=['rose','phoenix'].includes(kind)?2:6;
@@ -620,11 +629,7 @@
     }else{
      await animate(defeated.card,[{filter:'brightness(2)',transform:'translateX(0)'},{filter:kind==='magma'?'brightness(.7) sepia(.4)':'brightness(1)',transform:'translateX('+(dx>0?36:-36)+'px) rotate('+(dx>0?12:-12)+'deg)',offset:.5},{transform:'none',filter:'none'}],{duration:reduced()?150:850,fill:'forwards'});
     }
-    shot.remove();if(!valid())return;
-    layer.dataset.phase='reveal';const face=cardImage(outcome.card);
-    await animate(defeated.card,[{transform:'rotateY(0deg)'},{transform:'rotateY(85deg)'}],{duration:reduced()?80:180,fill:'forwards'});if(!valid())return;
-    defeated.card.replaceChildren(face);
-    await animate(defeated.card,[{transform:'rotateY(85deg)'},{transform:'rotateY(0deg)'}],{duration:reduced()?80:230,fill:'forwards'});if(!valid())return;
+    if(!valid())return;
     layer.dataset.phase='result';caption.textContent=name(winning.id)+'以「'+winning.skill.name+'」擊敗 '+name(defeated.id)+' · 輸牌 '+cards[outcome.card].rank+' 號「'+cards[outcome.card].name+'」';
     defeated.math.textContent='輸牌 '+cards[outcome.card].rank+' 號';await beatFor(1500);if(!valid())return;
     departure=center(defeated.card);

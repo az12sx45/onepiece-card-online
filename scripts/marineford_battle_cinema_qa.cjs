@@ -4,7 +4,7 @@ const {chromium,webkit}=require('C:/Users/王曜瑋/.cache/codex-runtimes/codex-
 const root=path.resolve(__dirname,'..'),out=process.env.MF_QA_DIR;fs.mkdirSync(out,{recursive:true});
 const app=express(),server=http.createServer(app),io=new Server(server),sockets=new Map(),acks=new Map(),checks=[],errors=[],evidence=[];let fromUI;const uiActions=[];
 app.use((req,res,next)=>{res.setHeader('Content-Security-Policy',"default-src 'self'; img-src 'self' data: blob: poasset:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' ws: wss:; media-src 'self' data: blob:");next();});
-app.use(express.static(root+'/public'));app.use(express.static('D:/Codex_Release_Worktrees/card-native-server-adapter-20261029/public'));
+app.use(express.static(root+'/public'));if(process.env.MF_MEDIA_ROOT)app.use(express.static(process.env.MF_MEDIA_ROOT));app.use(express.static('D:/Codex_Release_Worktrees/card-native-server-adapter-20261029/public'));
 const seats=Array.from({length:6},(_,i)=>({userId:i+1,name:i?'海賊隊員'+i:'海軍元帥',avatar:i+8,ready:true}));
 io.on('connection',socket=>{
  socket.on('SOCIAL_AUTH',({secret},cb)=>{const id=Number(secret);sockets.set(id,socket);cb({ok:true,me:seats[id]});});
@@ -59,13 +59,13 @@ function fixture(navy,pirate,boostN=0,boostP=0,attacker=0){
   for(let id=0;id<3;id++){
    const p=pages[id],observed=phases[id],last=observed.at(-1),ownAllowed=[c.navy,c.pirate];
    assert(observed.some(e=>e.phase==='charge'));assert(observed.some(e=>e.phase==='clash'));assert.equal(last.phase,'result');
-   for(const frame of observed.filter(x=>!['reveal','result','return'].includes(x.phase))){
+   for(const frame of observed.filter(x=>!['reveal','ko','result','return'].includes(x.phase))){
     if(id<2)assert(frame.cards.every(card=>ownAllowed.includes(card)));else assert.equal(frame.cards.length,0,'Observer must not see either face before impact ends');
-    assert(!/被擊敗|輸牌/.test(frame.caption||''),'No early verdict');
+    assert(!/被擊敗|輸牌/.test(frame.caption||''),'No early verdict');if(frame.phase!=='private-compare'&&frame.phase!=='entry')assert.equal(frame.cards.length,0,'All viewers see backs during attack');
    }
-   if(id<2){assert.deepEqual([...last.cards].sort(),ownAllowed.slice().sort());assert.deepEqual(observed.find(f=>f.phase==='charge').cards.slice().sort(),ownAllowed.slice().sort());if(index===7)assert(observed.some(f=>f.math.includes('牌號 4 ＋ 士氣 2 ＝ 6')),'Morale reversal uses server score, not rank alone');}
+   if(id<2){assert.deepEqual(observed.find(f=>f.phase==='private-compare').cards.slice().sort(),ownAllowed.slice().sort());assert.deepEqual(last.cards,c.tie?[]:[outcome.card]);assert.deepEqual(observed.find(f=>f.phase==='charge').cards,[]);if(index===7)assert(observed.some(f=>f.math.includes('牌號 4 ＋ 士氣 2 ＝ 6')),'Morale reversal uses server score, not rank alone');}
    else assert.deepEqual(last.cards,c.tie?[]:[outcome.card]);
-   if(c.tie)assert.match(last.caption,/平手/);else assert.match(last.caption,new RegExp('輸牌 '+engine.byId[outcome.card].rank+' 號'));
+   for(const frame of observed.filter(x=>['reveal','ko','result','return'].includes(x.phase)))assert(frame.cards.every(card=>card===outcome.card),'Winner face never appears in reveal/KO');if(!c.tie){const order=observed.map(x=>x.phase);assert(order.indexOf('impact')<order.indexOf('reveal'));assert(order.indexOf('reveal')<order.indexOf('ko'));assert(order.indexOf('ko')<order.indexOf('result'));}if(c.tie)assert.match(last.caption,/平手/);else assert.match(last.caption,new RegExp('輸牌 '+engine.byId[outcome.card].rank+' 號'));
    if(index===0||index===3)assert(last.at-observed.find(f=>f.phase==='charge').at>=3000,'Normal-motion verdict waits for the complete exchange and impact');
    assert.equal(await p.locator('.cinema-party').count(),2);assert.equal(await p.locator('.cinema-stage img[src*="battle-"][src*="-strike-"],.cinema-actor,.mf-marco-flight').count(),0,'No character sprite in the card duel');
    await p.locator('.cinema-background').evaluate(i=>i.decode());

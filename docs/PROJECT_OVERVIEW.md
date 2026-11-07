@@ -3142,3 +3142,6 @@ card-duel-runtime.js 另以獨立 bounded boot 掛接 6 號交換的手牌視覺
 伺服器修正薩波靜默下索隆丟棄9／19漏補牌的資料分支。合法棄牌重抽仍需把牌堆中的替補牌交給目標，避免存活玩家在牌堆仍有牌時留下 hand:null。羅6普通／強化另拒絕將任一空手牌對調，故不會把這個空值傳給另一玩家。
 
 資料模型、保存鍵、Socket.IO封包與客戶端內容不變；已部署單次卡背碰撞的 client package-1b7337cdeb75bb0b 繼續沿用，修正由共用Card後端套用至桌機、Android及iOS。舊圖殘留另作圖片層診斷，未假稱已由這個後端修正全部解決。
+
+
+2026-11-07 Marineford battle presentation preserves private two-combatant comparison. All fight motion uses card backs; only the losing card turns face-up after impact and before KO. Shared game program serves desktop, Android and iOS; native-device acceptance remains separate.

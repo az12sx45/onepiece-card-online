@@ -2372,3 +2372,6 @@ CARD_TIMING_VIDEO_20261104.md列使用者逐卡決策與來源界線。正式gam
 - scripts/card_empty_hand_qa.js：exact9f before／after對照、合法8與15動作資料再現、各Law邊界、靜默／免疫／空堆／0號／牌數守恆。
 - D:/Codex_QA/card-empty-hand-engine-20261107：本輪source baseline、engine unit／privacy、真server原UI資料失敗與修正、HTTP與最終發布綁定。
 - D:/Codex_QA/card-swap-collision-20261107：前端client1b已部署交付證據，另有不重載nextDRAW、像素與80圖matrix診斷；原18份凍結交接與前輪26正式證據不覆寫。
+
+
+2026-11-07 public/marineford/marineford.js: private-compare -> card backs entry/charge/clash/strike/impact -> loser reveal -> KO -> result/return. scripts/marineford_battle_cinema_qa.cjs verifies these phases using three clients and real engine packets; MF_MEDIA_ROOT can supply pre-existing published art without duplicating assets.
