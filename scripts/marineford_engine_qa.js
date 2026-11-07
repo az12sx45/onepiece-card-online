@@ -35,5 +35,33 @@ check('Both combatants automatically spend one, never stack, before battle; ties
 });
 check('Justice chained battles consume one per actual battle, not one per effect',()=>{let {s,navyCard}=battleFixture(3,0,1);s.pending.battle.remaining=2;let r=doAction(s,0,{type:'CHOOSE',card:navyCard});assert.equal(r.state.players[0].morale,2);assert.equal(r.state.pending.type,'fight-target');assert.equal(r.state.turn,0);r=doAction(r.state,0,{type:'CHOOSE',target:2});r=doAction(r.state,0,{type:'CHOOSE',card:navyCard});assert.equal(r.state.players[0].morale,1);assert.equal(r.state.turn,1);assert.notEqual(r.state.pending?.type,'morale-use');});
 check('Declining battle and guessing do not spend morale',()=>{let {s}=battleFixture(3,2);s.pending={type:'fight-target',owner:0,attacker:0,targets:[1],remaining:1,used:[]};let r=doAction(s,0,{type:'CHOOSE',skip:true});assert.equal(r.state.players[0].morale,3);assert.equal(r.state.players[1].morale,2);s.pending={type:'guess',owner:0,targets:[1],digits:[1,2,3,4,5,6]};r=doAction(s,0,{type:'CHOOSE',digit:6});assert.equal(r.state.players[0].morale,3);assert.equal(r.state.players[1].morale,2);});
-check('1500 complete seeded games, conservation and no stuck pending action',()=>{for(let n=2;n<=6;n++)for(let game=0;game<300;game++){let s=create(n,game%n);for(let step=0;s.phase==='playing';step++){assert.ok(step<1800,'Game did not end');const id=s.pending?.owner??s.turn,a=e.cpuAction(e.visible(s,id),id,rng);assert.ok(a,JSON.stringify({step:s.step,pending:s.pending,hand:s.players[id].hand}));s=doAction(s,id,a).state;assert.notEqual(s.pending?.type,'morale-use');assert.ok(s.players.every(p=>p.morale>=0));const ids=[...Object.values(s.decks).flat(),...s.players.flatMap(p=>[...p.hand,...p.played]),...s.jobs.filter(j=>j.type==='recycle').map(j=>j.card)];assert.equal(new Set(ids).size,ids.length,'duplicate physical card');if(s.phase==='playing')assert.equal(ids.length,29,'lost card');report.maxActions=Math.max(report.maxActions,step+1);}assert.ok(['navy','pirate'].includes(s.winner));report.games++;}});
+check('CPU learns only authorized reveals, forgets changed hands, and guesses known ranks',()=>{
+ const s=create(3),id=1,target=0,view=e.visible(s,id);
+ view.pending={type:'guess',owner:id,targets:[target],digits:[1,2,3,4,5,6,7]};
+ const secret={type:'battle-private',to:[0,2],cards:[{player:0,card:'navy-sengoku'}]};
+ let memory=e.observeCpu(undefined,view,id,[secret]);
+ assert.equal(memory.has(0),false);
+ const read={...view,pending:{type:'read',owner:id,target,slot:0,cards:['navy-sengoku']}};
+ memory=e.observeCpu(memory,read,id,[]);
+ assert.equal(e.cpuAction(view,id,()=>0,memory).digit,7);
+ e.observeCpu(memory,view,id,[{type:'hand-shuffle',player:target,to:'all'}]);
+ assert.equal(e.cpuAction(view,id,()=>0,memory).digit,7);
+ e.observeCpu(memory,view,id,[{type:'draw',player:target,to:'all'}]);
+ assert.equal(memory.has(target),false);
+});
+check('CPU excludes played cards and applies mandatory morale to fight choices',()=>{
+ const s=create(3),v=e.visible(s,0);
+ v.players[0].hand=['navy-aokiji'];
+ v.players[1].hand=[null];v.players[2].hand=[null];
+ v.players[1].played=e.cards.filter(c=>c.team==='pirate'&&c.rank!==4).map(c=>c.id);
+ v.pending={type:'guess',owner:0,targets:[1],digits:[1,2,3,4,5,6]};
+ assert.equal(e.cpuAction(v,0,()=>0).digit,4);
+ v.pending={type:'fight-target',owner:0,targets:[1]};
+ assert.equal(e.cpuAction(v,0,()=>0).skip,true);
+ v.players[0].morale=1;
+ assert.equal(e.cpuAction(v,0,()=>0).target,1);
+ v.players[1].morale=1;
+ assert.equal(e.cpuAction(v,0,()=>0).skip,true);
+});
+check('1500 complete seeded games, conservation and no stuck pending action',()=>{for(let n=2;n<=6;n++)for(let game=0;game<300;game++){let s=create(n,game%n),memory=[];for(let step=0;s.phase==='playing';step++){assert.ok(step<1800,'Game did not end');const id=s.pending?.owner??s.turn,a=e.cpuAction(e.visible(s,id),id,rng,memory[id]);assert.ok(a,JSON.stringify({step:s.step,pending:s.pending,hand:s.players[id].hand}));const result=doAction(s,id,a);s=result.state;memory=s.players.map(p=>e.observeCpu(memory[p.id],e.visible(s,p.id),p.id,result.events));assert.notEqual(s.pending?.type,'morale-use');assert.ok(s.players.every(p=>p.morale>=0));const ids=[...Object.values(s.decks).flat(),...s.players.flatMap(p=>[...p.hand,...p.played]),...s.jobs.filter(j=>j.type==='recycle').map(j=>j.card)];assert.equal(new Set(ids).size,ids.length,'duplicate physical card');if(s.phase==='playing')assert.equal(ids.length,29,'lost card');report.maxActions=Math.max(report.maxActions,step+1);}assert.ok(['navy','pirate'].includes(s.winner));report.games++;}});
 report.passed=true;const output=process.env.MF_QA_REPORT;if(output)fs.writeFileSync(output,JSON.stringify(report,null,2));console.log(JSON.stringify(report));

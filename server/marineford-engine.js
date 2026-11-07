@@ -147,17 +147,5 @@ function visible(s,viewer){
  if(s.pending){const p=s.pending;v.pending={type:p.type==='defeat-choice'&&p.owner!==viewer?'effect':p.type,owner:p.owner};if(p.owner===viewer){for(const key of ['targets','digits','slots','remaining','used','count','high'])if(p[key]!=null)v.pending[key]=clone(p[key]);if(p.cards)v.pending.cards=p.cards.slice();}if(p.type==='read'){v.pending.target=p.target;v.pending.slot=p.slot;}}
  return v;
 }
-function cpuAction(v,id,rng=Math.random){
- const choose=a=>a[Math.floor(rng()*a.length)];const p=v.pending;
- if(!p){if(id!==v.turn)return null;if(v.step==='draw')return {type:'DRAW'};const ids=v.players[id].hand.filter(c=>c&&byId[c].rank!==7);return ids.length?{type:'PLAY',card:choose(ids)}:null;}
- if(p.owner!==id)return null;const action={type:'CHOOSE'};
- if(['read','review'].includes(p.type))return {...action,done:true};
- if(p.type==='guess')return {...action,digit:choose(p.digits)};
- if(['peek-slot','battle-slot'].includes(p.type))return {...action,slot:Math.floor(rng()*p.slots)};
- if(['arrange','order'].includes(p.type))return {...action,cards:shuffle(p.cards.slice(),rng)};
- if(p.type==='return')return {...action,cards:p.cards.slice().sort((a,b)=>byId[a].rank-byId[b].rank).slice(0,p.count)};
- if(p.cards)return {...action,card:choose(p.cards)};
- if(p.targets)return {...action,target:choose(p.targets)};
- return null;
-}
-module.exports={cards,byId,create,apply,visible,cpuAction};
+const {cpuAction,observe:observeCpu}=require('./marineford-cpu')(cards,byId);
+module.exports={cards,byId,create,apply,visible,cpuAction,observeCpu};

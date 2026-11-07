@@ -69,12 +69,12 @@ check('Matching duplicate Navy ranks do not expose duplicate choice to other sea
 for(const card of ['navy-garp','justice-2'])for(const rank of [2,3,4])check(card+' threshold '+rank,()=>{
  let s=fresh();for(const id of [...s.players[1].hand])move(s,id,()=>s.decks.pirate);held(s,1,e.cards.find(c=>c.team==='pirate'&&c.rank===rank).id);s=play(s,0,card).state;const r=choose(s,{target:1});assert.equal(r.state.hp.pirate,6-Number(card==='navy-garp'?rank<=3:rank>=3));conserve(r.state);
 });
-check('Printed Kizaru and Justice 4 each grant three; pirate 4 grants one to self or ally',()=>{
- for(const card of ['navy-kizaru','justice-4'])assert.equal(play(fresh(),0,card).state.players[0].morale,3);
+check('Kizaru grants one and Justice 4 grants three; pirate 4 grants one to self or ally',()=>{
+ for(const [card,amount] of [['navy-kizaru',1],['justice-4',3]])assert.equal(play(fresh(),0,card).state.players[0].morale,amount);
  for(const target of [1,2]){const s=play(fresh(),1,'pirate-10').state;assert.equal(choose(s,{target}).state.players[target].morale,1);}
 });
 check('Justice 6 copies a faceup card without moving or duplicating it',()=>{
- let s=fresh();move(s,'navy-kizaru',()=>s.players[0].played);s=play(s,0,'justice-6').state;assert.ok(s.pending.cards.includes('navy-kizaru'));assert.ok(!s.pending.cards.includes('justice-6'));s=choose(s,{card:'navy-kizaru'}).state;assert.equal(s.players[0].morale,3);assert.ok(s.players[0].played.includes('navy-kizaru'));conserve(s);
+ let s=fresh();move(s,'navy-kizaru',()=>s.players[0].played);s=play(s,0,'justice-6').state;assert.ok(s.pending.cards.includes('navy-kizaru'));assert.ok(!s.pending.cards.includes('justice-6'));s=choose(s,{card:'navy-kizaru'}).state;assert.equal(s.players[0].morale,1);assert.ok(s.players[0].played.includes('navy-kizaru'));conserve(s);
 });
 for(const card of ['navy-sengoku',...Array.from({length:6},(_,i)=>'justice-'+(i+1))])check(card+' defeat redraws then recycles exactly that card',()=>{let s=fresh();held(s,0,card);s.pending={type:'defeat-choice',owner:0,cards:[card]};s.jobs=[];const r=choose(s,{card});assert.ok(!r.state.players[0].played.includes(card));assert.ok(r.state.decks.navy.includes(card));const sh=r.events.find(x=>x.type==='shuffle');assert.deepEqual(sh.cards,[card]);assert.equal(sh.reason,'defeated-special');assert.ok(r.events.findIndex(x=>x.type==='draw')<r.events.findIndex(x=>x.type==='shuffle'));conserve(r.state);});
 check('Normally played Justice remains public and is not recycled',()=>{let s=play(fresh(),0,'justice-4').state;assert.ok(s.players[0].played.includes('justice-4'));assert.ok(!s.decks.navy.includes('justice-4'));conserve(s);});

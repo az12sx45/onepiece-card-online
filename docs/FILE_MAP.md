@@ -2383,3 +2383,6 @@ CARD_TIMING_VIDEO_20261104.md列使用者逐卡決策與來源界線。正式gam
 2026-11-07 馬林福特結局原畫：public/marineford/art/v2/finale-rescue-v1.webp 與 finale-execution-v1.webp。
 
 finale-execution-swing-v1.webp 為執行兵落刀分鏡。
+
+
+2026-11-07 馬林福特之戰：server/marineford-cpu.js 負責 CPU 策略與該座位的牌面線索。marineford-rooms.js 管理每局、每座位的記憶與合法事件分發。
