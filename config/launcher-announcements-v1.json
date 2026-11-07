@@ -1,7 +1,26 @@
 {
   "schemaVersion": 1,
-  "revision": 99,
+  "revision": 100,
   "announcements": [
+    {
+      "id": "marineford-20261107-cardback-impact-ko",
+      "status": "published",
+      "publishedAt": "2026-11-07T03:14:18.719Z",
+      "scope": "launcher",
+      "category": "update",
+      "version": "馬林福特之戰 2026.11.07",
+      "title": "馬林福特之戰：卡背交鋒與敗牌翻面",
+      "summary": "參戰雙方先私下確認兩張牌，再以卡背交鋒；敗牌命中後翻面並KO，旁觀者看不到勝牌。",
+      "body": [
+        "參戰雙方先私下確認兩張出戰牌，進場、蓄力與交鋒均使用卡背。命中後才翻開敗牌，再進行KO與結果演出；勝牌保持卡背，平手維持兩張卡背。",
+        "其他玩家與觀戰者只會在命中後看到敗牌，無法看到勝牌；士氣與勝負規則維持原樣。",
+        "請結束對局後更新《馬林福特之戰》並重新進入。Windows 1.2.33、Android v067、iOS v066 沿用現有啟動器與App。"
+      ],
+      "requiredRelease": {
+        "kind": "launcher",
+        "version": "1.2.33"
+      }
+    },
     {
       "id": "card-20261107-empty-hand-engine",
       "status": "published",
