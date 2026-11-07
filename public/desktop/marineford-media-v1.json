@@ -332,6 +332,27 @@
       "sha256": "818a3145a122b9fa260132d37227e08db531642c73daecf43ea77630fe3a2e8e"
     },
     {
+      "path": "marineford/art/v2/finale-execution-swing-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 133176,
+      "sha256": "cd415acec1d3db080286059350bb0d191864f42a521e20b2feaf88858285b4d6"
+    },
+    {
+      "path": "marineford/art/v2/finale-execution-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 131180,
+      "sha256": "e6334d075a68a411d5c7edafce67c7c4a8d63ba7870640b5a8c1a068542ac0fe"
+    },
+    {
+      "path": "marineford/art/v2/finale-rescue-v1.webp",
+      "kind": "image",
+      "mime": "image/webp",
+      "size": 280902,
+      "sha256": "d956b06a58f59aa70a296789cb9ce2a75227e41fed5664dfaa3ccfb03eab1563"
+    },
+    {
       "path": "marineford/art/v2/fx-fire.webp",
       "kind": "image",
       "mime": "image/webp",

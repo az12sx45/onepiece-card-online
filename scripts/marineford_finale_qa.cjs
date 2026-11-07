@@ -41,11 +41,16 @@ io.on('connection',socket=>{
    socket.emit('MF_PRESENT',{sequence:11,you:id,view:engine.visible(state,id),events:[{type:'victory',team:state.winner,justice}]});
    const stage=page.locator('.mf-finale[data-route="'+route+'"]');
    await stage.waitFor();
-   await stage.locator('.mf-finale-art').evaluate(img=>img.decode());
+   await stage.locator('.mf-finale-art').first().evaluate(img=>img.decode());
+   if(route==='execution'){
+    await page.locator('.mf-finale[data-phase=raise] .mf-finale-ending[src*=finale-execution-v1]').waitFor();
+    await page.locator('.mf-finale[data-phase=swing] .mf-finale-ending[src*=finale-execution-swing-v1]').waitFor();
+   }
    if(justice.length)assert.equal(await stage.locator('.mf-finale-justice .card-face').count().then(async count=>{if(!count)await stage.locator('.mf-finale-justice .card-face').first().waitFor();return stage.locator('.mf-finale-justice .card-face').count();}),6);
    const result=page.locator('#sheet[data-kind="campaign-result"]');
    await result.waitFor();
    await result.locator('.mf-result-art').evaluate(img=>img.decode());
+   if(route!=='justice')assert.match(await result.locator('.mf-result-art').getAttribute('src'),new RegExp('finale-'+route+'-v1'));
    assert.equal(await result.locator('.campaign-banner h3').textContent(),['艾斯獲救','處刑執行','正義集結'][index]);
    assert.equal(await result.locator('.campaign-player').count(),6);
    const body=result.locator('#sheetBody');

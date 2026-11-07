@@ -468,14 +468,19 @@
  const readingTime=(text,minimum=1600)=>Math.max(minimum,Math.min(3200,600+Array.from(text).length*75));
  function resultText(state=view){return state.winner==='pirate'?{title:'艾斯獲救',reason:'海賊登上處刑台，成功救出艾斯。'}:state.hp.pirate===0?{title:'處刑執行',reason:'海軍登上處刑台，執行處刑。'}:{title:'正義集結',reason:'六種正義集齊，海軍獲勝。'};}
  function finaleArt(state){
-  return state.winner==='pirate'?'scaffold-field-pirate.webp':'scaffold-field-navy.webp';
+  if(state.winner==='pirate')return 'finale-rescue-v1.webp';
+  return state.hp.pirate===0?'finale-execution-v1.webp':'scaffold-field-navy.webp';
  }
  async function finale(state,justice,token){
   const layer=$('effectLayer'),stage=node('section',null,'mf-finale'),art=node('img',null,'mf-finale-art');
   const rescue=state.winner==='pirate',assembly=!rescue&&state.hp.pirate>0&&justice.length===6,result=resultText(state);
   stage.dataset.route=rescue?'rescue':assembly?'justice':'execution';
   layer.dataset.kind='finale';
-  art.src=artUrl(finaleArt(state));art.alt='';
+  art.src=artUrl(rescue?'scaffold-field-pirate.webp':'scaffold-field-navy.webp');art.alt='';
+  const ending=node('img',null,'mf-finale-art mf-finale-ending');
+  ending.src=artUrl(finaleArt(state));ending.alt='';
+  const swing=new Image();
+  if(!rescue&&!assembly)swing.src=artUrl('finale-execution-swing-v1.webp');
   const copy=node('div',null,'mf-finale-copy'),label=node('small','馬林福特 · 最終章');
   const title=node('h2',rescue?'處刑台突破':assembly?'正義之旗集結':'處刑命令下達');
   copy.append(label,title);stage.append(art,copy);layer.replaceChildren(stage);
@@ -496,13 +501,28 @@
     }
     window.MFSound?.play('rally');
     await pause(1400);
+   }else if(!rescue){
+    await Promise.race([Promise.all([ending.decode(),swing.decode()]).catch(()=>{}),pause(850)]);
+    if(token!==epoch)return;
+    stage.insertBefore(ending,copy);
+    stage.dataset.phase='raise';
+    await motion(ending,[{opacity:0,transform:'scale(1)'},{opacity:1,transform:'scale(1.07)'}],650);
+    if(token!==epoch)return;
+    art.remove();
+    stage.dataset.phase='swing';
+    if(swing.naturalWidth)ending.src=swing.src;
+    window.MFSound?.play('slash');
+    await motion(ending,[{opacity:1,transform:'scale(1.07)'},{opacity:.1,transform:'scale(1.1)'}],480);
    }else{
     const fx=node('img',null,'mf-finale-fx');
-    fx.alt='';fx.src=artUrl(rescue?'fx-fire.webp':'fx-kizaru-light-v1.webp');
+    fx.alt='';fx.src=artUrl('fx-fire.webp');
     stage.append(fx);
-    window.MFSound?.play(rescue?'fire':'slash');
+    window.MFSound?.play('fire');
     await motion(fx,[{opacity:0,transform:'scale(.45)'},{opacity:.95,transform:'scale(1)',offset:.58},{opacity:0,transform:'scale(1.26)'}],1350);
     fx.remove();
+    if(token!==epoch)return;
+    stage.insertBefore(ending,copy);
+    await motion(ending,[{opacity:0,transform:'scale(1.05)'},{opacity:1,transform:'scale(1)'}],650);
    }
    if(token!==epoch)return;
    stage.dataset.phase='verdict';

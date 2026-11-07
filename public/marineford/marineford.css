@@ -820,3 +820,7 @@ body:has(#sheet:not([hidden])) > .mf-invite{visibility:hidden}
 #sheet[data-kind="campaign-result"] .campaign-sides>section[data-team="pirate"]{border-top-color:#dd9778}
 #sheet[data-kind="campaign-result"] .result-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
 #sheet[data-kind="campaign-result"] .result-actions button{min-height:42px}
+
+.mf-finale-ending{object-position:50% 42%}
+#sheet[data-kind="campaign-result"] .mf-result-art[src*="finale-"]{object-position:center 32%}
+@media(max-aspect-ratio:1/1){.mf-finale-ending{object-fit:contain}}

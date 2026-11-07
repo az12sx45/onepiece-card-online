@@ -2378,3 +2378,8 @@ CARD_TIMING_VIDEO_20261104.md列使用者逐卡決策與來源界線。正式gam
 
 
 2026-11-07 馬林福特之戰：public/marineford/marineford.js 的 finale 與 showResult 負責結局演出與戰果，版面在 marineford.css。
+
+
+2026-11-07 馬林福特結局原畫：public/marineford/art/v2/finale-rescue-v1.webp 與 finale-execution-v1.webp。
+
+finale-execution-swing-v1.webp 為執行兵落刀分鏡。
