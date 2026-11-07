@@ -1,5 +1,11 @@
 # Development record
 
+## 2026-11-07 新世界航海錄進化素材取得指南
+
+- `candidate/project/original-core.js` 提供和電腦版相同的所需素材與來源。`native-crew-markup.js` 將指南資料送給 `native_crew_modal.gd`，以可捲動的列呈現。點素材可展開地點、關卡、條件與領取方式；特殊進化僅顯示區域。指南不觸發遊戲操作，沒有修改規則、獎勵、存檔或多人協定，未新增媒體。
+- 以已發布 iOS v067 的來源 `edb92e84` 建立隔離樹。三個原始程式檔均與已發布 Android v068 APK 內容一致。iOS v067 PCK 中兩個 JS 逐位元相同，GDScript 走既有匯出轉換。
+- Node 的原始船員詳情至原生投影 6/6，Godot 4.7.2 原生控制測試 11/11，涵蓋 740×360 與 500×280 指標點擊、展開、換行、捲動和保留特殊進化探索提示。證據在 `D:/Codex_QA/board-material-source-mobile-20261107/`。實體手機、正式帳號及新版封裝待整合驗證。
+
 ## 2026-11-07 新世界航海錄：Android／iOS 船員升等提示
 
 - 以正式 iOS v066 的 `1786e1595` 為隔離來源。四個要替換的既有 Godot 程式檔均與正式 Android v067 APK 內容逐位元相同；各平台啟動器、宿主與素材載入維持各自既有版本。

@@ -1,5 +1,5 @@
 extends Control
-## Persistent full-screen roster/details; source handlers own every action.
+## Persistent full-screen roster/details; source handlers own gameplay actions.
 signal command_requested(key: String)
 signal surface_ready
 const PANEL="mobile/art-ui/mobile-panel-v013.png"
@@ -23,6 +23,9 @@ var portrait:=TextureRect.new()
 var form:=RichTextLabel.new()
 var detail_scroll:=ScrollContainer.new()
 var sections:=VBoxContainer.new()
+var material_guide:=VBoxContainer.new()
+var material_rows: Array[Dictionary]=[]
+var expanded_material:=-1
 var section_labels: Array[Dictionary]=[]
 var actions: Array[Button]=[]
 
@@ -37,6 +40,8 @@ func _ready() -> void:
 	scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;add_child(scroll);list.size_flags_horizontal=Control.SIZE_EXPAND_FILL;list.add_theme_constant_override("separation",5);scroll.add_child(list)
 	_prepare_picture(portrait);add_child(portrait);form.scroll_active=true;form.bbcode_enabled=false;form.mouse_filter=Control.MOUSE_FILTER_STOP;add_child(form)
 	detail_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;add_child(detail_scroll);sections.size_flags_horizontal=Control.SIZE_EXPAND_FILL;sections.add_theme_constant_override("separation",12);detail_scroll.add_child(sections)
+	material_guide.name="EvolutionMaterialGuide";material_guide.add_theme_constant_override("separation",5);sections.add_child(material_guide);material_guide.hide()
+	var material_heading:=Label.new();material_heading.text="進化材料・點選查看取得方式";material_heading.add_theme_font_size_override("font_size",15);material_heading.add_theme_color_override("font_color",Color("ead197"));material_heading.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;material_guide.add_child(material_heading)
 	for i in range(2):
 		var panel:=InfoPanel.new();panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL;sections.add_child(panel)
 		var box:=VBoxContainer.new();box.size_flags_horizontal=Control.SIZE_EXPAND_FILL;panel.add_child(box)
@@ -48,6 +53,42 @@ func _ready() -> void:
 		for side in [SIDE_LEFT,SIDE_TOP,SIDE_RIGHT,SIDE_BOTTOM]:frame.set_patch_margin(side,160)
 		button.add_child(frame);button.set_meta("frame",frame);button.pressed.connect(func():_press(str(button.get_meta("key"))));actions.append(button)
 	resized.connect(_layout);hide()
+func _material_style(fill: Color,border: Color) -> StyleBoxFlat:
+	var style:=StyleBoxFlat.new();style.bg_color=fill;style.border_color=border;style.set_border_width_all(1);style.set_corner_radius_all(6)
+	style.content_margin_left=12;style.content_margin_right=12;style.content_margin_top=8;style.content_margin_bottom=8
+	return style
+func _new_material_row(index: int) -> Dictionary:
+	var row:=VBoxContainer.new();row.add_theme_constant_override("separation",3);material_guide.add_child(row)
+	var button:=Button.new();button.name="MaterialButton"+str(index);button.custom_minimum_size.y=44;button.alignment=HORIZONTAL_ALIGNMENT_LEFT;button.toggle_mode=true;button.clip_text=true;button.text_overrun_behavior=TextServer.OVERRUN_TRIM_ELLIPSIS
+	button.add_theme_font_size_override("font_size",15);button.add_theme_color_override("font_color",Color("f5e5c5"));button.add_theme_stylebox_override("normal",_material_style(Color("142c3a"),Color("4d6c75")));button.add_theme_stylebox_override("hover",_material_style(Color("1c3948"),Color("83a8aa")));button.add_theme_stylebox_override("pressed",_material_style(Color("24414b"),Color("d3ad66")))
+	row.add_child(button);button.pressed.connect(_toggle_material.bind(index))
+	var panel:=PanelContainer.new();panel.add_theme_stylebox_override("panel",_material_style(Color("102431"),Color("546558")));row.add_child(panel);panel.hide()
+	var copy:=Label.new();copy.name="SourceCopy";copy.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;copy.add_theme_font_size_override("font_size",14);copy.add_theme_color_override("font_color",Color("e9e1c8"));panel.add_child(copy)
+	return {"root":row,"button":button,"panel":panel,"copy":copy,"label":""}
+func _populate_materials(entries: Array) -> void:
+	material_guide.visible=not entries.is_empty()
+	while material_rows.size()<entries.size():material_rows.append(_new_material_row(material_rows.size()))
+	for i in range(material_rows.size()):
+		var row: Dictionary=material_rows[i];row.root.visible=i<entries.size()
+		if not row.root.visible:continue
+		var entry: Dictionary=entries[i];row.label="%s ×%d" % [str(entry.name),int(entry.quantity)];row.button.tooltip_text=row.label
+		var sources:=PackedStringArray()
+		for source in entry.rows:
+			var lines:=PackedStringArray()
+			for field in [["location","地點"],["challenge","關卡／任務"],["requirement","條件"],["reward","取得方式"]]:
+				var value:=str(source.get(field[0],""))
+				if not value.is_empty():lines.append("%s：%s" % [field[1],value])
+			if not lines.is_empty():sources.append("\n".join(lines))
+		row.copy.text="\n\n".join(sources) if not sources.is_empty() else "尚未登錄取得方式。"
+	_set_expanded_material(-1)
+func _toggle_material(index: int) -> void:
+	_set_expanded_material(-1 if expanded_material==index else index)
+	if expanded_material>=0:detail_scroll.ensure_control_visible.call_deferred(material_rows[index].button)
+func _set_expanded_material(index: int) -> void:
+	expanded_material=index
+	for i in range(material_rows.size()):
+		var row: Dictionary=material_rows[i];var active: bool=index==i and row.root.visible
+		row.panel.visible=active;row.button.set_pressed_no_signal(active);row.button.text=("▾  " if active else "▸  ")+str(row.label)
 func _prepare_picture(picture: TextureRect) -> void:
 	picture.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;picture.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;picture.mouse_filter=Control.MOUSE_FILTER_IGNORE
 func _new_row() -> Dictionary:
@@ -92,6 +133,7 @@ func _prepare(value: Dictionary,token: int) -> void:
 	if token!=epoch:return
 	var prior_kind: String=str(model.get("kind",""));model=value;prepared=available;background.texture=prepared[PANEL];title.text=model.title;subtitle.text=model.subtitle
 	var roster: bool=model.kind=="crew-roster";scroll.visible=roster;detail_scroll.visible=not roster;portrait.visible=not roster;form.visible=not roster
+	_populate_materials([] if roster else model.get("evolutionMaterials",[]))
 	if roster:
 		while rows.size()<model.entries.size():rows.append(_new_row())
 		for i in range(rows.size()):

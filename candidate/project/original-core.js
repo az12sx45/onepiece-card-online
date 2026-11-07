@@ -66234,6 +66234,50 @@ function firstEvolutionMoveChoiceId(form, eligibleMoveIds = [], existingMoveIds 
 function evolutionMaterialCosts(form) {
     return Array.isArray(form?.materialCost) ? form.materialCost.filter((cost) => cost?.itemId && Number(cost.quantity || 0) > 0) : [];
   }
+function evolutionMaterialGuideCosts(card) {
+  if (activeEvolutionForm(card)?.id === ZORO_NEW_WORLD_FORM_ID) return [{ itemId: ENMA_ITEM_ID, quantity: 1 }];
+  return evolutionMaterialCosts(nextEvolutionFormForCard(card)).map(({ itemId, quantity }) => ({ itemId, quantity: Math.max(1, Math.round(Number(quantity))) }));
+}
+
+function evolutionMaterialSourceRows(itemId) {
+  switch (itemId) {
+    case "pierced_flag":
+      return [{
+        location: "司法島（第 25 號島）",
+        challenge: "司法島討伐六戰：斯潘達姆 → 布魯諾 → 卡莉法 → 加布拉 → 卡古 → 羅布・路基。",
+        requirement: "參與討伐並累積貢獻。",
+        reward: "通關後領到司法島通關寶箱，到背包開箱，從四項獎勵中選擇被打穿的旗幟。",
+        islandId: "island-25",
+      }];
+    case "new_world_newspaper_3d2y":
+      return [{
+        location: "海軍本部（第 19 號島）",
+        challenge: "頂上戰爭篇四戰：青雉 → 黃猿 → 赤犬 → 戰國元帥。",
+        requirement: "打完四戰並成功救出處刑台角色。",
+        reward: "救援通關時直接獲得 3D2Y 的報紙 ×1。",
+        islandId: "island-19",
+      }];
+    case "prime_vivre_card":
+      return [{
+        location: "任務島・委託牆",
+        challenge: "S 級委託「舊時代殘響」。接取後完成頂上戰爭篇，或擊敗 1 名 S 級以上敵人。",
+        requirement: "懸賞達 30 億才會開放 S 級委託。委託牆會輪替。",
+        reward: "完成後領取舊時代的記憶 ×1。",
+        islandKind: "mission",
+      }, {
+        location: "海軍本部（第 19 號島）",
+        challenge: "任務日誌・主線第 80 話「3D2Y」。",
+        requirement: "推進到第 80 話，完成頂上戰爭篇。",
+        reward: "到任務日誌領取舊時代的記憶 ×1。",
+        islandId: "island-19",
+      }];
+    case ENMA_ITEM_ID:
+      return [{ location: "二周目・無風帶孤島" }];
+    default:
+      return [];
+  }
+}
+
 function evolutionMaterialText(form) {
     const costs = evolutionMaterialCosts(form);
     if (!costs.length) return "無材料";
@@ -66266,7 +66310,7 @@ function evolutionStatusText(player, card) {
     const nextForm = nextEvolutionFormForCard(card);
     const forms = evolutionFormsForCard(card);
     if (!forms.length) return "尚無進化";
-    if (activeForm?.id === ZORO_NEW_WORLD_FORM_ID) return "特殊進化：攜帶閻魔實際參戰並贏得一場非切磋戰鬥，可永久進化為索隆十郎。";
+    if (activeForm?.id === ZORO_NEW_WORLD_FORM_ID) return "這名船員有特殊進化，可在航程中探索。";
     if (activeForm && !nextForm) return "已達目前可進化最終階。";
     if (!nextForm) return "尚無進化";
     const status = evolutionRequirementStatus(player, card, nextForm);
@@ -69400,6 +69444,12 @@ function openCharacterDetail(player, index, options = {}) {
     const canEvolveFromDetail = Boolean(nextForm && nextStatus?.ok);
     const evolutionStageLine = evolutionStageSummaryText(card);
     const evolutionLine = evolutionStatusText(player, card);
+    const evolutionGuide = evolutionMaterialGuideCosts(card).map(({ itemId, quantity }) => ({
+      itemId,
+      name: gameItemDef(itemId)?.name || itemId,
+      quantity,
+      rows: evolutionMaterialSourceRows(itemId).map(({ location, challenge, requirement, reward }) => ({ location, challenge, requirement, reward })),
+    }));
     const portraits = cardPortraitsForDisplay(card);
     const fallbackInitial = String(cardDisplayName(card) || "?").slice(0, 1);
     openModal(`
@@ -69414,6 +69464,7 @@ function openCharacterDetail(player, index, options = {}) {
           <span>${escapeModalText(fallbackInitial)}</span>
           <div class="crew-detail-form-line">${activeForm ? `目前形態：${escapeModalText(activeForm.name)}` : "目前形態：未進化"}<br>${escapeModalText(evolutionStageLine)}<br>${escapeModalText(evolutionLine)}</div>
         </div>
+        <template data-crew-evolution-guide>${escapeModalText(JSON.stringify(evolutionGuide))}</template>
         <div class="crew-detail-info">
           <article class="crew-detail-section">
             <img src="images/board/crew_ui/crew_info_section_frame.webp" alt="" aria-hidden="true">

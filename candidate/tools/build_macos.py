@@ -23,10 +23,9 @@ def sha(path):
     with path.open('rb') as stream: return hashlib.file_digest(stream,'sha256').hexdigest()
 
 
-def verify_board_level_up_pack(entries, project):
+def verify_board_pack(entries, project, names):
     records = {}
-    for name in ('native-game-runtime.js', 'native_app_stage.gd', 'native_crew_level_up_hud.gd',
-                 'original-board-audio.js', 'original-core.js'):
+    for name in names:
         source = (project/name).read_bytes()
         packed = 'res://'+name
         if name.endswith('.gd'):
@@ -36,7 +35,7 @@ def verify_board_level_up_pack(entries, project):
             packed = compiled
         content = entries.get(packed)
         if not content or (name.endswith('.js') and content != source):
-            raise ValueError('Board level-up resource missing or changed: '+name)
+            raise ValueError('Board resource missing or changed: '+name)
         records[name] = {'sourceSha256': hashlib.sha256(source).hexdigest(),
                          'packedPath': packed, 'packedSha256': hashlib.sha256(content).hexdigest(),
                          'packedBytes': len(content)}
@@ -152,7 +151,11 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
     if len(packs)!=1:raise ValueError('Expected one exported game pack')
     entries=read_pck(packs[0].read_bytes())
     raw_verified=verify_runtime_files(entries,candidate/'project')
-    board_level_up_pack=verify_board_level_up_pack(entries,candidate/'project')
+    board_level_up_pack=verify_board_pack(entries,candidate/'project',
+        ('native-game-runtime.js', 'native_app_stage.gd', 'native_crew_level_up_hud.gd',
+         'original-board-audio.js', 'original-core.js'))
+    board_material_guide_pack=verify_board_pack(entries,candidate/'project',
+        ('native-crew-markup.js', 'native_crew_modal.gd', 'original-core.js'))
     del entries
     shutil.copytree(candidate/'bundle-resources',app,dirs_exist_ok=True)
     launcher=json.loads((candidate/'launcher-manifest.json').read_text())
@@ -194,6 +197,7 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
         'baselineVersion':38,'cloudCostVerified':False,'warning':'Owner signing and physical iPhone acceptance required'}
     report['rawRuntimeResourcesByteIdentical']=raw_verified
     report['boardLevelUpPack']=board_level_up_pack
+    report['boardMaterialGuidePack']=board_material_guide_pack
     report['macWebKitLauncherChecked']=True
     report['macWebKitMarinefordChecked']=True
     report['macWebKitMarinefordProgramChecked']=True

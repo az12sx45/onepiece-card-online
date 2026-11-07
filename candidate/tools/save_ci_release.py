@@ -22,7 +22,7 @@ def main():
     report = json.loads((build/'build-result.json').read_bytes())
     with ipa.open('rb') as stream:
         digest = hashlib.file_digest(stream, 'sha256').hexdigest()
-    require(0 < ipa.stat().st_size < LIMIT and report['versionCode'] == 67 and
+    require(0 < ipa.stat().st_size < LIMIT and report['versionCode'] == 68 and
             report['macCompiled'] and report['macWebKitMarinefordProgramChecked'] and
             report['signed'] is False and report['iphoneTested'] is False and
             report['sha256'] == digest and report['bytes'] == ipa.stat().st_size,
@@ -39,7 +39,7 @@ def main():
     run = request('/actions/runs/'+str(run_id))
     require(run['head_sha'] == commit and run['head_branch'] == 'codex/ios-native-v038',
             'CI run identity differs')
-    tag = 'ios-native-v067-ci-'+commit[:12]
+    tag = 'ios-native-v068-ci-'+commit[:12]
     matches = [item for item in request('/releases?per_page=100') if item['tag_name'] == tag]
     require(len(matches) <= 1, 'Ambiguous draft candidate')
     if matches:
@@ -48,17 +48,17 @@ def main():
                 'Existing candidate is not this draft source')
     else:
         release = request('/releases', dict(tag_name=tag, target_commitish=commit, draft=True, prerelease=True,
-            name='iOS v067 unsigned candidate '+commit[:12],
+            name='iOS v068 unsigned candidate '+commit[:12],
             body='Unsigned native candidate from CI run '+str(run_id)+'. Owner signing and physical iPhone acceptance pending.'))
     release_id = release['id']
     require(release['draft'] is True, 'Candidate release unexpectedly public')
-    diagnostics = build/'PO-iOS-v067-ci-report.zip'
+    diagnostics = build/'PO-iOS-v068-ci-report.zip'
     with zipfile.ZipFile(diagnostics,'w',compression=zipfile.ZIP_DEFLATED) as archive:
         archive.write(build/'build-result.json','build-result.json')
         for file in sorted((build/'logs').glob('*.log')):
             archive.writestr(file.name, file.read_bytes()[-2*1024*1024:])
-    files = [(ipa,'PO-iOS-v067-'+digest[:12]+'-UNSIGNED.ipa'),
-             (diagnostics,'PO-iOS-v067-ci-report-'+str(run_id)+'-'+os.environ.get('GITHUB_RUN_ATTEMPT','1')+'.zip')]
+    files = [(ipa,'PO-iOS-v068-'+digest[:12]+'-UNSIGNED.ipa'),
+             (diagnostics,'PO-iOS-v068-ci-report-'+str(run_id)+'-'+os.environ.get('GITHUB_RUN_ATTEMPT','1')+'.zip')]
     retained = []
     existing = request('/releases/'+str(release_id)+'/assets?per_page=100')
     for file, name in files:

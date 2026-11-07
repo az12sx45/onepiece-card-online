@@ -17,6 +17,8 @@ exports.project=function(html,bridge,{decode,field,asset}){
  }else{
   model.image=asset(field(html,/<div class="crew-detail-character-stage">\s*<img src="([^"]+)"/,'crew detail portrait'));
   model.form=plain(html.match(/<div class="crew-detail-form-line">([\s\S]*?)<\/div>/)?.[1]||'');
+  const evolutionGuide=html.match(/<template data-crew-evolution-guide>([\s\S]*?)<\/template>/)?.[1];
+  model.evolutionMaterials=evolutionGuide===undefined?[]:JSON.parse(decode(evolutionGuide));
   model.sections=[...html.matchAll(/<article class="crew-detail-section">([\s\S]*?)<\/article>/g)].map(match=>({title:field(match[1],/<h4>([\s\S]*?)<\/h4>/,'crew section title'),text:plain(match[1].match(/<p>([\s\S]*?)<\/p>/)?.[1]||'')}));
   if(model.sections.length!==2)throw Error('Original crew detail section count changed');
  }
