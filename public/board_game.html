@@ -22902,6 +22902,114 @@
       line-height:1.28;
       text-shadow:0 1px 2px #000;
     }
+    .crew-detail-info.has-evolution-materials{
+      grid-template-rows:auto minmax(0,1fr) minmax(0,1fr);
+      gap:2%;
+    }
+    .crew-material-access{
+      display:flex;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:4px 7px;
+      min-width:0;
+      max-height:84px;
+      padding:2px 3px;
+      overflow:auto;
+      scrollbar-width:thin;
+    }
+    .crew-material-access h4{
+      margin:0;
+      color:#ffdf98;
+      font-size:clamp(12px,1vw,16px);
+      line-height:1.2;
+      text-shadow:0 1px 3px #000;
+    }
+    .crew-material-chip,
+    .crew-material-guide-action{
+      min-height:34px;
+      max-width:100%;
+      padding:4px 10px;
+      border:1px solid #cfa45d;
+      border-radius:7px;
+      background:linear-gradient(180deg,#234c50,#132c32);
+      color:#fff0c8;
+      font-family:inherit;
+      font-size:clamp(13px,1.05vw,16px);
+      font-weight:700;
+      line-height:1.25;
+      overflow-wrap:anywhere;
+      cursor:pointer;
+    }
+    .crew-material-chip span{margin-left:2px;color:#ffda86}
+    .crew-material-chip:hover,
+    .crew-material-guide-action:not(:disabled):hover{background:#315e5d}
+    .crew-material-chip:focus-visible,
+    .crew-material-guide-action:focus-visible{outline:2px solid #ffe4a4;outline-offset:1px}
+    .crew-material-guide-action:disabled{opacity:.55;cursor:default}
+    .crew-material-guide{
+      position:absolute;
+      z-index:5;
+      top:53%;
+      left:50%;
+      width:min(82%,760px);
+      max-height:71%;
+      transform:translate(-50%,-50%);
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+      border:1px solid #ddb66f;
+      border-radius:12px;
+      background:linear-gradient(145deg,#183537,#101f29 70%);
+      color:#f3f3e6;
+      box-shadow:0 9px 28px #000c,0 0 0 100vmax #07151bb0,inset 0 0 0 1px #ffe1a620;
+    }
+    .crew-material-guide[hidden]{display:none}
+    .crew-material-guide > header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:6px 12px;
+      padding:10px 14px;
+      border-bottom:1px solid #cfa45d69;
+    }
+    .crew-material-guide > header > div{min-width:0}
+    .crew-material-guide > header span{color:#ecc786;font-size:clamp(11px,.85vw,14px)}
+    .crew-material-guide > header h4{
+      margin:2px 0 0;
+      color:#fff0c8;
+      font-size:clamp(15px,1.45vw,22px);
+      line-height:1.2;
+      overflow-wrap:anywhere;
+    }
+    .crew-material-guide-body{
+      min-height:0;
+      overflow:auto;
+      overscroll-behavior:contain;
+      padding:10px 14px;
+      scrollbar-width:thin;
+      scrollbar-color:#bd8732 transparent;
+    }
+    .crew-material-source{
+      padding:9px 11px;
+      border:1px solid #cfa45d4f;
+      border-radius:8px;
+      background:#0a1b24b3;
+    }
+    .crew-material-source + .crew-material-source{margin-top:8px}
+    .crew-material-source dl{margin:0;font-size:clamp(13px,1.1vw,17px);line-height:1.45}
+    .crew-material-source dl > div{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:0 9px}
+    .crew-material-source dl > div + div{margin-top:4px}
+    .crew-material-source dt{color:#e8c381;font-weight:700}
+    .crew-material-source dd{margin:0;overflow-wrap:anywhere}
+    .crew-material-source .crew-material-guide-action{margin-top:8px}
+    .crew-material-source-empty{margin:0;font-size:14px}
+    @media (max-width:650px),(max-height:480px){
+      .crew-material-access{max-height:54px}
+      .crew-material-guide{width:86%;max-height:76%}
+      .crew-material-guide > header,.crew-material-guide-body{padding:7px 9px}
+      .crew-material-source{padding:7px 8px}
+      .crew-material-source dl > div{gap:0 6px}
+    }
     .crew-detail-actions{
       position:absolute;
       z-index:3;
@@ -27856,6 +27964,6 @@
   <script src="js/board_art_collection.js?v=20260922-adventure-art-v1"></script>
   <script src="js/board_audio_ui.js?v=20261107-crew-level-up-v1"></script>
   <script src="js/board_hotkeys.js?v=20260922-hotkeys-v1"></script>
-  <script src="js/board_game.js?v=20261107-crew-level-up-v1"></script>
+  <script src="js/board_game.js?v=20261107-evolution-material-guide-v1"></script>
 </body>
 </html>

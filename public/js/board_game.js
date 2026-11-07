@@ -17496,6 +17496,65 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return Array.isArray(form?.materialCost) ? form.materialCost.filter((cost) => cost?.itemId && Number(cost.quantity || 0) > 0) : [];
   }
 
+  function evolutionMaterialGuideCosts(card) {
+    if (activeEvolutionForm(card)?.id === ZORO_NEW_WORLD_FORM_ID) return [{ itemId: ENMA_ITEM_ID, quantity: 1 }];
+    return evolutionMaterialCosts(nextEvolutionFormForCard(card)).map(({ itemId, quantity }) => ({ itemId, quantity: Math.max(1, Math.round(Number(quantity))) }));
+  }
+
+  function evolutionMaterialSourceRows(itemId) {
+    switch (itemId) {
+      case "pierced_flag":
+        return [{
+          location: "司法島（第 25 號島）",
+          challenge: "司法島討伐六戰：斯潘達姆 → 布魯諾 → 卡莉法 → 加布拉 → 卡古 → 羅布・路基。",
+          requirement: "參與討伐並累積貢獻。",
+          reward: "通關後領到司法島通關寶箱，到背包開箱，從四項獎勵中選擇被打穿的旗幟。",
+          islandId: "island-25",
+        }];
+      case "new_world_newspaper_3d2y":
+        return [{
+          location: "海軍本部（第 19 號島）",
+          challenge: "頂上戰爭篇四戰：青雉 → 黃猿 → 赤犬 → 戰國元帥。",
+          requirement: "打完四戰並成功救出處刑台角色。",
+          reward: "救援通關時直接獲得 3D2Y 的報紙 ×1。",
+          islandId: "island-19",
+        }];
+      case "prime_vivre_card":
+        return [{
+          location: "任務島・委託牆",
+          challenge: "S 級委託「舊時代殘響」。接取後完成頂上戰爭篇，或擊敗 1 名 S 級以上敵人。",
+          requirement: "懸賞達 30 億才會開放 S 級委託。委託牆會輪替。",
+          reward: "完成後領取舊時代的記憶 ×1。",
+          islandKind: "mission",
+        }, {
+          location: "海軍本部（第 19 號島）",
+          challenge: "任務日誌・主線第 80 話「3D2Y」。",
+          requirement: "推進到第 80 話，完成頂上戰爭篇。",
+          reward: "到任務日誌領取舊時代的記憶 ×1。",
+          islandId: "island-19",
+        }];
+      case ENMA_ITEM_ID:
+        return [{ location: "二周目・無風帶孤島" }];
+      default:
+        return [];
+    }
+  }
+
+  function evolutionMaterialSourceIsland(row) {
+    const game = state.gameState;
+    if (!game?.boardData?.islands) return null;
+    const viewer = mapViewerPlayer();
+    if (row.islandId) {
+      const island = getIslandById(row.islandId);
+      return island && isIslandVisibleToPlayer(viewer, island) ? island : null;
+    }
+    if (row.islandKind) {
+      return game.boardData.islands.find((island) => getEffectiveIslandKind(island) === row.islandKind
+        && isIslandVisibleToPlayer(viewer, island)) || null;
+    }
+    return null;
+  }
+
   function evolutionMaterialText(form) {
     const costs = evolutionMaterialCosts(form);
     if (!costs.length) return "無材料";
@@ -17532,7 +17591,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const nextForm = nextEvolutionFormForCard(card);
     const forms = evolutionFormsForCard(card);
     if (!forms.length) return "尚無進化";
-    if (activeForm?.id === ZORO_NEW_WORLD_FORM_ID) return "特殊進化：攜帶閻魔實際參戰並贏得一場非切磋戰鬥，可永久進化為索隆十郎。";
+    if (activeForm?.id === ZORO_NEW_WORLD_FORM_ID) return "這名船員有特殊進化，可在航程中探索。";
     if (activeForm && !nextForm) return "已達目前可進化最終階。";
     if (!nextForm) return "尚無進化";
     const status = evolutionRequirementStatus(player, card, nextForm);
@@ -20896,6 +20955,104 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     document.getElementById("closePassiveSummaryBtn")?.addEventListener("click", closeModal);
   }
 
+  function crewEvolutionMaterialButtons(costs) {
+    if (!costs.length) return "";
+    return `
+      <section class="crew-material-access" aria-label="進化材料">
+        <h4>進化材料</h4>
+        ${costs.map(({ itemId, quantity }) => `
+          <button type="button" class="crew-material-chip" data-evolution-material="${escapeModalText(itemId)}"
+            aria-controls="crewEvolutionMaterialGuide" aria-expanded="false">
+            ${escapeModalText(gameItemDef(itemId)?.name || itemId)} ×${escapeModalText(quantity)} <span aria-hidden="true">›</span>
+          </button>
+        `).join("")}
+      </section>
+    `;
+  }
+
+  function bindCrewEvolutionMaterialGuide(costs) {
+    if (!costs.length) return;
+    const panel = document.getElementById("crewEvolutionMaterialGuide");
+    if (!panel) return;
+    const title = panel.querySelector("#crewEvolutionMaterialGuideTitle");
+    const body = panel.querySelector("[data-evolution-material-guide-body]");
+    const close = panel.querySelector("[data-evolution-material-close]");
+    const covered = Array.from(panel.parentElement.children).filter((node) => node !== panel && !node.inert);
+    let active = null;
+    let rows = [];
+    const hide = () => {
+      panel.hidden = true;
+      covered.forEach((node) => { node.inert = false; });
+      active?.setAttribute("aria-expanded", "false");
+      active?.focus();
+      active = null;
+      rows = [];
+    };
+
+    refs.modal.querySelectorAll("[data-evolution-material]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const cost = costs.find((entry) => entry.itemId === button.dataset.evolutionMaterial);
+        if (!cost) return;
+        if (active === button && !panel.hidden) { hide(); return; }
+        active?.setAttribute("aria-expanded", "false");
+        active = button;
+        active.setAttribute("aria-expanded", "true");
+        rows = evolutionMaterialSourceRows(cost.itemId);
+        title.textContent = gameItemDef(cost.itemId)?.name || cost.itemId;
+        body.innerHTML = rows.length ? rows.map((row, rowIndex) => {
+          const island = row.islandId || row.islandKind ? evolutionMaterialSourceIsland(row) : null;
+          const fields = [["地點", row.location], ["頭目／關卡", row.challenge], ["通關條件", row.requirement], ["取得方式", row.reward]];
+          return `
+            <article class="crew-material-source">
+              <dl>
+                ${fields.filter(([, value]) => value).map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeModalText(value)}</dd></div>`).join("")}
+              </dl>
+              ${island ? `<button type="button" class="crew-material-guide-action" data-evolution-material-map="${rowIndex}">地圖定位</button>` : ""}
+            </article>
+          `;
+        }).join("") : `<p class="crew-material-source-empty">取得方式尚未登錄。</p>`;
+        panel.hidden = false;
+        covered.forEach((node) => { node.inert = true; });
+        body.scrollTop = 0;
+        close.focus();
+      });
+    });
+    close.addEventListener("click", hide);
+    panel.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        event.stopPropagation();
+        event.preventDefault();
+        hide();
+      } else if (event.key === "Tab") {
+        const controls = Array.from(panel.querySelectorAll('button:not(:disabled), [tabindex="0"]'));
+        const first = controls[0], last = controls[controls.length - 1];
+        if (event.shiftKey ? document.activeElement !== first : document.activeElement !== last) return;
+        event.preventDefault();
+        (event.shiftKey ? last : first)?.focus();
+      }
+    });
+    body.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-evolution-material-map]");
+      if (!button) return;
+      const row = rows[Number(button.dataset.evolutionMaterialMap)];
+      // Discovery and map assignments can change while the guide is open.
+      const island = row && evolutionMaterialSourceIsland(row);
+      if (!island) {
+        button.disabled = true;
+        shared.showToast("目前無法定位這個地點。");
+        return;
+      }
+      const point = nodeToPx(island);
+      state.autoCenterEnabled = false;
+      closeModal();
+      panToBoardPoint(point.x, point.y, {
+        immediate: window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches,
+        scale: Math.max(state.panZoom.scale, 0.88),
+      });
+      shared.showToast(`地圖已定位：${island.name}`);
+    });
+  }
+
   function openCharacterDetail(player, index, options = {}) {
     const card = player.crew[index];
     if (!card) return;
@@ -20912,6 +21069,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const canEvolveFromDetail = Boolean(nextForm && nextStatus?.ok);
     const evolutionStageLine = evolutionStageSummaryText(card);
     const evolutionLine = evolutionStatusText(player, card);
+    const materialGuideCosts = evolutionMaterialGuideCosts(card);
     const portraits = cardPortraitsForDisplay(card);
     const fallbackInitial = String(cardDisplayName(card) || "?").slice(0, 1);
     openModal(`
@@ -20926,7 +21084,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           <span>${escapeModalText(fallbackInitial)}</span>
           <div class="crew-detail-form-line">${activeForm ? `目前形態：${escapeModalText(activeForm.name)}` : "目前形態：未進化"}<br>${escapeModalText(evolutionStageLine)}<br>${escapeModalText(evolutionLine)}</div>
         </div>
-        <div class="crew-detail-info">
+        <div class="crew-detail-info${materialGuideCosts.length ? " has-evolution-materials" : ""}">
+          ${crewEvolutionMaterialButtons(materialGuideCosts)}
           <article class="crew-detail-section">
             <img src="images/board/crew_ui/crew_info_section_frame.webp" alt="" aria-hidden="true">
             <div class="crew-detail-section-copy">
@@ -20965,8 +21124,18 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           <button type="button" class="modal-btn secondary" id="crewCosmeticFrameFromDetailBtn">選擇外觀框</button>
         </div>
         <footer class="crew-detail-footer"><button type="button" class="modal-btn secondary" id="closeCharacterDetailBtn">${returnTo === "crewManage" ? "返回名冊" : "關閉"}</button></footer>
+        ${materialGuideCosts.length ? `
+          <section class="crew-material-guide" id="crewEvolutionMaterialGuide" role="dialog" aria-modal="true" aria-labelledby="crewEvolutionMaterialGuideTitle" hidden>
+            <header>
+              <div><span>材料取得指南</span><h4 id="crewEvolutionMaterialGuideTitle"></h4></div>
+              <button type="button" class="crew-material-guide-action" data-evolution-material-close>返回角色</button>
+            </header>
+            <div class="crew-material-guide-body" data-evolution-material-guide-body tabindex="0"></div>
+          </section>
+        ` : ""}
       </section>
     `, "crew-detail-nautical-modal");
+    bindCrewEvolutionMaterialGuide(materialGuideCosts);
     document.getElementById("evolveCrewFromDetailBtn")?.addEventListener("click", () => evolveCrewCard(player, index));
     document.getElementById("trainingDetailFromCrewBtn")?.addEventListener("click", () => openTrainingDetailModal(player, index, { returnTo }));
     document.getElementById("setCrewCaptainFromDetailBtn")?.addEventListener("click", () => {
