@@ -1,5 +1,7 @@
 # File Map
 
+2026-11-07 Board 角色升等：`public/board_game.html` 放共用提示面板與樣式；`public/js/board_game.js` 接經驗結果、本機身分和已接受的即時狀態；`public/js/board_audio_ui.js` 的 `levelUp` 使用原有音效控制。`scripts/board_crew_level_up_browser_qa.cjs` 驗證實際結算與領獎、提示順序、縮小畫面、重整和讀檔；同目錄的 `board_crew_level_up_qa_route.cjs` 只在本機 Playwright 測試頁注入指定經驗，正式程式與資產套件不含此入口。
+
 2026-11-03 Marineford 牌桌小播報：marineford.js 的 scene 將不含卡圖的文字事件轉為 notice，省略空白全畫面 stage 與第二段停留；marineford.css 的 effectLayer 一般演出無背景遮罩，notice 隨文字寬度呈現。戰鬥／正義／出牌保留原牌桌，戰鬥卡與名字讓出上方玩家 HUD。scripts/marineford_notices_qa.cjs 覆蓋 13 類播報、連續事件、恢復、牌桌演出及名字位置。
 
 2026-11-03 Marineford 海軍選牌：marineford.js 的 showPending 在出戰／敗牌／回牌選擇中用 pick-info 顯示可閱讀階級、名稱、效果；arrange 保留原牌桌，只提供維持原位／交換左右。navyHandShuffle 只使用未知海軍牌背，兩種決定同一動畫；server/marineford-engine.js 的 arrange 回傳相同 hand-shuffle 事件，沿用全員 ACK。scripts/marineford_navy_choice_qa.cjs 檢查所有 13 張海軍牌、多尺寸、實際觸控與恢復。

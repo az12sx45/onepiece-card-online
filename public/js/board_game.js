@@ -11659,6 +11659,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function initGameState() {
+    clearCrewLevelUpToast();
     const seedParam = query.get("seed");
     const forcedSeed = seedParam !== null && seedParam.trim() !== "" ? Number(seedParam) : NaN;
     const seed = Number.isFinite(forcedSeed)
@@ -12792,6 +12793,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       && (payload.boardUiEvent?.id === remoteModalId || (!payload.boardUiEvent && sameRemoteTurn
         && !incomingGame.pendingMove && !incomingGame.movementAnimating && !incomingGame.diceRolling));
     const liveFlow = captureLiveFlowStateForLoad(payload.gameState, options);
+    if (options.source !== "lan" || options.initialLanRestore || options.lanReason === "load-save"
+      || incomingGame.seed !== state.gameState?.seed) clearCrewLevelUpToast();
     resetShipSailingMotions();
     state.gameState = safeJsonClone(payload.gameState);
     if (payload.campaignContext?.campaignId) {
@@ -13419,11 +13422,13 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     }
     boardLan.remoteMovementLocations.clear();
     resetShipSailingMotions();
-    const previousMissionPlayer = !initialRestorePending && reason !== "load-save"
-      ? safeJsonClone((state.gameState?.players || []).find(canReceiveMissionCompleteToast) || null)
+    const previousNoticePlayer = !initialRestorePending && reason !== "load-save"
+      ? safeJsonClone((state.gameState?.players || []).find(canReceiveLocalBoardNotice) || null)
       : null;
-    const previousMissionSeed = state.gameState?.seed;
+    const previousNoticeSeed = state.gameState?.seed;
+    const levelUpNoticeEpoch = crewLevelUpNoticeEpoch;
     let remoteMissionCompletions = [];
+    let remoteLevelUps = [];
     boardLan.version = Math.max(boardLan.version, version);
     boardLan.applying = true;
     let applied = false;
@@ -13437,9 +13442,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         initialLanRestore: wasAwaitingInitialState,
       });
       if (applied) {
-        const restoredMissionPlayer = (state.gameState?.players || []).find((player) => String(player.id) === String(previousMissionPlayer?.id));
-        if (previousMissionSeed === state.gameState?.seed) {
-          remoteMissionCompletions = newlyCompletedMissions(previousMissionPlayer, restoredMissionPlayer);
+        const restoredNoticePlayer = (state.gameState?.players || []).find((player) => String(player.id) === String(previousNoticePlayer?.id));
+        if (previousNoticeSeed === state.gameState?.seed) {
+          remoteMissionCompletions = newlyCompletedMissions(previousNoticePlayer, restoredNoticePlayer);
+          remoteLevelUps = newlyLeveledCrew(previousNoticePlayer, restoredNoticePlayer);
         }
         boardLan.joinedOnce = true;
         boardLan.awaitingInitialState = false;
@@ -13464,8 +13470,11 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       setTimeout(() => {
         boardLan.applying = false;
         if (applied) {
-          const notificationPlayer = (state.gameState?.players || []).find((player) => String(player.id) === String(previousMissionPlayer?.id));
-          if (previousMissionSeed === state.gameState?.seed) remoteMissionCompletions.forEach((mission) => showMissionCompleteToast(mission, notificationPlayer));
+          const notificationPlayer = (state.gameState?.players || []).find((player) => String(player.id) === String(previousNoticePlayer?.id));
+          if (previousNoticeSeed === state.gameState?.seed) {
+            remoteMissionCompletions.forEach((mission) => showMissionCompleteToast(mission, notificationPlayer));
+            if (levelUpNoticeEpoch === crewLevelUpNoticeEpoch) queueCrewLevelUpToast(notificationPlayer, remoteLevelUps);
+          }
           flushBoardLanPendingState();
           scheduleBoardCampaignAutoSave();
           // Applying a remote CPU handoff rendered the die while authority was suspended.
@@ -18454,7 +18463,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return `${log.length}-${hash >>> 0}`;
   }
 
-  function canReceiveMissionCompleteToast(player) {
+  function canReceiveLocalBoardNotice(player) {
     if (!player || isCpuPlayer(player)) return false;
     if (!boardLan.enabled) return true;
     return boardPlayerMatchesLocalUser(player)
@@ -18477,7 +18486,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function showMissionCompleteToast(mission, player = currentPlayer()) {
-    if (!mission || !canReceiveMissionCompleteToast(player) || boardLan.applying) return;
+    if (!mission || !canReceiveLocalBoardNotice(player) || boardLan.applying) return;
     const key = `${state.gameState?.seed || ""}:${player.id}:${mission.id}`;
     if (key === activeMissionCompleteToastKey || missionCompleteToastQueue.some((entry) => entry.key === key)) return;
     missionCompleteToastQueue.push({ key, mission });
@@ -18503,6 +18512,94 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       activeMissionCompleteToastKey = "";
       if (missionCompleteToastQueue.length) showNextMissionCompleteToast();
     }, 5200);
+  }
+
+  const crewLevelUpToastQueue = [];
+  let crewLevelUpToastTimer = 0;
+  let crewLevelUpNoticeEpoch = 0;
+
+  function clearCrewLevelUpToast() {
+    crewLevelUpNoticeEpoch += 1;
+    window.clearTimeout(crewLevelUpToastTimer);
+    crewLevelUpToastTimer = 0;
+    crewLevelUpToastQueue.length = 0;
+    hideCrewLevelUpToast();
+  }
+
+  function hideCrewLevelUpToast() {
+    const toast = document.getElementById("crewLevelUpToast");
+    if (!toast) return;
+    toast.querySelector("[data-level-up-card]").hidden = true;
+    toast.querySelector("img")?.remove();
+    toast.querySelector("[role=status]").textContent = "";
+  }
+
+  function newlyLeveledCrew(previousPlayer, player) {
+    if (!previousPlayer || !player || String(previousPlayer.id) !== String(player.id)) return [];
+    // An accepted live snapshot can contain a co-op reward settled on another seat.
+    // Require the same existing character and an actual EXP increase, not a roster change.
+    return (player.crew || []).flatMap((card, index) => {
+      if (!card?.id) return [];
+      const matches = (previousPlayer.crew || []).filter((previous) => previous?.id === card.id
+        && String(previous.instanceId || "") === String(card.instanceId || ""));
+      const previous = matches.length === 1 ? matches[0] : null;
+      const fromLevel = Number(previous?.level);
+      const toLevel = Number(card.level);
+      if (!(fromLevel > 0 && toLevel > fromLevel && Number(card.totalExp) > Number(previous?.totalExp))) return [];
+      return [{ card, result: { fromLevel, toLevel }, isActive: index === player.activeCrewIndex }];
+    });
+  }
+
+  function queueCrewLevelUpToast(player, entries) {
+    if (!entries.length || boardLan.applying || !canReceiveLocalBoardNotice(player)) return;
+    const raised = entries.filter(({ result }) => result.toLevel > result.fromLevel)
+      .sort((a, b) => Number(b.isActive) - Number(a.isActive));
+    raised.forEach(({ card, result }, index) => {
+      const portraits = cardPortraitsForDisplay(card);
+      crewLevelUpToastQueue.push({
+        name: cardDisplayName(card), portrait: portraits.normal || portraits.idle,
+        fromLevel: result.fromLevel, toLevel: result.toLevel, playCue: index === 0,
+      });
+    });
+    if (!crewLevelUpToastTimer && crewLevelUpToastQueue.length) showNextCrewLevelUpToast();
+  }
+
+  function showNextCrewLevelUpToast() {
+    const toast = document.getElementById("crewLevelUpToast");
+    const entry = crewLevelUpToastQueue.shift();
+    if (!toast || !entry) {
+      crewLevelUpToastTimer = 0;
+      crewLevelUpToastQueue.length = 0;
+      hideCrewLevelUpToast();
+      return;
+    }
+    const card = toast.querySelector("[data-level-up-card]");
+    card.hidden = true;
+    // The fixed board shrinks its entire iframe on narrow windows. Keep this
+    // short notice readable without changing the board or its hit targets.
+    const frame = window.frameElement;
+    const visibleWidth = frame?.id === "boardFixedFrame" ? frame.getBoundingClientRect().width : 0;
+    const scale = visibleWidth > 24 && visibleWidth < window.innerWidth
+      ? (window.innerWidth / visibleWidth) * Math.min(1, (visibleWidth - 24) / toast.offsetWidth) : 1;
+    toast.style.setProperty("--crew-level-up-scale", String(scale));
+    const portrait = card.querySelector(".crew-level-up-portrait");
+    portrait.querySelector("img")?.remove();
+    if (entry.portrait) {
+      const image = document.createElement("img");
+      image.alt = "";
+      image.decoding = "async";
+      image.addEventListener("error", () => image.remove(), { once: true });
+      image.src = entry.portrait;
+      portrait.appendChild(image);
+    }
+    card.querySelector("[data-level-up-name]").textContent = entry.name;
+    card.querySelector("[data-level-up-from]").textContent = `Lv. ${entry.fromLevel}`;
+    card.querySelector("[data-level-up-to]").textContent = `Lv. ${entry.toLevel}`;
+    toast.querySelector("[role=status]").textContent = `${entry.name}從 ${entry.fromLevel} 級升到 ${entry.toLevel} 級`;
+    void card.offsetWidth;
+    card.hidden = false;
+    if (entry.playCue) window.BoardAudio?.playCue?.("levelUp");
+    crewLevelUpToastTimer = window.setTimeout(showNextCrewLevelUpToast, 2400);
   }
 
   function teamMoveAverage(player) {
@@ -56970,6 +57067,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         queueMoveLearnChoice(player, card, choice.moveId);
       });
     });
+    queueCrewLevelUpToast(player, expResults);
     if (expResults.length) {
       recordMissionEvent(player, { type: "crew_exp", amount: 1 });
       if (expResults.some(({ result }) => Number(result.levelsGained || 0) > 0)) {

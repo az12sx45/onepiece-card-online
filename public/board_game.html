@@ -487,6 +487,39 @@
       opacity:1;
       transform:translate(-50%, 0) scale(1);
     }
+    .crew-level-up-toast{
+      position:fixed;z-index:26001;pointer-events:none;left:50%;
+      top:max(calc(12px * var(--crew-level-up-scale,1)), env(safe-area-inset-top));
+      transform:translateX(-50%) scale(var(--crew-level-up-scale,1));transform-origin:top center;
+      width:min(354px, calc(100% - 24px));
+    }
+    .mission-complete-toast.show ~ .crew-level-up-toast{top:max(116px, calc(env(safe-area-inset-top) + 104px))}
+    .crew-level-up-card{
+      position:relative;display:grid;grid-template-columns:48px minmax(0, 1fr);align-items:center;gap:10px;
+      min-height:66px;padding:8px 13px;overflow:hidden;box-sizing:border-box;
+      border:1px solid #dfb865;border-radius:13px;
+      background:linear-gradient(112deg,#243237,#11292c 42%,#0a1a24);color:#fff2d2;
+      box-shadow:0 6px 24px #0009,inset 0 0 15px #e7b34b2e;
+      animation:crew-level-up-in .34s ease-out both;
+    }
+    .crew-level-up-card[hidden]{display:none}
+    .crew-level-up-card::after{
+      content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 33%,#ffe18a45 50%,transparent 65%);
+      animation:crew-level-up-shine .74s ease-out both;
+    }
+    .crew-level-up-portrait{
+      position:relative;display:grid;place-items:center;isolation:isolate;aspect-ratio:1;border-radius:9px;overflow:hidden;
+      border:1px solid #edc773;background:#132f36;color:#ffdc8b;font-size:25px;font-weight:900;
+    }
+    .crew-level-up-portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+    .crew-level-up-kicker{display:block;color:#ffdc84;font-size:12px;font-weight:900;letter-spacing:.13em}
+    .crew-level-up-name{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px;font-weight:850}
+    .crew-level-up-levels{display:flex;align-items:baseline;gap:8px;font-size:14px;line-height:1.15;color:#e7e0ce;font-variant-numeric:tabular-nums}
+    .crew-level-up-levels strong{color:#ffe090;font-size:22px;text-shadow:0 0 12px #ffc56265}
+    .crew-level-up-announcement{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+    @keyframes crew-level-up-in{from{opacity:0;transform:translateY(-9px) scale(.96)}to{opacity:1;transform:none}}
+    @keyframes crew-level-up-shine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+    @media(prefers-reduced-motion:reduce){.crew-level-up-card{animation:none}.crew-level-up-card::after{content:none;animation:none}}
     .mission-mainline-guidance{
       padding:10px 14px;border:1px solid rgba(230,190,111,.6);border-radius:8px;
       color:#ffdf9b;background:rgba(7,29,36,.95);font-size:13px;line-height:1.5;
@@ -27748,6 +27781,17 @@
     <div class="mission-toast-title" data-mission-toast-title>任務完成</div>
     <div class="mission-toast-sub" data-mission-toast-sub>可以領取任務獎勵。</div>
   </div>
+  <div class="crew-level-up-toast" id="crewLevelUpToast">
+    <span class="crew-level-up-announcement" role="status" aria-live="polite" aria-atomic="true"></span>
+    <div class="crew-level-up-card" data-level-up-card aria-hidden="true" hidden>
+      <span class="crew-level-up-portrait">↑</span>
+      <div>
+        <span class="crew-level-up-kicker">✦ 角色升等</span>
+        <span class="crew-level-up-name" data-level-up-name></span>
+        <span class="crew-level-up-levels"><span data-level-up-from></span> → <strong data-level-up-to></strong></span>
+      </div>
+    </div>
+  </div>
   <div class="evolution-hud" id="evolutionHud" aria-live="polite" aria-atomic="true" aria-hidden="true">
     <section class="evolution-card">
       <div class="evolution-material-stage">
@@ -27810,8 +27854,8 @@
   <script src="js/board_sea_event_visuals.js?v=20260922-adventure-art-v1"></script>
   <script src="js/board_adventure_art.js?v=20260922-adventure-art-v1"></script>
   <script src="js/board_art_collection.js?v=20260922-adventure-art-v1"></script>
-  <script src="js/board_audio_ui.js?v=20260921-board-audio-v1"></script>
+  <script src="js/board_audio_ui.js?v=20261107-crew-level-up-v1"></script>
   <script src="js/board_hotkeys.js?v=20260922-hotkeys-v1"></script>
-  <script src="js/board_game.js?v=20261012-smooth-sailing-v1"></script>
+  <script src="js/board_game.js?v=20261107-crew-level-up-v1"></script>
 </body>
 </html>
