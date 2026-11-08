@@ -6,6 +6,9 @@ const FILES := ["native-turn-control-sync.js", "native_battle_stage.gdc", "origi
 const MAX_STATE_BYTES := 512 * 1024
 const STATE_SCHEMA := 1
 const BUNDLED := ""
+const QA_MANIFEST_LIMIT := 8192
+const QA_MANIFEST_FILE := "qa-envelope.json"
+const UNUSED_CACHE_SECONDS := 7 * 24 * 60 * 60
 
 var _transport: Node
 var _identity: String
@@ -65,6 +68,7 @@ func setup(config: Dictionary) -> void:
 		_message = "上次試用未完成，已回到可用版本。"
 	_boot_pending = _disk.pending
 	_ready_to_update = true
+	_prune_cache()
 	check_remote.call_deferred()
 
 func state() -> Dictionary:
@@ -92,7 +96,8 @@ func state() -> Dictionary:
 		"boardRevision": int(current_manifest.get("sequence", 0)),
 		"pendingRestart": staged and not pending_launch, "pendingLaunch": pending_launch,
 		"restartRequired": _blocked_until_restart, "canRollback": current != BUNDLED or pending != BUNDLED,
-		"fetchedBytes": _received, "reusedBytes": _reused,
+		"fetchedBytes": _received if _installing else int(_disk.get("fetchedBytes", 0)),
+		"reusedBytes": _reused if _installing else int(_disk.get("reusedBytes", 0)),
 		"downloadedBytes": _received + _reused, "totalBytes": _total}
 
 func check_remote() -> void:
@@ -102,9 +107,28 @@ func check_remote() -> void:
 	_next_check_ms = Time.get_ticks_msec() + 60000
 	var result: Dictionary = await _transport.fetch_manifest()
 	_checking = false
+	if not _valid_manifest(result) or int(result.manifest.sequence) < 2:
+		result = _read_local_qa_manifest()
 	if _valid_manifest(result):
 		_remote = result
+	else:
+		_remote = {}
 	changed.emit()
+
+func _read_local_qa_manifest() -> Dictionary:
+	if int(_disk.highWater) != 0:
+		return {}
+	var folder := DirAccess.open(_directory)
+	if folder == null or folder.is_link(QA_MANIFEST_FILE):
+		return {}
+	var file := FileAccess.open(_directory.path_join(QA_MANIFEST_FILE), FileAccess.READ)
+	if file == null or file.get_length() > QA_MANIFEST_LIMIT:
+		return {}
+	var result: Dictionary = _transport.verify_envelope(file.get_buffer(file.get_length()))
+	file.close()
+	if _valid_manifest(result) and int(result.manifest.sequence) == 1 and result.manifest.version == "Board QA v070.1":
+		return result
+	return {}
 
 func install() -> bool:
 	if not _ready_to_update or _installing or _checking or _disk.pending != BUNDLED or _blocked_until_restart or not _offers_update():
@@ -232,6 +256,8 @@ func _install(result: Dictionary, operation: int) -> void:
 	var next := _disk.duplicate()
 	next.highWater = int(result.manifest.sequence)
 	next.pending = Marshalls.raw_to_base64(result.envelope)
+	next.fetchedBytes = _received
+	next.reusedBytes = _reused
 	if not _save(next):
 		_finish_install("無法保存遊戲更新，已保留舊版。")
 		return
@@ -304,6 +330,10 @@ func _read_state() -> bool:
 		return false
 	_disk = {"highWater": int(high_water), "active": value.active, "previous": value.previous,
 		"pending": value.pending, "trial": value.trial}
+	for key in ["fetchedBytes", "reusedBytes"]:
+		var count: Variant = value.get(key, 0)
+		if (count is int or count is float) and count >= 0 and count <= 32 * 1024 * 1024 and count == int(count):
+			_disk[key] = int(count)
 	return true
 
 func _save(next: Dictionary) -> bool:
@@ -365,6 +395,28 @@ func _file_matches(path: String, row: Dictionary) -> bool:
 
 func _cas_path(digest: String) -> String:
 	return _directory.path_join("cas").path_join(digest)
+
+func _prune_cache() -> void:
+	var folder := DirAccess.open(_directory.path_join("cas"))
+	if folder == null:
+		return
+	var keep := {}
+	for encoded: String in [_disk.active, _disk.previous, _disk.pending]:
+		if encoded == BUNDLED:
+			continue
+		var manifest := _manifest(encoded)
+		if manifest.is_empty():
+			return
+		for row in manifest.files:
+			keep[row.sha256] = true
+	for name in folder.get_files():
+		var digest := name.trim_suffix(".part")
+		if not _digest(digest) or folder.is_link(name):
+			continue
+		var modified := FileAccess.get_modified_time(_directory.path_join("cas").path_join(name))
+		var expired := modified > 0 and Time.get_unix_time_from_system() - modified > UNUSED_CACHE_SECONDS
+		if name.ends_with(".part") or (expired and not keep.has(digest)):
+			folder.remove(name)
 
 func _digest(value: Variant) -> bool:
 	if not value is String or value.length() != 64:
