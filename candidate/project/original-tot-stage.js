@@ -1,14 +1,5 @@
 'use strict';
 // Exact original persistent-stage state transitions. Native drawing is supplied separately.
-exports.create=function({refs,setWorld,setBoss,clearTimeout,setTimeout,setInterval,clearInterval,showStatus,hooks={},visualRandom}){
-let latestView=null;
-const setTotMusicaWorldStage=setWorld,setTotMusicaBossStage=setBoss;
-// The browser presentation had its own realm. Its rolling faces must not
-// consume the native game's random stream.
-const Math=Object.create(globalThis.Math);Math.random=()=>{if(!visualRandom)throw Error('Tot cinematic visual RNG required');return visualRandom();};
-const invoke=(name,...args)=>{if(typeof hooks[name]!=='function')throw Error('Unbound original Tot cinematic hook '+name);return hooks[name](...args);};
-const clearDamageNumbers=()=>invoke('clearDamageNumbers'),moveFxRuntime=()=>invoke('moveFxRuntime'),playStageShake=()=>invoke('playStageShake'),playCastEffectSound=value=>invoke('playCastEffectSound',value),playHitEffectSound=value=>invoke('playHitEffectSound',value),moveFxSound=(...args)=>invoke('moveFxSound',...args),restartAnimation=(...args)=>invoke('restartAnimation',...args),spawnBattleDamageNumber=value=>invoke('spawnBattleDamageNumber',value),renderPanel=view=>invoke('renderPanel',view);
-const PLACEHOLDER_BATTLE_PORTRAIT = "images/board/battle/portraits/placeholder/normal.webp";
 const COSMETIC_FRAME_CONFIGS = {
     threeDTwoY: {
       layers: {
@@ -559,6 +550,26 @@ const COSMETIC_FRAME_ALIAS = {
     postgameloki: "postgameLoki",
     postgamearamaki: "postgameAramaki",
   };
+function normalizeCosmeticFrameId(value = "") {
+    const raw = String(value || "").trim();
+    if (raw === "nikaFrame" || COSMETIC_FRAME_CONFIGS[raw]) return raw;
+    const key = raw.replace(/[\s_-]+/g, "").toLowerCase();
+    if (!key) return "";
+    return COSMETIC_FRAME_ALIAS[key] || "";
+  }
+exports.normalizeCosmeticFrameId = normalizeCosmeticFrameId;
+exports.frame = id => COSMETIC_FRAME_CONFIGS[normalizeCosmeticFrameId(id)] || null;
+
+// Exact original persistent-stage state transitions. Native drawing is supplied separately.
+exports.create=function({refs,setWorld,setBoss,clearTimeout,setTimeout,setInterval,clearInterval,showStatus,hooks={},visualRandom}){
+let latestView=null;
+const setTotMusicaWorldStage=setWorld,setTotMusicaBossStage=setBoss;
+// The browser presentation had its own realm. Its rolling faces must not
+// consume the native game's random stream.
+const Math=Object.create(globalThis.Math);Math.random=()=>{if(!visualRandom)throw Error('Tot cinematic visual RNG required');return visualRandom();};
+const invoke=(name,...args)=>{if(typeof hooks[name]!=='function')throw Error('Unbound original Tot cinematic hook '+name);return hooks[name](...args);};
+const clearDamageNumbers=()=>invoke('clearDamageNumbers'),moveFxRuntime=()=>invoke('moveFxRuntime'),playStageShake=()=>invoke('playStageShake'),playCastEffectSound=value=>invoke('playCastEffectSound',value),playHitEffectSound=value=>invoke('playHitEffectSound',value),moveFxSound=(...args)=>invoke('moveFxSound',...args),restartAnimation=(...args)=>invoke('restartAnimation',...args),spawnBattleDamageNumber=value=>invoke('spawnBattleDamageNumber',value),renderPanel=view=>invoke('renderPanel',view);
+const PLACEHOLDER_BATTLE_PORTRAIT = "images/board/battle/portraits/placeholder/normal.webp";
 let totMusicaBossPreviewOpen = false;
 let totMusicaDualAwaitingEvent = false;
 let totMusicaDualAnimationActive = false;
@@ -590,13 +601,6 @@ function carryItemHudPills(carryItem) {
     return `
       <button class="pill carry-pill${subItems.length ? " carry-arsenal-pill" : ""}" type="button" data-carry-popover data-carry-name="${escapeHtml(carryItem.name || "攜帶物")}" data-carry-status="${escapeHtml(carryItem.status || "戰鬥中生效")}" data-carry-summary="${escapeHtml(carryItem.summary || "沒有登錄效果。")}" ${subItemsPayload ? `data-carry-sub-items="${escapeHtml(subItemsPayload)}"` : ""}>攜帶物：${escapeHtml(carryItem.name || "無")}</button>
     `;
-  }
-function normalizeCosmeticFrameId(value = "") {
-    const raw = String(value || "").trim();
-    if (raw === "nikaFrame" || COSMETIC_FRAME_CONFIGS[raw]) return raw;
-    const key = raw.replace(/[\s_-]+/g, "").toLowerCase();
-    if (!key) return "";
-    return COSMETIC_FRAME_ALIAS[key] || "";
   }
 function totMusicaDualPortrait(source = {}, states = []) {
     const portraits = source?.battlePortraits && typeof source.battlePortraits === "object" ? source.battlePortraits : {};
@@ -1204,5 +1208,5 @@ function playTotMusicaEnemyDualStrikeFx(event = {}) {
       renderPanel(latestView);
     }, duration + 60);
   }
-return {sync(view){latestView=view;syncTotMusicaPersistentStage(view);},toggle(){toggleTotMusicaBossPreview();},presentation(active,awaiting=false){totMusicaDualAnimationActive=active;totMusicaDualAwaitingEvent=awaiting;},play(event){if(event.type==='tot-musica-dual-sync')playTotMusicaDualSyncFx(event);else if(event.type==='tot-musica-enemy-dual-strike')playTotMusicaEnemyDualStrikeFx(event);else throw Error('Unknown Tot cinematic '+event.type);},clear:clearTotMusicaDualSyncFx,animationActive:()=>totMusicaDualAnimationActive,portrait:totMusicaDualPortrait,carry:carryItemHudPills,frame(id){return COSMETIC_FRAME_CONFIGS[normalizeCosmeticFrameId(id)]||null;}};
+return {sync(view){latestView=view;syncTotMusicaPersistentStage(view);},toggle(){toggleTotMusicaBossPreview();},presentation(active,awaiting=false){totMusicaDualAnimationActive=active;totMusicaDualAwaitingEvent=awaiting;},play(event){if(event.type==='tot-musica-dual-sync')playTotMusicaDualSyncFx(event);else if(event.type==='tot-musica-enemy-dual-strike')playTotMusicaEnemyDualStrikeFx(event);else throw Error('Unknown Tot cinematic '+event.type);},clear:clearTotMusicaDualSyncFx,animationActive:()=>totMusicaDualAnimationActive,portrait:totMusicaDualPortrait,carry:carryItemHudPills,frame:exports.frame};
 };

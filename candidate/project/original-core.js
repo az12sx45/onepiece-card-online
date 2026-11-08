@@ -49575,20 +49575,23 @@ function ensureDeferredImageSource(image) {
     if (!image.getAttribute("src") && image.dataset?.src) image.src = image.dataset.src;
     return image;
   }
-function decodeImageWhenReady(image) {
-    if (!image?.getAttribute("src")) return Promise.resolve();
+function decodeImageWhenReady(image, timeoutMs = IMAGE_DECODE_WAIT_TIMEOUT_MS) {
+    if (!image?.getAttribute("src")) return Promise.resolve(false);
     const ready = typeof image.decode === "function"
-      ? image.decode().catch(() => {})
+      ? image.decode().then(() => true, () => false)
       : image.complete
-        ? Promise.resolve()
+        ? Promise.resolve(image.naturalWidth > 0)
         : new Promise((resolve) => {
-          image.addEventListener("load", resolve, { once: true });
-          image.addEventListener("error", resolve, { once: true });
+          image.addEventListener("load", () => resolve(true), { once: true });
+          image.addEventListener("error", () => resolve(false), { once: true });
         });
-    return Promise.race([
-      ready,
-      new Promise((resolve) => window.setTimeout(resolve, IMAGE_DECODE_WAIT_TIMEOUT_MS)),
-    ]);
+    return new Promise((resolve) => {
+      const timer = window.setTimeout(() => resolve(false), timeoutMs);
+      ready.then((decoded) => {
+        window.clearTimeout(timer);
+        resolve(decoded);
+      });
+    });
   }
 function ensureDeferredImageDecoded(image) {
     return decodeImageWhenReady(ensureDeferredImageSource(image));
@@ -66278,6 +66281,21 @@ function evolutionMaterialSourceRows(itemId) {
   }
 }
 
+function evolutionMaterialSourceIsland(row) {
+  const game = state.gameState;
+  if (!game?.boardData?.islands) return null;
+  const viewer = mapViewerPlayer();
+  if (row.islandId) {
+    const island = getIslandById(row.islandId);
+    return island && isIslandVisibleToPlayer(viewer, island) ? island : null;
+  }
+  if (row.islandKind) {
+    return game.boardData.islands.find((island) => getEffectiveIslandKind(island) === row.islandKind
+      && isIslandVisibleToPlayer(viewer, island)) || null;
+  }
+  return null;
+}
+
 function evolutionMaterialText(form) {
     const costs = evolutionMaterialCosts(form);
     if (!costs.length) return "無材料";
@@ -66432,7 +66450,8 @@ async function playNextItemReveal() {
       return;
     }
     itemRevealActive = true;
-    const revealImagesReady = [ensureDeferredImageDecoded(refs.itemRevealPanelFrame)];
+    const waitForArtwork = (image) => decodeImageWhenReady(image, 1800);
+    const revealImagesReady = [waitForArtwork(ensureDeferredImageSource(refs.itemRevealPanelFrame))];
     const image = itemImageForDisplay(itemDef);
     const clueBossDef = itemDef.effect?.kind === "postgame_york_clue"
       ? postgameBossDef(itemDef.effect.bossKey)
@@ -66449,19 +66468,19 @@ async function playNextItemReveal() {
       refs.itemRevealImage.src = image;
       refs.itemRevealImage.alt = itemDef.name;
       refs.itemRevealImage.hidden = Boolean(clueBossDef) || !image;
-      if (!clueBossDef && image) revealImagesReady.push(decodeImageWhenReady(refs.itemRevealImage));
+      if (!clueBossDef) revealImagesReady.push(waitForArtwork(refs.itemRevealImage));
     }
     if (clueReveal) {
       clueReveal.hidden = !clueBossDef;
       if (clueBossDef) {
         if (clueRevealFrame) {
           clueRevealFrame.src = portablePrefetchedBoardAssetUrl(image || "images/board/postgame_clue_ui/york_clue_playing_card_frame_v2.webp");
-          revealImagesReady.push(decodeImageWhenReady(clueRevealFrame));
+          revealImagesReady.push(waitForArtwork(clueRevealFrame));
         }
         if (clueRevealIsland) {
           clueRevealIsland.src = mapDisplayAssetUrl(clueBossDef.islandImage || ISLAND_IMAGE_MAP.postgame_boss);
           clueRevealIsland.alt = clueBossDef.name;
-          revealImagesReady.push(decodeImageWhenReady(clueRevealIsland));
+          revealImagesReady.push(waitForArtwork(clueRevealIsland));
         }
         if (clueRevealRank) {
           const clueLabel = postgameClueCardLabel(itemDef.effect.clueNumber || clueBossDef.clueNumber);
@@ -66474,8 +66493,16 @@ async function playNextItemReveal() {
         }
       }
     }
-    await Promise.all(revealImagesReady);
+    const artworkReady = (await Promise.all(revealImagesReady)).every(Boolean);
     if (!itemRevealActive || !refs.itemRevealHud) return;
+    if (!artworkReady) {
+      // The native reveal cannot receive a tap until its artwork is ready.
+      // The item has already been granted, so release the UI and turn gates.
+      hideItemRevealHud();
+      window.setTimeout(playNextItemReveal, 120);
+      shared.showToast(`${itemDef.name}已加入背包。`);
+      return;
+    }
     refs.itemRevealHud.className = `item-reveal-hud show ${normalizeGameItemCategory(itemDef.category)}${clueBossDef ? " postgame-clue" : ""}`;
     refs.itemRevealHud.setAttribute("aria-hidden", "false");
     itemRevealTimer = window.setTimeout(() => {
@@ -69444,11 +69471,20 @@ function openCharacterDetail(player, index, options = {}) {
     const canEvolveFromDetail = Boolean(nextForm && nextStatus?.ok);
     const evolutionStageLine = evolutionStageSummaryText(card);
     const evolutionLine = evolutionStatusText(player, card);
+    const materialMapSources = new Map();
     const evolutionGuide = evolutionMaterialGuideCosts(card).map(({ itemId, quantity }) => ({
       itemId,
       name: gameItemDef(itemId)?.name || itemId,
       quantity,
-      rows: evolutionMaterialSourceRows(itemId).map(({ location, challenge, requirement, reward }) => ({ location, challenge, requirement, reward })),
+      rows: evolutionMaterialSourceRows(itemId).map((source, index) => {
+        const { location, challenge, requirement, reward } = source;
+        const row = { location, challenge, requirement, reward };
+        if (evolutionMaterialSourceIsland(source)) {
+          row.mapKey = `crewMaterialMap-${itemId}-${index}`;
+          materialMapSources.set(row.mapKey, source);
+        }
+        return row;
+      }),
     }));
     const portraits = cardPortraitsForDisplay(card);
     const fallbackInitial = String(cardDisplayName(card) || "?").slice(0, 1);
@@ -69506,6 +69542,25 @@ function openCharacterDetail(player, index, options = {}) {
         <footer class="crew-detail-footer"><button type="button" class="modal-btn secondary" id="closeCharacterDetailBtn">${returnTo === "crewManage" ? "返回名冊" : "關閉"}</button></footer>
       </section>
     `, "crew-detail-nautical-modal");
+    for (const [key, source] of materialMapSources) {
+      const button = document.getElementById(key);
+      button?.addEventListener("click", () => {
+        const island = evolutionMaterialSourceIsland(source);
+        if (!island) {
+          button.disabled = true;
+          shared.showToast("目前無法定位這個地點。");
+          return;
+        }
+        const point = nodeToPx(island);
+        state.autoCenterEnabled = false;
+        closeModal();
+        panToBoardPoint(point.x, point.y, {
+          immediate: window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches,
+          scale: Math.max(state.panZoom.scale, 0.88),
+        });
+        shared.showToast(`地圖已定位：${island.name}`);
+      });
+    }
     document.getElementById("evolveCrewFromDetailBtn")?.addEventListener("click", () => evolveCrewCard(player, index));
     document.getElementById("trainingDetailFromCrewBtn")?.addEventListener("click", () => openTrainingDetailModal(player, index, { returnTo }));
     document.getElementById("setCrewCaptainFromDetailBtn")?.addEventListener("click", () => {
@@ -106276,8 +106331,21 @@ function confirmJudicialClearChestChoice(player, itemId, choiceId) {
     addLog(`${player.name} 打開${itemDef.name}，獲得 ${rewards.join("、")}。`);
     emitItemUseBoardEvent(player, itemDef, `${player.name} 打開${itemDef.name}。`);
     recordMissionEvent(player, { type: "use_item_category", category: "key", itemId: itemDef.id, itemName: itemDef.name });
+    const backpack = { pocketId: choice?.type === "held" ? "held" : "key", itemName: choice?.name || "被打穿的旗幟" };
+    if (itemRevealIsPending()) {
+      const { seed, round } = state.gameState;
+      closeModal();
+      waitForItemRevealIdle(() => {
+        if (state.gameState?.seed === seed && state.gameState?.round === round
+          && String(currentPlayer()?.id) === String(player.id) && !refs.modalBack?.classList.contains("open")) {
+          openBackpackModal(backpack);
+        }
+      });
+      renderAll();
+      return;
+    }
     renderAll();
-    openBackpackModal({ pocketId: choice?.type === "held" ? "held" : "key", itemName: choice?.name || "被打穿的旗幟" });
+    openBackpackModal(backpack);
   }
 function openJudicialClearChest(player, itemId = "judicial_clear_chest") {
     const itemDef = gameItemDef(itemId);
@@ -112240,7 +112308,9 @@ if (!boardLanStarted) openSetupStep();
   }
 setupCpuAutomation();
 };
-api.presentation.startupAssets=()=>OPENING_STORY_DEFINITION;
+api.presentation.startupAssets = () => (campaignInitialLoadRequested || query.get("skipOpeningStory") === "1")
+  ? null
+  : OPENING_STORY_DEFINITION;
 api.presentation.cpuAutomationStatus=()=>({busy:cpuAuto.busy,timer:!!cpuAuto.timer,error:!!cpuAuto.lastError,idle:cpuAuto.lastResult==="目前沒有可自動處理的動作。",canRun:shouldRunCpuAutoStep(),canDrive:canLocalDriveCpuPlayer(cpuAutomationTargetPlayer()),host:localPlayerIsLobbyHost(),connected:boardLan.connected,awaiting:boardLan.awaitingInitialState,applying:boardLan.applying,remoteBusy:remoteBoardPlaybackBusy(),actionLocked:isGameActionLocked(),diceDisabled:!!refs.rollDiceBtn.disabled,resolution:!!state.gameState.resolutionLock,moving:!!state.gameState.movementAnimating,rolling:!!state.gameState.diceRolling,modal:refs.modalBack.classList.contains("open")});
 return api;
 };

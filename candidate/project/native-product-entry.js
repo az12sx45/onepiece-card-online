@@ -11,6 +11,9 @@ class NativeProductEntry extends Node{
    try{
     const core=require('./original-core'),sync=require('./native-turn-control-sync');
     if(typeof core.create!=='function'||typeof sync.create!=='function'||!host.call('board_program_preflight'))throw Error('Board program failed preflight');
+    for(const moduleName of JSON.parse(host.call('board_program_preflight_modules'))){
+     if(require('./'+moduleName)==null)throw Error('Board module failed preflight');
+    }
     boardRevision=sync.boardUpdateRevision||'';
    }catch(_){host.call_deferred('board_program_failed');return;}
   }

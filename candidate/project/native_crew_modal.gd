@@ -63,8 +63,25 @@ func _new_material_row(index: int) -> Dictionary:
 	button.add_theme_font_size_override("font_size",15);button.add_theme_color_override("font_color",Color("f5e5c5"));button.add_theme_stylebox_override("normal",_material_style(Color("142c3a"),Color("4d6c75")));button.add_theme_stylebox_override("hover",_material_style(Color("1c3948"),Color("83a8aa")));button.add_theme_stylebox_override("pressed",_material_style(Color("24414b"),Color("d3ad66")))
 	row.add_child(button);button.pressed.connect(_toggle_material.bind(index))
 	var panel:=PanelContainer.new();panel.add_theme_stylebox_override("panel",_material_style(Color("102431"),Color("546558")));row.add_child(panel);panel.hide()
-	var copy:=Label.new();copy.name="SourceCopy";copy.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;copy.add_theme_font_size_override("font_size",14);copy.add_theme_color_override("font_color",Color("e9e1c8"));panel.add_child(copy)
-	return {"root":row,"button":button,"panel":panel,"copy":copy,"label":""}
+	var stack:=VBoxContainer.new();stack.add_theme_constant_override("separation",10);panel.add_child(stack)
+	return {"root":row,"button":button,"panel":panel,"stack":stack,"sources":[],"label":""}
+func _new_material_source(stack: VBoxContainer,index: int) -> Dictionary:
+	var section:=VBoxContainer.new()
+	section.add_theme_constant_override("separation",5)
+	stack.add_child(section)
+	var copy:=Label.new()
+	copy.name="SourceCopy" if index==0 else "SourceCopy"+str(index)
+	copy.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	copy.add_theme_font_size_override("font_size",14)
+	copy.add_theme_color_override("font_color",Color("e9e1c8"))
+	section.add_child(copy)
+	var locate:=Button.new()
+	locate.text="地圖定位"
+	locate.custom_minimum_size.y=44
+	locate.add_theme_stylebox_override("normal",_material_style(Color("142c3a"),Color("4d6c75")))
+	section.add_child(locate)
+	locate.pressed.connect(func():command_requested.emit(str(locate.get_meta("key"))))
+	return {"section":section,"copy":copy,"locate":locate}
 func _populate_materials(entries: Array) -> void:
 	material_guide.visible=not entries.is_empty()
 	while material_rows.size()<entries.size():material_rows.append(_new_material_row(material_rows.size()))
@@ -72,15 +89,29 @@ func _populate_materials(entries: Array) -> void:
 		var row: Dictionary=material_rows[i];row.root.visible=i<entries.size()
 		if not row.root.visible:continue
 		var entry: Dictionary=entries[i];row.label="%s ×%d" % [str(entry.name),int(entry.quantity)];row.button.tooltip_text=row.label
-		var sources:=PackedStringArray()
-		for source in entry.rows:
+		var sources: Array=entry.rows if not entry.rows.is_empty() else [{}]
+		while row.sources.size()<sources.size():row.sources.append(_new_material_source(row.stack,row.sources.size()))
+		for j in range(row.sources.size()):
+			var source_view: Dictionary=row.sources[j]
+			source_view.section.visible=j<sources.size()
+			if not source_view.section.visible:continue
+			var source: Dictionary=sources[j]
 			var lines:=PackedStringArray()
 			for field in [["location","地點"],["challenge","關卡／任務"],["requirement","條件"],["reward","取得方式"]]:
 				var value:=str(source.get(field[0],""))
 				if not value.is_empty():lines.append("%s：%s" % [field[1],value])
-			if not lines.is_empty():sources.append("\n".join(lines))
-		row.copy.text="\n\n".join(sources) if not sources.is_empty() else "尚未登錄取得方式。"
+			source_view.copy.text="\n".join(lines) if not lines.is_empty() else "尚未登錄取得方式。"
+			var key:=str(source.get("mapKey",""))
+			source_view.locate.set_meta("key",key)
+			source_view.locate.disabled=false
+			source_view.locate.visible=not key.is_empty()
 	_set_expanded_material(-1)
+func set_material_locator_disabled(key: String,disabled: bool) -> void:
+	for row in material_rows:
+		for source in row.sources:
+			if source.locate.get_meta("key","")==key:
+				source.locate.disabled=disabled
+				return
 func _toggle_material(index: int) -> void:
 	_set_expanded_material(-1 if expanded_material==index else index)
 	if expanded_material>=0:detail_scroll.ensure_control_visible.call_deferred(material_rows[index].button)

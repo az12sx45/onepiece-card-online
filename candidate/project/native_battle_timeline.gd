@@ -29,6 +29,7 @@ var turn_banner: Control
 var replacement_gate := ""
 var knockout_done: Dictionary = {}
 var knockout_tweens: Dictionary = {}
+var knockout_epoch := 0
 var result_gate := ""
 var result_notice_epoch := -1
 var nika_heartbeat: Control
@@ -158,7 +159,7 @@ func present(id: String, event: Dictionary, profile: Dictionary, packet: Diction
 		await dice.message(str(event.get("targetName","綠牛／荒牧"))+" 倒下！","",float(event.get("duration",1100)))
 	elif type == "postgame-aramaki-revive":
 		pose_epochs.enemy=int(pose_epochs.get("enemy",0))+1
-		knockout_done.erase("enemy")
+		_clear_knockout("enemy")
 		view.portraits.enemy.modulate.a=1.0
 		view.set_pose("enemy","")
 		var healing: Dictionary=event.duplicate(true);healing.type="heal"
@@ -186,17 +187,23 @@ func present(id: String, event: Dictionary, profile: Dictionary, packet: Diction
 func reset_actor_presentation() -> void:
 	suspend_result()
 	replacement_gate=""
-	for tween in knockout_tweens.values():
-		if is_instance_valid(tween):tween.kill()
-	knockout_tweens.clear()
-	knockout_done.clear()
 	for side in ["player","enemy"]:
+		_clear_knockout(side)
 		pose_epochs[side]=int(pose_epochs.get(side,0))+1
 		view.portraits[side].stop_attack_motion()
 		view.portraits[side].stop_hit_motion()
 
 func sync_replacement(model: Dictionary) -> void:
 	var battle: Dictionary=model.get("battle",{})
+	for side in ["player","enemy"]:
+		var saved: Dictionary=knockout_done.get(side,{})
+		if saved.is_empty():continue
+		var actor: Dictionary=model.get("activeCard" if side=="player" else "enemy",{})
+		var same_actor: bool=view.actor_keys.get(side,"")==saved.key
+		if not same_actor or float(actor.get("currentHp",1.0))>0 or _keeps_knockout_portrait(side,battle)!=saved.kept:
+			_clear_knockout(side)
+			if same_actor and view.pose_overrides.get(side,"") in ["dizzy","hitPlayerSide","hitEnemySide"]:
+				view.set_pose(side,"")
 	if not battle.get("needsReplacement",false) or battle.get("luffyGearFifthAwakeningPending",false) or battle.get("keepPlayerPortraitOnKnockout",false):
 		replacement_gate=""
 		return
@@ -252,45 +259,69 @@ func _replacement_after_animation(key: String) -> void:
 		await _knockout("player",str(view.model.activeCard.name))
 	if replacement_gate == key: view.show_replacement()
 
+func _keeps_knockout_portrait(side: String, battle: Dictionary) -> bool:
+	return side=="player" and (battle.get("keepPlayerPortraitOnKnockout",false) or battle.get("luffyGearFifthAwakeningPending",false))
+
+func _clear_knockout(side: String) -> void:
+	var saved: Dictionary=knockout_done.get(side,{})
+	if saved.has("notice_epoch") and saved.notice_epoch==dice.epoch:
+		dice.epoch+=1
+		dice.hide()
+	knockout_done.erase(side)
+	var tween: Tween=knockout_tweens.get(side)
+	if is_instance_valid(tween):tween.kill()
+	knockout_tweens.erase(side)
+	view.portraits[side].stop_knockout_motion()
+
+func _knockout_current(side: String, token: int, result_key: String) -> bool:
+	var saved: Dictionary=knockout_done.get(side,{})
+	if saved.get("token")!=token:return false
+	if view.actor_keys.get(side,"")!=saved.key or (not result_key.is_empty() and result_gate!=result_key):
+		_clear_knockout(side)
+		return false
+	return true
+
 func _knockout(side: String, label: String, result_key: String="") -> void:
 	var key: String=view.actor_keys.get(side,"")
-	if knockout_done.get(side,"") == key: return
-	knockout_done[side]=key
+	var actor: Dictionary=view.model.get("activeCard" if side=="player" else "enemy",{})
+	if key.is_empty() or float(actor.get("currentHp",1.0))>0 or knockout_done.get(side,{}).get("key")==key:return
+	_clear_knockout(side)
+	knockout_epoch+=1
+	var token:=knockout_epoch
+	var kept:=_keeps_knockout_portrait(side,view.model.get("battle",{}))
+	knockout_done[side]={"key":key,"token":token,"kept":kept}
 	pose_epochs[side]=int(pose_epochs.get(side,0))+1
-	view.set_pose(side,"hitPlayerSide" if side == "player" else "hitEnemySide")
-	if side == "player" and (view.model.battle.get("keepPlayerPortraitOnKnockout",false) or view.model.battle.get("luffyGearFifthAwakeningPending",false)):
+	var hit_pose: String="hitPlayerSide" if side=="player" else "hitEnemySide"
+	if kept:
+		view.set_pose(side,hit_pose)
+		knockout_done[side].notice_epoch=dice.epoch+1
 		dice.message(label+" 瀕死！","",760)
 		return
-	await _wait(1250)
-	if not result_key.is_empty() and result_gate!=result_key:
-		if knockout_done.get(side,"")==key:knockout_done.erase(side)
-		return
-	if view.actor_keys.get(side,"") != key: return
+	# Match the desktop KO lead-in: an existing hit pose becomes dizzy immediately.
+	var already_hit: bool=view.pose_overrides.get(side,"") in ["hit",hit_pose,"dizzy"]
+	if not already_hit:
+		view.set_pose(side,hit_pose)
+		await _wait(260)
+		if not _knockout_current(side,token,result_key):return
+	view.set_pose(side,"dizzy")
+	await _wait(900 if already_hit else 990)
+	if not _knockout_current(side,token,result_key):return
+	var portrait: Control=view.portraits[side]
+	portrait.start_knockout_motion()
 	var tween:=create_tween()
 	knockout_tweens[side]=tween
-	tween.tween_property(view.portraits[side],"modulate:a",0.0,1.05)
+	tween.tween_method(portrait.sample_knockout_motion,0.0,1.0,1.05)
 	while tween.is_running():
 		await get_tree().process_frame
-		if view.actor_keys.get(side,"") != key:
-			tween.kill()
-			if knockout_tweens.get(side)==tween:knockout_tweens.erase(side)
-			return
-		if not result_key.is_empty() and result_gate!=result_key:
-			tween.kill()
-			if knockout_tweens.get(side)==tween:knockout_tweens.erase(side)
-			if view.actor_keys.get(side,"")==key:view.portraits[side].modulate.a=1.0
-			if knockout_done.get(side,"")==key:knockout_done.erase(side)
-			return
+		if not _knockout_current(side,token,result_key):return
 	if knockout_tweens.get(side)==tween:knockout_tweens.erase(side)
-	if view.actor_keys.get(side,"") != key: return
+	if not _knockout_current(side,token,result_key):return
 	await _wait(120)
-	if not result_key.is_empty() and result_gate!=result_key:
-		if view.actor_keys.get(side,"")==key:view.portraits[side].modulate.a=1.0
-		if knockout_done.get(side,"")==key:knockout_done.erase(side)
-		return
+	if not _knockout_current(side,token,result_key):return
 	# Finish the announcement before exposing the replacement buttons, so the
 	# native banner cannot cover the candidates or consume their touch area.
-	if not result_key.is_empty():result_notice_epoch=dice.epoch+1
+	knockout_done[side].notice_epoch=dice.epoch+1
+	if not result_key.is_empty():result_notice_epoch=knockout_done[side].notice_epoch
 	await dice.message(label+(" 瀕死！" if side == "player" else " 倒下！"),"",760)
 
 func _wait(ms: float) -> void:

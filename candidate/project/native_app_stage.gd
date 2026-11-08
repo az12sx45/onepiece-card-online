@@ -66,6 +66,7 @@ var cpu_ship_menu: Control
 var fleet_modal: Control
 var ship_info_modal: Control
 var codex_modal: Control
+var adventure_gallery: Control
 var water_seven_page: Control
 var marineford_page: Control
 var impel_down_page: Control
@@ -114,6 +115,10 @@ func _ready() -> void:
 	get_tree().node_added.connect(_watch_audio_control)
 	_watch_audio_subtree(self)
 	game_tools=preload("res://native_game_tools.gd").new();game_tools.cache=map_cache;game_tools.size=size;game_tools.z_index=104;add_child(game_tools);resized.connect(func():game_tools.size=size)
+	adventure_gallery=preload("res://native_adventure_gallery.gd").new()
+	adventure_gallery.cache=map_cache;adventure_gallery.size=size;adventure_gallery.z_index=120;add_child(adventure_gallery)
+	adventure_gallery.visibility_changed.connect(func():map_controls_visibility_changed.emit())
+	resized.connect(func():adventure_gallery.size=size)
 	map_view=MapView.new()
 	map_view.cache=map_cache
 	map_view.size=size
@@ -225,7 +230,9 @@ func _ready() -> void:
 	crew_level_up_hud.mission_notice=battle.timeline.notices
 	crew_level_up_hud.size=size;crew_level_up_hud.z_index=341;add_child(crew_level_up_hud)
 	resized.connect(func():crew_level_up_hud.size=size)
-	battle.visibility_changed.connect(func():map_controls_visibility_changed.emit())
+	battle.visibility_changed.connect(func():
+		if battle.visible:close_adventure_gallery()
+		map_controls_visibility_changed.emit())
 	# Loading a save also closes an already hidden battle. Its transition still
 	# locks commands for 260 ms; the battle itself emits no visibility change
 	# when that lock ends. Observe the actual transition surface as well.
@@ -238,10 +245,12 @@ func _input(event: InputEvent) -> void:
 
 func _modal_ready(current: Control) -> void:
 	modal_pending=false
+	close_adventure_gallery()
 	for surface in [choice_modal,shop_modal,story_modal,hospital_modal,tavern_modal,captain_modal,crew_modal,carry_modal,training_modal,move_learn_modal,cosmetic_modal,draft_modal,save_modal,trade_modal,final_imu_modal,yonko_modal,encounter_modal,compass_modal,map_info_modal,arena_modal,judicial_entry_modal,inversion_overview_modal,final_ritual_modal,cpu_strategy_modal,cpu_ship_menu,fleet_modal,ship_info_modal,codex_modal,mission_journal_modal,mission_board_modal,backpack_modal,backpack_target_modal,reward_choice_modal,sea_chest_modal,research_modal]:
 		if surface!=current:surface.close_surface()
 
 func can_show_commands() -> bool:
+	if adventure_gallery.visible:return false
 	if sea_splash.visible:return false
 	if egghead_effect.visible or york_page.visible or spar_page.visible or impel_down_page.visible:return false
 	if marineford_page.visible:return false
@@ -292,6 +301,8 @@ func show_backpack_modal(value: String) -> void:begin_modal_transition();backpac
 func show_mission_board_modal(value: String) -> void:begin_modal_transition();mission_board_modal.apply_json(value)
 func show_mission_journal_modal(value: String) -> void:begin_modal_transition();mission_journal_modal.apply_json(value)
 func show_codex_modal(value: String) -> void:begin_modal_transition();codex_modal.apply_json(value)
+func show_adventure_gallery(value: String) -> void:adventure_gallery.apply_json(value)
+func close_adventure_gallery() -> void:adventure_gallery.close_surface()
 func show_ship_info_modal(value: String) -> void:begin_modal_transition();ship_info_modal.apply_json(value)
 func show_fleet_modal(value: String) -> void:begin_modal_transition();fleet_modal.apply_json(value)
 func show_cpu_strategy_modal(value: String) -> void:begin_modal_transition();cpu_strategy_modal.apply_json(value)
@@ -313,10 +324,11 @@ func request_modal_close() -> void:
 	call_deferred("_close_modal_if_current",token)
 func _close_modal_if_current(token: int) -> void:
 	if token!=modal_generation:return
+	close_adventure_gallery()
 	for surface in [choice_modal,shop_modal,story_modal,hospital_modal,tavern_modal,captain_modal,crew_modal,carry_modal,training_modal,move_learn_modal,cosmetic_modal,draft_modal,save_modal,trade_modal,final_imu_modal,yonko_modal,encounter_modal,compass_modal,map_info_modal,arena_modal,judicial_entry_modal,inversion_overview_modal,final_ritual_modal,cpu_strategy_modal,cpu_ship_menu,fleet_modal,ship_info_modal,codex_modal,mission_journal_modal,mission_board_modal,backpack_modal,backpack_target_modal,reward_choice_modal,sea_chest_modal,research_modal]:surface.close_surface()
 func show_board_notice(value: String) -> void:board_notice.apply_json(value)
 
-func play_board_dice(id: String, value: String) -> void:dice.start(id,JSON.parse_string(value))
+func play_board_dice(id: String, value: String) -> void:close_adventure_gallery();dice.start(id,JSON.parse_string(value))
 func cancel_board_dice(remote_id: String) -> void:dice.cancel(remote_id)
 func hide_board_dice() -> void:dice.hide()
 

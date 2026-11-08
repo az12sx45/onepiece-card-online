@@ -29,8 +29,11 @@ func _ready() -> void:
 	_frame(background,Rect2(),0.2,100);background.draw_center=false;add_child(background)
 	_frame(header,Rect2(492,9,695,124),0.25,150);header.patch_margin_top=20;header.patch_margin_bottom=20;add_child(header)
 	_frame(left_frame,Rect2(90,113,850,546),0.25,66);add_child(left_frame);_frame(right_frame,Rect2(997,141,542,687),0.25,90);add_child(right_frame)
-	for label in [heading,preview_name,preview_label,current,unlock]:label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;label.mouse_filter=Control.MOUSE_FILTER_IGNORE;add_child(label)
-	heading.add_theme_font_size_override("font_size",19);heading.add_theme_color_override("font_color",Color("fff0c0"));preview_name.add_theme_font_size_override("font_size",14);preview_name.add_theme_color_override("font_color",Color("fff0c4"));preview_label.add_theme_color_override("font_color",Color("77d7e2"));current.add_theme_font_size_override("font_size",10);current.add_theme_color_override("font_color",Color("f2d89c"));unlock.add_theme_font_size_override("font_size",10);unlock.add_theme_color_override("font_color",Color("8acbd2"));unlock.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	for label in [heading,preview_name,preview_label,current,unlock]:
+		label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;label.mouse_filter=Control.MOUSE_FILTER_IGNORE
+		label.text_overrun_behavior=TextServer.OVERRUN_TRIM_ELLIPSIS
+		add_child(label)
+	heading.add_theme_font_size_override("font_size",19);heading.add_theme_color_override("font_color",Color("fff0c0"));preview_name.add_theme_font_size_override("font_size",14);preview_name.add_theme_color_override("font_color",Color("fff0c4"));preview_label.add_theme_color_override("font_color",Color("77d7e2"));current.add_theme_font_size_override("font_size",10);current.add_theme_color_override("font_color",Color("f2d89c"));unlock.add_theme_font_size_override("font_size",10);unlock.add_theme_color_override("font_color",Color("8acbd2"))
 	add_child(preview);scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;add_child(scroll);list.size_flags_horizontal=Control.SIZE_EXPAND_FILL;list.add_theme_constant_override("separation",6);scroll.add_child(list)
 	for selected in [false,true]:
 		var gradient:=Gradient.new();gradient.colors=PackedColorArray([Color(8.0/255,39.0/255,50.0/255,.98),Color(16.0/255,73.0/255,78.0/255,.9)] if selected else [Color(2.0/255,14.0/255,24.0/255,.93),Color(12.0/255,35.0/255,47.0/255,.86)]);var tex:=GradientTexture2D.new();tex.width=64;tex.height=16;tex.gradient=gradient;tex.fill_from=Vector2(0,0.412);tex.fill_to=Vector2(1,0.588);gradients.append(tex)
@@ -87,12 +90,28 @@ func _apply_scroll(token: int) -> void:
 	scroll.scroll_vertical=roundi(rows[requested_scroll].root.position.y)
 func _layout() -> void:
 	background.size=size/background.scale;header.position=Vector2(size.x*.25,8);header.size=Vector2(size.x*.5,33)/header.scale;heading.position=header.position;heading.size=Vector2(size.x*.5,33)
-	var middle:=size.x*.5;var bottom:=size.y-70
-	left_frame.position=Vector2(20,48);left_frame.size=Vector2(middle-25,bottom-48)/left_frame.scale;right_frame.position=Vector2(middle+3,48);right_frame.size=Vector2(size.x-middle-24,bottom-48)/right_frame.scale
-	preview.position=left_frame.position+Vector2(9,9);preview.size=Vector2(middle-43,maxf(60,bottom-48-71));preview_name.position=Vector2(26,bottom-59);preview_name.size=Vector2(middle-37,21);preview_label.position=Vector2(26,bottom-37);preview_label.size=Vector2(middle-37,18)
-	current.position=Vector2(26,size.y-65);current.size=Vector2(middle-37,16);unlock.position=Vector2(middle+10,size.y-65);unlock.size=Vector2(size.x-middle-36,16)
-	scroll.position=right_frame.position+Vector2(12,12);scroll.size=Vector2(size.x-middle-49,bottom-72)
-	for i in range(2):actions[i].position=Vector2(25+i*(size.x-44)/2.0,size.y-47);actions[i].size=Vector2((size.x-59)/2.0,36);actions[i].get_meta("frame").size=actions[i].size/actions[i].get_meta("frame").scale
+	var footer_y := size.y-53
+	var summary_y := footer_y-22
+	var body := Rect2(16,48,size.x-32,summary_y-54)
+	var left := Rect2(body.position,Vector2((body.size.x-8)*.5,body.size.y))
+	var right := Rect2(Vector2(left.end.x+8,body.position.y),left.size)
+	if size.x<size.y:
+		# Give the portrait and scrollable choices the full width on a phone.
+		left.size=Vector2(body.size.x,clampf(body.size.y*.43,96.0,300.0))
+		right=Rect2(Vector2(body.position.x,left.end.y+8),Vector2(body.size.x,body.end.y-left.end.y-8))
+	left_frame.position=left.position;left_frame.size=left.size/left_frame.scale
+	right_frame.position=right.position;right_frame.size=right.size/right_frame.scale
+	preview.position=left.position+Vector2(8,8);preview.size=Vector2(left.size.x-16,maxf(24,left.size.y-56))
+	preview_name.position=Vector2(left.position.x+7,left.end.y-45);preview_name.size=Vector2(left.size.x-14,21)
+	preview_label.position=Vector2(left.position.x+7,left.end.y-24);preview_label.size=Vector2(left.size.x-14,18)
+	var button_width := (body.size.x-8)*.5
+	current.position=Vector2(body.position.x,summary_y);current.size=Vector2(button_width,18)
+	unlock.position=Vector2(body.position.x+button_width+8,summary_y);unlock.size=Vector2(button_width,18)
+	scroll.position=right.position+Vector2(10,10);scroll.size=right.size-Vector2(20,20)
+	for i in range(actions.size()):
+		actions[i].position=Vector2(body.position.x+i*(button_width+8),footer_y)
+		actions[i].size=Vector2(button_width,44)
+		actions[i].get_meta("frame").size=actions[i].size/actions[i].get_meta("frame").scale
 	_layout_rows()
 func _layout_rows() -> void:
 	for row in rows:

@@ -1,16 +1,15 @@
 extends Node
-## Trusted transport for the fixed iOS Board program channel.
+## Trusted transport for a host's bundled Board program profile.
 
 const ORIGIN := "https://game-assets.rihdi.tw/"
-const SIGNATURE_DOMAIN := "PO-IOS-BOARD-PROGRAM-V1\n"
-const MANIFEST_LIMIT := 4096
-const ENVELOPE_LIMIT := 8192
+const IOS_SIGNATURE_DOMAIN := "PO-IOS-BOARD-PROGRAM-V1\n"
+const ANDROID_SIGNATURE_DOMAIN := "PO-ANDROID-BOARD-PROGRAM-V1\n"
+const MANIFEST_LIMIT := 16 * 1024
+const ENVELOPE_LIMIT := 24 * 1024
+const RESOURCE_COUNT_LIMIT := 64
+const RESOURCE_BYTES_LIMIT := 16 * 1024 * 1024
+const PACKAGE_BYTES_LIMIT := 32 * 1024 * 1024
 const BASE64_ALPHABET := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-const BLOB_LIMITS := {
-	"native-turn-control-sync.js": 256 * 1024,
-	"native_battle_stage.gdc": 2 * 1024 * 1024,
-	"original-core.js": 16 * 1024 * 1024,
-}
 
 class Transfer:
 	signal finished(response: Dictionary)
@@ -21,6 +20,10 @@ var _manifest_url := ""
 var _blob_base_url := ""
 var _host_build := 0
 var _base := ""
+var _platform := ""
+var _signature_domain := ""
+var _resource_limits: Dictionary = {}
+var _resource_paths := PackedStringArray()
 var _active: Transfer
 
 
@@ -32,8 +35,26 @@ func configure(config: Dictionary) -> bool:
 	var base: String = str(config.get("base", ""))
 	var key_text: String = str(config.get("publicKey", ""))
 	var build: Variant = config.get("hostBuild")
+	var platform: Variant = config.get("platform")
+	var resource_limits: Variant = config.get("resourceLimits")
 	if not _whole_number(build, 1, 2147483647) or base.is_empty():
 		return false
+	if not platform is String or not platform in ["ios", "android"] or not _safe_version(config.get("qaVersion")):
+		return false
+	if not resource_limits is Dictionary or resource_limits.is_empty() or resource_limits.size() > RESOURCE_COUNT_LIMIT:
+		return false
+	var extensions := ["js", "gdshader", "gdc" if platform == "ios" else "gd"]
+	var limits := {}
+	var paths := PackedStringArray()
+	for name in resource_limits:
+		if not name is String or name.length() > 128 or name.begins_with(".") or name.contains(".."):
+			return false
+		if not _has_only(name, "abcdefghijklmnopqrstuvwxyz0123456789-_.") or not name.get_extension() in extensions:
+			return false
+		if not _whole_number(resource_limits[name], 1, RESOURCE_BYTES_LIMIT):
+			return false
+		limits[name] = int(resource_limits[name])
+		paths.append(name)
 	if not _channel_url(manifest_url) or manifest_url.ends_with("/"):
 		return false
 	if not _channel_url(blob_base_url) or not blob_base_url.ends_with("/"):
@@ -48,7 +69,16 @@ func configure(config: Dictionary) -> bool:
 	_blob_base_url = blob_base_url
 	_host_build = int(build)
 	_base = base
+	_platform = platform
+	_signature_domain = IOS_SIGNATURE_DOMAIN if platform == "ios" else ANDROID_SIGNATURE_DOMAIN
+	_resource_limits = limits
+	paths.sort()
+	_resource_paths = paths
 	return true
+
+
+func resource_paths() -> PackedStringArray:
+	return _resource_paths.duplicate()
 
 
 func verify_envelope(raw: PackedByteArray) -> Dictionary:
@@ -61,7 +91,7 @@ func verify_envelope(raw: PackedByteArray) -> Dictionary:
 	var signature := _decode_base64(envelope.signature, 512)
 	if manifest_bytes.is_empty() or not signature.size() in [256, 384, 512]:
 		return {"error": "invalid_envelope"}
-	var signed_bytes := SIGNATURE_DOMAIN.to_utf8_buffer()
+	var signed_bytes := _signature_domain.to_utf8_buffer()
 	signed_bytes.append_array(manifest_bytes)
 	var hash := HashingContext.new()
 	if hash.start(HashingContext.HASH_SHA256) != OK or hash.update(signed_bytes) != OK:
@@ -175,27 +205,28 @@ func _valid_manifest(manifest: Dictionary) -> bool:
 		return false
 	if not _whole_number(manifest.schema, 1, 1) or not manifest.game is String or not manifest.platform is String:
 		return false
-	if manifest.game != "board" or manifest.platform != "ios" or not manifest.base is String:
+	if manifest.game != "board" or manifest.platform != _platform or not manifest.base is String:
 		return false
 	if not _whole_number(manifest.hostBuild, _host_build, _host_build) or manifest.base != _base:
 		return false
 	if not _whole_number(manifest.sequence, 1, 2147483647) or not _safe_version(manifest.version):
 		return false
-	if not manifest.files is Array or manifest.files.size() != BLOB_LIMITS.size():
+	if not manifest.files is Array or manifest.files.size() != _resource_paths.size():
 		return false
-	var previous := ""
-	for row in manifest.files:
-		if not row is Dictionary or not _valid_row(row) or row.path <= previous:
+	var total_bytes := 0
+	for index in _resource_paths.size():
+		var row: Variant = manifest.files[index]
+		if not row is Dictionary or not _valid_row(row) or row.path != _resource_paths[index]:
 			return false
-		previous = row.path
-	return true
+		total_bytes += int(row.bytes)
+	return total_bytes <= PACKAGE_BYTES_LIMIT
 
 
 func _valid_row(row: Dictionary) -> bool:
 	return (
 		_exact_fields(row, ["path", "sha256", "bytes"])
-		and row.path is String and BLOB_LIMITS.has(row.path)
-		and _whole_number(row.bytes, 1, BLOB_LIMITS[row.path])
+		and row.path is String and _resource_limits.has(row.path)
+		and _whole_number(row.bytes, 1, _resource_limits[row.path])
 		and row.sha256 is String and row.sha256.length() == 64
 		and _has_only(row.sha256, "0123456789abcdef")
 	)

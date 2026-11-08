@@ -3,6 +3,7 @@ var attribute_override: Dictionary={}
 var phase_dialogue_active:=false
 const PortraitCard = preload("res://native_portrait_card.gd")
 const PortraitState=preload("res://native_portrait_state.gd")
+const CosmeticFrame=preload("res://native_battle_cosmetic_frame.gd")
 var portrait_sources: Dictionary={}
 var portrait_warm: Dictionary={}
 ## Persistent native nodes consuming the original getBattleView contract.
@@ -13,6 +14,7 @@ var cache: Node
 var model: Dictionary = {}
 var background := TextureRect.new()
 var portraits: Dictionary = {}
+var cosmetic_frames: Dictionary = {}
 var hud: Dictionary = {}
 var command_buttons: Array[Button] = []
 var command_strip := Control.new()
@@ -81,6 +83,13 @@ func _ready() -> void:
 		portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(portrait)
 		portraits[side] = portrait
+		var cosmetic_frame := CosmeticFrame.new()
+		cosmetic_frame.cache = cache
+		cosmetic_frame.portrait = portrait
+		cosmetic_frame.base_frame = portrait.frame
+		cosmetic_frame.base_shadow = portrait.shadow
+		portrait.add_child(cosmetic_frame)
+		cosmetic_frames[side] = cosmetic_frame
 		var panel := Control.new()
 		add_child(panel)
 		var frame := NinePatchRect.new()
@@ -330,9 +339,14 @@ func _can_act() -> bool:
 	var intro: Dictionary = battle.get("prebattleIntro",{}) if battle.get("prebattleIntro") != null else {}
 	return battle.get("canControl",false) and battle.get("canAct",false) and (intro.is_empty() or intro.get("done",false) or battle.get("result")) and not battle.get("needsReplacement",false) and not battle.get("canFinish",false) and battle.get("result","") != "round-pause"
 
+func clear_cosmetic_frames() -> void:
+	for cosmetic_frame in cosmetic_frames.values():
+		cosmetic_frame.sync({})
+
 func apply_view(view: Dictionary) -> void:
 	model = view
 	if view.is_empty():
+		clear_cosmetic_frames()
 		portraits.enemy.sync_demon({},"normal")
 		boss_panel.sync(null)
 		boss_button.hide()
@@ -353,6 +367,8 @@ func apply_view(view: Dictionary) -> void:
 	_image(background,str(catalog.BATTLE_BACKGROUND_BY_ENEMY_KEY.get(key,catalog.BATTLE_BACKGROUND_BY_ENEMY_NAME.get(name,catalog.DEFAULT_BATTLE_BACKGROUND))))
 	for side in hud:
 		var actor: Dictionary = view.activeCard if side == "player" else enemy
+		var cosmetic_frame: Variant = actor.get("_nativeCosmeticFrame")
+		cosmetic_frames[side].sync(cosmetic_frame if cosmetic_frame is Dictionary else {})
 		var actor_key := battle_identity+"|"+str(actor.get("id",actor.get("key",actor.name)))+":"+str(view.battle.get("activeCrewIndex",0) if side == "player" else view.battle.get("islandId",""))
 		if actor_keys.get(side,"") != actor_key:
 			portraits[side].stop_attack_motion()

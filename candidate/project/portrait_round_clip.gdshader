@@ -11,6 +11,7 @@ uniform float attack_angle = 0.0;
 uniform float attack_scale = 1.0;
 uniform float idle_translation_y = 0.0;
 uniform float hit_translation_x = 0.0;
+uniform bool knockout_fade = false;
 varying vec2 local_position;
 varying vec4 portrait_tint;
 void vertex() { local_position = VERTEX; portrait_tint = COLOR; }
@@ -42,6 +43,11 @@ void fragment() {
         vec3 value=mix(COLOR.rgb,vec3(grey),.24);
         grey=dot(value,vec3(.2126,.7152,.0722));value=mix(vec3(grey),value,.42)*.7;
         COLOR.rgb=clamp((value-.5)*1.08+.5,vec3(0.0),vec3(1.0));
+    }
+    if (knockout_fade) {
+        vec3 luma = vec3(.2126,.7152,.0722);
+        vec3 muted = mix(COLOR.rgb,vec3(dot(COLOR.rgb,luma)),.38)*.78;
+        COLOR.rgb = mix(vec3(dot(muted,luma)),muted,.75);
     }
     vec2 edge = abs(p-box*.5)-(box*.5-vec2(inner_radius));
     float distance_to_edge = length(max(edge,vec2(0.0)))+min(max(edge.x,edge.y),0.0)-inner_radius;

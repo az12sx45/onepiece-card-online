@@ -9,6 +9,7 @@ import json
 import os
 from pathlib import Path
 import plistlib
+import re
 import shutil
 import subprocess
 import sys
@@ -19,26 +20,70 @@ from raw_resources import verify_runtime_files
 from verify_ipa import read_pck
 
 
+BOARD_PARITY_V071_HANDOFF_SHA = '2dbc622be80fa9bfcde0e715b643016b0732847775a8e9ae759ec82d85aed2e2'
+BOARD_PARITY_V071_SOURCES = {
+    'native-adventure-gallery.js': '6334c4c0beea849423cc0ec9bde1657447ab6868569139386474b0a7e6d9dfe7',
+    'native-battle-cosmetic-frame.js': 'b996589c458731ab28486f1f320eeac780ba67f64dee2dec100c988c754efbb6',
+    'native-battle-scene.js': 'ac9455d6a9dfe57ae5f7a1d940edb6a8f8062055c7f91cbc192fe523c18f9dd6',
+    'native-crew-markup.js': '8660f30422445b2011a978f9dcce2093869ecac9abc1e1996b606560b1d63b90',
+    'native-game-controls.js': '9ee08fed2073bb7ae021d0665cfd1223a64817efd7cab82a1808ccf2cc17b6df',
+    'native-game-runtime.js': 'd3ab7287789d984a5cee3497943eac853e76f8ceb4441149210000082ec8d56d',
+    'native-modal-bridge.js': '9c4c266f0b2dbce0cc2e3272c7b945e9663a104906de5cdb4f1665c01be969a8',
+    'native_adventure_gallery.gd': 'd1de3b5a3a399c0e5928a15904682d1e5f2a611112469bbdab48bdbd5aef7087',
+    'native_app_stage.gd': 'd888c3965512ddc8401a278fc757fb9a688244fd5149774c07e6c1690ce2eae7',
+    'native_backpack_modal.gd': '6aa5f0a7578ba873e837f0d6af299d66092ccd5a5a48bb0481dccd244a6ed1a4',
+    'native_battle_cosmetic_frame.gd': '4d65dc6376045aa05294bfc14485ed31a5e62d3a24fb01a8132cb47300567c2d',
+    'native_battle_cosmetic_layer.gdshader': 'c28fb0f1b15a6365509e18455fe226b2ae94cc70c64d399945459269e64e1cc7',
+    'native_battle_timeline.gd': 'b524541d2d4a83e1fe9604aa9107193792614215316a87caad4491d0259ea730',
+    'native_battle_view.gd': 'dbf86b8e29dfee48c30cee096ed37475bce2d0818a78935656bab83f30370b32',
+    'native_cosmetic_modal.gd': '2369f0f739834d7886055026490c9673a2719412ed6ad044a214c841be84e895',
+    'native_crew_modal.gd': 'b73e601969a539094b12a5d24b0b03c8c61b70fa603f96a048548aefc3dd5a56',
+    'native_game_tools.gd': '171b84a4376d47df65d18687d2601e72cb92a5b590fa74ea5b53c94761eadf71',
+    'native_map_hud.gd': 'c5deeb13b0738fa3df2d3765f4eda6c9d22eb1e08dec3b909fe3b889567300dc',
+    'native_portrait_card.gd': 'c47e6af8b92836d8cbc15a4f1f988f623e412e5cbcd331ed70148ec8d20f41f8',
+    'native_reward_choice_modal.gd': 'c58379ba29b659842cbcb9b5a4d5a42ecd574a6a1918896725d4afc9c7890220',
+    'original-core.js': 'cfd150004227b2a53e29fee38bf1d5dc7b5e571f9c0550c3655949c7d6e2f975',
+    'original-tot-stage.js': 'b306a61c945af8543f9db89dd0b1f0882848e175bbac58e145aa7bc933afbee4',
+    'portrait_round_clip.gdshader': '8f3c740ff6701e5f4048afc110851d062b5b6519405d259bb2a777687416c633',
+}
+BOARD_PARITY_V071_RETAINED = {
+    'native-turn-control-sync.js': 'fc7aef40dc49a1637cec1267a8b2b4f27a79177e6dfbbf982dd5de2ee102cbbb',
+    'native_battle_stage.gd': 'e71248eb67e7a63d9fec1fcbe7d770282073529ab53e4c55bc79da26368d3ce4',
+}
+
+
 def sha(path):
     with path.open('rb') as stream: return hashlib.file_digest(stream,'sha256').hexdigest()
 
 
-def verify_board_pack(entries, project, names):
+def verify_board_pack(entries, project, names, *, immutable_remaps=False):
     records = {}
     for name in names:
         source = (project/name).read_bytes()
         packed = 'res://'+name
+        remap_record = None
         if name.endswith('.gd'):
             compiled = packed[:-3]+'.gdc'
-            if ('path="'+compiled+'"').encode() not in entries.get(packed+'.remap', b''):
+            remap_path = packed+'.remap'
+            remap = entries.get(remap_path, b'')
+            destination = ('path="'+compiled+'"').encode()
+            if destination not in remap:
                 raise ValueError('Board GDScript remap missing: '+name)
+            if immutable_remaps:
+                if re.fullmatch(rb'\[remap\]\s+'+re.escape(destination)+rb'\s*', remap) is None:
+                    raise ValueError('Unexpected Board GDScript remap: '+name)
+                remap_record = {'path': remap_path, 'sha256': hashlib.sha256(remap).hexdigest(), 'bytes': len(remap)}
             packed = compiled
         content = entries.get(packed)
-        if not content or (name.endswith(('.js', '.json')) and content != source):
+        if not content or (name.endswith(('.js', '.json', '.gdshader')) and content != source):
             raise ValueError('Board resource missing or changed: '+name)
+        if remap_record is not None and not content.startswith(b'GDSC'):
+            raise ValueError('Unexpected Board GDScript payload: '+name)
         records[name] = {'sourceSha256': hashlib.sha256(source).hexdigest(),
                          'packedPath': packed, 'packedSha256': hashlib.sha256(content).hexdigest(),
                          'packedBytes': len(content)}
+        if remap_record is not None:
+            records[name]['remap'] = remap_record
     return records
 
 
@@ -55,9 +100,14 @@ def verify_board_update_host_v070(entries, project, out):
     host = verify_board_pack(entries, project, ('ios_host.gd', 'ios_board_update.gd',
         'ios_board_transport.gd', 'ios-board-program-v1.json', 'native-product-entry.js'))
 
+    return {'bundledJudicialPrograms': judicial, 'hostResources': host,
+        'qaFixture': make_board_qa_fixture(entries, out, judicial['native-turn-control-sync.js'], 70)}
+
+
+def make_board_qa_fixture(entries, out, source, build):
     name = 'native-turn-control-sync.js'
-    packed_path = judicial[name]['packedPath']
-    revision = 'qa-v070-transport'
+    packed_path = source['packedPath']
+    revision = f'qa-v{build:03d}-transport'
     baseline = entries[packed_path]
     marker = ("exports.boardUpdateRevision = '"+revision+"';").encode('ascii')
     if b'boardUpdateRevision' in baseline:
@@ -66,11 +116,52 @@ def verify_board_update_host_v070(entries, project, out):
     artifact = out/'board-qa'/name
     artifact.parent.mkdir()
     artifact.write_bytes(fixture)
-    return {'bundledJudicialPrograms': judicial, 'hostResources': host,
-        'qaFixture': {'qaOnly': True, 'revision': revision,
+    return {'qaOnly': True, 'revision': revision,
             'file': artifact.relative_to(out).as_posix(), 'packedPath': packed_path,
-            'baseSha256': judicial[name]['packedSha256'],
-            'sha256': hashlib.sha256(fixture).hexdigest(), 'bytes': len(fixture)}}
+            'baseSha256': source['packedSha256'],
+            'sha256': hashlib.sha256(fixture).hexdigest(), 'bytes': len(fixture)}
+
+
+def verify_board_parity_source_v071(project):
+    for name, expected in {**BOARD_PARITY_V071_SOURCES, **BOARD_PARITY_V071_RETAINED}.items():
+        if sha(project/name) != expected:
+            raise ValueError('v071 Board input differs from handoff: '+name)
+
+
+def verify_board_parity_host_v071(entries, project, out):
+    verify_board_parity_source_v071(project)
+    parity = verify_board_pack(entries, project, BOARD_PARITY_V071_SOURCES, immutable_remaps=True)
+    retained = verify_board_pack(entries, project, BOARD_PARITY_V071_RETAINED, immutable_remaps=True)
+    config_name = 'ios-board-program-v1.json'
+    host = verify_board_pack(entries, project, ('ios_host.gd', 'ios_board_update.gd',
+        'ios_board_transport.gd', config_name, 'native-product-entry.js'), immutable_remaps=True)
+    config = json.loads(entries['res://'+config_name])
+    channel = 'https://game-assets.rihdi.tw/ios/board-program/v1/host-71/'
+    if (config['hostBuild'] != 71 or config['platform'] != 'ios' or config['qaVersion'] != 'Board QA v071.1'
+            or config['manifestUrl'] != channel+'release.json' or config['blobBaseUrl'] != channel+'blobs/'
+            or re.fullmatch('[0-9a-f]{64}', config['base']) is None):
+        raise ValueError('Unexpected v071 Board update host config')
+
+    packed = {
+        record['packedPath'].removeprefix('res://'): {
+            'sha256': record['packedSha256'], 'bytes': record['packedBytes'],
+        }
+        for record in (*parity.values(), *retained.values())
+    }
+    limits = config['resourceLimits']
+    if (len(packed) != 25 or set(limits) != set(packed)
+            or any(type(limit) is not int or limit < packed[name]['bytes'] for name, limit in limits.items())):
+        raise ValueError('v071 Board packed resources and allowlist differ')
+
+    return {
+        'handoffSha256': BOARD_PARITY_V071_HANDOFF_SHA,
+        'base': config['base'],
+        'bundledParityPrograms': parity,
+        'retainedBoardPrograms': retained,
+        'hostResources': host,
+        'allowlistedPackedResources': packed,
+        'qaFixture': make_board_qa_fixture(entries, out, retained['native-turn-control-sync.js'], 71),
+    }
 
 
 def run(command, cwd, log, env=None):
@@ -99,8 +190,11 @@ def main():
     parser.add_argument('--candidate',type=Path,required=True)
     parser.add_argument('--godot',type=Path,required=True)
     parser.add_argument('--out',type=Path,required=True)
-    parser.add_argument('--board-update-host-v070',action='store_true',
-                        help='Verify the exact Judicial Island baseline and prepare a separate unsigned Board QA blob')
+    board = parser.add_mutually_exclusive_group()
+    board.add_argument('--board-update-host-v070',action='store_true',
+                       help='Verify the exact Judicial Island baseline and prepare a separate unsigned Board QA blob')
+    board.add_argument('--board-parity-host-v071',action='store_true',
+                       help='Verify the exact Board parity baseline and prepare a separate unsigned Board QA blob')
     args=parser.parse_args()
     if sys.platform!='darwin': parser.error('macOS/Xcode required; no Windows build success may be reported')
     candidate=args.candidate.resolve(); out=args.out.resolve()
@@ -109,6 +203,8 @@ def main():
     for name,expected in json.loads((candidate/'input-sha256.json').read_text()).items():
         file=(candidate/name).resolve()
         if not file.is_relative_to(candidate) or sha(file)!=expected: raise ValueError('Candidate input changed: '+name)
+    if args.board_parity_host_v071:
+        verify_board_parity_source_v071(candidate/'project')
     version=subprocess.check_output([str(args.godot),'--version'],text=True).strip()
     if not version.startswith('4.7.2.stable'): raise ValueError('Exact verified Godot 4.7.2 required')
     subprocess.run(['xcrun','--sdk','iphoneos','--show-sdk-path'],check=True,stdout=subprocess.DEVNULL)
@@ -193,6 +289,8 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
         ('native_hospital_modal.gd', 'native_mission_board_modal.gd', 'native_mission_journal_modal.gd', 'native_research_modal.gd', 'native_shop_modal.gd', 'native_tavern_modal.gd', 'original-core.js'))
     if args.board_update_host_v070:
         board_update_host = verify_board_update_host_v070(entries,candidate/'project',out)
+    if args.board_parity_host_v071:
+        board_parity_host = verify_board_parity_host_v071(entries,candidate/'project',out)
     del entries
     shutil.copytree(candidate/'bundle-resources',app,dirs_exist_ok=True)
     launcher=json.loads((candidate/'launcher-manifest.json').read_text())
@@ -202,6 +300,8 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
     if info['CFBundleIdentifier']!='tw.rihdi.po.native.ios': raise ValueError('Unexpected bundle identifier')
     if args.board_update_host_v070 and int(info['CFBundleVersion']) != 70:
         raise ValueError('Unexpected Board update host build number')
+    if args.board_parity_host_v071 and int(info['CFBundleVersion']) != 71:
+        raise ValueError('Unexpected Board parity host build number')
     executable=app/info['CFBundleExecutable']
     arch=subprocess.check_output(['lipo','-archs',str(executable)],text=True).strip()
     if arch!='arm64': raise ValueError('Unexpected device architectures')
@@ -240,6 +340,8 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
     report['boardCpuRecoveryPack']=board_cpu_recovery_pack
     if args.board_update_host_v070:
         report['boardUpdateHost'] = board_update_host
+    if args.board_parity_host_v071:
+        report['boardParityHost'] = board_parity_host
     report['macWebKitLauncherChecked']=True
     report['macWebKitMarinefordChecked']=True
     report['macWebKitMarinefordProgramChecked']=True

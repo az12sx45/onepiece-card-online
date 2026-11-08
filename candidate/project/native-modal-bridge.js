@@ -15,7 +15,7 @@ class NativeModalBridge{
     control(key,dataset={},initialText=''){
         let text=initialText,disabled=false;
         const control={id:key,dataset,addEventListener:(type,listener)=>{if(type!=='click'||typeof listener!=='function')throw Error('Unsupported native modal listener');this.listeners.set(key,listener);}};
-        Object.defineProperty(control,'disabled',{get:()=>disabled,set:value=>{disabled=!!value;if(this.model?.kind==='tavern-result')this.application.get('tavern_modal').call('set_control_disabled',key,disabled);else if(this.model?.kind==='move-learn')this.application.get('move_learn_modal').call('set_control_disabled',key,disabled);}});
+        Object.defineProperty(control,'disabled',{get:()=>disabled,set:value=>{disabled=!!value;if(this.model?.kind==='tavern-result')this.application.get('tavern_modal').call('set_control_disabled',key,disabled);else if(this.model?.kind==='move-learn')this.application.get('move_learn_modal').call('set_control_disabled',key,disabled);else if(this.model?.kind==='crew-detail'&&key.startsWith('crewMaterialMap-'))this.application.get('crew_modal').call('set_material_locator_disabled',key,disabled);}});
         control.click=()=>{if(!disabled)this.listeners.get(key)?.();};control.focus=()=>{};
         const geometry=()=>JSON.parse(this.application.call('modal_button_state_json',key));
         control.getBoundingClientRect=()=>geometry().rect;

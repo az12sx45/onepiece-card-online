@@ -2,11 +2,10 @@ extends Node
 ## An overlay is selected at most once per process, before loading any Board resource.
 signal changed
 
-const FILES := ["native-turn-control-sync.js", "native_battle_stage.gdc", "original-core.js"]
 const MAX_STATE_BYTES := 512 * 1024
 const STATE_SCHEMA := 1
 const BUNDLED := ""
-const QA_MANIFEST_LIMIT := 8192
+const QA_MANIFEST_LIMIT := 24 * 1024
 const QA_MANIFEST_FILE := "qa-envelope.json"
 const UNUSED_CACHE_SECONDS := 7 * 24 * 60 * 60
 
@@ -14,6 +13,8 @@ var _transport: Node
 var _identity: String
 var _directory: String
 var _bundled_version: String
+var _qa_version: String
+var _files := PackedStringArray()
 var _base_files: Dictionary = {}
 var _disk: Dictionary = {"highWater": 0, "active": BUNDLED, "previous": BUNDLED, "pending": BUNDLED, "trial": false}
 var _boot_pending: String = BUNDLED
@@ -35,8 +36,10 @@ var _total := 0
 func setup(config: Dictionary) -> void:
 	_bundled_version = str(config.get("bundledVersion", "內建"))
 	_identity = str(config.get("base", ""))
+	_qa_version = str(config.get("qaVersion", ""))
 	var build := int(config.get("hostBuild", 0))
-	_directory = str(config.get("storeRoot", "user://po-ios-board-program/host-%d" % build))
+	var platform := str(config.get("platform", ""))
+	_directory = str(config.get("storeRoot", "user://po-%s-board-program/host-%d" % [platform, build]))
 	if not _private_directory(_directory) or _identity.is_empty():
 		return
 	var transport_script := load("res://ios_board_transport.gd") as GDScript
@@ -46,7 +49,8 @@ func setup(config: Dictionary) -> void:
 	add_child(_transport)
 	if not _transport.configure(config):
 		return
-	for name: String in FILES:
+	_files = _transport.resource_paths()
+	for name: String in _files:
 		var path := "res://" + name
 		var file := FileAccess.open(path, FileAccess.READ)
 		if file == null:
@@ -126,7 +130,7 @@ func _read_local_qa_manifest() -> Dictionary:
 		return {}
 	var result: Dictionary = _transport.verify_envelope(file.get_buffer(file.get_length()))
 	file.close()
-	if _valid_manifest(result) and int(result.manifest.sequence) == 1 and result.manifest.version == "Board QA v070.1":
+	if _valid_manifest(result) and int(result.manifest.sequence) == 1 and result.manifest.version == _qa_version:
 		return result
 	return {}
 
@@ -203,6 +207,9 @@ func confirm_board() -> void:
 	else:
 		_message = "無法保存啟用紀錄，下次開啟會保留舊版。"
 	changed.emit()
+
+func needs_full_preflight() -> bool:
+	return _mounted_trial
 
 func fail_board() -> void:
 	if _mounted == BUNDLED:
@@ -361,11 +368,11 @@ func _valid_manifest(result: Dictionary) -> bool:
 	if not result.get("manifest") is Dictionary or not result.get("envelope") is PackedByteArray:
 		return false
 	var manifest: Dictionary = result.manifest
-	if manifest.get("base") != _identity or not manifest.get("files") is Array or manifest.files.size() != FILES.size():
+	if manifest.get("base") != _identity or not manifest.get("files") is Array or manifest.files.size() != _files.size():
 		return false
-	for index in FILES.size():
+	for index in _files.size():
 		var row: Variant = manifest.files[index]
-		if not row is Dictionary or row.get("path") != FILES[index] or not _digest(row.get("sha256")):
+		if not row is Dictionary or row.get("path") != _files[index] or not _digest(row.get("sha256")):
 			return false
 	return true
 

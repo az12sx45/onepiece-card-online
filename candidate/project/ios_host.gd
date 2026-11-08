@@ -6,6 +6,7 @@ var installed_version: String = "iOS"
 var native_game_id: String = ""
 var board_updates: Node
 var board_revision := ""
+var board_config: Dictionary = {}
 
 func _ready() -> void:
 	var backdrop := ColorRect.new()
@@ -15,8 +16,9 @@ func _ready() -> void:
 	board_updates=preload("res://ios_board_update.gd").new()
 	add_child(board_updates)
 	board_updates.connect("changed",_board_state_changed)
-	var board_config: Variant=JSON.parse_string(FileAccess.get_file_as_string("res://ios-board-program-v1.json"))
-	board_updates.setup(board_config if board_config is Dictionary else {})
+	var config: Variant=JSON.parse_string(FileAccess.get_file_as_string("res://ios-board-program-v1.json"))
+	if config is Dictionary:board_config=config
+	board_updates.setup(board_config)
 	resized.connect(_layout)
 	if bridge!=null:bridge.call("launcher_show",true)
 	else:push_error("iOS launcher bridge unavailable")
@@ -90,7 +92,22 @@ func board_program_preflight() -> bool:
 	var stage: Variant=script.new()
 	if not stage is Control:return false
 	stage.free()
+	if not board_updates.needs_full_preflight():return true
+	for path: String in board_config.resourceLimits:
+		if path.ends_with(".gdc"):
+			var checked := ResourceLoader.load("res://"+path.trim_suffix(".gdc")+".gd","GDScript") as GDScript
+			if checked==null or not checked.can_instantiate():return false
+		elif path.ends_with(".gdshader"):
+			var shader := ResourceLoader.load("res://"+path,"Shader") as Shader
+			if shader==null or shader.code.is_empty():return false
 	return true
+
+func board_program_preflight_modules() -> String:
+	var modules: Array[String] = []
+	if board_updates.needs_full_preflight():
+		for path: String in board_config.resourceLimits:
+			if path.ends_with(".js"):modules.append(path.trim_suffix(".js"))
+	return JSON.stringify(modules)
 
 func board_program_failed() -> void:
 	board_updates.fail_board()

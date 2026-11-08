@@ -21,6 +21,9 @@ var attack_duration:=.9
 var hit_tick: int=-1
 var hit_duration:=.7
 var hit_starts:=0
+var knockout_active:=false
+var knockout_base_scale:=Vector2.ONE
+var knockout_base_pivot:=Vector2.ZERO
 var idle_enabled:=false
 var idle_started:=0
 var resting_origin:=Vector2.ZERO
@@ -67,7 +70,10 @@ func _ready() -> void:
 func set_layout_rect(origin: Vector2,extent: Vector2) -> void:
 	size=extent
 	resting_origin=origin
-	if hit_tick>=0:
+	if knockout_active:
+		position=origin
+		pivot_offset=size*.5
+	elif hit_tick>=0:
 		_process(0)
 	elif attack_tick>=0:
 		attack_origin=origin
@@ -153,7 +159,39 @@ func stop_hit_motion() -> void:
 	hit_tick=-1;position=resting_origin
 	if material:material.set_shader_parameter("hit_translation_x",0.0)
 	set_process((idle_enabled or attack_tick>=0) and is_visible_in_tree())
-func _exit_tree() -> void:stop_attack_motion();stop_hit_motion()
+
+func start_knockout_motion() -> void:
+	stop_hit_motion()
+	stop_attack_motion()
+	set_idle_pose(false)
+	knockout_base_scale=scale
+	knockout_base_pivot=pivot_offset
+	pivot_offset=size*.5
+	knockout_active=true
+	material.set_shader_parameter("knockout_fade",true)
+	sample_knockout_motion(0.0)
+
+func sample_knockout_motion(progress: float) -> void:
+	if not knockout_active:return
+	# board_battle.html cardKnockoutFade: the card grows slightly before fading.
+	if progress<=.18:
+		var eased:=IdleEase._ease(progress/.18,[0.0,0.0,.58,1.0])
+		scale=knockout_base_scale*lerpf(1.0,1.015,eased)
+		modulate.a=1.0
+	else:
+		var eased:=IdleEase._ease((progress-.18)/.82,[0.0,0.0,.58,1.0])
+		scale=knockout_base_scale*lerpf(1.015,.96,eased)
+		modulate.a=1.0-eased
+
+func stop_knockout_motion() -> void:
+	if not knockout_active:return
+	knockout_active=false
+	scale=knockout_base_scale
+	pivot_offset=knockout_base_pivot
+	modulate.a=1.0
+	material.set_shader_parameter("knockout_fade",false)
+
+func _exit_tree() -> void:stop_attack_motion();stop_hit_motion();stop_knockout_motion()
 
 func sync_demon(value: Dictionary,pose: String) -> void:
 	if demon==null:return

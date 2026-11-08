@@ -31,11 +31,48 @@ exports.create=function({context,application,search,fetch,navigate,controlsChang
   const value=target[key];return typeof value==='function'?value.bind(target):value;
  }});
  window.io=()=>socket;
- function publishControls(){if(disposed||queued)return;queued=true;window.setTimeout(()=>{queued=false;const model={...controls.project(),available:started&&map.canShowCommands()&&!core.presentation.mapPresentationLocked()},json=JSON.stringify(model);if(json!==lastControls){lastControls=json;application.get('game_tools').call('apply_json',json);controlsChanged(model);}},0);}
+ const mapAudio={bgm:music,sfx:sound.api};
+ function audioSettings(){
+  return Object.fromEntries(Object.entries(mapAudio).map(([key,api])=>{
+   const {enabled,volume}=api.status();
+   return [key,{enabled,volume:Math.round(volume*100)}];
+  }));
+ }
+ function applyAudioSetting(key,value){
+  if(key==='audio:sample'){
+   sound.api.unlock();sound.api.playCue('reward');return;
+  }
+  const [,channel,setting]=key.split(':');
+  if(!Object.hasOwn(mapAudio,channel))return;
+  const api=mapAudio[channel];
+  if(setting==='enabled')api.setEnabled(value==='true');
+  if(setting==='volume'){
+   const level=Number(value);
+   if(Number.isFinite(level))api.setVolume(Math.max(0,Math.min(100,level))/100);
+  }
+  publishControls();
+ }
+ function publishControls(){if(disposed||queued)return;queued=true;window.setTimeout(()=>{queued=false;const model={...controls.project(),audio:audioSettings(),available:started&&map.canShowCommands()&&!core.presentation.mapPresentationLocked()},json=JSON.stringify(model);if(json!==lastControls){lastControls=json;application.get('game_tools').call('apply_json',json);controlsChanged(model);}},0);}
  // Like the source phone presenter, reconcile after the synchronous source
  // action finishes. closeModal may immediately open another full-screen page.
  function scheduleMapControls(){if(disposed||mapQueued)return;mapQueued=true;window.requestAnimationFrame(()=>{mapQueued=false;if(!started||disposed)return;controller.sync();publishControls();});}
- const controls=require('./native-game-controls').create(publishControls),map=new NativeMapScene(application),modal=new NativeModalBridge(application,{navigate});
+ const controls=require('./native-game-controls').create(publishControls,{openAdventureGallery,canOpenAdventureGallery}),map=new NativeMapScene(application),modal=new NativeModalBridge(application,{navigate});
+ const adventure=require('./native-adventure-gallery'),gallerySurface=application.get('adventure_gallery');
+ let galleryCollection,mergeGalleryVoyage;
+ function canOpenAdventureGallery(){
+  return started&&!disposed&&context.active()&&!!core.state.gameState&&!core.functions.isGameActionLocked();
+ }
+ function galleryJson(){
+  const {unlocked,syncStatus}=galleryCollection.snapshot();
+  return JSON.stringify(adventure.project(window.BoardAdventureArt,unlocked,syncStatus));
+ }
+ function openAdventureGallery(){
+  if(!canOpenAdventureGallery()||!map.canShowCommands()||core.presentation.mapPresentationLocked())return false;
+  mergeGalleryVoyage(core);
+  application.call('show_adventure_gallery',galleryJson());
+  galleryCollection.sync(true);
+  return true;
+ }
  const battleNode=application.get_node('Battle');
  battleNode.get('timeline').get('audio').set('muted',false);
  const battle=new NativeBattleScene(battleNode,{closeModal:()=>modal.clear(),log(){},map(){map.refresh(core.presentation.mapProjection());scheduleMapControls();return true;},ships(){const complete=map.refreshShips(core.presentation.shipProjection());scheduleMapControls();return complete;}});
@@ -65,11 +102,18 @@ exports.create=function({context,application,search,fetch,navigate,controlsChang
   map.camera=require('./native-map-camera').create(api,application,window);
   controller=require('./native-map-platform').create(api,map);
   const bindings=require('./native-battle-platform').bind(api,battle,host.window),render=bindings.renderAll;
-  const presentation={...bindings,...controller.bindings,...modal.bindings(),...nika.bind(api),playSeaEncounterSplash:name=>seaSplash.play(name),renderAll(){render();api.functions.renderHeader();api.functions.renderCurrentPlayer();publishControls();}};
+  const presentation={...bindings,...controller.bindings,...modal.bindings(),...nika.bind(api),playSeaEncounterSplash:name=>seaSplash.play(name),renderAll(){mergeGalleryVoyage?.(api);render();api.functions.renderHeader();api.functions.renderCurrentPlayer();publishControls();}};
   return Object.fromEntries(Object.entries(presentation).map(([name,fn])=>[name,typeof fn==='function'?function(...args){return scope.measure('presentation:'+name,()=>fn.apply(this,args));}:fn]));
  };
  host.shared={...context.shared,showToast:text=>application.get("shared_toasts").call("show_message",String(text||""))};
  core=original.create(host);modal.nativeRefs=host.refs;modal.tavernPresentation=new (require('./native-tavern-reveal').NativeTavernReveal)(modal,window);
+ galleryCollection=adventure.createCollection(window.BoardAdventureArt,{
+  identity:()=>context.active()?context.profile:null,storage:context.host.localStorage,socket:realSocket,
+  setTimer:window.setTimeout,clearTimer:window.clearTimeout,
+  changed(){if(!disposed&&gallerySurface.call('is_visible'))gallerySurface.call('update_json',galleryJson());}
+ });
+ mergeGalleryVoyage=adventure.createVoyageMerger(galleryCollection);
+ window.BoardArtCollection=galleryCollection;
  const reconcileTurnControls=require('./native-turn-control-sync').create(core,host.refs);
  const reconcileInteractions=require('./native-interaction-sync').create(core,host.refs);
  const reconcileBattleSurface=require('./native-battle-lifecycle').create(core,battle);
@@ -86,11 +130,16 @@ exports.create=function({context,application,search,fetch,navigate,controlsChang
  connect(application.get_tree(),'process_frame',()=>{const now=Time.get_ticks_msec();if(disposed||!started||now<nextCpuDiagnostic)return;nextCpuDiagnostic=now+2000;const flags=JSON.stringify({cpu:core.functions.isCpuPlayer(core.functions.currentPlayer()),...core.presentation.cpuAutomationStatus(),battle:!!core.state.battleState,battleAnimating:!!core.state.battleState?.animating,battleResult:core.state.battleState?.result||"",battleWindow:core.functions.battleWindowIsActive(),battleVisible:battle.isOpen(),battleClosing:battle.closing,battlePending:battle.hasPendingBattlePresentation(),remoteBattleViews:core.boardLan.pendingRemoteBattleViews.length,restoreAttempts:core.boardLan.initialStateRequestAttempts,joined:core.boardLan.joinedOnce,version:core.boardLan.version,pendingState:!!core.boardLan.pendingState,inFlightState:!!core.boardLan.inFlightState,lastError:core.boardLan.lastError});if(flags!==lastCpuDiagnostic){lastCpuDiagnostic=flags;application.call('report_cpu_diagnostic',flags);}});
  connect(application,'audio_unlock_requested',()=>{music.unlock();sound.api.unlock();});
  connect(crewLevelUpHud,'cue_requested',()=>{if(!disposed)sound.api.playCue('levelUp');});
+ connect(gallerySurface,'sync_requested',()=>galleryCollection.sync(true));
  connect(application,'ui_control_activated',json=>sound.control(JSON.parse(json)));
  connect(battleNode,'cinematic_music_hold',held=>{if(held){battleMusicHold?.restore();battleMusicHold=require('./original-battle-bgm').hold(window);}else{battleMusicHold?.restore();battleMusicHold=null;}});
  connect(battleNode,'katakuri_music_focus',held=>{katakuriFocus?.release();katakuriFocus=held?music.acquireAudioFocus('katakuri-future-sight',{volumeRatio:.08,fadeOutMs:280,fadeInMs:720}):null;});
  connect(application,'map_controls_visibility_changed',()=>{if(started&&!disposed)scheduleMapControls();});
- connect(application.get('game_tools'),'command_requested',(key,value)=>{key=String(key);map.camera.beforeTool(key);const result=controls.activate(key,String(value));if(result)map.camera.afterTool(key);});
+ connect(application.get('game_tools'),'command_requested',(key,value)=>{
+  key=String(key);
+  if(key.startsWith('audio:')){applyAudioSetting(key,String(value));return;}
+  map.camera.beforeTool(key);const result=controls.activate(key,String(value));if(result)map.camera.afterTool(key);
+ });
  connect(waterNode,'command_requested',key=>water.activate(String(key)));
  connect(application.get('york_page'),'command_requested',key=>{york.activate(String(key)).catch(e=>console.error('York command: '+e.stack));});
  connect(application.get('york_page'),'drag_requested',(card,target)=>{york.drag(Number(card),Number(target)).catch(e=>console.error('York drag: '+e.stack));});
@@ -108,10 +157,10 @@ exports.create=function({context,application,search,fetch,navigate,controlsChang
   if(starting||started||disposed)throw Error('Native game entry already started or disposed');starting=true;
   const assets=JSON.stringify(startupAssets()),deadline=Date.now()+30000;
   while(!application.call('warm_assets_json',assets)){if(disposed)throw Error('Native entry cancelled');if(Date.now()>deadline)throw Error('Original opening assets unavailable');await new Promise(resolve=>setTimeout(resolve,16));}
-  if(disposed)throw Error('Native entry cancelled');started=true;core.startNative();publishControls();
+  if(disposed)throw Error('Native entry cancelled');started=true;core.startNative();galleryCollection.sync();publishControls();
  },async dispose(){
   if(disposed)return;disposed=true;joinRecovery.dispose();for(const item of listeners)realSocket.off(item.event,item.wrapped);listeners.length=0;
-  crewLevelUpHud.call('clear');
+  crewLevelUpHud.call('clear');galleryCollection.dispose();application.call('close_adventure_gallery');
   // This core is being unmounted. Invalidate its transient battle identity
   // before releasing UI waits so the original stale-battle guards terminate
   // continuations. Retain gameState, paid rewards and persisted saves unchanged.

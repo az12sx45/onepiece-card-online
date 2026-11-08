@@ -9,7 +9,11 @@ import urllib.request
 import zipfile
 REPO = 'az12sx45/onepiece-card-online'
 LIMIT = 496000000
-BUILD_VERSIONS = {'codex/ios-native-v038': 69, 'codex/ios-board-update-host-v070': 70}
+BUILD_VERSIONS = {
+    'codex/ios-native-v038': 69,
+    'codex/ios-board-update-host-v070': 70,
+    'codex/ios-board-parity-host-v071': 71,
+}
 def require(condition, message):
     if not condition:
         raise RuntimeError(message)
@@ -45,8 +49,14 @@ def main():
     require(run['head_sha'] == commit and run['head_branch'] == branch,
             'CI run identity differs')
     fixture = None
-    if version_code == 70:
-        expected = report['boardUpdateHost']['qaFixture']
+    if version_code in (70, 71):
+        host_report = report['boardUpdateHost' if version_code == 70 else 'boardParityHost']
+        if version_code == 71:
+            require(len(host_report['bundledParityPrograms']) == 23 and
+                    len(host_report['allowlistedPackedResources']) == 25 and
+                    host_report['qaFixture']['revision'] == 'qa-v071-transport',
+                    'Board parity pack inventory differs')
+        expected = host_report['qaFixture']
         fixture_path = 'board-qa/native-turn-control-sync.js'
         require(expected['qaOnly'] is True and expected['file'] == fixture_path and
                 0 < expected['bytes'] <= 4096, 'Board QA fixture identity differs')

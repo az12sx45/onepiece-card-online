@@ -13,6 +13,7 @@ const oars=require('./original-oars-presentation');
 const saga=require('./original-saga-presentation');
 const bullet=require('./original-bullet-presentation');
 const battleIdentity=require('./original-battle-identity');
+const cosmeticFrame=require('./native-battle-cosmetic-frame');
 class NativeBattleScene {
     constructor(stage,callbacks){
         for(const key of ['closeModal','log','map'])if(typeof callbacks[key]!=='function')throw Error('Missing native application scene callback '+key);
@@ -38,7 +39,7 @@ class NativeBattleScene {
     show(packet={skip:true}){this.closing=false;this.stage.call('request_open_json',JSON.stringify(packet));}
     isOpen(){return this.stage.call('is_visible');}
     beginClose(){this.closing=true;this.stage.call('begin_close');}
-    close(){this.closing=false;if(this.judicialReward)this.judicialReward.close();this.zephyr.close();this.stage.call('close_surface');if(this.lineage)this.lineage.refresh(null);this.prompts.refresh(null);this.totActions.refresh(null);this.totStage.refresh(null);}
+    close(){this.closing=false;if(this.judicialReward)this.judicialReward.close();this.zephyr.close();this.stage.call('close_surface');this.stage.get('view').call('clear_cosmetic_frames');if(this.lineage)this.lineage.refresh(null);this.prompts.refresh(null);this.totActions.refresh(null);this.totStage.refresh(null);}
     enableJudicialReward(options){if(this.judicialReward)throw Error('Judicial bridge already bound');this.judicialReward=new(require('./native-judicial-reward-bridge').NativeJudicialRewardBridge)(this.stage,options);return this.judicialReward;}
     closeModal(){this.callbacks.closeModal();}
     ready(){return this.stage.is_inside_tree()&&this.stage.call('presentation_ready');}
@@ -51,10 +52,12 @@ class NativeBattleScene {
     hasPendingBattlePresentation(){return [...this.events.values()].some(event=>event.pending&&!['turn-banner','mission-complete-toast'].includes(event.type));}
     applyHud(view){
         const packet={...view,_nativeAttribute:attributes.prepare(view)};
+        const regularPortraits=view.battle?.postgameBossMechanic?.key!=='postgame_tot_musica';
         for(const [side,field] of [['player','activeCard'],['enemy','enemy']]){
             const actor=view[field];if(!actor)continue;
             this.statusControls[side].refresh(actor,side,view);
             packet[field]={...actor,_nativeStatusIcons:this.statusControls[side].project()};
+            if(regularPortraits)packet[field]._nativeCosmeticFrame=cosmeticFrame.prepare(actor,side);
             if(side==='enemy')packet[field]._nativeDemon=demon.prepare(actor);
         }
         this.stage.call('apply_view_json',JSON.stringify(packet));
