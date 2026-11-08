@@ -78,19 +78,27 @@ func _prepare(value: Dictionary,token: int) -> void:
 			for row in value.replacements:paths.append(row.image)
 	var available: Dictionary={};var deadline:=Time.get_ticks_msec()+15000
 	for path in paths:
-		if prepared.has(path):available[path]=prepared[path]
+		if prepared.get(path)!=null:available[path]=prepared[path]
 	while token==epoch:
 		var ready:=true
 		for path in paths:
 			if str(path).is_empty() or available.has(path):continue
-			if cache.failed.has(path):push_error("Native tavern asset failed: "+str(path));return
+			if cache.failed.has(path):
+				push_warning("Native tavern asset unavailable: "+str(path))
+				available[path]=null
+				continue
 			var texture: Texture2D=cache.request(path)
 			if texture!=null:available[path]=texture
 			else:ready=false
 		if ready:break
-		if Time.get_ticks_msec()>deadline:push_error("Native tavern asset timeout");return
+		if Time.get_ticks_msec()>=deadline:
+			push_warning("Native tavern art preparation timed out; showing available art")
+			break
 		await get_tree().process_frame
 	if token!=epoch:return
+	# Art is optional. Keep null keys for the Impel result presenter as well.
+	for path in paths:
+		if not available.has(path):available[path]=null
 	model=value;prepared=available;blocked=false;_commit()
 func _commit() -> void:
 	if model.kind=="impel-recruit-result":
@@ -121,6 +129,7 @@ func _commit() -> void:
 			rows[key]={"button":button,"picture":picture,"text":text,"path":item.image};button.resized.connect(func():_layout_row(key));row_writes+=1
 		var row: Dictionary=rows[key];list.move_child(row.button,index);row.button.custom_minimum_size.y=100 if main else 126;row.button.disabled=item.get("disabled",false);row.path=item.image
 		row.button.get_meta("frame").texture=prepared["mobile/art-ui/mobile-row-v013.png"];row.button.get_meta("frame").self_modulate=Color("ffe1a4") if item.get("selected",false) else Color.WHITE
+		row.button.flat=prepared["mobile/art-ui/mobile-row-v013.png"]!=null
 		row.text.text=(item.grade+" · "+item.name+"\n"+item.meta+"\n"+item.bottom) if main else item.name+"\n"+item.detail
 	for key in rows.keys():
 		if not keep.has(key):rows[key].button.queue_free();rows.erase(key)
@@ -129,6 +138,7 @@ func _commit() -> void:
 		var key: String=item.key;keep[key]=true
 		if not actions.has(key):actions[key]=_button(key,self)
 		var button: Button=actions[key];button.show();button.text=item.label;button.disabled=item.disabled;button.get_meta("frame").texture=prepared["mobile/art-ui/mobile-row-v013.png"]
+		button.flat=prepared["mobile/art-ui/mobile-row-v013.png"]!=null
 	for key in actions:
 		if not keep.has(key):actions[key].hide()
 	_layout();call_deferred("_layout");show();surface_ready.emit();call_deferred("set_list_scroll_top",wanted_scroll);call_deferred("_visible_thumbnails")

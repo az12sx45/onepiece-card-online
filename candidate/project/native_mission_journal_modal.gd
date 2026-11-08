@@ -70,6 +70,7 @@ func _frame(button: Button) -> void:
 	var frame:=NinePatchRect.new();frame.texture=row_texture;frame.region_rect=Rect2(0,204,2008,360);frame.scale=Vector2.ONE*.0625;frame.mouse_filter=Control.MOUSE_FILTER_IGNORE;frame.show_behind_parent=true
 	for side in [SIDE_LEFT,SIDE_TOP,SIDE_RIGHT,SIDE_BOTTOM]:frame.set_patch_margin(side,160)
 	button.add_child(frame);button.resized.connect(func():frame.size=button.size/.0625);frame.size=button.size/.0625
+	button.set_meta("journal_frame",frame)
 func apply_json(value: String) -> void:
 	var next: Dictionary=JSON.parse_string(value)
 	if next==model and visible and not busy:surface_ready.emit();return
@@ -82,27 +83,30 @@ func _prepare(token: int, list_top: int, detail_top: int) -> void:
 	if not model.detail.image.is_empty():paths.append(model.detail.image)
 	var deadline:=Time.get_ticks_msec()+20000
 	while token==epoch:
+		var expired:=Time.get_ticks_msec()>=deadline
 		var complete:=true
 		for path in paths:
 			if loaded.has(path):continue
-			if cache.failed.has(path):push_error("Journal source image failed: "+str(path));return
+			# Journal and mission wall still render their original text and actions.
+			if expired or cache.failed.has(path):loaded[path]=null;continue
 			var live: bool=cache.live_textures.has(path) and cache.live_textures[path].get_ref()!=null
 			if not cache.records.has(path) and not live and cache.pending.size()>=2:complete=false;continue
 			var texture: Texture2D=cache.request(path)
 			if texture:loaded[path]=texture
 			else:complete=false
 		if complete:break
-		if Time.get_ticks_msec()>deadline:push_error("Journal source image timeout");return
 		await get_tree().process_frame
 	if token!=epoch:return
-	panel.texture=loaded[PANEL];row_texture=loaded[ROW];detail_frame.texture=row_texture
+	panel.texture=loaded.get(PANEL);row_texture=loaded.get(ROW);detail_frame.texture=row_texture
 	if not framed:
 		for action in actions:_frame(action.button)
 		framed=true
+	for action in actions:
+		action.button.get_meta("journal_frame").texture=row_texture
 	title.text=model.title;subtitle.text=model.subtitle
 	while rows.size()<model.entries.size():_new_row()
 	for index in range(rows.size()):
-		var row: Dictionary=rows[index];row.button.visible=index<model.entries.size()
+		var row: Dictionary=rows[index];row.button.visible=index<model.entries.size();row.button.get_meta("journal_frame").texture=row_texture
 		if not row.button.visible:row.image.texture=null;continue
 		var entry: Dictionary=model.entries[index];row.button.set_meta("key",entry.key);row.button.disabled=entry.get("disabled",false);row.image.texture=loaded.get(entry.image);row.title.text=entry.title;row.subtitle.text=entry.subtitle;row.status.text=entry.status;row.button.modulate=Color("fff1b8") if entry.selected else Color.WHITE
 	rank.texture=loaded.get(model.detail.image);rank.visible=rank.texture!=null;name_label.text=model.detail.title;type_label.text=model.detail.subtitle;condition_title.text=model.detail.conditionTitle;condition_title.visible=not condition_title.text.is_empty();condition.text=model.detail.condition;progress_label.text=model.detail.progressLabel;progress_text.text=model.detail.progress;progress.value=model.detail.progressPercent;reward_title.text=model.detail.rewardTitle;reward.text=model.detail.reward;note.text=model.detail.note;note.visible=not note.text.is_empty()

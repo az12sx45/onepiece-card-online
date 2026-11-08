@@ -156,6 +156,8 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
          'original-board-audio.js', 'original-core.js'))
     board_material_guide_pack=verify_board_pack(entries,candidate/'project',
         ('native-crew-markup.js', 'native_crew_modal.gd', 'original-core.js'))
+    board_cpu_recovery_pack=verify_board_pack(entries,candidate/'project',
+        ('native_hospital_modal.gd', 'native_mission_board_modal.gd', 'native_mission_journal_modal.gd', 'native_research_modal.gd', 'native_shop_modal.gd', 'native_tavern_modal.gd', 'original-core.js'))
     del entries
     shutil.copytree(candidate/'bundle-resources',app,dirs_exist_ok=True)
     launcher=json.loads((candidate/'launcher-manifest.json').read_text())
@@ -198,6 +200,7 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
     report['rawRuntimeResourcesByteIdentical']=raw_verified
     report['boardLevelUpPack']=board_level_up_pack
     report['boardMaterialGuidePack']=board_material_guide_pack
+    report['boardCpuRecoveryPack']=board_cpu_recovery_pack
     report['macWebKitLauncherChecked']=True
     report['macWebKitMarinefordChecked']=True
     report['macWebKitMarinefordProgramChecked']=True

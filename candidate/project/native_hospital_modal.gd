@@ -66,21 +66,23 @@ func _prepare(value: Dictionary,token: int) -> void:
 		if not entry.empty and not str(entry.image).is_empty():paths.append(entry.image)
 	var available: Dictionary={};var deadline:=Time.get_ticks_msec()+15000
 	while token==epoch:
+		var expired:=Time.get_ticks_msec()>=deadline
 		var ready:=true
 		for path in paths:
 			if available.has(path):continue
-			if cache.failed.has(path):push_error("Native hospital asset failed: "+str(path));return
+			# Crew and island artwork is optional; do not hold the heal/leave actions.
+			if str(path).is_empty() or expired or cache.failed.has(path):available[path]=null;continue
 			var texture: Texture2D=cache.request(path)
 			if texture!=null:available[path]=texture
 			else:ready=false
 		if ready:break
-		if Time.get_ticks_msec()>deadline:push_error("Native hospital asset timeout");return
 		await get_tree().process_frame
 	if token!=epoch:return
-	model=value;prepared=available;background.texture=prepared[paths[0]];island.texture=prepared[model.image]
+	model=value;prepared=available;background.texture=prepared.get(paths[0]);island.texture=prepared.get(model.image)
 	title.text=model.title;subtitle.text=model.subtitle;copy.text=model.cost+" · "+model.name+"\n"+model.description
+	var row_texture: Texture2D=prepared.get(paths[1])
 	for index in range(cards.size()):
-		var entry: Dictionary=model.crew[index];var card: Dictionary=cards[index];card.frame.texture=prepared[paths[1]]
+		var entry: Dictionary=model.crew[index];var card: Dictionary=cards[index];card.frame.texture=row_texture
 		card.picture.visible=not entry.empty;card.status.visible=not entry.empty
 		for meter in card.meters:meter.bar.visible=not entry.empty;meter.label.visible=not entry.empty
 		if entry.empty:card.name.text="空船員席位";continue
@@ -88,7 +90,7 @@ func _prepare(value: Dictionary,token: int) -> void:
 		for pair in [[card.meters[0],entry.hp],[card.meters[1],entry.pp]]:pair[0].bar.value=pair[1].value;pair[0].label.text=pair[1].text
 	for index in range(actions.size()):
 		var action: Dictionary=model.actions[index];var button: Button=actions[index]
-		button.set_meta("key",action.key);button.text=action.label;button.disabled=action.disabled;button.get_meta("frame").texture=prepared[paths[1]]
+		button.set_meta("key",action.key);button.text=action.label;button.disabled=action.disabled;button.flat=row_texture!=null;button.get_meta("frame").texture=row_texture
 	_layout();call_deferred("_layout");show();surface_ready.emit()
 
 func _layout() -> void:

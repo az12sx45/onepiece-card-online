@@ -21,23 +21,29 @@ func _ready() -> void:
 func apply_json(value: String) -> void:
 	var next: Dictionary=JSON.parse_string(value)
 	if next==original_model and visible and not busy:surface_ready.emit();return
-	broker_epoch+=1;busy=true;_load_board(next,broker_epoch)
+	# Invalidate the previous model's inherited journal preparation immediately.
+	broker_epoch+=1;epoch+=1;busy=true;_load_board(next,broker_epoch)
 
 func _load_board(next: Dictionary, token: int) -> void:
 	var loaded: Dictionary={};var deadline:=Time.get_ticks_msec()+20000
+	var paths: Array=[next.broker.open,next.broker.blink]
 	while token==broker_epoch:
-		for path in [next.broker.open,next.broker.blink]:
+		var expired:=Time.get_ticks_msec()>=deadline
+		var complete:=true
+		for path in paths:
 			if loaded.has(path):continue
-			if cache.failed.has(path):push_error("Original mission broker failed: "+str(path));return
+			if str(path).is_empty() or expired or cache.failed.has(path):loaded[path]=null;continue
 			var live: bool=cache.live_textures.has(path) and cache.live_textures[path].get_ref()!=null
-			if not cache.records.has(path) and not live and cache.pending.size()>=2:continue
+			if not cache.records.has(path) and not live and cache.pending.size()>=2:complete=false;continue
 			var texture: Texture2D=cache.request(path)
 			if texture:loaded[path]=texture
-		if loaded.size()==2:break
-		if Time.get_ticks_msec()>deadline:push_error("Mission broker timeout");return
+			else:complete=false
+		if complete:break
 		await get_tree().process_frame
 	if token!=broker_epoch:return
-	original_model=next;broker_open.texture=loaded[next.broker.open];broker_blink.texture=loaded[next.broker.blink];blink_start=Time.get_ticks_msec();broker_blink.modulate.a=0;guidance.text=next.broker.guidance;tier.text=next.tier;refresh.text=next.refresh.label;refresh.disabled=next.refresh.disabled
+	var open_texture: Texture2D=loaded.get(next.broker.open)
+	var blink_texture: Texture2D=loaded.get(next.broker.blink)
+	original_model=next;broker_open.texture=open_texture if open_texture!=null else blink_texture;broker_blink.texture=blink_texture if open_texture!=null else null;blink_start=Time.get_ticks_msec();broker_blink.modulate.a=0;guidance.text=next.broker.guidance;tier.text=next.tier;refresh.text=next.refresh.label;refresh.disabled=next.refresh.disabled
 	var projected: Dictionary={"kind":"mission-board","title":next.title,"subtitle":"　".join(next.wallet),"entries":[],"empty":next.empty,"detail":{},"actions":next.actions.duplicate(true)}
 	for entry in next.entries:
 		projected.entries.append({"key":entry.key,"id":entry.id,"disabled":entry.get("disabled",false),"selected":entry.selected,"main":false,"image":entry.image,"title":entry.title,"subtitle":" · ".join(entry.tags)+"\n"+entry.condition+"\n"+"　".join(entry.rewards),"status":" · ".join(entry.stamps)})

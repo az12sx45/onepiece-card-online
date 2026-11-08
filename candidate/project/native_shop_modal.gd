@@ -74,6 +74,8 @@ func _image(control: Control,path: String) -> void:
 	if path.is_empty():control.texture=null;return
 	if control.texture!=null and control.get_meta("loaded","")==path:return
 	var texture: Texture2D=prepared.get(path)
+	if texture==null and prepared.has(path):
+		control.texture=null;control.remove_meta("loaded");return
 	if texture==null:texture=cache.request(path)
 	if texture!=null:control.texture=texture;control.set_meta("loaded",path)
 
@@ -103,20 +105,22 @@ func _prepare(value: Dictionary,token: int) -> void:
 	var available: Dictionary={};var deadline:=Time.get_ticks_msec()+15000
 	# Cache eviction must not recreate textures already retained by this page.
 	for path in paths:
-		if prepared.has(path):available[path]=prepared[path]
+		var retained: Texture2D=prepared.get(path)
+		if retained!=null:available[path]=retained
 	while token==epoch:
+		var expired:=Time.get_ticks_msec()>=deadline
 		var ready:=true
 		for path in paths:
 			if available.has(path):continue
-			if cache.failed.has(path):push_error("Native shop asset failed: "+str(path));return
+			# A missing texture must not keep source purchase/leave controls disabled.
+			if expired or cache.failed.has(path):available[path]=null;continue
 			var texture: Texture2D=cache.request(path)
 			if texture!=null:available[path]=texture
 			else:ready=false
 		if ready:break
-		if Time.get_ticks_msec()>deadline:push_error("Native shop assets timed out");return
 		await get_tree().process_frame
 	if token!=epoch:return
-	prepared=available;model=value;row_texture=prepared[paths[1]];_commit()
+	prepared=available;model=value;row_texture=prepared.get(paths[1]);_commit()
 
 func _commit() -> void:
 	_image(background,"mobile/art-ui/mobile-panel-v013.png")
@@ -143,6 +147,7 @@ func _commit() -> void:
 				rows[key]={"button":button,"picture":picture,"name":name_label,"price":price}
 				button.resized.connect(func():_layout_row(key));list_writes+=1
 			var row: Dictionary=rows[key];list.move_child(row.button,index);row.button.disabled=item.get("disabled",false);row.button.tooltip_text=item.name
+			row.button.flat=row_texture!=null
 			row.button.get_meta("frame").texture=row_texture
 			row.button.get_meta("frame").self_modulate=Color("ffe2a2") if item.selected else Color.WHITE
 			_text(row.name,item.name);_text(row.price,item.price+(" 鎖" if item.locked else ""));row.picture.set_meta("wanted",item.image);_layout_row(key)
@@ -152,7 +157,7 @@ func _commit() -> void:
 	_layout();call_deferred("_layout");show();surface_ready.emit();call_deferred("set_list_scroll_top",wanted_scroll);call_deferred("_update_visible_thumbnails")
 
 func _configure_button(button: Button,value: Dictionary) -> void:
-	_text(button,value.label);button.disabled=value.disabled;button.get_meta("frame").texture=row_texture;button.set_meta("key",value.key)
+	_text(button,value.label);button.disabled=value.disabled;button.flat=row_texture!=null;button.get_meta("frame").texture=row_texture;button.set_meta("key",value.key)
 
 func _layout_row(key: String) -> void:
 	if not rows.has(key):return

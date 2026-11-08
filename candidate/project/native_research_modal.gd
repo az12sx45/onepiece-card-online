@@ -51,23 +51,25 @@ func apply_json(value: String) -> void:epoch+=1;busy=true;_load(JSON.parse_strin
 func _load(next: Dictionary,token: int) -> void:
 	var paths: Array=[];_paths(next,paths);var fallbacks: Dictionary={};_fallbacks(next,fallbacks);var images: Dictionary={};var deadline:=Time.get_ticks_msec()+18000
 	while images.size()<paths.size() and token==epoch:
+		var expired:=Time.get_ticks_msec()>=deadline
 		for path in paths:
 			if images.has(path):continue
+			if expired:images[path]=null;continue
 			var source: String=path
 			if cache.failed.has(source):
-				if not fallbacks.has(source) or cache.failed.has(fallbacks[source]):push_error("Research source image and fallback failed "+path);return
-				source=fallbacks[source]
+				source=str(fallbacks.get(path,""))
+				if source.is_empty() or cache.failed.has(source):images[path]=null;continue
 			if cache.pending.size()>=2 and not cache.records.has(source) and not cache.live_textures.has(source):continue
 			var texture: Texture2D=cache.request(source)
 			if texture!=null:images[path]=texture
-		if Time.get_ticks_msec()>deadline:push_error("Research source images timeout");return
+		if images.size()==paths.size():break
 		await get_tree().process_frame
 	if token!=epoch:return
 	loads+=1;model=next;prepared=images;controls.clear();buttons.clear();cultivation_vessel=null;cultivating_tick=-1
 	for control in model.controls:controls[control.key]=control
 	for container in [nav,tabs,footer,body]:
 		for child in container.get_children():container.remove_child(child);child.queue_free()
-	frame.texture=prepared[model.frame];title.text=model.title;subtitle.text=model.subtitle;notice.text=model.notice
+	frame.texture=prepared.get(model.frame);title.text=model.title;subtitle.text=model.subtitle;notice.text=model.notice
 	for key in model.nav:_button(nav,key,46).size_flags_vertical=Control.SIZE_EXPAND_FILL
 	for key in model.subnav:_button(tabs,key,30)
 	for key in model.footer:_button(footer,key,32)
@@ -83,11 +85,12 @@ func _row(parent: Node) -> HBoxContainer:
 func _button(parent: Node,key: String,height:=32) -> Button:
 	assert(controls.has(key),"Original research control absent");var data: Dictionary=controls[key];var button:=Button.new();button.text=data.label;button.disabled=data.disabled;button.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;button.size_flags_horizontal=Control.SIZE_EXPAND_FILL;button.custom_minimum_size.y=height;button.add_theme_font_size_override("font_size",11);button.add_theme_color_override("font_color",Color("ffefb4"))
 	var path: String=data.image
-	if path.is_empty():button.flat=true
-	else:
-		var style:=StyleBoxTexture.new();style.texture=prepared[path]
+	var texture: Texture2D=prepared.get(path)
+	if texture!=null:
+		var style:=StyleBoxTexture.new();style.texture=texture
 		for side in [SIDE_LEFT,SIDE_TOP,SIDE_RIGHT,SIDE_BOTTOM]:style.set_texture_margin(side,12);style.set_content_margin(side,6)
 		button.add_theme_stylebox_override("normal",style);button.add_theme_stylebox_override("hover",style);button.add_theme_stylebox_override("pressed",style);button.add_theme_stylebox_override("disabled",style)
+	else:button.flat=path.is_empty()
 	button.set_meta("key",key);parent.add_child(button);buttons[key]=button;button.pressed.connect(func():if not busy:command_requested.emit(key));return button
 func _actions(parent: Node,keys: Array) -> void:
 	if keys.is_empty():return
