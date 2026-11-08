@@ -1,17 +1,19 @@
 {
   "schemaVersion": 1,
-  "revision": 105,
+  "revision": 106,
   "announcements": [
     {
-      "id": "board-20261107-evolution-material-guide",
+      "id": "board-20261108-cpu-turn-recovery",
       "status": "published",
-      "publishedAt": "2026-11-07T09:12:42.995Z",
+      "publishedAt": "2026-11-08T03:20:29.539Z",
       "scope": "board",
       "category": "update",
-      "version": "package-d9c4e4a672b9277c",
-      "title": "新世界航海錄：進化素材取得指南",
-      "summary": "電腦版船員詳情可點選進化素材，查看一般素材的地點、關卡、條件與領取方式。",
+      "version": "package-7294865db78a1df4",
+      "title": "新世界航海錄：CPU 回合續行修正",
+      "summary": "修正 CPU 打完敵人島後可能卡在酒館。CPU 依既有規則招募或離開後，會繼續交棒。",
       "body": [
+        "CPU 在酒館可自行完成招募或離開，繼續回合。修正部分過期進島提示擋住擲骰的情況。",
+        "讀回已發放司法島階段獎勵的存檔時，可以接續後面的流程，避免同一份獎勵重複發放。",
         "打開船員詳情並點選所需素材。一般素材會列出取得條件，已看見的島嶼可在地圖上定位。",
         "特殊進化只提供大致探索區域。",
         "戰鬥結算或領取任務獎勵後，升等的船員會顯示角色頭像、前後等級與金色亮光。",
@@ -23,7 +25,7 @@
       ],
       "requiredRelease": {
         "kind": "board",
-        "releaseId": "package-d9c4e4a672b9277c"
+        "releaseId": "package-7294865db78a1df4"
       },
       "cta": {
         "kind": "game",
