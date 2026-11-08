@@ -2725,7 +2725,7 @@
       if (def.id === "fixed_step") player.fixedStepTokens = Math.max(0, Number(player.fixedStepTokens || 0)) + count;
     }
     recordMissionEvent(player, { type: "obtain_item", itemId: def.id, itemName: def.name, category: normalizeGameItemCategory(def.category), amount: count }, count);
-    if (options?.reveal) queueImportantItemReveal(def, count);
+    if (options?.reveal && !isCpuPlayer(player)) queueImportantItemReveal(def, count);
     return def;
   }
 
@@ -29085,9 +29085,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       callback?.();
       return 0;
     }
-    setTurnHandoffVisualLock(true);
-    const event = emitTurnHandoffEvent(player, options);
-    const delay = Math.max(0, Number(handleBoardUiEvent(event) || event?.transitionDelay || TURN_HANDOFF_TRANSITION_DELAY_MS));
+    let delay = TURN_HANDOFF_TRANSITION_DELAY_MS;
+    try {
+      setTurnHandoffVisualLock(true);
+      const event = emitTurnHandoffEvent(player, options);
+      delay = Math.max(0, Number(handleBoardUiEvent(event) || event?.transitionDelay || delay));
+    } catch (error) {
+      console.warn("Turn handoff presentation failed", error);
+    }
     window.setTimeout(() => {
       try {
         callback?.();
@@ -35870,7 +35875,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       const added = addBattleCarryItemToBackpack(player, counterItemId, { bound: false });
       if (added) {
         player.yonkoCounterRewards.push(counterItemId);
-        queueImportantItemReveal(gameItemDef(counterItemId), 1);
+        if (!isCpuPlayer(player)) queueImportantItemReveal(gameItemDef(counterItemId), 1);
         addLog(`${player.name} 首次打倒 ${island.name}，取得角色攜帶物：${counterDef.name}。`);
         recordMissionEvent(player, { type: "obtain_item", itemId: counterItemId, itemName: counterDef.name, category: "held" });
       }
@@ -40718,7 +40723,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       if (itemDef.id === "pointer") player.routeInsight = Math.max(0, Number(player.routeInsight || 0)) + count;
       if (itemDef.id === "fixed_step") player.fixedStepTokens = Math.max(0, Number(player.fixedStepTokens || 0)) + count;
       recordMissionEvent(player, { type: "obtain_item", itemId: itemDef.id, itemName: itemDef.name, category: normalizeGameItemCategory(itemDef.category), amount: count }, count);
-      if (itemDef.important) queueImportantItemReveal(itemDef, count);
+      if (itemDef.important && !isCpuPlayer(player)) queueImportantItemReveal(itemDef, count);
       return `${itemDef.name} +${count}`;
     }
     if (item.id === "heal_2") {
@@ -44117,6 +44122,59 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function openTavernModal(player, island) {
     if (warnBoardLanTurnLocked(player)) return;
+    clearAllTavernRecruitBoosts(player);
+    const rollRecruit = () => {
+      const latest = currentPlayer();
+      if (latest !== player || warnBoardLanTurnLocked(player)) return false;
+      const latestPool = tavernRecruitPool(latest);
+      const latestRollPool = tavernRecruitRollPool(latestPool, latest);
+      if (latest.coins < TAVERN_RECRUIT_ROLL_COST || !latestRollPool.length) return false;
+      latest.coins -= TAVERN_RECRUIT_ROLL_COST;
+      recordMissionEvent(latest, { type: "tavern_action", action: "roll", islandKind: "tavern" });
+      recordMissionEvent(latest, { type: "island_service", islandKind: "tavern" });
+      const picked = pickWeightedTavernRecruit(latestRollPool, latest);
+      if (!picked) {
+        clearAllTavernRecruitBoosts(latest);
+        addLog(`${latest.name} 在 ${island.name} 嘗試招募，但目前已沒有可招募夥伴。`);
+        finishIslandServiceTurn();
+        return true;
+      }
+      const totalWeight = tavernRecruitTotalWeight(latestRollPool, latest);
+      const chance = tavernRecruitChance(picked, latest, latestRollPool);
+      const boostCount = tavernRecruitBoostCount(latest, picked.id);
+      const recruit = cloneRecruitAtPartyFloor(latest, picked);
+      const syncedLevelText = recruit.recruitSyncedFromLevel
+        ? `，等級同步至隊伍最低等 Lv.${recruit.recruitSyncedToLevel}`
+        : "";
+      clearAllTavernRecruitBoosts(latest);
+      addLog(`${latest.name} 在 ${island.name} 花 ${formatCoin(TAVERN_RECRUIT_ROLL_COST)} 貝里招募，抽中 ${cardDisplayName(recruit)}（${tavernRecruitGrade(recruit)}級，機率約 ${formatRecruitChance(chance)}${syncedLevelText}）。`);
+      emitBoardActionNotice("recruit", "酒館招募", `${latest.name} 在 ${island.name} 抽中 ${cardDisplayName(recruit)}`, {
+        player: latest,
+        cardName: cardDisplayName(recruit),
+        theme: "fate",
+        symbol: "招",
+      }, { immediate: true, skipStatePush: isCpuPlayer(latest) });
+      openRecruitResultModal(latest, island, recruit, {
+        tavernReveal: true,
+        cost: TAVERN_RECRUIT_ROLL_COST,
+        chance,
+        boostCount,
+        poolSize: latestPool.length,
+        totalWeight,
+      });
+      return true;
+    };
+    const leaveTavern = () => {
+      if (currentPlayer() !== player || warnBoardLanTurnLocked(player)) return;
+      clearAllTavernRecruitBoosts(player);
+      finishIslandServiceTurn();
+    };
+    if (isCpuPlayer(player)) {
+      // CPU decisions use the same rules without waiting for controls or art.
+      if (currentPlayer() !== player || !canLocalDriveCpuPlayer(player)) return;
+      if (!devObserverShouldRollTavern(player) || !rollRecruit()) leaveTavern();
+      return;
+    }
     playBgmForContext({
       phase: "town",
       sceneType: "tavern",
@@ -44127,7 +44185,6 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       eventTags: ["party", "crew", "food"],
       storyMood: "festive",
     });
-    clearAllTavernRecruitBoosts(player);
     const render = (preferredId = player.tavernRecruitSelectedId, candidateScrollTop = 0) => {
       const current = currentPlayer();
       if (!current || current.id !== player.id) return;
@@ -44136,7 +44193,6 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       const selected = pool.find((card) => card.id === preferredId) || pool[0] || null;
       current.tavernRecruitSelectedId = selected?.id || "";
       const hasRoom = current.crew.length < TEAM_LIMIT;
-      const totalWeight = tavernRecruitTotalWeight(rollPool, current);
       const selectedBoost = selected ? tavernRecruitBoostCount(current, selected.id) : 0;
       const selectedEligible = !!selected && rollPool.some((card) => card.id === selected.id);
       const selectedChance = selected && selectedEligible ? tavernRecruitChance(selected, current, rollPool) : 0;
@@ -44200,50 +44256,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         recordMissionEvent(latest, { type: "island_service", islandKind: "tavern" });
         render(target.id, candidateList?.scrollTop || 0);
       });
-      document.getElementById("rollRecruitBtn")?.addEventListener("click", () => {
-        const latest = currentPlayer();
-        if (!latest || latest.id !== player.id) return;
-        const latestPool = tavernRecruitPool(latest);
-        const latestRollPool = tavernRecruitRollPool(latestPool, latest);
-        if (latest.coins < TAVERN_RECRUIT_ROLL_COST || !latestRollPool.length) return;
-        latest.coins -= TAVERN_RECRUIT_ROLL_COST;
-        recordMissionEvent(latest, { type: "tavern_action", action: "roll", islandKind: "tavern" });
-        recordMissionEvent(latest, { type: "island_service", islandKind: "tavern" });
-        const picked = pickWeightedTavernRecruit(latestRollPool, latest);
-        if (!picked) {
-          clearAllTavernRecruitBoosts(latest);
-          addLog(`${latest.name} 在 ${island.name} 嘗試招募，但目前已沒有可招募夥伴。`);
-          finishIslandServiceTurn();
-          return;
-        }
-        const chance = tavernRecruitChance(picked, latest, latestRollPool);
-        const boostCount = tavernRecruitBoostCount(latest, picked.id);
-        const recruit = cloneRecruitAtPartyFloor(latest, picked);
-        const syncedLevelText = recruit.recruitSyncedFromLevel
-          ? `，等級同步至隊伍最低等 Lv.${recruit.recruitSyncedToLevel}`
-          : "";
-        clearAllTavernRecruitBoosts(latest);
-        addLog(`${latest.name} 在 ${island.name} 花 ${formatCoin(TAVERN_RECRUIT_ROLL_COST)} 貝里招募，抽中 ${cardDisplayName(recruit)}（${tavernRecruitGrade(recruit)}級，機率約 ${formatRecruitChance(chance)}${syncedLevelText}）。`);
-        emitBoardActionNotice("recruit", "酒館招募", `${latest.name} 在 ${island.name} 抽中 ${cardDisplayName(recruit)}`, {
-          player: latest,
-          cardName: cardDisplayName(recruit),
-          theme: "fate",
-          symbol: "招",
-        }, { immediate: true });
-        openRecruitResultModal(latest, island, recruit, {
-          tavernReveal: true,
-          cost: TAVERN_RECRUIT_ROLL_COST,
-          chance,
-          boostCount,
-          poolSize: latestPool.length,
-          totalWeight,
-        });
-      });
-      document.getElementById("leaveTavernBtn")?.addEventListener("click", () => {
-        const latest = currentPlayer();
-        if (latest?.id === player.id) clearAllTavernRecruitBoosts(latest);
-        finishIslandServiceTurn();
-      });
+      document.getElementById("rollRecruitBtn")?.addEventListener("click", rollRecruit);
+      document.getElementById("leaveTavernBtn")?.addEventListener("click", leaveTavern);
       emitSpectatorModalEvent("tavern", current, tavernSpectatorDetail(current, island, pool, rollPool, selected, {
         selectedChance,
         selectedBoost,
@@ -44254,6 +44268,46 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function openRecruitResultModal(player, island, recruit, rollMeta = {}) {
+    const acceptRecruit = () => {
+      player.crew.push(recruit);
+      state.gameState.availableCards = state.gameState.availableCards.filter((entry) => entry.id !== recruit.id);
+      clearTavernRecruitBoost(player, recruit.id);
+      recalcPlayerDerivedStats(player);
+      addLog(`${player.name} 在 ${island.name} 招募到 ${recruit.name}。`);
+      queueRecruitSyncedMoveChoices(player, recruit);
+      finishIslandServiceTurn();
+    };
+    const declineRecruit = () => {
+      addLog(`${player.name} 在 ${island.name} 放棄招募 ${recruit.name}。`);
+      finishIslandServiceTurn();
+    };
+    const replaceRecruit = (replaceIndex) => {
+      const replaced = player.crew[replaceIndex];
+      const returnedCarryName = returnBattleCarryFromRemovedCard(player, replaced);
+      const returnedToRecruitPool = returnRecruitCardToPool(replaced);
+      player.crew.splice(replaceIndex, 1, recruit);
+      state.gameState.availableCards = state.gameState.availableCards.filter((entry) => entry.id !== recruit.id);
+      clearTavernRecruitBoost(player, recruit.id);
+      if (player.activeCrewIndex === replaceIndex) player.activeCrewIndex = replaceIndex;
+      if (player.activeCrewIndex >= player.crew.length) player.activeCrewIndex = 0;
+      recalcPlayerDerivedStats(player);
+      addLog(`${player.name} 在 ${island.name} 捨棄 ${replaced.name}，改收下 ${recruit.name}。`);
+      queueRecruitSyncedMoveChoices(player, recruit);
+      if (returnedCarryName) addLog(`${replaced.name} 的 ${returnedCarryName} 已回到背包。`);
+      if (returnedToRecruitPool) addLog(`${replaced.name} 回到可招募角色池。`);
+      finishIslandServiceTurn();
+    };
+    if (rollMeta.tavernReveal === true && isCpuPlayer(player)) {
+      if (currentPlayer() !== player || !canLocalDriveCpuPlayer(player)) return;
+      if (player.crew.length < TEAM_LIMIT) acceptRecruit();
+      else {
+        const weakest = devObserverWeakestCrew(player);
+        const baseCandidate = state.gameState.availableCards.find((entry) => entry.id === recruit.id) || recruit;
+        if (weakest && devObserverCardScore(baseCandidate) >= weakest.score + 180) replaceRecruit(weakest.index);
+        else declineRecruit();
+      }
+      return;
+    }
     const cinematic = rollMeta.tavernReveal === true;
     const tavernHost = cinematic ? "luffy" : "";
     const presentation = { cinematic, tavernHost, tavernAuto: isCpuPlayer(player) || devObserver.running };
@@ -44316,19 +44370,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       }), "tavern-recruit-result-modal tavern-result-nautical-modal no-backdrop-close");
       resultNode = refs.modal.querySelector(".tavern-result-ui");
       if (cinematic) window.BoardTavernReveal?.watch?.(resultNode, decisionIsCurrent);
-      document.getElementById("acceptRecruitBtn")?.addEventListener("click", () => decide("accept", () => {
-        player.crew.push(recruit);
-        state.gameState.availableCards = state.gameState.availableCards.filter((entry) => entry.id !== recruit.id);
-        clearTavernRecruitBoost(player, recruit.id);
-        recalcPlayerDerivedStats(player);
-        addLog(`${player.name} 在 ${island.name} 招募到 ${recruit.name}。`);
-        queueRecruitSyncedMoveChoices(player, recruit);
-        finishIslandServiceTurn();
-      }));
-      document.getElementById("rejectRecruitBtn")?.addEventListener("click", () => decide("decline", () => {
-        addLog(`${player.name} 在 ${island.name} 放棄招募 ${recruit.name}。`);
-        finishIslandServiceTurn();
-      }));
+      document.getElementById("acceptRecruitBtn")?.addEventListener("click", () => decide("accept", acceptRecruit));
+      document.getElementById("rejectRecruitBtn")?.addEventListener("click", () => decide("decline", declineRecruit));
       return;
     }
 
@@ -44346,28 +44389,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     resultNode = refs.modal.querySelector(".tavern-result-ui");
     if (cinematic) window.BoardTavernReveal?.watch?.(resultNode, decisionIsCurrent);
     refs.modal.querySelectorAll("[data-replace-crew]").forEach((button) => {
-      button.addEventListener("click", () => decide("accept", () => {
-        const replaceIndex = Number(button.dataset.replaceCrew);
-        const replaced = player.crew[replaceIndex];
-        const returnedCarryName = returnBattleCarryFromRemovedCard(player, replaced);
-        const returnedToRecruitPool = returnRecruitCardToPool(replaced);
-        player.crew.splice(replaceIndex, 1, recruit);
-        state.gameState.availableCards = state.gameState.availableCards.filter((entry) => entry.id !== recruit.id);
-        clearTavernRecruitBoost(player, recruit.id);
-        if (player.activeCrewIndex === replaceIndex) player.activeCrewIndex = replaceIndex;
-        if (player.activeCrewIndex >= player.crew.length) player.activeCrewIndex = 0;
-        recalcPlayerDerivedStats(player);
-        addLog(`${player.name} 在 ${island.name} 捨棄 ${replaced.name}，改收下 ${recruit.name}。`);
-        queueRecruitSyncedMoveChoices(player, recruit);
-        if (returnedCarryName) addLog(`${replaced.name} 的 ${returnedCarryName} 已回到背包。`);
-        if (returnedToRecruitPool) addLog(`${replaced.name} 回到可招募角色池。`);
-        finishIslandServiceTurn();
-      }));
+      button.addEventListener("click", () => decide("accept", () => replaceRecruit(Number(button.dataset.replaceCrew))));
     });
-    document.getElementById("rejectFullRecruitBtn")?.addEventListener("click", () => decide("decline", () => {
-      addLog(`${player.name} 在 ${island.name} 放棄招募 ${recruit.name}。`);
-      finishIslandServiceTurn();
-    }));
+    document.getElementById("rejectFullRecruitBtn")?.addEventListener("click", () => decide("decline", declineRecruit));
   }
 
   function openEventIslandModal(player, island) {
@@ -57603,7 +57627,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       const droppedItem = gameItemDef(rewards.itemDrop.id);
       if (droppedItem && normalizeGameItemCategory(droppedItem.category) !== "held") {
         addInventoryItem(player, droppedItem.id, 1);
-        if (droppedItem.important) queueImportantItemReveal(droppedItem, 1);
+        if (droppedItem.important && !isCpuPlayer(player)) queueImportantItemReveal(droppedItem, 1);
         granted.push(droppedItem.name);
         addLog(`${player.name}${sourceText} 獲得${ITEM_CATEGORY_LABELS[normalizeGameItemCategory(droppedItem.category)] || "道具"}：${droppedItem.name}。`);
         recordMissionEvent(player, { type: "obtain_item", itemId: droppedItem.id, itemName: droppedItem.name, category: normalizeGameItemCategory(droppedItem.category) });
@@ -57986,32 +58010,52 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     });
   }
 
+  async function continueJudicialRaidWin(battle, player, defeatedPhaseIndex, defeatedName) {
+    judicialSettlementsInFlight.add(battle);
+    try {
+      const raid = ensureJudicialRaidState();
+      const nextPhaseIndex = Math.max(Number(raid.phaseIndex || 0) + 1, defeatedPhaseIndex + 1);
+      const hasNextPhase = nextPhaseIndex < JUDICIAL_RAID_PHASES.length;
+      const nextEnemy = hasNextPhase ? getJudicialRaidEnemyProfile(nextPhaseIndex) : null;
+      const reward = battle.raidPhaseReward;
+      if (reward) {
+        battle.visualEvent = {
+          id: `judicial-phase-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+          type: "raid-phase-reward", defeatedName, nextEnemyName: nextEnemy?.name || "",
+          finalVictory: !hasNextPhase, phaseIndex: defeatedPhaseIndex, nextPhaseIndex,
+          phaseTotal: JUDICIAL_RAID_PHASES.length, reward, bonus: reward.bonus || null,
+          segments: JUDICIAL_PHASE_BONUS_POOL.map((entry) => ({ id: entry.id, label: entry.label, iconKey: entry.iconKey || entry.id })),
+          duration: 11000,
+        };
+        try {
+          notifyBattleWindow();
+          await waitBattleWindowVisual(battle.visualEvent, 11000);
+        } catch (error) {
+          console.warn("Judicial reward presentation failed", error);
+        }
+      }
+      // A restored phase already has its reward; only resume the continuation.
+      if (state.battleState !== battle) return;
+      if (hasNextPhase) promptJudicialRaidNextSwitch(battle, player, defeatedName, nextPhaseIndex, nextEnemy);
+      else completeJudicialRaidAfterReveal(battle, player);
+    } finally {
+      judicialSettlementsInFlight.delete(battle);
+    }
+  }
+
   async function finishJudicialRaidBattle(battle) {
     const player = battlePlayer(null, battle);
     if (!player) return;
+    if (judicialSettlementsInFlight.has(battle)) return;
     if (battle._judicialSettlementDone) {
-      const finalPhase = JUDICIAL_RAID_PHASES.indexOf(battle.raidEnemyKey) === JUDICIAL_RAID_PHASES.length - 1;
-      if (!finalPhase || battle.result !== "win" || !battle.raidPhaseReward || judicialSettlementsInFlight.has(battle)) return;
-      judicialSettlementsInFlight.add(battle);
-      // Loading during the new final-phase reveal preserves the already-paid
-      // bonus. Re-present it without rerolling, kill credit or another reward.
-      battle.visualEvent = {
-        id: `judicial-phase-resume-${Date.now()}`,
-        type: "raid-phase-reward", finalVictory: true,
-        defeatedName: battle.enemyCombatant.name, nextEnemyName: "",
-        phaseIndex: JUDICIAL_RAID_PHASES.length - 1,
-        phaseTotal: JUDICIAL_RAID_PHASES.length,
-        reward: battle.raidPhaseReward, bonus: battle.raidPhaseReward.bonus,
-        duration: 11000,
-      };
-      notifyBattleWindow();
-      await waitBattleWindowVisual(battle.visualEvent, 11000);
-      completeJudicialRaidAfterReveal(battle, player);
+      const defeatedPhaseIndex = JUDICIAL_RAID_PHASES.indexOf(battle.raidEnemyKey);
+      if (battle.result !== "win" || defeatedPhaseIndex < 0) return;
+      await continueJudicialRaidWin(battle, player, defeatedPhaseIndex, battle.enemyCombatant.name);
       return;
     }
     judicialSettlementsInFlight.add(battle);
     battle._judicialSettlementDone = true;
-    let raid = ensureJudicialRaidState();
+    const raid = ensureJudicialRaidState();
     const islandState = getIslandState(raid.islandId);
     player.activeCrewIndex = battle.activeCrewIndex;
     player.pendingBattle = null;
@@ -58027,34 +58071,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       const defeatedPhaseIndex = Math.max(0, JUDICIAL_RAID_PHASES.indexOf(defeatedKey));
       const phaseReward = grantJudicialPhaseReward(player, battle, defeatedPhaseIndex, defeatedKey, defeatedName);
       battle.raidPhaseReward = phaseReward;
-      raid = ensureJudicialRaidState();
-      const nextPhaseIndex = Math.max(Number(raid.phaseIndex || 0) + 1, defeatedPhaseIndex + 1);
-      const hasNextPhase = nextPhaseIndex < JUDICIAL_RAID_PHASES.length;
-      const nextEnemy = hasNextPhase ? getJudicialRaidEnemyProfile(nextPhaseIndex) : null;
-      if (phaseReward) {
-        battle.visualEvent = {
-          id: `judicial-phase-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-          type: "raid-phase-reward",
-          defeatedName,
-          nextEnemyName: nextEnemy?.name || "",
-          finalVictory: !hasNextPhase,
-          phaseIndex: defeatedPhaseIndex,
-          nextPhaseIndex,
-          phaseTotal: JUDICIAL_RAID_PHASES.length,
-          reward: phaseReward,
-          bonus: phaseReward?.bonus || null,
-          segments: JUDICIAL_PHASE_BONUS_POOL.map((entry) => ({ id: entry.id, label: entry.label, iconKey: entry.iconKey || entry.id })),
-          duration: 11000,
-        };
-        notifyBattleWindow();
-        await waitBattleWindowVisual(battle.visualEvent, 11000);
-      }
-      if (state.battleState !== battle) return;
-      if (hasNextPhase) {
-        promptJudicialRaidNextSwitch(battle, player, defeatedName, nextPhaseIndex, nextEnemy);
-        return;
-      }
-      completeJudicialRaidAfterReveal(battle, player);
+      await continueJudicialRaidWin(battle, player, defeatedPhaseIndex, defeatedName);
       return;
     }
 
@@ -58708,7 +58725,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   async function finishBattle() {
     const battle = state.battleState;
-    if (!battle) return;
+    if (!battle || state.gameState.battleExitLock) return;
     if (battle.zorojuroEvolutionResolving) return;
     if (!canEndBattleTurn(battle)) return;
     if (battle.isAokijiCaptureStoryBattle) {
@@ -58735,6 +58752,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         if (state.battleState === battle) battle.zorojuroEvolutionResolving = false;
       }
     }
+    if (state.battleState !== battle || state.gameState.battleExitLock) return;
     if (battle.deferredCoopResult) {
       finishDeferredCoopBattleResult(playerForTurnLock, battle);
       return;
@@ -61561,25 +61579,30 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     });
   }
 
+  function discardPendingIslandServiceChoice(player) {
+    clearPendingIslandServiceChoice(player);
+    if (currentPlayer() !== player) return;
+    releasePendingIslandServiceChoiceLock();
+    if (refs.modal?.querySelector(".island-service-choice-ui")) closeModal();
+    syncTurnActionButtons();
+  }
+
   function pendingIslandServiceChoiceAction(player = currentPlayer()) {
     if (!player?.pendingIslandServiceChoice) return null;
     if (player.location?.kind !== "island") {
-      clearPendingIslandServiceChoice(player);
-      releasePendingIslandServiceChoiceLock();
+      discardPendingIslandServiceChoice(player);
       return null;
     }
     const choice = player.pendingIslandServiceChoice;
     if (String(choice.islandId || "") !== String(player.location.islandId || "")) {
-      clearPendingIslandServiceChoice(player);
-      releasePendingIslandServiceChoiceLock();
+      discardPendingIslandServiceChoice(player);
       return null;
     }
     const island = getIslandById(player.location.islandId);
     const islandState = getIslandState(player.location.islandId);
     const kind = getEffectiveIslandKind(island, islandState);
     if (!island || !islandState || !isServiceIslandKind(kind)) {
-      clearPendingIslandServiceChoice(player);
-      releasePendingIslandServiceChoiceLock();
+      discardPendingIslandServiceChoice(player);
       return null;
     }
     if (choice.serviceKind && choice.serviceKind !== kind && isTemporaryEnemyIslandService(island, islandState)) {

@@ -27,7 +27,7 @@ const functions = [
   "resumeAfterRemoteBoardPlayback", "clearPendingIslandServiceChoice",
   "pendingIslandServiceChoiceOwnsResolutionLock", "releasePendingIslandServiceChoiceLock",
   "markPendingIslandServiceChoice", "markPendingIslandServiceChoiceForPlayers",
-  "pendingIslandServiceChoiceAction", "canOpenPendingIslandServiceChoice",
+  "discardPendingIslandServiceChoice", "pendingIslandServiceChoiceAction", "canOpenPendingIslandServiceChoice",
   "cpuShouldEnterPendingIslandService", "resolvePendingIslandServiceChoice",
   "openPendingIslandServiceChoice", "scheduleTurnStartIslandServiceChoiceForCurrentPlayer",
   "devObserverHandlePendingIslandServiceChoice", "itemRevealIsPending", "notifyItemRevealIdle",
@@ -204,6 +204,8 @@ async function main() {
     const h = harness(); h.mark();
     h.context.state.gameState.resolutionLock = true;
     h.context.state.gameState.turnStep = `${h.island.name}：進島或出發`;
+    h.context.syncTurnActionButtons();
+    check(h.context.refs.rollDiceBtn.disabled, true, `${invalid}: required entry initially disables dice`);
     if (invalid === "route") h.player.location = { kind: "route", routeId: "qa-route" };
     if (invalid === "other-island") h.player.location.islandId = "elsewhere";
     if (invalid === "enemy-returned") h.islandState.currentKind = "enemy";
@@ -211,6 +213,7 @@ async function main() {
     check(h.context.pendingIslandServiceChoiceAction(), null, `${invalid}: stale service is rejected`);
     check(h.player.pendingIslandServiceChoice, null, `${invalid}: stale marker is removed`);
     check(h.context.state.gameState.resolutionLock, false, `${invalid}: stale choice-owned lock is released`);
+    check(h.context.refs.rollDiceBtn.disabled, false, `${invalid}: dice is restored without waiting for another render`);
   }
   {
     const h = harness(); h.mark();
