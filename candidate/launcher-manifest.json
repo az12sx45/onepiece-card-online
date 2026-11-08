@@ -185,14 +185,14 @@
     {
       "path": "launcher/launcher.js",
       "sourceSha256": "95708927809f8c9b42f4579c815bd813b5f49f385ac6b62dc574b7169f2bf3f2",
-      "sha256": "3016150ae5835b8f7cbd2f3e2ff6c07bf1e7bc90e79b68391330d36f8fab7e48",
-      "size": 55794
+      "sha256": "45484eeefc39a09166b3aca1ff3d4544692916d0b9138fc97acfa780fde83895",
+      "size": 57799
     },
     {
       "path": "launcher/mobile-bridge.js",
       "sourceSha256": "7df50941a034cea5cfd1838e57e7a7458c7de2ce1f5421139e974368c3c195e1",
-      "sha256": "e6098ec451ca80d992428a35c649b276bb56bd7c4c659c36a047ac3437a891a3",
-      "size": 38976
+      "sha256": "f4adeadd5e0c2066ebfcb9bf73022fc3371efcf13b6177bd92fc89488ac2c548",
+      "size": 39105
     },
     {
       "path": "launcher/socket.io.min.js",

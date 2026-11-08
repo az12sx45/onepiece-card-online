@@ -587,11 +587,11 @@ class SocialService extends EventEmitter {
     }
     return result;
   }
-  async function gameAction(method, gameId) {
+  async function gameAction(method, gameId, fields = {}) {
     if (!['card', 'board', 'chess', 'marineford'].includes(gameId)) return { ok: false, error: 'invalid game' };
     await ensureLoaded();
     if (!authenticated) return { ok: false, error: 'not authenticated' };
-    const result = await nativeCall(method, { gameId });
+    const result = await nativeCall(method, { gameId, ...fields });
     return { ...result, state: await nativeStateRefresh() };
   }
   const api = {
@@ -622,6 +622,7 @@ class SocialService extends EventEmitter {
   for (const method of ['installGame', 'cancelInstall', 'uninstallGame', 'launchGame']) api[method] = gameId => gameAction(method, gameId);
   if (document.documentElement.dataset.host === 'ios') {
     api.checkBoardProgram = gameId => gameAction('checkBoardProgram', gameId);
+    api.checkBoardProgramQa = (gameId, invite) => gameAction('checkBoardProgramQa', gameId, { invite });
     api.rollbackBoardProgram = gameId => gameAction('rollbackBoardProgram', gameId);
   }
   for (const method of ['getLauncherUpdateState', 'checkLauncherUpdate', 'downloadLauncherUpdate', 'cancelLauncherUpdate', 'applyLauncherUpdate',

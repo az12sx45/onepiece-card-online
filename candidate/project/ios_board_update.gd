@@ -14,6 +14,7 @@ var _identity: String
 var _directory: String
 var _bundled_version: String
 var _qa_version: String
+var _qa_invite := ""
 var _files := PackedStringArray()
 var _base_files: Dictionary = {}
 var _disk: Dictionary = {"highWater": 0, "active": BUNDLED, "previous": BUNDLED, "pending": BUNDLED, "trial": false}
@@ -99,6 +100,7 @@ func state() -> Dictionary:
 		"installedVersion": version, "remoteVersion": remote_version, "message": message,
 		"boardRevision": int(current_manifest.get("sequence", 0)),
 		"pendingRestart": staged and not pending_launch, "pendingLaunch": pending_launch,
+		"canCheckQa": _can_check_qa(),
 		"restartRequired": _blocked_until_restart, "canRollback": current != BUNDLED or pending != BUNDLED,
 		"fetchedBytes": _received if _installing else int(_disk.get("fetchedBytes", 0)),
 		"reusedBytes": _reused if _installing else int(_disk.get("reusedBytes", 0)),
@@ -111,6 +113,7 @@ func check_remote() -> void:
 	_next_check_ms = Time.get_ticks_msec() + 60000
 	var result: Dictionary = await _transport.fetch_manifest()
 	_checking = false
+	_qa_invite = ""
 	if not _valid_manifest(result) or int(result.manifest.sequence) < 2:
 		result = _read_local_qa_manifest()
 	if _valid_manifest(result):
@@ -118,6 +121,39 @@ func check_remote() -> void:
 	else:
 		_remote = {}
 	changed.emit()
+
+func _can_check_qa() -> bool:
+	return _ready_to_update and not _checking and not _installing and not _blocked_until_restart and int(_disk.highWater) == 0 and _disk.pending == BUNDLED
+
+
+func check_qa(invite: String) -> bool:
+	if not _can_check_qa():
+		return false
+	_qa_invite = ""
+	_remote = {}
+	var cleaned := invite.strip_edges()
+	if not _transport.is_qa_invite(cleaned):
+		_message = "私人測試邀請格式錯誤。"
+		changed.emit()
+		return true
+	_checking = true
+	_message = "正在驗證私人測試邀請…"
+	changed.emit()
+	_check_qa.call_deferred(cleaned)
+	return true
+
+
+func _check_qa(invite: String) -> void:
+	var result: Dictionary = await _transport.fetch_qa_manifest(invite)
+	_checking = false
+	if _valid_manifest(result) and int(result.manifest.sequence) == 1 and result.manifest.version == _qa_version:
+		_qa_invite = invite
+		_remote = result
+		_message = "私人測試已就緒。"
+	else:
+		_message = "私人測試邀請無法使用，請確認邀請是否有效。"
+	changed.emit()
+
 
 func _read_local_qa_manifest() -> Dictionary:
 	if int(_disk.highWater) != 0:
@@ -252,7 +288,7 @@ func _install(result: Dictionary, operation: int) -> void:
 		if _matches_base(row) or _file_matches(destination, row):
 			_reused += size
 		else:
-			var transfer: Dictionary = await _transport.download_blob(row, destination)
+			var transfer: Dictionary = await _transport.download_blob(row, destination, _qa_invite)
 			if operation != _operation:
 				return
 			if transfer.get("ok") != true or not _file_matches(destination, row):
@@ -268,6 +304,7 @@ func _install(result: Dictionary, operation: int) -> void:
 	if not _save(next):
 		_finish_install("無法保存遊戲更新，已保留舊版。")
 		return
+	_qa_invite = ""
 	_finish_install("")
 
 func _finish_install(message: String) -> void:

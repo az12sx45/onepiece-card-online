@@ -51,8 +51,8 @@ func _request(method: String,args: Dictionary) -> Dictionary:
 		return {"ok":true,"preferences":preferences}
 	if method in ["installGame","cancelInstall","uninstallGame"] and args.get("gameId")=="marineford":
 		return _marineford_request(method)
-	if args.get("gameId")=="board" and method in ["installGame","cancelInstall","rollbackBoardProgram","checkBoardProgram"]:
-		return _board_request(method)
+	if args.get("gameId")=="board" and method in ["installGame","cancelInstall","rollbackBoardProgram","checkBoardProgram","checkBoardProgramQa"]:
+		return _board_request(method,args)
 	if method=="launchGame":
 		var target:=str(args.get("gameId",""))
 		if not target in ["board","card","chess","marineford"]:return {"ok":false,"error":"無效的遊戲。"}
@@ -74,12 +74,17 @@ func _marineford_request(method: String) -> Dictionary:
 	var result: Variant=JSON.parse_string(bridge.call("marineford_request",method))
 	return result if result is Dictionary else {"ok":false,"status":"error","error":"素材儲存空間無法使用。"}
 
-func _board_request(method: String) -> Dictionary:
+func _board_request(method: String,args: Dictionary) -> Dictionary:
 	if method=="cancelInstall":return {"ok":bool(board_updates.cancel())}
 	if method=="checkBoardProgram":
 		board_updates.check_remote()
 		return {"ok":true}
 	if is_instance_valid(game):return {"ok":false,"error":"請先結束航海錄。"}
+	if method=="checkBoardProgramQa":
+		var invite: Variant=args.get("invite")
+		if invite is String and board_updates.check_qa(invite):
+			return {"ok":true}
+		return {"ok":false,"error":"請確認測試邀請連結，並等目前的檢查完成後再試。"}
 	var began: bool=board_updates.rollback() if method=="rollbackBoardProgram" else board_updates.install()
 	return {"ok":true} if began else {"ok":false,"error":"目前沒有可套用的航海錄更新，請稍後再試。"}
 

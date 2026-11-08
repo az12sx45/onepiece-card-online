@@ -13,6 +13,7 @@ BUILD_VERSIONS = {
     'codex/ios-native-v038': 69,
     'codex/ios-board-update-host-v070': 70,
     'codex/ios-board-parity-host-v071': 71,
+    'codex/ios-board-private-host-v071': 71,
 }
 def require(condition, message):
     if not condition:

@@ -200,6 +200,7 @@ const launcherContentUpdateProgressBar = $('#launcherContentUpdateProgressBar');
 const launcherContentUpdateProgressDetail = $('#launcherContentUpdateProgressDetail');
 const launcherContentUpdateAction = $('#launcherContentUpdateAction');
 const uninstallDialog = $('#uninstallDialog');
+let boardQaDialog;
 const toast = $('#toast');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -756,6 +757,14 @@ function renderDownloads() {
         actions.appendChild(button);
       }
     }
+    if (game.id === 'board' && state.canCheckQa && !busy && typeof api.checkBoardProgramQa === 'function') {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'ghost-button';
+      button.textContent = '航海錄私人測試';
+      button.addEventListener('click', openBoardQaDialog);
+      actions.appendChild(button);
+    }
     if (state.removable) {
       const remove = document.createElement('button');
       remove.type = 'button';
@@ -1012,9 +1021,45 @@ function closeAccountMenu() {
   $('#accountButton').setAttribute('aria-expanded', 'false');
 }
 
+function openBoardQaDialog() {
+  if (!boardQaDialog) {
+    boardQaDialog = document.createElement('dialog');
+    boardQaDialog.className = 'social-dialog';
+    boardQaDialog.setAttribute('aria-labelledby', 'boardQaTitle');
+    boardQaDialog.innerHTML = `
+      <form autocomplete="off">
+        <h2 id="boardQaTitle">航海錄私人測試</h2>
+        <label class="social-field">貼上完整測試邀請連結
+          <input type="password" maxlength="160" required autocomplete="off"
+            autocapitalize="none" spellcheck="false">
+        </label>
+        <div class="social-dialog-actions">
+          <button class="ghost-button" type="button">取消</button>
+          <button class="gold-button" type="submit">檢查測試更新</button>
+        </div>
+      </form>`;
+    const form = boardQaDialog.querySelector('form');
+    const field = form.querySelector('input');
+    form.querySelector('button[type="button"]').addEventListener('click', () => boardQaDialog.close());
+    boardQaDialog.addEventListener('close', () => { field.value = ''; });
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const invite = field.value.trim();
+      field.value = '';
+      boardQaDialog.close();
+      try {
+        const result = await api.checkBoardProgramQa('board', invite);
+        if (!result?.ok) showToast(result?.error || '私人測試更新暫時無法檢查。');
+      } catch (_) { showToast('啟動器暫時沒有回應。'); }
+    });
+    document.body.appendChild(boardQaDialog);
+  }
+  boardQaDialog.showModal();
+}
+
 function closeLauncherOverlays() {
-  for (const dialog of [detailDialog, locationDialog, settingsDialog, uninstallDialog]) {
-    if (dialog.open) dialog.close();
+  for (const dialog of [detailDialog, locationDialog, settingsDialog, uninstallDialog, boardQaDialog]) {
+    if (dialog?.open) dialog.close();
   }
   uninstallGameId = '';
   closeAccountMenu();

@@ -1,7 +1,7 @@
 name: PO iOS unsigned native build
 on:
   push:
-    branches: [codex/ios-native-v038, codex/ios-board-update-host-v070, codex/ios-board-parity-host-v071]
+    branches: [codex/ios-native-v038, codex/ios-board-update-host-v070, codex/ios-board-parity-host-v071, codex/ios-board-private-host-v071]
     paths: [candidate/**, .github/workflows/ios-native.yml]
 permissions:
   contents: read
@@ -36,7 +36,7 @@ jobs:
           args=()
           if [ "$GITHUB_REF_NAME" = 'codex/ios-board-update-host-v070' ]; then
             args+=(--board-update-host-v070)
-          elif [ "$GITHUB_REF_NAME" = 'codex/ios-board-parity-host-v071' ]; then
+          elif [[ "$GITHUB_REF_NAME" == 'codex/ios-board-parity-host-v071' || "$GITHUB_REF_NAME" == 'codex/ios-board-private-host-v071' ]]; then
             args+=(--board-parity-host-v071)
           fi
           "$RUNNER_TEMP/po-python/bin/python" candidate/tools/build_macos.py --candidate candidate --godot "$RUNNER_TEMP/po-godot/Godot.app/Contents/MacOS/Godot" --out "$RUNNER_TEMP/po-build" "${args[@]}"
@@ -66,7 +66,7 @@ jobs:
       - name: Save diagnostics for one day
         id: diagnostics
         continue-on-error: true
-        if: always()
+        if: always() && github.ref_name != 'codex/ios-board-private-host-v071'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: po-ios-build-report
@@ -75,7 +75,7 @@ jobs:
       - name: Save unsigned candidate for one day
         id: candidate
         continue-on-error: true
-        if: success() && steps.storage.outputs.artifact-upload-allowed == 'true'
+        if: success() && github.ref_name != 'codex/ios-board-private-host-v071' && steps.storage.outputs.artifact-upload-allowed == 'true'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: PO-iOS-UNSIGNED
@@ -83,7 +83,7 @@ jobs:
           retention-days: 1
           compression-level: 0
       - name: Retain verified candidate in dedicated draft release
-        if: success() && (steps.storage.outputs.artifact-upload-allowed != 'true' || steps.candidate.outcome == 'failure' || steps.diagnostics.outcome == 'failure')
+        if: success() && (github.ref_name == 'codex/ios-board-private-host-v071' || steps.storage.outputs.artifact-upload-allowed != 'true' || steps.candidate.outcome == 'failure' || steps.diagnostics.outcome == 'failure')
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python3 -B candidate/tools/save_ci_release.py

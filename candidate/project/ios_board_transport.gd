@@ -2,6 +2,9 @@ extends Node
 ## Trusted transport for a host's bundled Board program profile.
 
 const ORIGIN := "https://game-assets.rihdi.tw/"
+const QA_INVITE_PATH := "/board-qa#"
+const QA_TUNNEL_DOMAIN := ".trycloudflare.com"
+const TOKEN_ALPHABET := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
 const IOS_SIGNATURE_DOMAIN := "PO-IOS-BOARD-PROGRAM-V1\n"
 const ANDROID_SIGNATURE_DOMAIN := "PO-ANDROID-BOARD-PROGRAM-V1\n"
 const MANIFEST_LIMIT := 16 * 1024
@@ -118,7 +121,23 @@ func fetch_manifest() -> Dictionary:
 	return verify_envelope(response.body)
 
 
-func download_blob(row: Dictionary, destination: String) -> Dictionary:
+func is_qa_invite(invite: String) -> bool:
+	return not _qa_route(invite).is_empty()
+
+
+func fetch_qa_manifest(invite: String) -> Dictionary:
+	if _key == null:
+		return {"error": "channel_unavailable"}
+	var route := _qa_route(invite)
+	if route.is_empty():
+		return {"error": "invalid_invite"}
+	var response := await _request(route.base + "qa-envelope.json", ENVELOPE_LIMIT, 20.0, "", route)
+	if response.has("error"):
+		return response
+	return verify_envelope(response.body)
+
+
+func download_blob(row: Dictionary, destination: String, qa_invite := "") -> Dictionary:
 	if _key == null or not _valid_row(row):
 		return {"error": "invalid_blob"}
 	if not destination.begins_with("user://") or destination.simplify_path() != destination:
@@ -136,7 +155,14 @@ func download_blob(row: Dictionary, destination: String) -> Dictionary:
 	var temporary := destination + ".part"
 	if FileAccess.file_exists(temporary) and DirAccess.remove_absolute(temporary) != OK:
 		return {"error": "storage_unavailable"}
-	var response := await _request(_blob_base_url + digest, int(row.bytes), 120.0, temporary)
+	var url := _blob_base_url + digest
+	var route := {}
+	if not qa_invite.is_empty():
+		route = _qa_route(qa_invite)
+		if route.is_empty():
+			return {"error": "invalid_invite"}
+		url = route.base + "blobs/" + digest
+	var response := await _request(url, int(row.bytes), 120.0, temporary, route)
 	if not response.has("error"):
 		if not _matches_file(temporary, int(row.bytes), digest):
 			response = {"error": "blob_integrity"}
@@ -157,11 +183,17 @@ func cancel() -> void:
 	_finish(transfer, {"error": "cancelled"})
 
 
-func _request(url: String, max_bytes: int, timeout: float, file_path := "") -> Dictionary:
+func _request(url: String, max_bytes: int, timeout: float, file_path := "", qa_route: Dictionary = {}) -> Dictionary:
 	if _active != null:
 		return {"error": "request_in_progress"}
-	if not _channel_url(url):
-		return {"error": "invalid_url"}
+	var headers := PackedStringArray(["Accept-Encoding: identity"])
+	if qa_route.is_empty():
+		if not _channel_url(url):
+			return {"error": "invalid_url"}
+	else:
+		if not url.begins_with(qa_route.base) or not _channel_url(url, qa_route.origin):
+			return {"error": "invalid_url"}
+		headers.append("Authorization: Bearer " + qa_route.token)
 	var transfer := Transfer.new()
 	var request := HTTPRequest.new()
 	transfer.request = request
@@ -173,7 +205,7 @@ func _request(url: String, max_bytes: int, timeout: float, file_path := "") -> D
 	request.download_file = file_path
 	request.request_completed.connect(_received.bind(transfer), CONNECT_ONE_SHOT)
 	add_child(request)
-	var error := request.request(url, PackedStringArray(["Accept-Encoding: identity"]))
+	var error := request.request(url, headers)
 	if error != OK:
 		_active = null
 		request.queue_free()
@@ -271,8 +303,29 @@ func _matches_file(path: String, bytes: int, digest: String) -> bool:
 	return correct_size and FileAccess.get_sha256(path) == digest
 
 
-func _channel_url(url: String) -> bool:
-	var origin := _origin()
+func _qa_route(invite: String) -> Dictionary:
+	if _host_build != 71 or invite.length() > 160 or not invite.begins_with("https://"):
+		return {}
+	var parts := invite.trim_prefix("https://").split(QA_INVITE_PATH, true)
+	if parts.size() != 2 or parts[1].length() != 43 or not _has_only(parts[1], TOKEN_ALPHABET):
+		return {}
+	var host := parts[0]
+	if host != "game-assets.rihdi.tw":
+		if not host.ends_with(QA_TUNNEL_DOMAIN):
+			return {}
+		var label := host.trim_suffix(QA_TUNNEL_DOMAIN)
+		if label.is_empty() or label.length() > 63 or label.begins_with("-") or label.ends_with("-"):
+			return {}
+		if not _has_only(label, "abcdefghijklmnopqrstuvwxyz0123456789-"):
+			return {}
+	var origin := "https://" + host + "/"
+	var base := origin + "private/board-qa/v1/%s/host-%d/" % [_platform, _host_build]
+	return {"origin": origin, "base": base, "token": parts[1]}
+
+
+func _channel_url(url: String, origin := "") -> bool:
+	if origin.is_empty():
+		origin = _origin()
 	if not url.begins_with(origin) or url.length() > 512:
 		return false
 	var path := url.trim_prefix(origin).trim_suffix("/")
