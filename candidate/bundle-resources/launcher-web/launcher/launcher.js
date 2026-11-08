@@ -484,6 +484,8 @@ async function runLauncherContentUpdateAction() {
 }
 
 function statusCopy(gameState = {}) {
+  if (gameState.restartRequired) return { label: '請重新開啟 App', tone: 'update', action: '待重新開啟' };
+  if (gameState.pendingRestart) return { label: '已下載，待重新開啟', tone: 'update', action: '啟動現有版本' };
   switch (gameState.status) {
     case 'installed': return { label: '可遊玩', tone: 'ready', action: '啟動遊戲' };
     case 'update': return { label: '有新版本', tone: 'update', action: '下載更新' };
@@ -644,9 +646,9 @@ function renderFeature() {
   featureStatus.dataset.tone = copy.tone;
   featureVersion.textContent = game.english;
   primaryAction.textContent = launching && state.status === 'installed' ? '正在啟動…' : copy.action;
-  primaryAction.disabled = launchBlocked || ['unavailable', 'desktop-required', 'checking', 'startup-error', 'preparing', 'downloading', 'verifying', 'removing'].includes(state.status);
+  primaryAction.disabled = launchBlocked || state.restartRequired === true || ['unavailable', 'desktop-required', 'checking', 'startup-error', 'preparing', 'downloading', 'verifying', 'removing'].includes(state.status);
   existingLaunchAction.hidden = !state.hasInstalled || ['installed', 'preparing', 'downloading', 'verifying', 'removing'].includes(state.status);
-  existingLaunchAction.disabled = launchBlocked;
+  existingLaunchAction.disabled = launchBlocked || state.restartRequired === true;
   renderProgress(state);
   setFeatureVideo(game);
 }
@@ -689,7 +691,17 @@ function renderDownloads() {
     versions.className = 'download-versions';
     const installedVersion = state.installedVersion ? `已安裝 ${state.installedVersion}` : '尚未安裝';
     const remoteVersion = state.remoteVersion ? `最新 ${state.remoteVersion}` : '版本尚未公布';
-    versions.innerHTML = `<span>${installedVersion}</span><span>${remoteVersion}</span>`;
+    for (const label of [installedVersion, remoteVersion]) {
+      const span = document.createElement('span');
+      span.textContent = label;
+      versions.appendChild(span);
+    }
+    if (game.id === 'board' && state.appVersion) {
+      const proof = document.createElement('span');
+      proof.textContent = [state.appVersion, state.programRevision,
+        Number.isFinite(state.fetchedBytes) ? `已下載 ${formatBytes(state.fetchedBytes)}` : ''].filter(Boolean).join(' · ');
+      versions.appendChild(proof);
+    }
     content.append(title, detail, versions);
 
     const status = document.createElement('span');
@@ -707,7 +719,7 @@ function renderDownloads() {
       primary.type = 'button';
       primary.className = 'gold-button download-primary';
       primary.textContent = launching && state.status === 'installed' ? '正在啟動…' : copy.action;
-      primary.disabled = busy;
+      primary.disabled = busy || state.restartRequired === true;
       primary.addEventListener('click', () => runGameAction(game.id));
       actions.appendChild(primary);
     }
@@ -716,7 +728,7 @@ function renderDownloads() {
       launchExisting.type = 'button';
       launchExisting.className = 'ghost-button';
       launchExisting.textContent = launching ? '正在啟動…' : '啟動現有版本';
-      launchExisting.disabled = busy;
+      launchExisting.disabled = busy || state.restartRequired === true;
       launchExisting.addEventListener('click', () => launchInstalledGame(game.id));
       actions.appendChild(launchExisting);
     }
@@ -727,6 +739,22 @@ function renderDownloads() {
       pause.textContent = '暫停下載';
       pause.addEventListener('click', () => pauseGameDownload(game.id));
       actions.appendChild(pause);
+    }
+    if (game.id === 'board' && state.appVersion && !busy) {
+      for (const [method, label] of [['checkBoardProgram', '檢查航海錄更新'], ['rollbackBoardProgram', '回到上一版']]) {
+        if (typeof api[method] !== 'function' || (method === 'rollbackBoardProgram' && !state.canRollback)) continue;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ghost-button';
+        button.textContent = label;
+        button.addEventListener('click', async () => {
+          try {
+            const result = await api[method](game.id);
+            if (!result?.ok) showToast(result?.error || '航海錄更新暫時無法操作。');
+          } catch (_) { showToast('啟動器暫時沒有回應。'); }
+        });
+        actions.appendChild(button);
+      }
     }
     if (state.removable) {
       const remove = document.createElement('button');

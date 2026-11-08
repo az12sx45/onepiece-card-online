@@ -1,7 +1,7 @@
 name: PO iOS unsigned native build
 on:
   push:
-    branches: [codex/ios-native-v038]
+    branches: [codex/ios-native-v038, codex/ios-board-update-host-v070]
     paths: [candidate/**, .github/workflows/ios-native.yml]
 permissions:
   contents: read
@@ -33,7 +33,11 @@ jobs:
           "$RUNNER_TEMP/po-python/bin/python" candidate/tools/setup_macos.py --root "$RUNNER_TEMP/po-godot"
       - name: Compile arm64 device app without Apple credentials
         run: |
-          "$RUNNER_TEMP/po-python/bin/python" candidate/tools/build_macos.py --candidate candidate --godot "$RUNNER_TEMP/po-godot/Godot.app/Contents/MacOS/Godot" --out "$RUNNER_TEMP/po-build"
+          args=()
+          if [ "$GITHUB_REF_NAME" = 'codex/ios-board-update-host-v070' ]; then
+            args+=(--board-update-host-v070)
+          fi
+          "$RUNNER_TEMP/po-python/bin/python" candidate/tools/build_macos.py --candidate candidate --godot "$RUNNER_TEMP/po-godot/Godot.app/Contents/MacOS/Godot" --out "$RUNNER_TEMP/po-build" "${args[@]}"
       - name: Collect bounded diagnostics
         if: always()
         run: |
@@ -41,6 +45,10 @@ jobs:
           if [ -d "$RUNNER_TEMP/po-build/logs" ]; then cp "$RUNNER_TEMP/po-build/logs/"*.log ci-result/; fi
           if [ -f "$RUNNER_TEMP/po-build/build-result.json" ]; then cp "$RUNNER_TEMP/po-build/build-result.json" ci-result/; fi
           if [ -f "$RUNNER_TEMP/po-storage-guard.json" ]; then cp "$RUNNER_TEMP/po-storage-guard.json" ci-result/; fi
+          if [ -f "$RUNNER_TEMP/po-build/board-qa/native-turn-control-sync.js" ]; then
+            mkdir -p ci-result/board-qa
+            cp "$RUNNER_TEMP/po-build/board-qa/native-turn-control-sync.js" ci-result/board-qa/
+          fi
           printf '%s\n' 'Unsigned development candidate only. No Apple credentials or iPhone acceptance.' > ci-result/NOTICE.txt
       - name: Verify bounded unsigned candidate size
         if: success()

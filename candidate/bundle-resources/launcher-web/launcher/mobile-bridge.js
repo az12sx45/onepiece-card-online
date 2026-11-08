@@ -620,6 +620,10 @@ class SocialService extends EventEmitter {
     api[method] = (...args) => accountMethod(method, ...args);
   }
   for (const method of ['installGame', 'cancelInstall', 'uninstallGame', 'launchGame']) api[method] = gameId => gameAction(method, gameId);
+  if (document.documentElement.dataset.host === 'ios') {
+    api.checkBoardProgram = gameId => gameAction('checkBoardProgram', gameId);
+    api.rollbackBoardProgram = gameId => gameAction('rollbackBoardProgram', gameId);
+  }
   for (const method of ['getLauncherUpdateState', 'checkLauncherUpdate', 'downloadLauncherUpdate', 'cancelLauncherUpdate', 'applyLauncherUpdate',
     'getLauncherContentUpdateState', 'checkLauncherContentUpdate', 'applyLauncherContentUpdate']) api[method] = async () => {
       const result = await nativeCall(method);

@@ -1,0 +1,8 @@
+{
+  "hostBuild": 70,
+  "base": "d0f41eda8132260811bca0ad013de0c5422ab3124ae2fa31678c6bb1b7af8bf8",
+  "bundledVersion": "Board 內建",
+  "manifestUrl": "https://game-assets.rihdi.tw/ios/board-program/v1/host-70/release.json",
+  "blobBaseUrl": "https://game-assets.rihdi.tw/ios/board-program/v1/host-70/blobs/",
+  "publicKey": "-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAz+gdlvrpCYrqQ0oxAGHl\nRCWL83A/bFRTENg5RtNVj/7OBfUZHm9cmw9+lrM9yYB3uc/S4DicNX305/l+oeOy\nR82/X3XmVpImrVxO3TasvTbnK/petf3pXNAQJS/Je5mELE83eV9rgtgIcxEB+y0b\nv9RwBc5zhiXgdZwhCLriCnVZAx0C1bDD/Wd50vxWHdWiM4yfxn9gq0RCOZUOpTs4\nYESaQc43IESe3CDc70UVrEscQIZU7N47/XnLB1saV5Tgscnm6bMWhNMroy6NTjFm\nIdenXdShjvcwzB4KMCguPv7sP1ffEjL5oNRVA0RlTMeDCSPNq08YwA//RJ3HCfwm\ntNgrmQZ7T+Ruo43UzLHAbWNZcR23YW20a3w2Rj5g9SYCN9hUsXZlFdlb/+cTainI\nsRq4ChcabAFGn1Cg+ShIMkikSFZAhaEpHGFyMKhwkVPLR9FgG0kwPFgsIHPmp4M8\ndm2Xf6RW0diXkipzJlefEgXZbMi4wuJYvFm+i9znFxlnAgMBAAE=\n-----END PUBLIC KEY-----\n"
+}

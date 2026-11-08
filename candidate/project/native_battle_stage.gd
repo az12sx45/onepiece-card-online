@@ -11,6 +11,7 @@ const Cache = preload("res://native_asset_cache.gd")
 const View = preload("res://native_battle_view.gd")
 const Timeline = preload("res://native_battle_timeline.gd")
 const Intro = preload("res://native_prebattle_intro.gd")
+const BATTLE_ART_WAIT_MS := 4000
 var cache: Node
 var view: Control
 var timeline: Node
@@ -18,6 +19,7 @@ var intro: Control
 var lineage_view: Control
 var command_count := 0
 var open_epoch := 0
+var battle_art_fallback := false
 var entry: Control
 var boss_prompt: Control
 var tot_actions: Control
@@ -86,11 +88,17 @@ func reset_battle_actor_visuals(identity: String) -> void:
 	view.hp_overrides.clear()
 	view.finish_pending_until=0
 	for portrait in view.portraits.values():portrait.modulate.a=1.0
+	# A fast turn handoff may reuse a still-visible surface for a new opponent.
+	battle_art_fallback=false
+	if visible and not entry.closing:
+		open_epoch+=1
+		_open_when_ready(open_epoch)
 
 func apply_view_json(value: String) -> void:
 	var started:=Time.get_ticks_usec()
 	var model: Dictionary = JSON.parse_string(value)
 	view.apply_view(model)
+	if battle_art_fallback:_discard_unready_battle_art()
 	timeline.king.sync(model)
 	timeline.nika_heartbeat.sync(model)
 	intro.sync(model)
@@ -106,9 +114,21 @@ func apply_view_json(value: String) -> void:
 func assets_ready() -> bool:
 	if not intro.assets_ready():return false
 	if not tot_stage.assets_ready():return false
+	if battle_art_fallback:return true
 	for target in [view.background,view.portraits.player,view.portraits.enemy]:
-		if target.texture == null or target.get_meta("loaded_asset","") != target.get_meta("wanted_asset",""): return false
+		if not _battle_art_ready(target):return false
 	return true
+
+func _battle_art_ready(target: Control) -> bool:
+	return target.texture != null and target.get_meta("loaded_asset","") == target.get_meta("wanted_asset","")
+
+func _discard_unready_battle_art() -> void:
+	# Keep wanted_asset so a late matching download can replace the empty art.
+	for target in [view.background,view.portraits.player,view.portraits.enemy]:
+		if target.texture == null or _battle_art_ready(target):continue
+		if target.has_method("set_asset_texture"):target.set_asset_texture(null)
+		else:target.texture=null
+		target.remove_meta("loaded_asset")
 
 func request_open() -> void:
 	request_open_json('{"skip":true}')
@@ -116,10 +136,18 @@ func request_open() -> void:
 func request_open_json(value: String) -> void:
 	var packet: Dictionary=JSON.parse_string(value)
 	if packet.get("repeat",false):
-		if visible:entry.reopen()
-		return
+		if visible:
+			var was_closing: bool = entry.closing
+			entry.reopen()
+			if was_closing:
+				open_epoch+=1
+				_open_when_ready(open_epoch)
+			return
+		if not entry.closing:return
+		packet={"skip":true}
 	open_epoch+=1
 	if visible:return
+	battle_art_fallback=false
 	entry.begin(packet)
 	_open_when_ready(open_epoch)
 
@@ -131,21 +159,28 @@ func _open_when_ready(epoch: int) -> void:
 	# Original openBattleWindow is called before notifyBattleWindow. Yield once
 	# so readiness refers to the incoming battle, not a retained previous image.
 	await get_tree().process_frame
-	var deadline := Time.get_ticks_msec()+15000
+	var start := Time.get_ticks_msec()
 	while is_inside_tree() and epoch==open_epoch:
+		if entry.closing:return
+		var elapsed := Time.get_ticks_msec()-start
+		if not battle_art_fallback:
+			for target in [view.background,view.portraits.player,view.portraits.enemy]:
+				if _battle_art_ready(target):continue
+				var path: String=target.get_meta("wanted_asset","")
+				if cache.failed.has(path) or elapsed>=BATTLE_ART_WAIT_MS:
+					battle_art_fallback=true
+					_discard_unready_battle_art()
+					print("[PO_BATTLE] Continuing with unavailable artwork: ",path)
+					break
 		if assets_ready() and entry.can_open():show();return
-		for target in [view.background,view.portraits.player,view.portraits.enemy]:
-			var path: String=target.get_meta("wanted_asset","")
-			if cache.failed.has(path):
-				presentation_finished.emit("prebattle-error","Native battle required image failed: "+path)
-				return
-		if Time.get_ticks_msec()>deadline:
+		if elapsed>15000:
 			presentation_finished.emit("prebattle-error","Native battle images did not become ready")
 			return
 		await get_tree().process_frame
 
 func close_surface() -> void:
 	open_epoch+=1
+	battle_art_fallback=false
 	zephyr_story.close_surface()
 	view.portraits.enemy.sync_demon({},"normal")
 	timeline.katakuri.cancel()

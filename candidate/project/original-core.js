@@ -74997,16 +74997,17 @@ function resumePendingCoopBattleResult(player) {
     scheduleBoardLanStatePush("coop-deferred-result-open", 60, { force: true });
     return true;
   }
-function canAutoOpenJudicialRaidForPlayer(player, raid = ensureJudicialRaidState()) {
+function canAutoOpenJudicialRaidForPlayer(player, raid = state.gameState?.judicialRaid) {
     if (!player?.id || !raid?.active || raid.cleared || raid.failed) return false;
     const participant = raid.participants?.[player.id];
     if (!participant?.active || participant.defeated) return false;
     if (player.location?.kind !== "island") return false;
     if (String(player.location.islandId || "") !== String(raid.islandId || JUDICIAL_ISLAND_ID)) return false;
-    return Boolean(raid.enemyKey) && Number(raid.enemyMaxHp || 0) > 0;
+    return Boolean(raid.enemyKey) && Number(raid.enemyCurrentHp || 0) > 0
+      && Number(raid.enemyMaxHp || 0) > 0 && !!player.crew?.some((card) => Number(card?.currentHp || 0) > 0);
   }
 function canResumeBattle(player) {
-    if (!player?.pendingBattle) return false;
+    if (!player?.pendingBattle) return canAutoOpenJudicialRaidForPlayer(player);
     if (isPendingAokijiCaptureStoryBattle(player.pendingBattle)) {
       const pending = pendingAokijiCaptureStory();
       return !!pending
@@ -75245,12 +75246,17 @@ function autoResumeBattleForCurrentPlayer() {
     if (state.battleState || state.gameState.pendingMove || state.gameState.movementAnimating || state.gameState.routePrompt || state.gameState.tradePrompt || state.gameState.activeTrade || activeSparBlocksCurrentTurn() || state.gameState.coopBattlePrompt || state.gameState.islandDecision || state.gameState.resolutionLock) return false;
     const player = currentPlayer();
     if (pendingCoopBattleResultForPlayer(player)) return resumePendingCoopBattleResult(player);
-    if (!canResumeBattle(player)) {
-      if (canAutoOpenJudicialRaidForPlayer(player)) {
-        openJudicialRaidBattle(player);
-        notifyBattleWindow();
-        return true;
-      }
+    const resumable = canResumeBattle(player);
+    const resumesJudicial = resumable
+      ? !player.pendingBattle || player.pendingBattle.isJudicialRaid
+      : canAutoOpenJudicialRaidForPlayer(player);
+    if (resumesJudicial) {
+      if (turnHandoffVisualLock || state.gameState.diceRolling || state.gameState.battleExitLock
+        || boardLan.applying || !canBoardLanControlCurrentPlayer(player)) return false;
+      openJudicialRaidBattle(player);
+      return Boolean(state.battleState);
+    }
+    if (!resumable) {
       if (isPlayerInMarineford(player) && canBoardLanControlCurrentPlayer(player)) {
         openMarinefordWindow(player);
         notifyMarinefordWindow(player);
@@ -75282,11 +75288,6 @@ function autoResumeBattleForCurrentPlayer() {
     const island = getIslandById(player.location.islandId);
     const islandState = getIslandState(player.location.islandId);
     if (!island || !islandState) return false;
-    if (player.pendingBattle?.isJudicialRaid) {
-      openJudicialRaidBattle(player);
-      notifyBattleWindow();
-      return true;
-    }
     if (player.pendingBattle?.isFinalGate || player.pendingBattle?.islandKind === "final_gate") {
       startFinalGateBattle(player, { resume: true });
       return true;

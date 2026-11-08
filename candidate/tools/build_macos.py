@@ -34,12 +34,43 @@ def verify_board_pack(entries, project, names):
                 raise ValueError('Board GDScript remap missing: '+name)
             packed = compiled
         content = entries.get(packed)
-        if not content or (name.endswith('.js') and content != source):
+        if not content or (name.endswith(('.js', '.json')) and content != source):
             raise ValueError('Board resource missing or changed: '+name)
         records[name] = {'sourceSha256': hashlib.sha256(source).hexdigest(),
                          'packedPath': packed, 'packedSha256': hashlib.sha256(content).hexdigest(),
                          'packedBytes': len(content)}
     return records
+
+
+def verify_board_update_host_v070(entries, project, out):
+    expected_sources = {
+        'original-core.js': '29930498f0307e979b422085c091e2fcba1fa95669a66797760675c4aec9facb',
+        'native-turn-control-sync.js': 'fc7aef40dc49a1637cec1267a8b2b4f27a79177e6dfbbf982dd5de2ee102cbbb',
+        'native_battle_stage.gd': 'e71248eb67e7a63d9fec1fcbe7d770282073529ab53e4c55bc79da26368d3ce4',
+    }
+    judicial = verify_board_pack(entries, project, expected_sources)
+    for name, expected in expected_sources.items():
+        if judicial[name]['sourceSha256'] != expected:
+            raise ValueError('v070 Judicial Island input differs from handoff: '+name)
+    host = verify_board_pack(entries, project, ('ios_host.gd', 'ios_board_update.gd',
+        'ios_board_transport.gd', 'ios-board-program-v1.json', 'native-product-entry.js'))
+
+    name = 'native-turn-control-sync.js'
+    packed_path = judicial[name]['packedPath']
+    revision = 'qa-v070-transport'
+    baseline = entries[packed_path]
+    marker = ("exports.boardUpdateRevision = '"+revision+"';").encode('ascii')
+    if b'boardUpdateRevision' in baseline:
+        raise ValueError('QA revision already present in shipped source')
+    fixture = baseline + (b'' if baseline.endswith(b'\n') else b'\n') + marker + b'\n'
+    artifact = out/'board-qa'/name
+    artifact.parent.mkdir()
+    artifact.write_bytes(fixture)
+    return {'bundledJudicialPrograms': judicial, 'hostResources': host,
+        'qaFixture': {'qaOnly': True, 'revision': revision,
+            'file': artifact.relative_to(out).as_posix(), 'packedPath': packed_path,
+            'baseSha256': judicial[name]['packedSha256'],
+            'sha256': hashlib.sha256(fixture).hexdigest(), 'bytes': len(fixture)}}
 
 
 def run(command, cwd, log, env=None):
@@ -68,6 +99,8 @@ def main():
     parser.add_argument('--candidate',type=Path,required=True)
     parser.add_argument('--godot',type=Path,required=True)
     parser.add_argument('--out',type=Path,required=True)
+    parser.add_argument('--board-update-host-v070',action='store_true',
+                        help='Verify the exact Judicial Island baseline and prepare a separate unsigned Board QA blob')
     args=parser.parse_args()
     if sys.platform!='darwin': parser.error('macOS/Xcode required; no Windows build success may be reported')
     candidate=args.candidate.resolve(); out=args.out.resolve()
@@ -158,6 +191,8 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
         ('native-crew-markup.js', 'native_crew_modal.gd', 'original-core.js'))
     board_cpu_recovery_pack=verify_board_pack(entries,candidate/'project',
         ('native_hospital_modal.gd', 'native_mission_board_modal.gd', 'native_mission_journal_modal.gd', 'native_research_modal.gd', 'native_shop_modal.gd', 'native_tavern_modal.gd', 'original-core.js'))
+    if args.board_update_host_v070:
+        board_update_host = verify_board_update_host_v070(entries,candidate/'project',out)
     del entries
     shutil.copytree(candidate/'bundle-resources',app,dirs_exist_ok=True)
     launcher=json.loads((candidate/'launcher-manifest.json').read_text())
@@ -165,6 +200,8 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
         if sha(app/'launcher-web'/record['path'])!=record['sha256']:raise ValueError('Launcher bundle mismatch: '+record['path'])
     info=plistlib.loads((app/'Info.plist').read_bytes())
     if info['CFBundleIdentifier']!='tw.rihdi.po.native.ios': raise ValueError('Unexpected bundle identifier')
+    if args.board_update_host_v070 and int(info['CFBundleVersion']) != 70:
+        raise ValueError('Unexpected Board update host build number')
     executable=app/info['CFBundleExecutable']
     arch=subprocess.check_output(['lipo','-archs',str(executable)],text=True).strip()
     if arch!='arm64': raise ValueError('Unexpected device architectures')
@@ -201,6 +238,8 @@ ios.release="res://addons/po-ios/po-ios.xcframework"
     report['boardLevelUpPack']=board_level_up_pack
     report['boardMaterialGuidePack']=board_material_guide_pack
     report['boardCpuRecoveryPack']=board_cpu_recovery_pack
+    if args.board_update_host_v070:
+        report['boardUpdateHost'] = board_update_host
     report['macWebKitLauncherChecked']=True
     report['macWebKitMarinefordChecked']=True
     report['macWebKitMarinefordProgramChecked']=True

@@ -106,6 +106,8 @@ protected:
         ClassDB::bind_method(D_METHOD("download_forget","identifier"),&PoIOSBridge::download_forget);
         ClassDB::bind_method(D_METHOD("launcher_show","reload"),&PoIOSBridge::launcher_show);
         ClassDB::bind_method(D_METHOD("launcher_hide"),&PoIOSBridge::launcher_hide);
+        ClassDB::bind_method(D_METHOD("launcher_games_changed"),&PoIOSBridge::launcher_games_changed);
+        ClassDB::bind_method(D_METHOD("launcher_game_failed"),&PoIOSBridge::launcher_game_failed);
         ClassDB::bind_method(D_METHOD("launcher_requests"),&PoIOSBridge::launcher_requests);
         ClassDB::bind_method(D_METHOD("launcher_reply","identifier","result"),&PoIOSBridge::launcher_reply);
         ClassDB::bind_method(D_METHOD("web_game_open","game_id"),&PoIOSBridge::web_game_open);
@@ -208,6 +210,8 @@ public:
     bool open_settings(){bool available=false;ui([&]{NSURL *url=[NSURL URLWithString:UIApplicationOpenSettingsURLString];available=[UIApplication.sharedApplication canOpenURL:url];if(available)[UIApplication.sharedApplication openURL:url options:@{} completionHandler:nil];});return available;}
     bool launcher_show(bool reload){bool ok=false;ui([&]{if(!launcher)launcher=[POLauncher new];ok=[launcher show:reload];});return ok;}
     void launcher_hide(){ui([&]{[launcher hide];});}
+    void launcher_games_changed(){ui([&]{[launcher notifyGameState];});}
+    void launcher_game_failed(){ui([&]{[launcher notifyGameLaunchFailed];});}
     String launcher_requests(){String value;ui([&]{value=json([launcher takeRequests]?:@[]);});return value;}
     void launcher_reply(const String &identifier,const String &result){
         id parsed=[NSJSONSerialization JSONObjectWithData:[ns(result) dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];

@@ -9,11 +9,16 @@ import urllib.request
 import zipfile
 REPO = 'az12sx45/onepiece-card-online'
 LIMIT = 496000000
+BUILD_VERSIONS = {'codex/ios-native-v038': 69, 'codex/ios-board-update-host-v070': 70}
 def require(condition, message):
     if not condition:
         raise RuntimeError(message)
 def main():
     require(os.environ.get('GITHUB_REPOSITORY') == REPO, 'Unexpected repository')
+    branch = os.environ.get('GITHUB_REF_NAME')
+    require(branch in BUILD_VERSIONS, 'Unexpected CI branch')
+    version_code = BUILD_VERSIONS[branch]
+    version = f'v{version_code:03d}'
     token = os.environ['GITHUB_TOKEN']
     commit = os.environ['GITHUB_SHA']
     run_id = int(os.environ['GITHUB_RUN_ID'])
@@ -22,7 +27,7 @@ def main():
     report = json.loads((build/'build-result.json').read_bytes())
     with ipa.open('rb') as stream:
         digest = hashlib.file_digest(stream, 'sha256').hexdigest()
-    require(0 < ipa.stat().st_size < LIMIT and report['versionCode'] == 69 and
+    require(0 < ipa.stat().st_size < LIMIT and report['versionCode'] == version_code and
             report['macCompiled'] and report['macWebKitMarinefordProgramChecked'] and
             report['signed'] is False and report['iphoneTested'] is False and
             report['sha256'] == digest and report['bytes'] == ipa.stat().st_size,
@@ -37,9 +42,19 @@ def main():
             return json.load(response)
     require(request('')['private'] is False, 'Public free-runner repository required')
     run = request('/actions/runs/'+str(run_id))
-    require(run['head_sha'] == commit and run['head_branch'] == 'codex/ios-native-v038',
+    require(run['head_sha'] == commit and run['head_branch'] == branch,
             'CI run identity differs')
-    tag = 'ios-native-v069-ci-'+commit[:12]
+    fixture = None
+    if version_code == 70:
+        expected = report['boardUpdateHost']['qaFixture']
+        fixture_path = 'board-qa/native-turn-control-sync.js'
+        require(expected['qaOnly'] is True and expected['file'] == fixture_path and
+                0 < expected['bytes'] <= 4096, 'Board QA fixture identity differs')
+        fixture = build/fixture_path
+        require(fixture.stat().st_size == expected['bytes'] and
+                hashlib.sha256(fixture.read_bytes()).hexdigest() == expected['sha256'],
+                'Board QA fixture bytes differ')
+    tag = 'ios-native-'+version+'-ci-'+commit[:12]
     matches = [item for item in request('/releases?per_page=100') if item['tag_name'] == tag]
     require(len(matches) <= 1, 'Ambiguous draft candidate')
     if matches:
@@ -48,17 +63,19 @@ def main():
                 'Existing candidate is not this draft source')
     else:
         release = request('/releases', dict(tag_name=tag, target_commitish=commit, draft=True, prerelease=True,
-            name='iOS v069 unsigned candidate '+commit[:12],
+            name='iOS '+version+' unsigned candidate '+commit[:12],
             body='Unsigned native candidate from CI run '+str(run_id)+'. Owner signing and physical iPhone acceptance pending.'))
     release_id = release['id']
     require(release['draft'] is True, 'Candidate release unexpectedly public')
-    diagnostics = build/'PO-iOS-v069-ci-report.zip'
+    diagnostics = build/('PO-iOS-'+version+'-ci-report.zip')
     with zipfile.ZipFile(diagnostics,'w',compression=zipfile.ZIP_DEFLATED) as archive:
         archive.write(build/'build-result.json','build-result.json')
         for file in sorted((build/'logs').glob('*.log')):
             archive.writestr(file.name, file.read_bytes()[-2*1024*1024:])
-    files = [(ipa,'PO-iOS-v069-'+digest[:12]+'-UNSIGNED.ipa'),
-             (diagnostics,'PO-iOS-v069-ci-report-'+str(run_id)+'-'+os.environ.get('GITHUB_RUN_ATTEMPT','1')+'.zip')]
+        if fixture is not None:
+            archive.write(fixture, fixture_path)
+    files = [(ipa,'PO-iOS-'+version+'-'+digest[:12]+'-UNSIGNED.ipa'),
+             (diagnostics,'PO-iOS-'+version+'-ci-report-'+str(run_id)+'-'+os.environ.get('GITHUB_RUN_ATTEMPT','1')+'.zip')]
     retained = []
     existing = request('/releases/'+str(release_id)+'/assets?per_page=100')
     for file, name in files:

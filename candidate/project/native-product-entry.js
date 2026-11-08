@@ -5,7 +5,16 @@ const {Node,Callable}=require('godot');require('./native-timers').install();
 class NativeProductEntry extends Node{
  _ready(){setTimeout(()=>this.start().catch(()=>this.get_parent().call('show_failure','unavailable')),0);}
  async start(){
-  const root=this.get_parent(),account=require('./native-account-service').create({websocketPool:root.get_node('Pool'),sessionNode:root.get_node('Session')});
+  const root=this.get_parent(),host=root.get_parent(),managed=host.has_method('board_program_ready');
+  let boardRevision='';
+  if(managed){
+   try{
+    const core=require('./original-core'),sync=require('./native-turn-control-sync');
+    if(typeof core.create!=='function'||typeof sync.create!=='function'||!host.call('board_program_preflight'))throw Error('Board program failed preflight');
+    boardRevision=sync.boardUpdateRevision||'';
+   }catch(_){host.call_deferred('board_program_failed');return;}
+  }
+  const account=require('./native-account-service').create({websocketPool:root.get_node('Pool'),sessionNode:root.get_node('Session')});
   const http=require('./native-runtime-http').create(root.get_node('Http'));
   const social=require('./native-product-social').create({account,node:root.get('social_page'),notify:text=>root.call('notify_player',text)});
   const randomValues=array=>{
@@ -17,11 +26,14 @@ class NativeProductEntry extends Node{
   const lifecycle=require('./native-product-lifecycle').create({account,view:{loading:()=>root.call('show_loading'),failure:kind=>root.call('show_failure',kind),returnToLauncher:()=>root.get_parent().call_deferred('return_to_launcher')},openFriends:()=>social.show(),createSession:({openFriends})=>require('./native-product-session').create({root,account,http,randomValues,openFriends})});
   let closing=false;
   this.release=async()=>{if(closing)return;closing=true;social.dispose();await lifecycle.dispose();http.dispose();};
-  const retry=Callable.create(root,()=>{lifecycle.retry().catch(()=>root.call('show_failure','unavailable'));});
+  const reportReady=ready=>{
+   if(ready&&!closing&&managed)host.call('board_program_ready',boardRevision);
+  };
+  const retry=Callable.create(root,()=>{lifecycle.retry().then(reportReady).catch(()=>root.call('show_failure','unavailable'));});
   const leave=Callable.create(root,()=>{this.release().then(()=>root.get_parent().call_deferred('return_to_launcher')).catch(()=>root.call('show_failure','unavailable'));});
   root.connect('retry_requested',retry);root.connect('return_requested',leave);
   this.unbind=()=>{root.disconnect('retry_requested',retry);root.disconnect('return_requested',leave);};
-  await lifecycle.start();
+  reportReady(await lifecycle.start());
  }
  _exit_tree(){this.unbind?.();this.release?.().catch(()=>{});}
 }

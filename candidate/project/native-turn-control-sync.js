@@ -8,11 +8,21 @@ exports.create=function(core,refs={}){
   const lan=core.boardLan,f=core.functions,game=core.state.gameState,player=f.currentPlayer();
   // A whole snapshot can arrive and release applying between two frames.
   // Also observe flow/modal locks: CPU automation reads the original die flag.
+  // If a Judicial return missed its turn-start retries, re-arm on authority release.
+  const actionLocked=!game||f.isGameActionLocked(),modalOpen=!!refs.modalBack?.classList.contains('open');
+  const judicialReady=!!game&&!lan.applying&&!actionLocked&&!modalOpen&&!game.battleExitLock
+   &&!player?.pendingPostgameBossVoyage&&player?.pendingIslandServiceChoice?.requiredEntry!==true
+   &&(!player?.pendingBattle||player.pendingBattle.isJudicialRaid)
+   &&f.canAutoOpenJudicialRaidForPlayer(player)&&f.canBoardLanControlCurrentPlayer(player);
+  const judicialPlayer=judicialReady?player.id:null;
   const next=[game,lan.enabled,lan.connected,lan.awaitingInitialState,lan.applying,
    f.remoteBoardPlaybackBusy(),f.localPlayerIsLobbyHost(),player?.id,
-   game?f.isGameActionLocked():true,!!refs.modalBack?.classList.contains('open'),
-   !!player?.pendingPostgameBossVoyage,player?.pendingIslandServiceChoice?.requiredEntry===true];
+   actionLocked,modalOpen,!!player?.pendingPostgameBossVoyage,
+   player?.pendingIslandServiceChoice?.requiredEntry===true,judicialPlayer];
   if(previous&&next.every((value,index)=>value===previous[index]))return false;
-  previous=next;f.syncTurnActionButtons();return true;
+  const resumeJudicial=judicialReady&&(!previous||previous[0]!==game||previous.at(-1)!==judicialPlayer);
+  previous=next;f.syncTurnActionButtons();
+  if(resumeJudicial)f.scheduleAutoResumeBattleForCurrentPlayer();
+  return true;
  };
 };
