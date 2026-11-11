@@ -9343,3 +9343,21 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - iOS 必須用同一 preset 先重現目前 AppStage GDC 9dea35ff 與 BattleStage GDC d4abb728，再編兩個新 GDC；只交付既有 allowlist 的程式檔與其他實際修正項。Android／iOS AppStage 各從自己的已發布來源修改，保留 iOS 滿版、兩端既有戰鬥換手與海軍本部修正。未更動玩家快取或刪除 QA、安裝包及回復基底。
 - 驗收界線：桌面 Godot、可控呈現邊界、靜態媒體索引、程式更新器測試與公開檔案讀回，分別列證據；不代表每隻 Boss 所有技能、所有動態素材、真實 LAN 帳號或實體手機舊存檔全部驗收。本輪沒有可用 LATTICE API，未宣稱任務／圖譜持久寫入成功。精確候選 hash、覆蓋案例、未測限制及發布事實見最終 handoff／個別平台收據。
 - npm start 已在目前正式來源 a5219f0f 嘗試，因缺少 express 而失敗，未宣稱兩個瀏覽器真房間驗收。另以原 createManualSavePayload／applyBoardLanPayload／receiveBoardLanGameEvent 驗證 applying、awaitingInitialState 及 remotePlayback 鎖期間不搶開副本，原 callback 釋放後才回到相同洛基試煉；這份來源層權威測試不代替實際 LAN 房間。
+
+## 2026-11-11 Board：頂上戰爭／四皇血量、青雉冰凍與手機分段血條
+
+使用者要求頂上戰爭敵人血量除以2、四皇島除以1.5，並修正頂上青雉冰凍過久與手機缺少兩段血條。範圍是《新世界航海錄》的副本，不是獨立《馬林福特之戰》。桌機以公開 package-8030e1def37ac737 的 js/board_game.js（eff5e75f）為基底，行動版以已發布 Android5／iOS10 的 Core d04f9672 為基底；保留上一版所有換手、頁面載入與媒體失敗恢復。
+
+- 在 Marineford／Yonko 的專用 profile factory 套用整數 HP 縮放，避免影響共享青雉模板的放行試煉及其他戰鬥。其餘戰鬥數值不變。
+- 舊存檔按當前 canonical 最大HP映射剩餘比例，處理島嶼共享狀態、進行中與 pending 戰鬥及 CPU 續戰；重複正規化不再乘一次。四皇舊半血邊界對齊新第二段，保留階段與0HP結算。
+- 青雉冰凍原宣告1回合，但高骰狀態加成會變2。此副本改為在實際阻擋玩家行動時消耗一次，配合先攻／後攻與讀檔夾限，避免後攻於輪末被提前扣光。其餘冰凍來源沿用原規則。
+- 桌機真實凱多攻擊回歸發現 applyYonkoPlayerHitDamageRules 使用未宣告的 ctx；沿用已發布行動Core的區域別名修正，避免命中時拋錯卡住。本次不搬移其他無關的行動版差異，舊桌機反例保留。
+- Core 已輸出 phaseHpBars；原生 View 補上對應顯示，包含目前第幾段、當前段HP與動畫HP投影。Android使用raw View，iOS使用同來源、同preset的編譯View，沿用既有host71 allowlist。
+
+候選、可攜patch、原始基底與所有最終驗證證據保留於 D:/Codex_QA/board-boss-hp-balance-20261111；精確來源指紋、測試通過範圍及限制以本次最終交接列出的報告為準。npm start 的正式基底啟動檢查因缺少 express，於 server/index.js:4 前置失敗，沒有安裝依賴或宣稱雙實體瀏覽器驗收。自動化原始程式／引擎及隔離存檔測試不等於玩家個人舊檔或手機真機驗收。
+
+發布交給啟動器聊天室，Windows替換Board主JS，Android／iOS替換Core與既有View target，保留其餘遊戲檔，App保持v071。正式狀態、版本、下載檔與公開讀回以個別平台發布收據為準。
+
+攻略影響：頂上戰爭最大HP減半、四皇總HP除以1.5；四皇仍兩階段；青雉一次冰凍阻擋一次玩家行動；手機補上分段血條；桌機凱多命中錯誤修復。攻略情報部門見 D:/Codex_Project_Coordination/tabletop-series/strategy/，特殊進化仍只提示大概區域。
+
+清理：本次沒有刪除；保留基底、候選、舊存檔fixture、編譯基線、測試及發布證據供追溯。沒有新增APK／IPA或大量素材複本。

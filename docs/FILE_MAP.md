@@ -2411,3 +2411,11 @@ finale-execution-swing-v1.webp 為執行兵落刀分鏡。
 - native_battle_stage.gd：保留原戰鬥、ACK、回合與畫面時序，內嵌 ImportedEnmaIntro／ImportedPrebattleIntro，讀取已安裝 iOS 的進度圖資源。
 - native-battle-scene.js：保留既有 CPU／狀態清理，明確處理已知純素材演出錯誤及平台 hold 延遲契約，等原生 ACK 才釋放原動作；未知錯誤與互動獎勵仍保留原失敗／操作流程。
 - D:/Codex_QA/board-all-island-lifecycle-20261111/{core,native,battle,assets,compiler}：分開保存完整流程矩陣、原生載入／世代測試、戰鬥呈現、最小媒體索引與同 preset 編譯／掛載證據。此目錄不是正式玩家快取。
+
+## 2026-11-11 Board 副本平衡與行動版分段血條
+
+- public/js/board_game.js：桌機副本HP factory、舊檔／換手HP映射、頂上青雉一次行動冰凍，以及凱多命中流程的ctx區域別名修復。
+- original-core.js（行動版既有program target）：與桌機相同的窄範圍規則修正；保留d04f的既有原生生命週期修正。
+- native_battle_view.gd／對應iOS編譯native_battle_view.gdc：消費既有phaseHpBars，呈現兩階段HP及動畫投影；沿用原生host71更新白名單。
+- D:/Codex_QA/board-boss-hp-balance-20261111：保留來源基底指紋、隔離候選與patch、各項實際執行報告及公開讀回。正式交接與個別平台收據列精確hash與適用版本。
+- D:/Codex_Project_Coordination/tabletop-series/strategy：四款遊戲攻略情報規則、來源索引與可重用問答；來源變版時按需刷新。

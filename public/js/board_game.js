@@ -4034,10 +4034,65 @@
   prepareScriptedEnemyForRebalance(FINAL_GATE_ENEMY_PROFILE);
   Object.values(ELBAPH_GOD_KNIGHT_PROFILES).forEach(prepareScriptedEnemyForRebalance);
 
+  function reduceDungeonBossProfileHp(profile, divisor) {
+    if (!profile) return profile;
+    profile.maxHp = Math.max(1, Math.round(Number(profile.maxHp || 1) / divisor));
+    profile.hp = profile.maxHp;
+    if (profile.baseStats) profile.baseStats.hp = profile.maxHp;
+    return profile;
+  }
+  function normalizeDungeonBossHp(target, profile, phaseTwo = false) {
+    if (!target || !profile) return;
+    const previousMaxHp = Math.max(1, Number(target.maxHp || profile.maxHp || 1));
+    const nextMaxHp = Math.max(1, Number(profile.maxHp || 1));
+    if (Number.isFinite(Number(target.currentHp))) {
+      const previousHp = Math.max(0, Math.min(previousMaxHp, Number(target.currentHp)));
+      let nextHp = previousMaxHp === nextMaxHp ? previousHp : Math.round(previousHp * nextMaxHp / previousMaxHp);
+      if (previousHp > 0) nextHp = Math.max(1, nextHp);
+      if (phaseTwo) nextHp = Math.min(Math.max(1, Math.floor(nextMaxHp / 2)), nextHp);
+      target.currentHp = nextHp;
+    }
+    target.maxHp = nextMaxHp;
+    if (Object.prototype.hasOwnProperty.call(target, "hp")) target.hp = nextMaxHp;
+    if (target.baseStats) target.baseStats.hp = nextMaxHp;
+  }
+  function normalizeDungeonBossIslandHp(island, islandState) {
+    const key = islandState?.enemyProfile?.key;
+    const marineIndex = island?.kind === "marineford" ? MARINEFORD_BOSSES.findIndex((entry) => entry.key === key) : -1;
+    const profile = marineIndex >= 0 ? marinefordBossProfile(marineIndex)
+      : island?.kind === "yonko" && YONKO_BOSS_PROFILES[key] ? yonkoBossProfileForIsland({ glyphId: key }) : null;
+    if (!profile) return;
+    const belowFirstBar = island.kind === "yonko" && Number(islandState.currentHp || 0) <= Math.floor(Number(islandState.maxHp || 1) / 2);
+    normalizeDungeonBossHp(islandState, profile, belowFirstBar);
+    normalizeDungeonBossHp(islandState.enemyProfile, profile);
+  }
+  function isMarinefordAokijiBattle(battle) {
+    return Boolean((battle?.isMarineford || battle?.islandKind === "marineford") && battle?.enemyCombatant?.key === "aokiji");
+  }
+  function normalizeDungeonBossBattleHp(battle) {
+    if (!battle?.enemyCombatant) return;
+    const key = battle.enemyCombatant.key;
+    const marineIndex = battle.isMarineford || battle.islandKind === "marineford" ? MARINEFORD_BOSSES.findIndex((entry) => entry.key === key) : -1;
+    const isYonko = battle.islandKind === "yonko" && Boolean(YONKO_BOSS_PROFILES[key]);
+    const profile = marineIndex >= 0 ? marinefordBossProfile(marineIndex) : isYonko ? yonkoBossProfileForIsland({ glyphId: key }) : null;
+    const phase = isYonko ? battle.yonkoState?.[key.replace(/^yonko_/, "")] : null;
+    const belowFirstBar = isYonko && Number(battle.enemyCombatant.currentHp || 0) <= Math.floor(Number(battle.enemyCombatant.maxHp || 1) / 2);
+    normalizeDungeonBossHp(battle.enemyCombatant, profile, Boolean(isYonko && (phase?.phase2 || phase?.phase2Pending || belowFirstBar)));
+    if (isMarinefordAokijiBattle(battle)) {
+      [battle.playerStatuses, ...Object.values(battle.playerCrewStatuses || {})].forEach((bag) => {
+        if (bag && Number(bag.freeze || 0) > 1) bag.freeze = 1;
+      });
+    }
+  }
+  function normalizeDungeonBossHpForGame(game) {
+    (game?.boardData?.islands || []).forEach((island) => normalizeDungeonBossIslandHp(island, game.boardData.islandStates?.[island.id]));
+    normalizeDungeonBossBattleHp(state.battleState);
+    (game?.players || []).forEach((player) => normalizeDungeonBossBattleHp(player.pendingBattle));
+  }
   function yonkoBossProfileForIsland(island) {
     const glyphId = String(island?.glyphId || "").trim();
     const base = YONKO_BOSS_PROFILES[glyphId];
-    return base ? balanceEnemyProfile(safeJsonClone(base)) : null;
+    return base ? reduceDungeonBossProfileHp(balanceEnemyProfile(safeJsonClone(base)), 1.5) : null;
   }
   const RECRUIT_TIER_STATS = {
     T6: { hp: 62, atk: 44, def: 42, satk: 42, sdef: 42, spd: 44 },
@@ -12439,6 +12494,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       }
       state.battleState.transitionLocked = false;
     }
+    normalizeDungeonBossHpForGame(game);
     return true;
   }
 
@@ -20718,6 +20774,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       const scalesBefore = Number(stateEntry.scales || 0);
       let breakCount = 0;
       const attackAttribute = battleMoveAttackAttribute("player", moveEntry, player, battle);
+      const ctx = griffonCtx;
       const hasGriffon = ctx?.item?.id === "griffon_sword";
       if (hasGriffon) {
         const extra = ATTRIBUTE_ADVANTAGE[attackAttribute] === "力" ? 2 : 1;
@@ -27049,6 +27106,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!player?.pendingBattle) return false;
     const pending = cloneBattleState(player.pendingBattle);
     if (!isPendingMarinefordBattle(pending)) return false;
+    normalizeDungeonBossBattleHp(pending);
     const island = getMarinefordIsland();
     closeModal();
     closeMarinefordPageOverlay();
@@ -46072,7 +46130,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (diceFace >= 4 && diceFace % 2 === 0) pushStatus(effects.statusOnEvenHighDice);
     const applied = [];
     statusEntries.forEach((entry) => {
-      const label = applyBattleStatus(targetSide, battle, entry.status, entry.duration);
+      const turns = side === "enemy" && isMarinefordAokijiBattle(battle) && normalizeBattleStatus(entry.status) === "freeze" ? 1 : entry.duration;
+      const label = applyBattleStatus(targetSide, battle, entry.status, turns);
       if (label && !applied.includes(label)) applied.push(label);
     });
     if (applied.length) {
@@ -46158,6 +46217,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function tickDownBattleStatuses(battle) {
     [battleStatusBag("player", battle), battle.enemyCombatant?.statuses].forEach((bag) => {
       Object.keys(bag || {}).forEach((status) => {
+        if (status === "freeze" && bag === battleStatusBag("player", battle) && isMarinefordAokijiBattle(battle)) return;
         if (Number(bag[status] || 0) > 0) bag[status] -= 1;
       });
     });
@@ -46178,6 +46238,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const bag = battleStatusBag(side, battle);
     const sideName = battleSideName(side, player, battle);
     if (bag.freeze > 0) {
+      if (side === "player" && isMarinefordAokijiBattle(battle)) bag.freeze = 0;
       battle.log.push(`${sideName} 被冰凍，無法行動。`);
       return true;
     }
@@ -46989,6 +47050,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function createBattleState(player, island, islandState) {
+    normalizeDungeonBossIslandHp(island, islandState);
     ensureActiveCrewAlive(player);
     const activeIndex = player.activeCrewIndex;
     const battle = {
@@ -47090,6 +47152,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function normalizeBattleState(battle, player, islandState) {
     ensureBalancedEnemyState(islandState);
+    normalizeDungeonBossIslandHp(getIslandById(battle.islandId), islandState);
     battle.result ||= "";
     battle.enemyTier ||= islandState.enemyProfile?.tier || islandState.enemyTier || "T5";
     battle.roundResolved = !!battle.roundResolved;
@@ -47160,6 +47223,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     };
     battle.enemyCombatant.currentHp = islandState.currentHp;
     battle.enemyCombatant.maxHp = islandState.maxHp;
+    normalizeDungeonBossBattleHp(battle);
     battle.enemyCombatant.stages ||= emptyStages();
     battle.enemyCombatant.stageTurns ||= emptyStageTurns();
     battle.enemyCombatant.statuses ||= emptyStatusEffects();
@@ -56433,7 +56497,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function marinefordBossProfile(index = 0) {
     const base = MARINEFORD_BOSSES[Math.max(0, Math.min(MARINEFORD_BOSSES.length - 1, Number(index || 0)))] || MARINEFORD_BOSSES[0];
-    return balanceEnemyProfile(safeJsonClone(base));
+    return reduceDungeonBossProfileHp(balanceEnemyProfile(safeJsonClone(base)), 2);
   }
 
   function marinefordValidateSlots(player, slots) {
