@@ -2396,3 +2396,10 @@ finale-execution-swing-v1.webp 為執行兵落刀分鏡。
 - `scheduleJudicialRaidClearCompletion` 恢復司法島最後階段的舊存檔終態，`playJudicialRaidClearStory` 提供可跳過且不重播的短劇情，結算仍由 `finishJudicialRaidBattle`、`continueJudicialRaidWin` 及 `completeJudicialRaidAfterReveal` 負責。
 - 原生 `native-battle-scene.js` 的 `ready` 等候 ACK 和觀戰佇列，`resetStatusVisuals` 清除前場圖示及粒子，`update` 在最終輪盤事件消失時關閉舊獎勵介面。
 - 私有驗證位於 D:/Codex_QA/board-battle-queue-20261111，包含 CPU、Buff、真實原生場景、司法島入口、舊存檔、Edge 頁面及公開素材讀回證據。
+
+### Board 手機海軍本部入口（2026-11-11）
+
+- 手機 native_app_stage.gd：既有遊戲程式更新白名單入口；內嵌 ImportedMarinefordFrameStream、ResponsiveMarinefordPage，分別處理匯出後的動畫讀取與載入失敗復原。Android 發 raw GD，iOS 發同 preset 編譯的 GDC。
+- bundle 的 native_marineford_page.gd／native_frame_stream.gd：原始來源頁面、雙槽串流與 raw 圖片雜湊驗證的基底；本輪不直接替換這兩個未列入 v071 更新白名單的檔案。
+- bundle 的 marineford-animation-assets/manifest.json／65 份 PNG 或 import/CTEX：重用已安裝媒體；本輪未新增或下載整組動畫。
+- D:/Codex_QA/board-marineford-entry-20261111：本輪可重跑入口、Core、原生顯示、媒體索引及同 preset 編譯證據；不是玩家快取或新版 App 安裝包。

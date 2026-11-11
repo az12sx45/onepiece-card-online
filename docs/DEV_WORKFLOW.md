@@ -9318,3 +9318,13 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 司法島 Core 與 NativeStoryBridge 十類入口回歸通過，桌機以原 board_game.html、合併候選及真實 Edge 驗看完、跳過與舊輪盤存檔三類流程。獎勵均只發一次。乾淨來源缺少 express 相依，npm start 實跑未啟動成功。瀏覽器頁面使用獨立唯讀 HTTP 服務。既有媒體未完整保留在來源 checkout，新增劇情使用的三張既有圖片另以公開 CAS 大小及 SHA-256 核對。實體手機、正式帳號及兩個實際聯網瀏覽器的完整房間流程仍待驗收。
 
 程式候選、精確來源雜湊、舊版失敗與修正版通過證據保留於 D:/Codex_QA/board-battle-queue-20261111。測試圖片以獨立實體檔取得，沒有對玩家快取建立硬連結。
+
+## 2026-11-11：Board 手機海軍本部入口與載入復原
+
+- 使用者回報 iPhone 在海軍本部按「進入」後停住；本次延續 Android 遊戲獨立更新授權，不要求接線、重裝或改寫玩家存檔。
+- 重現來源為已發布 iOS v071 IPA 與 Preview 8 的 AppStage。原 Marineford 頁面在初始規則視窗也會預熱守衛動畫；iOS 匯出保有全部 65 份 import/CTEX，沒有 raw PNG。舊 Image.load(raw PNG) 回傳 ERR_FILE_NOT_FOUND，原頁面失敗分支未解除 busy，因而一直停在地圖。真 renderer 中材質暖機成功但仍重現上述失敗；不是以 headless 暖機失敗推定手機 shader 故障。
+- 在既有 allowlist 的 native_app_stage.gd 內嵌 ImportedMarinefordFrameStream 與 ResponsiveMarinefordPage，僅替換 Marineford 頁面建構式。iOS 從已簽署 bundle 的固定動畫目錄重用 CompressedTexture2D/get_image；只有 raw 不存在時使用，raw 路徑原 worker、像素雜湊驗證及 generation 取消仍保留。匯入後像素與原 PNG 像素雜湊不等價，不能拿原 PNG hash 驗 CTEX 解碼結果。
+- 畫面失敗或逾時後顯示「重試載入／返回大廳」；明確點擊重試時僅失效本頁所需且失敗的圖片紀錄，重新開始串流與未完成的材質暖機。保留原始副本選人、抽選、戰鬥及存讀檔規則。
+- iOS 從當前 source 515fa99cd227 修改並沿用同一 export preset 產生 GDC；baseline 重新編譯必須重現公開 26e36d2b 的 33,700 B GDC。Android 從當前 source 7f2c4004 修改，不搬入 iOS 專用滿版差異。既有 Core 1cdde1ee 與 BattleScene 333d65ec 保留。
+- 驗證及精確 SHA、命令、輸出見 D:/Codex_QA/board-marineford-entry-20261111 的 core、native、assets、compiler 報告及交接。Core 使用真實進入／首次劇情／存讀檔／再進入／CPU 六條流程；原生頁面使用 Godot OpenGL、exact IPA 的 65 格 CTEX 與原 Core 初始 model。更新包由啟動器核對簽署與逐檔 mount 後發布。
+- 測試界線：桌面原生 renderer、編譯／掛載、可控來源 UI 與舊版實際 updater 的驗證，與真 iPhone／Android 玩家舊存檔驗收分開記錄；本輪不宣稱實體手機驗收通過。LATTICE API 未出現在可用工具，未宣稱持久寫入或 Godot 完整圖譜成功。
