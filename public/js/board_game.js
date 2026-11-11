@@ -49325,6 +49325,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     scheduleMarinefordBattleAutoFinish(battlePlayer(null, state.battleState), state.battleState);
     scheduleElbaphGodKnightBattleAutoFinish(battlePlayer(null, state.battleState), state.battleState);
     scheduleBattleLanStatePush("battle-open", 0);
+    scheduleJudicialRaidClearCompletion(state.battleState);
   }
 
   function stageMultiplier(stage) {
@@ -57986,6 +57987,73 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   const judicialSettlementsInFlight = new WeakSet();
+  const judicialClearCompletionsScheduled = new WeakSet();
+  function scheduleJudicialRaidClearCompletion(battle) {
+      if (!battle?.isJudicialRaid || battle.result !== "win"
+        || JUDICIAL_RAID_PHASES.indexOf(battle.raidEnemyKey) !== JUDICIAL_RAID_PHASES.length - 1
+        || judicialSettlementsInFlight.has(battle) || judicialClearCompletionsScheduled.has(battle)) return;
+      judicialClearCompletionsScheduled.add(battle);
+      const resume = () => {
+        if (state.battleState !== battle) return judicialClearCompletionsScheduled.delete(battle);
+        if (judicialSettlementsInFlight.has(battle)) return judicialClearCompletionsScheduled.delete(battle);
+        const player = battlePlayer(null, battle);
+        const finalReward = battle.visualEvent?.type === "raid-phase-reward" && battle.visualEvent.finalVictory === true;
+        const settledFinal = battle._judicialSettlementDone === true && !battle.visualEvent;
+        if (boardLan.applying || !player || !canBoardLanControlBattlePlayer(player, battle)
+          || state.gameState.battleExitLock || refs.modalBack?.classList.contains("open")
+          || battle.animating && !finalReward && !settledFinal || battle.visualEvent && !finalReward) {
+          window.setTimeout(resume, 180);
+          return;
+        }
+        if (finalReward || settledFinal) {
+          battle.visualEvent = null;
+          battle.animating = false;
+          notifyBattleWindow();
+        }
+        judicialClearCompletionsScheduled.delete(battle);
+        void finishBattle();
+      };
+      window.setTimeout(resume, 0);
+    }
+  function playJudicialRaidClearStory(battle, player) {
+      if (battle.judicialClearStoryStarted) return Promise.resolve();
+      battle.judicialClearStoryStarted = true;
+      if (isCpuPlayer(player)) return Promise.resolve();
+      const game = state.gameState;
+      const story = {
+        id: "judicial_raid_clear", title: "司法島・一起回去吧", tone: "resolve",
+        routeName: "司法島", badge: "司法島通關", finishLabel: "領取通關獎勵",
+        sceneDuration: 12000, showPoneglyphs: false,
+        chapters: [{
+          scene: "feature-island-judicial",
+          bg: FEATURE_ISLAND_STORY_BASE + "judicial.webp",
+          beats: [
+            { speaker: "旁白", text: "路基倒下了。激戰過後，司法島的天空終於安靜下來。" },
+            { speaker: "魯夫", speakerImage: FEATURE_ISLAND_LUFFY_ENIES, text: "大家，一起回去吧！" },
+            { speaker: "羅賓", pose: "smile", text: "嗯……回到夥伴身邊。" },
+            { speaker: "旁白", text: "夥伴們重新集合。帶著這場勝利，準備迎向下一段航程。" },
+          ],
+        }],
+      };
+      battle.visualEvent = null;
+      notifyBattleWindow();
+      scheduleBattleLanStatePush("judicial-clear-story", 0, { force: true });
+      return new Promise((resolve) => {
+        let completed = false;
+        const complete = () => {
+          if (completed) return;
+          completed = true;
+          if (state.gameState === game && state.battleState === battle) closeModal();
+          resolve();
+        };
+        try {
+          startFinalEndingCinematicSession(player, story, complete);
+        } catch (error) {
+          console.warn("Judicial clear story presentation failed", error);
+          complete();
+        }
+      });
+    }
 
   function completeJudicialRaidAfterReveal(battle, player) {
     // A restored snapshot owns its own continuation; an old timer must not
@@ -58018,7 +58086,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       const hasNextPhase = nextPhaseIndex < JUDICIAL_RAID_PHASES.length;
       const nextEnemy = hasNextPhase ? getJudicialRaidEnemyProfile(nextPhaseIndex) : null;
       const reward = battle.raidPhaseReward;
-      if (reward) {
+      if (reward && hasNextPhase) {
         battle.visualEvent = {
           id: `judicial-phase-${Date.now()}-${Math.random().toString(36).slice(2)}`,
           type: "raid-phase-reward", defeatedName, nextEnemyName: nextEnemy?.name || "",
@@ -58037,7 +58105,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       // A restored phase already has its reward; only resume the continuation.
       if (state.battleState !== battle) return;
       if (hasNextPhase) promptJudicialRaidNextSwitch(battle, player, defeatedName, nextPhaseIndex, nextEnemy);
-      else completeJudicialRaidAfterReveal(battle, player);
+      else {
+        await playJudicialRaidClearStory(battle, player);
+        if (state.battleState === battle) completeJudicialRaidAfterReveal(battle, player);
+      }
     } finally {
       judicialSettlementsInFlight.delete(battle);
     }
@@ -58047,6 +58118,11 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const player = battlePlayer(null, battle);
     if (!player) return;
     if (judicialSettlementsInFlight.has(battle)) return;
+    const previousRaid = ensureJudicialRaidState();
+    if (battle.result === "win" && previousRaid.cleared && !previousRaid.active) {
+      completeJudicialRaidAfterReveal(battle, player);
+      return;
+    }
     if (battle._judicialSettlementDone) {
       const defeatedPhaseIndex = JUDICIAL_RAID_PHASES.indexOf(battle.raidEnemyKey);
       if (battle.result !== "win" || defeatedPhaseIndex < 0) return;
@@ -64951,6 +65027,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function shouldRunCpuAutoStep() {
     if (!state.gameState || boardLan.applying || devObserver.running || cpuAuto.busy || draftWheelAnimationBusy) return false;
+    if (turnHandoffVisualLock || state.gameState.battleExitLock) return false;
+    if (state.battleState && (state.battleState.animating || !battlePageReadyForOpeningVisuals())) return false;
     if (state.gameState.phase === "setup-order") return false;
     if (state.gameState.phase !== "main" && state.gameState.phase !== "setup-draft") return false;
     const player = cpuAutomationTargetPlayer();

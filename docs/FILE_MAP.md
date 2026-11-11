@@ -2390,3 +2390,9 @@ finale-execution-swing-v1.webp 為執行兵落刀分鏡。
 
 
 2026-11-07 馬林福特之戰：server/marineford-cpu.js 負責 CPU 策略與該座位的牌面線索。marineford-rooms.js 管理每局、每座位的記憶與合法事件分發。
+## 2026-11-11 戰鬥交棒與司法島通關入口
+
+- `public/js/board_game.js` 與原生 `original-core.js` 的 `shouldRunCpuAutoStep` 等候切換鎖、退出鎖、動作與畫面就緒。
+- `scheduleJudicialRaidClearCompletion` 恢復司法島最後階段的舊存檔終態，`playJudicialRaidClearStory` 提供可跳過且不重播的短劇情，結算仍由 `finishJudicialRaidBattle`、`continueJudicialRaidWin` 及 `completeJudicialRaidAfterReveal` 負責。
+- 原生 `native-battle-scene.js` 的 `ready` 等候 ACK 和觀戰佇列，`resetStatusVisuals` 清除前場圖示及粒子，`update` 在最終輪盤事件消失時關閉舊獎勵介面。
+- 私有驗證位於 D:/Codex_QA/board-battle-queue-20261111，包含 CPU、Buff、真實原生場景、司法島入口、舊存檔、Edge 頁面及公開素材讀回證據。
