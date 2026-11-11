@@ -2403,3 +2403,11 @@ finale-execution-swing-v1.webp 為執行兵落刀分鏡。
 - bundle 的 native_marineford_page.gd／native_frame_stream.gd：原始來源頁面、雙槽串流與 raw 圖片雜湊驗證的基底；本輪不直接替換這兩個未列入 v071 更新白名單的檔案。
 - bundle 的 marineford-animation-assets/manifest.json／65 份 PNG 或 import/CTEX：重用已安裝媒體；本輪未新增或下載整組動畫。
 - D:/Codex_QA/board-marineford-entry-20261111：本輪可重跑入口、Core、原生顯示、媒體索引及同 preset 編譯證據；不是玩家快取或新版 App 安裝包。
+
+### Board 島嶼／副本流程檢查（2026-11-11）
+
+- 手機 original-core.js：凱多道具判定與洛基試煉續戰分派等實際重現的規則／進度修正。新增項目以最終精確 portable patch 為準，不替換既有原作規則或存檔欄位。
+- native_app_stage.gd：互斥頁面的請求 owner、載入完成與失敗恢復，及可直接 apply_json 的橋接登記。兩平台各保留自己的版面基底；iOS 由同 preset 編成 GDC。
+- native_battle_stage.gd：保留原戰鬥、ACK、回合與畫面時序，內嵌 ImportedEnmaIntro／ImportedPrebattleIntro，讀取已安裝 iOS 的進度圖資源。
+- native-battle-scene.js：保留既有 CPU／狀態清理，明確處理已知純素材演出錯誤及平台 hold 延遲契約，等原生 ACK 才釋放原動作；未知錯誤與互動獎勵仍保留原失敗／操作流程。
+- D:/Codex_QA/board-all-island-lifecycle-20261111/{core,native,battle,assets,compiler}：分開保存完整流程矩陣、原生載入／世代測試、戰鬥呈現、最小媒體索引與同 preset 編譯／掛載證據。此目錄不是正式玩家快取。

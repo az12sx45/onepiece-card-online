@@ -9328,3 +9328,18 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - iOS 從當前 source 515fa99cd227 修改並沿用同一 export preset 產生 GDC；baseline 重新編譯必須重現公開 26e36d2b 的 33,700 B GDC。Android 從當前 source 7f2c4004 修改，不搬入 iOS 專用滿版差異。既有 Core 1cdde1ee 與 BattleScene 333d65ec 保留。
 - 驗證及精確 SHA、命令、輸出見 D:/Codex_QA/board-marineford-entry-20261111 的 core、native、assets、compiler 報告及交接。Core 使用真實進入／首次劇情／存讀檔／再進入／CPU 六條流程；原生頁面使用 Godot OpenGL、exact IPA 的 65 格 CTEX 與原 Core 初始 model。更新包由啟動器核對簽署與逐檔 mount 後發布。
 - 測試界線：桌面原生 renderer、編譯／掛載、可控來源 UI 與舊版實際 updater 的驗證，與真 iPhone／Android 玩家舊存檔驗收分開記錄；本輪不宣稱實體手機驗收通過。LATTICE API 未出現在可用工具，未宣稱持久寫入或 Godot 完整圖譜成功。
+
+## 2026-11-11：Board 島嶼／副本完整流程與手機載入恢復
+
+- 使用者要求 Android、iOS 一起檢查進入、換 CPU、恢復同場戰鬥及通關領獎，完成後直接透過現有 v071 遊戲程式通道發布，沿用 App、帳號與存檔，不要求接線或重裝。發布基底為 Android seq4／iOS seq9；實際新序號及公開讀回以啟動器個別收據為準。
+- Core 的真四皇凱多行動重現未定義 ctx 導致 ReferenceError 並保留 animating=true。改用同函式已選出的 griffonCtx；保留既有有／無格里芬及破鱗條件，不改道具或數值。洛基試煉的 pendingBattle 原來落入通用敵島恢復入口，因 anchor 沒有一般 enemyProfile 而停在地圖；增加既有專用 startElbaphLokiTrialBattle 分派，沿用原保存進度。
+- 另修正全破後 Boss 續戰的血量正規化：十三個固定 Boss 在讀檔重建 profile 後保留進入平衡處理前的既定 maxHP；原本其他平衡欄位仍照原邏輯。全破後戰鬥暫停時，將當前權威戰鬥的 currentHP／maxHP 成對寫回同一 islandState，避免洛克斯等被再次依錯誤比例縮血。不從個人 stale pending 覆蓋共用世界的新傷害，也不改第一場的原定 HP／攻防數字。
+- AppStage 的互斥 modal 以實際請求頁面管理載入完成。舊頁面的 surface_ready 不能關閉較新的頁面；show_* 與原生橋接直接 apply_json 的入口均需核對，保留既有 begin_modal_transition 無參數呼叫相容。
+- 水之七島、推進城、切磋與漂流寶箱的素材失敗／逾時原本會直接 return 並留下 busy。以 AppStage 內嵌衍生類提供可見重試與原返回大廳操作；其他互斥 modal 共用目前 owner／payload／世代的載入監測與恢復。重試只失效本次頁面所需且失敗的素材，重送原顯示 payload，不自動替玩家選獎勵、結算、換人或完成戰鬥。
+- exact v071 IPA 的 Enma 兩張進度圖及十個備援提示音只有 import／CTEX／sample，原始 PNG／WAV 不存在。BattleStage 內嵌原 Intro／Enma 的最小 ready 衍生類，AppStage 內嵌 SoundTransport，重用本機匯入資源；Android raw 存在時保留原讀取。真引擎 before 顯示進度圖為 null、備援聲音缺失，但後續音效 loader 仍建立，不能把這兩個媒體缺口誤稱為整體初始化死鎖。
+- NativeBattleScene 的素材演出錯誤原本會 reject 來源的 await，讓 animating 留 true。對明列的非互動演出 type／精確素材錯誤（含六王槍圖片、卡塔庫栗純影片解碼）改為保留原動作並等待一次既有 delay-only native 呈現 ACK，才完成原 Promise；不重跑傷害、PP 或 RNG，不自動領獎或跳過未知錯誤。原平台 empty-event fallback 的 hold 同樣映射既有 delay-only 分支，避免傳入未實作的呈現種類。真來源對照驗證恢復後 HP、全部 PP 與 RNG 次數相同；真 GD 驗證在 fallback ACK 前仍阻擋下一動作。
+- 新測試與可重跑命令保存在 D:/Codex_QA/board-all-island-lifecycle-20261111。Core 盤點以源碼的實際 battle families 為準，逐例區分真行動、存讀檔、CPU 交還、完整擊殺及合法勝利 checkpoint 的 finish／reward 邊界。原生測試包含實際 GodotJS 最終 Scene 與新版 Stage 的 20 場／155 項 ACK、狀態清理及 spectator readiness 檢查；閻魔使用真 Core 六幕、原時長至 intro-done，另外驗證十個本機提示音與 voice API。
+- 最終 Core 另跑 20 輪真玩家／CPU 指令與換手，呈現 readiness／ACK 為受控邊界，沒有提前 CPU 指令、隱藏攻擊或換手鎖內搶跑。Core family 矩陣與這項行為回歸的界線分開保存。
+- iOS 必須用同一 preset 先重現目前 AppStage GDC 9dea35ff 與 BattleStage GDC d4abb728，再編兩個新 GDC；只交付既有 allowlist 的程式檔與其他實際修正項。Android／iOS AppStage 各從自己的已發布來源修改，保留 iOS 滿版、兩端既有戰鬥換手與海軍本部修正。未更動玩家快取或刪除 QA、安裝包及回復基底。
+- 驗收界線：桌面 Godot、可控呈現邊界、靜態媒體索引、程式更新器測試與公開檔案讀回，分別列證據；不代表每隻 Boss 所有技能、所有動態素材、真實 LAN 帳號或實體手機舊存檔全部驗收。本輪沒有可用 LATTICE API，未宣稱任務／圖譜持久寫入成功。精確候選 hash、覆蓋案例、未測限制及發布事實見最終 handoff／個別平台收據。
+- npm start 已在目前正式來源 a5219f0f 嘗試，因缺少 express 而失敗，未宣稱兩個瀏覽器真房間驗收。另以原 createManualSavePayload／applyBoardLanPayload／receiveBoardLanGameEvent 驗證 applying、awaitingInitialState 及 remotePlayback 鎖期間不搶開副本，原 callback 釋放後才回到相同洛基試煉；這份來源層權威測試不代替實際 LAN 房間。
