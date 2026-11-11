@@ -1,25 +1,25 @@
 {
   "schemaVersion": 1,
-  "revision": 107,
+  "revision": 108,
   "announcements": [
     {
-      "id": "board-20261111-battle-queue-judicial-clear",
+      "id": "board-20261111-boss-hp-balance",
       "status": "published",
-      "publishedAt": "2026-11-11T09:47:15.286Z",
+      "publishedAt": "2026-11-11T14:19:52.776Z",
       "scope": "board",
       "category": "update",
-      "version": "package-8030e1def37ac737",
-      "title": "新世界航海錄：戰鬥交棒與司法島通關更新",
-      "summary": "電腦版 CPU 等待戰鬥進場與動作完成；擊敗司法島路基後播放可跳過的通關短劇情。",
+      "version": "package-920933d52b615826",
+      "title": "新世界航海錄：頭目血量與青雉冰凍調整",
+      "summary": "頂上戰爭敵人血量減半、四皇島總血量調整；青雉單次冰凍最多阻擋一次招式行動，並修正電腦版凱多命中後卡住。",
       "body": [
-        "CPU 會等待交棒、戰鬥進場與前一個動作完成，再繼續出招。",
-        "擊敗司法島路基後直接進入四段可跳過的通關短劇情，接續既有通關寶箱；中途階段補給維持原有流程。",
-        "舊輪盤與已結算的存檔可接續後續流程，避免重複發放通關獎勵。",
-        "請結束目前對局，在現有 Windows 啟動器更新《新世界航海錄》後重新進入。啟動器維持 1.2.33，只下載遊戲變更檔。"
+        "頂上戰爭副本敵人 HP 減半；四皇島總 HP 除以 1.5，仍維持兩階段戰鬥。",
+        "舊存檔按剩餘 HP 比例調整；讀檔與換手不會重複縮血或回滿。",
+        "青雉單次冰凍最多阻擋一次玩家招式行動，並修正電腦版凱多命中時卡住的錯誤。",
+        "請結束目前對局，在現有 Windows 啟動器更新《新世界航海錄》後重新進入；啟動器維持 1.2.33，只下載遊戲變更檔。"
       ],
       "requiredRelease": {
         "kind": "board",
-        "releaseId": "package-8030e1def37ac737"
+        "releaseId": "package-920933d52b615826"
       },
       "cta": {
         "kind": "game",
