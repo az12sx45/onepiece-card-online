@@ -2455,3 +2455,13 @@ finale-execution-swing-v1.webp 為執行兵落刀分鏡。
 - D:/Codex_QA/board-thirteen-boss-lifecycle-20261112/{core,native,audit,public}：分開保存原失敗、最小候選、portable inverse、十三 Boss 定向流程、來源／原生 GUI／編譯、實際更新器與公開核驗；docs-candidate/docs/ 為四份正式文件的 exact-parent append 候選，DOCS_READY 列父 commit、基底／候選指紋及逆轉證明。
 
 本次文件與程式均先作候選，實際整合檔、平台版本及發布由啟動器最終收據確認。受控 terminal 勝利、來源橋接、原生 viewport、完整自然戰鬥與真機驗收各自列明，所有失敗 evidence 保留，沒有清理玩家或 QA 資料。
+
+
+## 2026-11-13 黃金票券組裝與載入擁有者（候選待發布）
+
+- native-game-runtime.js：既有手機allowlist JS目標；保留列車自己的document/map節點路由與ship class，與後續FinalRoute/Kuma/York/Egghead/Nika共存。原始host body為18405B、d3ab7287789d984a5cee3497943eac853e76f8ceb4441149210000082ec8d56d；候選在本輪QA，不新增App target。
+- public/js/board_game.js與行動original-core.js：同一Source列車回呼所有權與被接受載入邊界；自身RAF/timers/layer取消、舊game/player隔離，保留原正常抵達/回合。既有board_battle.js、AppStage/GDC及其他原生helper沿用；未有其餘需求不修改。
+- native-sea-train-bridge.js、native-final-route-bridge.js、native-kuma-bridge.js與原生對應layer：作既有實作透過Runtime組裝，不另發未allowlisted檔。
+- D:/Codex_QA/board-golden-ticket-recurrence-20261113/{baseline,core,native,audit,public}：本輪公開基底、完整組裝before/after、Source/真連線試例、獨立審查與只讀發布讀回。文件append候選在docs-candidate；exact base/append/candidate指紋列DOCS_READY。
+
+正式Windows896/Android9/iOS14是本輪已核起點；新版本、最終候選hash與發布狀態看啟動器收據。所有舊失敗、正式來源與rollback evidence保留；此候選不聲稱硬體/正式帳號遊玩或完整全遊戲驗收。

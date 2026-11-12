@@ -9444,3 +9444,16 @@ Windows `package-8967751403531eb3` 已完成公開 CAS／清單雜湊與兩檔�
 公開驗證：D:\Codex_QA\board-thirteen-boss-lifecycle-20261112\public\runs\20261112T152127Z-f02dc554\report.json；實際 provider／runtime-package：D:\Codex_QA\board-thirteen-boss-lifecycle-20261112\live-workload\20261112T152052Z-568e70c6\report.json。Root 封存 facts SHA `1acc7b8f508200b6024b4587783b5a5819ec3cd426c27f967fa68001a9b65e6b`。桌機為真實公開 CAS、四檔隔離 updater contract；完整 6587 筆清單與 6585 筆保留另核。手機為原宿主與正常公開 HTTPS、100 次啟用／重啟有效讀取。同步驗證為本機 loopback、真 Chrome 兩個隔離 contexts、11 項斷言，包含初始／週期快照不得重播 transient recovery。沒有宣稱實體手機、正式帳號、玩家個人存檔或十三場自然完整對戰驗收。
 
 在上述公開核對 PASS 後，新增公告 rev111；其餘 99 則精確保留，最舊的同遊戲已發布公告僅從 100 筆 feed 輪替，全文留在 Git 與 QA before.json。本提交只更新公告與本發布紀錄，不改遊戲程式、通道指標或安裝包；以正常 Git push 自動部署，不另 manual trigger。
+
+
+## 2026-11-13 黃金票券完整手機組裝與列車讀回隔離（候選待發布）
+
+從正式87900a98、Windows896、Android Update9/iOS Preview14重查使用者「iOS選完目的地卡住」。既有票券驗證曾將Source SeaTrain、原生列車、Water7分開跑，未涵蓋native-game-runtime真正SeaTrain→FinalRoute→Kuma→York/Egghead/Nika共同refs/document組裝。正式d3ab Runtime與原Core2fc、iOS compiled AppStage361e的單一Godot host真輸入能重現：船指令盤→背包→key票券→使用→選站，在Kuma對非自家markup的拒絕處中斷；movementAnimating仍true、原島不變、沒有列車prepare/RAF。票為原可重用key，沒有被扣掉。
+
+候選只在既有native-game-runtime.js接回海上列車自己的div/append/ship-class處理，保留FinalRoute/Kuma的原實例身分、相機、cleanup與其餘呈現器；不改Source動畫時序、站點、票券、數值或以超時清鎖代修。手機維持既有25 allowlist targets，Runtime由原宿主提供變為遊戲覆蓋檔；原宿主body保留作rollback證據，不為驗收虛構舊CAS網址。
+
+同時以正式Source/socket查搭車中合法重連的所有權：舊RAF不能在初始快照已換game/player後，再對新全域開Water7或交棒。對public/js/board_game.js及行動original-core.js的候選採自身動畫取消與擁有者檢核：只在有效載入被接受時、換狀態之前，取消自身RAF/timers/layer，不觸發舊arrival、不改新遊戲鎖；invalid load保留原合法行程。存檔格式、資料ID與原先載入正規化沿用。
+
+本輪QA位於D:/Codex_QA/board-golden-ticket-recurrence-20261113。發布閘門以最終精確候選的單一完整Godot host真GUI→Source→列車→首訪故事→真Water7各頁/離開→原合法操作與再次使用為主，分別綁Android及iOS compiled原件；另驗正常/減少動態、舊卡檔cold load、真Socket重連、FinalRoute/Kuma自然完成與unknown surface拒絕。分離trace只作診斷。原先失敗與QA前置失誤保留，未通過的項目不計PASS。
+
+此記錄是候選時點；最終hash/結果/實際新版本以READY及啟動器正式發布收據為準。沿用既有App/host71與帳號存檔，不要求USB/重裝。尚未宣稱實體Android/iPhone、個人舊存檔或正式帳號驗收。LATTICE工具本階段未提供，沒有假稱新任務或圖譜持久寫入；正式與歷史freeze均保留，未執行清理。

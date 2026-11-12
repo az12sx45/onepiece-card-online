@@ -12911,14 +12911,18 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const liveFlow = captureLiveFlowStateForLoad(payload.gameState, options);
     if (options.source !== "lan" || options.initialLanRestore || options.lanReason === "load-save"
       || incomingGame.seed !== state.gameState?.seed) clearCrewLevelUpToast();
+    const restoredGameState = safeJsonClone(payload.gameState);
+    const restoredBattleState = payload.battleState ? safeJsonClone(payload.battleState) : null;
+    if (!restoredGameState?.boardData) return false;
+    clearSeaTrainGoldenTicketAnimation();
     resetShipSailingMotions();
-    state.gameState = safeJsonClone(payload.gameState);
+    state.gameState = restoredGameState;
     if (payload.campaignContext?.campaignId) {
       applyBoardCampaignContext(payload.campaignContext);
     } else if (state.lobby?.campaignId) {
       applyBoardCampaignContext({ campaignId: String(state.lobby.campaignId), mode: String(state.lobby.campaignMode || "") });
     }
-    state.battleState = payload.battleState ? safeJsonClone(payload.battleState) : null;
+    state.battleState = restoredBattleState;
     restoreLegacyBattleWinRewardReceipts(state.battleState, state.gameState);
     state.boardUiEvent = null;
     if (!normalizeLoadedGameState(options)) {
@@ -59992,12 +59996,19 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
     train.style.transform = `translate(-50%,-50%) rotate(${heading.angle}deg)`;
   }
 
+  let seaTrainAnimationSession = null;
+  function clearSeaTrainGoldenTicketAnimation() {
+    if (!seaTrainAnimationSession) return false;
+    seaTrainAnimationSession.cancel();
+    return true;
+  }
   function playSeaTrainGoldenTicketAnimation(player, destinationIsland, onComplete) {
     const board = refs.boardGameMap;
     if (!player || !destinationIsland || !board) {
       onComplete?.();
       return;
     }
+    clearSeaTrainGoldenTicketAnimation();
     const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     const start = playerShipTokenPositionPx(player);
     const end = playerShipTokenPositionPx(player, nodeToPx(destinationIsland));
@@ -60045,7 +60056,50 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
       </div>
     `;
     board.appendChild(layer);
-    state.seaTrainAnimation = { playerId: player.id };
+    const trainState = { playerId: player.id };
+    state.seaTrainAnimation = trainState;
+    let active = true;
+    let animationFrame = 0;
+    const timers = new Set();
+    const session = {
+      game: state.gameState, player, layer, trainState,
+      cancel() {
+        if (!active) return;
+        active = false;
+        timers.forEach((timer) => window.clearTimeout(timer));
+        timers.clear();
+        if (animationFrame) window.cancelAnimationFrame(animationFrame);
+        animationFrame = 0;
+        layer.remove();
+        if (seaTrainAnimationSession === session) seaTrainAnimationSession = null;
+        if (state.seaTrainAnimation === trainState) state.seaTrainAnimation = null;
+      },
+    };
+    seaTrainAnimationSession = session;
+    const ownsAnimation = () => active && seaTrainAnimationSession === session
+      && state.seaTrainAnimation === trainState && state.gameState === session.game
+      && session.game.players.find((entry) => String(entry.id) === String(player.id)) === player;
+    const later = (callback, delay) => {
+      let timer = 0;
+      timer = window.setTimeout(() => {
+        timers.delete(timer);
+        if (ownsAnimation()) callback();
+      }, delay);
+      timers.add(timer);
+      return timer;
+    };
+    const frame = (callback) => {
+      animationFrame = window.requestAnimationFrame((timestamp) => {
+        animationFrame = 0;
+        if (ownsAnimation()) callback(timestamp);
+      });
+    };
+    const finish = () => {
+      if (!ownsAnimation()) return;
+      session.cancel();
+      if (state.gameState === session.game
+        && session.game.players.find((entry) => String(entry.id) === String(player.id)) === player) onComplete?.();
+    };
     const escapedPlayerId = window.CSS?.escape ? CSS.escape(player.id) : String(player.id).replace(/"/g, '\\"');
     const sourceShip = refs.boardGameMap?.querySelector(`.ship-token[data-player-id="${escapedPlayerId}"]`);
     sourceShip?.classList.add("sea-train-transforming-source");
@@ -60060,6 +60114,7 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
     const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     let startTime = 0;
     const tick = (timestamp) => {
+      if (!ownsAnimation()) return;
       if (!startTime) startTime = timestamp;
       const raw = Math.min(1, (timestamp - startTime) / duration);
       const t = ease(raw);
@@ -60069,23 +60124,21 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
       setSeaTrainTokenPose(train, point, angle);
       panToBoardPoint(point.x, point.y, { immediate: true, scale: followScale });
       if (raw < 1) {
-        requestAnimationFrame(tick);
+        frame(tick);
         return;
       }
       layer.classList.add("arrived");
-      window.setTimeout(() => {
-        layer.remove();
-        state.seaTrainAnimation = null;
-        onComplete?.();
+      later(() => {
+        finish();
       }, reduceMotion ? 80 : 220);
     };
     panToBoardPoint(start.x, start.y, { immediate: false, scale: followScale });
-    window.setTimeout(() => {
+    later(() => {
       sourceShip?.classList.add("sea-train-hidden-source");
       layer.classList.add("moving");
-      window.setTimeout(() => {
+      later(() => {
         layer.classList.add("train-moving");
-        requestAnimationFrame(tick);
+        frame(tick);
       }, trackRevealDuration);
     }, transformDelay);
   }
