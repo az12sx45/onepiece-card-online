@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 111,
+  "revision": 112,
   "announcements": [
+    {
+      "id": "board-20261113-golden-ticket-rejoin",
+      "status": "published",
+      "publishedAt": "2026-11-12T20:18:58.991Z",
+      "scope": "board",
+      "category": "update",
+      "version": "Windows 遊戲更新／Android Update 10／iOS Preview 15",
+      "title": "新世界航海錄：黃金票券與重新連線修正",
+      "summary": "修正手機黃金票券選完目的地後停住，以及搭車途中讀檔或重新連線後舊動畫干擾地圖的問題。",
+      "body": [
+        "修正 Android、iOS 黃金票券目的地確認後的海上列車演出，接續抵達劇情、水之七島與離開後的操作。",
+        "修正搭車途中讀檔或重新連線時，舊動畫繼續影響新地圖的情況。",
+        "黃金票券可重複使用，保留原有標記站、回合與獎勵規則。",
+        "沿用原啟動器或 App，在下載管理更新新世界航海錄；手機下載完成後，請完整關閉再重新開啟原 App。不需重裝 APK 或 IPA。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-1c17840e0493525f"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
+      }
+    },
     {
       "id": "board-20261112-thirteen-boss-lifecycle",
       "status": "published",
@@ -46,33 +70,6 @@
       "requiredRelease": {
         "kind": "board",
         "releaseId": "package-c710ae207d6510a6"
-      },
-      "cta": {
-        "kind": "game",
-        "gameId": "board"
-      }
-    },
-    {
-      "id": "board-20261112-debuff-entry-impel",
-      "status": "published",
-      "publishedAt": "2026-11-12T07:41:07.359Z",
-      "scope": "board",
-      "category": "update",
-      "version": "package-d5de74cc1d666b8b",
-      "title": "新世界航海錄：登場被動、能力說明與推進城更新",
-      "summary": "修正換人首次登場被動與下回合先制，保留能力倍率小數；調整推進城行動、麥哲倫交戰互斥與勝利後五個完整全局回合冷卻。",
-      "body": [
-        "修正換人、替補等首次入場被動；同場每角色只觸發一次，刷新、讀檔與 CPU 返回不會重複疊加。",
-        "下回合先制會顯示圖示，並在下一個適用回合參與行動順序判定；更高招式先制與原有速度、特殊行動順序保留。",
-        "能力變動說明保留小數倍率；原有命中與骰數條件照常判定。",
-        "推進城選擇不移動或略過事件會消耗當次行動，下回合仍可合法探索。",
-        "麥哲倫交戰與待交棒期間不再另外開啟新戰鬥；同隊共鬥、共用 HP 與舊多組進度保留。",
-        "只有勝利記錄全局回合：勝利當輪及接下來五個完整全局回合不再抽到麥哲倫，第六個後續全局回合恢復。敗北、逃跑與缺少欄位的舊存檔不新增冷卻。",
-        "請結束目前對局，在既有 Windows 啟動器更新《新世界航海錄》後重新進入；啟動器維持 1.2.33，只下載本次兩個遊戲程式檔。"
-      ],
-      "requiredRelease": {
-        "kind": "board",
-        "releaseId": "package-d5de74cc1d666b8b"
       },
       "cta": {
         "kind": "game",

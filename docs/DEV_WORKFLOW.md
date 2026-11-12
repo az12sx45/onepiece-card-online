@@ -9457,3 +9457,16 @@ Windows `package-8967751403531eb3` 已完成公開 CAS／清單雜湊與兩檔�
 本輪QA位於D:/Codex_QA/board-golden-ticket-recurrence-20261113。發布閘門以最終精確候選的單一完整Godot host真GUI→Source→列車→首訪故事→真Water7各頁/離開→原合法操作與再次使用為主，分別綁Android及iOS compiled原件；另驗正常/減少動態、舊卡檔cold load、真Socket重連、FinalRoute/Kuma自然完成與unknown surface拒絕。分離trace只作診斷。原先失敗與QA前置失誤保留，未通過的項目不計PASS。
 
 此記錄是候選時點；最終hash/結果/實際新版本以READY及啟動器正式發布收據為準。沿用既有App/host71與帳號存檔，不要求USB/重裝。尚未宣稱實體Android/iPhone、個人舊存檔或正式帳號驗收。LATTICE工具本階段未提供，沒有假稱新任務或圖譜持久寫入；正式與歷史freeze均保留，未執行清理。
+
+
+## 2026-11-13：黃金票券正式公開核對與公告
+
+公開核對時間：2026-11-12T20:18:58.991Z。Windows package-1c17840e0493525f、Android Update 10、iOS Preview 15 已完成 Root 封存的公開驗收。遊戲程式來源 2eb68f2cf3772c41360ec69198c7b7c9d6cee716；已驗證正式 runtime／metadata 提交 dc768bedd1a58302a2dd3d8a3c09872e09cbdf8b。
+
+Windows 沿用啟動器 1.2.34，真實公開 HTTPS 只下載主程式 3,524,125 B；完整 6,587 筆清單與 6,586 筆保留另由正式建置器核對，戰鬥程式 8c076 保留。Android／iOS 沿用原 host71 App，各只更新 Core 6,275,875 B 與 Runtime 20,370 B（合計 6,296,245 B），其餘 23 筆保留，完整有效資源為 25 筆、7 個 overlay 與 18 個原宿主資源；原 AppStage e047／361 保留。手機下載完成後，請完整關閉再重新開啟原 App；不需重裝 APK、IPA 或重新簽署。沒有宣稱執行中 JS 模組可即時熱置換。
+
+本機／公開驗證範圍：未改的實際 Windows 1.2.34 更新器、四檔隔離契約與真實公開下載，65 項通過；本機真 npm start、一個 Chrome 兩個隔離 contexts 與 Socket.IO 10 項通過，真實斷線重連後等待超過來源動畫截止時間，再走原背包／列車 RAF 重試。手機公開驗收為 Android／iOS 啟用及全新程序重啟共四個正常完整流程，涵蓋原宿主 updater、實際掛載後普通 require／create／start、列車與水之七島。手機中斷／重試 22＋22 項另屬本機隔離 fixture 補測，未重標為公開驗收；完整 raw reports、簽章、25 筆有效讀取、原 producer 確認鏈與 provider Live 均由 Root 公開 Gate 綁定。測試帳號／存檔為合成前置與哨兵；實體手機、玩家正式帳號及個人舊存檔未驗。保留帳號與存檔命名空間和儲存位置。
+
+公開 Gate：D:\Codex_QA\board-golden-ticket-publisher-prep-20261113\ROOT_PUBLIC_ACCEPTANCE_GATE_v2.json；SHA de42492d02b8d3ecbbcfbe365ed1779ef3db889f443fc52980babf08d836d3f8。Owner public PASS：D:\Codex_QA\board-golden-ticket-recurrence-20261113\public\v3\runs\20261112T201513Z-ad83c670\report.json；Root protection：D:\Codex_QA\board-golden-ticket-publisher-prep-20261113\root-protection\2026-11-12T20-12-18-415Z-4b8e5b\report.json；provider Live：D:\Codex_QA\board-golden-ticket-publisher-prep-20261113\runtime-provider-live.json。
+
+只有上述實際公開核對通過後才發布公告 rev112。其餘 99 則內容與順序精確保留，最舊同遊戲已發布公告只從 100 筆 feed 輪替，全文仍保存在 Git 與 QA before.json。本提交只改公告與此 append-only 發布紀錄，不改遊戲程式、catalog、通道指標或安裝包。工具只建立本機提交，由啟動器聊天室統一推送並等正式 Live。
