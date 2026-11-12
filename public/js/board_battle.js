@@ -1624,18 +1624,18 @@
     if (/治療|回復/.test(label) || loweredIcon === "heal") return `${label}，回復生命值。`;
     if (/先制/.test(label) || loweredIcon === "first") return `${label}，行動順序暫時提前。`;
     if (/中毒|灼傷|流血|冰凍|麻痺|束縛/.test(label) || persistentStatuses.includes(loweredIcon)) {
-      return description ? description.split(/[。.!！]/)[0] + "。" : `${label}狀態。`;
+      return description ? description.split(/[。!！]|\.(?!\d)/)[0] + "。" : `${label}狀態。`;
     }
     if (/蓄力|傷害加成|下一次攻擊|本次攻擊|追加.*傷害|高骰.*傷害/.test(label)) return `${label}，下一次或本次攻擊傷害提高。`;
     if (/易傷/.test(label) || loweredIcon === "damage_up") return `${label}，受到的傷害暫時增加。`;
     if (/封鎖/.test(label)) return `${label}，限制可使用的行動。`;
     const statName = label.match(/(攻擊|防禦|特攻|特防|戰術|意志|速度|命中|閃避|骰面)/)?.[1] || "";
-    if (statName && description) return description.split(/[。.!！]/)[0] + "。";
+    if (statName && description) return description.split(/[。!！]|\.(?!\d)/)[0] + "。";
     if (statName && (/[+＋↑]/.test(label) || /提升|強化/.test(label))) return `${label}，${statName}提高，持續到換下或瀕死。`;
     if (statName && (/[-－↓]/.test(label) || /下降|降低/.test(label))) return `${label}，${statName}降低，持續到換下或瀕死。`;
-    if (/[+＋↑]/.test(label) || /提升|強化/.test(label)) return description ? description.split(/[。.!！]/)[0] + "。" : `${label}，能力提高，持續到換下或瀕死。`;
-    if (/[-－↓]/.test(label) || /下降|降低/.test(label)) return description ? description.split(/[。.!！]/)[0] + "。" : `${label}，能力降低，持續到換下或瀕死。`;
-    if (description) return description.split(/[。.!！]/)[0] + "。";
+    if (/[+＋↑]/.test(label) || /提升|強化/.test(label)) return description ? description.split(/[。!！]|\.(?!\d)/)[0] + "。" : `${label}，能力提高，持續到換下或瀕死。`;
+    if (/[-－↓]/.test(label) || /下降|降低/.test(label)) return description ? description.split(/[。!！]|\.(?!\d)/)[0] + "。" : `${label}，能力降低，持續到換下或瀕死。`;
+    if (description) return description.split(/[。!！]|\.(?!\d)/)[0] + "。";
     return `${label}。`;
   }
 

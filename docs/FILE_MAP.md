@@ -2419,3 +2419,11 @@ finale-execution-swing-v1.webp 為執行兵落刀分鏡。
 - native_battle_view.gd／對應iOS編譯native_battle_view.gdc：消費既有phaseHpBars，呈現兩階段HP及動畫投影；沿用原生host71更新白名單。
 - D:/Codex_QA/board-boss-hp-balance-20261111：保留來源基底指紋、隔離候選與patch、各項實際執行報告及公開讀回。正式交接與個別平台收據列精確hash與適用版本。
 - D:/Codex_Project_Coordination/tabletop-series/strategy：四款遊戲攻略情報規則、來源索引與可重用問答；來源變版時按需刷新。
+
+## 2026-11-12 Board 戰鬥提示與推進城修正入口
+
+- public/js/board_game.js 與行動版 original-core.js：真入場被動、先制排序及排定提示、推進城事件行動消耗、麥哲倫 active／pending 占用與全局勝利冷卻。
+- public/js/board_battle.js：桌機狀態說明保留小數倍率，不把小數點當句尾。
+- 行動版 native-battle-scene.js：在既有 HUD 投影後，以唯一相符的來源 stage detail 補全小數倍率說明，不修改原始 view。
+- 行動版 native_battle_view.gd／iOS 同 preset 的 native_battle_view.gdc：現有狀態按鈕將滑動事件傳給狀態列 ScrollContainer，保留點擊說明與兩段血條。
+- D:/Codex_QA/board-debuff-display-20261112：core、desktop/impel、mobile 分開保存真指令、UI／引擎、編譯、存檔、最小 patch 與來源指紋；browser-wire-report.json 為兩 Chrome 的隔離 Socket.IO 傳輸測試。正式整合檔與下載尺寸以啟動器收據為準。

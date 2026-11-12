@@ -8876,6 +8876,11 @@
     const runtime = playerWorlds ? coopBattleRuntimeFor(player, battle, true) : null;
     const activeIndex = Number(runtime?.activeCrewIndex ?? (world === "real" ? mechanic.realActiveIndex : mechanic.songActiveIndex));
     const action = normalizeTotMusicaWorldAction(rawAction);
+    if (action.type !== "switch") {
+      setTotMusicaActiveWorldCrew(player, battle, mechanic, world, activeIndex);
+      applyActiveCharacterPassiveOpening(player, battle);
+      await playOpeningPassiveVisualsIfNeeded(player, battle);
+    }
     if (action.type === "wait") {
       const card = setTotMusicaActiveWorldCrew(player, battle, mechanic, world, activeIndex);
       battle.log.push(`${label}的 ${cardDisplayName(card)} 沒有可用招式，本輪待機；不形成同步攻擊，魔王照常行動。`);
@@ -8885,6 +8890,10 @@
       if (!indices.includes(action.nextIndex) || Number(player.crew?.[action.nextIndex]?.currentHp || 0) <= 0) return { world, label, direct: false, hit: false, damage: 0, diceFace: 0, firstDiceFace: 0, diceRolls: [], move: null, cardIndex: activeIndex };
       const fromName = cardDisplayName(player.crew?.[activeIndex]);
       const card = setTotMusicaActiveWorldCrew(player, battle, mechanic, world, action.nextIndex);
+      if (Number(action.nextIndex) !== activeIndex) {
+        applyActiveCharacterPassiveOpening(player, battle);
+        await playOpeningPassiveVisualsIfNeeded(player, battle);
+      }
       battle.log.push(`${label}免費調度：${fromName} → ${cardDisplayName(card)}；本世界本輪不會命中魔王。`);
       return { world, label, playerId: String(player.id || ""), attribute: card?.attribute || "無", direct: false, hit: false, damage: 0, diceFace: 0, firstDiceFace: 0, diceRolls: [], move: null, switched: true, cardIndex: action.nextIndex };
     }
@@ -12909,6 +12918,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       }
       state.gameState.resolutionLock = true;
       renderBattleInterface();
+      if (state.battleState.isSparBattle) scheduleOpeningPassiveVisualsIfReady(currentPlayer(), state.battleState);
       if (battleRefreshRecovery || (shouldRecoverInterruptedBattle && battleRefreshRecoveryHasQueuedResolution(state.battleState))) {
         scheduleInterruptedBattleResolutionRecovery();
       }
@@ -32235,9 +32245,30 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return IMPEL_DOWN_PRISONERS.every((prisoner) => impelDownPrisonerJoined(player, prisoner.id));
   }
 
+  function isUnfinishedImpelDownMagellanBattle(battle) {
+    if (!isPendingImpelDownBattle(battle) || !(battle.impelDown?.magellan || battle.enemyCombatant?.key === "magellan")) return false;
+    if (["win", "lose", "escape"].includes(String(battle.result || ""))) return false;
+    const participantIds = Array.isArray(battle.coop?.participantIds) && battle.coop.participantIds.length
+      ? battle.coop.participantIds.map((id) => String(id))
+      : [String(battle.playerId || battle.impelDown?.ownerPlayerId || "")];
+    const islandId = String(getImpelDownIsland()?.id || "impel_down");
+    return (state.gameState?.players || []).some((entry) => {
+      if (!participantIds.includes(String(entry?.id || "")) || !isPlayerInImpelDown(entry)) return false;
+      if (entry.location?.kind !== "island" || String(entry.location.islandId || "") !== islandId) return false;
+      const runtime = battle.coop?.runtimes?.[String(entry.id)];
+      if (runtime?.defeated || runtime?.escaped) return false;
+      return livingCrewIndices(entry).length > 0 || Boolean(runtime?.awaitingRescue && Number(runtime.rescueTurnsRemaining || 0) > 0);
+    });
+  }
+
   function impelDownMagellanAvailable(player) {
     const prison = normalizeImpelDownState(player);
-    return Math.max(1, Number(prison.level || 1)) >= 4;
+    if (Math.max(1, Number(prison?.level || 1)) < 4) return false;
+    const round = Math.max(1, Math.floor(Number(state.gameState?.round || 1)));
+    const defeatedRound = Math.max(0, Math.floor(Number(state.gameState?.impelDownMagellanDefeatedRound || 0)) || 0);
+    if (defeatedRound > 0 && round <= defeatedRound + 5) return false;
+    const battles = [state.battleState, ...(state.gameState?.players || []).map((entry) => entry?.pendingBattle)];
+    return !battles.some((battle) => isUnfinishedImpelDownMagellanBattle(battle));
   }
 
   function impelDownEventPool(player) {
@@ -33025,9 +33056,21 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     }, IMPEL_DOWN_EVENT_SPIN_MS + 680);
   }
 
-  function resolveImpelDownEventPrimary(player) {
+  function impelDownResolvableEvent(player, context = null) {
     const prison = normalizeImpelDownState(player);
-    const eventDef = impelDownEventById(prison.eventId);
+    if (!prison?.active || prison.status !== "event" || state.battleState || state.gameState?.resolutionLock || turnHandoffVisualLock) return null;
+    if (String(currentPlayer()?.id || "") !== String(player?.id || "")) return null;
+    if (context && typeof context === "object") {
+      if (context.playerId != null && String(context.playerId) !== String(player.id || "")) return null;
+      if (context.eventId != null && String(context.eventId) !== String(prison.eventId || "")) return null;
+      if (context.eventVisualId != null && String(context.eventVisualId) !== String(prison.eventVisualId || "")) return null;
+    }
+    return IMPEL_DOWN_EVENTS.find((event) => event.id === prison.eventId) || null;
+  }
+function resolveImpelDownEventPrimary(player, context = null) {
+    const prison = normalizeImpelDownState(player);
+    const eventDef = impelDownResolvableEvent(player, context);
+    if (!eventDef) return false;
     if (eventDef.id === "patrol") {
       startImpelDownBattle(player, { eventId: eventDef.id });
       return;
@@ -33061,18 +33104,28 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     }
   }
 
-  function resolveImpelDownEventSecondary(player) {
+  function resolveImpelDownEventSecondary(player, context = null) {
     const prison = normalizeImpelDownState(player);
-    const eventDef = impelDownEventById(prison.eventId);
+    const eventDef = impelDownResolvableEvent(player, context);
+    if (!eventDef) return false;
     if (eventDef.id === "patrol" || eventDef.id === "magellan") {
       setImpelDownGroupStatus(player, "locked");
       clearImpelDownTransient(prison);
       finishImpelDownTurn(player, `${impelDownGroupNames(player)} 戰鬥失利，被重新關回牢房。`);
       return;
     }
-    prison.status = "free";
-    clearImpelDownTransient(prison);
-    openImpelDownModal(player);
+    const eventVisualId = String(prison.eventVisualId || "");
+    const targets = eventDef.id === "hidden" ? [player] : impelDownFloorGroup(player);
+    targets.forEach((entry) => {
+      const entryState = normalizeImpelDownState(entry);
+      if (!entryState?.active || entryState.status !== "event" || entryState.eventId !== eventDef.id) return;
+      const targetVisualId = String(entryState.eventVisualId || "");
+      if (eventVisualId && targetVisualId && targetVisualId !== eventVisualId) return;
+      entryState.status = "free";
+      clearImpelDownTransient(entryState);
+    });
+    finishImpelDownTurn(player, `${player.name} 選擇略過「${eventDef.title}」，本回合結束。`);
+    return true;
   }
 
   function boostImpelDownRecruitFocus(player) {
@@ -33251,18 +33304,18 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return eventDef;
   }
 
-  function impelResolveEventPrimary() {
+  function impelResolveEventPrimary(context = null) {
     const player = impelCurrentPlayer();
     if (!isPlayerInImpelDown(player) || state.battleState) return null;
-    resolveImpelDownEventPrimary(player);
+    resolveImpelDownEventPrimary(player, context);
     notifyImpelDownWindow(player);
     return getImpelDownView(player);
   }
 
-  function impelResolveEventSecondary() {
+  function impelResolveEventSecondary(context = null) {
     const player = impelCurrentPlayer();
     if (!isPlayerInImpelDown(player) || state.battleState) return null;
-    resolveImpelDownEventSecondary(player);
+    resolveImpelDownEventSecondary(player, context);
     notifyImpelDownWindow(player);
     return getImpelDownView(player);
   }
@@ -33439,6 +33492,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!options.forceNew && isPendingImpelDownBattle(player?.pendingBattle) && canResumeBattle(player)) {
       return resumeImpelDownBattle(player);
     }
+    if (options.magellan && !impelDownMagellanAvailable(player)) return false;
     const island = getImpelDownIsland();
     if (!island) {
       addLog("推進城島嶼尚未建立，暫時無法進入逃獄戰。");
@@ -33907,6 +33961,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       islandState.isDefeated = false;
     }
     if (battle.result === "win") {
+      if (info.magellan) {
+        const recordedRound = Math.max(0, Math.floor(Number(info.magellanDefeatRecordedRound || 0)) || 0);
+        info.magellanDefeatRecordedRound = recordedRound || Math.max(1, Math.floor(Number(state.gameState.round || 1)));
+        state.gameState.impelDownMagellanDefeatedRound = Math.max(
+          Math.max(0, Math.floor(Number(state.gameState.impelDownMagellanDefeatedRound || 0)) || 0),
+          info.magellanDefeatRecordedRound
+        );
+      }
       const reward = info.rescue ? IMPEL_DOWN_RESCUE_REWARD : impelDownBattleReward(battle);
       const rewardPlayers = info.teamBattle
         ? participants.filter((entry) => {
@@ -45828,6 +45890,17 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           : `本回合被攻擊時，反彈受到傷害的 ${Math.round(Number(roundEffects.reflectRatio) * 100)}%。`,
       });
     }
+    if (roundEffects?.nextGuaranteedFirst) {
+      details.push({
+        id: "round-next-first",
+        icon: "first",
+        iconUrl: effectIconUrl("first"),
+        label: "下回合先制",
+        turns: 1,
+        type: "buff",
+        description: "已排定於下一個戰鬥回合生效，屆時行動順序大幅提前。",
+      });
+    }
     if (roundEffects?.guaranteedFirst) {
       details.push({
         id: "round-first",
@@ -46767,6 +46840,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const adapter = {
       __sparRuntimePlayer: player,
       isSparAdapter: true,
+      characterPassiveState: ensureCharacterPassiveState(battle),
+      openingPassiveVisualQueue: (battle.openingPassiveVisualQueue ||= []),
+      openingPassiveVisualPlayed: (battle.openingPassiveVisualPlayed ||= {}),
       islandId: "spar-pk",
       islandKind: "spar",
       playerId: actor.playerId,
@@ -46814,6 +46890,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!context.battle) return;
     initializeBattleCarryStates(context.player, context.battle);
     syncSparParticipantFromAdapter(participant, context.battle);
+    applySparCharacterPassiveOpening(battle, participant);
   }
 
   function startFormalSparBattle(spar = normalizeActiveSpar()) {
@@ -46868,6 +46945,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     renderBattleInterface();
     notifyBattleWindow();
     scheduleBoardLanStatePush("spar-battle-start", 20, { force: true });
+    scheduleOpeningPassiveVisualsIfReady(turnOwner, battle);
     return true;
   }
 
@@ -46905,6 +46983,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     renderBattleInterface();
     notifyBattleWindow();
     scheduleBoardLanStatePush("spar-turn-start", 20, { force: true });
+    scheduleOpeningPassiveVisualsIfReady(player, battle);
     return true;
   }
 
@@ -46913,7 +46992,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const actorIsViewer = String(event.actorId || "") === String(viewerId);
     const copy = safeJsonClone(event);
     copy.side = actorIsViewer ? "player" : "enemy";
-    copy.targetSide = actorIsViewer ? "enemy" : "player";
+    copy.targetSide = event.targetSide === "player" ? copy.side : actorIsViewer ? "enemy" : "player";
     if (copy.startHpByPlayerId) {
       copy.startHp = {
         player: copy.startHpByPlayerId[String(viewerId)] ?? null,
@@ -47023,7 +47102,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
               : "",
         roundPauseReturnsToMap: false,
         canFinish: canControl && viewerId === String(battle.turnOwnerId || "") && !!viewerResult,
-        canAct: canControl && expectedActionPlayerId === viewerId && !own.needsReplacement && !ownQueued,
+        canAct: canControl && expectedActionPlayerId === viewerId && !own.needsReplacement && !ownQueued && !openingPassiveVisualPending(battle),
         handoffPending: false,
         coopInfo: null,
         coopRescueWait: null,
@@ -47037,8 +47116,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         playerDiceRoll: own.diceRoll,
         enemyDiceRoll: opponent.diceRoll,
         visualEvent: sparVisualEventForViewer(battle.visualEvent, viewerId),
-        openingPassiveVisualPending: false,
-        openingPassiveVisualQueue: [],
+        openingPassiveVisualPending: openingPassiveVisualPending(battle),
+        openingPassiveVisualQueue: openingPassiveVisualQueueForView({
+          openingPassiveVisualQueue: (battle.openingPassiveVisualQueue || []).map((event) => sparVisualEventForViewer(event, viewerId)),
+        }),
         kyubiMaskVisualPending: false,
         rewards: null,
         coopRewardDetails: [],
@@ -49850,6 +49931,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     battle.playerStageTurns = emptyStageTurns();
     battle.playerRoundEffects = emptyRoundEffects();
     applyCaptainCoatSwitchBonus(player, battle, fromIndex, nextIndex);
+    applyActiveCharacterPassiveOpening(player, battle);
     battle.needsReplacement = false;
     battle.result = "";
     battle.roundResolved = false;
@@ -49893,10 +49975,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       BATTLE_REPLACEMENT_ENTRY_DISPLAY_MS,
       Number(battle.visualEvent?.duration || 0),
     );
-    window.setTimeout(() => {
+    window.setTimeout(async () => {
       if (state.battleState !== battle) return;
       if (String(battle.playerId || "") !== String(player.id || "")) return;
       battle.animating = false;
+      await playOpeningPassiveVisualsIfNeeded(player, battle);
+      if (state.battleState !== battle) return;
       if (shouldHandoffAfterCoopReplacement) {
         battle.coop ||= {};
         battle.coop.actions = {};
@@ -51362,7 +51446,19 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return battle.visualEvent;
   }
 
-  function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
+  function applySparCharacterPassiveOpening(battle, participant) {
+    const context = sparParticipantContext(battle, participant);
+    if (!context.battle) return;
+    const queue = context.battle.openingPassiveVisualQueue;
+    const before = queue.length;
+    applyActiveCharacterPassiveOpening(context.player, context.battle);
+    queue.slice(before).forEach((event) => {
+      event.actorId = participant.playerId;
+      event.targetId = sparOpponentParticipant(battle, participant.playerId)?.playerId || "";
+    });
+    syncSparParticipantFromAdapter(participant, context.battle);
+  }
+function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
     const index = Number(nextIndex);
     const card = participant?.crew?.[index];
     if (!card || Number(card.currentHp || 0) <= 0 || index === Number(participant.activeCrewIndex)) return false;
@@ -51380,6 +51476,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       ensureSanjiRaidSuitTransformation(context.player, context.battle, index, { queueOpening: false });
       syncSparParticipantFromAdapter(participant, context.battle);
     }
+    applySparCharacterPassiveOpening(battle, participant);
     battle.log.push(`${participant.name} ${reason === "replacement" ? "補上" : "換上"} ${card.name}。`);
     sparSetVisualEvent(battle, participant, {
       type: "switch",
@@ -51713,7 +51810,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       }
       if (participant.action.type === "switch") {
         sparApplySwitch(battle, participant, participant.action.nextIndex, "switch");
-        await wait(1100);
+        await waitBattleWindowVisual(battle.visualEvent, BATTLE_SWITCH_ENTRY_DISPLAY_MS);
+        await playOpeningPassiveVisualsIfNeeded(sparPlayerById(participant.playerId), battle);
       } else {
         await executeSparMoveAction(battle, participant, opponent);
       }
@@ -51743,7 +51841,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const battle = state.battleState;
     const local = options.playerId ? sparPlayerById(options.playerId) : localBoardPlayer();
     const participant = sparBattleParticipant(battle, local?.id);
-    if (!battle?.isSparBattle || !participant || battle.animating || battle.result || participant.needsReplacement || participant.action) return false;
+    if (!battle?.isSparBattle || !participant || battle.animating || battle.result || participant.needsReplacement || participant.action || openingPassiveVisualPending(battle)) return false;
     if (!options.skipControl && !canBoardLanControlPlayerIdentity(local)) return false;
     if (sparExpectedActionPlayerId(battle) !== String(participant.playerId)) return false;
     const card = sparActiveCard(participant);
@@ -51799,7 +51897,21 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!options.skipControl && !canBoardLanControlPlayerIdentity(local)) return false;
     if (!sparApplySwitch(battle, participant, Number(nextIndex), "replacement")) return false;
     const waiting = battle.participantOrder.some((id) => sparBattleParticipant(battle, id)?.needsReplacement);
-    if (!waiting && battle.awaitingMapAdvance) return completeSparRoundAndAdvanceTurn(battle);
+    if (!waiting && battle.awaitingMapAdvance) {
+      if (openingPassiveVisualPending(battle)) {
+        battle.animating = true;
+        void (async () => {
+          await waitBattleWindowVisual(battle.visualEvent, BATTLE_SWITCH_ENTRY_DISPLAY_MS);
+          await playOpeningPassiveVisualsIfNeeded(local, battle);
+          if (state.battleState !== battle) return;
+          battle.animating = false;
+          completeSparRoundAndAdvanceTurn(battle);
+        })();
+        return true;
+      }
+      return completeSparRoundAndAdvanceTurn(battle);
+    }
+    scheduleOpeningPassiveVisualsIfReady(local, battle);
     notifyBattleWindow();
     scheduleBoardLanStatePush("spar-replacement", 20, { force: true });
     return true;
@@ -52160,7 +52272,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       const moveEntry = side === "player"
         ? battleActiveCard(player, battle).moveSet.find((entry) => entry.id === action.moveId)
         : battle.enemyCombatant.moveSet.find((entry) => entry.id === action.moveId);
-      return moveEntry?.effects?.priority || moveEntry?.priority || 0;
+      const priority = Number(moveEntry?.effects?.priority || moveEntry?.priority || 0);
+      const roundEffects = side === "player" ? battle.playerRoundEffects : battle.enemyCombatant.roundEffects;
+      return roundEffects?.guaranteedFirst ? Math.max(priority, 1) : priority;
     }
     return 0;
   }
@@ -52782,6 +52896,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     battle.playerStageTurns = emptyStageTurns();
     resetRoundEffects(battle.playerRoundEffects);
     battle.playerAction = null;
+    applyActiveCharacterPassiveOpening(player, battle);
     battle.log.push(`${battleCarryItemName(ctx.item)}啟動，${fromName}${reasonText || "撤離不利局面"}，換上${toName}。`);
     return true;
   }
@@ -54695,6 +54810,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       if (side === "player" && ["switch", "sanji-raid-suit-transform"].includes(battle.visualEvent?.type)) {
         await waitBattleWindowVisual(battle.visualEvent, BATTLE_SWITCH_ENTRY_DISPLAY_MS);
       }
+      if (side === "player") await playOpeningPassiveVisualsIfNeeded(player, battle);
       renderBattleInterface();
       return;
     }
@@ -55097,7 +55213,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         knockedOutSide = "";
         knockedOutName = "";
       }
-      if ((battle.openingPassiveVisualQueue || []).some((event) => event?.type === "postgame-saga-fusion")) {
+      if (openingPassiveVisualPending(battle)) {
         await playOpeningPassiveVisualsIfNeeded(player, battle);
       }
       const transitionedYonkoPhase = await applyYonkoPhaseTransitions(player, battle);
@@ -55199,6 +55315,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
     if (side === "player") battle.playerPerformedAction = true;
     else battle.enemyPerformedAction = true;
+    if (openingPassiveVisualPending(battle)) await playOpeningPassiveVisualsIfNeeded(player, battle);
     if (battle.isJudicialRaid) {
       const raid = ensureJudicialRaidState();
       raid.enemyCurrentHp = Math.max(0, Math.min(raid.enemyMaxHp || battle.enemyCombatant.maxHp || 1, battle.enemyCombatant.currentHp ?? raid.enemyCurrentHp));
@@ -55732,6 +55849,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     battle.playerStageTurns = emptyStageTurns();
     resetRoundEffects(battle.playerRoundEffects);
     applyCaptainCoatSwitchBonus(player, battle, fromIndex, nextIndex);
+    applyActiveCharacterPassiveOpening(player, battle);
     const switchReduction = Math.max(0, Math.min(0.75, Number(getTeamEffects(player).shipSwitchDamageReduction || 0)));
     if (switchReduction > 0) {
       battle.shipSwitchDamageReduction = switchReduction;
@@ -57040,8 +57158,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     let result = null;
     if (command.type === "rollEscape") result = impelRollEscape();
     else if (command.type === "drawEvent") result = impelDrawEvent();
-    else if (command.type === "resolveEventPrimary") result = impelResolveEventPrimary();
-    else if (command.type === "resolveEventSecondary") result = impelResolveEventSecondary();
+    else if (command.type === "resolveEventPrimary") result = impelResolveEventPrimary(payload);
+    else if (command.type === "resolveEventSecondary") result = impelResolveEventSecondary(payload);
     else if (command.type === "move") result = impelMove(payload.direction);
     else if (command.type === "directEscape") result = impelDirectEscape();
     else if (command.type === "selectRecruit") result = impelSelectRecruit(payload.prisonerId);
