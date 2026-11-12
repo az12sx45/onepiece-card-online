@@ -9394,3 +9394,23 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 安裝器建置來源為 7065e4e55215f3653ac69b29dc5c43f12436626c，成品 324375297 bytes、SHA-256 74fa49c8e70cb8fc5c17f596e7c615e0f67676814cba7b6a8fbbb312723aacd5。內嵌 ASAR 與來源四個修正程式逐一一致；既有 Ed25519 更新信任金鑰簽署 release manifest，未建立新的 Windows 簽章憑證。官網 Windows fallback 與下載測試的 Windows 版本同步至 1.2.34；Android／iOS 下載資訊與四款遊戲指標不在本次變更範圍。
 
 獨立 AssetStore 驗證 16 情境／85 檢查、既有 desktop_asset_store_qa.js 與 desktop_download_scheduler_qa.js、成品 Electron 啟動 smoke，以及實際候選 renderer／preload 的 13 項狀態與重試 IPC 檢查均通過。測試使用獨立快取及本機 fixture，不宣稱正式帳號或四款完整對局驗收；隱藏視窗截圖的 compositor 延遲另有紀錄。精確命令、舊 1.2.33 更新器的公開下載驗證、Render 部署與公開指標讀回結果，以 D:/Codex_QA/launcher-integrity-revalidation-20261112/final-release-receipt.json 為準。建置、失敗嘗試、前版回復基底及本輪證據保留，不執行專案清理。
+
+## 2026-11-12 Board：重要物品展示與黃金票券原生觸控
+
+使用者澄清問題是「獲得高級物品的展示畫面」無法關閉，並非限定高級寶箱；四皇攜帶物為例，另有海上列車黃金票返回水之七島卡住。基底是正式 bf84083ba5d41c80b6818f09008f4ffcd8747a66、Windows package-d5de74cc1d666b8b、Android Update7／iOS Preview12。行動Core由77248579更新為c2749879，桌機主JS由6b9bdd2f更新為a2a51341；Scene3678475d、View4c68f4ca／c4f38320 保留。
+
+原重要物品 source guard／關閉／idle、黃金票 normal／reduced RAF 完成與抵達、首登故事、Water7 進出回呼已有接通。本輪以四皇合法勝利 checkpoint、連續物品、重複完成、舊存檔、CPU 與票券各模式跑原 Core；另盤點48個important定義及10類物品modal的實際listener。這些來源層通過不等於手機原生 GUI 會收到操作。
+
+iOS 先前滿版 helper 把 owner 的 STOP 複製到子背景 ColorRect，造成背景攔下事件，owner.gui_input收不到重要物品等畫面的點擊。改為互動背景傳回原owner，owner原STOP仍負責阻擋下層；純演出IGNORE保持。另一個真AppStage案例是 deferred BattleEntry 節點攔下繪製在它前面的HUD，需讓根UI命中順序符合既有顯示優先權，並保留已知恢復遮罩的優先權。精確排序範圍、可重現失敗、候選最小差異與最終SHA以本輪NATIVE_READY及handoff為準。
+
+原生交付限定既有 native_app_stage.gd（Android）及同preset編譯的 native_app_stage.gdc（iOS），不新增host71更新target或重建APK／IPA。iOS編譯先重現當前83fa31f9 GDC，再對候選檢查冷啟動、掛載及回復。另在Water7 info頁確認可選工頭肖像解碼失敗會擋住原文字資料，採僅肖像實際失敗時保留原說明／隊伍效果／材料的局部呈現；必要panel／row失敗仍走既有重試／離開，不修改原model或cache.failed。
+
+舊檔邊界另重現四皇獎勵已付、重要物品展示尚未關閉時，冷重啟讀檔再結算會重發普通貝里。桌機主JS與行動Core因此補同構的每場、每收件人獎勵receipt，區分原獎勵、後續任務／補給效果及完成／合法續接狀態。舊四皇已付檔只在既有完整流程證據吻合時遷移；單獨win、exitLock或預覽均不能當已領證明，無佐證的舊未領勝利保留正常領獎。精確新欄位、最小diff與回歸以Core最終READY／handoff為準；不更改原獎勵數值、玩家ID或存檔鍵。
+
+實際桌機Chrome候選a2a5／原HTML完成連續兩件重要物品的原guard與pointer關閉、完整列車RAF到island24、真pointer跳過首登故事後開啟Water7 iframe；正常owning profile與sessionStorage lobby的舊已付四皇檔冷載後18600不變、換至actor1且解除鎖定。正式checkout的npm start因缺express於server/index.js:4失敗；桌機對照使用獨立唯讀HTTP服務，沒有安裝或改動正式來源相依。
+
+另從正式bf840取77檔exact-byte server/static依賴，沿用隔離QA依賴及無資料庫本機帳號，兩個真Chrome context跑8項：建立／加入／開始、真來源socket join與BOARD_GAME_STATE推送套用、Page.reload重入保留receipt及economy、非控制者來源拒絕／server not_your_turn、合法控制者只續接一次且雙端鎖定解除。served桌機候選hash為a2a5、未加hook，0腳本例外；不等於正式帳號或完整多人遊戲驗收。最終c274 Core另在真GodotJS執行6段，涵蓋舊7724實engine領獎後冷載不重發、未領獎正常發放、真clicked續接、票券抵達／退出及原生命令在實engine ACK後正常暫停換人。所有控制時鐘、圖片ready及ACK前提在原報告明列。
+
+本輪來源、橋接、真Godot GUI、iOS編譯／掛載與更新器證據分層保留在 D:/Codex_QA/board-reward-ticket-lifecycle-20261112，未操作玩家個人存檔或實體手機。原生before／after須使用viewport真輸入，test_press或直接emit不代替GUI命中驗收。公開下載、25列簽章與有效掛載分開核對；App內建的未改檔案不要求另有公開下載網址。各平台發布狀態由啟動器個別收據與本輪closure證明。
+
+沒有清理；基底、候選、真App來源索引、失敗fixture原因與發布／回復證據保留。LATTICE API本階段未提供，沒有宣稱資料庫任務持久化或完整Godot圖譜成功。

@@ -2435,3 +2435,11 @@ finale-execution-swing-v1.webp 為執行兵落刀分鏡。
 - desktop/launcher.js：檢查中的狀態／進度與重新檢查操作；desktop/preload.js、desktop/main.js：受既有 guarded IPC 與遊戲 ID／登入檢查保護的本機重試，及啟動前狀態重檢。
 - desktop/package.json、desktop/package-lock.json：1.2.34；package metadata filter 補入當前 Card／Board manifest，保留其他既有 filter。
 - D:/Codex_QA/launcher-integrity-revalidation-20261112/：獨立快取 QA、來源、限制及發布前交接；此目錄與回復基底需保留，不是玩家快取。
+
+## 2026-11-12 Board 重要物品／黃金票原生操作入口
+
+- 行動版 native_app_stage.gd／iOS對應 native_app_stage.gdc：滿版背景的GUI事件傳遞、根層操作順序與已知恢復遮罩優先權。本輪僅交付現有allowlist中的AppStage。
+- native_item_reveal_hud.gd、native-item-reveal-bridge.js：沿用已安裝App的獲物展示與 clicked→source click契約；逐byte對正式host來源綁定，不另發布未列allowlist的helper。
+- native-sea-train-bridge.js／native_sea_train_layer.gd、原生modal與story橋接：保留Core的目的地、RAF、完成、進島與故事回呼，驗收從票券操作接到Water7頁。
+- public/js/board_game.js／行動original-core.js：保留原重要物品queue／waitForItemRevealIdle與票券流程，另修正每場每收件人的勝利獎勵去重、讀檔續接及有證據的舊四皇已付獎恢復；不改數值或存檔鍵。
+- D:/Codex_QA/board-reward-ticket-lifecycle-20261112/{core,audit,native,desktop,public}：保存來源指紋、實際回呼矩陣、桌機pointer與原生GUI、編譯、更新器及公開讀回證據。

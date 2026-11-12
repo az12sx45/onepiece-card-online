@@ -12868,6 +12868,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       applyBoardCampaignContext({ campaignId: String(state.lobby.campaignId), mode: String(state.lobby.campaignMode || "") });
     }
     state.battleState = payload.battleState ? safeJsonClone(payload.battleState) : null;
+    restoreLegacyBattleWinRewardReceipts(state.battleState, state.gameState);
     state.boardUiEvent = null;
     if (!normalizeLoadedGameState(options)) {
       if (options.silent) return false;
@@ -57328,6 +57329,7 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
 
   function finalizeBattleAndAdvanceTurn(player, afterFinalize, options = {}) {
     if (state.gameState.battleExitLock) return;
+    finalizeBattleWinRewardReceipts(state.battleState, options);
     state.gameState.battleExitLock = true;
     if (typeof afterFinalize === "function") afterFinalize();
     const shouldAdvanceTurn = options.advanceTurn !== false;
@@ -57829,8 +57831,101 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
     return granted;
   }
 
+  function battleWinRewardScope(battle) {
+    return [battle?.islandId || "", battle?.islandKind || "", battle?.enemyCombatant?.key || battle?.enemyCombatant?.name || ""].map(String).join("|");
+  }
+  function battleWinRewardReceipt(battle, player) {
+    const entry = battle?.winRewardReceipts?.[String(player?.id || "")];
+    return entry?.version === 1 && entry.playerId === String(player?.id || "") && entry.scope === battleWinRewardScope(battle) && entry.rewards ? entry : null;
+  }
+  function recordBattleWinRewardReceipt(battle, player, rewards, options = {}) {
+    battle.winRewardReceipts = battle.winRewardReceipts && typeof battle.winRewardReceipts === "object" ? battle.winRewardReceipts : {};
+    const entry = {
+      version: 1, playerId: String(player.id), scope: battleWinRewardScope(battle),
+      rewards: safeJsonClone(rewards), effectsApplied: false, complete: false,
+      ...options,
+    };
+    battle.winRewardReceipts[entry.playerId] = entry;
+    return entry;
+  }
+  function finalizeBattleWinRewardReceipts(battle, options = {}) {
+    if (battle?.result !== "win" || !battle.winRewardReceipts) return;
+    const continuation = options.advanceTurn !== false ? "end_turn"
+      : currentPlayer()?.pendingIslandServiceChoice?.requiredEntry === true ? "island_service" : "source_after_clear";
+    Object.values(battle.winRewardReceipts).forEach((entry) => {
+      if (entry?.version !== 1 || entry.scope !== battleWinRewardScope(battle)) return;
+      entry.complete = true;
+      entry.continuation = continuation;
+    });
+  }
+  function resumeCompletedBattleWinSettlement(player, battle) {
+    if (!player || battle?.result !== "win" || battle.deferredCoopResult) return false;
+    const recipients = isCoopBattle(battle) ? coopBattleRewardRecipients(battle, player) : [player];
+    const receipts = recipients.map((entry) => battleWinRewardReceipt(battle, entry));
+    if (!receipts.length || receipts.some((entry) => !entry?.complete)) return false;
+    const continuation = receipts[0].continuation;
+    if (receipts.some((entry) => entry.continuation !== continuation)) return false;
+    if (continuation === "end_turn") {
+      finalizeBattleAndAdvanceTurn(player);
+      return true;
+    }
+    if (continuation === "island_service" && player.pendingIslandServiceChoice?.requiredEntry === true) {
+      finalizeBattleAndAdvanceTurn(player, null, {
+        advanceTurn: false,
+        afterClear: () => {
+          scheduleTurnStartIslandServiceChoiceForCurrentPlayer();
+          if (canPresentPendingIslandServiceChoice(player)) openPendingIslandServiceChoice(player);
+        },
+      });
+      return true;
+    }
+    return false;
+  }
+  function restoreLegacyBattleWinRewardReceipts(battle, game) {
+    // Old builds could save a fully paid win while its item reveal blocked the
+    // handoff. Preview rewards, result=win, or an exit lock alone are not proof.
+    if (!battle || battle.winRewardReceipts || battle.result !== "win" || battle.islandKind !== "yonko"
+      || battle.deferredCoopResult || game?.battleExitLock !== true || !battle.roundResolved
+      || battle.animating || Number(battle.enemyCombatant?.currentHp || 0) > 0) return false;
+    const island = (game.boardData?.islands || []).find((entry) => entry.id === battle.islandId);
+    const islandState = game.boardData?.islandStates?.[battle.islandId];
+    const player = (game.players || []).find((entry) => String(entry.id) === String(battle.playerId));
+    if (!island || !player || !islandState?.isDefeated || !islandState.isYonkoDefeated
+      || Number(islandState.currentHp || 0) !== 0 || game.yonkoStatus?.[battle.islandId] !== true
+      || !player.defeatedYonkoGlyphs?.includes(islandState.glyphId)
+      || !islandState.copiedByPlayers?.includes(player.id)) return false;
+    const log = Array.isArray(game.log) ? game.log : [];
+    const defeatLine = player.name + " 擊敗了 " + island.name + " 的四皇據點。";
+    const rewardPrefix = player.name + " 的勝利獎勵：";
+    let proofIndex = -1;
+    for (let index = log.length - 3; index >= 0; index -= 1) {
+      if (log[index] === defeatLine && typeof log[index + 1] === "string" && log[index + 1].startsWith(rewardPrefix)
+        && [player.name + " 首次打倒此四皇，已標記擊敗並取得歷史本文拓本。", player.name + " 已打倒過此四皇，本次只取得一般重複挑戰獎勵。"].includes(log[index + 2])) {
+        proofIndex = index;
+        break;
+      }
+    }
+    if (proofIndex < 0) return false;
+    const ids = isCoopBattle(battle) ? (battle.coopRewardRecipientIds || []).map(String) : [String(player.id)];
+    const recipients = ids.map((id) => (game.players || []).find((entry) => String(entry.id) === id));
+    const enemyKey = String(battle.enemyCombatant?.key || battle.enemyCombatant?.id || battle.enemyCombatant?.name || "");
+    if (!recipients.length || recipients.some((entry) => !entry || !(entry.defeatedEnemies || []).some((record) => record.key === enemyKey
+      && Number(record.count || 0) > 0 && (record.lastPlace || record.lastEncounterPlace) === island.name))) return false;
+    for (const recipient of recipients) {
+      const rewards = battle.coopRewardPayloads?.[String(recipient.id)] || battle.resolvedRewards;
+      if (!rewards || typeof rewards !== "object") return false;
+    }
+    recipients.forEach((recipient) => recordBattleWinRewardReceipt(battle, recipient,
+      battle.coopRewardPayloads?.[String(recipient.id)] || battle.resolvedRewards, {
+        effectsApplied: true, complete: true, continuation: "end_turn",
+        legacyEvidence: { kind: "yonko_paid_exit_log_and_clear_state_v1", defeatLogIndex: proofIndex },
+      }));
+    return true;
+  }
   function grantBattleWinRewardsToPlayer(player, battle, baseRewards, options = {}) {
     if (!player || !battle || !baseRewards) return null;
+    const paid = battleWinRewardReceipt(battle, player);
+    if (paid) return safeJsonClone(paid.rewards);
     const runtime = isCoopBattle(battle) ? coopBattleRuntimeFor(player, battle, false) : null;
     const rewardBattle = safeJsonClone(battle);
     if (runtime) {
@@ -57859,6 +57954,7 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
       rewards.exp || 0,
       options.expLabel || "",
     );
+    recordBattleWinRewardReceipt(battle, player, rewards);
     return rewards;
   }
 
@@ -59002,6 +59098,8 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
         ? battleCommandPlayer(battle)
         : battlePlayer(null, battle);
     if (playerForTurnLock && warnBoardLanTurnLocked(playerForTurnLock)) return;
+    if (boardLan.applying) return;
+    if (resumeCompletedBattleWinSettlement(playerForTurnLock, battle)) return;
     if (battle.result === "win") {
       battle.zorojuroEvolutionResolving = true;
       try {
@@ -59109,19 +59207,23 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
         addLog(`共鬥勝利：${rewardRecipients.map((entry) => entry.name).join("、")} 都獲得貝里、賞金與 EXP，掉落物各自結算。`);
       }
       const defeatedTier = legacyTier(battle.enemyTier || battle.enemyCombatant?.tier || "T5");
-      const noCrewFainted = (player.crew || []).every((card) => Number(card?.currentHp || 0) > 0);
-      recordMissionEvent(player, { type: "battle_win", tier: defeatedTier, islandKind: battle.islandKind || (isSeaEncounter ? "sea-encounter" : island?.kind || "") });
-      recordMissionEvent(player, { type: "defeat_tier", tier: defeatedTier });
-      if (battleEnemyIsDevilFruitUser(battle)) recordMissionEvent(player, { type: "defeat_devil_fruit", tier: defeatedTier });
-      if (battleHadHeldTrigger(battle)) recordMissionEvent(player, { type: "held_trigger", tier: defeatedTier });
-      if (noCrewFainted) recordMissionEvent(player, { type: "no_ko_battle_win", tier: defeatedTier });
-      applyShipBattleWinRecovery(player, battle);
-      if (isSeaEncounter) {
-        recordMissionEvent(player, { type: "sea_battle_win", tier: defeatedTier, zone: battle.seaTile?.zone || "" });
-      } else if (battle.islandKind === "yonko" || island?.kind === "yonko") {
-        recordMissionEvent(player, { type: "yonko_win", tier: defeatedTier, islandKind: "yonko" });
-      } else if (battle.islandKind === "enemy" || island?.kind === "enemy") {
-        recordMissionEvent(player, { type: "enemy_island_win", tier: defeatedTier, islandKind: "enemy" });
+      const paidReceipt = battleWinRewardReceipt(battle, player);
+      if (!paidReceipt?.effectsApplied) {
+        const noCrewFainted = (player.crew || []).every((card) => Number(card?.currentHp || 0) > 0);
+        recordMissionEvent(player, { type: "battle_win", tier: defeatedTier, islandKind: battle.islandKind || (isSeaEncounter ? "sea-encounter" : island?.kind || "") });
+        recordMissionEvent(player, { type: "defeat_tier", tier: defeatedTier });
+        if (battleEnemyIsDevilFruitUser(battle)) recordMissionEvent(player, { type: "defeat_devil_fruit", tier: defeatedTier });
+        if (battleHadHeldTrigger(battle)) recordMissionEvent(player, { type: "held_trigger", tier: defeatedTier });
+        if (noCrewFainted) recordMissionEvent(player, { type: "no_ko_battle_win", tier: defeatedTier });
+        applyShipBattleWinRecovery(player, battle);
+        if (isSeaEncounter) {
+          recordMissionEvent(player, { type: "sea_battle_win", tier: defeatedTier, zone: battle.seaTile?.zone || "" });
+        } else if (battle.islandKind === "yonko" || island?.kind === "yonko") {
+          recordMissionEvent(player, { type: "yonko_win", tier: defeatedTier, islandKind: "yonko" });
+        } else if (battle.islandKind === "enemy" || island?.kind === "enemy") {
+          recordMissionEvent(player, { type: "enemy_island_win", tier: defeatedTier, islandKind: "enemy" });
+        }
+        if (paidReceipt) paidReceipt.effectsApplied = true;
       }
       if (isElbaphGodKnightBattle(battle)) {
         battle.isElbaphGodKnight = true;
