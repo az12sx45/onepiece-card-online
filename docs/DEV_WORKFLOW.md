@@ -9414,3 +9414,24 @@ iOS 先前滿版 helper 把 owner 的 STOP 複製到子背景 ColorRect，造成
 本輪來源、橋接、真Godot GUI、iOS編譯／掛載與更新器證據分層保留在 D:/Codex_QA/board-reward-ticket-lifecycle-20261112，未操作玩家個人存檔或實體手機。原生before／after須使用viewport真輸入，test_press或直接emit不代替GUI命中驗收。公開下載、25列簽章與有效掛載分開核對；App內建的未改檔案不要求另有公開下載網址。各平台發布狀態由啟動器個別收據與本輪closure證明。
 
 沒有清理；基底、候選、真App來源索引、失敗fixture原因與發布／回復證據保留。LATTICE API本階段未提供，沒有宣稱資料庫任務持久化或完整Godot圖譜成功。
+
+
+## 2026-11-12 Board：十三 Boss 流程與行動操作（候選待整合發布）
+
+本次延續正式 eb60855947199e03aaaf0896de533a204c294733、Windows package-c710ae207d6510a6、Android Update8／iOS Preview13，另建隔離候選；本紀錄不代表新版本已公開。完成遊戲 QA 後交由啟動器整合並核對每平台的正式來源、簽章、公開檔案及實際更新掛載。只更新 Board 遊戲檔，沿用既有 App、帳號、存檔鍵與 host71 白名單，不重建或要求玩家重裝 APK／IPA。
+
+桌機 public/js/board_game.js 與行動 original-core.js 補有完整佐證的舊十三 Boss 已付獎恢復：須同場的每名收件人專屬攜帶物判定標記、KING 額外判定標記、線索入袋、擊敗紀錄、培養艙重建狀態及相鄰完整原始日誌相符，才補回既有勝利 receipt。單獨 win、exitLock、獎勵預覽、以前的擊敗日誌或不完整佐證不算已領；正常未領及部分 receipt 保留原結算路徑。不改貝里、賞金、經驗、掉落率或道具 ID。
+
+Tot Musica 單人只剩一名存活船員，無法合法分成兩個非空世界時，來源提供「暫不挑戰／回地圖」，沿用受權限保護的 escape 意圖，無損清除此場與該玩家同場 pending，不扣 HP／PP／費用、不發獎、不消耗本次回合。桌機 public/js/board_battle.js 與手機以來源 canCancelBeforeAssignment 顯示入口。真正兩名玩家的世界分配維持原規則，另一人 KO／逃離也不會被誤當單人免費取消。
+
+卡塔庫栗只在手動讀檔或首次 LAN 還原邊界重建失聯的預知／防禦等待，仍走原開場、骰子、選擇與回合續接；核對同一 battle、操作權與 applying。正常畫面刷新與後續 LAN 快照不清除活著的 Promise，也不讓載入前的舊 Promise 修改新戰鬥。
+
+行動 native_app_stage.gd 與 iOS 同 preset 編譯 native_app_stage.gdc，在既有 target 內選用原生派生面板：補澤法解除炸藥岩的真來源指令入口，仍消耗原一次行動並受開場／換場、權限、動畫與重複送出保護。血統因子必要圖資暖機真正失敗或逾時時提供重試；只失效重載實際失敗路徑，不偽造 assets_ready。原可拒絕的 offered 狀態可透過原 playerId／權限檢查略過且不耗抽取器；來源已終結時取消舊 epoch 並關閉恢復遮罩，不以本地 UI 偽造抽取成功。替換面板重接原按鈕與 surface_closed，進場／可見性變化會重算操作狀態。
+
+約克線索 Q／數值 12 的手機肖像改對應歐斯，bank 操作查找將 JSON 數值正規成原整數鍵，避免浮點字串與原卡牌鍵不符。只修原生呈現與點擊對應；線索 ID、整數 1～13 排列、來源規則驗證、同源 channel 回呼、解碼器與蛋頭島解鎖條件不改。
+
+Core 候選實測包含十三 Boss 各掉落／未掉落的 26 條入場、首輪、暫停、CPU 換手返回及勝利結算流程；勝利是明列的 terminal checkpoint，不是十三場完整自然戰鬥。另有 29 條定向恢復／拒絕推定、19 條前輪 receipt 回歸、4 條自然 CPU／退化共鬥／同 runtime Promise 邊界及獨立 7 條額外檢查，分別保留報告，不能加總冒充獨立完整通關數。自然 CPU 案不注入 skip、presetStep 或 endTurn，實際經 NativeMapPlatform 擲骰、選路離島並換人。約克使用原 page／rules／platform 與有效 QA 排列測第十三線索、解碼、結果關閉、原演出時鐘及回地圖解鎖；不宣稱玩家解題或十三場完整勝利。
+
+桌機原 iframe 的 Tot 分隊區以來源 prompt／船員／操作權／戰鬥身分與本地選擇簽章保留未變 DOM，避免 focus 刷新在 pointerdown 與 click 之間替換按鈕；狀態或權限改變仍重建並走原來源檢查。最終桌機候選真 Chrome 三案通過：單人不足分隊無損取消、兩名存活船員原確認分隊、卡塔庫栗冷讀後原選項恢復；另保留三條受控 DOM 更新檢查。
+
+原生前後對照、三尺寸真 viewport 輸入、圖資失敗／延遲、來源指令回送、iOS 同 preset 編譯與有效掛載由本輪 native 證據逐項綁定最終 Core／AppStage；未完成項目仍待驗，不用早期 prototype 報告替代最終結果。桌機瀏覽器、啟動服務／同步、公開更新、實際更新器及實體 Android／iPhone 舊存檔分別記錄；本文件不宣稱尚未完成的驗收。完整來源與失敗嘗試保留於 D:/Codex_QA/board-thirteen-boss-lifecycle-20261112，不操作玩家正式快取或個人存檔，不執行清理。LATTICE API 本階段未提供，不宣稱任務持久化或完整 Godot 圖譜通過。

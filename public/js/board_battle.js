@@ -8043,10 +8043,15 @@
         totMusicaTeamPickedIndex = null;
       };
       const renderSetup = () => {
+        const setupSignature = JSON.stringify({ battle: battleIdentityKey(view), prompt, crew, canControl: Boolean(view?.battle?.canControl), pickedIndex: totMusicaTeamPickedIndex, slots: totMusicaTeamSlots });
+        const setupRoot = refs.infoContent.querySelector(".tot-musica-team-setup-ui");
+        // A focus refresh must preserve the node between pointerdown and click.
+        if (setupRoot?.dataset.totTeamSetupSignature === setupSignature) return;
         const livingCrew = crew.filter((card) => Number(card.currentHp || 0) > 0).slice(0, 6);
         const realIndices = totMusicaTeamSlots.real.filter(Number.isInteger);
         const songIndices = totMusicaTeamSlots.song.filter(Number.isInteger);
         const assigned = [...realIndices, ...songIndices];
+        const canCancel = prompt.canCancelBeforeAssignment === true;
         const valid = realIndices.length > 0
           && songIndices.length > 0
           && Number.isInteger(totMusicaTeamSlots.real[0])
@@ -8087,8 +8092,9 @@
             <div class="tot-musica-team-roster" aria-label="可拖曳船員">
               ${livingCrew.map((card) => `<button class="tot-musica-roster-card ${totMusicaTeamPickedIndex === Number(card.index) ? "picked" : ""}" type="button" draggable="true" data-tot-crew-index="${card.index}"><img src="${escapeHtml(postgameCrewPortrait(card))}" alt="${escapeHtml(card.name)}"><span><strong>${escapeHtml(card.name)}</strong><small>${placementOf(card.index)}</small></span></button>`).join("")}
             </div>
-            <button class="postgame-dual-confirm" type="button" data-tot-team-confirm ${valid ? "" : "disabled"}>確認出戰順序</button>
+            <button class="postgame-dual-confirm" type="button" data-tot-team-confirm ${(canCancel ? view?.battle?.canControl : valid) ? "" : "disabled"}>${canCancel ? "暫不挑戰／回地圖" : "確認出戰順序"}</button>
           </section>`;
+        refs.infoContent.querySelector(".tot-musica-team-setup-ui").dataset.totTeamSetupSignature = setupSignature;
         refs.infoContent.querySelectorAll("[data-tot-crew-index]").forEach((button) => {
           button.addEventListener("dragstart", (event) => {
             const index = Number(button.dataset.totCrewIndex);
@@ -8126,6 +8132,13 @@
           });
         });
         refs.infoContent.querySelector("[data-tot-team-confirm]")?.addEventListener("click", () => {
+          if (canCancel) {
+            if (view?.battle?.canControl && prompt.canCancelBeforeAssignment === true) {
+              callBattleAction("battleTryEscape", "escape");
+              showStatus("返回地圖中…");
+            }
+            return;
+          }
           callBattleAction("battleTotTeamSetup", "tot-team-setup", {
             realIndices: totMusicaTeamSlots.real.filter(Number.isInteger),
             songIndices: totMusicaTeamSlots.song.filter(Number.isInteger),

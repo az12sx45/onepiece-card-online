@@ -6794,7 +6794,8 @@
           view.prompt = {
             type: "tot_team_setup",
             title: "編排兩隊順位",
-            message: "把船員排進左右兩隊；第一格是先發。",
+            canCancelBeforeAssignment: canCancelInsufficientTotSetup(player, battle),
+            message: canCancelInsufficientTotSetup(player, battle) ? "目前只有一名存活船員；可等待隊友加入共鬥，或暫不挑戰回到地圖。" : "把船員排進左右兩隊；第一格是先發。",
           };
         }
         break;
@@ -8626,6 +8627,24 @@
     return chooseBattleReplacement(Number(nextIndex));
   }
 
+  function canCancelInsufficientTotSetup(player, battle = state.battleState) {
+    const mechanic = postgameBossMechanicFor(battle);
+    return Boolean(player && battle && mechanic?.key === "postgame_tot_musica" && !mechanic.assigned
+      && !postgameTotUsesPlayerWorlds(battle, mechanic) && livingCrewIndices(player).length < 2
+      && !battle.result && !battle.animating && !battle.playerAction && !battle.enemyAction
+      && !state.gameState?.battleExitLock);
+  }
+  function cancelInsufficientTotSetup(player, battle = state.battleState) {
+    if (state.battleState !== battle || !canCancelInsufficientTotSetup(player, battle) || boardLan.applying) return false;
+    if (isCoopBattle(battle) ? warnBoardLanBattleLocked(player, battle) : warnBoardLanTurnLocked(player)) return false;
+    const pending = player.pendingBattle;
+    if (pending && pending.islandId === battle.islandId && (pending.postgameBossKey || pending.enemyCombatant?.key) === "postgame_tot_musica") player.pendingBattle = null;
+    state.gameState.turnStep = "擲骰前進";
+    addLog(player.name + " 暫不挑戰 Tot Musica，返回地圖；未扣除生命、PP 或費用，也未結算戰鬥獎勵。");
+    finalizeBattleAndAdvanceTurn(player, null, { advanceTurn: false });
+    scheduleBoardLanStatePush("tot-musica-setup-cancel", 80, { force: true });
+    return true;
+  }
   function confirmTotMusicaTeams(realIndices = [], songIndices = null) {
     const battle = state.battleState;
     const player = isCoopBattle(battle) ? battleCommandPlayer(battle) : battlePlayer(null, battle);
@@ -12828,6 +12847,38 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     state.gameState.pendingMove = liveFlow.pendingMove ? safeJsonClone(liveFlow.pendingMove) : null;
   }
 
+  function scheduleLoadedKatakuriPresentationRecovery(battle) {
+    const mechanic = postgameBossMechanicFor(battle);
+    if (!battle || battle.result || battle.animating || battle.playerAction || battle.enemyAction
+      || mechanic?.key !== "postgame_charlotte_katakuri") return false;
+    const defense = mechanic.defenseRolling && mechanic.choiceMode === "defend" && Number(mechanic.forecastDie || 0) > 0;
+    const forecast = mechanic.forecastRolling && !mechanic.defenseRolling && !mechanic.choiceMode;
+    if (!defense && !forecast) return false;
+    const resume = () => {
+      if (state.battleState !== battle || battle.result || battle.animating || battle.playerAction || battle.enemyAction) return;
+      if (boardLan.enabled && (boardLan.applying || boardLan.awaitingInitialState)) { window.setTimeout(resume, 100); return; }
+      const player = postgameKatakuriCurrentPlayer(battle);
+      if (!player || !canBoardLanControlBattlePlayer(player, battle) || postgameBossMechanicFor(battle) !== mechanic) return;
+      battle.visualEvent = null;
+      battle.lastVisualEvent = null;
+      if (defense) {
+        const actionKey = postgameKatakuriActionKey(player, battle);
+        if (!mechanic.defenseRolling || mechanic.forecastActionKey !== actionKey) return;
+        void (async () => {
+          if (!await waitPostgameKatakuriForecastStage(battle, mechanic, actionKey)) return;
+          if (state.battleState === battle && mechanic.defenseRolling && mechanic.choiceMode === "defend") await resolvePostgameKatakuriDefense(player, battle, actionKey);
+        })();
+      } else {
+        if (!mechanic.forecastRolling) return;
+        mechanic.forecastRolling = false;
+        mechanic.forecastActionKey = "";
+        mechanic.choicePending = false;
+        void beginPostgameKatakuriForecast(player, battle);
+      }
+    };
+    window.setTimeout(resume, 0);
+    return true;
+  }
   function loadManualGame(payload = readManualSavePayload(), options = {}) {
     if (!payload?.gameState?.boardData) {
       if (options.silent) return false;
@@ -12919,6 +12970,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       }
       state.gameState.resolutionLock = true;
       renderBattleInterface();
+      if (shouldRecoverInterruptedBattle) scheduleLoadedKatakuriPresentationRecovery(state.battleState);
       if (state.battleState.isSparBattle) scheduleOpeningPassiveVisualsIfReady(currentPlayer(), state.battleState);
       if (battleRefreshRecovery || (shouldRecoverInterruptedBattle && battleRefreshRecoveryHasQueuedResolution(state.battleState))) {
         scheduleInterruptedBattleResolutionRecovery();
@@ -56492,6 +56544,8 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
 
   function attemptEscape() {
     const battle = state.battleState;
+    const setupPlayer = isCoopBattle(battle) ? battleCommandPlayer(battle) : battlePlayer(null, battle);
+    if (canCancelInsufficientTotSetup(setupPlayer, battle)) return cancelInsufficientTotSetup(setupPlayer, battle);
     if (!battle || postgameBossMechanicPromptPending(battle) || battle.animating || battle.roundResolved || battle.result || coopBattleHandoffPending(battle)) return false;
     if (isCoopBattle(battle) && !battle.__coopQueueRuntime) {
       const coopPlayer = battleCommandPlayer(battle);
@@ -57881,7 +57935,58 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
     }
     return false;
   }
+  function restoreLegacyPostgameWinRewardReceipts(battle, game) {
+    if (!battle || battle.winRewardReceipts || battle.result !== "win" || battle.islandKind !== "postgame_boss"
+      || !battle.isPostgameBoss || battle.deferredCoopResult || game?.battleExitLock !== true
+      || !battle.roundResolved || battle.animating || Number(battle.enemyCombatant?.currentHp) !== 0) return false;
+    const boss = postgameBossDef(battle.postgameBossKey);
+    const island = (game.boardData?.islands || []).find((entry) => entry.id === battle.islandId);
+    const islandState = game.boardData?.islandStates?.[battle.islandId];
+    const player = (game.players || []).find((entry) => String(entry.id) === String(battle.playerId));
+    if (!boss || !island || !player || battle.enemyCombatant?.key !== boss.key || islandState?.enemyProfile?.key !== boss.key
+      || islandState.currentKind !== "postgame_boss" || islandState.isDefeated !== false
+      || Number(islandState.maxHp) <= 0 || Number(islandState.currentHp) !== Number(islandState.maxHp)) return false;
+    const ids = isCoopBattle(battle) ? (battle.coopRewardRecipientIds || []).map(String) : [String(player.id)];
+    const recipients = ids.map((id) => (game.players || []).find((entry) => String(entry.id) === id));
+    const clue = gameItemDef(boss.clueItemId), relic = gameItemDef(POSTGAME_BOSS_RELIC_ITEM_BY_KEY[boss.key]);
+    const bonuses = (POSTGAME_BOSS_BONUS_RELIC_ITEMS_BY_KEY[boss.key] || []).map(gameItemDef);
+    if (!recipients.length || !clue || !relic || bonuses.some((entry) => !entry)) return false;
+    if (recipients.some((recipient) => !recipient || !battle.postgameRelicRewardedPlayerIds?.includes(String(recipient.id))
+      || inventoryItemCount(recipient, clue.id) < 1
+      || !(recipient.defeatedEnemies || []).some((entry) => entry.key === boss.key && Number(entry.count || 0) > 0
+        && (entry.lastPlace || entry.lastEncounterPlace) === island.name)
+      || bonuses.some((bonus) => !battle.postgameBonusRelicRewardKeys?.includes(String(recipient.id) + ":" + bonus.id))
+      || !(battle.coopRewardPayloads?.[String(recipient.id)] || battle.resolvedRewards))) return false;
+    const log = Array.isArray(game.log) ? game.log : [];
+    const header = recipients.map((entry) => entry.name).join("、") + " 擊敗 " + (battle.enemyCombatant.name || boss.name) + "；每位實際參戰者都取得對應的約克線索，並各自進行 10% 專屬攜帶物判定。";
+    const rebuild = island.name + " 的複製人培養艙開始重建；參戰者必須先離島，之後重新登島才能再次挑戰。";
+    let proofIndex = -1;
+    for (let index = log.length - 1; index >= 0; index -= 1) {
+      if (log[index] !== header) continue;
+      let cursor = index + 1;
+      let matches = true;
+      for (const recipient of recipients) {
+        const clueLine = log[cursor++];
+        if (typeof clueLine !== "string" || !clueLine.startsWith(recipient.name + " 取得「" + clue.name + "」；目前持有 ") || !clueLine.endsWith(" 張。")) { matches = false; break; }
+        const relicLine = log[cursor++];
+        if (![recipient.name + " 的 10% 判定成功，取得「" + relic.name + "」；此攜帶物可重複取得但不可交易。", recipient.name + " 的 10% 專屬攜帶物判定未掉落。"].includes(relicLine)) { matches = false; break; }
+        for (const bonus of bonuses) {
+          if (![recipient.name + " 的 KING 額外 10% 判定成功，取得「" + bonus.name + "」；KING 的佩刀判定不受影響。", recipient.name + " 的 KING 額外 10%「" + bonus.name + "」判定未掉落。"].includes(log[cursor++])) { matches = false; break; }
+        }
+        if (!matches) break;
+      }
+      if (matches && log[cursor] === rebuild) { proofIndex = index; break; }
+    }
+    if (proofIndex < 0) return false;
+    recipients.forEach((recipient) => recordBattleWinRewardReceipt(battle, recipient,
+      battle.coopRewardPayloads?.[String(recipient.id)] || battle.resolvedRewards, {
+        effectsApplied: true, complete: true, continuation: "end_turn",
+        legacyEvidence: { kind: "postgame_paid_rebuild_recipient_flags_and_logs_v1", defeatLogIndex: proofIndex },
+      }));
+    return true;
+  }
   function restoreLegacyBattleWinRewardReceipts(battle, game) {
+    if (battle?.islandKind === "postgame_boss") return restoreLegacyPostgameWinRewardReceipts(battle, game);
     // Old builds could save a fully paid win while its item reveal blocked the
     // handoff. Preview rewards, result=win, or an exit lock alone are not proof.
     if (!battle || battle.winRewardReceipts || battle.result !== "win" || battle.islandKind !== "yonko"
@@ -65035,6 +65140,8 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
       return "集滿十五袋巨型鹽，發射鹽彈淨化歐斯。";
     }
     if (postgamePrompt?.type === "tot_team_setup") {
+      const setupPlayer = battlePlayer(null, battle);
+      if (canCancelInsufficientTotSetup(setupPlayer, battle)) return cancelInsufficientTotSetup(setupPlayer, battle) ? "Tot Musica：暫不挑戰，返回地圖。" : "Tot Musica：等待目前操作權。";
       const defaults = postgameTotDefaultTeams(battlePlayer(null, battle));
       confirmTotMusicaTeams(defaults.realIndices);
       return "Tot Musica：完成雙世界分隊。";

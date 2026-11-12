@@ -2443,3 +2443,15 @@ finale-execution-swing-v1.webp 為執行兵落刀分鏡。
 - native-sea-train-bridge.js／native_sea_train_layer.gd、原生modal與story橋接：保留Core的目的地、RAF、完成、進島與故事回呼，驗收從票券操作接到Water7頁。
 - public/js/board_game.js／行動original-core.js：保留原重要物品queue／waitForItemRevealIdle與票券流程，另修正每場每收件人的勝利獎勵去重、讀檔續接及有證據的舊四皇已付獎恢復；不改數值或存檔鍵。
 - D:/Codex_QA/board-reward-ticket-lifecycle-20261112/{core,audit,native,desktop,public}：保存來源指紋、實際回呼矩陣、桌機pointer與原生GUI、編譯、更新器及公開讀回證據。
+
+
+## 2026-11-12 Board：十三 Boss 續接修正入口（候選待整合發布）
+
+- public/js/board_game.js／行動版 original-core.js：有完整佐證的舊 postgame Boss 已付獎 receipt 恢復、僅讀檔邊界的卡塔庫栗預知／防禦等待續接、Tot Musica 不足分隊的來源取消資格與原 escape 分派、CPU 同一意圖。保留數值、機率、ID、存檔鍵與既有同步事件。
+- public/js/board_battle.js：來源 canCancelBeforeAssignment 允許時，原 Tot 分隊確認區顯示「暫不挑戰／回地圖」，沿用 battleTryEscape／escape；正常分隊確認不變；相同來源／權限／戰鬥身分與本地分隊選擇保留 DOM，避免 focus 刷新吞掉真點擊，任一相關狀態變更仍重建。
+- 行動版 native_app_stage.gd／iOS 對應 native_app_stage.gdc：在既有更新 target 內選擇 GuardedBattleStage、GuardedBossPanel、GuardedBossPrompt、RecoverableLineage；重接原 signal，補澤法指令、Tot 取消入口、必要圖資真失敗重試／原 declined 意圖及終態 epoch 清理，沿用原 Core 權限與規則。
+- 同一 AppStage 的 RecoverableYorkPage：局部 Q／12 肖像改對應歐斯，bank 操作以原整數鍵對應 JSON 數值；不改原十三牌、線索項目或 puzzle 規則。
+- native_battle_stage.gd、native_boss_mechanics.gd、native_boss_prompt_stage.gd、native_lineage_stage.gd 與 native-york-platform／原 rules／bridge：沿用已安裝來源，派生介接及逐位元組來源綁定不代表另新增發布 target。iOS AppStage 由同 preset 編成 GDC，保留原基底重現、冷掛載與回復證據。
+- D:/Codex_QA/board-thirteen-boss-lifecycle-20261112/{core,native,audit,public}：分開保存原失敗、最小候選、portable inverse、十三 Boss 定向流程、來源／原生 GUI／編譯、實際更新器與公開核驗；docs-candidate/docs/ 為四份正式文件的 exact-parent append 候選，DOCS_READY 列父 commit、基底／候選指紋及逆轉證明。
+
+本次文件與程式均先作候選，實際整合檔、平台版本及發布由啟動器最終收據確認。受控 terminal 勝利、來源橋接、原生 viewport、完整自然戰鬥與真機驗收各自列明，所有失敗 evidence 保留，沒有清理玩家或 QA 資料。
