@@ -9388,3 +9388,9 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 - 1.2.34 包裝保留既有 metadata filter，只補入目前 Card card-package-1b7337cdeb75bb0b 與 Board board-package-d5de74cc1d666b8b manifest，以完整包含 bf840 catalog 的離線 fallback 參照。現有 Chess 與舊 manifest 保留；不改這些遊戲內容或公開指標。
 - 隔離驗證入口位於 D:/Codex_QA/launcher-integrity-revalidation-20261112/core/ 與 independent-qa/；逐項結果、來源雜湊與保留的失敗嘗試以最終 QA 收據為準。測試只用獨立實體小型快取，不接觸玩家正式快取、不建立硬連結。
 - 本紀錄不宣稱安裝器已建置／簽署／發布，也不宣稱四款遊戲完整對局、正式帳號或實體裝置驗收通過。發布由啟動器整合流程另行核對。
+
+### Windows 1.2.34 安裝器與正式通道整合
+
+安裝器建置來源為 7065e4e55215f3653ac69b29dc5c43f12436626c，成品 324375297 bytes、SHA-256 74fa49c8e70cb8fc5c17f596e7c615e0f67676814cba7b6a8fbbb312723aacd5。內嵌 ASAR 與來源四個修正程式逐一一致；既有 Ed25519 更新信任金鑰簽署 release manifest，未建立新的 Windows 簽章憑證。官網 Windows fallback 與下載測試的 Windows 版本同步至 1.2.34；Android／iOS 下載資訊與四款遊戲指標不在本次變更範圍。
+
+獨立 AssetStore 驗證 16 情境／85 檢查、既有 desktop_asset_store_qa.js 與 desktop_download_scheduler_qa.js、成品 Electron 啟動 smoke，以及實際候選 renderer／preload 的 13 項狀態與重試 IPC 檢查均通過。測試使用獨立快取及本機 fixture，不宣稱正式帳號或四款完整對局驗收；隱藏視窗截圖的 compositor 延遲另有紀錄。精確命令、舊 1.2.33 更新器的公開下載驗證、Render 部署與公開指標讀回結果，以 D:/Codex_QA/launcher-integrity-revalidation-20261112/final-release-receipt.json 為準。建置、失敗嘗試、前版回復基底及本輪證據保留，不執行專案清理。

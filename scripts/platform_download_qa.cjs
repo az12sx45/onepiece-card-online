@@ -13,8 +13,8 @@ const platforms = [
   {
     id: 'windows', link: '#download-link', info: '#release-info',
     channel: base + '/desktop/launcher-release-v1.json',
-    artifact: `${cdn}/desktop/launcher/releases/1.2.33/${windowsArtifact('1.2.33')}`,
-    version: '1.2.33', stale: '1.2.32', future: '1.2.34'
+    artifact: `${cdn}/desktop/launcher/releases/1.2.34/${windowsArtifact('1.2.34')}`,
+    version: '1.2.34', stale: '1.2.33', future: '1.2.35'
   },
   {
     id: 'android', link: '#android-download-link', info: '#android-release-info',
