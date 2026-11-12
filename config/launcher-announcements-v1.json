@@ -1,7 +1,32 @@
 {
   "schemaVersion": 1,
-  "revision": 109,
+  "revision": 110,
   "announcements": [
+    {
+      "id": "board-20261112-reward-ticket-lifecycle",
+      "status": "published",
+      "publishedAt": "2026-11-12T13:00:09.092Z",
+      "scope": "board",
+      "category": "update",
+      "version": "Windows 遊戲更新／Android 8／iOS 13",
+      "title": "新世界航海錄：重要物品展示、黃金票與舊存檔續接修正",
+      "summary": "修正重要物品展示無法繼續、海上列車抵達水之七島後操作卡住，以及讀檔續接時重複領取同筆獎勵的情況。",
+      "body": [
+        "修正獲得重要物品後無法點擊繼續，以及戰鬥切換畫面攔截操作的問題。",
+        "修正海上列車黃金票抵達水之七島後，劇情與頁面操作可能被遮罩擋住的問題。",
+        "水之七島的可選工頭肖像載入失敗時，仍能查看原文字資訊並正常離開頁面。",
+        "避免獎勵展示途中存檔重開後，再次發放同一場已領取的獎勵；有完整領獎佐證的舊四皇存檔可接回後續流程。",
+        "Windows、Android、iOS 都沿用現有啟動器或 App、帳號與存檔，只更新《新世界航海錄》遊戲程式。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-c710ae207d6510a6"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
+      }
+    },
     {
       "id": "board-20261112-debuff-entry-impel",
       "status": "published",
@@ -1869,29 +1894,6 @@
       "requiredRelease": {
         "kind": "board",
         "releaseId": "package-1c453fcf83416d97"
-      },
-      "cta": {
-        "kind": "game",
-        "gameId": "board"
-      }
-    },
-    {
-      "id": "board-tavern-reveal-20260928-b5eaebdecfaee7d6",
-      "status": "published",
-      "publishedAt": "2026-09-27T18:44:00.000Z",
-      "scope": "board",
-      "category": "update",
-      "version": "package-b5eaebdecfaee7d6",
-      "title": "酒館招募演出登場｜新世界航海錄",
-      "summary": "魯夫邀請新夥伴上船，酒館門後依角色階級發光，再揭曉抽中的角色。",
-      "body": [
-        "酒館招募新增魯夫邀請：「你願不願意加入我們？」接著依抽中角色的階級亮起門光，開門後先看見剪影，再揭曉角色。",
-        "演出可以隨時跳過；結束後照常選擇收下、放棄，或在隊伍已滿時替換夥伴。",
-        "本次只新增招募演出，不影響抽選結果、機率與招募費用，也不會因播放或跳過動畫重複扣款。"
-      ],
-      "requiredRelease": {
-        "kind": "board",
-        "releaseId": "package-b5eaebdecfaee7d6"
       },
       "cta": {
         "kind": "game",
