@@ -492,6 +492,8 @@ function statusCopy(gameState = {}) {
     case 'verifying': return { label: '驗證檔案', tone: 'update', action: '正在驗證…' };
     case 'removing': return { label: '移除中', tone: 'error', action: '正在移除…' };
     case 'paused': return { label: '已暫停', tone: 'update', action: '繼續下載' };
+    case 'integrity-checking': return { label: '正在檢查現有檔案', tone: 'update', action: '正在檢查…' };
+    case 'integrity-retry': return { label: '檢查暫停，請重試', tone: 'error', action: '重新檢查' };
     case 'repair': return { label: '需要修復', tone: 'error', action: '修復遊戲' };
     case 'error': return { label: '下載失敗', tone: 'error', action: '重試下載' };
     case 'unavailable': return { label: '製作中', tone: 'locked', action: '尚未開放' };
@@ -595,10 +597,21 @@ function setFeatureVideo(game) {
 }
 
 function renderProgress(gameState) {
-  const active = ['preparing', 'downloading', 'verifying'].includes(gameState.status);
+  const checking = gameState.status === 'integrity-checking';
+  const active = checking || ['preparing', 'downloading', 'verifying'].includes(gameState.status);
   installProgress.hidden = !active;
-  cancelAction.hidden = !active;
+  cancelAction.hidden = checking || !active;
   if (!active) return;
+  if (checking) {
+    const total = Math.max(0, Number(gameState.integrityTotalFiles) || 0);
+    const verified = Math.max(0, Number(gameState.integrityVerifiedFiles) || 0);
+    const percent = total ? Math.min(100, verified / total * 100) : 0;
+    progressLabel.textContent = '正在檢查現有檔案';
+    progressPercent.textContent = `${Math.round(percent)}%`;
+    progressBar.style.width = `${percent}%`;
+    progressDetail.textContent = `已確認 ${verified} / ${total} 個檔案`;
+    return;
+  }
   const downloaded = Math.max(0, Number(gameState.downloadedBytes) || 0);
   const total = Math.max(0, Number(gameState.totalBytes) || 0);
   const percent = total > 0 ? Math.min(100, downloaded / total * 100) : 0;
@@ -644,7 +657,7 @@ function renderFeature() {
   featureStatus.dataset.tone = copy.tone;
   featureVersion.textContent = game.english;
   primaryAction.textContent = launching && state.status === 'installed' ? '正在啟動…' : copy.action;
-  primaryAction.disabled = launchBlocked || ['unavailable', 'desktop-required', 'checking', 'startup-error', 'preparing', 'downloading', 'verifying', 'removing'].includes(state.status);
+  primaryAction.disabled = launchBlocked || ['unavailable', 'desktop-required', 'checking', 'integrity-checking', 'startup-error', 'preparing', 'downloading', 'verifying', 'removing'].includes(state.status);
   existingLaunchAction.hidden = !state.hasInstalled || ['installed', 'preparing', 'downloading', 'verifying', 'removing'].includes(state.status);
   existingLaunchAction.disabled = launchBlocked;
   renderProgress(state);
@@ -701,7 +714,7 @@ function renderDownloads() {
     actions.className = 'download-actions';
     const downloadActive = ['preparing', 'downloading', 'verifying'].includes(state.status);
     const launching = launchingGameIds.has(game.id);
-    const busy = downloadActive || state.status === 'removing' || launchingGameIds.size > 0;
+    const busy = downloadActive || state.status === 'integrity-checking' || state.status === 'removing' || launchingGameIds.size > 0;
     if (!['unavailable', 'checking', 'startup-error'].includes(state.status)) {
       const primary = document.createElement('button');
       primary.type = 'button';
@@ -844,7 +857,10 @@ async function runGameAction(gameId) {
   const state = snapshot.games?.[gameId] || {};
   if (state.status === 'installed') return launchInstalledGame(gameId);
   try {
-    const result = await api.installGame(gameId);
+    if (state.status === 'integrity-checking') return;
+    const result = state.status === 'integrity-retry'
+      ? await api.retryGameIntegrity(gameId)
+      : await api.installGame(gameId);
     if (!result?.ok) showToast(result?.error || '無法開始下載。');
   } catch (_) {
     showToast('啟動器暫時沒有回應。');

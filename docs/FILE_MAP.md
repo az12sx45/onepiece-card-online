@@ -2427,3 +2427,11 @@ finale-execution-swing-v1.webp 為執行兵落刀分鏡。
 - 行動版 native-battle-scene.js：在既有 HUD 投影後，以唯一相符的來源 stage detail 補全小數倍率說明，不修改原始 view。
 - 行動版 native_battle_view.gd／iOS 同 preset 的 native_battle_view.gdc：現有狀態按鈕將滑動事件傳給狀態列 ScrollContainer，保留點擊說明與兩段血條。
 - D:/Codex_QA/board-debuff-display-20261112：core、desktop/impel、mobile 分開保存真指令、UI／引擎、編譯、存檔、最小 patch 與來源指紋；browser-wire-report.json 為兩 Chrome 的隔離 Socket.IO 傳輸測試。正式整合檔與下載尺寸以啟動器收據為準。
+
+
+## 2026-11-12：Windows 1.2.34 完整性驗證來源
+
+- desktop/asset-store.js：七欄指紋、共享 SHA 背景強驗隊列、checking／retry 狀態、generation 失效與安全索引重建；抽樣稽核不再因暫時 I/O 失敗直接刪檔。
+- desktop/launcher.js：檢查中的狀態／進度與重新檢查操作；desktop/preload.js、desktop/main.js：受既有 guarded IPC 與遊戲 ID／登入檢查保護的本機重試，及啟動前狀態重檢。
+- desktop/package.json、desktop/package-lock.json：1.2.34；package metadata filter 補入當前 Card／Board manifest，保留其他既有 filter。
+- D:/Codex_QA/launcher-integrity-revalidation-20261112/：獨立快取 QA、來源、限制及發布前交接；此目錄與回復基底需保留，不是玩家快取。

@@ -47,6 +47,7 @@ contextBridge.exposeInMainWorld('onePieceDesktop', Object.freeze({
   checkLauncherContentUpdate: () => ipcRenderer.invoke('launcher:check-content-update'),
   applyLauncherContentUpdate: () => ipcRenderer.invoke('launcher:apply-content-update'),
   installGame: (gameId) => ipcRenderer.invoke('launcher:install-game', gameId),
+  retryGameIntegrity: (gameId) => ipcRenderer.invoke('launcher:retry-game-integrity', gameId),
   cancelInstall: (gameId) => ipcRenderer.invoke('launcher:cancel-install', gameId),
   uninstallGame: (gameId) => ipcRenderer.invoke('launcher:uninstall-game', gameId),
   launchGame: (gameId) => ipcRenderer.invoke('launcher:launch-game', gameId),

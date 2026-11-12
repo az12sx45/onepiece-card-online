@@ -9377,3 +9377,14 @@ CPU沿用真人ACK齊後短停頓移除舊估時表，修凍結合法出牌、�
 正式 sparse checkout 的 npm start 因缺 express，補隔離相依後又因 sparse desktop/marineford-release 缺檔而未啟動；未修改來源相依或補回工作樹。QA 以同 commit 的 server／必要相依快照、獨立 npm 相依、無資料庫及 OP_DESKTOP_ONLY=0 成功啟動。原生圖示與觸控、GodotJS 和編譯掛載另列報告，均與實體 iPhone／Android 舊存檔驗收分開。LATTICE API 本階段未提供，不宣稱資料庫任務或完整 Godot 圖譜驗收。
 
 發布沿用現有 Windows 遊戲檔與 v071 host71 的單款遊戲更新，不更換 App 或安裝包，不改帳號鍵與存檔鍵。保留前輪 HP 調整、分段血條、青雉冰凍、CPU 換手、滿版、素材失敗恢復。沒有清理或讀寫玩家正式快取；本輪 QA、基底及回復證據保留。
+
+
+## 2026-11-12：Windows 啟動器 1.2.34 完整性重新驗證（來源候選）
+
+- 修正範圍為 desktop/asset-store.js、launcher.js、main.js、preload.js 與 desktop 套件版本／lock；不改四款遊戲規則、catalog、receipt、帳號、存檔或正式 installer 指標。
+- 合法舊遊戲版本在檔案可信時仍為「有新版本」，不因版本較舊顯示修復。索引缺項或七欄指紋（包含 ctimeNs）不同時，使用共用 SHA 去重、限制並行的背景強 SHA 驗證；主視窗先顯示「正在檢查現有檔案」，未驗完的遊戲不可啟動。
+- 真缺檔、大小不符或前後指紋穩定而 SHA 不符才標示修復。讀取暫錯、驗證期間檔案改動會有界重試並保留檔案，耗盡後提供「重新檢查」；不刪 blob、不刪索引假裝恢復，不放寬時間／檔案身分驗證。
+- 四款遊戲共享的同一 CAS 在同一驗證工作中只讀一次；取消下載不取消其他遊戲需要的共享驗證；切換下載根目錄使舊 generation 工作失效，不得寫入新根目錄索引。啟動遊戲前另做即時狀態重檢。
+- 1.2.34 包裝保留既有 metadata filter，只補入目前 Card card-package-1b7337cdeb75bb0b 與 Board board-package-d5de74cc1d666b8b manifest，以完整包含 bf840 catalog 的離線 fallback 參照。現有 Chess 與舊 manifest 保留；不改這些遊戲內容或公開指標。
+- 隔離驗證入口位於 D:/Codex_QA/launcher-integrity-revalidation-20261112/core/ 與 independent-qa/；逐項結果、來源雜湊與保留的失敗嘗試以最終 QA 收據為準。測試只用獨立實體小型快取，不接觸玩家正式快取、不建立硬連結。
+- 本紀錄不宣稱安裝器已建置／簽署／發布，也不宣稱四款遊戲完整對局、正式帳號或實體裝置驗收通過。發布由啟動器整合流程另行核對。

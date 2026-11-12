@@ -641,6 +641,9 @@ class AssetStore extends EventEmitter {
     hashFileImpl,
     integrityAuditMaxFiles = DEFAULT_AUDIT_MAX_FILES,
     integrityAuditMaxBytes = DEFAULT_AUDIT_MAX_BYTES,
+    integrityRevalidationConcurrency = 2,
+    integrityRevalidationMaxAttempts = 3,
+    integrityRevalidationRetryMs = 150,
     manifestTimeoutMs = 8_000,
     downloadRequestTimeoutMs = 15_000,
     downloadIdleTimeoutMs = 20_000,
@@ -681,6 +684,11 @@ class AssetStore extends EventEmitter {
     this.integrityRevision = 0;
     this.integrityGeneration = 0;
     this.integrityWritePromise = Promise.resolve();
+    this.integrityRevalidationConcurrency = Math.max(1, Math.min(4, Number(integrityRevalidationConcurrency) || 2));
+    this.integrityRevalidationMaxAttempts = Math.max(1, Math.min(3, Number(integrityRevalidationMaxAttempts) || 3));
+    this.integrityRevalidationRetryMs = Math.max(10, Math.min(1000, Number(integrityRevalidationRetryMs) || 150));
+    this.integrityBatch = null;
+    this.integrityRevalidationPromise = Promise.resolve();
     this.backgroundAuditPromise = Promise.resolve({ files: 0, bytes: 0, invalid: 0 });
     this.stateRefreshPromise = Promise.resolve();
     this.cachedManifests = new Map();
@@ -869,6 +877,8 @@ class AssetStore extends EventEmitter {
   }
 
   async loadIntegrityIndex() {
+    this.cancelIntegrityRevalidation();
+    await this.integrityWritePromise.catch(() => {});
     this.integrityGeneration += 1;
     this.verifiedBlobs.clear();
     this.invalidBlobs.clear();
@@ -915,9 +925,9 @@ class AssetStore extends EventEmitter {
     return this.integrityWritePromise;
   }
 
-  async fingerprintBlob(asset) {
-    const target = blobPath(this.cacheRoot, asset.sha256);
-    await assertSafeManagedPath(this.cacheRoot, target, { allowMissing: false, leafKind: 'file' });
+  async fingerprintBlob(asset, { cacheRoot = this.cacheRoot } = {}) {
+    const target = blobPath(cacheRoot, asset.sha256);
+    await assertSafeManagedPath(cacheRoot, target, { allowMissing: true });
     const info = await fsp.lstat(target, { bigint: true });
     const fingerprint = blobFingerprint(info);
     if (!info.isFile() || fingerprint.size !== asset.size) return null;
@@ -927,6 +937,8 @@ class AssetStore extends EventEmitter {
   rememberVerifiedBlob(asset, fingerprint) {
     const record = { sha256: asset.sha256, ...fingerprint };
     const previous = this.integrityRecords.get(asset.sha256);
+    const previousJob = this.integrityBatch?.jobs.get(asset.sha256);
+    if (previousJob && ['retry', 'missing', 'changed'].includes(previousJob.status)) this.integrityBatch.jobs.delete(asset.sha256);
     this.verifiedBlobs.set(asset.sha256, fingerprintSignature(record));
     this.invalidBlobs.delete(asset.sha256);
     if (!previous || fingerprintSignature(previous) !== fingerprintSignature(record)) {
@@ -940,23 +952,193 @@ class AssetStore extends EventEmitter {
     if (this.integrityRecords.delete(sha256)) this.markIntegrityDirty();
   }
 
+  cancelIntegrityRevalidation() {
+    const batch = this.integrityBatch;
+    if (!batch) return;
+    batch.controller.abort();
+    if (batch.refreshTimer) clearTimeout(batch.refreshTimer);
+    for (const job of batch.jobs.values()) job.resolve?.({ status: 'cancelled' });
+    batch.resolveIdle?.();
+    this.integrityBatch = null;
+  }
+
+  currentIntegrityBatch() {
+    if (!this.integrityBatch) {
+      this.integrityBatch = {
+        generation: this.integrityGeneration, cacheRoot: this.cacheRoot,
+        controller: new AbortController(), jobs: new Map(), queue: [], active: 0,
+        idle: true, scheduled: false, refreshTimer: null, resolveIdle: null
+      };
+    }
+    return this.integrityBatch;
+  }
+
+  integrityBatchIsCurrent(batch) {
+    return this.integrityBatch === batch && batch.generation === this.integrityGeneration &&
+      samePath(batch.cacheRoot, this.cacheRoot) && !batch.controller.signal.aborted;
+  }
+
   async fastBlobStatus(asset) {
+    const generation = this.integrityGeneration;
+    const cacheRoot = this.cacheRoot;
     try {
-      const fingerprint = await this.fingerprintBlob(asset);
+      const fingerprint = await this.fingerprintBlob(asset, { cacheRoot });
+      if (generation !== this.integrityGeneration || !samePath(cacheRoot, this.cacheRoot)) return 'retry';
       if (!fingerprint) return 'missing';
       const signature = fingerprintSignature(fingerprint);
       if (this.invalidBlobs.get(asset.sha256) === signature) return 'changed';
-      const record = this.integrityRecords.get(asset.sha256);
-      if (!record) return 'unverified';
-      if (record.size !== asset.size || fingerprintSignature(record) !== signature) {
-        this.forgetVerifiedBlob(asset.sha256);
-        return 'changed';
+      const batch = this.integrityBatch;
+      const job = batch?.jobs.get(asset.sha256);
+      // A failed cycle stays visibly retryable; changing metadata must not
+      // silently reset its attempt budget into another automatic cycle.
+      if (job?.status === 'retry') return 'retry';
+      if (job && !['pending', 'checking'].includes(job.status) && (!job.signature || job.signature !== signature)) {
+        batch.jobs.delete(asset.sha256);
       }
-      this.verifiedBlobs.set(asset.sha256, signature);
-      return 'trusted';
-    } catch {
-      return 'missing';
+      const record = this.integrityRecords.get(asset.sha256);
+      if (record && record.size === asset.size && fingerprintSignature(record) === signature) {
+        this.verifiedBlobs.set(asset.sha256, signature);
+        return 'trusted';
+      }
+      // Metadata changes are evidence to re-hash, never proof of bad content.
+      this.forgetVerifiedBlob(asset.sha256);
+      return 'unverified';
+    } catch (error) {
+      if (generation === this.integrityGeneration && samePath(cacheRoot, this.cacheRoot)) this.forgetVerifiedBlob(asset.sha256);
+      return ['ENOENT', 'ENOTDIR'].includes(error?.code) ? 'missing' : 'retry';
     }
+  }
+
+  async checkBlobContent(asset, batch) {
+    const current = () => this.integrityBatchIsCurrent(batch);
+    let before = null;
+    try {
+      if (!current()) return { status: 'cancelled' };
+      before = await this.fingerprintBlob(asset, { cacheRoot: batch.cacheRoot });
+      if (!before) return { status: 'missing' };
+      const signature = fingerprintSignature(before);
+      const digest = await this.hashFileImpl(blobPath(batch.cacheRoot, asset.sha256), batch.controller.signal);
+      if (!current()) return { status: 'cancelled' };
+      const after = await this.fingerprintBlob(asset, { cacheRoot: batch.cacheRoot });
+      if (!current()) return { status: 'cancelled' };
+      if (!after || fingerprintSignature(after) !== signature) {
+        this.forgetVerifiedBlob(asset.sha256);
+        return { status: 'retry', signature, reason: '檔案在檢查期間改變，請稍後重試' };
+      }
+      if (digest !== asset.sha256) {
+        this.forgetVerifiedBlob(asset.sha256);
+        this.invalidBlobs.set(asset.sha256, signature);
+        return { status: 'changed', signature };
+      }
+      this.rememberVerifiedBlob(asset, after);
+      return { status: 'trusted', signature };
+    } catch (error) {
+      if (!current()) return { status: 'cancelled' };
+      this.forgetVerifiedBlob(asset.sha256);
+      if (!before && ['ENOENT', 'ENOTDIR'].includes(error?.code)) return { status: 'missing' };
+      return { status: 'retry', signature: before ? fingerprintSignature(before) : '', reason: '暫時無法讀取檔案，請稍後重試' };
+    }
+  }
+
+  enqueueIntegrityVerification(asset, { forceHash = false } = {}) {
+    const batch = this.currentIntegrityBatch();
+    const existing = batch.jobs.get(asset.sha256);
+    if (existing && ['pending', 'checking'].includes(existing.status)) return existing;
+    if (existing?.status === 'retry' && !forceHash) return existing;
+    // Completed work is not a permanent substitute for a requested new hash.
+    if (existing) batch.jobs.delete(asset.sha256);
+    if (batch.idle) {
+      batch.idle = false;
+      this.integrityRevalidationPromise = new Promise(resolve => { batch.resolveIdle = resolve; });
+    }
+    let resolve;
+    const job = { asset, status: 'pending', attempts: 0, signature: '', promise: new Promise(r => { resolve = r; }) };
+    job.resolve = resolve;
+    batch.jobs.set(asset.sha256, job);
+    batch.queue.push(job);
+    this.scheduleIntegrityStateRefresh(batch);
+    if (!batch.scheduled) {
+      batch.scheduled = true;
+      setImmediate(() => { batch.scheduled = false; this.pumpIntegrityVerification(batch); });
+    }
+    return job;
+  }
+
+  pumpIntegrityVerification(batch) {
+    if (!this.integrityBatchIsCurrent(batch)) return;
+    while (batch.active < this.integrityRevalidationConcurrency && batch.queue.length) {
+      const job = batch.queue.shift();
+      batch.active += 1;
+      job.status = 'checking';
+      (async () => {
+        let result = { status: 'cancelled' };
+        try {
+          for (let attempt = 1; attempt <= this.integrityRevalidationMaxAttempts; attempt += 1) {
+            job.attempts = attempt;
+            result = await this.checkBlobContent(job.asset, batch);
+            if (!this.integrityBatchIsCurrent(batch) || result.status !== 'retry' || attempt === this.integrityRevalidationMaxAttempts) break;
+            await delayWithSignal(this.integrityRevalidationRetryMs * attempt, batch.controller.signal);
+          }
+        } catch { result = { status: 'cancelled' }; }
+        if (this.integrityBatchIsCurrent(batch)) Object.assign(job, result);
+        job.resolve(result);
+        batch.active -= 1;
+        if (this.integrityBatchIsCurrent(batch)) {
+          this.pumpIntegrityVerification(batch);
+          this.scheduleIntegrityStateRefresh(batch);
+        }
+      })();
+    }
+  }
+
+  scheduleIntegrityStateRefresh(batch) {
+    if (!this.integrityBatchIsCurrent(batch) || batch.refreshTimer) return;
+    batch.refreshTimer = setTimeout(async () => {
+      batch.refreshTimer = null;
+      if (!this.integrityBatchIsCurrent(batch)) return;
+      try {
+        await this.refreshStates();
+        if (!this.integrityBatchIsCurrent(batch)) return;
+        this.emit('state', await this.getState());
+        if (!batch.active && !batch.queue.length) {
+          await this.flushIntegrityIndex();
+          if (!this.integrityBatchIsCurrent(batch)) return;
+          batch.idle = true;
+          batch.resolveIdle?.();
+          batch.resolveIdle = null;
+        }
+      } catch {
+        if (this.integrityBatchIsCurrent(batch) && !batch.active && !batch.queue.length) {
+          batch.idle = true;
+          batch.resolveIdle?.();
+          batch.resolveIdle = null;
+        }
+      }
+    }, 150);
+  }
+
+  async retryIntegrityChecks(gameId) {
+    if (!GAME_IDS.has(gameId) || !this.receipts.has(gameId)) return { ok: false, error: '找不到已安裝的遊戲。' };
+    if (this.activeInstall || this.activeRemoval) return { ok: false, error: '請先等待下載或移除完成。' };
+    const batch = this.currentIntegrityBatch();
+    for (const asset of this.receipts.get(gameId).manifest.assets) {
+      if (batch.jobs.get(asset.sha256)?.status === 'retry') batch.jobs.delete(asset.sha256);
+    }
+    await this.refreshStates();
+    this.emit('state', await this.getState());
+    return { ok: true };
+  }
+
+  async awaitIntegrityVerification(job, signal) {
+    throwIfAborted(signal);
+    if (!signal) return job.promise;
+    return new Promise((resolve, reject) => {
+      const cleanup = () => signal.removeEventListener('abort', onAbort);
+      const onAbort = () => { cleanup(); reject(abortError()); };
+      signal.addEventListener('abort', onAbort, { once: true });
+      if (signal.aborted) onAbort();
+      job.promise.then(result => { cleanup(); resolve(result); }, error => { cleanup(); reject(error); });
+    });
   }
 
   startBackgroundIntegrityAudit() {
@@ -976,7 +1158,7 @@ class AssetStore extends EventEmitter {
     }
     const assets = [...unique.values()].sort((left, right) => left.sha256 < right.sha256 ? -1 : 1);
     if (!assets.length || generation !== this.integrityGeneration) return { files: 0, bytes: 0, invalid: 0 };
-    let start = assets.findIndex((asset) => asset.sha256 > this.integrityAuditAfter);
+    let start = assets.findIndex(asset => asset.sha256 > this.integrityAuditAfter);
     if (start < 0) start = 0;
     const ordered = [...assets.slice(start), ...assets.slice(0, start)];
     let files = 0;
@@ -985,25 +1167,21 @@ class AssetStore extends EventEmitter {
     for (const asset of ordered) {
       if (generation !== this.integrityGeneration || files >= this.integrityAuditMaxFiles) break;
       if (files > 0 && bytes + asset.size > this.integrityAuditMaxBytes) break;
-      const valid = await this.verifyBlob(asset, { forceHash: true });
+      const prior = this.integrityBatch?.jobs.get(asset.sha256);
+      const alreadyStrongChecked = prior?.status === 'trusted' && await this.fastBlobStatus(asset) === 'trusted';
+      const result = await (alreadyStrongChecked ? prior : this.enqueueIntegrityVerification(asset)).promise;
       if (generation !== this.integrityGeneration) break;
       files += 1;
       bytes += asset.size;
       this.integrityAuditAfter = asset.sha256;
       this.markIntegrityDirty();
-      if (!valid) {
-        invalid += 1;
-        await removeSafeManagedPath(this.cacheRoot, blobPath(this.cacheRoot, asset.sha256), { force: true, leafKind: 'file' });
-        this.forgetVerifiedBlob(asset.sha256);
-        for (const [gameId, receipt] of this.receipts) {
-          if (!receipt.manifest.assets.some((entry) => entry.sha256 === asset.sha256)) continue;
-          const state = this.gameStates.get(gameId) || {};
-          this.gameStates.set(gameId, { ...state, status: 'repair', message: '素材損壞，需要修復', hasInstalled: false });
-        }
-      }
+      if (['changed', 'missing'].includes(result.status)) invalid += 1;
+      // Audit never deletes content: I/O and concurrent changes need retry,
+      // and confirmed bad content is replaced only by an explicit repair.
     }
-    await this.flushIntegrityIndex();
-    if (invalid > 0) this.getState().then((state) => this.emit('state', state)).catch(() => {});
+    if (generation !== this.integrityGeneration) return { files, bytes, invalid };
+    await this.refreshStates();
+    if (generation === this.integrityGeneration) this.emit('state', await this.getState());
     return { files, bytes, invalid };
   }
 
@@ -1248,6 +1426,8 @@ class AssetStore extends EventEmitter {
     const resolved = validateCacheRootPath(nextRoot);
     await fsp.mkdir(resolved, { recursive: true });
     await this.ensureCacheOwnership(resolved);
+    this.cancelIntegrityRevalidation();
+    await this.integrityWritePromise.catch(() => {});
     this.cacheRoot = resolved;
     this.receipts.clear();
     this.cachedManifests.clear();
@@ -1273,23 +1453,31 @@ class AssetStore extends EventEmitter {
     }
   }
 
-  async receiptFilesPresent(receipt) {
+  async receiptFileIntegrity(receipt) {
+    const generation = this.integrityGeneration;
     const unique = new Map();
     for (const asset of receipt.manifest.assets) if (!unique.has(asset.sha256)) unique.set(asset.sha256, asset);
+    const result = { trusted: 0, missing: 0, changed: 0, pending: 0, retry: 0, total: unique.size };
+    const assets = [...unique.values()];
     let cursor = 0;
-    let valid = true;
-    const values = [...unique.values()];
-    async function worker(store) {
-      while (valid) {
-        const index = cursor++;
-        if (index >= values.length) return;
-        const asset = values[index];
-        const status = await store.fastBlobStatus(asset);
-        if (status === 'missing' || status === 'changed') valid = false;
+    const worker = async () => {
+      while (cursor < assets.length) {
+        const asset = assets[cursor++];
+        const status = await this.fastBlobStatus(asset);
+        if (generation !== this.integrityGeneration) return;
+        if (['trusted', 'missing', 'changed'].includes(status)) { result[status] += 1; continue; }
+        const job = this.enqueueIntegrityVerification(asset);
+        if (job.status === 'retry') result.retry += 1;
+        else result.pending += 1;
       }
-    }
-    await Promise.all(Array.from({ length: Math.min(12, Math.max(1, values.length)) }, () => worker(this)));
-    return valid;
+    };
+    await Promise.all(Array.from({ length: Math.min(12, Math.max(1, assets.length)) }, worker));
+    return result;
+  }
+
+  async receiptFilesPresent(receipt) {
+    const result = await this.receiptFileIntegrity(receipt);
+    return result.trusted === result.total;
   }
 
   refreshStates(options = {}) {
@@ -1299,6 +1487,7 @@ class AssetStore extends EventEmitter {
   }
 
   async computeStates({ includeActiveGameId = '' } = {}) {
+    const generation = this.integrityGeneration;
     for (const gameId of GAME_ID_LIST) {
       if (this.activeInstall?.gameId === gameId && includeActiveGameId !== gameId) continue;
       const latest = this.catalog.games[gameId];
@@ -1315,12 +1504,20 @@ class AssetStore extends EventEmitter {
       let message = gameId === 'marineford' && this.marinefordMedia ? '已有素材快取，請下載完整遊戲套件' : '尚未安裝';
       let hasInstalled = false;
       let installedVersion = '';
+      let integrity = null;
       if (receipt) {
-        hasInstalled = await this.receiptFilesPresent(receipt);
+        integrity = await this.receiptFileIntegrity(receipt);
+        hasInstalled = integrity.trusted === integrity.total;
         installedVersion = receipt.releaseId;
-        if (!hasInstalled) {
+        if (integrity.missing || integrity.changed) {
           status = 'repair';
-          message = '部分檔案遺失，需要修復';
+          message = '已確認遊戲檔案缺失或損壞，需要修復';
+        } else if (integrity.pending) {
+          status = 'integrity-checking';
+          message = '正在檢查現有檔案';
+        } else if (integrity.retry) {
+          status = 'integrity-retry';
+          message = '暫時無法完成檔案檢查，請重試';
         } else if (receipt.releaseId === latest.releaseId && receipt.manifestSha256 === latest.manifestSha256) {
           status = 'installed';
           message = '已安裝，可以遊玩';
@@ -1332,12 +1529,17 @@ class AssetStore extends EventEmitter {
           message = '已有新版本可下載';
         }
       }
+      if (generation !== this.integrityGeneration) return;
       this.gameStates.set(gameId, {
         status,
         message,
         hasInstalled,
         removable: Boolean(receipt),
         installedVersion,
+        integrityPendingFiles: integrity?.pending || 0,
+        integrityRetryFiles: integrity?.retry || 0,
+        integrityVerifiedFiles: integrity?.trusted || 0,
+        integrityTotalFiles: integrity?.total || 0,
         remoteVersion: latest.releaseId,
         totalFiles: latest.totalFiles,
         totalBytes: latest.totalBytes,
@@ -1345,7 +1547,7 @@ class AssetStore extends EventEmitter {
         completedFiles: 0
       });
     }
-    if (this.integrityDirty) await this.flushIntegrityIndex();
+    if (this.integrityDirty && !this.integrityBatch?.active && !this.integrityBatch?.queue.length) await this.flushIntegrityIndex();
   }
 
   async getState() {
@@ -1449,6 +1651,7 @@ class AssetStore extends EventEmitter {
     if (!GAME_IDS.has(gameId)) return { ok: false, error: '此遊戲仍在製作中。' };
     if (gameId === 'marineford' && this.isGameRunning(gameId)) return { ok: false, error: '請先關閉馬林福特之戰，再下載或修復遊戲。' };
     if (this.activeRemoval) return { ok: false, error: '正在移除遊戲，完成後才能開始下載。' };
+    if (['integrity-checking', 'integrity-retry'].includes(this.gameStates.get(gameId)?.status)) return { ok: false, error: '請先完成現有檔案檢查，再下載或啟動遊戲。' };
     if (this.activeInstall) {
       if (this.activeInstall.gameId === gameId) return { ok: true, alreadyRunning: true };
       return { ok: false, error: '目前已有另一款遊戲正在下載，請先等待或暫停。' };
@@ -1462,10 +1665,11 @@ class AssetStore extends EventEmitter {
     }).catch((error) => {
       const aborted = error?.name === 'AbortError';
       const repairRequired = startingState.status === 'repair';
-      const fallbackStatus = repairRequired ? 'repair' : (startingState.hasInstalled ? 'update' : (aborted ? 'paused' : 'error'));
+      const integrityRetry = error?.code === 'INTEGRITY_RETRY';
+      const fallbackStatus = integrityRetry ? 'integrity-retry' : (repairRequired ? 'repair' : (startingState.hasInstalled ? 'update' : (aborted ? 'paused' : 'error')));
       this.emitProgress(gameId, {
         status: fallbackStatus,
-        hasInstalled: repairRequired ? false : Boolean(startingState.hasInstalled),
+        hasInstalled: (repairRequired || integrityRetry) ? false : Boolean(startingState.hasInstalled),
         message: aborted
           ? (repairRequired ? '修復已暫停，完成修復前無法遊玩' : '下載已暫停，可保留進度繼續')
           : String(error?.message || '下載失敗'),
@@ -1539,6 +1743,7 @@ class AssetStore extends EventEmitter {
     try {
       await this.stateRefreshPromise.catch(() => {});
       await this.backgroundAuditPromise.catch(() => {});
+      await this.integrityRevalidationPromise.catch(() => {});
 
       // Re-read the marker and durable receipt immediately before recursive
       // deletion. A stale in-memory receipt can never authorize filesystem work.
@@ -1694,7 +1899,7 @@ class AssetStore extends EventEmitter {
         cachedFiles += 1;
         continue;
       }
-      await removeSafeManagedPath(this.cacheRoot, blobPath(this.cacheRoot, asset.sha256), { force: true, leafKind: 'file' });
+      // Keep the prior file until a replacement payload is fully verified.
       this.forgetVerifiedBlob(asset.sha256);
       missing.push(asset);
     }
@@ -1976,39 +2181,19 @@ class AssetStore extends EventEmitter {
   }
 
   async verifyBlob(asset, { forceHash = false, signal } = {}) {
-    const target = blobPath(this.cacheRoot, asset.sha256);
-    try {
-      throwIfAborted(signal);
-      const before = await this.fingerprintBlob(asset);
-      if (!before) {
-        this.forgetVerifiedBlob(asset.sha256);
-        return false;
-      }
-      const signature = fingerprintSignature(before);
-      if (this.invalidBlobs.get(asset.sha256) === signature) return false;
-      const persisted = this.integrityRecords.get(asset.sha256);
-      if (!forceHash && this.verifiedBlobs.get(asset.sha256) === signature) return true;
-      if (!forceHash && persisted && persisted.size === asset.size && fingerprintSignature(persisted) === signature) {
-        this.verifiedBlobs.set(asset.sha256, signature);
-        return true;
-      }
-      const digest = await this.hashFileImpl(target, signal);
-      throwIfAborted(signal);
-      const after = await this.fingerprintBlob(asset);
-      const stable = after && fingerprintSignature(after) === signature;
-      const valid = Boolean(stable && digest === asset.sha256);
-      if (valid) {
-        this.rememberVerifiedBlob(asset, after);
-      } else {
-        this.forgetVerifiedBlob(asset.sha256);
-        if (after) this.invalidBlobs.set(asset.sha256, fingerprintSignature(after));
-      }
-      return valid;
-    } catch {
-      if (signal?.aborted) throw abortError();
-      this.forgetVerifiedBlob(asset.sha256);
-      return false;
-    }
+    throwIfAborted(signal);
+    const status = await this.fastBlobStatus(asset);
+    if (!forceHash && status === 'trusted') return true;
+    if (status === 'missing' || (!forceHash && status === 'changed')) return false;
+    const job = this.enqueueIntegrityVerification(asset, { forceHash });
+    const result = await this.awaitIntegrityVerification(job, signal);
+    throwIfAborted(signal);
+    if (result.status === 'trusted') return true;
+    if (result.status === 'cancelled') throw abortError();
+    if (['missing', 'changed'].includes(result.status)) return false;
+    const error = new Error(result.reason || '暫時無法完成檔案檢查，請重試');
+    error.code = 'INTEGRITY_RETRY';
+    throw error;
   }
 
   async cleanupUnusedCache({ completedGameId = '' } = {}) {
@@ -2186,11 +2371,20 @@ class AssetStore extends EventEmitter {
     const validated = receipt?.manifest?.schema === MANIFEST_SCHEMA ? safePackagePath(assetPath) : safeAssetPath(assetPath);
     if (!validated || !receipt) return null;
     const asset = receipt.assetIndex.get(validated.path.normalize('NFC').toLowerCase());
-    if (!asset || !(await this.verifyBlob(asset))) {
+    if (!asset) return null;
+    let valid;
+    try { valid = await this.verifyBlob(asset); }
+    catch (error) {
+      if (error?.code !== 'INTEGRITY_RETRY' && error?.name !== 'AbortError') throw error;
+      await this.refreshStates();
+      this.emit('state', await this.getState());
+      return null;
+    }
+    if (!valid) {
       await this.flushIntegrityIndex();
       const state = this.gameStates.get(gameId) || {};
-      this.gameStates.set(gameId, { ...state, status: 'repair', message: '素材損壞，需要修復', hasInstalled: false });
-      this.getState().then((state) => this.emit('state', state)).catch(() => {});
+      this.gameStates.set(gameId, { ...state, status: 'repair', message: '已確認遊戲檔案缺失或損壞，需要修復', hasInstalled: false });
+      this.emit('state', await this.getState());
       return null;
     }
     return { ...asset, filePath: blobPath(this.cacheRoot, asset.sha256) };

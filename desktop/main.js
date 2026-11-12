@@ -1211,6 +1211,11 @@ function registerLauncherIpc() {
     if (!ALLOWED_GAME_IDS.has(gameId)) return { ok: false, error: '此遊戲尚未開放下載。' };
     return assetStore.installGame(gameId);
   }, { requiresAssets: true }));
+  ipcMain.handle('launcher:retry-game-integrity', guarded(async (_event, gameId) => {
+    if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
+    if (!ALLOWED_GAME_IDS.has(gameId)) return { ok: false, error: '遊戲代號不正確。' };
+    return assetStore.retryIntegrityChecks(gameId);
+  }, { requiresAssets: true }));
   ipcMain.handle('launcher:cancel-install', guarded(async (_event, gameId) => {
     if (!ALLOWED_GAME_IDS.has(gameId)) return { ok: false, error: '遊戲代號不正確。' };
     return assetStore.cancelInstall(gameId);
@@ -1341,6 +1346,11 @@ function launchGame(gameId) {
 
 async function createGameWindow(gameId) {
   const launchStartedAt = Date.now();
+  await assetStore.refreshStates();
+  if (!assetStore.canLaunch(gameId)) {
+    assetStore.getState().then(state => assetStore.emit('state', state)).catch(() => {});
+    return { ok: false, error: '請先完成現有檔案檢查或修復，再啟動遊戲。' };
+  }
   const targetSession = await prepareGameSession(gameId);
   if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
   if (!assetStore.canLaunch(gameId)) return { ok: false, error: '遊戲檔案狀態已變更，請重新檢查或下載。' };
