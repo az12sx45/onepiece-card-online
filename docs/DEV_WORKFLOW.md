@@ -9435,3 +9435,12 @@ Core 候選實測包含十三 Boss 各掉落／未掉落的 26 條入場、首�
 桌機原 iframe 的 Tot 分隊區以來源 prompt／船員／操作權／戰鬥身分與本地選擇簽章保留未變 DOM，避免 focus 刷新在 pointerdown 與 click 之間替換按鈕；狀態或權限改變仍重建並走原來源檢查。最終桌機候選真 Chrome 三案通過：單人不足分隊無損取消、兩名存活船員原確認分隊、卡塔庫栗冷讀後原選項恢復；另保留三條受控 DOM 更新檢查。
 
 原生前後對照、三尺寸真 viewport 輸入、圖資失敗／延遲、來源指令回送、iOS 同 preset 編譯與有效掛載由本輪 native 證據逐項綁定最終 Core／AppStage；未完成項目仍待驗，不用早期 prototype 報告替代最終結果。桌機瀏覽器、啟動服務／同步、公開更新、實際更新器及實體 Android／iPhone 舊存檔分別記錄；本文件不宣稱尚未完成的驗收。完整來源與失敗嘗試保留於 D:/Codex_QA/board-thirteen-boss-lifecycle-20261112，不操作玩家正式快取或個人存檔，不執行清理。LATTICE API 本階段未提供，不宣稱任務持久化或完整 Godot 圖譜通過。
+
+
+## 2026-11-12：十三 Boss 正式公開核對與公告
+
+Windows `package-8967751403531eb3` 已完成公開 CAS／清單雜湊與兩檔更新核對；Android Update 9、iOS Preview 14 已完成通道簽章、兩檔更新及啟用／重新啟動的有效資源核對。遊戲程式來源 `40eced760d4a73efba4fe7ccabf2f0c575aafa2a`，正式 runtime／metadata 提交 `fee6342a0a7ffb8ebd52661ed6b7bf19ae8bbc4e`。保留 launcher 1.2.34、host71、原 APK／IPA、帳號與存檔儲存位置、其他遊戲及未變更素材。
+
+公開驗證：D:\Codex_QA\board-thirteen-boss-lifecycle-20261112\public\runs\20261112T152127Z-f02dc554\report.json；實際 provider／runtime-package：D:\Codex_QA\board-thirteen-boss-lifecycle-20261112\live-workload\20261112T152052Z-568e70c6\report.json。Root 封存 facts SHA `1acc7b8f508200b6024b4587783b5a5819ec3cd426c27f967fa68001a9b65e6b`。桌機為真實公開 CAS、四檔隔離 updater contract；完整 6587 筆清單與 6585 筆保留另核。手機為原宿主與正常公開 HTTPS、100 次啟用／重啟有效讀取。同步驗證為本機 loopback、真 Chrome 兩個隔離 contexts、11 項斷言，包含初始／週期快照不得重播 transient recovery。沒有宣稱實體手機、正式帳號、玩家個人存檔或十三場自然完整對戰驗收。
+
+在上述公開核對 PASS 後，新增公告 rev111；其餘 99 則精確保留，最舊的同遊戲已發布公告僅從 100 筆 feed 輪替，全文留在 Git 與 QA before.json。本提交只更新公告與本發布紀錄，不改遊戲程式、通道指標或安裝包；以正常 Git push 自動部署，不另 manual trigger。
