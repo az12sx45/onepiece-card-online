@@ -1,7 +1,32 @@
 {
   "schemaVersion": 1,
-  "revision": 114,
+  "revision": 115,
   "announcements": [
+    {
+      "id": "board-20261114-battle-sfx-music-update",
+      "status": "published",
+      "publishedAt": "2026-11-13T17:06:35.418Z",
+      "scope": "board",
+      "category": "update",
+      "version": "Windows 遊戲更新／Android Update 13／iOS Preview 18",
+      "title": "新世界航海錄：戰鬥音效與配樂更新",
+      "summary": "補強戰鬥與操作音效，改善配樂接續，讓音量與靜音設定確實套用到遊戲聲音。",
+      "body": [
+        "重新整理招式施放、命中、防禦、回復與勝敗等戰鬥音效，讓出手與結果更容易分辨。",
+        "新世界航海錄的選單操作、擲骰與獎勵提示，會播放對應音效。",
+        "保留原有配樂；同一情境的回合交接與戰鬥視窗切換，配樂會接續原本的播放位置，減少重複重播與疊播。",
+        "可調整音量或使用靜音；變更設定會套用到正在播放的遊戲聲音。",
+        "請在目前的啟動器或 App 內檢查《新世界航海錄》更新，下載並套用後完整關閉，再重新開啟即可；沿用原帳號與存檔，不需重裝 APK 或 IPA。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-929d0029f15414d6"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
+      }
+    },
     {
       "id": "board-20261113-reward-turn-marineford-continuation",
       "status": "published",
@@ -44,30 +69,6 @@
       "requiredRelease": {
         "kind": "board",
         "releaseId": "package-f0512e19492f33b3"
-      },
-      "cta": {
-        "kind": "game",
-        "gameId": "board"
-      }
-    },
-    {
-      "id": "board-20261113-golden-ticket-rejoin",
-      "status": "published",
-      "publishedAt": "2026-11-12T20:18:58.991Z",
-      "scope": "board",
-      "category": "update",
-      "version": "Windows 遊戲更新／Android Update 10／iOS Preview 15",
-      "title": "新世界航海錄：黃金票券與重新連線修正",
-      "summary": "修正手機黃金票券選完目的地後停住，以及搭車途中讀檔或重新連線後舊動畫干擾地圖的問題。",
-      "body": [
-        "修正 Android、iOS 黃金票券目的地確認後的海上列車演出，接續抵達劇情、水之七島與離開後的操作。",
-        "修正搭車途中讀檔或重新連線時，舊動畫繼續影響新地圖的情況。",
-        "黃金票券可重複使用，保留原有標記站、回合與獎勵規則。",
-        "沿用原啟動器或 App，在下載管理更新新世界航海錄；手機下載完成後，請完整關閉再重新開啟原 App。不需重裝 APK 或 IPA。"
-      ],
-      "requiredRelease": {
-        "kind": "board",
-        "releaseId": "package-1c17840e0493525f"
       },
       "cta": {
         "kind": "game",

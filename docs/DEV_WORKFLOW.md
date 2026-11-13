@@ -9553,3 +9553,18 @@ Native Android raw Stage 與 iOS compiled Stage 在 Windows 實際 NativeGameRun
 驗收界線：上述 Native 是 Windows 執行 Android raw／iOS compiled 程式面的 host 接受，不是實體 Android／iPhone 音訊硬體或舊個人存檔驗收；AudioContext analyser／AudioServer PCM 不是主觀聽感、耳機或系統 loopback 接受。一般解碼／峰值／播放位置不能證明每個音色都好聽。standalone 的 persisted pagehide 是受控事件，不冒稱真 BFCache restore。保留 Native 既有 setup-save 初始 LAN 等待 modal 限制，以 fresh-host 原 setup 真 tap 作新局聲音入口驗證，未為音訊繞過玩法。沒有把自然完整戰役／完整 CPU 策略或原影片手機 decoder 驗收附會到這些受控案例。
 
 最終證據入口：source-candidate/SOURCE_READY.json（16841 B／f0df6bb1598c1dbe664b478d51a650bedb33b65b8cdfffd8c6d67e865332d686）、native-candidate/NATIVE_READY.json（26994 B／d26bcddb35ccab22b0ddee84be925d71c12a8b5179246b1d151dbacf624475be）、ROOT_SOURCE_REVIEW_v4.json／ROOT_SOURCE_REVIEW_v5_DELTA.json、docs-candidate/CATALOG_REVIEW_v2.json、asset-audit/standalone-ui-qa/READY.json。未重新執行任一測試來製作文件。
+
+
+## 2026-11-14：航海錄戰鬥音效與配樂接續發布
+
+公開驗證完成時間：2026-11-13T17:06:28.651Z。唯一owner READY 93610d4a；原始遊戲提交 e99bc9ec8ae86ead01a93114a18c8c727341e4c2，正式 runtime／metadata 06ad792d3a8e3d8113e0b2743d695a9d44411ff4；Windows package-929d0029f15414d6、Android Update 13、iOS Preview 18。此追加稿只在Root確認真正Live、normal-public更新與保護資料讀回全部完成後套用。
+
+Windows沿用原啟動器1.2.34。正式6587筆清單只更新Main3953289B/608667b7、Battle482163B/ba2b778a與AudioUI137319B/b1a78648，合計4572771B；6584筆與所有6530筆媒體記錄原樣保留。原版actual-ASAR134更新器實際建立六筆舊fixture收據，再更新三程式；單損壞拒絕、LKG原收據、old/new cold及合成帳號存檔哨兵共76項通過。六筆Node契約不是完整玩家快取或個人存檔驗收。
+
+Android與iOS沿用原host71 App，各更新Core、Runtime與平台Stage三檔，其餘22筆保留；實際25筆來源為8個原更新器PCK資源與17個宿主資源。Android Stage為原始.gd，iOS Stage為對應編譯.gdc。公開更新與重新啟動流程證據由本輪實際四phase及原始producer確認收據綁定，不以Dummy音訊驅動的流程檢查冒充可聽輸出。
+
+音訊素材使用唯一凍結39clip catalog，嵌入既有程式，無新增獨立audio CAS、安裝包或簽裝需求。原BGM素材保留，修正同一情境續播、單一音樂owner、音效觸發與音量／靜音；音效峰值限制不改BGM/Master。重用owner final v4 Main/Core/戰鬥與原影片實測，以及final v5初始UI音量automation實測，依各自exact受驗產品與raw/compiled Stage enabled-driver證據區分。Publisher未另加音訊矩陣，未聲稱人耳或實體手機驗收，也未宣稱全Boss自然完整戰役測試。
+
+更新方式為在目前啟動器或App檢查《新世界航海錄》更新，下載套用後完整關閉再重開，帳號與既有存檔沿用；不用重裝APK、重簽IPA或新宿主版本。未改遊戲規則、存檔schema／namespace、既有事件名稱或其他遊戲。
+
+公開 Gate：D:\Codex_QA\board-audio-release-20261114/PUBLIC_VERIFICATION.json；SHA256 69dcbe9a53f2e8939e2db2e00316ec3086916a87af14af477cee4269142bafbb。其餘99則公告全文與順序精確保留；最舊同遊戲已發布原紀錄全文封存於QA與Git。Root最後公告提交只包含newsconfig與本DEV追加，再等待正式Live及保護metadata讀回。
