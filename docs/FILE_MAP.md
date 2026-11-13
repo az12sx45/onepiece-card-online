@@ -2465,3 +2465,16 @@ finale-execution-swing-v1.webp 為執行兵落刀分鏡。
 - D:/Codex_QA/board-golden-ticket-recurrence-20261113/{baseline,core,native,audit,public}：本輪公開基底、完整組裝before/after、Source/真連線試例、獨立審查與只讀發布讀回。文件append候選在docs-candidate；exact base/append/candidate指紋列DOCS_READY。
 
 正式Windows896/Android9/iOS14是本輪已核起點；新版本、最終候選hash與發布狀態看啟動器收據。所有舊失敗、正式來源與rollback evidence保留；此候選不聲稱硬體/正式帳號遊玩或完整全遊戲驗收。
+
+
+### 2026-11-13：大媽選項與四皇框候選檔案
+
+- public/js/board_battle.js：Desktop 既有 cosmetic frame 表；調整既有 ID yonkoBigMom 的 aura／左右飾物深度，移除 yonkoKaido 與 enemyYonkoKaido 的中央 aura（素材目錄沿用 yonko_bigmom／yonko_kaido）。
+- 手機原 allowlist original-tot-stage.js：對應的相同外觀框表；不修改角色圖或 shader。
+- native_battle_view.gd／iOS native_battle_view.gdc：原戰鬥 view 的靈魂拷問選項呈現、原 command_requested 接線；來源 gd 與發布 gdc 分開記錄。
+- Core battle.yonkoPrompt／原 processBattlePageCommand、Native battle command bridge：規則與命令契約來源，依實際需要保留，不為本次 UI 缺口重寫支付或全域鎖。
+- D:/Codex_QA/board-big-mom-frame-soul-reentry-20261113：候選、原始碼／介面證據與桌機／手機視覺比較；正式通道與精確 SHA 由唯一 READY 與啟動器發布收據連結。
+
+Native battle view 也是 postgameBossMechanic 可空呈現資料的邊界：處理原 JSON null，讓既有 Stage guard 安全讀取，不改原 Source 序列化或 AppStage 程式。
+
+- public/js/board_cosmetic_frame_preview.js 與手機 original-core.js 內 BoardCosmeticFramePreviewConfigs：同步裝備預覽的大媽與凱多配置；Core 僅改外觀預覽資料，不修改戰鬥邏輯或存檔欄位。

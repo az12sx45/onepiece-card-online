@@ -9470,3 +9470,18 @@ Windows 沿用啟動器 1.2.34，真實公開 HTTPS 只下載主程式 3,524,125
 公開 Gate：D:\Codex_QA\board-golden-ticket-publisher-prep-20261113\ROOT_PUBLIC_ACCEPTANCE_GATE_v2.json；SHA de42492d02b8d3ecbbcfbe365ed1779ef3db889f443fc52980babf08d836d3f8。Owner public PASS：D:\Codex_QA\board-golden-ticket-recurrence-20261113\public\v3\runs\20261112T201513Z-ad83c670\report.json；Root protection：D:\Codex_QA\board-golden-ticket-publisher-prep-20261113\root-protection\2026-11-12T20-12-18-415Z-4b8e5b\report.json；provider Live：D:\Codex_QA\board-golden-ticket-publisher-prep-20261113\runtime-provider-live.json。
 
 只有上述實際公開核對通過後才發布公告 rev112。其餘 99 則內容與順序精確保留，最舊同遊戲已發布公告只從 100 筆 feed 輪替，全文仍保存在 Git 與 QA before.json。本提交只改公告與此 append-only 發布紀錄，不改遊戲程式、catalog、通道指標或安裝包。工具只建立本機提交，由啟動器聊天室統一推送並等正式 Live。
+
+
+### 2026-11-13：大媽靈魂拷問手機操作與四皇外觀框候選
+
+- 來源基底為正式 8e333cdb，Windows package-1c17840e0493525f、Android Update 10、iOS Preview 15；本紀錄是候選修改，實際發布版本以啟動器收據為準。
+- Source 已提供 battle.yonkoPrompt 的靈魂拷問待選狀態，待選期間原本就禁止一般出招與換人。手機 battle view 補上 hp／pp／coins／item／refuse 選擇，交回既有 yonkoSoulChoice command 與原 Core 處理，不以解除全域鎖繞過事件。
+- Native 候選來源為 native_battle_view.gd；Android 更新 raw gd，iOS 使用同一候選的 compiled gdc。完整遊戲組裝需以原 NativeGameRuntime／Core 與真正更新包掛載後的 view 驗證，不能只測控制項設定值。
+- 外觀表在 Desktop public/js/board_battle.js 與手機 original-tot-stage.js。大媽 aura 與左右裝飾移到肖像後，前框保留；凱多獎勵框及 Boss 框兩個 alias 移除中央雲霧 aura 圖層，保留框邊與側飾，不另畫或替換角色素材。
+- 驗證範圍涵蓋原選項條件與支付／拒絕後的原回合續行、讀回 pending 舊存檔與切回控制權、非控制玩家不可代選，以及桌機／窄手機／一般手機的實際肖像與框。另保留既有黃金票券更新修正的原 Core／Runtime。
+- 沿用 host71 的遊戲獨立更新與原帳號／存檔格式，不重建 APK／IPA；手機需完整關閉原 App 再重開。正式發布需由啟動器使用已安裝前版獨立快取驗證下載、套用與冷啟動，公開指標與原程式碼核對後才更新公告。
+- 本機 QA：D:/Codex_QA/board-big-mom-frame-soul-reentry-20261113。保留 before、失敗與成功證據，不碰玩家快取，不建立硬連結。LATTICE 任務 API 本輪未提供，未宣稱資料庫或完整 Godot 圖譜驗收成功。
+
+另在真完整手機戰鬥重現普通四皇的 postgameBossMechanic 為 JSON null，既有 Stage 的十三 Boss 視圖 guard 以 Dictionary 讀取而報錯。Native battle view 只在已解析的呈現快照邊界將此 null 正規化為空 Dictionary，原 Core／存檔仍保留原 null；不額外修改 AppStage 或擴大清除遊戲狀態。before 與 after 的實際 script errors 分開保存。
+
+裝備預覽另有獨立鏡像，故候選也同步 public/js/board_cosmetic_frame_preview.js 與手機 original-core.js 的 BoardCosmeticFramePreviewConfigs。原 CORE_NO_CHANGE 證據仍用來說明戰鬥規則未改；發布用 Core 則必須以新的 preview-only 候選及實際 require witness 驗證，不能把舊 09ee 的測試直接冒充新 Core。

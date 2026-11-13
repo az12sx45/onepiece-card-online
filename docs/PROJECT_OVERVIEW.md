@@ -3215,3 +3215,14 @@ Android、iOS 的修正涵蓋進入頁面、戰鬥換手續接、勝利結算與
 本輪針對iOS選目的地即卡住，修復手機共同地圖呈現器組裝：列車節點與船隻class由自己的既有bridge處理，FinalRoute/Kuma與其他既有呈現器仍持有原節點與規則。驗證使用完整AppStage、NativeGameRuntime、原Source與真GUI訊號，同一程序抵達、劇情、Water7及恢復原操作；不以分離模型/記錄call當作整條完成。
 
 列車途中合法讀回/重新連線則以本身取消與game/player身分隔離舊回呼，避免舊動畫對新快照開頁或交棒。票券、站點、原動畫時序、獎勵/掉落率與存檔命名不變。Windows主程式與手機Core按同一規則處理；手機Runtime維持原25更新目標，App/host71沿用。正式版本與驗收範圍由本輪最終發布收據確認，候選不等於已公開或真機驗收。
+
+
+### 2026-11-13：大媽待選操作與外觀框可讀性候選
+
+手機補齊大媽靈魂拷問的既有選項入口；一般戰鬥按鈕仍依待選狀態鎖定，玩家完成原選擇後由 Core 接續流程。四皇外觀表同步桌機與手機：大媽的裝飾退到肖像後，凱多獎勵／Boss 框的中央半透明 aura 移除。原角色圖、框邊、戰鬥規則及存檔命名均保留。
+
+候選以正式 8e333cdb／Windows1c178／Android10／iOS15 為基底。由原 host71 遊戲更新管線發布；App、啟動器、帳號與存檔不因本候選更換。實際版本及驗證限制見此工作既有發布交接。
+
+同時處理普通戰鬥的可空 postgameBossMechanic 呈現資料，避免既有 Native 視圖 guard 將 null 當 Dictionary；此正規化只作用於呈現快照，不修改戰鬥／存檔內容。
+
+裝備預覽的獨立配置亦同步：Desktop preview.js 與 mobile Core 的 BoardCosmeticFramePreviewConfigs。戰鬥表三個框與裝備預覽的大媽／凱多配置保持一致，Core 的戰鬥函數仍保持原版。

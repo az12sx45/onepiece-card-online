@@ -242,15 +242,14 @@
     },
     yonkoBigMom: {
       layers: {
-        aura: { asset: "images/board/battle/cosmetic_frames/yonko_bigmom/aura.webp", x: 50, y: 50, w: 126, h: 118, rotate: 0, flipX: false, flipY: false, opacity: 0.2, strength: 0.65, z: 8, blend: "normal" },
-        leftPart: { asset: "images/board/battle/cosmetic_frames/yonko_bigmom/left_part.webp", x: 25, y: 52, w: 124, h: 132, rotate: 0, flipX: false, flipY: false, opacity: 1, strength: 1, z: 10, blend: "normal" },
-        rightPart: { asset: "images/board/battle/cosmetic_frames/yonko_bigmom/right_part.webp", x: 125, y: 53.5, w: 126, h: 124.5, rotate: 0, flipX: true, flipY: false, opacity: 1, strength: 1, z: 4, blend: "normal" },
+        aura: { asset: "images/board/battle/cosmetic_frames/yonko_bigmom/aura.webp", x: 50, y: 50, w: 126, h: 118, rotate: 0, flipX: false, flipY: false, opacity: 0.2, strength: 0.65, z: 1, blend: "normal" },
+        leftPart: { asset: "images/board/battle/cosmetic_frames/yonko_bigmom/left_part.webp", x: 25, y: 52, w: 124, h: 132, rotate: 0, flipX: false, flipY: false, opacity: 1, strength: 1, z: 2, blend: "normal" },
+        rightPart: { asset: "images/board/battle/cosmetic_frames/yonko_bigmom/right_part.webp", x: 125, y: 53.5, w: 126, h: 124.5, rotate: 0, flipX: true, flipY: false, opacity: 1, strength: 1, z: 3, blend: "normal" },
         frame: { asset: "images/board/battle/cosmetic_frames/yonko_bigmom/frame.webp", x: 50, y: 48.5, w: 105.5, h: 106, rotate: 0, flipX: false, flipY: false, opacity: 1, strength: 1, z: 12, blend: "normal" },
       },
     },
     yonkoKaido: {
       layers: {
-        aura: { asset: "images/board/battle/cosmetic_frames/yonko_kaido/aura.webp", x: 50, y: 50, w: 130, h: 124, rotate: 0, flipX: false, flipY: false, opacity: 1, strength: 2, z: 6, blend: "screen" },
         leftPart: { asset: "images/board/battle/cosmetic_frames/yonko_kaido/left_part.webp", x: 163.5, y: 63, w: 126, h: 136, rotate: 0, flipX: false, flipY: false, opacity: 1, strength: 1, z: 10, blend: "normal" },
         rightPart: { asset: "images/board/battle/cosmetic_frames/yonko_kaido/right_part.webp", x: 34, y: 52, w: 128, h: 136, rotate: -32, flipX: true, flipY: false, opacity: 1, strength: 1, z: 9, blend: "normal" },
         frame: { asset: "images/board/battle/cosmetic_frames/yonko_kaido/frame.webp", x: 50, y: 50, w: 110.5, h: 116.5, rotate: 0, flipX: false, flipY: false, opacity: 1, strength: 1, z: 12, blend: "normal" },
@@ -258,7 +257,6 @@
     },
     enemyYonkoKaido: {
       layers: {
-        aura: { asset: "images/board/battle/cosmetic_frames/yonko_kaido/aura.webp", x: 50, y: 50, w: 130, h: 124, rotate: 0, flipX: false, flipY: false, opacity: 0.2, strength: 0.65, z: 6, blend: "screen" },
         leftPart: { asset: "images/board/battle/cosmetic_frames/yonko_kaido/left_part.webp", x: 163.5, y: 63, w: 126, h: 136, rotate: 0, flipX: false, flipY: false, opacity: 1, strength: 1, z: 10, blend: "normal" },
         rightPart: { asset: "images/board/battle/cosmetic_frames/yonko_kaido/right_part.webp", x: 34, y: 52, w: 128, h: 136, rotate: -32, flipX: true, flipY: false, opacity: 1, strength: 1, z: 9, blend: "normal" },
         frame: { asset: "images/board/battle/cosmetic_frames/yonko_kaido/frame.webp", x: 50, y: 50, w: 110.5, h: 116.5, rotate: 0, flipX: false, flipY: false, opacity: 1, strength: 1, z: 12, blend: "normal" },
