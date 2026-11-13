@@ -1,7 +1,32 @@
 {
   "schemaVersion": 1,
-  "revision": 113,
+  "revision": 114,
   "announcements": [
+    {
+      "id": "board-20261113-reward-turn-marineford-continuation",
+      "status": "published",
+      "publishedAt": "2026-11-13T09:43:54.214Z",
+      "scope": "board",
+      "category": "update",
+      "version": "Windows 遊戲更新／Android Update 12／iOS Preview 17",
+      "title": "新世界航海錄：戰後領獎與頂上救援接續修正",
+      "summary": "修正領獎提示關閉後可能停住的情況，接回原本 CPU 與下一位玩家的回合；頂上救援成功確認也會接回既有演出入口。",
+      "body": [
+        "勝利後領取重要道具並關閉提示，會依原本順序接回 CPU 與下一位玩家的回合。",
+        "保留原有獎勵與結算規則，重複點擊不重發獎勵、不重複跳回合；已領獎的舊存檔仍按原本完成確認接續。",
+        "頂上戰爭救援勝利後，重新接回原本成功確認、霸氣影片與救援演出入口，沿用既有素材。",
+        "沿用原啟動器或 App，在下載管理更新新世界航海錄；保留原帳號與存檔，不需重裝 APK 或 IPA。",
+        "手機更新完成後，請完整關閉，再重新開啟原 App。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-07270657b0b8ea50"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
+      }
+    },
     {
       "id": "board-20261113-soul-choice-cosmetic-frames",
       "status": "published",
@@ -43,31 +68,6 @@
       "requiredRelease": {
         "kind": "board",
         "releaseId": "package-1c17840e0493525f"
-      },
-      "cta": {
-        "kind": "game",
-        "gameId": "board"
-      }
-    },
-    {
-      "id": "board-20261112-thirteen-boss-lifecycle",
-      "status": "published",
-      "publishedAt": "2026-11-12T15:22:12.944Z",
-      "scope": "board",
-      "category": "update",
-      "version": "Windows 遊戲更新／Android Update 9／iOS Preview 14",
-      "title": "新世界航海錄：十三 Boss 續戰與手機操作修正",
-      "summary": "改善 Boss 戰後續接、讀檔後的骰子操作及手機線索介面，避免有完整領獎紀錄的舊 Boss 存檔重複結算。",
-      "body": [
-        "修正卡塔庫栗骰子演出中讀檔後的續戰操作；合法控制者可恢復待處理選擇，同步快照不會重複觸發恢復流程。",
-        "單人挑戰 Tot Musica 且僅一名船員存活時，可選擇暫不挑戰返回地圖。",
-        "補上手機澤法解除炸藥岩操作，以及血統因子畫面載入失敗後的重試與略過。",
-        "修正線索解謎的選牌與角色圖示，以及有完整領獎紀錄的舊 Boss 存檔重複結算；保留原獎勵與掉落率。",
-        "三平台沿用現有啟動器或 App、帳號與存檔，只更新遊戲程式，不需重裝 APK 或 IPA。"
-      ],
-      "requiredRelease": {
-        "kind": "board",
-        "releaseId": "package-8967751403531eb3"
       },
       "cta": {
         "kind": "game",

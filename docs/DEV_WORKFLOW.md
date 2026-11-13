@@ -9505,3 +9505,20 @@ Windows 沿用啟動器 1.2.34，真實公開 HTTPS 只下載主程式 3,524,125
 候選在 Windows 主程式與手機 original-core.js 加入綁定原房間／航程、seed、phase、round、玩家及戰鬥 scope 的私有續行。只等待原獎勵與原收場的實際閒置，再經原控制權執行原 endTurn 或 afterClear；換局、明確讀檔與舊回呼以私有 generation 失效。不新增存檔欄位，不移除全域控制權 guard。共享明確 load-save 的已支付勝利狀態沿既有 receipt 恢復，避免重發獎勵。原影片、技能代價、回合規則及素材內容沿用。
 
 驗收包含 before/after 同一原生最後擊→真 HUD→CPU→玩家可操作、真兩瀏覽器／Socket.IO 交接與重整、原成功救援動畫／接續、受控舊狀態與過期回呼。最終各項結果與未測界線應讀本輪 COMBINED_READY；Windows Godot FFmpeg 是測具後端，Android／iOS 正式媒體走原 PoNativeVideo。不得把 decoder 資源存在、playing flag 或單一按鈕消失當成完整流程通過。未宣稱個人存檔、正式帳號或手機實測。
+
+
+## 2026-11-13：戰後領獎與頂上救援接續發布
+
+公開驗證完成時間：2026-11-13T09:43:13.584Z。原始遊戲來源 64daa44666929c15d3b0a6017d93290d7e204ac1；正式 runtime／metadata f5ce994ae56bd22990ce87dc6cedcd92c1ecc1c7；Windows package-07270657b0b8ea50、Android Update 12、iOS Preview 17。此片段與公告草稿僅在 Root 確認實際 Live、公開版本與保護項目、原更新器及冷啟動證據均通過後套用。
+
+Windows 沿用啟動器 1.2.34，完整 6,587 筆資源只更新 js/board_game.js（3,528,444 B，d3652e20），其餘 6,586 筆保留。實際 original134 更新器以 current f051 的五檔隔離契約真安裝舊609，再更新新Main；四筆保留、壞檔拒絕、原收據、cold runtime與合成帳號／存檔哨兵共68項通過。五檔契約不是全媒體f051實裝；完整清單由正式builder與公開catalog／manifest另證。
+
+Android／iOS 沿用原host71 App，本次各只換 original-core.js（6,279,925 B，67254fd3），其餘24筆保留；8個overlay與17個宿主資源合計25筆，以實際簽章清單與掛載證據為準。更新後請完整關閉，再重新開啟原App；不重裝APK／IPA、不重新簽署，也不聲稱執行中module cache可即時熱置換。
+
+功能修正為勝利領獎HUD與戰鬥收場真正閒置後，保留原owner權限接回原endTurn或afterClear；重複回呼不重發獎勵或雙跳回合。已付獎勵舊存檔仍使用原Finish／返回地圖確認，不改成自動重新結算。規則、掉落、存檔schema／namespace、事件名稱及素材不變。
+
+Windows owner已用exact d365實跑npm／雙Chrome真Socket.IO：非host真勝利、原獎勵點擊、host-driven CPU後接可操作human，refresh穩定version12，共11項；Web原MP4真playing／時間前進／ended後接guard、救援結果、CPU與human，共17項。這些是受控最後一擊與CPU單回合skip前置，不是自然完整戰役。Publisher重用其實際raw證據，未另跑GPU或長矩陣。
+
+媒體邊界：Web原影片完整尾段已實際驗證；Native Windows run06曾觀察playing／ended，但FFmpeg清理崩潰仍為partial，不能改寫為完整Native影片通過。Android／iOS宿主播放器註冊讀回不等於真機完整播放驗收。沒有修改影片、decoder或Native播放器。正式帳號、個人舊存檔及實體手機未驗收；帳號／存檔相容證據為原schema與受控哨兵。
+
+公開 Gate：D:\Codex_QA\board-reward-turn-marineford-animation-launcher-prep-20261113/PUBLIC_VERIFICATION.json；SHA256 cf443d8bef91afb5331ec221bd2204e89e4aa4352142af3e9b6fe2142084af82。其餘99則公告內容與順序精確保留，最舊同遊戲已發布原紀錄全文封存於QA與Git。本次公告提交只包含newsconfig與此DEV追加紀錄；由啟動器聊天室統一推送並等待正式Live。
