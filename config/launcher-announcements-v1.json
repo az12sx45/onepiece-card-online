@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "revision": 112,
+  "revision": 113,
   "announcements": [
+    {
+      "id": "board-20261113-soul-choice-cosmetic-frames",
+      "status": "published",
+      "publishedAt": "2026-11-13T06:44:01.845Z",
+      "scope": "board",
+      "category": "update",
+      "version": "Windows 遊戲更新／Android Update 11／iOS Preview 16",
+      "title": "新世界航海錄：靈魂拷問與角色框修正",
+      "summary": "補回手機版大媽靈魂拷問的選項，調整戰鬥與裝備預覽的角色框。",
+      "body": [
+        "手機進入或返回大媽戰鬥時，可依原規則選擇靈魂拷問的代價，處理後繼續戰鬥操作。",
+        "大媽框裝飾移至人物後方；凱多框移除中央雲霧，保留原有邊框與側邊圖案。戰鬥畫面與裝備預覽同步。",
+        "沿用現有啟動器或 App，在下載管理更新新世界航海錄，保留帳號與舊存檔。手機下載後請完整關閉原 App 再重開，不需重裝 APK 或 IPA。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-f0512e19492f33b3"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
+      }
+    },
     {
       "id": "board-20261113-golden-ticket-rejoin",
       "status": "published",
@@ -45,31 +68,6 @@
       "requiredRelease": {
         "kind": "board",
         "releaseId": "package-8967751403531eb3"
-      },
-      "cta": {
-        "kind": "game",
-        "gameId": "board"
-      }
-    },
-    {
-      "id": "board-20261112-reward-ticket-lifecycle",
-      "status": "published",
-      "publishedAt": "2026-11-12T13:00:09.092Z",
-      "scope": "board",
-      "category": "update",
-      "version": "Windows 遊戲更新／Android 8／iOS 13",
-      "title": "新世界航海錄：重要物品展示、黃金票與舊存檔續接修正",
-      "summary": "修正重要物品展示無法繼續、海上列車抵達水之七島後操作卡住，以及讀檔續接時重複領取同筆獎勵的情況。",
-      "body": [
-        "修正獲得重要物品後無法點擊繼續，以及戰鬥切換畫面攔截操作的問題。",
-        "修正海上列車黃金票抵達水之七島後，劇情與頁面操作可能被遮罩擋住的問題。",
-        "水之七島的可選工頭肖像載入失敗時，仍能查看原文字資訊並正常離開頁面。",
-        "避免獎勵展示途中存檔重開後，再次發放同一場已領取的獎勵；有完整領獎佐證的舊四皇存檔可接回後續流程。",
-        "Windows、Android、iOS 都沿用現有啟動器或 App、帳號與存檔，只更新《新世界航海錄》遊戲程式。"
-      ],
-      "requiredRelease": {
-        "kind": "board",
-        "releaseId": "package-c710ae207d6510a6"
       },
       "cta": {
         "kind": "game",

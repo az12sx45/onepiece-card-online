@@ -9485,3 +9485,12 @@ Windows 沿用啟動器 1.2.34，真實公開 HTTPS 只下載主程式 3,524,125
 另在真完整手機戰鬥重現普通四皇的 postgameBossMechanic 為 JSON null，既有 Stage 的十三 Boss 視圖 guard 以 Dictionary 讀取而報錯。Native battle view 只在已解析的呈現快照邊界將此 null 正規化為空 Dictionary，原 Core／存檔仍保留原 null；不額外修改 AppStage 或擴大清除遊戲狀態。before 與 after 的實際 script errors 分開保存。
 
 裝備預覽另有獨立鏡像，故候選也同步 public/js/board_cosmetic_frame_preview.js 與手機 original-core.js 的 BoardCosmeticFramePreviewConfigs。原 CORE_NO_CHANGE 證據仍用來說明戰鬥規則未改；發布用 Core 則必須以新的 preview-only 候選及實際 require witness 驗證，不能把舊 09ee 的測試直接冒充新 Core。
+
+## 2026-11-13 啟動器發布：靈魂拷問與角色框
+
+- 正式來源 af870e13771a5e7871b3b66de06add4943af6529；遊戲版本清單提交 ee5d554838a3314f7643156c15c64bffaead7535，Render Live dep-dbras2u7bikc73eon6l0。
+- Windows package-f0512e19492f33b3：兩個程式檔 495625 B，完整 6587 筆清單僅兩筆差異；原 1.2.34 更新器用隔離五檔契約實際下載兩個公開 CAS，66 項檢查通過，未宣稱實裝全部媒體。
+- Android Update 11／iOS Preview 16：各三檔，正常公開 HTTPS 舊 10／15 更新、原 store 選包／真正 Runtime 啟動／原 confirm 及再次冷啟動四階段通過。每階段 25 筆完整讀取、8 overlay／17 host。
+- 實際新 View／新 Core factory／Tot.frame、原生選項支付一件道具、重連與恢復操作、兩種戰鬥框與裝備預覽均有 Godot GPU 與原始報告。保留 Natural11／12 錯誤回合期待的 FAIL，不將其改標為同案支付成功。
+- 公開簽章、八個新 CAS、舊 Core／View CAS 與 Tot 原宿主回復來源、正式 runtime-package API、desktop403 政策及七個保護指標已核；未改啟動器、APK／IPA、其他遊戲、帳號與存檔格式。手機下載後須完整關閉原 App 再重開。
+- 公開驗證：D:/Codex_QA/board-big-mom-frame-soul-launcher-prep-20261113/PUBLIC_VERIFICATION.json（2845af5858a719b01b2479d111e39fe8f6fb110a2b4e2c812b4748cc870c8815）；完整 facts、失敗／中斷與回復來源另封。同批公告修訂 113 及攻略同步於公開驗證通過後才套用。未宣稱實機、正式帳號、玩家個人舊存檔驗收，無新增安裝包或清理。
