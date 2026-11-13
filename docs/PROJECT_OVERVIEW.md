@@ -3226,3 +3226,10 @@ Android、iOS 的修正涵蓋進入頁面、戰鬥換手續接、勝利結算與
 同時處理普通戰鬥的可空 postgameBossMechanic 呈現資料，避免既有 Native 視圖 guard 將 null 當 Dictionary；此正規化只作用於呈現快照，不修改戰鬥／存檔內容。
 
 裝備預覽的獨立配置亦同步：Desktop preview.js 與 mobile Core 的 BoardCosmeticFramePreviewConfigs。戰鬥表三個框與裝備預覽的大媽／凱多配置保持一致，Core 的戰鬥函數仍保持原版。
+
+
+### 戰鬥收場與回合續行（2026-11-13）
+
+戰鬥勝利後的回合交接由 Source 保留原回合擁有者的續行，等重要物品展示與原戰鬥收場都閒置，再執行原本的 endTurn。副本 advanceTurn:false 則在同一安全邊界接回 afterClear，例如頂上救援成功畫面及原霸氣動畫。等待畫面收尾與取得實際回合權限是不同條件；任何延後工作都須確認仍屬同一航程、玩家與戰鬥，不能靠固定延遲無條件換人。Windows 與手機由同源候選同步維護。
+
+本輪不改遊戲規則、獎勵、影片或存檔欄位；仍以原 App／啟動器的遊戲更新入口發布。實際公開版本、Native／瀏覽器證據與未測實機界線見本輪正式交接。

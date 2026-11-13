@@ -832,6 +832,8 @@
   const itemRevealIdleCallbacks = [];
   let itemRevealDeferredEndTurnOptions = null;
   let itemRevealDeferredEndTurnWaiting = false;
+  let ownedTurnContinuationEpoch = 0;
+  let itemRevealPresentationEpoch = 0;
   const handledBoardUiEventIds = new Set();
   let boardUiHudTimer = null;
   let diceHudClearTimer = null;
@@ -11742,6 +11744,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function initGameState() {
+    invalidateOwnedTurnContinuations();
     clearCrewLevelUpToast();
     const seedParam = query.get("seed");
     const forcedSeed = seedParam !== null && seedParam.trim() !== "" ? Number(seedParam) : NaN;
@@ -12813,7 +12816,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function captureLiveFlowStateForLoad(game = null, options = {}) {
     if (options?.source !== "lan" && !options?.preserveLiveFlow) return null;
     const source = game && typeof game === "object" ? game : {};
-    const initialLanRestore = options?.source === "lan" && options?.initialLanRestore === true;
+    const initialLanRestore = options?.source === "lan" && (options?.initialLanRestore === true || options?.lanReason === "load-save");
     return {
       // A refreshed page no longer owns the timers that created these visual locks.
       // Keep the real pending flow below, but let the new page resume it instead of
@@ -12914,6 +12917,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const restoredGameState = safeJsonClone(payload.gameState);
     const restoredBattleState = payload.battleState ? safeJsonClone(payload.battleState) : null;
     if (!restoredGameState?.boardData) return false;
+    if (options.source !== "lan" || options.initialLanRestore || options.lanReason === "load-save"
+      || incomingGame.seed !== state.gameState?.seed) invalidateOwnedTurnContinuations();
     clearSeaTrainGoldenTicketAnimation();
     resetShipSailingMotions();
     state.gameState = restoredGameState;
@@ -12945,7 +12950,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     syncBattleReplacementActiveCrewIndex();
     syncGamePlayerIdentitiesFromLobby();
     syncGamePlayerAvatarsFromLobby();
-    const shouldRecoverInterruptedBattle = options.source !== "lan" || options.initialLanRestore === true;
+    const shouldRecoverInterruptedBattle = options.source !== "lan" || options.initialLanRestore === true || options.lanReason === "load-save";
     const battleRefreshRecovery = state.battleState && shouldRecoverInterruptedBattle
       ? restoreBattleRefreshRecoveryCheckpoint()
       : null;
@@ -17802,18 +17807,31 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function deferEndTurnUntilItemRevealIdle(options = {}) {
-    itemRevealDeferredEndTurnOptions = { ...options, itemRevealWaitComplete: true };
+    const previous = itemRevealDeferredEndTurnOptions?.turnContinuation;
+    const context = options.turnContinuation
+      || (ownedTurnContinuationIsCurrent(previous) ? previous : captureOwnedTurnContinuation());
+    if (itemRevealDeferredEndTurnWaiting && previous !== context) itemRevealDeferredEndTurnWaiting = false;
+    itemRevealDeferredEndTurnOptions = { ...options, itemRevealWaitComplete: true, turnContinuation: context };
     if (itemRevealDeferredEndTurnWaiting) return;
     itemRevealDeferredEndTurnWaiting = true;
-    waitForItemRevealIdle(() => {
-      const deferredOptions = itemRevealDeferredEndTurnOptions || { itemRevealWaitComplete: true };
+    const clearDeferred = () => {
+      if (itemRevealDeferredEndTurnOptions?.turnContinuation !== context) return;
       itemRevealDeferredEndTurnOptions = null;
       itemRevealDeferredEndTurnWaiting = false;
-      endTurn(deferredOptions);
+    };
+    waitForItemRevealIdle(() => {
+      if (itemRevealDeferredEndTurnOptions?.turnContinuation !== context) return;
+      runOwnedTurnContinuationWhenIdle(context, () => {
+        if (itemRevealDeferredEndTurnOptions?.turnContinuation !== context) return;
+        const deferredOptions = itemRevealDeferredEndTurnOptions;
+        clearDeferred();
+        endTurn(deferredOptions);
+      }, clearDeferred);
     });
   }
 
-  function hideItemRevealHud() {
+  function hideItemRevealHud(options = {}) {
+    itemRevealPresentationEpoch += 1;
     window.clearTimeout(itemRevealTimer);
     itemRevealTimer = null;
     if (itemRevealDismissHandler && refs.itemRevealHud) {
@@ -17824,7 +17842,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!refs.itemRevealHud) return;
     refs.itemRevealHud.classList.remove("show", "awaiting");
     refs.itemRevealHud.setAttribute("aria-hidden", "true");
-    notifyItemRevealIdle();
+    if (options.notifyIdle !== false) notifyItemRevealIdle();
   }
 
   async function playNextItemReveal() {
@@ -17846,6 +17864,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       return;
     }
     itemRevealActive = true;
+    const presentationEpoch = itemRevealPresentationEpoch;
     const revealImagesReady = [ensureDeferredImageDecoded(refs.itemRevealPanelFrame)];
     const image = itemImageForDisplay(itemDef);
     const clueBossDef = itemDef.effect?.kind === "postgame_york_clue"
@@ -17889,14 +17908,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       }
     }
     await Promise.all(revealImagesReady);
-    if (!itemRevealActive || !refs.itemRevealHud) return;
+    if (!itemRevealActive || !refs.itemRevealHud || presentationEpoch !== itemRevealPresentationEpoch) return;
     refs.itemRevealHud.className = `item-reveal-hud show ${normalizeGameItemCategory(itemDef.category)}${clueBossDef ? " postgame-clue" : ""}`;
     refs.itemRevealHud.setAttribute("aria-hidden", "false");
     itemRevealTimer = window.setTimeout(() => {
       if (!refs.itemRevealHud) return;
       refs.itemRevealHud.classList.add("awaiting");
       itemRevealDismissHandler = (event) => {
-        if (event.target?.closest?.("button,a,input,select,textarea")) return;
+        if (presentationEpoch !== itemRevealPresentationEpoch || event.target?.closest?.("button,a,input,select,textarea")) return;
         hideItemRevealHud();
         window.setTimeout(playNextItemReveal, 120);
       };
@@ -57385,8 +57404,67 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
     state.gameState.resolutionLock = false;
   }
 
+  function captureOwnedTurnContinuation(player = currentPlayer(), battle = state.battleState) {
+    const game = state.gameState;
+    return {
+      epoch: ++ownedTurnContinuationEpoch,
+      scope: JSON.stringify(manualSaveStorageScope()),
+      seed: String(game?.seed || ""), phase: String(game?.phase || ""),
+      round: Number(game?.round || 0), playerId: String(currentPlayer()?.id || ""),
+      battle: battle ? { scope: battleWinRewardScope(battle), playerId: String(battle.playerId || ""), result: String(battle.result || "") } : null,
+      cleared: false,
+    };
+  }
+
+  function ownedTurnContinuationIsCurrent(context, ignoreBattle = false) {
+    const game = state.gameState;
+    if (!context || !game || context.epoch !== ownedTurnContinuationEpoch
+      || context.scope !== JSON.stringify(manualSaveStorageScope())
+      || context.seed !== String(game.seed || "") || context.phase !== String(game.phase || "")
+      || context.round !== Number(game.round || 0) || context.playerId !== String(currentPlayer()?.id || "")) return false;
+    if (ignoreBattle) return true;
+    if (context.cleared || !context.battle) return !state.battleState;
+    const battle = state.battleState;
+    return !!battle && context.battle.scope === battleWinRewardScope(battle)
+      && context.battle.playerId === String(battle.playerId || "") && context.battle.result === String(battle.result || "");
+  }
+
+  function runOwnedTurnContinuationWhenIdle(context, callback, onCancel = null) {
+    let complete = false;
+    const resume = () => {
+      if (complete) return;
+      if (!ownedTurnContinuationIsCurrent(context) || boardLan.lastError === "stale_socket") {
+        complete = true;
+        onCancel?.();
+        return;
+      }
+      if (itemRevealIsPending() || remoteBoardPlaybackBusy() || (boardLan.enabled && (boardLan.applying || !boardLan.connected || boardLan.awaitingInitialState))) {
+        window.setTimeout(resume, 100);
+        return;
+      }
+      if (!canBoardLanControlCurrentPlayer(currentPlayer())) {
+        complete = true;
+        onCancel?.();
+        return;
+      }
+      complete = true;
+      callback();
+    };
+    resume();
+  }
+
+  function invalidateOwnedTurnContinuations() {
+    ownedTurnContinuationEpoch += 1;
+    itemRevealIdleCallbacks.length = 0;
+    itemRevealDeferredEndTurnOptions = null;
+    itemRevealDeferredEndTurnWaiting = false;
+    itemRevealQueue.length = 0;
+    hideItemRevealHud({ notifyIdle: false });
+  }
+
   function finalizeBattleAndAdvanceTurn(player, afterFinalize, options = {}) {
     if (state.gameState.battleExitLock) return;
+    const turnContinuation = captureOwnedTurnContinuation(player, state.battleState);
     finalizeBattleWinRewardReceipts(state.battleState, options);
     state.gameState.battleExitLock = true;
     if (typeof afterFinalize === "function") afterFinalize();
@@ -57394,18 +57472,17 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
     const afterClear = typeof options.afterClear === "function" ? options.afterClear : null;
     if (shouldAdvanceTurn) {
       closeModal();
-      // Important post-battle drops (Boss clue cards, lineage factors, etc.)
-      // are rendered by the map page. Do not leave the full-screen battle
-      // iframe above that reveal while endTurn is deliberately waiting for
-      // the player to dismiss it, otherwise returning appears to be frozen.
+      // The original close may still own the battle presentation. Keep this
+      // exit owned and pending until its real idle boundary, then use endTurn.
       if (itemRevealIsPending()) {
         closeBattlePageOverlay();
         notifyBattleWindow();
       }
-      endTurn({
+      runOwnedTurnContinuationWhenIdle(turnContinuation, () => endTurn({
         context: "battle",
         subtitle: "準備切換到下一位玩家。",
         keepBattleExitLock: true,
+        turnContinuation,
         beforeAnnouncement: () => {
           clearBattleTransientState({ deferOverlayClose: true });
           state.gameState.battleExitLock = false;
@@ -57418,14 +57495,26 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
           schedulePendingMoveLearn();
           state.gameState.battleExitLock = false;
         },
-      });
+      }));
     } else {
-      clearBattleTransientState();
-      closeModal();
-      renderAll();
-      notifyBattleWindow();
-      if (afterClear) afterClear();
-      state.gameState.battleExitLock = false;
+      const game = state.gameState;
+      try {
+        clearBattleTransientState();
+        turnContinuation.cleared = true;
+        closeModal();
+        renderAll();
+        notifyBattleWindow();
+      } catch (error) {
+        if (state.gameState === game) game.battleExitLock = false;
+        throw error;
+      }
+      runOwnedTurnContinuationWhenIdle(turnContinuation, () => {
+        try {
+          if (afterClear) afterClear();
+        } finally {
+          if (ownedTurnContinuationIsCurrent(turnContinuation, true)) state.gameState.battleExitLock = false;
+        }
+      });
     }
   }
 

@@ -9494,3 +9494,14 @@ Windows 沿用啟動器 1.2.34，真實公開 HTTPS 只下載主程式 3,524,125
 - 實際新 View／新 Core factory／Tot.frame、原生選項支付一件道具、重連與恢復操作、兩種戰鬥框與裝備預覽均有 Godot GPU 與原始報告。保留 Natural11／12 錯誤回合期待的 FAIL，不將其改標為同案支付成功。
 - 公開簽章、八個新 CAS、舊 Core／View CAS 與 Tot 原宿主回復來源、正式 runtime-package API、desktop403 政策及七個保護指標已核；未改啟動器、APK／IPA、其他遊戲、帳號與存檔格式。手機下載後須完整關閉原 App 再重開。
 - 公開驗證：D:/Codex_QA/board-big-mom-frame-soul-launcher-prep-20261113/PUBLIC_VERIFICATION.json（2845af5858a719b01b2479d111e39fe8f6fb110a2b4e2c812b4748cc870c8815）；完整 facts、失敗／中斷與回復來源另封。同批公告修訂 113 及攻略同步於公開驗證通過後才套用。未宣稱實機、正式帳號、玩家個人舊存檔驗收，無新增安裝包或清理。
+
+
+## 2026-11-13：戰鬥領獎交接與頂上救援接續
+
+本輪基底為正式 7e19fd11612451f62bc1c1126298201658d5f486，Windows package-f0512e19492f33b3／Android Update11／iOS Preview16、host71。新候選與驗收位於 D:/Codex_QA/board-reward-turn-marineford-animation-20261113；公開發布以啟動器部門本輪正式收據為準。
+
+原生完整最後一擊、領獎與真實觸控重現：收場令 remote playback busy，原 endTurn 在安裝獎勵閒置續行前就被權限／忙碌檢查擋回；HUD 關閉後仍留勝利及 exit/resolution lock。真 localhost Socket.IO 兩瀏覽器的非房主案例亦重現，雙方版本一致，沒有拒絕 ACK，卻沒有下一回合快照。頂上最後戰的 advanceTurn:false 分支同樣在收場中呼叫 afterClear，openMarinefordWindow 被原 guard 拒絕，根本未進入影片 consumer。
+
+候選在 Windows 主程式與手機 original-core.js 加入綁定原房間／航程、seed、phase、round、玩家及戰鬥 scope 的私有續行。只等待原獎勵與原收場的實際閒置，再經原控制權執行原 endTurn 或 afterClear；換局、明確讀檔與舊回呼以私有 generation 失效。不新增存檔欄位，不移除全域控制權 guard。共享明確 load-save 的已支付勝利狀態沿既有 receipt 恢復，避免重發獎勵。原影片、技能代價、回合規則及素材內容沿用。
+
+驗收包含 before/after 同一原生最後擊→真 HUD→CPU→玩家可操作、真兩瀏覽器／Socket.IO 交接與重整、原成功救援動畫／接續、受控舊狀態與過期回呼。最終各項結果與未測界線應讀本輪 COMBINED_READY；Windows Godot FFmpeg 是測具後端，Android／iOS 正式媒體走原 PoNativeVideo。不得把 decoder 資源存在、playing flag 或單一按鈕消失當成完整流程通過。未宣稱個人存檔、正式帳號或手機實測。

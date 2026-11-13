@@ -2478,3 +2478,12 @@ finale-execution-swing-v1.webp 為執行兵落刀分鏡。
 Native battle view 也是 postgameBossMechanic 可空呈現資料的邊界：處理原 JSON null，讓既有 Stage guard 安全讀取，不改原 Source 序列化或 AppStage 程式。
 
 - public/js/board_cosmetic_frame_preview.js 與手機 original-core.js 內 BoardCosmeticFramePreviewConfigs：同步裝備預覽的大媽與凱多配置；Core 僅改外觀預覽資料，不修改戰鬥邏輯或存檔欄位。
+
+
+### 戰鬥收場續行與驗收入口（2026-11-13）
+
+- `public/js/board_game.js`：`finalizeBattleAndAdvanceTurn` 的一般換人與副本 afterClear 兩條收場路徑；`deferEndTurnUntilItemRevealIdle`、`hideItemRevealHud` 的展示等待／過期回呼處理。
+- 同檔 `captureOwnedTurnContinuation`、`ownedTurnContinuationIsCurrent`、`runOwnedTurnContinuationWhenIdle`、`invalidateOwnedTurnContinuations`：私有 scope／generation 與原控制權、閒置條件；不新增 gameState 儲存欄位。
+- 手機遊戲更新 `original-core.js`：同源控制流程，保留既有靈魂拷問、框預覽、黃金票券與其他已發布修正；原 NativeRuntime、AppStage、View、媒體 consumer 只有確有產品差異時才列入更新。
+- `public/board_marineford.html` 與既有 Native Marineford consumer：沿用原成功提示、`conqueror_intro.mp4`、守衛／救援效果和原續接；不得以新的 Core 動畫事件重複觸發原片。
+- `D:/Codex_QA/board-reward-turn-marineford-animation-20261113`：Source、Native 真觸控、兩個真瀏覽器／原 Socket.IO、原媒體及最終交接證據；before 失敗、測具錯誤與未完成項保留原樣，發布真實性以啟動器正式收據核對。
