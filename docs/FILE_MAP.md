@@ -2487,3 +2487,37 @@ Native battle view 也是 postgameBossMechanic 可空呈現資料的邊界：處
 - 手機遊戲更新 `original-core.js`：同源控制流程，保留既有靈魂拷問、框預覽、黃金票券與其他已發布修正；原 NativeRuntime、AppStage、View、媒體 consumer 只有確有產品差異時才列入更新。
 - `public/board_marineford.html` 與既有 Native Marineford consumer：沿用原成功提示、`conqueror_intro.mp4`、守衛／救援效果和原續接；不得以新的 Core 動畫事件重複觸發原片。
 - `D:/Codex_QA/board-reward-turn-marineford-animation-20261113`：Source、Native 真觸控、兩個真瀏覽器／原 Socket.IO、原媒體及最終交接證據；before 失敗、測具錯誤與未完成項保留原樣，發布真實性以啟動器正式收據核對。
+
+
+### 本輪音訊產品與證據（2026-11-14）
+
+本輪已完成音源與遊戲候選凍結、下列限定範圍的程式／播放驗證，交由啟動器部門依既有授權進行 game-only 發布；此文件本身不代表公開部署已完成。基底為 4132a48a31b2696dbb43904cf52a246d63d810e5，QA 在 D:/Codex_QA/board-audio-orchestration-20261113。沿用原 host71、啟動器／App、帳號與存檔 namespace／schema，不以重裝 App、更換簽章或遷移個人存檔交付本次音訊更新。公開版本及 live 驗證應以啟動器最終收據為準。
+
+| 產品／資料 | 責任與凍結入口 |
+| --- | --- |
+| public/js/board_game.js | Source frozen-v5，3,953,289 B，608667b7；同一 BGM manager／私有 SFX bus、generation／場景 family／資料 catalog，無回合結算所有權。 |
+| original-core.js | Source frozen-v5，6,704,787 B，ebd94919；手機同源音訊契約，Native owner 與原 setup／呈現派送串接。 |
+| public/js/board_battle.js | Source frozen-v5，482,163 B，ba2b778a；cast／hit／狀態、原語音與延遲取消，未映射保原聲。 |
+| public/js/board_audio_ui.js | Source frozen-v5，137,319 B，b1a78648；獨立原 board_start 等頁用同父 catalog 的 13 素材 fallback，已有 Main bus 時共用；v5 只修 master 音量 automation。 |
+| Native runtime／Stage | 最終 Native READY／recipe 列出 native-game-runtime.js、各平台 native_app_stage.gd 與必要 GDC 的實際 target／bytes／SHA；不替換 host71 App 本體。 |
+| ASSET_CATALOG_v2.json | 39 OGG／281,814 B，227 path 替換／260 保留；406,216 B，完整 SHA 見 CATALOG_READY_v2.json。程式私有 base64，不另加 runtime loader。 |
+| battle-v2/ASSETS_READY.json | 5 同 ID 新無料效果與 3 原片 cast accent；舊31維持、v1原36／catalog保護，逐層 source／recipe／真解碼量測。 |
+| 官方與原片來源 | upstream/soundeffect-lab/PAGES.json／DOWNLOAD_RECEIPT.json、Kenney官方 CC0、原Komori條款與provenance、anime-sampling/SOURCE_CLIPS.json／SAMPLING_PROPOSAL.json。 |
+| Source產品及portable | source-candidate/SOURCE_READY.json；Web UI權威portable是 frozen-v5/board_audio_ui.js.portable-v2.json，原逆向歧義草稿保留但不作權威。 |
+| 流程與輸出 | Source READY內各實際raw receipt、Native run11 raw／run12 compiled host與audio-component報告、standalone-ui-qa/READY.json。v1/v2文件草稿與失敗raw保持。 |
+
+| accent | audio/board_game/move-fx/v1/ 下的 cast 路徑 |
+| --- | --- |
+| anime_blade_cast | blade_cross__8ddac1cbdd__cast.ogg、blade_cross__0c75e2825f__cast.ogg |
+| anime_gear5_cast | rubber_nika__00d4f2ff51__cast.ogg、rubber_nika__96d393e282__cast.ogg |
+| anime_katakuri_sight | focus_sight__350000cbe4__cast.ogg，既有唯一使用者 lineage_postgame_charlotte_katakuri_cultivation_move_6 |
+
+來源紀錄：12 個 UI 使用 Kenney Interface Sounds／Casino Audio／Impact Sounds 官方包的 CC0，下載頁、原 License.txt 與 SHA 保留；既有乾淨戰鬥層沿小森平九包 read me.txt 與逐招派生紀錄，條款 https://taira-komori.net/freesounden.html。5 個升級素材為効果音ラボ官方 https://soundeffect-lab.info/sound/battle/ 的 punch-high2、super-arts-hit1、aura2、katana-slash2、magic-electron4，官方 HTTP200／檔案 SHA 與 https://soundeffect-lab.info/agreement/ HTML 已留存；它們是免費原創效果音，不稱航海王原錄音。只作遊戲內加工使用，不另散布獨立音效庫、不製作這批素材的音效-only 公開展示、不作 AI 訓練。3 段原作材料只取現有使用者專案影片，沒有外抓整集或整曲；底層未見授權項目不補造授權。Fal 生成提交為 0，按使用者指示使用免費及既有素材。
+
+Source v5 的 Main／Core／Battle 與 v4 精確相同；只有 Web UI 更新音量 retarget：idle 取消舊 automation 並立即 setValue，有聲源時 hold／anchor 後 20ms ramp。保留 v4 的真 volume failure（0.65→0.2 後輸出比約 0.54055），v5 相同薄案例比值 0.3076923924，符合單次 0.2／0.65。實際原 board_start 頁首可見 trusted 點擊的 confirm、auth tab 的 select PCM 與同 context 新素材解碼完全相符，post-limiter waveform 非零；synthetic click、mute、延遲真解碼後的 mute／pagehide 取消合計七項通過。board_start 沒有 Main bus 時用同根目錄抽出的 13 個 UI／heal 子 catalog，Main 存在時不另起第二套所有者。
+
+Native Android raw Stage 與 iOS compiled Stage 在 Windows 實際 NativeGameRuntime／Core／Stage 加 WASAPI 分別 run11／run12 完成，兩次 host 報告均 PASS、各 23 個原流程節點，程序 exit0／0 engine errors 以 Native READY 為準。包含 fresh 真 ScreenTouch、新 39 OGG 解碼／播放位置與非零 PCM、偏好／mute、六聲部准入與真 stop、私有 limiter、原／未映射聲音、原最後一擊／重要物品 HUD、合法 CPU skip、回玩家可操作、virtual BGM position 與 dispose；清理後無聲部、pending timer 清空且私有 bus 移除。受控前置為 Source 生成敵 HP1 的 phase2 checkpoint 及原 CPU skip 效果，沒有直接清 turn／lock 或假造獎勵。
+
+驗收界線：上述 Native 是 Windows 執行 Android raw／iOS compiled 程式面的 host 接受，不是實體 Android／iPhone 音訊硬體或舊個人存檔驗收；AudioContext analyser／AudioServer PCM 不是主觀聽感、耳機或系統 loopback 接受。一般解碼／峰值／播放位置不能證明每個音色都好聽。standalone 的 persisted pagehide 是受控事件，不冒稱真 BFCache restore。保留 Native 既有 setup-save 初始 LAN 等待 modal 限制，以 fresh-host 原 setup 真 tap 作新局聲音入口驗證，未為音訊繞過玩法。沒有把自然完整戰役／完整 CPU 策略或原影片手機 decoder 驗收附會到這些受控案例。
+
+最終證據入口：source-candidate/SOURCE_READY.json（16841 B／f0df6bb1598c1dbe664b478d51a650bedb33b65b8cdfffd8c6d67e865332d686）、native-candidate/NATIVE_READY.json（26994 B／d26bcddb35ccab22b0ddee84be925d71c12a8b5179246b1d151dbacf624475be）、ROOT_SOURCE_REVIEW_v4.json／ROOT_SOURCE_REVIEW_v5_DELTA.json、docs-candidate/CATALOG_REVIEW_v2.json、asset-audit/standalone-ui-qa/READY.json。未重新執行任一測試來製作文件。

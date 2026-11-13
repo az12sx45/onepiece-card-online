@@ -2285,3 +2285,20 @@ Tot Musica 單人只有一名存活船員、尚未分隊而不能形成兩個非
 重要獎勵仍只按原規則發放一次。領獎展示關閉與戰鬥收場完成後，應將控制權交給原規則指定的下一位；收場期間 CPU 不應搶先行動，舊回呼也不能讓下一位被跳過。沒有重要物品展示的勝利仍須等原收場完成。
 
 頂上戰爭的成功救援應接回原成功確認、魯夫霸氣影片及救援效果，再繼續原流程。本輪修正接續時序，不改成功條件、Boss 血量、招式、救援骰、獎勵、素材或進化規則。共享讀回已支付的勝利狀態不得再發同一筆獎勵；一般旁觀者也不能代替當前合法擁有者結算。
+
+
+### 音效、配樂與玩法權威邊界（2026-11-14）
+
+本輪已完成音源與遊戲候選凍結、下列限定範圍的程式／播放驗證，交由啟動器部門依既有授權進行 game-only 發布；此文件本身不代表公開部署已完成。基底為 4132a48a31b2696dbb43904cf52a246d63d810e5，QA 在 D:/Codex_QA/board-audio-orchestration-20261113。沿用原 host71、啟動器／App、帳號與存檔 namespace／schema，不以重裝 App、更換簽章或遷移個人存檔交付本次音訊更新。公開版本及 live 驗證應以啟動器最終收據為準。
+
+本次只改聲音呈現，不增加招式效果、回合、傷害、掉落、獎勵或存檔欄位；角色／道具 ID、Socket 名稱與原控制權規則沿用。聲音的播放、取消與失敗不能決定遊戲下一步。
+
+聲音接入同一私有 catalog／設定契約，device volume 只套一次；最多六個真實聲部，以同一優先級尺度准入，路基原專屬語音 priority90 保留。mute／零音量、identity 變更、場景關閉與離場會停止聲源並使私有 generation／延遲 callback 失效。Web 與 Native 的私有 SFX 輸出限制在 -1dB ceiling；原 BGM／有聲影片不繞入此音效 limiter。音訊解碼、載入或自動播放失敗只影響呈現，不能持有遊戲鎖、發獎勵或推進回合。
+
+配樂沿用既有曲目、原 BgmManager 與實際音樂位置，不新增外部音樂 loader。同一音樂 family 跨玩家／CPU 續播，短暫地圖／商店畫面經 dwell 與取消處理，持續停留的有意義場景仍可換曲；Boss 意圖到 commit 才消費，one-shot 結尾依實際 currentTime 及 generation 檢查。一般勝負播放短提示，不在每次領獎重新播放整首 party／勝利曲。原影片與特殊語音保留 scoped focus／結束、錯誤與取消清理。
+
+正式交付候選含 39 個 OGG／281,814 B：v1 的 31 個描述保留，5 個既有 assetId 升級新配方，另加 3 個原作材料 accent；v1 catalog 及原 36 音檔全部保留。ASSET_CATALOG_v2.json 406,216 B／SHA256 8aa28faaa347b56b9362a57e65d9ffb85b5dcc1d257c016cc71f512b987847a0，CATALOG_READY_v2.json 133,665 B／SHA256 1dd5bfeede4eacbc162248fd640ca431c1ec46daf0b45ef7107a38b8cb9bb80a。39 份 base64 大小／SHA／Vorbis mono 44.1k header 與凍結音檔逐項相符。根據原 provenance 的材質／角色作用／施放與命中階段，只替換 227 條舊 derived 路徑、保留 260 條；沒有對等材質或共享分類衝突時沿原聲。
+
+3 個原作材料由使用者專案既有影片短窗製成：處刑雙刀 0.18–0.82 秒（只作刀身材質，不稱魯夫拳擊）、Gear5 雷光壓迫 45.10–45.85 秒（只作施放，不冒稱拳擊命中）、卡塔庫栗紅眼 0.20–0.88 秒。各自再用前 0.40／0.38／0.50 秒低比例混入乾淨 SFX，catalog gain 為 0.58／0.65／0.60。原聲是混合 AAC，仍可能含背景配樂／人聲，沒有宣稱音源分離或無人聲。這些 accent 僅接下列五條獨立技能 cast；原救援、Gear5 進化及 Boss 未來視影片自身播放時不加第二份採樣，不改 hit 或影片聲道。
+
+驗收界線：上述 Native 是 Windows 執行 Android raw／iOS compiled 程式面的 host 接受，不是實體 Android／iPhone 音訊硬體或舊個人存檔驗收；AudioContext analyser／AudioServer PCM 不是主觀聽感、耳機或系統 loopback 接受。一般解碼／峰值／播放位置不能證明每個音色都好聽。standalone 的 persisted pagehide 是受控事件，不冒稱真 BFCache restore。保留 Native 既有 setup-save 初始 LAN 等待 modal 限制，以 fresh-host 原 setup 真 tap 作新局聲音入口驗證，未為音訊繞過玩法。沒有把自然完整戰役／完整 CPU 策略或原影片手機 decoder 驗收附會到這些受控案例。

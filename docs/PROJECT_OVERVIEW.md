@@ -3233,3 +3233,24 @@ Android、iOS 的修正涵蓋進入頁面、戰鬥換手續接、勝利結算與
 戰鬥勝利後的回合交接由 Source 保留原回合擁有者的續行，等重要物品展示與原戰鬥收場都閒置，再執行原本的 endTurn。副本 advanceTurn:false 則在同一安全邊界接回 afterClear，例如頂上救援成功畫面及原霸氣動畫。等待畫面收尾與取得實際回合權限是不同條件；任何延後工作都須確認仍屬同一航程、玩家與戰鬥，不能靠固定延遲無條件換人。Windows 與手機由同源候選同步維護。
 
 本輪不改遊戲規則、獎勵、影片或存檔欄位；仍以原 App／啟動器的遊戲更新入口發布。實際公開版本、Native／瀏覽器證據與未測實機界線見本輪正式交接。
+
+
+### 音訊呈現與獨立遊戲更新（2026-11-14）
+
+本輪已完成音源與遊戲候選凍結、下列限定範圍的程式／播放驗證，交由啟動器部門依既有授權進行 game-only 發布；此文件本身不代表公開部署已完成。基底為 4132a48a31b2696dbb43904cf52a246d63d810e5，QA 在 D:/Codex_QA/board-audio-orchestration-20261113。沿用原 host71、啟動器／App、帳號與存檔 namespace／schema，不以重裝 App、更換簽章或遷移個人存檔交付本次音訊更新。公開版本及 live 驗證應以啟動器最終收據為準。
+
+正式交付候選含 39 個 OGG／281,814 B：v1 的 31 個描述保留，5 個既有 assetId 升級新配方，另加 3 個原作材料 accent；v1 catalog 及原 36 音檔全部保留。ASSET_CATALOG_v2.json 406,216 B／SHA256 8aa28faaa347b56b9362a57e65d9ffb85b5dcc1d257c016cc71f512b987847a0，CATALOG_READY_v2.json 133,665 B／SHA256 1dd5bfeede4eacbc162248fd640ca431c1ec46daf0b45ef7107a38b8cb9bb80a。39 份 base64 大小／SHA／Vorbis mono 44.1k header 與凍結音檔逐項相符。根據原 provenance 的材質／角色作用／施放與命中階段，只替換 227 條舊 derived 路徑、保留 260 條；沒有對等材質或共享分類衝突時沿原聲。
+
+聲音接入同一私有 catalog／設定契約，device volume 只套一次；最多六個真實聲部，以同一優先級尺度准入，路基原專屬語音 priority90 保留。mute／零音量、identity 變更、場景關閉與離場會停止聲源並使私有 generation／延遲 callback 失效。Web 與 Native 的私有 SFX 輸出限制在 -1dB ceiling；原 BGM／有聲影片不繞入此音效 limiter。音訊解碼、載入或自動播放失敗只影響呈現，不能持有遊戲鎖、發獎勵或推進回合。
+
+配樂沿用既有曲目、原 BgmManager 與實際音樂位置，不新增外部音樂 loader。同一音樂 family 跨玩家／CPU 續播，短暫地圖／商店畫面經 dwell 與取消處理，持續停留的有意義場景仍可換曲；Boss 意圖到 commit 才消費，one-shot 結尾依實際 currentTime 及 generation 檢查。一般勝負播放短提示，不在每次領獎重新播放整首 party／勝利曲。原影片與特殊語音保留 scoped focus／結束、錯誤與取消清理。
+
+3 個原作材料由使用者專案既有影片短窗製成：處刑雙刀 0.18–0.82 秒（只作刀身材質，不稱魯夫拳擊）、Gear5 雷光壓迫 45.10–45.85 秒（只作施放，不冒稱拳擊命中）、卡塔庫栗紅眼 0.20–0.88 秒。各自再用前 0.40／0.38／0.50 秒低比例混入乾淨 SFX，catalog gain 為 0.58／0.65／0.60。原聲是混合 AAC，仍可能含背景配樂／人聲，沒有宣稱音源分離或無人聲。這些 accent 僅接下列五條獨立技能 cast；原救援、Gear5 進化及 Boss 未來視影片自身播放時不加第二份採樣，不改 hit 或影片聲道。
+
+來源紀錄：12 個 UI 使用 Kenney Interface Sounds／Casino Audio／Impact Sounds 官方包的 CC0，下載頁、原 License.txt 與 SHA 保留；既有乾淨戰鬥層沿小森平九包 read me.txt 與逐招派生紀錄，條款 https://taira-komori.net/freesounden.html。5 個升級素材為効果音ラボ官方 https://soundeffect-lab.info/sound/battle/ 的 punch-high2、super-arts-hit1、aura2、katana-slash2、magic-electron4，官方 HTTP200／檔案 SHA 與 https://soundeffect-lab.info/agreement/ HTML 已留存；它們是免費原創效果音，不稱航海王原錄音。只作遊戲內加工使用，不另散布獨立音效庫、不製作這批素材的音效-only 公開展示、不作 AI 訓練。3 段原作材料只取現有使用者專案影片，沒有外抓整集或整曲；底層未見授權項目不補造授權。Fal 生成提交為 0，按使用者指示使用免費及既有素材。
+
+Source v5 的 Main／Core／Battle 與 v4 精確相同；只有 Web UI 更新音量 retarget：idle 取消舊 automation 並立即 setValue，有聲源時 hold／anchor 後 20ms ramp。保留 v4 的真 volume failure（0.65→0.2 後輸出比約 0.54055），v5 相同薄案例比值 0.3076923924，符合單次 0.2／0.65。實際原 board_start 頁首可見 trusted 點擊的 confirm、auth tab 的 select PCM 與同 context 新素材解碼完全相符，post-limiter waveform 非零；synthetic click、mute、延遲真解碼後的 mute／pagehide 取消合計七項通過。board_start 沒有 Main bus 時用同根目錄抽出的 13 個 UI／heal 子 catalog，Main 存在時不另起第二套所有者。
+
+Native Android raw Stage 與 iOS compiled Stage 在 Windows 實際 NativeGameRuntime／Core／Stage 加 WASAPI 分別 run11／run12 完成，兩次 host 報告均 PASS、各 23 個原流程節點，程序 exit0／0 engine errors 以 Native READY 為準。包含 fresh 真 ScreenTouch、新 39 OGG 解碼／播放位置與非零 PCM、偏好／mute、六聲部准入與真 stop、私有 limiter、原／未映射聲音、原最後一擊／重要物品 HUD、合法 CPU skip、回玩家可操作、virtual BGM position 與 dispose；清理後無聲部、pending timer 清空且私有 bus 移除。受控前置為 Source 生成敵 HP1 的 phase2 checkpoint 及原 CPU skip 效果，沒有直接清 turn／lock 或假造獎勵。
+
+驗收界線：上述 Native 是 Windows 執行 Android raw／iOS compiled 程式面的 host 接受，不是實體 Android／iPhone 音訊硬體或舊個人存檔驗收；AudioContext analyser／AudioServer PCM 不是主觀聽感、耳機或系統 loopback 接受。一般解碼／峰值／播放位置不能證明每個音色都好聽。standalone 的 persisted pagehide 是受控事件，不冒稱真 BFCache restore。保留 Native 既有 setup-save 初始 LAN 等待 modal 限制，以 fresh-host 原 setup 真 tap 作新局聲音入口驗證，未為音訊繞過玩法。沒有把自然完整戰役／完整 CPU 策略或原影片手機 decoder 驗收附會到這些受控案例。

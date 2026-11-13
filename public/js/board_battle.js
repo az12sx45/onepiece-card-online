@@ -3324,6 +3324,7 @@
     const fadeDelay = alreadyShowingKnockout ? KNOCKOUT_REPEAT_FADE_DELAY_MS : KNOCKOUT_FADE_DELAY_MS;
     const action = { key, readyAt: Date.now() + fadeDelay + KNOCKOUT_FADE_DURATION_MS + REPLACEMENT_PANEL_KO_BUFFER_MS };
     knockoutActions[side] = action;
+    battleHostAudioBus()?.playCatalogCue?.("knockout", { scope: battleAudioScope(), eventId: `ko:${key}`, priority: 2 });
     clearTimeout(portraitTimers[side]);
     clearTimeout(knockoutTimers[side]);
     clearTimeout(knockoutTimers[`${side}Fade`]);
@@ -3553,10 +3554,73 @@
     return null;
   }
 
+  function battleHostAudioBus() {
+    for (const candidate of [window.parent, window.opener, window]) {
+      try { if (candidate?.__boardSfxBus) return candidate.__boardSfxBus; } catch (_) {}
+    }
+    return null;
+  }
+
+  function battleAudioScope() {
+    return `board-battle:${lastBattleIdentity || "current"}`;
+  }
+
+  let battleAudioGeneration = 0;
+  const battleStatusAudioTimers = new Set();
+  function cancelBattleAudioScope() {
+    battleHostAudioBus()?.stopScope?.(battleAudioScope());
+    battleAudioGeneration += 1;
+    for (const timer of battleStatusAudioTimers) clearTimeout(timer);
+    battleStatusAudioTimers.clear();
+  }
+
+  function battleAudioPresentationIsCurrent(scope) {
+    if (scope !== battleAudioScope() || !latestView?.battle || document.hidden) return false;
+    try {
+      if (window.parent && window.parent !== window) {
+        const overlay = window.parent.document?.getElementById?.("battlePageOverlay");
+        if (overlay && (!overlay.classList.contains("open") || overlay.classList.contains("closing"))) return false;
+      }
+    } catch (_) {}
+    return true;
+  }
+
+  function scheduleBattleStatusAudio(direction) {
+    const scope = battleAudioScope(), token = battleAudioGeneration;
+    const timer = setTimeout(() => {
+      battleStatusAudioTimers.delete(timer);
+      if (token === battleAudioGeneration && battleAudioPresentationIsCurrent(scope)) playStatusEffectSound(direction);
+    }, STATUS_EFFECT_SFX_DELAY_MS);
+    battleStatusAudioTimers.add(timer);
+  }
+
+  function playBattleAudio(kind, src, options = {}) {
+    if (!battleAudioPresentationIsCurrent(battleAudioScope())) return null;
+    const bus = battleHostAudioBus();
+    if (bus) {
+      const request = { ...options, path: src, preserveUnmapped: ["castDefault", "hitDefault"].includes(kind), scope: battleAudioScope() };
+      const replacement = bus.playCatalogCue(kind, request);
+      return replacement.handled ? replacement.handle : bus.playAsset(src, request);
+    }
+    // Standalone battle pages still honor the same stored audio preferences.
+    let enabled = true, volume = 0.65;
+    try { const prefs = window.BoardAudio?.status?.(); enabled = prefs?.enabled ?? localStorage.getItem("board_sfx_enabled") !== "0"; volume = Number(prefs?.volume ?? localStorage.getItem("board_sfx_volume") ?? 0.65); } catch (_) {}
+    if (!enabled || !volume || !src) return null;
+    try {
+      const audio = new Audio(src);
+      audio.volume = Math.max(0, Math.min(1, Number(options.gain ?? 0.5) * volume));
+      const cancel = () => { try { audio.pause(); audio.removeAttribute("src"); audio.load(); } catch (_) {} };
+      audio.__boardAudioCancel = cancel;
+      const playing = audio.play(); if (playing?.catch) playing.catch(cancel);
+      return { audio, cancel };
+    } catch (_) { return null; }
+  }
+
   function pauseAudioEntries(entries) {
     (Array.isArray(entries) ? entries : []).forEach((audio) => {
       if (!audio) return;
       try {
+        audio.__boardAudioCancel?.();
         audio.pause();
         audio.currentTime = 0;
       } catch (_error) {
@@ -3567,6 +3631,7 @@
 
   function silenceBattleEffectAudioForLucciRokuogan() {
     lucciRokuoganEffectAudioSilenced = true;
+    battleHostAudioBus()?.stopScope?.(battleAudioScope());
     Object.values(statusEffectAudioPools).forEach((pool) => pauseAudioEntries(pool));
     Object.values(castEffectAudioPools).forEach((pool) => pauseAudioEntries(pool));
     Object.values(hitEffectAudioPools).forEach((pool) => pauseAudioEntries(pool));
@@ -3625,6 +3690,7 @@
       const audio = lucciRokuoganVoiceAudio[key];
       if (!audio) return;
       try {
+        audio.__boardAudioCancel?.();
         audio.pause();
         audio.currentTime = 0;
       } catch (_error) {
@@ -3658,15 +3724,15 @@
         previous.pause();
         previous.currentTime = 0;
       }
-      const audio = new Audio(source);
+      previous?.__boardAudioCancel?.();
+      const managed = playBattleAudio(slot === "hit" ? "voiceHit" : "voiceCall", source, { gain: slot === "hit" ? 0.9 : 0.96, priority: 90 });
+      const audio = managed?.audio;
+      if (!audio) return null;
       audio.preload = "auto";
-      audio.volume = slot === "hit" ? 0.9 : 0.96;
       lucciRokuoganVoiceAudio[slot] = audio;
       audio.addEventListener?.("error", () => {
         if (lucciRokuoganVoiceAudio[slot] === audio) lucciRokuoganVoiceAudio[slot] = null;
       }, { once: true });
-      const playPromise = audio.play();
-      if (playPromise?.catch) playPromise.catch(() => {});
       return audio;
     } catch (_error) {
       // Missing, undecodable, or autoplay-blocked optional voices fall back to the visual only.
@@ -4909,6 +4975,7 @@
   function resetBattleSessionVisualState(view) {
     const nextKey = battleIdentityKey(view);
     if (!nextKey || nextKey === lastBattleIdentity) return;
+    cancelBattleAudioScope();
     lastBattleIdentity = nextKey;
     lastVisualEventId = "";
     lastRenderedKingFlameOn = null;
@@ -5021,6 +5088,7 @@
   }
 
   function playSwitchInFx(event = {}) {
+    battleHostAudioBus()?.playCatalogCue?.("switch", { scope: battleAudioScope(), eventId: event.id, priority: 1 });
     const side = event.side === "enemy" ? "enemy" : "player";
     const card = side === "player" ? refs.playerCard : refs.enemyCard;
     const title = event.title || (event.toName ? `換上 ${event.toName}！` : "夥伴上場！");
@@ -5434,69 +5502,17 @@
   function playStatusEffectSound(direction) {
     if (lucciRokuoganEffectAudioSilenced) return;
     const key = direction === "down" ? "down" : "up";
-    const src = STATUS_EFFECT_SFX[key];
-    if (!src) return;
-    try {
-      const pool = statusEffectAudioPools[key];
-      let audio = pool.find((entry) => entry.paused || entry.ended);
-      if (!audio) {
-        audio = new Audio(src);
-        audio.preload = "auto";
-        audio.volume = 0.22;
-        pool.push(audio);
-        if (pool.length > 4) pool.shift();
-      }
-      audio.currentTime = 0;
-      audio.volume = 0.22;
-      const playPromise = audio.play();
-      if (playPromise?.catch) playPromise.catch(() => {});
-    } catch (_error) {
-      // Audio is optional; browser autoplay/file restrictions should not block battle visuals.
-    }
+    return playBattleAudio(key === "down" ? "statusDown" : "statusUp", STATUS_EFFECT_SFX[key], { gain: 0.34, priority: 2 });
   }
 
   function playHitEffectSound(src, options = {}) {
     if (!src || (lucciRokuoganEffectAudioSilenced && !options.allowDuringRokuogan)) return;
-    try {
-      const key = String(src);
-      const pool = hitEffectAudioPools[key] || (hitEffectAudioPools[key] = []);
-      let audio = pool.find((entry) => entry.paused || entry.ended);
-      if (!audio) {
-        audio = new Audio(src);
-        audio.preload = "auto";
-        audio.volume = 0.16;
-        pool.push(audio);
-        if (pool.length > 5) pool.shift();
-      }
-      audio.currentTime = 0;
-      audio.volume = 0.16;
-      const playPromise = audio.play();
-      if (playPromise?.catch) playPromise.catch(() => {});
-    } catch (_error) {
-      // Hit sounds are optional and should never block the animation.
-    }
+    return playBattleAudio("hitDefault", src, { gain: 0.25, priority: 2 });
   }
 
   function playCastEffectSound(src) {
     if (!src || lucciRokuoganEffectAudioSilenced) return;
-    try {
-      const key = String(src);
-      const pool = castEffectAudioPools[key] || (castEffectAudioPools[key] = []);
-      let audio = pool.find((entry) => entry.paused || entry.ended);
-      if (!audio) {
-        audio = new Audio(src);
-        audio.preload = "auto";
-        audio.volume = 0.12;
-        pool.push(audio);
-        if (pool.length > 4) pool.shift();
-      }
-      audio.currentTime = 0;
-      audio.volume = 0.12;
-      const playPromise = audio.play();
-      if (playPromise?.catch) playPromise.catch(() => {});
-    } catch (_error) {
-      // Cast sounds are optional and should never block dice animation.
-    }
+    return playBattleAudio("castDefault", src, { gain: 0.19, priority: 1 });
   }
 
   function renderPortraitParticles(card, direction) {
@@ -5552,7 +5568,7 @@
     void card.offsetWidth;
     card.classList.add("effect-fx", `effect-${direction}`, `effect-${kind}`);
     renderPortraitParticles(card, direction);
-    setTimeout(() => playStatusEffectSound(direction), STATUS_EFFECT_SFX_DELAY_MS);
+    scheduleBattleStatusAudio(direction);
     if (effectFx.eventId) {
       scheduleImpactFx(() => releaseStatusIconDelay(side, effectFx.eventId), 260);
     }
@@ -8710,6 +8726,7 @@
     // A queued actor/round must not be replaced by a fresh parent API lookup.
     latestView = followCurrentCoopActor(latestView, spectatorBattlePlayback.status().active ? null : api);
     if (!latestView) {
+      cancelBattleAudioScope();
       moveFxPlayer?.clear();
       warmedMoveFxSignature = "";
       renderDecisionHints(null);
@@ -8729,6 +8746,7 @@
       return;
     }
     if (!latestView.battle) {
+      cancelBattleAudioScope();
       moveFxPlayer?.clear();
       warmedMoveFxSignature = "";
       renderDecisionHints(null);
@@ -8907,6 +8925,7 @@
   };
 
   window.addEventListener("pagehide", () => {
+    cancelBattleAudioScope();
     spectatorBattlePlayback.reset();
     clearLucciRokuoganFx();
     clearZephyrExplosionStory();
